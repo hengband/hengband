@@ -707,7 +707,7 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	/* Check nearby grids, diagonals first */
 	for (i = 7; i >= 0; i--)
 	{
-		int dis, s;
+		POSITION dis, s;
 
 		/* Get the location */
 		y = fy + ddy_ddd[i];
@@ -2605,7 +2605,7 @@ void process_monster(MONSTER_IDX m_idx)
 			if (avoid || lonely || distant)
 			{
 				/* Remember the leash length */
-				int dis = p_ptr->pet_follow_distance;
+				POSITION dis = p_ptr->pet_follow_distance;
 
 				/* Hack -- adjust follow distance temporarily */
 				if (p_ptr->pet_follow_distance > PET_SEEK_DIST)

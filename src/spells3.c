@@ -145,17 +145,18 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
  */
 void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode)
 {
-	int ny, nx, oy, ox, d, i, min;
+	POSITION ny, nx, oy, ox;
+	int d, i, min;
 	int attempts = 500;
-	int dis = 2;
+	POSITION dis = 2;
 	bool look = TRUE;
 	monster_type *m_ptr = &m_list[m_idx];
 
 	/* Paranoia */
-	if (!m_ptr->r_idx) return;
+	if(!m_ptr->r_idx) return;
 
 	/* "Skill" test */
-	if (randint1(100) > power) return;
+	if(randint1(100) > power) return;
 
 	/* Initialize */
 	ny = m_ptr->fy;
@@ -258,7 +259,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
  * </pre>
  */
 
-bool teleport_player_aux(int dis, BIT_FLAGS mode)
+bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
@@ -374,7 +375,7 @@ bool teleport_player_aux(int dis, BIT_FLAGS mode)
  * @param mode オプション
  * @return なし
  */
-void teleport_player(int dis, BIT_FLAGS mode)
+void teleport_player(POSITION dis, BIT_FLAGS mode)
 {
 	int yy, xx;
 
@@ -418,7 +419,7 @@ void teleport_player(int dis, BIT_FLAGS mode)
  * @param dis テレポート距離
  * @return なし
  */
-void teleport_player_away(MONSTER_IDX m_idx, int dis)
+void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
 {
 	int yy, xx;
 
@@ -472,7 +473,7 @@ void teleport_player_away(MONSTER_IDX m_idx, int dis)
 void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 {
 	POSITION y, x;
-	int dis = 0, ctr = 0;
+	POSITION dis = 0, ctr = 0;
 
 	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{

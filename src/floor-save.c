@@ -408,7 +408,7 @@ static void preserve_pet(void)
 			}
 			else
 			{
-				int dis = distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx);
+				POSITION dis = distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx);
 
 				/* Confused (etc.) monsters don't follow. */
 				if (MON_CONFUSED(m_ptr) || MON_STUNNED(m_ptr) || MON_CSLEEP(m_ptr)) continue;
@@ -681,7 +681,7 @@ static void update_unique_artifact(s16b cur_floor_id)
 static void get_out_monster(void)
 {
 	int tries = 0;
-	int dis = 1;
+	POSITION dis = 1;
 	int oy = p_ptr->y;
 	int ox = p_ptr->x;
 	MONSTER_IDX m_idx = cave[oy][ox].m_idx;
