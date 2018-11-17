@@ -746,8 +746,8 @@ static int racial_aux(power_desc_type *pd_ptr)
  */
 static bool cmd_racial_power_aux(s32b command)
 {
-	s16b        plev = p_ptr->lev;
-	int         dir = 0;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	DIRECTION dir = 0;
 
 	if (command <= -3)
 	{

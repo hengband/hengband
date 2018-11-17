@@ -201,7 +201,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	/* Dungeon floor */
 	if (!(j_ptr->held_m_idx))
 	{
-		int y, x;
+		POSITION y, x;
 
 		/* Location */
 		y = j_ptr->iy;
@@ -321,7 +321,7 @@ static void compact_objects_aux(IDX i1, IDX i2)
 	/* Dungeon */
 	else
 	{
-		int y, x;
+		POSITION y, x;
 
 		/* Acquire location */
 		y = o_ptr->iy;
@@ -365,8 +365,9 @@ static void compact_objects_aux(IDX i1, IDX i2)
  */
 void compact_objects(int size)
 {
-	IDX i;
-	int y, x, num, cnt;
+	OBJECT_IDX i;
+	POSITION y, x;
+	int num, cnt;
 	int cur_lev, cur_dis, chance;
 	object_type *o_ptr;
 
