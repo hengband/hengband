@@ -1587,7 +1587,6 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 		/* Describe the object (with {terrible/special}) */
 		object_desc(o_name, o_ptr, 0);
 
-		/* Message */
 		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
 		/* Done */
@@ -1733,7 +1732,6 @@ void autopick_pickup_items(cave_type *c_ptr)
 				/* Describe the object */
 				object_desc(o_name, o_ptr, 0);
 
-				/* Message */
 				msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 				/* Hack - remember that the item has given a message here. */
 				o_ptr->marked |= OM_NOMSG;
@@ -1936,7 +1934,6 @@ bool autopick_autoregister(object_type *o_ptr)
 		/* Describe the object (with {terrible/special}) */
 		object_desc(o_name, o_ptr, 0);
 
-		/* Message */
 		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
 		/* Done */

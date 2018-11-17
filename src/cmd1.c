@@ -368,7 +368,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 		/* Pick a trap */
 		disclose_grid(y, x);
 
-		/* Message */
 		msg_print(_("トラップを発見した。", "You have found a trap."));
 
 		/* Disturb */
@@ -378,7 +377,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	/* Secret door */
 	if (is_hidden_door(c_ptr))
 	{
-		/* Message */
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
 
 		/* Disclose */
@@ -408,7 +406,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 		/* Identify once */
 		if (!object_is_known(o_ptr))
 		{
-			/* Message */
 			msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
 
 			/* Know the trap */
@@ -508,7 +505,6 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	/* Describe the object */
 	object_desc(o_name, o_ptr, 0);
 
-	/* Message */
 #ifdef JP
 	if ((o_ptr->name1 == ART_CRIMSON) && (p_ptr->pseikaku == SEIKAKU_COMBAT))
 	{
@@ -626,7 +622,6 @@ void carry(bool pickup)
 			/* Delete the gold */
 			delete_object_idx(this_o_idx);
 
-			/* Message */
 			msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."),
 			   (long)value, o_name);
 
@@ -1032,7 +1027,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		/* Hidden trap */
 		if (c_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
 		{
-			/* Message */
 			msg_print(_("トラップだ！", "You found a trap!"));
 
 			/* Pick a trap */
@@ -2147,7 +2141,6 @@ void run_step(DIRECTION dir)
 		{
 			sound(SOUND_HITWALL);
 
-			/* Message */
 			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
 
 			/* Disturb */

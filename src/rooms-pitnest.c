@@ -1514,7 +1514,6 @@ bool build_type13(void)
 
 		if (cheat_hear)
 		{
-			/* Message */
 			msg_print(r_name + r_info[what[i]].name);
 		}
 	}

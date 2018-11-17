@@ -374,7 +374,6 @@ void compact_objects(int size)
 	/* Compact */
 	if (size)
 	{
-		/* Message */
 		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
 
 		/* Redraw map */
@@ -5162,7 +5161,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	/* Handle normal "breakage" */
 	if (!object_is_artifact(j_ptr) && (randint0(100) < chance))
 	{
-		/* Message */
 #ifdef JP
 		msg_format("%sは消えた。", o_name);
 #else
@@ -5271,7 +5269,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	/* Handle lack of space */
 	if (!flag && !object_is_artifact(j_ptr))
 	{
-		/* Message */
 #ifdef JP
 		msg_format("%sは消えた。", o_name);
 #else
@@ -5325,7 +5322,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		/* No valid place! */
 		if (!candidates)
 		{
-			/* Message */
 #ifdef JP
 			msg_format("%sは消えた。", o_name);
 #else
@@ -5408,7 +5404,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	/* Failure */
 	if (!done && !o_idx)
 	{
-		/* Message */
 #ifdef JP
 		msg_format("%sは消えた。", o_name);
 #else
@@ -6306,7 +6301,6 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 	/* Carry the object */
 	slot = inven_carry(q_ptr);
 
-	/* Message */
 #ifdef JP
 	msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
 #else
@@ -6373,7 +6367,6 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	/* Describe local object */
 	object_desc(o_name, q_ptr, 0);
 
-	/* Message */
 	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
 
 	/* Drop it near the player */
@@ -6494,7 +6487,6 @@ void combine_pack(void)
 	}
 	while (combined);
 
-	/* Message */
 	if (flag) msg_print(_("ザックの中のアイテムをまとめ直した。", "You combine some items in your pack."));
 }
 
@@ -6562,7 +6554,6 @@ void reorder_pack(void)
 		p_ptr->window |= (PW_INVEN);
 	}
 
-	/* Message */
 	if (flag) msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
 }
 

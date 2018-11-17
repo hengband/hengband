@@ -79,7 +79,6 @@ void do_cmd_rerate(bool display)
 	/* Handle stuff */
 	handle_stuff();
 
-	/* Message */
 	if (display)
 	{
 		msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
@@ -1368,7 +1367,6 @@ static void do_cmd_wiz_play(void)
 	/* Accept change */
 	if (changed)
 	{
-		/* Message */
 		msg_print("Changes accepted.");
 
 		/* Recalcurate object's weight */

@@ -1465,7 +1465,6 @@ void generate_cave(void)
 		/* Prevent object over-flow */
 		if (o_max >= max_o_idx)
 		{
-			/* Message */
 #ifdef JP
 why = "アイテムが多すぎる";
 #else
@@ -1473,13 +1472,11 @@ why = "アイテムが多すぎる";
 #endif
 
 
-			/* Message */
 			okay = FALSE;
 		}
 		/* Prevent monster over-flow */
 		else if (m_max >= max_m_idx)
 		{
-			/* Message */
 #ifdef JP
 why = "モンスターが多すぎる";
 #else
@@ -1487,14 +1484,12 @@ why = "モンスターが多すぎる";
 #endif
 
 
-			/* Message */
 			okay = FALSE;
 		}
 
 		/* Accept */
 		if (okay) break;
 
-		/* Message */
 #ifdef JP
 if (why) msg_format("生成やり直し(%s)", why);
 #else

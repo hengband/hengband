@@ -647,7 +647,6 @@ bool build_type7(void)
 	v_ptr = &v_info[2];
 #endif
 
-	/* Message */
 	msg_format_wizard(CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
@@ -1251,7 +1250,6 @@ bool build_type17(void)
 	v_ptr = &v_info[2];
 #endif
 
-	/* Message */
 	msg_format_wizard(CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */

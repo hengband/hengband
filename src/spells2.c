@@ -1772,7 +1772,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 		/* Hack -- Affect player */
 		if (flag)
 		{
-			/* Message */
 			msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
 
 			/* Blind the player */
@@ -2114,7 +2113,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 					/* Delete (not kill) "dead" monsters */
 					if (m_ptr->hp < 0)
 					{
-						/* Message */
 						if (!ignore_unview || is_seen(m_ptr)) 
 							msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
 
@@ -4271,7 +4269,6 @@ void ring_of_power(DIRECTION dir)
 	case 1:
 	case 2:
 	{
-		/* Message */
 		msg_print(_("あなたは悪性のオーラに包み込まれた。", "You are surrounded by a malignant aura."));
 		sound(SOUND_EVIL);
 
@@ -4293,7 +4290,6 @@ void ring_of_power(DIRECTION dir)
 
 	case 3:
 	{
-		/* Message */
 		msg_print(_("あなたは強力なオーラに包み込まれた。", "You are surrounded by a powerful aura."));
 
 		/* Dispel monsters */

@@ -335,7 +335,6 @@ bool gain_magic(void)
 	}
 
 	object_desc(o_name, o_ptr, 0);
-	/* Message */
 	msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
 
 	/* Eliminate the item (from the pack) */

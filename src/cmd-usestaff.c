@@ -451,7 +451,6 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 		p_ptr->total_weight -= q_ptr->weight;
 		item = inven_carry(q_ptr);
 
-		/* Message */
 		msg_print(_("杖をまとめなおした。", "You unstack your staff."));
 	}
 

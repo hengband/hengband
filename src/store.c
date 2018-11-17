@@ -3233,7 +3233,6 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		/* No reason to haggle */
 		if (final_ask >= purse)
 		{
-			/* Message */
 #ifdef JP
 			msg_print("即座にこの金額にまとまった。");
 #else
@@ -3249,7 +3248,6 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		/* No need to haggle */
 		else if (noneed)
 		{
-			/* Message */
 #ifdef JP
 			msg_print("結局この金額にまとまった。");
 #else
@@ -3621,7 +3619,6 @@ msg_format("一つにつき $%ldです。", (long)(best));
 			/* Describe the object (fully) */
 			object_desc(o_name, j_ptr, 0);
 
-			/* Message */
 #ifdef JP
 			msg_format("%s(%c)を購入する。", o_name, I2A(item));
 #else
@@ -3675,7 +3672,6 @@ msg_format("一つにつき $%ldです。", (long)(best));
 				/* Describe the transaction */
 				object_desc(o_name, j_ptr, 0);
 
-				/* Message */
 #ifdef JP
 msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 #else
@@ -3702,7 +3698,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 				/* Describe the final result */
 				object_desc(o_name, &inventory[item_new], 0);
 
-				/* Message */
 #ifdef JP
 				msg_format("%s(%c)を手に入れた。", o_name, index_to_label(item_new));
 #else
@@ -3736,7 +3731,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 					if (one_in_(STORE_SHUFFLE))
 					{
 						char buf[80];
-						/* Message */
 #ifdef JP
 						msg_print("店主は引退した。");
 #else
@@ -3759,7 +3753,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 					/* Maintain */
 					else
 					{
-						/* Message */
 #ifdef JP
 						msg_print("店主は新たな在庫を取り出した。");
 #else
@@ -3828,7 +3821,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 		/* Describe just the result */
 		object_desc(o_name, &inventory[item_new], 0);
 
-		/* Message */
 #ifdef JP
 		msg_format("%s(%c)を取った。",
 #else
@@ -4444,7 +4436,6 @@ static void museum_remove_object(void)
 	if (!get_check(format("Really order to remove %s from the Museum? ", o_name))) return;
 #endif
 
-	/* Message */
 #ifdef JP
 	msg_format("%sの展示をやめさせた。", o_name);
 #else
@@ -5134,7 +5125,6 @@ void do_cmd_store(void)
 			/* Hack -- Flee from the store */
 			if (cur_store_num != STORE_HOME)
 			{
-				/* Message */
 #ifdef JP
 				if (cur_store_num == STORE_MUSEUM)
 					msg_print("ザックからアイテムがあふれそうなので、あわてて博物館から出た...");
@@ -5155,7 +5145,6 @@ void do_cmd_store(void)
 			/* Hack -- Flee from the home */
 			else if (!store_check_num(o_ptr))
 			{
-				/* Message */
 #ifdef JP
 				msg_print("ザックからアイテムがあふれそうなので、あわてて家から出た...");
 #else
@@ -5195,7 +5184,6 @@ void do_cmd_store(void)
 				/* Describe it */
 				object_desc(o_name, q_ptr, 0);
 
-				/* Message */
 #ifdef JP
 				msg_format("%sが落ちた。(%c)", o_name, index_to_label(item));
 #else

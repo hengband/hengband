@@ -1569,7 +1569,6 @@ bool do_cmd_cast_learned(void)
 		p_ptr->csp = 0;
 		p_ptr->csp_frac = 0;
 
-		/* Message */
 		msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
 
 		/* Hack -- Bypass free action */
@@ -1582,7 +1581,6 @@ bool do_cmd_cast_learned(void)
 		{
 			bool perm = (randint0(100) < 25);
 
-			/* Message */
 			msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
 
 			/* Reduce constitution */

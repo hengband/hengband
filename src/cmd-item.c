@@ -328,7 +328,6 @@ void do_cmd_wield(void)
 		/* Describe it */
 		object_desc(o_name, &inventory[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-		/* Message */
 #ifdef JP
 		msg_format("%s%sは呪われているようだ。",
 			   describe_use(slot) , o_name );
@@ -492,7 +491,6 @@ void do_cmd_wield(void)
 	/* Describe the result */
 	object_desc(o_name, o_ptr, 0);
 
-	/* Message */
 	msg_format(act, o_name, index_to_label(slot));
 
 
@@ -904,7 +902,6 @@ void do_cmd_destroy(void)
 	{
 		p_ptr->energy_use = 0;
 
-		/* Message */
 		msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), o_name);
 		/* Done */
 		return;
@@ -912,7 +909,6 @@ void do_cmd_destroy(void)
 
 	object_copy(q_ptr, o_ptr);
 
-	/* Message */
 	msg_format(_("%sを壊した。", "You destroy %s."), o_name);
 	sound(SOUND_DESTITEM);
 
@@ -1085,7 +1081,6 @@ void do_cmd_uninscribe(void)
 		return;
 	}
 
-	/* Message */
 	msg_print(_("銘を消した。", "Inscription removed."));
 
 	/* Remove the incription */
@@ -1138,7 +1133,6 @@ void do_cmd_inscribe(void)
 	/* Describe the activity */
 	object_desc(o_name, o_ptr, OD_OMIT_INSCRIPTION);
 
-	/* Message */
 	msg_format(_("%sに銘を刻む。", "Inscribing %s."), o_name);
 	msg_print(NULL);
 
@@ -1242,7 +1236,6 @@ static void do_cmd_refill_lamp(void)
 	/* Refuel */
 	j_ptr->xtra4 += o_ptr->xtra4;
 
-	/* Message */
 	msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
 
 	/* Comment */
@@ -1351,7 +1344,6 @@ static void do_cmd_refill_torch(void)
 	/* Refuel */
 	j_ptr->xtra4 += o_ptr->xtra4 + 5;
 
-	/* Message */
 	msg_print(_("松明を結合した。", "You combine the torches."));
 
 	/* Comment */

@@ -3986,7 +3986,6 @@ bool do_dec_stat(int stat)
 	/* Sustain */
 	if (sust && (!ironman_nightmare || randint0(13)))
 	{
-		/* Message */
 		msg_format(_("%sなった気がしたが、すぐに元に戻った。", "You feel %s for a moment, but the feeling passes."),
 					desc_stat_neg[stat]);
 
@@ -3997,7 +3996,6 @@ bool do_dec_stat(int stat)
 	/* Attempt to reduce the stat */
 	if (dec_stat(stat, 10, (ironman_nightmare && !randint0(13))))
 	{
-		/* Message */
 		msg_format(_("ひどく%sなった気がする。", "You feel very %s."), desc_stat_neg[stat]);
 
 		/* Notice effect */
@@ -4017,7 +4015,6 @@ bool do_res_stat(int stat)
 	/* Attempt to increase */
 	if (res_stat(stat))
 	{
-		/* Message */
 		msg_format(_("元通りに%sなった気がする。", "You feel less %s."), desc_stat_pos[stat]);
 
 		/* Notice */
@@ -4055,7 +4052,6 @@ bool do_inc_stat(int stat)
 		else if (stat == A_CON)
 			chg_virtue(V_VITALITY, 1);
 
-		/* Message */
 		msg_format(_("ワーオ！とても%sなった！", "Wow!  You feel very %s!"), desc_stat_pos[stat]);
 
 		/* Notice */
@@ -4065,7 +4061,6 @@ bool do_inc_stat(int stat)
 	/* Restoration worked */
 	if (res)
 	{
-		/* Message */
 		msg_format(_("元通りに%sなった気がする。", "You feel less %s."), desc_stat_pos[stat]);
 
 		/* Notice */
@@ -4085,7 +4080,6 @@ bool restore_level(void)
 	/* Restore experience */
 	if (p_ptr->exp < p_ptr->max_exp)
 	{
-		/* Message */
 		msg_print(_("経験値が戻ってきた気がする。", "You feel your experience returning."));
 
 		/* Restore the experience */
@@ -4721,7 +4715,6 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 			now_damaged = TRUE;
 		}
 
-		/* Message */
 		msg_print(_("*** 警告:低ヒット・ポイント！ ***", "*** LOW HITPOINT WARNING! ***"));
 		msg_print(NULL);
 		flush();

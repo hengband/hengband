@@ -5060,7 +5060,6 @@ errr file_character(cptr name)
 	/* Invalid file */
 	if (!fff)
 	{
-		/* Message */
 		prt(_("キャラクタ情報のファイルへの書き出しに失敗しました！", "Character dump failed!"), 0, 0);
 
 		(void)inkey();
@@ -5075,7 +5074,6 @@ errr file_character(cptr name)
 	my_fclose(fff);
 
 
-	/* Message */
 	msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
 	msg_print(NULL);
 
@@ -5377,7 +5375,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 	/* Oops */
 	if (!fff)
 	{
-		/* Message */
 		msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
 		msg_print(NULL);
 
@@ -6128,7 +6125,6 @@ void do_cmd_save_game(int is_autosave)
 	/* Handle stuff */
 	handle_stuff();
 
-	/* Message */
 	prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
 
 	/* Refresh */
@@ -7482,7 +7478,6 @@ static void handle_signal_abort(int sig)
 	_("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));
 
 
-	/* Message */
 	Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
 
 	do_cmd_write_nikki(NIKKI_GAMESTART, 0, _("----ゲーム異常終了----", "---- Panic Save and Abort Game ----"));

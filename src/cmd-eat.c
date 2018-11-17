@@ -393,7 +393,6 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 			p_ptr->total_weight -= q_ptr->weight;
 			item = inven_carry(q_ptr);
 
-			/* Message */
 			msg_format(_("杖をまとめなおした。", "You unstack your staff."));
 		}
 

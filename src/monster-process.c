@@ -1715,7 +1715,6 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 				}
 			}
 
-			/* Message */
 			if (act && see_either)
 			{
 #ifdef JP
@@ -1993,7 +1992,6 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 					/* Visible monsters */
 					if (see_m)
 					{
-						/* Message */
 #ifdef JP
 						msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
 #else
@@ -2769,7 +2767,6 @@ void process_monster(MONSTER_IDX m_idx)
 				/* Attempt to Bash XXX XXX XXX */
 				if (check_hp_for_feat_destruction(f_ptr, m_ptr) && (randint0(m_ptr->hp / 10) > f_ptr->power))
 				{
-					/* Message */
 					if (have_flag(f_ptr->flags, FF_GLASS))
 						msg_print(_("ガラスが砕ける音がした！", "You hear a glass was crashed!"));
 					else

@@ -416,7 +416,6 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 	{
 		sound(SOUND_MISS);
 
-		/* Message */
 		msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
 	}
 }
@@ -603,7 +602,6 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 
 			sound(SOUND_HIT);
 
-			/* Message */
 			if (backstab) msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), m_name);
 			else if (fuiuchi) msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), m_name);
 			else if (stab_fleeing) msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), m_name);
@@ -1198,9 +1196,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 
 				sound(SOUND_HIT);
 
-				/* Message */
 				msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
-				/* Message */
 				msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
 
 				/* Extract the flags */
@@ -1294,7 +1290,6 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 			{
 				sound(SOUND_MISS);
 
-				/* Message */
 				msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
 			}
 		}
@@ -1420,7 +1415,6 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	/* Handle player fear */
 	if (p_ptr->afraid)
 	{
-		/* Message */
 		if (m_ptr->ml)
 			msg_format(_("恐くて%sを攻撃できない！", "You are too afraid to attack %s!"), m_name);
 		else
@@ -1509,7 +1503,6 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	{
 		sound(SOUND_FLEE);
 
-		/* Message */
 		msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 	}
 
@@ -1646,7 +1639,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				/* Remember the Evil-ness */
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
 
-				/* Message */
 #ifdef JP
 				if (abbreviate)
 				    msg_format("撃退した。");
@@ -1934,7 +1926,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 			}
 
-			/* Message */
 			if (act)
 			{
 				if (do_silly_attack)
@@ -2089,7 +2080,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							/* Don't heal more than max hp */
 							heal = MIN(heal, m_ptr->maxhp - m_ptr->hp);
 
-							/* Message */
 							msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
 
 							/* Obvious */
@@ -2230,7 +2220,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Get a description */
 						object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
-						/* Message */
 #ifdef JP
 						msg_format("%s(%c)を%s盗まれた！",
 							   o_name, index_to_label(i),
@@ -2326,7 +2315,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Get a description */
 						object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-						/* Message */
 #ifdef JP
 						msg_format("%s(%c)を%s食べられてしまった！",
 							  o_name, index_to_label(i),
@@ -2389,7 +2377,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Obvious */
 					obvious = TRUE;
 
-					/* Message */
 					msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
 
 					/* Special damage */
@@ -2410,7 +2397,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Obvious */
 					obvious = TRUE;
 
-					/* Message */
 					msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
 
 					/* Special damage */
@@ -2428,7 +2414,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Obvious */
 					obvious = TRUE;
 
-					/* Message */
 					msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
 
 					/* Special damage */
@@ -2446,7 +2431,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Obvious */
 					obvious = TRUE;
 
-					/* Message */
 					msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
 
 					/* Special damage */
@@ -3358,7 +3342,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Disturbing */
 					disturb(1, 1);
 
-					/* Message */
 #ifdef JP
 					if (abbreviate)
 					    msg_format("%sかわした。", (p_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");

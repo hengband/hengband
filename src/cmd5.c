@@ -783,7 +783,6 @@ void do_cmd_study(void)
 	/* Nothing to study */
 	if (spell < 0)
 	{
-		/* Message */
 		msg_format(_("その本には学ぶべき%sがない。", "You cannot learn any %ss in that book."), p);
 
 		/* Abort */
@@ -1329,7 +1328,6 @@ void do_cmd_cast(void)
 		p_ptr->csp = 0;
 		p_ptr->csp_frac = 0;
 
-		/* Message */
 		msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
 
 		/* Hack -- Bypass free action */
@@ -1365,7 +1363,6 @@ void do_cmd_cast(void)
 		{
 			bool perm = (randint0(100) < 25);
 
-			/* Message */
 			msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
 
 			/* Reduce constitution */

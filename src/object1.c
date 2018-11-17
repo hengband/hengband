@@ -5056,7 +5056,6 @@ void py_pickup_floor(bool pickup)
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
 		{
-			/* Message */
 #ifdef JP
 			msg_format(" $%ld の価値がある%sを見つけた。",
 				(long)o_ptr->pval, o_name);
@@ -5128,14 +5127,12 @@ void py_pickup_floor(bool pickup)
 			/* Describe the object */
 			object_desc(o_name, o_ptr, 0);
 
-			/* Message */
 			msg_format(_("%sがある。", "You see %s."), o_name);
 		}
 
 		/* Multiple objects */
 		else
 		{
-			/* Message */
 			msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
 		}
 
@@ -5166,14 +5163,12 @@ void py_pickup_floor(bool pickup)
 			/* Describe the object */
 			object_desc(o_name, o_ptr, 0);
 
-			/* Message */
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 		}
 
 		/* Multiple objects */
 		else
 		{
-			/* Message */
 			msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
 
 		}

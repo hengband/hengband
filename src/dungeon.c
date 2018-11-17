@@ -1374,7 +1374,6 @@ static void process_world_aux_digestion(void)
 			/* Faint occasionally */
 			if (!p_ptr->paralyzed && (randint0(100) < 10))
 			{
-				/* Message */
 				msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
 				disturb(1, 1);
 
@@ -3385,7 +3384,6 @@ static void process_world(void)
 				/* Count warnings */
 				closing_flag++;
 
-				/* Message */
 				msg_print(_("アングバンドへの門が閉じかかっています...", "The gates to ANGBAND are closing..."));
 				msg_print(_("ゲームを終了するかセーブするかして下さい。", "Please finish up and/or save your game."));
 
@@ -3394,7 +3392,6 @@ static void process_world(void)
 			/* Slam the gate */
 			else
 			{
-				/* Message */
 				msg_print(_("今、アングバンドへの門が閉ざされました。", "The gates to ANGBAND are now closed."));
 
 				/* Stop playing */
@@ -3473,7 +3470,6 @@ static void process_world(void)
 					/* Verify store type */
 					if (f_ptr->subtype == n)
 					{
-						/* Message */
 						if (cheat_xtra) msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_name + f_ptr->name);
 
 						/* Shuffle it */
@@ -4677,7 +4673,6 @@ static void pack_overflow(void)
 		/* Describe */
 		object_desc(o_name, o_ptr, 0);
 
-		/* Message */
 		msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
 
 		/* Drop it (carefully) near the player */
@@ -6285,7 +6280,6 @@ void play_game(bool new_game)
 					/* Mark savefile */
 					p_ptr->noscore |= 0x0001;
 
-					/* Message */
 					msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
 					msg_print(NULL);
 
@@ -6311,7 +6305,6 @@ void play_game(bool new_game)
 					/* Hack -- cancel recall */
 					if (p_ptr->word_recall)
 					{
-						/* Message */
 						msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
 						msg_print(NULL);
 

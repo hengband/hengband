@@ -331,7 +331,6 @@ bool do_riding(bool force)
 		{
 			p_ptr->energy_use = 100;
 
-			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			py_attack(y, x, 0);
@@ -456,7 +455,6 @@ static void do_name_pet(void)
 
 		if (!is_pet(m_ptr))
 		{
-			/* Message */
 			msg_print(_("そのモンスターはペットではない。", "This monster is not a pet."));
 			return;
 		}
@@ -467,7 +465,6 @@ static void do_name_pet(void)
 		}
 		monster_desc(m_name, m_ptr, 0);
 
-		/* Message */
 		msg_format(_("%sに名前をつける。", "Name %s."), m_name);
 		msg_print(NULL);
 

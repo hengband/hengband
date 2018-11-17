@@ -102,7 +102,6 @@ void check_experience(void)
 
 		sound(SOUND_LEVEL);
 
-		/* Message */
 		msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), p_ptr->lev);
 
 		/* Update some stuff */
@@ -3225,7 +3224,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 				/* Describe the object */
 				object_desc(o_name, o_ptr, 0);
 
-				/* Message */
 #ifdef JP
 				sprintf(out_val, "%s%s%s%s[%s]",
 					s1, o_name, s2, s3, info);

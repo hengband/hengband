@@ -2287,7 +2287,6 @@ void init_angband(void)
 	{
 		char why[1024];
 
-		/* Message */
 		sprintf(why, _("'%s'ファイルにアクセスできません!", "Cannot access the '%s' file!"), buf);
 
 		/* Crash and burn */
@@ -2357,7 +2356,6 @@ void init_angband(void)
 		{
 			char why[1024];
 
-			/* Message */
 			sprintf(why, _("'%s'ファイルを作成できません!", "Cannot create the '%s' file!"), buf);
 
 			/* Crash and burn */

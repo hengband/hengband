@@ -43,7 +43,6 @@ vptr rnfree(vptr p, huge len)
 	/* Decrease memory count */
 	virt_kill += len;
 
-	/* Message */
 	if (len > virt_size)
 	{
 		char buf[80];

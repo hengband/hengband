@@ -872,7 +872,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Check line of sight */
 				if (known)
 				{
-					/* Message */
 					msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 					obvious = TRUE;
 				}
@@ -915,7 +914,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Check line of sight */
 				if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
 				{
-					/* Message */
 					msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), f_name + mimic_f_ptr->name);
 					obvious = TRUE;
 				}
@@ -928,7 +926,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			if (have_flag(f_ptr->flags, FF_HURT_ROCK))
 			{
-				/* Message */
 				if (known && (c_ptr->info & (CAVE_MARK)))
 				{
 					msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
@@ -1177,7 +1174,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
 			{
-				/* Message */
 				if (known && (c_ptr->info & CAVE_MARK))
 				{
 					msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
@@ -1205,7 +1201,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
 			{
-				/* Message */
 				if (known && (c_ptr->info & CAVE_MARK))
 				{
 					msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(c_ptr)].name);
@@ -3014,7 +3009,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (p_ptr->health_who == c_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
 			if (p_ptr->riding == c_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
-			/* Message */
 			note = _("は体力を回復したようだ。", " looks healthier.");
 
 			/* No "real" damage */
@@ -3871,7 +3865,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Learn about type */
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 
-				/* Message */
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
@@ -3908,7 +3901,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Learn about type */
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 
-				/* Message */
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
@@ -3944,7 +3936,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Learn about type */
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 
-				/* Message */
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
@@ -3977,7 +3968,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Obvious */
 				if (seen) obvious = TRUE;
 
-				/* Message */
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
@@ -4013,7 +4003,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				/* Learn about type */
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 
-				/* Message */
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
@@ -4043,7 +4032,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Obvious */
 			if (seen) obvious = TRUE;
 
-			/* Message */
 			note = _("は身震いした。", " shudders.");
 			note_dies = _("はドロドロに溶けた！", " dissolves!");
 			break;
@@ -4088,7 +4076,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				}
 				else
 				{
-					/* Message */
 					msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), m_name);
 					(void)hp_player(dam);
 				}
@@ -4105,7 +4092,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_MIND_BLAST:
 		{
 			if (seen) obvious = TRUE;
-			/* Message */
 			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -4156,7 +4142,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_BRAIN_SMASH:
 		{
 			if (seen) obvious = TRUE;
-			/* Message */
 			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -4216,7 +4201,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CAUSE_1:
 		{
 			if (seen) obvious = TRUE;
-			/* Message */
 			if (!who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -4240,7 +4224,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CAUSE_2:
 		{
 			if (seen) obvious = TRUE;
-			/* Message */
 			if (!who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -4264,7 +4247,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CAUSE_3:
 		{
 			if (seen) obvious = TRUE;
-			/* Message */
 			if (!who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), m_name);
 
 			if (r_ptr->flagsr & RFR_RES_ALL)
@@ -4288,7 +4270,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_CAUSE_4:
 		{
 			if (seen) obvious = TRUE;
-			/* Message */
 			if (!who) 
 				msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", 
 							 "You point at %s, screaming the word, 'DIE!'."), m_name);
@@ -4812,7 +4793,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Obvious */
 			if (seen) obvious = TRUE;
 
-			/* Message */
 			note = _("が消え去った！", " disappears!");
 
 			if (!who) chg_virtue(V_VALOUR, -1);
@@ -4966,7 +4946,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				sound(SOUND_FLEE);
 
-				/* Message */
 				msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 			}
 

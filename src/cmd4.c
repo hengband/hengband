@@ -3184,7 +3184,6 @@ void do_cmd_visuals(void)
 			/* Close */
 			close_auto_dump();
 
-			/* Message */
 			msg_print(_("モンスターの[色/文字]をファイルに書き出しました。", "Dumped monster attr/chars."));
 
 			break;
@@ -3253,7 +3252,6 @@ void do_cmd_visuals(void)
 			/* Close */
 			close_auto_dump();
 
-			/* Message */
 			msg_print(_("アイテムの[色/文字]をファイルに書き出しました。", "Dumped object attr/chars."));
 
 			break;
@@ -3309,7 +3307,6 @@ void do_cmd_visuals(void)
 			/* Close */
 			close_auto_dump();
 
-			/* Message */
 			msg_print(_("地形の[色/文字]をファイルに書き出しました。", "Dumped feature attr/chars."));
 
 			break;
@@ -3639,7 +3636,6 @@ void do_cmd_visuals(void)
 			/* Reset */
 			reset_visuals();
 
-			/* Message */
 			msg_print(_("画面上の[色/文字]を初期値にリセットしました。", "Visual attr/char tables reset."));
 			need_redraw = TRUE;
 			break;
@@ -3786,7 +3782,6 @@ void do_cmd_colors(void)
 			/* Close */
 			close_auto_dump();
 
-			/* Message */
 			msg_print(_("カラーの設定をファイルに書き出しました。", "Dumped color redefinitions."));
 		}
 
@@ -4763,7 +4758,6 @@ void do_cmd_load_screen(void)
 	my_fclose(fff);
 
 
-	/* Message */
 	prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
 
 	flush();
@@ -5101,7 +5095,6 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	/* Close it */
 	my_fclose(fff);
 
-	/* Message */
 	if (message) {
 		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 		msg_print(NULL);
@@ -5275,7 +5268,6 @@ void do_cmd_save_screen(void)
 		/* Close it */
 		my_fclose(fff);
 
-		/* Message */
 		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 		msg_print(NULL);
 
@@ -8717,7 +8709,6 @@ void do_cmd_time(void)
 	if (day < MAX_DAYS) sprintf(day_buf, "%d", day);
 	else strcpy(day_buf, "*****");
 
-	/* Message */
 #ifdef JP
 	msg_format("%s日目, 時刻は%d:%02d %sです。",
 		   day_buf, (hour % 12 == 0) ? 12 : (hour % 12),
@@ -8793,7 +8784,6 @@ void do_cmd_time(void)
 		}
 	}
 
-	/* Message */
 	msg_print(desc);
 
 	/* Close the file */

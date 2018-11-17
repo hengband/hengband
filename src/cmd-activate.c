@@ -1485,7 +1485,6 @@ bool activate_artifact(object_type *o_ptr)
 				p_ptr->csp = 0;
 				p_ptr->csp_frac = 0;
 
-				/* Message */
 				msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
 				/* Hack -- Bypass free action */
 				(void)set_paralyzed(p_ptr->paralyzed +

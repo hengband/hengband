@@ -2329,7 +2329,6 @@ static void calc_spells(void)
 				which = p_ptr->realm2;
 			}
 
-			/* Message */
 #ifdef JP
 			msg_format("%sの%sを忘れてしまった。", do_spell(which, j%32, SPELL_NAME), p );
 #else
@@ -2387,7 +2386,6 @@ static void calc_spells(void)
 				which = p_ptr->realm2;
 			}
 
-			/* Message */
 #ifdef JP
 			msg_format("%sの%sを忘れてしまった。",
 				   do_spell(which, j%32, SPELL_NAME), p );
@@ -2463,7 +2461,6 @@ static void calc_spells(void)
 				which = p_ptr->realm2;
 			}
 
-			/* Message */
 #ifdef JP
 			msg_format("%sの%sを思い出した。", do_spell(which, j%32, SPELL_NAME), p );
 #else
@@ -2514,7 +2511,6 @@ static void calc_spells(void)
 		/* Message if needed */
 		if (p_ptr->new_spells)
 		{
-			/* Message */
 #ifdef JP
 			if( p_ptr->new_spells < 10 ){
 				msg_format("あと %d つの%sを学べる。", p_ptr->new_spells, p);
@@ -2824,7 +2820,6 @@ static void calc_mana(void)
 	/* Take note when "glove state" changes */
 	if (p_ptr->old_cumber_glove != p_ptr->cumber_glove)
 	{
-		/* Message */
 		if (p_ptr->cumber_glove)
 		{
 			msg_print(_("手が覆われて呪文が唱えにくい感じがする。", "Your covered hands feel unsuitable for spellcasting."));
@@ -2842,7 +2837,6 @@ static void calc_mana(void)
 	/* Take note when "armor state" changes */
 	if (p_ptr->old_cumber_armor != p_ptr->cumber_armor)
 	{
-		/* Message */
 		if (p_ptr->cumber_armor)
 		{
 			msg_print(_("装備の重さで動きが鈍くなってしまっている。", "The weight of your equipment encumbers your movement."));
@@ -5619,7 +5613,6 @@ void calc_bonuses(void)
 	/* Take note when "heavy bow" changes */
 	if (p_ptr->old_heavy_shoot != p_ptr->heavy_shoot)
 	{
-		/* Message */
 		if (p_ptr->heavy_shoot)
 		{
 			msg_print(_("こんな重い弓を装備しているのは大変だ。", "You have trouble wielding such a heavy bow."));
@@ -5642,7 +5635,6 @@ void calc_bonuses(void)
 		/* Take note when "heavy weapon" changes */
 		if (p_ptr->old_heavy_wield[i] != p_ptr->heavy_wield[i])
 		{
-			/* Message */
 			if (p_ptr->heavy_wield[i])
 			{
 				msg_print(_("こんな重い武器を装備しているのは大変だ。", "You have trouble wielding such a heavy weapon."));
@@ -5667,7 +5659,6 @@ void calc_bonuses(void)
 		/* Take note when "heavy weapon" changes */
 		if (p_ptr->old_riding_wield[i] != p_ptr->riding_wield[i])
 		{
-			/* Message */
 			if (p_ptr->riding_wield[i])
 			{
 				msg_print(_("この武器は乗馬中に使うにはむかないようだ。", "This weapon is not suitable for use while riding."));
@@ -5687,7 +5678,6 @@ void calc_bonuses(void)
 		/* Take note when "illegal weapon" changes */
 		if (p_ptr->old_icky_wield[i] != p_ptr->icky_wield[i])
 		{
-			/* Message */
 			if (p_ptr->icky_wield[i])
 			{
 				msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
@@ -5712,7 +5702,6 @@ void calc_bonuses(void)
 
 	if (p_ptr->riding && (p_ptr->old_riding_ryoute != p_ptr->riding_ryoute))
 	{
-		/* Message */
 		if (p_ptr->riding_ryoute)
 		{
 #ifdef JP

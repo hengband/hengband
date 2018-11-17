@@ -704,7 +704,6 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 		/* Success */
 		if (randint0(100) < j)
 		{
-			/* Message */
 			msg_print(_("鍵をはずした。", "You have picked the lock."));
 
 			/* Open the door */
@@ -722,7 +721,6 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 			/* Failure */
 			if (flush_failure) flush();
 
-			/* Message */
 			msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
 
 			/* We may keep trying */
@@ -822,7 +820,6 @@ void do_cmd_open(void)
 		/* Nothing useful */
 		if (!have_flag(f_info[feat].flags, FF_OPEN) && !o_idx)
 		{
-			/* Message */
 			msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
 		}
 
@@ -831,7 +828,6 @@ void do_cmd_open(void)
 		{
 			p_ptr->energy_use = 100;
 
-			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 			
 			/* Attack */
@@ -890,7 +886,6 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
 		if ((c_ptr->o_idx || (c_ptr->info & CAVE_OBJECT)) &&
 		    (closed_feat != old_feat) && !have_flag(f_info[closed_feat].flags, FF_DROP))
 		{
-			/* Message */
 			msg_print(_("何かがつっかえて閉まらない。", "There seems stuck."));
 		}
 		else
@@ -901,7 +896,6 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
 			/* Broken door */
 			if (old_feat == c_ptr->feat)
 			{
-				/* Message */
 				msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
 			}
 			else
@@ -981,7 +975,6 @@ void do_cmd_close(void)
 		/* Require open/broken door */
 		if (!have_flag(f_info[feat].flags, FF_CLOSE))
 		{
-			/* Message */
 			msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
 		}
 
@@ -990,7 +983,6 @@ void do_cmd_close(void)
 		{
 			p_ptr->energy_use = 100;
 
-			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
@@ -1024,7 +1016,6 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 	/* Must have knowledge */
 	if (!(c_ptr->info & CAVE_MARK))
 	{
-		/* Message */
 		msg_print(_("そこには何も見当たらない。", "You see nothing there."));
 
 		/* Nope */
@@ -1034,7 +1025,6 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 	/* Must be a wall/door/etc */
 	if (!cave_have_flag_grid(c_ptr, FF_TUNNEL))
 	{
-		/* Message */
 		msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
 
 		/* Nope */
@@ -1103,7 +1093,6 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 		/* Dig */
 		if (p_ptr->skill_dig > randint0(20 * power))
 		{
-			/* Message */
 			msg_format(_("%sをくずした。", "You have removed the %s."), name);
 
 			/* Remove the feature */
@@ -1232,7 +1221,6 @@ void do_cmd_tunnel(void)
 		/* No tunnelling through doors */
 		if (have_flag(f_info[feat].flags, FF_DOOR))
 		{
-			/* Message */
 			msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
 		}
 
@@ -1247,7 +1235,6 @@ void do_cmd_tunnel(void)
 		{
 			p_ptr->energy_use = 100;
 
-			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
@@ -1327,7 +1314,6 @@ bool easy_open_door(POSITION y, POSITION x)
 		/* Success */
 		if (randint0(100) < j)
 		{
-			/* Message */
 			msg_print(_("鍵をはずした。", "You have picked the lock."));
 
 			/* Open the door */
@@ -1345,7 +1331,6 @@ bool easy_open_door(POSITION y, POSITION x)
 			/* Failure */
 			if (flush_failure) flush();
 
-			/* Message */
 			msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
 
 		}
@@ -1507,7 +1492,6 @@ static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	/* Success */
 	if (randint0(100) < j)
 	{
-		/* Message */
 		msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
 		
 		/* Reward */
@@ -1535,7 +1519,6 @@ static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 		/* Failure */
 		if (flush_failure) flush();
 
-		/* Message */
 		msg_format(_("%sの解除に失敗した。", "You failed to disarm the %s."), name);
 
 		/* We may keep trying */
@@ -1545,7 +1528,6 @@ static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	/* Failure -- Set off the trap */
 	else
 	{
-		/* Message */
 		msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
@@ -1642,14 +1624,12 @@ void do_cmd_disarm(void)
 		/* Disarm a trap */
 		if (!is_trap(feat) && !o_idx)
 		{
-			/* Message */
 			msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
 		}
 
 		/* Monster in the way */
 		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
 		{
-			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
@@ -1711,7 +1691,6 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	p_ptr->energy_use = 100;
 
-	/* Message */
 	msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
 
 	/* Compare bash power to door power XXX XXX XXX */
@@ -1725,7 +1704,6 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 	/* Hack -- attempt to bash down the door */
 	if (randint0(100) < temp)
 	{
-		/* Message */
 		msg_format(_("%sを壊した！", "The %s crashes open!"), name);
 
 		sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
@@ -1750,7 +1728,6 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 	else if (randint0(100) < adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
 		 p_ptr->lev)
 	{
-		/* Message */
 		msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
 
 		/* Allow repeated bashing */
@@ -1760,7 +1737,6 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 	/* High dexterity yields coolness */
 	else
 	{
-		/* Message */
 		msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
 
 		/* Hack -- Lose balance ala paralysis */
@@ -1835,7 +1811,6 @@ void do_cmd_bash(void)
 		/* Nothing useful */
 		if (!have_flag(f_info[feat].flags, FF_BASH))
 		{
-			/* Message */
 			msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
 		}
 
@@ -1844,7 +1819,6 @@ void do_cmd_bash(void)
 		{
 			p_ptr->energy_use = 100;
 
-			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
@@ -2053,14 +2027,12 @@ void do_cmd_spike(void)
 		/* Require closed door */
 		if (!have_flag(f_info[feat].flags, FF_SPIKE))
 		{
-			/* Message */
 			msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
 		}
 
 		/* Get a spike */
 		else if (!get_spike(&item))
 		{
-			/* Message */
 			msg_print(_("くさびを持っていない！", "You have no spikes!"));
 		}
 
@@ -2069,7 +2041,6 @@ void do_cmd_spike(void)
 		{
 			p_ptr->energy_use = 100;
 
-			/* Message */
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
@@ -3141,7 +3112,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 					/* Get "the monster" or "it" */
 					monster_desc(m_name, m_ptr, 0);
 
-					/* Message */
 					msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
 					if (m_ptr->ml)
@@ -3229,7 +3199,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 						msg_format(_("%sは%sに突き刺さった！", "%^s have stuck into %s!"),o_name, m_name);
 					}
 
-					/* Message */
 					message_pain(c_mon_ptr->m_idx, tdam);
 
 					/* Anger the monster */
@@ -3245,7 +3214,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 						/* Get the monster name (or "it") */
 						monster_desc(m_name, m_ptr, 0);
 
-						/* Message */
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 					}
 
@@ -3758,7 +3726,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					/* Get "the monster" or "it" */
 					monster_desc(m_name, m_ptr, 0);
 
-					/* Message */
 					msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
 					if (m_ptr->ml)
@@ -3821,7 +3788,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				/* No death */
 				else
 				{
-					/* Message */
 					message_pain(c_ptr->m_idx, tdam);
 
 					/* Anger the monster */
@@ -3838,7 +3804,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 						/* Get the monster name (or "it") */
 						monster_desc(m_name, m_ptr, 0);
 
-						/* Message */
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 					}
 				}
@@ -3874,7 +3839,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	{
 		if (hit_body || hit_wall || (randint1(100) < j))
 		{
-			/* Message */
 			msg_format(_("%sは砕け散った！", "The %s shatters!"), o_name);
 
 			if (potion_smash_effect(0, y, x, q_ptr->k_idx))

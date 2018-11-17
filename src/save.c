@@ -1845,7 +1845,6 @@ bool load_player(void)
 			/* Close the file */
 			my_fclose(fkk);
 
-			/* Message */
 			msg_print(_("セーブファイルは現在使用中です。", "Savefile is currently in use."));
 			msg_print(NULL);
 
@@ -1937,7 +1936,6 @@ bool load_player(void)
 		if (sf_when > (statbuf.st_ctime + 100) ||
 		    sf_when < (statbuf.st_ctime - 100))
 		{
-			/* Message */
 			what = _("無効なタイム・スタンプです", "Invalid timestamp");
 
 			/* Oops */
@@ -1961,7 +1959,6 @@ bool load_player(void)
 			}
 			else
 			{
-				/* Message */
 #ifdef JP
 				msg_format("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。",
 				    (z_major > 9) ? z_major-10 : z_major , z_minor, z_patch);
@@ -2031,7 +2028,6 @@ bool load_player(void)
 #endif
 
 
-	/* Message */
 #ifdef JP
 	msg_format("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。",
 		   what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);

@@ -2136,7 +2136,6 @@ void do_cmd_mind(void)
 		if ((p_ptr->csp - mana_cost) < 0) p_ptr->csp_frac = 0;
 		p_ptr->csp = MAX(0, p_ptr->csp - mana_cost);
 
-		/* Message */
 		msg_format(_("%sを集中しすぎて気を失ってしまった！", "You faint from the effort!"),p);
 
 		/* Hack -- Bypass free action */
@@ -2147,7 +2146,6 @@ void do_cmd_mind(void)
 		{
 			bool perm = (randint0(100) < 25);
 
-			/* Message */
 			msg_print(_("自分の精神を攻撃してしまった！", "You have damaged your mind!"));
 
 			/* Reduce constitution */

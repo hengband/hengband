@@ -1801,7 +1801,6 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 	disturb(1, 1);
 
-	/* Message */
 	monspell_message_base(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
 		_("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
@@ -1818,7 +1817,6 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 		/* Fully healed */
 		m_ptr->hp = m_ptr->maxhp;
 
-		/* Message */
 		monspell_message_base(m_idx, t_idx,
 			_("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
 			_("%^sは完全に治ったようだ！", "%^s sounds completely healed!"),
@@ -1830,7 +1828,6 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	/* Partially healed */
 	else
 	{
-		/* Message */
 		monspell_message_base(m_idx, t_idx,
 			_("%^sは体力を回復したようだ。", "%^s sounds healthier."),
 			_("%^sは体力を回復したようだ。", "%^s sounds healthier."),
@@ -1849,7 +1846,6 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 		/* Cancel fear */
 		(void)set_monster_monfear(m_idx, 0);
 
-		/* Message */
 		if (see_monster(m_idx))
 			msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
 	}
@@ -1866,7 +1862,6 @@ void spell_RF6_INVULNER(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	monster_type	*m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 
-	/* Message */
 	monspell_message_base(m_idx, t_idx,
 			_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
 			_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),

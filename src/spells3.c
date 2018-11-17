@@ -998,7 +998,6 @@ bool apply_disenchant(BIT_FLAGS mode)
 	/* Artifacts have 71% chance to resist */
 	if (object_is_artifact(o_ptr) && (randint0(100) < 71))
 	{
-		/* Message */
 #ifdef JP
 msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 #else
@@ -1038,7 +1037,6 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 	if ((to_h != o_ptr->to_h) || (to_d != o_ptr->to_d) ||
 	    (to_a != o_ptr->to_a) || (pval != o_ptr->pval))
 	{
-		/* Message */
 #ifdef JP
 		msg_format("%s(%c)は劣化してしまった！",
 			   o_name, index_to_label(t) );
@@ -1185,7 +1183,6 @@ void phlogiston(void)
 	/* Refuel */
 	o_ptr->xtra4 += (XTRA16)(max_flog / 2);
 
-	/* Message */
 	msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
 
 	/* Comment */
@@ -2010,7 +2007,6 @@ bool alchemy(void)
 	/* Artifacts cannot be destroyed */
 	if (!can_player_destroy_object(o_ptr))
 	{
-		/* Message */
 		msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), o_name);
 
 		/* Done */
@@ -2021,7 +2017,6 @@ bool alchemy(void)
 
 	if (price <= 0)
 	{
-		/* Message */
 		msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), o_name);
 	}
 	else
@@ -2274,7 +2269,6 @@ msg_format("%s は明るく輝いた！",
 		/* Flush */
 		if (flush_failure) flush();
 
-		/* Message */
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
 
 		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
@@ -2405,7 +2399,6 @@ bool artifact_scroll(void)
 		/* Flush */
 		if (flush_failure) flush();
 
-		/* Message */
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
 
 		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
@@ -4396,7 +4389,6 @@ int inven_damage(inven_func typ, int perc)
 				/* Get a description */
 				object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
-				/* Message */
 				msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
 
 #ifdef JP
@@ -4490,7 +4482,6 @@ static int minus_ac(void)
 		return (TRUE);
 	}
 
-	/* Message */
 	msg_format(_("%sがダメージを受けた！", "Your %s is damaged!"), o_name);
 
 	/* Damage the item */
@@ -4959,7 +4950,6 @@ bool brand_bolts(void)
 		/* Randomize */
 		if (randint0(100) < 75) continue;
 
-		/* Message */
 		msg_print(_("クロスボウの矢が炎のオーラに包まれた！", "Your bolts are covered in a fiery aura!"));
 
 		/* Ego-item */
@@ -5319,7 +5309,6 @@ bool eat_magic(int power)
 					p_ptr->total_weight -= q_ptr->weight;
 					item = inven_carry(q_ptr);
 
-					/* Message */
 					msg_print(_("杖をまとめなおした。", "You unstack your staff."));
 				}
 			}
