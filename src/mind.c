@@ -682,7 +682,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	int             y = 1;
 	int             x = 10;
 	int             minfail = 0;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int             chance = 0;
 	int             ask = TRUE;
 	char            choice;
@@ -1863,7 +1863,7 @@ void do_cmd_mind(void)
 	int b = 0;
 	int             chance;
 	int             minfail = 0;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int             old_csp = p_ptr->csp;
 	mind_type       spell;
 	bool            cast;

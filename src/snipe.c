@@ -170,7 +170,7 @@ void display_snipe_list(void)
 	int             i;
 	int             y = 1;
 	int             x = 1;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	snipe_power     spell;
 	char            psi_desc[80];
 
@@ -226,7 +226,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 	int             num = 0;
 	int             y = 1;
 	int             x = 20;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int             ask;
 	char            choice;
 	char            out_val[160];

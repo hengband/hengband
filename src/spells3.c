@@ -3489,7 +3489,7 @@ void display_spell_list(void)
 	    (p_ptr->pclass == CLASS_FORCETRAINER))
 	{
 		int             minfail = 0;
-		int             plev = p_ptr->lev;
+		PLAYER_LEVEL plev = p_ptr->lev;
 		int             chance = 0;
 		mind_type       spell;
 		char            comment[80];

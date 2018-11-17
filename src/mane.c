@@ -87,10 +87,10 @@ static int get_mane_power(int *sn, bool baigaesi)
 {
 	int             i = 0;
 	int             num = 0;
-	int             y = 1;
-	int             x = 18;
+	TERM_LEN y = 1;
+	TERM_LEN x = 18;
 	int             minfail = 0;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	int             chance = 0;
 	int             ask;
 	char            choice;
@@ -967,7 +967,7 @@ bool do_cmd_mane(bool baigaesi)
 	int             n = 0, j;
 	int             chance;
 	int             minfail = 0;
-	int             plev = p_ptr->lev;
+	PLAYER_LEVEL plev = p_ptr->lev;
 	monster_power   spell;
 	bool            cast;
 

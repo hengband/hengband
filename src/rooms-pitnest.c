@@ -18,7 +18,7 @@ struct vault_aux_type
 	cptr name;
 	bool(*hook_func)(MONRACE_IDX r_idx);
 	void(*prep_func)(void);
-	int level;
+	DEPTH level;
 	int chance;
 };
 
