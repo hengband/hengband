@@ -24,7 +24,6 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 	object_type forge;
 	object_type *q_ptr;
 
-	p_ptr->energy_use = 100; /* Take a turn */
 
 	if (world_player)
 	{

@@ -602,7 +602,6 @@ void do_cmd_snipe(void)
 
 	if (!cast) return;
 #if 0
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 #endif
 	/* Redraw mana */

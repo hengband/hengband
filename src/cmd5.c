@@ -878,7 +878,6 @@ void do_cmd_study(void)
 #endif
 	}
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	switch (mp_ptr->spell_book)
@@ -1318,7 +1317,6 @@ void do_cmd_cast(void)
 		}
 	}
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 

@@ -41,7 +41,6 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 	}
 
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	if (world_player)

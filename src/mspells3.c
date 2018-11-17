@@ -1590,7 +1590,6 @@ bool do_cmd_cast_learned(void)
 		}
 	}
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Window stuff */

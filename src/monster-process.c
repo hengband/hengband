@@ -2742,7 +2742,6 @@ void process_monster(MONSTER_IDX m_idx)
 					/* Do not bash the door */
 					may_bash = FALSE;
 
-					/* Take a turn */
 					do_turn = TRUE;
 				}
 
@@ -2758,7 +2757,6 @@ void process_monster(MONSTER_IDX m_idx)
 						/* Do not bash the door */
 						may_bash = FALSE;
 
-						/* Take a turn */
 						do_turn = TRUE;
 					}
 				}
@@ -3026,7 +3024,6 @@ void process_monster(MONSTER_IDX m_idx)
 			/* Note changes to viewable region */
 			do_view = TRUE;
 
-			/* Take a turn */
 			do_turn = TRUE;
 		}
 
@@ -3064,7 +3061,6 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Creature has been allowed move */
 		if (do_move)
 		{
-			/* Take a turn */
 			do_turn = TRUE;
 
 			if (have_flag(f_ptr->flags, FF_TREE))

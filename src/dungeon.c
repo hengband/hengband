@@ -1466,7 +1466,6 @@ static void process_world_aux_hp_and_sp(void)
 		take_hit(DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"), -1);
 	}
 
-
 	/* (Vampires) Take damage from sunlight */
 	if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
@@ -1477,7 +1476,6 @@ static void process_world_aux_hp_and_sp(void)
 				/* Take damage */
 				msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
 				take_hit(DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
-
 				cave_no_regen = TRUE;
 			}
 		}
@@ -1518,11 +1516,10 @@ static void process_world_aux_hp_and_sp(void)
 
 		if (damage)
 		{
-			if (prace_is_(RACE_ENT)) damage += damage / 3;
-			if (p_ptr->resist_fire) damage = damage / 3;
-			if (IS_OPPOSE_FIRE()) damage = damage / 3;
-
-			if (p_ptr->levitation) damage = damage / 5;
+			if(prace_is_(RACE_ENT)) damage += damage / 3;
+			if(p_ptr->resist_fire) damage = damage / 3;
+			if(IS_OPPOSE_FIRE()) damage = damage / 3;
+			if(p_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
@@ -1595,11 +1592,9 @@ static void process_world_aux_hp_and_sp(void)
 	 */
 	if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
 	{
-		if (!IS_INVULN() && !p_ptr->wraith_form && !p_ptr->kabenuke &&
-		    ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
+		if (!IS_INVULN() && !p_ptr->wraith_form && !p_ptr->kabenuke && ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
 		{
 			cptr dam_desc;
-
 			cave_no_regen = TRUE;
 
 			if (p_ptr->pass_wall)
@@ -2077,13 +2072,11 @@ static void process_world_aux_mutation(void)
 	/* No effect on the global map */
 	if (p_ptr->wild_mode) return;
 
-
 	if ((p_ptr->muta2 & MUT2_BERS_RAGE) && one_in_(3000))
 	{
 		disturb(0, 1);
 		msg_print(_("ウガァァア！", "RAAAAGHH!"));
 		msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
-
 		(void)set_shero(10 + randint1(p_ptr->lev), FALSE);
 		(void)set_afraid(0);
 	}
@@ -2100,12 +2093,9 @@ static void process_world_aux_mutation(void)
 
 	if ((p_ptr->muta2 & MUT2_RTELEPORT) && (randint1(5000) == 88))
 	{
-		if (!p_ptr->resist_nexus && !(p_ptr->muta1 & MUT1_VTELEPORT) &&
-		    !p_ptr->anti_tele)
+		if (!p_ptr->resist_nexus && !(p_ptr->muta1 & MUT1_VTELEPORT) && !p_ptr->anti_tele)
 		{
 			disturb(0, 1);
-
-			/* Teleport player */
 			msg_print(_("あなたの位置は突然ひじょうに不確定になった...", "Your position suddenly seems very uncertain..."));
 			msg_print(NULL);
 			teleport_player(40, TELEPORT_PASSIVE);
@@ -2162,9 +2152,7 @@ static void process_world_aux_mutation(void)
 	if ((p_ptr->muta2 & MUT2_FLATULENT) && (randint1(3000) == 13))
 	{
 		disturb(0, 1);
-
 		msg_print(_("ブゥーーッ！おっと。", "BRRAAAP! Oops."));
-
 		msg_print(NULL);
 		fire_ball(GF_POIS, 0, p_ptr->lev, 3);
 	}
@@ -2183,8 +2171,7 @@ static void process_world_aux_mutation(void)
 		fire_ball(GF_MANA, dire, p_ptr->lev * 2, 3);
 	}
 
-	if ((p_ptr->muta2 & MUT2_ATT_DEMON) &&
-	    !p_ptr->anti_magic && (randint1(6666) == 666))
+	if ((p_ptr->muta2 & MUT2_ATT_DEMON) && !p_ptr->anti_magic && (randint1(6666) == 666))
 	{
 		bool pet = one_in_(6);
 		BIT_FLAGS mode = PM_ALLOW_GROUP;
@@ -2192,8 +2179,7 @@ static void process_world_aux_mutation(void)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x,
-				    dun_level, SUMMON_DEMON, mode))
+		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, dun_level, SUMMON_DEMON, mode))
 		{
 			msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
 			disturb(0, 1);
@@ -2336,7 +2322,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_WASTING) && one_in_(3000))
 	{
-		int which_stat = randint0(6);
+		int which_stat = randint0(A_MAX);
 		int sustained = FALSE;
 
 		switch (which_stat)
@@ -2592,12 +2578,11 @@ static void process_world_aux_curse(void)
 			(void)activate_ty_curse(FALSE, &count);
 		}
 		/* Handle experience draining */
-		if (p_ptr->prace != RACE_ANDROID && 
-			((p_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)))
+		if (p_ptr->prace != RACE_ANDROID && ((p_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)))
 		{
-			p_ptr->exp -= (p_ptr->lev+1)/2;
+			p_ptr->exp -= (p_ptr->lev + 1) / 2;
 			if (p_ptr->exp < 0) p_ptr->exp = 0;
-			p_ptr->max_exp -= (p_ptr->lev+1)/2;
+			p_ptr->max_exp -= (p_ptr->lev + 1) / 2;
 			if (p_ptr->max_exp < 0) p_ptr->max_exp = 0;
 			check_experience();
 		}
@@ -4843,9 +4828,9 @@ static void process_player(void)
 			msg_print(NULL);
 			if (r_idx && one_in_(2))
 			{
-				int y, x;
-				y = p_ptr->y+ddy[tsuri_dir];
-				x = p_ptr->x+ddx[tsuri_dir];
+				POSITION y, x;
+				y = p_ptr->y + ddy[tsuri_dir];
+				x = p_ptr->x + ddx[tsuri_dir];
 				if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 				{
 					char m_name[80];
@@ -4874,8 +4859,7 @@ static void process_player(void)
 			/* Check for a key */
 			if (inkey())
 			{
-				/* Flush input */
-				flush();
+				flush(); /* Flush input */
 
 				/* Disturb */
 				disturb(0, 1);
@@ -4938,7 +4922,7 @@ static void process_player(void)
 		if (MON_MONFEAR(m_ptr))
 		{
 			/* Hack -- Recover from fear */
-			if (set_monster_monfear(p_ptr->riding,
+			if(set_monster_monfear(p_ptr->riding,
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
 				char m_name[80];
@@ -4964,10 +4948,7 @@ static void process_player(void)
 	}
 	if ((p_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI)
 	{
-		if (P_PTR_KI < 40)
-		{
-			P_PTR_KI = 0;
-		}
+		if(P_PTR_KI < 40) P_PTR_KI = 0;
 		else P_PTR_KI -= 40;
 		p_ptr->update |= (PU_BONUS);
 	}
@@ -4978,7 +4959,6 @@ static void process_player(void)
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
 		s64b_LSHIFT(cost, cost_frac, 16);
-
  
 		if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, cost, cost_frac) < 0)
 		{
@@ -5033,18 +5013,14 @@ static void process_player(void)
 		/* Refresh (optional) */
 		if (fresh_before) Term_fresh();
 
-
 		/* Hack -- Pack Overflow */
 		pack_overflow();
-
 
 		/* Hack -- cancel "lurking browse mode" */
 		if (!command_new) command_see = FALSE;
 
-
 		/* Assume free turn */
 		p_ptr->energy_use = 0;
-
 
 		if (p_ptr->inside_battle)
 		{
@@ -5060,7 +5036,6 @@ static void process_player(void)
 		/* Paralyzed or Knocked Out */
 		else if (p_ptr->paralyzed || (p_ptr->stun >= 100))
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 		}
 
@@ -5079,14 +5054,12 @@ static void process_player(void)
 				p_ptr->redraw |= (PR_STATE);
 			}
 
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 		}
 
 		/* Fishing */
 		else if (p_ptr->action == ACTION_FISH)
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 		}
 

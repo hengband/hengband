@@ -2096,7 +2096,6 @@ void do_cmd_mind(void)
 	}
 
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 	/* teleport from mirror costs small energy */
 	if( on_mirror && p_ptr->pclass == CLASS_MIRROR_MASTER )

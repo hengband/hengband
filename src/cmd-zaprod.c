@@ -295,7 +295,6 @@ void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 	}
 
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Extract the item level */

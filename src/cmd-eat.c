@@ -37,7 +37,6 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 
 	sound(SOUND_EAT);
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Identity not known yet */

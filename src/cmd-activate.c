@@ -85,7 +85,6 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		o_ptr = &o_list[0 - item];
 	}
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Extract the item level */

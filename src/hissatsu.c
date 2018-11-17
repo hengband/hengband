@@ -372,7 +372,6 @@ void do_cmd_hissatsu(void)
 	/* Cast the spell */
 	if (!do_spell(REALM_HISSATSU, n, SPELL_CAST)) return;
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Use some mana */
@@ -479,7 +478,6 @@ void do_cmd_gain_hissatsu(void)
 	if (!gain)
 		msg_print(_("何も覚えられなかった。", "You were not able to learn any special attacks."));
 
-	/* Take a turn */
 	else
 		p_ptr->energy_use = 100;
 

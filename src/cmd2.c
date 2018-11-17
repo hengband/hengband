@@ -384,8 +384,6 @@ void do_cmd_search(void)
 		/* Cancel the arg */
 		command_arg = 0;
 	}
-
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Search */
@@ -447,15 +445,10 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
-
 	bool flag = TRUE;
-
 	bool more = FALSE;
-
 	object_type *o_ptr = &o_list[o_idx];
 
-
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Attempt to unlock it */
@@ -675,13 +668,9 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 
 	/* Get requested grid */
 	cave_type *c_ptr = &cave[y][x];
-
 	feature_type *f_ptr = &f_info[c_ptr->feat];
-
 	bool more = FALSE;
 
-
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Seeing true feature code (ignore mimic) */
@@ -840,7 +829,6 @@ void do_cmd_open(void)
 		/* Monster in the way */
 		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 
 			/* Message */
@@ -889,7 +877,6 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
 	FEAT_IDX old_feat = c_ptr->feat;
 	bool more = FALSE;
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Seeing true feature code (ignore mimic) */
@@ -1001,7 +988,6 @@ void do_cmd_close(void)
 		/* Monster in the way */
 		else if (c_ptr->m_idx)
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 
 			/* Message */
@@ -1082,7 +1068,6 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	/* Verify legality */
 	if (!do_cmd_tunnel_test(y, x)) return (FALSE);
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Get grid */
@@ -1260,7 +1245,6 @@ void do_cmd_tunnel(void)
 		/* A monster is in the way */
 		else if (c_ptr->m_idx)
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 
 			/* Message */
@@ -1400,13 +1384,9 @@ bool easy_open_door(POSITION y, POSITION x)
 static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
-
 	bool more = FALSE;
-
 	object_type *o_ptr = &o_list[o_idx];
 
-
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Get the "disarm" factor */
@@ -1506,15 +1486,12 @@ static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	/* Extract trap "power" */
 	int power = f_ptr->power;
-
 	bool more = FALSE;
 
 	/* Get the "disarm" factor */
 	int i = p_ptr->skill_dis;
-
 	int j;
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Penalize some conditions */
@@ -1732,7 +1709,6 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	cptr name = f_name + f_info[get_feat_mimic(c_ptr)].name;
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Message */
@@ -1866,7 +1842,6 @@ void do_cmd_bash(void)
 		/* Monster in the way */
 		else if (c_ptr->m_idx)
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 
 			/* Message */
@@ -1948,7 +1923,6 @@ void do_cmd_alter(void)
 		feat = get_feat_mimic(c_ptr);
 		f_ptr = &f_info[feat];
 
-		/* Take a turn */
 		p_ptr->energy_use = 100;
 
 		/* Attack monsters */
@@ -2093,7 +2067,6 @@ void do_cmd_spike(void)
 		/* Is a monster in the way? */
 		else if (c_ptr->m_idx)
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 
 			/* Message */
@@ -2106,7 +2079,6 @@ void do_cmd_spike(void)
 		/* Go for it */
 		else
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 
 			/* Successful jamming */
@@ -2152,7 +2124,6 @@ void do_cmd_walk(bool pickup)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir, FALSE))
 	{
-		/* Take a turn */
 		p_ptr->energy_use = 100;
 
 		if ((dir != 5) && (p_ptr->special_defense & KATA_MUSOU))
@@ -2257,7 +2228,6 @@ void do_cmd_stay(bool pickup)
 		command_arg = 0;
 	}
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	if (pickup) mpe_mode |= MPE_DO_PICKUP;
@@ -3677,7 +3647,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		p_ptr->redraw |= (PR_EQUIPPY);
 	}
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Rogue and Ninja gets bonus */

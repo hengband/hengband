@@ -402,7 +402,6 @@ void do_cmd_wield(void)
 		autopick_alter_item(item, FALSE);
 	}
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Get local object */
@@ -898,7 +897,6 @@ void do_cmd_destroy(void)
 	object_desc(o_name, o_ptr, 0);
 	o_ptr->number = old_number;
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Artifacts cannot be destroyed */

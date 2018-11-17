@@ -329,7 +329,6 @@ bool do_riding(bool force)
 
 		if (c_ptr->m_idx)
 		{
-			/* Take a turn */
 			p_ptr->energy_use = 100;
 
 			/* Message */

@@ -340,7 +340,6 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 	}
 
 
-	/* Take a turn */
 	p_ptr->energy_use = 100;
 
 	/* Extract the item level */
