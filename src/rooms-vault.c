@@ -1088,11 +1088,11 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 *
 *This makes a vault that looks like a castle/ city in the dungeon.
 */
-static void build_castle_vault(int x0, int y0, int xsize, int ysize)
+static void build_castle_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
-	int dy, dx;
-	int y1, x1, y2, x2;
-	int y, x;
+	POSITION dy, dx;
+	POSITION y1, x1, y2, x2;
+	POSITION y, x;
 
 	/* Pick a random room size */
 	dy = ysize / 2 - 1;

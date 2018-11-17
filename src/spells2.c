@@ -4070,7 +4070,7 @@ bool kawarimi(bool success)
 {
 	object_type forge;
 	object_type *q_ptr = &forge;
-	int y, x;
+	POSITION y, x;
 
 	if (p_ptr->is_dead) return FALSE;
 	if (p_ptr->confused || p_ptr->blind || p_ptr->paralyzed || p_ptr->image) return FALSE;

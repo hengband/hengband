@@ -532,7 +532,7 @@ void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
  */
 void place_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
 {
-	int y, x;
+	POSITION y, x;
 
 	place_floor(x1, x2, y1, y2, light);
 

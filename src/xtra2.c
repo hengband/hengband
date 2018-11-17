@@ -2822,8 +2822,8 @@ static bool target_set_accept(POSITION y, POSITION x)
  */
 static void target_set_prepare(BIT_FLAGS mode)
 {
-	int y, x;
-	int min_hgt, max_hgt, min_wid, max_wid;
+	POSITION y, x;
+	POSITION min_hgt, max_hgt, min_wid, max_wid;
 
 	if (mode & TARGET_KILL)
 	{

@@ -146,7 +146,7 @@ static bool z_older_than(byte x, byte y, byte z)
  */
 static void note(cptr msg)
 {
-	static int y = 2;
+	static TERM_LEN y = 2;
 
 	/* Draw the message */
 	prt(msg, y, 0);

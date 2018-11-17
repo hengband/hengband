@@ -37,8 +37,8 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	SPELL_IDX i;
 	int j = 0;
 	int num = 0;
-	int y = 1;
-	int x = 15;
+	POSITION y = 1;
+	POSITION x = 15;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int ask = TRUE;
 	char choice;
