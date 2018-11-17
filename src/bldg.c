@@ -1744,7 +1744,7 @@ static void tsuchinoko(void)
 static void shoukinkubi(void)
 {
 	int i;
-	int y = 0;
+	TERM_LEN y = 0;
 
 	clear_bldg(4,18);
 	prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"),4 ,10);

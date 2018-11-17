@@ -3874,7 +3874,7 @@ static bool do_cmd_histpref(void)
 static void edit_history(void)
 {
 	char old_history[4][60];
-	int y = 0, x = 0;
+	TERM_LEN y = 0, x = 0;
 	int i, j;
 
 	/* Edit character background */

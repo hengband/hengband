@@ -1694,7 +1694,7 @@ typedef struct
 {
 	BIT_FLAGS info;
 	FEAT_IDX feat;
-	s16b mimic;
+	FEAT_IDX mimic;
 	s16b special;
 	u16b occurrence;
 } cave_template_type;
@@ -1735,7 +1735,7 @@ typedef struct {
 	int run; /* Remaining grid number */
 	int cost[MAX_HGT][MAX_WID];
 	POSITION x; /* Target X */
-	int y; /* Target Y */
+	POSITION y; /* Target Y */
 	DIRECTION dir; /* Running direction */
 } travel_type;
 #endif

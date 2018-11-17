@@ -212,7 +212,7 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 	{
 		while (TRUE)
 		{
-			int y = 0, x = 0;
+			POSITION y, x = 0;
 			cave_type *c_ptr;
 
 			int candidates = 0;
@@ -288,7 +288,8 @@ static bool alloc_stairs(IDX feat, int num, int walls)
  */
 static void alloc_object(int set, EFFECT_ID typ, int num)
 {
-	int y = 0, x = 0, k;
+	POSITION y = 0, x = 0;
+	int k;
 	int dummy = 0;
 	cave_type *c_ptr;
 
@@ -1038,9 +1039,9 @@ static void build_arena(void)
  */
 static void arena_gen(void)
 {
-	int y, x;
-	int qy = 0;
-	int qx = 0;
+	POSITION y, x;
+	POSITION qy = 0;
+	POSITION qx = 0;
 
 	/* Smallest area */
 	cur_hgt = SCREEN_HGT;
@@ -1149,10 +1150,10 @@ static void build_battle(void)
  */
 static void battle_gen(void)
 {
-	int y, x;
+	POSITION y, x;
 	MONSTER_IDX i;
-	int qy = 0;
-	int qx = 0;
+	POSITION qy = 0;
+	POSITION qx = 0;
 
 	/* Start with solid walls */
 	for (y = 0; y < MAX_HGT; y++)
@@ -1550,10 +1551,10 @@ if (why) msg_format("生成やり直し(%s)", why);
 */
 bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
-	int y, x;
+	POSITION y, x;
 	POSITION tmp_row, tmp_col;
-	int row_dir, col_dir;
-	int start_row, start_col;
+	DIRECTION row_dir, col_dir;
+	POSITION start_row, start_col;
 	int main_loop_count = 0;
 
 	bool door_flag = FALSE;

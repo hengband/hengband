@@ -5088,7 +5088,8 @@ void disturb(int stop_search, int stop_travel)
  */
 void glow_deep_lava_and_bldg(void)
 {
-	int y, x, i, yy, xx;
+	POSITION y, x, yy, xx;
+	DIRECTION i;
 	cave_type *c_ptr;
 
 	/* Not in the darkness dungeon */
