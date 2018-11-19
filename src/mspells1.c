@@ -361,9 +361,9 @@ static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
  */
-bool summon_possible(int y1, int x1)
+bool summon_possible(POSITION y1, POSITION x1)
 {
-	int y, x;
+	POSITION y, x;
 
 	/* Start at the player's location, and check 2 grids in each dir */
 	for (y = y1 - 2; y <= y1 + 2; y++)
@@ -452,11 +452,12 @@ bool raise_possible(monster_type *m_ptr)
  * no equally friendly monster is\n
  * between the attacker and target.\n
  */
-bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend)
+bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
 	/* Must be the same as projectable() */
 
-	int i, y, x;
+	int i;
+	POSITION y, x;
 
 	int grid_n = 0;
 	u16b grid_g[512];
@@ -619,14 +620,14 @@ void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp
 }
 
 /*!
- * @brief モンスターのボール型＆ブレス型魔法処理 /
+ * @brief アイテムに付加される可能性のある呪いを指定する。
  * @param power 呪いの段階
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
  * @return 与える呪いのID
  */
-u32b get_curse(int power, object_type *o_ptr)
+BIT_FLAGS get_curse(int power, object_type *o_ptr)
 {
-	u32b new_curse;
+	BIT_FLAGS new_curse;
 
 	while(1)
 	{
@@ -651,12 +652,12 @@ u32b get_curse(int power, object_type *o_ptr)
 }
 
 /*!
- * @brief 装備への呪い付加判定と付加処理 /
+ * @brief 装備への呪い付加判定と付加処理
  * @param chance 呪いの基本確率
- * @param heavy_chance 重い呪いを選択肢に入れるか否か。
+ * @param heavy_chance さらに重い呪いとなる確率
  * @return なし
  */
-void curse_equipment(int chance, int heavy_chance)
+void curse_equipment(PERCENTAGE chance, PERCENTAGE heavy_chance)
 {
 	bool        changed = FALSE;
 	int         curse_power = 0;

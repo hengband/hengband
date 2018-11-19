@@ -717,8 +717,8 @@ extern bool set_monster_monfear(MONSTER_IDX m_idx, int v);
 extern bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need);
 extern void process_monsters_mtimed(int mtimed_idx);
 extern void dispel_monster_status(MONSTER_IDX m_idx);
-extern u32b get_curse(int power, object_type *o_ptr);
-extern void curse_equipment(int chance, int heavy_chance);
+extern BIT_FLAGS get_curse(int power, object_type *o_ptr);
+extern void curse_equipment(PERCENTAGE chance, PERCENTAGE heavy_chance);
 extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, IDX who);
 extern bool process_the_world(int num, MONSTER_IDX who, bool vs_player);
 extern void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx);
@@ -1357,8 +1357,8 @@ extern void do_cmd_mind_browse(void);
 extern bool do_cmd_mane(bool baigaesi);
 
 /* mspells1.c */
-extern bool clean_shot(int y1, int x1, int y2, int x2, bool is_friend);
-extern bool summon_possible(int y1, int x1);
+extern bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
+extern bool summon_possible(POSITION y1, POSITION x1);
 extern bool raise_possible(monster_type *m_ptr);
 extern bool dispel_check(MONSTER_IDX m_idx);
 extern bool spell_is_inate(SPELL_IDX spell);
