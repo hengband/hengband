@@ -4228,8 +4228,8 @@ static int scent_when = 0;
  */
 void update_smell(void)
 {
-	int i, j;
-	int y, x;
+	POSITION i, j;
+	POSITION y, x;
 
 	/* Create a table that controls the spread of scent */
 	const int scent_adjust[5][5] = 
@@ -4296,7 +4296,8 @@ void update_smell(void)
  */
 void map_area(POSITION range)
 {
-	int             i, x, y;
+	int i;
+	POSITION x, y;
 	cave_type       *c_ptr;
 	s16b            feat;
 	feature_type    *f_ptr;

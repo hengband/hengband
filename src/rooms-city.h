@@ -9,8 +9,8 @@
 /* Struct for build underground buildings */
 typedef struct
 {
-	int y0, x0; /* North-west corner (relative) */
-	int y1, x1; /* South-east corner (relative) */
+	POSITION y0, x0; /* North-west corner (relative) */
+	POSITION y1, x1; /* South-east corner (relative) */
 }
 ugbldg_type;
 
