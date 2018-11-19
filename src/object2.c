@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "object-hook.h"
+#include "object-curse.h"
 
 static void one_sustain(object_type *o_ptr);
 

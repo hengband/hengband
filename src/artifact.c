@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "cmd-activate.h"
+#include "object-curse.h"
 
 static int suppression_evil_dam(object_type *o_ptr);
 static int weakening_artifact(object_type *o_ptr);

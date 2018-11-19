@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
+#include "object-curse.h"
 
 #define REWARD_CHANCE 10
 

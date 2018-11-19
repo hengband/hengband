@@ -21,6 +21,7 @@ hengband_SOURCES = \
 	monster-hook.c monster-hook.h monster-process.c \
 	monster-process.h monster-status.c monster-status.h monster1.c \
 	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c mutation.c \
+	object-curse.c object-curse.h \
 	object-hook.c object-hook.h object1.c object2.c obj_kind.c racial.c \
 	realm-arcane.c \
 	realm-arcane.h realm-chaos.c realm-chaos.h realm-craft.c realm-craft.h \

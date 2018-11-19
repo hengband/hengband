@@ -151,6 +151,7 @@
     <ClCompile Include="..\..\src\monster-hook.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
+    <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-hook.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
     <ClCompile Include="..\..\src\realm-crusade.c" />
@@ -273,6 +274,7 @@
     <ClInclude Include="..\..\src\mindtips.h" />
     <ClInclude Include="..\..\src\monster-hook.h" />
     <ClInclude Include="..\..\src\monster-status.h" />
+    <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-hook.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\realm-arcane.h" />
