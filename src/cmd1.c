@@ -1798,7 +1798,7 @@ static bool run_test(void)
 	int         i, max, inv;
 	int         option = 0, option2 = 0;
 	cave_type   *c_ptr;
-	s16b        feat;
+	FEAT_IDX feat;
 	feature_type *f_ptr;
 
 	/* Where we came from */

@@ -4298,9 +4298,9 @@ void map_area(POSITION range)
 {
 	int i;
 	POSITION x, y;
-	cave_type       *c_ptr;
-	s16b            feat;
-	feature_type    *f_ptr;
+	cave_type *c_ptr;
+	FEAT_IDX feat;
+	feature_type *f_ptr;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
@@ -4377,7 +4377,8 @@ void map_area(POSITION range)
  */
 void wiz_lite(bool ninja)
 {
-	int i, y, x;
+	OBJECT_IDX i;
+	POSITION y, x;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 
@@ -4475,8 +4476,8 @@ void wiz_lite(bool ninja)
  */
 void wiz_dark(void)
 {
-	int i, y, x;
-
+	OBJECT_IDX i;
+	POSITION y, x;
 
 	/* Forget every grid */
 	for (y = 1; y < cur_hgt - 1; y++)
@@ -4539,10 +4540,6 @@ void wiz_dark(void)
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
-
-
-
-
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
@@ -4563,7 +4560,8 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 		/* Hack -- glow the GLOW terrain */
 		if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 		{
-			int i, yy, xx;
+			DIRECTION i;
+			POSITION yy, xx;
 
 			for (i = 0; i < 9; i++)
 			{
@@ -4626,7 +4624,8 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 	/* Hack -- glow the GLOW terrain */
 	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 	{
-		int i, yy, xx;
+		DIRECTION i;
+		POSITION yy, xx;
 		cave_type *cc_ptr;
 
 		for (i = 0; i < 9; i++)
@@ -4660,7 +4659,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 }
 
 
-IDX conv_dungeon_feat(IDX newfeat)
+FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat)
 {
 	feature_type *f_ptr = &f_info[newfeat];
 
@@ -4694,7 +4693,7 @@ IDX conv_dungeon_feat(IDX newfeat)
  * Take a feature, determine what that feature becomes
  * through applying the given action.
  */
-IDX feat_state(IDX feat, int action)
+FEAT_IDX feat_state(FEAT_IDX feat, int action)
 {
 	feature_type *f_ptr = &f_info[feat];
 	int i;

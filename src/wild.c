@@ -970,7 +970,7 @@ static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
 	cptr    p;
 	int     cur = 0;
 	char    check = 'a';
-	s16b    feat;
+	FEAT_IDX feat;
 	int     num;
 
 	/* Begin the varargs stuff */
