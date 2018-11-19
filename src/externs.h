@@ -1082,6 +1082,7 @@ extern bool mirror_tunnel(void);
 extern bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
 extern void massacre(void);
 extern bool eat_lock(void);
+extern bool shock_power(void);
 
 /* store.c */
 extern bool combine_and_reorder_home(int store_num);

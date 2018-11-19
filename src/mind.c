@@ -679,8 +679,8 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 {
 	SPELL_IDX i;
 	int             num = 0;
-	int             y = 1;
-	int             x = 10;
+	TERM_LEN y = 1;
+	TERM_LEN x = 10;
 	int             minfail = 0;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int             chance = 0;
@@ -1261,63 +1261,8 @@ static bool cast_force_spell(int spell)
 		set_tim_sh_touki(randint1(plev / 2) + 15 + boost / 7, FALSE);
 		break;
 	case 7:
-	{
-		int y, x, dam;
-		project_length = 1;
-		if (!get_aim_dir(&dir)) return FALSE;
-
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
-		dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
-		fire_beam(GF_MISSILE, dir, dam);
-		if (cave[y][x].m_idx)
-		{
-			int i;
-			int ty = y, tx = x;
-			int oy = y, ox = x;
-			MONSTER_IDX m_idx = cave[y][x].m_idx;
-			monster_type *m_ptr = &m_list[m_idx];
-			monster_race *r_ptr = &r_info[m_ptr->r_idx];
-			char m_name[80];
-
-			monster_desc(m_name, m_ptr, 0);
-
-			if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam/2)
-			{
-				msg_format(_("%sは飛ばされなかった。", "%^s was not blown away."), m_name);
-			}
-			else
-			{
-				for (i = 0; i < 5; i++)
-				{
-					y += ddy[dir];
-					x += ddx[dir];
-					if (cave_empty_bold(y, x))
-					{
-						ty = y;
-						tx = x;
-					}
-					else break;
-				}
-				if ((ty != oy) || (tx != ox))
-				{
-					msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
-					cave[oy][ox].m_idx = 0;
-					cave[ty][tx].m_idx = (s16b)m_idx;
-					m_ptr->fy = (byte_hack)ty;
-					m_ptr->fx = (byte_hack)tx;
-
-					update_mon(m_idx, TRUE);
-					lite_spot(oy, ox);
-					lite_spot(ty, tx);
-
-					if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-						p_ptr->update |= (PU_MON_LITE);
-				}
-			}
-		}
+		return shock_power();
 		break;
-	}
 	case 8:
 		if (!get_aim_dir(&dir)) return FALSE;
 		fire_ball(GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);

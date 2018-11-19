@@ -1177,8 +1177,7 @@ byte color_char_to_attr(char c)
  * @param parse_info_txt_line パース関数
  * @return エラーコード
  */
-errr init_info_txt(FILE *fp, char *buf, header *head,
-		   parse_info_txt_func parse_info_txt_line)
+errr init_info_txt(FILE *fp, char *buf, header *head, parse_info_txt_func parse_info_txt_line)
 {
 	errr err;
 

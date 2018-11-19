@@ -5684,3 +5684,69 @@ bool eat_lock(void)
 	(void)move_player_effect(y, x, MPE_DONT_PICKUP);
 	return TRUE;
 }
+
+
+bool shock_power(void)
+{
+	DIRECTION dir;
+	POSITION y, x;
+	HIT_POINT dam;
+	PLAYER_LEVEL plev = p_ptr->lev;
+	int boost = P_PTR_KI;
+	if (heavy_armor()) boost /= 2;
+
+	project_length = 1;
+	if (!get_aim_dir(&dir)) return FALSE;
+
+	y = p_ptr->y + ddy[dir];
+	x = p_ptr->x + ddx[dir];
+	dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
+	fire_beam(GF_MISSILE, dir, dam);
+	if (cave[y][x].m_idx)
+	{
+		int i;
+		int ty = y, tx = x;
+		int oy = y, ox = x;
+		MONSTER_IDX m_idx = cave[y][x].m_idx;
+		monster_type *m_ptr = &m_list[m_idx];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+		char m_name[80];
+
+		monster_desc(m_name, m_ptr, 0);
+
+		if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2)
+		{
+			msg_format(_("%sは飛ばされなかった。", "%^s was not blown away."), m_name);
+		}
+		else
+		{
+			for (i = 0; i < 5; i++)
+			{
+				y += ddy[dir];
+				x += ddx[dir];
+				if (cave_empty_bold(y, x))
+				{
+					ty = y;
+					tx = x;
+				}
+				else break;
+			}
+			if ((ty != oy) || (tx != ox))
+			{
+				msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
+				cave[oy][ox].m_idx = 0;
+				cave[ty][tx].m_idx = (s16b)m_idx;
+				m_ptr->fy = (byte_hack)ty;
+				m_ptr->fx = (byte_hack)tx;
+
+				update_mon(m_idx, TRUE);
+				lite_spot(oy, ox);
+				lite_spot(ty, tx);
+
+				if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+					p_ptr->update |= (PU_MON_LITE);
+			}
+		}
+	}
+	return TRUE;
+}
