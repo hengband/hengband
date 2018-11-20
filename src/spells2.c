@@ -1424,23 +1424,13 @@ bool probing(void)
 			if (ironman_nightmare) speed += 5;
 
 			/* Get the monster's alignment */
-#ifdef JP
-			if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD)) align = "善悪";
-			else if (r_ptr->flags3 & RF3_EVIL) align = "邪悪";
-			else if (r_ptr->flags3 & RF3_GOOD) align = "善良";
-			else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) align = "中立(善悪)";
-			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = "中立(邪悪)";
-			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = "中立(善良)";
-			else align = "中立";
-#else
-			if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD)) align = "good&evil";
-			else if (r_ptr->flags3 & RF3_EVIL) align = "evil";
-			else if (r_ptr->flags3 & RF3_GOOD) align = "good";
-			else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) align = "neutral(good&evil)";
-			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = "neutral(evil)";
-			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = "neutral(good)";
-			else align = "neutral";
-#endif
+			if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD)) align = _("善悪", "good&evil");
+			else if (r_ptr->flags3 & RF3_EVIL) align = _("邪悪", "evil");
+			else if (r_ptr->flags3 & RF3_GOOD) align = _("善良", "good");
+			else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) _(align = "中立(善悪)", "neutral(good&evil)");
+			else if (m_ptr->sub_align & SUB_ALIGN_EVIL) align = _("中立(邪悪)", "neutral(evil)");
+			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = _("中立(善良)", "neutral(good)");
+			else align = _("中立", "neutral");
 
 			/* Describe the monster */
 			sprintf(buf,_("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"),
@@ -1455,21 +1445,13 @@ bool probing(void)
 				strcat(buf, "xxx ");
 			}
 
-#ifdef JP
-			if (MON_CSLEEP(m_ptr)) strcat(buf,"睡眠 ");
-			if (MON_STUNNED(m_ptr)) strcat(buf,"朦朧 ");
-			if (MON_MONFEAR(m_ptr)) strcat(buf,"恐怖 ");
-			if (MON_CONFUSED(m_ptr)) strcat(buf,"混乱 ");
-			if (MON_INVULNER(m_ptr)) strcat(buf,"無敵 ");
-#else
-			if (MON_CSLEEP(m_ptr)) strcat(buf,"sleeping ");
-			if (MON_STUNNED(m_ptr)) strcat(buf,"stunned ");
-			if (MON_MONFEAR(m_ptr)) strcat(buf,"scared ");
-			if (MON_CONFUSED(m_ptr)) strcat(buf,"confused ");
-			if (MON_INVULNER(m_ptr)) strcat(buf,"invulnerable ");
-#endif
+			if (MON_CSLEEP(m_ptr)) strcat(buf,_("睡眠 ", "sleeping "));
+			if (MON_STUNNED(m_ptr)) strcat(buf, _("朦朧 ", "stunned "));
+			if (MON_MONFEAR(m_ptr)) strcat(buf, _("恐怖 ", "scared "));
+			if (MON_CONFUSED(m_ptr)) strcat(buf, _("混乱 ", "confused "));
+			if (MON_INVULNER(m_ptr)) strcat(buf, _("無敵 ", "invulnerable "));
 			buf[strlen(buf)-1] = '\0';
-			prt(buf,0,0);
+			prt(buf, 0, 0);
 
 			/* HACK : Add the line to message buffer */
 			message_add(buf);
