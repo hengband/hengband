@@ -279,7 +279,7 @@ static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_t
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown)
+HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown)
 {
 	MULTIPLY mult = 10;
 

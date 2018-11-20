@@ -525,7 +525,7 @@ extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode
 /* cmd1.c */
 extern bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis);
 extern HIT_POINT critical_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam);
-extern s16b tot_dam_aux(object_type *o_ptr, int tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
+extern HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
 extern void search(void);
 extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern void carry(bool pickup);
@@ -851,7 +851,7 @@ extern void combine_pack(void);
 extern void reorder_pack(void);
 extern void display_koff(KIND_OBJECT_IDX k_idx);
 extern object_type *choose_warning_item(void);
-extern bool process_warning(int xx, int yy);
+extern bool process_warning(POSITION xx, POSITION yy);
 extern void do_cmd_kaji(bool only_browse);
 extern void torch_flags(object_type *o_ptr, u32b *flgs);
 extern void torch_dice(object_type *o_ptr, int *dd, int *ds);
