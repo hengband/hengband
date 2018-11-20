@@ -196,7 +196,6 @@ bool detect_objects_gold(POSITION range)
 		/* Skip held objects */
 		if (o_ptr->held_m_idx) continue;
 
-		/* Location */
 		y = o_ptr->iy;
 		x = o_ptr->ix;
 
@@ -260,7 +259,6 @@ bool detect_objects_normal(POSITION range)
 		/* Skip held objects */
 		if (o_ptr->held_m_idx) continue;
 
-		/* Location */
 		y = o_ptr->iy;
 		x = o_ptr->ix;
 
@@ -331,7 +329,6 @@ bool detect_objects_magic(POSITION range)
 		/* Skip held objects */
 		if (o_ptr->held_m_idx) continue;
 
-		/* Location */
 		y = o_ptr->iy;
 		x = o_ptr->ix;
 
@@ -412,7 +409,6 @@ bool detect_monsters_normal(POSITION range)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -472,7 +468,6 @@ bool detect_monsters_invis(POSITION range)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -538,7 +533,6 @@ bool detect_monsters_evil(POSITION range)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -608,7 +602,6 @@ bool detect_monsters_nonliving(POSITION range)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -672,7 +665,6 @@ bool detect_monsters_mind(POSITION range)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -738,7 +730,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -806,7 +797,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -908,9 +898,10 @@ bool detect_all(POSITION range)
  */
 bool project_hack(EFFECT_ID typ, HIT_POINT dam)
 {
-	int     i, x, y;
-	int     flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
-	bool    obvious = FALSE;
+	MONSTER_IDX i;
+	POSITION x, y;
+	BIT_FLAGS flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
+	bool obvious = FALSE;
 
 
 	/* Mark all (nearby) monsters */
@@ -921,7 +912,6 @@ bool project_hack(EFFECT_ID typ, HIT_POINT dam)
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -943,7 +933,6 @@ bool project_hack(EFFECT_ID typ, HIT_POINT dam)
 		/* Remove mark */
 		m_ptr->mflag &= ~(MFLAG_TEMP);
 
-		/* Location */
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
@@ -1081,7 +1070,6 @@ void aggravate_monsters(MONSTER_IDX who)
 	bool    sleep = FALSE;
 	bool    speed = FALSE;
 
-
 	/* Aggravate everyone nearby */
 	for (i = 1; i < m_max; i++)
 	{
@@ -1117,14 +1105,8 @@ void aggravate_monsters(MONSTER_IDX who)
 		}
 	}
 
-	/* Messages */
-#ifdef JP
-	if (speed) msg_print("付近で何かが突如興奮したような感じを受けた！");
-	else if (sleep) msg_print("何かが突如興奮したような騒々しい音が遠くに聞こえた！");
-#else
-	if (speed) msg_print("You feel a sudden stirring nearby!");
-	else if (sleep) msg_print("You hear a sudden stirring in the distance!");
-#endif
+	if (speed) msg_print(_("付近で何かが突如興奮したような感じを受けた！", "You feel a sudden stirring nearby!"));
+	else if (sleep) msg_print(_("何かが突如興奮したような騒々しい音が遠くに聞こえた！", "You hear a sudden stirring in the distance!"));
 	if (p_ptr->riding) p_ptr->update |= PU_BONUS;
 }
 
@@ -1149,15 +1131,10 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 
 	/* Hack -- Skip Unique Monsters or Quest Monsters */
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
-
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
-
 	else if (m_idx == p_ptr->riding) resist = TRUE;
-
 	else if ((p_ptr->inside_quest && !random_quest_number(dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle) resist = TRUE;
-
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
-
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 
 	/* Delete the monster */

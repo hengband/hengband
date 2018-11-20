@@ -342,7 +342,6 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 	/* Old monster */
 	m_ptr = &m_list[i1];
 
-	/* Location */
 	y = m_ptr->fy;
 	x = m_ptr->fx;
 

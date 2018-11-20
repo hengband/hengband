@@ -200,7 +200,6 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	{
 		POSITION y, x;
 
-		/* Location */
 		y = j_ptr->iy;
 		x = j_ptr->ix;
 
@@ -4956,7 +4955,6 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 		/* Structure Copy */
 		object_copy(o_ptr, q_ptr);
 
-		/* Location */
 		o_ptr->iy = y;
 		o_ptr->ix = x;
 
@@ -5187,7 +5185,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			/* Ignore distant grids */
 			if (d > 10) continue;
 
-			/* Location */
 			ty = y + dy;
 			tx = x + dx;
 

@@ -306,7 +306,6 @@ static void alloc_object(int set, EFFECT_ID typ, int num)
 
 			dummy++;
 
-			/* Location */
 			y = randint0(cur_hgt);
 			x = randint0(cur_wid);
 

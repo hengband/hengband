@@ -347,7 +347,6 @@ static void rd_item_old(object_type *o_ptr)
 	/* Kind */
 	rd_s16b(&o_ptr->k_idx);
 
-	/* Location */
 	rd_byte(&tmp8u);
 	o_ptr->iy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
@@ -628,7 +627,6 @@ static void rd_item(object_type *o_ptr)
 	/* Kind */
 	rd_s16b(&o_ptr->k_idx);
 
-	/* Location */
 	rd_byte(&tmp8u);
 	o_ptr->iy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);

@@ -164,7 +164,6 @@ static void wr_item(object_type *o_ptr)
 	/*** Write only un-obvious elements ***/
 	wr_s16b(o_ptr->k_idx);
 
-	/* Location */
 	wr_byte((byte_hack)o_ptr->iy);
 	wr_byte((byte_hack)o_ptr->ix);
 

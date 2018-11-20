@@ -7688,7 +7688,6 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		/* Player affected one monster (without "jumping") */
 		if (!who && (project_m_n == 1) && !jump)
 		{
-			/* Location */
 			x = project_m_x;
 			y = project_m_y;
 

@@ -2002,7 +2002,6 @@ void display_map(int *cy, int *cx)
 	{
 		for (j = 0; j < cur_hgt; ++j)
 		{
-			/* Location */
 			x = i / xrat + 1;
 			y = j / yrat + 1;
 
@@ -2036,7 +2035,6 @@ void display_map(int *cy, int *cx)
 	{
 		for (i = 0; i < cur_wid; ++i)
 		{
-			/* Location */
 			x = i / xrat + 1;
 			y = j / yrat + 1;
 
