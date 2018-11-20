@@ -8632,19 +8632,14 @@ void do_cmd_kaji(bool only_browse)
 	{
 		while (!mode)
 		{
+			prt(_("  a) エッセンス一覧", "  a) List essences"), 2, 14);
+			prt(_("  b) エッセンス抽出", "  b) Extract essence"), 3, 14);
+			prt(_("  c) エッセンス消去", "  c) Remove essence"), 4, 14);
+			prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
+			prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
 #ifdef JP
-			prt("  a) エッセンス一覧", 2, 14);
-			prt("  b) エッセンス抽出", 3, 14);
-			prt("  c) エッセンス消去", 4, 14);
-			prt("  d) エッセンス付加", 5, 14);
-			prt("  e) 武器/防具強化", 6, 14);
 			if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, TRUE))
 #else
-			prt("  a) List essences", 2, 14);
-			prt("  b) Extract essence", 3, 14);
-			prt("  c) Remove essence", 4, 14);
-			prt("  d) Add essence", 5, 14);
-			prt("  e) Enchant weapon/armor", 6, 14);
 			if (!get_com("Command :", &choice, TRUE))
 #endif
 			{
@@ -8728,7 +8723,7 @@ void do_cmd_kaji(bool only_browse)
  * @param flgs 特別に追加するフラグを返す参照ポインタ
  * @return なし
  */
-void torch_flags(object_type *o_ptr, u32b *flgs)
+void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs)
 {
 	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
 	{
@@ -8749,7 +8744,7 @@ void torch_flags(object_type *o_ptr, u32b *flgs)
  * @param ds 特別なダイス面数を返す参照ポインタ
  * @return なし
  */
-void torch_dice(object_type *o_ptr, int *dd, int *ds)
+void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
 {
 	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
 	{

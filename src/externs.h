@@ -853,8 +853,8 @@ extern void display_koff(KIND_OBJECT_IDX k_idx);
 extern object_type *choose_warning_item(void);
 extern bool process_warning(POSITION xx, POSITION yy);
 extern void do_cmd_kaji(bool only_browse);
-extern void torch_flags(object_type *o_ptr, u32b *flgs);
-extern void torch_dice(object_type *o_ptr, int *dd, int *ds);
+extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
+extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 extern cptr essence_name[];
 
