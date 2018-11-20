@@ -1835,7 +1835,8 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
  */
 bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
-	int i, t;
+	DIRECTION i;
+	int t;
 	POSITION y, x, yy, xx, dy, dx;
 	int             damage = 0;
 	int             sn = 0;
@@ -2546,9 +2547,7 @@ static void cave_temp_room_unlite(void)
 static int next_to_open(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, POSITION))
 {
 	int i;
-
 	POSITION y, x;
-
 	int len = 0;
 	int blen = 0;
 
@@ -2922,8 +2921,7 @@ bool fire_breath(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
  */
 bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
-	int tx, ty;
-
+	POSITION tx, ty;
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Use the given direction */
@@ -2958,8 +2956,7 @@ bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
  */
 bool fire_ball_hide(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
-	int tx, ty;
-
+	POSITION tx, ty;
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
 
 	/* Use the given direction */
@@ -3018,8 +3015,9 @@ bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POI
  */
 bool fire_blast(EFFECT_ID typ, DIRECTION dir, int dd, int ds, int num, int dev)
 {
-	int ly, lx, ld;
-	int ty, tx, y, x;
+	POSITION ly, lx;
+	int ld;
+	POSITION ty, tx, y, x;
 	int i;
 
 	BIT_FLAGS flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
@@ -3554,7 +3552,7 @@ bool sleep_monsters_touch(void)
 
 /*!
  * @brief 死者復活処理(起点より周囲5マス)
- * @param who 術者モンスターID(0ならばプレイやー)
+ * @param who 術者モンスターID(0ならばプレイヤー)
  * @param y 起点Y座標
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
