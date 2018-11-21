@@ -212,7 +212,6 @@ void check_hex(void)
 			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}

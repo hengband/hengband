@@ -3284,7 +3284,6 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Update some things */
 		p_ptr->update |= (PU_FLOW);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
@@ -3584,7 +3583,6 @@ void process_monsters(void)
 			(old_r_blows3 != r_ptr->r_blows[3]) ||
 			(old_r_cast_spell != r_ptr->r_cast_spell))
 		{
-			/* Window stuff */
 			p_ptr->window |= (PW_MONSTER);
 		}
 	}

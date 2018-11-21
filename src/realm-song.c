@@ -945,7 +945,6 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 			start_singing(spell, MUSIC_INVULN);
@@ -962,7 +961,6 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
 
-				/* Window stuff */
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 			}
 		}

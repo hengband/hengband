@@ -565,7 +565,6 @@ void carry(bool pickup)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD);
 
 	/* Handle stuff */
@@ -632,7 +631,6 @@ void carry(bool pickup)
 			/* Redraw gold */
 			p_ptr->redraw |= (PR_GOLD);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_PLAYER);
 		}
 
@@ -910,7 +908,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */

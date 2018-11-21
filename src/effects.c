@@ -281,7 +281,6 @@ void dispel_player(void)
 		/* Update monsters */
 		p_ptr->update |= (PU_MONSTERS);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		p_ptr->energy_need += ENERGY_NEED();
@@ -429,7 +428,6 @@ bool set_blind(TIME_EFFECT v)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	/* Handle stuff */
@@ -778,7 +776,6 @@ bool set_image(TIME_EFFECT v)
 	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	/* Handle stuff */
@@ -1440,7 +1437,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
@@ -1459,7 +1455,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
@@ -1525,7 +1520,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
@@ -1544,7 +1538,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 			p_ptr->energy_need += ENERGY_NEED();
@@ -3900,7 +3893,6 @@ bool hp_player(int num)
 		/* Redraw */
 		p_ptr->redraw |= (PR_HP);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 
 		/* Heal 0-4 */
@@ -4135,7 +4127,6 @@ bool lose_all_info(void)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	/* Mega-Hack -- Forget the map */
@@ -4473,7 +4464,6 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 	/* Display the hitpoints */
 	p_ptr->redraw |= (PR_HP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 
 	if (damage_type != DAMAGE_GENO && p_ptr->chp == 0)

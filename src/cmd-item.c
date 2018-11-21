@@ -523,7 +523,6 @@ void do_cmd_wield(void)
 
 	p_ptr->redraw |= (PR_EQUIPPY);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp();
@@ -652,7 +651,6 @@ void do_cmd_takeoff(void)
 			/* Recalculate the bonuses */
 			p_ptr->update |= (PU_BONUS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_EQUIP);
 
 			msg_print(_("呪いを打ち破った。", "You break the curse."));
@@ -1088,7 +1086,6 @@ void do_cmd_uninscribe(void)
 	/* Combine the pack */
 	p_ptr->notice |= (PN_COMBINE);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 	/* .や$の関係で, 再計算が必要なはず -- henkma */
@@ -1154,7 +1151,6 @@ void do_cmd_inscribe(void)
 		/* Combine the pack */
 		p_ptr->notice |= (PN_COMBINE);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* .や$の関係で, 再計算が必要なはず -- henkma */
@@ -1569,7 +1565,6 @@ void do_cmd_locate(void)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	/* Handle stuff */

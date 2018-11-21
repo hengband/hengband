@@ -73,7 +73,6 @@ void do_cmd_rerate(bool display)
 	p_ptr->update |= (PU_HP);
 	p_ptr->redraw |= (PR_HP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 
 	/* Handle stuff */
@@ -1009,7 +1008,6 @@ static void wiz_reroll_item(object_type *o_ptr)
 		/* Combine / Reorder the pack (later) */
 		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	}
 }
@@ -1386,7 +1384,6 @@ static void do_cmd_wiz_play(void)
 		/* Combine / Reorder the pack (later) */
 		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	}
 

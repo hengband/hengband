@@ -3948,7 +3948,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			/* Recalculate mana XXX */
 			p_ptr->update |= (PU_MANA);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_EQUIP);
 		}
 		else

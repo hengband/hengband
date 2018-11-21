@@ -5257,7 +5257,6 @@ void do_cmd_store(void)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 

@@ -2795,7 +2795,6 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 			/* Redraw mana and hp */
 			p_ptr->redraw |= (PR_HP | PR_MANA);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_PLAYER | PW_SPELL);
 		}
 	}

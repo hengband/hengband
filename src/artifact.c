@@ -2070,7 +2070,6 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	msg_format_wizard(CHEAT_OBJECT, _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」",
 		"Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers, total_flags, artifact_bias_name[o_ptr->artifact_bias]);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 	return TRUE;

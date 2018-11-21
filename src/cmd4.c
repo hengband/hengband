@@ -997,10 +997,8 @@ void do_cmd_redraw(void)
 	/* Redraw everything */
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
 	update_playtime();

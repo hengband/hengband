@@ -3709,7 +3709,6 @@ if (get_check(format("そのロッドを＄%d で再充填しますか？",
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
 
 	/* Pay the price */
@@ -3855,7 +3854,6 @@ static void building_recharge_all(void)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
 
 	/* Pay the price */
@@ -4636,7 +4634,6 @@ void do_cmd_bldg(void)
 	/* Redraw entire screen */
 	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 

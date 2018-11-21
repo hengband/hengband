@@ -394,7 +394,6 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
 
-	/* Window stuff */
 	window_stuff();
 
 	/* Abort if needed */
@@ -607,7 +606,6 @@ void do_cmd_snipe(void)
 	/* Redraw mana */
 	p_ptr->redraw |= (PR_HP | PR_MANA);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
 }

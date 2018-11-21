@@ -33,7 +33,6 @@ void day_break()
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -89,7 +88,6 @@ void night_falls(void)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)

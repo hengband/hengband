@@ -2514,7 +2514,6 @@ void toggle_inven_equip(void)
 			window_flag[j] &= ~(PW_INVEN);
 			window_flag[j] |= (PW_EQUIP);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_EQUIP);
 		}
 
@@ -2525,7 +2524,6 @@ void toggle_inven_equip(void)
 			window_flag[j] &= ~(PW_EQUIP);
 			window_flag[j] |= (PW_INVEN);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_INVEN);
 		}
 	}
@@ -3533,7 +3531,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Update */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-	/* Window stuff */
 	window_stuff();
 
 
@@ -4959,7 +4956,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Update */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
-	/* Window stuff */
 	window_stuff();
 
 
@@ -5068,7 +5064,6 @@ void py_pickup_floor(bool pickup)
 			/* Redraw gold */
 			p_ptr->redraw |= (PR_GOLD);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_PLAYER);
 
 			/* Delete the gold */

@@ -168,7 +168,6 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	{
 		(void)activate_artifact(o_ptr);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Success */

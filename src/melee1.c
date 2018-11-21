@@ -2097,7 +2097,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							/* Combine / Reorder the pack */
 							p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-							/* Window stuff */
 							p_ptr->window |= (PW_INVEN);
 
 							break;
@@ -2160,7 +2159,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Redraw gold */
 						p_ptr->redraw |= (PR_GOLD);
 
-						/* Window stuff */
 						p_ptr->window |= (PW_PLAYER);
 
 						/* Blink away */
@@ -2359,7 +2357,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							obvious = TRUE;
 						}
 
-						/* Window stuff */
 						p_ptr->window |= (PW_EQUIP);
 					}
 

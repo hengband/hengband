@@ -148,7 +148,6 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 }
 
@@ -740,7 +739,6 @@ static void regenhp(int percent)
 		/* Redraw */
 		p_ptr->redraw |= (PR_HP);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 
 		wild_regen = 20;
@@ -833,7 +831,6 @@ static void regenmana(int upkeep_factor, int regen_amount)
 		/* Redraw */
 		p_ptr->redraw |= (PR_MANA);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 		p_ptr->window |= (PW_SPELL);
 
@@ -982,7 +979,6 @@ static void regen_captured_monsters(void)
 		/* Combine pack */
 		p_ptr->notice |= (PN_COMBINE);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN);
 		p_ptr->window |= (PW_EQUIP);
 		wild_regen = 20;
@@ -999,7 +995,6 @@ static void notice_lite_change(object_type *o_ptr)
 	/* Hack -- notice interesting fuel steps */
 	if ((o_ptr->xtra4 < 100) || (!(o_ptr->xtra4 % 100)))
 	{
-		/* Window stuff */
 		p_ptr->window |= (PW_EQUIP);
 	}
 
@@ -1221,7 +1216,6 @@ static void check_music(void)
 			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
@@ -2768,7 +2762,6 @@ static void process_world_aux_recharge(void)
 	/* Notice changes */
 	if (changed)
 	{
-		/* Window stuff */
 		p_ptr->window |= (PW_EQUIP);
 		wild_regen = 20;
 	}
@@ -2817,7 +2810,6 @@ static void process_world_aux_recharge(void)
 	/* Notice changes */
 	if (changed)
 	{
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN);
 		wild_regen = 20;
 	}
@@ -5242,7 +5234,6 @@ static void process_player(void)
 				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
 
-				/* Window stuff */
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 				msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
@@ -5369,7 +5360,6 @@ static void dungeon(bool load_game)
 	/* Enter "xtra" mode */
 	character_xtra = TRUE;
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
 
 	/* Redraw dungeon */
@@ -6136,13 +6126,10 @@ void play_game(bool new_game)
 	/* React to changes */
 	Term_xtra(TERM_XTRA_REACT, 0);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
-	/* Window stuff */
 	window_stuff();
 
 

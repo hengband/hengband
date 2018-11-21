@@ -2952,7 +2952,6 @@ void msg_print(cptr msg)
 	/* Memorize the tail */
 	/* if (character_generated) message_add(t); */
 
-	/* Window stuff */
 	p_ptr->window |= (PW_MESSAGE);
 	window_stuff();
 

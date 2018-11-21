@@ -317,7 +317,6 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
 	}
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 
@@ -408,7 +407,6 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 			floor_item_charges(0 - item);
 		}
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Don't eat a staff/wand itself */

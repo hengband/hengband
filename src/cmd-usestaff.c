@@ -417,7 +417,6 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
 	}
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 

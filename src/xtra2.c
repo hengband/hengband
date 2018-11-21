@@ -67,7 +67,6 @@ void check_experience(void)
 		/* Redraw some stuff */
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 
 		/* Handle stuff */
@@ -111,7 +110,6 @@ void check_experience(void)
 		/* Redraw some stuff */
 		p_ptr->redraw |= (PR_LEV | PR_TITLE | PR_EXP);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
 
 		/* HPとMPの上昇量を表示 */
@@ -204,7 +202,6 @@ void check_experience(void)
 		/* Redraw some stuff */
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER | PW_SPELL);
 
 		/* Handle stuff */
@@ -2110,10 +2107,8 @@ void redraw_window(void)
 	/* Only if the dungeon exists */
 	if (!character_dungeon) return;
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
 	/* Hack -- update */
@@ -2315,7 +2310,6 @@ void verify_panel(void)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
@@ -3718,7 +3712,6 @@ bool target_set(BIT_FLAGS mode)
 					/* Redraw map */
 					p_ptr->redraw |= (PR_MAP);
 
-					/* Window stuff */
 					p_ptr->window |= (PW_OVERHEAD);
 
 					/* Handle stuff */
@@ -3810,7 +3803,6 @@ bool target_set(BIT_FLAGS mode)
 						/* Redraw map */
 						p_ptr->redraw |= (PR_MAP);
 
-						/* Window stuff */
 						p_ptr->window |= (PW_OVERHEAD);
 
 						/* Handle stuff */
@@ -3930,7 +3922,6 @@ bool target_set(BIT_FLAGS mode)
 					/* Redraw map */
 					p_ptr->redraw |= (PR_MAP);
 
-					/* Window stuff */
 					p_ptr->window |= (PW_OVERHEAD);
 
 					/* Handle stuff */
@@ -4056,7 +4047,6 @@ bool target_set(BIT_FLAGS mode)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD);
 
 	/* Handle stuff */
@@ -5184,7 +5174,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 					/* Redraw map */
 					p_ptr->redraw |= (PR_MAP);
 
-					/* Window stuff */
 					p_ptr->window |= (PW_OVERHEAD);
 
 					/* Handle stuff */
@@ -5274,7 +5263,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD);
 
 	/* Handle stuff */

@@ -376,7 +376,6 @@ void compact_objects(int size)
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
@@ -1543,7 +1542,6 @@ bool can_player_destroy_object(object_type *o_ptr)
 		/* Combine the pack */
 		p_ptr->notice |= (PN_COMBINE);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		return FALSE;
@@ -5743,7 +5741,6 @@ void inven_item_increase(INVENTORY_IDX item, int num)
 		/* Combine the pack */
 		p_ptr->notice |= (PN_COMBINE);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Hack -- Clear temporary elemental brands if player takes off weapons */
@@ -5795,7 +5792,6 @@ void inven_item_optimize(INVENTORY_IDX item)
 		/* Erase the "final" slot */
 		object_wipe(&inventory[i]);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN);
 	}
 
@@ -5817,11 +5813,9 @@ void inven_item_optimize(INVENTORY_IDX item)
 		/* Recalculate mana XXX */
 		p_ptr->update |= (PU_MANA);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_EQUIP);
 	}
 
-	/* Window stuff */
 	p_ptr->window |= (PW_SPELL);
 }
 
@@ -6116,7 +6110,6 @@ s16b inven_carry(object_type *o_ptr)
 			/* Recalculate bonuses */
 			p_ptr->update |= (PU_BONUS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_INVEN);
 
 			/* Success */
@@ -6198,7 +6191,6 @@ s16b inven_carry(object_type *o_ptr)
 	/* Combine and Reorder pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
 
 	/* Return the slot */
@@ -6457,7 +6449,6 @@ void combine_pack(void)
 						}
 					}
 
-					/* Window stuff */
 					p_ptr->window |= (PW_INVEN);
 
 					/* Take note */
@@ -6533,7 +6524,6 @@ void reorder_pack(void)
 		/* Insert the moving item */
 		object_copy(&inventory[j], q_ptr);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN);
 	}
 
@@ -7850,7 +7840,6 @@ static void drain_essence(void)
 	/* Combine the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
 }
 
@@ -8479,7 +8468,6 @@ static void add_essence(ESSENCE_IDX mode)
 	/* Combine the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
 }
 
@@ -8536,7 +8524,6 @@ static void erase_essence(void)
 	/* Combine the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
 }
 

@@ -1053,7 +1053,6 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
 		calc_android_exp();
@@ -1492,7 +1491,6 @@ static bool vanish_dungeon(void)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	return TRUE;
@@ -1896,7 +1894,6 @@ static int remove_curse_aux(int all)
 		/* Recalculate the bonuses */
 		p_ptr->update |= (PU_BONUS);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_EQUIP);
 
 		/* Count the uncursings */
@@ -2029,7 +2026,6 @@ bool alchemy(void)
 		/* Redraw gold */
 		p_ptr->redraw |= (PR_GOLD);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 
 	}
@@ -2184,7 +2180,6 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp();
@@ -2453,7 +2448,6 @@ bool identify_item(object_type *o_ptr)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	strcpy(record_o_name, o_name);
@@ -3010,7 +3004,6 @@ bool recharge(int power)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN);
 
 	/* Something was done */
@@ -3101,7 +3094,6 @@ msg_format("%s から邪悪なオーラが消えた。",
 		/* Recalculate the bonuses */
 		p_ptr->update |= (PU_BONUS);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_EQUIP);
 	}
 
@@ -3193,7 +3185,6 @@ msg_format("%s は劣化した！",
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp();
@@ -4486,7 +4477,6 @@ static int minus_ac(void)
 	/* Calculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp();
@@ -4827,7 +4817,6 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返し�
 		/* Recalculate mana */
 		p_ptr->update |= (PU_MANA);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 	}
 
@@ -4897,7 +4886,6 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 		/* Recalculate mana */
 		p_ptr->update |= (PU_MANA);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 	}
 

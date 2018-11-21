@@ -299,7 +299,6 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
 
-	/* Window stuff */
 	window_stuff();
 
 
@@ -383,7 +382,6 @@ void do_cmd_hissatsu(void)
 	/* Redraw mana */
 	p_ptr->redraw |= (PR_MANA);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
 }

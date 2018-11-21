@@ -1007,7 +1007,6 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
 
-	/* Window stuff */
 	window_stuff();
 
 	/* Abort if needed */
@@ -1196,7 +1195,6 @@ static bool cast_mindcrafter_spell(int spell)
 		/* Update monsters */
 		p_ptr->update |= (PU_MONSTERS);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		handle_stuff();
@@ -2101,7 +2099,6 @@ void do_cmd_mind(void)
 	/* Redraw mana */
 	p_ptr->redraw |= (PR_MANA);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
 }

@@ -578,7 +578,6 @@ static int get_learned_power(SPELL_IDX *sn)
 	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
 
-	/* Window stuff */
 	window_stuff();
 
 	/* Abort if needed */
@@ -1086,7 +1085,6 @@ static bool cast_learned_spell(int spell, bool success)
 		/* Update monsters */
 		p_ptr->update |= (PU_MONSTERS);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		handle_stuff();
@@ -1590,7 +1588,6 @@ bool do_cmd_cast_learned(void)
 
 	p_ptr->energy_use = 100;
 
-	/* Window stuff */
 	p_ptr->redraw |= (PR_MANA);
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);

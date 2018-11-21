@@ -2808,7 +2808,6 @@ static void calc_mana(void)
 		/* Display mana later */
 		p_ptr->redraw |= (PR_MANA);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 		p_ptr->window |= (PW_SPELL);
 	}
@@ -2931,7 +2930,6 @@ static void calc_hitpoints(void)
 		/* Display hitpoints (later) */
 		p_ptr->redraw |= (PR_HP);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 	}
 }
@@ -4547,7 +4545,6 @@ void calc_bonuses(void)
 			/* Redisplay the stats later */
 			p_ptr->redraw |= (PR_STATS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_PLAYER);
 		}
 
@@ -4573,7 +4570,6 @@ void calc_bonuses(void)
 			/* Redisplay the stats later */
 			p_ptr->redraw |= (PR_STATS);
 
-			/* Window stuff */
 			p_ptr->window |= (PW_PLAYER);
 		}
 
@@ -4626,7 +4622,6 @@ void calc_bonuses(void)
 				}
 			}
 
-			/* Window stuff */
 			p_ptr->window |= (PW_PLAYER);
 		}
 	}
@@ -5476,7 +5471,6 @@ void calc_bonuses(void)
 		/* Redraw */
 		p_ptr->redraw |= (PR_ARMOR);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_PLAYER);
 	}
 
@@ -6250,7 +6244,6 @@ void handle_stuff(void)
 	/* Redraw stuff */
 	if (p_ptr->redraw) redraw_stuff();
 
-	/* Window stuff */
 	if (p_ptr->window) window_stuff();
 }
 

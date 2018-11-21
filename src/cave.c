@@ -4351,7 +4351,6 @@ void map_area(POSITION range)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
@@ -4459,7 +4458,6 @@ void wiz_lite(bool ninja)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -4534,7 +4532,6 @@ void wiz_dark(void)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
@@ -4989,7 +4986,6 @@ void monster_race_track(MONRACE_IDX r_idx)
 	/* Save this monster ID */
 	p_ptr->monster_race_idx = r_idx;
 
-	/* Window stuff */
 	p_ptr->window |= (PW_MONSTER);
 }
 
@@ -5003,7 +4999,6 @@ void object_kind_track(KIND_OBJECT_IDX k_idx)
 	/* Save this monster ID */
 	p_ptr->object_kind_idx = k_idx;
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OBJECT);
 }
 

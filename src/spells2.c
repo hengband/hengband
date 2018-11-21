@@ -480,7 +480,6 @@ bool detect_monsters_invis(POSITION range)
 			/* Update monster recall window */
 			if (p_ptr->monster_race_idx == m_ptr->r_idx)
 			{
-				/* Window stuff */
 				p_ptr->window |= (PW_MONSTER);
 			}
 
@@ -550,7 +549,6 @@ bool detect_monsters_evil(POSITION range)
 				/* Update monster recall window */
 				if (p_ptr->monster_race_idx == m_ptr->r_idx)
 				{
-					/* Window stuff */
 					p_ptr->window |= (PW_MONSTER);
 				}
 			}
@@ -614,7 +612,6 @@ bool detect_monsters_nonliving(POSITION range)
 			/* Update monster recall window */
 			if (p_ptr->monster_race_idx == m_ptr->r_idx)
 			{
-				/* Window stuff */
 				p_ptr->window |= (PW_MONSTER);
 			}
 
@@ -677,7 +674,6 @@ bool detect_monsters_mind(POSITION range)
 			/* Update monster recall window */
 			if (p_ptr->monster_race_idx == m_ptr->r_idx)
 			{
-				/* Window stuff */
 				p_ptr->window |= (PW_MONSTER);
 			}
 
@@ -742,7 +738,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 			/* Update monster recall window */
 			if (p_ptr->monster_race_idx == m_ptr->r_idx)
 			{
-				/* Window stuff */
 				p_ptr->window |= (PW_MONSTER);
 			}
 
@@ -814,7 +809,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 				/* Update monster recall window */
 				if (p_ptr->monster_race_idx == m_ptr->r_idx)
 				{
-					/* Window stuff */
 					p_ptr->window |= (PW_MONSTER);
 				}
 			}
@@ -1192,7 +1186,6 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	/* Redraw */
 	p_ptr->redraw |= (PR_HP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 
 	/* Handle */
@@ -1750,7 +1743,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -2235,7 +2227,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -5237,7 +5228,6 @@ bool psychometry(void)
 	/* Combine / Reorder the pack (later) */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
-	/* Window stuff */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	/* Valid "tval" codes */

@@ -5060,7 +5060,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Update monster recall window */
 	if ((p_ptr->monster_race_idx == m_ptr->r_idx) && (seen || !m_ptr->r_idx))
 	{
-		/* Window stuff */
 		p_ptr->window |= (PW_MONSTER);
 	}
 
@@ -5693,7 +5692,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 				p_ptr->redraw |= PR_MAP;
 				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
-				/* Window stuff */
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 				/* Redraw status bar */
@@ -5996,7 +5994,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 				/* Redraw mana */
 				p_ptr->redraw |= (PR_MANA);
 
-				/* Window stuff */
 				p_ptr->window |= (PW_PLAYER);
 				p_ptr->window |= (PW_SPELL);
 

@@ -132,7 +132,6 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
 
-	/* Window stuff */
 	window_stuff();
 
 	/* Build a prompt (accept all spells) */
@@ -317,7 +316,6 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
 
-	/* Window stuff */
 	window_stuff();
 
 
@@ -1370,7 +1368,6 @@ void do_cmd_cast(void)
 		}
 	}
 
-	/* Window stuff */
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
 }

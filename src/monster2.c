@@ -1891,7 +1891,6 @@ int lore_do_probe(MONRACE_IDX r_idx)
 	/* Update monster recall window */
 	if (p_ptr->monster_race_idx == r_idx)
 	{
-		/* Window stuff */
 		p_ptr->window |= (PW_MONSTER);
 	}
 
@@ -1937,7 +1936,6 @@ void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold
 	/* Update monster recall window */
 	if (p_ptr->monster_race_idx == m_ptr->r_idx)
 	{
-		/* Window stuff */
 		p_ptr->window |= (PW_MONSTER);
 	}
 }

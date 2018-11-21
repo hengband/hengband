@@ -245,7 +245,6 @@ static int get_mane_power(int *sn, bool baigaesi)
 	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
 
-	/* Window stuff */
 	window_stuff();
 
 	/* Abort if needed */
@@ -690,7 +689,6 @@ static bool use_mane(int spell)
 		/* Update monsters */
 		p_ptr->update |= (PU_MONSTERS);
 
-		/* Window stuff */
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		handle_stuff();
@@ -1042,7 +1040,6 @@ bool do_cmd_mane(bool baigaesi)
 
 	p_ptr->energy_use = 100;
 
-	/* Window stuff */
 	p_ptr->redraw |= (PR_IMITATION);
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
