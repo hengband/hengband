@@ -193,7 +193,6 @@
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\main.c" />
     <ClCompile Include="..\..\src\mane.c" />
     <ClCompile Include="..\..\src\melee1.c" />
     <ClCompile Include="..\..\src\mind.c" />
