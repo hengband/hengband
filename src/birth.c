@@ -4636,7 +4636,6 @@ static bool player_birth_aux(void)
 			/* Calculate the bonuses and hitpoints */
 			p_ptr->update |= (PU_BONUS | PU_HP);
 
-			/* Update stuff */
 			update_stuff();
 
 			/* Fully healed */
@@ -4834,7 +4833,6 @@ static bool ask_quick_start(void)
 	/* Calculate the bonuses and hitpoints */
 	p_ptr->update |= (PU_BONUS | PU_HP);
 
-	/* Update stuff */
 	update_stuff();
 
 	/* Fully healed */

@@ -1169,7 +1169,6 @@ bool rakuba(HIT_POINT dam, bool force)
 
 	p_ptr->update |= (PU_BONUS);
 
-	/* Update stuff */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
 	/* Window stuff */

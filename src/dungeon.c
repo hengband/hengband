@@ -5378,7 +5378,6 @@ static void dungeon(bool load_game)
 	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
-	/* Update stuff */
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
 	/* Update lite/view */
@@ -5393,7 +5392,6 @@ static void dungeon(bool load_game)
 	/* Leave "xtra" mode */
 	character_xtra = FALSE;
 
-	/* Update stuff */
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
 	/* Combine / Reorder the pack */
@@ -5859,10 +5857,8 @@ void play_game(bool new_game)
 		if (!get_check_strict(_("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
 			quit(0);
 
-		/* Update stuff */
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
-		/* Update stuff */
 		update_stuff();
 
 		p_ptr->is_dead = TRUE;

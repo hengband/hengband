@@ -560,7 +560,6 @@ void carry(bool pickup)
 	/* Recenter the map around the player */
 	verify_panel();
 
-	/* Update stuff */
 	p_ptr->update |= (PU_MONSTERS);
 
 	/* Redraw map */
@@ -909,7 +908,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 			p_ptr->redraw |= (PR_MAP);
 		}
 
-		/* Update stuff */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
 
 		/* Window stuff */

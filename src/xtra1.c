@@ -3004,7 +3004,6 @@ static void calc_torch(void)
 	/* Notice changes in the "lite radius" */
 	if (p_ptr->old_lite != p_ptr->cur_lite)
 	{
-		/* Update stuff */
 		/* Hack -- PU_MON_LITE for monsters' darkness */
 		p_ptr->update |= (PU_LITE | PU_MON_LITE | PU_MONSTERS);
 
@@ -5836,7 +5835,6 @@ void notice_stuff(void)
  */
 void update_stuff(void)
 {
-	/* Update stuff */
 	if (!p_ptr->update) return;
 
 
@@ -6247,7 +6245,6 @@ void window_stuff(void)
  */
 void handle_stuff(void)
 {
-	/* Update stuff */
 	if (p_ptr->update) update_stuff();
 
 	/* Redraw stuff */

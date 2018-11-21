@@ -983,7 +983,6 @@ void do_cmd_redraw(void)
 	/* Update torch */
 	p_ptr->update |= (PU_TORCH);
 
-	/* Update stuff */
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
 	/* Forget lite/view */

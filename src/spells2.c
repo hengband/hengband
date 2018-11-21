@@ -1745,7 +1745,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 		/* Mega-Hack -- Forget the view and lite */
 		p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 
-		/* Update stuff */
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
 		/* Redraw map */
@@ -2228,7 +2227,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 
-	/* Update stuff */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
 	/* Update the health bar */
@@ -3469,7 +3467,6 @@ bool wall_stone(void)
 
 	bool dummy = (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_STONE_WALL, flg, -1));
 
-	/* Update stuff */
 	p_ptr->update |= (PU_FLOW);
 
 	/* Redraw map */

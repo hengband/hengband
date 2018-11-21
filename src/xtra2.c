@@ -2070,7 +2070,6 @@ void resize_map(void)
 				
 	verify_panel();
 
-	/* Update stuff */
 	p_ptr->update |= (PU_TORCH | PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
 	/* Forget lite/view */
@@ -2164,7 +2163,6 @@ bool change_panel(POSITION dy, POSITION dx)
 		/* Recalculate the boundaries */
 		panel_bounds_center();
 
-		/* Update stuff */
 		p_ptr->update |= (PU_MONSTERS);
 
 		/* Redraw map */
@@ -2312,7 +2310,6 @@ void verify_panel(void)
 	/* Recalculate the boundaries */
 	panel_bounds_center();
 
-	/* Update stuff */
 	p_ptr->update |= (PU_MONSTERS);
 
 	/* Redraw map */
@@ -3716,7 +3713,6 @@ bool target_set(BIT_FLAGS mode)
 					/* Recenter the map around the player */
 					verify_panel();
 
-					/* Update stuff */
 					p_ptr->update |= (PU_MONSTERS);
 
 					/* Redraw map */
@@ -3809,7 +3805,6 @@ bool target_set(BIT_FLAGS mode)
 						panel_col_min = x2;
 						panel_bounds_center();
 
-						/* Update stuff */
 						p_ptr->update |= (PU_MONSTERS);
 
 						/* Redraw map */
@@ -3930,7 +3925,6 @@ bool target_set(BIT_FLAGS mode)
 					/* Recenter the map around the player */
 					verify_panel();
 
-					/* Update stuff */
 					p_ptr->update |= (PU_MONSTERS);
 
 					/* Redraw map */
@@ -4057,7 +4051,6 @@ bool target_set(BIT_FLAGS mode)
 	/* Recenter the map around the player */
 	verify_panel();
 
-	/* Update stuff */
 	p_ptr->update |= (PU_MONSTERS);
 
 	/* Redraw map */
@@ -5186,7 +5179,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 					x = p_ptr->x;
 					verify_panel();	/* Move cursor to player */
 
-					/* Update stuff */
 					p_ptr->update |= (PU_MONSTERS);
 
 					/* Redraw map */
@@ -5277,7 +5269,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 	/* Recenter the map around the player */
 	verify_panel();
 
-	/* Update stuff */
 	p_ptr->update |= (PU_MONSTERS);
 
 	/* Redraw map */
