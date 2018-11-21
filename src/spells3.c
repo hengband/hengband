@@ -1725,7 +1725,6 @@ void alter_reality(void)
  */
 bool warding_glyph(void)
 {
-	/* XXX XXX XXX */
 	if (!cave_clean_bold(p_ptr->y, p_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -1751,7 +1750,6 @@ bool warding_glyph(void)
  */
 bool place_mirror(void)
 {
-	/* XXX XXX XXX */
 	if (!cave_clean_bold(p_ptr->y, p_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -1784,7 +1782,6 @@ bool place_mirror(void)
  */
 bool explosive_rune(void)
 {
-	/* XXX XXX XXX */
 	if (!cave_clean_bold(p_ptr->y, p_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));

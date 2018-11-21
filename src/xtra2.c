@@ -1353,7 +1353,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Make some gold */
 			if (!make_gold(q_ptr)) continue;
 
-			/* XXX XXX XXX */
 			dump_gold++;
 		}
 
@@ -1363,7 +1362,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Make an object */
 			if (!make_object(q_ptr, mo_mode)) continue;
 
-			/* XXX XXX XXX */
 			dump_item++;
 		}
 
@@ -4196,7 +4194,6 @@ bool get_aim_dir(DIRECTION *dp)
 	/* Check for confusion */
 	if (p_ptr->confused)
 	{
-		/* XXX XXX XXX */
 		/* Random direction */
 		dir = ddd[randint0(8)];
 	}
@@ -5381,7 +5378,6 @@ bool get_hack_dir(DIRECTION *dp)
 	/* Check for confusion */
 	if (p_ptr->confused)
 	{
-		/* XXX XXX XXX */
 		/* Random direction */
 		dir = ddd[randint0(8)];
 	}

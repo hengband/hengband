@@ -5451,7 +5451,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
 	}
 
-	/* XXX XXX XXX */
 
 	/* Result */
 	return (o_idx);

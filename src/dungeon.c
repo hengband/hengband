@@ -6221,7 +6221,6 @@ void play_game(bool new_game)
 		if (!p_ptr->is_dead) wipe_m_list();
 
 
-		/* XXX XXX XXX */
 		msg_print(NULL);
 
 		load_game = FALSE;

@@ -4460,7 +4460,6 @@ void update_smart_learn(MONSTER_IDX m_idx, int what)
 	if (!(r_ptr->flags2 & (RF2_SMART)) && (randint0(100) < 50)) return;
 
 
-	/* XXX XXX XXX */
 
 	/* Analyze the knowledge */
 	switch (what)

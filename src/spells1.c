@@ -714,7 +714,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	bool known = player_has_los_bold(y, x);
 
 
-	/* XXX XXX XXX */
 	who = who ? who : 0;
 
 	/* Reduce damage by distance */
@@ -1287,7 +1286,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	bool is_potion = FALSE;
 
 
-	/* XXX XXX XXX */
 	who = who ? who : 0;
 
 	/* Reduce damage by distance */
@@ -5225,7 +5223,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 		return TRUE;
 	}
 
-	/* XXX XXX XXX */
 	/* Limit maximum damage */
 	if (dam > 1600) dam = 1600;
 
