@@ -4486,14 +4486,8 @@ static void process_menus(WORD wCmd)
 			}
 			else
 			{
-#ifdef JP
-				plog_fmt("ヘルプファイル[%s]が見付かりません。", tmp);
-				plog("代わりにオンラインヘルプを使用してください。");
-#else
-				plog_fmt("Cannot find help file: %s", tmp);
-				plog("Use the online help files instead.");
-#endif
-
+				plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
+				plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
 			}
 			break;
 #else /* HTML_HELP */
@@ -4507,13 +4501,8 @@ static void process_menus(WORD wCmd)
 			}
 			else
 			{
-#ifdef JP
-				plog_fmt("ヘルプファイル[%s]が見付かりません。", tmp);
-				plog("代わりにオンラインヘルプを使用してください。");
-#else
-				plog_fmt("Cannot find help file: %s", tmp);
-				plog("Use the online help files instead.");
-#endif
+				plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
+				plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
 
 			}
 			break;
@@ -4620,8 +4609,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 				  WPARAM wParam, LPARAM lParam)
 #else /* __MWERKS__ */
-LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
-					  WPARAM wParam, LPARAM lParam)
+LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif /* __MWERKS__ */
 {
 	PAINTSTRUCT ps;
