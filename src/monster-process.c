@@ -298,7 +298,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 			/* Generate treasure */
 			monster_death(m_idx, FALSE);
 
-			/* Delete the monster */
+
 			delete_monster_idx(m_idx);
 
 			/* Not afraid */
@@ -774,43 +774,20 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
  */
 
 
-static sint d_off_y_0[] =
-{ 0 };
+static sint d_off_y_0[] = { 0 };
+static sint d_off_x_0[] = { 0 };
 
-static sint d_off_x_0[] =
-{ 0 };
+static sint d_off_y_1[] = { -1, -1, -1, 0, 0, 1, 1, 1, 0 };
+static sint d_off_x_1[] = { -1, 0, 1, -1, 1, -1, 0, 1, 0 };
 
+static sint d_off_y_2[] = { -1, -1, -2, -2, -2, 0, 0, 1, 1, 2, 2, 2, 0 };
+static sint d_off_x_2[] = { -2, 2, -1, 0, 1, -2, 2, -2, 2, -1, 0, 1, 0 };
 
-static sint d_off_y_1[] =
-{ -1, -1, -1, 0, 0, 1, 1, 1, 0 };
+static sint d_off_y_3[] = { -1, -1, -2, -2, -3, -3, -3, 0, 0, 1, 1, 2, 2, 3, 3, 3, 0 };
+static sint d_off_x_3[] = { -3, 3, -2, 2, -1, 0, 1, -3, 3, -3, 3, -2, 2, -1, 0, 1, 0 };
 
-static sint d_off_x_1[] =
-{ -1, 0, 1, -1, 1, -1, 0, 1, 0 };
-
-
-static sint d_off_y_2[] =
-{ -1, -1, -2, -2, -2, 0, 0, 1, 1, 2, 2, 2, 0 };
-
-static sint d_off_x_2[] =
-{ -2, 2, -1, 0, 1, -2, 2, -2, 2, -1, 0, 1, 0 };
-
-
-static sint d_off_y_3[] =
-{ -1, -1, -2, -2, -3, -3, -3, 0, 0, 1, 1, 2, 2,
-  3, 3, 3, 0 };
-
-static sint d_off_x_3[] =
-{ -3, 3, -2, 2, -1, 0, 1, -3, 3, -3, 3, -2, 2,
-  -1, 0, 1, 0 };
-
-
-static sint d_off_y_4[] =
-{ -1, -1, -2, -2, -3, -3, -3, -3, -4, -4, -4, 0,
-  0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 0 };
-
-static sint d_off_x_4[] =
-{ -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, -4, 4,
-  -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, 0 };
+static sint d_off_y_4[] = { -1, -1, -2, -2, -3, -3, -3, -3, -4, -4, -4, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 0 };
+static sint d_off_x_4[] = { -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, -4, 4, -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, 0 };
 
 
 static sint d_off_y_5[] =
@@ -1992,7 +1969,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 					if (see_m)
 					{
 #ifdef JP
-						msg_format("%sは%^sの攻撃をかわした。", t_name,m_name);
+						msg_format("%sは%^sの攻撃をかわした。", t_name, m_name);
 #else
 						msg_format("%^s misses %s.", m_name, t_name);
 #endif
@@ -2190,7 +2167,7 @@ void process_monster(MONSTER_IDX m_idx)
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
 		}
 
-		/* Delete the monster */
+
 		delete_monster_idx(m_idx);
 
 		return;
@@ -2223,7 +2200,7 @@ void process_monster(MONSTER_IDX m_idx)
 			/* Generate treasure, etc */
 			monster_death(m_idx, FALSE);
 
-			/* Delete the monster */
+
 			delete_monster_idx(m_idx);
 
 			if (sad)

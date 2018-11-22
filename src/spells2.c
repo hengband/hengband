@@ -1131,7 +1131,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 
-	/* Delete the monster */
+
 	else
 	{
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
@@ -2077,7 +2077,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 							}
 						}
 
-						/* Delete the monster */
+
 						delete_monster(yy, xx);
 
 						/* No longer safe */

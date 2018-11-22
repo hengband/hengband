@@ -476,7 +476,7 @@ void compact_monsters(int size)
 				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
 			}
 
-			/* Delete the monster */
+
 			delete_monster_idx(i);
 
 			/* Count the monster */

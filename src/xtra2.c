@@ -1929,7 +1929,7 @@ msg_format("%sを葬り去った。", m_name);
 
 			if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 
-			/* Delete the monster */
+
 			delete_monster_idx(m_idx);
 
 			if (summon_named_creature(0, dummy_y, dummy_x, MON_BIKETAL, mode))
@@ -1939,7 +1939,7 @@ msg_format("%sを葬り去った。", m_name);
 		}
 		else
 		{
-			/* Delete the monster */
+
 			delete_monster_idx(m_idx);
 		}
 

@@ -478,7 +478,7 @@ static void preserve_pet(void)
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
 
-			/* Delete the monster */
+
 			delete_monster_idx(i);
 		}
 	}

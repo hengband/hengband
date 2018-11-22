@@ -4863,7 +4863,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Generate treasure, etc */
 			monster_death(c_ptr->m_idx, FALSE);
 
-			/* Delete the monster */
+
 			delete_monster_idx(c_ptr->m_idx);
 
 			if (sad)
