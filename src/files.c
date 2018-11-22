@@ -5016,7 +5016,7 @@ errr make_character_dump(FILE *fff)
  * @param name 出力ファイル名
  * @return エラーコード
  * @details
- * XXX XXX XXX Allow the "full" flag to dump additional info,
+ * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
 errr file_character(cptr name)
@@ -5311,7 +5311,7 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 	/* Redirect the name */
 	name = filename;
 
-	/* Hack XXX XXX XXX */
+	/* Hack */
 	if (what)
 	{
 		/* Caption */
@@ -5964,7 +5964,7 @@ void process_player_name(bool sf)
  * Assumes that "display_player(0)" has just been called
  * Perhaps we should NOT ask for a name (at "birth()") on
  * Unix machines?  XXX XXX
- * What a horrible name for a global function.  XXX XXX XXX
+ * What a horrible name for a global function.  
  * </pre>
  */
 void get_name(void)
@@ -6290,7 +6290,7 @@ static void make_bones(void)
 		{
 			char tmp[128];
 
-			/* XXX XXX XXX "Bones" name */
+			/* "Bones" name */
 			sprintf(tmp, "bone.%03d", dun_level);
 
 			/* Build the filename */
@@ -6883,7 +6883,7 @@ void close_game(void)
 		/* Save the game */
 		do_cmd_save_game(FALSE);
 
-		/* Prompt for scores XXX XXX XXX */
+		/* Prompt for scores */
 		prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
 

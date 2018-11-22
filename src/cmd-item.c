@@ -1692,7 +1692,7 @@ void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
  *
  * The responses may be sorted in several ways, see below.
  *
- * Note that the player ghosts are ignored. XXX XXX XXX
+ * Note that the player ghosts are ignored. 
  * </pre>
  */
 void do_cmd_query_symbol(void)
@@ -1832,7 +1832,7 @@ void do_cmd_query_symbol(void)
 	}
 
 
-	/* Prompt XXX XXX XXX */
+	/* Prompt */
 	put_str(_("思い出を見ますか? (k:殺害順/y/n): ", "Recall details? (k/y/n): "), 0, _(36, 40));
 
 

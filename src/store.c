@@ -1537,7 +1537,7 @@ static bool store_will_buy(object_type *o_ptr)
 		}
 	}
 
-	/* XXX XXX XXX Ignore "worthless" items */
+	/* Ignore "worthless" items */
 	if (object_value(o_ptr) <= 0) return (FALSE);
 
 	/* Assume okay */
@@ -2632,7 +2632,7 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 
 #endif /* ALLOW_REPEAT -- TNB */
 
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 
@@ -2832,7 +2832,7 @@ static int get_haggle(cptr pmt, s32b *poffer, PRICE price, int final)
 	}
 
 
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 
@@ -3286,7 +3286,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 	final_ask *= o_ptr->number;
 
 
-	/* XXX XXX XXX Display commands */
+	/* Display commands */
 
 	/* Haggling parameters */
 	min_per = ot_ptr->haggle_per;
@@ -5044,7 +5044,7 @@ void do_cmd_store(void)
 #endif
 		}
 
-		/* Shop commands XXX XXX XXX */
+		/* Shop commands */
 		else
 		{
 #ifdef JP
@@ -5112,7 +5112,7 @@ void do_cmd_store(void)
 		/* Handle stuff */
 		handle_stuff();
 
-		/* XXX XXX XXX Pack Overflow */
+		/* Pack Overflow */
 		if (inventory[INVEN_PACK].k_idx)
 		{
 			INVENTORY_IDX item = INVEN_PACK;
@@ -5220,7 +5220,7 @@ void do_cmd_store(void)
 
 	p_ptr->town_num = old_town_num;
 
-	/* Free turn XXX XXX XXX */
+	/* Free turn */
 	p_ptr->energy_use = 100;
 
 
@@ -5237,7 +5237,7 @@ void do_cmd_store(void)
 	/* Allow expanding macros */
 	get_com_no_macros = FALSE;
 
-	/* Flush messages XXX XXX XXX */
+	/* Flush messages */
 	msg_print(NULL);
 
 

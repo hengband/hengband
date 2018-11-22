@@ -29,9 +29,9 @@
  * flag.  This is useful for switching "graphics" on/off.\n
  *\n
  * The features, objects, and monsters, should all be encoded in the\n
- * relevant "font.pref" and/or "graf.prf" files.  XXX XXX XXX\n
+ * relevant "font.pref" and/or "graf.prf" files.  \n
  *\n
- * The "prefs" parameter is no longer meaningful.  XXX XXX XXX\n
+ * The "prefs" parameter is no longer meaningful.  \n
  */
 void reset_visuals(void)
 {
@@ -2848,7 +2848,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 #endif /* ALLOW_REPEAT */
 
 
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 
@@ -3894,7 +3894,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 #endif /* ALLOW_REPEAT */
 
 
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 

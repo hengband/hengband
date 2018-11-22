@@ -1044,7 +1044,7 @@ static void wiz_statistics(object_type *o_ptr)
 	char tmp_val[80];
 
 
-	/* XXX XXX XXX Mega-Hack -- allow multiple artifacts */
+	/* Mega-Hack -- allow multiple artifacts */
 	if (object_is_fixed_artifact(o_ptr)) a_info[o_ptr->name1].cur_num = 0;
 
 
@@ -1126,7 +1126,7 @@ static void wiz_statistics(object_type *o_ptr)
 			make_object(q_ptr, mode);
 
 
-			/* XXX XXX XXX Mega-Hack -- allow multiple artifacts */
+			/* Mega-Hack -- allow multiple artifacts */
 			if (object_is_fixed_artifact(q_ptr)) a_info[q_ptr->name1].cur_num = 0;
 
 
@@ -1617,7 +1617,7 @@ static void do_cmd_wiz_summon(int num)
  * @param r_idx モンスター種族ID
  * @return なし
  * @details
- * XXX XXX XXX This function is rather dangerous
+ * This function is rather dangerous
  */
 static void do_cmd_wiz_named(MONRACE_IDX r_idx)
 {
@@ -1631,7 +1631,7 @@ static void do_cmd_wiz_named(MONRACE_IDX r_idx)
  * @param r_idx モンスター種族ID
  * @return なし
  * @details
- * XXX XXX XXX This function is rather dangerous
+ * This function is rather dangerous
  */
 static void do_cmd_wiz_named_friendly(MONRACE_IDX r_idx)
 {

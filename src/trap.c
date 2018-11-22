@@ -37,7 +37,7 @@ void init_normal_traps(void)
 * Get random trap
 * @return 選択したトラップのID
 * @details
-* XXX XXX XXX This routine should be redone to reflect trap "level".\n
+* This routine should be redone to reflect trap "level".\n
 * That is, it does not make sense to have spiked pits at 50 feet.\n
 * Actually, it is not this routine, but the "trap instantiation"\n
 * code, which should also check for "trap doors" on quest levels.\n
@@ -310,7 +310,7 @@ void hit_trap(bool break_trap)
 
 	cave_alter_feat(y, x, FF_HIT_TRAP);
 
-	/* Analyze XXX XXX XXX */
+	/* Analyze */
 	switch (trap_feat_type)
 	{
 	case TRAP_TRAPDOOR:

@@ -3445,7 +3445,7 @@ bool set_cut(TIME_EFFECT v)
  * 7500 food units, without overflowing the 32767 maximum limit.\n
  *\n
  * Perhaps we should disturb the player with various messages,
- * especially messages about hunger status changes.  XXX XXX XXX\n
+ * especially messages about hunger status changes.  \n
  *\n
  * Digestion of food is handled in "dungeon.c", in which, normally,
  * the player digests about 20 food units per 100 game turns, more
@@ -4365,9 +4365,9 @@ void do_poly_self(void)
 /*
  * Decreases players hit points and sets death flag if necessary
  *
- * XXX XXX XXX Invulnerability needs to be changed into a "shield"
+ * Invulnerability needs to be changed into a "shield"
  *
- * XXX XXX XXX Hack -- this function allows the user to save (or quit)
+ * Hack -- this function allows the user to save (or quit)
  * the game when he dies, since the "You die." message is shown before
  * setting the player to "dead".
  */

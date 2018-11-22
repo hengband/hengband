@@ -4219,7 +4219,7 @@ static void bldg_process_command(building_type *bldg, int i)
 	bool paid = FALSE;
 	int amt;
 
-	/* Flush messages XXX XXX XXX */
+	/* Flush messages */
 	msg_flag = FALSE;
 	msg_print(NULL);
 
@@ -4612,7 +4612,7 @@ void do_cmd_bldg(void)
 
 	select_floor_music();
 
-	/* Flush messages XXX XXX XXX */
+	/* Flush messages */
 	msg_flag = FALSE;
 	msg_print(NULL);
 

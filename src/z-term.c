@@ -1468,7 +1468,7 @@ static void Term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
  * On systems with a "soft" cursor, we must explicitly erase the cursor
  * before flushing the output, if needed, to prevent a "jumpy" refresh.
  * The actual method for this is horrible, but there is very little that
- * we can do to simplify it efficiently.  XXX XXX XXX
+ * we can do to simplify it efficiently.  
  *
  * On systems with a "hard" cursor, we will "hide" the cursor before
  * flushing the output, if needed, to avoid a "flickery" refresh.  It

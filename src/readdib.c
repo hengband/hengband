@@ -35,7 +35,7 @@
 #endif
 
 /*
- * Make sure "huge" is legal XXX XXX XXX
+ * Make sure "huge" is legal 
  */
 #undef huge
 #ifdef WIN32

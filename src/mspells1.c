@@ -346,7 +346,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p
 		f5 &= ~(RF5_DRAIN_MANA);
 	}
 
-	/* XXX XXX XXX No spells left? */
+	/* No spells left? */
 	/* if (!f4 && !f5 && !f6) ... */
 
 	(*f4p) = f4;
@@ -1287,12 +1287,12 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
  * @details
  * Returns "TRUE" if a spell (or whatever) was (successfully) cast.\n
  *\n
- * XXX XXX XXX This function could use some work, but remember to\n
+ * This function could use some work, but remember to\n
  * keep it as optimized as possible, while retaining generic code.\n
  *\n
  * Verify the various "blind-ness" checks in the code.\n
  *\n
- * XXX XXX XXX Note that several effects should really not be "seen"\n
+ * Note that several effects should really not be "seen"\n
  * if the player is blind.  See also "effects.c" for other "mistakes".\n
  *\n
  * Perhaps monsters should breathe at locations *near* the player,\n
@@ -1392,7 +1392,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	/* Sometimes forbid inate attacks (breaths) */
 	if (randint0(100) >= (r_ptr->freq_spell * 2)) no_inate = TRUE;
 
-	/* XXX XXX XXX Handle "track_target" option (?) */
+	/* Handle "track_target" option (?) */
 
 
 	/* Extract the racial spell flags */

@@ -31,7 +31,7 @@
  *
  * See also "identify_fully()".
  *
- * XXX XXX XXX Use the "show_file()" method, perhaps.
+ * Use the "show_file()" method, perhaps.
  * </pre>
  */
 void self_knowledge(void)

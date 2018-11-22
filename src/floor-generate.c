@@ -64,11 +64,11 @@
  * Note that the dungeon generation routines are much different (2.7.5)\n
  * and perhaps "DUN_ROOMS" should be less than 50.\n
  *\n
- * XXX XXX XXX Note that it is possible to create a room which is only\n
+ * Note that it is possible to create a room which is only\n
  * connected to itself, because the "tunnel generation" code allows a\n
  * tunnel to leave a room, wander around, and then re-enter the room.\n
  *\n
- * XXX XXX XXX Note that it is possible to create a set of rooms which\n
+ * Note that it is possible to create a set of rooms which\n
  * are only connected to other rooms in that set, since there is nothing\n
  * explicit in the code to prevent this from happening.  But this is less\n
  * likely than the "isolated room" problem, because each room attempts to\n
@@ -93,7 +93,7 @@
  * but we must be careful not to allow, for example, the user to display\n
  * hidden traps in a different way from floors, or secret doors in a way\n
  * different from granite walls, or even permanent granite in a different\n
- * way from granite.  XXX XXX XXX\n
+ * way from granite.  \n
  */
 
 #include "angband.h"

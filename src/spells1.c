@@ -351,7 +351,7 @@ u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
  * uses fewer than "range" grids for the projection path, so the result
  * of this function should never be compared directly to "range".  Note
  * that the initial grid (y1,x1) is never saved into the grid array, not
- * even if the initial grid is also the final grid.  XXX XXX XXX
+ * even if the initial grid is also the final grid.  
  *
  * The "flg" flags can be used to modify the behavior of this function.
  *
@@ -365,7 +365,7 @@ u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
  * that the path should be "angled" slightly if needed to avoid any wall
  * grids, allowing the player to "target" any grid which is in "view".
  * This flag is non-trivial and has not yet been implemented, but could
- * perhaps make use of the "vinfo" array (above).  XXX XXX XXX
+ * perhaps make use of the "vinfo" array (above).  
  *
  * This function returns the number of grids (if any) in the path.  This
  * function will return zero if and only if (y1,x1) and (y2,x2) are equal.
@@ -699,9 +699,9 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  *
  * We return "TRUE" if the effect of the projection is "obvious".
  *
- * XXX XXX XXX We also "see" grids which are "memorized", probably a hack
+ * We also "see" grids which are "memorized", probably a hack
  *
- * XXX XXX XXX Perhaps we should affect doors?
+ * Perhaps we should affect doors?
  * </pre>
  */
 static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
@@ -1263,7 +1263,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * Note that we determine if the player can "see" anything that happens
  * by taking into account: blindness, line-of-sight, and illumination.
  *
- * XXX XXX XXX We also "see" grids which are "memorized", probably a hack
+ * We also "see" grids which are "memorized", probably a hack
  *
  * We return "TRUE" if the effect of the projection is "obvious".
  * </pre>
@@ -1617,7 +1617,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * </pre>
  * <pre>
  * Note that "polymorph" is dangerous, since a failure in "place_monster()"'
- * may result in a dereference of an invalid pointer.  XXX XXX XXX
+ * may result in a dereference of an invalid pointer.  
  * </pre>
  * <pre>
  * Various messages are produced, and damage is applied.
@@ -5047,7 +5047,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		redraw_stuff();
 	}
 
-	/* XXX XXX XXX Verify this code */
+	/* Verify this code */
 
 	/* Update the monster */
 	if (m_ptr->r_idx) update_mon(c_ptr->m_idx, FALSE);
@@ -6276,7 +6276,7 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
 
 
 /*
- * XXX XXX XXX
+ * 
  * Modified version of los() for calculation of disintegration balls.
  * Disintegration effects are stopped by permanent walls.
  */

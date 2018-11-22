@@ -1131,7 +1131,7 @@ void do_cmd_change_name(void)
  */
 void do_cmd_message_one(void)
 {
-	/* Recall one message XXX XXX XXX */
+	/* Recall one message */
 	prt(format("> %s", message_str(0)), 0, 0);
 }
 
@@ -1231,7 +1231,7 @@ void do_cmd_messages(int num_now)
 			Term_erase(0, num_lines + 1 - j, 255);
 		}
 
-		/* Display header XXX XXX XXX */
+		/* Display header */
 		/* translation */
 		prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"),
 			   i, i + j - 1, n), 0, 0);
@@ -1397,7 +1397,7 @@ static void do_cmd_options_cheat(cptr info)
 	{
 		DIRECTION dir;
 
-		/* Prompt XXX XXX XXX */
+		/* Prompt */
 		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info);
 
 		prt(buf, 0, 0);
@@ -1548,7 +1548,7 @@ static void do_cmd_options_autosave(cptr info)
 	/* Interact with the player */
 	while (TRUE)
 	{
-		/* Prompt XXX XXX XXX */
+		/* Prompt */
 		sprintf(buf, _("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", 
 					   "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info);
 
@@ -1681,7 +1681,7 @@ void do_cmd_options_aux(int page, cptr info)
 	{
 		DIRECTION dir;
 
-		/* Prompt XXX XXX XXX */
+		/* Prompt */
 		sprintf(buf, _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) "),
 					info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept"));
 		prt(buf, 0, 0);
@@ -1825,7 +1825,7 @@ static void do_cmd_options_win(void)
 	/* Interact */
 	while (go)
 	{
-		/* Prompt XXX XXX XXX */
+		/* Prompt */
 		prt(_("ウィンドウ・フラグ (<方向>で移動, tでチェンジ, y/n でセット, ESC)", "Window Flags (<dir>, t, y, n, ESC) "), 0, 0);
 
 		/* Display the windows */
@@ -2329,7 +2329,7 @@ void do_cmd_options(void)
  * Ask for a "user pref line" and process it
  * @return なし
  * @details
- * XXX XXX XXX Allow absolute file names?
+ * Allow absolute file names?
  */
 void do_cmd_pref(void)
 {
@@ -2477,7 +2477,7 @@ static void do_cmd_macro_aux(char *buf)
  * @details
  * <pre>
  * Note that both "flush()" calls are extremely important.  This may
- * no longer be true, since "util.c" is much simpler now.  XXX XXX XXX
+ * no longer be true, since "util.c" is much simpler now.  
  * </pre>
  */
 static void do_cmd_macro_aux_keymap(char *buf)
@@ -2588,7 +2588,7 @@ static errr keymap_dump(cptr fname)
  * <pre>
  * Note that the macro "action" must be defined before the trigger.
  *
- * Could use some helpful instructions on this page.  XXX XXX XXX
+ * Could use some helpful instructions on this page.  
  * </pre>
  */
 void do_cmd_macros(void)
@@ -6046,7 +6046,7 @@ static void do_cmd_knowledge_pets(void)
  * @brief 現在のペットを表示するコマンドのメインルーチン /
  * Total kill count
  * @return なし
- * @note the player ghosts are ignored.  XXX XXX XXX
+ * @note the player ghosts are ignored.  
  */
 static void do_cmd_knowledge_kill_count(void)
 {

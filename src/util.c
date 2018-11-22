@@ -532,7 +532,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
  *
  * Dump a string, plus a newline, to a file
  *
- * XXX XXX XXX Process internal weirdness?
+ * Process internal weirdness?
  */
 errr my_fputs(FILE *fff, cptr buf, huge n)
 {
@@ -687,7 +687,7 @@ errr fd_copy(cptr file, cptr what)
  *
  * Note that we assume that the file should be "binary"
  *
- * XXX XXX XXX The horrible "BEN_HACK" code is for compiling under
+ * The horrible "BEN_HACK" code is for compiling under
  * the CodeWarrior compiler, in which case, for some reason, none
  * of the "O_*" flags are defined, and we must fake the definition
  * of "O_RDONLY", "O_WRONLY", and "O_RDWR" in "A-win-h", and then
@@ -943,7 +943,7 @@ errr fd_close(int fd)
 
 
 /*
- * XXX XXX XXX Important note about "colors" XXX XXX XXX
+ * Important note about "colors" 
  *
  * The "TERM_*" color definitions list the "composition" of each
  * "Angband color" in terms of "quarters" of each of the three color
@@ -1594,15 +1594,15 @@ static sint macro_find_ready(cptr pat)
  * Add a macro definition (or redefinition).
  *
  * We should use "act == NULL" to "remove" a macro, but this might make it
- * impossible to save the "removal" of a macro definition.  XXX XXX XXX
+ * impossible to save the "removal" of a macro definition.  
  *
  * We should consider refusing to allow macros which contain existing macros,
  * or which are contained in existing macros, because this would simplify the
- * macro analysis code.  XXX XXX XXX
+ * macro analysis code.  
  *
  * We should consider removing the "command macro" crap, and replacing it
  * with some kind of "powerful keymap" ability, but this might make it hard
- * to change the "roguelike" option from inside the game.  XXX XXX XXX
+ * to change the "roguelike" option from inside the game.  
  */
 errr macro_add(cptr pat, cptr act)
 {
@@ -1822,7 +1822,7 @@ void select_floor_music(void)
  * Only 500 (0+1+2+...+29+30) milliseconds may elapse between each key in
  * the macro trigger sequence.  If a key sequence forms the "prefix" of a
  * macro trigger, 500 milliseconds must pass before the key sequence is
- * known not to be that macro trigger.  XXX XXX XXX
+ * known not to be that macro trigger.  
  */
 static char inkey_aux(void)
 {
@@ -2001,7 +2001,7 @@ static void forget_macro_action(void)
 
 
 /*
- * Mega-Hack -- special "inkey_next" pointer.  XXX XXX XXX
+ * Mega-Hack -- special "inkey_next" pointer.  
  *
  * This special pointer allows a sequence of keys to be "inserted" into
  * the stream of keys returned by "inkey()".  This key sequence will not
@@ -2014,7 +2014,7 @@ static cptr inkey_next = NULL;
 #ifdef ALLOW_BORG
 
 /*
- * Mega-Hack -- special "inkey_hack" hook.  XXX XXX XXX
+ * Mega-Hack -- special "inkey_hack" hook.  
  *
  * This special function hook allows the "Borg" (see elsewhere) to take
  * control of the "inkey()" function, and substitute in fake keypresses.
@@ -2807,13 +2807,13 @@ static void msg_flush(int x)
  * The global "msg_flag" variable can be cleared to tell us to
  * "erase" any "pending" messages still on the screen.
  *
- * XXX XXX XXX Note that we must be very careful about using the
+ * Note that we must be very careful about using the
  * "msg_print()" functions without explicitly calling the special
  * "msg_print(NULL)" function, since this may result in the loss
  * of information if the screen is cleared, or if anything is
  * displayed on the top line.
  *
- * XXX XXX XXX Note that "msg_print(NULL)" will clear the top line
+ * Note that "msg_print(NULL)" will clear the top line
  * even if no messages are pending.  This is probably a hack.
  */
 void msg_print(cptr msg)
@@ -3612,7 +3612,7 @@ bool get_string(cptr prompt, char *buf, int len)
 {
 	bool res;
 
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 	/* Display prompt */
@@ -3662,7 +3662,7 @@ bool get_check_strict(cptr prompt, BIT_FLAGS mode)
 		num_more = 0;
 	}
 
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 	if (!rogue_like_commands)
@@ -3764,7 +3764,7 @@ bool get_check_strict(cptr prompt, BIT_FLAGS mode)
  */
 bool get_com(cptr prompt, char *command, bool z_escape)
 {
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 	/* Display a prompt */
@@ -3847,7 +3847,7 @@ QUANTITY get_quantity(cptr prompt, QUANTITY max)
 		prompt = tmp;
 	}
 
-	/* Paranoia XXX XXX XXX */
+	/* Paranoia */
 	msg_print(NULL);
 
 	/* Display prompt */
@@ -3895,7 +3895,7 @@ QUANTITY get_quantity(cptr prompt, QUANTITY max)
 
 
 /*
- * Pause for user response XXX XXX XXX
+ * Pause for user response 
  */
 void pause_line(int row)
 {
@@ -4392,7 +4392,7 @@ static char inkey_from_menu(void)
  * Note that this command is used both in the dungeon and in
  * stores, and must be careful to work in both situations.
  *
- * Note that "p_ptr->command_new" may not work any more.  XXX XXX XXX
+ * Note that "p_ptr->command_new" may not work any more.  
  */
 void request_command(int shopping)
 {

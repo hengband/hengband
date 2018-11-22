@@ -2721,7 +2721,7 @@ bool identify_fully(bool only_equip)
  * strongly they recharge.  Staffs, however, each get fewer charges if
  * stacked.
  *
- * XXX XXX XXX Beware of "sliding index errors".
+ * Beware of "sliding index errors".
  */
 bool recharge(int power)
 {
@@ -3439,8 +3439,8 @@ bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_ID
  * Hack -- Display all known spells in a window
  * return なし
  * @details
- * XXX XXX XXX Need to analyze size of the window.
- * XXX XXX XXX Need more color coding.
+ * Need to analyze size of the window.
+ * Need more color coding.
  */
 void display_spell_list(void)
 {

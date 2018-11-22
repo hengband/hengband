@@ -220,7 +220,7 @@ void check_experience(void)
  * @details
  * Hack -- Return the "automatic coin type" of a monster race
  * Used to allocate proper treasure when "Creeping coins" die
- * XXX XXX XXX Note the use of actual "monster names"
+ * Note the use of actual "monster names"
  */
 static int get_coin_type(MONRACE_IDX r_idx)
 {
@@ -1559,7 +1559,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
  * Made name, sex, and capitalization generic -BEN-
  * As always, the "ghost" processing is a total hack.
  * Hack -- we "delay" fear messages by passing around a "fear" flag.
- * XXX XXX XXX Consider decreasing monster experience over time, say,
+ * Consider decreasing monster experience over time, say,
  * by using "(m_exp * m_lev * (m_lev)) / (p_lev * (m_lev + n_killed))"
  * instead of simply "(m_exp * m_lev) / (p_lev)", to make the first
  * monster worth more than subsequent monsters.  This would also need
@@ -1982,7 +1982,7 @@ msg_format("%sを葬り去った。", m_name);
 			/* Hack -- note fear */
 			(*fear) = TRUE;
 
-			/* XXX XXX XXX Hack -- Add some timed fear */
+			/* Hack -- Add some timed fear */
 			(void)set_monster_monfear(m_idx, (randint1(10) +
 					  (((dam >= m_ptr->hp) && (percentage > 7)) ?
 					   20 : ((11 - percentage) * 5))));
@@ -2527,7 +2527,7 @@ bool target_able(MONSTER_IDX m_idx)
 	/* Monster must be projectable */
 	if (!projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) return (FALSE);
 
-	/* XXX XXX XXX Hack -- Never target trappers */
+	/* Hack -- Never target trappers */
 	/* if (CLEAR_ATTR && (CLEAR_CHAR)) return (FALSE); */
 
 	/* Assume okay */
@@ -2732,7 +2732,7 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 		/* Approximate Double Distance */
 		v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
 
-		/* XXX XXX XXX Penalize location */
+		/* Penalize location */
 
 		/* Track best */
 		if ((b_i >= 0) && (v >= b_v)) continue;
@@ -2968,7 +2968,7 @@ bool show_gold_on_floor = FALSE;
  * recall info and the health bar info to track that monster.
  *
  * Eventually, we may allow multiple objects per grid, or objects
- * and terrain features in the same grid. XXX XXX XXX
+ * and terrain features in the same grid. 
  *
  * This function must handle blindness/hallucination.
  */
@@ -3520,7 +3520,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
  *
  * All locations must be on the current panel.  Consider the use of
  * "panel_bounds()" to allow "off-panel" targets, perhaps by using
- * some form of "scrolling" the map around the cursor.  XXX XXX XXX
+ * some form of "scrolling" the map around the cursor.  
  * That is, consider the possibility of "auto-scrolling" the screen
  * while the cursor moves around.  This may require changes in the
  * "update_mon()" code to allow "visibility" even if off panel, and

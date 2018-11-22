@@ -1816,7 +1816,7 @@ errr parse_f_info(char *buf, header *head)
 				while (*t == ' ' || *t == '|') t++;
 			}
 
-			/* XXX XXX XXX Hack -- Read feature subtype */
+			/* Hack -- Read feature subtype */
 			if (1 == sscanf(s, "SUBTYPE_%d", &i))
 			{
 				/* Extract a "subtype" */
@@ -1829,7 +1829,7 @@ errr parse_f_info(char *buf, header *head)
 				continue;
 			}
 
-			/* XXX XXX XXX Hack -- Read feature power */
+			/* Hack -- Read feature power */
 			if (1 == sscanf(s, "POWER_%d", &i))
 			{
 				/* Extract a "power" */
@@ -2246,7 +2246,7 @@ errr parse_k_info(char *buf, header *head)
 	else if (buf[0] == 'A')
 	{
 
-		/* XXX XXX XXX Simply read each number following a colon */
+		/* Simply read each number following a colon */
 		for (i = 0, s = buf+1; s && (s[0] == ':') && s[1]; ++i)
 		{
 				/* Default chance */
@@ -3117,7 +3117,7 @@ errr parse_r_info(char *buf, header *head)
 				while ((*t == ' ') || (*t == '|')) t++;
 			}
 
-				/* XXX XXX XXX Hack -- Read spell frequency */
+				/* Hack -- Read spell frequency */
 			if (1 == sscanf(s, "1_IN_%d", &i))
 			{
 				/* Extract a "frequency" */
@@ -3439,7 +3439,7 @@ errr parse_d_info(char *buf, header *head)
 				while (*t == ' ' || *t == '|') t++;
 			}
 
-			/* XXX XXX XXX Hack -- Read Final Artifact */
+			/* Hack -- Read Final Artifact */
 			if (1 == sscanf(s, "FINAL_ARTIFACT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
@@ -3452,7 +3452,7 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-			/* XXX XXX XXX Hack -- Read Final Object */
+			/* Hack -- Read Final Object */
 			if (1 == sscanf(s, "FINAL_OBJECT_%d", &artif))
 			{
 				/* Extract a "Final Artifact" */
@@ -3465,7 +3465,7 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-			/* XXX XXX XXX Hack -- Read Artifact Guardian */
+			/* Hack -- Read Artifact Guardian */
 			if (1 == sscanf(s, "FINAL_GUARDIAN_%d", &monst))
 			{
 				/* Extract a "Artifact Guardian" */
@@ -3478,7 +3478,7 @@ errr parse_d_info(char *buf, header *head)
 				continue;
 			}
 
-			/* XXX XXX XXX Hack -- Read Special Percentage */
+			/* Hack -- Read Special Percentage */
 			if (1 == sscanf(s, "MONSTER_DIV_%d", &monst))
 			{
 				/* Extract a "Special %" */
@@ -3555,7 +3555,7 @@ errr parse_d_info(char *buf, header *head)
 				while ((*t == ' ') || (*t == '|')) t++;
 			}
 
-				/* XXX XXX XXX Hack -- Read spell frequency */
+				/* Hack -- Read spell frequency */
 			if (1 == sscanf(s, "1_IN_%d", &i))
 			{
 				/* Start at next entry */

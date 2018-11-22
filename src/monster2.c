@@ -2978,10 +2978,10 @@ byte get_mspeed(monster_race *r_ptr)
  *
  * This routine refuses to place out-of-depth "FORCE_DEPTH" monsters.
  *
- * XXX XXX XXX Use special "here" and "dead" flags for unique monsters,
+ * Use special "here" and "dead" flags for unique monsters,
  * remove old "cur_num" and "max_num" fields.
  *
- * XXX XXX XXX Actually, do something similar for artifacts, to simplify
+ * Actually, do something similar for artifacts, to simplify
  * the "preserve" mode, and to make the "what artifacts" flag more useful.
  *
  * This is the only function which may place a monster in the dungeon,

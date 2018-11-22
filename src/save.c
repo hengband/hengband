@@ -1555,7 +1555,7 @@ static bool wr_savefile_new(void)
  * Medium level player saver
  * @return 成功すればtrue
  * @details
- * XXX XXX XXX Angband 2.8.0 will use "fd" instead of "fff" if possible
+ * Angband 2.8.0 will use "fd" instead of "fff" if possible
  */
 static bool save_player_aux(char *name)
 {
@@ -1795,7 +1795,7 @@ bool load_player(void)
 
 #if !defined(MACINTOSH) && !defined(WINDOWS)
 
-	/* XXX XXX XXX Fix this */
+	/* Fix this */
 
 	/* Verify the existance of the savefile */
 	if (access(savefile, 0) < 0)

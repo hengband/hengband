@@ -695,7 +695,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 		/* Extract the lock power */
 		j = f_ptr->power;
 
-		/* Extract the difficulty XXX XXX XXX */
+		/* Extract the difficulty */
 		j = i - (j * 4);
 
 		/* Always have a small chance of success */
@@ -1305,7 +1305,7 @@ bool easy_open_door(POSITION y, POSITION x)
 		/* Extract the lock power */
 		j = f_ptr->power;
 
-		/* Extract the difficulty XXX XXX XXX */
+		/* Extract the difficulty */
 		j = i - (j * 4);
 
 		/* Always have a small chance of success */
@@ -1693,7 +1693,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
 
-	/* Compare bash power to door power XXX XXX XXX */
+	/* Compare bash power to door power */
 	temp = (bash - (temp * 10));
 
 	if (p_ptr->pclass == CLASS_BERSERKER) temp *= 2;
@@ -1847,7 +1847,7 @@ void do_cmd_bash(void)
  *
  * Attack monsters, tunnel through walls, disarm traps, open doors.
  *
- * Consider confusion XXX XXX XXX
+ * Consider confusion 
  *
  * This command must always take a turn, to prevent free detection
  * of invisible monsters.
@@ -1955,7 +1955,7 @@ void do_cmd_alter(void)
  * @return オブジェクトがある場合TRUEを返す
  * @details
  * <pre>
- * XXX XXX XXX Let user choose a pile of spikes, perhaps?
+ * Let user choose a pile of spikes, perhaps?
  * </pre>
  */
 static bool get_spike(INVENTORY_IDX *ip)
@@ -2262,7 +2262,7 @@ void do_cmd_rest(void)
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);
 
-	/* Take a turn XXX XXX XXX (?) */
+	/* Take a turn (?) */
 	p_ptr->energy_use = 100;
 
 	/* The sin of sloth */
@@ -3138,7 +3138,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 				}
 				else
 				{
-					/* Apply special damage XXX XXX XXX */
+					/* Apply special damage */
 					tdam = tot_dam_aux_shot(q_ptr, tdam, m_ptr);
 					tdam = critical_shot(q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
 
@@ -3739,7 +3739,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				ds = q_ptr->ds;
 				torch_dice(q_ptr, &dd, &ds); /* throwing a torch */
 				tdam = damroll(dd, ds);
-				/* Apply special damage XXX XXX XXX */
+				/* Apply special damage */
 				tdam = tot_dam_aux(q_ptr, tdam, m_ptr, 0, TRUE);
 				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, 0, tdam);
 				if (q_ptr->to_d > 0)

@@ -2176,7 +2176,7 @@ static void note(cptr str)
  * @return なし
  * @note
  * <pre>
- * XXX XXX XXX This function is "messy" because various things
+ * This function is "messy" because various things
  * may or may not be initialized, but the "plog()" and "quit()"
  * functions are "supposed" to work under any conditions.
  * </pre>
@@ -2221,7 +2221,7 @@ static void init_angband_aux(cptr why)
  * @return なし
  * @note
  * <pre>
- * XXX XXX XXX This function is "messy" because various things
+ * This function is "messy" because various things
  * may or may not be initialized, but the "plog()" and "quit()"
  * functions are "supposed" to work under any conditions.
  * Verify some files, display the "news.txt" file, create

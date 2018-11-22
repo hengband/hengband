@@ -338,7 +338,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 			/* Hack -- note fear */
 			(*fear) = TRUE;
 
-			/* XXX XXX XXX Hack -- Add some timed fear */
+			/* Hack -- Add some timed fear */
 			(void)set_monster_monfear(m_idx, (randint1(10) +
 				(((dam >= m_ptr->hp) && (percentage > 7)) ?
 				20 : ((11 - percentage) * 5))));
@@ -764,13 +764,13 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
  * It is probably better to replace these arrays with code to compute
  * the relevant arrays, even if the storage is pre-allocated in hard
  * coded sizes.  At the very least, code should be included which is
- * able to generate and dump these arrays (ala "los()").  XXX XXX XXX
+ * able to generate and dump these arrays (ala "los()").  
  *
- * Also, the storage needs could be halved by using bytes.  XXX XXX XXX
+ * Also, the storage needs could be halved by using bytes.  
  *
  * These arrays could be combined into two big arrays, using sub-arrays
  * to hold the offsets and lengths of each portion of the sub-arrays, and
- * this could perhaps also be used somehow in the "look" code.  XXX XXX XXX
+ * this could perhaps also be used somehow in the "look" code.  
  */
 
 
@@ -2091,7 +2091,7 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
  * fixate on opening a door even if they cannot open it.  Actually,\n
  * the same thing happens to normal monsters when they hit a door\n
  *\n
- * XXX XXX XXX In addition, monsters which *cannot* open or bash\n
+ * In addition, monsters which *cannot* open or bash\n
  * down a door will still stand there trying to open it...\n
  *\n
  * XXX Technically, need to check for monster in the way\n
@@ -2744,7 +2744,7 @@ void process_monster(MONSTER_IDX m_idx)
 				/* Locked doors (not jammed) */
 				else
 				{
-					/* Try to unlock it XXX XXX XXX */
+					/* Try to unlock it */
 					if (randint0(m_ptr->hp / 10) > f_ptr->power)
 					{
 						/* Unlock the door */
@@ -2762,7 +2762,7 @@ void process_monster(MONSTER_IDX m_idx)
 			if (may_bash && (r_ptr->flags2 & RF2_BASH_DOOR) && have_flag(f_ptr->flags, FF_BASH) &&
 				(!is_pet(m_ptr) || (p_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
-				/* Attempt to Bash XXX XXX XXX */
+				/* Attempt to Bash */
 				if (check_hp_for_feat_destruction(f_ptr, m_ptr) && (randint0(m_ptr->hp / 10) > f_ptr->power))
 				{
 					if (have_flag(f_ptr->flags, FF_GLASS))
@@ -2983,7 +2983,7 @@ void process_monster(MONSTER_IDX m_idx)
 				/* Wake up the moved monster */
 				(void)set_monster_csleep(c_ptr->m_idx, 0);
 
-				/* XXX XXX XXX Message */
+				/* Message */
 			}
 		}
 
@@ -3340,7 +3340,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 		if (m_ptr->ml) chg_virtue(V_COMPASSION, -1);
 
-		/* XXX XXX XXX Actually do something now (?) */
+		/* Actually do something now (?) */
 	}
 }
 

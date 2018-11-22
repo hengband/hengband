@@ -886,7 +886,7 @@ static void regenmagic(int regen_amount)
 /*!
  * @brief 100ゲームターン毎のモンスターのHP自然回復処理 / Regenerate the monsters (once per 100 game turns)
  * @return なし
- * @note XXX XXX XXX Should probably be done during monster turns.
+ * @note Should probably be done during monster turns.
  */
 static void regen_monsters(void)
 {
@@ -933,7 +933,7 @@ static void regen_monsters(void)
 /*!
  * @brief 30ゲームターン毎のボール中モンスターのHP自然回復処理 / Regenerate the captured monsters (once per 30 game turns)
  * @return なし
- * @note XXX XXX XXX Should probably be done during monster turns.
+ * @note Should probably be done during monster turns.
  */
 static void regen_captured_monsters(void)
 {
@@ -3713,7 +3713,7 @@ extern void do_cmd_borg(void);
 /*!
  * @brief プレイヤーから受けた入力コマンドの分岐処理。
  * / Parse and execute the current command Give "Warning" on illegal commands.
- * @todo XXX XXX XXX Make some "blocks"
+ * @todo Make some "blocks"
  * @return なし
  */
 static void process_command(void)
@@ -6284,7 +6284,7 @@ void play_game(bool new_game)
 						p_ptr->redraw |= (PR_STATUS);
 					}
 
-					/* Note cause of death XXX XXX XXX */
+					/* Note cause of death */
 					(void)strcpy(p_ptr->died_from, _("死の欺き", "Cheating death"));
 
 					/* Do not die */

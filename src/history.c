@@ -15,7 +15,7 @@
 *   Half-Orc      --> 19 --> 20 -->  2 -->  3 --> 50 --> 51 --> 52 --> 53\n
 *   Half-Troll    --> 22 --> 23 --> 62 --> 63 --> 64 --> 65 --> 66\n
 *\n
-* XXX XXX XXX This table *must* be correct or drastic errors may occur!\n
+* This table *must* be correct or drastic errors may occur!\n
 */
 hist_type bg[] =
 {

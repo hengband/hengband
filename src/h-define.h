@@ -22,7 +22,7 @@
 
 
 /*
- * Hack -- assist "main-acn.c" XXX XXX XXX
+ * Hack -- assist "main-acn.c" 
  */
 #ifdef ACORN
 # define O_RDONLY	0
@@ -45,7 +45,7 @@
 #endif
 
 /*
- * Hack -- force definitions -- see fd_lock()  XXX XXX XXX
+ * Hack -- force definitions -- see fd_lock()  
  */
 #ifndef F_UNLCK
 # define F_UNLCK	0
@@ -121,7 +121,7 @@
  *
  * Note that all "index" values must be "lowercase letters", while
  * all "digits" must be "digits".  Control characters can be made
- * from any legal characters.  XXX XXX XXX
+ * from any legal characters.  
  */
 #define A2I(X)	((X) - 'a')
 #define I2A(X)	((char)(X) + 'a')

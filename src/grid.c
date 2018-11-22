@@ -441,7 +441,7 @@ static int next_to_corr(POSITION y1, POSITION x1)
 * @return ドアを設置可能ならばTRUEを返す
 * @note Assumes "in_bounds(y1, x1)"
 * @details
-* XXX XXX XXX\n
+* \n
 * Assumes "in_bounds(y, x)"\n
 */
 static bool possible_doorway(POSITION y, POSITION x)

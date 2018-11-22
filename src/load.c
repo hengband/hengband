@@ -37,7 +37,7 @@
  * the existing "number of turns to protect for", and where each hit
  * by a monster will reduce the shield by that amount.
  *
- * XXX XXX XXX
+ * 
  */
 
 #include "angband.h"
@@ -1641,7 +1641,7 @@ static void rd_options(void)
  * @brief ダミー情報スキップ / Hack -- strip the "ghost" info
  * @return なし
  * @details
- * XXX XXX XXX This is such a nasty hack it hurts.
+ * This is such a nasty hack it hurts.
  */
 static void rd_ghost(void)
 {
@@ -2012,7 +2012,7 @@ static void rd_extra(void)
 		}
 	}
 
-	/* Repair maximum player level XXX XXX XXX */
+	/* Repair maximum player level */
 	if (p_ptr->max_plv < p_ptr->lev) p_ptr->max_plv = p_ptr->lev;
 
 	/* More info */
@@ -2867,7 +2867,7 @@ static errr rd_dungeon_old(void)
 		rd_item(o_ptr);
 
 
-		/* XXX XXX XXX XXX XXX */
+		/* XXX XXX */
 
 		/* Monster */
 		if (o_ptr->held_m_idx)

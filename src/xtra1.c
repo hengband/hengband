@@ -1986,7 +1986,7 @@ static void fix_player(void)
 /*!
  * @brief ゲームメッセージ履歴をサブウィンドウに表示する / 
  * Hack -- display recent messages in sub-windows
- * XXX XXX XXX Adjust for width and split messages
+ * Adjust for width and split messages
  * @return なし
  */
 static void fix_message(void)
@@ -2037,7 +2037,7 @@ static void fix_message(void)
 /*!
  * @brief 簡易マップをサブウィンドウに表示する / 
  * Hack -- display overhead view in sub-windows
- * XXX XXX XXX Adjust for width and split messages
+ * Adjust for width and split messages
  * @return なし
  * @details
  * Note that the "player" symbol does NOT appear on the map.
@@ -4922,7 +4922,7 @@ void calc_bonuses(void)
 		i = 1500 + riding_r_ptr->level * 25;
 	}
 
-	/* XXX XXX XXX Apply "encumbrance" from weight */
+	/* Apply "encumbrance" from weight */
 	if (j > i) new_speed -= ((j - i) / (i / 5));
 
 	/* Searching slows the player down */
