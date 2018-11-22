@@ -61,19 +61,12 @@ void init_saved_floors(bool force)
 		{
 			if (!force)
 			{
-#ifdef JP
-				msg_print("エラー：古いテンポラリ・ファイルが残っています。");
-				msg_print("変愚蛮怒を二重に起動していないか確認してください。");
-				msg_print("過去に変愚蛮怒がクラッシュした場合は一時ファイルを");
-				msg_print("強制的に削除して実行を続けられます。");
-				if (!get_check("強制的に削除してもよろしいですか？")) quit("実行中止");
-#else
-				msg_print("Error: There are old temporal files.");
-				msg_print("Make sure you are not running two game processes simultaneously.");
-				msg_print("If the temporal files are garbages of old crashed process, ");
-				msg_print("you can delete it safely.");
-				if (!get_check("Do you delete old temporal files? ")) quit("Aborted.");
-#endif
+				msg_print(_("エラー：古いテンポラリ・ファイルが残っています。", "Error: There are old temporal files."));
+				msg_print(_("変愚蛮怒を二重に起動していないか確認してください。", "Make sure you are not running two game processes simultaneously."));
+				msg_print(_("過去に変愚蛮怒がクラッシュした場合は一時ファイルを", "If the temporal files are garbages of old crashed process, "));
+				msg_print(_("強制的に削除して実行を続けられます。", "you can delete it safely."));
+				if (!get_check(_("強制的に削除してもよろしいですか？", "Do you delete old temporal files? ")))
+					quit(_("実行中止", "Aborted."));
 				force = TRUE;
 			}
 		}
