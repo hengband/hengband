@@ -1781,7 +1781,6 @@ static bool init_graphics(void)
 	{
 		/* Free bitmap XXX XXX XXX */
 
-		/* Oops */
 		plog(_("パレットを実現できません！", "Cannot activate palette!"));
 		return (FALSE);
 	}
@@ -2472,7 +2471,6 @@ static errr Term_xtra_win_sound(int v)
 
 #else /* USE_SOUND */
 
-	/* Oops */
 	return (1);
 
 #endif /* USE_SOUND */
@@ -2694,7 +2692,6 @@ static errr Term_xtra_win(int n, int v)
 		}
 	}
 
-	/* Oops */
 	return 1;
 }
 
@@ -3401,7 +3398,6 @@ static void init_windows(void)
 			/* Force the use of that font */
 			(void)term_force_font(td, buf);
 
-			/* Oops */
 			td->tile_wid = 8;
 			td->tile_hgt = 13;
 
@@ -5304,7 +5300,6 @@ LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 		}
 	}
 
-	/* Oops */
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 

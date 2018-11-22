@@ -248,7 +248,6 @@ static byte spell_color(int type)
 		/* Lookup the default colors for this type */
 		cptr s = quark_str(gf_color[type]);
 
-		/* Oops */
 		if (!s) return (TERM_WHITE);
 
 		/* Pick a random color */
@@ -6830,7 +6829,6 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		monster_desc(who_name, &m_list[who], MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 	}
 
-	/* Oops */
 	else
 	{
 		x1 = x;

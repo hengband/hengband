@@ -1936,10 +1936,8 @@ void do_cmd_alter(void)
 			more = do_cmd_disarm_aux(y, x, dir);
 		}
 
-		/* Oops */
 		else
 		{
-			/* Oops */
 			msg_print(_("何もない空中を攻撃した。", "You attack the empty air."));
 		}
 	}
@@ -1983,7 +1981,6 @@ static bool get_spike(INVENTORY_IDX *ip)
 		}
 	}
 
-	/* Oops */
 	return (FALSE);
 }
 
@@ -3509,7 +3506,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	/* Item is cursed */
 	if (object_is_cursed(o_ptr) && (item >= INVEN_RARM))
 	{
-		/* Oops */
 		msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 
 		/* Nope */

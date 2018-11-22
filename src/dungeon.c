@@ -5831,7 +5831,6 @@ void play_game(bool new_game)
 	/* Attempt to load */
 	if (!load_player())
 	{
-		/* Oops */
 		quit(_("セーブファイルが壊れています", "broken savefile"));
 	}
 

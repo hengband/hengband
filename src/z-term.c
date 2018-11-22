@@ -444,7 +444,6 @@ static errr Term_curs_hack(TERM_LEN x, TERM_LEN y)
 	(void)x;
 	(void)y;
 
-	/* Oops */
 	return (-1);
 }
 
@@ -466,7 +465,6 @@ static errr Term_wipe_hack(TERM_LEN x, TERM_LEN y, int n)
 	(void)y;
 	(void)n;
 
-	/* Oops */
 	return (-1);
 }
 
@@ -482,7 +480,6 @@ static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr cp)
 	(void)a;
 	(void)cp;
 
-	/* Oops */
 	return (-1);
 }
 
@@ -500,7 +497,6 @@ static errr Term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
 	(void)tap;
 	(void)tcp;
 
-	/* Oops */
 	return (-1);
 }
 

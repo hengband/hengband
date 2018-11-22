@@ -2586,7 +2586,6 @@ bool mundane_spell(bool only_equip)
 		o_ptr = &o_list[0 - item];
 	}
 
-	/* Oops */
 	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 	{
 		POSITION iy = o_ptr->iy;                 /* Y-position on map, or zero */
@@ -4788,7 +4787,6 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返し�
 	/* not artifact or failed save... */
 	else
 	{
-		/* Oops */
 		msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 		chg_virtue(V_ENCHANT, -5);
 
@@ -4857,7 +4855,6 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 	/* not artifact or failed save... */
 	else
 	{
-		/* Oops */
 		if (!force) msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
 		chg_virtue(V_ENCHANT, -5);
 

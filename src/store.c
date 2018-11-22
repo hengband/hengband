@@ -2675,7 +2675,6 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 			break;
 		}
 
-		/* Oops */
 		bell();
 	}
 
@@ -3966,7 +3965,6 @@ static void store_sell(void)
 	/* Hack -- Cannot remove cursed items */
 	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
 	{
-		/* Oops */
 #ifdef JP
 		msg_print("ふーむ、どうやらそれは呪われているようだね。");
 #else

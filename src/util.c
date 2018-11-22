@@ -284,7 +284,6 @@ static errr path_temp(char *buf, int max)
 	/* Temp file */
 	s = tmpnam(NULL);
 
-	/* Oops */
 	if (!s) return (-1);
 
 	/* Format to length */
@@ -2205,7 +2204,6 @@ char inkey(void)
 					break;
 				}
 
-				/* Oops */
 				break;
 			}
 

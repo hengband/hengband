@@ -1750,7 +1750,6 @@ static void rd_extra(void)
 	p_ptr->realm1 = (REALM_IDX)tmp8u;
 	rd_byte(&tmp8u);
 	p_ptr->realm2 = (REALM_IDX)tmp8u;
-	rd_byte(&tmp8u); /* oops */
 
 	if (z_older_than(10, 4, 4))
 	{
@@ -1775,7 +1774,6 @@ static void rd_extra(void)
 	for (i = 0; i < 6; i++) rd_s16b(&p_ptr->stat_max_max[i]);
 	for (i = 0; i < 6; i++) rd_s16b(&p_ptr->stat_cur[i]);
 
-	strip_bytes(24); /* oops */
 
 	rd_s32b(&p_ptr->au);
 
@@ -2208,7 +2206,6 @@ static void rd_extra(void)
 	rd_byte(&tmp8u);
 	p_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
 
-	rd_byte(&tmp8u); /* oops */
 	rd_byte(&tmp8u);
 	p_ptr->action = (ACTION_IDX)tmp8u;
 	if (!z_older_than(10, 4, 3))
@@ -2439,7 +2436,6 @@ static errr rd_inventory(void)
 		/* Warning -- backpack is full */
 		else if (inven_cnt == INVEN_PACK)
 		{
-			/* Oops */
 			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory!"));
 
 			/* Fail */
@@ -2857,7 +2853,6 @@ static errr rd_dungeon_old(void)
 		/* Get a new record */
 		o_idx = o_pop();
 
-		/* Oops */
 		if (i != o_idx)
 		{
 			note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
@@ -2925,7 +2920,6 @@ static errr rd_dungeon_old(void)
 		/* Get a new record */
 		m_idx = m_pop();
 
-		/* Oops */
 		if (i != m_idx)
 		{
 			note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
@@ -3184,7 +3178,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Get a new record */
 		o_idx = o_pop();
 
-		/* Oops */
 		if (i != o_idx) return 152;
 
 		/* Acquire place */
@@ -3242,7 +3235,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Get a new record */
 		m_idx = m_pop();
 
-		/* Oops */
 		if (i != m_idx) return 162;
 
 

@@ -603,7 +603,6 @@ errr process_pref_file_command(char *buf)
 			/* Find the colon */
 			char *t = my_strchr(buf + 2, ':');
 
-			/* Oops */
 			if (!t) return 1;
 
 			/* Nuke the colon */
@@ -792,7 +791,6 @@ cptr process_pref_file_expr(char **sp, char *fp)
 		/* First */
 		t = process_pref_file_expr(&s, &f);
 
-		/* Oops */
 		if (!*t)
 		{
 			/* Nothing */
@@ -880,7 +878,6 @@ cptr process_pref_file_expr(char **sp, char *fp)
 			}
 		}
 
-		/* Oops */
 		else
 		{
 			while (*s && (f != b2))
@@ -5370,13 +5367,11 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 		fff = my_fopen(path, "r");
 	}
 
-	/* Oops */
 	if (!fff)
 	{
 		msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
 		msg_print(NULL);
 
-		/* Oops */
 		return (TRUE);
 	}
 
@@ -5455,7 +5450,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 			/* Hack -- Re-Open the file */
 			fff = my_fopen(path, "r");
 
-			/* Oops */
 			if (!fff) return (FALSE);
 
 			/* File has been restarted */
@@ -5741,7 +5735,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 
 			ffp = my_fopen(buff, "w");
 
-			/* Oops */
 			if (!(fff && ffp))
 			{
 				msg_print(_("ファイルを開けません。", "Failed to open file."));

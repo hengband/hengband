@@ -167,7 +167,6 @@ static void wiz_create_named_art(void)
  */
 static void do_cmd_wiz_hack_ben(void)
 {
-	/* Oops */
 	msg_print("Oops.");
 	(void)probing();
 }
@@ -1803,7 +1802,6 @@ static void do_cmd_dump_options(void)
 	/* Open the file */
 	fff = my_fopen(buf, "a");
 
-	/* Oops */
 	if (!fff)
 	{
 		msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);

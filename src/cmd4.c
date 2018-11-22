@@ -1105,7 +1105,6 @@ void do_cmd_change_name(void)
 			mode++;
 		}
 
-		/* Oops */
 		else
 		{
 			bell();
@@ -2306,7 +2305,6 @@ void do_cmd_options(void)
 			/* Unknown option */
 			default:
 			{
-				/* Oops */
 				bell();
 				break;
 			}
@@ -2979,10 +2977,8 @@ void do_cmd_macros(void)
 
 #endif /* ALLOW_MACROS */
 
-		/* Oops */
 		else
 		{
-			/* Oops */
 			bell();
 		}
 
@@ -4675,7 +4671,6 @@ void do_cmd_load_screen(void)
 	/* Append to the file */
 	fff = my_fopen(buf, "r");
 
-	/* Oops */
 	if (!fff) {
 		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
 		msg_print(NULL);
@@ -4982,7 +4977,6 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	/* Append to the file */
 	fff = my_fopen(filename, "w");
 
-	/* Oops */
 	if (!fff) {
 		if (message) {
 		    msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
@@ -5197,7 +5191,6 @@ void do_cmd_save_screen(void)
 		/* Append to the file */
 		fff = my_fopen(buf, "w");
 
-		/* Oops */
 		if (!fff)
 		{
 			msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
@@ -8725,7 +8718,6 @@ void do_cmd_time(void)
 	/* Open this file */
 	fff = my_fopen(buf, "rt");
 
-	/* Oops */
 	if (!fff) return;
 
 	/* Find this time */

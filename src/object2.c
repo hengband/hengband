@@ -589,7 +589,6 @@ OBJECT_IDX o_pop(void)
 	/* Warn the player (except during dungeon creation) */
 	if (character_dungeon) msg_print(_("アイテムが多すぎる！", "Too many objects!"));
 
-	/* Oops */
 	return (0);
 }
 
@@ -1964,12 +1963,10 @@ IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 	}
 
 #if 0
-	/* Oops */
 	msg_format(_("アイテムがない (%d,%d)", "No object (%d,%d)"), tval, sval);
 #endif
 
 
-	/* Oops */
 	return (0);
 }
 

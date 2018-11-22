@@ -2217,7 +2217,6 @@ void process_monster(MONSTER_IDX m_idx)
 				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
-				/* Oops */
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
 

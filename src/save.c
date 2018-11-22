@@ -454,7 +454,6 @@ static void wr_options(void)
 
 	/*** Oops ***/
 
-	/* Oops */
 	for (i = 0; i < 4; i++) wr_u32b(0L);
 
 
@@ -628,7 +627,6 @@ static void wr_extra(void)
 	wr_byte(p_ptr->psex);
 	wr_byte((byte_hack)p_ptr->realm1);
 	wr_byte((byte_hack)p_ptr->realm2);
-	wr_byte(0);	/* oops */
 
 	wr_byte((byte)p_ptr->hitdie);
 	wr_u16b(p_ptr->expfact);
@@ -714,10 +712,6 @@ static void wr_extra(void)
 		wr_s16b((s16b)max_dlv[i]);
 
 	/* More info */
-	wr_s16b(0);     /* oops */
-	wr_s16b(0);     /* oops */
-	wr_s16b(0);     /* oops */
-	wr_s16b(0);     /* oops */
 	wr_s16b(p_ptr->sc);
 	wr_s16b(p_ptr->concent);
 
@@ -796,7 +790,6 @@ static void wr_extra(void)
 	wr_u32b(p_ptr->special_defense);
 	wr_byte(p_ptr->knowledge);
 	wr_byte(p_ptr->autopick_autoregister);
-	wr_byte(0);     /* oops */
 	wr_byte((byte_hack)p_ptr->action);
 	wr_byte(0);
 	wr_byte(preserve_mode);
@@ -806,9 +799,6 @@ static void wr_extra(void)
 	for (i = 0; i < 12; i++) wr_u32b(0L);
 
 	/* Ignore some flags */
-	wr_u32b(0L);    /* oops */
-	wr_u32b(0L);    /* oops */
-	wr_u32b(0L);    /* oops */
 
 
 	/* Write the "object seeds" */
@@ -1847,7 +1837,6 @@ bool load_player(void)
 			msg_print(_("セーブファイルは現在使用中です。", "Savefile is currently in use."));
 			msg_print(NULL);
 
-			/* Oops */
 			return (FALSE);
 		}
 
@@ -1937,7 +1926,6 @@ bool load_player(void)
 		{
 			what = _("無効なタイム・スタンプです", "Invalid timestamp");
 
-			/* Oops */
 			err = -1;
 		}
 	}
@@ -2034,7 +2022,6 @@ bool load_player(void)
 #endif
 	msg_print(NULL);
 
-	/* Oops */
 	return (FALSE);
 }
 

@@ -2275,7 +2275,6 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 	/* Acquire the "kind" index */
 	i = lookup_kind(a_ptr->tval, a_ptr->sval);
 
-	/* Oops */
 	if (!i) return FALSE;
 
 	/* Create the artifact */

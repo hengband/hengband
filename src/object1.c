@@ -498,7 +498,6 @@ cptr item_activation(object_type *o_ptr)
 		return _("モンスターを捕える、又は解放する。", "captures or releases a monster.");
 	}
 
-	/* Oops */
 	return _("何も起きない", "Nothing");
 }
 
@@ -2929,7 +2928,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		/* Cancel p_ptr->command_see */
 		command_see = FALSE;
 
-		/* Oops */
 		oops = TRUE;
 
 		done = TRUE;
@@ -3319,7 +3317,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 					if (done) break;
 				}
 
-				/* Oops */
 				bell();
 				break;
 			}
@@ -3977,7 +3974,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		/* Cancel p_ptr->command_see */
 		command_see = FALSE;
 
-		/* Oops */
 		oops = TRUE;
 
 		done = TRUE;

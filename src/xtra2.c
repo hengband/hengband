@@ -4270,7 +4270,6 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 			/* Look up the direction */
 			dir = get_keymap_dir(ch);
 
-			/* Oops */
 			if (!dir) bell();
 		}
 	}
@@ -4393,7 +4392,6 @@ bool get_rep_dir2(DIRECTION *dp)
 		/* Look up the direction */
 		dir = get_keymap_dir(ch);
 
-		/* Oops */
 		if (!dir) bell();
 	}
 

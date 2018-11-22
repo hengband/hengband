@@ -526,7 +526,6 @@ static errr init_info(cptr filename, header *head,
 			/* Error string */
 			oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "未知の");
 
-			/* Oops */
 			msg_format("'%s.txt'ファイルの %d 行目にエラー。", filename, error_line);
 			msg_format("レコード %d は '%s' エラーがあります。", error_idx, oops);
 			msg_format("構文 '%s'。", buf);
@@ -538,7 +537,6 @@ static errr init_info(cptr filename, header *head,
 			/* Error string */
 			oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
 
-			/* Oops */
 			msg_format("Error %d at line %d of '%s.txt'.", err, error_line, filename);
 			msg_format("Record %d contains a '%s' error.", error_idx, oops);
 			msg_format("Parsing '%s'.", buf);

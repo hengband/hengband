@@ -1317,7 +1317,6 @@ errr parse_v_info(char *buf, header *head)
 		v_ptr->wid = (POSITION)wid;
 	}
 
-	/* Oops */
 	else	return (6);
 
 	/* Success */
@@ -1402,7 +1401,6 @@ errr parse_s_info(char *buf, header *head)
 	}
 
 
-	/* Oops */
 	else return (6);
 
 	/* Success */
@@ -1534,7 +1532,6 @@ errr parse_m_info(char *buf, header *head)
 	}
 
 
-	/* Oops */
 	else return (6);
 
 	/* Success */
@@ -1589,7 +1586,6 @@ static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
 		}
 	}
 
-	/* Oops */
 	msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what);
 
 	/* Error */
@@ -1619,7 +1615,6 @@ static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
 		}
 	}
 
-	/* Oops */
 	msg_format(_("未知の地形アクション '%s'。", "Unknown feature action '%s'."), what);
 
 	/* Error */
@@ -1907,7 +1902,6 @@ errr parse_f_info(char *buf, header *head)
 		}
 	}
 
-	/* Oops */
 	else return (6);
 
 	/* Success */
@@ -2025,7 +2019,6 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
 	if (grab_one_flag(&k_ptr->gen_flags, k_info_gen_flags, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知のアイテム・フラグ '%s'。", "Unknown object flag '%s'."), what);
 
 	/* Error */
@@ -2058,7 +2051,6 @@ static byte grab_one_activation_flag(cptr what)
 		 return ((byte) i);
 	 }
 
-	/* Oops */
 	msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what);
 
 	/* Error */
@@ -2335,7 +2327,6 @@ errr parse_k_info(char *buf, header *head)
 	}
 
 
-	/* Oops */
 	else return (6);
 
 
@@ -2367,7 +2358,6 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
 	if (grab_one_flag(&a_ptr->gen_flags, k_info_gen_flags, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知の伝説のアイテム・フラグ '%s'。", "Unknown artifact flag '%s'."), what);
 
 	/* Error */
@@ -2564,7 +2554,6 @@ errr parse_a_info(char *buf, header *head)
 	}
 
 
-	/* Oops */
 	else return (6);
 
 
@@ -2597,7 +2586,6 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 	if (grab_one_flag(&e_ptr->gen_flags, k_info_gen_flags, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知の名のあるアイテム・フラグ '%s'。", "Unknown ego-item flag '%s'."), what);
 
 	/* Error */
@@ -2784,7 +2772,6 @@ errr parse_e_info(char *buf, header *head)
 		}
 	}
 
-	/* Oops */
 	else return (6);
 
 	/* Success */
@@ -2822,7 +2809,6 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
 	if (grab_one_flag(&r_ptr->flagsr, r_info_flagsr, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 
 	/* Failure */
@@ -2848,7 +2834,6 @@ static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
 	if (grab_one_flag(&r_ptr->a_ability_flags2, r_a_ability_flags2, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 
 	/* Failure */
@@ -3178,7 +3163,6 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->arena_ratio = (PERCENTAGE)val;
 	}
 
-	/* Oops */
 	else return (6);
 
 
@@ -3199,7 +3183,6 @@ static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
 	if (grab_one_flag(&d_ptr->flags1, d_info_flags1, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知のダンジョン・フラグ '%s'。", "Unknown dungeon type flag '%s'."), what);
 
 	/* Failure */
@@ -3236,7 +3219,6 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
 	if (grab_one_flag(&d_ptr->mflagsr, r_info_flagsr, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 	/* Failure */
 	return (1);
@@ -3261,7 +3243,6 @@ static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 	if (grab_one_flag(&d_ptr->m_a_ability_flags2, r_a_ability_flags2, what) == 0)
 		return 0;
 
-	/* Oops */
 	msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
 
 	/* Failure */
@@ -3592,7 +3573,6 @@ errr parse_d_info(char *buf, header *head)
 		}
 	}
 
-	/* Oops */
 	else return (6);
 
 	/* Success */
@@ -4516,7 +4496,6 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 		/* First */
 		t = process_dungeon_file_expr(&s, &f);
 
-		/* Oops */
 		if (!*t)
 		{
 			/* Nothing */
@@ -4604,7 +4583,6 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 			}
 		}
 
-		/* Oops */
 		else
 		{
 			while (*s && (f != b2))
@@ -4867,7 +4845,6 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 		/* Process the line */
 		err = process_dungeon_file_aux(buf, ymin, xmin, ymax, xmax, &y, &x);
 
-		/* Oops */
 		if (err) break;
 	}
 
@@ -4879,7 +4856,6 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 		/* Error string */
 		oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
 
-		/* Oops */
 		msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name);
 		msg_format(_("'%s'を解析中。", "Parsing '%s'."), buf);
 

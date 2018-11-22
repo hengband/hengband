@@ -629,7 +629,6 @@ void do_cmd_takeoff(void)
 	{
 		if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (p_ptr->pclass != CLASS_BERSERKER))
 		{
-			/* Oops */
 			msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 
 			/* Nope */
@@ -715,7 +714,6 @@ void do_cmd_drop(void)
 	/* Hack -- Cannot remove cursed items */
 	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
 	{
-		/* Oops */
 		msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 		/* Nope */
 		return;

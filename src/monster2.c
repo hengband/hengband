@@ -1976,7 +1976,6 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 			return; /* Cannot see it for some reason */
 
 		if (!(r_ptr->flags2 & RF2_ELDRITCH_HORROR))
-			return; /* oops */
 
 		if (is_pet(m_ptr))
 			return; /* Pet eldritch horrors are safe most of the time */
@@ -3728,7 +3727,6 @@ bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 	/* Attempt to place the monster */
 	if (place_monster_aux(0, y, x, r_idx, mode)) return (TRUE);
 
-	/* Oops */
 	return (FALSE);
 }
 
