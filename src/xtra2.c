@@ -4077,7 +4077,6 @@ bool get_aim_dir(DIRECTION *dp)
 	cptr	p;
 	COMMAND_CODE code;
 
-	/* Initialize */
 	(*dp) = 0;
 
 	/* Global direction */
@@ -4202,9 +4201,145 @@ bool get_aim_dir(DIRECTION *dp)
 }
 
 
+bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
+{
+	DIRECTION dir;
+	cptr prompt;
+	COMMAND_CODE code;
+
+	(*dp) = 0;
+
+	/* Global direction */
+	dir = command_dir;
+
+#ifdef ALLOW_REPEAT /* TNB */
+
+	if (repeat_pull(&code))
+	{
+		dir = (DIRECTION)code;
+		/*		return (TRUE); */
+	}
+	*dp = (DIRECTION)code;
+
+#endif /* ALLOW_REPEAT -- TNB */
+
+	if (allow_under)
+	{
+		prompt = _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ");
+	}
+	else
+	{
+		prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
+	}
+
+	/* Get a direction */
+	while (!dir)
+	{
+		char ch;
+
+		/* Get a command (or Cancel) */
+		if (!get_com(prompt, &ch, TRUE)) break;
+
+		/* Look down */
+		if ((allow_under) && ((ch == '5') || (ch == '-') || (ch == '.')))
+		{
+			dir = 5;
+		}
+		else
+		{
+			/* Look up the direction */
+			dir = get_keymap_dir(ch);
+
+			if (!dir) bell();
+		}
+	}
+
+	/* Prevent weirdness */
+	if ((dir == 5) && (!allow_under)) dir = 0;
+
+	/* Aborted */
+	if (!dir) return (FALSE);
+
+	/* Save desired direction */
+	command_dir = dir;
+
+	/* Apply "confusion" */
+	if (p_ptr->confused)
+	{
+		/* Standard confusion */
+		if (randint0(100) < 75)
+		{
+			/* Random direction */
+			dir = ddd[randint0(8)];
+		}
+	}
+	else if (p_ptr->riding && with_steed)
+	{
+		monster_type *m_ptr = &m_list[p_ptr->riding];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+		if (MON_CONFUSED(m_ptr))
+		{
+			/* Standard confusion */
+			if (randint0(100) < 75)
+			{
+				/* Random direction */
+				dir = ddd[randint0(8)];
+			}
+		}
+		else if ((r_ptr->flags1 & RF1_RAND_50) && (r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 50))
+		{
+			/* Random direction */
+			dir = ddd[randint0(8)];
+		}
+		else if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 25))
+		{
+			/* Random direction */
+			dir = ddd[randint0(8)];
+		}
+	}
+
+	/* Notice confusion */
+	if (command_dir != dir)
+	{
+		if (p_ptr->confused)
+		{
+			/* Warn the user */
+			msg_print(_("あなたは混乱している。", "You are confused."));
+		}
+		else
+		{
+			char m_name[80];
+			monster_type *m_ptr = &m_list[p_ptr->riding];
+
+			monster_desc(m_name, m_ptr, 0);
+			if (MON_CONFUSED(m_ptr))
+			{
+				msg_format(_("%sは混乱している。", "%^s is confusing."), m_name);
+			}
+			else
+			{
+				msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name);
+			}
+		}
+	}
+
+	/* Save direction */
+	(*dp) = dir;
+
+#ifdef ALLOW_REPEAT /* TNB */
+
+	/*	repeat_push(dir); */
+	repeat_push((COMMAND_CODE)command_dir);
+
+#endif /* ALLOW_REPEAT -- TNB */
+
+	/* Success */
+	return (TRUE);
+}
 
 /*
- * Request a "movement" direction (1,2,3,4,6,7,8,9) from the user,
+ * @brief 進行方向を指定する(騎乗対象の混乱の影響を受ける) / Request a "movement" direction (1,2,3,4,6,7,8,9) from the user,
  * and place it into "command_dir", unless we already have one.
  *
  * This function should be used for all "repeatable" commands, such as
@@ -4225,7 +4360,6 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	cptr prompt;
 	COMMAND_CODE code;
 
-	/* Initialize */
 	(*dp) = 0;
 
 	/* Global direction */
@@ -4341,84 +4475,6 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 				msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name);
 			}
 		}
-	}
-
-	/* Save direction */
-	(*dp) = dir;
-
-#ifdef ALLOW_REPEAT /* TNB */
-
-/*	repeat_push(dir); */
-	repeat_push((COMMAND_CODE)command_dir);
-
-#endif /* ALLOW_REPEAT -- TNB */
-
-	/* Success */
-	return (TRUE);
-}
-
-
-bool get_rep_dir2(DIRECTION *dp)
-{
-	DIRECTION dir;
-	COMMAND_CODE code;
-
-	/* Initialize */
-	(*dp) = 0;
-
-	/* Global direction */
-	dir = command_dir;
-
-#ifdef ALLOW_REPEAT /* TNB */
-
-	if (repeat_pull(&code))
-	{
-		dir = (DIRECTION)code;
-/*		return (TRUE); */
-	}
-	*dp = (DIRECTION)code;
-
-#endif /* ALLOW_REPEAT -- TNB */
-
-	/* Get a direction */
-	while (!dir)
-	{
-		char ch;
-
-		/* Get a command (or Cancel) */
-		if (!get_com(_("方向 (ESCで中断)? ", "Direction (Escape to cancel)? "), &ch, TRUE)) break;
-
-		/* Look up the direction */
-		dir = get_keymap_dir(ch);
-
-		if (!dir) bell();
-	}
-
-	/* Prevent weirdness */
-	if (dir == 5) dir = 0;
-
-	/* Aborted */
-	if (!dir) return (FALSE);
-
-	/* Save desired direction */
-	command_dir = dir;
-
-	/* Apply "confusion" */
-	if (p_ptr->confused)
-	{
-		/* Standard confusion */
-		if (randint0(100) < 75)
-		{
-			/* Random direction */
-			dir = ddd[randint0(8)];
-		}
-	}
-
-	/* Notice confusion */
-	if (command_dir != dir)
-	{
-		/* Warn the user */
-		msg_print(_("あなたは混乱している。", "You are confused."));
 	}
 
 	/* Save direction */
@@ -5276,7 +5332,6 @@ bool get_hack_dir(DIRECTION *dp)
 	cptr    p;
 	char    command;
 
-	/* Initialize */
 	(*dp) = 0;
 
 	/* Global direction */

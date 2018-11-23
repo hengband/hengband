@@ -276,7 +276,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		else
 		{
 			success = FALSE;
-			if (!get_rep_dir2(&dir)) return;
+			if (!get_direction(&dir, FALSE, FALSE)) return;
 			if (monster_can_enter(p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
 			{
 				if (place_monster_aux(0, p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
@@ -1629,7 +1629,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		POSITION x, y;
 
-		if (!get_rep_dir2(&dir)) return FALSE;
+		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 		tsuri_dir = dir;

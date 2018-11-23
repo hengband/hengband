@@ -40,7 +40,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			DIRECTION cdir;
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			for (cdir = 0; cdir < 8; cdir++)
@@ -92,7 +92,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -126,7 +126,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -174,7 +174,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				return NULL;
 			}
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 
 			if (dir == 5) return NULL;
 			y = p_ptr->y + ddy[dir];
@@ -212,7 +212,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -237,7 +237,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -261,7 +261,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -345,7 +345,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -373,7 +373,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -398,7 +398,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -423,7 +423,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -448,7 +448,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -474,7 +474,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -550,7 +550,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -625,7 +625,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int i;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			for (i = 0; i < 3; i++)
@@ -708,7 +708,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -843,7 +843,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];
@@ -893,7 +893,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y, x;
 
-			if (!get_rep_dir2(&dir)) return NULL;
+			if (!get_direction(&dir, FALSE, FALSE)) return NULL;
 			if (dir == 5) return NULL;
 
 			y = p_ptr->y + ddy[dir];

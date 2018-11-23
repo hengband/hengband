@@ -174,7 +174,6 @@ static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION 
 	bool old_is_floor, new_is_floor;
 
 
-	/* Initialize */
 	count = 0;
 
 	old_is_floor = get_is_floor(x1 - 1, y1);
@@ -1499,7 +1498,6 @@ void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 	/* Check if rectangle has no width */
 	if ((x1 == x2) || (y1 == y2)) return;
 
-	/* initialize */
 	if (x1 > x2)
 	{
 		/* Swap boundaries if in wrong order */

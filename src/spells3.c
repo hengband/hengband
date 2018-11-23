@@ -158,7 +158,6 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	/* "Skill" test */
 	if(randint1(100) > power) return;
 
-	/* Initialize */
 	ny = m_ptr->fy;
 	nx = m_ptr->fx;
 
@@ -5600,7 +5599,7 @@ bool eat_lock(void)
 	feature_type *f_ptr, *mimic_f_ptr;
 	DIRECTION dir;
 
-	if (!get_rep_dir2(&dir)) return FALSE;
+	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
 	c_ptr = &cave[y][x];

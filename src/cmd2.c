@@ -957,7 +957,7 @@ void do_cmd_close(void)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir,FALSE))
+	if (get_rep_dir(&dir, FALSE))
 	{
 		cave_type *c_ptr;
 		FEAT_IDX feat;

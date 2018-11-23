@@ -2144,7 +2144,6 @@ void run_step(DIRECTION dir)
 			return;
 		}
 
-		/* Initialize */
 		run_init(dir);
 	}
 

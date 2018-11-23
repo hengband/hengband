@@ -90,7 +90,6 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		{
 			/* Get distances to two closest centers */
 
-			/* initialize */
 			min1 = (u16b)distance(x, y, center[0].x, center[0].y);
 			min2 = (u16b)distance(x, y, center[1].x, center[1].y);
 

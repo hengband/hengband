@@ -5082,7 +5082,7 @@ bool_hack vampirism(void)
 	}
 
 	/* Only works on adjacent monsters */
-	if (!get_rep_dir2(&dir)) return FALSE;
+	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
 	c_ptr = &cave[y][x];
@@ -5125,7 +5125,7 @@ bool panic_hit(void)
 	DIRECTION dir;
 	POSITION x, y;
 
-	if (!get_rep_dir2(&dir)) return FALSE;
+	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
 	if (cave[y][x].m_idx)

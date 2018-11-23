@@ -5643,7 +5643,6 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		return FALSE;
 	}
 
-	/* Initialize */
 	if (hPrevInst == NULL)
 	{
 		wc.style         = CS_CLASSDC;
@@ -5758,7 +5757,6 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	/* Catch nasty signals */
 	signals_init();
 
-	/* Initialize */
 	Term_activate(term_screen);
 	init_angband();
 

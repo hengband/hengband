@@ -4402,7 +4402,6 @@ static bool player_birth_aux(void)
 		auto_round = 0L;
 	}
 
-	/* Initialize */
 	if (autoroller)
 	{
 		if (!get_stat_limits()) return FALSE;
@@ -4946,7 +4945,6 @@ void player_birth(void)
 	{
 		for (j = 0; j < MAX_STORES; j++)
 		{
-			/* Initialize */
 			store_init(i, j);
 		}
 	}

@@ -1508,7 +1508,7 @@ static bool cast_berserk_spell(int spell)
 			return FALSE;
 		}
 
-		if (!get_rep_dir2(&dir)) return FALSE;
+		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 
 		if (dir == 5) return FALSE;
 		y = p_ptr->y + ddy[dir];
@@ -1539,7 +1539,7 @@ static bool cast_berserk_spell(int spell)
 	}
 	case 2:
 	{
-		if (!get_rep_dir2(&dir)) return FALSE;
+		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 		move_player(dir, easy_disarm, TRUE);

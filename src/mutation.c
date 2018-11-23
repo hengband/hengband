@@ -2280,7 +2280,7 @@ bool mutation_power_aux(int power)
 				cave_type *c_ptr;
 				monster_type *m_ptr;
 				monster_race *r_ptr;
-				if (!get_rep_dir2(&dir)) return FALSE;
+				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
@@ -2325,7 +2325,7 @@ bool mutation_power_aux(int power)
 			{
 				POSITION x, y;
 				cave_type *c_ptr;
-				if (!get_rep_dir2(&dir)) return FALSE;
+				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
