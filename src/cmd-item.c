@@ -629,7 +629,6 @@ void do_cmd_takeoff(void)
 		{
 			msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 
-			/* Nope */
 			return;
 		}
 
@@ -712,7 +711,6 @@ void do_cmd_drop(void)
 	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
 	{
 		msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
-		/* Nope */
 		return;
 	}
 

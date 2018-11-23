@@ -1465,7 +1465,6 @@ static bool vault_aux_battle(MONRACE_IDX r_idx)
 	}
 	if (!dam && !(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK)) && !(r_ptr->a_ability_flags1 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK)) && !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK))) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -4749,6 +4748,5 @@ QUEST_IDX random_quest_number(DEPTH level)
 		}
 	}
 
-	/* Nope */
 	return 0;
 }

@@ -2800,7 +2800,6 @@ static bool target_set_accept(POSITION y, POSITION x)
 		if (have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_NOTICE)) return TRUE;
 	}
 
-	/* Nope */
 	return (FALSE);
 }
 
@@ -5046,7 +5045,6 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 		if (cave_have_flag_grid(c_ptr, FF_QUEST_EXIT)) return (TRUE);
 	}
 
-	/* Nope */
 	return (FALSE);
 }
 

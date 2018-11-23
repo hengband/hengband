@@ -3971,7 +3971,6 @@ static void store_sell(void)
 #endif
 
 
-		/* Nope */
 		return;
 	}
 

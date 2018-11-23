@@ -69,7 +69,6 @@ static u32b vault_aux_dragon_mask4;
 */
 static bool vault_aux_simple(MONRACE_IDX r_idx)
 {
-	/* Okay */
 	return (vault_monster_okay(r_idx));
 }
 
@@ -95,7 +94,6 @@ static bool vault_aux_jelly(MONRACE_IDX r_idx)
 	/* Require icky thing, jelly, mold, or mushroom */
 	if (!my_strchr("ijm,", r_ptr->d_char)) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -115,7 +113,6 @@ static bool vault_aux_animal(MONRACE_IDX r_idx)
 	/* Require "animal" flag */
 	if (!(r_ptr->flags3 & (RF3_ANIMAL))) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -136,7 +133,6 @@ static bool vault_aux_undead(MONRACE_IDX r_idx)
 	/* Require Undead */
 	if (!(r_ptr->flags3 & (RF3_UNDEAD))) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -190,7 +186,6 @@ static bool vault_aux_kennel(MONRACE_IDX r_idx)
 	/* Require a Zephyr Hound or a dog */
 	if (!my_strchr("CZ", r_ptr->d_char)) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -210,7 +205,6 @@ static bool vault_aux_mimic(MONRACE_IDX r_idx)
 	/* Require mimic */
 	if (!my_strchr("!$&(/=?[\\|", r_ptr->d_char)) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -249,7 +243,6 @@ static bool vault_aux_symbol_e(MONRACE_IDX r_idx)
 	/* Decline incorrect symbol */
 	if (r_ptr->d_char != vault_aux_char) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -274,7 +267,6 @@ static bool vault_aux_symbol_g(MONRACE_IDX r_idx)
 	/* Decline incorrect symbol */
 	if (r_ptr->d_char != vault_aux_char) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -298,7 +290,6 @@ static bool vault_aux_orc(MONRACE_IDX r_idx)
 	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -322,7 +313,6 @@ static bool vault_aux_troll(MONRACE_IDX r_idx)
 	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -348,7 +338,6 @@ static bool vault_aux_giant(MONRACE_IDX r_idx)
 	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -375,7 +364,6 @@ static bool vault_aux_dragon(MONRACE_IDX r_idx)
 	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -398,7 +386,6 @@ static bool vault_aux_demon(MONRACE_IDX r_idx)
 	/* Require demon */
 	if (!(r_ptr->flags3 & RF3_DEMON)) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -421,7 +408,6 @@ static bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 	/* Require eldritch horror */
 	if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -1233,7 +1219,6 @@ static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
 	/* No wall passing monster */
 	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 

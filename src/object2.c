@@ -4005,7 +4005,6 @@ static bool item_monster_okay(MONRACE_IDX r_idx)
 	if (r_ptr->flags1 & RF1_FORCE_DEPTH) return (FALSE);
 	if (r_ptr->flags7 & RF7_UNIQUE2) return (FALSE);
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -5241,7 +5240,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			by = ty;
 			bx = tx;
 
-			/* Okay */
 			flag = TRUE;
 		}
 	}
@@ -5282,7 +5280,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		/* Require floor space */
 		if (!cave_drop_bold(by, bx)) continue;
 
-		/* Okay */
 		flag = TRUE;
 	}
 
@@ -5963,7 +5960,6 @@ bool inven_carry_okay(object_type *o_ptr)
 		if (object_similar(j_ptr, o_ptr)) return (TRUE);
 	}
 
-	/* Nope */
 	return (FALSE);
 }
 

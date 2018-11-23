@@ -1018,7 +1018,6 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 	{
 		msg_print(_("そこには何も見当たらない。", "You see nothing there."));
 
-		/* Nope */
 		return (FALSE);
 	}
 
@@ -1027,11 +1026,9 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 	{
 		msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
 
-		/* Nope */
 		return (FALSE);
 	}
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -1280,7 +1277,6 @@ bool easy_open_door(POSITION y, POSITION x)
 	/* Must be a closed door */
 	if (!is_closed_door(c_ptr->feat))
 	{
-		/* Nope */
 		return (FALSE);
 	}
 
@@ -3500,13 +3496,11 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		o_ptr = &o_list[0 - item];
 	}
 
-
 	/* Item is cursed */
 	if (object_is_cursed(o_ptr) && (item >= INVEN_RARM))
 	{
 		msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 
-		/* Nope */
 		return FALSE;
 	}
 
@@ -3517,7 +3511,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
 			msg_print(NULL);
 
-			/* Nope */
 			return FALSE;
 		}
 

@@ -1700,7 +1700,6 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 #endif
 		}
 
-		/* Okay */
 		else
 		{
 			p = NULL;

@@ -1265,7 +1265,6 @@ void do_cmd_messages(int num_now)
 			}
 			else strcpy(shower_str, back_str);
 
-			/* Okay */
 			continue;
 
 		/* Hack -- handle find */

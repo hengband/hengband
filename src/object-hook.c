@@ -435,6 +435,5 @@ bool item_tester_hook_recharge(object_type *o_ptr)
 	/* Hack -- Recharge rods */
 	if (o_ptr->tval == TV_ROD) return (TRUE);
 
-	/* Nope */
 	return (FALSE);
 }

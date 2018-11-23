@@ -3595,7 +3595,6 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && !(z_ptr->flags7 & RF7_CHAMELEON))
 		return FALSE;
 
-	/* Okay */
 	return (TRUE);
 }
 
@@ -3909,7 +3908,6 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	}
 #endif /* MONSTER_HORDES */
 
-	/* Nope */
 	return (FALSE);
 }
 

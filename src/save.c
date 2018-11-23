@@ -1853,7 +1853,6 @@ bool load_player(void)
 #endif
 
 
-	/* Okay */
 	if (!err)
 	{
 		/* Open the savefile */
@@ -1932,7 +1931,6 @@ bool load_player(void)
 #endif
 
 
-	/* Okay */
 	if (!err)
 	{
 		/* Give a conversion warning */

@@ -65,7 +65,6 @@ static bool object_easy_know(int i)
 		}
 	}
 
-	/* Nope */
 	return (FALSE);
 }
 
