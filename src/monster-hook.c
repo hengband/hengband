@@ -1,6 +1,122 @@
 ﻿#include "angband.h"
 #include "monster-hook.h"
 
+/*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
+int vault_aux_race;
+
+/*! 単一シンボルpit生成時の指定シンボル / Race index for "monster pit (symbol clone)" */
+char vault_aux_char;
+
+/*! ブレス属性に基づくドラゴンpit生成時条件マスク / Breath mask for "monster pit (dragon)" */
+BIT_FLAGS vault_aux_dragon_mask4;
+
+
+/*!
+* @brief pit/nestの基準となる単種モンスターを決める /
+* @return なし
+*/
+void vault_prep_clone(void)
+{
+	/* Apply the monster restriction */
+	get_mon_num_prep(vault_aux_simple, NULL);
+
+	/* Pick a race to clone */
+	vault_aux_race = get_mon_num(dun_level + 10);
+
+	/* Remove the monster restriction */
+	get_mon_num_prep(NULL, NULL);
+}
+
+
+/*!
+* @brief pit/nestの基準となるモンスターシンボルを決める /
+* @return なし
+*/
+void vault_prep_symbol(void)
+{
+	MONRACE_IDX r_idx;
+
+	/* Apply the monster restriction */
+	get_mon_num_prep(vault_aux_simple, NULL);
+
+	/* Pick a race to clone */
+	r_idx = get_mon_num(dun_level + 10);
+
+	/* Remove the monster restriction */
+	get_mon_num_prep(NULL, NULL);
+
+	/* Extract the symbol */
+	vault_aux_char = r_info[r_idx].d_char;
+}
+
+
+
+/*!
+* @brief pit/nestの基準となるドラゴンの種類を決める /
+* @return なし
+*/
+void vault_prep_dragon(void)
+{
+	/* Pick dragon type */
+	switch (randint0(6))
+	{
+		/* Black */
+	case 0:
+	{
+		/* Restrict dragon breath type */
+		vault_aux_dragon_mask4 = RF4_BR_ACID;
+
+		break;
+	}
+
+	/* Blue */
+	case 1:
+	{
+		/* Restrict dragon breath type */
+		vault_aux_dragon_mask4 = RF4_BR_ELEC;
+
+		break;
+	}
+
+	/* Red */
+	case 2:
+	{
+		/* Restrict dragon breath type */
+		vault_aux_dragon_mask4 = RF4_BR_FIRE;
+
+		break;
+	}
+
+	/* White */
+	case 3:
+	{
+		/* Restrict dragon breath type */
+		vault_aux_dragon_mask4 = RF4_BR_COLD;
+
+		break;
+	}
+
+	/* Green */
+	case 4:
+	{
+		/* Restrict dragon breath type */
+		vault_aux_dragon_mask4 = RF4_BR_POIS;
+
+		break;
+	}
+
+	/* Multi-hued */
+	default:
+	{
+		/* Restrict dragon breath type */
+		vault_aux_dragon_mask4 = (RF4_BR_ACID | RF4_BR_ELEC |
+			RF4_BR_FIRE | RF4_BR_COLD |
+			RF4_BR_POIS);
+
+		break;
+	}
+	}
+}
 
 /*!
 * @brief モンスターがクエストの討伐対象に成り得るかを返す / Hook function for quest monsters
@@ -244,4 +360,393 @@ bool mon_hook_floor(MONRACE_IDX r_idx)
 		return TRUE;
 	else
 		return FALSE;
+}
+
+/*
+* Helper function for "glass room"
+*/
+bool vault_aux_lite(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return FALSE;
+
+	/* Require lite attack */
+	if (!(r_ptr->flags4 & RF4_BR_LITE) && !(r_ptr->a_ability_flags1 & RF5_BA_LITE)) return FALSE;
+
+	/* No wall passing monsters */
+	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
+
+	/* No disintegrating monsters */
+	if (r_ptr->flags4 & RF4_BR_DISI) return FALSE;
+
+	return TRUE;
+}
+
+/*
+* Helper function for "glass room"
+*/
+bool vault_aux_shards(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return FALSE;
+
+	/* Require shards breath attack */
+	if (!(r_ptr->flags4 & RF4_BR_SHAR)) return FALSE;
+
+	return TRUE;
+}
+
+
+/*!
+* @brief モンスターがVault生成の最低必要条件を満たしているかを返す /
+* Helper monster selection function
+* @param r_idx 確認したいモンスター種族ID
+* @return Vault生成の最低必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_simple(MONRACE_IDX r_idx)
+{
+	return (vault_monster_okay(r_idx));
+}
+
+
+/*!
+* @brief モンスターがゼリーnestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (jelly)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_jelly(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
+
+	/* Also decline evil jellies (like death molds and shoggoths) */
+	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
+
+	/* Require icky thing, jelly, mold, or mushroom */
+	if (!my_strchr("ijm,", r_ptr->d_char)) return (FALSE);
+
+	return (TRUE);
+}
+
+/*!
+* @brief モンスターが動物nestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (animal)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_animal(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require "animal" flag */
+	if (!(r_ptr->flags3 & (RF3_ANIMAL))) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターがアンデッドnestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (undead)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_undead(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require Undead */
+	if (!(r_ptr->flags3 & (RF3_UNDEAD))) return (FALSE);
+
+	return (TRUE);
+}
+
+/*!
+* @brief モンスターが聖堂nestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (chapel)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_chapel_g(MONRACE_IDX r_idx)
+{
+	static int chapel_list[] = {
+		MON_NOV_PRIEST, MON_NOV_PALADIN, MON_NOV_PRIEST_G, MON_NOV_PALADIN_G,
+		MON_PRIEST, MON_JADE_MONK, MON_IVORY_MONK, MON_ULTRA_PALADIN,
+		MON_EBONY_MONK, MON_W_KNIGHT, MON_KNI_TEMPLAR, MON_PALADIN,
+		MON_TOPAZ_MONK, 0 };
+
+	int i;
+
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
+	if ((r_idx == MON_A_GOLD) || (r_idx == MON_A_SILVER)) return (FALSE);
+
+	/* Require "priest" or Angel */
+
+	if (r_ptr->d_char == 'A') return TRUE;
+
+	for (i = 0; chapel_list[i]; i++)
+		if (r_idx == chapel_list[i]) return TRUE;
+
+	return FALSE;
+}
+
+/*!
+* @brief モンスターが犬小屋nestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (kennel)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_kennel(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require a Zephyr Hound or a dog */
+	if (!my_strchr("CZ", r_ptr->d_char)) return (FALSE);
+
+	return (TRUE);
+}
+
+/*!
+* @brief モンスターがミミックnestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (mimic)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_mimic(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require mimic */
+	if (!my_strchr("!$&(/=?[\\|", r_ptr->d_char)) return (FALSE);
+
+	return (TRUE);
+}
+
+/*!
+* @brief モンスターが単一クローンnestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (clone)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_clone(MONRACE_IDX r_idx)
+{
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	return (r_idx == vault_aux_race);
+}
+
+
+/*!
+* @brief モンスターが邪悪属性シンボルクローンnestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (symbol clone)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_symbol_e(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
+
+	if (r_ptr->flags3 & (RF3_GOOD)) return (FALSE);
+
+	/* Decline incorrect symbol */
+	if (r_ptr->d_char != vault_aux_char) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターが善良属性シンボルクローンnestの生成必要条件を満たしているかを返す /
+* Helper function for "monster nest (symbol clone)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_symbol_g(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
+
+	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
+
+	/* Decline incorrect symbol */
+	if (r_ptr->d_char != vault_aux_char) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターがオークpitの生成必要条件を満たしているかを返す /
+* Helper function for "monster pit (orc)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_orc(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require orc */
+	if (!(r_ptr->flags3 & RF3_ORC)) return (FALSE);
+
+	/* Decline undead */
+	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターがトロルpitの生成必要条件を満たしているかを返す /
+* Helper function for "monster pit (troll)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_troll(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require troll */
+	if (!(r_ptr->flags3 & RF3_TROLL)) return (FALSE);
+
+	/* Decline undead */
+	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターが巨人pitの生成必要条件を満たしているかを返す /
+* Helper function for "monster pit (giant)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_giant(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require giant */
+	if (!(r_ptr->flags3 & RF3_GIANT)) return (FALSE);
+
+	if (r_ptr->flags3 & RF3_GOOD) return (FALSE);
+
+	/* Decline undead */
+	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターがドラゴンpitの生成必要条件を満たしているかを返す /
+* Helper function for "monster pit (dragon)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_dragon(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	/* Require dragon */
+	if (!(r_ptr->flags3 & RF3_DRAGON)) return (FALSE);
+
+	/* Hack -- Require correct "breath attack" */
+	if (r_ptr->flags4 != vault_aux_dragon_mask4) return (FALSE);
+
+	/* Decline undead */
+	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターが悪魔pitの生成必要条件を満たしているかを返す /
+* Helper function for "monster pit (demon)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_demon(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
+
+	/* Require demon */
+	if (!(r_ptr->flags3 & RF3_DEMON)) return (FALSE);
+
+	return (TRUE);
+}
+
+
+/*!
+* @brief モンスターが狂気pitの生成必要条件を満たしているかを返す /
+* Helper function for "monster pit (lovecraftian)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_cthulhu(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return (FALSE);
+
+	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
+
+	/* Require eldritch horror */
+	if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) return (FALSE);
+
+	return (TRUE);
 }

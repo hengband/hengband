@@ -5,46 +5,8 @@
 #include "monster-hook.h"
 
 /*
-* Helper function for "glass room"
-*/
-static bool vault_aux_lite(MONRACE_IDX r_idx)
-{
-	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
-	if (!vault_monster_okay(r_idx)) return FALSE;
-
-	/* Require lite attack */
-	if (!(r_ptr->flags4 & RF4_BR_LITE) && !(r_ptr->a_ability_flags1 & RF5_BA_LITE)) return FALSE;
-
-	/* No wall passing monsters */
-	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
-
-	/* No disintegrating monsters */
-	if (r_ptr->flags4 & RF4_BR_DISI) return FALSE;
-
-	return TRUE;
-}
-
-/*
-* Helper function for "glass room"
-*/
-static bool vault_aux_shards(MONRACE_IDX r_idx)
-{
-	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
-	if (!vault_monster_okay(r_idx)) return FALSE;
-
-	/* Require shards breath attack */
-	if (!(r_ptr->flags4 & RF4_BR_SHAR)) return FALSE;
-
-	return TRUE;
-}
-
-/*
-* Hack -- determine if a template is potion
-*/
+ * Hack -- determine if a template is potion
+ */
 static bool kind_is_potion(KIND_OBJECT_IDX k_idx)
 {
 	return k_info[k_idx].tval == TV_POTION;

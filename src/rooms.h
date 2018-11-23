@@ -58,22 +58,6 @@ struct room_info_type
         byte min_level;
 };
 
-
-/*!
-* vaultに配置可能なモンスターの条件を指定するマクロ / Monster validation macro
-*
-* Line 1 -- forbid town monsters
-* Line 2 -- forbid uniques
-* Line 3 -- forbid aquatic monsters
-*/
-#define vault_monster_okay(I) \
-	(mon_hook_dungeon(I) && \
-	 !(r_info[I].flags1 & RF1_UNIQUE) && \
-	 !(r_info[I].flags7 & RF7_UNIQUE2) && \
-	 !(r_info[I].flagsr & RFR_RES_ALL) && \
-	 !(r_info[I].flags7 & RF7_AQUATIC))
-
-
 /* Externs */
 #ifdef ALLOW_CAVERNS_AND_LAKES
 extern void build_lake(int type);
