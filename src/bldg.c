@@ -3130,7 +3130,6 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
 	prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row+1, 2);
 
-	/* Get an item */
 	q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
 	s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
 
@@ -3160,7 +3159,6 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	object_desc(basenm, o_ptr, OD_NAME_ONLY);
 	prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row+3, 2);
 
-	/* Get an item */
 	q = _("材料となる武器は？", "Which weapon for material? ");
 	s = _("材料となる武器がありません。", "You have no material to repair.");
 
@@ -3405,7 +3403,6 @@ static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_C
 
 	item_tester_no_ryoute = TRUE;
 
-	/* Get an item */
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるものがありません。", "You have nothing to improve.");
 
@@ -3524,7 +3521,6 @@ static void building_recharge(void)
 	/* Only accept legal items */
 	item_tester_hook = item_tester_hook_recharge;
 
-	/* Get an item */
 	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
 	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;

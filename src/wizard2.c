@@ -1284,7 +1284,6 @@ static void do_cmd_wiz_play(void)
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
-	/* Get an item */
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;

@@ -483,7 +483,6 @@ void do_cmd_use_staff(void)
 	/* Restrict choices to wands */
 	item_tester_tval = TV_STAFF;
 
-	/* Get an item */
 	q = _("どの杖を使いますか? ", "Use which staff? ");
 	s = _("使える杖がない。", "You have no staff to use.");
 

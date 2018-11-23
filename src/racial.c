@@ -136,7 +136,6 @@ static bool do_cmd_archer(void)
 
 		item_tester_hook = item_tester_hook_convertible;
 
-		/* Get an item */
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
 		if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
@@ -195,7 +194,6 @@ static bool do_cmd_archer(void)
 
 		item_tester_hook = item_tester_hook_convertible;
 
-		/* Get an item */
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
 		if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
@@ -264,7 +262,6 @@ bool gain_magic(void)
 	/* Only accept legal items */
 	item_tester_hook = item_tester_hook_recharge;
 
-	/* Get an item */
 	q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
 	s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
 

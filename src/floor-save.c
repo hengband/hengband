@@ -471,7 +471,6 @@ static void preserve_pet(void)
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
 
-
 			delete_monster_idx(i);
 		}
 	}
@@ -675,8 +674,8 @@ static void get_out_monster(void)
 {
 	int tries = 0;
 	POSITION dis = 1;
-	int oy = p_ptr->y;
-	int ox = p_ptr->x;
+	POSITION oy = p_ptr->y;
+	POSITION ox = p_ptr->x;
 	MONSTER_IDX m_idx = cave[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
@@ -688,8 +687,8 @@ static void get_out_monster(void)
 		monster_type *m_ptr;
 
 		/* Pick a (possibly illegal) location */
-		int ny = rand_spread(oy, dis);
-		int nx = rand_spread(ox, dis);
+		POSITION ny = rand_spread(oy, dis);
+		POSITION nx = rand_spread(ox, dis);
 
 		tries++;
 
@@ -850,7 +849,7 @@ void leave_floor(void)
 	cave_type *c_ptr = NULL;
 	feature_type *f_ptr;
 	saved_floor_type *sf_ptr;
-	int quest_r_idx = 0;
+	MONRACE_IDX quest_r_idx = 0;
 	DUNGEON_IDX i;
 
 	/* Preserve pets and prepare to take these to next floor */

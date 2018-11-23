@@ -3266,7 +3266,6 @@ static bool entry_from_choosed_object(autopick_type *entry)
 	object_type *o_ptr;
 	cptr q, s;
 
-	/* Get an item */
 #ifdef JP
 	q = "どのアイテムを登録しますか? ";
 	s = "アイテムを持っていない。";
@@ -3291,7 +3290,6 @@ static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
 	object_type *o_ptr;
 	cptr q, s;
 
-	/* Get an item */
 #ifdef JP
 	q = "どのアイテムを検索しますか? ";
 	s = "アイテムを持っていない。";
@@ -3448,7 +3446,6 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 			return (back ? -1 : 1);
 
 		case KTRL('i'):
-			/* Get an item */
 			return get_object_for_search(o_handle, search_strp);
 
 		case KTRL('l'):

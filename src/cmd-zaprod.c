@@ -405,7 +405,6 @@ void do_cmd_zap_rod(void)
 	/* Restrict choices to rods */
 	item_tester_tval = TV_ROD;
 
-	/* Get an item */
 	q = _("どのロッドを振りますか? ", "Zap which rod? ");
 	s = _("使えるロッドがない。", "You have no rod to zap.");
 

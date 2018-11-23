@@ -641,7 +641,6 @@ void do_cmd_read_scroll(void)
 	/* Restrict choices to scrolls */
 	item_tester_hook = item_tester_hook_readable;
 
-	/* Get an item */
 	q = _("どの巻物を読みますか? ", "Read which scroll? ");
 	s = _("読める巻物がない。", "You have no scrolls to read.");
 

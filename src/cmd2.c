@@ -3379,7 +3379,6 @@ void do_cmd_fire(void)
 	/* Require proper missile */
 	item_tester_tval = p_ptr->tval_ammo;
 
-	/* Get an item */
 	q = _("どれを撃ちますか? ", "Fire which item? ");
 	s = _("発射されるアイテムがありません。", "You have nothing to fire.");
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR)))
@@ -3482,7 +3481,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	}
 	else
 	{
-		/* Get an item */
 		q = _("どのアイテムを投げますか? ", "Throw which item? ");
 		s = _("投げるアイテムがない。", "You have nothing to throw.");
 		if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP)))

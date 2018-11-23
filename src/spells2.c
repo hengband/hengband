@@ -5168,7 +5168,6 @@ bool psychometry(void)
 	bool okay = FALSE;
 
 	item_tester_no_ryoute = TRUE;
-	/* Get an item */
 	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
 	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
 

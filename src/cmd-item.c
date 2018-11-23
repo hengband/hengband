@@ -206,7 +206,6 @@ void do_cmd_wield(void)
 	/* Restrict the choices */
 	item_tester_hook = item_tester_hook_wear;
 
-	/* Get an item */
 	q = _("どれを装備しますか? ", "Wear/Wield which item? ");
 	s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
 
@@ -605,7 +604,6 @@ void do_cmd_takeoff(void)
 
 	item_tester_no_ryoute = TRUE;
 
-	/* Get an item */
 	q = _("どれを装備からはずしますか? ", "Take off which item? ");
 	s = _("はずせる装備がない。", "You are not wearing anything to take off.");
 
@@ -692,7 +690,6 @@ void do_cmd_drop(void)
 	}
 
 	item_tester_no_ryoute = TRUE;
-	/* Get an item */
 	q = _("どのアイテムを落としますか? ", "Drop which item? ");
 	s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
 
@@ -804,7 +801,6 @@ void do_cmd_destroy(void)
 	/* Hack -- force destruction */
 	if (command_arg > 0) force = TRUE;
 
-	/* Get an item */
 	q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
 	s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
 
@@ -1001,7 +997,6 @@ void do_cmd_observe(void)
 
 	item_tester_no_ryoute = TRUE;
 
-	/* Get an item */
 	q = _("どのアイテムを調べますか? ", "Examine which item? ");
 	s = _("調べられるアイテムがない。", "You have nothing to examine.");
 
@@ -1051,7 +1046,6 @@ void do_cmd_uninscribe(void)
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
-	/* Get an item */
 	q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
 	s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
 
@@ -1106,7 +1100,6 @@ void do_cmd_inscribe(void)
 	cptr q, s;
 
 	item_tester_no_ryoute = TRUE;
-	/* Get an item */
 	q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
 	s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
 
@@ -1196,7 +1189,6 @@ static void do_cmd_refill_lamp(void)
 	/* Restrict the choices */
 	item_tester_hook = item_tester_refill_lantern;
 
-	/* Get an item */
 #ifdef JP
 	q = "どの油つぼから注ぎますか? ";
 	s = "油つぼがない。";
@@ -1304,7 +1296,6 @@ static void do_cmd_refill_torch(void)
 	/* Restrict the choices */
 	item_tester_hook = item_tester_refill_torch;
 
-	/* Get an item */
 #ifdef JP
 	q = "どの松明で明かりを強めますか? ";
 	s = "他に松明がない。";
@@ -1983,7 +1974,6 @@ void do_cmd_use(void)
 	/* Prepare the hook */
 	item_tester_hook = item_tester_hook_use;
 
-	/* Get an item */
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing to use.");
 

@@ -452,7 +452,7 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 void do_cmd_aim_wand(void)
 {
 	OBJECT_IDX item;
-	cptr    q, s;
+	cptr q, s;
 
 	/* Restrict choices to wands */
 	item_tester_tval = TV_WAND;
@@ -462,12 +462,9 @@ void do_cmd_aim_wand(void)
 		set_action(ACTION_NONE);
 	}
 
-	/* Get an item */
 	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
-
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
-	/* Aim the wand */
 	do_cmd_aim_wand_aux(item);
 }

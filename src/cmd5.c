@@ -495,7 +495,6 @@ void do_cmd_browse(void)
 	if (p_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
 	else item_tester_hook = item_tester_learn_spell;
 
-	/* Get an item */
 	q = _("どの本を読みますか? ", "Browse which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
@@ -708,7 +707,6 @@ void do_cmd_study(void)
 	if (p_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
 	else item_tester_hook = item_tester_learn_spell;
 
-	/* Get an item */
 	q = _("どの本から学びますか? ", "Study which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
@@ -985,7 +983,6 @@ void do_cmd_cast(void)
 	/* Restrict choices to spell books */
 	item_tester_tval = mp_ptr->spell_book;
 
-	/* Get an item */
 	q = _("どの呪文書を使いますか? ", "Use which book? ");
 	s = _("呪文書がない！", "You have no spell books!");
 

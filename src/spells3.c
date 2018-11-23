@@ -1214,7 +1214,6 @@ void brand_weapon(int brand_type)
 	item_tester_hook = object_allow_enchant_melee_weapon;
 	item_tester_no_ryoute = TRUE;
 
-	/* Get an item */
 	q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
 	s = _("強化できる武器がない。", "You have nothing to enchant.");
 
@@ -1951,7 +1950,6 @@ bool alchemy(void)
 	/* Hack -- force destruction */
 	if (command_arg > 0) force = TRUE;
 
-	/* Get an item */
 	q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
 	s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
 
@@ -2216,7 +2214,6 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	/* Enchant armor if requested */
 	if (num_ac) item_tester_hook = object_is_armour;
 
-	/* Get an item */
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
@@ -2292,7 +2289,6 @@ bool artifact_scroll(void)
 	/* Enchant weapon/armour */
 	item_tester_hook = item_tester_hook_nameless_weapon_armour;
 
-	/* Get an item */
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
@@ -2502,7 +2498,6 @@ bool ident_spell(bool only_equip)
 		q = _("すべて鑑定済みです。 ", "All items are identified. ");
 	}
 
-	/* Get an item */
 	s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
@@ -2568,7 +2563,6 @@ bool mundane_spell(bool only_equip)
 	if (only_equip) item_tester_hook = object_is_weapon_armour_ammo;
 	item_tester_no_ryoute = TRUE;
 
-	/* Get an item */
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing you can use.");
 
@@ -2648,7 +2642,6 @@ bool identify_fully(bool only_equip)
 		q = _("すべて*鑑定*済みです。 ", "All items are *identified*. ");
 	}
 
-	/* Get an item */
 	s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
@@ -2742,7 +2735,6 @@ bool recharge(int power)
 	/* Only accept legal items */
 	item_tester_hook = item_tester_hook_recharge;
 
-	/* Get an item */
 	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
 	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
@@ -3028,7 +3020,6 @@ bool bless_weapon(void)
 	/* Bless only weapons */
 	item_tester_hook = object_is_weapon;
 
-	/* Get an item */
 	q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
 	s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
@@ -3209,7 +3200,6 @@ bool pulish_shield(void)
 	/* Assume enchant weapon */
 	item_tester_tval = TV_SHIELD;
 
-	/* Get an item */
 	q = _("どの盾を磨きますか？", "Pulish which weapon? ");
 	s = _("磨く盾がありません。", "You have weapon to pulish.");
 
@@ -4695,7 +4685,6 @@ bool rustproof(void)
 	/* Select a piece of armour */
 	item_tester_hook = object_is_armour;
 
-	/* Get an item */
 	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
 	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
 
@@ -5204,7 +5193,6 @@ bool eat_magic(int power)
 
 	item_tester_hook = item_tester_hook_recharge;
 
-	/* Get an item */
 	q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
 	s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 

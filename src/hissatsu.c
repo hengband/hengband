@@ -437,7 +437,6 @@ void do_cmd_gain_hissatsu(void)
 
 	item_tester_tval = TV_HISSATSU_BOOK;
 
-	/* Get an item */
 	q = _("どの書から学びますか? ", "Study which book? ");
 	s = _("読める書がない。", "You have no books that you can read.");
 

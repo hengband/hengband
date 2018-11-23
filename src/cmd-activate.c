@@ -375,7 +375,6 @@ void do_cmd_activate(void)
 	/* Prepare the hook */
 	item_tester_hook = item_tester_hook_activate;
 
-	/* Get an item */
 	q = _("どのアイテムを始動させますか? ", "Activate which item? ");
 	s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
 

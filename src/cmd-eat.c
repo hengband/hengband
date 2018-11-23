@@ -513,7 +513,6 @@ void do_cmd_eat_food(void)
 	/* Restrict choices to food */
 	item_tester_hook = item_tester_hook_eatable;
 
-	/* Get an item */
 	q = _("どれを食べますか? ", "Eat which item? ");
 	s = _("食べ物がない。", "You have nothing to eat.");
 

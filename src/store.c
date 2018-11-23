@@ -3920,7 +3920,6 @@ static void store_sell(void)
 	/* Only allow items the store will buy */
 	item_tester_hook = store_will_buy;
 
-	/* Get an item */
 	/* 我が家でおかしなメッセージが出るオリジナルのバグを修正 */
 	if (cur_store_num == STORE_HOME)
 	{

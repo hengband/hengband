@@ -628,7 +628,6 @@ void do_cmd_quaff_potion(void)
 	/* Restrict choices to potions */
 	item_tester_hook = item_tester_hook_quaff;
 
-	/* Get an item */
 	q = _("どの薬を飲みますか? ", "Quaff which potion? ");
 	s = _("飲める薬がない。", "You have no potions to quaff.");
 
