@@ -50,7 +50,6 @@ void vault_prep_symbol(void)
 }
 
 
-
 /*!
 * @brief pit/nestの基準となるドラゴンの種類を決める /
 * @return なし
@@ -60,61 +59,24 @@ void vault_prep_dragon(void)
 	/* Pick dragon type */
 	switch (randint0(6))
 	{
-		/* Black */
-	case 0:
-	{
-		/* Restrict dragon breath type */
+	case 0: /* Black */
 		vault_aux_dragon_mask4 = RF4_BR_ACID;
-
 		break;
-	}
-
-	/* Blue */
-	case 1:
-	{
-		/* Restrict dragon breath type */
+	case 1: /* Blue */
 		vault_aux_dragon_mask4 = RF4_BR_ELEC;
-
 		break;
-	}
-
-	/* Red */
-	case 2:
-	{
-		/* Restrict dragon breath type */
+	case 2: /* Red */
 		vault_aux_dragon_mask4 = RF4_BR_FIRE;
-
 		break;
-	}
-
-	/* White */
-	case 3:
-	{
-		/* Restrict dragon breath type */
+	case 3: /* White */
 		vault_aux_dragon_mask4 = RF4_BR_COLD;
-
 		break;
-	}
-
-	/* Green */
-	case 4:
-	{
-		/* Restrict dragon breath type */
+	case 4: /* Green */
 		vault_aux_dragon_mask4 = RF4_BR_POIS;
-
 		break;
-	}
-
-	/* Multi-hued */
-	default:
-	{
-		/* Restrict dragon breath type */
-		vault_aux_dragon_mask4 = (RF4_BR_ACID | RF4_BR_ELEC |
-			RF4_BR_FIRE | RF4_BR_COLD |
-			RF4_BR_POIS);
-
+	default: /* Multi-hued */
+		vault_aux_dragon_mask4 = (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS);
 		break;
-	}
 	}
 }
 
