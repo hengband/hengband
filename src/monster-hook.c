@@ -334,9 +334,7 @@ bool mon_hook_shallow_water(MONRACE_IDX r_idx)
 bool mon_hook_lava(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
 	if (!mon_hook_dungeon(r_idx)) return FALSE;
-
 	if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) ||
 		(r_ptr->flags7 & RF7_CAN_FLY)) &&
 		!(r_ptr->flags3 & RF3_AURA_COLD))
@@ -354,9 +352,7 @@ bool mon_hook_lava(MONRACE_IDX r_idx)
 bool mon_hook_floor(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	if (!(r_ptr->flags7 & RF7_AQUATIC) ||
-		(r_ptr->flags7 & RF7_CAN_FLY))
+	if (!(r_ptr->flags7 & RF7_AQUATIC) || (r_ptr->flags7 & RF7_CAN_FLY))
 		return TRUE;
 	else
 		return FALSE;
@@ -368,19 +364,10 @@ bool mon_hook_floor(MONRACE_IDX r_idx)
 bool vault_aux_lite(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return FALSE;
-
-	/* Require lite attack */
 	if (!(r_ptr->flags4 & RF4_BR_LITE) && !(r_ptr->a_ability_flags1 & RF5_BA_LITE)) return FALSE;
-
-	/* No wall passing monsters */
 	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
-
-	/* No disintegrating monsters */
 	if (r_ptr->flags4 & RF4_BR_DISI) return FALSE;
-
 	return TRUE;
 }
 
@@ -390,13 +377,8 @@ bool vault_aux_lite(MONRACE_IDX r_idx)
 bool vault_aux_shards(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return FALSE;
-
-	/* Require shards breath attack */
 	if (!(r_ptr->flags4 & RF4_BR_SHAR)) return FALSE;
-
 	return TRUE;
 }
 
@@ -422,18 +404,10 @@ bool vault_aux_simple(MONRACE_IDX r_idx)
 bool vault_aux_jelly(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
-
-	/* Also decline evil jellies (like death molds and shoggoths) */
 	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
-
-	/* Require icky thing, jelly, mold, or mushroom */
 	if (!my_strchr("ijm,", r_ptr->d_char)) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -446,13 +420,8 @@ bool vault_aux_jelly(MONRACE_IDX r_idx)
 bool vault_aux_animal(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require "animal" flag */
 	if (!(r_ptr->flags3 & (RF3_ANIMAL))) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -466,13 +435,8 @@ bool vault_aux_animal(MONRACE_IDX r_idx)
 bool vault_aux_undead(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require Undead */
 	if (!(r_ptr->flags3 & (RF3_UNDEAD))) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -491,22 +455,13 @@ bool vault_aux_chapel_g(MONRACE_IDX r_idx)
 		MON_TOPAZ_MONK, 0 };
 
 	int i;
-
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
 	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
 	if ((r_idx == MON_A_GOLD) || (r_idx == MON_A_SILVER)) return (FALSE);
-
-	/* Require "priest" or Angel */
-
 	if (r_ptr->d_char == 'A') return TRUE;
-
 	for (i = 0; chapel_list[i]; i++)
 		if (r_idx == chapel_list[i]) return TRUE;
-
 	return FALSE;
 }
 
@@ -519,13 +474,8 @@ bool vault_aux_chapel_g(MONRACE_IDX r_idx)
 bool vault_aux_kennel(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require a Zephyr Hound or a dog */
 	if (!my_strchr("CZ", r_ptr->d_char)) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -538,13 +488,8 @@ bool vault_aux_kennel(MONRACE_IDX r_idx)
 bool vault_aux_mimic(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require mimic */
 	if (!my_strchr("!$&(/=?[\\|", r_ptr->d_char)) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -556,9 +501,7 @@ bool vault_aux_mimic(MONRACE_IDX r_idx)
 */
 bool vault_aux_clone(MONRACE_IDX r_idx)
 {
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
 	return (r_idx == vault_aux_race);
 }
 
@@ -572,17 +515,10 @@ bool vault_aux_clone(MONRACE_IDX r_idx)
 bool vault_aux_symbol_e(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
-
 	if (r_ptr->flags3 & (RF3_GOOD)) return (FALSE);
-
-	/* Decline incorrect symbol */
 	if (r_ptr->d_char != vault_aux_char) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -596,17 +532,10 @@ bool vault_aux_symbol_e(MONRACE_IDX r_idx)
 bool vault_aux_symbol_g(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
-
 	if (r_ptr->flags3 & (RF3_EVIL)) return (FALSE);
-
-	/* Decline incorrect symbol */
 	if (r_ptr->d_char != vault_aux_char) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -620,16 +549,9 @@ bool vault_aux_symbol_g(MONRACE_IDX r_idx)
 bool vault_aux_orc(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require orc */
 	if (!(r_ptr->flags3 & RF3_ORC)) return (FALSE);
-
-	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -643,16 +565,9 @@ bool vault_aux_orc(MONRACE_IDX r_idx)
 bool vault_aux_troll(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require troll */
 	if (!(r_ptr->flags3 & RF3_TROLL)) return (FALSE);
-
-	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -666,18 +581,10 @@ bool vault_aux_troll(MONRACE_IDX r_idx)
 bool vault_aux_giant(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require giant */
 	if (!(r_ptr->flags3 & RF3_GIANT)) return (FALSE);
-
 	if (r_ptr->flags3 & RF3_GOOD) return (FALSE);
-
-	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -691,19 +598,10 @@ bool vault_aux_giant(MONRACE_IDX r_idx)
 bool vault_aux_dragon(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
-	/* Require dragon */
 	if (!(r_ptr->flags3 & RF3_DRAGON)) return (FALSE);
-
-	/* Hack -- Require correct "breath attack" */
 	if (r_ptr->flags4 != vault_aux_dragon_mask4) return (FALSE);
-
-	/* Decline undead */
 	if (r_ptr->flags3 & RF3_UNDEAD) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -717,15 +615,9 @@ bool vault_aux_dragon(MONRACE_IDX r_idx)
 bool vault_aux_demon(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
-
-	/* Require demon */
 	if (!(r_ptr->flags3 & RF3_DEMON)) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -739,15 +631,9 @@ bool vault_aux_demon(MONRACE_IDX r_idx)
 bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
-
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return (FALSE);
-
-	/* Require eldritch horror */
 	if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) return (FALSE);
-
 	return (TRUE);
 }
 
@@ -766,14 +652,7 @@ bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 		MON_D_ELF_LORD, MON_D_ELF_WARLOCK, MON_D_ELF_DRUID, MON_NIGHTBLADE,
 		MON_D_ELF_SORC, MON_D_ELF_SHADE, 0,
 	};
-
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return FALSE;
-
-	/* Require dark elves */
-	for (i = 0; dark_elf_list[i]; i++)
-		if (r_idx == dark_elf_list[i]) return TRUE;
-
-	/* Assume not */
+	for (i = 0; dark_elf_list[i]; i++) if (r_idx == dark_elf_list[i]) return TRUE;
 	return FALSE;
 }

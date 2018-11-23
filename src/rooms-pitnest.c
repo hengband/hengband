@@ -710,7 +710,6 @@ static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	/* Validate the monster */
 	if (!vault_monster_okay(r_idx)) return (FALSE);
 
 	/* No wall passing monster */
