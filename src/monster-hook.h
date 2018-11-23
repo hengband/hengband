@@ -56,4 +56,5 @@ extern bool vault_aux_giant(MONRACE_IDX r_idx);
 extern bool vault_aux_dragon(MONRACE_IDX r_idx);
 extern bool vault_aux_demon(MONRACE_IDX r_idx);
 extern bool vault_aux_cthulhu(MONRACE_IDX r_idx);
+extern bool vault_aux_dark_elf(MONRACE_IDX r_idx);
 

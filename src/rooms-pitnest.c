@@ -48,34 +48,6 @@ struct vault_aux_type
 
 
 /*!
-* @brief モンスターがダークエルフpitの生成必要条件を満たしているかを返す /
-* Helper function for "monster pit (dark elf)"
-* @param r_idx 確認したいモンスター種族ID
-* @return 生成必要条件を満たしているならTRUEを返す。
-*/
-static bool vault_aux_dark_elf(MONRACE_IDX r_idx)
-{
-	int i;
-	static int dark_elf_list[] =
-	{
-		MON_D_ELF, MON_D_ELF_MAGE, MON_D_ELF_WARRIOR, MON_D_ELF_PRIEST,
-		MON_D_ELF_LORD, MON_D_ELF_WARLOCK, MON_D_ELF_DRUID, MON_NIGHTBLADE,
-		MON_D_ELF_SORC, MON_D_ELF_SHADE, 0,
-	};
-
-	/* Validate the monster */
-	if (!vault_monster_okay(r_idx)) return FALSE;
-
-	/* Require dark elves */
-	for (i = 0; dark_elf_list[i]; i++)
-		if (r_idx == dark_elf_list[i]) return TRUE;
-
-	/* Assume not */
-	return FALSE;
-}
-
-
-/*!
 * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
 * @param l_ptr 選択されたpit/nest情報を返す参照ポインタ
 * @param allow_flag_mask 生成が許されるpit/nestのビット配列

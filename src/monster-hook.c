@@ -750,3 +750,30 @@ bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 
 	return (TRUE);
 }
+
+/*!
+* @brief モンスターがダークエルフpitの生成必要条件を満たしているかを返す /
+* Helper function for "monster pit (dark elf)"
+* @param r_idx 確認したいモンスター種族ID
+* @return 生成必要条件を満たしているならTRUEを返す。
+*/
+bool vault_aux_dark_elf(MONRACE_IDX r_idx)
+{
+	int i;
+	static int dark_elf_list[] =
+	{
+		MON_D_ELF, MON_D_ELF_MAGE, MON_D_ELF_WARRIOR, MON_D_ELF_PRIEST,
+		MON_D_ELF_LORD, MON_D_ELF_WARLOCK, MON_D_ELF_DRUID, MON_NIGHTBLADE,
+		MON_D_ELF_SORC, MON_D_ELF_SHADE, 0,
+	};
+
+	/* Validate the monster */
+	if (!vault_monster_okay(r_idx)) return FALSE;
+
+	/* Require dark elves */
+	for (i = 0; dark_elf_list[i]; i++)
+		if (r_idx == dark_elf_list[i]) return TRUE;
+
+	/* Assume not */
+	return FALSE;
+}
