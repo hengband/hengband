@@ -21,11 +21,11 @@
  */
 bool gain_random_mutation(int choose_mut)
 {
-	int     attempts_left = 20;
-	cptr    muta_desc = "";
-	bool    muta_chosen = FALSE;
-	u32b    muta_which = 0;
-	u32b    *muta_class = NULL;
+	int attempts_left = 20;
+	cptr muta_desc = "";
+	bool muta_chosen = FALSE;
+	BIT_FLAGS muta_which = 0;
+	BIT_FLAGS *muta_class = NULL;
 
 	if (choose_mut) attempts_left = 1;
 
@@ -862,8 +862,8 @@ bool lose_mutation(int choose_mut)
 	int attempts_left = 20;
 	cptr muta_desc = "";
 	bool muta_chosen = FALSE;
-	u32b muta_which = 0;
-	u32b *muta_class = NULL;
+	BIT_FLAGS muta_which = 0;
+	BIT_FLAGS *muta_class = NULL;
 
 	if (choose_mut) attempts_left = 1;
 
@@ -2196,7 +2196,7 @@ bool mutation_power_aux(int power)
 		/* Summon pet molds around the player */
 		case MUT1_GROW_MOLD:
 			{
-				int i;
+				DIRECTION i;
 				for (i = 0; i < 8; i++)
 				{
 					summon_specific(-1, p_ptr->y, p_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
@@ -2280,7 +2280,6 @@ bool mutation_power_aux(int power)
 				cave_type *c_ptr;
 				monster_type *m_ptr;
 				monster_race *r_ptr;
-
 				if (!get_rep_dir2(&dir)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
@@ -2306,11 +2305,9 @@ bool mutation_power_aux(int power)
 					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 					{
 						char m_name[80];
-
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 						do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 					}
-
 					/* Delete the monster, rather than killing it. */
 					delete_monster_idx(c_ptr->m_idx);
 					msg_print(_("その邪悪なモンスターは硫黄臭い煙とともに消え去った！", "The evil creature vanishes in a puff of sulfurous smoke!"));
@@ -2328,12 +2325,10 @@ bool mutation_power_aux(int power)
 			{
 				POSITION x, y;
 				cave_type *c_ptr;
-
 				if (!get_rep_dir2(&dir)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
 				c_ptr = &cave[y][x];
-
 				if (!c_ptr->m_idx)
 				{
 					msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));
@@ -2344,7 +2339,7 @@ bool mutation_power_aux(int power)
 			}
 			break;
 
-		/* XXX_XXX_XXX Hack!  MUT1_LAUNCHER is negative, see above */
+		/* XXX_XXX_XXX Hack! MUT1_LAUNCHER is negative, see above */
 		case 3: /* MUT1_LAUNCHER */
 			/* Gives a multiplier of 2 at first, up to 3 at 40th */
 			if (!do_cmd_throw(2 + lvl / 40, FALSE, -1)) return FALSE;
