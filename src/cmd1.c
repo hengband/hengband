@@ -571,16 +571,11 @@ void carry(bool pickup)
 	/* Automatically pickup/destroy/inscribe items */
 	autopick_pickup_items(c_ptr);
 
-
-#ifdef ALLOW_EASY_FLOOR
-
 	if (easy_floor)
 	{
 		py_pickup_floor(pickup);
 		return;
 	}
-
-#endif /* ALLOW_EASY_FLOOR */
 
 	/* Scan the pile of objects */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)

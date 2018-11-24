@@ -22,19 +22,11 @@ bool confirm_wear;	/* Confirm to wear/wield known cursed items */
 bool confirm_quest;	/* Prompt before exiting a quest level */
 bool target_pet;	/* Allow targetting pets */
 bool easy_open;	/* Automatically open doors */
-
-#ifdef ALLOW_EASY_DISARM
 bool easy_disarm;	/* Automatically disarm traps */
-#endif
-
-#ifdef ALLOW_EASY_FLOOR
 bool easy_floor;	/* Display floor stacks in a list */
-#endif
-
 bool use_command;	/* Allow unified use command */
 bool over_exert;	/* Allow casting spells when short of mana */
 bool numpad_as_cursorkey;	/* Use numpad keys as cursor key in editor mode */
-
 
 							/*** Map Screen Options ***/
 
@@ -250,10 +242,8 @@ const option_type option_info[] =
 	{ &easy_disarm,                 TRUE,  OPT_PAGE_INPUT, 5, 8,
 	"easy_disarm",                  _("自動的に罠を解除する", "Automatically disarm traps") },
 
-	#ifdef ALLOW_EASY_FLOOR /* TNB */
 	{ &easy_floor,                  FALSE, OPT_PAGE_INPUT, 5, 9,
 	"easy_floor",                   _("床上で重なったアイテムをリストする", "Display floor stacks in a list") },
-	#endif /* ALLOW_EASY_FLOOR -- TNB */
 
 	{ &use_command,                 FALSE, OPT_PAGE_INPUT, 5, 10,
 	"use_command",                  _("「使う(a)」コマンドでアイテムを何でも使える", "Allow unified use command") },

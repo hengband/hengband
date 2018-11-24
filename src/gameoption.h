@@ -14,15 +14,8 @@ extern bool confirm_wear;	/* Confirm to wear/wield known cursed items */
 extern bool confirm_quest;	/* Prompt before exiting a quest level */
 extern bool target_pet;	/* Allow targetting pets */
 extern bool easy_open;	/* Automatically open doors */
-
-#ifdef ALLOW_EASY_DISARM
 extern bool easy_disarm;	/* Automatically disarm traps */
-#endif
-
-#ifdef ALLOW_EASY_FLOOR
 extern bool easy_floor;	/* Display floor stacks in a list */
-#endif
-
 extern bool use_command;	/* Allow unified use command */
 extern bool over_exert;	/* Allow casting spells when short of mana */
 extern bool numpad_as_cursorkey;	/* Use numpad keys as cursor key in editor mode */

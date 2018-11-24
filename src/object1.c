@@ -2752,11 +2752,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	static char prev_tag = '\0';
 	char cur_tag = '\0';
 
-#ifdef ALLOW_EASY_FLOOR /* TNB */
-
 	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode);
-
-#endif /* ALLOW_EASY_FLOOR -- TNB */
 
 	/* Extract args */
 	if (mode & USE_EQUIP) equip = TRUE;
@@ -3535,9 +3531,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Result */
 	return (item);
 }
-
-
-#ifdef ALLOW_EASY_FLOOR
 
 /*!
  * @brief 床下に落ちているオブジェクトの数を返す / scan_floor
@@ -5198,5 +5191,3 @@ void py_pickup_floor(bool pickup)
 		}
 	}
 }
-
-#endif /* ALLOW_EASY_FLOOR */

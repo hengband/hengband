@@ -503,9 +503,6 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	return (more);
 }
 
-
-#if defined(ALLOW_EASY_DISARM) /* TNB */
-
 /*!
  * @brief 地形は開くものであって、かつ開かれているかを返す /
  * Attempt to open the given chest at the given location
@@ -647,9 +644,6 @@ static DIRECTION coords_to_dir(POSITION y, POSITION x)
 
 	return d[dx + 1][dy + 1];
 }
-
-#endif /* defined(ALLOW_EASY_DISARM) -- TNB */
-
 
 /*!
  * @brief 「開ける」動作コマンドのサブルーチン /

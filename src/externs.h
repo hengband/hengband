@@ -1462,9 +1462,6 @@ extern bool easy_disarm;
 /* cmd2.c */
 extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
 
-
-#ifdef ALLOW_EASY_FLOOR /* TNB */
-
 /* object1.c */
 extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
 extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width);
@@ -1473,8 +1470,6 @@ extern void py_pickup_floor(bool pickup);
 
 /* variable.c */
 extern bool easy_floor;
-
-#endif /* ALLOW_EASY_FLOOR -- TNB */
 
 /* obj_kind.c */
 extern bool object_is_potion(object_type *o_ptr);

@@ -521,18 +521,6 @@
 # define VERIFY_TIMESTAMPS
 #endif
 
-/* Zangband options: */
-
-/*
- * OPTION: Make disarming traps easy -- TNB
- */
-#define ALLOW_EASY_DISARM
-
-/*
- * OPTION: Make floor stacks easy -- TNB
- */
-#define ALLOW_EASY_FLOOR
-
 /*
  * Check the modification time of *_info.raw files
  * (by Keldon Jones)

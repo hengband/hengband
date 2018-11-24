@@ -2981,8 +2981,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 	feature_type *f_ptr;
 	char query = '\001';
 	char out_val[MAX_NLEN+80];
-
-#ifdef ALLOW_EASY_FLOOR
 	OBJECT_IDX floor_list[23];
 	ITEM_NUMBER floor_num = 0;
 
@@ -2996,8 +2994,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			x_info = _("x物 ", "x,");
 		}
 	}
-
-#endif /* ALLOW_EASY_FLOOR */
 
 	/* Hack -- under the player */
 	if (player_bold(y, x))
@@ -3193,8 +3189,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 #endif
 	}
 
-
-#ifdef ALLOW_EASY_FLOOR
 	if (floor_num)
 	{
 		int min_width = 0;
@@ -3316,8 +3310,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 
 		/* NOTREACHED */
 	}
-#endif /* ALLOW_EASY_FLOOR */
-
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
