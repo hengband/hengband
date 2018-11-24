@@ -846,7 +846,7 @@ void do_cmd_open(void)
 	}
 
 	/* Cancel repeat unless we may continue */
-	if (!more) disturb(0, 0);
+	if (!more) disturb(FALSE, FALSE);
 }
 
 
@@ -990,7 +990,7 @@ void do_cmd_close(void)
 	}
 
 	/* Cancel repeat unless we may continue */
-	if (!more) disturb(0, 0);
+	if (!more) disturb(FALSE, FALSE);
 }
 
 
@@ -1239,7 +1239,7 @@ void do_cmd_tunnel(void)
 	}
 
 	/* Cancel repetition unless we can continue */
-	if (!more) disturb(0, 0);
+	if (!more) disturb(FALSE, FALSE);
 }
 
 /*!
@@ -1634,7 +1634,7 @@ void do_cmd_disarm(void)
 	}
 
 	/* Cancel repeat unless told not to */
-	if (!more) disturb(0, 0);
+	if (!more) disturb(FALSE, FALSE);
 }
 
 
@@ -1816,7 +1816,7 @@ void do_cmd_bash(void)
 	}
 
 	/* Unless valid action taken, cancel bash */
-	if (!more) disturb(0, 0);
+	if (!more) disturb(FALSE, FALSE);
 }
 
 
@@ -1925,7 +1925,7 @@ void do_cmd_alter(void)
 	}
 
 	/* Cancel repetition unless we can continue */
-	if (!more) disturb(0, 0);
+	if (!more) disturb(FALSE, FALSE);
 }
 
 
@@ -2117,7 +2117,7 @@ void do_cmd_walk(bool pickup)
 	}
 
 	/* Cancel repeat unless we may continue */
-	if (!more) disturb(0, 0);
+	if (!more) disturb(FALSE, FALSE);
 }
 
 

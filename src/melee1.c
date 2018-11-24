@@ -1338,7 +1338,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	char            m_name[80];
 
-	disturb(0, 1);
+	disturb(FALSE, TRUE);
 
 	p_ptr->energy_use = 100;
 
@@ -1625,7 +1625,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		if (!effect || check_hit(power, rlev, MON_STUNNED(m_ptr)))
 		{
 			/* Always disturbing */
-			disturb(1, 1);
+			disturb(TRUE, TRUE);
 
 
 			/* Hack -- Apply "protection from evil" */
@@ -3330,7 +3330,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				if (m_ptr->ml)
 				{
 					/* Disturbing */
-					disturb(1, 1);
+					disturb(TRUE, TRUE);
 
 #ifdef JP
 					if (abbreviate)

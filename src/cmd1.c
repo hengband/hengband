@@ -370,7 +370,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 
 		msg_print(_("トラップを発見した。", "You have found a trap."));
 
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 	}
 
 	/* Secret door */
@@ -381,7 +381,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 		/* Disclose */
 		disclose_grid(y, x);
 
-		disturb(0, 0);
+		disturb(FALSE, FALSE);
 	}
 
 	/* Scan all objects in the grid */
@@ -410,7 +410,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 			object_known(o_ptr);
 
 			/* Notice it */
-			disturb(0, 0);
+			disturb(FALSE, FALSE);
 		}
 	}
 }
@@ -608,7 +608,7 @@ void carry(bool pickup)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Hack -- disturb */
-		disturb(0, 0);
+		disturb(FALSE, FALSE);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
@@ -964,7 +964,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Handle "store doors" */
 	if (have_flag(f_ptr->flags, FF_STORE))
 	{
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 
 		p_ptr->energy_use = 0;
 		/* Hack -- Enter store */
@@ -974,7 +974,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Handle "building doors" -KMW- */
 	else if (have_flag(f_ptr->flags, FF_BLDG))
 	{
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 
 		p_ptr->energy_use = 0;
 		/* Hack -- Enter building */
@@ -984,7 +984,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Handle quest areas -KMW- */
 	else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 	{
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 
 		p_ptr->energy_use = 0;
 		/* Hack -- Enter quest level */
@@ -1011,7 +1011,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Set off a trap */
 	else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING))
 	{
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 
 		/* Hidden trap */
 		if (c_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
@@ -1043,7 +1043,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 				msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
 			}
 
-			if (disturb_trap_detect) disturb(0, 1);
+			if (disturb_trap_detect) disturb(FALSE, TRUE);
 		}
 	}
 
@@ -1055,7 +1055,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
  * @param feat 地形ID
  * @return トラップが自動的に無効ならばTRUEを返す
  */
-bool trap_can_be_ignored(int feat)
+bool trap_can_be_ignored(FEAT_IDX feat)
 {
 	feature_type *f_ptr = &f_info[feat];
 
@@ -1305,7 +1305,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			msg_print(_("動けない！", "Can't move!"));
 			p_ptr->energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
 		}
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
@@ -1317,12 +1317,12 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			/* Dump a message */
 			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			oktomove = FALSE;
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
 		}
 		else if (p_ptr->riding_ryoute)
 		{
 			oktomove = FALSE;
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
 		}
 		else if (have_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY))
 		{
@@ -1339,21 +1339,21 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(c_ptr)].name);
 			p_ptr->energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
 			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name);
 			p_ptr->energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
 		}
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
 			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(c_ptr)].name);
 			p_ptr->energy_use = 0;
 			oktomove = FALSE;
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
 		}
 
 		if (oktomove && MON_STUNNED(riding_m_ptr) && one_in_(2))
@@ -1362,7 +1362,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			monster_desc(steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
 			oktomove = FALSE;
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
 		}
 	}
 
@@ -1470,7 +1470,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			}
 		}
 
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 
 		if (!boundary_floor(c_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
 	}
@@ -1484,7 +1484,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		}
 
 		/* To avoid a loop with running */
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 
 		oktomove = FALSE;
 	}
@@ -2120,7 +2120,7 @@ void run_step(DIRECTION dir)
 
 			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
 
-			disturb(0, 0);
+			disturb(FALSE, FALSE);
 
 			return;
 		}
@@ -2134,7 +2134,7 @@ void run_step(DIRECTION dir)
 		/* Update run */
 		if (run_test())
 		{
-			disturb(0, 0);
+			disturb(FALSE, FALSE);
 
 			return;
 		}
@@ -2161,7 +2161,7 @@ void run_step(DIRECTION dir)
 	{
 		p_ptr->run_py = 0;
 		p_ptr->run_px = 0;
-		disturb(0, 0);
+		disturb(FALSE, FALSE);
 	}
 }
 
@@ -2278,7 +2278,6 @@ void travel_step(void)
 	/* Get travel direction */
 	travel.dir = travel_test(travel.dir);
 
-	/* disturb */
 	if (!travel.dir)
 	{
 		if (travel.run == 255)
@@ -2286,7 +2285,7 @@ void travel_step(void)
 			msg_print(_("道筋が見つかりません！", "No route is found!"));
 			travel.y = travel.x = 0;
 		}
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
 		return;
 	}
 

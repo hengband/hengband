@@ -5008,7 +5008,7 @@ void object_kind_track(KIND_OBJECT_IDX k_idx)
  *
  * All disturbance cancels repeated commands, resting, and running.
  */
-void disturb(int stop_search, int stop_travel)
+void disturb(bool stop_search, bool stop_travel)
 {
 #ifndef TRAVEL
 	/* Unused */

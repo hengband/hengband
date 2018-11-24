@@ -215,7 +215,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 	/* Wake it up */
 	(void)set_monster_csleep(m_idx, 0);
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 1);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
 
 	if (MON_INVULNER(m_ptr) && randint0(PENETRATE_INVULNERABILITY))
 	{
@@ -1473,7 +1473,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 		mon_fight = TRUE;
 	}
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(1, 1);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
 
 	/* Scan through all four blows */
 	for (ap_cnt = 0; ap_cnt < 4; ap_cnt++)
@@ -1627,7 +1627,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 			case RBM_EXPLODE:
 				{
-					if (see_either) disturb(1, 1);
+					if (see_either) disturb(TRUE, TRUE);
 					act = _("爆発した。", "explodes.");
 					explode = TRUE;
 					touched = FALSE;
@@ -2231,7 +2231,7 @@ void process_monster(MONSTER_IDX m_idx)
 				msg_format(_("%sは傷の痛さの余りあなたの束縛から逃れようとしている。",
 							 "%^s seems to be in so much pain, and trying to escape from your restriction."), m_name);
 				riding_pinch++;
-				disturb(1, 1);
+				disturb(TRUE, TRUE);
 			}
 			else
 			{
@@ -2748,7 +2748,7 @@ void process_monster(MONSTER_IDX m_idx)
 						msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
 
 					/* Disturb (sometimes) */
-					if (disturb_minor) disturb(0, 0);
+					if (disturb_minor) disturb(FALSE, FALSE);
 
 					/* The door was bashed open */
 					did_bash_door = TRUE;
@@ -3089,7 +3089,7 @@ void process_monster(MONSTER_IDX m_idx)
 			     (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
 			{
 				if (is_hostile(m_ptr))
-					disturb(0, 1);
+					disturb(FALSE, TRUE);
 			}
 
 			/* Take or Kill objects on the floor */

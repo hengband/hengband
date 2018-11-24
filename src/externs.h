@@ -517,7 +517,7 @@ extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION
 extern void health_track(MONSTER_IDX m_idx);
 extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(KIND_OBJECT_IDX k_idx);
-extern void disturb(int stop_search, int flush_output);
+extern void disturb(bool stop_search, bool flush_output);
 extern void glow_deep_lava_and_bldg(void);
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
@@ -532,7 +532,7 @@ extern void carry(bool pickup);
 extern bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
 extern bool player_can_enter(s16b feature, u16b mode);
 extern bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
-extern bool trap_can_be_ignored(int feat);
+extern bool trap_can_be_ignored(FEAT_IDX feat);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(DIRECTION dir);
 #ifdef TRAVEL

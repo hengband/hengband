@@ -7091,7 +7091,7 @@ bool process_warning(POSITION xx, POSITION yy)
                 strcpy(o_name, _("体", "body")); /* Warning ability without item */
             msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
 
-			disturb(0, 1);
+			disturb(FALSE, TRUE);
             return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 		}
 	}
@@ -7108,7 +7108,7 @@ bool process_warning(POSITION xx, POSITION yy)
         else
             strcpy(o_name, _("体", "body")); /* Warning ability without item */
         msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
-		disturb(0, 1);
+		disturb(FALSE, TRUE);
         return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 	}
 

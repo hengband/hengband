@@ -1577,7 +1577,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 
 	/* Now decided to destroy */
 
-	disturb(0,0);
+	disturb(FALSE, FALSE);
 
 	/* Artifact? */
 	if (!can_player_destroy_object(o_ptr))
@@ -1722,7 +1722,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 		if (idx >= 0 &&
 			(autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)))
 		{
-			disturb(0,0);
+			disturb(FALSE, FALSE);
 
 			if (!inven_carry_okay(o_ptr))
 			{
