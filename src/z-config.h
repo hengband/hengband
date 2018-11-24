@@ -523,9 +523,6 @@
 
 /* Zangband options: */
 
-/* Allow hordes of 'similar' monsters */
-#define MONSTER_HORDES
-
 /*
  * OPTION: Make opening and closing things easy -- TNB
  */

@@ -3729,9 +3729,6 @@ bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 	return (FALSE);
 }
 
-
-#ifdef MONSTER_HORDES
-
 /*!
  * @brief 指定地点に1種類のモンスター種族による群れを生成する
  * @param y 生成地点y座標
@@ -3794,9 +3791,6 @@ bool alloc_horde(POSITION y, POSITION x)
 
 	return TRUE;
 }
-
-#endif /* MONSTER_HORDES */
-
 
 /*!
  * @brief ダンジョンの主生成を試みる / Put the Guardian
@@ -3888,7 +3882,6 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	}
 
 
-#ifdef MONSTER_HORDES
 	if (randint1(5000) <= dun_level)
 	{
 		if (alloc_horde(y, x))
@@ -3899,14 +3892,9 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	}
 	else
 	{
-#endif /* MONSTER_HORDES */
-
 		/* Attempt to place the monster, allow groups */
 		if (place_monster(y, x, (mode | PM_ALLOW_GROUP))) return (TRUE);
-
-#ifdef MONSTER_HORDES
 	}
-#endif /* MONSTER_HORDES */
 
 	return (FALSE);
 }

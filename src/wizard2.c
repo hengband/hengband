@@ -171,9 +171,6 @@ static void do_cmd_wiz_hack_ben(void)
 	(void)probing();
 }
 
-
-#ifdef MONSTER_HORDES
-
 /*!
  * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
  * @return なし
@@ -191,8 +188,6 @@ static void do_cmd_summon_horde(void)
 
 	(void)alloc_horde(wy, wx);
 }
-
-#endif /* MONSTER_HORDES */
 
 /*!
  * @brief 32ビット変数のビット配列を並べて描画する / Output a long int in binary format.
@@ -1984,11 +1979,9 @@ void do_cmd_debug(void)
 		do_cmd_rerate(TRUE);
 		break;
 
-#ifdef MONSTER_HORDES
 	case 'H':
 		do_cmd_summon_horde();
 		break;
-#endif /* MONSTER_HORDES */
 
 	/* Identify */
 	case 'i':
