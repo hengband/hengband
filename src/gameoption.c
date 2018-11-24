@@ -21,10 +21,7 @@ bool confirm_destroy;	/* Prompt for destruction of known worthless items */
 bool confirm_wear;	/* Confirm to wear/wield known cursed items */
 bool confirm_quest;	/* Prompt before exiting a quest level */
 bool target_pet;	/* Allow targetting pets */
-
-#ifdef ALLOW_EASY_OPEN
 bool easy_open;	/* Automatically open doors */
-#endif
 
 #ifdef ALLOW_EASY_DISARM
 bool easy_disarm;	/* Automatically disarm traps */
@@ -247,15 +244,11 @@ const option_type option_info[] =
 	{ &target_pet,                  FALSE, OPT_PAGE_INPUT, 2, 5,
 	"target_pet",                   _("ペットをターゲットにする", "Allow targetting pets") },
 
-	#ifdef ALLOW_EASY_OPEN
 	{ &easy_open,                   TRUE,  OPT_PAGE_INPUT, 5, 7,
 	"easy_open",                    _("自動的にドアを開ける", "Automatically open doors") },
-	#endif /* ALLOW_EASY_OPEN */
 
-	#ifdef ALLOW_EASY_DISARM
 	{ &easy_disarm,                 TRUE,  OPT_PAGE_INPUT, 5, 8,
 	"easy_disarm",                  _("自動的に罠を解除する", "Automatically disarm traps") },
-	#endif /* ALLOW_EASY_DISARM */
 
 	#ifdef ALLOW_EASY_FLOOR /* TNB */
 	{ &easy_floor,                  FALSE, OPT_PAGE_INPUT, 5, 9,

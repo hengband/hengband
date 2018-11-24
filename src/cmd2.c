@@ -504,7 +504,7 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 }
 
 
-#if defined(ALLOW_EASY_OPEN) || defined(ALLOW_EASY_DISARM) /* TNB */
+#if defined(ALLOW_EASY_DISARM) /* TNB */
 
 /*!
  * @brief 地形は開くものであって、かつ開かれているかを返す /
@@ -648,7 +648,7 @@ static DIRECTION coords_to_dir(POSITION y, POSITION x)
 	return d[dx + 1][dy + 1];
 }
 
-#endif /* defined(ALLOW_EASY_OPEN) || defined(ALLOW_EASY_DISARM) -- TNB */
+#endif /* defined(ALLOW_EASY_DISARM) -- TNB */
 
 
 /*!
@@ -761,8 +761,6 @@ void do_cmd_open(void)
 		set_action(ACTION_NONE);
 	}
 
-#ifdef ALLOW_EASY_OPEN /* TNB */
-
 	/* Option: Pick a direction */
 	if (easy_open)
 	{
@@ -782,8 +780,6 @@ void do_cmd_open(void)
 			if (!too_many) command_dir = coords_to_dir(y, x);
 		}
 	}
-
-#endif /* ALLOW_EASY_OPEN -- TNB */
 
 	/* Allow repeated command */
 	if (command_arg)
@@ -929,8 +925,6 @@ void do_cmd_close(void)
 		set_action(ACTION_NONE);
 	}
 
-#ifdef ALLOW_EASY_OPEN /* TNB */
-
 	/* Option: Pick a direction */
 	if (easy_open)
 	{
@@ -940,8 +934,6 @@ void do_cmd_close(void)
 			command_dir = coords_to_dir(y, x);
 		}
 	}
-
-#endif /* ALLOW_EASY_OPEN -- TNB */
 
 	/* Allow repeated command */
 	if (command_arg)
@@ -1250,9 +1242,6 @@ void do_cmd_tunnel(void)
 	if (!more) disturb(0, 0);
 }
 
-
-#ifdef ALLOW_EASY_OPEN /* TNB */
-
 /*!
  * @brief 移動処理による簡易な「開く」処理 /
  * easy_open_door --
@@ -1344,9 +1333,6 @@ bool easy_open_door(POSITION y, POSITION x)
 	/* Result */
 	return (TRUE);
 }
-
-#endif /* ALLOW_EASY_OPEN -- TNB */
-
 
 /*!
  * @brief 箱のトラップを解除するコマンドのメインルーチン /

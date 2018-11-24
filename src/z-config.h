@@ -524,11 +524,6 @@
 /* Zangband options: */
 
 /*
- * OPTION: Make opening and closing things easy -- TNB
- */
-#define ALLOW_EASY_OPEN
-
-/*
  * OPTION: Make disarming traps easy -- TNB
  */
 #define ALLOW_EASY_DISARM

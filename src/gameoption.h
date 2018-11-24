@@ -13,10 +13,7 @@ extern bool confirm_destroy;	/* Prompt for destruction of known worthless items 
 extern bool confirm_wear;	/* Confirm to wear/wield known cursed items */
 extern bool confirm_quest;	/* Prompt before exiting a quest level */
 extern bool target_pet;	/* Allow targetting pets */
-
-#ifdef ALLOW_EASY_OPEN
 extern bool easy_open;	/* Automatically open doors */
-#endif
 
 #ifdef ALLOW_EASY_DISARM
 extern bool easy_disarm;	/* Automatically disarm traps */

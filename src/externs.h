@@ -1448,15 +1448,12 @@ extern void repeat_push(COMMAND_CODE what);
 extern bool repeat_pull(COMMAND_CODE *what);
 extern void repeat_check(void);
 
-#ifdef ALLOW_EASY_OPEN /* TNB */
 
 /* variable.c */
 extern bool easy_open;
 
 /* cmd2.c */
 extern bool easy_open_door(POSITION y, POSITION x);
-
-#endif /* ALLOW_EASY_OPEN -- TNB */
 
 #ifdef ALLOW_EASY_DISARM /* TNB */
 

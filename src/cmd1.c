@@ -1456,10 +1456,8 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			/* Wall (or secret door) */
 			else
 			{
-#ifdef ALLOW_EASY_OPEN
 				/* Closed doors */
 				if (easy_open && is_closed_door(feat) && easy_open_door(y, x)) return;
-#endif /* ALLOW_EASY_OPEN */
 
 #ifdef JP
 				msg_format("%sが行く手をはばんでいる。", name);
