@@ -1629,21 +1629,15 @@ static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
 }
 
 
-
-
-
-
 /*
  * Hack -- allow quick "cycling" through the legal directions
  */
-static byte cycle[] =
-{ 1, 2, 3, 6, 9, 8, 7, 4, 1, 2, 3, 6, 9, 8, 7, 4, 1 };
+static byte cycle[] = { 1, 2, 3, 6, 9, 8, 7, 4, 1, 2, 3, 6, 9, 8, 7, 4, 1 };
 
 /*
  * Hack -- map each direction into the "middle" of the "cycle[]" array
  */
-static byte chome[] =
-{ 0, 8, 9, 10, 7, 0, 11, 6, 5, 4 };
+static byte chome[] = { 0, 8, 9, 10, 7, 0, 11, 6, 5, 4 };
 
 /*
  * The direction we are running
@@ -1666,8 +1660,6 @@ static bool find_openarea;
 static bool find_breakright;
 static bool find_breakleft;
 
-
-
 /*!
  * @brief ダッシュ処理の導入 /
  * Initialize the running algorithm for a new direction.
@@ -1686,9 +1678,8 @@ static bool find_breakleft;
  */
 static void run_init(DIRECTION dir)
 {
-	int             row, col, deepleft, deepright;
-	int             i, shortleft, shortright;
-
+	int row, col, deepleft, deepright;
+	int i, shortleft, shortright;
 
 	/* Save the direction */
 	find_current = dir;
@@ -1786,11 +1777,11 @@ static void run_init(DIRECTION dir)
  */
 static bool run_test(void)
 {
-	int         prev_dir, new_dir, check_dir = 0;
-	int         row, col;
-	int         i, max, inv;
-	int         option = 0, option2 = 0;
-	cave_type   *c_ptr;
+	DIRECTION prev_dir, new_dir, check_dir = 0;
+	int row, col;
+	int i, max, inv;
+	int option = 0, option2 = 0;
+	cave_type *c_ptr;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 
@@ -2194,7 +2185,7 @@ void run_step(DIRECTION dir)
  */
 static DIRECTION travel_test(DIRECTION prev_dir)
 {
-	int new_dir = 0;
+	DIRECTION new_dir = 0;
 	int i, max;
 	const cave_type *c_ptr;
 	int cost;
@@ -2239,8 +2230,8 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 		DIRECTION dir = cycle[chome[prev_dir] + i];
 
 		/* New location */
-		int row = p_ptr->y + ddy[dir];
-		int col = p_ptr->x + ddx[dir];
+		POSITION row = p_ptr->y + ddy[dir];
+		POSITION col = p_ptr->x + ddx[dir];
 
 		/* Access grid */
 		c_ptr = &cave[row][col];
