@@ -339,7 +339,6 @@ bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 	if (!notice)
 		return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 1);
 
 	/* Redraw title */
@@ -419,7 +418,6 @@ bool set_blind(TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Fully update the visuals */
@@ -518,7 +516,6 @@ bool set_confused(TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -572,7 +569,6 @@ bool set_poisoned(TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -640,7 +636,6 @@ bool set_afraid(TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -700,7 +695,6 @@ bool set_paralyzed(TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Redraw the state */
@@ -764,7 +758,6 @@ bool set_image(TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 1);
 
 	/* Redraw map */
@@ -832,7 +825,6 @@ bool set_fast(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -894,7 +886,6 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -952,7 +943,6 @@ bool set_slow(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1014,7 +1004,6 @@ bool set_shield(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1076,7 +1065,6 @@ bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1138,7 +1126,6 @@ bool set_magicdef(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1199,7 +1186,6 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1261,7 +1247,6 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1326,7 +1311,6 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1390,7 +1374,6 @@ bool set_protevil(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -1468,7 +1451,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1553,7 +1535,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1614,7 +1595,6 @@ bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1678,7 +1658,6 @@ bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1742,7 +1721,6 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1806,7 +1784,6 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1867,7 +1844,6 @@ bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -1933,7 +1909,6 @@ bool set_superstealth(bool set)
 	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Result */
@@ -1988,7 +1963,6 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2049,7 +2023,6 @@ bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -2107,7 +2080,6 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2168,7 +2140,6 @@ bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2229,7 +2200,6 @@ bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2291,7 +2261,6 @@ bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2352,7 +2321,6 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2411,7 +2379,6 @@ bool set_multishadow(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2472,7 +2439,6 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2533,7 +2499,6 @@ bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2600,7 +2565,6 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -2682,7 +2646,6 @@ bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
 #endif
 	}
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Redraw status bar */
@@ -2762,7 +2725,6 @@ bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 #endif
 	}
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Redraw status bar */
@@ -2824,7 +2786,6 @@ bool set_oppose_acid(TIME_EFFECT v, bool do_dec)
 	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -2882,7 +2843,6 @@ bool set_oppose_elec(TIME_EFFECT v, bool do_dec)
 	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -2941,7 +2901,6 @@ bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -2999,7 +2958,6 @@ bool set_oppose_cold(TIME_EFFECT v, bool do_dec)
 	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -3058,7 +3016,6 @@ bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Handle stuff */
@@ -3197,7 +3154,7 @@ bool set_stun(TIME_EFFECT v)
 		switch (new_aux)
 		{
 			/* None */
-		  case 0:
+		case 0:
 			msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
 
 			if (disturb_state) disturb(0, 0);
@@ -3213,7 +3170,6 @@ bool set_stun(TIME_EFFECT v)
 	/* No change */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -3413,7 +3369,6 @@ bool set_cut(TIME_EFFECT v)
 	/* No change */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -3614,7 +3569,6 @@ bool set_food(TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -4383,7 +4337,6 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 
 	if (damage_type != DAMAGE_USELIFE)
 	{
-		/* Disturb */
 		disturb(1, 1);
 		if (auto_more)
 		{
@@ -4930,7 +4883,6 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -4985,7 +4937,6 @@ bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */
@@ -5040,7 +4991,6 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	/* Disturb */
 	if (disturb_state) disturb(0, 0);
 
 	/* Recalculate bonuses */

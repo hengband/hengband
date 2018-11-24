@@ -370,7 +370,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 
 		msg_print(_("トラップを発見した。", "You have found a trap."));
 
-		/* Disturb */
 		disturb(0, 1);
 	}
 
@@ -382,7 +381,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 		/* Disclose */
 		disclose_grid(y, x);
 
-		/* Disturb */
 		disturb(0, 0);
 	}
 
@@ -966,7 +964,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Handle "store doors" */
 	if (have_flag(f_ptr->flags, FF_STORE))
 	{
-		/* Disturb */
 		disturb(0, 1);
 
 		p_ptr->energy_use = 0;
@@ -977,7 +974,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Handle "building doors" -KMW- */
 	else if (have_flag(f_ptr->flags, FF_BLDG))
 	{
-		/* Disturb */
 		disturb(0, 1);
 
 		p_ptr->energy_use = 0;
@@ -988,7 +984,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Handle quest areas -KMW- */
 	else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 	{
-		/* Disturb */
 		disturb(0, 1);
 
 		p_ptr->energy_use = 0;
@@ -1016,7 +1011,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	/* Set off a trap */
 	else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING))
 	{
-		/* Disturb */
 		disturb(0, 1);
 
 		/* Hidden trap */
@@ -2126,7 +2120,6 @@ void run_step(DIRECTION dir)
 
 			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
 
-			/* Disturb */
 			disturb(0, 0);
 
 			return;
@@ -2141,7 +2134,6 @@ void run_step(DIRECTION dir)
 		/* Update run */
 		if (run_test())
 		{
-			/* Disturb */
 			disturb(0, 0);
 
 			return;

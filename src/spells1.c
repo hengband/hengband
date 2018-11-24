@@ -6227,7 +6227,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 	}
 
 
-	/* Disturb */
 	disturb(1, 1);
 
 

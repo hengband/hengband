@@ -3244,7 +3244,6 @@ static void update_dungeon_feeling(void)
 	/* Update the level indicator */
 	p_ptr->redraw |= (PR_DEPTH);
 
-	/* Disturb */
 	if (disturb_minor) disturb(0, 0);
 }
 
@@ -3352,7 +3351,6 @@ static void process_world(void)
 			/* Warning */
 			if (closing_flag <= 2)
 			{
-				/* Disturb */
 				disturb(0, 1);
 
 				/* Count warnings */
@@ -4826,7 +4824,6 @@ static void process_player(void)
 			{
 				flush(); /* Flush input */
 
-				/* Disturb */
 				disturb(0, 1);
 
 				/* Hack -- Show a Message */
@@ -5314,7 +5311,6 @@ static void dungeon(bool load_game)
 	repair_objects = TRUE;
 
 
-	/* Disturb */
 	disturb(1, 1);
 
 	/* Get index of current quest (if any) */

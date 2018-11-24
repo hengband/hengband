@@ -3088,7 +3088,6 @@ void process_monster(MONSTER_IDX m_idx)
 			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
 			     (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
 			{
-				/* Disturb */
 				if (is_hostile(m_ptr))
 					disturb(0, 1);
 			}
