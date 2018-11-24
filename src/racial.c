@@ -2562,9 +2562,7 @@ void do_cmd_racial_power(void)
 				_("(特殊能力 %c-%c, *'で一覧, ESCで中断) どの特殊能力を使いますか？", "(Powers %c-%c, *=List, ESC=exit) Use which power? "),
 				I2A(0), (num <= 26) ? I2A(num - 1) : '0' + num - 27);
 
-#ifdef ALLOW_REPEAT
 if (!repeat_pull(&i) || i<0 || i>=num) {
-#endif /* ALLOW_REPEAT */
 	if (use_menu) screen_save();
 	 /* Get a spell from the user */
 
@@ -2754,10 +2752,8 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 		p_ptr->energy_use = 0;
 		return;
 	}
-#ifdef ALLOW_REPEAT
 	repeat_push(i);
 	} /*if (!repeat_pull(&i) || ...)*/
-#endif /* ALLOW_REPEAT */
 	switch (racial_aux(&power_desc[i]))
 	{
 	case 1:

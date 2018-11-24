@@ -2617,8 +2617,6 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 	char	out_val[160];
 	char	lo, hi;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Get the item index */
 	if (repeat_pull(com_val))
 	{
@@ -2629,8 +2627,6 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 			return (TRUE);
 		}
 	}
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Paranoia */
 	msg_print(NULL);
@@ -2684,11 +2680,7 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 	/* Cancel */
 	if (command == ESCAPE) return (FALSE);
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	repeat_push(*com_val);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
 	return (TRUE);
@@ -4478,12 +4470,8 @@ static bool leave_store = FALSE;
  */
 static void store_process_command(void)
 {
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Handle repeating the last command */
 	repeat_check();
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	if (rogue_like_commands && command_cmd == 'l')
 	{

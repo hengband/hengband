@@ -230,8 +230,6 @@ static int get_learned_power(SPELL_IDX *sn)
 	/* No redraw yet */
 	redraw = FALSE;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Get the spell, if available */
 	
 	if (repeat_pull(&code))
@@ -240,8 +238,6 @@ static int get_learned_power(SPELL_IDX *sn)
 		return (TRUE);
 	}
 	*sn = (SPELL_IDX)code;
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	if (use_menu)
 	{
@@ -586,11 +582,7 @@ static int get_learned_power(SPELL_IDX *sn)
 	/* Save the choice */
 	(*sn) = spellnum[i];
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	repeat_push((COMMAND_CODE)spellnum[i]);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
 	return (TRUE);

@@ -3720,12 +3720,8 @@ static void process_command(void)
 {
 	COMMAND_CODE old_now_message = now_message;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Handle repeating the last command */
 	repeat_check();
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	now_message = 0;
 

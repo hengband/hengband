@@ -7868,12 +7868,9 @@ static COMMAND_CODE choose_essence(void)
 #endif
 	const COMMAND_CODE mode_max = 7;
 
-#ifdef ALLOW_REPEAT
 	if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max)
 		return mode;
 	mode = 0;
-#endif /* ALLOW_REPEAT */
-
 	if (use_menu)
 	{
 		screen_save();
@@ -7943,9 +7940,7 @@ static COMMAND_CODE choose_essence(void)
 		screen_load();
 	}
 
-#ifdef ALLOW_REPEAT
 	repeat_push(mode);
-#endif /* ALLOW_REPEAT */
 	return mode;
 }
 
@@ -7981,11 +7976,8 @@ static void add_essence(ESSENCE_IDX mode)
 		num[max_num++] = i;
 	}
 
-#ifdef ALLOW_REPEAT
 	if (!repeat_pull(&i) || i<0 || i>=max_num)
 	{
-#endif /* ALLOW_REPEAT */
-
 
 	/* Nothing chosen yet */
 	flag = FALSE;
@@ -8220,11 +8212,8 @@ static void add_essence(ESSENCE_IDX mode)
 
 	if (!flag) return;
 
-#ifdef ALLOW_REPEAT
 	repeat_push(i);
 	}
-#endif /* ALLOW_REPEAT */
-
 	es_ptr = &essence_info[num[i]];
 
 	if (es_ptr->add == ESSENCE_SLAY_GLOVE)
@@ -8548,11 +8537,8 @@ void do_cmd_kaji(bool only_browse)
 		}
 	}
 
-#ifdef ALLOW_REPEAT
 	if (!(repeat_pull(&mode) && 1 <= mode && mode <= 5))
 	{
-#endif /* ALLOW_REPEAT */
-
 	if (only_browse) screen_save();
 	do {
 	if (!only_browse) screen_save();
@@ -8671,11 +8657,8 @@ void do_cmd_kaji(bool only_browse)
 	}
 	if (!only_browse) screen_load();
 	} while (only_browse);
-#ifdef ALLOW_REPEAT
 	repeat_push(mode);
 	}
-#endif /* ALLOW_REPEAT */
-
 	switch(mode)
 	{
 		case 1: display_essence();break;

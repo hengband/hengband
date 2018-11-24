@@ -3818,8 +3818,6 @@ QUANTITY get_quantity(cptr prompt, QUANTITY max)
 		return (amt);
 	}
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Get the item index */
 	result = repeat_pull(&code);
 	amt = (QUANTITY)code;
@@ -3834,8 +3832,6 @@ QUANTITY get_quantity(cptr prompt, QUANTITY max)
 		/* Use it */
 		return (amt);
 	}
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Build a prompt if needed */
 	if (!prompt)
@@ -3883,11 +3879,7 @@ QUANTITY get_quantity(cptr prompt, QUANTITY max)
 	/* Enforce the minimum */
 	if (amt < 0) amt = 0;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	if (amt) repeat_push((COMMAND_CODE)amt);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Return the result */
 	return (amt);
@@ -4844,8 +4836,6 @@ int get_keymap_dir(char ch)
 }
 
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 #define REPEAT_MAX		20
 
 /* Number of chars saved */
@@ -4920,8 +4910,6 @@ void repeat_check(void)
 		repeat_push(what);
 	}
 }
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 
 #ifdef SORT_R_INFO

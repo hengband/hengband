@@ -72,8 +72,6 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 #endif
 	int menu_line = (use_menu ? 1 : 0);
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Get the spell, if available */
 	if (repeat_pull(&code))
 	{
@@ -85,8 +83,6 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 			return (TRUE);
 		}
 	}
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	p = spell_category_name(mp_ptr->spell_book);
 
@@ -325,11 +321,7 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 	/* Save the choice */
 	(*sn) = spell;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	repeat_push((COMMAND_CODE)spell);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
 	return TRUE;
@@ -398,16 +390,12 @@ static void confirm_use_force(bool browse_only)
 	char which;
 	COMMAND_CODE code;
 
-#ifdef ALLOW_REPEAT
-
 	/* Get the item index */
 	if (repeat_pull(&code) && (code == INVEN_FORCE))
 	{
 		browse_only ? do_cmd_mind_browse() : do_cmd_mind();
 		return;
 	}
-
-#endif /* ALLOW_REPEAT */
 
 	/* Show the prompt */
 	prt(_("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. "), 0, 0);
@@ -421,11 +409,7 @@ static void confirm_use_force(bool browse_only)
 		else if (which == 'w')
 		{
 
-#ifdef ALLOW_REPEAT
-
 			repeat_push(INVEN_FORCE);
-
-#endif /* ALLOW_REPEAT */
 
 			break;
 		}

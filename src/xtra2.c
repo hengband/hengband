@@ -4085,8 +4085,6 @@ bool get_aim_dir(DIRECTION *dp)
 	/* Hack -- auto-target if requested */
 	if (use_old_target && target_okay()) dir = 5;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	if (repeat_pull(&code))
 	{
 		/* Confusion? */
@@ -4099,8 +4097,6 @@ bool get_aim_dir(DIRECTION *dp)
 		}
 	}
 	*dp = (DIRECTION)code;
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Ask until satisfied */
 	while (!dir)
@@ -4189,12 +4185,8 @@ bool get_aim_dir(DIRECTION *dp)
 	/* Save direction */
 	(*dp) = dir;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 /*	repeat_push(dir); */
 	repeat_push((COMMAND_CODE)command_dir);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* A "valid" direction was entered */
 	return (TRUE);
@@ -4212,16 +4204,12 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 	/* Global direction */
 	dir = command_dir;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	if (repeat_pull(&code))
 	{
 		dir = (DIRECTION)code;
 		/*		return (TRUE); */
 	}
 	*dp = (DIRECTION)code;
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	if (allow_under)
 	{
@@ -4327,12 +4315,8 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 	/* Save direction */
 	(*dp) = dir;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/*	repeat_push(dir); */
 	repeat_push((COMMAND_CODE)command_dir);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
 	return (TRUE);
@@ -4365,16 +4349,12 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	/* Global direction */
 	dir = command_dir;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	if (repeat_pull(&code))
 	{
 		dir = (DIRECTION)code;
 /*		return (TRUE); */
 	}
 	*dp = (DIRECTION)code;
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	if (under)
 	{
@@ -4480,12 +4460,8 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	/* Save direction */
 	(*dp) = dir;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 /*	repeat_push(dir); */
 	repeat_push((COMMAND_CODE)command_dir);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
 	return (TRUE);

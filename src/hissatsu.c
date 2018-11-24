@@ -53,8 +53,6 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	/* Assume cancelled */
 	*sn = (-1);
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Get the spell, if available */
 	if (repeat_pull(&code))
 	{
@@ -66,8 +64,6 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 			return (TRUE);
 		}
 	}
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Nothing chosen yet */
 	flag = FALSE;
@@ -308,11 +304,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	/* Save the choice */
 	(*sn) = j;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	repeat_push((COMMAND_CODE)j);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
 	return (TRUE);

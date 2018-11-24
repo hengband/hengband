@@ -740,8 +740,6 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	/* Assume cancelled */
 	*sn = (-1);
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	/* Get the spell, if available */
 
 	if (repeat_pull(&code))
@@ -758,8 +756,6 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 			return (TRUE);
 		}
 	}
-
-#endif /* ALLOW_REPEAT -- TNB */
 
     /* Nothing chosen yet */
     flag = FALSE;
@@ -1015,11 +1011,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	/* Save the choice */
 	(*sn) = i;
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 	repeat_push((COMMAND_CODE)i);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 	/* Success */
 	return (TRUE);

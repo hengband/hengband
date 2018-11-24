@@ -1443,14 +1443,10 @@ extern void fsetfileinfo(cptr path, u32b fcreator, u32b ftype);
 #endif
 
 
-#ifdef ALLOW_REPEAT /* TNB */
-
 /* util.c */
 extern void repeat_push(COMMAND_CODE what);
 extern bool repeat_pull(COMMAND_CODE *what);
 extern void repeat_check(void);
-
-#endif /* ALLOW_REPEAT -- TNB */
 
 #ifdef ALLOW_EASY_OPEN /* TNB */
 

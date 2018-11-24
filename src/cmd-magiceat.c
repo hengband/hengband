@@ -75,7 +75,6 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 
 	int menu_line = (use_menu ? 1 : 0);
 
-#ifdef ALLOW_REPEAT
 	COMMAND_CODE sn;
 	if (repeat_pull(&sn))
 	{
@@ -86,8 +85,6 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 			return sn;
 	}
 	
-#endif /* ALLOW_REPEAT */
-
 	for (i = 0; i < 108; i++)
 	{
 		if (p_ptr->magic_num2[i]) break;
@@ -498,9 +495,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 
 	if (!flag) return -1;
 
-#ifdef ALLOW_REPEAT
 	repeat_push(ext+i);
-#endif /* ALLOW_REPEAT */
 	return ext+i;
 }
 

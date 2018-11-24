@@ -527,11 +527,6 @@
 #define MONSTER_HORDES
 
 /*
- * OPTION: Repeat last command -- TNB
- */
-#define ALLOW_REPEAT
-
-/*
  * OPTION: Make opening and closing things easy -- TNB
  */
 #define ALLOW_EASY_OPEN

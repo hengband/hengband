@@ -693,11 +693,8 @@ void do_cmd_pet(void)
 		}
 	}
 
-#ifdef ALLOW_REPEAT
 	if (!(repeat_pull(&i) && (i >= 0) && (i < num)))
 	{
-#endif /* ALLOW_REPEAT */
-
 		/* Nothing chosen yet */
 		flag = FALSE;
 
@@ -864,11 +861,8 @@ void do_cmd_pet(void)
 			return;
 		}
 
-#ifdef ALLOW_REPEAT
 		repeat_push(i);
 	}
-#endif /* ALLOW_REPEAT */
-
 	switch (powers[i])
 	{
 	case PET_DISMISS: /* Dismiss pets */
