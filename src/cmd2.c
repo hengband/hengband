@@ -2964,7 +2964,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 		{
 			cave[ny][nx].info |= (CAVE_GLOW);
 
-			/* Notice */
 			note_spot(ny, nx);
 
 			/* Redraw */
@@ -3005,7 +3004,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 		{
 			cave[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
 
-			/* Notice */
 			note_spot(ny, nx);
 
 			/* Redraw */
@@ -3150,7 +3148,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 				{
 					cave[ny][nx].info |= (CAVE_GLOW);
 
-					/* Notice */
 					note_spot(ny, nx);
 
 					/* Redraw */

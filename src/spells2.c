@@ -2462,7 +2462,6 @@ static void cave_temp_room_unlite(void)
 				/* Forget the grid */
 				if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
 
-				/* Notice */
 				note_spot(y, x);
 			}
 

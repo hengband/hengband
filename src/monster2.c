@@ -3089,7 +3089,6 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 			c_ptr->info &= ~(CAVE_OBJECT);
 			c_ptr->mimic = 0;
 
-			/* Notice */
 			note_spot(y, x);
 		}
 		else return FALSE;

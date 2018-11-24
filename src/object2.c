@@ -4958,7 +4958,6 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 		/* Place the object */
 		c_ptr->o_idx = o_idx;
 
-		/* Notice */
 		note_spot(y, x);
 
 		/* Redraw */
@@ -5080,7 +5079,6 @@ void place_gold(POSITION y, POSITION x)
 		/* Place the object */
 		c_ptr->o_idx = o_idx;
 
-		/* Notice */
 		note_spot(y, x);
 
 		/* Redraw */

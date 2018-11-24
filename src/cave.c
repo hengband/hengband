@@ -4594,7 +4594,6 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 	/* Update the monster */
 	if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
 
-	/* Notice */
 	note_spot(y, x);
 
 	/* Redraw */
@@ -4634,7 +4633,6 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 				/* Update the monster */
 				if (cc_ptr->m_idx) update_mon(cc_ptr->m_idx, FALSE);
 
-				/* Notice */
 				note_spot(yy, xx);
 
 				/* Redraw */
@@ -4781,7 +4779,6 @@ void remove_mirror(POSITION y, POSITION x)
 		update_local_illumination(y, x);
 	}
 
-	/* Notice */
 	note_spot(y, x);
 
 	/* Redraw */

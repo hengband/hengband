@@ -3187,7 +3187,6 @@ bool set_stun(TIME_EFFECT v)
 		/* Hex */
 		if (hex_spelling_any()) stop_hex_spell_all();
 
-		/* Notice */
 		notice = TRUE;
 	}
 
@@ -3205,7 +3204,6 @@ bool set_stun(TIME_EFFECT v)
 			break;
 		}
 
-		/* Notice */
 		notice = TRUE;
 	}
 
@@ -3380,7 +3378,6 @@ bool set_cut(TIME_EFFECT v)
 			case 7: msg_print(_("致命的な傷を負ってしまった。", "You have been given a mortal wound.")); break;
 		}
 
-		/* Notice */
 		notice = TRUE;
 
 		if (randint1(1000) < v || one_in_(16))
@@ -3407,7 +3404,6 @@ bool set_cut(TIME_EFFECT v)
 			break;
 		}
 
-		/* Notice */
 		notice = TRUE;
 	}
 
@@ -3919,7 +3915,6 @@ bool hp_player(int num)
 			msg_print(_("ひじょうに気分が良くなった。", "You feel very good."));
 		}
 
-		/* Notice */
 		return (TRUE);
 	}
 
@@ -4008,7 +4003,6 @@ bool do_res_stat(int stat)
 	{
 		msg_format(_("元通りに%sなった気がする。", "You feel less %s."), desc_stat_pos[stat]);
 
-		/* Notice */
 		return (TRUE);
 	}
 
@@ -4045,7 +4039,6 @@ bool do_inc_stat(int stat)
 
 		msg_format(_("ワーオ！とても%sなった！", "Wow!  You feel very %s!"), desc_stat_pos[stat]);
 
-		/* Notice */
 		return (TRUE);
 	}
 
@@ -4054,7 +4047,6 @@ bool do_inc_stat(int stat)
 	{
 		msg_format(_("元通りに%sなった気がする。", "You feel less %s."), desc_stat_pos[stat]);
 
-		/* Notice */
 		return (TRUE);
 	}
 

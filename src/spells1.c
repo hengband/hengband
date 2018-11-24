@@ -904,7 +904,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				c_ptr->mimic = old_mimic;
 
-				/* Notice */
 				note_spot(y, x);
 
 				/* Redraw */
@@ -996,7 +995,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			c_ptr->info |= CAVE_OBJECT;
 			c_ptr->mimic = feat_glyph;
 
-			/* Notice */
 			note_spot(y, x);
 
 			/* Redraw */
@@ -1075,7 +1073,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				c_ptr->info |= (CAVE_GLOW);
 
-				/* Notice */
 				note_spot(y, x);
 
 				/* Redraw */
@@ -1139,7 +1136,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					/* Forget */
 					c_ptr->info &= ~(CAVE_MARK);
 
-					/* Notice */
 					note_spot(y, x);
 				}
 
@@ -1148,7 +1144,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				update_local_illumination(y, x);
 
-				/* Notice */
 				if (player_can_see_bold(y, x)) obvious = TRUE;
 
 				/* Mega-Hack -- Update the monster in the affected grid */
@@ -1483,7 +1478,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						/* Identify */
 						object_known(o_ptr);
 
-						/* Notice */
 						if (known && (o_ptr->marked & OM_FOUND))
 						{
 							msg_print(_("カチッと音がした！", "Click!"));

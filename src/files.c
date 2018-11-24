@@ -6106,7 +6106,6 @@ void do_cmd_save_game(int is_autosave)
 	}
 	else
 	{
-		/* Disturb the player */
 		disturb(1, 1);
 	}
 

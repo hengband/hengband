@@ -2818,7 +2818,6 @@ void process_monster(MONSTER_IDX m_idx)
 				/* Allow movement */
 				do_move = TRUE;
 
-				/* Notice */
 				note_spot(ny, nx);
 			}
 		}

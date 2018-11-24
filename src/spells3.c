@@ -1007,7 +1007,6 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 #endif
 
 
-		/* Notice */
 		return (TRUE);
 	}
 
@@ -1057,7 +1056,6 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 		calc_android_exp();
 	}
 
-	/* Notice */
 	return (TRUE);
 }
 
@@ -1730,7 +1728,6 @@ bool warding_glyph(void)
 	cave[p_ptr->y][p_ptr->x].info |= CAVE_OBJECT;
 	cave[p_ptr->y][p_ptr->x].mimic = feat_glyph;
 
-	/* Notice */
 	note_spot(p_ptr->y, p_ptr->x);
 
 	/* Redraw */
@@ -1758,7 +1755,6 @@ bool place_mirror(void)
 	/* Turn on the light */
 	cave[p_ptr->y][p_ptr->x].info |= CAVE_GLOW;
 
-	/* Notice */
 	note_spot(p_ptr->y, p_ptr->x);
 
 	/* Redraw */
@@ -1787,7 +1783,6 @@ bool explosive_rune(void)
 	cave[p_ptr->y][p_ptr->x].info |= CAVE_OBJECT;
 	cave[p_ptr->y][p_ptr->x].mimic = feat_explosive_rune;
 
-	/* Notice */
 	note_spot(p_ptr->y, p_ptr->x);
 	
 	/* Redraw */
@@ -4874,7 +4869,6 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 	}
 
-	/* Notice */
 	return (TRUE);
 }
 
@@ -4927,7 +4921,6 @@ bool brand_bolts(void)
 		/* Enchant */
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 
-		/* Notice */
 		return (TRUE);
 	}
 
@@ -4937,7 +4930,6 @@ bool brand_bolts(void)
 	/* Fail */
 	msg_print(_("炎で強化するのに失敗した。", "The fiery enchantment failed."));
 
-	/* Notice */
 	return (TRUE);
 }
 

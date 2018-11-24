@@ -88,7 +88,6 @@ void disclose_grid(POSITION y, POSITION x)
 		/* No longer hidden */
 		c_ptr->mimic = 0;
 
-		/* Notice */
 		note_spot(y, x);
 
 		/* Redraw */
@@ -134,7 +133,8 @@ void place_trap(POSITION y, POSITION x)
 */
 static int check_hit(int power)
 {
-	int k, ac;
+	int k;
+	ARMOUR_CLASS ac;
 
 	/* Percentile dice */
 	k = randint0(100);
@@ -220,7 +220,6 @@ static void hit_trap_pit(int trap_feat_type)
 		}
 	}
 
-	/* Take the damage */
 	take_hit(DAMAGE_NOESCAPE, dam, trap_name, -1);
 }
 
@@ -305,7 +304,6 @@ void hit_trap(bool break_trap)
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
 	cptr name = _("トラップ", "a trap");
 
-	/* Disturb the player */
 	disturb(0, 1);
 
 	cave_alter_feat(y, x, FF_HIT_TRAP);

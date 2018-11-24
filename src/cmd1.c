@@ -1476,7 +1476,6 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			}
 		}
 
-		/* Disturb the player */
 		disturb(0, 1);
 
 		if (!boundary_floor(c_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);

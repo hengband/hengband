@@ -1338,7 +1338,6 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	char            m_name[80];
 
-	/* Disturb the player */
 	disturb(0, 1);
 
 	p_ptr->energy_use = 100;
@@ -2350,7 +2349,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						o_ptr->xtra4 -= (s16b)(250 + randint1(250));
 						if (o_ptr->xtra4 < 1) o_ptr->xtra4 = 1;
 
-						/* Notice */
 						if (!p_ptr->blind)
 						{
 							msg_print(_("明かりが暗くなってしまった。", "Your light dims."));

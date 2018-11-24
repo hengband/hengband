@@ -3125,7 +3125,6 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	/* Clear screen */
 	clear_bldg(0, 22);
 
-	/* Notice */
 	prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
 	prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row+1, 2);
 
