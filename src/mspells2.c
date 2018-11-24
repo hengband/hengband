@@ -191,7 +191,7 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
  * @param flg 判定のフラグ配列
  * @return なし
  */
-void get_project_point(int sy, int sx, int *ty, int *tx, BIT_FLAGS flg)
+void get_project_point(POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
 	u16b path_g[128];
 	int  path_n, i;
@@ -474,8 +474,8 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			    (f5 & RF5_BALL_MASK) ||
 			    (f6 & RF6_BALL_MASK))
 			{
-				int real_y = y;
-				int real_x = x;
+				POSITION real_y = y;
+				POSITION real_x = x;
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 
@@ -505,17 +505,15 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 			if (f4 & RF4_ROCKET)
 			{
-				int real_y = y;
-				int real_x = x;
+				POSITION real_y = y;
+				POSITION real_x = x;
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
 				if (projectable(real_y, real_x, p_ptr->y, p_ptr->x) && (distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 2))
 					f4 &= ~(RF4_ROCKET);
 			}
 
-			if (((f4 & RF4_BEAM_MASK) ||
-			     (f5 & RF5_BEAM_MASK) ||
-			     (f6 & RF6_BEAM_MASK)) &&
+			if (((f4 & RF4_BEAM_MASK) || (f5 & RF5_BEAM_MASK) || (f6 & RF6_BEAM_MASK)) &&
 			    !direct_beam(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, m_ptr))
 			{
 				f4 &= ~(RF4_BEAM_MASK);
@@ -523,9 +521,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				f6 &= ~(RF6_BEAM_MASK);
 			}
 
-			if ((f4 & RF4_BREATH_MASK) ||
-			    (f5 & RF5_BREATH_MASK) ||
-			    (f6 & RF6_BREATH_MASK))
+			if ((f4 & RF4_BREATH_MASK) || (f5 & RF5_BREATH_MASK) || (f6 & RF6_BREATH_MASK))
 			{
 				/* Expected breath radius */
 				POSITION rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;

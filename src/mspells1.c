@@ -1467,7 +1467,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 		}
 		else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= MAX_RANGE))
 		{
-			int by = y, bx = x;
+			POSITION by = y, bx = x;
 			get_project_point(m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
 			if ((distance(by, bx, y, x) <= 3) && los(by, bx, y, x) && one_in_(5))
 			{
