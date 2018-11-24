@@ -3885,32 +3885,14 @@ static void process_command(void)
 		/* Move (usually pick up things) */
 		case ';':
 		{
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
 			do_cmd_walk(FALSE);
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-			do_cmd_walk(always_pickup);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
-
 			break;
 		}
 
 		/* Move (usually do not pick up) */
 		case '-':
 		{
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
 			do_cmd_walk(TRUE);
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-			do_cmd_walk(!always_pickup);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
-
 			break;
 		}
 

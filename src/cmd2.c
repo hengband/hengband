@@ -1432,15 +1432,8 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-#ifdef ALLOW_EASY_DISARM /* TNB */
 
 bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
 {
 	/* Get grid and contents */
 	cave_type *c_ptr = &cave[y][x];
@@ -1482,17 +1475,8 @@ static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 		/* Remove the trap */
 		cave_alter_feat(y, x, FF_DISARM);
 
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
 		/* Move the player onto the trap */
 		move_player(dir, easy_disarm, FALSE);
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-		/* move the player onto the trap grid */
-		move_player(dir, FALSE, FALSE);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
 	}
 
 	/* Failure -- Keep trying */
@@ -1511,18 +1495,8 @@ static bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	else
 	{
 		msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
-
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
 		/* Move the player onto the trap */
 		move_player(dir, easy_disarm, FALSE);
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-		/* Move the player onto the trap */
-		move_player(dir, FALSE, FALSE);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
 	}
 
 	/* Result */
@@ -1548,7 +1522,6 @@ void do_cmd_disarm(void)
 		set_action(ACTION_NONE);
 	}
 
-#ifdef ALLOW_EASY_DISARM /* TNB */
 
 	/* Option: Pick a direction */
 	if (easy_disarm)
@@ -1569,7 +1542,6 @@ void do_cmd_disarm(void)
 		}
 	}
 
-#endif /* ALLOW_EASY_DISARM -- TNB */
 
 	/* Allow repeated command */
 	if (command_arg)

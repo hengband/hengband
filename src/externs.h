@@ -1455,15 +1455,12 @@ extern bool easy_open;
 /* cmd2.c */
 extern bool easy_open_door(POSITION y, POSITION x);
 
-#ifdef ALLOW_EASY_DISARM /* TNB */
 
 /* variable.c */
 extern bool easy_disarm;
 
 /* cmd2.c */
 extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
 
 
 #ifdef ALLOW_EASY_FLOOR /* TNB */

@@ -1388,7 +1388,6 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		if ((p_ptr->pclass != CLASS_RANGER) && !p_ptr->levitation && (!p_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) p_ptr->energy_use *= 2;
 	}
 
-#ifdef ALLOW_EASY_DISARM /* TNB */
 
 	/* Disarm a visible trap */
 	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !c_ptr->mimic)
@@ -1400,7 +1399,6 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		}
 	}
 
-#endif /* ALLOW_EASY_DISARM -- TNB */
 
 	/* Player can not walk through "walls" unless in wraith form...*/
 	else if (!p_can_enter && !p_can_kill_walls)
@@ -1529,16 +1527,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 		/* sound(SOUND_WALK); */
 
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
 		if (do_pickup != always_pickup) mpe_mode |= MPE_DO_PICKUP;
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-		if (do_pickup) mpe_mode |= MPE_DO_PICKUP;
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
-
 		if (break_trap) mpe_mode |= MPE_BREAK_TRAP;
 
 		/* Move the player */
@@ -2147,15 +2136,7 @@ void run_step(DIRECTION dir)
 	p_ptr->energy_use = 100;
 
 	/* Move the player, using the "pickup" flag */
-#ifdef ALLOW_EASY_DISARM /* TNB */
-
 	move_player(find_current, FALSE, FALSE);
-
-#else /* ALLOW_EASY_DISARM -- TNB */
-
-	move_player(find_current, always_pickup, FALSE);
-
-#endif /* ALLOW_EASY_DISARM -- TNB */
 
 	if (player_bold(p_ptr->run_py, p_ptr->run_px))
 	{
