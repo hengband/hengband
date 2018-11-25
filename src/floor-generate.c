@@ -981,7 +981,7 @@ static bool cave_gen(void)
  */
 static void build_arena(void)
 {
-	int yval, y_height, y_depth, xval, x_left, x_right;
+	POSITION yval, y_height, y_depth, xval, x_left, x_right;
 	register int i, j;
 
 	yval = SCREEN_HGT / 2;
@@ -1086,7 +1086,7 @@ static void arena_gen(void)
  */
 static void build_battle(void)
 {
-	int yval, y_height, y_depth, xval, x_left, x_right;
+	POSITION yval, y_height, y_depth, xval, x_left, x_right;
 	register int i, j;
 
 	yval = SCREEN_HGT / 2;

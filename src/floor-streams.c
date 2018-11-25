@@ -441,7 +441,8 @@ void place_trees(POSITION x, POSITION y)
  */
 void destroy_level(void)
 {
-	int y1, x1, n;
+	POSITION y1, x1;
+	int n;
 
 	/* Note destroyed levels */
 	msg_print_wizard(CHEAT_DUNGEON, _("階に*破壊*の痕跡を生成しました。", "Destroyed Level."));

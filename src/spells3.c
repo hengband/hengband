@@ -376,11 +376,11 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
  */
 void teleport_player(POSITION dis, BIT_FLAGS mode)
 {
-	int yy, xx;
+	POSITION yy, xx;
 
 	/* Save the old location */
-	int oy = p_ptr->y;
-	int ox = p_ptr->x;
+	POSITION oy = p_ptr->y;
+	POSITION ox = p_ptr->x;
 
 	if (!teleport_player_aux(dis, mode)) return;
 
@@ -420,11 +420,11 @@ void teleport_player(POSITION dis, BIT_FLAGS mode)
  */
 void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
 {
-	int yy, xx;
+	POSITION yy, xx;
 
 	/* Save the old location */
-	int oy = p_ptr->y;
-	int ox = p_ptr->x;
+	POSITION oy = p_ptr->y;
+	POSITION ox = p_ptr->x;
 
 	if (!teleport_player_aux(dis, TELEPORT_PASSIVE)) return;
 
@@ -1359,11 +1359,11 @@ void brand_weapon(int brand_type)
  */
 static bool vanish_dungeon(void)
 {
-	int          y, x;
-	cave_type    *c_ptr;
+	POSITION y, x;
+	cave_type *c_ptr;
 	feature_type *f_ptr;
 	monster_type *m_ptr;
-	char         m_name[80];
+	char m_name[80];
 
 	/* Prevent vasishing of quest levels and town */
 	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
@@ -3428,12 +3428,12 @@ bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_ID
  */
 void display_spell_list(void)
 {
-	int             i, j;
-	int             y, x;
-	int             m[9];
+	int i, j;
+	TERM_LEN y, x;
+	int m[9];
 	const magic_type *s_ptr;
-	char            name[80];
-	char            out_val[160];
+	char name[80];
+	char out_val[160];
 
 
 	/* Erase window */

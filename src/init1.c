@@ -3976,9 +3976,7 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
 	int i;
-
 	char *zz[33];
-
 
 	/* Skip "empty" lines */
 	if (!buf[0]) return (0);

@@ -376,16 +376,16 @@ u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
  */
 sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {
-	int y, x;
+	POSITION y, x;
 
 	int n = 0;
 	int k = 0;
 
 	/* Absolute */
-	int ay, ax;
+	POSITION ay, ax;
 
 	/* Offsets */
-	int sy, sx;
+	POSITION sy, sx;
 
 	/* Fractions */
 	int frac;
