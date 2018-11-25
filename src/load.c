@@ -1481,12 +1481,8 @@ static void rd_options(void)
 	BIT_FLAGS flag[8];
 	BIT_FLAGS mask[8];
 
-
-	/*** Oops ***/
-
 	/* Ignore old options */
 	strip_bytes(16);
-
 
 	/*** Special info */
 

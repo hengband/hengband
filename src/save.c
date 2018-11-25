@@ -19,12 +19,10 @@
  * Some "local" parameters, used to help write savefiles
  */
 
-static FILE     *fff;           /* Current save "file" */
-
-static byte     xor_byte;       /* Simple encryption */
-
-static u32b     v_stamp = 0L;   /* A simple "checksum" on the actual values */
-static u32b     x_stamp = 0L;   /* A simple "checksum" on the encoded bytes */
+static FILE *fff;           /* Current save "file" */
+static byte xor_byte;       /* Simple encryption */
+static u32b v_stamp = 0L;   /* A simple "checksum" on the actual values */
+static u32b x_stamp = 0L;   /* A simple "checksum" on the encoded bytes */
 
 
 
@@ -351,7 +349,6 @@ static void wr_lore(MONRACE_IDX r_idx)
 	wr_u32b(r_ptr->r_flags6);
 	wr_u32b(r_ptr->r_flagsr);
 
-
 	/* Monster limit per level */
 	wr_byte((byte_hack)r_ptr->max_num);
 
@@ -381,7 +378,7 @@ static void wr_xtra(KIND_OBJECT_IDX k_idx)
 
 
 /*!
- * @brief 店舗情報を書き込む / Write a "store" record
+ * @brief セーブデータに店舗情報を書き込む / Write a "store" record
  * @param st_ptr 店舗情報の参照ポインタ
  * @return なし
  */
@@ -417,26 +414,20 @@ static void wr_store(store_type *st_ptr)
 
 
 /*!
- * @brief 乱数情報を書き込む / Write RNG state
- * @return なし
+ * @brief セーブデータに乱数情報を書き込む / Write RNG state
+ * @return 常に0(成功を返す) 
  */
 static errr wr_randomizer(void)
 {
 	int i;
-
-	/* Zero */
 	wr_u16b(0);
-
-	/* Place */
 	wr_u16b(Rand_place);
 
-	/* State */
 	for (i = 0; i < RAND_DEG; i++)
 	{
 		wr_u32b(Rand_state[i]);
 	}
 
-	/* Success */
 	return (0);
 }
 

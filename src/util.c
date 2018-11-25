@@ -438,9 +438,7 @@ FILE *my_fopen_temp(char *buf, int max)
 errr my_fgets(FILE *fff, char *buf, huge n)
 {
 	huge i = 0;
-
 	char *s;
-
 	char tmp[1024];
 
 	/* Read a line */
@@ -529,9 +527,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 
 /*
  * Hack -- replacement for "fputs()"
- *
  * Dump a string, plus a newline, to a file
- *
  * Process internal weirdness?
  */
 errr my_fputs(FILE *fff, cptr buf, huge n)
