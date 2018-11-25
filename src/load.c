@@ -1750,6 +1750,7 @@ static void rd_extra(void)
 	p_ptr->realm1 = (REALM_IDX)tmp8u;
 	rd_byte(&tmp8u);
 	p_ptr->realm2 = (REALM_IDX)tmp8u;
+	rd_byte(&tmp8u);
 
 	if (z_older_than(10, 4, 4))
 	{
@@ -1774,7 +1775,7 @@ static void rd_extra(void)
 	for (i = 0; i < 6; i++) rd_s16b(&p_ptr->stat_max_max[i]);
 	for (i = 0; i < 6; i++) rd_s16b(&p_ptr->stat_cur[i]);
 
-
+	strip_bytes(24);
 	rd_s32b(&p_ptr->au);
 
 	rd_s32b(&p_ptr->max_exp);
@@ -2206,6 +2207,7 @@ static void rd_extra(void)
 	rd_byte(&tmp8u);
 	p_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
 
+	rd_byte(&tmp8u);
 	rd_byte(&tmp8u);
 	p_ptr->action = (ACTION_IDX)tmp8u;
 	if (!z_older_than(10, 4, 3))
