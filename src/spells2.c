@@ -25,8 +25,8 @@
  */
 static bool detect_feat_flag(POSITION range, int flag, bool known)
 {
-	int       x, y;
-	bool      detect = FALSE;
+	int x, y;
+	bool detect = FALSE;
 	cave_type *c_ptr;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
@@ -207,11 +207,7 @@ bool detect_objects_gold(POSITION range)
 		{
 			/* Hack -- memorize it */
 			o_ptr->marked |= OM_FOUND;
-
-			/* Redraw */
 			lite_spot(y, x);
-
-			/* Detect */
 			detect = TRUE;
 		}
 	}
@@ -270,11 +266,7 @@ bool detect_objects_normal(POSITION range)
 		{
 			/* Hack -- memorize it */
 			o_ptr->marked |= OM_FOUND;
-
-			/* Redraw */
 			lite_spot(y, x);
-
-			/* Detect */
 			detect = TRUE;
 		}
 	}
@@ -366,11 +358,7 @@ bool detect_objects_magic(POSITION range)
 		{
 			/* Memorize the item */
 			o_ptr->marked |= OM_FOUND;
-
-			/* Redraw */
 			lite_spot(y, x);
-
-			/* Detect */
 			detect = TRUE;
 		}
 	}
@@ -426,8 +414,6 @@ bool detect_monsters_normal(POSITION range)
 
 			/* Update the monster */
 			update_mon(i, FALSE);
-
-			/* Detect */
 			flag = TRUE;
 		}
 	}
@@ -491,8 +477,6 @@ bool detect_monsters_invis(POSITION range)
 
 			/* Update the monster */
 			update_mon(i, FALSE);
-
-			/* Detect */
 			flag = TRUE;
 		}
 	}
@@ -561,8 +545,6 @@ bool detect_monsters_evil(POSITION range)
 
 			/* Update the monster */
 			update_mon(i, FALSE);
-
-			/* Detect */
 			flag = TRUE;
 		}
 	}
@@ -623,8 +605,6 @@ bool detect_monsters_nonliving(POSITION range)
 
 			/* Update the monster */
 			update_mon(i, FALSE);
-
-			/* Detect */
 			flag = TRUE;
 		}
 	}
@@ -685,8 +665,6 @@ bool detect_monsters_mind(POSITION range)
 
 			/* Update the monster */
 			update_mon(i, FALSE);
-
-			/* Detect */
 			flag = TRUE;
 		}
 	}
@@ -749,8 +727,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 
 			/* Update the monster */
 			update_mon(i, FALSE);
-
-			/* Detect */
 			flag = TRUE;
 		}
 	}
@@ -821,8 +797,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 
 			/* Update the monster */
 			update_mon(i, FALSE);
-
-			/* Detect */
 			flag = TRUE;
 		}
 	}

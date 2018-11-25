@@ -401,19 +401,14 @@ void do_cmd_search(void)
 static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 {
 	cave_type *c_ptr = &cave[y][x];
-
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Skip unknown chests XXX XXX */
@@ -427,8 +422,6 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 			return (this_o_idx);
 		}
 	}
-
-	/* No chest */
 	return (0);
 }
 

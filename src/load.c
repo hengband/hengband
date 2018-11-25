@@ -1473,9 +1473,7 @@ static void rd_randomizer(void)
 static void rd_options(void)
 {
 	int i, n;
-
 	byte b;
-
 	u16b c;
 
 	BIT_FLAGS flag[8];
@@ -1504,7 +1502,6 @@ static void rd_options(void)
 		rd_byte(&b);
 		mana_warn = b;
 	}
-
 
 	/*** Cheating options ***/
 

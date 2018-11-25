@@ -3100,7 +3100,7 @@
  * OM_NOMSG --- temporary flag to suppress messages which were
  *              already printed in autopick_pickup_items().
  */
-#define OM_FOUND        0x01    /* original boolean flag */
+#define OM_FOUND        0x01    /*!< アイテムを一度でも視界に収めたことがあるか */
 #define OM_NOMSG        0x02    /* temporary flag to suppress messages */
 #define OM_NO_QUERY     0x04    /* Query for auto-pick was already answered as 'No' */
 #define OM_AUTODESTROY  0x08    /* Destroy later to avoid illegal inventry shift */
