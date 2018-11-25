@@ -4766,8 +4766,6 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 
 	/* Save */
 	(*sp) = s;
-
-	/* Result */
 	return (v);
 }
 
@@ -4865,8 +4863,6 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 
 	/* Close the file */
 	my_fclose(fp);
-
-	/* Result */
 	return (err);
 }
 

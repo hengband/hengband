@@ -4026,8 +4026,6 @@ errr rd_savefile_new(void)
 
 	/* Close the file */
 	my_fclose(fff);
-
-	/* Result */
 	return (err);
 }
 
@@ -4203,7 +4201,5 @@ bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 
 	/* Restore old knowledge */
 	kanji_code = old_kanji_code;
-
-	/* Result */
 	return ok;
 }

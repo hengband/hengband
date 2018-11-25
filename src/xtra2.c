@@ -2740,8 +2740,6 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 		/* Track best */
 		b_i = i; b_v = v;
 	}
-
-	/* Result */
 	return (b_i);
 }
 

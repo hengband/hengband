@@ -74,8 +74,6 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 			}
 		}
 	}
-
-	/* Result */
 	return detect;
 }
 
@@ -99,8 +97,6 @@ bool detect_traps(POSITION range, bool known)
 	{
 		msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
 	}
-
-	/* Result */
 	return detect;
 }
 
@@ -121,8 +117,6 @@ bool detect_doors(POSITION range)
 	{
 		msg_print(_("ドアの存在を感じとった！", "You sense the presence of doors!"));
 	}
-
-	/* Result */
 	return detect;
 }
 
@@ -143,8 +137,6 @@ bool detect_stairs(POSITION range)
 	{
 		msg_print(_("階段の存在を感じとった！", "You sense the presence of stairs!"));
 	}
-
-	/* Result */
 	return detect;
 }
 
@@ -165,8 +157,6 @@ bool detect_treasure(POSITION range)
 	{
 		msg_print(_("埋蔵された財宝の存在を感じとった！", "You sense the presence of buried treasure!"));
 	}
-
-	/* Result */
 	return detect;
 }
 
@@ -205,7 +195,6 @@ bool detect_objects_gold(POSITION range)
 		/* Detect "gold" objects */
 		if (o_ptr->tval == TV_GOLD)
 		{
-			/* Hack -- memorize it */
 			o_ptr->marked |= OM_FOUND;
 			lite_spot(y, x);
 			detect = TRUE;
@@ -224,8 +213,6 @@ bool detect_objects_gold(POSITION range)
 	{
 		detect = TRUE;
 	}
-
-	/* Result */
 	return (detect);
 }
 
@@ -264,7 +251,6 @@ bool detect_objects_normal(POSITION range)
 		/* Detect "real" objects */
 		if (o_ptr->tval != TV_GOLD)
 		{
-			/* Hack -- memorize it */
 			o_ptr->marked |= OM_FOUND;
 			lite_spot(y, x);
 			detect = TRUE;
@@ -283,8 +269,6 @@ bool detect_objects_normal(POSITION range)
 	{
 		detect = TRUE;
 	}
-
-	/* Result */
 	return (detect);
 }
 
@@ -426,8 +410,6 @@ bool detect_monsters_normal(POSITION range)
 		/* Describe result */
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
 	}
-
-	/* Result */
 	return (flag);
 }
 
@@ -489,8 +471,6 @@ bool detect_monsters_invis(POSITION range)
 		/* Describe result */
 		msg_print(_("透明な生物の存在を感じとった！", "You sense the presence of invisible creatures!"));
 	}
-
-	/* Result */
 	return (flag);
 }
 
@@ -555,8 +535,6 @@ bool detect_monsters_evil(POSITION range)
 		/* Describe result */
 		msg_print(_("邪悪なる生物の存在を感じとった！", "You sense the presence of evil creatures!"));
 	}
-
-	/* Result */
 	return (flag);
 }
 
@@ -615,8 +593,6 @@ bool detect_monsters_nonliving(POSITION range)
 		/* Describe result */
 		msg_print(_("自然でないモンスターの存在を感じた！", "You sense the presence of unnatural beings!"));
 	}
-
-	/* Result */
 	return (flag);
 }
 
@@ -675,8 +651,6 @@ bool detect_monsters_mind(POSITION range)
 		/* Describe result */
 		msg_print(_("殺気を感じとった！", "You sense the presence of someone's mind!"));
 	}
-
-	/* Result */
 	return (flag);
 }
 
@@ -739,8 +713,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 		/* Describe result */
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
 	}
-
-	/* Result */
 	return (flag);
 }
 
@@ -818,8 +790,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 		msg_format(_("%sの存在を感じとった！", "You sense the presence of %s!"), desc_monsters);
 		msg_print(NULL);
 	}
-
-	/* Result */
 	return (flag);
 }
 
@@ -845,8 +815,6 @@ bool detect_all(POSITION range)
 	if (detect_objects_normal(range)) detect = TRUE;
 	if (detect_monsters_invis(range)) detect = TRUE;
 	if (detect_monsters_normal(range)) detect = TRUE;
-
-	/* Result */
 	return (detect);
 }
 
@@ -907,8 +875,6 @@ bool project_hack(EFFECT_ID typ, HIT_POINT dam)
 		/* Jump directly to the target monster */
 		if (project(0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
 	}
-
-	/* Result */
 	return (obvious);
 }
 
@@ -1441,8 +1407,6 @@ bool probing(void)
 		chg_virtue(V_KNOWLEDGE, 1);
 		msg_print(_("これで全部です。", "That's all."));
 	}
-
-	/* Result */
 	return (probe);
 }
 

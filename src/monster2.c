@@ -954,8 +954,6 @@ static bool summon_specific_aux(MONRACE_IDX r_idx)
 			break;
 		}
 	}
-
-	/* Result */
 	/* Since okay is int, "return (okay);" is not correct. */
 	return (bool)(okay ? TRUE : FALSE);
 }
@@ -1447,8 +1445,6 @@ MONRACE_IDX get_mon_num(DEPTH level)
 		/* Keep the "best" one */
 		if (table[i].level < table[j].level) i = j;
 	}
-
-	/* Result */
 	return (table[i].index);
 }
 

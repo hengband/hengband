@@ -4982,8 +4982,6 @@ static IDX poly_r_idx(MONRACE_IDX r_idx)
 
 		break;
 	}
-
-	/* Result */
 	return (r_idx);
 }
 

@@ -899,8 +899,6 @@ static char *analyze_font(char *path, int *wp, int *hp)
 	/* Save results */
 	(*wp) = wid;
 	(*hp) = hgt;
-
-	/* Result */
 	return (p);
 }
 #endif
@@ -1786,8 +1784,6 @@ static bool init_graphics(void)
 
 	/* Graphics available */
 	current_graphics_mode = arg_graphics;
-
-	/* Result */
 	return (current_graphics_mode);
 }
 #endif /* USE_GRAPHICS */
@@ -1808,8 +1804,6 @@ static bool init_music(void)
 		/* Sound available */
 		can_use_music = TRUE;
 	}
-
-	/* Result */
 	return (can_use_music);
 }
 
@@ -1839,8 +1833,6 @@ static bool init_sound(void)
 		/* Sound available */
 		can_use_sound = TRUE;
 	}
-
-	/* Result */
 	return (can_use_sound);
 }
 #endif /* USE_SOUND */

@@ -3527,8 +3527,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		if (command_cmd) prev_tag = cur_tag;
 		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 	}
-
-	/* Result */
 	return (item);
 }
 
@@ -3583,8 +3581,6 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
 		/* Only one */
 		if (mode & 0x04) break;
 	}
-
-	/* Result */
 	return num;
 }
 
@@ -4935,8 +4931,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		if (command_cmd) prev_tag = cur_tag;
 		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 	}
-
-	/* Result */
 	return (item);
 }
 

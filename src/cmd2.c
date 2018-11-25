@@ -491,8 +491,6 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		/* Let the Chest drop items */
 		chest_death(FALSE, y, x, o_idx);
 	}
-
-	/* Result */
 	return (more);
 }
 
@@ -723,8 +721,6 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 
 		sound(SOUND_OPENDOOR);
 	}
-
-	/* Result */
 	return (more);
 }
 
@@ -887,8 +883,6 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
 			}
 		}
 	}
-
-	/* Result */
 	return (more);
 }
 
@@ -1134,8 +1128,6 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 		/* Occasional Search XXX XXX */
 		if (randint0(100) < 25) search();
 	}
-
-	/* Result */
 	return more;
 }
 
@@ -1316,8 +1308,6 @@ bool easy_open_door(POSITION y, POSITION x)
 
 		sound(SOUND_OPENDOOR);
 	}
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1399,8 +1389,6 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		sound(SOUND_FAIL);
 		chest_trap(y, x, o_idx);
 	}
-
-	/* Result */
 	return (more);
 }
 
@@ -1485,8 +1473,6 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 		/* Move the player onto the trap */
 		move_player(dir, easy_disarm, FALSE);
 	}
-
-	/* Result */
 	return (more);
 }
 
@@ -1683,8 +1669,6 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 		/* Hack -- Lose balance ala paralysis */
 		(void)set_paralyzed(p_ptr->paralyzed + 2 + randint0(2));
 	}
-
-	/* Result */
 	return (more);
 }
 

@@ -348,8 +348,6 @@ bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 	p_ptr->update |= (PU_BONUS | PU_HP);
 
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -430,8 +428,6 @@ bool set_blind(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -520,8 +516,6 @@ bool set_confused(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -573,8 +567,6 @@ bool set_poisoned(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -640,8 +632,6 @@ bool set_afraid(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -702,8 +692,6 @@ bool set_paralyzed(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -773,8 +761,6 @@ bool set_image(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -832,8 +818,6 @@ bool set_fast(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -893,8 +877,6 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -950,8 +932,6 @@ bool set_slow(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1011,8 +991,6 @@ bool set_shield(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1072,8 +1050,6 @@ bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1133,8 +1109,6 @@ bool set_magicdef(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1193,8 +1167,6 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1257,8 +1229,6 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1321,8 +1291,6 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1378,8 +1346,6 @@ bool set_protevil(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1458,8 +1424,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 
 }
@@ -1542,8 +1506,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1605,8 +1567,6 @@ bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1668,8 +1628,6 @@ bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1731,8 +1689,6 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1791,8 +1747,6 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1851,8 +1805,6 @@ bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1910,8 +1862,6 @@ bool set_superstealth(bool set)
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -1970,8 +1920,6 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2027,8 +1975,6 @@ bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2087,8 +2033,6 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2147,8 +2091,6 @@ bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2207,8 +2149,6 @@ bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2268,8 +2208,6 @@ bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2328,8 +2266,6 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2386,8 +2322,6 @@ bool set_multishadow(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2446,8 +2380,6 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2506,8 +2438,6 @@ bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2575,8 +2505,6 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2790,8 +2718,6 @@ bool set_oppose_acid(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2847,8 +2773,6 @@ bool set_oppose_elec(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2905,8 +2829,6 @@ bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -2962,8 +2884,6 @@ bool set_oppose_cold(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -3020,8 +2940,6 @@ bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -3180,8 +3098,6 @@ bool set_stun(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -3379,8 +3295,6 @@ bool set_cut(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -3579,8 +3493,6 @@ bool set_food(TIME_EFFECT v)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -4890,8 +4802,6 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -4944,8 +4854,6 @@ bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 
@@ -4998,8 +4906,6 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 
 	/* Handle stuff */
 	handle_stuff();
-
-	/* Result */
 	return (TRUE);
 }
 

@@ -763,8 +763,6 @@ OBJECT_IDX get_obj_num(DEPTH level)
 		if (table[i].level < table[j].level) i = j;
 	}
 
-
-	/* Result */
 	return (table[i].index);
 }
 
@@ -2134,8 +2132,6 @@ int m_bonus(int max, DEPTH level)
 
 	/* Enforce the maximum value */
 	if (value > max) return (max);
-
-	/* Result */
 	return (value);
 }
 
@@ -5441,8 +5437,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
 	}
 
-
-	/* Result */
 	return (o_idx);
 }
 
