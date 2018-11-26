@@ -244,7 +244,7 @@ static cptr desc_moan[] =
 * @return なし
 */
 static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
-	int(*dam_func)(HIT_POINT dam, cptr kb_str, int monspell, bool aura), cptr message)
+	HIT_POINT(*dam_func)(HIT_POINT dam, cptr kb_str, int monspell, bool aura), cptr message)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 

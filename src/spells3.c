@@ -3913,17 +3913,18 @@ bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
  */
 void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX use_realm)
 {
-	int             i, spell, exp_level, increment = 64;
+	int i;
+	SPELL_IDX spell;
+	int  exp_level, increment = 64;
 	const magic_type *s_ptr;
-	cptr            comment;
-	char            info[80];
-	char            out_val[160];
-	byte            line_attr;
-	int             need_mana;
-	char            ryakuji[5];
-	char            buf[256];
+	cptr comment;
+	char info[80];
+	char out_val[160];
+	byte line_attr;
+	MANA_POINT need_mana;
+	char ryakuji[5];
+	char buf[256];
 	bool max = FALSE;
-
 
 	if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && p_ptr->wizard)
 	msg_print(_("警告！ print_spell が領域なしに呼ばれた", "Warning! print_spells called with null realm"));
@@ -3945,10 +3946,8 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 	/* Dump the spells */
 	for (i = 0; i < num; i++)
 	{
-		/* Access the spell */
 		spell = spells[i];
 
-		/* Access the spell */
 		if (!is_magic(use_realm))
 		{
 			s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
@@ -4361,16 +4360,11 @@ int inven_damage(inven_func typ, int perc)
 				msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
 
 #ifdef JP
-o_name, index_to_label(i),
-    ((o_ptr->number > 1) ?
-    ((amt == o_ptr->number) ? "全部" :
-    (amt > 1 ? "何個か" : "一個")) : "")    );
+				o_name, index_to_label(i), ((o_ptr->number > 1) ?
+				((amt == o_ptr->number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : "")    );
 #else
-				    ((o_ptr->number > 1) ?
-				    ((amt == o_ptr->number) ? "All of y" :
-				    (amt > 1 ? "Some of y" : "One of y")) : "Y"),
-				    o_name, index_to_label(i),
-				    ((amt > 1) ? "were" : "was"));
+				((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "All of y" :
+				(amt > 1 ? "Some of y" : "One of y")) : "Y"), o_name, index_to_label(i), ((amt > 1) ? "were" : "was"));
 #endif
 
 #ifdef JP
@@ -4414,7 +4408,7 @@ static int minus_ac(void)
 {
 	object_type *o_ptr = NULL;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	char        o_name[MAX_NLEN];
+	char o_name[MAX_NLEN];
 
 
 	/* Pick a (possibly empty) inventory slot */
@@ -4458,7 +4452,6 @@ static int minus_ac(void)
 
 	/* Calculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
 	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp();
@@ -4477,9 +4470,9 @@ static int minus_ac(void)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int acid_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
+HIT_POINT acid_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
-	int get_damage;  
+	HIT_POINT get_damage;  
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_ACID();
 
@@ -4527,9 +4520,9 @@ int acid_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int elec_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
+HIT_POINT elec_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
-	int get_damage;  
+	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_ELEC();
 
@@ -4576,9 +4569,9 @@ int elec_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int fire_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
+HIT_POINT fire_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
-	int get_damage;  
+	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_FIRE();
 
@@ -4625,9 +4618,9 @@ int fire_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
  * @param aura オーラよるダメージが原因ならばTRUE
  * @return 修正HPダメージ量
  */
-int cold_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
+HIT_POINT cold_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 {
-	int get_damage;  
+	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_COLD();
 
