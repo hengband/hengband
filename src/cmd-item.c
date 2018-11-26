@@ -1282,20 +1282,15 @@ static void do_cmd_refill_torch(void)
 
 	cptr q, s;
 
-
 	/* Restrict the choices */
 	item_tester_hook = item_tester_refill_torch;
 
-#ifdef JP
-	q = "どの松明で明かりを強めますか? ";
-	s = "他に松明がない。";
-#else
-	q = "Refuel with which torch? ";
-	s = "You have no extra torches.";
-#endif
+	q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
+	s = _("他に松明がない。", "You have no extra torches.");
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
+	o_ptr = ref_item(p_ptr, item);
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
