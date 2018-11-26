@@ -3443,7 +3443,6 @@ void display_spell_list(void)
 	if (p_ptr->pclass == CLASS_SORCERER) return;
 	if (p_ptr->pclass == CLASS_RED_MAGE) return;
 
-	/* Snipers */
 	if (p_ptr->pclass == CLASS_SNIPER)
 	{
 		display_snipe_list();
@@ -3644,7 +3643,7 @@ void display_spell_list(void)
  * @param use_realm 魔法領域
  * @return 経験値
  */
-s16b experience_of_spell(int spell, int use_realm)
+EXP experience_of_spell(SPELL_IDX spell, REALM_IDX use_realm)
 {
 	if (p_ptr->pclass == CLASS_SORCERER) return SPELL_EXP_MASTER;
 	else if (p_ptr->pclass == CLASS_RED_MAGE) return SPELL_EXP_SKILLED;
@@ -3662,7 +3661,7 @@ s16b experience_of_spell(int spell, int use_realm)
  * @param realm 魔法領域
  * @return 消費MP
  */
-int mod_need_mana(int need_mana, int spell, int realm)
+MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
 {
 #define MANA_CONST   2400
 #define MANA_DIV        4
@@ -3836,7 +3835,7 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 	if ((use_realm == p_ptr->realm1) || (use_realm == p_ptr->realm2)
 	    || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
 	{
-		s16b exp = experience_of_spell(spell, use_realm);
+		EXP exp = experience_of_spell(spell, use_realm);
 		if (exp >= SPELL_EXP_EXPERT) chance--;
 		if (exp >= SPELL_EXP_MASTER) chance--;
 	}
@@ -3963,7 +3962,7 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 			need_mana = s_ptr->smana;
 		else
 		{
-			s16b exp = experience_of_spell(spell, use_realm);
+			EXP exp = experience_of_spell(spell, use_realm);
 
 			/* Extract mana consumption rate */
 			need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
