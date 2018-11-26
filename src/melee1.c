@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
+#include "player-damage.h"
 
 
 

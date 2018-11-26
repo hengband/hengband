@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "trap.h"
+#include "player-damage.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 
