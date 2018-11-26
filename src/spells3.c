@@ -4112,27 +4112,21 @@ bool rustproof(void)
 	if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr))
 	{
 #ifdef JP
-msg_format("%sは新品同様になった！",o_name);
+		msg_format("%sは新品同様になった！",o_name);
 #else
-		msg_format("%s %s look%s as good as new!",
-			((item >= 0) ? "Your" : "The"), o_name,
-			((o_ptr->number > 1) ? "" : "s"));
+		msg_format("%s %s look%s as good as new!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
 		o_ptr->to_a = 0;
 	}
 
 #ifdef JP
-msg_format("%sは腐食しなくなった。", o_name);
+	msg_format("%sは腐食しなくなった。", o_name);
 #else
-	msg_format("%s %s %s now protected against corrosion.",
-		((item >= 0) ? "Your" : "The"), o_name,
-		((o_ptr->number > 1) ? "are" : "is"));
+	msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "are" : "is"));
 #endif
 
-
 	calc_android_exp();
-
 	return TRUE;
 }
 
