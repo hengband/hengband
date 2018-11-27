@@ -1237,7 +1237,6 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	/* Save the screen */
 	screen_save();
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Display Item name */
@@ -1662,7 +1661,6 @@ void display_inven(void)
 	char            o_name[MAX_NLEN];
 	int             wid, hgt;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Find the "final" slot */
@@ -1758,7 +1756,6 @@ void display_equip(void)
 	char            o_name[MAX_NLEN];
 	int             wid, hgt;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Display the equipment */
@@ -2159,7 +2156,6 @@ COMMAND_CODE show_inven(int target_item)
 	/* Starting column */
 	col = command_gap;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Default "max-length" */
@@ -2326,7 +2322,6 @@ COMMAND_CODE show_equip(int target_item)
 	/* Starting column */
 	col = command_gap;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Maximal length */
@@ -3617,7 +3612,6 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 
 	bool dont_need_to_show_weights = TRUE;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Default length */

@@ -4443,7 +4443,6 @@ static void draw_text_editor(text_body_type *tb)
 	int i;
 	int by1 = 0, by2 = 0;
 
-	/* Get size */
 	Term_get_size(&tb->wid, &tb->hgt);
 
 	/*

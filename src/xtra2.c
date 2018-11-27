@@ -2037,7 +2037,6 @@ void panel_bounds_center(void)
 {
 	int wid, hgt;
 
-	/* Get size */
 	get_screen_size(&wid, &hgt);
 
 	panel_row_max = panel_row_min + hgt - 1;
@@ -2133,7 +2132,6 @@ bool change_panel(POSITION dy, POSITION dx)
 	POSITION y, x;
 	TERM_LEN wid, hgt;
 
-	/* Get size */
 	get_screen_size(&wid, &hgt);
 
 	/* Apply the motion */
@@ -2189,7 +2187,6 @@ static bool change_panel_xy(POSITION y, POSITION x)
 	POSITION dy = 0, dx = 0;
 	TERM_LEN wid, hgt;
 
-	/* Get size */
 	get_screen_size(&wid, &hgt);
 
 	if (y < panel_row_min) dy = -1;
@@ -2223,7 +2220,6 @@ void verify_panel(void)
 	int max_prow_min;
 	int max_pcol_min;
 
-	/* Get size */
 	get_screen_size(&wid, &hgt);
 
 	max_prow_min = cur_hgt - hgt;
@@ -3559,7 +3555,6 @@ bool target_set(BIT_FLAGS mode)
 
 	int wid, hgt;
 	
-	/* Get size */
 	get_screen_size(&wid, &hgt);
 
 	/* Cancel target */
@@ -5119,7 +5114,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 
 	int wid, hgt;
 
-	/* Get size */
 	get_screen_size(&wid, &hgt);
 
 	x = p_ptr->x;

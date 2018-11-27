@@ -78,7 +78,6 @@ void do_cmd_inven(void)
 	{
 		int wid, hgt;
 
-		/* Get size */
 		Term_get_size(&wid, &hgt);
 
 		/* Reset stuff */
@@ -149,7 +148,6 @@ void do_cmd_equip(void)
 	{
 		int wid, hgt;
 
-		/* Get size */
 		Term_get_size(&wid, &hgt);
 
 		/* Reset stuff */
@@ -1460,7 +1458,6 @@ void do_cmd_locate(void)
 
 	int wid, hgt;
 
-	/* Get size */
 	get_screen_size(&wid, &hgt);
 
 

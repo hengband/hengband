@@ -1132,7 +1132,6 @@ bool build_type10(void)
 {
 	POSITION y0, x0, xsize, ysize, vtype;
 
-	/* Get size */
 	/* big enough to look good, small enough to be fairly common. */
 	xsize = randint1(22) + 22;
 	ysize = randint1(11) + 11;

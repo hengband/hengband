@@ -1168,7 +1168,6 @@ void do_cmd_messages(int num_now)
 	int wid, hgt;
 	int num_lines;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Number of message lines in a screen */
@@ -6186,8 +6185,7 @@ static void do_cmd_knowledge_kill_count(void)
 #ifdef JP
 	fprintf(fff,"    合計: %lu 体を倒した。\n", (unsigned long int)Total);
 #else
-	fprintf(fff,"   Total: %lu creature%s killed.\n",
-		(unsigned long int)Total, (Total == 1 ? "" : "s"));
+	fprintf(fff,"   Total: %lu creature%s killed.\n", (unsigned long int)Total, (Total == 1 ? "" : "s"));
 #endif
 
 
@@ -6218,8 +6216,7 @@ static void do_cmd_knowledge_kill_count(void)
  * @param grp_top 現在の選択リスト最上部ID
  * @return なし
  */
-static void display_group_list(int col, int row, int wid, int per_page,
-	IDX grp_idx[], cptr group_text[], int grp_cur, int grp_top)
+static void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], cptr group_text[], int grp_cur, int grp_top)
 {
 	int i;
 
@@ -6276,7 +6273,6 @@ static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt,
 		int browser_rows;
 		int wid, hgt;
 
-		/* Get size */
 		Term_get_size(&wid, &hgt);
 
 		browser_rows = hgt - 8;
@@ -6654,7 +6650,6 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 
 	BIT_FLAGS8 mode;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	browser_rows = hgt - 8;
@@ -7035,7 +7030,6 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 
 	byte mode;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	browser_rows = hgt - 8;
@@ -7403,7 +7397,6 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 	(void)C_WIPE(attr_old, F_LIT_MAX, byte);
 	(void)C_WIPE(char_old, F_LIT_MAX, byte);
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	browser_rows = hgt - 8;

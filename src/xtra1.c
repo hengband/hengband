@@ -2009,7 +2009,6 @@ static void fix_message(void)
 		/* Activate */
 		Term_activate(angband_term[j]);
 
-		/* Get size */
 		Term_get_size(&w, &h);
 
 		/* Dump messages */

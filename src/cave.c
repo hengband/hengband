@@ -1663,7 +1663,6 @@ void prt_map(void)
 
 	int wid, hgt;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 
 	/* Remove map offset */
@@ -1929,7 +1928,6 @@ void display_map(int *cy, int *cx)
 	int **match_autopick_yx;
 	object_type ***object_autopick_yx;
 
-	/* Get size */
 	Term_get_size(&wid, &hgt);
 	hgt -= 2;
 	wid -= 14;
