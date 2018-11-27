@@ -1290,7 +1290,6 @@ static void do_cmd_refill_torch(void)
 
 	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
-	o_ptr = ref_item(p_ptr, item);
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
