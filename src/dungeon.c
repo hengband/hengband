@@ -1363,7 +1363,6 @@ static void process_world_aux_digestion(void)
 				/* Calculate damage */
 				HIT_POINT dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
 
-				/* Take damage */
 				if (!IS_INVULN()) take_hit(DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
 			}
 		}
@@ -1390,7 +1389,6 @@ static void process_world_aux_hp_and_sp(void)
 	/* Take damage from poison */
 	if (p_ptr->poisoned && !IS_INVULN())
 	{
-		/* Take damage */
 		take_hit(DAMAGE_NOESCAPE, 1, _("毒", "poison"), -1);
 	}
 
@@ -1437,7 +1435,6 @@ static void process_world_aux_hp_and_sp(void)
 			dam = 1;
 		}
 
-		/* Take damage */
 		take_hit(DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"), -1);
 	}
 
@@ -1448,7 +1445,6 @@ static void process_world_aux_hp_and_sp(void)
 		{
 			if ((cave[p_ptr->y][p_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
-				/* Take damage */
 				msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
 				take_hit(DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
 				cave_no_regen = TRUE;
@@ -1520,7 +1516,6 @@ static void process_world_aux_hp_and_sp(void)
 	{
 		if (p_ptr->total_weight > weight_limit())
 		{
-			/* Take damage */
 			msg_print(_("溺れている！", "You are drowning!"));
 			take_hit(DAMAGE_NOESCAPE, randint1(p_ptr->lev), _("溺れ", "drowning"), -1);
 			cave_no_regen = TRUE;

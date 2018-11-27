@@ -433,7 +433,6 @@ HIT_POINT acid_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 		if (minus_ac()) dam = (dam + 1) / 2;
 	}
 
-	/* Take damage */
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
@@ -481,7 +480,6 @@ HIT_POINT elec_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(A_DEX);
 	}
 
-	/* Take damage */
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
@@ -530,7 +528,6 @@ HIT_POINT fire_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(A_STR);
 	}
 
-	/* Take damage */
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
@@ -578,7 +575,6 @@ HIT_POINT cold_dam(HIT_POINT dam, cptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(A_STR);
 	}
 
-	/* Take damage */
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
