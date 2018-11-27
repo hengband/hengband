@@ -1707,8 +1707,6 @@ static void fix_inven(void)
 
 		/* Display inventory */
 		display_inven();
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -1866,8 +1864,6 @@ static void fix_monster_list(void)
 
 		target_set_prepare_look();//モンスター一覧を生成，ソート
 		print_monster_list(0, 0, h);
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -1902,8 +1898,6 @@ static void fix_equip(void)
 
 		/* Display equipment */
 		display_equip();
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -1937,8 +1931,6 @@ static void fix_spell(void)
 
 		/* Display spell list */
 		display_spell_list();
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -1974,8 +1966,6 @@ static void fix_player(void)
 
 		/* Display player */
 		display_player(0);
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -2023,8 +2013,6 @@ static void fix_message(void)
 			/* Clear to end of line */
 			Term_erase(x, y, 255);
 		}
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -2068,8 +2056,6 @@ static void fix_overhead(void)
 		{
 			/* Redraw map */
 			display_map(&cy, &cx);
-
-			/* Fresh */
 			Term_fresh();
 		}
 
@@ -2104,8 +2090,6 @@ static void fix_dungeon(void)
 
 		/* Redraw dungeon view */
 		display_dungeon();
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -2139,8 +2123,6 @@ static void fix_monster(void)
 
 		/* Display monster race info */
 		if (p_ptr->monster_race_idx) display_roff(p_ptr->monster_race_idx);
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */
@@ -2174,8 +2156,6 @@ static void fix_object(void)
 
 		/* Display monster race info */
 		if (p_ptr->object_kind_idx) display_koff(p_ptr->object_kind_idx);
-
-		/* Fresh */
 		Term_fresh();
 
 		/* Restore */

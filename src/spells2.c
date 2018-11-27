@@ -1125,13 +1125,10 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 
 	/* Redraw */
 	p_ptr->redraw |= (PR_HP);
-
 	p_ptr->window |= (PW_PLAYER);
 
 	/* Handle */
 	handle_stuff();
-
-	/* Fresh */
 	Term_fresh();
 
 	/* Delay */
