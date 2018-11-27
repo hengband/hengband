@@ -1636,7 +1636,6 @@ static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 			delete_object_idx(0 - item);
 		}
 
-		/* Print a message */
 		msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), o_name);
 	}
 }

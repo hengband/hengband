@@ -21,6 +21,7 @@
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
 
+#include "player-item.h"
 #include "object-hook.h"
 
 
@@ -1288,7 +1289,7 @@ static void do_cmd_refill_torch(void)
 	q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
 	s = _("他に松明がない。", "You have no extra torches.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

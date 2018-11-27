@@ -5641,14 +5641,12 @@ void inven_item_charges(INVENTORY_IDX item)
 	/* Multiple charges */
 	if (o_ptr->pval != 1)
 	{
-		/* Print a message */
 		msg_format("You have %d charges remaining.", o_ptr->pval);
 	}
 
 	/* Single charge */
 	else
 	{
-		/* Print a message */
 		msg_format("You have %d charge remaining.", o_ptr->pval);
 	}
 #endif
@@ -5669,7 +5667,6 @@ void inven_item_describe(INVENTORY_IDX item)
 	/* Get a description */
 	object_desc(o_name, o_ptr, 0);
 
-	/* Print a message */
 #ifdef JP
 	/* "no more" の場合はこちらで表示する */
 	if (o_ptr->number <= 0)
@@ -5689,7 +5686,7 @@ void inven_item_describe(INVENTORY_IDX item)
 }
 
 /*!
- * @brief アイテムの残り所持数メッセージを表示する /
+ * @brief アイテムを増やし残り所持数メッセージを表示する /
  * Increase the "number" of an item in the inventory
  * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
  * @param num 増やしたい量
@@ -5834,14 +5831,12 @@ void floor_item_charges(INVENTORY_IDX item)
 	/* Multiple charges */
 	if (o_ptr->pval != 1)
 	{
-		/* Print a message */
 		msg_format("There are %d charges remaining.", o_ptr->pval);
 	}
 
 	/* Single charge */
 	else
 	{
-		/* Print a message */
 		msg_format("There is %d charge remaining.", o_ptr->pval);
 	}
 #endif
@@ -5862,7 +5857,6 @@ void floor_item_describe(INVENTORY_IDX item)
 	/* Get a description */
 	object_desc(o_name, o_ptr, 0);
 
-	/* Print a message */
 #ifdef JP
 	/* "no more" の場合はこちらで表示を分ける */
 	if (o_ptr->number <= 0)

@@ -5637,7 +5637,6 @@ static void do_cmd_knowledge_uniques(void)
 	{
 		monster_race *r_ptr = &r_info[who[k]];
 
-		/* Print a message */
 		fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, (int)r_ptr->level);
 	}
 
@@ -6140,9 +6139,7 @@ static void do_cmd_knowledge_kill_count(void)
 
 			if (dead)
 			{
-				/* Print a message */
-				fprintf(fff, "     %s\n",
-				    (r_name + r_ptr->name));
+				fprintf(fff, "     %s\n", (r_name + r_ptr->name));
 				Total++;
 			}
 		}
