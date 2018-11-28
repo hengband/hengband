@@ -97,9 +97,7 @@ u32b seed_town;			/* Hack -- consistent town layout */
 s16b command_cmd;		/* Current "Angband Command" */
 
 COMMAND_ARG command_arg;	/*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */
-
 COMMAND_NUM command_rep;	/*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
-
 DIRECTION command_dir;		/*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
 
 s16b command_see;		/* See "object1.c" */
@@ -325,26 +323,15 @@ u32b *message__ptr;
  */
 char *message__buf;
 
-
-/*
- * The array of normal options
- */
-u32b option_flag[8];
-u32b option_mask[8];
-
-
-/*
- * The array of window options
- */
-u32b window_flag[8];
-u32b window_mask[8];
-
+BIT_FLAGS option_flag[8]; //!< The array of normal options
+BIT_FLAGS option_mask[8]; //!< The array of normal options
+BIT_FLAGS window_flag[8]; //!< The array of window options
+BIT_FLAGS window_mask[8]; //!< The array of window options
 
 /*
  * The array of window pointers
  */
 term *angband_term[8];
-
 
 /*
  * Standard window names
@@ -687,112 +674,30 @@ char *d_name;
 char *d_text;
 
 
-/*
- * Hack -- The special Angband "System Suffix"
- * This variable is used to choose an appropriate "pref-xxx" file
- */
-cptr ANGBAND_SYS = "xxx";
+cptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
-/*
- * Hack -- The special Angband "Keyboard Suffix"
- * This variable is used to choose an appropriate macro-trigger definition
- */
+
 #ifdef JP
-cptr ANGBAND_KEYBOARD = "JAPAN";
+cptr ANGBAND_KEYBOARD = "JAPAN"; //!< Hack -- The special Angband "Keyboard Suffix" This variable is used to choose an appropriate macro-trigger definition
 #else
 cptr ANGBAND_KEYBOARD = "0";
 #endif
 
-/*
- * Hack -- The special Angband "Graphics Suffix"
- * This variable is used to choose an appropriate "graf-xxx" file
- */
-cptr ANGBAND_GRAF = "ascii";
-
-/*
- * Path name: The main "lib" directory
- * This variable is not actually used anywhere in the code
- */
-cptr ANGBAND_DIR;
-
-/*
- * High score files (binary)
- * These files may be portable between platforms
- */
-cptr ANGBAND_DIR_APEX;
-
-/*
- * Bone files for player ghosts (ascii)
- * These files are portable between platforms
- */
-cptr ANGBAND_DIR_BONE;
-
-/*
- * Binary image files for the "*_info" arrays (binary)
- * These files are not portable between platforms
- */
-cptr ANGBAND_DIR_DATA;
-
-/*
- * Textual template files for the "*_info" arrays (ascii)
- * These files are portable between platforms
- */
-cptr ANGBAND_DIR_EDIT;
-
-/*
- * Script files
- * These files are portable between platforms.
- */
-cptr ANGBAND_DIR_SCRIPT;
-
-/*
- * Various extra files (ascii)
- * These files may be portable between platforms
- */
-cptr ANGBAND_DIR_FILE;
-
-/*
- * Help files (normal) for the online help (ascii)
- * These files are portable between platforms
- */
-cptr ANGBAND_DIR_HELP;
-
-/*
- * Help files (spoilers) for the online help (ascii)
- * These files are portable between platforms
- */
-cptr ANGBAND_DIR_INFO;
-
-/*
- * Default user "preference" files (ascii)
- * These files are rarely portable between platforms
- */
-cptr ANGBAND_DIR_PREF;
-
-/*
- * Savefiles for current characters (binary)
- * These files are portable between platforms
- */
-cptr ANGBAND_DIR_SAVE;
-
-/*
- * User "preference" files (ascii)
- * These files are rarely portable between platforms
- */
-cptr ANGBAND_DIR_USER;
-
-/*
- * Various extra files (binary)
- * These files are rarely portable between platforms
- */
-cptr ANGBAND_DIR_XTRA;
-
-
-/*
- * Total Hack -- allow all items to be listed (even empty ones)
- * This is only used by "do_cmd_inven_e()" and is cleared there.
- */
-bool item_tester_full;
+cptr ANGBAND_GRAF = "ascii"; //!< Hack -- The special Angband "Graphics Suffix" This variable is used to choose an appropriate "graf-xxx" file
+cptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
+cptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
+cptr ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files are portable between platforms
+cptr ANGBAND_DIR_DATA; //!< Binary image files for the "*_info" arrays (binary) These files are not portable between platforms
+cptr ANGBAND_DIR_EDIT; //!< Textual template files for the "*_info" arrays (ascii) These files are portable between platforms
+cptr ANGBAND_DIR_SCRIPT; //!< Script files These files are portable between platforms.
+cptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
+cptr ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) These files are portable between platforms
+cptr ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
+cptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
+cptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
+cptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
+cptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
+bool item_tester_full; //!< Total Hack -- allow all items to be listed (even empty ones) This is only used by "do_cmd_inven_e()" and is cleared there.
 
 bool item_tester_no_ryoute = FALSE;
 

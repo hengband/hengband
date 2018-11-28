@@ -470,11 +470,9 @@ void compact_monsters(int size)
 			if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 			{
 				char m_name[80];
-
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
 			}
-
 
 			delete_monster_idx(i);
 
@@ -589,7 +587,6 @@ MONSTER_IDX m_pop(void)
 {
 	MONSTER_IDX i;
 
-
 	/* Normal allocation */
 	if (m_max < max_m_idx)
 	{
@@ -605,7 +602,6 @@ MONSTER_IDX m_pop(void)
 		/* Return the index */
 		return (i);
 	}
-
 
 	/* Recycle dead monsters */
 	for (i = 1; i < m_max; i++)
@@ -624,7 +620,6 @@ MONSTER_IDX m_pop(void)
 		/* Use this monster */
 		return (i);
 	}
-
 
 	/* Warn the player (except during dungeon creation) */
 	if (character_dungeon) msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
