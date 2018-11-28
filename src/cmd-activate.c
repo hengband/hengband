@@ -1485,12 +1485,10 @@ bool activate_artifact(object_type *o_ptr)
 
 				msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
 				/* Hack -- Bypass free action */
-				(void)set_paralyzed(p_ptr->paralyzed +
-					randint1(5 * oops + 1));
+				(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
 
 				/* Confusing. */
-				(void)set_confused(p_ptr->confused +
-					randint1(5 * oops + 1));
+				(void)set_confused(p_ptr->confused + randint1(5 * oops + 1));
 			}
 
 			/* Redraw mana */
@@ -1498,12 +1496,10 @@ bool activate_artifact(object_type *o_ptr)
 		}
 		take_hit(DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"), -1);
 		/* Confusing. */
-		if (one_in_(5)) (void)set_confused(p_ptr->confused +
-			randint1(10));
+		if (one_in_(5)) (void)set_confused(p_ptr->confused + randint1(10));
 
 		/* Exercise a little care... */
-		if (one_in_(20))
-			take_hit(DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
+		if (one_in_(20)) take_hit(DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
 		break;
 	}
 
