@@ -990,7 +990,6 @@ bool apply_disenchant(BIT_FLAGS mode)
 	}
 
 
-	/* Describe the object */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 
@@ -1972,7 +1971,6 @@ bool alchemy(void)
 	}
 
 
-	/* Describe the object */
 	old_number = o_ptr->number;
 	o_ptr->number = amt;
 	object_desc(o_name, o_ptr, 0);
@@ -4477,7 +4475,6 @@ bool polymorph_monster(POSITION y, POSITION x)
 				/* Acquire next object */
 				next_o_idx = o_list[this_o_idx].next_o_idx;
 
-				/* Delete the object */
 				delete_object_idx(this_o_idx);
 			}
 		}

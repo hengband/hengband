@@ -278,7 +278,6 @@ void delete_monster_idx(MONSTER_IDX i)
 		 * to prevent calling lite_spot()
 		 */
 
-		/* Delete the object */
 		delete_object_idx(this_o_idx);
 	}
 
@@ -4582,7 +4581,6 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 		/* Forget monster */
 		q_ptr->held_m_idx = 0;
 
-		/* Delete the object */
 		delete_object_idx(this_o_idx);
 
 		/* Drop it */

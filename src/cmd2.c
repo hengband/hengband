@@ -2729,7 +2729,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 	/* Sniper - Cannot shot a single arrow twice */
 	if ((snipe_type == SP_DOUBLE) && (o_ptr->number < 2)) snipe_type = SP_NONE;
 
-	/* Describe the object */
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Use the proper number of shots */

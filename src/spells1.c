@@ -753,7 +753,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_GRAVITY:
 			message = _("粉砕された", "was crushed."); break;
 		default:
-			message = NULL;break;
+			message = NULL; break;
 		}
 		if (message)
 		{
@@ -1559,9 +1559,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				k_idx = o_ptr->k_idx;
 				is_potion = object_is_potion(o_ptr);
-
-
-				/* Delete the object */
 				delete_object_idx(this_o_idx);
 
 				/* Potions produce effects when 'shattered' */

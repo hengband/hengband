@@ -1999,7 +1999,6 @@ static bool kankin(void)
 				 */
 				item_new = inven_carry(&forge);
 
-				/* Describe the object */
 				object_desc(o_name, &forge, 0);
 				msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 

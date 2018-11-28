@@ -2184,7 +2184,6 @@ COMMAND_CODE show_inven(int target_item)
 		/* Is this item acceptable? */
 		if (!item_tester_okay(o_ptr)) continue;
 
-		/* Describe the object */
 		object_desc(o_name, o_ptr, 0);
 
 		/* Save the object index, color, and description */
@@ -3624,7 +3623,6 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	{
 		o_ptr = &o_list[floor_list[i]];
 
-		/* Describe the object */
 		object_desc(o_name, o_ptr, 0);
 
 		/* Save the index */
@@ -4984,7 +4982,6 @@ void py_pickup_floor(bool pickup)
 		/* Access the object */
 		o_ptr = &o_list[this_o_idx];
 
-		/* Describe the object */
 		object_desc(o_name, o_ptr, 0);
 
 		/* Access the next object */
@@ -5063,7 +5060,6 @@ void py_pickup_floor(bool pickup)
 
 #endif /* ALLOW_EASY_SENSE */
 
-			/* Describe the object */
 			object_desc(o_name, o_ptr, 0);
 
 			msg_format(_("%sがある。", "You see %s."), o_name);
@@ -5098,7 +5094,6 @@ void py_pickup_floor(bool pickup)
 
 #endif /* ALLOW_EASY_SENSE */
 
-			/* Describe the object */
 			object_desc(o_name, o_ptr, 0);
 
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
@@ -5136,7 +5131,6 @@ void py_pickup_floor(bool pickup)
 
 #endif /* ALLOW_EASY_SENSE */
 
-			/* Describe the object */
 			object_desc(o_name, o_ptr, 0);
 
 			/* Build a prompt */

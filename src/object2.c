@@ -437,7 +437,6 @@ void compact_objects(int size)
 			/* Apply the saving throw */
 			if (randint0(100) < chance) continue;
 
-			/* Delete the object */
 			delete_object_idx(i);
 
 			/* Count it */
@@ -5916,7 +5915,6 @@ void floor_item_optimize(INVENTORY_IDX item)
 	/* Only optimize empty items */
 	if (o_ptr->number) return;
 
-	/* Delete the object */
 	delete_object_idx(item);
 }
 
@@ -6221,7 +6219,6 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 	/* Modify quantity */
 	q_ptr->number = amt;
 
-	/* Describe the object */
 	object_desc(o_name, q_ptr, 0);
 
 	/* Took off weapon */

@@ -2285,18 +2285,17 @@ static void display_entry(int pos)
 		/* Leave room for weights, if necessary -DRS- */
 		if (show_weights) maxwid -= 10;
 
-		/* Describe the object */
 		object_desc(o_name, o_ptr, 0);
 		o_name[maxwid] = '\0';
 		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, cur_col);
 
 		/* Show weights */
-		if (show_weights)
+		if(show_weights)
 		{
 			/* Only show the weight of an individual item */
 			int wgt = o_ptr->weight;
 #ifdef JP
-			sprintf(out_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt) );
+			sprintf(out_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt));
 			put_str(out_val, i+6, 67);
 #else
 			(void)sprintf(out_val, "%3d.%d lb", wgt / 10, wgt % 10);

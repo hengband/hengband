@@ -3223,7 +3223,6 @@ void process_monster(MONSTER_IDX m_idx)
 							msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
 						}
 
-						/* Delete the object */
 						delete_object_idx(this_o_idx);
 					}
 				}

@@ -475,7 +475,6 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	o_ptr = &o_list[o_idx];
 
 #ifdef JP
-	/* Describe the object */
 	object_desc(old_name, o_ptr, OD_NAME_ONLY);
 	object_desc_kosuu(kazu_str, o_ptr);
 	hirottakazu = o_ptr->number;
@@ -486,7 +485,6 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	/* Get the object again */
 	o_ptr = &inventory[slot];
 
-	/* Delete the object */
 	delete_object_idx(o_idx);
 
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
@@ -500,7 +498,6 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 		if (o_ptr->marked & OM_AUTODESTROY) return;
 	}
 
-	/* Describe the object */
 	object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
@@ -596,7 +593,6 @@ void carry(bool pickup)
 
 #endif /* ALLOW_EASY_SENSE -- TNB */
 
-		/* Describe the object */
 		object_desc(o_name, o_ptr, 0);
 
 		/* Acquire next object */
@@ -636,7 +632,6 @@ void carry(bool pickup)
 				/* Clear the flag. */
 				o_ptr->marked &= ~OM_NOMSG;
 			}
-			/* Describe the object */
 			else if (!pickup)
 			{
 				msg_format(_("%sがある。", "You see %s."), o_name);

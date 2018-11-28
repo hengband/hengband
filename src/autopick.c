@@ -1727,7 +1727,6 @@ void autopick_pickup_items(cave_type *c_ptr)
 			{
 				char o_name[MAX_NLEN];
 
-				/* Describe the object */
 				object_desc(o_name, o_ptr, 0);
 
 				msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
@@ -1747,7 +1746,6 @@ void autopick_pickup_items(cave_type *c_ptr)
 					continue;
 				}
 
-				/* Describe the object */
 				object_desc(o_name, o_ptr, 0);
 
 				sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);

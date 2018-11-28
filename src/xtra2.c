@@ -3153,7 +3153,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			/* Obtain an object description */
 			object_desc(o_name, o_ptr, 0);
 
-			/* Describe the object */
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
 #else
@@ -3198,15 +3197,12 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 				/* Acquire object */
 				o_ptr = &o_list[floor_list[0]];
 
-				/* Describe the object */
 				object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
-				sprintf(out_val, "%s%s%s%s[%s]",
-					s1, o_name, s2, s3, info);
+				sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
 #else
-				sprintf(out_val, "%s%s%s%s [%s]",
-					s1, s2, s3, o_name, info);
+				sprintf(out_val, "%s%s%s%s [%s]", s1, s2, s3, o_name, info);
 #endif
 
 				prt(out_val, 0, 0);
@@ -3327,7 +3323,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			/* Obtain an object description */
 			object_desc(o_name, o_ptr, 0);
 
-			/* Describe the object */
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
 #else

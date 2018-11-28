@@ -870,7 +870,6 @@ void do_cmd_destroy(void)
 	}
 
 
-	/* Describe the object */
 	old_number = o_ptr->number;
 	o_ptr->number = amt;
 	object_desc(o_name, o_ptr, 0);
