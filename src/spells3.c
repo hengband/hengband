@@ -973,7 +973,6 @@ bool apply_disenchant(BIT_FLAGS mode)
 		case 8: t = INVEN_FEET; break;
 	}
 
-	/* Get the item */
 	o_ptr = &inventory[t];
 
 	/* No item, nothing happens */

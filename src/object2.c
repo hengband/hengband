@@ -6355,7 +6355,6 @@ void combine_pack(void)
 		/* Combine the pack (backwards) */
 		for (i = INVEN_PACK; i > 0; i--)
 		{
-			/* Get the item */
 			o_ptr = &inventory[i];
 
 			/* Skip empty items */
@@ -6366,7 +6365,6 @@ void combine_pack(void)
 			{
 				int max_num;
 
-				/* Get the item */
 				j_ptr = &inventory[j];
 
 				/* Skip empty items */
@@ -6466,7 +6464,6 @@ void reorder_pack(void)
 		/* Mega-Hack -- allow "proper" over-flow */
 		if ((i == INVEN_PACK) && (inven_cnt == INVEN_PACK)) break;
 
-		/* Get the item */
 		o_ptr = &inventory[i];
 
 		/* Skip empty slots */

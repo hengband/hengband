@@ -2290,7 +2290,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Pick an item from the pack */
 						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
-						/* Get the item */
 						o_ptr = &inventory[i];
 
 						/* Skip non-objects */
@@ -2303,15 +2302,10 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
-						msg_format("%s(%c)を%s食べられてしまった！",
-							  o_name, index_to_label(i),
-							  ((o_ptr->number > 1) ? "一つ" : ""));
+						msg_format("%s(%c)を%s食べられてしまった！", o_name, index_to_label(i), ((o_ptr->number > 1) ? "一つ" : ""));
 #else
-						msg_format("%sour %s (%c) was eaten!",
-							   ((o_ptr->number > 1) ? "One of y" : "Y"),
-							   o_name, index_to_label(i));
+						msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
 #endif
-
 
 						/* Steal the items */
 						inven_item_increase(i, -1);

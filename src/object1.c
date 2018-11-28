@@ -2228,7 +2228,6 @@ COMMAND_CODE show_inven(int target_item)
 		/* Get the index */
 		i = out_index[j];
 
-		/* Get the item */
 		o_ptr = &inventory[i];
 
 		/* Clear the line */
@@ -2402,7 +2401,6 @@ COMMAND_CODE show_equip(int target_item)
 		/* Get the index */
 		i = out_index[j];
 
-		/* Get the item */
 		o_ptr = &inventory[i];
 
 		/* Clear the line */
@@ -3669,7 +3667,6 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 		/* Get the index */
 		m = floor_list[out_index[j]];
 
-		/* Get the item */
 		o_ptr = &o_list[m];
 
 		/* Clear the line */

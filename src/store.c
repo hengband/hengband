@@ -1575,7 +1575,6 @@ bool combine_and_reorder_home(int store_num)
 		/* Combine the items in the home (backwards) */
 		for (i = st_ptr->stock_num - 1; i > 0; i--)
 		{
-			/* Get the item */
 			o_ptr = &st_ptr->stock[i];
 
 			/* Skip empty items */
@@ -1586,7 +1585,6 @@ bool combine_and_reorder_home(int store_num)
 			{
 				int max_num;
 
-				/* Get the item */
 				j_ptr = &st_ptr->stock[j];
 
 				/* Skip empty items */
@@ -1658,7 +1656,6 @@ bool combine_and_reorder_home(int store_num)
 	/* Re-order the items in the home (forwards) */
 	for (i = 0; i < st_ptr->stock_num; i++)
 	{
-		/* Get the item */
 		o_ptr = &st_ptr->stock[i];
 
 		/* Skip empty slots */
@@ -1935,7 +1932,6 @@ static void store_item_increase(INVENTORY_IDX item, int num)
 	int 		cnt;
 	object_type *o_ptr;
 
-	/* Get the item */
 	o_ptr = &st_ptr->stock[item];
 
 	/* Verify the number */
@@ -1960,7 +1956,6 @@ static void store_item_optimize(INVENTORY_IDX item)
 	int 		j;
 	object_type *o_ptr;
 
-	/* Get the item */
 	o_ptr = &st_ptr->stock[item];
 
 	/* Must exist */
@@ -2259,10 +2254,8 @@ static void display_entry(int pos)
 	char		o_name[MAX_NLEN];
 	char		out_val[160];
 
-
 	int maxwid = 75;
 
-	/* Get the item */
 	o_ptr = &st_ptr->stock[pos];
 
 	/* Get the "offset" */
@@ -5298,7 +5291,6 @@ void store_shuffle(int which)
 	{
 		object_type *o_ptr;
 
-		/* Get the item */
 		o_ptr = &st_ptr->stock[i];
 
 		if (!object_is_artifact(o_ptr))
@@ -5310,11 +5302,7 @@ void store_shuffle(int which)
 			o_ptr->ident &= ~(IDENT_FIXED);
 
 			/* Mega-Hack -- Note that the item is "on sale" */
-#ifdef JP
-			o_ptr->inscription = quark_add("売出中");
-#else
-			o_ptr->inscription = quark_add("on sale");
-#endif
+			o_ptr->inscription = quark_add(_("売出中", "on sale"));
 		}
 	}
 }
