@@ -69,7 +69,6 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 				/* Redraw */
 				lite_spot(y, x);
 
-				/* Obvious */
 				detect = TRUE;
 			}
 		}

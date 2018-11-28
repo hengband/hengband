@@ -3710,7 +3710,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			if (!resists_tele)
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Prepare to teleport */
@@ -3734,7 +3733,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Only affect undead */
 			if (r_ptr->flags3 & (RF3_UNDEAD))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
@@ -3777,7 +3775,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Only affect evil */
 			if (r_ptr->flags3 & (RF3_EVIL))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
@@ -3817,7 +3814,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				skipped = TRUE;
 				break;
 			}
-			/* Obvious */
 			if (seen) obvious = TRUE;
 
 			/* Apply some fear */
@@ -3852,7 +3848,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Only affect undead */
 			if (r_ptr->flags3 & (RF3_UNDEAD))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
@@ -3888,7 +3883,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Only affect evil */
 			if (r_ptr->flags3 & (RF3_EVIL))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
@@ -3923,7 +3917,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Only affect good */
 			if (r_ptr->flags3 & (RF3_GOOD))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
@@ -3958,7 +3951,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Only affect non-undead */
 			if (monster_living(r_ptr))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				note = _("は身震いした。", " shudders.");
@@ -3990,7 +3982,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Only affect demons */
 			if (r_ptr->flags3 & (RF3_DEMON))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
@@ -4022,7 +4013,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				dam = 0;
 				break;
 			}
-			/* Obvious */
 			if (seen) obvious = TRUE;
 
 			note = _("は身震いした。", " shudders.");
@@ -4686,7 +4676,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			!(r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
 			!(r_ptr->flags3 & RF3_NO_STUN))
 		{
-			/* Obvious */
 			if (seen) obvious = TRUE;
 
 			/* Get stunned */
@@ -4713,7 +4702,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			 !(r_ptr->flags3 & RF3_NO_CONF) &&
 			 !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
 		{
-			/* Obvious */
 			if (seen) obvious = TRUE;
 
 			/* Already partially confused */
@@ -4739,7 +4727,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 		if (do_time)
 		{
-			/* Obvious */
 			if (seen) obvious = TRUE;
 
 			if (do_time >= m_ptr->maxhp) do_time = m_ptr->maxhp - 1;
@@ -4758,7 +4745,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		{
 			if (polymorph_monster(y, x))
 			{
-				/* Obvious */
 				if (seen) obvious = TRUE;
 
 				/* Monster polymorphs */
@@ -4783,7 +4769,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		/* Handle "teleport" */
 		if (do_dist)
 		{
-			/* Obvious */
 			if (seen) obvious = TRUE;
 
 			note = _("が消え去った！", " disappears!");

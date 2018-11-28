@@ -8428,7 +8428,6 @@ static void do_cmd_knowledge_autopick(void)
 		{
 			tmp = _("拾う", "Pickup");
 		}
-		else /* if (act & DO_QUERY_AUTOPICK) */ /* Obvious */
 		{
 			tmp = _("確認", "Query");
 		}

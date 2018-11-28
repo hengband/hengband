@@ -1987,7 +1987,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 				case RBE_HURT:
 				{
-					/* Obvious */
 					obvious = TRUE;
 
 					/* Hack -- Player armor reduces total damage */
@@ -2079,7 +2078,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 							msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
 
-							/* Obvious */
 							obvious = TRUE;
 
 							/* Heal the monster */
@@ -2114,7 +2112,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
-					/* Obvious */
 					obvious = TRUE;
 
 					/* Saving throw (unless paralyzed) based on dex and level */
@@ -2187,7 +2184,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Occasional "blink" anyway */
 						blinked = TRUE;
 
-						/* Obvious */
 						obvious = TRUE;
 
 						break;
@@ -2270,7 +2266,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						inven_item_increase(i, -1);
 						inven_item_optimize(i);
 
-						/* Obvious */
 						obvious = TRUE;
 
 						/* Blink away */
@@ -2322,7 +2317,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						inven_item_increase(i, -1);
 						inven_item_optimize(i);
 
-						/* Obvious */
 						obvious = TRUE;
 
 						break;
@@ -2363,7 +2357,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				case RBE_ACID:
 				{
 					if (explode) break;
-					/* Obvious */
 					obvious = TRUE;
 
 					msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
@@ -2383,7 +2376,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				case RBE_ELEC:
 				{
 					if (explode) break;
-					/* Obvious */
 					obvious = TRUE;
 
 					msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
@@ -2400,7 +2392,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				case RBE_FIRE:
 				{
 					if (explode) break;
-					/* Obvious */
 					obvious = TRUE;
 
 					msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
@@ -2417,7 +2408,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				case RBE_COLD:
 				{
 					if (explode) break;
-					/* Obvious */
 					obvious = TRUE;
 
 					msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
@@ -2554,12 +2544,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_STR:
 				{
-					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-					/* Damage (stat) */
 					if (do_dec_stat(A_STR)) obvious = TRUE;
 
 					break;
@@ -2567,12 +2554,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_INT:
 				{
-					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-					/* Damage (stat) */
 					if (do_dec_stat(A_INT)) obvious = TRUE;
 
 					break;
@@ -2580,12 +2564,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_WIS:
 				{
-					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-					/* Damage (stat) */
 					if (do_dec_stat(A_WIS)) obvious = TRUE;
 
 					break;
@@ -2593,12 +2574,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_DEX:
 				{
-					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-					/* Damage (stat) */
 					if (do_dec_stat(A_DEX)) obvious = TRUE;
 
 					break;
@@ -2606,12 +2584,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_CON:
 				{
-					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-					/* Damage (stat) */
 					if (do_dec_stat(A_CON)) obvious = TRUE;
 
 					break;
@@ -2619,12 +2594,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_CHR:
 				{
-					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-
-					/* Damage (stat) */
 					if (do_dec_stat(A_CHR)) obvious = TRUE;
 
 					break;
@@ -2632,7 +2604,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_ALL:
 				{
-					/* Damage (physical) */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
@@ -2650,7 +2621,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_SHATTER:
 				{
-					/* Obvious */
 					obvious = TRUE;
 
 					/* Hack -- Reduce damage based on the player armor class */
@@ -2671,7 +2641,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					s32b d = damroll(10, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
 
-					/* Obvious */
 					obvious = TRUE;
 
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
@@ -2686,7 +2655,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					s32b d = damroll(20, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
 
-					/* Obvious */
 					obvious = TRUE;
 
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
@@ -2701,7 +2669,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					s32b d = damroll(40, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
 
-					/* Obvious */
 					obvious = TRUE;
 
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
@@ -2716,7 +2683,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					s32b d = damroll(80, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
 
-					/* Obvious */
 					obvious = TRUE;
 
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
@@ -2826,7 +2792,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					s32b d = damroll(60, 6) + (p_ptr->exp / 100) * MON_DRAIN_LIFE;
 					bool resist_drain;
 
-					/* Obvious */
 					obvious = TRUE;
 
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
@@ -2882,7 +2847,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 				case RBE_DR_MANA:
 				{
-					/* Obvious */
 					obvious = TRUE;
 
 					if (CHECK_MULTISHADOW())
