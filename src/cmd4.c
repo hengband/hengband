@@ -8428,7 +8428,8 @@ static void do_cmd_knowledge_autopick(void)
 		{
 			tmp = _("拾う", "Pickup");
 		}
-		else {
+		else
+		{
 			tmp = _("確認", "Query");
 		}
 
