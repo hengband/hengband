@@ -1632,7 +1632,7 @@ bool activate_artifact(object_type *o_ptr)
 		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		tsuri_dir = dir;
+		p_ptr->fishing_dir = dir;
 		if (!cave_have_flag_bold(y, x, FF_WATER))
 		{
 			msg_print(_("そこは水辺ではない。", "There is no fishing place."));

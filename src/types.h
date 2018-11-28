@@ -1218,6 +1218,7 @@ struct player_type
 	ALIGNMENT align;				/* Good/evil/neutral */
 	POSITION run_py;
 	POSITION run_px;
+	DIRECTION fishing_dir;
 
 
 	/*** Extracted fields ***/

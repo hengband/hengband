@@ -4769,8 +4769,8 @@ static void process_player(void)
 			if (r_idx && one_in_(2))
 			{
 				POSITION y, x;
-				y = p_ptr->y + ddy[tsuri_dir];
-				x = p_ptr->x + ddx[tsuri_dir];
+				y = p_ptr->y + ddy[p_ptr->fishing_dir];
+				x = p_ptr->x + ddx[p_ptr->fishing_dir];
 				if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 				{
 					char m_name[80];

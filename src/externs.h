@@ -385,7 +385,6 @@ extern MONRACE_IDX today_mon;
 extern bool write_level;
 extern u32b playtime;
 extern u32b start_time;
-extern int tsuri_dir;
 extern bool sukekaku;
 extern bool new_mane;
 extern bool mon_fight;

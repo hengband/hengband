@@ -876,8 +876,6 @@ bool write_level;
 u32b playtime;
 u32b start_time;
 
-int tsuri_dir;
-
 bool sukekaku;
 bool new_mane;
 
