@@ -1129,7 +1129,6 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	handle_stuff();
 	Term_fresh();
 
-	/* Delay */
 	Term_xtra(TERM_XTRA_DELAY, msec);
 
 	return !resist;

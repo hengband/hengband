@@ -1180,7 +1180,6 @@ void phlogiston(void)
 
 	msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
 
-	/* Comment */
 	if (o_ptr->xtra4 >= max_flog)
 	{
 		o_ptr->xtra4 = (XTRA16)max_flog;

@@ -1211,7 +1211,6 @@ static void do_cmd_refill_lamp(void)
 
 	msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
 
-	/* Comment */
 	if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0))
 	{
 		j_ptr->xtra4 = 0;
@@ -1312,7 +1311,6 @@ static void do_cmd_refill_torch(void)
 
 	msg_print(_("松明を結合した。", "You combine the torches."));
 
-	/* Comment */
 	if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0))
 	{
 		j_ptr->xtra4 = 0;

@@ -721,7 +721,6 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 		/* Redraw stuff */
 		if (p_ptr->window) window_stuff();
 
-		/* Delay */
 		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
 	}
 

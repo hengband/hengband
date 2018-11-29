@@ -4757,7 +4757,6 @@ static void process_player(void)
 
 	if (p_ptr->action == ACTION_FISH)
 	{
-		/* Delay */
 		Term_xtra(TERM_XTRA_DELAY, 10);
 		if (one_in_(1000))
 		{

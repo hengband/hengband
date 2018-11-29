@@ -564,7 +564,6 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	/* Item was worthless, but we bought it */
 	if ((value <= 0) && (price > value))
 	{
-		/* Comment */
 		msg_print(comment_7a[randint0(MAX_COMMENT_7A)]);
 
 		chg_virtue(V_HONOUR, -1);
@@ -576,7 +575,6 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	/* Item was cheaper than we thought, and we paid more than necessary */
 	else if ((value < guess) && (price > value))
 	{
-		/* Comment */
 		msg_print(comment_7b[randint0(MAX_COMMENT_7B)]);
 
 		chg_virtue(V_JUSTICE, -1);
@@ -589,7 +587,6 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	/* Item was a good bargain, and we got away with it */
 	else if ((value > guess) && (value < (4 * guess)) && (price < value))
 	{
-		/* Comment */
 		msg_print(comment_7c[randint0(MAX_COMMENT_7C)]);
 
 		if (one_in_(4))
@@ -603,7 +600,6 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	/* Item was a great bargain, and we got away with it */
 	else if ((value > guess) && (price < value))
 	{
-		/* Comment */
 		msg_print(comment_7d[randint0(MAX_COMMENT_7D)]);
 
 		if (one_in_(2))

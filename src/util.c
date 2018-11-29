@@ -1900,7 +1900,6 @@ static char inkey_aux(void)
 			/* Excessive delay */
 			if (w >= 10) break;
 
-			/* Delay */
 			Term_xtra(TERM_XTRA_DELAY, w);
 		}
 	}
@@ -2219,7 +2218,6 @@ char inkey(void)
 					/* Excessive delay */
 					if (w >= 100) break;
 
-					/* Delay */
 					Term_xtra(TERM_XTRA_DELAY, w);
 				}
 			}
