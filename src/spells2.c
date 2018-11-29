@@ -38,8 +38,6 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 		{
 			int dist = distance(p_ptr->y, p_ptr->x, y, x);
 			if (dist > range) continue;
-
-			/* Access the grid */
 			c_ptr = &cave[y][x];
 
 			/* Hack -- Safe */
@@ -1450,8 +1448,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 
 			/* Stay in the circle of death */
 			if (k > r) continue;
-
-			/* Access the grid */
 			c_ptr = &cave[y][x];
 
 			/* Lose room and vault */
@@ -1626,8 +1622,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 
 				/* Stay in the circle of death */
 				if (k > r) continue;
-
-				/* Access the grid */
 				c_ptr = &cave[y][x];
 
 				if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;
@@ -1760,8 +1754,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;
-
-			/* Access the grid */
 			c_ptr = &cave[yy][xx];
 
 			/* Lose room and vault */
@@ -1875,7 +1867,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 		/* Important -- no wall on player */
 		map[16+p_ptr->y-cy][16+p_ptr->x-cx] = FALSE;
 
-		/* Take some damage */
 		if (damage)
 		{
 			cptr killer;
@@ -1910,8 +1901,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 
 			/* Skip unaffected grids */
 			if (!map[16+yy-cy][16+xx-cx]) continue;
-
-			/* Access the grid */
 			c_ptr = &cave[yy][xx];
 
 			if (c_ptr->m_idx == p_ptr->riding) continue;
@@ -1946,7 +1935,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 						/* Look for safety */
 						for (i = 0; i < 8; i++)
 						{
-							/* Access the grid */
 							y = yy + ddy_ddd[i];
 							x = xx + ddx_ddd[i];
 
@@ -2121,8 +2109,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;
-
-			/* Access the grid */
 			c_ptr = &cave[yy][xx];
 
 			if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;

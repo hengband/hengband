@@ -1993,7 +1993,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						}
 					}
 
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
@@ -2018,7 +2017,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						}
 					}
 
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
@@ -2029,7 +2027,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_UN_POWER:
 				{
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
@@ -2087,7 +2084,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_EAT_GOLD:
 				{
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Confused monsters cannot steal successfully. -LM-*/
@@ -2148,7 +2144,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_EAT_ITEM:
 				{
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Confused monsters cannot steal successfully. -LM-*/
@@ -2262,7 +2257,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_EAT_FOOD:
 				{
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
@@ -2306,8 +2300,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					/* Access the lite */
 					o_ptr = &inventory[INVEN_LITE];
-
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
@@ -2672,7 +2664,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_DISEASE:
 				{
-					/* Take some damage */
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;

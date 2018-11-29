@@ -337,8 +337,6 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 			/* Hack -- skip "non-grids" */
 			if (*t == ' ') continue;
-
-			/* Access the grid */
 			c_ptr = &cave[y][x];
 
 			/* Lay down a floor */

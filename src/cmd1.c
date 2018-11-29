@@ -358,8 +358,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	cave_type *c_ptr;
-
-	/* Access the grid */
 	c_ptr = &cave[y][x];
 
 	/* Invisible trap */

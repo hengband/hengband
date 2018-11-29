@@ -412,8 +412,6 @@ static int next_to_corr(POSITION y1, POSITION x1)
 		/* Extract the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
-
-		/* Access the grid */
 		c_ptr = &cave[y][x];
 
 		/* Skip non floors */

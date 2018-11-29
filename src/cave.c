@@ -3330,8 +3330,6 @@ void forget_view(void)
 	{
 		POSITION y = view_y[i];
 		POSITION x = view_x[i];
-
-		/* Access the grid */
 		c_ptr = &cave[y][x];
 
 		/* Forget that the grid is viewable */
@@ -3412,8 +3410,6 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Totally blocked by "unviewable neighbors" */
 	if (!v1 && !v2) return (TRUE);
 
-
-	/* Access the grid */
 	c_ptr = &cave[y][x];
 
 
@@ -3613,8 +3609,6 @@ void update_view(void)
 	{
 		y = view_y[n];
 		x = view_x[n];
-
-		/* Access the grid */
 		c_ptr = &cave[y][x];
 
 		/* Mark the grid as not in "view" */
@@ -3637,8 +3631,6 @@ void update_view(void)
 	/* Now start on the player */
 	y = p_ptr->y;
 	x = p_ptr->x;
-
-	/* Access the grid */
 	c_ptr = &cave[y][x];
 
 	/* Assume the player grid is easily viewable */
@@ -3986,8 +3978,6 @@ void update_view(void)
 	{
 		y = view_y[n];
 		x = view_x[n];
-
-		/* Access the grid */
 		c_ptr = &cave[y][x];
 
 		/* Clear the "CAVE_XTRA" flag */
@@ -4005,8 +3995,6 @@ void update_view(void)
 	{
 		y = temp_y[n];
 		x = temp_x[n];
-
-		/* Access the grid */
 		c_ptr = &cave[y][x];
 
 		/* No longer in the array */
@@ -4041,8 +4029,6 @@ void delayed_visual_update(void)
 	{
 		y = redraw_y[i];
 		x = redraw_x[i];
-
-		/* Access the grid */
 		c_ptr = &cave[y][x];
 
 		/* Update only needed grids (prevent multiple updating) */

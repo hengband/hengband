@@ -4002,7 +4002,6 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 		for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
 		{
-			/* Access the grid */
 			cave_type *c_ptr = &cave[*y][*x];
 
 			int idx = s[0];

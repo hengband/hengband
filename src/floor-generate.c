@@ -145,7 +145,6 @@ static int next_to_walls(POSITION y, POSITION x)
  */
 static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
 {
-	/* Access the grid */
 	cave_type *c_ptr = &cave[y][x];
 
 	/* Require "naked" floor grid */
@@ -259,8 +258,6 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 
 				if (!pick) break;
 			}
-
-			/* Access the grid */
 			c_ptr = &cave[y][x];
 
 			/* Clear possible garbage of hidden trap */
@@ -792,12 +789,8 @@ static bool cave_gen(void)
 			{
 				cave_type *c_ptr;
 				feature_type *f_ptr;
-
-				/* Access the grid */
 				y = dun->tunn[j].y;
 				x = dun->tunn[j].x;
-
-				/* Access the grid */
 				c_ptr = &cave[y][x];
 				f_ptr = &f_info[c_ptr->feat];
 
@@ -815,12 +808,8 @@ static bool cave_gen(void)
 			for (j = 0; j < dun->wall_n; j++)
 			{
 				cave_type *c_ptr;
-
-				/* Access the grid */
 				y = dun->wall[j].y;
 				x = dun->wall[j].x;
-
-				/* Access the grid */
 				c_ptr = &cave[y][x];
 
 				/* Clear mimic type */

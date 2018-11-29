@@ -264,8 +264,6 @@ void build_streamer(IDX feat, int chance)
 				if (!in_bounds2(ty, tx)) continue;
 				break;
 			}
-
-			/* Access the grid */
 			c_ptr = &cave[ty][tx];
 			f_ptr = &f_info[c_ptr->feat];
 
