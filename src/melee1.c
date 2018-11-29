@@ -1545,7 +1545,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 	bool explode = FALSE;
 	bool do_silly_attack = (one_in_(2) && p_ptr->image);
 	HIT_POINT get_damage = 0;
-	int abbreviate = 0;
+	int abbreviate = 0;	// ２回目以降の省略表現フラグ
 
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (FALSE);
@@ -1639,11 +1639,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
 
 #ifdef JP
-				if (abbreviate)
-				    msg_format("撃退した。");
-				else
-				    msg_format("%^sは撃退された。", m_name);
-				abbreviate = 1;/*２回目以降は省略 */
+				if (abbreviate) msg_format("撃退した。");
+				else msg_format("%^sは撃退された。", m_name);
+				abbreviate = 1; /*２回目以降は省略 */
 #else
 				msg_format("%^s is repelled.", m_name);
 #endif
@@ -1909,15 +1907,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					else
 					{
 						if (one_in_(3))
-#ifdef JP
-							act = "は♪僕らは楽しい家族♪と歌っている。";
+							act = _("は♪僕らは楽しい家族♪と歌っている。", "sings 'We are a happy family.'");
 						else
-							act = "は♪アイ ラブ ユー、ユー ラブ ミー♪と歌っている。";
-#else
-							act = "sings 'We are a happy family.'";
-						else
-							act = "sings 'I love you, you love me.'";
-#endif
+							act = _("は♪アイ ラブ ユー、ユー ラブ ミー♪と歌っている。", "sings 'I love you, you love me.'");
 					}
 
 					sound(SOUND_SHOW);
@@ -1936,11 +1928,11 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 #ifdef JP
 				if (abbreviate == 0)
-				    msg_format("%^sに%s", m_name, act);
+					msg_format("%^sに%s", m_name, act);
 				else if (abbreviate == 1)
-				    msg_format("%s", act);
+					msg_format("%s", act);
 				else /* if (abbreviate == -1) */
-				    msg_format("%^s%s", m_name, act);
+					msg_format("%^s%s", m_name, act);
 				abbreviate = 1;/*２回目以降は省略 */
 #else
 				msg_format("%^s %s%s", m_name, act, do_silly_attack ? " you." : "");
@@ -1957,23 +1949,18 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 			 * Skip the effect when exploding, since the explosion
 			 * already causes the effect.
 			 */
-			if (explode)
-				damage = 0;
+			if(explode) damage = 0;
 			/* Apply appropriate damage */
 			switch (effect)
 			{
 				case 0:
 				{
-					/* Hack -- Assume obvious */
 					obvious = TRUE;
-
-					/* Hack -- No damage */
 					damage = 0;
-
 					break;
 				}
 
-				case RBE_SUPERHURT:
+				case RBE_SUPERHURT:	/* AC軽減あり / Player armor reduces total damage */
 				{
 					if (((randint1(rlev*2+300) > (ac+200)) || one_in_(13)) && !CHECK_MULTISHADOW())
 					{
@@ -1985,15 +1972,11 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						break;
 					}
 				}
-				case RBE_HURT:
+				case RBE_HURT: /* AC軽減あり / Player armor reduces total damage */
 				{
 					obvious = TRUE;
-
-					/* Hack -- Player armor reduces total damage */
 					damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
 					break;
 				}
 
