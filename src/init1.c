@@ -1825,7 +1825,6 @@ errr parse_f_info(char *buf, header *head)
 				/* Start at next entry */
 				s = t;
 
-				/* Continue */
 				continue;
 			}
 
@@ -1837,8 +1836,6 @@ errr parse_f_info(char *buf, header *head)
 
 				/* Start at next entry */
 				s = t;
-
-				/* Continue */
 				continue;
 			}
 
@@ -3125,8 +3122,6 @@ errr parse_r_info(char *buf, header *head)
 
 					/* Start at next entry */
 				s = t;
-
-				/* Continue */
 				continue;
 			}
 
@@ -3447,8 +3442,6 @@ errr parse_d_info(char *buf, header *head)
 
 				/* Start at next entry */
 				s = t;
-
-				/* Continue */
 				continue;
 			}
 
@@ -3460,8 +3453,6 @@ errr parse_d_info(char *buf, header *head)
 
 				/* Start at next entry */
 				s = t;
-
-				/* Continue */
 				continue;
 			}
 
@@ -3473,8 +3464,6 @@ errr parse_d_info(char *buf, header *head)
 
 				/* Start at next entry */
 				s = t;
-
-				/* Continue */
 				continue;
 			}
 
@@ -3486,8 +3475,6 @@ errr parse_d_info(char *buf, header *head)
 
 				/* Start at next entry */
 				s = t;
-
-				/* Continue */
 				continue;
 			}
 
@@ -3526,8 +3513,6 @@ errr parse_d_info(char *buf, header *head)
 
 				/* Start at next entry */
 				s = t;
-
-				/* Continue */
 				continue;
 			}
 
@@ -3560,8 +3545,6 @@ errr parse_d_info(char *buf, header *head)
 			{
 				/* Start at next entry */
 				s = t;
-
-					/* Continue */
 				continue;
 			}
 
@@ -4830,8 +4813,6 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 
 			/* Set flag */
 			bypass = (streq(v, "0") ? TRUE : FALSE);
-
-			/* Continue */
 			continue;
 		}
 

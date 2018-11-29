@@ -2235,8 +2235,6 @@ char inkey(void)
 		{
 			/* Strip this key */
 			ch = 0;
-
-			/* Continue */
 			continue;
 		}
 
@@ -4537,8 +4535,6 @@ void request_command(int shopping)
 				{
 					/* Clear count */
 					command_arg = 0;
-
-					/* Continue */
 					continue;
 				}
 			}
@@ -4575,8 +4571,6 @@ void request_command(int shopping)
 
 			/* Start using the buffer */
 			inkey_next = request_command_buffer;
-
-			/* Continue */
 			continue;
 		}
 

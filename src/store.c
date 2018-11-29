@@ -565,10 +565,8 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	if ((value <= 0) && (price > value))
 	{
 		msg_print(comment_7a[randint0(MAX_COMMENT_7A)]);
-
 		chg_virtue(V_HONOUR, -1);
 		chg_virtue(V_JUSTICE, -1);
-
 		sound(SOUND_STORE1);
 	}
 
@@ -576,11 +574,8 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	else if ((value < guess) && (price > value))
 	{
 		msg_print(comment_7b[randint0(MAX_COMMENT_7B)]);
-
 		chg_virtue(V_JUSTICE, -1);
-		if (one_in_(4))
-			chg_virtue(V_HONOUR, -1);
-
+		if (one_in_(4)) chg_virtue(V_HONOUR, -1);
 		sound(SOUND_STORE2);
 	}
 
@@ -588,12 +583,8 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	else if ((value > guess) && (value < (4 * guess)) && (price < value))
 	{
 		msg_print(comment_7c[randint0(MAX_COMMENT_7C)]);
-
-		if (one_in_(4))
-			chg_virtue(V_HONOUR, -1);
-		else if (one_in_(4))
-			chg_virtue(V_HONOUR, 1);
-
+		if (one_in_(4)) chg_virtue(V_HONOUR, -1);
+		else if (one_in_(4)) chg_virtue(V_HONOUR, 1);
 		sound(SOUND_STORE3);
 	}
 
@@ -601,15 +592,9 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	else if ((value > guess) && (price < value))
 	{
 		msg_print(comment_7d[randint0(MAX_COMMENT_7D)]);
-
-		if (one_in_(2))
-			chg_virtue(V_HONOUR, -1);
-		if (one_in_(4))
-			chg_virtue(V_HONOUR, 1);
-
-		if (10 * price < value)
-			chg_virtue(V_SACRIFICE, 1);
-
+		if (one_in_(2)) chg_virtue(V_HONOUR, -1);
+		if (one_in_(4)) chg_virtue(V_HONOUR, 1);
+		if (10 * price < value) chg_virtue(V_SACRIFICE, 1);
 		sound(SOUND_STORE4);
 	}
 }

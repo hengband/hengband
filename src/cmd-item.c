@@ -480,9 +480,7 @@ void do_cmd_wield(void)
 
 	/* Describe the result */
 	object_desc(o_name, o_ptr, 0);
-
 	msg_format(act, o_name, index_to_label(slot));
-
 
 	/* Cursed! */
 	if (object_is_cursed(o_ptr))
@@ -1199,7 +1197,6 @@ static void do_cmd_refill_lamp(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-
 	/* Take a partial turn */
 	p_ptr->energy_use = 50;
 
@@ -1208,7 +1205,6 @@ static void do_cmd_refill_lamp(void)
 
 	/* Refuel */
 	j_ptr->xtra4 += o_ptr->xtra4;
-
 	msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
 
 	if ((o_ptr->name2 == EGO_LITE_DARKNESS) && (j_ptr->xtra4 > 0))

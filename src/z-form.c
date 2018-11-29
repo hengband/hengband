@@ -282,8 +282,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 
 			/* Save the character */
 			buf[n++] = *s++;
-
-			/* Continue */
 			continue;
 		}
 
@@ -301,8 +299,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 
 			/* Skip the "%" */
 			s++;
-
-			/* Continue */
 			continue;
 		}
 
@@ -319,8 +315,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 
 			/* Skip the "n" */
 			s++;
-
-			/* Continue */
 			continue;
 		}
 
@@ -332,8 +326,6 @@ uint vstrnfmt(char *buf, uint max, cptr fmt, va_list vp)
 
 			/* Skip the "r" */
 			s++;
-
-			/* Continue */
 			continue;
 		}
 

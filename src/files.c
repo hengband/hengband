@@ -1118,8 +1118,6 @@ static errr process_pref_file_aux(cptr name, int preftype)
 
 			/* Set flag */
 			bypass = (streq(v, "0") ? TRUE : FALSE);
-
-			/* Continue */
 			continue;
 		}
 
@@ -1154,8 +1152,6 @@ static errr process_pref_file_aux(cptr name, int preftype)
 
 			/* Set back depth level */
 			depth_count--;
-
-			/* Continue */
 			continue;
 		}
 
