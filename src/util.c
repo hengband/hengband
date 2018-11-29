@@ -558,18 +558,6 @@ errr my_fputs(FILE *fff, cptr buf, huge n)
 
 
 /*
- * Code Warrior is a little weird about some functions
- */
-#ifdef BEN_HACK
-extern int open(const char *, int, ...);
-extern int close(int);
-extern int read(int, void *, unsigned int);
-extern int write(int, const void *, unsigned int);
-extern long lseek(int, long, int);
-#endif /* BEN_HACK */
-
-
-/*
  * The Macintosh is a little bit brain-dead sometimes
  */
 #ifdef MACINTOSH
@@ -678,16 +666,8 @@ errr fd_copy(cptr file, cptr what)
 
 /*
  * Hack -- attempt to open a file descriptor (create file)
- *
  * This function should fail if the file already exists
- *
  * Note that we assume that the file should be "binary"
- *
- * The horrible "BEN_HACK" code is for compiling under
- * the CodeWarrior compiler, in which case, for some reason, none
- * of the "O_*" flags are defined, and we must fake the definition
- * of "O_RDONLY", "O_WRONLY", and "O_RDWR" in "A-win-h", and then
- * we must simulate the effect of the proper "open()" call below.
  */
 int fd_make(cptr file, BIT_FLAGS mode)
 {
@@ -695,19 +675,6 @@ int fd_make(cptr file, BIT_FLAGS mode)
 
 	/* Hack -- Try to parse the path */
 	if (path_parse(buf, 1024, file)) return (-1);
-
-#ifdef BEN_HACK
-
-	/* Check for existance */
-	/* if (fd_close(fd_open(file, O_RDONLY | O_BINARY))) return (1); */
-
-	/* Mega-Hack -- Create the file */
-	(void)my_fclose(my_fopen(file, "wb"));
-
-	/* Re-open the file for writing */
-	return (open(buf, O_WRONLY | O_BINARY, mode));
-
-#else /* BEN_HACK */
 
 #if defined(MAC_MPW) || defined(MACH_O_CARBON)
 	{
@@ -719,12 +686,11 @@ int fd_make(cptr file, BIT_FLAGS mode)
 		/* Return the descriptor */
 		return (fdes);
 	}
-# else
+#else
 	/* Create the file, fail if exists, write-only, binary */
 	return (open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode));
-# endif
+#endif
 
-#endif /* BEN_HACK */
 
 }
 
