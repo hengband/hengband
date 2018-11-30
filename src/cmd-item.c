@@ -1793,10 +1793,8 @@ void do_cmd_query_symbol(void)
 		return;
 	}
 
-
 	/* Prompt */
 	put_str(_("思い出を見ますか? (k:殺害順/y/n): ", "Recall details? (k/y/n): "), 0, _(36, 40));
-
 
 	/* Query */
 	query = inkey();
@@ -1942,7 +1940,6 @@ void do_cmd_use(void)
 	}
 
 	item_tester_no_ryoute = TRUE;
-	/* Prepare the hook */
 	item_tester_hook = item_tester_hook_use;
 
 	q = _("どれを使いますか？", "Use which item? ");

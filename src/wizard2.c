@@ -1098,11 +1098,8 @@ static void wiz_statistics(object_type *o_ptr)
 				/* Allow interupt */
 				if (inkey())
 				{
-					/* Flush */
 					flush();
-
-					/* Stop rolling */
-					break;
+					break; // stop rolling
 				}
 
 				/* Dump the stats */

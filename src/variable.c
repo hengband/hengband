@@ -154,14 +154,14 @@ bool repair_objects;	/* Hack -- optimize detect objects */
 bool is_loading_now;	/*!< ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 bool hack_mutation;
 
-s16b inven_cnt;			/* Number of items in inventory */
-s16b equip_cnt;			/* Number of items in equipment */
+s16b inven_cnt; /* Number of items in inventory */
+s16b equip_cnt; /* Number of items in equipment */
 
-s16b o_max = 1;			/* Number of allocated objects */
-s16b o_cnt = 0;			/* Number of live objects */
+s16b o_max = 1; /* Number of allocated objects */
+s16b o_cnt = 0; /* Number of live objects */
 
-MONSTER_IDX m_max = 1;			/* Number of allocated monsters */
-MONSTER_IDX m_cnt = 0;			/* Number of live monsters */
+MONSTER_IDX m_max = 1; /* Number of allocated monsters */
+MONSTER_IDX m_cnt = 0; /* Number of live monsters */
 
 MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
@@ -220,38 +220,23 @@ char player_base[32];
 char savefile[1024];
 char savefile_base[40];
 
-/*
- * Array of grids lit by player lite (see "cave.c")
- */
-POSITION_IDX lite_n;
+POSITION_IDX lite_n; //!< Array of grids lit by player lite (see "cave.c")
 POSITION lite_y[LITE_MAX];
 POSITION lite_x[LITE_MAX];
 
-/*
- * Array of grids lit by player lite (see "cave.c")
- */
-POSITION_IDX mon_lite_n;
+POSITION_IDX mon_lite_n; //!< Array of grids lit by player lite (see "cave.c")
 POSITION mon_lite_y[MON_LITE_MAX];
 POSITION mon_lite_x[MON_LITE_MAX];
 
-/*
- * Array of grids viewable to the player (see "cave.c")
- */
-POSITION_IDX view_n;
+POSITION_IDX view_n; //!< Array of grids viewable to the player (see "cave.c")
 POSITION view_y[VIEW_MAX];
 POSITION view_x[VIEW_MAX];
 
-/*
- * Array of grids for use by various functions (see "cave.c")
- */
-POSITION_IDX temp_n;
+POSITION_IDX temp_n; //!< Array of grids for use by various functions (see "cave.c")
 POSITION temp_y[TEMP_MAX];
 POSITION temp_x[TEMP_MAX];
 
-/*
- * Array of grids for delayed visual updating (see "cave.c")
- */
-POSITION_IDX redraw_n = 0;
+POSITION_IDX redraw_n = 0; //!< Array of grids for delayed visual updating (see "cave.c")
 POSITION redraw_y[REDRAW_MAX];
 POSITION redraw_x[REDRAW_MAX];
 

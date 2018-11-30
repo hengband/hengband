@@ -4864,7 +4864,6 @@ static bool insert_macro_line(text_body_type *tb)
 	/* Terminate */
 	buf[n] = '\0';
 
-	/* Flush */
 	flush();
 
 	/* Convert the trigger */
@@ -4925,14 +4924,12 @@ static bool insert_keymap_line(text_body_type *tb)
 		mode = KEYMAP_MODE_ORIG;
 	}
 
-	/* Flush */
 	flush();
 
 	/* Get a key */
 	buf[0] = inkey();
 	buf[1] = '\0';
 
-	/* Flush */
 	flush();
 
 	/* Convert the trigger */

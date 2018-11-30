@@ -3458,11 +3458,8 @@ static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_C
 	/* Failure */
 	if (!okay)
 	{
-		/* Flush */
 		if (flush_failure) flush();
-
 		msg_print(_("改良に失敗した。", "The improvement failed."));
-
 		return (FALSE);
 	}
 	else

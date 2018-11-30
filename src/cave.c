@@ -2198,7 +2198,6 @@ void do_cmd_view_map(void)
 	/* Note */
 	prt(_("お待ち下さい...", "Please wait..."), 0, 0);
 
-	/* Flush */
 	Term_fresh();
 
 	/* Clear the screen */

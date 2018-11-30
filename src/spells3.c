@@ -2225,8 +2225,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-msg_format("%s は明るく輝いた！",
-    o_name);
+	msg_format("%s は明るく輝いた！", o_name);
 #else
 	msg_format("%s %s glow%s brightly!",
 		   ((item >= 0) ? "Your" : "The"), o_name,
@@ -2242,11 +2241,8 @@ msg_format("%s は明るく輝いた！",
 	/* Failure */
 	if (!okay)
 	{
-		/* Flush */
 		if (flush_failure) flush();
-
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
-
 		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
 	}
 	else
@@ -2369,18 +2365,14 @@ bool artifact_scroll(void)
 	/* Failure */
 	if (!okay)
 	{
-		/* Flush */
 		if (flush_failure) flush();
-
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
-
 		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
 	}
 	else
 	{
 		if (record_rand_art)
 		{
-			/* Description */
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			do_cmd_write_nikki(NIKKI_ART_SCROLL, 0, o_name);
 		}
@@ -4300,14 +4292,10 @@ bool brand_bolts(void)
 
 		/* Ego-item */
 		o_ptr->name2 = EGO_FLAME;
-
-		/* Enchant */
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
-
 		return (TRUE);
 	}
 
-	/* Flush */
 	if (flush_failure) flush();
 
 	/* Fail */

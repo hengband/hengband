@@ -372,7 +372,6 @@ void do_cmd_activate(void)
 	}
 
 	item_tester_no_ryoute = TRUE;
-	/* Prepare the hook */
 	item_tester_hook = item_tester_hook_activate;
 
 	q = _("どのアイテムを始動させますか? ", "Activate which item? ");

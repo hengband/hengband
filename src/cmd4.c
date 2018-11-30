@@ -1533,11 +1533,9 @@ static s16b toggle_frequency(s16b current)
  */
 static void do_cmd_options_autosave(cptr info)
 {
-	char	ch;
-
-	int     i, k = 0, n = 2;
-
-	char	buf[80];
+	char ch;
+	int i, k = 0, n = 2;
+	char buf[80];
 
 
 	/* Clear screen */
@@ -1562,9 +1560,9 @@ static void do_cmd_options_autosave(cptr info)
 
 			/* Display the option text */
 			sprintf(buf, "%-48s: %s (%s)",
-			    autosave_info[i].o_desc,
-			    (*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
-			    autosave_info[i].o_text);
+				autosave_info[i].o_desc,
+				(*autosave_info[i].o_var ? _("はい  ", "yes") : _("いいえ", "no ")),
+				autosave_info[i].o_text);
 			c_prt(a, buf, i + 2, 0);
 		}
 		prt(format(_("自動セーブの頻度： %d ターン毎", "Timed autosave frequency: every %d turns"),  autosave_freq), 5, 0);
@@ -1669,7 +1667,6 @@ void do_cmd_options_aux(int page, cptr info)
 		/* Notice options on this "page" */
 		if (option_info[i].o_page == page) opt[n++] = i;
 	}
-
 
 	/* Clear screen */
 	Term_clear();
@@ -2426,7 +2423,6 @@ static void do_cmd_macro_aux(char *buf)
 	int n = 0;
 	char tmp[1024];
 
-	/* Flush */
 	flush();
 
 	/* Do not process macros */
@@ -2454,9 +2450,7 @@ static void do_cmd_macro_aux(char *buf)
 	/* Terminate */
 	buf[n] = '\0';
 
-	/* Flush */
 	flush();
-
 
 	/* Convert the trigger */
 	ascii_to_text(tmp, buf);
@@ -2482,15 +2476,11 @@ static void do_cmd_macro_aux_keymap(char *buf)
 {
 	char tmp[1024];
 
-
-	/* Flush */
 	flush();
-
 
 	/* Get a key */
 	buf[0] = inkey();
 	buf[1] = '\0';
-
 
 	/* Convert to ascii */
 	ascii_to_text(tmp, buf);
@@ -2498,8 +2488,6 @@ static void do_cmd_macro_aux_keymap(char *buf)
 	/* Hack -- display the trigger */
 	Term_addstr(-1, TERM_WHITE, tmp);
 
-
-	/* Flush */
 	flush();
 }
 

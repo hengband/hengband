@@ -2794,7 +2794,6 @@ void msg_print(cptr msg)
 	/* Hack -- flush when requested or needed */
 	if (p && (!msg || ((p + n) > 72)))
 	{
-		/* Flush */
 		msg_flush(p);
 
 		/* Forget it */

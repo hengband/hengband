@@ -5037,12 +5037,7 @@ void do_cmd_store(void)
 		}
 #endif
 		/* Prompt */
-#ifdef JP
-		prt("コマンド:", 20 + xtra_stock, 0);
-#else
-		prt("You may: ", 20 + xtra_stock, 0);
-#endif
-
+		prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
 
 		/* Get a command */
 		request_command(TRUE);

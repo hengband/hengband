@@ -7396,7 +7396,6 @@ static void handle_signal_simple(int sig)
 		/* Display the cause */
 		Term_putstr(0, 0, -1, TERM_WHITE, _("熟慮の上の自殺！", "Contemplating suicide!"));
 
-		/* Flush */
 		Term_fresh();
 	}
 
