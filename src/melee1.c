@@ -2184,17 +2184,12 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Skip artifacts */
 						if (object_is_artifact(o_ptr)) continue;
 
-						/* Get a description */
 						object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 #ifdef JP
-						msg_format("%s(%c)を%s盗まれた！",
-							   o_name, index_to_label(i),
-							   ((o_ptr->number > 1) ? "一つ" : ""));
+						msg_format("%s(%c)を%s盗まれた！", o_name, index_to_label(i), ((o_ptr->number > 1) ? "一つ" : ""));
 #else
-						msg_format("%sour %s (%c) was stolen!",
-							   ((o_ptr->number > 1) ? "One of y" : "Y"),
-							   o_name, index_to_label(i));
+						msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
 #endif
 
 						chg_virtue(V_SACRIFICE, 1);
@@ -2275,7 +2270,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Skip non-food objects */
 						if ((o_ptr->tval != TV_FOOD) && !((o_ptr->tval == TV_CORPSE) && (o_ptr->sval))) continue;
 
-						/* Get a description */
 						object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP

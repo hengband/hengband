@@ -1273,7 +1273,8 @@ bool mass_genocide_undead(int power, bool player_cast)
  */
 bool probing(void)
 {
-	int i, speed;
+	int i;
+	SPEED speed;
 	bool_hack cu, cv;
 	bool probe = FALSE;
 	char buf[256];
@@ -1424,7 +1425,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 	POSITION y, x;
 	int k, t;
 	cave_type *c_ptr;
-	bool      flag = FALSE;
+	bool flag = FALSE;
 
 	/* Prevent destruction of quest levels and town */
 	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)

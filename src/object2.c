@@ -5663,7 +5663,6 @@ void inven_item_describe(INVENTORY_IDX item)
 	object_type *o_ptr = &inventory[item];
 	char        o_name[MAX_NLEN];
 
-	/* Get a description */
 	object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
@@ -5853,7 +5852,6 @@ void floor_item_describe(INVENTORY_IDX item)
 	object_type *o_ptr = &o_list[item];
 	char        o_name[MAX_NLEN];
 
-	/* Get a description */
 	object_desc(o_name, o_ptr, 0);
 
 #ifdef JP

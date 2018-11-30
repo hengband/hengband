@@ -286,11 +286,9 @@ int inven_damage(inven_func typ, int perc)
 			/* Some casualities */
 			if (amt)
 			{
-				/* Get a description */
 				object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 				msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
-
 #ifdef JP
 					o_name, index_to_label(i), ((o_ptr->number > 1) ?
 						((amt == o_ptr->number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
@@ -341,7 +339,6 @@ static int minus_ac(void)
 	object_type *o_ptr = NULL;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	char o_name[MAX_NLEN];
-
 
 	/* Pick a (possibly empty) inventory slot */
 	switch (randint1(7))
