@@ -4166,8 +4166,6 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 
 		/* Distribute charges of wands/rods */
 		distribute_charges(o_ptr, q_ptr, amt);
-
-		/* Describe */
 #ifdef JP
 		msg_format("%sを置いた。(%c)", o_name, index_to_label(item));
 #else
@@ -4199,8 +4197,6 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 	{
 		/* Distribute charges of wands/rods */
 		distribute_charges(o_ptr, q_ptr, amt);
-
-		/* Describe */
 #ifdef JP
 		msg_format("%sを置いた。(%c)", o_name, index_to_label(item));
 #else
@@ -4316,8 +4312,6 @@ msg_print("このアイテムについて特に知っていることはない。
 
 	/* Description */
 	object_desc(o_name, o_ptr, 0);
-
-	/* Describe */
 #ifdef JP
 msg_format("%sを調べている...", o_name);
 #else

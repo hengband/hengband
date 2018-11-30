@@ -88,8 +88,6 @@ bool detect_traps(POSITION range, bool known)
 	if (known) p_ptr->dtrap = TRUE;
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
-
-	/* Describe */
 	if (detect)
 	{
 		msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
@@ -108,8 +106,6 @@ bool detect_doors(POSITION range)
 	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
-
-	/* Describe */
 	if (detect)
 	{
 		msg_print(_("ドアの存在を感じとった！", "You sense the presence of doors!"));
@@ -128,8 +124,6 @@ bool detect_stairs(POSITION range)
 	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
-
-	/* Describe */
 	if (detect)
 	{
 		msg_print(_("階段の存在を感じとった！", "You sense the presence of stairs!"));
@@ -148,8 +142,6 @@ bool detect_treasure(POSITION range)
 	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
-
-	/* Describe */
 	if (detect)
 	{
 		msg_print(_("埋蔵された財宝の存在を感じとった！", "You sense the presence of buried treasure!"));
@@ -199,8 +191,6 @@ bool detect_objects_gold(POSITION range)
 	}
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
-
-	/* Describe */
 	if (detect)
 	{
 		msg_print(_("財宝の存在を感じとった！", "You sense the presence of treasure!"));
@@ -255,8 +245,6 @@ bool detect_objects_normal(POSITION range)
 	}
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
-
-	/* Describe */
 	if (detect)
 	{
 		msg_print(_("アイテムの存在を感じとった！", "You sense the presence of objects!"));
@@ -343,8 +331,6 @@ bool detect_objects_magic(POSITION range)
 			detect = TRUE;
 		}
 	}
-
-	/* Describe */
 	if (detect)
 	{
 		msg_print(_("魔法のアイテムの存在を感じとった！", "You sense the presence of magic objects!"));
@@ -400,8 +386,6 @@ bool detect_monsters_normal(POSITION range)
 	}
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
-
-	/* Describe */
 	if (flag)
 	{
 		/* Describe result */
@@ -461,8 +445,6 @@ bool detect_monsters_invis(POSITION range)
 	}
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
-
-	/* Describe */
 	if (flag)
 	{
 		/* Describe result */
@@ -525,8 +507,6 @@ bool detect_monsters_evil(POSITION range)
 			flag = TRUE;
 		}
 	}
-
-	/* Describe */
 	if (flag)
 	{
 		/* Describe result */
@@ -583,8 +563,6 @@ bool detect_monsters_nonliving(POSITION range)
 			flag = TRUE;
 		}
 	}
-
-	/* Describe */
 	if (flag)
 	{
 		/* Describe result */
@@ -641,8 +619,6 @@ bool detect_monsters_mind(POSITION range)
 			flag = TRUE;
 		}
 	}
-
-	/* Describe */
 	if (flag)
 	{
 		/* Describe result */
@@ -703,8 +679,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 	}
 
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
-
-	/* Describe */
 	if (flag)
 	{
 		/* Describe result */
@@ -769,8 +743,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 			flag = TRUE;
 		}
 	}
-
-	/* Describe */
 	if (flag)
 	{
 		switch (match_flag)

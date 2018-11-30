@@ -2625,8 +2625,6 @@ void do_cmd_macros(void)
 	{
 		/* Clear screen */
 		Term_clear();
-
-		/* Describe */
 		prt(_("[ マクロの設定 ]", "Interact with Macros"), 2, 0);
 
 		/* Describe that action */

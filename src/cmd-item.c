@@ -1011,8 +1011,6 @@ void do_cmd_observe(void)
 
 	/* Description */
 	object_desc(o_name, o_ptr, 0);
-
-	/* Describe */
 	msg_format(_("%sを調べている...", "Examining %s..."), o_name);
 	/* Describe it fully */
 	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL)) msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
@@ -1689,8 +1687,6 @@ void do_cmd_query_symbol(void)
 	{
 		if (sym == ident_info[i][0]) break;
 	}
-
-	/* Describe */
 	if (sym == KTRL('A'))
 	{
 		all = TRUE;

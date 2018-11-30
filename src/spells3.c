@@ -2224,8 +2224,6 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 
 	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-	/* Describe */
 #ifdef JP
 msg_format("%s は明るく輝いた！",
     o_name);
@@ -2299,8 +2297,6 @@ bool artifact_scroll(void)
 
 	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-	/* Describe */
 #ifdef JP
 	msg_format("%s は眩い光を発した！",o_name);
 #else
@@ -2509,8 +2505,6 @@ bool ident_spell(bool only_equip)
 
 	/* Description */
 	object_desc(o_name, o_ptr, 0);
-
-	/* Describe */
 	if (item >= INVEN_RARM)
 	{
 		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
@@ -2659,8 +2653,6 @@ bool identify_fully(bool only_equip)
 
 	/* Description */
 	object_desc(o_name, o_ptr, 0);
-
-	/* Describe */
 	if (item >= INVEN_RARM)
 	{
 		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
@@ -3101,10 +3093,8 @@ msg_format("%s は既に祝福されている。",
 
 	if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3))
 	{
-		/* Describe */
 #ifdef JP
-msg_format("%sは輝いた！",
-     o_name);
+		msg_format("%sは輝いた！", o_name);
 #else
 		msg_format("%s %s shine%s!",
 		    ((item >= 0) ? "Your" : "The"), o_name,
@@ -4146,8 +4136,6 @@ bool curse_armor(void)
 	/* Nothing to curse */
 	if (!o_ptr->k_idx) return (FALSE);
 
-
-	/* Describe */
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Attempt a saving throw for artifacts */
@@ -4215,8 +4203,6 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 
 	/* Nothing to curse */
 	if (!o_ptr->k_idx) return (FALSE);
-
-	/* Describe */
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Attempt a saving throw */

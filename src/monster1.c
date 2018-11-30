@@ -583,8 +583,6 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
 			old = TRUE;
 		}
-
-		/* Describe */
 		hooked_roff(_("侵入者を追跡しない", "does not deign to chase intruders"));
 	}
 

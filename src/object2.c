@@ -6536,8 +6536,6 @@ void display_koff(KIND_OBJECT_IDX k_idx)
 
 	/* Prepare the object */
 	object_prep(q_ptr, k_idx);
-
-	/* Describe */
 	object_desc(o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
 	/* Mention the object name */

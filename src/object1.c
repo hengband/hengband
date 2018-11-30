@@ -2546,8 +2546,6 @@ static bool verify(cptr prompt, INVENTORY_IDX item)
 	{
 		o_ptr = &o_list[0 - item];
 	}
-
-	/* Describe */
 	object_desc(o_name, o_ptr, 0);
 
 	/* Prompt */

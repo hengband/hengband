@@ -4614,8 +4614,6 @@ static void pack_overflow(void)
 
 		/* Warning */
 		msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
-
-		/* Describe */
 		object_desc(o_name, o_ptr, 0);
 
 		msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
