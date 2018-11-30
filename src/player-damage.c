@@ -334,7 +334,7 @@ int inven_damage(inven_func typ, int perc)
 * Note that the "base armor" of an object never changes.
 * If any armor is damaged (or resists), the player takes less damage.
 */
-static int minus_ac(void)
+static bool minus_ac(void)
 {
 	object_type *o_ptr = NULL;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
