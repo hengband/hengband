@@ -3362,24 +3362,24 @@ void process_monsters(void)
 	monster_type    *m_ptr;
 	monster_race    *r_ptr;
 
-	int             old_monster_race_idx;
+	MONRACE_IDX old_monster_race_idx;
 
-	u32b    old_r_flags1 = 0L;
-	u32b    old_r_flags2 = 0L;
-	u32b    old_r_flags3 = 0L;
-	u32b    old_r_flags4 = 0L;
-	u32b    old_r_flags5 = 0L;
-	u32b    old_r_flags6 = 0L;
-	u32b    old_r_flagsr = 0L;
+	BIT_FLAGS old_r_flags1 = 0L;
+	BIT_FLAGS old_r_flags2 = 0L;
+	BIT_FLAGS old_r_flags3 = 0L;
+	BIT_FLAGS old_r_flags4 = 0L;
+	BIT_FLAGS old_r_flags5 = 0L;
+	BIT_FLAGS old_r_flags6 = 0L;
+	BIT_FLAGS old_r_flagsr = 0L;
 
-	byte    old_r_blows0 = 0;
-	byte    old_r_blows1 = 0;
-	byte    old_r_blows2 = 0;
-	byte    old_r_blows3 = 0;
+	byte old_r_blows0 = 0;
+	byte old_r_blows1 = 0;
+	byte old_r_blows2 = 0;
+	byte old_r_blows3 = 0;
 
-	byte    old_r_cast_spell = 0;
+	byte old_r_cast_spell = 0;
 
-	int speed;
+	SPEED speed;
 
 	/* Clear monster fighting indicator */
 	mon_fight = FALSE;

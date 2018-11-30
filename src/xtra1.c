@@ -4875,7 +4875,7 @@ void calc_bonuses(void)
 	{
 		monster_type *riding_m_ptr = &m_list[p_ptr->riding];
 		monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-		int speed = riding_m_ptr->mspeed;
+		SPEED speed = riding_m_ptr->mspeed;
 
 		if (riding_m_ptr->mspeed > 110)
 		{
@@ -4984,7 +4984,11 @@ void calc_bonuses(void)
 		p_ptr->icky_wield[i] = FALSE;
 		p_ptr->riding_wield[i] = FALSE;
 
-		if (!buki_motteruka(INVEN_RARM+i)) {p_ptr->num_blow[i]=1;continue;}
+		if (!buki_motteruka(INVEN_RARM+i))
+		{
+			p_ptr->num_blow[i] = 1;
+			continue;
+		}
 		/* It is hard to hold a heavy weapon */
 		if (hold < o_ptr->weight / 10)
 		{

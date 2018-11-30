@@ -220,7 +220,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	int             msex = 0;
 
 	bool nightmare = ironman_nightmare && !(mode & 0x02);
-	int speed = nightmare ? r_ptr->speed + 5 : r_ptr->speed;
+	SPEED speed = nightmare ? r_ptr->speed + 5 : r_ptr->speed;
 
 	bool            breath = FALSE;
 	bool            magic = FALSE;
