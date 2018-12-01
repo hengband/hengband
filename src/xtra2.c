@@ -2066,8 +2066,6 @@ void resize_map(void)
 
 	/* Hack -- update */
 	handle_stuff();
-	
-	/* Redraw */
 	Term_redraw();
 
 	/*
@@ -2091,13 +2089,10 @@ void redraw_window(void)
 	if (!character_dungeon) return;
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
 	/* Hack -- update */
 	handle_stuff();
-
-	/* Redraw */
 	Term_redraw();
 }
 

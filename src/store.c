@@ -4515,7 +4515,6 @@ static void store_process_command(void)
 			break;
 		}
 
-		/* Redraw */
 		case KTRL('R'):
 		{
 			do_cmd_redraw();

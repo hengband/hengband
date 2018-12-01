@@ -1753,8 +1753,6 @@ static void do_cmd_wiz_create_feature(void)
 		c_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
 
 	note_spot(y, x);
-
-	/* Redraw */
 	lite_spot(y, x);
 
 	/* Update some things */

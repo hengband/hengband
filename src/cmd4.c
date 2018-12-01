@@ -1017,8 +1017,6 @@ void do_cmd_redraw(void)
 
 		/* Activate */
 		Term_activate(angband_term[j]);
-
-		/* Redraw */
 		Term_redraw();
 
 		/* Refresh */

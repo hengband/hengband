@@ -3745,7 +3745,6 @@ bool hp_player(int num)
 			p_ptr->chp_frac = 0;
 		}
 
-		/* Redraw */
 		p_ptr->redraw |= (PR_HP);
 
 		p_ptr->window |= (PW_PLAYER);

@@ -50,7 +50,6 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 
 					c_ptr->info &= ~(CAVE_UNSAFE);
 
-					/* Redraw */
 					lite_spot(y, x);
 				}
 			}
@@ -64,7 +63,6 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 				/* Hack -- Memorize */
 				c_ptr->info |= (CAVE_MARK);
 
-				/* Redraw */
 				lite_spot(y, x);
 
 				detect = TRUE;
@@ -1077,7 +1075,6 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	/* Visual feedback */
 	move_cursor_relative(p_ptr->y, p_ptr->x);
 
-	/* Redraw */
 	p_ptr->redraw |= (PR_HP);
 	p_ptr->window |= (PW_PLAYER);
 
@@ -2261,7 +2258,6 @@ static void cave_temp_room_lite(void)
 		/* Note */
 		note_spot(y, x);
 
-		/* Redraw */
 		lite_spot(y, x);
 
 		update_local_illumination(y, x);
@@ -2344,7 +2340,6 @@ static void cave_temp_room_unlite(void)
 				update_monster(c_ptr->m_idx, FALSE);
 			}
 
-			/* Redraw */
 			lite_spot(y, x);
 
 			update_local_illumination(y, x);

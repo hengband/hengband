@@ -1726,7 +1726,6 @@ bool warding_glyph(void)
 
 	note_spot(p_ptr->y, p_ptr->x);
 
-	/* Redraw */
 	lite_spot(p_ptr->y, p_ptr->x);
 
 	return TRUE;
@@ -1753,7 +1752,6 @@ bool place_mirror(void)
 
 	note_spot(p_ptr->y, p_ptr->x);
 
-	/* Redraw */
 	lite_spot(p_ptr->y, p_ptr->x);
 
 	update_local_illumination(p_ptr->y, p_ptr->x);
@@ -1781,7 +1779,6 @@ bool explosive_rune(void)
 
 	note_spot(p_ptr->y, p_ptr->x);
 	
-	/* Redraw */
 	lite_spot(p_ptr->y, p_ptr->x);
 
 	return TRUE;

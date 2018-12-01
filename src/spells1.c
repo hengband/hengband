@@ -854,7 +854,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				c_ptr->info &= ~(CAVE_UNSAFE);
 
-				/* Redraw */
 				lite_spot(y, x);
 
 				obvious = TRUE;
@@ -885,7 +884,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				c_ptr->info &= ~(CAVE_UNSAFE);
 
-				/* Redraw */
 				lite_spot(y, x);
 
 				obvious = TRUE;
@@ -907,7 +905,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				note_spot(y, x);
 
-				/* Redraw */
 				lite_spot(y, x);
 
 				/* Check line of sight */
@@ -998,7 +995,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			note_spot(y, x);
 
-			/* Redraw */
 			lite_spot(y, x);
 
 			break;
@@ -1076,7 +1072,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				note_spot(y, x);
 
-				/* Redraw */
 				lite_spot(y, x);
 
 				update_local_illumination(y, x);
@@ -1140,7 +1135,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					note_spot(y, x);
 				}
 
-				/* Redraw */
 				lite_spot(y, x);
 
 				update_local_illumination(y, x);
@@ -1567,7 +1561,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					(void)potion_smash_effect(who, y, x, k_idx);
 				}
 
-				/* Redraw */
 				lite_spot(y, x);
 			}
 		}

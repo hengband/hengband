@@ -2908,7 +2908,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 
 			note_spot(ny, nx);
 
-			/* Redraw */
 			lite_spot(ny, nx);
 		}
 
@@ -2948,7 +2947,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 
 			note_spot(ny, nx);
 
-			/* Redraw */
 			lite_spot(ny, nx);
 		}
 
@@ -3092,7 +3090,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 
 					note_spot(ny, nx);
 
-					/* Redraw */
 					lite_spot(ny, nx);
 				}
 

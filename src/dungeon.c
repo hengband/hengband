@@ -736,11 +736,8 @@ static void regenhp(int percent)
 	/* Notice changes */
 	if (old_chp != p_ptr->chp)
 	{
-		/* Redraw */
 		p_ptr->redraw |= (PR_HP);
-
 		p_ptr->window |= (PW_PLAYER);
-
 		wild_regen = 20;
 	}
 }
@@ -828,12 +825,9 @@ static void regenmana(int upkeep_factor, int regen_amount)
 	/* Redraw mana */
 	if (old_csp != p_ptr->csp)
 	{
-		/* Redraw */
 		p_ptr->redraw |= (PR_MANA);
-
 		p_ptr->window |= (PW_PLAYER);
 		p_ptr->window |= (PW_SPELL);
-
 		wild_regen = 20;
 	}
 }

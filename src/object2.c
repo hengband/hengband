@@ -4946,7 +4946,6 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 
 		note_spot(y, x);
 
-		/* Redraw */
 		lite_spot(y, x);
 	}
 	else
@@ -5065,7 +5064,6 @@ void place_gold(POSITION y, POSITION x)
 
 		note_spot(y, x);
 
-		/* Redraw */
 		lite_spot(y, x);
 	}
 }

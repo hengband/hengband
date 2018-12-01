@@ -2503,7 +2503,6 @@ void forget_lite(void)
 		/* Forget "LITE" flag */
 		cave[y][x].info &= ~(CAVE_LITE);
 
-		/* Redraw */
 		/* lite_spot(y, x); Perhaps don't need? */
 	}
 
@@ -4035,7 +4034,6 @@ void delayed_visual_update(void)
 		/* If required, note */
 		if (c_ptr->info & CAVE_NOTE) note_spot(y, x);
 
-		/* Redraw */
 		lite_spot(y, x);
 
 		/* Hack -- Visual update of monster on this grid */
@@ -4573,7 +4571,6 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 
 	note_spot(y, x);
 
-	/* Redraw */
 	lite_spot(y, x);
 
 	/* Check if los has changed */
@@ -4611,7 +4608,6 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 
 				note_spot(yy, xx);
 
-				/* Redraw */
 				lite_spot(yy, xx);
 			}
 
@@ -4755,7 +4751,6 @@ void remove_mirror(POSITION y, POSITION x)
 
 	note_spot(y, x);
 
-	/* Redraw */
 	lite_spot(y, x);
 }
 

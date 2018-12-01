@@ -5450,12 +5450,9 @@ void calc_bonuses(void)
 	/* Redraw armor (if needed) */
 	if ((p_ptr->dis_ac != old_dis_ac) || (p_ptr->dis_to_a != old_dis_to_a))
 	{
-		/* Redraw */
 		p_ptr->redraw |= (PR_ARMOR);
-
 		p_ptr->window |= (PW_PLAYER);
 	}
-
 
 	if (p_ptr->ryoute && !omoi)
 	{

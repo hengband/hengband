@@ -90,8 +90,6 @@ void disclose_grid(POSITION y, POSITION x)
 		c_ptr->mimic = 0;
 
 		note_spot(y, x);
-
-		/* Redraw */
 		lite_spot(y, x);
 	}
 }
