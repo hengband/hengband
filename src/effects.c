@@ -275,7 +275,6 @@ void dispel_player(void)
 		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS | PU_HP);
 
-		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
 
 		/* Update monsters */
@@ -421,7 +420,6 @@ bool set_blind(TIME_EFFECT v)
 	/* Fully update the visuals */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -748,7 +746,6 @@ bool set_image(TIME_EFFECT v)
 
 	if (disturb_state) disturb(FALSE, TRUE);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	/* Update the health bar */
@@ -1380,7 +1377,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 			chg_virtue(V_SACRIFICE, -2);
 			chg_virtue(V_VALOUR, -5);
 
-			/* Redraw map */
 			p_ptr->redraw |= (PR_MAP);
 
 			/* Update monsters */
@@ -1398,7 +1394,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 			msg_print(_("不透明になった感じがする。", "You feel opaque."));
 			notice = TRUE;
 
-			/* Redraw map */
 			p_ptr->redraw |= (PR_MAP);
 
 			/* Update monsters */
@@ -1460,7 +1455,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 			chg_virtue(V_SACRIFICE, -3);
 			chg_virtue(V_VALOUR, -5);
 
-			/* Redraw map */
 			p_ptr->redraw |= (PR_MAP);
 
 			/* Update monsters */
@@ -1478,7 +1472,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 			msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
 			notice = TRUE;
 
-			/* Redraw map */
 			p_ptr->redraw |= (PR_MAP);
 
 			/* Update monsters */

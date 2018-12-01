@@ -2142,7 +2142,6 @@ bool change_panel(POSITION dy, POSITION dx)
 
 		p_ptr->update |= (PU_MONSTERS);
 
-		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
 
 		/* Handle stuff */
@@ -2287,7 +2286,6 @@ void verify_panel(void)
 
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -3672,7 +3670,6 @@ bool target_set(BIT_FLAGS mode)
 
 					p_ptr->update |= (PU_MONSTERS);
 
-					/* Redraw map */
 					p_ptr->redraw |= (PR_MAP);
 
 					p_ptr->window |= (PW_OVERHEAD);
@@ -3763,7 +3760,6 @@ bool target_set(BIT_FLAGS mode)
 
 						p_ptr->update |= (PU_MONSTERS);
 
-						/* Redraw map */
 						p_ptr->redraw |= (PR_MAP);
 
 						p_ptr->window |= (PW_OVERHEAD);
@@ -3882,7 +3878,6 @@ bool target_set(BIT_FLAGS mode)
 
 					p_ptr->update |= (PU_MONSTERS);
 
-					/* Redraw map */
 					p_ptr->redraw |= (PR_MAP);
 
 					p_ptr->window |= (PW_OVERHEAD);
@@ -4007,7 +4002,6 @@ bool target_set(BIT_FLAGS mode)
 
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD);
@@ -5162,7 +5156,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 
 					p_ptr->update |= (PU_MONSTERS);
 
-					/* Redraw map */
 					p_ptr->redraw |= (PR_MAP);
 
 					p_ptr->window |= (PW_OVERHEAD);
@@ -5251,7 +5244,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD);

@@ -5191,7 +5191,7 @@ static void process_player(void)
 
 			if (world_player && (p_ptr->energy_need > - 1000))
 			{
-				/* Redraw map */
+
 				p_ptr->redraw |= (PR_MAP);
 
 				/* Update monsters */
@@ -5327,7 +5327,6 @@ static void dungeon(bool load_game)
 	/* Redraw dungeon */
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);

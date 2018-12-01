@@ -5200,7 +5200,6 @@ void do_cmd_store(void)
 	/* Redraw entire screen */
 	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

@@ -418,7 +418,6 @@ bool do_riding(bool force)
 	/* Update the monsters */
 	p_ptr->update |= (PU_BONUS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP | PR_EXTRA);
 
 	p_ptr->redraw |= (PR_UHEALTH);

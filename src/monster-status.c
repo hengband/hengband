@@ -724,7 +724,6 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
 	}
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	/* Update monsters */

@@ -683,7 +683,6 @@ static bool use_mane(int spell)
 		/* Hack */
 		p_ptr->energy_need -= 1000 + (100 + randint1(200)+200)*TURNS_PER_TICK/10;
 
-		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
 
 		/* Update monsters */

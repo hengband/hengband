@@ -555,7 +555,6 @@ void carry(bool pickup)
 
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD);
@@ -888,7 +887,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 			/* Mega-Hack -- Forget the view */
 			p_ptr->update |= (PU_UN_VIEW);
 
-			/* Redraw map */
 			p_ptr->redraw |= (PR_MAP);
 		}
 

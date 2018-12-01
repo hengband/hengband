@@ -939,7 +939,6 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			msg_print(_("フィンゴルフィンの冥王への挑戦を歌った．．．",
 				"You recall the valor of Fingolfin's challenge to the Dark Lord..."));
 
-			/* Redraw map */
 			p_ptr->redraw |= (PR_MAP);
 
 			/* Update monsters */
@@ -955,7 +954,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (!p_ptr->invuln)
 			{
 				msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
-				/* Redraw map */
+
 				p_ptr->redraw |= (PR_MAP);
 
 				/* Update monsters */

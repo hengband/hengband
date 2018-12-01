@@ -30,7 +30,6 @@ void day_break()
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -85,7 +84,6 @@ void night_falls(void)
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

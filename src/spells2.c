@@ -1625,7 +1625,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
-		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
 
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -2101,7 +2100,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	/* Update the health bar */
 	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -3333,7 +3331,6 @@ bool wall_stone(void)
 
 	p_ptr->update |= (PU_FLOW);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	return dummy;

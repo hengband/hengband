@@ -2032,7 +2032,6 @@ static void fix_message(void)
 static void fix_overhead(void)
 {
 	int j;
-
 	int cy, cx;
 
 	/* Scan windows */
@@ -2054,7 +2053,7 @@ static void fix_overhead(void)
 		Term_get_size(&wid, &hgt);
 		if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2)
 		{
-			/* Redraw map */
+
 			display_map(&cy, &cx);
 			Term_fresh();
 		}

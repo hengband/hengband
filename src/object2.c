@@ -369,7 +369,6 @@ void compact_objects(int size)
 	{
 		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
 
-		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
 
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

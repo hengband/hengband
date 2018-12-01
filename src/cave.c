@@ -1749,7 +1749,6 @@ void prt_path(POSITION y, POSITION x)
 	/* Get projection path */
 	path_n = project_path(path_g, (project_length ? project_length : MAX_RANGE), p_ptr->y, p_ptr->x, y, x, PROJECT_PATH|PROJECT_THRU);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	/* Redraw stuff */
@@ -4329,7 +4328,6 @@ void map_area(POSITION range)
 		}
 	}
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -4436,7 +4434,6 @@ void wiz_lite(bool ninja)
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -4510,7 +4507,6 @@ void wiz_dark(void)
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -5084,7 +5080,6 @@ void glow_deep_lava_and_bldg(void)
 	/* Update the view and lite */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 }
 

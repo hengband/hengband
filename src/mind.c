@@ -1181,7 +1181,6 @@ static bool cast_mindcrafter_spell(int spell)
 		/* Hack */
 		p_ptr->energy_need -= 1000 + (100 + p_ptr->csp - 50)*TURNS_PER_TICK/10;
 
-		/* Redraw map */
 		p_ptr->redraw |= (PR_MAP);
 
 		/* Update monsters */

@@ -1481,7 +1481,6 @@ static bool vanish_dungeon(void)
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw map */
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
