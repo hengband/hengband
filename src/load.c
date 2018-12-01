@@ -1402,8 +1402,6 @@ static errr rd_store(int town_number, int store_number)
 
 		/* Get local object */
 		q_ptr = &forge;
-
-		/* Wipe the object */
 		object_wipe(q_ptr);
 
 		/* Read the item */
@@ -2402,8 +2400,6 @@ static errr rd_inventory(void)
 
 		/* Get local object */
 		q_ptr = &forge;
-
-		/* Wipe the object */
 		object_wipe(q_ptr);
 
 		/* Read the item */

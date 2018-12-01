@@ -6961,8 +6961,6 @@ static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
 
 	/* Get local object */
 	o_ptr = &object_type_body;
-
-	/* Wipe the object */
 	object_wipe(o_ptr);
 
 	/* Create the artifact */

@@ -4624,8 +4624,6 @@ void calc_android_exp(void)
 
 		if ((i == INVEN_RIGHT) || (i == INVEN_LEFT) || (i == INVEN_NECK) || (i == INVEN_LITE)) continue;
 		if (!o_ptr->k_idx) continue;
-
-		/* Wipe the object */
 		object_wipe(q_ptr);
 
 		object_copy(q_ptr, o_ptr);

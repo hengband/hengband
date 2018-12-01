@@ -63,8 +63,6 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	{
 		/* Get local object */
 		q_ptr = &forge;
-
-		/* Wipe the object */
 		object_wipe(q_ptr);
 
 		/* Small chests often drop gold */

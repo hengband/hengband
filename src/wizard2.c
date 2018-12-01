@@ -1107,11 +1107,8 @@ static void wiz_statistics(object_type *o_ptr)
 				Term_fresh();
 			}
 
-
 			/* Get local object */
 			q_ptr = &forge;
-
-			/* Wipe the object */
 			object_wipe(q_ptr);
 
 			/* Create an object */

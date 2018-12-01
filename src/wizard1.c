@@ -1725,8 +1725,6 @@ static void spoil_artifact(cptr fname)
 
 			/* Get local object */
 			q_ptr = &forge;
-
-			/* Wipe the object */
 			object_wipe(q_ptr);
 
 			/* Attempt to "forge" the artifact */

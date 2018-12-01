@@ -206,8 +206,6 @@ void delete_object_idx(OBJECT_IDX o_idx)
 		/* Visual update */
 		lite_spot(y, x);
 	}
-
-	/* Wipe the object */
 	object_wipe(j_ptr);
 
 	/* Count objects */
@@ -243,8 +241,6 @@ void delete_object(POSITION y, POSITION x)
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
-
-		/* Wipe the object */
 		object_wipe(o_ptr);
 
 		/* Count objects */
@@ -524,8 +520,6 @@ void wipe_o_list(void)
 			/* Hack -- see above */
 			c_ptr->o_idx = 0;
 		}
-
-		/* Wipe the object */
 		object_wipe(o_ptr);
 	}
 
@@ -4922,8 +4916,6 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 
 	/* Get local object */
 	q_ptr = &forge;
-
-	/* Wipe the object */
 	object_wipe(q_ptr);
 
 	/* Make an object (if possible) */
@@ -5043,8 +5035,6 @@ void place_gold(POSITION y, POSITION x)
 
 	/* Get local object */
 	q_ptr = &forge;
-
-	/* Wipe the object */
 	object_wipe(q_ptr);
 
 	/* Make some gold */
@@ -5462,8 +5452,6 @@ void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bo
 	{
 		/* Get local object */
 		i_ptr = &object_type_body;
-
-		/* Wipe the object */
 		object_wipe(i_ptr);
 
 		/* Make a good (or great) object (if possible) */
@@ -5553,11 +5541,7 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
 
 		/* Get local object */
 		i_ptr = &object_type_body;
-
-		/* Wipe the object */
 		object_wipe(i_ptr);
-
-		/* Wipe the object */
 		k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
 
 		/* Paranoia - reroll if nothing */

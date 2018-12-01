@@ -648,8 +648,6 @@ void check_quest_completion(monster_type *m_ptr)
 		{
 			/* Get local object */
 			o_ptr = &forge;
-
-			/* Wipe the object */
 			object_wipe(o_ptr);
 
 			/* Make a great object */
@@ -953,8 +951,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		{
 			/* Get local object */
 			q_ptr = &forge;
-
-			/* Wipe the object */
 			object_wipe(q_ptr);
 
 			/* Activate restriction */
@@ -1138,8 +1134,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			{
 				/* Get local object */
 				q_ptr = &forge;
-
-				/* Wipe the object */
 				object_wipe(q_ptr);
 
 				/* Activate restriction */
@@ -1158,8 +1152,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			{
 				/* Get local object */
 				q_ptr = &forge;
-
-				/* Wipe the object */
 				object_wipe(q_ptr);
 
 				/* Activate restriction */
@@ -1178,8 +1170,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			{
 				/* Get local object */
 				q_ptr = &forge;
-
-				/* Wipe the object */
 				object_wipe(q_ptr);
 
 				/* Activate restriction */
@@ -1198,8 +1188,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			{
 				/* Get local object */
 				q_ptr = &forge;
-
-				/* Wipe the object */
 				object_wipe(q_ptr);
 
 				/* Activate restriction */
@@ -1218,8 +1206,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			{
 				/* Get local object */
 				q_ptr = &forge;
-
-				/* Wipe the object */
 				object_wipe(q_ptr);
 
 				/* Activate restriction */
@@ -1340,8 +1326,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	{
 		/* Get local object */
 		q_ptr = &forge;
-
-		/* Wipe the object */
 		object_wipe(q_ptr);
 
 		/* Make Gold */
