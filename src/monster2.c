@@ -2282,7 +2282,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  * "disturb_near" (monster which is "easily" viewable moves in some
  * way).  Note that "moves" includes "appears" and "disappears".
  */
-void update_mon(MONSTER_IDX m_idx, bool full)
+void update_monster(MONSTER_IDX m_idx, bool full)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 
@@ -2686,9 +2686,7 @@ void update_monsters(bool full)
 
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
-
-		/* Update the monster */
-		update_mon(i, full);
+		update_monster(i, full);
 	}
 }
 
@@ -2821,7 +2819,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = r_idx;
-	update_mon(m_idx, FALSE);
+	update_monster(m_idx, FALSE);
 	lite_spot(m_ptr->fy, m_ptr->fx);
 
 	if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) ||
@@ -3267,9 +3265,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		p_ptr->update |= (PU_MON_LITE);
 	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !MON_CSLEEP(m_ptr))
 		p_ptr->update |= (PU_MON_LITE);
-
-	/* Update the monster */
-	update_mon(c_ptr->m_idx, TRUE);
+	update_monster(c_ptr->m_idx, TRUE);
 
 
 	/* Count the monsters on the level */

@@ -760,7 +760,7 @@ extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 extern int lore_do_probe(MONRACE_IDX r_idx);
 extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
-extern void update_mon(MONSTER_IDX m_idx, bool full);
+extern void update_monster(MONSTER_IDX m_idx, bool full);
 extern void update_monsters(bool full);
 extern bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode);

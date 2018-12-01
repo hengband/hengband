@@ -378,9 +378,7 @@ bool detect_monsters_normal(POSITION range)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -437,9 +435,7 @@ bool detect_monsters_invis(POSITION range)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -501,9 +497,7 @@ bool detect_monsters_evil(POSITION range)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -557,9 +551,7 @@ bool detect_monsters_nonliving(POSITION range)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -613,9 +605,7 @@ bool detect_monsters_mind(POSITION range)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -671,9 +661,7 @@ bool detect_monsters_string(POSITION range, cptr Match)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -737,9 +725,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -1993,7 +1979,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 						m_ptr->fx = sx;
 
 						/* Update the monster (new location) */
-						update_mon(m_idx, TRUE);
+						update_monster(m_idx, TRUE);
 
 						/* Redraw the old grid */
 						lite_spot(yy, xx);
@@ -2246,9 +2232,7 @@ static void cave_temp_room_lite(void)
 			monster_type    *m_ptr = &m_list[c_ptr->m_idx];
 
 			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-
-			/* Update the monster */
-			update_mon(c_ptr->m_idx, FALSE);
+			update_monster(c_ptr->m_idx, FALSE);
 
 			/* Stupid monsters rarely wake up */
 			if (r_ptr->flags2 & (RF2_STUPID)) chance = 10;
@@ -2359,8 +2343,7 @@ static void cave_temp_room_unlite(void)
 			/* Process affected monsters */
 			if (c_ptr->m_idx)
 			{
-				/* Update the monster */
-				update_mon(c_ptr->m_idx, FALSE);
+				update_monster(c_ptr->m_idx, FALSE);
 			}
 
 			/* Redraw */
@@ -4025,9 +4008,7 @@ bool rush_attack(bool *mdeath)
 
 		/* Move player before updating the monster */
 		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
-
-		/* Update the monster */
-		update_mon(cave[ny][nx].m_idx, TRUE);
+		update_monster(cave[ny][nx].m_idx, TRUE);
 
 		/* Found a monster */
 		m_ptr = &m_list[cave[ny][nx].m_idx];

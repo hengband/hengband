@@ -5540,9 +5540,9 @@ static void do_cmd_knowledge_uniques(void)
 
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	/* Allocate the "who" array */

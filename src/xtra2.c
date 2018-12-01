@@ -3487,7 +3487,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
  * some form of "scrolling" the map around the cursor.  
  * That is, consider the possibility of "auto-scrolling" the screen
  * while the cursor moves around.  This may require changes in the
- * "update_mon()" code to allow "visibility" even if off panel, and
+ * "update_monster()" code to allow "visibility" even if off panel, and
  * may require dynamic recalculation of the "temp" grid set.
  *
  * Hack -- targeting/observing an "outer border grid" may induce

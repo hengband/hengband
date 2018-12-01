@@ -118,7 +118,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	reset_target(m_ptr);
 
 	/* Update the monster (new location) */
-	update_mon(m_idx, TRUE);
+	update_monster(m_idx, TRUE);
 
 	/* Redraw the old grid */
 	lite_spot(oy, ox);
@@ -223,7 +223,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	m_ptr->fx = nx;
 
 	/* Update the monster (new location) */
-	update_mon(m_idx, TRUE);
+	update_monster(m_idx, TRUE);
 
 	/* Redraw the old grid */
 	lite_spot(oy, ox);
@@ -5067,7 +5067,7 @@ bool shock_power(void)
 				m_ptr->fy = (byte_hack)ty;
 				m_ptr->fx = (byte_hack)tx;
 
-				update_mon(m_idx, TRUE);
+				update_monster(m_idx, TRUE);
 				lite_spot(oy, ox);
 				lite_spot(ty, tx);
 

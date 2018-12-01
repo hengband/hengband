@@ -308,7 +308,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					m_ptr->fy = ty;
 					m_ptr->fx = tx;
 
-					update_mon(m_idx, TRUE);
+					update_monster(m_idx, TRUE);
 					lite_spot(oy, ox);
 					lite_spot(ty, tx);
 
@@ -674,7 +674,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				m_ptr->fy = ny;
 				m_ptr->fx = nx;
 
-				update_mon(m_idx, TRUE);
+				update_monster(m_idx, TRUE);
 
 				/* Redraw the old spot */
 				lite_spot(y, x);

@@ -4702,9 +4702,7 @@ static void process_player(void)
 
 			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-
-			/* Update the monster */
-			update_mon(i, FALSE);
+			update_monster(i, FALSE);
 		}
 		prt_time();
 	}
@@ -5160,9 +5158,7 @@ static void process_player(void)
 
 							/* Assume invisible */
 							m_ptr->ml = FALSE;
-
-							/* Update the monster */
-							update_mon(i, FALSE);
+							update_monster(i, FALSE);
 
 							if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
 							if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);

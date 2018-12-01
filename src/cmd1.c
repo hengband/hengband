@@ -860,7 +860,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 				monster_type *om_ptr = &m_list[om_idx];
 				om_ptr->fy = ny;
 				om_ptr->fx = nx;
-				update_mon(om_idx, TRUE);
+				update_monster(om_idx, TRUE);
 			}
 
 			if (nm_idx > 0) /* Monster on new spot */
@@ -868,7 +868,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 				monster_type *nm_ptr = &m_list[nm_idx];
 				nm_ptr->fy = oy;
 				nm_ptr->fx = ox;
-				update_mon(nm_idx, TRUE);
+				update_monster(nm_idx, TRUE);
 			}
 		}
 

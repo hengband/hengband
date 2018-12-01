@@ -1257,8 +1257,7 @@ static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
 	misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list,
 				     N_ELEMENTS(misc_flags2_desc));
 
-	misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list,
-				     N_ELEMENTS(misc_flags3_desc));
+	misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
 
 	/*
 	 * Glowing artifacts -- small radius light.
@@ -1381,8 +1380,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 {
 	artifact_type *a_ptr = &a_info[o_ptr->name1];
 
-	sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"),
-		(int)a_ptr->level, a_ptr->rarity,
+	sprintf(misc_desc, _("レベル %d, 希少度 %u, %d.%d kg, ＄%ld", "Level %d, Rarity %u, %d.%d lbs, %ld Gold"), (int)a_ptr->level, a_ptr->rarity,
 #ifdef JP
 		lbtokg1(a_ptr->weight), lbtokg2(a_ptr->weight), (long int)a_ptr->cost);
 #else
@@ -1423,8 +1421,7 @@ static void print_header(void)
 {
 	char buf[80];
 
-	sprintf(buf, "Artifact Spoilers for Hengband Version %d.%d.%d",
-		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+	sprintf(buf, "Artifact Spoilers for Hengband Version %d.%d.%d",FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 	spoiler_underline(buf);
 }
 

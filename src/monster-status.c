@@ -857,7 +857,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 			/* Now you feel very close to this pet. */
 			m_ptr->parent_m_idx = 0;
 		}
-		update_mon(m_idx, FALSE);
+		update_monster(m_idx, FALSE);
 		lite_spot(m_ptr->fy, m_ptr->fx);
 	}
 	if (m_idx == p_ptr->riding) p_ptr->update |= PU_BONUS;

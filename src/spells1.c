@@ -1086,7 +1086,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Mega-Hack -- Update the monster in the affected grid */
 				/* This allows "spear of light" (etc) to work "correctly" */
-				if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+				if (c_ptr->m_idx) update_monster(c_ptr->m_idx, FALSE);
 
 				if (p_ptr->special_defense & NINJA_S_STEALTH)
 				{
@@ -1149,7 +1149,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Mega-Hack -- Update the monster in the affected grid */
 				/* This allows "spear of light" (etc) to work "correctly" */
-				if (c_ptr->m_idx) update_mon(c_ptr->m_idx, FALSE);
+				if (c_ptr->m_idx) update_monster(c_ptr->m_idx, FALSE);
 			}
 
 			/* All done */
@@ -5025,9 +5025,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	}
 
 	/* Verify this code */
-
-	/* Update the monster */
-	if (m_ptr->r_idx) update_mon(c_ptr->m_idx, FALSE);
+	if (m_ptr->r_idx) update_monster(c_ptr->m_idx, FALSE);
 
 	/* Redraw the monster grid */
 	lite_spot(y, x);

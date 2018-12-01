@@ -1707,7 +1707,7 @@ static bool cast_ninja_spell(int spell)
 		(void)set_monster_csleep(m_idx, 0);
 
 		/* Update the monster (new location) */
-		update_mon(m_idx, TRUE);
+		update_monster(m_idx, TRUE);
 
 		/* Redraw the old grid */
 		lite_spot(target_row, target_col);

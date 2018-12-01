@@ -574,9 +574,7 @@ static void place_pet(void)
 				/* Must repair monsters */
 				repair_monsters = TRUE;
 			}
-
-			/* Update the monster */
-			update_mon(m_idx, TRUE);
+			update_monster(m_idx, TRUE);
 			lite_spot(cy, cx);
 
 			/* Pre-calculated in precalc_cur_num_of_pet() */
@@ -728,7 +726,7 @@ static void get_out_monster(void)
 		m_ptr->fy = ny;
 		m_ptr->fx = nx; 
 
-		/* No need to do update_mon() */
+		/* No need to do update_monster() */
 
 		/* Success */
 		return;
