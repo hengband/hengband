@@ -1577,7 +1577,6 @@ static void spoiler_outlist(cptr header, cptr *list, char separator)
 static void spoiler_print_art(obj_desc_list *art_ptr)
 {
 	pval_info_type *pval_ptr = &art_ptr->pval_info;
-
 	char buf[80];
 
 	/* Don't indent the first line */
@@ -1592,20 +1591,11 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 	}
 
 	/* Now deal with the description lists */
-
-#ifdef JP
-	spoiler_outlist("対:", art_ptr->slays, ITEM_SEP);
-	spoiler_outlist("武器属性:", art_ptr->brands, LIST_SEP);
-	spoiler_outlist("免疫:", art_ptr->immunities, ITEM_SEP);
-	spoiler_outlist("耐性:", art_ptr->resistances, ITEM_SEP);
-	spoiler_outlist("維持:", art_ptr->sustains, ITEM_SEP);
-#else
-	spoiler_outlist("Slay", art_ptr->slays, ITEM_SEP);
-	spoiler_outlist("", art_ptr->brands, LIST_SEP);
-	spoiler_outlist("Immunity to", art_ptr->immunities, ITEM_SEP);
-	spoiler_outlist("Resist", art_ptr->resistances, ITEM_SEP);
-	spoiler_outlist("Sustain", art_ptr->sustains, ITEM_SEP);
-#endif
+	spoiler_outlist(_("対:", "Slay"), art_ptr->slays, ITEM_SEP);
+	spoiler_outlist(_("武器属性:", ""), art_ptr->brands, LIST_SEP);
+	spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, ITEM_SEP);
+	spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, ITEM_SEP);
+	spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, ITEM_SEP);
 	spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
 
 	if (art_ptr->addition[0])
@@ -1634,9 +1624,7 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 {
 	IDX i;
-
 	artifact_type *a_ptr = &a_info[name1];
-
 
 	/* Ignore "empty" artifacts */
 	if (!a_ptr->name) return FALSE;
@@ -1680,11 +1668,8 @@ static void spoil_artifact(cptr fname)
 
 	object_type forge;
 	object_type *q_ptr;
-
 	obj_desc_list artifact;
-
 	char buf[1024];
-
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
