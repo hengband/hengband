@@ -4429,11 +4429,8 @@ void wiz_lite(bool ninja)
 		}
 	}
 
-	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -4496,17 +4493,10 @@ void wiz_dark(void)
 	/* Forget travel route when we have forgotten map */
 	forget_travel_flow();
 
-	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	/* Update the view and lite */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-
-	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 

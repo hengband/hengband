@@ -96,36 +96,28 @@ void place_random_stairs(POSITION y, POSITION x)
 	if (!is_floor_grid(c_ptr) || c_ptr->o_idx) return;
 
 	/* Town */
-	if (!dun_level)
-		up_stairs = FALSE;
+	if (!dun_level) up_stairs = FALSE;
 
 	/* Ironman */
-	if (ironman_downward)
-		up_stairs = FALSE;
+	if (ironman_downward) up_stairs = FALSE;
 
 	/* Bottom */
-	if (dun_level >= d_info[dungeon_type].maxdepth)
-		down_stairs = FALSE;
+	if (dun_level >= d_info[dungeon_type].maxdepth) down_stairs = FALSE;
 
 	/* Quest-level */
-	if (quest_number(dun_level) && (dun_level > 1))
-		down_stairs = FALSE;
+	if (quest_number(dun_level) && (dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
 	if (down_stairs && up_stairs)
 	{
 		/* Choose a staircase randomly */
-		if (randint0(100) < 50)
-			up_stairs = FALSE;
-		else
-			down_stairs = FALSE;
+		if (randint0(100) < 50) up_stairs = FALSE;
+		else down_stairs = FALSE;
 	}
 
 	/* Place the stairs */
-	if (up_stairs)
-		place_up_stairs(y, x);
-	else if (down_stairs)
-		place_down_stairs(y, x);
+	if (up_stairs) place_up_stairs(y, x);
+	else if (down_stairs) place_down_stairs(y, x);
 }
 
 /*!

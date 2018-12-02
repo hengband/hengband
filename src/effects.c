@@ -1554,8 +1554,6 @@ bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
 	/* Handle stuff */

@@ -264,7 +264,6 @@ void do_cmd_pet_dismiss(void)
 
 				p_ptr->riding = 0;
 
-				/* Update the monsters */
 				p_ptr->update |= (PU_BONUS | PU_MONSTERS);
 				p_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
 			}
@@ -414,12 +413,8 @@ bool do_riding(bool force)
 
 	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	/* Update the monsters */
 	p_ptr->update |= (PU_BONUS);
-
 	p_ptr->redraw |= (PR_MAP | PR_EXTRA);
-
 	p_ptr->redraw |= (PR_UHEALTH);
 
 	/* Move the player */
