@@ -5782,8 +5782,6 @@ void do_cmd_help(void)
 
 	/* Peruse the main help file */
 	(void)show_file(TRUE, _("jhelp.hlp", "help.hlp"), NULL, 0, 0);
-
-	/* Load screen */
 	screen_load();
 }
 
@@ -6621,8 +6619,6 @@ static void show_info(void)
 
 		/* Dump a character file */
 		(void)file_character(out_val);
-
-		/* Load screen */
 		screen_load();
 	}
 

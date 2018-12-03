@@ -311,8 +311,6 @@ static void arena_comm(int cmd)
 
 			/* Peruse the arena help file */
 			(void)show_file(TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
-
-			/* Load screen */
 			screen_load();
 
 			break;
@@ -2308,8 +2306,6 @@ static void town_history(void)
 
 	/* Peruse the building help file */
 	(void)show_file(TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
-
-	/* Load screen */
 	screen_load();
 }
 

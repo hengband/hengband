@@ -4962,7 +4962,6 @@ bool choose_ele_attack(void)
 		screen_load();
 		return FALSE;
 	}
-	/* Load screen */
 	screen_load();
 	return TRUE;
 }
@@ -5005,7 +5004,6 @@ bool choose_ele_immune(TIME_EFFECT immune_turn)
 		screen_load();
 		return FALSE;
 	}
-	/* Load screen */
 	screen_load();
 	return TRUE;
 }

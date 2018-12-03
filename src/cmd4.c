@@ -2965,8 +2965,6 @@ void do_cmd_macros(void)
 		/* Flush messages */
 		msg_print(NULL);
 	}
-
-	/* Load screen */
 	screen_load();
 }
 

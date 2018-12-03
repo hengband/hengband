@@ -3130,7 +3130,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Hack -- Fix screen */
 				if (command_see)
 				{
-					/* Load screen */
 					screen_load();
 					screen_save();
 				}
@@ -3210,8 +3209,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Flip flag */
 					command_see = FALSE;
-
-					/* Load screen */
 					screen_load();
 				}
 
@@ -3238,7 +3235,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Hack -- Fix screen */
 				if (command_see)
 				{
-					/* Load screen */
 					screen_load();
 					screen_save();
 				}
@@ -3472,7 +3468,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Fix the screen if necessary */
 	if (command_see)
 	{
-		/* Load screen */
 		screen_load();
 
 		/* Hack -- Cancel "display" */
@@ -4275,7 +4270,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Hack -- Fix screen */
 				if (command_see)
 				{
-					/* Load screen */
 					screen_load();
 					screen_save();
 				}
@@ -4334,7 +4328,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Hack -- Fix screen */
 				if (command_see)
 				{
-					/* Load screen */
 					screen_load();
 					screen_save();
 				}
@@ -4415,8 +4408,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Flip flag */
 					command_see = FALSE;
-
-					/* Load screen */
 					screen_load();
 				}
 
@@ -4464,7 +4455,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Hack -- Fix screen */
 				if (command_see)
 				{
-					/* Load screen */
 					screen_load();
 					screen_save();
 				}
@@ -4512,7 +4502,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Hack -- Fix screen */
 				if (command_see)
 				{
-					/* Load screen */
 					screen_load();
 					screen_save();
 				}
@@ -4562,7 +4551,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Hack -- Fix screen */
 				if (command_see)
 				{
-					/* Load screen */
 					screen_load();
 					screen_save();
 				}
@@ -4826,7 +4814,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Fix the screen if necessary */
 	if (command_see)
 	{
-		/* Load screen */
 		screen_load();
 
 		/* Hack -- Cancel "display" */

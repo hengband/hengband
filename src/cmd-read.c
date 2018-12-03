@@ -546,8 +546,6 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 
 		/* Peruse the help file */
 		(void)show_file(TRUE, buf, o_name, 0, 0);
-
-		/* Load screen */
 		screen_load();
 
 		used_up=FALSE;

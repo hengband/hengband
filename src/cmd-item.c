@@ -66,8 +66,6 @@ void do_cmd_inven(void)
 
 	/* Get a new command */
 	command_new = inkey();
-
-	/* Load screen */
 	screen_load();
 
 

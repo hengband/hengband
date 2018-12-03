@@ -3211,8 +3211,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 
 				/* Wait */
 				query = inkey();
-
-				/* Load screen */
 				screen_load();
 
 				/* Exit unless 'Enter' */
