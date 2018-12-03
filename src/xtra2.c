@@ -3166,11 +3166,9 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			{
 				/* Display rough information about items */
 #ifdef JP
-				sprintf(out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]",
-					s1, (int)floor_num, s2, s3, info);
+				sprintf(out_val, "%s %d個のアイテム%s%s ['x'で一覧, %s]", s1, (int)floor_num, s2, s3, info);
 #else
-				sprintf(out_val, "%s%s%sa pile of %d items [x,%s]",
-					s1, s2, s3, (int)floor_num, info);
+				sprintf(out_val, "%s%s%sa pile of %d items [x,%s]", s1, s2, s3, (int)floor_num, info);
 #endif
 
 				prt(out_val, 0, 0);
@@ -3200,16 +3198,12 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 
 				/* Prompt */
 #ifdef JP
-				sprintf(out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]",
-					s1, (int)floor_num, s2, s3, info);
+				sprintf(out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", s1, (int)floor_num, s2, s3, info);
 #else
-				sprintf(out_val, "%s%s%sa pile of %d items [Enter,%s]",
-					s1, s2, s3, (int)floor_num, info);
+				sprintf(out_val, "%s%s%sa pile of %d items [Enter,%s]", s1, s2, s3, (int)floor_num, info);
 #endif
 				prt(out_val, 0, 0);
 
-
-				/* Wait */
 				query = inkey();
 				screen_load();
 

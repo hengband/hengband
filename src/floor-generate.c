@@ -1539,7 +1539,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
 	POSITION y, x;
 	POSITION tmp_row, tmp_col;
-	DIRECTION row_dir, col_dir;
+	POSITION row_dir, col_dir;
 	POSITION start_row, start_col;
 	int main_loop_count = 0;
 

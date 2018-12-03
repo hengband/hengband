@@ -572,24 +572,19 @@ void vault_objects(POSITION y, POSITION x, int num)
 				break;
 			}
 
-
 			if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room)
 			{
 				msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
 			}
 
-
 			/* Require "clean" floor space */
 			c_ptr = &cave[j][k];
 			if (!is_floor_grid(c_ptr) || c_ptr->o_idx) continue;
 
-			/* Place an item */
 			if (randint0(100) < 75)
 			{
 				place_object(j, k, 0L);
 			}
-
-			/* Place gold */
 			else
 			{
 				place_gold(j, k);
@@ -717,7 +712,7 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
  * @param x2 終点X座標
  * @return なし
  */
-void correct_dir(int *rdir, int *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	/* Extract vertical and horizontal directions */
 	*rdir = (y1 == y2) ? 0 : (y1 < y2) ? 1 : -1;
@@ -739,7 +734,7 @@ void correct_dir(int *rdir, int *cdir, POSITION y1, POSITION x1, POSITION y2, PO
  * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
  * @return なし
  */
-void rand_dir(int *rdir, int *cdir)
+void rand_dir(POSITION *rdir, POSITION *cdir)
 {
 	/* Pick a random direction */
 	int i = randint0(4);

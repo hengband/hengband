@@ -2566,9 +2566,7 @@ static bool verify(cptr prompt, INVENTORY_IDX item)
 static bool get_item_allow(INVENTORY_IDX item)
 {
 	cptr s;
-
 	object_type *o_ptr;
-
 	if (!command_cmd) return TRUE; /* command_cmd is no longer effective */
 
 	/* Inventory */
