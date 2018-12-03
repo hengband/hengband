@@ -1868,7 +1868,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 					msg_format("せっかくだから%sを倒した。", m_name);
 				else
-msg_format("%sを倒した。", m_name);
+				msg_format("%sを倒した。", m_name);
 #else
 				msg_format("You have destroyed %s.", m_name);
 #endif
@@ -1882,7 +1882,7 @@ msg_format("%sを倒した。", m_name);
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_format("せっかくだから%sを葬り去った。", m_name);
 			else
-msg_format("%sを葬り去った。", m_name);
+				msg_format("%sを葬り去った。", m_name);
 #else
 				msg_format("You have slain %s.", m_name);
 #endif
@@ -1904,18 +1904,13 @@ msg_format("%sを葬り去った。", m_name);
 		monster_death(m_idx, TRUE);
 
 		/* Mega hack : replace IKETA to BIKETAL */
-		if ((m_ptr->r_idx == MON_IKETA) &&
-		    !(p_ptr->inside_arena || p_ptr->inside_battle))
+		if ((m_ptr->r_idx == MON_IKETA) && !(p_ptr->inside_arena || p_ptr->inside_battle))
 		{
-			int dummy_y = m_ptr->fy;
-			int dummy_x = m_ptr->fx;
+			POSITION dummy_y = m_ptr->fy;
+			POSITION dummy_x = m_ptr->fx;
 			BIT_FLAGS mode = 0L;
-
 			if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
-
-
 			delete_monster_idx(m_idx);
-
 			if (summon_named_creature(0, dummy_y, dummy_x, MON_BIKETAL, mode))
 			{
 				msg_print(_("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!"));
@@ -1923,7 +1918,6 @@ msg_format("%sを葬り去った。", m_name);
 		}
 		else
 		{
-
 			delete_monster_idx(m_idx);
 		}
 
@@ -1960,8 +1954,7 @@ msg_format("%sを葬り去った。", m_name);
 		 * Run (sometimes) if at 10% or less of max hit points,
 		 * or (usually) when hit for half its current hit points
 		 */
-		if ((randint1(10) >= percentage) ||
-		    ((dam >= m_ptr->hp) && (randint0(100) < 80)))
+		if ((randint1(10) >= percentage) || ((dam >= m_ptr->hp) && (randint0(100) < 80)))
 		{
 			/* Hack -- note fear */
 			(*fear) = TRUE;
@@ -1973,22 +1966,6 @@ msg_format("%sを葬り去った。", m_name);
 		}
 	}
 
-#endif
-
-#if 0
-	if (p_ptr->riding && (p_ptr->riding == m_idx) && (dam > 0))
-	{
-		char m_name[80];
-
-		/* Extract monster name */
-		monster_desc(m_name, m_ptr, 0);
-
-		if (m_ptr->hp > m_ptr->maxhp/3) dam = (dam + 1) / 2;
-		if (rakuba((dam > 200) ? 200 : dam, FALSE))
-		{
-		msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
-		}
-	}
 #endif
 
 	/* Not dead yet */
