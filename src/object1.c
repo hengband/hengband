@@ -3612,7 +3612,6 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	/* Default length */
 	len = MAX((*min_width), 20);
 
-
 	/* Scan for objects in the grid, using item_tester_okay() */
 	floor_num = scan_floor(floor_list, y, x, 0x03);
 
@@ -4079,41 +4078,23 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			/* Append */
 			if (allow_equip)
 			{
-#ifdef JP
 				if (!use_menu)
-					strcat(out_val, " '/' 装備品,");
+					strcat(out_val, _(" '/' 装備品,", " / for Equip,"));
 				else if (allow_floor)
-					strcat(out_val, " '6' 装備品,");
+					strcat(out_val, _(" '6' 装備品,", " 6 for Equip,"));
 				else
-					strcat(out_val, " '4'or'6' 装備品,");
-#else
-				if (!use_menu)
-					strcat(out_val, " / for Equip,");
-				else if (allow_floor)
-					strcat(out_val, " 6 for Equip,");
-				else
-					strcat(out_val, " 4 or 6 for Equip,");
-#endif
+					strcat(out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"));
 			}
 
 			/* Append */
 			if (allow_floor)
 			{
-#ifdef JP
 				if (!use_menu)
-					strcat(out_val, " '-'床上,");
+					strcat(out_val, _(" '-'床上,", " - for floor,"));
 				else if (allow_equip)
-					strcat(out_val, " '4' 床上,");
+					strcat(out_val, _(" '4' 床上,", " 4 for floor,"));
 				else
-					strcat(out_val, " '4'or'6' 床上,");
-#else
-				if (!use_menu)
-					strcat(out_val, " - for floor,");
-				else if (allow_equip)
-					strcat(out_val, " 4 for floor,");
-				else
-					strcat(out_val, " 4 or 6 for floor,");
-#endif
+					strcat(out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
 			}
 		}
 
@@ -4139,41 +4120,23 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			/* Append */
 			if (allow_inven)
 			{
-#ifdef JP
 				if (!use_menu)
-					strcat(out_val, " '/' 持ち物,");
+					strcat(out_val, _(" '/' 持ち物,", " / for Inven,"));
 				else if (allow_floor)
-					strcat(out_val, " '4' 持ち物,");
+					strcat(out_val, _(" '4' 持ち物,", " 4 for Inven,"));
 				else
-					strcat(out_val, " '4'or'6' 持ち物,");
-#else
-				if (!use_menu)
-					strcat(out_val, " / for Inven,");
-				else if (allow_floor)
-					strcat(out_val, " 4 for Inven,");
-				else
-					strcat(out_val, " 4 or 6 for Inven,");
-#endif
+					strcat(out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"));
 			}
 
 			/* Append */
 			if (allow_floor)
 			{
-#ifdef JP
 				if (!use_menu)
-					strcat(out_val, " '-'床上,");
+					strcat(out_val, _(" '-'床上,", " - for floor,"));
 				else if (allow_inven)
-					strcat(out_val, " '6' 床上,");
+					strcat(out_val, _(" '6' 床上,", " 6 for floor,"));
 				else
-					strcat(out_val, " '4'or'6' 床上,");
-#else
-				if (!use_menu)
-					strcat(out_val, " - for floor,");
-				else if (allow_inven)
-					strcat(out_val, " 6 for floor,");
-				else
-					strcat(out_val, " 4 or 6 for floor,");
-#endif
+					strcat(out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"));
 			}
 		}
 
