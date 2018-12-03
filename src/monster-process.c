@@ -212,7 +212,6 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 	}
 
-	/* Wake it up */
 	(void)set_monster_csleep(m_idx, 0);
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
@@ -1508,7 +1507,6 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 		/* Monster hits */
 		if (!effect || check_hit2(power, rlev, ac, MON_STUNNED(m_ptr)))
 		{
-			/* Wake it up */
 			(void)set_monster_csleep(t_idx, 0);
 
 			if (t_ptr->ml)
@@ -1962,7 +1960,6 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			case RBM_ENGULF:
 			case RBM_CHARGE:
 				{
-					/* Wake it up */
 					(void)set_monster_csleep(t_idx, 0);
 
 					/* Visible monsters */

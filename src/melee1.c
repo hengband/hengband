@@ -2072,7 +2072,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 							/* Combine / Reorder the pack */
 							p_ptr->notice |= (PN_COMBINE | PN_REORDER);
-
 							p_ptr->window |= (PW_INVEN);
 
 							break;
@@ -2161,9 +2160,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 						/* Occasional "blink" anyway */
 						blinked = TRUE;
-
 						obvious = TRUE;
-
 						break;
 					}
 
@@ -2321,18 +2318,10 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					if (explode) break;
 					obvious = TRUE;
-
 					msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
-
-					/* Special damage */
 					get_damage += acid_dam(damage, ddesc, -1, FALSE);
-
-					/* Hack -- Update AC */
 					update_stuff();
-
-					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_ACID);
-
 					break;
 				}
 
@@ -2340,15 +2329,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					if (explode) break;
 					obvious = TRUE;
-
 					msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
-
-					/* Special damage */
 					get_damage += elec_dam(damage, ddesc, -1, FALSE);
-
-					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_ELEC);
-
 					break;
 				}
 
@@ -2356,15 +2339,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					if (explode) break;
 					obvious = TRUE;
-
 					msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
-
-					/* Special damage */
 					get_damage += fire_dam(damage, ddesc, -1, FALSE);
-
-					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_FIRE);
-
 					break;
 				}
 
@@ -2372,22 +2349,15 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					if (explode) break;
 					obvious = TRUE;
-
 					msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
-
-					/* Special damage */
 					get_damage += cold_dam(damage, ddesc, -1, FALSE);
-
-					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_COLD);
-
 					break;
 				}
 
 				case RBE_BLIND:
 				{
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
-
 					if (p_ptr->is_dead) break;
 
 					/* Increase "blind" */

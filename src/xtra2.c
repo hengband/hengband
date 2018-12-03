@@ -1552,15 +1552,14 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
  */
 bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 {
-	monster_type    *m_ptr = &m_list[m_idx];
-	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-
-	monster_type    exp_mon;
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	monster_type exp_mon;
 
 	/* Innocent until proven otherwise */
-	bool        innocent = TRUE, thief = FALSE;
-	int         i;
-	int         expdam;
+	bool innocent = TRUE, thief = FALSE;
+	int i;
+	HIT_POINT expdam;
 
 	(void)COPY(&exp_mon, m_ptr, monster_type);
 	
@@ -1575,7 +1574,6 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
 	if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
-	/* Wake it up */
 	(void)set_monster_csleep(m_idx, 0);
 
 	/* Hack - Cancel any special player stealth magics. -LM- */
@@ -1587,15 +1585,14 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 	/* Genocided by chaos patron */
 	if (!m_idx) return TRUE;
 	
-	/* Hurt it */
 	m_ptr->hp -= dam;
-	
 	m_ptr->dealt_damage += dam;
+
 	if(m_ptr->dealt_damage > m_ptr->max_maxhp * 100) m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
+
 	if (p_ptr->wizard)
 	{
-		msg_format( _("合計%d/%dのダメージを与えた。","You do %d (out of %d) damage."),
-					m_ptr->dealt_damage, m_ptr->maxhp);
+		msg_format( _("合計%d/%dのダメージを与えた。","You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
 	}
 
 	/* It is dead now */
@@ -1694,8 +1691,9 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 
 			/* Dump a message */
 			if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got))
-
+			{
 				msg_format("%^s %s", m_name, line_got);
+			}
 
 #ifdef WORLD_SCORE
 			if (m_ptr->r_idx == MON_SERPENT)
@@ -1743,8 +1741,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 			chg_virtue(V_COMPASSION, -1);
 		}
 
-		if ((r_ptr->flags3 & RF3_GOOD) &&
-			((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100)))
+		if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100)))
 			chg_virtue(V_UNLIFE, 1);
 
 		if (r_ptr->d_char == 'A')
@@ -1801,8 +1798,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(V_JUSTICE, 3);
-			else if (1+((r_ptr->level) / 10 + (2 * dun_level))
-				>= randint1(100))
+			else if (1+((r_ptr->level) / 10 + (2 * dun_level)) >= randint1(100))
 				chg_virtue(V_JUSTICE, 1);
 		}
 		else if (innocent)
@@ -1818,11 +1814,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 		if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq)
 		{
 			char note_buf[160];
-#ifdef JP
-			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? "(クローン)" : "");
-#else
-			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? "(Clone)" : "");
-#endif
+			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? _("(クローン)", "(Clone)") : "");
 			do_cmd_write_nikki(NIKKI_UNIQUE, 0, note_buf);
 		}
 
