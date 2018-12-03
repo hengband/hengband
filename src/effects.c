@@ -4912,8 +4912,6 @@ bool choose_ele_attack(void)
 		msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
 		return FALSE;
 	}
-
-	/* Save screen */
 	screen_save();
 
 	num = (p_ptr->lev - 20) / 5;
@@ -4976,8 +4974,6 @@ bool choose_ele_attack(void)
 bool choose_ele_immune(TIME_EFFECT immune_turn)
 {
 	char choice;
-
-	/* Save screen */
 	screen_save();
 
 	c_prt(TERM_RED,    _("        a) 火炎", "        a) Immune Fire"), 2, 14);

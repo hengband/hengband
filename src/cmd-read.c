@@ -534,8 +534,6 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		cptr q;
 		char o_name[MAX_NLEN];
 		char buf[1024];
-
-		/* Save screen */
 		screen_save();
 
 		q=format("book-%d_jp.txt",o_ptr->sval);

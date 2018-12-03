@@ -2601,8 +2601,6 @@ void do_cmd_macros(void)
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
 
-
-	/* Save screen */
 	screen_save();
 
 

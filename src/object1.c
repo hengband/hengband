@@ -2953,7 +2953,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Hack -- start out in "display" mode */
 	if (command_see)
 	{
-		/* Save screen */
 		screen_save();
 	}
 
@@ -3133,8 +3132,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Load screen */
 					screen_load();
-
-					/* Save screen */
 					screen_save();
 				}
 
@@ -3221,7 +3218,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Show the list */
 				else
 				{
-					/* Save screen */
 					screen_save();
 
 					/* Flip flag */
@@ -3244,8 +3240,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Load screen */
 					screen_load();
-
-					/* Save screen */
 					screen_save();
 				}
 
@@ -3977,7 +3971,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Hack -- start out in "display" mode */
 	if (command_see)
 	{
-		/* Save screen */
 		screen_save();
 	}
 
@@ -4284,8 +4277,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Load screen */
 					screen_load();
-
-					/* Save screen */
 					screen_save();
 				}
 
@@ -4345,8 +4336,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Load screen */
 					screen_load();
-
-					/* Save screen */
 					screen_save();
 				}
 
@@ -4434,7 +4423,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				/* Show the list */
 				else
 				{
-					/* Save screen */
 					screen_save();
 
 					/* Flip flag */
@@ -4478,8 +4466,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Load screen */
 					screen_load();
-
-					/* Save screen */
 					screen_save();
 				}
 
@@ -4528,8 +4514,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Load screen */
 					screen_load();
-
-					/* Save screen */
 					screen_save();
 				}
 
@@ -4580,8 +4564,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 				{
 					/* Load screen */
 					screen_load();
-
-					/* Save screen */
 					screen_save();
 				}
 

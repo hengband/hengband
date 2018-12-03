@@ -5778,7 +5778,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
  */
 void do_cmd_help(void)
 {
-	/* Save screen */
 	screen_save();
 
 	/* Peruse the main help file */
@@ -6618,8 +6617,6 @@ static void show_info(void)
 
 		/* Return means "show on screen" */
 		if (!out_val[0]) break;
-
-		/* Save screen */
 		screen_save();
 
 		/* Dump a character file */

@@ -3191,8 +3191,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			{
 				int i;
 				OBJECT_IDX o_idx;
-
-				/* Save screen */
 				screen_save();
 
 				/* Display */

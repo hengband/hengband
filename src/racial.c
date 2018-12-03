@@ -395,8 +395,6 @@ static bool choose_kamae(void)
 		msg_print(_("混乱していて構えられない！", "Too confused."));
 		return FALSE;
 	}
-
-	/* Save screen */
 	screen_save();
 	prt(_(" a) 構えをとく", " a) No form"), 2, 20);
 
@@ -500,8 +498,6 @@ static bool choose_kata(void)
 		msg_print(_("体が震えて構えられない！", "You are trembling with fear!"));
 		return FALSE;
 	}
-
-	/* Save screen */
 	screen_save();
 	prt(_(" a) 型を崩す", " a) No Form"), 2, 20);
 

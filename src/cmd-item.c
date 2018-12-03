@@ -39,8 +39,6 @@ void do_cmd_inven(void)
 
 	/* Note that we are in "inventory" mode */
 	if (easy_floor) command_wrk = (USE_INVEN);
-
-	/* Save screen */
 	screen_save();
 
 	/* Hack -- show empty slots */

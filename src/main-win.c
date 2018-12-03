@@ -3901,7 +3901,6 @@ static void process_menus(WORD wCmd)
 			}
 			else
 			{
-				/* Save Screen */
 				screen_save();
 
 				/* Clear screen */

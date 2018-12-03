@@ -307,8 +307,6 @@ static void arena_comm(int cmd)
 			}
 			break;
 		case BACT_ARENA_RULES:
-
-			/* Save screen */
 			screen_save();
 
 			/* Peruse the arena help file */
@@ -2306,7 +2304,6 @@ static void castle_quest(void)
  */
 static void town_history(void)
 {
-	/* Save screen */
 	screen_save();
 
 	/* Peruse the building help file */

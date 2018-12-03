@@ -504,7 +504,6 @@ static void birth_quit(void)
  */
 static void show_help(cptr helpfile)
 {
-	/* Save screen */
 	screen_save();
 
 	/* Peruse the help file */
