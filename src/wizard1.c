@@ -128,87 +128,39 @@ static grouper group_item[] =
 	{ TV_SHIELD,        NULL },
 	{ TV_CLOAK,         NULL },
 
-#ifdef JP
-	{ TV_LITE,          "光源" },
-	{ TV_AMULET,        "アミュレット" },
-	{ TV_RING,          "指輪" },
-#else
-	{ TV_LITE,          "Light Sources" },
-	{ TV_AMULET,        "Amulets" },
-	{ TV_RING,          "Rings" },
-#endif
+	{ TV_LITE,          _("光源", "Light Sources") },
+	{ TV_AMULET,        _("アミュレット", "Amulets" )},
+	{ TV_RING,          _("指輪", "Rings") },
+	{ TV_STAFF,         _("杖", "Staffs") },
+	{ TV_WAND,          _("魔法棒", "Wands") },
+	{ TV_ROD,           _("ロッド", "Rods") },
+	{ TV_SCROLL,        _("巻物", "Scrolls") },
+	{ TV_POTION,        _("薬", "Potions") },
+	{ TV_FOOD,          _("食料", "Food") },
 
-#ifdef JP
-	{ TV_STAFF,         "杖" },
-	{ TV_WAND,          "魔法棒" },
-	{ TV_ROD,           "ロッド" },
-#else
-	{ TV_STAFF,         "Staffs" },
-	{ TV_WAND,          "Wands" },
-	{ TV_ROD,           "Rods" },
-#endif
+	{ TV_LIFE_BOOK,     _("魔法書 (生命)", "Books (Life)") },
+	{ TV_SORCERY_BOOK,  _("魔法書 (仙術)", "Books (Sorcery)") },
+	{ TV_NATURE_BOOK,   _("魔法書 (自然)", "Books (Nature)") },
+	{ TV_CHAOS_BOOK,    _("魔法書 (カオス)", "Books (Chaos)") },
+	{ TV_DEATH_BOOK,    _("魔法書 (暗黒)", "Books (Death)") },
+	{ TV_TRUMP_BOOK,    _("魔法書 (トランプ)", "Books (Trump)") },
+	{ TV_ARCANE_BOOK,   _("魔法書 (秘術)", "Books (Arcane)") },
+	{ TV_CRAFT_BOOK,    _("魔法書 (匠)", "Books (Craft)") },
+	{ TV_DAEMON_BOOK,   _("魔法書 (悪魔)", "Books (Daemon)") },
+	{ TV_CRUSADE_BOOK,  _("魔法書 (破邪)", "Books (Crusade)") },
+	{ TV_MUSIC_BOOK,    _("歌集", "Song Books") },
+	{ TV_HISSATSU_BOOK, _("武芸の書", "Books (Kendo)") },
+	{ TV_HEX_BOOK,      _("魔法書 (呪術)", "Books (Hex)") },
 
-#ifdef JP
-	{ TV_SCROLL,        "巻物" },
-	{ TV_POTION,        "薬" },
-	{ TV_FOOD,          "食料" },
-#else
-	{ TV_SCROLL,        "Scrolls" },
-	{ TV_POTION,        "Potions" },
-	{ TV_FOOD,          "Food" },
-#endif
-
-#ifdef JP
-	{ TV_LIFE_BOOK,     "魔法書 (生命)" },
-	{ TV_SORCERY_BOOK,  "魔法書 (仙術)" },
-	{ TV_NATURE_BOOK,   "魔法書 (自然)" },
-	{ TV_CHAOS_BOOK,    "魔法書 (カオス)" },
-	{ TV_DEATH_BOOK,    "魔法書 (暗黒)" },
-	{ TV_TRUMP_BOOK,    "魔法書 (トランプ)" },
-	{ TV_ARCANE_BOOK,   "魔法書 (秘術)" },
-	{ TV_CRAFT_BOOK,    "魔法書 (匠)" },
-	{ TV_DAEMON_BOOK,   "魔法書 (悪魔)" },
-	{ TV_CRUSADE_BOOK,  "魔法書 (破邪)" },
-	{ TV_MUSIC_BOOK,    "歌集" },
-	{ TV_HISSATSU_BOOK, "武芸の書" },
-	{ TV_HEX_BOOK,      "魔法書 (呪術)" },
-#else
-	{ TV_LIFE_BOOK,     "Books (Life)" },
-	{ TV_SORCERY_BOOK,  "Books (Sorcery)" },
-	{ TV_NATURE_BOOK,   "Books (Nature)" },
-	{ TV_CHAOS_BOOK,    "Books (Chaos)" },
-	{ TV_DEATH_BOOK,    "Books (Death)" },
-	{ TV_TRUMP_BOOK,    "Books (Trump)" },
-	{ TV_ARCANE_BOOK,   "Books (Arcane)" },
-	{ TV_CRAFT_BOOK,    "Books (Craft)" },
-	{ TV_DAEMON_BOOK,   "Books (Daemon)" },
-	{ TV_CRUSADE_BOOK,  "Books (Crusade)" },
-	{ TV_MUSIC_BOOK,    "Song Books" },
-	{ TV_HISSATSU_BOOK, "Books (Kendo)" },
-	{ TV_HEX_BOOK,      "Books (Hex)" },
-#endif
-
-#ifdef JP
-	{ TV_WHISTLE,       "笛" },
-	{ TV_CAPTURE,       "キャプチャー・ボール" },
-	{ TV_CARD,          "エクスプレスカード" },
-#else
-	{ TV_WHISTLE,       "Whistle" },
-	{ TV_CAPTURE,       "Capture Ball" },
-	{ TV_CARD,          "Express Card" },
-#endif
+	{ TV_WHISTLE,       _("笛", "Whistle") },
+	{ TV_CAPTURE,       _("キャプチャー・ボール", "Capture Ball") },
+	{ TV_CARD,          _("エクスプレスカード", "Express Card") },
 
 	{ TV_CHEST,         _("箱", "Chests") },
 
-#ifdef JP
-	{ TV_FIGURINE,      "人形" },
-	{ TV_STATUE,        "像" },
-	{ TV_CORPSE,        "死体" },
-#else
-	{ TV_FIGURINE,      "Magical Figurines" },
-	{ TV_STATUE,        "Statues" },
-	{ TV_CORPSE,        "Corpses" },
-#endif
+	{ TV_FIGURINE,      _("人形", "Magical Figurines") },
+	{ TV_STATUE,        _("像", "Statues") },
+	{ TV_CORPSE,        _("死体", "Corpses") },
 
 	{ TV_SKELETON,      _("その他", "Misc") },
 	{ TV_BOTTLE,        NULL },
