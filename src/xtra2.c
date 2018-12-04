@@ -646,7 +646,6 @@ void check_quest_completion(monster_type *m_ptr)
 
 		for (i = 0; i < (dun_level / 15)+1; i++)
 		{
-			/* Get local object */
 			o_ptr = &forge;
 			object_wipe(o_ptr);
 
@@ -817,7 +816,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		if (arena_info[p_ptr->arena_number].tval)
 		{
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Prepare to make a prize */
@@ -880,8 +878,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				if (!one_in_(5)) corpse = TRUE;
 			}
 		}
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Prepare to make an object */
@@ -933,7 +929,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		/* Bloodletters of Khorne may drop a blade of chaos */
 		if (drop_chosen_item && (randint1(100) < 15))
 		{
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Prepare to make a Blade of Chaos */
@@ -949,7 +944,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	case MON_RAAL:
 		if (drop_chosen_item && (dun_level > 9))
 		{
-			/* Get local object */
 			q_ptr = &forge;
 			object_wipe(q_ptr);
 
@@ -1053,8 +1047,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 	case MON_SERPENT:
 		if (!drop_chosen_item) break;
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Mega-Hack -- Prepare to make "Grond" */
@@ -1068,8 +1060,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Mega-Hack -- Prepare to make "Chaos" */
@@ -1088,7 +1078,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	case MON_B_DEATH_SWORD:
 		if (drop_chosen_item)
 		{
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Prepare to make a broken sword */
@@ -1104,7 +1093,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		if (drop_chosen_item && ((m_ptr->r_idx == MON_A_GOLD) ||
 		     ((m_ptr->r_idx == MON_A_SILVER) && (r_ptr->r_akills % 5 == 0))))
 		{
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Prepare to make a Can of Toys */
@@ -1132,7 +1120,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		case '(':
 			if (dun_level > 0)
 			{
-				/* Get local object */
 				q_ptr = &forge;
 				object_wipe(q_ptr);
 
@@ -1150,7 +1137,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		case '/':
 			if (dun_level > 4)
 			{
-				/* Get local object */
 				q_ptr = &forge;
 				object_wipe(q_ptr);
 
@@ -1168,7 +1154,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		case '[':
 			if (dun_level > 19)
 			{
-				/* Get local object */
 				q_ptr = &forge;
 				object_wipe(q_ptr);
 
@@ -1186,7 +1171,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		case '\\':
 			if (dun_level > 4)
 			{
-				/* Get local object */
 				q_ptr = &forge;
 				object_wipe(q_ptr);
 
@@ -1204,7 +1188,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		case '|':
 			if (m_ptr->r_idx != MON_STORMBRINGER)
 			{
-				/* Get local object */
 				q_ptr = &forge;
 				object_wipe(q_ptr);
 
@@ -1282,7 +1265,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			if (k_idx)
 			{
-				/* Get local object */
 				q_ptr = &forge;
 
 				/* Prepare to make a reward */
@@ -1324,7 +1306,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	/* Drop some objects */
 	for (j = 0; j < number; j++)
 	{
-		/* Get local object */
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 
@@ -4494,8 +4475,6 @@ void gain_level_reward(int chosen_reward)
 
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝の行いは貴き剣に値せり。」", "'Thy deed hath earned thee a worthy blade.'"));
-
-			/* Get local object */
 			q_ptr = &forge;
 			dummy = TV_SWORD;
 			switch (randint1(p_ptr->lev))

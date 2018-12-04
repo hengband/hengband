@@ -388,8 +388,6 @@ void do_cmd_wield(void)
 	}
 
 	p_ptr->energy_use = 100;
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Obtain local object */

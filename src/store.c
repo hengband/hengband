@@ -1656,8 +1656,6 @@ bool combine_and_reorder_home(int store_num)
 
 		/* Take note */
 		flag = TRUE;
-
-		/* Get local object */
 		j_ptr = &forge;
 
 		/* Save a copy of the moving item */
@@ -2094,8 +2092,6 @@ static void store_create(void)
 			level = rand_range(1, STORE_OBJ_LEVEL);
 		}
 
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Create a new object of the chosen kind */
@@ -3483,8 +3479,6 @@ static void store_purchase(void)
 
 	/* Assume the player wants just one of them */
 	amt = 1;
-
-	/* Get local object */
 	j_ptr = &forge;
 
 	/* Get a copy of the object */
@@ -3535,8 +3529,6 @@ msg_format("一つにつき $%ldです。", (long)(best));
 		/* Allow user abort */
 		if (amt <= 0) return;
 	}
-
-	/* Get local object */
 	j_ptr = &forge;
 
 	/* Get desired object */
@@ -3952,8 +3944,6 @@ static void store_sell(void)
 		/* Allow user abort */
 		if (amt <= 0) return;
 	}
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Get a copy of the object */
@@ -4055,8 +4045,6 @@ static void store_sell(void)
 
 			/* Identify it */
 			identify_item(o_ptr);
-
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Get a copy of the object */
@@ -5118,8 +5106,6 @@ void do_cmd_store(void)
 				msg_print("Your pack overflows!");
 #endif
 
-
-				/* Get local object */
 				q_ptr = &forge;
 
 				/* Grab a copy of the item */

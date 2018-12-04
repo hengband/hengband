@@ -4613,8 +4613,6 @@ bool eat_magic(int power)
 				{
 					object_type forge;
 					object_type *q_ptr;
-
-					/* Get local object */
 					q_ptr = &forge;
 
 					/* Obtain a local object */

@@ -2824,8 +2824,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 	/* Start at the player */
 	y = p_ptr->y;
 	x = p_ptr->x;
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Obtain a local object */
@@ -3437,8 +3435,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		}
 
 	}
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Obtain a local object */

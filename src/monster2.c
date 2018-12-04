@@ -4557,8 +4557,6 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Copy the object */

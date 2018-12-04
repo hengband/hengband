@@ -101,8 +101,6 @@ static bool do_cmd_archer(void)
 		else
 		{
 			s16b slot;
-
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Hack -- Give the player some small firestones */
@@ -151,8 +149,6 @@ static bool do_cmd_archer(void)
 		{
 			q_ptr = &o_list[0 - item];
 		}
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
@@ -209,8 +205,6 @@ static bool do_cmd_archer(void)
 		{
 			q_ptr = &o_list[0 - item];
 		}
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
@@ -1216,8 +1210,6 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				object_type *q_ptr;
 				object_type forge;
-
-				/* Get local object */
 				q_ptr = &forge;
 
 				/* Create the food ration */

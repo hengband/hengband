@@ -2308,8 +2308,6 @@ void player_outfit(void)
 	object_type	forge;
 	object_type	*q_ptr;
 
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Give the player some food */
@@ -2373,8 +2371,6 @@ void player_outfit(void)
 
 		add_outfit(q_ptr);
 	}
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	if ((p_ptr->prace == RACE_VAMPIRE) && (p_ptr->pclass != CLASS_NINJA))
@@ -2395,8 +2391,6 @@ void player_outfit(void)
 
 		add_outfit(q_ptr);
 	}
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	if ((p_ptr->pclass == CLASS_RANGER) || (p_ptr->pclass == CLASS_CAVALRY))
@@ -2525,8 +2519,6 @@ void player_outfit(void)
 			tv = TV_POTION;
 			sv = SV_POTION_RESTORE_MANA;
 		  }
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Hack -- Give the player an object */

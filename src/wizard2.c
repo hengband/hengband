@@ -893,8 +893,6 @@ static void wiz_reroll_item(object_type *o_ptr)
 	/* Hack -- leave artifacts alone */
 	if (object_is_artifact(o_ptr)) return;
 
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Copy the object */
@@ -1106,8 +1104,6 @@ static void wiz_statistics(object_type *o_ptr)
 				prt(format(q, i, correct, matches, better, worse, other), 0, 0);
 				Term_fresh();
 			}
-
-			/* Get local object */
 			q_ptr = &forge;
 			object_wipe(q_ptr);
 
@@ -1296,8 +1292,6 @@ static void do_cmd_wiz_play(void)
 	/* Save the screen */
 	screen_save();
 
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Copy object */
@@ -1435,8 +1429,6 @@ static void wiz_create_item(void)
 			return;
 		}
 	}
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Create the item */
@@ -1569,7 +1561,6 @@ static void do_cmd_wiz_learn(void)
 		/* Induce awareness */
 		if (k_ptr->level <= command_arg)
 		{
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Prepare object */

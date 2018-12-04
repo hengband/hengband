@@ -5055,8 +5055,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	{
 		object_type *q_ptr;
 		object_type forge;
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Prepare to make a Blade of Chaos */

@@ -4119,7 +4119,6 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			}
 			else if (object_index)
 			{
-				/* Get local object */
 				object_type *o_ptr = &object_type_body;
 
 				/* Create the item */

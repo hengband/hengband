@@ -1399,8 +1399,6 @@ static errr rd_store(int town_number, int store_number)
 	{
 		object_type forge;
 		object_type *q_ptr;
-
-		/* Get local object */
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 
@@ -2397,8 +2395,6 @@ static errr rd_inventory(void)
 
 		/* Nope, we reached the end */
 		if (n == 0xFFFF) break;
-
-		/* Get local object */
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 

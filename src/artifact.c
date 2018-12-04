@@ -2265,8 +2265,6 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 	IDX i;
 
 	artifact_type *a_ptr = &a_info[a_idx];
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Ignore "empty" artifacts */

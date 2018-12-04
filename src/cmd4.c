@@ -5466,8 +5466,6 @@ static void do_cmd_knowledge_artifacts(void)
 		{
 			object_type forge;
 			object_type *q_ptr;
-
-			/* Get local object */
 			q_ptr = &forge;
 
 			/* Create fake object */
@@ -6950,8 +6948,6 @@ static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
 {
 	object_type *o_ptr;
 	object_type object_type_body;
-
-	/* Get local object */
 	o_ptr = &object_type_body;
 	object_wipe(o_ptr);
 

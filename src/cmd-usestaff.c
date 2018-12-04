@@ -432,8 +432,6 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 	{
 		object_type forge;
 		object_type *q_ptr;
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Obtain a local object */

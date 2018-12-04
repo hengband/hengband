@@ -4892,8 +4892,6 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	/* Avoid stacking on other objects */
 	if (c_ptr->o_idx) return;
 
-
-	/* Get local object */
 	q_ptr = &forge;
 	object_wipe(q_ptr);
 
@@ -5008,8 +5006,6 @@ void place_gold(POSITION y, POSITION x)
 	/* Avoid stacking on other objects */
 	if (c_ptr->o_idx) return;
 
-
-	/* Get local object */
 	q_ptr = &forge;
 	object_wipe(q_ptr);
 
@@ -5419,7 +5415,6 @@ void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bo
 	/* Acquirement */
 	while (num--)
 	{
-		/* Get local object */
 		i_ptr = &object_type_body;
 		object_wipe(i_ptr);
 
@@ -5507,8 +5502,6 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
 			r -= amuse_info[i].prob;
 			if (r <= 0) break;
 		}
-
-		/* Get local object */
 		i_ptr = &object_type_body;
 		object_wipe(i_ptr);
 		k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
@@ -6160,8 +6153,6 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 	/* Verify */
 	if (amt > o_ptr->number) amt = o_ptr->number;
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Obtain a local object */
@@ -6254,8 +6245,6 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 		o_ptr = &inventory[item];
 	}
 
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Obtain local object */
@@ -6431,8 +6420,6 @@ void reorder_pack(void)
 
 		/* Take note */
 		flag = TRUE;
-
-		/* Get local object */
 		q_ptr = &forge;
 
 		/* Save a copy of the moving item */
@@ -6483,8 +6470,6 @@ void display_koff(KIND_OBJECT_IDX k_idx)
 
 	/* No info */
 	if (!k_idx) return;
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Prepare the object */

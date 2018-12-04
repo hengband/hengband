@@ -61,7 +61,6 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	/* Drop some objects (non-chests) */
 	for (; number > 0; --number)
 	{
-		/* Get local object */
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 

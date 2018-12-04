@@ -238,8 +238,6 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
 	object_type forge;
 	object_type *q_ptr;
 	int i;
-
-	/* Get local object */
 	q_ptr = &forge;
 
 	/* Prepare a fake item */
@@ -1704,8 +1702,6 @@ static void spoil_artifact(cptr fname)
 
 			/* We only want objects in the current group */
 			if (a_ptr->tval != group_artifact[i].tval) continue;
-
-			/* Get local object */
 			q_ptr = &forge;
 			object_wipe(q_ptr);
 
