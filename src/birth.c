@@ -2335,14 +2335,6 @@ void player_outfit(void)
 		}
 		break;
 
-#if 0
-	case RACE_SKELETON:
-		/* Some Skeletons */
-		object_prep(q_ptr, lookup_kind(TV_SKELETON, SV_ANY));
-		q_ptr->number = (byte)rand_range(7, 12);
-		add_outfit(q_ptr);
-		break;
-#endif
 	case RACE_SKELETON:
 	case RACE_GOLEM:
 	case RACE_ZOMBIE:

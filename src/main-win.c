@@ -781,25 +781,6 @@ static int init_bg(void)
 		use_bg = 0;
 		return 0;
 	}
-#if 0 /* gomi */
-	HDC wnddc, dcimage, dcbg;
-	HBITMAP bmimage, bmimage_old, bmbg_old;
-	int i, j;
-
-	delete_bg();
-
-	wnddc = GetDC(hwnd);
-	dcimage = CreateCompatibleDC(wnddc);
-	dcbg = CreateCompatibleDC(wnddc);
-
-	bmimage = LoadImage(NULL, "bg.bmp", LR_LOADFROMFILE, 0, 0, 0);
-	if (!bmimage) quit("bg.bmpが読みこめない！");
-	bmimage_old = SelectObject(dcimage, bmimage);
-
-	CreateCompatibleBitmap();
-
-	ReleaseDC(hwnd, wnddc);
-#endif
 	use_bg = 1;
 	return 1;
 }

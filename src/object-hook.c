@@ -128,22 +128,21 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 	else
 #endif
 
-		if (prace_is_(RACE_SKELETON) ||
-			prace_is_(RACE_GOLEM) ||
-			prace_is_(RACE_ZOMBIE) ||
-			prace_is_(RACE_SPECTRE))
-		{
-			if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
-				return TRUE;
-		}
-		else if (prace_is_(RACE_DEMON) ||
-			(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
-		{
-			if (o_ptr->tval == TV_CORPSE &&
-				o_ptr->sval == SV_CORPSE &&
-				my_strchr("pht", r_info[o_ptr->pval].d_char))
-				return TRUE;
-		}
+	if (prace_is_(RACE_SKELETON) ||
+		prace_is_(RACE_GOLEM) ||
+		prace_is_(RACE_ZOMBIE) ||
+		prace_is_(RACE_SPECTRE))
+	{
+		if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
+			return TRUE;
+	}
+	else if (prace_is_(RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
+	{
+		if (o_ptr->tval == TV_CORPSE &&
+			o_ptr->sval == SV_CORPSE &&
+			my_strchr("pht", r_info[o_ptr->pval].d_char))
+			return TRUE;
+	}
 
 	/* Assume not */
 	return (FALSE);
