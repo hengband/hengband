@@ -1452,37 +1452,20 @@ void generate_cave(void)
 		/* Prevent object over-flow */
 		if (o_max >= max_o_idx)
 		{
-#ifdef JP
-why = "アイテムが多すぎる";
-#else
-			why = "too many objects";
-#endif
-
-
+			why = _("アイテムが多すぎる", "too many objects");
 			okay = FALSE;
 		}
 		/* Prevent monster over-flow */
 		else if (m_max >= max_m_idx)
 		{
-#ifdef JP
-why = "モンスターが多すぎる";
-#else
-			why = "too many monsters";
-#endif
-
-
+			why = _("モンスターが多すぎる", "too many monsters");
 			okay = FALSE;
 		}
 
 		/* Accept */
 		if (okay) break;
 
-#ifdef JP
-if (why) msg_format("生成やり直し(%s)", why);
-#else
-		if (why) msg_format("Generation restarted (%s)", why);
-#endif
-
+		if (why) msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why);
 
 		/* Wipe the objects */
 		wipe_o_list();
