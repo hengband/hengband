@@ -25,7 +25,7 @@
  */
 static bool detect_feat_flag(POSITION range, int flag, bool known)
 {
-	int x, y;
+	POSITION x, y;
 	bool detect = FALSE;
 	cave_type *c_ptr;
 
@@ -155,7 +155,8 @@ bool detect_treasure(POSITION range)
  */
 bool detect_objects_gold(POSITION range)
 {
-	int i, y, x;
+	OBJECT_IDX i;
+	POSITION y, x;
 	POSITION range2 = range;
 
 	bool detect = FALSE;
@@ -209,7 +210,8 @@ bool detect_objects_gold(POSITION range)
  */
 bool detect_objects_normal(POSITION range)
 {
-	int i, y, x;
+	OBJECT_IDX i;
+	POSITION y, x;
 	POSITION range2 = range;
 
 	bool detect = FALSE;
@@ -271,7 +273,9 @@ bool detect_objects_normal(POSITION range)
  */
 bool detect_objects_magic(POSITION range)
 {
-	int i, y, x, tv;
+	OBJECT_TYPE_VALUE tv;
+	OBJECT_IDX i;
+	POSITION y, x;
 
 	bool detect = FALSE;
 
@@ -570,7 +574,7 @@ bool detect_monsters_mind(POSITION range)
 {
 	MONSTER_IDX i;
 	POSITION y, x;
-	bool    flag = FALSE;
+	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 

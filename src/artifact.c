@@ -2342,8 +2342,7 @@ int calc_arm_avgdamage(object_type *o_ptr)
 
 	dam = dam + o_ptr->to_d;
 
-	msg_format_wizard(CHEAT_OBJECT,"素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d",
-		base, s_evil, forced, vorpal, dam);
+	msg_format_wizard(CHEAT_OBJECT,"素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d", base, s_evil, forced, vorpal, dam);
 
 	return(dam);
 }

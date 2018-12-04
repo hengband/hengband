@@ -975,7 +975,7 @@ static int do_poker(void)
 		cards[i] = deck[deck_ptr++];
 		kaeruka[i] = 0; /* default:nokosu */
 	}
-	
+
 	/* suteruno wo kimeru */
 	prt(_("残すカードを決めて下さい(方向で移動, スペースで選択)。", "Stay witch? "), 0, 0);
 
