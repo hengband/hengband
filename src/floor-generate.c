@@ -1170,8 +1170,7 @@ static void battle_gen(void)
 
 	for(i = 0; i < 4; i++)
 	{
-		place_monster_aux(0, p_ptr->y + 8 + (i/2)*4, p_ptr->x - 2 + (i%2)*4, battle_mon[i],
-				  (PM_NO_KAGE | PM_NO_PET));
+		place_monster_aux(0, p_ptr->y + 8 + (i/2)*4, p_ptr->x - 2 + (i%2)*4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
 		set_friendly(&m_list[cave[p_ptr->y+8+(i/2)*4][p_ptr->x-2+(i%2)*4].m_idx]);
 	}
 	for(i = 1; i < m_max; i++)
@@ -1193,7 +1192,6 @@ static void battle_gen(void)
 static void quest_gen(void)
 {
 	POSITION x, y;
-
 
 	/* Start with perm walls */
 	for (y = 0; y < cur_hgt; y++)
@@ -1251,8 +1249,7 @@ static bool level_gen(cptr *why)
 				level_height = randint1(MAX_HGT/SCREEN_HGT);
 				level_width = randint1(MAX_WID/SCREEN_WID);
 			}
-			while ((level_height == MAX_HGT/SCREEN_HGT) &&
-				   (level_width == MAX_WID/SCREEN_WID));
+			while ((level_height == MAX_HGT/SCREEN_HGT) && (level_width == MAX_WID/SCREEN_WID));
 		}
 
 		cur_hgt = level_height * SCREEN_HGT;
@@ -1280,12 +1277,7 @@ static bool level_gen(cptr *why)
 	/* Make a dungeon */
 	if (!cave_gen())
 	{
-#ifdef JP
-*why = "ダンジョン生成に失敗";
-#else
-		*why = "could not place player";
-#endif
-
+		*why = _("ダンジョン生成に失敗", "could not place player");
 		return FALSE;
 	}
 	else return TRUE;
@@ -1353,26 +1345,12 @@ void clear_cave(void)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			cave_type *c_ptr = &cave[y][x];
-
-			/* No flags */
 			c_ptr->info = 0;
-
-			/* No features */
 			c_ptr->feat = 0;
-
-			/* No objects */
 			c_ptr->o_idx = 0;
-
-			/* No monsters */
 			c_ptr->m_idx = 0;
-
-			/* No special */
 			c_ptr->special = 0;
-
-			/* No mimic */
 			c_ptr->mimic = 0;
-
-			/* No flow */
 			c_ptr->cost = 0;
 			c_ptr->dist = 0;
 			c_ptr->when = 0;
@@ -1467,10 +1445,7 @@ void generate_cave(void)
 
 		if (why) msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why);
 
-		/* Wipe the objects */
 		wipe_o_list();
-
-		/* Wipe the monsters */
 		wipe_m_list();
 	}
 
