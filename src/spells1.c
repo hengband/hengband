@@ -1284,7 +1284,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Scan all objects in the grid */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		/* Acquire object */
 		object_type *o_ptr = &o_list[this_o_idx];
 
 		bool is_art = FALSE;

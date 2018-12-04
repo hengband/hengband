@@ -4426,7 +4426,6 @@ bool polymorph_monster(POSITION y, POSITION x)
 		{
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
-				/* Acquire object */
 				object_type *o_ptr = &o_list[this_o_idx];
 
 				/* Acquire next object */

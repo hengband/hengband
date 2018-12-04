@@ -81,8 +81,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-
-			/* Acquire object */
 			o_ptr = &o_list[this_o_idx];
 
 			/* Acquire next object */
@@ -135,8 +133,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-
-			/* Acquire object */
 			o_ptr = &o_list[this_o_idx];
 
 			/* Acquire next object */
@@ -233,8 +229,6 @@ void delete_object(POSITION y, POSITION x)
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */
@@ -272,7 +266,6 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	/* Repair objects */
 	for (i = 1; i < o_max; i++)
 	{
-		/* Acquire object */
 		o_ptr = &o_list[i];
 
 		/* Skip "dead" objects */
@@ -285,8 +278,6 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 			o_ptr->next_o_idx = i2;
 		}
 	}
-
-	/* Acquire object */
 	o_ptr = &o_list[i1];
 
 	/* Monster */
@@ -554,8 +545,6 @@ OBJECT_IDX o_pop(void)
 	for (i = 1; i < o_max; i++)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[i];
 
 		/* Skip live objects */
@@ -4919,8 +4908,6 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	if (o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[o_idx];
 
 		/* Structure Copy */
@@ -5036,8 +5023,6 @@ void place_gold(POSITION y, POSITION x)
 	if (o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[o_idx];
 
 		/* Copy the object */
@@ -5172,8 +5157,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
-
-				/* Acquire object */
 				o_ptr = &o_list[this_o_idx];
 
 				/* Acquire next object */
@@ -5326,8 +5309,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */

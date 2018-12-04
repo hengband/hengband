@@ -964,8 +964,7 @@ void aggravate_monsters(MONSTER_IDX who)
 	/* Aggravate everyone nearby */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type    *m_ptr = &m_list[i];
-/*		monster_race    *r_ptr = &r_info[m_ptr->r_idx]; */
+		monster_type *m_ptr = &m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -1477,8 +1476,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
 					object_type *o_ptr;
-
-					/* Acquire object */
 					o_ptr = &o_list[this_o_idx];
 
 					/* Acquire next object */

@@ -2766,8 +2766,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 
 			/* Special index */
 			k = 0 - (*cp);
-
-			/* Acquire object */
 			o_ptr = &o_list[k];
 
 			/* Validate the item */
@@ -2886,8 +2884,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-
-			/* Acquire object */
 			o_ptr = &o_list[this_o_idx];
 
 			/* Acquire next object */
@@ -3253,8 +3249,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 					for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 					{
 						object_type *o_ptr;
-
-						/* Acquire object */
 						o_ptr = &o_list[this_o_idx];
 
 						/* Acquire next object */
@@ -3535,8 +3529,6 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
 	for (this_o_idx = cave[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */

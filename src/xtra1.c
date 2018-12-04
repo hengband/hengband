@@ -5724,7 +5724,6 @@ void calc_bonuses(void)
 
 	for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */

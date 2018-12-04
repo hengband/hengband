@@ -386,8 +386,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */
@@ -575,8 +573,6 @@ void carry(bool pickup)
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 #ifdef ALLOW_EASY_SENSE /* TNB */
@@ -1815,8 +1811,6 @@ static bool run_test(void)
 		for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-
-			/* Acquire object */
 			o_ptr = &o_list[this_o_idx];
 
 			/* Acquire next object */

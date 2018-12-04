@@ -3099,8 +3099,6 @@ void process_monster(MONSTER_IDX m_idx)
 				{
 					BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
 					char m_name[80], o_name[MAX_NLEN];
-
-					/* Acquire object */
 					object_type *o_ptr = &o_list[this_o_idx];
 
 					/* Acquire next object */

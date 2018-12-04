@@ -626,8 +626,6 @@ bool cave_valid_bold(POSITION y, POSITION x)
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */
@@ -1195,8 +1193,6 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */

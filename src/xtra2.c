@@ -2719,8 +2719,6 @@ static bool target_set_accept(POSITION y, POSITION x)
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */
@@ -3089,8 +3087,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			char o_name[MAX_NLEN];
 
 			object_type *o_ptr;
-
-			/* Acquire object */
 			o_ptr = &o_list[this_o_idx];
 
 			/* Acquire next object */
@@ -3139,8 +3135,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 				char o_name[MAX_NLEN];
 
 				object_type *o_ptr;
-
-				/* Acquire object */
 				o_ptr = &o_list[floor_list[0]];
 
 				object_desc(o_name, o_ptr, 0);
@@ -3241,8 +3235,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-
-		/* Acquire object */
 		o_ptr = &o_list[this_o_idx];
 
 		/* Acquire next object */
