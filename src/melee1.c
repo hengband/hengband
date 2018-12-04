@@ -416,7 +416,6 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 	else
 	{
 		sound(SOUND_MISS);
-
 		msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
 	}
 }

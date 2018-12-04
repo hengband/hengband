@@ -64,9 +64,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	object_type *j_ptr;
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-
-	s16b prev_o_idx = 0;
-
+	OBJECT_IDX prev_o_idx = 0;
 
 	/* Object */
 	j_ptr = &o_list[o_idx];
@@ -262,15 +260,14 @@ void delete_object(POSITION y, POSITION x)
  * @param i2 整理したい配列の終点
  * @return なし
  */
-static void compact_objects_aux(IDX i1, IDX i2)
+static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 {
-	IDX i;
+	OBJECT_IDX i;
 	cave_type *c_ptr;
 	object_type *o_ptr;
 
 	/* Do nothing */
 	if (i1 == i2) return;
-
 
 	/* Repair objects */
 	for (i = 1; i < o_max; i++)
@@ -289,10 +286,8 @@ static void compact_objects_aux(IDX i1, IDX i2)
 		}
 	}
 
-
 	/* Acquire object */
 	o_ptr = &o_list[i1];
-
 
 	/* Monster */
 	if (o_ptr->held_m_idx)
@@ -330,7 +325,6 @@ static void compact_objects_aux(IDX i1, IDX i2)
 		}
 	}
 
-
 	/* Structure copy */
 	o_list[i2] = o_list[i1];
 
@@ -363,14 +357,11 @@ void compact_objects(int size)
 	int cur_lev, cur_dis, chance;
 	object_type *o_ptr;
 
-
 	/* Compact */
 	if (size)
 	{
 		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
-
 		p_ptr->redraw |= (PR_MAP);
-
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 

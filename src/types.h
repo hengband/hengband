@@ -537,8 +537,8 @@ struct object_type
 
 	WEIGHT weight;		/* Item weight */
 
-	IDX name1;			/* Artifact type, if any */
-	IDX name2;			/* Ego-Item type, if any */
+	ARTIFACT_IDX name1;		/* Artifact type, if any */
+	EGO_IDX name2;			/* Ego-Item type, if any */
 
 	XTRA8 xtra1;			/* Extra info type (now unused) */
 	XTRA8 xtra2;			/* Extra info activation index */
@@ -558,7 +558,6 @@ struct object_type
 	TIME_EFFECT timeout;	/* Timeout Counter */
 
 	byte ident;			/* Special flags  */
-
 	byte marked;		/* Object is marked */
 
 	u16b inscription;	/* Inscription index */
@@ -569,8 +568,8 @@ struct object_type
 	BIT_FLAGS art_flags[TR_FLAG_SIZE];        /* Extra Flags for ego and artifacts */
 	BIT_FLAGS curse_flags;        /* Flags for curse */
 
-	IDX next_o_idx;	/* Next object in stack (if any) */
-	IDX held_m_idx;	/* Monster holding us (if any) */
+	OBJECT_IDX next_o_idx;	/* Next object in stack (if any) */
+	MONSTER_IDX held_m_idx;	/* Monster holding us (if any) */
 
 	ARTIFACT_BIAS_IDX artifact_bias; /*!< ランダムアーティファクト生成時のバイアスID */
 };
@@ -579,9 +578,7 @@ struct object_type
 
 /*
  * Monster information, for a specific monster.
- *
  * Note: fy, fx constrain dungeon size to 256x256
- *
  * The "hold_o_idx" field points to the first object of a stack
  * of objects (if any) being carried by the monster (see above).
  */
