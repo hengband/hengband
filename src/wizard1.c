@@ -204,21 +204,14 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
 	q_ptr->to_h = 0;
 	q_ptr->to_d = 0;
 
-
-	/* Level */
 	(*lev) = k_info[q_ptr->k_idx].level;
-
-	/* Value */
 	(*val) = object_value(q_ptr);
-
 
 	/* Hack */
 	if (!buf || !dam || !chance || !wgt) return;
 
-
 	/* Description (too brief) */
 	object_desc(buf, q_ptr, (OD_NAME_ONLY | OD_STORE));
-
 
 	/* Misc info */
 	strcpy(dam, "");

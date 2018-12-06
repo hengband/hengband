@@ -2217,17 +2217,12 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 		o_ptr = &o_list[0 - item];
 	}
 
-
-	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 	msg_format("%s は明るく輝いた！", o_name);
 #else
-	msg_format("%s %s glow%s brightly!",
-		   ((item >= 0) ? "Your" : "The"), o_name,
-		   ((o_ptr->number > 1) ? "" : "s"));
+	msg_format("%s %s glow%s brightly!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
-
 
 	/* Enchant */
 	if (enchant(o_ptr, num_hit, ENCH_TOHIT)) okay = TRUE;
@@ -2279,22 +2274,17 @@ bool artifact_scroll(void)
 	{
 		o_ptr = &inventory[item];
 	}
-
 	/* Get the item (on the floor) */
 	else
 	{
 		o_ptr = &o_list[0 - item];
 	}
 
-
-	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 	msg_format("%s は眩い光を発した！",o_name);
 #else
-	msg_format("%s %s radiate%s a blinding light!",
-		  ((item >= 0) ? "Your" : "The"), o_name,
-		  ((o_ptr->number > 1) ? "" : "s"));
+	msg_format("%s %s radiate%s a blinding light!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
 
 	if (object_is_artifact(o_ptr))
@@ -2302,9 +2292,7 @@ bool artifact_scroll(void)
 #ifdef JP
 		msg_format("%sは既に伝説のアイテムです！", o_name  );
 #else
-		msg_format("The %s %s already %s!",
-		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
-		    ((o_ptr->number > 1) ? "artifacts" : "an artifact"));
+		msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "artifacts" : "an artifact"));
 #endif
 
 		okay = FALSE;
@@ -2393,7 +2381,6 @@ bool identify_item(object_type *o_ptr)
 	bool old_known = FALSE;
 	char o_name[MAX_NLEN];
 
-	/* Description */
 	object_desc(o_name, o_ptr, 0);
 
 	if (o_ptr->ident & IDENT_KNOWN)
@@ -2423,7 +2410,6 @@ bool identify_item(object_type *o_ptr)
 	strcpy(record_o_name, o_name);
 	record_turn = turn;
 
-	/* Description */
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 	if(record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
@@ -2491,7 +2477,6 @@ bool ident_spell(bool only_equip)
 	/* Identify it */
 	old_known = identify_item(o_ptr);
 
-	/* Description */
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
@@ -2639,7 +2624,6 @@ bool identify_fully(bool only_equip)
 	/* Handle stuff */
 	handle_stuff();
 
-	/* Description */
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
@@ -3008,8 +2992,6 @@ bool bless_weapon(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-
-	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Extract the flags */
@@ -3023,22 +3005,18 @@ bool bless_weapon(void)
 		    (o_ptr->curse_flags & TRC_PERMA_CURSE))
 		{
 #ifdef JP
-msg_format("%sを覆う黒いオーラは祝福を跳ね返した！",
-    o_name);
+			msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
 #else
-			msg_format("The black aura on %s %s disrupts the blessing!",
-			    ((item >= 0) ? "your" : "the"), o_name);
+			msg_format("The black aura on %s %s disrupts the blessing!", ((item >= 0) ? "your" : "the"), o_name);
 #endif
 
 			return TRUE;
 		}
 
 #ifdef JP
-msg_format("%s から邪悪なオーラが消えた。",
-    o_name);
+		msg_format("%s から邪悪なオーラが消えた。", o_name);
 #else
-		msg_format("A malignant aura leaves %s %s.",
-		    ((item >= 0) ? "your" : "the"), o_name);
+		msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
 #endif
 
 
@@ -3186,8 +3164,6 @@ bool pulish_shield(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-
-	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Extract the flags */
@@ -3197,11 +3173,9 @@ bool pulish_shield(void)
 	    !object_is_cursed(o_ptr) && (o_ptr->sval != SV_MIRROR_SHIELD))
 	{
 #ifdef JP
-msg_format("%sは輝いた！", o_name);
+		msg_format("%sは輝いた！", o_name);
 #else
-		msg_format("%s %s shine%s!",
-		    ((item >= 0) ? "Your" : "The"), o_name,
-		    ((o_ptr->number > 1) ? "" : "s"));
+		msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
 		o_ptr->name2 = EGO_REFLECTION;
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOAC);
@@ -4077,8 +4051,6 @@ bool rustproof(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-
-	/* Description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
