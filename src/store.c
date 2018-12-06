@@ -4297,12 +4297,7 @@ static void museum_remove_object(void)
 	/* Empty? */
 	if (st_ptr->stock_num <= 0)
 	{
-#ifdef JP
-		msg_print("博物館には何も置いてありません。");
-#else
-		msg_print("Museum is empty.");
-#endif
-
+		msg_print(_("博物館には何も置いてありません。", "Museum is empty."));
 		return;
 	}
 
@@ -4313,11 +4308,7 @@ static void museum_remove_object(void)
 	if (i > store_bottom) i = store_bottom;
 
 	/* Prompt */
-#ifdef JP
-	sprintf(out_val, "どのアイテムの展示をやめさせますか？");
-#else
-	sprintf(out_val, "Which item do you want to order to remove? ");
-#endif
+	sprintf(out_val, _("どのアイテムの展示をやめさせますか？", "Which item do you want to order to remove? "));
 
 	/* Get the item number to be removed */
 	if (!get_stock(&item, out_val, 0, i - 1)) return;
@@ -4328,22 +4319,12 @@ static void museum_remove_object(void)
 	/* Get the actual item */
 	o_ptr = &st_ptr->stock[item];
 
-	/* Description */
 	object_desc(o_name, o_ptr, 0);
 
-#ifdef JP
-	msg_print("展示をやめさせたアイテムは二度と見ることはできません！");
-	if (!get_check(format("本当に%sの展示をやめさせますか？", o_name))) return;
-#else
-	msg_print("You cannot see items which is removed from the Museum!");
-	if (!get_check(format("Really order to remove %s from the Museum? ", o_name))) return;
-#endif
+	msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "You cannot see items which is removed from the Museum!"));
+	if (!get_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), o_name))) return;
 
-#ifdef JP
-	msg_format("%sの展示をやめさせた。", o_name);
-#else
-	msg_format("You ordered to remove %s.", o_name);
-#endif
+	msg_format(_("%sの展示をやめさせた。", "You ordered to remove %s."), o_name);
 
 	/* Remove the items from the home */
 	store_item_increase(item, -o_ptr->number);
@@ -4409,11 +4390,7 @@ static void store_process_command(void)
 		case '-':
 		{
 			if (st_ptr->stock_num <= store_bottom) {
-#ifdef JP
-				msg_print("これで全部です。");
-#else
-				msg_print("Entire inventory is shown.");
-#endif
+				msg_print(_("これで全部です。", "Entire inventory is shown."));
 			}
 			else{
 				store_top -= store_bottom;
@@ -4431,12 +4408,7 @@ static void store_process_command(void)
 		{
 			if (st_ptr->stock_num <= store_bottom)
 			{
-#ifdef JP
-				msg_print("これで全部です。");
-#else
-				msg_print("Entire inventory is shown.");
-#endif
-
+				msg_print(_("これで全部です。", "Entire inventory is shown."));
 			}
 			else
 			{
@@ -4551,8 +4523,6 @@ static void store_process_command(void)
 			toggle_inven_equip();
 			break;
 		}
-
-
 
 		/*** Use various objects ***/
 
@@ -4745,13 +4715,8 @@ static void store_process_command(void)
 			}
 			else
 			{
-#ifdef JP
-				msg_print("そのコマンドは店の中では使えません。");
-#else
-				msg_print("That command does not work in stores.");
-#endif
+				msg_print(_("そのコマンドは店の中では使えません。", "That command does not work in stores."));
 			}
-
 			break;
 		}
 	}
@@ -4794,12 +4759,7 @@ void do_cmd_store(void)
 	/* Verify a store */
 	if (!cave_have_flag_grid(c_ptr, FF_STORE))
 	{
-#ifdef JP
-		msg_print("ここには店がありません。");
-#else
-		msg_print("You see no store here.");
-#endif
-
+		msg_print(_("ここには店がありません。", "You see no store here."));
 		return;
 	}
 
@@ -4815,12 +4775,7 @@ void do_cmd_store(void)
 	if ((town[p_ptr->town_num].store[which].store_open >= turn) ||
 	    (ironman_shops))
 	{
-#ifdef JP
-		msg_print("ドアに鍵がかかっている。");
-#else
-		msg_print("The doors are locked.");
-#endif
-
+		msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
 		p_ptr->town_num = old_town_num;
 		return;
 	}
