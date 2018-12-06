@@ -58,13 +58,8 @@ void check_experience(void)
 	{
 		/* Lose a level */
 		p_ptr->lev--;
-
-		/* Update some stuff */
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-		/* Redraw some stuff */
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
-
 		p_ptr->window |= (PW_PLAYER);
 		handle_stuff();
 	}
@@ -100,12 +95,8 @@ void check_experience(void)
 
 		msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), p_ptr->lev);
 
-		/* Update some stuff */
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-		/* Redraw some stuff */
 		p_ptr->redraw |= (PR_LEV | PR_TITLE | PR_EXP);
-
 		p_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
 
 		/* HPとMPの上昇量を表示 */
@@ -190,12 +181,8 @@ void check_experience(void)
 			level_reward = FALSE;
 		}
 
-		/* Update some stuff */
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-		/* Redraw some stuff */
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
-
 		p_ptr->window |= (PW_PLAYER | PW_SPELL);
 		handle_stuff();
 	}
@@ -719,15 +706,14 @@ cptr extract_note_dies(monster_race *r_ptr)
  */
 void monster_death(MONSTER_IDX m_idx, bool drop_item)
 {
-	int i, j, y, x;
+	int i, j;
+	POSITION y, x;
 
 	int dump_item = 0;
 	int dump_gold = 0;
-
 	int number = 0;
 
 	monster_type *m_ptr = &m_list[m_idx];
-
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	bool visible = ((m_ptr->ml && !p_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE));
@@ -812,7 +798,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			/* Prepare to make a prize */
 			object_prep(q_ptr, lookup_kind(arena_info[p_ptr->arena_number].tval, arena_info[p_ptr->arena_number].sval));
-
 			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
 
 			/* Drop it in the dungeon */
@@ -1671,7 +1656,6 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 #ifdef WORLD_SCORE
 			if (m_ptr->r_idx == MON_SERPENT)
 			{
-				/* Make screen dump */
 				screen_dump = make_screen_dump();
 			}
 #endif
