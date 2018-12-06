@@ -2620,8 +2620,6 @@ bool identify_fully(bool only_equip)
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	object_desc(o_name, o_ptr, 0);

@@ -6100,8 +6100,6 @@ void do_cmd_save_game(int is_autosave)
 
 	/* Clear messages */
 	msg_print(NULL);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
@@ -6584,8 +6582,6 @@ static void show_info(void)
 
 	/* Hack -- Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	/* Flush all input keys */
@@ -6781,8 +6777,6 @@ void close_game(void)
 	bool do_send = TRUE;
 
 /*	cptr p = "[i:キャラクタの情報, f:ファイル書き出し, t:スコア, x:*鑑定*, ESC:ゲーム終了]"; */
-
-	/* Handle stuff */
 	handle_stuff();
 
 	/* Flush the messages */

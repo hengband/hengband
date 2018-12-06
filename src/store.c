@@ -3668,8 +3668,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 				{
 					o_ptr->pval -= j_ptr->pval;
 				}
-
-				/* Handle stuff */
 				handle_stuff();
 
 				/* Note how many slots the store used to have */
@@ -3782,8 +3780,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 		msg_format("You have %s (%c).",
 #endif
  o_name, index_to_label(item_new));
-
-		/* Handle stuff */
 		handle_stuff();
 
 		/* Take note if we take the last one */
@@ -4104,8 +4100,6 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 				autopick_alter_item(item, FALSE);
 
 			inven_item_optimize(item);
-
-			/* Handle stuff */
 			handle_stuff();
 
 			/* The store gets that (known) item */
@@ -4166,8 +4160,6 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 		inven_item_increase(item, -amt);
 		inven_item_describe(item);
 		inven_item_optimize(item);
-
-		/* Handle stuff */
 		handle_stuff();
 
 		/* Let the home carry it */
@@ -4197,8 +4189,6 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 		inven_item_increase(item, -amt);
 		inven_item_describe(item);
 		inven_item_optimize(item);
-
-		/* Handle stuff */
 		handle_stuff();
 
 		/* Let the home carry it */
@@ -4959,8 +4949,6 @@ void do_cmd_store(void)
 
 		/* Notice stuff */
 		notice_stuff();
-
-		/* Handle stuff */
 		handle_stuff();
 
 		/* Pack Overflow */
@@ -5041,8 +5029,6 @@ void do_cmd_store(void)
 				inven_item_increase(item, -255);
 				inven_item_describe(item);
 				inven_item_optimize(item);
-
-				/* Handle stuff */
 				handle_stuff();
 
 				/* Let the home carry it */

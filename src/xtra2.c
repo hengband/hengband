@@ -49,8 +49,6 @@ void check_experience(void)
 
 	/* Redraw experience */
 	p_ptr->redraw |= (PR_EXP);
-
-	/* Handle stuff */
 	handle_stuff();
 
 
@@ -68,8 +66,6 @@ void check_experience(void)
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
 
 		p_ptr->window |= (PW_PLAYER);
-
-		/* Handle stuff */
 		handle_stuff();
 	}
 
@@ -114,8 +110,6 @@ void check_experience(void)
 
 		/* HPとMPの上昇量を表示 */
 		level_up = 1;
-
-		/* Handle stuff */
 		handle_stuff();
 
 		level_up = 0;
@@ -203,8 +197,6 @@ void check_experience(void)
 		p_ptr->redraw |= (PR_LEV | PR_TITLE);
 
 		p_ptr->window |= (PW_PLAYER | PW_SPELL);
-
-		/* Handle stuff */
 		handle_stuff();
 	}
 
@@ -2088,8 +2080,6 @@ bool change_panel(POSITION dy, POSITION dx)
 		p_ptr->update |= (PU_MONSTERS);
 
 		p_ptr->redraw |= (PR_MAP);
-
-		/* Handle stuff */
 		handle_stuff();
 
 		/* Success */
@@ -3600,8 +3590,6 @@ bool target_set(BIT_FLAGS mode)
 					p_ptr->redraw |= (PR_MAP);
 
 					p_ptr->window |= (PW_OVERHEAD);
-
-					/* Handle stuff */
 					handle_stuff();
 
 					/* Recalculate interesting grids */
@@ -3690,8 +3678,6 @@ bool target_set(BIT_FLAGS mode)
 						p_ptr->redraw |= (PR_MAP);
 
 						p_ptr->window |= (PW_OVERHEAD);
-
-						/* Handle stuff */
 						handle_stuff();
 
 						/* Recalculate interesting grids */
@@ -3808,8 +3794,6 @@ bool target_set(BIT_FLAGS mode)
 					p_ptr->redraw |= (PR_MAP);
 
 					p_ptr->window |= (PW_OVERHEAD);
-
-					/* Handle stuff */
 					handle_stuff();
 
 					/* Recalculate interesting grids */
@@ -3932,8 +3916,6 @@ bool target_set(BIT_FLAGS mode)
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	/* Failure to set target */
@@ -5084,8 +5066,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 					p_ptr->redraw |= (PR_MAP);
 
 					p_ptr->window |= (PW_OVERHEAD);
-
-					/* Handle stuff */
 					handle_stuff();
 				}
 				else	/* move cursor to next stair and change panel */
@@ -5172,8 +5152,6 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	*x_ptr = x;

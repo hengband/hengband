@@ -2214,8 +2214,6 @@ void do_cmd_rest(void)
 
 	/* Redraw the state */
 	p_ptr->redraw |= (PR_STATE);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	/* Refresh */

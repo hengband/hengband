@@ -1911,8 +1911,6 @@ static bool kankin(void)
 
 				/* Auto-inscription */
 				autopick_alter_item(item_new, FALSE);
-
-				/* Handle stuff */
 				handle_stuff();
 
 				change = TRUE;
@@ -4499,8 +4497,6 @@ void do_cmd_bldg(void)
 
 		/* Notice stuff */
 		notice_stuff();
-
-		/* Handle stuff */
 		handle_stuff();
 	}
 

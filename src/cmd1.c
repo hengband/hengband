@@ -556,8 +556,6 @@ void carry(bool pickup)
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	/* Automatically pickup/destroy/inscribe items */
@@ -895,8 +893,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 		/* For get everything when requested hehe I'm *NASTY* */
 		if (dun_level && (d_info[dungeon_type].flags1 & DF1_FORGET)) wiz_dark();
-
-		/* Handle stuff */
 		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff();
 
 		if (p_ptr->pclass == CLASS_NINJA)

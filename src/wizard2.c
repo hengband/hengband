@@ -74,8 +74,6 @@ void do_cmd_rerate(bool display)
 	p_ptr->redraw |= (PR_HP);
 
 	p_ptr->window |= (PW_PLAYER);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	if (display)

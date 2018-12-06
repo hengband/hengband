@@ -423,8 +423,6 @@ bool set_blind(TIME_EFFECT v)
 	p_ptr->redraw |= (PR_MAP);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -511,8 +509,6 @@ bool set_confused(TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -562,8 +558,6 @@ bool set_poisoned(TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -627,8 +621,6 @@ bool set_afraid(TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -687,8 +679,6 @@ bool set_paralyzed(TIME_EFFECT v)
 
 	/* Redraw the state */
 	p_ptr->redraw |= (PR_STATE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -755,8 +745,6 @@ bool set_image(TIME_EFFECT v)
 	p_ptr->update |= (PU_MONSTERS);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -812,8 +800,6 @@ bool set_fast(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -871,8 +857,6 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -926,8 +910,6 @@ bool set_slow(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -985,8 +967,6 @@ bool set_shield(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1044,8 +1024,6 @@ bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1103,8 +1081,6 @@ bool set_magicdef(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1161,8 +1137,6 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1223,8 +1197,6 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate hitpoints */
 	p_ptr->update |= (PU_HP);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1285,8 +1257,6 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate hitpoints */
 	p_ptr->update |= (PU_HP);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1340,8 +1310,6 @@ bool set_protevil(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1416,8 +1384,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 
@@ -1496,8 +1462,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1555,8 +1519,6 @@ bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	p_ptr->update |= (PU_MONSTERS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1616,8 +1578,6 @@ bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1677,8 +1637,6 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 
 	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1735,8 +1693,6 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1793,8 +1749,6 @@ bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1908,8 +1862,6 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -1963,8 +1915,6 @@ bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2021,8 +1971,6 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2079,8 +2027,6 @@ bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2137,8 +2083,6 @@ bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2196,8 +2140,6 @@ bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2254,8 +2196,6 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2310,8 +2250,6 @@ bool set_multishadow(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2368,8 +2306,6 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2426,8 +2362,6 @@ bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2493,8 +2427,6 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate hitpoints */
 	p_ptr->update |= (PU_HP);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2571,8 +2503,6 @@ bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
 	p_ptr->redraw |= (PR_STATUS);
 
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	return (TRUE);
@@ -2650,8 +2580,6 @@ bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 	p_ptr->redraw |= (PR_STATUS);
 
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 
 	return (TRUE);
@@ -2706,8 +2634,6 @@ bool set_oppose_acid(TIME_EFFECT v, bool do_dec)
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2761,8 +2687,6 @@ bool set_oppose_elec(TIME_EFFECT v, bool do_dec)
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2817,8 +2741,6 @@ bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2872,8 +2794,6 @@ bool set_oppose_cold(TIME_EFFECT v, bool do_dec)
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -2928,8 +2848,6 @@ bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -3086,8 +3004,6 @@ bool set_stun(TIME_EFFECT v)
 
 	/* Redraw the "stun" */
 	p_ptr->redraw |= (PR_STUN);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -3283,8 +3199,6 @@ bool set_cut(TIME_EFFECT v)
 
 	/* Redraw the "cut" */
 	p_ptr->redraw |= (PR_CUT);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -3481,8 +3395,6 @@ bool set_food(TIME_EFFECT v)
 
 	/* Redraw hunger */
 	p_ptr->redraw |= (PR_HUNGER);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -4787,8 +4699,6 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -4839,8 +4749,6 @@ bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
@@ -4891,8 +4799,6 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
-
-	/* Handle stuff */
 	handle_stuff();
 	return (TRUE);
 }
