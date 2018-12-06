@@ -4233,34 +4233,17 @@ static void store_examine(void)
 	char        o_name[MAX_NLEN];
 	char        out_val[160];
 
-
 	/* Empty? */
 	if (st_ptr->stock_num <= 0)
 	{
 		if (cur_store_num == STORE_HOME)
-#ifdef JP
-			msg_print("我が家には何も置いてありません。");
-#else
-			msg_print("Your home is empty.");
-#endif
-
+			msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
 		else if (cur_store_num == STORE_MUSEUM)
-#ifdef JP
-			msg_print("博物館には何も置いてありません。");
-#else
-			msg_print("Museum is empty.");
-#endif
-
+			msg_print(_("博物館には何も置いてありません。", "Museum is empty."));
 		else
-#ifdef JP
-			msg_print("現在商品の在庫を切らしています。");
-#else
-			msg_print("I am currently out of stock.");
-#endif
-
+			msg_print(_("現在商品の在庫を切らしています。", "I am currently out of stock."));
 		return;
 	}
-
 
 	/* Find the number of objects on this and following pages */
 	i = (st_ptr->stock_num - store_top);
@@ -4269,12 +4252,7 @@ static void store_examine(void)
 	if (i > store_bottom) i = store_bottom;
 
 	/* Prompt */
-#ifdef JP
-sprintf(out_val, "どれを調べますか？");
-#else
-	sprintf(out_val, "Which item do you want to examine? ");
-#endif
-
+	sprintf(out_val, _("どれを調べますか？", "Which item do you want to examine? "));
 
 	/* Get the item number to be examined */
 	if (!get_stock(&item, out_val, 0, i - 1)) return;
@@ -4289,32 +4267,15 @@ sprintf(out_val, "どれを調べますか？");
 	if (!(o_ptr->ident & IDENT_MENTAL))
 	{
 		/* This can only happen in the home */
-#ifdef JP
-msg_print("このアイテムについて特に知っていることはない。");
-#else
-		msg_print("You have no special knowledge about that item.");
-#endif
-
+		msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
 		return;
 	}
 
-	/* Description */
 	object_desc(o_name, o_ptr, 0);
-#ifdef JP
-msg_format("%sを調べている...", o_name);
-#else
-	msg_format("Examining %s...", o_name);
-#endif
+	msg_format(_("%sを調べている...", "Examining %s..."), o_name);
 
-
-	/* Describe it fully */
 	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL))
-#ifdef JP
-msg_print("特に変わったところはないようだ。");
-#else
-		msg_print("You see nothing special.");
-#endif
-
+		msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
 
 	return;
 }
@@ -4327,11 +4288,11 @@ msg_print("特に変わったところはないようだ。");
  */
 static void museum_remove_object(void)
 {
-	int         i;
+	int i;
 	COMMAND_CODE item;
 	object_type *o_ptr;
-	char        o_name[MAX_NLEN];
-	char        out_val[160];
+	char o_name[MAX_NLEN];
+	char out_val[160];
 
 	/* Empty? */
 	if (st_ptr->stock_num <= 0)
