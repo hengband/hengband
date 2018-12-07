@@ -744,38 +744,19 @@ static void prt_title(void)
 	cptr p = "";
 	char str[14];
 
-	/* Wizard */
 	if (p_ptr->wizard)
 	{
-#ifdef JP
-		/* 英日切り替え機能 称号 */
-		p = "[ウィザード]";
-#else
-		p = "[=-WIZARD-=]";
-#endif
-
+		p = _("[ウィザード]", "[=-WIZARD-=]");
 	}
-
-	/* Winner */
 	else if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
 	{
 		if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
 		{
-#ifdef JP
-			/* 英日切り替え機能 称号 */
-			p = "*真・勝利者*";
-#else
-			p = "*TRUEWINNER*";
-#endif
+			p = _("*真・勝利者*", "*TRUEWINNER*");
 		}
 		else
 		{
-#ifdef JP
-			/* 英日切り替え機能 称号 */
-			p = "***勝利者***";
-#else
-			p = "***WINNER***";
-#endif
+			p = _("***勝利者***", "***WINNER***");
 		}
 	}
 
@@ -868,11 +849,10 @@ static void prt_exp(void)
 	}
 	else
 	{
+		put_str(_("x経験", "Exp "), ROW_EXP, 0);
 #ifdef JP
-		put_str("x経験", ROW_EXP, 0);
 		c_put_str(TERM_YELLOW, out_val, ROW_EXP, COL_EXP + 5);
 #else
-		put_str("Exp ", ROW_EXP, 0);
 		c_put_str(TERM_YELLOW, out_val, ROW_EXP, COL_EXP + 4);
 #endif
 
@@ -923,11 +903,9 @@ static void prt_hp(void)
 /* ヒットポイントの表示方法を変更 */
 	char tmp[32];
   
-	byte color;
+	TERM_COLOR color;
   
 	/* タイトル */
-/*	put_str(" ＨＰ・ＭＰ", ROW_HPMP, COL_HPMP); */
-
 	put_str("HP", ROW_CURHP, COL_CURHP);
 
 	/* 現在のヒットポイント */
@@ -974,7 +952,6 @@ static void prt_sp(void)
 	if (!mp_ptr->spell_book) return;
 
 	/* タイトル */
-/*	put_str(" ＭＰ / 最大", ROW_MAXSP, COL_MAXSP); */
 	put_str(_("MP", "SP"), ROW_CURSP, COL_CURSP);
 
 	/* 現在のマジックポイント */
@@ -6118,8 +6095,7 @@ void window_stuff(void)
 {
 	int j;
 
-	u32b mask = 0L;
-
+	BIT_FLAGS mask = 0L;
 
 	/* Nothing to do */
 	if (!p_ptr->window) return;
@@ -6136,7 +6112,6 @@ void window_stuff(void)
 
 	/* Nothing to do */
 	if (!p_ptr->window) return;
-
 
 	/* Display inventory */
 	if (p_ptr->window & (PW_INVEN))
@@ -6230,9 +6205,9 @@ void handle_stuff(void)
  * @param riding_control 乗馬中により片手を必要としている状態ならばTRUEを返す。
  * @return 開いている手のビットフラグ
  */
-s16b empty_hands(bool riding_control)
+BIT_FLAGS16 empty_hands(bool riding_control)
 {
-	s16b status = EMPTY_HAND_NONE;
+	BIT_FLAGS16 status = EMPTY_HAND_NONE;
 
 	if (!inventory[INVEN_RARM].k_idx) status |= EMPTY_HAND_RARM;
 	if (!inventory[INVEN_LARM].k_idx) status |= EMPTY_HAND_LARM;
