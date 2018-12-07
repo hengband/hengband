@@ -5119,6 +5119,7 @@ extern int PlayerUID;
 #define MON_WYRM_SPACE    1064
 #define MON_JIZOTAKO      1065
 #define MON_TANUKI        1067
+#define MON_ALIEN_JURAL   1082
 #define MON_HATOPOPPO     1083
 #define MON_KOGAN         1096
 

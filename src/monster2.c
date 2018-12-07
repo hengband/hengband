@@ -2904,9 +2904,13 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 static IDX initial_r_appearance(MONRACE_IDX r_idx)
 {
 	int attempts = 1000;
-
 	IDX ap_r_idx;
 	DEPTH min = MIN(base_level-5, 50);
+
+	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN)
+	{
+		if (base_level == 0 || one_in_(5)) return MON_ALIEN_JURAL;
+	}
 
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
 		return r_idx;
