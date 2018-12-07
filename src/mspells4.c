@@ -229,6 +229,11 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("やりやがったな！", ""));
+		else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+		{
+			if (randint0(2) == 0) msg_print(_("ジュラル星人め！", ""));
+			else msg_print(_("弱い者いじめは止めるんだ！", ""));
+		}
 
 		learn_spell(MS_DISPEL);
 	}
@@ -2267,7 +2272,12 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	{
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("くっそ～", ""));
-		
+		else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+		{
+			if (randint0(2) == 0) msg_print(_("ジュラル星人め！", ""));
+			else msg_print(_("弱い者いじめは止めるんだ！", ""));
+		}
+
 		learn_spell(MS_TELE_AWAY);
 		teleport_player_away(m_idx, 100);
 	}

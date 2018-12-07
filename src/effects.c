@@ -697,6 +697,7 @@ bool set_image(TIME_EFFECT v)
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
+	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN) v = 0;
 
 
 	/* Open */

@@ -2588,6 +2588,8 @@ static void player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 
 	if (p_ptr->pseikaku == SEIKAKU_SEXY)
 		add_flag(flgs, TR_AGGRAVATE);
+	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN)
+		add_flag(flgs, TR_RES_CONF);
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
 		add_flag(flgs, TR_RES_BLIND);

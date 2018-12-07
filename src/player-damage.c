@@ -300,6 +300,11 @@ int inven_damage(inven_func typ, int perc)
 #ifdef JP
 				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 					msg_print("やりやがったな！");
+				else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+				{
+					if (randint0(2) == 0) msg_print(_("ジュラル星人め！", ""));
+					else msg_print(_("弱い者いじめは止めるんだ！", ""));
+				}
 #endif
 
 				/* Potions smash open */
