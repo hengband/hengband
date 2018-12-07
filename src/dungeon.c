@@ -701,9 +701,9 @@ static bool pattern_effect(void)
  */
 static void regenhp(int percent)
 {
-	s32b new_chp;
+	HIT_POINT new_chp;
 	u32b new_chp_frac;
-	s32b old_chp;
+	HIT_POINT old_chp;
 
 	if (p_ptr->special_defense & KATA_KOUKIJIN) return;
 	if (p_ptr->action == ACTION_HAYAGAKE) return;
@@ -749,9 +749,9 @@ static void regenhp(int percent)
  * @param regen_amount 回復量
  * @return なし
  */
-static void regenmana(int upkeep_factor, int regen_amount)
+static void regenmana(MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 {
-	s32b old_csp = p_ptr->csp;
+	MANA_POINT old_csp = p_ptr->csp;
 	s32b regen_rate = regen_amount * 100 - upkeep_factor * PY_REGEN_NORMAL;
 
 	/*
@@ -782,7 +782,7 @@ static void regenmana(int upkeep_factor, int regen_amount)
 	else if (regen_rate > 0)
 	{
 		/* (percent/100) is the Regen factor in unit (1/2^16) */
-		s32b new_mana = 0;
+		MANA_POINT new_mana = 0;
 		u32b new_mana_frac = (p_ptr->msp * regen_rate / 100 + PY_REGEN_MNBASE);
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
@@ -821,8 +821,6 @@ static void regenmana(int upkeep_factor, int regen_amount)
 		}
 	}
 
-
-	/* Redraw mana */
 	if (old_csp != p_ptr->csp)
 	{
 		p_ptr->redraw |= (PR_MANA);
@@ -839,7 +837,7 @@ static void regenmana(int upkeep_factor, int regen_amount)
  */
 static void regenmagic(int regen_amount)
 {
-	s32b new_mana;
+	MANA_POINT new_mana;
 	int i;
 	int dev = 30;
 	int mult = (dev + adj_mag_mana[p_ptr->stat_ind[A_INT]]); /* x1 to x2 speed bonus for recharging */
@@ -972,7 +970,6 @@ static void regen_captured_monsters(void)
 	{
 		/* Combine pack */
 		p_ptr->notice |= (PN_COMBINE);
-
 		p_ptr->window |= (PW_INVEN);
 		p_ptr->window |= (PW_EQUIP);
 		wild_regen = 20;
@@ -1162,7 +1159,7 @@ static void check_music(void)
 {
 	const magic_type *s_ptr;
 	int spell;
-	s32b need_mana;
+	MANA_POINT need_mana;
 	u32b need_mana_frac;
 
 	/* Music singed by player */
@@ -1518,7 +1515,7 @@ static void process_world_aux_hp_and_sp(void)
 
 	if (p_ptr->riding)
 	{
-		int damage;
+		HIT_POINT damage;
 		if ((r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !p_ptr->immune_fire)
 		{
 			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
@@ -2553,7 +2550,7 @@ static void process_world_aux_curse(void)
 		/* Add light curse (Later) */
 		if ((p_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(2000))
 		{
-			u32b new_curse;
+			BIT_FLAGS new_curse;
 			object_type *o_ptr;
 
 			o_ptr = choose_cursed_obj_name(TRC_ADD_L_CURSE);
@@ -2576,7 +2573,7 @@ static void process_world_aux_curse(void)
 		/* Add heavy curse (Later) */
 		if ((p_ptr->cursed & TRC_ADD_H_CURSE) && one_in_(2000))
 		{
-			u32b new_curse;
+			BIT_FLAGS new_curse;
 			object_type *o_ptr;
 
 			o_ptr = choose_cursed_obj_name(TRC_ADD_H_CURSE);
@@ -2696,19 +2693,11 @@ static void process_world_aux_curse(void)
 
 		if (o_ptr->name1 == ART_JUDGE)
 		{
-#ifdef JP
 			if (object_is_known(o_ptr))
-				msg_print("『審判の宝石』はあなたの体力を吸収した！");
+				msg_print(_("『審判の宝石』はあなたの体力を吸収した！", "The Jewel of Judgement drains life from you!"));
 			else
-				msg_print("なにかがあなたの体力を吸収した！");
-			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "審判の宝石", -1);
-#else
-			if (object_is_known(o_ptr))
-				msg_print("The Jewel of Judgement drains life from you!");
-			else
-				msg_print("Something drains life from you!");
-			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), "the Jewel of Judgement", -1);
-#endif
+				msg_print(_("なにかがあなたの体力を吸収した！", "Something drains life from you!"));
+			take_hit(DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"), -1);
 		}
 	}
 }
@@ -2857,8 +2846,7 @@ static void process_world_aux_movement(void)
 			/* Determine the level */
 			if (dun_level || p_ptr->inside_quest || p_ptr->enter_dungeon)
 			{
-				msg_print(_("上に引っ張りあげられる感じがする！",
-							"You feel yourself yanked upwards!"));
+				msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
 
 				if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
 				if (record_stair)
@@ -2876,8 +2864,7 @@ static void process_world_aux_movement(void)
 			}
 			else
 			{
-				msg_print(_("下に引きずり降ろされる感じがする！",
-							"You feel yourself yanked downwards!"));
+				msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
 
 				dungeon_type = p_ptr->recall_dungeon;
 
@@ -3006,8 +2993,8 @@ static void process_world_aux_movement(void)
 static int get_monster_crowd_number(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-	int my = m_ptr->fy;
-	int mx = m_ptr->fx;
+	POSITION my = m_ptr->fy;
+	POSITION mx = m_ptr->fx;
 	int i;
 	int count = 0;
 
@@ -3126,7 +3113,7 @@ static byte get_dungeon_feeling(void)
 		/* Artifacts */
 		if (object_is_artifact(o_ptr))
 		{
-			s32b cost = object_value_real(o_ptr);
+			PRICE cost = object_value_real(o_ptr);
 
 			delta += 10 * base;
 			if (cost > 10000L) delta += 10 * base;
@@ -3138,27 +3125,16 @@ static byte get_dungeon_feeling(void)
 		}
 
 		if (o_ptr->tval == TV_DRAG_ARMOR) delta += 30 * base;
-		if (o_ptr->tval == TV_SHIELD &&
-		    o_ptr->sval == SV_DRAGON_SHIELD) delta += 5 * base;
-		if (o_ptr->tval == TV_GLOVES &&
-		    o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) delta += 5 * base;
-		if (o_ptr->tval == TV_BOOTS &&
-		    o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) delta += 5 * base;
-		if (o_ptr->tval == TV_HELM &&
-		    o_ptr->sval == SV_DRAGON_HELM) delta += 5 * base;
-		if (o_ptr->tval == TV_RING &&
-		    o_ptr->sval == SV_RING_SPEED &&
-		    !object_is_cursed(o_ptr)) delta += 25 * base;
-		if (o_ptr->tval == TV_RING &&
-		    o_ptr->sval == SV_RING_LORDLY &&
-		    !object_is_cursed(o_ptr)) delta += 15 * base;
-		if (o_ptr->tval == TV_AMULET &&
-		    o_ptr->sval == SV_AMULET_THE_MAGI &&
-		    !object_is_cursed(o_ptr)) delta += 15 * base;
+		if (o_ptr->tval == TV_SHIELD && o_ptr->sval == SV_DRAGON_SHIELD) delta += 5 * base;
+		if (o_ptr->tval == TV_GLOVES && o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) delta += 5 * base;
+		if (o_ptr->tval == TV_BOOTS && o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) delta += 5 * base;
+		if (o_ptr->tval == TV_HELM && o_ptr->sval == SV_DRAGON_HELM) delta += 5 * base;
+		if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_SPEED && !object_is_cursed(o_ptr)) delta += 25 * base;
+		if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_LORDLY && !object_is_cursed(o_ptr)) delta += 15 * base;
+		if (o_ptr->tval == TV_AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !object_is_cursed(o_ptr)) delta += 15 * base;
 
 		/* Out-of-depth objects */
-		if (!object_is_cursed(o_ptr) && !object_is_broken(o_ptr) &&
-		    k_ptr->level > dun_level)
+		if (!object_is_cursed(o_ptr) && !object_is_broken(o_ptr) && k_ptr->level > dun_level)
 		{
 			/* Rating increase */
 			delta += (k_ptr->level - dun_level) * base;
