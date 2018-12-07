@@ -5013,10 +5013,7 @@ static void process_player(void)
 			/* Count this execution */
 			command_rep--;
 
-			/* Redraw the state */
 			p_ptr->redraw |= (PR_STATE);
-
-			/* Redraw stuff */
 			redraw_stuff();
 
 			/* Hack -- Assume messages were seen */

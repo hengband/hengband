@@ -5898,18 +5898,13 @@ void update_stuff(void)
  */
 void redraw_stuff(void)
 {
-	/* Redraw stuff */
 	if (!p_ptr->redraw) return;
-
 
 	/* Character is not ready yet, no screen updates */
 	if (!character_generated) return;
 
-
 	/* Character is in "icky" mode, no screen updates */
 	if (character_icky) return;
-
-
 
 	/* Hack -- clear the screen */
 	if (p_ptr->redraw & (PR_WIPE))
@@ -6193,10 +6188,7 @@ void window_stuff(void)
 void handle_stuff(void)
 {
 	if (p_ptr->update) update_stuff();
-
-	/* Redraw stuff */
 	if (p_ptr->redraw) redraw_stuff();
-
 	if (p_ptr->window) window_stuff();
 }
 

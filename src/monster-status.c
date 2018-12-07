@@ -712,13 +712,8 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 
 		/* Notice stuff */
 		if (p_ptr->notice) notice_stuff();
-
 		if (p_ptr->update) update_stuff();
-
-		/* Redraw stuff */
 		if (p_ptr->redraw) redraw_stuff();
-
-		/* Redraw stuff */
 		if (p_ptr->window) window_stuff();
 
 		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
