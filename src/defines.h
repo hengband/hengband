@@ -181,7 +181,7 @@
 #define MAX_OWNERS      32 /*!< 各店舗毎の店主定義最大数 / Total number of owners per store (see "store.c", etc) */
 #define MAX_SEXES        2 /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
 #define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
-#define MAX_SEIKAKU     12 /*!< 性格の最大定義数 */
+#define MAX_SEIKAKU     13 /*!< 性格の最大定義数 */
 #define MAX_PATRON      16 /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
 
 /* ELDRITCH_HORRORによるsanity blast処理に関するメッセージの最大数 / Number of entries in the sanity-blast descriptions */
@@ -825,6 +825,7 @@
 #define SEIKAKU_LUCKY	 9
 #define SEIKAKU_GAMAN	 10
 #define SEIKAKU_MUNCHKIN 11
+#define SEIKAKU_CHARGEMAN 12
 
 /*** Screen Locations ***/
 

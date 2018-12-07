@@ -3240,6 +3240,17 @@ const player_seikaku seikaku_info[MAX_SEIKAKU] =
 		 20, 40, 30, 10, 40, 40,  80, 80,
 		 15, 1, 0
 	},
+
+	{
+#ifdef JP
+		"チャージマン",
+#endif
+		"Chargeman",
+		{ 2,  -2,  -2,  0,  1,  -2 },
+		-7, 7, -5, -1, -2, -4, 15, 20,
+		-1, 0, 0
+	},
+
 };
 
 
