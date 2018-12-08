@@ -1068,14 +1068,6 @@ extern void massacre(void);
 extern bool eat_lock(void);
 extern bool shock_power(void);
 
-/* store.c */
-extern bool combine_and_reorder_home(int store_num);
-extern void do_cmd_store(void);
-extern void store_shuffle(int which);
-extern void store_maint(int town_num, int store_num);
-extern void store_init(int town_num, int store_num);
-extern void move_to_black_market(object_type * o_ptr);
-
 /* bldg.c */
 extern bool get_nightmare(MONRACE_IDX r_idx);
 extern void battle_monsters(void);

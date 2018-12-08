@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "history.h"
 #include "monster-hook.h"
+#include "store.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

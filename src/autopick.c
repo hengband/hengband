@@ -12,7 +12,7 @@
  */
 
 #include "angband.h"
-
+#include "store.h"
 
 #define MAX_LINELEN 1024
 

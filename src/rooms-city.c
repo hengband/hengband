@@ -3,6 +3,7 @@
 #include "generate.h"
 #include "rooms.h"
 #include "rooms-city.h"
+#include "store.h"
 
 
 
