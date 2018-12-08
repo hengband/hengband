@@ -2204,9 +2204,7 @@ void verify_panel(void)
 	panel_bounds_center();
 
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
@@ -2217,8 +2215,8 @@ void verify_panel(void)
 cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 {
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-	bool         living;
-	int          perc;
+	bool living;
+	int perc;
 	cptr desc;
 	cptr attitude;
 	cptr clone;
@@ -2232,54 +2230,28 @@ cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 	/* Healthy monsters */
 	if (m_ptr->hp >= m_ptr->maxhp)
 	{
-		/* No damage */
-#ifdef JP
-		desc = living ? "無傷" : "無ダメージ";
-#else
-		desc = living ? "unhurt" : "undamaged";
-#endif
-
+		desc = living ? _("無傷", "unhurt") : _("無ダメージ", "undamaged");
 	}
 
 	else if (perc >= 60)
 	{
-#ifdef JP
-		desc = living ? "軽傷" : "小ダメージ";
-#else
-		desc = living ? "somewhat wounded" : "somewhat damaged";
-#endif
-
+		desc = living ? _("軽傷", "somewhat wounded") : _("小ダメージ", "somewhat damaged");
 	}
 
 	else if (perc >= 25)
 	{
-#ifdef JP
-		desc = living ? "負傷" : "中ダメージ";
-#else
-		desc = living ? "wounded" : "damaged";
-#endif
-
+		desc = living ? _("負傷", "wounded") : _("中ダメージ", "damaged");
 	}
 
 	else if (perc >= 10)
 	{
-#ifdef JP
-		desc = living ? "重傷" : "大ダメージ";
-#else
-		desc = living ? "badly wounded" : "badly damaged";
-#endif
-
+		desc = living ? _("重傷", "badly wounded") : _("大ダメージ", "badly damaged");
 	}
 
 	else 
 	{
-#ifdef JP
-		desc = living ? "半死半生" : "倒れかけ";
-#else
-		desc = living ? "almost dead" : "almost destroyed";
-#endif
+		desc = living ? _("半死半生", "almost dead") : _("倒れかけ", "almost destroyed");
 	}
-
 
 	/* Need attitude information? */
 	if (!(mode & 0x01))
@@ -2300,7 +2272,6 @@ cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 		attitude = _("", "");
 	}
 
-
 	/* Clone monster? */
 	if (m_ptr->smart & SM_CLONED)
 	{
@@ -2320,6 +2291,7 @@ cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 	{
 		return format(_("レベル???, %s%s%s", "Level ???, %s%s%s"), desc, attitude, clone);
 	}
+
 }
 
 
