@@ -3444,7 +3444,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-static bool place_monster_group(IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3530,14 +3530,14 @@ static bool place_monster_group(IDX who, POSITION y, POSITION x, MONRACE_IDX r_i
  * @brief 護衛対象となるモンスター種族IDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_idxを除去し、関数引数化する
  */
-static IDX place_monster_idx = 0;
+static MONSTER_IDX place_monster_idx = 0;
 
 /*!
  * @var place_monster_m_idx
  * @brief 護衛対象となるモンスターIDを渡すグローバル変数 / Hack -- help pick an escort type
  * @todo 関数ポインタの都合を配慮しながら、グローバル変数place_monster_m_idxを除去し、関数引数化する
  */
-static IDX place_monster_m_idx = 0;
+static MONSTER_IDX place_monster_m_idx = 0;
 
 /*!
  * @brief モンスター種族が召喚主の護衛となれるかどうかをチェックする / Hack -- help pick an escort type

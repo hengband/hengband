@@ -1169,9 +1169,9 @@ struct player_type
 
 	IDX health_who;	/* Health bar trackee */
 
-	IDX monster_race_idx;	/* Monster race trackee */
+	MONRACE_IDX monster_race_idx;	/* Monster race trackee */
 
-	IDX object_kind_idx;	/* Object kind trackee */
+	KIND_OBJECT_IDX object_kind_idx;	/* Object kind trackee */
 
 	s16b new_spells;	/* Number of spells available */
 	s16b old_spells;

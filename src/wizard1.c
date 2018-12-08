@@ -1563,7 +1563,7 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
  */
 static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 {
-	IDX i;
+	OBJECT_IDX i;
 	artifact_type *a_ptr = &a_info[name1];
 
 	/* Ignore "empty" artifacts */

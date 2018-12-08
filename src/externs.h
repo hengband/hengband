@@ -1189,7 +1189,7 @@ extern void update_stuff(void);
 extern void redraw_stuff(void);
 extern void window_stuff(void);
 extern void handle_stuff(void);
-extern s16b empty_hands(bool riding_control);
+extern BIT_FLAGS16 empty_hands(bool riding_control);
 extern bool heavy_armor(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void update_playtime(void);

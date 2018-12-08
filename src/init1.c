@@ -2600,12 +2600,10 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
 errr parse_e_info(char *buf, header *head)
 {
 	int i;
-
 	char *s, *t;
 
 	/* Current entry */
 	static ego_item_type *e_ptr = NULL;
-
 
 	/* Just before the first record */
 	error_idx = -1;
@@ -2613,14 +2611,13 @@ errr parse_e_info(char *buf, header *head)
 	/* Just before the first line */
 	error_line = -1;
 
-
 	/* Process 'N' for "New/Number/Name" */
 	if (buf[0] == 'N')
 	{
 		/* Find the colon before the name */
 		s = my_strchr(buf+2, ':');
 
-			/* Verify that colon */
+		/* Verify that colon */
 		if (!s) return (1);
 
 		/* Nuke the colon, advance to the name */
@@ -2848,7 +2845,6 @@ static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
 errr parse_r_info(char *buf, header *head)
 {
 	int i;
-
 	char *s, *t;
 
 	/* Current entry */
@@ -3254,12 +3250,10 @@ static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
 errr parse_d_info(char *buf, header *head)
 {
 	int i;
-
 	char *s, *t;
 
 	/* Current entry */
 	static dungeon_info_type *d_ptr = NULL;
-
 
 	/* Process 'N' for "New/Number/Name" */
 	if (buf[0] == 'N')
@@ -3594,7 +3588,7 @@ struct dungeon_grid
 	IDX trap;			/* Trap */
 	BIT_FLAGS cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
 	s16b special; /* Reserved for special terrain info */
-	int		random;			/* Number of the random effect */
+	int random;			/* Number of the random effect */
 };
 
 
@@ -3611,7 +3605,6 @@ static errr parse_line_feature(char *buf)
 {
 	int num;
 	char *zz[9];
-
 
 	if (init_flags & INIT_ONLY_BUILDINGS) return (0);
 
@@ -3928,7 +3921,6 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 	/* Structure copy */
 	object_copy(o_ptr, j_ptr);
 
-
 	/* Locate */
 	o_ptr->iy = y;
 	o_ptr->ix = x;
@@ -4006,10 +3998,10 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 			int idx = s[0];
 
-			IDX object_index = letter[idx].object;
-			IDX monster_index = letter[idx].monster;
+			OBJECT_IDX object_index = letter[idx].object;
+			MONSTER_IDX monster_index = letter[idx].monster;
 			int random = letter[idx].random;
-			IDX artifact_index = letter[idx].artifact;
+			ARTIFACT_IDX artifact_index = letter[idx].artifact;
 
 			/* Lay down a floor */
 			c_ptr->feat = conv_dungeon_feat(letter[idx].feature);
@@ -4307,7 +4299,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				/* Place player in a quest level */
 				if (p_ptr->inside_quest)
 				{
-					int py, px;
+					POSITION py, px;
 
 					/* Delete the monster (if any) */
 					delete_monster(p_ptr->y, p_ptr->x);

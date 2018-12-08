@@ -767,7 +767,7 @@ IDX max_v_idx;
 /*
  * Maximum number of terrain features in f_info.txt
  */
-IDX max_f_idx;
+FEAT_IDX max_f_idx;
 
 /*
  * Maximum number of artifacts in a_info.txt
