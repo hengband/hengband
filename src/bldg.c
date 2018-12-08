@@ -4037,8 +4037,6 @@ static bool research_mon(void)
 
 				/* Save this monster ID */
 				monster_race_track(r_idx);
-
-				/* Hack -- Handle stuff */
 				handle_stuff();
 
 				/* know every thing mode */
@@ -4492,10 +4490,8 @@ void do_cmd_bldg(void)
 			}
 		}
 
-		if (validcmd)
-			bldg_process_command(bldg, i);
+		if(validcmd) bldg_process_command(bldg, i);
 
-		/* Notice stuff */
 		notice_stuff();
 		handle_stuff();
 	}

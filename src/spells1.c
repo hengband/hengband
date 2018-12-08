@@ -6858,8 +6858,6 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	/* Calculate the projection path */
 
 	path_n = project_path(path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
-
-	/* Hack -- Handle stuff */
 	handle_stuff();
 
 	/* Giga-Hack SEEKER & SUPER_RAY */

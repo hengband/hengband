@@ -6786,8 +6786,6 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 		{
 			/* Mega Hack -- track this monster race */
 			if (mon_cnt) monster_race_track(mon_idx[mon_cur]);
-
-			/* Hack -- handle stuff */
 			handle_stuff();
 		}
 
@@ -6962,8 +6960,6 @@ static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
 
 	/* Hack - mark as fake */
 	/* term_obj_real = FALSE; */
-
-	/* Hack -- Handle stuff */
 	handle_stuff();
 
 	if (!screen_object(o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL))
@@ -7191,7 +7187,6 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 			/* The "current" object changed */
 			if (object_old != object_idx[object_cur])
 			{
-				/* Hack -- handle stuff */
 				handle_stuff();
 
 				/* Remember the "current" object */

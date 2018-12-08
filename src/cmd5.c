@@ -514,8 +514,6 @@ void do_cmd_browse(void)
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
-
-	/* Hack -- Handle stuff */
 	handle_stuff();
 
 
@@ -721,8 +719,6 @@ void do_cmd_study(void)
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
-
-	/* Hack -- Handle stuff */
 	handle_stuff();
 
 	/* Mage -- Learn a selected spell */
@@ -1003,8 +999,6 @@ void do_cmd_cast(void)
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
-
-	/* Hack -- Handle stuff */
 	handle_stuff();
 
 	if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))

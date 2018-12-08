@@ -2951,8 +2951,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 
 		/* Hack -- health bar for this monster */
 		health_track(c_ptr->m_idx);
-
-		/* Hack -- handle stuff */
 		handle_stuff();
 
 		/* Interact */

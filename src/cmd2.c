@@ -2846,8 +2846,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 	}
 
 	sound(SOUND_SHOOT);
-
-	/* Hack -- Handle stuff */
 	handle_stuff();
 
 	/* Save the old location */
@@ -3528,8 +3526,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	y = p_ptr->y;
 	x = p_ptr->x;
 
-
-	/* Hack -- Handle stuff */
 	handle_stuff();
 
 	if ((p_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((have_flag(flgs, TR_THROW)) && (q_ptr->tval == TV_SWORD)))) shuriken = TRUE;

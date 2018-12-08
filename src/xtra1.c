@@ -5750,12 +5750,10 @@ void calc_bonuses(void)
  */
 void notice_stuff(void)
 {
-	/* Notice stuff */
-	if (!p_ptr->notice) return;
-
+	if(!p_ptr->notice) return;
 
 	/* Actually do auto-destroy */
-	if (p_ptr->notice & (PN_AUTODESTROY))
+	if(p_ptr->notice & (PN_AUTODESTROY))
 	{
 		p_ptr->notice &= ~(PN_AUTODESTROY);
 		autopick_delayed_alter();
@@ -5785,7 +5783,6 @@ void notice_stuff(void)
 void update_stuff(void)
 {
 	if (!p_ptr->update) return;
-
 
 	if (p_ptr->update & (PU_BONUS))
 	{
@@ -5817,14 +5814,11 @@ void update_stuff(void)
 		calc_spells();
 	}
 
-
 	/* Character is not ready yet, no screen updates */
 	if (!character_generated) return;
 
-
 	/* Character is in "icky" mode, no screen updates */
 	if (character_icky) return;
-
 
 	if (p_ptr->update & (PU_UN_LITE))
 	{
@@ -5914,13 +5908,11 @@ void redraw_stuff(void)
 		Term_clear();
 	}
 
-
 	if (p_ptr->redraw & (PR_MAP))
 	{
 		p_ptr->redraw &= ~(PR_MAP);
 		prt_map();
 	}
-
 
 	if (p_ptr->redraw & (PR_BASIC))
 	{
@@ -5945,7 +5937,6 @@ void redraw_stuff(void)
 		p_ptr->redraw &= ~(PR_MISC);
 		prt_field(rp_ptr->title, ROW_RACE, COL_RACE);
 /*		prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS); */
-
 	}
 
 	if (p_ptr->redraw & (PR_TITLE))
@@ -6025,7 +6016,6 @@ void redraw_stuff(void)
 		health_redraw(TRUE);
 	}
 
-
 	if (p_ptr->redraw & (PR_EXTRA))
 	{
 		p_ptr->redraw &= ~(PR_EXTRA);
@@ -6080,7 +6070,6 @@ void redraw_stuff(void)
 	}
 }
 
-
 /*! 
  * @brief p_ptr->window のフラグに応じた更新をまとめて行う / Handle "p_ptr->window"
  * @return なし
@@ -6089,7 +6078,6 @@ void redraw_stuff(void)
 void window_stuff(void)
 {
 	int j;
-
 	BIT_FLAGS mask = 0L;
 
 	/* Nothing to do */

@@ -208,8 +208,6 @@ void do_cmd_pet_dismiss(void)
 		{
 			/* Hack -- health bar for this monster */
 			health_track(pet_ctr);
-
-			/* Hack -- handle stuff */
 			handle_stuff();
 
 			msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
