@@ -5594,7 +5594,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	HDC hdc;
 	MSG msg;
 
-	setlocale( LC_ALL, "ja_JP" );
+	setlocale(LC_ALL, "ja_JP.utf8");
 
 	/* Unused */
 	(void)nCmdShow;
