@@ -144,7 +144,7 @@ static void next_mirror(int* next_y, int* next_x, int cury, int curx)
  * @param max 色IDの最大値
  * @return 選択した色ID
  */
-static byte mh_attr(int max)
+static TERM_COLOR mh_attr(int max)
 {
 	switch (randint1(max))
 	{
@@ -175,7 +175,7 @@ static byte mh_attr(int max)
  * @param type 魔法属性
  * @return 対応する色ID
  */
-static byte spell_color(int type)
+static TERM_COLOR spell_color(int type)
 {
 	/* Check if A.B.'s new graphics should be used (rr9) */
 	if (streq(ANGBAND_GRAF, "new") || streq(ANGBAND_GRAF, "ne2"))
@@ -243,8 +243,8 @@ static byte spell_color(int type)
 	/* Normal tiles or ASCII */
 	else
 	{
-		byte a;
-		char c;
+		TERM_COLOR a;
+		SYMBOL_CODE c;
 
 		/* Lookup the default colors for this type */
 		cptr s = quark_str(gf_color[type]);
@@ -292,7 +292,7 @@ u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
 	byte k;
 
 	TERM_COLOR a;
-	char c;
+	SYMBOL_CODE c;
 
 	/* No motion (*) */
 	if ((ny == y) && (nx == x)) base = 0x30;
@@ -853,9 +853,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!p_ptr->blind && player_has_los_bold(y, x))
 			{
 				c_ptr->info &= ~(CAVE_UNSAFE);
-
 				lite_spot(y, x);
-
 				obvious = TRUE;
 			}
 
@@ -883,9 +881,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!p_ptr->blind && player_has_los_bold(y, x))
 			{
 				c_ptr->info &= ~(CAVE_UNSAFE);
-
 				lite_spot(y, x);
-
 				obvious = TRUE;
 			}
 
@@ -900,11 +896,9 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				feature_type *mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
 				cave_alter_feat(y, x, FF_SPIKE);
-
 				c_ptr->mimic = old_mimic;
 
 				note_spot(y, x);
-
 				lite_spot(y, x);
 
 				/* Check line of sight */
@@ -1069,11 +1063,8 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 			{
 				c_ptr->info |= (CAVE_GLOW);
-
 				note_spot(y, x);
-
 				lite_spot(y, x);
-
 				update_local_illumination(y, x);
 
 				/* Observe */
