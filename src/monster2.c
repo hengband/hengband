@@ -197,7 +197,7 @@ void reset_target(monster_type *m_ptr)
  */
 monster_race *real_r_ptr(monster_type *m_ptr)
 {
-		return &r_info[real_r_idx(m_ptr)];
+	return &r_info[real_r_idx(m_ptr)];
 }
 
 MONRACE_IDX real_r_idx(monster_type *m_ptr)
@@ -1216,47 +1216,6 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 	return (0);
 }
 
-/*!
- * @brief 平方根を切り捨て整数で返す
- * @param n 数値
- * @return 平方根
- */
-static int mysqrt(int n)
-{
-	int tmp = n>>1;
-	int tasu = 10;
-	int kaeriti = 1;
-
-	if (!tmp)
-	{
-		if (n) return 1;
-		else return 0;
-	}
-
-	while(tmp)
-	{
-		if ((n/tmp) < tmp)
-		{
-			tmp >>= 1;
-		}
-		else break;
-	}
-	kaeriti = tmp;
-	while(tasu)
-	{
-		if ((n/tmp) < tmp)
-		{
-			tasu--;
-			tmp = kaeriti;
-		}
-		else
-		{
-			kaeriti = tmp;
-			tmp += tasu;
-		}
-	}
-	return kaeriti;
-}
 
 /*!
  * @brief 生成モンスター種族を1種生成テーブルから選択する

@@ -65,4 +65,5 @@ extern void s64b_mod(s32b *A1, u32b *A2, s32b B1, u32b B2);
 #endif
 
 extern int count_bits(BIT_FLAGS x);
+extern int mysqrt(int n);
 
