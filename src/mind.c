@@ -1813,22 +1813,22 @@ void do_cmd_mind(void)
 #ifdef JP
 	switch(p_ptr->pclass)
 	{
-		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER;p = "精神";break;
-		case CLASS_FORCETRAINER:          use_mind = MIND_KI;p = "気";break;
-		case CLASS_BERSERKER:   use_mind = MIND_BERSERKER;p = "怒り";break;
-		case CLASS_MIRROR_MASTER:   use_mind = MIND_MIRROR_MASTER;p = "鏡魔法";break;
-		case CLASS_NINJA:       use_mind = MIND_NINJUTSU;p = "精神";break;
-		default:                use_mind = 0;p = "超能力";break;
+		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER; p = "精神";break;
+		case CLASS_FORCETRAINER:          use_mind = MIND_KI; p = "気";break;
+		case CLASS_BERSERKER:   use_mind = MIND_BERSERKER; p = "怒り";break;
+		case CLASS_MIRROR_MASTER:   use_mind = MIND_MIRROR_MASTER; p = "鏡魔法";break;
+		case CLASS_NINJA:       use_mind = MIND_NINJUTSU; p = "精神";break;
+		default:                use_mind = 0 ;p = "超能力"; break;
 	}
 #else
 	switch(p_ptr->pclass)
 	{
-		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER;break;
-		case CLASS_FORCETRAINER:          use_mind = MIND_KI;break;
-		case CLASS_BERSERKER:   use_mind = MIND_BERSERKER;break;
-		case CLASS_MIRROR_MASTER:   use_mind = MIND_MIRROR_MASTER;break;
-		case CLASS_NINJA:       use_mind = MIND_NINJUTSU;break;
-		default:                use_mind = 0;break;
+		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER; break;
+		case CLASS_FORCETRAINER:          use_mind = MIND_KI; break;
+		case CLASS_BERSERKER:   use_mind = MIND_BERSERKER; break;
+		case CLASS_MIRROR_MASTER:   use_mind = MIND_MIRROR_MASTER; break;
+		case CLASS_NINJA:       use_mind = MIND_NINJUTSU; break;
+		default:                use_mind = 0; break;
 	}
 #endif
 	spell = mind_powers[use_mind].info[n];
@@ -2081,10 +2081,7 @@ void do_cmd_mind(void)
 			(void)dec_stat(A_WIS, 15 + randint1(10), perm);
 		}
 	}
-
-	/* Redraw mana */
 	p_ptr->redraw |= (PR_MANA);
-
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
 }

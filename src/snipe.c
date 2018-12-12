@@ -592,10 +592,6 @@ void do_cmd_snipe(void)
 	cast = cast_sniper_spell(n);
 
 	if (!cast) return;
-#if 0
-	p_ptr->energy_use = 100;
-#endif
-	/* Redraw mana */
 	p_ptr->redraw |= (PR_HP | PR_MANA);
 
 	p_ptr->window |= (PW_PLAYER);

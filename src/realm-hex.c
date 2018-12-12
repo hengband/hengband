@@ -191,22 +191,13 @@ void check_hex(void)
 		p_ptr->redraw |= PR_MANA;
 		if (res)
 		{
-#ifdef JP
-			msg_print("詠唱を再開した。");
-#else
-			msg_print("You restart spelling.");
-#endif
+			msg_print(_("詠唱を再開した。", "You restart spelling."));
+
 			p_ptr->action = ACTION_SPELL;
 
-			/* Recalculate bonuses */
 			p_ptr->update |= (PU_BONUS | PU_HP);
-
-			/* Redraw map and status bar */
 			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
-
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
@@ -247,14 +238,9 @@ void check_hex(void)
 bool hex_spell_fully(void)
 {
 	int k_max = 0;
-
 	k_max = (p_ptr->lev / 15) + 1;
-
-	/* Paranoia */
 	k_max = MIN(k_max, MAX_KEEP);
-
 	if (CASTING_HEX_NUM(p_ptr) < k_max) return FALSE;
-
 	return TRUE;
 }
 

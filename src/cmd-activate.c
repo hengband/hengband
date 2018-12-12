@@ -1489,8 +1489,6 @@ bool activate_artifact(object_type *o_ptr)
 				/* Confusing. */
 				(void)set_confused(p_ptr->confused + randint1(5 * oops + 1));
 			}
-
-			/* Redraw mana */
 			p_ptr->redraw |= (PR_MANA);
 		}
 		take_hit(DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"), -1);

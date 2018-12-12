@@ -5946,8 +5946,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 				}
 
 				learn_spell(monspell);
-
-				/* Redraw mana */
 				p_ptr->redraw |= (PR_MANA);
 
 				p_ptr->window |= (PW_PLAYER);

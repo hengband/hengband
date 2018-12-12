@@ -371,8 +371,6 @@ void do_cmd_hissatsu(void)
 
 	/* Limit */
 	if (p_ptr->csp < 0) p_ptr->csp = 0;
-
-	/* Redraw mana */
 	p_ptr->redraw |= (PR_MANA);
 
 	p_ptr->window |= (PW_PLAYER);

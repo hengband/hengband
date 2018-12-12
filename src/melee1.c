@@ -3291,8 +3291,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		msg_format(_("%^sに反撃した！", "Your counterattack to %s!"), m_target_name);
 		py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
-
-		/* Redraw mana */
 		p_ptr->redraw |= (PR_MANA);
 	}
 
