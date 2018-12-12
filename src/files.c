@@ -4351,7 +4351,7 @@ static void dump_aux_class_special(FILE *fff)
 	else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 	{
 		char s[EATER_EXT][MAX_NLEN];
-		OBJECT_TYPE_VALUE tval;
+		OBJECT_TYPE_VALUE tval = 0;
 		int ext;
 		KIND_OBJECT_IDX k_idx;
 		OBJECT_SUBTYPE_VALUE i;

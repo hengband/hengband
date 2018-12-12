@@ -24,7 +24,7 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	coord center[BUBBLENUM];
 
 	int i, j;
-	POSITION x, y;
+	POSITION x = 0, y = 0;
 	u16b min1, min2, temp;
 	bool done;
 

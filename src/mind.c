@@ -1557,7 +1557,7 @@ static bool cast_berserk_spell(int spell)
  */
 static bool cast_ninja_spell(int spell)
 {
-	POSITION x, y;
+	POSITION x = 0, y = 0;
 	DIRECTION dir;
 	PLAYER_LEVEL plev = p_ptr->lev;
 
@@ -1680,8 +1680,8 @@ static bool cast_ninja_spell(int spell)
 		ty = target_row, tx = target_col;
 		for (i = 1; i < path_n; i++)
 		{
-			int ny = GRID_Y(path_g[i]);
-			int nx = GRID_X(path_g[i]);
+			POSITION ny = GRID_Y(path_g[i]);
+			POSITION nx = GRID_X(path_g[i]);
 			cave_type *c_ptr = &cave[ny][nx];
 
 			if (in_bounds(ny, nx) && cave_empty_bold(ny, nx) &&
