@@ -2555,11 +2555,8 @@ static bool get_player_race(void)
 
 	/* Extra info */
 	clear_from(10);
-#ifdef JP
-	put_str("注意：《種族》によってキャラクターの先天的な資質やボーナスが変化します。", 23, 5);
-#else
-	put_str("Note: Your 'race' determines various intrinsic factors and bonuses.", 23 ,5);
-#endif
+	put_str(_("注意：《種族》によってキャラクターの先天的な資質やボーナスが変化します。",
+	"Note: Your 'race' determines various intrinsic factors and bonuses."), 23, 5);
 
 	/* Dump races */
 	for (n = 0; n < MAX_RACES; n++)
@@ -2582,11 +2579,7 @@ static bool get_player_race(void)
 
 	}
 
-#ifdef JP
-	sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-	sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+	sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random");
 
 	/* Choose */
 	k = -1;
@@ -2635,11 +2628,7 @@ static bool get_player_race(void)
 
 		if (k >= 0) break;
 
-#ifdef JP
-		sprintf(buf, "種族を選んで下さい (%c-%c) ('='初期オプション設定): ", sym[0], sym[MAX_RACES-1]);
-#else
-		sprintf(buf, "Choose a race (%c-%c) ('=' for options): ", sym[0], sym[MAX_RACES-1]);
-#endif
+		sprintf(buf, _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES-1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -2705,11 +2694,7 @@ static bool get_player_race(void)
 		else if (c == '=')
 		{
 			screen_save();
-#ifdef JP
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
-#endif
+			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 			screen_load();
 		}
 		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
@@ -2744,17 +2729,11 @@ static bool get_player_class(void)
 
 	/* Extra info */
 	clear_from(10);
-#ifdef JP
-	put_str("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。", 23, 5);
-#else
-	put_str("Note: Your 'class' determines various intrinsic abilities and bonuses.", 23, 5);
-#endif
+	put_str(_("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。",
+		"Note: Your 'class' determines various intrinsic abilities and bonuses."), 23, 5);
 
-#ifdef JP
-	put_str("()で囲まれた選択肢はこの種族には似合わない職業です。", 11, 10);
-#else
-	put_str("Any entries in parentheses should only be used by advanced players.", 11, 5);
-#endif
+	put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。", 
+		"Any entries in parentheses should only be used by advanced players."), 11, 5);
 
 
 	/* Dump classes */
@@ -2850,11 +2829,7 @@ static bool get_player_class(void)
 
 		if (k >= 0) break;
 
-#ifdef JP
-		sprintf(buf, "職業を選んで下さい (%c-%c) ('='初期オプション設定): ", sym[0], sym[MAX_CLASS_CHOICE-1]);
-#else
-		sprintf(buf, "Choose a class (%c-%c) ('=' for options): ",  sym[0], sym[MAX_CLASS_CHOICE-1]);
-#endif
+		sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS_CHOICE-1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -2920,12 +2895,7 @@ static bool get_player_class(void)
 		else if (c == '=')
 		{
 			screen_save();
-#ifdef JP
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
-#endif
-
+			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 			screen_load();
 		}
 		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();

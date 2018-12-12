@@ -57,8 +57,8 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 			}
 		}
 
-		center[i].x = (byte_hack)x;
-		center[i].y = (byte_hack)y;
+		center[i].x = x;
+		center[i].y = y;
 	}
 
 
