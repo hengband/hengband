@@ -1640,13 +1640,8 @@ static bool cast_ninja_spell(int spell)
 			}
 			if (slot == INVEN_PACK)
 			{
-#ifdef JP
-				if (!i) msg_print("くさびを持っていない。");
-				else msg_print("くさびがなくなった。");
-#else
-				if (!i) msg_print("You have no Iron Spikes.");
-				else msg_print("You have no more Iron Spikes.");
-#endif
+				if (!i) msg_print(_("くさびを持っていない。", "You have no Iron Spikes."));
+				else msg_print(_("くさびがなくなった。", "You have no more Iron Spikes."));
 				return FALSE;
 			}
 
