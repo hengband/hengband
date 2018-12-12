@@ -886,7 +886,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			for (i = 0; i < 2; i++)
 			{
-				int wy = y, wx = x;
+				POSITION wy = y, wx = x;
 				bool pet = is_pet(m_ptr);
 				BIT_FLAGS mode = 0L;
 
@@ -894,13 +894,11 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
 				{
-					if (player_can_see_bold(wy, wx))
-						notice = TRUE;
+					if (player_can_see_bold(wy, wx)) notice = TRUE;
 				}
 			}
 
-			if (notice)
-				msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
+			if (notice) msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
 		}
 		break;
 

@@ -2275,7 +2275,7 @@ void anger_monster(monster_type *m_ptr)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, u16b mode)
+bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
 	feature_type *f_ptr = &f_info[feat];
 
@@ -2340,7 +2340,7 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, u16b mode)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, u16b mode)
+bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
 	cave_type *c_ptr = &cave[y][x];
 
