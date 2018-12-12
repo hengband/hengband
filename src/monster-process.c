@@ -15,7 +15,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 
 /*!

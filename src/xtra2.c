@@ -14,7 +14,7 @@
 #include "angband.h"
 #include "cmd-pet.h"
 #include "object-curse.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 #define REWARD_CHANCE 10
 

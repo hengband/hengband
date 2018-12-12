@@ -13,7 +13,7 @@
 
 #include "angband.h"
 #include "history.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 #include "store.h"
 
 /*!

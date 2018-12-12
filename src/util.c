@@ -11,7 +11,7 @@
 /* Purpose: Angband utilities -BEN- */
 
 #include "angband.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 
 static int num_more = 0;

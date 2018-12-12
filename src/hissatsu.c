@@ -11,7 +11,7 @@
  */
 
 #include "angband.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 

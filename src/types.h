@@ -1542,7 +1542,7 @@ struct tag_type
 	int     index;
 };
 
-typedef bool (*monster_hook_type)(MONRACE_IDX r_idx);
+typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
 
 
 /*

@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 #include "monster-status.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
@@ -1158,8 +1158,8 @@ static bool restrict_monster_to_dungeon(MONRACE_IDX r_idx)
  * @param monster_hook2 制限関数2
  * @return エラーコード
  */
-errr get_mon_num_prep(monster_hook_type monster_hook,
-					  monster_hook_type monster_hook2)
+errr get_mon_num_prep(monsterrace_hook_type monster_hook,
+					  monsterrace_hook_type monster_hook2)
 {
 	int i;
 

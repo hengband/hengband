@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 /*!
 * @brief 剣術の各処理を行う

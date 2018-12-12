@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 
 /*
@@ -2127,38 +2127,38 @@ void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte attr, cptr
  * @brief プレイヤーの現在の広域マップ座標から得た地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monster_hook_type get_monster_hook(void)
+monsterrace_hook_type get_monster_hook(void)
 {
 	if (!dun_level && !p_ptr->inside_quest)
 	{
 		switch (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain)
 		{
 		case TERRAIN_TOWN:
-			return (monster_hook_type)mon_hook_town;
+			return (monsterrace_hook_type)mon_hook_town;
 		case TERRAIN_DEEP_WATER:
-			return (monster_hook_type)mon_hook_ocean;
+			return (monsterrace_hook_type)mon_hook_ocean;
 		case TERRAIN_SHALLOW_WATER:
 		case TERRAIN_SWAMP:
-			return (monster_hook_type)mon_hook_shore;
+			return (monsterrace_hook_type)mon_hook_shore;
 		case TERRAIN_DIRT:
 		case TERRAIN_DESERT:
-			return (monster_hook_type)mon_hook_waste;
+			return (monsterrace_hook_type)mon_hook_waste;
 		case TERRAIN_GRASS:
-			return (monster_hook_type)mon_hook_grass;
+			return (monsterrace_hook_type)mon_hook_grass;
 		case TERRAIN_TREES:
-			return (monster_hook_type)mon_hook_wood;
+			return (monsterrace_hook_type)mon_hook_wood;
 		case TERRAIN_SHALLOW_LAVA:
 		case TERRAIN_DEEP_LAVA:
-			return (monster_hook_type)mon_hook_volcano;
+			return (monsterrace_hook_type)mon_hook_volcano;
 		case TERRAIN_MOUNTAIN:
-			return (monster_hook_type)mon_hook_mountain;
+			return (monsterrace_hook_type)mon_hook_mountain;
 		default:
-			return (monster_hook_type)mon_hook_dungeon;
+			return (monsterrace_hook_type)mon_hook_dungeon;
 		}
 	}
 	else
 	{
-		return (monster_hook_type)mon_hook_dungeon;
+		return (monsterrace_hook_type)mon_hook_dungeon;
 	}
 }
 
@@ -2166,7 +2166,7 @@ monster_hook_type get_monster_hook(void)
  * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monster_hook_type get_monster_hook2(POSITION y, POSITION x)
+monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x)
 {
 	feature_type *f_ptr = &f_info[cave[y][x].feat];
 
@@ -2178,23 +2178,23 @@ monster_hook_type get_monster_hook2(POSITION y, POSITION x)
 		/* Deep water */
 		if (have_flag(f_ptr->flags, FF_DEEP))
 		{
-			return (monster_hook_type)mon_hook_deep_water;
+			return (monsterrace_hook_type)mon_hook_deep_water;
 		}
 
 		/* Shallow water */
 		else
 		{
-			return (monster_hook_type)mon_hook_shallow_water;
+			return (monsterrace_hook_type)mon_hook_shallow_water;
 		}
 	}
 
 	/* Lava */
 	else if (have_flag(f_ptr->flags, FF_LAVA))
 	{
-		return (monster_hook_type)mon_hook_lava;
+		return (monsterrace_hook_type)mon_hook_lava;
 	}
 
-	else return (monster_hook_type)mon_hook_floor;
+	else return (monsterrace_hook_type)mon_hook_floor;
 }
 
 /*!
