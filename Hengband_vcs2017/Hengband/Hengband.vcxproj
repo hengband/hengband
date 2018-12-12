@@ -150,9 +150,9 @@
     <ClCompile Include="..\..\src\floor-generate.c" />
     <ClCompile Include="..\..\src\floor-save.c" />
     <ClCompile Include="..\..\src\history.c" />
-    <ClCompile Include="..\..\src\monster-hook.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
+    <ClCompile Include="..\..\src\monsterrace-hook.c" />
     <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-hook.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
@@ -275,8 +275,8 @@
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\kajitips.h" />
     <ClInclude Include="..\..\src\mindtips.h" />
-    <ClInclude Include="..\..\src\monster-hook.h" />
     <ClInclude Include="..\..\src\monster-status.h" />
+    <ClInclude Include="..\..\src\monsterrace-hook.h" />
     <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-hook.h" />
     <ClInclude Include="..\..\src\player-damage.h" />

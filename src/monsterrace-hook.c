@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 /*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
 int vault_aux_race;
