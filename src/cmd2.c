@@ -3081,14 +3081,12 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 				if (snipe_type == SP_HOLYNESS)
 				{
 					cave[ny][nx].info |= (CAVE_GLOW);
-
 					note_spot(ny, nx);
-
 					lite_spot(ny, nx);
 				}
 
 				/* Hit the monster, check for death */
-				if (mon_take_hit(c_mon_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
+				if (mon_take_hit(c_mon_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
 				{
 					/* Dead monster */
 				}
@@ -3679,7 +3677,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
 				/* Hit the monster, check for death */
-				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_ptr(m_ptr))))
+				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
 				{
 					/* Dead monster */
 				}

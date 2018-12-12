@@ -197,19 +197,24 @@ void reset_target(monster_type *m_ptr)
  */
 monster_race *real_r_ptr(monster_type *m_ptr)
 {
+		return &r_info[real_r_idx(m_ptr)];
+}
+
+MONRACE_IDX real_r_idx(monster_type *m_ptr)
+{
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Extract real race */
 	if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
 	{
 		if (r_ptr->flags1 & RF1_UNIQUE)
-			return &r_info[MON_CHAMELEON_K];
+			return MON_CHAMELEON_K;
 		else
-			return &r_info[MON_CHAMELEON];
+			return MON_CHAMELEON;
 	}
 	else
 	{
-		return r_ptr;
+		return m_ptr->r_idx;
 	}
 }
 
@@ -824,13 +829,13 @@ static bool summon_specific_aux(MONRACE_IDX r_idx)
 
 		case SUMMON_HI_DRAGON_LIVING:
 		{
-			okay = ((r_ptr->d_char == 'D') && monster_living(r_ptr));
+			okay = ((r_ptr->d_char == 'D') && monster_living(r_idx));
 			break;
 		}
 
 		case SUMMON_LIVING:
 		{
-			okay = monster_living(r_ptr);
+			okay = monster_living(r_idx);
 			break;
 		}
 
@@ -884,7 +889,7 @@ static bool summon_specific_aux(MONRACE_IDX r_idx)
 
 			for (i = 0; i < 4; i++)
 				if (r_ptr->blow[i].method == RBM_EXPLODE) okay = TRUE;
-			okay = (okay && monster_living(r_ptr));
+			okay = (okay && monster_living(r_idx));
 			break;
 		}
 

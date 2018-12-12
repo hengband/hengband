@@ -666,10 +666,11 @@ void check_find_art_quest_completion(object_type *o_ptr)
  * @param r_ptr 撃破されたモンスターの種族情報を持つ構造体の参照ポインタ
  * @return 撃破されたモンスターの述語
  */
-cptr extract_note_dies(monster_race *r_ptr)
+cptr extract_note_dies(MONRACE_IDX r_idx)
 {
+	monster_race *r_ptr = &r_info[r_idx];
 	/* Some monsters get "destroyed" */
-	if (!monster_living(r_ptr))
+	if (!monster_living(r_idx))
 	{
 		int i;
 
@@ -1800,7 +1801,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 		}
 
 		/* Death by Physical attack -- non-living monster */
-		else if (!monster_living(r_ptr))
+		else if (!monster_living(m_ptr->r_idx))
 		{
 			bool explode = FALSE;
 
@@ -2223,7 +2224,7 @@ cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 	cptr clone;
 
 	/* Determine if the monster is "living" */
-	living = monster_living(ap_r_ptr);
+	living = monster_living(m_ptr->ap_r_idx);
 
 	/* Calculate a health "percentage" */
 	perc = 100L * m_ptr->hp / m_ptr->maxhp;

@@ -630,8 +630,10 @@ bool vault_aux_dark_elf(MONRACE_IDX r_idx)
  * Used to determine the message to print for a killed monster.
  * ("dies", "destroyed")
  */
-bool monster_living(monster_race *r_ptr)
+bool monster_living(MONRACE_IDX r_idx)
 {
+	monster_race *r_ptr = &r_info[r_idx];
+
 	/* Non-living, undead, or demon */
 	if (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING))
 		return FALSE;

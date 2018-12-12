@@ -1694,12 +1694,12 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	cptr note = NULL;
 
 	/* Assume a default death */
-	cptr note_dies = extract_note_dies(real_r_ptr(m_ptr));
+	cptr note_dies = extract_note_dies(real_r_idx(m_ptr));
 
-	int ty = m_ptr->fy;
-	int tx = m_ptr->fx;
+	POSITION ty = m_ptr->fy;
+	POSITION tx = m_ptr->fx;
 
-	int caster_lev = (who > 0) ? r_info[caster_ptr->r_idx].level : (p_ptr->lev * 2);
+	DEPTH caster_lev = (who > 0) ? r_info[caster_ptr->r_idx].level : (p_ptr->lev * 2);
 
 	/* Nobody here */
 	if (!c_ptr->m_idx) return (FALSE);
@@ -2786,7 +2786,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
-			if (!monster_living(r_ptr))
+			if (!monster_living(m_ptr->r_idx))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
@@ -2815,7 +2815,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
-			if (!monster_living(r_ptr))
+			if (!monster_living(m_ptr->r_idx))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
@@ -3358,7 +3358,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
-				!monster_living(r_ptr))
+				!monster_living(m_ptr->r_idx))
 			{
 				/* Resist */
 				/* No obvious effect */
@@ -3930,7 +3930,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				break;
 			}
 			/* Only affect non-undead */
-			if (monster_living(r_ptr))
+			if (monster_living(m_ptr->r_idx))
 			{
 				if (seen) obvious = TRUE;
 
@@ -4304,7 +4304,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			if (is_pet(m_ptr)) nokori_hp = m_ptr->maxhp * 4L;
-			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(r_ptr))
+			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
 				nokori_hp = m_ptr->maxhp * 3 / 10;
 			else
 				nokori_hp = m_ptr->maxhp * 3 / 20;
