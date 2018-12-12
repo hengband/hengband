@@ -58,3 +58,5 @@ extern bool vault_aux_demon(MONRACE_IDX r_idx);
 extern bool vault_aux_cthulhu(MONRACE_IDX r_idx);
 extern bool vault_aux_dark_elf(MONRACE_IDX r_idx);
 
+extern bool monster_living(monster_race *r_ptr);
+extern bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx);

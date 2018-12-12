@@ -737,8 +737,6 @@ extern bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, u16b m
 extern bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, u16b mode);
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
-extern bool monster_living(monster_race *r_ptr);
-extern bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 
 

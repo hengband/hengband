@@ -1891,17 +1891,11 @@ void determine_random_questor(quest_type *q_ptr)
 		r_ptr = &r_info[r_idx];
 
 		if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
 		if (r_ptr->flags1 & RF1_QUESTOR) continue;
-
 		if (r_ptr->rarity > 100) continue;
-
 		if (r_ptr->flags7 & RF7_FRIENDLY) continue;
-
 		if (r_ptr->flags7 & RF7_AQUATIC) continue;
-
 		if (r_ptr->flags8 & RF8_WILD_ONLY) continue;
-
 		if (no_questor_or_bounty_uniques(r_idx)) continue;
 
 		/*
@@ -1911,7 +1905,7 @@ void determine_random_questor(quest_type *q_ptr)
 		if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) break;
 	}
 
-	q_ptr->r_idx = (s16b)r_idx;
+	q_ptr->r_idx = r_idx;
 }
 
 /*!
@@ -2579,7 +2573,7 @@ static bool get_player_race(void)
 
 	}
 
-	sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random");
+	sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 
 	/* Choose */
 	k = -1;
