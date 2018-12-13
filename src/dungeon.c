@@ -1505,7 +1505,7 @@ static void process_world_aux_hp_and_sp(void)
 	}
 
 	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-	    !p_ptr->levitation && !p_ptr->can_swim && !p_ptr->res_water)
+	    !p_ptr->levitation && !p_ptr->can_swim && !p_ptr->resist_water)
 	{
 		if (p_ptr->total_weight > weight_limit())
 		{
