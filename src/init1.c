@@ -3838,11 +3838,13 @@ static errr parse_line_building(char *buf)
 		/* Building Classes */
 		case 'C':
 		{
-			if (tokenize(s + 2, MAX_CLASS, zz, 0) == MAX_CLASS)
+			int n;
+			n = tokenize(s + 2, MAX_CLASS, zz, 0);
+			if (n <= MAX_CLASS)
 			{
 				for (i = 0; i < MAX_CLASS; i++)
-				{
-					building[index].member_class[i] = (CLASS_IDX)atoi(zz[i]);
+				{	
+					building[index].member_class[i] = ((i > n) ? (CLASS_IDX)atoi(zz[i]) : 1);
 				}
 
 				break;
@@ -3854,11 +3856,13 @@ static errr parse_line_building(char *buf)
 		/* Building Races */
 		case 'R':
 		{
-			if (tokenize(s+2, MAX_RACES, zz, 0) == MAX_RACES)
+			int n;
+			n = tokenize(s + 2, MAX_RACES, zz, 0);
+			if (n <= MAX_RACES)
 			{
 				for (i = 0; i < MAX_RACES; i++)
 				{
-					building[index].member_race[i] = (RACE_IDX)atoi(zz[i]);
+					building[index].member_race[i] = ((i > n) ? (RACE_IDX)atoi(zz[i]) : 1);
 				}
 
 				break;
@@ -3870,11 +3874,13 @@ static errr parse_line_building(char *buf)
 		/* Building Realms */
 		case 'M':
 		{
-			if (tokenize(s+2, MAX_MAGIC, zz, 0) == MAX_MAGIC)
+			int n;
+			n = tokenize(s + 2, MAX_MAGIC, zz, 0);
+			if (n <= MAX_MAGIC)
 			{
 				for (i = 0; i < MAX_MAGIC; i++)
 				{
-					building[index].member_realm[i+1] = (REALM_IDX)atoi(zz[i]);
+					building[index].member_realm[i+1] = ((i > n) ? (REALM_IDX)atoi(zz[i]) : 1);
 				}
 
 				break;
