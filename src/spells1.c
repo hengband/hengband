@@ -5412,19 +5412,21 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 			if (fuzzy) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
 			if (!CHECK_MULTISHADOW())
 			{
-				if (!p_ptr->resist_sound)
+				if (!p_ptr->resist_sound && !p_ptr->resist_water)
 				{
 					set_stun(p_ptr->stun + randint1(40));
 				}
-				if (!p_ptr->resist_conf)
+				if (!p_ptr->resist_conf && !p_ptr->resist_water)
 				{
 					set_confused(p_ptr->confused + randint1(5) + 5);
 				}
 
-				if (one_in_(5))
+				if (one_in_(5) && !p_ptr->resist_water)
 				{
 					inven_damage(set_cold_destroy, 3);
 				}
+
+				if (p_ptr->resist_water) get_damage /= 4;
 			}
 
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
@@ -5947,9 +5949,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 
 				learn_spell(monspell);
 				p_ptr->redraw |= (PR_MANA);
-
-				p_ptr->window |= (PW_PLAYER);
-				p_ptr->window |= (PW_SPELL);
+				p_ptr->window |= (PW_PLAYER | PW_SPELL);
 
 				if (who > 0)
 				{

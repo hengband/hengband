@@ -3290,6 +3290,7 @@ void calc_bonuses(void)
 	p_ptr->resist_blind = FALSE;
 	p_ptr->resist_neth = FALSE;
 	p_ptr->resist_time = FALSE;
+	p_ptr->resist_water = FALSE;
 	p_ptr->resist_fear = FALSE;
 	p_ptr->reflect = FALSE;
 	p_ptr->sh_fire = FALSE;
@@ -3770,6 +3771,8 @@ void calc_bonuses(void)
 			p_ptr->resist_pois = TRUE;
 			p_ptr->hold_exp = TRUE;
 			break;
+		case RACE_MERFOLK:
+			p_ptr->resist_water = TRUE;
 		default:
 			/* Do nothing */
 			;

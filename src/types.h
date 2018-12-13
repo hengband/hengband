@@ -1248,6 +1248,7 @@ struct player_type
 	bool resist_neth;	/* Resist nether */
 	bool resist_fear;	/* Resist fear */
 	bool resist_time;	/* Resist time */
+	bool resist_water;	/* Resist water */
 
 	bool reflect;       /* Reflect 'bolt' attacks */
 	bool sh_fire;       /* Fiery 'immolation' effect */
