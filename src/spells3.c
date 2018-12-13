@@ -515,10 +515,10 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 void teleport_away_followable(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-	int          oldfy = m_ptr->fy;
-	int          oldfx = m_ptr->fx;
-	bool         old_ml = m_ptr->ml;
-	int          old_cdis = m_ptr->cdis;
+	POSITION oldfy = m_ptr->fy;
+	POSITION oldfx = m_ptr->fx;
+	bool old_ml = m_ptr->ml;
+	POSITION old_cdis = m_ptr->cdis;
 
 	teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
 
@@ -531,7 +531,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 		{
 			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
-			int i;
+			INVENTORY_IDX i;
 
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{

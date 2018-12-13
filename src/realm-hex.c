@@ -56,7 +56,7 @@ bool stop_hex_spell_all(void)
 bool stop_hex_spell(void)
 {
 	int spell;
-	char choice;
+	char choice = 0;
 	char out_val[160];
 	bool flag = FALSE;
 	TERM_LEN y = 1;
@@ -76,13 +76,8 @@ bool stop_hex_spell(void)
 	}
 	else
 	{
-#ifdef JP
-		strnfmt(out_val, 78, "どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)",
+		strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
 			I2A(0), I2A(CASTING_HEX_NUM(p_ptr) - 1));
-#else
-		strnfmt(out_val, 78, "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)",
-			I2A(0), I2A(CASTING_HEX_NUM(p_ptr) - 1));
-#endif
 
 		screen_save();
 
@@ -90,7 +85,7 @@ bool stop_hex_spell(void)
 		{
 			int n = 0;
 			Term_erase(x, y, 255);
-			prt("     名前", y, x + 5);
+			prt(_("     名前", "     Name"), y, x + 5);
 			for (spell = 0; spell < 32; spell++)
 			{
 				if (hex_spelling(spell))
@@ -141,7 +136,7 @@ bool stop_hex_spell(void)
 void check_hex(void)
 {
 	int spell;
-	s32b need_mana;
+	MANA_POINT need_mana;
 	u32b need_mana_frac;
 	bool res = FALSE;
 
@@ -196,22 +191,13 @@ void check_hex(void)
 		p_ptr->redraw |= PR_MANA;
 		if (res)
 		{
-#ifdef JP
-			msg_print("詠唱を再開した。");
-#else
-			msg_print("You restart spelling.");
-#endif
+			msg_print(_("詠唱を再開した。", "You restart spelling."));
+
 			p_ptr->action = ACTION_SPELL;
 
-			/* Recalculate bonuses */
 			p_ptr->update |= (PU_BONUS | PU_HP);
-
-			/* Redraw map and status bar */
 			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
-
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
@@ -252,14 +238,9 @@ void check_hex(void)
 bool hex_spell_fully(void)
 {
 	int k_max = 0;
-
 	k_max = (p_ptr->lev / 15) + 1;
-
-	/* Paranoia */
 	k_max = MIN(k_max, MAX_KEEP);
-
 	if (CASTING_HEX_NUM(p_ptr) < k_max) return FALSE;
-
 	return TRUE;
 }
 

@@ -18,7 +18,7 @@ hengband_SOURCES = \
 	history.h history.c \
 	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
 	main.c main-x11.c main-gcu.c mane.c melee1.c mind.c \
-	monster-hook.c monster-hook.h monster-process.c \
+	monsterrace-hook.c monsterrace-hook.h monster-process.c \
 	monster-process.h monster-status.c monster-status.h monster1.c \
 	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c mutation.c \
 	object-curse.c object-curse.h \

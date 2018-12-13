@@ -923,8 +923,6 @@ static bool cmd_racial_power_aux(s32b command)
 				p_ptr->csp = p_ptr->msp;
 				p_ptr->csp_frac = 0;
 			}
-
-			/* Redraw mana */
 			p_ptr->redraw |= (PR_MANA);
 			break;
 		}
@@ -1019,8 +1017,6 @@ static bool cmd_racial_power_aux(s32b command)
 					p_ptr->csp = max_csp;
 					p_ptr->csp_frac = 0;
 				}
-
-				/* Redraw mana */
 				p_ptr->redraw |= (PR_MANA);
 			}
 			else if (command == -4)
@@ -1129,8 +1125,6 @@ static bool cmd_racial_power_aux(s32b command)
 						p_ptr->csp = p_ptr->msp;
 						p_ptr->csp_frac = 0;
 					}
-
-					/* Redraw mana */
 					p_ptr->redraw |= (PR_MANA);
 				}
 				else

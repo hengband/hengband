@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 #include "monster-status.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
@@ -197,19 +197,24 @@ void reset_target(monster_type *m_ptr)
  */
 monster_race *real_r_ptr(monster_type *m_ptr)
 {
+	return &r_info[real_r_idx(m_ptr)];
+}
+
+MONRACE_IDX real_r_idx(monster_type *m_ptr)
+{
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Extract real race */
 	if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
 	{
 		if (r_ptr->flags1 & RF1_UNIQUE)
-			return &r_info[MON_CHAMELEON_K];
+			return MON_CHAMELEON_K;
 		else
-			return &r_info[MON_CHAMELEON];
+			return MON_CHAMELEON;
 	}
 	else
 	{
-		return r_ptr;
+		return m_ptr->r_idx;
 	}
 }
 
@@ -824,13 +829,13 @@ static bool summon_specific_aux(MONRACE_IDX r_idx)
 
 		case SUMMON_HI_DRAGON_LIVING:
 		{
-			okay = ((r_ptr->d_char == 'D') && monster_living(r_ptr));
+			okay = ((r_ptr->d_char == 'D') && monster_living(r_idx));
 			break;
 		}
 
 		case SUMMON_LIVING:
 		{
-			okay = monster_living(r_ptr);
+			okay = monster_living(r_idx);
 			break;
 		}
 
@@ -884,7 +889,7 @@ static bool summon_specific_aux(MONRACE_IDX r_idx)
 
 			for (i = 0; i < 4; i++)
 				if (r_ptr->blow[i].method == RBM_EXPLODE) okay = TRUE;
-			okay = (okay && monster_living(r_ptr));
+			okay = (okay && monster_living(r_idx));
 			break;
 		}
 
@@ -1153,8 +1158,8 @@ static bool restrict_monster_to_dungeon(MONRACE_IDX r_idx)
  * @param monster_hook2 制限関数2
  * @return エラーコード
  */
-errr get_mon_num_prep(monster_hook_type monster_hook,
-					  monster_hook_type monster_hook2)
+errr get_mon_num_prep(monsterrace_hook_type monster_hook,
+					  monsterrace_hook_type monster_hook2)
 {
 	int i;
 
@@ -1211,47 +1216,6 @@ errr get_mon_num_prep(monster_hook_type monster_hook,
 	return (0);
 }
 
-/*!
- * @brief 平方根を切り捨て整数で返す
- * @param n 数値
- * @return 平方根
- */
-static int mysqrt(int n)
-{
-	int tmp = n>>1;
-	int tasu = 10;
-	int kaeriti = 1;
-
-	if (!tmp)
-	{
-		if (n) return 1;
-		else return 0;
-	}
-
-	while(tmp)
-	{
-		if ((n/tmp) < tmp)
-		{
-			tmp >>= 1;
-		}
-		else break;
-	}
-	kaeriti = tmp;
-	while(tasu)
-	{
-		if ((n/tmp) < tmp)
-		{
-			tasu--;
-			tmp = kaeriti;
-		}
-		else
-		{
-			kaeriti = tmp;
-			tmp += tasu;
-		}
-	}
-	return kaeriti;
-}
 
 /*!
  * @brief 生成モンスター種族を1種生成テーブルから選択する

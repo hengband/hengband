@@ -2,7 +2,7 @@
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 /*
  * Hack -- determine if a template is potion

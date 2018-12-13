@@ -1559,20 +1559,15 @@ static bool wr_savefile_new(void)
  */
 static bool save_player_aux(char *name)
 {
-	bool    ok = FALSE;
-
-	int             fd = -1;
-
-	int             mode = 0644;
-
+	bool ok = FALSE;
+	int fd = -1;
+	int mode = 0644;
 
 	/* No file yet */
 	fff = NULL;
 
-
 	/* File type is "SAVE" */
 	FILE_TYPE(FILE_TYPE_SAVE);
-
 
 	/* Grab permissions */
 	safe_setuid_grab();

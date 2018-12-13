@@ -15,6 +15,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
+#include "monsterrace-hook.h"
 
 
 /*!
@@ -258,7 +259,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 		else
 		{
 			/* Make a sound */
-			if (!monster_living(r_ptr))
+			if (!monster_living(m_ptr->r_idx))
 			{
 				sound(SOUND_N_KILL);
 			}
@@ -281,7 +282,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 					msg_format(_("%^s%s", "%^s%s"), m_name, note);
 				}
 				/* Death by normal attack -- nonliving monster */
-				else if (!monster_living(r_ptr))
+				else if (!monster_living(m_ptr->r_idx))
 				{
 					msg_format(_("%^sは破壊された。", "%^s is destroyed."), m_name);
 				}
@@ -1850,7 +1851,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 					break;
 
 				case BLOW_EFFECT_TYPE_HEAL:
-					if ((monster_living(tr_ptr)) && (damage > 2))
+					if ((monster_living(m_idx)) && (damage > 2))
 					{
 						bool did_heal = FALSE;
 

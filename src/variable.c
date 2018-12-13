@@ -717,8 +717,8 @@ void (*ang_sort_swap)(vptr u, vptr v, int a, int b);
 /*
  * Hack -- function hooks to restrict "get_mon_num_prep()" function
  */
-monster_hook_type get_mon_num_hook;
-monster_hook_type get_mon_num2_hook;
+monsterrace_hook_type get_mon_num_hook;
+monsterrace_hook_type get_mon_num2_hook;
 
 
 /*

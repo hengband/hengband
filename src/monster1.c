@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 
 /*
@@ -2127,38 +2127,38 @@ void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte attr, cptr
  * @brief プレイヤーの現在の広域マップ座標から得た地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monster_hook_type get_monster_hook(void)
+monsterrace_hook_type get_monster_hook(void)
 {
 	if (!dun_level && !p_ptr->inside_quest)
 	{
 		switch (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain)
 		{
 		case TERRAIN_TOWN:
-			return (monster_hook_type)mon_hook_town;
+			return (monsterrace_hook_type)mon_hook_town;
 		case TERRAIN_DEEP_WATER:
-			return (monster_hook_type)mon_hook_ocean;
+			return (monsterrace_hook_type)mon_hook_ocean;
 		case TERRAIN_SHALLOW_WATER:
 		case TERRAIN_SWAMP:
-			return (monster_hook_type)mon_hook_shore;
+			return (monsterrace_hook_type)mon_hook_shore;
 		case TERRAIN_DIRT:
 		case TERRAIN_DESERT:
-			return (monster_hook_type)mon_hook_waste;
+			return (monsterrace_hook_type)mon_hook_waste;
 		case TERRAIN_GRASS:
-			return (monster_hook_type)mon_hook_grass;
+			return (monsterrace_hook_type)mon_hook_grass;
 		case TERRAIN_TREES:
-			return (monster_hook_type)mon_hook_wood;
+			return (monsterrace_hook_type)mon_hook_wood;
 		case TERRAIN_SHALLOW_LAVA:
 		case TERRAIN_DEEP_LAVA:
-			return (monster_hook_type)mon_hook_volcano;
+			return (monsterrace_hook_type)mon_hook_volcano;
 		case TERRAIN_MOUNTAIN:
-			return (monster_hook_type)mon_hook_mountain;
+			return (monsterrace_hook_type)mon_hook_mountain;
 		default:
-			return (monster_hook_type)mon_hook_dungeon;
+			return (monsterrace_hook_type)mon_hook_dungeon;
 		}
 	}
 	else
 	{
-		return (monster_hook_type)mon_hook_dungeon;
+		return (monsterrace_hook_type)mon_hook_dungeon;
 	}
 }
 
@@ -2166,7 +2166,7 @@ monster_hook_type get_monster_hook(void)
  * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monster_hook_type get_monster_hook2(POSITION y, POSITION x)
+monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x)
 {
 	feature_type *f_ptr = &f_info[cave[y][x].feat];
 
@@ -2178,23 +2178,23 @@ monster_hook_type get_monster_hook2(POSITION y, POSITION x)
 		/* Deep water */
 		if (have_flag(f_ptr->flags, FF_DEEP))
 		{
-			return (monster_hook_type)mon_hook_deep_water;
+			return (monsterrace_hook_type)mon_hook_deep_water;
 		}
 
 		/* Shallow water */
 		else
 		{
-			return (monster_hook_type)mon_hook_shallow_water;
+			return (monsterrace_hook_type)mon_hook_shallow_water;
 		}
 	}
 
 	/* Lava */
 	else if (have_flag(f_ptr->flags, FF_LAVA))
 	{
-		return (monster_hook_type)mon_hook_lava;
+		return (monsterrace_hook_type)mon_hook_lava;
 	}
 
-	else return (monster_hook_type)mon_hook_floor;
+	else return (monsterrace_hook_type)mon_hook_floor;
 }
 
 /*!
@@ -2275,7 +2275,7 @@ void anger_monster(monster_type *m_ptr)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, u16b mode)
+bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
 	feature_type *f_ptr = &f_info[feat];
 
@@ -2340,7 +2340,7 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, u16b mode)
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, u16b mode)
+bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
 	cave_type *c_ptr = &cave[y][x];
 
@@ -2448,49 +2448,4 @@ bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, mo
 
 	/* Non-hostile alignment */
 	return FALSE;
-}
-
-
-/*!
- * @brief モンスターが生命体かどうかを返す
- * Is the monster "alive"?
- * @param r_ptr 判定するモンスターの種族情報構造体参照ポインタ
- * @return 生命体ならばTRUEを返す
- * @details
- * Used to determine the message to print for a killed monster.
- * ("dies", "destroyed")
- */
-bool monster_living(monster_race *r_ptr)
-{
-	/* Non-living, undead, or demon */
-	if (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING))
-		return FALSE;
-	else
-		return TRUE;
-}
-
-
-/*!
- * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す。
- * Is the monster "alive"? / Is this monster declined to be questor or bounty?
- * @param r_idx モンスターの種族ID
- * @return 賞金首に加えられないならばTRUEを返す
- * @details
- * 実質バーノール＝ルパート用。
- */
-bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx)
-{
-	switch (r_idx)
-	{
-	/*
-	 * Decline them to be questor or bounty because they use
-	 * special motion "split and combine"
-	 */
-	case MON_BANORLUPART:
-	case MON_BANOR:
-	case MON_LUPART:
-		return TRUE;
-	default:
-		return FALSE;
-	}
 }

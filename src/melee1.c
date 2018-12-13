@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "cmd-pet.h"
 #include "player-damage.h"
+#include "monsterrace-hook.h"
 
 
 
@@ -649,7 +650,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 			if ((have_flag(flgs, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(HEX_VAMP_BLADE))
 			{
 				/* Only drain "living" monsters */
-				if (monster_living(r_ptr))
+				if (monster_living(m_ptr->r_idx))
 					can_drain = TRUE;
 				else
 					can_drain = FALSE;
@@ -880,13 +881,13 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 			drain_result += p_ptr->to_d[hand];
 
 			if ((mode == HISSATSU_SUTEMI) || (mode == HISSATSU_3DAN)) k *= 2;
-			if ((mode == HISSATSU_SEKIRYUKA) && !monster_living(r_ptr)) k = 0;
+			if ((mode == HISSATSU_SEKIRYUKA) && !monster_living(m_ptr->r_idx)) k = 0;
 			if ((mode == HISSATSU_SEKIRYUKA) && !p_ptr->cut) k /= 2;
 
 			/* No negative damage */
 			if (k < 0) k = 0;
 
-			if ((mode == HISSATSU_ZANMA) && !(!monster_living(r_ptr) && (r_ptr->flags3 & RF3_EVIL)))
+			if ((mode == HISSATSU_ZANMA) && !(!monster_living(m_ptr->r_idx) && (r_ptr->flags3 & RF3_EVIL)))
 			{
 				k = 0;
 			}
@@ -3290,8 +3291,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		msg_format(_("%^sに反撃した！", "Your counterattack to %s!"), m_target_name);
 		py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
-
-		/* Redraw mana */
 		p_ptr->redraw |= (PR_MANA);
 	}
 

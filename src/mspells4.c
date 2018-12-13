@@ -2134,10 +2134,10 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 		}
 
 		if(monster_to_player && p_ptr->riding)
-			mon_take_hit_mon(p_ptr->riding, dam, &fear, extract_note_dies(real_r_ptr(&m_list[p_ptr->riding])), m_idx);
+			mon_take_hit_mon(p_ptr->riding, dam, &fear, extract_note_dies(real_r_idx(&m_list[p_ptr->riding])), m_idx);
 
 		if(monster_to_monster)
-			mon_take_hit_mon(t_idx, dam, &fear, extract_note_dies(real_r_ptr(t_ptr)), m_idx);
+			mon_take_hit_mon(t_idx, dam, &fear, extract_note_dies(real_r_idx(t_ptr)), m_idx);
 	}
 	return dam;
 }

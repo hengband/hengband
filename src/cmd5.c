@@ -1081,8 +1081,6 @@ void do_cmd_cast(void)
 		p_ptr->csp -= need_mana;
 	}
 	else over_exerted = TRUE;
-
-	/* Redraw mana */
 	p_ptr->redraw |= (PR_MANA);
 
 	/* Failed spell */

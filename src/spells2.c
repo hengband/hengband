@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "grid.h"
 #include "trap.h"
+#include "monsterrace-hook.h"
 
 
 /*!
@@ -528,7 +529,6 @@ bool detect_monsters_nonliving(POSITION range)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
-		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -540,7 +540,7 @@ bool detect_monsters_nonliving(POSITION range)
 		if (distance(p_ptr->y, p_ptr->x, y, x) > range) continue;
 
 		/* Detect non-living monsters */
-		if (!monster_living(r_ptr))
+		if (!monster_living(m_ptr->r_idx))
 		{
 			/* Update monster recall window */
 			if (p_ptr->monster_race_idx == m_ptr->r_idx)

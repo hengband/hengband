@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 /*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
 int vault_aux_race;
@@ -617,4 +617,51 @@ bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	for (i = 0; dark_elf_list[i]; i++) if (r_idx == dark_elf_list[i]) return TRUE;
 	return FALSE;
+}
+
+
+
+/*!
+ * @brief モンスターが生命体かどうかを返す
+ * Is the monster "alive"?
+ * @param r_ptr 判定するモンスターの種族情報構造体参照ポインタ
+ * @return 生命体ならばTRUEを返す
+ * @details
+ * Used to determine the message to print for a killed monster.
+ * ("dies", "destroyed")
+ */
+bool monster_living(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Non-living, undead, or demon */
+	if (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING))
+		return FALSE;
+	else
+		return TRUE;
+}
+
+/*!
+ * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す。
+ * Is the monster "alive"? / Is this monster declined to be questor or bounty?
+ * @param r_idx モンスターの種族ID
+ * @return 賞金首に加えられないならばTRUEを返す
+ * @details
+ * 実質バーノール＝ルパート用。
+ */
+bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx)
+{
+	switch (r_idx)
+	{
+		/*
+		 * Decline them to be questor or bounty because they use
+		 * special motion "split and combine"
+		 */
+	case MON_BANORLUPART:
+	case MON_BANOR:
+	case MON_LUPART:
+		return TRUE;
+	default:
+		return FALSE;
+	}
 }

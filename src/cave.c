@@ -1760,8 +1760,8 @@ void prt_path(POSITION y, POSITION x)
 			TERM_COLOR a = default_color;
 			char c;
 
-			TERM_COLOR ta;
-			char tc;
+			TERM_COLOR ta = default_color;
+			char tc = '*';
 
 			if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
 			{

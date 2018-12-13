@@ -11,7 +11,7 @@
 /* Purpose: Angband utilities -BEN- */
 
 #include "angband.h"
-#include "monster-hook.h"
+#include "monsterrace-hook.h"
 
 
 static int num_more = 0;
@@ -663,7 +663,6 @@ errr fd_copy(cptr file, cptr what)
 	return (0);
 }
 
-
 /*
  * Hack -- attempt to open a file descriptor (create file)
  * This function should fail if the file already exists
@@ -690,7 +689,6 @@ int fd_make(cptr file, BIT_FLAGS mode)
 	/* Create the file, fail if exists, write-only, binary */
 	return (open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode));
 #endif
-
 
 }
 

@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
+#include "monsterrace-hook.h"
 
 /*!
 * @brief 剣術の各処理を行う
@@ -529,7 +530,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				/* Hack -- attack monsters */
 				if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
 				{
-					if (!monster_living(&r_info[m_ptr->r_idx]))
+					if (!monster_living(m_ptr->r_idx))
 					{
 						char m_name[80];
 

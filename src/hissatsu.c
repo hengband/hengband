@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "monsterrace-hook.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 
@@ -370,8 +371,6 @@ void do_cmd_hissatsu(void)
 
 	/* Limit */
 	if (p_ptr->csp < 0) p_ptr->csp = 0;
-
-	/* Redraw mana */
 	p_ptr->redraw |= (PR_MANA);
 
 	p_ptr->window |= (PW_PLAYER);
@@ -552,7 +551,7 @@ MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_
 	/* Zammaken (Nonliving Evil) */
 	if (mode == HISSATSU_ZANMA)
 	{
-		if (!monster_living(r_ptr) && (r_ptr->flags3 & RF3_EVIL))
+		if (!monster_living(m_ptr->r_idx) && (r_ptr->flags3 & RF3_EVIL))
 		{
 			if (mult < 15) mult = 25;
 			else if (mult < 50) mult = MIN(50, mult+20);
@@ -635,7 +634,7 @@ MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_
 	}
 
 	/* Bloody Maelstrom */
-	if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && monster_living(r_ptr))
+	if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && monster_living(m_ptr->r_idx))
 	{
 		MULTIPLY tmp = MIN(100, MAX(10, p_ptr->cut / 10));
 		if (mult < tmp) mult = tmp;

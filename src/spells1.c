@@ -16,6 +16,7 @@
 #include "trap.h"
 #include "object-curse.h"
 #include "player-damage.h"
+#include "monsterrace-hook.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
@@ -144,7 +145,7 @@ static void next_mirror(int* next_y, int* next_x, int cury, int curx)
  * @param max 色IDの最大値
  * @return 選択した色ID
  */
-static byte mh_attr(int max)
+static TERM_COLOR mh_attr(int max)
 {
 	switch (randint1(max))
 	{
@@ -175,7 +176,7 @@ static byte mh_attr(int max)
  * @param type 魔法属性
  * @return 対応する色ID
  */
-static byte spell_color(int type)
+static TERM_COLOR spell_color(int type)
 {
 	/* Check if A.B.'s new graphics should be used (rr9) */
 	if (streq(ANGBAND_GRAF, "new") || streq(ANGBAND_GRAF, "ne2"))
@@ -243,8 +244,8 @@ static byte spell_color(int type)
 	/* Normal tiles or ASCII */
 	else
 	{
-		byte a;
-		char c;
+		TERM_COLOR a;
+		SYMBOL_CODE c;
 
 		/* Lookup the default colors for this type */
 		cptr s = quark_str(gf_color[type]);
@@ -292,7 +293,7 @@ u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
 	byte k;
 
 	TERM_COLOR a;
-	char c;
+	SYMBOL_CODE c;
 
 	/* No motion (*) */
 	if ((ny == y) && (nx == x)) base = 0x30;
@@ -853,9 +854,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!p_ptr->blind && player_has_los_bold(y, x))
 			{
 				c_ptr->info &= ~(CAVE_UNSAFE);
-
 				lite_spot(y, x);
-
 				obvious = TRUE;
 			}
 
@@ -883,9 +882,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!p_ptr->blind && player_has_los_bold(y, x))
 			{
 				c_ptr->info &= ~(CAVE_UNSAFE);
-
 				lite_spot(y, x);
-
 				obvious = TRUE;
 			}
 
@@ -900,11 +897,9 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				feature_type *mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
 
 				cave_alter_feat(y, x, FF_SPIKE);
-
 				c_ptr->mimic = old_mimic;
 
 				note_spot(y, x);
-
 				lite_spot(y, x);
 
 				/* Check line of sight */
@@ -1069,11 +1064,8 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 			{
 				c_ptr->info |= (CAVE_GLOW);
-
 				note_spot(y, x);
-
 				lite_spot(y, x);
-
 				update_local_illumination(y, x);
 
 				/* Observe */
@@ -1702,12 +1694,12 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	cptr note = NULL;
 
 	/* Assume a default death */
-	cptr note_dies = extract_note_dies(real_r_ptr(m_ptr));
+	cptr note_dies = extract_note_dies(real_r_idx(m_ptr));
 
-	int ty = m_ptr->fy;
-	int tx = m_ptr->fx;
+	POSITION ty = m_ptr->fy;
+	POSITION tx = m_ptr->fx;
 
-	int caster_lev = (who > 0) ? r_info[caster_ptr->r_idx].level : (p_ptr->lev * 2);
+	DEPTH caster_lev = (who > 0) ? r_info[caster_ptr->r_idx].level : (p_ptr->lev * 2);
 
 	/* Nobody here */
 	if (!c_ptr->m_idx) return (FALSE);
@@ -2794,7 +2786,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
-			if (!monster_living(r_ptr))
+			if (!monster_living(m_ptr->r_idx))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
@@ -2823,7 +2815,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 				break;
 			}
-			if (!monster_living(r_ptr))
+			if (!monster_living(m_ptr->r_idx))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
@@ -3366,7 +3358,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Attempt a saving throw */
 			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
-				!monster_living(r_ptr))
+				!monster_living(m_ptr->r_idx))
 			{
 				/* Resist */
 				/* No obvious effect */
@@ -3938,7 +3930,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				break;
 			}
 			/* Only affect non-undead */
-			if (monster_living(r_ptr))
+			if (monster_living(m_ptr->r_idx))
 			{
 				if (seen) obvious = TRUE;
 
@@ -4312,7 +4304,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			if (is_pet(m_ptr)) nokori_hp = m_ptr->maxhp * 4L;
-			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(r_ptr))
+			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
 				nokori_hp = m_ptr->maxhp * 3 / 10;
 			else
 				nokori_hp = m_ptr->maxhp * 3 / 20;
@@ -5954,8 +5946,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 				}
 
 				learn_spell(monspell);
-
-				/* Redraw mana */
 				p_ptr->redraw |= (PR_MANA);
 
 				p_ptr->window |= (PW_PLAYER);

@@ -24,6 +24,7 @@
 #include "floor-events.h"
 #include "object-curse.h"
 #include "store.h"
+#include "monsterrace-hook.h"
 
 static bool load = TRUE; /*!<ロード処理中の分岐フラグ*/
 static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
@@ -1264,7 +1265,7 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 					(flag == TRC_FAST_DIGEST) || 
 					(flag == TRC_SLOW_REGEN) )
 		{
-			u32b cf;
+			u32b cf = 0L;
 			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_flags(o_ptr, flgs);
 			switch (flag)
