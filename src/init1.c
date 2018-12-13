@@ -3752,7 +3752,7 @@ static errr parse_line_feature(char *buf)
 static errr parse_line_building(char *buf)
 {
 	int i;
-	char *zz[37];
+	char *zz[1000];
 	int index;
 	char *s;
 
