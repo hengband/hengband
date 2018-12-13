@@ -329,7 +329,7 @@ int inven_damage(inven_func typ, int perc)
 /*!
 * @brief 酸攻撃による装備のAC劣化処理 /
 * Acid has hit the player, attempt to affect some armor.
-* @return ACが実際に劣化したらTRUEを返す
+* @return 装備が酸を浴びたならTRUEを返す
 * @details
 * Note that the "base armor" of an object never changes.
 * If any armor is damaged (or resists), the player takes less damage.
