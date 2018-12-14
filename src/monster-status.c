@@ -481,8 +481,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 					if (m_ptr->ml)
 					{
 						char m_name[80];
-
-						/* Acquire the monster name */
 						monster_desc(m_name, m_ptr, 0);
 
 						/* Dump a message */
@@ -507,8 +505,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			if (is_seen(m_ptr))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
@@ -524,8 +520,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			if (is_seen(m_ptr))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
@@ -545,8 +539,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			if (is_seen(m_ptr))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
@@ -564,8 +556,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			if (is_seen(m_ptr))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
@@ -588,8 +578,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 				/* Acquire the monster possessive */
 				monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
@@ -609,8 +597,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			if (is_seen(m_ptr))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */

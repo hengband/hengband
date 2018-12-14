@@ -4787,8 +4787,6 @@ static void process_player(void)
 
 			/* Recover fully */
 			(void)set_monster_csleep(p_ptr->riding, 0);
-
-			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%^sを起こした。", "You have waked %s up."), m_name);
 		}
@@ -4800,8 +4798,6 @@ static void process_player(void)
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
@@ -4816,8 +4812,6 @@ static void process_player(void)
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1)))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */
@@ -4832,8 +4826,6 @@ static void process_player(void)
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				/* Dump a message */

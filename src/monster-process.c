@@ -2143,8 +2143,6 @@ void process_monster(MONSTER_IDX m_idx)
 		if (see_m)
 		{
 			char m_name[80];
-
-			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 		}
@@ -2174,14 +2172,11 @@ void process_monster(MONSTER_IDX m_idx)
 		{
 			bool sad = FALSE;
 
-			if (is_pet(m_ptr) && !(m_ptr->ml))
-				sad = TRUE;
+			if (is_pet(m_ptr) && !(m_ptr->ml)) sad = TRUE;
 
 			if (see_m)
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
@@ -2192,7 +2187,6 @@ void process_monster(MONSTER_IDX m_idx)
 
 
 			delete_monster_idx(m_idx);
-
 			if (sad)
 			{
 				msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));
@@ -2280,8 +2274,6 @@ void process_monster(MONSTER_IDX m_idx)
 		if (m_ptr->ml)
 		{
 			char m_name[80];
-
-			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 
 			/* Dump a message */
@@ -3115,8 +3107,6 @@ void process_monster(MONSTER_IDX m_idx)
 
 					/* Acquire the object name */
 					object_desc(o_name, o_ptr, 0);
-
-					/* Acquire the monster name */
 					monster_desc(m_name, m_ptr, MD_INDEF_HIDDEN);
 
 					/* React to objects that hurt the monster */
@@ -3289,8 +3279,6 @@ void process_monster(MONSTER_IDX m_idx)
 		if (see_m)
 		{
 			char m_name[80];
-
-			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 
 			/* Dump a message */
