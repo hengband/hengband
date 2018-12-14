@@ -691,8 +691,6 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 	}
 
 	p_ptr->redraw |= (PR_MAP);
-
-	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

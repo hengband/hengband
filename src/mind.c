@@ -1182,8 +1182,6 @@ static bool cast_mindcrafter_spell(int spell)
 		p_ptr->energy_need -= 1000 + (100 + p_ptr->csp - 50)*TURNS_PER_TICK/10;
 
 		p_ptr->redraw |= (PR_MAP);
-
-		/* Update monsters */
 		p_ptr->update |= (PU_MONSTERS);
 
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

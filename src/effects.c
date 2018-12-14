@@ -276,8 +276,6 @@ void dispel_player(void)
 		p_ptr->update |= (PU_BONUS | PU_HP);
 
 		p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-
-		/* Update monsters */
 		p_ptr->update |= (PU_MONSTERS);
 
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -740,8 +738,6 @@ bool set_image(TIME_EFFECT v)
 
 	/* Update the health bar */
 	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH);
-
-	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -1346,8 +1342,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 			chg_virtue(V_VALOUR, -5);
 
 			p_ptr->redraw |= (PR_MAP);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -1363,8 +1357,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 
 			p_ptr->redraw |= (PR_MAP);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -1422,8 +1414,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 			chg_virtue(V_VALOUR, -5);
 
 			p_ptr->redraw |= (PR_MAP);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -1439,8 +1429,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 
 			p_ptr->redraw |= (PR_MAP);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

@@ -940,8 +940,6 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				"You recall the valor of Fingolfin's challenge to the Dark Lord..."));
 
 			p_ptr->redraw |= (PR_MAP);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -956,8 +954,6 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
 
 				p_ptr->redraw |= (PR_MAP);
-
-				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
 
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

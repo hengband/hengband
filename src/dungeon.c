@@ -1205,8 +1205,6 @@ static void check_music(void)
 
 			/* Redraw map and status bar */
 			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -3726,8 +3724,6 @@ static void process_command(void)
 				p_ptr->wizard = TRUE;
 				msg_print(_("ウィザードモード突入。", "Wizard mode on."));
 			}
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			/* Redraw "title" */
@@ -5148,8 +5144,6 @@ static void process_player(void)
 			{
 
 				p_ptr->redraw |= (PR_MAP);
-
-				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
 
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -5288,8 +5282,6 @@ static void dungeon(bool load_game)
 
 	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH);
-
-	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 	/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */

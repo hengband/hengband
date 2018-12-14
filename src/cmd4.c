@@ -990,8 +990,6 @@ void do_cmd_redraw(void)
 
 	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-
-	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS);
 
 	/* Redraw everything */

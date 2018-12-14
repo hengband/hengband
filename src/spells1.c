@@ -5646,7 +5646,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 					"The light forces you out of your incorporeal shadow form."));
 
 				p_ptr->redraw |= PR_MAP;
-				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 

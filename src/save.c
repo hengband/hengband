@@ -1162,8 +1162,6 @@ static bool wr_dungeon(void)
 
 	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-
-	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 
