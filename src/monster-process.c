@@ -85,8 +85,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 					}
 				}
 				/* Hack -- no fighting away from player */
-				else if ((m_ptr->cdis < t_ptr->cdis) &&
-							(t_ptr->cdis > p_ptr->pet_follow_distance))
+				else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > p_ptr->pet_follow_distance))
 				{
 					continue;
 				}
@@ -223,7 +222,6 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 		{
 			msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), m_name);
 		}
-
 		return;
 	}
 
@@ -245,7 +243,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 	}
 
 	/* Hurt it */
-	m_ptr->hp -= (s16b)dam;
+	m_ptr->hp -= dam;
 
 	/* It is dead now... or is it? */
 	if (m_ptr->hp < 0)
@@ -294,11 +292,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, I
 			}
 
 			monster_gain_exp(who, m_ptr->r_idx);
-
-			/* Generate treasure */
 			monster_death(m_idx, FALSE);
-
-
 			delete_monster_idx(m_idx);
 
 			/* Not afraid */
@@ -396,7 +390,8 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	u16b p_lev, m_lev;
+	PLAYER_LEVEL p_lev;
+	DEPTH m_lev;
 	HIT_POINT p_chp, p_mhp;
 	HIT_POINT m_chp, m_mhp;
 	u32b p_val, m_val;
@@ -1045,7 +1040,7 @@ static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
  * @param mm 移動方向を返す方向IDの参照ポインタ
  * @return 有効方向があった場合TRUEを返す
  */
-static bool get_moves(MONSTER_IDX m_idx, int *mm)
+static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -2077,10 +2072,10 @@ void process_monster(MONSTER_IDX m_idx)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race    *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
-	int             i, d;
-	POSITION	oy, ox, ny, nx;
+	int i, d;
+	POSITION oy, ox, ny, nx;
 
-	int             mm[8];
+	DIRECTION mm[8];
 
 	cave_type       *c_ptr;
 	feature_type    *f_ptr;
@@ -2392,9 +2387,9 @@ void process_monster(MONSTER_IDX m_idx)
 			{
 				if (r_ptr->freq_spell && (randint1(100) <= r_ptr->freq_spell))
 				{
-					int  k, count = 0;
-					int  rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-					u32b p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
+					int k, count = 0;
+					DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+					BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
 
 					for (k = 0; k < 6; k++)
 					{
@@ -2464,11 +2459,10 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Give priority to counter attack? */
 		if (m_ptr->target_y)
 		{
-			int t_m_idx = cave[m_ptr->target_y][m_ptr->target_x].m_idx;
+			MONSTER_IDX t_m_idx = cave[m_ptr->target_y][m_ptr->target_x].m_idx;
 
 			/* The monster must be an enemy, and projectable */
-			if (t_m_idx &&
-			    are_enemies(m_ptr, &m_list[t_m_idx]) &&
+			if (t_m_idx && are_enemies(m_ptr, &m_list[t_m_idx]) &&
 			    projectable(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 			{
 				counterattack = TRUE;
