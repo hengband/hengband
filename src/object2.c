@@ -385,7 +385,6 @@ void compact_objects(int size)
 				/* Acquire monster */
 				m_ptr = &m_list[o_ptr->held_m_idx];
 
-				/* Get the location */
 				y = m_ptr->fy;
 				x = m_ptr->fx;
 
@@ -396,7 +395,6 @@ void compact_objects(int size)
 			/* Dungeon */
 			else
 			{
-				/* Get the location */
 				y = o_ptr->iy;
 				x = o_ptr->ix;
 			}

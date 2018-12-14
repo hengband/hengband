@@ -496,7 +496,6 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	{
 		int cost;
 
-		/* Get the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
 
@@ -630,7 +629,6 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	/* Check nearby grids, diagonals first */
 	for (i = 7; i >= 0; i--)
 	{
-		/* Get the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
 
@@ -709,7 +707,6 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	{
 		POSITION dis, s;
 
-		/* Get the location */
 		y = fy + ddy_ddd[i];
 		x = fx + ddx_ddd[i];
 

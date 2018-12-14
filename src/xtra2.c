@@ -281,7 +281,6 @@ void check_quest_completion(monster_type *m_ptr)
 	object_type forge;
 	object_type *o_ptr;
 
-	/* Get the location */
 	y = m_ptr->fy;
 	x = m_ptr->fx;
 
@@ -584,7 +583,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		p_ptr->update |= (PU_MON_LITE);
 	}
 
-	/* Get the location */
 	y = m_ptr->fy;
 	x = m_ptr->fx;
 
