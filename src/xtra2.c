@@ -15,6 +15,7 @@
 #include "cmd-pet.h"
 #include "object-curse.h"
 #include "monsterrace-hook.h"
+#include "objectkind-hook.h"
 
 #define REWARD_CHANCE 10
 
@@ -117,37 +118,22 @@ void check_experience(void)
 					int n;
 					char tmp[32];
 
-#ifdef JP
 					cnv_stat(p_ptr->stat_max[0], tmp);
-					prt(format("        a) 腕力 (現在値 %s)", tmp), 2, 14);
+					prt(format(_("        a) 腕力 (現在値 %s)", "        a) Str (cur %s)"), tmp), 2, 14);
 					cnv_stat(p_ptr->stat_max[1], tmp);
-					prt(format("        b) 知能 (現在値 %s)", tmp), 3, 14);
+					prt(format(_("        b) 知能 (現在値 %s)", "        a) Int (cur %s)"), tmp), 3, 14);
 					cnv_stat(p_ptr->stat_max[2], tmp);
-					prt(format("        c) 賢さ (現在値 %s)", tmp), 4, 14);
+					prt(format(_("        c) 賢さ (現在値 %s)", "        a) Wis (cur %s)"), tmp), 4, 14);
 					cnv_stat(p_ptr->stat_max[3], tmp);
-					prt(format("        d) 器用 (現在値 %s)", tmp), 5, 14);
+					prt(format(_("        d) 器用 (現在値 %s)", "        a) Dex (cur %s)"), tmp), 5, 14);
 					cnv_stat(p_ptr->stat_max[4], tmp);
-					prt(format("        e) 耐久 (現在値 %s)", tmp), 6, 14);
+					prt(format(_("        e) 耐久 (現在値 %s)", "        a) Con (cur %s)"), tmp), 6, 14);
 					cnv_stat(p_ptr->stat_max[5], tmp);
-					prt(format("        f) 魅力 (現在値 %s)", tmp), 7, 14);
+					prt(format(_("        f) 魅力 (現在値 %s)", "        a) Chr (cur %s)"), tmp), 7, 14);
+
 					prt("", 8, 14);
-					prt("        どの能力値を上げますか？", 1, 14);
-#else
-					cnv_stat(p_ptr->stat_max[0], tmp);
-					prt(format("        a) Str (cur %s)", tmp), 2, 14);
-					cnv_stat(p_ptr->stat_max[1], tmp);
-					prt(format("        b) Int (cur %s)", tmp), 3, 14);
-					cnv_stat(p_ptr->stat_max[2], tmp);
-					prt(format("        c) Wis (cur %s)", tmp), 4, 14);
-					cnv_stat(p_ptr->stat_max[3], tmp);
-					prt(format("        d) Dex (cur %s)", tmp), 5, 14);
-					cnv_stat(p_ptr->stat_max[4], tmp);
-					prt(format("        e) Con (cur %s)", tmp), 6, 14);
-					cnv_stat(p_ptr->stat_max[5], tmp);
-					prt(format("        f) Chr (cur %s)", tmp), 7, 14);
-					prt("", 8, 14);
-					prt("        Which stat do you want to raise?", 1, 14);
-#endif
+					prt(_("        どの能力値を上げますか？", "        Which stat do you want to raise?"), 1, 14);
+
 					while(1)
 					{
 						choice = inkey();
@@ -220,151 +206,6 @@ static int get_coin_type(MONRACE_IDX r_idx)
 }
 
 
-/*!
- * @brief オブジェクトがクロークかどうかを判定する /
- * Hack -- determine if a template is Cloak
- * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトがクロークならばTRUEを返す
- */
-static bool kind_is_cloak(KIND_OBJECT_IDX k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item type */
-	if (k_ptr->tval == TV_CLOAK)
-	{
-		return (TRUE);
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-
-/*!
- * @brief オブジェクトが竿状武器かどうかを判定する /
- * Hack -- determine if a template is Polearm
- * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトが竿状武器ならばTRUEを返す
- */
-static bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item type */
-	if (k_ptr->tval == TV_POLEARM)
-	{
-		return (TRUE);
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-
-/*!
- * @brief オブジェクトが剣かどうかを判定する /
- * Hack -- determine if a template is Sword
- * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトが剣ならばTRUEを返す
- */
-static bool kind_is_sword(KIND_OBJECT_IDX k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item type */
-	if ((k_ptr->tval == TV_SWORD) && (k_ptr->sval > 2))
-	{
-		return (TRUE);
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-
-/*!
- * @brief オブジェクトが魔法書かどうかを判定する /
- * Hack -- determine if a template is Book
- * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトが魔法書ならばTRUEを返す
- */
-static bool kind_is_book(KIND_OBJECT_IDX k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item type */
-	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_CRUSADE_BOOK))
-	{
-		return (TRUE);
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-
-/*!
- * @brief オブジェクトがベースアイテム時点でGOODかどうかを判定する /
- * Hack -- determine if a template is Good book
- * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトがベースアイテム時点でGOODなアイテムならばTRUEを返す
- */
-static bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item type */
-	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_CRUSADE_BOOK) && (k_ptr->tval != TV_ARCANE_BOOK) && (k_ptr->sval > 1))
-	{
-		return (TRUE);
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-
-/*!
- * @brief オブジェクトが鎧かどうかを判定する /
- * Hack -- determine if a template is Armor
- * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトが鎧ならばTRUEを返す
- */
-static bool kind_is_armor(KIND_OBJECT_IDX k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item type */
-	if (k_ptr->tval == TV_HARD_ARMOR)
-	{
-		return (TRUE);
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
-
-
-/*!
- * @brief オブジェクトが打撃武器かどうかを判定する /
- * Hack -- determine if a template is hafted weapon
- * @param k_idx 判定したいオブジェクトのベースアイテムID
- * @return オブジェクトが打撃武器ならばTRUEを返す
- */
-static bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
-{
-	object_kind *k_ptr = &k_info[k_idx];
-
-	/* Analyze the item type */
-	if (k_ptr->tval == TV_HAFTED)
-	{
-		return (TRUE);
-	}
-
-	/* Assume not good */
-	return (FALSE);
-}
 
 /*!
  * @brief クエストを達成状態にする /
