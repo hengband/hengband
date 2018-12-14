@@ -653,7 +653,7 @@ static int  racial_cost;
  */
 static int racial_aux(power_desc_type *pd_ptr)
 {
-	s16b min_level  = pd_ptr->level;
+	PLAYER_LEVEL min_level  = pd_ptr->level;
 	int  use_stat   = pd_ptr->stat;
 	int  difficulty = pd_ptr->fail;
 	int  use_hp = 0;
@@ -713,8 +713,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 	p_ptr->energy_use = 100;
 
 	/* Success? */
-	if (randint1(p_ptr->stat_cur[use_stat]) >=
-	    ((difficulty / 2) + randint1(difficulty / 2)))
+	if (randint1(p_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
 	{
 		return 1;
 	}
@@ -742,8 +741,9 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 		case CLASS_WARRIOR:
 		{
-			int y = 0, x = 0, i;
-			cave_type       *c_ptr;
+			POSITION y = 0, x = 0;
+			int i;
+			cave_type *c_ptr;
 
 			for (i = 0; i < 6; i++)
 			{
@@ -813,8 +813,7 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				int gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, 
-								_("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
+				int gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
 				if (gain_sp)
 				{
 					p_ptr->csp += gain_sp;
@@ -1173,12 +1172,7 @@ static bool cmd_racial_power_aux(s32b command)
 			int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth();
-#ifdef JP
-			msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
-#else
-			msg_format("You breathe %s.",((type == GF_NETHER) ? "nether" : "fire"));
-#endif
-
+			msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."),((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
 			fire_breath(type, dir, plev * 3, (plev / 15) + 1);
 			break;
 		}
@@ -1309,12 +1303,8 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_DRACONIAN:
 			{
-				int  Type = (one_in_(3) ? GF_COLD : GF_FIRE);
-#ifdef JP
-				cptr Type_desc = ((Type == GF_COLD) ? "冷気" : "炎");
-#else
-				cptr Type_desc = ((Type == GF_COLD) ? "cold" : "fire");
-#endif
+				int Type = (one_in_(3) ? GF_COLD : GF_FIRE);
+				cptr Type_desc = ((Type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
 
 				if (!get_aim_dir(&dir)) return FALSE;
 
@@ -1497,12 +1487,7 @@ static bool cmd_racial_power_aux(s32b command)
 				int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 				if (!get_aim_dir(&dir)) return FALSE;
 				stop_mouth();
-#ifdef JP
-				msg_format("あなたは%sのブレスを吐いた。",((type == GF_NETHER) ? "地獄" : "火炎"));
-#else
-				msg_format("You breathe %s.",((type == GF_NETHER) ? "nether" : "fire"));
-#endif
-
+				msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."),((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
 				fire_breath(type, dir, plev * 3, (plev / 15) + 1);
 			}
 			break;

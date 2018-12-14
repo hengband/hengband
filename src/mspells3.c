@@ -1072,8 +1072,6 @@ static bool cast_learned_spell(int spell, bool success)
 		p_ptr->energy_need -= 1000 + (100 + randint1(200)+200)*TURNS_PER_TICK/10;
 
 		p_ptr->redraw |= (PR_MAP);
-
-		/* Update monsters */
 		p_ptr->update |= (PU_MONSTERS);
 
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);

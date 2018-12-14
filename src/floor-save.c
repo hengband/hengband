@@ -465,8 +465,6 @@ static void preserve_pet(void)
 			if (is_seen(m_ptr))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}

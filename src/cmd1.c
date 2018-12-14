@@ -1288,11 +1288,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
 			char steed_name[80];
-
-			/* Acquire the monster name */
 			monster_desc(steed_name, riding_m_ptr, 0);
-
-			/* Dump a message */
 			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);

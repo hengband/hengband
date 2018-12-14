@@ -5648,7 +5648,6 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 					"The light forces you out of your incorporeal shadow form."));
 
 				p_ptr->redraw |= PR_MAP;
-				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
@@ -6967,7 +6966,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		}
 		for(i = last_i ; i < path_n ; i++)
 		{
-			int py, px;
+			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
 			if(project_m(0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
@@ -7002,11 +7001,11 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 		for (i = 0; i < path_n; ++i)
 		{
-			int oy = y;
-			int ox = x;
+			POSITION oy = y;
+			POSITION ox = x;
 
-			int ny = GRID_Y(path_g[i]);
-			int nx = GRID_X(path_g[i]);
+			POSITION ny = GRID_Y(path_g[i]);
+			POSITION nx = GRID_X(path_g[i]);
 
 			/* Advance */
 			y = ny;
@@ -7025,7 +7024,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				{
 					u16b p;
 
-					byte a;
+					TERM_COLOR a;
 					char c;
 
 					/* Obtain the bolt pict */
@@ -7101,7 +7100,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		}
 		for( i = 0; i < path_n ; i++ )
 		{
-			int py, px;
+			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
 			(void)project_m(0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
@@ -7127,11 +7126,11 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	/* Project along the path */
 	for (i = 0; i < path_n; ++i)
 	{
-		int oy = y;
-		int ox = x;
+		POSITION oy = y;
+		POSITION ox = x;
 
-		int ny = GRID_Y(path_g[i]);
-		int nx = GRID_X(path_g[i]);
+		POSITION ny = GRID_Y(path_g[i]);
+		POSITION nx = GRID_X(path_g[i]);
 
 		if (flg & PROJECT_DISI)
 		{
@@ -7331,7 +7330,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				{
 					u16b p;
 
-					byte a;
+					TERM_COLOR a;
 					char c;
 
 					drawn = TRUE;

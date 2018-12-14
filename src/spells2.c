@@ -2246,11 +2246,7 @@ static void cave_temp_room_lite(void)
 				if (m_ptr->ml)
 				{
 					char m_name[80];
-
-					/* Acquire the monster name */
 					monster_desc(m_name, m_ptr, 0);
-
-					/* Dump a message */
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}

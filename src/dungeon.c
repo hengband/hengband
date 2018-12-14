@@ -1205,8 +1205,6 @@ static void check_music(void)
 
 			/* Redraw map and status bar */
 			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -3726,8 +3724,6 @@ static void process_command(void)
 				p_ptr->wizard = TRUE;
 				msg_print(_("ウィザードモード突入。", "Wizard mode on."));
 			}
-
-			/* Update monsters */
 			p_ptr->update |= (PU_MONSTERS);
 
 			/* Redraw "title" */
@@ -4787,8 +4783,6 @@ static void process_player(void)
 
 			/* Recover fully */
 			(void)set_monster_csleep(p_ptr->riding, 0);
-
-			/* Acquire the monster name */
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%^sを起こした。", "You have waked %s up."), m_name);
 		}
@@ -4800,11 +4794,7 @@ static void process_player(void)
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
 			}
 		}
@@ -4816,11 +4806,7 @@ static void process_player(void)
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1)))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
 			}
 		}
@@ -4832,11 +4818,7 @@ static void process_player(void)
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
 				char m_name[80];
-
-				/* Acquire the monster name */
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fear."), m_name);
 			}
 		}
@@ -5162,8 +5144,6 @@ static void process_player(void)
 			{
 
 				p_ptr->redraw |= (PR_MAP);
-
-				/* Update monsters */
 				p_ptr->update |= (PU_MONSTERS);
 
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -5302,8 +5282,6 @@ static void dungeon(bool load_game)
 
 	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH);
-
-	/* Update monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 	/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
