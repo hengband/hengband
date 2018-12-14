@@ -2247,8 +2247,6 @@ static void cave_temp_room_lite(void)
 				{
 					char m_name[80];
 					monster_desc(m_name, m_ptr, 0);
-
-					/* Dump a message */
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}

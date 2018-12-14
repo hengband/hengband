@@ -1485,8 +1485,6 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 		if (r_ptr->flags2 & RF2_CAN_SPEAK)
 		{
 			char line_got[1024];
-
-			/* Dump a message */
 			if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got))
 			{
 				msg_format("%^s %s", m_name, line_got);

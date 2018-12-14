@@ -4799,8 +4799,6 @@ static void process_player(void)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
 			}
 		}
@@ -4813,8 +4811,6 @@ static void process_player(void)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
 			}
 		}
@@ -4827,8 +4823,6 @@ static void process_player(void)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fear."), m_name);
 			}
 		}

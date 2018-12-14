@@ -1393,8 +1393,6 @@ static bool vanish_dungeon(void)
 				if (m_ptr->ml)
 				{
 					monster_desc(m_name, m_ptr, 0);
-
-					/* Dump a message */
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}

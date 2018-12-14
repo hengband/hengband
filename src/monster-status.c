@@ -482,8 +482,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 					{
 						char m_name[80];
 						monster_desc(m_name, m_ptr, 0);
-
-						/* Dump a message */
 						msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 					}
 
@@ -506,8 +504,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sはもう加速されていない。", "%^s is no longer fast."), m_name);
 			}
 		}
@@ -521,8 +517,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sはもう減速されていない。", "%^s is no longer slow."), m_name);
 			}
 		}
@@ -540,8 +534,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
 			}
 		}
@@ -557,8 +549,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
 			}
 		}
@@ -579,8 +569,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 				monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 #ifdef JP
 				msg_format("%^sは勇気を取り戻した。", m_name);
 #else
@@ -598,8 +586,6 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			{
 				char m_name[80];
 				monster_desc(m_name, m_ptr, 0);
-
-				/* Dump a message */
 				msg_format(_("%^sはもう無敵でない。", "%^s is no longer invulnerable."), m_name);
 			}
 		}

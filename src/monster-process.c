@@ -2275,8 +2275,6 @@ void process_monster(MONSTER_IDX m_idx)
 		{
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
-
-			/* Dump a message */
 			msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 		}
 
@@ -3147,7 +3145,6 @@ void process_monster(MONSTER_IDX m_idx)
 							/* Describe observable situations */
 							if (m_ptr->ml && player_can_see_bold(ny, nx))
 							{
-								/* Dump a message */
 								msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
 							}
 						}
@@ -3162,7 +3159,6 @@ void process_monster(MONSTER_IDX m_idx)
 						/* Describe observable situations */
 						if (player_can_see_bold(ny, nx))
 						{
-							/* Dump a message */
 							msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
 						}
 
@@ -3194,7 +3190,6 @@ void process_monster(MONSTER_IDX m_idx)
 						/* Describe observable situations */
 						if (player_has_los_bold(ny, nx))
 						{
-							/* Dump a message */
 							msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
 						}
 
@@ -3280,8 +3275,6 @@ void process_monster(MONSTER_IDX m_idx)
 		{
 			char m_name[80];
 			monster_desc(m_name, m_ptr, 0);
-
-			/* Dump a message */
 			msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
 		}
 
