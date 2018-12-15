@@ -2393,6 +2393,13 @@ void player_outfit(void)
 	}
 	q_ptr = &forge;
 
+	if (p_ptr->prace == RACE_MERFOLK)
+	{
+		object_prep(q_ptr, lookup_kind(TV_RING, SV_RING_LEVITATION_FALL));
+		q_ptr->number = 1;
+		add_outfit(q_ptr);
+	}
+
 	if ((p_ptr->pclass == CLASS_RANGER) || (p_ptr->pclass == CLASS_CAVALRY))
 	{
 		/* Hack -- Give the player some arrows */
