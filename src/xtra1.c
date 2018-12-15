@@ -3776,14 +3776,6 @@ void calc_bonuses(void)
 			break;
 		case RACE_MERFOLK:
 			p_ptr->resist_water = TRUE;
-			if(have_flag(f_ptr->flags, FF_WATER))
-			{
-				new_speed += (2 + p_ptr->lev / 10);
-			}
-			else if(!p_ptr->levitation)
-			{
-				new_speed -= 2;
-			}
 			break;
 		default:
 			/* Do nothing */
@@ -4897,6 +4889,20 @@ void calc_bonuses(void)
 
 	/* Searching slows the player down */
 	if (p_ptr->action == ACTION_SEARCH) new_speed -= 10;
+
+	/* Feature bonus */
+	if(p_ptr->prace == RACE_MERFOLK)
+	{
+		if (have_flag(f_ptr->flags, FF_WATER))
+		{
+			new_speed += (2 + p_ptr->lev / 10);
+		}
+		else if (!p_ptr->levitation)
+		{
+			new_speed -= 2;
+		}
+	}
+
 
 	/* Actual Modifier Bonuses (Un-inflate stat bonuses) */
 	p_ptr->to_a += ((int)(adj_dex_ta[p_ptr->stat_ind[A_DEX]]) - 128);
