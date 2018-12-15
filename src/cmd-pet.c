@@ -1149,11 +1149,8 @@ bool rakuba(HIT_POINT dam, bool force)
 	calc_bonuses();
 
 	p_ptr->update |= (PU_BONUS);
-
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
 	p_ptr->redraw |= (PR_EXTRA);
 
 	/* Update health track of mount */

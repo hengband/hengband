@@ -826,16 +826,17 @@ bool player_can_enter(s16b feature, u16b mode)
  */
 bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
+	POSITION oy = p_ptr->y;
+	POSITION ox = p_ptr->x;
 	cave_type *c_ptr = &cave[ny][nx];
+	cave_type *oc_ptr = &cave[oy][ox];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
+	feature_type *of_ptr = &f_info[oc_ptr->feat];
 
 	if (!(mpe_mode & MPE_STAYING))
 	{
-		POSITION oy = p_ptr->y;
-		POSITION ox = p_ptr->x;
-		cave_type *oc_ptr = &cave[oy][ox];
-		IDX om_idx = oc_ptr->m_idx;
-		IDX nm_idx = c_ptr->m_idx;
+		MONSTER_IDX om_idx = oc_ptr->m_idx;
+		MONSTER_IDX nm_idx = c_ptr->m_idx;
 
 		/* Move the player */
 		p_ptr->y = ny;
@@ -885,7 +886,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		}
 
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
-
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */
@@ -907,6 +907,15 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		{
 			msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
 			set_action(ACTION_NONE);
+		}
+
+		if (p_ptr->prace == RACE_MERFOLK)
+		{
+			if(have_flag(f_ptr->flags, FF_WATER) ^ have_flag(of_ptr->flags, FF_WATER))
+			{
+				p_ptr->update |= PU_BONUS;
+				update_stuff();
+			}
 		}
 	}
 

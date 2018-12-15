@@ -3153,22 +3153,22 @@ s16b calc_num_fire(object_type *o_ptr)
  */
 void calc_bonuses(void)
 {
-	int             i, j, hold, neutral[2];
-	int             new_speed;
-	int             default_hand = 0;
-	int             empty_hands_status = empty_hands(TRUE);
-	int             extra_blows[2];
-	object_type     *o_ptr;
+	int i, j, hold, neutral[2];
+	int new_speed;
+	int default_hand = 0;
+	int empty_hands_status = empty_hands(TRUE);
+	int extra_blows[2];
+	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	bool            omoi = FALSE;
-	bool            yoiyami = FALSE;
-	bool            down_saving = FALSE;
+	bool omoi = FALSE;
+	bool yoiyami = FALSE;
+	bool down_saving = FALSE;
 #if 0
-	bool            have_dd_s = FALSE, have_dd_t = FALSE;
+	bool have_dd_s = FALSE, have_dd_t = FALSE;
 #endif
-	bool            have_sw = FALSE, have_kabe = FALSE;
-	bool            easy_2weapon = FALSE;
-	bool            riding_levitation = FALSE;
+	bool have_sw = FALSE, have_kabe = FALSE;
+	bool easy_2weapon = FALSE;
+	bool riding_levitation = FALSE;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	const player_race *tmp_rp_ptr;
 
@@ -3189,9 +3189,12 @@ void calc_bonuses(void)
 	bool old_see_inv = p_ptr->see_inv;
 	bool old_mighty_throw = p_ptr->mighty_throw;
 
+	/* Current feature under player. */
+	feature_type *f_ptr = &f_info[cave[p_ptr->y][p_ptr->x].feat];
+
 	/* Save the old armor class */
-	s16b old_dis_ac = p_ptr->dis_ac;
-	s16b old_dis_to_a = p_ptr->dis_to_a;
+	ARMOUR_CLASS old_dis_ac = p_ptr->dis_ac;
+	ARMOUR_CLASS old_dis_to_a = p_ptr->dis_to_a;
 
 
 	/* Clear extra blows/shots */
@@ -3773,6 +3776,15 @@ void calc_bonuses(void)
 			break;
 		case RACE_MERFOLK:
 			p_ptr->resist_water = TRUE;
+			if(have_flag(f_ptr->flags, FF_WATER))
+			{
+				new_speed += (2 + p_ptr->lev / 10);
+			}
+			else if(!p_ptr->levitation)
+			{
+				new_speed -= 2;
+			}
+			break;
 		default:
 			/* Do nothing */
 			;
