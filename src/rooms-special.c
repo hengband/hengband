@@ -3,14 +3,8 @@
 #include "generate.h"
 #include "rooms.h"
 #include "monsterrace-hook.h"
+#include "objectkind-hook.h"
 
-/*
- * Hack -- determine if a template is potion
- */
-static bool kind_is_potion(KIND_OBJECT_IDX k_idx)
-{
-	return k_info[k_idx].tval == TV_POTION;
-}
 
 /*!
 * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms

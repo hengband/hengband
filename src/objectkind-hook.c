@@ -146,3 +146,11 @@ bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
 	/* Assume not good */
 	return (FALSE);
 }
+
+/*
+ * Hack -- determine if a template is potion
+ */
+bool kind_is_potion(KIND_OBJECT_IDX k_idx)
+{
+	return k_info[k_idx].tval == TV_POTION;
+}
