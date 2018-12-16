@@ -4493,7 +4493,6 @@ void do_cmd_bldg(void)
 
 		if(validcmd) bldg_process_command(bldg, i);
 
-		notice_stuff();
 		handle_stuff();
 	}
 

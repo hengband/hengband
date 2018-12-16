@@ -4571,7 +4571,7 @@ static void pack_overflow(void)
 		object_type *o_ptr;
 
 		/* Is auto-destroy done? */
-		notice_stuff();
+		handle_stuff();
 		if (!inventory[INVEN_PACK].k_idx) return;
 
 		/* Access the slot to be dropped */
@@ -4594,10 +4594,6 @@ static void pack_overflow(void)
 		inven_item_describe(INVEN_PACK);
 		inven_item_optimize(INVEN_PACK);
 
-		/* Handle "p_ptr->notice" */
-		notice_stuff();
-
-		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 	}
 }
@@ -4889,10 +4885,6 @@ static void process_player(void)
 		p_ptr->counter = FALSE;
 		now_damaged = FALSE;
 
-		/* Handle "p_ptr->notice" */
-		notice_stuff();
-
-		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 
 		/* Place the cursor on the player */
@@ -5291,14 +5283,7 @@ static void dungeon(bool load_game)
 	character_xtra = FALSE;
 
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-	/* Combine / Reorder the pack */
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
-
-	/* Handle "p_ptr->notice" */
-	notice_stuff();
-
-	/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 	handle_stuff();
 
 	/* Refresh */
@@ -5386,14 +5371,9 @@ static void dungeon(bool load_game)
 		/* Hack -- Compress the object list occasionally */
 		if (o_cnt + 32 < o_max) compact_objects(0);
 
-		
 		/* Process the player */
 		process_player();
-		
 		process_upkeep_with_speed();
-
-		/* Handle "p_ptr->notice" */
-		notice_stuff();
 
 		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
@@ -5410,10 +5390,6 @@ static void dungeon(bool load_game)
 		/* Process all of the monsters */
 		process_monsters();
 
-		/* Handle "p_ptr->notice" */
-		notice_stuff();
-
-		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 
 		/* Hack -- Hilite the player */
@@ -5425,14 +5401,9 @@ static void dungeon(bool load_game)
 		/* Hack -- Notice death or departure */
 		if (!p_ptr->playing || p_ptr->is_dead) break;
 
-
 		/* Process the world */
 		process_world();
 
-		/* Handle "p_ptr->notice" */
-		notice_stuff();
-
-		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 
 		/* Hack -- Hilite the player */
@@ -6073,13 +6044,10 @@ void play_game(bool new_game)
 		/* Process the level */
 		dungeon(load_game);
 
-		/* Handle "p_ptr->notice" */
-		notice_stuff();
 
 		/* Hack -- prevent "icky" message */
 		character_xtra = TRUE;
 
-		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 
 		character_xtra = FALSE;

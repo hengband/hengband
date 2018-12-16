@@ -4948,7 +4948,6 @@ void do_cmd_store(void)
 		/* Hack -- Character is still in "icky" mode */
 		character_icky = TRUE;
 
-		notice_stuff();
 		handle_stuff();
 
 		/* Pack Overflow */
