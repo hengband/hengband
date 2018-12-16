@@ -878,7 +878,7 @@ void do_cmd_study(void)
 #
 	/* Update Study */
 	p_ptr->update |= (PU_SPELLS);
-	update_stuff();
+	handle_stuff();
 
 	/* Redraw object recall */
 	p_ptr->window |= (PW_OBJECT);

@@ -4798,7 +4798,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue)
 	(void)set_cut(0);
 	(void)restore_all_status();
 	(void)set_shero(0, TRUE);
-	update_stuff();
+	handle_stuff();
 	hp_player(5000);
 
 	return TRUE;

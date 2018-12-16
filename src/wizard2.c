@@ -345,7 +345,7 @@ static void do_cmd_wiz_reset_class(void)
 	/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
-	update_stuff();
+	handle_stuff();
 }
 
 

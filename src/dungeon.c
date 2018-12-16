@@ -5756,7 +5756,7 @@ void play_game(bool new_game)
 
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
-		update_stuff();
+		handle_stuff();
 
 		p_ptr->is_dead = TRUE;
 

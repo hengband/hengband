@@ -6137,7 +6137,7 @@ void do_cmd_save_game(int is_autosave)
 	/* HACK -- don't get sanity blast on updating view */
 	is_loading_now = FALSE;
 
-	update_stuff();
+	handle_stuff();
 
 	/* Initialize monster process */
 	mproc_init();

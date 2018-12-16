@@ -683,7 +683,7 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 		reset_target(m_ptr);
 
 		if (p_ptr->notice) notice_stuff();
-		if (p_ptr->update) update_stuff();
+		if (p_ptr->update) handle_stuff();
 		if (p_ptr->redraw) redraw_stuff();
 		if (p_ptr->window) window_stuff();
 

@@ -7387,7 +7387,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 
 	/* Update stuff if needed */
-	if (p_ptr->update) update_stuff();
+	if (p_ptr->update) handle_stuff();
 
 
 	if (flg & PROJECT_KILL)
@@ -7430,7 +7430,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	}
 
 	/* Update stuff if needed */
-	if (p_ptr->update) update_stuff();
+	if (p_ptr->update) handle_stuff();
 
 	/* Check objects */
 	if (flg & (PROJECT_ITEM))

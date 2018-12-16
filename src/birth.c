@@ -4580,13 +4580,9 @@ static bool player_birth_aux(void)
 		{
 			/* Calculate the bonuses and hitpoints */
 			p_ptr->update |= (PU_BONUS | PU_HP);
+			handle_stuff();
 
-			update_stuff();
-
-			/* Fully healed */
 			p_ptr->chp = p_ptr->mhp;
-
-			/* Fully rested */
 			p_ptr->csp = p_ptr->msp;
 
 			/* Display the player */
@@ -4778,7 +4774,7 @@ static bool ask_quick_start(void)
 	/* Calculate the bonuses and hitpoints */
 	p_ptr->update |= (PU_BONUS | PU_HP);
 
-	update_stuff();
+	handle_stuff();
 
 	/* Fully healed */
 	p_ptr->chp = p_ptr->mhp;
