@@ -679,20 +679,14 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 	{
 		if (!m_ptr->r_idx) break;
 		process_monster(world_monster);
-
 		reset_target(m_ptr);
-
-		if (p_ptr->notice) notice_stuff();
-		if (p_ptr->update) handle_stuff();
-		if (p_ptr->redraw) redraw_stuff();
-		if (p_ptr->window) window_stuff();
+		handle_stuff();
 
 		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
 	}
 
 	p_ptr->redraw |= (PR_MAP);
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	world_monster = 0;
@@ -703,7 +697,6 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 	}
 
 	handle_stuff();
-
 	return (TRUE);
 }
 

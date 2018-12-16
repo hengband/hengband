@@ -1193,7 +1193,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 
 			if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3))
 			{
-				u32b flgs_aux[TR_FLAG_SIZE];
+				BIT_FLAGS flgs_aux[TR_FLAG_SIZE];
 
 				sound(SOUND_HIT);
 
@@ -1285,12 +1285,11 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				if (k < 0) k = 0;
 
 				take_hit(DAMAGE_FORCE, k, _("死の大鎌", "Death scythe"), -1);
-				redraw_stuff();
+				handle_stuff();
 			}
 			else
 			{
 				sound(SOUND_MISS);
-
 				msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
 			}
 		}

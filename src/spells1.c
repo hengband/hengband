@@ -5005,7 +5005,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	{
 		p_ptr->health_who = c_ptr->m_idx;
 		p_ptr->redraw |= (PR_HEALTH);
-		redraw_stuff();
+		handle_stuff();
 	}
 
 	/* Verify this code */

@@ -1746,7 +1746,7 @@ void prt_path(POSITION y, POSITION x)
 	path_n = project_path(path_g, (project_length ? project_length : MAX_RANGE), p_ptr->y, p_ptr->x, y, x, PROJECT_PATH|PROJECT_THRU);
 
 	p_ptr->redraw |= (PR_MAP);
-	redraw_stuff();
+	handle_stuff();
 
 	/* Draw path */
 	for (i = 0; i < path_n; i++)

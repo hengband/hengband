@@ -4974,7 +4974,7 @@ static void process_player(void)
 			command_rep--;
 
 			p_ptr->redraw |= (PR_STATE);
-			redraw_stuff();
+			handle_stuff();
 
 			/* Hack -- Assume messages were seen */
 			msg_flag = FALSE;
