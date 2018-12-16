@@ -176,7 +176,7 @@ bool build_type15(void)
 
 	case 3: /* 4 shards breathers + 2 potions */
 	{
-		int dir1;
+		DIRECTION dir1;
 
 		/* Walls around the potion */
 		for (y = yval - 2; y <= yval + 2; y++)

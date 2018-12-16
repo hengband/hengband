@@ -198,6 +198,8 @@ typedef s16b FEED;       /*!< ゲーム中の滋養度の型定義 */
 
 typedef u32b STR_OFFSET;      /*!< テキストオフセットの型定義 */
 
+typedef int POWER;		/*!< 魔法の効力定義*/
+
 typedef s32b DEPTH;     /*!< ゲーム中の階層レベルの型定義 */
 typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
 

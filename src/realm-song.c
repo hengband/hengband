@@ -98,7 +98,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int power = plev;
+			POWER power = plev;
 
 			if (info) return info_power(power);
 
@@ -244,7 +244,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int power = plev;
+			POWER power = plev;
 
 			if (info) return info_power(power);
 
@@ -443,7 +443,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int power = plev * 2;
+			POWER power = plev * 2;
 
 			if (info) return info_power(power);
 
@@ -624,7 +624,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			POSITION rad = plev / 15 + 1;
-			int power = plev * 3 + 1;
+			POWER power = plev * 3 + 1;
 
 			if (info) return info_radius(rad);
 
@@ -654,8 +654,8 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int m_sides = plev * 3;
-			int e_sides = plev * 3;
+			DICE_SID m_sides = plev * 3;
+			DICE_SID e_sides = plev * 3;
 
 			if (info) return format("%s1d%d+1d%d", s_dam, m_sides, e_sides);
 
@@ -681,7 +681,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int power = plev;
+			POWER power = plev;
 
 			if (info) return info_power(power);
 
@@ -779,7 +779,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 
 		{
-			int power = plev * 4;
+			POWER power = plev * 4;
 
 			if (info) return info_power(power);
 
@@ -941,7 +941,6 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			p_ptr->redraw |= (PR_MAP);
 			p_ptr->update |= (PU_MONSTERS);
-
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 			start_singing(spell, MUSIC_INVULN);
@@ -955,7 +954,6 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				p_ptr->redraw |= (PR_MAP);
 				p_ptr->update |= (PU_MONSTERS);
-
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 			}
 		}

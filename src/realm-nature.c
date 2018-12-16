@@ -546,8 +546,8 @@ cptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int d_dam = 4 * plev;
 			int b_dam = (100 + plev) * 2;
-			int b_rad = 1 + plev / 12;
-			int q_rad = 20 + plev / 2;
+			POSITION b_rad = 1 + plev / 12;
+			POSITION q_rad = 20 + plev / 2;
 
 			if (info) return format("%s%d+%d", s_dam, d_dam, b_dam / 2);
 
