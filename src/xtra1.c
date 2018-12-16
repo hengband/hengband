@@ -5748,7 +5748,7 @@ void calc_bonuses(void)
  * @return なし
  * @details 更新処理の対象はアイテムの自動破壊/アイテムの結合/アイテムの並び替え。
  */
-void notice_stuff(void)
+static void notice_stuff(void)
 {
 	if(!p_ptr->notice) return;
 
@@ -5780,7 +5780,7 @@ void notice_stuff(void)
  * @return なし
  * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
  */
-void update_stuff(void)
+static void update_stuff(void)
 {
 	if (!p_ptr->update) return;
 
@@ -5890,7 +5890,7 @@ void update_stuff(void)
  * @return なし
  * @details 更新処理の対象はゲーム中の全描画処理
  */
-void redraw_stuff(void)
+static void redraw_stuff(void)
 {
 	if (!p_ptr->redraw) return;
 
@@ -6075,7 +6075,7 @@ void redraw_stuff(void)
  * @return なし
  * @details 更新処理の対象はサブウィンドウ全般
  */
-void window_stuff(void)
+static void window_stuff(void)
 {
 	int j;
 	BIT_FLAGS mask = 0L;
