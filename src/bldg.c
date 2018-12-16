@@ -2787,8 +2787,8 @@ static PRICE compare_weapons(PRICE bcost)
 			/* Copy i-th weapon into the weapon slot (if it's not already there) */
 			if (o_ptr[i] != i_ptr) object_copy(i_ptr, o_ptr[i]);
 
-			/* Get the new values */
-			calc_bonuses();
+			p_ptr->update |= PU_BONUS;
+			handle_stuff();
 
 			/* List the new values */
 			list_weapon(o_ptr[i], row, col);
@@ -2799,7 +2799,8 @@ static PRICE compare_weapons(PRICE bcost)
 		}
 
 		/* Reset the values for the old weapon */
-		calc_bonuses();
+		p_ptr->update |= PU_BONUS;
+		handle_stuff();
 
 		character_xtra = old_character_xtra;
 

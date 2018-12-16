@@ -26,7 +26,8 @@ bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 		p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
 	}
 
-	calc_bonuses();
+	p_ptr->update |= PU_BONUS;
+	handle_stuff();
 
 	p_can_enter = player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 
@@ -36,7 +37,8 @@ bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
 	p_ptr->riding_ryoute = old_riding_ryoute;
 	p_ptr->old_riding_ryoute = old_old_riding_ryoute;
 
-	calc_bonuses();
+	p_ptr->update |= PU_BONUS;
+	handle_stuff();
 
 	character_xtra = old_character_xtra;
 
@@ -1146,11 +1148,9 @@ bool rakuba(HIT_POINT dam, bool force)
 	p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
 	p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
 
-	calc_bonuses();
+	p_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+	handle_stuff();
 
-	p_ptr->update |= (PU_BONUS);
-
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
