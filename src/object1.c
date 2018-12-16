@@ -2974,8 +2974,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		}
 
 		/* Toggle if needed */
-		if ((command_wrk && ni && !ne) ||
-		    (!command_wrk && !ni && ne))
+		if ((command_wrk && ni && !ne) || (!command_wrk && !ni && ne))
 		{
 			/* Toggle */
 			toggle_inven_equip();
@@ -2984,12 +2983,8 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			toggle = !toggle;
 		}
 
-		/* Update */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Redraw windows */
-		window_stuff();
-
+		handle_stuff();
 
 		/* Inventory screen */
 		if (!command_wrk)
@@ -3480,11 +3475,8 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Toggle again if needed */
 	if (toggle) toggle_inven_equip();
 
-	/* Update */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-	window_stuff();
-
+	handle_stuff();
 
 	/* Clear the prompt line */
 	prt("", 0, 0);
@@ -3992,11 +3984,8 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			toggle = !toggle;
 		}
 
-		/* Update */
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		/* Redraw windows */
-		window_stuff();
+		handle_stuff();
 
 		/* Inventory screen */
 		if (command_wrk == (USE_INVEN))
@@ -4822,11 +4811,8 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Toggle again if needed */
 	if (toggle) toggle_inven_equip();
 
-	/* Update */
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-	window_stuff();
-
+	handle_stuff();
 
 	/* Clear the prompt line */
 	prt("", 0, 0);

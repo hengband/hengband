@@ -271,7 +271,7 @@ void do_cmd_pet_dismiss(void)
 			/* HACK : Add the line to message buffer */
 			msg_format(_("%s を放した。", "Dismissed %s."), friend_name);
 			p_ptr->window |= (PW_MESSAGE);
-			window_stuff();
+			handle_stuff();
 
 			delete_monster_idx(pet_ctr);
 			Dismissed++;

@@ -302,7 +302,7 @@ static void arena_comm(int cmd)
 
 				p_ptr->monster_race_idx = arena_info[p_ptr->arena_number].r_idx;
 				p_ptr->window |= (PW_MONSTER);
-				window_stuff();
+				handle_stuff();
 
 			}
 			break;

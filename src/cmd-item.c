@@ -811,7 +811,7 @@ void do_cmd_destroy(void)
 		/* HACK : Add the line to message buffer */
 		message_add(out_val);
 		p_ptr->window |= (PW_MESSAGE);
-		window_stuff();
+		handle_stuff();
 
 		/* Get an acceptable answer */
 		while (TRUE)
@@ -1415,10 +1415,8 @@ void do_cmd_target(void)
  */
 void do_cmd_look(void)
 {
-	/*TEST*/
 	p_ptr->window |= PW_MONSTER_LIST;
-	window_stuff();
-	/*TEST*/
+	handle_stuff();
 
 	/* Look around */
 	if (target_set(TARGET_LOOK))

@@ -2904,7 +2904,7 @@ void msg_print(cptr msg)
 	/* if (character_generated) message_add(t); */
 
 	p_ptr->window |= (PW_MESSAGE);
-	window_stuff();
+	handle_stuff();
 
 	/* Remember the message */
 	msg_flag = TRUE;
@@ -3609,7 +3609,7 @@ bool get_check_strict(cptr prompt, BIT_FLAGS mode)
 	if (auto_more)
 	{
 		p_ptr->window |= PW_MESSAGE;
-		window_stuff();
+		handle_stuff();
 		num_more = 0;
 	}
 
@@ -3645,7 +3645,7 @@ bool get_check_strict(cptr prompt, BIT_FLAGS mode)
 		/* HACK : Add the line to message buffer */
 		message_add(buf);
 		p_ptr->window |= (PW_MESSAGE);
-		window_stuff();
+		handle_stuff();
 	}
 
 	/* Get an acceptable answer */

@@ -125,10 +125,8 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 	/* No redraw yet */
 	redraw = FALSE;
 
-	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
-
-	window_stuff();
+	handle_stuff();
 
 	/* Build a prompt (accept all spells) */
 #ifdef JP
@@ -308,12 +306,8 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 	/* Restore the screen */
 	if (redraw) screen_load();
 
-
-	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
-
-	window_stuff();
-
+	handle_stuff();
 
 	/* Abort if needed */
 	if (!flag) return FALSE;

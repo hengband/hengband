@@ -1316,8 +1316,9 @@ bool probing(void)
 
 			/* HACK : Add the line to message buffer */
 			message_add(buf);
+
 			p_ptr->window |= (PW_MESSAGE);
-			window_stuff();
+			handle_stuff();
 
 			if (m_ptr->ml) move_cursor_relative(m_ptr->fy, m_ptr->fx);
 			inkey();

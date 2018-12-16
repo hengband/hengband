@@ -293,11 +293,8 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	/* Restore the screen */
 	if (redraw) screen_load();
 
-	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
-
-	window_stuff();
-
+	handle_stuff();
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);

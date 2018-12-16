@@ -1000,10 +1000,8 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	/* Restore the screen */
 	if (redraw && !only_browse) screen_load();
 
-	/* Show choices */
 	p_ptr->window |= (PW_SPELL);
-
-	window_stuff();
+	handle_stuff();
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);
