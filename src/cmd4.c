@@ -5787,9 +5787,13 @@ static void do_cmd_knowledge_skill_exp(void)
 	FILE *fff;
 
 	char file_name[1024];
-	char skill_name[3][20]={_("マーシャルアーツ", "Martial Arts    "),
-							_("二刀流          ", "Dual Wielding   "), 
-							_("乗馬            ", "Riding          ")};
+	char skill_name[GINOU_TEMPMAX][20] =
+	{
+		_("マーシャルアーツ", "Martial Arts    "),
+		_("二刀流          ", "Dual Wielding   "), 
+		_("乗馬            ", "Riding          "),
+		_("盾              ", "Shield          ")
+	};
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
@@ -5799,7 +5803,7 @@ static void do_cmd_knowledge_skill_exp(void)
 	    return;
 	}
 
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < GINOU_TEMPMAX; i++)
 	{
 		skill_exp = p_ptr->skill_exp[i];
 		fprintf(fff, "%-20s ", skill_name[i]);
