@@ -1455,8 +1455,8 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 
 		if (cur < max)
 		{
-			int ridinglevel = r_info[m_list[p_ptr->riding].r_idx].level;
-			int targetlevel = r_ptr->level;
+			DEPTH ridinglevel = r_info[m_list[p_ptr->riding].r_idx].level;
+			DEPTH targetlevel = r_ptr->level;
 			int inc = 0;
 
 			if ((cur / 200 - 5) < targetlevel)
@@ -1472,7 +1472,6 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 			}
 
 			p_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
-
 			p_ptr->update |= (PU_BONUS);
 		}
 	}
@@ -3224,6 +3223,33 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 #endif
 
 				}
+
+				/* Gain shield experience */
+				if (object_is_armour(&inventory[INVEN_RARM]) || object_is_armour(&inventory[INVEN_LARM]))
+				{
+					int cur = p_ptr->skill_exp[GINOU_SHIELD];
+					int max = s_info[p_ptr->pclass].s_max[GINOU_SHIELD];
+
+					if (cur < max)
+					{
+						DEPTH targetlevel = r_ptr->level;
+						int inc = 0;
+
+
+						/* Extra experience */
+						if ((cur / 100) < targetlevel)
+						{
+							if ((cur / 100 + 15) < targetlevel)
+								inc += 1 + (targetlevel - (cur / 100 + 15));
+							else
+								inc += 1;
+						}
+
+						p_ptr->skill_exp[GINOU_SHIELD] = MIN(max, cur + inc);
+						p_ptr->update |= (PU_BONUS);
+					}
+				}
+
 				damage = 0;
 
 				break;
