@@ -1884,8 +1884,6 @@ bool load_player(void)
 		z_patch = vvv[2];
 		sf_extra = vvv[3];
 
-
-		/* Clear screen */
 		Term_clear();
 
 		/* Attempt to load */

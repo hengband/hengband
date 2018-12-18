@@ -2452,7 +2452,6 @@ void do_cmd_spoilers(void)
 	/* Interact */
 	while (1)
 	{
-		/* Clear screen */
 		Term_clear();
 
 		/* Info */

@@ -2296,8 +2296,6 @@ void init_angband(void)
 
 
 	/*** Display the "news" file ***/
-
-	/* Clear screen */
 	Term_clear();
 
 	/* Build the filename */

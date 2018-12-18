@@ -750,8 +750,6 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 
 	char buf[160];
 
-
-	/* Clear screen */
 	Term_clear();
 
 	/* Print all tval's and their descriptions */
@@ -784,8 +782,6 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 
 
 	/*** And now we go for k_idx ***/
-
-	/* Clear screen */
 	Term_clear();
 
 	/* We have to search the whole itemlist. */

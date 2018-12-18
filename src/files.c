@@ -5416,8 +5416,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 
 	/* start from bottom when reverse mode */
 	if (line == -1) line = ((size-1)/rows)*rows;
-
-	/* Clear screen */
 	Term_clear();
 
 	/* Display the file */
@@ -6347,8 +6345,6 @@ static void print_tomb(void)
 #ifdef JP
 		int    extra_line = 0;
 #endif
-
-		/* Clear screen */
 		Term_clear();
 
 		/* Build the filename */
@@ -6656,7 +6652,6 @@ static void show_info(void)
 			/* Display contents of the home */
 			for (k = 0, i = 0; i < st_ptr->stock_num; k++)
 			{
-				/* Clear screen */
 				Term_clear();
 
 				/* Show 12 items */
@@ -6694,7 +6689,6 @@ static void show_info(void)
  */
 static bool check_score(void)
 {
-	/* Clear screen */
 	Term_clear();
 
 	/* No score file */
@@ -6817,8 +6811,6 @@ void close_game(void)
 
 		/* Show more info */
 		show_info();
-
-		/* Clear screen */
 		Term_clear();
 
 		if (check_score())

@@ -187,7 +187,6 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 	/* Show per_screen per page, until "done" */
 	for (k = from, place = k+1; k < i; k += per_screen)
 	{
-		/* Clear screen */
 		Term_clear();
 
 		/* Title */
@@ -395,8 +394,6 @@ void display_scores(int from, int to)
 
 	/* Paranoia -- No score file */
 	if (highscore_fd < 0) quit(_("スコア・ファイルが使用できません。", "Score file unavailable."));
-
-	/* Clear screen */
 	Term_clear();
 
 	/* Display the scores */
@@ -868,8 +865,6 @@ void kingly(void)
 
 	/* Hack -- Instant Gold */
 	p_ptr->au += 10000000L;
-
-	/* Clear screen */
 	Term_clear();
 
 	/* Display a crown */

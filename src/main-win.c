@@ -3169,8 +3169,6 @@ static void windows_map(void)
 
 	/* Only in graphics mode */
 	if (!use_graphics) return;
-
-	/* Clear screen */
 	Term_xtra_win_clear();
 
 	td->map_tile_wid = (td->tile_wid * td->cols) / MAX_WID;
@@ -3883,8 +3881,6 @@ static void process_menus(WORD wCmd)
 			else
 			{
 				screen_save();
-
-				/* Clear screen */
 				Term_clear();
 
 				/* Display the scores */

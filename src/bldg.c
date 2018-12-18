@@ -3021,8 +3021,6 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	char basenm[MAX_NLEN];
 	cptr q, s; /* For get_item prompt */
 	int row = 7;
-
-	/* Clear screen */
 	clear_bldg(0, 22);
 
 	prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);

@@ -2454,8 +2454,6 @@ static void display_store(void)
 {
 	char buf[80];
 
-
-	/* Clear screen */
 	Term_clear();
 
 	/* The "Home" is special */

@@ -4051,8 +4051,6 @@ static bool player_birth_aux(void)
 
 
 	/*** Intro ***/
-
-	/* Clear screen */
 	Term_clear();
 
 	/* Title everything */
@@ -4717,8 +4715,6 @@ static bool ask_quick_start(void)
 	/* Doesn't have previous data */
 	if (!previous_char.quick_ok) return FALSE;
 
-
-	/* Clear screen */
 	Term_clear();
 
 	/* Extra info */
