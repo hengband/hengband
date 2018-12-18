@@ -8494,21 +8494,11 @@ void do_cmd_knowledge(void)
 		}
 #endif
 		/* Prompt */
-#ifdef JP
-		prt("-続く-", 17, 8);
-		prt("ESC) 抜ける", 21, 1);
-		prt("SPACE) 次ページ", 21, 30);
+		prt(_("-続く-", "-more-"), 17, 8);
+		prt(_("ESC) 抜ける", "ESC) Exit menu"), 21, 1);
+		prt(_("SPACE) 次ページ", "SPACE) Next page"), 21, 30);
 		/*prt("-) 前ページ", 21, 60);*/
-		prt("コマンド:", 20, 0);
-#else
-		prt("-more-", 17, 8);
-		prt("ESC) Exit menu", 21, 1);
-		prt("SPACE) Next page", 21, 30);
-		/*prt("-) Previous page", 21, 60);*/
-		prt("Command: ", 20, 0);
-#endif
-
-		/* Prompt */
+		prt(_("コマンド:", "Command: "), 20, 0);
 		i = inkey();
 
 		if (i == ESCAPE) break;
