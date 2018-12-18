@@ -2013,8 +2013,6 @@ bool autopick_autoregister(object_type *o_ptr)
 	/* Add a line to the file */
 	/* Don't kill "entry" */
 	fprintf(pref_fff, "%s\n", autopick_line_from_entry(entry));
-
-	/* Close the file */
 	fclose(pref_fff);
 
 	return TRUE;

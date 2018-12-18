@@ -4015,8 +4015,6 @@ errr rd_savefile_new(void)
 
 	/* Check for errors */
 	if (ferror(fff)) err = -1;
-
-	/* Close the file */
 	my_fclose(fff);
 	return (err);
 }
@@ -4163,8 +4161,6 @@ bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 
 		/* Check for errors */
 		if (ferror(fff)) ok = FALSE;
-
-		/* Close the file */
 		my_fclose(fff);
 
 		/* Grab permissions */

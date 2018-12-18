@@ -4829,8 +4829,6 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 		msg_print(NULL);
 	}
 
-
-	/* Close the file */
 	my_fclose(fp);
 	return (err);
 }

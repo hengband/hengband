@@ -2008,8 +2008,6 @@ void do_cmd_knowledge_mutations(void)
 
 	/* Dump the mutations to file */
 	if (fff) dump_mutations(fff);
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */

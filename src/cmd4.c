@@ -4881,8 +4881,6 @@ static void do_cmd_knowledge_inven(void)
 			do_cmd_knowledge_inven_aux(fff, &st_ptr->stock[i], &j, tval, where);
 		}
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -5462,8 +5460,6 @@ static void do_cmd_knowledge_artifacts(void)
 
 	/* Free the "okay" array */
 	C_KILL(okay, max_a_idx, bool);
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -5589,8 +5585,6 @@ static void do_cmd_knowledge_uniques(void)
 
 	/* Free the "who" array */
 	C_KILL(who, max_r_idx, s16b);
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -5647,8 +5641,6 @@ static void do_cmd_knowledge_weapon_exp(void)
 			}
 		}
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -5737,8 +5729,6 @@ static void do_cmd_knowledge_spell_exp(void)
 			fprintf(fff, "\n");
 		}
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -5783,8 +5773,6 @@ static void do_cmd_knowledge_skill_exp(void)
 		if (cheat_xtra) fprintf(fff, " %d", skill_exp);
 		fprintf(fff, "\n");
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -5975,8 +5963,6 @@ static void do_cmd_knowledge_pets(void)
 #endif
 
 
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -6139,8 +6125,6 @@ static void do_cmd_knowledge_kill_count(void)
 
 	/* Free the "who" array */
 	C_KILL(who, max_r_idx, s16b);
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -7700,9 +7684,7 @@ static void do_cmd_knowledge_kubi(void)
 			fprintf(fff,"\n%s\n", _("賞金首はもう残っていません。", "There is no more wanted monster."));
 		}
 	}
-	
-	/* Close the file */
-	my_fclose(fff);
+		my_fclose(fff);
 	
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
@@ -7732,9 +7714,7 @@ static void do_cmd_knowledge_virtues(void)
 		fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment());
 		dump_virtues(fff);
 	}
-	
-	/* Close the file */
-	my_fclose(fff);
+		my_fclose(fff);
 	
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
@@ -7779,9 +7759,7 @@ static void do_cmd_knowledge_dungeon(void)
 			fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
 		}
 	}
-	
-	/* Close the file */
-	my_fclose(fff);
+		my_fclose(fff);
 	
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
@@ -7832,8 +7810,6 @@ static void do_cmd_knowledge_stat(void)
 	}
 
 	dump_yourself(fff);
-
-	/* Close the file */
 	my_fclose(fff);
 	
 	/* Display the file contents */
@@ -8223,8 +8199,6 @@ static void do_cmd_knowledge_quests(void)
 		fputc('\n', fff);
 		do_cmd_knowledge_quests_wiz_random(fff);
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -8307,8 +8281,6 @@ static void do_cmd_knowledge_home(void)
 			fprintf(fff, "\n\n");
 		}
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Display the file contents */
@@ -8379,7 +8351,6 @@ static void do_cmd_knowledge_autopick(void)
 		string_free(tmp);
 		fprintf(fff, "\n");
 	}
-	/* Close the file */
 	my_fclose(fff);
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
@@ -8674,7 +8645,5 @@ void do_cmd_time(void)
 	}
 
 	msg_print(desc);
-
-	/* Close the file */
 	my_fclose(fff);
 }

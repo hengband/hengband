@@ -1179,8 +1179,6 @@ static errr process_pref_file_aux(cptr name, int preftype)
 		msg_format(_("('%s'を解析中)", "Parsing '%s'"), old);
 		msg_print(NULL);
 	}
-
-	/* Close the file */
 	my_fclose(fp);
 	return (err);
 }
@@ -1463,8 +1461,6 @@ errr check_load_init(void)
 
 		break;
 	}
-
-	/* Close the file */
 	my_fclose(fp);
 
 #endif
@@ -5030,8 +5026,6 @@ errr file_character(cptr name)
 	if (fd >= 0)
 	{
 		char out_val[160];
-
-		/* Close the file */
 		(void)fd_close(fd);
 
 		/* Build query */
@@ -5758,8 +5752,6 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 		/* Exit on the q key */
 		if (skey == 'q') break;
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Escape */
@@ -7033,8 +7025,6 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
 		/* Copy the line */
 		if (one_in_(counter + 1)) strcpy(output, buf);
 	}
-
-	/* Close the file */
 	my_fclose(fp);
 
 	/* Success */

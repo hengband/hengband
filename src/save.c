@@ -1824,7 +1824,6 @@ bool load_player(void)
 		/* Oops, lock exists */
 		if (fkk)
 		{
-			/* Close the file */
 			my_fclose(fkk);
 
 			msg_print(_("セーブファイルは現在使用中です。", "Savefile is currently in use."));
@@ -1872,8 +1871,6 @@ bool load_player(void)
 
 		/* What */
 		if (err) what = _("セーブファイルを読めません。", "Cannot read savefile");
-
-		/* Close the file */
 		(void)fd_close(fd);
 	}
 

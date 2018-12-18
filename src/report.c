@@ -287,8 +287,6 @@ static errr make_dump(BUF* dumpbuf)
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
 	(void)make_character_dump(fff);
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Open for read */
@@ -298,8 +296,6 @@ static errr make_dump(BUF* dumpbuf)
 	{
 		(void)buf_sprintf(dumpbuf, "%s", buf);
 	}
-
-	/* Close the file */
 	my_fclose(fff);
 
 	/* Remove the file */

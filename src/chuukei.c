@@ -669,8 +669,6 @@ void prepare_movie_hooks(void)
 			if (fd >= 0)
 			{
 				char out_val[160];
-
-				/* Close the file */
 				(void)fd_close(fd);
 
 				/* Build query */
