@@ -478,7 +478,7 @@ extern void update_local_illumination(POSITION y, POSITION x);
 extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool cave_valid_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
-extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], byte f_char[F_LIT_MAX]);
+extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_char[F_LIT_MAX]);
 extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(char c, byte a, TERM_LEN y, TERM_LEN x);

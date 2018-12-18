@@ -6410,10 +6410,10 @@ static byte char_idx_feat[F_LIT_MAX];
 static bool visual_mode_command(char ch, bool *visual_list_ptr,
 				int height, int width,
 				TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
-				TERM_COLOR *cur_attr_ptr, byte *cur_char_ptr, bool *need_redraw)
+				TERM_COLOR *cur_attr_ptr, SYMBOL_CODE *cur_char_ptr, bool *need_redraw)
 {
 	static TERM_COLOR attr_old = 0;
-	static byte char_old = 0;
+	static SYMBOL_CODE char_old = 0;
 
 	switch (ch)
 	{
@@ -7355,9 +7355,9 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 	int wid, hgt;
 
 	TERM_COLOR attr_old[F_LIT_MAX];
-	byte char_old[F_LIT_MAX];
+	SYMBOL_CODE char_old[F_LIT_MAX];
 	TERM_COLOR *cur_attr_ptr;
-	byte *cur_char_ptr;
+	SYMBOL_CODE *cur_char_ptr;
 
 	(void)C_WIPE(attr_old, F_LIT_MAX, byte);
 	(void)C_WIPE(char_old, F_LIT_MAX, byte);

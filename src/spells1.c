@@ -6900,37 +6900,37 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					Term_xtra(TERM_XTRA_DELAY, msec);
 				}
 			}
-			if(project_o(0,0,y,x,dam,GF_SEEKER))notice=TRUE;
-			if( is_mirror_grid(&cave[y][x]))
+			if (project_o(0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
+			if (is_mirror_grid(&cave[y][x]))
 			{
-			  /* The target of monsterspell becomes tha mirror(broken) */
-				monster_target_y=(s16b)y;
-				monster_target_x=(s16b)x;
+				/* The target of monsterspell becomes tha mirror(broken) */
+				monster_target_y = y;
+				monster_target_x = x;
 
 				remove_mirror(y, x);
 				next_mirror(&oy, &ox, y, x);
 
-				path_n = i+project_path(&(path_g[i+1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
-				for(j = last_i; j <= i; j++)
+				path_n = i + project_path(&(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
+				for (j = last_i; j <= i; j++)
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					if(project_m(0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice=TRUE;
-					if(!who && (project_m_n==1) && !jump ){
-					  if(cave[project_m_y][project_m_x].m_idx >0 ){
-						monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
+					if (project_m(0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
+					if (!who && (project_m_n == 1) && !jump) {
+						if (cave[project_m_y][project_m_x].m_idx > 0) {
+							monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
-						if (m_ptr->ml)
-						{
-						  /* Hack -- auto-recall */
-						  if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+							if (m_ptr->ml)
+							{
+								/* Hack -- auto-recall */
+								if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-						  /* Hack - auto-track */
-						  health_track(cave[project_m_y][project_m_x].m_idx);
+								/* Hack - auto-track */
+								health_track(cave[project_m_y][project_m_x].m_idx);
+							}
 						}
-					  }
 					}
-					(void)project_f(0,0,y,x,dam,GF_SEEKER);
+					(void)project_f(0, 0, y, x, dam, GF_SEEKER);
 				}
 				last_i = i;
 			}
@@ -6940,10 +6940,10 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			if(project_m(0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
+			if (project_m(0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
 				notice = TRUE;
-			if(!who && (project_m_n==1) && !jump ){
-				if(cave[project_m_y][project_m_x].m_idx > 0)
+			if (!who && (project_m_n == 1) && !jump) {
+				if (cave[project_m_y][project_m_x].m_idx > 0)
 				{
 					monster_type *m_ptr = &m_list[cave[project_m_y][project_m_x].m_idx];
 
