@@ -1116,6 +1116,7 @@ extern u16b quark_add(cptr str);
 extern s32b message_num(void);
 extern cptr message_str(int age);
 extern void message_add(cptr msg);
+extern void msg_erase(void);
 extern void msg_print(cptr msg);
 extern void msg_print_wizard(int cheat_type, cptr msg);
 #ifndef SWIG

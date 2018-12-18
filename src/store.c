@@ -5071,13 +5071,8 @@ void do_cmd_store(void)
 	/* Allow expanding macros */
 	get_com_no_macros = FALSE;
 
-	/* Flush messages */
-	msg_print(NULL);
-
-
-	/* Clear the screen */
+	msg_erase();
 	Term_clear();
-
 
 	/* Update everything */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
@@ -5085,9 +5080,7 @@ void do_cmd_store(void)
 
 	/* Redraw entire screen */
 	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 

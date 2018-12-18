@@ -4110,9 +4110,8 @@ static void bldg_process_command(building_type *bldg, int i)
 	bool paid = FALSE;
 	int amt;
 
-	/* Flush messages */
 	msg_flag = FALSE;
-	msg_print(NULL);
+	msg_erase();
 
 	if (is_owner(bldg))
 		bcost = bldg->member_costs[i];
@@ -4498,9 +4497,8 @@ void do_cmd_bldg(void)
 
 	select_floor_music();
 
-	/* Flush messages */
 	msg_flag = FALSE;
-	msg_print(NULL);
+	msg_erase();
 
 	/* Reinit wilderness to activate quests ... */
 	if (reinit_wilderness)

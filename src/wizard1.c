@@ -2508,8 +2508,7 @@ void do_cmd_spoilers(void)
 			break;
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 }
 

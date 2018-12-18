@@ -6587,8 +6587,7 @@ static void show_info(void)
 	/* Flush all input keys */
 	flush();
 
-	/* Flush messages */
-	msg_print(NULL);
+	msg_erase();
 
 
 	/* Describe options */

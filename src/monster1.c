@@ -2058,8 +2058,7 @@ void roff_top(MONRACE_IDX r_idx)
  */
 void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-	/* Flush messages */
-	msg_print(NULL);
+	msg_erase();
 
 	/* Begin recall */
 	Term_erase(0, 1, 255);

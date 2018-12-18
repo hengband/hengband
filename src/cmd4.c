@@ -942,8 +942,7 @@ void do_cmd_nikki(void)
 			bell();
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 
 	/* Restore the screen */
@@ -1100,14 +1099,12 @@ void do_cmd_change_name(void)
 		{
 			mode++;
 		}
-
 		else
 		{
 			bell();
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 
 	/* Restore the screen */
@@ -2301,8 +2298,7 @@ void do_cmd_options(void)
 			}
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 
 
@@ -2960,8 +2956,7 @@ void do_cmd_macros(void)
 			bell();
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 	screen_load();
 }
@@ -3612,8 +3607,7 @@ void do_cmd_visuals(void)
 			break;
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 
 	/* Restore the screen */
@@ -3831,8 +3825,7 @@ void do_cmd_colors(void)
 			bell();
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 
 
@@ -8573,8 +8566,7 @@ void do_cmd_knowledge(void)
 			bell();
 		}
 
-		/* Flush messages */
-		msg_print(NULL);
+		msg_erase();
 	}
 
 	/* Restore the screen */

@@ -2745,6 +2745,12 @@ static void msg_flush(int x)
 }
 
 
+void msg_erase(void)
+{
+	msg_print(NULL);
+}
+
+
 /*
  * Output a message to the top line of the screen.
  *
@@ -4380,8 +4386,7 @@ void request_command(int shopping)
 		/* Hack -- auto-commands */
 		if (command_new)
 		{
-			/* Flush messages */
-			msg_print(NULL);
+			msg_erase();
 
 			/* Use auto-command */
 			cmd = command_new;

@@ -5256,8 +5256,7 @@ static void dungeon(bool load_game)
 	/* Verify the panel */
 	verify_panel();
 
-	/* Flush messages */
-	msg_print(NULL);
+	msg_erase();
 
 
 	/* Enter "xtra" mode */
