@@ -891,8 +891,6 @@ void do_cmd_nikki(void)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Save the screen */
 	screen_save();
 
 	/* Interact until done */
@@ -1038,8 +1036,6 @@ void do_cmd_change_name(void)
 
 	char	tmp[160];
 
-
-	/* Save the screen */
 	screen_save();
 
 	/* Forever */
@@ -1177,8 +1173,6 @@ void do_cmd_messages(int num_now)
 
 	/* Start on first message */
 	i = 0;
-
-	/* Save the screen */
 	screen_save();
 
 	/* Clear screen */
@@ -2027,8 +2021,6 @@ void do_cmd_options(void)
 	char k;
 	int d, skey;
 	TERM_LEN i, y = 0;
-
-	/* Save the screen */
 	screen_save();
 
 	/* Interact */
@@ -3058,8 +3050,6 @@ void do_cmd_visuals(void)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Save the screen */
 	screen_save();
 
 	/* Interact until done */
@@ -3632,8 +3622,6 @@ void do_cmd_colors(void)
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
 
-
-	/* Save the screen */
 	screen_save();
 
 
@@ -4646,8 +4634,6 @@ void do_cmd_load_screen(void)
 		return;
 	}
 
-
-	/* Save the screen */
 	screen_save();
 
 	/* Clear the screen */
@@ -4954,10 +4940,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		
 		return;
 	}
-
-	/* Save the screen */
-	if (message)
-		screen_save();
+	if (message) screen_save();
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
@@ -5167,8 +5150,6 @@ void do_cmd_save_screen(void)
 			return;
 		}
 
-
-		/* Save the screen */
 		screen_save();
 
 
@@ -8418,8 +8399,6 @@ void do_cmd_knowledge(void)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Save the screen */
 	screen_save();
 
 	/* Interact until done */
@@ -8583,8 +8562,6 @@ void do_cmd_checkquest(void)
 {
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Save the screen */
 	screen_save();
 
 	/* Quest info */

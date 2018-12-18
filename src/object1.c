@@ -1233,8 +1233,6 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 
 	/* No relevant informations */
 	if (i <= trivial_info) return (FALSE);
-
-	/* Save the screen */
 	screen_save();
 
 	Term_get_size(&wid, &hgt);

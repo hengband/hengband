@@ -1574,8 +1574,6 @@ void self_knowledge(void)
 		}
 	}
 
-
-	/* Save the screen */
 	screen_save();
 
 	/* Erase the screen */
@@ -1780,8 +1778,6 @@ void report_magics(void)
 		info2[i]  = report_magics_aux(p_ptr->oppose_pois);
 		info[i++] = _("あなたは毒への耐性を持っている", "You are resistant to poison");
 	}
-
-	/* Save the screen */
 	screen_save();
 
 	/* Erase the screen */

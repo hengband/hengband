@@ -6060,8 +6060,6 @@ void do_cmd_edit_autopick(void)
 			break;
 		}
 	}
-
-	/* Save the screen */
 	screen_save();
 
 	/* Process requests until done */

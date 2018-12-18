@@ -697,7 +697,6 @@ void do_cmd_pet(void)
 
 		if (use_menu)
 		{
-			/* Save the screen */
 			screen_save();
 
 			/* Build a prompt */
@@ -775,8 +774,6 @@ void do_cmd_pet(void)
 
 					/* Show list */
 					redraw = TRUE;
-
-					/* Save the screen */
 					if (!use_menu) screen_save();
 
 					prt("", y++, x);

@@ -2607,8 +2607,6 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 
 				/* Show list */
 				redraw = TRUE;
-
-				/* Save the screen */
 				if (!use_menu) screen_save();
 
 				/* Print header(s) */

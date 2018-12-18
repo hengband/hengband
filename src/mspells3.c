@@ -440,8 +440,6 @@ static int get_learned_power(SPELL_IDX *sn)
 
 				/* Show list */
 				redraw = TRUE;
-
-				/* Save the screen */
 				if (!use_menu) screen_save();
 
 				/* Display a list of spells */

@@ -104,8 +104,6 @@ void do_cmd_equip(void)
 
 	/* Note that we are in "equipment" mode */
 	if (easy_floor) command_wrk = (USE_EQUIP);
-
-	/* Save the screen */
 	screen_save();
 
 	/* Hack -- show empty slots */
@@ -1847,7 +1845,6 @@ void do_cmd_query_symbol(void)
 			/* Recall */
 			if (recall)
 			{
-				/* Save the screen */
 				screen_save();
 
 				/* Recall on screen */

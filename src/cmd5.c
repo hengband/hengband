@@ -197,8 +197,6 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 				{
 					/* Show list */
 					redraw = TRUE;
-
-					/* Save the screen */
 					screen_save();
 
 					/* Display a list of spells */
@@ -522,8 +520,6 @@ void do_cmd_browse(void)
 		}
 	}
 
-
-	/* Save the screen */
 	screen_save();
 
 	/* Clear the top line */

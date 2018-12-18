@@ -135,8 +135,6 @@ static int get_mane_power(int *sn, bool baigaesi)
 
 				/* Show list */
 				redraw = TRUE;
-
-				/* Save the screen */
 				screen_save();
 
 				/* Display a list of spells */

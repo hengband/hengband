@@ -195,9 +195,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 											"(*=List, ESC=exit) Browse which power? "));
 	else strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を使いますか？",
 								"(*=List, ESC=exit) Use which power? "));
-	
-	/* Save the screen */
-	screen_save();
+		screen_save();
 
 	request_list = always_show_list;
 

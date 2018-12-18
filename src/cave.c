@@ -2184,8 +2184,6 @@ void do_cmd_view_map(void)
 {
 	int cy, cx;
 
-
-	/* Save the screen */
 	screen_save();
 
 	/* Note */

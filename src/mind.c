@@ -843,8 +843,6 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 
 				/* Show list */
 				redraw = TRUE;
-
-				/* Save the screen */
 				if (!only_browse && !use_menu) screen_save();
 
 				/* Display a list of spells */

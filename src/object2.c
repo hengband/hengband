@@ -7977,8 +7977,6 @@ static void add_essence(ESSENCE_IDX mode)
 
 				/* Show list */
 				redraw = TRUE;
-
-				/* Save the screen */
 				if (!use_menu) screen_save();
 
 				for (y = 1; y < 24; y++)

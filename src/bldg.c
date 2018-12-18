@@ -2737,8 +2737,6 @@ static PRICE compare_weapons(PRICE bcost)
 	char ch;
 	PRICE total = 0;
 	PRICE cost = 0; /* First time no price */
-
-	/* Save the screen */
 	screen_save();
 
 	/* Clear the screen */
@@ -3860,8 +3858,6 @@ static bool research_mon(void)
 	static int old_sym = '\0';
 	static IDX old_i = 0;
 
-
-	/* Save the screen */
 	screen_save();
 
 	/* Get a character, or abort */

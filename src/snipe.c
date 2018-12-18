@@ -297,8 +297,6 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 
 				/* Show list */
 				redraw = TRUE;
-
-				/* Save the screen */
 				if (!only_browse) screen_save();
 
 				/* Display a list of spells */

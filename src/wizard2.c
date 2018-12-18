@@ -1286,8 +1286,6 @@ static void do_cmd_wiz_play(void)
 	/* The item was not changed */
 	changed = FALSE;
 
-
-	/* Save the screen */
 	screen_save();
 
 	q_ptr = &forge;
@@ -1392,8 +1390,6 @@ static void wiz_create_item(void)
 	object_type *q_ptr;
 
 	OBJECT_IDX k_idx;
-
-	/* Save the screen */
 	screen_save();
 
 	/* Get object base type */
