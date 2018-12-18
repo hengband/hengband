@@ -2003,14 +2003,10 @@ bool load_player(void)
 
 #endif
 
+	msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。",
+		"Error (%s) reading %d.%d.%d savefile."),
+		what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
 
-#ifdef JP
-	msg_format("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。",
-		   what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
-#else
-	msg_format("Error (%s) reading %d.%d.%d savefile.",
-		   what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
-#endif
 	msg_print(NULL);
 
 	return (FALSE);

@@ -5097,7 +5097,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
 {
 	int k = 0;
-	int rlev = 0;
+	DEPTH rlev = 0;
 
 	/* Hack -- assume obvious */
 	bool obvious = TRUE;
@@ -5267,8 +5267,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 			if (p_ptr->resist_pois) dam = (dam + 2) / 3;
 			if (double_resist) dam = (dam + 2) / 3;
 
-			if ((!(double_resist || p_ptr->resist_pois)) &&
-				 one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
+			if ((!(double_resist || p_ptr->resist_pois)) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW())
 			{
 				do_dec_stat(A_CON);
 			}
@@ -5369,9 +5368,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 				(void)set_stun(p_ptr->stun + plus_stun);
 			}
 
-			if (!(p_ptr->resist_fire ||
-				IS_OPPOSE_FIRE() ||
-				p_ptr->immune_fire))
+			if (!(p_ptr->resist_fire || IS_OPPOSE_FIRE() || p_ptr->immune_fire))
 			{
 				inven_damage(set_acid_destroy, 3);
 			}
@@ -5645,13 +5642,9 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 				msg_print(_("閃光のため非物質的な影の存在でいられなくなった。",
 					"The light forces you out of your incorporeal shadow form."));
 
-				p_ptr->redraw |= PR_MAP;
+				p_ptr->redraw |= (PR_MAP | PR_STATUS);
 				p_ptr->update |= (PU_MONSTERS);
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-				/* Redraw status bar */
-				p_ptr->redraw |= (PR_STATUS);
-
 			}
 
 			break;
@@ -5946,9 +5939,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 
 				learn_spell(monspell);
 				p_ptr->redraw |= (PR_MANA);
-
-				p_ptr->window |= (PW_PLAYER);
-				p_ptr->window |= (PW_SPELL);
+				p_ptr->window |= (PW_PLAYER | PW_SPELL);
 
 				if (who > 0)
 				{
@@ -6235,27 +6226,13 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
  */
 bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	/* Delta */
-	POSITION dx, dy;
-
-	/* Absolute */
-	POSITION ax, ay;
-
-	/* Signs */
-	POSITION sx, sy;
-
-	/* Fractions */
-	POSITION qx, qy;
-
-	/* Scanners */
-	POSITION tx, ty;
-
-	/* Scale factors */
-	POSITION f1, f2;
-
-	/* Slope, or 1/Slope, of LOS */
-	POSITION m;
-
+	POSITION dx, dy; /* Delta */
+	POSITION ax, ay; /* Absolute */
+	POSITION sx, sy; /* Signs */
+	POSITION qx, qy; /* Fractions */
+	POSITION tx, ty; /* Scanners */
+	POSITION f1, f2; /* Scale factors */
+	POSITION m; /* Slope, or 1/Slope, of LOS */
 
 	/* Extract the offset */
 	dy = y2 - y1;
@@ -6265,14 +6242,11 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	ay = ABS(dy);
 	ax = ABS(dx);
 
-
 	/* Handle adjacent (or identical) grids */
 	if ((ax < 2) && (ay < 2)) return (TRUE);
 
-
 	/* Paranoia -- require "safe" origin */
 	/* if (!in_bounds(y1, x1)) return (FALSE); */
-
 
 	/* Directly South/North */
 	if (!dx)
@@ -6324,11 +6298,9 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		return (TRUE);
 	}
 
-
 	/* Extract some signs */
 	sx = (dx < 0) ? -1 : 1;
 	sy = (dy < 0) ? -1 : 1;
-
 
 	/* Vertical "knights" */
 	if (ax == 1)
@@ -6347,7 +6319,6 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 			if (!cave_stop_disintegration(y1, x1 + sx)) return (TRUE);
 		}
 	}
-
 
 	/* Calculate scale factor div 2 */
 	f2 = (ax * ay);
