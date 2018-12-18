@@ -7742,11 +7742,9 @@ static void do_cmd_knowledge_kubi(void)
  */
 static void do_cmd_knowledge_virtues(void)
 {
-	FILE *fff;
-	
+	FILE *fff;	
 	char file_name[1024];
-	
-	
+		
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
@@ -7781,8 +7779,7 @@ static void do_cmd_knowledge_dungeon(void)
 	
 	char file_name[1024];
 	int i;
-	
-	
+		
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff) {
@@ -8439,13 +8436,8 @@ void do_cmd_knowledge(void)
 		Term_clear();
 
 		/* Ask for a choice */
-#ifdef JP
-		prt(format("%d/2 ページ", (p+1)), 2, 65);
-		prt("現在の知識を確認する", 3, 0);
-#else
-		prt(format("page %d/2", (p+1)), 2, 65);
-		prt("Display current knowledge", 3, 0);
-#endif
+		prt(format(_("%d/2 ページ", "page %d/2"), (p+1)), 2, 65);
+		prt(_("現在の知識を確認する", "Display current knowledge"), 3, 0);
 
 		/* Give some choices */
 #ifdef JP
