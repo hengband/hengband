@@ -1601,7 +1601,7 @@ static void process_world_aux_hp_and_sp(void)
 
 			if (p_ptr->levitation)
 			{
-				msg_print(_("酸を受けた！", "The acid melt you!"));
+				msg_print(_("酸が飛び散った！", "The acid melt you!"));
 				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
 					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
 			}
