@@ -1502,6 +1502,160 @@ static void process_world_aux_hp_and_sp(void)
 		}
 	}
 
+	if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !IS_INVULN() && !p_ptr->immune_cold)
+	{
+		int damage = 0;
+
+		if (have_flag(f_ptr->flags, FF_DEEP))
+		{
+			damage = 6000 + randint0(4000);
+		}
+		else if (!p_ptr->levitation)
+		{
+			damage = 3000 + randint0(2000);
+		}
+
+		if (damage)
+		{
+			if (p_ptr->resist_cold) damage = damage / 3;
+			if (IS_OPPOSE_COLD()) damage = damage / 3;
+			if (p_ptr->levitation) damage = damage / 5;
+
+			damage = damage / 100 + (randint0(100) < (damage % 100));
+
+			if (p_ptr->levitation)
+			{
+				msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
+				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+			}
+			else
+			{
+				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
+				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
+			}
+
+			cave_no_regen = TRUE;
+		}
+	}
+
+	if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !IS_INVULN() && !p_ptr->immune_elec)
+	{
+		int damage = 0;
+
+		if (have_flag(f_ptr->flags, FF_DEEP))
+		{
+			damage = 6000 + randint0(4000);
+		}
+		else if (!p_ptr->levitation)
+		{
+			damage = 3000 + randint0(2000);
+		}
+
+		if (damage)
+		{
+			if (p_ptr->resist_elec) damage = damage / 3;
+			if (IS_OPPOSE_ELEC()) damage = damage / 3;
+			if (p_ptr->levitation) damage = damage / 5;
+
+			damage = damage / 100 + (randint0(100) < (damage % 100));
+
+			if (p_ptr->levitation)
+			{
+				msg_print(_("電撃を受けた！", "The electric shocks you!"));
+				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+			}
+			else
+			{
+				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				msg_format(_("%sに感電した！", "The %s shocks you!"), name);
+				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
+			}
+
+			cave_no_regen = TRUE;
+		}
+	}
+
+	if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !IS_INVULN() && !p_ptr->immune_acid)
+	{
+		int damage = 0;
+
+		if (have_flag(f_ptr->flags, FF_DEEP))
+		{
+			damage = 6000 + randint0(4000);
+		}
+		else if (!p_ptr->levitation)
+		{
+			damage = 3000 + randint0(2000);
+		}
+
+		if (damage)
+		{
+			if (p_ptr->resist_acid) damage = damage / 3;
+			if (IS_OPPOSE_ACID()) damage = damage / 3;
+			if (p_ptr->levitation) damage = damage / 5;
+
+			damage = damage / 100 + (randint0(100) < (damage % 100));
+
+			if (p_ptr->levitation)
+			{
+				msg_print(_("酸を受けた！", "The acid melt you!"));
+				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+			}
+			else
+			{
+				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
+				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
+			}
+
+			cave_no_regen = TRUE;
+		}
+	}
+
+	if (have_flag(f_ptr->flags, FF_POISON_PUDDLE) && !IS_INVULN())
+	{
+		int damage = 0;
+
+		if (have_flag(f_ptr->flags, FF_DEEP))
+		{
+			damage = 6000 + randint0(4000);
+		}
+		else if (!p_ptr->levitation)
+		{
+			damage = 3000 + randint0(2000);
+		}
+
+		if (damage)
+		{
+			if (p_ptr->resist_pois) damage = damage / 3;
+			if (IS_OPPOSE_POIS()) damage = damage / 3;
+			if (p_ptr->levitation) damage = damage / 5;
+
+			damage = damage / 100 + (randint0(100) < (damage % 100));
+
+			if (p_ptr->levitation)
+			{
+				msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
+				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr->poisoned + 1);
+			}
+			else
+			{
+				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				msg_format(_("%sに毒された！", "The %s poisons you!"), name);
+				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
+				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr->poisoned + 3);
+			}
+
+			cave_no_regen = TRUE;
+		}
+	}
+
 	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
 	    !p_ptr->levitation && !p_ptr->can_swim)
 	{
