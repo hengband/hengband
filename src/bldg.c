@@ -3093,7 +3093,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 
 	if (o_ptr->sval == SV_BROKEN_DAGGER)
 	{
-		IDX j;
+		KIND_OBJECT_IDX j;
 		int n = 1;
 
 		/* Suppress compiler warning */
@@ -3245,6 +3245,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	o_ptr->discount = 99;
 
 	p_ptr->total_weight += o_ptr->weight;
+	calc_android_exp();
 
 	/* Decrease material object */
 	inven_item_increase(mater, -1);
@@ -3283,22 +3284,17 @@ static int repair_broken_weapon(PRICE bcost)
  */
 static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_CLASS to_ac)
 {
-	int         i;
-	OBJECT_IDX  item;
-	bool        okay = FALSE;
+	int i;
+	OBJECT_IDX item;
+	bool okay = FALSE;
 	object_type *o_ptr;
-	cptr        q, s;
-	int         maxenchant = (p_ptr->lev / 5);
-	char        tmp_str[MAX_NLEN];
+	cptr q, s;
+	int maxenchant = (p_ptr->lev / 5);
+	char tmp_str[MAX_NLEN];
 
 	clear_bldg(4, 18);
-#ifdef JP
-	prt(format("現在のあなたの技量だと、+%d まで改良できます。", maxenchant), 5, 0);
-	prt(format(" 改良の料金は一個につき＄%d です。", cost), 7, 0);
-#else
-	prt(format("  Based on your skill, we can improve up to +%d.", maxenchant), 5, 0);
-	prt(format("  The price for the service is %d gold per item.", cost), 7, 0);
-#endif
+	prt(format(_("現在のあなたの技量だと、+%d まで改良できます。", "  Based on your skill, we can improve up to +%d."), maxenchant), 5, 0);
+	prt(format(_(" 改良の料金は一個につき＄%d です。", "  The price for the service is %d gold per item."), cost), 7, 0);
 
 	item_tester_no_ryoute = TRUE;
 
