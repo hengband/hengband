@@ -1932,13 +1932,8 @@ bool load_player(void)
 			}
 			else
 			{
-#ifdef JP
-				msg_format("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。",
+				msg_format(_("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。", "Converted a %d.%d.%d savefile."),
 				    (z_major > 9) ? z_major-10 : z_major , z_minor, z_patch);
-#else
-				msg_format("Converted a %d.%d.%d savefile.",
-				    (z_major > 9) ? z_major-10 : z_major , z_minor, z_patch);
-#endif
 			}
 			msg_print(NULL);
 		}
@@ -1951,7 +1946,6 @@ bool load_player(void)
 			{
 				/* A character was loaded */
 				character_loaded = TRUE;
-
 				return (TRUE);
 			}
 
@@ -1998,8 +1992,7 @@ bool load_player(void)
 
 #endif
 
-	msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。",
-		"Error (%s) reading %d.%d.%d savefile."),
+	msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d savefile."),
 		what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
 
 	msg_print(NULL);
