@@ -881,14 +881,14 @@
 #define ROW_CURSP               15
 #define COL_CURSP               0       /* "Cur SP xxxxx" */
 
-#define ROW_RIDING_INFO          16
-#define COL_RIDING_INFO          0       /* "xxxxxxxxxxxx" */
+#define ROW_RIDING_INFO         16
+#define COL_RIDING_INFO         0       /* "xxxxxxxxxxxx" */
 
 #define ROW_INFO                17
 #define COL_INFO                0       /* "xxxxxxxxxxxx" */
 
-#define ROW_MAP						0
-#define COL_MAP                  12
+#define ROW_MAP                 0
+#define COL_MAP                 12
 
 #define ROW_CUT                 18
 #define COL_CUT                 0       /* <cut> */

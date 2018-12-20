@@ -234,10 +234,9 @@ static int get_learned_power(SPELL_IDX *sn)
 	
 	if (repeat_pull(&code))
 	{
-		/* Success */
+		*sn = (SPELL_IDX)code;
 		return (TRUE);
 	}
-	*sn = (SPELL_IDX)code;
 
 	if (use_menu)
 	{
