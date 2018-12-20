@@ -244,21 +244,13 @@ static int get_learned_power(SPELL_IDX *sn)
 
 		while(!mode)
 		{
-#ifdef JP
-			prt(format(" %s ボルト", (menu_line == 1) ? "》" : "  "), 2, 14);
-			prt(format(" %s ボール", (menu_line == 2) ? "》" : "  "), 3, 14);
-			prt(format(" %s ブレス", (menu_line == 3) ? "》" : "  "), 4, 14);
-			prt(format(" %s 召喚", (menu_line == 4) ? "》" : "  "), 5, 14);
-			prt(format(" %s その他", (menu_line == 5) ? "》" : "  "), 6, 14);
-			prt("どの種類の魔法を使いますか？", 0, 0);
-#else
-			prt(format(" %s bolt", (menu_line == 1) ? "> " : "  "), 2, 14);
-			prt(format(" %s ball", (menu_line == 2) ? "> " : "  "), 3, 14);
-			prt(format(" %s breath", (menu_line == 3) ? "> " : "  "), 4, 14);
-			prt(format(" %s sommoning", (menu_line == 4) ? "> " : "  "), 5, 14);
-			prt(format(" %s others", (menu_line == 5) ? "> " : "  "), 6, 14);
-			prt("use which type of magic? ", 0, 0);
-#endif
+			prt(format(_(" %s ボルト", " %s bolt"), (menu_line == 1) ? _("》", "> ") : "  "), 2, 14);
+			prt(format(_(" %s ボール", " %s ball"), (menu_line == 2) ? _("》", "> ") : "  "), 3, 14);
+			prt(format(_(" %s ブレス", " %s breath"), (menu_line == 3) ? _("》", "> ") : "  "), 4, 14);
+			prt(format(_(" %s 召喚", " %s sommoning"), (menu_line == 4) ? _("》", "> ") : "  "), 5, 14);
+			prt(format(_(" %s その他", " %s others"), (menu_line == 5) ? _("》", "> ") : "  "), 6, 14);
+			prt(_("どの種類の魔法を使いますか？", "use which type of magic? "), 0, 0);
+
 			choice = inkey();
 			switch(choice)
 			{
