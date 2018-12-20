@@ -3089,6 +3089,8 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 		return (0);
 	}
 
+	p_ptr->total_weight -= o_ptr->weight;
+
 	if (o_ptr->sval == SV_BROKEN_DAGGER)
 	{
 		IDX j;
@@ -3187,7 +3189,6 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 		}
 	}
 
-	/* */
 	if (have_flag(k_ptr->flags, TR_BLOWS))
 	{
 		int bmax = MIN(3, MAX(1, 40 / (o_ptr->dd * o_ptr->ds)));
@@ -3242,6 +3243,8 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 
 	/* Add repaired flag */
 	o_ptr->discount = 99;
+
+	p_ptr->total_weight += o_ptr->weight;
 
 	/* Decrease material object */
 	inven_item_increase(mater, -1);

@@ -5330,8 +5330,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 #ifdef JP
 		msg_format("%sは消えた。", o_name);
 #else
-		msg_format("The %s disappear%s.",
-			   o_name, (plural ? "" : "s"));
+		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
 

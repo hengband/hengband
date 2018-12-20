@@ -199,12 +199,12 @@ static void learned_info(char *p, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_learned_power(SPELL_IDX *sn)
+static bool get_learned_power(SPELL_IDX *sn)
 {
 	int             i = 0;
 	int             num = 0;
-	int             y = 1;
-	int             x = 18;
+	TERM_LEN y = 1;
+	TERM_LEN x = 18;
 	PERCENTAGE minfail = 0;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	PERCENTAGE chance = 0;
@@ -214,8 +214,8 @@ static int get_learned_power(SPELL_IDX *sn)
 	char            choice;
 	char            out_val[160];
 	char            comment[80];
-	s32b            f4 = 0, f5 = 0, f6 = 0;
-	cptr            p = _("魔法", "magic");
+	BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
+	cptr p = _("魔法", "magic");
 	COMMAND_CODE code;
 	monster_power   spell;
 	bool            flag, redraw;
@@ -345,9 +345,8 @@ static int get_learned_power(SPELL_IDX *sn)
 	}
 
 	/* Build a prompt (accept all spells) */
-	(void)strnfmt(out_val, 78, 
-		      _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
-		      I2A(0), I2A(num - 1), p);
+	(void)strnfmt(out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
+		I2A(0), I2A(num - 1), p);
 
 	if (use_menu) screen_save();
 
