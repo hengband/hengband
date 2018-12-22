@@ -187,12 +187,13 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
  * @param m_idx 目標となるモンスターの参照ID
  * @param dam ダメージ量
- * @param fear 目標となるモンスターの恐慌状態を返す参照ポインタ
+ * @param fear 目標となったモンスターの死亡状態を返す参照ポインタ
+ * @param fear 目標となったモンスターの恐慌状態を返す参照ポインタ
  * @param note 目標モンスターが死亡した場合の特別メッセージ(NULLならば標準表示を行う)
  * @param who 打撃を行ったモンスターの参照ID
  * @return なし
  */
-void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, IDX who)
+void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, cptr note, IDX who)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1424,7 +1425,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	char            m_name[80], t_name[80];
 	char            temp[MAX_NLEN];
 	bool            blinked;
-	bool            explode = FALSE, touched = FALSE, fear = FALSE;
+	bool            explode = FALSE, touched = FALSE, fear = FALSE, dead = FALSE;
 	int             y_saver = t_ptr->fy;
 	int             x_saver = t_ptr->fx;
 	int             effect_type;
@@ -1451,10 +1452,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	/* Extract the effective monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
-
-	/* Get the monster name (or "it") */
 	monster_desc(t_name, t_ptr, 0);
 
 	/* Assume no blink */
@@ -1992,7 +1990,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 		/* Cancel Invulnerability */
 		(void)set_monster_invulner(m_idx, 0, FALSE);
-		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
 		blinked = FALSE;
 	}
 
@@ -2098,7 +2096,7 @@ void process_monster(MONSTER_IDX m_idx)
 	bool            can_cross;
 	bool            aware = TRUE;
 
-	bool            fear;
+	bool fear, dead;
 
 	bool            is_riding_mon = (m_idx == p_ptr->riding);
 
@@ -2198,7 +2196,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
 	{
-		mon_take_hit_mon(m_idx, 1, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+		mon_take_hit_mon(m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
 	}
 
 	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->inside_battle)

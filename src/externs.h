@@ -716,7 +716,7 @@ extern bool set_monster_monfear(MONSTER_IDX m_idx, int v);
 extern bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need);
 extern void process_monsters_mtimed(int mtimed_idx);
 extern void dispel_monster_status(MONSTER_IDX m_idx);
-extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note, IDX who);
+extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, cptr note, IDX who);
 extern bool process_the_world(int num, MONSTER_IDX who, bool vs_player);
 extern void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx);
 
