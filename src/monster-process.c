@@ -187,7 +187,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
  * @param m_idx 目標となるモンスターの参照ID
  * @param dam ダメージ量
- * @param fear 目標となったモンスターの死亡状態を返す参照ポインタ
+ * @param dead 目標となったモンスターの死亡状態を返す参照ポインタ
  * @param fear 目標となったモンスターの恐慌状態を返す参照ポインタ
  * @param note 目標モンスターが死亡した場合の特別メッセージ(NULLならば標準表示を行う)
  * @param who 打撃を行ったモンスターの参照ID
@@ -267,6 +267,8 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 				sound(SOUND_KILL);
 			}
 
+			*dead = TRUE;
+
 			if (known)
 			{
 				monster_desc(m_name, m_ptr, MD_TRUE_NAME);
@@ -303,6 +305,8 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 			return;
 		}
 	}
+
+	*dead = FALSE;
 
 #ifdef ALLOW_FEAR
 
