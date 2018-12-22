@@ -847,7 +847,6 @@ void do_cmd_open(void)
  */
 static bool do_cmd_close_aux(POSITION y, POSITION x)
 {
-	/* Get grid and contents */
 	cave_type *c_ptr = &cave[y][x];
 	FEAT_IDX old_feat = c_ptr->feat;
 	bool more = FALSE;
@@ -935,11 +934,8 @@ void do_cmd_close(void)
 		cave_type *c_ptr;
 		FEAT_IDX feat;
 
-		/* Get requested location */
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-
-		/* Get grid and contents */
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
@@ -1410,7 +1406,6 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 
 bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 {
-	/* Get grid and contents */
 	cave_type *c_ptr = &cave[y][x];
 
 	/* Get feature */
@@ -1535,11 +1530,8 @@ void do_cmd_disarm(void)
 		cave_type *c_ptr;
 		FEAT_IDX feat;
 
-		/* Get location */
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-
-		/* Get grid and contents */
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */
@@ -1811,7 +1803,6 @@ void do_cmd_alter(void)
 		FEAT_IDX feat;
 		feature_type *f_ptr;
 
-		/* Get location */
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 
@@ -1936,11 +1927,8 @@ void do_cmd_spike(void)
 		cave_type *c_ptr;
 		FEAT_IDX feat;
 
-		/* Get location */
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-
-		/* Get grid and contents */
 		c_ptr = &cave[y][x];
 
 		/* Feature code (applying "mimic" field) */

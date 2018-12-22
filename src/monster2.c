@@ -234,7 +234,6 @@ void delete_monster_idx(MONSTER_IDX i)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	/* Get location */
 	y = m_ptr->fy;
 	x = m_ptr->fx;
 
