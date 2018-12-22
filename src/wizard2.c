@@ -1211,14 +1211,12 @@ static void wiz_quantity_item(object_type *o_ptr)
  */
 static void do_cmd_wiz_blue_mage(void)
 {
+	int i = 0;
+	int j = 0;
+	BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
 
-	int				i = 0;
-	int				j = 0;
-	s32b            f4 = 0, f5 = 0, f6 = 0;	
-
-	for (j=1; j<6; j++)
+	for (j = 1; j < 6; j++)
 	{
-
 		set_rf_masks(&f4, &f5, &f6, j);
 
 		for (i = 0; i < 32; i++)
@@ -2035,7 +2033,7 @@ void do_cmd_debug(void)
 			if(tmp_int < 0) break;
 			if(tmp_int >= max_q_idx) break;
 
-			p_ptr->inside_quest = tmp_int;
+			p_ptr->inside_quest = (QUEST_IDX)tmp_int;
 			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 			quest[tmp_int].status = QUEST_STATUS_TAKEN;
 			p_ptr->inside_quest = 0;

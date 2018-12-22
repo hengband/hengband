@@ -1606,7 +1606,7 @@ void learn_spell(int monspell)
  */
 /*
  */
-void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, BIT_FLAGS mode)
+void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode)
 {
 	switch (mode)
 	{

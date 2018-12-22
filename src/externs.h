@@ -1346,7 +1346,7 @@ extern bool monst_spell_monst(MONSTER_IDX m_idx);
 /* mspells3.c */
 extern bool do_cmd_cast_learned(void);
 extern void learn_spell(int monspell);
-extern void set_rf_masks(s32b *f4, s32b *f5, s32b *f6, BIT_FLAGS mode);
+extern void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode);
 
 /* mspells4.c */
 extern bool spell_learnable(MONSTER_IDX m_idx);

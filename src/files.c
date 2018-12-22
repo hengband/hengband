@@ -4245,7 +4245,7 @@ static void dump_aux_class_special(FILE *fff)
 		int l2 = 0;
 		int num = 0;
 		int spellnum[MAX_MONSPELLS];
-		s32b f4 = 0, f5 = 0, f6 = 0;
+		BIT_FLAGS f4 = 0, f5 = 0, f6 = 0;
 		char p[60][80];
 		int col = 0;
 		bool pcol = FALSE;
