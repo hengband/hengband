@@ -2973,7 +2973,6 @@ void process_monster(MONSTER_IDX m_idx)
 
 			/* Note changes to viewable region */
 			do_view = TRUE;
-
 			do_turn = TRUE;
 		}
 
@@ -3038,7 +3037,7 @@ void process_monster(MONSTER_IDX m_idx)
 				}
 
 				/* Hack -- Update the new location */
-				c_ptr->m_idx = (s16b)m_idx;
+				c_ptr->m_idx = m_idx;
 
 				/* Move the monster */
 				m_ptr->fy = ny;
@@ -3172,7 +3171,7 @@ void process_monster(MONSTER_IDX m_idx)
 						o_ptr->iy = o_ptr->ix = 0;
 
 						/* Memorize monster */
-						o_ptr->held_m_idx = (s16b)m_idx;
+						o_ptr->held_m_idx = m_idx;
 
 						/* Build a stack */
 						o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -3224,9 +3223,7 @@ void process_monster(MONSTER_IDX m_idx)
 	/* Notice changes in view */
 	if (do_view)
 	{
-		/* Update some things */
 		p_ptr->update |= (PU_FLOW);
-
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
