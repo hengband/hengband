@@ -3802,13 +3802,11 @@ c_put_str(TERM_YELLOW, "現在", row, stat_col+35);
  * Mode 4 = mutations
  * </pre>
  */
-void display_player(BIT_FLAGS mode)
+void display_player(int mode)
 {
 	int i;
-
-	char	buf[80];
-	char	tmp[64];
-
+	char buf[80];
+	char tmp[64];
 
 	if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && display_mutations)
 		mode = (mode % 5);
@@ -4059,7 +4057,6 @@ static void dump_aux_display_player(FILE *fff)
 	char c;
 	char buf[1024];
 
-	/* Display player */
 	display_player(0);
 
 	/* Dump part of the screen */
@@ -6606,8 +6603,6 @@ static void show_info(void)
 	}
 
 	update_playtime();
-
-	/* Display player */
 	display_player(0);
 
 	/* Prompt for inventory */

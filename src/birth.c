@@ -1928,8 +1928,8 @@ static void init_dungeon_quests(void)
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
 	{
-		quest_type      *q_ptr = &quest[i];
-		monster_race    *quest_r_ptr;
+		quest_type *q_ptr = &quest[i];
+		monster_race *quest_r_ptr;
 
 		q_ptr->status = QUEST_STATUS_TAKEN;
 		determine_random_questor(q_ptr);

@@ -620,7 +620,7 @@ extern void prevent_turn_overflow(void);
 extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);
 extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
-extern void display_player(BIT_FLAGS mode);
+extern void display_player(int mode);
 extern errr make_character_dump(FILE *fff);
 extern errr file_character(cptr name);
 extern errr process_pref_file_command(char *buf);

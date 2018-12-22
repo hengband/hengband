@@ -1940,8 +1940,6 @@ static void fix_player(void)
 		Term_activate(angband_term[j]);
 
 		update_playtime();
-
-		/* Display player */
 		display_player(0);
 		Term_fresh();
 

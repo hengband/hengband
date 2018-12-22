@@ -2020,6 +2020,28 @@ void do_cmd_debug(void)
 		teleport_player(10, 0L);
 		break;
 
+	/* Take a Quests */
+	case 'Q':
+		{
+			char ppp[30];
+			char tmp_val[5];
+			int tmp_int;
+			sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
+			sprintf(tmp_val, "%d", 0);
+
+			if (!get_string(ppp, tmp_val, 3)) return;
+			tmp_int = atoi(tmp_val);
+
+			if(tmp_int < 0) break;
+			if(tmp_int >= max_q_idx) break;
+
+			p_ptr->inside_quest = tmp_int;
+			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+			quest[tmp_int].status = QUEST_STATUS_TAKEN;
+			p_ptr->inside_quest = 0;
+		}
+		break;
+
 	/* Complete a Quest -KMW- */
 	case 'q':
 		if(p_ptr->inside_quest)
