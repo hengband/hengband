@@ -1772,12 +1772,10 @@ void do_cmd_bash(void)
  */
 void do_cmd_alter(void)
 {
-	int			y, x, dir;
-
-	cave_type	*c_ptr;
-
-	bool		more = FALSE;
-
+	POSITION y, x;
+	DIRECTION dir;
+	cave_type *c_ptr;
+	bool more = FALSE;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -1815,10 +1813,8 @@ void do_cmd_alter(void)
 
 		p_ptr->energy_use = 100;
 
-		/* Attack monsters */
 		if (c_ptr->m_idx)
 		{
-			/* Attack */
 			py_attack(y, x, 0);
 		}
 
