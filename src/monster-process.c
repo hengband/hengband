@@ -2034,8 +2034,8 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {
 	return !have_flag(f_ptr->flags, FF_GLASS) ||
-	       (r_info[m_ptr->r_idx].flags2 & RF2_STUPID) ||
-	       (m_ptr->hp >= MAX(m_ptr->maxhp / 3, 200));
+		(r_info[m_ptr->r_idx].flags2 & RF2_STUPID) ||
+		(m_ptr->hp >= MAX(m_ptr->maxhp / 3, 200));
 }
 
 
@@ -2196,6 +2196,7 @@ void process_monster(MONSTER_IDX m_idx)
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
 	{
 		mon_take_hit_mon(m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+		if(dead) return;
 	}
 
 	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->inside_battle)
@@ -2335,7 +2336,6 @@ void process_monster(MONSTER_IDX m_idx)
 			{
 				/* Ignore locations off of edge */
 				if (!in_bounds2(y, x)) continue;
-
 				if (cave[y][x].m_idx) k++;
 			}
 		}
@@ -3034,10 +3034,7 @@ void process_monster(MONSTER_IDX m_idx)
 				m_ptr->fx = nx;
 				update_monster(m_idx, TRUE);
 
-				/* Redraw the old grid */
 				lite_spot(oy, ox);
-
-				/* Redraw the new grid */
 				lite_spot(ny, nx);
 			}
 			else
