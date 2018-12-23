@@ -2658,9 +2658,9 @@ static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 	char o_name[MAX_NLEN];
 	char tmp_str[80];
 
-	/* Effective dices */
 	DICE_NUMBER eff_dd = o_ptr->dd + p_ptr->to_dd[0];
 	DICE_SID eff_ds = o_ptr->ds + p_ptr->to_ds[0];
+	HIT_RELIABILITY reli = p_ptr->skill_thn + (p_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
 	/* Print the weapon name */
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -2676,11 +2676,11 @@ static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 
 	/* Print the weapons base damage dice */
 	sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)",
-		hit_chance(o_ptr->to_h, 0),
-		hit_chance(o_ptr->to_h, 50),
-		hit_chance(o_ptr->to_h, 100),
-		hit_chance(o_ptr->to_h, 150),
-		hit_chance(o_ptr->to_h, 200));
+		hit_chance(reli, 0),
+		hit_chance(reli, 50),
+		hit_chance(reli, 100),
+		hit_chance(reli, 150),
+		hit_chance(reli, 200));
 	put_str(tmp_str, row+3, col);
 	c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row+5, col);
 

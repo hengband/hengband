@@ -15,6 +15,7 @@
 #include "cmd-pet.h"
 #include "player-damage.h"
 #include "monsterrace-hook.h"
+#include "melee.h"
 
 
 
@@ -29,28 +30,8 @@
  */
 bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
 {
-	int k;
-
-	/* Percentile dice */
-	k = randint0(100);
-
-	/* Hack -- Instant miss or hit */
-	if (k < 10) return (k < 5);
-
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
-		if (one_in_(20)) return (FALSE);
-
-	/* Wimpy attack never hits */
-	if (chance <= 0) return (FALSE);
-
-	/* Penalize invisible targets */
 	if (!visible) chance = (chance + 1) / 2;
-
-	/* Power must defeat armor */
-	if (randint0(chance) < (ac * 3 / 4)) return (FALSE);
-
-	/* Assume hit */
-	return (TRUE);
+	return hit_chance(chance, ac) >= randint1(100);
 }
 
 /*!
@@ -59,13 +40,12 @@ bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
  * @param ac 敵AC
  * @return 命中確率
  */
-PERCENTAGE hit_chance(HIT_PROB to_h, ARMOUR_CLASS ac)
+PERCENTAGE hit_chance(HIT_RELIABILITY reli, ARMOUR_CLASS ac)
 {
 	PERCENTAGE chance = 5, chance_left = 90;
-	int meichuu = p_ptr->skill_thn + (p_ptr->to_h[0] + to_h) * BTH_PLUS_ADJ;
 
 	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance_left = (chance_left * 19 + 9) / 20;
-	chance += (100 - ((ac * 75) / meichuu)) * chance_left / 100;
+	chance += (100 - ((ac * 75) / reli)) * chance_left / 100;
 
 	return chance;
 }
