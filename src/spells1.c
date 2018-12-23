@@ -17,6 +17,7 @@
 #include "object-curse.h"
 #include "player-damage.h"
 #include "monsterrace-hook.h"
+#include "melee.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

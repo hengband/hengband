@@ -14,9 +14,8 @@
  * 特殊技能を揃えて実装している。
  */
 
-
-
 #include "angband.h"
+#include "melee.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

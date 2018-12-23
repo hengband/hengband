@@ -15,6 +15,7 @@
 #include "grid.h"
 #include "trap.h"
 #include "monsterrace-hook.h"
+#include "melee.h"
 
 
 /*!

@@ -14,7 +14,7 @@
 #include "cmd-magiceat.h"
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
-
+#include "melee.h"
 #include "object-hook.h"
 
 /*!

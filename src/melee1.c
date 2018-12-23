@@ -207,8 +207,6 @@ static int check_hit(int power, DEPTH level, int stun)
 	return (FALSE);
 }
 
-
-
 /*! モンスターの侮辱行為メッセージテーブル / Hack -- possible "insult" messages */
 static cptr desc_insult[] =
 {
@@ -238,7 +236,6 @@ static cptr desc_insult[] =
 
 };
 
-
 /*! マゴットのぼやきメッセージテーブル / Hack -- possible "insult" messages */
 static cptr desc_moan[] =
 {
@@ -255,7 +252,6 @@ static cptr desc_moan[] =
 #endif
 
 };
-
 
 /*!
 * @brief 敵オーラによるプレイヤーのダメージ処理（補助）
@@ -293,9 +289,6 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 		handle_stuff();
 	}
 }
-
-
-
 
 /*!
 * @brief 敵オーラによるプレイヤーのダメージ処理（メイン）
@@ -1340,7 +1333,6 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	}
 }
 
-
 /*!
 * @brief プレイヤーの打撃処理メインルーチン
 * @param y 攻撃目標のY座標
@@ -1534,7 +1526,6 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 
 	return mdeath;
 }
-
 
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.

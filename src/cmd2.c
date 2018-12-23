@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "chest.h"
+#include "melee.h"
 #include "object-hook.h"
 
 /*!
@@ -806,10 +807,7 @@ void do_cmd_open(void)
 		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
 		{
 			p_ptr->energy_use = 100;
-
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-			
-			/* Attack */
 			py_attack(y, x, 0);
 		}
 
