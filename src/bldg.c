@@ -2640,28 +2640,6 @@ static void compare_weapon_aux(object_type *o_ptr, int col, int r)
 }
 
 /*!
- * @brief モンスターへの命中率の計算
- * @param to_h 命中値
- * @param ac 敵AC
- * @return 命中確率
- */
-static PERCENTAGE hit_chance(HIT_PROB to_h, ARMOUR_CLASS ac)
-{
-	PERCENTAGE chance = 0;
-	int meichuu = p_ptr->skill_thn + (p_ptr->to_h[0] + to_h) * BTH_PLUS_ADJ;
-
-	if (meichuu <= 0) return 5;
-
-	chance = 100 - ((ac * 75) / meichuu);
-
-	if (chance > 95) chance = 95;
-	if (chance < 5) chance = 5;
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
-		chance = (chance * 19 + 9) / 20;
-	return chance;
-}
-
-/*!
  * @brief 武器匠における武器一つ毎の完全情報を表示する。
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @param row 表示する列の左端

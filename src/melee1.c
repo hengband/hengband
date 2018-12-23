@@ -53,6 +53,29 @@ bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis)
 	return (TRUE);
 }
 
+/*!
+ * @brief モンスターへの命中率の計算
+ * @param to_h 命中値
+ * @param ac 敵AC
+ * @return 命中確率
+ */
+PERCENTAGE hit_chance(HIT_PROB to_h, ARMOUR_CLASS ac)
+{
+	PERCENTAGE chance = 0;
+	int meichuu = p_ptr->skill_thn + (p_ptr->to_h[0] + to_h) * BTH_PLUS_ADJ;
+
+	if (meichuu <= 0) return 5;
+
+	chance = 100 - ((ac * 75) / meichuu);
+
+	if (chance > 95) chance = 95;
+	if (chance < 5) chance = 5;
+	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+		chance = (chance * 19 + 9) / 20;
+	return chance;
+}
+
+
 
 /*!
 * @brief プレイヤーからモンスターへの打撃クリティカル判定 /

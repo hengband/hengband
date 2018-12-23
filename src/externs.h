@@ -698,6 +698,8 @@ extern errr rd_savefile_new(void);
 extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* melee1.c */
+PERCENTAGE hit_chance(HIT_PROB to_h, ARMOUR_CLASS ac);
+
 /* monster-process.c */
 extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern HIT_POINT critical_norm(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
