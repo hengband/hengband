@@ -2720,9 +2720,8 @@ static PRICE compare_weapons(PRICE bcost)
 	char ch;
 	PRICE total = 0;
 	PRICE cost = 0; /* First time no price */
-	screen_save();
 
-	/* Clear the screen */
+	screen_save();
 	clear_bldg(0, 22);
 
 	/* Store copy of original wielded weapon */
@@ -2750,7 +2749,6 @@ static PRICE compare_weapons(PRICE bcost)
 
 	while (TRUE)
 	{
-		/* Clear the screen */
 		clear_bldg(0, 22);
 
 		/* Only compare melee weapons */
@@ -4485,15 +4483,10 @@ void do_cmd_bldg(void)
 	/* Hack -- Decrease "icky" depth */
 	character_icky--;
 
-	/* Clear the screen */
 	Term_clear();
 
-	/* Update the visuals */
 	p_ptr->update |= (PU_VIEW | PU_MONSTERS | PU_BONUS | PU_LITE | PU_MON_LITE);
-
-	/* Redraw entire screen */
 	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 

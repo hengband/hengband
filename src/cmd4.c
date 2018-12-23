@@ -4613,10 +4613,7 @@ void do_cmd_load_screen(void)
 	}
 
 	screen_save();
-
-	/* Clear the screen */
 	Term_clear();
-
 
 	/* Load the screen */
 	for (y = 0; okay; y++)

@@ -2190,8 +2190,6 @@ void do_cmd_view_map(void)
 	prt(_("お待ち下さい...", "Please wait..."), 0, 0);
 
 	Term_fresh();
-
-	/* Clear the screen */
 	Term_clear();
 
 	display_autopick = 0;
