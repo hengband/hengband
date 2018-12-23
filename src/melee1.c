@@ -23,11 +23,11 @@
  * Determine if the player "hits" a monster (normal combat).
  * @param chance 基本命中値
  * @param ac モンスターのAC
- * @param vis 目標を視界に捕らえているならばTRUEを指定
+ * @param visible 目標を視界に捕らえているならばTRUEを指定
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis)
+bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
 {
 	int k;
 
@@ -44,7 +44,7 @@ bool test_hit_norm(int chance, ARMOUR_CLASS ac, int vis)
 	if (chance <= 0) return (FALSE);
 
 	/* Penalize invisible targets */
-	if (!vis) chance = (chance + 1) / 2;
+	if (!visible) chance = (chance + 1) / 2;
 
 	/* Power must defeat armor */
 	if (randint0(chance) < (ac * 3 / 4)) return (FALSE);
@@ -372,10 +372,8 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
 
-
 	/* Calculate the "attack quality" */
-	bonus = p_ptr->to_h_m;
-	bonus += (p_ptr->lev * 6 / 5);
+	bonus = p_ptr->to_h_m + (p_ptr->lev * 6 / 5);
 	chance = (p_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
 	/* Test for hit */
@@ -566,7 +564,6 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	chance = (p_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 	if (mode == HISSATSU_IAI) chance += 60;
 	if (p_ptr->special_defense & KATA_KOUKIJIN) chance += 150;
-
 	if (p_ptr->sutemi) chance = MAX(chance * 3 / 2, chance + 60);
 
 	vir = virtue_number(V_VALOUR);
