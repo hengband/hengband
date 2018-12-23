@@ -61,17 +61,12 @@ bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
  */
 PERCENTAGE hit_chance(HIT_PROB to_h, ARMOUR_CLASS ac)
 {
-	PERCENTAGE chance = 0;
+	PERCENTAGE chance = 5, chance_left = 90;
 	int meichuu = p_ptr->skill_thn + (p_ptr->to_h[0] + to_h) * BTH_PLUS_ADJ;
 
-	if (meichuu <= 0) return 5;
+	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance_left = (chance_left * 19 + 9) / 20;
+	chance += (100 - ((ac * 75) / meichuu)) * chance_left / 100;
 
-	chance = 100 - ((ac * 75) / meichuu);
-
-	if (chance > 95) chance = 95;
-	if (chance < 5) chance = 5;
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
-		chance = (chance * 19 + 9) / 20;
 	return chance;
 }
 
