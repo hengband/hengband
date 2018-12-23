@@ -1539,8 +1539,8 @@ static void health_redraw(bool riding)
 		else
 		{
 			/* Extract the "percent" of health */
-			int pct = 100L * m_ptr->hp / m_ptr->maxhp;
-			int pct2 = 100L * m_ptr->hp / m_ptr->max_maxhp;
+			int pct = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
+			int pct2 = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->max_maxhp: 0;
 
 			/* Convert percent into "health" */
 			int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;

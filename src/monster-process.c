@@ -2101,10 +2101,8 @@ void process_monster(MONSTER_IDX m_idx)
 	bool            aware = TRUE;
 
 	bool fear, dead;
-
-	bool            is_riding_mon = (m_idx == p_ptr->riding);
-
-	bool            see_m = is_seen(m_ptr);
+	bool is_riding_mon = (m_idx == p_ptr->riding);
+	bool see_m = is_seen(m_ptr);
 
 	if (is_riding_mon && !(r_ptr->flags7 & RF7_RIDING))
 	{
@@ -2132,7 +2130,7 @@ void process_monster(MONSTER_IDX m_idx)
 		int tmp = p_ptr->lev*6+(p_ptr->skill_stl+10)*4;
 		if (p_ptr->monlite) tmp /= 3;
 		if (p_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
-		if (r_ptr->level > (p_ptr->lev*p_ptr->lev/20+10)) tmp /= 3;
+		if (r_ptr->level > (p_ptr->lev * p_ptr->lev / 20 + 10)) tmp /= 3;
 		/* Low-level monsters will find it difficult to locate the player. */
 		if (randint0(tmp) > (r_ptr->level+20)) aware = FALSE;
 	}
@@ -2152,11 +2150,9 @@ void process_monster(MONSTER_IDX m_idx)
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
 			char m_name[80];
-
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
 		}
-
 
 		delete_monster_idx(m_idx);
 
@@ -2186,7 +2182,6 @@ void process_monster(MONSTER_IDX m_idx)
 
 			/* Generate treasure, etc */
 			monster_death(m_idx, FALSE);
-
 
 			delete_monster_idx(m_idx);
 			if (sad)
@@ -2267,8 +2262,6 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Handle non-aggravation - Still sleeping */
 		if (!(p_ptr->cursed & TRC_AGGRAVATE)) return;
 
-		/* Handle aggravation */
-
 		/* Reset sleep counter */
 		(void)set_monster_csleep(m_idx, 0);
 
@@ -2304,8 +2297,7 @@ void process_monster(MONSTER_IDX m_idx)
 		gets_angry = TRUE;
 
 	/* Paranoia... no pet uniques outside wizard mode -- TY */
-	if (is_pet(m_ptr) &&
-	    ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
+	if (is_pet(m_ptr) && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
 	      monster_has_hostile_align(NULL, 10, -10, r_ptr))
 	     || (r_ptr->flagsr & RFR_RES_ALL)))
 	{
@@ -2330,11 +2322,11 @@ void process_monster(MONSTER_IDX m_idx)
 	oy = m_ptr->fy;
 	ox = m_ptr->fx;
 
-
 	/* Attempt to "multiply" if able and allowed */
 	if ((r_ptr->flags2 & RF2_MULTIPLY) && (num_repro < MAX_REPRO))
 	{
-		int k, y, x;
+		int k;
+		POSITION y, x;
 
 		/* Count the adjacent monsters */
 		for (k = 0, y = oy - 1; y <= oy + 1; y++)
@@ -2369,7 +2361,6 @@ void process_monster(MONSTER_IDX m_idx)
 		}
 	}
 
-
 	if (r_ptr->a_ability_flags2 & RF6_SPECIAL)
 	{
 		/* Hack -- Ohmu scatters molds! */
@@ -2396,7 +2387,6 @@ void process_monster(MONSTER_IDX m_idx)
 			}
 		}
 	}
-
 
 	if (!p_ptr->inside_battle)
 	{
@@ -2542,8 +2532,7 @@ void process_monster(MONSTER_IDX m_idx)
 	else if (is_pet(m_ptr))
 	{
 		/* Are we trying to avoid the player? */
-		bool avoid = ((p_ptr->pet_follow_distance < 0) &&
-						  (m_ptr->cdis <= (0 - p_ptr->pet_follow_distance)));
+		bool avoid = ((p_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - p_ptr->pet_follow_distance)));
 
 		/* Do we want to find the player? */
 		bool lonely = (!avoid && (m_ptr->cdis > p_ptr->pet_follow_distance));
@@ -2608,7 +2597,6 @@ void process_monster(MONSTER_IDX m_idx)
 	did_move_body = FALSE;
 	did_pass_wall = FALSE;
 	did_kill_wall = FALSE;
-
 
 	/* Take a zero-terminated array of "directions" */
 	for (i = 0; mm[i]; i++)

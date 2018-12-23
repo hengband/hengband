@@ -251,7 +251,6 @@ void delete_monster_idx(MONSTER_IDX i)
 	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(i, 0);
 	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(i, 0, FALSE);
 
-
 	/* Hack -- remove target monster */
 	if (i == target_who) target_who = 0;
 

@@ -2060,7 +2060,7 @@ cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 	living = monster_living(m_ptr->ap_r_idx);
 
 	/* Calculate a health "percentage" */
-	perc = 100L * m_ptr->hp / m_ptr->maxhp;
+	perc = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
 
 	/* Healthy monsters */
 	if (m_ptr->hp >= m_ptr->maxhp)
