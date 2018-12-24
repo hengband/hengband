@@ -711,20 +711,43 @@ static bool cave_gen(void)
 		/* Hack -- Add some rivers */
 		if (one_in_(3) && (randint1(dun_level) > 5))
 		{
-			IDX feat1 = 0, feat2 = 0;
+			FEAT_IDX feat1 = 0, feat2 = 0;
 
-			/* Choose water or lava */
+			/* Choose water mainly */
 			if ((randint1(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[dungeon_type].flags1 & DF1_WATER_RIVER))
 			{
 				feat1 = feat_deep_water;
 				feat2 = feat_shallow_water;
 			}
-			else if  (d_info[dungeon_type].flags1 & DF1_LAVA_RIVER)
+			else /* others */
 			{
-				feat1 = feat_deep_lava;
-				feat2 = feat_shallow_lava;
+				FEAT_IDX select_deep_feat[10];
+				FEAT_IDX select_shallow_feat[10];
+				int select_id_max = 0, selected;
+
+				if (d_info[dungeon_type].flags1 & DF1_LAVA_RIVER)
+				{
+					select_deep_feat[select_id_max] = feat_deep_lava;
+					select_shallow_feat[select_id_max] = feat_shallow_lava;
+					select_id_max++;
+				}
+				if (d_info[dungeon_type].flags1 & DF1_POISONOUS_RIVER)
+				{
+					select_deep_feat[select_id_max] = feat_deep_poisonous_puddle;
+					select_shallow_feat[select_id_max] = feat_shallow_poisonous_puddle;
+					select_id_max++;
+				}
+				if (d_info[dungeon_type].flags1 & DF1_ACID_RIVER)
+				{
+					select_deep_feat[select_id_max] = feat_deep_acid_puddle;
+					select_shallow_feat[select_id_max] = feat_shallow_acid_puddle;
+					select_id_max++;
+				}
+
+				selected = randint1(select_id_max);
+				feat1 = select_deep_feat[selected];
+				feat2 = select_shallow_feat[selected];
 			}
-			else feat1 = 0;
 
 			if (feat1)
 			{
