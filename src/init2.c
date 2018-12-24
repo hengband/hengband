@@ -1737,6 +1737,14 @@ static errr init_feat_variables(void)
 	feat_shallow_water = f_tag_to_index_in_init("SHALLOW_WATER");
 	feat_deep_lava = f_tag_to_index_in_init("DEEP_LAVA");
 	feat_shallow_lava = f_tag_to_index_in_init("SHALLOW_LAVA");
+	feat_heavy_cold_zone = f_tag_to_index_in_init("HEAVY_COLD_ZONE");
+	feat_cold_zone = f_tag_to_index_in_init("COLD_ZONE");
+	feat_heavy_electrical_zone = f_tag_to_index_in_init("HEAVY_ELECTRICAL_ZONE");
+	feat_electrical_zone = f_tag_to_index_in_init("ELECTRICAL_ZONE");
+	feat_deep_acid_puddle = f_tag_to_index_in_init("DEEP_ACID_PUDDLE");
+	feat_shallow_acid_puddle = f_tag_to_index_in_init("SHALLOW_ACID_PUDDLE");
+	feat_deep_poisonous_puddle = f_tag_to_index_in_init("DEEP_POISONOUS_PUDDLE");
+	feat_shallow_poisonous_puddle = f_tag_to_index_in_init("SHALLOW_POISONOUS_PUDDLE");
 	feat_dirt = f_tag_to_index_in_init("DIRT");
 	feat_grass = f_tag_to_index_in_init("GRASS");
 	feat_flower = f_tag_to_index_in_init("FLOWER");

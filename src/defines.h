@@ -5257,8 +5257,8 @@ extern int PlayerUID;
 #define DF1_CAVE                0x00000400L
 #define DF1_CAVERN              0x00000800L
 #define DF1_ARCADE              0x00001000L
-#define DF1_XXX13               0x00002000L
-#define DF1_XXX14               0x00004000L
+#define DF1_LAKE_ACID           0x00002000L
+#define DF1_LAKE_POISONOUS      0x00004000L
 #define DF1_XXX15               0x00008000L
 #define DF1_FORGET              0x00010000L
 #define DF1_LAKE_WATER          0x00020000L
@@ -5274,10 +5274,10 @@ extern int PlayerUID;
 #define DF1_NO_MELEE            0x08000000L
 #define DF1_CHAMELEON           0x10000000L
 #define DF1_DARKNESS            0x20000000L
-#define DF1_XXX30               0x40000000L
-#define DF1_XXX31               0x80000000L
+#define DF1_ACID_RIVER          0x40000000L
+#define DF1_POISONOUS_RIVER     0x80000000L
 
-#define DF1_LAKE_MASK (DF1_LAKE_WATER | DF1_LAKE_LAVA | DF1_LAKE_RUBBLE | DF1_LAKE_TREE)
+#define DF1_LAKE_MASK (DF1_LAKE_WATER | DF1_LAKE_LAVA | DF1_LAKE_RUBBLE | DF1_LAKE_TREE | DF1_LAKE_POISONOUS | DF1_LAKE_ACID)
 
 #define DUNGEON_ANGBAND  1
 #define DUNGEON_GALGALS  2
