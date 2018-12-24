@@ -963,8 +963,8 @@ static cptr d_info_flags1[] =
 	"CAVE",
 	"CAVERN",
 	"ARCADE",
-	"XXX",
-	"XXX",
+	"LAKE_ACID",
+	"LAKE_POISONOUS",
 	"XXX",
 	"FORGET",
 	"LAKE_WATER",
@@ -980,8 +980,8 @@ static cptr d_info_flags1[] =
 	"NO_MELEE",
 	"CHAMELEON",
 	"DARKNESS",
-	"XXX",
-	"XXX"
+	"ACID_RIVER",
+	"POISONOUS_RIVER"
 };
 
 
