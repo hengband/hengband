@@ -2326,6 +2326,30 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 m
 		if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) return FALSE;
 	}
 
+	/* Cold */
+	if (have_flag(f_ptr->flags, FF_COLD_PUDDLE))
+	{
+		if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) return FALSE;
+	}
+
+	/* Elec */
+	if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE))
+	{
+		if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) return FALSE;
+	}
+
+	/* Acid */
+	if (have_flag(f_ptr->flags, FF_ACID_PUDDLE))
+	{
+		if (!(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)) return FALSE;
+	}
+
+	/* Poison */
+	if (have_flag(f_ptr->flags, FF_POISON_PUDDLE))
+	{
+		if (!(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)) return FALSE;
+	}
+
 	return TRUE;
 }
 
