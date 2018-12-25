@@ -744,7 +744,7 @@ static bool cave_gen(void)
 					select_id_max++;
 				}
 
-				selected = randint1(select_id_max);
+				selected = randint0(select_id_max);
 				feat1 = select_deep_feat[selected];
 				feat2 = select_shallow_feat[selected];
 			}
