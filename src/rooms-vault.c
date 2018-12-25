@@ -470,6 +470,38 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				set_cave_feat(y, x, feat_deep_lava);
 				break;
 
+			case 'f':
+				set_cave_feat(y, x, feat_shallow_acid_puddle);
+				break;
+
+			case 'F':
+				set_cave_feat(y, x, feat_deep_acid_puddle);
+				break;
+
+			case 'g':
+				set_cave_feat(y, x, feat_shallow_poisonous_puddle);
+				break;
+
+			case 'G':
+				set_cave_feat(y, x, feat_deep_poisonous_puddle);
+				break;
+
+			case 'h':
+				set_cave_feat(y, x, feat_cold_zone);
+				break;
+
+			case 'H':
+				set_cave_feat(y, x, feat_heavy_cold_zone);
+				break;
+
+			case 'i':
+				set_cave_feat(y, x, feat_electrical_zone);
+				break;
+
+			case 'I':
+				set_cave_feat(y, x, feat_heavy_electrical_zone);
+				break;
+
 			}
 		}
 	}

@@ -51,6 +51,14 @@
 #    = - deep water
 #    v - shallow lava
 #    w - deep lava
+#    f - shallow acid puddle
+#    F - deep acid puddle
+#    g - shallow poisonous puddle
+#    G - deep poisonous puddle
+#    h - cold zone
+#    H - heavy cold zone
+#    i - electrical zone
+#    I - heavy electrical zone
 
 # Version stamp (required)
 
@@ -3154,5 +3162,54 @@ D:%..vwwwwv..%
 D:%..vwwwwv..%
 D:%..vvwwvv..%
 D:%%..vvvv..%%
+D: %%......%% 
+D:  %%%%%%%%  
+
+N:138:AcidSpring 1
+X:16:8:10:12
+D:  %%%%%%%%  
+D: %%......%% 
+D:%%..ffff..%%
+D:%..ffFFff..%
+D:%..fFFFFf..%
+D:%..fFFFFf..%
+D:%..ffFFff..%
+D:%%..ffff..%%
+D: %%......%% 
+D:  %%%%%%%%  
+
+N:139:PoisonousSpring 1
+D:  %%%%%%%%  
+D: %%......%% 
+D:%%..gggg..%%
+D:%..ggGGgg..%
+D:%..gGGGGg..%
+D:%..gGGGGg..%
+D:%..ggGGgg..%
+D:%%..gggg..%%
+D: %%......%% 
+D:  %%%%%%%%  
+
+N:140:ColdZone 1
+D:  %%%%%%%%  
+D: %%......%% 
+D:%%..hhhh..%%
+D:%..hhHHhh..%
+D:%..hHHHHh..%
+D:%..hHHHHh..%
+D:%..hhHHhh..%
+D:%%..hhhh..%%
+D: %%......%% 
+D:  %%%%%%%%  
+
+N:141:ElectricalZone 1
+D:  %%%%%%%%  
+D: %%......%% 
+D:%%..iiii..%%
+D:%..iiIIii..%
+D:%..iIIIIi..%
+D:%..iIIIIi..%
+D:%..iiIIii..%
+D:%%..iiii..%%
 D: %%......%% 
 D:  %%%%%%%%  
