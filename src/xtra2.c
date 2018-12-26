@@ -1814,15 +1814,10 @@ void resize_map(void)
 	verify_panel();
 
 	p_ptr->update |= (PU_TORCH | PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-	/* Forget lite/view */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw everything */
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
 	handle_stuff();

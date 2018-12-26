@@ -1091,8 +1091,6 @@ void do_cmd_change_name(void)
 		msg_erase();
 	}
 	screen_load();
-
-	/* Redraw everything */
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
 	handle_stuff();

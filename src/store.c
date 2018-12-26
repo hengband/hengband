@@ -3722,8 +3722,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 
 					/* Start over */
 					store_top = 0;
-
-					/* Redraw everything */
 					display_inventory();
 				}
 
@@ -3732,8 +3730,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 				{
 					/* Pick the correct screen */
 					if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-
-					/* Redraw everything */
 					display_inventory();
 				}
 
@@ -3793,7 +3789,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 		/* Hack -- Item is still here */
 		if (i == st_ptr->stock_num)
 		{
-			/* Redraw everything */
 			if (combined_or_reordered) display_inventory();
 
 			/* Redraw the item */
@@ -3808,8 +3803,6 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 
 			/* Nothing left on that screen */
 			else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-
-			/* Redraw everything */
 			display_inventory();
 
 			chg_virtue(V_SACRIFICE, 1);
@@ -4328,8 +4321,6 @@ static void museum_remove_object(void)
 
 	/* Nothing left on that screen */
 	else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-
-	/* Redraw everything */
 	display_inventory();
 
 	return;

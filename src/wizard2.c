@@ -484,8 +484,6 @@ static void do_cmd_wiz_change(void)
 {
 	/* Interact */
 	do_cmd_wiz_change_aux();
-
-	/* Redraw everything */
 	do_cmd_redraw();
 }
 
