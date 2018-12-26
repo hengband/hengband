@@ -3840,26 +3840,13 @@ static void store_sell(void)
 
 	/* Prepare a prompt */
 	if (cur_store_num == STORE_HOME)
-#ifdef JP
-	q = "どのアイテムを置きますか? ";
-#else
-		q = "Drop which item? ";
-#endif
+		q = _("どのアイテムを置きますか? ", "Drop which item? ");
 
 	else if (cur_store_num == STORE_MUSEUM)
-#ifdef JP
-	q = "どのアイテムを寄贈しますか? ";
-#else
-		q = "Give which item? ";
-#endif
+		q = _("どのアイテムを寄贈しますか? ", "Give which item? ");
 
 	else
-#ifdef JP
-		q = "どのアイテムを売りますか? ";
-#else
-		q = "Sell which item? ";
-#endif
-
+		q = _("どのアイテムを売りますか? ", "Sell which item? ");
 
 	item_tester_no_ryoute = TRUE;
 	/* Only allow items the store will buy */
@@ -3868,27 +3855,15 @@ static void store_sell(void)
 	/* 我が家でおかしなメッセージが出るオリジナルのバグを修正 */
 	if (cur_store_num == STORE_HOME)
 	{
-#ifdef JP
-		s = "置けるアイテムを持っていません。";
-#else
-		s = "You don't have any item to drop.";
-#endif
+		s = _("置けるアイテムを持っていません。", "You don't have any item to drop.");
 	}
 	else if (cur_store_num == STORE_MUSEUM)
 	{
-#ifdef JP
-		s = "寄贈できるアイテムを持っていません。";
-#else
-		s = "You don't have any item to give.";
-#endif
+		s = _("寄贈できるアイテムを持っていません。", "You don't have any item to give.");
 	}
 	else
 	{
-#ifdef JP
-		s = "欲しい物がないですねえ。";
-#else
-		s = "You have nothing that I want.";
-#endif
+		s = _("欲しい物がないですねえ。", "You have nothing that I want.");
 	}
 
 	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
@@ -3963,25 +3938,13 @@ static void store_sell(void)
 	if (!store_check_num(q_ptr))
 	{
 		if (cur_store_num == STORE_HOME)
-#ifdef JP
-			msg_print("我が家にはもう置く場所がない。");
-#else
-			msg_print("Your home is full.");
-#endif
+			msg_print(_("我が家にはもう置く場所がない。", "Your home is full."));
 
 		else if (cur_store_num == STORE_MUSEUM)
-#ifdef JP
-			msg_print("博物館はもう満杯だ。");
-#else
-			msg_print("Museum is full.");
-#endif
+			msg_print(_("博物館はもう満杯だ。", "Museum is full."));
 
 		else
-#ifdef JP
-			msg_print("すいませんが、店にはもう置く場所がありません。");
-#else
-			msg_print("I have not the room in my store to keep it.");
-#endif
+			msg_print(_("すいませんが、店にはもう置く場所がありません。", "I have not the room in my store to keep it."));
 
 		return;
 	}
@@ -3991,11 +3954,7 @@ static void store_sell(void)
 	if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM))
 	{
 		/* Describe the transaction */
-#ifdef JP
-		msg_format("%s(%c)を売却する。", o_name, index_to_label(item));
-#else
-		msg_format("Selling %s (%c).", o_name, index_to_label(item));
-#endif
+		msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), o_name, index_to_label(item));
 
 		msg_print(NULL);
 
@@ -4060,11 +4019,7 @@ static void store_sell(void)
 			object_desc(o_name, q_ptr, 0);
 
 			/* Describe the result (in message buffer) */
-#ifdef JP
-msg_format("%sを $%ldで売却しました。", o_name, (long)price);
-#else
-			msg_format("You sold %s for %ld gold.", o_name, (long)price);
-#endif
+			msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, (long)price);
 
 			if (record_sell) do_cmd_write_nikki(NIKKI_SELL, 0, o_name);
 
@@ -4114,25 +4069,14 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 
 		if (-1 == store_check_num(q_ptr))
 		{
-#ifdef JP
-			msg_print("それと同じ品物は既に博物館にあるようです。");
-#else
-			msg_print("The same object as it is already in the Museum.");
-#endif
+			msg_print(_("それと同じ品物は既に博物館にあるようです。", "The same object as it is already in the Museum."));
 		}
 		else
 		{
-#ifdef JP
-			msg_print("博物館に寄贈したものは取り出すことができません！！");
-#else
-			msg_print("You cannot take items which is given to the Museum back!!");
-#endif
+			msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take items which is given to the Museum back!!"));
 		}
-#ifdef JP
-		if (!get_check(format("本当に%sを寄贈しますか？", o2_name))) return;
-#else
-		if (!get_check(format("Really give %s to the Museum? ", o2_name))) return;
-#endif
+
+		if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) return;
 
 		/* Identify it */
 		identify_item(q_ptr);
@@ -4140,12 +4084,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 
 		/* Distribute charges of wands/rods */
 		distribute_charges(o_ptr, q_ptr, amt);
-#ifdef JP
-		msg_format("%sを置いた。(%c)", o_name, index_to_label(item));
-#else
-		msg_format("You drop %s (%c).", o_name, index_to_label(item));
-#endif
-
+		msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 		choice = 0;
 
 		/* Take it from the players inventory */
@@ -4169,11 +4108,7 @@ msg_format("%sを $%ldで売却しました。", o_name, (long)price);
 	{
 		/* Distribute charges of wands/rods */
 		distribute_charges(o_ptr, q_ptr, amt);
-#ifdef JP
-		msg_format("%sを置いた。(%c)", o_name, index_to_label(item));
-#else
-		msg_format("You drop %s (%c).", o_name, index_to_label(item));
-#endif
+		msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 
 		choice = 0;
 
