@@ -976,28 +976,19 @@ void do_cmd_redraw(void)
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 
 
-	/* Update torch */
 	p_ptr->update |= (PU_TORCH);
-
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-	/* Forget lite/view */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 	p_ptr->update |= (PU_MONSTERS);
 
-	/* Redraw everything */
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
 	update_playtime();
 
-	/* Hack -- update */
 	handle_stuff();
 
 	if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
@@ -5076,11 +5067,7 @@ void do_cmd_save_screen(void)
 	{
 		use_graphics = FALSE;
 		reset_visuals();
-
-		/* Redraw everything */
 		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-
-		/* Hack -- update */
 		handle_stuff();
 	}
 
@@ -5188,11 +5175,7 @@ void do_cmd_save_screen(void)
 	{
 		use_graphics = TRUE;
 		reset_visuals();
-
-		/* Redraw everything */
 		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-
-		/* Hack -- update */
 		handle_stuff();
 	}
 }

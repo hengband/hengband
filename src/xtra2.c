@@ -1825,7 +1825,6 @@ void resize_map(void)
 	/* Redraw everything */
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
-	/* Hack -- update */
 	handle_stuff();
 	Term_redraw();
 
@@ -1852,7 +1851,6 @@ void redraw_window(void)
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
-	/* Hack -- update */
 	handle_stuff();
 	Term_redraw();
 }

@@ -203,8 +203,6 @@ static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION 
 	int count;
 	POSITION x, y;
 	bool old_is_floor, new_is_floor;
-
-
 	count = 0;
 
 	old_is_floor = get_is_floor(x1 - 1, y1);
