@@ -5663,7 +5663,7 @@ P:4:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
 #JZ#
-N:585:ドラゴン皮の靴
+N:585:ドラゴン・ブーツ
 E:& Pair~ of Dragon Boots
 G:]:G
 I:30:4:0
