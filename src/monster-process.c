@@ -1430,8 +1430,8 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	char            temp[MAX_NLEN];
 	bool            blinked;
 	bool            explode = FALSE, touched = FALSE, fear = FALSE, dead = FALSE;
-	int             y_saver = t_ptr->fy;
-	int             x_saver = t_ptr->fx;
+	POSITION y_saver = t_ptr->fy;
+	POSITION x_saver = t_ptr->fx;
 	int             effect_type;
 
 	bool see_m = is_seen(m_ptr);
