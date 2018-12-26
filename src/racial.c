@@ -2650,8 +2650,6 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 			{
 				/* Hide list */
 				redraw = FALSE;
-
-				/* Restore the screen */
 				screen_load();
 			}
 
@@ -2707,8 +2705,6 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 		/* Stop the loop */
 		flag = TRUE;
 	}
-
-	/* Restore the screen */
 	if (redraw) screen_load();
 
 	/* Abort if needed */

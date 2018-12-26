@@ -6139,8 +6139,6 @@ void do_cmd_edit_autopick(void)
 
 		if (com_id) quit = do_editor_command(tb, com_id);
 	} /* while (TRUE) */
-
-	/* Restore the screen */
 	screen_load();
 
 	/* Get the filename of preference */

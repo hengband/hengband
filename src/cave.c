@@ -2252,8 +2252,6 @@ void do_cmd_view_map(void)
 		/* Get any key */
 		inkey();
 	}
-
-	/* Restore the screen */
 	screen_load();
 }
 

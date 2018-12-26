@@ -210,8 +210,6 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 
 					/* Hide list */
 					redraw = FALSE;
-
-					/* Restore the screen */
 					screen_load();
 				}
 
@@ -300,8 +298,6 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 		flag = TRUE;
 	}
 
-
-	/* Restore the screen */
 	if (redraw) screen_load();
 
 	p_ptr->window |= (PW_SPELL);
@@ -544,8 +540,6 @@ void do_cmd_browse(void)
 				prt(_("読める呪文がない。", "No spells to browse."), 0, 0);
 			(void)inkey();
 
-
-			/* Restore the screen */
 			screen_load();
 
 			return;
@@ -565,8 +559,6 @@ void do_cmd_browse(void)
 			line++;
 		}
 	}
-
-	/* Restore the screen */
 	screen_load();
 }
 

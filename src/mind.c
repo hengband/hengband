@@ -947,8 +947,6 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 			{
 				/* Hide list */
 				redraw = FALSE;
-
-				/* Restore the screen */
 				screen_load();
 			}
 
@@ -993,8 +991,6 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 		/* Stop the loop */
 		flag = TRUE;
 	}
-
-	/* Restore the screen */
 	if (redraw && !only_browse) screen_load();
 
 	p_ptr->window |= (PW_SPELL);

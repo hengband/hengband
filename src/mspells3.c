@@ -509,8 +509,6 @@ static bool get_learned_power(SPELL_IDX *sn)
 			{
 				/* Hide list */
 				redraw = FALSE;
-
-				/* Restore the screen */
 				screen_load();
 			}
 
@@ -555,8 +553,6 @@ static bool get_learned_power(SPELL_IDX *sn)
 		/* Stop the loop */
 		flag = TRUE;
 	}
-
-	/* Restore the screen */
 	if (redraw) screen_load();
 
 	p_ptr->window |= (PW_SPELL);

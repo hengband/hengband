@@ -1281,8 +1281,6 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 15);
 
 	inkey();
-
-	/* Restore the screen */
 	screen_load();
 
 	/* Gave knowledge */

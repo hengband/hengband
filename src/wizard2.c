@@ -1328,8 +1328,6 @@ static void do_cmd_wiz_play(void)
 		}
 	}
 
-
-	/* Restore the screen */
 	screen_load();
 
 
@@ -1389,7 +1387,6 @@ static void wiz_create_item(void)
 	/* Get object base type */
 	k_idx = wiz_create_itemtype();
 
-	/* Restore the screen */
 	screen_load();
 
 	/* Return if failed */

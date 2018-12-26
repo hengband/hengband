@@ -337,8 +337,6 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 			{
 				/* Hide list */
 				redraw = FALSE;
-
-				/* Restore the screen */
 				if (!only_browse) screen_load();
 			}
 
@@ -381,8 +379,6 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 		/* Stop the loop */
 		flag = TRUE;
 	}
-
-	/* Restore the screen */
 	if (redraw && !only_browse) screen_load();
 
 	p_ptr->window |= (PW_SPELL);

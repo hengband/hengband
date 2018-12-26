@@ -1895,7 +1895,6 @@ bool change_panel(POSITION dy, POSITION dx)
 		panel_bounds_center();
 
 		p_ptr->update |= (PU_MONSTERS);
-
 		p_ptr->redraw |= (PR_MAP);
 		handle_stuff();
 

@@ -2472,7 +2472,6 @@ void do_cmd_spoilers(void)
 		{
 		/* Escape */
 		case ESCAPE:
-			/* Restore the screen */
 			screen_load();
 			return;
 

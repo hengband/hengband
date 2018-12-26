@@ -132,8 +132,6 @@ void do_cmd_equip(void)
 
 	/* Get a new command */
 	command_new = inkey();
-
-	/* Restore the screen */
 	screen_load();
 
 

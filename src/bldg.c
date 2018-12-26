@@ -2823,8 +2823,6 @@ static PRICE compare_weapons(PRICE bcost)
 			break;
 		}
 	}
-
-	/* Restore the screen */
 	screen_load();
 
 	return (total);

@@ -941,8 +941,6 @@ void do_cmd_nikki(void)
 
 		msg_erase();
 	}
-
-	/* Restore the screen */
 	screen_load();
 }
 
@@ -1092,8 +1090,6 @@ void do_cmd_change_name(void)
 
 		msg_erase();
 	}
-
-	/* Restore the screen */
 	screen_load();
 
 	/* Redraw everything */
@@ -1344,8 +1340,6 @@ void do_cmd_messages(int num_now)
 		/* Hack -- Error of some kind */
 		if (i == j) bell();
 	}
-
-	/* Restore the screen */
 	screen_load();
 }
 
@@ -2271,8 +2265,6 @@ void do_cmd_options(void)
 		msg_erase();
 	}
 
-
-	/* Restore the screen */
 	screen_load();
 
 	/* Hack - Redraw equippy chars */
@@ -3569,8 +3561,6 @@ void do_cmd_visuals(void)
 
 		msg_erase();
 	}
-
-	/* Restore the screen */
 	screen_load();
 
 	if (need_redraw) do_cmd_redraw();
@@ -3785,8 +3775,6 @@ void do_cmd_colors(void)
 		msg_erase();
 	}
 
-
-	/* Restore the screen */
 	screen_load();
 }
 
@@ -4672,8 +4660,6 @@ void do_cmd_load_screen(void)
 	flush();
 	inkey();
 
-
-	/* Restore the screen */
 	screen_load();
 }
 
@@ -5002,8 +4988,6 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 		msg_print(NULL);
 	}
-
-	/* Restore the screen */
 	if (message)
 		screen_load();
 }
@@ -5160,14 +5144,11 @@ void do_cmd_save_screen(void)
 		/* Skip a line */
 		fprintf(fff, "\n");
 
-
 		/* Close it */
 		my_fclose(fff);
 
 		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 		msg_print(NULL);
-
-		/* Restore the screen */
 		screen_load();
 	}
 
@@ -8475,8 +8456,6 @@ void do_cmd_knowledge(void)
 
 		msg_erase();
 	}
-
-	/* Restore the screen */
 	screen_load();
 
 	if (need_redraw) do_cmd_redraw();
@@ -8494,8 +8473,6 @@ void do_cmd_checkquest(void)
 
 	/* Quest info */
 	do_cmd_knowledge_quests();
-
-	/* Restore the screen */
 	screen_load();
 }
 

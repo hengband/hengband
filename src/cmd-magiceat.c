@@ -387,9 +387,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 			{
 				/* Hide list */
 				request_list = FALSE;
-				
-				/* Restore the screen */
-				screen_load();
+								screen_load();
 				screen_save();
 			}
 			else
@@ -487,8 +485,6 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 		/* Stop the loop */
 		flag = TRUE;
 	}
-
-	/* Restore the screen */
 	screen_load();
 
 	if (!flag) return -1;

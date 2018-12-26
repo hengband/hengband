@@ -1600,8 +1600,6 @@ void self_knowledge(void)
 	/* Pause */
 	prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 13);
 	inkey();
-
-	/* Restore the screen */
 	screen_load();
 }
 
@@ -1807,7 +1805,5 @@ void report_magics(void)
 	/* Pause */
 	prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 13);
 	inkey();
-
-	/* Restore the screen */
 	screen_load();
 }

@@ -193,8 +193,6 @@ static int get_mane_power(int *sn, bool baigaesi)
 			{
 				/* Hide list */
 				redraw = FALSE;
-
-				/* Restore the screen */
 				screen_load();
 			}
 
@@ -236,8 +234,6 @@ static int get_mane_power(int *sn, bool baigaesi)
 		/* Stop the loop */
 		flag = TRUE;
 	}
-
-	/* Restore the screen */
 	if (redraw) screen_load();
 
 	p_ptr->window |= (PW_SPELL);

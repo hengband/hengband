@@ -8072,8 +8072,6 @@ static void add_essence(ESSENCE_IDX mode)
 			{
 				/* Hide list */
 				redraw = FALSE;
-
-				/* Restore the screen */
 				screen_load();
 			}
 
@@ -8115,8 +8113,6 @@ static void add_essence(ESSENCE_IDX mode)
 		/* Stop the loop */
 		flag = TRUE;
 	}
-
-	/* Restore the screen */
 	if (redraw) screen_load();
 
 	if (!flag) return;

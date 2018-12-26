@@ -801,8 +801,6 @@ void do_cmd_pet(void)
 				{
 					/* Hide list */
 					redraw = FALSE;
-
-					/* Restore the screen */
 					screen_load();
 				}
 
@@ -842,8 +840,6 @@ void do_cmd_pet(void)
 			/* Stop the loop */
 			flag = TRUE;
 		}
-
-		/* Restore the screen */
 		if (redraw) screen_load();
 
 		/* Abort if needed */
