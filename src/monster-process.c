@@ -771,89 +771,89 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
  */
 
 
-static sint d_off_y_0[] = { 0 };
-static sint d_off_x_0[] = { 0 };
+static POSITION d_off_y_0[] = { 0 };
+static POSITION d_off_x_0[] = { 0 };
 
-static sint d_off_y_1[] = { -1, -1, -1, 0, 0, 1, 1, 1, 0 };
-static sint d_off_x_1[] = { -1, 0, 1, -1, 1, -1, 0, 1, 0 };
+static POSITION d_off_y_1[] = { -1, -1, -1, 0, 0, 1, 1, 1, 0 };
+static POSITION d_off_x_1[] = { -1, 0, 1, -1, 1, -1, 0, 1, 0 };
 
-static sint d_off_y_2[] = { -1, -1, -2, -2, -2, 0, 0, 1, 1, 2, 2, 2, 0 };
-static sint d_off_x_2[] = { -2, 2, -1, 0, 1, -2, 2, -2, 2, -1, 0, 1, 0 };
+static POSITION d_off_y_2[] = { -1, -1, -2, -2, -2, 0, 0, 1, 1, 2, 2, 2, 0 };
+static POSITION d_off_x_2[] = { -2, 2, -1, 0, 1, -2, 2, -2, 2, -1, 0, 1, 0 };
 
-static sint d_off_y_3[] = { -1, -1, -2, -2, -3, -3, -3, 0, 0, 1, 1, 2, 2, 3, 3, 3, 0 };
-static sint d_off_x_3[] = { -3, 3, -2, 2, -1, 0, 1, -3, 3, -3, 3, -2, 2, -1, 0, 1, 0 };
+static POSITION d_off_y_3[] = { -1, -1, -2, -2, -3, -3, -3, 0, 0, 1, 1, 2, 2, 3, 3, 3, 0 };
+static POSITION d_off_x_3[] = { -3, 3, -2, 2, -1, 0, 1, -3, 3, -3, 3, -2, 2, -1, 0, 1, 0 };
 
-static sint d_off_y_4[] = { -1, -1, -2, -2, -3, -3, -3, -3, -4, -4, -4, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 0 };
-static sint d_off_x_4[] = { -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, -4, 4, -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, 0 };
+static POSITION d_off_y_4[] = { -1, -1, -2, -2, -3, -3, -3, -3, -4, -4, -4, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 0 };
+static POSITION d_off_x_4[] = { -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, -4, 4, -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, 0 };
 
 
-static sint d_off_y_5[] =
+static POSITION d_off_y_5[] =
 { -1, -1, -2, -2, -3, -3, -4, -4, -4, -4, -5, -5,
   -5, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5,
   5, 0 };
 
-static sint d_off_x_5[] =
+static POSITION d_off_x_5[] =
 { -5, 5, -4, 4, -4, 4, -2, -3, 2, 3, -1, 0, 1,
   -5, 5, -5, 5, -4, 4, -4, 4, -2, -3, 2, 3, -1,
   0, 1, 0 };
 
 
-static sint d_off_y_6[] =
+static POSITION d_off_y_6[] =
 { -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5, -5,
   -6, -6, -6, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5,
   5, 5, 6, 6, 6, 0 };
 
-static sint d_off_x_6[] =
+static POSITION d_off_x_6[] =
 { -6, 6, -5, 5, -5, 5, -4, 4, -2, -3, 2, 3, -1,
   0, 1, -6, 6, -6, 6, -5, 5, -5, 5, -4, 4, -2,
   -3, 2, 3, -1, 0, 1, 0 };
 
 
-static sint d_off_y_7[] =
+static POSITION d_off_y_7[] =
 { -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5, -5,
   -6, -6, -6, -6, -7, -7, -7, 0, 0, 1, 1, 2, 2, 3,
   3, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 0 };
 
-static sint d_off_x_7[] =
+static POSITION d_off_x_7[] =
 { -7, 7, -6, 6, -6, 6, -5, 5, -4, -5, 4, 5, -2,
   -3, 2, 3, -1, 0, 1, -7, 7, -7, 7, -6, 6, -6,
   6, -5, 5, -4, -5, 4, 5, -2, -3, 2, 3, -1, 0,
   1, 0 };
 
 
-static sint d_off_y_8[] =
+static POSITION d_off_y_8[] =
 { -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6,
   -6, -6, -7, -7, -7, -7, -8, -8, -8, 0, 0, 1, 1,
   2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
   8, 8, 8, 0 };
 
-static sint d_off_x_8[] =
+static POSITION d_off_x_8[] =
 { -8, 8, -7, 7, -7, 7, -6, 6, -6, 6, -4, -5, 4,
   5, -2, -3, 2, 3, -1, 0, 1, -8, 8, -8, 8, -7,
   7, -7, 7, -6, 6, -6, 6, -4, -5, 4, 5, -2, -3,
   2, 3, -1, 0, 1, 0 };
 
 
-static sint d_off_y_9[] =
+static POSITION d_off_y_9[] =
 { -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6,
   -7, -7, -7, -7, -8, -8, -8, -8, -9, -9, -9, 0,
   0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 7,
   7, 8, 8, 8, 8, 9, 9, 9, 0 };
 
-static sint d_off_x_9[] =
+static POSITION d_off_x_9[] =
 { -9, 9, -8, 8, -8, 8, -7, 7, -7, 7, -6, 6, -4,
   -5, 4, 5, -2, -3, 2, 3, -1, 0, 1, -9, 9, -9,
   9, -8, 8, -8, 8, -7, 7, -7, 7, -6, 6, -4, -5,
   4, 5, -2, -3, 2, 3, -1, 0, 1, 0 };
 
 
-static sint *dist_offsets_y[10] =
+static POSITION *dist_offsets_y[10] =
 {
 	d_off_y_0, d_off_y_1, d_off_y_2, d_off_y_3, d_off_y_4,
 	d_off_y_5, d_off_y_6, d_off_y_7, d_off_y_8, d_off_y_9
 };
 
-static sint *dist_offsets_x[10] =
+static POSITION *dist_offsets_x[10] =
 {
 	d_off_x_0, d_off_x_1, d_off_x_2, d_off_x_3, d_off_x_4,
 	d_off_x_5, d_off_x_6, d_off_x_7, d_off_x_8, d_off_x_9
@@ -887,8 +887,8 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	POSITION y, x, dy, dx, d, dis, i;
 	POSITION gy = 0, gx = 0, gdis = 0;
 
-	sint *y_offsets;
-	sint *x_offsets;
+	POSITION *y_offsets;
+	POSITION *x_offsets;
 
 	cave_type *c_ptr;
 
@@ -982,7 +982,7 @@ static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	POSITION y, x, dy, dx, d, dis, i;
 	POSITION gy = 0, gx = 0, gdis = 999;
 
-	sint *y_offsets, *x_offsets;
+	POSITION *y_offsets, *x_offsets;
 
 	/* Start with adjacent locations, spread further */
 	for (d = 1; d < 10; d++)
