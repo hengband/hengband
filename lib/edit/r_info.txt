@@ -7770,7 +7770,7 @@ D:ディープワンには老化というものが無く、事故死か或いは
 D:も生き続ける。
 
 #J0#
-N:453:バシリスク
+N:453:バジリスク
 E:Basilisk
 G:R:D
 I:120:20d30:15:90:30
@@ -12333,7 +12333,7 @@ D:その恐ろしげな黒い体はまるで死が実体を持ったかのよう
 D:全ての秩序に反して無理矢理に存在しているかのようだ。
 
 #JZ#
-N:668:大バシリスク
+N:668:大バジリスク
 E:Greater basilisk
 G:R:D
 I:120:20d100:25:100:15
@@ -12348,7 +12348,7 @@ F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8
 S:BR_POIS | BR_DARK | BR_NETH
 D:$A large basilisk, whose shape resembles that of a great wyrm.
-D:大型のバシリスクで、ワイアームに似た姿をしている。
+D:大型のバジリスクで、ワイアームに似た姿をしている。
 
 #JZ#
 N:669:『カリブディス』
@@ -13248,7 +13248,7 @@ S:HOLD | SCARE |
 S:BR_FIRE | BR_NETH
 D:$A mixture of dragon and basilisk, the dracolisk stares at you with deep 
 D:$piercing eyes, its evil breath burning the ground where it stands.
-D:ドラゴンとバシリスクの混血であるドラコリスクは、深く突き刺すような
+D:ドラゴンとバジリスクの混血であるドラコリスクは、深く突き刺すような
 D:視線で冒険者を睨みつける。その邪悪なブレスは、自分の足下の大地ですら燃え上
 D:がらせる。
 
