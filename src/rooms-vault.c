@@ -391,6 +391,16 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				}
 				break;
 
+				/* Treasure */
+			case '[':
+				place_object(y, x, 0L);
+				break;
+
+				/* Tree */
+			case ':':
+				c_ptr->feat = feat_tree;
+				break;
+
 				/* Secret doors */
 			case '+':
 				place_secret_door(y, x, DOOR_DEFAULT);
