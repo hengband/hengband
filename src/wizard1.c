@@ -2569,19 +2569,11 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 
 		/* Now deal with the description lists */
 
-#ifdef JP
-		spoiler_outlist("対:", art_ptr->slays, ITEM_SEP);
-		spoiler_outlist("武器属性:", art_ptr->brands, LIST_SEP);
-		spoiler_outlist("免疫:", art_ptr->immunities, ITEM_SEP);
-		spoiler_outlist("耐性:", art_ptr->resistances, ITEM_SEP);
-		spoiler_outlist("維持:", art_ptr->sustains, ITEM_SEP);
-#else
-		spoiler_outlist("Slay", art_ptr->slays, ITEM_SEP);
-		spoiler_outlist("", art_ptr->brands, LIST_SEP);
-		spoiler_outlist("Immunity to", art_ptr->immunities, ITEM_SEP);
-		spoiler_outlist("Resist", art_ptr->resistances, ITEM_SEP);
-		spoiler_outlist("Sustain", art_ptr->sustains, ITEM_SEP);
-#endif
+		spoiler_outlist(_("対:", "Slay"), art_ptr->slays, ITEM_SEP);
+		spoiler_outlist(_("武器属性:", ""), art_ptr->brands, LIST_SEP);
+		spoiler_outlist(_("免疫:", "Immunity to"), art_ptr->immunities, ITEM_SEP);
+		spoiler_outlist(_("耐性:", "Resist"), art_ptr->resistances, ITEM_SEP);
+		spoiler_outlist(_("維持:", "Sustain"), art_ptr->sustains, ITEM_SEP);
 		spoiler_outlist("", art_ptr->misc_magic, LIST_SEP);
 
 		/* Write out the possible activation at the primary indention level */
@@ -2630,7 +2622,6 @@ void spoil_random_artifact(cptr fname)
 	object_type *q_ptr;
 
 	char buf[1024];
-
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
