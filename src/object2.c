@@ -5627,7 +5627,7 @@ void inven_item_describe(INVENTORY_IDX item)
 }
 
 /*!
- * @brief アイテムを増やし残り所持数メッセージを表示する /
+ * @brief アイテムを増減させ残り所持数メッセージを表示する /
  * Increase the "number" of an item in the inventory
  * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
  * @param num 増やしたい量
@@ -6220,7 +6220,6 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	object_type *o_ptr;
 
 	char o_name[MAX_NLEN];
-
 
 	/* Access original object */
 	o_ptr = &inventory[item];

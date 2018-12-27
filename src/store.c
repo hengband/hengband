@@ -3495,12 +3495,7 @@ static void store_purchase(void)
 	/* Hack -- require room in pack */
 	if (!inven_carry_okay(j_ptr))
 	{
-#ifdef JP
-msg_print("そんなにアイテムを持てない。");
-#else
-		msg_print("You cannot carry that many different items.");
-#endif
-
+		msg_print(_("そんなにアイテムを持てない。", "You cannot carry that many different items."));
 		return;
 	}
 
@@ -3514,12 +3509,7 @@ msg_print("そんなにアイテムを持てない。");
 		if ((cur_store_num != STORE_HOME) &&
 		    (o_ptr->ident & IDENT_FIXED))
 		{
-#ifdef JP
-msg_format("一つにつき $%ldです。", (long)(best));
-#else
-			msg_format("That costs %ld gold per item.", (long)(best));
-#endif
-
+			msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
 		}
 
 		/* Get a quantity */
@@ -3545,12 +3535,7 @@ msg_format("一つにつき $%ldです。", (long)(best));
 	/* Hack -- require room in pack */
 	if (!inven_carry_okay(j_ptr))
 	{
-#ifdef JP
-		msg_print("ザックにそのアイテムを入れる隙間がない。");
-#else
-		msg_print("You cannot carry that many items.");
-#endif
-
+		msg_print(_("ザックにそのアイテムを入れる隙間がない。", "You cannot carry that many items."));
 		return;
 	}
 
@@ -3572,13 +3557,7 @@ msg_format("一つにつき $%ldです。", (long)(best));
 		{
 			/* Describe the object (fully) */
 			object_desc(o_name, j_ptr, 0);
-
-#ifdef JP
-			msg_format("%s(%c)を購入する。", o_name, I2A(item));
-#else
-			msg_format("Buying %s (%c).", o_name, I2A(item));
-#endif
-
+			msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
 			msg_print(NULL);
 
 			/* Haggle for a final price */
@@ -3626,11 +3605,7 @@ msg_format("一つにつき $%ldです。", (long)(best));
 				/* Describe the transaction */
 				object_desc(o_name, j_ptr, 0);
 
-#ifdef JP
-msg_format("%sを $%ldで購入しました。", o_name, (long)price);
-#else
-				msg_format("You bought %s for %ld gold.", o_name, (long)price);
-#endif
+				msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), o_name, (long)price);
 
 				strcpy(record_o_name, o_name);
 				record_turn = turn;
@@ -3651,13 +3626,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 
 				/* Describe the final result */
 				object_desc(o_name, &inventory[item_new], 0);
-
-#ifdef JP
-				msg_format("%s(%c)を手に入れた。", o_name, index_to_label(item_new));
-#else
-				msg_format("You have %s (%c).",
-						   o_name, index_to_label(item_new));
-#endif
+				msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
 				/* Auto-inscription */
 				autopick_alter_item(item_new, FALSE);
@@ -3683,12 +3652,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 					if (one_in_(STORE_SHUFFLE))
 					{
 						char buf[80];
-#ifdef JP
-						msg_print("店主は引退した。");
-#else
-						msg_print("The shopkeeper retires.");
-#endif
-
+						msg_print(_("店主は引退した。", "The shopkeeper retires."));
 
 						/* Shuffle the store */
 						store_shuffle(cur_store_num);
@@ -3705,12 +3669,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 					/* Maintain */
 					else
 					{
-#ifdef JP
-						msg_print("店主は新たな在庫を取り出した。");
-#else
-						msg_print("The shopkeeper brings out some new stock.");
-#endif
-
+						msg_print(_("店主は新たな在庫を取り出した。", "The shopkeeper brings out some new stock."));
 					}
 
 					/* New inventory */
@@ -3745,12 +3704,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 			else
 			{
 				/* Simple message (no insult) */
-#ifdef JP
-				msg_print("お金が足りません。");
-#else
-				msg_print("You do not have enough gold.");
-#endif
-
+				msg_print(_("お金が足りません。", "You do not have enough gold."));
 			}
 		}
 	}
@@ -3769,12 +3723,7 @@ msg_format("%sを $%ldで購入しました。", o_name, (long)price);
 		/* Describe just the result */
 		object_desc(o_name, &inventory[item_new], 0);
 
-#ifdef JP
-		msg_format("%s(%c)を取った。",
-#else
-		msg_format("You have %s (%c).",
-#endif
- o_name, index_to_label(item_new));
+		msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(item_new));
 		handle_stuff();
 
 		/* Take note if we take the last one */

@@ -2118,6 +2118,11 @@ void do_cmd_debug(void)
 		do_cmd_wiz_hack_ben();
 		break;
 
+	/* For temporary test. */
+	case 'X':
+		player_outfit();
+		break;
+
 	/* Not a Wizard Command */
 	default:
 		msg_print("That is not a valid debug command.");
