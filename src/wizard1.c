@@ -1281,33 +1281,18 @@ static void analyze_addition(object_type *o_ptr, char *addition)
 	/* Init */
 	strcpy(addition, "");
 
-#ifdef JP
-	if ((a_ptr->gen_flags & TRG_XTRA_POWER) && (a_ptr->gen_flags & TRG_XTRA_H_RES)) strcat(addition, "能力and耐性");
+	if ((a_ptr->gen_flags & TRG_XTRA_POWER) && (a_ptr->gen_flags & TRG_XTRA_H_RES)) strcat(addition, _("能力and耐性", "Ability and Resistance"));
 	else if (a_ptr->gen_flags & TRG_XTRA_POWER)
 	{
-		strcat(addition, "能力");
-		if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, "(1/2でand耐性)");
+		strcat(addition, _("能力", "Ability"));
+		if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"));
 	}
 	else if (a_ptr->gen_flags & TRG_XTRA_H_RES)
 	{
-		strcat(addition, "耐性");
-		if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, "(1/2でand能力)");
+		strcat(addition, _("耐性", "Resistance"));
+		if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"));
 	}
-	else if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, "能力or耐性");
-#else
-	if ((a_ptr->gen_flags & TRG_XTRA_POWER) && (a_ptr->gen_flags & TRG_XTRA_H_RES)) strcat(addition, "Ability and Resistance");
-	else if (a_ptr->gen_flags & TRG_XTRA_POWER)
-	{
-		strcat(addition, "Ability");
-		if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, "(plus Resistance about 1/2)");
-	}
-	else if (a_ptr->gen_flags & TRG_XTRA_H_RES)
-	{
-		strcat(addition, "Resistance");
-		if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, "(plus Ability about 1/2)");
-	}
-	else if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, "Ability or Resistance");
-#endif
+	else if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) strcat(addition, _("能力or耐性", "Ability or Resistance"));
 }
 
 
