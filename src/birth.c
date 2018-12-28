@@ -2307,8 +2307,11 @@ void player_outfit(void)
 		{
 			object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
 			q_ptr->pval = get_mon_num(2);
-			q_ptr->number = 1;
-			add_outfit(q_ptr);
+			if(q_ptr->pval)
+			{
+				q_ptr->number = 1;
+				add_outfit(q_ptr);
+			}
 		}
 		break;
 

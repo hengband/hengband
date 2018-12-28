@@ -1243,16 +1243,14 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
  */
 MONRACE_IDX get_mon_num(DEPTH level)
 {
-	int			i, j, p;
-	int			r_idx;
-	long		value, total;
-	monster_race	*r_ptr;
-	alloc_entry		*table = alloc_race_table;
+	int i, j, p;
+	MONRACE_IDX r_idx;
+	long value, total;
+	monster_race *r_ptr;
+	alloc_entry *table = alloc_race_table;
 
 	int pls_kakuritu, pls_level;
 	int delay = mysqrt(level * 10000L) + 400L;
-
-	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
 	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
 	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10)) ;
@@ -1284,6 +1282,9 @@ MONRACE_IDX get_mon_num(DEPTH level)
 			}
 		}
 	}
+
+	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
+	if (level < 0) level = 0;
 
 	/* Reset total */
 	total = 0L;
