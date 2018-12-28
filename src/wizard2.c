@@ -2120,8 +2120,15 @@ void do_cmd_debug(void)
 
 	/* For temporary test. */
 	case 'X':
+	{
+		int i;
+		for(i = INVEN_TOTAL - 1; i >= 0; i--)
+		{
+			if(inventory[i].k_idx) inven_drop(i, 999);
+		}
 		player_outfit();
 		break;
+	}
 
 	/* Not a Wizard Command */
 	default:
