@@ -2252,22 +2252,6 @@ static byte player_init[MAX_CLASS][3][2] =
 };
 
 /*!
- * @brief バルログが死体を食べられるモンスターかの判定 / Hook function for human corpses
- * @param r_idx モンスターＩＤ
- * @return 死体を食べられるならTRUEを返す。
- */
-static bool monster_hook_human(MONRACE_IDX r_idx)
-{
-	monster_race *r_ptr = &r_info[r_idx];
-
-	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
-
-	if (my_strchr("pht", r_ptr->d_char)) return TRUE;
-
-	return FALSE;
-}
-
-/*!
  * @brief 初期所持アイテムの処理 / Add an outfit object
  * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ

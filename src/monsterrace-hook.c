@@ -665,3 +665,17 @@ bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx)
 		return FALSE;
 	}
 }
+
+/*!
+ * @brief バルログが死体を食べられるモンスターかの判定 / Hook function for human corpses
+ * @param r_idx モンスターＩＤ
+ * @return 死体を食べられるならTRUEを返す。
+ */
+bool monster_hook_human(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
+	if (my_strchr("pht", r_ptr->d_char)) return TRUE;
+
+	return FALSE;
+}
