@@ -4054,54 +4054,23 @@ static bool player_birth_aux(void)
 	Term_clear();
 
 	/* Title everything */
-#ifdef JP
-	put_str("名前  :", 1,26);
-#else
-	put_str("Name  :", 1,26);
-#endif
-
-#ifdef JP
-	put_str("性別        :", 3, 1);
-#else
-	put_str("Sex         :", 3, 1);
-#endif
-
-#ifdef JP
-	put_str("種族        :", 4, 1);
-#else
-	put_str("Race        :", 4, 1);
-#endif
-
-#ifdef JP
-	put_str("職業        :", 5, 1);
-#else
-	put_str("Class       :", 5, 1);
-#endif
-
+	put_str(_("名前  :", "Name  :"), 1,26);
+	put_str(_("性別        :", "Sex         :"), 3, 1);
+	put_str(_("種族        :", "Race        :"), 4, 1);
+	put_str(_("職業        :", "Class       :"), 5, 1);
 
 	/* Dump the default name */
 	c_put_str(TERM_L_BLUE, p_ptr->name, 1, 34);
 
-
 	/*** Instructions ***/
 
 	/* Display some helpful information */
-#ifdef JP
-	put_str("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)", 8, 10);
-#else
-	put_str("Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)", 8, 10);
-#endif
-
+	put_str(_("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)", "Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)"), 8, 10);
 
 	/*** Player sex ***/
 
 	/* Extra info */
-#ifdef JP
-	put_str("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。", 23, 5);
-#else
-	put_str("Note: Your 'sex' does not have any significant gameplay effects.", 23, 5);
-#endif
-
+	put_str(_("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。", "Note: Your 'sex' does not have any significant gameplay effects."), 23, 5);
 
 	/* Prompt for "Sex" */
 	for (n = 0; n < MAX_SEXES; n++)
