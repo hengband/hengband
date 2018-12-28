@@ -6230,7 +6230,6 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	/* Not too many */
 	if (amt > o_ptr->number) amt = o_ptr->number;
 
-
 	/* Take off equipment */
 	if (item >= INVEN_RARM)
 	{
