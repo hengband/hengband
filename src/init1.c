@@ -4112,8 +4112,6 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			else if (object_index)
 			{
 				object_type *o_ptr = &object_type_body;
-
-				/* Create the item */
 				object_prep(o_ptr, object_index);
 
 				if (o_ptr->tval == TV_GOLD)

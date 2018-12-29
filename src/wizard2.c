@@ -1413,11 +1413,8 @@ static void wiz_create_item(void)
 		}
 	}
 	q_ptr = &forge;
-
-	/* Create the item */
 	object_prep(q_ptr, k_idx);
 
-	/* Apply magic */
 	apply_magic(q_ptr, dun_level, AM_NO_FIXED_ART);
 
 	/* Drop the object from heaven */
@@ -1485,8 +1482,6 @@ static void do_cmd_wiz_jump(void)
 
 	/* Paranoia */
 	if (command_arg < d_info[dungeon_type].mindepth) command_arg = 0;
-
-	/* Paranoia */
 	if (command_arg > d_info[dungeon_type].maxdepth) command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
 
 	/* Accept request */
@@ -1531,7 +1526,7 @@ static void do_cmd_wiz_jump(void)
  */
 static void do_cmd_wiz_learn(void)
 {
-	IDX i;
+	KIND_OBJECT_IDX i;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -1545,11 +1540,7 @@ static void do_cmd_wiz_learn(void)
 		if (k_ptr->level <= command_arg)
 		{
 			q_ptr = &forge;
-
-			/* Prepare object */
 			object_prep(q_ptr, i);
-
-			/* Awareness */
 			object_aware(q_ptr);
 		}
 	}
@@ -1610,7 +1601,6 @@ static void do_cmd_wiz_named_friendly(MONRACE_IDX r_idx)
 static void do_cmd_wiz_zap(void)
 {
 	MONSTER_IDX i;
-
 
 	/* Genocide everyone nearby */
 	for (i = 1; i < m_max; i++)

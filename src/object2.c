@@ -4433,8 +4433,6 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 		return;
 	}
 
-
-	/* Apply magic */
 	switch (o_ptr->tval)
 	{
 		case TV_DIGGING:

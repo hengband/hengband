@@ -440,8 +440,6 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 				object_type *q_ptr = &forge;
 
 				msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
-
-				/* Create the item */
 				object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
 
 				/* Drop the object from heaven */
