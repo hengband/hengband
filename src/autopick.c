@@ -3242,13 +3242,8 @@ static bool entry_from_choosed_object(autopick_type *entry)
 	object_type *o_ptr;
 	cptr q, s;
 
-#ifdef JP
-	q = "どのアイテムを登録しますか? ";
-	s = "アイテムを持っていない。";
-#else
-	q = "Enter which item? ";
-	s = "You have nothing to enter.";
-#endif
+	q = _("どのアイテムを登録しますか? ", "Enter which item? ");
+	s = _("アイテムを持っていない。", "You have nothing to enter.");
 	o_ptr = choose_object(q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, NULL);
 	if (!o_ptr) return FALSE;
 
@@ -3266,13 +3261,8 @@ static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
 	object_type *o_ptr;
 	cptr q, s;
 
-#ifdef JP
-	q = "どのアイテムを検索しますか? ";
-	s = "アイテムを持っていない。";
-#else
-	q = "Enter which item? ";
-	s = "You have nothing to enter.";
-#endif
+	q = _("どのアイテムを検索しますか? ", "Enter which item? ");
+	s = _("アイテムを持っていない。", "You have nothing to enter.");
 	o_ptr = choose_object(q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, NULL);
 	if (!o_ptr) return 0;
 
