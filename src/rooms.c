@@ -69,7 +69,7 @@
  * for all the rooms you ask for.\n
  */
 
-#if 0
+#if 1
 
 static room_info_type room_info_normal[ROOM_T_MAX] =
 {
@@ -97,7 +97,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 
 #endif
 
-#if 1
+#if 0
 static room_info_type room_info_normal[ROOM_T_MAX] =
 {
 /*デバッグ用配列*/
