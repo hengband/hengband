@@ -92,7 +92,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
 	{{  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,  2}, 40}, /*GLASS    */
 	{{  1,  1,  1,  1,  1,  1,  1,  2,  2,  3,  3},  1}, /*ARCADE   */
-	{{ 20, 40, 60, 80,100,100,100,100,100,100,100},  1}, /*FIX   */
+	{{ 20, 40, 60, 80,100,100,100,100,100,100,100},  1}, /*FIX      */
 };
 
 #endif
@@ -117,7 +117,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 { {  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  0}, 20 }, /*TRAP     */
 { {  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,  0}, 40 }, /*GLASS    */
 { {  1,  1,  1,  1,  1,  1,  1,  2,  2,  3,  0},  1 }, /*ARCADE   */
-{ { 20, 40, 60, 80,100,100,100,100,100,100,100},  1 }, /*FIX   */
+{ { 20, 40, 60, 80,100,100,100,100,100,100,100},  1 }, /*FIX      */
 };
 
 #endif
@@ -282,9 +282,9 @@ static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION 
  * @param block_x 範囲の左端
  * @return なし
  */
-static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int block_x)
+static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION block_y, POSITION block_x)
 {
-	int by1, bx1, by2, bx2, by, bx;
+	POSITION by1, bx1, by2, bx2, by, bx;
 
 	/* Itty-bitty rooms must shift about within their rectangle */
 	if (blocks_wide < 3)
@@ -327,8 +327,8 @@ static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int bl
 	}
 
 	/* Extract blocks */
-	by1 = block_y + 0;
-	bx1 = block_x + 0;
+	by1 = block_y;
+	bx1 = block_x;
 	by2 = block_y + blocks_high;
 	bx2 = block_x + blocks_wide;
 
@@ -376,13 +376,12 @@ static bool find_space_aux(int blocks_high, int blocks_wide, int block_y, int bl
 bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 {
 	int candidates, pick;
-	int by, bx, by1, bx1, by2, bx2;
-	int block_y = 0, block_x = 0;
-
+	POSITION by, bx, by1, bx1, by2, bx2;
+	POSITION block_y = 0, block_x = 0;
 
 	/* Find out how many blocks we need. */
-	int blocks_high = 1 + ((height - 1) / BLOCK_HGT);
-	int blocks_wide = 1 + ((width - 1) / BLOCK_WID);
+	POSITION blocks_high = 1 + ((height - 1) / BLOCK_HGT);
+	POSITION blocks_wide = 1 + ((width - 1) / BLOCK_WID);
 
 	/* There are no way to allocate such huge space */
 	if (dun->row_rooms < blocks_high) return FALSE;
@@ -442,8 +441,8 @@ bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 	}
 
 	/* Extract blocks */
-	by1 = block_y + 0;
-	bx1 = block_x + 0;
+	by1 = block_y;
+	bx1 = block_x;
 	by2 = block_y + blocks_high;
 	bx2 = block_x + blocks_wide;
 
@@ -473,7 +472,6 @@ bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 		}
 	}
 
-
 	/*
 	 * Hack- See if room will cut off a cavern.
 	 *
@@ -482,12 +480,9 @@ bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 	 */
 	check_room_boundary(*x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
 
-
 	/* Success. */
 	return TRUE;
 }
-
-
 
 
 /*
@@ -527,15 +522,15 @@ static fill_data_type fill_data;
 
 /* Store routine for the fractal cave generator */
 /* this routine probably should be an inline function or a macro. */
-static void store_height(POSITION x, POSITION y, int val)
+static void store_height(POSITION x, POSITION y, FEAT_IDX val)
 {
 	/* if on boundary set val > cutoff so walls are not as square */
 	if (((x == fill_data.xmin) || (y == fill_data.ymin) ||
-	     (x == fill_data.xmax) || (y == fill_data.ymax)) &&
-	    (val <= fill_data.c1)) val = fill_data.c1 + 1;
+		(x == fill_data.xmax) || (y == fill_data.ymax)) &&
+		(val <= fill_data.c1)) val = fill_data.c1 + 1;
 
 	/* store the value in height-map format */
-	cave[y][x].feat = (s16b)val;
+	cave[y][x].feat = val;
 
 	return;
 }
