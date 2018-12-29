@@ -3237,23 +3237,6 @@ static bool insert_return_code(text_body_type *tb)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-static object_type *choose_object(cptr q, cptr s)
-{
-	OBJECT_IDX item;
-
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP))) return NULL;
-
-	/* Get the item (in the pack) */
-	if (item >= 0) return &inventory[item];
-
-	/* Get the item (on the floor) */
-	else return &o_list[0 - item];
-}
-
-
-/*
- * Choose an item and get auto-picker entry from it.
- */
 static bool entry_from_choosed_object(autopick_type *entry)
 {
 	object_type *o_ptr;
@@ -3266,7 +3249,7 @@ static bool entry_from_choosed_object(autopick_type *entry)
 	q = "Enter which item? ";
 	s = "You have nothing to enter.";
 #endif
-	o_ptr = choose_object(q, s);
+	o_ptr = choose_object(q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, NULL);
 	if (!o_ptr) return FALSE;
 
 	autopick_entry_from_object(entry, o_ptr);
@@ -3290,7 +3273,7 @@ static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
 	q = "Enter which item? ";
 	s = "You have nothing to enter.";
 #endif
-	o_ptr = choose_object(q, s);
+	o_ptr = choose_object(q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, NULL);
 	if (!o_ptr) return 0;
 
 	*o_handle = o_ptr;

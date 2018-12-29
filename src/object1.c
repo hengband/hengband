@@ -2817,10 +2817,8 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		}
 	}
 
-
 	/* Paranoia */
 	msg_print(NULL);
-
 
 	/* Not done */
 	done = FALSE;
@@ -3488,6 +3486,23 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	}
 	return (item);
 }
+
+/*
+ * Choose an item and get auto-picker entry from it.
+ */
+object_type *choose_object(cptr q, cptr s, BIT_FLAGS option, OBJECT_IDX *idx)
+{
+	OBJECT_IDX item;
+	if (!get_item(&item, q, s, option)) return NULL;
+	if (idx) idx = item;
+
+	/* Get the item (in the pack) */
+	if (item >= 0) return &inventory[item];
+
+	/* Get the item (on the floor) */
+	else return &o_list[0 - item];
+}
+
 
 /*!
  * @brief 床下に落ちているオブジェクトの数を返す / scan_floor

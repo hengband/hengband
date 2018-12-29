@@ -801,6 +801,7 @@ extern COMMAND_CODE show_equip(int target_item);
 extern void toggle_inven_equip(void);
 extern bool can_get_item(void);
 extern bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode);
+extern object_type *choose_object(cptr q, cptr s, BIT_FLAGS option, OBJECT_IDX *id);
 
 /* object2.c */
 extern void excise_object_idx(OBJECT_IDX o_idx);
