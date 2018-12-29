@@ -1219,7 +1219,7 @@ bool build_type10(void)
 
 
 /*!
-* @brief タイプ16の部屋…v_info.txtより固定特殊部屋を生成する / Type 16 -- fixed special room (see "v_info.txt")
+* @brief タイプ17の部屋…v_info.txtより固定特殊部屋を生成する / Type 17 -- fixed special room (see "v_info.txt")
 * @return なし
 */
 bool build_type17(void)
@@ -1237,8 +1237,8 @@ bool build_type17(void)
 		/* Access a random vault record */
 		v_ptr = &v_info[randint0(max_v_idx)];
 
-		/* Accept the first lesser vault */
-		if (v_ptr->typ == 16) break;
+		/* Accept the special fix room. */
+		if (v_ptr->typ == 17) break;
 	}
 
 	/* No lesser vault found */
