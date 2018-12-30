@@ -4716,93 +4716,52 @@ void do_cmd_store(void)
 
 
 		/* Basic commands */
-#ifdef JP
-		prt(" ESC) 建物から出る", 21 + xtra_stock, 0);
-#else
-		prt(" ESC) Exit from Building.", 21 + xtra_stock, 0);
-#endif
-
+		prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), 21 + xtra_stock, 0);
 
 		/* Browse if necessary */
 		if (st_ptr->stock_num > store_bottom)
 		{
-#ifdef JP
-			prt(" -)前ページ", 22 + xtra_stock, 0);
-			prt(" スペース) 次ページ", 23 + xtra_stock, 0);
-#else
-			prt(" -) Previous page", 22 + xtra_stock, 0);
-			prt(" SPACE) Next page", 23 + xtra_stock, 0);
-#endif
-
+			prt(_(" -)前ページ", " -) Previous page"), 22 + xtra_stock, 0);
+			prt(_(" スペース) 次ページ", " SPACE) Next page"), 23 + xtra_stock, 0);
 		}
 
 		/* Home commands */
 		if (cur_store_num == STORE_HOME)
 		{
-#ifdef JP
-			prt("g) アイテムを取る", 21 + xtra_stock, 27);
-			prt("d) アイテムを置く", 22 + xtra_stock, 27);
-			prt("x) 家のアイテムを調べる", 23 + xtra_stock, 27);
-#else
-			prt("g) Get an item.", 21 + xtra_stock, 27);
-			prt("d) Drop an item.", 22 + xtra_stock, 27);
-			prt("x) eXamine an item in the home.", 23 + xtra_stock, 27);
-#endif
+			prt(_("g) アイテムを取る", "g) Get an item."), 21 + xtra_stock, 27);
+			prt(_("d) アイテムを置く", "d) Drop an item."), 22 + xtra_stock, 27);
+			prt(_("x) 家のアイテムを調べる", "x) eXamine an item in the home."), 23 + xtra_stock, 27);
 		}
 
 		/* Museum commands */
 		else if (cur_store_num == STORE_MUSEUM)
 		{
-#ifdef JP
-			prt("d) アイテムを置く", 21 + xtra_stock, 27);
-			prt("r) アイテムの展示をやめる", 22 + xtra_stock, 27);
-			prt("x) 博物館のアイテムを調べる", 23 + xtra_stock, 27);
-#else
-			prt("d) Drop an item.", 21 + xtra_stock, 27);
-			prt("r) order to Remove an item.", 22 + xtra_stock, 27);
-			prt("x) eXamine an item in the museum.", 23 + xtra_stock, 27);
-#endif
+			prt(_("d) アイテムを置く", "d) Drop an item."), 21 + xtra_stock, 27);
+			prt(_("r) アイテムの展示をやめる", "r) order to Remove an item."), 22 + xtra_stock, 27);
+			prt(_("x) 博物館のアイテムを調べる", "x) eXamine an item in the museum."), 23 + xtra_stock, 27);
 		}
 
 		/* Shop commands */
 		else
 		{
-#ifdef JP
-			prt("p) 商品を買う", 21 + xtra_stock, 30);
-			prt("s) アイテムを売る", 22 + xtra_stock, 30);
-			prt("x) 商品を調べる", 23 + xtra_stock,30);
-#else
-			prt("p) Purchase an item.", 21 + xtra_stock, 30);
-			prt("s) Sell an item.", 22 + xtra_stock, 30);
-			prt("x) eXamine an item in the shop", 23 + xtra_stock,30);
-#endif
+			prt(_("p) 商品を買う", "p) Purchase an item."), 21 + xtra_stock, 30);
+			prt(_("s) アイテムを売る", "s) Sell an item."), 22 + xtra_stock, 30);
+			prt(_("x) 商品を調べる", "x) eXamine an item in the shop"), 23 + xtra_stock,30);
 		}
 
-#ifdef JP
 		/* 基本的なコマンドの追加表示 */
 
-		prt("i/e) 持ち物/装備の一覧", 21 + xtra_stock, 56);
+		prt(_("i/e) 持ち物/装備の一覧", "i/e) Inventry/Equipment list"), 21 + xtra_stock, 56);
 
 		if (rogue_like_commands)
 		{
-			prt("w/T) 装備する/はずす", 22 + xtra_stock, 56);
+			prt(_("w/T) 装備する/はずす", "w/T) Wear/Take off equipment"), 22 + xtra_stock, 56);
 		}
 		else
 		{
-			prt("w/t) 装備する/はずす", 22 + xtra_stock, 56);
+			prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), 22 + xtra_stock, 56);
 		}
-#else
-		prt("i/e) Inventry/Equipment list", 21 + xtra_stock, 56);
 
-		if (rogue_like_commands)
-		{
-			prt("w/T) Wear/Take off equipment", 22 + xtra_stock, 56);
-		}
-		else
-		{
-			prt("w/t) Wear/Take off equipment", 22 + xtra_stock, 56);
-		}
-#endif
 		/* Prompt */
 		prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
 
@@ -4833,18 +4792,10 @@ void do_cmd_store(void)
 			/* Hack -- Flee from the store */
 			if (cur_store_num != STORE_HOME)
 			{
-#ifdef JP
 				if (cur_store_num == STORE_MUSEUM)
-					msg_print("ザックからアイテムがあふれそうなので、あわてて博物館から出た...");
+					msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));
 				else
-					msg_print("ザックからアイテムがあふれそうなので、あわてて店から出た...");
-#else
-				if (cur_store_num == STORE_MUSEUM)
-					msg_print("Your pack is so full that you flee the Museum...");
-				else
-					msg_print("Your pack is so full that you flee the store...");
-#endif
-
+					msg_print(_("ザックからアイテムがあふれそうなので、あわてて店から出た...", "Your pack is so full that you flee the store..."));
 
 				/* Leave */
 				leave_store = TRUE;
@@ -4853,13 +4804,7 @@ void do_cmd_store(void)
 			/* Hack -- Flee from the home */
 			else if (!store_check_num(o_ptr))
 			{
-#ifdef JP
-				msg_print("ザックからアイテムがあふれそうなので、あわてて家から出た...");
-#else
-				msg_print("Your pack is so full that you flee your home...");
-#endif
-
-
+				msg_print(_("ザックからアイテムがあふれそうなので、あわてて家から出た...", "Your pack is so full that you flee your home..."));
 				/* Leave */
 				leave_store = TRUE;
 			}
@@ -4874,25 +4819,15 @@ void do_cmd_store(void)
 
 				char o_name[MAX_NLEN];
 
-
 				/* Give a message */
-#ifdef JP
-				msg_print("ザックからアイテムがあふれてしまった！");
-#else
-				msg_print("Your pack overflows!");
-#endif
+				msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
 
 				q_ptr = &forge;
 
 				object_copy(q_ptr, o_ptr);
 				object_desc(o_name, q_ptr, 0);
 
-#ifdef JP
-				msg_format("%sが落ちた。(%c)", o_name, index_to_label(item));
-#else
-				msg_format("You drop %s (%c).", o_name, index_to_label(item));
-#endif
-
+				msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 
 				/* Remove it from the players inventory */
 				inven_item_increase(item, -255);
