@@ -394,7 +394,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
 		{
-			project_hack(GF_POIS, randint1(power));
+			project_all_los(GF_POIS, randint1(power));
 		}
 		break;
 
@@ -590,7 +590,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
 		{
-			project_hack(GF_HYPODYNAMIA, randint1(power));
+			project_all_los(GF_HYPODYNAMIA, randint1(power));
 		}
 		break;
 
@@ -829,7 +829,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
 		{
-			project_hack(GF_PSI_DRAIN, randint1(power));
+			project_all_los(GF_PSI_DRAIN, randint1(power));
 		}
 		break;
 

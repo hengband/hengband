@@ -3112,7 +3112,7 @@
  * Special Monster Flags (all temporary)
  */
 #define MFLAG_VIEW      0x01    /* Monster is in line of sight */
-#define MFLAG_TEMP      0x02    /* Monster is marked for project_hack() */
+#define MFLAG_TEMP      0x02    /* Monster is marked for project_all_los() */
 #define MFLAG_XXX2      0x04    /* (unused) */
 #define MFLAG_XXX3      0x08    /* (unused) */
 #define MFLAG_BORN      0x10    /* Monster is still being born */

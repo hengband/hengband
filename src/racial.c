@@ -954,7 +954,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else if (command == -4)
 			{
-				project_hack(GF_CHARM_LIVING, p_ptr->lev);
+				project_all_los(GF_CHARM_LIVING, p_ptr->lev);
 			}
 			break;
 		}

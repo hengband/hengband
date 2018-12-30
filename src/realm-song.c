@@ -250,7 +250,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				project_hack(GF_TURN_ALL, power);
+				project_all_los(GF_TURN_ALL, power);
 			}
 		}
 
@@ -370,7 +370,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				project_hack(GF_PSI, damroll(dice, sides));
+				project_all_los(GF_PSI, damroll(dice, sides));
 			}
 		}
 
@@ -476,7 +476,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				project_hack(GF_SOUND, damroll(dice, sides));
+				project_all_los(GF_SOUND, damroll(dice, sides));
 			}
 		}
 
