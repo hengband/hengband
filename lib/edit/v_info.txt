@@ -3304,11 +3304,11 @@ D:%.#hh#HHHHHHHHHH#hh#.%
 D:%.#hh#H########H#hh#.%
 D:%.#hh#H#&....&#H#hh#.%
 D:%.#hh#H#......#H#hh#.%
-D:%.#hh#H#..[[..#H#hh#.%
+D:%.#hh#H#..##..#H#hh#.%
+D:%.#hh+H#.#[[#.#H+hh#.%
 D:%.#hh+H#.[[[[.#H+hh#.%
-D:%.#hh+H#.[[[[.#H+hh#.%
-D:%.#hh+H#.[[[[.#H+hh#.%
-D:%.#hh+H#..[[..#H+hh#.%
+D:%.#hh+H#.#[[#.#H+hh#.%
+D:%.#hh+H#..##..#H+hh#.%
 D:%.#hh#H#......#H#hh#.%
 D:%.#hh#H#&....&#H#hh#.%
 D:%.#hh#H########H#hh#.%
@@ -3338,7 +3338,7 @@ D:%.vvvvwww######HHHhhhh.%
 D:%.vvvvww###[[###HHhhhh.%
 D:%.vvvvw###IIII###Hhhhh.%
 D:%.vvvv###IIIIII###hhhh.%
-D:%.vvv###iiiiiiii###hhh.%
+D:%.vvv###IIIIIIII###hhh.%
 D:%.vv###iiiiiiiiii###hh.%
 D:%.v###iiiiiiiiiiii###h.%
 D:%.###iiiiiiiiiiiiii###.%
@@ -3346,4 +3346,59 @@ D:%.##iiiiiiiiiiiiiiii##.%
 D:%&....................&%
 D:%%%%%%%%%%%%%%%%%%%%%%%%
 
+N:148:Fixed room8
+X:17:8:14:14
+D:        %%%%%%
+D:       %%....%
+D:      %%.....%
+D:     %%......%
+D:    %%.......%
+D:   %%.......%%
+D:  %%.......%% 
+D: %%.......%%  
+D:%%.......%%   
+D:%.......%%    
+D:%......%%     
+D:%.....%%      
+D:%....%%       
+D:%%%%%%        
 
+N:149:Fixed room9
+X:17:8:14:14
+D:    %%%%%%%%%%
+D:   %%........%
+D:  %%..##..##.%
+D: %%..##..###.%
+D:%%..##..###..%
+D:%..##..###...%
+D:%.##..###..#.%
+D:%.#..###..##.%
+D:%...###..##..%
+D:%..###..##..%%
+D:%.###..##..%% 
+D:%.##..##..%%  
+D:%........%%   
+D:%%%%%%%%%%    
+
+N:150:PoisonousSpring 2
+X:17:8:20:24
+D:  %%%%%%%%    %%%%%%%%  
+D: %%......%%%%%%......%% 
+D:%%..gggg###..###gggg..%%
+D:%..ggGGgggg##ggggGGgg..%
+D:%..gGGGGggg##gggGGGGg..%
+D:%..gGGGGggggggggGGGGg..%
+D:%..ggGGGGGG##GGGGGGgg..%
+D:%%.#gggG.++##++.Gggg#.%%
+D: %%#gggG.+&##&+.Gggg#%% 
+D:  %.#gg###[[[[###gg#.%  
+D:  %.#gg###[[[[###gg#.%  
+D: %%#gggG.+&##&+.Gggg#%% 
+D:%%.#gggG.++##++.Gggg#.%%
+D:%..ggGGGGGG##GGGGGGgg..%
+D:%..gGGGGggggggggGGGGg..%
+D:%..gGGGGggg##gggGGGGg..%
+D:%..ggGGgggg##ggggGGgg..%
+D:%%..gggg###..###gggg..%%
+D: %%......%%%%%%......%% 
+D:  %%%%%%%%    %%%%%%%%  
