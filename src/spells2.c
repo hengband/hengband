@@ -354,12 +354,10 @@ bool detect_monsters_normal(POSITION range)
 {
 	MONSTER_IDX i;
 	POSITION y, x;
-
 	bool flag = FALSE;
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
@@ -380,7 +378,6 @@ bool detect_monsters_normal(POSITION range)
 			/* Repair visibility later */
 			repair_monsters = TRUE;
 
-			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(i, FALSE);
 			flag = TRUE;
@@ -390,7 +387,6 @@ bool detect_monsters_normal(POSITION range)
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 	if (flag)
 	{
-		/* Describe result */
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
 	}
 	return (flag);
@@ -410,7 +406,6 @@ bool detect_monsters_invis(POSITION range)
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
@@ -437,7 +432,6 @@ bool detect_monsters_invis(POSITION range)
 			/* Repair visibility later */
 			repair_monsters = TRUE;
 
-			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(i, FALSE);
 			flag = TRUE;
@@ -447,7 +441,6 @@ bool detect_monsters_invis(POSITION range)
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 	if (flag)
 	{
-		/* Describe result */
 		msg_print(_("透明な生物の存在を感じとった！", "You sense the presence of invisible creatures!"));
 	}
 	return (flag);
@@ -466,7 +459,6 @@ bool detect_monsters_evil(POSITION range)
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
@@ -499,7 +491,6 @@ bool detect_monsters_evil(POSITION range)
 			/* Repair visibility later */
 			repair_monsters = TRUE;
 
-			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(i, FALSE);
 			flag = TRUE;
@@ -507,7 +498,6 @@ bool detect_monsters_evil(POSITION range)
 	}
 	if (flag)
 	{
-		/* Describe result */
 		msg_print(_("邪悪なる生物の存在を感じとった！", "You sense the presence of evil creatures!"));
 	}
 	return (flag);
@@ -526,7 +516,6 @@ bool detect_monsters_nonliving(POSITION range)
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
@@ -552,7 +541,6 @@ bool detect_monsters_nonliving(POSITION range)
 			/* Repair visibility later */
 			repair_monsters = TRUE;
 
-			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(i, FALSE);
 			flag = TRUE;
@@ -560,7 +548,6 @@ bool detect_monsters_nonliving(POSITION range)
 	}
 	if (flag)
 	{
-		/* Describe result */
 		msg_print(_("自然でないモンスターの存在を感じた！", "You sense the presence of unnatural beings!"));
 	}
 	return (flag);
@@ -579,7 +566,6 @@ bool detect_monsters_mind(POSITION range)
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
@@ -606,7 +592,6 @@ bool detect_monsters_mind(POSITION range)
 			/* Repair visibility later */
 			repair_monsters = TRUE;
 
-			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(i, FALSE);
 			flag = TRUE;
@@ -614,7 +599,6 @@ bool detect_monsters_mind(POSITION range)
 	}
 	if (flag)
 	{
-		/* Describe result */
 		msg_print(_("殺気を感じとった！", "You sense the presence of someone's mind!"));
 	}
 	return (flag);
@@ -635,7 +619,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
@@ -662,7 +645,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 			/* Repair visibility later */
 			repair_monsters = TRUE;
 
-			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(i, FALSE);
 			flag = TRUE;
@@ -672,7 +654,6 @@ bool detect_monsters_string(POSITION range, cptr Match)
 	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 	if (flag)
 	{
-		/* Describe result */
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
 	}
 	return (flag);
@@ -693,7 +674,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan monsters */
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &m_list[i];
@@ -726,7 +706,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 			/* Repair visibility later */
 			repair_monsters = TRUE;
 
-			/* Hack -- Detect monster */
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(i, FALSE);
 			flag = TRUE;
@@ -744,7 +723,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 				break;
 		}
 
-		/* Describe result */
 		msg_format(_("%sの存在を感じとった！", "You sense the presence of %s!"), desc_monsters);
 		msg_print(NULL);
 	}
@@ -1082,7 +1060,6 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	p_ptr->redraw |= (PR_HP);
 	p_ptr->window |= (PW_PLAYER);
 
-	/* Handle */
 	handle_stuff();
 	Term_fresh();
 
