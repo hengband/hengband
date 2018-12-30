@@ -1994,7 +1994,6 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 
 		get_mon_num_prep(NULL, NULL);
 
-		/* Describe it */
 #ifndef JP
 		if (!(r_ptr->flags1 & RF1_UNIQUE))
 			sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);

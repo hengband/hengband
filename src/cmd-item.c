@@ -293,15 +293,12 @@ void do_cmd_wield(void)
 	/* Prevent wielding into a cursed slot */
 	if (object_is_cursed(&inventory[slot]))
 	{
-		/* Describe it */
 		object_desc(o_name, &inventory[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
-		msg_format("%s%sは呪われているようだ。",
-			   describe_use(slot) , o_name );
+		msg_format("%s%sは呪われているようだ。", describe_use(slot) , o_name );
 #else
-		msg_format("The %s you are %s appears to be cursed.",
-			   o_name, describe_use(slot));
+		msg_format("The %s you are %s appears to be cursed.", o_name, describe_use(slot));
 #endif
 
 		/* Cancel the command */
@@ -315,7 +312,6 @@ void do_cmd_wield(void)
 	{
 		char dummy[MAX_NLEN+80];
 
-		/* Describe it */
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		sprintf(dummy, _("本当に%s{呪われている}を使いますか？", "Really use the %s {cursed}? "), o_name);
 
@@ -326,7 +322,6 @@ void do_cmd_wield(void)
 	{
 		char dummy[MAX_NLEN+80];
 
-		/* Describe it */
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP

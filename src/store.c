@@ -4884,10 +4884,7 @@ void do_cmd_store(void)
 
 				q_ptr = &forge;
 
-				/* Grab a copy of the item */
 				object_copy(q_ptr, o_ptr);
-
-				/* Describe it */
 				object_desc(o_name, q_ptr, 0);
 
 #ifdef JP

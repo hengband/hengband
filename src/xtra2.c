@@ -2992,7 +2992,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		/* Describe it */
 		if (o_ptr->marked & OM_FOUND)
 		{
 			char o_name[MAX_NLEN];
