@@ -396,9 +396,7 @@ static void confirm_use_force(bool browse_only)
 		if (which == ESCAPE) break;
 		else if (which == 'w')
 		{
-
 			repeat_push(INVEN_FORCE);
-
 			break;
 		}
 	}
@@ -470,30 +468,18 @@ void do_cmd_browse(void)
 	q = _("どの本を読みますか? ", "Browse which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR)))
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr)
 	{
+		if (item == INVEN_FORCE) /* the_force */
+		{
+			do_cmd_mind_browse();
+			return;
+		}
 		select_the_force = FALSE;
 		return;
 	}
 	select_the_force = FALSE;
-
-	if (item == INVEN_FORCE) /* the_force */
-	{
-		do_cmd_mind_browse();
-		return;
-	}
-
-	/* Get the item (in the pack) */
-	else if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
 
 	/* Access the item's sval */
 	sval = o_ptr->sval;
@@ -503,7 +489,6 @@ void do_cmd_browse(void)
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
 	handle_stuff();
-
 
 	/* Extract spells */
 	for (spell = 0; spell < 32; spell++)
@@ -517,8 +502,6 @@ void do_cmd_browse(void)
 	}
 
 	screen_save();
-
-	/* Clear the top line */
 	prt("", 0, 0);
 
 	/* Keep browsing spells.  Exit browsing on cancel. */
@@ -674,19 +657,8 @@ void do_cmd_study(void)
 	q = _("どの本から学びますか? ", "Study which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	/* Access the item's sval */
 	sval = o_ptr->sval;
@@ -948,36 +920,23 @@ void do_cmd_cast(void)
 	q = _("どの呪文書を使いますか? ", "Use which book? ");
 	s = _("呪文書がない！", "You have no spell books!");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR)))
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr)
 	{
+		if (item == INVEN_FORCE) /* the_force */
+		{
+			do_cmd_mind();
+			return;
+		}
 		select_the_force = FALSE;
 		return;
 	}
 	select_the_force = FALSE;
 
-	if (item == INVEN_FORCE) /* the_force */
-	{
-		do_cmd_mind();
-		return;
-	}
-
-	/* Get the item (in the pack) */
-	else if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
-
 	/* Access the item's sval */
 	sval = o_ptr->sval;
 
 	if ((p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE) && (o_ptr->tval == REALM2_BOOK)) increment = 32;
-
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);

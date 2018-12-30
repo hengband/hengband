@@ -3496,8 +3496,10 @@ object_type *choose_object(OBJECT_IDX *idx, cptr q, cptr s, BIT_FLAGS option)
 	if (!get_item(&item, q, s, option)) return NULL;
 	if (idx) *idx = item;
 
+	if (item == INVEN_FORCE) return NULL;
+
 	/* Get the item (in the pack) */
-	if (item >= 0) return &inventory[item];
+	else if (item >= 0) return &inventory[item];
 
 	/* Get the item (on the floor) */
 	else return &o_list[0 - item];
