@@ -2736,14 +2736,13 @@ static PRICE compare_weapons(PRICE bcost)
 	q = _("第一の武器は？", "What is your first weapon? ");
 	s = _("比べるものがありません。", "You have nothing to compare.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN)))
+	o_ptr[0] = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN));
+	if (!o_ptr)
 	{
 		screen_load();
 		return (0);
 	}
 
-	/* Get the item (in the pack) */
-	o_ptr[0] = &inventory[item];
 	n = 1;
 	total = bcost;
 
@@ -2809,13 +2808,11 @@ static PRICE compare_weapons(PRICE bcost)
 			s = _("比べるものがありません。", "You have nothing to compare.");
 
 			/* Get the second weapon */
-			if (!get_item(&item2, q, s, (USE_EQUIP | USE_INVEN))) continue;
+			o_ptr[1] = choose_object(&item2, q, s, (USE_EQUIP | USE_INVEN));
+			if (!o_ptr) continue;
 
 			total += cost;
 			cost = bcost / 2;
-
-			/* Get the item (in the pack) */
-			o_ptr[1] = &inventory[item2];
 			n = 2;
 		}
 		else
@@ -2998,7 +2995,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	int i, dd_bonus, ds_bonus;
 	KIND_OBJECT_IDX k_idx;
 	char basenm[MAX_NLEN];
-	cptr q, s; /* For get_item prompt */
+	cptr q, s;
 	int row = 7;
 	clear_bldg(0, 22);
 
@@ -3011,10 +3008,8 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_broken_weapon;
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP))) return (0);
-
-	/* Get the item (in the pack) */
-	o_ptr = &inventory[item];
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP));
+	if (!o_ptr) return (0);
 
 	/* It is worthless */
 	if (!object_is_ego(o_ptr) && !object_is_artifact(o_ptr))
@@ -3280,10 +3275,8 @@ static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_C
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるものがありません。", "You have nothing to improve.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP))) return (FALSE);
-
-	/* Get the item (in the pack) */
-	o_ptr = &inventory[item];
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP));
+	if (!o_ptr) return (FALSE);
 
 	/* Check if the player has enough money */
 	if (p_ptr->au < (cost * o_ptr->number))

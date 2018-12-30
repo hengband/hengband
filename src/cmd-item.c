@@ -167,17 +167,15 @@ bool select_ring_slot = FALSE;
 void do_cmd_wield(void)
 {
 	OBJECT_IDX item, slot;
-
 	object_type forge;
 	object_type *q_ptr;
-
 	object_type *o_ptr;
 
 	cptr act;
+	cptr q, s;
 
 	char o_name[MAX_NLEN];
 
-	cptr q, s;
 
 	OBJECT_IDX need_switch_wielding = 0;
 
@@ -192,20 +190,8 @@ void do_cmd_wield(void)
 	q = _("どれを装備しますか? ", "Wear/Wield which item? ");
 	s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
-
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	/* Check the slot */
 	slot = wield_slot(o_ptr);
