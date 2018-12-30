@@ -3325,7 +3325,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	object_type forge;
 	object_type *q_ptr;
-
 	object_type *o_ptr;
 
 	bool hit_body = FALSE;
@@ -3590,10 +3589,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				else
 				{
 					char m_name[80];
-
-					/* Get "the monster" or "it" */
 					monster_desc(m_name, m_ptr, 0);
-
 					msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
 					if (m_ptr->ml)
@@ -3665,13 +3661,11 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					/* Take note */
 					if (fear && m_ptr->ml)
 					{
-						char m_name[80];
-
 						sound(SOUND_FLEE);
 
 						/* Get the monster name (or "it") */
+						char m_name[80];
 						monster_desc(m_name, m_ptr, 0);
-
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 					}
 				}
@@ -3693,8 +3687,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	{
 		j = 100;
 
-		if (!(summon_named_creature(0, y, x, q_ptr->pval,
-					    !(object_is_cursed(q_ptr)) ? PM_FORCE_PET : 0L)))
+		if (!(summon_named_creature(0, y, x, q_ptr->pval, !(object_is_cursed(q_ptr)) ? PM_FORCE_PET : 0L)))
 			msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
 		else if (object_is_cursed(q_ptr))
 			msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
@@ -3807,15 +3800,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			/* Increment the equip counter by hand */
 			equip_cnt++;
 
-			/* Recalculate bonuses */
-			p_ptr->update |= (PU_BONUS);
-
 			/* Recalculate torch */
-			p_ptr->update |= (PU_TORCH);
-
-			/* Recalculate mana XXX */
-			p_ptr->update |= (PU_MANA);
-
+			p_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
 			p_ptr->window |= (PW_EQUIP);
 		}
 		else
@@ -3830,17 +3816,14 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		calc_android_exp();
 	}
 
-	/* Drop (or break) near that location */
 	if (do_drop)
 	{
 		if (cave_have_flag_bold(y, x, FF_PROJECT))
 		{
-			/* Drop (or break) near that location */
 			(void)drop_near(q_ptr, j, y, x);
 		}
 		else
 		{
-			/* Drop (or break) near that location */
 			(void)drop_near(q_ptr, j, prev_y, prev_x);
 		}
 	}
@@ -3867,17 +3850,15 @@ static POSITION temp2_y[MAX_SHORT];
 void forget_travel_flow(void)
 {
 	POSITION x, y;
-
-	/* Check the entire dungeon */
+	/* Check the entire dungeon / Forget the old data */
 	for (y = 0; y < cur_hgt; y++)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			/* Forget the old data */
+			
 			travel.cost[y][x] = MAX_SHORT;
 		}
 	}
-
 	travel.y = travel.x = 0;
 }
 
