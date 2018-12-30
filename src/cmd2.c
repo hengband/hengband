@@ -2860,7 +2860,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 				if (c_ptr->info & (CAVE_MARK)) msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
 				/* Forget the wall */
 				c_ptr->info &= ~(CAVE_MARK);
-
 				p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 				/* Destroy the wall */
@@ -2881,9 +2880,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 		if (snipe_type == SP_LITE)
 		{
 			cave[ny][nx].info |= (CAVE_GLOW);
-
 			note_spot(ny, nx);
-
 			lite_spot(ny, nx);
 		}
 
@@ -2920,9 +2917,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 		if (snipe_type == SP_EVILNESS)
 		{
 			cave[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
-
 			note_spot(ny, nx);
-
 			lite_spot(ny, nx);
 		}
 
@@ -2933,7 +2928,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 		/* Save the new location */
 		x = nx;
 		y = ny;
-
 
 		/* Monster here, Try to hit it */
 		if (cave[y][x].m_idx)
@@ -3232,7 +3226,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 void do_cmd_fire(void)
 {
 	OBJECT_IDX item;
-	object_type *j_ptr;
+	object_type *j_ptr, *ammo_ptr;
 	cptr q, s;
 
 	is_fired = FALSE;	/* not fired yet */
@@ -3273,7 +3267,10 @@ void do_cmd_fire(void)
 
 	q = _("どれを撃ちますか? ", "Fire which item? ");
 	s = _("発射されるアイテムがありません。", "You have nothing to fire.");
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR)))
+
+
+	ammo_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!ammo_ptr)
 	{
 		flush();
 		return;
@@ -3362,7 +3359,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			item_tester_hook = item_tester_hook_boomerang;
 			q = _("どの武器を投げますか? ", "Throw which item? ");
 			s = _("投げる武器がない。", "You have nothing to throw.");
-			if (!get_item(&item, q, s, (USE_EQUIP)))
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			if (!o_ptr)
 			{
 				flush();
 				return FALSE;
@@ -3375,21 +3373,12 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	{
 		q = _("どのアイテムを投げますか? ", "Throw which item? ");
 		s = _("投げるアイテムがない。", "You have nothing to throw.");
-		if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP)))
+		o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP));
+		if (!o_ptr)
 		{
 			flush();
 			return FALSE;
 		}
-	}
-
-	/* Access the item (if in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-	else
-	{
-		o_ptr = &o_list[0 - item];
 	}
 
 	/* Item is cursed */

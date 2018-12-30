@@ -3035,15 +3035,13 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
-	if (!get_item(&mater, q, s, (USE_INVEN | USE_EQUIP))) return (0);
+	mo_ptr = choose_object(&mater, q, s, (USE_INVEN | USE_EQUIP));
+	if (!mo_ptr) return (0);
 	if (mater == item)
 	{
 		msg_print(_("クラインの壷じゃない！", "This is not a klein bottle!"));
 		return (0);
 	}
-
-	/* Get the item (in the pack) */
-	mo_ptr = &inventory[mater];
 
 	/* Display item name */
 	object_desc(basenm, mo_ptr, OD_NAME_ONLY);
@@ -3387,19 +3385,9 @@ static void building_recharge(void)
 
 	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
 	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	k_ptr = &k_info[o_ptr->k_idx];
 
