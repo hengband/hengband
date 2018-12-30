@@ -2640,6 +2640,7 @@
 #define USE_EQUIP	0x01	/*!< アイテム選択範囲: 装備品からの選択を許可する / Allow equip items */
 #define USE_INVEN	0x02	/*!< アイテム選択範囲: 所持品からの選択を許可する /  Allow inven items */
 #define USE_FLOOR	0x04	/*!< アイテム選択範囲: 床下のアイテムからの選択を許可する /  Allow floor items */
+#define USE_FORCE	0x08	/*!< 特殊: wキーで錬気術への切り替えを許可する */
 
 
 /*

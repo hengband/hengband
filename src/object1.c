@@ -2726,9 +2726,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	char tmp_val[160];
 	char out_val[160];
 
-	/* See cmd5.c */
-	extern bool select_the_force;
-
 	int menu_line = (use_menu ? 1 : 0);
 	int max_inven = 0;
 	int max_equip = 0;
@@ -2747,7 +2744,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	if (repeat_pull(cp))
 	{
 		/* the_force */
-		if (select_the_force && (*cp == INVEN_FORCE))
+		if (mode & USE_FORCE && (*cp == INVEN_FORCE))
 		{
 			item_tester_tval = 0;
 			item_tester_hook = NULL;
@@ -2893,12 +2890,10 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	{
 		/* Cancel p_ptr->command_see */
 		command_see = FALSE;
-
 		oops = TRUE;
-
 		done = TRUE;
 
-		if (select_the_force) {
+		if (mode & USE_FORCE) {
 		    *cp = INVEN_FORCE;
 		    item = TRUE;
 		}
@@ -3052,7 +3047,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 
 		/* Indicate legality of the "floor" item */
 		if (allow_floor) strcat(out_val, _(" '-'床上,", " - for floor,"));
-		if (select_the_force) strcat(out_val, _(" 'w'練気術,", " w for the Force,"));
+		if (mode & USE_FORCE) strcat(out_val, _(" 'w'練気術,", " w for the Force,"));
 
 		/* Finish the prompt */
 		strcat(out_val, " ESC");
@@ -3162,7 +3157,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			}
 			case 'w':
 			{
-				if (select_the_force) {
+				if (mode & USE_FORCE) {
 					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;
@@ -3351,7 +3346,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 
 			case 'w':
 			{
-				if (select_the_force) {
+				if (mode & USE_FORCE) {
 					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;
@@ -3718,6 +3713,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	bool equip = (mode & USE_EQUIP) ? TRUE : FALSE;
 	bool inven = (mode & USE_INVEN) ? TRUE : FALSE;
 	bool floor = (mode & USE_FLOOR) ? TRUE : FALSE;
+	bool force = (mode & USE_FORCE) ? TRUE : FALSE;
 
 	bool allow_equip = FALSE;
 	bool allow_inven = FALSE;
@@ -3733,8 +3729,6 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	int floor_top = 0;
 	TERM_LEN min_width = 0;
 
-	extern bool select_the_force;
-
 	int menu_line = (use_menu ? 1 : 0);
 	int max_inven = 0;
 	int max_equip = 0;
@@ -3746,7 +3740,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	if (repeat_pull(cp))
 	{
 		/* the_force */
-		if (select_the_force && (*cp == INVEN_FORCE))
+		if (force && (*cp == INVEN_FORCE))
 		{
 			item_tester_tval = 0;
 			item_tester_hook = NULL;
@@ -3913,12 +3907,10 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	{
 		/* Cancel p_ptr->command_see */
 		command_see = FALSE;
-
 		oops = TRUE;
-
 		done = TRUE;
 
-		if (select_the_force) {
+		if (force) {
 		    *cp = INVEN_FORCE;
 		    item = TRUE;
 		}
@@ -4171,7 +4163,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		}
 
 		/* Append */
-		if (select_the_force) strcat(out_val, _(" 'w'練気術,", " w for the Force,"));
+		if (force) strcat(out_val, _(" 'w'練気術,", " w for the Force,"));
 
 		/* Finish the prompt */
 		strcat(out_val, " ESC");
@@ -4370,7 +4362,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			}
 			case 'w':
 			{
-				if (select_the_force) {
+				if (force) {
 					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;
@@ -4673,7 +4665,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 
 			case 'w':
 			{
-				if (select_the_force) {
+				if (force) {
 					*cp = INVEN_FORCE;
 					item = TRUE;
 					done = TRUE;

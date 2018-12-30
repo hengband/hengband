@@ -33,9 +33,6 @@ cptr spell_category_name(OBJECT_TYPE_VALUE tval)
 	}
 }
 
-
-bool select_the_force = FALSE;
-
 /*!
  * @brief 領域魔法の閲覧、学習、使用選択するインターフェイス処理
  * Allow user to choose a spell/prayer from the given book.
@@ -458,7 +455,6 @@ void do_cmd_browse(void)
 			confirm_use_force(TRUE);
 			return;
 		}
-		select_the_force = TRUE;
 	}
 
 	/* Restrict choices to "useful" books */
@@ -468,7 +464,7 @@ void do_cmd_browse(void)
 	q = _("どの本を読みますか? ", "Browse which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)));
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */
@@ -476,10 +472,8 @@ void do_cmd_browse(void)
 			do_cmd_mind_browse();
 			return;
 		}
-		select_the_force = FALSE;
 		return;
 	}
-	select_the_force = FALSE;
 
 	/* Access the item's sval */
 	sval = o_ptr->sval;
@@ -909,7 +903,6 @@ void do_cmd_cast(void)
 			confirm_use_force(FALSE);
 			return;
 		}
-		select_the_force = TRUE;
 	}
 
 	prayer = spell_category_name(mp_ptr->spell_book);
@@ -920,7 +913,7 @@ void do_cmd_cast(void)
 	q = _("どの呪文書を使いますか? ", "Use which book? ");
 	s = _("呪文書がない！", "You have no spell books!");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)));
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */
@@ -928,10 +921,8 @@ void do_cmd_cast(void)
 			do_cmd_mind();
 			return;
 		}
-		select_the_force = FALSE;
 		return;
 	}
-	select_the_force = FALSE;
 
 	/* Access the item's sval */
 	sval = o_ptr->sval;
