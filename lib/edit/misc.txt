@@ -19,7 +19,7 @@ M:R:1111
 M:K:672
 
 # Maximum number of vaults in v_info.txt
-M:V:151
+M:V:153
 
 # Maximum number of terrain features in f_info.txt
 M:F:255
