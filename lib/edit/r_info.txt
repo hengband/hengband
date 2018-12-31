@@ -22325,3 +22325,176 @@ D:$The half-devil Planeswalker, Tibalt always has a preference
 D:$for spread of pain and disorder to everyone including himself. 
 D:半人半魔のプレインズウォーカー、ティボルトは苦痛と騒乱が、
 D:自分を含めた全ての人々に及ぶことを常に望んでいる。
+
+N:1111:ファイア・コボルド
+E:Fire kobold
+G:k:R
+I:110:11d9:20:35:30
+W:12:1:0:42:800:1116
+B:HIT:FIRE:4d5
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS
+F:IM_FIRE | WILD_VOLCANO
+D:$It seems only a red kobold, but it learned the use of fire.
+D:それは単なる赤いコボルドに見えるが、火の使い方を覚えている。
+
+N:1112:アイス・コボルド
+E:Ice kobold
+G:k:W
+I:110:11d9:20:35:30
+W:12:1:0:42:800:1117
+B:HIT:COLD:4d5
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS
+F:IM_COLD | WILD_SWAMP
+D:$It seems only a white kobold, but it learned the use of ice.
+D:それは単なる白いコボルドに見えるが、冷気の浴びせ方を覚えている。
+
+N:1113:サンダー・コボルド
+E:Thunder kobold
+G:k:B
+I:110:11d9:20:35:30
+W:12:1:0:42:800:1118
+B:HIT:ELEC:4d5
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS
+F:IM_ELEC | WILD_MOUNTAIN
+D:$It seems only a blue kobold, but it learned the use of thunder.
+D:それは単なる青いコボルドに見えるが、電撃の浴びせ方を覚えている。
+
+N:1114:アシッド・コボルド
+E:Acid kobold
+G:k:s
+I:110:11d9:20:35:30
+W:12:1:0:42:800:1119
+B:HIT:ACID:4d5
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS
+F:IM_ACID | WILD_WOOD
+D:$It seems only a black kobold, but it learned the use of acid.
+D:それは単なる黒いコボルドに見えるが、酸の浴びせ方を覚えている。
+
+N:1115:ポイズン・コボルド
+E:Poison kobold
+G:k:G
+I:115:12d10:25:45:35
+W:14:1:0:55:1100:1120
+B:HIT:POISON:5d5
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS
+D:$It seems only a green kobold, but it learned the use of poison.
+D:それは単なる緑色のコボルドに見えるが、毒のくらわし方を覚えている。
+
+N:1116:フレイム・コボルド
+E:Flame kobold
+G:k:r
+I:110:25d9:25:40:35
+W:23:1:0:250:0:0
+B:HIT:FIRE:11d6
+B:HIT:FIRE:11d6
+S:1_IN_10
+S:BR_FIRE
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
+F:IM_FIRE | FRIENDS
+D:$It is a kobold which emits the fire breath enough to burns down a big tree.
+D:$They are sometimes shunned by other kobolds on the ground that
+D:$he is a somothering guy.
+D:大木を焼き尽くすほどの強力な炎を吐き出すことができるようになったコボルドだ。
+D:コボルド仲間の間でも暑苦しいと煙たがれることがある。
+
+N:1117:ブリザード・コボルド
+E:Blizzard kobold
+G:k:w
+I:110:25d9:25:40:35
+W:23:1:0:250:0:0
+B:HIT:COLD:11d6
+B:HIT:COLD:11d6
+S:1_IN_10
+S:BR_COLD | BR_WALL
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
+F:IM_COLD | FRIENDS
+D:$It can freeze a room eternally by its strong breath.
+D:$Around him, you may be able to see the diamond dust.
+D:部屋の全てを永遠に凍りつかせるほどの強力な冷気を吐き出すことができる。
+D:それの周りではダイアモンドダストを見ることができるという。
+
+N:1118:ライトニング・コボルド
+E:Lightning kobold
+G:k:b
+I:110:25d9:25:40:35
+W:23:1:0:250:0:0
+B:HIT:ELEC:11d6
+B:HIT:ELEC:11d6
+S:1_IN_10
+S:BR_ELEC
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
+F:IM_ELEC | FRIENDS
+F:SELF_LITE_1
+D:$Have you seen the very experiment by Edison?
+D:$This kobold can kill an elephant easily by its breath!
+D:君は見たことがあるだろうか、あのエジソンの忌まわしい実験を！
+D:このコボルドはあれと同じことができる！
+
+N:1119:カルボラン・コボルド
+E:Carborane kobold
+G:k:D
+I:110:25d9:25:40:35
+W:23:1:0:250:0:0
+B:HIT:ACID:11d6
+B:HIT:ACID:11d6
+S:1_IN_10
+S:BR_ACID
+F:DROP_90
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
+F:IM_ACID | FRIENDS
+D:$O my god!
+D:$This kobold can resolve a candle via its breath!
+D:ああ、何ということだ！
+D:このコボルドが吐き出す酸はロウソクをも溶かしてしまう！
+
+N:1120:アポトキシン・コボルド
+E:Apotoxin kobold
+G:k:g
+I:115:26d10:30:45:40
+W:24:1:0:333:0:0
+B:HIT:POISON:11d6
+B:HIT:POISON:11d6
+S:1_IN_10
+S:BR_POIS | BR_TIME
+F:DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
+F:NO_CONF | NO_FEAR
+D:$Be aware!
+D:$This kobold's poison can change a tough guy to a frail kid!
+D:気をつけろ！
+D:やつの毒は大の大人を無力な子供に変えてしまう！
+
+N:1121:ジャイアンの腰巾着『スネヲ』
+E:Suneo, the Follower of Jaian
+G:k:u
+I:120:35d20:25:50:40
+W:25:1:0:410:0:0
+B:HIT:HURT:12d6
+B:TOUCH:EAT_GOLD
+F:DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
+F:UNIQUE | FORCE_MAXHP
+F:EVIL | IM_POIS | EAT_POISONOUS
+F:ESCORT | ESCORTS | RES_SOUN | CAN_FLY | DROP_GREAT
+D:$"Hey Nobita, I regret to say, but the capacity of this dungeon is 3."
+D:$However, obviously there are many money mongers around him!
+D:「悪いなのび太、このダンジョンは3人用なんだ」
+D:しかし、彼に群がる金の亡者は明らかに3人よりも多い！
