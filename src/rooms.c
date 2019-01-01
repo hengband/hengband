@@ -597,12 +597,12 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 	 * this gives 8 binary places of fractional part + 8 places of normal part
 	 */
 
-	u16b xstep, xhstep, ystep, yhstep;
-	u16b xstep2, xhstep2, ystep2, yhstep2;
-	u16b i, j, ii, jj, diagsize, xxsize, yysize;
+	POSITION xstep, xhstep, ystep, yhstep;
+	POSITION xstep2, xhstep2, ystep2, yhstep2;
+	POSITION i, j, ii, jj, diagsize, xxsize, yysize;
 	
 	/* Cache for speed */
-	u16b xm, xp, ym, yp;
+	POSITION xm, xp, ym, yp;
 
 	/* redefine size so can change the value if out of range */
 	xsize = xsiz;
@@ -787,7 +787,7 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 }
 
 
-static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, int feat1, int feat2, int feat3, int info1, int info2, int info3)
+static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, FEAT_IDX feat1, FEAT_IDX feat2, FEAT_IDX feat3, BIT_FLAGS info1, BIT_FLAGS info2, BIT_FLAGS info3)
 {
 	/*
 	 * function used to convert from height-map back to the
@@ -809,14 +809,14 @@ static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, int f
 			/* 25% of the time use the other tile : it looks better this way */
 			if (randint1(100) < 75)
 			{
-				cave[y][x].feat = (s16b)feat1;
+				cave[y][x].feat = feat1;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info1;
 				return TRUE;
 			}
 			else
 			{
-				cave[y][x].feat = (s16b)feat2;
+				cave[y][x].feat = feat2;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info2;
 				return TRUE;
@@ -827,14 +827,14 @@ static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, int f
 			/* 25% of the time use the other tile : it looks better this way */
 			if (randint1(100) < 75)
 			{
-				cave[y][x].feat = (s16b)feat2;
+				cave[y][x].feat = feat2;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info2;
 				return TRUE;
 			}
 			else
 			{
-				cave[y][x].feat = (s16b)feat1;
+				cave[y][x].feat = feat1;
 				cave[y][x].info &= ~(CAVE_MASK);
 				cave[y][x].info |= info1;
 				return TRUE;
@@ -842,7 +842,7 @@ static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, int f
 		}
 		else if (cave[y][x].feat <= c3)
 		{
-			cave[y][x].feat = (s16b)feat3;
+			cave[y][x].feat = feat3;
 			cave[y][x].info &= ~(CAVE_MASK);
 			cave[y][x].info |= info3;
 			return TRUE;
