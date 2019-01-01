@@ -2549,12 +2549,8 @@ static bool get_player_race(void)
 			sym[n] = I2A(n);
 		else
 			sym[n] = ('A' + n - 26);
-#ifdef JP
 		sprintf(buf, "%c%c%s", sym[n], p2, str);
-#else
-		sprintf(buf, "%c%c %s", sym[n], p2, str);
-#endif
-		put_str(buf, 12 + (n/5), 1 + 16 * (n%5));
+		put_str(buf, 12 + (n / 5), 1 + 16 * (n % 5));
 
 	}
 
@@ -2573,11 +2569,7 @@ static bool get_player_race(void)
 			put_str("                                   ", 3, 40);
 			if(cs == MAX_RACES)
 			{
-#ifdef JP
-				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-				sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+				sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 				put_str("                                   ", 4, 40);
 				put_str("                                   ", 5, 40);
 			}
@@ -2585,17 +2577,11 @@ static bool get_player_race(void)
 			{
 				rp_ptr = &race_info[cs];
 				str = rp_ptr->title;
-#ifdef JP
 				sprintf(cur, "%c%c%s", sym[cs], p2, str);
 				c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
-				put_str("の種族修正", 3, 40+strlen(rp_ptr->title));
-				put_str("腕力 知能 賢さ 器用 耐久 魅力 経験 ", 4, 40);
-#else
-				sprintf(cur, "%c%c %s", sym[cs], p2, str);
-				c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
-				put_str(": Race modification", 3, 40+strlen(rp_ptr->title));
-				put_str("Str  Int  Wis  Dex  Con  Chr   EXP ", 4, 40);
-#endif
+				put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
+				put_str(_("の種族修正", ": Race modification"), 3, 40 + strlen(rp_ptr->title));
+
 				sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
 					rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3],
 					rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
@@ -2729,26 +2715,14 @@ static bool get_player_class(void)
 
 		/* Display */
 		if (!(rp_ptr->choice & (1L << n)))
-#ifdef JP
 			sprintf(buf, "%c%c(%s)", sym[n], p2, str);
-#else
-			sprintf(buf, "%c%c (%s)", sym[n], p2, str);
-#endif
 		else
-#ifdef JP
 			sprintf(buf, "%c%c%s", sym[n], p2, str);
-#else
-			sprintf(buf, "%c%c %s", sym[n], p2, str);
-#endif
 
 		put_str(buf, 13+ (n/4), 2 + 19 * (n%4));
 	}
 
-#ifdef JP
-	sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-	sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+	sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 
 	/* Get a class */
 	k = -1;
@@ -2763,11 +2737,7 @@ static bool get_player_class(void)
 			put_str("                                   ", 3, 40);
 			if(cs == MAX_CLASS_CHOICE)
 			{
-#ifdef JP
-				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-				sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+				sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 				put_str("                                   ", 4, 40);
 				put_str("                                   ", 5, 40);
 			}
@@ -2777,32 +2747,19 @@ static bool get_player_class(void)
 				mp_ptr = &m_info[cs];
 				str = cp_ptr->title;
 				if (!(rp_ptr->choice & (1L << cs)))
-#ifdef JP
 					sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
-#else
-					sprintf(cur, "%c%c (%s)", sym[cs], p2, str);
-#endif
 				else
-#ifdef JP
 					sprintf(cur, "%c%c%s", sym[cs], p2, str);
-#else
-					sprintf(cur, "%c%c %s", sym[cs], p2, str);
-#endif
-#ifdef JP
+
 					c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
-					put_str("の職業修正", 3, 40+strlen(cp_ptr->title));
-					put_str("腕力 知能 賢さ 器用 耐久 魅力 経験 ", 4, 40);
-#else
-					c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
-					put_str(": Class modification", 3, 40+strlen(cp_ptr->title));
-					put_str("Str  Int  Wis  Dex  Con  Chr   EXP ", 4, 40);
-#endif
+					put_str(_("の職業修正", ": Class modification"), 3, 40+strlen(cp_ptr->title));
+					put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
 					sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
 						cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
 						cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
 					c_put_str(TERM_L_BLUE, buf, 5, 40);
 			}
-			c_put_str(TERM_YELLOW, cur, 13 + (cs/4), 2 + 19 * (cs%4));
+			c_put_str(TERM_YELLOW, cur, 13 + (cs / 4), 2 + 19 * (cs % 4));
 			os = cs;
 		}
 
@@ -2885,7 +2842,6 @@ static bool get_player_class(void)
 	cp_ptr = &class_info[p_ptr->pclass];
 	mp_ptr = &m_info[p_ptr->pclass];
 
-
 	/* Display */
 	c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
 
@@ -2899,13 +2855,13 @@ static bool get_player_class(void)
  */
 static bool get_player_seikaku(void)
 {
-	int     k, n, os, cs;
-	char    c;
-	char	sym[MAX_SEIKAKU];
-	char    p2 = ')';
-	char    buf[80], cur[80];
-	char    tmp[64];
-	cptr    str;
+	int k, n, os, cs;
+	char c;
+	char sym[MAX_SEIKAKU];
+	char p2 = ')';
+	char buf[80], cur[80];
+	char tmp[64];
+	cptr str;
 
 
 	/* Extra info */
@@ -2930,20 +2886,11 @@ static bool get_player_seikaku(void)
 			sym[n] = ('A' + n - 26);
 
 		/* Display */
-		/* Display */
-#ifdef JP
 		sprintf(buf, "%c%c%s", I2A(n), p2, str);
-#else
-		sprintf(buf, "%c%c %s", I2A(n), p2, str);
-#endif
 		put_str(buf, 12 + (n/4), 2 + 18 * (n%4));
 	}
 
-#ifdef JP
-	sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-	sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+	sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 
 	/* Get a seikaku */
 	k = -1;
@@ -2958,11 +2905,7 @@ static bool get_player_seikaku(void)
 			put_str("                                   ", 3, 40);
 			if(cs == MAX_SEIKAKU)
 			{
-#ifdef JP
-				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-				sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+				sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 				put_str("                                   ", 4, 40);
 				put_str("                                   ", 5, 40);
 			}
@@ -2970,24 +2913,14 @@ static bool get_player_seikaku(void)
 			{
 				ap_ptr = &seikaku_info[cs];
 				str = ap_ptr->title;
-#ifdef JP
-					sprintf(cur, "%c%c%s", sym[cs], p2, str);
-#else
-					sprintf(cur, "%c%c %s", sym[cs], p2, str);
-#endif
-#ifdef JP
-					c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
-					put_str("の性格修正", 3, 40+strlen(ap_ptr->title));
-					put_str("腕力 知能 賢さ 器用 耐久 魅力      ", 4, 40);
-#else
-					c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
-					put_str(": Personality modification", 3, 40+strlen(ap_ptr->title));
-					put_str("Str  Int  Wis  Dex  Con  Chr       ", 4, 40);
-#endif
-					sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ",
-						ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3],
-						ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
-					c_put_str(TERM_L_BLUE, buf, 5, 40);
+				sprintf(cur, "%c%c%s", sym[cs], p2, str);
+				c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
+				put_str(_("の性格修正", ": Personality modification"), 3, 40+strlen(ap_ptr->title));
+				put_str(_("腕力 知能 賢さ 器用 耐久 魅力      ", "Str  Int  Wis  Dex  Con  Chr       "), 4, 40);
+				sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ",
+					ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3],
+					ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
+				c_put_str(TERM_L_BLUE, buf, 5, 40);
 			}
 			c_put_str(TERM_YELLOW, cur, 12 + (cs/4), 2 + 18 * (cs%4));
 			os = cs;
@@ -2995,11 +2928,7 @@ static bool get_player_seikaku(void)
 
 		if (k >= 0) break;
 
-#ifdef JP
-		sprintf(buf, "性格を選んで下さい (%c-%c) ('='初期オプション設定): ", sym[0], sym[MAX_SEIKAKU-1]);
-#else
-		sprintf(buf, "Choose a personality (%c-%c) ('=' for options): ", sym[0], sym[MAX_SEIKAKU-1]);
-#endif
+		sprintf(buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_SEIKAKU-1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -3107,19 +3036,14 @@ static bool get_player_seikaku(void)
 		else if (c == '=')
 		{
 			screen_save();
-#ifdef JP
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
-#endif
-
+			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 			screen_load();
 		}
 		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
 	}
 
 	/* Set seikaku */
-	p_ptr->pseikaku = (byte_hack)k;
+	p_ptr->pseikaku = k;
 	ap_ptr = &seikaku_info[p_ptr->pseikaku];
 #ifdef JP
 	strcpy(tmp, ap_ptr->title);
@@ -3130,7 +3054,6 @@ static bool get_player_seikaku(void)
 	strcat(tmp," ");
 #endif
 	strcat(tmp,p_ptr->name);
-
 
 	/* Display */
 	c_put_str(TERM_L_BLUE, tmp, 1, 34);
@@ -3155,19 +3078,10 @@ static bool get_stat_limits(void)
 	clear_from(10);
 
 	/* Extra infomation */
-#ifdef JP
-	put_str("最低限得たい能力値を設定して下さい。", 10, 10);
-	put_str("2/8で項目選択、4/6で値の増減、Enterで次へ", 11, 10);
-#else
-	put_str("Set minimum stats.", 10, 10);
-	put_str("2/8 for Select, 4/6 for Change value, Enter for Goto next", 11, 10);
-#endif
+	put_str(_("最低限得たい能力値を設定して下さい。", "Set minimum stats."), 10, 10);
+	put_str(_("2/8で項目選択、4/6で値の増減、Enterで次へ", "2/8 for Select, 4/6 for Change value, Enter for Goto next"), 11, 10);
 	
-#ifdef JP
-	put_str("         基本値  種族 職業 性格     合計値  最大値", 13, 10);
-#else
-	put_str("           Base   Rac  Cla  Per      Total  Maximum", 13, 10);
-#endif
+	put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
 
 	/* Output the maximum stats */
 	for (i = 0; i < 6; i++)
