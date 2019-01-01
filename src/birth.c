@@ -2360,7 +2360,7 @@ void player_outfit(void)
 		/* Hack -- Give the player scrolls of DARKNESS! */
 		object_prep(q_ptr, lookup_kind(TV_SCROLL, SV_SCROLL_DARKNESS));
 
-		q_ptr->number = (byte)rand_range(2, 5);
+		q_ptr->number = rand_range(2, 5);
 
 		add_outfit(q_ptr);
 	}
@@ -2368,7 +2368,7 @@ void player_outfit(void)
 	{
 		/* Hack -- Give the player some torches */
 		object_prep(q_ptr, lookup_kind(TV_LITE, SV_LITE_TORCH));
-		q_ptr->number = (byte)rand_range(3, 7);
+		q_ptr->number = rand_range(3, 7);
 		q_ptr->xtra4 = rand_range(3, 7) * 500;
 
 		add_outfit(q_ptr);
@@ -2425,33 +2425,33 @@ void player_outfit(void)
 		{
 			/* Hack -- Give the player some arrows */
 			object_prep(q_ptr, lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
-			q_ptr->number = (byte)rand_range(15, 20);
+			q_ptr->number = rand_range(15, 20);
 
 			add_outfit(q_ptr);
 		}
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_BISCUIT));
-		q_ptr->number = (byte)rand_range(2, 4);
+		q_ptr->number = rand_range(2, 4);
 
 		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_WAYBREAD));
-		q_ptr->number = (byte)rand_range(2, 4);
+		q_ptr->number = rand_range(2, 4);
 
 		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_JERKY));
-		q_ptr->number = (byte)rand_range(1, 3);
+		q_ptr->number = rand_range(1, 3);
 
 		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_ALE));
-		q_ptr->number = (byte)rand_range(2, 4);
+		q_ptr->number = rand_range(2, 4);
 
 		add_outfit(q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_WINE));
-		q_ptr->number = (byte)rand_range(2, 4);
+		q_ptr->number = rand_range(2, 4);
 
 		add_outfit(q_ptr);
 	}
@@ -2459,7 +2459,7 @@ void player_outfit(void)
 	{
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_SPIKE, 0));
-		q_ptr->number = (byte)rand_range(15, 20);
+		q_ptr->number = rand_range(15, 20);
 
 		add_outfit(q_ptr);
 	}
@@ -2467,7 +2467,7 @@ void player_outfit(void)
 	{
 		/* Hack -- Give the player some bolts */
 		object_prep(q_ptr, lookup_kind(TV_BOLT, SV_AMMO_NORMAL));
-		q_ptr->number = (byte)rand_range(15, 20);
+		q_ptr->number = rand_range(15, 20);
 
 		add_outfit(q_ptr);
 	}
@@ -2495,12 +2495,11 @@ void player_outfit(void)
 			/* Barbarians do not need a ring of resist fear */
 			sv = SV_RING_SUSTAIN_STR;
 
-		else if (tv == TV_RING && sv == SV_RING_SUSTAIN_INT &&
-		    p_ptr->prace == RACE_MIND_FLAYER)
-		  {
+		else if (tv == TV_RING && sv == SV_RING_SUSTAIN_INT && p_ptr->prace == RACE_MIND_FLAYER)
+		{
 			tv = TV_POTION;
 			sv = SV_POTION_RESTORE_MANA;
-		  }
+		}
 		q_ptr = &forge;
 
 		/* Hack -- Give the player an object */
@@ -2533,11 +2532,10 @@ static bool get_player_race(void)
 	char    p2 = ')';
 	char    buf[80], cur[80];
 
-
 	/* Extra info */
 	clear_from(10);
 	put_str(_("注意：《種族》によってキャラクターの先天的な資質やボーナスが変化します。",
-	"Note: Your 'race' determines various intrinsic factors and bonuses."), 23, 5);
+		"Note: Your 'race' determines various intrinsic factors and bonuses."), 23, 5);
 
 	/* Dump races */
 	for (n = 0; n < MAX_RACES; n++)
