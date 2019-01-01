@@ -866,7 +866,7 @@ static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, FEAT_
 static void cave_fill(POSITION y, POSITION x)
 {
 	int i, j, d;
-	int ty, tx;
+	POSITION ty, tx;
 
 	int flow_tail = 1;
 	int flow_head = 0;
@@ -877,7 +877,6 @@ static void cave_fill(POSITION y, POSITION x)
 	/* Enqueue that entry */
 	temp_y[0] = y;
 	temp_x[0] = x;
-
 
 	/* Now process the queue */
 	while (flow_head != flow_tail)
@@ -1136,7 +1135,8 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
  */
 void build_cavern(void)
 {
-	int grd, roug, cutoff, xsize, ysize, x0, y0;
+	int grd, roug, cutoff;
+	POSITION xsize, ysize, x0, y0;
 	bool done, light;
 
 	light = done = FALSE;
