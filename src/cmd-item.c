@@ -109,7 +109,6 @@ void do_cmd_equip(void)
 	/* Hack -- show empty slots */
 	item_tester_full = TRUE;
 
-	/* Display the equipment */
 	(void)show_equip(0, 0L);
 
 	/* Hack -- undo the hack above */

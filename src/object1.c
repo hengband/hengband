@@ -1745,16 +1745,15 @@ void display_inven(void)
  */
 void display_equip(void)
 {
-	register        int i, n;
-	object_type     *o_ptr;
-	TERM_COLOR      attr = TERM_WHITE;
-	char            tmp_val[80];
-	char            o_name[MAX_NLEN];
-	int             wid, hgt;
+	register int i, n;
+	object_type *o_ptr;
+	TERM_COLOR attr = TERM_WHITE;
+	char tmp_val[80];
+	char o_name[MAX_NLEN];
+	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
 
-	/* Display the equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		/* Examine the item */
