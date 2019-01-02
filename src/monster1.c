@@ -2278,7 +2278,6 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 m
 {
 	feature_type *f_ptr = &f_info[feat];
 
-	/* Pattern */
 	if (have_flag(f_ptr->flags, FF_PATTERN))
 	{
 		if (!(mode & CEM_RIDING))

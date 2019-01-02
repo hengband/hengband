@@ -801,13 +801,11 @@ bool player_can_enter(s16b feature, u16b mode)
 
 	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
 
-	/* Pattern */
 	if (have_flag(f_ptr->flags, FF_PATTERN))
 	{
 		if (!(mode & CEM_P_CAN_ENTER_PATTERN)) return FALSE;
 	}
 
-	/* "CAN" flags */
 	if (have_flag(f_ptr->flags, FF_CAN_FLY) && p_ptr->levitation) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && p_ptr->can_swim) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_PASS) && p_ptr->pass_wall) return TRUE;
@@ -866,10 +864,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 			}
 		}
 
-		/* Redraw old spot */
 		lite_spot(oy, ox);
-
-		/* Redraw new spot */
 		lite_spot(ny, nx);
 
 		/* Check for new panel (redraw map) */

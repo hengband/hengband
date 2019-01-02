@@ -37,9 +37,9 @@ static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カ
  */
 static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 {
-	byte        feel;
+	byte feel;
 	object_type *o_ptr = &inventory[slot];
-	char        o_name[MAX_NLEN];
+	char o_name[MAX_NLEN];
 
 	/* We know about it already, do not tell us again */
 	if (o_ptr->ident & (IDENT_SENSE))return;
