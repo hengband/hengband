@@ -1577,7 +1577,7 @@ bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VA
 bool item_tester_okay(object_type *o_ptr)
 {
 	/* Hack -- allow listing empty slots */
-	if (item_tester_full) return (TRUE);
+	// if (item_tester_full) return (TRUE); // TODO:DELETE
 
 	/* Require an item */
 	if (!o_ptr->k_idx) return (FALSE);
@@ -1620,12 +1620,12 @@ bool item_tester_okay(object_type *o_ptr)
  */
 void display_inven(void)
 {
-	register        int i, n, z = 0;
-	object_type     *o_ptr;
-	TERM_COLOR      attr = TERM_WHITE;
-	char            tmp_val[80];
-	char            o_name[MAX_NLEN];
-	int             wid, hgt;
+	register int i, n, z = 0;
+	object_type *o_ptr;
+	TERM_COLOR attr = TERM_WHITE;
+	char tmp_val[80];
+	char o_name[MAX_NLEN];
+	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
 
@@ -2103,7 +2103,7 @@ static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inven(int target_item)
+COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 {
 	COMMAND_CODE i;
 	int j, k, l, z = 0;
@@ -2116,7 +2116,7 @@ COMMAND_CODE show_inven(int target_item)
 	char            out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
 	TERM_LEN wid, hgt;
-	char            inven_label[52 + 1];
+	char inven_label[52 + 1];
 
 	/* Starting column */
 	col = command_gap;
@@ -2948,7 +2948,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		if (!command_wrk)
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line);
+			if (command_see) get_item_label = show_inven(menu_line, mode);
 		}
 
 		/* Equipment screen */
@@ -2979,11 +2979,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			if (!command_see && !use_menu) strcat(out_val, _(" '*'一覧,", " * to see,"));
 
 			/* Append */
-#ifdef JP
-			if (equip) strcat(out_val, format(" %s 装備品,", use_menu ? "'4'or'6'" : "'/'"));
-#else
-			if (equip) strcat(out_val, format(" %s for Equip,", use_menu ? "4 or 6" : "/"));
-#endif
+			if (equip) strcat(out_val, format(_(" %s 装備品,", " %s for Equip,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "/")));
 		}
 
 		/* Viewing equipment */
@@ -3007,11 +3003,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			if (!command_see && !use_menu) strcat(out_val, _(" '*'一覧,", " * to see,"));
 
 			/* Append */
-#ifdef JP
-			if (inven) strcat(out_val, format(" %s 持ち物,", use_menu ? "'4'or'6'" : "'/'"));
-#else
-			if (inven) strcat(out_val, format(" %s for Inven,", use_menu ? "4 or 6" : "'/'"));
-#endif
+			if (inven) strcat(out_val, format(_(" %s 持ち物,", " %s for Inven,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "'/'")));
 		}
 
 		/* Indicate legality of the "floor" item */
@@ -3967,7 +3959,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			n2 = I2A(i2);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line);
+			if (command_see) get_item_label = show_inven(menu_line, mode);
 		}
 
 		/* Equipment screen */
@@ -3978,7 +3970,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line, 0L);
+			if (command_see) get_item_label = show_equip(menu_line, mode);
 		}
 
 		/* Floor screen */
@@ -4808,9 +4800,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 static bool py_pickup_floor_aux(void)
 {
 	OBJECT_IDX this_o_idx;
-
 	cptr q, s;
-
 	OBJECT_IDX item;
 
 	/* Restrict the choices */

@@ -6618,8 +6618,7 @@ static void show_info(void)
 	if (equip_cnt)
 	{
 		Term_clear();
-		item_tester_full = TRUE;
-		(void)show_equip(0, 0L);
+		(void)show_equip(0, USE_FULL);
 		prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;
@@ -6629,8 +6628,7 @@ static void show_info(void)
 	if (inven_cnt)
 	{
 		Term_clear();
-		item_tester_full = TRUE;
-		(void)show_inven(0);
+		(void)show_inven(0, USE_FULL);
 		prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;

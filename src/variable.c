@@ -682,7 +682,6 @@ cptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files 
 cptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
 cptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
 cptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
-bool item_tester_full; //!< Total Hack -- allow all items to be listed (even empty ones) This is only used by "do_cmd_inven_e()" and is cleared there.
 
 
 /*

@@ -33,7 +33,6 @@ void do_cmd_inven(void)
 {
 	char out_val[160];
 
-
 	/* Note that we are in "inventory" mode */
 	command_wrk = FALSE;
 
@@ -41,23 +40,17 @@ void do_cmd_inven(void)
 	if (easy_floor) command_wrk = (USE_INVEN);
 	screen_save();
 
-	/* Hack -- show empty slots */
-	item_tester_full = TRUE;
-
 	/* Display the inventory */
-	(void)show_inven(0);
-
-	/* Hack -- hide empty slots */
-	item_tester_full = FALSE;
+	(void)show_inven(0, USE_FULL);
 
 #ifdef JP
 	sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
-	    (int)lbtokg1(p_ptr->total_weight) , (int)lbtokg2(p_ptr->total_weight) ,
-	    (long int)((p_ptr->total_weight * 100) / weight_limit()));
+		(int)lbtokg1(p_ptr->total_weight) , (int)lbtokg2(p_ptr->total_weight) ,
+		(long int)((p_ptr->total_weight * 100) / weight_limit()));
 #else
 	sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ",
-	    (int)(p_ptr->total_weight / 10), (int)(p_ptr->total_weight % 10),
-	    (p_ptr->total_weight * 100) / weight_limit());
+		(int)(p_ptr->total_weight / 10), (int)(p_ptr->total_weight % 10),
+		(p_ptr->total_weight * 100) / weight_limit());
 #endif
 
 
@@ -106,13 +99,7 @@ void do_cmd_equip(void)
 	if (easy_floor) command_wrk = (USE_EQUIP);
 	screen_save();
 
-	/* Hack -- show empty slots */
-	item_tester_full = TRUE;
-
-	(void)show_equip(0, 0L);
-
-	/* Hack -- undo the hack above */
-	item_tester_full = FALSE;
+	(void)show_equip(0, USE_FULL);
 
 	/* Build a prompt */
 #ifdef JP
