@@ -1542,24 +1542,9 @@ cptr describe_use(int i)
 		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "just lifting" : (p_ptr->hidarite ? "attacking monsters with" : "wearing on your arm"); break;
 #endif
 
-#ifdef JP
-		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "持つだけで精一杯の" : "射撃用に装備している"; break;
-#else
-		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "just holding" : "shooting missiles with"; break;
-#endif
-
-#ifdef JP
-		case INVEN_RIGHT: p = (left_hander ? "左手の指にはめている" : "右手の指にはめている"); break;
-#else
-		case INVEN_RIGHT: p = (left_hander ? "wearing on your left hand" : "wearing on your right hand"); break;
-#endif
-
-#ifdef JP
-		case INVEN_LEFT:  p = (left_hander ? "右手の指にはめている" : "左手の指にはめている"); break;
-#else
-		case INVEN_LEFT:  p = (left_hander ? "wearing on your right hand" : "wearing on your left hand"); break;
-#endif
-
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? _("持つだけで精一杯の", "just holding") : _("射撃用に装備している", "shooting missiles with"); break;
+		case INVEN_RIGHT: p = (left_hander ? _("左手の指にはめている", "wearing on your left hand") : _("右手の指にはめている", "wearing on your right hand")); break;
+		case INVEN_LEFT:  p = (left_hander ? _("右手の指にはめている", "wearing on your right hand") : _("左手の指にはめている", "wearing on your left hand")); break;
 		case INVEN_NECK:  p = _("首にかけている", "wearing around your neck"); break;
 		case INVEN_LITE:  p = _("光源にしている", "using to light the way"); break;
 		case INVEN_BODY:  p = _("体に着ている", "wearing on your body"); break;
@@ -1719,7 +1704,7 @@ void display_inven(void)
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
 #ifdef JP
-			sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt),lbtokg2(wgt) );
+			sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt), lbtokg2(wgt));
 #else
 			sprintf(tmp_val, "%3d.%1d lb", wgt / 10, wgt % 10);
 #endif
