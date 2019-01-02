@@ -3125,7 +3125,6 @@ void process_monster(MONSTER_IDX m_idx)
 						/* Only give a message for "take_item" */
 						if (do_take && (r_ptr->flags2 & RF2_STUPID))
 						{
-							/* Take note */
 							did_take_item = TRUE;
 
 							/* Describe observable situations */
@@ -3139,7 +3138,6 @@ void process_monster(MONSTER_IDX m_idx)
 					/* Pick up the item */
 					else if (do_take)
 					{
-						/* Take note */
 						did_take_item = TRUE;
 
 						/* Describe observable situations */
@@ -3170,7 +3168,6 @@ void process_monster(MONSTER_IDX m_idx)
 					/* Destroy the item if not a pet */
 					else if (!is_pet(m_ptr))
 					{
-						/* Take note */
 						did_kill_item = TRUE;
 
 						/* Describe observable situations */

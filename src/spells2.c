@@ -1102,7 +1102,6 @@ bool symbol_genocide(int power, bool player_cast)
 		/* Skip "wrong" monsters */
 		if (r_ptr->d_char != typ) continue;
 
-		/* Take note */
 		result |= genocide_aux(i, power, player_cast, 4, _("抹殺", "Genocide"));
 	}
 

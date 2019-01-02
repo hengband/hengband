@@ -3087,16 +3087,11 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 					/* Anger the monster */
 					if (tdam > 0) anger_monster(m_ptr);
 
-					/* Take note */
 					if (fear && m_ptr->ml)
 					{
 						char m_name[80];
-
 						sound(SOUND_FLEE);
-
-						/* Get the monster name (or "it") */
 						monster_desc(m_name, m_ptr, 0);
-
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 					}
 
@@ -3658,12 +3653,9 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					if ((tdam > 0) && !object_is_potion(q_ptr))
 						anger_monster(m_ptr);
 
-					/* Take note */
 					if (fear && m_ptr->ml)
 					{
 						sound(SOUND_FLEE);
-
-						/* Get the monster name (or "it") */
 						char m_name[80];
 						monster_desc(m_name, m_ptr, 0);
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);

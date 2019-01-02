@@ -4901,11 +4901,9 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (((dam > 0) || get_angry) && !do_sleep)
 				anger_monster(m_ptr);
 
-			/* Take note */
 			if ((fear || do_fear) && seen)
 			{
 				sound(SOUND_FLEE);
-
 				msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 			}
 

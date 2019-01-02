@@ -2473,7 +2473,6 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 				/* Handle "cold blooded" monsters */
 				if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD)
 				{
-					/* Take note */
 					do_cold_blood = TRUE;
 				}
 
@@ -2491,7 +2490,6 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 				/* Handle "invisible" monsters */
 				if (r_ptr->flags2 & (RF2_INVISIBLE))
 				{
-					/* Take note */
 					do_invisible = TRUE;
 
 					/* See invisible */

@@ -2012,11 +2012,8 @@ static void wield_all(void)
 		if (slot == INVEN_LITE) continue; /* Does not wield toaches because buys a lantern soon */
 		if (inventory[slot].k_idx) continue; 
  
-		/* Get local object */ 
 		i_ptr = &object_type_body; 
 		object_copy(i_ptr, o_ptr); 
- 
-		/* Modify quantity */ 
 		i_ptr->number = 1; 
  
 		/* Decrease the item (from the pack) */ 
@@ -2033,14 +2030,9 @@ static void wield_all(void)
 			floor_item_optimize(0 - item); 
 		} 
  
-		/* Get the wield slot */ 
 		o_ptr = &inventory[slot]; 
- 
-		/* Wear the new stuff */ 
-		object_copy(o_ptr, i_ptr); 
- 
-		/* Increase the weight */ 
-		p_ptr->total_weight += i_ptr->weight; 
+ 		object_copy(o_ptr, i_ptr); 
+ 		p_ptr->total_weight += i_ptr->weight; 
  
 		/* Increment the equip counter by hand */ 
 		equip_cnt++;

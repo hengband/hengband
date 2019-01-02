@@ -449,14 +449,12 @@ void do_cmd_wield(void)
 		break;
 	}
 
-	/* Describe the result */
 	object_desc(o_name, o_ptr, 0);
 	msg_format(act, o_name, index_to_label(slot));
 
 	/* Cursed! */
 	if (object_is_cursed(o_ptr))
 	{
-		/* Warn the player */
 		msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
 		chg_virtue(V_HARMONY, -1);
 
@@ -471,17 +469,8 @@ void do_cmd_wield(void)
 		change_race(RACE_VAMPIRE, "");
 	}
 
-	/* Recalculate bonuses */
-	p_ptr->update |= (PU_BONUS);
-
-	/* Recalculate torch */
-	p_ptr->update |= (PU_TORCH);
-
-	/* Recalculate mana */
-	p_ptr->update |= (PU_MANA);
-
+	p_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
 	p_ptr->redraw |= (PR_EQUIPPY);
-
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp();
@@ -513,9 +502,9 @@ void kamaenaoshi(INVENTORY_IDX item)
 				inven_item_optimize(INVEN_LARM);
 				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 					msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
-				 else
-				msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name, 
-							(left_hander ? _("左手", "left") : _("右手", "right")));
+				else
+					msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name, 
+						(left_hander ? _("左手", "left") : _("右手", "right")));
 			}
 			else
 			{
@@ -596,17 +585,11 @@ void do_cmd_takeoff(void)
 		{
 			msg_print(_("呪われた装備を力づくで剥がした！", "You teared a cursed equipment off by sheer strength!"));
 
-			/* Hack -- Assume felt */
 			o_ptr->ident |= (IDENT_SENSE);
-
 			o_ptr->curse_flags = 0L;
-
-			/* Take note */
 			o_ptr->feeling = FEEL_NONE;
 
-			/* Recalculate the bonuses */
 			p_ptr->update |= (PU_BONUS);
-
 			p_ptr->window |= (PW_EQUIP);
 
 			msg_print(_("呪いを打ち破った。", "You break the curse."));

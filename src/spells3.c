@@ -1872,12 +1872,9 @@ static int remove_curse_aux(int all)
 		/* Hack -- Assume felt */
 		o_ptr->ident |= (IDENT_SENSE);
 
-		/* Take note */
 		o_ptr->feeling = FEEL_NONE;
 
-		/* Recalculate the bonuses */
 		p_ptr->update |= (PU_BONUS);
-
 		p_ptr->window |= (PW_EQUIP);
 
 		/* Count the uncursings */
@@ -3022,12 +3019,10 @@ bool bless_weapon(void)
 		/* Hack -- Assume felt */
 		o_ptr->ident |= (IDENT_SENSE);
 
-		/* Take note */
 		o_ptr->feeling = FEEL_NONE;
 
 		/* Recalculate the bonuses */
 		p_ptr->update |= (PU_BONUS);
-
 		p_ptr->window |= (PW_EQUIP);
 	}
 
