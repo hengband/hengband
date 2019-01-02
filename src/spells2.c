@@ -5005,11 +5005,10 @@ bool psychometry(void)
 	cptr            q, s;
 	bool okay = FALSE;
 
-	item_tester_no_ryoute = TRUE;
 	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
 	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

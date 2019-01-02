@@ -2728,15 +2728,13 @@ static PRICE compare_weapons(PRICE bcost)
 	i_ptr = &inventory[INVEN_RARM];
 	object_copy(&orig_weapon, i_ptr);
 
-	/* Only compare melee weapons */
-	item_tester_no_ryoute = TRUE;
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
 	/* Get the first weapon */
 	q = _("第一の武器は？", "What is your first weapon? ");
 	s = _("比べるものがありません。", "You have nothing to compare.");
 
-	o_ptr[0] = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN));
+	o_ptr[0] = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
 	if (!o_ptr)
 	{
 		screen_load();
@@ -2751,7 +2749,6 @@ static PRICE compare_weapons(PRICE bcost)
 		clear_bldg(0, 22);
 
 		/* Only compare melee weapons */
-		item_tester_no_ryoute = TRUE;
 		item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
 		/* Hack -- prevent "icky" message */
@@ -2808,7 +2805,7 @@ static PRICE compare_weapons(PRICE bcost)
 			s = _("比べるものがありません。", "You have nothing to compare.");
 
 			/* Get the second weapon */
-			o_ptr[1] = choose_object(&item2, q, s, (USE_EQUIP | USE_INVEN));
+			o_ptr[1] = choose_object(&item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
 			if (!o_ptr) continue;
 
 			total += cost;
@@ -3268,12 +3265,10 @@ static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_C
 	prt(format(_("現在のあなたの技量だと、+%d まで改良できます。", "  Based on your skill, we can improve up to +%d."), maxenchant), 5, 0);
 	prt(format(_(" 改良の料金は一個につき＄%d です。", "  The price for the service is %d gold per item."), cost), 7, 0);
 
-	item_tester_no_ryoute = TRUE;
-
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるものがありません。", "You have nothing to improve.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT));
 	if (!o_ptr) return (FALSE);
 
 	/* Check if the player has enough money */

@@ -371,13 +371,12 @@ void do_cmd_activate(void)
 		set_action(ACTION_NONE);
 	}
 
-	item_tester_no_ryoute = TRUE;
 	item_tester_hook = item_tester_hook_activate;
 
 	q = _("どのアイテムを始動させますか? ", "Activate which item? ");
 	s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Activate the item */
 	do_cmd_activate_aux(item);

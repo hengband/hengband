@@ -1207,12 +1207,11 @@ void brand_weapon(int brand_type)
 
 	/* Assume enchant weapon */
 	item_tester_hook = object_allow_enchant_melee_weapon;
-	item_tester_no_ryoute = TRUE;
 
 	q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
 	s = _("強化できる武器がない。", "You have nothing to enchant.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2187,10 +2186,8 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	char        o_name[MAX_NLEN];
 	cptr        q, s;
 
-
 	/* Assume enchant weapon */
 	item_tester_hook = object_allow_enchant_weapon;
-	item_tester_no_ryoute = TRUE;
 
 	/* Enchant armor if requested */
 	if (num_ac) item_tester_hook = object_is_armour;
@@ -2198,7 +2195,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2253,16 +2250,13 @@ bool artifact_scroll(void)
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 
-
-	item_tester_no_ryoute = TRUE;
-
 	/* Enchant weapon/armour */
 	item_tester_hook = item_tester_hook_nameless_weapon_armour;
 
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2432,8 +2426,6 @@ bool ident_spell(bool only_equip)
 	cptr            q, s;
 	bool old_known;
 
-	item_tester_no_ryoute = TRUE;
-
 	if (only_equip)
 		item_tester_hook = item_tester_hook_identify_weapon_armour;
 	else
@@ -2455,7 +2447,7 @@ bool ident_spell(bool only_equip)
 
 	s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2513,12 +2505,11 @@ bool mundane_spell(bool only_equip)
 	cptr            q, s;
 
 	if (only_equip) item_tester_hook = object_is_weapon_armour_ammo;
-	item_tester_no_ryoute = TRUE;
 
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing you can use.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2569,12 +2560,11 @@ bool mundane_spell(bool only_equip)
 bool identify_fully(bool only_equip)
 {
 	OBJECT_IDX item;
-	object_type     *o_ptr;
-	char            o_name[MAX_NLEN];
-	cptr            q, s;
+	object_type *o_ptr;
+	char o_name[MAX_NLEN];
+	cptr q, s;
 	bool old_known;
 
-	item_tester_no_ryoute = TRUE;
 	if (only_equip)
 		item_tester_hook = item_tester_hook_identify_fully_weapon_armour;
 	else
@@ -2596,7 +2586,7 @@ bool identify_fully(bool only_equip)
 
 	s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return (FALSE);
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -2957,12 +2947,10 @@ bool recharge(int power)
 bool bless_weapon(void)
 {
 	OBJECT_IDX item;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	char            o_name[MAX_NLEN];
-	cptr            q, s;
-
-	item_tester_no_ryoute = TRUE;
+	char o_name[MAX_NLEN];
+	cptr q, s;
 
 	/* Bless only weapons */
 	item_tester_hook = object_is_weapon;
@@ -2970,7 +2958,7 @@ bool bless_weapon(void)
 	q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
 	s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR)))
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT)))
 		return FALSE;
 
 	/* Get the item (in the pack) */
@@ -3133,14 +3121,13 @@ bool pulish_shield(void)
 	char            o_name[MAX_NLEN];
 	cptr            q, s;
 
-	item_tester_no_ryoute = TRUE;
 	/* Assume enchant weapon */
 	item_tester_tval = TV_SHIELD;
 
 	q = _("どの盾を磨きますか？", "Pulish which weapon? ");
 	s = _("磨く盾がありません。", "You have weapon to pulish.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR)))
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT)))
 		return FALSE;
 
 	/* Get the item (in the pack) */
@@ -4021,14 +4008,13 @@ bool rustproof(void)
 	char        o_name[MAX_NLEN];
 	cptr        q, s;
 
-	item_tester_no_ryoute = TRUE;
 	/* Select a piece of armour */
 	item_tester_hook = object_is_armour;
 
 	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
 	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return FALSE;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return FALSE;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

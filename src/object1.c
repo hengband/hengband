@@ -2298,7 +2298,7 @@ COMMAND_CODE show_inven(int target_item)
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equip(int target_item)
+COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 {
 	COMMAND_CODE i;
 	int j, k, l;
@@ -2330,7 +2330,7 @@ COMMAND_CODE show_equip(int target_item)
 		/* Is this item acceptable? */
 		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr)) &&
 		    (!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
-		     item_tester_no_ryoute)) continue;
+				(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
 		/* Description */
 		object_desc(o_name, o_ptr, 0);
@@ -2851,14 +2851,14 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
 			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j])) max_equip++;
-		if (p_ptr->ryoute && !item_tester_no_ryoute) max_equip++;
+		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
 
-	if (equip && p_ptr->ryoute && !item_tester_no_ryoute)
+	if (equip && p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
 		if (p_ptr->migite)
 		{
@@ -2986,7 +2986,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 		else
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line);
+			if (command_see) get_item_label = show_equip(menu_line, mode);
 		}
 
 		/* Viewing inventory */
@@ -3454,8 +3454,6 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	/* Forget the item_tester_tval restriction */
 	item_tester_tval = 0;
 
-	item_tester_no_ryoute = FALSE;
-
 	/* Forget the item_tester_hook restriction */
 	item_tester_hook = NULL;
 
@@ -3866,14 +3864,14 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
 			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j])) max_equip++;
-		if (p_ptr->ryoute && !item_tester_no_ryoute) max_equip++;
+		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
 
-	if (equip && p_ptr->ryoute && !item_tester_no_ryoute)
+	if (equip && p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
 		if (p_ptr->migite)
 		{
@@ -4011,7 +4009,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line);
+			if (command_see) get_item_label = show_equip(menu_line, 0L);
 		}
 
 		/* Floor screen */

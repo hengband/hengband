@@ -1246,10 +1246,8 @@ static void do_cmd_wiz_blue_mage(void)
 static void do_cmd_wiz_play(void)
 {
 	OBJECT_IDX item;
-
 	object_type	forge;
 	object_type *q_ptr;
-
 	object_type *o_ptr;
 
 	char ch;
@@ -1258,10 +1256,9 @@ static void do_cmd_wiz_play(void)
 
 	cptr q, s;
 
-	item_tester_no_ryoute = TRUE;
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

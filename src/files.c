@@ -6619,7 +6619,7 @@ static void show_info(void)
 	{
 		Term_clear();
 		item_tester_full = TRUE;
-		(void)show_equip(0);
+		(void)show_equip(0, 0L);
 		prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;

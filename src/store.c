@@ -3796,7 +3796,6 @@ static void store_sell(void)
 	else
 		q = _("どのアイテムを売りますか? ", "Sell which item? ");
 
-	item_tester_no_ryoute = TRUE;
 	/* Only allow items the store will buy */
 	item_tester_hook = store_will_buy;
 
@@ -3814,7 +3813,7 @@ static void store_sell(void)
 		s = _("欲しい物がないですねえ。", "You have nothing that I want.");
 	}
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

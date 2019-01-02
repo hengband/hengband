@@ -110,7 +110,7 @@ void do_cmd_equip(void)
 	item_tester_full = TRUE;
 
 	/* Display the equipment */
-	(void)show_equip(0);
+	(void)show_equip(0, 0L);
 
 	/* Hack -- undo the hack above */
 	item_tester_full = FALSE;
@@ -207,12 +207,11 @@ void do_cmd_wield(void)
 		{
 			/* Restrict the choices */
 			item_tester_hook = item_tester_hook_melee_weapon;
-			item_tester_no_ryoute = TRUE;
 
 			/* Choose a weapon from the equipment only */
 			q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
 			s = _("おっと。", "Oops.");
-			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+			if (!get_item(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
 			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
 		}
 
@@ -279,9 +278,8 @@ void do_cmd_wield(void)
 
 		/* Restrict the choices */
 		select_ring_slot = TRUE;
-		item_tester_no_ryoute = TRUE;
 
-		if (!get_item(&slot, q, s, (USE_EQUIP)))
+		if (!get_item(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT)))
 		{
 			select_ring_slot = FALSE;
 			return;
@@ -551,12 +549,10 @@ void do_cmd_takeoff(void)
 		set_action(ACTION_NONE);
 	}
 
-	item_tester_no_ryoute = TRUE;
-
 	q = _("どれを装備からはずしますか? ", "Take off which item? ");
 	s = _("はずせる装備がない。", "You are not wearing anything to take off.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -631,11 +627,10 @@ void do_cmd_drop(void)
 		set_action(ACTION_NONE);
 	}
 
-	item_tester_no_ryoute = TRUE;
 	q = _("どのアイテムを落としますか? ", "Drop which item? ");
 	s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -930,17 +925,15 @@ void do_cmd_destroy(void)
 void do_cmd_observe(void)
 {
 	OBJECT_IDX item;
-	object_type		*o_ptr;
-	char		o_name[MAX_NLEN];
-
+	object_type *o_ptr;
+	char o_name[MAX_NLEN];
 	cptr q, s;
 
-	item_tester_no_ryoute = TRUE;
 
 	q = _("どのアイテムを調べますか? ", "Examine which item? ");
 	s = _("調べられるアイテムがない。", "You have nothing to examine.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -983,11 +976,10 @@ void do_cmd_uninscribe(void)
 	object_type *o_ptr;
 	cptr q, s;
 
-	item_tester_no_ryoute = TRUE;
 	q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
 	s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -1037,11 +1029,10 @@ void do_cmd_inscribe(void)
 	char		out_val[80];
 	cptr q, s;
 
-	item_tester_no_ryoute = TRUE;
 	q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
 	s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -1885,13 +1876,12 @@ void do_cmd_use(void)
 		set_action(ACTION_NONE);
 	}
 
-	item_tester_no_ryoute = TRUE;
 	item_tester_hook = item_tester_hook_use;
 
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing to use.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

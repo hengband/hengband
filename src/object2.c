@@ -7526,12 +7526,11 @@ static void drain_essence(void)
 		drain_value[i] = 0;
 
 	item_tester_hook = object_is_weapon_armour_ammo;
-	item_tester_no_ryoute = TRUE;
 
 	q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
 	s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
@@ -8127,12 +8126,11 @@ static void add_essence(ESSENCE_IDX mode)
 		item_tester_hook = object_is_armour;
 	else
 		item_tester_hook = object_is_weapon_armour_ammo;
-	item_tester_no_ryoute = TRUE;
 
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
