@@ -4697,49 +4697,25 @@ void player_birth(void)
 	message_add(" ");
 	message_add("  ");
 
-#ifdef JP
-	do_cmd_write_nikki(NIKKI_GAMESTART, 1, "-------- 新規ゲーム開始 --------");
-#else
-	do_cmd_write_nikki(NIKKI_GAMESTART, 1, "-------- Start New Game --------");
-#endif
+	do_cmd_write_nikki(NIKKI_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "-------- Start New Game --------"));
 	do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
 
-#ifdef JP
-	sprintf(buf,"                            性別に%sを選択した。", sex_info[p_ptr->psex].title);
-#else
-	sprintf(buf,"                            choose %s personality.", sex_info[p_ptr->psex].title);
-#endif
+	sprintf(buf,_("                            性別に%sを選択した。", "                            choose %s personality."), sex_info[p_ptr->psex].title);
 	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
 
-#ifdef JP
-	sprintf(buf,"                            種族に%sを選択した。", race_info[p_ptr->prace].title);
-#else
-	sprintf(buf,"                            choose %s race.", race_info[p_ptr->prace].title);
-#endif
+	sprintf(buf,_("                            種族に%sを選択した。", "                            choose %s race."), race_info[p_ptr->prace].title);
 	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
 
-#ifdef JP
-	sprintf(buf,"                            職業に%sを選択した。", class_info[p_ptr->pclass].title);
-#else
-	sprintf(buf,"                            choose %s class.", class_info[p_ptr->pclass].title);
-#endif
+	sprintf(buf,_("                            職業に%sを選択した。", "                            choose %s class."), class_info[p_ptr->pclass].title);
 	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
 
 	if (p_ptr->realm1)
 	{
-#ifdef JP
-		sprintf(buf,"                            魔法の領域に%s%sを選択した。",realm_names[p_ptr->realm1], p_ptr->realm2 ? format("と%s",realm_names[p_ptr->realm2]) : "");
-#else
-		sprintf(buf,"                            choose %s%s realm.",realm_names[p_ptr->realm1], p_ptr->realm2 ? format(" realm and %s",realm_names[p_ptr->realm2]) : "");
-#endif
+		sprintf(buf,_("                            魔法の領域に%s%sを選択した。", "                            choose %s%s realm."),realm_names[p_ptr->realm1], p_ptr->realm2 ? format("と%s",realm_names[p_ptr->realm2]) : "");
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
 	}
 
-#ifdef JP
-	sprintf(buf,"                            性格に%sを選択した。", seikaku_info[p_ptr->pseikaku].title);
-#else
-	sprintf(buf,"                            choose %s.", seikaku_info[p_ptr->pseikaku].title);
-#endif
+	sprintf(buf,_("                            性格に%sを選択した。", "                            choose %s."), seikaku_info[p_ptr->pseikaku].title);
 	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
 
 	/* Init the shops */

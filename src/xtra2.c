@@ -3116,11 +3116,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 		    (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena) ||
 		    have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
-#ifdef JP
-			s2 = "の入口";
-#else
-			s3 = "";
-#endif
+			s2 = _("の入口", "");
 		}
 #ifndef JP
 		else if (have_flag(f_ptr->flags, FF_FLOOR) ||
@@ -3215,19 +3211,19 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
  */
 bool target_set(BIT_FLAGS mode)
 {
-	int		i, d, m, t, bd;
+	int i, d, m, t, bd;
 	POSITION y = p_ptr->y;
 	POSITION x = p_ptr->x;
 
-	bool	done = FALSE;
-	bool	flag = TRUE;
-	char	query;
-	char	info[80];
-	char	same_key;
+	bool done = FALSE;
+	bool flag = TRUE;
+	char query;
+	char info[80];
+	char same_key;
 
-	cave_type		*c_ptr;
+	cave_type *c_ptr;
 
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 	
 	get_screen_size(&wid, &hgt);
 
@@ -3286,8 +3282,7 @@ bool target_set(BIT_FLAGS mode)
 			{
 				char cheatinfo[30];
 				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d",
-					los(p_ptr->y, p_ptr->x, y, x),
-					projectable(p_ptr->y, p_ptr->x, y, x));
+					los(p_ptr->y, p_ptr->x, y, x), projectable(p_ptr->y, p_ptr->x, y, x));
 				strcat(info, cheatinfo);
 			}
 			
