@@ -1483,24 +1483,9 @@ cptr mention_use(int i)
 		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "Just lifting" : (p_ptr->hidarite ? "Wielding" : "On arm"); break;
 #endif
 
-#ifdef JP
-		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "運搬中" : "射撃用"; break;
-#else
-		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? "Just holding" : "Shooting"; break;
-#endif
-
-#ifdef JP
-		case INVEN_RIGHT: p = (left_hander ? "左手指" : "右手指"); break;
-#else
-		case INVEN_RIGHT: p = (left_hander ? "On left hand" : "On right hand"); break;
-#endif
-
-#ifdef JP
-		case INVEN_LEFT:  p = (left_hander ? "右手指" : "左手指"); break;
-#else
-		case INVEN_LEFT:  p = (left_hander ? "On right hand" : "On left hand"); break;
-#endif
-
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
+		case INVEN_RIGHT: p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand")); break;
+		case INVEN_LEFT:  p = (left_hander ? _("右手指", "On right hand") : _("左手指", "On left hand")); break;
 		case INVEN_NECK:  p = _("  首", "Around neck"); break;
 		case INVEN_LITE:  p = _(" 光源", "Light source"); break;
 		case INVEN_BODY:  p = _("  体", "On body"); break;
