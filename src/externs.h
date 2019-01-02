@@ -333,7 +333,6 @@ extern cptr ANGBAND_DIR_PREF;
 extern cptr ANGBAND_DIR_SAVE;
 extern cptr ANGBAND_DIR_USER;
 extern cptr ANGBAND_DIR_XTRA;
-extern bool item_tester_full;
 extern OBJECT_TYPE_VALUE item_tester_tval;
 extern bool (*item_tester_hook)(object_type *o_ptr);
 extern bool (*ang_sort_comp)(vptr u, vptr v, int a, int b);

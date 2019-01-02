@@ -1854,7 +1854,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 		if (!o_ptr->inscription) continue;
 
 		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr)) continue;
+		if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
 		s = my_strchr(quark_str(o_ptr->inscription), '@');
@@ -1899,7 +1899,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 		if (!o_ptr->inscription) continue;
 
 		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr)) continue;
+		if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
 		s = my_strchr(quark_str(o_ptr->inscription), '@');
@@ -2147,7 +2147,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 		o_ptr = &inventory[i];
 
 		/* Is this item acceptable? */
-		if (!item_tester_okay(o_ptr)) continue;
+		if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
 
 		object_desc(o_name, o_ptr, 0);
 
@@ -2297,7 +2297,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 		o_ptr = &inventory[i];
 
 		/* Is this item acceptable? */
-		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr)) &&
+		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr) || (mode & USE_FULL)) &&
 		    (!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
 				(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
@@ -2731,7 +2731,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			o_ptr = &o_list[k];
 
 			/* Validate the item */
-			if (item_tester_okay(o_ptr))
+			if (item_tester_okay(o_ptr) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
 				item_tester_tval = 0;
@@ -2802,7 +2802,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&inventory[j])) max_inven++;
+			if (item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_inven++;
 	}
 
 	/* Restrict inventory indexes */
@@ -2819,7 +2819,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j])) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
@@ -2850,7 +2850,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Accept the item on the floor if legal */
-			if (item_tester_okay(o_ptr) && (o_ptr->marked & OM_FOUND)) allow_floor = TRUE;
+			if ((item_tester_okay(o_ptr) || (mode & USE_FULL)) && (o_ptr->marked & OM_FOUND)) allow_floor = TRUE;
 		}
 	}
 
@@ -3200,7 +3200,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 						next_o_idx = o_ptr->next_o_idx;
 
 						/* Validate the item */
-						if (!item_tester_okay(o_ptr)) continue;
+						if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
 
 						/* Special index */
 						k = 0 - this_o_idx;
@@ -3734,7 +3734,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 			}
 
 			/* Validate the item */
-			else if (item_tester_okay(&o_list[0 - (*cp)]))
+			else if (item_tester_okay(&o_list[0 - (*cp)]) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
 				item_tester_tval = 0;
@@ -3807,7 +3807,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&inventory[j])) max_inven++;
+			if (item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_inven++;
 	}
 
 	/* Restrict inventory indexes */
@@ -3824,7 +3824,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j])) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
