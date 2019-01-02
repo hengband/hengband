@@ -4782,11 +4782,8 @@ void dump_yourself(FILE *fff)
 
 	roff_to_buf(race_jouhou[p_ptr->prace], 78, temp, sizeof(temp));
 	fprintf(fff, "\n\n");
-#ifdef JP
-	fprintf(fff, "種族: %s\n", race_info[p_ptr->prace].title);
-#else
-	fprintf(fff, "Race: %s\n", race_info[p_ptr->prace].title);
-#endif
+	fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[p_ptr->prace].title);
+
 	t = temp;
 	for (i = 0; i < 10; i++)
 	{
@@ -4797,11 +4794,8 @@ void dump_yourself(FILE *fff)
 	}
 	roff_to_buf(class_jouhou[p_ptr->pclass], 78, temp, sizeof(temp));
 	fprintf(fff, "\n");
-#ifdef JP
-	fprintf(fff, "職業: %s\n", class_info[p_ptr->pclass].title);
-#else
-	fprintf(fff, "Class: %s\n", class_info[p_ptr->pclass].title);
-#endif
+	fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[p_ptr->pclass].title);
+
 	t = temp;
 	for (i = 0; i < 10; i++)
 	{
@@ -4812,11 +4806,8 @@ void dump_yourself(FILE *fff)
 	}
 	roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 78, temp, sizeof(temp));
 	fprintf(fff, "\n");
-#ifdef JP
-	fprintf(fff, "性格: %s\n", seikaku_info[p_ptr->pseikaku].title);
-#else
-	fprintf(fff, "Pesonality: %s\n", seikaku_info[p_ptr->pseikaku].title);
-#endif
+	fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[p_ptr->pseikaku].title);
+
 	t = temp;
 	for (i = 0; i < 6; i++)
 	{
@@ -4829,11 +4820,8 @@ void dump_yourself(FILE *fff)
 	if (p_ptr->realm1)
 	{
 		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 78, temp, sizeof(temp));
-#ifdef JP
-		fprintf(fff, "魔法: %s\n", realm_names[p_ptr->realm1]);
-#else
-		fprintf(fff, "Realm: %s\n", realm_names[p_ptr->realm1]);
-#endif
+		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[p_ptr->realm1]);
+
 		t = temp;
 		for (i = 0; i < 6; i++)
 		{
@@ -4847,11 +4835,8 @@ void dump_yourself(FILE *fff)
 	if (p_ptr->realm2)
 	{
 		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 78, temp, sizeof(temp));
-#ifdef JP
-		fprintf(fff, "魔法: %s\n", realm_names[p_ptr->realm2]);
-#else
-		fprintf(fff, "Realm: %s\n", realm_names[p_ptr->realm2]);
-#endif
+		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[p_ptr->realm2]);
+
 		t = temp;
 		for (i = 0; i < 6; i++)
 		{
