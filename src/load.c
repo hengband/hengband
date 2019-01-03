@@ -1661,9 +1661,12 @@ static void load_quick_start(void)
 	}
 
 	rd_byte(&previous_char.psex);
-	rd_byte(&previous_char.prace);
-	rd_byte(&previous_char.pclass);
-	rd_byte(&previous_char.pseikaku);
+	rd_byte(&tmp8u);
+	previous_char.prace = (RACE_IDX)tmp8u;
+	rd_byte(&tmp8u);
+	previous_char.pclass = (CLASS_IDX)tmp8u;
+	rd_byte(&tmp8u);
+	previous_char.pseikaku = (CHARACTER_IDX)tmp8u;
 	rd_byte(&tmp8u);
 	previous_char.realm1 = (REALM_IDX)tmp8u;
 	rd_byte(&tmp8u);
@@ -1731,9 +1734,12 @@ static void rd_extra(void)
 	}
 
 	/* Class/Race/Seikaku/Gender/Spells */
-	rd_byte(&p_ptr->prace);
-	rd_byte(&p_ptr->pclass);
-	rd_byte(&p_ptr->pseikaku);
+	rd_byte(&tmp8u);
+	p_ptr->prace = (RACE_IDX)tmp8u;
+	rd_byte(&tmp8u);
+	p_ptr->pclass = (CLASS_IDX)tmp8u;
+	rd_byte(&tmp8u);
+	p_ptr->pseikaku = (CHARACTER_IDX)tmp8u;
 	rd_byte(&p_ptr->psex);
 	rd_byte(&tmp8u);
 	p_ptr->realm1 = (REALM_IDX)tmp8u;
