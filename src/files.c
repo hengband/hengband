@@ -6091,7 +6091,6 @@ void do_cmd_save_game(int is_autosave)
 
 	prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
 
-	/* Refresh */
 	Term_fresh();
 
 	/* The player is not dead */
@@ -6115,7 +6114,6 @@ void do_cmd_save_game(int is_autosave)
 	/* Allow suspend again */
 	signals_handle_tstp();
 
-	/* Refresh */
 	Term_fresh();
 
 	/* Note that the player is not dead */

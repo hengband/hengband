@@ -1001,11 +1001,7 @@ void do_cmd_redraw(void)
 		/* Activate */
 		Term_activate(angband_term[j]);
 		Term_redraw();
-
-		/* Refresh */
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1914,14 +1910,8 @@ static void do_cmd_options_win(void)
 
 		/* Activate */
 		Term_activate(angband_term[j]);
-
-		/* Erase */
 		Term_clear();
-
-		/* Refresh */
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }

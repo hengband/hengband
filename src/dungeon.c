@@ -5437,8 +5437,6 @@ static void dungeon(bool load_game)
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
 	handle_stuff();
-
-	/* Refresh */
 	Term_fresh();
 
 	if (quest_num && (is_fixed_quest_idx(quest_num) &&

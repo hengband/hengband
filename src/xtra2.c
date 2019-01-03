@@ -1817,7 +1817,6 @@ void resize_map(void)
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
 	handle_stuff();
@@ -1829,7 +1828,6 @@ void resize_map(void)
 	 */
 	if (can_save) move_cursor_relative(p_ptr->y, p_ptr->x);
 
-	/* Refresh */
 	Term_fresh();
 }
 
