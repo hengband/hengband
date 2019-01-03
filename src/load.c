@@ -1836,7 +1836,8 @@ static void rd_extra(void)
 	}
 	else
 	{
-		rd_byte(&p_ptr->start_race);
+		rd_byte(&tmp8u);
+		p_ptr->start_race = (RACE_IDX)tmp8u;
 		rd_s32b(&tmp32s);
 		p_ptr->old_race1 = (BIT_FLAGS)tmp32s;
 		rd_s32b(&tmp32s);

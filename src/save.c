@@ -599,9 +599,7 @@ static void wr_extra(void)
 	byte tmp8u;
 
 	wr_string(p_ptr->name);
-
 	wr_string(p_ptr->died_from);
-
 	wr_string(p_ptr->last_message ? p_ptr->last_message : "");
 
 	save_quick_start();
@@ -649,7 +647,7 @@ static void wr_extra(void)
 	for (i = 0; i < 108; i++) wr_s32b(p_ptr->magic_num1[i]);
 	for (i = 0; i < 108; i++) wr_byte(p_ptr->magic_num2[i]);
 
-	wr_byte(p_ptr->start_race);
+	wr_byte((byte_hack)p_ptr->start_race);
 	wr_s32b(p_ptr->old_race1);
 	wr_s32b(p_ptr->old_race2);
 	wr_s16b(p_ptr->old_realm);

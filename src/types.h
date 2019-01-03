@@ -964,19 +964,19 @@ struct player_type
 	POSITION oldpy;		/* Previous player location -KMW- */
 	POSITION oldpx;		/* Previous player location -KMW- */
 
-	CHARACTER_IDX psex;			/* Sex index */
-	CHARACTER_IDX prace;			/* Race index */
-	CHARACTER_IDX pclass;		/* Class index */
-	CHARACTER_IDX pseikaku;		/* Seikaku index */
-	REALM_IDX realm1;        /* First magic realm */
-	REALM_IDX realm2;        /* Second magic realm */
-	CHARACTER_IDX oops;			/* Unused */
+	byte psex;	/* Sex index */
+	RACE_IDX prace;		/* Race index */
+	CLASS_IDX pclass;	/* Class index */
+	CHARACTER_IDX pseikaku;	/* Seikaku index */
+	REALM_IDX realm1;		/* First magic realm */
+	REALM_IDX realm2;		/* Second magic realm */
+	CHARACTER_IDX oops;		/* Unused */
 
-	DICE_SID hitdie;		/* Hit dice (sides) */
-	u16b expfact;       /* Experience factor
-			     * Note: was byte, causing overflow for Amberite
-			     * characters (such as Amberite Paladins)
-			     */
+	DICE_SID hitdie;	/* Hit dice (sides) */
+	u16b expfact;	/* Experience factor
+					* Note: was byte, causing overflow for Amberite
+					* characters (such as Amberite Paladins)
+					*/
 
 	s16b age;			/* Characters age */
 	s16b ht;			/* Height */
@@ -1137,7 +1137,7 @@ struct player_type
 	byte knowledge;           /* Knowledge about yourself */
 	BIT_FLAGS visit;               /* Visited towns */
 
-	byte start_race;          /* Race at birth */
+	RACE_IDX start_race;          /* Race at birth */
 	BIT_FLAGS old_race1;           /* Record of race changes */
 	BIT_FLAGS old_race2;           /* Record of race changes */
 	s16b old_realm;           /* Record of realm changes */

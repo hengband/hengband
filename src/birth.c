@@ -2847,7 +2847,7 @@ static bool get_player_class(void)
  */
 static bool get_player_seikaku(void)
 {
-	CHARACTER_IDX k;
+	int k;
 	int n, os, cs;
 	char c;
 	char sym[MAX_SEIKAKU];
@@ -3031,7 +3031,7 @@ static bool get_player_seikaku(void)
 	}
 
 	/* Set seikaku */
-	p_ptr->pseikaku = k;
+	p_ptr->pseikaku = (CHARACTER_IDX)k;
 	ap_ptr = &seikaku_info[p_ptr->pseikaku];
 #ifdef JP
 	strcpy(tmp, ap_ptr->title);
@@ -3043,7 +3043,6 @@ static bool get_player_seikaku(void)
 #endif
 	strcat(tmp,p_ptr->name);
 
-	/* Display */
 	c_put_str(TERM_L_BLUE, tmp, 1, 34);
 
 	return TRUE;
