@@ -1371,9 +1371,9 @@ typedef struct birther birther;
 struct birther
 {
 	byte psex;         /* Sex index */
-	byte prace;        /* Race index */
-	byte pclass;       /* Class index */
-	byte pseikaku;     /* Seikaku index */
+	RACE_IDX prace;        /* Race index */
+	CLASS_IDX pclass;       /* Class index */
+	CHARACTER_IDX pseikaku;     /* Seikaku index */
 	REALM_IDX realm1;       /* First magic realm */
 	REALM_IDX realm2;       /* Second magic realm */
 

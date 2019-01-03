@@ -111,6 +111,7 @@ typedef s16b FLOOR_IDX;			/*!< ゲーム中のフロアID型を定義 */
 
 typedef s16b RACE_IDX;			/*!< ゲーム中のプレイヤー種族ID型を定義 */
 typedef s16b CLASS_IDX;			/*!< ゲーム中のプレイヤー職業ID型を定義 */
+typedef s16b CHARACTER_IDX;		/*!< ゲーム中のプレイヤー性格ID型を定義 */
 typedef s16b MIMIC_RACE_IDX;	/*!< ゲーム中のプレイヤー変身種族ID型を定義 */
 typedef s16b PATRON_IDX;		/*!< ゲーム中のプレイヤーパトロンID型を定義 */
 typedef s32b ACTION_IDX;		/*!< プレイヤーが現在取っている常時行動のID定義 */
@@ -167,7 +168,6 @@ typedef s32b ITEM_NUMBER;		/*!< ゲーム中のアイテム数型を定義 */
 typedef s16b ACTION_ENERGY;		/*!< ゲーム中の行動エネルギー型を定義 */
 typedef s16b ARMOUR_CLASS;		/*!< ゲーム中の行動アーマークラス型を定義 */
 typedef s16b TIME_EFFECT;		/*!< ゲーム中の時限期間の型を定義 */
-typedef byte CHARACTER_IDX;		/*!< ゲーム中のキャラクター特性各種IDの型を定義 */
 typedef byte DISCOUNT_RATE;		/*!< ゲーム中の値引き率の型を定義 */
 typedef byte SPEED;				/*!< ゲーム中の加速値の型定義 */
 
