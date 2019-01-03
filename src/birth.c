@@ -2847,7 +2847,7 @@ static bool get_player_class(void)
  */
 static bool get_player_seikaku(void)
 {
-	CHARACATER_IDX k;
+	CHARACTER_IDX k;
 	int n, os, cs;
 	char c;
 	char sym[MAX_SEIKAKU];
@@ -2856,14 +2856,9 @@ static bool get_player_seikaku(void)
 	char tmp[64];
 	cptr str;
 
-
 	/* Extra info */
 	clear_from(10);
-#ifdef JP
-	put_str("注意：《性格》によってキャラクターの能力やボーナスが変化します。", 23, 5);
-#else
-	put_str("Note: Your personality determines various intrinsic abilities and bonuses.", 23, 5);
-#endif
+	put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."), 23, 5);
 
 	/* Dump seikakus */
 	for (n = 0; n < MAX_SEIKAKU; n++)
@@ -3301,17 +3296,11 @@ static bool get_chara_limits(void)
 		_("社会的地位", "social class")
 	};
 
-	/* Clean up */
 	clear_from(10);
 	
 	/* Prompt for the minimum stats */
-#ifdef JP
-	put_str("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", 11, 10);
-	put_str("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", 23, 2);
-#else
-	put_str("2/4/6/8 for Select, +/- for Change value, Enter for Goto next", 11, 10);
-	put_str("Caution: Values near minimum or maximum is extremery rare.", 23, 5);
-#endif
+	put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
+	put_str(_("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum is extremery rare."), 23, 2);
 	
 	if (p_ptr->psex == SEX_MALE)
 	{
@@ -3324,13 +3313,8 @@ static bool get_chara_limits(void)
 		min_percent = (int)(rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1) * 100 / (int)(rp_ptr->f_b_ht);
 	}
 	
-#ifdef JP
-	put_str("体格/地位の最小値/最大値を設定して下さい。", 10, 10);
-	put_str("  項    目                 最小値  最大値", 13,20);
-#else
-	put_str(" Parameter                    Min     Max", 13,20);
-	put_str("Set minimum/maximum attribute.", 10, 10);
-#endif
+	put_str(_("体格/地位の最小値/最大値を設定して下さい。", "Set minimum/maximum attribute."), 10, 10);
+	put_str(_("  項    目                 最小値  最大値", " Parameter                    Min     Max"), 13,20);
 
 	/* Output the maximum stats */
 	for (i = 0; i < MAXITEMS; i++)
@@ -3552,12 +3536,7 @@ static bool get_chara_limits(void)
 			break;
 		case '=':
 			screen_save();
-#ifdef JP
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
-#endif
-
+			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 			screen_load();
 			break;
 		default:
@@ -3609,11 +3588,7 @@ static bool do_cmd_histpref(void)
 	char temp[64 * 4];
 	char histbuf[HISTPREF_LIMIT];
 
-#ifdef JP
-	if (!get_check("生い立ち設定ファイルをロードしますか? ")) return FALSE;
-#else
-	if (!get_check("Load background history preference file? ")) return FALSE;
-#endif
+	if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? "))) return FALSE;
 
 	/* Prepare the buffer */
 	histbuf[0] = '\0';
@@ -3639,11 +3614,7 @@ static bool do_cmd_histpref(void)
 
 	if (err)
 	{
-#ifdef JP
-		msg_print("生い立ち設定ファイルの読み込みに失敗しました。");
-#else
-		msg_print("Failed to load background history preference.");
-#endif
+		msg_print(_("生い立ち設定ファイルの読み込みに失敗しました。", "Failed to load background history preference."));
 		msg_print(NULL);
 
 		/* Kill the buffer */
@@ -3653,11 +3624,7 @@ static bool do_cmd_histpref(void)
 	}
 	else if (!histpref_buf[0])
 	{
-#ifdef JP
-		msg_print("有効な生い立ち設定はこのファイルにありません。");
-#else
-		msg_print("There does not exist valid background history preference.");
-#endif
+		msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
 		msg_print(NULL);
 
 		/* Kill the buffer */
