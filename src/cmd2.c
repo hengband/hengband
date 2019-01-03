@@ -2287,153 +2287,115 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 		case TV_ARROW:
 		case TV_BOLT:
 		{
-			/* Slay Animal */
-			if ((have_flag(flgs, TR_SLAY_ANIMAL)) &&
-			    (r_ptr->flags3 & RF3_ANIMAL))
+			if ((have_flag(flgs, TR_SLAY_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ANIMAL;
 				}
-
 				if (mult < 17) mult = 17;
 			}
 
-			/* Kill Animal */
-			if ((have_flag(flgs, TR_KILL_ANIMAL)) &&
-			    (r_ptr->flags3 & RF3_ANIMAL))
+			if ((have_flag(flgs, TR_KILL_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ANIMAL;
 				}
-
 				if (mult < 27) mult = 27;
 			}
 
-			/* Slay Evil */
-			if ((have_flag(flgs, TR_SLAY_EVIL)) &&
-			    (r_ptr->flags3 & RF3_EVIL))
+			if ((have_flag(flgs, TR_SLAY_EVIL)) && (r_ptr->flags3 & RF3_EVIL))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_EVIL;
 				}
-
 				if (mult < 15) mult = 15;
 			}
 
-			/* Kill Evil */
-			if ((have_flag(flgs, TR_KILL_EVIL)) &&
-			    (r_ptr->flags3 & RF3_EVIL))
+			if ((have_flag(flgs, TR_KILL_EVIL)) && (r_ptr->flags3 & RF3_EVIL))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_EVIL;
 				}
-
 				if (mult < 25) mult = 25;
 			}
 
-			/* Slay Human */
-			if ((have_flag(flgs, TR_SLAY_HUMAN)) &&
-			    (r_ptr->flags2 & RF2_HUMAN))
+			if ((have_flag(flgs, TR_SLAY_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags2 |= RF2_HUMAN;
 				}
-
 				if (mult < 17) mult = 17;
 			}
 
-			/* Kill Human */
-			if ((have_flag(flgs, TR_KILL_HUMAN)) &&
-			    (r_ptr->flags2 & RF2_HUMAN))
+			if ((have_flag(flgs, TR_KILL_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags2 |= RF2_HUMAN;
 				}
-
 				if (mult < 27) mult = 27;
 			}
 
-			/* Slay Undead */
-			if ((have_flag(flgs, TR_SLAY_UNDEAD)) &&
-			    (r_ptr->flags3 & RF3_UNDEAD))
+			if ((have_flag(flgs, TR_SLAY_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_UNDEAD;
 				}
-
 				if (mult < 20) mult = 20;
 			}
 
-			/* Kill Undead */
-			if ((have_flag(flgs, TR_KILL_UNDEAD)) &&
-			    (r_ptr->flags3 & RF3_UNDEAD))
+			if ((have_flag(flgs, TR_KILL_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_UNDEAD;
 				}
-
 				if (mult < 30) mult = 30;
 			}
 
-			/* Slay Demon */
-			if ((have_flag(flgs, TR_SLAY_DEMON)) &&
-			    (r_ptr->flags3 & RF3_DEMON))
+			if ((have_flag(flgs, TR_SLAY_DEMON)) && (r_ptr->flags3 & RF3_DEMON))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DEMON;
 				}
-
 				if (mult < 20) mult = 20;
 			}
 
-			/* Kill Demon */
-			if ((have_flag(flgs, TR_KILL_DEMON)) &&
-			    (r_ptr->flags3 & RF3_DEMON))
+			if ((have_flag(flgs, TR_KILL_DEMON)) && (r_ptr->flags3 & RF3_DEMON))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DEMON;
 				}
-
 				if (mult < 30) mult = 30;
 			}
 
-			/* Slay Orc */
-			if ((have_flag(flgs, TR_SLAY_ORC)) &&
-			    (r_ptr->flags3 & RF3_ORC))
+			if ((have_flag(flgs, TR_SLAY_ORC)) && (r_ptr->flags3 & RF3_ORC))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ORC;
 				}
-
 				if (mult < 20) mult = 20;
 			}
 
-			/* Kill Orc */
-			if ((have_flag(flgs, TR_KILL_ORC)) &&
-			    (r_ptr->flags3 & RF3_ORC))
+			if ((have_flag(flgs, TR_KILL_ORC)) && (r_ptr->flags3 & RF3_ORC))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_ORC;
 				}
-
 				if (mult < 30) mult = 30;
 			}
 
-			/* Slay Troll */
-			if ((have_flag(flgs, TR_SLAY_TROLL)) &&
-			    (r_ptr->flags3 & RF3_TROLL))
+			if ((have_flag(flgs, TR_SLAY_TROLL)) && (r_ptr->flags3 & RF3_TROLL))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
@@ -2443,72 +2405,54 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				if (mult < 20) mult = 20;
 			}
 
-			/* Kill Troll */
-			if ((have_flag(flgs, TR_KILL_TROLL)) &&
-			    (r_ptr->flags3 & RF3_TROLL))
+			if ((have_flag(flgs, TR_KILL_TROLL)) && (r_ptr->flags3 & RF3_TROLL))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_TROLL;
 				}
-
 				if (mult < 30) mult = 30;
 			}
 
-			/* Slay Giant */
-			if ((have_flag(flgs, TR_SLAY_GIANT)) &&
-			    (r_ptr->flags3 & RF3_GIANT))
+			if ((have_flag(flgs, TR_SLAY_GIANT)) && (r_ptr->flags3 & RF3_GIANT))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_GIANT;
 				}
-
 				if (mult < 20) mult = 20;
 			}
 
-			/* Kill Giant */
-			if ((have_flag(flgs, TR_KILL_GIANT)) &&
-			    (r_ptr->flags3 & RF3_GIANT))
+			if ((have_flag(flgs, TR_KILL_GIANT)) && (r_ptr->flags3 & RF3_GIANT))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_GIANT;
 				}
-
 				if (mult < 30) mult = 30;
 			}
 
-			/* Slay Dragon  */
-			if ((have_flag(flgs, TR_SLAY_DRAGON)) &&
-			    (r_ptr->flags3 & RF3_DRAGON))
+			if ((have_flag(flgs, TR_SLAY_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DRAGON;
 				}
-
 				if (mult < 20) mult = 20;
 			}
 
-			/* Execute Dragon */
-			if ((have_flag(flgs, TR_KILL_DRAGON)) &&
-			    (r_ptr->flags3 & RF3_DRAGON))
+			if ((have_flag(flgs, TR_KILL_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON))
 			{
 				if (is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_DRAGON;
 				}
-
 				if (mult < 30) mult = 30;
-
-				if ((o_ptr->name1 == ART_BARD_ARROW) &&
-				    (m_ptr->r_idx == MON_SMAUG) &&
+				if ((o_ptr->name1 == ART_BARD_ARROW) && (m_ptr->r_idx == MON_SMAUG) &&
 				    (inventory[INVEN_BOW].name1 == ART_BARD))
 					mult *= 5;
 			}
 
-			/* Brand (Acid) */
 			if (have_flag(flgs, TR_BRAND_ACID))
 			{
 				/* Notice immunity */
@@ -2519,15 +2463,12 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK);
 					}
 				}
-
-				/* Otherwise, take the damage */
 				else
 				{
 					if (mult < 17) mult = 17;
 				}
 			}
 
-			/* Brand (Elec) */
 			if (have_flag(flgs, TR_BRAND_ELEC))
 			{
 				/* Notice immunity */
@@ -2538,15 +2479,12 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 					}
 				}
-
-				/* Otherwise, take the damage */
 				else
 				{
 					if (mult < 17) mult = 17;
 				}
 			}
 
-			/* Brand (Fire) */
 			if (have_flag(flgs, TR_BRAND_FIRE))
 			{
 				/* Notice immunity */
@@ -2557,7 +2495,6 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 					}
 				}
-
 				/* Otherwise, take the damage */
 				else
 				{
@@ -2573,7 +2510,6 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				}
 			}
 
-			/* Brand (Cold) */
 			if (have_flag(flgs, TR_BRAND_COLD))
 			{
 				/* Notice immunity */
@@ -2599,7 +2535,6 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 				}
 			}
 
-			/* Brand (Poison) */
 			if (have_flag(flgs, TR_BRAND_POIS))
 			{
 				/* Notice immunity */
@@ -2610,7 +2545,6 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 						r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
 					}
 				}
-
 				/* Otherwise, take the damage */
 				else
 				{
@@ -4008,7 +3942,7 @@ void do_cmd_travel(void)
 {
 	POSITION x, y;
 	int i;
-	int dx, dy, sx, sy;
+	POSITION dx, dy, sx, sy;
 	feature_type *f_ptr;
 
 	if (travel.x != 0 && travel.y != 0 &&
