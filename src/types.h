@@ -964,7 +964,7 @@ struct player_type
 	POSITION oldpy;		/* Previous player location -KMW- */
 	POSITION oldpx;		/* Previous player location -KMW- */
 
-	byte psex;	/* Sex index */
+	SEX_IDX psex;		/* Sex index */
 	RACE_IDX prace;		/* Race index */
 	CLASS_IDX pclass;	/* Class index */
 	CHARACTER_IDX pseikaku;	/* Seikaku index */
@@ -1370,12 +1370,12 @@ typedef struct birther birther;
 
 struct birther
 {
-	byte psex;         /* Sex index */
-	RACE_IDX prace;        /* Race index */
-	CLASS_IDX pclass;       /* Class index */
-	CHARACTER_IDX pseikaku;     /* Seikaku index */
-	REALM_IDX realm1;       /* First magic realm */
-	REALM_IDX realm2;       /* Second magic realm */
+	SEX_IDX psex;		/* Sex index */
+	RACE_IDX prace;		/* Race index */
+	CLASS_IDX pclass;	/* Class index */
+	CHARACTER_IDX pseikaku;	/* Seikaku index */
+	REALM_IDX realm1;	/* First magic realm */
+	REALM_IDX realm2;	/* Second magic realm */
 
 	s16b age;
 	s16b ht;
@@ -1567,19 +1567,12 @@ typedef struct high_score high_score;
 struct high_score
 {
 	char what[8];		/* Version info (string) */
-
 	char pts[10];		/* Total Score (number) */
-
 	char gold[10];		/* Total Gold (number) */
-
 	char turns[10];		/* Turns Taken (number) */
-
 	char day[10];		/* Time stamp (string) */
-
 	char who[16];		/* Player Name (string) */
-
 	char uid[8];		/* Player UID (number) */
-
 	char sex[2];		/* Player Sex (string) */
 	char p_r[3];		/* Player Race (number) */
 	char p_c[3];		/* Player Class (number) */
@@ -1680,8 +1673,8 @@ typedef struct
 	DEPTH dun_level;
 	s32b last_visit;      /* Time count of last visit. 0 for new floor. */
 	u32b visit_mark;      /* Older has always smaller mark. */
-	s16b upper_floor_id;  /* a floor connected with level teleportation */
-	s16b lower_floor_id;  /* a floor connected with level tel. and trap door */
+	FLOOR_IDX upper_floor_id;  /* a floor connected with level teleportation */
+	FLOOR_IDX lower_floor_id;  /* a floor connected with level tel. and trap door */
 } saved_floor_type;
 
 
