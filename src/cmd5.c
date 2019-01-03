@@ -52,17 +52,17 @@ cptr spell_category_name(OBJECT_TYPE_VALUE tval)
  */
 static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
 {
-	int         i;
+	int i;
 	SPELL_IDX   spell = -1;
-	int         num = 0;
-	int         ask = TRUE;
-	MANA_POINT  need_mana;
-	SPELL_IDX   spells[64];
-	bool        flag, redraw, okay;
-	char        choice;
+	int num = 0;
+	int ask = TRUE;
+	MANA_POINT need_mana;
+	SPELL_IDX spells[64];
+	bool flag, redraw, okay;
+	char choice;
 	const magic_type  *s_ptr;
-	char        out_val[160];
-	cptr        p;
+	char out_val[160];
+	cptr p;
 	COMMAND_CODE code;
 #ifdef JP
 	char jverb_buf[128];

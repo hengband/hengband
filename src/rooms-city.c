@@ -12,9 +12,10 @@
 */
 static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 {
-	int i, y, x, center_y, center_x, tmp, attempt = 10000;
-	int max_bldg_hgt = 3 * town_hgt / MAX_TOWN_HGT;
-	int max_bldg_wid = 5 * town_wid / MAX_TOWN_WID;
+	POSITION i, y, x, center_y, center_x;
+	int tmp, attempt = 10000;
+	POSITION max_bldg_hgt = 3 * town_hgt / MAX_TOWN_HGT;
+	POSITION max_bldg_wid = 5 * town_wid / MAX_TOWN_WID;
 	ugbldg_type *cur_ugbldg;
 	bool **ugarcade_used, abort;
 
@@ -97,10 +98,11 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 * @note
 * Note: ltcy and ltcx indicate "left top corner".
 */
-static void build_stores(int ltcy, int ltcx, int stores[], int n)
+static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 {
-	int i, y, x;
-	IDX j;
+	int i;
+	POSITION y, x;
+	FEAT_IDX j;
 	ugbldg_type *cur_ugbldg;
 
 	for (i = 0; i < n; i++)

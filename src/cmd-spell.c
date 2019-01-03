@@ -178,10 +178,6 @@ cptr info_weight(WEIGHT weight)
 #endif
 }
 
-
-
-
-
 /*!
  * @brief 魔法処理のメインルーチン
  * @param realm 魔法領域のID

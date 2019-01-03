@@ -329,8 +329,8 @@ bool build_type3(void)
 	POSITION y1a, x1a, y2a, x2a;
 	POSITION y1b, x1b, y2b, x2b;
 	POSITION yval, xval;
-	bool		light;
-	cave_type   *c_ptr;
+	bool light;
+	cave_type *c_ptr;
 
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
@@ -584,8 +584,8 @@ bool build_type4(void)
 {
 	POSITION y, x, y1, x1;
 	POSITION y2, x2, tmp, yval, xval;
-	bool        light;
-	cave_type   *c_ptr;
+	bool light;
+	cave_type *c_ptr;
 
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
@@ -655,243 +655,243 @@ bool build_type4(void)
 	/* Inner room variations */
 	switch (randint1(5))
 	{
-		/* Just an inner room with a monster */
-	case 1:
-	{
-		/* Place a secret door */
-		switch (randint1(4))
+			/* Just an inner room with a monster */
+		case 1:
 		{
-		case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-		case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-		case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-		case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
-		}
-
-		/* Place a monster in the room */
-		vault_monsters(yval, xval, 1);
-
-		break;
-	}
-
-	/* Treasure Vault (with a door) */
-	case 2:
-	{
-		/* Place a secret door */
-		switch (randint1(4))
-		{
-		case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-		case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-		case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-		case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
-		}
-
-		/* Place another inner room */
-		for (y = yval - 1; y <= yval + 1; y++)
-		{
-			for (x = xval - 1; x <= xval + 1; x++)
+			/* Place a secret door */
+			switch (randint1(4))
 			{
-				if ((x == xval) && (y == yval)) continue;
-				c_ptr = &cave[y][x];
-				place_inner_grid(c_ptr);
+			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
 			}
+
+			/* Place a monster in the room */
+			vault_monsters(yval, xval, 1);
+
+			break;
 		}
 
-		/* Place a locked door on the inner room */
-		switch (randint1(4))
+		/* Treasure Vault (with a door) */
+		case 2:
 		{
-		case 1: place_locked_door(yval - 1, xval); break;
-		case 2: place_locked_door(yval + 1, xval); break;
-		case 3: place_locked_door(yval, xval - 1); break;
-		case 4: place_locked_door(yval, xval + 1); break;
-		}
-
-		/* Monsters to guard the "treasure" */
-		vault_monsters(yval, xval, randint1(3) + 2);
-
-		/* Object (80%) */
-		if (randint0(100) < 80)
-		{
-			place_object(yval, xval, 0L);
-		}
-
-		/* Stairs (20%) */
-		else
-		{
-			place_random_stairs(yval, xval);
-		}
-
-		/* Traps to protect the treasure */
-		vault_traps(yval, xval, 4, 10, 2 + randint1(3));
-
-		break;
-	}
-
-	/* Inner pillar(s). */
-	case 3:
-	{
-		/* Place a secret door */
-		switch (randint1(4))
-		{
-		case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-		case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-		case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-		case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
-		}
-
-		/* Large Inner Pillar */
-		for (y = yval - 1; y <= yval + 1; y++)
-		{
-			for (x = xval - 1; x <= xval + 1; x++)
+			/* Place a secret door */
+			switch (randint1(4))
 			{
-				c_ptr = &cave[y][x];
-				place_inner_grid(c_ptr);
+			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
 			}
-		}
 
-		/* Occasionally, two more Large Inner Pillars */
-		if (one_in_(2))
-		{
-			tmp = randint1(2);
+			/* Place another inner room */
 			for (y = yval - 1; y <= yval + 1; y++)
 			{
-				for (x = xval - 5 - tmp; x <= xval - 3 - tmp; x++)
+				for (x = xval - 1; x <= xval + 1; x++)
 				{
+					if ((x == xval) && (y == yval)) continue;
 					c_ptr = &cave[y][x];
 					place_inner_grid(c_ptr);
 				}
-				for (x = xval + 3 + tmp; x <= xval + 5 + tmp; x++)
+			}
+
+			/* Place a locked door on the inner room */
+			switch (randint1(4))
+			{
+			case 1: place_locked_door(yval - 1, xval); break;
+			case 2: place_locked_door(yval + 1, xval); break;
+			case 3: place_locked_door(yval, xval - 1); break;
+			case 4: place_locked_door(yval, xval + 1); break;
+			}
+
+			/* Monsters to guard the "treasure" */
+			vault_monsters(yval, xval, randint1(3) + 2);
+
+			/* Object (80%) */
+			if (randint0(100) < 80)
+			{
+				place_object(yval, xval, 0L);
+			}
+
+			/* Stairs (20%) */
+			else
+			{
+				place_random_stairs(yval, xval);
+			}
+
+			/* Traps to protect the treasure */
+			vault_traps(yval, xval, 4, 10, 2 + randint1(3));
+
+			break;
+		}
+
+		/* Inner pillar(s). */
+		case 3:
+		{
+			/* Place a secret door */
+			switch (randint1(4))
+			{
+			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+			}
+
+			/* Large Inner Pillar */
+			for (y = yval - 1; y <= yval + 1; y++)
+			{
+				for (x = xval - 1; x <= xval + 1; x++)
 				{
 					c_ptr = &cave[y][x];
 					place_inner_grid(c_ptr);
 				}
 			}
+
+			/* Occasionally, two more Large Inner Pillars */
+			if (one_in_(2))
+			{
+				tmp = randint1(2);
+				for (y = yval - 1; y <= yval + 1; y++)
+				{
+					for (x = xval - 5 - tmp; x <= xval - 3 - tmp; x++)
+					{
+						c_ptr = &cave[y][x];
+						place_inner_grid(c_ptr);
+					}
+					for (x = xval + 3 + tmp; x <= xval + 5 + tmp; x++)
+					{
+						c_ptr = &cave[y][x];
+						place_inner_grid(c_ptr);
+					}
+				}
+			}
+
+			/* Occasionally, some Inner rooms */
+			if (one_in_(3))
+			{
+				int door_type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
+					one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+					((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+
+				/* Long horizontal walls */
+				for (x = xval - 5; x <= xval + 5; x++)
+				{
+					c_ptr = &cave[yval - 1][x];
+					place_inner_grid(c_ptr);
+					c_ptr = &cave[yval + 1][x];
+					place_inner_grid(c_ptr);
+				}
+
+				/* Close off the left/right edges */
+				c_ptr = &cave[yval][xval - 5];
+				place_inner_grid(c_ptr);
+				c_ptr = &cave[yval][xval + 5];
+				place_inner_grid(c_ptr);
+
+				/* Secret doors (random top/bottom) */
+				place_secret_door(yval - 3 + (randint1(2) * 2), xval - 3, door_type);
+				place_secret_door(yval - 3 + (randint1(2) * 2), xval + 3, door_type);
+
+				/* Monsters */
+				vault_monsters(yval, xval - 2, randint1(2));
+				vault_monsters(yval, xval + 2, randint1(2));
+
+				/* Objects */
+				if (one_in_(3)) place_object(yval, xval - 2, 0L);
+				if (one_in_(3)) place_object(yval, xval + 2, 0L);
+			}
+
+			break;
 		}
 
-		/* Occasionally, some Inner rooms */
-		if (one_in_(3))
+		/* Maze inside. */
+		case 4:
+		{
+			/* Place a secret door */
+			switch (randint1(4))
+			{
+			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+			}
+
+			/* Maze (really a checkerboard) */
+			for (y = y1; y <= y2; y++)
+			{
+				for (x = x1; x <= x2; x++)
+				{
+					if (0x1 & (x + y))
+					{
+						c_ptr = &cave[y][x];
+						place_inner_grid(c_ptr);
+					}
+				}
+			}
+
+			/* Monsters just love mazes. */
+			vault_monsters(yval, xval - 5, randint1(3));
+			vault_monsters(yval, xval + 5, randint1(3));
+
+			/* Traps make them entertaining. */
+			vault_traps(yval, xval - 3, 2, 8, randint1(3));
+			vault_traps(yval, xval + 3, 2, 8, randint1(3));
+
+			/* Mazes should have some treasure too. */
+			vault_objects(yval, xval, 3);
+
+			break;
+		}
+
+		/* Four small rooms. */
+		case 5:
 		{
 			int door_type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
 				one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
 				((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
-			/* Long horizontal walls */
-			for (x = xval - 5; x <= xval + 5; x++)
+			/* Inner "cross" */
+			for (y = y1; y <= y2; y++)
 			{
-				c_ptr = &cave[yval - 1][x];
-				place_inner_grid(c_ptr);
-				c_ptr = &cave[yval + 1][x];
+				c_ptr = &cave[y][xval];
 				place_inner_grid(c_ptr);
 			}
-
-			/* Close off the left/right edges */
-			c_ptr = &cave[yval][xval - 5];
-			place_inner_grid(c_ptr);
-			c_ptr = &cave[yval][xval + 5];
-			place_inner_grid(c_ptr);
-
-			/* Secret doors (random top/bottom) */
-			place_secret_door(yval - 3 + (randint1(2) * 2), xval - 3, door_type);
-			place_secret_door(yval - 3 + (randint1(2) * 2), xval + 3, door_type);
-
-			/* Monsters */
-			vault_monsters(yval, xval - 2, randint1(2));
-			vault_monsters(yval, xval + 2, randint1(2));
-
-			/* Objects */
-			if (one_in_(3)) place_object(yval, xval - 2, 0L);
-			if (one_in_(3)) place_object(yval, xval + 2, 0L);
-		}
-
-		break;
-	}
-
-	/* Maze inside. */
-	case 4:
-	{
-		/* Place a secret door */
-		switch (randint1(4))
-		{
-		case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-		case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-		case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-		case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
-		}
-
-		/* Maze (really a checkerboard) */
-		for (y = y1; y <= y2; y++)
-		{
 			for (x = x1; x <= x2; x++)
 			{
-				if (0x1 & (x + y))
-				{
-					c_ptr = &cave[y][x];
-					place_inner_grid(c_ptr);
-				}
+				c_ptr = &cave[yval][x];
+				place_inner_grid(c_ptr);
 			}
+
+			/* Doors into the rooms */
+			if (randint0(100) < 50)
+			{
+				int i = randint1(10);
+				place_secret_door(y1 - 1, xval - i, door_type);
+				place_secret_door(y1 - 1, xval + i, door_type);
+				place_secret_door(y2 + 1, xval - i, door_type);
+				place_secret_door(y2 + 1, xval + i, door_type);
+			}
+			else
+			{
+				int i = randint1(3);
+				place_secret_door(yval + i, x1 - 1, door_type);
+				place_secret_door(yval - i, x1 - 1, door_type);
+				place_secret_door(yval + i, x2 + 1, door_type);
+				place_secret_door(yval - i, x2 + 1, door_type);
+			}
+
+			/* Treasure, centered at the center of the cross */
+			vault_objects(yval, xval, 2 + randint1(2));
+
+			/* Gotta have some monsters. */
+			vault_monsters(yval + 1, xval - 4, randint1(4));
+			vault_monsters(yval + 1, xval + 4, randint1(4));
+			vault_monsters(yval - 1, xval - 4, randint1(4));
+			vault_monsters(yval - 1, xval + 4, randint1(4));
+
+			break;
 		}
-
-		/* Monsters just love mazes. */
-		vault_monsters(yval, xval - 5, randint1(3));
-		vault_monsters(yval, xval + 5, randint1(3));
-
-		/* Traps make them entertaining. */
-		vault_traps(yval, xval - 3, 2, 8, randint1(3));
-		vault_traps(yval, xval + 3, 2, 8, randint1(3));
-
-		/* Mazes should have some treasure too. */
-		vault_objects(yval, xval, 3);
-
-		break;
-	}
-
-	/* Four small rooms. */
-	case 5:
-	{
-		int door_type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-			one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-			((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
-
-		/* Inner "cross" */
-		for (y = y1; y <= y2; y++)
-		{
-			c_ptr = &cave[y][xval];
-			place_inner_grid(c_ptr);
-		}
-		for (x = x1; x <= x2; x++)
-		{
-			c_ptr = &cave[yval][x];
-			place_inner_grid(c_ptr);
-		}
-
-		/* Doors into the rooms */
-		if (randint0(100) < 50)
-		{
-			int i = randint1(10);
-			place_secret_door(y1 - 1, xval - i, door_type);
-			place_secret_door(y1 - 1, xval + i, door_type);
-			place_secret_door(y2 + 1, xval - i, door_type);
-			place_secret_door(y2 + 1, xval + i, door_type);
-		}
-		else
-		{
-			int i = randint1(3);
-			place_secret_door(yval + i, x1 - 1, door_type);
-			place_secret_door(yval - i, x1 - 1, door_type);
-			place_secret_door(yval + i, x2 + 1, door_type);
-			place_secret_door(yval - i, x2 + 1, door_type);
-		}
-
-		/* Treasure, centered at the center of the cross */
-		vault_objects(yval, xval, 2 + randint1(2));
-
-		/* Gotta have some monsters. */
-		vault_monsters(yval + 1, xval - 4, randint1(4));
-		vault_monsters(yval + 1, xval + 4, randint1(4));
-		vault_monsters(yval - 1, xval - 4, randint1(4));
-		vault_monsters(yval - 1, xval + 4, randint1(4));
-
-		break;
-	}
 	}
 
 	return TRUE;
@@ -961,7 +961,7 @@ bool build_type12(void)
 	bool emptyflag = TRUE;
 
 	/* Make a random metric */
-	int h1, h2, h3, h4;
+	POSITION h1, h2, h3, h4;
 	h1 = randint1(32) - 16;
 	h2 = randint1(16);
 	h3 = randint1(32);

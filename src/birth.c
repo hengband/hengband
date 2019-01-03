@@ -2847,7 +2847,8 @@ static bool get_player_class(void)
  */
 static bool get_player_seikaku(void)
 {
-	int k, n, os, cs;
+	CHARACATER_IDX k;
+	int n, os, cs;
 	char c;
 	char sym[MAX_SEIKAKU];
 	char p2 = ')';
