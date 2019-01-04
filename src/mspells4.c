@@ -2667,11 +2667,10 @@ MONSTER_NUMBER summon_Kin(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 	int k, count = 0;
 	monster_type	*m_ptr = &m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
-	summon_kin_type = r_ptr->d_char; /* Big hack */
 
 	for (k = 0; k < 4; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP, '\0');
+		count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP, r_ptr->d_char);
 	}
 	return count;
 }

@@ -3718,18 +3718,18 @@ bool alloc_horde(POSITION y, POSITION x)
 	m_idx = cave[y][x].m_idx;
 
 	if (m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[m_list[m_idx].r_idx];
-	summon_kin_type = r_ptr->d_char;
 
 	for (attempts = randint1(10) + 5; attempts; attempts--)
 	{
 		scatter(&cy, &cx, y, x, 5, 0);
 
-		(void)summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, '\0');
+		(void)summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, r_ptr->d_char);
 
 		y = cy;
 		x = cx;
 	}
 
+	if (cheat_hear) msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
 	return TRUE;
 }
 
@@ -3827,7 +3827,6 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	{
 		if (alloc_horde(y, x))
 		{
-			if (cheat_hear) msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), summon_kin_type);
 			return (TRUE);
 		}
 	}
@@ -3934,6 +3933,8 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 
 	/* Save the "summon" type */
 	summon_specific_type = type;
+
+	summon_kin_type = symbol;
 
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
 
