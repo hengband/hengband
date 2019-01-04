@@ -1051,13 +1051,8 @@ void leave_floor(void)
 		/* Record the last visit turn of current floor */
 		sf_ptr->last_visit = turn;
 
-		/* Forget the lite */
 		forget_lite();
-
-		/* Forget the view */
 		forget_view();
-
-		/* Forget the view */
 		clear_mon_lite();
 
 		/* Save current floor */

@@ -1149,19 +1149,13 @@ static bool wr_dungeon(void)
 	saved_floor_type *cur_sf_ptr;
 	int i;
 
-	/* Forget the lite */
 	forget_lite();
-
-	/* Forget the view */
 	forget_view();
-
-	/* Forget the view */
 	clear_mon_lite();
 
 	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
 	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
-
 
 	/*** Meta info ***/
 

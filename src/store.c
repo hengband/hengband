@@ -4601,11 +4601,11 @@ static void store_process_command(void)
  */
 void do_cmd_store(void)
 {
-	int         which;
-	int         maintain_num;
-	int         i;
-	cave_type   *c_ptr;
-	bool        need_redraw_store_inv; /* To redraw missiles damage and prices in store */
+	int which;
+	int maintain_num;
+	int i;
+	cave_type *c_ptr;
+	bool need_redraw_store_inv; /* To redraw missiles damage and prices in store */
 	int w, h;
 
 	/* Get term size */
@@ -4658,24 +4658,15 @@ void do_cmd_store(void)
 		town[p_ptr->town_num].store[which].last_visit = turn;
 	}
 
-	/* Forget the lite */
 	forget_lite();
-
-	/* Forget the view */
 	forget_view();
-
 
 	/* Hack -- Character is in "icky" mode */
 	character_icky = TRUE;
 
-
-	/* No command argument */
+	/* command reset */
 	command_arg = 0;
-
-	/* No repeated command */
 	command_rep = 0;
-
-	/* No automatic command */
 	command_new = 0;
 
 	/* Do not expand macros */
@@ -4691,13 +4682,11 @@ void do_cmd_store(void)
 	st_ptr = &town[p_ptr->town_num].store[cur_store_num];
 	ot_ptr = &owners[cur_store_num][st_ptr->owner];
 
-
 	/* Start at the beginning */
 	store_top = 0;
 
 	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
-	/* Display the store */
 	display_store();
 
 	/* Do not leave */

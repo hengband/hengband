@@ -4391,10 +4391,7 @@ void do_cmd_bldg(void)
 		p_ptr->oldpx = p_ptr->x;
 	}
 
-	/* Forget the lite */
 	forget_lite();
-
-	/* Forget the view */
 	forget_view();
 
 	/* Hack -- Increase "icky" depth */
@@ -4502,8 +4499,7 @@ void quest_discovery(QUEST_IDX q_idx)
 		/* Unique */
 
 		/* Hack -- "unique" monsters must be "unique" */
-		if ((r_ptr->flags1 & RF1_UNIQUE) &&
-		    (0 == r_ptr->max_num))
+		if ((r_ptr->flags1 & RF1_UNIQUE) && (0 == r_ptr->max_num))
 		{
 			msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
 			/* The unique is already dead */

@@ -6208,14 +6208,8 @@ void play_game(bool new_game)
 		/* Cancel the health bar */
 		health_track(0);
 
-
-		/* Forget the lite */
 		forget_lite();
-
-		/* Forget the view */
 		forget_view();
-
-		/* Forget the view */
 		clear_mon_lite();
 
 		/* Handle "quit and save" */
