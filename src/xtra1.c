@@ -509,7 +509,7 @@ static struct {
 static void prt_status(void)
 {
 	u32b bar_flags[3];
-	int wid, hgt, row_statbar, max_col_statbar;
+	TERM_LEN wid, hgt, row_statbar, max_col_statbar;
 	int i, col = 0, num = 0;
 	int space = 2;
 
@@ -990,7 +990,7 @@ static void prt_sp(void)
 static void prt_depth(void)
 {
 	char depths[32];
-	int wid, hgt, row_depth, col_depth;
+	TERM_LEN wid, hgt, row_depth, col_depth;
 	byte attr = TERM_WHITE;
 
 	Term_get_size(&wid, &hgt);
@@ -1243,7 +1243,7 @@ static void prt_speed(void)
 
 	byte attr = TERM_WHITE;
 	char buf[32] = "";
-	int wid, hgt, row_speed, col_speed;
+	TERM_LEN wid, hgt, row_speed, col_speed;
 
 	Term_get_size(&wid, &hgt);
 	col_speed = wid + COL_SPEED;
@@ -1309,7 +1309,7 @@ static void prt_speed(void)
  */
 static void prt_study(void)
 {
-	int wid, hgt, row_study, col_study;
+	TERM_LEN wid, hgt, row_study, col_study;
 
 	Term_get_size(&wid, &hgt);
 	col_study = wid + COL_STUDY;
@@ -1332,7 +1332,7 @@ static void prt_study(void)
  */
 static void prt_imitation(void)
 {
-	int wid, hgt, row_study, col_study;
+	TERM_LEN wid, hgt, row_study, col_study;
 
 	Term_get_size(&wid, &hgt);
 	col_study = wid + COL_STUDY;
@@ -2013,7 +2013,7 @@ static void fix_overhead(void)
 	for (j = 0; j < 8; j++)
 	{
 		term *old = Term;
-		int wid, hgt;
+		TERM_LEN wid, hgt;
 
 		/* No window */
 		if (!angband_term[j]) continue;

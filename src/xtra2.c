@@ -1782,7 +1782,7 @@ void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
  */
 void panel_bounds_center(void)
 {
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
 	get_screen_size(&wid, &hgt);
 
@@ -1940,7 +1940,7 @@ void verify_panel(void)
 {
 	POSITION y = p_ptr->y;
 	POSITION x = p_ptr->x;
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
 	int prow_min;
 	int pcol_min;
@@ -4765,7 +4765,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 	POSITION x, y;
 	bool success = FALSE;
 
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
 	get_screen_size(&wid, &hgt);
 

@@ -841,8 +841,8 @@ void race_legends(void)
  */
 void kingly(void)
 {
-	int wid, hgt;
-	int cx, cy;
+	TERM_LEN wid, hgt;
+	TERM_LEN cx, cy;
 	bool seppuku = streq(p_ptr->died_from, "Seppuku");
 
 	/* Hack -- retire in town */
