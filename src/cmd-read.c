@@ -8,6 +8,7 @@
 
 #include "angband.h"
 #include "object-hook.h"
+#include "spells-summon.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

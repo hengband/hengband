@@ -1064,7 +1064,6 @@ extern bool brand_bolts(void);
 extern bool polymorph_monster(POSITION y, POSITION x);
 extern bool dimension_door(void);
 extern bool mirror_tunnel(void);
-extern bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
 extern void massacre(void);
 extern bool eat_lock(void);
 extern bool shock_power(void);

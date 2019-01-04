@@ -793,7 +793,6 @@ static bool summon_specific_aux(MONRACE_IDX r_idx)
 			break;
 		}
 
-
 		case SUMMON_KIN:
 		{
 			okay = ((r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE));
