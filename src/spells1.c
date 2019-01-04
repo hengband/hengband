@@ -4964,7 +4964,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (pet) mode |= PM_FORCE_PET;
 				else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
-				count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, mode);
+				count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, mode, '\0');
 				if (!one_in_(6)) break;
 			}
 			case 23: case 24: case 25:

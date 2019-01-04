@@ -1555,7 +1555,7 @@ static void do_cmd_wiz_summon(int num)
 	int i;
 	for (i = 0; i < num; i++)
 	{
-		(void)summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		(void)summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE), '\0');
 	}
 }
 

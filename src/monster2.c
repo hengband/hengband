@@ -3724,7 +3724,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	{
 		scatter(&cy, &cx, y, x, 5, 0);
 
-		(void)summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+		(void)summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, '\0');
 
 		y = cy;
 		x = cx;
@@ -3920,7 +3920,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
  *
  * Note that this function may not succeed, though this is very rare.
  */
-bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
+bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode, SYMBOL_CODE symbol)
 {
 	POSITION x, y;
 	MONRACE_IDX r_idx;

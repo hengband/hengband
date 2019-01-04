@@ -925,14 +925,14 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_SUMMON_ANIMAL:
 	{
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0');
 		break;
 	}
 
 	case ACT_SUMMON_PHANTOM:
 	{
 		msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0');
 		break;
 	}
 
@@ -945,7 +945,7 @@ bool activate_artifact(object_type *o_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= PM_NO_PET;
 
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode))
+		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode, '\0'))
 		{
 			msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
 			if (pet)
@@ -975,7 +975,7 @@ bool activate_artifact(object_type *o_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), type, mode))
+		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), type, mode, '\0'))
 		{
 			msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
 				"Cold winds begin to blow around you, carrying with them the stench of decay..."));
@@ -997,7 +997,7 @@ bool activate_artifact(object_type *o_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= PM_NO_PET;
 
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, mode))
+		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, mode, '\0'))
 		{
 
 			if (pet)
@@ -1014,7 +1014,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_SUMMON_DAWN:
 	{
 		msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0');
 		break;
 	}
 

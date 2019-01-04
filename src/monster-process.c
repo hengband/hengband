@@ -2376,7 +2376,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 					for (k = 0; k < 6; k++)
 					{
-						if (summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode)))
+						if (summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode), '\0'))
 						{
 							if (m_list[hack_m_idx_ii].ml) count++;
 						}

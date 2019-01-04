@@ -49,7 +49,7 @@ bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int t
 
 	for (i = 0; i < num; i++)
 	{
-		if (summon_specific(who, y, x, lev, type, mode))
+		if (summon_specific(who, y, x, lev, type, mode, '\0'))
 			success = TRUE;
 	}
 
@@ -71,7 +71,7 @@ bool cast_summon_demon(int power)
 	else flg |= PM_NO_PET;
 	if (!(pet && (p_ptr->lev < 50))) flg |= PM_ALLOW_GROUP;
 
-	if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, power, SUMMON_DEMON, flg))
+	if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, power, SUMMON_DEMON, flg, '\0'))
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		if (pet)
@@ -136,7 +136,7 @@ bool cast_summon_greater_demon(void)
 
 	summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
 
-	if (summon_specific(-1, p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
+	if (summon_specific(-1, p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0'))
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
@@ -278,5 +278,5 @@ bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 		summon_kin_type = 'V';
 		break;
 	}
-	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
+	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode, '\0');
 }

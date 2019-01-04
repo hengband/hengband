@@ -537,7 +537,7 @@ cptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (pet) flg |= PM_FORCE_PET;
 				else flg |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, type, flg))
+				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, type, flg, '\0'))
 				{
 					msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
 						"Cold winds begin to blow around you, carrying with them the stench of decay..."));
