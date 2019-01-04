@@ -22498,3 +22498,22 @@ D:$"Hey Nobita, I regret to say, but the capacity of this dungeon is 3."
 D:$However, obviously there are many money mongers around him!
 D:「悪いなのび太、このダンジョンは3人用なんだ」
 D:しかし、彼に群がる金の亡者は明らかに3人よりも多い！
+
+N:1122:半魔のオーク
+E:Half-demon orc
+G:o:D
+I:120:25d10:20:50:30
+W:35:2:0:600:0:0
+B:SHOOT:HURT:8d4
+B:HIT:HURT:8d4
+B:HIT:FIRE:8d4
+F:MALE | 
+F:FORCE_MAXHP | FRIENDS | DROP_60 | 
+F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
+F:EVIL | ORC | IM_POIS | RES_DARK | IM_FIRE | RES_CHAO | DEMON | WILD_VOLCANO | AURA_FIRE
+S:1_IN_8
+S:SHOOT |  BO_FIRE |
+D:$This orc is succeeding demon blood. He wears brack flame.
+D:$This unclean combination is bred in unclean tribe
+D:このオークの体にはデーモンの血が流れており、そこから来る暗黒の炎をまとっている。
+D:この不浄な結合は、暗き風習を持つ生き物の中でしばしば育まれる。
