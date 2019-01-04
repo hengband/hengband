@@ -1632,7 +1632,7 @@ bool activate_artifact(object_type *o_ptr)
 		}
 		else if (cave[y][x].m_idx)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 			msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
 			p_ptr->energy_use = 0;

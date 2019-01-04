@@ -468,7 +468,7 @@ void compact_monsters(int size)
 
 			if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 			{
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
 			}
@@ -1904,7 +1904,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 
 	if (!necro && m_ptr)
 	{
-		GAME_TEXT m_name[80];
+		GAME_TEXT m_name[MAX_NLEN];
 		monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
 
 		power = r_ptr->level / 2;
@@ -1983,7 +1983,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	else if(!necro)
 	{
 		monster_race *r_ptr;
-		GAME_TEXT m_name[80];
+		GAME_TEXT m_name[MAX_NLEN];
 		cptr desc;
 
 		get_mon_num_prep(get_nightmare, NULL);
@@ -2732,7 +2732,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 	int oldmaxhp;
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr;
-	char old_m_name[80];
+	char old_m_name[MAX_NLEN];
 	bool old_unique = FALSE;
 	int old_r_idx = m_ptr->r_idx;
 
@@ -2798,7 +2798,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 	if (m_idx == p_ptr->riding)
 	{
-		GAME_TEXT m_name[80];
+		GAME_TEXT m_name[MAX_NLEN];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name);
 		if (!(r_ptr->flags7 & RF7_RIDING))
@@ -4047,7 +4047,7 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	GAME_TEXT m_name[80];
+	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Get the monster name */
 	monster_desc(m_name, m_ptr, 0);

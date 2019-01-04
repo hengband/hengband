@@ -364,7 +364,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 {
 	int day, hour, min;
 	FILE *fff = NULL;
-	GAME_TEXT file_name[80];
+	GAME_TEXT file_name[MAX_NLEN];
 	char buf[1024];
 	cptr note_level = "";
 	bool do_level = TRUE;
@@ -490,7 +490,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_RAND_QUEST_C:
 		{
-			char name[80];
+			char name[MAX_NLEN];
 			strcpy(name, r_name+r_info[quest[num].r_idx].name);
 			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n",
 						   " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
@@ -498,7 +498,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_RAND_QUEST_F:
 		{
-			char name[80];
+			char name[MAX_NLEN];
 			strcpy(name, r_name+r_info[quest[num].r_idx].name);
 			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n",
 						   " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
@@ -721,7 +721,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 static void do_cmd_disp_nikki(void)
 {
 	char nikki_title[256];
-	GAME_TEXT file_name[80];
+	GAME_TEXT file_name[MAX_NLEN];
 	char buf[1024];
 	char tmp[80];
 #ifdef JP
@@ -858,7 +858,7 @@ static void do_cmd_last_get(void)
  */
 static void do_cmd_erase_nikki(void)
 {
-	GAME_TEXT file_name[80];
+	GAME_TEXT file_name[MAX_NLEN];
 	char buf[256];
 	FILE *fff = NULL;
 
@@ -3126,7 +3126,7 @@ void do_cmd_visuals(void)
 			/* Dump objects */
 			for (k_idx = 0; k_idx < max_k_idx; k_idx++)
 			{
-				GAME_TEXT o_name[80];
+				GAME_TEXT o_name[MAX_NLEN];
 				object_kind *k_ptr = &k_info[k_idx];
 
 				/* Skip non-entries */
@@ -5845,7 +5845,7 @@ static void do_cmd_knowledge_pets(void)
 	int             i;
 	FILE            *fff;
 	monster_type    *m_ptr;
-	GAME_TEXT pet_name[80];
+	GAME_TEXT pet_name[MAX_NLEN];
 	int             t_friends = 0;
 	int             show_upkeep = 0;
 	GAME_TEXT file_name[1024];
@@ -6753,7 +6753,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 	/* Display lines until done */
 	for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++)
 	{
-		GAME_TEXT o_name[80];
+		GAME_TEXT o_name[MAX_NLEN];
 		TERM_COLOR a;
 		byte c;
 		object_kind *flavor_k_ptr;
@@ -7754,7 +7754,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 {
 	char tmp_str[120];
 	char rand_tmp_str[120] = "\0";
-	char name[80];
+	char name[MAX_NLEN];
 	monster_race *r_ptr;
 	IDX i;
 	int rand_level = 100;

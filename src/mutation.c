@@ -2302,7 +2302,7 @@ bool mutation_power_aux(int power)
 				{
 					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 					{
-						GAME_TEXT m_name[80];
+						GAME_TEXT m_name[MAX_NLEN];
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 						do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 					}

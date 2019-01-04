@@ -2027,7 +2027,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (a_scroll)
 	{
-		GAME_TEXT dummy_name[80] = "";
+		GAME_TEXT dummy_name[MAX_NLEN] = "";
 		cptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
 
 		/* Identify it fully */

@@ -1686,7 +1686,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	bool heal_leper = FALSE;
 
 	/* Hold the monster name */
-	GAME_TEXT m_name[80];
+	GAME_TEXT m_name[MAX_NLEN];
 	char m_poss[10];
 
 	PARAMETER_VALUE photo = 0;
@@ -4861,7 +4861,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
-			char m2_name[80];
+			char m2_name[MAX_NLEN];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
@@ -5111,7 +5111,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 	monster_type *m_ptr = NULL;
 
 	/* Monster name (for attacks) */
-	GAME_TEXT m_name[80];
+	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Monster name (for damage) */
 	char killer[80];
@@ -6710,7 +6710,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	bool jump = FALSE;
 
 	/* Attacker's name (prepared before polymorph)*/
-	GAME_TEXT who_name[80];
+	GAME_TEXT who_name[MAX_NLEN];
 
 	/* Can the player see the source of this effect? */
 	bool see_s_msg = TRUE;
@@ -7699,7 +7699,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 	if (p_ptr->riding)
 	{
-		GAME_TEXT m_name[80];
+		GAME_TEXT m_name[MAX_NLEN];
 
 		monster_desc(m_name, &m_list[p_ptr->riding], 0);
 

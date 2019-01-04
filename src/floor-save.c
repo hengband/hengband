@@ -439,7 +439,7 @@ static void preserve_pet(void)
 		for (i = m_max - 1; i >=1; i--)
 		{
 			monster_type *m_ptr = &m_list[i];
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 
 			if (!m_ptr->r_idx) continue;
 			if (!is_pet(m_ptr)) continue;
@@ -464,7 +464,7 @@ static void preserve_pet(void)
 
 			if (is_seen(m_ptr))
 			{
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
@@ -592,7 +592,7 @@ static void place_pet(void)
 		{
 			monster_type *m_ptr = &party_mon[i];
 			monster_race *r_ptr = real_r_ptr(m_ptr);
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);

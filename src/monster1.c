@@ -754,7 +754,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 							r_name + rf_ptr->name));
 #else
 						bool plural = (r_ptr->reinforce_dd[n] * r_ptr->reinforce_ds[n] > 1);
-						char name[80];
+						char name[MAX_NLEN];
 						strcpy(name, r_name + rf_ptr->name);
 						if(plural) plural_aux(name);
 						hooked_roff(format(",%dd%d %s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], name));
@@ -2251,7 +2251,7 @@ void anger_monster(monster_type *m_ptr)
 	if (p_ptr->inside_battle) return;
 	if (is_friendly(m_ptr))
 	{
-		GAME_TEXT m_name[80];
+		GAME_TEXT m_name[MAX_NLEN];
 
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name);

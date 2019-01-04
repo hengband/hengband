@@ -287,7 +287,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				POSITION oy = y, ox = x;
 				MONSTER_IDX m_idx = cave[y][x].m_idx;
 				monster_type *m_ptr = &m_list[m_idx];
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 
 				monster_desc(m_name, m_ptr, 0);
 
@@ -533,7 +533,7 @@ cptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				{
 					if (!monster_living(m_ptr->r_idx))
 					{
-						GAME_TEXT m_name[80];
+						GAME_TEXT m_name[MAX_NLEN];
 
 						monster_desc(m_name, m_ptr, 0);
 						msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);

@@ -4184,7 +4184,7 @@ static void dump_aux_pet(FILE *fff)
 	int i;
 	bool pet = FALSE;
 	bool pet_settings = FALSE;
-	GAME_TEXT pet_name[80];
+	GAME_TEXT pet_name[MAX_NLEN];
 
 	for (i = m_max - 1; i >= 1; i--)
 	{

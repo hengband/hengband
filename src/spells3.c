@@ -731,7 +731,7 @@ void teleport_level(MONSTER_IDX m_idx)
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
-			char m2_name[80];
+			char m2_name[MAX_NLEN];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
@@ -1360,7 +1360,7 @@ static bool vanish_dungeon(void)
 	cave_type *c_ptr;
 	feature_type *f_ptr;
 	monster_type *m_ptr;
-	GAME_TEXT m_name[80];
+	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Prevent vasishing of quest levels and town */
 	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
@@ -3358,7 +3358,7 @@ void display_spell_list(void)
 	TERM_LEN y, x;
 	int m[9];
 	const magic_type *s_ptr;
-	char name[80];
+	char name[MAX_NLEN];
 	char out_val[160];
 
 
@@ -4980,7 +4980,7 @@ bool shock_power(void)
 		MONSTER_IDX m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-		GAME_TEXT m_name[80];
+		GAME_TEXT m_name[MAX_NLEN];
 
 		monster_desc(m_name, m_ptr, 0);
 

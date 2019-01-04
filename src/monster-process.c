@@ -1426,7 +1426,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	ARMOUR_CLASS ac;
 	DEPTH rlev;
 	int pt;
-	GAME_TEXT m_name[80], t_name[80];
+	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	char            temp[MAX_NLEN];
 	bool            blinked;
 	bool            explode = FALSE, touched = FALSE, fear = FALSE, dead = FALSE;
@@ -2111,7 +2111,7 @@ void process_monster(MONSTER_IDX m_idx)
 #ifdef JP
 			msg_print("地面に落とされた。");
 #else
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, &m_list[p_ptr->riding], 0);
 			msg_format("You have fallen from %s.", m_name);
 #endif
@@ -2142,14 +2142,14 @@ void process_monster(MONSTER_IDX m_idx)
 
 		if (see_m)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 		}
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
 		}
@@ -2174,7 +2174,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 			if (see_m)
 			{
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, 0);
 
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
@@ -2205,7 +2205,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 		if (m_ptr->hp < m_ptr->maxhp/3)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0);
 
 			if (is_riding_mon && riding_pinch < 2)
@@ -2269,7 +2269,7 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Notice the "waking up" */
 		if (m_ptr->ml)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 		}
@@ -2311,7 +2311,7 @@ void process_monster(MONSTER_IDX m_idx)
 	{
 		if (is_pet(m_ptr) || see_m)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
 			msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
 		}
@@ -2405,7 +2405,7 @@ void process_monster(MONSTER_IDX m_idx)
 		    player_has_los_bold(oy, ox) &&
 		    projectable(oy, ox, p_ptr->y, p_ptr->x))
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			char monmessage[1024];
 			cptr filename;
 
@@ -3066,7 +3066,7 @@ void process_monster(MONSTER_IDX m_idx)
 				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
 					BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
-					GAME_TEXT m_name[80], o_name[MAX_NLEN];
+					GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
 					object_type *o_ptr = &o_list[this_o_idx];
 
 					/* Acquire next object */
@@ -3254,7 +3254,7 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Message if seen */
 		if (see_m)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
 		}

@@ -4484,10 +4484,10 @@ static cptr find_quest[] =
  */
 void quest_discovery(QUEST_IDX q_idx)
 {
-	quest_type      *q_ptr = &quest[q_idx];
-	monster_race    *r_ptr = &r_info[q_ptr->r_idx];
-	int             q_num = q_ptr->max_num;
-	char            name[80];
+	quest_type *q_ptr = &quest[q_idx];
+	monster_race *r_ptr = &r_info[q_ptr->r_idx];
+	MONSTER_NUMBER q_num = q_ptr->max_num;
+	GAME_TEXT name[MAX_NLEN];
 
 	/* No quest index */
 	if (!q_idx) return;

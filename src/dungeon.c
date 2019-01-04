@@ -3424,7 +3424,7 @@ static void process_world(void)
 		}
 		else if ((number_mon-1) == 0)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *wm_ptr;
 
 			wm_ptr = &m_list[win_m_idx];
@@ -4885,7 +4885,7 @@ static void process_player(void)
 				x = p_ptr->x + ddx[p_ptr->fishing_dir];
 				if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 				{
-					GAME_TEXT m_name[80];
+					GAME_TEXT m_name[MAX_NLEN];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 					msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 					success = TRUE;
@@ -4928,7 +4928,7 @@ static void process_player(void)
 
 		if (MON_CSLEEP(m_ptr))
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 
 			/* Recover fully */
 			(void)set_monster_csleep(p_ptr->riding, 0);
@@ -4942,7 +4942,7 @@ static void process_player(void)
 			if (set_monster_stunned(p_ptr->riding,
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 			{
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
 			}
@@ -4954,7 +4954,7 @@ static void process_player(void)
 			if (set_monster_confused(p_ptr->riding,
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1)))
 			{
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
 			}
@@ -4966,7 +4966,7 @@ static void process_player(void)
 			if(set_monster_monfear(p_ptr->riding,
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fear."), m_name);
 			}

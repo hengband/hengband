@@ -579,7 +579,7 @@ typedef struct power_desc_type power_desc_type;
  */
 struct power_desc_type
 {
-	char name[80];      //!<レイシャル名
+	char name[MAX_NLEN];      //!<レイシャル名
 	PLAYER_LEVEL level;	//!<体得レベル
 	int cost;
 	int stat;
@@ -1045,7 +1045,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_CAVALRY:
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 			int rlev;

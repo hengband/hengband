@@ -1011,7 +1011,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	{
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
@@ -1023,7 +1023,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	if (resist && player_cast)
 	{
 		bool see_m = is_seen(m_ptr);
-		GAME_TEXT m_name[80];
+		GAME_TEXT m_name[MAX_NLEN];
 
 		monster_desc(m_name, m_ptr, 0);
 		if (see_m)
@@ -1235,7 +1235,7 @@ bool probing(void)
 		/* Probe visible monsters */
 		if (m_ptr->ml)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 
 			/* Start the message */
 			if (!probe)
@@ -1434,7 +1434,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 				{
 					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 					{
-						GAME_TEXT m_name[80];
+						GAME_TEXT m_name[MAX_NLEN];
 
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 						do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
@@ -1807,7 +1807,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 
 			if (m_idx)
 			{
-				GAME_TEXT m_name[80];
+				GAME_TEXT m_name[MAX_NLEN];
 				monster_type *m_ptr = &m_list[m_idx];
 
 				/* Get the monster's real name */
@@ -1858,7 +1858,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 				if (!(r_ptr->flags2 & (RF2_KILL_WALL)) &&
 				    !(r_ptr->flags2 & (RF2_PASS_WALL)))
 				{
-					GAME_TEXT m_name[80];
+					GAME_TEXT m_name[MAX_NLEN];
 
 					/* Assume not safe */
 					sn = 0;
@@ -1924,7 +1924,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 						{
 							if (record_named_pet && is_pet(&m_list[c_ptr->m_idx]) && m_list[c_ptr->m_idx].nickname)
 							{
-								char m2_name[80];
+								char m2_name[MAX_NLEN];
 
 								monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
 								do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
@@ -2134,7 +2134,7 @@ void discharge_minion(void)
 		/* Uniques resist discharging */
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0x00);
 			msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists to be blasted, and run away."), m_name);
 			delete_monster_idx(i);
@@ -2150,7 +2150,7 @@ void discharge_minion(void)
 
 		if (record_named_pet && m_ptr->nickname)
 		{
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
@@ -2223,7 +2223,7 @@ static void cave_temp_room_lite(void)
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
 				{
-					GAME_TEXT m_name[80];
+					GAME_TEXT m_name[MAX_NLEN];
 					monster_desc(m_name, m_ptr, 0);
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
@@ -3992,7 +3992,7 @@ bool rush_attack(bool *mdeath)
 		else if (!player_bold(ty, tx))
 		{
 			/* Hold the monster name */
-			GAME_TEXT m_name[80];
+			GAME_TEXT m_name[MAX_NLEN];
 
 			/* Get the monster name (BEFORE polymorphing) */
 			monster_desc(m_name, m_ptr, 0);
