@@ -459,12 +459,12 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	INVENTORY_IDX slot;
 
 #ifdef JP
-	char o_name[MAX_NLEN];
-	char old_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
+	GAME_TEXT old_name[MAX_NLEN];
 	char kazu_str[80];
 	int hirottakazu;
 #else
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 #endif
 
 	object_type *o_ptr;
@@ -547,7 +547,7 @@ void carry(bool pickup)
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	char	o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Recenter the map around the player */
 	verify_panel();
@@ -1110,7 +1110,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	monster_type *riding_m_ptr = &m_list[p_ptr->riding];
 	monster_race *riding_r_ptr = &r_info[p_ptr->riding ? riding_m_ptr->r_idx : 0]; /* Paranoia */
 
-	char m_name[80];
+	GAME_TEXT m_name[80];
 
 	bool p_can_enter = player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 	bool p_can_kill_walls = FALSE;
@@ -1283,7 +1283,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		}
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
-			char steed_name[80];
+			GAME_TEXT steed_name[80];
 			monster_desc(steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			oktomove = FALSE;
@@ -1328,7 +1328,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 		if (oktomove && MON_STUNNED(riding_m_ptr) && one_in_(2))
 		{
-			char steed_name[80];
+			GAME_TEXT steed_name[80];
 			monster_desc(steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
 			oktomove = FALSE;

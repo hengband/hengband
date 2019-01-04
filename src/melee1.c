@@ -246,7 +246,7 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 
 	if ((atoffset(u32b, r_ptr, flags_offset) & aura_flag) && !immune)
 	{
-		char mon_name[80];
+		GAME_TEXT mon_name[80];
 		int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
 		/* Hack -- Get the "died from" name */
@@ -295,7 +295,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 	int             n_weight = 0;
 	monster_type    *m_ptr = &m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-	char            m_name[80];
+	GAME_TEXT m_name[80];
 
 	int             dice_num, dice_side;
 
@@ -436,7 +436,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	/* Access the weapon */
 	object_type     *o_ptr = &inventory[INVEN_RARM + hand];
 
-	char            m_name[80];
+	GAME_TEXT m_name[80];
 
 	bool            success_hit = FALSE;
 	bool            backstab = FALSE;
@@ -1160,7 +1160,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				if (target_ptr->hold_o_idx)
 				{
 					object_type *q_ptr = &o_list[target_ptr->hold_o_idx];
-					char o_name[MAX_NLEN];
+					GAME_TEXT o_name[MAX_NLEN];
 
 					object_desc(o_name, q_ptr, OD_NAME_ONLY);
 					q_ptr->held_m_idx = 0;
@@ -1323,7 +1323,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	cave_type       *c_ptr = &cave[y][x];
 	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-	char            m_name[80];
+	GAME_TEXT m_name[80];
 
 	disturb(FALSE, TRUE);
 
@@ -1519,9 +1519,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 	object_type *o_ptr;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
-	char m_name[80];
+	GAME_TEXT m_name[80];
 
 	char ddesc[80];
 
@@ -3256,7 +3256,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 #ifdef JP
 		msg_format("攻撃が%s自身を傷つけた！", m_name);
 #else
-		char m_name_self[80];
+		GAME_TEXT m_name_self[80];
 
 		/* hisself */
 		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);

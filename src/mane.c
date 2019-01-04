@@ -688,7 +688,7 @@ static bool use_mane(int spell)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;
-		char m_name[80];
+		GAME_TEXT m_name[80];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!cave[target_row][target_col].m_idx) break;
@@ -729,7 +729,7 @@ static bool use_mane(int spell)
 		IDX target_m_idx;
 		monster_type *m_ptr;
 		monster_race *r_ptr;
-		char m_name[80];
+		GAME_TEXT m_name[80];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
 		target_m_idx = cave[target_row][target_col].m_idx;

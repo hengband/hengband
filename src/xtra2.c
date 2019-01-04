@@ -588,7 +588,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 	if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 	{
-		char m_name[80];
+		GAME_TEXT m_name[80];
 
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 		do_cmd_write_nikki(NIKKI_NAMED_PET, 3, m_name);
@@ -649,7 +649,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		p_ptr->arena_number++;
 		if (record_arena)
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 			
 			/* Extract monster name */
 			monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
@@ -1395,7 +1395,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
 	/* It is dead now */
 	if (m_ptr->hp < 0)
 	{
-		char m_name[80];
+		GAME_TEXT m_name[80];
 
 		if (r_info[m_ptr->r_idx].flags7 & RF7_TANUKI)
 		{
@@ -2734,7 +2734,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 	{
 		monster_type *m_ptr = &m_list[c_ptr->m_idx];
 		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-		char m_name[80];
+		GAME_TEXT m_name[80];
 		bool recall = FALSE;
 
 		/* Not boring */
@@ -2834,7 +2834,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 		/* Scan all objects being carried */
 		for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
-			char o_name[MAX_NLEN];
+			GAME_TEXT o_name[MAX_NLEN];
 
 			object_type *o_ptr;
 			o_ptr = &o_list[this_o_idx];
@@ -2882,7 +2882,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 		{
 			if (floor_num == 1)
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_type *o_ptr;
 				o_ptr = &o_list[floor_list[0]];
@@ -2992,7 +2992,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 
 		if (o_ptr->marked & OM_FOUND)
 		{
-			char o_name[MAX_NLEN];
+			GAME_TEXT o_name[MAX_NLEN];
 
 			/* Not boring */
 			boring = FALSE;
@@ -3937,7 +3937,7 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 		}
 		else
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 			monster_type *m_ptr = &m_list[p_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
@@ -4082,7 +4082,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 		}
 		else
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 			monster_type *m_ptr = &m_list[p_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
@@ -4117,7 +4117,7 @@ void gain_level_reward(int chosen_reward)
 	OBJECT_SUBTYPE_VALUE dummy2 = 0;
 	int         type, effect;
 	cptr        reward = NULL;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	int count = 0;
 

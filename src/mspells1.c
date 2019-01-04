@@ -1346,7 +1346,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	BIT_FLAGS f4, f5, f6;
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	char m_name[80];
+	GAME_TEXT m_name[80];
 #ifndef JP
 	char m_poss[80];
 #endif

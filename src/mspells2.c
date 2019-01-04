@@ -265,8 +265,8 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	byte spell[96], num = 0;
 
-	char m_name[160];
-	char t_name[160];
+	GAME_TEXT m_name[160];
+	GAME_TEXT t_name[160];
 
 #ifndef JP
 	char m_poss[160];

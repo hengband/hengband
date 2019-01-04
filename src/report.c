@@ -270,7 +270,7 @@ static errr make_dump(BUF* dumpbuf)
 {
 	char		buf[1024];
 	FILE *fff;
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);

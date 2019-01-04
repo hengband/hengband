@@ -141,6 +141,9 @@ typedef s16b POSITION_IDX;		/*!< ゲーム中の座標リストID型 */
 typedef s32b ALIGNMENT;		/*!< 善悪属性の型定義 */
 typedef byte FEAT_SUBTYPE;	/*!< 地形情報の副値 (トラップ種別/パターン種別/店舗種別)*/
 
+typedef char GAME_TEXT;		/*!< ゲーム中のテキスト型定義 */
+
+
 /*!
  * @var typedef s32b HIT_POINT
  * @brief HPとその増減量の型定義

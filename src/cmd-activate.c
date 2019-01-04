@@ -1544,7 +1544,7 @@ bool activate_artifact(object_type *o_ptr)
 		INVENTORY_IDX inv;
 		int t;
 		OBJECT_IDX o_idx;
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 		object_type forge;
 
 		/* Cast off activated item */
@@ -1632,7 +1632,7 @@ bool activate_artifact(object_type *o_ptr)
 		}
 		else if (cave[y][x].m_idx)
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 			monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 			msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
 			p_ptr->energy_use = 0;

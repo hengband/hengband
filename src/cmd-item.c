@@ -160,7 +160,7 @@ void do_cmd_wield(void)
 	cptr act;
 	cptr q, s;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 
 	OBJECT_IDX need_switch_wielding = 0;
@@ -324,7 +324,7 @@ void do_cmd_wield(void)
 		object_type *switch_o_ptr = &inventory[need_switch_wielding];
 		object_type object_tmp;
 		object_type *otmp_ptr = &object_tmp;
-		char switch_name[MAX_NLEN];
+		GAME_TEXT switch_name[MAX_NLEN];
 
 		object_desc(switch_name, switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -468,7 +468,7 @@ void do_cmd_wield(void)
 void kamaenaoshi(INVENTORY_IDX item)
 {
 	object_type *o_ptr, *new_o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	if (item == INVEN_RARM)
 	{
@@ -710,7 +710,7 @@ void do_cmd_destroy(void)
 	object_type forge;
 	object_type *q_ptr = &forge;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char out_val[MAX_NLEN+40];
 
 	cptr q, s;
@@ -912,7 +912,7 @@ void do_cmd_observe(void)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr q, s;
 
 
@@ -1011,7 +1011,7 @@ void do_cmd_inscribe(void)
 {
 	OBJECT_IDX item;
 	object_type		*o_ptr;
-	char		o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char		out_val[80];
 	cptr q, s;
 

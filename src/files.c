@@ -4184,7 +4184,7 @@ static void dump_aux_pet(FILE *fff)
 	int i;
 	bool pet = FALSE;
 	bool pet_settings = FALSE;
-	char pet_name[80];
+	GAME_TEXT pet_name[80];
 
 	for (i = m_max - 1; i >= 1; i--)
 	{
@@ -4850,7 +4850,7 @@ static void dump_aux_mutations(FILE *fff)
 static void dump_aux_equipment_inventory(FILE *fff)
 {
 	int i;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Dump the equipment */
 	if (equip_cnt)
@@ -4893,7 +4893,7 @@ static void dump_aux_equipment_inventory(FILE *fff)
  */
 static void dump_aux_home_museum(FILE *fff)
 {
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	store_type  *st_ptr;
 
 	/* Do we need it?? */
@@ -6648,7 +6648,7 @@ static void show_info(void)
 				/* Show 12 items */
 				for (j = 0; (j < 12) && (i < st_ptr->stock_num); j++, i++)
 				{
-					char o_name[MAX_NLEN];
+					GAME_TEXT o_name[MAX_NLEN];
 					char tmp_val[80];
 
 					/* Acquire item */

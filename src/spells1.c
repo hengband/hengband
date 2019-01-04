@@ -1262,7 +1262,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	KIND_OBJECT_IDX k_idx = 0;
 	bool is_potion = FALSE;
@@ -1686,7 +1686,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	bool heal_leper = FALSE;
 
 	/* Hold the monster name */
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	char m_poss[10];
 
 	PARAMETER_VALUE photo = 0;
@@ -5111,7 +5111,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 	monster_type *m_ptr = NULL;
 
 	/* Monster name (for attacks) */
-	char m_name[80];
+	GAME_TEXT m_name[80];
 
 	/* Monster name (for damage) */
 	char killer[80];
@@ -6161,7 +6161,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 	if ((p_ptr->tim_eyeeye || hex_spelling(HEX_EYE_FOR_EYE))
 		&& (get_damage > 0) && !p_ptr->is_dead && (who > 0))
 	{
-		char m_name_self[80];
+		GAME_TEXT m_name_self[80];
 
 		/* hisself */
 		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
@@ -6710,7 +6710,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	bool jump = FALSE;
 
 	/* Attacker's name (prepared before polymorph)*/
-	char who_name[80];
+	GAME_TEXT who_name[80];
 
 	/* Can the player see the source of this effect? */
 	bool see_s_msg = TRUE;
@@ -7699,7 +7699,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 	if (p_ptr->riding)
 	{
-		char m_name[80];
+		GAME_TEXT m_name[80];
 
 		monster_desc(m_name, &m_list[p_ptr->riding], 0);
 

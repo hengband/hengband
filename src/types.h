@@ -1461,10 +1461,10 @@ typedef struct building_type building_type;
 struct building_type
 {
 	char name[20];                  /* proprietor name */
-	char owner_name[20];            /* proprietor name */
+	GAME_TEXT owner_name[20];            /* proprietor name */
 	char owner_race[20];            /* proprietor race */
 
-	char act_names[8][30];          /* action names */
+	GAME_TEXT act_names[8][30];          /* action names */
 	PRICE member_costs[8];           /* Costs for class members of building */
 	PRICE other_costs[8];		    /* Costs for nonguild members */
 	char letters[8];                /* action letters */

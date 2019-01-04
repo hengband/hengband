@@ -124,7 +124,7 @@ static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -212,7 +212,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
  */
 void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -311,7 +311,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -749,7 +749,7 @@ HIT_POINT spell_RF5_BA_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	char t_name[80];
+	GAME_TEXT t_name[80];
 	monster_name(t_idx, t_name);
 
 
@@ -836,7 +836,7 @@ HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -873,7 +873,7 @@ HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 	monster_type	*m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -910,7 +910,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONST
 	monster_type *m_ptr = &m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -950,7 +950,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONST
 */
 void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -1398,7 +1398,7 @@ void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cp
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool see_t = see_monster(t_idx);
 	bool known = monster_near_player(m_idx, t_idx);
-	char m_name[80], t_name[80];
+	GAME_TEXT m_name[80], t_name[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 
@@ -1533,7 +1533,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
 		cptr msg1;
-		char t_name[80];
+		GAME_TEXT t_name[80];
 		monster_name(t_idx, t_name);
 		
 		if (streq(t_name, "it"))
@@ -1646,7 +1646,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
 		cptr msg1;
-		char t_name[80];
+		GAME_TEXT t_name[80];
 		monster_name(t_idx, t_name);
 
 		if (streq(t_name, "it"))
@@ -1735,7 +1735,7 @@ void spell_RF6_HASTE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	bool see_m = see_monster(m_idx);
 	monster_type	*m_ptr = &m_list[m_idx];
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 
 	monspell_message_base(m_idx, t_idx,
@@ -1796,7 +1796,7 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	monster_type	*m_ptr = &m_list[m_idx];
 	int rlev = monster_level_idx(m_idx);
 	bool seen = (!p_ptr->blind && m_ptr->ml);
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 
 	disturb(TRUE, TRUE);
@@ -1879,7 +1879,7 @@ void spell_RF6_INVULNER(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 */
 void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 {
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 	
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
@@ -1910,7 +1910,7 @@ void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 */
 void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 {	
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 	
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
@@ -1938,7 +1938,7 @@ HIT_POINT spell_RF6_WORLD(MONSTER_IDX m_idx)
 {
 	monster_type	*m_ptr = &m_list[m_idx];
 	MONSTER_IDX who = 0;
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 
 	disturb(TRUE, TRUE);
@@ -2063,7 +2063,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 	bool monster_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool direct = player_bold(y, x);
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 
 	disturb(TRUE, TRUE);
@@ -2122,7 +2122,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 			get_damage = take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
 			if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
 			{
-				char m_name_self[80];
+				GAME_TEXT m_name_self[80];
 				/* hisself */
 				monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
@@ -2210,7 +2210,7 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
 		bool resists_tele = FALSE;
-		char t_name[80];
+		GAME_TEXT t_name[80];
 		monster_name(t_idx, t_name);
 
 		if (tr_ptr->flagsr & RFR_RES_TELE)
@@ -2274,7 +2274,7 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
 		bool resists_tele = FALSE;
-		char t_name[80];
+		GAME_TEXT t_name[80];
 		monster_name(t_idx, t_name);
 
 		if (tr_ptr->flagsr & RFR_RES_TELE)
@@ -2402,7 +2402,7 @@ void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	bool can_use_lite_area = FALSE;
 	bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
 	bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
-	char t_name[80];
+	GAME_TEXT t_name[80];
 	monster_name(t_idx, t_name);
 
 	if ((p_ptr->pclass == CLASS_NINJA) &&
@@ -2476,7 +2476,7 @@ void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 */
 void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 	disturb(TRUE, TRUE);
 
@@ -2498,7 +2498,7 @@ void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
 void spell_RF6_FORGET(MONSTER_IDX m_idx)
 {
 	int rlev = monster_level_idx(m_idx);
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 
 	disturb(TRUE, TRUE);
@@ -2695,7 +2695,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	int rlev = monster_level_idx(m_idx);
 	int count = 0;
-	char m_name[80], t_name[80], m_poss[80];
+	GAME_TEXT m_name[80], t_name[80], m_poss[80];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
@@ -3181,7 +3181,7 @@ MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 	int count = 0, k;
 	POSITION cy = y;
 	POSITION cx = x;
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 
 	if (p_ptr->blind)
@@ -3242,7 +3242,7 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 	monster_type	*m_ptr = &m_list[m_idx];
 	int rlev = monster_level_idx(m_idx);
 	int k, count = 0;
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_name(m_idx, m_name);
 
 	disturb(TRUE, TRUE);

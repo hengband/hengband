@@ -2251,7 +2251,7 @@ void anger_monster(monster_type *m_ptr)
 	if (p_ptr->inside_battle) return;
 	if (is_friendly(m_ptr))
 	{
-		char m_name[80];
+		GAME_TEXT m_name[80];
 
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name);

@@ -31,7 +31,7 @@ static bool do_cmd_archer(void)
 	object_type     *q_ptr;
 
 	char com[80];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	q_ptr = &forge;
 
@@ -251,7 +251,7 @@ bool gain_magic(void)
 	int ext = 0;
 	cptr q, s;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Only accept legal items */
 	item_tester_hook = item_tester_hook_recharge;
@@ -1045,7 +1045,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_CAVALRY:
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 			int rlev;

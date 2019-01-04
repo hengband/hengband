@@ -1615,7 +1615,7 @@ static void do_cmd_wiz_zap(void)
 		{
 			if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
@@ -1649,7 +1649,7 @@ static void do_cmd_wiz_zap_all(void)
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);

@@ -480,7 +480,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 					/* Notice the "waking up" */
 					if (m_ptr->ml)
 					{
-						char m_name[80];
+						GAME_TEXT m_name[80];
 						monster_desc(m_name, m_ptr, 0);
 						msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 					}
@@ -502,7 +502,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 		{
 			if (is_seen(m_ptr))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sはもう加速されていない。", "%^s is no longer fast."), m_name);
 			}
@@ -515,7 +515,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 		{
 			if (is_seen(m_ptr))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sはもう減速されていない。", "%^s is no longer slow."), m_name);
 			}
@@ -532,7 +532,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			/* Message if visible */
 			if (is_seen(m_ptr))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
 			}
@@ -547,7 +547,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			/* Message if visible */
 			if (is_seen(m_ptr))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
 			}
@@ -561,7 +561,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			/* Visual note */
 			if (is_seen(m_ptr))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 #ifndef JP
 				char m_poss[80];
 
@@ -584,7 +584,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 		{
 			if (is_seen(m_ptr))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sはもう無敵でない。", "%^s is no longer invulnerable."), m_name);
 			}
@@ -626,7 +626,7 @@ void process_monsters_mtimed(int mtimed_idx)
 void dispel_monster_status(MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-	char         m_name[80];
+	GAME_TEXT m_name[80];
 
 	monster_desc(m_name, m_ptr, 0);
 	if (set_monster_invulner(m_idx, 0, TRUE))
@@ -658,7 +658,7 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 
 	if (vs_player)
 	{
-		char m_name[80];
+		GAME_TEXT m_name[80];
 		monster_desc(m_name, m_ptr, 0);
 
 		if (who == 1)
@@ -736,7 +736,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 
 	if (m_ptr->exp >= r_ptr->next_exp)
 	{
-		char m_name[80];
+		GAME_TEXT m_name[80];
 		int old_hp = m_ptr->hp;
 		int old_maxhp = m_ptr->max_maxhp;
 		int old_r_idx = m_ptr->r_idx;

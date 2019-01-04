@@ -1732,7 +1732,7 @@ static bool kankin(void)
 	INVENTORY_IDX i;
 	int j;
 	bool change = FALSE;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	object_type *o_ptr;
 
 	/* Loop for inventory and right/left arm */
@@ -2655,7 +2655,7 @@ static void compare_weapon_aux(object_type *o_ptr, int col, int r)
  */
 static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 {
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char tmp_str[80];
 
 	DICE_NUMBER eff_dd = o_ptr->dd + p_ptr->to_dd[0];

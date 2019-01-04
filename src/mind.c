@@ -1645,7 +1645,7 @@ static bool cast_ninja_spell(int spell)
 	{
 		monster_type *m_ptr;
 		MONSTER_IDX m_idx;
-		char m_name[80];
+		GAME_TEXT m_name[80];
 		int i;
 		int path_n;
 		u16b path_g[512];

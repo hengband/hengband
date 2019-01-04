@@ -416,7 +416,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 			my_strchr("pht", r_info[o_ptr->pval].d_char)))
 	{
 		/* Drain vitality of humanoids */
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
 		(void)set_food(PY_FOOD_MAX - 1);

@@ -2619,7 +2619,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 
 	bool hit_body = FALSE;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	u16b path_g[512];	/* For calcuration of path length */
 
@@ -2926,7 +2926,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 				/* Handle visible monster */
 				else
 				{
-					char m_name[80];
+					GAME_TEXT m_name[80];
 
 					/* Get "the monster" or "it" */
 					monster_desc(m_name, m_ptr, 0);
@@ -2948,7 +2948,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 					if ((randint1(randint1(r_ptr->level / (3 + p_ptr->concent)) + (8 - p_ptr->concent)) == 1)
 						&& !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
 					{
-						char m_name[80];
+						GAME_TEXT m_name[80];
 
 						/* Get "the monster" or "it" */
 						monster_desc(m_name, m_ptr, 0);
@@ -3006,7 +3006,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 					if (object_is_fixed_artifact(q_ptr) &&
 						(p_ptr->pclass != CLASS_SNIPER || p_ptr->concent == 0))
 					{
-						char m_name[80];
+						GAME_TEXT m_name[80];
 
 						monster_desc(m_name, m_ptr, 0);
 
@@ -3021,7 +3021,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 
 					if (fear && m_ptr->ml)
 					{
-						char m_name[80];
+						GAME_TEXT m_name[80];
 						sound(SOUND_FLEE);
 						monster_desc(m_name, m_ptr, 0);
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
@@ -3259,7 +3259,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	bool equiped_item = FALSE;
 	bool return_when_thrown = FALSE;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	int msec = delay_factor * delay_factor * delay_factor;
 
@@ -3515,7 +3515,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				/* Handle visible monster */
 				else
 				{
-					char m_name[80];
+					GAME_TEXT m_name[80];
 					monster_desc(m_name, m_ptr, 0);
 					msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
@@ -3588,7 +3588,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					if (fear && m_ptr->ml)
 					{
 						sound(SOUND_FLEE);
-						char m_name[80];
+						GAME_TEXT m_name[80];
 						monster_desc(m_name, m_ptr, 0);
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 					}
@@ -3635,7 +3635,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				    is_friendly(&m_list[cave[y][x].m_idx]) &&
 				    !MON_INVULNER(m_ptr))
 				{
-					char m_name[80];
+					GAME_TEXT m_name[80];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 					msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
 					set_hostile(&m_list[cave[y][x].m_idx]);

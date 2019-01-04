@@ -517,7 +517,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 
 	char temp[70 * 20];
 	cptr            info[128];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	int wid, hgt;
 	POSITION rad;
 	char desc[256];
@@ -1624,7 +1624,7 @@ void display_inven(void)
 	object_type *o_ptr;
 	TERM_COLOR attr = TERM_WHITE;
 	char tmp_val[80];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
@@ -1719,7 +1719,7 @@ void display_equip(void)
 	object_type *o_ptr;
 	TERM_COLOR attr = TERM_WHITE;
 	char tmp_val[80];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
@@ -2109,7 +2109,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 	int j, k, l, z = 0;
 	int             col, cur_col, len;
 	object_type     *o_ptr;
-	char            o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char            tmp_val[80];
 	COMMAND_CODE    out_index[23];
 	TERM_COLOR      out_color[23];
@@ -2274,7 +2274,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 	int             col, cur_col, len;
 	object_type     *o_ptr;
 	char            tmp_val[80];
-	char            o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	COMMAND_CODE    out_index[23];
 	TERM_COLOR      out_color[23];
 	char            out_desc[23][MAX_NLEN];
@@ -2495,7 +2495,7 @@ void toggle_inven_equip(void)
  */
 static bool verify(cptr prompt, INVENTORY_IDX item)
 {
-	char        o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char        out_val[MAX_NLEN+20];
 	object_type *o_ptr;
 
@@ -3530,7 +3530,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 
 	object_type *o_ptr;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char tmp_val[80];
 
 	COMMAND_CODE out_index[23];
@@ -4836,7 +4836,7 @@ void py_pickup_floor(bool pickup)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	object_type *o_ptr;
 
 	int floor_num = 0;

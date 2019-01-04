@@ -364,7 +364,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 {
 	int day, hour, min;
 	FILE *fff = NULL;
-	char file_name[80];
+	GAME_TEXT file_name[80];
 	char buf[1024];
 	cptr note_level = "";
 	bool do_level = TRUE;
@@ -721,7 +721,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 static void do_cmd_disp_nikki(void)
 {
 	char nikki_title[256];
-	char file_name[80];
+	GAME_TEXT file_name[80];
 	char buf[1024];
 	char tmp[80];
 #ifdef JP
@@ -858,7 +858,7 @@ static void do_cmd_last_get(void)
  */
 static void do_cmd_erase_nikki(void)
 {
-	char file_name[80];
+	GAME_TEXT file_name[80];
 	char buf[256];
 	FILE *fff = NULL;
 
@@ -3126,7 +3126,7 @@ void do_cmd_visuals(void)
 			/* Dump objects */
 			for (k_idx = 0; k_idx < max_k_idx; k_idx++)
 			{
-				char o_name[80];
+				GAME_TEXT o_name[80];
 				object_kind *k_ptr = &k_info[k_idx];
 
 				/* Skip non-entries */
@@ -4677,7 +4677,7 @@ cptr inven_res_label = _("                               酸電火冷毒光闇�
 /* XTRA HACK RESLIST */
 static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, OBJECT_TYPE_VALUE tval, char *where)
 {
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	if (!o_ptr->k_idx) return;
@@ -4775,7 +4775,7 @@ static void do_cmd_knowledge_inven(void)
 {
 	FILE *fff;
 
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
 	store_type  *st_ptr;
 
@@ -5248,9 +5248,9 @@ static void do_cmd_knowledge_artifacts(void)
 
 	FILE *fff;
 
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
-	char base_name[MAX_NLEN];
+	GAME_TEXT base_name[MAX_NLEN];
 
 	bool *okay;
 
@@ -5410,7 +5410,7 @@ static void do_cmd_knowledge_uniques(void)
 
 	FILE *fff;
 
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
 	int n_alive[10];
 	int n_alive_surface = 0;
@@ -5532,7 +5532,7 @@ static void do_cmd_knowledge_weapon_exp(void)
 
 	FILE *fff;
 
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 	char tmp[30];
 
 	/* Open a new file */
@@ -5591,7 +5591,7 @@ static void do_cmd_knowledge_spell_exp(void)
 	FILE *fff;
 	const magic_type *s_ptr;
 
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
@@ -5677,8 +5677,8 @@ static void do_cmd_knowledge_skill_exp(void)
 
 	FILE *fff;
 
-	char file_name[1024];
-	char skill_name[3][20]={_("マーシャルアーツ", "Martial Arts    "),
+	GAME_TEXT file_name[1024];
+	GAME_TEXT skill_name[3][20]={_("マーシャルアーツ", "Martial Arts    "),
 							_("二刀流          ", "Dual Wielding   "), 
 							_("乗馬            ", "Riding          ")};
 
@@ -5845,10 +5845,10 @@ static void do_cmd_knowledge_pets(void)
 	int             i;
 	FILE            *fff;
 	monster_type    *m_ptr;
-	char            pet_name[80];
+	GAME_TEXT pet_name[80];
 	int             t_friends = 0;
 	int             show_upkeep = 0;
-	char            file_name[1024];
+	GAME_TEXT file_name[1024];
 
 
 	/* Open a new file */
@@ -5915,7 +5915,7 @@ static void do_cmd_knowledge_kill_count(void)
 
 	FILE *fff;
 
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
 	s32b Total = 0;
 
@@ -6753,7 +6753,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 	/* Display lines until done */
 	for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++)
 	{
-		char o_name[80];
+		GAME_TEXT o_name[80];
 		TERM_COLOR a;
 		byte c;
 		object_kind *flavor_k_ptr;
@@ -7570,7 +7570,7 @@ static void do_cmd_knowledge_kubi(void)
 	int i;
 	FILE *fff;
 	
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 	
 	
 	/* Open a new file */
@@ -7626,7 +7626,7 @@ static void do_cmd_knowledge_kubi(void)
 static void do_cmd_knowledge_virtues(void)
 {
 	FILE *fff;	
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 		
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
@@ -7658,7 +7658,7 @@ static void do_cmd_knowledge_dungeon(void)
 {
 	FILE *fff;
 	
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 	int i;
 		
 	/* Open a new file */
@@ -7703,7 +7703,7 @@ static void do_cmd_knowledge_stat(void)
 {
 	FILE *fff;
 	
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 	int percent, v_nr;
 	
 	/* Open a new file */
@@ -8092,7 +8092,7 @@ void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
 static void do_cmd_knowledge_quests(void)
 {
 	FILE *fff;
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 	IDX *quest_num;
 	int dummy;
 	IDX i;
@@ -8147,9 +8147,9 @@ static void do_cmd_knowledge_home(void)
 	FILE *fff;
 
 	int i;
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 	store_type  *st_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr		paren = ")";
 
 	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
@@ -8225,7 +8225,7 @@ static void do_cmd_knowledge_autopick(void)
 {
 	int k;
 	FILE *fff;
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);

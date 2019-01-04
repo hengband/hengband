@@ -111,7 +111,7 @@ void self_knowledge(void)
 	info[i++] = buf[1];
 	for (v_nr = 0; v_nr < 8; v_nr++)
 	{
-		char vir_name [20];
+		GAME_TEXT vir_name [20];
 		char vir_desc[80];
 		int tester = p_ptr->virtues[v_nr];
 	

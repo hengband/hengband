@@ -575,7 +575,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 void teleport_level(MONSTER_IDX m_idx)
 {
 	bool         go_up;
-	char         m_name[160];
+	GAME_TEXT m_name[160];
 	bool         see_m = TRUE;
 
 	if (m_idx <= 0) /* To player */
@@ -958,7 +958,7 @@ bool apply_disenchant(BIT_FLAGS mode)
 {
 	int             t = 0;
 	object_type     *o_ptr;
-	char            o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	int to_h, to_d, to_a, pval;
 
 	/* Pick a random slot */
@@ -1238,7 +1238,7 @@ void brand_weapon(int brand_type)
 		cptr act = NULL;
 
 		/* Let's get the name before it is changed... */
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 		switch (brand_type)
@@ -1360,7 +1360,7 @@ static bool vanish_dungeon(void)
 	cave_type *c_ptr;
 	feature_type *f_ptr;
 	monster_type *m_ptr;
-	char m_name[80];
+	GAME_TEXT m_name[80];
 
 	/* Prevent vasishing of quest levels and town */
 	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
@@ -1578,7 +1578,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 	OBJECT_IDX i;
 	cave_type *c_ptr;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Check to see if an object is already there */
 	if (cave[p_ptr->y][p_ptr->x].o_idx)
@@ -1923,7 +1923,7 @@ bool alchemy(void)
 	PRICE price;
 	bool force = FALSE;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char out_val[MAX_NLEN+40];
 
 	cptr q, s;
@@ -2183,7 +2183,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	OBJECT_IDX item;
 	bool        okay = FALSE;
 	object_type *o_ptr;
-	char        o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr        q, s;
 
 	/* Assume enchant weapon */
@@ -2247,7 +2247,7 @@ bool artifact_scroll(void)
 	OBJECT_IDX item;
 	bool            okay = FALSE;
 	object_type     *o_ptr;
-	char            o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr            q, s;
 
 	/* Enchant weapon/armour */
@@ -2368,7 +2368,7 @@ bool artifact_scroll(void)
 bool identify_item(object_type *o_ptr)
 {
 	bool old_known = FALSE;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
 
@@ -2422,7 +2422,7 @@ bool ident_spell(bool only_equip)
 {
 	OBJECT_IDX item;
 	object_type     *o_ptr;
-	char            o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr            q, s;
 	bool old_known;
 
@@ -2561,7 +2561,7 @@ bool identify_fully(bool only_equip)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr q, s;
 	bool old_known;
 
@@ -2667,7 +2667,7 @@ bool recharge(int power)
 	byte fail_type = 1;
 
 	cptr q, s;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Only accept legal items */
 	item_tester_hook = item_tester_hook_recharge;
@@ -2949,7 +2949,7 @@ bool bless_weapon(void)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr q, s;
 
 	/* Bless only weapons */
@@ -3118,7 +3118,7 @@ bool pulish_shield(void)
 	OBJECT_IDX item;
 	object_type     *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	char            o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr            q, s;
 
 	/* Assume enchant weapon */
@@ -4005,7 +4005,7 @@ bool rustproof(void)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	char        o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	cptr        q, s;
 
 	/* Select a piece of armour */
@@ -4064,7 +4064,7 @@ bool curse_armor(void)
 	int i;
 	object_type *o_ptr;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 
 	/* Curse the body armor */
@@ -4136,7 +4136,7 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返し�
 bool curse_weapon_object(bool force, object_type *o_ptr)
 {
 	int i;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Nothing to curse */
 	if (!o_ptr->k_idx) return (FALSE);
@@ -4492,7 +4492,7 @@ bool eat_magic(int power)
 	byte fail_type = 1;
 
 	cptr q, s;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	item_tester_hook = item_tester_hook_recharge;
 
@@ -4980,7 +4980,7 @@ bool shock_power(void)
 		MONSTER_IDX m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-		char m_name[80];
+		GAME_TEXT m_name[80];
 
 		monster_desc(m_name, m_ptr, 0);
 

@@ -490,7 +490,7 @@ void dump_virtues(FILE *OutFile)
 
 	for (v_nr = 0; v_nr < 8; v_nr++)
 	{
-		char vir_name [20];
+		GAME_TEXT vir_name [20];
 		int tester = p_ptr->virtues[v_nr];
 
 		strcpy(vir_name, virtue[(p_ptr->vir_types[v_nr])-1]);

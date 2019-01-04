@@ -2001,7 +2001,7 @@ void dump_mutations(FILE *OutFile)
 void do_cmd_knowledge_mutations(void)
 {
 	FILE *fff;
-	char file_name[1024];
+	GAME_TEXT file_name[1024];
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
@@ -2302,7 +2302,7 @@ bool mutation_power_aux(int power)
 				{
 					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 					{
-						char m_name[80];
+						GAME_TEXT m_name[80];
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 						do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 					}

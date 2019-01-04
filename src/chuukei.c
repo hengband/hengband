@@ -52,7 +52,7 @@ static int browse_delay; /* 表示するまでの時間(100ms単位)(この間�
 static int sd; /* ソケットのファイルディスクリプタ */
 static long time_diff;   /* プレイ側との時間のずれ(これを見ながらディレイを調整していく) */
 static int server_port;
-static char server_name[MAX_HOSTNAME];
+static GAME_TEXT server_name[MAX_HOSTNAME];
 #endif
 
 static int movie_fd;

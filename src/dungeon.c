@@ -39,7 +39,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 {
 	byte feel;
 	object_type *o_ptr = &inventory[slot];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* We know about it already, do not tell us again */
 	if (o_ptr->ident & (IDENT_SENSE))return;
@@ -1113,7 +1113,7 @@ void leave_tower_check(void)
  */
 static void recharged_notice(object_type *o_ptr)
 {
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	cptr s;
 
@@ -1446,7 +1446,7 @@ static void process_world_aux_hp_and_sp(void)
 		    !p_ptr->resist_lite)
 		{
 			object_type * o_ptr = &inventory[INVEN_LITE];
-			char o_name [MAX_NLEN];
+			GAME_TEXT o_name [MAX_NLEN];
 			char ouch [MAX_NLEN+40];
 
 			/* Get an object description */
@@ -2636,7 +2636,7 @@ static void process_world_aux_curse(void)
 		 */
 		if ((p_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(200))
 		{
-			char o_name[MAX_NLEN];
+			GAME_TEXT o_name[MAX_NLEN];
 			object_type *o_ptr;
 			int i, i_keep = 0, count = 0;
 
@@ -2712,7 +2712,7 @@ static void process_world_aux_curse(void)
 			new_curse = get_curse(0, o_ptr);
 			if (!(o_ptr->curse_flags & new_curse))
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -2735,7 +2735,7 @@ static void process_world_aux_curse(void)
 			new_curse = get_curse(1, o_ptr);
 			if (!(o_ptr->curse_flags & new_curse))
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -2752,7 +2752,7 @@ static void process_world_aux_curse(void)
 			if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_ANIMAL,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが動物を引き寄せた！", "Your %s have attracted an animal!"), o_name);
@@ -2764,7 +2764,7 @@ static void process_world_aux_curse(void)
 		{
 			if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが悪魔を引き寄せた！", "Your %s have attracted a demon!"), o_name);
@@ -2777,7 +2777,7 @@ static void process_world_aux_curse(void)
 			if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_DRAGON,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s have attracted an dragon!"), o_name);
@@ -2790,7 +2790,7 @@ static void process_world_aux_curse(void)
 			if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_UNDEAD,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが死霊を引き寄せた！", "Your %s have attracted an undead!"), o_name);
@@ -2817,7 +2817,7 @@ static void process_world_aux_curse(void)
 		/* Handle HP draining */
 		if ((p_ptr->cursed & TRC_DRAIN_HP) && one_in_(666))
 		{
-			char o_name[MAX_NLEN];
+			GAME_TEXT o_name[MAX_NLEN];
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
@@ -2826,7 +2826,7 @@ static void process_world_aux_curse(void)
 		/* Handle mana draining */
 		if ((p_ptr->cursed & TRC_DRAIN_MANA) && p_ptr->csp && one_in_(666))
 		{
-			char o_name[MAX_NLEN];
+			GAME_TEXT o_name[MAX_NLEN];
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
@@ -3424,7 +3424,7 @@ static void process_world(void)
 		}
 		else if ((number_mon-1) == 0)
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 			monster_type *wm_ptr;
 
 			wm_ptr = &m_list[win_m_idx];
@@ -4721,7 +4721,7 @@ static void pack_overflow(void)
 {
 	if (inventory[INVEN_PACK].k_idx)
 	{
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 		object_type *o_ptr;
 
 		/* Is auto-destroy done? */
@@ -4885,7 +4885,7 @@ static void process_player(void)
 				x = p_ptr->x + ddx[p_ptr->fishing_dir];
 				if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 				{
-					char m_name[80];
+					GAME_TEXT m_name[80];
 					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 					msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 					success = TRUE;
@@ -4928,7 +4928,7 @@ static void process_player(void)
 
 		if (MON_CSLEEP(m_ptr))
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 
 			/* Recover fully */
 			(void)set_monster_csleep(p_ptr->riding, 0);
@@ -4942,7 +4942,7 @@ static void process_player(void)
 			if (set_monster_stunned(p_ptr->riding,
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
 			}
@@ -4954,7 +4954,7 @@ static void process_player(void)
 			if (set_monster_confused(p_ptr->riding,
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1)))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
 			}
@@ -4966,7 +4966,7 @@ static void process_player(void)
 			if(set_monster_monfear(p_ptr->riding,
 				(randint0(r_ptr->level) < p_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 				monster_desc(m_name, m_ptr, 0);
 				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fear."), m_name);
 			}

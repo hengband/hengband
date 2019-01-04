@@ -134,7 +134,7 @@ static char KEY_COLLECTING[] = "collecting";
 static char KEY_ARTIFACT[] = "artifact";
 static char KEY_EGO[] = "ego";
 static char KEY_GOOD[] = "good";
-static char KEY_NAMELESS[] = "nameless";
+static GAME_TEXT KEY_nameLESS[] = "nameless";
 static char KEY_AVERAGE[] = "average";
 static char KEY_WORTHLESS[] = "worthless";
 static char KEY_RARE[] = "rare";
@@ -664,7 +664,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	/* Prepare the object description */
 	if (name)
 	{
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 
 		object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
 
@@ -1436,7 +1436,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_nam
 int is_autopick(object_type *o_ptr)
 {
 	int i;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	if (o_ptr->tval == TV_GOLD) return -1;
 
@@ -1582,7 +1582,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 	/* Artifact? */
 	if (!can_player_destroy_object(o_ptr))
 	{
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
 		object_desc(o_name, o_ptr, 0);
@@ -1618,7 +1618,7 @@ static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 
 	if (o_ptr->k_idx && (o_ptr->marked & OM_AUTODESTROY))
 	{
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
 		object_desc(o_name, o_ptr, 0);
@@ -1723,7 +1723,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 
 			if (!inven_carry_okay(o_ptr))
 			{
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, o_ptr, 0);
 
@@ -1736,7 +1736,7 @@ void autopick_pickup_items(cave_type *c_ptr)
 			else if (autopick_list[idx].action & DO_QUERY_AUTOPICK)
 			{
 				char out_val[MAX_NLEN+20];
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				if (o_ptr->marked & OM_NO_QUERY)
 				{
@@ -1923,7 +1923,7 @@ bool autopick_autoregister(object_type *o_ptr)
 	    ((o_ptr->ident & IDENT_SENSE) &&
 	     (o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL)))
 	{
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
 		object_desc(o_name, o_ptr, 0);
@@ -3589,7 +3589,7 @@ static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
 static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forward)
 {
 	autopick_type an_entry, *entry = &an_entry;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	int bypassed_cy = -1;
 
 	/* Start searching from current cursor position */

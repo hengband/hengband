@@ -414,7 +414,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			OBJECT_IDX item;
 			cptr q, s;
-			char o_name[MAX_NLEN];
+			GAME_TEXT o_name[MAX_NLEN];
 			object_type *o_ptr;
 			u32b f[TR_FLAG_SIZE];
 
@@ -710,7 +710,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			OBJECT_IDX item;
 			cptr q, s;
-			char o_name[MAX_NLEN];
+			GAME_TEXT o_name[MAX_NLEN];
 			object_type *o_ptr;
 			u32b f[TR_FLAG_SIZE];
 

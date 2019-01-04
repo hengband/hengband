@@ -1743,7 +1743,7 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
  */
 bool create_artifact(object_type *o_ptr, bool a_scroll)
 {
-	char    new_name[1024];
+	GAME_TEXT new_name[1024];
 	PARAMETER_VALUE has_pval = 0;
 	int     powers = randint1(5) + 1;
 	int     max_powers;
@@ -2027,7 +2027,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (a_scroll)
 	{
-		char dummy_name[80] = "";
+		GAME_TEXT dummy_name[80] = "";
 		cptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
 
 		/* Identify it fully */

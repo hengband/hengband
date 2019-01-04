@@ -254,7 +254,7 @@ int inven_damage(inven_func typ, int perc)
 	INVENTORY_IDX i;
 	int j, k, amt;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	if (CHECK_MULTISHADOW()) return 0;
 
@@ -338,7 +338,7 @@ static bool minus_ac(void)
 {
 	object_type *o_ptr = NULL;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Pick a (possibly empty) inventory slot */
 	switch (randint1(7))

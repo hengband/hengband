@@ -532,7 +532,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 	else if (o_ptr->tval==TV_PARCHMENT)
 	{
 		cptr q;
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 		char buf[1024];
 		screen_save();
 

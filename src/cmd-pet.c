@@ -196,7 +196,7 @@ void do_cmd_pet_dismiss(void)
 	for (i = 0; i < max_pet; i++)
 	{
 		bool delete_this;
-		char friend_name[80];
+		GAME_TEXT friend_name[80];
 		bool kakunin;
 
 		/* Access the monster */
@@ -253,7 +253,7 @@ void do_cmd_pet_dismiss(void)
 		{
 			if (record_named_pet && m_ptr->nickname)
 			{
-				char m_name[80];
+				GAME_TEXT m_name[80];
 
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
@@ -396,7 +396,7 @@ bool do_riding(bool force)
 
 		if (MON_CSLEEP(m_ptr))
 		{
-			char m_name[80];
+			GAME_TEXT m_name[80];
 			monster_desc(m_name, m_ptr, 0);
 			(void)set_monster_csleep(c_ptr->m_idx, 0);
 			msg_format(_("%sを起こした。", "You have waked %s up."), m_name);
@@ -432,7 +432,7 @@ static void do_name_pet(void)
 {
 	monster_type *m_ptr;
 	char out_val[20];
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	bool old_name = FALSE;
 	bool old_target_pet = target_pet;
 
@@ -1041,7 +1041,7 @@ bool rakuba(HIT_POINT dam, bool force)
 {
 	int i, y, x, oy, ox;
 	int sn = 0, sy = 0, sx = 0;
-	char m_name[80];
+	GAME_TEXT m_name[80];
 	monster_type *m_ptr = &m_list[p_ptr->riding];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool fall_dam = FALSE;

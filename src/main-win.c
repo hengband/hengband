@@ -1076,7 +1076,7 @@ static void term_getsize(term_data *td)
 static void save_prefs_aux(int i)
 {
 	term_data *td = &data[i];
-	char sec_name[128];
+	GAME_TEXT sec_name[128];
 	char buf[1024];
 
 	RECT rc;
@@ -1218,7 +1218,7 @@ static void save_prefs(void)
 static void load_prefs_aux(int i)
 {
 	term_data *td = &data[i];
-	char sec_name[128];
+	GAME_TEXT sec_name[128];
 	char tmp[1024];
 
 	int wid, hgt, posx, posy;

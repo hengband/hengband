@@ -788,7 +788,7 @@ void object_aware(object_type *o_ptr)
 	{
 		object_type forge;
 		object_type *q_ptr;
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 
 		q_ptr = &forge;
 		object_copy(q_ptr, o_ptr);
@@ -2113,7 +2113,7 @@ int m_bonus(int max, DEPTH level)
  */
 static void object_mention(object_type *o_ptr)
 {
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	object_aware(o_ptr);
 	object_known(o_ptr);
@@ -5073,7 +5073,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 
 	cave_type *c_ptr;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	bool flag = FALSE;
 	bool done = FALSE;
@@ -5602,7 +5602,7 @@ void inven_item_charges(INVENTORY_IDX item)
 void inven_item_describe(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &inventory[item];
-	char        o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
 
@@ -5791,7 +5791,7 @@ void floor_item_charges(INVENTORY_IDX item)
 void floor_item_describe(INVENTORY_IDX item)
 {
 	object_type *o_ptr = &o_list[item];
-	char        o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
 
@@ -6137,7 +6137,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 	cptr act;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 
 	/* Get the item to take off */
@@ -6217,7 +6217,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	object_type *q_ptr;
 	object_type *o_ptr;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Access original object */
 	o_ptr = &inventory[item];
@@ -6451,7 +6451,7 @@ void display_koff(KIND_OBJECT_IDX k_idx)
 	int         sval;
 	REALM_IDX   use_realm;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 
 	/* Erase the window */
@@ -6892,7 +6892,7 @@ bool process_warning(POSITION xx, POSITION yy)
 {
 	POSITION mx, my;
 	cave_type *c_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 #define WARNING_AWARE_RANGE 12
 	int dam_max = 0;
@@ -7546,7 +7546,7 @@ static void drain_essence(void)
 
 	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
 	{
-		char o_name[MAX_NLEN];
+		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name))) return;
 	}
@@ -7867,7 +7867,7 @@ static void add_essence(ESSENCE_IDX mode)
 	int ask = TRUE;
 	char out_val[160];
 	int num[22];
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	int use_essence;
 	essence_type *es_ptr;
 	bool able[22] = { 0 };
@@ -8359,7 +8359,7 @@ static void erase_essence(void)
 	OBJECT_IDX item;
 	cptr q, s;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	item_tester_hook = object_is_smith;

@@ -2228,7 +2228,7 @@ static void display_entry(int pos)
 	object_type 	*o_ptr;
 	s32b		x;
 
-	char		o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char		out_val[160];
 
 	int maxwid = 75;
@@ -3399,7 +3399,7 @@ static void store_purchase(void)
 
 	object_type *o_ptr;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 	char out_val[160];
 
@@ -3783,7 +3783,7 @@ static void store_sell(void)
 
 	cptr q, s;
 
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 
 
 	/* Prepare a prompt */
@@ -4094,7 +4094,7 @@ static void store_examine(void)
 	int         i;
 	COMMAND_CODE item;
 	object_type *o_ptr;
-	char        o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char        out_val[160];
 
 	/* Empty? */
@@ -4155,7 +4155,7 @@ static void museum_remove_object(void)
 	int i;
 	COMMAND_CODE item;
 	object_type *o_ptr;
-	char o_name[MAX_NLEN];
+	GAME_TEXT o_name[MAX_NLEN];
 	char out_val[160];
 
 	/* Empty? */
@@ -4815,7 +4815,7 @@ void do_cmd_store(void)
 				object_type forge;
 				object_type *q_ptr;
 
-				char o_name[MAX_NLEN];
+				GAME_TEXT o_name[MAX_NLEN];
 
 				/* Give a message */
 				msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
