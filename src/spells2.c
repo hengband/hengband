@@ -16,6 +16,7 @@
 #include "trap.h"
 #include "monsterrace-hook.h"
 #include "melee.h"
+#include "world.h"
 
 
 /*!

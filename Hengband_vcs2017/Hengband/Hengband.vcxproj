@@ -246,6 +246,7 @@
     <ClCompile Include="..\..\src\wild.c" />
     <ClCompile Include="..\..\src\wizard1.c" />
     <ClCompile Include="..\..\src\wizard2.c" />
+    <ClCompile Include="..\..\src\world.c" />
     <ClCompile Include="..\..\src\xtra1.c" />
     <ClCompile Include="..\..\src\xtra2.c" />
     <ClCompile Include="..\..\src\z-form.c" />
@@ -313,6 +314,7 @@
     <ClInclude Include="..\..\src\store.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />
+    <ClInclude Include="..\..\src\world.h" />
     <ClInclude Include="..\..\src\z-config.h" />
     <ClInclude Include="..\..\src\z-form.h" />
     <ClInclude Include="..\..\src\z-rand.h" />

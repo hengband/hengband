@@ -15,7 +15,7 @@
 #include "angband.h"
 #include "object-hook.h"
 #include "melee.h"
-
+#include "world.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c

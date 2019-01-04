@@ -14,6 +14,7 @@
 
 
 #include "angband.h"
+#include "world.h"
 
 
 /*
