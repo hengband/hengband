@@ -4700,7 +4700,6 @@ void do_cmd_store(void)
 		/* Clear */
 		clear_from(20 + xtra_stock);
 
-
 		/* Basic commands */
 		prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), 21 + xtra_stock, 0);
 
@@ -4736,7 +4735,6 @@ void do_cmd_store(void)
 		}
 
 		/* 基本的なコマンドの追加表示 */
-
 		prt(_("i/e) 持ち物/装備の一覧", "i/e) Inventry/Equipment list"), 21 + xtra_stock, 56);
 
 		if (rogue_like_commands)
@@ -4751,7 +4749,6 @@ void do_cmd_store(void)
 		/* Prompt */
 		prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
 
-		/* Get a command */
 		request_command(TRUE);
 
 		/* Process the command */

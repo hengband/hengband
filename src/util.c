@@ -4248,7 +4248,6 @@ static char inkey_from_menu(void)
 		/* Place the cursor on the player */
 		move_cursor_relative(p_ptr->y, p_ptr->x);
 
-		/* Get a command */
 		sub_cmd = inkey();
 		if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n'))
 		{
@@ -4405,7 +4404,6 @@ void request_command(int shopping)
 			/* Activate "command mode" */
 			inkey_flag = TRUE;
 
-			/* Get a command */
 			cmd = inkey();
 
 			if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X'))

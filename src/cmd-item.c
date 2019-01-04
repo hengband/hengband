@@ -53,14 +53,9 @@ void do_cmd_inven(void)
 		(p_ptr->total_weight * 100) / weight_limit());
 #endif
 
-
-	/* Get a command */
 	prt(out_val, 0, 0);
-
-	/* Get a new command */
 	command_new = inkey();
 	screen_load();
-
 
 	/* Process "Escape" */
 	if (command_new == ESCAPE)
@@ -112,14 +107,9 @@ void do_cmd_equip(void)
 	    (long int)((p_ptr->total_weight * 100) / weight_limit()));
 #endif
 
-
-	/* Get a command */
 	prt(out_val, 0, 0);
-
-	/* Get a new command */
 	command_new = inkey();
 	screen_load();
-
 
 	/* Process "Escape" */
 	if (command_new == ESCAPE)

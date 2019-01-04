@@ -1204,7 +1204,6 @@ void do_cmd_messages(int num_now)
 		prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]",
 			  "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
 
-		/* Get a command */
 		skey = inkey_special(TRUE);
 
 		/* Exit on Escape */
@@ -2581,7 +2580,6 @@ void do_cmd_macros(void)
 		/* Prompt */
 		prt(_("コマンド: ", "Command: "), 16, 0);
 
-		/* Get a command */
 		i = inkey();
 
 		/* Leave */
@@ -3261,7 +3259,6 @@ void do_cmd_visuals(void)
 				Term_putstr(0, 22, -1, TERM_WHITE, 
 					_("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
-				/* Get a command */
 				i = inkey();
 
 				/* All done */
@@ -3352,7 +3349,6 @@ void do_cmd_visuals(void)
 				Term_putstr(0, 22, -1, TERM_WHITE,
 					    _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
-				/* Get a command */
 				i = inkey();
 
 				/* All done */
@@ -3455,7 +3451,6 @@ void do_cmd_visuals(void)
 					    "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ");
 #endif
 
-				/* Get a command */
 				i = inkey();
 
 				/* All done */
@@ -3725,8 +3720,6 @@ void do_cmd_colors(void)
 				Term_putstr(0, 14, -1, TERM_WHITE,
 					_("コマンド (n/N/k/K/r/R/g/G/b/B): ", "Command (n/N/k/K/r/R/g/G/b/B): "));
 
-
-				/* Get a command */
 				i = inkey();
 
 				/* All done */
