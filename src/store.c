@@ -4606,9 +4606,8 @@ void do_cmd_store(void)
 	int i;
 	cave_type *c_ptr;
 	bool need_redraw_store_inv; /* To redraw missiles damage and prices in store */
-	int w, h;
+	TERM_LEN w, h;
 
-	/* Get term size */
 	Term_get_size(&w, &h);
 
 	/* Calculate stocks per 1 page */
