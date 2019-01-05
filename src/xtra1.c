@@ -742,25 +742,13 @@ static void prt_level(void)
 
 	if (p_ptr->lev >= p_ptr->max_plv)
 	{
-#ifdef JP
-		put_str("レベル ", ROW_LEVEL, 0);
+		put_str(_("レベル ", "LEVEL "), ROW_LEVEL, 0);
 		c_put_str(TERM_L_GREEN, tmp, ROW_LEVEL, COL_LEVEL + 7);
-#else
-		put_str("LEVEL ", ROW_LEVEL, 0);
-		c_put_str(TERM_L_GREEN, tmp, ROW_LEVEL, COL_LEVEL + 6);
-#endif
-
 	}
 	else
 	{
-#ifdef JP
-		put_str("xレベル", ROW_LEVEL, 0);
+		put_str(_("xレベル", "Level "), ROW_LEVEL, 0);
 		c_put_str(TERM_YELLOW, tmp, ROW_LEVEL, COL_LEVEL + 7);
-#else
-		put_str("Level ", ROW_LEVEL, 0);
-		c_put_str(TERM_YELLOW, tmp, ROW_LEVEL, COL_LEVEL + 6);
-#endif
-
 	}
 }
 
@@ -775,7 +763,7 @@ static void prt_exp(void)
 
 	if ((!exp_need)||(p_ptr->prace == RACE_ANDROID))
 	{
-		(void)sprintf(out_val, _("%7ld", "%8ld"), (long)p_ptr->exp);
+		(void)sprintf(out_val, "%8ld", (long)p_ptr->exp);
 	}
 	else
 	{
@@ -785,36 +773,20 @@ static void prt_exp(void)
 		}
 		else
 		{
-#ifdef JP
-			(void)sprintf(out_val, "%7ld", (long)(player_exp [p_ptr->lev - 1] * p_ptr->expfact / 100L) - p_ptr->exp);
-#else      
 			(void)sprintf(out_val, "%8ld", (long)(player_exp [p_ptr->lev - 1] * p_ptr->expfact / 100L) - p_ptr->exp);
-#endif
 		}
 	}
 
 	if (p_ptr->exp >= p_ptr->max_exp)
 	{
-#ifdef JP
-		if (p_ptr->prace == RACE_ANDROID) put_str("強化 ", ROW_EXP, 0);
-		else put_str("経験 ", ROW_EXP, 0);
-		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 5);
-#else
-		if (p_ptr->prace == RACE_ANDROID) put_str("Cst ", ROW_EXP, 0);
-		else put_str("EXP ", ROW_EXP, 0);
+		if (p_ptr->prace == RACE_ANDROID) put_str(_("強化 ", "Cst "), ROW_EXP, 0);
+		else put_str(_("経験 ", "EXP "), ROW_EXP, 0);
 		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 4);
-#endif
-
 	}
 	else
 	{
 		put_str(_("x経験", "Exp "), ROW_EXP, 0);
-#ifdef JP
-		c_put_str(TERM_YELLOW, out_val, ROW_EXP, COL_EXP + 5);
-#else
 		c_put_str(TERM_YELLOW, out_val, ROW_EXP, COL_EXP + 4);
-#endif
-
 	}
 }
 
