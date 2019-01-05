@@ -211,7 +211,7 @@ typedef byte RARITY;    /*!< ゲーム中の希少度の型定義 */
 typedef s32b GAME_TURN;     /*!< ゲーム中のターンの型定義 */
 typedef u32b REAL_TIME;     /*!< 実時刻の型定義 */
 
-typedef s16b PERCENTAGE;    /*!< ゲーム中のパーセント表記の型定義(/100倍) */
+typedef s32b PERCENTAGE;    /*!< ゲーム中のパーセント表記の型定義(/100倍) */
 typedef s16b MULTIPLY;      /*!< ゲーム中の倍率の型定義(/10倍) */
 
 typedef u32b BIT_FLAGS;     /*!< 32ビットのフラグ配列の型定義 */

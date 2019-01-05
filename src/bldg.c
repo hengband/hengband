@@ -2676,11 +2676,11 @@ static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 
 	/* Print the weapons base damage dice */
 	sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)",
-		hit_chance(reli, 0),
-		hit_chance(reli, 50),
-		hit_chance(reli, 100),
-		hit_chance(reli, 150),
-		hit_chance(reli, 200));
+		(int)hit_chance(reli, 0),
+		(int)hit_chance(reli, 50),
+		(int)hit_chance(reli, 100),
+		(int)hit_chance(reli, 150),
+		(int)hit_chance(reli, 200));
 	put_str(tmp_str, row+3, col);
 	c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row+5, col);
 

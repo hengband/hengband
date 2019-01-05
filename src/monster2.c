@@ -1169,7 +1169,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 	/* Scan the allocation table */
 	for (i = 0; i < alloc_race_size; i++)
 	{
-		monster_race	*r_ptr;
+		monster_race *r_ptr;
 		
 		/* Get the entry */
 		alloc_entry *entry = &alloc_race_table[i];
@@ -3976,7 +3976,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
  * @param mode 生成オプション 
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	POSITION x, y;
 
@@ -4041,8 +4041,9 @@ bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
  */
 void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 {
-	long oldhp, newhp, tmp;
-	int percentage;
+	HIT_POINT oldhp, newhp;
+	HIT_POINT tmp;
+	PERCENTAGE percentage;
 
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -4059,10 +4060,10 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 	}
 
 	/* Note -- subtle fix -CFT */
-	newhp = (long)(m_ptr->hp);
-	oldhp = newhp + (long)(dam);
+	newhp = m_ptr->hp;
+	oldhp = newhp + dam;
 	tmp = (newhp * 100L) / oldhp;
-	percentage = (int)(tmp);
+	percentage = tmp;
 
 	if(my_strchr(",ejmvwQ", r_ptr->d_char)) // Mushrooms, Eyes, Jellies, Molds, Vortices, Worms, Quylthulgs
 	{
@@ -4370,9 +4371,7 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 void update_smart_learn(MONSTER_IDX m_idx, int what)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
 
 	/* Not allowed to learn */
 	if (!smart_learn) return;
@@ -4382,8 +4381,6 @@ void update_smart_learn(MONSTER_IDX m_idx, int what)
 
 	/* Not intelligent, only learn sometimes */
 	if (!(r_ptr->flags2 & (RF2_SMART)) && (randint0(100) < 50)) return;
-
-
 
 	/* Analyze the knowledge */
 	switch (what)
