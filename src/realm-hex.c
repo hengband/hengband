@@ -39,10 +39,8 @@ bool stop_hex_spell_all(void)
 	CASTING_HEX_FLAGS(p_ptr) = 0;
 	CASTING_HEX_NUM(p_ptr) = 0;
 
-	/* Print message */
 	if (p_ptr->action == ACTION_SPELL) set_action(ACTION_NONE);
 
-	/* Redraw status */
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
 
@@ -120,7 +118,6 @@ bool stop_hex_spell(void)
 		CASTING_HEX_NUM(p_ptr)--;
 	}
 
-	/* Redraw status */
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
 
@@ -904,7 +901,6 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (cont) CASTING_HEX_NUM(p_ptr)--;
 				if (CASTING_HEX_NUM(p_ptr)) p_ptr->action = ACTION_NONE;
 
-				/* Redraw status */
 				p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 				p_ptr->redraw |= (PR_EXTRA);
 
@@ -1117,7 +1113,6 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (p_ptr->action != ACTION_SPELL) set_action(ACTION_SPELL);
 	}
 
-	/* Redraw status */
 	if (!info)
 	{
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
