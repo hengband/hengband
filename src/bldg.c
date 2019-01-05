@@ -2071,9 +2071,9 @@ static bool inn_comm(int cmd)
  */
 static void get_questinfo(IDX questnum, bool do_init)
 {
-	int     i;
-	IDX     old_quest;
-	char    tmp_str[80];
+	int i;
+	IDX old_quest;
+	GAME_TEXT tmp_str[80];
 
 	/* Clear the text */
 	for (i = 0; i < 10; i++)
@@ -2410,7 +2410,7 @@ static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, WEIGHT wei
  */
 static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, int dam_bonus, cptr attr, byte color)
 {
-	char tmp_str[80];
+	GAME_TEXT tmp_str[80];
 	int mindam, maxdam;
 	
 	mindam = blows * (mindice + dam_bonus);
@@ -2656,7 +2656,7 @@ static void compare_weapon_aux(object_type *o_ptr, int col, int r)
 static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 {
 	GAME_TEXT o_name[MAX_NLEN];
-	char tmp_str[80];
+	GAME_TEXT tmp_str[80];
 
 	DICE_NUMBER eff_dd = o_ptr->dd + p_ptr->to_dd[0];
 	DICE_SID eff_ds = o_ptr->ds + p_ptr->to_ds[0];
