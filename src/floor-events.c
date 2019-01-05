@@ -27,11 +27,8 @@ void day_break()
 		}
 	}
 
-	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -81,11 +78,8 @@ void night_falls(void)
 		}
 	}
 
-	/* Update the monsters */
 	p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)

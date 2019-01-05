@@ -2665,8 +2665,8 @@ MONSTER_NUMBER summon_LOUSE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 MONSTER_NUMBER summon_Kin(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
 	int k, count = 0;
-	monster_type	*m_ptr = &m_list[m_idx];
-	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	for (k = 0; k < 4; k++)
 	{

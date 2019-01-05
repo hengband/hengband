@@ -113,14 +113,8 @@ static bool snipe_concentrate(void)
 	msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), p_ptr->concent);
 	reset_concent = FALSE;
 
-	/* Recalculate bonuses */
-	p_ptr->update |= (PU_BONUS);
-
+	p_ptr->update |= (PU_BONUS | PU_MONSTERS);
 	p_ptr->redraw |= (PR_STATUS);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_MONSTERS);
-
 	return (TRUE);
 }
 
@@ -139,13 +133,8 @@ void reset_concentration(bool msg)
 	p_ptr->concent = 0;
 	reset_concent = FALSE;
 
-	/* Recalculate bonuses */
-	p_ptr->update |= (PU_BONUS);
-
+	p_ptr->update |= (PU_BONUS | PU_MONSTERS);
 	p_ptr->redraw |= (PR_STATUS);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_MONSTERS);
 }
 
 /*! 

@@ -4050,7 +4050,6 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 
 	GAME_TEXT m_name[MAX_NLEN];
 
-	/* Get the monster name */
 	monster_desc(m_name, m_ptr, 0);
 
 	if(dam == 0) // Notice non-damage

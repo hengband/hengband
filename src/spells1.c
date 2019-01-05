@@ -4034,7 +4034,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						/* Special message */
 						if (see_s_msg)
 						{
-							/* Get the monster name */
 							monster_desc(killer, caster_ptr, 0);
 							msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), killer);
 						}
@@ -5191,12 +5190,8 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 
 	if (who > 0)
 	{
-		/* Get the source monster */
 		m_ptr = &m_list[who];
-		/* Extract the monster level */
 		rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
-
-		/* Get the monster name */
 		monster_desc(m_name, m_ptr, 0);
 
 		/* Get the monster's real name (gotten before polymorph!) */

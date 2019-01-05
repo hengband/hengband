@@ -1471,15 +1471,8 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Mega-Hack -- Forget the view and lite */
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
-
-	/* Update the monsters */
-	p_ptr->update |= (PU_MONSTERS);
-
+	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	return TRUE;
