@@ -4456,8 +4456,8 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 	/* Analyze */
 	if (*s == b1)
 	{
-		const char *p;
-		const char *t;
+		cptr p;
+		cptr t;
 
 		/* Skip b1 */
 		s++;

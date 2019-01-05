@@ -98,7 +98,7 @@ int usleep(huge usecs)
  */
 #ifdef SET_UID
 extern struct passwd *getpwuid(uid_t uid);
-extern struct passwd *getpwnam(const char *name);
+extern struct passwd *getpwnam(cptr name);
 #endif
 
 
@@ -5235,12 +5235,12 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf, size_t bufsize)
  *
  * This function should be equivalent to the strlcpy() function in BSD.
  */
-size_t my_strcpy(char *buf, const char *src, size_t bufsize)
+size_t my_strcpy(char *buf, cptr src, size_t bufsize)
 {
 #ifdef JP
 
 	char *d = buf;
-	const char *s = src;
+	cptr s = src;
 	size_t len = 0;
 
 	if (bufsize > 0) {
@@ -5303,7 +5303,7 @@ size_t my_strcpy(char *buf, const char *src, size_t bufsize)
  *
  * This function should be equivalent to the strlcat() function in BSD.
  */
-size_t my_strcat(char *buf, const char *src, size_t bufsize)
+size_t my_strcat(char *buf, cptr src, size_t bufsize)
 {
 	size_t dlen = strlen(buf);
 
@@ -5326,7 +5326,7 @@ size_t my_strcat(char *buf, const char *src, size_t bufsize)
  *
  * my_strstr() can handle Kanji strings correctly.
  */
-char *my_strstr(const char *haystack, const char *needle)
+char *my_strstr(cptr haystack, cptr needle)
 {
 	int i;
 	int l1 = strlen(haystack);
@@ -5354,7 +5354,7 @@ char *my_strstr(const char *haystack, const char *needle)
  *
  * my_strchr() can handle Kanji strings correctly.
  */
-char *my_strchr(const char *ptr, char ch)
+char *my_strchr(cptr ptr, char ch)
 {
 	for ( ; *ptr != '\0'; ptr++)
 	{

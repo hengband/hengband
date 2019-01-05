@@ -96,7 +96,7 @@ struct term
 	errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n); //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
 	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s); //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
 	void (*resize_hook)(void); //!< 画面リサイズ実装部
-	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
+	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *ap, cptr cp, const TERM_COLOR *tap, cptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
 };
 
 

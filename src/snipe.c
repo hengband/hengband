@@ -18,7 +18,7 @@ struct snipe_power
 {
 	int     min_lev;
 	int     mana_cost;
-	const char *name;
+	cptr name;
 };
 
 /*! スナイパー技能の解説メッセージ */

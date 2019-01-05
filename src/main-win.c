@@ -310,7 +310,7 @@
 #else /* WIN32 */
 #define FA_LABEL    0x08        /* Volume label */
 #define FA_DIREC    0x10        /* Directory */
-unsigned _cdecl _dos_getfileattr(const char *, unsigned *);
+unsigned _cdecl _dos_getfileattr(cptr , unsigned *);
 #endif /* WIN32 */
 
 /*
@@ -2796,7 +2796,7 @@ static errr Term_wipe_win(int x, int y, int n)
  * what color it should be using to draw with, but perhaps simply changing
  * it every time is not too inefficient.  
  */
-static errr Term_text_win(int x, int y, int n, TERM_COLOR a, const char *s)
+static errr Term_text_win(int x, int y, int n, TERM_COLOR a, cptr s)
 {
 	term_data *td = (term_data*)(Term->data);
 	RECT rc;
@@ -2989,7 +2989,7 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, const char *s)
  *
  * If "graphics" is not available, we simply "wipe" the given grids.
  */
-static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, const char *cp, const TERM_COLOR *tap, const char *tcp)
+static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, cptr cp, const TERM_COLOR *tap, cptr tcp)
 {
 	term_data *td = (term_data*)(Term->data);
 

@@ -517,7 +517,7 @@ typedef struct flag_desc flag_desc;
 struct flag_desc
 {
 	const int flag;
-	const char *const desc;
+	cptr const desc;
 };
 
 

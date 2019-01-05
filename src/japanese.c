@@ -63,7 +63,7 @@ static const convert_key s2j_table[] = {
  * @return なし
  * @details
  */
-void sindarin_to_kana(char *kana, const char *sindarin)
+void sindarin_to_kana(char *kana, cptr sindarin)
 {
 	char buf[256];
 	int idx;
@@ -161,7 +161,7 @@ static const struct jverb_table_t {
  * @return なし
  * @details
  */
-void jverb(const char *in, char *out, int flag)
+void jverb(cptr in, char *out, int flag)
 {
 	const struct jverb_table_t * p;
 	int in_len = strlen(in);

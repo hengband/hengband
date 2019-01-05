@@ -3000,7 +3000,7 @@ void do_cmd_visuals(void)
 	char tmp[160];
 	char buf[1024];
 	bool need_redraw = FALSE;
-	const char *empty_symbol = "<< ? >>";
+	cptr empty_symbol = "<< ? >>";
 
 	if (use_bigtile) empty_symbol = "<< ?? >>";
 

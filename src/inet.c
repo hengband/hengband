@@ -278,7 +278,7 @@ static void interrupt_report(int sig)
 
 
 /* サーバにコネクトする関数。 */
-int connect_server(int timeout, const char *host, int port)
+int connect_server(int timeout, cptr host, int port)
 #ifndef MACINTOSH
 {
 	int			sd;

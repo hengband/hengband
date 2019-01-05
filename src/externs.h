@@ -1156,10 +1156,10 @@ extern byte gamma_table[256];
 extern void build_gamma_table(int gamma);
 #endif /* SUPPORT_GAMMA */
 
-extern size_t my_strcpy(char *buf, const char *src, size_t bufsize);
-extern size_t my_strcat(char *buf, const char *src, size_t bufsize);
-extern char *my_strstr(const char *haystack, const char *needle);
-extern char *my_strchr(const char *ptr, char ch);
+extern size_t my_strcpy(char *buf, cptr src, size_t bufsize);
+extern size_t my_strcat(char *buf, cptr src, size_t bufsize);
+extern char *my_strstr(cptr haystack, cptr needle);
+extern char *my_strchr(cptr ptr, char ch);
 extern void str_tolower(char *str);
 extern int inkey_special(bool numpad_cursor);
 
@@ -1492,8 +1492,8 @@ extern void dump_virtues(FILE * OutFile);
 
 #ifdef JP
 /* japanese.c */
-extern void sindarin_to_kana(char *kana, const char *sindarin);
-extern void jverb( const char *in , char *out , int flag);
+extern void sindarin_to_kana(char *kana, cptr sindarin);
+extern void jverb( cptr in , char *out , int flag);
 extern void sjis2euc(char *str);
 extern void euc2sjis(char *str);
 extern byte codeconv(char *str);
@@ -1511,7 +1511,7 @@ extern cptr make_screen_dump(void);
 extern int soc_write(int sd, char *buf, size_t sz);
 extern int soc_read(int sd, char *buf, size_t sz);
 extern void set_proxy(char *default_url, int default_port);
-extern int connect_server(int timeout, const char *host, int port);
+extern int connect_server(int timeout, cptr host, int port);
 extern int disconnect_server(int sd);
 extern cptr soc_err(void);
 

@@ -100,7 +100,7 @@ static void buf_delete(BUF *b)
  * @param size 追加サイズ
  * @return 追加後のバッファ容量
  */
-static int buf_append(BUF *buf, const char *data, size_t size)
+static int buf_append(BUF *buf, cptr data, size_t size)
 {
 	while (buf->size + size > buf->max_size)
 	{
@@ -126,7 +126,7 @@ static int buf_append(BUF *buf, const char *data, size_t size)
  * @param fmt 文字列フォーマット
  * @return 追加後のバッファ容量
  */
-static int buf_sprintf(BUF *buf, const char *fmt, ...)
+static int buf_sprintf(BUF *buf, cptr fmt, ...)
 {
 	int		ret;
 	char	tmpbuf[8192];
@@ -194,7 +194,7 @@ static int buf_write(BUF *buf, int fd)
 	return buf->size;
 }
 
-static int buf_search(BUF *buf, const char *str)
+static int buf_search(BUF *buf, cptr str)
 {
 	char *ret;
 
@@ -232,7 +232,7 @@ static bool http_post(int sd, cptr url, BUF *buf)
 {
 	BUF *output;
 	char response_buf[1024] = "";
-	const char *HTTP_RESPONSE_CODE_OK = "HTTP/1.1 200 OK";
+	cptr HTTP_RESPONSE_CODE_OK = "HTTP/1.1 200 OK";
 
 	output = buf_new();
 	buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
