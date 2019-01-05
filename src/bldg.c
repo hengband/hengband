@@ -3403,7 +3403,6 @@ static void building_recharge(void)
 			/* Pay the price */
 			p_ptr->au -= 50;
 
-			/* Identify it */
 			identify_item(o_ptr);
 
 			/* Description */
@@ -3661,7 +3660,6 @@ static void building_recharge_all(void)
 		/* skip non magic device */
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
 
-		/* Identify it */
 		if (!object_is_known(o_ptr))
 		{
 			identify_item(o_ptr);

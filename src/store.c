@@ -3937,7 +3937,6 @@ static void store_sell(void)
 			/* Get the "apparent" value */
 			dummy = object_value(q_ptr) * q_ptr->number;
 
-			/* Identify it */
 			identify_item(o_ptr);
 			q_ptr = &forge;
 
@@ -4025,7 +4024,6 @@ static void store_sell(void)
 
 		if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) return;
 
-		/* Identify it */
 		identify_item(q_ptr);
 		q_ptr->ident |= IDENT_MENTAL;
 

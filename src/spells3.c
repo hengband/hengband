@@ -1532,13 +1532,12 @@ void call_the_(void)
 #ifdef JP
 		msg_format("あなたは%sを壁に近すぎる場所で唱えてしまった！",
 			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "祈り" : "呪文"));
-		msg_print("大きな爆発音があった！");
 #else
 		msg_format("You %s the %s too close to a wall!",
 			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"),
 			((mp_ptr->spell_book == TV_LIFE_BOOK) ? "prayer" : "spell"));
-		msg_print("There is a loud explosion!");
 #endif
+		msg_print(_("大きな爆発音があった！", "There is a loud explosion!"));
 
 		if (one_in_(666))
 		{
@@ -1625,10 +1624,8 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 	}
 	else
 	{
-		/* Use a direction */
-		ty = p_ptr->y; /* Where to drop the item */
+		ty = p_ptr->y; 
 		tx = p_ptr->x;
-
 		do
 		{
 			ty += ddy[dir];
@@ -1715,7 +1712,6 @@ bool warding_glyph(void)
 	cave[p_ptr->y][p_ptr->x].mimic = feat_glyph;
 
 	note_spot(p_ptr->y, p_ptr->x);
-
 	lite_spot(p_ptr->y, p_ptr->x);
 
 	return TRUE;
@@ -1741,9 +1737,7 @@ bool place_mirror(void)
 	cave[p_ptr->y][p_ptr->x].info |= CAVE_GLOW;
 
 	note_spot(p_ptr->y, p_ptr->x);
-
 	lite_spot(p_ptr->y, p_ptr->x);
-
 	update_local_illumination(p_ptr->y, p_ptr->x);
 
 	return TRUE;
@@ -1767,8 +1761,7 @@ bool explosive_rune(void)
 	cave[p_ptr->y][p_ptr->x].info |= CAVE_OBJECT;
 	cave[p_ptr->y][p_ptr->x].mimic = feat_explosive_rune;
 
-	note_spot(p_ptr->y, p_ptr->x);
-	
+	note_spot(p_ptr->y, p_ptr->x);	
 	lite_spot(p_ptr->y, p_ptr->x);
 
 	return TRUE;
@@ -1793,7 +1786,6 @@ void identify_pack(void)
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
-		/* Identify it */
 		identify_item(o_ptr);
 
 		/* Auto-inscription */
@@ -2454,7 +2446,6 @@ bool ident_spell(bool only_equip)
 		o_ptr = &o_list[0 - item];
 	}
 
-	/* Identify it */
 	old_known = identify_item(o_ptr);
 
 	object_desc(o_name, o_ptr, 0);
@@ -2593,7 +2584,6 @@ bool identify_fully(bool only_equip)
 		o_ptr = &o_list[0 - item];
 	}
 
-	/* Identify it */
 	old_known = identify_item(o_ptr);
 
 	/* Mark the item as fully known */
