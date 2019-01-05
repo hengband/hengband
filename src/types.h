@@ -1200,11 +1200,10 @@ struct player_type
 
 	s16b cur_lite;		/* Radius of lite (if any) */
 
-
-	u32b notice;		/* Special Updates (bit flags) */
-	u32b update;		/* Pending Updates (bit flags) */
-	u32b redraw;		/* Normal Redraws (bit flags) */
-	u32b window;		/* Window Redraws (bit flags) */
+	BIT_FLAGS notice;	/* Special Updates */
+	BIT_FLAGS update;	/* Pending Updates */
+	BIT_FLAGS redraw;	/* Normal Redraws */
+	BIT_FLAGS window;	/* Window Redraws */
 
 	s16b stat_use[6];	/* Current modified stats */
 	s16b stat_top[6];	/* Maximal modified stats */
@@ -1212,7 +1211,7 @@ struct player_type
 	bool sutemi;
 	bool counter;
 
-	ALIGNMENT align;				/* Good/evil/neutral */
+	ALIGNMENT align; /* Good/evil/neutral */
 	POSITION run_py;
 	POSITION run_px;
 	DIRECTION fishing_dir;
@@ -1339,7 +1338,6 @@ struct player_type
 	 * 100以上ならば必ず全てのトラップなどを見つけることが出来る。
 	 */
 	ACTION_SKILL_POWER skill_srh;
-
 
 	ACTION_SKILL_POWER skill_fos;	/*!< 行動技能値:探索 / Skill: Searching frequency */
 	ACTION_SKILL_POWER skill_thn;	/*!< 行動技能値:打撃命中能力 / Skill: To hit (normal) */
@@ -1525,9 +1523,8 @@ struct town_type
 typedef struct dun_type dun_type;
 struct dun_type
 {
-	byte min_level; /* Minimum level in the dungeon */
-	byte max_level; /* Maximum dungeon level allowed */
-
+	DEPTH min_level; /* Minimum level in the dungeon */
+	DEPTH max_level; /* Maximum dungeon level allowed */
 	cptr name;      /* The name of the dungeon */
 };
 
