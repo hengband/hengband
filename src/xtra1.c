@@ -295,7 +295,7 @@ static void prt_stat(int stat)
 #define BAR_ESP_EVIL 66     /*!< 下部ステータス表示: 邪悪感知 */
 
 static struct {
-	byte attr;
+	TERM_COLOR attr;
 	cptr sstr;
 	cptr lstr;
 } bar[]
@@ -831,7 +831,7 @@ static void prt_ac(void)
  */
 static void prt_hp(void)
 {
-/* ヒットポイントの表示方法を変更 */
+	/* ヒットポイントの表示方法を変更 */
 	char tmp[32];
   
 	TERM_COLOR color;
@@ -922,7 +922,7 @@ static void prt_depth(void)
 {
 	char depths[32];
 	TERM_LEN wid, hgt, row_depth, col_depth;
-	byte attr = TERM_WHITE;
+	TERM_COLOR attr = TERM_WHITE;
 
 	Term_get_size(&wid, &hgt);
 	col_depth = wid + COL_DEPTH;
@@ -1019,9 +1019,8 @@ static void prt_hunger(void)
  */
 static void prt_state(void)
 {
-	byte attr = TERM_WHITE;
-
-	char text[16];
+	TERM_COLOR attr = TERM_WHITE;
+	GAME_TEXT text[16];
 
 	/* Repeating */
 	if (command_rep)
@@ -1172,7 +1171,7 @@ static void prt_speed(void)
 	int i = p_ptr->pspeed;
 	bool is_fast = IS_FAST();
 
-	byte attr = TERM_WHITE;
+	TERM_COLOR attr = TERM_WHITE;
 	char buf[32] = "";
 	TERM_LEN wid, hgt, row_speed, col_speed;
 
@@ -1273,7 +1272,7 @@ static void prt_imitation(void)
 	{
 		if (p_ptr->mane_num)
 		{
-			byte attr;
+			TERM_COLOR attr;
 			if (new_mane) attr = TERM_L_RED;
 			else attr = TERM_WHITE;
 			c_put_str(attr, _("まね", "Imit"), row_study, col_study);
@@ -1477,7 +1476,7 @@ static void health_redraw(bool riding)
 			int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
 
 			/* Default to almost dead */
-			byte attr = TERM_RED;
+			TERM_COLOR attr = TERM_RED;
 
 			/* Invulnerable */
 			if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;

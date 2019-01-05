@@ -117,7 +117,7 @@ static bool know_damage(MONRACE_IDX r_idx, int i)
 /*
  * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
  */
-void (*hook_c_roff)(byte attr, cptr str) = c_roff;
+void (*hook_c_roff)(TERM_COLOR attr, cptr str) = c_roff;
 
 /*!
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
@@ -2111,7 +2111,7 @@ void display_roff(MONRACE_IDX r_idx)
  * @param roff_func 出力処理を行う関数ポインタ
  * @return なし
  */
-void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(byte attr, cptr str))
+void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, cptr str))
 {
 	hook_c_roff = roff_func;
 

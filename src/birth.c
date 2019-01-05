@@ -1592,7 +1592,7 @@ static void birth_put_stats(void)
 {
 	int i, j, m, p;
 	int col;
-	byte attr;
+	TERM_COLOR attr;
 	char buf[80];
 
 

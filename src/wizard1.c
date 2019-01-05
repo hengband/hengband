@@ -1996,7 +1996,7 @@ static void spoil_out(cptr str)
  * @param str 文字列参照ポインタ
  * @return なし
  */
-static void roff_func(byte attr, cptr str)
+static void roff_func(TERM_COLOR attr, cptr str)
 {
 	/* Unused */
 	(void)attr;

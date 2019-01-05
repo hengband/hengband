@@ -6080,7 +6080,7 @@ static void display_group_list(int col, int row, int wid, int per_page, IDX grp_
 		int grp = grp_idx[grp_top + i];
 
 		/* Choose a color */
-		byte attr = (grp_top + i == grp_cur) ? TERM_L_BLUE : TERM_WHITE;
+		TERM_COLOR attr = (grp_top + i == grp_cur) ? TERM_L_BLUE : TERM_WHITE;
 
 		/* Erase the entire line */
 		Term_erase(col, row + i, wid);
@@ -6428,7 +6428,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 	/* Display lines until done */
 	for (i = 0; i < per_page && (mon_idx[mon_top + i] >= 0); i++)
 	{
-		byte attr;
+		TERM_COLOR attr;
 
 		/* Get the race index */
 		MONRACE_IDX r_idx = mon_idx[mon_top + i] ;
@@ -6759,7 +6759,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 		object_kind *k_ptr = &k_info[k_idx];
 
 		/* Choose a color */
-		byte attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
+		TERM_COLOR attr = ((k_ptr->aware || visual_only) ? TERM_WHITE : TERM_SLATE);
 		byte cursor = ((k_ptr->aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
 
 
@@ -7154,7 +7154,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 	/* Display lines until done */
 	for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++)
 	{
-		byte attr;
+		TERM_COLOR attr;
 
 		/* Get the index */
 		FEAT_IDX f_idx = feat_idx[feat_top + i];

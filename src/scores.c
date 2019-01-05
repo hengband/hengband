@@ -145,15 +145,15 @@ static int highscore_add(high_score *score)
  */
 void display_scores_aux(int from, int to, int note, high_score *score)
 {
-	int		i, j, k, n, place;
-	byte attr;
+	int i, j, k, n, place;
+	TERM_COLOR attr;
 
-	high_score	the_score;
+	high_score the_score;
 
-	char	out_val[256];
-	char	tmp_val[160];
+	GAME_TEXT out_val[256];
+	GAME_TEXT tmp_val[160];
 
-	int wid, hgt, per_screen;
+	TERM_LEN wid, hgt, per_screen;
 
 	Term_get_size(&wid, &hgt);
 	per_screen = (hgt - 4) / 4;

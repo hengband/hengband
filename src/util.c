@@ -3064,7 +3064,7 @@ void put_str(cptr str, int row, int col)
  * Display a string on the screen using an attribute, and clear
  * to the end of the line.
  */
-void c_prt(byte attr, cptr str, int row, int col)
+void c_prt(TERM_COLOR attr, cptr str, int row, int col)
 {
 	/* Clear line, position cursor */
 	Term_erase(col, row, 255);
