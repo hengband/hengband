@@ -453,7 +453,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	bool bol_mark = TRUE;
 #endif
 
-	char name_str[MAX_NLEN];
+	GAME_TEXT name_str[MAX_NLEN];
 
 	/* Initialize name string */
 	name_str[0] = '\0';
@@ -754,7 +754,7 @@ static cptr pickpref_filename(int filename_mode)
  */
 void autopick_load_pref(bool disp_mes)
 {
-	char buf[80];
+	GAME_TEXT buf[80];
 	errr err;
 
 	/* Free old entries */

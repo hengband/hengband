@@ -110,7 +110,7 @@ s16b modify_stat_value(int value, int amount)
  * @param col 描画行
  * @return なし
  */
-static void prt_field(cptr info, int row, int col)
+static void prt_field(cptr info, TERM_LEN row, TERM_LEN col)
 {
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", row, col);
@@ -168,7 +168,7 @@ cptr map_name(void)
 static void prt_dungeon(void)
 {
 	cptr dungeon_name;
-	int col;
+	TERM_LEN col;
 
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", ROW_DUNGEON, COL_DUNGEON);
@@ -466,9 +466,10 @@ static struct {
  */
 static void prt_status(void)
 {
-	u32b bar_flags[3];
+	BIT_FLAGS bar_flags[3];
 	TERM_LEN wid, hgt, row_statbar, max_col_statbar;
-	int i, col = 0, num = 0;
+	int i;
+	TERM_LEN col = 0, num = 0;
 	int space = 2;
 
 	Term_get_size(&wid, &hgt);
@@ -700,7 +701,7 @@ static void prt_status(void)
 static void prt_title(void)
 {
 	cptr p = "";
-	char str[14];
+	GAME_TEXT str[14];
 
 	if (p_ptr->wizard)
 	{

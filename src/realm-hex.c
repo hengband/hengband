@@ -29,7 +29,7 @@
  */
 bool stop_hex_spell_all(void)
 {
-	int i;
+	SPELL_IDX i;
 
 	for (i = 0; i < 32; i++)
 	{
@@ -166,12 +166,10 @@ void check_hex(void)
 		}
 	}
 
-
 	/* Culcurates final mana cost */
 	need_mana_frac = 0;
 	s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
 	need_mana += (CASTING_HEX_NUM(p_ptr) - 1);
-
 
 	/* Not enough mana */
 	if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, need_mana, need_mana_frac) < 0)
