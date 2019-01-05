@@ -491,7 +491,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_RAND_QUEST_C:
 		{
-			char name[MAX_NLEN];
+			GAME_TEXT name[MAX_NLEN];
 			strcpy(name, r_name+r_info[quest[num].r_idx].name);
 			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n",
 						   " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
@@ -499,7 +499,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_RAND_QUEST_F:
 		{
-			char name[MAX_NLEN];
+			GAME_TEXT name[MAX_NLEN];
 			strcpy(name, r_name+r_info[quest[num].r_idx].name);
 			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n",
 						   " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
@@ -7748,7 +7748,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 {
 	char tmp_str[120];
 	char rand_tmp_str[120] = "\0";
-	char name[MAX_NLEN];
+	GAME_TEXT name[MAX_NLEN];
 	monster_race *r_ptr;
 	IDX i;
 	int rand_level = 100;

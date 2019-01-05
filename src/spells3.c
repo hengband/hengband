@@ -3341,7 +3341,7 @@ void display_spell_list(void)
 	TERM_LEN y, x;
 	int m[9];
 	const magic_type *s_ptr;
-	char name[MAX_NLEN];
+	GAME_TEXT name[MAX_NLEN];
 	char out_val[160];
 
 

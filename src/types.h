@@ -698,7 +698,7 @@ struct quest_type
 	QUEST_STATUS status;          /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
 	QUEST_TYPE type;              /*!< クエストの種別 / The quest type */
 
-	char name[60];          /*!< クエスト名 / Quest name */
+	GAME_TEXT name[60];          /*!< クエスト名 / Quest name */
 	DEPTH level;            /*!< 処理階層 / Dungeon level */
 	MONRACE_IDX r_idx;      /*!< クエスト対象のモンスターID / Monster race */
 
@@ -724,16 +724,11 @@ typedef struct owner_type owner_type;
 struct owner_type
 {
 	cptr owner_name;	/* Name */
-
 	PRICE max_cost;		/* Purse limit */
-
 	byte max_inflate;	/* Inflation (max) */
 	byte min_inflate;	/* Inflation (min) */
-
 	byte haggle_per;	/* Haggle unit */
-
 	byte insult_max;	/* Insult limit */
-
 	byte owner_race;	/* Owner race */
 };
 
@@ -1357,7 +1352,7 @@ struct player_type
 
 	POSITION y;	/* Player location in dungeon */
 	POSITION x;	/* Player location in dungeon */
-	char name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
+	GAME_TEXT name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
 };
 
 
@@ -1458,7 +1453,7 @@ typedef struct building_type building_type;
 
 struct building_type
 {
-	char name[20];                  /* proprietor name */
+	GAME_TEXT name[20];                  /* proprietor name */
 	GAME_TEXT owner_name[20];            /* proprietor name */
 	char owner_race[20];            /* proprietor race */
 
@@ -1497,12 +1492,12 @@ struct border_type
 typedef struct wilderness_type wilderness_type;
 struct wilderness_type
 {
-	int         terrain;
-	int         town;
-	int         road;
-	u32b        seed;
-	DEPTH        level;
-	byte        entrance;
+	int terrain;
+	int town;
+	int road;
+	u32b seed;
+	DEPTH level;
+	byte entrance;
 };
 
 
@@ -1513,10 +1508,10 @@ struct wilderness_type
 typedef struct town_type town_type;
 struct town_type
 {
-	char        name[32];
-	u32b        seed;      /* Seed for RNG */
-	store_type	*store;    /* The stores [MAX_STORES] */
-	byte        numstores;
+	GAME_TEXT name[32];
+	u32b seed;      /* Seed for RNG */
+	store_type *store;    /* The stores [MAX_STORES] */
+	byte numstores;
 };
 
 /* Dungeons */

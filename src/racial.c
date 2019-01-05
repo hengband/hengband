@@ -579,7 +579,7 @@ typedef struct power_desc_type power_desc_type;
  */
 struct power_desc_type
 {
-	char name[MAX_NLEN];      //!<レイシャル名
+	GAME_TEXT name[MAX_NLEN];      //!<レイシャル名
 	PLAYER_LEVEL level;	//!<体得レベル
 	int cost;
 	int stat;

@@ -750,11 +750,10 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 					else
 					{
 #ifdef JP
-						hooked_roff(format("、 %dd%d 体の%s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n],
-							r_name + rf_ptr->name));
+						hooked_roff(format("、 %dd%d 体の%s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], r_name + rf_ptr->name));
 #else
 						bool plural = (r_ptr->reinforce_dd[n] * r_ptr->reinforce_ds[n] > 1);
-						char name[MAX_NLEN];
+						GAME_TEXT name[MAX_NLEN];
 						strcpy(name, r_name + rf_ptr->name);
 						if(plural) plural_aux(name);
 						hooked_roff(format(",%dd%d %s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], name));
