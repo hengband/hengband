@@ -3831,13 +3831,7 @@ static void store_sell(void)
 	/* Hack -- Cannot remove cursed items */
 	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
 	{
-#ifdef JP
-		msg_print("ふーむ、どうやらそれは呪われているようだね。");
-#else
-		msg_print("Hmmm, it seems to be cursed.");
-#endif
-
-
+		msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
 		return;
 	}
 
@@ -5034,8 +5028,7 @@ void store_maint(int town_num, int store_num)
  */
 void store_init(int town_num, int store_num)
 {
-	int 		k;
-
+	int k;
 	cur_store_num = store_num;
 
 	/* Activate that store */
