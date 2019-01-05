@@ -22353,7 +22353,7 @@ D:$It seems only a white kobold, but it learned the use of ice.
 D:それは単なる白いコボルドに見えるが、冷気の浴びせ方を覚えている。
 
 N:1113:サンダー・コボルド
-E:Thunder kobold
+E:Electric kobold
 G:k:B
 I:110:11d9:20:35:30
 W:12:1:0:42:800:1118
@@ -22362,7 +22362,7 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS
 F:IM_ELEC | WILD_MOUNTAIN
-D:$It seems only a blue kobold, but it learned the use of thunder.
+D:$It seems only a blue kobold, but it learned the use of electricity.
 D:それは単なる青いコボルドに見えるが、電撃の浴びせ方を覚えている。
 
 N:1114:アシッド・コボルド
@@ -22383,7 +22383,7 @@ E:Poison kobold
 G:k:G
 I:115:12d10:25:45:35
 W:14:1:0:55:1100:1120
-B:HIT:POISON:5d5
+B:HIT:POISON:4d6
 F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS
@@ -22393,10 +22393,10 @@ D:それは単なる緑色のコボルドに見えるが、毒のくらわし方
 N:1116:フレイム・コボルド
 E:Flame kobold
 G:k:r
-I:110:25d9:25:40:35
-W:23:1:0:250:0:0
-B:HIT:FIRE:11d6
-B:HIT:FIRE:11d6
+I:110:20d10:25:40:35
+W:23:1:0:240:0:0
+B:HIT:FIRE:8d6
+B:HIT:FIRE:8d6
 S:1_IN_10
 S:BR_FIRE
 F:DROP_90
@@ -22412,10 +22412,10 @@ D:コボルド仲間の間でも暑苦しいと煙たがれることがある。
 N:1117:ブリザード・コボルド
 E:Blizzard kobold
 G:k:w
-I:110:25d9:25:40:35
-W:23:1:0:250:0:0
-B:HIT:COLD:11d6
-B:HIT:COLD:11d6
+I:110:20d10:25:40:35
+W:23:1:0:240:0:0
+B:HIT:COLD:8d6
+B:HIT:COLD:8d6
 S:1_IN_10
 S:BR_COLD | BR_WALL
 F:DROP_90
@@ -22430,10 +22430,10 @@ D:それの周りではダイアモンドダストを見ることができると
 N:1118:ライトニング・コボルド
 E:Lightning kobold
 G:k:b
-I:110:25d9:25:40:35
-W:23:1:0:250:0:0
-B:HIT:ELEC:11d6
-B:HIT:ELEC:11d6
+I:110:20d10:25:40:35
+W:23:1:0:240:0:0
+B:HIT:ELEC:8d6
+B:HIT:ELEC:8d6
 S:1_IN_10
 S:BR_ELEC
 F:DROP_90
@@ -22449,10 +22449,10 @@ D:このコボルドはあれと同じことができる！
 N:1119:カルボラン・コボルド
 E:Carborane kobold
 G:k:D
-I:110:25d9:25:40:35
-W:23:1:0:250:0:0
-B:HIT:ACID:11d6
-B:HIT:ACID:11d6
+I:110:20d10:25:40:35
+W:23:1:0:240:0:0
+B:HIT:ACID:8d6
+B:HIT:ACID:8d6
 S:1_IN_10
 S:BR_ACID
 F:DROP_90
@@ -22467,16 +22467,15 @@ D:このコボルドが吐き出す酸はロウソクをも溶かしてしまう
 N:1120:アポトキシン・コボルド
 E:Apotoxin kobold
 G:k:g
-I:115:26d10:30:45:40
+I:115:21d11:30:45:40
 W:24:1:0:333:0:0
-B:HIT:POISON:11d6
-B:HIT:POISON:11d6
+B:HIT:POISON:9d6
+B:HIT:POISON:9d6
 S:1_IN_10
 S:BR_POIS | BR_TIME
 F:DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
-F:NO_CONF | NO_FEAR
 D:$Be aware!
 D:$This kobold's poison can change a tough guy to a frail kid!
 D:気をつけろ！
@@ -22485,15 +22484,16 @@ D:やつの毒は大の大人を無力な子供に変えてしまう！
 N:1121:ジャイアンの腰巾着『スネヲ』
 E:Suneo, the Follower of Jaian
 G:k:u
-I:120:35d20:25:50:40
+I:120:35d20:30:50:40
 W:25:1:0:410:0:0
-B:HIT:HURT:12d6
-B:TOUCH:EAT_GOLD
-F:DROP_1D2
+B:HIT:HURT:10d6
+S:1_IN_8 | S_KIN | SHRIEK
+F:DROP_1D2 | DROP_90 | ONLY_ITEM | DROP_GOOD | DROP_GREAT
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:UNIQUE | FORCE_MAXHP
 F:EVIL | IM_POIS | EAT_POISONOUS
-F:ESCORT | ESCORTS | RES_SOUN | CAN_FLY | DROP_GREAT
+F:ESCORT | ESCORTS | RES_SOUN | CAN_FLY
+F:NO_CONF
 D:$"Hey Nobita, I regret to say, but the capacity of this dungeon is 3."
 D:$However, obviously there are many money mongers around him!
 D:「悪いなのび太、このダンジョンは3人用なんだ」
