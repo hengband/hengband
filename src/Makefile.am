@@ -25,7 +25,7 @@ hengband_SOURCES = \
 	object-curse.c object-curse.h \
 	object-hook.c object-hook.h object1.c object2.c \
 	objectkind-hook.c objectkind-hook.h obj_kind.c \
-	player-damage.c player-damage.h \
+	player-damage.c player-damage.h player-status.c player-status.h \
 	racial.c \
 	realm-arcane.c \
 	realm-arcane.h realm-chaos.c realm-chaos.h realm-craft.c realm-craft.h \

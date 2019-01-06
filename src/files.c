@@ -15,6 +15,7 @@
 
 #include "angband.h"
 #include "world.h"
+#include "player-status.h"
 
 
 /*

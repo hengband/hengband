@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "object-hook.h"
 #include "melee.h"
+#include "player-status.h"
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100

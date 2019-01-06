@@ -15,6 +15,7 @@
  */
 
 #include "angband.h"
+#include "player-status.h"
 
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.

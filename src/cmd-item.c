@@ -21,7 +21,6 @@
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
 
-#include "player-item.h"
 #include "object-hook.h"
 
 
