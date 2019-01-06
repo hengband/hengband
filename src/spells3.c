@@ -119,13 +119,8 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	/* Forget the counter target */
 	reset_target(m_ptr);
 
-	/* Update the monster (new location) */
 	update_monster(m_idx, TRUE);
-
-	/* Redraw the old grid */
 	lite_spot(oy, ox);
-
-	/* Redraw the new grid */
 	lite_spot(ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
@@ -224,13 +219,8 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	m_ptr->fy = ny;
 	m_ptr->fx = nx;
 
-	/* Update the monster (new location) */
 	update_monster(m_idx, TRUE);
-
-	/* Redraw the old grid */
 	lite_spot(oy, ox);
-
-	/* Redraw the new grid */
 	lite_spot(ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))

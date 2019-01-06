@@ -1932,7 +1932,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 							}
 						}
 
-
 						delete_monster(yy, xx);
 
 						/* No longer safe */
@@ -1954,13 +1953,8 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 						m_ptr->fy = sy;
 						m_ptr->fx = sx;
 
-						/* Update the monster (new location) */
 						update_monster(m_idx, TRUE);
-
-						/* Redraw the old grid */
 						lite_spot(yy, xx);
-
-						/* Redraw the new grid */
 						lite_spot(sy, sx);
 					}
 				}
@@ -2203,9 +2197,7 @@ static void cave_temp_room_lite(void)
 		if (c_ptr->m_idx)
 		{
 			int chance = 25;
-
 			monster_type    *m_ptr = &m_list[c_ptr->m_idx];
-
 			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 			update_monster(c_ptr->m_idx, FALSE);
 

@@ -3060,7 +3060,6 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 							m_ptr->fx = nx;
 							m_ptr->fy = ny;
 
-							/* Update the monster (new location) */
 							update_monster(c_mon_ptr->m_idx, TRUE);
 
 							lite_spot(ny, nx);

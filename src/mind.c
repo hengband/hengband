@@ -1689,13 +1689,8 @@ static bool cast_ninja_spell(int spell)
 		/* Wake the monster up */
 		(void)set_monster_csleep(m_idx, 0);
 
-		/* Update the monster (new location) */
 		update_monster(m_idx, TRUE);
-
-		/* Redraw the old grid */
 		lite_spot(target_row, target_col);
-
-		/* Redraw the new grid */
 		lite_spot(ty, tx);
 
 		if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
