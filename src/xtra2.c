@@ -5034,29 +5034,6 @@ bool get_hack_dir(DIRECTION *dp)
 }
 
 
-/*
- * エネルギーの増加量10d5を速く計算するための関数
- */
-
-#define Go_no_JuuJou 5*5*5*5*5*5*5*5*5*5
-
-s16b gain_energy(void)
-{
-	int i;
-	s32b energy_result = 10;
-	s32b tmp;
-
-	tmp = randint0(Go_no_JuuJou);
-
-	for (i = 0; i < 9; i ++){
-		energy_result += tmp % 5;
-		tmp /= 5;
-	}
-
-	return (s16b)(energy_result + tmp);
-}
-
-
 /*!
  * @brief 射撃武器の攻撃に必要な基本消費エネルギーを返す/Return bow energy
  * @param sval 射撃武器のアイテム副分類ID 

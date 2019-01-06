@@ -1283,7 +1283,6 @@ extern bool tgt_pt(POSITION *x, POSITION *y);
 extern void do_poly_wounds(void);
 extern void change_race(CHARACTER_IDX new_race, cptr effect_msg);
 extern HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear);
-extern s16b gain_energy(void);
 extern ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);
 extern int bow_tmul(OBJECT_SUBTYPE_VALUE sval);
 extern cptr your_alignment(void);
