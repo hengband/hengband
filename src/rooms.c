@@ -91,7 +91,7 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 	{{  0,  0,  1,  1,  1,  2,  3,  4,  5,  6,  8}, 20}, /*TRAP     */
 	{{  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,  2}, 40}, /*GLASS    */
 	{{  1,  1,  1,  1,  1,  1,  1,  2,  2,  3,  3},  1}, /*ARCADE   */
-	{{ 20, 40, 60, 80,100,100,100,100,100,100,100},  1}, /*FIX      */
+	{{  1,  8, 16, 24, 32, 40, 48, 56, 64, 72, 80},  1}, /*FIX      */
 };
 
 #endif
@@ -135,12 +135,12 @@ static byte room_build_order[ROOM_T_MAX] = {
 	ROOM_T_TRAP,
 	ROOM_T_GLASS,
 	ROOM_T_INNER_FEAT,
+	ROOM_T_FIXED,
 	ROOM_T_OVAL,
 	ROOM_T_CRYPT,
 	ROOM_T_OVERLAP,
 	ROOM_T_CROSS,
 	ROOM_T_FRACAVE,
-	ROOM_T_FIXED,
 	ROOM_T_NORMAL,
 };
 
@@ -2156,7 +2156,9 @@ bool generate_rooms(void)
 	 * XXX -- Various dungeon types and options.
 	 */
 
-	/*! @details ダンジョンにBEGINNER、CHAMELEON、SMALLESTいずれのフラグもなく、かつ「常に通常でない部屋を生成する」フラグがONならば、GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults */
+	/*! @details ダンジョンにBEGINNER、CHAMELEON、SMALLESTいずれのフラグもなく、
+	 * かつ「常に通常でない部屋を生成する」フラグがONならば、
+	 * GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults */
 	if (ironman_rooms && !((d_info[dungeon_type].flags1 & (DF1_BEGINNER | DF1_CHAMELEON | DF1_SMALLEST))))
 	{
 		for (i = 0; i < ROOM_T_MAX; i++)
@@ -2172,6 +2174,12 @@ bool generate_rooms(void)
 		prob_list[ROOM_T_LESSER_VAULT] = 0;
 		prob_list[ROOM_T_GREATER_VAULT] = 0;
 		prob_list[ROOM_T_RANDOM_VAULT] = 0;
+	}
+
+	/*! @details ダンジョンにBEGINNERフラグがあるならば、FIXED_ROOMを除外 / Forbidden vaults */
+	if (d_info[dungeon_type].flags1 & DF1_BEGINNER)
+	{
+		prob_list[ROOM_T_FIXED] = 0;
 	}
 
 	/*! @details ダンジョンにNO_CAVEフラグがある場合、FRACAVEの生成枠がNORMALに与えられる。CRIPT、OVALの生成枠がINNER_Fに与えられる。/ NO_CAVE dungeon (Castle)*/
