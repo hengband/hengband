@@ -5154,23 +5154,13 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
  */
 cptr your_alignment(void)
 {
-#ifdef JP
-	if (p_ptr->align > 150) return "大善";
-	else if (p_ptr->align > 50) return "中善";
-	else if (p_ptr->align > 10) return "小善";
-	else if (p_ptr->align > -11) return "中立";
-	else if (p_ptr->align > -51) return "小悪";
-	else if (p_ptr->align > -151) return "中悪";
-	else return "大悪";
-#else
-	if (p_ptr->align > 150) return "Lawful";
-	else if (p_ptr->align > 50) return "Good";
-	else if (p_ptr->align > 10) return "Neutral Good";
-	else if (p_ptr->align > -11) return "Neutral";
-	else if (p_ptr->align > -51) return "Neutral Evil";
-	else if (p_ptr->align > -151) return "Evil";
-	else return "Chaotic";
-#endif
+	if (p_ptr->align > 150) return _("大善", "Lawful");
+	else if (p_ptr->align > 50) return _("中善", "Good");
+	else if (p_ptr->align > 10) return _("小善", "Neutral Good");
+	else if (p_ptr->align > -11) return _("中立", "Neutral");
+	else if (p_ptr->align > -51) return _("小悪", "Neutral Evil");
+	else if (p_ptr->align > -151) return _("中悪", "Evil");
+	else return _("大悪", "Chaotic");
 }
 
 
