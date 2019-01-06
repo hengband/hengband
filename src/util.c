@@ -3043,7 +3043,7 @@ void msg_format_wizard(int cheat_type, cptr fmt, ...)
  * At the given location, using the given attribute, if allowed,
  * add the given string.  Do not clear the line.
  */
-void c_put_str(TERM_COLOR attr, cptr str, int row, int col)
+void c_put_str(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Position cursor, Dump the attr/text */
 	Term_putstr(col, row, -1, attr, str);
@@ -3052,7 +3052,7 @@ void c_put_str(TERM_COLOR attr, cptr str, int row, int col)
 /*
  * As above, but in "white"
  */
-void put_str(cptr str, int row, int col)
+void put_str(cptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Spawn */
 	Term_putstr(col, row, -1, TERM_WHITE, str);
@@ -3064,7 +3064,7 @@ void put_str(cptr str, int row, int col)
  * Display a string on the screen using an attribute, and clear
  * to the end of the line.
  */
-void c_prt(TERM_COLOR attr, cptr str, int row, int col)
+void c_prt(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Clear line, position cursor */
 	Term_erase(col, row, 255);
@@ -3076,7 +3076,7 @@ void c_prt(TERM_COLOR attr, cptr str, int row, int col)
 /*
  * As above, but in "white"
  */
-void prt(cptr str, int row, int col)
+void prt(cptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Spawn */
 	c_prt(TERM_WHITE, str, row, col);

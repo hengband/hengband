@@ -1126,10 +1126,10 @@ extern void msg_format_wizard(int cheat_type, cptr fmt, ...);
 #endif /* SWIG */
 extern void screen_save(void);
 extern void screen_load(void);
-extern void c_put_str(TERM_COLOR attr, cptr str, int row, int col);
-extern void put_str(cptr str, int row, int col);
-extern void c_prt(TERM_COLOR attr, cptr str, int row, int col);
-extern void prt(cptr str, int row, int col);
+extern void c_put_str(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col);
+extern void put_str(cptr str, TERM_LEN row, TERM_LEN col);
+extern void c_prt(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col);
+extern void prt(cptr str, TERM_LEN row, TERM_LEN col);
 extern void c_roff(TERM_COLOR attr, cptr str);
 extern void roff(cptr str);
 extern void clear_from(int row);
