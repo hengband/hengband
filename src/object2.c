@@ -5631,7 +5631,7 @@ void inven_item_describe(INVENTORY_IDX item)
  * @param num 増やしたい量
  * @return なし
  */
-void inven_item_increase(INVENTORY_IDX item, int num)
+void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
 	object_type *o_ptr = &inventory[item];
 
@@ -5643,7 +5643,7 @@ void inven_item_increase(INVENTORY_IDX item, int num)
 	else if (num < 0) num = 0;
 
 	/* Un-apply */
-	num -= (ITEM_NUMBER)o_ptr->number;
+	num -= o_ptr->number;
 
 	/* Change the number and weight */
 	if (num)
@@ -5819,7 +5819,7 @@ void floor_item_describe(INVENTORY_IDX item)
  * @param num 増やしたいアイテムの数
  * @return なし
  */
-void floor_item_increase(INVENTORY_IDX item, int num)
+void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
 	object_type *o_ptr = &o_list[item];
 
@@ -5831,10 +5831,10 @@ void floor_item_increase(INVENTORY_IDX item, int num)
 	else if (num < 0) num = 0;
 
 	/* Un-apply */
-	num -= (int)o_ptr->number;
+	num -=  o_ptr->number;
 
 	/* Change the number */
-	o_ptr->number += (ITEM_NUMBER)num;
+	o_ptr->number += num;
 }
 
 

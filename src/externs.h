@@ -836,11 +836,11 @@ extern void acquirement(POSITION y1, POSITION x1, int num, bool great, bool spec
 extern void amusement(POSITION y1, POSITION x1, int num, bool known);
 extern void inven_item_charges(INVENTORY_IDX item);
 extern void inven_item_describe(INVENTORY_IDX item);
-extern void inven_item_increase(INVENTORY_IDX item, int num);
+extern void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 extern void inven_item_optimize(INVENTORY_IDX item);
 extern void floor_item_charges(INVENTORY_IDX item);
 extern void floor_item_describe(INVENTORY_IDX item);
-extern void floor_item_increase(INVENTORY_IDX item, int num);
+extern void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 extern void floor_item_optimize(INVENTORY_IDX item);
 extern bool inven_carry_okay(object_type *o_ptr);
 extern bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
