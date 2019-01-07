@@ -2221,10 +2221,10 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 bool artifact_scroll(void)
 {
 	OBJECT_IDX item;
-	bool            okay = FALSE;
-	object_type     *o_ptr;
+	bool okay = FALSE;
+	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr            q, s;
+	cptr q, s;
 
 	/* Enchant weapon/armour */
 	item_tester_hook = item_tester_hook_nameless_weapon_armour;
@@ -2291,21 +2291,20 @@ bool artifact_scroll(void)
 	{
 		if (o_ptr->number > 1)
 		{
+			msg_print(_("複数のアイテムに魔法をかけるだけのエネルギーはありません！", "Not enough enough energy to enchant more than one object!"));
 #ifdef JP
-			msg_print("複数のアイテムに魔法をかけるだけのエネルギーはありません！");
 			msg_format("%d 個の%sが壊れた！",(o_ptr->number)-1, o_name);
 #else
-			msg_print("Not enough enough energy to enchant more than one object!");
 			msg_format("%d of your %s %s destroyed!",(o_ptr->number)-1, o_name, (o_ptr->number>2?"were":"was"));
 #endif
 
 			if (item >= 0)
 			{
-				inven_item_increase(item, 1-(o_ptr->number));
+				inven_item_increase(item, 1 - (o_ptr->number));
 			}
 			else
 			{
-				floor_item_increase(0-item, 1-(o_ptr->number));
+				floor_item_increase(0 - item, 1 - (o_ptr->number));
 			}
 		}
 		okay = create_artifact(o_ptr, TRUE);

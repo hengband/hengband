@@ -2380,44 +2380,35 @@ static bool suppression_evil_dam(object_type *o_ptr)
 
 static bool weakening_artifact(object_type *o_ptr)
 {
-	KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
+	KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
 	object_kind *k_ptr = &k_info[k_idx];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
+	object_flags(o_ptr, flgs);
 
-	if ((k_ptr->dd < o_ptr->dd) || (k_ptr->ds < o_ptr->ds))
+	if (have_flag(flgs, TR_KILL_EVIL))
 	{
-		DICE_NUMBER pre_dd = o_ptr->dd;
-		DICE_SID pre_ds = o_ptr->ds;
-
-		if (o_ptr->dd > o_ptr->ds)
-		{
-			o_ptr->dd--;
-		}
-		else
-		{
-			o_ptr->ds--;
-		}
-
-		msg_format_wizard(CHEAT_OBJECT,
-			_("ダイスが抑制されました。%dd%d -> %dd%d", "Dice Supress %dd%d -> %dd%d"),
-			pre_dd, pre_ds, o_ptr->dd, o_ptr->ds);
-		return 1;
+		remove_flag(o_ptr->art_flags, TR_KILL_EVIL);
+		add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
+		return TRUE;
 	}
-
-	if (o_ptr->to_d > 10)
+	else if (k_ptr->dd < o_ptr->dd)
 	{
-		HIT_POINT pre_damage = o_ptr->to_d;
-
+		o_ptr->dd--;
+		return TRUE;
+	}
+	else if (k_ptr->ds < o_ptr->ds)
+	{
+		o_ptr->ds--;
+		return TRUE;
+	}
+	else if (o_ptr->to_d > 10)
+	{
 		o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
 		if (o_ptr->to_d < 10)
 		{
 			o_ptr->to_d = 10;
 		}
-
-		msg_format_wizard(CHEAT_OBJECT,
-			_("ダメージ修正が抑制されました。 %d -> %d", "Plus-Damage Supress %d -> %d"),
-			pre_damage, o_ptr->to_d);
-
-		return 1;
+		return TRUE;
 	}
-	return 0;
+	return FALSE;
 }
