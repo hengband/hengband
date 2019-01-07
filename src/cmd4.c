@@ -6626,19 +6626,11 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 		}
 
 		/* Prompt */
-#ifdef JP
-		prt(format("<方向>%s%s%s, ESC",
-			(!visual_list && !visual_only) ? ", 'r'で思い出を見る" : "",
-			visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
-			(attr_idx || char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
+		prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"),
+			(!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
+			visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
+			(attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
 			hgt - 1, 0);
-#else
-		prt(format("<dir>%s%s%s, ESC",
-			(!visual_list && !visual_only) ? ", 'r' to recall" : "",
-			visual_list ? ", ENTER to accept" : ", 'v' for visuals",
-			(attr_idx || char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
-			hgt - 1, 0);
-#endif
 
 		/* Get the current monster */
 		r_ptr = &r_info[mon_idx[mon_cur]];
