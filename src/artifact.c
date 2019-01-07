@@ -14,7 +14,7 @@
 #include "cmd-activate.h"
 #include "object-curse.h"
 
-static bool suppression_evil_dam(object_type *o_ptr);
+static bool has_extreme_damage_rate(object_type *o_ptr);
 static bool weakening_artifact(object_type *o_ptr);
 
 
@@ -2007,7 +2007,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	}
 
 	/* ダメージ抑制処理を行う */
-	while (suppression_evil_dam(o_ptr) && !one_in_(SWORDFISH_LUCK));
+	while (has_extreme_damage_rate(o_ptr) && !one_in_(SWORDFISH_LUCK));
 	{
 		weakening_artifact(o_ptr);
 	}
@@ -2332,7 +2332,7 @@ HIT_POINT calc_arm_avgdamage(object_type *o_ptr)
 	return dam;
 }
 
-static bool suppression_evil_dam(object_type *o_ptr)
+static bool has_extreme_damage_rate(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
