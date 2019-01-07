@@ -5874,12 +5874,10 @@ static void do_cmd_knowledge_pets(void)
 	fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
 	fprintf(fff, "    合計: %d 体のペット\n", t_friends);
-	fprintf(fff, " 維持コスト: %d%% MP\n", show_upkeep);
 #else
-	fprintf(fff, "   Total: %d pet%s.\n",
-		t_friends, (t_friends == 1 ? "" : "s"));
-	fprintf(fff, "   Upkeep: %d%% mana.\n", show_upkeep);
+	fprintf(fff, "   Total: %d pet%s.\n", t_friends, (t_friends == 1 ? "" : "s"));
 #endif
+	fprintf(fff, _(" 維持コスト: %d%% MP\n", "   Upkeep: %d%% mana.\n"), show_upkeep);
 
 
 	my_fclose(fff);
@@ -6564,22 +6562,12 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 		if (redraw)
 		{
 			clear_from(0);
-
-#ifdef JP
-			prt(format("%s - モンスター", !visual_only ? "知識" : "表示"), 2, 0);
-			if (direct_r_idx < 0) prt("グループ", 4, 0);
-			prt("名前", 4, max + 3);
+			prt(format(_("%s - モンスター", "%s - monsters"), !visual_only ? _("知識", "Knowledge") : _("表示", "Visuals")), 2, 0);
+			if (direct_r_idx < 0) prt(_("グループ", "Group"), 4, 0);
+			prt(_("名前", "Name"), 4, max + 3);
 			if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
-			prt("文字", 4, 67);
-			if (!visual_only) prt("殺害数", 4, 72);
-#else
-			prt(format("%s - monsters", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
-			if (direct_r_idx < 0) prt("Group", 4, 0);
-			prt("Name", 4, max + 3);
-			if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
-			prt("Sym", 4, 68);
-			if (!visual_only) prt("Kills", 4, 73);
-#endif
+			prt(_("文字", "Sym"), 4, 67);
+			if (!visual_only) prt(_("殺害数", "Kills"), 4, 72);
 
 			for (i = 0; i < 78; i++)
 			{
