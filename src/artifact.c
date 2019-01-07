@@ -15,8 +15,7 @@
 #include "object-curse.h"
 
 static bool suppression_evil_dam(object_type *o_ptr);
-static int weakening_artifact(object_type *o_ptr);
-
+static bool weakening_artifact(object_type *o_ptr);
 
 
 /*!
@@ -1326,13 +1325,13 @@ static void random_slay(object_type *o_ptr)
 			break;
 		case 3:
 		case 4:
-			if (one_in_(4))
+			if (one_in_(8))
 			{
 				add_flag(o_ptr->art_flags, TR_KILL_EVIL);
 			}
 			else
 			{
-			add_flag(o_ptr->art_flags, TR_SLAY_EVIL); 
+				add_flag(o_ptr->art_flags, TR_SLAY_EVIL); 
 			}
 			if (!o_ptr->artifact_bias && one_in_(2))
 				o_ptr->artifact_bias = BIAS_LAW;
@@ -1900,14 +1899,6 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (has_pval)
 	{
-#if 0
-		add_flag(o_ptr->art_flags, TR_SHOW_MODS);
-
-		/* This one commented out by gw's request... */
-		if (!a_scroll)
-			add_flag(o_ptr->art_flags, TR_HIDE_TYPE);
-#endif
-
 		if (have_flag(o_ptr->art_flags, TR_BLOWS))
 		{
 			o_ptr->pval = randint1(2);
@@ -1960,14 +1951,14 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		while ((o_ptr->to_d+o_ptr->to_h) > 20)
 		{
 			if (one_in_(o_ptr->to_d) && one_in_(o_ptr->to_h)) break;
-			o_ptr->to_d -= (s16b)randint0(3);
-			o_ptr->to_h -= (s16b)randint0(3);
+			o_ptr->to_d -= (HIT_POINT)randint0(3);
+			o_ptr->to_h -= (HIT_PROB)randint0(3);
 		}
 		while ((o_ptr->to_d+o_ptr->to_h) > 10)
 		{
 			if (one_in_(o_ptr->to_d) || one_in_(o_ptr->to_h)) break;
-			o_ptr->to_d -= (s16b)randint0(3);
-			o_ptr->to_h -= (s16b)randint0(3);
+			o_ptr->to_d -= (HIT_POINT)randint0(3);
+			o_ptr->to_h -= (HIT_PROB)randint0(3);
 		}
 	}
 
@@ -2015,14 +2006,10 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		else power_level = 3;
 	}
 
-	/* 平均対邪ダメージが一定以上なら11/12(WEIRD_LUCK)でダメージ抑制処理を行う */
-	if(suppression_evil_dam(o_ptr) && !one_in_(WEIRD_LUCK) && object_is_weapon(o_ptr))
+	/* ダメージ抑制処理を行う */
+	while (suppression_evil_dam(o_ptr) && !one_in_(SWORDFISH_LUCK));
 	{
-		msg_format_wizard(CHEAT_OBJECT, "アーティファクトの抑制処理を行います。");
-		do
-		{
-			if (weakening_artifact(o_ptr) == 0) break;
-		} while (suppression_evil_dam(o_ptr));
+		weakening_artifact(o_ptr);
 	}
 
 	if (a_scroll)
@@ -2262,7 +2249,7 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 {
 	object_type forge;
 	object_type *q_ptr;
-	IDX i;
+	KIND_OBJECT_IDX i;
 
 	artifact_type *a_ptr = &a_info[a_idx];
 	q_ptr = &forge;
@@ -2279,7 +2266,7 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 	object_prep(q_ptr, i);
 
 	/* Save the name */
-	q_ptr->name1 = (byte_hack)a_idx;
+	q_ptr->name1 = a_idx;
 
 	/* Extract the fields */
 	q_ptr->pval = a_ptr->pval;
@@ -2306,7 +2293,7 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 }
 
 /*対邪平均ダメージの計算処理*/
-int calc_arm_avgdamage(object_type *o_ptr)
+HIT_POINT calc_arm_avgdamage(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
@@ -2342,7 +2329,7 @@ int calc_arm_avgdamage(object_type *o_ptr)
 
 	msg_format_wizard(CHEAT_OBJECT,"素:%d> 対邪:%d> 理力:%d> 切:%d> 最終:%d", base, s_evil, forced, vorpal, dam);
 
-	return(dam);
+	return dam;
 }
 
 static bool suppression_evil_dam(object_type *o_ptr)
@@ -2391,13 +2378,13 @@ static bool suppression_evil_dam(object_type *o_ptr)
 	return FALSE;
 }
 
-static int weakening_artifact(object_type *o_ptr)
+static bool weakening_artifact(object_type *o_ptr)
 {
-	 KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
-	 object_kind *k_ptr = &k_info[k_idx];
+	KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->sval, o_ptr->tval);
+	object_kind *k_ptr = &k_info[k_idx];
 
-	 if ((k_ptr->dd < o_ptr->dd) || (k_ptr->ds < o_ptr->ds))
-	 {
+	if ((k_ptr->dd < o_ptr->dd) || (k_ptr->ds < o_ptr->ds))
+	{
 		DICE_NUMBER pre_dd = o_ptr->dd;
 		DICE_SID pre_ds = o_ptr->ds;
 
@@ -2410,12 +2397,12 @@ static int weakening_artifact(object_type *o_ptr)
 			o_ptr->ds--;
 		}
 
-		msg_format_wizard(CHEAT_OBJECT, 
+		msg_format_wizard(CHEAT_OBJECT,
 			_("ダイスが抑制されました。%dd%d -> %dd%d", "Dice Supress %dd%d -> %dd%d"),
 			pre_dd, pre_ds, o_ptr->dd, o_ptr->ds);
 		return 1;
 	}
-	
+
 	if (o_ptr->to_d > 10)
 	{
 		HIT_POINT pre_damage = o_ptr->to_d;
@@ -2431,6 +2418,6 @@ static int weakening_artifact(object_type *o_ptr)
 			pre_damage, o_ptr->to_d);
 
 		return 1;
-	 }
-	 return 0;
+	}
+	return 0;
 }
