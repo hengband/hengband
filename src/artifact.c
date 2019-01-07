@@ -14,7 +14,7 @@
 #include "cmd-activate.h"
 #include "object-curse.h"
 
-static int suppression_evil_dam(object_type *o_ptr);
+static bool suppression_evil_dam(object_type *o_ptr);
 static int weakening_artifact(object_type *o_ptr);
 
 
@@ -2345,9 +2345,8 @@ int calc_arm_avgdamage(object_type *o_ptr)
 	return(dam);
 }
 
-static int suppression_evil_dam(object_type *o_ptr)
+static bool suppression_evil_dam(object_type *o_ptr)
 {
-	int num = FALSE;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
@@ -2355,41 +2354,41 @@ static int suppression_evil_dam(object_type *o_ptr)
 	{
 		if(have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 52))
 		{
-			num = TRUE;
+			return TRUE;
 		}
 		else if(have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 43))
 		{
-			num = TRUE;
+			return TRUE;
 		}
 		else if( have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 33))
 		{
-			num = TRUE;
+			return TRUE;
 		}
 		else if (calc_arm_avgdamage(o_ptr) > 63)
 		{
-			num = TRUE;
+			return TRUE;
 		}
 	}
 	else
 	{
 		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(o_ptr) > 65))
 		{
-			num = TRUE;
+			return TRUE;
 		}
 		else if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 52))
 		{
-			num = TRUE;
+			return TRUE;
 		}
 		else if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 40))
 		{
-			num = TRUE;
+			return TRUE;
 		}
 		else if (calc_arm_avgdamage(o_ptr) > 75)
 		{
-			num = TRUE;
+			return TRUE;
 		}
 	}
-	return(num);
+	return FALSE;
 }
 
 static int weakening_artifact(object_type *o_ptr)
