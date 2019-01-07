@@ -7214,16 +7214,16 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
  */
 static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
-	IDX i;
+	FEAT_IDX i;
 	int len, max;
-	IDX grp_cur, grp_top, old_grp_cur;
-	IDX feat_cur, feat_top;
+	FEAT_IDX grp_cur, grp_top, old_grp_cur;
+	FEAT_IDX feat_cur, feat_top;
 	int grp_cnt;
-	IDX grp_idx[100];
+	FEAT_IDX grp_idx[100];
 	int feat_cnt;
-	IDX *feat_idx;
+	FEAT_IDX *feat_idx;
 
-	int column = 0;
+	TERM_LEN column = 0;
 	bool flag;
 	bool redraw;
 
@@ -7231,8 +7231,8 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 	TERM_COLOR attr_top = 0;
 	byte char_left = 0;
 
-	int browser_rows;
-	int wid, hgt;
+	TERM_LEN browser_rows;
+	TERM_LEN wid, hgt;
 
 	TERM_COLOR attr_old[F_LIT_MAX];
 	SYMBOL_CODE char_old[F_LIT_MAX];
@@ -7247,7 +7247,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 	browser_rows = hgt - 8;
 
 	/* Allocate the "feat_idx" array */
-	C_MAKE(feat_idx, max_f_idx, IDX);
+	C_MAKE(feat_idx, max_f_idx, FEAT_IDX);
 
 	max = 0;
 	grp_cnt = 0;
