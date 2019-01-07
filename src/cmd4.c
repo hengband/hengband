@@ -7312,35 +7312,19 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 		{
 			clear_from(0);
 
-#ifdef JP
-			prt("表示 - 地形", 2, 0);
-			if (direct_f_idx < 0) prt("グループ", 4, 0);
-			prt("名前", 4, max + 3);
+			prt(_("表示 - 地形", "Visuals - features"), 2, 0);
+			if (direct_f_idx < 0) prt(_("グループ", "Group"), 4, 0);
+			prt(_("名前", "Name"), 4, max + 3);
 			if (use_bigtile)
 			{
 				if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
-				prt("文字 ( l/ d)", 4, 66);
+				prt(_("文字 ( l/ d)", "Sym ( l/ d)"), 4, 66);
 			}
 			else
 			{
 				if (p_ptr->wizard || visual_only) prt("Idx", 4, 64);
-				prt("文字 (l/d)", 4, 68);
+				prt(_("文字 (l/d)", "Sym (l/d)"), 4, 68);
 			}
-#else
-			prt("Visuals - features", 2, 0);
-			if (direct_f_idx < 0) prt("Group", 4, 0);
-			prt("Name", 4, max + 3);
-			if (use_bigtile)
-			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
-				prt("Sym ( l/ d)", 4, 67);
-			}
-			else
-			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 64);
-				prt("Sym (l/d)", 4, 69);
-			}
-#endif
 
 			for (i = 0; i < 78; i++)
 			{
@@ -7399,17 +7383,10 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 		}
 
 		/* Prompt */
-#ifdef JP
-		prt(format("<方向>%s, 'd'で標準光源効果%s, ESC",
-			visual_list ? ", ENTERで決定, 'a'で対象明度変更" : ", 'v'でシンボル変更",
-			(attr_idx || char_idx) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
+		prt(format(_("<方向>%s, 'd'で標準光源効果%s, ESC", "<dir>%s, 'd' for default lighting%s, ESC"),
+			visual_list ? _(", ENTERで決定, 'a'で対象明度変更", ", ENTER to accept, 'a' for lighting level") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
+			(attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
 			hgt - 1, 0);
-#else
-		prt(format("<dir>%s, 'd' for default lighting%s, ESC",
-			visual_list ? ", ENTER to accept, 'a' for lighting level" : ", 'v' for visuals",
-			(attr_idx || char_idx) ? ", 'c', 'p' to paste" : ", 'c' to copy"),
-			hgt - 1, 0);
-#endif
 
 		/* Get the current feature */
 		f_ptr = &f_info[feat_idx[feat_cur]];
