@@ -5233,18 +5233,15 @@ static void ang_sort_art_swap(vptr u, vptr v, int a, int b)
  */
 static void do_cmd_knowledge_artifacts(void)
 {
-	IDX i;
-	IDX k;
+	ARTIFACT_IDX i;
+	ARTIFACT_IDX k;
 	POSITION x, y;
 	int n = 0;
-	IDX z;
+	ARTIFACT_IDX z;
 	u16b why = 3;
-	IDX *who;
-
+	ARTIFACT_IDX *who;
 	FILE *fff;
-
 	GAME_TEXT file_name[1024];
-
 	GAME_TEXT base_name[MAX_NLEN];
 
 	bool *okay;
@@ -5259,7 +5256,7 @@ static void do_cmd_knowledge_artifacts(void)
 	}
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_a_idx, s16b);
+	C_MAKE(who, max_a_idx, ARTIFACT_IDX);
 
 	/* Allocate the "okay" array */
 	C_MAKE(okay, max_a_idx, bool);
@@ -5378,7 +5375,7 @@ static void do_cmd_knowledge_artifacts(void)
 	}
 
 	/* Free the "who" array */
-	C_KILL(who, max_a_idx, s16b);
+	C_KILL(who, max_a_idx, ARTIFACT_IDX);
 
 	/* Free the "okay" array */
 	C_KILL(okay, max_a_idx, bool);
@@ -5903,13 +5900,11 @@ static void do_cmd_knowledge_pets(void)
  */
 static void do_cmd_knowledge_kill_count(void)
 {
-	IDX i;
+	MONRACE_IDX i;
 	int k, n = 0;
 	u16b why = 2;
-	IDX *who;
-
+	MONRACE_IDX *who;
 	FILE *fff;
-
 	GAME_TEXT file_name[1024];
 
 	s32b Total = 0;
@@ -5919,13 +5914,13 @@ static void do_cmd_knowledge_kill_count(void)
 	fff = my_fopen_temp(file_name, 1024);
 
 	if (!fff) {
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
+	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	{
 		/* Monsters slain */
@@ -7530,7 +7525,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 	}
 
 	/* Free the "feat_idx" array */
-	C_KILL(feat_idx, max_f_idx, IDX);
+	C_KILL(feat_idx, max_f_idx, FEAT_IDX);
 }
 
 
