@@ -1547,8 +1547,8 @@ typedef struct tag_type tag_type;
 
 struct tag_type
 {
-	int     tag;
-	int     index;
+	int tag;
+	int index;
 };
 
 typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
@@ -1575,24 +1575,24 @@ typedef struct high_score high_score;
 
 struct high_score
 {
-	char what[8];		/* Version info (string) */
-	char pts[10];		/* Total Score (number) */
-	char gold[10];		/* Total Gold (number) */
-	char turns[10];		/* Turns Taken (number) */
-	char day[10];		/* Time stamp (string) */
-	char who[16];		/* Player Name (string) */
-	char uid[8];		/* Player UID (number) */
-	char sex[2];		/* Player Sex (string) */
-	char p_r[3];		/* Player Race (number) */
-	char p_c[3];		/* Player Class (number) */
-	char p_a[3];		/* Player Seikaku (number) */
+	GAME_TEXT what[8];		/* Version info (string) */
+	GAME_TEXT pts[10];		/* Total Score (number) */
+	GAME_TEXT gold[10];		/* Total Gold (number) */
+	GAME_TEXT turns[10];		/* Turns Taken (number) */
+	GAME_TEXT day[10];		/* Time stamp (string) */
+	GAME_TEXT who[16];		/* Player Name (string) */
+	GAME_TEXT uid[8];		/* Player UID (number) */
+	GAME_TEXT sex[2];		/* Player Sex (string) */
+	GAME_TEXT p_r[3];		/* Player Race (number) */
+	GAME_TEXT p_c[3];		/* Player Class (number) */
+	GAME_TEXT p_a[3];		/* Player Seikaku (number) */
 
-	char cur_lev[4];		/* Current Player Level (number) */
-	char cur_dun[4];		/* Current Dungeon Level (number) */
-	char max_lev[4];		/* Max Player Level (number) */
-	char max_dun[4];		/* Max Dungeon Level (number) */
+	GAME_TEXT cur_lev[4];		/* Current Player Level (number) */
+	GAME_TEXT cur_dun[4];		/* Current Dungeon Level (number) */
+	GAME_TEXT max_lev[4];		/* Max Player Level (number) */
+	GAME_TEXT max_dun[4];		/* Max Dungeon Level (number) */
 
-	char how[40];		/* Method of death (string) */
+	GAME_TEXT how[40];		/* Method of death (string) */
 };
 
 
