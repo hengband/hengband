@@ -169,7 +169,6 @@ void reset_tim_flags(void)
 	p_ptr->dustrobe = 0;
 	p_ptr->action = ACTION_NONE;
 
-
 	p_ptr->oppose_acid = 0;     /* Timed -- oppose acid */
 	p_ptr->oppose_elec = 0;     /* Timed -- oppose lightning */
 	p_ptr->oppose_fire = 0;     /* Timed -- oppose heat */

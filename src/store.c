@@ -2644,7 +2644,6 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 	/* Clear the prompt */
 	prt("", 0, 0);
 
-	/* Cancel */
 	if (command == ESCAPE) return (FALSE);
 
 	repeat_push(*com_val);
@@ -3128,10 +3127,8 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		}
 	}
 
-	/* Cancel */
 	if (cancel) return (TRUE);
 
-	/* Update bargaining info */
 	updatebargain(*price, final_ask, o_ptr->number);
 
 	/* Do not cancel */
@@ -3369,10 +3366,8 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		}
 	}
 
-	/* Cancel */
 	if (cancel) return (TRUE);
 
-	/* Update bargaining info */
 	updatebargain(*price, final_ask, o_ptr->number);
 
 	/* Do not cancel */
