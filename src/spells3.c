@@ -1037,8 +1037,6 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 
 		chg_virtue(V_HARMONY, 1);
 		chg_virtue(V_ENCHANT, -2);
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
 		p_ptr->window |= (PW_EQUIP | PW_PLAYER);
@@ -2127,8 +2125,6 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 
 	/* Failure */
 	if (!res) return (FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Combine / Reorder the pack (later) */
@@ -2281,8 +2277,7 @@ bool artifact_scroll(void)
 #ifdef JP
 		msg_format("%sは既に強化されています！", o_name );
 #else
-		msg_format("The %s %s already %s!",
-		    o_name, ((o_ptr->number > 1) ? "are" : "is"),
+		msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"),
 		    ((o_ptr->number > 1) ? "customized items" : "a customized item"));
 #endif
 	}
@@ -2291,7 +2286,7 @@ bool artifact_scroll(void)
 	{
 		if (o_ptr->number > 1)
 		{
-			msg_print(_("複数のアイテムに魔法をかけるだけのエネルギーはありません！", "Not enough enough energy to enchant more than one object!"));
+			msg_print(_("複数のアイテムに魔法をかけるだけのエネルギーはありません！", "Not enough energy to enchant more than one object!"));
 #ifdef JP
 			msg_format("%d 個の%sが壊れた！",(o_ptr->number)-1, o_name);
 #else
@@ -2362,8 +2357,6 @@ bool identify_item(object_type *o_ptr)
 
 	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Combine / Reorder the pack (later) */
@@ -3069,8 +3062,6 @@ msg_format("%s は劣化した！",
 
 		}
 	}
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
@@ -4086,8 +4077,6 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返し�
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
 		/* Recalculate mana */
@@ -4152,8 +4141,6 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
 		/* Recalculate mana */

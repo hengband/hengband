@@ -2189,8 +2189,6 @@ void do_cmd_rest(void)
 	/* Save the rest code */
 	resting = command_arg;
 	p_ptr->action = ACTION_REST;
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Redraw the state */

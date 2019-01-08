@@ -1200,8 +1200,6 @@ static void check_music(void)
 			INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 			msg_print(_("歌を再開した。", "You restart singing."));
 			p_ptr->action = ACTION_SING;
-
-			/* Recalculate bonuses */
 			p_ptr->update |= (PU_BONUS | PU_HP);
 
 			/* Redraw map and status bar */

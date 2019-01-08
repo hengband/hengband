@@ -884,8 +884,6 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 					if (p_ptr->stat_cur[i] > p_ptr->stat_max[i])
 						p_ptr->stat_cur[i] = p_ptr->stat_max[i];
-
-					/* Recalculate bonuses */
 					p_ptr->update |= (PU_BONUS);
 
 					flag = TRUE;

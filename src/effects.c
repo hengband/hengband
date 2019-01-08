@@ -116,8 +116,6 @@ void set_action(ACTION_IDX typ)
 			break;
 		}
 	}
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Redraw the state */
@@ -271,8 +269,6 @@ void dispel_player(void)
 		SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
 		p_ptr->action = ACTION_NONE;
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS | PU_HP);
 
 		p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
@@ -340,8 +336,6 @@ bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 
 	/* Redraw title */
 	p_ptr->redraw |= (PR_BASIC | PR_STATUS);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS | PU_HP);
 
 	handle_stuff();
@@ -793,8 +787,6 @@ bool set_fast(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -850,8 +842,6 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -903,8 +893,6 @@ bool set_slow(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -960,8 +948,6 @@ bool set_shield(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1017,8 +1003,6 @@ bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1074,8 +1058,6 @@ bool set_magicdef(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1130,8 +1112,6 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1187,8 +1167,6 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
@@ -1247,8 +1225,6 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
@@ -1373,8 +1349,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1447,8 +1421,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1503,8 +1475,6 @@ bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	p_ptr->update |= (PU_MONSTERS);
 	handle_stuff();
@@ -1560,8 +1530,6 @@ bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Update the monsters */
@@ -1619,8 +1587,6 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Update the monsters */
@@ -1678,8 +1644,6 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1734,8 +1698,6 @@ bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1847,8 +1809,6 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1956,8 +1916,6 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2012,8 +1970,6 @@ bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2068,8 +2024,6 @@ bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2125,8 +2079,6 @@ bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2181,8 +2133,6 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2235,8 +2185,6 @@ bool set_multishadow(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2291,8 +2239,6 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2347,8 +2293,6 @@ bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2409,8 +2353,6 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
@@ -2986,8 +2928,6 @@ bool set_stun(TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Redraw the "stun" */
@@ -3181,8 +3121,6 @@ bool set_cut(TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Redraw the "cut" */
@@ -3377,8 +3315,6 @@ bool set_food(TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Redraw hunger */
@@ -3442,8 +3378,6 @@ bool inc_stat(int stat)
 		{
 			p_ptr->stat_max[stat] = value;
 		}
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
 		/* Success */
@@ -3577,8 +3511,6 @@ bool dec_stat(int stat, int amount, int permanent)
 
 		/* Redisplay the stats later */
 		p_ptr->redraw |= (PR_STATS);
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 	}
 
@@ -3598,8 +3530,6 @@ bool res_stat(int stat)
 	{
 		/* Restore */
 		p_ptr->stat_cur[stat] = p_ptr->stat_max[stat];
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
 		/* Redisplay the stats later */
@@ -3868,8 +3798,6 @@ bool lose_all_info(void)
 		/* Hack -- Clear the "felt" flag */
 		o_ptr->ident &= ~(IDENT_SENSE);
 	}
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Combine / Reorder the pack (later) */
@@ -4684,8 +4612,6 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -4734,8 +4660,6 @@ bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -4784,8 +4708,6 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);

@@ -5653,8 +5653,6 @@ void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 
 		/* Add the weight */
 		p_ptr->total_weight += (num * o_ptr->weight);
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
 		/* Recalculate mana XXX */
@@ -5725,8 +5723,6 @@ void inven_item_optimize(INVENTORY_IDX item)
 
 		/* Erase the empty slot */
 		object_wipe(&inventory[item]);
-
-		/* Recalculate bonuses */
 		p_ptr->update |= (PU_BONUS);
 
 		/* Recalculate torch */
@@ -6022,8 +6018,6 @@ s16b inven_carry(object_type *o_ptr)
 
 			/* Increase the weight */
 			p_ptr->total_weight += (o_ptr->number * o_ptr->weight);
-
-			/* Recalculate bonuses */
 			p_ptr->update |= (PU_BONUS);
 
 			p_ptr->window |= (PW_INVEN);
@@ -6100,8 +6094,6 @@ s16b inven_carry(object_type *o_ptr)
 
 	/* Count the items */
 	inven_cnt++;
-
-	/* Recalculate bonuses */
 	p_ptr->update |= (PU_BONUS);
 
 	/* Combine and Reorder pack */
