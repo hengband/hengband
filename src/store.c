@@ -2459,30 +2459,15 @@ static void display_store(void)
 	if (cur_store_num == STORE_HOME)
 	{
 		/* Put the owner name */
-#ifdef JP
-		put_str("我が家", 3, 31);
-#else
-		put_str("Your Home", 3, 30);
-#endif
-
+		put_str(_("我が家", "Your Home"), 3, 31);
 
 		/* Label the item descriptions */
-#ifdef JP
-		put_str("アイテムの一覧", 5, 4);
-#else
-		put_str("Item Description", 5, 3);
-#endif
-
+		put_str(_("アイテムの一覧", "Item Description"), 5, 4);
 
 		/* If showing weights, show label */
 		if (show_weights)
 		{
-#ifdef JP
-			put_str("重さ", 5, 72);
-#else
-			put_str("Weight", 5, 70);
-#endif
-
+			put_str(_("  重さ", "Weight"), 5, 70);
 		}
 	}
 
@@ -2490,30 +2475,15 @@ static void display_store(void)
 	else if (cur_store_num == STORE_MUSEUM)
 	{
 		/* Put the owner name */
-#ifdef JP
-		put_str("博物館", 3, 31);
-#else
-		put_str("Museum", 3, 30);
-#endif
-
+		put_str(_("博物館", "Museum"), 3, 31);
 
 		/* Label the item descriptions */
-#ifdef JP
-		put_str("アイテムの一覧", 5, 4);
-#else
-		put_str("Item Description", 5, 3);
-#endif
-
+		put_str(_("アイテムの一覧", "Item Description"), 5, 4);
 
 		/* If showing weights, show label */
 		if (show_weights)
 		{
-#ifdef JP
-			put_str("重さ", 5, 72);
-#else
-			put_str("Weight", 5, 70);
-#endif
-
+			put_str(_("  重さ", "Weight"), 5, 70);
 		}
 	}
 
@@ -2533,31 +2503,17 @@ static void display_store(void)
 		prt(buf, 3, 50);
 
 		/* Label the item descriptions */
-#ifdef JP
-		put_str("商品の一覧", 5, 7);
-#else
-		put_str("Item Description", 5, 3);
-#endif
+		put_str(_("商品の一覧", "Item Description"), 5, 5);
 
 
 		/* If showing weights, show label */
 		if (show_weights)
 		{
-#ifdef JP
-			put_str("重さ", 5, 62);
-#else
-			put_str("Weight", 5, 60);
-#endif
-
+			put_str(_("  重さ", "Weight"), 5, 60);
 		}
 
 		/* Label the asking price (in stores) */
-#ifdef JP
-		put_str("価格", 5, 73);
-#else
-		put_str("Price", 5, 72);
-#endif
-
+		put_str(_(" 価格", "Price"), 5, 72);
 	}
 
 	/* Display the current gold */
@@ -2580,9 +2536,9 @@ static void display_store(void)
  */
 static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 {
-	char	command;
-	char	out_val[160];
-	char	lo, hi;
+	char command;
+	char out_val[160];
+	char lo, hi;
 
 	/* Get the item index */
 	if (repeat_pull(com_val))
@@ -2597,7 +2553,6 @@ static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
 
 	/* Paranoia */
 	msg_print(NULL);
-
 
 	/* Assume failure */
 	*com_val = (-1);
