@@ -4385,7 +4385,6 @@ static bool player_birth_aux(void)
 		/* Flush input */
 		flush();
 
-
 		/*** Display ***/
 
 		/* Mode */
@@ -4405,7 +4404,7 @@ static bool player_birth_aux(void)
 		{
 			/* Calculate the bonuses and hitpoints */
 			p_ptr->update |= (PU_BONUS | PU_HP);
-			handle_stuff();
+			update_creature(p_ptr);
 
 			p_ptr->chp = p_ptr->mhp;
 			p_ptr->csp = p_ptr->msp;

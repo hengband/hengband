@@ -5960,7 +5960,7 @@ static void window_stuff(void)
  */
 void handle_stuff(void)
 {
-	if (p_ptr->update) update_creature();
+	if (p_ptr->update) update_creature(p_ptr);
 	if (p_ptr->redraw) redraw_stuff();
 	if (p_ptr->window) window_stuff();
 }
@@ -5976,59 +5976,58 @@ void update_output(void)
  * @return なし
  * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
  */
-void update_creature(void)
+void update_creature(player_type *creature_ptr)
 {
-
-	if (!p_ptr->update) return;
+	if (!creature_ptr->update) return;
 
 	/* Actually do auto-destroy */
-	if (p_ptr->update & (PU_AUTODESTROY))
+	if (creature_ptr->update & (PU_AUTODESTROY))
 	{
-		p_ptr->update &= ~(PU_AUTODESTROY);
+		creature_ptr->update &= ~(PU_AUTODESTROY);
 		autopick_delayed_alter();
 	}
 
 	/* Combine the pack */
-	if (p_ptr->update & (PU_COMBINE))
+	if (creature_ptr->update & (PU_COMBINE))
 	{
-		p_ptr->update &= ~(PU_COMBINE);
+		creature_ptr->update &= ~(PU_COMBINE);
 		combine_pack();
 	}
 
 	/* Reorder the pack */
-	if (p_ptr->update & (PU_REORDER))
+	if (creature_ptr->update & (PU_REORDER))
 	{
-		p_ptr->update &= ~(PU_REORDER);
+		creature_ptr->update &= ~(PU_REORDER);
 		reorder_pack();
 	}
 
-	if (p_ptr->update & (PU_BONUS))
+	if (creature_ptr->update & (PU_BONUS))
 	{
-		p_ptr->update &= ~(PU_BONUS);
+		creature_ptr->update &= ~(PU_BONUS);
 		calc_bonuses();
 	}
 
-	if (p_ptr->update & (PU_TORCH))
+	if (creature_ptr->update & (PU_TORCH))
 	{
-		p_ptr->update &= ~(PU_TORCH);
+		creature_ptr->update &= ~(PU_TORCH);
 		calc_torch();
 	}
 
-	if (p_ptr->update & (PU_HP))
+	if (creature_ptr->update & (PU_HP))
 	{
-		p_ptr->update &= ~(PU_HP);
+		creature_ptr->update &= ~(PU_HP);
 		calc_hitpoints();
 	}
 
-	if (p_ptr->update & (PU_MANA))
+	if (creature_ptr->update & (PU_MANA))
 	{
-		p_ptr->update &= ~(PU_MANA);
+		creature_ptr->update &= ~(PU_MANA);
 		calc_mana();
 	}
 
-	if (p_ptr->update & (PU_SPELLS))
+	if (creature_ptr->update & (PU_SPELLS))
 	{
-		p_ptr->update &= ~(PU_SPELLS);
+		creature_ptr->update &= ~(PU_SPELLS);
 		calc_spells();
 	}
 
@@ -6038,50 +6037,50 @@ void update_creature(void)
 	/* Character is in "icky" mode, no screen updates */
 	if (character_icky) return;
 
-	if (p_ptr->update & (PU_UN_LITE))
+	if (creature_ptr->update & (PU_UN_LITE))
 	{
-		p_ptr->update &= ~(PU_UN_LITE);
+		creature_ptr->update &= ~(PU_UN_LITE);
 		forget_lite();
 	}
 
-	if (p_ptr->update & (PU_UN_VIEW))
+	if (creature_ptr->update & (PU_UN_VIEW))
 	{
-		p_ptr->update &= ~(PU_UN_VIEW);
+		creature_ptr->update &= ~(PU_UN_VIEW);
 		forget_view();
 	}
 
-	if (p_ptr->update & (PU_VIEW))
+	if (creature_ptr->update & (PU_VIEW))
 	{
-		p_ptr->update &= ~(PU_VIEW);
+		creature_ptr->update &= ~(PU_VIEW);
 		update_view();
 	}
 
-	if (p_ptr->update & (PU_LITE))
+	if (creature_ptr->update & (PU_LITE))
 	{
-		p_ptr->update &= ~(PU_LITE);
+		creature_ptr->update &= ~(PU_LITE);
 		update_lite();
 	}
 
 
-	if (p_ptr->update & (PU_FLOW))
+	if (creature_ptr->update & (PU_FLOW))
 	{
-		p_ptr->update &= ~(PU_FLOW);
+		creature_ptr->update &= ~(PU_FLOW);
 		update_flow();
 	}
 
-	if (p_ptr->update & (PU_DISTANCE))
+	if (creature_ptr->update & (PU_DISTANCE))
 	{
-		p_ptr->update &= ~(PU_DISTANCE);
+		creature_ptr->update &= ~(PU_DISTANCE);
 
 		/* Still need to call update_monsters(FALSE) after update_mon_lite() */
-		/* p_ptr->update &= ~(PU_MONSTERS); */
+		/* creature_ptr->update &= ~(PU_MONSTERS); */
 
 		update_monsters(TRUE);
 	}
 
-	if (p_ptr->update & (PU_MON_LITE))
+	if (creature_ptr->update & (PU_MON_LITE))
 	{
-		p_ptr->update &= ~(PU_MON_LITE);
+		creature_ptr->update &= ~(PU_MON_LITE);
 		update_mon_lite();
 	}
 
@@ -6089,15 +6088,15 @@ void update_creature(void)
 	 * Mega-Hack -- Delayed visual update
 	 * Only used if update_view(), update_lite() or update_mon_lite() was called
 	 */
-	if (p_ptr->update & (PU_DELAY_VIS))
+	if (creature_ptr->update & (PU_DELAY_VIS))
 	{
-		p_ptr->update &= ~(PU_DELAY_VIS);
+		creature_ptr->update &= ~(PU_DELAY_VIS);
 		delayed_visual_update();
 	}
 
-	if (p_ptr->update & (PU_MONSTERS))
+	if (creature_ptr->update & (PU_MONSTERS))
 	{
-		p_ptr->update &= ~(PU_MONSTERS);
+		creature_ptr->update &= ~(PU_MONSTERS);
 		update_monsters(FALSE);
 	}
 }
