@@ -1176,6 +1176,8 @@ extern int bow_tval_ammo(object_type *o_ptr);
 extern s16b calc_num_fire(object_type *o_ptr);
 extern void calc_bonuses(void);
 extern void handle_stuff(void);
+extern void update_output(void);
+extern void update_creature(void);
 extern BIT_FLAGS16 empty_hands(bool riding_control);
 extern bool heavy_armor(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);

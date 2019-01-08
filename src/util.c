@@ -2910,7 +2910,7 @@ void msg_print(cptr msg)
 	/* if (character_generated) message_add(t); */
 
 	p_ptr->window |= (PW_MESSAGE);
-	handle_stuff();
+	update_output();
 
 	/* Remember the message */
 	msg_flag = TRUE;

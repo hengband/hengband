@@ -6109,6 +6109,18 @@ void handle_stuff(void)
 	if (p_ptr->window) window_stuff();
 }
 
+void update_output(void)
+{
+	if (p_ptr->redraw) redraw_stuff();
+	if (p_ptr->window) window_stuff();
+}
+
+void update_creature(void)
+{
+	if (p_ptr->notice) notice_stuff();
+	if (p_ptr->update) update_stuff();
+}
+
 /*!
  * @brief プレイヤーの現在開いている手の状態を返す
  * @param riding_control 乗馬中により片手を必要としている状態ならばTRUEを返す。
