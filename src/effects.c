@@ -117,8 +117,6 @@ void set_action(ACTION_IDX typ)
 		}
 	}
 	p_ptr->update |= (PU_BONUS);
-
-	/* Redraw the state */
 	p_ptr->redraw |= (PR_STATE);
 }
 
@@ -268,14 +266,11 @@ void dispel_player(void)
 		INTERUPTING_SONG_EFFECT(p_ptr) = SINGING_SONG_EFFECT(p_ptr);
 		SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
+
 		p_ptr->action = ACTION_NONE;
-		p_ptr->update |= (PU_BONUS | PU_HP);
-
+		p_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
 		p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-		p_ptr->update |= (PU_MONSTERS);
-
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
 		p_ptr->energy_need += ENERGY_NEED();
 	}
 }
@@ -668,8 +663,6 @@ bool set_paralyzed(TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Redraw the state */
 	p_ptr->redraw |= (PR_STATE);
 	handle_stuff();
 	return (TRUE);

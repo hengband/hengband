@@ -5080,8 +5080,6 @@ static void process_player(void)
 				resting--;
 
 				if (!resting) set_action(ACTION_NONE);
-
-				/* Redraw the state */
 				p_ptr->redraw |= (PR_STATE);
 			}
 

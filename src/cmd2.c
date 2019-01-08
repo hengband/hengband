@@ -378,8 +378,6 @@ void do_cmd_search(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -770,8 +768,6 @@ void do_cmd_open(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -918,8 +914,6 @@ void do_cmd_close(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -1159,8 +1153,6 @@ void do_cmd_tunnel(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -1514,8 +1506,6 @@ void do_cmd_disarm(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -1700,8 +1690,6 @@ void do_cmd_bash(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -1785,8 +1773,6 @@ void do_cmd_alter(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -1988,8 +1974,6 @@ void do_cmd_walk(bool pickup)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -2095,8 +2079,6 @@ void do_cmd_stay(bool pickup)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-
-		/* Redraw the state */
 		p_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
@@ -2190,8 +2172,6 @@ void do_cmd_rest(void)
 	resting = command_arg;
 	p_ptr->action = ACTION_REST;
 	p_ptr->update |= (PU_BONUS);
-
-	/* Redraw the state */
 	p_ptr->redraw |= (PR_STATE);
 	handle_stuff();
 
