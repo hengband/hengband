@@ -386,7 +386,7 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 		o_ptr->ident |= (IDENT_EMPTY);
 
 		/* Combine / Reorder the pack (later) */
-		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 		p_ptr->window |= (PW_INVEN);
 
 		return;
@@ -405,7 +405,7 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 	}
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	/* Tried the item */
 	object_tried(o_ptr);

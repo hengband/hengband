@@ -2172,8 +2172,10 @@ void do_cmd_rest(void)
 	resting = command_arg;
 	p_ptr->action = ACTION_REST;
 	p_ptr->update |= (PU_BONUS);
+	update_creature();
+
 	p_ptr->redraw |= (PR_STATE);
-	handle_stuff();
+	update_output();
 
 	Term_fresh();
 }

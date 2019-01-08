@@ -988,7 +988,7 @@ static void wiz_reroll_item(object_type *o_ptr)
 		p_ptr->update |= (PU_BONUS);
 
 		/* Combine / Reorder the pack (later) */
-		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	}
@@ -1342,7 +1342,7 @@ static void do_cmd_wiz_play(void)
 		p_ptr->update |= (PU_BONUS);
 
 		/* Combine / Reorder the pack (later) */
-		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	}

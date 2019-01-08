@@ -149,7 +149,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 	autopick_alter_item(slot, destroy_feeling);
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 }
@@ -972,7 +972,7 @@ static void regen_captured_monsters(void)
 	if (heal)
 	{
 		/* Combine pack */
-		p_ptr->notice |= (PN_COMBINE);
+		p_ptr->update |= (PU_COMBINE);
 		p_ptr->window |= (PW_INVEN);
 		p_ptr->window |= (PW_EQUIP);
 		wild_regen = 20;
@@ -5431,7 +5431,7 @@ static void dungeon(bool load_game)
 	character_xtra = FALSE;
 
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 	handle_stuff();
 	Term_fresh();
 

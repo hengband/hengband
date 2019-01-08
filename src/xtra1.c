@@ -5672,32 +5672,32 @@ void calc_bonuses(void)
 
 
 /*! 
- * @brief p_ptr->notice のフラグに応じた更新をまとめて行う / Handle "p_ptr->notice"
+ * @brief p_ptr->update のフラグに応じた更新をまとめて行う / Handle "p_ptr->update"
  * @return なし
  * @details 更新処理の対象はアイテムの自動破壊/アイテムの結合/アイテムの並び替え。
  */
 static void notice_stuff(void)
 {
-	if(!p_ptr->notice) return;
+	if(!p_ptr->update) return;
 
 	/* Actually do auto-destroy */
-	if(p_ptr->notice & (PN_AUTODESTROY))
+	if(p_ptr->update & (PU_AUTODESTROY))
 	{
-		p_ptr->notice &= ~(PN_AUTODESTROY);
+		p_ptr->update &= ~(PU_AUTODESTROY);
 		autopick_delayed_alter();
 	}
 
 	/* Combine the pack */
-	if (p_ptr->notice & (PN_COMBINE))
+	if (p_ptr->update & (PU_COMBINE))
 	{
-		p_ptr->notice &= ~(PN_COMBINE);
+		p_ptr->update &= ~(PU_COMBINE);
 		combine_pack();
 	}
 
 	/* Reorder the pack */
-	if (p_ptr->notice & (PN_REORDER))
+	if (p_ptr->update & (PU_REORDER))
 	{
-		p_ptr->notice &= ~(PN_REORDER);
+		p_ptr->update &= ~(PU_REORDER);
 		reorder_pack();
 	}
 }
@@ -6103,7 +6103,7 @@ static void window_stuff(void)
  */
 void handle_stuff(void)
 {
-	if (p_ptr->notice) notice_stuff();
+	if (p_ptr->update) notice_stuff();
 	if (p_ptr->update) update_stuff();
 	if (p_ptr->redraw) redraw_stuff();
 	if (p_ptr->window) window_stuff();
@@ -6117,7 +6117,7 @@ void update_output(void)
 
 void update_creature(void)
 {
-	if (p_ptr->notice) notice_stuff();
+	if (p_ptr->update) notice_stuff();
 	if (p_ptr->update) update_stuff();
 }
 

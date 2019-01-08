@@ -3549,7 +3549,7 @@ if (get_check(format("そのロッドを＄%d で再充填しますか？",
 #endif
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
 
@@ -3693,7 +3693,7 @@ static void building_recharge_all(void)
 	msg_print(NULL);
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
 

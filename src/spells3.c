@@ -2128,7 +2128,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 	p_ptr->update |= (PU_BONUS);
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
@@ -2360,7 +2360,7 @@ bool identify_item(object_type *o_ptr)
 	p_ptr->update |= (PU_BONUS);
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
@@ -2896,7 +2896,7 @@ bool recharge(int power)
 	}
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
 
@@ -4704,7 +4704,7 @@ bool eat_magic(int power)
 	/* Redraw mana and hp */
 	p_ptr->redraw |= (PR_MANA);
 
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN);
 
 	return TRUE;

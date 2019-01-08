@@ -570,7 +570,7 @@ static void change_realm2(CHARACTER_IDX next_realm)
 	p_ptr->old_realm |= 1 << (p_ptr->realm2-1);
 	p_ptr->realm2 = next_realm;
 
-	p_ptr->notice |= (PN_REORDER);
+	p_ptr->update |= (PU_REORDER);
 	p_ptr->update |= (PU_SPELLS);
 	handle_stuff();
 

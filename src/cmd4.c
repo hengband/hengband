@@ -973,7 +973,7 @@ void do_cmd_redraw(void)
 
 
 	/* Combine and Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 
 	p_ptr->update |= (PU_TORCH);

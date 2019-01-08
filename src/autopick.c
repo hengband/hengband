@@ -1597,7 +1597,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 
 	/* Destroy Later */
 	o_ptr->marked |= OM_AUTODESTROY;
-	p_ptr->notice |= PN_AUTODESTROY;
+	p_ptr->update |= PU_AUTODESTROY;
 
 	return;
 }

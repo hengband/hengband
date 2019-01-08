@@ -1195,7 +1195,6 @@ struct player_type
 
 	s16b cur_lite;		/* Radius of lite (if any) */
 
-	BIT_FLAGS notice;	/* Special Updates */
 	BIT_FLAGS update;	/* Pending Updates */
 	BIT_FLAGS redraw;	/* Normal Redraws */
 	BIT_FLAGS window;	/* Window Redraws */

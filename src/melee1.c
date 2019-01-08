@@ -2056,7 +2056,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							o_ptr->pval = 0;
 
 							/* Combine / Reorder the pack */
-							p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+							p_ptr->update |= (PU_COMBINE | PU_REORDER);
 							p_ptr->window |= (PW_INVEN);
 
 							break;

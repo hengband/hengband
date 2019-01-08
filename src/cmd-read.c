@@ -554,7 +554,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))
 	{

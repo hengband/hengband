@@ -396,7 +396,7 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 		o_ptr->ident |= (IDENT_EMPTY);
 
 		/* Combine / Reorder the pack (later) */
-		p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 		p_ptr->window |= (PW_INVEN);
 
 		return;
@@ -407,7 +407,7 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 	ident = wand_effect(o_ptr->sval, dir, FALSE, FALSE);
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))
 	{

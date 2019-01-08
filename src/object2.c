@@ -1507,7 +1507,7 @@ bool can_player_destroy_object(object_type *o_ptr)
 		o_ptr->ident |= (IDENT_SENSE);
 
 		/* Combine the pack */
-		p_ptr->notice |= (PN_COMBINE);
+		p_ptr->update |= (PU_COMBINE);
 
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
@@ -5659,7 +5659,7 @@ void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 		p_ptr->update |= (PU_MANA);
 
 		/* Combine the pack */
-		p_ptr->notice |= (PN_COMBINE);
+		p_ptr->update |= (PU_COMBINE);
 
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
@@ -6097,7 +6097,7 @@ s16b inven_carry(object_type *o_ptr)
 	p_ptr->update |= (PU_BONUS);
 
 	/* Combine and Reorder pack */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
 
@@ -7728,7 +7728,7 @@ static void drain_essence(void)
 	autopick_alter_item(item, TRUE);
 
 	/* Combine the pack */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
 }
@@ -8337,7 +8337,7 @@ static void add_essence(ESSENCE_IDX mode)
 #endif
 
 	/* Combine the pack */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
 }
@@ -8392,7 +8392,7 @@ static void erase_essence(void)
 	msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
 
 	/* Combine the pack */
-	p_ptr->notice |= (PN_COMBINE | PN_REORDER);
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
 }

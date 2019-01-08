@@ -981,7 +981,7 @@ void do_cmd_uninscribe(void)
 	o_ptr->inscription = 0;
 
 	/* Combine the pack */
-	p_ptr->notice |= (PN_COMBINE);
+	p_ptr->update |= (PU_COMBINE);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
@@ -1044,7 +1044,7 @@ void do_cmd_inscribe(void)
 		o_ptr->inscription = quark_add(out_val);
 
 		/* Combine the pack */
-		p_ptr->notice |= (PN_COMBINE);
+		p_ptr->update |= (PU_COMBINE);
 
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 

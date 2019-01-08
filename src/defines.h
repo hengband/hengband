@@ -2645,13 +2645,6 @@
 #define USE_FULL  0x20 /*!< アイテム表示/選択範囲: 空欄まですべて表示する*/
 
 
-/*
- * p_ptr->noticeに充てるアイテム更新処理要求 / Bit flags for the "p_ptr->notice" variable
- */
-#define PN_COMBINE      0x00000001L     /*!< アイテム処理フラグ: アイテムの結合を要する / Combine the pack */
-#define PN_REORDER      0x00000002L     /*!< アイテム処理フラグ: アイテムの並び替えを要する / Reorder the pack */
-#define PN_AUTODESTROY  0x00000004L     /*!< アイテム処理フラグ: アイテムの自動破壊を要する / Auto-destroy marked item */
-/* xxx (many) */
 
 
 /*
@@ -2664,6 +2657,9 @@
 #define PU_MANA         0x00000020L     /*!< ステータス更新フラグ: MP / Calculate csp and msp */
 #define PU_SPELLS       0x00000040L     /*!< ステータス更新フラグ: 魔法学習数 / Calculate spells */
 /* xxx (many) */
+#define PU_COMBINE      0x00000100L     /*!< アイテム処理フラグ: アイテムの結合を要する / Combine the pack */
+#define PU_REORDER      0x00000200L     /*!< アイテム処理フラグ: アイテムの並び替えを要する / Reorder the pack */
+#define PU_AUTODESTROY  0x00000400L     /*!< アイテム処理フラグ: アイテムの自動破壊を要する / Auto-destroy marked item */
 /* xxx (many) */
 #define PU_UN_VIEW      0x00010000L     /*!< ステータス更新フラグ: 地形の視界外化 / Forget view */
 #define PU_UN_LITE      0x00020000L     /*!< ステータス更新フラグ: 明暗範囲の視界外化 / Forget lite */
