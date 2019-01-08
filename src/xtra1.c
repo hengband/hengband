@@ -5670,149 +5670,6 @@ void calc_bonuses(void)
 }
 
 
-
-/*! 
- * @brief p_ptr->update のフラグに応じた更新をまとめて行う / Handle "p_ptr->update"
- * @return なし
- * @details 更新処理の対象はアイテムの自動破壊/アイテムの結合/アイテムの並び替え。
- */
-static void notice_stuff(void)
-{
-	if(!p_ptr->update) return;
-
-	/* Actually do auto-destroy */
-	if(p_ptr->update & (PU_AUTODESTROY))
-	{
-		p_ptr->update &= ~(PU_AUTODESTROY);
-		autopick_delayed_alter();
-	}
-
-	/* Combine the pack */
-	if (p_ptr->update & (PU_COMBINE))
-	{
-		p_ptr->update &= ~(PU_COMBINE);
-		combine_pack();
-	}
-
-	/* Reorder the pack */
-	if (p_ptr->update & (PU_REORDER))
-	{
-		p_ptr->update &= ~(PU_REORDER);
-		reorder_pack();
-	}
-}
-
-
-/*! 
- * @brief p_ptr->update のフラグに応じた更新をまとめて行う / Handle "p_ptr->update"
- * @return なし
- * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
- */
-static void update_stuff(void)
-{
-	if (!p_ptr->update) return;
-
-	if (p_ptr->update & (PU_BONUS))
-	{
-		p_ptr->update &= ~(PU_BONUS);
-		calc_bonuses();
-	}
-
-	if (p_ptr->update & (PU_TORCH))
-	{
-		p_ptr->update &= ~(PU_TORCH);
-		calc_torch();
-	}
-
-	if (p_ptr->update & (PU_HP))
-	{
-		p_ptr->update &= ~(PU_HP);
-		calc_hitpoints();
-	}
-
-	if (p_ptr->update & (PU_MANA))
-	{
-		p_ptr->update &= ~(PU_MANA);
-		calc_mana();
-	}
-
-	if (p_ptr->update & (PU_SPELLS))
-	{
-		p_ptr->update &= ~(PU_SPELLS);
-		calc_spells();
-	}
-
-	/* Character is not ready yet, no screen updates */
-	if (!character_generated) return;
-
-	/* Character is in "icky" mode, no screen updates */
-	if (character_icky) return;
-
-	if (p_ptr->update & (PU_UN_LITE))
-	{
-		p_ptr->update &= ~(PU_UN_LITE);
-		forget_lite();
-	}
-
-	if (p_ptr->update & (PU_UN_VIEW))
-	{
-		p_ptr->update &= ~(PU_UN_VIEW);
-		forget_view();
-	}
-
-	if (p_ptr->update & (PU_VIEW))
-	{
-		p_ptr->update &= ~(PU_VIEW);
-		update_view();
-	}
-
-	if (p_ptr->update & (PU_LITE))
-	{
-		p_ptr->update &= ~(PU_LITE);
-		update_lite();
-	}
-
-
-	if (p_ptr->update & (PU_FLOW))
-	{
-		p_ptr->update &= ~(PU_FLOW);
-		update_flow();
-	}
-
-	if (p_ptr->update & (PU_DISTANCE))
-	{
-		p_ptr->update &= ~(PU_DISTANCE);
-
-		/* Still need to call update_monsters(FALSE) after update_mon_lite() */ 
-		/* p_ptr->update &= ~(PU_MONSTERS); */
-
-		update_monsters(TRUE);
-	}
-
-	if (p_ptr->update & (PU_MON_LITE))
-	{
-		p_ptr->update &= ~(PU_MON_LITE);
-		update_mon_lite();
-	}
-
-	/*
-	 * Mega-Hack -- Delayed visual update
-	 * Only used if update_view(), update_lite() or update_mon_lite() was called
-	 */
-	if (p_ptr->update & (PU_DELAY_VIS))
-	{
-		p_ptr->update &= ~(PU_DELAY_VIS);
-		delayed_visual_update();
-	}
-
-	if (p_ptr->update & (PU_MONSTERS))
-	{
-		p_ptr->update &= ~(PU_MONSTERS);
-		update_monsters(FALSE);
-	}
-}
-
-
 /*! 
  * @brief p_ptr->redraw のフラグに応じた更新をまとめて行う / Handle "p_ptr->redraw"
  * @return なし
@@ -6103,8 +5960,7 @@ static void window_stuff(void)
  */
 void handle_stuff(void)
 {
-	if (p_ptr->update) notice_stuff();
-	if (p_ptr->update) update_stuff();
+	if (p_ptr->update) update_creature();
 	if (p_ptr->redraw) redraw_stuff();
 	if (p_ptr->window) window_stuff();
 }
@@ -6115,10 +5971,135 @@ void update_output(void)
 	if (p_ptr->window) window_stuff();
 }
 
+/*!
+ * @brief p_ptr->update のフラグに応じた更新をまとめて行う / Handle "p_ptr->update"
+ * @return なし
+ * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
+ */
 void update_creature(void)
 {
-	if (p_ptr->update) notice_stuff();
-	if (p_ptr->update) update_stuff();
+
+	if (!p_ptr->update) return;
+
+	/* Actually do auto-destroy */
+	if (p_ptr->update & (PU_AUTODESTROY))
+	{
+		p_ptr->update &= ~(PU_AUTODESTROY);
+		autopick_delayed_alter();
+	}
+
+	/* Combine the pack */
+	if (p_ptr->update & (PU_COMBINE))
+	{
+		p_ptr->update &= ~(PU_COMBINE);
+		combine_pack();
+	}
+
+	/* Reorder the pack */
+	if (p_ptr->update & (PU_REORDER))
+	{
+		p_ptr->update &= ~(PU_REORDER);
+		reorder_pack();
+	}
+
+	if (p_ptr->update & (PU_BONUS))
+	{
+		p_ptr->update &= ~(PU_BONUS);
+		calc_bonuses();
+	}
+
+	if (p_ptr->update & (PU_TORCH))
+	{
+		p_ptr->update &= ~(PU_TORCH);
+		calc_torch();
+	}
+
+	if (p_ptr->update & (PU_HP))
+	{
+		p_ptr->update &= ~(PU_HP);
+		calc_hitpoints();
+	}
+
+	if (p_ptr->update & (PU_MANA))
+	{
+		p_ptr->update &= ~(PU_MANA);
+		calc_mana();
+	}
+
+	if (p_ptr->update & (PU_SPELLS))
+	{
+		p_ptr->update &= ~(PU_SPELLS);
+		calc_spells();
+	}
+
+	/* Character is not ready yet, no screen updates */
+	if (!character_generated) return;
+
+	/* Character is in "icky" mode, no screen updates */
+	if (character_icky) return;
+
+	if (p_ptr->update & (PU_UN_LITE))
+	{
+		p_ptr->update &= ~(PU_UN_LITE);
+		forget_lite();
+	}
+
+	if (p_ptr->update & (PU_UN_VIEW))
+	{
+		p_ptr->update &= ~(PU_UN_VIEW);
+		forget_view();
+	}
+
+	if (p_ptr->update & (PU_VIEW))
+	{
+		p_ptr->update &= ~(PU_VIEW);
+		update_view();
+	}
+
+	if (p_ptr->update & (PU_LITE))
+	{
+		p_ptr->update &= ~(PU_LITE);
+		update_lite();
+	}
+
+
+	if (p_ptr->update & (PU_FLOW))
+	{
+		p_ptr->update &= ~(PU_FLOW);
+		update_flow();
+	}
+
+	if (p_ptr->update & (PU_DISTANCE))
+	{
+		p_ptr->update &= ~(PU_DISTANCE);
+
+		/* Still need to call update_monsters(FALSE) after update_mon_lite() */
+		/* p_ptr->update &= ~(PU_MONSTERS); */
+
+		update_monsters(TRUE);
+	}
+
+	if (p_ptr->update & (PU_MON_LITE))
+	{
+		p_ptr->update &= ~(PU_MON_LITE);
+		update_mon_lite();
+	}
+
+	/*
+	 * Mega-Hack -- Delayed visual update
+	 * Only used if update_view(), update_lite() or update_mon_lite() was called
+	 */
+	if (p_ptr->update & (PU_DELAY_VIS))
+	{
+		p_ptr->update &= ~(PU_DELAY_VIS);
+		delayed_visual_update();
+	}
+
+	if (p_ptr->update & (PU_MONSTERS))
+	{
+		p_ptr->update &= ~(PU_MONSTERS);
+		update_monsters(FALSE);
+	}
 }
 
 /*!
