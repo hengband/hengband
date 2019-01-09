@@ -679,3 +679,22 @@ bool monster_hook_human(MONRACE_IDX r_idx)
 
 	return FALSE;
 }
+
+/*!
+ * @brief 悪夢の元凶となるモンスターかどうかを返す。
+ * @param r_idx 判定対象となるモンスターのＩＤ
+ * @return 悪夢の元凶となり得るか否か。
+ */
+bool get_nightmare(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	/* Require eldritch horrors */
+	if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) return (FALSE);
+
+	/* Require high level */
+	if (r_ptr->level <= p_ptr->lev) return (FALSE);
+
+	/* Accept this monster */
+	return (TRUE);
+}

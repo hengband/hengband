@@ -1069,7 +1069,6 @@ extern bool eat_lock(void);
 extern bool shock_power(void);
 
 /* bldg.c */
-extern bool get_nightmare(MONRACE_IDX r_idx);
 extern void battle_monsters(void);
 extern void do_cmd_bldg(void);
 extern void do_cmd_quest(void);
