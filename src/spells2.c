@@ -3865,21 +3865,14 @@ bool kawarimi(bool success)
 	x = p_ptr->x;
 
 	teleport_player(10 + randint1(90), 0L);
-
 	object_wipe(q_ptr);
-
 	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
 	q_ptr->pval = MON_NINJA;
 	(void)drop_near(q_ptr, -1, y, x);
 
-#ifdef JP
-	if (success) msg_print("攻撃を受ける前に素早く身をひるがえした。");
-	else msg_print("失敗！攻撃を受けてしまった。");
-#else
-	if (success) msg_print("You have turned around just before the attack hit you.");
-	else msg_print("Failed! You are hit by the attack.");
-#endif
+	if (success) msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));
+	else msg_print(_("失敗！攻撃を受けてしまった。", "Failed! You are hit by the attack."));
 
 	p_ptr->special_defense &= ~(NINJA_KAWARIMI);
 	p_ptr->redraw |= (PR_STATUS);
@@ -3974,8 +3967,7 @@ bool rush_attack(bool *mdeath)
 		if (tm_idx != cave[ny][nx].m_idx)
 		{
 #ifdef JP
-			msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "",
-				   m_ptr->ml ? "モンスター" : "何か");
+			msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "", m_ptr->ml ? "モンスター" : "何か");
 #else
 			msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
 #endif
