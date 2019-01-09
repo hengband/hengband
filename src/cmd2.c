@@ -738,6 +738,8 @@ void do_cmd_open(void)
 
 	bool more = FALSE;
 
+	if (p_ptr->wild_mode) return;
+
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
 		set_action(ACTION_NONE);
@@ -893,6 +895,8 @@ void do_cmd_close(void)
 	DIRECTION dir;
 
 	bool more = FALSE;
+
+	if (p_ptr->wild_mode) return;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -1475,11 +1479,12 @@ void do_cmd_disarm(void)
 
 	bool more = FALSE;
 
+	if (p_ptr->wild_mode) return;
+
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
 		set_action(ACTION_NONE);
 	}
-
 
 	/* Option: Pick a direction */
 	if (easy_disarm)
@@ -1673,12 +1678,11 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
  */
 void do_cmd_bash(void)
 {
-	int			y, x, dir;
-
+	int	y, x, dir;
 	cave_type	*c_ptr;
-
 	bool		more = FALSE;
 
+	if (p_ptr->wild_mode) return;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -1894,13 +1898,15 @@ void do_cmd_spike(void)
 {
 	DIRECTION dir;
 
+	if (p_ptr->wild_mode) return;
+
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
 		set_action(ACTION_NONE);
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir,FALSE))
+	if (get_rep_dir(&dir, FALSE))
 	{
 		POSITION y, x;
 		INVENTORY_IDX item;

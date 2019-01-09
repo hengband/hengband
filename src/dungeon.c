@@ -4121,35 +4121,35 @@ static void process_command(void)
 		/* Open a door or chest */
 		case 'o':
 		{
-			if (!p_ptr->wild_mode) do_cmd_open();
+			do_cmd_open();
 			break;
 		}
 
 		/* Close a door */
 		case 'c':
 		{
-			if (!p_ptr->wild_mode) do_cmd_close();
+			do_cmd_close();
 			break;
 		}
 
 		/* Jam a door with spikes */
 		case 'j':
 		{
-			if (!p_ptr->wild_mode) do_cmd_spike();
+			do_cmd_spike();
 			break;
 		}
 
 		/* Bash a door */
 		case 'B':
 		{
-			if (!p_ptr->wild_mode) do_cmd_bash();
+			do_cmd_bash();
 			break;
 		}
 
 		/* Disarm a trap or chest */
 		case 'D':
 		{
-			if (!p_ptr->wild_mode) do_cmd_disarm();
+			do_cmd_disarm();
 			break;
 		}
 
@@ -4326,13 +4326,13 @@ static void process_command(void)
 		{
 			if (!p_ptr->wild_mode)
 			{
-			if (!p_ptr->inside_arena)
-				do_cmd_aim_wand();
-			else
-			{
-				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-				msg_print(NULL);
-			}
+				if (!p_ptr->inside_arena)
+					do_cmd_aim_wand();
+				else
+				{
+					msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
+					msg_print(NULL);
+				}
 			}
 			break;
 		}
