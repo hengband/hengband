@@ -14,6 +14,7 @@
 
 #include "angband.h"
 #include "object-hook.h"
+#include "monsterrace-hook.h"
 #include "melee.h"
 #include "world.h"
 
@@ -1341,43 +1342,6 @@ static bool gamble_comm(int cmd)
 }
 
 /*!
- * @brief モンスター闘技場に参加できるモンスターの判定
- * @param r_idx モンスターＩＤ
- * @details 基準はNEVER_MOVE MULTIPLY QUANTUM RF7_AQUATIC RF7_CHAMELEONのいずれも持たず、
- * 自爆以外のなんらかのHP攻撃手段を持っていること。
- * @return 参加できるか否か
- */
-static bool vault_aux_battle(MONRACE_IDX r_idx)
-{
-	int i;
-	HIT_POINT dam = 0;
-
-	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Decline town monsters */
-/*	if (!mon_hook_dungeon(r_idx)) return FALSE; */
-
-	/* Decline unique monsters */
-/*	if (r_ptr->flags1 & (RF1_UNIQUE)) return (FALSE); */
-/*	if (r_ptr->flags7 & (RF7_NAZGUL)) return (FALSE); */
-
-	if (r_ptr->flags1 & (RF1_NEVER_MOVE)) return (FALSE);
-	if (r_ptr->flags2 & (RF2_MULTIPLY)) return (FALSE);
-	if (r_ptr->flags2 & (RF2_QUANTUM)) return (FALSE);
-	if (r_ptr->flags7 & (RF7_AQUATIC)) return (FALSE);
-	if (r_ptr->flags7 & (RF7_CHAMELEON)) return (FALSE);
-
-	for (i = 0; i < 4; i++)
-	{
-		if (r_ptr->blow[i].method == RBM_EXPLODE) return (FALSE);
-		if (r_ptr->blow[i].effect != RBE_DR_MANA) dam += r_ptr->blow[i].d_dice;
-	}
-	if (!dam && !(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK)) && !(r_ptr->a_ability_flags1 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK)) && !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK))) return (FALSE);
-
-	return (TRUE);
-}
-
-/*!
  * @brief モンスター闘技場に参加するモンスターをリセットする。
  * @return なし
  */
@@ -1415,7 +1379,7 @@ void battle_monsters(void)
 			int j;
 			while (1)
 			{
-				get_mon_num_prep(vault_aux_battle, NULL);
+				get_mon_num_prep(monster_can_entry_arena, NULL);
 				p_ptr->inside_battle = TRUE;
 				r_idx = get_mon_num(mon_level);
 				p_ptr->inside_battle = old_inside_battle;
