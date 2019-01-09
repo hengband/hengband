@@ -68,7 +68,7 @@ POSITION distance (POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  * @param feat 地形情報のID
  * @return 罠持ちの地形ならばTRUEを返す。
  */
-bool is_trap(IDX feat)
+bool is_trap(FEAT_IDX feat)
 {
 	return have_flag(f_info[feat].flags, FF_TRAP);
 }
@@ -91,7 +91,7 @@ bool is_known_trap(cave_type *c_ptr)
  * @param feat 地形情報のID
  * @return 閉じたドアのある地形ならばTRUEを返す。
  */
-bool is_closed_door(IDX feat)
+bool is_closed_door(FEAT_IDX feat)
 {
 	feature_type *f_ptr = &f_info[feat];
 
@@ -4658,10 +4658,10 @@ FEAT_IDX feat_state(FEAT_IDX feat, int action)
 void cave_alter_feat(POSITION y, POSITION x, int action)
 {
 	/* Set old feature */
-	IDX oldfeat = cave[y][x].feat;
+	FEAT_IDX oldfeat = cave[y][x].feat;
 
 	/* Get the new feat */
-	IDX newfeat = feat_state(oldfeat, action);
+	FEAT_IDX newfeat = feat_state(oldfeat, action);
 
 	/* No change */
 	if (newfeat == oldfeat) return;

@@ -188,7 +188,7 @@ void check_experience(void)
  * Used to allocate proper treasure when "Creeping coins" die
  * Note the use of actual "monster names"
  */
-static int get_coin_type(MONRACE_IDX r_idx)
+static OBJECT_SUBTYPE_VALUE get_coin_type(MONRACE_IDX r_idx)
 {
 	/* Analyze monsters */
 	switch (r_idx)

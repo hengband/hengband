@@ -833,8 +833,8 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		POSITION oy = p_ptr->y;
 		POSITION ox = p_ptr->x;
 		cave_type *oc_ptr = &cave[oy][ox];
-		IDX om_idx = oc_ptr->m_idx;
-		IDX nm_idx = c_ptr->m_idx;
+		MONSTER_IDX om_idx = oc_ptr->m_idx;
+		MONSTER_IDX nm_idx = c_ptr->m_idx;
 
 		/* Move the player */
 		p_ptr->y = ny;
