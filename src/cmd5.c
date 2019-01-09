@@ -823,10 +823,10 @@ void do_cmd_study(void)
 
 	/* One less spell available */
 	p_ptr->learned_spells++;
-#
+
 	/* Update Study */
 	p_ptr->update |= (PU_SPELLS);
-	handle_stuff();
+	update_creature(p_ptr);
 
 	/* Redraw object recall */
 	p_ptr->window |= (PW_OBJECT);

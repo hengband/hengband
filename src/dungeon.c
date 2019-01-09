@@ -5856,8 +5856,7 @@ void play_game(bool new_game)
 			quit(0);
 
 		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-		handle_stuff();
+		update_creature(p_ptr);
 
 		p_ptr->is_dead = TRUE;
 

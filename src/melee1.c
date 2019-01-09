@@ -1997,7 +1997,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						if (apply_disenchant(0))
 						{
 							/* Hack -- Update AC */
-							handle_stuff();
+							update_creature(p_ptr);
 							obvious = TRUE;
 						}
 					}
@@ -2305,7 +2305,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					obvious = TRUE;
 					msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
 					get_damage += acid_dam(damage, ddesc, -1, FALSE);
-					handle_stuff();
+					update_creature(p_ptr);
 					update_smart_learn(m_idx, DRS_ACID);
 					break;
 				}

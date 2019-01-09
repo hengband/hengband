@@ -4589,15 +4589,9 @@ static bool ask_quick_start(void)
 	/* Calc hitdie, but don't roll */
 	get_extra(FALSE);
 
-	/* Calculate the bonuses and hitpoints */
 	p_ptr->update |= (PU_BONUS | PU_HP);
-
-	handle_stuff();
-
-	/* Fully healed */
+	update_creature(p_ptr);
 	p_ptr->chp = p_ptr->mhp;
-
-	/* Fully rested */
 	p_ptr->csp = p_ptr->msp;
 
 	/* Process the player name */
