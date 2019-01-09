@@ -62,3 +62,7 @@ extern bool monster_living(MONRACE_IDX r_idx);
 extern bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx);
 extern bool monster_hook_human(MONRACE_IDX r_idx);
 extern bool get_nightmare(MONRACE_IDX r_idx);
+extern bool monster_is_fishing_target(MONRACE_IDX r_idx);
+
+
+

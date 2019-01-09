@@ -4696,22 +4696,6 @@ static void process_command(void)
 }
 
 /*!
- * @brief モンスター種族が釣れる種族かどうかを判定する。
- * @param r_idx 判定したいモンスター種族のID
- * @return 釣れる対象ならばTRUEを返す
- */
-static bool monster_tsuri(MONRACE_IDX r_idx)
-{
-	monster_race *r_ptr = &r_info[r_idx];
-
-	if ((r_ptr->flags7 & RF7_AQUATIC) && !(r_ptr->flags1 & RF1_UNIQUE) && my_strchr("Jjlw", r_ptr->d_char))
-		return TRUE;
-	else
-		return FALSE;
-}
-
-
-/*!
  * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理 / Hack -- Pack Overflow
  * @return なし
  */
@@ -4873,7 +4857,7 @@ static void process_player(void)
 		{
 			MONRACE_IDX r_idx;
 			bool success = FALSE;
-			get_mon_num_prep(monster_tsuri,NULL);
+			get_mon_num_prep(monster_is_fishing_target,NULL);
 			r_idx = get_mon_num(dun_level ? dun_level : wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level);
 			msg_print(NULL);
 			if (r_idx && one_in_(2))

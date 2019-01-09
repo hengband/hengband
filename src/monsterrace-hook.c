@@ -698,3 +698,18 @@ bool get_nightmare(MONRACE_IDX r_idx)
 	/* Accept this monster */
 	return (TRUE);
 }
+
+/*!
+ * @brief モンスター種族が釣れる種族かどうかを判定する。
+ * @param r_idx 判定したいモンスター種族のID
+ * @return 釣れる対象ならばTRUEを返す
+ */
+bool monster_is_fishing_target(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+
+	if ((r_ptr->flags7 & RF7_AQUATIC) && !(r_ptr->flags1 & RF1_UNIQUE) && my_strchr("Jjlw", r_ptr->d_char))
+		return TRUE;
+	else
+		return FALSE;
+}
