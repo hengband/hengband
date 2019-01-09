@@ -471,8 +471,6 @@ void check_quest_completion(monster_type *m_ptr)
 
 			/* Make a great object */
 			make_object(o_ptr, AM_GOOD | AM_GREAT);
-
-			/* Drop it in the dungeon */
 			(void)drop_near(o_ptr, -1, y, x);
 		}
 	}
@@ -640,8 +638,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Prepare to make a prize */
 			object_prep(q_ptr, lookup_kind(arena_info[p_ptr->arena_number].tval, arena_info[p_ptr->arena_number].sval));
 			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
-
-			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 
@@ -704,8 +700,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
 
 		q_ptr->pval = m_ptr->r_idx;
-
-		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
 
@@ -751,8 +745,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
 
 			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | mo_mode);
-
-			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 		break;
@@ -771,8 +763,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			/* Make a book */
 			make_object(q_ptr, mo_mode);
-
-			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 		break;
@@ -873,8 +863,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		/* Mega-Hack -- Actually create "Grond" */
 		apply_magic(q_ptr, -1, AM_GOOD | AM_GREAT);
-
-		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 		q_ptr = &forge;
 
@@ -886,8 +874,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		/* Mega-Hack -- Actually create "Chaos" */
 		apply_magic(q_ptr, -1, AM_GOOD | AM_GREAT);
-
-		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 		break;
 
@@ -898,8 +884,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			/* Prepare to make a broken sword */
 			object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
-
-			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 		break;
@@ -915,8 +899,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
 
 			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
-
-			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 		break;
@@ -944,8 +926,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a cloak */
 				make_object(q_ptr, mo_mode);
-
-				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
 			}
 			break;
@@ -961,8 +941,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a poleweapon */
 				make_object(q_ptr, mo_mode);
-
-				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
 			}
 			break;
@@ -978,8 +956,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a hard armor */
 				make_object(q_ptr, mo_mode);
-
-				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
 			}
 			break;
@@ -995,8 +971,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a hafted weapon */
 				make_object(q_ptr, mo_mode);
-
-				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
 			}
 			break;
@@ -1012,8 +986,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a sword */
 				make_object(q_ptr, mo_mode);
-
-				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
 			}
 			break;
@@ -1087,8 +1059,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				object_prep(q_ptr, k_idx);
 
 				apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | AM_GOOD);
-
-				/* Drop it in the dungeon */
 				(void)drop_near(q_ptr, -1, y, x);
 			}
 			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"),d_name+d_info[dungeon_type].name);
@@ -1142,8 +1112,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			dump_item++;
 		}
-
-		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, y, x);
 	}
 
@@ -4324,8 +4292,6 @@ void gain_level_reward(int chosen_reward)
 			q_ptr->to_d = 3 + randint1(dun_level) % 10;
 			one_resistance(q_ptr);
 			q_ptr->name2 = EGO_CHAOTIC;
-
-			/* Drop it in the dungeon */
 			(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
 			reward = _("(混沌)の武器を手に入れた。", "chaos weapon");
 			break;

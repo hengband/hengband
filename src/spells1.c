@@ -5055,8 +5055,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 		/* Mark the item as fully known */
 		q_ptr->ident |= (IDENT_MENTAL);
-
-		/* Drop it in the dungeon */
 		(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
 	}
 

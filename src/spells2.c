@@ -3871,8 +3871,6 @@ bool kawarimi(bool success)
 	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
 	q_ptr->pval = MON_NINJA;
-
-	/* Drop it in the dungeon */
 	(void)drop_near(q_ptr, -1, y, x);
 
 #ifdef JP

@@ -4137,8 +4137,6 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 					object_type *q_ptr = &forge;
 
 					object_prep(q_ptr, k_idx);
-
-					/* Drop it in the dungeon */
 					drop_here(q_ptr, *y, *x);
 				}
 				else
