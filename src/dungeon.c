@@ -4707,7 +4707,7 @@ static void pack_overflow(void)
 		object_type *o_ptr;
 
 		/* Is auto-destroy done? */
-		handle_stuff();
+		update_creature(p_ptr);
 		if (!inventory[INVEN_PACK].k_idx) return;
 
 		/* Access the slot to be dropped */
