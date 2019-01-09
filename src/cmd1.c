@@ -795,7 +795,7 @@ bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
  * @param mode 移動に関するオプションフラグ
  * @return 移動可能ならばTRUEを返す
  */
-bool player_can_enter(s16b feature, u16b mode)
+bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode)
 {
 	feature_type *f_ptr = &f_info[feature];
 
@@ -874,14 +874,11 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		{
 			forget_flow();
 
-			/* Mega-Hack -- Forget the view */
 			p_ptr->update |= (PU_UN_VIEW);
-
 			p_ptr->redraw |= (PR_MAP);
 		}
 
 		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
-
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */

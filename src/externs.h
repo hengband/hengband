@@ -534,7 +534,7 @@ extern void search(void);
 extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern void carry(bool pickup);
 extern bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
-extern bool player_can_enter(s16b feature, u16b mode);
+extern bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode);
 extern bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
 extern bool trap_can_be_ignored(FEAT_IDX feat);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
