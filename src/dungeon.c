@@ -4335,59 +4335,31 @@ static void process_command(void)
 		/* Quaff a potion */
 		case 'q':
 		{
-			if (!p_ptr->wild_mode)
-			{
-			if (!p_ptr->inside_arena)
-				do_cmd_quaff_potion();
-			else
-			{
-				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-				msg_print(NULL);
-			}
-			}
+			do_cmd_quaff_potion();
 			break;
 		}
 
 		/* Read a scroll */
 		case 'r':
 		{
-			if (!p_ptr->wild_mode)
-			{
-			if (!p_ptr->inside_arena)
-				do_cmd_read_scroll();
-			else
-			{
-				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-				msg_print(NULL);
-			}
-			}
+			do_cmd_read_scroll();
 			break;
 		}
 
 		/* Use a staff */
 		case 'u':
 		{
-			if (!p_ptr->wild_mode)
-			{
-			if (p_ptr->inside_arena)
-			{
-				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-				msg_print(NULL);
-			}
-			else if (use_command && !rogue_like_commands)
-			{
+			if (use_command && !rogue_like_commands)
 				do_cmd_use();
-			}
 			else
 				do_cmd_use_staff();
-			}
 			break;
 		}
 
 		/* Use racial power */
 		case 'U':
 		{
-			if (!p_ptr->wild_mode) do_cmd_racial_power();
+			do_cmd_racial_power();
 			break;
 		}
 
@@ -4418,7 +4390,7 @@ static void process_command(void)
 		/* Target monster or location */
 		case '*':
 		{
-			if (!p_ptr->wild_mode) do_cmd_target();
+			do_cmd_target();
 			break;
 		}
 

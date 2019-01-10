@@ -1319,6 +1319,8 @@ void do_cmd_refill(void)
  */
 void do_cmd_target(void)
 {
+	if (p_ptr->wild_mode) return;
+
 	/* Target set */
 	if (target_set(TARGET_KILL))
 	{

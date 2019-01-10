@@ -618,6 +618,18 @@ void do_cmd_quaff_potion(void)
 	OBJECT_IDX item;
 	cptr q, s;
 
+	if (p_ptr->wild_mode)
+	{
+		return;
+	}
+
+	if (p_ptr->inside_arena)
+	{
+		msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
+		msg_print(NULL);
+		return;
+	}
+
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
 		set_action(ACTION_NONE);

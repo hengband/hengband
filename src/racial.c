@@ -1550,6 +1550,7 @@ void do_cmd_racial_power(void)
 	char            out_val[160];
 	int menu_line = (use_menu ? 1 : 0);
 
+	if (p_ptr->wild_mode) return;
 
 	for (num = 0; num < 36; num++)
 	{
