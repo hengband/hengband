@@ -259,7 +259,7 @@ static void wr_monster(monster_type *m_ptr)
 	if (flags & SAVE_MON_SUB_ALIGN) wr_byte(m_ptr->sub_align);
 	if (flags & SAVE_MON_CSLEEP) wr_s16b(m_ptr->mtimed[MTIMED_CSLEEP]);
 
-	wr_byte(m_ptr->mspeed);
+	wr_byte((byte)m_ptr->mspeed);
 	wr_s16b(m_ptr->energy_need);
 
 	if (flags & SAVE_MON_FAST)

@@ -637,7 +637,7 @@
 #define REALM_DEATH        5
 #define REALM_TRUMP        6
 #define REALM_ARCANE       7
-#define REALM_CRAFT      8
+#define REALM_CRAFT        8
 #define REALM_DAEMON       9
 #define REALM_CRUSADE      10
 #define MAX_MAGIC          10

@@ -871,7 +871,10 @@ static void rd_monster_old(monster_type *m_ptr)
 	}
 	
 	rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
-	rd_byte(&m_ptr->mspeed);
+
+	rd_byte(&tmp8u);
+	m_ptr->mspeed = tmp8u;
+
 	if (z_older_than(10, 4, 2))
 	{
 		rd_byte(&tmp8u);
@@ -1025,7 +1028,8 @@ static void rd_monster(monster_type *m_ptr)
 	if (flags & SAVE_MON_CSLEEP) rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
 	else m_ptr->mtimed[MTIMED_CSLEEP] = 0;
 
-	rd_byte(&m_ptr->mspeed);
+	rd_byte(&tmp8u);
+	m_ptr->mspeed = tmp8u;
 
 	rd_s16b(&m_ptr->energy_need);
 
