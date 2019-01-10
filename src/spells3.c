@@ -924,7 +924,7 @@ bool reset_recall(void)
 			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 					/* Accept request */
 #ifdef JP
-msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
+		msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
 #else
 		msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif
@@ -1641,8 +1641,8 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 	cave[p_ptr->y][p_ptr->x].o_idx = i; /* 'move' it */
 
 	o_ptr->next_o_idx = 0;
-	o_ptr->iy = (byte)p_ptr->y;
-	o_ptr->ix = (byte)p_ptr->x;
+	o_ptr->iy = p_ptr->y;
+	o_ptr->ix = p_ptr->x;
 
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
@@ -1922,7 +1922,6 @@ bool alchemy(void)
 		o_ptr = &o_list[0 - item];
 	}
 
-
 	/* See how many items */
 	if (o_ptr->number > 1)
 	{
@@ -1932,7 +1931,6 @@ bool alchemy(void)
 		/* Allow user abort */
 		if (amt <= 0) return FALSE;
 	}
-
 
 	old_number = o_ptr->number;
 	o_ptr->number = amt;
@@ -2050,7 +2048,6 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 	bool    a = object_is_artifact(o_ptr);
 	bool    force = (eflag & ENCH_FORCE);
 
-
 	/* Large piles resist enchantment */
 	prob = o_ptr->number * 100;
 
@@ -2125,11 +2122,9 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 
 	/* Failure */
 	if (!res) return (FALSE);
-	p_ptr->update |= (PU_BONUS);
 
 	/* Combine / Reorder the pack (later) */
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
+	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp();
@@ -2357,11 +2352,8 @@ bool identify_item(object_type *o_ptr)
 
 	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
-	p_ptr->update |= (PU_BONUS);
 
-	/* Combine / Reorder the pack (later) */
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
+	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	strcpy(record_o_name, o_name);
@@ -2897,7 +2889,6 @@ bool recharge(int power)
 
 	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
 	p_ptr->window |= (PW_INVEN);
 
 	/* Something was done */
@@ -2991,8 +2982,7 @@ bool bless_weapon(void)
 	if (have_flag(flgs, TR_BLESSED))
 	{
 #ifdef JP
-msg_format("%s は既に祝福されている。",
-    o_name    );
+		msg_format("%s は既に祝福されている。", o_name);
 #else
 		msg_format("%s %s %s blessed already.",
 		    ((item >= 0) ? "Your" : "The"), o_name,
@@ -3052,20 +3042,17 @@ msg_format("%s は既に祝福されている。",
 			msg_print(_("周囲が凡庸な雰囲気で満ちた...", "There is a static feeling in the air..."));
 
 #ifdef JP
-msg_format("%s は劣化した！",
-     o_name    );
+			msg_format("%s は劣化した！", o_name);
 #else
-			msg_format("%s %s %s disenchanted!",
-			    ((item >= 0) ? "Your" : "The"), o_name,
-			    ((o_ptr->number > 1) ? "were" : "was"));
+			msg_format("%s %s %s disenchanted!", ((item >= 0) ? "Your" : "The"), o_name,
+				((o_ptr->number > 1) ? "were" : "was"));
 #endif
 
 		}
 	}
+
 	p_ptr->update |= (PU_BONUS);
-
 	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
-
 	calc_android_exp();
 
 	return TRUE;

@@ -4499,7 +4499,7 @@ static void process_command(void)
 		/* Repeat level feeling */
 		case KTRL('F'):
 		{
-			if (!p_ptr->wild_mode) do_cmd_feeling();
+			do_cmd_feeling();
 			break;
 		}
 

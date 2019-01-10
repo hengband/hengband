@@ -1897,11 +1897,11 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
  * @param sval 検索したいベースアイテムのsval
  * @return なし
  */
-IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
+KIND_OBJECT_IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 {
-	IDX k;
+	KIND_OBJECT_IDX k;
 	int num = 0;
-	IDX bk = 0;
+	KIND_OBJECT_IDX bk = 0;
 
 	/* Look for it */
 	for (k = 1; k < max_k_idx; k++)
@@ -2208,8 +2208,7 @@ static bool make_artifact_special(object_type *o_ptr)
  */
 static bool make_artifact(object_type *o_ptr)
 {
-	IDX i;
-
+	ARTIFACT_IDX i;
 
 	/* No artifacts in the town */
 	if (!dun_level) return (FALSE);

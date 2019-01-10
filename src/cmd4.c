@@ -964,18 +964,14 @@ void do_cmd_nikki(void)
 void do_cmd_redraw(void)
 {
 	int j;
-
 	term *old = Term;
 
 
 	/* Hack -- react to changes */
 	Term_xtra(TERM_XTRA_REACT, 0);
 
-
 	/* Combine and Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
-
 	p_ptr->update |= (PU_TORCH);
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
@@ -3788,8 +3784,6 @@ void do_cmd_note(void)
  */
 void do_cmd_version(void)
 {
-	/* Silly message */
-
 #if FAKE_VER_EXTRA > 0
 	msg_format(_("変愚蛮怒(Hengband) %d.%d.%d.%d", "You are playing Hengband %d.%d.%d.%d."),
 		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
@@ -3856,6 +3850,8 @@ static cptr do_cmd_feeling_text_lucky[11] =
  */
 void do_cmd_feeling(void)
 {
+	if (p_ptr->wild_mode) return;
+
 	/* No useful feeling in quests */
 	if (p_ptr->inside_quest && !random_quest_number(dun_level))
 	{
