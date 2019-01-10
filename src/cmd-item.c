@@ -186,7 +186,7 @@ void do_cmd_wield(void)
 			/* Choose a weapon from the equipment only */
 			q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
 			s = _("おっと。", "Oops.");
-			if (!get_item(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
+			if (!choose_object(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
 			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
 		}
 
@@ -202,7 +202,7 @@ void do_cmd_wield(void)
 			/* Choose a hand */
 			q = _("どちらの手に装備しますか?", "Equip which hand? ");
 			s = _("おっと。", "Oops.");
-			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+			if (!choose_object(&slot, q, s, (USE_EQUIP))) return;
 		}
 		break;
 

@@ -500,7 +500,6 @@ void do_cmd_eat_food(void)
 	OBJECT_IDX item;
 	cptr        q, s;
 
-
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
 		set_action(ACTION_NONE);
@@ -512,7 +511,7 @@ void do_cmd_eat_food(void)
 	q = _("どれを食べますか? ", "Eat which item? ");
 	s = _("食べ物がない。", "You have nothing to eat.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
 	/* Eat the object */
 	do_cmd_eat_food_aux(item);
