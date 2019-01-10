@@ -232,7 +232,7 @@ void do_cmd_wield(void)
 			q = _("どちらの手に装備しますか?", "Equip which hand? ");
 			s = _("おっと。", "Oops.");
 			
-			if (!get_item(&slot, q, s, (USE_EQUIP))) return;
+			if (!choose_object(&slot, q, s, (USE_EQUIP))) return;
 			if ((slot == INVEN_LARM) && !buki_motteruka(INVEN_RARM))
 				need_switch_wielding = INVEN_RARM;
 		}
@@ -254,7 +254,7 @@ void do_cmd_wield(void)
 		/* Restrict the choices */
 		select_ring_slot = TRUE;
 
-		if (!get_item(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT)))
+		if (!choose_object(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT)))
 		{
 			select_ring_slot = FALSE;
 			return;
@@ -527,20 +527,8 @@ void do_cmd_takeoff(void)
 	q = _("どれを装備からはずしますか? ", "Take off which item? ");
 	s = _("はずせる装備がない。", "You are not wearing anything to take off.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
-
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	/* Item is cursed */
 	if (object_is_cursed(o_ptr))
@@ -605,20 +593,8 @@ void do_cmd_drop(void)
 	q = _("どのアイテムを落としますか? ", "Drop which item? ");
 	s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
-
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	/* Hack -- Cannot remove cursed items */
 	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
@@ -715,19 +691,8 @@ void do_cmd_destroy(void)
 	q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
 	s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	/* Verify unless quantity given beforehand */
 	if (!force && (confirm_destroy || (object_value(o_ptr) > 0)))
@@ -904,24 +869,11 @@ void do_cmd_observe(void)
 	GAME_TEXT o_name[MAX_NLEN];
 	cptr q, s;
 
-
 	q = _("どのアイテムを調べますか? ", "Examine which item? ");
 	s = _("調べられるアイテムがない。", "You have nothing to examine.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
-
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	/* Require full knowledge */
 	if (!(o_ptr->ident & IDENT_MENTAL))
@@ -929,7 +881,6 @@ void do_cmd_observe(void)
 		msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
 		return;
 	}
-
 
 	/* Description */
 	object_desc(o_name, o_ptr, 0);
@@ -954,19 +905,8 @@ void do_cmd_uninscribe(void)
 	q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
 	s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	/* Nothing to remove */
 	if (!o_ptr->inscription)
@@ -999,27 +939,16 @@ void do_cmd_uninscribe(void)
 void do_cmd_inscribe(void)
 {
 	OBJECT_IDX item;
-	object_type		*o_ptr;
+	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	char		out_val[80];
+	char out_val[80];
 	cptr q, s;
 
 	q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
 	s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	/* Describe the activity */
 	object_desc(o_name, o_ptr, OD_OMIT_INSCRIPTION);
@@ -1089,31 +1018,14 @@ static void do_cmd_refill_lamp(void)
 
 	cptr q, s;
 
-
 	/* Restrict the choices */
 	item_tester_hook = item_tester_refill_lantern;
 
-#ifdef JP
-	q = "どの油つぼから注ぎますか? ";
-	s = "油つぼがない。";
-#else
-	q = "Refill with which flask? ";
-	s = "You have no flasks of oil.";
-#endif
+	q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
+	s = _("油つぼがない。", "You have no flasks of oil.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	/* Take a partial turn */
 	p_ptr->energy_use = 50;
@@ -1199,20 +1111,8 @@ static void do_cmd_refill_torch(void)
 	q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
 	s = _("他に松明がない。", "You have no extra torches.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
-
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	/* Take a partial turn */
 	p_ptr->energy_use = 50;
@@ -1870,18 +1770,8 @@ void do_cmd_use(void)
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing to use.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	switch (o_ptr->tval)
 	{
