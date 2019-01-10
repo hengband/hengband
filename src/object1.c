@@ -2301,7 +2301,6 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 		    (!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
 				(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
-		/* Description */
 		object_desc(o_name, o_ptr, 0);
 
 		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)

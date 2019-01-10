@@ -2120,8 +2120,6 @@ static void object_mention(object_type *o_ptr)
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
-
-	/* Description */
 	object_desc(o_name, o_ptr, 0);
 	msg_format_wizard(CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }

@@ -882,10 +882,8 @@ void do_cmd_observe(void)
 		return;
 	}
 
-	/* Description */
 	object_desc(o_name, o_ptr, 0);
 	msg_format(_("%sを調べている...", "Examining %s..."), o_name);
-	/* Describe it fully */
 	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL)) msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
 }
 

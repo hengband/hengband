@@ -3345,12 +3345,8 @@ static void building_recharge(void)
 			get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? ")))
 
 		{
-			/* Pay the price */
 			p_ptr->au -= 50;
-
 			identify_item(o_ptr);
-
-			/* Description */
 			object_desc(tmp_str, o_ptr, 0);
 			msg_format(_("%s です。", "You have: %s."), tmp_str);
 

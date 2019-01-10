@@ -3327,7 +3327,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	/* Single object */
 	q_ptr->number = 1;
 
-	/* Description */
 	object_desc(o_name, q_ptr, OD_OMIT_PREFIX);
 
 	if (p_ptr->mighty_throw) mult += 3;

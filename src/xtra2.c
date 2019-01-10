@@ -2656,15 +2656,12 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 	/* Hack -- under the player */
 	if (player_bold(y, x))
 	{
-		/* Description */
 #ifdef JP
 		s1 = "あなたは";
 		s2 = "の上";
 		s3 = "にいる";
 #else
 		s1 = "You are ";
-
-		/* Preposition */
 		s2 = "on ";
 #endif
 	}
