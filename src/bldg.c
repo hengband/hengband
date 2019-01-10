@@ -4229,6 +4229,8 @@ static void bldg_process_command(building_type *bldg, int i)
  */
 void do_cmd_quest(void)
 {
+	if(p_ptr->wild_mode) return;
+
 	p_ptr->energy_use = 100;
 
 	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
@@ -4268,6 +4270,7 @@ void do_cmd_bldg(void)
 	bool            validcmd;
 	building_type   *bldg;
 
+	if(p_ptr->wild_mode) return;
 
 	p_ptr->energy_use = 100;
 

@@ -527,6 +527,8 @@ void do_cmd_pet(void)
 
 	num = 0;
 
+	if(p_ptr->wild_mode) return;
+
 	power_desc[num] = _("ペットを放す", "dismiss pets");
 	powers[num++] = PET_DISMISS;
 

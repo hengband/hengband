@@ -4550,6 +4550,7 @@ void do_cmd_store(void)
 	bool need_redraw_store_inv; /* To redraw missiles damage and prices in store */
 	TERM_LEN w, h;
 
+	if(p_ptr->wild_mode) return;
 	Term_get_size(&w, &h);
 
 	/* Calculate stocks per 1 page */

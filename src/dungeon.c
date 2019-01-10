@@ -4063,21 +4063,21 @@ static void process_command(void)
 		/* Enter store */
 		case SPECIAL_KEY_STORE:
 		{
-			if (!p_ptr->wild_mode) do_cmd_store();
+			do_cmd_store();
 			break;
 		}
 
 		/* Enter building -KMW- */
 		case SPECIAL_KEY_BUILDING:
 		{
-			if (!p_ptr->wild_mode) do_cmd_bldg();
+			do_cmd_bldg();
 			break;
 		}
 
 		/* Enter quest level -KMW- */
 		case SPECIAL_KEY_QUEST:
 		{
-			if (!p_ptr->wild_mode) do_cmd_quest();
+			do_cmd_quest();
 			break;
 		}
 
@@ -4114,7 +4114,6 @@ static void process_command(void)
 				change_wild_mode();
 			else
 				do_cmd_go_down();
-
 			break;
 		}
 
@@ -4257,7 +4256,7 @@ static void process_command(void)
 		/* Issue a pet command */
 		case 'p':
 		{
-			if (!p_ptr->wild_mode) do_cmd_pet();
+			do_cmd_pet();
 			break;
 		}
 
@@ -4280,16 +4279,7 @@ static void process_command(void)
 		/* Activate an artifact */
 		case 'A':
 		{
-			if (!p_ptr->wild_mode)
-			{
-			if (!p_ptr->inside_arena)
-				do_cmd_activate();
-			else
-			{
-				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-				msg_print(NULL);
-			}
-			}
+			do_cmd_activate();
 			break;
 		}
 
