@@ -2152,7 +2152,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Find an item */
 					for (k = 0; k < 10; k++)
 					{
-						s16b o_idx;
+						OBJECT_IDX o_idx;
 
 						/* Pick an item */
 						i = (INVENTORY_IDX)randint0(INVEN_PACK);

@@ -1475,7 +1475,7 @@ void do_cmd_disarm(void)
 {
 	POSITION y, x;
 	DIRECTION dir;
-	s16b o_idx;
+	OBJECT_IDX o_idx;
 
 	bool more = FALSE;
 
@@ -1551,14 +1551,12 @@ void do_cmd_disarm(void)
 		/* Disarm chest */
 		else if (o_idx)
 		{
-			/* Disarm the chest */
 			more = do_cmd_disarm_chest(y, x, o_idx);
 		}
 
 		/* Disarm trap */
 		else
 		{
-			/* Disarm the trap */
 			more = do_cmd_disarm_aux(y, x, dir);
 		}
 	}
