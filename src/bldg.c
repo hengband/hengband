@@ -3441,8 +3441,7 @@ static void building_recharge(void)
 	if (o_ptr->tval == TV_ROD)
 	{
 #ifdef JP
-if (get_check(format("そのロッドを＄%d で再充填しますか？",
- price)))
+		if (get_check(format("そのロッドを＄%d で再充填しますか？", price)))
 #else
 		if (get_check(format("Recharge the %s for %d gold? ",
 			((o_ptr->number > 1) ? "rods" : "rod"), price)))
@@ -3651,7 +3650,8 @@ static void building_recharge_all(void)
  */
 bool tele_town(void)
 {
-	int i, x, y;
+	int i;
+	POSITION x, y;
 	int num = 0;
 
 	if (dun_level)
@@ -3812,7 +3812,7 @@ static bool research_mon(void)
 
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, IDX);
+	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Collect matching monsters */
 	for (n = 0, i = 1; i < max_r_idx; i++)
@@ -3869,7 +3869,7 @@ static bool research_mon(void)
 	if (!n)
 	{
 		/* Free the "who" array */
-		C_KILL(who, max_r_idx, IDX);
+		C_KILL(who, max_r_idx, MONRACE_IDX);
 
 		/* Restore */
 		screen_load();
@@ -3975,7 +3975,7 @@ static bool research_mon(void)
 	/* prt(buf, 5, 5);*/
 
 	/* Free the "who" array */
-	C_KILL(who, max_r_idx, IDX);
+	C_KILL(who, max_r_idx, MONRACE_IDX);
 
 	/* Restore */
 	screen_load();
@@ -4114,7 +4114,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		break;
 	case BACT_TELEPORT_LEVEL:
 	{
-		IDX select_dungeon;
+		DUNGEON_IDX select_dungeon;
 		DEPTH max_depth;
 
 		clear_bldg(4, 20);
