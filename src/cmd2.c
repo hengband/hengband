@@ -3139,6 +3139,8 @@ void do_cmd_fire(void)
 	object_type *j_ptr, *ammo_ptr;
 	cptr q, s;
 
+	if(p_ptr->wild_mode) return;
+
 	is_fired = FALSE;	/* not fired yet */
 
 	/* Get the "bow" (if any) */
@@ -3251,6 +3253,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	bool come_back = FALSE;
 	bool do_drop = TRUE;
 
+	if (p_ptr->wild_mode) return FALSE;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{

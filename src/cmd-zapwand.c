@@ -454,6 +454,15 @@ void do_cmd_aim_wand(void)
 	OBJECT_IDX item;
 	cptr q, s;
 
+	if (p_ptr->wild_mode) return;
+
+	if (p_ptr->inside_arena)
+	{
+		msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
+		msg_print(NULL);
+		return;
+	}
+
 	/* Restrict choices to wands */
 	item_tester_tval = TV_WAND;
 

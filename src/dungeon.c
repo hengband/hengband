@@ -4300,51 +4300,34 @@ static void process_command(void)
 		/* Fire an item */
 		case 'f':
 		{
-			if (!p_ptr->wild_mode) do_cmd_fire();
+			do_cmd_fire();
 			break;
 		}
 
 		/* Throw an item */
 		case 'v':
 		{
-			if (!p_ptr->wild_mode) do_cmd_throw(1, FALSE, -1);
+			do_cmd_throw(1, FALSE, -1);
 			break;
 		}
 
 		/* Aim a wand */
 		case 'a':
 		{
-			if (!p_ptr->wild_mode)
-			{
-				if (!p_ptr->inside_arena)
-					do_cmd_aim_wand();
-				else
-				{
-					msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-					msg_print(NULL);
-				}
-			}
+			do_cmd_aim_wand();
 			break;
 		}
 
 		/* Zap a rod */
 		case 'z':
 		{
-			if (!p_ptr->wild_mode)
-			{
-			if (p_ptr->inside_arena)
-			{
-				msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-				msg_print(NULL);
-			}
-			else if (use_command && rogue_like_commands)
+			if (use_command && rogue_like_commands)
 			{
 				do_cmd_use();
 			}
 			else
 			{
 				do_cmd_zap_rod();
-			}
 			}
 			break;
 		}
