@@ -182,19 +182,10 @@ static bool do_cmd_archer(void)
 
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
-		if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
 
-		/* Get the item (in the pack) */
-		if (item >= 0)
-		{
-			q_ptr = &inventory[item];
-		}
+		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+		if (!q_ptr) return FALSE;
 
-		/* Get the item (on the floor) */
-		else
-		{
-			q_ptr = &o_list[0 - item];
-		}
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
@@ -249,19 +240,8 @@ bool gain_magic(void)
 	q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
 	s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = get_item(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return (FALSE);
 
 	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
 	{

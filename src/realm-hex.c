@@ -417,9 +417,9 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どれを呪いますか？", "Which weapon do you curse?");
 			s = _("武器を装備していない。", "You wield no weapons.");
 
-			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			if (!o_ptr) return FALSE;
 
-			o_ptr = &inventory[item];
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			object_flags(o_ptr, f);
 
@@ -713,7 +713,8 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どれを呪いますか？", "Which piece of armour do you curse?");
 			s = _("防具を装備していない。", "You wield no piece of armours.");
 
-			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			if (!o_ptr) return FALSE;
 
 			o_ptr = &inventory[item];
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -919,9 +920,9 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
 			s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
-			if (!get_item(&item, q, s, (USE_EQUIP))) return FALSE;
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			if (!o_ptr) return FALSE;
 
-			o_ptr = &inventory[item];
 			object_flags(o_ptr, f);
 
 			p_ptr->csp += (p_ptr->lev / 5) + randint1(p_ptr->lev / 5);
