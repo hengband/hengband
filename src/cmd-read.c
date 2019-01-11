@@ -653,19 +653,8 @@ void do_cmd_read_scroll(void)
 	q = _("どの巻物を読みますか? ", "Read which scroll? ");
 	s = _("読める巻物がない。", "You have no scrolls to read.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	/* Read the scroll */
 	do_cmd_read_scroll_aux(item, object_is_aware(o_ptr));

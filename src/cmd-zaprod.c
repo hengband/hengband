@@ -420,7 +420,7 @@ void do_cmd_zap_rod(void)
 	q = _("どのロッドを振りますか? ", "Zap which rod? ");
 	s = _("使えるロッドがない。", "You have no rod to zap.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
 	/* Zap the rod */
 	do_cmd_zap_rod_aux(item);

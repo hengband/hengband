@@ -641,7 +641,7 @@ void do_cmd_quaff_potion(void)
 	q = _("どの薬を飲みますか? ", "Quaff which potion? ");
 	s = _("飲める薬がない。", "You have no potions to quaff.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
 	/* Quaff the potion */
 	do_cmd_quaff_potion_aux(item);

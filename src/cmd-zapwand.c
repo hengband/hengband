@@ -473,7 +473,7 @@ void do_cmd_aim_wand(void)
 
 	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
 
 	do_cmd_aim_wand_aux(item);
 }

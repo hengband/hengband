@@ -422,19 +422,8 @@ void do_cmd_gain_hissatsu(void)
 	q = _("どの書から学びますか? ", "Study which book? ");
 	s = _("読める書がない。", "You have no books that you can read.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++)
 	{
