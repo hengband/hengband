@@ -3936,7 +3936,7 @@ void do_poly_self(void)
 			/* Harmful deformity */
 			power -= 15;
 
-			while (tmp < 6)
+			while (tmp < A_MAX)
 			{
 				if (one_in_(2))
 				{
@@ -3987,7 +3987,7 @@ void do_poly_self(void)
 		power -= 20;
 		msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), p_ptr->prace == RACE_ANDROID ? "機械" : "内臓");
 
-		while (tmp < 6)
+		while (tmp < A_MAX)
 		{
 			(void)dec_stat(tmp, randint1(6) + 6, one_in_(3));
 			tmp++;

@@ -2506,7 +2506,7 @@ void message_add(cptr str)
 		if (*t)
 		{
 			/* Message is too small */
-			if (strlen(buf) < 6) break;
+			if (strlen(buf) < A_MAX) break;
 
 			/* Drop the space */
 			*(t - 1) = '\0';

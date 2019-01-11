@@ -95,7 +95,7 @@ void self_knowledge(void)
 
 	info[i++] = _("能力の最大値", "Limits of maximum stats");
 
-	for (v_nr = 0; v_nr < 6; v_nr++)
+	for (v_nr = 0; v_nr < A_MAX; v_nr++)
 	{
 		char stat_desc[80];
 

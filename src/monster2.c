@@ -3581,7 +3581,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 	place_monster_m_idx = hack_m_idx_ii;
 
 	/* Reinforcement */
-	for(i = 0; i < 6; i++)
+	for(i = 0; i < A_MAX; i++)
 	{
 		if(!r_ptr->reinforce_id[i]) break;
 		n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);

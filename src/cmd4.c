@@ -7672,7 +7672,7 @@ static void do_cmd_knowledge_stat(void)
 		else fprintf(fff, "Your current Life Rating is ???.\n\n");
 		fprintf(fff, "Limits of maximum stats\n\n");
 #endif
-		for (v_nr = 0; v_nr < 6; v_nr++)
+		for (v_nr = 0; v_nr < A_MAX; v_nr++)
 		{
 			if ((p_ptr->knowledge & KNOW_STAT) || p_ptr->stat_max[v_nr] == p_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
 			else fprintf(fff, "%s ???\n", stat_names[v_nr]);

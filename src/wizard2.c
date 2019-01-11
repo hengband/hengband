@@ -379,7 +379,7 @@ static void do_cmd_wiz_change_aux(void)
 
 
 	/* Query the stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		/* Prompt */
 		sprintf(ppp, "%s (3-%d): ", stat_names[i], p_ptr->stat_max_max[i]);
@@ -1211,7 +1211,7 @@ static void do_cmd_wiz_blue_mage(void)
 	int j = 0;
 	BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
 
-	for (j = 1; j < 6; j++)
+	for (j = 1; j < A_MAX; j++)
 	{
 		set_rf_masks(&f4, &f5, &f6, j);
 

@@ -1682,8 +1682,8 @@ static void load_quick_start(void)
 	rd_s16b(&previous_char.sc);
 	rd_s32b(&previous_char.au);
 
-	for (i = 0; i < 6; i++) rd_s16b(&previous_char.stat_max[i]);
-	for (i = 0; i < 6; i++) rd_s16b(&previous_char.stat_max_max[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&previous_char.stat_max[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&previous_char.stat_max_max[i]);
 
 	for (i = 0; i < PY_MAX_LEVEL; i++)
 	{
@@ -1770,9 +1770,9 @@ static void rd_extra(void)
 	rd_s16b(&p_ptr->wt);
 
 	/* Read the stat info */
-	for (i = 0; i < 6; i++) rd_s16b(&p_ptr->stat_max[i]);
-	for (i = 0; i < 6; i++) rd_s16b(&p_ptr->stat_max_max[i]);
-	for (i = 0; i < 6; i++) rd_s16b(&p_ptr->stat_cur[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_max[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_max_max[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_cur[i]);
 
 	strip_bytes(24);
 	rd_s32b(&p_ptr->au);

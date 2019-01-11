@@ -2690,7 +2690,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							{
 								msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
 
-								for (k = 0; k < 6; k++)
+								for (k = 0; k < A_MAX; k++)
 								{
 									p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 7) / 8;
 									if (p_ptr->stat_cur[k] < 3) p_ptr->stat_cur[k] = 3;

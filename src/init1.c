@@ -3000,7 +3000,7 @@ errr parse_r_info(char *buf, header *head)
 	{
 		int id, ds, dd;
 		/* Find the next empty blow slot (if any) */
-		for (i = 0; i < 6; i++) if (r_ptr->reinforce_id[i] == 0) break;
+		for (i = 0; i < A_MAX; i++) if (r_ptr->reinforce_id[i] == 0) break;
 
 		/* Oops, no more slots */
 		if (i == 6) return (1);

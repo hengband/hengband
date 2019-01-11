@@ -1839,7 +1839,7 @@ void get_bloody_moon_flags(object_type *o_ptr)
 	for (i = 0; i < 2; i++)
 	{
 		int tmp = randint0(11);
-		if (tmp < 6) add_flag(o_ptr->art_flags, TR_STR + tmp);
+		if (tmp < A_MAX) add_flag(o_ptr->art_flags, TR_STR + tmp);
 		else add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
 	}
 }

@@ -745,7 +745,7 @@ static bool cmd_racial_power_aux(s32b command)
 			int i;
 			cave_type *c_ptr;
 
-			for (i = 0; i < 6; i++)
+			for (i = 0; i < A_MAX; i++)
 			{
 				dir = randint0(8);
 				y = p_ptr->y + ddy_ddd[dir];

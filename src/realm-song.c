@@ -331,7 +331,7 @@ cptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					detect_monsters_invis(rad);
 					detect_monsters_normal(rad);
 
-					if (plev > 19 && count < 6)
+					if (plev > 19 && count < A_MAX)
 						SINGING_COUNT(p_ptr) = count + 1;
 				}
 				detect_traps(rad, TRUE);

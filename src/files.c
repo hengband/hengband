@@ -3533,7 +3533,7 @@ static void display_player_stat_info(void)
 	c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col+35);
 
 	/* Display the stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		int r_adj;
 
@@ -3630,7 +3630,7 @@ static void display_player_stat_info(void)
 		object_flags_known(o_ptr, flgs);
 
 		/* Initialize color based of sign of pval. */
-		for (stat = 0; stat < 6; stat++)
+		for (stat = 0; stat < A_MAX; stat++)
 		{
 			/* Default */
 			a = TERM_SLATE;
@@ -3689,7 +3689,7 @@ static void display_player_stat_info(void)
 	player_flags(flgs);
 
 	/* Check stats */
-	for (stat = 0; stat < 6; stat++)
+	for (stat = 0; stat < A_MAX; stat++)
 	{
 		/* Default */
 		a = TERM_SLATE;
@@ -3852,7 +3852,7 @@ void display_player(int mode)
 
 
 		/* Display the stats */
-		for (i = 0; i < 6; i++)
+		for (i = 0; i < A_MAX; i++)
 		{
 			/* Special treatment of "injured" stats */
 			if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
@@ -4807,7 +4807,7 @@ static void dump_aux_virtues(FILE *fff)
 		else fprintf(fff, "Your current Life Rating is ???.\n\n");
 		fprintf(fff, "Limits of maximum stats\n");
 #endif
-		for (v_nr = 0; v_nr < 6; v_nr++)
+		for (v_nr = 0; v_nr < A_MAX; v_nr++)
 		{
 			if ((p_ptr->knowledge & KNOW_STAT) || p_ptr->stat_max[v_nr] == p_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
 			else fprintf(fff, "%s ???\n", stat_names[v_nr]);

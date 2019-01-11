@@ -506,8 +506,6 @@ static void birth_quit(void)
 static void show_help(cptr helpfile)
 {
 	screen_save();
-
-	/* Peruse the help file */
 	(void)show_file(TRUE, helpfile, NULL, 0, 0);
 	screen_load();
 }
@@ -837,7 +835,7 @@ static bool get_player_realms(void)
 
 			roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 74, temp, sizeof(temp));
 			t = temp;
-			for (i = 0; i < 6; i++)
+			for (i = 0; i < A_MAX; i++)
 			{
 				if(t[0] == 0)
 					break; 
@@ -891,7 +889,7 @@ static void save_prev_data(birther *birther_ptr)
 	birther_ptr->au = p_ptr->au;
 
 	/* Save the stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		birther_ptr->stat_max[i] = p_ptr->stat_max[i];
 		birther_ptr->stat_max_max[i] = p_ptr->stat_max_max[i];
@@ -950,7 +948,7 @@ static void load_prev_data(bool swap)
 	p_ptr->au = previous_char.au;
 
 	/* Load the stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = previous_char.stat_max[i];
 		p_ptr->stat_max_max[i] = previous_char.stat_max_max[i];
@@ -1106,15 +1104,14 @@ static void get_stats(void)
  */
 void get_max_stats(void)
 {
-	int		i, j;
-
-	int		dice[6];
+	int i, j;
+	int dice[6];
 
 	/* Roll and verify some stats */
 	while (TRUE)
 	{
 		/* Roll some dice */
-		for (j = i = 0; i < 6; i++)
+		for (j = i = 0; i < A_MAX; i++)
 		{
 			/* Roll the dice */
 			dice[i] = randint1(7);
@@ -1128,7 +1125,7 @@ void get_max_stats(void)
 	}
 
 	/* Acquire the stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		BASE_STATUS max_max = 18 + 60 + dice[i]*10;
 
@@ -1513,7 +1510,7 @@ static void get_money(void)
 	  gold += 2000;
 
 	/* Process the stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		/* Mega-Hack -- reduce gold for high stats */
 		if (p_ptr->stat_max[i] >= 18 + 50) gold -= 300;
@@ -1554,7 +1551,7 @@ static void birth_put_stats(void)
 	{
 		col = 42;
 		/* Put the stats (and percents) */
-		for (i = 0; i < 6; i++)
+		for (i = 0; i < A_MAX; i++)
 		{
 			/* Race/Class bonus */
 			j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
@@ -3025,7 +3022,7 @@ static bool get_stat_limits(void)
 	put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
 
 	/* Output the maximum stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		/* Reset the "success" counter */
 		stat_match[i] = 0;
@@ -3085,7 +3082,7 @@ static bool get_stat_limits(void)
 			{
 				c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
 			}
-			else if(os < 6)
+			else if(os < A_MAX)
 			{
 				c_put_str(TERM_WHITE, cur, 14 + os, 10);
 			}
@@ -3144,7 +3141,7 @@ static bool get_stat_limits(void)
 			break;
 		case '2':
 		case 'j':
-			if (cs < 6) cs++;
+			if (cs < A_MAX) cs++;
 			break;
 		case '4':
 		case 'h':
@@ -3218,7 +3215,7 @@ static bool get_stat_limits(void)
 		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
 	}
 	
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		/* Save the minimum stat */
 		stat_limit[i] = (s16b)cval[i];
@@ -4083,7 +4080,7 @@ static bool player_birth_aux(void)
 		roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 74, temp, sizeof(temp));
 		t = temp;
 
-		for (i = 0; i< 6; i++)
+		for (i = 0; i< A_MAX; i++)
 		{
 			if(t[0] == 0)
 				break; 
@@ -4215,7 +4212,7 @@ static bool player_birth_aux(void)
 
 
 			/* Put the minimal stats */
-			for (i = 0; i < 6; i++)
+			for (i = 0; i < A_MAX; i++)
 			{
 				int j, m;
 
@@ -4252,7 +4249,7 @@ static bool player_birth_aux(void)
 
 				if (autoroller)
 				{
-					for (i = 0; i < 6; i++)
+					for (i = 0; i < A_MAX; i++)
 					{
 						stat_match[i] = 0;
 					}
@@ -4262,7 +4259,7 @@ static bool player_birth_aux(void)
 			if (autoroller)
 			{
 				/* Check and count acceptable stats */
-				for (i = 0; i < 6; i++)
+				for (i = 0; i < A_MAX; i++)
 				{
 					/* This stat is okay */
 					if (p_ptr->stat_max[i] >= stat_limit[i])
@@ -4691,7 +4688,7 @@ void dump_yourself(FILE *fff)
 	fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[p_ptr->pseikaku].title);
 
 	t = temp;
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		if(t[0] == 0)
 			break; 
@@ -4705,7 +4702,7 @@ void dump_yourself(FILE *fff)
 		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[p_ptr->realm1]);
 
 		t = temp;
-		for (i = 0; i < 6; i++)
+		for (i = 0; i < A_MAX; i++)
 		{
 			if(t[0] == 0)
 				break; 
@@ -4720,7 +4717,7 @@ void dump_yourself(FILE *fff)
 		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[p_ptr->realm2]);
 
 		t = temp;
-		for (i = 0; i < 6; i++)
+		for (i = 0; i < A_MAX; i++)
 		{
 			if(t[0] == 0)
 				break; 

@@ -530,7 +530,7 @@ static void place_pet(void)
 			int j;
 			POSITION d;
 
-			for (d = 1; d < 6; d++)
+			for (d = 1; d < A_MAX; d++)
 			{
 				for (j = 1000; j > 0; j--)
 				{

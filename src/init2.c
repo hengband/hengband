@@ -1875,7 +1875,7 @@ static errr init_other(void)
 	 *  Window 1 : Display messages
 	 *  Window 2 : Display inven/equip
 	 */
-	window_flag[1] = 1L << 6;
+	window_flag[1] = 1L << A_MAX;
 	window_flag[2] = 1L << 0;
 
 

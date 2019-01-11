@@ -258,7 +258,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	flags7 = (r_ptr->flags7 & r_ptr->flags7);
 	flagsr = (r_ptr->flagsr & r_ptr->r_flagsr);
 
-	for(n = 0; n < 6; n++)
+	for(n = 0; n < A_MAX; n++)
 	{
 		if(r_ptr->reinforce_id[n] > 0) reinforce = TRUE;
 	}
@@ -738,7 +738,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 #ifndef JP
 			hooked_roff(" contain ");
 #endif			
-			for(n = 0; n < 6; n++)
+			for(n = 0; n < A_MAX; n++)
 			{
 				if(r_ptr->reinforce_id[n] && r_ptr->reinforce_dd[n] && r_ptr->reinforce_ds[n])
 				{

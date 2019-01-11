@@ -4978,7 +4978,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				int i = 0;
 				if (one_in_(13))
 				{
-					while (i < 6)
+					while (i < A_MAX)
 					{
 						do
 						{
@@ -5709,7 +5709,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 						msg_print(_("あなたは以前ほど力強くなくなってしまった...。", 
 									"You're not as powerful as you used to be..."));
 
-						for (k = 0; k < 6; k++)
+						for (k = 0; k < A_MAX; k++)
 						{
 							p_ptr->stat_cur[k] = (p_ptr->stat_cur[k] * 7) / 8;
 							if (p_ptr->stat_cur[k] < 3) p_ptr->stat_cur[k] = 3;

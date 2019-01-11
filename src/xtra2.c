@@ -139,7 +139,7 @@ void check_experience(void)
 						choice = inkey();
 						if ((choice >= 'a') && (choice <= 'f')) break;
 					}
-					for(n = 0; n < 6; n++)
+					for(n = 0; n < A_MAX; n++)
 						if (n != choice - 'a')
 							prt("",n+2,14);
 					if (get_check(_("よろしいですか？", "Are you sure? "))) break;
@@ -4414,7 +4414,7 @@ void gain_level_reward(int chosen_reward)
 			msg_print(_("「汝、謙虚たることを学ぶべし！」", "'Thou needst a lesson in humility, mortal!'"));
 			msg_print(_("あなたは以前より弱くなった！", "You feel less powerful!"));
 
-			for (dummy = 0; dummy < 6; dummy++)
+			for (dummy = 0; dummy < A_MAX; dummy++)
 			{
 				(void)dec_stat(dummy, 10 + randint1(15), TRUE);
 			}
@@ -4435,7 +4435,7 @@ void gain_level_reward(int chosen_reward)
 
 			msg_print(_("「我がささやかなる賜物を受けとるがよい！」", "'Receive this modest gift from me!'"));
 
-			for (dummy = 0; dummy < 6; dummy++)
+			for (dummy = 0; dummy < A_MAX; dummy++)
 			{
 				(void)do_inc_stat(dummy);
 			}
@@ -4526,7 +4526,7 @@ void gain_level_reward(int chosen_reward)
 					}
 					break;
 				default:
-					for (dummy = 0; dummy < 6; dummy++)
+					for (dummy = 0; dummy < A_MAX; dummy++)
 					{
 						(void)dec_stat(dummy, 10 + randint1(15), TRUE);
 					}
@@ -4541,7 +4541,7 @@ void gain_level_reward(int chosen_reward)
 			msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
 			take_hit(DAMAGE_LOSELIFE, p_ptr->lev * 4, wrath_reason, -1);
-			for (dummy = 0; dummy < 6; dummy++)
+			for (dummy = 0; dummy < A_MAX; dummy++)
 			{
 				(void)dec_stat(dummy, 10 + randint1(15), FALSE);
 			}

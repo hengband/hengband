@@ -873,7 +873,7 @@ cptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				flag = TRUE;
 			}
-			for (i = A_STR; i < 6; i++)
+			for (i = A_STR; i < A_MAX; i++)
 			{
 				if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
 				{

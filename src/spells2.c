@@ -3496,7 +3496,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			}
 			if (!one_in_(6)) break;
 		default:
-			while (i < 6)
+			while (i < A_MAX)
 			{
 				do
 				{

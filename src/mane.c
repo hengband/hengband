@@ -811,7 +811,7 @@ static bool use_mane(int spell)
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 		msg_print(_("モンスターを召喚した！", "You summon monsters!"));
-		for (k = 0;k < 6; k++)
+		for (k = 0;k < A_MAX; k++)
 			summon_specific(-1, target_row, target_col, plev, 0, (mode | u_mode), '\0');
 		break;
 	}
@@ -820,7 +820,7 @@ static bool use_mane(int spell)
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 		msg_print(_("アリを召喚した。", "You summon ants."));
-		for (k = 0;k < 6; k++)
+		for (k = 0;k < A_MAX; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_ANT, mode, '\0');
 		break;
 	}
@@ -829,7 +829,7 @@ static bool use_mane(int spell)
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 		msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
-		for (k = 0;k < 6; k++)
+		for (k = 0;k < A_MAX; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_SPIDER, mode, '\0');
 		break;
 	}
@@ -892,7 +892,7 @@ static bool use_mane(int spell)
 		int k;
 		if (!target_set(TARGET_KILL)) return FALSE;
 		msg_print(_("強力なアンデッドを召喚した！", "You summon greater undead!"));
-		for (k = 0;k < 6; k++)
+		for (k = 0;k < A_MAX; k++)
 			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode), '\0');
 		break;
 	}

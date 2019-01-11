@@ -1539,7 +1539,7 @@ static void prt_frame_basic(void)
 	prt_exp();
 
 	/* All Stats */
-	for (i = 0; i < 6; i++) prt_stat(i);
+	for (i = 0; i < A_MAX; i++) prt_stat(i);
 
 	/* Armor */
 	prt_ac();
@@ -3126,7 +3126,7 @@ void calc_bonuses(void)
 	extra_blows[0] = extra_blows[1] = 0;
 
 	/* Clear the stat modifiers */
-	for (i = 0; i < 6; i++) p_ptr->stat_add[i] = 0;
+	for (i = 0; i < A_MAX; i++) p_ptr->stat_add[i] = 0;
 
 
 	/* Clear the Displayed/Real armor class */
@@ -3791,7 +3791,7 @@ void calc_bonuses(void)
 
 	/* Hack -- apply racial/class stat maxes */
 	/* Apply the racial modifiers */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		/* Modify the stats for "race" */
 		p_ptr->stat_add[i] += (tmp_rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i]);
@@ -4352,7 +4352,7 @@ void calc_bonuses(void)
 
 	if (p_ptr->special_defense & KATA_KOUKIJIN)
 	{
-		for (i = 0; i < 6; i++)
+		for (i = 0; i < A_MAX; i++)
 			p_ptr->stat_add[i] += 5;
 		p_ptr->to_a -= 50;
 		p_ptr->dis_to_a -= 50;
@@ -4412,7 +4412,7 @@ void calc_bonuses(void)
 	}
 
 	/* Calculate stats */
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		int top, use, ind;
 
