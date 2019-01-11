@@ -2270,7 +2270,7 @@ static void display_entry(int pos)
 		if(show_weights)
 		{
 			/* Only show the weight of an individual item */
-			int wgt = o_ptr->weight;
+			WEIGHT wgt = o_ptr->weight;
 #ifdef JP
 			sprintf(out_val, "%3d.%1d kg", lbtokg1(wgt) , lbtokg2(wgt));
 			put_str(out_val, i+6, 67);

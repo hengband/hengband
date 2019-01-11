@@ -3526,20 +3526,11 @@ static void display_player_stat_info(void)
 	row = 3;
 
 	/* Print out the labels for the columns */
-#ifdef JP
-c_put_str(TERM_WHITE, "能力", row, stat_col+1);
-c_put_str(TERM_BLUE, "  基本", row, stat_col+7);
-c_put_str(TERM_L_BLUE, " 種 職 性 装 ", row, stat_col+13);
-c_put_str(TERM_L_GREEN, "合計", row, stat_col+28);
-c_put_str(TERM_YELLOW, "現在", row, stat_col+35);
-#else
-	c_put_str(TERM_WHITE, "Stat", row, stat_col+1);
-	c_put_str(TERM_BLUE, "  Base", row, stat_col+7);
-	c_put_str(TERM_L_BLUE, "RacClaPerMod", row, stat_col+13);
-	c_put_str(TERM_L_GREEN, "Actual", row, stat_col+26);
-	c_put_str(TERM_YELLOW, "Current", row, stat_col+32);
-#endif
-
+	c_put_str(TERM_WHITE, _("能力", "Stat"), row, stat_col+1);
+	c_put_str(TERM_BLUE, _("  基本", "  Base"), row, stat_col+7);
+	c_put_str(TERM_L_BLUE, _(" 種 職 性 装 ", "RacClaPerMod"), row, stat_col+13);
+	c_put_str(TERM_L_GREEN, _("合計", "Actual"), row, stat_col+28);
+	c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col+35);
 
 	/* Display the stats */
 	for (i = 0; i < 6; i++)
