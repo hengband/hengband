@@ -2043,7 +2043,7 @@ static void prepare_label_string(char *label, BIT_FLAGS mode)
 	for (i = 0; i < 52; i++)
 	{
 		COMMAND_CODE index;
-		char c = alphabet_chars[i];
+		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
 		if (get_tag(&index, c, mode))
@@ -2080,7 +2080,7 @@ static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM
 	for (i = 0; i < 52; i++)
 	{
 		COMMAND_CODE index;
-		char c = alphabet_chars[i];
+		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
 		if (get_tag_floor(&index, c, floor_list, floor_num))
@@ -2225,8 +2225,8 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 		/* Display graphics for object, if desired */
 		if (show_item_graph)
 		{
-			byte  a = object_attr(o_ptr);
-			char c = object_char(o_ptr);
+			TERM_COLOR a = object_attr(o_ptr);
+			SYMBOL_CODE c = object_char(o_ptr);
 			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
 			if (use_bigtile) cur_col++;
 
@@ -2397,8 +2397,8 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 		/* Display graphics for object, if desired */
 		if (show_item_graph)
 		{
-			byte a = object_attr(o_ptr);
-			char c = object_char(o_ptr);
+			TERM_COLOR a = object_attr(o_ptr);
+			SYMBOL_CODE c = object_char(o_ptr);
 			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
 			if (use_bigtile) cur_col++;
 

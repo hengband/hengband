@@ -2245,8 +2245,8 @@ static void display_entry(int pos)
 	cur_col = 3;
 	if (show_item_graph)
 	{
-		byte a = object_attr(o_ptr);
-		char c = object_char(o_ptr);
+		TERM_COLOR a = object_attr(o_ptr);
+		SYMBOL_CODE c = object_char(o_ptr);
 
 		Term_queue_bigchar(cur_col, i + 6, a, c, 0, 0);
 		if (use_bigtile) cur_col++;

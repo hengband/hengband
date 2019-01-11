@@ -6850,8 +6850,8 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				{
 					u16b p;
 
-					byte a;
-					char c;
+					TERM_COLOR a;
+					SYMBOL_CODE c;
 
 					/* Obtain the bolt pict */
 					p = bolt_pict(oy, ox, y, x, typ);
@@ -6989,7 +6989,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					u16b p;
 
 					TERM_COLOR a;
-					char c;
+					SYMBOL_CODE c;
 
 					/* Obtain the bolt pict */
 					p = bolt_pict(oy, ox, y, x, typ);
@@ -7132,8 +7132,8 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			{
 				u16b p;
 
-				byte a;
-				char c;
+				TERM_COLOR a;
+				SYMBOL_CODE c;
 
 				/* Obtain the bolt pict */
 				p = bolt_pict(oy, ox, y, x, typ);
@@ -7295,7 +7295,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					u16b p;
 
 					TERM_COLOR a;
-					char c;
+					SYMBOL_CODE c;
 
 					drawn = TRUE;
 

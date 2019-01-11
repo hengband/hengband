@@ -1699,10 +1699,10 @@ void prt_map(void)
 		for (x = xmin; x <= xmax; x++)
 		{
 			TERM_COLOR a;
-			char c;
+			SYMBOL_CODE c;
 
 			TERM_COLOR ta;
-			char tc;
+			SYMBOL_CODE tc;
 
 			/* Determine what is there */
 			map_info(y, x, &a, &c, &ta, &tc);

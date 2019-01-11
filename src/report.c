@@ -316,7 +316,7 @@ cptr make_screen_dump(void)
 	cptr ret;
 
 	TERM_COLOR a = 0, old_a = 0;
-	char c = ' ';
+	SYMBOL_CODE c = ' ';
 
 	static cptr html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
