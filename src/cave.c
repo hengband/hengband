@@ -161,22 +161,22 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	POSITION dx, dy;
 
 	/* Absolute */
-	int ax, ay;
+	POSITION ax, ay;
 
 	/* Signs */
-	int sx, sy;
+	POSITION sx, sy;
 
 	/* Fractions */
-	int qx, qy;
+	POSITION qx, qy;
 
 	/* Scanners */
-	int tx, ty;
+	POSITION tx, ty;
 
 	/* Scale factors */
-	int f1, f2;
+	POSITION f1, f2;
 
 	/* Slope, or 1/Slope, of LOS */
-	int m;
+	POSITION m;
 
 
 	/* Extract the offset */
@@ -1652,13 +1652,13 @@ void lite_spot(POSITION y, POSITION x)
  */
 void prt_map(void)
 {
-	int     x, y;
-	int     v;
+	POSITION x, y;
+	int v;
 
 	/* map bounds */
-	s16b xmin, xmax, ymin, ymax;
+	POSITION xmin, xmax, ymin, ymax;
 
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
 
