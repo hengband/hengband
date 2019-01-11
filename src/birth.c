@@ -888,20 +888,12 @@ else
 
 			if (count < 2)
 			{
-#ifdef JP
-				prt("何かキーを押してください", 0, 0);
-#else
-				prt("Hit any key.", 0, 0);
-#endif
+				prt(_("何かキーを押してください", "Hit any key."), 0, 0);
 				(void)inkey();
 				prt("", 0, 0);
 				break;
 			}
-#ifdef JP
-			else if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y)) break;
-#else
-			else if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
-#endif
+			else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) break;
 		}
 		if (p_ptr->realm2)
 		{

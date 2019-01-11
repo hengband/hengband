@@ -2947,7 +2947,6 @@ static void process_world_aux_recharge(void)
 	/* Process objects on floor */
 	for (i = 1; i < o_max; i++)
 	{
-		/* Access object */
 		object_type *o_ptr = &o_list[i];
 
 		/* Skip dead objects */
