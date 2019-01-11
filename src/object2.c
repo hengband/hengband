@@ -7519,19 +7519,8 @@ static void drain_essence(void)
 	q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
 	s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
 	{
@@ -8119,19 +8108,8 @@ static void add_essence(ESSENCE_IDX mode)
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr)))
 	{
@@ -8356,26 +8334,15 @@ static void erase_essence(void)
 	q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
 	s = _("エッセンスを付加したアイテムがありません。", "You have nothing to remove essence.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name))) return;
 
 	p_ptr->energy_use = 100;
 
-	if (o_ptr->xtra3 == 1+ESSENCE_SLAY_GLOVE)
+	if (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE)
 	{
 		o_ptr->to_h -= (o_ptr->xtra4>>8);
 		o_ptr->to_d -= (o_ptr->xtra4 & 0x000f);

@@ -136,19 +136,9 @@ static bool do_cmd_archer(void)
 
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
-		if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
+		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+		if (!q_ptr) return FALSE;
 
-		/* Get the item (in the pack) */
-		if (item >= 0)
-		{
-			q_ptr = &inventory[item];
-		}
-
-		/* Get the item (on the floor) */
-		else
-		{
-			q_ptr = &o_list[0 - item];
-		}
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */

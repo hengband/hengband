@@ -4809,7 +4809,7 @@ static bool py_pickup_floor_aux(void)
 	q = _("どれを拾いますか？", "Get which item? ");
 	s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
 
-	if (get_item(&item, q, s, (USE_FLOOR)))
+	if (choose_object(&item, q, s, (USE_FLOOR)))
 	{
 		this_o_idx = 0 - item;
 	}
