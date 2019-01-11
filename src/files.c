@@ -3624,7 +3624,6 @@ static void display_player_stat_info(void)
 	/* Process equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		/* Access object */
 		o_ptr = &inventory[i];
 
 		/* Acquire "known" flags */

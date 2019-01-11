@@ -875,7 +875,7 @@ else
 
 			roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 74, temp, sizeof(temp));
 			t = temp;
-			for (i = 0; i< 6; i++)
+			for (i = 0; i < 6; i++)
 			{
 				if(t[0] == 0)
 					break; 
