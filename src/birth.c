@@ -619,14 +619,10 @@ static byte choose_realm(s32b choices, int *count)
 	}
 
 	/* Extra info */
-#ifdef JP
-	put_str ("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", 23, 5);
-#else
-	put_str ("Note: The realm of magic will determine which spells you can learn.", 23, 5);
-#endif
+	put_str (_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The realm of magic will determine which spells you can learn."), 23, 5);
 
 	cs = 0;
-	for (i = 0; i<32; i++)
+	for (i = 0; i < 32; i++)
 	{
 		/* Analize realms */
 		if (choices & (1L << i))
@@ -648,11 +644,7 @@ static byte choose_realm(s32b choices, int *count)
 			picks[n++] = i+1;
 		}
 	}
-#ifdef JP
-	sprintf(cur, "%c%c %s", '*', p2, "ランダム");
-#else
-	sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+	sprintf(cur, "%c%c %s", '*', p2, _("ランダム", "Random"));
 
 	/* Get a realm */
 	k = -1;
@@ -667,11 +659,7 @@ static byte choose_realm(s32b choices, int *count)
 
 			if(cs == n)
 			{
-#ifdef JP
-				sprintf(cur, "%c%c %s", '*', p2, "ランダム");
-#else
-				sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+				sprintf(cur, "%c%c %s", '*', p2, _("ランダム", "Random"));
 			}
 			else
 			{
@@ -692,11 +680,7 @@ static byte choose_realm(s32b choices, int *count)
 
 		if (k >= 0) break;
 
-#ifdef JP
-		sprintf(buf, "領域を選んで下さい(%c-%c) ('='初期オプション設定): ", sym[0], sym[n-1]);
-#else
-		sprintf(buf, "Choose a realm (%c-%c) ('=' for options): ", sym[0], sym[n-1]);
-#endif
+		sprintf(buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), sym[0], sym[n-1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -751,20 +735,12 @@ static byte choose_realm(s32b choices, int *count)
 		else k = -1;
 		if (c == '?')
 		{
-#ifdef JP
-			show_help("jmagic.txt#MagicRealms");
-#else
-			show_help("magic.txt#MagicRealms");
-#endif
+			show_help(_("jmagic.txt#MagicRealms", "magic.txt#MagicRealms"));
 		}
 		else if (c == '=')
 		{
 			screen_save();
-#ifdef JP
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-			do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth option((*)s effect score)");
-#endif
+			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth option((*)s effect score)"));
 
 			screen_load();
 		}
@@ -825,21 +801,12 @@ static bool get_player_realms(void)
 
 		if (count < 2)
 		{
-#ifdef JP
-			prt("何かキーを押してください", 0, 0);
-#else
-			prt("Hit any key.", 0, 0);
-#endif
+			prt(_("何かキーを押してください", "Hit any key."), 0, 0);
 			(void)inkey();
 			prt("", 0, 0);
 			break;
 		}
-else
-#ifdef JP
-		if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y)) break;
-#else
-		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
-#endif
+		else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) break;
 	}
 
 	/* Select the second realm */
@@ -847,12 +814,7 @@ else
 	if (p_ptr->realm1)
 	{
 		/* Print the realm */
-#ifdef JP
-		put_str("魔法        :", 6, 1);
-#else
-		put_str("Magic       :", 6, 1);
-#endif
-
+		put_str(_("魔法        :", "Magic       :"), 6, 1);
 		c_put_str(TERM_L_BLUE, realm_names[p_ptr->realm1], 6, 15);
 
 		/* Select the second realm */
