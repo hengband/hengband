@@ -4357,7 +4357,7 @@ F:IM_POIS | IM_COLD |IM_FIRE | NO_FEAR | NO_CONF | NO_SLEEP
 S:1_IN_6
 S:BO_ACID | S_MONSTER | SCARE | DRAIN_MANA
 D:$A creature like a giant purple Buddha with lots of teeth.
-D:$It cleans them with the bones of sorcerors.
+D:$It cleans them with the bones of sorcerers.
 D:魔法使いを好んで食べるゴリラ形の謎の守護者だ。
 D:「大きくて丸々と太った姿が僕の道を塞いでいた。コウモリの耳を
 D:した紫色のブッダのようだった。近づくにつれその詳細がはっきり
@@ -12032,7 +12032,7 @@ D:怪人だ。
 
 #J0#
 N:657:ダークエルフ・ソーサラー
-E:Dark elven sorceror
+E:Dark elven sorcerer
 G:h:v
 I:130:80d10:20:70:10
 W:41:2:0:3000:30000:886
