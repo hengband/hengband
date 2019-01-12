@@ -2299,8 +2299,7 @@ HIT_POINT calc_arm_avgdamage(object_type *o_ptr)
 	object_flags(o_ptr, flgs);
 
 	HIT_POINT dam, base, s_evil, forced, vorpal;
-	dam = base = s_evil = forced = vorpal = 0;
-
+	s_evil = forced = vorpal = 0;
 	dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
 
 	if(have_flag(flgs, TR_KILL_EVIL))

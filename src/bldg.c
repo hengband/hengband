@@ -3995,7 +3995,6 @@ static void bldg_process_command(building_type *bldg, int i)
 	BACT_IDX bact = bldg->actions[i];
 	PRICE bcost;
 	bool paid = FALSE;
-	int amt;
 
 	msg_flag = FALSE;
 	msg_erase();
@@ -4109,50 +4108,19 @@ static void bldg_process_command(building_type *bldg, int i)
 		item_tester_tval = TV_BOW;
 		enchant_item(bcost, 1, 1, 0);
 		break;
+
 	case BACT_RECALL:
 		if (recall_player(1)) paid = TRUE;
 		break;
+
 	case BACT_TELEPORT_LEVEL:
-	{
-		DUNGEON_IDX select_dungeon;
-		DEPTH max_depth;
-
 		clear_bldg(4, 20);
-		select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
-		show_building(bldg);
-		if (!select_dungeon) return;
-
-		max_depth = d_info[select_dungeon].maxdepth;
-
-		/* Limit depth in Angband */
-		if (select_dungeon == DUNGEON_ANGBAND)
-		{
-			if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED) max_depth = 98;
-			else if(quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED) max_depth = 99;
-		}
-		amt = get_quantity(format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), 
-							d_name + d_info[select_dungeon].name), (QUANTITY)max_depth);
-
-		if (amt > 0)
-		{
-			p_ptr->word_recall = 1;
-			p_ptr->recall_dungeon = select_dungeon;
-			max_dlv[p_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
-			if (record_maxdepth)
-				do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
-				
-			msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
-
-			paid = TRUE;
-			p_ptr->redraw |= (PR_STATUS);
-		}
+		paid = free_level_recall(p_ptr);
 		break;
-	}
+
 	case BACT_LOSE_MUTATION:
-		if (p_ptr->muta1 || p_ptr->muta2 ||
-		    (p_ptr->muta3 & ~MUT3_GOOD_LUCK) ||
-		    (p_ptr->pseikaku != SEIKAKU_LUCKY &&
-		     (p_ptr->muta3 & MUT3_GOOD_LUCK)))
+		if (p_ptr->muta1 || p_ptr->muta2 || (p_ptr->muta3 & ~MUT3_GOOD_LUCK) ||
+			(p_ptr->pseikaku != SEIKAKU_LUCKY && (p_ptr->muta3 & MUT3_GOOD_LUCK)))
 		{
 			while(!lose_mutation(0));
 			paid = TRUE;
@@ -4163,21 +4131,27 @@ static void bldg_process_command(building_type *bldg, int i)
 			msg_print(NULL);
 		}
 		break;
+
 	case BACT_BATTLE:
 		kakutoujou();
 		break;
+
 	case BACT_TSUCHINOKO:
 		tsuchinoko();
 		break;
+
 	case BACT_KUBI:
 		shoukinkubi();
 		break;
+
 	case BACT_TARGET:
 		today_target();
 		break;
+
 	case BACT_KANKIN:
 		kankin();
 		break;
+
 	case BACT_HEIKOUKA:
 		msg_print(_("平衡化の儀式を行なった。", "You received an equalization ritual."));
 		set_virtue(V_COMPASSION, 0);
@@ -4201,12 +4175,15 @@ static void bldg_process_command(building_type *bldg, int i)
 		get_virtues();
 		paid = TRUE;
 		break;
+
 	case BACT_TELE_TOWN:
 		paid = tele_town();
 		break;
+
 	case BACT_EVAL_AC:
 		paid = eval_ac(p_ptr->dis_ac + p_ptr->dis_to_a);
 		break;
+
 	case BACT_BROKEN_WEAPON:
 		paid = TRUE;
 		bcost = repair_broken_weapon(bcost);

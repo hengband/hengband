@@ -869,6 +869,44 @@ bool recall_player(TIME_EFFECT turns)
 	return TRUE;
 }
 
+bool free_level_recall(player_type *creature_ptr)
+{
+	DUNGEON_IDX select_dungeon;
+	DEPTH max_depth;
+	QUANTITY amt;
+
+	select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
+
+	if (!select_dungeon) return FALSE;
+
+	max_depth = d_info[select_dungeon].maxdepth;
+
+	/* Limit depth in Angband */
+	if (select_dungeon == DUNGEON_ANGBAND)
+	{
+		if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED) max_depth = 98;
+		else if (quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED) max_depth = 99;
+	}
+	amt = get_quantity(format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "),
+		d_name + d_info[select_dungeon].name), (QUANTITY)max_depth);
+
+	if (amt > 0)
+	{
+		creature_ptr->word_recall = 1;
+		creature_ptr->recall_dungeon = select_dungeon;
+		max_dlv[creature_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
+		if (record_maxdepth)
+			do_cmd_write_nikki(NIKKI_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
+
+		msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
+
+		creature_ptr->redraw |= (PR_STATUS);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 /*!
  * @brief 帰還用メインルーチン
  * @return 常にTRUEを返す
