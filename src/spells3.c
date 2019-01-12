@@ -2420,9 +2420,9 @@ bool mundane_spell(bool only_equip)
 	{
 		POSITION iy = o_ptr->iy;                 /* Y-position on map, or zero */
 		POSITION ix = o_ptr->ix;                 /* X-position on map, or zero */
-		s16b next_o_idx = o_ptr->next_o_idx; /* Next object in stack (if any) */
+		OBJECT_IDX next_o_idx = o_ptr->next_o_idx; /* Next object in stack (if any) */
 		byte marked = o_ptr->marked;         /* Object is marked */
-		s16b weight = o_ptr->number * o_ptr->weight;
+		WEIGHT weight = o_ptr->number * o_ptr->weight;
 		u16b inscription = o_ptr->inscription;
 
 		/* Wipe it clean */
