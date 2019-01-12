@@ -1247,28 +1247,16 @@ static void do_cmd_wiz_play(void)
 	object_type	forge;
 	object_type *q_ptr;
 	object_type *o_ptr;
-
 	char ch;
-
 	bool changed;
-
 	cptr q, s;
 
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
 
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
 
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	if (!o_ptr) return;
 	
 	/* The item was not changed */
 	changed = FALSE;

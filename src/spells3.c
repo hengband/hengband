@@ -2139,7 +2139,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	o_ptr = get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
 	if (!o_ptr) return (FALSE);
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -2479,19 +2479,8 @@ bool identify_fully(bool only_equip)
 
 	s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return (FALSE);
 
 	old_known = identify_item(o_ptr);
 
@@ -2567,19 +2556,8 @@ bool recharge(int power)
 	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
 	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return (FALSE);
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return (FALSE);
 
 	/* Get the object kind. */
 	k_ptr = &k_info[o_ptr->k_idx];
@@ -2849,20 +2827,8 @@ bool bless_weapon(void)
 	q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
 	s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT)))
-		return FALSE;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -3012,20 +2978,8 @@ bool pulish_shield(void)
 	q = _("どの盾を磨きますか？", "Pulish which weapon? ");
 	s = _("磨く盾がありません。", "You have weapon to pulish.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT)))
-		return FALSE;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -3891,7 +3845,7 @@ bool rustproof(void)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr        q, s;
+	cptr q, s;
 
 	/* Select a piece of armour */
 	item_tester_hook = object_is_armour;
@@ -3899,19 +3853,8 @@ bool rustproof(void)
 	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
 	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return FALSE;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
@@ -4380,16 +4323,8 @@ bool eat_magic(int power)
 	q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
 	s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
-
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return FALSE;
 
 	k_ptr = &k_info[o_ptr->k_idx];
 	lev = k_info[o_ptr->k_idx].level;

@@ -120,19 +120,8 @@ bool cast_summon_greater_demon(void)
 	item_tester_hook = item_tester_offer;
 	q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
 	s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
-	if (!get_item(&item, q, s, (USE_INVEN | USE_FLOOR))) return FALSE;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return FALSE;
 
 	summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
 

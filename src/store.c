@@ -3763,20 +3763,8 @@ static void store_sell(void)
 		s = _("欲しい物がないですねえ。", "You have nothing that I want.");
 	}
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return;
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
-
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return;
 
 	/* Hack -- Cannot remove cursed items */
 	if ((item >= INVEN_RARM) && object_is_cursed(o_ptr))
@@ -3784,7 +3772,6 @@ static void store_sell(void)
 		msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
 		return;
 	}
-
 
 	/* Assume one item */
 	amt = 1;
