@@ -376,7 +376,6 @@ void do_cmd_wield(void)
 	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
 
-	/* Increase the weight */
 	p_ptr->total_weight += q_ptr->weight;
 
 	/* Increment the equip counter by hand */

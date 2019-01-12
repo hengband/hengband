@@ -126,7 +126,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		POSITION y = j_ptr->iy;
 		POSITION x = j_ptr->ix;
 
-		/* Grid */
 		c_ptr = &cave[y][x];
 
 		/* Scan all objects in the grid */
@@ -222,7 +221,6 @@ void delete_object(POSITION y, POSITION x)
 	/* Refuse "illegal" locations */
 	if (!in_bounds(y, x)) return;
 
-	/* Grid */
 	c_ptr = &cave[y][x];
 
 	/* Scan all objects in the grid */
@@ -5291,7 +5289,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	}
 
 
-	/* Grid */
 	c_ptr = &cave[by][bx];
 
 	/* Scan objects in that grid for combination */
@@ -5306,7 +5303,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		/* Check for combination */
 		if (object_similar(o_ptr, j_ptr))
 		{
-			/* Combine the items */
 			object_absorb(o_ptr, j_ptr);
 
 			/* Success */
@@ -6004,13 +6000,10 @@ s16b inven_carry(object_type *o_ptr)
 		/* Check if the two items can be combined */
 		if (object_similar(j_ptr, o_ptr))
 		{
-			/* Combine the items */
 			object_absorb(j_ptr, o_ptr);
 
-			/* Increase the weight */
 			p_ptr->total_weight += (o_ptr->number * o_ptr->weight);
 			p_ptr->update |= (PU_BONUS);
-
 			p_ptr->window |= (PW_INVEN);
 
 			/* Success */
@@ -6080,16 +6073,11 @@ s16b inven_carry(object_type *o_ptr)
 	/* Player touches it, and no longer marked */
 	j_ptr->marked = OM_TOUCHED;
 
-	/* Increase the weight */
 	p_ptr->total_weight += (j_ptr->number * j_ptr->weight);
 
 	/* Count the items */
 	inven_cnt++;
-	p_ptr->update |= (PU_BONUS);
-
-	/* Combine and Reorder pack */
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
+	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN);
 
 	/* Return the slot */

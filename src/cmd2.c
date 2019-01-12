@@ -3701,7 +3701,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			/* Wear the new stuff */
 			object_copy(o_ptr, q_ptr);
 
-			/* Increase the weight */
 			p_ptr->total_weight += q_ptr->weight;
 
 			/* Increment the equip counter by hand */
