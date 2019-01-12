@@ -1047,7 +1047,7 @@ void leave_quest_check(void)
 	       (q_ptr->status == QUEST_STATUS_TAKEN))
 		{
 			q_ptr->status = QUEST_STATUS_FAILED;
-			q_ptr->complev = (byte)p_ptr->lev;
+			q_ptr->complev = p_ptr->lev;
 			update_playtime();
 			q_ptr->comptime = playtime;
 
@@ -1056,7 +1056,7 @@ void leave_quest_check(void)
 			{
 			  case QUEST_TYPE_TOWER:
 				quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
-				quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
+				quest[QUEST_TOWER1].complev = p_ptr->lev;
 				break;
 			  case QUEST_TYPE_FIND_ARTIFACT:
 				a_info[q_ptr->k_idx].gen_flags &= ~(TRG_QUESTITEM);
@@ -1097,7 +1097,7 @@ void leave_tower_check(void)
 		if(quest[leaving_quest].type == QUEST_TYPE_TOWER)
 		{
 			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
-			quest[QUEST_TOWER1].complev = (byte)p_ptr->lev;
+			quest[QUEST_TOWER1].complev = p_ptr->lev;
 			update_playtime();
 			quest[QUEST_TOWER1].comptime = playtime;
 		}
@@ -1198,12 +1198,8 @@ static void check_music(void)
 			INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 			msg_print(_("歌を再開した。", "You restart singing."));
 			p_ptr->action = ACTION_SING;
-			p_ptr->update |= (PU_BONUS | PU_HP);
-
-			/* Redraw map and status bar */
+			p_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
 			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-			p_ptr->update |= (PU_MONSTERS);
-
 			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
