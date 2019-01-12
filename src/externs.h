@@ -1476,6 +1476,7 @@ extern void spoil_random_artifact(cptr fname);
 extern void strip_name(char *buf, KIND_OBJECT_IDX k_idx);
 extern void do_cmd_rerate_aux(void);
 extern void do_cmd_rerate(bool display);
+extern void cheat_death(player_type *creature_ptr);
 
 /* avatar.c */
 extern bool compare_virtue(int type, int num, int tekitou);

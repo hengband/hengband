@@ -6111,7 +6111,6 @@ void play_game(bool new_game)
 		/* Process the level */
 		dungeon(load_game);
 
-
 		/* Hack -- prevent "icky" message */
 		character_xtra = TRUE;
 
@@ -6168,106 +6167,7 @@ void play_game(bool new_game)
 				/* Mega-Hack -- Allow player to cheat death */
 				if ((p_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
 				{
-					/* Mark social class, reset age, if needed */
-					if (p_ptr->sc) p_ptr->sc = p_ptr->age = 0;
-
-					/* Increase age */
-					p_ptr->age++;
-
-					/* Mark savefile */
-					p_ptr->noscore |= 0x0001;
-
-					msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
-					msg_print(NULL);
-
-					(void)life_stream(FALSE, FALSE);
-
-					if (p_ptr->pclass == CLASS_MAGIC_EATER)
-					{
-						int magic_idx;
-						for (magic_idx = 0; magic_idx < EATER_EXT*2; magic_idx++)
-						{
-							p_ptr->magic_num1[magic_idx] = p_ptr->magic_num2[magic_idx]*EATER_CHARGE;
-						}
-						for (; magic_idx < EATER_EXT*3; magic_idx++)
-						{
-							p_ptr->magic_num1[magic_idx] = 0;
-						}
-					}
-
-					/* Restore spell points */
-					p_ptr->csp = p_ptr->msp;
-					p_ptr->csp_frac = 0;
-
-					/* Hack -- cancel recall */
-					if (p_ptr->word_recall)
-					{
-						msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
-						msg_print(NULL);
-
-						/* Hack -- Prevent recall */
-						p_ptr->word_recall = 0;
-						p_ptr->redraw |= (PR_STATUS);
-					}
-
-					/* Hack -- cancel alter */
-					if (p_ptr->alter_reality)
-					{
-						/* Hack -- Prevent alter */
-						p_ptr->alter_reality = 0;
-						p_ptr->redraw |= (PR_STATUS);
-					}
-
-					/* Note cause of death */
-					(void)strcpy(p_ptr->died_from, _("死の欺き", "Cheating death"));
-
-					/* Do not die */
-					p_ptr->is_dead = FALSE;
-
-					/* Hack -- Prevent starvation */
-					(void)set_food(PY_FOOD_MAX - 1);
-
-					dun_level = 0;
-					p_ptr->inside_arena = FALSE;
-					p_ptr->inside_battle = FALSE;
-					leaving_quest = 0;
-					p_ptr->inside_quest = 0;
-					if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
-					dungeon_type = 0;
-					if (lite_town || vanilla_town)
-					{
-						p_ptr->wilderness_y = 1;
-						p_ptr->wilderness_x = 1;
-						if (vanilla_town)
-						{
-							p_ptr->oldpy = 10;
-							p_ptr->oldpx = 34;
-						}
-						else
-						{
-							p_ptr->oldpy = 33;
-							p_ptr->oldpx = 131;
-						}
-					}
-					else
-					{
-						p_ptr->wilderness_y = 48;
-						p_ptr->wilderness_x = 5;
-						p_ptr->oldpy = 33;
-						p_ptr->oldpx = 131;
-					}
-
-					/* Leaving */
-					p_ptr->wild_mode = FALSE;
-					p_ptr->leaving = TRUE;
-
-					do_cmd_write_nikki(NIKKI_BUNSHOU, 1, 
-								_("                            しかし、生き返った。", 
-								  "                            but revived."));
-
-					/* Prepare next floor */
-					leave_floor();
-					wipe_m_list();
+					cheat_death(p_ptr);
 				}
 			}
 		}
