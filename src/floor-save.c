@@ -15,7 +15,7 @@
 #include "grid.h"
 
 
-static s16b new_floor_id;       /*!<次のフロアのID / floor_id of the destination */
+static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
 
@@ -229,10 +229,10 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
  * @details
  * If number of saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
  */
-s16b get_new_floor_id(void)
+FLOOR_IDX get_new_floor_id(void)
 {
 	saved_floor_type *sf_ptr = NULL;
-	s16b i;
+	FLOOR_IDX i;
 
 	/* Look for empty space */
 	for (i = 0; i < MAX_SAVED_FLOORS; i++)
@@ -867,7 +867,6 @@ void leave_floor(void)
 	    /* Get temporal floor_id */
 	    p_ptr->floor_id = get_new_floor_id();
 	}
-
 
 	/* Search the quest monster index */
 	for (i = 0; i < max_q_idx; i++)
