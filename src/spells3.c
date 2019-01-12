@@ -2831,8 +2831,6 @@ bool bless_weapon(void)
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	if (object_is_cursed(o_ptr))
@@ -2982,8 +2980,6 @@ bool pulish_shield(void)
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	if (o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) &&

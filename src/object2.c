@@ -5316,7 +5316,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		}
 	}
 
-	/* Get new object */
 	if (!done) o_idx = o_pop();
 
 	/* Failure */
@@ -5327,7 +5326,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 #else
 		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-
 
 		/* Debug */
 		if (p_ptr->wizard) msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
@@ -5368,12 +5366,8 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		done = TRUE;
 	}
 
-	/* Note the spot */
 	note_spot(by, bx);
-
-	/* Draw the spot */
 	lite_spot(by, bx);
-
 	sound(SOUND_DROP);
 
 	/* Mega-Hack -- no message if "dropped" by player */

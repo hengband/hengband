@@ -1010,8 +1010,6 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 {
 	char *prev_ptr = ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	/* Remove obvious flags */

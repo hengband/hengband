@@ -2850,8 +2850,6 @@ static void calc_torch(void)
 				if((o_ptr->sval == SV_LITE_LANTERN) && !(o_ptr->xtra4 > 0)) continue;
 			}
 		}
-
-		/* Extract the flags */
 		object_flags(o_ptr, flgs);
 
 		/* calc the lite_radius */

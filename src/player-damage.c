@@ -360,8 +360,6 @@ static bool minus_ac(void)
 	/* No damage left to be done */
 	if (o_ptr->ac + o_ptr->to_a <= 0) return (FALSE);
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	/* Object resists */

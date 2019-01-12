@@ -1025,8 +1025,6 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
 		pi_ptr->pval_desc[0] = '\0';
 		return;
 	}
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	affects_list = pi_ptr->pval_affects;
@@ -2069,8 +2067,6 @@ static void spoil_mon_info(cptr fname)
 	for (l = 0; l < n; l++)
 	{
 		monster_race *r_ptr = &r_info[who[l]];
-
-		/* Extract the flags */
 		flags1 = r_ptr->flags1;
 
 		/* Prefix */

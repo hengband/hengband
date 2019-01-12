@@ -1293,8 +1293,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
-
-		/* Extract the flags */
 		object_flags(o_ptr, flgs);
 
 		/* Check for artifact */

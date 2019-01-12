@@ -176,8 +176,6 @@ bool item_tester_hook_activate(object_type *o_ptr)
 
 	/* Not known */
 	if (!object_is_known(o_ptr)) return (FALSE);
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	/* Check activation flag */
@@ -245,7 +243,6 @@ bool item_tester_hook_use(object_type *o_ptr)
 		{
 			if (&inventory[i] == o_ptr)
 			{
-				/* Extract the flags */
 				object_flags(o_ptr, flgs);
 
 				/* Check activation flag */

@@ -84,8 +84,6 @@ void self_knowledge(void)
 
 		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
-
-		/* Extract the flags */
 		object_flags(o_ptr, tflgs);
 
 		/* Extract flags */

@@ -1187,8 +1187,6 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 
 				msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
 				msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
-
-				/* Extract the flags */
 				object_flags(o_ptr, flgs_aux);
 
 				k = damroll(o_ptr->dd + p_ptr->to_dd[hand], o_ptr->ds + p_ptr->to_ds[hand]);
@@ -2184,11 +2182,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						if (o_idx)
 						{
 							object_type *j_ptr;
-
-							/* Get new object */
 							j_ptr = &o_list[o_idx];
-
-							/* Copy object */
 							object_copy(j_ptr, o_ptr);
 
 							/* Modify number */

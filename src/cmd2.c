@@ -2258,8 +2258,6 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	/* Some "weapons" and "ammo" do extra damage */

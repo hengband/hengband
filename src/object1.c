@@ -474,8 +474,6 @@ static cptr item_activation_aux(object_type *o_ptr)
 cptr item_activation(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	/* Require activation ability */
@@ -523,8 +521,6 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	char desc[256];
 
 	int trivial_info = 0;
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	/* Extract the description */

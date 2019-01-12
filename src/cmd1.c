@@ -285,8 +285,6 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 	MULTIPLY mult = 10;
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 	torch_flags(o_ptr, flgs); /* torches has secret flags */
 

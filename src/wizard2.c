@@ -556,8 +556,6 @@ static void wiz_display_item(object_type *o_ptr)
 	int i, j = 13;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	char buf[256];
-
-	/* Extract the flags */
 	object_flags(o_ptr, flgs);
 
 	/* Clear the screen */
@@ -1264,8 +1262,6 @@ static void do_cmd_wiz_play(void)
 	screen_save();
 
 	q_ptr = &forge;
-
-	/* Copy object */
 	object_copy(q_ptr, o_ptr);
 
 

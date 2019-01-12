@@ -2421,7 +2421,6 @@ static errr rd_inventory(void)
 			/* Player touches it */
 			q_ptr->marked |= OM_TOUCHED;
 
-			/* Copy object */
 			object_copy(&inventory[n], q_ptr);
 
 			/* Add the weight */
@@ -2449,7 +2448,6 @@ static errr rd_inventory(void)
 			/* Player touches it */
 			q_ptr->marked |= OM_TOUCHED;
 
-			/* Copy object */
 			object_copy(&inventory[n], q_ptr);
 
 			/* Add the weight */

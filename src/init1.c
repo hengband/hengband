@@ -3912,7 +3912,6 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 	cave_type *c_ptr = &cave[y][x];
 	object_type *o_ptr;
 
-	/* Get new object */
 	OBJECT_IDX o_idx = o_pop();
 
 	/* Access new object */
@@ -4934,8 +4933,6 @@ void write_r_info_txt(void)
 													  r_info_blow_effect[b_ptr->effect],
 													  b_ptr->d_dice, b_ptr->d_side);
 		}
-
-		/* Extract the flags */
 		for (fc = 0, j = 0; j < 32 * 3; j++)
 		{
 			/* Check this flag */
