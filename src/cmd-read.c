@@ -185,7 +185,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_WORD_OF_RECALL:
 		{
-			if (!word_of_recall()) used_up = FALSE;
+			if (!recall_player(p_ptr, randint0(21) + 15)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}

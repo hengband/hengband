@@ -298,7 +298,7 @@ cptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!word_of_recall()) return NULL;
+				if (!recall_player(p_ptr, randint0(21) + 15)) return NULL;
 			}
 		}
 		break;

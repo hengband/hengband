@@ -1054,7 +1054,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_BERSERKER:
 		{
-			if (!word_of_recall()) return FALSE;
+			if (!recall_player(p_ptr, randint0(21) + 15)) return FALSE;
 			break;
 		}
 		case CLASS_SMITH:

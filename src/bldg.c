@@ -4110,7 +4110,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		break;
 
 	case BACT_RECALL:
-		if (recall_player(1)) paid = TRUE;
+		if (recall_player(p_ptr, 1)) paid = TRUE;
 		break;
 
 	case BACT_TELEPORT_LEVEL:

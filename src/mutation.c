@@ -2269,7 +2269,7 @@ bool mutation_power_aux(int power)
 			break;
 
 		case MUT1_RECALL:
-			if (!word_of_recall()) return FALSE;
+			if (!recall_player(p_ptr, randint0(21) + 15)) return FALSE;
 			break;
 
 		case MUT1_BANISH:

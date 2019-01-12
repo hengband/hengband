@@ -1361,7 +1361,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_RECALL:
 	{
 		msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
-		if (!word_of_recall()) return FALSE;
+		if (!recall_player(p_ptr, randint0(21) + 15)) return FALSE;
 		break;
 	}
 
@@ -1381,7 +1381,7 @@ bool activate_artifact(object_type *o_ptr)
 
 		if (get_check(_("帰還の力を使いますか？", "Activate recall? ")))
 		{
-			(void)word_of_recall();
+			(void)recall_player(p_ptr, randint0(21) + 15);
 		}
 
 		break;

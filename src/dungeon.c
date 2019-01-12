@@ -523,8 +523,8 @@ static void pattern_teleport(void)
 	/* Ask for level */
 	if (get_check(_("他の階にテレポートしますか？", "Teleport level? ")))
 	{
-		char	ppp[80];
-		char	tmp_val[160];
+		char ppp[80];
+		char tmp_val[160];
 
 		/* Only downward in ironman mode */
 		if (ironman_downward)
@@ -582,7 +582,7 @@ static void pattern_teleport(void)
 
 	leave_quest_check();
 
-	if (record_stair) do_cmd_write_nikki(NIKKI_PAT_TELE,0,NULL);
+	if (record_stair) do_cmd_write_nikki(NIKKI_PAT_TELE, 0, NULL);
 
 	p_ptr->inside_quest = 0;
 	p_ptr->energy_use = 0;
@@ -616,9 +616,7 @@ static void wreck_the_pattern(void)
 	msg_print(_("パターンを血で汚してしまった！", "You bleed on the Pattern!"));
 	msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
 
-	if (!IS_INVULN())
-		take_hit(DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
-
+	if (!IS_INVULN()) take_hit(DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
 	to_ruin = randint1(45) + 35;
 
 	while (to_ruin--)

@@ -49,7 +49,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 
 	case SV_ROD_RECALL:
 	{
-		if (!word_of_recall()) *use_charge = FALSE;
+		if (!recall_player(p_ptr, randint0(21) + 15)) *use_charge = FALSE;
 		ident = TRUE;
 		break;
 	}

@@ -1441,7 +1441,7 @@ static bool cast_mirror_spell(int spell)
 
 		/* mirror of recall */
 	case 17:
-		return word_of_recall();
+		return recall_player(p_ptr, randint0(21) + 15);
 		/* multi-shadow */
 	case 18:
 		set_multishadow(6 + randint1(6), FALSE);

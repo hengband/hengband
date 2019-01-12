@@ -823,7 +823,7 @@ DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x)
  * @param turns 発動までのターン数
  * @return 常にTRUEを返す
  */
-bool recall_player(TIME_EFFECT turns)
+bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 {
 	/*
 	 * TODO: Recall the player to the last
@@ -831,13 +831,13 @@ bool recall_player(TIME_EFFECT turns)
 	 */
 
 	/* Ironman option */
-	if (p_ptr->inside_arena || ironman_downward)
+	if (creature_ptr->inside_arena || ironman_downward)
 	{
 		msg_print(_("何も起こらなかった。", "Nothing happens."));
 		return TRUE;
 	}
 
-	if (dun_level && (max_dlv[dungeon_type] > dun_level) && !p_ptr->inside_quest && !p_ptr->word_recall)
+	if (dun_level && (max_dlv[dungeon_type] > dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
 	{
 		if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? ")))
 		{
@@ -847,24 +847,24 @@ bool recall_player(TIME_EFFECT turns)
 		}
 
 	}
-	if (!p_ptr->word_recall)
+	if (!creature_ptr->word_recall)
 	{
 		if (!dun_level)
 		{
 			DUNGEON_IDX select_dungeon;
 			select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
 			if (!select_dungeon) return FALSE;
-			p_ptr->recall_dungeon = select_dungeon;
+			creature_ptr->recall_dungeon = select_dungeon;
 		}
-		p_ptr->word_recall = turns;
+		creature_ptr->word_recall = turns;
 		msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
-		p_ptr->redraw |= (PR_STATUS);
+		creature_ptr->redraw |= (PR_STATUS);
 	}
 	else
 	{
-		p_ptr->word_recall = 0;
+		creature_ptr->word_recall = 0;
 		msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
-		p_ptr->redraw |= (PR_STATUS);
+		creature_ptr->redraw |= (PR_STATUS);
 	}
 	return TRUE;
 }
@@ -906,15 +906,6 @@ bool free_level_recall(player_type *creature_ptr)
 	return FALSE;
 }
 
-
-/*!
- * @brief 帰還用メインルーチン
- * @return 常にTRUEを返す
- */
-bool word_of_recall(void)
-{
-	return(recall_player(randint0(21) + 15));
-}
 
 /*!
  * @brief フロア・リセット処理
