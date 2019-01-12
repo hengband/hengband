@@ -240,7 +240,7 @@ bool gain_magic(void)
 	q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
 	s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
 
-	o_ptr = get_item(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_item(&item, q, s, (USE_INVEN | USE_FLOOR));
 	if (!o_ptr) return (FALSE);
 
 	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
@@ -248,7 +248,6 @@ bool gain_magic(void)
 		msg_print(_("この杖には発動の為の能力は何も備わっていないようだ。", "This staff doesn't have any magical ability."));
 		return FALSE;
 	}
-
 
 	if (!object_is_known(o_ptr))
 	{

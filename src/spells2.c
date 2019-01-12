@@ -4991,19 +4991,8 @@ bool psychometry(void)
 	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
 	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
 
-	if (!get_item(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT))) return (FALSE);
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &inventory[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &o_list[0 - item];
-	}
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return (FALSE);
 
 	/* It is fully known, no information needed */
 	if (object_is_known(o_ptr))
@@ -5026,12 +5015,10 @@ bool psychometry(void)
 	}
 
 #ifdef JP
-	msg_format("%sは%sという感じがする...",
-		o_name, game_inscriptions[feel]);
+	msg_format("%sは%sという感じがする...", o_name, game_inscriptions[feel]);
 #else
 	msg_format("You feel that the %s %s %s...",
-		o_name, ((o_ptr->number == 1) ? "is" : "are"),
-		game_inscriptions[feel]);
+		o_name, ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
 
