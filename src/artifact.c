@@ -2007,7 +2007,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 	}
 
 	/* ダメージ抑制処理を行う */
-	while (has_extreme_damage_rate(o_ptr) && !one_in_(SWORDFISH_LUCK));
+	while (has_extreme_damage_rate(o_ptr) && !one_in_(SWORDFISH_LUCK))
 	{
 		weakening_artifact(o_ptr);
 	}
