@@ -450,7 +450,6 @@ static void do_cmd_wiz_change_aux(void)
 	/* Save */
 	p_ptr->au = tmp_long;
 
-
 	/* Default */
 	sprintf(tmp_val, "%ld", (long)(p_ptr->max_exp));
 

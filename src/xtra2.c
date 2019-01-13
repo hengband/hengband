@@ -2705,13 +2705,8 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 		/* Not boring */
 		boring = FALSE;
 
-		/* Get the monster name ("a kobold") */
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-
-		/* Hack -- track this monster race */
 		monster_race_track(m_ptr->ap_r_idx);
-
-		/* Hack -- health bar for this monster */
 		health_track(c_ptr->m_idx);
 		handle_stuff();
 
@@ -2723,7 +2718,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 			/* Recall */
 			if (recall)
 			{
-				/* Save */
 				screen_save();
 
 				/* Recall on screen */
@@ -2735,7 +2729,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 				/* Command */
 				query = inkey();
 
-				/* Restore */
 				screen_load();
 
 				/* Normal commands */

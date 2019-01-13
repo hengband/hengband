@@ -2917,10 +2917,7 @@ void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
 
 					if (m_ptr->ml)
 					{
-						/* Hack -- Track this monster race */
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-
-						/* Hack -- Track this monster */
 						health_track(c_mon_ptr->m_idx);
 					}
 				}
@@ -3513,10 +3510,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 					if (m_ptr->ml)
 					{
-						/* Hack -- Track this monster race */
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-
-						/* Hack -- Track this monster */
 						health_track(c_ptr->m_idx);
 					}
 				}

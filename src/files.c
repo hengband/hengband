@@ -1035,8 +1035,6 @@ cptr process_pref_file_expr(char **sp, char *fp)
 
 	/* Save */
 	(*fp) = f;
-
-	/* Save */
 	(*sp) = s;
 	return (v);
 }
