@@ -26,7 +26,7 @@
 
 #include <stdlib.h>
 
-static cptr errstr;
+static concptr errstr;
 static char	*proxy;
 static int	proxy_port;
 
@@ -278,7 +278,7 @@ static void interrupt_report(int sig)
 
 
 /* サーバにコネクトする関数。 */
-int connect_server(int timeout, cptr host, int port)
+int connect_server(int timeout, concptr host, int port)
 #ifndef MACINTOSH
 {
 	int			sd;
@@ -515,7 +515,7 @@ int disconnect_server(int sd)
 #endif
 }
 
-cptr soc_err()
+concptr soc_err()
 {
 	return errstr;
 }

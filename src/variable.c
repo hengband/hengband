@@ -16,7 +16,7 @@
  * コピーライト情報 /
  * Hack -- Link a copyright message into the executable
  */
-const cptr copyright[5] =
+const concptr copyright[5] =
 {
 	"Copyright (c) 1989 James E. Wilson, Robert A. Keoneke",
 	"",
@@ -27,11 +27,11 @@ const cptr copyright[5] =
 
 
 int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
-cptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
-cptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
-cptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
-cptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
-cptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
+concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
+concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
+concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
+concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
+concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
 
 int level_up = 0; /*!< レベルアップの際に遅延してcalc_mana()関数上で上昇量を表示するかどうかの判定フラグ */
 
@@ -249,12 +249,12 @@ s16b macro__num;
 /*
  * Array of macro patterns [MACRO_MAX]
  */
-cptr *macro__pat;
+concptr *macro__pat;
 
 /*
  * Array of macro actions [MACRO_MAX]
  */
-cptr *macro__act;
+concptr *macro__act;
 
 /*
  * Array of macro types [MACRO_MAX]
@@ -275,7 +275,7 @@ STR_OFFSET quark__num;
 /*
  * The pointers to the quarks [QUARK_MAX]
  */
-cptr *quark__str;
+concptr *quark__str;
 
 
 /*
@@ -361,7 +361,7 @@ byte angband_color_table[256][4] =
 /*
  * Standard sound names
  */
-const cptr angband_sound_name[SOUND_MAX] =
+const concptr angband_sound_name[SOUND_MAX] =
 {
 	"dummy",
 	"hit",
@@ -435,7 +435,7 @@ const cptr angband_sound_name[SOUND_MAX] =
 /*
  * Standard music names
  */
-const cptr angband_music_basic_name[MUSIC_BASIC_MAX] =
+const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 {
 	"default",
 	"gameover",
@@ -563,7 +563,7 @@ char tval_to_char[128];
 /*
  * Keymaps for each "mode" associated with each keypress.
  */
-cptr keymap_act[KEYMAP_MODES][256];
+concptr keymap_act[KEYMAP_MODES][256];
 
 
 
@@ -659,29 +659,29 @@ char *d_name;
 char *d_text;
 
 
-cptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
+concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
 
 #ifdef JP
-cptr ANGBAND_KEYBOARD = "JAPAN"; //!< Hack -- The special Angband "Keyboard Suffix" This variable is used to choose an appropriate macro-trigger definition
+concptr ANGBAND_KEYBOARD = "JAPAN"; //!< Hack -- The special Angband "Keyboard Suffix" This variable is used to choose an appropriate macro-trigger definition
 #else
-cptr ANGBAND_KEYBOARD = "0";
+concptr ANGBAND_KEYBOARD = "0";
 #endif
 
-cptr ANGBAND_GRAF = "ascii"; //!< Hack -- The special Angband "Graphics Suffix" This variable is used to choose an appropriate "graf-xxx" file
-cptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
-cptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
-cptr ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files are portable between platforms
-cptr ANGBAND_DIR_DATA; //!< Binary image files for the "*_info" arrays (binary) These files are not portable between platforms
-cptr ANGBAND_DIR_EDIT; //!< Textual template files for the "*_info" arrays (ascii) These files are portable between platforms
-cptr ANGBAND_DIR_SCRIPT; //!< Script files These files are portable between platforms.
-cptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
-cptr ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) These files are portable between platforms
-cptr ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
-cptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
-cptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
-cptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
-cptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
+concptr ANGBAND_GRAF = "ascii"; //!< Hack -- The special Angband "Graphics Suffix" This variable is used to choose an appropriate "graf-xxx" file
+concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
+concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
+concptr ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files are portable between platforms
+concptr ANGBAND_DIR_DATA; //!< Binary image files for the "*_info" arrays (binary) These files are not portable between platforms
+concptr ANGBAND_DIR_EDIT; //!< Textual template files for the "*_info" arrays (ascii) These files are portable between platforms
+concptr ANGBAND_DIR_SCRIPT; //!< Script files These files are portable between platforms.
+concptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
+concptr ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) These files are portable between platforms
+concptr ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
+concptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
+concptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
+concptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
+concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
 
 
 /*
@@ -867,7 +867,7 @@ bool mon_fight;
 bool ambush_flag;
 bool generate_encounter;
 
-cptr screen_dump = NULL;
+concptr screen_dump = NULL;
 
 /*** Terrain feature variables ***/
 

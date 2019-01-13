@@ -231,7 +231,7 @@ static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_LE
 	u32b rarity[K_MAX_DEPTH];
 	u32b total[K_MAX_DEPTH];
 	s32b display[22];
-	cptr r = "+---Rate---+";
+	concptr r = "+---Rate---+";
 	object_kind *k_ptr;
 
 
@@ -627,7 +627,7 @@ static void wiz_display_item(object_type *o_ptr)
 typedef struct tval_desc
 {
 	int        tval; /*!< 大項目のID */
-	cptr       desc; /*!< 大項目名 */
+	concptr       desc; /*!< 大項目名 */
 } tval_desc;
 
 /*!
@@ -702,7 +702,7 @@ void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 
 	object_kind *k_ptr = &k_info[k_idx];
 
-	cptr str = (k_name + k_ptr->name);
+	concptr str = (k_name + k_ptr->name);
 
 
 	/* Skip past leading characters */
@@ -738,7 +738,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 	TERM_LEN col, row;
 	OBJECT_TYPE_VALUE tval;
 
-	cptr tval_desc;
+	concptr tval_desc;
 	char ch;
 
 	KIND_OBJECT_IDX choice[80];
@@ -831,7 +831,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
  */
 static void wiz_tweak_item(object_type *o_ptr)
 {
-	cptr p;
+	concptr p;
 	char tmp_val[80];
 
 	/* Hack -- leave artifacts alone */
@@ -1011,16 +1011,16 @@ static void wiz_statistics(object_type *o_ptr)
 	u32b test_roll = 1000000;
 
 	char ch;
-	cptr quality;
+	concptr quality;
 
 	BIT_FLAGS mode;
 
 	object_type forge;
 	object_type	*q_ptr;
 
-	cptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
+	concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
 
-	cptr p = "Enter number of items to roll: ";
+	concptr p = "Enter number of items to roll: ";
 	char tmp_val[80];
 
 
@@ -1031,7 +1031,7 @@ static void wiz_statistics(object_type *o_ptr)
 	/* Interact */
 	while (TRUE)
 	{
-		cptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
+		concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
 
 		/* Display item */
 		wiz_display_item(o_ptr);
@@ -1246,7 +1246,7 @@ static void do_cmd_wiz_play(void)
 	object_type *o_ptr;
 	char ch;
 	bool changed;
-	cptr q, s;
+	concptr q, s;
 
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";

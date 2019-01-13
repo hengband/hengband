@@ -284,7 +284,7 @@ static term_data data[MAX_TERM_DATA];
 
 #ifdef USE_SOUND
 
-static cptr ANGBAND_DIR_XTRA_SOUND;
+static concptr ANGBAND_DIR_XTRA_SOUND;
 
 /*
  * Flag set once "sound" has been initialized
@@ -294,7 +294,7 @@ static bool can_use_sound = FALSE;
 /*
  * An array of sound file names
  */
-static cptr sound_file[SOUND_MAX];
+static concptr sound_file[SOUND_MAX];
 
 #endif /* USE_SOUND */
 
@@ -636,7 +636,7 @@ static errr Term_xtra_gcu_alive(int v)
 /*
  * Check for existance of a file
  */
-static bool check_file(cptr s)
+static bool check_file(concptr s)
 {
    FILE *fff;
 
@@ -1064,7 +1064,7 @@ static errr Term_wipe_gcu(int x, int y, int n)
  * think hard about how map_info() in cave.c should handle the color
  * of something that we here draw in reverse. It's not so simple, alas.
  */
-static void Term_acs_text_gcu(int x, int y, int n, byte a, cptr s)
+static void Term_acs_text_gcu(int x, int y, int n, byte a, concptr s)
 {
    term_data *td = (term_data *)(Term->data);
    int i;
@@ -1089,7 +1089,7 @@ static void Term_acs_text_gcu(int x, int y, int n, byte a, cptr s)
 /*
  * Place some text on the screen using an attribute
  */
-static errr Term_text_gcu(int x, int y, int n, byte a, cptr s)
+static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 {
    term_data *td = (term_data *)(Term->data);
 
@@ -1176,7 +1176,7 @@ static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
 }
 
 
-static void hook_quit(cptr str)
+static void hook_quit(concptr str)
 {
 	/* Unused */
 	(void)str;

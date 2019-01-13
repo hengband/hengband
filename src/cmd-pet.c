@@ -512,7 +512,7 @@ void do_cmd_pet(void)
 	COMMAND_CODE i = 0;
 	int			num;
 	int			powers[36];
-	cptr			power_desc[36];
+	concptr			power_desc[36];
 	bool			flag, redraw;
 	char			choice;
 	char			out_val[160];

@@ -612,7 +612,7 @@ bool detect_monsters_mind(POSITION range)
  * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_string(POSITION range, cptr Match)
+bool detect_monsters_string(POSITION range, concptr Match)
 {
 	MONSTER_IDX i;
 	POSITION y, x;
@@ -671,7 +671,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 	MONSTER_IDX i;
 	POSITION y, x;
 	bool flag = FALSE;
-	cptr desc_monsters = _("変なモンスター", "weird monsters");
+	concptr desc_monsters = _("変なモンスター", "weird monsters");
 
 	if (d_info[dungeon_type].flags1 & DF1_DARKNESS) range /= 3;
 
@@ -990,7 +990,7 @@ void aggravate_monsters(MONSTER_IDX who)
  * @param spell_name 抹殺効果を起こした魔法の名前
  * @return 効力があった場合TRUEを返す
  */
-bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, cptr spell_name)
+bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
 {
 	int          msec = delay_factor * delay_factor * delay_factor;
 	monster_type *m_ptr = &m_list[m_idx];
@@ -1214,7 +1214,7 @@ bool probing(void)
 	bool_hack cu, cv;
 	bool probe = FALSE;
 	char buf[256];
-	cptr align;
+	concptr align;
 
 	cu = Term->scr->cu;
 	cv = Term->scr->cv;
@@ -1804,7 +1804,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 
 		if (damage)
 		{
-			cptr killer;
+			concptr killer;
 
 			if (m_idx)
 			{
@@ -4985,7 +4985,7 @@ bool psychometry(void)
 	object_type     *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	byte            feel;
-	cptr            q, s;
+	concptr            q, s;
 	bool okay = FALSE;
 
 	q = _("どのアイテムを調べますか？", "Meditate on which item? ");

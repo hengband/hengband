@@ -18,11 +18,11 @@ struct snipe_power
 {
 	int     min_lev;
 	int     mana_cost;
-	cptr name;
+	concptr name;
 };
 
 /*! スナイパー技能の解説メッセージ */
-static cptr const snipe_tips[MAX_SNIPE_POWERS] =
+static concptr const snipe_tips[MAX_SNIPE_POWERS] =
 {
 #ifdef JP
 	"精神を集中する。射撃の威力、精度が上がり、高度な射撃術が使用できるようになる。",
@@ -219,7 +219,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 	int             ask;
 	char            choice;
 	char            out_val[160];
-	cptr            p = _("射撃術", "power");
+	concptr            p = _("射撃術", "power");
 	snipe_power     spell;
 	bool            flag, redraw;
 

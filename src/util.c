@@ -27,9 +27,9 @@ static char inkey_macro_trigger_string[1024];
  *
  * Compare the two strings "a" and "b" ala "strcmp()" ignoring case.
  */
-int stricmp(cptr a, cptr b)
+int stricmp(concptr a, concptr b)
 {
-	cptr s1, s2;
+	concptr s1, s2;
 	char z1, z2;
 
 	/* Scan the strings */
@@ -98,7 +98,7 @@ int usleep(huge usecs)
  */
 #ifdef SET_UID
 extern struct passwd *getpwuid(uid_t uid);
-extern struct passwd *getpwnam(cptr name);
+extern struct passwd *getpwnam(concptr name);
 #endif
 
 
@@ -186,9 +186,9 @@ void user_name(char *buf, int id)
  * Replace "~user/" by the home directory of the user named "user"
  * Replace "~/" by the home directory of the current user
  */
-errr path_parse(char *buf, int max, cptr file)
+errr path_parse(char *buf, int max, concptr file)
 {
-	cptr		u, s;
+	concptr		u, s;
 	struct passwd	*pw;
 	char		user[128];
 
@@ -252,7 +252,7 @@ errr path_parse(char *buf, int max, cptr file)
  * This requires no special processing on simple machines,
  * except for verifying the size of the filename.
  */
-errr path_parse(char *buf, int max, cptr file)
+errr path_parse(char *buf, int max, concptr file)
 {
 	/* Accept the filename */
 	(void)strnfmt(buf, max, "%s", file);
@@ -279,7 +279,7 @@ errr path_parse(char *buf, int max, cptr file)
  */
 static errr path_temp(char *buf, int max)
 {
-	cptr s;
+	concptr s;
 
 	/* Temp file */
 	s = tmpnam(NULL);
@@ -312,7 +312,7 @@ static errr path_temp(char *buf, int max)
  * Note that this function yields a path which must be "parsed"
  * using the "parse" function above.
  */
-errr path_build(char *buf, int max, cptr path, cptr file)
+errr path_build(char *buf, int max, concptr path, concptr file)
 {
 	/* Special file */
 	if (file[0] == '~')
@@ -350,7 +350,7 @@ errr path_build(char *buf, int max, cptr path, cptr file)
 /*
  * Hack -- replacement for "fopen()"
  */
-FILE *my_fopen(cptr file, cptr mode)
+FILE *my_fopen(concptr file, concptr mode)
 {
 	char buf[1024];
 
@@ -530,7 +530,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
  * Dump a string, plus a newline, to a file
  * Process internal weirdness?
  */
-errr my_fputs(FILE *fff, cptr buf, huge n)
+errr my_fputs(FILE *fff, concptr buf, huge n)
 {
 	/* XXX XXX */
 	n = n ? n : 0;
@@ -579,7 +579,7 @@ write(F,(char*)(B),S)
 /*
  * Hack -- attempt to delete a file
  */
-errr fd_kill(cptr file)
+errr fd_kill(concptr file)
 {
 	char buf[1024];
 
@@ -596,7 +596,7 @@ errr fd_kill(cptr file)
 /*
  * Hack -- attempt to move a file
  */
-errr fd_move(cptr file, cptr what)
+errr fd_move(concptr file, concptr what)
 {
 	char buf[1024];
 	char aux[1024];
@@ -617,7 +617,7 @@ errr fd_move(cptr file, cptr what)
 /*
  * Hack -- attempt to copy a file
  */
-errr fd_copy(cptr file, cptr what)
+errr fd_copy(concptr file, concptr what)
 {
 	char buf[1024];
 	char aux[1024];
@@ -668,7 +668,7 @@ errr fd_copy(cptr file, cptr what)
  * This function should fail if the file already exists
  * Note that we assume that the file should be "binary"
  */
-int fd_make(cptr file, BIT_FLAGS mode)
+int fd_make(concptr file, BIT_FLAGS mode)
 {
 	char buf[1024];
 
@@ -698,7 +698,7 @@ int fd_make(cptr file, BIT_FLAGS mode)
  *
  * Note that we assume that the file should be "binary"
  */
-int fd_open(cptr file, int flags)
+int fd_open(concptr file, int flags)
 {
 	char buf[1024];
 
@@ -852,7 +852,7 @@ errr fd_read(int fd, char *buf, huge n)
 /*
  * Hack -- Attempt to write data to a file descriptor
  */
-errr fd_write(int fd, cptr buf, huge n)
+errr fd_write(int fd, concptr buf, huge n)
 {
 	/* Verify the fd */
 	if (fd < 0) return (-1);
@@ -996,9 +996,9 @@ static int dehex(char c)
 }
 
 
-static int my_stricmp(cptr a, cptr b)
+static int my_stricmp(concptr a, concptr b)
 {
-	cptr s1, s2;
+	concptr s1, s2;
 	char z1, z2;
 
 	/* Scan the strings */
@@ -1012,9 +1012,9 @@ static int my_stricmp(cptr a, cptr b)
 	}
 }
 
-static int my_strnicmp(cptr a, cptr b, int n)
+static int my_strnicmp(concptr a, concptr b, int n)
 {
-	cptr s1, s2;
+	concptr s1, s2;
 	char z1, z2;
 
 	/* Scan the strings */
@@ -1030,15 +1030,15 @@ static int my_strnicmp(cptr a, cptr b, int n)
 }
 
 
-static void trigger_text_to_ascii(char **bufptr, cptr *strptr)
+static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 {
 	char *s = *bufptr;
-	cptr str = *strptr;
+	concptr str = *strptr;
 	bool mod_status[MAX_MACRO_MOD];
 
 	int i, len = 0;
 	int shiftstatus = 0;
-	cptr key_code;
+	concptr key_code;
 
 	if (macro_template == NULL)
 		return;
@@ -1127,7 +1127,7 @@ static void trigger_text_to_ascii(char **bufptr, cptr *strptr)
  * parsing "\xFF" into a (signed) char.  Whoever thought of making
  * the "sign" of a "char" undefined is a complete moron.  Oh well.
  */
-void text_to_ascii(char *buf, cptr str)
+void text_to_ascii(char *buf, concptr str)
 {
 	char *s = buf;
 
@@ -1256,13 +1256,13 @@ void text_to_ascii(char *buf, cptr str)
 }
 
 
-static bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
+static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 {
 	char *s = *bufptr;
-	cptr str = *strptr;
+	concptr str = *strptr;
 	char key_code[100];
 	int i;
-	cptr tmp;
+	concptr tmp;
 
 	if (macro_template == NULL)
 		return FALSE;
@@ -1321,7 +1321,7 @@ static bool trigger_ascii_to_text(char **bufptr, cptr *strptr)
 /*
  * Hack -- convert a string into a printable form
  */
-void ascii_to_text(char *buf, cptr str)
+void ascii_to_text(char *buf, concptr str)
 {
 	char *s = buf;
 
@@ -1431,7 +1431,7 @@ static bool macro__use[256];
 /*
  * Find the macro (if any) which exactly matches the given pattern
  */
-sint macro_find_exact(cptr pat)
+sint macro_find_exact(concptr pat)
 {
 	int i;
 
@@ -1459,7 +1459,7 @@ sint macro_find_exact(cptr pat)
 /*
  * Find the first macro (if any) which contains the given pattern
  */
-static sint macro_find_check(cptr pat)
+static sint macro_find_check(concptr pat)
 {
 	int i;
 
@@ -1487,7 +1487,7 @@ static sint macro_find_check(cptr pat)
 /*
  * Find the first macro (if any) which contains the given pattern and more
  */
-static sint macro_find_maybe(cptr pat)
+static sint macro_find_maybe(concptr pat)
 {
 	int i;
 
@@ -1518,7 +1518,7 @@ static sint macro_find_maybe(cptr pat)
 /*
  * Find the longest macro (if any) which starts with the given pattern
  */
-static sint macro_find_ready(cptr pat)
+static sint macro_find_ready(concptr pat)
 {
 	int i, t, n = -1, s = -1;
 
@@ -1562,7 +1562,7 @@ static sint macro_find_ready(cptr pat)
  * with some kind of "powerful keymap" ability, but this might make it hard
  * to change the "roguelike" option from inside the game.  
  */
-errr macro_add(cptr pat, cptr act)
+errr macro_add(concptr pat, concptr act)
 {
 	int n;
 
@@ -1788,7 +1788,7 @@ static char inkey_aux(void)
 
 	char ch;
 
-	cptr pat, act;
+	concptr pat, act;
 
 	char *buf = inkey_macro_trigger_string;
 
@@ -1965,7 +1965,7 @@ static void forget_macro_action(void)
  * trigger any macros, and cannot be bypassed by the Borg.  It is used
  * in Angband to handle "keymaps".
  */
-static cptr inkey_next = NULL;
+static concptr inkey_next = NULL;
 
 
 #ifdef ALLOW_BORG
@@ -2284,7 +2284,7 @@ char inkey(void)
 void quark_init(void)
 {
 	/* Quark variables */
-	C_MAKE(quark__str, QUARK_MAX, cptr);
+	C_MAKE(quark__str, QUARK_MAX, concptr);
 
 	/* Prepare first quark, which is used when quark_add() is failed */
 	quark__str[1] = string_make("");
@@ -2297,7 +2297,7 @@ void quark_init(void)
 /*
  * Add a new "quark" to the set of quarks.
  */
-u16b quark_add(cptr str)
+u16b quark_add(concptr str)
 {
 	u16b i;
 
@@ -2325,9 +2325,9 @@ u16b quark_add(cptr str)
 /*
  * This function looks up a quark
  */
-cptr quark_str(STR_OFFSET i)
+concptr quark_str(STR_OFFSET i)
 {
-	cptr q;
+	concptr q;
 
 	/* Return NULL for an invalid index */
 	if ((i < 1) || (i >= quark__num)) return NULL;
@@ -2393,11 +2393,11 @@ s32b message_num(void)
  * @params age メッセージの世代
  * @return メッセージの文字列ポインタ
  */
-cptr message_str(int age)
+concptr message_str(int age)
 {
 	s32b x;
 	s32b o;
-	cptr s;
+	concptr s;
 
 	/* Forgotten messages have no text */
 	if ((age < 0) || (age >= message_num())) return ("");
@@ -2421,14 +2421,14 @@ cptr message_str(int age)
  * @params str 保存したいメッセージ
  * @return なし
  */
-void message_add(cptr str)
+void message_add(concptr str)
 {
 	u32b i, n;
 	int k, x, m;
 
 	char u[4096];
 	char splitted1[81];
-	cptr splitted2;
+	concptr splitted2;
 
 	/*** Step 1 -- Analyze the message ***/
 
@@ -2444,7 +2444,7 @@ void message_add(cptr str)
 	/* extra step -- split the message if n>80.(added by Mogami) */
 	if (n > 80) {
 #ifdef JP
-		cptr t = str;
+		concptr t = str;
 
 		for (n = 0; n < 80; n++, t++)
 		{
@@ -2482,7 +2482,7 @@ void message_add(cptr str)
 		char buf[1024];
 		char *t;
 
-		cptr old;
+		concptr old;
 
 		/* Back up and wrap if needed */
 		if (i-- == 0) i = MESSAGE_MAX - 1;
@@ -2546,7 +2546,7 @@ void message_add(cptr str)
 	for (i = message__next; k; k--)
 	{
 		int q;
-		cptr old;
+		concptr old;
 
 		/* Back up and wrap if needed */
 		if (i-- == 0) i = MESSAGE_MAX - 1;
@@ -2776,7 +2776,7 @@ void msg_erase(void)
  * Note that "msg_print(NULL)" will clear the top line
  * even if no messages are pending.  This is probably a hack.
  */
-void msg_print(cptr msg)
+void msg_print(concptr msg)
 {
 	static int p = 0;
 	int n;
@@ -2926,14 +2926,14 @@ void msg_print(cptr msg)
 	if (fresh_message) Term_fresh();
 }
 
-void msg_print_wizard(int cheat_type, cptr msg)
+void msg_print_wizard(int cheat_type, concptr msg)
 {
 	if (!cheat_room && cheat_type == CHEAT_DUNGEON) return;
 	if (!cheat_peek && cheat_type == CHEAT_OBJECT) return;
 	if (!cheat_hear && cheat_type == CHEAT_MONSTER) return;
 	if (!cheat_xtra && cheat_type == CHEAT_MISC) return;
 
-	cptr cheat_mes[] = {"ITEM", "MONS", "DUNG", "MISC"};
+	concptr cheat_mes[] = {"ITEM", "MONS", "DUNG", "MISC"};
 	char buf[1024];
 	sprintf(buf, "WIZ-%s:%s", cheat_mes[cheat_type], msg);
 	msg_print(buf);
@@ -2990,7 +2990,7 @@ void screen_load(void)
 /*
  * Display a formatted message, using "vstrnfmt()" and "msg_print()".
  */
-void msg_format(cptr fmt, ...)
+void msg_format(concptr fmt, ...)
 {
 	va_list vp;
 
@@ -3012,7 +3012,7 @@ void msg_format(cptr fmt, ...)
 /*
  * Display a formatted message, using "vstrnfmt()" and "msg_print()".
  */
-void msg_format_wizard(int cheat_type, cptr fmt, ...)
+void msg_format_wizard(int cheat_type, concptr fmt, ...)
 {
 	if(!cheat_room && cheat_type == CHEAT_DUNGEON) return;
 	if(!cheat_peek && cheat_type == CHEAT_OBJECT) return;
@@ -3043,7 +3043,7 @@ void msg_format_wizard(int cheat_type, cptr fmt, ...)
  * At the given location, using the given attribute, if allowed,
  * add the given string.  Do not clear the line.
  */
-void c_put_str(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col)
+void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Position cursor, Dump the attr/text */
 	Term_putstr(col, row, -1, attr, str);
@@ -3052,7 +3052,7 @@ void c_put_str(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col)
 /*
  * As above, but in "white"
  */
-void put_str(cptr str, TERM_LEN row, TERM_LEN col)
+void put_str(concptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Spawn */
 	Term_putstr(col, row, -1, TERM_WHITE, str);
@@ -3064,7 +3064,7 @@ void put_str(cptr str, TERM_LEN row, TERM_LEN col)
  * Display a string on the screen using an attribute, and clear
  * to the end of the line.
  */
-void c_prt(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col)
+void c_prt(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Clear line, position cursor */
 	Term_erase(col, row, 255);
@@ -3076,7 +3076,7 @@ void c_prt(TERM_COLOR attr, cptr str, TERM_LEN row, TERM_LEN col)
 /*
  * As above, but in "white"
  */
-void prt(cptr str, TERM_LEN row, TERM_LEN col)
+void prt(concptr str, TERM_LEN row, TERM_LEN col)
 {
 	/* Spawn */
 	c_prt(TERM_WHITE, str, row, col);
@@ -3099,13 +3099,13 @@ void prt(cptr str, TERM_LEN row, TERM_LEN col)
  * This function will correctly handle any width up to the maximum legal
  * value of 256, though it works best for a standard 80 character width.
  */
-void c_roff(byte a, cptr str)
+void c_roff(byte a, concptr str)
 {
 	int x, y;
 
 	int w, h;
 
-	cptr s;
+	concptr s;
 
 	/* Obtain the size */
 	(void)Term_get_size(&w, &h);
@@ -3260,7 +3260,7 @@ void c_roff(byte a, cptr str)
 /*
  * As above, but in "white"
  */
-void roff(cptr str)
+void roff(concptr str)
 {
 	/* Spawn */
 	c_roff(TERM_WHITE, str);
@@ -3567,7 +3567,7 @@ bool askfor(char *buf, int len)
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-bool get_string(cptr prompt, char *buf, int len)
+bool get_string(concptr prompt, char *buf, int len)
 {
 	bool res;
 
@@ -3593,7 +3593,7 @@ bool get_string(cptr prompt, char *buf, int len)
  *
  * Note that "[y/n]" is appended to the prompt.
  */
-bool get_check(cptr prompt)
+bool get_check(concptr prompt)
 {
 	return get_check_strict(prompt, 0);
 }
@@ -3606,7 +3606,7 @@ bool get_check(cptr prompt)
  * mode & CHECK_NO_HISTORY  : no message_add
  * mode & CHECK_DEFAULT_Y   : accept any key as y, except n and Esc.
  */
-bool get_check_strict(cptr prompt, BIT_FLAGS mode)
+bool get_check_strict(concptr prompt, BIT_FLAGS mode)
 {
 	int i;
 	char buf[80];
@@ -3719,7 +3719,7 @@ bool get_check_strict(cptr prompt, BIT_FLAGS mode)
  *
  * Returns TRUE unless the character is "Escape"
  */
-bool get_com(cptr prompt, char *command, bool z_escape)
+bool get_com(concptr prompt, char *command, bool z_escape)
 {
 	/* Paranoia */
 	msg_print(NULL);
@@ -3750,7 +3750,7 @@ bool get_com(cptr prompt, char *command, bool z_escape)
  *
  * Hack -- allow "command_arg" to specify a quantity
  */
-QUANTITY get_quantity(cptr prompt, QUANTITY max)
+QUANTITY get_quantity(concptr prompt, QUANTITY max)
 {
 	bool res, result;
 	QUANTITY amt;
@@ -3865,7 +3865,7 @@ static char request_command_buffer[256];
 
 typedef struct
 {
-	cptr name;
+	concptr name;
 	byte cmd;
 	bool fin;
 } menu_naiyou;
@@ -4140,7 +4140,7 @@ menu_naiyou menu_info[10][10] =
 
 typedef struct
 {
-	cptr name;
+	concptr name;
 	byte window;
 	byte number;
 	byte jouken;
@@ -4205,7 +4205,7 @@ static char inkey_from_menu(void)
 	{
 		int i;
 		char sub_cmd;
-		cptr menu_name;
+		concptr menu_name;
 		if (!menu) old_num = num;
 		put_str("+----------------------------------------------------+", basey, basex);
 		put_str("|                                                    |", basey+1, basex);
@@ -4349,7 +4349,7 @@ void request_command(int shopping)
 	s16b cmd;
 	int mode;
 
-	cptr act;
+	concptr act;
 
 #ifdef JP
 	int caretcmd = 0;
@@ -4582,7 +4582,7 @@ void request_command(int shopping)
 #ifdef JP
 	for (i = 0; i < 256; i++)
 	{
-		cptr s;
+		concptr s;
 		if ((s = keymap_act[mode][i]) != NULL)
 		{
 			if (*s == command_cmd && *(s+1) == 0)
@@ -4599,7 +4599,7 @@ void request_command(int shopping)
 	/* Hack -- Scan equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		cptr s;
+		concptr s;
 
 		object_type *o_ptr = &inventory[i];
 
@@ -4681,7 +4681,7 @@ bool is_a_vowel(int ch)
  * XXX Could be made more efficient, especially in the
  * case where "insert" is smaller than "target".
  */
-static bool insert_str(char *buf, cptr target, cptr insert)
+static bool insert_str(char *buf, concptr target, concptr insert)
 {
 	int   i, len;
 	int		   b_len, t_len, i_len;
@@ -4749,7 +4749,7 @@ int get_keymap_dir(char ch)
 	else
 	{
 		BIT_FLAGS mode;
-		cptr act, s;
+		concptr act, s;
 
 		/* Roguelike */
 		if (rogue_like_commands)
@@ -5094,10 +5094,10 @@ void build_gamma_table(int gamma)
  *
  * NB: The keys added here will be interpreted by any macros or keymaps.
  */
-errr type_string(cptr str, uint len)
+errr type_string(concptr str, uint len)
 {
 	errr err = 0;
-	cptr s;
+	concptr s;
 
 	term *old = Term;
 
@@ -5129,7 +5129,7 @@ errr type_string(cptr str, uint len)
 
 
 
-void roff_to_buf(cptr str, int maxlen, char *tbuf, size_t bufsize)
+void roff_to_buf(concptr str, int maxlen, char *tbuf, size_t bufsize)
 {
 	int read_pt = 0;
 	int write_pt = 0;
@@ -5235,12 +5235,12 @@ void roff_to_buf(cptr str, int maxlen, char *tbuf, size_t bufsize)
  *
  * This function should be equivalent to the strlcpy() function in BSD.
  */
-size_t my_strcpy(char *buf, cptr src, size_t bufsize)
+size_t my_strcpy(char *buf, concptr src, size_t bufsize)
 {
 #ifdef JP
 
 	char *d = buf;
-	cptr s = src;
+	concptr s = src;
 	size_t len = 0;
 
 	if (bufsize > 0) {
@@ -5303,7 +5303,7 @@ size_t my_strcpy(char *buf, cptr src, size_t bufsize)
  *
  * This function should be equivalent to the strlcat() function in BSD.
  */
-size_t my_strcat(char *buf, cptr src, size_t bufsize)
+size_t my_strcat(char *buf, concptr src, size_t bufsize)
 {
 	size_t dlen = strlen(buf);
 
@@ -5326,7 +5326,7 @@ size_t my_strcat(char *buf, cptr src, size_t bufsize)
  *
  * my_strstr() can handle Kanji strings correctly.
  */
-char *my_strstr(cptr haystack, cptr needle)
+char *my_strstr(concptr haystack, concptr needle)
 {
 	int i;
 	int l1 = strlen(haystack);
@@ -5354,7 +5354,7 @@ char *my_strstr(cptr haystack, cptr needle)
  *
  * my_strchr() can handle Kanji strings correctly.
  */
-char *my_strchr(cptr ptr, char ch)
+char *my_strchr(concptr ptr, char ch)
 {
 	for ( ; *ptr != '\0'; ptr++)
 	{
@@ -5399,7 +5399,7 @@ void str_tolower(char *str)
 int inkey_special(bool numpad_cursor)
 {
 	static const struct {
-		cptr keyname;
+		concptr keyname;
 		int keyflag;
 	} modifier_key_list[] = {
 		{"shift-", SKEY_MOD_SHIFT},
@@ -5409,7 +5409,7 @@ int inkey_special(bool numpad_cursor)
 
 	static const struct {
 		bool numpad;
-		cptr keyname;
+		concptr keyname;
 		int keycode;
 	} special_key_list[] = {
 		{FALSE, "Down]", SKEY_DOWN},
@@ -5440,7 +5440,7 @@ int inkey_special(bool numpad_cursor)
 	};
 
 	static const struct {
-		cptr keyname;
+		concptr keyname;
 		int keycode;
 	} gcu_special_key_list[] = {
 		{"A", SKEY_UP},
@@ -5455,7 +5455,7 @@ int inkey_special(bool numpad_cursor)
 	};
 
 	char buf[1024];
-	cptr str = buf;
+	concptr str = buf;
 	char key;
 	int skey = 0;
 	int modifier = 0;

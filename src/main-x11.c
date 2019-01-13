@@ -346,7 +346,7 @@ struct infofnt
 	XFontStruct *info;
 #endif
 
-	cptr name;
+	concptr name;
 
 	s16b wid;
 	s16b twid;
@@ -487,7 +487,7 @@ static infofnt *Infofnt = (infofnt*)(NULL);
  *
  * Return -1 if no Display given, and none can be opened.
  */
-static errr Metadpy_init_2(Display *dpy, cptr name)
+static errr Metadpy_init_2(Display *dpy, concptr name)
 {
 	metadpy *m = Metadpy;
 
@@ -621,7 +621,7 @@ static errr Metadpy_do_beep(void)
 /*
  * Set the name (in the title bar) of Infowin
  */
-static errr Infowin_set_name(cptr name)
+static errr Infowin_set_name(concptr name)
 {
 	Status st;
 	XTextProperty tp;
@@ -639,7 +639,7 @@ static errr Infowin_set_name(cptr name)
 /*
  * Set the icon name of Infowin
  */
-static errr Infowin_set_icon_name(cptr name)
+static errr Infowin_set_icon_name(concptr name)
 {
 	Status st;
 	XTextProperty tp;
@@ -951,7 +951,7 @@ static errr Infowin_fill(void)
  * Pairs of values, first is texttual name, second is the string
  * holding the decimal value that the operation corresponds to.
  */
-static cptr opcode_pairs[] =
+static concptr opcode_pairs[] =
 {
 	"cpy", "3",
 	"xor", "6",
@@ -987,7 +987,7 @@ static cptr opcode_pairs[] =
  *	0-15: if 'str' is a valid Operation
  *	-1:   if 'str' could not be parsed
  */
-static int Infoclr_Opcode(cptr str)
+static int Infoclr_Opcode(concptr str)
 {
 	register int i;
 
@@ -1022,7 +1022,7 @@ static int Infoclr_Opcode(cptr str)
  * Valid forms for 'name':
  *	'fg', 'bg', 'zg', '<name>' and '#<code>'
  */
-static Pixell Infoclr_Pixell(cptr name)
+static Pixell Infoclr_Pixell(concptr name)
 {
 	XColor scrn;
 
@@ -1409,9 +1409,9 @@ static errr Infofnt_init_real(XFontStruct *info)
  *	name: The name of the requested Font
  */
 #ifdef USE_JP_FONTSTRUCT
-static void Infofnt_init_data(cptr name, cptr kname)
+static void Infofnt_init_data(concptr name, concptr kname)
 #else
-static void Infofnt_init_data(cptr name)
+static void Infofnt_init_data(concptr name)
 #endif
 
 {
@@ -1602,7 +1602,7 @@ XDrawMultiString(display,d,gc, x, y, string, len, afont,
 /*
  * Standard Text
  */
-static errr Infofnt_text_std(int x, int y, cptr str, int len)
+static errr Infofnt_text_std(int x, int y, concptr str, int len)
 {
 	int i;
 
@@ -1697,7 +1697,7 @@ static errr Infofnt_text_std(int x, int y, cptr str, int len)
 /*
  * Painting where text would be
  */
-static errr Infofnt_text_non(int x, int y, cptr str, int len)
+static errr Infofnt_text_non(int x, int y, concptr str, int len)
 {
 	int w, h;
 
@@ -2830,12 +2830,12 @@ static errr CheckEvent(bool wait)
 /*
  * An array of sound file names
  */
-static cptr sound_file[SOUND_MAX];
+static concptr sound_file[SOUND_MAX];
 
 /*
  * Check for existance of a file
  */
-static bool check_file(cptr s)
+static bool check_file(concptr s)
 {
 	FILE *fff;
 
@@ -3096,7 +3096,7 @@ static errr Term_wipe_x11(int x, int y, int n)
 /*
  * Draw some textual characters.
  */
-static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
+static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
 {
 	/* Draw the text */
 	Infoclr_set(clr[a]);
@@ -3319,11 +3319,11 @@ static errr term_data_init(term_data *td, int i)
 {
 	term *t = &td->t;
 
-	cptr name = angband_term_name[i];
+	concptr name = angband_term_name[i];
 
-	cptr font;
+	concptr font;
 #ifdef USE_JP_FONTSTRUCT
-	cptr kfont;
+	concptr kfont;
 #endif
 
 
@@ -3340,7 +3340,7 @@ static errr term_data_init(term_data *td, int i)
 
 	char buf[80];
 
-	cptr str;
+	concptr str;
 
 	int val;
 
@@ -3667,7 +3667,7 @@ errr init_x11(int argc, char *argv[])
 {
 	int i;
 
-	cptr dpy_name = "";
+	concptr dpy_name = "";
 
 	int num_term = 3;
 

@@ -19,7 +19,7 @@
 /*!
  * 徳の名称 / The names of the virtues
  */
-cptr virtue[MAX_VIRTUE] =
+concptr virtue[MAX_VIRTUE] =
 {
 	_("情", "Compassion"),
 	_("誉", "Honour"),

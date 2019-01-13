@@ -873,7 +873,7 @@ static errr Term_wipe_cap(int x, int y, int n)
 /*
  * Place some text on the screen using an attribute
  */
-static errr Term_text_cap(int x, int y, int n, byte a, cptr s)
+static errr Term_text_cap(int x, int y, int n, byte a, concptr s)
 {
 	int i;
 

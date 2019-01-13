@@ -44,7 +44,7 @@
 
 
 /*! 種族の解説メッセージテーブル */
-static cptr race_jouhou[MAX_RACES] =
+static concptr race_jouhou[MAX_RACES] =
 {
 #ifdef JP
 "人間は基本となるキャラクタです。他の全ての種族は人間と比較されます。人間はどんな職業に就くこともでき、どの職業でも平均的にこなせます。人間は寿命が短いため、レベル上昇が他のどんな種族よりも早くなる傾向があります。また、特別な修正や特性は持っていません。",
@@ -201,7 +201,7 @@ static cptr race_jouhou[MAX_RACES] =
 };
 
 /*! 職業の解説メッセージテーブル */
-static cptr class_jouhou[MAX_CLASS] =
+static concptr class_jouhou[MAX_CLASS] =
 {
 #ifdef JP
 "戦士は、直面する問題のほとんどを細切れに叩き切ることで解決するキャラクタです。が、時折退却して魔法の道具の世話になることもあります。不運にも、高レベルなアイテムの多くは彼らが扱える範囲を越えています。",
@@ -321,7 +321,7 @@ static cptr class_jouhou[MAX_CLASS] =
 };
 
 /*! 性格の解説メッセージテーブル */
-static cptr seikaku_jouhou[MAX_SEIKAKU] =
+static concptr seikaku_jouhou[MAX_SEIKAKU] =
 {
 #ifdef JP
 "ふつうは、特に特筆するべき部分がない性格です。あらゆる技能を平均的にこなします。",
@@ -378,7 +378,7 @@ static cptr seikaku_jouhou[MAX_SEIKAKU] =
 };
 
 /*! 魔法領域の詳細解説メッセージテーブル */
-static cptr realm_jouhou[VALID_REALM] =
+static concptr realm_jouhou[VALID_REALM] =
 {
 #ifdef JP
 "生命は回復能力に優れた魔法です。治療や防御、感知魔法が多く含まれていますが、攻撃呪文もわずかに持っています。特に高レベルの呪文にはアンデッドを塵に帰す力をあると言われています。",
@@ -437,7 +437,7 @@ static cptr realm_jouhou[VALID_REALM] =
 };
 
 /*! 魔法領域の簡易解説メッセージテーブル */
-static cptr realm_subinfo[VALID_REALM] =
+static concptr realm_subinfo[VALID_REALM] =
 {
 #ifdef JP
 "感知と防御と回復に優れています",
@@ -503,7 +503,7 @@ static void birth_quit(void)
  * @param helpfile ファイル名
  * @return なし
  */
-static void show_help(cptr helpfile)
+static void show_help(concptr helpfile)
 {
 	screen_save();
 	(void)show_file(TRUE, helpfile, NULL, 0, 0);
@@ -771,7 +771,7 @@ static bool get_player_realms(void)
 	while (1)
 	{
 		char temp[80*10];
-		cptr t;
+		concptr t;
 		count = 0;
 		p_ptr->realm1 = choose_realm(realm_choices1[p_ptr->pclass], &count);
 
@@ -819,7 +819,7 @@ static bool get_player_realms(void)
 		while (1)
 		{
 			char temp[80*8];
-			cptr t;
+			concptr t;
 
 			count = 0;
 			p_ptr->realm2 = choose_realm(realm_choices2[p_ptr->pclass], &count);
@@ -2469,7 +2469,7 @@ void player_outfit(void)
 static bool get_player_race(void)
 {
 	int     k, n, cs, os;
-	cptr    str;
+	concptr    str;
 	char    c;
 	char	sym[MAX_RACES];
 	char    p2 = ')';
@@ -2632,7 +2632,7 @@ static bool get_player_class(void)
 	char	sym[MAX_CLASS_CHOICE];
 	char    p2 = ')';
 	char    buf[80], cur[80];
-	cptr    str;
+	concptr    str;
 
 
 	/* Extra info */
@@ -2805,7 +2805,7 @@ static bool get_player_seikaku(void)
 	char p2 = ')';
 	char buf[80], cur[80];
 	char tmp[64];
-	cptr str;
+	concptr str;
 
 	/* Extra info */
 	clear_from(10);
@@ -3239,7 +3239,7 @@ static bool get_chara_limits(void)
 	int max_percent, min_percent;
 	char c;
 	char buf[80], cur[80];
-	cptr itemname[] = {
+	concptr itemname[] = {
 		_("年齢", "age"),
 		_("身長(インチ)", "height"),
 		_("体重(ポンド)", "weight"),
@@ -3517,7 +3517,7 @@ static char *histpref_buf = NULL;
  * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
  * @return なし
  */
-void add_history_from_pref_line(cptr t)
+void add_history_from_pref_line(concptr t)
 {
 	/* Do nothing if the buffer is not ready */
 	if (!histpref_buf) return;
@@ -3844,7 +3844,7 @@ static bool player_birth_aux(void)
 	bool flag = FALSE;
 	bool prev = FALSE;
 
-	cptr str;
+	concptr str;
 
 	char c;
 
@@ -4001,7 +4001,7 @@ static bool player_birth_aux(void)
 	while(1)
 	{
 		char temp[80*10];
-		cptr t;
+		concptr t;
 
 		if (!get_player_race()) return FALSE;
 
@@ -4037,7 +4037,7 @@ static bool player_birth_aux(void)
 	while(1)
 	{
 		char temp[80*9];
-		cptr t;
+		concptr t;
 
 		if (!get_player_class()) return FALSE;
 
@@ -4072,7 +4072,7 @@ static bool player_birth_aux(void)
 	while(1)
 	{
 		char temp[80*8];
-		cptr t;
+		concptr t;
 
 		if (!get_player_seikaku()) return FALSE;
 
@@ -4655,7 +4655,7 @@ void dump_yourself(FILE *fff)
 {
 	char temp[80*10];
 	int i;
-	cptr t;
+	concptr t;
 
 	if (!fff) return;
 

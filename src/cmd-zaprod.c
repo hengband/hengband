@@ -395,7 +395,7 @@ void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 void do_cmd_zap_rod(void)
 {
 	OBJECT_IDX item;
-	cptr q, s;
+	concptr q, s;
 
 	if (p_ptr->wild_mode)
 	{

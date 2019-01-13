@@ -1799,7 +1799,7 @@ void prt_path(POSITION y, POSITION x)
 }
 
 
-static cptr simplify_list[][2] =
+static concptr simplify_list[][2] =
 {
 #ifdef JP
 	{"の魔法書", ""},
@@ -1845,7 +1845,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 		int i;
 		for (i = 0; simplify_list[i][1]; i++)
 		{
-			cptr org_w = simplify_list[i][0];
+			concptr org_w = simplify_list[i][0];
 
 			if (*org_w == '^')
 			{
@@ -1858,7 +1858,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 			if (!strncmp(c, org_w, strlen(org_w)))
 			{
 				char *s = c;
-				cptr tmp = simplify_list[i][1];
+				concptr tmp = simplify_list[i][1];
 				while (*tmp)
 					*s++ = *tmp++;
 				tmp = c + strlen(org_w);

@@ -136,10 +136,10 @@ vptr ralloc(huge len)
 /*
  * Allocate a constant string, containing the same thing as 'str'
  */
-cptr string_make(cptr str)
+concptr string_make(concptr str)
 {
 	huge len = 0;
-	cptr t = str;
+	concptr t = str;
 	char *s, *res;
 
 	/* Simple sillyness */
@@ -163,7 +163,7 @@ cptr string_make(cptr str)
  * Un-allocate a string allocated above.
  * Depends on no changes being made to the string.
  */
-errr string_free(cptr str)
+errr string_free(concptr str)
 {
 	huge len = 0;
 

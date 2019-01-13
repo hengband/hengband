@@ -25,7 +25,7 @@
  *
  * Close down, then fall back into "quit()".
  */
-static void quit_hook(cptr s)
+static void quit_hook(concptr s)
 {
 	int j;
 
@@ -99,7 +99,7 @@ static void init_stuff(void)
 {
 	char path[1024];
 
-	cptr tail;
+	concptr tail;
 
 	/* Get the environment variable */
 	tail = getenv("ANGBAND_PATH");
@@ -128,9 +128,9 @@ static void init_stuff(void)
  * The "<path>" can be any legal path for the given system, and should
  * not end in any special path separator (i.e. "/tmp" or "~/.ang-info").
  */
-static void change_path(cptr info)
+static void change_path(concptr info)
 {
-	cptr s;
+	concptr s;
 
 	/* Find equal sign */
 	s = my_strchr(info, '=');
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 	bool done = FALSE;
 	bool new_game = FALSE;
 	int show_score = 0;
-	cptr mstr = NULL;
+	concptr mstr = NULL;
 	bool args = TRUE;
 
 	/* Save the "program name" XXX XXX XXX */

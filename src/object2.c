@@ -18,7 +18,7 @@
 static void one_sustain(object_type *o_ptr);
 
 
-static cptr const kaji_tips[5] =
+static concptr const kaji_tips[5] =
 {
 #ifdef JP
 	"現在持っているエッセンスの一覧を表示する。",
@@ -6106,7 +6106,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 	object_type *o_ptr;
 
-	cptr act;
+	concptr act;
 
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -7000,7 +7000,7 @@ bool process_warning(POSITION xx, POSITION yy)
  */
 typedef struct {
 	int add;       /* TR flag number or special essence id */
-	cptr add_name; /* Name of this ability */
+	concptr add_name; /* Name of this ability */
 	ESSENCE_IDX type;      /* Menu number */
 	int essence;   /* Index for carrying essences */
 	int value;     /* Needed value to add this ability */
@@ -7239,7 +7239,7 @@ static essence_type essence_info[] =
  * エッセンス名テーブル / Essense names for Weapon smith
  */
 #ifdef JP
-cptr essence_name[] = 
+concptr essence_name[] = 
 {
 	"腕力",
 	"知能",
@@ -7342,7 +7342,7 @@ cptr essence_name[] =
 
 #else
 
-cptr essence_name[] = 
+concptr essence_name[] = 
 {
 	"strength",
 	"intelligen.",
@@ -7486,7 +7486,7 @@ static void drain_essence(void)
 	TIME_EFFECT old_timeout;
 	BIT_FLAGS old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 	POSITION iy, ix;
 	byte_hack marked;
 	ITEM_NUMBER number;
@@ -7712,7 +7712,7 @@ static COMMAND_CODE choose_essence(void)
 	COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
 #ifdef JP
-	cptr menu_name[] = {
+	concptr menu_name[] = {
 		"武器属性", 
 		"耐性",
 		"能力",
@@ -7722,7 +7722,7 @@ static COMMAND_CODE choose_essence(void)
 		"その他"
 	};
 #else
-	cptr menu_name[] = {
+	concptr menu_name[] = {
 		"Brand weapon",
 		"Resistance",
 		"Ability",
@@ -7822,7 +7822,7 @@ static void add_essence(ESSENCE_IDX mode)
 	COMMAND_CODE i;
 	bool flag,redraw;
 	char choice;
-	cptr            q, s;
+	concptr            q, s;
 	object_type *o_ptr;
 	int ask = TRUE;
 	char out_val[160];
@@ -8306,7 +8306,7 @@ static void add_essence(ESSENCE_IDX mode)
 static void erase_essence(void)
 {
 	OBJECT_IDX item;
-	cptr q, s;
+	concptr q, s;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	BIT_FLAGS flgs[TR_FLAG_SIZE];

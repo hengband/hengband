@@ -1130,7 +1130,7 @@ static errr Term_curs_xaw(int x, int y)
 /*
  * Draw a number of characters
  */
-static errr Term_text_xaw(int x, int y, int n, byte a, cptr s)
+static errr Term_text_xaw(int x, int y, int n, byte a, concptr s)
 {
 	term_data *td = (term_data*)(Term->data);
 

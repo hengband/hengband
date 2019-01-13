@@ -129,7 +129,7 @@ static bool do_cmd_archer(void)
 	else if (ext == 2)
 	{
 		OBJECT_IDX item;
-		cptr q, s;
+		concptr q, s;
 		s16b slot;
 
 		item_tester_hook = item_tester_hook_convertible;
@@ -175,7 +175,7 @@ static bool do_cmd_archer(void)
 	else if (ext == 3)
 	{
 		OBJECT_IDX item;
-		cptr q, s;
+		concptr q, s;
 		s16b slot;
 
 		item_tester_hook = item_tester_hook_convertible;
@@ -230,7 +230,7 @@ bool gain_magic(void)
 	OBJECT_IDX item;
 	PARAMETER_VALUE pval;
 	int ext = 0;
-	cptr q, s;
+	concptr q, s;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -1273,7 +1273,7 @@ static bool cmd_racial_power_aux(s32b command)
 		case RACE_DRACONIAN:
 			{
 				int Type = (one_in_(3) ? GF_COLD : GF_FIRE);
-				cptr Type_desc = ((Type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
+				concptr Type_desc = ((Type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
 
 				if (!get_aim_dir(&dir)) return FALSE;
 

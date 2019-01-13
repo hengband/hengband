@@ -86,7 +86,7 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 
 	if (!gamma_table_ready)
 	{
-		cptr str = getenv("ANGBAND_X11_GAMMA");
+		concptr str = getenv("ANGBAND_X11_GAMMA");
 		if (str != NULL) gamma_val = atoi(str);
 		
 		gamma_table_ready = TRUE;

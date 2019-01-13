@@ -110,7 +110,7 @@ s16b modify_stat_value(int value, int amount)
  * @param col 描画行
  * @return なし
  */
-static void prt_field(cptr info, TERM_LEN row, TERM_LEN col)
+static void prt_field(concptr info, TERM_LEN row, TERM_LEN col)
 {
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", row, col);
@@ -144,7 +144,7 @@ void prt_time(void)
  * @brief 現在のマップ名を返す /
  * @return マップ名の文字列参照ポインタ
  */
-cptr map_name(void)
+concptr map_name(void)
 {
 	if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)
 	    && (quest[p_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
@@ -167,7 +167,7 @@ cptr map_name(void)
  */
 static void prt_dungeon(void)
 {
-	cptr dungeon_name;
+	concptr dungeon_name;
 	TERM_LEN col;
 
 	/* Dump 13 spaces to clear */
@@ -296,8 +296,8 @@ static void prt_stat(int stat)
 
 static struct {
 	TERM_COLOR attr;
-	cptr sstr;
-	cptr lstr;
+	concptr sstr;
+	concptr lstr;
 } bar[]
 #ifdef JP
 = {
@@ -681,7 +681,7 @@ static void prt_status(void)
 	{
 		if (IS_FLG(i))
 		{
-			cptr str;
+			concptr str;
 			if (space == 2) str = bar[i].lstr;
 			else str = bar[i].sstr;
 
@@ -700,7 +700,7 @@ static void prt_status(void)
  */
 static void prt_title(void)
 {
-	cptr p = "";
+	concptr p = "";
 	GAME_TEXT str[14];
 
 	if (p_ptr->wizard)
@@ -1702,8 +1702,8 @@ void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
 			/*
 			MONRACE_IDX r_idx = m_ptr->ap_r_idx;
 			monster_race* r_ptr = &r_info[r_idx];
-			cptr name = (r_name + r_ptr->name);
-			cptr ename = (r_name + r_ptr->name);
+			concptr name = (r_name + r_ptr->name);
+			concptr ename = (r_name + r_ptr->name);
 			//ミミック類や「それ」等は、一覧に出てはいけない
 			if(r_ptr->flags1&RF1_CHAR_CLEAR)continue;
 			if((r_ptr->flags1&RF1_NEVER_MOVE)&&(r_ptr->flags2&RF2_CHAR_MULTI))continue;
@@ -2089,7 +2089,7 @@ static void calc_spells(void)
 	int bonus = 0;
 
 
-	cptr p;
+	concptr p;
 
 	/* Hack -- must be literate */
 	if (!mp_ptr->spell_book) return;
@@ -4075,7 +4075,7 @@ void calc_bonuses(void)
 			if (object_is_cursed(o_ptr)) p_ptr->cursed |= TRC_TELEPORT;
 			else
 			{
-				cptr insc = quark_str(o_ptr->inscription);
+				concptr insc = quark_str(o_ptr->inscription);
 
 				if (o_ptr->inscription && my_strchr(insc, '.'))
 				{

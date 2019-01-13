@@ -147,8 +147,8 @@ void do_cmd_wield(void)
 	object_type *q_ptr;
 	object_type *o_ptr;
 
-	cptr act;
-	cptr q, s;
+	concptr act;
+	concptr q, s;
 
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -517,7 +517,7 @@ void do_cmd_takeoff(void)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -583,7 +583,7 @@ void do_cmd_drop(void)
 
 	object_type *o_ptr;
 
-	cptr q, s;
+	concptr q, s;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -678,7 +678,7 @@ void do_cmd_destroy(void)
 	GAME_TEXT o_name[MAX_NLEN];
 	char out_val[MAX_NLEN+40];
 
-	cptr q, s;
+	concptr q, s;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -867,7 +867,7 @@ void do_cmd_observe(void)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr q, s;
+	concptr q, s;
 
 	q = _("どのアイテムを調べますか? ", "Examine which item? ");
 	s = _("調べられるアイテムがない。", "You have nothing to examine.");
@@ -898,7 +898,7 @@ void do_cmd_uninscribe(void)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
 	s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
@@ -940,7 +940,7 @@ void do_cmd_inscribe(void)
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	char out_val[80];
-	cptr q, s;
+	concptr q, s;
 
 	q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
 	s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
@@ -1014,7 +1014,7 @@ static void do_cmd_refill_lamp(void)
 	object_type *o_ptr;
 	object_type *j_ptr;
 
-	cptr q, s;
+	concptr q, s;
 
 	/* Restrict the choices */
 	item_tester_hook = item_tester_refill_lantern;
@@ -1101,7 +1101,7 @@ static void do_cmd_refill_torch(void)
 	object_type *o_ptr;
 	object_type *j_ptr;
 
-	cptr q, s;
+	concptr q, s;
 
 	/* Restrict the choices */
 	item_tester_hook = item_tester_refill_torch;
@@ -1744,7 +1744,7 @@ void do_cmd_use(void)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	if (p_ptr->wild_mode)
 	{

@@ -22,7 +22,7 @@
 bool gain_random_mutation(int choose_mut)
 {
 	int attempts_left = 20;
-	cptr muta_desc = "";
+	concptr muta_desc = "";
 	bool muta_chosen = FALSE;
 	BIT_FLAGS muta_which = 0;
 	BIT_FLAGS *muta_class = NULL;
@@ -860,7 +860,7 @@ bool gain_random_mutation(int choose_mut)
 bool lose_mutation(int choose_mut)
 {
 	int attempts_left = 20;
-	cptr muta_desc = "";
+	concptr muta_desc = "";
 	bool muta_chosen = FALSE;
 	BIT_FLAGS muta_which = 0;
 	BIT_FLAGS *muta_class = NULL;

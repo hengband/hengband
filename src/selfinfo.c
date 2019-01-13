@@ -50,7 +50,7 @@ void self_knowledge(void)
 	char Dummy[80];
 	char buf[2][80];
 
-	cptr info[220];
+	concptr info[220];
 
 	PLAYER_LEVEL plev = p_ptr->lev;
 
@@ -1639,7 +1639,7 @@ static int report_magics_aux(int dur)
 	}
 }
 
-static cptr report_magic_durations[] =
+static concptr report_magic_durations[] =
 {
 #ifdef JP
 "ごく短い間",
@@ -1671,7 +1671,7 @@ void report_magics(void)
 {
 	int     i = 0, j, k;
 	char    Dummy[80];
-	cptr    info[128];
+	concptr    info[128];
 	int     info2[128];
 
 

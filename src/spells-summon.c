@@ -113,7 +113,7 @@ bool cast_summon_greater_demon(void)
 {
 	PLAYER_LEVEL plev = p_ptr->lev;
 	OBJECT_IDX item;
-	cptr q, s;
+	concptr q, s;
 	int summon_lev;
 	object_type *o_ptr;
 

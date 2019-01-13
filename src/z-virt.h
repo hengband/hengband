@@ -161,10 +161,10 @@ extern vptr rpanic(huge len);
 extern vptr ralloc(huge len);
 
 /* Create a "dynamic string" */
-extern cptr string_make(cptr str);
+extern concptr string_make(concptr str);
 
 /* Free a string allocated with "string_make()" */
-extern errr string_free(cptr str);
+extern errr string_free(concptr str);
 
 
 

@@ -471,7 +471,7 @@ static errr Term_wipe_hack(TERM_LEN x, TERM_LEN y, int n)
 /*
  * Hack -- fake hook for "Term_text()" (see above)
  */
-static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr cp)
+static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr cp)
 {
 	/* Unused */
 	(void)x;
@@ -486,7 +486,7 @@ static errr Term_text_hack(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr cp)
 /*
  * Hack -- fake hook for "Term_pict()" (see above)
  */
-static errr Term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, cptr cp, const TERM_COLOR *tap, cptr tcp)
+static errr Term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
 {
 	/* Unused */
 	(void)x;
@@ -707,7 +707,7 @@ void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
  * a valid location, so the first "n" characters of "s" can all be added
  * starting at (x,y) without causing any illegal operations.
  */
-void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
+void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
 {
 	TERM_LEN x1 = -1, x2 = -1;
 
@@ -1944,7 +1944,7 @@ errr Term_add_bigch(TERM_COLOR a, char c)
  * positive value, future calls to either function will
  * return negative ones.
  */
-errr Term_addstr(int n, TERM_COLOR a, cptr s)
+errr Term_addstr(int n, TERM_COLOR a, concptr s)
 {
 	int k;
 	TERM_LEN w = Term->wid;
@@ -1997,7 +1997,7 @@ errr Term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 /*
  * Move to a location and, using an attr, add a string
  */
-errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
+errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s)
 {
 	errr res;
 
@@ -2015,7 +2015,7 @@ errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s)
 /*
  * Move to a location and, using an attr, add a string vertically
  */
-errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s)
+errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
 {
 	errr res;
 	int i;

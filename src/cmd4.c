@@ -59,7 +59,7 @@ static char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
  * Variables for auto dump
  */
 static FILE *auto_dump_stream;
-static cptr auto_dump_mark;
+static concptr auto_dump_mark;
 static int auto_dump_line_num;
 
 
@@ -68,7 +68,7 @@ static int auto_dump_line_num;
  * Remove old lines automatically generated before.
  * @param orig_file 消去を行うファイル名
  */
-static void remove_auto_dump(cptr orig_file)
+static void remove_auto_dump(concptr orig_file)
 {
 	FILE *tmp_fff, *orig_fff;
 
@@ -230,9 +230,9 @@ static void remove_auto_dump(cptr orig_file)
  * Dump a formatted line, using "vstrnfmt()".
  * @param fmt 出力内容
  */
-static void auto_dump_printf(cptr fmt, ...)
+static void auto_dump_printf(concptr fmt, ...)
 {
-	cptr p;
+	concptr p;
 	va_list vp;
 
 	char buf[1024];
@@ -264,7 +264,7 @@ static void auto_dump_printf(cptr fmt, ...)
  * @param mark 出力するヘッダマーク
  * @return ファイルポインタを取得できたらTRUEを返す
  */
-static bool open_auto_dump(cptr buf, cptr mark)
+static bool open_auto_dump(concptr buf, concptr mark)
 {
 
 	char header_mark_str[80];
@@ -337,7 +337,7 @@ static void close_auto_dump(void)
  * @param num number
  * @return pointer of suffix string.
  */
-cptr get_ordinal_number_suffix(int num)
+concptr get_ordinal_number_suffix(int num)
 {
 	num = ABS(num) % 100;
 	switch (num % 10)
@@ -363,13 +363,13 @@ cptr get_ordinal_number_suffix(int num)
  * @param note 日記内容のIDに応じた文字列参照ポインタ
  * @return エラーID
  */
-errr do_cmd_write_nikki(int type, int num, cptr note)
+errr do_cmd_write_nikki(int type, int num, concptr note)
 {
 	int day, hour, min;
 	FILE *fff = NULL;
 	GAME_TEXT file_name[MAX_NLEN];
 	char buf[1024];
-	cptr note_level = "";
+	concptr note_level = "";
 	bool do_level = TRUE;
 	char note_level_buf[40];
 	QUEST_IDX q_idx;
@@ -525,7 +525,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_STAIR:
 		{
-			cptr to;
+			concptr to;
 			if (q_idx && (is_fixed_quest_idx(q_idx)
 			     && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 			{
@@ -599,7 +599,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_WIZ_TELE:
 		{
-			cptr to;
+			concptr to;
 			if (!dun_level)
 				to = _("地上", "the surface");
 			else
@@ -611,7 +611,7 @@ errr do_cmd_write_nikki(int type, int num, cptr note)
 		}
 		case NIKKI_PAT_TELE:
 		{
-			cptr to;
+			concptr to;
 			if (!dun_level)
 				to = _("地上", "the surface");
 			else
@@ -1132,7 +1132,7 @@ void do_cmd_messages(int num_now)
 	char shower_str[81];
 	char finder_str[81];
 	char back_str[81];
-	cptr shower = NULL;
+	concptr shower = NULL;
 	int wid, hgt;
 	int num_lines;
 
@@ -1164,7 +1164,7 @@ void do_cmd_messages(int num_now)
 		/* Dump up to 20 lines of messages */
 		for (j = 0; (j < num_lines) && (i + j < n); j++)
 		{
-			cptr msg = message_str(i+j);
+			concptr msg = message_str(i+j);
 
 			/* Dump the messages, bottom to top */
 			c_prt((i + j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
@@ -1172,7 +1172,7 @@ void do_cmd_messages(int num_now)
 			/* Hilite "shower" */
 			if (shower && shower[0])
 			{
-				cptr str = msg;
+				concptr str = msg;
 
 				/* Display matches */
 				while ((str = my_strstr(str, shower)) != NULL)
@@ -1257,7 +1257,7 @@ void do_cmd_messages(int num_now)
 				/* Scan messages */
 				for (z = i + 1; z < n; z++)
 				{
-					cptr msg = message_str(z);
+					concptr msg = message_str(z);
 
 					/* Search for it */
 					if (my_strstr(msg, finder_str))
@@ -1342,7 +1342,7 @@ void do_cmd_messages(int num_now)
  * @param info 表示メッセージ
  * @return なし
  */
-static void do_cmd_options_cheat(cptr info)
+static void do_cmd_options_cheat(concptr info)
 {
 	char	ch;
 	int		i, k = 0, n = CHEAT_MAX;
@@ -1490,7 +1490,7 @@ static s16b toggle_frequency(s16b current)
  * @param info 表示メッセージ
  * @return なし
  */
-static void do_cmd_options_autosave(cptr info)
+static void do_cmd_options_autosave(concptr info)
 {
 	char ch;
 	int i, k = 0, n = 2;
@@ -1605,7 +1605,7 @@ static void do_cmd_options_autosave(cptr info)
  * @param info 表示メッセージ
  * @return なし
  */
-void do_cmd_options_aux(int page, cptr info)
+void do_cmd_options_aux(int page, concptr info)
 {
 	char    ch;
 	int     i, k = 0, n = 0, l;
@@ -1781,7 +1781,7 @@ static void do_cmd_options_win(void)
 		{
 			byte a = TERM_WHITE;
 
-			cptr s = angband_term_name[j];
+			concptr s = angband_term_name[j];
 
 			/* Use color */
 			if (j == x) a = TERM_L_BLUE;
@@ -1795,7 +1795,7 @@ static void do_cmd_options_win(void)
 		{
 			byte a = TERM_WHITE;
 
-			cptr str = window_flag_desc[i];
+			concptr str = window_flag_desc[i];
 
 			/* Use color */
 			if (i == y) a = TERM_L_BLUE;
@@ -1921,7 +1921,7 @@ static void do_cmd_options_win(void)
 static struct opts
 {
 	char key;
-	cptr name;
+	concptr name;
 	int row;
 }
 option_fields[OPT_NUM] =
@@ -2298,9 +2298,9 @@ void do_cmd_reload_autopick(void)
  * @param fname ファイル名
  * @return なし
  */
-static errr macro_dump(cptr fname)
+static errr macro_dump(concptr fname)
 {
-	static cptr mark = "Macro Dump";
+	static concptr mark = "Macro Dump";
 
 	int i;
 
@@ -2439,9 +2439,9 @@ static void do_cmd_macro_aux_keymap(char *buf)
  * @return エラーコード
  * @details
  */
-static errr keymap_dump(cptr fname)
+static errr keymap_dump(concptr fname)
 {
-	static cptr mark = "Keymap Dump";
+	static concptr mark = "Keymap Dump";
 	int i;
 
 	char key[1024];
@@ -2477,7 +2477,7 @@ static errr keymap_dump(cptr fname)
 	/* Dump them */
 	for (i = 0; i < 256; i++)
 	{
-		cptr act;
+		concptr act;
 
 		/* Loop up the keymap */
 		act = keymap_act[mode][i];
@@ -2767,7 +2767,7 @@ void do_cmd_macros(void)
 		/* Query a keymap */
 		else if (i == '7')
 		{
-			cptr act;
+			concptr act;
 
 			/* Prompt */
 			prt(_("コマンド: キー配置の確認", "Command: Query a keymap"), 16, 0);
@@ -2910,7 +2910,7 @@ void do_cmd_macros(void)
 /*!
  * @brief キャラクタ色の明暗表現
  */
-static cptr lighting_level_str[F_LIT_MAX] =
+static concptr lighting_level_str[F_LIT_MAX] =
 {
 #ifdef JP
 	"標準色",
@@ -2960,7 +2960,7 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
  * @param choice_msg 選択メッセージ
  * @return なし
  */
-static void print_visuals_menu(cptr choice_msg)
+static void print_visuals_menu(concptr choice_msg)
 {
 	prt(_("[ 画面表示の設定 ]", "Interact with Visuals"), 1, 0);
 	
@@ -2998,7 +2998,7 @@ void do_cmd_visuals(void)
 	char tmp[160];
 	char buf[1024];
 	bool need_redraw = FALSE;
-	cptr empty_symbol = "<< ? >>";
+	concptr empty_symbol = "<< ? >>";
 
 	if (use_bigtile) empty_symbol = "<< ?? >>";
 
@@ -3046,7 +3046,7 @@ void do_cmd_visuals(void)
 		/* Dump monster attr/chars */
 		case '1':
 		{
-			static cptr mark = "Monster attr/chars";
+			static concptr mark = "Monster attr/chars";
 
 			/* Prompt */
 			prt(_("コマンド: モンスターの[色/文字]をファイルに書き出します", "Command: Dump monster attr/chars"), 15, 0);
@@ -3096,7 +3096,7 @@ void do_cmd_visuals(void)
 		/* Dump object attr/chars */
 		case '2':
 		{
-			static cptr mark = "Object attr/chars";
+			static concptr mark = "Object attr/chars";
 			KIND_OBJECT_IDX k_idx;
 
 			/* Prompt */
@@ -3164,7 +3164,7 @@ void do_cmd_visuals(void)
 		/* Dump feature attr/chars */
 		case '3':
 		{
-			static cptr mark = "Feature attr/chars";
+			static concptr mark = "Feature attr/chars";
 
 			/* Prompt */
 			prt(_("コマンド: 地形の[色/文字]をファイルに書き出します", "Command: Dump feature attr/chars"), 15, 0);
@@ -3219,7 +3219,7 @@ void do_cmd_visuals(void)
 		/* Modify monster attr/chars (numeric operation) */
 		case '4':
 		{
-			static cptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
+			static concptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
 			static IDX r = 0;
 
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
@@ -3309,7 +3309,7 @@ void do_cmd_visuals(void)
 		/* Modify object attr/chars (numeric operation) */
 		case '5':
 		{
-			static cptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
+			static concptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
 			static IDX k = 0;
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
@@ -3399,7 +3399,7 @@ void do_cmd_visuals(void)
 		/* Modify feature attr/chars (numeric operation) */
 		case '6':
 		{
-			static cptr choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
+			static concptr choice_msg = _("地形の[色/文字]を変更します", "Change feature attr/chars");
 			static IDX f = 0;
 			static IDX lighting_level = F_LIT_STANDARD;
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
@@ -3620,7 +3620,7 @@ void do_cmd_colors(void)
 		/* Dump colors */
 		else if (i == '2')
 		{
-			static cptr mark = "Colors";
+			static concptr mark = "Colors";
 
 			/* Prompt */
 			prt(_("コマンド: カラーの設定をファイルに書き出します", "Command: Dump colors"), 8, 0);
@@ -3651,7 +3651,7 @@ void do_cmd_colors(void)
 				int gv = angband_color_table[i][2];
 				int bv = angband_color_table[i][3];
 
-				cptr name = _("未知", "unknown");
+				concptr name = _("未知", "unknown");
 
 				/* Skip non-entries */
 				if (!kv && !rv && !gv && !bv) continue;
@@ -3684,7 +3684,7 @@ void do_cmd_colors(void)
 			/* Hack -- query until done */
 			while (1)
 			{
-				cptr name;
+				concptr name;
 				byte j;
 
 				/* Clear */
@@ -3799,7 +3799,7 @@ void do_cmd_version(void)
 /*
  * Array of feeling strings
  */
-static cptr do_cmd_feeling_text[11] =
+static concptr do_cmd_feeling_text[11] =
 {
 	_("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
 	_("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
@@ -3814,7 +3814,7 @@ static cptr do_cmd_feeling_text[11] =
 	_("なんて退屈なところだ...", "What a boring place...")
 };
 
-static cptr do_cmd_feeling_text_combat[11] =
+static concptr do_cmd_feeling_text_combat[11] =
 {
 	_("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
 	_("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
@@ -3829,7 +3829,7 @@ static cptr do_cmd_feeling_text_combat[11] =
 	_("なんて退屈なところだ...", "What a boring place...")
 };
 
-static cptr do_cmd_feeling_text_lucky[11] =
+static concptr do_cmd_feeling_text_lucky[11] =
 {
 	_("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
 	_("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
@@ -3897,7 +3897,7 @@ void do_cmd_feeling(void)
 /*
  * Description of each monster group.
  */
-static cptr monster_group_text[] = 
+static concptr monster_group_text[] = 
 {
 #ifdef JP
 	"ユニーク",	/* "Uniques" */
@@ -4030,7 +4030,7 @@ static cptr monster_group_text[] =
  * Symbols of monsters in each group. Note the "Uniques" group
  * is handled differently.
  */
-static cptr monster_group_char[] =
+static concptr monster_group_char[] =
 {
 	(char *) -1L,
 	(char *) -2L,
@@ -4134,7 +4134,7 @@ static IDX collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 	int dummy_why;
 
 	/* Get a list of x_char in this group */
-	cptr group_char = monster_group_char[grp_cur];
+	concptr group_char = monster_group_char[grp_cur];
 
 	/* XXX Hack -- Check if this is the "Uniques" group */
 	bool grp_unique = (monster_group_char[grp_cur] == (char *) -1L);
@@ -4223,7 +4223,7 @@ static IDX collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 /*
  * Description of each monster group.
  */
-static cptr object_group_text[] = 
+static concptr object_group_text[] = 
 {
 #ifdef JP
 	"キノコ",	/* "Mushrooms" */
@@ -4444,7 +4444,7 @@ static int collect_objects(int grp_cur, IDX object_idx[], BIT_FLAGS8 mode)
 /*
  * Description of each feature group.
  */
-static cptr feature_group_text[] = 
+static concptr feature_group_text[] = 
 {
 	"terrains",
 	NULL
@@ -4646,7 +4646,7 @@ void do_cmd_load_screen(void)
 
 
 
-cptr inven_res_label = _("                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",
+concptr inven_res_label = _("                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",
 						 "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSeHlEpSdRgLv");
 
 
@@ -4834,19 +4834,19 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	char buf[2048];
 
 	int yomikomu = 0;
-	cptr tags[4] = {
+	concptr tags[4] = {
 		"HEADER_START:",
 		"HEADER_END:",
 		"FOOTER_START:",
 		"FOOTER_END:",
 	};
 
-	cptr html_head[] = {
+	concptr html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
 		"<pre>",
 		0,
 	};
-	cptr html_foot[] = {
+	concptr html_foot[] = {
 		"</pre>\n",
 		"</body>\n</html>\n",
 		0,
@@ -4905,7 +4905,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		for (x = 0; x < wid - 1; x++)
 		{
 			int rv, gv, bv;
-			cptr cc = NULL;
+			concptr cc = NULL;
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
 
@@ -5726,10 +5726,10 @@ void plural_aux(char *Name)
 	}
 	else if (my_strstr(Name, " of "))
 	{
-		cptr aider = my_strstr(Name, " of ");
+		concptr aider = my_strstr(Name, " of ");
 		char dummy[80];
 		int i = 0;
-		cptr ctr = Name;
+		concptr ctr = Name;
 
 		while (ctr < aider)
 		{
@@ -6060,7 +6060,7 @@ static void do_cmd_knowledge_kill_count(void)
  * @param grp_top 現在の選択リスト最上部ID
  * @return なし
  */
-static void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], cptr group_text[], int grp_cur, int grp_top)
+static void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], concptr group_text[], int grp_cur, int grp_top)
 {
 	int i;
 
@@ -8094,7 +8094,7 @@ static void do_cmd_knowledge_home(void)
 	GAME_TEXT file_name[1024];
 	store_type  *st_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr		paren = ")";
+	concptr		paren = ")";
 
 	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
 
@@ -8193,7 +8193,7 @@ static void do_cmd_knowledge_autopick(void)
 
 	for (k = 0; k < max_autopick; k++)
 	{
-		cptr tmp;
+		concptr tmp;
 		byte act = autopick_list[k].action;
 		if (act & DONT_AUTOPICK)
 		{

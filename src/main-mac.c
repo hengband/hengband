@@ -710,7 +710,7 @@ void convert_pathname(char* path)
  * Although there is no easy way to emulate fstat in the old interface,
  * we still can do stat-like things, because Mac OS is an OS.
  */
-static int get_modification_time(cptr path, u32b *mod_time)
+static int get_modification_time(concptr path, u32b *mod_time)
 {
 	CInfoPBRec pb;
 	Str255 pathname;
@@ -745,7 +745,7 @@ static int get_modification_time(cptr path, u32b *mod_time)
  * A (non-Mach-O) Mac OS version of check_modification_time, for those
  * compilers without good enough POSIX-compatibility libraries XXX XXX
  */
-errr check_modification_date(int fd, cptr template_file)
+errr check_modification_date(int fd, concptr template_file)
 {
 #pragma unused(fd)
 	u32b txt_stat, raw_stat;
@@ -863,7 +863,7 @@ static OSErr spec_to_path(const FSSpec *spec, char *buf, size_t size)
  * Set creator and filetype of a file specified by POSIX-style pathname.
  * Returns 0 on success, -1 in case of errors.
  */
-void fsetfileinfo(cptr pathname, OSType fcreator, OSType ftype)
+void fsetfileinfo(concptr pathname, OSType fcreator, OSType ftype)
 {
 	OSErr err;
 	FSSpec spec;
@@ -997,7 +997,7 @@ static void activate(WindowPtr w)
 /*
  * Display a warning message
  */
-static void mac_warning(cptr warning)
+static void mac_warning(concptr warning)
 {
 	Str255 text;
 	int len, i;
@@ -3677,7 +3677,7 @@ static void init_windows(void)
 	{
 		int n;
 
-		cptr s;
+		concptr s;
 
 		/* Obtain */
 		td = &data[i];
@@ -6882,7 +6882,7 @@ static vptr hook_rpanic(huge size)
 /*
  * Hook to tell the user something important
  */
-static void hook_plog(cptr str)
+static void hook_plog(concptr str)
 {
 	/* Warning message */
 	mac_warning(str);
@@ -6891,7 +6891,7 @@ static void hook_plog(cptr str)
 /*
  * Hook to tell the user something, and then quit
  */
-static void hook_quit(cptr str)
+static void hook_quit(concptr str)
 {
 	/* Warning if needed */
 	if (str) mac_warning(str);
@@ -6913,7 +6913,7 @@ static void hook_quit(cptr str)
 /*
  * Hook to tell the user something, and then crash
  */
-static void hook_core(cptr str)
+static void hook_core(concptr str)
 {
 	/* XXX Use the debugger */
 	/* DebugStr(str); */

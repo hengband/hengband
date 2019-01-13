@@ -9,7 +9,7 @@ typedef struct hist_type hist_type;
 */
 struct hist_type
 {
-	cptr info;			    /*!> メッセージ本文 / Textual History */
+	concptr info;			    /*!> メッセージ本文 / Textual History */
 
 	byte roll;			    /*!> 確率の重み / Frequency of this entry */
 	byte chart;			    /*!> 生い立ちメッセージの流れを示すチャートID / Chart index */

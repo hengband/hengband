@@ -193,7 +193,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
  * @param who 打撃を行ったモンスターの参照ID
  * @return なし
  */
-void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, cptr note, IDX who)
+void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, IDX who)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1477,7 +1477,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 		HIT_POINT power = 0;
 		HIT_POINT damage = 0;
 
-		cptr act = NULL;
+		concptr act = NULL;
 
 		/* Extract the attack infomation */
 		int effect = r_ptr->blow[ap_cnt].effect;
@@ -2407,7 +2407,7 @@ void process_monster(MONSTER_IDX m_idx)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			char monmessage[1024];
-			cptr filename;
+			concptr filename;
 
 			/* Acquire the monster name/poss */
 			if (m_ptr->ml)

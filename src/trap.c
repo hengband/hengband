@@ -166,8 +166,8 @@ static int check_hit(int power)
 static void hit_trap_pit(int trap_feat_type)
 {
 	HIT_POINT dam;
-	cptr trap_name = "";
-	cptr spike_name = "";
+	concptr trap_name = "";
+	concptr spike_name = "";
 
 	switch (trap_feat_type)
 	{
@@ -277,7 +277,7 @@ static void hit_trap_slow(void)
 * @param turn 状態異常の追加ターン量
 * @return なし
 */
-static void hit_trap_set_abnormal_status(cptr trap_message, bool resist, bool(*set_status)(IDX), IDX turn_aux)
+static void hit_trap_set_abnormal_status(concptr trap_message, bool resist, bool(*set_status)(IDX), IDX turn_aux)
 {
 	msg_print(trap_message);
 	if (!resist)
@@ -301,7 +301,7 @@ void hit_trap(bool break_trap)
 	cave_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
-	cptr name = _("トラップ", "a trap");
+	concptr name = _("トラップ", "a trap");
 
 	disturb(FALSE, TRUE);
 

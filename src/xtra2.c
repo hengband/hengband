@@ -505,7 +505,7 @@ void check_find_art_quest_completion(object_type *o_ptr)
  * @param r_ptr 撃破されたモンスターの種族情報を持つ構造体の参照ポインタ
  * @return 撃破されたモンスターの述語
  */
-cptr extract_note_dies(MONRACE_IDX r_idx)
+concptr extract_note_dies(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	/* Some monsters get "destroyed" */
@@ -1316,7 +1316,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
  * to induce changes in the monster recall code.
  * </pre>
  */
-bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, cptr note)
+bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -2006,14 +2006,14 @@ void verify_panel(void)
 /*
  * Monster health description
  */
-cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
+concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 {
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 	bool living;
 	int perc;
-	cptr desc;
-	cptr attitude;
-	cptr clone;
+	concptr desc;
+	concptr attitude;
+	concptr clone;
 
 	/* Determine if the monster is "living" */
 	living = monster_living(m_ptr->ap_r_idx);
@@ -2565,11 +2565,11 @@ bool show_gold_on_floor = FALSE;
  *
  * This function must handle blindness/hallucination.
  */
-static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
+static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
 	cave_type *c_ptr = &cave[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	cptr s1 = "", s2 = "", s3 = "", x_info = "";
+	concptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
@@ -2609,7 +2609,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 	/* Hack -- hallucination */
 	if (p_ptr->image)
 	{
-		cptr name = _("何か奇妙な物", "something strange");
+		concptr name = _("何か奇妙な物", "something strange");
 
 		/* Display a message */
 #ifdef JP
@@ -2943,7 +2943,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, cptr info)
 	/* Terrain feature if needed */
 	if (boring || have_flag(f_ptr->flags, FF_REMEMBER))
 	{
-		cptr name;
+		concptr name;
 
 		/* Hack -- special handling for quest entrances */
 		if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
@@ -3585,7 +3585,7 @@ bool get_aim_dir(DIRECTION *dp)
 {
 	DIRECTION dir;
 	char	command;
-	cptr	p;
+	concptr	p;
 	COMMAND_CODE code;
 
 	(*dp) = 0;
@@ -3707,7 +3707,7 @@ bool get_aim_dir(DIRECTION *dp)
 bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 {
 	DIRECTION dir;
-	cptr prompt;
+	concptr prompt;
 	COMMAND_CODE code;
 
 	(*dp) = 0;
@@ -3852,7 +3852,7 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 bool get_rep_dir(DIRECTION *dp, bool under)
 {
 	DIRECTION dir;
-	cptr prompt;
+	concptr prompt;
 	COMMAND_CODE code;
 
 	(*dp) = 0;
@@ -3987,7 +3987,7 @@ void gain_level_reward(int chosen_reward)
 	OBJECT_TYPE_VALUE dummy = 0;
 	OBJECT_SUBTYPE_VALUE dummy2 = 0;
 	int         type, effect;
-	cptr        reward = NULL;
+	concptr        reward = NULL;
 	GAME_TEXT o_name[MAX_NLEN];
 
 	int count = 0;
@@ -4805,7 +4805,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 bool get_hack_dir(DIRECTION *dp)
 {
 	DIRECTION dir;
-	cptr    p;
+	concptr    p;
 	char    command;
 
 	(*dp) = 0;
@@ -5029,7 +5029,7 @@ IDX rumor_num(char *zz, IDX max_idx)
 	return (IDX)atoi(zz);
 }
 
-cptr rumor_bind_name(char *base, cptr fullname)
+concptr rumor_bind_name(char *base, concptr fullname)
 {
 	char *s, *v;
 
@@ -5067,8 +5067,8 @@ void display_rumor(bool ex)
 	if (strncmp(Rumor, "R:", 2) == 0)
 	{
 		char *zz[4];
-		cptr rumor_msg = NULL;
-		cptr rumor_eff_format = NULL;
+		concptr rumor_msg = NULL;
+		concptr rumor_eff_format = NULL;
 		char fullname[1024] = "";
 
 		if (tokenize(Rumor + 2, 3, zz, TOKENIZE_CHECKQUOTE) == 3)

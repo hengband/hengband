@@ -86,7 +86,7 @@ void get_table_name_aux(char *out_string)
 #else
 #define MAX_SYLLABLES 164       /* Used with scrolls (see below) */
 
-	static cptr syllables[MAX_SYLLABLES] = {
+	static concptr syllables[MAX_SYLLABLES] = {
 		"a", "ab", "ag", "aks", "ala", "an", "ankh", "app",
 		"arg", "arze", "ash", "aus", "ban", "bar", "bat", "bek",
 		"bie", "bin", "bit", "bjor", "blu", "bot", "bu",
@@ -378,7 +378,7 @@ static char *object_desc_chr(char *t, char c)
  * Print a string "s" into a string "t", as if by strcpy(t, s),
  * and return a pointer to the terminator.
  */
-static char *object_desc_str(char *t, cptr s)
+static char *object_desc_str(char *t, concptr s)
 {
 	/* Copy the string */
 	while (*s) *t++ = *s++;
@@ -591,9 +591,9 @@ static char *object_desc_int(char *t, sint v)
 typedef struct flag_insc_table
 {
 #ifdef JP
-	cptr japanese;
+	concptr japanese;
 #endif
-	cptr english;
+	concptr english;
 	int flag;
 	int except_flag;
 } flag_insc_table;
@@ -1159,7 +1159,7 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
  */
 static void get_inscription(char *buff, object_type *o_ptr)
 {
-	cptr insc = quark_str(o_ptr->inscription);
+	concptr insc = quark_str(o_ptr->inscription);
 	char *ptr = buff;
 
 	/* Not fully identified */
@@ -1190,7 +1190,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
 		{
 			bool kanji = FALSE;
 			bool all;
-			cptr start = ptr;
+			concptr start = ptr;
 
 			/* check for too long inscription */
 			if (ptr >= buff + MAX_NLEN) continue;
@@ -1308,13 +1308,13 @@ bool object_is_quest_target(object_type *o_ptr)
 void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 {
 	/* Extract object kind name */
-	cptr            kindname = k_name + k_info[o_ptr->k_idx].name;
+	concptr            kindname = k_name + k_info[o_ptr->k_idx].name;
 
 	/* Extract default "base" string */
-	cptr            basenm = kindname;
+	concptr            basenm = kindname;
 
 	/* Assume no "modifier" string */
-	cptr            modstr = "";
+	concptr            modstr = "";
 
 	int power;
 	int fire_rate;
@@ -1326,7 +1326,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 	bool            show_weapon = FALSE;
 	bool            show_armour = FALSE;
 
-	cptr            s, s0;
+	concptr            s, s0;
 	char            *t;
 
 	char            p1 = '(', p2 = ')';
@@ -1409,7 +1409,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 					sprintf(tmp_val2, " (%s)",r_name + r_ptr->name);
 					modstr = tmp_val2;
 #else
-					cptr t = r_name + r_ptr->name;
+					concptr t = r_name + r_ptr->name;
 
 					if (!(r_ptr->flags1 & RF1_UNIQUE))
 					{
@@ -1438,7 +1438,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 #ifdef JP
 			modstr = r_name + r_ptr->name;
 #else
-			cptr t = r_name + r_ptr->name;
+			concptr t = r_name + r_ptr->name;
 
 			if (!(r_ptr->flags1 & RF1_UNIQUE))
 			{
@@ -2018,7 +2018,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		/* ランダム・アーティファクト */
 		if (o_ptr->art_name)
 		{
-			cptr temp = quark_str(o_ptr->art_name);
+			concptr temp = quark_str(o_ptr->art_name);
 
 			/* '『' から始まらない伝説のアイテムの名前は最初に付加する */
 			/* 英語版のセーブファイルから来た 'of XXX' は,「XXXの」と表示する */
@@ -2148,7 +2148,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		}
 		else if (o_ptr->inscription)
 		{
-			cptr str = quark_str(o_ptr->inscription);
+			concptr str = quark_str(o_ptr->inscription);
 
 			while(*str)
 			{
@@ -2163,7 +2163,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 			if (*str)
 			{
 				/* Find the '#' */
-				cptr str_aux = my_strchr(quark_str(o_ptr->inscription), '#');
+				concptr str_aux = my_strchr(quark_str(o_ptr->inscription), '#');
 
 				/* Add the false name */
 				t = object_desc_str(t,"『");
@@ -2211,7 +2211,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 			if (o_ptr->inscription && my_strchr(quark_str(o_ptr->inscription), '#'))
 			{
 				/* Find the '#' */
-				cptr str = my_strchr(quark_str(o_ptr->inscription), '#');
+				concptr str = my_strchr(quark_str(o_ptr->inscription), '#');
 
 				/* Add the false name */
 				t = object_desc_chr(t, ' ');

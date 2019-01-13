@@ -12,8 +12,8 @@ typedef struct convert_key convert_key;
 
 struct convert_key
 {
-	cptr key1;
-	cptr key2;
+	concptr key1;
+	concptr key2;
 };
 
 static const convert_key s2j_table[] = {
@@ -63,7 +63,7 @@ static const convert_key s2j_table[] = {
  * @return なし
  * @details
  */
-void sindarin_to_kana(char *kana, cptr sindarin)
+void sindarin_to_kana(char *kana, concptr sindarin)
 {
 	char buf[256];
 	int idx;
@@ -74,8 +74,8 @@ void sindarin_to_kana(char *kana, cptr sindarin)
 
 	for (idx = 0; s2j_table[idx].key1 != NULL; idx++)
 	{
-		cptr pat1 = s2j_table[idx].key1;
-		cptr pat2 = s2j_table[idx].key2;
+		concptr pat1 = s2j_table[idx].key1;
+		concptr pat2 = s2j_table[idx].key2;
 		int len = strlen(pat1);
 		char *src = kana;
 		char *dest = buf;
@@ -161,7 +161,7 @@ static const struct jverb_table_t {
  * @return なし
  * @details
  */
-void jverb(cptr in, char *out, int flag)
+void jverb(concptr in, char *out, int flag)
 {
 	const struct jverb_table_t * p;
 	int in_len = strlen(in);
@@ -370,7 +370,7 @@ byte codeconv(char *str)
  * @param x 判定する位置(バイト)
  * @return 漢字の1バイト目ならばTRUE
  */
-bool iskanji2(cptr s, int x)
+bool iskanji2(concptr s, int x)
 {
 	int i;
 
@@ -388,7 +388,7 @@ bool iskanji2(cptr s, int x)
  * @param str 判定する文字列へのポインタ
  * @return 文字列の文字コードがASCIIならTRUE、そうでなければFALSE
  */
-static bool is_ascii_str(cptr str)
+static bool is_ascii_str(concptr str)
 {
 	for (;*str; str++) {
 		if (!(0x00 < *str && *str <= 0x7f))
@@ -402,7 +402,7 @@ static bool is_ascii_str(cptr str)
  * @param str 判定する文字列へのポインタ
  * @return 文字列の文字コードがUTF-8ならTRUE、そうでなければFALSE
  */
-static bool is_utf8_str(cptr str)
+static bool is_utf8_str(concptr str)
 {
 	const unsigned char* p;
 	for (p = (const unsigned char*)str; *p; p++) {

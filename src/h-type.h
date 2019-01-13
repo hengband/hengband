@@ -42,7 +42,7 @@
 /*** Special 4 letter names for some standard types ***/
 
 typedef void *vptr;       /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
-typedef const char *cptr; /*!< 文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
+typedef const char *concptr; /*!< 文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
 typedef double real;      /*!< doubleをreal型として定義 / Since float's are silly, hard code real numbers as doubles */
 
 
@@ -269,7 +269,7 @@ typedef u16b *u16b_ptr;
 typedef s32b *s32b_ptr;
 typedef u32b *u32b_ptr;
 typedef vptr *vptr_ptr;
-typedef cptr *cptr_ptr;
+typedef concptr *cptr_ptr;
 
 
 

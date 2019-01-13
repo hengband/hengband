@@ -18,14 +18,14 @@
 /*
  * Pronoun arrays, by gender.
  */
-static cptr wd_he[3] =
+static concptr wd_he[3] =
 #ifdef JP
 { "それ", "彼", "彼女" };
 #else
 { "it", "he", "she" };
 #endif
 
-static cptr wd_his[3] =
+static concptr wd_his[3] =
 #ifdef JP
 { "それの", "彼の", "彼女の" };
 #else
@@ -117,14 +117,14 @@ static bool know_damage(MONRACE_IDX r_idx, int i)
 /*
  * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
  */
-void (*hook_c_roff)(TERM_COLOR attr, cptr str) = c_roff;
+void (*hook_c_roff)(TERM_COLOR attr, concptr str) = c_roff;
 
 /*!
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
  * @param str 出力文字列
  * @return なし
  */
-static void hooked_roff(cptr str)
+static void hooked_roff(concptr str)
 {
 	/* Spawn */
 	hook_c_roff(TERM_WHITE, str);
@@ -210,7 +210,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	monster_race    *r_ptr = &r_info[r_idx];
 	bool            old = FALSE;
 	int             m, n, r;
-	cptr            p, q;
+	concptr            p, q;
 
 #ifdef JP
 	char            jverb_buf[64];
@@ -239,7 +239,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	int		vn = 0;
 	byte		color[96];
-	cptr		vp[96];
+	concptr		vp[96];
 	char tmp_msg[96][96];
 
 	bool know_everything = FALSE;
@@ -450,7 +450,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	/* Descriptions */
 	{
-		cptr tmp = r_text + r_ptr->text;
+		concptr tmp = r_text + r_ptr->text;
 
 		if (tmp[0])
 		{
@@ -1590,7 +1590,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		  (r_ptr->r_ignore == MAX_UCHAR) ||
 	    (r_ptr->sleep == 0 && r_ptr->r_tkills >= 10) || know_everything)
 	{
-		cptr act;
+		concptr act;
 
 		if (r_ptr->sleep > 200)
 		{
@@ -2111,7 +2111,7 @@ void display_roff(MONRACE_IDX r_idx)
  * @param roff_func 出力処理を行う関数ポインタ
  * @return なし
  */
-void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, cptr str))
+void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
 {
 	hook_c_roff = roff_func;
 

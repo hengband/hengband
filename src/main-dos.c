@@ -300,7 +300,7 @@ static void Term_init_dos(term *t);
 static void Term_nuke_dos(term *t);
 static void term_data_link(term_data *td);
 static void dos_dump_screen(void);
-static void dos_quit_hook(cptr str);
+static void dos_quit_hook(concptr str);
 static bool init_windows(void);
 errr init_dos(void);
 #ifdef USE_SOUND
@@ -1310,7 +1310,7 @@ static void term_data_link(term_data *td)
 /*
  * Shut down visual system, then fall back into standard "quit()"
  */
-static void dos_quit_hook(cptr str)
+static void dos_quit_hook(concptr str)
 {
 	int i;
 

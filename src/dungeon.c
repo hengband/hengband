@@ -1114,7 +1114,7 @@ static void recharged_notice(object_type *o_ptr)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 
-	cptr s;
+	concptr s;
 
 	/* No inscription */
 	if (!o_ptr->inscription) return;
@@ -1486,7 +1486,7 @@ static void process_world_aux_hp_and_sp(void)
 			}
 			else
 			{
-				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sで火傷した！", "The %s burns you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1524,7 +1524,7 @@ static void process_world_aux_hp_and_sp(void)
 			}
 			else
 			{
-				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1562,7 +1562,7 @@ static void process_world_aux_hp_and_sp(void)
 			}
 			else
 			{
-				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに感電した！", "The %s shocks you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1600,7 +1600,7 @@ static void process_world_aux_hp_and_sp(void)
 			}
 			else
 			{
-				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1639,7 +1639,7 @@ static void process_world_aux_hp_and_sp(void)
 			}
 			else
 			{
-				cptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに毒された！", "The %s poisons you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr->poisoned + 3);
@@ -1702,7 +1702,7 @@ static void process_world_aux_hp_and_sp(void)
 	{
 		if (!IS_INVULN() && !p_ptr->wraith_form && !p_ptr->kabenuke && ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
 		{
-			cptr dam_desc;
+			concptr dam_desc;
 			cave_no_regen = TRUE;
 
 			if (p_ptr->pass_wall)
@@ -4197,7 +4197,7 @@ static void process_command(void)
 				}
 				else if (p_ptr->anti_magic && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
 				{
-					cptr which_power = _("魔法", "magic");
+					concptr which_power = _("魔法", "magic");
 					if (p_ptr->pclass == CLASS_MINDCRAFTER)
 						which_power = _("超能力", "psionic powers");
 					else if (p_ptr->pclass == CLASS_IMITATOR)

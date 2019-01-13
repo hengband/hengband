@@ -62,7 +62,7 @@
  * モンスターの打撃手段トークンの定義 /
  * Monster Blow Methods
  */
-static cptr r_info_blow_method[] =
+static concptr r_info_blow_method[] =
 {
 	"",
 	"HIT",
@@ -98,7 +98,7 @@ static cptr r_info_blow_method[] =
  * モンスターの打撃属性トークンの定義 /
  * Monster Blow Effects
  */
-static cptr r_info_blow_effect[] =
+static concptr r_info_blow_effect[] =
 {
 	"",
 	"HURT",
@@ -143,7 +143,7 @@ static cptr r_info_blow_effect[] =
  * 地形属性トークンの定義 /
  * Feature info flags
  */
-static cptr f_info_flags[] =
+static concptr f_info_flags[] =
 {
 	"LOS",
 	"PROJECT",
@@ -268,7 +268,7 @@ static cptr f_info_flags[] =
  * モンスター特性トークンの定義1 /
  * Monster race flags
  */
-static cptr r_info_flags1[] =
+static concptr r_info_flags1[] =
 {
 	"UNIQUE",
 	"QUESTOR",
@@ -308,7 +308,7 @@ static cptr r_info_flags1[] =
  * モンスター特性トークンの定義2 /
  * Monster race flags
  */
-static cptr r_info_flags2[] =
+static concptr r_info_flags2[] =
 {
 	"STUPID",
 	"SMART",
@@ -348,7 +348,7 @@ static cptr r_info_flags2[] =
  * モンスター特性トークンの定義3 /
  * Monster race flags
  */
-static cptr r_info_flags3[] =
+static concptr r_info_flags3[] =
 {
 	"ORC",
 	"TROLL",
@@ -388,7 +388,7 @@ static cptr r_info_flags3[] =
  * モンスター特性トークンの定義4 /
  * Monster race flags
  */
-static cptr r_info_flags4[] =
+static concptr r_info_flags4[] =
 {
 	"SHRIEK",
 	"XXX1",
@@ -428,7 +428,7 @@ static cptr r_info_flags4[] =
  * モンスター特性トークン(発動型能力1) /
  * Monster race flags
  */
-static cptr r_a_ability_flags1[] =
+static concptr r_a_ability_flags1[] =
 {
 	"BA_ACID",
 	"BA_ELEC",
@@ -468,7 +468,7 @@ static cptr r_a_ability_flags1[] =
  * モンスター特性トークン(発動型能力2) /
  * Monster race flags
  */
-static cptr r_a_ability_flags2[] =
+static concptr r_a_ability_flags2[] =
 {
 	"HASTE",
 	"HAND_DOOM",
@@ -509,7 +509,7 @@ static cptr r_a_ability_flags2[] =
  * モンスター特性トークン(発動型能力3) /
  * Monster race flags
  */
-static cptr r_a_ability_flags3[] =
+static concptr r_a_ability_flags3[] =
 {
 	"XXXA3X00",
 	"XXXA3X01",
@@ -551,7 +551,7 @@ static cptr r_a_ability_flags3[] =
  * モンスター特性トークン(発動型能力4) /
  * Monster race flags
  */
-static cptr r_a_ability_flags4[] =
+static concptr r_a_ability_flags4[] =
 {
 	"XXXA4X00",
 	"XXXA4X01",
@@ -593,7 +593,7 @@ static cptr r_a_ability_flags4[] =
  * モンスター特性トークンの定義7 /
  * Monster race flags
  */
-static cptr r_info_flags7[] =
+static concptr r_info_flags7[] =
 {
 	"AQUATIC",
 	"CAN_SWIM",
@@ -633,7 +633,7 @@ static cptr r_info_flags7[] =
  * モンスター特性トークンの定義8 /
  * Monster race flags
  */
-static cptr r_info_flags8[] =
+static concptr r_info_flags8[] =
 {
 	"WILD_ONLY",
 	"WILD_TOWN",
@@ -674,7 +674,7 @@ static cptr r_info_flags8[] =
  * モンスター特性トークンの定義9 /
  * Monster race flags
  */
-static cptr r_info_flags9[] =
+static concptr r_info_flags9[] =
 {
 	"DROP_CORPSE",
 	"DROP_SKELETON",
@@ -716,7 +716,7 @@ static cptr r_info_flags9[] =
  * モンスター特性トークンの定義R(耐性) /
  * Monster race flags
  */
-static cptr r_info_flagsr[] =
+static concptr r_info_flagsr[] =
 {
 	"IM_ACID",
 	"IM_ELEC",
@@ -757,7 +757,7 @@ static cptr r_info_flagsr[] =
  * オブジェクト基本特性トークンの定義 /
  * Object flags
  */
-static cptr k_info_flags[] =
+static concptr k_info_flags[] =
 {
 	"STR",
 	"INT",
@@ -908,7 +908,7 @@ static cptr k_info_flags[] =
  * オブジェクト生成特性トークンの定義 /
  * Object flags
  */
-static cptr k_info_gen_flags[] =
+static concptr k_info_gen_flags[] =
 {
 	"INSTA_ART",
 	"QUESTITEM",
@@ -948,7 +948,7 @@ static cptr k_info_gen_flags[] =
  * ダンジョン特性トークンの定義 /
  * Dungeon flags
  */
-static cptr d_info_flags1[] =
+static concptr d_info_flags1[] =
 {
 	"WINNER",
 	"MAZE",
@@ -997,7 +997,7 @@ static cptr d_info_flags1[] =
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-static bool add_text(u32b *offset, header *head, cptr buf, bool normal_text)
+static bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
 {
 	/* Hack -- Verify space */
 	if (head->text_size + strlen(buf) + 8 > FAKE_TEXT_SIZE)
@@ -1059,7 +1059,7 @@ static bool add_text(u32b *offset, header *head, cptr buf, bool normal_text)
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-static bool add_name(u32b *offset, header *head, cptr buf)
+static bool add_name(u32b *offset, header *head, concptr buf)
 {
 	/* Hack -- Verify space */
 	if (head->name_size + strlen(buf) + 8 > FAKE_NAME_SIZE)
@@ -1094,7 +1094,7 @@ static bool add_name(u32b *offset, header *head, cptr buf)
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-static bool add_tag(STR_OFFSET *offset, header *head, cptr buf)
+static bool add_tag(STR_OFFSET *offset, header *head, concptr buf)
 {
 	u32b i;
 
@@ -1547,7 +1547,7 @@ errr parse_m_info(char *buf, header *head)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_flag(u32b *flags, cptr names[], cptr what)
+static errr grab_one_flag(u32b *flags, concptr names[], concptr what)
 {
 	int i;
 
@@ -1572,7 +1572,7 @@ static errr grab_one_flag(u32b *flags, cptr names[], cptr what)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
+static errr grab_one_feat_flag(feature_type *f_ptr, concptr what)
 {
 	int i;
 
@@ -1601,7 +1601,7 @@ static errr grab_one_feat_flag(feature_type *f_ptr, cptr what)
  * @param count ステートの保存先ID
  * @return エラーコード
  */
-static errr grab_one_feat_action(feature_type *f_ptr, cptr what, int count)
+static errr grab_one_feat_action(feature_type *f_ptr, concptr what, int count)
 {
 	FF_FLAGS_IDX i;
 
@@ -1912,7 +1912,7 @@ errr parse_f_info(char *buf, header *head)
  * @param str タグ文字列
  * @return 地形ID
  */
-s16b f_tag_to_index(cptr str)
+s16b f_tag_to_index(concptr str)
 {
 	u16b i;
 
@@ -1999,7 +1999,7 @@ void retouch_f_info(header *head)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
+static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
 {
 	int i;
 
@@ -2028,7 +2028,7 @@ static errr grab_one_kind_flag(object_kind *k_ptr, cptr what)
  * @param what 参照元の文字列ポインタ
  * @return 発動能力ID
  */
-static byte grab_one_activation_flag(cptr what)
+static byte grab_one_activation_flag(concptr what)
 {
 	int i;
 
@@ -2338,7 +2338,7 @@ errr parse_k_info(char *buf, header *head)
  * @param what 参照元の文字列ポインタ
  * @return エラーがあった場合1、エラーがない場合0を返す
  */
-static errr grab_one_artifact_flag(artifact_type *a_ptr, cptr what)
+static errr grab_one_artifact_flag(artifact_type *a_ptr, concptr what)
 {
 	int i;
 
@@ -2566,7 +2566,7 @@ errr parse_a_info(char *buf, header *head)
  * @param what 参照元の文字列ポインタ
  * @return エラーがあった場合1、エラーがない場合0を返す
  */
-static bool grab_one_ego_item_flag(ego_item_type *e_ptr, cptr what)
+static bool grab_one_ego_item_flag(ego_item_type *e_ptr, concptr what)
 {
 	int i;
 
@@ -2780,7 +2780,7 @@ errr parse_e_info(char *buf, header *head)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
+static errr grab_one_basic_flag(monster_race *r_ptr, concptr what)
 {
 	if (grab_one_flag(&r_ptr->flags1, r_info_flags1, what) == 0)
 		return 0;
@@ -2817,7 +2817,7 @@ static errr grab_one_basic_flag(monster_race *r_ptr, cptr what)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_spell_flag(monster_race *r_ptr, cptr what)
+static errr grab_one_spell_flag(monster_race *r_ptr, concptr what)
 {
 	if (grab_one_flag(&r_ptr->flags4, r_info_flags4, what) == 0)
 		return 0;
@@ -3169,7 +3169,7 @@ errr parse_r_info(char *buf, header *head)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
+static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, concptr what)
 {
 	if (grab_one_flag(&d_ptr->flags1, d_info_flags1, what) == 0)
 		return 0;
@@ -3187,7 +3187,7 @@ static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, cptr what)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
+static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, concptr what)
 {
 	if (grab_one_flag(&d_ptr->mflags1, r_info_flags1, what) == 0)
 		return 0;
@@ -3223,7 +3223,7 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, cptr what)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, cptr what)
+static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, concptr what)
 {
 	if (grab_one_flag(&d_ptr->mflags4, r_info_flags4, what) == 0)
 		return 0;
@@ -4416,7 +4416,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 
 static char tmp[8];
-static cptr variant = "ZANGBAND";
+static concptr variant = "ZANGBAND";
 
 
 /*!
@@ -4426,9 +4426,9 @@ static cptr variant = "ZANGBAND";
  * @param fp
  * @return エラーコード
  */
-static cptr process_dungeon_file_expr(char **sp, char *fp)
+static concptr process_dungeon_file_expr(char **sp, char *fp)
 {
-	cptr v;
+	concptr v;
 
 	char *b;
 	char *s;
@@ -4453,8 +4453,8 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
 	/* Analyze */
 	if (*s == b1)
 	{
-		cptr p;
-		cptr t;
+		concptr p;
+		concptr t;
 
 		/* Skip b1 */
 		s++;
@@ -4744,7 +4744,7 @@ static cptr process_dungeon_file_expr(char **sp, char *fp)
  * @param xmax 詳細不明
  * @return エラーコード
  */
-errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
+errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax)
 {
 	FILE *fp;
 	char buf[1024];
@@ -4785,7 +4785,7 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 		if ((buf[0] == '?') && (buf[1] == ':'))
 		{
 			char f;
-			cptr v;
+			concptr v;
 			char *s;
 
 			/* Start */
@@ -4811,7 +4811,7 @@ errr process_dungeon_file(cptr name, int ymin, int xmin, int ymax, int xmax)
 	/* Errors */
 	if (err)
 	{
-		cptr oops;
+		concptr oops;
 
 		/* Error string */
 		oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
@@ -4834,10 +4834,10 @@ void write_r_info_txt(void)
 	int i, j, z, fc, bc;
 	int dlen;
 
-	cptr flags[32 * 10];
+	concptr flags[32 * 10];
 
 	u32b f_ptr[10];
-	cptr *n_ptr[10];
+	concptr *n_ptr[10];
 
 	monster_race *r_ptr;
 
@@ -4845,7 +4845,7 @@ void write_r_info_txt(void)
 
 	FILE *fff = fopen("output.txt", "wt");
 
-	cptr desc;
+	concptr desc;
 
 	BIT_FLAGS mode = -1;
 

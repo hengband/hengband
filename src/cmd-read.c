@@ -532,7 +532,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 	}
 	else if (o_ptr->tval==TV_PARCHMENT)
 	{
-		cptr q;
+		concptr q;
 		GAME_TEXT o_name[MAX_NLEN];
 		char buf[1024];
 		screen_save();
@@ -610,7 +610,7 @@ void do_cmd_read_scroll(void)
 {
 	object_type *o_ptr;
 	OBJECT_IDX item;
-	cptr q, s;
+	concptr q, s;
 
 	if (p_ptr->wild_mode)
 	{

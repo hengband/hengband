@@ -681,8 +681,8 @@ struct option_type
 	byte	o_set;
 	byte	o_bit;
 
-	cptr	o_text;
-	cptr	o_desc;
+	concptr	o_text;
+	concptr	o_desc;
 };
 
 
@@ -723,7 +723,7 @@ typedef struct owner_type owner_type;
 
 struct owner_type
 {
-	cptr owner_name;	/* Name */
+	concptr owner_name;	/* Name */
 	PRICE max_cost;		/* Purse limit */
 	byte max_inflate;	/* Inflation (max) */
 	byte min_inflate;	/* Inflation (min) */
@@ -814,11 +814,11 @@ typedef struct player_sex player_sex;
 
 struct player_sex
 {
-	cptr title;			/* Type of sex */
-	cptr winner;		/* Name of winner */
+	concptr title;			/* Type of sex */
+	concptr winner;		/* Name of winner */
 #ifdef JP
-	cptr E_title;		/* 英語性別 */
-	cptr E_winner;		/* 英語性別 */
+	concptr E_title;		/* 英語性別 */
+	concptr E_winner;		/* 英語性別 */
 #endif
 };
 
@@ -831,10 +831,10 @@ typedef struct player_race player_race;
 
 struct player_race
 {
-	cptr title;			/* Type of race */
+	concptr title;			/* Type of race */
 
 #ifdef JP
-	cptr E_title;		/* 英語種族 */
+	concptr E_title;		/* 英語種族 */
 #endif
 	s16b r_adj[6];		/* Racial stat bonuses */
 
@@ -878,10 +878,10 @@ typedef struct player_class player_class;
 
 struct player_class
 {
-	cptr title;			/* Type of class */
+	concptr title;			/* Type of class */
 
 #ifdef JP
-	cptr E_title;		/* 英語職業 */
+	concptr E_title;		/* 英語職業 */
 #endif
 	s16b c_adj[6];		/* Class stat modifier */
 
@@ -913,10 +913,10 @@ struct player_class
 typedef struct player_seikaku player_seikaku;
 struct player_seikaku
 {
-	cptr title;			/* Type of seikaku */
+	concptr title;			/* Type of seikaku */
 
 #ifdef JP
-	cptr E_title;		/* 英語性格 */
+	concptr E_title;		/* 英語性格 */
 #endif
 
 	s16b a_adj[6];		/* seikaku stat bonuses */
@@ -1115,7 +1115,7 @@ struct player_type
 
 	HIT_POINT player_hp[PY_MAX_LEVEL];
 	char died_from[80];   	  /* What killed the player */
-	cptr last_message;        /* Last message on death or retirement */
+	concptr last_message;        /* Last message on death or retirement */
 	char history[4][60];  	  /* Textual "history" for the Player */
 
 	u16b total_winner;	  /* Total winner */
@@ -1414,7 +1414,7 @@ typedef struct martial_arts martial_arts;
 
 struct martial_arts
 {
-	cptr    desc;       /* A verbose attack description */
+	concptr    desc;       /* A verbose attack description */
 	int     min_level;  /* Minimum level to use */
 	int     chance;     /* Chance of 'success' */
 	int     dd;         /* Damage dice */
@@ -1426,9 +1426,9 @@ typedef struct kamae kamae;
 
 struct kamae
 {
-	cptr    desc;       /* A verbose kamae description */
+	concptr    desc;       /* A verbose kamae description */
 	int     min_level;  /* Minimum level to use */
-	cptr    info;
+	concptr    info;
 };
 
 /* Mindcrafters */
@@ -1438,7 +1438,7 @@ struct mind_type
 	int     min_lev;
 	int     mana_cost;
 	int     fail;
-	cptr    name;
+	concptr    name;
 };
 
 typedef struct mind_power mind_power;
@@ -1458,7 +1458,7 @@ struct monster_power
 	int     manedam;
 	int     manefail;
 	int     use_stat;
-	cptr    name;
+	concptr    name;
 };
 
 
@@ -1537,7 +1537,7 @@ struct dun_type
 {
 	DEPTH min_level; /* Minimum level in the dungeon */
 	DEPTH max_level; /* Maximum dungeon level allowed */
-	cptr name;      /* The name of the dungeon */
+	concptr name;      /* The name of the dungeon */
 };
 
 /*
@@ -1664,8 +1664,8 @@ struct dungeon_info_type {
  * @brief 自動拾い/破壊設定データの構造体 / A structure type for entry of auto-picker/destroyer
  */
 typedef struct {
-	cptr name;          /*!< 自動拾い/破壊定義の名称一致基準 / Items which have 'name' as part of its name match */
-	cptr insc;          /*!< 対象となったアイテムに自動で刻む内容 / Items will be auto-inscribed as 'insc' */
+	concptr name;          /*!< 自動拾い/破壊定義の名称一致基準 / Items which have 'name' as part of its name match */
+	concptr insc;          /*!< 対象となったアイテムに自動で刻む内容 / Items will be auto-inscribed as 'insc' */
 	BIT_FLAGS flag[2];       /*!< キーワードに関する汎用的な条件フラグ / Misc. keyword to be matched */
 	byte action;        /*!< 対象のアイテムを拾う/破壊/放置するかの指定フラグ / Auto-pickup or Destroy or Leave items */
 	byte dice;          /*!< 武器のダイス値基準値 / Weapons which have more than 'dice' dice match */
@@ -1742,7 +1742,7 @@ typedef struct {
 #endif
 
 typedef struct {
-	cptr flag;
+	concptr flag;
 	byte index;
 	byte level;
 	s32b value;
@@ -1750,11 +1750,11 @@ typedef struct {
 		int constant;
 		DICE_NUMBER dice;
 	} timeout;
-	cptr desc;
+	concptr desc;
 } activation_type;
 
 typedef struct {
 	int flag;
 	int type;
-	cptr name;
+	concptr name;
 } dragonbreath_type;

@@ -183,7 +183,7 @@ static int check_hit(int power, DEPTH level, int stun)
 }
 
 /*! モンスターの侮辱行為メッセージテーブル / Hack -- possible "insult" messages */
-static cptr desc_insult[] =
+static concptr desc_insult[] =
 {
 #ifdef JP
 	"があなたを侮辱した！",
@@ -212,7 +212,7 @@ static cptr desc_insult[] =
 };
 
 /*! マゴットのぼやきメッセージテーブル / Hack -- possible "insult" messages */
-static cptr desc_moan[] =
+static concptr desc_moan[] =
 {
 #ifdef JP
 	"は何かを悲しんでいるようだ。",
@@ -240,7 +240,7 @@ static cptr desc_moan[] =
 * @return なし
 */
 static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
-	HIT_POINT(*dam_func)(HIT_POINT dam, cptr kb_str, int monspell, bool aura), cptr message)
+	HIT_POINT(*dam_func)(HIT_POINT dam, concptr kb_str, int monspell, bool aura), concptr message)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -299,7 +299,7 @@ static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
 
 	int             dice_num, dice_side;
 
-	cptr            atk_desc;
+	concptr            atk_desc;
 
 	switch (attack)
 	{
@@ -1570,7 +1570,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		HIT_POINT power = 0;
 		HIT_POINT damage = 0;
 
-		cptr act = NULL;
+		concptr act = NULL;
 
 		/* Extract the attack infomation */
 		int effect = r_ptr->blow[ap_cnt].effect;

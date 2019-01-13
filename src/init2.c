@@ -181,7 +181,7 @@ void init_file_paths(char *path)
 	/* Allow "fat binary" usage with NeXT */
 	if (TRUE)
 	{
-		cptr next = NULL;
+		concptr next = NULL;
 
 # if defined(m68k)
 		next = "m68k";
@@ -230,7 +230,7 @@ int error_line; /*!< データ読み込み/初期化時に汎用的にエラー�
 /*!
  * エラーメッセージの名称定義 / Standard error message text
  */
-cptr err_str[PARSE_ERROR_MAX] =
+concptr err_str[PARSE_ERROR_MAX] =
 {
 	NULL,
 #ifdef JP
@@ -285,7 +285,7 @@ header m_head; /*!< プレイヤー職業魔法情報のヘッダ構造体 */
  * @param template_file ファイル名
  * @return テキストの方が新しいか、rawファイルがなく更新の必要がある場合-1、更新の必要がない場合0。
  */
-static errr check_modification_date(int fd, cptr template_file)
+static errr check_modification_date(int fd, concptr template_file)
 {
 	char buf[1024];
 
@@ -437,7 +437,7 @@ static void init_header(header *head, IDX num, int len)
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-static errr init_info(cptr filename, header *head,
+static errr init_info(concptr filename, header *head,
 		      void **info, char **name, char **text, char **tag)
 {
 	int fd;
@@ -520,7 +520,7 @@ static errr init_info(cptr filename, header *head,
 		/* Errors */
 		if (err)
 		{
-			cptr oops;
+			concptr oops;
 
 #ifdef JP
 			/* Error string */
@@ -582,7 +582,7 @@ static errr init_info(cptr filename, header *head,
 		if (fd >= 0)
 		{
 			/* Dump it */
-			fd_write(fd, (cptr)(head), head->head_size);
+			fd_write(fd, (concptr)(head), head->head_size);
 
 			/* Dump the "*_info" array */
 			fd_write(fd, head->info_ptr, head->info_size);
@@ -1597,7 +1597,7 @@ static bool feat_tag_is_not_found = FALSE;
  * Initialize quest array
  * @return 地形ID
  */
-s16b f_tag_to_index_in_init(cptr str)
+s16b f_tag_to_index_in_init(concptr str)
 {
 	FEAT_IDX feat = f_tag_to_index(str);
 
@@ -1801,8 +1801,8 @@ static errr init_other(void)
 	/*** Prepare the various "bizarre" arrays ***/
 
 	/* Macro variables */
-	C_MAKE(macro__pat, MACRO_MAX, cptr);
-	C_MAKE(macro__act, MACRO_MAX, cptr);
+	C_MAKE(macro__pat, MACRO_MAX, concptr);
+	C_MAKE(macro__act, MACRO_MAX, concptr);
 	C_MAKE(macro__cmd, MACRO_MAX, bool);
 
 	/* Macro action buffer */
@@ -2169,7 +2169,7 @@ static errr init_alloc(void)
  * Hack -- take notes on line 23
  * @return なし
  */
-static void note(cptr str)
+static void note(concptr str)
 {
 	Term_erase(0, 23, 255);
 	Term_putstr(20, 23, -1, TERM_WHITE, str);
@@ -2189,7 +2189,7 @@ static void note(cptr str)
  * functions are "supposed" to work under any conditions.
  * </pre>
  */
-static void init_angband_aux(cptr why)
+static void init_angband_aux(concptr why)
 {
 	/* Why */
 	plog(why);
@@ -2505,7 +2505,7 @@ static void put_title(void)
  * @brief サムチェック情報を出力 / Get check sum in string form
  * @return サムチェック情報の文字列
  */
-cptr get_check_sum(void)
+concptr get_check_sum(void)
 {
 	return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
 		      f_head.v_extra, 

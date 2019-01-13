@@ -204,7 +204,7 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 		{
 			int pr, pc, pa, clev, mlev, cdun, mdun;
 
-			cptr user, gold, when, aged;
+			concptr user, gold, when, aged;
 
 
 			/* Hack -- indicate death in yellow */

@@ -94,9 +94,9 @@ struct term
 	errr (*curs_hook)(TERM_LEN x, TERM_LEN y); //!< カーソル描画実装部 / Hook for placing the cursor
 	errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y); //!< 大型タイル時カーソル描画実装部 / Hook for placing the cursor on bigtile mode
 	errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n); //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
-	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s); //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
+	errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s); //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
 	void (*resize_hook)(void); //!< 画面リサイズ実装部
-	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *ap, cptr cp, const TERM_COLOR *tap, cptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
+	errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
 };
 
 
@@ -159,7 +159,7 @@ extern void Term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TER
 
 extern void Term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
-extern void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s);
+extern void Term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
 
 extern errr Term_fresh(void);
 extern errr Term_set_cursor(int v);
@@ -167,11 +167,11 @@ extern errr Term_gotoxy(TERM_LEN x, TERM_LEN y);
 extern errr Term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
 extern errr Term_addch(TERM_COLOR a, char c);
 extern errr Term_add_bigch(TERM_COLOR a, char c);
-extern errr Term_addstr(int n, TERM_COLOR a, cptr s);
+extern errr Term_addstr(int n, TERM_COLOR a, concptr s);
 extern errr Term_putch(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
-extern errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, cptr s);
+extern errr Term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s);
 #ifdef JP
-extern errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, cptr s);
+extern errr Term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
 #endif
 extern errr Term_erase(TERM_LEN x, TERM_LEN y, int n);
 extern errr Term_clear(void);

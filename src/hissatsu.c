@@ -45,7 +45,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	char choice;
 	char out_val[160];
 	SPELL_IDX sentaku[32];
-	cptr p = _("必殺剣", "special attack");
+	concptr p = _("必殺剣", "special attack");
 	COMMAND_CODE code;
 	magic_type spell;
 	bool flag, redraw;
@@ -379,7 +379,7 @@ void do_cmd_gain_hissatsu(void)
 	int i, j;
 
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	bool gain = FALSE;
 

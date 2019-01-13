@@ -192,7 +192,7 @@ typedef struct named_num named_num;
 
 struct named_num
 {
-	cptr name;		/* The name of this thing */
+	concptr name;		/* The name of this thing */
 	int num;			/* A number associated with it */
 };
 
@@ -757,9 +757,9 @@ errr process_pref_file_command(char *buf)
  *   result
  * </pre>
  */
-cptr process_pref_file_expr(char **sp, char *fp)
+concptr process_pref_file_expr(char **sp, char *fp)
 {
-	cptr v;
+	concptr v;
 
 	char *b;
 	char *s;
@@ -785,8 +785,8 @@ cptr process_pref_file_expr(char **sp, char *fp)
 	/* Analyze */
 	if (*s == b1)
 	{
-		cptr p;
-		cptr t;
+		concptr p;
+		concptr t;
 
 		/* Skip b1 */
 		s++;
@@ -1060,7 +1060,7 @@ cptr process_pref_file_expr(char **sp, char *fp)
  *   result
  * </pre>
  */
-static errr process_pref_file_aux(cptr name, int preftype)
+static errr process_pref_file_aux(concptr name, int preftype)
 {
 	FILE *fp;
 
@@ -1108,7 +1108,7 @@ static errr process_pref_file_aux(cptr name, int preftype)
 		if ((buf[0] == '?') && (buf[1] == ':'))
 		{
 			char f;
-			cptr v;
+			concptr v;
 			char *s;
 
 			/* Start */
@@ -1197,7 +1197,7 @@ static errr process_pref_file_aux(cptr name, int preftype)
  * allow conditional evaluation and filename inclusion.
  * </pre>
  */
-errr process_pref_file(cptr name)
+errr process_pref_file(concptr name)
 {
 	char buf[1024];
 
@@ -1637,14 +1637,14 @@ static struct
  * @param attr 項目表示の色
  * @return なし
  */
-static void display_player_one_line(int entry, cptr val, TERM_COLOR attr)
+static void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
 {
 	char buf[40];
 
 	int row = disp_player_line[entry].row;
 	int col = disp_player_line[entry].col;
 	int len = disp_player_line[entry].len;
-	cptr head = disp_player_line[entry].header;
+	concptr head = disp_player_line[entry].header;
 
 	int head_len = strlen(head);
 
@@ -1917,7 +1917,7 @@ static TERM_COLOR likert_color = TERM_WHITE;
  * @param y 技能値に対するランク基準比
  * @return なし
  */
-static cptr likert(int x, int y)
+static concptr likert(int x, int y)
 {
 	static char dummy[20] = "", dummy2[20] = "";
 	memset(dummy, 0, strlen(dummy));
@@ -2019,7 +2019,7 @@ static void display_player_various(void)
 	int			xthn, xthb, xfos, xsrh;
 	int			xdis, xdev, xsav, xstl;
 	int			xdig;
-	cptr		desc;
+	concptr		desc;
 	int         muta_att = 0;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	int		shots, shot_frac;
@@ -2974,7 +2974,7 @@ typedef struct {
  * @param mode 表示オプション
  * @return なし
  */
-static void display_flag_aux(TERM_LEN row, TERM_LEN col, cptr header,
+static void display_flag_aux(TERM_LEN row, TERM_LEN col, concptr header,
 				    int flag1, all_player_flags *f, u16b mode)
 {
 	int     i;
@@ -4995,7 +4995,7 @@ errr make_character_dump(FILE *fff)
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(cptr name)
+errr file_character(concptr name)
 {
 	int		fd = -1;
 	FILE		*fff = NULL;
@@ -5067,7 +5067,7 @@ errr file_character(cptr name)
  * You can use any single character in place of the "|".
  * </pre>
  */
-static void show_file_aux_line(cptr str, int cy, cptr shower)
+static void show_file_aux_line(concptr str, int cy, concptr shower)
 {
 	static const char tag_str[] = "[[[[";
 	byte color = TERM_WHITE;
@@ -5092,7 +5092,7 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
 		int showercol = len + 1;
 		int bracketcol = len + 1;
 		int endcol = len;
-		cptr ptr;
+		concptr ptr;
 
 		/* Search for a shower string in the line */
 		if (shower)
@@ -5196,7 +5196,7 @@ static void show_file_aux_line(cptr str, int cy, cptr shower)
  * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
  * </pre>
  */
-bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode)
+bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {
 	int i, n, skey;
 
@@ -5216,10 +5216,10 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 	FILE *fff = NULL;
 
 	/* Find this string (if any) */
-	cptr find = NULL;
+	concptr find = NULL;
 
 	/* Jump to this tag */
-	cptr tag = NULL;
+	concptr tag = NULL;
 
 	/* Hold strings to find/show */
 	char finder_str[81];
@@ -5227,7 +5227,7 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 	char back_str[81];
 
 	/* String to show */
-	cptr shower = NULL;
+	concptr shower = NULL;
 
 	/* Filename */
 	char filename[1024];
@@ -5444,7 +5444,7 @@ bool show_file(bool show_version, cptr name, cptr what, int line, BIT_FLAGS mode
 		/* Dump the next 20, or rows, lines of the file */
 		for (i = 0; i < rows; )
 		{
-			cptr str = buf;
+			concptr str = buf;
 
 			/* Hack -- track the "first" line */
 			if (!i) line = next;
@@ -5879,11 +5879,11 @@ void process_player_name(bool sf)
 #endif
 	if (!savefile_base[0] && savefile[0])
 	{
-		cptr s;
+		concptr s;
 		s = savefile;
 		while (1)
 		{
-			cptr t;
+			concptr t;
 			t = my_strstr(s, PATH_SEP);
 			if (!t)
 				break;
@@ -6211,7 +6211,7 @@ long total_points(void)
  * @return なし
  * @details
  */
-static void center_string(char *buf, cptr str)
+static void center_string(char *buf, concptr str)
 {
 	int i, j;
 
@@ -6321,7 +6321,7 @@ static void print_tomb(void)
 	/* Print the text-tombstone */
 	if (!done)
 	{
-		cptr   p;
+		concptr   p;
 		char   tmp[160];
 		char   buf[1024];
 		char   dummy[80];
@@ -6458,7 +6458,7 @@ static void print_tomb(void)
 		{
 			if (dun_level == 0)
 			{
-				cptr field_name = p_ptr->town_num ? "街" : "荒野";
+				concptr field_name = p_ptr->town_num ? "街" : "荒野";
 				if (streq(p_ptr->died_from, "途中終了"))
 				{
 					sprintf(tmp, "%sで死んだ", field_name);
@@ -6743,7 +6743,7 @@ void close_game(void)
 	char buf[1024];
 	bool do_send = TRUE;
 
-/*	cptr p = "[i:キャラクタの情報, f:ファイル書き出し, t:スコア, x:*鑑定*, ESC:ゲーム終了]"; */
+/*	concptr p = "[i:キャラクタの情報, f:ファイル書き出し, t:スコア, x:*鑑定*, ESC:ゲーム終了]"; */
 	handle_stuff();
 
 	/* Flush the messages */
@@ -6907,7 +6907,7 @@ void exit_game_panic(void)
  * Based on the monster speech patch by Matt Graham,
  * </pre>
  */
-errr get_rnd_line(cptr file_name, int entry, char *output)
+errr get_rnd_line(concptr file_name, int entry, char *output)
 {
 	FILE    *fp;
 	char    buf[1024];
@@ -7016,7 +7016,7 @@ errr get_rnd_line(cptr file_name, int entry, char *output)
  * @return エラーコード
  * @details
  */
-errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count)
+errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
 {
 	int  i, j, kanji;
 	errr result = 1;
@@ -7038,7 +7038,7 @@ errr get_rnd_line_jonly(cptr file_name, int entry, char *output, int count)
  * @param name ファイル名
  * @details
  */
-errr process_autopick_file(cptr name)
+errr process_autopick_file(concptr name)
 {
 	char buf[1024];
 
@@ -7059,7 +7059,7 @@ errr process_autopick_file(cptr name)
  * @return エラーコード
  * @details
  */
-errr process_histpref_file(cptr name)
+errr process_histpref_file(concptr name)
 {
 	char buf[1024];
 	errr err = 0;

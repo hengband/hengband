@@ -1244,7 +1244,7 @@ static void quest_gen(void)
  * @brief ダンジョン時のランダムフロア生成 / Make a real level
  * @return フロアの生成に成功したらTRUE
  */
-static bool level_gen(cptr *why)
+static bool level_gen(concptr *why)
 {
 	int level_height, level_width;
 
@@ -1410,7 +1410,7 @@ void generate_cave(void)
 	{
 		bool okay = TRUE;
 
-		cptr why = NULL;
+		concptr why = NULL;
 
 		/* Clear and empty the cave */
 		clear_cave();

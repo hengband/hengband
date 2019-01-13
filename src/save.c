@@ -102,7 +102,7 @@ static void wr_s32b(s32b v)
  * @param str 書き込む文字列
  * @return なし
  */
-static void wr_string(cptr str)
+static void wr_string(concptr str)
 {
 	while (*str)
 	{
@@ -1765,7 +1765,7 @@ bool load_player(void)
 	struct stat     statbuf;
 #endif
 
-	cptr    what = "generic";
+	concptr    what = "generic";
 
 
 	/* Paranoia */

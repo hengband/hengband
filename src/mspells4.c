@@ -118,7 +118,7 @@ void monster_wakeup(MONSTER_IDX t_idx)
  * @param msg_flag_aux メッセージを分岐するためのフラグ
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool msg_flag_aux, int TARGET_TYPE)
+static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool msg_flag_aux, int TARGET_TYPE)
 {
 	bool known = monster_near_player(m_idx, t_idx);
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
@@ -163,7 +163,7 @@ static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg
 * @param msg3 プレイヤーが盲目でなく、モンスター対象とする場合のメッセージ
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int TARGET_TYPE)
+void monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int TARGET_TYPE)
 {
 	monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg3, p_ptr->blind > 0, TARGET_TYPE);
 }
@@ -176,7 +176,7 @@ void monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2
 * @param msg2 モンスター対象とする場合のメッセージ
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void simple_monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, int TARGET_TYPE)
+void simple_monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, int TARGET_TYPE)
 {
 	monspell_message_base(m_idx, t_idx, msg1, msg2, msg1, msg2, p_ptr->blind > 0, TARGET_TYPE);
 }
@@ -304,7 +304,7 @@ HIT_POINT spell_RF4_SHOOT(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX
 HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, ms_type, drs_type = 0;
-	cptr type_s;
+	concptr type_s;
 	bool smart_learn_aux = TRUE;
 	monster_type	*m_ptr = &m_list[m_idx];
 	bool known = monster_near_player(m_idx, t_idx);
@@ -948,7 +948,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONST
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, int MS_TYPE, int TARGET_TYPE)
+void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -987,7 +987,7 @@ void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER
 */
 HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	cptr msg1, msg2, msg3;
+	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_1), m_idx, DAM_ROLL);
 
@@ -1010,7 +1010,7 @@ HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 */
 HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	cptr msg1, msg2, msg3;
+	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_2), m_idx, DAM_ROLL);
 
@@ -1033,7 +1033,7 @@ HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 */
 HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	cptr msg1, msg2, msg3;
+	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_3), m_idx, DAM_ROLL);
 
@@ -1056,7 +1056,7 @@ HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 */
 HIT_POINT spell_RF5_CAUSE_4(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	cptr msg1, msg2, msg3;
+	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
 	dam = monspell_damage((MS_CAUSE_4), m_idx, DAM_ROLL);
 
@@ -1393,7 +1393,7 @@ HIT_POINT spell_RF5_MISSILE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param saving_throw 抵抗に成功したか判別するフラグ
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, cptr msg1, cptr msg2, cptr msg3, cptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
+void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
 {
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool see_t = see_monster(t_idx);
@@ -1532,7 +1532,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		cptr msg1;
+		concptr msg1;
 		GAME_TEXT t_name[MAX_NLEN];
 		monster_name(t_idx, t_name);
 		
@@ -1645,7 +1645,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		cptr msg1;
+		concptr msg1;
 		GAME_TEXT t_name[MAX_NLEN];
 		monster_name(t_idx, t_name);
 

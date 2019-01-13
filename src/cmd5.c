@@ -18,7 +18,7 @@
  * @param tval 魔法書のtval
  * @return 領域魔法の技能名称を保管した文字列ポインタ
  */
-cptr spell_category_name(OBJECT_TYPE_VALUE tval)
+concptr spell_category_name(OBJECT_TYPE_VALUE tval)
 {
 	switch (tval)
 	{
@@ -50,7 +50,7 @@ cptr spell_category_name(OBJECT_TYPE_VALUE tval)
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
+static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
 {
 	int i;
 	SPELL_IDX   spell = -1;
@@ -62,7 +62,7 @@ static int get_spell(SPELL_IDX *sn, cptr prompt, OBJECT_SUBTYPE_VALUE sval, bool
 	char choice;
 	const magic_type  *s_ptr;
 	char out_val[160];
-	cptr p;
+	concptr p;
 	COMMAND_CODE code;
 #ifdef JP
 	char jverb_buf[128];
@@ -434,7 +434,7 @@ void do_cmd_browse(void)
 
 	object_type	*o_ptr;
 
-	cptr q, s;
+	concptr q, s;
 
 	/* Warriors are illiterate */
 	if (!(p_ptr->realm1 || p_ptr->realm2) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE))
@@ -595,11 +595,11 @@ void do_cmd_study(void)
 	/* Spells of realm2 will have an increment of +32 */
 	SPELL_IDX spell = -1;
 
-	cptr p = spell_category_name(mp_ptr->spell_book);
+	concptr p = spell_category_name(mp_ptr->spell_book);
 
 	object_type *o_ptr;
 
-	cptr q, s;
+	concptr q, s;
 
 	if (!p_ptr->realm1)
 	{
@@ -732,7 +732,7 @@ void do_cmd_study(void)
 		int max_exp = (spell < 32) ? SPELL_EXP_MASTER : SPELL_EXP_EXPERT;
 		int old_exp = p_ptr->spell_exp[spell];
 		int new_rank = EXP_LEVEL_UNSKILLED;
-		cptr name = do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell%32, SPELL_NAME);
+		concptr name = do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell%32, SPELL_NAME);
 
 		if (old_exp >= max_exp)
 		{
@@ -849,10 +849,10 @@ void do_cmd_cast(void)
 	REALM_IDX use_realm;
 	MANA_POINT need_mana;
 
-	cptr prayer;
+	concptr prayer;
 	object_type	*o_ptr;
 	const magic_type *s_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	bool over_exerted = FALSE;
 

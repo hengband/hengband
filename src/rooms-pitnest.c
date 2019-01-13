@@ -16,7 +16,7 @@ typedef struct vault_aux_type vault_aux_type;
 /*! pit/nest型情報の構造体定義 */
 struct vault_aux_type
 {
-	cptr name;
+	concptr name;
 	bool(*hook_func)(MONRACE_IDX r_idx);
 	void(*prep_func)(void);
 	DEPTH level;
@@ -110,7 +110,7 @@ static int pick_vault_type(vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 * Hack -- Get the string describing subtype of pit/nest
 * Determined in prepare function (some pit/nest only)
 */
-static cptr pit_subtype_string(int type, bool nest)
+static concptr pit_subtype_string(int type, bool nest)
 {
 	static char inner_buf[256] = "";
 

@@ -23,7 +23,7 @@
  * @var horror_desc
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ（通常時）
  */
-cptr horror_desc[MAX_SAN_HORROR] =
+concptr horror_desc[MAX_SAN_HORROR] =
 {
 #ifdef JP
 	"忌まわしい",
@@ -81,7 +81,7 @@ cptr horror_desc[MAX_SAN_HORROR] =
  * @var funny_desc
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ(幻覚状態時)
  */
-cptr funny_desc[MAX_SAN_FUNNY] =
+concptr funny_desc[MAX_SAN_FUNNY] =
 {
 #ifdef JP
 	"間抜けな",
@@ -145,7 +145,7 @@ cptr funny_desc[MAX_SAN_FUNNY] =
  * @var funny_comments
  * @brief ELDRITCH HORROR効果時の幻覚時間延長を示す錯乱表現
  */
-cptr funny_comments[MAX_SAN_COMMENT] =
+concptr funny_comments[MAX_SAN_COMMENT] =
 {
 #ifdef JP
   /* nuke me */
@@ -1456,10 +1456,10 @@ MONRACE_IDX get_mon_num(DEPTH level)
  */
 void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
-	cptr            res;
+	concptr            res;
 	monster_race    *r_ptr;
 
-	cptr            name;
+	concptr            name;
 	char            buf[128];
 	GAME_TEXT silly_name[1024];
 	bool            seen, pron;
@@ -1983,7 +1983,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	{
 		monster_race *r_ptr;
 		GAME_TEXT m_name[MAX_NLEN];
-		cptr desc;
+		concptr desc;
 
 		get_mon_num_prep(get_nightmare, NULL);
 
@@ -2937,7 +2937,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	cave_type		*c_ptr = &cave[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];
-	cptr		name = (r_name + r_ptr->name);
+	concptr		name = (r_name + r_ptr->name);
 
 	int cmi;
 
@@ -3248,7 +3248,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	{
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
-			cptr color;
+			concptr color;
 			object_type *o_ptr;
 			GAME_TEXT o_name[MAX_NLEN];
 

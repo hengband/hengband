@@ -303,11 +303,11 @@ static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yof
 * @param transno 変換ID
 * @return なし
 */
-static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, cptr data,
+static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, concptr data,
 	POSITION xoffset, POSITION yoffset, int transno)
 {
 	POSITION dx, dy, x, y, i, j;
-	cptr t;
+	concptr t;
 	cave_type *c_ptr;
 
 	/* Place dungeon features and objects */

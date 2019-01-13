@@ -217,7 +217,7 @@ static void show_building(building_type* bldg)
 static void arena_comm(int cmd)
 {
 	monster_race    *r_ptr;
-	cptr            name;
+	concptr            name;
 
 
 	switch (cmd)
@@ -730,8 +730,8 @@ static void display_cards(void)
 	int i, j;
 	char suitcolor[4] = {TERM_YELLOW, TERM_L_RED, TERM_L_BLUE, TERM_L_GREEN};
 #ifdef JP
-	cptr suit[4] = {"★", "●", "¶", "†"};
-	cptr card_grph[13][7] = {{"Ａ   %s     ",
+	concptr suit[4] = {"★", "●", "¶", "†"};
+	concptr card_grph[13][7] = {{"Ａ   %s     ",
 				  "     変     ",
 				  "     愚     ",
 				  "     蛮     ",
@@ -822,7 +822,7 @@ static void display_cards(void)
 				  "   υ    ∂ ",
 				  "    σ ノ %s",
 				  "          Ｋ"}};
-	cptr joker_grph[7] = {    "            ",
+	concptr joker_grph[7] = {    "            ",
 				  "     Ｊ     ",
 				  "     Ｏ     ",
 				  "     Ｋ     ",
@@ -832,8 +832,8 @@ static void display_cards(void)
 
 #else
 
-	cptr suit[4] = {"[]", "qp", "<>", "db"};
-	cptr card_grph[13][7] = {{"A    %s     ",
+	concptr suit[4] = {"[]", "qp", "<>", "db"};
+	concptr card_grph[13][7] = {{"A    %s     ",
 				  "     He     ",
 				  "     ng     ",
 				  "     ba     ",
@@ -924,7 +924,7 @@ static void display_cards(void)
 				  "   c    &   ",
 				  "    v__/  %s",
 				  "           K"}};
-	cptr joker_grph[7] = {    "            ",
+	concptr joker_grph[7] = {    "            ",
 				  "     J      ",
 				  "     O      ",
 				  "     K      ",
@@ -1046,7 +1046,7 @@ static bool gamble_comm(int cmd)
 	s32b oldgold;
 
 	char out_val[160], tmp_str[80], again;
-	cptr p;
+	concptr p;
 
 	screen_save();
 
@@ -1454,7 +1454,7 @@ static bool kakutoujou(void)
 	s32b maxbet;
 	s32b wager;
 	char out_val[160], tmp_str[80];
-	cptr p;
+	concptr p;
 
 	if ((turn - old_battle) > TURNS_PER_TICK*250)
 	{
@@ -1626,7 +1626,7 @@ static void shoukinkubi(void)
 	for (i = 0; i < MAX_KUBI; i++)
 	{
 		byte color;
-		cptr done_mark;
+		concptr done_mark;
 		monster_race *r_ptr = &r_info[(kubi_r_idx[i] > 10000 ? kubi_r_idx[i] - 10000 : kubi_r_idx[i])];
 
 		if (kubi_r_idx[i] > 10000)
@@ -2064,7 +2064,7 @@ static void castle_quest(void)
 	IDX q_index = 0;
 	monster_race    *r_ptr;
 	quest_type      *q_ptr;
-	cptr            name;
+	concptr            name;
 
 
 	clear_bldg(4, 18);
@@ -2354,7 +2354,7 @@ static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, WEIGHT wei
  * the current +dam of the player.\n
  * @return なし
  */
-static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, int dam_bonus, cptr attr, byte color)
+static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, int dam_bonus, concptr attr, byte color)
 {
 	GAME_TEXT tmp_str[80];
 	int mindam, maxdam;
@@ -2659,7 +2659,7 @@ static PRICE compare_weapons(PRICE bcost)
 	object_type *o_ptr[2];
 	object_type orig_weapon;
 	object_type *i_ptr;
-	cptr q, s;
+	concptr q, s;
 	TERM_LEN row = 2;
 	TERM_LEN wid = 38, mgn = 2;
 	bool old_character_xtra = character_xtra;
@@ -2938,7 +2938,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	int i, dd_bonus, ds_bonus;
 	KIND_OBJECT_IDX k_idx;
 	char basenm[MAX_NLEN];
-	cptr q, s;
+	concptr q, s;
 	int row = 7;
 	clear_bldg(0, 22);
 
@@ -3203,7 +3203,7 @@ static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_C
 	OBJECT_IDX item;
 	bool okay = FALSE;
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 	int maxenchant = (p_ptr->lev / 5);
 	char tmp_str[MAX_NLEN];
 
@@ -3308,7 +3308,7 @@ static void building_recharge(void)
 	DEPTH       lev;
 	object_type *o_ptr;
 	object_kind *k_ptr;
-	cptr        q, s;
+	concptr        q, s;
 	PRICE       price;
 	PARAMETER_VALUE charges;
 	int         max_charges;
@@ -4385,7 +4385,7 @@ void do_cmd_bldg(void)
 /*!
  * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription
  */
-static cptr find_quest[] =
+static concptr find_quest[] =
 {
 	_("床にメッセージが刻まれている:", "You find the following inscription in the floor"),
 	_("壁にメッセージが刻まれている:", "You see a message inscribed in the wall"),

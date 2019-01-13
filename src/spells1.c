@@ -250,7 +250,7 @@ static TERM_COLOR spell_color(int type)
 		SYMBOL_CODE c;
 
 		/* Lookup the default colors for this type */
-		cptr s = quark_str(gf_color[type]);
+		concptr s = quark_str(gf_color[type]);
 
 		if (!s) return (TERM_WHITE);
 
@@ -725,7 +725,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	if (have_flag(f_ptr->flags, FF_TREE))
 	{
-		cptr message;
+		concptr message;
 		switch (typ)
 		{
 		case GF_POIS:
@@ -1284,7 +1284,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		bool ignore = FALSE;
 		bool do_kill = FALSE;
 
-		cptr note_kill = NULL;
+		concptr note_kill = NULL;
 
 #ifndef JP
 		/* Get the "plural"-ness */
@@ -1691,10 +1691,10 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	PARAMETER_VALUE photo = 0;
 
 	/* Assume no note */
-	cptr note = NULL;
+	concptr note = NULL;
 
 	/* Assume a default death */
-	cptr note_dies = extract_note_dies(real_r_idx(m_ptr));
+	concptr note_dies = extract_note_dies(real_r_idx(m_ptr));
 
 	POSITION ty = m_ptr->fy;
 	POSITION tx = m_ptr->fx;
@@ -2565,8 +2565,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			else if (dam > 0)
 			{
 				int b = damroll(5, dam) / 4;
-				cptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
-				cptr msg = _("あなたは%sの苦痛を%sに変換した！", 
+				concptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
+				concptr msg = _("あなたは%sの苦痛を%sに変換した！", 
 					 (seen ? "You convert %s's pain into %s!" : 
 							 "You convert %ss pain into %s!"));
 				msg_format(msg, m_name, str);
@@ -5089,7 +5089,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
  * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
+static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
 {
 	int k = 0;
 	DEPTH rlev = 0;
@@ -5113,7 +5113,7 @@ static bool project_p(MONSTER_IDX who, cptr who_name, int r, POSITION y, POSITIO
 	char killer[80];
 
 	/* Hack -- messages */
-	cptr act = NULL;
+	concptr act = NULL;
 
 	int get_damage = 0;
 

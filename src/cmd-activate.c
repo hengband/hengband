@@ -237,7 +237,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 				o_ptr->xtra5 = (XTRA16)cap_maxhp;
 				if (cap_nickname)
 				{
-					cptr t;
+					concptr t;
 					char *s;
 					char buf[80] = "";
 
@@ -289,7 +289,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 					if (o_ptr->inscription)
 					{
 						char buf[80];
-						cptr t;
+						concptr t;
 #ifndef JP
 						bool quote = FALSE;
 #endif
@@ -365,7 +365,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 void do_cmd_activate(void)
 {
 	OBJECT_IDX item;
-	cptr q, s;
+	concptr q, s;
 
 	if (p_ptr->wild_mode) return;
 
@@ -402,7 +402,7 @@ static bool activate_dragon_breath(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
 	int type[20];
-	cptr name[20];
+	concptr name[20];
 	int i, t, n = 0;
 	DIRECTION dir;
 
@@ -444,7 +444,7 @@ bool activate_artifact(object_type *o_ptr)
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int k, dummy = 0;
 	DIRECTION dir;
-	cptr name = k_name + k_info[o_ptr->k_idx].name;
+	concptr name = k_name + k_info[o_ptr->k_idx].name;
 	const activation_type* const act_ptr = find_activation_info(o_ptr);
 
 	/* Paranoia */
@@ -1657,7 +1657,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		int count = 0, i;
 		monster_type *m_ptr;
-		cptr kakusan = "";
+		concptr kakusan = "";
 
 		if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_SUKE, PM_FORCE_PET))
 		{

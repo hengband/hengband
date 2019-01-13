@@ -339,9 +339,9 @@ void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 /*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/ブレス）
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return cptr 発動名称を返す文字列ポインタ
+ * @return concptr 発動名称を返す文字列ポインタ
  */
-static cptr item_activation_dragon_breath(object_type *o_ptr)
+static concptr item_activation_dragon_breath(object_type *o_ptr)
 {
 	static char desc[256];
 	BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
@@ -368,12 +368,12 @@ static cptr item_activation_dragon_breath(object_type *o_ptr)
 /*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return cptr 発動名称を返す文字列ポインタ
+ * @return concptr 発動名称を返す文字列ポインタ
  */
-static cptr item_activation_aux(object_type *o_ptr)
+static concptr item_activation_aux(object_type *o_ptr)
 {
 	static char activation_detail[256];
-	cptr desc;
+	concptr desc;
 	char timeout[32];
 	int constant, dice;
 	const activation_type* const act_ptr = find_activation_info(o_ptr);
@@ -469,9 +469,9 @@ static cptr item_activation_aux(object_type *o_ptr)
  * @brief オブジェクトの発動効果名称を返す（メインルーチン） /
  * Determine the "Activation" (if any) for an artifact Return a string, or NULL for "no activation"
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
- * @return cptr 発動名称を返す文字列ポインタ
+ * @return concptr 発動名称を返す文字列ポインタ
  */
-cptr item_activation(object_type *o_ptr)
+concptr item_activation(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
@@ -514,7 +514,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	char temp[70 * 20];
-	cptr            info[128];
+	concptr            info[128];
 	GAME_TEXT o_name[MAX_NLEN];
 	int wid, hgt;
 	POSITION rad;
@@ -1460,9 +1460,9 @@ s16b wield_slot(object_type *o_ptr)
  * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 部位表現の文字列ポインタ
  */
-cptr mention_use(int i)
+concptr mention_use(int i)
 {
-	cptr p;
+	concptr p;
 
 	/* Examine the location */
 	switch (i)
@@ -1505,9 +1505,9 @@ cptr mention_use(int i)
  * @details
  * Currently, only used for items in the equipment, not inventory.
  */
-cptr describe_use(int i)
+concptr describe_use(int i)
 {
-	cptr p;
+	concptr p;
 
 	switch (i)
 	{
@@ -1817,7 +1817,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 {
 	COMMAND_CODE i;
 	COMMAND_CODE start, end;
-	cptr s;
+	concptr s;
 
 	/* Extract index from mode */
 	switch (mode)
@@ -1942,7 +1942,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
 	COMMAND_CODE i;
-	cptr s;
+	concptr s;
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
 
@@ -2028,7 +2028,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
  */
 static void prepare_label_string(char *label, BIT_FLAGS mode)
 {
-	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
 	int  i;
 
@@ -2066,7 +2066,7 @@ static void prepare_label_string(char *label, BIT_FLAGS mode)
  */
 static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
-	cptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  i;
 
 	/* Prepare normal labels */
@@ -2488,7 +2488,7 @@ void toggle_inven_equip(void)
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
  */
-static bool verify(cptr prompt, INVENTORY_IDX item)
+static bool verify(concptr prompt, INVENTORY_IDX item)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 	char        out_val[MAX_NLEN+20];
@@ -2525,7 +2525,7 @@ static bool verify(cptr prompt, INVENTORY_IDX item)
  */
 static bool get_item_allow(INVENTORY_IDX item)
 {
-	cptr s;
+	concptr s;
 	object_type *o_ptr;
 	if (!command_cmd) return TRUE; /* command_cmd is no longer effective */
 
@@ -2664,7 +2664,7 @@ bool can_get_item(void)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
+bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -3439,7 +3439,7 @@ bool get_item(OBJECT_IDX *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-object_type *choose_object(OBJECT_IDX *idx, cptr q, cptr s, BIT_FLAGS option)
+object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option)
 {
 	OBJECT_IDX item;
 	if (!get_item(&item, q, s, option)) return NULL;
@@ -3650,7 +3650,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
+bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
@@ -4795,7 +4795,7 @@ bool get_item_floor(COMMAND_CODE *cp, cptr pmt, cptr str, BIT_FLAGS mode)
 static bool py_pickup_floor_aux(void)
 {
 	OBJECT_IDX this_o_idx;
-	cptr q, s;
+	concptr q, s;
 	OBJECT_IDX item;
 
 	/* Restrict the choices */

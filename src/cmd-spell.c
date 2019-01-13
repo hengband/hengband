@@ -32,7 +32,7 @@
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_string_dice(cptr str, DICE_NUMBER dice, DICE_SID sides, int base)
+concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base)
 {
 	/* Fix value */
 	if (!dice)
@@ -55,7 +55,7 @@ cptr info_string_dice(cptr str, DICE_NUMBER dice, DICE_SID sides, int base)
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
+concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
 {
 	return info_string_dice(_("損傷:", "dam "), dice, sides, base);
 }
@@ -66,7 +66,7 @@ cptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-cptr info_duration(int base, DICE_SID sides)
+concptr info_duration(int base, DICE_SID sides)
 {
 	return format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides);
 }
@@ -76,7 +76,7 @@ cptr info_duration(int base, DICE_SID sides)
  * @param range 効果範囲
  * @return フォーマットに従い整形された文字列
  */
-cptr info_range(POSITION range)
+concptr info_range(POSITION range)
 {
 	return format(_("範囲:%d", "range %d"), range);
 }
@@ -88,7 +88,7 @@ cptr info_range(POSITION range)
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
+concptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
 {
 	return info_string_dice(_("回復:", "heal "), dice, sides, base);
 }
@@ -99,7 +99,7 @@ cptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-cptr info_delay(int base, DICE_SID sides)
+concptr info_delay(int base, DICE_SID sides)
 {
 	return format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides);
 }
@@ -110,7 +110,7 @@ cptr info_delay(int base, DICE_SID sides)
  * @param dam 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_multi_damage(HIT_POINT dam)
+concptr info_multi_damage(HIT_POINT dam)
 {
 	return format(_("損傷:各%d", "dam %d each"), dam);
 }
@@ -122,7 +122,7 @@ cptr info_multi_damage(HIT_POINT dam)
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-cptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
+concptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
 {
 	return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
 }
@@ -132,7 +132,7 @@ cptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
  * @param power 固定値
  * @return フォーマットに従い整形された文字列
  */
-cptr info_power(int power)
+concptr info_power(int power)
 {
 	return format(_("効力:%d", "power %d"), power);
 }
@@ -147,7 +147,7 @@ cptr info_power(int power)
 /*
  * Generate power info string such as "power 1d100"
  */
-cptr info_power_dice(DICE_NUMBER dice, DICE_SID sides)
+concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides)
 {
 	return format(_("効力:%dd%d", "power %dd%d"), dice, sides);
 }
@@ -158,7 +158,7 @@ cptr info_power_dice(DICE_NUMBER dice, DICE_SID sides)
  * @param rad 効果半径
  * @return フォーマットに従い整形された文字列
  */
-cptr info_radius(POSITION rad)
+concptr info_radius(POSITION rad)
 {
 	return format(_("半径:%d", "rad %d"), rad);
 }
@@ -169,7 +169,7 @@ cptr info_radius(POSITION rad)
  * @param weight 最大重量
  * @return フォーマットに従い整形された文字列
  */
-cptr info_weight(WEIGHT weight)
+concptr info_weight(WEIGHT weight)
 {
 #ifdef JP
 	return format("最大重量:%d.%dkg", lbtokg1(weight), lbtokg2(weight));
@@ -185,7 +185,7 @@ cptr info_weight(WEIGHT weight)
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
-cptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	switch (realm)
 	{

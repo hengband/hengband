@@ -338,7 +338,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 		prace_is_(RACE_SPECTRE)) &&
 		(o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND))
 	{
-		cptr staff;
+		concptr staff;
 
 		if (o_ptr->tval == TV_STAFF &&
 			(item < 0) && (o_ptr->number > 1))
@@ -498,7 +498,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 void do_cmd_eat_food(void)
 {
 	OBJECT_IDX item;
-	cptr        q, s;
+	concptr        q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{

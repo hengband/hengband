@@ -96,7 +96,7 @@ const char listsym[] =
  * スクリーン表示色キャラクタ /
  * Encode the screen colors
  */
-const cptr color_char = "dwsorgbuDWvyRGBU";
+const concptr color_char = "dwsorgbuDWvyRGBU";
 
 
 /*!
@@ -3543,7 +3543,7 @@ const s32b realm_choices2[MAX_CLASS] =
 /*!
  * 領域魔法名称
  */
-const cptr realm_names[] =
+const concptr realm_names[] =
 {
 	"魔法なし",
 	"生命",
@@ -3569,9 +3569,9 @@ const cptr realm_names[] =
 #endif
 
 #ifdef JP
-const cptr E_realm_names[]
+const concptr E_realm_names[]
 #else
-const cptr realm_names[]
+const concptr realm_names[]
 #endif
 = {
 	"none",
@@ -3685,7 +3685,7 @@ const int chest_traps[64] =
  * </pre>
  */
 #ifdef JP
-const cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
+const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 {
 	/* Warrior */
 	{
@@ -4087,7 +4087,7 @@ const cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 };
 
 #else
-const cptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
+const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 {
 	/* Warrior */
 	{
@@ -4691,7 +4691,7 @@ const monster_power monster_powers[MAX_MONSPELLS] =
 /*!
  * @brief モンスター魔法名テーブル
  */
-const cptr monster_powers_short[MAX_MONSPELLS] = {
+const concptr monster_powers_short[MAX_MONSPELLS] = {
 #ifdef JP
 
 	"叫ぶ", "何か", "魔力消去", "ロケット", "射撃", "何か", "何か", "何か",
@@ -4733,7 +4733,7 @@ const cptr monster_powers_short[MAX_MONSPELLS] = {
 /*!
  * @brief 色名称テーブル / Hack -- the "basic" color names (see "TERM_xxx")
  */
-const cptr color_names[16] =
+const concptr color_names[16] =
 {
 #ifdef JP
 	"黒",
@@ -4777,7 +4777,7 @@ const cptr color_names[16] =
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
  */
-const cptr stat_names[6] =
+const concptr stat_names[6] =
 {
 #ifdef JP
 	"腕力 :", "知能 :", "賢さ :", "器用 :", "耐久 :", "魅力 :"
@@ -4790,7 +4790,7 @@ const cptr stat_names[6] =
 /*!
  * @brief 能力値テーブル(能力低下時) / Abbreviations of damaged stats
  */
-const cptr stat_names_reduced[6] =
+const concptr stat_names_reduced[6] =
 {
 #ifdef JP
 	"腕力x:", "知能x:", "賢さx:", "器用x:", "耐久x:", "魅力x:"
@@ -4819,7 +4819,7 @@ const cptr stat_names_reduced[6] =
  * of the main screen into any interested windows.
  * </pre>
  */
-const cptr window_flag_desc[32] =
+const concptr window_flag_desc[32] =
 {
 #ifdef JP
 	"持ち物/装備一覧",
@@ -4926,7 +4926,7 @@ const cptr window_flag_desc[32] =
 /*!
  * @brief カオスパトロン名テーブル
  */
-const cptr chaos_patrons[MAX_PATRON] =
+const concptr chaos_patrons[MAX_PATRON] =
 {
 	"スローター",
 	"マベロード",
@@ -4949,7 +4949,7 @@ const cptr chaos_patrons[MAX_PATRON] =
 	"カイン"
 };
 #else
-const cptr chaos_patrons[MAX_PATRON] =
+const concptr chaos_patrons[MAX_PATRON] =
 {
 	"Slortar",
 	"Mabelode",
@@ -5243,7 +5243,7 @@ const int monk_ave_damage[PY_MAX_LEVEL+1][3] =
  * @brief アイテムの価値記述テーブル /
  * Table of game-generated inscriptions (indexed by the defines in defines.h). -- RG
  */
-const cptr game_inscriptions[] =
+const concptr game_inscriptions[] =
 {
 	NULL,            /* FEEL_NONE */
 #ifdef JP
@@ -5309,7 +5309,7 @@ const kamae kata_shurui[MAX_KATA] =
 /*!
  * @brief 技能値到達表記テーブル
  */
-const cptr exp_level_str[5]=
+const concptr exp_level_str[5]=
 #ifdef JP
 {"[初心者]", "[入門者]", "[熟練者]", "[エキスパート]", "[達人]"};
 #else
@@ -5320,7 +5320,7 @@ const cptr exp_level_str[5]=
  * @brief 幻覚時の打撃記述テーブル / Weird melee attack types when hallucinating
  */
 #ifdef JP
-const cptr silly_attacks[MAX_SILLY_ATTACK] =
+const concptr silly_attacks[MAX_SILLY_ATTACK] =
 {
 	"に小便をかけられた。",
 	"があなたの回りを3回回ってワンと言った。",
@@ -5368,7 +5368,7 @@ const cptr silly_attacks[MAX_SILLY_ATTACK] =
 /*!
  * @brief 幻覚時の打撃記述テーブル(フォーマットつき) / Weird melee attack types when hallucinating (%s for strfmt())
  */
-const cptr silly_attacks2[MAX_SILLY_ATTACK] =
+const concptr silly_attacks2[MAX_SILLY_ATTACK] =
 {
 	"%sに小便をかけた。",
 	"%sの回りを3回回ってワンと言った。",
@@ -5413,7 +5413,7 @@ const cptr silly_attacks2[MAX_SILLY_ATTACK] =
 	"言った。「変愚蛮怒、絶賛公開中！」",
 };
 #else
-const cptr silly_attacks[MAX_SILLY_ATTACK] =
+const concptr silly_attacks[MAX_SILLY_ATTACK] =
 {
 	"smothers",
 	"hugs",
@@ -5457,7 +5457,7 @@ const cptr silly_attacks[MAX_SILLY_ATTACK] =
  * @brief シンボル解説テーブル /
  * The table of "symbol info" -- each entry is a string of the form "X:desc" where "X" is the trigger, and "desc" is the "info".
  */
-const cptr ident_info[] =
+const concptr ident_info[] =
 {
 #ifdef JP
 	" :暗闇",
@@ -6123,7 +6123,7 @@ const activation_type activation_info[] =
 /*!
  * @brief ランダムアーティファクトのバイアス名称テーブル
  */
-const cptr artifact_bias_name[MAX_BIAS] =
+const concptr artifact_bias_name[MAX_BIAS] =
 {
 	"なし",
 	"電撃",
@@ -6147,7 +6147,7 @@ const cptr artifact_bias_name[MAX_BIAS] =
 	"レンジャー",
 };
 #else
-const cptr artifact_bias_name[MAX_BIAS] =
+const concptr artifact_bias_name[MAX_BIAS] =
 {
 	"None",
 	"Elec",

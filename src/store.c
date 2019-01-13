@@ -30,7 +30,7 @@ static s16b inner_town_num = 0;
 
 #define MAX_COMMENT_1	6
 
-static cptr comment_1[MAX_COMMENT_1] =
+static concptr comment_1[MAX_COMMENT_1] =
 {
 #ifdef JP
 	"オーケーだ。",
@@ -52,7 +52,7 @@ static cptr comment_1[MAX_COMMENT_1] =
 
 #ifdef JP
 /*! ブラックマーケット追加メッセージ（承諾） */
-static cptr comment_1_B[MAX_COMMENT_1] = {
+static concptr comment_1_B[MAX_COMMENT_1] = {
 	"まあ、それでいいや。",
 	"今日はそれで勘弁してやる。",
 	"分かったよ。",
@@ -63,7 +63,7 @@ static cptr comment_1_B[MAX_COMMENT_1] = {
 #endif
 #define MAX_COMMENT_2A	2
 
-static cptr comment_2a[MAX_COMMENT_2A] =
+static concptr comment_2a[MAX_COMMENT_2A] =
 {
 #ifdef JP
 	"私の忍耐力を試しているのかい？ $%s が最後だ。",
@@ -77,7 +77,7 @@ static cptr comment_2a[MAX_COMMENT_2A] =
 
 #define MAX_COMMENT_2B	12
 
-static cptr comment_2b[MAX_COMMENT_2B] =
+static concptr comment_2b[MAX_COMMENT_2B] =
 {
 #ifdef JP
 	" $%s ぐらいは出さなきゃダメだよ。",
@@ -111,7 +111,7 @@ static cptr comment_2b[MAX_COMMENT_2B] =
 
 #ifdef JP
 /*! ブラックマーケット用追加メッセージ（売るとき） */
-static cptr comment_2b_B[MAX_COMMENT_2B] = {
+static concptr comment_2b_B[MAX_COMMENT_2B] = {
 	"いくら俺様がお人好しとはいえ $%s が限界だね。嫌なら帰りな。",
 	"金がないのかい、あんた？まずは家に帰って $%s 揃えてきな。",
 	"物の価値が分からん奴だな。これは $%s が普通なんだよ。",
@@ -128,7 +128,7 @@ static cptr comment_2b_B[MAX_COMMENT_2B] = {
 #endif
 #define MAX_COMMENT_3A	2
 
-static cptr comment_3a[MAX_COMMENT_3A] =
+static concptr comment_3a[MAX_COMMENT_3A] =
 {
 #ifdef JP
 	"私の忍耐力を試しているのかい？ $%s が最後だ。",
@@ -143,7 +143,7 @@ static cptr comment_3a[MAX_COMMENT_3A] =
 
 #define MAX_COMMENT_3B	12
 
-static cptr comment_3b[MAX_COMMENT_3B] =
+static concptr comment_3b[MAX_COMMENT_3B] =
 {
 #ifdef JP
 	"本音を言うと $%s でいいんだろ？",
@@ -177,7 +177,7 @@ static cptr comment_3b[MAX_COMMENT_3B] =
 
 #ifdef JP
 /*! ブラックマーケット用追加メッセージ（買い取り） */
-static cptr comment_3b_B[MAX_COMMENT_3B] = {
+static concptr comment_3b_B[MAX_COMMENT_3B] = {
 	" $%s ってところだね。そのどうしようもないガラクタは。",
 	"この俺が $%s って言っているんだから、その通りにした方が身のためだぞ。",
 	"俺の優しさに甘えるのもいい加減にしておけ。 $%s だ。",
@@ -194,7 +194,7 @@ static cptr comment_3b_B[MAX_COMMENT_3B] = {
 #endif
 #define MAX_COMMENT_4A	4
 
-static cptr comment_4a[MAX_COMMENT_4A] =
+static concptr comment_4a[MAX_COMMENT_4A] =
 {
 #ifdef JP
 	"もうたくさんだ！何度も私をわずらわせないでくれ！",
@@ -212,7 +212,7 @@ static cptr comment_4a[MAX_COMMENT_4A] =
 
 #ifdef JP
 /*! ブラックマーケット用追加メッセージ（怒りの頂点） */
-static cptr comment_4a_B[MAX_COMMENT_4A] = {
+static concptr comment_4a_B[MAX_COMMENT_4A] = {
 	"なめやがって！温厚な俺様でも限界があるってことを知れ！",
 	"俺をここまで怒らせて...命があるだけでもありがたいと思え！",
 	"ふざけてるのか！冷やかしなら相手を見てからにしろ！",
@@ -221,7 +221,7 @@ static cptr comment_4a_B[MAX_COMMENT_4A] = {
 #endif
 #define MAX_COMMENT_4B	4
 
-static cptr comment_4b[MAX_COMMENT_4B] =
+static concptr comment_4b[MAX_COMMENT_4B] =
 {
 #ifdef JP
 	"店から出て行け！",
@@ -239,7 +239,7 @@ static cptr comment_4b[MAX_COMMENT_4B] =
 
 #ifdef JP
 /*! ブラックマーケット用追加メッセージ（追い出し） */
-static cptr comment_4b_B[MAX_COMMENT_4B] = {
+static concptr comment_4b_B[MAX_COMMENT_4B] = {
 	"二度とうちに来るんじゃねえ！！",
 	"とっとと、どっかへ失せろ！！",
 	"今すぐ消え失せろ！！",
@@ -248,7 +248,7 @@ static cptr comment_4b_B[MAX_COMMENT_4B] = {
 #endif
 #define MAX_COMMENT_5	8
 
-static cptr comment_5[MAX_COMMENT_5] =
+static concptr comment_5[MAX_COMMENT_5] =
 {
 #ifdef JP
 	"考え直してくれ。",
@@ -274,7 +274,7 @@ static cptr comment_5[MAX_COMMENT_5] =
 
 #ifdef JP
 /*! ブラックマーケット用追加メッセージ（怒り） */
-static cptr comment_5_B[MAX_COMMENT_5] = {
+static concptr comment_5_B[MAX_COMMENT_5] = {
 	"時間の無駄だな、これは。",
 	"厄介なお客様だな！",
 	"話して分かる相手じゃなさそうだ。",
@@ -287,7 +287,7 @@ static cptr comment_5_B[MAX_COMMENT_5] = {
 #endif
 #define MAX_COMMENT_6	4
 
-static cptr comment_6[MAX_COMMENT_6] =
+static concptr comment_6[MAX_COMMENT_6] =
 {
 #ifdef JP
 	"どうやら聞き間違えたらしい。",
@@ -479,7 +479,7 @@ static void say_comment_6(void)
 
 #define MAX_COMMENT_7A	4
 
-static cptr comment_7a[MAX_COMMENT_7A] =
+static concptr comment_7a[MAX_COMMENT_7A] =
 {
 #ifdef JP
 	"うわああぁぁ！",
@@ -497,7 +497,7 @@ static cptr comment_7a[MAX_COMMENT_7A] =
 
 #define MAX_COMMENT_7B	4
 
-static cptr comment_7b[MAX_COMMENT_7B] =
+static concptr comment_7b[MAX_COMMENT_7B] =
 {
 #ifdef JP
 	"くそう！",
@@ -515,7 +515,7 @@ static cptr comment_7b[MAX_COMMENT_7B] =
 
 #define MAX_COMMENT_7C	4
 
-static cptr comment_7c[MAX_COMMENT_7C] =
+static concptr comment_7c[MAX_COMMENT_7C] =
 {
 #ifdef JP
 	"すばらしい！",
@@ -533,7 +533,7 @@ static cptr comment_7c[MAX_COMMENT_7C] =
 
 #define MAX_COMMENT_7D	4
 
-static cptr comment_7d[MAX_COMMENT_7D] =
+static concptr comment_7d[MAX_COMMENT_7D] =
 {
 #ifdef JP
 	"やっほぅ！",
@@ -2490,9 +2490,9 @@ static void display_store(void)
 	/* Normal stores */
 	else
 	{
-		cptr store_name = (f_name + f_info[cur_store_feat].name);
-		cptr owner_name = (ot_ptr->owner_name);
-		cptr race_name = race_info[ot_ptr->owner_race].title;
+		concptr store_name = (f_name + f_info[cur_store_feat].name);
+		concptr owner_name = (ot_ptr->owner_name);
+		concptr race_name = race_info[ot_ptr->owner_race].title;
 
 		/* Put the owner name and race */
 		sprintf(buf, "%s (%s)", owner_name, race_name);
@@ -2534,7 +2534,7 @@ static void display_store(void)
  * @param j 選択範囲の最大値
  * @return 実際に選択したらTRUE、キャンセルしたらFALSE
  */
-static int get_stock(COMMAND_CODE *com_val, cptr pmt, int i, int j)
+static int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 {
 	char command;
 	char out_val[160];
@@ -2691,11 +2691,11 @@ static s32b last_inc = 0L;
  * @param final 最終確定価格ならばTRUE
  * @return プレイヤーを締め出す場合TRUEを返す
  */
-static int get_haggle(cptr pmt, s32b *poffer, PRICE price, int final)
+static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 {
 	s32b		i;
 
-	cptr		p;
+	concptr		p;
 
 	char				buf[128];
 	char		out_val[160];
@@ -2850,7 +2850,7 @@ static int get_haggle(cptr pmt, s32b *poffer, PRICE price, int final)
  * @return プレイヤーの価格に対して不服ならばTRUEを返す /
  * Return TRUE if offer is NOT okay
  */
-static bool receive_offer(cptr pmt, s32b *poffer,
+static bool receive_offer(concptr pmt, s32b *poffer,
 			  s32b last_offer, int factor,
 			  PRICE price, int final)
 {
@@ -2895,9 +2895,9 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 	bool		cancel = FALSE;
 
 #ifdef JP
-	cptr pmt = "提示価格";
+	concptr pmt = "提示価格";
 #else
-	cptr		pmt = "Asking";
+	concptr		pmt = "Asking";
 #endif
 
 
@@ -3109,9 +3109,9 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 	int     annoyed = 0, final = FALSE;
 	bool    cancel = FALSE;
 #ifdef JP
-	cptr pmt = "提示金額";
+	concptr pmt = "提示金額";
 #else
-	cptr    pmt = "Offer";
+	concptr    pmt = "Offer";
 #endif
 
 	char    out_val[160];
@@ -3731,7 +3731,7 @@ static void store_sell(void)
 
 	object_type *o_ptr;
 
-	cptr q, s;
+	concptr q, s;
 
 	GAME_TEXT o_name[MAX_NLEN];
 

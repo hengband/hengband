@@ -23,32 +23,32 @@
 
 /**** Available variables ****/
 
-/* A cptr to the name of the program */
-extern cptr argv0;
+/* A concptr to the name of the program */
+extern concptr argv0;
 
 
 /* Aux functions */
-extern void (*plog_aux)(cptr);
-extern void (*quit_aux)(cptr);
-extern void (*core_aux)(cptr);
+extern void (*plog_aux)(concptr);
+extern void (*quit_aux)(concptr);
+extern void (*core_aux)(concptr);
 
 
 /**** Available Functions ****/
 
 /* Test equality, prefix, suffix */
-extern bool streq(cptr s, cptr t);
-extern bool prefix(cptr s, cptr t);
-extern bool suffix(cptr s, cptr t);
+extern bool streq(concptr s, concptr t);
+extern bool prefix(concptr s, concptr t);
+extern bool suffix(concptr s, concptr t);
 
 
 /* Print an error message */
-extern void plog(cptr str);
+extern void plog(concptr str);
 
 /* Exit, with optional message */
-extern void quit(cptr str);
+extern void quit(concptr str);
 
 /* Dump core, with optional message */
-extern void core(cptr str);
+extern void core(concptr str);
 
 
 /* 64-bit integer operations */

@@ -310,7 +310,7 @@
 #else /* WIN32 */
 #define FA_LABEL    0x08        /* Volume label */
 #define FA_DIREC    0x10        /* Directory */
-unsigned _cdecl _dos_getfileattr(cptr , unsigned *);
+unsigned _cdecl _dos_getfileattr(concptr , unsigned *);
 #endif /* WIN32 */
 
 /*
@@ -391,7 +391,7 @@ typedef struct _term_data term_data;
 struct _term_data
 {
 	term t;
-	cptr s;
+	concptr s;
 	HWND w;
 	DWORD dwStyle;
 	DWORD dwExStyle;
@@ -413,8 +413,8 @@ struct _term_data
 	bool xtra_hack;
 	bool visible;
 	bool bizarre;
-	cptr font_want;
-	cptr font_file;
+	concptr font_want;
+	concptr font_file;
 	HFONT font_id;
 	int font_wid;  //!< フォント横幅
 	int font_hgt;  //!< フォント縦幅
@@ -531,7 +531,7 @@ static bool can_use_sound = FALSE;
 /*
  * An array of sound file names
  */
-static cptr sound_file[SOUND_MAX][SAMPLE_MAX];
+static concptr sound_file[SOUND_MAX][SAMPLE_MAX];
 
 #endif /* USE_SOUND */
 
@@ -540,10 +540,10 @@ static cptr sound_file[SOUND_MAX][SAMPLE_MAX];
 #ifdef USE_MUSIC
 
 #define SAMPLE_MUSIC_MAX 16
-static cptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
-static cptr dungeon_music_file[1000][SAMPLE_MUSIC_MAX];
-static cptr town_music_file[1000][SAMPLE_MUSIC_MAX];
-static cptr quest_music_file[1000][SAMPLE_MUSIC_MAX];
+static concptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
+static concptr dungeon_music_file[1000][SAMPLE_MUSIC_MAX];
+static concptr town_music_file[1000][SAMPLE_MUSIC_MAX];
+static concptr quest_music_file[1000][SAMPLE_MUSIC_MAX];
 static bool can_use_music = FALSE;
 
 static MCI_OPEN_PARMS mop;
@@ -558,30 +558,30 @@ int current_music_id = 0;
 /*
  * Full path to ANGBAND.INI
  */
-static cptr ini_file = NULL;
+static concptr ini_file = NULL;
 
 /*
  * Name of application
  */
-static cptr AppName = "ANGBAND";
+static concptr AppName = "ANGBAND";
 
 /*
  * Name of sub-window type
  */
-static cptr AngList = "AngList";
+static concptr AngList = "AngList";
 
 /*
  * Directory names
  */
-static cptr ANGBAND_DIR_XTRA_GRAF;
-static cptr ANGBAND_DIR_XTRA_SOUND;
-static cptr ANGBAND_DIR_XTRA_MUSIC;
-static cptr ANGBAND_DIR_XTRA_HELP;
+static concptr ANGBAND_DIR_XTRA_GRAF;
+static concptr ANGBAND_DIR_XTRA_SOUND;
+static concptr ANGBAND_DIR_XTRA_MUSIC;
+static concptr ANGBAND_DIR_XTRA_HELP;
 #if 0 /* #ifndef JP */
-static cptr ANGBAND_DIR_XTRA_FONT;
+static concptr ANGBAND_DIR_XTRA_FONT;
 #endif
 #ifdef USE_MUSIC
-static cptr ANGBAND_DIR_XTRA_MUSIC;
+static concptr ANGBAND_DIR_XTRA_MUSIC;
 #endif
 
 
@@ -824,9 +824,9 @@ static void DrawBG(HDC hdc, RECT *r)
 /*
  * Hack -- given a pathname, point at the filename
  */
-static cptr extract_file_name(cptr s)
+static concptr extract_file_name(concptr s)
 {
-	cptr p;
+	concptr p;
 
 	/* Start at the end */
 	p = s + strlen(s) - 1;
@@ -888,7 +888,7 @@ static char *analyze_font(char *path, int *wp, int *hp)
 /*
  * Check for existance of a file
  */
-static bool check_file(cptr s)
+static bool check_file(concptr s)
 {
 	char path[1024];
 
@@ -937,7 +937,7 @@ static bool check_file(cptr s)
 /*
  * Check for existance of a directory
  */
-static bool check_dir(cptr s)
+static bool check_dir(concptr s)
 {
 	int i;
 
@@ -994,7 +994,7 @@ static bool check_dir(cptr s)
 /*
  * Validate a file
  */
-static void validate_file(cptr s)
+static void validate_file(concptr s)
 {
 	/* Verify or fail */
 	if (!check_file(s))
@@ -1007,7 +1007,7 @@ static void validate_file(cptr s)
 /*
  * Validate a directory
  */
-static void validate_dir(cptr s, bool vital)
+static void validate_dir(concptr s, bool vital)
 {
 	/* Verify or fail */
 	if (!check_dir(s))
@@ -1663,7 +1663,7 @@ static bool init_graphics(void)
 	/* Initialize once */
 	char buf[1024];
 	BYTE wid, hgt, twid, thgt, ox, oy;
-	cptr name;
+	concptr name;
 
 	if (arg_graphics == GRAPHICS_ADAM_BOLT)
 	{
@@ -1846,7 +1846,7 @@ static void term_window_resize(term_data *td)
  *
  * Note that the "font name" must be capitalized!!!
  */
-static errr term_force_font(term_data *td, cptr path)
+static errr term_force_font(term_data *td, concptr path)
 {
 	int wid, hgt;
 
@@ -2796,7 +2796,7 @@ static errr Term_wipe_win(int x, int y, int n)
  * what color it should be using to draw with, but perhaps simply changing
  * it every time is not too inefficient.  
  */
-static errr Term_text_win(int x, int y, int n, TERM_COLOR a, cptr s)
+static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 {
 	term_data *td = (term_data*)(Term->data);
 	RECT rc;
@@ -2989,7 +2989,7 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, cptr s)
  *
  * If "graphics" is not available, we simply "wipe" the given grids.
  */
-static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, cptr cp, const TERM_COLOR *tap, cptr tcp)
+static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
 {
 	term_data *td = (term_data*)(Term->data);
 
@@ -5280,7 +5280,7 @@ LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 /*
  * Display warning message (see "z-util.c")
  */
-static void hack_plog(cptr str)
+static void hack_plog(concptr str)
 {
 	/* Give a warning */
 	if (str)
@@ -5300,7 +5300,7 @@ static void hack_plog(cptr str)
 /*
  * Display error message and quit (see "z-util.c")
  */
-static void hack_quit(cptr str)
+static void hack_quit(concptr str)
 {
 	/* Give a warning */
 	if (str)
@@ -5333,7 +5333,7 @@ static void hack_quit(cptr str)
 /*
  * Display warning message (see "z-util.c")
  */
-static void hook_plog(cptr str)
+static void hook_plog(concptr str)
 {
 	/* Warning */
 	if (str)
@@ -5353,7 +5353,7 @@ static void hook_plog(cptr str)
 /*
  * Display error message and quit (see "z-util.c")
  */
-static void hook_quit(cptr str)
+static void hook_quit(concptr str)
 {
 	int i;
 

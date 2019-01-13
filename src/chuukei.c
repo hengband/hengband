@@ -104,7 +104,7 @@ static errr (*old_xtra_hook)(int n, int v);
 static errr (*old_curs_hook)(int x, int y);
 static errr (*old_bigcurs_hook)(int x, int y);
 static errr (*old_wipe_hook)(int x, int y, int n);
-static errr (*old_text_hook)(int x, int y, int n, TERM_COLOR a, cptr s);
+static errr (*old_text_hook)(int x, int y, int n, TERM_COLOR a, concptr s);
 
 static void disable_chuukei_server(void)
 {
@@ -285,7 +285,7 @@ void flush_ringbuf(void)
 }
 
 
-static int read_chuukei_prf(cptr prf_name)
+static int read_chuukei_prf(concptr prf_name)
 {
 	char buf[1024];
 	FILE *fp;
@@ -522,7 +522,7 @@ static bool string_is_repeat(char *str, int len)
 	return (TRUE);
 }
 
-static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, cptr str)
+static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
 	char buf[1024];
 	char buf2[1024];
@@ -1085,7 +1085,7 @@ void browse_chuukei()
 }
 #endif /* CHUUKEI */
 
-void prepare_browse_movie_aux(cptr filename)
+void prepare_browse_movie_aux(concptr filename)
 {
 	movie_fd = fd_open(filename, O_RDONLY);
 	
@@ -1094,7 +1094,7 @@ void prepare_browse_movie_aux(cptr filename)
 	init_buffer();
 }
 
-void prepare_browse_movie(cptr filename)
+void prepare_browse_movie(concptr filename)
 {
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);

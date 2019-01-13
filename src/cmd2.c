@@ -1014,7 +1014,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	cave_type *c_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
 	int power;
-	cptr name;
+	concptr name;
 	bool more = FALSE;
 
 	/* Verify legality */
@@ -1406,7 +1406,7 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	/* Access trap name */
-	cptr name = (f_name + f_ptr->name);
+	concptr name = (f_name + f_ptr->name);
 
 	/* Extract trap "power" */
 	int power = f_ptr->power;
@@ -1597,7 +1597,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	bool		more = FALSE;
 
-	cptr name = f_name + f_info[get_feat_mimic(c_ptr)].name;
+	concptr name = f_name + f_info[get_feat_mimic(c_ptr)].name;
 
 	p_ptr->energy_use = 100;
 
@@ -2117,7 +2117,7 @@ void do_cmd_rest(void)
 	/* Prompt for time if needed */
 	if (command_arg <= 0)
 	{
-		cptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", 
+		concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", 
 				   "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
 
 
@@ -3132,7 +3132,7 @@ void do_cmd_fire(void)
 {
 	OBJECT_IDX item;
 	object_type *j_ptr, *ammo_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	if(p_ptr->wild_mode) return;
 
@@ -3244,7 +3244,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	int msec = delay_factor * delay_factor * delay_factor;
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	cptr q, s;
+	concptr q, s;
 	bool come_back = FALSE;
 	bool do_drop = TRUE;
 

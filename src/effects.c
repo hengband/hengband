@@ -261,7 +261,7 @@ void dispel_player(void)
 
 	if (music_singing_any() || hex_spelling_any())
 	{
-		cptr str = (music_singing_any()) ? _("歌", "singing") : _("呪文", "spelling");
+		concptr str = (music_singing_any()) ? _("歌", "singing") : _("呪文", "spelling");
 		INTERUPTING_SONG_EFFECT(p_ptr) = SINGING_SONG_EFFECT(p_ptr);
 		SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
@@ -3604,7 +3604,7 @@ bool hp_player(int num)
 /*
  * Array of stat "descriptions"
  */
-static cptr desc_stat_pos[] =
+static concptr desc_stat_pos[] =
 {
 	_("強く", "strong"),
 	_("知的に", "smart"),
@@ -3618,7 +3618,7 @@ static cptr desc_stat_pos[] =
 /*
  * Array of stat "descriptions"
  */
-static cptr desc_stat_neg[] =
+static concptr desc_stat_neg[] =
 {
 	_("弱く", "weak"),
 	_("無知に", "stupid"),
@@ -3833,9 +3833,9 @@ void do_poly_wounds(void)
 /*
  * Change player race
  */
-void change_race(CHARACTER_IDX new_race, cptr effect_msg)
+void change_race(CHARACTER_IDX new_race, concptr effect_msg)
 {
-	cptr title = race_info[new_race].title;
+	concptr title = race_info[new_race].title;
 	int  old_race = p_ptr->prace;
 
 #ifdef JP
@@ -4040,7 +4040,7 @@ void do_poly_self(void)
  * setting the player to "dead".
  */
 
-int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
+int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 {
 	int old_chp = p_ptr->chp;
 
@@ -4163,7 +4163,7 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 
 		if (p_ptr->inside_arena)
 		{
-			cptr m_name = r_name+r_info[arena_info[p_ptr->arena_number].r_idx].name;
+			concptr m_name = r_name+r_info[arena_info[p_ptr->arena_number].r_idx].name;
 			msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
 			msg_print(NULL);
 			if (record_arena) do_cmd_write_nikki(NIKKI_ARENA, -1 - p_ptr->arena_number, m_name);
@@ -4291,7 +4291,7 @@ int take_hit(int damage_type, HIT_POINT damage, cptr hit_from, int monspell)
 					int h = Term->hgt;
 					int msg_pos_x[9] = {  5,  7,  9, 12,  14,  17,  19,  21, 23};
 					int msg_pos_y[9] = {  3,  4,  5,  4,   5,   4,   5,   6,  4};
-					cptr str;
+					concptr str;
 					char* str2;
 
 					Term_clear();

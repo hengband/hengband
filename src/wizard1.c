@@ -30,7 +30,7 @@ static FILE *fff = NULL;
  * @param r_ptr モンスター種族の構造体ポインタ
  * @return シンボル職の記述名
  */
-static cptr attr_to_text(monster_race *r_ptr)
+static concptr attr_to_text(monster_race *r_ptr)
 {
 #ifdef JP000
 	if (r_ptr->flags1 & RF1_ATTR_CLEAR)    return "透明な";
@@ -96,7 +96,7 @@ static cptr attr_to_text(monster_race *r_ptr)
 typedef struct
 {
 	OBJECT_TYPE_VALUE tval;
-	cptr name;
+	concptr name;
 } grouper;
 
 
@@ -286,7 +286,7 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
  * @param fname ファイル名
  * @return なし
  */
-static void spoil_obj_desc(cptr fname)
+static void spoil_obj_desc(concptr fname)
 {
 	int i, k, s, t, n = 0, group_start = 0;
 
@@ -518,7 +518,7 @@ typedef struct flag_desc flag_desc;
 struct flag_desc
 {
 	const int flag;
-	cptr const desc;
+	concptr const desc;
 };
 
 
@@ -859,7 +859,7 @@ typedef struct
 	 *
 	 * This list includes extra attacks, for simplicity.
 	 */
-	cptr pval_affects[N_ELEMENTS(stat_flags_desc) - 1 +
+	concptr pval_affects[N_ELEMENTS(stat_flags_desc) - 1 +
 			  N_ELEMENTS(pval_flags1_desc) + 1];
 
 } pval_info_type;
@@ -882,22 +882,22 @@ typedef struct
 	pval_info_type pval_info;
 
 	/* A list of an object's slaying preferences */
-	cptr slays[N_ELEMENTS(slay_flags_desc) + 1];
+	concptr slays[N_ELEMENTS(slay_flags_desc) + 1];
 
 	/* A list if an object's elemental brands */
-	cptr brands[N_ELEMENTS(brand_flags_desc) + 1];
+	concptr brands[N_ELEMENTS(brand_flags_desc) + 1];
 
 	/* A list of immunities granted by an object */
-	cptr immunities[N_ELEMENTS(immune_flags_desc) + 1];
+	concptr immunities[N_ELEMENTS(immune_flags_desc) + 1];
 
 	/* A list of resistances granted by an object */
-	cptr resistances[N_ELEMENTS(resist_flags_desc) + 1];
+	concptr resistances[N_ELEMENTS(resist_flags_desc) + 1];
 
 	/* A list of stats sustained by an object */
-	cptr sustains[N_ELEMENTS(sustain_flags_desc)  - 1 + 1];
+	concptr sustains[N_ELEMENTS(sustain_flags_desc)  - 1 + 1];
 
 	/* A list of various magical qualities an object may have */
-	cptr misc_magic[N_ELEMENTS(misc_flags2_desc) + N_ELEMENTS(misc_flags3_desc)
+	concptr misc_magic[N_ELEMENTS(misc_flags2_desc) + N_ELEMENTS(misc_flags3_desc)
 			+ 1       /* Permanent Light */
 			+ 1       /* TY curse */
 			+ 1       /* type of curse */
@@ -907,7 +907,7 @@ typedef struct
 	char addition[80];
 
 	/* A string describing an artifact's activation */
-	cptr activation;
+	concptr activation;
 
 	/* "Level 20, Rarity 30, 3.0 lbs, 20000 Gold" */
 	char misc_desc[80];
@@ -945,7 +945,7 @@ static void spoiler_blanklines(int n)
  * @param str 出力したい文字列
  * @return なし
  */
-static void spoiler_underline(cptr str)
+static void spoiler_underline(concptr str)
 {
 	fprintf(fff, "%s\n", str);
 	spoiler_out_n_chars(strlen(str), '-');
@@ -973,9 +973,9 @@ static void spoiler_underline(cptr str)
  * The possibly updated description pointer is returned.
  * </pre>
  */
-static cptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE],
+static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE],
 			      const flag_desc *flag_ptr,
-			      cptr *desc_ptr, const int n_elmnts)
+			      concptr *desc_ptr, const int n_elmnts)
 {
 	int i;
 
@@ -1017,7 +1017,7 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-	cptr *affects_list;
+	concptr *affects_list;
 
 	/* If pval == 0, there is nothing to do. */
 	if (!o_ptr->pval)
@@ -1067,7 +1067,7 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
  * @param slay_list 種族スレイ構造体の参照ポインタ
  * @return なし
  */
-static void analyze_slay(object_type *o_ptr, cptr *slay_list)
+static void analyze_slay(object_type *o_ptr, concptr *slay_list)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -1088,7 +1088,7 @@ static void analyze_slay(object_type *o_ptr, cptr *slay_list)
  * @param brand_list 属性ブランド構造体の参照ポインタ
  * @return なし
  */
-static void analyze_brand(object_type *o_ptr, cptr *brand_list)
+static void analyze_brand(object_type *o_ptr, concptr *brand_list)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -1109,7 +1109,7 @@ static void analyze_brand(object_type *o_ptr, cptr *brand_list)
  * @param resist_list 通常耐性構造体の参照ポインタ
  * @return なし
  */
-static void analyze_resist(object_type *o_ptr, cptr *resist_list)
+static void analyze_resist(object_type *o_ptr, concptr *resist_list)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -1130,7 +1130,7 @@ static void analyze_resist(object_type *o_ptr, cptr *resist_list)
  * @param immune_list 免疫構造体の参照ポインタ
  * @return なし
  */
-static void analyze_immune(object_type *o_ptr, cptr *immune_list)
+static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -1151,7 +1151,7 @@ static void analyze_immune(object_type *o_ptr, cptr *immune_list)
  * @param sustain_list 維持特性構造体の参照ポインタ
  * @return なし
  */
-static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
+static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -1188,7 +1188,7 @@ static void analyze_sustains(object_type *o_ptr, cptr *sustain_list)
  * @param misc_list その他の特性構造体の参照ポインタ
  * @return なし
  */
-static void analyze_misc_magic(object_type *o_ptr, cptr *misc_list)
+static void analyze_misc_magic(object_type *o_ptr, concptr *misc_list)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	POSITION rad;
@@ -1401,7 +1401,7 @@ static void print_header(void)
  * @param separator フラグ表示の区切り記号
  * @return なし
  */
-static void spoiler_outlist(cptr header, cptr *list, char separator)
+static void spoiler_outlist(concptr header, concptr *list, char separator)
 {
 	int line_len, buf_len;
 	char line[MAX_LINE_LEN+1], buf[80];
@@ -1585,7 +1585,7 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
  * @param fname 生成ファイル名
  * @return なし
  */
-static void spoil_artifact(cptr fname)
+static void spoil_artifact(concptr fname)
 {
 	int i;
 	IDX j;
@@ -1662,7 +1662,7 @@ static void spoil_artifact(cptr fname)
  * @param fname 生成ファイル名
  * @return なし
  */
-static void spoil_mon_desc(cptr fname)
+static void spoil_mon_desc(concptr fname)
 {
 	int i, n = 0;
 
@@ -1730,7 +1730,7 @@ static void spoil_mon_desc(cptr fname)
 	{
 		monster_race *r_ptr = &r_info[who[i]];
 
-		cptr name = (r_name + r_ptr->name);
+		concptr name = (r_name + r_ptr->name);
 		if (r_ptr->flags7 & (RF7_KAGE)) continue;
 
 		/* Get the "name" */
@@ -1827,9 +1827,9 @@ static void spoil_mon_desc(cptr fname)
  * @param str 文字列参照ポインタ
  * @return なし
  */
-static void spoil_out(cptr str)
+static void spoil_out(concptr str)
 {
-	cptr r;
+	concptr r;
 
 	/* Line buffer */
 	static char roff_buf[256];
@@ -1913,9 +1913,9 @@ static void spoil_out(cptr str)
 #ifdef JP
 				bool k_flag_local;
 				bool iskanji_flag_local = FALSE;
-				cptr tail = str + (k_flag ? 2 : 1);
+				concptr tail = str + (k_flag ? 2 : 1);
 #else
-				cptr tail = str + 1;
+				concptr tail = str + 1;
 #endif
 
 				for (; *tail; tail++)
@@ -1995,7 +1995,7 @@ static void spoil_out(cptr str)
  * @param str 文字列参照ポインタ
  * @return なし
  */
-static void roff_func(TERM_COLOR attr, cptr str)
+static void roff_func(TERM_COLOR attr, concptr str)
 {
 	/* Unused */
 	(void)attr;
@@ -2010,7 +2010,7 @@ static void roff_func(TERM_COLOR attr, cptr str)
  * @param fname ファイル名
  * @return なし
  */
-static void spoil_mon_info(cptr fname)
+static void spoil_mon_info(concptr fname)
 {
 	char buf[1024];
 	int i, l, n = 0;
@@ -2288,7 +2288,7 @@ static void ang_sort_swap_evol_tree(vptr u, vptr v, int a, int b)
  * @param fname 出力ファイル名
  * @return なし
  */
-static void spoil_mon_evol(cptr fname)
+static void spoil_mon_evol(concptr fname)
 {
 	char buf[1024];
 	monster_race *r_ptr;
@@ -2596,7 +2596,7 @@ static void spoil_random_artifact_aux(object_type *o_ptr, int i)
  * @param fname 出力ファイル名
  * @return なし
  */
-void spoil_random_artifact(cptr fname)
+void spoil_random_artifact(concptr fname)
 {
 	int i,j;
 

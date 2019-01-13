@@ -4,7 +4,7 @@
 /*
  * Return alignment title
  */
-cptr your_alignment(void)
+concptr your_alignment(void)
 {
 	if (p_ptr->align > 150) return _("大善", "Lawful");
 	else if (p_ptr->align > 50) return _("中善", "Good");

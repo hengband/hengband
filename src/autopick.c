@@ -202,13 +202,13 @@ static GAME_TEXT KEY_BOOTS[] = "boots";
 /*
  * A function to create new entry
  */
-static bool autopick_new_entry(autopick_type *entry, cptr str, bool allow_default)
+static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 {
-	cptr insc;
+	concptr insc;
 	int i;
 	byte act = 0;
 	char buf[MAX_LINELEN];
-	cptr prev_ptr, ptr, old_ptr;
+	concptr prev_ptr, ptr, old_ptr;
 	int prev_flg;
 
 	if (str[0] && str[1] == ':') switch (str[0])
@@ -731,7 +731,7 @@ static void init_autopick(void)
 /*
  *  Get file name for autopick preference
  */
-static cptr pickpref_filename(int filename_mode)
+static concptr pickpref_filename(int filename_mode)
 {
 	static const char namebase[] = _("picktype", "pickpref");
 
@@ -872,7 +872,7 @@ errr process_autopick_file_command(char *buf)
 /*
  * Reconstruct preference line from entry
  */
-cptr autopick_line_from_entry(autopick_type *entry)
+concptr autopick_line_from_entry(autopick_type *entry)
 {
 	char buf[MAX_LINELEN];
 	char *ptr;
@@ -996,9 +996,9 @@ cptr autopick_line_from_entry(autopick_type *entry)
 /*
  * Reconstruct preference line from entry and kill entry
  */
-static cptr autopick_line_from_entry_kill(autopick_type *entry)
+static concptr autopick_line_from_entry_kill(autopick_type *entry)
 {
-	cptr ptr = autopick_line_from_entry(entry);
+	concptr ptr = autopick_line_from_entry(entry);
 
 	/* Free memory for original entry */
 	autopick_free_entry(entry);
@@ -1011,10 +1011,10 @@ static cptr autopick_line_from_entry_kill(autopick_type *entry)
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the entry
  */
-static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, cptr o_name)
+static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_name)
 {
 	int j;
-	cptr ptr = entry->name;
+	concptr ptr = entry->name;
 
 	/*** Unaware items ***/
 	if (IS_FLG(FLG_UNAWARE) && object_is_aware(o_ptr))
@@ -1906,7 +1906,7 @@ bool autopick_autoregister(object_type *o_ptr)
 	/* Already registered */
 	if (match_autopick != -1)
 	{
-		cptr what;
+		concptr what;
 		byte act = autopick_list[match_autopick].action;
 
 		if (act & DO_AUTOPICK) what = _("自動で拾う", "auto-pickup");
@@ -2057,13 +2057,13 @@ typedef struct {
 	byte mark;
 
 	object_type *search_o_ptr;
-	cptr search_str;
-	cptr last_destroyed;
+	concptr search_str;
+	concptr last_destroyed;
 
 	chain_str_type *yank;
 	bool yank_eol;
 
-	cptr *lines_list;
+	concptr *lines_list;
 	byte states[MAX_LINES];
 
 	u16b dirty_flags;
@@ -2092,15 +2092,15 @@ typedef struct {
  */
 static void describe_autopick(char *buff, autopick_type *entry)
 {
-	cptr str = entry->name;
+	concptr str = entry->name;
 	byte act = entry->action;
-	cptr insc = entry->insc;
+	concptr insc = entry->insc;
 	int i;
 
 	bool top = FALSE;
 
 #ifdef JP
-	cptr before_str[100], body_str;
+	concptr before_str[100], body_str;
 	int before_n = 0;
 
 	body_str = "アイテム";
@@ -2386,7 +2386,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 
 #else /* JP */
 
-	cptr before_str[20], after_str[20], which_str[20], whose_str[20], body_str;
+	concptr before_str[20], after_str[20], which_str[20], whose_str[20], body_str;
 	int before_n = 0, after_n = 0, which_n = 0, whose_n = 0;
 
 	body_str = "items";
@@ -2731,9 +2731,9 @@ static void describe_autopick(char *buff, autopick_type *entry)
 /*
  * Read whole lines of a file to memory
  */
-static cptr *read_text_lines(cptr filename)
+static concptr *read_text_lines(concptr filename)
 {
-	cptr *lines_list = NULL;
+	concptr *lines_list = NULL;
 	FILE *fff;
 
 	int lines = 0;
@@ -2747,7 +2747,7 @@ static cptr *read_text_lines(cptr filename)
 	if (fff)
 	{
 		/* Allocate list of pointers */
-		C_MAKE(lines_list, MAX_LINES, cptr);
+		C_MAKE(lines_list, MAX_LINES, concptr);
 
 		/* Parse it */
 		while (0 == my_fgets(fff, buf, sizeof(buf)))
@@ -2771,7 +2771,7 @@ static cptr *read_text_lines(cptr filename)
  */
 static void prepare_default_pickpref(void)
 {
-	const cptr messages[] = {
+	const concptr messages[] = {
 		_("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
 		_("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
 		_("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf ."),
@@ -2782,7 +2782,7 @@ static void prepare_default_pickpref(void)
 	FILE *pref_fp;
 	FILE *user_fp;
 	int i;
-	cptr filename = pickpref_filename(PT_DEFAULT);
+	concptr filename = pickpref_filename(PT_DEFAULT);
 
 	/* Display messages */
 	for (i = 0; messages[i]; i++) msg_print(messages[i]);
@@ -2828,10 +2828,10 @@ static void prepare_default_pickpref(void)
  * Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-static cptr *read_pickpref_text_lines(int *filename_mode_p)
+static concptr *read_pickpref_text_lines(int *filename_mode_p)
 {
 	char buf[1024];
-	cptr *lines_list;
+	concptr *lines_list;
 
 	/* Try a filename with player name */
 	*filename_mode_p = PT_WITH_PNAME;
@@ -2860,7 +2860,7 @@ static cptr *read_pickpref_text_lines(int *filename_mode_p)
 	if (!lines_list)
 	{
 		/* Allocate list of pointers */
-		C_MAKE(lines_list, MAX_LINES, cptr);
+		C_MAKE(lines_list, MAX_LINES, concptr);
 		lines_list[0] = string_make("");
 	}
 	return lines_list;
@@ -2870,7 +2870,7 @@ static cptr *read_pickpref_text_lines(int *filename_mode_p)
 /*
  * Write whole lines of memory to a file.
  */
-static bool write_text_lines(cptr filename, cptr *lines_list)
+static bool write_text_lines(concptr filename, concptr *lines_list)
 {
 	FILE *fff;
 
@@ -2898,7 +2898,7 @@ static bool write_text_lines(cptr filename, cptr *lines_list)
 /*
  * Free memory of lines_list.
  */
-static void free_text_lines(cptr *lines_list)
+static void free_text_lines(concptr *lines_list)
 {
 	int lines;
 
@@ -2906,7 +2906,7 @@ static void free_text_lines(cptr *lines_list)
 		string_free(lines_list[lines]);
 
 	/* free list of pointers */
-	C_KILL(lines_list, MAX_LINES, cptr);
+	C_KILL(lines_list, MAX_LINES, concptr);
 }
 
 
@@ -3148,7 +3148,7 @@ static void add_keyword(text_body_type *tb, BIT_FLAGS flg)
  */
 static void check_expression_line(text_body_type *tb, int y)
 {
-	cptr s = tb->lines_list[y];
+	concptr s = tb->lines_list[y];
 
 	if ((s[0] == '?' && s[1] == ':') ||
 	    (tb->states[y] & LSTAT_BYPASS))
@@ -3240,7 +3240,7 @@ static bool insert_return_code(text_body_type *tb)
 static bool entry_from_choosed_object(autopick_type *entry)
 {
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	q = _("どのアイテムを登録しますか? ", "Enter which item? ");
 	s = _("アイテムを持っていない。", "You have nothing to enter.");
@@ -3255,11 +3255,11 @@ static bool entry_from_choosed_object(autopick_type *entry)
 /*
  * Choose an item for search
  */
-static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
+static byte get_object_for_search(object_type **o_handle, concptr *search_strp)
 {
 	char buf[MAX_NLEN+20];
 	object_type *o_ptr;
-	cptr q, s;
+	concptr q, s;
 
 	q = _("どのアイテムを検索しますか? ", "Enter which item? ");
 	s = _("アイテムを持っていない。", "You have nothing to enter.");
@@ -3278,7 +3278,7 @@ static byte get_object_for_search(object_type **o_handle, cptr *search_strp)
 /*
  * Prepare for search by destroyed object
  */
-static byte get_destroyed_object_for_search(object_type **o_handle, cptr *search_strp)
+static byte get_destroyed_object_for_search(object_type **o_handle, concptr *search_strp)
 {
 	char buf[MAX_NLEN+20];
 
@@ -3296,7 +3296,7 @@ static byte get_destroyed_object_for_search(object_type **o_handle, cptr *search
 /*
  * Choose an item or string for search
  */
-static byte get_string_for_search(object_type **o_handle, cptr *search_strp)
+static byte get_string_for_search(object_type **o_handle, concptr *search_strp)
 {
 	int pos = 0;
 
@@ -3671,7 +3671,7 @@ static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forwa
 /*
  * Search next line matches to the string
  */
-static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
+static void search_for_string(text_body_type *tb, concptr search_str, bool forward)
 {
 	int bypassed_cy = -1;
 	int bypassed_cx = 0;
@@ -3681,7 +3681,7 @@ static void search_for_string(text_body_type *tb, cptr search_str, bool forward)
 
 	while (TRUE)
 	{
-		cptr pos;
+		concptr pos;
 
 		/* End of list? */
 		if (forward)
@@ -3984,7 +3984,7 @@ static GAME_TEXT MN_NOUN[] = "Keywords (noun)";
 
 
 typedef struct {
-	cptr name;
+	concptr name;
 	int level;
 	int key;
 	int com_id;
@@ -4184,7 +4184,7 @@ static int do_command_menu(int level, int start)
 			for (i = start; menu_data[i].level >= level; i++)
 			{
 				char com_key_str[3];
-				cptr str;
+				concptr str;
 
 				/* Ignore lower level sub menus */
 				if (menu_data[i].level > level) continue;
@@ -4254,7 +4254,7 @@ static int do_command_menu(int level, int start)
 }
 
 
-static chain_str_type *new_chain_str(cptr str)
+static chain_str_type *new_chain_str(concptr str)
 {
 	chain_str_type *chain;
 
@@ -4287,7 +4287,7 @@ static void kill_yank_chain(text_body_type *tb)
 }
 
 
-static void add_str_to_yank(text_body_type *tb, cptr str)
+static void add_str_to_yank(text_body_type *tb, concptr str)
 {
 	chain_str_type *chain;
 
@@ -4485,8 +4485,8 @@ static void draw_text_editor(text_body_type *tb)
 		for (y = 0; tb->lines_list[y]; y++)
 		{
 			char f;
-			cptr v;
-			cptr s = tb->lines_list[y];
+			concptr v;
+			concptr s = tb->lines_list[y];
 			char *ss, *s_keep;
 			int s_len;
 
@@ -4534,7 +4534,7 @@ static void draw_text_editor(text_body_type *tb)
 	{
 		int j;
 		int leftcol = 0;
-		cptr msg;
+		concptr msg;
 		byte color;
 		int y = tb->upper+i;
 
@@ -4620,7 +4620,7 @@ static void draw_text_editor(text_body_type *tb)
 	if (tb->old_cy != tb->cy || (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || tb->dirty_line == tb->cy)
 	{
 		autopick_type an_entry, *entry = &an_entry;
-		cptr str1 = NULL, str2 = NULL;
+		concptr str1 = NULL, str2 = NULL;
 
 
 		/* Clear information line */
@@ -4703,7 +4703,7 @@ static void draw_text_editor(text_body_type *tb)
 		{
 			char buf[MAX_LINELEN];
 			char temp[MAX_LINELEN];
-			cptr t;
+			concptr t;
 
 			describe_autopick(buf, entry);
 
@@ -4747,7 +4747,7 @@ static void draw_text_editor(text_body_type *tb)
 static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
 {
 	char buf[MAX_LINELEN];
-	cptr s = tb->lines_list[y];
+	concptr s = tb->lines_list[y];
 	char *d = buf;
 	int x;
 
@@ -4877,7 +4877,7 @@ static bool insert_keymap_line(text_body_type *tb)
 	char tmp[1024];
 	char buf[2];
 	BIT_FLAGS mode;
-	cptr act;
+	concptr act;
 
 	/* Roguelike */
 	if (rogue_like_commands)
@@ -5266,7 +5266,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Paste text */
 		while (chain)
 		{
-			cptr yank_str = chain->s;
+			concptr yank_str = chain->s;
 
 			char buf[MAX_LINELEN];
 			int i;

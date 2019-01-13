@@ -288,7 +288,7 @@ mind_power const mind_powers[5] =
 };
 
 /*! 特殊能力の解説文字列 */
-static cptr const mind_tips[5][MAX_MIND_POWERS] =
+static concptr const mind_tips[5][MAX_MIND_POWERS] =
 {
 #ifdef JP
 {
@@ -536,13 +536,13 @@ static cptr const mind_tips[5][MAX_MIND_POWERS] =
 void mindcraft_info(char *p, int use_mind, int power)
 {
 #ifdef JP
-	cptr s_dam = "損傷:";
-	cptr s_dur = "期間:";
-	cptr s_range = "範囲:";
+	concptr s_dam = "損傷:";
+	concptr s_dur = "期間:";
+	concptr s_range = "範囲:";
 #else
-	cptr s_dam = "dam ";
-	cptr s_dur = "dur ";
-	cptr s_range = "range ";
+	concptr s_dam = "dam ";
+	concptr s_dur = "dur ";
+	concptr s_range = "range ";
 #endif
 	PLAYER_LEVEL plev = p_ptr->lev;
 
@@ -687,7 +687,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	char            choice;
 	char            out_val[160];
 	char            comment[80];
-	cptr            p;
+	concptr            p;
 	COMMAND_CODE code;
 	mind_type       spell;
 	const mind_power      *mind_ptr;
@@ -1781,7 +1781,7 @@ void do_cmd_mind(void)
 	mind_type       spell;
 	bool            cast;
 	int             use_mind, mana_cost;
-	cptr            p;
+	concptr            p;
 	bool		on_mirror = FALSE;
 
 	/* not if confused */

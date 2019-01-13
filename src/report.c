@@ -100,7 +100,7 @@ static void buf_delete(BUF *b)
  * @param size 追加サイズ
  * @return 追加後のバッファ容量
  */
-static int buf_append(BUF *buf, cptr data, size_t size)
+static int buf_append(BUF *buf, concptr data, size_t size)
 {
 	while (buf->size + size > buf->max_size)
 	{
@@ -126,7 +126,7 @@ static int buf_append(BUF *buf, cptr data, size_t size)
  * @param fmt 文字列フォーマット
  * @return 追加後のバッファ容量
  */
-static int buf_sprintf(BUF *buf, cptr fmt, ...)
+static int buf_sprintf(BUF *buf, concptr fmt, ...)
 {
 	int		ret;
 	char	tmpbuf[8192];
@@ -194,7 +194,7 @@ static int buf_write(BUF *buf, int fd)
 	return buf->size;
 }
 
-static int buf_search(BUF *buf, cptr str)
+static int buf_search(BUF *buf, concptr str)
 {
 	char *ret;
 
@@ -228,11 +228,11 @@ static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
  * @param buf 伝送内容バッファ
  * @return なし
  */
-static bool http_post(int sd, cptr url, BUF *buf)
+static bool http_post(int sd, concptr url, BUF *buf)
 {
 	BUF *output;
 	char response_buf[1024] = "";
-	cptr HTTP_RESPONSE_CODE_OK = "HTTP/1.1 200 OK";
+	concptr HTTP_RESPONSE_CODE_OK = "HTTP/1.1 200 OK";
 
 	output = buf_new();
 	buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
@@ -309,21 +309,21 @@ static errr make_dump(BUF* dumpbuf)
  * @brief スクリーンダンプを作成する/ Make screen dump to buffer
  * @return 作成したスクリーンダンプの参照ポインタ
  */
-cptr make_screen_dump(void)
+concptr make_screen_dump(void)
 {
 	BUF *screen_buf;
 	int y, x, i;
-	cptr ret;
+	concptr ret;
 
 	TERM_COLOR a = 0, old_a = 0;
 	SYMBOL_CODE c = ' ';
 
-	static cptr html_head[] = {
+	static concptr html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
 		"<pre>",
 		0,
 	};
-	static cptr html_foot[] = {
+	static concptr html_foot[] = {
 		"</pre>\n",
 		"</body>\n</html>\n",
 		0,
@@ -365,7 +365,7 @@ cptr make_screen_dump(void)
 		for (x = 0; x < wid - 1; x++)
 		{
 			int rv, gv, bv;
-			cptr cc = NULL;
+			concptr cc = NULL;
 			/* Get the attr/char */
 			(void)(Term_what(x, y, &a, &c));
 

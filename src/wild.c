@@ -965,10 +965,10 @@ errr init_wilderness(void)
  * @param fmt 地勢内の地形数を参照するための独自フォーマット
  * @return なし
  */
-static void init_terrain_table(int terrain, s16b feat_global, cptr fmt, ...)
+static void init_terrain_table(int terrain, s16b feat_global, concptr fmt, ...)
 {
 	va_list vp;
-	cptr    p;
+	concptr    p;
 	int     cur = 0;
 	char    check = 'a';
 	FEAT_IDX feat;
@@ -1158,9 +1158,9 @@ bool change_wild_mode(void)
 	if (have_pet)
 	{
 #ifdef JP
-		cptr msg = "ペットを置いて広域マップに入りますか？";
+		concptr msg = "ペットを置いて広域マップに入りますか？";
 #else
-		cptr msg = "Do you leave your pets behind? ";
+		concptr msg = "Do you leave your pets behind? ";
 #endif
 
 		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))

@@ -24,7 +24,7 @@
 * @param tmp 返すメッセージを格納する配列
 * @return なし
 */
-void set_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, cptr msg, char* tmp)
+void set_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, concptr msg, char* tmp)
 {
     int base_damage = monspell_bluemage_damage(SPELL_NUM, plev, BASE_DAM);
     int dice_num = monspell_bluemage_damage(SPELL_NUM, plev, DICE_NUM);
@@ -47,15 +47,15 @@ static void learned_info(char *p, int power)
 	PLAYER_LEVEL plev = pseudo_plev();
 
 #ifdef JP
-	cptr s_dam = " 損傷:%s";
-	cptr s_dur = "期間:";
-	cptr s_range = "範囲:";
-	cptr s_heal = " 回復:%s";
+	concptr s_dam = " 損傷:%s";
+	concptr s_dur = "期間:";
+	concptr s_range = "範囲:";
+	concptr s_heal = " 回復:%s";
 #else
-	cptr s_dam = " dam %s";
-	cptr s_dur = "dur ";
-	cptr s_range = "range ";
-	cptr s_heal = " heal %s";
+	concptr s_dam = " dam %s";
+	concptr s_dur = "dur ";
+	concptr s_range = "range ";
+	concptr s_heal = " heal %s";
 #endif
 
 	strcpy(p, "");
@@ -216,7 +216,7 @@ static bool get_learned_power(SPELL_IDX *sn)
 	char            out_val[160];
 	char            comment[80];
 	BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
-	cptr p = _("魔法", "magic");
+	concptr p = _("魔法", "magic");
 	COMMAND_CODE code;
 	monster_power   spell;
 	bool            flag, redraw;

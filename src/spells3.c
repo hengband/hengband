@@ -742,7 +742,7 @@ void teleport_level(MONSTER_IDX m_idx)
  * @param x コンソールX座標
  * @return 選択されたダンジョンID
  */
-DUNGEON_IDX choose_dungeon(cptr note, POSITION y, POSITION x)
+DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 {
 	DUNGEON_IDX select_dungeon;
 	DUNGEON_IDX i;
@@ -1220,7 +1220,7 @@ void brand_weapon(int brand_type)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	cptr        q, s;
+	concptr        q, s;
 
 
 	/* Assume enchant weapon */
@@ -1241,7 +1241,7 @@ void brand_weapon(int brand_type)
 	    !((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) &&
 	    !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE)))
 	{
-		cptr act = NULL;
+		concptr act = NULL;
 
 		/* Let's get the name before it is changed... */
 		GAME_TEXT o_name[MAX_NLEN];
@@ -1917,7 +1917,7 @@ bool alchemy(void)
 	GAME_TEXT o_name[MAX_NLEN];
 	char out_val[MAX_NLEN+40];
 
-	cptr q, s;
+	concptr q, s;
 
 	/* Hack -- force destruction */
 	if (command_arg > 0) force = TRUE;
@@ -2157,7 +2157,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	bool        okay = FALSE;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr        q, s;
+	concptr        q, s;
 
 	/* Assume enchant weapon */
 	item_tester_hook = object_allow_enchant_weapon;
@@ -2210,7 +2210,7 @@ bool artifact_scroll(void)
 	bool okay = FALSE;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr q, s;
+	concptr q, s;
 
 	/* Enchant weapon/armour */
 	item_tester_hook = item_tester_hook_nameless_weapon_armour;
@@ -2368,7 +2368,7 @@ bool ident_spell(bool only_equip)
 	OBJECT_IDX item;
 	object_type     *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr            q, s;
+	concptr            q, s;
 	bool old_known;
 
 	if (only_equip)
@@ -2435,7 +2435,7 @@ bool mundane_spell(bool only_equip)
 {
 	OBJECT_IDX item;
 	object_type     *o_ptr;
-	cptr            q, s;
+	concptr            q, s;
 
 	if (only_equip) item_tester_hook = object_is_weapon_armour_ammo;
 
@@ -2484,7 +2484,7 @@ bool identify_fully(bool only_equip)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr q, s;
+	concptr q, s;
 	bool old_known;
 
 	if (only_equip)
@@ -2576,7 +2576,7 @@ bool recharge(int power)
 	bool fail = FALSE;
 	byte fail_type = 1;
 
-	cptr q, s;
+	concptr q, s;
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Only accept legal items */
@@ -2848,7 +2848,7 @@ bool bless_weapon(void)
 	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr q, s;
+	concptr q, s;
 
 	/* Bless only weapons */
 	item_tester_hook = object_is_weapon;
@@ -2997,7 +2997,7 @@ bool pulish_shield(void)
 	object_type     *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr            q, s;
+	concptr            q, s;
 
 	/* Assume enchant weapon */
 	item_tester_tval = TV_SHIELD;
@@ -3707,7 +3707,7 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 	SPELL_IDX spell;
 	int  exp_level, increment = 64;
 	const magic_type *s_ptr;
-	cptr comment;
+	concptr comment;
 	char info[80];
 	char out_val[160];
 	byte line_attr;
@@ -3870,7 +3870,7 @@ bool rustproof(void)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	cptr q, s;
+	concptr q, s;
 
 	/* Select a piece of armour */
 	item_tester_hook = object_is_armour;
@@ -4340,7 +4340,7 @@ bool eat_magic(int power)
 	bool fail = FALSE;
 	byte fail_type = 1;
 
-	cptr q, s;
+	concptr q, s;
 	GAME_TEXT o_name[MAX_NLEN];
 
 	item_tester_hook = item_tester_hook_recharge;
