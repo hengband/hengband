@@ -3261,6 +3261,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if (shuriken >= 0)
 	{
 		item = shuriken;
+		o_ptr = &inventory[item];
 	}
 	else if (boomerang)
 	{
@@ -3276,8 +3277,16 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				return FALSE;
 			}
 		}
-		else if (buki_motteruka(INVEN_LARM)) item = INVEN_LARM;
-		else item = INVEN_RARM;
+		else if (buki_motteruka(INVEN_LARM))
+		{
+			item = INVEN_LARM;
+			o_ptr = &inventory[item];
+		}
+		else
+		{
+			item = INVEN_RARM;
+			o_ptr = &inventory[item];
+		}
 	}
 	else
 	{

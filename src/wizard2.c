@@ -2097,6 +2097,10 @@ void do_cmd_debug(void)
 		break;
 	}
 
+	case 'V':
+		do_cmd_wiz_reset_class();
+		break;
+
 	/* Not a Wizard Command */
 	default:
 		msg_print("That is not a valid debug command.");
