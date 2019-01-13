@@ -3450,8 +3450,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		/* The player can see the (on screen) missile */
 		if (panel_contains(ny[cur_dis], nx[cur_dis]) && player_can_see_bold(ny[cur_dis], nx[cur_dis]))
 		{
-			char c = object_char(q_ptr);
-			byte a = object_attr(q_ptr);
+			SYMBOL_CODE c = object_char(q_ptr);
+			TERM_COLOR a = object_attr(q_ptr);
 
 			/* Draw, Hilite, Fresh, Pause, Erase */
 			print_rel(c, a, ny[cur_dis], nx[cur_dis]);
