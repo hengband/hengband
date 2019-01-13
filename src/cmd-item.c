@@ -1259,16 +1259,13 @@ void do_cmd_look(void)
  */
 void do_cmd_locate(void)
 {
-	int		dir, y1, x1, y2, x2;
-
-	char	tmp_val[80];
-
-	char	out_val[160];
-
-	int wid, hgt;
+	DIRECTION dir;
+	POSITION y1, x1, y2, x2;
+	GAME_TEXT tmp_val[80];
+	GAME_TEXT out_val[160];
+	TERM_LEN wid, hgt;
 
 	get_screen_size(&wid, &hgt);
-
 
 	/* Start at current panel */
 	y2 = y1 = panel_row_min;
@@ -1302,8 +1299,8 @@ void do_cmd_locate(void)
 		}
 
 		/* Prepare to ask which way to look */
-		sprintf(out_val, _("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", 
-					       "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
+		sprintf(out_val, _("マップ位置 [%ld(%02ld),%ld(%02ld)] (プレイヤーの%s)  方向?", 
+					       "Map sector [%ld(%02ld),%ld(%02ld)], which is%s your sector.  Direction?"),
 			y2 / (hgt / 2), y2 % (hgt / 2),
 			x2 / (wid / 2), x2 % (wid / 2), tmp_val);
 
@@ -1341,9 +1338,7 @@ void do_cmd_locate(void)
 	verify_panel();
 
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	handle_stuff();
 }
@@ -1364,7 +1359,6 @@ void do_cmd_locate(void)
 bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 {
 	u16b *who = (u16b*)(u);
-
 	u16b *why = (u16b*)(v);
 
 	int w1 = who[a];
