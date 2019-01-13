@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "sort.h"
 
 
 #ifdef ALLOW_SPOILERS

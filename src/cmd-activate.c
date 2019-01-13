@@ -10,6 +10,7 @@
 #include "cmd-activate.h"
 #include "object-hook.h"
 #include "spells-summon.h"
+#include "sort.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数

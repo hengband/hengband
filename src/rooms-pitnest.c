@@ -4,6 +4,7 @@
 #include "rooms.h"
 #include "rooms-pitnest.h"
 #include "monsterrace-hook.h"
+#include "sort.h"
 
 
 

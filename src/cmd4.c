@@ -43,6 +43,7 @@
 #include "cmd-pet.h"
 #include "world.h"
 #include "player-status.h"
+#include "sort.h"
 
 
 /*

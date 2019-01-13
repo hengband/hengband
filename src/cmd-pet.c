@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "melee.h"
+#include "sort.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定

@@ -22,6 +22,7 @@
 #include "cmd-zapwand.h"
 
 #include "object-hook.h"
+#include "sort.h"
 
 
 /*!

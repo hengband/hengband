@@ -1269,8 +1269,6 @@ extern void redraw_window(void);
 extern bool change_panel(POSITION dy, POSITION dx);
 extern void verify_panel(void);
 extern cptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
-extern void ang_sort_aux(vptr u, vptr v, int p, int q);
-extern void ang_sort(vptr u, vptr v, int n);
 extern bool target_able(MONSTER_IDX m_idx);
 extern bool target_okay(void);
 extern bool target_set(BIT_FLAGS mode);

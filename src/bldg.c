@@ -17,6 +17,7 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "world.h"
+#include "sort.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c
