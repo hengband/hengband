@@ -4739,9 +4739,9 @@ void cast_shuffle(void)
 	}
 }
 
-bool_hack life_stream(bool_hack message, bool_hack virtue)
+bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 {
-	if(virtue)
+	if(virtue_change)
 	{
 		chg_virtue(V_VITALITY, 1);
 		chg_virtue(V_UNLIFE, -5);

@@ -995,7 +995,7 @@ extern bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad);
 extern void cast_wonder(DIRECTION dir);
 extern void cast_invoke_spirits(DIRECTION dir);
 extern void cast_shuffle(void);
-extern bool_hack life_stream(bool_hack message, bool_hack virtue);
+extern bool_hack life_stream(bool_hack message, bool_hack virtue_change);
 extern bool_hack heroism(int base);
 extern bool_hack berserk(int base);
 extern bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides);

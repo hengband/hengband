@@ -3729,7 +3729,7 @@ bool get_com(cptr prompt, char *command, bool z_escape)
 
 	/* Get a key */
 	if (get_com_no_macros)
-		*command = inkey_special(FALSE);
+		*command = (char)inkey_special(FALSE);
 	else
 		*command = inkey();
 
