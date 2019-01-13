@@ -3176,19 +3176,13 @@ bool target_set(BIT_FLAGS mode)
 	char query;
 	char info[80];
 	char same_key;
-
 	cave_type *c_ptr;
-
 	TERM_LEN wid, hgt;
 	
 	get_screen_size(&wid, &hgt);
 
 	/* Cancel target */
 	target_who = 0;
-
-
-	/* Cancel tracking */
-	/* health_track(0); */
 
 	if (rogue_like_commands)
 	{
@@ -3247,9 +3241,6 @@ bool target_set(BIT_FLAGS mode)
 				query = target_set_aux(y, x, mode, info);
 				if(query)break;
 			}
-
-			/* Cancel tracking */
-			/* health_track(0); */
 
 			/* Assume no "direction" */
 			d = 0;
@@ -3315,11 +3306,8 @@ bool target_set(BIT_FLAGS mode)
 				{
 					/* Recenter the map around the player */
 					verify_panel();
-
 					p_ptr->update |= (PU_MONSTERS);
-
 					p_ptr->redraw |= (PR_MAP);
-
 					p_ptr->window |= (PW_OVERHEAD);
 					handle_stuff();
 
@@ -3396,8 +3384,8 @@ bool target_set(BIT_FLAGS mode)
 					/* Nothing interesting */
 					else
 					{
-						int dx = ddx[d];
-						int dy = ddy[d];
+						POSITION dx = ddx[d];
+						POSITION dy = ddy[d];
 
 						/* Restore previous position */
 						panel_row_min = y2;
@@ -3405,9 +3393,7 @@ bool target_set(BIT_FLAGS mode)
 						panel_bounds_center();
 
 						p_ptr->update |= (PU_MONSTERS);
-
 						p_ptr->redraw |= (PR_MAP);
-
 						p_ptr->window |= (PW_OVERHEAD);
 						handle_stuff();
 
@@ -3482,9 +3468,6 @@ bool target_set(BIT_FLAGS mode)
 			/* Describe and Prompt (enable "TARGET_LOOK") */
 			while ((query = target_set_aux(y, x, mode | TARGET_LOOK, info)) == 0);
 
-			/* Cancel tracking */
-			/* health_track(0); */
-
 			/* Assume no direction */
 			d = 0;
 
@@ -3519,11 +3502,8 @@ bool target_set(BIT_FLAGS mode)
 				{
 					/* Recenter the map around the player */
 					verify_panel();
-
 					p_ptr->update |= (PU_MONSTERS);
-
 					p_ptr->redraw |= (PR_MAP);
-
 					p_ptr->window |= (PW_OVERHEAD);
 					handle_stuff();
 
@@ -3585,8 +3565,8 @@ bool target_set(BIT_FLAGS mode)
 			/* Handle "direction" */
 			if (d)
 			{
-				int dx = ddx[d];
-				int dy = ddy[d];
+				POSITION dx = ddx[d];
+				POSITION dy = ddy[d];
 
 				/* XTRA HACK MOVEFAST */
 				if (move_fast)
@@ -3641,11 +3621,8 @@ bool target_set(BIT_FLAGS mode)
 
 	/* Recenter the map around the player */
 	verify_panel();
-
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD);
 	handle_stuff();
 
