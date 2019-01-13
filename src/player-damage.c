@@ -329,12 +329,12 @@ int inven_damage(inven_func typ, int perc)
 /*!
 * @brief 酸攻撃による装備のAC劣化処理 /
 * Acid has hit the player, attempt to affect some armor.
-* @return 装備が酸を浴びたならTRUEを返す
+* @return 装備による軽減があったならTRUEを返す
 * @details
 * Note that the "base armor" of an object never changes.
 * If any armor is damaged (or resists), the player takes less damage.
 */
-static bool minus_ac(void)
+static bool acid_minus_ac(void)
 {
 	object_type *o_ptr = NULL;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -352,13 +352,15 @@ static bool minus_ac(void)
 	case 7: o_ptr = &inventory[INVEN_FEET]; break;
 	}
 
-	/* Nothing to damage */
 	if (!o_ptr->k_idx) return (FALSE);
-
 	if (!object_is_armour(o_ptr)) return (FALSE);
 
 	/* No damage left to be done */
-	if (o_ptr->ac + o_ptr->to_a <= 0) return (FALSE);
+	if (o_ptr->ac + o_ptr->to_a <= 0)
+	{
+		msg_format(_("%sは既にボロボロだ！", "Your %s is already crumble!"), o_name);
+		return (FALSE);
+	}
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	object_flags(o_ptr, flgs);
 
@@ -369,7 +371,7 @@ static bool minus_ac(void)
 		return (TRUE);
 	}
 
-	msg_format(_("%sがダメージを受けた！", "Your %s is damaged!"), o_name);
+	msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), o_name);
 
 	/* Damage the item */
 	o_ptr->to_a--;
@@ -422,7 +424,7 @@ HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(A_CHR);
 
 		/* If any armor gets hit, defend the player */
-		if (minus_ac()) dam = (dam + 1) / 2;
+		if (acid_minus_ac()) dam = (dam + 1) / 2;
 	}
 
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);

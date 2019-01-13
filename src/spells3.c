@@ -1010,22 +1010,17 @@ bool apply_disenchant(BIT_FLAGS mode)
 		return (FALSE);
 	}
 
-
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
 
 	/* Artifacts have 71% chance to resist */
 	if (object_is_artifact(o_ptr) && (randint0(100) < 71))
 	{
 #ifdef JP
-msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
+		msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 #else
-		msg_format("Your %s (%c) resist%s disenchantment!",
-			   o_name, index_to_label(t),
-			   ((o_ptr->number != 1) ? "" : "s"));
+		msg_format("Your %s (%c) resist%s disenchantment!", o_name, index_to_label(t),
+			((o_ptr->number != 1) ? "" : "s"));
 #endif
-
-
 		return (TRUE);
 	}
 
@@ -1056,18 +1051,15 @@ msg_format("%s(%c)は劣化を跳ね返した！",o_name, index_to_label(t) );
 	    (to_a != o_ptr->to_a) || (pval != o_ptr->pval))
 	{
 #ifdef JP
-		msg_format("%s(%c)は劣化してしまった！",
-			   o_name, index_to_label(t) );
+		msg_format("%s(%c)は劣化してしまった！", o_name, index_to_label(t) );
 #else
-		msg_format("Your %s (%c) %s disenchanted!",
-			   o_name, index_to_label(t),
-			   ((o_ptr->number != 1) ? "were" : "was"));
+		msg_format("Your %s (%c) %s disenchanted!", o_name, index_to_label(t),
+			((o_ptr->number != 1) ? "were" : "was"));
 #endif
 
 		chg_virtue(V_HARMONY, 1);
 		chg_virtue(V_ENCHANT, -2);
 		p_ptr->update |= (PU_BONUS);
-
 		p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
 		calc_android_exp();
