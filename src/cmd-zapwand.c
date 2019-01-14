@@ -315,7 +315,9 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool ma
 */
 void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 {
-	int         lev, ident, chance, dir;
+	DEPTH lev;
+	int ident, chance;
+	DIRECTION dir;
 	object_type *o_ptr;
 	bool old_target_pet = target_pet;
 
