@@ -15,8 +15,8 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	static const char s_dam[] = _("損傷:", "dam ");
-	static const char s_rng[] = _("射程", "rng ");
+	const concptr s_dam = _("損傷:", "dam ");
+	const concptr s_rng = _("射程", "rng ");
 
 	DIRECTION dir;
 	PLAYER_LEVEL plev = p_ptr->lev;

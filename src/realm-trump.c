@@ -15,7 +15,8 @@ concptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 	bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
-	static const char s_random[] = _("ランダム", "random");
+
+	const concptr s_random = _("ランダム", "random");
 
 	DIRECTION dir;
 	PLAYER_LEVEL plev = p_ptr->lev;
