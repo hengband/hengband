@@ -4295,6 +4295,13 @@ void calc_bonuses(void)
 		}
 	}
 
+	/* Shield skill bonus */
+	if (object_is_armour(&inventory[INVEN_RARM]) || object_is_armour(&inventory[INVEN_LARM]))
+	{
+		p_ptr->ac += p_ptr->skill_exp[GINOU_SHIELD] * (1 + p_ptr->lev / 22) / 2000;
+		p_ptr->dis_ac += p_ptr->skill_exp[GINOU_SHIELD] * (1 + p_ptr->lev / 22) / 2000;
+	}
+
 	if (old_mighty_throw != p_ptr->mighty_throw)
 	{
 		/* Redraw average damege display of Shuriken */
