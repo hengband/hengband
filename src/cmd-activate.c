@@ -183,12 +183,12 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 
 		{
 			IDX pet_ctr, i;
-			IDX *who;
+			MONSTER_IDX *who;
 			int max_pet = 0;
 			u16b dummy_why;
 
 			/* Allocate the "who" array */
-			C_MAKE(who, max_m_idx, IDX);
+			C_MAKE(who, max_m_idx, MONSTER_IDX);
 
 			/* Process the monsters (backwards) */
 			for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)

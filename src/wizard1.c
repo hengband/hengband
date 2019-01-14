@@ -1667,7 +1667,7 @@ static void spoil_mon_desc(concptr fname)
 	int i, n = 0;
 
 	u16b why = 2;
-	s16b *who;
+	MONRACE_IDX *who;
 
 	char buf[1024];
 
@@ -1695,7 +1695,7 @@ static void spoil_mon_desc(concptr fname)
 	}
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
+	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Dump the header */
 	fprintf(fff, "Monster Spoilers for Hengband Version %d.%d.%d\n",
@@ -2017,7 +2017,7 @@ static void spoil_mon_info(concptr fname)
 	BIT_FLAGS flags1;
 
 	u16b why = 2;
-	s16b *who;
+	MONRACE_IDX *who;
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
@@ -2043,7 +2043,7 @@ static void spoil_mon_info(concptr fname)
 	spoil_out("------------------------------------------\n\n");
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
+	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Scan the monsters */
 	for (i = 1; i < max_r_idx; i++)

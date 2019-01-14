@@ -200,12 +200,12 @@ void get_table_sindarin(char *out_string)
  */
 static void shuffle_flavors(OBJECT_TYPE_VALUE tval)
 {
-	IDX *k_idx_list;
-	IDX k_idx_list_num = 0;
-	IDX i;
+	KIND_OBJECT_IDX *k_idx_list;
+	KIND_OBJECT_IDX k_idx_list_num = 0;
+	KIND_OBJECT_IDX i;
 
 	/* Allocate an array for a list of k_idx */
-	C_MAKE(k_idx_list, max_k_idx, s16b);
+	C_MAKE(k_idx_list, max_k_idx, KIND_OBJECT_IDX);
 
 	/* Search objects with given tval for shuffle */
 	for (i = 0; i < max_k_idx; i++)

@@ -5407,7 +5407,7 @@ static void do_cmd_knowledge_uniques(void)
 	}
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
+	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Scan the monsters */
 	for (i = 1; i < max_r_idx; i++)
@@ -6486,7 +6486,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 	browser_rows = hgt - 8;
 
 	/* Allocate the "mon_idx" array */
-	C_MAKE(mon_idx, max_r_idx, s16b);
+	C_MAKE(mon_idx, max_r_idx, MONRACE_IDX);
 
 	max = 0;
 	grp_cnt = 0;
@@ -6840,7 +6840,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	browser_rows = hgt - 8;
 
 	/* Allocate the "object_idx" array */
-	C_MAKE(object_idx, max_k_idx, IDX);
+	C_MAKE(object_idx, max_k_idx, KIND_OBJECT_IDX);
 
 	max = 0;
 	grp_cnt = 0;
@@ -8038,7 +8038,7 @@ static void do_cmd_knowledge_quests(void)
 	}
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_q_idx, IDX);
+	C_MAKE(quest_num, max_q_idx, QUEST_IDX);
 
 	/* Sort by compete level */
 	for (i = 1; i < max_q_idx; i++) quest_num[i] = i;

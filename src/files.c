@@ -4433,14 +4433,14 @@ static void dump_aux_class_special(FILE *fff)
  */
 static void dump_aux_quest(FILE *fff)
 {
-	IDX i;
-	IDX *quest_num;
+	QUEST_IDX i;
+	QUEST_IDX *quest_num;
 	int dummy;
 
 	fprintf(fff, _("\n\n  [クエスト情報]\n", "\n\n  [Quest Information]\n"));
 
 	/* Allocate Memory */
-	C_MAKE(quest_num, max_q_idx, IDX);
+	C_MAKE(quest_num, max_q_idx, QUEST_IDX);
 
 	/* Sort by compete level */
 	for (i = 1; i < max_q_idx; i++) quest_num[i] = i;
@@ -4456,7 +4456,7 @@ static void dump_aux_quest(FILE *fff)
 	fputc('\n', fff);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_q_idx, IDX);
+	C_KILL(quest_num, max_q_idx, QUEST_IDX);
 }
 
 
@@ -4639,7 +4639,7 @@ static void dump_aux_monsters(FILE *fff)
 	IDX k;
 	long uniq_total = 0;
 	long norm_total = 0;
-	IDX *who;
+	MONRACE_IDX *who;
 
 	/* Sort by monster level */
 	u16b why = 2;
@@ -4647,7 +4647,7 @@ static void dump_aux_monsters(FILE *fff)
 	fprintf(fff, _("\n  [倒したモンスター]\n\n", "\n  [Defeated Monsters]\n\n"));
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, s16b);
+	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Count monster kills */
 	for (k = 1; k < max_r_idx; k++)

@@ -1540,7 +1540,7 @@ void do_cmd_query_symbol(void)
 	prt(buf, 0, 0);
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_r_idx, IDX);
+	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Collect matching monsters */
 	for (n = 0, i = 1; i < max_r_idx; i++)
