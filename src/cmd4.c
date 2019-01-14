@@ -806,11 +806,9 @@ static void do_cmd_disp_nikki(void)
 	else strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-2)+1]);
 
 #ifdef JP
-	sprintf(nikki_title, "「%s%s%sの伝説 -%s-」",
-		ap_ptr->title, ap_ptr->no ? "の" : "", p_ptr->name, tmp);
+	sprintf(nikki_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", p_ptr->name, tmp);
 #else
-	sprintf(nikki_title, "Legend of %s %s '%s'",
-		ap_ptr->title, p_ptr->name, tmp);
+	sprintf(nikki_title, "Legend of %s %s '%s'", ap_ptr->title, p_ptr->name, tmp);
 #endif
 
 	/* Display the file contents */

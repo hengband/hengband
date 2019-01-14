@@ -4821,87 +4821,22 @@ const concptr stat_names_reduced[6] =
  */
 const concptr window_flag_desc[32] =
 {
-#ifdef JP
-	"持ち物/装備一覧",
-#else
-	"Display inven/equip",
-#endif
-
-#ifdef JP
-	"装備/持ち物一覧",
-#else
-	"Display equip/inven",
-#endif
-
-#ifdef JP
-	"呪文一覧",
-#else
-	"Display spell list",
-#endif
-
-#ifdef JP
-	"キャラクタ情報",
-#else
-	"Display character",
-#endif
-		
-#ifdef JP
-	"視界内のモンスター表示",
-#else
-	"Display monsters in sight",
-#endif		
-
+	_("持ち物/装備一覧", "Display inven/equip"),
+	_("装備/持ち物一覧", "Display equip/inven"),
+	_("呪文一覧", "Display spell list"),
+	_("キャラクタ情報", "Display character"),
+	_("視界内のモンスター表示", "Display monsters in sight"),
 	NULL,
-#ifdef JP
-	"メッセージ",
-#else
-	"Display messages",
-#endif
-
-#ifdef JP
-	"ダンジョン全体図",
-#else
-	"Display overhead view",
-#endif
-
-#ifdef JP
-	"モンスターの思い出",
-#else
-	"Display monster recall",
-#endif
-
-#ifdef JP
-	"アイテムの詳細",
-#else
-	"Display object recall",
-#endif
-
-#ifdef JP
-	"自分の周囲を表示", 
-#else
-	"Display dungeon view",
-#endif
-
-#ifdef JP
-	"記念撮影",
-#else
-	"Display snap-shot",
-#endif
-
+	_("メッセージ", "Display messages"),
+	_("ダンジョン全体図", "Display overhead view"),
+	_("モンスターの思い出", "Display monster recall"),
+	_("アイテムの詳細", "Display object recall"),
+	_("自分の周囲を表示", "Display dungeon view"),
+	_("記念撮影", "Display snap-shot"),
 	NULL,
 	NULL,
-#ifdef JP
-	"ボーグ・メッセージ",
-#else
-	"Display borg messages",
-#endif
-
-#ifdef JP
-	"ボーグ・ステータス",
-#else
-	"Display borg status",
-#endif
-
+	_("ボーグ・メッセージ", "Display borg messages"),
+	_("ボーグ・ステータス", "Display borg status"),
 	NULL,
 	NULL,
 	NULL,
