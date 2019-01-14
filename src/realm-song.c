@@ -74,8 +74,6 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
 	bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
 
-	const concptr s_dam = _("損傷:", "dam ");
-
 	DIRECTION dir;
 	PLAYER_LEVEL plev = p_ptr->lev;
 

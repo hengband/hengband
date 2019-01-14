@@ -16,9 +16,6 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	const concptr s_dam = _("損傷:", "dam ");
-	const concptr s_random = _("ランダム", "random");
-
 	DIRECTION dir;
 	PLAYER_LEVEL plev = p_ptr->lev;
 

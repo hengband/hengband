@@ -1,4 +1,8 @@
 ﻿
+static const concptr s_dam = _("損傷:", "dam ");
+static const concptr s_random = _("ランダム", "random");
+static const concptr s_rng = _("射程", "rng ");
+
 extern concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base);
 extern concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base);
 extern concptr info_duration(int base, DICE_SID sides);
@@ -11,3 +15,4 @@ extern concptr info_power(int power);
 extern concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides);
 extern concptr info_radius(POSITION rad);
 extern concptr info_weight(WEIGHT weight);
+
