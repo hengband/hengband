@@ -2681,7 +2681,7 @@ static PRICE compare_weapons(PRICE bcost)
 	s = _("比べるものがありません。", "You have nothing to compare.");
 
 	o_ptr[0] = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
-	if (!o_ptr)
+	if (!o_ptr[0])
 	{
 		screen_load();
 		return (0);
@@ -2752,7 +2752,7 @@ static PRICE compare_weapons(PRICE bcost)
 
 			/* Get the second weapon */
 			o_ptr[1] = choose_object(&item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
-			if (!o_ptr) continue;
+			if (!o_ptr[1]) continue;
 
 			total += cost;
 			cost = bcost / 2;
