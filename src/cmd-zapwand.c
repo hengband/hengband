@@ -41,253 +41,253 @@ int wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool ma
 	/* Analyze the wand */
 	switch (sval)
 	{
-	case SV_WAND_HEAL_MONSTER:
-	{
-		HIT_POINT dam = damroll((powerful ? 20 : 10), 10);
-		if (heal_monster(dir, dam)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_HASTE_MONSTER:
-	{
-		if (speed_monster(dir, lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_CLONE_MONSTER:
-	{
-		if (clone_monster(dir)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_TELEPORT_AWAY:
-	{
-		int distance = MAX_SIGHT * (powerful ? 8 : 5);
-		if (teleport_monster(dir, distance)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_DISARMING:
-	{
-		if (disarm_trap(dir)) ident = TRUE;
-		if (powerful && disarm_traps_touch()) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_TRAP_DOOR_DEST:
-	{
-		if (destroy_door(dir)) ident = TRUE;
-		if (powerful && destroy_doors_touch()) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_STONE_TO_MUD:
-	{
-		HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
-		if (wall_to_mud(dir, dam)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_LITE:
-	{
-		HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
-		msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
-		(void)lite_line(dir, dam);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_SLEEP_MONSTER:
-	{
-		if (sleep_monster(dir, lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_SLOW_MONSTER:
-	{
-		if (slow_monster(dir, lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_CONFUSE_MONSTER:
-	{
-		if (confuse_monster(dir, lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_FEAR_MONSTER:
-	{
-		if (fear_monster(dir, lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_HYPODYNAMIA:
-	{
-		if (hypodynamic_bolt(dir, 80 + lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_POLYMORPH:
-	{
-		if (poly_monster(dir, lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_STINKING_CLOUD:
-	{
-		fire_ball(GF_POIS, dir, 12 + lev / 4, rad);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_MAGIC_MISSILE:
-	{
-		fire_bolt_or_beam(20, GF_MISSILE, dir, damroll(2 + lev / 10, 6));
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_ACID_BOLT:
-	{
-		fire_bolt_or_beam(20, GF_ACID, dir, damroll(6 + lev / 7, 8));
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_CHARM_MONSTER:
-	{
-		if (charm_monster(dir, MAX(20, lev)))
-			ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_FIRE_BOLT:
-	{
-		fire_bolt_or_beam(20, GF_FIRE, dir, damroll(7 + lev / 6, 8));
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_COLD_BOLT:
-	{
-		fire_bolt_or_beam(20, GF_COLD, dir, damroll(5 + lev / 8, 8));
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_ACID_BALL:
-	{
-		fire_ball(GF_ACID, dir, 60 + 3 * lev / 4, rad);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_ELEC_BALL:
-	{
-		fire_ball(GF_ELEC, dir, 40 + 3 * lev / 4, rad);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_FIRE_BALL:
-	{
-		fire_ball(GF_FIRE, dir, 70 + 3 * lev / 4, rad);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_COLD_BALL:
-	{
-		fire_ball(GF_COLD, dir, 50 + 3 * lev / 4, rad);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_WONDER:
-	{
-		msg_print(_("おっと、謎の魔法棒を始動させた。", "Oops.  Wand of wonder activated."));
-		break;
-	}
-
-	case SV_WAND_DRAGON_FIRE:
-	{
-		fire_breath(GF_FIRE, dir, (powerful ? 300 : 200), 3);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_DRAGON_COLD:
-	{
-		fire_breath(GF_COLD, dir, (powerful ? 270 : 180), 3);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_WAND_DRAGON_BREATH:
-	{
-		HIT_POINT dam;
-		EFFECT_ID typ;
-
-		switch (randint1(5))
+		case SV_WAND_HEAL_MONSTER:
 		{
-		case 1:
-			dam = 240;
-			typ = GF_ACID;
-			break;
-		case 2:
-			dam = 210;
-			typ = GF_ELEC;
-			break;
-		case 3:
-			dam = 240;
-			typ = GF_FIRE;
-			break;
-		case 4:
-			dam = 210;
-			typ = GF_COLD;
-			break;
-		default:
-			dam = 180;
-			typ = GF_POIS;
+			HIT_POINT dam = damroll((powerful ? 20 : 10), 10);
+			if (heal_monster(dir, dam)) ident = TRUE;
 			break;
 		}
 
-		if (powerful) dam = (dam * 3) / 2;
+		case SV_WAND_HASTE_MONSTER:
+		{
+			if (speed_monster(dir, lev)) ident = TRUE;
+			break;
+		}
 
-		fire_breath(typ, dir, dam, 3);
+		case SV_WAND_CLONE_MONSTER:
+		{
+			if (clone_monster(dir)) ident = TRUE;
+			break;
+		}
 
-		ident = TRUE;
-		break;
-	}
+		case SV_WAND_TELEPORT_AWAY:
+		{
+			int distance = MAX_SIGHT * (powerful ? 8 : 5);
+			if (teleport_monster(dir, distance)) ident = TRUE;
+			break;
+		}
 
-	case SV_WAND_DISINTEGRATE:
-	{
-		fire_ball(GF_DISINTEGRATE, dir, 200 + randint1(lev * 2), rad);
-		ident = TRUE;
-		break;
-	}
+		case SV_WAND_DISARMING:
+		{
+			if (disarm_trap(dir)) ident = TRUE;
+			if (powerful && disarm_traps_touch()) ident = TRUE;
+			break;
+		}
 
-	case SV_WAND_ROCKETS:
-	{
-		msg_print(_("ロケットを発射した！", "You launch a rocket!"));
-		fire_rocket(GF_ROCKET, dir, 250 + lev * 3, rad);
-		ident = TRUE;
-		break;
-	}
+		case SV_WAND_TRAP_DOOR_DEST:
+		{
+			if (destroy_door(dir)) ident = TRUE;
+			if (powerful && destroy_doors_touch()) ident = TRUE;
+			break;
+		}
 
-	case SV_WAND_STRIKING:
-	{
-		fire_bolt(GF_METEOR, dir, damroll(15 + lev / 3, 13));
-		ident = TRUE;
-		break;
-	}
+		case SV_WAND_STONE_TO_MUD:
+		{
+			HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
+			if (wall_to_mud(dir, dam)) ident = TRUE;
+			break;
+		}
 
-	case SV_WAND_GENOCIDE:
-	{
-		fire_ball_hide(GF_GENOCIDE, dir, magic ? lev + 50 : 250, 0);
-		ident = TRUE;
-		break;
-	}
+		case SV_WAND_LITE:
+		{
+			HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
+			msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
+			(void)lite_line(dir, dam);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_SLEEP_MONSTER:
+		{
+			if (sleep_monster(dir, lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_SLOW_MONSTER:
+		{
+			if (slow_monster(dir, lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_CONFUSE_MONSTER:
+		{
+			if (confuse_monster(dir, lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_FEAR_MONSTER:
+		{
+			if (fear_monster(dir, lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_HYPODYNAMIA:
+		{
+			if (hypodynamic_bolt(dir, 80 + lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_POLYMORPH:
+		{
+			if (poly_monster(dir, lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_STINKING_CLOUD:
+		{
+			fire_ball(GF_POIS, dir, 12 + lev / 4, rad);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_MAGIC_MISSILE:
+		{
+			fire_bolt_or_beam(20, GF_MISSILE, dir, damroll(2 + lev / 10, 6));
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_ACID_BOLT:
+		{
+			fire_bolt_or_beam(20, GF_ACID, dir, damroll(6 + lev / 7, 8));
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_CHARM_MONSTER:
+		{
+			if (charm_monster(dir, MAX(20, lev)))
+				ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_FIRE_BOLT:
+		{
+			fire_bolt_or_beam(20, GF_FIRE, dir, damroll(7 + lev / 6, 8));
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_COLD_BOLT:
+		{
+			fire_bolt_or_beam(20, GF_COLD, dir, damroll(5 + lev / 8, 8));
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_ACID_BALL:
+		{
+			fire_ball(GF_ACID, dir, 60 + 3 * lev / 4, rad);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_ELEC_BALL:
+		{
+			fire_ball(GF_ELEC, dir, 40 + 3 * lev / 4, rad);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_FIRE_BALL:
+		{
+			fire_ball(GF_FIRE, dir, 70 + 3 * lev / 4, rad);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_COLD_BALL:
+		{
+			fire_ball(GF_COLD, dir, 50 + 3 * lev / 4, rad);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_WONDER:
+		{
+			msg_print(_("おっと、謎の魔法棒を始動させた。", "Oops.  Wand of wonder activated."));
+			break;
+		}
+
+		case SV_WAND_DRAGON_FIRE:
+		{
+			fire_breath(GF_FIRE, dir, (powerful ? 300 : 200), 3);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_DRAGON_COLD:
+		{
+			fire_breath(GF_COLD, dir, (powerful ? 270 : 180), 3);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_DRAGON_BREATH:
+		{
+			HIT_POINT dam;
+			EFFECT_ID typ;
+
+			switch (randint1(5))
+			{
+			case 1:
+				dam = 240;
+				typ = GF_ACID;
+				break;
+			case 2:
+				dam = 210;
+				typ = GF_ELEC;
+				break;
+			case 3:
+				dam = 240;
+				typ = GF_FIRE;
+				break;
+			case 4:
+				dam = 210;
+				typ = GF_COLD;
+				break;
+			default:
+				dam = 180;
+				typ = GF_POIS;
+				break;
+			}
+
+			if (powerful) dam = (dam * 3) / 2;
+
+			fire_breath(typ, dir, dam, 3);
+
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_DISINTEGRATE:
+		{
+			fire_ball(GF_DISINTEGRATE, dir, 200 + randint1(lev * 2), rad);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_ROCKETS:
+		{
+			msg_print(_("ロケットを発射した！", "You launch a rocket!"));
+			fire_rocket(GF_ROCKET, dir, 250 + lev * 3, rad);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_STRIKING:
+		{
+			fire_bolt(GF_METEOR, dir, damroll(15 + lev / 3, 13));
+			ident = TRUE;
+			break;
+		}
+
+		case SV_WAND_GENOCIDE:
+		{
+			fire_ball_hide(GF_GENOCIDE, dir, magic ? lev + 50 : 250, 0);
+			ident = TRUE;
+			break;
+		}
 	}
 	return ident;
 }
