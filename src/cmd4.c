@@ -4542,18 +4542,14 @@ static char hack[17] = "dwsorgbuDWvyRGBU";
  */
 void do_cmd_load_screen(void)
 {
-	int i, y, x;
-
+	int i;
+	TERM_LEN y, x;
 	TERM_COLOR a = 0;
-	char c = ' ';
-
+	SYMBOL_CODE c = ' ';
 	bool okay = TRUE;
-
 	FILE *fff;
-
 	char buf[1024];
-
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
 
@@ -4628,10 +4624,8 @@ void do_cmd_load_screen(void)
 		}
 	}
 
-
 	/* Close it */
 	my_fclose(fff);
-
 
 	prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
 
@@ -4764,16 +4758,13 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, OB
 static void do_cmd_knowledge_inven(void)
 {
 	FILE *fff;
-
 	GAME_TEXT file_name[1024];
-
 	store_type  *st_ptr;
-
 	OBJECT_TYPE_VALUE tval;
 	int i = 0;
 	int j = 0;
 
-	char  where[32];
+	char where[32];
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
@@ -4823,7 +4814,8 @@ static void do_cmd_knowledge_inven(void)
 
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
-	int y, x, i;
+	TERM_LEN y, x;
+	int i;
 
 	TERM_COLOR a = 0, old_a = 0;
 	char c = ' ';
@@ -4850,7 +4842,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		0,
 	};
 
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
 
@@ -5047,13 +5039,10 @@ void do_cmd_save_screen(void)
 	}
 	else /* Dump the screen as text */
 	{
-		int y, x;
-
+		TERM_LEN y, x;
 		TERM_COLOR a = 0;
-		char c = ' ';
-
+		SYMBOL_CODE c = ' ';
 		FILE *fff;
-
 		char buf[1024];
 
 		/* Build the filename */
