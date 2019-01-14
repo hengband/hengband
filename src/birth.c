@@ -352,6 +352,8 @@ static concptr seikaku_jouhou[MAX_SEIKAKU] =
 
 "いかさまは、初心者の練習用の性格です。あらゆる能力が高くなっています。この性格を使えば勝利者になることは容易ですが、勝利しても全く自慢になりません。",
 
+"チャージマンは「こんなところ」に連れて行かれても仕方のない可愛そうなお友達なんＤＡ。腕っ節やタフさはマンモス並みに強いのだけれど知能面はまるで駄目なのが分かるだろう？この性格は最初から気が狂っているので、混乱したり幻覚を見る心配がないのです。",
+
 #else
 
 "\"Ordinary\" is a personality with no special skills or talents, with unmodified stats and skills.",
@@ -377,7 +379,10 @@ static concptr seikaku_jouhou[MAX_SEIKAKU] =
 
 "A \"Patient\" person does things carefully.  Patient people have high constitution, and high resilience, but poor abilities in most other skills.  Also it directly influences your hit-points.",
 
-"\"munchkin\" is a personality for beginners.  It raises all your stats and skills.  With this personality, you can win the game easily, but gain little honor in doing so."
+"\"munchkin\" is a personality for beginners.  It raises all your stats and skills.  With this personality, you can win the game easily, but gain little honor in doing so.",
+
+"\ChargeMan\" is crazy killer. It render you powerfull strength and constitution, but poor intelligence.you are not confused and seen the illusion because this you go mad from the beginning.",
+
 #endif
 };
 

@@ -321,6 +321,9 @@ void hit_trap(bool break_trap)
 			msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
 			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_print(_("くっそ～！", ""));
+			else if((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+				msg_print(_("ジュラル星人の仕業に違いない！", ""));
+
 
 			sound(SOUND_FALL);
 			dam = damroll(2, 8);

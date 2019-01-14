@@ -4218,6 +4218,7 @@ void do_cmd_quest(void)
 		if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("『とにかく入ってみようぜぇ。』", ""));
+		else if(p_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
 
 		/* Player enters a new quest */
 		p_ptr->oldpy = 0;

@@ -3770,9 +3770,16 @@ void calc_bonuses(void)
 
 	/* Sexy Gal */
 	if (p_ptr->pseikaku == SEIKAKU_SEXY) p_ptr->cursed |= (TRC_AGGRAVATE);
+
 	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) p_ptr->to_m_chance += 10;
 	if (p_ptr->pseikaku == SEIKAKU_KIREMONO) p_ptr->to_m_chance -= 3;
 	if ((p_ptr->pseikaku == SEIKAKU_GAMAN) || (p_ptr->pseikaku == SEIKAKU_CHIKARA)) p_ptr->to_m_chance++;
+
+	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN)
+	{
+		p_ptr->to_m_chance += 5;
+		p_ptr->resist_conf = TRUE;
+	}
 
 	/* Lucky man */
 	if (p_ptr->pseikaku == SEIKAKU_LUCKY) p_ptr->muta3 |= MUT3_GOOD_LUCK;
