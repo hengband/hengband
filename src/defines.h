@@ -670,11 +670,12 @@
 #define RACE_S_FAIRY            34
 #define RACE_KUTAR              35
 #define RACE_ANDROID            36
+#define RACE_MERFOLK            37
 
 /*
  * Maximum number of player "race" types (see "table.c", etc)
  */
-#define MAX_RACES               37
+#define MAX_RACES               38
 
 
 /*

@@ -1150,7 +1150,6 @@ bool rakuba(HIT_POINT dam, bool force)
 
 
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
 	p_ptr->redraw |= (PR_EXTRA);
 
 	/* Update health track of mount */
