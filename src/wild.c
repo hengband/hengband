@@ -75,16 +75,16 @@ void set_floor_and_wall(DUNGEON_IDX type)
  * @param depth_max 深みの最大値
  * @return なし
  */
-static void perturb_point_mid(POSITION x1, POSITION x2, POSITION x3, POSITION x4, POSITION xmid, POSITION ymid, POSITION rough, POSITION depth_max)
+static void perturb_point_mid(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
 	/*
 	 * Average the four corners & perturb it a bit.
 	 * tmp is a random int +/- rough
 	 */
-	int tmp2 = rough*2 + 1;
-	int tmp = randint1(tmp2) - (rough + 1);
+	FEAT_IDX tmp2 = rough*2 + 1;
+	FEAT_IDX tmp = randint1(tmp2) - (rough + 1);
 
-	int avg = ((x1 + x2 + x3 + x4) / 4) + tmp;
+	FEAT_IDX avg = ((x1 + x2 + x3 + x4) / 4) + tmp;
 
 	/* Division always rounds down, so we round up again */
 	if (((x1 + x2 + x3 + x4) % 4) > 1)
@@ -95,7 +95,7 @@ static void perturb_point_mid(POSITION x1, POSITION x2, POSITION x3, POSITION x4
 	if (avg > depth_max) avg = depth_max;
 
 	/* Set the new value. */
-	cave[ymid][xmid].feat = (s16b)avg;
+	cave[ymid][xmid].feat = (FEAT_IDX)avg;
 }
 
 
@@ -111,17 +111,16 @@ static void perturb_point_mid(POSITION x1, POSITION x2, POSITION x3, POSITION x4
  * @param depth_max 深みの最大値
  * @return なし
  */
-static void perturb_point_end(int x1, int x2, int x3,
-			  int xmid, int ymid, int rough, int depth_max)
+static void perturb_point_end(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
 	/*
 	 * Average the three corners & perturb it a bit.
 	 * tmp is a random int +/- rough
 	 */
-	int tmp2 = rough * 2 + 1;
-	int tmp = randint0(tmp2) - rough;
+	FEAT_IDX tmp2 = rough * 2 + 1;
+	FEAT_IDX tmp = randint0(tmp2) - rough;
 
-	int avg = ((x1 + x2 + x3) / 3) + tmp;
+	FEAT_IDX avg = ((x1 + x2 + x3) / 3) + tmp;
 
 	/* Division always rounds down, so we round up again */
 	if ((x1 + x2 + x3) % 3) avg++;
@@ -131,7 +130,7 @@ static void perturb_point_end(int x1, int x2, int x3,
 	if (avg > depth_max) avg = depth_max;
 
 	/* Set the new value. */
-	cave[ymid][xmid].feat = (s16b)avg;
+	cave[ymid][xmid].feat = (FEAT_IDX)avg;
 }
 
 
