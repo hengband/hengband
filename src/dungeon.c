@@ -21,6 +21,7 @@
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
+#include "floor.h"
 #include "floor-events.h"
 #include "object-curse.h"
 #include "store.h"

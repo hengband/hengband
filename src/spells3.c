@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "object-hook.h"
 #include "melee.h"
 #include "player-status.h"

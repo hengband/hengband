@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "chest.h"
+#include "floor.h"
 #include "melee.h"
 #include "object-hook.h"
 

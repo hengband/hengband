@@ -11,8 +11,10 @@ hengband_SOURCES = \
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h defines.h dungeon.c effects.c externs.h files.c flavor.c \
-	floor-events.c floor-events.h floor-generate.c floor-save.c \
+
+	floor.h floor-events.c floor-events.h floor-generate.c floor-save.c \
 	floor-streams.c floor-streams.h \
+
 	gameoption.c gameoption.h gamevalue.h \
 	generate.h grid.c grid.h h-basic.h h-config.h h-define.h hissatsu.c \
 	history.h history.c \

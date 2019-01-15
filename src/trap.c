@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "floor.h"
 #include "trap.h"
 #include "player-damage.h"
 

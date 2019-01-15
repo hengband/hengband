@@ -266,6 +266,7 @@
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\floor-events.h" />
+    <ClInclude Include="..\..\src\floor.h" />
     <ClInclude Include="..\..\src\gameoption.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\generate.h" />
