@@ -157,8 +157,8 @@ bool hack_mutation;
 s16b inven_cnt; /* Number of items in inventory */
 s16b equip_cnt; /* Number of items in equipment */
 
-s16b o_max = 1; /* Number of allocated objects */
-s16b o_cnt = 0; /* Number of live objects */
+OBJECT_IDX o_max = 1; /* Number of allocated objects */
+OBJECT_IDX o_cnt = 0; /* Number of live objects */
 
 MONSTER_IDX m_max = 1; /* Number of allocated monsters */
 MONSTER_IDX m_cnt = 0; /* Number of live monsters */

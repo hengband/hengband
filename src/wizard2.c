@@ -66,8 +66,7 @@ void do_cmd_rerate(bool display)
 	do_cmd_rerate_aux();
 
 	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
-		(2 * p_ptr->hitdie +
-		((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
+		(2 * p_ptr->hitdie + ((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
 
 
 	/* Update and redraw hitpoints */

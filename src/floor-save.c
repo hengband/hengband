@@ -1184,11 +1184,11 @@ void change_floor(void)
 		/* Maintain monsters and artifacts */
 		if (loaded)
 		{
-			IDX i;
-			s32b tmp_last_visit = sf_ptr->last_visit;
-			s32b absence_ticks;
+			MONSTER_IDX i;
+			GAME_TURN tmp_last_visit = sf_ptr->last_visit;
+			GAME_TURN absence_ticks;
 			int alloc_chance = d_info[dungeon_type].max_m_alloc_chance;
-			int alloc_times;
+			GAME_TURN alloc_times;
 
 			while (tmp_last_visit > turn) tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
 			absence_ticks = (turn - tmp_last_visit) / TURNS_PER_TICK;
@@ -1339,8 +1339,7 @@ void change_floor(void)
 		}
 
 		/* You see stairs blocked */
-		else if ((change_floor_mode & CFM_NO_RETURN) &&
-			 (change_floor_mode & (CFM_DOWN | CFM_UP)))
+		else if ((change_floor_mode & CFM_NO_RETURN) && (change_floor_mode & (CFM_DOWN | CFM_UP)))
 		{
 			if (!p_ptr->blind)
 			{
@@ -1407,7 +1406,7 @@ void stair_creation(void)
 
 	bool up = TRUE;
 	bool down = TRUE;
-	s16b dest_floor_id = 0;
+	FLOOR_IDX dest_floor_id = 0;
 
 
 	/* Forbid up staircases on Ironman mode */
