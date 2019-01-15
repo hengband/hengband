@@ -2282,7 +2282,7 @@ void player_outfit(void)
 	case RACE_ENT:
 		/* Potions of Water */
 		object_prep(q_ptr, lookup_kind(TV_POTION, SV_POTION_WATER));
-		q_ptr->number = (byte)rand_range(15, 23);
+		q_ptr->number = (ITEM_NUMBER)rand_range(15, 23);
 		add_outfit(q_ptr);
 
 		break;
@@ -2294,7 +2294,7 @@ void player_outfit(void)
 		/* Fuel with oil (move pval to xtra4) */
 		apply_magic(q_ptr, 1, AM_NO_FIXED_ART);
 
-		q_ptr->number = (byte)rand_range(7, 12);
+		q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
 		add_outfit(q_ptr);
 
 		break;
@@ -2302,7 +2302,7 @@ void player_outfit(void)
 	default:
 		/* Food rations */
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
-		q_ptr->number = (byte)rand_range(3, 7);
+		q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
 
 		add_outfit(q_ptr);
 	}
@@ -2313,7 +2313,7 @@ void player_outfit(void)
 		/* Hack -- Give the player scrolls of DARKNESS! */
 		object_prep(q_ptr, lookup_kind(TV_SCROLL, SV_SCROLL_DARKNESS));
 
-		q_ptr->number = rand_range(2, 5);
+		q_ptr->number = (ITEM_NUMBER)rand_range(2, 5);
 
 		add_outfit(q_ptr);
 	}
@@ -2321,7 +2321,7 @@ void player_outfit(void)
 	{
 		/* Hack -- Give the player some torches */
 		object_prep(q_ptr, lookup_kind(TV_LITE, SV_LITE_TORCH));
-		q_ptr->number = rand_range(3, 7);
+		q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
 		q_ptr->xtra4 = rand_range(3, 7) * 500;
 
 		add_outfit(q_ptr);
@@ -2354,7 +2354,7 @@ void player_outfit(void)
 	{
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
-		q_ptr->number = (byte)rand_range(15, 20);
+		q_ptr->number = (ITEM_NUMBER)rand_range(15, 20);
 
 		add_outfit(q_ptr);
 	}
@@ -2363,7 +2363,7 @@ void player_outfit(void)
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_WAND, SV_WAND_MAGIC_MISSILE));
 		q_ptr->number = 1;
-		q_ptr->pval = (byte)rand_range(25, 30);
+		q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);
 
 		add_outfit(q_ptr);
 	}

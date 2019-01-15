@@ -202,7 +202,7 @@ void complete_quest(QUEST_IDX quest_num)
 	}
 
 	q_ptr->status = QUEST_STATUS_COMPLETED;
-	q_ptr->complev = (byte)p_ptr->lev;
+	q_ptr->complev = p_ptr->lev;
 	update_playtime();
 	q_ptr->comptime = playtime;
 

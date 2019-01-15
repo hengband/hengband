@@ -272,7 +272,7 @@ void do_cmd_go_down(void)
 
 	else
 	{
-		int target_dungeon = 0;
+		DUNGEON_IDX target_dungeon = 0;
 
 		if (!dun_level)
 		{
@@ -293,7 +293,7 @@ void do_cmd_go_down(void)
 			/* Save old player position */
 			p_ptr->oldpx = p_ptr->x;
 			p_ptr->oldpy = p_ptr->y;
-			dungeon_type = (byte)target_dungeon;
+			dungeon_type = target_dungeon;
 
 			/*
 			 * Clear all saved floors
