@@ -13,6 +13,8 @@
 #include "angband.h"
 #include "cmd-pet.h"
 #include "monsterrace-hook.h"
+#include "objectkind-hook.h"
+#include "projection.h"
 
 
 /*
@@ -2469,4 +2471,661 @@ bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, mo
 
 	/* Non-hostile alignment */
 	return FALSE;
+}
+
+/*!
+ * @brief モンスターを倒した際の財宝svalを返す
+ * @param r_idx 倒したモンスターの種族ID
+ * @return 財宝のsval
+ * @details
+ * Hack -- Return the "automatic coin type" of a monster race
+ * Used to allocate proper treasure when "Creeping coins" die
+ * Note the use of actual "monster names"
+ */
+static OBJECT_SUBTYPE_VALUE get_coin_type(MONRACE_IDX r_idx)
+{
+	/* Analyze monsters */
+	switch (r_idx)
+	{
+	case MON_COPPER_COINS: return 2;
+	case MON_SILVER_COINS: return 5;
+	case MON_GOLD_COINS: return 10;
+	case MON_MITHRIL_COINS:
+	case MON_MITHRIL_GOLEM: return 16;
+	case MON_ADAMANT_COINS: return 17;
+	}
+
+	/* Assume nothing */
+	return 0;
+}
+
+
+/*!
+ * @brief モンスターが死亡した時の処理 /
+ * Handle the "death" of a monster.
+ * @param m_idx 死亡したモンスターのID
+ * @param drop_item TRUEならばモンスターのドロップ処理を行う
+ * @return 撃破されたモンスターの述語
+ * @details
+ * <pre>
+ * Disperse treasures centered at the monster location based on the
+ * various flags contained in the monster flags fields.
+ * Check for "Quest" completion when a quest monster is killed.
+ * Note that only the player can induce "monster_death()" on Uniques.
+ * Thus (for now) all Quest monsters should be Uniques.
+ * Note that monsters can now carry objects, and when a monster dies,
+ * it drops all of its objects, which may disappear in crowded rooms.
+ * </pre>
+ */
+void monster_death(MONSTER_IDX m_idx, bool drop_item)
+{
+	int i, j;
+	POSITION y, x;
+
+	int dump_item = 0;
+	int dump_gold = 0;
+	int number = 0;
+
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	bool visible = ((m_ptr->ml && !p_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE));
+
+	u32b mo_mode = 0L;
+
+	bool do_gold = (!(r_ptr->flags1 & RF1_ONLY_ITEM));
+	bool do_item = (!(r_ptr->flags1 & RF1_ONLY_GOLD));
+	bool cloned = (m_ptr->smart & SM_CLONED) ? TRUE : FALSE;
+	int force_coin = get_coin_type(m_ptr->r_idx);
+
+	object_type forge;
+	object_type *q_ptr;
+
+	bool drop_chosen_item = drop_item && !cloned && !p_ptr->inside_arena
+		&& !p_ptr->inside_battle && !is_pet(m_ptr);
+
+	/* The caster is dead? */
+	if (world_monster && world_monster == m_idx) world_monster = 0;
+
+	/* Notice changes in view */
+	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+	{
+		/* Update some things */
+		p_ptr->update |= (PU_MON_LITE);
+	}
+
+	y = m_ptr->fy;
+	x = m_ptr->fx;
+
+	if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+
+		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+		do_cmd_write_nikki(NIKKI_NAMED_PET, 3, m_name);
+	}
+
+	/* Let monsters explode! */
+	for (i = 0; i < 4; i++)
+	{
+		if (r_ptr->blow[i].method == RBM_EXPLODE)
+		{
+			BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+			EFFECT_ID typ = mbe_info[r_ptr->blow[i].effect].explode_type;
+			DICE_NUMBER d_dice = r_ptr->blow[i].d_dice;
+			DICE_SID d_side = r_ptr->blow[i].d_side;
+			HIT_POINT damage = damroll(d_dice, d_side);
+
+			project(m_idx, 3, y, x, damage, typ, flg, -1);
+			break;
+		}
+	}
+
+	if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
+	{
+		choose_new_monster(m_idx, TRUE, MON_CHAMELEON);
+		r_ptr = &r_info[m_ptr->r_idx];
+	}
+
+	/* Check for quest completion */
+	check_quest_completion(m_ptr);
+
+	/* Handle the possibility of player vanquishing arena combatant -KMW- */
+	if (p_ptr->inside_arena && !is_pet(m_ptr))
+	{
+		p_ptr->exit_bldg = TRUE;
+
+		if (p_ptr->arena_number > MAX_ARENA_MONS)
+		{
+			msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
+		}
+		else
+		{
+			msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
+		}
+
+		if (arena_info[p_ptr->arena_number].tval)
+		{
+			q_ptr = &forge;
+
+			/* Prepare to make a prize */
+			object_prep(q_ptr, lookup_kind(arena_info[p_ptr->arena_number].tval, arena_info[p_ptr->arena_number].sval));
+			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+
+		if (p_ptr->arena_number > MAX_ARENA_MONS) p_ptr->arena_number++;
+		p_ptr->arena_number++;
+		if (record_arena)
+		{
+			GAME_TEXT m_name[MAX_NLEN];
+
+			/* Extract monster name */
+			monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+
+			do_cmd_write_nikki(NIKKI_ARENA, p_ptr->arena_number, m_name);
+		}
+	}
+
+	if (m_idx == p_ptr->riding)
+	{
+		if (rakuba(-1, FALSE))
+		{
+			msg_print(_("地面に落とされた。", "You have fallen from your riding pet."));
+		}
+	}
+
+	/* Drop a dead corpse? */
+	if (one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) &&
+		(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) &&
+		!(p_ptr->inside_arena || p_ptr->inside_battle || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+	{
+		/* Assume skeleton */
+		bool corpse = FALSE;
+
+		/*
+		 * We cannot drop a skeleton? Note, if we are in this check,
+		 * we *know* we can drop at least a corpse or a skeleton
+		 */
+		if (!(r_ptr->flags9 & RF9_DROP_SKELETON))
+			corpse = TRUE;
+		else if ((r_ptr->flags9 & RF9_DROP_CORPSE) && (r_ptr->flags1 & RF1_UNIQUE))
+			corpse = TRUE;
+
+		/* Else, a corpse is more likely unless we did a "lot" of damage */
+		else if (r_ptr->flags9 & RF9_DROP_CORPSE)
+		{
+			/* Lots of damage in one blow */
+			if ((0 - ((m_ptr->maxhp) / 4)) > m_ptr->hp)
+			{
+				if (one_in_(5)) corpse = TRUE;
+			}
+			else
+			{
+				if (!one_in_(5)) corpse = TRUE;
+			}
+		}
+		q_ptr = &forge;
+
+		/* Prepare to make an object */
+		object_prep(q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
+
+		apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
+
+		q_ptr->pval = m_ptr->r_idx;
+		(void)drop_near(q_ptr, -1, y, x);
+	}
+
+	/* Drop objects being carried */
+	monster_drop_carried_objects(m_ptr);
+
+	if (r_ptr->flags1 & RF1_DROP_GOOD) mo_mode |= AM_GOOD;
+	if (r_ptr->flags1 & RF1_DROP_GREAT) mo_mode |= AM_GREAT;
+
+	switch (m_ptr->r_idx)
+	{
+	case MON_PINK_HORROR:
+		/* Pink horrors are replaced with 2 Blue horrors */
+		if (!(p_ptr->inside_arena || p_ptr->inside_battle))
+		{
+			bool notice = FALSE;
+
+			for (i = 0; i < 2; i++)
+			{
+				POSITION wy = y, wx = x;
+				bool pet = is_pet(m_ptr);
+				BIT_FLAGS mode = 0L;
+
+				if (pet) mode |= PM_FORCE_PET;
+
+				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode, '\0'))
+				{
+					if (player_can_see_bold(wy, wx)) notice = TRUE;
+				}
+			}
+
+			if (notice) msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
+		}
+		break;
+
+	case MON_BLOODLETTER:
+		/* Bloodletters of Khorne may drop a blade of chaos */
+		if (drop_chosen_item && (randint1(100) < 15))
+		{
+			q_ptr = &forge;
+
+			/* Prepare to make a Blade of Chaos */
+			object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
+
+			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | mo_mode);
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+		break;
+
+	case MON_RAAL:
+		if (drop_chosen_item && (dun_level > 9))
+		{
+			q_ptr = &forge;
+			object_wipe(q_ptr);
+
+			/* Activate restriction */
+			if ((dun_level > 49) && one_in_(5))
+				get_obj_num_hook = kind_is_good_book;
+			else
+				get_obj_num_hook = kind_is_book;
+
+			/* Make a book */
+			make_object(q_ptr, mo_mode);
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+		break;
+
+	case MON_DAWN:
+		/*
+		 * Mega^3-hack: killing a 'Warrior of the Dawn' is likely to
+		 * spawn another in the fallen one's place!
+		 */
+		if (!p_ptr->inside_arena && !p_ptr->inside_battle)
+		{
+			if (!one_in_(7))
+			{
+				POSITION wy = y, wx = x;
+				int attempts = 100;
+				bool pet = is_pet(m_ptr);
+
+				do
+				{
+					scatter(&wy, &wx, y, x, 20, 0);
+				} while (!(in_bounds(wy, wx) && cave_empty_bold2(wy, wx)) && --attempts);
+
+				if (attempts > 0)
+				{
+					BIT_FLAGS mode = 0L;
+					if (pet) mode |= PM_FORCE_PET;
+
+					if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode, '\0'))
+					{
+						if (player_can_see_bold(wy, wx))
+							msg_print(_("新たな戦士が現れた！", "A new warrior steps forth!"));
+					}
+				}
+			}
+		}
+		break;
+
+	case MON_UNMAKER:
+		/* One more ultra-hack: An Unmaker goes out with a big bang! */
+	{
+		BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+		(void)project(m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
+	}
+	break;
+
+	case MON_UNICORN_ORD:
+	case MON_MORGOTH:
+	case MON_ONE_RING:
+		/* Reward for "lazy" player */
+		if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+		{
+			ARTIFACT_IDX a_idx = 0;
+			artifact_type *a_ptr = NULL;
+
+			if (!drop_chosen_item) break;
+
+			do
+			{
+				switch (randint0(3))
+				{
+				case 0:
+					a_idx = ART_NAMAKE_HAMMER;
+					break;
+				case 1:
+					a_idx = ART_NAMAKE_BOW;
+					break;
+				case 2:
+					a_idx = ART_NAMAKE_ARMOR;
+					break;
+				}
+
+				a_ptr = &a_info[a_idx];
+			} while (a_ptr->cur_num);
+
+			/* Create the artifact */
+			if (create_named_art(a_idx, y, x))
+			{
+				a_ptr->cur_num = 1;
+
+				/* Hack -- Memorize location of artifact in saved floors */
+				if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+			}
+			else if (!preserve_mode) a_ptr->cur_num = 1;
+		}
+		break;
+
+	case MON_SERPENT:
+		if (!drop_chosen_item) break;
+		q_ptr = &forge;
+
+		/* Mega-Hack -- Prepare to make "Grond" */
+		object_prep(q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
+
+		/* Mega-Hack -- Mark this item as "Grond" */
+		q_ptr->name1 = ART_GROND;
+
+		/* Mega-Hack -- Actually create "Grond" */
+		apply_magic(q_ptr, -1, AM_GOOD | AM_GREAT);
+		(void)drop_near(q_ptr, -1, y, x);
+		q_ptr = &forge;
+
+		/* Mega-Hack -- Prepare to make "Chaos" */
+		object_prep(q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
+
+		/* Mega-Hack -- Mark this item as "Chaos" */
+		q_ptr->name1 = ART_CHAOS;
+
+		/* Mega-Hack -- Actually create "Chaos" */
+		apply_magic(q_ptr, -1, AM_GOOD | AM_GREAT);
+		(void)drop_near(q_ptr, -1, y, x);
+		break;
+
+	case MON_B_DEATH_SWORD:
+		if (drop_chosen_item)
+		{
+			q_ptr = &forge;
+
+			/* Prepare to make a broken sword */
+			object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+		break;
+
+	case MON_A_GOLD:
+	case MON_A_SILVER:
+		if (drop_chosen_item && ((m_ptr->r_idx == MON_A_GOLD) ||
+			((m_ptr->r_idx == MON_A_SILVER) && (r_ptr->r_akills % 5 == 0))))
+		{
+			q_ptr = &forge;
+
+			/* Prepare to make a Can of Toys */
+			object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
+
+			apply_magic(q_ptr, object_level, AM_NO_FIXED_ART);
+			(void)drop_near(q_ptr, -1, y, x);
+		}
+		break;
+
+	case MON_ROLENTO:
+	{
+		BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+		(void)project(m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
+	}
+	break;
+
+	default:
+		if (!drop_chosen_item) break;
+
+		switch (r_ptr->d_char)
+		{
+		case '(':
+			if (dun_level > 0)
+			{
+				q_ptr = &forge;
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_cloak;
+
+				/* Make a cloak */
+				make_object(q_ptr, mo_mode);
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '/':
+			if (dun_level > 4)
+			{
+				q_ptr = &forge;
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_polearm;
+
+				/* Make a poleweapon */
+				make_object(q_ptr, mo_mode);
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '[':
+			if (dun_level > 19)
+			{
+				q_ptr = &forge;
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_armor;
+
+				/* Make a hard armor */
+				make_object(q_ptr, mo_mode);
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '\\':
+			if (dun_level > 4)
+			{
+				q_ptr = &forge;
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_hafted;
+
+				/* Make a hafted weapon */
+				make_object(q_ptr, mo_mode);
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+
+		case '|':
+			if (m_ptr->r_idx != MON_STORMBRINGER)
+			{
+				q_ptr = &forge;
+				object_wipe(q_ptr);
+
+				/* Activate restriction */
+				get_obj_num_hook = kind_is_sword;
+
+				/* Make a sword */
+				make_object(q_ptr, mo_mode);
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			break;
+		}
+		break;
+	}
+
+	/* Mega-Hack -- drop fixed items */
+	if (drop_chosen_item)
+	{
+		ARTIFACT_IDX a_idx = 0;
+		int chance = 0;
+
+		for (i = 0; i < 4; i++)
+		{
+			if (!r_ptr->artifact_id[i]) break;
+			a_idx = r_ptr->artifact_id[i];
+			chance = r_ptr->artifact_percent[i];
+		}
+
+		if ((a_idx > 0) && ((randint0(100) < chance) || p_ptr->wizard))
+		{
+			artifact_type *a_ptr = &a_info[a_idx];
+
+			if (!a_ptr->cur_num)
+			{
+				/* Create the artifact */
+				if (create_named_art(a_idx, y, x))
+				{
+					a_ptr->cur_num = 1;
+
+					/* Hack -- Memorize location of artifact in saved floors */
+					if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+				}
+				else if (!preserve_mode) a_ptr->cur_num = 1;
+			}
+		}
+
+		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
+		{
+			KIND_OBJECT_IDX k_idx = d_info[dungeon_type].final_object ? d_info[dungeon_type].final_object
+				: lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+
+			if (d_info[dungeon_type].final_artifact)
+			{
+				a_idx = d_info[dungeon_type].final_artifact;
+				artifact_type *a_ptr = &a_info[a_idx];
+
+				if (!a_ptr->cur_num)
+				{
+					/* Create the artifact */
+					if (create_named_art(a_idx, y, x))
+					{
+						a_ptr->cur_num = 1;
+
+						/* Hack -- Memorize location of artifact in saved floors */
+						if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+					}
+					else if (!preserve_mode) a_ptr->cur_num = 1;
+
+					/* Prevent rewarding both artifact and "default" object */
+					if (!d_info[dungeon_type].final_object) k_idx = 0;
+				}
+			}
+
+			if (k_idx)
+			{
+				q_ptr = &forge;
+
+				/* Prepare to make a reward */
+				object_prep(q_ptr, k_idx);
+
+				apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | AM_GOOD);
+				(void)drop_near(q_ptr, -1, y, x);
+			}
+			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[dungeon_type].name);
+		}
+	}
+
+	/* Determine how much we can drop */
+	if ((r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60)) number++;
+	if ((r_ptr->flags1 & RF1_DROP_90) && (randint0(100) < 90)) number++;
+	if (r_ptr->flags1 & RF1_DROP_1D2) number += damroll(1, 2);
+	if (r_ptr->flags1 & RF1_DROP_2D2) number += damroll(2, 2);
+	if (r_ptr->flags1 & RF1_DROP_3D2) number += damroll(3, 2);
+	if (r_ptr->flags1 & RF1_DROP_4D2) number += damroll(4, 2);
+
+	if (cloned && !(r_ptr->flags1 & RF1_UNIQUE))
+		number = 0; /* Clones drop no stuff unless Cloning Pits */
+
+	if (is_pet(m_ptr) || p_ptr->inside_battle || p_ptr->inside_arena)
+		number = 0; /* Pets drop no stuff */
+	if (!drop_item && (r_ptr->d_char != '$')) number = 0;
+
+	if ((r_ptr->flags2 & (RF2_MULTIPLY)) && (r_ptr->r_akills > 1024))
+		number = 0; /* Limit of Multiply monster drop */
+
+	/* Hack -- handle creeping coins */
+	coin_type = force_coin;
+
+	/* Average dungeon and monster levels */
+	object_level = (dun_level + r_ptr->level) / 2;
+
+	/* Drop some objects */
+	for (j = 0; j < number; j++)
+	{
+		q_ptr = &forge;
+		object_wipe(q_ptr);
+
+		/* Make Gold */
+		if (do_gold && (!do_item || (randint0(100) < 50)))
+		{
+			/* Make some gold */
+			if (!make_gold(q_ptr)) continue;
+
+			dump_gold++;
+		}
+
+		/* Make Object */
+		else
+		{
+			/* Make an object */
+			if (!make_object(q_ptr, mo_mode)) continue;
+
+			dump_item++;
+		}
+		(void)drop_near(q_ptr, -1, y, x);
+	}
+
+	/* Reset the object level */
+	object_level = base_level;
+
+	/* Reset "coin" type */
+	coin_type = 0;
+
+
+	/* Take note of any dropped treasure */
+	if (visible && (dump_item || dump_gold))
+	{
+		/* Take notes on treasure */
+		lore_treasure(m_idx, dump_item, dump_gold);
+	}
+
+	/* Only process "Quest Monsters" */
+	if (!(r_ptr->flags1 & RF1_QUESTOR)) return;
+	if (p_ptr->inside_battle) return;
+
+	/* Winner? */
+	if ((m_ptr->r_idx == MON_SERPENT) && !cloned)
+	{
+		/* Total winner */
+		p_ptr->total_winner = TRUE;
+
+		/* Redraw the "title" */
+		p_ptr->redraw |= (PR_TITLE);
+
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
+
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
+
+		if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || (p_ptr->muta2 & MUT2_CHAOS_GIFT))
+		{
+			msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
+			msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));
+		}
+
+		/* Congratulations */
+		msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
+		msg_print(_("あなたはゲームをコンプリートしました。", "You have won the game!"));
+		msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
+	}
 }
