@@ -22,10 +22,10 @@
 void do_cmd_rerate_aux(void)
 {
 	/* Minimum hitpoints at highest level */
-	int min_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 3 / 8;
+	HIT_POINT min_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 3 / 8;
 
 	/* Maximum hitpoints at highest level */
-	int max_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 5 / 8;
+	HIT_POINT max_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 5 / 8;
 
 	int i;
 
@@ -73,7 +73,6 @@ void do_cmd_rerate(bool display)
 	/* Update and redraw hitpoints */
 	p_ptr->update |= (PU_HP);
 	p_ptr->redraw |= (PR_HP);
-
 	p_ptr->window |= (PW_PLAYER);
 	handle_stuff();
 
@@ -114,16 +113,9 @@ static bool set_gametime(void)
 	int tmp_int = 0;
 	char ppp[80], tmp_val[40];
 
-	/* Prompt */
 	sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)dungeon_turn_limit);
-
-	/* Default */
 	sprintf(tmp_val, "%ld", (long)dungeon_turn);
-
-	/* Query */
 	if (!get_string(ppp, tmp_val, 10)) return (FALSE);
-
-	/* Extract */
 	tmp_int = atoi(tmp_val);
 
 	/* Verify */
