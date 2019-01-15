@@ -4372,10 +4372,10 @@ static byte object_group_tval[] =
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static int collect_objects(int grp_cur, IDX object_idx[], BIT_FLAGS8 mode)
+static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[], BIT_FLAGS8 mode)
 {
-	IDX i;
-	int j, k, object_cnt = 0;
+	KIND_OBJECT_IDX i, object_cnt = 0;
+	int j, k;
 
 	/* Get a list of x_char in this group */
 	byte group_tval = object_group_tval[grp_cur];
@@ -4455,10 +4455,10 @@ static concptr feature_group_text[] =
  *
  * mode & 0x01 : check for non-empty group
  */
-static int collect_features(int grp_cur, IDX *feat_idx, BIT_FLAGS8 mode)
+static FEAT_IDX collect_features(int grp_cur, FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 {
-	IDX i;
-	int feat_cnt = 0;
+	FEAT_IDX i;
+	FEAT_IDX feat_cnt = 0;
 
 	/* Unused;  There is a single group. */
 	(void)grp_cur;
@@ -5503,7 +5503,8 @@ static void do_cmd_knowledge_uniques(void)
  */
 static void do_cmd_knowledge_weapon_exp(void)
 {
-	int i, num, weapon_exp;
+	int i, num;
+	SUB_EXP weapon_exp;
 	KIND_OBJECT_IDX j;
 
 	FILE *fff;
@@ -5562,7 +5563,8 @@ static void do_cmd_knowledge_weapon_exp(void)
 static void do_cmd_knowledge_spell_exp(void)
 {
 	SPELL_IDX i = 0;
-	int spell_exp, exp_level;
+	SUB_EXP spell_exp;
+	int exp_level;
 
 	FILE *fff;
 	const magic_type *s_ptr;
@@ -6361,8 +6363,8 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 		{
 			int eff_width;
 			int d = get_keymap_dir(ch);
-			byte a = (*cur_attr_ptr & 0x7f);
-			byte c = *cur_char_ptr;
+			TERM_COLOR a = (*cur_attr_ptr & 0x7f);
+			SYMBOL_CODE c = *cur_char_ptr;
 
 			if (use_bigtile) eff_width = width / 2;
 			else eff_width = width;
