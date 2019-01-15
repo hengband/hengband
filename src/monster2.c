@@ -3622,8 +3622,6 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 
 			/* Require empty grids */
 			if (!cave_empty_bold2(ny, nx)) continue;
-
-			/* Prepare allocation table */
 			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(ny, nx));
 
 			/* Pick a random race */
@@ -3659,8 +3657,6 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	MONRACE_IDX r_idx;
-
-	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
 
 	/* Pick a monster */
@@ -3689,8 +3685,6 @@ bool alloc_horde(POSITION y, POSITION x)
 	int attempts = 1000;
 	POSITION cy = y;
 	POSITION cx = x;
-
-	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
 
 	while (--attempts)
@@ -3942,8 +3936,6 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	summon_kin_type = symbol;
 
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
-
-	/* Prepare allocation table */
 	get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));
 
 	/* Pick a monster, using the level calculation */

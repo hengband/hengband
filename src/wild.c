@@ -464,8 +464,6 @@ void wilderness_gen(void)
 
 	x = p_ptr->wilderness_x;
 	y = p_ptr->wilderness_y;
-
-	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	/* North border */

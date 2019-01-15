@@ -1839,7 +1839,7 @@ void determine_random_questor(quest_type *q_ptr)
 	MONRACE_IDX r_idx;
 	monster_race *r_ptr;
 
-	/* Prepare allocation table */
+	
 	get_mon_num_prep(mon_hook_quest, NULL);
 
 	while (1)
@@ -2252,8 +2252,6 @@ void player_outfit(void)
 
 	case RACE_DEMON:
 		/* Demon can drain vitality from humanoid corpse */
-
-		/* Prepare allocation table */
 		get_mon_num_prep(monster_hook_human, NULL);
 
 		for (i = rand_range(3,4); i > 0; i--)

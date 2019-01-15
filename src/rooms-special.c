@@ -72,8 +72,6 @@ bool build_type15(void)
 	case 1: /* 4 lite breathers + potion */
 	{
 		int dir1, dir2;
-
-		/* Prepare allocation table */
 		get_mon_num_prep(vault_aux_lite, NULL);
 
 		/* Place fixed lite berathers */
@@ -141,8 +139,6 @@ bool build_type15(void)
 		c_ptr = &cave[y2 - 1][x2 - 1];
 		place_inner_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
-
-		/* Prepare allocation table */
 		get_mon_num_prep(vault_aux_lite, NULL);
 
 		r_idx = get_mon_num(dun_level);
@@ -203,8 +199,6 @@ bool build_type15(void)
 			place_inner_grid(c_ptr);
 			c_ptr->feat = feat_glass_wall;
 		}
-
-		/* Prepare allocation table */
 		get_mon_num_prep(vault_aux_shards, NULL);
 
 		/* Place shard berathers */

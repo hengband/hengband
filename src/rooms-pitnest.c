@@ -295,8 +295,6 @@ bool build_type5(void)
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-
-	/* Prepare allocation table */
 	get_mon_num_prep(n_ptr->hook_func, NULL);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
@@ -508,8 +506,6 @@ bool build_type6(void)
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-
-	/* Prepare allocation table */
 	get_mon_num_prep(n_ptr->hook_func, NULL);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
@@ -818,8 +814,6 @@ bool build_type13(void)
 
 	/* Process a preparation function if necessary */
 	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-
-	/* Prepare allocation table */
 	get_mon_num_prep(n_ptr->hook_func, vault_aux_trapped_pit);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;

@@ -597,8 +597,6 @@ static bool cave_gen(void)
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(dungeon_type);
-
-	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	/* Randomize the dungeon creation values */
@@ -1231,8 +1229,6 @@ static void quest_gen(void)
 	monster_level = base_level;
 
 	if (record_stair) do_cmd_write_nikki(NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
-
-	/* Prepare allocation table */
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	init_flags = INIT_CREATE_DUNGEON;
