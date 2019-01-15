@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
+#include "projection.h"
 
 
 

@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "projection.h"
 
 
 

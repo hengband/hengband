@@ -11,6 +11,7 @@
 #include "object-hook.h"
 #include "spells-summon.h"
 #include "sort.h"
+#include "projection.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数

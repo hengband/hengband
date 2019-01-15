@@ -142,6 +142,7 @@
 #include "angband.h"
 #include "melee.h"
 #include "trap.h"
+#include "projection.h"
 
 
 

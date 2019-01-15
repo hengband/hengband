@@ -19,6 +19,7 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "world.h"
+#include "projection.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

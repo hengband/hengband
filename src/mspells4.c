@@ -7,6 +7,7 @@
 
 
 #include "angband.h"
+#include "projection.h"
 
 /*!
 * @brief モンスターIDを取り、モンスター名をm_nameに代入する /

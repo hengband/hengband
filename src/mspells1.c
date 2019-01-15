@@ -40,6 +40,7 @@
 
 #include "angband.h"
 #include "object-curse.h"
+#include "projection.h"
 
 
 /*!

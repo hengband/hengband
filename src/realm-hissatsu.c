@@ -2,6 +2,7 @@
 #include "cmd-spell.h"
 #include "melee.h"
 #include "monsterrace-hook.h"
+#include "projection.h"
 
 /*!
 * @brief 剣術の各処理を行う

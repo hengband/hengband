@@ -17,6 +17,7 @@
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
 #include "sort.h"
+#include "projection.h"
 
 #define REWARD_CHANCE 10
 

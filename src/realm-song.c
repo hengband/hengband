@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
+#include "projection.h"
 
 /*!
 * @brief 歌の開始を処理する / Start singing if the player is a Bard

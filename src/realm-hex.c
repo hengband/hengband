@@ -20,6 +20,7 @@
 #include "cmd-quaff.h"
 #include "object-hook.h"
 #include "object-curse.h"
+#include "projection.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

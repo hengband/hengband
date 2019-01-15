@@ -2,6 +2,7 @@
 #include "floor.h"
 #include "trap.h"
 #include "player-damage.h"
+#include "projection.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

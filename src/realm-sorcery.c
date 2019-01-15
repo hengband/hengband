@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
 #include "selfinfo.h"
+#include "projection.h"
 
 /*!
 * @brief 仙術領域魔法の各処理を行う

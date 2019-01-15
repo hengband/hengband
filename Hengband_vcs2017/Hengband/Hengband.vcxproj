@@ -314,6 +314,7 @@
     <ClInclude Include="..\..\src\sort.h" />
     <ClInclude Include="..\..\src\spells-summon.h" />
     <ClInclude Include="..\..\src\floor-streams.h" />
+    <ClInclude Include="..\..\src\projection.h" />
     <ClInclude Include="..\..\src\store.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />

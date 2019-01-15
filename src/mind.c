@@ -16,6 +16,7 @@
 
 #include "angband.h"
 #include "melee.h"
+#include "projection.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

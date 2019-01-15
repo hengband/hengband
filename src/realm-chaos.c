@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
 #include "spells-summon.h"
+#include "projection.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う

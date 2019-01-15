@@ -15,6 +15,7 @@
 #include "floor.h"
 #include "melee.h"
 #include "object-hook.h"
+#include "projection.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

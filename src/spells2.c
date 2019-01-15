@@ -17,6 +17,7 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "world.h"
+#include "projection.h"
 
 
 /*!
