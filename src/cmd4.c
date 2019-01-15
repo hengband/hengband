@@ -6259,11 +6259,11 @@ static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, b
  *  Clipboard variables for copy&paste in visual mode
  */
 static TERM_COLOR attr_idx = 0;
-static byte char_idx = 0;
+static SYMBOL_CODE char_idx = 0;
 
 /* Hack -- for feature lighting */
 static TERM_COLOR attr_idx_feat[F_LIT_MAX];
-static byte char_idx_feat[F_LIT_MAX];
+static SYMBOL_CODE char_idx_feat[F_LIT_MAX];
 
 /*
  *  Do visual mode command -- Change symbols
@@ -6696,7 +6696,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 	}
 
 	/* Free the "mon_idx" array */
-	C_KILL(mon_idx, max_r_idx, s16b);
+	C_KILL(mon_idx, max_r_idx, MONRACE_IDX);
 }
 
 
@@ -6713,7 +6713,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 	{
 		GAME_TEXT o_name[MAX_NLEN];
 		TERM_COLOR a;
-		byte c;
+		SYMBOL_CODE c;
 		object_kind *flavor_k_ptr;
 
 		/* Get the object index */
@@ -6824,7 +6824,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	int grp_cnt;
 	IDX grp_idx[100];
 	int object_cnt;
-	IDX *object_idx;
+	OBJECT_IDX *object_idx;
 
 	int column = 0;
 	bool flag;
@@ -6835,7 +6835,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	byte char_left = 0;
 
 	int browser_rows;
-	int wid, hgt;
+	TERM_LEN wid, hgt;
 
 	byte mode;
 
@@ -7097,7 +7097,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 	}
 
 	/* Free the "object_idx" array */
-	C_KILL(object_idx, max_k_idx, IDX);
+	C_KILL(object_idx, max_k_idx, KIND_OBJECT_IDX);
 }
 
 
@@ -7202,8 +7202,8 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 	TERM_COLOR *cur_attr_ptr;
 	SYMBOL_CODE *cur_char_ptr;
 
-	(void)C_WIPE(attr_old, F_LIT_MAX, byte);
-	(void)C_WIPE(char_old, F_LIT_MAX, byte);
+	(void)C_WIPE(attr_old, F_LIT_MAX, TERM_COLOR);
+	(void)C_WIPE(char_old, F_LIT_MAX, SYMBOL_CODE);
 
 	Term_get_size(&wid, &hgt);
 
@@ -7520,15 +7520,10 @@ static void do_cmd_knowledge_kubi(void)
 	{
 		bool listed = FALSE;
 
-#ifdef JP
-		fprintf(fff, "今日のターゲット : %s\n", (p_ptr->today_mon ? r_name + r_info[p_ptr->today_mon].name : "不明"));
+		fprintf(fff, _("今日のターゲット : %s\n", "Today target : %s\n"),
+			(p_ptr->today_mon ? r_name + r_info[p_ptr->today_mon].name : _("不明", "unknown")));
 		fprintf(fff, "\n");
-		fprintf(fff, "賞金首リスト\n");
-#else
-		fprintf(fff, "Today target : %s\n", (p_ptr->today_mon ? r_name + r_info[p_ptr->today_mon].name : "unknown"));
-		fprintf(fff, "\n");
-		fprintf(fff, "List of wanted monsters\n");
-#endif
+		fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
 		fprintf(fff, "----------------------------------------------\n");
 
 		for (i = 0; i < MAX_KUBI; i++)
@@ -7655,15 +7650,11 @@ static void do_cmd_knowledge_stat(void)
 			(2 * p_ptr->hitdie +
 			((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
 
-#ifdef JP
-		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "現在の体力ランク : %d/100\n\n", percent);
-		else fprintf(fff, "現在の体力ランク : ???\n\n");
-		fprintf(fff, "能力の最大値\n\n");
-#else
-		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "Your current Life Rating is %d/100.\n\n", percent);
-		else fprintf(fff, "Your current Life Rating is ???.\n\n");
-		fprintf(fff, "Limits of maximum stats\n\n");
-#endif
+		if (p_ptr->knowledge & KNOW_HPRATE)
+			fprintf(fff, _("現在の体力ランク : %d/100\n\n", "Your current Life Rating is %d/100.\n\n"), percent);
+		else fprintf(fff, _("現在の体力ランク : ???\n\n", "Your current Life Rating is ???.\n\n"));
+
+		fprintf(fff, _("能力の最大値\n\n", "Limits of maximum stats\n\n"));
 		for (v_nr = 0; v_nr < A_MAX; v_nr++)
 		{
 			if ((p_ptr->knowledge & KNOW_STAT) || p_ptr->stat_max[v_nr] == p_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
@@ -8426,16 +8417,8 @@ void do_cmd_time(void)
 	if (day < MAX_DAYS) sprintf(day_buf, "%d", day);
 	else strcpy(day_buf, "*****");
 
-#ifdef JP
-	msg_format("%s日目, 時刻は%d:%02d %sです。",
-		   day_buf, (hour % 12 == 0) ? 12 : (hour % 12),
-		   min, (hour < 12) ? "AM" : "PM");
-#else
-	msg_format("This is day %s. The time is %d:%02d %s.",
-		   day_buf, (hour % 12 == 0) ? 12 : (hour % 12),
-		   min, (hour < 12) ? "AM" : "PM");
-#endif
-
+	msg_format(_("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s."),
+		   day_buf, (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
 
 	/* Find the path */
 	if (!randint0(10) || p_ptr->image)
