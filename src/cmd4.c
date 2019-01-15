@@ -7919,21 +7919,20 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 /*
  * Print all finished quests
  */
-void do_cmd_knowledge_quests_completed(FILE *fff, IDX quest_num[])
+void do_cmd_knowledge_quests_completed(FILE *fff, QUEST_IDX quest_num[])
 {
-	int i;
-	int total = 0;
+	QUEST_IDX i;
+	QUEST_IDX total = 0;
 
 	fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
 	for (i = 1; i < max_q_idx; i++)
 	{
-		IDX q_idx = quest_num[i];
+		QUEST_IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
-		if (q_ptr->status == QUEST_STATUS_FINISHED &&
-		    do_cmd_knowledge_quests_aux(fff, q_idx))
+		if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(fff, q_idx))
 		{
-			++ total;
+			++total;
 		}
 	}
 	if (!total) fprintf(fff, _("  なし\n", "  Nothing.\n"));
@@ -7943,21 +7942,21 @@ void do_cmd_knowledge_quests_completed(FILE *fff, IDX quest_num[])
 /*
  * Print all failed quests
  */
-void do_cmd_knowledge_quests_failed(FILE *fff, IDX quest_num[])
+void do_cmd_knowledge_quests_failed(FILE *fff, QUEST_IDX quest_num[])
 {
-	IDX i;
-	int total = 0;
+	QUEST_IDX i;
+	QUEST_IDX total = 0;
 
 	fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
 	for (i = 1; i < max_q_idx; i++)
 	{
-		IDX q_idx = quest_num[i];
+		QUEST_IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) &&
 		    do_cmd_knowledge_quests_aux(fff, q_idx))
 		{
-			++ total;
+			++total;
 		}
 	}
 	if (!total) fprintf(fff, _("  なし\n", "  Nothing.\n"));
@@ -7969,9 +7968,9 @@ void do_cmd_knowledge_quests_failed(FILE *fff, IDX quest_num[])
  */
 static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 {
-	char tmp_str[120];
-	int i;
-	int total = 0;
+	GAME_TEXT tmp_str[120];
+	QUEST_IDX i;
+	QUEST_IDX total = 0;
 
 	fprintf(fff, _("《残りのランダムクエスト》\n", "< Remaining Random Quest >\n"));
 	for (i = 1; i < max_q_idx; i++)
