@@ -574,7 +574,6 @@ bool player_can_see_bold(POSITION y, POSITION x)
 	/* Blind players see nothing */
 	if (p_ptr->blind) return FALSE;
 
-	/* Access the cave grid */
 	c_ptr = &cave[y][x];
 
 	/* Note that "torch-lite" yields "illumination" */
@@ -1506,14 +1505,12 @@ void note_spot(POSITION y, POSITION x)
 			if (view_torch_grids &&
 			    ((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) || p_ptr->see_nocto))
 			{
-				/* Memorize */
 				c_ptr->info |= (CAVE_MARK);
 			}
 
 			/* Option -- memorize all perma-lit floors */
 			else if (view_perma_grids && ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW))
 			{
-				/* Memorize */
 				c_ptr->info |= (CAVE_MARK);
 			}
 		}
@@ -1521,28 +1518,24 @@ void note_spot(POSITION y, POSITION x)
 		/* Memorize normal grids */
 		else if (have_flag(f_ptr->flags, FF_LOS))
 		{
-			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize torch-lit walls */
 		else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
 		{
-			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize walls seen by noctovision of Ninja */
 		else if (p_ptr->see_nocto)
 		{
-			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize certain non-torch-lit wall grids */
 		else if (check_local_illumination(y, x))
 		{
-			/* Memorize */
 			c_ptr->info |= (CAVE_MARK);
 		}
 	}
