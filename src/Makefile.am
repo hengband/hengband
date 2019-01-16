@@ -11,30 +11,30 @@ hengband_SOURCES = \
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h defines.h dungeon.c effects.c externs.h files.c flavor.c \
-
+	\
 	floor.h floor-events.c floor-events.h floor-generate.c floor-save.c \
 	floor-streams.c floor-streams.h \
-
+	\
 	gameoption.c gameoption.h gamevalue.h \
 	generate.h grid.c grid.h h-basic.h h-config.h h-define.h hissatsu.c \
 	history.h history.c \
 	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
 	main.c main-x11.c main-gcu.c mane.c \
 	melee.h melee1.c mind.c \
-
+	\
 	monster.h \
 	monsterrace-hook.c monsterrace-hook.h monster-process.c \
 	monster-process.h monster-status.c monster-status.h monster1.c \
 	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c mutation.c \
-
+	\
 	object-curse.c object-curse.h \
 	object-hook.c object-hook.h object1.c object2.c \
 	objectkind-hook.c objectkind-hook.h obj_kind.c \
-
+	\
 	patron.h patron.c \
-
+	\
 	projection.h \
-
+	\
 	player-damage.c player-damage.h player-status.c player-status.h \
 	racial.c \
 	realm-arcane.c \
@@ -47,9 +47,9 @@ hengband_SOURCES = \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
 	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h shoot.c snipe.c \
-
+	\
 	spells1.c spells2.c spells3.c spells-summon.c spells-summon.h \
-
+	\
 	sort.c sort.h \
 	store.h store.c tables.c trap.c trap.h types.h util.c \
 	variable.c wild.c wizard1.c wizard2.c \
