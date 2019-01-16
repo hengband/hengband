@@ -761,13 +761,6 @@ extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER n
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 extern void update_monster(MONSTER_IDX m_idx, bool full);
 extern void update_monsters(bool full);
-extern bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode);
-extern bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode);
-extern bool alloc_horde(POSITION y, POSITION x);
-extern bool alloc_guardian(bool def_val);
-extern bool alloc_monster(POSITION dis, BIT_FLAGS mode);
-extern bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode, SYMBOL_CODE symbol);
-extern bool summon_named_creature (MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
 extern void update_smart_learn(MONSTER_IDX m_idx, int what);
 extern void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);

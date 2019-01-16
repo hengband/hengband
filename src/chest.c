@@ -1,6 +1,6 @@
 ﻿
 #include "angband.h"
-#include "monster.h"
+#include "spells-summon.h"
 
 /*!
 * @brief 箱からアイテムを引き出す /

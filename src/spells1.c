@@ -18,6 +18,7 @@
 #include "player-damage.h"
 
 #include "monster.h"
+#include "spells-summon.h"
 #include "monsterrace-hook.h"
 
 #include "melee.h"

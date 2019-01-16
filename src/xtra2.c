@@ -19,6 +19,7 @@
 #include "objectkind-hook.h"
 #include "sort.h"
 #include "projection.h"
+#include "spells-summon.h"
 
 #define REWARD_CHANCE 10
 

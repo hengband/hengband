@@ -25,7 +25,7 @@
 #include "floor-events.h"
 #include "object-curse.h"
 #include "store.h"
-#include "monster.h"
+#include "spells-summon.h"
 #include "monsterrace-hook.h"
 #include "world.h"
 
