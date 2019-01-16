@@ -1564,7 +1564,8 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 				if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;
 				else if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 				{
-					int i, yy, xx;
+					DIRECTION i;
+					POSITION yy, xx;
 					cave_type *cc_ptr;
 
 					for (i = 0; i < 9; i++)
@@ -1599,12 +1600,8 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 		forget_flow();
 
 		/* Mega-Hack -- Forget the view and lite */
-		p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-
+		p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 		p_ptr->redraw |= (PR_MAP);
-
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -1650,12 +1647,12 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	DIRECTION i;
 	int t;
 	POSITION y, x, yy, xx, dy, dx;
-	int             damage = 0;
-	int             sn = 0;
-	POSITION        sy = 0, sx = 0;
-	bool            hurt = FALSE;
-	cave_type       *c_ptr;
-	bool            map[32][32];
+	int damage = 0;
+	int sn = 0;
+	POSITION sy = 0, sx = 0;
+	bool hurt = FALSE;
+	cave_type *c_ptr;
+	bool map[32][32];
 
 
 	/* Prevent destruction of quest levels and town */
@@ -1978,7 +1975,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			/* Skip unaffected grids */
 			if (!map[16+yy-cy][16+xx-cx]) continue;
 
-			/* Access the cave grid */
 			c_ptr = &cave[yy][xx];
 
 			/* Paranoia -- never affect player */
