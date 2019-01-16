@@ -31,6 +31,8 @@ hengband_SOURCES = \
 	object-hook.c object-hook.h object1.c object2.c \
 	objectkind-hook.c objectkind-hook.h obj_kind.c \
 
+	patron.h patron.c \
+
 	projection.h \
 
 	player-damage.c player-damage.h player-status.c player-status.h \

@@ -1269,7 +1269,6 @@ extern bool get_aim_dir(DIRECTION *dp);
 extern bool get_hack_dir(DIRECTION *dp);
 extern bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed);
 extern bool get_rep_dir(DIRECTION *dp, bool under);
-extern void gain_level_reward(int chosen_reward);
 extern bool tgt_pt(POSITION *x, POSITION *y);
 extern void do_poly_wounds(void);
 extern void change_race(CHARACTER_IDX new_race, concptr effect_msg);

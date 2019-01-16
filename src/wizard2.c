@@ -14,6 +14,7 @@
 #include "floor.h"
 #include "selfinfo.h"
 #include "spells-summon.h"
+#include "patron.h"
 
 
 /*!

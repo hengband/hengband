@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-hook.c" />
     <ClCompile Include="..\..\src\objectkind-hook.c" />
+    <ClCompile Include="..\..\src\patron.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
     <ClCompile Include="..\..\src\player-status.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
@@ -287,6 +288,7 @@
     <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-hook.h" />
     <ClInclude Include="..\..\src\objectkind-hook.h" />
+    <ClInclude Include="..\..\src\patron.h" />
     <ClInclude Include="..\..\src\player-damage.h" />
     <ClInclude Include="..\..\src\player-status.h" />
     <ClInclude Include="..\..\src\readdib.h" />
