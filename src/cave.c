@@ -1361,13 +1361,8 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 	if (player_bold(y, x))
 	{
 		monster_race *r_ptr = &r_info[0];
-
-		/* Get the "player" attr */
 		*ap = r_ptr->x_attr;
-
-		/* Get the "player" char */
 		*cp = r_ptr->x_char;
-
 		feat_priority = 31;
 	}
 }
@@ -1401,7 +1396,7 @@ void move_cursor_relative(int row, int col)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(char c, byte a, TERM_LEN y, TERM_LEN x)
+void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
 {
 	/* Only do "legal" locations */
 	if (panel_contains(y, x))
@@ -1561,10 +1556,10 @@ void display_dungeon(void)
 {
 	TERM_LEN x, y;
 	TERM_COLOR a;
-	char c;
+	SYMBOL_CODE c;
 
 	TERM_COLOR ta = 0;
-	char tc = '\0';
+	SYMBOL_CODE tc = '\0';
 
 	for (x = p_ptr->x - Term->wid / 2 + 1; x <= p_ptr->x + Term->wid / 2; x++)
 	{
@@ -1619,10 +1614,10 @@ void lite_spot(POSITION y, POSITION x)
 	if (panel_contains(y, x) && in_bounds2(y, x))
 	{
 		TERM_COLOR a;
-		char c;
+		SYMBOL_CODE c;
 
 		TERM_COLOR ta;
-		char tc;
+		SYMBOL_CODE tc;
 
 		/* Examine the grid */
 		map_info(y, x, &a, &c, &ta, &tc);
@@ -1902,23 +1897,23 @@ void display_map(int *cy, int *cx)
 	int i, j, x, y;
 
 	TERM_COLOR ta;
-	char tc;
+	SYMBOL_CODE tc;
 
 	byte tp;
 
 	TERM_COLOR **bigma;
-	char **bigmc;
+	SYMBOL_CODE **bigmc;
 	byte **bigmp;
 
 	TERM_COLOR **ma;
-	char **mc;
+	SYMBOL_CODE **mc;
 	byte **mp;
 
 	/* Save lighting effects */
 	bool old_view_special_lite = view_special_lite;
 	bool old_view_granite_lite = view_granite_lite;
 
-	int hgt, wid, yrat, xrat;
+	TERM_LEN hgt, wid, yrat, xrat;
 
 	int **match_autopick_yx;
 	object_type ***object_autopick_yx;
@@ -2148,7 +2143,7 @@ void display_map(int *cy, int *cx)
 	{
 		/* Free one row each array */
 		C_KILL(ma[y], (wid + 2), TERM_COLOR);
-		C_KILL(mc[y], (wid + 2), char);
+		C_KILL(mc[y], (wid + 2), SYMBOL_CODE);
 		C_KILL(mp[y], (wid + 2), byte);
 		C_KILL(match_autopick_yx[y], (wid + 2), int);
 		C_KILL(object_autopick_yx[y], (wid + 2), object_type *);
@@ -2166,7 +2161,7 @@ void display_map(int *cy, int *cx)
 	{
 		/* Free one row each array */
 		C_KILL(bigma[y], (cur_wid + 2), TERM_COLOR);
-		C_KILL(bigmc[y], (cur_wid + 2), char);
+		C_KILL(bigmc[y], (cur_wid + 2), SYMBOL_CODE);
 		C_KILL(bigmp[y], (cur_wid + 2), byte);
 	}
 
