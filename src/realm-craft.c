@@ -2,6 +2,7 @@
 #include "cmd-spell.h"
 #include "selfinfo.h"
 #include "projection.h"
+#include "spells-summon.h"
 
 
 

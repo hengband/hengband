@@ -51,6 +51,8 @@
 
 #include "trap.h"
 
+#include "monster.h"
+
 
 /*!
  * 各部屋タイプの生成比定義

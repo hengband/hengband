@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "selfinfo.h"
+#include "spells-summon.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

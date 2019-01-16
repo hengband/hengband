@@ -17,6 +17,7 @@
 #include "grid.h"
 #include "trap.h"
 #include "rooms.h"
+#include "monster.h"
 
 
 /*!

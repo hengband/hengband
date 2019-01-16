@@ -102,6 +102,7 @@
 #include "rooms.h"
 #include "floor-streams.h"
 #include "trap.h"
+#include "monster.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;

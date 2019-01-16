@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "spells-summon.h"
 
 /*!
 * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells

@@ -16,7 +16,10 @@
 #include "trap.h"
 #include "object-curse.h"
 #include "player-damage.h"
+
+#include "monster.h"
 #include "monsterrace-hook.h"
+
 #include "melee.h"
 #include "world.h"
 #include "projection.h"

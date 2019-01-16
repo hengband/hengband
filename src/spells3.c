@@ -17,6 +17,7 @@
 #include "melee.h"
 #include "player-status.h"
 #include "projection.h"
+#include "spells-summon.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

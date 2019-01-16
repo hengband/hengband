@@ -2,6 +2,7 @@
 #include "grid.h"
 #include "generate.h"
 #include "rooms.h"
+#include "monster.h"
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
 

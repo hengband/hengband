@@ -282,6 +282,7 @@
     <ClInclude Include="..\..\src\melee.h" />
     <ClInclude Include="..\..\src\mindtips.h" />
     <ClInclude Include="..\..\src\monster-status.h" />
+    <ClInclude Include="..\..\src\monster.h" />
     <ClInclude Include="..\..\src\monsterrace-hook.h" />
     <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-hook.h" />

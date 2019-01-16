@@ -4,6 +4,7 @@
 #include "rooms.h"
 #include "store.h"
 #include "trap.h"
+#include "monster.h"
 
 /*
 * This function creates a random vault that looks like a collection of bubbles.

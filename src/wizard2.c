@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "floor.h"
 #include "selfinfo.h"
+#include "spells-summon.h"
 
 
 /*!

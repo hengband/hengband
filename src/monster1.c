@@ -15,6 +15,7 @@
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
 #include "projection.h"
+#include "monster.h"
 
 
 /*

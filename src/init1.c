@@ -48,6 +48,7 @@
 
 #include "angband.h"
 #include "trap.h"
+#include "monster.h"
 
 
 

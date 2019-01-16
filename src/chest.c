@@ -1,5 +1,6 @@
 ﻿
 #include "angband.h"
+#include "monster.h"
 
 /*!
 * @brief 箱からアイテムを引き出す /

@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "cmd-pet.h"
 #include "object-curse.h"
+#include "monster.h"
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
 #include "sort.h"

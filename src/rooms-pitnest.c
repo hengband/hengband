@@ -3,6 +3,7 @@
 #include "generate.h"
 #include "rooms.h"
 #include "rooms-pitnest.h"
+#include "monster.h"
 #include "monsterrace-hook.h"
 #include "sort.h"
 

@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "projection.h"
+#include "spells-summon.h"
 
 
 
