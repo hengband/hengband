@@ -64,6 +64,25 @@ extern void build_lake(int type);
 extern void build_cavern(void);
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
+/* Maximum locked/jammed doors */
+#define MAX_LJ_DOORS 8
+
+/*
+ * A structure type for doors
+ */
+typedef struct
+{
+	FEAT_IDX open;
+	FEAT_IDX broken;
+	FEAT_IDX closed;
+	FEAT_IDX locked[MAX_LJ_DOORS];
+	FEAT_IDX num_locked;
+	FEAT_IDX jammed[MAX_LJ_DOORS];
+	FEAT_IDX num_jammed;
+} door_type;
+
+door_type feat_door[MAX_DOOR_TYPES];
+
 extern bool generate_rooms(void);
 extern void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault);
 extern bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width);

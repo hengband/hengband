@@ -16,6 +16,7 @@
 #include "generate.h"
 #include "grid.h"
 #include "trap.h"
+#include "rooms.h"
 
 
 /*!

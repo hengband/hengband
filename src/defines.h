@@ -1006,36 +1006,6 @@
 	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
 
 
-/* Types of normal traps */
-#define NOT_TRAP        -1
-#define TRAP_TRAPDOOR    0
-#define TRAP_PIT         1
-#define TRAP_SPIKED_PIT  2
-#define TRAP_POISON_PIT  3
-#define TRAP_TY_CURSE    4
-#define TRAP_TELEPORT    5
-#define TRAP_FIRE        6
-#define TRAP_ACID        7
-#define TRAP_SLOW        8
-#define TRAP_LOSE_STR    9
-#define TRAP_LOSE_DEX   10
-#define TRAP_LOSE_CON   11
-#define TRAP_BLIND      12
-#define TRAP_CONFUSE    13
-#define TRAP_POISON     14
-#define TRAP_SLEEP      15
-#define TRAP_TRAPS      16
-#define TRAP_ALARM      17
-
-
-/* Types of special traps */
-#define TRAP_OPEN       18
-#define TRAP_ARMAGEDDON 19
-#define TRAP_PIRANHA    20
-
-
-/* Maximum locked/jammed doors */
-#define MAX_LJ_DOORS 8
 
 
 /* Types of pattern tiles */

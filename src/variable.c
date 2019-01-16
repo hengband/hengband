@@ -882,9 +882,6 @@ FEAT_IDX feat_glyph;
 FEAT_IDX feat_explosive_rune;
 FEAT_IDX feat_mirror;
 
-/* Doors */
-door_type feat_door[MAX_DOOR_TYPES];
-
 /* Stairs */
 FEAT_IDX feat_up_stair;
 FEAT_IDX feat_down_stair;

@@ -36,6 +36,7 @@
 
 #include "init.h"
 #include "trap.h"
+#include "rooms.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

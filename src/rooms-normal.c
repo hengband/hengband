@@ -1,6 +1,9 @@
 ﻿#include "angband.h"
 #include "grid.h"
+#include "trap.h"
+
 #include "rooms.h"
+
 
 /*!
 * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms

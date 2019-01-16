@@ -396,7 +396,6 @@ extern FEAT_IDX feat_floor;
 extern FEAT_IDX feat_glyph;
 extern FEAT_IDX feat_explosive_rune;
 extern FEAT_IDX feat_mirror;
-extern door_type feat_door[MAX_DOOR_TYPES];
 extern FEAT_IDX feat_up_stair;
 extern FEAT_IDX feat_down_stair;
 extern FEAT_IDX feat_entrance;

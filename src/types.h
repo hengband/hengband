@@ -1846,19 +1846,6 @@ typedef struct
 } arena_type;
 
 
-/*
- * A structure type for doors
- */
-typedef struct
-{
-	FEAT_IDX open;
-	FEAT_IDX broken;
-	FEAT_IDX closed;
-	FEAT_IDX locked[MAX_LJ_DOORS];
-	FEAT_IDX num_locked;
-	FEAT_IDX jammed[MAX_LJ_DOORS];
-	FEAT_IDX num_jammed;
-} door_type;
 
 
 #ifdef TRAVEL
