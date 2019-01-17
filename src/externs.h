@@ -792,6 +792,7 @@ extern void toggle_inven_equip(void);
 extern bool can_get_item(void);
 extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option);
+PERCENTAGE breakage_chance(object_type *o_ptr);
 
 /* object2.c */
 extern void excise_object_idx(OBJECT_IDX o_idx);
