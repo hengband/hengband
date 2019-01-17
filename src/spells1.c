@@ -119,9 +119,9 @@ PERCENTAGE beam_chance(void)
  * @param cury 現在の鏡のy座標
  * @param curx 現在の鏡のx座標
  */
-static void next_mirror(int* next_y, int* next_x, int cury, int curx)
+static void next_mirror(POSITION* next_y, POSITION* next_x, POSITION cury, POSITION curx)
 {
-	int mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
+	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
 	int mirror_num = 0;			  /* 鏡の数 */
 	POSITION x, y;
 	int num;
