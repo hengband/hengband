@@ -6,6 +6,51 @@
 #include "object-curse.h"
 
 
+
+/*!
+ * @brief モンスターに与えたダメージの修正処理 /
+ * Modify the physical damage done to the monster.
+ * @param m_ptr ダメージを受けるモンスターの構造体参照ポインタ
+ * @param dam ダメージ基本値
+ * @param is_psy_spear 攻撃手段が光の剣ならばTRUE
+ * @return 修正を行った結果のダメージ量
+ * @details
+ * <pre>
+ * (for example when it's invulnerable or shielded)
+ * ToDo: Accept a damage-type to calculate the modified damage from
+ * things like fire, frost, lightning, poison, ... attacks.
+ * "type" is not yet used and should be 0.
+ * </pre>
+ */
+HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	if ((r_ptr->flagsr & RFR_RES_ALL) && dam > 0)
+	{
+		dam /= 100;
+		if ((dam == 0) && one_in_(3)) dam = 1;
+	}
+
+	if (MON_INVULNER(m_ptr))
+	{
+		if (is_psy_spear)
+		{
+			if (!p_ptr->blind && is_seen(m_ptr))
+			{
+				msg_print(_("バリアを切り裂いた！", "The barrier is penetrated!"));
+			}
+		}
+		else if (!one_in_(PENETRATE_INVULNERABILITY))
+		{
+			return (0);
+		}
+	}
+	return (dam);
+}
+
+
+
 /*!
  * @brief モンスターに与えたダメージを元に経験値を加算する /
  * Calculate experience point to be get
