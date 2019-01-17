@@ -2250,7 +2250,7 @@ void do_cmd_fire(void)
 	}
 
 	/* Fire the item */
-	do_cmd_fire_aux(item, j_ptr);
+	exe_fire(item, j_ptr);
 
 	if (!is_fired || p_ptr->pclass != CLASS_SNIPER) return;
 

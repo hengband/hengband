@@ -560,7 +560,7 @@ extern void do_cmd_stay(bool pickup);
 extern void do_cmd_run(void);
 extern void do_cmd_rest(void);
 extern void do_cmd_fire(void);
-extern void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr);
+extern void exe_fire(INVENTORY_IDX item, object_type *j_ptr);
 extern bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken);
 #ifdef TRAVEL
 extern void do_cmd_travel(void);

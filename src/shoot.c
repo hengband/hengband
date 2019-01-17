@@ -310,7 +310,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
 
 
 /*!
- * @brief 射撃処理のサブルーチン /
+ * @brief 射撃処理実行 /
  * Fire an object from the pack or floor.
  * @param item 射撃するオブジェクトの所持ID
  * @param j_ptr 射撃武器のオブジェクト参照ポインタ
@@ -333,7 +333,7 @@ static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
  * Note that Bows of "Extra Shots" give an extra shot.
  * </pre>
  */
-void do_cmd_fire_aux(INVENTORY_IDX item, object_type *j_ptr)
+void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 {
 	DIRECTION dir;
 	int i;
