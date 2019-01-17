@@ -17,6 +17,7 @@
 #include "projection.h"
 #include "monster.h"
 #include "spells-summon.h"
+#include "quest.h"
 
 
 /*

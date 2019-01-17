@@ -38,6 +38,9 @@ hengband_SOURCES = \
 	projection.h \
 	\
 	player-damage.c player-damage.h player-status.c player-status.h \
+	\
+	quest.h quest.c\
+	\
 	racial.c \
 	realm-arcane.c \
 	realm-arcane.h realm-chaos.c realm-chaos.h realm-craft.c realm-craft.h \

@@ -23,6 +23,7 @@
 
 #include "object-hook.h"
 #include "sort.h"
+#include "quest.h"
 
 
 /*!

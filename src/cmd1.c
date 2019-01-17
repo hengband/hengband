@@ -143,6 +143,7 @@
 #include "melee.h"
 #include "trap.h"
 #include "projection.h"
+#include "quest.h"
 
 
 

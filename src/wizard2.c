@@ -16,6 +16,7 @@
 #include "spells-summon.h"
 #include "patron.h"
 #include "mutation.h"
+#include "quest.h"
 
 
 /*!
