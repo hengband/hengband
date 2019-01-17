@@ -13,4 +13,3 @@
 #define CFM_NO_RETURN    0x0100  /* Flee from random quest etc... */
 #define CFM_FIRST_FLOOR  0x0200  /* Create exit from the dungeon */
 
-

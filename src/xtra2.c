@@ -22,6 +22,7 @@
 #include "spells-summon.h"
 #include "patron.h"
 #include "mutation.h"
+#include "floor-events.h"
 
 #define REWARD_CHANCE 10
 
@@ -218,30 +219,6 @@ void complete_quest(QUEST_IDX quest_num)
 	}
 }
 
-/*!
- * @brief 現在フロアに残っている敵モンスターの数を返す /
- * @return 現在の敵モンスターの数
- */
-static MONSTER_NUMBER count_all_hostile_monsters(void)
-{
-	POSITION x, y;
-	MONSTER_NUMBER number_mon = 0;
-
-	for (x = 0; x < cur_wid; ++ x)
-	{
-		for (y = 0; y < cur_hgt; ++ y)
-		{
-			MONSTER_IDX m_idx = cave[y][x].m_idx;
-
-			if (m_idx > 0 && is_hostile(&m_list[m_idx]))
-			{
-				++number_mon;
-			}
-		}
-	}
-
-	return number_mon;
-}
 
 /*!
  * @brief 特定の敵を倒した際にクエスト達成処理 /
