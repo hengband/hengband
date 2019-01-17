@@ -6,6 +6,7 @@
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
 #include "spells-summon.h"
+#include "mutation.h"
 
 #ifdef JP
 /*!

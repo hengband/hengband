@@ -15,6 +15,7 @@
 #include "selfinfo.h"
 #include "spells-summon.h"
 #include "patron.h"
+#include "mutation.h"
 
 
 /*!

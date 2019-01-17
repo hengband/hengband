@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "selfinfo.h"
 #include "object-hook.h"
+#include "mutation.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

@@ -13,6 +13,7 @@
  */
 
 #include "angband.h"
+#include "mutation.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

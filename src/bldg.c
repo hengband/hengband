@@ -20,6 +20,8 @@
 #include "world.h"
 #include "sort.h"
 
+#include "mutation.h"
+
 /*!
  * ループ中で / hack as in leave_store in store.c
  */

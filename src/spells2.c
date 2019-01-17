@@ -19,6 +19,7 @@
 #include "world.h"
 #include "projection.h"
 #include "spells-summon.h"
+#include "mutation.h"
 
 
 /*!

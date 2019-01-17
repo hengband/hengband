@@ -1345,15 +1345,6 @@ extern void do_cmd_hissatsu(void);
 extern void do_cmd_gain_hissatsu(void);
 extern MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode);
 
-/* mutation.c */
-extern bool gain_random_mutation(int choose_mut);
-extern bool lose_mutation(int choose_mut);
-extern void lose_all_mutations(void);
-extern void dump_mutations(FILE *OutFile);
-extern void do_cmd_knowledge_mutations(void);
-extern int calc_mutant_regenerate_mod(void);
-extern bool mutation_power_aux(int power);
-
 
 /*
  * Hack -- conditional (or "bizarre") externs

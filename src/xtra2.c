@@ -21,6 +21,7 @@
 #include "projection.h"
 #include "spells-summon.h"
 #include "patron.h"
+#include "mutation.h"
 
 #define REWARD_CHANCE 10
 

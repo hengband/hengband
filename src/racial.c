@@ -17,6 +17,8 @@
 #include "melee.h"
 #include "object-hook.h"
 
+#include "mutation.h"
+
 /*!
  * @brief レイシャル「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
  * Hook to determine if an object is contertible in an arrow/bolt

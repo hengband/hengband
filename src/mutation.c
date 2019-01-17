@@ -12,6 +12,8 @@
  */
 
 #include "angband.h"
+#include "mutation.h"
+
 #include "selfinfo.h"
 #include "spells-summon.h"
 

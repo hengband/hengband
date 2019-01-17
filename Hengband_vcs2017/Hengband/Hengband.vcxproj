@@ -285,6 +285,7 @@
     <ClInclude Include="..\..\src\monster-status.h" />
     <ClInclude Include="..\..\src\monster.h" />
     <ClInclude Include="..\..\src\monsterrace-hook.h" />
+    <ClInclude Include="..\..\src\mutation.h" />
     <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-hook.h" />
     <ClInclude Include="..\..\src\objectkind-hook.h" />

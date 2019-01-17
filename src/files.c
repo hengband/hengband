@@ -17,6 +17,7 @@
 #include "world.h"
 #include "player-status.h"
 #include "sort.h"
+#include "mutation.h"
 
 
 /*
