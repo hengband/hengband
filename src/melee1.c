@@ -17,6 +17,7 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "projection.h"
+#include "monster-status.h"
 
 
 

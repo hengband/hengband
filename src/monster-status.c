@@ -1,4 +1,94 @@
 ﻿#include "angband.h"
+#include "monster.h"
+#include "monster-status.h"
+#include "spells-summon.h"
+#include "monsterrace-hook.h"
+#include "object-curse.h"
+
+
+/*!
+ * @brief モンスターに与えたダメージを元に経験値を加算する /
+ * Calculate experience point to be get
+ * @param dam 与えたダメージ量
+ * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
+ * @return なし
+ * @details
+ * <pre>
+ * Even the 64 bit operation is not big enough to avoid overflaw
+ * unless we carefully choose orders of multiplication and division.
+ * Get the coefficient first, and multiply (potentially huge) base
+ * experience point of a monster later.
+ * </pre>
+ */
+static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	s32b new_exp;
+	u32b new_exp_frac;
+	s32b div_h;
+	u32b div_l;
+
+	if (!m_ptr->r_idx) return;
+	if (is_pet(m_ptr) || p_ptr->inside_battle) return;
+
+	/*
+	 * - Ratio of monster's level to player's level effects
+	 * - Varying speed effects
+	 * - Get a fraction in proportion of damage point
+	 */
+	new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * dam;
+	new_exp_frac = 0;
+	div_h = 0L;
+	div_l = (p_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed);
+
+	/* Use (average maxhp * 2) as a denominator */
+	if (!(r_ptr->flags1 & RF1_FORCE_MAXHP))
+		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * (r_ptr->hside + 1));
+	else
+		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside * 2);
+
+	/* Special penalty in the wilderness */
+	if (!dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
+		s64b_mul(&div_h, &div_l, 0, 5);
+
+	/* Do division first to prevent overflaw */
+	s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
+
+	/* Special penalty for mutiply-monster */
+	if ((r_ptr->flags2 & RF2_MULTIPLY) || (m_ptr->r_idx == MON_DAWN))
+	{
+		int monnum_penarty = r_ptr->r_akills / 400;
+		if (monnum_penarty > 8) monnum_penarty = 8;
+
+		while (monnum_penarty--)
+		{
+			/* Divide by 4 */
+			s64b_RSHIFT(new_exp, new_exp_frac, 2);
+		}
+	}
+
+	/* Special penalty for rest_and_shoot exp scum */
+	if ((m_ptr->dealt_damage > m_ptr->max_maxhp) && (m_ptr->hp >= 0))
+	{
+		int over_damage = m_ptr->dealt_damage / m_ptr->max_maxhp;
+		if (over_damage > 32) over_damage = 32;
+
+		while (over_damage--)
+		{
+			/* 9/10 for once */
+			s64b_mul(&new_exp, &new_exp_frac, 0, 9);
+			s64b_div(&new_exp, &new_exp_frac, 0, 10);
+		}
+	}
+
+	/* Finally multiply base experience point of the monster */
+	s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
+
+	/* Gain experience */
+	gain_exp_64(new_exp, new_exp_frac);
+}
+
 
 
 /*!
@@ -818,3 +908,443 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 	}
 	if (m_idx == p_ptr->riding) p_ptr->update |= PU_BONUS;
 }
+
+/*!
+ * @brief モンスターのHPをダメージに応じて減算する /
+ * Decreases monsters hit points, handling monster death.
+ * @param dam 与えたダメージ量
+ * @param m_idx ダメージを与えたモンスターのID
+ * @param fear ダメージによってモンスターが恐慌状態に陥ったならばTRUEを返す
+ * @param note モンスターが倒された際の特別なメッセージ述語
+ * @return なし
+ * @details
+ * <pre>
+ * We return TRUE if the monster has been killed (and deleted).
+ * We announce monster death (using an optional "death message"
+ * if given, and a otherwise a generic killed/destroyed message).
+ * Only "physical attacks" can induce the "You have slain" message.
+ * Missile and Spell attacks will induce the "dies" message, or
+ * various "specialized" messages.  Note that "You have destroyed"
+ * and "is destroyed" are synonyms for "You have slain" and "dies".
+ * Hack -- unseen monsters yield "You have killed it." message.
+ * Added fear (DGK) and check whether to print fear messages -CWS
+ * Made name, sex, and capitalization generic -BEN-
+ * As always, the "ghost" processing is a total hack.
+ * Hack -- we "delay" fear messages by passing around a "fear" flag.
+ * Consider decreasing monster experience over time, say,
+ * by using "(m_exp * m_lev * (m_lev)) / (p_lev * (m_lev + n_killed))"
+ * instead of simply "(m_exp * m_lev) / (p_lev)", to make the first
+ * monster worth more than subsequent monsters.  This would also need
+ * to induce changes in the monster recall code.
+ * </pre>
+ */
+bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
+{
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	monster_type exp_mon;
+
+	/* Innocent until proven otherwise */
+	bool innocent = TRUE, thief = FALSE;
+	int i;
+	HIT_POINT expdam;
+
+	(void)COPY(&exp_mon, m_ptr, monster_type);
+
+	expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;
+
+	get_exp_from_mon(expdam, &exp_mon);
+
+	/* Genocided by chaos patron */
+	if (!m_ptr->r_idx) m_idx = 0;
+
+	/* Redraw (later) if needed */
+	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+	if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+
+	(void)set_monster_csleep(m_idx, 0);
+
+	/* Hack - Cancel any special player stealth magics. -LM- */
+	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		set_superstealth(FALSE);
+	}
+
+	/* Genocided by chaos patron */
+	if (!m_idx) return TRUE;
+
+	m_ptr->hp -= dam;
+	m_ptr->dealt_damage += dam;
+
+	if (m_ptr->dealt_damage > m_ptr->max_maxhp * 100) m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
+
+	if (p_ptr->wizard)
+	{
+		msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
+	}
+
+	/* It is dead now */
+	if (m_ptr->hp < 0)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+
+		if (r_info[m_ptr->r_idx].flags7 & RF7_TANUKI)
+		{
+			/* You might have unmasked Tanuki first time */
+			r_ptr = &r_info[m_ptr->r_idx];
+			m_ptr->ap_r_idx = m_ptr->r_idx;
+			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+		}
+
+		if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
+		{
+			/* You might have unmasked Chameleon first time */
+			r_ptr = real_r_ptr(m_ptr);
+			if (r_ptr->r_sights < MAX_SHORT) r_ptr->r_sights++;
+		}
+
+		if (!(m_ptr->smart & SM_CLONED))
+		{
+			/* When the player kills a Unique, it stays dead */
+			if (r_ptr->flags1 & RF1_UNIQUE)
+			{
+				r_ptr->max_num = 0;
+
+				/* Mega-Hack -- Banor & Lupart */
+				if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART))
+				{
+					r_info[MON_BANORLUPART].max_num = 0;
+					r_info[MON_BANORLUPART].r_pkills++;
+					r_info[MON_BANORLUPART].r_akills++;
+					if (r_info[MON_BANORLUPART].r_tkills < MAX_SHORT) r_info[MON_BANORLUPART].r_tkills++;
+				}
+				else if (m_ptr->r_idx == MON_BANORLUPART)
+				{
+					r_info[MON_BANOR].max_num = 0;
+					r_info[MON_BANOR].r_pkills++;
+					r_info[MON_BANOR].r_akills++;
+					if (r_info[MON_BANOR].r_tkills < MAX_SHORT) r_info[MON_BANOR].r_tkills++;
+					r_info[MON_LUPART].max_num = 0;
+					r_info[MON_LUPART].r_pkills++;
+					r_info[MON_LUPART].r_akills++;
+					if (r_info[MON_LUPART].r_tkills < MAX_SHORT) r_info[MON_LUPART].r_tkills++;
+				}
+			}
+
+			/* When the player kills a Nazgul, it stays dead */
+			else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num--;
+		}
+
+		/* Count all monsters killed */
+		if (r_ptr->r_akills < MAX_SHORT) r_ptr->r_akills++;
+
+		/* Recall even invisible uniques or winners */
+		if ((m_ptr->ml && !p_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE))
+		{
+			/* Count kills this life */
+			if ((m_ptr->mflag2 & MFLAG2_KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) r_info[MON_KAGE].r_pkills++;
+			else if (r_ptr->r_pkills < MAX_SHORT) r_ptr->r_pkills++;
+
+			/* Count kills in all lives */
+			if ((m_ptr->mflag2 & MFLAG2_KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) r_info[MON_KAGE].r_tkills++;
+			else if (r_ptr->r_tkills < MAX_SHORT) r_ptr->r_tkills++;
+
+			/* Hack -- Auto-recall */
+			monster_race_track(m_ptr->ap_r_idx);
+		}
+
+		/* Extract monster name */
+		monster_desc(m_name, m_ptr, MD_TRUE_NAME);
+
+		/* Don't kill Amberites */
+		if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2))
+		{
+			int curses = 1 + randint1(3);
+			bool stop_ty = FALSE;
+			int count = 0;
+
+			msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
+			curse_equipment(100, 50);
+
+			do
+			{
+				stop_ty = activate_ty_curse(stop_ty, &count);
+			} while (--curses);
+		}
+
+		if (r_ptr->flags2 & RF2_CAN_SPEAK)
+		{
+			char line_got[1024];
+			if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got))
+			{
+				msg_format("%^s %s", m_name, line_got);
+			}
+
+#ifdef WORLD_SCORE
+			if (m_ptr->r_idx == MON_SERPENT)
+			{
+				screen_dump = make_screen_dump();
+			}
+#endif
+		}
+
+		if (!(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+		{
+			if (!dun_level && !ambush_flag && !p_ptr->inside_arena)
+			{
+				chg_virtue(V_VALOUR, -1);
+			}
+			else if (r_ptr->level > dun_level)
+			{
+				if (randint1(10) <= (r_ptr->level - dun_level))
+					chg_virtue(V_VALOUR, 1);
+			}
+			if (r_ptr->level > 60)
+			{
+				chg_virtue(V_VALOUR, 1);
+			}
+			if (r_ptr->level >= 2 * (p_ptr->lev + 1))
+				chg_virtue(V_VALOUR, 2);
+		}
+
+		if (r_ptr->flags1 & RF1_UNIQUE)
+		{
+			if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) chg_virtue(V_HARMONY, 2);
+
+			if (r_ptr->flags3 & RF3_GOOD)
+			{
+				chg_virtue(V_UNLIFE, 2);
+				chg_virtue(V_VITALITY, -2);
+			}
+
+			if (one_in_(3)) chg_virtue(V_INDIVIDUALISM, -1);
+		}
+
+		if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER)
+		{
+			chg_virtue(V_COMPASSION, -1);
+		}
+
+		if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100)))
+			chg_virtue(V_UNLIFE, 1);
+
+		if (r_ptr->d_char == 'A')
+		{
+			if (r_ptr->flags1 & RF1_UNIQUE)
+				chg_virtue(V_FAITH, -2);
+			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100))
+			{
+				if (r_ptr->flags3 & RF3_GOOD) chg_virtue(V_FAITH, -1);
+				else chg_virtue(V_FAITH, 1);
+			}
+		}
+		else if (r_ptr->flags3 & RF3_DEMON)
+		{
+			if (r_ptr->flags1 & RF1_UNIQUE)
+				chg_virtue(V_FAITH, 2);
+			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100))
+				chg_virtue(V_FAITH, 1);
+		}
+
+		if ((r_ptr->flags3 & RF3_UNDEAD) && (r_ptr->flags1 & RF1_UNIQUE))
+			chg_virtue(V_VITALITY, 2);
+
+		if (r_ptr->r_deaths)
+		{
+			if (r_ptr->flags1 & RF1_UNIQUE)
+			{
+				chg_virtue(V_HONOUR, 10);
+			}
+			else if ((r_ptr->level) / 10 + (2 * dun_level) >= randint1(100))
+			{
+				chg_virtue(V_HONOUR, 1);
+			}
+		}
+		if ((r_ptr->flags2 & RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10))
+		{
+			chg_virtue(V_VALOUR, -1);
+		}
+
+		for (i = 0; i < 4; i++)
+		{
+			if (r_ptr->blow[i].d_dice != 0) innocent = FALSE; /* Murderer! */
+
+			if ((r_ptr->blow[i].effect == RBE_EAT_ITEM)
+				|| (r_ptr->blow[i].effect == RBE_EAT_GOLD))
+
+				thief = TRUE; /* Thief! */
+		}
+
+		/* The new law says it is illegal to live in the dungeon */
+		if (r_ptr->level != 0) innocent = FALSE;
+
+		if (thief)
+		{
+			if (r_ptr->flags1 & RF1_UNIQUE)
+				chg_virtue(V_JUSTICE, 3);
+			else if (1 + ((r_ptr->level) / 10 + (2 * dun_level)) >= randint1(100))
+				chg_virtue(V_JUSTICE, 1);
+		}
+		else if (innocent)
+		{
+			chg_virtue(V_JUSTICE, -1);
+		}
+
+		if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) && !(r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) && !(r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
+		{
+			if (one_in_(4)) chg_virtue(V_NATURE, -1);
+		}
+
+		if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq)
+		{
+			char note_buf[160];
+			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? _("(クローン)", "(Clone)") : "");
+			do_cmd_write_nikki(NIKKI_UNIQUE, 0, note_buf);
+		}
+
+		/* Make a sound */
+		sound(SOUND_KILL);
+
+		/* Death by Missile/Spell attack */
+		if (note)
+		{
+			msg_format("%^s%s", m_name, note);
+		}
+
+		/* Death by physical attack -- invisible monster */
+		else if (!m_ptr->ml)
+		{
+#ifdef JP
+			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+				msg_format("せっかくだから%sを殺した。", m_name);
+			else
+				msg_format("%sを殺した。", m_name);
+#else
+			msg_format("You have killed %s.", m_name);
+#endif
+
+		}
+
+		/* Death by Physical attack -- non-living monster */
+		else if (!monster_living(m_ptr->r_idx))
+		{
+			bool explode = FALSE;
+
+			for (i = 0; i < 4; i++)
+			{
+				if (r_ptr->blow[i].method == RBM_EXPLODE) explode = TRUE;
+			}
+
+			/* Special note at death */
+			if (explode)
+				msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name);
+			else
+			{
+#ifdef JP
+				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+					msg_format("せっかくだから%sを倒した。", m_name);
+				else
+					msg_format("%sを倒した。", m_name);
+#else
+				msg_format("You have destroyed %s.", m_name);
+#endif
+			}
+		}
+
+		/* Death by Physical attack -- living monster */
+		else
+		{
+#ifdef JP
+			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+				msg_format("せっかくだから%sを葬り去った。", m_name);
+			else
+				msg_format("%sを葬り去った。", m_name);
+#else
+			msg_format("You have slain %s.", m_name);
+#endif
+
+		}
+		if ((r_ptr->flags1 & RF1_UNIQUE) && !(m_ptr->smart & SM_CLONED) && !vanilla_town)
+		{
+			for (i = 0; i < MAX_KUBI; i++)
+			{
+				if ((kubi_r_idx[i] == m_ptr->r_idx) && !(m_ptr->mflag2 & MFLAG2_CHAMELEON))
+				{
+					msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
+					break;
+				}
+			}
+		}
+
+		/* Generate treasure */
+		monster_death(m_idx, TRUE);
+
+		/* Mega hack : replace IKETA to BIKETAL */
+		if ((m_ptr->r_idx == MON_IKETA) && !(p_ptr->inside_arena || p_ptr->inside_battle))
+		{
+			POSITION dummy_y = m_ptr->fy;
+			POSITION dummy_x = m_ptr->fx;
+			BIT_FLAGS mode = 0L;
+			if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
+			delete_monster_idx(m_idx);
+			if (summon_named_creature(0, dummy_y, dummy_x, MON_BIKETAL, mode))
+			{
+				msg_print(_("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!"));
+			}
+		}
+		else
+		{
+			delete_monster_idx(m_idx);
+		}
+
+		get_exp_from_mon((long)exp_mon.max_maxhp * 2, &exp_mon);
+
+		/* Not afraid */
+		(*fear) = FALSE;
+
+		/* Monster is dead */
+		return (TRUE);
+	}
+
+
+#ifdef ALLOW_FEAR
+
+	/* Mega-Hack -- Pain cancels fear */
+	if (MON_MONFEAR(m_ptr) && (dam > 0))
+	{
+		/* Cure fear */
+		if (set_monster_monfear(m_idx, MON_MONFEAR(m_ptr) - randint1(dam)))
+		{
+			/* No more fear */
+			(*fear) = FALSE;
+		}
+	}
+
+	/* Sometimes a monster gets scared by damage */
+	if (!MON_MONFEAR(m_ptr) && !(r_ptr->flags3 & (RF3_NO_FEAR)))
+	{
+		/* Percentage of fully healthy */
+		int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
+
+		/*
+		 * Run (sometimes) if at 10% or less of max hit points,
+		 * or (usually) when hit for half its current hit points
+		 */
+		if ((randint1(10) >= percentage) || ((dam >= m_ptr->hp) && (randint0(100) < 80)))
+		{
+			/* Hack -- note fear */
+			(*fear) = TRUE;
+
+			/* Hack -- Add some timed fear */
+			(void)set_monster_monfear(m_idx, (randint1(10) +
+				(((dam >= m_ptr->hp) && (percentage > 7)) ?
+					20 : ((11 - percentage) * 5))));
+		}
+	}
+
+#endif
+
+	/* Not dead yet */
+	return (FALSE);
+}
+

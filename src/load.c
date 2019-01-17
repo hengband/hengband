@@ -43,6 +43,7 @@
 #include "angband.h"
 #include "generate.h"
 #include "trap.h"
+#include "mutation.h"
 
 
 /*

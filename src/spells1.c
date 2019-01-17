@@ -18,12 +18,14 @@
 #include "player-damage.h"
 
 #include "monster.h"
+#include "monster-status.h"
 #include "spells-summon.h"
 #include "monsterrace-hook.h"
 
 #include "melee.h"
 #include "world.h"
 #include "projection.h"
+#include "mutation.h"
 #include "rooms.h"
 
 
