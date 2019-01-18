@@ -213,26 +213,25 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_PROBING:
 	{
-		probing();
-		ident = TRUE;
+		ident = probing();
 		break;
 	}
 
 	case SV_STAFF_DISPEL_EVIL:
 	{
-		if (dispel_evil(powerful ? 120 : 80)) ident = TRUE;
+		ident = dispel_evil(powerful ? 120 : 80);
 		break;
 	}
 
 	case SV_STAFF_POWER:
 	{
-		if (dispel_monsters(powerful ? 225 : 150)) ident = TRUE;
+		ident = dispel_monsters(powerful ? 225 : 150) ;
 		break;
 	}
 
 	case SV_STAFF_HOLINESS:
 	{
-		if (cleansing_nova(p_ptr, magic, powerful)) ident = TRUE;
+		ident = cleansing_nova(p_ptr, magic, powerful);
 		break;
 	}
 
@@ -254,17 +253,13 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_DESTRUCTION:
 	{
-		if (destroy_area(p_ptr->y, p_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE))
-			ident = TRUE;
-
+		ident = destroy_area(p_ptr->y, p_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
 		break;
 	}
 
 	case SV_STAFF_ANIMATE_DEAD:
 	{
-		if (animate_dead(0, p_ptr->y, p_ptr->x))
-			ident = TRUE;
-
+		ident = animate_dead(0, p_ptr->y, p_ptr->x);
 		break;
 	}
 
