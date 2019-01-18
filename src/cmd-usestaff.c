@@ -232,14 +232,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_HOLINESS:
 	{
-		if (dispel_evil(powerful ? 225 : 150)) ident = TRUE;
-		k = 3 * lev;
-		if (set_protevil((magic ? 0 : p_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
-		if (set_poisoned(0)) ident = TRUE;
-		if (set_afraid(0)) ident = TRUE;
-		if (hp_player(50)) ident = TRUE;
-		if (set_stun(0)) ident = TRUE;
-		if (set_cut(0)) ident = TRUE;
+		if (cleansing_nova(p_ptr, magic, powerful)) ident = TRUE;
 		break;
 	}
 

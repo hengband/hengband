@@ -906,6 +906,20 @@ bool dispel_monsters(HIT_POINT dam)
 	return (project_all_los(GF_DISP_ALL, dam));
 }
 
+bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
+{
+	bool ident = FALSE;
+	if (dispel_evil(powerful ? 225 : 150)) ident = TRUE;
+	int k = 3 * creature_ptr->lev;
+	if (set_protevil((magic ? 0 : creature_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
+	if (set_poisoned(0)) ident = TRUE;
+	if (set_afraid(0)) ident = TRUE;
+	if (hp_player(50)) ident = TRUE;
+	if (set_stun(0)) ident = TRUE;
+	if (set_cut(0)) ident = TRUE;
+	return ident;
+}
+
 /*!
  * @brief 視界内の生命のあるモンスターにダメージを与える処理 / Dispel 'living' monsters
  * @return 効力があった場合TRUEを返す

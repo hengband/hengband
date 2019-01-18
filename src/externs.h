@@ -908,6 +908,7 @@ extern bool dispel_undead(HIT_POINT dam);
 extern bool dispel_monsters(HIT_POINT dam);
 extern bool dispel_living(HIT_POINT dam);
 extern bool dispel_demons(HIT_POINT dam);
+extern bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful);
 extern bool crusade(void);
 extern bool turn_undead(void);
 extern bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate);
