@@ -920,6 +920,18 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	return ident;
 }
 
+bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
+{
+	msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
+	project(0, (powerful ? 7 : 5), p_ptr->y, p_ptr->x,
+	(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+	if ((p_ptr->pclass != CLASS_MAGE) && (p_ptr->pclass != CLASS_HIGH_MAGE) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_MAGIC_EATER) && (p_ptr->pclass != CLASS_BLUE_MAGE))
+	{
+		(void)take_hit(DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
+	}
+	return TRUE;
+}
+
 /*!
  * @brief 視界内の生命のあるモンスターにダメージを与える処理 / Dispel 'living' monsters
  * @return 効力があった場合TRUEを返す

@@ -265,15 +265,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_MSTORM:
 	{
-		msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
-		project(0, (powerful ? 7 : 5), p_ptr->y, p_ptr->x,
-			(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
-		if ((p_ptr->pclass != CLASS_MAGE) && (p_ptr->pclass != CLASS_HIGH_MAGE) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_MAGIC_EATER) && (p_ptr->pclass != CLASS_BLUE_MAGE))
-		{
-			(void)take_hit(DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
-		}
-		ident = TRUE;
-
+		ident = unleash_mana_storm(p_ptr, powerful);
 		break;
 	}
 
