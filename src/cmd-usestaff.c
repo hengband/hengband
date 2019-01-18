@@ -23,260 +23,260 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 	/* Analyze the staff */
 	switch (sval)
 	{
-	case SV_STAFF_DARKNESS:
-	{
-		if (!(p_ptr->resist_blind) && !(p_ptr->resist_dark))
+		case SV_STAFF_DARKNESS:
 		{
-			if (set_blind(p_ptr->blind + 3 + randint1(5))) ident = TRUE;
+			if (!(p_ptr->resist_blind) && !(p_ptr->resist_dark))
+			{
+				if (set_blind(p_ptr->blind + 3 + randint1(5))) ident = TRUE;
+			}
+			if (unlite_area(10, (powerful ? 6 : 3))) ident = TRUE;
+			break;
 		}
-		if (unlite_area(10, (powerful ? 6 : 3))) ident = TRUE;
-		break;
-	}
 
-	case SV_STAFF_SLOWNESS:
-	{
-		if (set_slow(p_ptr->slow + randint1(30) + 15, FALSE)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_HASTE_MONSTERS:
-	{
-		if (speed_monsters()) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_SUMMONING:
-	{
-		const int times = randint1(powerful ? 8 : 4);
-		for (k = 0; k < times; k++)
+		case SV_STAFF_SLOWNESS:
 		{
-			if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+			if (set_slow(p_ptr->slow + randint1(30) + 15, FALSE)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_HASTE_MONSTERS:
+		{
+			if (speed_monsters()) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_SUMMONING:
+		{
+			const int times = randint1(powerful ? 8 : 4);
+			for (k = 0; k < times; k++)
+			{
+				if (summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+				{
+					ident = TRUE;
+				}
+			}
+			break;
+		}
+
+		case SV_STAFF_TELEPORTATION:
+		{
+			teleport_player((powerful ? 150 : 100), 0L);
+			ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_IDENTIFY:
+		{
+			if (powerful) {
+				if (!identify_fully(FALSE)) *use_charge = FALSE;
+			}
+			else {
+				if (!ident_spell(FALSE)) *use_charge = FALSE;
+			}
+			ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_REMOVE_CURSE:
+		{
+			bool result = powerful ? remove_all_curse() : remove_curse();
+			if (result)
 			{
 				ident = TRUE;
 			}
+			break;
 		}
-		break;
-	}
 
-	case SV_STAFF_TELEPORTATION:
-	{
-		teleport_player((powerful ? 150 : 100), 0L);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_IDENTIFY:
-	{
-		if (powerful) {
-			if (!identify_fully(FALSE)) *use_charge = FALSE;
-		}
-		else {
-			if (!ident_spell(FALSE)) *use_charge = FALSE;
-		}
-		ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_REMOVE_CURSE:
-	{
-		bool result = powerful ? remove_all_curse() : remove_curse();
-		if (result)
+		case SV_STAFF_STARLITE:
 		{
-			ident = TRUE;
-		}
-		break;
-	}
+			HIT_POINT num = damroll(5, 3);
+			POSITION y = 0, x = 0;
+			int attempts;
 
-	case SV_STAFF_STARLITE:
-	{
-		HIT_POINT num = damroll(5, 3);
-		POSITION y = 0, x = 0;
-		int attempts;
-
-		if (!p_ptr->blind && !magic)
-		{
-			msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
-		}
-		for (k = 0; k < num; k++)
-		{
-			attempts = 1000;
-
-			while (attempts--)
+			if (!p_ptr->blind && !magic)
 			{
-				scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
-				if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
-				if (!player_bold(y, x)) break;
+				msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
 			}
+			for (k = 0; k < num; k++)
+			{
+				attempts = 1000;
 
-			project(0, 0, y, x, damroll(6 + lev / 8, 10), GF_LITE_WEAK,
-				(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
-		}
-		ident = TRUE;
-		break;
-	}
+				while (attempts--)
+				{
+					scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
+					if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+					if (!player_bold(y, x)) break;
+				}
 
-	case SV_STAFF_LITE:
-	{
-		if (lite_area(damroll(2, 8), (powerful ? 4 : 2))) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_MAPPING:
-	{
-		map_area(powerful ? DETECT_RAD_MAP * 3 / 2 : DETECT_RAD_MAP);
-		ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_DETECT_GOLD:
-	{
-		if (detect_treasure(detect_rad)) ident = TRUE;
-		if (detect_objects_gold(detect_rad)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_DETECT_ITEM:
-	{
-		if (detect_objects_normal(detect_rad)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_DETECT_TRAP:
-	{
-		if (detect_traps(detect_rad, known)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_DETECT_DOOR:
-	{
-		if (detect_doors(detect_rad)) ident = TRUE;
-		if (detect_stairs(detect_rad)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_DETECT_INVIS:
-	{
-		if (detect_monsters_invis(detect_rad)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_DETECT_EVIL:
-	{
-		if (detect_monsters_evil(detect_rad)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_CURE_LIGHT:
-	{
-		ident = cure_light_wounds((powerful ? 4 : 2), 8);
-		break;
-	}
-
-	case SV_STAFF_CURING:
-	{
-		ident = true_healing(0);
-		if (set_shero(0, TRUE)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_HEALING:
-	{
-		if (cure_critical_wounds(powerful ? 500 : 300)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_THE_MAGI:
-	{
-		if (do_res_stat(A_INT)) ident = TRUE;
-		ident |= restore_mana(FALSE);
-		if (set_shero(0, TRUE)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_SLEEP_MONSTERS:
-	{
-		if (sleep_monsters(lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_SLOW_MONSTERS:
-	{
-		if (slow_monsters(lev)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_SPEED:
-	{
-		if (set_fast(randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
-		break;
-	}
-
-	case SV_STAFF_PROBING:
-	{
-		ident = probing();
-		break;
-	}
-
-	case SV_STAFF_DISPEL_EVIL:
-	{
-		ident = dispel_evil(powerful ? 120 : 80);
-		break;
-	}
-
-	case SV_STAFF_POWER:
-	{
-		ident = dispel_monsters(powerful ? 225 : 150) ;
-		break;
-	}
-
-	case SV_STAFF_HOLINESS:
-	{
-		ident = cleansing_nova(p_ptr, magic, powerful);
-		break;
-	}
-
-	case SV_STAFF_GENOCIDE:
-	{
-		ident = symbol_genocide((magic ? lev + 50 : 200), TRUE);
-		break;
-	}
-
-	case SV_STAFF_EARTHQUAKES:
-	{
-		if (earthquake(p_ptr->y, p_ptr->x, (powerful ? 15 : 10)))
+				project(0, 0, y, x, damroll(6 + lev / 8, 10), GF_LITE_WEAK,
+					(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
+			}
 			ident = TRUE;
-		else
-			msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
+			break;
+		}
 
-		break;
-	}
+		case SV_STAFF_LITE:
+		{
+			if (lite_area(damroll(2, 8), (powerful ? 4 : 2))) ident = TRUE;
+			break;
+		}
 
-	case SV_STAFF_DESTRUCTION:
-	{
-		ident = destroy_area(p_ptr->y, p_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
-		break;
-	}
+		case SV_STAFF_MAPPING:
+		{
+			map_area(powerful ? DETECT_RAD_MAP * 3 / 2 : DETECT_RAD_MAP);
+			ident = TRUE;
+			break;
+		}
 
-	case SV_STAFF_ANIMATE_DEAD:
-	{
-		ident = animate_dead(0, p_ptr->y, p_ptr->x);
-		break;
-	}
+		case SV_STAFF_DETECT_GOLD:
+		{
+			if (detect_treasure(detect_rad)) ident = TRUE;
+			if (detect_objects_gold(detect_rad)) ident = TRUE;
+			break;
+		}
 
-	case SV_STAFF_MSTORM:
-	{
-		ident = unleash_mana_storm(p_ptr, powerful);
-		break;
-	}
+		case SV_STAFF_DETECT_ITEM:
+		{
+			if (detect_objects_normal(detect_rad)) ident = TRUE;
+			break;
+		}
 
-	case SV_STAFF_NOTHING:
-	{
-		msg_print(_("何も起らなかった。", "Nothing happen."));
-		if (prace_is_(RACE_SKELETON) || prace_is_(RACE_GOLEM) ||
-			prace_is_(RACE_ZOMBIE) || prace_is_(RACE_SPECTRE))
-			msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
-		break;
-	}
+		case SV_STAFF_DETECT_TRAP:
+		{
+			if (detect_traps(detect_rad, known)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_DETECT_DOOR:
+		{
+			if (detect_doors(detect_rad)) ident = TRUE;
+			if (detect_stairs(detect_rad)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_DETECT_INVIS:
+		{
+			if (detect_monsters_invis(detect_rad)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_DETECT_EVIL:
+		{
+			if (detect_monsters_evil(detect_rad)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_CURE_LIGHT:
+		{
+			ident = cure_light_wounds((powerful ? 4 : 2), 8);
+			break;
+		}
+
+		case SV_STAFF_CURING:
+		{
+			ident = true_healing(0);
+			if (set_shero(0, TRUE)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_HEALING:
+		{
+			if (cure_critical_wounds(powerful ? 500 : 300)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_THE_MAGI:
+		{
+			if (do_res_stat(A_INT)) ident = TRUE;
+			ident |= restore_mana(FALSE);
+			if (set_shero(0, TRUE)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_SLEEP_MONSTERS:
+		{
+			if (sleep_monsters(lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_SLOW_MONSTERS:
+		{
+			if (slow_monsters(lev)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_SPEED:
+		{
+			if (set_fast(randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
+			break;
+		}
+
+		case SV_STAFF_PROBING:
+		{
+			ident = probing();
+			break;
+		}
+
+		case SV_STAFF_DISPEL_EVIL:
+		{
+			ident = dispel_evil(powerful ? 120 : 80);
+			break;
+		}
+
+		case SV_STAFF_POWER:
+		{
+			ident = dispel_monsters(powerful ? 225 : 150) ;
+			break;
+		}
+
+		case SV_STAFF_HOLINESS:
+		{
+			ident = cleansing_nova(p_ptr, magic, powerful);
+			break;
+		}
+
+		case SV_STAFF_GENOCIDE:
+		{
+			ident = symbol_genocide((magic ? lev + 50 : 200), TRUE);
+			break;
+		}
+
+		case SV_STAFF_EARTHQUAKES:
+		{
+			if (earthquake(p_ptr->y, p_ptr->x, (powerful ? 15 : 10)))
+				ident = TRUE;
+			else
+				msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
+
+			break;
+		}
+
+		case SV_STAFF_DESTRUCTION:
+		{
+			ident = destroy_area(p_ptr->y, p_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
+			break;
+		}
+
+		case SV_STAFF_ANIMATE_DEAD:
+		{
+			ident = animate_dead(0, p_ptr->y, p_ptr->x);
+			break;
+		}
+
+		case SV_STAFF_MSTORM:
+		{
+			ident = unleash_mana_storm(p_ptr, powerful);
+			break;
+		}
+
+		case SV_STAFF_NOTHING:
+		{
+			msg_print(_("何も起らなかった。", "Nothing happen."));
+			if (prace_is_(RACE_SKELETON) || prace_is_(RACE_GOLEM) ||
+				prace_is_(RACE_ZOMBIE) || prace_is_(RACE_SPECTRE))
+				msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
+			break;
+		}
 	}
 	return ident;
 }
