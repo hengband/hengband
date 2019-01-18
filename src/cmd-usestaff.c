@@ -238,8 +238,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 	case SV_STAFF_GENOCIDE:
 	{
-		(void)symbol_genocide((magic ? lev + 50 : 200), TRUE);
-		ident = TRUE;
+		ident = symbol_genocide((magic ? lev + 50 : 200), TRUE);
 		break;
 	}
 
