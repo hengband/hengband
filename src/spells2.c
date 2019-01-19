@@ -1301,7 +1301,6 @@ bool probing(void)
 			else if (m_ptr->sub_align & SUB_ALIGN_GOOD) align = _("中立(善良)", "neutral(good)");
 			else align = _("中立", "neutral");
 
-			/* Describe the monster */
 			sprintf(buf,_("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"),
 				m_name, align, (int)m_ptr->hp, (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
 
@@ -1511,7 +1510,6 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 				}
 			}
 
-			/* Delete objects */
 			delete_object(y, x);
 
 			/* Destroy "non-permanent" grids */
@@ -1683,7 +1681,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	cave_type *c_ptr;
 	bool map[32][32];
 
-
 	/* Prevent destruction of quest levels and town */
 	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
 	{
@@ -1718,10 +1715,8 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			if (distance(cy, cx, yy, xx) > r) continue;
 			c_ptr = &cave[yy][xx];
 
-			/* Lose room and vault */
+			/* Lose room and vault / Lose light and knowledge */
 			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
-
-			/* Lose light and knowledge */
 			c_ptr->info &= ~(CAVE_GLOW | CAVE_MARK | CAVE_KNOWN);
 
 			/* Skip the epicenter */
@@ -1927,7 +1922,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 						}
 					}
 
-					/* Describe the monster */
 					monster_desc(m_name, m_ptr, 0);
 
 					/* Scream in pain */
@@ -2012,7 +2006,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			/* Destroy location (if valid) */
 			if (cave_valid_bold(yy, xx))
 			{
-				/* Delete objects */
 				delete_object(yy, xx);
 
 				/* Wall (or floor) type */
@@ -2049,7 +2042,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 		}
 	}
 
-
 	/* Process "re-glowing" */
 	for (dy = -r; dy <= r; dy++)
 	{
@@ -2069,7 +2061,8 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;
 			else if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
 			{
-				int ii, yyy, xxx;
+				DIRECTION ii;
+				POSITION yyy, xxx;
 				cave_type *cc_ptr;
 
 				for (ii = 0; ii < 9; ii++)
@@ -2088,17 +2081,10 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 		}
 	}
 
-
 	/* Mega-Hack -- Forget the view and lite */
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-
 	/* Update the health bar */
-	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH);
-
-	p_ptr->redraw |= (PR_MAP);
-
+	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH | PR_MAP);
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -2162,11 +2148,10 @@ void discharge_minion(void)
 			continue;
 		}
 		dam = m_ptr->maxhp / 2;
-		if (dam > 100) dam = (dam-100)/2 + 100;
-		if (dam > 400) dam = (dam-400)/2 + 400;
+		if (dam > 100) dam = (dam - 100) / 2 + 100;
+		if (dam > 400) dam = (dam - 400) / 2 + 400;
 		if (dam > 800) dam = 800;
-		project(i, 2+(r_ptr->level/20), m_ptr->fy,
-			m_ptr->fx, dam, GF_PLASMA, 
+		project(i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, 
 			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 
 		if (record_named_pet && m_ptr->nickname)

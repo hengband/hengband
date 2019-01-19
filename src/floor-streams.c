@@ -319,7 +319,6 @@ void build_streamer(IDX feat, int chance)
 					}
 				}
 
-				/* Delete objects */
 				delete_object(ty, tx);
 			}
 

@@ -4232,12 +4232,10 @@ bool polymorph_monster(POSITION y, POSITION x)
 		}
 		else if (back_m.hold_o_idx) /* Failed (paranoia) */
 		{
-			/* Delete objects */
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				/* Acquire next object */
 				next_o_idx = o_list[this_o_idx].next_o_idx;
-
 				delete_object_idx(this_o_idx);
 			}
 		}

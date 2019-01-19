@@ -267,8 +267,6 @@ void delete_monster_idx(MONSTER_IDX i)
 	/* Monster is gone */
 	cave[y][x].m_idx = 0;
 
-
-	/* Delete objects */
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
