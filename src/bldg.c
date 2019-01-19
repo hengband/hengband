@@ -2021,7 +2021,7 @@ static bool inn_comm(int cmd)
 static void get_questinfo(IDX questnum, bool do_init)
 {
 	int i;
-	IDX old_quest;
+	QUEST_IDX old_quest;
 	GAME_TEXT tmp_str[80];
 
 	/* Clear the text */
@@ -2064,10 +2064,10 @@ static void get_questinfo(IDX questnum, bool do_init)
  */
 static void castle_quest(void)
 {
-	IDX q_index = 0;
-	monster_race    *r_ptr;
-	quest_type      *q_ptr;
-	concptr            name;
+	QUEST_IDX q_index = 0;
+	monster_race *r_ptr;
+	quest_type *q_ptr;
+	concptr name;
 
 
 	clear_bldg(4, 18);
@@ -3744,9 +3744,9 @@ static bool research_mon(void)
 	MONSTER_IDX *who;
 
 	/* XTRA HACK WHATSEARCH */
-	bool    all = FALSE;
-	bool    uniq = FALSE;
-	bool    norm = FALSE;
+	bool all = FALSE;
+	bool uniq = FALSE;
+	bool norm = FALSE;
 	char temp[80] = "";
 
 	/* XTRA HACK REMEMBER_IDX */

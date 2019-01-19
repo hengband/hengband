@@ -387,7 +387,7 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 	    type == NIKKI_RAND_QUEST_F ||
 	    type == NIKKI_TO_QUEST)
 	{
-		IDX old_quest;
+		QUEST_IDX old_quest;
 
 		old_quest = p_ptr->inside_quest;
 		p_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
@@ -3219,7 +3219,7 @@ void do_cmd_visuals(void)
 		case '4':
 		{
 			static concptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
-			static IDX r = 0;
+			static MONRACE_IDX r = 0;
 
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
@@ -7584,9 +7584,8 @@ static void do_cmd_knowledge_virtues(void)
 }
 
 /*
-* Dungeon
-*
-*/
+ * Dungeon
+ */
 static void do_cmd_knowledge_dungeon(void)
 {
 	FILE *fff;
@@ -7685,7 +7684,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 	char rand_tmp_str[120] = "\0";
 	GAME_TEXT name[MAX_NLEN];
 	monster_race *r_ptr;
-	IDX i;
+	QUEST_IDX i;
 	int rand_level = 100;
 	int total = 0;
 
@@ -7698,7 +7697,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 			(quest[i].status == QUEST_STATUS_COMPLETED))
 		{
 			/* Set the quest number temporary */
-			IDX old_quest = p_ptr->inside_quest;
+			QUEST_IDX old_quest = p_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */
@@ -8063,7 +8062,7 @@ static void do_cmd_knowledge_quests(void)
 	fd_kill(file_name);
 
 	/* Free Memory */
-	C_KILL(quest_num, max_q_idx, IDX);
+	C_KILL(quest_num, max_q_idx, QUEST_IDX);
 }
 
 
