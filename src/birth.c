@@ -2671,13 +2671,13 @@ static bool get_player_class(void)
 				else
 					sprintf(cur, "%c%c%s", sym[cs], p2, str);
 
-					c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
-					put_str(_("の職業修正", ": Class modification"), 3, 40+strlen(cp_ptr->title));
-					put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-					sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
-						cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
-						cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
-					c_put_str(TERM_L_BLUE, buf, 5, 40);
+				c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
+				put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
+				put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
+				sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
+					cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
+					cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
+				c_put_str(TERM_L_BLUE, buf, 5, 40);
 			}
 			c_put_str(TERM_YELLOW, cur, 13 + (cs / 4), 2 + 19 * (cs % 4));
 			os = cs;
@@ -4703,4 +4703,3 @@ void dump_yourself(FILE *fff)
 		}
 	}
 }
-
