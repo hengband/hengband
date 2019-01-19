@@ -15,6 +15,7 @@
 #include "history.h"
 #include "monsterrace-hook.h"
 #include "store.h"
+#include "quest.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 
@@ -1829,45 +1830,6 @@ static void player_wipe_without_name(void)
 }
 
 
-/*!
- * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
- * @param q_ptr クエスト構造体の参照ポインタ
- * @return なし
- */
-void determine_random_questor(quest_type *q_ptr)
-{
-	MONRACE_IDX r_idx;
-	monster_race *r_ptr;
-
-	
-	get_mon_num_prep(mon_hook_quest, NULL);
-
-	while (1)
-	{
-		/*
-		 * Random monster 5 - 10 levels out of depth
-		 * (depending on level)
-		 */
-		r_idx = get_mon_num(q_ptr->level + 5 + randint1(q_ptr->level / 10));
-		r_ptr = &r_info[r_idx];
-
-		if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-		if (r_ptr->flags1 & RF1_QUESTOR) continue;
-		if (r_ptr->rarity > 100) continue;
-		if (r_ptr->flags7 & RF7_FRIENDLY) continue;
-		if (r_ptr->flags7 & RF7_AQUATIC) continue;
-		if (r_ptr->flags8 & RF8_WILD_ONLY) continue;
-		if (no_questor_or_bounty_uniques(r_idx)) continue;
-
-		/*
-		 * Accept monsters that are 2 - 6 levels
-		 * out of depth depending on the quest level
-		 */
-		if (r_ptr->level > (q_ptr->level + (q_ptr->level / 20))) break;
-	}
-
-	q_ptr->r_idx = r_idx;
-}
 
 /*!
  * @brief ダンジョン内部のクエストを初期化する / Initialize random quests and final quests

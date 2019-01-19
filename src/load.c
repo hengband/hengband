@@ -44,6 +44,7 @@
 #include "generate.h"
 #include "trap.h"
 #include "mutation.h"
+#include "quest.h"
 
 
 /*
