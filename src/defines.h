@@ -857,7 +857,7 @@
 /* #define FF_HURT_ACID     47 */       /*!< 未使用 */
 #define FF_COLD_PUDDLE   48             /*!< 冷気溜まりがある */
 #define FF_ACID_PUDDLE   49             /*!< 酸溜まりがある */
-/* #define FF_OIL           50          /*!< 未使用 */
+/* #define FF_OIL           50 */       /*!< 未使用 */
 #define FF_ELEC_PUDDLE   51             /*!< 接地部が帯電している */
 /* #define FF_CAN_CLIMB     52 */       /*!< 未使用 */
 #define FF_CAN_FLY       53             /*!< 飛行可能な地形である */
