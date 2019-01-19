@@ -1450,7 +1450,6 @@ void self_knowledge(void)
 			info[i++] = _("あなたの武器はログルスの徴の属性をもつ。", "Your weapon is branded with the Sign of Logrus.");
 		}
 
-		/* Hack */
 		if (have_flag(flgs, TR_IMPACT))
 		{
 			info[i++] = _("あなたの武器は打撃で地震を発生することができる。", "The impact of your weapon can cause earthquakes.");
@@ -1642,14 +1641,14 @@ static int report_magics_aux(int dur)
 static concptr report_magic_durations[] =
 {
 #ifdef JP
-"ごく短い間",
-"少しの間",
-"しばらくの間",
-"多少長い間",
-"長い間",
-"非常に長い間",
-"信じ難いほど長い間",
-"モンスターを攻撃するまで"
+	"ごく短い間",
+	"少しの間",
+	"しばらくの間",
+	"多少長い間",
+	"長い間",
+	"非常に長い間",
+	"信じ難いほど長い間",
+	"モンスターを攻撃するまで"
 #else
 	"for a short time",
 	"for a little while",

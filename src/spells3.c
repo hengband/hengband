@@ -1975,12 +1975,8 @@ bool alchemy(void)
 		msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %ld coins worth of gold."), o_name, price);
 
 		p_ptr->au += price;
-
-		/* Redraw gold */
 		p_ptr->redraw |= (PR_GOLD);
-
 		p_ptr->window |= (PW_PLAYER);
-
 	}
 
 	/* Eliminate the item (from the pack) */
@@ -2334,7 +2330,6 @@ bool identify_item(object_type *o_ptr)
 
 	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
-
 	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
@@ -3197,8 +3192,7 @@ bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_ID
 			/* Do nothing */  ;
 	}
 
-	(void)project(who, radius, y, x, dam, dt,
-	    (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
+	(void)project(who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
 
 	/* XXX  those potions that explode need to become "known" */
 	return angry;
@@ -3222,8 +3216,6 @@ void display_spell_list(void)
 	GAME_TEXT name[MAX_NLEN];
 	char out_val[160];
 
-
-	/* Erase window */
 	clear_from(0);
 
 	/* They have too many spells to list */
@@ -3916,7 +3908,6 @@ bool curse_armor(void)
 
 	GAME_TEXT o_name[MAX_NLEN];
 
-
 	/* Curse the body armor */
 	o_ptr = &inventory[INVEN_BODY];
 
@@ -3930,11 +3921,11 @@ bool curse_armor(void)
 	{
 		/* Cool */
 #ifdef JP
-msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
-"恐怖の暗黒オーラ", "防具", o_name);
+		msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
+			"恐怖の暗黒オーラ", "防具", o_name);
 #else
 		msg_format("A %s tries to %s, but your %s resists the effects!",
-			   "terrible black aura", "surround your armor", o_name);
+			"terrible black aura", "surround your armor", o_name);
 #endif
 
 	}
@@ -3963,11 +3954,7 @@ msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返し�
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);
-		p_ptr->update |= (PU_BONUS);
-
-		/* Recalculate mana */
-		p_ptr->update |= (PU_MANA);
-
+		p_ptr->update |= (PU_BONUS | PU_MANA);
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 	}
 
@@ -4027,11 +4014,7 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);
-		p_ptr->update |= (PU_BONUS);
-
-		/* Recalculate mana */
-		p_ptr->update |= (PU_MANA);
-
+		p_ptr->update |= (PU_BONUS | PU_MANA);
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 	}
 
@@ -4113,8 +4096,7 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 	DEPTH lev1, lev2;
 
 	/* Hack -- Uniques/Questors never polymorph */
-	if ((r_ptr->flags1 & RF1_UNIQUE) ||
-	    (r_ptr->flags1 & RF1_QUESTOR))
+	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags1 & RF1_QUESTOR))
 		return (r_idx);
 
 	/* Allowable range of "levels" for resulting monster */
