@@ -1062,6 +1062,7 @@ extern bool mirror_tunnel(void);
 extern void massacre(void);
 extern bool eat_lock(void);
 extern bool shock_power(void);
+extern bool booze(player_type *creature_ptr);
 
 /* bldg.c */
 extern void battle_monsters(void);

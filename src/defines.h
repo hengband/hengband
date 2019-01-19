@@ -2231,7 +2231,7 @@
 #define SV_POTION_POISON                 6
 #define SV_POTION_BLINDNESS              7
 /* xxx */
-#define SV_POTION_CONFUSION              9
+#define SV_POTION_BOOZE              9
 /* xxx */
 #define SV_POTION_SLEEP                 11
 /* xxx */

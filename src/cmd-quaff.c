@@ -152,37 +152,8 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 			}
 			break;
 
-		case SV_POTION_CONFUSION: /* Booze */
-			if (p_ptr->pclass != CLASS_MONK) chg_virtue(V_HARMONY, -1);
-			else if (!p_ptr->resist_conf) p_ptr->special_attack |= ATTACK_SUIKEN;
-			if (!p_ptr->resist_conf)
-			{
-				if (set_confused(randint0(20) + 15))
-				{
-					ident = TRUE;
-				}
-			}
-
-			if (!p_ptr->resist_chaos)
-			{
-				if (one_in_(2))
-				{
-					if (set_image(p_ptr->image + randint0(150) + 150))
-					{
-						ident = TRUE;
-					}
-				}
-				if (one_in_(13) && (p_ptr->pclass != CLASS_MONK))
-				{
-					ident = TRUE;
-					if (one_in_(3)) lose_all_info();
-					else wiz_dark();
-					(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
-					wiz_dark();
-					msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
-					msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing, or how you got here!"));
-				}
-			}
+		case SV_POTION_BOOZE:
+			ident = booze(p_ptr);
 			break;
 
 		case SV_POTION_SLEEP:

@@ -3128,7 +3128,7 @@ bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_ID
 			dt = GF_DARK;
 			angry = TRUE;
 			break;
-		case SV_POTION_CONFUSION: /* Booze */
+		case SV_POTION_BOOZE: /* Booze */
 			dt = GF_OLD_CONF;
 			angry = TRUE;
 			break;
@@ -4722,4 +4722,40 @@ bool shock_power(void)
 		}
 	}
 	return TRUE;
+}
+
+bool booze(player_type *creature_ptr)
+{
+	bool ident = FALSE;
+	if (creature_ptr->pclass != CLASS_MONK) chg_virtue(V_HARMONY, -1);
+	else if (!creature_ptr->resist_conf) creature_ptr->special_attack |= ATTACK_SUIKEN;
+	if (!creature_ptr->resist_conf)
+	{
+		if (set_confused(randint0(20) + 15))
+		{
+			ident = TRUE;
+		}
+	}
+
+	if (!creature_ptr->resist_chaos)
+	{
+		if (one_in_(2))
+		{
+			if (set_image(creature_ptr->image + randint0(150) + 150))
+			{
+				ident = TRUE;
+			}
+		}
+		if (one_in_(13) && (creature_ptr->pclass != CLASS_MONK))
+		{
+			ident = TRUE;
+			if (one_in_(3)) lose_all_info();
+			else wiz_dark();
+			(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+			wiz_dark();
+			msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
+			msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing, or how you got here!"));
+		}
+	}
+	return ident;
 }
