@@ -2593,6 +2593,34 @@ void unlite_room(POSITION y1, POSITION x1)
 	cave_temp_room_unlite();
 }
 
+bool starlight(bool magic)
+{
+	HIT_POINT num = damroll(5, 3);
+	POSITION y = 0, x = 0;
+	int k;
+	int attempts;
+
+	if (!p_ptr->blind && !magic)
+	{
+		msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
+	}
+	for (k = 0; k < num; k++)
+	{
+		attempts = 1000;
+
+		while (attempts--)
+		{
+			scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
+			if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+			if (!player_bold(y, x)) break;
+		}
+
+		project(0, 0, p_ptr->y, p_ptr->x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
+			(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
+	}
+	return TRUE;
+}
+
 
 
 /*!

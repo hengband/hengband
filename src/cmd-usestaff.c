@@ -88,32 +88,8 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 		}
 
 		case SV_STAFF_STARLITE:
-		{
-			HIT_POINT num = damroll(5, 3);
-			POSITION y = 0, x = 0;
-			int attempts;
-
-			if (!p_ptr->blind && !magic)
-			{
-				msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
-			}
-			for (k = 0; k < num; k++)
-			{
-				attempts = 1000;
-
-				while (attempts--)
-				{
-					scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
-					if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
-					if (!player_bold(y, x)) break;
-				}
-
-				project(0, 0, y, x, damroll(6 + lev / 8, 10), GF_LITE_WEAK,
-					(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
-			}
-			ident = TRUE;
+			ident = starlight(magic);
 			break;
-		}
 
 		case SV_STAFF_LITE:
 		{
