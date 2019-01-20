@@ -2821,23 +2821,13 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 	screen_save();
 	clear_bldg(0, 22);
 
-#ifdef JP
-	put_str(format("あなたの現在のAC: %3d", iAC), row++, 0);
-	put_str(format("ダメージ軽減率  : %3d%%", protection), row++, 0);
+	put_str(format(_("あなたの現在のAC: %3d", "Your current AC : %3d"), iAC), row++, 0);
+	put_str(format(_("ダメージ軽減率  : %3d%%", "Protection rate : %3d%%"), protection), row++, 0);
 	row++;
 
-	put_str("敵のレベル      :", row + 0, 0);
-	put_str("回避率          :", row + 1, 0);
-	put_str("ダメージ期待値  :", row + 2, 0);
-#else
-	put_str(format("Your current AC : %3d", iAC), row++, 0);
-	put_str(format("Protection rate : %3d%%", protection), row++, 0);
-	row++;
-
-	put_str("Level of Monster:", row + 0, 0);
-	put_str("Dodge Rate      :", row + 1, 0);
-	put_str("Average Damage  :", row + 2, 0);
-#endif
+	put_str(_("敵のレベル      :", "Level of Monster:"), row + 0, 0);
+	put_str(_("回避率          :", "Dodge Rate      :"), row + 1, 0);
+	put_str(_("ダメージ期待値  :", "Average Damage  :"), row + 2, 0);
     
 	for (col = 17 + 1, lvl = 0; lvl <= 100; lvl += 10, col += 5)
 	{
