@@ -70,111 +70,43 @@ u32b Rand_state[RAND_DEG] = {
 };
 
 
-typedef struct {
-	u32b dw[2];
-} u64b;
-
-static u64b u64b_xor(u64b a, u64b b)
+static u32b u32b_rotl(const u32b x, int k)
 {
-	u64b result;
-
-	result.dw[0] = a.dw[0] ^ b.dw[0];
-	result.dw[1] = a.dw[1] ^ b.dw[1];
-
-	return result;
-}
-
-static u64b u64b_shiftl(u64b x, int k)
-{
-	u64b result;
-
-	if (k < 32) {
-		result.dw[1] = (x.dw[1] << k) | (x.dw[0] >> (32 - k));
-		result.dw[0] = (x.dw[0] << k);
-	}
-	else {
-		result.dw[1] = (x.dw[0] << (k - 32));
-		result.dw[0] = 0;
-	}
-
-	return result;
-}
-
-static u64b u64b_rotl(u64b x, int k)
-{
-	u64b result;
-
-	if (k < 32) {
-		result.dw[0] = (x.dw[0] << k) | (x.dw[1] >> (32 - k));
-		result.dw[1] = (x.dw[1] << k) | (x.dw[0] >> (32 - k));
-	}
-	else {
-		result.dw[0] = (x.dw[0] >> (64 - k)) | (x.dw[1] << (k - 32));
-		result.dw[1] = (x.dw[1] >> (64 - k)) | (x.dw[0] << (k - 32));
-	}
-
-	return result;
-}
-
-static u64b u64b_add(u64b a, u64b b)
-{
-	u64b result;
-
-	result.dw[0] = a.dw[0] + b.dw[0];
-	result.dw[1] = a.dw[1] + b.dw[1];
-
-	if (result.dw[0] < a.dw[0])
-		result.dw[1] ++;
-
-	return result;
+	return (x << k) | (x >> (32 - k));
 }
 
 /*
- * Initialize Xorshift Algorithm state
+ * Initialize RNG state
  */
-static void Rand_Xorshift_seed(u32b seed, u32b* state)
+static void Rand_seed(u32b seed, u32b* state)
 {
 	int i;
 
-	/* Initialize Xorshift Algorithm RNG */
 	for (i = 1; i <= 4; ++ i) {
 		seed = 1812433253UL * (seed ^ (seed >> 30)) + i;
 		state[i-1] = seed;
 	}
 }
 
-#if 0
 /*
- * Xorshift Algorithm
+ * Xoshiro128** Algorithm
  */
-static u32b Rand_Xorshift(u32b* state)
+static u32b Rand_Xoshiro128starstar(u32b *state)
 {
-	u32b t = state[0] ^ (state[0] << 11);
+	const u32b result = u32b_rotl(state[0] * 5, 7) * 9;
 
-	state[0] = state[1];
-	state[1] = state[2];
-	state[2] = state[3];
+	const u32b t = state[1] << 9;
 
-	state[3] = (state[3] ^ (state[3] >> 19)) ^ (t ^ (t >> 8));
+	state[2] ^= state[0];
+	state[3] ^= state[1];
+	state[1] ^= state[2];
+	state[0] ^= state[3];
 
-	return state[3];
-}
-#endif
+	state[2] ^= t;
 
-/*
- * Xoroshiro128+ Algorithm
- */
-static u32b Rand_Xoroshiro128plus(u32b* state)
-{
-	const u64b s0 = *((u64b*)state);
-	u64b s1 = *((u64b*)state + 1);
-	const u64b result = u64b_add(s0, s1);
+	state[3] = u32b_rotl(state[3], 11);
 
-	s1 = u64b_xor(s0, s1);
-	*((u64b*)state) = u64b_xor(u64b_xor(u64b_rotl(s0, 55), s1), u64b_shiftl(s1, 14));
-	*((u64b*)state + 1) = u64b_rotl(s1, 36);
-
-	return result.dw[0];
+	return result;
 }
 
 static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
@@ -184,7 +116,7 @@ static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
  */
 void Rand_state_set(u32b seed)
 {
-	Rand_Xorshift_seed(seed, Rand_state);
+	Rand_seed(seed, Rand_state);
 }
 
 void Rand_state_init(void)
@@ -267,7 +199,7 @@ static s32b Rand_div_impl(s32b m, u32b* state)
 	past = scaling * m;
 
 	do {
-		ret = Rand_Xoroshiro128plus(state);
+		ret = Rand_Xoshiro128starstar(state);
 	} while (ret >= past);
 
 	return ret / scaling;
@@ -465,7 +397,7 @@ s32b Rand_external(s32b m)
 	{
 		/* Initialize with new seed */
 		u32b seed = (u32b)time(NULL);
-		Rand_Xorshift_seed(seed, Rand_state_external);
+		Rand_seed(seed, Rand_state_external);
 		initialized = TRUE;
 	}
 
