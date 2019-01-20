@@ -29,6 +29,7 @@
 #include "monsterrace-hook.h"
 #include "world.h"
 #include "mutation.h"
+#include "quest.h"
 
 static bool load = TRUE; /*!<ロード処理中の分岐フラグ*/
 static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/

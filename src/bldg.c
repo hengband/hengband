@@ -21,6 +21,7 @@
 #include "sort.h"
 
 #include "mutation.h"
+#include "quest.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c

@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "sort.h"
+#include "quest.h"
 
 
 

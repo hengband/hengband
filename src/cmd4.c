@@ -45,6 +45,7 @@
 #include "player-status.h"
 #include "sort.h"
 #include "mutation.h"
+#include "quest.h"
 
 
 /*
