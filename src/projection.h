@@ -17,3 +17,5 @@
 #define PROJECT_PATH        0x2000 /*!< 遠隔攻撃特性: / Only used for printing project path */
 #define PROJECT_FAST        0x4000 /*!< 遠隔攻撃特性: / Hide "visual" of flying bolts until blast */
 #define PROJECT_LOS         0x8000 /*!< 遠隔攻撃特性: /  */
+
+extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);

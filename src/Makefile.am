@@ -35,7 +35,7 @@ hengband_SOURCES = \
 	\
 	patron.h patron.c \
 	\
-	projection.h \
+	projection.h projection.c\
 	\
 	player-damage.c player-damage.h player-status.c player-status.h \
 	\
