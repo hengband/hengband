@@ -4759,3 +4759,12 @@ bool booze(player_type *creature_ptr)
 	}
 	return ident;
 }
+
+bool detonation(player_type *creature_ptr)
+{
+	msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
+	take_hit(DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
+	(void)set_stun(creature_ptr->stun + 75);
+	(void)set_cut(creature_ptr->cut + 5000);
+	return TRUE;
+}
