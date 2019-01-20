@@ -5,6 +5,18 @@
 
 
 /*!
+ * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription
+ */
+static concptr find_quest[] =
+{
+	_("床にメッセージが刻まれている:", "You find the following inscription in the floor"),
+	_("壁にメッセージが刻まれている:", "You see a message inscribed in the wall"),
+	_("メッセージを見つけた:", "There is a sign saying"),
+	_("何かが階段の上に書いてある:", "Something is written on the staircase"),
+	_("巻物を見つけた。メッセージが書いてある:", "You find a scroll with the following message"),
+};
+
+/*!
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param q_ptr クエスト構造体の参照ポインタ
  * @return なし
@@ -310,6 +322,55 @@ void check_find_art_quest_completion(object_type *o_ptr)
 	}
 }
 
+
+/*!
+ * @brief クエストの導入メッセージを表示する / Discover quest
+ * @param q_idx 開始されたクエストのID
+ */
+void quest_discovery(QUEST_IDX q_idx)
+{
+	quest_type *q_ptr = &quest[q_idx];
+	monster_race *r_ptr = &r_info[q_ptr->r_idx];
+	MONSTER_NUMBER q_num = q_ptr->max_num;
+	GAME_TEXT name[MAX_NLEN];
+
+	/* No quest index */
+	if (!q_idx) return;
+
+	strcpy(name, (r_name + r_ptr->name));
+
+	msg_print(find_quest[rand_range(0, 4)]);
+	msg_print(NULL);
+
+	if (q_num == 1)
+	{
+		/* Unique */
+
+		/* Hack -- "unique" monsters must be "unique" */
+		if ((r_ptr->flags1 & RF1_UNIQUE) && (0 == r_ptr->max_num))
+		{
+			msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
+			/* The unique is already dead */
+			quest[q_idx].status = QUEST_STATUS_FINISHED;
+			q_ptr->complev = 0;
+			update_playtime();
+			q_ptr->comptime = playtime;
+		}
+		else
+		{
+			msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name);
+		}
+	}
+	else
+	{
+		/* Normal monsters */
+#ifndef JP
+		plural_aux(name);
+#endif
+		msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), q_num, name);
+
+	}
+}
 
 
 /*!
