@@ -1071,8 +1071,6 @@ extern void battle_monsters(void);
 extern void do_cmd_bldg(void);
 extern void do_cmd_quest(void);
 extern void quest_discovery(QUEST_IDX q_idx);
-extern QUEST_IDX quest_number(DEPTH level);
-extern QUEST_IDX random_quest_number(DEPTH level);
 extern bool tele_town(void);
 extern HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow);
 extern HIT_POINT calc_expect_crit_shot(WEIGHT weight, int plus_ammo,int plus_bow, HIT_POINT dam);

@@ -22,4 +22,5 @@ extern void determine_random_questor(quest_type *q_ptr);
 extern void complete_quest(QUEST_IDX quest_num);
 extern void check_quest_completion(monster_type *m_ptr);
 extern void check_find_art_quest_completion(object_type *o_ptr);
-
+extern QUEST_IDX quest_number(DEPTH level);
+extern QUEST_IDX random_quest_number(DEPTH level);

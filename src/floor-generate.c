@@ -103,6 +103,7 @@
 #include "floor-streams.h"
 #include "trap.h"
 #include "monster.h"
+#include "quest.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;

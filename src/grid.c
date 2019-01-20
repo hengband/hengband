@@ -18,6 +18,7 @@
 #include "trap.h"
 #include "rooms.h"
 #include "monster.h"
+#include "quest.h"
 
 
 /*!
