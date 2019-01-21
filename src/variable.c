@@ -760,7 +760,7 @@ KIND_OBJECT_IDX max_k_idx;
 /*
  * Maximum number of vaults in v_info.txt
  */
-IDX max_v_idx;
+VAULT_IDX max_v_idx;
 
 /*
  * Maximum number of terrain features in f_info.txt
@@ -775,7 +775,7 @@ ARTIFACT_IDX max_a_idx;
 /*
  * Maximum number of ego-items in e_info.txt
  */
-IDX max_e_idx;
+EGO_IDX max_e_idx;
 
 /*
  * Maximum number of dungeon in e_info.txt

@@ -134,6 +134,7 @@ typedef s16b INVENTORY_IDX;		/*!< ゲーム中の所持品ID型を定義 */
 typedef s16b OBJECT_IDX;		/*!< ゲーム中のアイテムID型を定義 */
 typedef s32b ESSENCE_IDX;		/*!< 鍛冶エッセンスのID型 */
 typedef s16b KIND_OBJECT_IDX;	/*!< ゲーム中のベースアイテムID型を定義 */
+typedef s16b VAULT_IDX;			/*!< 固定部屋のID型を定義 */
 
 typedef s32b POSITION;			/*!< ゲーム中の座標型を定義 */
 typedef s16b POSITION_IDX;		/*!< ゲーム中の座標リストID型 */
