@@ -64,7 +64,7 @@ hengband_SOURCES = \
 	sort.c sort.h \
 	store.h store.c tables.c trap.c trap.h types.h util.c \
 	variable.c wild.c wizard1.c wizard2.c \
-	world.c world.h
+	world.c world.h \
 	\
 	view-mainwindow.c\
 	\
