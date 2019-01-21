@@ -7,6 +7,7 @@
 #include "objectkind-hook.h"
 #include "spells-summon.h"
 #include "mutation.h"
+#include "artifact.h"
 
 #ifdef JP
 /*!

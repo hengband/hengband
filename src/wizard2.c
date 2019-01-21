@@ -17,6 +17,7 @@
 #include "patron.h"
 #include "mutation.h"
 #include "quest.h"
+#include "artifact.h"
 
 
 /*!

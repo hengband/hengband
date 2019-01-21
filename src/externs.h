@@ -1274,21 +1274,6 @@ extern ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);
 extern int bow_tmul(OBJECT_SUBTYPE_VALUE sval);
 extern void display_rumor(bool ex);
 
-/* artifact.c */
-extern void one_high_resistance(object_type *o_ptr);
-extern void one_lordly_high_resistance(object_type *o_ptr);
-extern void one_ele_resistance(object_type *o_ptr);
-extern void one_dragon_ele_resistance(object_type *o_ptr);
-extern void one_low_esp(object_type *o_ptr);
-extern void one_resistance(object_type *o_ptr);
-extern void one_ability(object_type *o_ptr);
-extern void one_activation(object_type *o_ptr);
-extern bool create_artifact(object_type *o_ptr, bool a_scroll);
-extern int activation_index(object_type *o_ptr);
-extern const activation_type* find_activation_info(object_type *o_ptr);
-extern void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr);
-extern bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x);
-
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);
 extern void display_scores(int from, int to);
