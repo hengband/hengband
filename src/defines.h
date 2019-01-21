@@ -145,7 +145,6 @@
 #define BUILDING_MEMBER     1 /*!< 不明(現在未使用) */
 #define BUILDING_OWNER      2 /*!< 施設の種族/職業条件が一致している状態値 */
 
-#define MAX_OWNERS      32 /*!< 各店舗毎の店主定義最大数 / Total number of owners per store (see "store.c", etc) */
 #define MAX_SEXES        2 /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
 #define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
 #define MAX_SEIKAKU     13 /*!< 性格の最大定義数 */
@@ -301,18 +300,6 @@
 #define SPECIAL_KEY_BUILDING 254
 #define SPECIAL_KEY_STORE    253
 #define SPECIAL_KEY_QUIT     252
-
-/*
- * Store constants
- */
-#define STORE_INVEN_MAX 24              /* Max number of discrete objs in inven */
-#define STORE_CHOICES   48              /* Number of items to choose stock from */
-#define STORE_OBJ_LEVEL 5               /* Magic Level for normal stores */
-#define STORE_TURNOVER  9               /* Normal shop turnover, per day */
-#define STORE_MIN_KEEP  6               /* Min slots to "always" keep full */
-#define STORE_MAX_KEEP  18              /* Max slots to "always" keep full */
-#define STORE_SHUFFLE   21              /* 1/Chance (per day) of an owner changing */
-#define STORE_TICKS     1000            /* Number of ticks between turnovers */
 
 /*! @brief 消費する行動エネルギー値を正規乱数で返す(中央100/分散25) / Random energy */
 #define ENERGY_NEED() (randnor(100, 25))
