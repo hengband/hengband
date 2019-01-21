@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "sort.h"
+#include "store.h"
 
 
 #ifdef ALLOW_SPOILERS

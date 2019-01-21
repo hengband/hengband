@@ -45,6 +45,7 @@
 #include "trap.h"
 #include "mutation.h"
 #include "quest.h"
+#include "store.h"
 
 
 /*
