@@ -249,11 +249,11 @@
     <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
     <ClCompile Include="..\..\src\variable.c" />
+    <ClCompile Include="..\..\src\view-mainwindow.c" />
     <ClCompile Include="..\..\src\wild.c" />
     <ClCompile Include="..\..\src\wizard1.c" />
     <ClCompile Include="..\..\src\wizard2.c" />
     <ClCompile Include="..\..\src\world.c" />
-    <ClCompile Include="..\..\src\xtra1.c" />
     <ClCompile Include="..\..\src\xtra2.c" />
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-rand.c" />

@@ -64,7 +64,11 @@ hengband_SOURCES = \
 	sort.c sort.h \
 	store.h store.c tables.c trap.c trap.h types.h util.c \
 	variable.c wild.c wizard1.c wizard2.c \
-	world.c world.h xtra1.c xtra2.c z-config.h \
+	world.c world.h
+	\
+	view-mainwindow.c\
+	\
+	xtra2.c z-config.h \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
 	z-virt.c z-virt.h 
 
