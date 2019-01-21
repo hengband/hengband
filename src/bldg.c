@@ -22,6 +22,7 @@
 
 #include "mutation.h"
 #include "quest.h"
+#include "artifact.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c

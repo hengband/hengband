@@ -12,6 +12,7 @@
 #include "spells-summon.h"
 #include "sort.h"
 #include "projection.h"
+#include "artifact.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数

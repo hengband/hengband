@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "projection.h"
 #include "spells-summon.h"
+#include "artifact.h"
 
 /*!
 * @brief モンスターIDを取り、モンスター名をm_nameに代入する /

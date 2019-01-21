@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "artifact.h"
 #include "cmd-pet.h"
 #include "player-damage.h"
 #include "monsterrace-hook.h"

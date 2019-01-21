@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "player-damage.h"
+#include "artifact.h"
 
 
 /*!

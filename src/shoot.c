@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "projection.h"
 #include "monster-status.h"
+#include "artifact.h"
 
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /

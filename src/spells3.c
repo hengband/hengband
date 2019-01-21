@@ -19,6 +19,7 @@
 #include "projection.h"
 #include "spells-summon.h"
 #include "quest.h"
+#include "artifact.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "cmd-activate.h"
 #include "object-curse.h"
+#include "artifact.h"
 
 static bool has_extreme_damage_rate(object_type *o_ptr);
 static bool weakening_artifact(object_type *o_ptr);

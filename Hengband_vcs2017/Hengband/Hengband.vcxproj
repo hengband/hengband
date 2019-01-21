@@ -173,6 +173,7 @@
     <ClCompile Include="..\..\src\cmd-usestaff.c" />
     <ClCompile Include="..\..\src\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
+    <ClInclude Include="..\..\src\artifact.h" />
     <ClInclude Include="..\..\src\chest.h" />
     <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />

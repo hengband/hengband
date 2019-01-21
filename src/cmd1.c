@@ -144,6 +144,7 @@
 #include "trap.h"
 #include "projection.h"
 #include "quest.h"
+#include "artifact.h"
 
 
 

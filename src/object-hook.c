@@ -1,6 +1,7 @@
 ﻿
 #include "angband.h"
 #include "object-hook.h"
+#include "artifact.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/

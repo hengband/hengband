@@ -19,6 +19,7 @@
 #include "spells-summon.h"
 #include "monster-status.h"
 #include "quest.h"
+#include "artifact.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

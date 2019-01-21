@@ -46,6 +46,7 @@
 #include "mutation.h"
 #include "quest.h"
 #include "store.h"
+#include "artifact.h"
 
 
 /*

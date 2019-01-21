@@ -18,6 +18,7 @@
 #include "monster.h"
 #include "spells-summon.h"
 #include "quest.h"
+#include "artifact.h"
 
 
 /*

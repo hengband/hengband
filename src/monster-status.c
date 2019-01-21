@@ -4,6 +4,7 @@
 #include "spells-summon.h"
 #include "monsterrace-hook.h"
 #include "object-curse.h"
+#include "artifact.h"
 
 
 
