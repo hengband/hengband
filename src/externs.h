@@ -1162,17 +1162,9 @@ extern void cnv_stat(int val, char *out_val);
 extern s16b modify_stat_value(int value, int amount);
 extern void prt_time(void);
 extern concptr map_name(void);
-extern WEIGHT weight_limit(void);
-extern bool buki_motteruka(int i);
-extern bool is_heavy_shoot(object_type *o_ptr);
 extern int bow_tval_ammo(object_type *o_ptr);
-extern s16b calc_num_fire(object_type *o_ptr);
-extern void calc_bonuses(void);
 extern void handle_stuff(void);
 extern void update_output(void);
-extern void update_creature(player_type *creature_ptr);
-extern BIT_FLAGS16 empty_hands(bool riding_control);
-extern bool heavy_armor(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void update_playtime(void);
 

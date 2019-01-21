@@ -8,6 +8,7 @@
 #include "spells-summon.h"
 #include "mutation.h"
 #include "artifact.h"
+#include "player-status.h"
 
 #ifdef JP
 /*!

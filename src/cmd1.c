@@ -145,6 +145,7 @@
 #include "projection.h"
 #include "quest.h"
 #include "artifact.h"
+#include "player-status.h"
 
 
 

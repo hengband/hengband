@@ -17,6 +17,7 @@
 #include "monsterrace-hook.h"
 #include "store.h"
 #include "quest.h"
+#include "player-status.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

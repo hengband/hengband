@@ -16,6 +16,7 @@
 #include "mutation.h"
 #include "quest.h"
 #include "avatar.h"
+#include "player-status.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

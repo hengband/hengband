@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "store.h"
+#include "player-status.h"
 
 #define MAX_LINELEN 1024
 

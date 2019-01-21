@@ -26,6 +26,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "player-status.h"
 
 
 /*!

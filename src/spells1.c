@@ -29,6 +29,7 @@
 #include "rooms.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "player-status.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

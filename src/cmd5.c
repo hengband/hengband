@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "avatar.h"
+#include "player-status.h"
 
 /*!
  * @brief 領域魔法に応じて技能の名称を返す。

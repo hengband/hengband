@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "monsterrace-hook.h"
+#include "player-status.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 

@@ -15,6 +15,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "player-status.h"
 
 /*!
  * @brief 現在の修正後能力値を3～17及び18/xxx形式に変換する / Converts stat num into a six-char (right justified) string

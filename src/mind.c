@@ -19,6 +19,7 @@
 #include "projection.h"
 #include "spells-summon.h"
 #include "avatar.h"
+#include "player-status.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

@@ -20,6 +20,7 @@
 #include "projection.h"
 #include "monster-status.h"
 #include "avatar.h"
+#include "player-status.h"
 
 
 

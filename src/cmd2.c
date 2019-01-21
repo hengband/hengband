@@ -21,6 +21,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "player-status.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
