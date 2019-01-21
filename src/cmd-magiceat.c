@@ -56,6 +56,7 @@
 #include "cmd-usestaff.h"
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
+#include "avatar.h"
 
 
 /*!

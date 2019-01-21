@@ -21,6 +21,7 @@
 #include "spells-summon.h"
 #include "mutation.h"
 #include "quest.h"
+#include "avatar.h"
 
 
 /*!

@@ -10,6 +10,7 @@
 #include "object-hook.h"
 #include "spells-summon.h"
 #include "artifact.h"
+#include "avatar.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

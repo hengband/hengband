@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "avatar.h"
 #include "history.h"
 #include "monsterrace-hook.h"
 #include "store.h"

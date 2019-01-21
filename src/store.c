@@ -15,6 +15,7 @@
 #include "cmd-zapwand.h"
 #include "cmd-magiceat.h"
 #include "store.h"
+#include "avatar.h"
 
 #define MIN_STOCK 12
 

@@ -2,6 +2,7 @@
 #include "cmd-spell.h"
 #include "spells-summon.h"
 #include "projection.h"
+#include "avatar.h"
 
 /*!
 * @brief 秘術領域魔法の各処理を行う

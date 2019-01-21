@@ -28,6 +28,7 @@
 #include "mutation.h"
 #include "rooms.h"
 #include "artifact.h"
+#include "avatar.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

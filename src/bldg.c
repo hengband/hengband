@@ -20,6 +20,7 @@
 #include "world.h"
 #include "sort.h"
 
+#include "avatar.h"
 #include "mutation.h"
 #include "quest.h"
 #include "artifact.h"

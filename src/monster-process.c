@@ -20,6 +20,7 @@
 #include "projection.h"
 #include "spells-summon.h"
 #include "quest.h"
+#include "avatar.h"
 
 
 /*!

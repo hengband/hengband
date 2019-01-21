@@ -19,6 +19,7 @@
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"
+#include "avatar.h"
 
 
 /*

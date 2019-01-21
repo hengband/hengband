@@ -13,6 +13,7 @@
 #include "sort.h"
 #include "projection.h"
 #include "artifact.h"
+#include "avatar.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数

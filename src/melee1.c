@@ -19,6 +19,7 @@
 #include "melee.h"
 #include "projection.h"
 #include "monster-status.h"
+#include "avatar.h"
 
 
 

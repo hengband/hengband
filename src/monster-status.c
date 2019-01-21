@@ -5,6 +5,7 @@
 #include "monsterrace-hook.h"
 #include "object-curse.h"
 #include "artifact.h"
+#include "avatar.h"
 
 
 

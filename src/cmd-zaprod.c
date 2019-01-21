@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "avatar.h"
 
 /*!
  * @brief ロッドの効果を発動する

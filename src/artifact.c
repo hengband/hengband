@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+
+#include "avatar.h"
 #include "cmd-activate.h"
 #include "object-curse.h"
 #include "artifact.h"

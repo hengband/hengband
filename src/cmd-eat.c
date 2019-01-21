@@ -9,6 +9,7 @@
 
 #include "angband.h"
 #include "object-hook.h"
+#include "avatar.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン

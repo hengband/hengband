@@ -21,6 +21,7 @@
 #include "quest.h"
 #include "store.h"
 #include "artifact.h"
+#include "avatar.h"
 
 
 /*

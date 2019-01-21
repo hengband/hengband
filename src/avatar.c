@@ -13,8 +13,8 @@
     included in all such copies.
 */
 
-
 #include "angband.h"
+#include "avatar.h"
 
 /*!
  * 徳の名称 / The names of the virtues

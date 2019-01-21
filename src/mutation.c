@@ -16,6 +16,7 @@
 
 #include "selfinfo.h"
 #include "spells-summon.h"
+#include "avatar.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える
