@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "avatar.h"
+#include "spells-status.h"
 
 /*!
  * @brief ロッドの効果を発動する

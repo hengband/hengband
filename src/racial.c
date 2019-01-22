@@ -19,6 +19,7 @@
 
 #include "mutation.h"
 #include "player-status.h"
+#include "spells-status.h"
 
 /*!
  * @brief レイシャル「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.

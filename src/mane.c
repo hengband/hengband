@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "spells-summon.h"
+#include "spells-status.h"
 
 static int damage;
 

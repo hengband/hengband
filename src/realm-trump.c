@@ -3,6 +3,7 @@
 #include "projection.h"
 #include "spells-summon.h"
 #include "mutation.h"
+#include "spells-status.h"
 
 
 /*!

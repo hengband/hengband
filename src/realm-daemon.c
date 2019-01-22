@@ -2,6 +2,7 @@
 #include "angband.h"
 #include "cmd-spell.h"
 #include "spells-summon.h"
+#include "spells-status.h"
 #include "projection.h"
 
 /*!

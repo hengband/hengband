@@ -14,6 +14,7 @@
 #include "projection.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "spells-status.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数

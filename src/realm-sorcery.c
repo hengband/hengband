@@ -3,6 +3,7 @@
 #include "selfinfo.h"
 #include "projection.h"
 #include "avatar.h"
+#include "spells-status.h"
 
 /*!
 * @brief 仙術領域魔法の各処理を行う
