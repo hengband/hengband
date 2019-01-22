@@ -2837,7 +2837,7 @@ bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POI
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(EFFECT_ID typ, DIRECTION dir, int dd, int ds, int num, int dev)
+bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
 {
 	POSITION ly, lx;
 	int ld;
@@ -2963,7 +2963,7 @@ bool teleport_swap(DIRECTION dir)
 
 
 /*!
- * @brief 指定方向に飛び道具を飛ばす（フラグ任意指定） / Hack -- apply a "projection()" in a direction (or at the target)
+ * @brief 指定方向に飛び道具を飛ばす（フラグ任意指定） / Hack -- apply a "project()" in a direction (or at the target)
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -2972,7 +2972,7 @@ bool teleport_swap(DIRECTION dir)
  */
 bool project_hook(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 {
-	int tx, ty;
+	POSITION tx, ty;
 
 	/* Pass through the target if needed */
 	flg |= (PROJECT_THRU);
