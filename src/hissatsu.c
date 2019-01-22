@@ -319,7 +319,7 @@ void do_cmd_hissatsu(void)
 		msg_print(_("混乱していて集中できない！", "You are too confused!"));
 		return;
 	}
-	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+	if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
 	{
 		if (flush_failure) flush();
 		msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));

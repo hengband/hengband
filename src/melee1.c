@@ -466,7 +466,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	{
 	case CLASS_ROGUE:
 	case CLASS_NINJA:
-		if (buki_motteruka(INVEN_RARM + hand) && !p_ptr->icky_wield[hand])
+		if (has_melee_weapon(INVEN_RARM + hand) && !p_ptr->icky_wield[hand])
 		{
 			int tmp = p_ptr->lev * 6 + (p_ptr->skill_stl + 10) * 4;
 			if (p_ptr->monlite && (mode != HISSATSU_NYUSIN)) tmp /= 3;
@@ -937,7 +937,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				}
 				else k = 1;
 			}
-			else if ((p_ptr->pclass == CLASS_NINJA) && buki_motteruka(INVEN_RARM + hand) && !p_ptr->icky_wield[hand] && ((p_ptr->cur_lite <= 0) || one_in_(7)))
+			else if ((p_ptr->pclass == CLASS_NINJA) && has_melee_weapon(INVEN_RARM + hand) && !p_ptr->icky_wield[hand] && ((p_ptr->cur_lite <= 0) || one_in_(7)))
 			{
 				int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
 				if (one_in_(backstab ? 13 : (stab_fleeing || fuiuchi) ? 15 : 27))

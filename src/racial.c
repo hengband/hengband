@@ -993,7 +993,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else if (command == -4)
 			{
-				if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+				if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
 				{
 					msg_print(_("武器を持たないといけません。", "You need to wield a weapon."));
 					return FALSE;

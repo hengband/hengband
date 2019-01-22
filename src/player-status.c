@@ -282,8 +282,8 @@ void calc_bonuses(void)
 	/* Base skill -- digging */
 	p_ptr->skill_dig = 0;
 
-	if (buki_motteruka(INVEN_RARM)) p_ptr->migite = TRUE;
-	if (buki_motteruka(INVEN_LARM))
+	if (has_melee_weapon(INVEN_RARM)) p_ptr->migite = TRUE;
+	if (has_melee_weapon(INVEN_LARM))
 	{
 		p_ptr->hidarite = TRUE;
 		if (!p_ptr->migite) default_hand = 1;
@@ -1227,8 +1227,8 @@ void calc_bonuses(void)
 		}
 
 		/* Hack -- do not apply "weapon" bonuses */
-		if (i == INVEN_RARM && buki_motteruka(i)) continue;
-		if (i == INVEN_LARM && buki_motteruka(i)) continue;
+		if (i == INVEN_RARM && has_melee_weapon(i)) continue;
+		if (i == INVEN_LARM && has_melee_weapon(i)) continue;
 
 		/* Hack -- do not apply "bow" bonuses */
 		if (i == INVEN_BOW) continue;
@@ -1744,7 +1744,7 @@ void calc_bonuses(void)
 		p_ptr->dis_to_h[default_hand] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
 	}
 
-	if (buki_motteruka(INVEN_RARM) && buki_motteruka(INVEN_LARM))
+	if (has_melee_weapon(INVEN_RARM) && has_melee_weapon(INVEN_LARM))
 	{
 		int penalty1, penalty2;
 		penalty1 = ((100 - p_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - inventory[INVEN_RARM].weight) / 8);
@@ -1924,7 +1924,7 @@ void calc_bonuses(void)
 		p_ptr->icky_wield[i] = FALSE;
 		p_ptr->riding_wield[i] = FALSE;
 
-		if (!buki_motteruka(INVEN_RARM + i))
+		if (!has_melee_weapon(INVEN_RARM + i))
 		{
 			p_ptr->num_blow[i] = 1;
 			continue;
@@ -2215,7 +2215,7 @@ void calc_bonuses(void)
 			case CLASS_MONK:
 			case CLASS_FORCETRAINER:
 			case CLASS_BERSERKER:
-				if ((empty_hands(FALSE) != EMPTY_HAND_NONE) && !buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+				if ((empty_hands(FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
 					p_ptr->riding_ryoute = TRUE;
 				break;
 			}
@@ -2331,7 +2331,7 @@ void calc_bonuses(void)
 
 	for (i = 0; i < 2; i++)
 	{
-		if (buki_motteruka(INVEN_RARM + i))
+		if (has_melee_weapon(INVEN_RARM + i))
 		{
 			OBJECT_TYPE_VALUE tval = inventory[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
 			OBJECT_SUBTYPE_VALUE sval = inventory[INVEN_RARM + i].sval;
@@ -2552,7 +2552,7 @@ void calc_bonuses(void)
 			{
 				msg_print(_("こんな重い武器を装備しているのは大変だ。", "You have trouble wielding such a heavy weapon."));
 			}
-			else if (buki_motteruka(INVEN_RARM + i))
+			else if (has_melee_weapon(INVEN_RARM + i))
 			{
 				msg_print(_("これなら装備していても辛くない。", "You have no trouble wielding your weapon."));
 			}
@@ -2580,7 +2580,7 @@ void calc_bonuses(void)
 			{
 				msg_print(_("この武器は徒歩で使いやすい。", "This weapon was not suitable for use while riding."));
 			}
-			else if (buki_motteruka(INVEN_RARM + i))
+			else if (has_melee_weapon(INVEN_RARM + i))
 			{
 				msg_print(_("これなら乗馬中にぴったりだ。", "This weapon is suitable for use while riding."));
 			}
@@ -2599,7 +2599,7 @@ void calc_bonuses(void)
 					chg_virtue(V_FAITH, -1);
 				}
 			}
-			else if (buki_motteruka(INVEN_RARM + i))
+			else if (has_melee_weapon(INVEN_RARM + i))
 			{
 				msg_print(_("今の装備は自分にふさわしい気がする。", "You feel comfortable with your weapon."));
 			}
@@ -3634,7 +3634,7 @@ WEIGHT weight_limit(void)
  * @param i 判定する手のID(右手:0 左手:1)
  * @return 持っているならばTRUE
  */
-bool buki_motteruka(int i)
+bool has_melee_weapon(int i)
 {
 	return ((inventory[i].k_idx && object_is_melee_weapon(&inventory[i])) ? TRUE : FALSE);
 }

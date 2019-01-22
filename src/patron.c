@@ -615,15 +615,15 @@ void gain_level_reward(int chosen_reward)
 
 		case REW_CURSE_WP:
 
-			if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM)) break;
+			if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM)) break;
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
 			dummy = INVEN_RARM;
-			if (buki_motteruka(INVEN_LARM))
+			if (has_melee_weapon(INVEN_LARM))
 			{
 				dummy = INVEN_LARM;
-				if (buki_motteruka(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+				if (has_melee_weapon(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 			}
 			object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
 			(void)curse_weapon(FALSE, dummy);
@@ -658,12 +658,12 @@ void gain_level_reward(int chosen_reward)
 			case 3:
 				if (one_in_(2))
 				{
-					if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM)) break;
+					if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM)) break;
 					dummy = INVEN_RARM;
-					if (buki_motteruka(INVEN_LARM))
+					if (has_melee_weapon(INVEN_LARM))
 					{
 						dummy = INVEN_LARM;
-						if (buki_motteruka(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+						if (has_melee_weapon(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 					}
 					object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
 					(void)curse_weapon(FALSE, dummy);
@@ -703,12 +703,12 @@ void gain_level_reward(int chosen_reward)
 			{
 				dummy = 0;
 
-				if (buki_motteruka(INVEN_RARM))
+				if (has_melee_weapon(INVEN_RARM))
 				{
 					dummy = INVEN_RARM;
-					if (buki_motteruka(INVEN_LARM) && one_in_(2)) dummy = INVEN_LARM;
+					if (has_melee_weapon(INVEN_LARM) && one_in_(2)) dummy = INVEN_LARM;
 				}
-				else if (buki_motteruka(INVEN_LARM)) dummy = INVEN_LARM;
+				else if (has_melee_weapon(INVEN_LARM)) dummy = INVEN_LARM;
 
 				if (dummy) (void)curse_weapon(FALSE, dummy);
 			}

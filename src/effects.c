@@ -4505,7 +4505,7 @@ void calc_android_exp(void)
 			if (value > 100000L)
 				exp += (value - 100000L) / 4  * level;
 		}
-		if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (buki_motteruka(i))) || (i == INVEN_BOW)) total_exp += exp / 48;
+		if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (has_melee_weapon(i))) || (i == INVEN_BOW)) total_exp += exp / 48;
 		else total_exp += exp / 16;
 		if (i == INVEN_BODY) total_exp += exp / 32;
 	}
@@ -4720,7 +4720,7 @@ bool choose_ele_attack(void)
 
 	char choice;
 
-	if (!buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+	if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
 	{
 		msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
 		return FALSE;

@@ -674,7 +674,7 @@ void do_cmd_pet(void)
 
 					powers[num++] = PET_RYOUTE;
 				}
-				else if ((empty_hands(FALSE) != EMPTY_HAND_NONE) && !buki_motteruka(INVEN_RARM) && !buki_motteruka(INVEN_LARM))
+				else if ((empty_hands(FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
 				{
 					if (p_ptr->pet_extra_flags & PF_RYOUTE)
 					{
