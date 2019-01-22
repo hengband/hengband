@@ -26,6 +26,7 @@
 #include "object-curse.h"
 #include "store.h"
 #include "spells-summon.h"
+#include "spells-object.h"
 #include "monsterrace-hook.h"
 #include "world.h"
 #include "mutation.h"
@@ -4163,7 +4164,7 @@ static void process_command(void)
 			else if (p_ptr->pclass == CLASS_SAMURAI)
 				do_cmd_gain_hissatsu();
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				gain_magic();
+				import_magic_device();
 			else
 				do_cmd_study();
 			break;

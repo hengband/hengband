@@ -850,7 +850,6 @@ extern void torch_lost_fuel(object_type *o_ptr);
 extern concptr essence_name[];
 
 /* racial.c */
-extern bool gain_magic(void);
 extern void do_cmd_racial_power(void);
 
 /* save.c */

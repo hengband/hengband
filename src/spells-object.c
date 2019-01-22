@@ -206,3 +206,98 @@ bool create_ammo(void)
 	}
 	return TRUE;
 }
+
+/*!
+ * @brief 魔道具術師の魔力取り込み処理
+ * @return 取り込みを実行したらTRUE、キャンセルしたらFALSEを返す
+ */
+bool import_magic_device(void)
+{
+	OBJECT_IDX item;
+	PARAMETER_VALUE pval;
+	int ext = 0;
+	concptr q, s;
+	object_type *o_ptr;
+	GAME_TEXT o_name[MAX_NLEN];
+
+	/* Only accept legal items */
+	item_tester_hook = item_tester_hook_recharge;
+
+	q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
+	s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
+
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	if (!o_ptr) return (FALSE);
+
+	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
+	{
+		msg_print(_("この杖には発動の為の能力は何も備わっていないようだ。", "This staff doesn't have any magical ability."));
+		return FALSE;
+	}
+
+	if (!object_is_known(o_ptr))
+	{
+		msg_print(_("鑑定されていないと取り込めない。", "You need to identify before absorbing."));
+		return FALSE;
+	}
+
+	if (o_ptr->timeout)
+	{
+		msg_print(_("充填中のアイテムは取り込めない。", "This item is still charging."));
+		return FALSE;
+	}
+
+	pval = o_ptr->pval;
+	if (o_ptr->tval == TV_ROD)
+		ext = 72;
+	else if (o_ptr->tval == TV_WAND)
+		ext = 36;
+
+	if (o_ptr->tval == TV_ROD)
+	{
+		p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)o_ptr->number;
+		if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
+	}
+	else
+	{
+		int num;
+		for (num = o_ptr->number; num; num--)
+		{
+			int gain_num = pval;
+			if (o_ptr->tval == TV_WAND) gain_num = (pval + num - 1) / num;
+			if (p_ptr->magic_num2[o_ptr->sval + ext])
+			{
+				gain_num *= 256;
+				gain_num = (gain_num / 3 + randint0(gain_num / 3)) / 256;
+				if (gain_num < 1) gain_num = 1;
+			}
+			p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)gain_num;
+			if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
+			p_ptr->magic_num1[o_ptr->sval + ext] += pval * 0x10000;
+			if (p_ptr->magic_num1[o_ptr->sval + ext] > 99 * 0x10000) p_ptr->magic_num1[o_ptr->sval + ext] = 99 * 0x10000;
+			if (p_ptr->magic_num1[o_ptr->sval + ext] > p_ptr->magic_num2[o_ptr->sval + ext] * 0x10000) p_ptr->magic_num1[o_ptr->sval + ext] = p_ptr->magic_num2[o_ptr->sval + ext] * 0x10000;
+			if (o_ptr->tval == TV_WAND) pval -= (pval + num - 1) / num;
+		}
+	}
+
+	object_desc(o_name, o_ptr, 0);
+	msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
+
+	/* Eliminate the item (from the pack) */
+	if (item >= 0)
+	{
+		inven_item_increase(item, -999);
+		inven_item_describe(item);
+		inven_item_optimize(item);
+	}
+
+	/* Eliminate the item (from the floor) */
+	else
+	{
+		floor_item_increase(0 - item, -999);
+		floor_item_describe(0 - item);
+		floor_item_optimize(0 - item);
+	}
+	p_ptr->energy_use = 100;
+	return TRUE;
+}
