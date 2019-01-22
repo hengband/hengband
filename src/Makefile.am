@@ -60,6 +60,7 @@ hengband_SOURCES = \
 	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h shoot.c snipe.c \
 	\
 	spells1.c spells2.c spells3.c \
+	spells-object.c spells-object.h \
 	spells-status.c spells-status.h \
 	spells-summon.c spells-summon.h \
 	\
