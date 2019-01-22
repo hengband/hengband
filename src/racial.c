@@ -730,7 +730,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_ARCHER:
 		{
-			if (!do_cmd_archer()) return FALSE;
+			if (!create_ammo()) return FALSE;
 			break;
 		}
 		case CLASS_MAGIC_EATER:

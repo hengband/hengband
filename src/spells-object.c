@@ -8,7 +8,7 @@
  * Hook to determine if an object is contertible in an arrow/bolt
  * @return 製造を実際に行ったらTRUE、キャンセルしたらFALSEを返す
  */
-bool do_cmd_archer(void)
+bool create_ammo(void)
 {
 	int ext = 0;
 	char ch;
