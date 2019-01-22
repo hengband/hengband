@@ -232,13 +232,11 @@ static bool choose_kata(void)
 	else
 	{
 		p_ptr->special_defense &= ~(KATA_MASK);
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->update |= (PU_MONSTERS);
+		p_ptr->update |= (PU_BONUS | PU_MONSTERS);
 		msg_format(_("%sの型で構えた。", "You assume a posture of %s form."),kata_shurui[new_kata].desc);
 		p_ptr->special_defense |= (KATA_IAI << new_kata);
 	}
-	p_ptr->redraw |= (PR_STATE);
-	p_ptr->redraw |= (PR_STATUS);
+	p_ptr->redraw |= (PR_STATE | PR_STATUS);
 	screen_load();
 	return TRUE;
 }
@@ -329,9 +327,9 @@ static int  racial_cost;
 static int racial_aux(power_desc_type *pd_ptr)
 {
 	PLAYER_LEVEL min_level  = pd_ptr->level;
-	int  use_stat   = pd_ptr->stat;
-	int  difficulty = pd_ptr->fail;
-	int  use_hp = 0;
+	int use_stat   = pd_ptr->stat;
+	int difficulty = pd_ptr->fail;
+	int use_hp = 0;
 
 	racial_cost = pd_ptr->cost;
 
