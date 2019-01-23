@@ -486,37 +486,12 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				int gain_sp = take_hit(DAMAGE_USELIFE, p_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
-				if (gain_sp)
-				{
-					p_ptr->csp += gain_sp;
-					if (p_ptr->csp > p_ptr->msp)
-					{
-						p_ptr->csp = p_ptr->msp;
-						p_ptr->csp_frac = 0;
-					}
-				}
-				else
-				{
-					msg_print(_("変換に失敗した。", "You failed to convert."));
-				}
+				return comvert_hp_to_mp(p_ptr);
 			}
 			else if (command == -4)
 			{
-				if (p_ptr->csp >= p_ptr->lev / 5)
-				{
-					p_ptr->csp -= p_ptr->lev / 5;
-					hp_player(p_ptr->lev);
-				}
-				else
-				{
-					msg_print(_("変換に失敗した。", "You failed to convert."));
-				}
+				return comvert_mp_to_hp(p_ptr);
 			}
-
-			/* Redraw mana and hp */
-			p_ptr->redraw |= (PR_HP | PR_MANA);
-
 			break;
 		}
 		case CLASS_CHAOS_WARRIOR:

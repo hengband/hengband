@@ -994,6 +994,8 @@ extern bool android_inside_weapon(player_type *creature_ptr);
 extern bool create_ration(player_type *crature_ptr);
 extern void hayagake(player_type *creature_ptr);
 extern bool double_attack(player_type *creature_ptr);
+extern bool comvert_hp_to_mp(player_type *creature_ptr);
+extern bool comvert_mp_to_hp(player_type *creature_ptr);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
