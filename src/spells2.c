@@ -5189,3 +5189,39 @@ void hayagake(player_type *creature_ptr)
 	}
 	creature_ptr->energy_use = 0;
 }
+
+bool double_attack(player_type *creature_ptr)
+{
+	DIRECTION dir;
+	POSITION x, y;
+
+	if (!get_rep_dir(&dir, FALSE)) return FALSE;
+	y = creature_ptr->y + ddy[dir];
+	x = creature_ptr->x + ddx[dir];
+	if (cave[y][x].m_idx)
+	{
+		if (one_in_(3))
+			msg_print(_("あーたたたたたたたたたたたたたたたたたたたたたた！！！",
+				"Ahhhtatatatatatatatatatatatatatataatatatatattaaaaa!!!!"));
+		else if(one_in_(2))
+			msg_print(_("無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄！！！",
+				"Mudamudamudamudamudamudamudamudamudamudamudamudamuda!!!!"));
+		else
+			msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！",
+				"Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
+
+		py_attack(y, x, 0);
+		if (cave[y][x].m_idx)
+		{
+			handle_stuff();
+			py_attack(y, x, 0);
+		}
+		creature_ptr->energy_need += ENERGY_NEED();
+	}
+	else
+	{
+		msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
+		msg_print(NULL);
+	}
+	return TRUE;
+}
