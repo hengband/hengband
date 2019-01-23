@@ -1039,32 +1039,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_ANDROID:
-			if (!get_aim_dir(&dir)) return FALSE;
-			if (plev < 10)
-			{
-				msg_print(_("レイガンを発射した。", "You fire your ray gun."));
-				fire_bolt(GF_MISSILE, dir, (plev+1) / 2);
-			}
-			else if (plev < 25)
-			{
-				msg_print(_("ブラスターを発射した。", "You fire your blaster."));
-				fire_bolt(GF_MISSILE, dir, plev);
-			}
-			else if (plev < 35)
-			{
-				msg_print(_("バズーカを発射した。", "You fire your bazooka."));
-				fire_ball(GF_MISSILE, dir, plev * 2, 2);
-			}
-			else if (plev < 45)
-			{
-				msg_print(_("ビームキャノンを発射した。", "You fire a beam cannon."));
-				fire_beam(GF_MISSILE, dir, plev * 2);
-			}
-			else
-			{
-				msg_print(_("ロケットを発射した。", "You fire a rocket."));
-				fire_rocket(GF_ROCKET, dir, plev * 5, 2);
-			}
+			return android_inside_weapon(p_ptr);
 			break;
 
 		default:

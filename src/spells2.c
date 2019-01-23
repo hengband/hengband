@@ -5116,5 +5116,37 @@ bool draconian_breath(player_type *creature_ptr)
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), Type_desc);
 
 	fire_breath(Type, creature_ptr->lev, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
+	return TRUE;
 }
 
+bool android_inside_weapon(player_type *creature_ptr)
+{
+	DIRECTION dir;
+	if (!get_aim_dir(&dir)) return FALSE;
+	if (creature_ptr->lev < 10)
+	{
+		msg_print(_("レイガンを発射した。", "You fire your ray gun."));
+		fire_bolt(GF_MISSILE, dir, (creature_ptr->lev + 1) / 2);
+	}
+	else if (creature_ptr->lev < 25)
+	{
+		msg_print(_("ブラスターを発射した。", "You fire your blaster."));
+		fire_bolt(GF_MISSILE, dir, creature_ptr->lev);
+	}
+	else if (creature_ptr->lev < 35)
+	{
+		msg_print(_("バズーカを発射した。", "You fire your bazooka."));
+		fire_ball(GF_MISSILE, dir, creature_ptr->lev * 2, 2);
+	}
+	else if (creature_ptr->lev < 45)
+	{
+		msg_print(_("ビームキャノンを発射した。", "You fire a beam cannon."));
+		fire_beam(GF_MISSILE, dir, creature_ptr->lev * 2);
+	}
+	else
+	{
+		msg_print(_("ロケットを発射した。", "You fire a rocket."));
+		fire_rocket(GF_ROCKET, dir, creature_ptr->lev * 5, 2);
+	}
+	return TRUE;
+}
