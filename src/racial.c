@@ -731,27 +731,7 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else if (command == -4)
 			{
-				if (total_friends)
-				{
-					msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
-					return FALSE;
-				}
-				if (is_mirror_grid(&cave[p_ptr->y][p_ptr->x]))
-				{
-					msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
-
-					p_ptr->csp += (5 + p_ptr->lev * p_ptr->lev / 100);
-					if (p_ptr->csp >= p_ptr->msp)
-					{
-						p_ptr->csp = p_ptr->msp;
-						p_ptr->csp_frac = 0;
-					}
-					p_ptr->redraw |= (PR_MANA);
-				}
-				else
-				{
-					msg_print(_("鏡の上でないと集中できない！", "Here are not any mirrors!"));
-				}
+				return mirror_concentration(p_ptr);
 			}
 			break;
 		}

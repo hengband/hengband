@@ -5273,3 +5273,28 @@ bool demonic_breath(player_type *creature_ptr)
 	return TRUE;
 }
 
+bool mirror_concentration(player_type *creature_ptr)
+{
+	if (total_friends)
+	{
+		msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
+		return FALSE;
+	}
+	if (is_mirror_grid(&cave[creature_ptr->y][creature_ptr->x]))
+	{
+		msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
+
+		creature_ptr->csp += (5 + creature_ptr->lev * creature_ptr->lev / 100);
+		if (creature_ptr->csp >= creature_ptr->msp)
+		{
+			creature_ptr->csp = creature_ptr->msp;
+			creature_ptr->csp_frac = 0;
+		}
+		creature_ptr->redraw |= (PR_MANA);
+	}
+	else
+	{
+		msg_print(_("鏡の上でないと集中できない！", "Here are not any mirrors!"));
+	}
+	return TRUE;
+}
