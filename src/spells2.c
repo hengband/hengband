@@ -5165,3 +5165,27 @@ bool create_ration(player_type *crature_ptr)
 	msg_print(_("食事を料理して作った。", "You cook some food."));
 	return TRUE;
 }
+
+void hayagake(player_type *creature_ptr)
+{
+	if (creature_ptr->action == ACTION_HAYAGAKE)
+	{
+		set_action(ACTION_NONE);
+	}
+	else
+	{
+		cave_type *c_ptr = &cave[creature_ptr->y][creature_ptr->x];
+		feature_type *f_ptr = &f_info[c_ptr->feat];
+
+		if (!have_flag(f_ptr->flags, FF_PROJECT) ||
+			(!creature_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP)))
+		{
+			msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
+		}
+		else
+		{
+			set_action(ACTION_HAYAGAKE);
+		}
+	}
+	creature_ptr->energy_use = 0;
+}

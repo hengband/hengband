@@ -807,32 +807,8 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 		}
 		case CLASS_NINJA:
-		{
-			if (p_ptr->action == ACTION_HAYAGAKE)
-			{
-				set_action(ACTION_NONE);
-			}
-			else
-			{
-				cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
-				feature_type *f_ptr = &f_info[c_ptr->feat];
-
-				if (!have_flag(f_ptr->flags, FF_PROJECT) ||
-				    (!p_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP)))
-				{
-					msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
-				}
-				else
-				{
-					set_action(ACTION_HAYAGAKE);
-				}
-			}
-
-
-			p_ptr->energy_use = 0;
+			hayagake(p_ptr);
 			break;
-		}
-
 		}
 	}
 	else if (p_ptr->mimic_form)

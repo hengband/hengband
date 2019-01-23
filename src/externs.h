@@ -992,6 +992,7 @@ extern bool psychometry(void);
 extern bool draconian_breath(player_type *creature_ptr);
 extern bool android_inside_weapon(player_type *creature_ptr);
 extern bool create_ration(player_type *crature_ptr);
+extern void hayagake(player_type *creature_ptr);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
