@@ -5261,3 +5261,15 @@ bool comvert_mp_to_hp(player_type *creature_ptr)
 	creature_ptr->redraw |= (PR_HP | PR_MANA);
 	return TRUE;
 }
+
+bool demonic_breath(player_type *creature_ptr)
+{
+	DIRECTION dir;
+	int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
+	if (!get_aim_dir(&dir)) return FALSE;
+	stop_mouth();
+	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), ((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
+	fire_breath(type, dir, creature_ptr->lev * 3, (creature_ptr->lev / 15) + 1);
+	return TRUE;
+}
+

@@ -767,12 +767,7 @@ static bool cmd_racial_power_aux(s32b command)
 		case MIMIC_DEMON:
 		case MIMIC_DEMON_LORD:
 		{
-			int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
-			if (!get_aim_dir(&dir)) return FALSE;
-			stop_mouth();
-			msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."),((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
-			fire_breath(type, dir, plev * 3, (plev / 15) + 1);
-			break;
+			return demonic_breath(p_ptr);
 		}
 		case MIMIC_VAMPIRE:
 			vampirism();
@@ -939,13 +934,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_DEMON:
-			{
-				int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
-				if (!get_aim_dir(&dir)) return FALSE;
-				stop_mouth();
-				msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."),((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
-				fire_breath(type, dir, plev * 3, (plev / 15) + 1);
-			}
+			return demonic_breath(p_ptr); 
 			break;
 
 		case RACE_KUTAR:
