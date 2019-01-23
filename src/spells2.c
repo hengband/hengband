@@ -5115,7 +5115,7 @@ bool draconian_breath(player_type *creature_ptr)
 	stop_mouth();
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), Type_desc);
 
-	fire_breath(Type, creature_ptr->lev, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
+	fire_breath(Type, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
 	return TRUE;
 }
 
@@ -5148,5 +5148,20 @@ bool android_inside_weapon(player_type *creature_ptr)
 		msg_print(_("ロケットを発射した。", "You fire a rocket."));
 		fire_rocket(GF_ROCKET, dir, creature_ptr->lev * 5, 2);
 	}
+	return TRUE;
+}
+
+bool create_ration(player_type *crature_ptr)
+{
+	object_type *q_ptr;
+	object_type forge;
+	q_ptr = &forge;
+
+	/* Create the food ration */
+	object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+
+	/* Drop the object from heaven */
+	(void)drop_near(q_ptr, -1, crature_ptr->y, crature_ptr->x);
+	msg_print(_("食事を料理して作った。", "You cook some food."));
 	return TRUE;
 }

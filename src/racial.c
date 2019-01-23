@@ -868,18 +868,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_HOBBIT:
-			{
-				object_type *q_ptr;
-				object_type forge;
-				q_ptr = &forge;
-
-				/* Create the food ration */
-				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
-
-				/* Drop the object from heaven */
-				(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
-				msg_print(_("食事を料理して作った。", "You cook some food."));
-			}
+			return create_ration(p_ptr);
 			break;
 
 		case RACE_GNOME:
