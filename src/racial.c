@@ -478,12 +478,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_CHAOS_WARRIOR:
 		{
-			msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
-			slow_monsters(p_ptr->lev);
-			stun_monsters(p_ptr->lev * 4);
-			confuse_monsters(p_ptr->lev * 4);
-			turn_monsters(p_ptr->lev * 4);
-			stasis_monsters(p_ptr->lev * 4);
+			return confusing_light(p_ptr);
 			break;
 		}
 		case CLASS_MONK:

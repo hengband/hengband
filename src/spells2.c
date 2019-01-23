@@ -5323,3 +5323,14 @@ bool sword_dancing(player_type *creature_ptr)
 	}
 	return TRUE;
 }
+
+bool confusing_light(player_type *creature_ptr)
+{
+	msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
+	slow_monsters(p_ptr->lev);
+	stun_monsters(p_ptr->lev * 4);
+	confuse_monsters(p_ptr->lev * 4);
+	turn_monsters(p_ptr->lev * 4);
+	stasis_monsters(p_ptr->lev * 4);
+	return TRUE;
+}

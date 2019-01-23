@@ -999,6 +999,7 @@ extern bool comvert_mp_to_hp(player_type *creature_ptr);
 extern bool demonic_breath(player_type *creature_ptr);
 extern bool mirror_concentration(player_type *creature_ptr);
 extern bool sword_dancing(player_type *creature_ptr);
+extern bool confusing_light(player_type *creature_ptr);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
