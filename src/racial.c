@@ -414,25 +414,7 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 		case CLASS_WARRIOR:
 		{
-			POSITION y = 0, x = 0;
-			int i;
-			cave_type *c_ptr;
-
-			for (i = 0; i < A_MAX; i++)
-			{
-				dir = randint0(8);
-				y = p_ptr->y + ddy_ddd[dir];
-				x = p_ptr->x + ddx_ddd[dir];
-				c_ptr = &cave[y][x];
-
-				/* Hack -- attack monsters */
-				if (c_ptr->m_idx)
-					py_attack(y, x, 0);
-				else
-				{
-					msg_print(_("攻撃が空をきった。", "You attack the empty air."));
-				}
-			}
+			return sword_dancing(p_ptr);
 			break;
 		}
 		case CLASS_HIGH_MAGE:

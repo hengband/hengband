@@ -5298,3 +5298,28 @@ bool mirror_concentration(player_type *creature_ptr)
 	}
 	return TRUE;
 }
+
+bool sword_dancing(player_type *creature_ptr)
+{
+	DIRECTION dir;
+	POSITION y = 0, x = 0;
+	int i;
+	cave_type *c_ptr;
+
+	for (i = 0; i < 6; i++)
+	{
+		dir = randint0(8);
+		y = creature_ptr->y + ddy_ddd[dir];
+		x = creature_ptr->x + ddx_ddd[dir];
+		c_ptr = &cave[y][x];
+
+		/* Hack -- attack monsters */
+		if (c_ptr->m_idx)
+			py_attack(y, x, 0);
+		else
+		{
+			msg_print(_("攻撃が空をきった。", "You attack the empty air."));
+		}
+	}
+	return TRUE;
+}
