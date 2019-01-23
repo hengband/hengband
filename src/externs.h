@@ -989,6 +989,7 @@ extern void stop_mouth(void);
 extern bool_hack vampirism(void);
 extern bool panic_hit(void);
 extern bool psychometry(void);
+extern bool draconian_breath(player_type *creature_ptr);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
