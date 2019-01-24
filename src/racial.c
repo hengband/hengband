@@ -581,27 +581,6 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				int max_csp = MAX(p_ptr->msp*4, p_ptr->lev*5+5);
-
-				if (total_friends)
-				{
-					msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
-					return FALSE;
-				}
-				if (p_ptr->special_defense & KATA_MASK)
-				{
-					msg_print(_("今は構えに集中している。", "You need concentration on your form."));
-					return FALSE;
-				}
-				msg_print(_("精神を集中して気合いを溜めた。", "You concentrate to charge your power."));
-
-				p_ptr->csp += p_ptr->msp / 2;
-				if (p_ptr->csp >= max_csp)
-				{
-					p_ptr->csp = max_csp;
-					p_ptr->csp_frac = 0;
-				}
-				p_ptr->redraw |= (PR_MANA);
 			}
 			else if (command == -4)
 			{
