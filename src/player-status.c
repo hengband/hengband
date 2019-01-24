@@ -3228,7 +3228,7 @@ static void calc_mana(void)
 {
 	int msp, levels, cur_wgt, max_wgt;
 
-	object_type	*o_ptr;
+	object_type *o_ptr;
 
 
 	/* Hack -- Must be literate */

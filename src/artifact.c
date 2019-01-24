@@ -2020,7 +2020,6 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 		GAME_TEXT dummy_name[MAX_NLEN] = "";
 		concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
 
-		/* Identify it fully */
 		object_aware(o_ptr);
 		object_known(o_ptr);
 

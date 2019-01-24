@@ -2030,7 +2030,7 @@ static void display_player_various(void)
 	int		shots, shot_frac;
 	bool dokubari;
 
-	object_type		*o_ptr;
+	object_type *o_ptr;
 
 	if (p_ptr->muta2 & MUT2_HORNS)     muta_att++;
 	if (p_ptr->muta2 & MUT2_SCOR_TAIL) muta_att++;
@@ -6527,7 +6527,7 @@ static void print_tomb(void)
 static void show_info(void)
 {
 	int             i, j, k, l;
-	object_type		*o_ptr;
+	object_type *o_ptr;
 	store_type		*st_ptr;
 
 	/* Hack -- Know everything in the inven/equip */

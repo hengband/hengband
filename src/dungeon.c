@@ -147,7 +147,6 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 
 	}
 
-	/* We have "felt" it */
 	o_ptr->ident |= (IDENT_SENSE);
 
 	/* Set the "inscription" */

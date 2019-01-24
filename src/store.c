@@ -3523,7 +3523,7 @@ static void updatebargain(PRICE price, PRICE minprice, int num)
 static void display_entry(int pos)
 {
 	int 		i, cur_col;
-	object_type 	*o_ptr;
+	object_type *o_ptr;
 	s32b		x;
 
 	GAME_TEXT o_name[MAX_NLEN];

@@ -2105,7 +2105,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 	COMMAND_CODE i;
 	int j, k, l, z = 0;
 	int             col, cur_col, len;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	char            tmp_val[80];
 	COMMAND_CODE    out_index[23];
@@ -2269,7 +2269,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 	COMMAND_CODE i;
 	int j, k, l;
 	int             col, cur_col, len;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	char            tmp_val[80];
 	GAME_TEXT o_name[MAX_NLEN];
 	COMMAND_CODE    out_index[23];

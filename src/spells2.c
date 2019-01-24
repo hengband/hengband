@@ -4894,7 +4894,7 @@ bool panic_hit(void)
 bool psychometry(void)
 {
 	OBJECT_IDX      item;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	byte            feel;
 	concptr            q, s;
@@ -4934,16 +4934,11 @@ bool psychometry(void)
 #endif
 
 
-	/* We have "felt" it */
 	o_ptr->ident |= (IDENT_SENSE);
-
-	/* "Inscribe" it */
 	o_ptr->feeling = feel;
-
-	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
+	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	/* Valid "tval" codes */

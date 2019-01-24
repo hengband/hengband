@@ -434,7 +434,7 @@ void do_cmd_browse(void)
 	SPELL_IDX spells[64];
 	char temp[62*4];
 
-	object_type	*o_ptr;
+	object_type *o_ptr;
 
 	concptr q, s;
 
@@ -852,7 +852,7 @@ void do_cmd_cast(void)
 	MANA_POINT need_mana;
 
 	concptr prayer;
-	object_type	*o_ptr;
+	object_type *o_ptr;
 	const magic_type *s_ptr;
 	concptr q, s;
 

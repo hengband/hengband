@@ -984,7 +984,7 @@ bool reset_recall(void)
 bool apply_disenchant(BIT_FLAGS mode)
 {
 	int             t = 0;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	int to_h, to_d, to_a, pval;
 
@@ -1850,17 +1850,12 @@ static int remove_curse_aux(int all)
 		/* Perma-Cursed Items can NEVER be uncursed */
 		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 		{
-			/* Uncurse it */
 			o_ptr->curse_flags &= (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE);
 			continue;
 		}
 
-		/* Uncurse it */
 		o_ptr->curse_flags = 0L;
-
-		/* Hack -- Assume felt */
 		o_ptr->ident |= (IDENT_SENSE);
-
 		o_ptr->feeling = FEEL_NONE;
 
 		p_ptr->update |= (PU_BONUS);
@@ -2324,12 +2319,10 @@ bool identify_item(object_type *o_ptr)
 			chg_virtue(V_KNOWLEDGE, 1);
 	}
 
-	/* Identify it fully */
 	object_aware(o_ptr);
 	object_known(o_ptr);
-
-	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
+
 	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
@@ -2358,7 +2351,7 @@ bool identify_item(object_type *o_ptr)
 bool ident_spell(bool only_equip)
 {
 	OBJECT_IDX item;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	concptr            q, s;
 	bool old_known;
@@ -2426,8 +2419,8 @@ bool ident_spell(bool only_equip)
 bool mundane_spell(bool only_equip)
 {
 	OBJECT_IDX item;
-	object_type     *o_ptr;
-	concptr            q, s;
+	object_type *o_ptr;
+	concptr q, s;
 
 	if (only_equip) item_tester_hook = object_is_weapon_armour_ammo;
 
@@ -2875,12 +2868,9 @@ bool bless_weapon(void)
 #endif
 
 
-		/* Uncurse it */
 		o_ptr->curse_flags = 0L;
 
-		/* Hack -- Assume felt */
 		o_ptr->ident |= (IDENT_SENSE);
-
 		o_ptr->feeling = FEEL_NONE;
 
 		/* Recalculate the bonuses */
@@ -2984,7 +2974,7 @@ bool bless_weapon(void)
 bool pulish_shield(void)
 {
 	OBJECT_IDX item;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	GAME_TEXT o_name[MAX_NLEN];
 	concptr            q, s;

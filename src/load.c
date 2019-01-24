@@ -2423,9 +2423,7 @@ static errr rd_inventory(void)
 		/* Wield equipment */
 		if (n >= INVEN_RARM)
 		{
-			/* Player touches it */
 			q_ptr->marked |= OM_TOUCHED;
-
 			object_copy(&inventory[n], q_ptr);
 
 			/* Add the weight */
@@ -2450,9 +2448,7 @@ static errr rd_inventory(void)
 			/* Get a slot */
 			n = slot++;
 
-			/* Player touches it */
 			q_ptr->marked |= OM_TOUCHED;
-
 			object_copy(&inventory[n], q_ptr);
 
 			/* Add the weight */

@@ -3621,7 +3621,6 @@ static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
 						break;
 					}
 				}
-				/* Uncurse it */
 				o_ptr->curse_flags = 0L;
 			}
 			else if ((power == -2) && one_in_(2))
@@ -3904,7 +3903,6 @@ static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
 						}
 					}
 				}
-				/* Uncurse it */
 				o_ptr->curse_flags = 0L;
 			}
 			else if ((power == -2) && one_in_(2))
@@ -6247,7 +6245,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 void combine_pack(void)
 {
 	int             i, j, k;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	object_type     *j_ptr;
 	bool            flag = FALSE, combined;
 
@@ -6357,7 +6355,7 @@ void reorder_pack(void)
 	s32b            o_value;
 	object_type     forge;
 	object_type     *q_ptr;
-	object_type     *o_ptr;
+	object_type *o_ptr;
 	bool            flag = FALSE;
 
 

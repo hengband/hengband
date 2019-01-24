@@ -378,7 +378,6 @@ void do_cmd_wield(void)
 	/* Wear the new stuff */
 	object_copy(o_ptr, q_ptr);
 
-	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
 
 	p_ptr->total_weight += q_ptr->weight;
