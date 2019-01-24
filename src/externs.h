@@ -1001,6 +1001,7 @@ extern bool mirror_concentration(player_type *creature_ptr);
 extern bool sword_dancing(player_type *creature_ptr);
 extern bool confusing_light(player_type *creature_ptr);
 extern bool rodeo(player_type *creature_ptr);
+extern bool clear_mind(player_type *creature_ptr);
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);

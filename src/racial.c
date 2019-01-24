@@ -508,21 +508,7 @@ static bool cmd_racial_power_aux(s32b command)
 		case CLASS_MINDCRAFTER:
 		case CLASS_FORCETRAINER:
 		{
-			if (total_friends)
-			{
-				msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
-				return FALSE;
-			}
-			msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
-
-			p_ptr->csp += (3 + p_ptr->lev/20);
-			if (p_ptr->csp >= p_ptr->msp)
-			{
-				p_ptr->csp = p_ptr->msp;
-				p_ptr->csp_frac = 0;
-			}
-			p_ptr->redraw |= (PR_MANA);
-			break;
+			return clear_mind(p_ptr);
 		}
 		case CLASS_TOURIST:
 		{
