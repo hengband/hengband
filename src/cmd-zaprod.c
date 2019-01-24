@@ -366,8 +366,6 @@ void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 
 	/* Increase the timeout by the rod kind's pval. -LM- */
 	if (use_charge) o_ptr->timeout += k_ptr->pval;
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))

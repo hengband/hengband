@@ -4942,8 +4942,6 @@ bool psychometry(void)
 
 	/* Player touches it */
 	o_ptr->marked |= OM_TOUCHED;
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);

@@ -2123,8 +2123,6 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 
 	/* Failure */
 	if (!res) return (FALSE);
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
@@ -2821,8 +2819,6 @@ bool recharge(int power)
 			}
 		}
 	}
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN);
 

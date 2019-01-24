@@ -398,8 +398,6 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 		if (flush_failure) flush();
 		msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
 		o_ptr->ident |= (IDENT_EMPTY);
-
-		/* Combine / Reorder the pack (later) */
 		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 		p_ptr->window |= (PW_INVEN);
 
@@ -409,8 +407,6 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 	sound(SOUND_ZAP);
 
 	ident = wand_effect(o_ptr->sval, dir, FALSE, FALSE);
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))

@@ -555,8 +555,6 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		used_up=FALSE;
 	}
 
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))

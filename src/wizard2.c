@@ -980,8 +980,6 @@ static void wiz_reroll_item(object_type *o_ptr)
 		/* Apply changes */
 		object_copy(o_ptr, q_ptr);
 		p_ptr->update |= (PU_BONUS);
-
-		/* Combine / Reorder the pack (later) */
 		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
@@ -1320,8 +1318,6 @@ static void do_cmd_wiz_play(void)
 		object_copy(o_ptr, q_ptr);
 
 		p_ptr->update |= (PU_BONUS);
-
-		/* Combine / Reorder the pack (later) */
 		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);

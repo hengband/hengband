@@ -500,8 +500,6 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 		msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
 		(void)potion_smash_effect(0, p_ptr->y, p_ptr->x, q_ptr->k_idx);
 	}
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(q_ptr)))

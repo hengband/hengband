@@ -3796,8 +3796,6 @@ bool lose_all_info(void)
 		o_ptr->ident &= ~(IDENT_SENSE);
 	}
 	p_ptr->update |= (PU_BONUS);
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);

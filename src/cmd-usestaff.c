@@ -342,8 +342,6 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 		if (flush_failure) flush();
 		msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
 		o_ptr->ident |= (IDENT_EMPTY);
-
-		/* Combine / Reorder the pack (later) */
 		p_ptr->update |= (PU_COMBINE | PU_REORDER);
 		p_ptr->window |= (PW_INVEN);
 
@@ -361,8 +359,6 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 		chg_virtue(V_CHANCE, 1);
 		chg_virtue(V_KNOWLEDGE, -1);
 	}
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	/* Tried the item */

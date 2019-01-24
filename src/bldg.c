@@ -3484,8 +3484,6 @@ static void building_recharge(void)
 #else
 	msg_format("%^s %s recharged for %d gold.", tmp_str, ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);
@@ -3628,8 +3626,6 @@ static void building_recharge_all(void)
 	/* Give feedback */
 	msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
 	msg_print(NULL);
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN);

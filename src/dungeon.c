@@ -155,8 +155,6 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 
 	/* Auto-inscription/destroy */
 	autopick_alter_item(slot, destroy_feeling);
-
-	/* Combine / Reorder the pack (later) */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
