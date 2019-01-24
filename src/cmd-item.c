@@ -1610,8 +1610,6 @@ void do_cmd_query_symbol(void)
 
 	/* Query */
 	query = inkey();
-
-	/* Restore */
 	prt(buf, 0, 0);
 
 	why = 2;
@@ -1688,7 +1686,6 @@ void do_cmd_query_symbol(void)
 			/* Unrecall */
 			if (recall)
 			{
-				/* Restore */
 				screen_load();
 			}
 

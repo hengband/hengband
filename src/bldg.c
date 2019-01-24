@@ -3748,7 +3748,6 @@ static bool research_mon(void)
 				   "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "), &sym, FALSE)) 
 
 	{
-		/* Restore */
 		screen_load();
 
 		return (FALSE);
@@ -3782,8 +3781,6 @@ static bool research_mon(void)
 		if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"),temp, 70))
 		{
 			temp[0]=0;
-
-			/* Restore */
 			screen_load();
 
 			return FALSE;
@@ -3801,7 +3798,6 @@ static bool research_mon(void)
 
 	/* Display the result */
 	prt(buf, 16, 10);
-
 
 	/* Allocate the "who" array */
 	C_MAKE(who, max_r_idx, MONRACE_IDX);
@@ -3862,8 +3858,6 @@ static bool research_mon(void)
 	{
 		/* Free the "who" array */
 		C_KILL(who, max_r_idx, MONRACE_IDX);
-
-		/* Restore */
 		screen_load();
 
 		return (FALSE);
@@ -3968,8 +3962,6 @@ static bool research_mon(void)
 
 	/* Free the "who" array */
 	C_KILL(who, max_r_idx, MONRACE_IDX);
-
-	/* Restore */
 	screen_load();
 
 	return (!notpicked);

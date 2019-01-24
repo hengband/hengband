@@ -3525,7 +3525,6 @@ bool res_stat(int stat)
 	/* Restore if needed */
 	if (p_ptr->stat_cur[stat] != p_ptr->stat_max[stat])
 	{
-		/* Restore */
 		p_ptr->stat_cur[stat] = p_ptr->stat_max[stat];
 		p_ptr->update |= (PU_BONUS);
 

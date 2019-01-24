@@ -1619,8 +1619,6 @@ static void fix_inven(void)
 		/* Display inventory */
 		display_inven();
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1776,8 +1774,6 @@ static void fix_monster_list(void)
 		target_set_prepare_look();//モンスター一覧を生成，ソート
 		print_monster_list(0, 0, h);
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1810,8 +1806,6 @@ static void fix_equip(void)
 		/* Display equipment */
 		display_equip();
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1843,8 +1837,6 @@ static void fix_spell(void)
 		/* Display spell list */
 		display_spell_list();
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1876,8 +1868,6 @@ static void fix_player(void)
 		update_playtime();
 		display_player(0);
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1923,8 +1913,6 @@ static void fix_message(void)
 			Term_erase(x, y, 255);
 		}
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1966,8 +1954,6 @@ static void fix_overhead(void)
 			display_map(&cy, &cx);
 			Term_fresh();
 		}
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -1999,8 +1985,6 @@ static void fix_dungeon(void)
 		/* Redraw dungeon view */
 		display_dungeon();
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -2032,8 +2016,6 @@ static void fix_monster(void)
 		/* Display monster race info */
 		if (p_ptr->monster_race_idx) display_roff(p_ptr->monster_race_idx);
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
@@ -2065,8 +2047,6 @@ static void fix_object(void)
 		/* Display monster race info */
 		if (p_ptr->object_kind_idx) display_koff(p_ptr->object_kind_idx);
 		Term_fresh();
-
-		/* Restore */
 		Term_activate(old);
 	}
 }
