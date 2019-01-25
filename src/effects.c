@@ -3506,7 +3506,6 @@ bool dec_stat(int stat, int amount, int permanent)
 		p_ptr->stat_cur[stat] = cur;
 		p_ptr->stat_max[stat] = max;
 
-		/* Redisplay the stats later */
 		p_ptr->redraw |= (PR_STATS);
 		p_ptr->update |= (PU_BONUS);
 	}
@@ -3527,8 +3526,6 @@ bool res_stat(int stat)
 	{
 		p_ptr->stat_cur[stat] = p_ptr->stat_max[stat];
 		p_ptr->update |= (PU_BONUS);
-
-		/* Redisplay the stats later */
 		p_ptr->redraw |= (PR_STATS);
 
 		/* Success */

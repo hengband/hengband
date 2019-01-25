@@ -1446,10 +1446,7 @@ void calc_bonuses(void)
 		{
 			/* Save the new value */
 			p_ptr->stat_top[i] = (s16b)top;
-
-			/* Redisplay the stats later */
 			p_ptr->redraw |= (PR_STATS);
-
 			p_ptr->window |= (PW_PLAYER);
 		}
 
@@ -1471,10 +1468,7 @@ void calc_bonuses(void)
 		{
 			/* Save the new value */
 			p_ptr->stat_use[i] = (s16b)use;
-
-			/* Redisplay the stats later */
 			p_ptr->redraw |= (PR_STATS);
-
 			p_ptr->window |= (PW_PLAYER);
 		}
 
@@ -1957,93 +1951,73 @@ void calc_bonuses(void)
 			/* Analyze the class */
 			switch (p_ptr->pclass)
 			{
-				/* Warrior */
 			case CLASS_WARRIOR:
 				num = 6; wgt = 70; mul = 5; break;
 
-				/* Berserker */
 			case CLASS_BERSERKER:
 				num = 6; wgt = 70; mul = 7; break;
 
-				/* Mage */
 			case CLASS_MAGE:
 			case CLASS_HIGH_MAGE:
 			case CLASS_BLUE_MAGE:
 				num = 3; wgt = 100; mul = 2; break;
 
-				/* Priest, Mindcrafter, Magic-Eater */
 			case CLASS_PRIEST:
 			case CLASS_MAGIC_EATER:
 			case CLASS_MINDCRAFTER:
 				num = 5; wgt = 100; mul = 3; break;
 
-				/* Rogue */
 			case CLASS_ROGUE:
 				num = 5; wgt = 40; mul = 3; break;
 
-				/* Ranger */
 			case CLASS_RANGER:
 				num = 5; wgt = 70; mul = 4; break;
 
-				/* Paladin */
 			case CLASS_PALADIN:
 			case CLASS_SAMURAI:
 				num = 5; wgt = 70; mul = 4; break;
 
-				/* Weaponsmith */
 			case CLASS_SMITH:
 				num = 5; wgt = 150; mul = 5; break;
 
-				/* Warrior-Mage */
 			case CLASS_WARRIOR_MAGE:
 			case CLASS_RED_MAGE:
 				num = 5; wgt = 70; mul = 3; break;
 
-				/* Chaos Warrior */
 			case CLASS_CHAOS_WARRIOR:
 				num = 5; wgt = 70; mul = 4; break;
 
-				/* Monk */
 			case CLASS_MONK:
 				num = 5; wgt = 60; mul = 3; break;
 
-				/* Tourist */
 			case CLASS_TOURIST:
 				num = 4; wgt = 100; mul = 3; break;
 
-				/* Imitator */
 			case CLASS_IMITATOR:
 				num = 5; wgt = 70; mul = 4; break;
 
-				/* Beastmaster */
 			case CLASS_BEASTMASTER:
 				num = 5; wgt = 70; mul = 3; break;
 
-				/* Cavalry */
 			case CLASS_CAVALRY:
 				if ((p_ptr->riding) && (have_flag(flgs, TR_RIDING))) { num = 5; wgt = 70; mul = 4; }
 				else { num = 5; wgt = 100; mul = 3; }
 				break;
 
-				/* Sorcerer */
 			case CLASS_SORCERER:
 				num = 1; wgt = 1; mul = 1; break;
 
-				/* Archer, Bard, Sniper */
 			case CLASS_ARCHER:
 			case CLASS_BARD:
 			case CLASS_SNIPER:
 				num = 4; wgt = 70; mul = 2; break;
 
-				/* ForceTrainer */
 			case CLASS_FORCETRAINER:
 				num = 4; wgt = 60; mul = 2; break;
 
-				/* Mirror Master */
 			case CLASS_MIRROR_MASTER:
 				num = 3; wgt = 100; mul = 3; break;
 
-				/* Ninja */
 			case CLASS_NINJA:
 				num = 4; wgt = 20; mul = 1; break;
 			}
