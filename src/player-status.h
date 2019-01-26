@@ -11,3 +11,4 @@ extern bool is_heavy_shoot(object_type *o_ptr);
 extern bool heavy_armor(void);
 extern void update_creature(player_type *creature_ptr);
 extern BIT_FLAGS16 empty_hands(bool riding_control);
+extern bool player_has_no_spellbooks(void);

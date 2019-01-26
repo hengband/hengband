@@ -344,30 +344,6 @@ static bool item_tester_learn_spell(object_type *o_ptr)
 }
 
 /*!
- * @brief プレイヤーが魔道書を一冊も持っていないかを判定する
- * @return 魔道書を一冊も持っていないならTRUEを返す
- */
-static bool player_has_no_spellbooks(void)
-{
-	int         i;
-	object_type *o_ptr;
-
-	for (i = 0; i < INVEN_PACK; i++)
-	{
-		o_ptr = &inventory[i];
-		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
-	}
-
-	for (i = cave[p_ptr->y][p_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
-	{
-		o_ptr = &o_list[i];
-		if (o_ptr->k_idx && (o_ptr->marked & OM_FOUND) && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
-	}
-
-	return TRUE;
-}
-
-/*!
  * @brief プレイヤーの職業が練気術師の時、領域魔法と練気術を切り換える処理のインターフェイス
  * @param browse_only 魔法と技能の閲覧を行うならばTRUE
  * @return 魔道書を一冊も持っていないならTRUEを返す
