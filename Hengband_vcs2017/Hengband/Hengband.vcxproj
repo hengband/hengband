@@ -184,7 +184,7 @@
     <ClInclude Include="..\..\src\cmd-zapwand.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClCompile Include="..\..\src\cmd1.c" />
+    <ClCompile Include="..\..\src\player-move.c" />
     <ClCompile Include="..\..\src\cmd2.c" />
     <ClCompile Include="..\..\src\cmd-item.c" />
     <ClCompile Include="..\..\src\cmd4.c" />
