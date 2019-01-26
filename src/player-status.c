@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
-#include "artifact.h"
 #include "player-status.h"
+
+#include "artifact.h"
 #include "avatar.h"
 
 /*

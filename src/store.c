@@ -16,6 +16,7 @@
 #include "cmd-magiceat.h"
 #include "store.h"
 #include "avatar.h"
+#include "cmd-spell.h"
 
 #define MIN_STOCK 12
 

@@ -385,15 +385,9 @@ void do_cmd_wield(void)
 	/* Increment the equip counter by hand */
 	equip_cnt++;
 
-#ifdef JP
-#define STR_WIELD_RARM "%s(%c)を右手に装備した。"
-#define STR_WIELD_LARM "%s(%c)を左手に装備した。"
-#define STR_WIELD_ARMS "%s(%c)を両手で構えた。"
-#else
-#define STR_WIELD_RARM "You are wielding %s (%c) in your right hand."
-#define STR_WIELD_LARM "You are wielding %s (%c) in your left hand."
-#define STR_WIELD_ARMS "You are wielding %s (%c) with both hands."
-#endif
+#define STR_WIELD_RARM _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")
+#define STR_WIELD_LARM _("%s(%c)を左手に装備した。", "You are wielding %s (%c) in your left hand.")
+#define STR_WIELD_ARMS _("%s(%c)を両手で構えた。", "You are wielding %s (%c) with both hands.")
 
 	/* Where is the item now */
 	switch (slot)

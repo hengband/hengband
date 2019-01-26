@@ -16,3 +16,7 @@ extern concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides);
 extern concptr info_radius(POSITION rad);
 extern concptr info_weight(WEIGHT weight);
 
+/* cmd5.c */
+extern void do_cmd_browse(void);
+extern void do_cmd_study(void);
+extern void do_cmd_cast(void);

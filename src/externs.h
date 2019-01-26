@@ -596,12 +596,6 @@ extern void plural_aux(char * Name);
 extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
 
-/* cmd5.c */
-extern concptr spell_category_name(OBJECT_TYPE_VALUE tval);
-extern void do_cmd_browse(void);
-extern void do_cmd_study(void);
-extern void do_cmd_cast(void);
-
 /* cmd-spell.c */
 extern void stop_singing(void);
 extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
@@ -869,6 +863,7 @@ extern bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_P
 extern int project_length;
 extern bool binding_field(HIT_POINT dam);
 extern void seal_of_mirror(HIT_POINT dam);
+extern concptr spell_category_name(OBJECT_TYPE_VALUE tval);
 
 /* spells2.c */
 extern void message_pain(MONSTER_IDX m_idx, HIT_POINT dam);

@@ -12,7 +12,7 @@ hengband_SOURCES = \
 	avatar.h avatar.c \
 	\
 	birth.c bldg.c cave.c chest.c chest.h chuukei.c \
-	cmd1.c cmd2.c cmd4.c cmd5.c cmd-activate.c cmd-activate.h cmd-eat.c cmd-eat.h \
+	cmd1.c cmd2.c cmd4.c cmd-activate.c cmd-activate.h cmd-eat.c cmd-eat.h \
 	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h cmd-pet.c cmd-pet.h \
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \

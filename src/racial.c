@@ -21,6 +21,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "spells-object.h"
+#include "cmd-spell.h"
 
 /*!
  * @brief 魔法系コマンドを実行できるかの判定を返す
