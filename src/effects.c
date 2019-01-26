@@ -2417,28 +2417,17 @@ bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 		p_ptr->ele_immune = v;
 
 		/* Message. */
-#ifdef JP
-		msg_format("%sの攻撃を受けつけなくなった！",
-			     ((immune_type == DEFENSE_ACID) ? "酸" :
-			      ((immune_type == DEFENSE_ELEC) ? "電撃" :
-			       ((immune_type == DEFENSE_FIRE) ? "火炎" : 
-				((immune_type == DEFENSE_COLD) ? "冷気" : 
-				 ((immune_type == DEFENSE_POIS) ? "毒" : 
-					"(なし)"))))));
-#else
-		msg_format("For a while, You are immune to %s",
-			     ((immune_type == DEFENSE_ACID) ? "acid!" :
-			      ((immune_type == DEFENSE_ELEC) ? "electricity!" :
-			       ((immune_type == DEFENSE_FIRE) ? "fire!" : 
-				((immune_type == DEFENSE_COLD) ? "cold!" : 
-				 ((immune_type == DEFENSE_POIS) ? "poison!" : 
-					"do nothing special."))))));
-#endif
+		msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, You are immune to %s"),
+			     ((immune_type == DEFENSE_ACID) ? _("酸", "acid!") :
+			      ((immune_type == DEFENSE_ELEC) ? _("電撃", "electricity!") :
+			       ((immune_type == DEFENSE_FIRE) ? _("火炎", "fire!") : 
+				((immune_type == DEFENSE_COLD) ? _("冷気", "cold!") : 
+				 ((immune_type == DEFENSE_POIS) ? _("毒", "poison!") : 
+					_("(なし)", "do nothing special.")))))));
 	}
 
 	if (disturb_state) disturb(FALSE, FALSE);
 	p_ptr->redraw |= (PR_STATUS);
-
 	p_ptr->update |= (PU_BONUS);
 	handle_stuff();
 
@@ -2714,12 +2703,10 @@ bool set_stun(TIME_EFFECT v)
 	int old_aux, new_aux;
 	bool notice = FALSE;
 
-
 	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
-
 	if (prace_is_(RACE_GOLEM) || ((p_ptr->pclass == CLASS_BERSERKER) && (p_ptr->lev > 34))) v = 0;
 
 	/* Knocked out */
