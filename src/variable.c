@@ -25,7 +25,6 @@ const concptr copyright[5] =
 	"are included in all such copies."
 };
 
-
 int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
 concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
 concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
@@ -46,7 +45,7 @@ autopick_type *autopick_list = NULL; /*!< 自動拾い/破壊設定構造体の�
 /*
  * Savefile version
  */
-byte h_ver_major;       /* Savefile version for Hengband 1.1.1 and later */
+byte h_ver_major; /* Savefile version for Hengband 1.1.1 and later */
 byte h_ver_minor;
 byte h_ver_patch;
 byte h_ver_extra;
@@ -195,7 +194,7 @@ POSITION panel_col_prt, panel_row_prt;
 /*
  * Targetting variables
  */
-IDX target_who;
+MONSTER_IDX target_who;
 POSITION target_col;
 POSITION target_row;
 
@@ -478,7 +477,7 @@ saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 /*
  * Number of floor_id used from birth
  */
-s16b max_floor_id;
+FLOOR_IDX max_floor_id;
 
 
 /*
