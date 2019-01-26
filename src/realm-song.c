@@ -22,8 +22,6 @@ static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 	set_action(ACTION_SING);
 
 	p_ptr->update |= (PU_BONUS);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 }
 

@@ -399,8 +399,6 @@ bool set_blind(TIME_EFFECT v)
 
 	/* Use the value */
 	p_ptr->blind = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -492,8 +490,6 @@ bool set_confused(TIME_EFFECT v)
 
 	/* Use the value */
 	p_ptr->confused = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -541,8 +537,6 @@ bool set_poisoned(TIME_EFFECT v)
 
 	/* Use the value */
 	p_ptr->poisoned = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -604,8 +598,6 @@ bool set_afraid(TIME_EFFECT v)
 
 	/* Use the value */
 	p_ptr->afraid = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -659,8 +651,6 @@ bool set_paralyzed(TIME_EFFECT v)
 
 	/* Use the value */
 	p_ptr->paralyzed = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -717,8 +707,6 @@ bool set_image(TIME_EFFECT v)
 
 	/* Use the value */
 	p_ptr->image = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -938,8 +926,6 @@ bool set_shield(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->shield = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -993,8 +979,6 @@ bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tsubureru = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1048,8 +1032,6 @@ bool set_magicdef(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->magicdef = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1102,8 +1084,6 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->blessed = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1157,8 +1137,6 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->hero = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1215,8 +1193,6 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->shero = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1272,8 +1248,6 @@ bool set_protevil(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->protevil = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1339,8 +1313,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->wraith_form = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1411,8 +1383,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->invuln = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1465,8 +1435,6 @@ bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_esp = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1520,8 +1488,6 @@ bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_invis = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1577,8 +1543,6 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_infra = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1634,8 +1598,6 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_regen = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1688,8 +1650,6 @@ bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_stealth = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1750,8 +1710,6 @@ bool set_superstealth(bool set)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
@@ -1799,8 +1757,6 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_levitation = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1853,8 +1809,6 @@ bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_sh_touki = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1906,8 +1860,6 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_sh_fire = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -1960,8 +1912,6 @@ bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_sh_holy = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2014,8 +1964,6 @@ bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_eyeeye = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2069,8 +2017,6 @@ bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->resist_magic = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2123,8 +2069,6 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_reflect = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2175,8 +2119,6 @@ bool set_multishadow(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->multishadow = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2229,8 +2171,6 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->dustrobe = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2283,8 +2223,6 @@ bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->kabenuke = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2343,8 +2281,6 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tsuyoshi = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -2426,8 +2362,6 @@ bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
 	}
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	p_ptr->update |= (PU_BONUS);
@@ -2503,8 +2437,6 @@ bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 	}
 
 	if (disturb_state) disturb(FALSE, FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	p_ptr->update |= (PU_BONUS);
@@ -2557,8 +2489,6 @@ bool set_oppose_acid(TIME_EFFECT v, bool do_dec)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
@@ -2610,8 +2540,6 @@ bool set_oppose_elec(TIME_EFFECT v, bool do_dec)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
@@ -2664,8 +2592,6 @@ bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
@@ -2717,8 +2643,6 @@ bool set_oppose_cold(TIME_EFFECT v, bool do_dec)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
@@ -2771,8 +2695,6 @@ bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
@@ -4596,8 +4518,6 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->ult_res = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -4644,8 +4564,6 @@ bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_res_nether = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
@@ -4692,8 +4610,6 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 
 	/* Use the value */
 	p_ptr->tim_res_time = v;
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */

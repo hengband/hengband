@@ -163,7 +163,5 @@ void stop_singing(void)
 	SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
 	SINGING_SONG_ID(p_ptr) = 0;
 	p_ptr->update |= (PU_BONUS);
-
-	/* Redraw status bar */
 	p_ptr->redraw |= (PR_STATUS);
 }
