@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "object-hook.h"
 
 /*!
  * @brief 領域魔法に応じて技能の名称を返す。
@@ -312,35 +313,6 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 
 	/* Success */
 	return TRUE;
-}
-
-/*!
- * @brief オブジェクトがプレイヤーが使用可能な魔道書かどうかを判定する
- * @param o_ptr 判定したいオブ会ジェクトの構造体参照ポインタ
- * @return 学習できる魔道書ならばTRUEを返す
- */
-static bool item_tester_learn_spell(object_type *o_ptr)
-{
-	s32b choices = realm_choices2[p_ptr->pclass];
-
-	if (p_ptr->pclass == CLASS_PRIEST)
-	{
-		if (is_good_realm(p_ptr->realm1))
-		{
-			choices &= ~(CH_DEATH | CH_DAEMON);
-		}
-		else
-		{
-			choices &= ~(CH_LIFE | CH_CRUSADE);
-		}
-	}
-
-	if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + MAX_REALM - 1))) return (FALSE);
-	if ((o_ptr->tval == TV_MUSIC_BOOK) && (p_ptr->pclass == CLASS_BARD)) return (TRUE);
-	else if (!is_magic(tval2realm(o_ptr->tval))) return FALSE;
-	if ((REALM1_BOOK == o_ptr->tval) || (REALM2_BOOK == o_ptr->tval)) return (TRUE);
-	if (choices & (0x0001 << (tval2realm(o_ptr->tval) - 1))) return (TRUE);
-	return (FALSE);
 }
 
 /*!

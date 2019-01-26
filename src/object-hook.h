@@ -22,3 +22,5 @@ extern bool item_tester_hook_identify_weapon_armour(object_type *o_ptr);
 extern bool item_tester_hook_identify_fully(object_type *o_ptr);
 extern bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr);
 extern bool item_tester_hook_recharge(object_type *o_ptr);
+
+extern bool item_tester_learn_spell(object_type *o_ptr);
