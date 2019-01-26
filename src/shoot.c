@@ -495,7 +495,6 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 		sound(SOUND_SHOOT);
 		handle_stuff();
 
-		/* Save the old location */
 		prev_y = y;
 		prev_x = x;
 
@@ -586,7 +585,6 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 				lite_spot(ny, nx);
 			}
 
-			/* Save the old location */
 			prev_y = y;
 			prev_x = x;
 

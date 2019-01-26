@@ -51,7 +51,6 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	/* Paranoia */
 	if (!m_ptr->r_idx) return (FALSE);
 
-	/* Save the old location */
 	oy = m_ptr->fy;
 	ox = m_ptr->fx;
 
@@ -164,8 +163,6 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 
 	ny = m_ptr->fy;
 	nx = m_ptr->fx;
-
-	/* Save the old location */
 	oy = m_ptr->fy;
 	ox = m_ptr->fx;
 
@@ -374,8 +371,6 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 void teleport_player(POSITION dis, BIT_FLAGS mode)
 {
 	POSITION yy, xx;
-
-	/* Save the old location */
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
 
@@ -418,8 +413,6 @@ void teleport_player(POSITION dis, BIT_FLAGS mode)
 void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
 {
 	POSITION yy, xx;
-
-	/* Save the old location */
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
 

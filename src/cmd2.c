@@ -2492,7 +2492,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	if (shuriken) chance *= 2;
 
-	/* Save the old location */
 	prev_y = y;
 	prev_x = x;
 
@@ -2536,7 +2535,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			Term_xtra(TERM_XTRA_DELAY, msec);
 		}
 
-		/* Save the old location */
 		prev_y = y;
 		prev_x = x;
 
