@@ -5123,3 +5123,14 @@ bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
 
 	return TRUE;
 }
+
+/*!
+ * @brief 地形は開くものであって、かつ開かれているかを返す /
+ * Attempt to open the given chest at the given location
+ * @param feat 地形ID
+ * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
+ */
+bool is_open(FEAT_IDX feat)
+{
+	return have_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(feat, FF_CLOSE));
+}

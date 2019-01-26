@@ -502,18 +502,6 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 }
 
 /*!
- * @brief 地形は開くものであって、かつ開かれているかを返す /
- * Attempt to open the given chest at the given location
- * @param feat 地形ID
- * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
- */
-static bool is_open(IDX feat)
-{
-	return have_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(feat, FF_CLOSE));
-}
-
-
-/*!
  * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
  * Attempt to open the given chest at the given location
  * @param y 該当する地形の中から1つのY座標を返す参照ポインタ
