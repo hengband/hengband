@@ -290,8 +290,6 @@ void dispel_player(void)
 bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -354,8 +352,6 @@ bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 bool set_blind(TIME_EFFECT v)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -425,8 +421,6 @@ bool set_blind(TIME_EFFECT v)
 bool set_confused(TIME_EFFECT v)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -509,8 +503,6 @@ bool set_confused(TIME_EFFECT v)
 bool set_poisoned(TIME_EFFECT v)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -556,8 +548,6 @@ bool set_poisoned(TIME_EFFECT v)
 bool set_afraid(TIME_EFFECT v)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -616,8 +606,6 @@ bool set_afraid(TIME_EFFECT v)
 bool set_paralyzed(TIME_EFFECT v)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -671,8 +659,6 @@ bool set_paralyzed(TIME_EFFECT v)
 bool set_image(TIME_EFFECT v)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -734,8 +720,6 @@ bool set_image(TIME_EFFECT v)
 bool set_fast(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -787,8 +771,6 @@ bool set_fast(TIME_EFFECT v, bool do_dec)
 bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -842,8 +824,6 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 bool set_slow(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -894,8 +874,6 @@ bool set_slow(TIME_EFFECT v, bool do_dec)
 bool set_shield(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -947,8 +925,6 @@ bool set_shield(TIME_EFFECT v, bool do_dec)
 bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1000,8 +976,6 @@ bool set_tsubureru(TIME_EFFECT v, bool do_dec)
 bool set_magicdef(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1052,8 +1026,6 @@ bool set_magicdef(TIME_EFFECT v, bool do_dec)
 bool set_blessed(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1105,8 +1077,6 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 bool set_hero(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1160,8 +1130,6 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 bool set_shero(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1216,8 +1184,6 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 bool set_protevil(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1267,8 +1233,6 @@ bool set_protevil(TIME_EFFECT v, bool do_dec)
 bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1334,8 +1298,6 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 bool set_invuln(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1403,8 +1365,6 @@ bool set_invuln(TIME_EFFECT v, bool do_dec)
 bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1456,8 +1416,6 @@ bool set_tim_esp(TIME_EFFECT v, bool do_dec)
 bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1511,8 +1469,6 @@ bool set_tim_invis(TIME_EFFECT v, bool do_dec)
 bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1566,8 +1522,6 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1618,8 +1572,6 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1725,8 +1677,6 @@ bool set_superstealth(bool set)
 bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1777,8 +1727,6 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1828,8 +1776,6 @@ bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1880,8 +1826,6 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1932,8 +1876,6 @@ bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec)
 bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -1985,8 +1927,6 @@ bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec)
 bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2037,8 +1977,6 @@ bool set_resist_magic(TIME_EFFECT v, bool do_dec)
 bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2087,8 +2025,6 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 bool set_multishadow(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2139,8 +2075,6 @@ bool set_multishadow(TIME_EFFECT v, bool do_dec)
 bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2191,8 +2125,6 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2243,8 +2175,6 @@ bool set_kabenuke(TIME_EFFECT v, bool do_dec)
 bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2303,7 +2233,6 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
  */
 bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
 {
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	/* Clear all elemental attacks (only one is allowed at a time). */
@@ -2341,7 +2270,6 @@ bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
 		/* Set duration. */
 		p_ptr->ele_attack = v;
 
-		/* Message. */
 #ifdef JP
 		msg_format("%sで攻撃できるようになった！",
 			     ((attack_type == ATTACK_ACID) ? "酸" :
@@ -2378,7 +2306,6 @@ bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
  */
 bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 {
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	/* Clear all elemental attacks (only one is allowed at a time). */
@@ -2416,7 +2343,6 @@ bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 		/* Set duration. */
 		p_ptr->ele_immune = v;
 
-		/* Message. */
 		msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, You are immune to %s"),
 			     ((immune_type == DEFENSE_ACID) ? _("酸", "acid!") :
 			      ((immune_type == DEFENSE_ELEC) ? _("電撃", "electricity!") :
@@ -2443,8 +2369,6 @@ bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 bool set_oppose_acid(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2494,8 +2418,6 @@ bool set_oppose_acid(TIME_EFFECT v, bool do_dec)
 bool set_oppose_elec(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2545,8 +2467,6 @@ bool set_oppose_elec(TIME_EFFECT v, bool do_dec)
 bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2597,8 +2517,6 @@ bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 bool set_oppose_cold(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2648,8 +2566,6 @@ bool set_oppose_cold(TIME_EFFECT v, bool do_dec)
 bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->lev > 44)) v = 1;
@@ -2702,8 +2618,6 @@ bool set_stun(TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -2855,8 +2769,6 @@ bool set_cut(TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -3067,8 +2979,6 @@ bool set_food(TIME_EFFECT v)
 	int old_aux, new_aux;
 
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 20000) ? 20000 : (v < 0) ? 0 : v;
 
 	/* Fainting / Starving */
@@ -4473,8 +4383,6 @@ bool drain_exp(s32b drain, s32b slip, int hold_exp_prob)
 bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -4519,8 +4427,6 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;
@@ -4565,8 +4471,6 @@ bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (p_ptr->is_dead) return FALSE;

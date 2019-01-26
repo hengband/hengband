@@ -269,7 +269,6 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		/* Determine how many nasty tricks can be played. */
 		int nasty_tricks_count = 4 + randint0(3);
 
-		/* Message. */
 		msg_print(_("恐ろしい声が響いた:  「暗闇が汝をつつまん！」", "Hideous voices bid:  'Let the darkness have thee!'"));
 		/* This is gonna hurt... */
 		for (; nasty_tricks_count > 0; nasty_tricks_count--)

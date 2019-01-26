@@ -223,8 +223,6 @@ bool set_monster_csleep(MONSTER_IDX m_idx, int v)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	/* Open */
@@ -276,8 +274,6 @@ bool set_monster_fast(MONSTER_IDX m_idx, int v)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
 	/* Open */
@@ -318,8 +314,6 @@ bool set_monster_slow(MONSTER_IDX m_idx, int v)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
 	/* Open */
@@ -364,8 +358,6 @@ bool set_monster_stunned(MONSTER_IDX m_idx, int v)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
 	/* Open */
@@ -406,8 +398,6 @@ bool set_monster_confused(MONSTER_IDX m_idx, int v)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
 	/* Open */
@@ -448,8 +438,6 @@ bool set_monster_monfear(MONSTER_IDX m_idx, int v)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
 	/* Open */
@@ -500,8 +488,6 @@ bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need)
 {
 	monster_type *m_ptr = &m_list[m_idx];
 	bool notice = FALSE;
-
-	/* Hack -- Force good values */
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
 	/* Open */
