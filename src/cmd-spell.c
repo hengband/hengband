@@ -232,7 +232,7 @@ concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
 static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
 {
 	int i;
-	SPELL_IDX   spell = -1;
+	SPELL_IDX spell = -1;
 	int num = 0;
 	int ask = TRUE;
 	MANA_POINT need_mana;

@@ -420,7 +420,6 @@ bool do_riding(bool force)
 	p_ptr->redraw |= (PR_MAP | PR_EXTRA);
 	p_ptr->redraw |= (PR_UHEALTH);
 
-	/* Move the player */
 	(void)move_player_effect(y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return TRUE;
@@ -1167,7 +1166,6 @@ bool rakuba(HIT_POINT dam, bool force)
 		fall_dam = TRUE;
 	}
 
-	/* Move the player */
 	if (sy && !p_ptr->is_dead)
 		(void)move_player_effect(p_ptr->y, p_ptr->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 

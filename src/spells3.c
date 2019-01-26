@@ -361,9 +361,7 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 		msg_format("『こっちだぁ、%s』", p_ptr->name);
 #endif
 
-	/* Move the player */
 	(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
-
 	return TRUE;
 }
 
@@ -505,8 +503,6 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 	}
 
 	sound(SOUND_TELEPORT);
-
-	/* Move the player */
 	(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
@@ -4566,8 +4562,8 @@ bool eat_magic(int power)
 void massacre(void)
 {
 	POSITION x, y;
-	cave_type       *c_ptr;
-	monster_type    *m_ptr;
+	cave_type *c_ptr;
+	monster_type *m_ptr;
 	DIRECTION dir;
 
 	for (dir = 0; dir < 8; dir++)
@@ -4575,8 +4571,6 @@ void massacre(void)
 		y = p_ptr->y + ddy_ddd[dir];
 		x = p_ptr->x + ddx_ddd[dir];
 		c_ptr = &cave[y][x];
-
-		/* Get the monster */
 		m_ptr = &m_list[c_ptr->m_idx];
 
 		/* Hack -- attack monsters */
@@ -4641,7 +4635,6 @@ bool eat_lock(void)
 	/* Destroy the wall */
 	cave_alter_feat(y, x, FF_HURT_ROCK);
 
-	/* Move the player */
 	(void)move_player_effect(y, x, MPE_DONT_PICKUP);
 	return TRUE;
 }

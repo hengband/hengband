@@ -555,9 +555,7 @@ void carry(bool pickup)
 	verify_panel();
 
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD);
 	handle_stuff();
 
@@ -613,7 +611,6 @@ void carry(bool pickup)
 
 			/* Redraw gold */
 			p_ptr->redraw |= (PR_GOLD);
-
 			p_ptr->window |= (PW_PLAYER);
 		}
 
@@ -774,8 +771,7 @@ bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 					return TRUE; /* Goof-up */
 			}
 
-			if ((pattern_type_new == ok_move) ||
-			    (pattern_type_new == pattern_type_cur))
+			if ((pattern_type_new == ok_move) || (pattern_type_new == pattern_type_cur))
 				return TRUE;
 			else
 			{
@@ -839,7 +835,6 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		MONSTER_IDX om_idx = oc_ptr->m_idx;
 		MONSTER_IDX nm_idx = c_ptr->m_idx;
 
-		/* Move the player */
 		p_ptr->y = ny;
 		p_ptr->x = nx;
 
@@ -1215,9 +1210,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		p_can_enter = FALSE;
 	}
 
-	/* Get the monster */
 	m_ptr = &m_list[c_ptr->m_idx];
-
 
 	if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 	if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
@@ -1508,7 +1501,6 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		if (do_pickup != always_pickup) mpe_mode |= MPE_DO_PICKUP;
 		if (break_trap) mpe_mode |= MPE_BREAK_TRAP;
 
-		/* Move the player */
 		(void)move_player_effect(y, x, mpe_mode);
 	}
 }

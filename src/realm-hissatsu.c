@@ -202,8 +202,6 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (player_can_enter(cave[y][x].feat, 0) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
 			{
 				msg_print(NULL);
-
-				/* Move the player */
 				(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 			}
 		}
@@ -527,8 +525,6 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				y = p_ptr->y + ddy_ddd[dir];
 				x = p_ptr->x + ddx_ddd[dir];
 				c_ptr = &cave[y][x];
-
-				/* Get the monster */
 				m_ptr = &m_list[c_ptr->m_idx];
 
 				/* Hack -- attack monsters */
@@ -690,7 +686,6 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				/* Player can move forward? */
 				if (player_can_enter(c_ptr->feat, 0))
 				{
-					/* Move the player */
 					if (!move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
 				}
 				else
