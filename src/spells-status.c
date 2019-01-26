@@ -134,3 +134,36 @@ bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev)
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(GF_TURN_ALL, dir, plev, flg));
 }
+
+/*!
+* @brief ‰Ì‚Ì’âŽ~‚ðˆ—‚·‚é / Stop singing if the player is a Bard
+* @return ‚È‚µ
+*/
+void stop_singing(void)
+{
+	if (p_ptr->pclass != CLASS_BARD) return;
+
+	/* Are there interupted song? */
+	if (INTERUPTING_SONG_EFFECT(p_ptr))
+	{
+		/* Forget interupted song */
+		INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
+		return;
+	}
+
+	/* The player is singing? */
+	if (!SINGING_SONG_EFFECT(p_ptr)) return;
+
+	/* Hack -- if called from set_action(), avoid recursive loop */
+	if (p_ptr->action == ACTION_SING) set_action(ACTION_NONE);
+
+	/* Message text of each song or etc. */
+	do_spell(REALM_MUSIC, SINGING_SONG_ID(p_ptr), SPELL_STOP);
+
+	SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
+	SINGING_SONG_ID(p_ptr) = 0;
+	p_ptr->update |= (PU_BONUS);
+
+	/* Redraw status bar */
+	p_ptr->redraw |= (PR_STATUS);
+}

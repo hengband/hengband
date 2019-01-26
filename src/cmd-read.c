@@ -12,6 +12,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "spells-status.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

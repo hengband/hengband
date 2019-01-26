@@ -10,6 +10,7 @@
 #include "angband.h"
 #include "object-hook.h"
 #include "avatar.h"
+#include "spells-status.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン

@@ -11,6 +11,7 @@
 #include "object-hook.h"
 #include "mutation.h"
 #include "avatar.h"
+#include "spells-status.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

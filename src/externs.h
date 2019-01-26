@@ -598,7 +598,6 @@ extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
 
 /* cmd-spell.c */
-extern void stop_singing(void);
 extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
 

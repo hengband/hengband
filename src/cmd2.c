@@ -17,6 +17,7 @@
 #include "object-hook.h"
 #include "projection.h"
 #include "spells-summon.h"
+#include "spells-status.h"
 #include "monster-status.h"
 #include "quest.h"
 #include "artifact.h"

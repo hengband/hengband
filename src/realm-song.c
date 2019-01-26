@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
+#include "spells-status.h"
 #include "projection.h"
 
 /*!
@@ -20,39 +21,6 @@ static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 	/* Now the player is singing */
 	set_action(ACTION_SING);
 
-	p_ptr->update |= (PU_BONUS);
-
-	/* Redraw status bar */
-	p_ptr->redraw |= (PR_STATUS);
-}
-
-/*!
-* @brief 歌の停止を処理する / Stop singing if the player is a Bard
-* @return なし
-*/
-void stop_singing(void)
-{
-	if (p_ptr->pclass != CLASS_BARD) return;
-
-	/* Are there interupted song? */
-	if (INTERUPTING_SONG_EFFECT(p_ptr))
-	{
-		/* Forget interupted song */
-		INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
-		return;
-	}
-
-	/* The player is singing? */
-	if (!SINGING_SONG_EFFECT(p_ptr)) return;
-
-	/* Hack -- if called from set_action(), avoid recursive loop */
-	if (p_ptr->action == ACTION_SING) set_action(ACTION_NONE);
-
-	/* Message text of each song or etc. */
-	do_spell(REALM_MUSIC, SINGING_SONG_ID(p_ptr), SPELL_STOP);
-
-	SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
-	SINGING_SONG_ID(p_ptr) = 0;
 	p_ptr->update |= (PU_BONUS);
 
 	/* Redraw status bar */
