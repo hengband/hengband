@@ -971,8 +971,8 @@ bool crusade(void)
 void aggravate_monsters(MONSTER_IDX who)
 {
 	MONSTER_IDX i;
-	bool    sleep = FALSE;
-	bool    speed = FALSE;
+	bool sleep = FALSE;
+	bool speed = FALSE;
 
 	/* Aggravate everyone nearby */
 	for (i = 1; i < m_max; i++)
@@ -1039,7 +1039,6 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	else if ((p_ptr->inside_quest && !random_quest_number(dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle) resist = TRUE;
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
-
 
 	else
 	{
@@ -2086,7 +2085,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	}
 
 	/* Mega-Hack -- Forget the view and lite */
-	/* Update the health bar */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH | PR_MAP);
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -2238,11 +2236,8 @@ static void cave_temp_room_lite(void)
 			}
 		}
 
-		/* Note */
 		note_spot(y, x);
-
 		lite_spot(y, x);
-
 		update_local_illumination(y, x);
 	}
 
@@ -2288,8 +2283,8 @@ static void cave_temp_room_unlite(void)
 			{
 				for (j = 0; j < 9; j++)
 				{
-					int by = y + ddy_ddd[j];
-					int bx = x + ddx_ddd[j];
+					POSITION by = y + ddy_ddd[j];
+					POSITION bx = x + ddx_ddd[j];
 
 					if (in_bounds2(by, bx))
 					{
@@ -2313,7 +2308,6 @@ static void cave_temp_room_unlite(void)
 			{
 				/* Forget the grid */
 				if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
-
 				note_spot(y, x);
 			}
 
@@ -2324,7 +2318,6 @@ static void cave_temp_room_unlite(void)
 			}
 
 			lite_spot(y, x);
-
 			update_local_illumination(y, x);
 		}
 	}

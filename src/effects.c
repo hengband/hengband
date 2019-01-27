@@ -326,12 +326,10 @@ bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 	p_ptr->tim_mimic = v;
 
 	/* Nothing to notice */
-	if (!notice)
-		return (FALSE);
+	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, TRUE);
 
-	/* Redraw title */
 	p_ptr->redraw |= (PR_BASIC | PR_STATUS);
 	p_ptr->update |= (PU_BONUS | PU_HP);
 
@@ -399,14 +397,11 @@ bool set_blind(TIME_EFFECT v)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-
 	if (disturb_state) disturb(FALSE, FALSE);
 
 	/* Fully update the visuals */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	handle_stuff();
 	return (TRUE);
@@ -700,12 +695,8 @@ bool set_image(TIME_EFFECT v)
 
 	if (disturb_state) disturb(FALSE, TRUE);
 
-	p_ptr->redraw |= (PR_MAP);
-
-	/* Update the health bar */
-	p_ptr->redraw |= (PR_HEALTH | PR_UHEALTH);
+	p_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
 	p_ptr->update |= (PU_MONSTERS);
-
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	handle_stuff();
 	return (TRUE);

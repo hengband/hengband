@@ -2176,7 +2176,6 @@ void do_cmd_view_map(void)
 
 	screen_save();
 
-	/* Note */
 	prt(_("お待ち下さい...", "Please wait..."), 0, 0);
 
 	Term_fresh();
