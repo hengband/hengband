@@ -1262,8 +1262,6 @@ extern bool get_rep_dir(DIRECTION *dp, bool under);
 extern bool tgt_pt(POSITION *x, POSITION *y);
 extern void do_poly_wounds(void);
 extern void change_race(CHARACTER_IDX new_race, concptr effect_msg);
-extern ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);
-extern int bow_tmul(OBJECT_SUBTYPE_VALUE sval);
 
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);
@@ -1507,3 +1505,7 @@ extern void kamaenaoshi(INVENTORY_IDX item);
 
 extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
+
+/* shoot.c */
+extern ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);
+extern int bow_tmul(OBJECT_SUBTYPE_VALUE sval);
