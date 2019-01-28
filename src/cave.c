@@ -955,7 +955,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 	feature_type *f_ptr = &f_info[feat];
 
 	TERM_COLOR a;
-	byte c;
+	SYMBOL_CODE c;
 
 	/* Boring grids (floors, etc) */
 	if (!have_flag(f_ptr->flags, FF_REMEMBER))

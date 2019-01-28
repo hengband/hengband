@@ -6213,8 +6213,8 @@ static void display_visual_list(int col, int row, int height, int width, TERM_CO
 		/* Display columns until done */
 		for (j = 0; j < width; j++)
 		{
-			byte a;
-			char c;
+			TERM_COLOR a;
+			SYMBOL_CODE c;
 			TERM_LEN x = col + j;
 			TERM_LEN y = row + i;
 			int ia, ic;
@@ -6230,8 +6230,8 @@ static void display_visual_list(int col, int row, int height, int width, TERM_CO
 			    (!use_graphics && ic > 0x7f))
 				continue;
 
-			a = (byte)ia;
-			c = (char)ic;
+			a = ia;
+			c = ic;
 
 			/* Force correct code for both ASCII character and tile */
 			if (c & 0x80) a |= 0x80;
