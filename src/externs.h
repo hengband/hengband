@@ -1237,15 +1237,18 @@ extern bool set_wraith_form(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_esp(TIME_EFFECT v, bool do_dec);
 extern bool set_superstealth(bool set);
 
+/* view-mainwindow.c */
+extern void resize_map(void);
+extern void redraw_window(void);
+extern bool change_panel(POSITION dy, POSITION dx);
+
+
 /* xtra2.c */
 extern void check_experience(void);
 extern concptr extract_note_dies(MONRACE_IDX r_idx);
 extern void monster_death(MONSTER_IDX m_idx, bool drop_item);
 extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 extern void panel_bounds_center(void);
-extern void resize_map(void);
-extern void redraw_window(void);
-extern bool change_panel(POSITION dy, POSITION dx);
 extern void verify_panel(void);
 extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern bool target_able(MONSTER_IDX m_idx);

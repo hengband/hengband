@@ -2417,3 +2417,112 @@ void update_playtime(void)
 		start_time = tmp;
 	}
 }
+
+
+
+/*!
+ * @brief コンソールのリサイズに合わせてマップを再描画する /
+ * Map resizing whenever the main term changes size
+ * @return なし
+ */
+void resize_map(void)
+{
+	/* Only if the dungeon exists */
+	if (!character_dungeon) return;
+
+	/* Mega-Hack -- no panel yet */
+	panel_row_max = 0;
+	panel_col_max = 0;
+
+	/* Reset the panels */
+	panel_row_min = cur_hgt;
+	panel_col_min = cur_wid;
+
+	verify_panel();
+
+	p_ptr->update |= (PU_TORCH | PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+	p_ptr->update |= (PU_MONSTERS);
+	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+
+	handle_stuff();
+	Term_redraw();
+
+	/*
+	 * Waiting command;
+	 * Place the cursor on the player
+	 */
+	if (can_save) move_cursor_relative(p_ptr->y, p_ptr->x);
+
+	Term_fresh();
+}
+
+/*!
+ * @brief コンソールを再描画する /
+ * Redraw a term when it is resized
+ * @return なし
+ */
+void redraw_window(void)
+{
+	/* Only if the dungeon exists */
+	if (!character_dungeon) return;
+
+	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+
+	handle_stuff();
+	Term_redraw();
+}
+
+
+/*!
+ * @brief フォーカスを当てるべきマップ描画の基準座標を指定する（サブルーチン）
+ * @param dy 変更先のフロアY座標
+ * @param dx 変更先のフロアX座標
+ * Handle a request to change the current panel
+ * Return TRUE if the panel was changed.
+ * Also used in do_cmd_locate
+ * @return 実際に再描画が必要だった場合TRUEを返す
+ */
+bool change_panel(POSITION dy, POSITION dx)
+{
+	POSITION y, x;
+	TERM_LEN wid, hgt;
+
+	get_screen_size(&wid, &hgt);
+
+	/* Apply the motion */
+	y = panel_row_min + dy * hgt / 2;
+	x = panel_col_min + dx * wid / 2;
+
+	/* Verify the row */
+	if (y > cur_hgt - hgt) y = cur_hgt - hgt;
+	if (y < 0) y = 0;
+
+	/* Verify the col */
+	if (x > cur_wid - wid) x = cur_wid - wid;
+	if (x < 0) x = 0;
+
+	/* Handle "changes" */
+	if ((y != panel_row_min) || (x != panel_col_min))
+	{
+		/* Save the new panel info */
+		panel_row_min = y;
+		panel_col_min = x;
+
+		/* Recalculate the boundaries */
+		panel_bounds_center();
+
+		p_ptr->update |= (PU_MONSTERS);
+		p_ptr->redraw |= (PR_MAP);
+		handle_stuff();
+
+		/* Success */
+		return (TRUE);
+	}
+
+	/* No change */
+	return (FALSE);
+}
+
