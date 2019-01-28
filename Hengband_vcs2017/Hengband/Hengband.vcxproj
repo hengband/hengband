@@ -232,6 +232,7 @@
     <ClCompile Include="..\..\src\rooms-trap.c" />
     <ClCompile Include="..\..\src\rooms-vault.c" />
     <ClCompile Include="..\..\src\rooms.c" />
+    <ClCompile Include="..\..\src\rumor.c" />
     <ClCompile Include="..\..\src\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
@@ -320,6 +321,7 @@
     <ClInclude Include="..\..\src\rooms-trap.h" />
     <ClInclude Include="..\..\src\rooms-vault.h" />
     <ClInclude Include="..\..\src\rooms.h" />
+    <ClInclude Include="..\..\src\rumor.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\sort.h" />
     <ClInclude Include="..\..\src\spells-object.h" />

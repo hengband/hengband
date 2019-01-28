@@ -25,6 +25,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "cmd-spell.h"
+#include "rumor.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c

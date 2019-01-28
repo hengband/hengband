@@ -1264,7 +1264,6 @@ extern void do_poly_wounds(void);
 extern void change_race(CHARACTER_IDX new_race, concptr effect_msg);
 extern ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);
 extern int bow_tmul(OBJECT_SUBTYPE_VALUE sval);
-extern void display_rumor(bool ex);
 
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);

@@ -13,6 +13,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "spells-status.h"
+#include "rumor.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

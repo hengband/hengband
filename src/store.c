@@ -17,6 +17,7 @@
 #include "store.h"
 #include "avatar.h"
 #include "cmd-spell.h"
+#include "rumor.h"
 
 #define MIN_STOCK 12
 

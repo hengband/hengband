@@ -59,6 +59,8 @@ hengband_SOURCES = \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
 	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h shoot.c snipe.c \
 	\
+	rumor.h rumor.c \
+	\
 	spells1.c spells2.c spells3.c \
 	spells-object.c spells-object.h \
 	spells-status.c spells-status.h \
