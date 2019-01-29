@@ -558,7 +558,6 @@ void do_cmd_takeoff(void)
 		}
 	}
 
-	/* Take a partial turn */
 	p_ptr->energy_use = 50;
 
 	/* Take off the item */
@@ -611,8 +610,6 @@ void do_cmd_drop(void)
 		if (amt <= 0) return;
 	}
 
-
-	/* Take a partial turn */
 	p_ptr->energy_use = 50;
 
 	/* Drop (some of) the item */
@@ -958,10 +955,8 @@ void do_cmd_inscribe(void)
 static void do_cmd_refill_lamp(void)
 {
 	OBJECT_IDX item;
-
 	object_type *o_ptr;
 	object_type *j_ptr;
-
 	concptr q, s;
 
 	/* Restrict the choices */
@@ -973,7 +968,6 @@ static void do_cmd_refill_lamp(void)
 	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
 	if (!o_ptr) return;
 
-	/* Take a partial turn */
 	p_ptr->energy_use = 50;
 
 	/* Access the lantern */
@@ -1060,7 +1054,6 @@ static void do_cmd_refill_torch(void)
 	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
 	if (!o_ptr) return;
 
-	/* Take a partial turn */
 	p_ptr->energy_use = 50;
 
 	/* Access the primary torch */
@@ -1225,25 +1218,13 @@ void do_cmd_locate(void)
 		/* Describe the location */
 		if ((y2 == y1) && (x2 == x1))
 		{
-#ifdef JP
-			strcpy(tmp_val, "真上");
-#else
-			tmp_val[0] = '\0';
-#endif
-
+			strcpy(tmp_val, _("真上", "\0"));
 		}
 		else
 		{
-#ifdef JP
 			sprintf(tmp_val, "%s%s",
-				((y2 < y1) ? "北" : (y2 > y1) ? "南" : ""),
-				((x2 < x1) ? "西" : (x2 > x1) ? "東" : ""));
-#else
-			sprintf(tmp_val, "%s%s of",
-				((y2 < y1) ? " North" : (y2 > y1) ? " South" : ""),
-				((x2 < x1) ? " West" : (x2 > x1) ? " East" : ""));
-#endif
-
+				((y2 < y1) ? _("北", " North") : (y2 > y1) ? _("南", " South") : ""),
+				((x2 < x1) ? _("西", " West") : (x2 > x1) ? _("東", " East") : ""));
 		}
 
 		/* Prepare to ask which way to look */
