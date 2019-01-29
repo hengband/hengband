@@ -627,34 +627,6 @@ void do_cmd_drop(void)
 	p_ptr->redraw |= (PR_EQUIPPY);
 }
 
-/*!
- * @brief オブジェクトが高位の魔法書かどうかを判定する
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return オブジェクトが高位の魔法書ならばTRUEを返す
- */
-static bool high_level_book(object_type *o_ptr)
-{
-	if ((o_ptr->tval == TV_LIFE_BOOK) ||
-	    (o_ptr->tval == TV_SORCERY_BOOK) ||
-	    (o_ptr->tval == TV_NATURE_BOOK) ||
-	    (o_ptr->tval == TV_CHAOS_BOOK) ||
-	    (o_ptr->tval == TV_DEATH_BOOK) ||
-	    (o_ptr->tval == TV_TRUMP_BOOK) ||
-	    (o_ptr->tval == TV_CRAFT_BOOK) ||
-	    (o_ptr->tval == TV_DAEMON_BOOK) ||
-	    (o_ptr->tval == TV_CRUSADE_BOOK) ||
-	    (o_ptr->tval == TV_MUSIC_BOOK) ||
-		(o_ptr->tval == TV_HEX_BOOK))
-	{
-		if (o_ptr->sval > 1)
-			return TRUE;
-		else
-			return FALSE;
-	}
-
-	return FALSE;
-}
-
 
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
@@ -794,7 +766,7 @@ void do_cmd_destroy(void)
 		floor_item_optimize(0 - item);
 	}
 
-	if (high_level_book(q_ptr))
+	if (item_tester_high_level_book(q_ptr))
 	{
 		bool gain_expr = FALSE;
 
@@ -827,12 +799,12 @@ void do_cmd_destroy(void)
 			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 			gain_exp(tester_exp * amt);
 		}
-		if (high_level_book(q_ptr) && q_ptr->tval == TV_LIFE_BOOK)
+		if (item_tester_high_level_book(q_ptr) && q_ptr->tval == TV_LIFE_BOOK)
 		{
 			chg_virtue(V_UNLIFE, 1);
 			chg_virtue(V_VITALITY, -1);
 		}
-		else if (high_level_book(q_ptr) && q_ptr->tval == TV_DEATH_BOOK)
+		else if (item_tester_high_level_book(q_ptr) && q_ptr->tval == TV_DEATH_BOOK)
 		{
 			chg_virtue(V_UNLIFE, -1);
 			chg_virtue(V_VITALITY, 1);
