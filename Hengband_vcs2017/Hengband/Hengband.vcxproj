@@ -323,6 +323,7 @@
     <ClInclude Include="..\..\src\rooms.h" />
     <ClInclude Include="..\..\src\rumor.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
+    <ClInclude Include="..\..\src\shoot.h" />
     <ClInclude Include="..\..\src\sort.h" />
     <ClInclude Include="..\..\src\spells-object.h" />
     <ClInclude Include="..\..\src\spells-status.h" />

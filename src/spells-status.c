@@ -165,3 +165,23 @@ void stop_singing(void)
 	p_ptr->update |= (PU_BONUS);
 	p_ptr->redraw |= (PR_STATUS);
 }
+
+bool time_walk(player_type *creature_ptr)
+{
+	if (world_player)
+	{
+		msg_print(_("既に時は止まっている。", "Time is already stopped."));
+		return (FALSE);
+	}
+	world_player = TRUE;
+	msg_print(_("「時よ！」", "You yell 'Time!'"));
+	msg_print(NULL);
+
+	/* Hack */
+	p_ptr->energy_need -= 1000 + (100 + p_ptr->csp - 50)*TURNS_PER_TICK / 10;
+	p_ptr->redraw |= (PR_MAP);
+	p_ptr->update |= (PU_MONSTERS);
+	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	handle_stuff();
+	return TRUE;
+}

@@ -11,4 +11,5 @@ extern bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev);
 extern bool poly_monster(DIRECTION dir, int power);
 extern bool clone_monster(DIRECTION dir);
 extern void stop_singing(void);
+extern bool time_walk(player_type *creature_ptr);
 

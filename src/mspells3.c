@@ -1050,19 +1050,7 @@ static bool cast_learned_spell(int spell, bool success)
 		teleport_player(plev * 5, 0L);
 		break;
 	case MS_WORLD:
-        world_player = TRUE;
-        msg_print(_("「時よ！」", "'Time!'"));
-		msg_print(NULL);
-
-		/* Hack */
-		p_ptr->energy_need -= 1000 + (100 + randint1(200)+200)*TURNS_PER_TICK/10;
-
-		p_ptr->redraw |= (PR_MAP);
-		p_ptr->update |= (PU_MONSTERS);
-
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-		handle_stuff();
+		(void)time_walk(p_ptr);
 		break;
 	case MS_SPECIAL:
 		break;
