@@ -21,6 +21,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "spells-status.h"
+#include "cmd-spell.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =
@@ -540,15 +541,6 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
  */
 void mindcraft_info(char *p, int use_mind, int power)
 {
-#ifdef JP
-	concptr s_dam = "損傷:";
-	concptr s_dur = "期間:";
-	concptr s_range = "範囲:";
-#else
-	concptr s_dam = "dam ";
-	concptr s_dur = "dur ";
-	concptr s_range = "range ";
-#endif
 	PLAYER_LEVEL plev = p_ptr->lev;
 
 	strcpy(p, "");

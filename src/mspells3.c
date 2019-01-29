@@ -15,6 +15,7 @@
 #include "projection.h"
 #include "avatar.h"
 #include "spells-status.h"
+#include "cmd-spell.h"
 
 #define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< モンスター魔法をプレイヤーが使用する場合の換算レベル */
 
@@ -36,7 +37,7 @@ void set_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, concptr msg, char* tm
     int dice_div = monspell_bluemage_damage(SPELL_NUM, plev, DICE_DIV);
     char dmg_str[80];
     dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
-    sprintf(tmp, msg, dmg_str);
+    sprintf(tmp, " %s %s", msg, dmg_str);
 }
 
 /*!
@@ -48,18 +49,6 @@ void set_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, concptr msg, char* tm
 static void learned_info(char *p, int power)
 {
 	PLAYER_LEVEL plev = pseudo_plev();
-
-#ifdef JP
-	concptr s_dam = " 損傷:%s";
-	concptr s_dur = "期間:";
-	concptr s_range = "範囲:";
-	concptr s_heal = " 回復:%s";
-#else
-	concptr s_dam = " dam %s";
-	concptr s_dur = "dur ";
-	concptr s_range = "range ";
-	concptr s_heal = " heal %s";
-#endif
 
 	strcpy(p, "");
 
