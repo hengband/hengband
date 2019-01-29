@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "spells-summon.h"
 #include "spells-status.h"
+#include "cmd-spell.h"
 
 static int damage;
 
@@ -26,10 +27,6 @@ static int damage;
 static void mane_info(char *p, int power, HIT_POINT dam)
 {
 	PLAYER_LEVEL plev = p_ptr->lev;
-	concptr s_dam = _("損傷:", "dam ");
-	concptr s_dur = _("期間:", "dur ");
-	concptr s_range = _("範囲:", "range ");
-	concptr s_heal = _("回復:", "heal ");
 
 	strcpy(p, "");
 
@@ -98,7 +95,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 	char            choice;
 	char            out_val[160];
 	char            comment[80];
-	concptr            p = _("能力", "power");
+	concptr p = _("能力", "power");
 
 	monster_power   spell;
 	bool            flag, redraw;
