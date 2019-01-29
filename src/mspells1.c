@@ -42,6 +42,7 @@
 #include "object-curse.h"
 #include "projection.h"
 #include "quest.h"
+#include "realm-hex.h"
 
 
 /*!

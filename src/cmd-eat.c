@@ -11,6 +11,7 @@
 #include "object-hook.h"
 #include "avatar.h"
 #include "spells-status.h"
+#include "realm-hex.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン

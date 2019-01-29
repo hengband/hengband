@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "projection.h"
 #include "quest.h"
+#include "realm-hex.h"
 
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

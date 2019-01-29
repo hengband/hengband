@@ -1490,17 +1490,6 @@ extern void do_cmd_snipe(void);
 extern void do_cmd_snipe_browse(void);
 extern int boost_concentration_damage(int tdam);
 
-/* hex.c */
-extern bool stop_hex_spell_all(void);
-extern bool stop_hex_spell(void);
-extern void check_hex(void);
-extern bool hex_spell_fully(void);
-extern void revenge_spell(void);
-extern void revenge_store(HIT_POINT dam);
-extern bool teleport_barrier(MONSTER_IDX m_idx);
-extern bool magic_barrier(MONSTER_IDX m_idx);
-extern bool multiply_barrier(MONSTER_IDX m_idx);
-
 extern void kamaenaoshi(INVENTORY_IDX item);
 
 extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);

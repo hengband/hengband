@@ -25,6 +25,7 @@
 #include "avatar.h"
 
 #include "spells-status.h"
+#include "realm-hex.h"
 
 /*!
  * @brief プレイヤー周辺の地形を感知する

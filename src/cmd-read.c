@@ -14,6 +14,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "rumor.h"
+#include "realm-hex.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン
