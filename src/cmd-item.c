@@ -1367,7 +1367,6 @@ bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 void ang_sort_swap_hook(vptr u, vptr v, int a, int b)
 {
 	u16b *who = (u16b*)(u);
-
 	u16b holder;
 
 	/* Unused */
@@ -1402,19 +1401,19 @@ void do_cmd_query_symbol(void)
 	IDX i;
 	int n;
 	MONRACE_IDX r_idx;
-	char	sym, query;
-	char	buf[128];
+	char sym, query;
+	char buf[128];
 
-	bool	all = FALSE;
-	bool	uniq = FALSE;
-	bool	norm = FALSE;
-	bool	ride = FALSE;
-	char    temp[80] = "";
+	bool all = FALSE;
+	bool uniq = FALSE;
+	bool norm = FALSE;
+	bool ride = FALSE;
+	char temp[80] = "";
 
-	bool	recall = FALSE;
+	bool recall = FALSE;
 
-	u16b	why = 0;
-	IDX	*who;
+	u16b why = 0;
+	MONRACE_IDX *who;
 
 	/* Get a character, or abort */
 	if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ", 
@@ -1671,12 +1670,7 @@ void do_cmd_use(void)
 		return;
 	}
 
-	if (p_ptr->inside_arena)
-	{
-		msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-		msg_print(NULL);
-		return;
-	}
+	if (cmd_limit_arena(p_ptr)) return;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{

@@ -53,6 +53,17 @@ bool confirm_leave_level(bool down_stair)
 	return FALSE;
 }
 
+bool cmd_limit_arena(player_type *creature_ptr)
+{
+	if (p_ptr->inside_arena)
+	{
+		msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
+		msg_print(NULL);
+		return TRUE;
+	}
+	return FALSE;
+}
+
 /*!
  * @brief 階段を使って階層を昇る処理 / Go up one level
  * @return なし

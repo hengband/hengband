@@ -455,13 +455,7 @@ void do_cmd_aim_wand(void)
 	concptr q, s;
 
 	if (p_ptr->wild_mode) return;
-
-	if (p_ptr->inside_arena)
-	{
-		msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-		msg_print(NULL);
-		return;
-	}
+	if (cmd_limit_arena(p_ptr)) return;
 
 	/* Restrict choices to wands */
 	item_tester_tval = TV_WAND;
