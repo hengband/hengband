@@ -381,7 +381,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("ランダムで様々な効果が起こる。", "Causes random effects.");
 
 		{
-			if (info) return s_random;
+			if (info) return KWD_RANDOM;
 
 			if (cast)
 			{
@@ -450,7 +450,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			HIT_POINT dam = 100;
 
-			if (info) return format("%s3*%d", s_dam, dam);
+			if (info) return format("%s3*%d", KWD_DAM, dam);
 
 			if (cast)
 			{

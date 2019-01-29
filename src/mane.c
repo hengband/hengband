@@ -31,31 +31,31 @@ static void mane_info(char *p, int power, HIT_POINT dam)
 	strcpy(p, "");
 
 	if ((power > 2 && power < 41) || (power > 41 && power < 59) || (power == 75))
-		sprintf(p, " %s%d", s_dam, (int)dam);
+		sprintf(p, " %s%d", KWD_DAM, (int)dam);
 	else
 	{
 		switch (power)
 		{
 			case 41:
-				sprintf(p, " %sd%d+%d", s_heal, plev * 3, plev);
+				sprintf(p, " %sd%d+%d", KWD_HEAL, plev * 3, plev);
 				break;
 			case 64:
-				sprintf(p, " %sd%d+%d", s_dur, 20+plev, plev);
+				sprintf(p, " %sd%d+%d", KWD_DURATION, 20+plev, plev);
 				break;
 			case 66:
-				sprintf(p, " %s%d", s_heal, plev*6);
+				sprintf(p, " %s%d", KWD_HEAL, plev*6);
 				break;
 			case 67:
-				sprintf(p, " %sd7+7", s_dur);
+				sprintf(p, " %sd7+7", KWD_DURATION);
 				break;
 			case 68:
-				sprintf(p, " %s10", s_range);
+				sprintf(p, " %s10", KWD_SPHERE);
 				break;
 			case 69:
-				sprintf(p, " %s%d", s_range, plev * 5);
+				sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
 				break;
 			case 79:
-				sprintf(p, " %s5", s_range);
+				sprintf(p, " %s5", KWD_SPHERE);
 				break;
 			default:
 				break;

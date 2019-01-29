@@ -619,7 +619,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			DICE_SID m_sides = plev * 3;
 			DICE_SID e_sides = plev * 3;
 
-			if (info) return format("%s1d%d+1d%d", s_dam, m_sides, e_sides);
+			if (info) return format("%s1d%d+1d%d", KWD_DAM, m_sides, e_sides);
 
 			if (cont)
 			{

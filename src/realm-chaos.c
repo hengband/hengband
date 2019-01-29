@@ -184,7 +184,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("モンスターにランダムな効果を与える。", "Fires something with random effects.");
 
 		{
-			if (info) return s_random;
+			if (info) return KWD_RANDOM;
 
 			if (cast)
 			{
@@ -511,7 +511,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("ランダムな属性の球やビームを発生させる。", "Generate random kind of balls or beams.");
 
 		{
-			if (info) return format("%s150 / 250", s_dam);
+			if (info) return format("%s150 / 250", KWD_DAM);
 
 			if (cast)
 			{
@@ -576,7 +576,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.");
 
 		{
-			if (info) return format("%s3 * 175", s_dam);
+			if (info) return format("%s3 * 175", KWD_DAM);
 
 			if (cast)
 			{

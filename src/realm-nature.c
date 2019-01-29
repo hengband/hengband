@@ -48,7 +48,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			DICE_SID sides = 4;
 			POSITION range = plev / 6 + 2;
 
-			if (info) return format("%s%dd%d %s%d", s_dam, dice, sides, s_rng, range);
+			if (info) return format("%s%dd%d %s%d", KWD_DAM, dice, sides, KWD_RANGE, range);
 
 			if (cast)
 			{
@@ -549,7 +549,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			POSITION b_rad = 1 + plev / 12;
 			POSITION q_rad = 20 + plev / 2;
 
-			if (info) return format("%s%d+%d", s_dam, d_dam, b_dam / 2);
+			if (info) return format("%s%d+%d", KWD_DAM, d_dam, b_dam / 2);
 
 			if (cast)
 			{

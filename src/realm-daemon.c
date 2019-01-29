@@ -407,7 +407,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int sides1 = plev * 2;
 			int sides2 = plev * 2;
 
-			if (info) return format("%sd%d+d%d", s_dam, sides1, sides2);
+			if (info) return format("%sd%d+d%d", KWD_DAM, sides1, sides2);
 
 			if (cast)
 			{
@@ -489,7 +489,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			int power = 20 + plev;
 			POSITION rad = 3 + plev / 20;
 
-			if (info) return format("%s%d+%d", s_dam, dam / 2, dam / 2);
+			if (info) return format("%s%d+%d", KWD_DAM, dam / 2, dam / 2);
 
 			if (cast)
 			{

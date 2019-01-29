@@ -65,7 +65,7 @@ concptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("カードの占いをする。", "Causes random effects.");
 
 		{
-			if (info) return s_random;
+			if (info) return KWD_RANDOM;
 
 			if (cast)
 			{

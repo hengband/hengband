@@ -93,7 +93,7 @@ static void learned_info(char *p, int power)
         case MS_BALL_MANA:
         case MS_BALL_DARK:
         case MS_STARBURST: 
-            set_bluemage_damage((power), plev, s_dam, p); break;
+            set_bluemage_damage((power), plev, KWD_DAM, p); break;
 		case MS_DISPEL:
 			break;
         case MS_ROCKET:
@@ -129,9 +129,9 @@ static void learned_info(char *p, int power)
         case MS_BALL_POIS:
         case MS_BALL_NETHER:
         case MS_BALL_WATER:
-            set_bluemage_damage((power), plev, s_dam, p); break;
+            set_bluemage_damage((power), plev, KWD_DAM, p); break;
         case MS_DRAIN_MANA:
-            set_bluemage_damage((power), plev, s_heal, p); break;
+            set_bluemage_damage((power), plev, KWD_HEAL, p); break;
         case MS_MIND_BLAST:
         case MS_BRAIN_SMASH:
         case MS_CAUSE_1:
@@ -148,26 +148,26 @@ static void learned_info(char *p, int power)
         case MS_BOLT_PLASMA:
         case MS_BOLT_ICE: 
         case MS_MAGIC_MISSILE: 
-            set_bluemage_damage((power), plev, s_dam, p); break;
+            set_bluemage_damage((power), plev, KWD_DAM, p); break;
 		case MS_SPEED:
-			sprintf(p, " %sd%d+%d", s_dur, 20+plev, plev);
+			sprintf(p, " %sd%d+%d", KWD_DURATION, 20+plev, plev);
 			break;
         case MS_HEAL:
-            set_bluemage_damage((power), plev, s_heal, p); break;
+            set_bluemage_damage((power), plev, KWD_HEAL, p); break;
 		case MS_INVULNER:
-			sprintf(p, " %sd7+7", s_dur);
+			sprintf(p, " %sd7+7", KWD_DURATION);
 			break;
 		case MS_BLINK:
-			sprintf(p, " %s10", s_range);
+			sprintf(p, " %s10", KWD_SPHERE);
 			break;
 		case MS_TELEPORT:
-			sprintf(p, " %s%d", s_range, plev * 5);
+			sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
 			break;
         case MS_PSY_SPEAR:
-            set_bluemage_damage((power), plev, s_dam, p); break;
+            set_bluemage_damage((power), plev, KWD_DAM, p); break;
 			break;
 		case MS_RAISE_DEAD:
-			sprintf(p, " %s5", s_range);
+			sprintf(p, " %s5", KWD_SPHERE);
 			break;
 		default:
 			break;
