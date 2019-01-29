@@ -1495,6 +1495,3 @@ extern void kamaenaoshi(INVENTORY_IDX item);
 extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
 
-/* shoot.c */
-extern ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);
-extern int bow_tmul(OBJECT_SUBTYPE_VALUE sval);

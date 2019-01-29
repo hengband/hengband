@@ -4,6 +4,7 @@
 #include "artifact.h"
 #include "avatar.h"
 
+#include "shoot.h"
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /
  * Determines the odds of an object breaking when thrown at a monster

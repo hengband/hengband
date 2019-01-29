@@ -22,6 +22,7 @@
 #include "store.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "shoot.h"
 
 
 /*

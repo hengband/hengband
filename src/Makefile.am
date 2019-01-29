@@ -57,7 +57,7 @@ hengband_SOURCES = \
 	report.c rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
-	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h shoot.c snipe.c \
+	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h shoot.c shoot.h snipe.c \
 	\
 	rumor.h rumor.c \
 	\
