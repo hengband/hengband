@@ -25,3 +25,4 @@ extern bool item_tester_hook_recharge(object_type *o_ptr);
 
 extern bool item_tester_learn_spell(object_type *o_ptr);
 extern bool item_tester_high_level_book(object_type *o_ptr);
+extern bool item_tester_refill_lantern(object_type *o_ptr);

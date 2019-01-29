@@ -491,3 +491,23 @@ bool item_tester_high_level_book(object_type *o_ptr)
 
 	return FALSE;
 }
+
+/*!
+ * @brief オブジェクトがランタンの燃料になるかどうかを判定する
+ * An "item_tester_hook" for refilling lanterns
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトがランタンの燃料になるならばTRUEを返す
+ */
+bool item_tester_refill_lantern(object_type *o_ptr)
+{
+	/* Flasks of oil are okay */
+	if (o_ptr->tval == TV_FLASK) return (TRUE);
+
+	/* Laterns are okay */
+	if ((o_ptr->tval == TV_LITE) &&
+		(o_ptr->sval == SV_LITE_LANTERN)) return (TRUE);
+
+	/* Assume not okay */
+	return (FALSE);
+}
+
