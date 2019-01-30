@@ -721,31 +721,10 @@ static bool use_mane(int spell)
 
 		(void)fire_beam(GF_AWAY_ALL, dir, plev);
 		break;
+
 	case MS_TELE_LEVEL:
-	{
-		IDX target_m_idx;
-		monster_type *m_ptr;
-		monster_race *r_ptr;
-		GAME_TEXT m_name[MAX_NLEN];
-
-		if (!target_set(TARGET_KILL)) return FALSE;
-		target_m_idx = cave[target_row][target_col].m_idx;
-		if (!target_m_idx) break;
-		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
-		m_ptr = &m_list[target_m_idx];
-		r_ptr = &r_info[m_ptr->r_idx];
-		monster_desc(m_name, m_ptr, 0);
-		msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
-
-		if ((r_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE)) ||
-			(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > plev + randint1(60)))
-		{
-			msg_print(_("しかし効果がなかった！", "%^s is unaffected!"));
-		}
-		else teleport_level(target_m_idx);
+		return teleport_level_other(p_ptr);
 		break;
-	}
 
 	case MS_PSY_SPEAR:
 		if (!get_aim_dir(&dir)) return FALSE;
