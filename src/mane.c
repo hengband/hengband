@@ -672,11 +672,9 @@ static bool use_mane(int spell)
 		msg_print(NULL);
 
 		/* Hack */
-		p_ptr->energy_need -= 1000 + (100 + randint1(200)+200)*TURNS_PER_TICK/10;
-
+		p_ptr->energy_need -= 1000 + (100 + randint1(200) + 200) * TURNS_PER_TICK / 10;
 		p_ptr->redraw |= (PR_MAP);
 		p_ptr->update |= (PU_MONSTERS);
-
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		handle_stuff();

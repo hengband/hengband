@@ -319,13 +319,7 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 		chance = USE_DEVICE;
 	}
 
-	if (world_player)
-	{
-		if (flush_failure) flush();
-		msg_print(_("止まった時の中ではうまく働かないようだ。", "Nothing happen. Maybe this staff is freezing too."));
-		sound(SOUND_FAIL);
-		return;
-	}
+	if (cmd_limit_time_walk(p_ptr)) return;
 
 	/* Roll for usage */
 	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (p_ptr->pclass == CLASS_BERSERKER))

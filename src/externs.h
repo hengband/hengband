@@ -543,6 +543,7 @@ extern void travel_step(void);
 
 /* cmd2.c */
 extern bool cmd_limit_arena(player_type *creature_ptr);
+extern bool cmd_limit_time_walk(player_type *creature_ptr);
 extern void forget_travel_flow(void);
 extern bool confirm_leave_level(bool down_stair);
 extern void do_cmd_go_up(void);

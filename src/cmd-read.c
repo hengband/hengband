@@ -47,16 +47,8 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		o_ptr = &o_list[0 - item];
 	}
 
-
 	p_ptr->energy_use = 100;
-
-	if (world_player)
-	{
-		if (flush_failure) flush();
-		msg_print(_("止まった時の中ではうまく働かないようだ。", "Nothing happen."));
-		sound(SOUND_FAIL);
-		return;
-	}
+	if (cmd_limit_time_walk(p_ptr)) return;
 
 	if (p_ptr->pclass == CLASS_BERSERKER)
 	{

@@ -119,13 +119,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	if (fail < USE_DEVICE) fail = USE_DEVICE;
 	if (chance < USE_DEVICE) chance = USE_DEVICE;
 
-	if (world_player)
-	{
-		if (flush_failure) flush();
-		msg_print(_("止まった時の中ではうまく働かないようだ。", "It shows no reaction."));
-		sound(SOUND_FAIL);
-		return;
-	}
+	if(cmd_limit_time_walk(p_ptr)) return;
 
 	if (p_ptr->pclass == CLASS_BERSERKER) success = FALSE;
 	else if (chance > fail)

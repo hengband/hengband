@@ -64,6 +64,18 @@ bool cmd_limit_arena(player_type *creature_ptr)
 	return FALSE;
 }
 
+bool cmd_limit_time_walk(player_type *creature_ptr)
+{
+	if (world_player)
+	{
+		if (flush_failure) flush();
+		msg_print(_("止まった時の中ではうまく働かないようだ。", "It shows no reaction."));
+		sound(SOUND_FAIL);
+		return TRUE;
+	}
+	return FALSE;
+}
+
 /*!
  * @brief 階段を使って階層を昇る処理 / Go up one level
  * @return なし
