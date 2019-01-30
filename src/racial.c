@@ -250,7 +250,7 @@ struct power_desc_type
 	PLAYER_LEVEL level;	//!<体得レベル
 	int cost;
 	int stat;
-	int fail;
+	PERCENTAGE fail;
 	int number;
 };
 
@@ -263,7 +263,7 @@ struct power_desc_type
 static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
 {
 	PLAYER_LEVEL min_level  = pd_ptr->level;
-	int difficulty = pd_ptr->fail;
+	PERCENTAGE difficulty = pd_ptr->fail;
 
 	int i;
 	int val;
@@ -281,11 +281,11 @@ static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
 	/* Calculate difficulty */
 	if (p_ptr->stun)
 	{
-		difficulty += p_ptr->stun;
+		difficulty += (PERCENTAGE)p_ptr->stun;
 	}
 	else if (p_ptr->lev > min_level)
 	{
-		int lev_adj = ((p_ptr->lev - min_level) / 3);
+		PERCENTAGE lev_adj = (PERCENTAGE)((p_ptr->lev - min_level) / 3);
 		if (lev_adj > 10) lev_adj = 10;
 		difficulty -= lev_adj;
 	}
