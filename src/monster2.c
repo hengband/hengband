@@ -3321,7 +3321,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 #define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */
 
 /*!
- * @brief モンスター1体を目標地点に可能ながり近い位置に生成する / improved version of scatter() for place monster
+ * @brief モンスター1体を目標地点に可能な限り近い位置に生成する / improved version of scatter() for place monster
  * @param r_idx 生成モンスター種族
  * @param yp 結果生成位置y座標
  * @param xp 結果生成位置x座標

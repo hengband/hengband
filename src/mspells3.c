@@ -1181,7 +1181,7 @@ static bool cast_learned_spell(int spell, bool success)
 	{
 		int k;
         msg_print(_("アリを召喚した。", "You summon ants."));
-		for (k = 0;k < 1; k++)
+		for (k = 0; k < 1; k++)
 			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode), '\0'))
 			{
                 if (!pet)
