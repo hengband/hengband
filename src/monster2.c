@@ -3333,11 +3333,11 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
  */
 static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
-	int place_x[MON_SCAT_MAXD];
-	int place_y[MON_SCAT_MAXD];
+	POSITION place_x[MON_SCAT_MAXD];
+	POSITION place_y[MON_SCAT_MAXD];
 	int num[MON_SCAT_MAXD];
 	int i;
-	int nx, ny;
+	POSITION nx, ny;
 
 	if (max_dist >= MON_SCAT_MAXD)
 		return FALSE;
