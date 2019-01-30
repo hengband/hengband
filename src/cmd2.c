@@ -53,6 +53,31 @@ bool confirm_leave_level(bool down_stair)
 	return FALSE;
 }
 
+/*!
+ * @brief 魔法系コマンドが制限されているかを返す。
+ * @return 魔法系コマンドを使用可能ならFALSE、不可能ならば理由をメッセージ表示してTRUEを返す。
+ */
+bool cmd_limit_cast(player_type *creature_ptr)
+{
+	if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+	{
+		msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
+		msg_print(NULL);
+		return TRUE;
+	}
+	else if (p_ptr->anti_magic)
+	{
+		msg_print(_("反魔法バリアが魔法を邪魔した！", "An anti-magic shell disrupts your magic!"));
+		return TRUE;
+	}
+	else if (p_ptr->shero)
+	{
+		msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
 
 bool cmd_limit_confused(player_type *creature_ptr)
 {

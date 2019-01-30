@@ -25,32 +25,6 @@
 #include "realm-hex.h"
 
 /*!
- * @brief 魔法系コマンドを実行できるかの判定を返す
- * @return 魔法系コマンドを使用可能ならTRUE、不可能ならば理由をメッセージ表示してFALSEを返す。
- */
-static bool can_do_cmd_cast(void)
-{
-	if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
-	{
-		msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
-		msg_print(NULL);
-		return FALSE;
-	}
-	else if (p_ptr->anti_magic)
-	{
-		msg_print(_("反魔法バリアが魔法を邪魔した！", "An anti-magic shell disrupts your magic!"));
-		return FALSE;
-	}
-	else if (p_ptr->shero)
-	{
-		msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-		return FALSE;
-	}
-	else
-		return TRUE;
-}
-
-/*!
  * @brief 修行僧の構え設定処理
  * @return 構えを変化させたらTRUE、構え不能かキャンセルしたらFALSEを返す。
  */
@@ -545,7 +519,7 @@ static bool cmd_racial_power_aux(s32b command)
 			if (command == -3) {
 				if (!import_magic_device()) return FALSE;
 			} else if (command == -4) {
-				if (!can_do_cmd_cast()) return FALSE;
+				if (cmd_limit_cast(p_ptr)) return FALSE;
 				if (!do_cmd_magic_eater(FALSE, TRUE)) return FALSE;
 			}
 			break;
@@ -561,11 +535,11 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_RED_MAGE:
 		{
-			if (!can_do_cmd_cast()) return FALSE;
+			if (cmd_limit_cast(p_ptr)) return FALSE;
 			handle_stuff();
 			do_cmd_cast();
 			handle_stuff();
-			if (!p_ptr->paralyzed && can_do_cmd_cast())
+			if (!p_ptr->paralyzed && !cmd_limit_cast(p_ptr))
 				do_cmd_cast();
 			break;
 		}

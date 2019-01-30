@@ -542,6 +542,7 @@ extern void travel_step(void);
 #endif
 
 /* cmd2.c */
+extern bool cmd_limit_cast(player_type *creature_ptr);
 extern bool cmd_limit_arena(player_type *creature_ptr);
 extern bool cmd_limit_time_walk(player_type *creature_ptr);
 extern bool cmd_limit_confused(player_type *creature_ptr);
