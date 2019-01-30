@@ -8357,11 +8357,7 @@ void do_cmd_kaji(bool only_browse)
 
 	if (!only_browse)
 	{
-		if (p_ptr->confused)
-		{
-			msg_print(_("混乱していて作業できない！", "You are too confused!"));
-			return;
-		}
+		if (cmd_limit_confused(p_ptr)) return;
 		if (p_ptr->blind)
 		{
 			msg_print(_("目が見えなくて作業できない！", "You are blind!"));

@@ -313,12 +313,7 @@ void do_cmd_hissatsu(void)
 	SPELL_IDX       n = 0;
 	magic_type      spell;
 
-	/* not if confused */
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて集中できない！", "You are too confused!"));
-		return;
-	}
+	if (cmd_limit_confused(p_ptr)) return;
 	if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
 	{
 		if (flush_failure) flush();
@@ -395,11 +390,7 @@ void do_cmd_gain_hissatsu(void)
 		return;
 	}
 
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて読めない！", "You are too confused!"));
-		return;
-	}
+	if (cmd_limit_confused(p_ptr)) return;
 
 	if (!(p_ptr->new_spells))
 	{

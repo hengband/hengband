@@ -1403,13 +1403,7 @@ bool do_cmd_cast_learned(void)
 	bool cast;
 	MANA_POINT need_mana;
 
-
-	/* not if confused */
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて唱えられない！", "You are too confused!"));
-		return TRUE;
-	}
+	if (cmd_limit_confused(p_ptr)) return FALSE;
 
 	/* get power */
 	if (!get_learned_power(&n)) return FALSE;
@@ -1521,8 +1515,7 @@ bool do_cmd_cast_learned(void)
 	p_ptr->energy_use = 100;
 
 	p_ptr->redraw |= (PR_MANA);
-	p_ptr->window |= (PW_PLAYER);
-	p_ptr->window |= (PW_SPELL);
+	p_ptr->window |= (PW_PLAYER | PW_SPELL);
 
 	return TRUE;
 }

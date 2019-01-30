@@ -61,11 +61,7 @@ static bool choose_kamae(void)
 	int i;
 	char buf[80];
 
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて構えられない！", "Too confused."));
-		return FALSE;
-	}
+	if (cmd_limit_confused(p_ptr)) return FALSE;
 	screen_save();
 	prt(_(" a) 構えをとく", " a) No form"), 2, 20);
 
@@ -152,11 +148,7 @@ static bool choose_kata(void)
 	int i;
 	char buf[80];
 
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて構えられない！", "Too confused."));
-		return FALSE;
-	}
+	if (cmd_limit_confused(p_ptr)) return FALSE;
 
 	if (p_ptr->stun)
 	{
@@ -345,15 +337,13 @@ static int racial_aux(power_desc_type *pd_ptr)
 					 "You need to attain level %d to use this power."), min_level);
 
 		p_ptr->energy_use = 0;
-		return 0;
+		return FALSE;
 	}
 
-	/* Too confused */
-	else if (p_ptr->confused)
+	if (cmd_limit_confused(p_ptr))
 	{
-		msg_print(_("混乱していてその能力は使えない。", "You are too confused to use this power."));
 		p_ptr->energy_use = 0;
-		return 0;
+		return FALSE;
 	}
 
 	/* Risk death? */
@@ -362,7 +352,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 		if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? ")))
 		{
 			p_ptr->energy_use = 0;
-			return 0;
+			return FALSE;
 		}
 	}
 
@@ -868,9 +858,8 @@ void do_cmd_racial_power(void)
 
 	num = 0;
 
-	if (p_ptr->confused)
+	if (cmd_limit_confused(p_ptr))
 	{
-		msg_print(_("混乱していて特殊能力を使えません！", "You are too confused to use any powers!"));
 		p_ptr->energy_use = 0;
 		return;
 	}

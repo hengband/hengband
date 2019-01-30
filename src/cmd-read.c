@@ -631,12 +631,7 @@ void do_cmd_read_scroll(void)
 		msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
 		return;
 	}
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて読めない。", "You are too confused!"));
-		return;
-	}
-
+	if (cmd_limit_confused(p_ptr)) return;
 
 	/* Restrict choices to scrolls */
 	item_tester_hook = item_tester_hook_readable;

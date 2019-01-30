@@ -934,13 +934,7 @@ bool do_cmd_mane(bool baigaesi)
 	monster_power   spell;
 	bool            cast;
 
-
-	/* not if confused */
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて集中できない！", "You are too confused!"));
-		return TRUE;
-	}
+	if (cmd_limit_confused(p_ptr)) return FALSE;
 
 	if (!p_ptr->mane_num)
 	{

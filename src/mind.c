@@ -1762,12 +1762,7 @@ void do_cmd_mind(void)
 	concptr            p;
 	bool		on_mirror = FALSE;
 
-	/* not if confused */
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて集中できない！", "You are too confused!"));
-		return;
-	}
+	if (cmd_limit_confused(p_ptr)) return;
 
 	/* get power */
 	if (!get_mind_power(&n, FALSE)) return;

@@ -1743,11 +1743,7 @@ void do_cmd_use(void)
 				msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
 				return;
 			}
-			if (p_ptr->confused)
-			{
-				msg_print(_("混乱していて読めない！", "You are too confused!"));
-				return;
-			}
+			if (cmd_limit_confused(p_ptr)) return;
 
 		  do_cmd_read_scroll_aux(item, TRUE);
 		  break;

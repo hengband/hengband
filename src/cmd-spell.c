@@ -739,11 +739,7 @@ void do_cmd_study(void)
 		return;
 	}
 
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて読めない！", "You are too confused!"));
-		return;
-	}
+	if (cmd_limit_confused(p_ptr)) return;
 
 	if (!(p_ptr->new_spells))
 	{
@@ -1002,13 +998,7 @@ void do_cmd_cast(void)
 		return;
 	}
 
-	/* Not when confused */
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて唱えられない！", "You are too confused!"));
-		flush();
-		return;
-	}
+	if (cmd_limit_confused(p_ptr)) return;
 
 	/* Hex */
 	if (p_ptr->realm1 == REALM_HEX)

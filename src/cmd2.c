@@ -53,6 +53,17 @@ bool confirm_leave_level(bool down_stair)
 	return FALSE;
 }
 
+
+bool cmd_limit_confused(player_type *creature_ptr)
+{
+	if (p_ptr->confused)
+	{
+		msg_print(_("混乱していてできない！", "You are too confused!"));
+		return TRUE;
+	}
+	return FALSE;
+}
+
 bool cmd_limit_arena(player_type *creature_ptr)
 {
 	if (p_ptr->inside_arena)
@@ -2063,13 +2074,7 @@ void do_cmd_walk(bool pickup)
 void do_cmd_run(void)
 {
 	DIRECTION dir;
-
-	/* Hack -- no running when confused */
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて走れない！", "You are too confused!"));
-		return;
-	}
+	if (cmd_limit_confused(p_ptr)) return;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{

@@ -345,11 +345,7 @@ bool do_riding(bool force)
 	}
 	else
 	{
-		if (p_ptr->confused)
-		{
-			msg_print(_("混乱していて乗れない！", "You are too confused!"));
-			return FALSE;
-		}
+		if (cmd_limit_confused(p_ptr)) return FALSE;
 
 		m_ptr = &m_list[c_ptr->m_idx];
 

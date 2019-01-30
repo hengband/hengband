@@ -512,12 +512,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	OBJECT_SUBTYPE_VALUE sval;
 	bool use_charge = TRUE;
 
-	/* Not when confused */
-	if (!only_browse && p_ptr->confused)
-	{
-		msg_print(_("混乱していて唱えられない！", "You are too confused!"));
-		return FALSE;
-	}
+	if (cmd_limit_confused(p_ptr)) return FALSE;
 
 	item = select_magic_eater(only_browse);
 	if (item == -1)

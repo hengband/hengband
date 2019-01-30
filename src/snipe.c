@@ -542,13 +542,7 @@ void do_cmd_snipe(void)
 	COMMAND_CODE n = 0;
 	bool            cast;
 
-
-	/* not if confused */
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱していて集中できない！", "You are too confused!"));
-		return;
-	}
+	if (cmd_limit_confused(p_ptr)) return;
 
 	/* not if hullucinated */
 	if (p_ptr->image)
