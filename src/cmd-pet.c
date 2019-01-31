@@ -844,7 +844,7 @@ void do_cmd_pet(void)
 		/* Abort if needed */
 		if (!flag)
 		{
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			return;
 		}
 

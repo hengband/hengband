@@ -733,7 +733,7 @@ void do_cmd_destroy(void)
 	/* Artifacts cannot be destroyed */
 	if (!can_player_destroy_object(o_ptr))
 	{
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 
 		msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), o_name);
 		return;

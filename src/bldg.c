@@ -4271,7 +4271,7 @@ void do_cmd_bldg(void)
 			command_new = SPECIAL_KEY_BUILDING;
 
 			/* No energy needed to re-enter the arena */
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 		}
 
 		return;
@@ -4288,7 +4288,7 @@ void do_cmd_bldg(void)
 		command_new = SPECIAL_KEY_BUILDING;
 
 		/* No energy needed to re-enter the arena */
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 
 		return;
 	}

@@ -14,6 +14,7 @@
 #include "world.h"
 #include "monster.h"
 #include "realm-hex.h"
+#include "player-status.h"
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
@@ -1150,7 +1151,7 @@ bool change_wild_mode(void)
 #else
 		msg_print("You cannot enter global map, since there is some monsters nearby!");
 #endif
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		return FALSE;
 	}
 
@@ -1164,7 +1165,7 @@ bool change_wild_mode(void)
 
 		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))
 		{
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			return FALSE;
 		}
 	}

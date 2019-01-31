@@ -943,7 +943,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	{
 		disturb(FALSE, TRUE);
 
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		/* Hack -- Enter store */
 		command_new = SPECIAL_KEY_STORE;
 	}
@@ -953,7 +953,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	{
 		disturb(FALSE, TRUE);
 
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		/* Hack -- Enter building */
 		command_new = SPECIAL_KEY_BUILDING;
 	}
@@ -963,7 +963,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	{
 		disturb(FALSE, TRUE);
 
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		/* Hack -- Enter quest level */
 		command_new = SPECIAL_KEY_QUEST;
 	}
@@ -1260,7 +1260,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			else
 			{
 				msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name);
-				p_ptr->energy_use = 0;
+				free_turn(p_ptr);
 				oktomove = FALSE;
 			}
 
@@ -1278,7 +1278,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		if (riding_r_ptr->flags1 & RF1_NEVER_MOVE)
 		{
 			msg_print(_("動けない！", "Can't move!"));
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);
 		}
@@ -1308,21 +1308,21 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			(have_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE)))
 		{
 			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(c_ptr)].name);
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
 			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name);
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);
 		}
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
 			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(c_ptr)].name);
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);
 		}
@@ -1344,7 +1344,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation)
 	{
 		msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(c_ptr)].name);
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		running = 0;
 		oktomove = FALSE;
 	}
@@ -1413,7 +1413,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			{
 				msg_print(_("それ以上先には進めない。", "You cannot go any more."));
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
-					p_ptr->energy_use = 0;
+					free_turn(p_ptr);
 			}
 
 			/* Wall (or secret door) */
@@ -1435,7 +1435,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				 * typing mistakes should not cost you a turn...
 				 */
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
-					p_ptr->energy_use = 0;
+					free_turn(p_ptr);
 			}
 		}
 
@@ -1449,7 +1449,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	{
 		if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
 		{
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 		}
 
 		/* To avoid a loop with running */

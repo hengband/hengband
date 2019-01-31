@@ -3,6 +3,7 @@
 #include "monster-status.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "player-status.h"
 
 #include "shoot.h"
 /*!
@@ -420,7 +421,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 	/* Get a direction (or cancel) */
 	if (!get_aim_dir(&dir))
 	{
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 
 		if (snipe_type == SP_AWAY) snipe_type = SP_NONE;
 
@@ -448,7 +449,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 	/* Don't shoot at my feet */
 	if (tx == p_ptr->x && ty == p_ptr->y)
 	{
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 
 		/* project_length is already reset to 0 */
 

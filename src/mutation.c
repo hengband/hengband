@@ -17,6 +17,7 @@
 #include "selfinfo.h"
 #include "spells-summon.h"
 #include "avatar.h"
+#include "player-status.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える
@@ -2348,7 +2349,7 @@ bool mutation_power_aux(int power)
 			break;
 
 		default:
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);
 	}
 

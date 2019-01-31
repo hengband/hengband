@@ -593,7 +593,7 @@ static void pattern_teleport(void)
 	if (record_stair) do_cmd_write_nikki(NIKKI_PAT_TELE, 0, NULL);
 
 	p_ptr->inside_quest = 0;
-	p_ptr->energy_use = 0;
+	free_turn(p_ptr);
 
 	/*
 	 * Clear all saved floors
@@ -4220,12 +4220,12 @@ static void process_command(void)
 						which_power = _("祈り", "prayer");
 
 					msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
-					p_ptr->energy_use = 0;
+					free_turn(p_ptr);
 				}
 				else if (p_ptr->shero && (p_ptr->pclass != CLASS_BERSERKER))
 				{
 					msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-					p_ptr->energy_use = 0;
+					free_turn(p_ptr);
 				}
 				else
 				{
@@ -4981,7 +4981,7 @@ static void process_player(void)
 		if (!command_new) command_see = FALSE;
 
 		/* Assume free turn */
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 
 		if (p_ptr->inside_battle)
 		{

@@ -518,7 +518,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	item = select_magic_eater(only_browse);
 	if (item == -1)
 	{
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		return FALSE;
 	}
 	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}

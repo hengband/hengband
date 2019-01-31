@@ -310,13 +310,13 @@ static int racial_aux(power_desc_type *pd_ptr)
 		msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", 
 					 "You need to attain level %d to use this power."), min_level);
 
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		return FALSE;
 	}
 
 	if (cmd_limit_confused(p_ptr))
 	{
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		return FALSE;
 	}
 
@@ -325,7 +325,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 	{
 		if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? ")))
 		{
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			return FALSE;
 		}
 	}
@@ -570,7 +570,7 @@ static bool cmd_racial_power_aux(s32b command)
 			{
 				set_action(ACTION_LEARN);
 			}
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			break;
 		}
 		case CLASS_CAVALRY:
@@ -799,7 +799,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		default:
 			msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 	}
 	}
 	return TRUE;
@@ -834,7 +834,7 @@ void do_cmd_racial_power(void)
 
 	if (cmd_limit_confused(p_ptr))
 	{
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		return;
 	}
 
@@ -1818,7 +1818,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 				case '0':
 				{
 					screen_load();
-					p_ptr->energy_use = 0;
+					free_turn(p_ptr);
 					return;
 				}
 
@@ -1982,7 +1982,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 	/* Abort if needed */
 	if (!flag)
 	{
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		return;
 	}
 	repeat_push(i);
@@ -2024,7 +2024,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 			p_ptr->window |= (PW_PLAYER | PW_SPELL);
 		}
 	}
-	else p_ptr->energy_use = 0;
+	else free_turn(p_ptr);
 
 	/* Success */
 	return;

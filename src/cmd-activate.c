@@ -155,7 +155,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
 	{
 		msg_print(_("燃料がない。", "It has no fuel."));
-		p_ptr->energy_use = 0;
+		free_turn(p_ptr);
 		return;
 	}
 
@@ -1639,7 +1639,7 @@ bool activate_artifact(object_type *o_ptr)
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
 			msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
-			p_ptr->energy_use = 0;
+			free_turn(p_ptr);
 			return FALSE;
 		}
 		set_action(ACTION_FISH);
