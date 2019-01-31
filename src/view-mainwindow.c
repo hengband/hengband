@@ -195,7 +195,7 @@ static void prt_dungeon(void)
  */
 static void prt_stat(int stat)
 {
-	char tmp[32];
+	GAME_TEXT tmp[32];
 
 	/* Display "injured" stat */
 	if (p_ptr->stat_cur[stat] < p_ptr->stat_max[stat])

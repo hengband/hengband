@@ -395,7 +395,7 @@ static void do_cmd_wiz_change_aux(void)
 		else if (tmp_int < 3) tmp_int = 3;
 
 		/* Save it */
-		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = (s16b)tmp_int;
+		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
 	}
 
 

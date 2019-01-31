@@ -242,7 +242,7 @@ static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
 	int i;
 	int val;
 	int sum = 0;
-	int stat = p_ptr->stat_cur[pd_ptr->stat];
+	BASE_STATUS stat = p_ptr->stat_cur[pd_ptr->stat];
 
 	/* No chance for success */
 	if ((p_ptr->lev < min_level) || p_ptr->confused)

@@ -1100,8 +1100,8 @@ void mutate_player(void)
 	int ii, jj, i;
 
 	/* Pick a pair of stats */
-	ii = randint0(6);
-	for (jj = ii; jj == ii; jj = randint0(6)) /* loop */;
+	ii = randint0(A_MAX);
+	for (jj = ii; jj == ii; jj = randint0(A_MAX)) /* loop */;
 
 	max1 = p_ptr->stat_max[ii];
 	cur1 = p_ptr->stat_cur[ii];
@@ -1113,7 +1113,7 @@ void mutate_player(void)
 	p_ptr->stat_max[jj] = max1;
 	p_ptr->stat_cur[jj] = cur1;
 
-	for (i=0;i<6;i++)
+	for (i = 0; i < A_MAX; i++)
 	{
 		if(p_ptr->stat_max[i] > p_ptr->stat_max_max[i]) p_ptr->stat_max[i] = p_ptr->stat_max_max[i];
 		if(p_ptr->stat_cur[i] > p_ptr->stat_max_max[i]) p_ptr->stat_cur[i] = p_ptr->stat_max_max[i];
