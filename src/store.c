@@ -18,6 +18,7 @@
 #include "avatar.h"
 #include "cmd-spell.h"
 #include "rumor.h"
+#include "player-status.h"
 
 #define MIN_STOCK 12
 
@@ -6072,13 +6073,10 @@ void do_cmd_store(void)
 
 	p_ptr->town_num = old_town_num;
 
-	/* Free turn */
-	p_ptr->energy_use = 100;
-
+	take_turn(p_ptr, 100);;
 
 	/* Hack -- Character is no longer in "icky" mode */
 	character_icky = FALSE;
-
 
 	/* Hack -- Cancel automatic command */
 	command_new = 0;

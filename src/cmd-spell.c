@@ -924,7 +924,7 @@ void do_cmd_study(void)
 #endif
 	}
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	switch (mp_ptr->spell_book)
 	{
@@ -1336,7 +1336,7 @@ void do_cmd_cast(void)
 		}
 	}
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 
 	/* Over-exert the player */

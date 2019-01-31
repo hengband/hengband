@@ -7511,7 +7511,7 @@ static void drain_essence(void)
 		if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name))) return;
 	}
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	object_flags(o_ptr, old_flgs);
 	if (have_flag(old_flgs, TR_KILL_DRAGON)) add_flag(old_flgs, TR_SLAY_DRAGON);
@@ -8194,7 +8194,7 @@ static void add_essence(ESSENCE_IDX mode)
 			if ((o_ptr->to_h >= p_ptr->lev/5+5) && (o_ptr->to_d >= p_ptr->lev/5+5))
 			{
 				msg_print(_("改良に失敗した。", "You failed to enchant."));
-				p_ptr->energy_use = 100;
+				take_turn(p_ptr, 100);;
 				return;
 			}
 			else
@@ -8208,7 +8208,7 @@ static void add_essence(ESSENCE_IDX mode)
 			if (o_ptr->to_a >= p_ptr->lev/5+5)
 			{
 				msg_print(_("改良に失敗した。", "You failed to enchant."));
-				p_ptr->energy_use = 100;
+				take_turn(p_ptr, 100);;
 				return;
 			}
 			else
@@ -8285,7 +8285,7 @@ static void add_essence(ESSENCE_IDX mode)
 		}
 	}
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 #ifdef JP
 	msg_format("%sに%sの能力を付加しました。", o_name, es_ptr->add_name);
@@ -8322,7 +8322,7 @@ static void erase_essence(void)
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name))) return;
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	if (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE)
 	{

@@ -1331,7 +1331,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 
 	disturb(FALSE, TRUE);
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	if (!p_ptr->migite && !p_ptr->hidarite &&
 		!(p_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES)))

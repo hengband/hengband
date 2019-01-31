@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "avatar.h"
 #include "spells-status.h"
+#include "player-status.h"
 
 
 /*!
@@ -354,7 +355,7 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 	}
 	target_pet = old_target_pet;
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	/* Get the level */
 	lev = k_info[o_ptr->k_idx].level;

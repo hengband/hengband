@@ -16,6 +16,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "cmd-spell.h"
+#include "player-status.h"
 
 #define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< モンスター魔法をプレイヤーが使用する場合の換算レベル */
 
@@ -1512,7 +1513,7 @@ bool do_cmd_cast_learned(void)
 		}
 	}
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	p_ptr->redraw |= (PR_MANA);
 	p_ptr->window |= (PW_PLAYER | PW_SPELL);

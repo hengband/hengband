@@ -2,6 +2,7 @@
 #include "projection.h"
 #include "spells-summon.h"
 #include "avatar.h"
+#include "player-status.h"
 
 
 
@@ -298,7 +299,7 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 	}
 
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;

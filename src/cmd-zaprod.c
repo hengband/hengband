@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "avatar.h"
 #include "spells-status.h"
+#include "player-status.h"
 
 /*!
  * @brief ロッドの効果を発動する
@@ -297,7 +298,7 @@ void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 	}
 
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;

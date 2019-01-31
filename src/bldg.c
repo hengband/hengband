@@ -26,6 +26,7 @@
 #include "artifact.h"
 #include "cmd-spell.h"
 #include "rumor.h"
+#include "player-status.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c
@@ -4190,7 +4191,7 @@ void do_cmd_quest(void)
 {
 	if(p_ptr->wild_mode) return;
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
 	{
@@ -4232,7 +4233,7 @@ void do_cmd_bldg(void)
 
 	if(p_ptr->wild_mode) return;
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_BLDG))
 	{

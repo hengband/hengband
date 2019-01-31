@@ -2,6 +2,7 @@
 #include "angband.h"
 #include "spells-object.h"
 #include "object-hook.h"
+#include "player-status.h"
 
 /*!
  * @brief「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
@@ -298,6 +299,6 @@ bool import_magic_device(void)
 		floor_item_describe(0 - item);
 		floor_item_optimize(0 - item);
 	}
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 	return TRUE;
 }

@@ -16,6 +16,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "realm-hex.h"
+#include "player-status.h"
 
 /*!
 * @brief ペット入りモンスターボールをソートするための比較関数
@@ -91,7 +92,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		o_ptr = &o_list[0 - item];
 	}
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;

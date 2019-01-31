@@ -12,6 +12,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "realm-hex.h"
+#include "player-status.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン
@@ -40,7 +41,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 
 	sound(SOUND_EAT);
 
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 
 	/* Identity not known yet */
 	ident = FALSE;

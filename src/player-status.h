@@ -12,3 +12,5 @@ extern bool heavy_armor(void);
 extern void update_creature(player_type *creature_ptr);
 extern BIT_FLAGS16 empty_hands(bool riding_control);
 extern bool player_has_no_spellbooks(void);
+
+extern void take_turn(player_type *creature_ptr, PERCENTAGE need_cost);

@@ -57,6 +57,7 @@
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
 #include "avatar.h"
+#include "player-status.h"
 
 
 /*!
@@ -551,7 +552,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		sound(SOUND_FAIL);
 		if (randint1(100) >= chance)
 			chg_virtue(V_CHANCE,-1);
-		p_ptr->energy_use = 100;
+		take_turn(p_ptr, 100);;
 
 		return TRUE;
 	}
@@ -579,7 +580,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		if (randint1(100) < chance)
 			chg_virtue(V_CHANCE,1);
 	}
-	p_ptr->energy_use = 100;
+	take_turn(p_ptr, 100);;
 	if (tval == TV_ROD) p_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
 	else p_ptr->magic_num1[item] -= EATER_CHARGE;
 
