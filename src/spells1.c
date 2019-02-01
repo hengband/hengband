@@ -529,101 +529,58 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			break;
 		}
 
-		/* Make doors */
 		case GF_MAKE_DOOR:
 		{
-			/* Require a "naked" floor grid */
 			if (!cave_naked_bold(y, x)) break;
-
-			/* Not on the player */
 			if (player_bold(y, x)) break;
-
-			/* Create a closed door */
 			cave_set_feat(y, x, feat_door[DOOR_DOOR].closed);
-
-			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
-
 			break;
 		}
 
-		/* Make traps */
 		case GF_MAKE_TRAP:
 		{
-			/* Place a trap */
 			place_trap(y, x);
-
 			break;
 		}
 
-		/* Make doors */
 		case GF_MAKE_TREE:
 		{
-			/* Require a "naked" floor grid */
 			if (!cave_naked_bold(y, x)) break;
-
-			/* Not on the player */
 			if (player_bold(y, x)) break;
-
-			/* Create a closed door */
 			cave_set_feat(y, x, feat_tree);
-
-			/* Observe */
 			if (c_ptr->info & (CAVE_MARK)) obvious = TRUE;
-
-
 			break;
 		}
 
 		case GF_MAKE_GLYPH:
 		{
-			/* Require a "naked" floor grid */
 			if (!cave_naked_bold(y, x)) break;
-
-			/* Create a glyph */
 			c_ptr->info |= CAVE_OBJECT;
 			c_ptr->mimic = feat_glyph;
-
 			note_spot(y, x);
-
 			lite_spot(y, x);
-
 			break;
 		}
 
 		case GF_STONE_WALL:
 		{
-			/* Require a "naked" floor grid */
 			if (!cave_naked_bold(y, x)) break;
-
-			/* Not on the player */
 			if (player_bold(y, x)) break;
-
-			/* Place a wall */
 			cave_set_feat(y, x, feat_granite);
-
 			break;
 		}
 
-
 		case GF_LAVA_FLOW:
 		{
-			/* Ignore permanent grid */
 			if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
-
-			/* Shallow Lava */
 			if (dam == 1)
 			{
-				/* Ignore grid without enough space */
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-
-				/* Place a shallow lava */
 				cave_set_feat(y, x, feat_shallow_lava);
 			}
-			/* Deep Lava */
 			else if (dam)
 			{
-				/* Place a deep lava */
 				cave_set_feat(y, x, feat_deep_lava);
 			}
 			break;
@@ -631,22 +588,14 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 		case GF_WATER_FLOW:
 		{
-			/* Ignore permanent grid */
 			if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
-
-			/* Shallow Water */
 			if (dam == 1)
 			{
-				/* Ignore grid without enough space */
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-
-				/* Place a shallow water */
 				cave_set_feat(y, x, feat_shallow_water);
 			}
-			/* Deep Water */
 			else if (dam)
 			{
-				/* Place a deep water */
 				cave_set_feat(y, x, feat_deep_water);
 			}
 			break;

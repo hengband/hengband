@@ -62,6 +62,7 @@ hengband_SOURCES = \
 	rumor.h rumor.c \
 	\
 	spells1.c spells2.c spells3.c \
+	spells-diceroll.c spells-diceroll.h \
 	spells-object.c spells-object.h \
 	spells-status.c spells-status.h \
 	spells-summon.c spells-summon.h \
