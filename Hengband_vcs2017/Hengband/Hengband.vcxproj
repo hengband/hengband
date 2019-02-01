@@ -239,6 +239,7 @@
     <ClCompile Include="..\..\src\shoot.c" />
     <ClCompile Include="..\..\src\snipe.c" />
     <ClCompile Include="..\..\src\sort.c" />
+    <ClCompile Include="..\..\src\spells-diceroll.c" />
     <ClCompile Include="..\..\src\spells-object.c" />
     <ClCompile Include="..\..\src\spells-status.c" />
     <ClCompile Include="..\..\src\spells-summon.c" />
@@ -325,6 +326,7 @@
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\shoot.h" />
     <ClInclude Include="..\..\src\sort.h" />
+    <ClInclude Include="..\..\src\spells-diceroll.h" />
     <ClInclude Include="..\..\src\spells-object.h" />
     <ClInclude Include="..\..\src\spells-status.h" />
     <ClInclude Include="..\..\src\spells-summon.h" />
