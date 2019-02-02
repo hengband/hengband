@@ -8,13 +8,15 @@
 
 #include "angband.h"
 #include "object-hook.h"
-#include "spells-summon.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
-#include "spells-status.h"
 #include "rumor.h"
 #include "realm-hex.h"
+
+#include "spells-object.h"
+#include "spells-summon.h"
+#include "spells-status.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

@@ -822,7 +822,6 @@ extern bool make_gold(object_type *j_ptr);
 extern void place_gold(POSITION y, POSITION x);
 extern OBJECT_IDX drop_near(object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 extern void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
-extern void amusement(POSITION y1, POSITION x1, int num, bool known);
 extern void inven_item_charges(INVENTORY_IDX item);
 extern void inven_item_describe(INVENTORY_IDX item);
 extern void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);

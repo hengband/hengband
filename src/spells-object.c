@@ -4,6 +4,44 @@
 #include "object-hook.h"
 #include "player-status.h"
 
+
+typedef struct
+{
+	OBJECT_TYPE_VALUE tval;
+	OBJECT_SUBTYPE_VALUE sval;
+	PERCENTAGE prob;
+	byte flag;
+} amuse_type;
+
+/*
+ * Scatter some "amusing" objects near the player
+ */
+
+#define AMS_NOTHING   0x00 /* No restriction */
+#define AMS_NO_UNIQUE 0x01 /* Don't make the amusing object of uniques */
+#define AMS_FIXED_ART 0x02 /* Make a fixed artifact based on the amusing object */
+#define AMS_MULTIPLE  0x04 /* Drop 1-3 objects for one type */
+#define AMS_PILE      0x08 /* Drop 1-99 pile objects for one type */
+
+static amuse_type amuse_info[] =
+{
+	{ TV_BOTTLE, SV_ANY, 5, AMS_NOTHING },
+	{ TV_JUNK, SV_ANY, 3, AMS_MULTIPLE },
+	{ TV_SPIKE, SV_ANY, 10, AMS_PILE },
+	{ TV_STATUE, SV_ANY, 15, AMS_NOTHING },
+	{ TV_CORPSE, SV_ANY, 15, AMS_NO_UNIQUE },
+	{ TV_SKELETON, SV_ANY, 10, AMS_NO_UNIQUE },
+	{ TV_FIGURINE, SV_ANY, 10, AMS_NO_UNIQUE },
+	{ TV_PARCHMENT, SV_ANY, 1, AMS_NOTHING },
+	{ TV_POLEARM, SV_TSURIZAO, 3, AMS_NOTHING }, //Fishing Pole of Taikobo
+	{ TV_SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, //Broken Dagger of Magician
+	{ TV_SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING },
+	{ TV_SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING },
+	{ TV_SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
+
+	{ 0, 0, 0 }
+};
+
 /*!
  * @brief「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
  * Hook to determine if an object is contertible in an arrow/bolt
@@ -301,4 +339,91 @@ bool import_magic_device(void)
 	}
 	take_turn(p_ptr, 100);;
 	return TRUE;
+}
+
+/*!
+ * @brief 誰得ドロップを行う。
+ * @param y1 配置したいフロアのY座標
+ * @param x1 配置したいフロアのX座標
+ * @param num 誰得の処理回数
+ * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
+ * @return なし
+ */
+void amusement(POSITION y1, POSITION x1, int num, bool known)
+{
+	object_type *i_ptr;
+	object_type object_type_body;
+	int n, t = 0;
+
+	for (n = 0; amuse_info[n].tval != 0; n++)
+	{
+		t += amuse_info[n].prob;
+	}
+
+	/* Acquirement */
+	while (num)
+	{
+		int i;
+		KIND_OBJECT_IDX k_idx;
+		ARTIFACT_IDX a_idx = 0;
+		int r = randint0(t);
+		bool insta_art, fixed_art;
+
+		for (i = 0; ; i++)
+		{
+			r -= amuse_info[i].prob;
+			if (r <= 0) break;
+		}
+		i_ptr = &object_type_body;
+		object_wipe(i_ptr);
+		k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
+
+		/* Paranoia - reroll if nothing */
+		if (!k_idx) continue;
+
+		/* Search an artifact index if need */
+		insta_art = (k_info[k_idx].gen_flags & TRG_INSTA_ART);
+		fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
+
+		if (insta_art || fixed_art)
+		{
+			for (a_idx = 1; a_idx < max_a_idx; a_idx++)
+			{
+				if (insta_art && !(a_info[a_idx].gen_flags & TRG_INSTA_ART)) continue;
+				if (a_info[a_idx].tval != k_info[k_idx].tval) continue;
+				if (a_info[a_idx].sval != k_info[k_idx].sval) continue;
+				if (a_info[a_idx].cur_num > 0) continue;
+				break;
+			}
+
+			if (a_idx >= max_a_idx) continue;
+		}
+
+		/* Make an object (if possible) */
+		object_prep(i_ptr, k_idx);
+		if (a_idx) i_ptr->name1 = a_idx;
+		apply_magic(i_ptr, 1, AM_NO_FIXED_ART);
+
+		if (amuse_info[i].flag & AMS_NO_UNIQUE)
+		{
+			if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE) continue;
+		}
+
+		if (amuse_info[i].flag & AMS_MULTIPLE) i_ptr->number = randint1(3);
+		if (amuse_info[i].flag & AMS_PILE) i_ptr->number = randint1(99);
+
+		if (known)
+		{
+			object_aware(i_ptr);
+			object_known(i_ptr);
+		}
+
+		/* Paranoia - reroll if nothing */
+		if (!(i_ptr->k_idx)) continue;
+
+		/* Drop the object */
+		(void)drop_near(i_ptr, -1, y1, x1);
+
+		num--;
+	}
 }
