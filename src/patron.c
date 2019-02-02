@@ -5,10 +5,12 @@
 #include "object-curse.h"
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
-#include "spells-summon.h"
 #include "mutation.h"
 #include "artifact.h"
 #include "player-status.h"
+
+#include "spells-summon.h"
+#include "spells-object.h"
 
 #ifdef JP
 /*!

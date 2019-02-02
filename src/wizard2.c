@@ -13,13 +13,14 @@
 #include "angband.h"
 #include "floor.h"
 #include "selfinfo.h"
-#include "spells-summon.h"
 #include "patron.h"
 #include "mutation.h"
 #include "quest.h"
 #include "artifact.h"
 #include "player-status.h"
 
+#include "spells-object.h"
+#include "spells-summon.h"
 
 /*!
  * @brief プレイヤーのヒットダイスを振り直す / Roll the hitdie -- aux of do_cmd_rerate()

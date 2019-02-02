@@ -5376,46 +5376,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	return (o_idx);
 }
 
-
-/*!
- * @brief 獲得ドロップを行う。
- * Scatter some "great" objects near the player
- * @param y1 配置したいフロアのY座標
- * @param x1 配置したいフロアのX座標
- * @param num 獲得の処理回数
- * @param great TRUEならば必ず高級品以上を落とす
- * @param special TRUEならば必ず特別品を落とす
- * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
- * @return なし
- */
-void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
-{
-	object_type *i_ptr;
-	object_type object_type_body;
-	BIT_FLAGS mode = AM_GOOD | (great || special ? AM_GREAT : 0L) | (special ? AM_SPECIAL : 0L) ;
-
-	/* Acquirement */
-	while (num--)
-	{
-		i_ptr = &object_type_body;
-		object_wipe(i_ptr);
-
-		/* Make a good (or great) object (if possible) */
-		if (!make_object(i_ptr, mode)) continue;
-
-		if (known)
-		{
-			object_aware(i_ptr);
-			object_known(i_ptr);
-		}
-
-		/* Drop the object */
-		(void)drop_near(i_ptr, -1, y1, x1);
-	}
-}
-
-
-
 /*!
  * @brief 魔道具の使用回数の残量を示すメッセージを表示する /
  * Describe the charges on an item in the inventory.
