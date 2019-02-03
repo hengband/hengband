@@ -1428,7 +1428,6 @@ extern void spoil_random_artifact(concptr fname);
 
 /* wizard2.c */
 extern void strip_name(char *buf, KIND_OBJECT_IDX k_idx);
-extern void do_cmd_rerate(SPOP_FLAGS options);
 extern void cheat_death(player_type *creature_ptr);
 
 

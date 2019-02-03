@@ -452,7 +452,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_NEW_LIFE:
-			do_cmd_rerate(0L);
+			roll_hitdice(0L);
 			get_max_stats();
 			p_ptr->update |= PU_BONUS;
 			lose_all_mutations();

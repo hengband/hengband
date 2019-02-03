@@ -12,4 +12,5 @@ extern bool poly_monster(DIRECTION dir, int power);
 extern bool clone_monster(DIRECTION dir);
 extern void stop_singing(void);
 extern bool time_walk(player_type *creature_ptr);
+extern void roll_hitdice(SPOP_FLAGS options);
 

@@ -22,71 +22,7 @@
 #include "spells.h"
 #include "spells-object.h"
 #include "spells-summon.h"
-
-/*!
- * @brief プレイヤーのヒットダイスを振り直す / Hack -- Rerate Hitpoints
- * @param options スペル共通オプション
- * @return なし
- */
-void do_cmd_rerate(SPOP_FLAGS options)
-{
-	PERCENTAGE percent;
-
-	/* Minimum hitpoints at highest level */
-	HIT_POINT min_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 3 / 8;
-
-	/* Maximum hitpoints at highest level */
-	HIT_POINT max_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 5 / 8;
-
-	int i;
-
-	/* Rerate */
-	while (1)
-	{
-		/* Pre-calculate level 1 hitdice */
-		p_ptr->player_hp[0] = (HIT_POINT)p_ptr->hitdie;
-
-		for (i = 1; i < 4; i++)
-		{
-			p_ptr->player_hp[0] += randint1(p_ptr->hitdie);
-		}
-
-		/* Roll the hitpoint values */
-		for (i = 1; i < PY_MAX_LEVEL; i++)
-		{
-			p_ptr->player_hp[i] = p_ptr->player_hp[i - 1] + randint1(p_ptr->hitdie);
-		}
-
-		/* Require "valid" hitpoints at highest level */
-		if ((p_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) &&
-			(p_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value)) break;
-	}
-
-	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
-		(2 * p_ptr->hitdie + ((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
-
-	/* Update and redraw hitpoints */
-	p_ptr->update |= (PU_HP);
-	p_ptr->redraw |= (PR_HP);
-	p_ptr->window |= (PW_PLAYER);
-
-	if(!(options & SPOP_NO_UPDATE)) handle_stuff();
-
-	if (options & SPOP_DISPLAY_MES)
-	{
-		if (options & SPOP_DEBUG)
-		{
-			msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
-			p_ptr->knowledge |= KNOW_HPRATE;
-		}
-		else
-		{
-			msg_print(_("体力ランクが変わった。", "Life rate is changed."));
-			p_ptr->knowledge &= ~(KNOW_HPRATE);
-		}
-	}
-}
-
+#include "spells-status.h"
 
 #ifdef ALLOW_WIZARD
 
@@ -1895,7 +1831,7 @@ void do_cmd_debug(void)
 
 	/* Hitpoint rerating */
 	case 'h':
-		do_cmd_rerate(SPOP_DISPLAY_MES | SPOP_DEBUG);
+		roll_hitdice(SPOP_DISPLAY_MES | SPOP_DEBUG);
 		break;
 
 	case 'H':

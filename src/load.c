@@ -48,6 +48,7 @@
 #include "store.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "spells-status.h"
 
 
 /*
@@ -3791,22 +3792,22 @@ static errr rd_savefile_new_aux(void)
 	if(z_older_than(10, 2, 2) && (p_ptr->pclass == CLASS_BEASTMASTER) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		do_cmd_rerate(0L);
+		roll_hitdice(0L);
 	}
 	if(z_older_than(10, 3, 2) && (p_ptr->pclass == CLASS_ARCHER) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		do_cmd_rerate(0L);
+		roll_hitdice(0L);
 	}
 	if(z_older_than(10, 2, 6) && (p_ptr->pclass == CLASS_SORCERER) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		do_cmd_rerate(0L);
+		roll_hitdice(0L);
 	}
 	if(z_older_than(10, 4, 7) && (p_ptr->pclass == CLASS_BLUE_MAGE) && !p_ptr->is_dead)
 	{
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		do_cmd_rerate(0L);
+		roll_hitdice(0L);
 	}
 
 	/* Important -- Initialize the magic */
