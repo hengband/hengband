@@ -18,6 +18,7 @@
 #include "store.h"
 #include "quest.h"
 #include "player-status.h"
+#include "spells.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 
@@ -1199,7 +1200,7 @@ static void get_extra(bool roll_hitdie)
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
 	/* Roll for hit point unless quick-start */
-	if (roll_hitdie) do_cmd_rerate_aux();
+	if (roll_hitdie) do_cmd_rerate(SPOP_NO_UPDATE);
 
 	/* Initial hitpoints */
 	p_ptr->mhp = p_ptr->player_hp[0];

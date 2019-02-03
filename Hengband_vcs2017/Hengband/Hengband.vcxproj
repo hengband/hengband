@@ -263,7 +263,6 @@
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\z-util.c" />
     <ClCompile Include="..\..\src\z-virt.c" />
-    <ClInclude Include="spells.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -333,6 +332,7 @@
     <ClInclude Include="..\..\src\spells-summon.h" />
     <ClInclude Include="..\..\src\floor-streams.h" />
     <ClInclude Include="..\..\src\projection.h" />
+    <ClInclude Include="..\..\src\spells.h" />
     <ClInclude Include="..\..\src\store.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />

@@ -19,15 +19,19 @@
 #include "artifact.h"
 #include "player-status.h"
 
+#include "spells.h"
 #include "spells-object.h"
 #include "spells-summon.h"
 
 /*!
- * @brief プレイヤーのヒットダイスを振り直す / Roll the hitdie -- aux of do_cmd_rerate()
+ * @brief プレイヤーのヒットダイスを振り直す / Hack -- Rerate Hitpoints
+ * @param options スペル共通オプション
  * @return なし
  */
-void do_cmd_rerate_aux(void)
+void do_cmd_rerate(SPOP_FLAGS options)
 {
+	PERCENTAGE percent;
+
 	/* Minimum hitpoints at highest level */
 	HIT_POINT min_value = p_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (p_ptr->hitdie + 1)) * 3 / 8;
 
@@ -55,42 +59,31 @@ void do_cmd_rerate_aux(void)
 
 		/* Require "valid" hitpoints at highest level */
 		if ((p_ptr->player_hp[PY_MAX_LEVEL - 1] >= min_value) &&
-		    (p_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value)) break;
+			(p_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value)) break;
 	}
-}
-
-
-/*!
- * @brief プレイヤーのヒットダイスを振り直した後明示を行う / Hack -- Rerate Hitpoints
- * @param display TRUEならば体力ランクを明示する
- * @return なし
- */
-void do_cmd_rerate(bool display)
-{
-	PERCENTAGE percent;
-
-	/* Rerate */
-	do_cmd_rerate_aux();
 
 	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * p_ptr->hitdie + ((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
-
 
 	/* Update and redraw hitpoints */
 	p_ptr->update |= (PU_HP);
 	p_ptr->redraw |= (PR_HP);
 	p_ptr->window |= (PW_PLAYER);
-	handle_stuff();
 
-	if (display)
+	if(!(options & SPOP_NO_UPDATE)) handle_stuff();
+
+	if (options & SPOP_DISPLAY_MES)
 	{
-		msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
-		p_ptr->knowledge |= KNOW_HPRATE;
-	}
-	else
-	{
-		msg_print(_("体力ランクが変わった。", "Life rate is changed."));
-		p_ptr->knowledge &= ~(KNOW_HPRATE);
+		if (options & SPOP_DEBUG)
+		{
+			msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
+			p_ptr->knowledge |= KNOW_HPRATE;
+		}
+		else
+		{
+			msg_print(_("体力ランクが変わった。", "Life rate is changed."));
+			p_ptr->knowledge &= ~(KNOW_HPRATE);
+		}
 	}
 }
 
@@ -1902,7 +1895,7 @@ void do_cmd_debug(void)
 
 	/* Hitpoint rerating */
 	case 'h':
-		do_cmd_rerate(TRUE);
+		do_cmd_rerate(SPOP_DISPLAY_MES | SPOP_DEBUG);
 		break;
 
 	case 'H':

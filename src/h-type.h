@@ -254,7 +254,7 @@ typedef byte FF_FLAGS_IDX;   /*!< 地形特性ID */
 
 typedef s16b FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
-typedef BIT_FLAGS SPOP_FLAGS; /*1< スペル用オプション */
+typedef BIT_FLAGS SPOP_FLAGS; /*!< スペル用オプション */
 
 /*** Pointers to all the basic types defined above ***/
 
