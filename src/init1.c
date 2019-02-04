@@ -3842,17 +3842,11 @@ static errr parse_line_building(char *buf)
 		{
 			int n;
 			n = tokenize(s + 2, MAX_CLASS, zz, 0);
-			if (n <= MAX_CLASS)
-			{
-				for (i = 0; i < MAX_CLASS; i++)
-				{	
-					building[index].member_class[i] = ((i > n) ? (CLASS_IDX)atoi(zz[i]) : 1);
-				}
-
-				break;
+			for (i = 0; i < MAX_CLASS; i++)
+			{	
+				building[index].member_class[i] = ((i < n) ? (CLASS_IDX)atoi(zz[i]) : 1);
 			}
-
-			return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+			break;
 		}
 
 		/* Building Races */
@@ -3872,17 +3866,11 @@ static errr parse_line_building(char *buf)
 		{
 			int n;
 			n = tokenize(s + 2, MAX_MAGIC, zz, 0);
-			if (n <= MAX_MAGIC)
+			for (i = 0; i < MAX_MAGIC; i++)
 			{
-				for (i = 0; i < MAX_MAGIC; i++)
-				{
-					building[index].member_realm[i+1] = ((i > n) ? (REALM_IDX)atoi(zz[i]) : 1);
-				}
-
-				break;
+				building[index].member_realm[i+1] = ((i < n) ? (REALM_IDX)atoi(zz[i]) : 1);
 			}
-
-			return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+			break;
 		}
 
 		case 'Z':
