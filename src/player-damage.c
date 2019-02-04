@@ -361,14 +361,14 @@ static bool acid_minus_ac(void)
 	if (!o_ptr->k_idx) return (FALSE);
 	if (!object_is_armour(o_ptr)) return (FALSE);
 
+	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_flags(o_ptr, flgs);
 	/* No damage left to be done */
 	if (o_ptr->ac + o_ptr->to_a <= 0)
 	{
 		msg_format(_("%sは既にボロボロだ！", "Your %s is already crumble!"), o_name);
 		return (FALSE);
 	}
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-	object_flags(o_ptr, flgs);
 
 	/* Object resists */
 	if (have_flag(flgs, TR_IGNORE_ACID))
