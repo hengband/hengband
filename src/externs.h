@@ -364,7 +364,6 @@ extern int highscore_fd;
 extern int mutant_regenerate_mod;
 extern bool can_save;
 extern s16b world_monster;
-extern bool world_player;
 extern int cap_mon;
 extern int cap_mspeed;
 extern HIT_POINT cap_hp;

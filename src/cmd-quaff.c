@@ -29,7 +29,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 	object_type *q_ptr;
 
 
-	if (world_player)
+	if (p_ptr->timewalk)
 	{
 		if (flush_failure) flush();
 		msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from a bottle."));

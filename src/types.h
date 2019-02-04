@@ -1104,6 +1104,9 @@ struct player_type
 	TIME_EFFECT multishadow;       /* Timed -- Multi-shadow */
 	TIME_EFFECT dustrobe;          /* Timed -- Robe of dust */
 
+	bool timewalk;
+
+
 	PATRON_IDX chaos_patron;
 
 	BIT_FLAGS muta1; /*!< レイシャル型の変異 / "Activatable" mutations must be in MUT1_* */	

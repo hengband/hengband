@@ -833,7 +833,6 @@ int mutant_regenerate_mod = 100;
 bool can_save = FALSE;        /* Game can be saved */
 
 s16b world_monster;
-bool world_player;
 
 int cap_mon;
 int cap_mspeed;

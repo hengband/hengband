@@ -3759,7 +3759,7 @@ static errr rd_savefile_new_aux(void)
 
 	/* Read the extra stuff */
 	rd_extra();
-	if (p_ptr->energy_need < -999) world_player = TRUE;
+	if (p_ptr->energy_need < -999) p_ptr->timewalk = TRUE;
 
 	if (arg_fiddle) note(_("特別情報をロードしました", "Loaded extra information"));
 

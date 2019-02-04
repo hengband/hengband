@@ -1753,7 +1753,7 @@ static void player_wipe_without_name(void)
 	/* Assume no winning game */
 	p_ptr->total_winner = FALSE;
 
-	world_player = FALSE;
+	p_ptr->timewalk = FALSE;
 
 	/* Assume no panic save */
 	p_ptr->panic_save = 0;

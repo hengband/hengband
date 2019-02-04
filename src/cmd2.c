@@ -102,7 +102,7 @@ bool cmd_limit_arena(player_type *creature_ptr)
 
 bool cmd_limit_time_walk(player_type *creature_ptr)
 {
-	if (world_player)
+	if (creature_ptr->timewalk)
 	{
 		if (flush_failure) flush();
 		msg_print(_("止まった時の中ではうまく働かないようだ。", "It shows no reaction."));

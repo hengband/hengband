@@ -169,12 +169,12 @@ void stop_singing(void)
 
 bool time_walk(player_type *creature_ptr)
 {
-	if (world_player)
+	if (creature_ptr->timewalk)
 	{
 		msg_print(_("既に時は止まっている。", "Time is already stopped."));
 		return (FALSE);
 	}
-	world_player = TRUE;
+	creature_ptr->timewalk = TRUE;
 	msg_print(_("「時よ！」", "You yell 'Time!'"));
 	msg_print(NULL);
 

@@ -5083,7 +5083,7 @@ static void process_player(void)
 		if (p_ptr->energy_use)
 		{
 			/* Use some energy */
-			if (world_player || p_ptr->energy_use > 400)
+			if (p_ptr->timewalk || p_ptr->energy_use > 400)
 			{
 				/* The Randomness is irrelevant */
 				p_ptr->energy_need += p_ptr->energy_use * TURNS_PER_TICK / 10;
@@ -5211,7 +5211,7 @@ static void process_player(void)
 				p_ptr->redraw |= (PR_STATE);
 			}
 
-			if (world_player && (p_ptr->energy_need > - 1000))
+			if (p_ptr->timewalk && (p_ptr->energy_need > - 1000))
 			{
 
 				p_ptr->redraw |= (PR_MAP);
@@ -5221,7 +5221,7 @@ static void process_player(void)
 
 				msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
 				msg_print(NULL);
-				world_player = FALSE;
+				p_ptr->timewalk = FALSE;
 				p_ptr->energy_need = ENERGY_NEED();
 
 				/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
@@ -5232,7 +5232,7 @@ static void process_player(void)
 		/* Hack -- notice death */
 		if (!p_ptr->playing || p_ptr->is_dead)
 		{
-			world_player = FALSE;
+			p_ptr->timewalk = FALSE;
 			break;
 		}
 

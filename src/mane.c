@@ -663,7 +663,7 @@ static bool use_mane(int spell)
 		teleport_player(plev * 5, 0L);
 		break;
 	case MS_WORLD:
-		world_player = TRUE;
+		p_ptr->timewalk = TRUE;
 		if (damage == 1 || damage == 2)
 			msg_print(_("「『ザ・ワールド』！時は止まった！」", "You yell 'The World! Time has stopped!'"));
 		else if (damage == 3 || damage == 6)
