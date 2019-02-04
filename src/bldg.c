@@ -27,6 +27,7 @@
 #include "cmd-spell.h"
 #include "rumor.h"
 #include "player-status.h"
+#include "spells-status.h"
 
 /*!
  * ループ中で / hack as in leave_store in store.c

@@ -18,6 +18,7 @@
 #include "spells-summon.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "spells-status.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

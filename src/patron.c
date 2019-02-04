@@ -11,6 +11,7 @@
 
 #include "spells-summon.h"
 #include "spells-object.h"
+#include "spells-status.h"
 
 #ifdef JP
 /*!

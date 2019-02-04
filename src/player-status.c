@@ -3,6 +3,7 @@
 
 #include "artifact.h"
 #include "avatar.h"
+#include "spells-status.h"
 
 /*
  * Return alignment title

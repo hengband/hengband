@@ -250,3 +250,142 @@ void roll_hitdice(SPOP_FLAGS options)
 		}
 	}
 }
+
+bool_hack life_stream(bool_hack message, bool_hack virtue_change)
+{
+	if (virtue_change)
+	{
+		chg_virtue(V_VITALITY, 1);
+		chg_virtue(V_UNLIFE, -5);
+	}
+	if (message)
+	{
+		msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
+	}
+	restore_level();
+	(void)set_poisoned(0);
+	(void)set_blind(0);
+	(void)set_confused(0);
+	(void)set_image(0);
+	(void)set_stun(0);
+	(void)set_cut(0);
+	(void)restore_all_status();
+	(void)set_shero(0, TRUE);
+	handle_stuff();
+	hp_player(5000);
+
+	return TRUE;
+}
+
+bool_hack heroism(int base)
+{
+	bool_hack ident = FALSE;
+	if (set_afraid(0)) ident = TRUE;
+	if (set_hero(p_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
+	if (hp_player(10)) ident = TRUE;
+	return ident;
+}
+
+bool_hack berserk(int base)
+{
+	bool_hack ident = FALSE;
+	if (set_afraid(0)) ident = TRUE;
+	if (set_shero(p_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
+	if (hp_player(30)) ident = TRUE;
+	return ident;
+}
+
+bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides)
+{
+	bool_hack ident = FALSE;
+	if (hp_player(damroll(dice, sides))) ident = TRUE;
+	if (set_blind(0)) ident = TRUE;
+	if (set_cut(p_ptr->cut - 10)) ident = TRUE;
+	if (set_shero(0, TRUE)) ident = TRUE;
+	return ident;
+}
+
+bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides)
+{
+	bool_hack ident = FALSE;
+	if (hp_player(damroll(dice, sides))) ident = TRUE;
+	if (set_blind(0)) ident = TRUE;
+	if (set_confused(0)) ident = TRUE;
+	if (set_cut((p_ptr->cut / 2) - 50)) ident = TRUE;
+	if (set_shero(0, TRUE)) ident = TRUE;
+	return ident;
+}
+
+bool_hack cure_critical_wounds(HIT_POINT pow)
+{
+	bool_hack ident = FALSE;
+	if (hp_player(pow)) ident = TRUE;
+	if (set_blind(0)) ident = TRUE;
+	if (set_confused(0)) ident = TRUE;
+	if (set_poisoned(0)) ident = TRUE;
+	if (set_stun(0)) ident = TRUE;
+	if (set_cut(0)) ident = TRUE;
+	if (set_shero(0, TRUE)) ident = TRUE;
+	return ident;
+}
+
+bool_hack true_healing(HIT_POINT pow)
+{
+	bool_hack ident = FALSE;
+	if (hp_player(pow)) ident = TRUE;
+	if (set_blind(0)) ident = TRUE;
+	if (set_confused(0)) ident = TRUE;
+	if (set_poisoned(0)) ident = TRUE;
+	if (set_stun(0)) ident = TRUE;
+	if (set_cut(0)) ident = TRUE;
+	if (set_image(0)) ident = TRUE;
+	return ident;
+}
+
+bool_hack restore_mana(bool_hack magic_eater)
+{
+	bool_hack ident = FALSE;
+
+	if (p_ptr->pclass == CLASS_MAGIC_EATER && magic_eater)
+	{
+		int i;
+		for (i = 0; i < EATER_EXT * 2; i++)
+		{
+			p_ptr->magic_num1[i] += (p_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : p_ptr->magic_num2[i] * EATER_CHARGE / 3;
+			if (p_ptr->magic_num1[i] > p_ptr->magic_num2[i] * EATER_CHARGE) p_ptr->magic_num1[i] = p_ptr->magic_num2[i] * EATER_CHARGE;
+		}
+		for (; i < EATER_EXT * 3; i++)
+		{
+			KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i - EATER_EXT * 2);
+			p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE * 3 : p_ptr->magic_num2[i] * EATER_ROD_CHARGE / 3)*k_info[k_idx].pval;
+			if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
+		}
+		msg_print(_("頭がハッキリとした。", "You feel your head clear."));
+		p_ptr->window |= (PW_PLAYER);
+		ident = TRUE;
+	}
+	else if (p_ptr->csp < p_ptr->msp)
+	{
+		p_ptr->csp = p_ptr->msp;
+		p_ptr->csp_frac = 0;
+		msg_print(_("頭がハッキリとした。", "You feel your head clear."));
+		p_ptr->redraw |= (PR_MANA);
+		p_ptr->window |= (PW_PLAYER);
+		p_ptr->window |= (PW_SPELL);
+		ident = TRUE;
+	}
+
+	return ident;
+}
+
+bool restore_all_status(void)
+{
+	bool ident = FALSE;
+	if (do_res_stat(A_STR)) ident = TRUE;
+	if (do_res_stat(A_INT)) ident = TRUE;
+	if (do_res_stat(A_WIS)) ident = TRUE;
+	if (do_res_stat(A_DEX)) ident = TRUE;
+	if (do_res_stat(A_CON)) ident = TRUE;
+	if (do_res_stat(A_CHR)) ident = TRUE;
+	return ident;
+}
