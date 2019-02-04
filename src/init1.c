@@ -3860,17 +3860,11 @@ static errr parse_line_building(char *buf)
 		{
 			int n;
 			n = tokenize(s + 2, MAX_RACES, zz, 0);
-			if (n <= MAX_RACES)
+			for (i = 0; i < MAX_RACES; i++)
 			{
-				for (i = 0; i < MAX_RACES; i++)
-				{
-					building[index].member_race[i] = ((i > n) ? (RACE_IDX)atoi(zz[i]) : 1);
-				}
-
-				break;
+				building[index].member_race[i] = ((i < n) ? (RACE_IDX)atoi(zz[i]) : 1);
 			}
-
-			return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+			break;
 		}
 
 		/* Building Realms */
