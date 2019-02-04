@@ -928,9 +928,9 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 {
 	msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
-	project(0, (powerful ? 7 : 5), p_ptr->y, p_ptr->x,
+	project(0, (powerful ? 7 : 5), creature_ptr->y, creature_ptr->x,
 	(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
-	if ((p_ptr->pclass != CLASS_MAGE) && (p_ptr->pclass != CLASS_HIGH_MAGE) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_MAGIC_EATER) && (p_ptr->pclass != CLASS_BLUE_MAGE))
+	if ((creature_ptr->pclass != CLASS_MAGE) && (creature_ptr->pclass != CLASS_HIGH_MAGE) && (creature_ptr->pclass != CLASS_SORCERER) && (creature_ptr->pclass != CLASS_MAGIC_EATER) && (creature_ptr->pclass != CLASS_BLUE_MAGE))
 	{
 		(void)take_hit(DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
 	}
@@ -5176,11 +5176,11 @@ bool sword_dancing(player_type *creature_ptr)
 bool confusing_light(player_type *creature_ptr)
 {
 	msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
-	slow_monsters(p_ptr->lev);
-	stun_monsters(p_ptr->lev * 4);
-	confuse_monsters(p_ptr->lev * 4);
-	turn_monsters(p_ptr->lev * 4);
-	stasis_monsters(p_ptr->lev * 4);
+	slow_monsters(creature_ptr->lev);
+	stun_monsters(creature_ptr->lev * 4);
+	confuse_monsters(creature_ptr->lev * 4);
+	turn_monsters(creature_ptr->lev * 4);
+	stasis_monsters(creature_ptr->lev * 4);
 	return TRUE;
 }
 

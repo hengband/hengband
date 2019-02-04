@@ -65,12 +65,12 @@ bool cmd_limit_cast(player_type *creature_ptr)
 		msg_print(NULL);
 		return TRUE;
 	}
-	else if (p_ptr->anti_magic)
+	else if (creature_ptr->anti_magic)
 	{
 		msg_print(_("反魔法バリアが魔法を邪魔した！", "An anti-magic shell disrupts your magic!"));
 		return TRUE;
 	}
-	else if (p_ptr->shero)
+	else if (creature_ptr->shero)
 	{
 		msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
 		return TRUE;
@@ -81,7 +81,7 @@ bool cmd_limit_cast(player_type *creature_ptr)
 
 bool cmd_limit_confused(player_type *creature_ptr)
 {
-	if (p_ptr->confused)
+	if (creature_ptr->confused)
 	{
 		msg_print(_("混乱していてできない！", "You are too confused!"));
 		return TRUE;
@@ -91,7 +91,7 @@ bool cmd_limit_confused(player_type *creature_ptr)
 
 bool cmd_limit_arena(player_type *creature_ptr)
 {
-	if (p_ptr->inside_arena)
+	if (creature_ptr->inside_arena)
 	{
 		msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 		msg_print(NULL);

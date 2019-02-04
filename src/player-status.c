@@ -3815,10 +3815,10 @@ bool player_has_no_spellbooks(void)
 
 void take_turn(player_type *creature_ptr, PERCENTAGE need_cost)
 {
-	p_ptr->energy_use = (ENERGY)need_cost;
+	creature_ptr->energy_use = (ENERGY)need_cost;
 }
 
 void free_turn(player_type *creature_ptr)
 {
-	p_ptr->energy_use = 0;
+	creature_ptr->energy_use = 0;
 }
