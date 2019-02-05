@@ -156,7 +156,7 @@ static void perturb_point_end(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xm
  * need to be converted to features.
  * </pre>
  */
-static void plasma_recursive(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION depth_max, POSITION rough)
+static void plasma_recursive(POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX depth_max, FEAT_IDX rough)
 {
 	/* Find middle */
 	POSITION xmid = (x2 - x1) / 2 + x1;
@@ -208,7 +208,7 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 {
 	POSITION x1, y1;
 	int table_size = sizeof(terrain_table[0]) / sizeof(s16b);
-	int roughness = 1; /* The roughness of the level. */
+	FEAT_IDX roughness = 1; /* The roughness of the level. */
 	u32b state_backup[4];
 
 	/* Unused */
