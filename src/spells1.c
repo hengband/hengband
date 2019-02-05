@@ -6370,11 +6370,11 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 		for (i = 0; i < path_n; ++i)
 		{
-			int oy = y;
-			int ox = x;
+			POSITION oy = y;
+			POSITION ox = x;
 
-			int ny = GRID_Y(path_g[i]);
-			int nx = GRID_X(path_g[i]);
+			POSITION ny = GRID_Y(path_g[i]);
+			POSITION nx = GRID_X(path_g[i]);
 
 			/* Advance */
 			y = ny;

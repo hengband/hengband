@@ -6213,11 +6213,10 @@ static void display_visual_list(int col, int row, int height, int width, TERM_CO
 		/* Display columns until done */
 		for (j = 0; j < width; j++)
 		{
-			TERM_COLOR a;
-			SYMBOL_CODE c;
+			TERM_COLOR a, ia;
+			SYMBOL_CODE c, ic;
 			TERM_LEN x = col + j;
 			TERM_LEN y = row + i;
-			int ia, ic;
 
 			/* Bigtile mode uses double width */
 			if (use_bigtile) x += j;
