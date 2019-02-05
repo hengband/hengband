@@ -57,7 +57,7 @@ void set_floor_and_wall(DUNGEON_IDX type)
 	d_ptr = &d_info[type];
 
 	set_floor_and_wall_aux(feat_ground_type, d_ptr->floor);
-	set_floor_and_wall_aux(fill_type, d_ptr->fill);
+	set_floor_and_wall_aux(feat_wall_type, d_ptr->fill);
 
 	feat_wall_outer = d_ptr->outer_wall;
 	feat_wall_inner = d_ptr->inner_wall;

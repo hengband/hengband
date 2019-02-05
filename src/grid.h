@@ -81,7 +81,7 @@
 
 #define place_extra_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,fill_type[randint0(100)]); \
+	set_cave_feat(Y,X,feat_wall_type[randint0(100)]); \
 	cave[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_EXTRA); \
 	delete_monster(Y, X); \
@@ -89,7 +89,7 @@
 
 #define place_extra_grid(C) \
 { \
-	(C)->feat = fill_type[randint0(100)]; \
+	(C)->feat = feat_wall_type[randint0(100)]; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_EXTRA; \
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
@@ -114,7 +114,7 @@
 #define place_extra_noperm_bold(Y, X) \
 { \
 	feature_type *_f_ptr; \
-	set_cave_feat(Y,X,fill_type[randint0(100)]); \
+	set_cave_feat(Y,X,feat_wall_type[randint0(100)]); \
 	_f_ptr = &f_info[cave[Y][X].feat]; \
 	if (permanent_wall(_f_ptr)) cave[Y][X].feat = feat_state(cave[Y][X].feat, FF_UNPERM); \
 	cave[Y][X].info &= ~(CAVE_MASK); \

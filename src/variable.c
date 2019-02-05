@@ -956,7 +956,7 @@ DEPTH *max_dlv;
 FEAT_IDX feat_wall_outer;
 FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
-FEAT_IDX feat_ground_type[100], fill_type[100];
+FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
 bool now_damaged;
 COMMAND_CODE now_message;
