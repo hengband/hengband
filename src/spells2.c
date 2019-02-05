@@ -1542,7 +1542,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 					else
 					{
 						/* Create floor */
-						cave_set_feat(y, x, floor_type[randint0(100)]);
+						cave_set_feat(y, x, feat_ground_type[randint0(100)]);
 					}
 				}
 				else /* In generation */
@@ -2040,7 +2040,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 				else
 				{
 					/* Create floor */
-					cave_set_feat(yy, xx, floor_type[randint0(100)]);
+					cave_set_feat(yy, xx, feat_ground_type[randint0(100)]);
 				}
 			}
 		}

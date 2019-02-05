@@ -65,7 +65,7 @@
 
 #define place_floor_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,floor_type[randint0(100)]); \
+	set_cave_feat(Y,X,feat_ground_type[randint0(100)]); \
 	cave[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_FLOOR); \
 	delete_monster(Y, X); \
@@ -73,7 +73,7 @@
 
 #define place_floor_grid(C) \
 { \
-	(C)->feat = floor_type[randint0(100)]; \
+	(C)->feat = feat_ground_type[randint0(100)]; \
 	(C)->info &= ~(CAVE_MASK); \
 	(C)->info |= CAVE_FLOOR; \
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \

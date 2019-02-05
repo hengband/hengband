@@ -182,7 +182,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 			{
 				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
 				{
-					c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
+					c_ptr->feat = one_in_(2) ? c_ptr->mimic : feat_ground_type[randint0(100)];
 				}
 				c_ptr->mimic = 0;
 			}
@@ -320,7 +320,7 @@ void place_secret_door(POSITION y, POSITION x, int type)
 			{
 				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
 				{
-					c_ptr->feat = one_in_(2) ? c_ptr->mimic : floor_type[randint0(100)];
+					c_ptr->feat = one_in_(2) ? c_ptr->mimic : feat_ground_type[randint0(100)];
 				}
 				c_ptr->mimic = 0;
 			}

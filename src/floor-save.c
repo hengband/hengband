@@ -1140,7 +1140,7 @@ void change_floor(void)
 						if (change_floor_mode & (CFM_DOWN | CFM_UP))
 						{
 							/* Reset to floor */
-							c_ptr->feat = floor_type[randint0(100)];
+							c_ptr->feat = feat_ground_type[randint0(100)];
 						}
 
 						c_ptr->special = 0;
@@ -1483,7 +1483,7 @@ void stair_creation(void)
 
 				/* Remove old stairs */
 				c_ptr->special = 0;
-				cave_set_feat(y, x, floor_type[randint0(100)]);
+				cave_set_feat(y, x, feat_ground_type[randint0(100)]);
 			}
 		}
 	}

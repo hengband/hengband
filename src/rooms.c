@@ -968,9 +968,9 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 	fill_data.c3 = 0;
 
 	/* features to fill with */
-	fill_data.feat1 = floor_type[randint0(100)];
-	fill_data.feat2 = floor_type[randint0(100)];
-	fill_data.feat3 = floor_type[randint0(100)];
+	fill_data.feat1 = feat_ground_type[randint0(100)];
+	fill_data.feat2 = feat_ground_type[randint0(100)];
+	fill_data.feat3 = feat_ground_type[randint0(100)];
 
 	fill_data.info1 = CAVE_FLOOR;
 	fill_data.info2 = CAVE_FLOOR;
@@ -1189,21 +1189,21 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 	case LAKE_T_LAVA: /* Lava */
 		feat1 = feat_deep_lava;
 		feat2 = feat_shallow_lava;
-		feat3 = floor_type[randint0(100)];
+		feat3 = feat_ground_type[randint0(100)];
 		break;
 	case LAKE_T_WATER: /* Water */
 		feat1 = feat_deep_water;
 		feat2 = feat_shallow_water;
-		feat3 = floor_type[randint0(100)];
+		feat3 = feat_ground_type[randint0(100)];
 		break;
 	case LAKE_T_CAVE: /* Collapsed cave */
-		feat1 = floor_type[randint0(100)];
-		feat2 = floor_type[randint0(100)];
+		feat1 = feat_ground_type[randint0(100)];
+		feat2 = feat_ground_type[randint0(100)];
 		feat3 = feat_rubble;
 		break;
 	case LAKE_T_EARTH_VAULT: /* Earth vault */
 		feat1 = feat_rubble;
-		feat2 = floor_type[randint0(100)];
+		feat2 = feat_ground_type[randint0(100)];
 		feat3 = feat_rubble;
 		break;
 	case LAKE_T_AIR_VAULT: /* Air vault */

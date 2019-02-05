@@ -4598,7 +4598,7 @@ FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat)
 		switch (f_ptr->subtype)
 		{
 		case CONVERT_TYPE_FLOOR:
-			return floor_type[randint0(100)];
+			return feat_ground_type[randint0(100)];
 		case CONVERT_TYPE_WALL:
 			return fill_type[randint0(100)];
 		case CONVERT_TYPE_INNER:
