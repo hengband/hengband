@@ -301,8 +301,8 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 /*!
  * @brief 荒野フロア生成のメインルーチン /
  * Load a town or generate a terrain level using "plasma" fractals.
- * @param y 広域マップY座標
- * @param x 広域マップY座標
+ * @param y 広域Y座標
+ * @param x 広域X座標
  * @param border 広域マップの辺部分としての生成ならばTRUE
  * @param corner 広域マップの角部分としての生成ならばTRUE
  * @return なし
