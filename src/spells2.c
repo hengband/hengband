@@ -3492,38 +3492,6 @@ int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 	return count;
 }
 
-
-/*!
- * @brief サイバーデーモンの召喚
- * @param who 召喚主のモンスターID(0ならばプレイヤー)
- * @param y 召喚位置Y座標
- * @param x 召喚位置X座標
- * @return 作用が実際にあった場合TRUEを返す
- */
-int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
-{
-	int i;
-	int max_cyber = (easy_band ? 1 : (dun_level / 50) + randint1(2));
-	int count = 0;
-	BIT_FLAGS mode = PM_ALLOW_GROUP;
-
-	/* Summoned by a monster */
-	if (who > 0)
-	{
-		monster_type *m_ptr = &m_list[who];
-		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
-	}
-
-	if (max_cyber > 4) max_cyber = 4;
-
-	for (i = 0; i < max_cyber; i++)
-	{
-		count += summon_specific(who, y, x, 100, SUMMON_CYBER, mode, '\0');
-	}
-
-	return count;
-}
-
 /*!
  * @brief 周辺破壊効果(プレイヤー中心)
  * @return 作用が実際にあった場合TRUEを返す
