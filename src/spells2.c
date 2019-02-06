@@ -2622,7 +2622,6 @@ bool lite_area(HIT_POINT dam, POSITION rad)
 		return FALSE;
 	}
 
-	/* Hack -- Message */
 	if (!p_ptr->blind)
 	{
 		msg_print(_("白い光が辺りを覆った。", "You are surrounded by a white light."));
@@ -2631,7 +2630,6 @@ bool lite_area(HIT_POINT dam, POSITION rad)
 	/* Hook into the "project()" function */
 	(void)project(0, rad, p_ptr->y, p_ptr->x, dam, GF_LITE_WEAK, flg, -1);
 
-	/* Lite up the room */
 	lite_room(p_ptr->y, p_ptr->x);
 
 	/* Assume seen */
@@ -2658,7 +2656,6 @@ bool unlite_area(HIT_POINT dam, POSITION rad)
 	/* Hook into the "project()" function */
 	(void)project(0, rad, p_ptr->y, p_ptr->x, dam, GF_DARK_WEAK, flg, -1);
 
-	/* Lite up the room */
 	unlite_room(p_ptr->y, p_ptr->x);
 
 	/* Assume seen */
@@ -2919,16 +2916,12 @@ bool teleport_swap(DIRECTION dir)
 	if (!c_ptr->m_idx || (c_ptr->m_idx == p_ptr->riding))
 	{
 		msg_print(_("それとは場所を交換できません。", "You can't trade places with that!"));
-
-		/* Failure */
 		return FALSE;
 	}
 
 	if ((c_ptr->info & CAVE_ICKY) || (distance(ty, tx, p_ptr->y, p_ptr->x) > p_ptr->lev * 3 / 2 + 10))
 	{
 		msg_print(_("失敗した。", "Failed to swap."));
-
-		/* Failure */
 		return FALSE;
 	}
 
@@ -2940,10 +2933,7 @@ bool teleport_swap(DIRECTION dir)
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
 		msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-
 		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-
-		/* Failure */
 		return FALSE;
 	}
 
@@ -3195,13 +3185,9 @@ bool glyph_creation(void)
 bool wall_stone(void)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-
 	bool dummy = (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_STONE_WALL, flg, -1));
-
 	p_ptr->update |= (PU_FLOW);
-
 	p_ptr->redraw |= (PR_MAP);
-
 	return dummy;
 }
 
@@ -3314,8 +3300,7 @@ void call_chaos(void)
  */
 bool activate_ty_curse(bool stop_ty, int *count)
 {
-	int     i = 0;
-
+	int i = 0;
 	BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 
 	do
