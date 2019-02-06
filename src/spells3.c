@@ -784,7 +784,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	}
 
 	/* Allocate the "dun" array */
-	C_MAKE(dun, max_d_idx, s16b);
+	C_MAKE(dun, max_d_idx, DUNGEON_IDX);
 
 	screen_save();
 	for(i = 1; i < max_d_idx; i++)
@@ -818,7 +818,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		if ((i == ESCAPE) || !num)
 		{
 			/* Free the "dun" array */
-			C_KILL(dun, max_d_idx, s16b);
+			C_KILL(dun, max_d_idx, DUNGEON_IDX);
 
 			screen_load();
 			return 0;
@@ -833,7 +833,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	screen_load();
 
 	/* Free the "dun" array */
-	C_KILL(dun, max_d_idx, s16b);
+	C_KILL(dun, max_d_idx, DUNGEON_IDX);
 
 	return select_dungeon;
 }
@@ -4678,8 +4678,8 @@ bool shock_power(void)
 	if (cave[y][x].m_idx)
 	{
 		int i;
-		int ty = y, tx = x;
-		int oy = y, ox = x;
+		POSITION ty = y, tx = x;
+		POSITION oy = y, ox = x;
 		MONSTER_IDX m_idx = cave[y][x].m_idx;
 		monster_type *m_ptr = &m_list[m_idx];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -4708,9 +4708,9 @@ bool shock_power(void)
 			{
 				msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
 				cave[oy][ox].m_idx = 0;
-				cave[ty][tx].m_idx = (s16b)m_idx;
-				m_ptr->fy = (byte_hack)ty;
-				m_ptr->fx = (byte_hack)tx;
+				cave[ty][tx].m_idx = m_idx;
+				m_ptr->fy = ty;
+				m_ptr->fx = tx;
 
 				update_monster(m_idx, TRUE);
 				lite_spot(oy, ox);
