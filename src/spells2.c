@@ -2598,7 +2598,7 @@ bool starlight(bool magic)
 			if (!player_bold(y, x)) break;
 		}
 
-		project(0, 0, p_ptr->y, p_ptr->x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
+		project(0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
 			(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
 	}
 	return TRUE;
