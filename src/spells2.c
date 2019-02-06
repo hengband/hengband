@@ -3915,10 +3915,7 @@ void ring_of_power(DIRECTION dir)
 	case 3:
 	{
 		msg_print(_("あなたは強力なオーラに包み込まれた。", "You are surrounded by a powerful aura."));
-
-		/* Dispel monsters */
 		dispel_monsters(1000);
-
 		break;
 	}
 
@@ -3926,9 +3923,7 @@ void ring_of_power(DIRECTION dir)
 	case 5:
 	case 6:
 	{
-		/* Mana Ball */
 		fire_ball(GF_MANA, dir, 600, 3);
-
 		break;
 	}
 
@@ -3937,9 +3932,7 @@ void ring_of_power(DIRECTION dir)
 	case 9:
 	case 10:
 	{
-		/* Mana Bolt */
 		fire_bolt(GF_MANA, dir, 500);
-
 		break;
 	}
 	}
