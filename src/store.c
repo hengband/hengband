@@ -4150,21 +4150,11 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 	s32b			   min_per, max_per;
 	int 			   flag, loop_flag, noneed;
 	int 			   annoyed = 0, final = FALSE;
-
 	bool		cancel = FALSE;
-
-#ifdef JP
-	concptr pmt = "提示価格";
-#else
-	concptr		pmt = "Asking";
-#endif
-
-
 	char		out_val[160];
-
-
 	*price = 0;
 
+	concptr pmt = _("提示価格", "Asking");
 
 	/* Extract the starting offer and the final offer */
 	cur_ask = price_item(o_ptr, ot_ptr->max_inflate, FALSE);
@@ -4180,12 +4170,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		if (noneed)
 		{
 			/* Message summary */
-#ifdef JP
-			msg_print("結局この金額にまとまった。");
-#else
-			msg_print("You eventually agree upon the price.");
-#endif
-
+			msg_print(_("結局この金額にまとまった。", "You eventually agree upon the price."));
 			msg_print(NULL);
 		}
 
@@ -4193,12 +4178,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		else
 		{
 			/* Message summary */
-#ifdef JP
-			msg_print("すんなりとこの金額にまとまった。");
-#else
-			msg_print("You quickly agree upon the price.");
-#endif
-
+			msg_print(_("すんなりとこの金額にまとまった。", "You quickly agree upon the price."));
 			msg_print(NULL);
 
 			/* Apply Sales Tax */
@@ -4209,12 +4189,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		cur_ask = final_ask;
 
 		/* Go to final offer */
-#ifdef JP
-		pmt = "最終提示価格";
-#else
-		pmt = "Final Offer";
-#endif
-
+		pmt = _("最終提示価格", "Final Offer");
 		final = TRUE;
 	}
 
@@ -4248,14 +4223,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		{
 			(void)sprintf(out_val, "%s :  %ld", pmt, (long)cur_ask);
 			put_str(out_val, 1, 0);
-#ifdef JP
-			cancel = receive_offer("提示する金額? ",
-#else
-			cancel = receive_offer("What do you offer? ",
-#endif
-
-					       &offer, last_offer, 1, cur_ask, final);
-
+			cancel = receive_offer(_("提示する金額? ", "What do you offer? "), &offer, last_offer, 1, cur_ask, final);
 			if (cancel)
 			{
 				flag = TRUE;
@@ -4303,12 +4271,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 			{
 				final = TRUE;
 				cur_ask = final_ask;
-#ifdef JP
-				pmt = "最終提示価格";
-#else
-				pmt = "Final Offer";
-#endif
-
+				pmt = _("最終提示価格", "What do you offer? ");
 				annoyed++;
 				if (annoyed > 3)
 				{
@@ -4328,13 +4291,7 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 				last_offer = offer;
 				allow_inc = TRUE;
 				prt("", 1, 0);
-#ifdef JP
-(void)sprintf(out_val, "前回の提示金額: $%ld",
-#else
-				(void)sprintf(out_val, "Your last offer: %ld",
-#endif
-
-							  (long)last_offer);
+				(void)sprintf(out_val, _("前回の提示金額: $%ld", "Your last offer: %ld"), (long)last_offer);
 				put_str(out_val, 1, 39);
 				say_comment_2(cur_ask, annoyed);
 			}
