@@ -5052,7 +5052,6 @@ bool comvert_mp_to_hp(player_type *creature_ptr)
 	{
 		msg_print(_("変換に失敗した。", "You failed to convert."));
 	}
-	/* Redraw mana and hp */
 	creature_ptr->redraw |= (PR_HP | PR_MANA);
 	return TRUE;
 }

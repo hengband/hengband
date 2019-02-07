@@ -2018,9 +2018,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 			}
 			else p_ptr->csp -= actual_racial_cost;
 
-			/* Redraw mana and hp */
 			p_ptr->redraw |= (PR_HP | PR_MANA);
-
 			p_ptr->window |= (PW_PLAYER | PW_SPELL);
 		}
 	}

@@ -4562,9 +4562,7 @@ bool eat_magic(int power)
 		p_ptr->csp = p_ptr->msp;
 	}
 
-	/* Redraw mana and hp */
 	p_ptr->redraw |= (PR_MANA);
-
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN);
 
