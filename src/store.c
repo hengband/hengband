@@ -3692,21 +3692,11 @@ static void display_inventory(void)
 	if (st_ptr->stock_num > store_bottom)
 	{
 		/* Show "more" reminder (after the last item) */
-#ifdef JP
-		prt("-続く-", k + 6, 3);
-#else
-		prt("-more-", k + 6, 3);
-#endif
-
+		prt(_("-続く-", "-more-"), k + 6, 3);
 
 		/* Indicate the "current page" */
 		/* Trailing spaces are to display (Page xx) and (Page x) */
-#ifdef JP
-		put_str(format("(%dページ)  ", store_top/store_bottom + 1), 5, 20);
-#else
-		put_str(format("(Page %d)  ", store_top/store_bottom + 1), 5, 20);
-#endif
-
+		put_str(format(_("(%dページ)  ", "(Page %d)  "), store_top/store_bottom + 1), 5, 20);
 	}
 
 	if (cur_store_num == STORE_HOME || cur_store_num == STORE_MUSEUM)
@@ -3733,13 +3723,7 @@ static void store_prt_gold(void)
 {
 	char out_val[64];
 
-#ifdef JP
-	prt("手持ちのお金: ", 19 + xtra_stock, 53);
-#else
-	prt("Gold Remaining: ", 19 + xtra_stock, 53);
-#endif
-
-
+	prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
 	sprintf(out_val, "%9ld", (long)p_ptr->au);
 	prt(out_val, 19 + xtra_stock, 68);
 }
@@ -3995,48 +3979,29 @@ static s32b last_inc = 0L;
 static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 {
 	s32b		i;
-
 	concptr		p;
-
 	char				buf[128];
 	char		out_val[160];
-
 
 	/* Clear old increment if necessary */
 	if (!allow_inc) last_inc = 0L;
 
-
 	/* Final offer */
 	if (final)
 	{
-#ifdef JP
-		sprintf(buf, "%s [承諾] ", pmt);
-#else
-		sprintf(buf, "%s [accept] ", pmt);
-#endif
-
+		sprintf(buf, _("%s [承諾] ", "%s [accept] "), pmt);
 	}
 
 	/* Old (negative) increment, and not final */
 	else if (last_inc < 0)
 	{
-#ifdef JP
-		sprintf(buf, "%s [-$%ld] ", pmt, (long)(ABS(last_inc)));
-#else
-		sprintf(buf, "%s [-%ld] ", pmt, (long)(ABS(last_inc)));
-#endif
-
+		sprintf(buf, _("%s [-$%ld] ", "%s [-%ld] "), pmt, (long)(ABS(last_inc)));
 	}
 
 	/* Old (positive) increment, and not final */
 	else if (last_inc > 0)
 	{
-#ifdef JP
-		sprintf(buf, "%s [+$%ld] ", pmt, (long)(ABS(last_inc)));
-#else
-		sprintf(buf, "%s [+%ld] ", pmt, (long)(ABS(last_inc)));
-#endif
-
+		sprintf(buf, _("%s [+$%ld] ", "%s [+%ld] "), pmt, (long)(ABS(last_inc)));
 	}
 
 	/* Normal haggle */
@@ -4045,10 +4010,8 @@ static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 		sprintf(buf, "%s ", pmt);
 	}
 
-
 	/* Paranoia */
 	msg_print(NULL);
-
 
 	/* Ask until done */
 	while (TRUE)
@@ -4125,12 +4088,7 @@ static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 		}
 
 		/* Warning */
-#ifdef JP
-		msg_print("値がおかしいです。");
-#else
-		msg_print("Invalid response.");
-#endif
-
+		msg_print(_("値がおかしいです。", "Invalid response."));
 		msg_print(NULL);
 	}
 
