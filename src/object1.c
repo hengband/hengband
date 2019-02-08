@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "artifact.h"
+#include "cmd-activate.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify

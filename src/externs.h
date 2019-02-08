@@ -111,7 +111,6 @@ extern const concptr ident_info[];
 extern const mbe_info_type mbe_info[];
 extern const byte feature_action_flags[FF_FLAG_MAX];
 extern const dragonbreath_type dragonbreath_info[];
-extern const activation_type activation_info[];
 
 extern const option_type option_info[];
 extern const option_type cheat_info[CHEAT_MAX];

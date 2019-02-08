@@ -50,6 +50,7 @@
 #include "trap.h"
 #include "monster.h"
 #include "artifact.h"
+#include "cmd-activate.h"
 
 
 
