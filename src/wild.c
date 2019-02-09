@@ -853,7 +853,7 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 			wilderness[*y][*x].level = w_letter[id].level;
 			wilderness[*y][*x].town = w_letter[id].town;
 			wilderness[*y][*x].road = w_letter[id].road;
-			strcpy(town[w_letter[id].town].name, w_letter[id].name);
+			strcpy(town_info[w_letter[id].town].name, w_letter[id].name);
 		}
 		
 		(*y)++;

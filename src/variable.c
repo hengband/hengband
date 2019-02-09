@@ -512,7 +512,7 @@ u16b max_towns;
 /*
  * The towns [max_towns]
  */
-town_type *town;
+town_type *town_info;
 
 
 /*

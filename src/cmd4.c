@@ -3866,7 +3866,7 @@ void do_cmd_feeling(void)
 	/* No useful feeling in town */
 	else if (p_ptr->town_num && !dun_level)
 	{
-		if (!strcmp(town[p_ptr->town_num].name, _("荒野", "wilderness")))
+		if (!strcmp(town_info[p_ptr->town_num].name, _("荒野", "wilderness")))
 		{
 			msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
 			return;
@@ -4800,7 +4800,7 @@ static void do_cmd_knowledge_inven(void)
 			do_cmd_knowledge_inven_aux(fff, &inventory[i], &j, tval, where);
 		}
 
-		st_ptr = &town[1].store[STORE_HOME];
+		st_ptr = &town_info[1].store[STORE_HOME];
 		strcpy(where, _("家", "H "));
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
@@ -8095,7 +8095,7 @@ static void do_cmd_knowledge_home(void)
 	if (fff)
 	{
 		/* Print all homes in the different towns */
-		st_ptr = &town[1].store[STORE_HOME];
+		st_ptr = &town_info[1].store[STORE_HOME];
 
 		/* Home -- if anything there */
 		if (st_ptr->stock_num)

@@ -1374,12 +1374,12 @@ static errr rd_store(int town_number, int store_number)
 
 	if (z_older_than(10, 3, 3) && (store_number == STORE_HOME))
 	{
-		st_ptr = &town[1].store[store_number];
+		st_ptr = &town_info[1].store[store_number];
 		if (st_ptr->stock_num) sort = TRUE;
 	}
 	else
 	{
-		st_ptr = &town[town_number].store[store_number];
+		st_ptr = &town_info[town_number].store[store_number];
 	}
 
 	/* Read the basic info */

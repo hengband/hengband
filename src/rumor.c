@@ -123,10 +123,10 @@ void display_rumor(bool ex)
 				while (1)
 				{
 					t_idx = rumor_num(zz[1], NO_TOWN);
-					if (town[t_idx].name) break;
+					if (town_info[t_idx].name) break;
 				}
 
-				strcpy(fullname, town[t_idx].name);
+				strcpy(fullname, town_info[t_idx].name);
 
 				visit = (1L << (t_idx - 1));
 				if ((t_idx != SECRET_TOWN) && !(p_ptr->visit & visit))

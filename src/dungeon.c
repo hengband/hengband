@@ -6242,7 +6242,7 @@ void prevent_turn_overflow(void)
 	{
 		for (j = 0; j < MAX_STORES; j++)
 		{
-			store_type *st_ptr = &town[i].store[j];
+			store_type *st_ptr = &town_info[i].store[j];
 
 			if (st_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS)
 			{

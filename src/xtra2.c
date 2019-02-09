@@ -1362,7 +1362,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 		}
 		else if (have_flag(f_ptr->flags, FF_TOWN))
 		{
-			name = town[c_ptr->special].name;
+			name = town_info[c_ptr->special].name;
 		}
 		else if (p_ptr->wild_mode && (feat == feat_floor))
 		{

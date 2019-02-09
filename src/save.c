@@ -1496,7 +1496,7 @@ static bool wr_savefile_new(void)
 	{
 		for (j = 0; j < MAX_STORES; j++)
 		{
-			wr_store(&town[i].store[j]);
+			wr_store(&town_info[i].store[j]);
 		}
 	}
 

@@ -887,20 +887,20 @@ static errr init_towns(void)
 	/*** Prepare the Towns ***/
 
 	/* Allocate the towns */
-	C_MAKE(town, max_towns, town_type);
+	C_MAKE(town_info, max_towns, town_type);
 
 	for (i = 1; i < max_towns; i++)
 	{
 		/*** Prepare the Stores ***/
 
 		/* Allocate the stores */
-		C_MAKE(town[i].store, MAX_STORES, store_type);
+		C_MAKE(town_info[i].store, MAX_STORES, store_type);
 
 		/* Fill in each store */
 		for (j = 0; j < MAX_STORES; j++)
 		{
 			/* Access the store */
-			store_type *st_ptr = &town[i].store[j];
+			store_type *st_ptr = &town_info[i].store[j];
 
 			if ((i > 1) && (j == STORE_MUSEUM || j == STORE_HOME)) continue;
 

@@ -160,7 +160,7 @@ concptr map_name(void)
 	else if (p_ptr->inside_battle)
 		return _("闘技場", "Monster Arena");
 	else if (!dun_level && p_ptr->town_num)
-		return town[p_ptr->town_num].name;
+		return town_info[p_ptr->town_num].name;
 	else
 		return d_name+d_info[p_ptr->dungeon_idx].name;
 }

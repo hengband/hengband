@@ -4899,7 +4899,7 @@ static void dump_aux_home_museum(FILE *fff)
 	/* process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x); */
 
 	/* Print the home */
-	st_ptr = &town[1].store[STORE_HOME];
+	st_ptr = &town_info[1].store[STORE_HOME];
 
 	/* Home -- if anything there */
 	if (st_ptr->stock_num)
@@ -4924,7 +4924,7 @@ static void dump_aux_home_museum(FILE *fff)
 
 
 	/* Print the home */
-	st_ptr = &town[1].store[STORE_MUSEUM];
+	st_ptr = &town_info[1].store[STORE_MUSEUM];
 
 	/* Home -- if anything there */
 	if (st_ptr->stock_num)
@@ -6546,7 +6546,7 @@ static void show_info(void)
 
 	for (i = 1; i < max_towns; i++)
 	{
-		st_ptr = &town[i].store[STORE_HOME];
+		st_ptr = &town_info[i].store[STORE_HOME];
 
 		/* Hack -- Know everything in the home */
 		for (j = 0; j < st_ptr->stock_num; j++)
@@ -6634,7 +6634,7 @@ static void show_info(void)
 	/* Homes in the different towns */
 	for (l = 1; l < max_towns; l++)
 	{
-		st_ptr = &town[l].store[STORE_HOME];
+		st_ptr = &town_info[l].store[STORE_HOME];
 
 		/* Home -- if anything there */
 		if (st_ptr->stock_num)

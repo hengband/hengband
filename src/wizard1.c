@@ -2643,7 +2643,7 @@ void spoil_random_artifact(concptr fname)
 		}
 
 		/* random artifacts in home */
-		st_ptr = &town[1].store[STORE_HOME];
+		st_ptr = &town_info[1].store[STORE_HOME];
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
 			q_ptr = &st_ptr->stock[i];
@@ -2651,7 +2651,7 @@ void spoil_random_artifact(concptr fname)
 		}
 
 		/* random artifacts in museum */
-		st_ptr = &town[1].store[STORE_MUSEUM];
+		st_ptr = &town_info[1].store[STORE_MUSEUM];
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
 			q_ptr = &st_ptr->stock[i];
