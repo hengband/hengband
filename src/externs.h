@@ -438,7 +438,6 @@ extern FEAT_IDX feat_mountain;
 extern FEAT_IDX feat_swamp;
 extern FEAT_IDX feat_undetected;
 
-extern DUNGEON_IDX dungeon_idx;
 extern DEPTH *max_dlv;
 extern FEAT_IDX feat_wall_outer;
 extern FEAT_IDX feat_wall_inner;

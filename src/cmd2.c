@@ -59,7 +59,7 @@ bool confirm_leave_level(bool down_stair)
  */
 bool cmd_limit_cast(player_type *creature_ptr)
 {
-	if (dun_level && (d_info[dungeon_idx].flags1 & DF1_NO_MAGIC))
+	if (dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
 	{
 		msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 		msg_print(NULL);
@@ -240,7 +240,7 @@ void do_cmd_go_up(void)
 		}
 
 		/* Get out from current dungeon */
-		if (dun_level - up_num < d_info[dungeon_idx].mindepth)
+		if (dun_level - up_num < d_info[p_ptr->dungeon_idx].mindepth)
 			up_num = dun_level;
 	}
 	if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
@@ -355,7 +355,7 @@ void do_cmd_go_down(void)
 			/* Save old player position */
 			p_ptr->oldpx = p_ptr->x;
 			p_ptr->oldpy = p_ptr->y;
-			dungeon_idx = target_dungeon;
+			p_ptr->dungeon_idx = target_dungeon;
 
 			/*
 			 * Clear all saved floors
@@ -376,7 +376,7 @@ void do_cmd_go_down(void)
 		{
 			/* Enter the dungeon just now */
 			p_ptr->enter_dungeon = TRUE;
-			down_num = d_info[dungeon_idx].mindepth;
+			down_num = d_info[p_ptr->dungeon_idx].mindepth;
 		}
 
 		if (record_stair)
@@ -394,7 +394,7 @@ void do_cmd_go_down(void)
 			/* Success */
 			if (target_dungeon)
 			{
-				msg_format(_("%sへ入った。", "You entered %s."), d_text + d_info[dungeon_idx].text);
+				msg_format(_("%sへ入った。", "You entered %s."), d_text + d_info[p_ptr->dungeon_idx].text);
 			}
 			else
 			{

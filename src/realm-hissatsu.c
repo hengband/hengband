@@ -277,7 +277,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
-			if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE)
+			if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 			{
 				return "";
 			}
@@ -649,7 +649,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					return NULL;
 				}
 
-				if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE)
+				if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 				{
 					return "";
 				}
@@ -849,7 +849,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE)
+			if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 			{
 				msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
 				return "";

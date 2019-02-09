@@ -1026,6 +1026,7 @@ struct player_type
 	QUEST_IDX inside_quest;		/* Inside quest level */
 	bool inside_battle;		/* Is character inside tougijou? */
 
+	DUNGEON_IDX dungeon_idx; /* current dungeon index */
 	POSITION wilderness_x;	/* Coordinates in the wilderness */
 	POSITION wilderness_y;
 	bool wild_mode;

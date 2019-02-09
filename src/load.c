@@ -2557,11 +2557,11 @@ static errr rd_dungeon_old(void)
 	/* Header info */
 	rd_s16b(&tmp16s);
 	dun_level = (DEPTH)tmp16s;
-	if (z_older_than(10, 3, 8)) dungeon_idx = DUNGEON_ANGBAND;
+	if (z_older_than(10, 3, 8)) p_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
 	{ 
 		rd_byte(&tmp8u);
-		dungeon_idx = (IDX)tmp8u;
+		p_ptr->dungeon_idx = (IDX)tmp8u;
 	}
 
 	/* Set the base level for old versions */
@@ -3282,7 +3282,7 @@ static errr rd_dungeon(void)
 		err = rd_dungeon_old();
 
 		/* Prepare floor_id of current floor */
-		if (dungeon_idx)
+		if (p_ptr->dungeon_idx)
 		{
 			p_ptr->floor_id = get_new_floor_id();
 			get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
@@ -3299,7 +3299,7 @@ static errr rd_dungeon(void)
 
 	/* Current dungeon type */
 	rd_byte(&tmp8u);
-	dungeon_idx = (DUNGEON_IDX)tmp8u;
+	p_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
 
 	/* Number of the saved_floors array elements */
 	rd_byte(&num);
@@ -3958,7 +3958,7 @@ static errr rd_savefile_new_aux(void)
 	{
 		if (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
 		{
-			dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
+			p_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
 			dun_level = 1;
 			p_ptr->inside_quest = 0;
 		}

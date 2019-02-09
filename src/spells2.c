@@ -40,7 +40,7 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 	bool detect = FALSE;
 	cave_type *c_ptr;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan the current panel */
 	for (y = 1; y < cur_hgt - 1; y++)
@@ -172,7 +172,7 @@ bool detect_objects_gold(POSITION range)
 
 	bool detect = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
 	/* Scan objects */
 	for (i = 1; i < o_max; i++)
@@ -227,7 +227,7 @@ bool detect_objects_normal(POSITION range)
 
 	bool detect = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
 	/* Scan objects */
 	for (i = 1; i < o_max; i++)
@@ -290,7 +290,7 @@ bool detect_objects_magic(POSITION range)
 
 	bool detect = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan all objects */
 	for (i = 1; i < o_max; i++)
@@ -365,7 +365,7 @@ bool detect_monsters_normal(POSITION range)
 	POSITION y, x;
 	bool flag = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	for (i = 1; i < m_max; i++)
 	{
@@ -413,7 +413,7 @@ bool detect_monsters_invis(POSITION range)
 	POSITION y, x;
 	bool flag = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	for (i = 1; i < m_max; i++)
 	{
@@ -466,7 +466,7 @@ bool detect_monsters_evil(POSITION range)
 	POSITION y, x;
 	bool flag = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	for (i = 1; i < m_max; i++)
 	{
@@ -523,7 +523,7 @@ bool detect_monsters_nonliving(POSITION range)
 	POSITION y, x;
 	bool flag = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	for (i = 1; i < m_max; i++)
 	{
@@ -573,7 +573,7 @@ bool detect_monsters_mind(POSITION range)
 	POSITION y, x;
 	bool flag = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	for (i = 1; i < m_max; i++)
 	{
@@ -626,7 +626,7 @@ bool detect_monsters_string(POSITION range, concptr Match)
 	POSITION y, x;
 	bool flag = FALSE;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	for (i = 1; i < m_max; i++)
 	{
@@ -681,7 +681,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 	bool flag = FALSE;
 	concptr desc_monsters = _("変なモンスター", "weird monsters");
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	for (i = 1; i < m_max; i++)
 	{
@@ -1593,7 +1593,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 				c_ptr = &cave[y][x];
 
 				if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;
-				else if (!(d_info[dungeon_idx].flags1 & DF1_DARKNESS))
+				else if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 				{
 					DIRECTION i;
 					POSITION yy, xx;
@@ -2063,7 +2063,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			c_ptr = &cave[yy][xx];
 
 			if (is_mirror_grid(c_ptr)) c_ptr->info |= CAVE_GLOW;
-			else if (!(d_info[dungeon_idx].flags1 & DF1_DARKNESS))
+			else if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 			{
 				DIRECTION ii;
 				POSITION yyy, xxx;
@@ -2616,7 +2616,7 @@ bool lite_area(HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
-	if (d_info[dungeon_idx].flags1 & DF1_DARKNESS)
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
 	{
 		msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorb your light."));
 		return FALSE;
@@ -4609,7 +4609,7 @@ bool_hack vampirism(void)
 	int dummy;
 	cave_type *c_ptr;
 
-	if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE)
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 	{
 		msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
 		return FALSE;

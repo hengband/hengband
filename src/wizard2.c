@@ -1356,7 +1356,7 @@ static void do_cmd_wiz_jump(void)
 		sprintf(ppp, "Jump which dungeon : ");
 
 		/* Default */
-		sprintf(tmp_val, "%d", dungeon_idx);
+		sprintf(tmp_val, "%d", p_ptr->dungeon_idx);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 2)) return;
@@ -1377,12 +1377,12 @@ static void do_cmd_wiz_jump(void)
 		/* Extract request */
 		command_arg = (COMMAND_ARG)atoi(tmp_val);
 
-		dungeon_idx = tmp_dungeon_type;
+		p_ptr->dungeon_idx = tmp_dungeon_type;
 	}
 
 	/* Paranoia */
-	if (command_arg < d_info[dungeon_idx].mindepth) command_arg = 0;
-	if (command_arg > d_info[dungeon_idx].maxdepth) command_arg = (COMMAND_ARG)d_info[dungeon_idx].maxdepth;
+	if (command_arg < d_info[p_ptr->dungeon_idx].mindepth) command_arg = 0;
+	if (command_arg > d_info[p_ptr->dungeon_idx].maxdepth) command_arg = (COMMAND_ARG)d_info[p_ptr->dungeon_idx].maxdepth;
 
 	/* Accept request */
 	msg_format("You jump to dungeon level %d.", command_arg);
@@ -1394,7 +1394,7 @@ static void do_cmd_wiz_jump(void)
 
 	prepare_change_floor_mode(CFM_RAND_PLACE);
 
-	if (!dun_level) dungeon_idx = 0;
+	if (!dun_level) p_ptr->dungeon_idx = 0;
 	p_ptr->inside_arena = FALSE;
 	p_ptr->wild_mode = FALSE;
 
@@ -2097,8 +2097,8 @@ void cheat_death(player_type *creature_ptr)
 	creature_ptr->inside_battle = FALSE;
 	leaving_quest = 0;
 	creature_ptr->inside_quest = 0;
-	if (dungeon_idx) creature_ptr->recall_dungeon = dungeon_idx;
-	dungeon_idx = 0;
+	if (p_ptr->dungeon_idx) creature_ptr->recall_dungeon = p_ptr->dungeon_idx;
+	p_ptr->dungeon_idx = 0;
 	if (lite_town || vanilla_town)
 	{
 		creature_ptr->wilderness_y = 1;

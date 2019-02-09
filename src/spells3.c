@@ -629,7 +629,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 
 	/* Down only */ 
-	if ((ironman_downward && (m_idx <= 0)) || (dun_level <= d_info[dungeon_idx].mindepth))
+	if ((ironman_downward && (m_idx <= 0)) || (dun_level <= d_info[p_ptr->dungeon_idx].mindepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは床を突き破って沈んでいく。", m_name);
@@ -640,7 +640,7 @@ void teleport_level(MONSTER_IDX m_idx)
 		{
 			if (!dun_level)
 			{
-				dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : p_ptr->recall_dungeon;
+				p_ptr->dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : p_ptr->recall_dungeon;
 				p_ptr->oldpy = p_ptr->y;
 				p_ptr->oldpx = p_ptr->x;
 			}
@@ -651,7 +651,7 @@ void teleport_level(MONSTER_IDX m_idx)
 
 			if (!dun_level)
 			{
-				dun_level = d_info[dungeon_idx].mindepth;
+				dun_level = d_info[p_ptr->dungeon_idx].mindepth;
 				prepare_change_floor_mode(CFM_RAND_PLACE);
 			}
 			else
@@ -665,7 +665,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 
 	/* Up only */
-	else if (quest_number(dun_level) || (dun_level >= d_info[dungeon_idx].maxdepth))
+	else if (quest_number(dun_level) || (dun_level >= d_info[p_ptr->dungeon_idx].maxdepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -721,7 +721,7 @@ void teleport_level(MONSTER_IDX m_idx)
 		if (m_idx <= 0) /* To player */
 		{
 			/* Never reach this code on the surface */
-			/* if (!dun_level) dungeon_idx = p_ptr->recall_dungeon; */
+			/* if (!dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
 
 			if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
 
@@ -859,13 +859,13 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		return TRUE;
 	}
 
-	if (dun_level && (max_dlv[dungeon_idx] > dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
+	if (dun_level && (max_dlv[p_ptr->dungeon_idx] > dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
 	{
 		if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? ")))
 		{
-			max_dlv[dungeon_idx] = dun_level;
+			max_dlv[p_ptr->dungeon_idx] = dun_level;
 			if (record_maxdepth)
-				do_cmd_write_nikki(NIKKI_TRUMP, dungeon_idx, _("帰還のときに", "when recall from dungeon"));
+				do_cmd_write_nikki(NIKKI_TRUMP, p_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
 		}
 
 	}

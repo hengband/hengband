@@ -878,7 +878,7 @@ void leave_floor(void)
 		    ((quest[i].type == QUEST_TYPE_KILL_LEVEL) ||
 		    (quest[i].type == QUEST_TYPE_RANDOM)) &&
 		    (quest[i].level == dun_level) &&
-		    (dungeon_idx == quest[i].dungeon) &&
+		    (p_ptr->dungeon_idx == quest[i].dungeon) &&
 		    !(quest[i].flags & QUEST_FLAG_PRESET))
 		{
 			quest_r_idx = quest[i].r_idx;
@@ -970,11 +970,11 @@ void leave_floor(void)
 		if (change_floor_mode & CFM_DOWN)
 		{
 			if (!dun_level)
-				move_num = d_info[dungeon_idx].mindepth;
+				move_num = d_info[p_ptr->dungeon_idx].mindepth;
 		}
 		else if (change_floor_mode & CFM_UP)
 		{
-			if (dun_level + move_num < d_info[dungeon_idx].mindepth)
+			if (dun_level + move_num < d_info[p_ptr->dungeon_idx].mindepth)
 				move_num = -dun_level;
 		}
 
@@ -982,16 +982,16 @@ void leave_floor(void)
 	}
 
 	/* Leaving the dungeon to town */
-	if (!dun_level && dungeon_idx)
+	if (!dun_level && p_ptr->dungeon_idx)
 	{
 		p_ptr->leaving_dungeon = TRUE;
 		if (!vanilla_town && !lite_town)
 		{
-			p_ptr->wilderness_y = d_info[dungeon_idx].dy;
-			p_ptr->wilderness_x = d_info[dungeon_idx].dx;
+			p_ptr->wilderness_y = d_info[p_ptr->dungeon_idx].dy;
+			p_ptr->wilderness_x = d_info[p_ptr->dungeon_idx].dx;
 		}
-		p_ptr->recall_dungeon = dungeon_idx;
-		dungeon_idx = 0;
+		p_ptr->recall_dungeon = p_ptr->dungeon_idx;
+		p_ptr->dungeon_idx = 0;
 
 		/* Reach to the surface -- Clear all saved floors */
 		change_floor_mode &= ~CFM_SAVE_FLOORS;
@@ -1189,7 +1189,7 @@ void change_floor(void)
 			MONSTER_IDX i;
 			GAME_TURN tmp_last_visit = sf_ptr->last_visit;
 			GAME_TURN absence_ticks;
-			int alloc_chance = d_info[dungeon_idx].max_m_alloc_chance;
+			int alloc_chance = d_info[p_ptr->dungeon_idx].max_m_alloc_chance;
 			GAME_TURN alloc_times;
 
 			while (tmp_last_visit > turn) tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
@@ -1415,7 +1415,7 @@ void stair_creation(void)
 	if (ironman_downward) up = FALSE;
 
 	/* Forbid down staircases on quest level */
-	if (quest_number(dun_level) || (dun_level >= d_info[dungeon_idx].maxdepth)) down = FALSE;
+	if (quest_number(dun_level) || (dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) down = FALSE;
 
 	/* No effect out of standard dungeon floor */
 	if (!dun_level || (!up && !down) ||

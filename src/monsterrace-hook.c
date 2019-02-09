@@ -118,7 +118,7 @@ bool mon_hook_dungeon(MONRACE_IDX r_idx)
 		return TRUE;
 	else
 	{
-		dungeon_info_type *d_ptr = &d_info[dungeon_idx];
+		dungeon_info_type *d_ptr = &d_info[p_ptr->dungeon_idx];
 		if ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) &&
 			(r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
 		return FALSE;

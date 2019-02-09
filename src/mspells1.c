@@ -1371,7 +1371,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	/* Check "projectable" */
 	bool direct;
 
-	bool in_no_magic_dungeon = (d_info[dungeon_idx].flags1 & DF1_NO_MAGIC) && dun_level
+	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
 	bool can_use_lite_area = FALSE;
@@ -1529,7 +1529,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 		if (!(r_ptr->flags2 & RF2_STUPID))
 		{
-			if (d_info[dungeon_idx].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
+			if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
 			else if ((p_ptr->pclass == CLASS_NINJA) && !can_use_lite_area) f6 &= ~(RF6_DARKNESS);
 		}
 	}

@@ -40,7 +40,7 @@ bool build_type9(void)
 	light = done = FALSE;
 	room = TRUE;
 
-	if ((dun_level <= randint1(25)) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	while (!done)
 	{

@@ -18,8 +18,8 @@ bool build_type1(void)
 
 	cave_type *c_ptr;
 
-	bool curtain = (d_info[dungeon_idx].flags1 & DF1_CURTAIN) &&
-		one_in_((d_info[dungeon_idx].flags1 & DF1_NO_CAVE) ? 48 : 512);
+	bool curtain = (d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+		one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 48 : 512);
 
 	/* Pick a room size */
 	y1 = randint1(4);
@@ -47,7 +47,7 @@ bool build_type1(void)
 	}
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 
 	/* Get corner values */
@@ -163,8 +163,8 @@ bool build_type1(void)
 	/* Hack -- Occasional divided room */
 	else if (one_in_(50))
 	{
-		bool curtain2 = (d_info[dungeon_idx].flags1 & DF1_CURTAIN) &&
-			one_in_((d_info[dungeon_idx].flags1 & DF1_NO_CAVE) ? 2 : 128);
+		bool curtain2 = (d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+			one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 2 : 128);
 
 		if (randint1(100) < 50)
 		{
@@ -216,7 +216,7 @@ bool build_type2(void)
 	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Determine extents of the first room */
 	y1a = yval - randint1(4);
@@ -341,7 +341,7 @@ bool build_type3(void)
 
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* For now, always 3x3 */
 	wx = wy = 1;
@@ -532,9 +532,9 @@ bool build_type3(void)
 			/* Sometimes shut using secret doors */
 			if (one_in_(3))
 			{
-				int door_type = ((d_info[dungeon_idx].flags1 & DF1_CURTAIN) &&
-					one_in_((d_info[dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-					((d_info[dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+				int door_type = ((d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+					one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+					((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 				place_secret_door(yval, x1a - 1, door_type);
 				place_secret_door(yval, x2a + 1, door_type);
@@ -595,7 +595,7 @@ bool build_type4(void)
 	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Large room */
 	y1 = yval - 4;
@@ -773,9 +773,9 @@ bool build_type4(void)
 			/* Occasionally, some Inner rooms */
 			if (one_in_(3))
 			{
-				int door_type = ((d_info[dungeon_idx].flags1 & DF1_CURTAIN) &&
-					one_in_((d_info[dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-					((d_info[dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+				int door_type = ((d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+					one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+					((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 				/* Long horizontal walls */
 				for (x = xval - 5; x <= xval + 5; x++)
@@ -850,9 +850,9 @@ bool build_type4(void)
 		/* Four small rooms. */
 		case 5:
 		{
-			int door_type = ((d_info[dungeon_idx].flags1 & DF1_CURTAIN) &&
-				one_in_((d_info[dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-				((d_info[dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+			int door_type = ((d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+				one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+				((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 			/* Inner "cross" */
 			for (y = y1; y <= y2; y++)
@@ -916,7 +916,7 @@ bool build_type11(void)
 	int light = FALSE;
 
 	/* Occasional light */
-	if ((randint1(dun_level) <= 15) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((randint1(dun_level) <= 15) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	rad = randint0(9);
 
@@ -971,7 +971,7 @@ bool build_type12(void)
 	h4 = randint1(32) - 16;
 
 	/* Occasional light */
-	if ((randint1(dun_level) <= 5) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((randint1(dun_level) <= 5) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	rad = randint1(9);
 

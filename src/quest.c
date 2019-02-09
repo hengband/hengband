@@ -394,7 +394,7 @@ QUEST_IDX quest_number(DEPTH level)
 		if ((quest[i].type == QUEST_TYPE_KILL_LEVEL) &&
 			!(quest[i].flags & QUEST_FLAG_PRESET) &&
 			(quest[i].level == level) &&
-			(quest[i].dungeon == dungeon_idx))
+			(quest[i].dungeon == p_ptr->dungeon_idx))
 			return (i);
 	}
 
@@ -411,7 +411,7 @@ QUEST_IDX random_quest_number(DEPTH level)
 {
 	QUEST_IDX i;
 
-	if (dungeon_idx != DUNGEON_ANGBAND) return 0;
+	if (p_ptr->dungeon_idx != DUNGEON_ANGBAND) return 0;
 
 	for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 	{
