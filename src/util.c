@@ -1718,7 +1718,7 @@ void select_floor_music(void)
 	{ // TODO マクロで類似条件を統合すること
 		if(quest[i].status == QUEST_STATUS_TAKEN &&
 			(quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_RANDOM) &&
-			 quest[i].level == dun_level && dungeon_type == quest[i].dungeon)
+			 quest[i].level == dun_level && dungeon_idx == quest[i].dungeon)
 		{
 			if(play_music(TERM_XTRA_MUSIC_QUEST, i)) 
 			{
@@ -1728,13 +1728,13 @@ void select_floor_music(void)
 		}
 	}
 
-	if(dungeon_type)
+	if(dungeon_idx)
 	{
 		if(p_ptr->feeling == 2) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2);
 		else if(p_ptr->feeling >= 3 && p_ptr->feeling <= 5) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1);
 		else
 		{
-			if(play_music(TERM_XTRA_MUSIC_DUNGEON, dungeon_type))
+			if(play_music(TERM_XTRA_MUSIC_DUNGEON, dungeon_idx))
 			{
 				if(dun_level < 40) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW);
 				else if(dun_level < 80) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED);

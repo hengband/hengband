@@ -27,7 +27,7 @@ bool build_type15(void)
 	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
+	light = ((dun_level <= randint1(25)) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Get corner values */
 	y1 = yval - ysize / 2;

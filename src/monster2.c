@@ -967,7 +967,7 @@ static int chameleon_change_m_idx = 0;
  */
 static bool restrict_monster_to_dungeon(MONRACE_IDX r_idx)
 {
-	dungeon_info_type *d_ptr = &d_info[dungeon_type];
+	dungeon_info_type *d_ptr = &d_info[dungeon_idx];
 	monster_race *r_ptr = &r_info[r_idx];
 	byte a;
 
@@ -1205,7 +1205,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 
 		if (dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) && !restrict_monster_to_dungeon(entry->index) && !p_ptr->inside_battle)
 		{
-			int hoge = entry->prob2 * d_info[dungeon_type].special_div;
+			int hoge = entry->prob2 * d_info[dungeon_idx].special_div;
 			entry->prob2 = hoge / 64;
 			if (randint0(64) < (hoge & 0x3f)) entry->prob2++;
 		}
@@ -1256,7 +1256,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
 	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10)) ;
 
-	if (d_info[dungeon_type].flags1 & DF1_MAZE)
+	if (d_info[dungeon_idx].flags1 & DF1_MAZE)
 	{
 		pls_kakuritu = MIN(pls_kakuritu / 2, pls_kakuritu - 10);
 		if (pls_kakuritu < 2) pls_kakuritu = 2;
@@ -1265,7 +1265,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	}
 
 	/* Boost the level */
-	if (!p_ptr->inside_battle && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+	if (!p_ptr->inside_battle && !(d_info[dungeon_idx].flags1 & DF1_BEGINNER))
 	{
 		/* Nightmare mode allows more out-of depth monsters */
 		if (ironman_nightmare && !randint0(pls_kakuritu))
@@ -2262,7 +2262,7 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 	bool easy = FALSE;
 
 	/* Non-Ninja player in the darkness */
-	bool in_darkness = (d_info[dungeon_type].flags1 & DF1_DARKNESS) && !p_ptr->see_nocto;
+	bool in_darkness = (d_info[dungeon_idx].flags1 & DF1_DARKNESS) && !p_ptr->see_nocto;
 
 	/* Do disturb? */
 	if (disturb_high)
@@ -2761,7 +2761,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 		else
 			level = dun_level;
 
-		if (d_info[dungeon_type].flags1 & DF1_CHAMELEON) level+= 2+randint1(3);
+		if (d_info[dungeon_idx].flags1 & DF1_CHAMELEON) level+= 2+randint1(3);
 
 		r_idx = get_mon_num(level);
 		r_ptr = &r_info[r_idx];
@@ -3740,9 +3740,9 @@ bool alloc_horde(POSITION y, POSITION x)
  */
 bool alloc_guardian(bool def_val)
 {
-	MONRACE_IDX guardian = d_info[dungeon_type].final_guardian;
+	MONRACE_IDX guardian = d_info[dungeon_idx].final_guardian;
 
-	if (guardian && (d_info[dungeon_type].maxdepth == dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
+	if (guardian && (d_info[dungeon_idx].maxdepth == dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
 		int oy;
 		int ox;
@@ -3882,7 +3882,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 	    monster_has_hostile_align(NULL, 10, -10, r_ptr))
 		return FALSE;
 
-	if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[dungeon_type].flags1 & DF1_CHAMELEON)) return TRUE;
+	if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[dungeon_idx].flags1 & DF1_CHAMELEON)) return TRUE;
 
 	return (summon_specific_aux(r_idx));
 }

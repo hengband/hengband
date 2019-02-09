@@ -1453,7 +1453,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & RF1_NEVER_BLOW) return FALSE;
 
-	if (d_info[dungeon_type].flags1 & DF1_NO_MELEE) return (FALSE);
+	if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE) return (FALSE);
 
 	/* Total armor */
 	ac = tr_ptr->ac;
@@ -2849,7 +2849,7 @@ void process_monster(MONSTER_IDX m_idx)
 			}
 
 			/* In anti-melee dungeon, stupid or confused monster takes useless turn */
-			if (do_move && (d_info[dungeon_type].flags1 & DF1_NO_MELEE))
+			if (do_move && (d_info[dungeon_idx].flags1 & DF1_NO_MELEE))
 			{
 				if (!MON_CONFUSED(m_ptr))
 				{
@@ -2905,7 +2905,7 @@ void process_monster(MONSTER_IDX m_idx)
 						if (monst_attack_monst(m_idx, c_ptr->m_idx)) return;
 
 						/* In anti-melee dungeon, stupid or confused monster takes useless turn */
-						else if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
+						else if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE)
 						{
 							if (MON_CONFUSED(m_ptr)) return;
 							else if (r_ptr->flags2 & RF2_STUPID)

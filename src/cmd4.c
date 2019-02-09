@@ -439,9 +439,9 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 		else
 		{
 #ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", (int)dun_level, d_name+d_info[dungeon_type].name);
+			sprintf(note_level_buf, "%d階(%s):", (int)dun_level, d_name+d_info[dungeon_idx].name);
 #else
-			sprintf(note_level_buf, "%s L%d:", d_name+d_info[dungeon_type].name, (int)dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name+d_info[dungeon_idx].name, (int)dun_level);
 #endif
 			note_level = note_level_buf;
 		}
@@ -516,8 +516,8 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 		{
 			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
 						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
-						   _(d_name+d_info[dungeon_type].name, num),
-						   _(num, d_name+d_info[dungeon_type].name));
+						   _(d_name+d_info[dungeon_idx].name, num),
+						   _(num, d_name+d_info[dungeon_idx].name));
 			break;
 		}
 		case NIKKI_TRUMP:
@@ -548,8 +548,8 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 		{
 			if (!num)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"), 
-						hour, min, note_level, _(d_name+d_info[dungeon_type].name, (int)max_dlv[dungeon_type]), 
-											   _((int)max_dlv[dungeon_type], d_name+d_info[dungeon_type].name));
+						hour, min, note_level, _(d_name+d_info[dungeon_idx].name, (int)max_dlv[dungeon_idx]), 
+											   _((int)max_dlv[dungeon_idx], d_name+d_info[dungeon_idx].name));
 			else
 				fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
 			break;
@@ -608,7 +608,7 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 			if (!dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), dun_level, d_name+d_info[dungeon_type].name);
+				to = format(_("%d階(%s)", "level %d of %s"), dun_level, d_name+d_info[dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
 						   " %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
@@ -620,7 +620,7 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 			if (!dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), dun_level, d_name+d_info[dungeon_type].name);
+				to = format(_("%d階(%s)", "level %d of %s"), dun_level, d_name+d_info[dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
 						   " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);

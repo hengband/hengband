@@ -628,7 +628,7 @@ OBJECT_IDX get_obj_num(DEPTH level)
 	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
 	/* Boost level */
-	if ((level > 0) && !(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+	if ((level > 0) && !(d_info[dungeon_idx].flags1 & DF1_BEGINNER))
 	{
 		/* Occasional "boost" */
 		if (one_in_(GREAT_OBJ))
@@ -4295,14 +4295,14 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 	f1 = lev + 10;
 
 	/* Maximal chance of being "good" */
-	if (f1 > d_info[dungeon_type].obj_good) f1 = d_info[dungeon_type].obj_good;
+	if (f1 > d_info[dungeon_idx].obj_good) f1 = d_info[dungeon_idx].obj_good;
 
 	/* Base chance of being "great" */
 	f2 = f1 * 2 / 3;
 
 	/* Maximal chance of being "great" */
-	if ((p_ptr->pseikaku != SEIKAKU_MUNCHKIN) && (f2 > d_info[dungeon_type].obj_great))
-		f2 = d_info[dungeon_type].obj_great;
+	if ((p_ptr->pseikaku != SEIKAKU_MUNCHKIN) && (f2 > d_info[dungeon_idx].obj_great))
+		f2 = d_info[dungeon_idx].obj_great;
 
 	if (p_ptr->muta3 & MUT3_GOOD_LUCK)
 	{
@@ -6734,7 +6734,7 @@ bool process_warning(POSITION xx, POSITION yy)
 				BIT_FLAGS f5 = r_ptr->a_ability_flags1;
 				BIT_FLAGS f6 = r_ptr->a_ability_flags2;
 
-				if (!(d_info[dungeon_type].flags1 & DF1_NO_MAGIC))
+				if (!(d_info[dungeon_idx].flags1 & DF1_NO_MAGIC))
 				{
 					if (f4 & RF4_BA_CHAO) spell_damcalc_by_spellnum(MS_BALL_CHAOS, GF_CHAOS, c_ptr->m_idx, &dam_max0);
 					if (f5 & RF5_BA_MANA) spell_damcalc_by_spellnum(MS_BALL_MANA, GF_MANA, c_ptr->m_idx, &dam_max0);
@@ -6769,7 +6769,7 @@ bool process_warning(POSITION xx, POSITION yy)
 			}
 
 			/* Monster melee attacks */
-			if (!(r_ptr->flags1 & RF1_NEVER_BLOW) && !(d_info[dungeon_type].flags1 & DF1_NO_MELEE))
+			if (!(r_ptr->flags1 & RF1_NEVER_BLOW) && !(d_info[dungeon_idx].flags1 & DF1_NO_MELEE))
 			{
 				if (mx <= xx + 1 && mx >= xx - 1 && my <= yy + 1 && my >= yy - 1)
 				{

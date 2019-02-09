@@ -411,7 +411,7 @@ bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 	}
 
 	/* Normal dungeon */
-	if (!(d_info[dungeon_type].flags1 & DF1_NO_CAVE))
+	if (!(d_info[dungeon_idx].flags1 & DF1_NO_CAVE))
 	{
 		/* Choose a random one */
 		pick = randint1(candidates);
@@ -1142,7 +1142,7 @@ void build_cavern(void)
 	bool done, light;
 
 	light = done = FALSE;
-	if ((dun_level <= randint1(50)) && !(d_info[dungeon_type].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((dun_level <= randint1(50)) && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	/* Make a cave the size of the dungeon */
 	xsize = cur_wid - 1;
@@ -1309,7 +1309,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 			/* Light lava */
 			if (cave_have_flag_bold(y0 + y - yhsize, x0 + x - xhsize, FF_LAVA))
 			{
-				if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS)) cave[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
+				if (!(d_info[dungeon_idx].flags1 & DF1_DARKNESS)) cave[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
 			}
 		}
 	}
@@ -1697,7 +1697,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && is_vault && !(d_info[dungeon_type].flags1 & DF1_DARKNESS));
+	light = ((dun_level <= randint1(25)) && is_vault && !(d_info[dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Pick a random room size - randomized by calling routine */
 	dy = ysize / 2 - 1;
@@ -2161,7 +2161,7 @@ bool generate_rooms(void)
 	/*! @details ダンジョンにBEGINNER、CHAMELEON、SMALLESTいずれのフラグもなく、
 	 * かつ「常に通常でない部屋を生成する」フラグがONならば、
 	 * GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults */
-	if (ironman_rooms && !((d_info[dungeon_type].flags1 & (DF1_BEGINNER | DF1_CHAMELEON | DF1_SMALLEST))))
+	if (ironman_rooms && !((d_info[dungeon_idx].flags1 & (DF1_BEGINNER | DF1_CHAMELEON | DF1_SMALLEST))))
 	{
 		for (i = 0; i < ROOM_T_MAX; i++)
 		{
@@ -2171,7 +2171,7 @@ bool generate_rooms(void)
 	}
 
 	/*! @details ダンジョンにNO_VAULTフラグがあるならば、LESSER_VAULT / GREATER_VAULT/ RANDOM_VAULTを除外 / Forbidden vaults */
-	else if (d_info[dungeon_type].flags1 & DF1_NO_VAULT)
+	else if (d_info[dungeon_idx].flags1 & DF1_NO_VAULT)
 	{
 		prob_list[ROOM_T_LESSER_VAULT] = 0;
 		prob_list[ROOM_T_GREATER_VAULT] = 0;
@@ -2179,13 +2179,13 @@ bool generate_rooms(void)
 	}
 
 	/*! @details ダンジョンにBEGINNERフラグがあるならば、FIXED_ROOMを除外 / Forbidden vaults */
-	if (d_info[dungeon_type].flags1 & DF1_BEGINNER)
+	if (d_info[dungeon_idx].flags1 & DF1_BEGINNER)
 	{
 		prob_list[ROOM_T_FIXED] = 0;
 	}
 
 	/*! @details ダンジョンにNO_CAVEフラグがある場合、FRACAVEの生成枠がNORMALに与えられる。CRIPT、OVALの生成枠がINNER_Fに与えられる。/ NO_CAVE dungeon (Castle)*/
-	if (d_info[dungeon_type].flags1 & DF1_NO_CAVE)
+	if (d_info[dungeon_idx].flags1 & DF1_NO_CAVE)
 	{
 		MOVE_PLIST(ROOM_T_NORMAL, ROOM_T_FRACAVE);
 		MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_CRYPT);
@@ -2193,7 +2193,7 @@ bool generate_rooms(void)
 	}
 
 	/*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc cave etc.) */
-	else if (d_info[dungeon_type].flags1 & DF1_CAVE)
+	else if (d_info[dungeon_idx].flags1 & DF1_CAVE)
 	{
 		MOVE_PLIST(ROOM_T_FRACAVE, ROOM_T_NORMAL);
 	}
@@ -2205,13 +2205,13 @@ bool generate_rooms(void)
 	}
 
 	/*! @details ダンジョンに最初からGLASS_ROOMフラグがある場合、GLASS を生成から除外。/ Forbidden glass rooms */
-	if (!(d_info[dungeon_type].flags1 & DF1_GLASS_ROOM))
+	if (!(d_info[dungeon_idx].flags1 & DF1_GLASS_ROOM))
 	{
 		prob_list[ROOM_T_GLASS] = 0;
 	}
 
 	/*! @details ARCADEは同フラグがダンジョンにないと生成されない。 / Forbidden glass rooms */
-	if (!(d_info[dungeon_type].flags1 & DF1_ARCADE))
+	if (!(d_info[dungeon_idx].flags1 & DF1_ARCADE))
 	{
 		prob_list[ROOM_T_ARCADE] = 0;
 	}

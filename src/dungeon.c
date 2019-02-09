@@ -539,7 +539,7 @@ static void pattern_teleport(void)
 			min_level = dun_level;
 
 		/* Maximum level */
-		if (dungeon_type == DUNGEON_ANGBAND)
+		if (dungeon_idx == DUNGEON_ANGBAND)
 		{
 			if (dun_level > 100)
 				max_level = MAX_DEPTH - 1;
@@ -548,8 +548,8 @@ static void pattern_teleport(void)
 		}
 		else
 		{
-			max_level = d_info[dungeon_type].maxdepth;
-			min_level = d_info[dungeon_type].mindepth;
+			max_level = d_info[dungeon_idx].maxdepth;
+			min_level = d_info[dungeon_idx].mindepth;
 		}
 
 		/* Prompt */
@@ -3001,12 +3001,12 @@ static void process_world_aux_movement(void)
 			{
 				msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
 
-				if (dungeon_type) p_ptr->recall_dungeon = dungeon_type;
+				if (dungeon_idx) p_ptr->recall_dungeon = dungeon_idx;
 				if (record_stair)
 					do_cmd_write_nikki(NIKKI_RECALL, dun_level, NULL);
 
 				dun_level = 0;
-				dungeon_type = 0;
+				dungeon_idx = 0;
 
 				leave_quest_check();
 				leave_tower_check();
@@ -3019,17 +3019,17 @@ static void process_world_aux_movement(void)
 			{
 				msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
 
-				dungeon_type = p_ptr->recall_dungeon;
+				dungeon_idx = p_ptr->recall_dungeon;
 
 				if (record_stair)
 					do_cmd_write_nikki(NIKKI_RECALL, dun_level, NULL);
 
 				/* New depth */
-				dun_level = max_dlv[dungeon_type];
+				dun_level = max_dlv[dungeon_idx];
 				if (dun_level < 1) dun_level = 1;
 
 				/* Nightmare mode makes recall more dangerous */
-				if (ironman_nightmare && !randint0(666) && (dungeon_type == DUNGEON_ANGBAND))
+				if (ironman_nightmare && !randint0(666) && (dungeon_idx == DUNGEON_ANGBAND))
 				{
 					if (dun_level < 50)
 					{
@@ -3041,7 +3041,7 @@ static void process_world_aux_movement(void)
 					}
 					else if (dun_level > 100)
 					{
-						dun_level = d_info[dungeon_type].maxdepth - 1;
+						dun_level = d_info[dungeon_idx].maxdepth - 1;
 					}
 				}
 
@@ -3067,7 +3067,7 @@ static void process_world_aux_movement(void)
 				/* Leaving */
 				p_ptr->leaving = TRUE;
 
-				if (dungeon_type == DUNGEON_ANGBAND)
+				if (dungeon_idx == DUNGEON_ANGBAND)
 				{
 					int i;
 
@@ -3384,10 +3384,10 @@ static void process_world(void)
 	update_dungeon_feeling();
 
 	/* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
-	if (ironman_downward && (dungeon_type != DUNGEON_ANGBAND && dungeon_type != 0))
+	if (ironman_downward && (dungeon_idx != DUNGEON_ANGBAND && dungeon_idx != 0))
 	{
 		dun_level = 0;
-		dungeon_type = 0;
+		dungeon_idx = 0;
 		prepare_change_floor_mode(CFM_FIRST_FLOOR | CFM_RAND_PLACE);
 		p_ptr->inside_arena = FALSE;
 		p_ptr->wild_mode = FALSE;
@@ -3576,7 +3576,7 @@ static void process_world(void)
 	/*** Process the monsters ***/
 
 	/* Check for creature generation. */
-	if (one_in_(d_info[dungeon_type].max_m_alloc_chance) &&
+	if (one_in_(d_info[dungeon_idx].max_m_alloc_chance) &&
 	    !p_ptr->inside_arena && !p_ptr->inside_quest && !p_ptr->inside_battle)
 	{
 		/* Make a new monster */
@@ -4198,7 +4198,7 @@ static void process_command(void)
 				{
 					msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
 				}
-				else if (dun_level && (d_info[dungeon_type].flags1 & DF1_NO_MAGIC) && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
+				else if (dun_level && (d_info[dungeon_idx].flags1 & DF1_NO_MAGIC) && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
 				{
 					msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 					msg_print(NULL);
@@ -5321,9 +5321,9 @@ static void dungeon(bool load_game)
 
 
 	/* Track maximum dungeon level (if not in quest -KMW-) */
-	if ((max_dlv[dungeon_type] < dun_level) && !p_ptr->inside_quest)
+	if ((max_dlv[dungeon_idx] < dun_level) && !p_ptr->inside_quest)
 	{
-		max_dlv[dungeon_type] = dun_level;
+		max_dlv[dungeon_idx] = dun_level;
 		if (record_maxdepth) do_cmd_write_nikki(NIKKI_MAXDEAPTH, dun_level, NULL);
 	}
 
@@ -5390,22 +5390,22 @@ static void dungeon(bool load_game)
 	if (!p_ptr->playing || p_ptr->is_dead) return;
 
 	/* Print quest message if appropriate */
-	if (!p_ptr->inside_quest && (dungeon_type == DUNGEON_ANGBAND))
+	if (!p_ptr->inside_quest && (dungeon_idx == DUNGEON_ANGBAND))
 	{
 		quest_discovery(random_quest_number(dun_level));
 		p_ptr->inside_quest = random_quest_number(dun_level);
 	}
-	if ((dun_level == d_info[dungeon_type].maxdepth) && d_info[dungeon_type].final_guardian)
+	if ((dun_level == d_info[dungeon_idx].maxdepth) && d_info[dungeon_idx].final_guardian)
 	{
-		if (r_info[d_info[dungeon_type].final_guardian].max_num)
+		if (r_info[d_info[dungeon_idx].final_guardian].max_num)
 #ifdef JP
 			msg_format("この階には%sの主である%sが棲んでいる。",
-				   d_name+d_info[dungeon_type].name, 
-				   r_name+r_info[d_info[dungeon_type].final_guardian].name);
+				   d_name+d_info[dungeon_idx].name, 
+				   r_name+r_info[d_info[dungeon_idx].final_guardian].name);
 #else
 			msg_format("%^s lives in this level as the keeper of %s.",
-					   r_name+r_info[d_info[dungeon_type].final_guardian].name, 
-					   d_name+d_info[dungeon_type].name);
+					   r_name+r_info[d_info[dungeon_idx].final_guardian].name, 
+					   d_name+d_info[dungeon_idx].name);
 #endif
 	}
 
@@ -5966,7 +5966,7 @@ void play_game(bool new_game)
 		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
 
 	/* Fill the arrays of floors and walls in the good proportions */
-	set_floor_and_wall(dungeon_type);
+	set_floor_and_wall(dungeon_idx);
 
 	/* Flavor the objects */
 	flavor_init();

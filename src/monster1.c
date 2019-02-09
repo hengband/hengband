@@ -3000,14 +3000,14 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			}
 		}
 
-		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[dungeon_type].final_guardian == m_ptr->r_idx))
+		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[dungeon_idx].final_guardian == m_ptr->r_idx))
 		{
-			KIND_OBJECT_IDX k_idx = d_info[dungeon_type].final_object ? d_info[dungeon_type].final_object
+			KIND_OBJECT_IDX k_idx = d_info[dungeon_idx].final_object ? d_info[dungeon_idx].final_object
 				: lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 
-			if (d_info[dungeon_type].final_artifact)
+			if (d_info[dungeon_idx].final_artifact)
 			{
-				a_idx = d_info[dungeon_type].final_artifact;
+				a_idx = d_info[dungeon_idx].final_artifact;
 				artifact_type *a_ptr = &a_info[a_idx];
 
 				if (!a_ptr->cur_num)
@@ -3023,7 +3023,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 					else if (!preserve_mode) a_ptr->cur_num = 1;
 
 					/* Prevent rewarding both artifact and "default" object */
-					if (!d_info[dungeon_type].final_object) k_idx = 0;
+					if (!d_info[dungeon_idx].final_object) k_idx = 0;
 				}
 			}
 
@@ -3037,7 +3037,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				apply_magic(q_ptr, object_level, AM_NO_FIXED_ART | AM_GOOD);
 				(void)drop_near(q_ptr, -1, y, x);
 			}
-			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[dungeon_type].name);
+			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[dungeon_idx].name);
 		}
 	}
 

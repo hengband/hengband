@@ -509,7 +509,7 @@ errr top_twenty(void)
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)p_ptr->lev, 999));
 	sprintf(the_score.cur_dun, "%3d", (int)dun_level);
 	sprintf(the_score.max_lev, "%3d", MIN((u16b)p_ptr->max_plv, 999));
-	sprintf(the_score.max_dun, "%3d", (int)max_dlv[dungeon_type]);
+	sprintf(the_score.max_dun, "%3d", (int)max_dlv[dungeon_idx]);
 
 	/* Save the cause of death (31 chars) */
 	if (strlen(p_ptr->died_from) >= sizeof(the_score.how))
@@ -622,7 +622,7 @@ errr predict_score(void)
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)p_ptr->lev, 999));
 	sprintf(the_score.cur_dun, "%3d", (int)dun_level);
 	sprintf(the_score.max_lev, "%3d", MIN((u16b)p_ptr->max_plv, 999));
-	sprintf(the_score.max_dun, "%3d", (int)max_dlv[dungeon_type]);
+	sprintf(the_score.max_dun, "%3d", (int)max_dlv[dungeon_idx]);
 
 	/* Hack -- no cause of death */
 	/* まだ死んでいないときの識別文字 */

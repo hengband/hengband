@@ -162,7 +162,7 @@ concptr map_name(void)
 	else if (!dun_level && p_ptr->town_num)
 		return town[p_ptr->town_num].name;
 	else
-		return d_name+d_info[dungeon_type].name;
+		return d_name+d_info[dungeon_idx].name;
 }
 
 /*!
@@ -936,7 +936,7 @@ static void prt_depth(void)
 	{
 		strcpy(depths, _("地上", "Surf."));
 	}
-	else if (p_ptr->inside_quest && !dungeon_type)
+	else if (p_ptr->inside_quest && !dungeon_idx)
 	{
 		strcpy(depths, _("地上", "Quest"));
 	}

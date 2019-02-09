@@ -105,7 +105,7 @@ void place_random_stairs(POSITION y, POSITION x)
 	if (ironman_downward) up_stairs = FALSE;
 
 	/* Bottom */
-	if (dun_level >= d_info[dungeon_type].maxdepth) down_stairs = FALSE;
+	if (dun_level >= d_info[dungeon_idx].maxdepth) down_stairs = FALSE;
 
 	/* Quest-level */
 	if (quest_number(dun_level) && (dun_level > 1)) down_stairs = FALSE;
@@ -139,15 +139,15 @@ void place_random_door(POSITION y, POSITION x, bool room)
 	/* Initialize mimic info */
 	c_ptr->mimic = 0;
 
-	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
+	if (d_info[dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
 		return;
 	}
 
-	type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-		one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-		((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+	type = ((d_info[dungeon_idx].flags1 & DF1_CURTAIN) &&
+		one_in_((d_info[dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+		((d_info[dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 	/* Choose an object */
 	tmp = randint0(1000);
@@ -219,7 +219,7 @@ void place_closed_door(POSITION y, POSITION x, int type)
 	int tmp;
 	FEAT_IDX feat = feat_none;
 
-	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
+	if (d_info[dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
 		return;
@@ -270,13 +270,13 @@ void place_closed_door(POSITION y, POSITION x, int type)
 */
 void place_locked_door(POSITION y, POSITION x)
 {
-	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
+	if (d_info[dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
 	}
 	else
 	{
-		set_cave_feat(y, x, feat_locked_door_random((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+		set_cave_feat(y, x, feat_locked_door_random((d_info[dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
 		cave[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}
@@ -292,7 +292,7 @@ void place_locked_door(POSITION y, POSITION x)
 */
 void place_secret_door(POSITION y, POSITION x, int type)
 {
-	if (d_info[dungeon_type].flags1 & DF1_NO_DOORS)
+	if (d_info[dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
 	}
@@ -302,9 +302,9 @@ void place_secret_door(POSITION y, POSITION x, int type)
 
 		if (type == DOOR_DEFAULT)
 		{
-			type = ((d_info[dungeon_type].flags1 & DF1_CURTAIN) &&
-				one_in_((d_info[dungeon_type].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-				((d_info[dungeon_type].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+			type = ((d_info[dungeon_idx].flags1 & DF1_CURTAIN) &&
+				one_in_((d_info[dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+				((d_info[dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 		}
 
 		/* Create secret door */
@@ -479,7 +479,7 @@ void try_door(POSITION y, POSITION x)
 	if (cave[y][x].info & (CAVE_ROOM)) return;
 
 	/* Occasional door (if allowed) */
-	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[dungeon_type].flags1 & DF1_NO_DOORS))
+	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[dungeon_idx].flags1 & DF1_NO_DOORS))
 	{
 		/* Place a door */
 		place_random_door(y, x, FALSE);

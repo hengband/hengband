@@ -1121,7 +1121,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 #endif
 		}
 
-		if (!(d_info[dungeon_type].flags1 & DF1_BEGINNER))
+		if (!(d_info[dungeon_idx].flags1 & DF1_BEGINNER))
 		{
 			if (!dun_level && !ambush_flag && !p_ptr->inside_arena)
 			{

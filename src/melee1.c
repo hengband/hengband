@@ -1363,7 +1363,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 		}
 	}
 
-	if (d_info[dungeon_type].flags1 & DF1_NO_MELEE)
+	if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE)
 	{
 		msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
 		return FALSE;
@@ -1538,7 +1538,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (FALSE);
 
-	if (d_info[dungeon_type].flags1 & DF1_NO_MELEE) return (FALSE);
+	if (d_info[dungeon_idx].flags1 & DF1_NO_MELEE) return (FALSE);
 
 	/* ...nor if friendly */
 	if (!is_hostile(m_ptr)) return FALSE;

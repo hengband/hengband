@@ -65,7 +65,7 @@ FEAT_IDX choose_random_trap(void)
 		if (p_ptr->inside_arena || quest_number(dun_level)) continue;
 
 		/* Hack -- no trap doors on the deepest level */
-		if (dun_level >= d_info[dungeon_type].maxdepth) continue;
+		if (dun_level >= d_info[dungeon_idx].maxdepth) continue;
 
 		break;
 	}

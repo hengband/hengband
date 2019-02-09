@@ -606,7 +606,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_LITE:
 		{
 			/* Turn on the light */
-			if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS))
+			if (!(d_info[dungeon_idx].flags1 & DF1_DARKNESS))
 			{
 				c_ptr->info |= (CAVE_GLOW);
 				note_spot(y, x);

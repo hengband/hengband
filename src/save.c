@@ -1166,7 +1166,7 @@ static bool wr_dungeon(void)
 	wr_s16b(max_floor_id);
 
 	/* Current dungeon type */
-	wr_byte((byte_hack)dungeon_type);
+	wr_byte((byte_hack)dungeon_idx);
 
 
 	/*** No saved floor (On the surface etc.) ***/

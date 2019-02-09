@@ -133,7 +133,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 						/* Lava terrain glows */
 						if (have_flag(f_info[feat1].flags, FF_LAVA))
 						{
-							if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS)) c_ptr->info |= CAVE_GLOW;
+							if (!(d_info[dungeon_idx].flags1 & DF1_DARKNESS)) c_ptr->info |= CAVE_GLOW;
 						}
 
 						/* Hack -- don't teleport here */
@@ -416,7 +416,7 @@ void place_trees(POSITION x, POSITION y)
 				c_ptr->mimic = 0;
 
 				/* Light area since is open above */
-				if (!(d_info[dungeon_type].flags1 & DF1_DARKNESS)) cave[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+				if (!(d_info[dungeon_idx].flags1 & DF1_DARKNESS)) cave[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
 			}
 		}
 	}

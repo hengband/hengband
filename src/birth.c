@@ -1812,10 +1812,10 @@ static void player_wipe_without_name(void)
 	p_ptr->muta2 = 0;
 	p_ptr->muta3 = 0;
 
-	/* Reset virtues*/
+	/* Reset virtues */
 	for (i = 0; i < 8; i++) p_ptr->virtues[i]=0;
 
-	dungeon_type = 0;
+	dungeon_idx = 0;
 
 	/* Set the recall dungeon accordingly */
 	if (vanilla_town || ironman_downward)
