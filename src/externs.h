@@ -272,7 +272,7 @@ extern object_type *o_list;
 extern monster_type *m_list;
 extern s16b *mproc_list[MAX_MTIMED];
 extern s16b mproc_max[MAX_MTIMED];
-extern u16b max_towns;
+extern TOWN_IDX max_towns;
 extern town_type *town_info;
 extern object_type *inventory;
 extern s16b alloc_kind_size;
