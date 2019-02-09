@@ -653,7 +653,7 @@ char *r_text;
 /*
  * The dungeon arrays
  */
-dungeon_info_type *d_info;
+dungeon_type *d_info;
 char *d_name;
 char *d_text;
 

@@ -775,7 +775,7 @@ static errr init_r_info(void)
 static errr init_d_info(void)
 {
 	/* Init the header */
-	init_header(&d_head, max_d_idx, sizeof(dungeon_info_type));
+	init_header(&d_head, max_d_idx, sizeof(dungeon_type));
 
 #ifdef ALLOW_TEMPLATES
 

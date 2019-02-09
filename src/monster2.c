@@ -967,7 +967,7 @@ static int chameleon_change_m_idx = 0;
  */
 static bool restrict_monster_to_dungeon(MONRACE_IDX r_idx)
 {
-	dungeon_info_type *d_ptr = &d_info[p_ptr->dungeon_idx];
+	dungeon_type *d_ptr = &d_info[p_ptr->dungeon_idx];
 	monster_race *r_ptr = &r_info[r_idx];
 	byte a;
 

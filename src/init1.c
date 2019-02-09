@@ -3172,7 +3172,7 @@ errr parse_r_info(char *buf, header *head)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, concptr what)
+static errr grab_one_dungeon_flag(dungeon_type *d_ptr, concptr what)
 {
 	if (grab_one_flag(&d_ptr->flags1, d_info_flags1, what) == 0)
 		return 0;
@@ -3190,7 +3190,7 @@ static errr grab_one_dungeon_flag(dungeon_info_type *d_ptr, concptr what)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, concptr what)
+static errr grab_one_basic_monster_flag(dungeon_type *d_ptr, concptr what)
 {
 	if (grab_one_flag(&d_ptr->mflags1, r_info_flags1, what) == 0)
 		return 0;
@@ -3226,7 +3226,7 @@ static errr grab_one_basic_monster_flag(dungeon_info_type *d_ptr, concptr what)
  * @param what 参照元の文字列ポインタ
  * @return エラーコード
  */
-static errr grab_one_spell_monster_flag(dungeon_info_type *d_ptr, concptr what)
+static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
 {
 	if (grab_one_flag(&d_ptr->mflags4, r_info_flags4, what) == 0)
 		return 0;
@@ -3256,7 +3256,7 @@ errr parse_d_info(char *buf, header *head)
 	char *s, *t;
 
 	/* Current entry */
-	static dungeon_info_type *d_ptr = NULL;
+	static dungeon_type *d_ptr = NULL;
 
 	/* Process 'N' for "New/Number/Name" */
 	if (buf[0] == 'N')

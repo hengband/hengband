@@ -98,7 +98,7 @@ void display_rumor(bool ex)
 			else if (strcmp(zz[0], "DUNGEON") == 0)
 			{
 				DUNGEON_IDX d_idx;
-				dungeon_info_type *d_ptr;
+				dungeon_type *d_ptr;
 
 				while (1)
 				{
