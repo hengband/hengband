@@ -1668,15 +1668,6 @@ struct town_type
 	byte numstores;
 };
 
-/* Dungeons */
-typedef struct dun_type dun_type;
-struct dun_type
-{
-	DEPTH min_level; /* Minimum level in the dungeon */
-	DEPTH max_level; /* Maximum dungeon level allowed */
-	concptr name;      /* The name of the dungeon */
-};
-
 /*
  * Sort-array element
  */
