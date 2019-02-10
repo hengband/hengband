@@ -100,6 +100,21 @@ bool cmd_limit_arena(player_type *creature_ptr)
 	return FALSE;
 }
 
+bool cmd_limit_blind(player_type *creature_ptr)
+{
+	if (creature_ptr->blind)
+	{
+		msg_print(_("目が見えない。", "You can't see anything."));
+		return TRUE;
+	}
+	if (no_lite())
+	{
+		msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
+		return TRUE;
+	}
+	return FALSE;
+}
+
 bool cmd_limit_time_walk(player_type *creature_ptr)
 {
 	if (creature_ptr->timewalk)

@@ -622,17 +622,7 @@ void do_cmd_read_scroll(void)
 		set_action(ACTION_NONE);
 	}
 
-	/* Check some conditions */
-	if (p_ptr->blind)
-	{
-		msg_print(_("目が見えない。", "You can't see anything."));
-		return;
-	}
-	if (no_lite())
-	{
-		msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
-		return;
-	}
+	if (cmd_limit_blind(p_ptr)) return;
 	if (cmd_limit_confused(p_ptr)) return;
 
 	/* Restrict choices to scrolls */
