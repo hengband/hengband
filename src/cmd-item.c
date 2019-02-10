@@ -1228,8 +1228,8 @@ void do_cmd_locate(void)
 		}
 
 		/* Prepare to ask which way to look */
-		sprintf(out_val, _("マップ位置 [%ld(%02ld),%ld(%02ld)] (プレイヤーの%s)  方向?", 
-					       "Map sector [%ld(%02ld),%ld(%02ld)], which is%s your sector.  Direction?"),
+		sprintf(out_val, _("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", 
+					       "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?"),
 			y2 / (hgt / 2), y2 % (hgt / 2),
 			x2 / (wid / 2), x2 % (wid / 2), tmp_val);
 
