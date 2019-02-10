@@ -1551,31 +1551,31 @@ typedef struct martial_arts martial_arts;
 
 struct martial_arts
 {
-	concptr    desc;       /* A verbose attack description */
-	int     min_level;  /* Minimum level to use */
-	int     chance;     /* Chance of 'success' */
-	int     dd;         /* Damage dice */
-	int     ds;         /* Damage sides */
-	int     effect;     /* Special effects */
+	concptr desc;       /* A verbose attack description */
+	PLAYER_LEVEL min_level;  /* Minimum level to use */
+	int chance;     /* Chance of 'success' */
+	int dd;         /* Damage dice */
+	int ds;         /* Damage sides */
+	int effect;     /* Special effects */
 };
 
 typedef struct kamae kamae;
 
 struct kamae
 {
-	concptr    desc;       /* A verbose kamae description */
-	int     min_level;  /* Minimum level to use */
-	concptr    info;
+	concptr desc;       /* A verbose kamae description */
+	PLAYER_LEVEL min_level;  /* Minimum level to use */
+	concptr info;
 };
 
 /* Mindcrafters */
 typedef struct mind_type mind_type;
 struct mind_type
 {
-	int     min_lev;
-	int     mana_cost;
-	int     fail;
-	concptr    name;
+	PLAYER_LEVEL min_lev;
+	MANA_POINT mana_cost;
+	PERCENTAGE fail;
+	concptr name;
 };
 
 typedef struct mind_power mind_power;
@@ -1609,7 +1609,7 @@ struct building_type
 {
 	GAME_TEXT name[20];                  /* proprietor name */
 	GAME_TEXT owner_name[20];            /* proprietor name */
-	char owner_race[20];            /* proprietor race */
+	GAME_TEXT owner_race[20];            /* proprietor race */
 
 	GAME_TEXT act_names[8][30];          /* action names */
 	PRICE member_costs[8];           /* Costs for class members of building */
