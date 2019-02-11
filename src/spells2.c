@@ -2403,8 +2403,6 @@ static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITIO
 static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pass_bold)(POSITION, POSITION))
 {
 	grid_type *g_ptr;
-
-	/* Get the grid */
 	g_ptr = &grid_array[y][x];
 
 	/* Avoid infinite recursion */

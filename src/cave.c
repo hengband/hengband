@@ -4371,8 +4371,6 @@ void wiz_lite(bool ninja)
 				{
 					POSITION yy = y + ddy_ddd[i];
 					POSITION xx = x + ddx_ddd[i];
-
-					/* Get the grid */
 					g_ptr = &grid_array[yy][xx];
 
 					/* Feature code (applying "mimic" field) */

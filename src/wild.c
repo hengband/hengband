@@ -566,7 +566,6 @@ void wilderness_gen(void)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			/* Get the grid */
 			g_ptr = &grid_array[y][x];
 
 			if (is_daytime())
@@ -613,7 +612,6 @@ void wilderness_gen(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				/* Get the grid */
 				g_ptr = &grid_array[y][x];
 
 				/* Seeing true feature code (ignore mimic) */
@@ -639,7 +637,6 @@ void wilderness_gen(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				/* Get the grid */
 				g_ptr = &grid_array[y][x];
 
 				if (cave_have_flag_grid(g_ptr, FF_ENTRANCE))

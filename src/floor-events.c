@@ -12,7 +12,6 @@ void day_break()
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				/* Get the grid */
 				grid_type *g_ptr = &grid_array[y][x];
 
 				/* Assume lit */
@@ -50,7 +49,6 @@ void night_falls(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				/* Get the grid */
 				grid_type *g_ptr = &grid_array[y][x];
 
 				/* Feature code (applying "mimic" field) */

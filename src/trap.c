@@ -301,8 +301,6 @@ void hit_trap(bool break_trap)
 {
 	int i, num, dam;
 	POSITION x = p_ptr->x, y = p_ptr->y;
-
-	/* Get the grid */
 	grid_type *g_ptr = &grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
