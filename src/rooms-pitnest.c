@@ -284,7 +284,7 @@ bool build_type5(void)
 
 	monster_type align;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	int cur_nest_type = pick_vault_type(nest_types, d_info[p_ptr->dungeon_idx].nest);
 	vault_aux_type *n_ptr;
@@ -495,7 +495,7 @@ bool build_type6(void)
 
 	monster_type align;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	int cur_pit_type = pick_vault_type(pit_types, d_info[p_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
@@ -800,7 +800,7 @@ bool build_type13(void)
 
 	monster_type align;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	int cur_pit_type = pick_vault_type(pit_types, d_info[p_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;

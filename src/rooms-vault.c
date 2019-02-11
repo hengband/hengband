@@ -309,7 +309,7 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 {
 	POSITION dx, dy, x, y, i, j;
 	concptr t;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Place dungeon features and objects */
 	for (t = data, dy = 0; dy < ymax; dy++)
@@ -1066,7 +1066,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 

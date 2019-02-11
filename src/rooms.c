@@ -1692,7 +1692,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	POSITION y1, x1, y2, x2;
 	int m, n, num_vertices, *visited;
 	bool light;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
@@ -1963,7 +1963,7 @@ void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, in
  */
 void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	feature_type *f_ptr;
 	int i, j;
 
@@ -2042,7 +2042,7 @@ void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int
 {
 	POSITION y, x;
 	
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	for (y = y1; y <= y2; y++)
 	{

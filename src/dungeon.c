@@ -3405,7 +3405,7 @@ static void process_world(void)
 		for (i2 = 0; i2 < cur_wid; ++i2)
 			for (j2 = 0; j2 < cur_hgt; j2++)
 			{
-				cave_type *c_ptr = &cave[j2][i2];
+				grid_type *c_ptr = &cave[j2][i2];
 
 				if ((c_ptr->m_idx > 0) && (c_ptr->m_idx != p_ptr->riding))
 				{

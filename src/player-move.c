@@ -360,7 +360,7 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 static void discover_hidden_things(POSITION y, POSITION x)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	c_ptr = &cave[y][x];
 
 	/* Invisible trap */
@@ -545,7 +545,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
  */
 void carry(bool pickup)
 {
-	cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+	grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -825,8 +825,8 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
-	cave_type *c_ptr = &cave[ny][nx];
-	cave_type *oc_ptr = &cave[oy][ox];
+	grid_type *c_ptr = &cave[ny][nx];
+	grid_type *oc_ptr = &cave[oy][ox];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	feature_type *of_ptr = &f_info[oc_ptr->feat];
 
@@ -1104,7 +1104,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	POSITION x = p_ptr->x + ddx[dir];
 
 	/* Examine the destination */
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
@@ -1518,7 +1518,7 @@ static bool ignore_avoid_run;
  */
 static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Get the new location */
 	y += ddy[dir];
@@ -1733,7 +1733,7 @@ static bool run_test(void)
 	int row, col;
 	int i, max, inv;
 	int option = 0, option2 = 0;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 
@@ -2127,7 +2127,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 {
 	DIRECTION new_dir = 0;
 	int i, max;
-	const cave_type *c_ptr;
+	const grid_type *c_ptr;
 	int cost;
 
 	/* Cannot travel when blind */

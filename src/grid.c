@@ -30,7 +30,7 @@ bool new_player_spot(void)
 	POSITION y = 0, x = 0;
 	int max_attempts = 10000;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	feature_type *f_ptr;
 
 	/* Place the player */
@@ -92,7 +92,7 @@ void place_random_stairs(POSITION y, POSITION x)
 {
 	bool up_stairs = TRUE;
 	bool down_stairs = TRUE;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Paranoia */
 	c_ptr = &cave[y][x];
@@ -134,7 +134,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 {
 	int tmp, type;
 	FEAT_IDX feat = feat_none;
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	/* Initialize mimic info */
 	c_ptr->mimic = 0;
@@ -298,7 +298,7 @@ void place_secret_door(POSITION y, POSITION x, int type)
 	}
 	else
 	{
-		cave_type *c_ptr = &cave[y][x];
+		grid_type *c_ptr = &cave[y][x];
 
 		if (type == DOOR_DEFAULT)
 		{
@@ -399,7 +399,7 @@ static int next_to_corr(POSITION y1, POSITION x1)
 	int i, k = 0;
 	POSITION y, x;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Scan adjacent grids */
 	for (i = 0; i < 4; i++)
@@ -556,7 +556,7 @@ void vault_objects(POSITION y, POSITION x, int num)
 	int dummy = 0;
 	int i = 0, j = y, k = x;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 
 	/* Attempt to place 'num' objects */
@@ -614,7 +614,7 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 	int count = 0, y1 = y, x1 = x;
 	int dummy = 0;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Place traps */
 	for (count = 0; count <= 5; count++)
@@ -679,7 +679,7 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
 {
 	int k, i;
 	POSITION y, x;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Try to summon "num" monsters "near" the given location */
 	for (k = 0; k < num; k++)

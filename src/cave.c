@@ -79,7 +79,7 @@ bool is_trap(FEAT_IDX feat)
  * @param c_ptr マス構造体の参照ポインタ
  * @return 看破済みの罠があるならTRUEを返す。
  */
-bool is_known_trap(cave_type *c_ptr)
+bool is_known_trap(grid_type *c_ptr)
 {
 	if (!c_ptr->mimic && !cave_have_flag_grid(c_ptr, FF_SECRET) &&
 	    is_trap(c_ptr->feat)) return TRUE;
@@ -105,7 +105,7 @@ bool is_closed_door(FEAT_IDX feat)
  * @param c_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
-bool is_hidden_door(cave_type *c_ptr)
+bool is_hidden_door(grid_type *c_ptr)
 {
 	if ((c_ptr->mimic || cave_have_flag_grid(c_ptr, FF_SECRET)) &&
 	    is_closed_door(c_ptr->feat))
@@ -569,7 +569,7 @@ void update_local_illumination(POSITION y, POSITION x)
  */
 bool player_can_see_bold(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Blind players see nothing */
 	if (p_ptr->blind) return FALSE;
@@ -617,7 +617,7 @@ bool no_lite(void)
  */
 bool cave_valid_bold(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Forbid perma-grids */
@@ -944,7 +944,7 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
 void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
 	/* Get the cave */
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -1458,7 +1458,7 @@ void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
  */
 void note_spot(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Blind players see nothing */
@@ -1743,7 +1743,7 @@ void prt_path(POSITION y, POSITION x)
 	{
 		POSITION ny = GRID_Y(path_g[i]);
 		POSITION nx = GRID_X(path_g[i]);
-		cave_type *c_ptr = &cave[ny][nx];
+		grid_type *c_ptr = &cave[ny][nx];
 
 		if (panel_contains(ny, nx))
 		{
@@ -2557,7 +2557,7 @@ void update_lite(void)
 {
 	int i, x, y, min_x, max_x, min_y, max_y;
 	int p = p_ptr->cur_lite;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/*** Special case ***/
 
@@ -2781,7 +2781,7 @@ static POSITION mon_fy, mon_fx;
  */
 static void mon_lite_hack(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	int dpf, d;
 	POSITION midpoint;
 
@@ -2868,7 +2868,7 @@ static void mon_lite_hack(POSITION y, POSITION x)
  */
 static void mon_dark_hack(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	int       midpoint, dpf, d;
 
 	/* We trust this grid is in bounds */
@@ -2951,7 +2951,7 @@ static void mon_dark_hack(POSITION y, POSITION x)
 void update_mon_lite(void)
 {
 	int i, rad;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	POSITION fx, fy;
 	void (*add_mon_lite)(POSITION, POSITION);
@@ -3269,7 +3269,7 @@ void update_mon_lite(void)
 void clear_mon_lite(void)
 {
 	int i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Clear all monster lit squares */
 	for (i = 0; i < mon_lite_n; i++)
@@ -3294,7 +3294,7 @@ void forget_view(void)
 {
 	int i;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* None to forget */
 	if (!view_n) return;
@@ -3359,10 +3359,10 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 {
 	bool f1, f2, v1, v2, z1, z2, wall;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
-	cave_type *g1_c_ptr;
-	cave_type *g2_c_ptr;
+	grid_type *g1_c_ptr;
+	grid_type *g2_c_ptr;
 
 	/* Access the grids */
 	g1_c_ptr = &cave[y1][x1];
@@ -3551,7 +3551,7 @@ void update_view(void)
 	POSITION y_max = cur_hgt - 1;
 	POSITION x_max = cur_wid - 1;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/*** Initialize ***/
 
@@ -3996,7 +3996,7 @@ void update_view(void)
 void delayed_visual_update(void)
 {
 	int       i, y, x;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Update needed grids */
 	for (i = 0; i < redraw_n; i++)
@@ -4121,7 +4121,7 @@ void update_flow(void)
 			int old_head = flow_head;
 			byte_hack m = cave[ty][tx].cost + 1;
 			byte_hack n = cave[ty][tx].dist + 1;
-			cave_type *c_ptr;
+			grid_type *c_ptr;
 
 			/* Child location */
 			y = ty + ddy_ddd[d];
@@ -4217,7 +4217,7 @@ void update_smell(void)
 	{
 		for (j = 0; j < 5; j++)
 		{
-			cave_type *c_ptr;
+			grid_type *c_ptr;
 
 			/* Translate table to map grids */
 			y = i + p_ptr->y - 2;
@@ -4251,7 +4251,7 @@ void map_area(POSITION range)
 {
 	int i;
 	POSITION x, y;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 
@@ -4354,7 +4354,7 @@ void wiz_lite(bool ninja)
 		/* Scan all normal grids */
 		for (x = 1; x < cur_wid - 1; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			/* Memorize terrain of the grid */
 			c_ptr->info |= (CAVE_KNOWN);
@@ -4430,7 +4430,7 @@ void wiz_dark(void)
 	{
 		for (x = 1; x < cur_wid - 1; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			/* Process the grid */
 			c_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
@@ -4482,7 +4482,7 @@ void wiz_dark(void)
  */
 void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[feat];
 	bool old_los, old_mirror;
 
@@ -4559,7 +4559,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 	{
 		DIRECTION i;
 		POSITION yy, xx;
-		cave_type *cc_ptr;
+		grid_type *cc_ptr;
 
 		for (i = 0; i < 9; i++)
 		{
@@ -4701,7 +4701,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 /* Remove a mirror */
 void remove_mirror(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	/* Remove the mirror */
 	c_ptr->info &= ~(CAVE_OBJECT);
@@ -4725,7 +4725,7 @@ void remove_mirror(POSITION y, POSITION x)
 /*
  *  Return TRUE if there is a mirror on the grid.
  */
-bool is_mirror_grid(cave_type *c_ptr)
+bool is_mirror_grid(grid_type *c_ptr)
 {
 	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_MIRROR))
 		return TRUE;
@@ -4737,7 +4737,7 @@ bool is_mirror_grid(cave_type *c_ptr)
 /*
  *  Return TRUE if there is a mirror on the grid.
  */
-bool is_glyph_grid(cave_type *c_ptr)
+bool is_glyph_grid(grid_type *c_ptr)
 {
 	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_GLYPH))
 		return TRUE;
@@ -4749,7 +4749,7 @@ bool is_glyph_grid(cave_type *c_ptr)
 /*
  *  Return TRUE if there is a mirror on the grid.
  */
-bool is_explosive_rune_grid(cave_type *c_ptr)
+bool is_explosive_rune_grid(grid_type *c_ptr)
 {
 	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_MINOR_GLYPH))
 		return TRUE;
@@ -5013,7 +5013,7 @@ void glow_deep_lava_and_bldg(void)
 {
 	POSITION y, x, yy, xx;
 	DIRECTION i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Not in the darkness dungeon */
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) return;
@@ -5056,7 +5056,7 @@ void glow_deep_lava_and_bldg(void)
 bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-	cave_type    *c_ptr = &cave[y][x];
+	grid_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	/* Require "teleportable" space */
@@ -5086,7 +5086,7 @@ bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, B
 */
 bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	cave_type    *c_ptr = &cave[y][x];
+	grid_type    *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	/* Require "teleportable" space */

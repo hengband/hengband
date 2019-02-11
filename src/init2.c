@@ -1238,7 +1238,7 @@ static errr init_other(void)
 	for (i = 0; i < MAX_HGT; i++)
 	{
 		/* Allocate one row of the cave */
-		C_MAKE(cave[i], MAX_WID, cave_type);
+		C_MAKE(cave[i], MAX_WID, grid_type);
 	}
 
 

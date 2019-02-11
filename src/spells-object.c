@@ -107,7 +107,7 @@ bool create_ammo(void)
 	{
 		POSITION x, y;
 		DIRECTION dir;
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
 		y = p_ptr->y + ddy[dir];

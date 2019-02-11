@@ -404,7 +404,7 @@ bool raise_possible(monster_type *m_ptr)
 	POSITION y = m_ptr->fy;
 	POSITION x = m_ptr->fx;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	for (xx = x - 5; xx <= x + 5; xx++)
 	{
@@ -1257,7 +1257,7 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 	{
 		int next_x = *xp + tonari_x[tonari][i];
 		int next_y = *yp + tonari_y[tonari][i];
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 
 		/* Access the next grid */
 		c_ptr = &cave[next_y][next_x];

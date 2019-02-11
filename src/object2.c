@@ -123,7 +123,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	/* Dungeon */
 	else
 	{
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 
 		POSITION y = j_ptr->iy;
 		POSITION x = j_ptr->ix;
@@ -217,7 +217,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
  */
 void delete_object(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
@@ -257,7 +257,7 @@ void delete_object(POSITION y, POSITION x)
 static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 {
 	OBJECT_IDX i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	object_type *o_ptr;
 
 	/* Do nothing */
@@ -487,7 +487,7 @@ void wipe_o_list(void)
 		/* Dungeon */
 		else
 		{
-			cave_type *c_ptr;
+			grid_type *c_ptr;
 
 			/* Access location */
 			POSITION y = o_ptr->iy;
@@ -4868,7 +4868,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4982,7 +4982,7 @@ void place_gold(POSITION y, POSITION x)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -5066,7 +5066,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	OBJECT_IDX o_idx = 0;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -6699,7 +6699,7 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 bool process_warning(POSITION xx, POSITION yy)
 {
 	POSITION mx, my;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
 #define WARNING_AWARE_RANGE 12

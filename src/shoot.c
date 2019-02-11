@@ -506,7 +506,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 		/* Travel until stopped */
 		for (cur_dis = 0; cur_dis <= tdis; )
 		{
-			cave_type *c_ptr;
+			grid_type *c_ptr;
 
 			/* Hack -- Stop at the target */
 			if ((y == ty) && (x == tx)) break;
@@ -597,7 +597,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			/* Monster here, Try to hit it */
 			if (cave[y][x].m_idx)
 			{
-				cave_type *c_mon_ptr = &cave[y][x];
+				grid_type *c_mon_ptr = &cave[y][x];
 
 				monster_type *m_ptr = &m_list[c_mon_ptr->m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];

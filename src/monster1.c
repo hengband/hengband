@@ -2370,7 +2370,7 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 m
  */
 bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	/* Player or other monster */
 	if (player_bold(y, x)) return FALSE;

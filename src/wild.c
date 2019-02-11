@@ -449,7 +449,7 @@ static border_type border;
 void wilderness_gen(void)
 {
 	int i, y, x, lim;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	feature_type *f_ptr;
 
 	/* Big town */

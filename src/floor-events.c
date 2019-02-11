@@ -13,7 +13,7 @@ void day_break()
 			for (x = 0; x < cur_wid; x++)
 			{
 				/* Get the cave grid */
-				cave_type *c_ptr = &cave[y][x];
+				grid_type *c_ptr = &cave[y][x];
 
 				/* Assume lit */
 				c_ptr->info |= (CAVE_GLOW);
@@ -51,7 +51,7 @@ void night_falls(void)
 			for (x = 0; x < cur_wid; x++)
 			{
 				/* Get the cave grid */
-				cave_type *c_ptr = &cave[y][x];
+				grid_type *c_ptr = &cave[y][x];
 
 				/* Feature code (applying "mimic" field) */
 				feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];

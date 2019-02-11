@@ -37,7 +37,7 @@
  *
  * Certain data is saved in multiple places for efficient access, currently,
  * this includes the tval/sval/weight fields in "object_type", various fields
- * in "header_type", and the "m_idx" and "o_idx" fields in "cave_type".  All
+ * in "header_type", and the "m_idx" and "o_idx" fields in "grid_type".  All
  * of these could be removed, but this would, in general, slow down the game
  * and increase the complexity of the code.
  * </pre>
@@ -450,9 +450,9 @@ struct skill_table
  * Note the special fields for the "MONSTER_FLOW" code.
  */
 
-typedef struct cave_type cave_type;
+typedef struct grid_type grid_type;
 
-struct cave_type
+struct grid_type
 {
 	BIT_FLAGS info;		/* Hack -- cave flags */
 

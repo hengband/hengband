@@ -512,7 +512,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y = 0, x = 0;
 
-			cave_type       *c_ptr;
+			grid_type       *c_ptr;
 			monster_type    *m_ptr;
 
 			if (p_ptr->cut < 300)
@@ -634,7 +634,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				POSITION y, x;
 				POSITION ny, nx;
 				MONSTER_IDX m_idx;
-				cave_type *c_ptr;
+				grid_type *c_ptr;
 				monster_type *m_ptr;
 
 				y = p_ptr->y + ddy[dir];

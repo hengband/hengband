@@ -17,7 +17,7 @@ bool build_type14(void)
 
 	bool light;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	s16b trap;
 
 	/* Pick a room size */

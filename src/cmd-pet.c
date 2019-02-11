@@ -9,7 +9,7 @@
 * @param now_riding TRUEなら下馬処理、FALSEならば騎乗処理
 * @return 可能ならばTRUEを返す
 */
-bool player_can_ride_aux(cave_type *c_ptr, bool now_riding)
+bool player_can_ride_aux(grid_type *c_ptr, bool now_riding)
 {
 	bool p_can_enter;
 	bool old_character_xtra = character_xtra;
@@ -308,7 +308,7 @@ bool do_riding(bool force)
 {
 	POSITION x, y;
 	DIRECTION dir = 0;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	monster_type *m_ptr;
 
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
@@ -876,7 +876,7 @@ void do_cmd_pet(void)
 		if (!target_set(TARGET_KILL)) pet_t_m_idx = 0;
 		else
 		{
-			cave_type *c_ptr = &cave[target_row][target_col];
+			grid_type *c_ptr = &cave[target_row][target_col];
 			if (c_ptr->m_idx && (m_list[c_ptr->m_idx].ml))
 			{
 				pet_t_m_idx = cave[target_row][target_col].m_idx;
@@ -1086,7 +1086,7 @@ bool rakuba(HIT_POINT dam, bool force)
 		/* Check around the player */
 		for (i = 0; i < 8; i++)
 		{
-			cave_type *c_ptr;
+			grid_type *c_ptr;
 
 			/* Access the location */
 			y = p_ptr->y + ddy_ddd[i];

@@ -16,7 +16,7 @@ bool build_type1(void)
 
 	bool light;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	bool curtain = (d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
 		one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 48 : 512);
@@ -210,7 +210,7 @@ bool build_type2(void)
 	POSITION	y1a, x1a, y2a, x2a;
 	POSITION	y1b, x1b, y2b, x2b;
 	bool		light;
-	cave_type   *c_ptr;
+	grid_type   *c_ptr;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
@@ -333,7 +333,7 @@ bool build_type3(void)
 	POSITION y1b, x1b, y2b, x2b;
 	POSITION yval, xval;
 	bool light;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
@@ -588,7 +588,7 @@ bool build_type4(void)
 	POSITION y, x, y1, x1;
 	POSITION y2, x2, tmp, yval, xval;
 	bool light;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */

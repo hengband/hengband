@@ -5273,7 +5273,7 @@ static void do_cmd_knowledge_artifacts(void)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			OBJECT_IDX this_o_idx, next_o_idx = 0;
 

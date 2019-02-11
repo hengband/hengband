@@ -136,7 +136,7 @@ void do_cmd_go_up(void)
 	bool go_up = FALSE;
 
 	/* Player grid */
-	cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+	grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	int up_num = 0;
@@ -280,7 +280,7 @@ void do_cmd_go_up(void)
 void do_cmd_go_down(void)
 {
 	/* Player grid */
-	cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+	grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	bool fall_trap = FALSE;
@@ -477,7 +477,7 @@ void do_cmd_search(void)
  */
 static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Scan all objects in the grid */
@@ -592,7 +592,7 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under
 	/* Check around (and under) the character */
 	for (d = 0; d < 9; d++)
 	{
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 		FEAT_IDX feat;
 
 		/* if not searching under player continue */
@@ -717,7 +717,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 	int i, j;
 
 	/* Get requested grid */
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	bool more = FALSE;
 
@@ -846,7 +846,7 @@ void do_cmd_open(void)
 	if (get_rep_dir(&dir, TRUE))
 	{
 		FEAT_IDX feat;
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 
 		/* Get requested location */
 		y = p_ptr->y + ddy[dir];
@@ -909,7 +909,7 @@ void do_cmd_open(void)
  */
 static bool do_cmd_close_aux(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	FEAT_IDX old_feat = c_ptr->feat;
 	bool more = FALSE;
 
@@ -993,7 +993,7 @@ void do_cmd_close(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir, FALSE))
 	{
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 		FEAT_IDX feat;
 
 		y = p_ptr->y + ddy[dir];
@@ -1042,7 +1042,7 @@ void do_cmd_close(void)
  */
 static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	/* Must have knowledge */
 	if (!(c_ptr->info & CAVE_MARK))
@@ -1077,7 +1077,7 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
  */
 static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
 	int power;
 	concptr name;
@@ -1207,7 +1207,7 @@ void do_cmd_tunnel(void)
 {
 	int			y, x, dir;
 
-	cave_type	*c_ptr;
+	grid_type	*c_ptr;
 	FEAT_IDX feat;
 
 	bool		more = FALSE;
@@ -1295,7 +1295,7 @@ bool easy_open_door(POSITION y, POSITION x)
 {
 	int i, j;
 
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	/* Must be a closed door */
@@ -1466,7 +1466,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 
 bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	/* Get feature */
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -1586,7 +1586,7 @@ void do_cmd_disarm(void)
 	/* Get a direction (or abort) */
 	if (get_rep_dir(&dir,TRUE))
 	{
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 		FEAT_IDX feat;
 
 		y = p_ptr->y + ddy[dir];
@@ -1649,7 +1649,7 @@ void do_cmd_disarm(void)
 static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 {
 	/* Get grid */
-	cave_type	*c_ptr = &cave[y][x];
+	grid_type	*c_ptr = &cave[y][x];
 
 	/* Get feature */
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -1743,7 +1743,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 void do_cmd_bash(void)
 {
 	int	y, x, dir;
-	cave_type	*c_ptr;
+	grid_type	*c_ptr;
 	bool		more = FALSE;
 
 	if (p_ptr->wild_mode) return;
@@ -1828,7 +1828,7 @@ void do_cmd_alter(void)
 {
 	POSITION y, x;
 	DIRECTION dir;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	bool more = FALSE;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
@@ -1974,7 +1974,7 @@ void do_cmd_spike(void)
 	{
 		POSITION y, x;
 		INVENTORY_IDX item;
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 		FEAT_IDX feat;
 
 		y = p_ptr->y + ddy[dir];
@@ -2600,7 +2600,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		/* Monster here, Try to hit it */
 		if (cave[y][x].m_idx)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 			monster_type *m_ptr = &m_list[c_ptr->m_idx];
 
 			/* Check the visibility */
@@ -2942,7 +2942,7 @@ static int travel_flow_cost(POSITION y, POSITION x)
  */
 static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	int old_head = flow_head;
 	int add_cost = 1;

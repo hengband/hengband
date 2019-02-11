@@ -5749,7 +5749,7 @@ void do_cmd_store(void)
 	int which;
 	int maintain_num;
 	int i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	bool need_redraw_store_inv; /* To redraw missiles damage and prices in store */
 	TERM_LEN w, h;
 

@@ -1377,7 +1377,7 @@ void brand_weapon(int brand_type)
 static bool vanish_dungeon(void)
 {
 	POSITION y, x;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	feature_type *f_ptr;
 	monster_type *m_ptr;
 	GAME_TEXT m_name[MAX_NLEN];
@@ -1505,7 +1505,7 @@ static bool vanish_dungeon(void)
 void call_the_(void)
 {
 	int i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	bool do_call = TRUE;
 
 	for (i = 0; i < 9; i++)
@@ -1588,7 +1588,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 {
 	POSITION ty, tx;
 	OBJECT_IDX i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -4141,7 +4141,7 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
  */
 bool polymorph_monster(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	monster_type *m_ptr = &m_list[c_ptr->m_idx];
 	bool polymorphed = FALSE;
 	MONRACE_IDX new_r_idx;
@@ -4579,7 +4579,7 @@ bool eat_magic(int power)
 void massacre(void)
 {
 	POSITION x, y;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	monster_type *m_ptr;
 	DIRECTION dir;
 
@@ -4599,7 +4599,7 @@ void massacre(void)
 bool eat_lock(void)
 {
 	POSITION x, y;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
 	DIRECTION dir;
 

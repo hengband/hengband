@@ -304,7 +304,7 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  */
 static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	bool obvious = FALSE;
@@ -648,7 +648,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 						if (in_bounds2(by, bx))
 						{
-							cave_type *cc_ptr = &cave[by][bx];
+							grid_type *cc_ptr = &cave[by][bx];
 
 							if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 							{
@@ -797,7 +797,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  */
 static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -1177,7 +1177,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 {
 	int tmp;
 
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	monster_type *m_ptr = &m_list[c_ptr->m_idx];
 	monster_type *caster_ptr = (who > 0) ? &m_list[who] : NULL;

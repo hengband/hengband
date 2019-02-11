@@ -1644,7 +1644,7 @@ static bool cast_ninja_spell(int spell)
 		{
 			POSITION ny = GRID_Y(path_g[i]);
 			POSITION nx = GRID_X(path_g[i]);
-			cave_type *c_ptr = &cave[ny][nx];
+			grid_type *c_ptr = &cave[ny][nx];
 
 			if (in_bounds(ny, nx) && cave_empty_bold(ny, nx) &&
 			    !(c_ptr->info & CAVE_OBJECT) &&

@@ -38,7 +38,7 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 {
 	POSITION x, y;
 	bool detect = FALSE;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
@@ -1394,7 +1394,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
 	POSITION y, x;
 	int k, t;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	bool flag = FALSE;
 
 	/* Prevent destruction of quest levels and town */
@@ -1597,7 +1597,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 				{
 					DIRECTION i;
 					POSITION yy, xx;
-					cave_type *cc_ptr;
+					grid_type *cc_ptr;
 
 					for (i = 0; i < 9; i++)
 					{
@@ -1682,7 +1682,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	int sn = 0;
 	POSITION sy = 0, sx = 0;
 	bool hurt = FALSE;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	bool map[32][32];
 
 	/* Prevent destruction of quest levels and town */
@@ -2067,7 +2067,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			{
 				DIRECTION ii;
 				POSITION yyy, xxx;
-				cave_type *cc_ptr;
+				grid_type *cc_ptr;
 
 				for (ii = 0; ii < 9; ii++)
 				{
@@ -2196,7 +2196,7 @@ static void cave_temp_room_lite(void)
 		POSITION y = temp_y[i];
 		POSITION x = temp_x[i];
 
-		cave_type *c_ptr = &cave[y][x];
+		grid_type *c_ptr = &cave[y][x];
 
 		/* No longer in the array */
 		c_ptr->info &= ~(CAVE_TEMP);
@@ -2271,7 +2271,7 @@ static void cave_temp_room_unlite(void)
 		POSITION x = temp_x[i];
 		int j;
 
-		cave_type *c_ptr = &cave[y][x];
+		grid_type *c_ptr = &cave[y][x];
 		bool do_dark = !is_mirror_grid(c_ptr);
 
 		/* No longer in the array */
@@ -2289,7 +2289,7 @@ static void cave_temp_room_unlite(void)
 
 					if (in_bounds2(by, bx))
 					{
-						cave_type *cc_ptr = &cave[by][bx];
+						grid_type *cc_ptr = &cave[by][bx];
 
 						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 						{
@@ -2402,7 +2402,7 @@ static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITIO
  */
 static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pass_bold)(POSITION, POSITION))
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Get the grid */
 	c_ptr = &cave[y][x];
@@ -2891,7 +2891,7 @@ bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int n
 bool teleport_swap(DIRECTION dir)
 {
 	POSITION tx, ty;
-	cave_type* c_ptr;
+	grid_type* c_ptr;
 	monster_type* m_ptr;
 	monster_race* r_ptr;
 
@@ -4607,7 +4607,7 @@ bool_hack vampirism(void)
 	DIRECTION dir;
 	POSITION x, y;
 	int dummy;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 	{
@@ -4969,7 +4969,7 @@ void hayagake(player_type *creature_ptr)
 	}
 	else
 	{
-		cave_type *c_ptr = &cave[creature_ptr->y][creature_ptr->x];
+		grid_type *c_ptr = &cave[creature_ptr->y][creature_ptr->x];
 		feature_type *f_ptr = &f_info[c_ptr->feat];
 
 		if (!have_flag(f_ptr->flags, FF_PROJECT) ||
@@ -5098,7 +5098,7 @@ bool sword_dancing(player_type *creature_ptr)
 	DIRECTION dir;
 	POSITION y = 0, x = 0;
 	int i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	for (i = 0; i < 6; i++)
 	{

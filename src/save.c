@@ -949,7 +949,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 
 
-	/*********** Make template for cave_type **********/
+	/*********** Make template for grid_type **********/
 
 	/*
 	 * Usually number of templates are fewer than 255.  Even if
@@ -973,7 +973,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
@@ -1053,7 +1053,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{

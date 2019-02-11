@@ -311,7 +311,7 @@ void delete_monster_idx(MONSTER_IDX i)
  */
 void delete_monster(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Paranoia */
 	if (!in_bounds(y, x)) return;
@@ -334,7 +334,7 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 {
 	POSITION y, x;
 	int i;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	monster_type *m_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -2940,7 +2940,7 @@ byte get_mspeed(monster_race *r_ptr)
 static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	/* Access the location */
-	cave_type		*c_ptr = &cave[y][x];
+	grid_type		*c_ptr = &cave[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];
 	concptr		name = (r_name + r_ptr->name);

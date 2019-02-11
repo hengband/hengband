@@ -590,8 +590,8 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 {
 	POSITION *x = (POSITION*)(u);
 	POSITION *y = (POSITION*)(v);
-	cave_type *ca_ptr = &cave[y[a]][x[a]];
-	cave_type *cb_ptr = &cave[y[b]][x[b]];
+	grid_type *ca_ptr = &cave[y[a]][x[a]];
+	grid_type *cb_ptr = &cave[y[b]][x[b]];
 	monster_type *ma_ptr = &m_list[ca_ptr->m_idx];
 	monster_type *mb_ptr = &m_list[cb_ptr->m_idx];
 	monster_race *ap_ra_ptr, *ap_rb_ptr;
@@ -728,7 +728,7 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
  */
 static bool target_set_accept(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Bounds */
@@ -814,7 +814,7 @@ static void target_set_prepare(BIT_FLAGS mode)
 	{
 		for (x = min_wid; x <= max_wid; x++)
 		{
-			cave_type *c_ptr;
+			grid_type *c_ptr;
 
 			/* Require "interesting" contents */
 			if (!target_set_accept(y, x)) continue;
@@ -948,7 +948,7 @@ bool show_gold_on_floor = FALSE;
  */
 static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	concptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
@@ -1493,7 +1493,7 @@ bool target_set(BIT_FLAGS mode)
 	char query;
 	char info[80];
 	char same_key;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	TERM_LEN wid, hgt;
 	
 	get_screen_size(&wid, &hgt);
@@ -2366,7 +2366,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
  */
 static bool tgt_pt_accept(POSITION y, POSITION x)
 {
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Bounds */
 	if (!(in_bounds(y, x))) return (FALSE);
@@ -2494,7 +2494,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				/* Skip stairs which have defferent distance */
 				for (; n < temp_n; ++ n)
 				{
-					cave_type *c_ptr = &cave[temp_y[n]][temp_x[n]];
+					grid_type *c_ptr = &cave[temp_y[n]][temp_x[n]];
 
 					if (cave_have_flag_grid(c_ptr, FF_STAIRS) &&
 					    cave_have_flag_grid(c_ptr, ch == '>' ? FF_MORE : FF_LESS))

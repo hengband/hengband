@@ -82,7 +82,7 @@ FEAT_IDX choose_random_trap(void)
 */
 void disclose_grid(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	if (cave_have_flag_grid(c_ptr, FF_SECRET))
 	{
@@ -111,7 +111,7 @@ void disclose_grid(POSITION y, POSITION x)
 */
 void place_trap(POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	/* Paranoia -- verify location */
 	if (!in_bounds(y, x)) return;
@@ -303,7 +303,7 @@ void hit_trap(bool break_trap)
 	POSITION x = p_ptr->x, y = p_ptr->y;
 
 	/* Get the cave grid */
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
 	concptr name = _("トラップ", "a trap");

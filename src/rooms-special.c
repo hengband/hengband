@@ -17,7 +17,7 @@ bool build_type15(void)
 	POSITION y1, x1, xsize, ysize;
 	bool light;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Pick a room size */
 	xsize = rand_range(9, 13);

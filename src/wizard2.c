@@ -1573,7 +1573,7 @@ static void do_cmd_wiz_create_feature(void)
 {
 	static int   prev_feat = 0;
 	static int   prev_mimic = 0;
-	cave_type    *c_ptr;
+	grid_type    *c_ptr;
 	feature_type *f_ptr;
 	char         tmp_val[160];
 	IDX          tmp_feat, tmp_mimic;

@@ -758,7 +758,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 			feature_type *f_ptr = &f_info[c_ptr->feat];
 			bool ok = FALSE;
 
@@ -845,7 +845,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
  */
 void leave_floor(void)
 {
-	cave_type *c_ptr = NULL;
+	grid_type *c_ptr = NULL;
 	feature_type *f_ptr;
 	saved_floor_type *sf_ptr;
 	MONRACE_IDX quest_r_idx = 0;
@@ -1133,7 +1133,7 @@ void change_floor(void)
 				/* Forbid return stairs */
 				if (change_floor_mode & CFM_NO_RETURN)
 				{
-					cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+					grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 					if (!feat_uses_special(c_ptr->feat))
 					{
@@ -1310,7 +1310,7 @@ void change_floor(void)
 			if (!(change_floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
-				cave_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+				grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
 
 				/*** Create connected stairs ***/
 
@@ -1475,7 +1475,7 @@ void stair_creation(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				cave_type *c_ptr = &cave[y][x];
+				grid_type *c_ptr = &cave[y][x];
 
 				if (!c_ptr->special) continue;
 				if (feat_uses_special(c_ptr->feat)) continue;

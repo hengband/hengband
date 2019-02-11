@@ -2549,7 +2549,7 @@ static errr rd_dungeon_old(void)
 	byte tmp8u;
 	s16b tmp16s;
 	u16b limit;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 
 	/*** Basic info ***/
@@ -2962,7 +2962,7 @@ static errr rd_dungeon_old(void)
  * この関数は、セーブデータの互換性を保つために多くのデータ改変処理を備えている。
  * 現在確認している処理は以下の通り、
  * <ul>
- * <li>1.7.0.2で8bitだったcave_typeのfeat,mimicのID値を16bitに拡張する処理。</li>
+ * <li>1.7.0.2で8bitだったgrid_typeのfeat,mimicのID値を16bitに拡張する処理。</li>
  * <li>1.7.0.8までに廃止、IDなどを差し替えたクエスト番号を置換する処理。</li>
  * </ul>
  * The monsters/objects must be loaded in the same order
@@ -3047,7 +3047,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 
 
-	/*** Read template for cave_type ***/
+	/*** Read template for grid_type ***/
 
 	/* Read the template count */
 	rd_u16b(&limit);
@@ -3104,7 +3104,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		for (i = count; i > 0; i--)
 		{
 			/* Access the cave */
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			/* Extract cave data */
 			c_ptr->info = templates[id].info;
@@ -3130,7 +3130,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Access the cave */
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 
 			if ((c_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
 			{
@@ -3204,7 +3204,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		else
 		{
 			/* Access the item location */
-			cave_type *c_ptr = &cave[o_ptr->iy][o_ptr->ix];
+			grid_type *c_ptr = &cave[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = c_ptr->o_idx;
@@ -3226,7 +3226,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
 	{
-		cave_type *c_ptr;
+		grid_type *c_ptr;
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
 

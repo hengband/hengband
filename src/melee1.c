@@ -434,7 +434,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
 
-	cave_type       *c_ptr = &cave[y][x];
+	grid_type       *c_ptr = &cave[y][x];
 
 	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -1324,7 +1324,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	bool            mdeath = FALSE;
 	bool            stormbringer = FALSE;
 
-	cave_type       *c_ptr = &cave[y][x];
+	grid_type       *c_ptr = &cave[y][x];
 	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];

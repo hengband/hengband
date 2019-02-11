@@ -472,7 +472,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	int i, best = 999;
 	POSITION y, x, y1, x1;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	bool can_open_door = FALSE;
 	int now_cost;
 
@@ -577,7 +577,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	int i, best;
 	POSITION y, x, y1, x1;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	bool use_scent = FALSE;
 
 	monster_type *m_ptr = &m_list[m_idx];
@@ -895,7 +895,7 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	POSITION *y_offsets;
 	POSITION *x_offsets;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Start with adjacent locations, spread further */
 	for (d = 1; d < 10; d++)
@@ -1060,7 +1060,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 	POSITION     x2 = p_ptr->x;
 	bool         done = FALSE;
 	bool         will_run = mon_will_run(m_idx);
-	cave_type    *c_ptr;
+	grid_type    *c_ptr;
 	bool         no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (cave[m_ptr->fy][m_ptr->fx].cost > 2));
 	bool         can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall));
 
@@ -2084,7 +2084,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 	DIRECTION mm[8];
 
-	cave_type       *c_ptr;
+	grid_type       *c_ptr;
 	feature_type    *f_ptr;
 
 	monster_type    *y_ptr;

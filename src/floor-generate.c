@@ -147,7 +147,7 @@ static int next_to_walls(POSITION y, POSITION x)
  */
 static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 
 	/* Require "naked" floor grid */
 	if (!is_floor_grid(c_ptr)) return FALSE;
@@ -214,7 +214,7 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 		while (TRUE)
 		{
 			POSITION y, x = 0;
-			cave_type *c_ptr;
+			grid_type *c_ptr;
 
 			int candidates = 0;
 			int pick;
@@ -290,7 +290,7 @@ static void alloc_object(int set, EFFECT_ID typ, int num)
 	POSITION y = 0, x = 0;
 	int k;
 	int dummy = 0;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* A small level has few objects. */
 	num = num * cur_hgt * cur_wid / (MAX_HGT*MAX_WID) +1;
@@ -420,7 +420,7 @@ bool place_quest_monsters(void)
 				/* Find an empty grid */
 				for (l = SAFE_MAX_ATTEMPTS; l > 0; l--)
 				{
-					cave_type    *c_ptr;
+					grid_type    *c_ptr;
 					feature_type *f_ptr;
 
 					y = randint0(cur_hgt);
@@ -466,7 +466,7 @@ bool place_quest_monsters(void)
  * @param c_ptr 永久壁を廃止したいマス構造体の参照ポインタ
  * @return なし
  */
-static void set_bound_perm_wall(cave_type *c_ptr)
+static void set_bound_perm_wall(grid_type *c_ptr)
 {
 	if (bound_walls_perm)
 	{
@@ -810,7 +810,7 @@ static bool cave_gen(void)
 			/* Turn the tunnel into corridor */
 			for (j = 0; j < dun->tunn_n; j++)
 			{
-				cave_type *c_ptr;
+				grid_type *c_ptr;
 				feature_type *f_ptr;
 				y = dun->tunn[j].y;
 				x = dun->tunn[j].x;
@@ -830,7 +830,7 @@ static bool cave_gen(void)
 			/* Apply the piercings that we found */
 			for (j = 0; j < dun->wall_n; j++)
 			{
-				cave_type *c_ptr;
+				grid_type *c_ptr;
 				y = dun->wall[j].y;
 				x = dun->wall[j].x;
 				c_ptr = &cave[y][x];
@@ -1364,7 +1364,7 @@ void clear_cave(void)
 	{
 		for (x = 0; x < MAX_WID; x++)
 		{
-			cave_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &cave[y][x];
 			c_ptr->info = 0;
 			c_ptr->feat = 0;
 			c_ptr->o_idx = 0;
@@ -1523,7 +1523,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 
 	bool door_flag = FALSE;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* Save the starting location */
 	start_row = row1;
@@ -1713,7 +1713,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
-	cave_type *c_ptr = &cave[*y][*x];
+	grid_type *c_ptr = &cave[*y][*x];
 
 	if (!in_bounds(*y, *x)) return TRUE;
 
@@ -2007,7 +2007,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 	int length;
 	int i;
 	bool retval, firstsuccede;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	length = distance(x1, y1, x2, y2);
 

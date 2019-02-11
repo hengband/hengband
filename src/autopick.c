@@ -1699,7 +1699,7 @@ void autopick_alter_item(INVENTORY_IDX item, bool destroy)
 /*
  * Automatically pickup/destroy items in this grid.
  */
-void autopick_pickup_items(cave_type *c_ptr)
+void autopick_pickup_items(grid_type *c_ptr)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	

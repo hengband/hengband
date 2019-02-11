@@ -39,7 +39,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 	POSITION changex, changey;
 	POSITION ty, tx;
 	bool done;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	length = distance(x1, y1, x2, y2);
 
@@ -232,7 +232,7 @@ void build_streamer(IDX feat, int chance)
 	int		y, x, dir;
 	int dummy = 0;
 
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 	feature_type *f_ptr;
 
 	feature_type *streamer_ptr = &f_info[feat];
@@ -382,7 +382,7 @@ void build_streamer(IDX feat, int chance)
 void place_trees(POSITION x, POSITION y)
 {
 	int i, j;
-	cave_type *c_ptr;
+	grid_type *c_ptr;
 
 	/* place trees/ rubble in ovalish distribution */
 	for (i = x - 3; i < x + 4; i++)

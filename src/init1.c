@@ -3900,7 +3900,7 @@ static errr parse_line_building(char *buf)
  */
 static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 {
-	cave_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &cave[y][x];
 	object_type *o_ptr;
 
 	OBJECT_IDX o_idx = o_pop();
@@ -3984,7 +3984,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 		for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
 		{
-			cave_type *c_ptr = &cave[*y][*x];
+			grid_type *c_ptr = &cave[*y][*x];
 
 			int idx = s[0];
 

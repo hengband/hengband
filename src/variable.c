@@ -465,7 +465,7 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
  * Not completely allocated, that would be inefficient
  * Not completely hardcoded, that would overflow memory
  */
-cave_type *cave[MAX_HGT];
+grid_type *cave[MAX_HGT];
 
 
 /*

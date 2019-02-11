@@ -2281,7 +2281,7 @@ bool mutation_power_aux(int power)
 		case MUT1_BANISH:
 			{
 				POSITION x, y;
-				cave_type *c_ptr;
+				grid_type *c_ptr;
 				monster_type *m_ptr;
 				monster_race *r_ptr;
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
@@ -2328,7 +2328,7 @@ bool mutation_power_aux(int power)
 		case MUT1_COLD_TOUCH:
 			{
 				POSITION x, y;
-				cave_type *c_ptr;
+				grid_type *c_ptr;
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
