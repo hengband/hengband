@@ -1,14 +1,14 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "avatar.h"
 #include "spells-status.h"
 #include "projection.h"
 #include "spells.h"
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‰ñ•œˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param dam ˆÐ—Í
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å›žå¾©å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param dam å¨åŠ›
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool heal_monster(DIRECTION dir, HIT_POINT dam)
 {
@@ -17,10 +17,10 @@ bool heal_monster(DIRECTION dir, HIT_POINT dam)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‰Á‘¬ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param power Œø—Í
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼åŠ é€Ÿå‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param power åŠ¹åŠ›
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool speed_monster(DIRECTION dir, int power)
 {
@@ -29,10 +29,10 @@ bool speed_monster(DIRECTION dir, int power)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[Œ¸‘¬ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param power Œø—Í
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ¸›é€Ÿå‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param power åŠ¹åŠ›
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool slow_monster(DIRECTION dir, int power)
 {
@@ -41,10 +41,10 @@ bool slow_monster(DIRECTION dir, int power)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[Ã–°ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param power Œø—Í
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‚¬çœ å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param power åŠ¹åŠ›
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool sleep_monster(DIRECTION dir, int power)
 {
@@ -53,10 +53,10 @@ bool sleep_monster(DIRECTION dir, int power)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[S‘©(STASIS)ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
- * @details ˆÐ—Í‚ÍƒvƒŒƒCƒ„[ƒŒƒxƒ‹*2‚ÉŒÅ’è
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ‹˜æŸ(STASIS)å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
+ * @details å¨åŠ›ã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¬ãƒ™ãƒ«*2ã«å›ºå®š
  */
 bool stasis_monster(DIRECTION dir)
 {
@@ -64,10 +64,10 @@ bool stasis_monster(DIRECTION dir)
 }
 
 /*!
- * @brief Ž×ˆ«‚Èƒ‚ƒ“ƒXƒ^[S‘©(STASIS)ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
- * @details ˆÐ—Í‚ÍƒvƒŒƒCƒ„[ƒŒƒxƒ‹*2‚ÉŒÅ’è
+ * @brief é‚ªæ‚ªãªãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ‹˜æŸ(STASIS)å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
+ * @details å¨åŠ›ã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¬ãƒ™ãƒ«*2ã«å›ºå®š
  */
 bool stasis_evil(DIRECTION dir)
 {
@@ -75,10 +75,10 @@ bool stasis_evil(DIRECTION dir)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[¬—ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param plev ƒvƒŒƒCƒ„[ƒŒƒxƒ‹(=Œø—Í)
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ··ä¹±å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param plev ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¬ãƒ™ãƒ«(=åŠ¹åŠ›)
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool confuse_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
@@ -87,10 +87,10 @@ bool confuse_monster(DIRECTION dir, PLAYER_LEVEL plev)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[žNžOˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param plev ƒvƒŒƒCƒ„[ƒŒƒxƒ‹(=Œø—Í)
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æœ¦æœ§å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param plev ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¬ãƒ™ãƒ«(=åŠ¹åŠ›)
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool stun_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
@@ -99,10 +99,10 @@ bool stun_monster(DIRECTION dir, PLAYER_LEVEL plev)
 }
 
 /*!
- * @brief ƒ`ƒFƒ“ƒWƒ‚ƒ“ƒXƒ^[ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param power Œø—Í
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒã‚§ãƒ³ã‚¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param power åŠ¹åŠ›
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool poly_monster(DIRECTION dir, int power)
 {
@@ -114,9 +114,9 @@ bool poly_monster(DIRECTION dir, int power)
 }
 
 /*!
- * @brief ƒNƒ[ƒ“ƒ‚ƒ“ƒXƒ^[ˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ã‚¯ãƒ­ãƒ¼ãƒ³ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool clone_monster(DIRECTION dir)
 {
@@ -125,10 +125,10 @@ bool clone_monster(DIRECTION dir)
 }
 
 /*!
- * @brief ƒ‚ƒ“ƒXƒ^[‹°Qˆ—
- * @param dir •ûŒü(5‚È‚ç‚ÎƒOƒ[ƒoƒ‹•Ï” target_col/target_row ‚ÌÀ•W‚ð–Ú•W‚É‚·‚é)
- * @param plev ƒvƒŒƒCƒ„[ƒŒƒxƒ‹(=Œø—Í)
- * @return ì—p‚ªŽÀÛ‚É‚ ‚Á‚½ê‡TRUE‚ð•Ô‚·
+ * @brief ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ææ…Œå‡¦ç†
+ * @param dir æ–¹å‘(5ãªã‚‰ã°ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° target_col/target_row ã®åº§æ¨™ã‚’ç›®æ¨™ã«ã™ã‚‹)
+ * @param plev ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¬ãƒ™ãƒ«(=åŠ¹åŠ›)
+ * @return ä½œç”¨ãŒå®Ÿéš›ã«ã‚ã£ãŸå ´åˆTRUEã‚’è¿”ã™
  */
 bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
@@ -137,8 +137,8 @@ bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev)
 }
 
 /*!
-* @brief ‰Ì‚Ì’âŽ~‚ðˆ—‚·‚é / Stop singing if the player is a Bard
-* @return ‚È‚µ
+* @brief æ­Œã®åœæ­¢ã‚’å‡¦ç†ã™ã‚‹ / Stop singing if the player is a Bard
+* @return ãªã—
 */
 void stop_singing(void)
 {
@@ -171,11 +171,11 @@ bool time_walk(player_type *creature_ptr)
 {
 	if (creature_ptr->timewalk)
 	{
-		msg_print(_("Šù‚ÉŽž‚ÍŽ~‚Ü‚Á‚Ä‚¢‚éB", "Time is already stopped."));
+		msg_print(_("æ—¢ã«æ™‚ã¯æ­¢ã¾ã£ã¦ã„ã‚‹ã€‚", "Time is already stopped."));
 		return (FALSE);
 	}
 	creature_ptr->timewalk = TRUE;
-	msg_print(_("uŽž‚æIv", "You yell 'Time!'"));
+	msg_print(_("ã€Œæ™‚ã‚ˆï¼ã€", "You yell 'Time!'"));
 	msg_print(NULL);
 
 	/* Hack */
@@ -188,9 +188,9 @@ bool time_walk(player_type *creature_ptr)
 }
 
 /*!
- * @brief ƒvƒŒƒCƒ„[‚Ìƒqƒbƒgƒ_ƒCƒX‚ðU‚é / Role Hitpoints
- * @param options ƒXƒyƒ‹‹¤’ÊƒIƒvƒVƒ‡ƒ“
- * @return ‚È‚µ
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ’ãƒƒãƒˆãƒ€ã‚¤ã‚¹ã‚’æŒ¯ã‚‹ / Role Hitpoints
+ * @param options ã‚¹ãƒšãƒ«å…±é€šã‚ªãƒ—ã‚·ãƒ§ãƒ³
+ * @return ãªã—
  */
 void roll_hitdice(SPOP_FLAGS options)
 {
@@ -240,12 +240,12 @@ void roll_hitdice(SPOP_FLAGS options)
 	{
 		if (options & SPOP_DEBUG)
 		{
-			msg_format(_("Œ»Ý‚Ì‘Ì—Íƒ‰ƒ“ƒN‚Í %d/100 ‚Å‚·B", "Your life rate is %d/100 now."), percent);
+			msg_format(_("ç¾åœ¨ã®ä½“åŠ›ãƒ©ãƒ³ã‚¯ã¯ %d/100 ã§ã™ã€‚", "Your life rate is %d/100 now."), percent);
 			p_ptr->knowledge |= KNOW_HPRATE;
 		}
 		else
 		{
-			msg_print(_("‘Ì—Íƒ‰ƒ“ƒN‚ª•Ï‚í‚Á‚½B", "Life rate is changed."));
+			msg_print(_("ä½“åŠ›ãƒ©ãƒ³ã‚¯ãŒå¤‰ã‚ã£ãŸã€‚", "Life rate is changed."));
 			p_ptr->knowledge &= ~(KNOW_HPRATE);
 		}
 	}
@@ -260,7 +260,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 	}
 	if (message)
 	{
-		msg_print(_("‘Ì’†‚É¶–½—Í‚ª–ž‚¿‚ ‚Ó‚ê‚Ä‚«‚½I", "You feel life flow through your body!"));
+		msg_print(_("ä½“ä¸­ã«ç”Ÿå‘½åŠ›ãŒæº€ã¡ã‚ãµã‚Œã¦ããŸï¼", "You feel life flow through your body!"));
 	}
 	restore_level();
 	(void)set_poisoned(0);
@@ -360,7 +360,7 @@ bool_hack restore_mana(bool_hack magic_eater)
 			p_ptr->magic_num1[i] -= ((p_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE * 3 : p_ptr->magic_num2[i] * EATER_ROD_CHARGE / 3)*k_info[k_idx].pval;
 			if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
 		}
-		msg_print(_("“ª‚ªƒnƒbƒLƒŠ‚Æ‚µ‚½B", "You feel your head clear."));
+		msg_print(_("é ­ãŒãƒãƒƒã‚­ãƒªã¨ã—ãŸã€‚", "You feel your head clear."));
 		p_ptr->window |= (PW_PLAYER);
 		ident = TRUE;
 	}
@@ -368,7 +368,7 @@ bool_hack restore_mana(bool_hack magic_eater)
 	{
 		p_ptr->csp = p_ptr->msp;
 		p_ptr->csp_frac = 0;
-		msg_print(_("“ª‚ªƒnƒbƒLƒŠ‚Æ‚µ‚½B", "You feel your head clear."));
+		msg_print(_("é ­ãŒãƒãƒƒã‚­ãƒªã¨ã—ãŸã€‚", "You feel your head clear."));
 		p_ptr->redraw |= (PR_MANA);
 		p_ptr->window |= (PW_PLAYER);
 		p_ptr->window |= (PW_SPELL);

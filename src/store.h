@@ -1,20 +1,20 @@
-
+ï»¿
 /*
  * Store types
  */
-#define STORE_GENERAL   0 /*!< “X•Ü‚ÌŽí—Þ: ŽG‰Ý‰® */
-#define STORE_ARMOURY   1 /*!< “X•Ü‚ÌŽí—Þ: –h‹ï‰® */
-#define STORE_WEAPON    2 /*!< “X•Ü‚ÌŽí—Þ: •Ší‰® */
-#define STORE_TEMPLE    3 /*!< “X•Ü‚ÌŽí—Þ: Ž›‰@ */
-#define STORE_ALCHEMIST 4 /*!< “X•Ü‚ÌŽí—Þ: ˜B‹àp‚Ì“X */
-#define STORE_MAGIC     5 /*!< “X•Ü‚ÌŽí—Þ: –‚“¹‹ï‰® */
-#define STORE_BLACK     6 /*!< “X•Ü‚ÌŽí—Þ: ƒuƒ‰ƒbƒNEƒ}[ƒPƒbƒg */
-#define STORE_HOME      7 /*!< “X•Ü‚ÌŽí—Þ: ‰ä‚ª‰Æ */
-#define STORE_BOOK      8 /*!< “X•Ü‚ÌŽí—Þ: ‘“X */
-#define STORE_MUSEUM    9 /*!< “X•Ü‚ÌŽí—Þ: ”Ž•¨ŠÙ */
-#define MAX_STORES      10 /*!< store.c—p‚Ì“X•Ü‚ÌŽí—ÞÅ‘å” / Total number of stores (see "store.c", etc) */
+#define STORE_GENERAL   0 /*!< åº—èˆ—ã®ç¨®é¡ž: é›‘è²¨å±‹ */
+#define STORE_ARMOURY   1 /*!< åº—èˆ—ã®ç¨®é¡ž: é˜²å…·å±‹ */
+#define STORE_WEAPON    2 /*!< åº—èˆ—ã®ç¨®é¡ž: æ­¦å™¨å±‹ */
+#define STORE_TEMPLE    3 /*!< åº—èˆ—ã®ç¨®é¡ž: å¯ºé™¢ */
+#define STORE_ALCHEMIST 4 /*!< åº—èˆ—ã®ç¨®é¡ž: éŒ¬é‡‘è¡“ã®åº— */
+#define STORE_MAGIC     5 /*!< åº—èˆ—ã®ç¨®é¡ž: é­”é“å…·å±‹ */
+#define STORE_BLACK     6 /*!< åº—èˆ—ã®ç¨®é¡ž: ãƒ–ãƒ©ãƒƒã‚¯ãƒ»ãƒžãƒ¼ã‚±ãƒƒãƒˆ */
+#define STORE_HOME      7 /*!< åº—èˆ—ã®ç¨®é¡ž: æˆ‘ãŒå®¶ */
+#define STORE_BOOK      8 /*!< åº—èˆ—ã®ç¨®é¡ž: æ›¸åº— */
+#define STORE_MUSEUM    9 /*!< åº—èˆ—ã®ç¨®é¡ž: åšç‰©é¤¨ */
+#define MAX_STORES      10 /*!< store.cç”¨ã®åº—èˆ—ã®ç¨®é¡žæœ€å¤§æ•° / Total number of stores (see "store.c", etc) */
 
-#define MAX_OWNERS      32 /*!< Še“X•Ü–ˆ‚Ì“XŽå’è‹`Å‘å” / Total number of owners per store (see "store.c", etc) */
+#define MAX_OWNERS      32 /*!< å„åº—èˆ—æ¯Žã®åº—ä¸»å®šç¾©æœ€å¤§æ•° / Total number of owners per store (see "store.c", etc) */
 
  /*
   * Store constants

@@ -1,4 +1,4 @@
-
+﻿
 extern bool heal_monster(DIRECTION dir, HIT_POINT dam);
 extern bool speed_monster(DIRECTION dir, int power);
 extern bool slow_monster(DIRECTION dir, int power);
