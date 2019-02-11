@@ -404,7 +404,7 @@ bool raise_possible(monster_type *m_ptr)
 	POSITION y = m_ptr->fy;
 	POSITION x = m_ptr->fx;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	for (xx = x - 5; xx <= x + 5; xx++)
 	{
@@ -414,9 +414,9 @@ bool raise_possible(monster_type *m_ptr)
 			if (!los(y, x, yy, xx)) continue;
 			if (!projectable(y, x, yy, xx)) continue;
 
-			c_ptr = &grid_array[yy][xx];
+			g_ptr = &grid_array[yy][xx];
 			/* Scan the pile of objects */
-			for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr = &o_list[this_o_idx];
 
@@ -1257,13 +1257,13 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 	{
 		int next_x = *xp + tonari_x[tonari][i];
 		int next_y = *yp + tonari_y[tonari][i];
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 
 		/* Access the next grid */
-		c_ptr = &grid_array[next_y][next_x];
+		g_ptr = &grid_array[next_y][next_x];
 
 		/* Skip this feature */
-		if (!cave_have_flag_grid(c_ptr, f_flag)) continue;
+		if (!cave_have_flag_grid(g_ptr, f_flag)) continue;
 
 		if (path_check(m_ptr->fy, m_ptr->fx, next_y, next_x))
 		{

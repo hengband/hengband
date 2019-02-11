@@ -472,7 +472,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	int i, best = 999;
 	POSITION y, x, y1, x1;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	bool can_open_door = FALSE;
 	int now_cost;
 
@@ -510,15 +510,15 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		/* Simply move to player */
 		if (player_bold(y, x)) return (FALSE);
 
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
-		cost = c_ptr->cost;
+		cost = g_ptr->cost;
 
 		/* Monster cannot kill or pass walls */
 		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding))))
 		{
 			if (cost == 0) continue;
-			if (!can_open_door && is_closed_door(c_ptr->feat)) continue;
+			if (!can_open_door && is_closed_door(g_ptr->feat)) continue;
 		}
 
 		/* Hack -- for kill or pass wall monster.. */
@@ -577,7 +577,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	int i, best;
 	POSITION y, x, y1, x1;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	bool use_scent = FALSE;
 
 	monster_type *m_ptr = &m_list[m_idx];
@@ -607,19 +607,19 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	if (player_has_los_bold(y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)) return (FALSE);
 
 	/* Monster grid */
-	c_ptr = &grid_array[y1][x1];
+	g_ptr = &grid_array[y1][x1];
 
 	/* If we can hear noises, advance towards them */
-	if (c_ptr->cost)
+	if (g_ptr->cost)
 	{
 		best = 999;
 	}
 
 	/* Otherwise, try to follow a scent trail */
-	else if (c_ptr->when)
+	else if (g_ptr->when)
 	{
 		/* Too old smell */
-		if (grid_array[p_ptr->y][p_ptr->x].when - c_ptr->when > 127) return (FALSE);
+		if (grid_array[p_ptr->y][p_ptr->x].when - g_ptr->when > 127) return (FALSE);
 
 		use_scent = TRUE;
 		best = 0;
@@ -640,12 +640,12 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 		/* Ignore locations off of edge */
 		if (!in_bounds2(y, x)) continue;
 
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* We're following a scent trail */
 		if (use_scent)
 		{
-			int when = c_ptr->when;
+			int when = g_ptr->when;
 
 			/* Accept younger scent */
 			if (best > when) continue;
@@ -658,8 +658,8 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 			int cost;
 
 			if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR))
-				cost = c_ptr->dist;
-			else cost = c_ptr->cost;
+				cost = g_ptr->dist;
+			else cost = g_ptr->cost;
 
 			/* Accept louder sounds */
 			if ((cost == 0) || (best < cost)) continue;
@@ -895,7 +895,7 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	POSITION *y_offsets;
 	POSITION *x_offsets;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Start with adjacent locations, spread further */
 	for (d = 1; d < 10; d++)
@@ -915,19 +915,19 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			/* Skip illegal locations */
 			if (!in_bounds(y, x)) continue;
 
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Skip locations in a wall */
-			if (!monster_can_cross_terrain(c_ptr->feat, &r_info[m_ptr->r_idx], (m_idx == p_ptr->riding) ? CEM_RIDING : 0)) continue;
+			if (!monster_can_cross_terrain(g_ptr->feat, &r_info[m_ptr->r_idx], (m_idx == p_ptr->riding) ? CEM_RIDING : 0)) continue;
 
 			/* Check for "availability" (if monsters can flow) */
 			if (!(m_ptr->mflag2 & MFLAG2_NOFLOW))
 			{
 				/* Ignore grids very far from the player */
-				if (c_ptr->dist == 0) continue;
+				if (g_ptr->dist == 0) continue;
 
 				/* Ignore too-distant grids */
-				if (c_ptr->dist > grid_array[fy][fx].dist + 2 * d) continue;
+				if (g_ptr->dist > grid_array[fy][fx].dist + 2 * d) continue;
 			}
 
 			/* Check for absence of shot (more or less) */
@@ -1060,7 +1060,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 	POSITION     x2 = p_ptr->x;
 	bool         done = FALSE;
 	bool         will_run = mon_will_run(m_idx);
-	grid_type    *c_ptr;
+	grid_type    *g_ptr;
 	bool         no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (grid_array[m_ptr->fy][m_ptr->fx].cost > 2));
 	bool         can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall));
 
@@ -1104,10 +1104,10 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 
 				if (!in_bounds2(yy, xx)) continue;
 
-				c_ptr = &grid_array[yy][xx];
+				g_ptr = &grid_array[yy][xx];
 
 				/* Check grid */
-				if (monster_can_cross_terrain(c_ptr->feat, r_ptr, 0))
+				if (monster_can_cross_terrain(g_ptr->feat, r_ptr, 0))
 				{
 					/* One more room grid */
 					room++;
@@ -2084,7 +2084,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 	DIRECTION mm[8];
 
-	grid_type       *c_ptr;
+	grid_type       *g_ptr;
 	feature_type    *f_ptr;
 
 	monster_type    *y_ptr;
@@ -2620,12 +2620,12 @@ void process_monster(MONSTER_IDX m_idx)
 		if (!in_bounds2(ny, nx)) continue;
 
 		/* Access that grid */
-		c_ptr = &grid_array[ny][nx];
-		f_ptr = &f_info[c_ptr->feat];
-		can_cross = monster_can_cross_terrain(c_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
+		g_ptr = &grid_array[ny][nx];
+		f_ptr = &f_info[g_ptr->feat];
+		can_cross = monster_can_cross_terrain(g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
 
 		/* Access that grid's contents */
-		y_ptr = &m_list[c_ptr->m_idx];
+		y_ptr = &m_list[g_ptr->m_idx];
 
 		/* Hack -- player 'in' wall */
 		if (player_bold(ny, nx))
@@ -2634,7 +2634,7 @@ void process_monster(MONSTER_IDX m_idx)
 		}
 
 		/* Possibly a monster to attack */
-		else if (c_ptr->m_idx)
+		else if (g_ptr->m_idx)
 		{
 			do_move = TRUE;
 		}
@@ -2669,7 +2669,7 @@ void process_monster(MONSTER_IDX m_idx)
 		}
 
 		/* Handle doors and secret doors */
-		else if (is_closed_door(c_ptr->feat))
+		else if (is_closed_door(g_ptr->feat))
 		{
 			bool may_bash = TRUE;
 
@@ -2738,7 +2738,7 @@ void process_monster(MONSTER_IDX m_idx)
 			if (did_open_door || did_bash_door)
 			{
 				/* Break down the door */
-				if (did_bash_door && ((randint0(100) < 50) || (feat_state(c_ptr->feat, FF_OPEN) == c_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
+				if (did_bash_door && ((randint0(100) < 50) || (feat_state(g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 				{
 					cave_alter_feat(ny, nx, FF_BASH);
 
@@ -2759,7 +2759,7 @@ void process_monster(MONSTER_IDX m_idx)
 					cave_alter_feat(ny, nx, FF_OPEN);
 				}
 
-				f_ptr = &f_info[c_ptr->feat];
+				f_ptr = &f_info[g_ptr->feat];
 
 				/* Handle viewable doors */
 				do_view = TRUE;
@@ -2767,7 +2767,7 @@ void process_monster(MONSTER_IDX m_idx)
 		}
 
 		/* Hack -- check for Glyph of Warding */
-		if (do_move && is_glyph_grid(c_ptr) &&
+		if (do_move && is_glyph_grid(g_ptr) &&
 		    !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(ny, nx)))
 		{
 			/* Assume no move allowed */
@@ -2777,17 +2777,17 @@ void process_monster(MONSTER_IDX m_idx)
 			if (!is_pet(m_ptr) && (randint1(BREAK_GLYPH) < r_ptr->level))
 			{
 				/* Describe observable breakage */
-				if (c_ptr->info & CAVE_MARK)
+				if (g_ptr->info & CAVE_MARK)
 				{
 					msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
 				}
 
 				/* Forget the rune */
-				c_ptr->info &= ~(CAVE_MARK);
+				g_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-				c_ptr->info &= ~(CAVE_OBJECT);
-				c_ptr->mimic = 0;
+				g_ptr->info &= ~(CAVE_OBJECT);
+				g_ptr->mimic = 0;
 
 				/* Allow movement */
 				do_move = TRUE;
@@ -2795,7 +2795,7 @@ void process_monster(MONSTER_IDX m_idx)
 				note_spot(ny, nx);
 			}
 		}
-		else if (do_move && is_explosive_rune_grid(c_ptr) &&
+		else if (do_move && is_explosive_rune_grid(g_ptr) &&
 			 !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(ny, nx)))
 		{
 			/* Assume no move allowed */
@@ -2808,7 +2808,7 @@ void process_monster(MONSTER_IDX m_idx)
 				if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
 				{
 					/* Describe observable breakage */
-					if (c_ptr->info & CAVE_MARK)
+					if (g_ptr->info & CAVE_MARK)
 					{
 						msg_print(_("ルーンが爆発した！", "The rune explodes!"));
 						project(0, 2, ny, nx, 2 * (p_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -2820,11 +2820,11 @@ void process_monster(MONSTER_IDX m_idx)
 				}
 
 				/* Forget the rune */
-				c_ptr->info &= ~(CAVE_MARK);
+				g_ptr->info &= ~(CAVE_MARK);
 
 				/* Break the rune */
-				c_ptr->info &= ~(CAVE_OBJECT);
-				c_ptr->mimic = 0;
+				g_ptr->info &= ~(CAVE_OBJECT);
+				g_ptr->mimic = 0;
 
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
@@ -2879,7 +2879,7 @@ void process_monster(MONSTER_IDX m_idx)
 		}
 
 		/* A monster is in the way */
-		if (do_move && c_ptr->m_idx)
+		if (do_move && g_ptr->m_idx)
 		{
 			monster_race *z_ptr = &r_info[y_ptr->r_idx];
 
@@ -2889,7 +2889,7 @@ void process_monster(MONSTER_IDX m_idx)
 			/* Attack 'enemies' */
 			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
 				 (r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
-				 can_cross && (c_ptr->m_idx != p_ptr->riding)) ||
+				 can_cross && (g_ptr->m_idx != p_ptr->riding)) ||
 				are_enemies(m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
 			{
 				if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
@@ -2902,7 +2902,7 @@ void process_monster(MONSTER_IDX m_idx)
 					/* attack */
 					if (y_ptr->r_idx && (y_ptr->hp >= 0))
 					{
-						if (monst_attack_monst(m_idx, c_ptr->m_idx)) return;
+						if (monst_attack_monst(m_idx, g_ptr->m_idx)) return;
 
 						/* In anti-melee dungeon, stupid or confused monster takes useless turn */
 						else if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
@@ -2921,7 +2921,7 @@ void process_monster(MONSTER_IDX m_idx)
 			/* Push past weaker monsters (unless leaving a wall) */
 			else if ((r_ptr->flags2 & RF2_MOVE_BODY) && !(r_ptr->flags1 & RF1_NEVER_MOVE) &&
 				(r_ptr->mexp > z_ptr->mexp) &&
-				can_cross && (c_ptr->m_idx != p_ptr->riding) &&
+				can_cross && (g_ptr->m_idx != p_ptr->riding) &&
 				monster_can_cross_terrain(grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
 			{
 				/* Allow movement */
@@ -2931,7 +2931,7 @@ void process_monster(MONSTER_IDX m_idx)
 				did_move_body = TRUE;
 
 				/* Wake up the moved monster */
-				(void)set_monster_csleep(c_ptr->m_idx, 0);
+				(void)set_monster_csleep(g_ptr->m_idx, 0);
 
 				/* Message */
 			}
@@ -2964,7 +2964,7 @@ void process_monster(MONSTER_IDX m_idx)
 				return;
 			}
 
-			f_ptr = &f_info[c_ptr->feat];
+			f_ptr = &f_info[g_ptr->feat];
 
 			/* Note changes to viewable region */
 			do_view = TRUE;
@@ -2973,7 +2973,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 		if (must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
 		{
-			if (!monster_can_cross_terrain(c_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0))
+			if (!monster_can_cross_terrain(g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0))
 			{
 				/* Assume no move allowed */
 				do_move = FALSE;
@@ -3018,21 +3018,21 @@ void process_monster(MONSTER_IDX m_idx)
 			if (!is_riding_mon)
 			{
 				/* Hack -- Update the old location */
-				grid_array[oy][ox].m_idx = c_ptr->m_idx;
+				grid_array[oy][ox].m_idx = g_ptr->m_idx;
 
 				/* Mega-Hack -- move the old monster, if any */
-				if (c_ptr->m_idx)
+				if (g_ptr->m_idx)
 				{
 					/* Move the old monster */
 					y_ptr->fy = oy;
 					y_ptr->fx = ox;
 
 					/* Update the old monster */
-					update_monster(c_ptr->m_idx, TRUE);
+					update_monster(g_ptr->m_idx, TRUE);
 				}
 
 				/* Hack -- Update the new location */
-				c_ptr->m_idx = m_idx;
+				g_ptr->m_idx = m_idx;
 
 				/* Move the monster */
 				m_ptr->fy = ny;
@@ -3059,14 +3059,14 @@ void process_monster(MONSTER_IDX m_idx)
 			}
 
 			/* Take or Kill objects on the floor */
-			if (c_ptr->o_idx && (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) &&
+			if (g_ptr->o_idx && (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) &&
 			    (!is_pet(m_ptr) || ((p_ptr->pet_extra_flags & PF_PICKUP_ITEMS) && (r_ptr->flags2 & RF2_TAKE_ITEM))))
 			{
 				OBJECT_IDX this_o_idx, next_o_idx;
 				bool do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) ? TRUE : FALSE;
 
 				/* Scan all objects in the grid */
-				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+				for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
 					BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
 					GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];

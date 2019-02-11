@@ -728,7 +728,7 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
  */
 static bool target_set_accept(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Bounds */
@@ -741,19 +741,19 @@ static bool target_set_accept(POSITION y, POSITION x)
 	if (p_ptr->image) return (FALSE);
 
 	/* Examine the grid */
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Visible monsters */
-	if (c_ptr->m_idx)
+	if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &m_list[c_ptr->m_idx];
+		monster_type *m_ptr = &m_list[g_ptr->m_idx];
 
 		/* Visible monsters */
 		if (m_ptr->ml) return (TRUE);
 	}
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -766,13 +766,13 @@ static bool target_set_accept(POSITION y, POSITION x)
 	}
 
 	/* Interesting memorized features */
-	if (c_ptr->info & (CAVE_MARK))
+	if (g_ptr->info & (CAVE_MARK))
 	{
 		/* Notice object features */
-		if (c_ptr->info & CAVE_OBJECT) return (TRUE);
+		if (g_ptr->info & CAVE_OBJECT) return (TRUE);
 
 		/* Feature code (applying "mimic" field) */
-		if (have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_NOTICE)) return TRUE;
+		if (have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_NOTICE)) return TRUE;
 	}
 
 	return (FALSE);
@@ -814,17 +814,17 @@ static void target_set_prepare(BIT_FLAGS mode)
 	{
 		for (x = min_wid; x <= max_wid; x++)
 		{
-			grid_type *c_ptr;
+			grid_type *g_ptr;
 
 			/* Require "interesting" contents */
 			if (!target_set_accept(y, x)) continue;
 
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Require target_able monsters for "TARGET_KILL" */
-			if ((mode & (TARGET_KILL)) && !target_able(c_ptr->m_idx)) continue;
+			if ((mode & (TARGET_KILL)) && !target_able(g_ptr->m_idx)) continue;
 
-			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&m_list[c_ptr->m_idx])) continue;
+			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&m_list[g_ptr->m_idx])) continue;
 
 			/* Save the location */
 			temp_x[temp_n] = x;
@@ -948,7 +948,7 @@ bool show_gold_on_floor = FALSE;
  */
 static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	concptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
@@ -1012,9 +1012,9 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 
 
 	/* Actual monsters */
-	if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
+	if (g_ptr->m_idx && m_list[g_ptr->m_idx].ml)
 	{
-		monster_type *m_ptr = &m_list[c_ptr->m_idx];
+		monster_type *m_ptr = &m_list[g_ptr->m_idx];
 		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 		GAME_TEXT m_name[MAX_NLEN];
 		bool recall = FALSE;
@@ -1024,7 +1024,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 		monster_race_track(m_ptr->ap_r_idx);
-		health_track(c_ptr->m_idx);
+		health_track(g_ptr->m_idx);
 		handle_stuff();
 
 		/* Interact */
@@ -1233,7 +1233,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				}
 
 				/* Get the object being moved. */
-				o_idx = c_ptr->o_idx;
+				o_idx = g_ptr->o_idx;
  
 				/* Only rotate a pile of two or more objects. */
 				if (!(o_idx && o_list[o_idx].next_o_idx)) continue;
@@ -1242,7 +1242,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				excise_object_idx(o_idx);
 
 				/* Find end of the list. */
-				i = c_ptr->o_idx;
+				i = g_ptr->o_idx;
 				while (o_list[i].next_o_idx)
 					i = o_list[i].next_o_idx;
 
@@ -1257,7 +1257,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	}
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -1310,10 +1310,10 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 
 
 	/* Feature code (applying "mimic" field) */
-	feat = get_feat_mimic(c_ptr);
+	feat = get_feat_mimic(g_ptr);
 
 	/* Require knowledge about grid, or ability to see grid */
-	if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
+	if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
 	{
 		/* Forget feature */
 		feat = feat_none;
@@ -1337,7 +1337,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
 			quest_text_line = 0;
 
-			p_ptr->inside_quest = c_ptr->special;
+			p_ptr->inside_quest = g_ptr->special;
 
 			/* Get the quest text */
 			init_flags = INIT_NAME_ONLY;
@@ -1345,7 +1345,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 			name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), 
-						quest[c_ptr->special].name, quest[c_ptr->special].level);
+						quest[g_ptr->special].name, quest[g_ptr->special].level);
 
 			/* Reset the old quest number */
 			p_ptr->inside_quest = old_quest;
@@ -1358,11 +1358,11 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 		}
 		else if (have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
-			name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[c_ptr->special].text, d_info[c_ptr->special].mindepth);
+			name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[g_ptr->special].text, d_info[g_ptr->special].mindepth);
 		}
 		else if (have_flag(f_ptr->flags, FF_TOWN))
 		{
-			name = town_info[c_ptr->special].name;
+			name = town_info[g_ptr->special].name;
 		}
 		else if (p_ptr->wild_mode && (feat == feat_floor))
 		{
@@ -1410,12 +1410,12 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 		if (p_ptr->wizard)
 		{
 			char f_idx_str[32];
-			if (c_ptr->mimic) sprintf(f_idx_str, "%d/%d", c_ptr->feat, c_ptr->mimic);
-			else sprintf(f_idx_str, "%d", c_ptr->feat);
+			if (g_ptr->mimic) sprintf(f_idx_str, "%d/%d", g_ptr->feat, g_ptr->mimic);
+			else sprintf(f_idx_str, "%d", g_ptr->feat);
 #ifdef JP
-			sprintf(out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", s1, name, s2, s3, info, (unsigned int)c_ptr->info, f_idx_str, c_ptr->dist, c_ptr->cost, c_ptr->when, (int)y, (int)x, travel.cost[y][x]);
+			sprintf(out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", s1, name, s2, s3, info, (unsigned int)g_ptr->info, f_idx_str, g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
 #else
-			sprintf(out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", s1, s2, s3, name, info, c_ptr->info, f_idx_str, c_ptr->dist, c_ptr->cost, c_ptr->when, (int)y, (int)x);
+			sprintf(out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", s1, s2, s3, name, info, g_ptr->info, f_idx_str, g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x);
 #endif
 		}
 		else
@@ -1493,7 +1493,7 @@ bool target_set(BIT_FLAGS mode)
 	char query;
 	char info[80];
 	char same_key;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	TERM_LEN wid, hgt;
 	
 	get_screen_size(&wid, &hgt);
@@ -1531,10 +1531,10 @@ bool target_set(BIT_FLAGS mode)
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
 			/* Access */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Allow target */
-			if (target_able(c_ptr->m_idx))
+			if (target_able(g_ptr->m_idx))
 			{
 				strcpy(info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
 			}
@@ -1582,10 +1582,10 @@ bool target_set(BIT_FLAGS mode)
 				case '5':
 				case '0':
 				{
-					if (target_able(c_ptr->m_idx))
+					if (target_able(g_ptr->m_idx))
 					{
-						health_track(c_ptr->m_idx);
-						target_who = c_ptr->m_idx;
+						health_track(g_ptr->m_idx);
+						target_who = g_ptr->m_idx;
 						target_row = y;
 						target_col = x;
 						done = TRUE;
@@ -1768,7 +1768,7 @@ bool target_set(BIT_FLAGS mode)
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
 			/* Access */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Default prompt */
 			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
@@ -2366,7 +2366,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
  */
 static bool tgt_pt_accept(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Bounds */
 	if (!(in_bounds(y, x))) return (FALSE);
@@ -2378,18 +2378,18 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 	if (p_ptr->image) return (FALSE);
 
 	/* Examine the grid */
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Interesting memorized features */
-	if (c_ptr->info & (CAVE_MARK))
+	if (g_ptr->info & (CAVE_MARK))
 	{
 		/* Notice stairs */
-		if (cave_have_flag_grid(c_ptr, FF_LESS)) return (TRUE);
-		if (cave_have_flag_grid(c_ptr, FF_MORE)) return (TRUE);
+		if (cave_have_flag_grid(g_ptr, FF_LESS)) return (TRUE);
+		if (cave_have_flag_grid(g_ptr, FF_MORE)) return (TRUE);
 
 		/* Notice quest features */
-		if (cave_have_flag_grid(c_ptr, FF_QUEST_ENTER)) return (TRUE);
-		if (cave_have_flag_grid(c_ptr, FF_QUEST_EXIT)) return (TRUE);
+		if (cave_have_flag_grid(g_ptr, FF_QUEST_ENTER)) return (TRUE);
+		if (cave_have_flag_grid(g_ptr, FF_QUEST_EXIT)) return (TRUE);
 	}
 
 	return (FALSE);
@@ -2494,10 +2494,10 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				/* Skip stairs which have defferent distance */
 				for (; n < temp_n; ++ n)
 				{
-					grid_type *c_ptr = &grid_array[temp_y[n]][temp_x[n]];
+					grid_type *g_ptr = &grid_array[temp_y[n]][temp_x[n]];
 
-					if (cave_have_flag_grid(c_ptr, FF_STAIRS) &&
-					    cave_have_flag_grid(c_ptr, ch == '>' ? FF_MORE : FF_LESS))
+					if (cave_have_flag_grid(g_ptr, FF_STAIRS) &&
+					    cave_have_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
 					{
 						/* Found */
 						break;

@@ -76,13 +76,13 @@ bool is_trap(FEAT_IDX feat)
 
 /*!
  * @brief マスに看破済みの罠があるかの判定を行う。 / Return TRUE if the given grid is a known trap
- * @param c_ptr マス構造体の参照ポインタ
+ * @param g_ptr マス構造体の参照ポインタ
  * @return 看破済みの罠があるならTRUEを返す。
  */
-bool is_known_trap(grid_type *c_ptr)
+bool is_known_trap(grid_type *g_ptr)
 {
-	if (!c_ptr->mimic && !cave_have_flag_grid(c_ptr, FF_SECRET) &&
-	    is_trap(c_ptr->feat)) return TRUE;
+	if (!g_ptr->mimic && !cave_have_flag_grid(g_ptr, FF_SECRET) &&
+	    is_trap(g_ptr->feat)) return TRUE;
 	else
 		return FALSE;
 }
@@ -102,13 +102,13 @@ bool is_closed_door(FEAT_IDX feat)
 
 /*!
  * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
- * @param c_ptr マス構造体の参照ポインタ
+ * @param g_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
-bool is_hidden_door(grid_type *c_ptr)
+bool is_hidden_door(grid_type *g_ptr)
 {
-	if ((c_ptr->mimic || cave_have_flag_grid(c_ptr, FF_SECRET)) &&
-	    is_closed_door(c_ptr->feat))
+	if ((g_ptr->mimic || cave_have_flag_grid(g_ptr, FF_SECRET)) &&
+	    is_closed_door(g_ptr->feat))
 		return TRUE;
 	else
 		return FALSE;
@@ -569,15 +569,15 @@ void update_local_illumination(POSITION y, POSITION x)
  */
 bool player_can_see_bold(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Blind players see nothing */
 	if (p_ptr->blind) return FALSE;
 
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Note that "torch-lite" yields "illumination" */
-	if (c_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;
+	if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;
 
 	/* Require line of sight to the grid */
 	if (!player_has_los_bold(y, x)) return FALSE;
@@ -586,11 +586,11 @@ bool player_can_see_bold(POSITION y, POSITION x)
 	if (p_ptr->see_nocto) return TRUE;
 
 	/* Require "perma-lite" of the grid */
-	if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) return FALSE;
+	if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) return FALSE;
 
 	/* Feature code (applying "mimic" field) */
 	/* Floors are simple */
-	if (feat_supports_los(get_feat_mimic(c_ptr))) return TRUE;
+	if (feat_supports_los(get_feat_mimic(g_ptr))) return TRUE;
 
 	/* Check for "local" illumination */
 	return check_local_illumination(y, x);
@@ -617,14 +617,14 @@ bool no_lite(void)
  */
 bool cave_valid_bold(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Forbid perma-grids */
-	if (cave_perma_grid(c_ptr)) return (FALSE);
+	if (cave_perma_grid(g_ptr)) return (FALSE);
 
 	/* Check objects */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -944,12 +944,12 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
 void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
 	/* Get the grid_array */
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Feature code (applying "mimic" field) */
-	FEAT_IDX feat = get_feat_mimic(c_ptr);
+	FEAT_IDX feat = get_feat_mimic(g_ptr);
 
 	/* Access floor */
 	feature_type *f_ptr = &f_info[feat];
@@ -972,8 +972,8 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 		 * - Can see grids with CAVE_VIEW unless darkened by monsters.
 		 */
 		if (!p_ptr->blind &&
-		    ((c_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) ||
-		     ((c_ptr->info & CAVE_VIEW) && (((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))))
+		    ((g_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) ||
+		     ((g_ptr->info & CAVE_VIEW) && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))))
 		{
 			/* Normal attr/char */
 			a = f_ptr->x_attr[F_LIT_STANDARD];
@@ -992,10 +992,10 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			else if (darkened_grid(c_ptr))
+			else if (darkened_grid(g_ptr))
 			{
 				/* Unsafe grid -- idea borrowed from Unangband */
-				feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+				feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 				/* Access darkness */
 				f_ptr = &f_info[feat];
@@ -1009,7 +1009,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 			else if (view_special_lite)
 			{
 				/* Handle "torch-lit" grids */
-				if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
+				if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
 					if (view_yellow_lite)
@@ -1021,7 +1021,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 				}
 
 				/* Handle "dark" grids */
-				else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+				else if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 				{
 					/* Use a darkened colour/tile */
 					a = f_ptr->x_attr[F_LIT_DARK];
@@ -1029,7 +1029,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 				}
 
 				/* Handle "out-of-sight" grids */
-				else if (!(c_ptr->info & CAVE_VIEW))
+				else if (!(g_ptr->info & CAVE_VIEW))
 				{
 					/* Special flag */
 					if (view_bright_lite)
@@ -1046,7 +1046,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 		else
 		{
 			/* Unsafe grid -- idea borrowed from Unangband */
-			feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+			feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 			/* Access darkness */
 			f_ptr = &f_info[feat];
@@ -1061,7 +1061,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 	else
 	{
 		/* Memorized grids */
-		if (c_ptr->info & CAVE_MARK)
+		if (g_ptr->info & CAVE_MARK)
 		{
 			/* Normal attr/char */
 			a = f_ptr->x_attr[F_LIT_STANDARD];
@@ -1080,12 +1080,12 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			else if (darkened_grid(c_ptr) && !p_ptr->blind)
+			else if (darkened_grid(g_ptr) && !p_ptr->blind)
 			{
 				if (have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT))
 				{
 					/* Unsafe grid -- idea borrowed from Unangband */
-					feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+					feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 					/* Access darkness */
 					f_ptr = &f_info[feat];
@@ -1114,7 +1114,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 				}
 
 				/* Handle "torch-lit" grids */
-				else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
+				else if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
 				{
 					/* Torch lite */
 					if (view_yellow_lite)
@@ -1129,7 +1129,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 				else if (view_bright_lite)
 				{
 					/* Not viewable */
-					if (!(c_ptr->info & CAVE_VIEW))
+					if (!(g_ptr->info & CAVE_VIEW))
 					{
 						/* Use a darkened colour/tile */
 						a = f_ptr->x_attr[F_LIT_DARK];
@@ -1137,7 +1137,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 					}
 
 					/* Not glowing */
-					else if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+					else if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 					{
 						/* Use a darkened colour/tile */
 						a = f_ptr->x_attr[F_LIT_DARK];
@@ -1159,7 +1159,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 		else
 		{
 			/* Unsafe grid -- idea borrowed from Unangband */
-			feat = (view_unsafe_grids && (c_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+			feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
 
 			/* Access feature */
 			f_ptr = &f_info[feat];
@@ -1191,7 +1191,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 	}
 
 	/* Objects */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -1239,9 +1239,9 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 
 
 	/* Handle monsters */
-	if (c_ptr->m_idx && display_autopick == 0 )
+	if (g_ptr->m_idx && display_autopick == 0 )
 	{
-		monster_type *m_ptr = &m_list[c_ptr->m_idx];
+		monster_type *m_ptr = &m_list[g_ptr->m_idx];
 
 		/* Visible monster */
 		if (m_ptr->ml)
@@ -1317,7 +1317,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap,
 					else if ((r_ptr->flags1 & RF1_ATTR_SEMIRAND) && !use_graphics)
 					{
 						/* Use semi-random attr (usually mimics' colors vary) */
-						*ap = c_ptr->m_idx % 15 + 1;
+						*ap = g_ptr->m_idx % 15 + 1;
 					}
 					else
 					{
@@ -1458,20 +1458,20 @@ void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
  */
 void note_spot(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Blind players see nothing */
 	if (p_ptr->blind) return;
 
 	/* Analyze non-torch-lit grids */
-	if (!(c_ptr->info & (CAVE_LITE | CAVE_MNLT)))
+	if (!(g_ptr->info & (CAVE_LITE | CAVE_MNLT)))
 	{
 		/* Require line of sight to the grid */
-		if (!(c_ptr->info & (CAVE_VIEW))) return;
+		if (!(g_ptr->info & (CAVE_VIEW))) return;
 
 		/* Require "perma-lite" of the grid */
-		if ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+		if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 		{
 			/* Not Ninja */
 			if (!p_ptr->see_nocto) return;
@@ -1480,7 +1480,7 @@ void note_spot(POSITION y, POSITION x)
 
 
 	/* Hack -- memorize objects */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr = &o_list[this_o_idx];
 
@@ -1493,55 +1493,55 @@ void note_spot(POSITION y, POSITION x)
 
 
 	/* Hack -- memorize grids */
-	if (!(c_ptr->info & (CAVE_MARK)))
+	if (!(g_ptr->info & (CAVE_MARK)))
 	{
 		/* Feature code (applying "mimic" field) */
-		feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
+		feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 		/* Memorize some "boring" grids */
 		if (!have_flag(f_ptr->flags, FF_REMEMBER))
 		{
 			/* Option -- memorize all torch-lit floors */
 			if (view_torch_grids &&
-			    ((c_ptr->info & (CAVE_LITE | CAVE_MNLT)) || p_ptr->see_nocto))
+			    ((g_ptr->info & (CAVE_LITE | CAVE_MNLT)) || p_ptr->see_nocto))
 			{
-				c_ptr->info |= (CAVE_MARK);
+				g_ptr->info |= (CAVE_MARK);
 			}
 
 			/* Option -- memorize all perma-lit floors */
-			else if (view_perma_grids && ((c_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW))
+			else if (view_perma_grids && ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW))
 			{
-				c_ptr->info |= (CAVE_MARK);
+				g_ptr->info |= (CAVE_MARK);
 			}
 		}
 
 		/* Memorize normal grids */
 		else if (have_flag(f_ptr->flags, FF_LOS))
 		{
-			c_ptr->info |= (CAVE_MARK);
+			g_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize torch-lit walls */
-		else if (c_ptr->info & (CAVE_LITE | CAVE_MNLT))
+		else if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
 		{
-			c_ptr->info |= (CAVE_MARK);
+			g_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize walls seen by noctovision of Ninja */
 		else if (p_ptr->see_nocto)
 		{
-			c_ptr->info |= (CAVE_MARK);
+			g_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize certain non-torch-lit wall grids */
 		else if (check_local_illumination(y, x))
 		{
-			c_ptr->info |= (CAVE_MARK);
+			g_ptr->info |= (CAVE_MARK);
 		}
 	}
 
 	/* Memorize terrain of the grid */
-	c_ptr->info |= (CAVE_KNOWN);
+	g_ptr->info |= (CAVE_KNOWN);
 }
 
 
@@ -1743,7 +1743,7 @@ void prt_path(POSITION y, POSITION x)
 	{
 		POSITION ny = GRID_Y(path_g[i]);
 		POSITION nx = GRID_X(path_g[i]);
-		grid_type *c_ptr = &grid_array[ny][nx];
+		grid_type *g_ptr = &grid_array[ny][nx];
 
 		if (panel_contains(ny, nx))
 		{
@@ -1753,7 +1753,7 @@ void prt_path(POSITION y, POSITION x)
 			TERM_COLOR ta = default_color;
 			char tc = '*';
 
-			if (c_ptr->m_idx && m_list[c_ptr->m_idx].ml)
+			if (g_ptr->m_idx && m_list[g_ptr->m_idx].ml)
 			{
 				/* Determine what is there */
 				map_info(ny, nx, &a, &c, &ta, &tc);
@@ -1780,7 +1780,7 @@ void prt_path(POSITION y, POSITION x)
 		}
 
 		/* Known Wall */
-		if ((c_ptr->info & CAVE_MARK) && !cave_have_flag_grid(c_ptr, FF_PROJECT)) break;
+		if ((g_ptr->info & CAVE_MARK) && !cave_have_flag_grid(g_ptr, FF_PROJECT)) break;
 
 		/* Change color */
 		if (nx == x && ny == y) default_color = TERM_L_DARK;
@@ -2557,7 +2557,7 @@ void update_lite(void)
 {
 	int i, x, y, min_x, max_x, min_y, max_y;
 	int p = p_ptr->cur_lite;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/*** Special case ***/
 
@@ -2738,13 +2738,13 @@ void update_lite(void)
 		y = lite_y[i];
 		x = lite_x[i];
 
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Update fresh grids */
-		if (c_ptr->info & (CAVE_TEMP)) continue;
+		if (g_ptr->info & (CAVE_TEMP)) continue;
 
 		/* Add it to later visual update */
-		cave_note_and_redraw_later(c_ptr, y, x);
+		cave_note_and_redraw_later(g_ptr, y, x);
 	}
 
 	/* Clear them all */
@@ -2753,16 +2753,16 @@ void update_lite(void)
 		y = temp_y[i];
 		x = temp_x[i];
 
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* No longer in the array */
-		c_ptr->info &= ~(CAVE_TEMP);
+		g_ptr->info &= ~(CAVE_TEMP);
 
 		/* Update stale grids */
-		if (c_ptr->info & (CAVE_LITE)) continue;
+		if (g_ptr->info & (CAVE_LITE)) continue;
 
 		/* Add it to later visual update */
-		cave_redraw_later(c_ptr, y, x);
+		cave_redraw_later(g_ptr, y, x);
 	}
 
 	/* None left */
@@ -2781,19 +2781,19 @@ static POSITION mon_fy, mon_fx;
  */
 static void mon_lite_hack(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	int dpf, d;
 	POSITION midpoint;
 
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
 
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Want a unlit square in view of the player */
-	if ((c_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW) return;
+	if ((g_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW) return;
 
-	if (!cave_los_grid(c_ptr))
+	if (!cave_los_grid(g_ptr))
 	{
 		/* Hack -- Prevent monster lite leakage in walls */
 
@@ -2843,7 +2843,7 @@ static void mon_lite_hack(POSITION y, POSITION x)
 	/* We trust temp_n does not exceed TEMP_MAX */
 
 	/* New grid */
-	if (!(c_ptr->info & CAVE_MNDK))
+	if (!(g_ptr->info & CAVE_MNDK))
 	{
 		/* Save this square */
 		temp_x[temp_n] = x;
@@ -2855,11 +2855,11 @@ static void mon_lite_hack(POSITION y, POSITION x)
 	else
 	{
 		/* No longer dark */
-		c_ptr->info &= ~(CAVE_MNDK);
+		g_ptr->info &= ~(CAVE_MNDK);
 	}
 
 	/* Light it */
-	c_ptr->info |= CAVE_MNLT;
+	g_ptr->info |= CAVE_MNLT;
 }
 
 
@@ -2868,18 +2868,18 @@ static void mon_lite_hack(POSITION y, POSITION x)
  */
 static void mon_dark_hack(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	int       midpoint, dpf, d;
 
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
 
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Want a unlit and undarkened square in view of the player */
-	if ((c_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) return;
+	if ((g_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) return;
 
-	if (!cave_los_grid(c_ptr) && !cave_have_flag_grid(c_ptr, FF_PROJECT))
+	if (!cave_los_grid(g_ptr) && !cave_have_flag_grid(g_ptr, FF_PROJECT))
 	{
 		/* Hack -- Prevent monster dark lite leakage in walls */
 
@@ -2934,7 +2934,7 @@ static void mon_dark_hack(POSITION y, POSITION x)
 	temp_n++;
 
 	/* Darken it */
-	c_ptr->info |= CAVE_MNDK;
+	g_ptr->info |= CAVE_MNDK;
 }
 
 
@@ -2951,7 +2951,7 @@ static void mon_dark_hack(POSITION y, POSITION x)
 void update_mon_lite(void)
 {
 	int i, rad;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	POSITION fx, fy;
 	void (*add_mon_lite)(POSITION, POSITION);
@@ -2967,13 +2967,13 @@ void update_mon_lite(void)
 	for (i = 0; i < mon_lite_n; i++)
 	{
 		/* Point to grid */
-		c_ptr = &grid_array[mon_lite_y[i]][mon_lite_x[i]];
+		g_ptr = &grid_array[mon_lite_y[i]][mon_lite_x[i]];
 
 		/* Set temp or xtra flag */
-		c_ptr->info |= (c_ptr->info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA;
+		g_ptr->info |= (g_ptr->info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA;
 
 		/* Clear monster illumination flag */
-		c_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
+		g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
 	}
 
 	/* Empty temp list of new squares to lite up */
@@ -3053,10 +3053,10 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy + 2, mon_fx);
 					add_mon_lite(mon_fy + 2, mon_fx - 1);
 
-					c_ptr = &grid_array[mon_fy + 2][mon_fx];
+					g_ptr = &grid_array[mon_fy + 2][mon_fx];
 
 					/* Radius 3 */
-					if ((rad == 3) && cave_have_flag_grid(c_ptr, f_flag))
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
 					{
 						add_mon_lite(mon_fy + 3, mon_fx + 1);
 						add_mon_lite(mon_fy + 3, mon_fx);
@@ -3071,10 +3071,10 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy - 2, mon_fx);
 					add_mon_lite(mon_fy - 2, mon_fx - 1);
 
-					c_ptr = &grid_array[mon_fy - 2][mon_fx];
+					g_ptr = &grid_array[mon_fy - 2][mon_fx];
 
 					/* Radius 3 */
-					if ((rad == 3) && cave_have_flag_grid(c_ptr, f_flag))
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
 					{
 						add_mon_lite(mon_fy - 3, mon_fx + 1);
 						add_mon_lite(mon_fy - 3, mon_fx);
@@ -3089,10 +3089,10 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy, mon_fx + 2);
 					add_mon_lite(mon_fy - 1, mon_fx + 2);
 
-					c_ptr = &grid_array[mon_fy][mon_fx + 2];
+					g_ptr = &grid_array[mon_fy][mon_fx + 2];
 
 					/* Radius 3 */
-					if ((rad == 3) && cave_have_flag_grid(c_ptr, f_flag))
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
 					{
 						add_mon_lite(mon_fy + 1, mon_fx + 3);
 						add_mon_lite(mon_fy, mon_fx + 3);
@@ -3107,10 +3107,10 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy, mon_fx - 2);
 					add_mon_lite(mon_fy - 1, mon_fx - 2);
 
-					c_ptr = &grid_array[mon_fy][mon_fx - 2];
+					g_ptr = &grid_array[mon_fy][mon_fx - 2];
 
 					/* Radius 3 */
-					if ((rad == 3) && cave_have_flag_grid(c_ptr, f_flag))
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
 					{
 						add_mon_lite(mon_fy + 1, mon_fx - 3);
 						add_mon_lite(mon_fy, mon_fx - 3);
@@ -3163,26 +3163,26 @@ void update_mon_lite(void)
 		/* We trust this grid is in bounds */
 
 		/* Point to grid */
-		c_ptr = &grid_array[fy][fx];
+		g_ptr = &grid_array[fy][fx];
 
-		if (c_ptr->info & CAVE_TEMP) /* Pervious lit */
+		if (g_ptr->info & CAVE_TEMP) /* Pervious lit */
 		{
 			/* It it no longer lit? */
-			if ((c_ptr->info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW)
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW)
 			{
 				/* It is now unlit */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(c_ptr, fy, fx);
+				cave_note_and_redraw_later(g_ptr, fy, fx);
 			}
 		}
 		else /* Pervious darkened */
 		{
 			/* It it no longer darken? */
-			if ((c_ptr->info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW)
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW)
 			{
 				/* It is now undarken */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(c_ptr, fy, fx);
+				cave_note_and_redraw_later(g_ptr, fy, fx);
 			}
 		}
 
@@ -3204,26 +3204,26 @@ void update_mon_lite(void)
 		/* We trust this grid is in bounds */
 
 		/* Point to grid */
-		c_ptr = &grid_array[fy][fx];
+		g_ptr = &grid_array[fy][fx];
 
-		if (c_ptr->info & CAVE_MNLT) /* Lit */
+		if (g_ptr->info & CAVE_MNLT) /* Lit */
 		{
 			/* The is the square newly lit and visible? */
-			if ((c_ptr->info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW)
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW)
 			{
 				/* It is now lit */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(c_ptr, fy, fx);
+				cave_note_and_redraw_later(g_ptr, fy, fx);
 			}
 		}
 		else /* Darkened */
 		{
 			/* The is the square newly darkened and visible? */
-			if ((c_ptr->info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW)
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW)
 			{
 				/* It is now darkened */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(c_ptr, fy, fx);
+				cave_note_and_redraw_later(g_ptr, fy, fx);
 			}
 		}
 
@@ -3269,16 +3269,16 @@ void update_mon_lite(void)
 void clear_mon_lite(void)
 {
 	int i;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Clear all monster lit squares */
 	for (i = 0; i < mon_lite_n; i++)
 	{
 		/* Point to grid */
-		c_ptr = &grid_array[mon_lite_y[i]][mon_lite_x[i]];
+		g_ptr = &grid_array[mon_lite_y[i]][mon_lite_x[i]];
 
 		/* Clear monster illumination flag */
-		c_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
+		g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
 	}
 
 	/* Empty the array */
@@ -3294,7 +3294,7 @@ void forget_view(void)
 {
 	int i;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* None to forget */
 	if (!view_n) return;
@@ -3304,10 +3304,10 @@ void forget_view(void)
 	{
 		POSITION y = view_y[i];
 		POSITION x = view_x[i];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Forget that the grid is viewable */
-		c_ptr->info &= ~(CAVE_VIEW);
+		g_ptr->info &= ~(CAVE_VIEW);
 
 		/* if (!panel_contains(y, x)) continue; */
 
@@ -3359,7 +3359,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 {
 	bool f1, f2, v1, v2, z1, z2, wall;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	grid_type *g1_c_ptr;
 	grid_type *g2_c_ptr;
@@ -3384,11 +3384,11 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Totally blocked by "unviewable neighbors" */
 	if (!v1 && !v2) return (TRUE);
 
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 
 	/* Check for walls */
-	wall = (!cave_los_grid(c_ptr));
+	wall = (!cave_los_grid(g_ptr));
 
 
 	/* Check the "ease" of visibility */
@@ -3398,9 +3398,9 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Hack -- "easy" plus "easy" yields "easy" */
 	if (z1 && z2)
 	{
-		c_ptr->info |= (CAVE_XTRA);
+		g_ptr->info |= (CAVE_XTRA);
 
-		cave_view_hack(c_ptr, y, x);
+		cave_view_hack(g_ptr, y, x);
 
 		return (wall);
 	}
@@ -3408,7 +3408,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Hack -- primary "easy" yields "viewed" */
 	if (z1)
 	{
-		cave_view_hack(c_ptr, y, x);
+		cave_view_hack(g_ptr, y, x);
 
 		return (wall);
 	}
@@ -3416,9 +3416,9 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Hack -- "view" plus "view" yields "view" */
 	if (v1 && v2)
 	{
-		/* c_ptr->info |= (CAVE_XTRA); */
+		/* g_ptr->info |= (CAVE_XTRA); */
 
-		cave_view_hack(c_ptr, y, x);
+		cave_view_hack(g_ptr, y, x);
 
 		return (wall);
 	}
@@ -3427,7 +3427,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Mega-Hack -- the "los()" function works poorly on walls */
 	if (wall)
 	{
-		cave_view_hack(c_ptr, y, x);
+		cave_view_hack(g_ptr, y, x);
 
 		return (wall);
 	}
@@ -3436,7 +3436,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Hack -- check line of sight */
 	if (los(p_ptr->y, p_ptr->x, y, x))
 	{
-		cave_view_hack(c_ptr, y, x);
+		cave_view_hack(g_ptr, y, x);
 
 		return (wall);
 	}
@@ -3551,7 +3551,7 @@ void update_view(void)
 	POSITION y_max = cur_hgt - 1;
 	POSITION x_max = cur_wid - 1;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/*** Initialize ***/
 
@@ -3583,13 +3583,13 @@ void update_view(void)
 	{
 		y = view_y[n];
 		x = view_x[n];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Mark the grid as not in "view" */
-		c_ptr->info &= ~(CAVE_VIEW);
+		g_ptr->info &= ~(CAVE_VIEW);
 
 		/* Mark the grid as "seen" */
-		c_ptr->info |= (CAVE_TEMP);
+		g_ptr->info |= (CAVE_TEMP);
 
 		/* Add it to the "seen" set */
 		temp_y[temp_n] = y;
@@ -3605,13 +3605,13 @@ void update_view(void)
 	/* Now start on the player */
 	y = p_ptr->y;
 	x = p_ptr->x;
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Assume the player grid is easily viewable */
-	c_ptr->info |= (CAVE_XTRA);
+	g_ptr->info |= (CAVE_XTRA);
 
 	/* Assume the player grid is viewable */
-	cave_view_hack(c_ptr, y, x);
+	cave_view_hack(g_ptr, y, x);
 
 
 	/*** Step 2 -- Major Diagonals ***/
@@ -3622,37 +3622,37 @@ void update_view(void)
 	/* Scan south-east */
 	for (d = 1; d <= z; d++)
 	{
-		c_ptr = &grid_array[y+d][x+d];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y+d, x+d);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y+d][x+d];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y+d, x+d);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 	/* Scan south-west */
 	for (d = 1; d <= z; d++)
 	{
-		c_ptr = &grid_array[y+d][x-d];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y+d, x-d);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y+d][x-d];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y+d, x-d);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 	/* Scan north-east */
 	for (d = 1; d <= z; d++)
 	{
-		c_ptr = &grid_array[y-d][x+d];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y-d, x+d);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y-d][x+d];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y-d, x+d);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 	/* Scan north-west */
 	for (d = 1; d <= z; d++)
 	{
-		c_ptr = &grid_array[y-d][x-d];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y-d, x-d);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y-d][x-d];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y-d, x-d);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 
@@ -3661,10 +3661,10 @@ void update_view(void)
 	/* Scan south */
 	for (d = 1; d <= full; d++)
 	{
-		c_ptr = &grid_array[y+d][x];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y+d, x);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y+d][x];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y+d, x);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 	/* Initialize the "south strips" */
@@ -3673,10 +3673,10 @@ void update_view(void)
 	/* Scan north */
 	for (d = 1; d <= full; d++)
 	{
-		c_ptr = &grid_array[y-d][x];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y-d, x);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y-d][x];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y-d, x);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 	/* Initialize the "north strips" */
@@ -3685,10 +3685,10 @@ void update_view(void)
 	/* Scan east */
 	for (d = 1; d <= full; d++)
 	{
-		c_ptr = &grid_array[y][x+d];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y, x+d);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y][x+d];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y, x+d);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 	/* Initialize the "east strips" */
@@ -3697,10 +3697,10 @@ void update_view(void)
 	/* Scan west */
 	for (d = 1; d <= full; d++)
 	{
-		c_ptr = &grid_array[y][x-d];
-		c_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(c_ptr, y, x-d);
-		if (!cave_los_grid(c_ptr)) break;
+		g_ptr = &grid_array[y][x-d];
+		g_ptr->info |= (CAVE_XTRA);
+		cave_view_hack(g_ptr, y, x-d);
+		if (!cave_los_grid(g_ptr)) break;
 	}
 
 	/* Initialize the "west strips" */
@@ -3952,16 +3952,16 @@ void update_view(void)
 	{
 		y = view_y[n];
 		x = view_x[n];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Clear the "CAVE_XTRA" flag */
-		c_ptr->info &= ~(CAVE_XTRA);
+		g_ptr->info &= ~(CAVE_XTRA);
 
 		/* Update only newly viewed grids */
-		if (c_ptr->info & (CAVE_TEMP)) continue;
+		if (g_ptr->info & (CAVE_TEMP)) continue;
 
 		/* Add it to later visual update */
-		cave_note_and_redraw_later(c_ptr, y, x);
+		cave_note_and_redraw_later(g_ptr, y, x);
 	}
 
 	/* Wipe the old grids, update as needed */
@@ -3969,16 +3969,16 @@ void update_view(void)
 	{
 		y = temp_y[n];
 		x = temp_x[n];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* No longer in the array */
-		c_ptr->info &= ~(CAVE_TEMP);
+		g_ptr->info &= ~(CAVE_TEMP);
 
 		/* Update only non-viewable grids */
-		if (c_ptr->info & (CAVE_VIEW)) continue;
+		if (g_ptr->info & (CAVE_VIEW)) continue;
 
 		/* Add it to later visual update */
-		cave_redraw_later(c_ptr, y, x);
+		cave_redraw_later(g_ptr, y, x);
 	}
 
 	/* None left */
@@ -3996,28 +3996,28 @@ void update_view(void)
 void delayed_visual_update(void)
 {
 	int       i, y, x;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Update needed grids */
 	for (i = 0; i < redraw_n; i++)
 	{
 		y = redraw_y[i];
 		x = redraw_x[i];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Update only needed grids (prevent multiple updating) */
-		if (!(c_ptr->info & CAVE_REDRAW)) continue;
+		if (!(g_ptr->info & CAVE_REDRAW)) continue;
 
 		/* If required, note */
-		if (c_ptr->info & CAVE_NOTE) note_spot(y, x);
+		if (g_ptr->info & CAVE_NOTE) note_spot(y, x);
 
 		lite_spot(y, x);
 
 		/* Hack -- Visual update of monster on this grid */
-		if (c_ptr->m_idx) update_monster(c_ptr->m_idx, FALSE);
+		if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
 
 		/* No longer in the array */
-		c_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
+		g_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
 	}
 
 	/* None left */
@@ -4121,7 +4121,7 @@ void update_flow(void)
 			int old_head = flow_head;
 			byte_hack m = grid_array[ty][tx].cost + 1;
 			byte_hack n = grid_array[ty][tx].dist + 1;
-			grid_type *c_ptr;
+			grid_type *g_ptr;
 
 			/* Child location */
 			y = ty + ddy_ddd[d];
@@ -4130,19 +4130,19 @@ void update_flow(void)
 			/* Ignore player's grid */
 			if (player_bold(y, x)) continue;
 
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
-			if (is_closed_door(c_ptr->feat)) m += 3;
+			if (is_closed_door(g_ptr->feat)) m += 3;
 
 			/* Ignore "pre-stamped" entries */
-			if (c_ptr->dist != 0 && c_ptr->dist <= n && c_ptr->cost <= m) continue;
+			if (g_ptr->dist != 0 && g_ptr->dist <= n && g_ptr->cost <= m) continue;
 
 			/* Ignore "walls" and "rubble" */
-			if (!cave_have_flag_grid(c_ptr, FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
+			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
 
 			/* Save the flow cost */
-			if (c_ptr->cost == 0 || c_ptr->cost > m) c_ptr->cost = m;
-			if (c_ptr->dist == 0 || c_ptr->dist > n) c_ptr->dist = n;
+			if (g_ptr->cost == 0 || g_ptr->cost > m) g_ptr->cost = m;
+			if (g_ptr->dist == 0 || g_ptr->dist > n) g_ptr->dist = n;
 
 			/* Hack -- limit flow depth */
 			if (n == MONSTER_FLOW_DEPTH) continue;
@@ -4217,7 +4217,7 @@ void update_smell(void)
 	{
 		for (j = 0; j < 5; j++)
 		{
-			grid_type *c_ptr;
+			grid_type *g_ptr;
 
 			/* Translate table to map grids */
 			y = i + p_ptr->y - 2;
@@ -4226,10 +4226,10 @@ void update_smell(void)
 			/* Check Bounds */
 			if (!in_bounds(y, x)) continue;
 
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Walls, water, and lava cannot hold scent. */
-			if (!cave_have_flag_grid(c_ptr, FF_MOVE) && !is_closed_door(c_ptr->feat)) continue;
+			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
 
 			/* Grid must not be blocked by walls from the character */
 			if (!player_has_los_bold(y, x)) continue;
@@ -4238,7 +4238,7 @@ void update_smell(void)
 			if (scent_adjust[i][j] == -1) continue;
 
 			/* Mark the grid with new scent */
-			c_ptr->when = scent_when + scent_adjust[i][j];
+			g_ptr->when = scent_when + scent_adjust[i][j];
 		}
 	}
 }
@@ -4251,7 +4251,7 @@ void map_area(POSITION range)
 {
 	int i;
 	POSITION x, y;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 
@@ -4264,13 +4264,13 @@ void map_area(POSITION range)
 		{
 			if (distance(p_ptr->y, p_ptr->x, y, x) > range) continue;
 
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Memorize terrain of the grid */
-			c_ptr->info |= (CAVE_KNOWN);
+			g_ptr->info |= (CAVE_KNOWN);
 
 			/* Feature code (applying "mimic" field) */
-			feat = get_feat_mimic(c_ptr);
+			feat = get_feat_mimic(g_ptr);
 			f_ptr = &f_info[feat];
 
 			/* All non-walls are "checked" */
@@ -4280,23 +4280,23 @@ void map_area(POSITION range)
 				if (have_flag(f_ptr->flags, FF_REMEMBER))
 				{
 					/* Memorize the object */
-					c_ptr->info |= (CAVE_MARK);
+					g_ptr->info |= (CAVE_MARK);
 				}
 
 				/* Memorize known walls */
 				for (i = 0; i < 8; i++)
 				{
-					c_ptr = &grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
+					g_ptr = &grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
 
 					/* Feature code (applying "mimic" field) */
-					feat = get_feat_mimic(c_ptr);
+					feat = get_feat_mimic(g_ptr);
 					f_ptr = &f_info[feat];
 
 					/* Memorize walls (etc) */
 					if (have_flag(f_ptr->flags, FF_REMEMBER))
 					{
 						/* Memorize the walls */
-						c_ptr->info |= (CAVE_MARK);
+						g_ptr->info |= (CAVE_MARK);
 					}
 				}
 			}
@@ -4354,13 +4354,13 @@ void wiz_lite(bool ninja)
 		/* Scan all normal grids */
 		for (x = 1; x < cur_wid - 1; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
 			/* Memorize terrain of the grid */
-			c_ptr->info |= (CAVE_KNOWN);
+			g_ptr->info |= (CAVE_KNOWN);
 
 			/* Feature code (applying "mimic" field) */
-			feat = get_feat_mimic(c_ptr);
+			feat = get_feat_mimic(g_ptr);
 			f_ptr = &f_info[feat];
 
 			/* Process all non-walls */
@@ -4373,32 +4373,32 @@ void wiz_lite(bool ninja)
 					POSITION xx = x + ddx_ddd[i];
 
 					/* Get the grid */
-					c_ptr = &grid_array[yy][xx];
+					g_ptr = &grid_array[yy][xx];
 
 					/* Feature code (applying "mimic" field) */
-					f_ptr = &f_info[get_feat_mimic(c_ptr)];
+					f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 					/* Perma-lite the grid */
 					if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !ninja)
 					{
-						c_ptr->info |= (CAVE_GLOW);
+						g_ptr->info |= (CAVE_GLOW);
 					}
 
 					/* Memorize normal features */
 					if (have_flag(f_ptr->flags, FF_REMEMBER))
 					{
 						/* Memorize the grid */
-						c_ptr->info |= (CAVE_MARK);
+						g_ptr->info |= (CAVE_MARK);
 					}
 
 					/* Perma-lit grids (newly and previously) */
-					else if (c_ptr->info & CAVE_GLOW)
+					else if (g_ptr->info & CAVE_GLOW)
 					{
 						/* Normally, memorize floors (see above) */
 						if (view_perma_grids && !view_torch_grids)
 						{
 							/* Memorize the grid */
-							c_ptr->info |= (CAVE_MARK);
+							g_ptr->info |= (CAVE_MARK);
 						}
 					}
 				}
@@ -4430,11 +4430,11 @@ void wiz_dark(void)
 	{
 		for (x = 1; x < cur_wid - 1; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
 			/* Process the grid */
-			c_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
-			c_ptr->info |= (CAVE_UNSAFE);
+			g_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
+			g_ptr->info |= (CAVE_UNSAFE);
 		}
 	}
 
@@ -4482,17 +4482,17 @@ void wiz_dark(void)
  */
 void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 	feature_type *f_ptr = &f_info[feat];
 	bool old_los, old_mirror;
 
 	if (!character_dungeon)
 	{
 		/* Clear mimic type */
-		c_ptr->mimic = 0;
+		g_ptr->mimic = 0;
 
 		/* Change the feature */
-		c_ptr->feat = feat;
+		g_ptr->feat = feat;
 
 		/* Hack -- glow the GLOW terrain */
 		if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
@@ -4513,28 +4513,28 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 	}
 
 	old_los = cave_have_flag_bold(y, x, FF_LOS);
-	old_mirror = is_mirror_grid(c_ptr);
+	old_mirror = is_mirror_grid(g_ptr);
 
 	/* Clear mimic type */
-	c_ptr->mimic = 0;
+	g_ptr->mimic = 0;
 
 	/* Change the feature */
-	c_ptr->feat = feat;
+	g_ptr->feat = feat;
 
 	/* Remove flag for mirror/glyph */
-	c_ptr->info &= ~(CAVE_OBJECT);
+	g_ptr->info &= ~(CAVE_OBJECT);
 
 	if (old_mirror && (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 	{
-		c_ptr->info &= ~(CAVE_GLOW);
-		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
+		g_ptr->info &= ~(CAVE_GLOW);
+		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
 
 		update_local_illumination(y, x);
 	}
 
 	/* Check for change to boring grid */
-	if (!have_flag(f_ptr->flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
-	if (c_ptr->m_idx) update_monster(c_ptr->m_idx, FALSE);
+	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
+	if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
 
 	note_spot(y, x);
 
@@ -4701,17 +4701,17 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 /* Remove a mirror */
 void remove_mirror(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	/* Remove the mirror */
-	c_ptr->info &= ~(CAVE_OBJECT);
-	c_ptr->mimic = 0;
+	g_ptr->info &= ~(CAVE_OBJECT);
+	g_ptr->mimic = 0;
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
 	{
-		c_ptr->info &= ~(CAVE_GLOW);
-		if (!view_torch_grids) c_ptr->info &= ~(CAVE_MARK);
-		if (c_ptr->m_idx) update_monster(c_ptr->m_idx, FALSE);
+		g_ptr->info &= ~(CAVE_GLOW);
+		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
+		if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
 
 		update_local_illumination(y, x);
 	}
@@ -4725,9 +4725,9 @@ void remove_mirror(POSITION y, POSITION x)
 /*
  *  Return TRUE if there is a mirror on the grid.
  */
-bool is_mirror_grid(grid_type *c_ptr)
+bool is_mirror_grid(grid_type *g_ptr)
 {
-	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_MIRROR))
+	if ((g_ptr->info & CAVE_OBJECT) && have_flag(f_info[g_ptr->mimic].flags, FF_MIRROR))
 		return TRUE;
 	else
 		return FALSE;
@@ -4737,9 +4737,9 @@ bool is_mirror_grid(grid_type *c_ptr)
 /*
  *  Return TRUE if there is a mirror on the grid.
  */
-bool is_glyph_grid(grid_type *c_ptr)
+bool is_glyph_grid(grid_type *g_ptr)
 {
-	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_GLYPH))
+	if ((g_ptr->info & CAVE_OBJECT) && have_flag(f_info[g_ptr->mimic].flags, FF_GLYPH))
 		return TRUE;
 	else
 		return FALSE;
@@ -4749,9 +4749,9 @@ bool is_glyph_grid(grid_type *c_ptr)
 /*
  *  Return TRUE if there is a mirror on the grid.
  */
-bool is_explosive_rune_grid(grid_type *c_ptr)
+bool is_explosive_rune_grid(grid_type *g_ptr)
 {
-	if ((c_ptr->info & CAVE_OBJECT) && have_flag(f_info[c_ptr->mimic].flags, FF_MINOR_GLYPH))
+	if ((g_ptr->info & CAVE_OBJECT) && have_flag(f_info[g_ptr->mimic].flags, FF_MINOR_GLYPH))
 		return TRUE;
 	else
 		return FALSE;
@@ -5013,7 +5013,7 @@ void glow_deep_lava_and_bldg(void)
 {
 	POSITION y, x, yy, xx;
 	DIRECTION i;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Not in the darkness dungeon */
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) return;
@@ -5022,11 +5022,11 @@ void glow_deep_lava_and_bldg(void)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Feature code (applying "mimic" field) */
 
-			if (have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_GLOW))
+			if (have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_GLOW))
 			{
 				for (i = 0; i < 9; i++)
 				{
@@ -5056,22 +5056,22 @@ void glow_deep_lava_and_bldg(void)
 bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	monster_type *m_ptr = &m_list[m_idx];
-	grid_type    *c_ptr = &grid_array[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type    *g_ptr = &grid_array[y][x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Require "teleportable" space */
 	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
 
-	if (c_ptr->m_idx && (c_ptr->m_idx != m_idx)) return FALSE;
+	if (g_ptr->m_idx && (g_ptr->m_idx != m_idx)) return FALSE;
 	if (player_bold(y, x)) return FALSE;
 
 	/* Hack -- no teleport onto glyph of warding */
-	if (is_glyph_grid(c_ptr)) return FALSE;
-	if (is_explosive_rune_grid(c_ptr)) return FALSE;
+	if (is_glyph_grid(g_ptr)) return FALSE;
+	if (is_explosive_rune_grid(g_ptr)) return FALSE;
 
 	if (!(mode & TELEPORT_PASSIVE))
 	{
-		if (!monster_can_cross_terrain(c_ptr->feat, &r_info[m_ptr->r_idx], 0)) return FALSE;
+		if (!monster_can_cross_terrain(g_ptr->feat, &r_info[m_ptr->r_idx], 0)) return FALSE;
 	}
 
 	return TRUE;
@@ -5086,23 +5086,23 @@ bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, B
 */
 bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	grid_type    *c_ptr = &grid_array[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type    *g_ptr = &grid_array[y][x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Require "teleportable" space */
 	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
 
 	/* No magical teleporting into vaults and such */
-	if (!(mode & TELEPORT_NONMAGICAL) && (c_ptr->info & CAVE_ICKY)) return FALSE;
+	if (!(mode & TELEPORT_NONMAGICAL) && (g_ptr->info & CAVE_ICKY)) return FALSE;
 
-	if (c_ptr->m_idx && (c_ptr->m_idx != p_ptr->riding)) return FALSE;
+	if (g_ptr->m_idx && (g_ptr->m_idx != p_ptr->riding)) return FALSE;
 
 	/* don't teleport on a trap. */
 	if (have_flag(f_ptr->flags, FF_HIT_TRAP)) return FALSE;
 
 	if (!(mode & TELEPORT_PASSIVE))
 	{
-		if (!player_can_enter(c_ptr->feat, 0)) return FALSE;
+		if (!player_can_enter(g_ptr->feat, 0)) return FALSE;
 
 		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
 		{

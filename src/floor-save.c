@@ -735,7 +735,7 @@ static void get_out_monster(void)
 }
 
 /*!
- * マス構造体のspecial要素を利用する地形かどうかを判定するマクロ / Is this feature has special meaning (except floor_id) with c_ptr->special?
+ * マス構造体のspecial要素を利用する地形かどうかを判定するマクロ / Is this feature has special meaning (except floor_id) with g_ptr->special?
  */
 #define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
 
@@ -758,8 +758,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
-			feature_type *f_ptr = &f_info[c_ptr->feat];
+			grid_type *g_ptr = &grid_array[y][x];
+			feature_type *f_ptr = &f_info[g_ptr->feat];
 			bool ok = FALSE;
 
 			if (change_floor_mode & CFM_UP)
@@ -770,8 +770,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 					ok = TRUE;
 
 					/* Found fixed stairs? */
-					if (c_ptr->special &&
-					    c_ptr->special == sf_ptr->upper_floor_id)
+					if (g_ptr->special &&
+					    g_ptr->special == sf_ptr->upper_floor_id)
 					{
 						sx = x;
 						sy = y;
@@ -787,8 +787,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 					ok = TRUE;
 
 					/* Found fixed stairs */
-					if (c_ptr->special &&
-					    c_ptr->special == sf_ptr->lower_floor_id)
+					if (g_ptr->special &&
+					    g_ptr->special == sf_ptr->lower_floor_id)
 					{
 						sx = x;
 						sy = y;
@@ -845,7 +845,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
  */
 void leave_floor(void)
 {
-	grid_type *c_ptr = NULL;
+	grid_type *g_ptr = NULL;
 	feature_type *f_ptr;
 	saved_floor_type *sf_ptr;
 	MONRACE_IDX quest_r_idx = 0;
@@ -936,14 +936,14 @@ void leave_floor(void)
 	if (change_floor_mode & CFM_SAVE_FLOORS)
 	{
 		/* Extract stair position */
-		c_ptr = &grid_array[p_ptr->y][p_ptr->x];
-		f_ptr = &f_info[c_ptr->feat];
+		g_ptr = &grid_array[p_ptr->y][p_ptr->x];
+		f_ptr = &f_info[g_ptr->feat];
 
 		/* Get back to old saved floor? */
-		if (c_ptr->special && !have_flag(f_ptr->flags, FF_SPECIAL) && get_sf_ptr(c_ptr->special))
+		if (g_ptr->special && !have_flag(f_ptr->flags, FF_SPECIAL) && get_sf_ptr(g_ptr->special))
 		{
 			/* Saved floor is exist.  Use it. */
-			new_floor_id = c_ptr->special;
+			new_floor_id = g_ptr->special;
 		}
 
 		/* Mark shaft up/down */
@@ -1028,9 +1028,9 @@ void leave_floor(void)
 		new_floor_id = get_new_floor_id();
 
 		/* Connect from here */
-		if (c_ptr && !feat_uses_special(c_ptr->feat))
+		if (g_ptr && !feat_uses_special(g_ptr->feat))
 		{
-			c_ptr->special = new_floor_id;
+			g_ptr->special = new_floor_id;
 		}
 	}
 
@@ -1133,17 +1133,17 @@ void change_floor(void)
 				/* Forbid return stairs */
 				if (change_floor_mode & CFM_NO_RETURN)
 				{
-					grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
+					grid_type *g_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
-					if (!feat_uses_special(c_ptr->feat))
+					if (!feat_uses_special(g_ptr->feat))
 					{
 						if (change_floor_mode & (CFM_DOWN | CFM_UP))
 						{
 							/* Reset to floor */
-							c_ptr->feat = feat_ground_type[randint0(100)];
+							g_ptr->feat = feat_ground_type[randint0(100)];
 						}
 
-						c_ptr->special = 0;
+						g_ptr->special = 0;
 					}
 				}
 			}
@@ -1310,27 +1310,27 @@ void change_floor(void)
 			if (!(change_floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
-				grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
+				grid_type *g_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 				/*** Create connected stairs ***/
 
 				/* No stairs down from Quest */
 				if ((change_floor_mode & CFM_UP) && !quest_number(dun_level))
 				{
-					c_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
+					g_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}
 
 				/* No stairs up when ironman_downward */
 				else if ((change_floor_mode & CFM_DOWN) && !ironman_downward)
 				{
-					c_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
+					g_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
 				}
 
 				/* Paranoia -- Clear mimic */
-				c_ptr->mimic = 0;
+				g_ptr->mimic = 0;
 
 				/* Connect to previous floor */
-				c_ptr->special = p_ptr->floor_id;
+				g_ptr->special = p_ptr->floor_id;
 			}
 		}
 
@@ -1475,14 +1475,14 @@ void stair_creation(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				grid_type *c_ptr = &grid_array[y][x];
+				grid_type *g_ptr = &grid_array[y][x];
 
-				if (!c_ptr->special) continue;
-				if (feat_uses_special(c_ptr->feat)) continue;
-				if (c_ptr->special != dest_floor_id) continue;
+				if (!g_ptr->special) continue;
+				if (feat_uses_special(g_ptr->feat)) continue;
+				if (g_ptr->special != dest_floor_id) continue;
 
 				/* Remove old stairs */
-				c_ptr->special = 0;
+				g_ptr->special = 0;
 				cave_set_feat(y, x, feat_ground_type[randint0(100)]);
 			}
 		}

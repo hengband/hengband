@@ -1377,7 +1377,7 @@ void brand_weapon(int brand_type)
 static bool vanish_dungeon(void)
 {
 	POSITION y, x;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	feature_type *f_ptr;
 	monster_type *m_ptr;
 	GAME_TEXT m_name[MAX_NLEN];
@@ -1393,21 +1393,21 @@ static bool vanish_dungeon(void)
 	{
 		for (x = 1; x < cur_wid - 1; x++)
 		{
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Seeing true feature code (ignore mimic) */
-			f_ptr = &f_info[c_ptr->feat];
+			f_ptr = &f_info[g_ptr->feat];
 
 			/* Lose room and vault */
-			c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-			m_ptr = &m_list[c_ptr->m_idx];
+			m_ptr = &m_list[g_ptr->m_idx];
 
 			/* Awake monster */
-			if (c_ptr->m_idx && MON_CSLEEP(m_ptr))
+			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
 			{
 				/* Reset sleep counter */
-				(void)set_monster_csleep(c_ptr->m_idx, 0);
+				(void)set_monster_csleep(g_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
@@ -1425,68 +1425,68 @@ static bool vanish_dungeon(void)
 	/* Special boundary walls -- Top and bottom */
 	for (x = 0; x < cur_wid; x++)
 	{
-		c_ptr = &grid_array[0][x];
-		f_ptr = &f_info[c_ptr->mimic];
+		g_ptr = &grid_array[0][x];
+		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
-		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
+		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
-			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		c_ptr = &grid_array[cur_hgt - 1][x];
-		f_ptr = &f_info[c_ptr->mimic];
+		g_ptr = &grid_array[cur_hgt - 1][x];
+		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
-		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
+		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
-			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 	}
 
 	/* Special boundary walls -- Left and right */
 	for (y = 1; y < (cur_hgt - 1); y++)
 	{
-		c_ptr = &grid_array[y][0];
-		f_ptr = &f_info[c_ptr->mimic];
+		g_ptr = &grid_array[y][0];
+		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
-		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
+		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
-			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		c_ptr = &grid_array[y][cur_wid - 1];
-		f_ptr = &f_info[c_ptr->mimic];
+		g_ptr = &grid_array[y][cur_wid - 1];
+		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
-		c_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
+		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
 		/* Set boundary mimic if needed */
-		if (c_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
+		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			c_ptr->mimic = feat_state(c_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
-			if (!have_flag(f_info[c_ptr->mimic].flags, FF_REMEMBER)) c_ptr->info &= ~(CAVE_MARK);
+			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 	}
 
@@ -1505,17 +1505,17 @@ static bool vanish_dungeon(void)
 void call_the_(void)
 {
 	int i;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	bool do_call = TRUE;
 
 	for (i = 0; i < 9; i++)
 	{
-		c_ptr = &grid_array[p_ptr->y + ddy_ddd[i]][p_ptr->x + ddx_ddd[i]];
+		g_ptr = &grid_array[p_ptr->y + ddy_ddd[i]][p_ptr->x + ddx_ddd[i]];
 
-		if (!cave_have_flag_grid(c_ptr, FF_PROJECT))
+		if (!cave_have_flag_grid(g_ptr, FF_PROJECT))
 		{
-			if (!c_ptr->mimic || !have_flag(f_info[c_ptr->mimic].flags, FF_PROJECT) ||
-			    !permanent_wall(&f_info[c_ptr->feat]))
+			if (!g_ptr->mimic || !have_flag(f_info[g_ptr->mimic].flags, FF_PROJECT) ||
+			    !permanent_wall(&f_info[g_ptr->feat]))
 			{
 				do_call = FALSE;
 				break;
@@ -1588,7 +1588,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 {
 	POSITION ty, tx;
 	OBJECT_IDX i;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -1611,17 +1611,17 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 			return;
 		}
 
-		c_ptr = &grid_array[ty][tx];
+		g_ptr = &grid_array[ty][tx];
 
 		/* We need an item to fetch */
-		if (!c_ptr->o_idx)
+		if (!g_ptr->o_idx)
 		{
 			msg_print(_("そこには何もありません。", "There is no object at this place."));
 			return;
 		}
 
 		/* No fetching from vault */
-		if (c_ptr->info & CAVE_ICKY)
+		if (g_ptr->info & CAVE_ICKY)
 		{
 			msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
 			return;
@@ -1650,15 +1650,15 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 		{
 			ty += ddy[dir];
 			tx += ddx[dir];
-			c_ptr = &grid_array[ty][tx];
+			g_ptr = &grid_array[ty][tx];
 
 			if ((distance(p_ptr->y, p_ptr->x, ty, tx) > MAX_RANGE) ||
 				!cave_have_flag_bold(ty, tx, FF_PROJECT)) return;
 		}
-		while (!c_ptr->o_idx);
+		while (!g_ptr->o_idx);
 	}
 
-	o_ptr = &o_list[c_ptr->o_idx];
+	o_ptr = &o_list[g_ptr->o_idx];
 
 	if (o_ptr->weight > wgt)
 	{
@@ -1667,8 +1667,8 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 		return;
 	}
 
-	i = c_ptr->o_idx;
-	c_ptr->o_idx = o_ptr->next_o_idx;
+	i = g_ptr->o_idx;
+	g_ptr->o_idx = o_ptr->next_o_idx;
 	grid_array[p_ptr->y][p_ptr->x].o_idx = i; /* 'move' it */
 
 	o_ptr->next_o_idx = 0;
@@ -4141,18 +4141,18 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
  */
 bool polymorph_monster(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
-	monster_type *m_ptr = &m_list[c_ptr->m_idx];
+	grid_type *g_ptr = &grid_array[y][x];
+	monster_type *m_ptr = &m_list[g_ptr->m_idx];
 	bool polymorphed = FALSE;
 	MONRACE_IDX new_r_idx;
 	MONRACE_IDX old_r_idx = m_ptr->r_idx;
-	bool targeted = (target_who == c_ptr->m_idx) ? TRUE : FALSE;
-	bool health_tracked = (p_ptr->health_who == c_ptr->m_idx) ? TRUE : FALSE;
+	bool targeted = (target_who == g_ptr->m_idx) ? TRUE : FALSE;
+	bool health_tracked = (p_ptr->health_who == g_ptr->m_idx) ? TRUE : FALSE;
 	monster_type back_m;
 
 	if (p_ptr->inside_arena || p_ptr->inside_battle) return (FALSE);
 
-	if ((p_ptr->riding == c_ptr->m_idx) || (m_ptr->mflag2 & MFLAG2_KAGE)) return (FALSE);
+	if ((p_ptr->riding == g_ptr->m_idx) || (m_ptr->mflag2 & MFLAG2_KAGE)) return (FALSE);
 
 	/* Memorize the monster before polymorphing */
 	back_m = *m_ptr;
@@ -4176,7 +4176,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 		m_ptr->hold_o_idx = 0;
 
 		/* "Kill" the "old" monster */
-		delete_monster_idx(c_ptr->m_idx);
+		delete_monster_idx(g_ptr->m_idx);
 
 		/* Create a new monster (no groups) */
 		if (place_monster_aux(0, y, x, new_r_idx, mode))
@@ -4579,7 +4579,7 @@ bool eat_magic(int power)
 void massacre(void)
 {
 	POSITION x, y;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	monster_type *m_ptr;
 	DIRECTION dir;
 
@@ -4587,11 +4587,11 @@ void massacre(void)
 	{
 		y = p_ptr->y + ddy_ddd[dir];
 		x = p_ptr->x + ddx_ddd[dir];
-		c_ptr = &grid_array[y][x];
-		m_ptr = &m_list[c_ptr->m_idx];
+		g_ptr = &grid_array[y][x];
+		m_ptr = &m_list[g_ptr->m_idx];
 
 		/* Hack -- attack monsters */
-		if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
+		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
 			py_attack(y, x, 0);
 	}
 }
@@ -4599,16 +4599,16 @@ void massacre(void)
 bool eat_lock(void)
 {
 	POSITION x, y;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
 	DIRECTION dir;
 
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
-	c_ptr = &grid_array[y][x];
-	f_ptr = &f_info[c_ptr->feat];
-	mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
+	g_ptr = &grid_array[y][x];
+	f_ptr = &f_info[g_ptr->feat];
+	mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 	stop_mouth();
 
@@ -4620,9 +4620,9 @@ bool eat_lock(void)
 	{
 		msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), f_name + mimic_f_ptr->name);
 	}
-	else if (c_ptr->m_idx)
+	else if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &m_list[c_ptr->m_idx];
+		monster_type *m_ptr = &m_list[g_ptr->m_idx];
 		msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
 		if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(y, x, 0);

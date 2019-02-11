@@ -311,16 +311,16 @@ void delete_monster_idx(MONSTER_IDX i)
  */
 void delete_monster(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Paranoia */
 	if (!in_bounds(y, x)) return;
 
 	/* Check the grid */
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Delete the monster (if any) */
-	if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
 }
 
 
@@ -334,7 +334,7 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 {
 	POSITION y, x;
 	int i;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	monster_type *m_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -348,10 +348,10 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 	x = m_ptr->fx;
 
 	/* Cave grid */
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Update the grid_array */
-	c_ptr->m_idx = i2;
+	g_ptr->m_idx = i2;
 
 	/* Repair objects being carried by monster */
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -2940,7 +2940,7 @@ byte get_mspeed(monster_race *r_ptr)
 static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	/* Access the location */
-	grid_type		*c_ptr = &grid_array[y][x];
+	grid_type		*g_ptr = &grid_array[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];
 	concptr		name = (r_name + r_ptr->name);
@@ -3022,22 +3022,22 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 	}
 
-	if (is_glyph_grid(c_ptr))
+	if (is_glyph_grid(g_ptr))
 	{
 		if (randint1(BREAK_GLYPH) < (r_ptr->level+20))
 		{
 			/* Describe observable breakage */
-			if (c_ptr->info & CAVE_MARK)
+			if (g_ptr->info & CAVE_MARK)
 			{
 				msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
 			}
 
 			/* Forget the rune */
-			c_ptr->info &= ~(CAVE_MARK);
+			g_ptr->info &= ~(CAVE_MARK);
 
 			/* Break the rune */
-			c_ptr->info &= ~(CAVE_OBJECT);
-			c_ptr->mimic = 0;
+			g_ptr->info &= ~(CAVE_OBJECT);
+			g_ptr->mimic = 0;
 
 			note_spot(y, x);
 		}
@@ -3049,15 +3049,15 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10)) mode &= ~PM_KAGE;
 
 	/* Make a new monster */
-	c_ptr->m_idx = m_pop();
-	hack_m_idx_ii = c_ptr->m_idx;
+	g_ptr->m_idx = m_pop();
+	hack_m_idx_ii = g_ptr->m_idx;
 
 	/* Mega-Hack -- catch "failure" */
-	if (!c_ptr->m_idx) return (FALSE);
+	if (!g_ptr->m_idx) return (FALSE);
 
 
 	/* Get a new monster record */
-	m_ptr = &m_list[c_ptr->m_idx];
+	m_ptr = &m_list[g_ptr->m_idx];
 
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
@@ -3117,7 +3117,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 	if (r_ptr->flags7 & RF7_CHAMELEON)
 	{
-		choose_new_monster(c_ptr->m_idx, TRUE, 0);
+		choose_new_monster(g_ptr->m_idx, TRUE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
 		m_ptr->mflag2 |= MFLAG2_CHAMELEON;
 
@@ -3155,7 +3155,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	if ((mode & PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare)
 	{
 		int val = r_ptr->sleep;
-		(void)set_monster_csleep(c_ptr->m_idx, (val * 2) + randint1(val * 10));
+		(void)set_monster_csleep(g_ptr->m_idx, (val * 2) + randint1(val * 10));
 	}
 
 	/* Assign maximal hitpoints */
@@ -3191,7 +3191,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Extract the monster base speed */
 	m_ptr->mspeed = get_mspeed(r_ptr);
 
-	if (mode & PM_HASTE) (void)set_monster_fast(c_ptr->m_idx, 100);
+	if (mode & PM_HASTE) (void)set_monster_fast(g_ptr->m_idx, 100);
 
 	/* Give a random starting energy */
 	if (!ironman_nightmare)
@@ -3215,7 +3215,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	}
 
 	/* Hack -- see "process_monsters()" */
-	if (c_ptr->m_idx < hack_m_idx)
+	if (g_ptr->m_idx < hack_m_idx)
 	{
 		/* Monster is still being born */
 		m_ptr->mflag |= (MFLAG_BORN);
@@ -3226,7 +3226,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		p_ptr->update |= (PU_MON_LITE);
 	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !MON_CSLEEP(m_ptr))
 		p_ptr->update |= (PU_MON_LITE);
-	update_monster(c_ptr->m_idx, TRUE);
+	update_monster(g_ptr->m_idx, TRUE);
 
 
 	/* Count the monsters on the level */
@@ -3284,13 +3284,13 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 	}
 
-	if (is_explosive_rune_grid(c_ptr))
+	if (is_explosive_rune_grid(g_ptr))
 	{
 		/* Break the ward */
 		if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
 		{
 			/* Describe observable breakage */
-			if (c_ptr->info & CAVE_MARK)
+			if (g_ptr->info & CAVE_MARK)
 			{
 				msg_print(_("ルーンが爆発した！", "The rune explodes!"));
 				project(0, 2, y, x, 2 * (p_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -3302,11 +3302,11 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 
 		/* Forget the rune */
-		c_ptr->info &= ~(CAVE_MARK);
+		g_ptr->info &= ~(CAVE_MARK);
 
 		/* Break the rune */
-		c_ptr->info &= ~(CAVE_OBJECT);
-		c_ptr->mimic = 0;
+		g_ptr->info &= ~(CAVE_OBJECT);
+		g_ptr->mimic = 0;
 
 		note_spot(y, x);
 		lite_spot(y, x);

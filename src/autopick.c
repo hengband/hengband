@@ -1699,12 +1699,12 @@ void autopick_alter_item(INVENTORY_IDX item, bool destroy)
 /*
  * Automatically pickup/destroy items in this grid.
  */
-void autopick_pickup_items(grid_type *c_ptr)
+void autopick_pickup_items(grid_type *g_ptr)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	
 	/* Scan the pile of objects */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		int idx;
 			object_type *o_ptr = &o_list[this_o_idx];

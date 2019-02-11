@@ -2228,7 +2228,7 @@ errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 {
 	int i, j;
 
-	char *c_ptr;
+	char *g_ptr;
 
 	/* Bounds checking */
 	if (y2 >= Term->hgt) y2 = Term->hgt - 1;
@@ -2260,25 +2260,25 @@ errr Term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 		Term->x1[i] = (byte_hack)x1j;
 		Term->x2[i] = (byte_hack)x2j;
    
-		c_ptr = Term->old->c[i];
+		g_ptr = Term->old->c[i];
    
 		/* Clear the section so it is redrawn */
 		for (j = x1j; j <= x2j; j++)
 		{
 			/* Hack - set the old character to "none" */
-			c_ptr[j] = 0;
+			g_ptr[j] = 0;
 		}
 #else
 		Term->x1[i] = x1;
 		Term->x2[i] = x2;
 
-		c_ptr = Term->old->c[i];
+		g_ptr = Term->old->c[i];
 
 		/* Clear the section so it is redrawn */
 		for (j = x1; j <= x2; j++)
 		{
 			/* Hack - set the old character to "none" */
-			c_ptr[j] = 0;
+			g_ptr[j] = 0;
 		}
 #endif
 	}

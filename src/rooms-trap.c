@@ -17,7 +17,7 @@ bool build_type14(void)
 
 	bool light;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	s16b trap;
 
 	/* Pick a room size */
@@ -48,27 +48,27 @@ bool build_type14(void)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			c_ptr = &grid_array[y][x];
-			place_floor_grid(c_ptr);
-			c_ptr->info |= (CAVE_ROOM);
-			if (light) c_ptr->info |= (CAVE_GLOW);
+			g_ptr = &grid_array[y][x];
+			place_floor_grid(g_ptr);
+			g_ptr->info |= (CAVE_ROOM);
+			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
 	}
 
 	/* Walls around the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		c_ptr = &grid_array[y][x1 - 1];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y][x2 + 1];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y][x1 - 1];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y][x2 + 1];
+		place_outer_grid(g_ptr);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		c_ptr = &grid_array[y1 - 1][x];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y2 + 1][x];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y1 - 1][x];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y2 + 1][x];
+		place_outer_grid(g_ptr);
 	}
 
 	if (dun_level < 30 + randint1(30))
@@ -77,9 +77,9 @@ bool build_type14(void)
 		trap = feat_trap_armageddon;
 
 	/* Place a special trap */
-	c_ptr = &grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];
-	c_ptr->mimic = c_ptr->feat;
-	c_ptr->feat = trap;
+	g_ptr = &grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];
+	g_ptr->mimic = g_ptr->feat;
+	g_ptr->feat = trap;
 
 	msg_format_wizard(CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), f_name + f_info[trap].name);
 

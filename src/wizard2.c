@@ -1573,7 +1573,7 @@ static void do_cmd_wiz_create_feature(void)
 {
 	static int   prev_feat = 0;
 	static int   prev_mimic = 0;
-	grid_type    *c_ptr;
+	grid_type    *g_ptr;
 	feature_type *f_ptr;
 	char         tmp_val[160];
 	IDX          tmp_feat, tmp_mimic;
@@ -1581,7 +1581,7 @@ static void do_cmd_wiz_create_feature(void)
 
 	if (!tgt_pt(&x, &y)) return;
 
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Default */
 	sprintf(tmp_val, "%d", prev_feat);
@@ -1606,15 +1606,15 @@ static void do_cmd_wiz_create_feature(void)
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 
 	cave_set_feat(y, x, tmp_feat);
-	c_ptr->mimic = (s16b)tmp_mimic;
+	g_ptr->mimic = (s16b)tmp_mimic;
 
-	f_ptr = &f_info[get_feat_mimic(c_ptr)];
+	f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 	if (have_flag(f_ptr->flags, FF_GLYPH) ||
 	    have_flag(f_ptr->flags, FF_MINOR_GLYPH))
-		c_ptr->info |= (CAVE_OBJECT);
+		g_ptr->info |= (CAVE_OBJECT);
 	else if (have_flag(f_ptr->flags, FF_MIRROR))
-		c_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
+		g_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
 
 	note_spot(y, x);
 	lite_spot(y, x);

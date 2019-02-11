@@ -5,11 +5,11 @@
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定
-* @param c_ptr プレイヤーの移動先マスの構造体参照ポインタ
+* @param g_ptr プレイヤーの移動先マスの構造体参照ポインタ
 * @param now_riding TRUEなら下馬処理、FALSEならば騎乗処理
 * @return 可能ならばTRUEを返す
 */
-bool player_can_ride_aux(grid_type *c_ptr, bool now_riding)
+bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
 {
 	bool p_can_enter;
 	bool old_character_xtra = character_xtra;
@@ -21,7 +21,7 @@ bool player_can_ride_aux(grid_type *c_ptr, bool now_riding)
 	/* Hack -- prevent "icky" message */
 	character_xtra = TRUE;
 
-	if (now_riding) p_ptr->riding = c_ptr->m_idx;
+	if (now_riding) p_ptr->riding = g_ptr->m_idx;
 	else
 	{
 		p_ptr->riding = 0;
@@ -32,7 +32,7 @@ bool player_can_ride_aux(grid_type *c_ptr, bool now_riding)
 	p_ptr->update |= PU_BONUS;
 	handle_stuff();
 
-	p_can_enter = player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+	p_can_enter = player_can_enter(g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 
 	p_ptr->riding = old_riding;
 	if (old_pf_ryoute) p_ptr->pet_extra_flags |= (PF_RYOUTE);
@@ -308,20 +308,20 @@ bool do_riding(bool force)
 {
 	POSITION x, y;
 	DIRECTION dir = 0;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	monster_type *m_ptr;
 
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	if (p_ptr->special_defense & KATA_MUSOU) set_action(ACTION_NONE);
 
 	if (p_ptr->riding)
 	{
 		/* Skip non-empty grids */
-		if (!player_can_ride_aux(c_ptr, FALSE))
+		if (!player_can_ride_aux(g_ptr, FALSE))
 		{
 			msg_print(_("そちらには降りられません。", "You cannot go to that direction."));
 			return FALSE;
@@ -329,7 +329,7 @@ bool do_riding(bool force)
 
 		if (!pattern_seq(p_ptr->y, p_ptr->x, y, x)) return FALSE;
 
-		if (c_ptr->m_idx)
+		if (g_ptr->m_idx)
 		{
 			take_turn(p_ptr, 100);;
 
@@ -347,9 +347,9 @@ bool do_riding(bool force)
 	{
 		if (cmd_limit_confused(p_ptr)) return FALSE;
 
-		m_ptr = &m_list[c_ptr->m_idx];
+		m_ptr = &m_list[g_ptr->m_idx];
 
-		if (!c_ptr->m_idx || !m_ptr->ml)
+		if (!g_ptr->m_idx || !m_ptr->ml)
 		{
 			msg_print(_("その場所にはモンスターはいません。", "Here is no monster."));
 			return FALSE;
@@ -367,10 +367,10 @@ bool do_riding(bool force)
 
 		if (!pattern_seq(p_ptr->y, p_ptr->x, y, x)) return FALSE;
 
-		if (!player_can_ride_aux(c_ptr, TRUE))
+		if (!player_can_ride_aux(g_ptr, TRUE))
 		{
 			/* Feature code (applying "mimic" field) */
-			feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
+			feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 #ifdef JP
 			msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
 				((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
@@ -396,13 +396,13 @@ bool do_riding(bool force)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0);
-			(void)set_monster_csleep(c_ptr->m_idx, 0);
+			(void)set_monster_csleep(g_ptr->m_idx, 0);
 			msg_format(_("%sを起こした。", "You have waked %s up."), m_name);
 		}
 
 		if (p_ptr->action == ACTION_KAMAE) set_action(ACTION_NONE);
 
-		p_ptr->riding = c_ptr->m_idx;
+		p_ptr->riding = g_ptr->m_idx;
 
 		/* Hack -- remove tracked monster */
 		if (p_ptr->riding == p_ptr->health_who) health_track(0);
@@ -876,8 +876,8 @@ void do_cmd_pet(void)
 		if (!target_set(TARGET_KILL)) pet_t_m_idx = 0;
 		else
 		{
-			grid_type *c_ptr = &grid_array[target_row][target_col];
-			if (c_ptr->m_idx && (m_list[c_ptr->m_idx].ml))
+			grid_type *g_ptr = &grid_array[target_row][target_col];
+			if (g_ptr->m_idx && (m_list[g_ptr->m_idx].ml))
 			{
 				pet_t_m_idx = grid_array[target_row][target_col].m_idx;
 				p_ptr->pet_follow_distance = PET_DESTROY_DIST;
@@ -1086,23 +1086,23 @@ bool rakuba(HIT_POINT dam, bool force)
 		/* Check around the player */
 		for (i = 0; i < 8; i++)
 		{
-			grid_type *c_ptr;
+			grid_type *g_ptr;
 
 			/* Access the location */
 			y = p_ptr->y + ddy_ddd[i];
 			x = p_ptr->x + ddx_ddd[i];
 
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
-			if (c_ptr->m_idx) continue;
+			if (g_ptr->m_idx) continue;
 
 			/* Skip non-empty grids */
-			if (!cave_have_flag_grid(c_ptr, FF_MOVE) && !cave_have_flag_grid(c_ptr, FF_CAN_FLY))
+			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !cave_have_flag_grid(g_ptr, FF_CAN_FLY))
 			{
-				if (!player_can_ride_aux(c_ptr, FALSE)) continue;
+				if (!player_can_ride_aux(g_ptr, FALSE)) continue;
 			}
 
-			if (cave_have_flag_grid(c_ptr, FF_PATTERN)) continue;
+			if (cave_have_flag_grid(g_ptr, FF_PATTERN)) continue;
 
 			/* Count "safe" grids */
 			sn++;

@@ -973,14 +973,14 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
-				if (templates[i].info == c_ptr->info &&
-				    templates[i].feat == c_ptr->feat &&
-				    templates[i].mimic == c_ptr->mimic &&
-				    templates[i].special == c_ptr->special)
+				if (templates[i].info == g_ptr->info &&
+				    templates[i].feat == g_ptr->feat &&
+				    templates[i].mimic == g_ptr->mimic &&
+				    templates[i].special == g_ptr->special)
 				{
 					/* Same terrain is exist */
 					templates[i].occurrence++;
@@ -1004,10 +1004,10 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 			}
 
 			/* Add new template */
-			templates[num_temp].info = c_ptr->info;
-			templates[num_temp].feat = c_ptr->feat;
-			templates[num_temp].mimic = c_ptr->mimic;
-			templates[num_temp].special = c_ptr->special;
+			templates[num_temp].info = g_ptr->info;
+			templates[num_temp].feat = g_ptr->feat;
+			templates[num_temp].mimic = g_ptr->mimic;
+			templates[num_temp].special = g_ptr->special;
 			templates[num_temp].occurrence = 1;
 
 			/* Increase number of template */
@@ -1053,14 +1053,14 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
-				if (templates[i].info == c_ptr->info &&
-				    templates[i].feat == c_ptr->feat &&
-				    templates[i].mimic == c_ptr->mimic &&
-				    templates[i].special == c_ptr->special)
+				if (templates[i].info == g_ptr->info &&
+				    templates[i].feat == g_ptr->feat &&
+				    templates[i].mimic == g_ptr->mimic &&
+				    templates[i].special == g_ptr->special)
 					break;
 			}
 

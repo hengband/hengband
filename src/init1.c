@@ -3900,7 +3900,7 @@ static errr parse_line_building(char *buf)
  */
 static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 	object_type *o_ptr;
 
 	OBJECT_IDX o_idx = o_pop();
@@ -3919,10 +3919,10 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 	o_ptr->held_m_idx = 0;
 
 	/* Build a stack */
-	o_ptr->next_o_idx = c_ptr->o_idx;
+	o_ptr->next_o_idx = g_ptr->o_idx;
 
 	/* Place the object */
-	c_ptr->o_idx = o_idx;
+	g_ptr->o_idx = o_idx;
 }
 
 
@@ -3984,7 +3984,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 		for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
 		{
-			grid_type *c_ptr = &grid_array[*y][*x];
+			grid_type *g_ptr = &grid_array[*y][*x];
 
 			int idx = s[0];
 
@@ -3994,13 +3994,13 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			ARTIFACT_IDX artifact_index = letter[idx].artifact;
 
 			/* Lay down a floor */
-			c_ptr->feat = conv_dungeon_feat(letter[idx].feature);
+			g_ptr->feat = conv_dungeon_feat(letter[idx].feature);
 
 			/* Only the features */
 			if (init_flags & INIT_ONLY_FEATURES) continue;
 
 			/* Cave info */
-			c_ptr->info = letter[idx].cave_info;
+			g_ptr->info = letter[idx].cave_info;
 
 			/* Create a monster */
 			if (random & RANDOM_MONSTER)
@@ -4096,8 +4096,8 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Hidden trap (or door) */
 			else if (letter[idx].trap)
 			{
-				c_ptr->mimic = c_ptr->feat;
-				c_ptr->feat = conv_dungeon_feat(letter[idx].trap);
+				g_ptr->mimic = g_ptr->feat;
+				g_ptr->feat = conv_dungeon_feat(letter[idx].trap);
 			}
 			else if (object_index)
 			{
@@ -4138,7 +4138,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			}
 
 			/* Terrain special */
-			c_ptr->special = letter[idx].special;
+			g_ptr->special = letter[idx].special;
 		}
 
 		(*y)++;

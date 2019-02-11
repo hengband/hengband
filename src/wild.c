@@ -449,7 +449,7 @@ static border_type border;
 void wilderness_gen(void)
 {
 	int i, y, x, lim;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	feature_type *f_ptr;
 
 	/* Big town */
@@ -567,41 +567,41 @@ void wilderness_gen(void)
 		for (x = 0; x < cur_wid; x++)
 		{
 			/* Get the grid */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			if (is_daytime())
 			{
 				/* Assume lit */
-				c_ptr->info |= (CAVE_GLOW);
+				g_ptr->info |= (CAVE_GLOW);
 
 				/* Hack -- Memorize lit grids if allowed */
-				if (view_perma_grids) c_ptr->info |= (CAVE_MARK);
+				if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
 			}
 			else
 			{
 				/* Feature code (applying "mimic" field) */
-				f_ptr = &f_info[get_feat_mimic(c_ptr)];
+				f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
-				if (!is_mirror_grid(c_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
+				if (!is_mirror_grid(g_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
 				    !have_flag(f_ptr->flags, FF_ENTRANCE))
 				{
 					/* Assume dark */
-					c_ptr->info &= ~(CAVE_GLOW);
+					g_ptr->info &= ~(CAVE_GLOW);
 
 					/* Darken "boring" features */
 					if (!have_flag(f_ptr->flags, FF_REMEMBER))
 					{
 						/* Forget the grid */
-						c_ptr->info &= ~(CAVE_MARK);
+						g_ptr->info &= ~(CAVE_MARK);
 					}
 				}
 				else if (have_flag(f_ptr->flags, FF_ENTRANCE))
 				{
 					/* Assume lit */
-					c_ptr->info |= (CAVE_GLOW);
+					g_ptr->info |= (CAVE_GLOW);
 
 					/* Hack -- Memorize lit grids if allowed */
-					if (view_perma_grids) c_ptr->info |= (CAVE_MARK);
+					if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
 				}
 			}
 		}
@@ -614,16 +614,16 @@ void wilderness_gen(void)
 			for (x = 0; x < cur_wid; x++)
 			{
 				/* Get the grid */
-				c_ptr = &grid_array[y][x];
+				g_ptr = &grid_array[y][x];
 
 				/* Seeing true feature code (ignore mimic) */
-				f_ptr = &f_info[c_ptr->feat];
+				f_ptr = &f_info[g_ptr->feat];
 
 				if (have_flag(f_ptr->flags, FF_BLDG))
 				{
 					if ((f_ptr->subtype == 4) || ((p_ptr->town_num == 1) && (f_ptr->subtype == 0)))
 					{
-						if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
+						if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
 						p_ptr->oldpy = (s16b)y;
 						p_ptr->oldpx = (s16b)x;
 					}
@@ -640,11 +640,11 @@ void wilderness_gen(void)
 			for (x = 0; x < cur_wid; x++)
 			{
 				/* Get the grid */
-				c_ptr = &grid_array[y][x];
+				g_ptr = &grid_array[y][x];
 
-				if (cave_have_flag_grid(c_ptr, FF_ENTRANCE))
+				if (cave_have_flag_grid(g_ptr, FF_ENTRANCE))
 				{
-					if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
+					if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
 					p_ptr->oldpy = (s16b)y;
 					p_ptr->oldpx = (s16b)x;
 				}

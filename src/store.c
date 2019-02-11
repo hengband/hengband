@@ -5749,7 +5749,7 @@ void do_cmd_store(void)
 	int which;
 	int maintain_num;
 	int i;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	bool need_redraw_store_inv; /* To redraw missiles damage and prices in store */
 	TERM_LEN w, h;
 
@@ -5761,17 +5761,17 @@ void do_cmd_store(void)
 	store_bottom = MIN_STOCK + xtra_stock;
 
 	/* Access the player grid */
-	c_ptr = &grid_array[p_ptr->y][p_ptr->x];
+	g_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 	/* Verify a store */
-	if (!cave_have_flag_grid(c_ptr, FF_STORE))
+	if (!cave_have_flag_grid(g_ptr, FF_STORE))
 	{
 		msg_print(_("ここには店がありません。", "You see no store here."));
 		return;
 	}
 
 	/* Extract the store code */
-	which = f_info[c_ptr->feat].subtype;
+	which = f_info[g_ptr->feat].subtype;
 
 	old_town_num = p_ptr->town_num;
 	if ((which == STORE_HOME) || (which == STORE_MUSEUM)) p_ptr->town_num = 1;
@@ -5821,7 +5821,7 @@ void do_cmd_store(void)
 	cur_store_num = which;
 
 	/* Hack -- save the store feature */
-	cur_store_feat = c_ptr->feat;
+	cur_store_feat = g_ptr->feat;
 
 	/* Save the store and owner pointers */
 	st_ptr = &town_info[p_ptr->town_num].store[cur_store_num];

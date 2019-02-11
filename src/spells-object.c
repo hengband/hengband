@@ -107,19 +107,19 @@ bool create_ammo(void)
 	{
 		POSITION x, y;
 		DIRECTION dir;
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
-		if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_CAN_DIG))
+		if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG))
 		{
 			msg_print(_("そこには岩石がない。", "You need pile of rubble."));
 			return FALSE;
 		}
-		else if (!cave_have_flag_grid(c_ptr, FF_CAN_DIG) || !cave_have_flag_grid(c_ptr, FF_HURT_ROCK))
+		else if (!cave_have_flag_grid(g_ptr, FF_CAN_DIG) || !cave_have_flag_grid(g_ptr, FF_HURT_ROCK))
 		{
 			msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
 		}

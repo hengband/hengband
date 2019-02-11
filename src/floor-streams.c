@@ -39,7 +39,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 	POSITION changex, changey;
 	POSITION ty, tx;
 	bool done;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	length = distance(x1, y1, x2, y2);
 
@@ -108,36 +108,36 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 					{
 						if (!in_bounds2(ty, tx)) continue;
 
-						c_ptr = &grid_array[ty][tx];
+						g_ptr = &grid_array[ty][tx];
 
-						if (c_ptr->feat == feat1) continue;
-						if (c_ptr->feat == feat2) continue;
+						if (g_ptr->feat == feat1) continue;
+						if (g_ptr->feat == feat2) continue;
 
 						if (distance(ty, tx, y, x) > rand_spread(width, 1)) continue;
 
 						/* Do not convert permanent features */
-						if (cave_perma_grid(c_ptr)) continue;
+						if (cave_perma_grid(g_ptr)) continue;
 
 						/*
 						 * Clear previous contents, add feature
 						 * The border mainly gets feat2, while the center gets feat1
 						 */
 						if (distance(ty, tx, y, x) > width)
-							c_ptr->feat = feat2;
+							g_ptr->feat = feat2;
 						else
-							c_ptr->feat = feat1;
+							g_ptr->feat = feat1;
 
 						/* Clear garbage of hidden trap or door */
-						c_ptr->mimic = 0;
+						g_ptr->mimic = 0;
 
 						/* Lava terrain glows */
 						if (have_flag(f_info[feat1].flags, FF_LAVA))
 						{
-							if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) c_ptr->info |= CAVE_GLOW;
+							if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) g_ptr->info |= CAVE_GLOW;
 						}
 
 						/* Hack -- don't teleport here */
-						c_ptr->info |= CAVE_ICKY;
+						g_ptr->info |= CAVE_ICKY;
 					}
 				}
 
@@ -232,7 +232,7 @@ void build_streamer(IDX feat, int chance)
 	int		y, x, dir;
 	int dummy = 0;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	feature_type *f_ptr;
 
 	feature_type *streamer_ptr = &f_info[feat];
@@ -264,8 +264,8 @@ void build_streamer(IDX feat, int chance)
 				if (!in_bounds2(ty, tx)) continue;
 				break;
 			}
-			c_ptr = &grid_array[ty][tx];
-			f_ptr = &f_info[c_ptr->feat];
+			g_ptr = &grid_array[ty][tx];
+			f_ptr = &f_info[g_ptr->feat];
 
 			if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
 				continue;
@@ -276,22 +276,22 @@ void build_streamer(IDX feat, int chance)
 			/* Only convert "granite" walls */
 			if (streamer_is_wall)
 			{
-				if (!is_extra_grid(c_ptr) && !is_inner_grid(c_ptr) && !is_outer_grid(c_ptr) && !is_solid_grid(c_ptr)) continue;
-				if (is_closed_door(c_ptr->feat)) continue;
+				if (!is_extra_grid(g_ptr) && !is_inner_grid(g_ptr) && !is_outer_grid(g_ptr) && !is_solid_grid(g_ptr)) continue;
+				if (is_closed_door(g_ptr->feat)) continue;
 			}
 
-			if (c_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[m_list[c_ptr->m_idx].r_idx], 0)))
+			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[m_list[g_ptr->m_idx].r_idx], 0)))
 			{
 				/* Delete the monster (if any) */
 				delete_monster(ty, tx);
 			}
 
-			if (c_ptr->o_idx && !have_flag(streamer_ptr->flags, FF_DROP))
+			if (g_ptr->o_idx && !have_flag(streamer_ptr->flags, FF_DROP))
 			{
 				OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 				/* Scan all objects in the grid */
-				for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+				for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
 					object_type *o_ptr = &o_list[this_o_idx];
 
@@ -323,10 +323,10 @@ void build_streamer(IDX feat, int chance)
 			}
 
 			/* Clear previous contents, add proper vein type */
-			c_ptr->feat = feat;
+			g_ptr->feat = feat;
 
 			/* Paranoia: Clear mimic field */
-			c_ptr->mimic = 0;
+			g_ptr->mimic = 0;
 
 			if (streamer_may_have_gold)
 			{
@@ -382,7 +382,7 @@ void build_streamer(IDX feat, int chance)
 void place_trees(POSITION x, POSITION y)
 {
 	int i, j;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* place trees/ rubble in ovalish distribution */
 	for (i = x - 3; i < x + 4; i++)
@@ -390,13 +390,13 @@ void place_trees(POSITION x, POSITION y)
 		for (j = y - 3; j < y + 4; j++)
 		{
 			if (!in_bounds(j, i)) continue;
-			c_ptr = &grid_array[j][i];
+			g_ptr = &grid_array[j][i];
 
-			if (c_ptr->info & CAVE_ICKY) continue;
-			if (c_ptr->o_idx) continue;
+			if (g_ptr->info & CAVE_ICKY) continue;
+			if (g_ptr->o_idx) continue;
 
 			/* Want square to be in the circle and accessable. */
-			if ((distance(j, i, y, x) < 4) && !cave_perma_grid(c_ptr))
+			if ((distance(j, i, y, x) < 4) && !cave_perma_grid(g_ptr))
 			{
 				/*
 				 * Clear previous contents, add feature
@@ -413,7 +413,7 @@ void place_trees(POSITION x, POSITION y)
 				}
 
 				/* Clear garbage of hidden trap or door */
-				c_ptr->mimic = 0;
+				g_ptr->mimic = 0;
 
 				/* Light area since is open above */
 				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);

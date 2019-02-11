@@ -82,17 +82,17 @@ FEAT_IDX choose_random_trap(void)
 */
 void disclose_grid(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
-	if (cave_have_flag_grid(c_ptr, FF_SECRET))
+	if (cave_have_flag_grid(g_ptr, FF_SECRET))
 	{
 		/* No longer hidden */
 		cave_alter_feat(y, x, FF_SECRET);
 	}
-	else if (c_ptr->mimic)
+	else if (g_ptr->mimic)
 	{
 		/* No longer hidden */
-		c_ptr->mimic = 0;
+		g_ptr->mimic = 0;
 
 		note_spot(y, x);
 		lite_spot(y, x);
@@ -111,7 +111,7 @@ void disclose_grid(POSITION y, POSITION x)
 */
 void place_trap(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	/* Paranoia -- verify location */
 	if (!in_bounds(y, x)) return;
@@ -120,8 +120,8 @@ void place_trap(POSITION y, POSITION x)
 	if (!cave_clean_bold(y, x)) return;
 
 	/* Place an invisible trap */
-	c_ptr->mimic = c_ptr->feat;
-	c_ptr->feat = choose_random_trap();
+	g_ptr->mimic = g_ptr->feat;
+	g_ptr->feat = choose_random_trap();
 }
 
 
@@ -303,8 +303,8 @@ void hit_trap(bool break_trap)
 	POSITION x = p_ptr->x, y = p_ptr->y;
 
 	/* Get the grid */
-	grid_type *c_ptr = &grid_array[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type *g_ptr = &grid_array[y][x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
 	concptr name = _("トラップ", "a trap");
 
@@ -565,7 +565,7 @@ void hit_trap(bool break_trap)
 	}
 	}
 
-	if (break_trap && is_trap(c_ptr->feat))
+	if (break_trap && is_trap(g_ptr->feat))
 	{
 		cave_alter_feat(y, x, FF_DISARM);
 		msg_print(_("トラップを粉砕した。", "You destroyed the trap."));

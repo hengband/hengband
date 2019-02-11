@@ -434,9 +434,9 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
 
-	grid_type       *c_ptr = &grid_array[y][x];
+	grid_type       *g_ptr = &grid_array[y][x];
 
-	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
+	monster_type    *m_ptr = &m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Access the weapon */
@@ -535,7 +535,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	}
 
 	/* Disturb the monster */
-	(void)set_monster_csleep(c_ptr->m_idx, 0);
+	(void)set_monster_csleep(g_ptr->m_idx, 0);
 
 	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
@@ -773,7 +773,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				{
 					if (p_ptr->lev > randint1(r_ptr->level + resist_stun + 10))
 					{
-						if (set_monster_stunned(c_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr)))
+						if (set_monster_stunned(g_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr)))
 						{
 							msg_format(_("%^sはフラフラになった。", "%^s is stunned."), m_name);
 						}
@@ -919,7 +919,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 					}
 
 					/* Apply stun */
-					(void)set_monster_stunned(c_ptr->m_idx, MON_STUNNED(m_ptr) + tmp);
+					(void)set_monster_stunned(g_ptr->m_idx, MON_STUNNED(m_ptr) + tmp);
 				}
 				else
 				{
@@ -973,7 +973,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				drain_result = m_ptr->hp;
 
 			/* Damage, check for fear and death */
-			if (mon_take_hit(c_ptr->m_idx, k, fear, NULL))
+			if (mon_take_hit(g_ptr->m_idx, k, fear, NULL))
 			{
 				*mdeath = TRUE;
 				if ((p_ptr->pclass == CLASS_BERSERKER) && p_ptr->energy_use)
@@ -1100,7 +1100,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				else
 				{
 					msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), m_name);
-					(void)set_monster_confused(c_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(p_ptr->lev) / 5);
+					(void)set_monster_confused(g_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(p_ptr->lev) / 5);
 				}
 			}
 
@@ -1127,7 +1127,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				if (!resists_tele)
 				{
 					msg_format(_("%^sは消えた！", "%^s disappears!"), m_name);
-					teleport_away(c_ptr->m_idx, 50, TELEPORT_PASSIVE);
+					teleport_away(g_ptr->m_idx, 50, TELEPORT_PASSIVE);
 					num = num_blow + 1; /* Can't hit it anymore! */
 					*mdeath = TRUE;
 				}
@@ -1150,7 +1150,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 					}
 
 					/* Hack -- Get new monster */
-					m_ptr = &m_list[c_ptr->m_idx];
+					m_ptr = &m_list[g_ptr->m_idx];
 
 					/* Oops, we need a different name... */
 					monster_desc(m_name, m_ptr, 0);
@@ -1161,7 +1161,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 			}
 			else if (o_ptr->name1 == ART_G_HAMMER)
 			{
-				monster_type *target_ptr = &m_list[c_ptr->m_idx];
+				monster_type *target_ptr = &m_list[g_ptr->m_idx];
 
 				if (target_ptr->hold_o_idx)
 				{
@@ -1324,8 +1324,8 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	bool            mdeath = FALSE;
 	bool            stormbringer = FALSE;
 
-	grid_type       *c_ptr = &grid_array[y][x];
-	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
+	grid_type       *g_ptr = &grid_array[y][x];
+	monster_type    *m_ptr = &m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -1350,7 +1350,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 		if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
 		/* Track a new monster */
-		health_track(c_ptr->m_idx);
+		health_track(g_ptr->m_idx);
 	}
 
 	if ((r_ptr->flags1 & RF1_FEMALE) &&
@@ -1411,7 +1411,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 			msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
 
 		/* Disturb the monster */
-		(void)set_monster_csleep(c_ptr->m_idx, 0);
+		(void)set_monster_csleep(g_ptr->m_idx, 0);
 
 		return FALSE;
 	}
@@ -1467,7 +1467,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 		}
 	}
 
-	riding_t_m_idx = c_ptr->m_idx;
+	riding_t_m_idx = g_ptr->m_idx;
 	if (p_ptr->migite) py_attack_aux(y, x, &fear, &mdeath, 0, mode);
 	if (p_ptr->hidarite && !mdeath) py_attack_aux(y, x, &fear, &mdeath, 1, mode);
 
@@ -1475,15 +1475,15 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	if (!mdeath)
 	{
 		if ((p_ptr->muta2 & MUT2_HORNS) && !mdeath)
-			natural_attack(c_ptr->m_idx, MUT2_HORNS, &fear, &mdeath);
+			natural_attack(g_ptr->m_idx, MUT2_HORNS, &fear, &mdeath);
 		if ((p_ptr->muta2 & MUT2_BEAK) && !mdeath)
-			natural_attack(c_ptr->m_idx, MUT2_BEAK, &fear, &mdeath);
+			natural_attack(g_ptr->m_idx, MUT2_BEAK, &fear, &mdeath);
 		if ((p_ptr->muta2 & MUT2_SCOR_TAIL) && !mdeath)
-			natural_attack(c_ptr->m_idx, MUT2_SCOR_TAIL, &fear, &mdeath);
+			natural_attack(g_ptr->m_idx, MUT2_SCOR_TAIL, &fear, &mdeath);
 		if ((p_ptr->muta2 & MUT2_TRUNK) && !mdeath)
-			natural_attack(c_ptr->m_idx, MUT2_TRUNK, &fear, &mdeath);
+			natural_attack(g_ptr->m_idx, MUT2_TRUNK, &fear, &mdeath);
 		if ((p_ptr->muta2 & MUT2_TENTACLES) && !mdeath)
-			natural_attack(c_ptr->m_idx, MUT2_TENTACLES, &fear, &mdeath);
+			natural_attack(g_ptr->m_idx, MUT2_TENTACLES, &fear, &mdeath);
 	}
 
 	/* Hack -- delay fear messages */

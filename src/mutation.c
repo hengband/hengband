@@ -2281,22 +2281,22 @@ bool mutation_power_aux(int power)
 		case MUT1_BANISH:
 			{
 				POSITION x, y;
-				grid_type *c_ptr;
+				grid_type *g_ptr;
 				monster_type *m_ptr;
 				monster_race *r_ptr;
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
-				c_ptr = &grid_array[y][x];
+				g_ptr = &grid_array[y][x];
 
-				if (!c_ptr->m_idx)
+				if (!g_ptr->m_idx)
 				{
 					msg_print(_("邪悪な存在を感じとれません！", "You sense no evil there!"));
 
 					break;
 				}
 
-				m_ptr = &m_list[c_ptr->m_idx];
+				m_ptr = &m_list[g_ptr->m_idx];
 				r_ptr = &r_info[m_ptr->r_idx];
 
 				if ((r_ptr->flags3 & RF3_EVIL) &&
@@ -2313,7 +2313,7 @@ bool mutation_power_aux(int power)
 						do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 					}
 					/* Delete the monster, rather than killing it. */
-					delete_monster_idx(c_ptr->m_idx);
+					delete_monster_idx(g_ptr->m_idx);
 					msg_print(_("その邪悪なモンスターは硫黄臭い煙とともに消え去った！", "The evil creature vanishes in a puff of sulfurous smoke!"));
 
 				}
@@ -2328,12 +2328,12 @@ bool mutation_power_aux(int power)
 		case MUT1_COLD_TOUCH:
 			{
 				POSITION x, y;
-				grid_type *c_ptr;
+				grid_type *g_ptr;
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
-				c_ptr = &grid_array[y][x];
-				if (!c_ptr->m_idx)
+				g_ptr = &grid_array[y][x];
+				if (!g_ptr->m_idx)
 				{
 					msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));
 

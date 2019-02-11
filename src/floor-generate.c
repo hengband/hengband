@@ -147,12 +147,12 @@ static int next_to_walls(POSITION y, POSITION x)
  */
 static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	/* Require "naked" floor grid */
-	if (!is_floor_grid(c_ptr)) return FALSE;
+	if (!is_floor_grid(g_ptr)) return FALSE;
 	if (pattern_tile(y, x)) return FALSE;
-	if (c_ptr->o_idx || c_ptr->m_idx) return FALSE;
+	if (g_ptr->o_idx || g_ptr->m_idx) return FALSE;
 
 	/* Require a certain number of adjacent walls */
 	if (next_to_walls(y, x) < walls) return FALSE;
@@ -214,7 +214,7 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 		while (TRUE)
 		{
 			POSITION y, x = 0;
-			grid_type *c_ptr;
+			grid_type *g_ptr;
 
 			int candidates = 0;
 			int pick;
@@ -260,16 +260,16 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 
 				if (!pick) break;
 			}
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Clear possible garbage of hidden trap */
-			c_ptr->mimic = 0;
+			g_ptr->mimic = 0;
 
 			/* Clear previous contents, add stairs */
-			c_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
+			g_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
 
 			/* No longer "FLOOR" */
-			c_ptr->info &= ~(CAVE_FLOOR);
+			g_ptr->info &= ~(CAVE_FLOOR);
 
 			/* Success */
 			break;
@@ -290,7 +290,7 @@ static void alloc_object(int set, EFFECT_ID typ, int num)
 	POSITION y = 0, x = 0;
 	int k;
 	int dummy = 0;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* A small level has few objects. */
 	num = num * cur_hgt * cur_wid / (MAX_HGT*MAX_WID) +1;
@@ -308,10 +308,10 @@ static void alloc_object(int set, EFFECT_ID typ, int num)
 			y = randint0(cur_hgt);
 			x = randint0(cur_wid);
 
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Require "naked" floor grid */
-			if (!is_floor_grid(c_ptr) || c_ptr->o_idx || c_ptr->m_idx) continue;
+			if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 			/* Avoid player location */
 			if (player_bold(y, x)) continue;
@@ -420,19 +420,19 @@ bool place_quest_monsters(void)
 				/* Find an empty grid */
 				for (l = SAFE_MAX_ATTEMPTS; l > 0; l--)
 				{
-					grid_type    *c_ptr;
+					grid_type    *g_ptr;
 					feature_type *f_ptr;
 
 					y = randint0(cur_hgt);
 					x = randint0(cur_wid);
 
-					c_ptr = &grid_array[y][x];
-					f_ptr = &f_info[c_ptr->feat];
+					g_ptr = &grid_array[y][x];
+					f_ptr = &f_info[g_ptr->feat];
 
 					if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) continue;
 					if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 					if (distance(y, x, p_ptr->y, p_ptr->x) < 10) continue;
-					if (c_ptr->info & CAVE_ICKY) continue;
+					if (g_ptr->info & CAVE_ICKY) continue;
 					else break;
 				}
 
@@ -463,31 +463,31 @@ bool place_quest_monsters(void)
 
 /*!
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
- * @param c_ptr 永久壁を廃止したいマス構造体の参照ポインタ
+ * @param g_ptr 永久壁を廃止したいマス構造体の参照ポインタ
  * @return なし
  */
-static void set_bound_perm_wall(grid_type *c_ptr)
+static void set_bound_perm_wall(grid_type *g_ptr)
 {
 	if (bound_walls_perm)
 	{
 		/* Clear boundary mimic */
-		c_ptr->mimic = 0;
+		g_ptr->mimic = 0;
 	}
 	else
 	{
-		feature_type *f_ptr = &f_info[c_ptr->feat];
+		feature_type *f_ptr = &f_info[g_ptr->feat];
 
 		/* Hack -- Decline boundary walls with known treasure  */
 		if ((have_flag(f_ptr->flags, FF_HAS_GOLD) || have_flag(f_ptr->flags, FF_HAS_ITEM)) &&
 		    !have_flag(f_ptr->flags, FF_SECRET))
-			c_ptr->feat = feat_state(c_ptr->feat, FF_ENSECRET);
+			g_ptr->feat = feat_state(g_ptr->feat, FF_ENSECRET);
 
 		/* Set boundary mimic */
-		c_ptr->mimic = c_ptr->feat;
+		g_ptr->mimic = g_ptr->feat;
 	}
 
 	/* Add "solid" perma-wall */
-	place_solid_perm_grid(c_ptr);
+	place_solid_perm_grid(g_ptr);
 }
 
 /*!
@@ -810,36 +810,36 @@ static bool cave_gen(void)
 			/* Turn the tunnel into corridor */
 			for (j = 0; j < dun->tunn_n; j++)
 			{
-				grid_type *c_ptr;
+				grid_type *g_ptr;
 				feature_type *f_ptr;
 				y = dun->tunn[j].y;
 				x = dun->tunn[j].x;
-				c_ptr = &grid_array[y][x];
-				f_ptr = &f_info[c_ptr->feat];
+				g_ptr = &grid_array[y][x];
+				f_ptr = &f_info[g_ptr->feat];
 
 				/* Clear previous contents (if not a lake), add a floor */
 				if (!have_flag(f_ptr->flags, FF_MOVE) || (!have_flag(f_ptr->flags, FF_WATER) && !have_flag(f_ptr->flags, FF_LAVA)))
 				{
 					/* Clear mimic type */
-					c_ptr->mimic = 0;
+					g_ptr->mimic = 0;
 
-					place_floor_grid(c_ptr);
+					place_floor_grid(g_ptr);
 				}
 			}
 
 			/* Apply the piercings that we found */
 			for (j = 0; j < dun->wall_n; j++)
 			{
-				grid_type *c_ptr;
+				grid_type *g_ptr;
 				y = dun->wall[j].y;
 				x = dun->wall[j].x;
-				c_ptr = &grid_array[y][x];
+				g_ptr = &grid_array[y][x];
 
 				/* Clear mimic type */
-				c_ptr->mimic = 0;
+				g_ptr->mimic = 0;
 
 				/* Clear previous contents, add up floor */
-				place_floor_grid(c_ptr);
+				place_floor_grid(g_ptr);
 
 				/* Occasional doorway */
 				if ((randint0(100) < dun_tun_pen) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
@@ -1364,16 +1364,16 @@ void clear_cave(void)
 	{
 		for (x = 0; x < MAX_WID; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
-			c_ptr->info = 0;
-			c_ptr->feat = 0;
-			c_ptr->o_idx = 0;
-			c_ptr->m_idx = 0;
-			c_ptr->special = 0;
-			c_ptr->mimic = 0;
-			c_ptr->cost = 0;
-			c_ptr->dist = 0;
-			c_ptr->when = 0;
+			grid_type *g_ptr = &grid_array[y][x];
+			g_ptr->info = 0;
+			g_ptr->feat = 0;
+			g_ptr->o_idx = 0;
+			g_ptr->m_idx = 0;
+			g_ptr->special = 0;
+			g_ptr->mimic = 0;
+			g_ptr->cost = 0;
+			g_ptr->dist = 0;
+			g_ptr->when = 0;
 		}
 	}
 
@@ -1523,7 +1523,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 
 	bool door_flag = FALSE;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Save the starting location */
 	start_row = row1;
@@ -1575,13 +1575,13 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 
 
 		/* Access the location */
-		c_ptr = &grid_array[tmp_row][tmp_col];
+		g_ptr = &grid_array[tmp_row][tmp_col];
 
 		/* Avoid "solid" walls */
-		if (is_solid_grid(c_ptr)) continue;
+		if (is_solid_grid(g_ptr)) continue;
 
 		/* Pierce "outer" walls of rooms */
-		if (is_outer_grid(c_ptr))
+		if (is_outer_grid(g_ptr))
 		{
 			/* Acquire the "next" location */
 			y = tmp_row + row_dir;
@@ -1620,7 +1620,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 		}
 
 		/* Travel quickly through rooms */
-		else if (c_ptr->info & (CAVE_ROOM))
+		else if (g_ptr->info & (CAVE_ROOM))
 		{
 			/* Accept the location */
 			row1 = tmp_row;
@@ -1628,7 +1628,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 		}
 
 		/* Tunnel through all other walls */
-		else if (is_extra_grid(c_ptr) || is_inner_grid(c_ptr) || is_solid_grid(c_ptr))
+		else if (is_extra_grid(g_ptr) || is_inner_grid(g_ptr) || is_solid_grid(g_ptr))
 		{
 			/* Accept this location */
 			row1 = tmp_row;
@@ -1713,11 +1713,11 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
-	grid_type *c_ptr = &grid_array[*y][*x];
+	grid_type *g_ptr = &grid_array[*y][*x];
 
 	if (!in_bounds(*y, *x)) return TRUE;
 
-	if (is_inner_grid(c_ptr))
+	if (is_inner_grid(g_ptr))
 	{
 		return TRUE;
 	}
@@ -1742,7 +1742,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		return TRUE;
 	}
 
-	if (is_outer_grid(c_ptr) && affectwall)
+	if (is_outer_grid(g_ptr) && affectwall)
 	{
 		/* Save the wall location */
 		if (dun->wall_n < WALL_MAX)
@@ -1775,7 +1775,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		return TRUE;
 	}
 
-	if (is_solid_grid(c_ptr) && affectwall)
+	if (is_solid_grid(g_ptr) && affectwall)
 	{
 		/* cannot place tunnel here - use a square to the side */
 
@@ -1802,7 +1802,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		if (i == 0)
 		{
 			/* Failed for some reason: hack - ignore the solidness */
-			place_outer_grid(c_ptr);
+			place_outer_grid(g_ptr);
 			dx = 0;
 			dy = 0;
 		}
@@ -2007,7 +2007,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 	int length;
 	int i;
 	bool retval, firstsuccede;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	length = distance(x1, y1, x2, y2);
 
@@ -2033,9 +2033,9 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 			x3 = (x1 + x2) / 2;
 			y3 = (y1 + y2) / 2;
 		}
-		/* cache c_ptr */
-		c_ptr = &grid_array[y3][x3];
-		if (is_solid_grid(c_ptr))
+		/* cache g_ptr */
+		g_ptr = &grid_array[y3][x3];
+		if (is_solid_grid(g_ptr))
 		{
 			/* move midpoint a bit to avoid problem. */
 
@@ -2064,10 +2064,10 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 			}
 			y3 += dy;
 			x3 += dx;
-			c_ptr = &grid_array[y3][x3];
+			g_ptr = &grid_array[y3][x3];
 		}
 
-		if (is_floor_grid(c_ptr))
+		if (is_floor_grid(g_ptr))
 		{
 			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
 			{

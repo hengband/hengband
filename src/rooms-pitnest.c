@@ -284,7 +284,7 @@ bool build_type5(void)
 
 	monster_type align;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	int cur_nest_type = pick_vault_type(nest_types, d_info[p_ptr->dungeon_idx].nest);
 	vault_aux_type *n_ptr;
@@ -345,26 +345,26 @@ bool build_type5(void)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			c_ptr = &grid_array[y][x];
-			place_floor_grid(c_ptr);
-			c_ptr->info |= (CAVE_ROOM);
+			g_ptr = &grid_array[y][x];
+			place_floor_grid(g_ptr);
+			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
 
 	/* Place the outer walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		c_ptr = &grid_array[y][x1 - 1];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y][x2 + 1];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y][x1 - 1];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y][x2 + 1];
+		place_outer_grid(g_ptr);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		c_ptr = &grid_array[y1 - 1][x];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y2 + 1][x];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y1 - 1][x];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y2 + 1][x];
+		place_outer_grid(g_ptr);
 	}
 
 
@@ -377,18 +377,18 @@ bool build_type5(void)
 	/* The inner walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		c_ptr = &grid_array[y][x1 - 1];
-		place_inner_grid(c_ptr);
-		c_ptr = &grid_array[y][x2 + 1];
-		place_inner_grid(c_ptr);
+		g_ptr = &grid_array[y][x1 - 1];
+		place_inner_grid(g_ptr);
+		g_ptr = &grid_array[y][x2 + 1];
+		place_inner_grid(g_ptr);
 	}
 
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		c_ptr = &grid_array[y1 - 1][x];
-		place_inner_grid(c_ptr);
-		c_ptr = &grid_array[y2 + 1][x];
-		place_inner_grid(c_ptr);
+		g_ptr = &grid_array[y1 - 1][x];
+		place_inner_grid(g_ptr);
+		g_ptr = &grid_array[y2 + 1][x];
+		place_inner_grid(g_ptr);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -495,7 +495,7 @@ bool build_type6(void)
 
 	monster_type align;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	int cur_pit_type = pick_vault_type(pit_types, d_info[p_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
@@ -555,26 +555,26 @@ bool build_type6(void)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			c_ptr = &grid_array[y][x];
-			place_floor_grid(c_ptr);
-			c_ptr->info |= (CAVE_ROOM);
+			g_ptr = &grid_array[y][x];
+			place_floor_grid(g_ptr);
+			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
 
 	/* Place the outer walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		c_ptr = &grid_array[y][x1 - 1];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y][x2 + 1];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y][x1 - 1];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y][x2 + 1];
+		place_outer_grid(g_ptr);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		c_ptr = &grid_array[y1 - 1][x];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y2 + 1][x];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y1 - 1][x];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y2 + 1][x];
+		place_outer_grid(g_ptr);
 	}
 
 	/* Advance to the center room */
@@ -586,17 +586,17 @@ bool build_type6(void)
 	/* The inner walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		c_ptr = &grid_array[y][x1 - 1];
-		place_inner_grid(c_ptr);
-		c_ptr = &grid_array[y][x2 + 1];
-		place_inner_grid(c_ptr);
+		g_ptr = &grid_array[y][x1 - 1];
+		place_inner_grid(g_ptr);
+		g_ptr = &grid_array[y][x2 + 1];
+		place_inner_grid(g_ptr);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		c_ptr = &grid_array[y1 - 1][x];
-		place_inner_grid(c_ptr);
-		c_ptr = &grid_array[y2 + 1][x];
-		place_inner_grid(c_ptr);
+		g_ptr = &grid_array[y1 - 1][x];
+		place_inner_grid(g_ptr);
+		g_ptr = &grid_array[y2 + 1][x];
+		place_inner_grid(g_ptr);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -800,7 +800,7 @@ bool build_type13(void)
 
 	monster_type align;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	int cur_pit_type = pick_vault_type(pit_types, d_info[p_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
@@ -863,61 +863,61 @@ bool build_type13(void)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			c_ptr = &grid_array[y][x];
-			place_inner_grid(c_ptr);
-			c_ptr->info |= (CAVE_ROOM);
+			g_ptr = &grid_array[y][x];
+			place_inner_grid(g_ptr);
+			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
 
 	/* Place the floor area 1 */
 	for (x = x1 + 3; x <= x2 - 3; x++)
 	{
-		c_ptr = &grid_array[yval - 2][x];
-		place_floor_grid(c_ptr);
+		g_ptr = &grid_array[yval - 2][x];
+		place_floor_grid(g_ptr);
 		add_cave_info(yval - 2, x, CAVE_ICKY);
 
-		c_ptr = &grid_array[yval + 2][x];
-		place_floor_grid(c_ptr);
+		g_ptr = &grid_array[yval + 2][x];
+		place_floor_grid(g_ptr);
 		add_cave_info(yval + 2, x, CAVE_ICKY);
 	}
 
 	/* Place the floor area 2 */
 	for (x = x1 + 5; x <= x2 - 5; x++)
 	{
-		c_ptr = &grid_array[yval - 3][x];
-		place_floor_grid(c_ptr);
+		g_ptr = &grid_array[yval - 3][x];
+		place_floor_grid(g_ptr);
 		add_cave_info(yval - 3, x, CAVE_ICKY);
 
-		c_ptr = &grid_array[yval + 3][x];
-		place_floor_grid(c_ptr);
+		g_ptr = &grid_array[yval + 3][x];
+		place_floor_grid(g_ptr);
 		add_cave_info(yval + 3, x, CAVE_ICKY);
 	}
 
 	/* Corridor */
 	for (x = x1; x <= x2; x++)
 	{
-		c_ptr = &grid_array[yval][x];
-		place_floor_grid(c_ptr);
-		c_ptr = &grid_array[y1][x];
-		place_floor_grid(c_ptr);
-		c_ptr = &grid_array[y2][x];
-		place_floor_grid(c_ptr);
+		g_ptr = &grid_array[yval][x];
+		place_floor_grid(g_ptr);
+		g_ptr = &grid_array[y1][x];
+		place_floor_grid(g_ptr);
+		g_ptr = &grid_array[y2][x];
+		place_floor_grid(g_ptr);
 	}
 
 	/* Place the outer walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		c_ptr = &grid_array[y][x1 - 1];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y][x2 + 1];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y][x1 - 1];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y][x2 + 1];
+		place_outer_grid(g_ptr);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		c_ptr = &grid_array[y1 - 1][x];
-		place_outer_grid(c_ptr);
-		c_ptr = &grid_array[y2 + 1][x];
-		place_outer_grid(c_ptr);
+		g_ptr = &grid_array[y1 - 1][x];
+		place_outer_grid(g_ptr);
+		g_ptr = &grid_array[y2 + 1][x];
+		place_outer_grid(g_ptr);
 	}
 
 	/* Random corridor */

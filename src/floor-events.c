@@ -13,13 +13,13 @@ void day_break()
 			for (x = 0; x < cur_wid; x++)
 			{
 				/* Get the grid */
-				grid_type *c_ptr = &grid_array[y][x];
+				grid_type *g_ptr = &grid_array[y][x];
 
 				/* Assume lit */
-				c_ptr->info |= (CAVE_GLOW);
+				g_ptr->info |= (CAVE_GLOW);
 
 				/* Hack -- Memorize lit grids if allowed */
-				if (view_perma_grids) c_ptr->info |= (CAVE_MARK);
+				if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
 
 				/* Hack -- Notice spot */
 				note_spot(y, x);
@@ -51,21 +51,21 @@ void night_falls(void)
 			for (x = 0; x < cur_wid; x++)
 			{
 				/* Get the grid */
-				grid_type *c_ptr = &grid_array[y][x];
+				grid_type *g_ptr = &grid_array[y][x];
 
 				/* Feature code (applying "mimic" field) */
-				feature_type *f_ptr = &f_info[get_feat_mimic(c_ptr)];
+				feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
-				if (!is_mirror_grid(c_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
+				if (!is_mirror_grid(g_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
 					!have_flag(f_ptr->flags, FF_ENTRANCE))
 				{
 					/* Assume dark */
-					c_ptr->info &= ~(CAVE_GLOW);
+					g_ptr->info &= ~(CAVE_GLOW);
 
 					if (!have_flag(f_ptr->flags, FF_REMEMBER))
 					{
 						/* Forget the normal floor grid */
-						c_ptr->info &= ~(CAVE_MARK);
+						g_ptr->info &= ~(CAVE_MARK);
 
 						/* Hack -- Notice spot */
 						note_spot(y, x);

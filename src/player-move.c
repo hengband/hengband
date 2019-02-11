@@ -360,11 +360,11 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 static void discover_hidden_things(POSITION y, POSITION x)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	grid_type *c_ptr;
-	c_ptr = &grid_array[y][x];
+	grid_type *g_ptr;
+	g_ptr = &grid_array[y][x];
 
 	/* Invisible trap */
-	if (c_ptr->mimic && is_trap(c_ptr->feat))
+	if (g_ptr->mimic && is_trap(g_ptr->feat))
 	{
 		/* Pick a trap */
 		disclose_grid(y, x);
@@ -375,7 +375,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	}
 
 	/* Secret door */
-	if (is_hidden_door(c_ptr))
+	if (is_hidden_door(g_ptr))
 	{
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
 
@@ -386,7 +386,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	}
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -545,7 +545,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
  */
 void carry(bool pickup)
 {
-	grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
+	grid_type *g_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -560,7 +560,7 @@ void carry(bool pickup)
 	handle_stuff();
 
 	/* Automatically pickup/destroy/inscribe items */
-	autopick_pickup_items(c_ptr);
+	autopick_pickup_items(g_ptr);
 
 	if (easy_floor)
 	{
@@ -569,7 +569,7 @@ void carry(bool pickup)
 	}
 
 	/* Scan the pile of objects */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -825,15 +825,15 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
-	grid_type *c_ptr = &grid_array[ny][nx];
+	grid_type *g_ptr = &grid_array[ny][nx];
 	grid_type *oc_ptr = &grid_array[oy][ox];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 	feature_type *of_ptr = &f_info[oc_ptr->feat];
 
 	if (!(mpe_mode & MPE_STAYING))
 	{
 		MONSTER_IDX om_idx = oc_ptr->m_idx;
-		MONSTER_IDX nm_idx = c_ptr->m_idx;
+		MONSTER_IDX nm_idx = g_ptr->m_idx;
 
 		p_ptr->y = ny;
 		p_ptr->x = nx;
@@ -842,7 +842,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		if (!(mpe_mode & MPE_DONT_SWAP_MON))
 		{
 			/* Swap two monsters */
-			c_ptr->m_idx = om_idx;
+			g_ptr->m_idx = om_idx;
 			oc_ptr->m_idx = nm_idx;
 
 			if (om_idx > 0) /* Monster on old spot (or p_ptr->riding) */
@@ -880,7 +880,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */
-		if ((!p_ptr->blind && !no_lite()) || !is_trap(c_ptr->feat)) c_ptr->info &= ~(CAVE_UNSAFE);
+		if ((!p_ptr->blind && !no_lite()) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
 
 		/* For get everything when requested hehe I'm *NASTY* */
 		if (dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark();
@@ -888,7 +888,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 		if (p_ptr->pclass == CLASS_NINJA)
 		{
-			if (c_ptr->info & (CAVE_GLOW)) set_superstealth(FALSE);
+			if (g_ptr->info & (CAVE_GLOW)) set_superstealth(FALSE);
 			else if (p_ptr->cur_lite <= 0) set_superstealth(TRUE);
 		}
 
@@ -977,7 +977,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 		leave_quest_check();
 
-		p_ptr->inside_quest = c_ptr->special;
+		p_ptr->inside_quest = g_ptr->special;
 		dun_level = 0;
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
@@ -991,7 +991,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		disturb(FALSE, TRUE);
 
 		/* Hidden trap */
-		if (c_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
+		if (g_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
 		{
 			msg_print(_("トラップだ！", "You found a trap!"));
 
@@ -1007,13 +1007,13 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 	/* Warn when leaving trap detected region */
 	if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(c_ptr->info & CAVE_IN_DETECT))
+	    && p_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(c_ptr->info & CAVE_UNSAFE))
+		if (!(g_ptr->info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -1104,9 +1104,9 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	POSITION x = p_ptr->x + ddx[dir];
 
 	/* Examine the destination */
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	monster_type *m_ptr;
 
@@ -1115,7 +1115,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 	GAME_TEXT m_name[MAX_NLEN];
 
-	bool p_can_enter = player_can_enter(c_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+	bool p_can_enter = player_can_enter(g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 	bool p_can_kill_walls = FALSE;
 	bool stormbringer = FALSE;
 
@@ -1128,7 +1128,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		 (y == 0) || (y == MAX_HGT - 1)))
 	{
 		/* Can the player enter the grid? */
-		if (c_ptr->mimic && player_can_enter(c_ptr->mimic, 0))
+		if (g_ptr->mimic && player_can_enter(g_ptr->mimic, 0))
 		{
 			/* Hack: move to new area */
 			if ((y == 0) && (x == 0))
@@ -1210,7 +1210,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		p_can_enter = FALSE;
 	}
 
-	m_ptr = &m_list[c_ptr->m_idx];
+	m_ptr = &m_list[g_ptr->m_idx];
 
 	if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 	if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
@@ -1222,7 +1222,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		!have_flag(f_ptr->flags, FF_PERMANENT);
 
 	/* Hack -- attack monsters */
-	if (c_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls))
+	if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls))
 	{
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1233,7 +1233,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		    pattern_seq(p_ptr->y, p_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
 		{
 			/* Disturb the monster */
-			(void)set_monster_csleep(c_ptr->m_idx, 0);
+			(void)set_monster_csleep(g_ptr->m_idx, 0);
 
 			/* Extract monster name (or "it") */
 			monster_desc(m_name, m_ptr, 0);
@@ -1244,7 +1244,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
 				/* Track a new monster */
-				health_track(c_ptr->m_idx);
+				health_track(g_ptr->m_idx);
 			}
 
 			/* displace? */
@@ -1307,7 +1307,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			!(riding_r_ptr->flags7 & RF7_AQUATIC) &&
 			(have_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE)))
 		{
-			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(c_ptr)].name);
+			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 			free_turn(p_ptr);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);
@@ -1321,7 +1321,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		}
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
-			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(c_ptr)].name);
+			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 			free_turn(p_ptr);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);
@@ -1343,7 +1343,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 	else if (!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation)
 	{
-		msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(c_ptr)].name);
+		msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 		free_turn(p_ptr);
 		running = 0;
 		oktomove = FALSE;
@@ -1361,9 +1361,9 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 
 	/* Disarm a visible trap */
-	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !c_ptr->mimic)
+	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic)
 	{
-		if (!trap_can_be_ignored(c_ptr->feat))
+		if (!trap_can_be_ignored(g_ptr->feat))
 		{
 			(void)do_cmd_disarm_aux(y, x, dir);
 			return;
@@ -1375,17 +1375,17 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	else if (!p_can_enter && !p_can_kill_walls)
 	{
 		/* Feature code (applying "mimic" field) */
-		FEAT_IDX feat = get_feat_mimic(c_ptr);
+		FEAT_IDX feat = get_feat_mimic(g_ptr);
 		feature_type *mimic_f_ptr = &f_info[feat];
 		concptr name = f_name + mimic_f_ptr->name;
 
 		oktomove = FALSE;
 
 		/* Notice things in the dark */
-		if (!(c_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
+		if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
 		{
 			/* Boundary floor mimic */
-			if (boundary_floor(c_ptr, f_ptr, mimic_f_ptr))
+			if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
 			{
 				msg_print(_("それ以上先には進めないようだ。", "You feel you cannot go any more."));
 			}
@@ -1400,7 +1400,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 					is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
 
-				c_ptr->info |= (CAVE_MARK);
+				g_ptr->info |= (CAVE_MARK);
 				lite_spot(y, x);
 			}
 		}
@@ -1409,7 +1409,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		else
 		{
 			/* Boundary floor mimic */
-			if (boundary_floor(c_ptr, f_ptr, mimic_f_ptr))
+			if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
 			{
 				msg_print(_("それ以上先には進めない。", "You cannot go any more."));
 				if (!(p_ptr->confused || p_ptr->stun || p_ptr->image))
@@ -1441,7 +1441,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 		disturb(FALSE, TRUE);
 
-		if (!boundary_floor(c_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
+		if (!boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
 	}
 
 	/* Normal movement */
@@ -1518,7 +1518,7 @@ static bool ignore_avoid_run;
  */
 static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Get the new location */
 	y += ddy[dir];
@@ -1528,13 +1528,13 @@ static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 	if (!in_bounds2(y, x)) return (FALSE);
 
 	/* Access grid */
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Must be known to the player */
-	if (c_ptr->info & (CAVE_MARK))
+	if (g_ptr->info & (CAVE_MARK))
 	{
 		/* Feature code (applying "mimic" field) */
-		s16b         feat = get_feat_mimic(c_ptr);
+		s16b         feat = get_feat_mimic(g_ptr);
 		feature_type *f_ptr = &f_info[feat];
 
 		/* Wall grids are known walls */
@@ -1733,7 +1733,7 @@ static bool run_test(void)
 	int row, col;
 	int i, max, inv;
 	int option = 0, option2 = 0;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 
@@ -1780,23 +1780,23 @@ static bool run_test(void)
 		col = p_ptr->x + ddx[new_dir];
 
 		/* Access grid */
-		c_ptr = &grid_array[row][col];
+		g_ptr = &grid_array[row][col];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 		f_ptr = &f_info[feat];
 
 		/* Visible monsters abort running */
-		if (c_ptr->m_idx)
+		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &m_list[c_ptr->m_idx];
+			monster_type *m_ptr = &m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return (TRUE);
 		}
 
 		/* Visible objects abort running */
-		for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
 			o_ptr = &o_list[this_o_idx];
@@ -1812,7 +1812,7 @@ static bool run_test(void)
 		inv = TRUE;
 
 		/* Check memorized grids */
-		if (c_ptr->info & (CAVE_MARK))
+		if (g_ptr->info & (CAVE_MARK))
 		{
 			bool notice = have_flag(f_ptr->flags, FF_NOTICE);
 
@@ -2127,7 +2127,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 {
 	DIRECTION new_dir = 0;
 	int i, max;
-	const grid_type *c_ptr;
+	const grid_type *g_ptr;
 	int cost;
 
 	/* Cannot travel when blind */
@@ -2174,12 +2174,12 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 		POSITION col = p_ptr->x + ddx[dir];
 
 		/* Access grid */
-		c_ptr = &grid_array[row][col];
+		g_ptr = &grid_array[row][col];
 
 		/* Visible monsters abort running */
-		if (c_ptr->m_idx)
+		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &m_list[c_ptr->m_idx];
+			monster_type *m_ptr = &m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return (0);
@@ -2204,13 +2204,13 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	if (!new_dir) return (0);
 
 	/* Access newly move grid */
-	c_ptr = &grid_array[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
+	g_ptr = &grid_array[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
-	if (!easy_open && is_closed_door(c_ptr->feat)) return (0);
+	if (!easy_open && is_closed_door(g_ptr->feat)) return (0);
 
 	/* Visible and unignorable trap abort tarveling */
-	if (!c_ptr->mimic && !trap_can_be_ignored(c_ptr->feat)) return (0);
+	if (!g_ptr->mimic && !trap_can_be_ignored(g_ptr->feat)) return (0);
 
 	/* Move new grid */
 	return (new_dir);

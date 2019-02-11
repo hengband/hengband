@@ -2549,7 +2549,7 @@ static errr rd_dungeon_old(void)
 	byte tmp8u;
 	s16b tmp16s;
 	u16b limit;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 
 	/*** Basic info ***/
@@ -2619,10 +2619,10 @@ static errr rd_dungeon_old(void)
 		for (i = count; i > 0; i--)
 		{
 			/* Access the grid_array */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Extract "info" */
-			c_ptr->info = info;
+			g_ptr->info = info;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2650,10 +2650,10 @@ static errr rd_dungeon_old(void)
 		for (i = count; i > 0; i--)
 		{
 			/* Access the grid_array */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Extract "feat" */
-			c_ptr->feat = (s16b)tmp8u;
+			g_ptr->feat = (s16b)tmp8u;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2680,10 +2680,10 @@ static errr rd_dungeon_old(void)
 		for (i = count; i > 0; i--)
 		{
 			/* Access the grid_array */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Extract "mimic" */
-			c_ptr->mimic = (s16b)tmp8u;
+			g_ptr->mimic = (s16b)tmp8u;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2710,10 +2710,10 @@ static errr rd_dungeon_old(void)
 		for (i = count; i > 0; i--)
 		{
 			/* Access the grid_array */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Extract "feat" */
-			c_ptr->special = tmp16s;
+			g_ptr->special = tmp16s;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -2742,20 +2742,20 @@ static errr rd_dungeon_old(void)
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Access the grid_array */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Very old */
-			if (c_ptr->feat == OLD_FEAT_INVIS)
+			if (g_ptr->feat == OLD_FEAT_INVIS)
 			{
-				c_ptr->feat = feat_floor;
-				c_ptr->info |= CAVE_TRAP;
+				g_ptr->feat = feat_floor;
+				g_ptr->info |= CAVE_TRAP;
 			}
 
 			/* Older than 1.1.1 */
-			if (c_ptr->feat == OLD_FEAT_MIRROR)
+			if (g_ptr->feat == OLD_FEAT_MIRROR)
 			{
-				c_ptr->feat = feat_floor;
-				c_ptr->info |= CAVE_OBJECT;
+				g_ptr->feat = feat_floor;
+				g_ptr->info |= CAVE_OBJECT;
 			}
 		}
 	}
@@ -2765,36 +2765,36 @@ static errr rd_dungeon_old(void)
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Access the grid_array */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Old CAVE_IN_MIRROR flag */
-			if (c_ptr->info & CAVE_OBJECT)
+			if (g_ptr->info & CAVE_OBJECT)
 			{
-				c_ptr->mimic = feat_mirror;
+				g_ptr->mimic = feat_mirror;
 			}
 
 			/* Runes will be mimics and flags */
-			else if ((c_ptr->feat == OLD_FEAT_MINOR_GLYPH) ||
-			         (c_ptr->feat == OLD_FEAT_GLYPH))
+			else if ((g_ptr->feat == OLD_FEAT_MINOR_GLYPH) ||
+			         (g_ptr->feat == OLD_FEAT_GLYPH))
 			{
-				c_ptr->info |= CAVE_OBJECT;
-				c_ptr->mimic = c_ptr->feat;
-				c_ptr->feat = feat_floor;
+				g_ptr->info |= CAVE_OBJECT;
+				g_ptr->mimic = g_ptr->feat;
+				g_ptr->feat = feat_floor;
 			}
 
 			/* Hidden traps will be trap terrains mimicing floor */
-			else if (c_ptr->info & CAVE_TRAP)
+			else if (g_ptr->info & CAVE_TRAP)
 			{
-				c_ptr->info &= ~CAVE_TRAP;
-				c_ptr->mimic = c_ptr->feat;
-				c_ptr->feat = choose_random_trap();
+				g_ptr->info &= ~CAVE_TRAP;
+				g_ptr->mimic = g_ptr->feat;
+				g_ptr->feat = choose_random_trap();
 			}
 
 			/* Another hidden trap */
-			else if (c_ptr->feat == OLD_FEAT_INVIS)
+			else if (g_ptr->feat == OLD_FEAT_INVIS)
 			{
-				c_ptr->mimic = feat_floor;
-				c_ptr->feat = feat_trap_open;
+				g_ptr->mimic = feat_floor;
+				g_ptr->feat = feat_trap_open;
 			}
 		}
 	}
@@ -2805,25 +2805,25 @@ static errr rd_dungeon_old(void)
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Access the grid_array */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
-			if ((c_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
 			{
-				if (c_ptr->feat == OLD_FEAT_QUEST_ENTER)
+				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
-					c_ptr->feat = feat_tree;
-					c_ptr->special = 0;
+					g_ptr->feat = feat_tree;
+					g_ptr->special = 0;
 				}
-				else if (c_ptr->feat == OLD_FEAT_BLDG_1)
+				else if (g_ptr->feat == OLD_FEAT_BLDG_1)
 				{
-					c_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
+					g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
 				}
 			}
-			else if ((c_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
+			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
 			         (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
 			{
-				c_ptr->feat = feat_up_stair;
-				c_ptr->special = 0;
+				g_ptr->feat = feat_up_stair;
+				g_ptr->special = 0;
 			}
 		}
 	}
@@ -2886,13 +2886,13 @@ static errr rd_dungeon_old(void)
 		else
 		{
 			/* Access the item location */
-			c_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
+			g_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
-			o_ptr->next_o_idx = c_ptr->o_idx;
+			o_ptr->next_o_idx = g_ptr->o_idx;
 
 			/* Place the object */
-			c_ptr->o_idx = o_idx;
+			g_ptr->o_idx = o_idx;
 		}
 	}
 
@@ -2933,10 +2933,10 @@ static errr rd_dungeon_old(void)
 
 
 		/* Access grid */
-		c_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
-		c_ptr->m_idx = m_idx;
+		g_ptr->m_idx = m_idx;
 
 		/* Count */
 		real_r_ptr(m_ptr)->cur_num++;
@@ -3104,13 +3104,13 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		for (i = count; i > 0; i--)
 		{
 			/* Access the grid_array */
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
 			/* Extract grid_array data */
-			c_ptr->info = templates[id].info;
-			c_ptr->feat = templates[id].feat;
-			c_ptr->mimic = templates[id].mimic;
-			c_ptr->special = templates[id].special;
+			g_ptr->info = templates[id].info;
+			g_ptr->feat = templates[id].feat;
+			g_ptr->mimic = templates[id].mimic;
+			g_ptr->special = templates[id].special;
 
 			/* Advance/Wrap */
 			if (++x >= xmax)
@@ -3130,25 +3130,25 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Access the grid_array */
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
-			if ((c_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
 			{
-				if (c_ptr->feat == OLD_FEAT_QUEST_ENTER)
+				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
-					c_ptr->feat = feat_tree;
-					c_ptr->special = 0;
+					g_ptr->feat = feat_tree;
+					g_ptr->special = 0;
 				}
-				else if (c_ptr->feat == OLD_FEAT_BLDG_1)
+				else if (g_ptr->feat == OLD_FEAT_BLDG_1)
 				{
-					c_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
+					g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
 				}
 			}
-			else if ((c_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
+			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
 				(p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
 			{
-				c_ptr->feat = feat_up_stair;
-				c_ptr->special = 0;
+				g_ptr->feat = feat_up_stair;
+				g_ptr->special = 0;
 			}
 		}
 	}
@@ -3204,13 +3204,13 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		else
 		{
 			/* Access the item location */
-			grid_type *c_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
+			grid_type *g_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
-			o_ptr->next_o_idx = c_ptr->o_idx;
+			o_ptr->next_o_idx = g_ptr->o_idx;
 
 			/* Place the object */
-			c_ptr->o_idx = o_idx;
+			g_ptr->o_idx = o_idx;
 		}
 	}
 
@@ -3226,7 +3226,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
 	{
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
 
@@ -3244,10 +3244,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 
 		/* Access grid */
-		c_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
-		c_ptr->m_idx = m_idx;
+		g_ptr->m_idx = m_idx;
 
 		/* Count */
 		real_r_ptr(m_ptr)->cur_num++;

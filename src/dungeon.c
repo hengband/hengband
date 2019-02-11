@@ -3405,12 +3405,12 @@ static void process_world(void)
 		for (i2 = 0; i2 < cur_wid; ++i2)
 			for (j2 = 0; j2 < cur_hgt; j2++)
 			{
-				grid_type *c_ptr = &grid_array[j2][i2];
+				grid_type *g_ptr = &grid_array[j2][i2];
 
-				if ((c_ptr->m_idx > 0) && (c_ptr->m_idx != p_ptr->riding))
+				if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != p_ptr->riding))
 				{
 					number_mon++;
-					win_m_idx = c_ptr->m_idx;
+					win_m_idx = g_ptr->m_idx;
 				}
 			}
 

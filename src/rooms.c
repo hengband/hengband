@@ -1692,7 +1692,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	POSITION y1, x1, y2, x2;
 	int m, n, num_vertices, *visited;
 	bool light;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
@@ -1713,22 +1713,22 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			c_ptr = &grid_array[y][x];
-			c_ptr->info |= CAVE_ROOM;
-			if (is_vault) c_ptr->info |= CAVE_ICKY;
+			g_ptr = &grid_array[y][x];
+			g_ptr->info |= CAVE_ROOM;
+			if (is_vault) g_ptr->info |= CAVE_ICKY;
 			if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1))
 			{
-				place_outer_grid(c_ptr);
+				place_outer_grid(g_ptr);
 			}
 			else if (!is_vault)
 			{
-				place_extra_grid(c_ptr);
+				place_extra_grid(g_ptr);
 			}
 			else
 			{
-				place_inner_grid(c_ptr);
+				place_inner_grid(g_ptr);
 			}
-			if (light) c_ptr->info |= (CAVE_GLOW);
+			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
 	}
 
@@ -1963,22 +1963,22 @@ void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, in
  */
 void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	feature_type *f_ptr;
 	int i, j;
 
 	if (!in_bounds(y, x)) return;
 
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* hack- check to see if square has been visited before
 	* if so, then exit (use room flag to do this) */
-	if (c_ptr->info & CAVE_ROOM) return;
+	if (g_ptr->info & CAVE_ROOM) return;
 
 	/* set room flag */
-	c_ptr->info |= CAVE_ROOM;
+	g_ptr->info |= CAVE_ROOM;
 
-	f_ptr = &f_info[c_ptr->feat];
+	f_ptr = &f_info[g_ptr->feat];
 
 	if (is_floor_bold(y, x))
 	{
@@ -1990,7 +1990,7 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 					 (y + j >= y1) && (y + j <= y2))
 				{
 					add_outer_wall(x + i, y + j, light, x1, y1, x2, y2);
-					if (light) c_ptr->info |= CAVE_GLOW;
+					if (light) g_ptr->info |= CAVE_GLOW;
 				}
 			}
 		}
@@ -1999,12 +1999,12 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 	{
 		/* Set bounding walls */
 		place_outer_bold(y, x);
-		if (light) c_ptr->info |= CAVE_GLOW;
+		if (light) g_ptr->info |= CAVE_GLOW;
 	}
 	else if (permanent_wall(f_ptr))
 	{
 		/* Set bounding walls */
-		if (light) c_ptr->info |= CAVE_GLOW;
+		if (light) g_ptr->info |= CAVE_GLOW;
 	}
 }
 
@@ -2042,17 +2042,17 @@ void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int
 {
 	POSITION y, x;
 	
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	for (y = y1; y <= y2; y++)
 	{
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			c_ptr = &grid_array[y][x];
-			place_floor_grid(c_ptr);
-			c_ptr->info |= (CAVE_ROOM);
-			if (light) c_ptr->info |= (CAVE_GLOW);
+			g_ptr = &grid_array[y][x];
+			place_floor_grid(g_ptr);
+			g_ptr->info |= (CAVE_ROOM);
+			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
 	}
 }

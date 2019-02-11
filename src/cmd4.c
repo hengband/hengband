@@ -5273,12 +5273,12 @@ static void do_cmd_knowledge_artifacts(void)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
 			OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 			/* Scan all objects in the grid */
-			for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
 				o_ptr = &o_list[this_o_idx];

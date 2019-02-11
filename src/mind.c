@@ -1644,10 +1644,10 @@ static bool cast_ninja_spell(int spell)
 		{
 			POSITION ny = GRID_Y(path_g[i]);
 			POSITION nx = GRID_X(path_g[i]);
-			grid_type *c_ptr = &grid_array[ny][nx];
+			grid_type *g_ptr = &grid_array[ny][nx];
 
 			if (in_bounds(ny, nx) && cave_empty_bold(ny, nx) &&
-			    !(c_ptr->info & CAVE_OBJECT) &&
+			    !(g_ptr->info & CAVE_OBJECT) &&
 				!pattern_tile(ny, nx))
 			{
 				ty = ny;

@@ -506,7 +506,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 		/* Travel until stopped */
 		for (cur_dis = 0; cur_dis <= tdis; )
 		{
-			grid_type *c_ptr;
+			grid_type *g_ptr;
 
 			/* Hack -- Stop at the target */
 			if ((y == ty) && (x == tx)) break;
@@ -519,13 +519,13 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			/* Shatter Arrow */
 			if (snipe_type == SP_KILL_WALL)
 			{
-				c_ptr = &grid_array[ny][nx];
+				g_ptr = &grid_array[ny][nx];
 
-				if (cave_have_flag_grid(c_ptr, FF_HURT_ROCK) && !c_ptr->m_idx)
+				if (cave_have_flag_grid(g_ptr, FF_HURT_ROCK) && !g_ptr->m_idx)
 				{
-					if (c_ptr->info & (CAVE_MARK)) msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
+					if (g_ptr->info & (CAVE_MARK)) msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
 					/* Forget the wall */
-					c_ptr->info &= ~(CAVE_MARK);
+					g_ptr->info &= ~(CAVE_MARK);
 					p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 					/* Destroy the wall */

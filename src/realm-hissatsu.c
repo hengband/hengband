@@ -512,7 +512,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION y = 0, x = 0;
 
-			grid_type       *c_ptr;
+			grid_type       *g_ptr;
 			monster_type    *m_ptr;
 
 			if (p_ptr->cut < 300)
@@ -524,11 +524,11 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				y = p_ptr->y + ddy_ddd[dir];
 				x = p_ptr->x + ddx_ddd[dir];
-				c_ptr = &grid_array[y][x];
-				m_ptr = &m_list[c_ptr->m_idx];
+				g_ptr = &grid_array[y][x];
+				m_ptr = &m_list[g_ptr->m_idx];
 
 				/* Hack -- attack monsters */
-				if (c_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
+				if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
 				{
 					if (!monster_living(m_ptr->r_idx))
 					{
@@ -634,14 +634,14 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				POSITION y, x;
 				POSITION ny, nx;
 				MONSTER_IDX m_idx;
-				grid_type *c_ptr;
+				grid_type *g_ptr;
 				monster_type *m_ptr;
 
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
-				c_ptr = &grid_array[y][x];
+				g_ptr = &grid_array[y][x];
 
-				if (c_ptr->m_idx)
+				if (g_ptr->m_idx)
 					py_attack(y, x, HISSATSU_3DAN);
 				else
 				{
@@ -655,11 +655,11 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				}
 
 				/* Monster is dead? */
-				if (!c_ptr->m_idx) break;
+				if (!g_ptr->m_idx) break;
 
 				ny = y + ddy[dir];
 				nx = x + ddx[dir];
-				m_idx = c_ptr->m_idx;
+				m_idx = g_ptr->m_idx;
 				m_ptr = &m_list[m_idx];
 
 				/* Monster cannot move back? */
@@ -670,7 +670,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					continue;
 				}
 
-				c_ptr->m_idx = 0;
+				g_ptr->m_idx = 0;
 				grid_array[ny][nx].m_idx = m_idx;
 				m_ptr->fy = ny;
 				m_ptr->fx = nx;
@@ -684,7 +684,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				lite_spot(ny, nx);
 
 				/* Player can move forward? */
-				if (player_can_enter(c_ptr->feat, 0))
+				if (player_can_enter(g_ptr->feat, 0))
 				{
 					if (!move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
 				}

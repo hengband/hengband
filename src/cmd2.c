@@ -136,8 +136,8 @@ void do_cmd_go_up(void)
 	bool go_up = FALSE;
 
 	/* Player grid */
-	grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type *g_ptr = &grid_array[p_ptr->y][p_ptr->x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	int up_num = 0;
 
@@ -168,7 +168,7 @@ void do_cmd_go_up(void)
 
 		leave_quest_check();
 
-		p_ptr->inside_quest = c_ptr->special;
+		p_ptr->inside_quest = g_ptr->special;
 
 		/* Activate the quest */
 		if (!quest[p_ptr->inside_quest].status)
@@ -230,7 +230,7 @@ void do_cmd_go_up(void)
 	{
 		leave_quest_check();
 
-		p_ptr->inside_quest = c_ptr->special;
+		p_ptr->inside_quest = g_ptr->special;
 		dun_level = 0;
 		up_num = 0;
 	}
@@ -280,8 +280,8 @@ void do_cmd_go_up(void)
 void do_cmd_go_down(void)
 {
 	/* Player grid */
-	grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type *g_ptr = &grid_array[p_ptr->y][p_ptr->x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	bool fall_trap = FALSE;
 	int down_num = 0;
@@ -320,7 +320,7 @@ void do_cmd_go_down(void)
 		leave_quest_check();
 		leave_tower_check();
 
-		p_ptr->inside_quest = c_ptr->special;
+		p_ptr->inside_quest = g_ptr->special;
 
 		/* Activate the quest */
 		if (!quest[p_ptr->inside_quest].status)
@@ -353,7 +353,7 @@ void do_cmd_go_down(void)
 
 		if (!dun_level)
 		{
-			target_dungeon = have_flag(f_ptr->flags, FF_ENTRANCE) ? c_ptr->special : DUNGEON_ANGBAND;
+			target_dungeon = have_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
 
 			if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND))
 			{
@@ -477,11 +477,11 @@ void do_cmd_search(void)
  */
 static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 
@@ -592,7 +592,7 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under
 	/* Check around (and under) the character */
 	for (d = 0; d < 9; d++)
 	{
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 		FEAT_IDX feat;
 
 		/* if not searching under player continue */
@@ -603,13 +603,13 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under
 		xx = p_ptr->x + ddx_ddd[d];
 
 		/* Get the grid_array */
-		c_ptr = &grid_array[yy][xx];
+		g_ptr = &grid_array[yy][xx];
 
 		/* Must have knowledge */
-		if (!(c_ptr->info & (CAVE_MARK))) continue;
+		if (!(g_ptr->info & (CAVE_MARK))) continue;
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 
 		/* Not looking for this feature */
 		if (!((*test)(feat))) continue;
@@ -717,8 +717,8 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 	int i, j;
 
 	/* Get requested grid */
-	grid_type *c_ptr = &grid_array[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type *g_ptr = &grid_array[y][x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 	bool more = FALSE;
 
 	take_turn(p_ptr, 100);;
@@ -729,7 +729,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 	if (!have_flag(f_ptr->flags, FF_OPEN))
 	{
 		/* Stuck */
-		msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(c_ptr)].name);
+		msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 	}
 
 	/* Locked door */
@@ -846,17 +846,17 @@ void do_cmd_open(void)
 	if (get_rep_dir(&dir, TRUE))
 	{
 		FEAT_IDX feat;
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 
 		/* Get requested location */
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 
 		/* Get requested grid */
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 
 		/* Check for chest */
 		o_idx = chest_check(y, x, FALSE);
@@ -868,7 +868,7 @@ void do_cmd_open(void)
 		}
 
 		/* Monster in the way */
-		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
+		else if (g_ptr->m_idx && p_ptr->riding != g_ptr->m_idx)
 		{
 			take_turn(p_ptr, 100);;
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
@@ -909,8 +909,8 @@ void do_cmd_open(void)
  */
 static bool do_cmd_close_aux(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
-	FEAT_IDX old_feat = c_ptr->feat;
+	grid_type *g_ptr = &grid_array[y][x];
+	FEAT_IDX old_feat = g_ptr->feat;
 	bool more = FALSE;
 
 	take_turn(p_ptr, 100);;
@@ -923,7 +923,7 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
 		s16b closed_feat = feat_state(old_feat, FF_CLOSE);
 
 		/* Hack -- object in the way */
-		if ((c_ptr->o_idx || (c_ptr->info & CAVE_OBJECT)) &&
+		if ((g_ptr->o_idx || (g_ptr->info & CAVE_OBJECT)) &&
 		    (closed_feat != old_feat) && !have_flag(f_info[closed_feat].flags, FF_DROP))
 		{
 			msg_print(_("何かがつっかえて閉まらない。", "There seems stuck."));
@@ -934,7 +934,7 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
 			cave_alter_feat(y, x, FF_CLOSE);
 
 			/* Broken door */
-			if (old_feat == c_ptr->feat)
+			if (old_feat == g_ptr->feat)
 			{
 				msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
 			}
@@ -993,15 +993,15 @@ void do_cmd_close(void)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir, FALSE))
 	{
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 		FEAT_IDX feat;
 
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 
 		/* Require open/broken door */
 		if (!have_flag(f_info[feat].flags, FF_CLOSE))
@@ -1010,7 +1010,7 @@ void do_cmd_close(void)
 		}
 
 		/* Monster in the way */
-		else if (c_ptr->m_idx)
+		else if (g_ptr->m_idx)
 		{
 			take_turn(p_ptr, 100);;
 
@@ -1042,10 +1042,10 @@ void do_cmd_close(void)
  */
 static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	/* Must have knowledge */
-	if (!(c_ptr->info & CAVE_MARK))
+	if (!(g_ptr->info & CAVE_MARK))
 	{
 		msg_print(_("そこには何も見当たらない。", "You see nothing there."));
 
@@ -1053,7 +1053,7 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 	}
 
 	/* Must be a wall/door/etc */
-	if (!cave_have_flag_grid(c_ptr, FF_TUNNEL))
+	if (!cave_have_flag_grid(g_ptr, FF_TUNNEL))
 	{
 		msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
 
@@ -1077,7 +1077,7 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
  */
 static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
 	int power;
 	concptr name;
@@ -1089,12 +1089,12 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	take_turn(p_ptr, 100);;
 
 	/* Get grid */
-	c_ptr = &grid_array[y][x];
-	f_ptr = &f_info[c_ptr->feat];
+	g_ptr = &grid_array[y][x];
+	f_ptr = &f_info[g_ptr->feat];
 	power = f_ptr->power;
 
 	/* Feature code (applying "mimic" field) */
-	mimic_f_ptr = &f_info[get_feat_mimic(c_ptr)];
+	mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 	name = f_name + mimic_f_ptr->name;
 
@@ -1181,7 +1181,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 		}
 	}
 
-	if (is_hidden_door(c_ptr))
+	if (is_hidden_door(g_ptr))
 	{
 		/* Occasional Search XXX XXX */
 		if (randint0(100) < 25) search();
@@ -1207,7 +1207,7 @@ void do_cmd_tunnel(void)
 {
 	int			y, x, dir;
 
-	grid_type	*c_ptr;
+	grid_type	*g_ptr;
 	FEAT_IDX feat;
 
 	bool		more = FALSE;
@@ -1237,10 +1237,10 @@ void do_cmd_tunnel(void)
 		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 
 		/* No tunnelling through doors */
 		if (have_flag(f_info[feat].flags, FF_DOOR))
@@ -1255,7 +1255,7 @@ void do_cmd_tunnel(void)
 		}
 
 		/* A monster is in the way */
-		else if (c_ptr->m_idx)
+		else if (g_ptr->m_idx)
 		{
 			take_turn(p_ptr, 100);;
 
@@ -1295,11 +1295,11 @@ bool easy_open_door(POSITION y, POSITION x)
 {
 	int i, j;
 
-	grid_type *c_ptr = &grid_array[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type *g_ptr = &grid_array[y][x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Must be a closed door */
-	if (!is_closed_door(c_ptr->feat))
+	if (!is_closed_door(g_ptr->feat))
 	{
 		return (FALSE);
 	}
@@ -1308,7 +1308,7 @@ bool easy_open_door(POSITION y, POSITION x)
 	if (!have_flag(f_ptr->flags, FF_OPEN))
 	{
 		/* Stuck */
-		msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(c_ptr)].name);
+		msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 
 	}
 
@@ -1466,10 +1466,10 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 
 bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 {
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	/* Get feature */
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Access trap name */
 	concptr name = (f_name + f_ptr->name);
@@ -1586,15 +1586,15 @@ void do_cmd_disarm(void)
 	/* Get a direction (or abort) */
 	if (get_rep_dir(&dir,TRUE))
 	{
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 		FEAT_IDX feat;
 
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 
 		/* Check for chests */
 		o_idx = chest_check(y, x, TRUE);
@@ -1606,7 +1606,7 @@ void do_cmd_disarm(void)
 		}
 
 		/* Monster in the way */
-		else if (c_ptr->m_idx && p_ptr->riding != c_ptr->m_idx)
+		else if (g_ptr->m_idx && p_ptr->riding != g_ptr->m_idx)
 		{
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -1649,10 +1649,10 @@ void do_cmd_disarm(void)
 static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 {
 	/* Get grid */
-	grid_type	*c_ptr = &grid_array[y][x];
+	grid_type	*g_ptr = &grid_array[y][x];
 
 	/* Get feature */
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Hack -- Bash power based on strength */
 	/* (Ranges from 3 to 20 to 100 to 200) */
@@ -1663,7 +1663,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	bool		more = FALSE;
 
-	concptr name = f_name + f_info[get_feat_mimic(c_ptr)].name;
+	concptr name = f_name + f_info[get_feat_mimic(g_ptr)].name;
 
 	take_turn(p_ptr, 100);;
 
@@ -1685,7 +1685,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 		sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
 
 		/* Break down the door */
-		if ((randint0(100) < 50) || (feat_state(c_ptr->feat, FF_OPEN) == c_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
+		if ((randint0(100) < 50) || (feat_state(g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
 		{
 			cave_alter_feat(y, x, FF_BASH);
 		}
@@ -1743,7 +1743,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 void do_cmd_bash(void)
 {
 	int	y, x, dir;
-	grid_type	*c_ptr;
+	grid_type	*g_ptr;
 	bool		more = FALSE;
 
 	if (p_ptr->wild_mode) return;
@@ -1774,10 +1774,10 @@ void do_cmd_bash(void)
 		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 
 		/* Nothing useful */
 		if (!have_flag(f_info[feat].flags, FF_BASH))
@@ -1786,7 +1786,7 @@ void do_cmd_bash(void)
 		}
 
 		/* Monster in the way */
-		else if (c_ptr->m_idx)
+		else if (g_ptr->m_idx)
 		{
 			take_turn(p_ptr, 100);;
 
@@ -1828,7 +1828,7 @@ void do_cmd_alter(void)
 {
 	POSITION y, x;
 	DIRECTION dir;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	bool more = FALSE;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
@@ -1857,15 +1857,15 @@ void do_cmd_alter(void)
 		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 		f_ptr = &f_info[feat];
 
 		take_turn(p_ptr, 100);;
 
-		if (c_ptr->m_idx)
+		if (g_ptr->m_idx)
 		{
 			py_attack(y, x, 0);
 		}
@@ -1974,15 +1974,15 @@ void do_cmd_spike(void)
 	{
 		POSITION y, x;
 		INVENTORY_IDX item;
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 		FEAT_IDX feat;
 
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(c_ptr);
+		feat = get_feat_mimic(g_ptr);
 
 		/* Require closed door */
 		if (!have_flag(f_info[feat].flags, FF_SPIKE))
@@ -1997,7 +1997,7 @@ void do_cmd_spike(void)
 		}
 
 		/* Is a monster in the way? */
-		else if (c_ptr->m_idx)
+		else if (g_ptr->m_idx)
 		{
 			take_turn(p_ptr, 100);;
 
@@ -2600,8 +2600,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		/* Monster here, Try to hit it */
 		if (grid_array[y][x].m_idx)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
-			monster_type *m_ptr = &m_list[c_ptr->m_idx];
+			grid_type *g_ptr = &grid_array[y][x];
+			monster_type *m_ptr = &m_list[g_ptr->m_idx];
 
 			/* Check the visibility */
 			visible = m_ptr->ml;
@@ -2631,7 +2631,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					if (m_ptr->ml)
 					{
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-						health_track(c_ptr->m_idx);
+						health_track(g_ptr->m_idx);
 					}
 				}
 
@@ -2677,7 +2677,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
 				/* Hit the monster, check for death */
-				if (mon_take_hit(c_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
+				if (mon_take_hit(g_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
 				{
 					/* Dead monster */
 				}
@@ -2685,7 +2685,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				/* No death */
 				else
 				{
-					message_pain(c_ptr->m_idx, tdam);
+					message_pain(g_ptr->m_idx, tdam);
 
 					/* Anger the monster */
 					if ((tdam > 0) && !object_is_potion(q_ptr))
@@ -2942,8 +2942,8 @@ static int travel_flow_cost(POSITION y, POSITION x)
  */
 static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 {
-	grid_type *c_ptr = &grid_array[y][x];
-	feature_type *f_ptr = &f_info[c_ptr->feat];
+	grid_type *g_ptr = &grid_array[y][x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 	int old_head = flow_head;
 	int add_cost = 1;
 	int base_cost = (n % TRAVEL_UNABLE);
@@ -2954,7 +2954,7 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 	if (!in_bounds(y, x)) return;
 
 	/* Ignore unknown grid except in wilderness */
-	if (dun_level > 0 && !(c_ptr->info & CAVE_KNOWN)) return;
+	if (dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
 
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||

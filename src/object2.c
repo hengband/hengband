@@ -123,15 +123,15 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	/* Dungeon */
 	else
 	{
-		grid_type *c_ptr;
+		grid_type *g_ptr;
 
 		POSITION y = j_ptr->iy;
 		POSITION x = j_ptr->ix;
 
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Scan all objects in the grid */
-		for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
 			o_ptr = &o_list[this_o_idx];
@@ -145,7 +145,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 				if (prev_o_idx == 0)
 				{
 					/* Remove from list */
-					c_ptr->o_idx = next_o_idx;
+					g_ptr->o_idx = next_o_idx;
 				}
 
 				/* Real previous */
@@ -217,16 +217,16 @@ void delete_object_idx(OBJECT_IDX o_idx)
  */
 void delete_object(POSITION y, POSITION x)
 {
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
 	if (!in_bounds(y, x)) return;
 
-	c_ptr = &grid_array[y][x];
+	g_ptr = &grid_array[y][x];
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -240,7 +240,7 @@ void delete_object(POSITION y, POSITION x)
 	}
 
 	/* Objects are gone */
-	c_ptr->o_idx = 0;
+	g_ptr->o_idx = 0;
 
 	/* Visual update */
 	lite_spot(y, x);
@@ -257,7 +257,7 @@ void delete_object(POSITION y, POSITION x)
 static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 {
 	OBJECT_IDX i;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	object_type *o_ptr;
 
 	/* Do nothing */
@@ -306,13 +306,13 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 		x = o_ptr->ix;
 
 		/* Acquire grid */
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Repair grid */
-		if (c_ptr->o_idx == i1)
+		if (g_ptr->o_idx == i1)
 		{
 			/* Repair */
-			c_ptr->o_idx = i2;
+			g_ptr->o_idx = i2;
 		}
 	}
 
@@ -442,7 +442,7 @@ void compact_objects(int size)
  * Delete all the items when player leaves the level
  * @note we do NOT visually reflect these (irrelevant) changes
  * @details
- * Hack -- we clear the "c_ptr->o_idx" field for every grid,
+ * Hack -- we clear the "g_ptr->o_idx" field for every grid,
  * and the "m_ptr->next_o_idx" field for every monster, since
  * we know we are clearing every object.  Technically, we only
  * clear those fields for grids/monsters containing objects,
@@ -487,17 +487,17 @@ void wipe_o_list(void)
 		/* Dungeon */
 		else
 		{
-			grid_type *c_ptr;
+			grid_type *g_ptr;
 
 			/* Access location */
 			POSITION y = o_ptr->iy;
 			POSITION x = o_ptr->ix;
 
 			/* Access grid */
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Hack -- see above */
-			c_ptr->o_idx = 0;
+			g_ptr->o_idx = 0;
 		}
 		object_wipe(o_ptr);
 	}
@@ -4868,7 +4868,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4881,7 +4881,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	if (!cave_drop_bold(y, x)) return;
 
 	/* Avoid stacking on other objects */
-	if (c_ptr->o_idx) return;
+	if (g_ptr->o_idx) return;
 
 	q_ptr = &forge;
 	object_wipe(q_ptr);
@@ -4906,10 +4906,10 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 		o_ptr->ix = x;
 
 		/* Build a stack */
-		o_ptr->next_o_idx = c_ptr->o_idx;
+		o_ptr->next_o_idx = g_ptr->o_idx;
 
 		/* Place the object */
-		c_ptr->o_idx = o_idx;
+		g_ptr->o_idx = o_idx;
 
 		note_spot(y, x);
 
@@ -4982,7 +4982,7 @@ void place_gold(POSITION y, POSITION x)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4995,7 +4995,7 @@ void place_gold(POSITION y, POSITION x)
 	if (!cave_drop_bold(y, x)) return;
 
 	/* Avoid stacking on other objects */
-	if (c_ptr->o_idx) return;
+	if (g_ptr->o_idx) return;
 
 	q_ptr = &forge;
 	object_wipe(q_ptr);
@@ -5020,10 +5020,10 @@ void place_gold(POSITION y, POSITION x)
 		o_ptr->ix = x;
 
 		/* Build a stack */
-		o_ptr->next_o_idx = c_ptr->o_idx;
+		o_ptr->next_o_idx = g_ptr->o_idx;
 
 		/* Place the object */
-		c_ptr->o_idx = o_idx;
+		g_ptr->o_idx = o_idx;
 
 		note_spot(y, x);
 
@@ -5066,7 +5066,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	OBJECT_IDX o_idx = 0;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -5132,7 +5132,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			if (!projectable(y, x, ty, tx)) continue;
 
 			/* Obtain grid */
-			c_ptr = &grid_array[ty][tx];
+			g_ptr = &grid_array[ty][tx];
 
 			/* Require floor space */
 			if (!cave_drop_bold(ty, tx)) continue;
@@ -5141,7 +5141,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			k = 0;
 
 			/* Scan objects in that grid */
-			for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
 				o_ptr = &o_list[this_o_idx];
@@ -5289,10 +5289,10 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	}
 
 
-	c_ptr = &grid_array[by][bx];
+	g_ptr = &grid_array[by][bx];
 
 	/* Scan objects in that grid for combination */
-	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -5353,10 +5353,10 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		j_ptr->held_m_idx = 0;
 
 		/* Build a stack */
-		j_ptr->next_o_idx = c_ptr->o_idx;
+		j_ptr->next_o_idx = g_ptr->o_idx;
 
 		/* Place the object */
-		c_ptr->o_idx = o_idx;
+		g_ptr->o_idx = o_idx;
 
 		/* Success */
 		done = TRUE;
@@ -6699,7 +6699,7 @@ static int blow_damcalc(monster_type *m_ptr, monster_blow *blow_ptr)
 bool process_warning(POSITION xx, POSITION yy)
 {
 	POSITION mx, my;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
 #define WARNING_AWARE_RANGE 12
@@ -6716,11 +6716,11 @@ bool process_warning(POSITION xx, POSITION yy)
 
 			if (!in_bounds(my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
-			c_ptr = &grid_array[my][mx];
+			g_ptr = &grid_array[my][mx];
 
-			if (!c_ptr->m_idx) continue;
+			if (!g_ptr->m_idx) continue;
 
-			m_ptr = &m_list[c_ptr->m_idx];
+			m_ptr = &m_list[g_ptr->m_idx];
 
 			if (MON_CSLEEP(m_ptr)) continue;
 			if (!is_hostile(m_ptr)) continue;
@@ -6736,36 +6736,36 @@ bool process_warning(POSITION xx, POSITION yy)
 
 				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
 				{
-					if (f4 & RF4_BA_CHAO) spell_damcalc_by_spellnum(MS_BALL_CHAOS, GF_CHAOS, c_ptr->m_idx, &dam_max0);
-					if (f5 & RF5_BA_MANA) spell_damcalc_by_spellnum(MS_BALL_MANA, GF_MANA, c_ptr->m_idx, &dam_max0);
-					if (f5 & RF5_BA_DARK) spell_damcalc_by_spellnum(MS_BALL_DARK, GF_DARK, c_ptr->m_idx, &dam_max0);
-					if (f5 & RF5_BA_LITE) spell_damcalc_by_spellnum(MS_STARBURST, GF_LITE, c_ptr->m_idx, &dam_max0);
-					if (f6 & RF6_HAND_DOOM) spell_damcalc_by_spellnum(MS_HAND_DOOM, GF_HAND_DOOM, c_ptr->m_idx, &dam_max0);
-					if (f6 & RF6_PSY_SPEAR) spell_damcalc_by_spellnum(MS_PSY_SPEAR, GF_PSY_SPEAR, c_ptr->m_idx, &dam_max0);
+					if (f4 & RF4_BA_CHAO) spell_damcalc_by_spellnum(MS_BALL_CHAOS, GF_CHAOS, g_ptr->m_idx, &dam_max0);
+					if (f5 & RF5_BA_MANA) spell_damcalc_by_spellnum(MS_BALL_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
+					if (f5 & RF5_BA_DARK) spell_damcalc_by_spellnum(MS_BALL_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
+					if (f5 & RF5_BA_LITE) spell_damcalc_by_spellnum(MS_STARBURST, GF_LITE, g_ptr->m_idx, &dam_max0);
+					if (f6 & RF6_HAND_DOOM) spell_damcalc_by_spellnum(MS_HAND_DOOM, GF_HAND_DOOM, g_ptr->m_idx, &dam_max0);
+					if (f6 & RF6_PSY_SPEAR) spell_damcalc_by_spellnum(MS_PSY_SPEAR, GF_PSY_SPEAR, g_ptr->m_idx, &dam_max0);
 				}
-				if (f4 & RF4_ROCKET) spell_damcalc_by_spellnum(MS_ROCKET, GF_ROCKET, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_ACID) spell_damcalc_by_spellnum(MS_BR_ACID, GF_ACID, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_ELEC) spell_damcalc_by_spellnum(MS_BR_ELEC, GF_ELEC, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_FIRE) spell_damcalc_by_spellnum(MS_BR_FIRE, GF_FIRE, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_COLD) spell_damcalc_by_spellnum(MS_BR_COLD, GF_COLD, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_POIS) spell_damcalc_by_spellnum(MS_BR_POIS, GF_POIS, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_NETH) spell_damcalc_by_spellnum(MS_BR_NETHER, GF_NETHER, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_LITE) spell_damcalc_by_spellnum(MS_BR_LITE, GF_LITE, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_DARK) spell_damcalc_by_spellnum(MS_BR_DARK, GF_DARK, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_CONF) spell_damcalc_by_spellnum(MS_BR_CONF, GF_CONFUSION, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_SOUN) spell_damcalc_by_spellnum(MS_BR_SOUND, GF_SOUND, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_CHAO) spell_damcalc_by_spellnum(MS_BR_CHAOS, GF_CHAOS, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_DISE) spell_damcalc_by_spellnum(MS_BR_DISEN, GF_DISENCHANT, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_NEXU) spell_damcalc_by_spellnum(MS_BR_NEXUS, GF_NEXUS, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_TIME) spell_damcalc_by_spellnum(MS_BR_TIME, GF_TIME, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_INER) spell_damcalc_by_spellnum(MS_BR_INERTIA, GF_INERTIAL, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_GRAV) spell_damcalc_by_spellnum(MS_BR_GRAVITY, GF_GRAVITY, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_SHAR) spell_damcalc_by_spellnum(MS_BR_SHARDS, GF_SHARDS, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_PLAS) spell_damcalc_by_spellnum(MS_BR_PLASMA, GF_PLASMA, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_WALL) spell_damcalc_by_spellnum(MS_BR_FORCE, GF_FORCE, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_MANA) spell_damcalc_by_spellnum(MS_BR_MANA, GF_MANA, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_NUKE) spell_damcalc_by_spellnum(MS_BR_NUKE, GF_NUKE, c_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_DISI) spell_damcalc_by_spellnum(MS_BR_DISI, GF_DISINTEGRATE, c_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_ROCKET) spell_damcalc_by_spellnum(MS_ROCKET, GF_ROCKET, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_ACID) spell_damcalc_by_spellnum(MS_BR_ACID, GF_ACID, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_ELEC) spell_damcalc_by_spellnum(MS_BR_ELEC, GF_ELEC, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_FIRE) spell_damcalc_by_spellnum(MS_BR_FIRE, GF_FIRE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_COLD) spell_damcalc_by_spellnum(MS_BR_COLD, GF_COLD, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_POIS) spell_damcalc_by_spellnum(MS_BR_POIS, GF_POIS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_NETH) spell_damcalc_by_spellnum(MS_BR_NETHER, GF_NETHER, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_LITE) spell_damcalc_by_spellnum(MS_BR_LITE, GF_LITE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_DARK) spell_damcalc_by_spellnum(MS_BR_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_CONF) spell_damcalc_by_spellnum(MS_BR_CONF, GF_CONFUSION, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_SOUN) spell_damcalc_by_spellnum(MS_BR_SOUND, GF_SOUND, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_CHAO) spell_damcalc_by_spellnum(MS_BR_CHAOS, GF_CHAOS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_DISE) spell_damcalc_by_spellnum(MS_BR_DISEN, GF_DISENCHANT, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_NEXU) spell_damcalc_by_spellnum(MS_BR_NEXUS, GF_NEXUS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_TIME) spell_damcalc_by_spellnum(MS_BR_TIME, GF_TIME, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_INER) spell_damcalc_by_spellnum(MS_BR_INERTIA, GF_INERTIAL, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_GRAV) spell_damcalc_by_spellnum(MS_BR_GRAVITY, GF_GRAVITY, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_SHAR) spell_damcalc_by_spellnum(MS_BR_SHARDS, GF_SHARDS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_PLAS) spell_damcalc_by_spellnum(MS_BR_PLASMA, GF_PLASMA, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_WALL) spell_damcalc_by_spellnum(MS_BR_FORCE, GF_FORCE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_MANA) spell_damcalc_by_spellnum(MS_BR_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_NUKE) spell_damcalc_by_spellnum(MS_BR_NUKE, GF_NUKE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_DISI) spell_damcalc_by_spellnum(MS_BR_DISI, GF_DISINTEGRATE, g_ptr->m_idx, &dam_max0);
 			}
 
 			/* Monster melee attacks */
@@ -6814,9 +6814,9 @@ bool process_warning(POSITION xx, POSITION yy)
 	}
 	else old_damage = old_damage / 2;
 
-	c_ptr = &grid_array[yy][xx];
-	if (((!easy_disarm && is_trap(c_ptr->feat))
-	    || (c_ptr->mimic && is_trap(c_ptr->feat))) && !one_in_(13))
+	g_ptr = &grid_array[yy][xx];
+	if (((!easy_disarm && is_trap(g_ptr->feat))
+	    || (g_ptr->mimic && is_trap(g_ptr->feat))) && !one_in_(13))
 	{
 		object_type *o_ptr = choose_warning_item();
 

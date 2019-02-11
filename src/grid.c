@@ -30,7 +30,7 @@ bool new_player_spot(void)
 	POSITION y = 0, x = 0;
 	int max_attempts = 10000;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 	feature_type *f_ptr;
 
 	/* Place the player */
@@ -40,13 +40,13 @@ bool new_player_spot(void)
 		y = (POSITION)rand_range(1, cur_hgt - 2);
 		x = (POSITION)rand_range(1, cur_wid - 2);
 
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Must be a "naked" floor grid */
-		if (c_ptr->m_idx) continue;
+		if (g_ptr->m_idx) continue;
 		if (dun_level)
 		{
-			f_ptr = &f_info[c_ptr->feat];
+			f_ptr = &f_info[g_ptr->feat];
 
 			if (max_attempts > 5000) /* Rule 1 */
 			{
@@ -61,11 +61,11 @@ bool new_player_spot(void)
 			/* Refuse to start on anti-teleport grids in dungeon */
 			if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) continue;
 		}
-		if (!player_can_enter(c_ptr->feat, 0)) continue;
+		if (!player_can_enter(g_ptr->feat, 0)) continue;
 		if (!in_bounds(y, x)) continue;
 
 		/* Refuse to start on anti-teleport grids */
-		if (c_ptr->info & (CAVE_ICKY)) continue;
+		if (g_ptr->info & (CAVE_ICKY)) continue;
 
 		break;
 	}
@@ -92,11 +92,11 @@ void place_random_stairs(POSITION y, POSITION x)
 {
 	bool up_stairs = TRUE;
 	bool down_stairs = TRUE;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Paranoia */
-	c_ptr = &grid_array[y][x];
-	if (!is_floor_grid(c_ptr) || c_ptr->o_idx) return;
+	g_ptr = &grid_array[y][x];
+	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
 
 	/* Town */
 	if (!dun_level) up_stairs = FALSE;
@@ -134,10 +134,10 @@ void place_random_door(POSITION y, POSITION x, bool room)
 {
 	int tmp, type;
 	FEAT_IDX feat = feat_none;
-	grid_type *c_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &grid_array[y][x];
 
 	/* Initialize mimic info */
-	c_ptr->mimic = 0;
+	g_ptr->mimic = 0;
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
@@ -175,16 +175,16 @@ void place_random_door(POSITION y, POSITION x, bool room)
 		if (type != DOOR_CURTAIN)
 		{
 			/* Hide. If on the edge of room, use outer wall. */
-			c_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
+			g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
 
 			/* Floor type terrain cannot hide a door */
-			if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
+			if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat))
 			{
-				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
+				if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY))
 				{
-					c_ptr->feat = one_in_(2) ? c_ptr->mimic : feat_ground_type[randint0(100)];
+					g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
 				}
-				c_ptr->mimic = 0;
+				g_ptr->mimic = 0;
 			}
 		}
 	}
@@ -298,7 +298,7 @@ void place_secret_door(POSITION y, POSITION x, int type)
 	}
 	else
 	{
-		grid_type *c_ptr = &grid_array[y][x];
+		grid_type *g_ptr = &grid_array[y][x];
 
 		if (type == DOOR_DEFAULT)
 		{
@@ -313,20 +313,20 @@ void place_secret_door(POSITION y, POSITION x, int type)
 		if (type != DOOR_CURTAIN)
 		{
 			/* Hide by inner wall because this is used in rooms only */
-			c_ptr->mimic = feat_wall_inner;
+			g_ptr->mimic = feat_wall_inner;
 
 			/* Floor type terrain cannot hide a door */
-			if (feat_supports_los(c_ptr->mimic) && !feat_supports_los(c_ptr->feat))
+			if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat))
 			{
-				if (have_flag(f_info[c_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[c_ptr->mimic].flags, FF_CAN_FLY))
+				if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY))
 				{
-					c_ptr->feat = one_in_(2) ? c_ptr->mimic : feat_ground_type[randint0(100)];
+					g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
 				}
-				c_ptr->mimic = 0;
+				g_ptr->mimic = 0;
 			}
 		}
 
-		c_ptr->info &= ~(CAVE_FLOOR);
+		g_ptr->info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}
 }
@@ -399,7 +399,7 @@ static int next_to_corr(POSITION y1, POSITION x1)
 	int i, k = 0;
 	POSITION y, x;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Scan adjacent grids */
 	for (i = 0; i < 4; i++)
@@ -407,17 +407,17 @@ static int next_to_corr(POSITION y1, POSITION x1)
 		/* Extract the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
-		c_ptr = &grid_array[y][x];
+		g_ptr = &grid_array[y][x];
 
 		/* Skip non floors */
-		if (cave_have_flag_grid(c_ptr, FF_WALL)) continue;
+		if (cave_have_flag_grid(g_ptr, FF_WALL)) continue;
 
 		/* Skip non "empty floor" grids */
-		if (!is_floor_grid(c_ptr))
+		if (!is_floor_grid(g_ptr))
 			continue;
 
 		/* Skip grids inside rooms */
-		if (c_ptr->info & (CAVE_ROOM)) continue;
+		if (g_ptr->info & (CAVE_ROOM)) continue;
 
 		/* Count these grids */
 		k++;
@@ -556,7 +556,7 @@ void vault_objects(POSITION y, POSITION x, int num)
 	int dummy = 0;
 	int i = 0, j = y, k = x;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 
 	/* Attempt to place 'num' objects */
@@ -581,8 +581,8 @@ void vault_objects(POSITION y, POSITION x, int num)
 			}
 
 			/* Require "clean" floor space */
-			c_ptr = &grid_array[j][k];
-			if (!is_floor_grid(c_ptr) || c_ptr->o_idx) continue;
+			g_ptr = &grid_array[j][k];
+			if (!is_floor_grid(g_ptr) || g_ptr->o_idx) continue;
 
 			if (randint0(100) < 75)
 			{
@@ -614,7 +614,7 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 	int count = 0, y1 = y, x1 = x;
 	int dummy = 0;
 
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Place traps */
 	for (count = 0; count <= 5; count++)
@@ -635,8 +635,8 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 		}
 
 		/* Require "naked" floor grids */
-		c_ptr = &grid_array[y1][x1];
-		if (!is_floor_grid(c_ptr) || c_ptr->o_idx || c_ptr->m_idx) continue;
+		g_ptr = &grid_array[y1][x1];
+		if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 		/* Place the trap */
 		place_trap(y1, x1);
@@ -679,7 +679,7 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
 {
 	int k, i;
 	POSITION y, x;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Try to summon "num" monsters "near" the given location */
 	for (k = 0; k < num; k++)
@@ -693,8 +693,8 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
 			scatter(&y, &x, y1, x1, d, 0);
 
 			/* Require "empty" floor grids */
-			c_ptr = &grid_array[y][x];
-			if (!cave_empty_grid(c_ptr)) continue;
+			g_ptr = &grid_array[y][x];
+			if (!cave_empty_grid(g_ptr)) continue;
 
 			/* Place the monster (allow groups) */
 			monster_level = base_level + 2;

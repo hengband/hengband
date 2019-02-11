@@ -4368,12 +4368,12 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			{
 				int i;
 				OBJECT_IDX o_idx;
-				grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
+				grid_type *g_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;
 
 				/* Get the object being moved. */
-				o_idx = c_ptr->o_idx;
+				o_idx = g_ptr->o_idx;
 
 				/* Only rotate a pile of two or more objects. */
 				if (!(o_idx && o_list[o_idx].next_o_idx)) break;
@@ -4382,7 +4382,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				excise_object_idx(o_idx);
 
 				/* Find end of the list. */
-				i = c_ptr->o_idx;
+				i = g_ptr->o_idx;
 				while (o_list[i].next_o_idx)
 					i = o_list[i].next_o_idx;
 

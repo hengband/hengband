@@ -309,7 +309,7 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 {
 	POSITION dx, dy, x, y, i, j;
 	concptr t;
-	grid_type *c_ptr;
+	grid_type *g_ptr;
 
 	/* Place dungeon features and objects */
 	for (t = data, dy = 0; dy < ymax; dy++)
@@ -339,45 +339,45 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 			/* Hack -- skip "non-grids" */
 			if (*t == ' ') continue;
-			c_ptr = &grid_array[y][x];
+			g_ptr = &grid_array[y][x];
 
 			/* Lay down a floor */
-			place_floor_grid(c_ptr);
+			place_floor_grid(g_ptr);
 
 			/* Remove any mimic */
-			c_ptr->mimic = 0;
+			g_ptr->mimic = 0;
 
 			/* Part of a vault */
-			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+			g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
 			/* Analyze the grid */
 			switch (*t)
 			{
 				/* Granite wall (outer) */
 			case '%':
-				place_outer_noperm_grid(c_ptr);
+				place_outer_noperm_grid(g_ptr);
 				break;
 
 				/* Granite wall (inner) */
 			case '#':
-				place_inner_grid(c_ptr);
+				place_inner_grid(g_ptr);
 				break;
 
 				/* Glass wall (inner) */
 			case '$':
-				place_inner_grid(c_ptr);
-				c_ptr->feat = feat_glass_wall;
+				place_inner_grid(g_ptr);
+				g_ptr->feat = feat_glass_wall;
 				break;
 
 				/* Permanent wall (inner) */
 			case 'X':
-				place_inner_perm_grid(c_ptr);
+				place_inner_perm_grid(g_ptr);
 				break;
 
 				/* Permanent glass wall (inner) */
 			case 'Y':
-				place_inner_perm_grid(c_ptr);
-				c_ptr->feat = feat_permanent_glass_wall;
+				place_inner_perm_grid(g_ptr);
+				g_ptr->feat = feat_permanent_glass_wall;
 				break;
 
 				/* Treasure/trap */
@@ -399,7 +399,7 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 				/* Tree */
 			case ':':
-				c_ptr->feat = feat_tree;
+				g_ptr->feat = feat_tree;
 				break;
 
 				/* Secret doors */
@@ -410,7 +410,7 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				/* Secret glass doors */
 			case '-':
 				place_secret_door(y, x, DOOR_GLASS_DOOR);
-				if (is_closed_door(c_ptr->feat)) c_ptr->mimic = feat_glass_wall;
+				if (is_closed_door(g_ptr->feat)) g_ptr->mimic = feat_glass_wall;
 				break;
 
 				/* Curtains */
@@ -1066,12 +1066,12 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			grid_type *c_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &grid_array[y][x];
 
-			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+			g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
 			/* Permanent walls */
-			place_inner_perm_grid(c_ptr);
+			place_inner_perm_grid(g_ptr);
 		}
 	}
 
