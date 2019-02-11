@@ -2287,7 +2287,7 @@ bool mutation_power_aux(int power)
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
-				c_ptr = &cave[y][x];
+				c_ptr = &grid_array[y][x];
 
 				if (!c_ptr->m_idx)
 				{
@@ -2332,7 +2332,7 @@ bool mutation_power_aux(int power)
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
-				c_ptr = &cave[y][x];
+				c_ptr = &grid_array[y][x];
 				if (!c_ptr->m_idx)
 				{
 					msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));

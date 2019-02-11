@@ -266,7 +266,7 @@ void delete_monster_idx(MONSTER_IDX i)
 	if (p_ptr->riding == i) p_ptr->riding = 0;
 
 	/* Monster is gone */
-	cave[y][x].m_idx = 0;
+	grid_array[y][x].m_idx = 0;
 
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
@@ -317,7 +317,7 @@ void delete_monster(POSITION y, POSITION x)
 	if (!in_bounds(y, x)) return;
 
 	/* Check the grid */
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
 	/* Delete the monster (if any) */
 	if (c_ptr->m_idx) delete_monster_idx(c_ptr->m_idx);
@@ -348,9 +348,9 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 	x = m_ptr->fx;
 
 	/* Cave grid */
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
-	/* Update the cave */
+	/* Update the grid_array */
 	c_ptr->m_idx = i2;
 
 	/* Repair objects being carried by monster */
@@ -540,7 +540,7 @@ void wipe_m_list(void)
 		if (!m_ptr->r_idx) continue;
 
 		/* Monster is gone */
-		cave[m_ptr->fy][m_ptr->fx].m_idx = 0;
+		grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
 
 		/* Wipe the Monster */
 		(void)WIPE(m_ptr, monster_type);
@@ -2667,7 +2667,7 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2702,7 +2702,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(cave[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2940,7 +2940,7 @@ byte get_mspeed(monster_race *r_ptr)
 static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	/* Access the location */
-	grid_type		*c_ptr = &cave[y][x];
+	grid_type		*c_ptr = &grid_array[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];
 	concptr		name = (r_name + r_ptr->name);
@@ -3013,8 +3013,8 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 				/* Count all quest monsters */
 				for (i2 = 0; i2 < cur_wid; ++i2)
 					for (j2 = 0; j2 < cur_hgt; j2++)
-						if (cave[j2][i2].m_idx > 0)
-							if (m_list[cave[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
+						if (grid_array[j2][i2].m_idx > 0)
+							if (m_list[grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
 								number_mon++;
 				if(number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
 					return FALSE;
@@ -3715,7 +3715,7 @@ bool alloc_horde(POSITION y, POSITION x)
 
 	if (attempts < 1) return FALSE;
 
-	m_idx = cave[y][x].m_idx;
+	m_idx = grid_array[y][x].m_idx;
 
 	if (m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[m_list[m_idx].r_idx];
 
@@ -3756,7 +3756,7 @@ bool alloc_guardian(bool def_val)
 			ox = randint1(cur_wid - 4) + 2;
 
 			/* Is it a good spot ? */
-			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(cave[oy][ox].feat, &r_info[guardian], 0))
+			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(grid_array[oy][ox].feat, &r_info[guardian], 0))
 			{
 				/* Place the guardian */
 				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
@@ -4480,7 +4480,7 @@ void update_smart_learn(MONSTER_IDX m_idx, int what)
 bool player_place(POSITION y, POSITION x)
 {
 	/* Paranoia XXX XXX */
-	if (cave[y][x].m_idx != 0) return FALSE;
+	if (grid_array[y][x].m_idx != 0) return FALSE;
 
 	/* Save player location */
 	p_ptr->y = y;

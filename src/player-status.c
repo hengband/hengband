@@ -121,7 +121,7 @@ void calc_bonuses(void)
 	bool old_mighty_throw = p_ptr->mighty_throw;
 
 	/* Current feature under player. */
-	feature_type *f_ptr = &f_info[cave[p_ptr->y][p_ptr->x].feat];
+	feature_type *f_ptr = &f_info[grid_array[p_ptr->y][p_ptr->x].feat];
 
 	/* Save the old armor class */
 	ARMOUR_CLASS old_dis_ac = p_ptr->dis_ac;
@@ -2639,7 +2639,7 @@ void calc_bonuses(void)
 		if ((inventory[i].tval == TV_CRAFT_BOOK) && (inventory[i].sval == 2)) have_kabe = TRUE;
 	}
 
-	for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		o_ptr = &o_list[this_o_idx];
 
@@ -2812,7 +2812,7 @@ static void calc_torch(void)
 	}
 
 	/* max radius is 14 (was 5) without rewriting other code -- */
-	/* see cave.c:update_lite() and defines.h:LITE_MAX */
+	/* see grid_array.c:update_lite() and defines.h:LITE_MAX */
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS && p_ptr->cur_lite > 1)
 		p_ptr->cur_lite = 1;
 
@@ -3804,7 +3804,7 @@ bool player_has_no_spellbooks(void)
 		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
-	for (i = cave[p_ptr->y][p_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
+	for (i = grid_array[p_ptr->y][p_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
 	{
 		o_ptr = &o_list[i];
 		if (o_ptr->k_idx && (o_ptr->marked & OM_FOUND) && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;

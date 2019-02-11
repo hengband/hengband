@@ -2838,7 +2838,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+		for (this_o_idx = grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
 			o_ptr = &o_list[this_o_idx];
@@ -3188,7 +3188,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				if (allow_floor)
 				{
 					/* Scan all objects in the grid */
-					for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+					for (this_o_idx = grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 					{
 						object_type *o_ptr;
 						o_ptr = &o_list[this_o_idx];
@@ -3465,7 +3465,7 @@ object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS opti
  * @param mode オプションフラグ
  * @return 対象のマスに落ちているアイテム数
  * @details
- * Return a list of o_list[] indexes of items at the given cave
+ * Return a list of o_list[] indexes of items at the given grid_array
  * location. Valid flags are:
  *
  *		mode & 0x01 -- Item tester
@@ -3482,7 +3482,7 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
 	if (!in_bounds(y, x)) return 0;
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = cave[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &o_list[this_o_idx];
@@ -4368,7 +4368,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			{
 				int i;
 				OBJECT_IDX o_idx;
-				grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+				grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;
 
@@ -4842,7 +4842,7 @@ void py_pickup_floor(bool pickup)
 	int can_pickup = 0;
 
 	/* Scan the pile of objects */
-	for (this_o_idx = cave[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		/* Access the object */
 		o_ptr = &o_list[this_o_idx];

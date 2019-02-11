@@ -40,7 +40,7 @@ bool new_player_spot(void)
 		y = (POSITION)rand_range(1, cur_hgt - 2);
 		x = (POSITION)rand_range(1, cur_wid - 2);
 
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Must be a "naked" floor grid */
 		if (c_ptr->m_idx) continue;
@@ -95,7 +95,7 @@ void place_random_stairs(POSITION y, POSITION x)
 	grid_type *c_ptr;
 
 	/* Paranoia */
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 	if (!is_floor_grid(c_ptr) || c_ptr->o_idx) return;
 
 	/* Town */
@@ -134,7 +134,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 {
 	int tmp, type;
 	FEAT_IDX feat = feat_none;
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 
 	/* Initialize mimic info */
 	c_ptr->mimic = 0;
@@ -254,7 +254,7 @@ void place_closed_door(POSITION y, POSITION x, int type)
 		cave_set_feat(y, x, feat);
 
 		/* Now it is not floor */
-		cave[y][x].info &= ~(CAVE_MASK);
+		grid_array[y][x].info &= ~(CAVE_MASK);
 	}
 	else
 	{
@@ -277,7 +277,7 @@ void place_locked_door(POSITION y, POSITION x)
 	else
 	{
 		set_cave_feat(y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
-		cave[y][x].info &= ~(CAVE_FLOOR);
+		grid_array[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}
 }
@@ -298,7 +298,7 @@ void place_secret_door(POSITION y, POSITION x, int type)
 	}
 	else
 	{
-		grid_type *c_ptr = &cave[y][x];
+		grid_type *c_ptr = &grid_array[y][x];
 
 		if (type == DOOR_DEFAULT)
 		{
@@ -407,7 +407,7 @@ static int next_to_corr(POSITION y1, POSITION x1)
 		/* Extract the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Skip non floors */
 		if (cave_have_flag_grid(c_ptr, FF_WALL)) continue;
@@ -476,7 +476,7 @@ void try_door(POSITION y, POSITION x)
 	if (cave_have_flag_bold(y, x, FF_WALL)) return;
 
 	/* Ignore room grids */
-	if (cave[y][x].info & (CAVE_ROOM)) return;
+	if (grid_array[y][x].info & (CAVE_ROOM)) return;
 
 	/* Occasional door (if allowed) */
 	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
@@ -581,7 +581,7 @@ void vault_objects(POSITION y, POSITION x, int num)
 			}
 
 			/* Require "clean" floor space */
-			c_ptr = &cave[j][k];
+			c_ptr = &grid_array[j][k];
 			if (!is_floor_grid(c_ptr) || c_ptr->o_idx) continue;
 
 			if (randint0(100) < 75)
@@ -635,7 +635,7 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 		}
 
 		/* Require "naked" floor grids */
-		c_ptr = &cave[y1][x1];
+		c_ptr = &grid_array[y1][x1];
 		if (!is_floor_grid(c_ptr) || c_ptr->o_idx || c_ptr->m_idx) continue;
 
 		/* Place the trap */
@@ -693,7 +693,7 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
 			scatter(&y, &x, y1, x1, d, 0);
 
 			/* Require "empty" floor grids */
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 			if (!cave_empty_grid(c_ptr)) continue;
 
 			/* Place the monster (allow groups) */
@@ -781,7 +781,7 @@ void set_floor(POSITION x, POSITION y)
 		return;
 	}
 
-	if (cave[y][x].info & CAVE_ROOM)
+	if (grid_array[y][x].info & CAVE_ROOM)
 	{
 		/* A room border don't touch. */
 		return;

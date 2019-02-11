@@ -69,9 +69,9 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		int side_x = x0 - xhsize + i;
 
 		place_outer_noperm_bold(y0 - yhsize + 0, side_x);
-		cave[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(y0 - yhsize + ysize - 1, side_x);
-		cave[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
@@ -80,9 +80,9 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		int side_y = y0 - yhsize + i;
 
 		place_outer_noperm_bold(side_y, x0 - xhsize + 0);
-		cave[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(side_y, x0 - xhsize + xsize - 1);
-		cave[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Fill in middle with bubbles */
@@ -132,7 +132,7 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 			}
 
 			/* clean up rest of flags */
-			cave[y0 - yhsize + y][x0 - xhsize + x].info |= (CAVE_ROOM | CAVE_ICKY);
+			grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= (CAVE_ROOM | CAVE_ICKY);
 		}
 	}
 
@@ -170,7 +170,7 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 			POSITION y = y0 - yhsize + y1;
 
 			place_extra_bold(y, x);
-			cave[y][x].info &= (~CAVE_ICKY);
+			grid_array[y][x].info &= (~CAVE_ICKY);
 		}
 	}
 
@@ -197,7 +197,7 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 }
 
 
-/* Create a random vault out of a fractal cave */
+/* Create a random vault out of a fractal grid_array */
 static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
 	int grd, roug, cutoff;
@@ -239,7 +239,7 @@ static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION y
 	{
 		for (y = 0; y <= ysize; y++)
 		{
-			cave[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
+			grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
 		}
 	}
 
@@ -339,7 +339,7 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 			/* Hack -- skip "non-grids" */
 			if (*t == ' ') continue;
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 
 			/* Lay down a floor */
 			place_floor_grid(c_ptr);
@@ -818,10 +818,10 @@ static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		for (y = y0 - rad; y <= y0 + rad; y++)
 		{
 			/* clear room flag */
-			cave[y][x].info &= ~(CAVE_ROOM);
+			grid_array[y][x].info &= ~(CAVE_ROOM);
 
 			/* Vault - so is "icky" */
-			cave[y][x].info |= CAVE_ICKY;
+			grid_array[y][x].info |= CAVE_ICKY;
 
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1)
 			{
@@ -981,7 +981,7 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 	{
 		for (y = 0; y <= ysize; y++)
 		{
-			cave[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
+			grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
 		}
 	}
 
@@ -1030,7 +1030,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		if (!in_bounds(y1 - 2, x)) break;
 
-		cave[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y1 - 2, x);
 	}
@@ -1039,7 +1039,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		if (!in_bounds(y2 + 2, x)) break;
 
-		cave[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y2 + 2, x);
 	}
@@ -1048,7 +1048,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		if (!in_bounds(y, x1 - 2)) break;
 
-		cave[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y, x1 - 2);
 	}
@@ -1057,7 +1057,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		if (!in_bounds(y, x2 + 2)) break;
 
-		cave[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
+		grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y, x2 + 2);
 	}
@@ -1066,7 +1066,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			grid_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &grid_array[y][x];
 
 			c_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -1151,7 +1151,7 @@ static void build_castle_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			cave[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
+			grid_array[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
 			/* Make everything a floor */
 			place_floor_bold(y, x);
 		}

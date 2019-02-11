@@ -361,7 +361,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	grid_type *c_ptr;
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
 	/* Invisible trap */
 	if (c_ptr->mimic && is_trap(c_ptr->feat))
@@ -545,7 +545,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
  */
 void carry(bool pickup)
 {
-	grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+	grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -669,8 +669,8 @@ void carry(bool pickup)
  */
 bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
-	feature_type *cur_f_ptr = &f_info[cave[c_y][c_x].feat];
-	feature_type *new_f_ptr = &f_info[cave[n_y][n_x].feat];
+	feature_type *cur_f_ptr = &f_info[grid_array[c_y][c_x].feat];
+	feature_type *new_f_ptr = &f_info[grid_array[n_y][n_x].feat];
 	bool is_pattern_tile_cur = have_flag(cur_f_ptr->flags, FF_PATTERN);
 	bool is_pattern_tile_new = have_flag(new_f_ptr->flags, FF_PATTERN);
 	int pattern_type_cur, pattern_type_new;
@@ -825,8 +825,8 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
-	grid_type *c_ptr = &cave[ny][nx];
-	grid_type *oc_ptr = &cave[oy][ox];
+	grid_type *c_ptr = &grid_array[ny][nx];
+	grid_type *oc_ptr = &grid_array[oy][ox];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	feature_type *of_ptr = &f_info[oc_ptr->feat];
 
@@ -1104,7 +1104,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	POSITION x = p_ptr->x + ddx[dir];
 
 	/* Examine the destination */
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
@@ -1253,7 +1253,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				py_attack(y, x, 0);
 				oktomove = FALSE;
 			}
-			else if (monster_can_cross_terrain(cave[p_ptr->y][p_ptr->x].feat, r_ptr, 0))
+			else if (monster_can_cross_terrain(grid_array[p_ptr->y][p_ptr->x].feat, r_ptr, 0))
 			{
 				do_past = TRUE;
 			}
@@ -1314,7 +1314,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
-			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name);
+			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name);
 			free_turn(p_ptr);
 			oktomove = FALSE;
 			disturb(FALSE, TRUE);
@@ -1528,7 +1528,7 @@ static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 	if (!in_bounds2(y, x)) return (FALSE);
 
 	/* Access grid */
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
 	/* Must be known to the player */
 	if (c_ptr->info & (CAVE_MARK))
@@ -1571,7 +1571,7 @@ static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
 	if (!in_bounds2(y, x)) return (TRUE);
 
 	/* Memorized grids are always known */
-	if (cave[y][x].info & (CAVE_MARK)) return (FALSE);
+	if (grid_array[y][x].info & (CAVE_MARK)) return (FALSE);
 
 	/* Viewable door/wall grids are known */
 	if (player_can_see_bold(y, x)) return (FALSE);
@@ -1746,13 +1746,13 @@ static bool run_test(void)
 
 	/* break run when leaving trap detected region */
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(cave[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
+	    && p_ptr->dtrap && !(grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(cave[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
+		if (!(grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -1780,7 +1780,7 @@ static bool run_test(void)
 		col = p_ptr->x + ddx[new_dir];
 
 		/* Access grid */
-		c_ptr = &cave[row][col];
+		c_ptr = &grid_array[row][col];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -2139,13 +2139,13 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 
 	/* break run when leaving trap detected region */
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(cave[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
+	    && p_ptr->dtrap && !(grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(cave[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
+		if (!(grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -2174,7 +2174,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 		POSITION col = p_ptr->x + ddx[dir];
 
 		/* Access grid */
-		c_ptr = &cave[row][col];
+		c_ptr = &grid_array[row][col];
 
 		/* Visible monsters abort running */
 		if (c_ptr->m_idx)
@@ -2204,7 +2204,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	if (!new_dir) return (0);
 
 	/* Access newly move grid */
-	c_ptr = &cave[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
+	c_ptr = &grid_array[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
 	if (!easy_open && is_closed_door(c_ptr->feat)) return (0);

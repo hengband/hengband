@@ -1581,7 +1581,7 @@ static void do_cmd_wiz_create_feature(void)
 
 	if (!tgt_pt(&x, &y)) return;
 
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
 	/* Default */
 	sprintf(tmp_val, "%d", prev_feat);
@@ -1948,7 +1948,7 @@ void do_cmd_debug(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				cave[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+				grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
 		}
 		wiz_lite(FALSE);

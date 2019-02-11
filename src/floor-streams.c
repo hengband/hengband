@@ -108,7 +108,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 					{
 						if (!in_bounds2(ty, tx)) continue;
 
-						c_ptr = &cave[ty][tx];
+						c_ptr = &grid_array[ty][tx];
 
 						if (c_ptr->feat == feat1) continue;
 						if (c_ptr->feat == feat2) continue;
@@ -264,7 +264,7 @@ void build_streamer(IDX feat, int chance)
 				if (!in_bounds2(ty, tx)) continue;
 				break;
 			}
-			c_ptr = &cave[ty][tx];
+			c_ptr = &grid_array[ty][tx];
 			f_ptr = &f_info[c_ptr->feat];
 
 			if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
@@ -390,7 +390,7 @@ void place_trees(POSITION x, POSITION y)
 		for (j = y - 3; j < y + 4; j++)
 		{
 			if (!in_bounds(j, i)) continue;
-			c_ptr = &cave[j][i];
+			c_ptr = &grid_array[j][i];
 
 			if (c_ptr->info & CAVE_ICKY) continue;
 			if (c_ptr->o_idx) continue;
@@ -405,18 +405,18 @@ void place_trees(POSITION x, POSITION y)
 				if ((distance(j, i, y, x) > 1) || (randint1(100) < 25))
 				{
 					if (randint1(100) < 75)
-						cave[j][i].feat = feat_tree;
+						grid_array[j][i].feat = feat_tree;
 				}
 				else
 				{
-					cave[j][i].feat = feat_rubble;
+					grid_array[j][i].feat = feat_rubble;
 				}
 
 				/* Clear garbage of hidden trap or door */
 				c_ptr->mimic = 0;
 
 				/* Light area since is open above */
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) cave[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
 			}
 		}
 	}
@@ -425,7 +425,7 @@ void place_trees(POSITION x, POSITION y)
 	if (!ironman_downward && one_in_(3))
 	{
 		/* up stair */
-		cave[y][x].feat = feat_up_stair;
+		grid_array[y][x].feat = feat_up_stair;
 	}
 }
 

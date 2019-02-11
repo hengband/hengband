@@ -1907,10 +1907,10 @@ bool activate_artifact(object_type *o_ptr)
 			msg_print(_("そこは水辺ではない。", "There is no fishing place."));
 			return FALSE;
 		}
-		else if (cave[y][x].m_idx)
+		else if (grid_array[y][x].m_idx)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
+			monster_desc(m_name, &m_list[grid_array[y][x].m_idx], 0);
 			msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
 			free_turn(p_ptr);
 			return FALSE;

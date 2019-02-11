@@ -57,21 +57,21 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			y = p_ptr->y + ddy_cdd[cdir];
 			x = p_ptr->x + ddx_cdd[cdir];
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
 				msg_print(_("攻撃は空を切った。", "You attack the empty air."));
 
 			y = p_ptr->y + ddy_cdd[(cdir + 7) % 8];
 			x = p_ptr->x + ddx_cdd[(cdir + 7) % 8];
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
 				msg_print(_("攻撃は空を切った。", "You attack the empty air."));
 
 			y = p_ptr->y + ddy_cdd[(cdir + 1) % 8];
 			x = p_ptr->x + ddx_cdd[(cdir + 1) % 8];
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
 				msg_print(_("攻撃は空を切った。", "You attack the empty air."));
@@ -103,7 +103,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_FIRE);
 			else
 			{
@@ -137,7 +137,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_MINEUCHI);
 			else
 			{
@@ -185,7 +185,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (!cave[y][x].m_idx)
+			if (!grid_array[y][x].m_idx)
 			{
 				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
@@ -193,13 +193,13 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			py_attack(y, x, 0);
 
-			if (!player_can_enter(cave[y][x].feat, 0) || is_trap(cave[y][x].feat))
+			if (!player_can_enter(grid_array[y][x].feat, 0) || is_trap(grid_array[y][x].feat))
 				break;
 
 			y += ddy[dir];
 			x += ddx[dir];
 
-			if (player_can_enter(cave[y][x].feat, 0) && !is_trap(cave[y][x].feat) && !cave[y][x].m_idx)
+			if (player_can_enter(grid_array[y][x].feat, 0) && !is_trap(grid_array[y][x].feat) && !grid_array[y][x].m_idx)
 			{
 				msg_print(NULL);
 				(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
@@ -221,7 +221,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_POISON);
 			else
 			{
@@ -246,7 +246,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_ZANMA);
 			else
 			{
@@ -270,7 +270,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, 0);
 			else
 			{
@@ -281,12 +281,12 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				return "";
 			}
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 			{
 				int i;
 				POSITION ty = y, tx = x;
 				POSITION oy = y, ox = x;
-				MONSTER_IDX m_idx = cave[y][x].m_idx;
+				MONSTER_IDX m_idx = grid_array[y][x].m_idx;
 				monster_type *m_ptr = &m_list[m_idx];
 				GAME_TEXT m_name[MAX_NLEN];
 
@@ -306,8 +306,8 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if ((ty != oy) || (tx != ox))
 				{
 					msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
-					cave[oy][ox].m_idx = 0;
-					cave[ty][tx].m_idx = m_idx;
+					grid_array[oy][ox].m_idx = 0;
+					grid_array[ty][tx].m_idx = m_idx;
 					m_ptr->fy = ty;
 					m_ptr->fx = tx;
 
@@ -354,7 +354,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_HAGAN);
 
 			if (!cave_have_flag_bold(y, x, FF_HURT_ROCK)) break;
@@ -382,7 +382,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_COLD);
 			else
 			{
@@ -407,7 +407,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_KYUSHO);
 			else
 			{
@@ -432,7 +432,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_MAJIN);
 			else
 			{
@@ -457,7 +457,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_SUTEMI);
 			else
 			{
@@ -483,7 +483,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_ELEC);
 			else
 			{
@@ -524,7 +524,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				y = p_ptr->y + ddy_ddd[dir];
 				x = p_ptr->x + ddx_ddd[dir];
-				c_ptr = &cave[y][x];
+				c_ptr = &grid_array[y][x];
 				m_ptr = &m_list[c_ptr->m_idx];
 
 				/* Hack -- attack monsters */
@@ -557,7 +557,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_QUAKE);
 			else
 				earthquake(p_ptr->y, p_ptr->x, 10);
@@ -639,7 +639,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				y = p_ptr->y + ddy[dir];
 				x = p_ptr->x + ddx[dir];
-				c_ptr = &cave[y][x];
+				c_ptr = &grid_array[y][x];
 
 				if (c_ptr->m_idx)
 					py_attack(y, x, HISSATSU_3DAN);
@@ -671,7 +671,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				}
 
 				c_ptr->m_idx = 0;
-				cave[ny][nx].m_idx = m_idx;
+				grid_array[ny][nx].m_idx = m_idx;
 				m_ptr->fy = ny;
 				m_ptr->fx = nx;
 
@@ -714,7 +714,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_DRAIN);
 			else
 			{
@@ -815,10 +815,10 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 			{
 				py_attack(y, x, 0);
-				if (cave[y][x].m_idx)
+				if (grid_array[y][x].m_idx)
 				{
 					handle_stuff();
 					py_attack(y, x, 0);
@@ -899,7 +899,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			y = p_ptr->y + ddy[dir];
 			x = p_ptr->x + ddx[dir];
 
-			if (cave[y][x].m_idx)
+			if (grid_array[y][x].m_idx)
 				py_attack(y, x, HISSATSU_UNDEAD);
 			else
 			{

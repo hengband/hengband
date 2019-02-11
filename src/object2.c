@@ -128,7 +128,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		POSITION y = j_ptr->iy;
 		POSITION x = j_ptr->ix;
 
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Scan all objects in the grid */
 		for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -223,7 +223,7 @@ void delete_object(POSITION y, POSITION x)
 	/* Refuse "illegal" locations */
 	if (!in_bounds(y, x)) return;
 
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -306,7 +306,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 		x = o_ptr->ix;
 
 		/* Acquire grid */
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Repair grid */
 		if (c_ptr->o_idx == i1)
@@ -494,7 +494,7 @@ void wipe_o_list(void)
 			POSITION x = o_ptr->ix;
 
 			/* Access grid */
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 
 			/* Hack -- see above */
 			c_ptr->o_idx = 0;
@@ -4868,7 +4868,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4982,7 +4982,7 @@ void place_gold(POSITION y, POSITION x)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -5132,7 +5132,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			if (!projectable(y, x, ty, tx)) continue;
 
 			/* Obtain grid */
-			c_ptr = &cave[ty][tx];
+			c_ptr = &grid_array[ty][tx];
 
 			/* Require floor space */
 			if (!cave_drop_bold(ty, tx)) continue;
@@ -5289,7 +5289,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	}
 
 
-	c_ptr = &cave[by][bx];
+	c_ptr = &grid_array[by][bx];
 
 	/* Scan objects in that grid for combination */
 	for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -6716,7 +6716,7 @@ bool process_warning(POSITION xx, POSITION yy)
 
 			if (!in_bounds(my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
-			c_ptr = &cave[my][mx];
+			c_ptr = &grid_array[my][mx];
 
 			if (!c_ptr->m_idx) continue;
 
@@ -6814,7 +6814,7 @@ bool process_warning(POSITION xx, POSITION yy)
 	}
 	else old_damage = old_damage / 2;
 
-	c_ptr = &cave[yy][xx];
+	c_ptr = &grid_array[yy][xx];
 	if (((!easy_disarm && is_trap(c_ptr->feat))
 	    || (c_ptr->mimic && is_trap(c_ptr->feat))) && !one_in_(13))
 	{

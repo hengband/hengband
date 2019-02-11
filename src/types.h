@@ -427,13 +427,13 @@ struct skill_table
 /*
  * A single "grid" in a Cave
  *
- * Note that several aspects of the code restrict the actual cave
+ * Note that several aspects of the code restrict the actual grid_array
  * to a max size of 256 by 256.  In partcular, locations are often
  * saved as bytes, limiting each coordinate to the 0-255 range.
  *
  * The "o_idx" and "m_idx" fields are very interesting.  There are
  * many places in the code where we need quick access to the actual
- * monster or object(s) in a given cave grid.  The easiest way to
+ * monster or object(s) in a given grid.  The easiest way to
  * do this is to simply keep the index of the monster and object
  * (if any) with the grid, but this takes 198*66*4 bytes of memory.
  * Several other methods come to mind, which require only half this
@@ -454,13 +454,13 @@ typedef struct grid_type grid_type;
 
 struct grid_type
 {
-	BIT_FLAGS info;		/* Hack -- cave flags */
+	BIT_FLAGS info;		/* Hack -- grid_array flags */
 
 	FEAT_IDX feat;		/* Hack -- feature type */
 	OBJECT_IDX o_idx;		/* Object in this grid */
 	MONSTER_IDX m_idx;		/* Monster in this grid */
 
-	/*! 地形の特別な情報を保存する / Special cave info
+	/*! 地形の特別な情報を保存する / Special grid_array info
 	 * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
 	 * 各ダンジョン入口の移行先ダンジョンID、
 	 * 
@@ -503,7 +503,7 @@ struct coord
  * Note that "object flags" must now be derived from the object kind,
  * the artifact and ego-item indexes, and the two "xtra" fields.
  *
- * Each cave grid points to one (or zero) objects via the "o_idx"
+ * Each grid points to one (or zero) objects via the "o_idx"
  * field (above).  Each object then points to one (or zero) objects
  * via the "next_o_idx" field, forming a singly linked list, which
  * in game terms, represents a "stack" of objects in the same grid.

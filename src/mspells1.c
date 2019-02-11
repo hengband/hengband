@@ -414,7 +414,7 @@ bool raise_possible(monster_type *m_ptr)
 			if (!los(y, x, yy, xx)) continue;
 			if (!projectable(y, x, yy, xx)) continue;
 
-			c_ptr = &cave[yy][xx];
+			c_ptr = &grid_array[yy][xx];
 			/* Scan the pile of objects */
 			for (this_o_idx = c_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
@@ -483,9 +483,9 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 		y = GRID_Y(grid_g[i]);
 		x = GRID_X(grid_g[i]);
 
-		if ((cave[y][x].m_idx > 0) && !((y == y2) && (x == x2)))
+		if ((grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2)))
 		{
-			monster_type *m_ptr = &m_list[cave[y][x].m_idx];
+			monster_type *m_ptr = &m_list[grid_array[y][x].m_idx];
 			if (is_friend == is_pet(m_ptr))
 			{
 				return (FALSE);
@@ -1260,7 +1260,7 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 		grid_type *c_ptr;
 
 		/* Access the next grid */
-		c_ptr = &cave[next_y][next_x];
+		c_ptr = &grid_array[next_y][next_x];
 
 		/* Skip this feature */
 		if (!cave_have_flag_grid(c_ptr, f_flag)) continue;
@@ -1414,7 +1414,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 		if (los(m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
 		{
-			feature_type *f_ptr = &f_info[cave[y_br_lite][x_br_lite].feat];
+			feature_type *f_ptr = &f_info[grid_array[y_br_lite][x_br_lite].feat];
 
 			if (!have_flag(f_ptr->flags, FF_LOS))
 			{
@@ -1436,7 +1436,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	/* Check path */
 	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
-		feature_type *f_ptr = &f_info[cave[y][x].feat];
+		feature_type *f_ptr = &f_info[grid_array[y][x].feat];
 
 		if (!have_flag(f_ptr->flags, FF_PROJECT))
 		{

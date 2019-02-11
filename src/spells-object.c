@@ -112,7 +112,7 @@ bool create_ammo(void)
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		if (!have_flag(f_info[get_feat_mimic(c_ptr)].flags, FF_CAN_DIG))
 		{

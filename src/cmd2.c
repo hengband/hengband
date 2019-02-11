@@ -136,7 +136,7 @@ void do_cmd_go_up(void)
 	bool go_up = FALSE;
 
 	/* Player grid */
-	grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+	grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	int up_num = 0;
@@ -280,7 +280,7 @@ void do_cmd_go_up(void)
 void do_cmd_go_down(void)
 {
 	/* Player grid */
-	grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+	grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	bool fall_trap = FALSE;
@@ -477,7 +477,7 @@ void do_cmd_search(void)
  */
 static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 {
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Scan all objects in the grid */
@@ -602,8 +602,8 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under
 		yy = p_ptr->y + ddy_ddd[d];
 		xx = p_ptr->x + ddx_ddd[d];
 
-		/* Get the cave */
-		c_ptr = &cave[yy][xx];
+		/* Get the grid_array */
+		c_ptr = &grid_array[yy][xx];
 
 		/* Must have knowledge */
 		if (!(c_ptr->info & (CAVE_MARK))) continue;
@@ -717,7 +717,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 	int i, j;
 
 	/* Get requested grid */
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	bool more = FALSE;
 
@@ -853,7 +853,7 @@ void do_cmd_open(void)
 		x = p_ptr->x + ddx[dir];
 
 		/* Get requested grid */
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -909,7 +909,7 @@ void do_cmd_open(void)
  */
 static bool do_cmd_close_aux(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 	FEAT_IDX old_feat = c_ptr->feat;
 	bool more = FALSE;
 
@@ -998,7 +998,7 @@ void do_cmd_close(void)
 
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -1042,7 +1042,7 @@ void do_cmd_close(void)
  */
 static bool do_cmd_tunnel_test(POSITION y, POSITION x)
 {
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 
 	/* Must have knowledge */
 	if (!(c_ptr->info & CAVE_MARK))
@@ -1089,7 +1089,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	take_turn(p_ptr, 100);;
 
 	/* Get grid */
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 	f_ptr = &f_info[c_ptr->feat];
 	power = f_ptr->power;
 
@@ -1237,7 +1237,7 @@ void do_cmd_tunnel(void)
 		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -1295,7 +1295,7 @@ bool easy_open_door(POSITION y, POSITION x)
 {
 	int i, j;
 
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 
 	/* Must be a closed door */
@@ -1466,7 +1466,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 
 bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 {
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 
 	/* Get feature */
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -1591,7 +1591,7 @@ void do_cmd_disarm(void)
 
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -1649,7 +1649,7 @@ void do_cmd_disarm(void)
 static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 {
 	/* Get grid */
-	grid_type	*c_ptr = &cave[y][x];
+	grid_type	*c_ptr = &grid_array[y][x];
 
 	/* Get feature */
 	feature_type *f_ptr = &f_info[c_ptr->feat];
@@ -1774,7 +1774,7 @@ void do_cmd_bash(void)
 		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -1857,7 +1857,7 @@ void do_cmd_alter(void)
 		x = p_ptr->x + ddx[dir];
 
 		/* Get grid */
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -1979,7 +1979,7 @@ void do_cmd_spike(void)
 
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(c_ptr);
@@ -2562,7 +2562,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		if (!cave_have_flag_bold(ny[cur_dis], nx[cur_dis], FF_PROJECT))
 		{
 			hit_wall = TRUE;
-			if ((q_ptr->tval == TV_FIGURINE) || object_is_potion(q_ptr) || !cave[ny[cur_dis]][nx[cur_dis]].m_idx) break;
+			if ((q_ptr->tval == TV_FIGURINE) || object_is_potion(q_ptr) || !grid_array[ny[cur_dis]][nx[cur_dis]].m_idx) break;
 		}
 
 		/* The player can see the (on screen) missile */
@@ -2598,9 +2598,9 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		cur_dis++;
 
 		/* Monster here, Try to hit it */
-		if (cave[y][x].m_idx)
+		if (grid_array[y][x].m_idx)
 		{
-			grid_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &grid_array[y][x];
 			monster_type *m_ptr = &m_list[c_ptr->m_idx];
 
 			/* Check the visibility */
@@ -2734,17 +2734,17 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 			if (potion_smash_effect(0, y, x, q_ptr->k_idx))
 			{
-				monster_type *m_ptr = &m_list[cave[y][x].m_idx];
+				monster_type *m_ptr = &m_list[grid_array[y][x].m_idx];
 
 				/* ToDo (Robert): fix the invulnerability */
-				if (cave[y][x].m_idx &&
-				    is_friendly(&m_list[cave[y][x].m_idx]) &&
+				if (grid_array[y][x].m_idx &&
+				    is_friendly(&m_list[grid_array[y][x].m_idx]) &&
 				    !MON_INVULNER(m_ptr))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
+					monster_desc(m_name, &m_list[grid_array[y][x].m_idx], 0);
 					msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
-					set_hostile(&m_list[cave[y][x].m_idx]);
+					set_hostile(&m_list[grid_array[y][x].m_idx]);
 				}
 			}
 			do_drop = FALSE;
@@ -2899,7 +2899,7 @@ void forget_travel_flow(void)
  */
 static int travel_flow_cost(POSITION y, POSITION x)
 {
-	feature_type *f_ptr = &f_info[cave[y][x].feat];
+	feature_type *f_ptr = &f_info[grid_array[y][x].feat];
 	int cost = 1;
 
 	/* Avoid obstacles (ex. trees) */
@@ -2923,7 +2923,7 @@ static int travel_flow_cost(POSITION y, POSITION x)
 	}
 
 	/* Detected traps and doors */
-	if (cave[y][x].info & (CAVE_MARK))
+	if (grid_array[y][x].info & (CAVE_MARK))
 	{
 		if (have_flag(f_ptr->flags, FF_DOOR)) cost += 1;
 		if (have_flag(f_ptr->flags, FF_TRAP)) cost += 10;
@@ -2942,7 +2942,7 @@ static int travel_flow_cost(POSITION y, POSITION x)
  */
 static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 {
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 	feature_type *f_ptr = &f_info[c_ptr->feat];
 	int old_head = flow_head;
 	int add_cost = 1;
@@ -2959,7 +2959,7 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||
 		have_flag(f_ptr->flags, FF_CAN_DIG) ||
-		(have_flag(f_ptr->flags, FF_DOOR) && cave[y][x].mimic) ||
+		(have_flag(f_ptr->flags, FF_DOOR) && grid_array[y][x].mimic) ||
 		(!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation))
 	{
 		if (!wall || !from_wall) return;
@@ -3001,7 +3001,7 @@ static void travel_flow(POSITION ty, POSITION tx)
 {
 	POSITION x, y, d;
 	bool wall = FALSE;
-	feature_type *f_ptr = &f_info[cave[p_ptr->y][p_ptr->x].feat];
+	feature_type *f_ptr = &f_info[grid_array[p_ptr->y][p_ptr->x].feat];
 
 	/* Reset the "queue" */
 	flow_head = flow_tail = 0;
@@ -3062,12 +3062,12 @@ void do_cmd_travel(void)
 		return;
 	}
 
-	f_ptr = &f_info[cave[y][x].feat];
+	f_ptr = &f_info[grid_array[y][x].feat];
 
-	if ((cave[y][x].info & CAVE_MARK) &&
+	if ((grid_array[y][x].info & CAVE_MARK) &&
 		(have_flag(f_ptr->flags, FF_WALL) ||
 			have_flag(f_ptr->flags, FF_CAN_DIG) ||
-			(have_flag(f_ptr->flags, FF_DOOR) && cave[y][x].mimic)))
+			(have_flag(f_ptr->flags, FF_DOOR) && grid_array[y][x].mimic)))
 	{
 		msg_print(_("そこには行くことができません！", "You cannot travel there!"));
 		return;

@@ -613,7 +613,7 @@ static void wreck_the_pattern(void)
 {
 	int to_ruin = 0;
 	POSITION r_y, r_x;
-	int pattern_type = f_info[cave[p_ptr->y][p_ptr->x].feat].subtype;
+	int pattern_type = f_info[grid_array[p_ptr->y][p_ptr->x].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)
 	{
@@ -632,7 +632,7 @@ static void wreck_the_pattern(void)
 		scatter(&r_y, &r_x, p_ptr->y, p_ptr->x, 4, 0);
 
 		if (pattern_tile(r_y, r_x) &&
-		    (f_info[cave[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
+		    (f_info[grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
 		{
 			cave_set_feat(r_y, r_x, feat_pattern_corrupted);
 		}
@@ -657,7 +657,7 @@ static bool pattern_effect(void)
 		wreck_the_pattern();
 	}
 
-	pattern_type = f_info[cave[p_ptr->y][p_ptr->x].feat].subtype;
+	pattern_type = f_info[grid_array[p_ptr->y][p_ptr->x].feat].subtype;
 
 	switch (pattern_type)
 	{
@@ -1368,7 +1368,7 @@ static void process_world_aux_digestion(void)
  */
 static void process_world_aux_hp_and_sp(void)
 {
-	feature_type *f_ptr = &f_info[cave[p_ptr->y][p_ptr->x].feat];
+	feature_type *f_ptr = &f_info[grid_array[p_ptr->y][p_ptr->x].feat];
 	bool cave_no_regen = FALSE;
 	int upkeep_factor = 0;
 
@@ -1435,7 +1435,7 @@ static void process_world_aux_hp_and_sp(void)
 	{
 		if (!dun_level && !p_ptr->resist_lite && !IS_INVULN() && is_daytime())
 		{
-			if ((cave[p_ptr->y][p_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+			if ((grid_array[p_ptr->y][p_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
 				msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
 				take_hit(DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
@@ -1490,11 +1490,11 @@ static void process_world_aux_hp_and_sp(void)
 			{
 				msg_print(_("熱で火傷した！", "The heat burns you!"));
 				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), 
-								f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+								f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sで火傷した！", "The %s burns you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1528,11 +1528,11 @@ static void process_world_aux_hp_and_sp(void)
 			{
 				msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
 				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1566,11 +1566,11 @@ static void process_world_aux_hp_and_sp(void)
 			{
 				msg_print(_("電撃を受けた！", "The electric shocks you!"));
 				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに感電した！", "The %s shocks you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1604,11 +1604,11 @@ static void process_world_aux_hp_and_sp(void)
 			{
 				msg_print(_("酸が飛び散った！", "The acid melt you!"));
 				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1642,12 +1642,12 @@ static void process_world_aux_hp_and_sp(void)
 			{
 				msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
 				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name), -1);
 				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr->poisoned + 1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&cave[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&grid_array[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに毒された！", "The %s poisons you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
 				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr->poisoned + 3);
@@ -2364,7 +2364,7 @@ static void process_world_aux_mutation(void)
 		msg_print(NULL);
 
 		/* Absorb light from the current possition */
-		if ((cave[p_ptr->y][p_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+		if ((grid_array[p_ptr->y][p_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 		{
 			hp_player(10);
 		}
@@ -3159,7 +3159,7 @@ static int get_monster_crowd_number(MONSTER_IDX m_idx)
 		if (!in_bounds(ay, ax)) continue;
 
 		/* Count number of monsters */
-		if (cave[ay][ax].m_idx > 0) count++;
+		if (grid_array[ay][ax].m_idx > 0) count++;
  	}
 
 	return count;
@@ -3405,7 +3405,7 @@ static void process_world(void)
 		for (i2 = 0; i2 < cur_wid; ++i2)
 			for (j2 = 0; j2 < cur_hgt; j2++)
 			{
-				grid_type *c_ptr = &cave[j2][i2];
+				grid_type *c_ptr = &grid_array[j2][i2];
 
 				if ((c_ptr->m_idx > 0) && (c_ptr->m_idx != p_ptr->riding))
 				{
@@ -4814,7 +4814,7 @@ static void process_player(void)
 				if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, &m_list[cave[y][x].m_idx], 0);
+					monster_desc(m_name, &m_list[grid_array[y][x].m_idx], 0);
 					msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 					success = TRUE;
 				}
@@ -6139,7 +6139,7 @@ void play_game(bool new_game)
 		/* Handle "quit and save" */
 		if (!p_ptr->playing && !p_ptr->is_dead) break;
 
-		/* Erase the old cave */
+		/* Erase the old grid_array */
 		wipe_o_list();
 		if (!p_ptr->is_dead) wipe_m_list();
 

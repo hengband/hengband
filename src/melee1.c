@@ -434,7 +434,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
 
-	grid_type       *c_ptr = &cave[y][x];
+	grid_type       *c_ptr = &grid_array[y][x];
 
 	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
@@ -1305,7 +1305,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	if (do_quake)
 	{
 		earthquake(p_ptr->y, p_ptr->x, 10);
-		if (!cave[y][x].m_idx) *mdeath = TRUE;
+		if (!grid_array[y][x].m_idx) *mdeath = TRUE;
 	}
 }
 
@@ -1324,7 +1324,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	bool            mdeath = FALSE;
 	bool            stormbringer = FALSE;
 
-	grid_type       *c_ptr = &cave[y][x];
+	grid_type       *c_ptr = &grid_array[y][x];
 	monster_type    *m_ptr = &m_list[c_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
@@ -3038,7 +3038,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
 					}
 
-					if (is_mirror_grid(&cave[p_ptr->y][p_ptr->x]))
+					if (is_mirror_grid(&grid_array[p_ptr->y][p_ptr->x]))
 					{
 						teleport_player(10, 0L);
 					}

@@ -264,7 +264,7 @@ extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
 extern const concptr angband_sound_name[SOUND_MAX];
 extern const concptr angband_music_basic_name[MUSIC_BASIC_MAX];
-extern grid_type *cave[MAX_HGT];
+extern grid_type *grid_array[MAX_HGT];
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;
@@ -466,7 +466,7 @@ extern void get_height_weight(void);
 extern void player_outfit(void);
 extern void dump_yourself(FILE *fff);
 
-/* cave.c */
+/* grid_array.c */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool is_trap(IDX feat);
 extern bool is_known_trap(grid_type *c_ptr);

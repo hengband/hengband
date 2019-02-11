@@ -49,8 +49,8 @@ static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
 
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
-		else if (is_friend && cave[y][x].m_idx > 0 &&
-			 !are_enemies(m_ptr, &m_list[cave[y][x].m_idx]))
+		else if (is_friend && grid_array[y][x].m_idx > 0 &&
+			 !are_enemies(m_ptr, &m_list[grid_array[y][x].m_idx]))
 		{
 			/* Friends don't shoot friends */
 			return FALSE;
@@ -316,7 +316,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* Is there counter attack target? */
 	if (!target_idx && m_ptr->target_y)
 	{
-		target_idx = cave[m_ptr->target_y][m_ptr->target_x].m_idx;
+		target_idx = grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
 
 		if (target_idx)
 		{

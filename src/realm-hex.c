@@ -1008,10 +1008,10 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					int dy = y + ddy_ddd[dir];
 					int dx = x + ddx_ddd[dir];
 					if (dir == 5) continue;
-					if (cave[dy][dx].m_idx) flag = TRUE;
+					if (grid_array[dy][dx].m_idx) flag = TRUE;
 				}
 
-				if (!cave_empty_bold(y, x) || (cave[y][x].info & CAVE_ICKY) ||
+				if (!cave_empty_bold(y, x) || (grid_array[y][x].info & CAVE_ICKY) ||
 					(distance(y, x, p_ptr->y, p_ptr->x) > plev + 2))
 				{
 					msg_print(_("そこには移動できない。", "Can not teleport to there."));

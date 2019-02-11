@@ -2618,8 +2618,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the cave */
-			c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			c_ptr = &grid_array[y][x];
 
 			/* Extract "info" */
 			c_ptr->info = info;
@@ -2649,8 +2649,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the cave */
-			c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			c_ptr = &grid_array[y][x];
 
 			/* Extract "feat" */
 			c_ptr->feat = (s16b)tmp8u;
@@ -2679,8 +2679,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the cave */
-			c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			c_ptr = &grid_array[y][x];
 
 			/* Extract "mimic" */
 			c_ptr->mimic = (s16b)tmp8u;
@@ -2709,8 +2709,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the cave */
-			c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			c_ptr = &grid_array[y][x];
 
 			/* Extract "feat" */
 			c_ptr->special = tmp16s;
@@ -2727,13 +2727,13 @@ static errr rd_dungeon_old(void)
 		}
 	}
 
-	/* Convert cave data */
+	/* Convert grid_array data */
 	if (z_older_than(11, 0, 99))
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Wipe old unused flags */
-			cave[y][x].info &= ~(CAVE_MASK);
+			grid_array[y][x].info &= ~(CAVE_MASK);
 		}
 	}
 
@@ -2741,8 +2741,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the cave */
-			c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			c_ptr = &grid_array[y][x];
 
 			/* Very old */
 			if (c_ptr->feat == OLD_FEAT_INVIS)
@@ -2764,8 +2764,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the cave */
-			c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			c_ptr = &grid_array[y][x];
 
 			/* Old CAVE_IN_MIRROR flag */
 			if (c_ptr->info & CAVE_OBJECT)
@@ -2804,8 +2804,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the cave */
-			c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			c_ptr = &grid_array[y][x];
 
 			if ((c_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
 			{
@@ -2886,7 +2886,7 @@ static errr rd_dungeon_old(void)
 		else
 		{
 			/* Access the item location */
-			c_ptr = &cave[o_ptr->iy][o_ptr->ix];
+			c_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = c_ptr->o_idx;
@@ -2933,7 +2933,7 @@ static errr rd_dungeon_old(void)
 
 
 		/* Access grid */
-		c_ptr = &cave[m_ptr->fy][m_ptr->fx];
+		c_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		c_ptr->m_idx = m_idx;
@@ -2984,7 +2984,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	cave_template_type *templates;
 
 
-	/*** Wipe all cave ***/
+	/*** Wipe all grid_array ***/
 	clear_cave();
 
 
@@ -3103,10 +3103,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the cave */
-			grid_type *c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			grid_type *c_ptr = &grid_array[y][x];
 
-			/* Extract cave data */
+			/* Extract grid_array data */
 			c_ptr->info = templates[id].info;
 			c_ptr->feat = templates[id].feat;
 			c_ptr->mimic = templates[id].mimic;
@@ -3129,8 +3129,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the cave */
-			grid_type *c_ptr = &cave[y][x];
+			/* Access the grid_array */
+			grid_type *c_ptr = &grid_array[y][x];
 
 			if ((c_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
 			{
@@ -3204,7 +3204,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		else
 		{
 			/* Access the item location */
-			grid_type *c_ptr = &cave[o_ptr->iy][o_ptr->ix];
+			grid_type *c_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = c_ptr->o_idx;
@@ -3244,7 +3244,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 
 		/* Access grid */
-		c_ptr = &cave[m_ptr->fy][m_ptr->fx];
+		c_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		c_ptr->m_idx = m_idx;

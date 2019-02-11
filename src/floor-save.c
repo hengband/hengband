@@ -314,7 +314,7 @@ static void build_dead_end(void)
 {
 	POSITION x, y;
 
-	/* Clear and empty the cave */
+	/* Clear and empty the grid_array */
 	clear_cave();
 
 	/* Fill the arrays of floors and walls in the good proportions */
@@ -550,7 +550,7 @@ static void place_pet(void)
 			monster_type *m_ptr = &m_list[m_idx];
 			monster_race *r_ptr;
 
-			cave[cy][cx].m_idx = m_idx;
+			grid_array[cy][cx].m_idx = m_idx;
 
 			m_ptr->r_idx = party_mon[i].r_idx;
 
@@ -675,7 +675,7 @@ static void get_out_monster(void)
 	POSITION dis = 1;
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
-	MONSTER_IDX m_idx = cave[oy][ox].m_idx;
+	MONSTER_IDX m_idx = grid_array[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
 	if (!m_idx) return;
@@ -707,8 +707,8 @@ static void get_out_monster(void)
 		if (!cave_empty_bold(ny, nx)) continue;
 
 		/* Hack -- no teleport onto glyph of warding */
-		if (is_glyph_grid(&cave[ny][nx])) continue;
-		if (is_explosive_rune_grid(&cave[ny][nx])) continue;
+		if (is_glyph_grid(&grid_array[ny][nx])) continue;
+		if (is_explosive_rune_grid(&grid_array[ny][nx])) continue;
 
 		/* ...nor onto the Pattern */
 		if (pattern_tile(ny, nx)) continue;
@@ -718,10 +718,10 @@ static void get_out_monster(void)
 		m_ptr = &m_list[m_idx];
 
 		/* Update the old location */
-		cave[oy][ox].m_idx = 0;
+		grid_array[oy][ox].m_idx = 0;
 
 		/* Update the new location */
-		cave[ny][nx].m_idx = m_idx;
+		grid_array[ny][nx].m_idx = m_idx;
 
 		/* Move the monster */
 		m_ptr->fy = ny;
@@ -758,7 +758,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *c_ptr = &cave[y][x];
+			grid_type *c_ptr = &grid_array[y][x];
 			feature_type *f_ptr = &f_info[c_ptr->feat];
 			bool ok = FALSE;
 
@@ -825,7 +825,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 		prepare_change_floor_mode(CFM_RAND_PLACE | CFM_NO_RETURN);
 
 		/* Mega Hack -- It's not the stairs you enter.  Disable it.  */
-		if (!feat_uses_special(cave[p_ptr->y][p_ptr->x].feat)) cave[p_ptr->y][p_ptr->x].special = 0;
+		if (!feat_uses_special(grid_array[p_ptr->y][p_ptr->x].feat)) grid_array[p_ptr->y][p_ptr->x].special = 0;
 	}
 	else
 	{
@@ -936,7 +936,7 @@ void leave_floor(void)
 	if (change_floor_mode & CFM_SAVE_FLOORS)
 	{
 		/* Extract stair position */
-		c_ptr = &cave[p_ptr->y][p_ptr->x];
+		c_ptr = &grid_array[p_ptr->y][p_ptr->x];
 		f_ptr = &f_info[c_ptr->feat];
 
 		/* Get back to old saved floor? */
@@ -1075,7 +1075,7 @@ void leave_floor(void)
  * @return なし
  * @details
  * If the floor is an old saved floor, it will be\n
- * restored from the temporal file.  If the floor is new one, new cave\n
+ * restored from the temporal file.  If the floor is new one, new grid_array\n
  * will be generated.\n
  */
 void change_floor(void)
@@ -1102,7 +1102,7 @@ void change_floor(void)
 	if (!(change_floor_mode & CFM_SAVE_FLOORS) &&
 	    !(change_floor_mode & CFM_FIRST_FLOOR))
 	{
-		/* Create cave */
+		/* Create grid_array */
 		generate_cave();
 
 		/* Paranoia -- No new saved floor */
@@ -1133,7 +1133,7 @@ void change_floor(void)
 				/* Forbid return stairs */
 				if (change_floor_mode & CFM_NO_RETURN)
 				{
-					grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+					grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 					if (!feat_uses_special(c_ptr->feat))
 					{
@@ -1296,7 +1296,7 @@ void change_floor(void)
 			}
 			else
 			{
-				/* Newly create cave */
+				/* Newly create grid_array */
 				generate_cave();
 			}
 
@@ -1310,7 +1310,7 @@ void change_floor(void)
 			if (!(change_floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
-				grid_type *c_ptr = &cave[p_ptr->y][p_ptr->x];
+				grid_type *c_ptr = &grid_array[p_ptr->y][p_ptr->x];
 
 				/*** Create connected stairs ***/
 
@@ -1475,7 +1475,7 @@ void stair_creation(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				grid_type *c_ptr = &cave[y][x];
+				grid_type *c_ptr = &grid_array[y][x];
 
 				if (!c_ptr->special) continue;
 				if (feat_uses_special(c_ptr->feat)) continue;
@@ -1520,5 +1520,5 @@ void stair_creation(void)
 
 
 	/* Connect this stairs to the destination */
-	cave[p_ptr->y][p_ptr->x].special = dest_floor_id;
+	grid_array[p_ptr->y][p_ptr->x].special = dest_floor_id;
 }

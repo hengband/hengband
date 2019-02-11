@@ -40,7 +40,7 @@ bool build_type15(void)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 			place_floor_grid(c_ptr);
 			c_ptr->feat = feat_glass_floor;
 			c_ptr->info |= (CAVE_ROOM);
@@ -51,19 +51,19 @@ bool build_type15(void)
 	/* Walls around the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		c_ptr = &cave[y][x1 - 1];
+		c_ptr = &grid_array[y][x1 - 1];
 		place_outer_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
-		c_ptr = &cave[y][x2 + 1];
+		c_ptr = &grid_array[y][x2 + 1];
 		place_outer_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		c_ptr = &cave[y1 - 1][x];
+		c_ptr = &grid_array[y1 - 1][x];
 		place_outer_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
-		c_ptr = &cave[y2 + 1][x];
+		c_ptr = &grid_array[y2 + 1][x];
 		place_outer_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
 	}
@@ -87,7 +87,7 @@ bool build_type15(void)
 			/* Walls around the breather */
 			for (dir2 = 0; dir2 < 8; dir2++)
 			{
-				c_ptr = &cave[y + ddy_ddd[dir2]][x + ddx_ddd[dir2]];
+				c_ptr = &grid_array[y + ddy_ddd[dir2]][x + ddx_ddd[dir2]];
 				place_inner_grid(c_ptr);
 				c_ptr->feat = feat_glass_wall;
 			}
@@ -98,10 +98,10 @@ bool build_type15(void)
 		{
 			y = yval + 2 * ddy_ddd[dir1];
 			x = xval + 2 * ddx_ddd[dir1];
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 			place_inner_perm_grid(c_ptr);
 			c_ptr->feat = feat_permanent_glass_wall;
-			cave[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]].info |= (CAVE_ICKY);
+			grid_array[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]].info |= (CAVE_ICKY);
 		}
 
 		/* Glass door */
@@ -109,13 +109,13 @@ bool build_type15(void)
 		y = yval + 2 * ddy_ddd[dir1];
 		x = xval + 2 * ddx_ddd[dir1];
 		place_secret_door(y, x, DOOR_GLASS_DOOR);
-		c_ptr = &cave[y][x];
+		c_ptr = &grid_array[y][x];
 		if (is_closed_door(c_ptr->feat)) c_ptr->mimic = feat_glass_wall;
 
 		/* Place a potion */
 		get_obj_num_hook = kind_is_potion;
 		place_object(yval, xval, AM_NO_FIXED_ART);
-		cave[yval][xval].info |= (CAVE_ICKY);
+		grid_array[yval][xval].info |= (CAVE_ICKY);
 	}
 	break;
 
@@ -125,19 +125,19 @@ bool build_type15(void)
 		DIRECTION dir1;
 
 		/* Pillars */
-		c_ptr = &cave[y1 + 1][x1 + 1];
+		c_ptr = &grid_array[y1 + 1][x1 + 1];
 		place_inner_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
 
-		c_ptr = &cave[y1 + 1][x2 - 1];
+		c_ptr = &grid_array[y1 + 1][x2 - 1];
 		place_inner_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
 
-		c_ptr = &cave[y2 - 1][x1 + 1];
+		c_ptr = &grid_array[y2 - 1][x1 + 1];
 		place_inner_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
 
-		c_ptr = &cave[y2 - 1][x2 - 1];
+		c_ptr = &grid_array[y2 - 1][x2 - 1];
 		place_inner_grid(c_ptr);
 		c_ptr->feat = feat_glass_wall;
 		get_mon_num_prep(vault_aux_lite, NULL);
@@ -148,7 +148,7 @@ bool build_type15(void)
 		/* Walls around the breather */
 		for (dir1 = 0; dir1 < 8; dir1++)
 		{
-			c_ptr = &cave[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]];
+			c_ptr = &grid_array[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]];
 			place_inner_grid(c_ptr);
 			c_ptr->feat = feat_glass_wall;
 		}
@@ -167,7 +167,7 @@ bool build_type15(void)
 
 		/* Place an object */
 		place_object(yval, xval, AM_NO_FIXED_ART);
-		cave[yval][xval].info |= (CAVE_ICKY);
+		grid_array[yval][xval].info |= (CAVE_ICKY);
 	}
 	break;
 
@@ -178,25 +178,25 @@ bool build_type15(void)
 		/* Walls around the potion */
 		for (y = yval - 2; y <= yval + 2; y++)
 		{
-			c_ptr = &cave[y][xval - 3];
+			c_ptr = &grid_array[y][xval - 3];
 			place_inner_grid(c_ptr);
 			c_ptr->feat = feat_glass_wall;
-			c_ptr = &cave[y][xval + 3];
+			c_ptr = &grid_array[y][xval + 3];
 			place_inner_grid(c_ptr);
 			c_ptr->feat = feat_glass_wall;
 		}
 		for (x = xval - 2; x <= xval + 2; x++)
 		{
-			c_ptr = &cave[yval - 3][x];
+			c_ptr = &grid_array[yval - 3][x];
 			place_inner_grid(c_ptr);
 			c_ptr->feat = feat_glass_wall;
-			c_ptr = &cave[yval + 3][x];
+			c_ptr = &grid_array[yval + 3][x];
 			place_inner_grid(c_ptr);
 			c_ptr->feat = feat_glass_wall;
 		}
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
-			c_ptr = &cave[yval + 2 * ddy_ddd[dir1]][xval + 2 * ddx_ddd[dir1]];
+			c_ptr = &grid_array[yval + 2 * ddy_ddd[dir1]][xval + 2 * ddx_ddd[dir1]];
 			place_inner_grid(c_ptr);
 			c_ptr->feat = feat_glass_wall;
 		}
@@ -230,7 +230,7 @@ bool build_type15(void)
 
 		for (y = yval - 2; y <= yval + 2; y++)
 			for (x = xval - 2; x <= xval + 2; x++)
-				cave[y][x].info |= (CAVE_ICKY);
+				grid_array[y][x].info |= (CAVE_ICKY);
 
 	}
 	break;

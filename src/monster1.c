@@ -2173,7 +2173,7 @@ monsterrace_hook_type get_monster_hook(void)
  */
 monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x)
 {
-	feature_type *f_ptr = &f_info[cave[y][x].feat];
+	feature_type *f_ptr = &f_info[grid_array[y][x].feat];
 
 	/* Set the monster list */
 
@@ -2370,7 +2370,7 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 m
  */
 bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 
 	/* Player or other monster */
 	if (player_bold(y, x)) return FALSE;

@@ -590,8 +590,8 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 {
 	POSITION *x = (POSITION*)(u);
 	POSITION *y = (POSITION*)(v);
-	grid_type *ca_ptr = &cave[y[a]][x[a]];
-	grid_type *cb_ptr = &cave[y[b]][x[b]];
+	grid_type *ca_ptr = &grid_array[y[a]][x[a]];
+	grid_type *cb_ptr = &grid_array[y[b]][x[b]];
 	monster_type *ma_ptr = &m_list[ca_ptr->m_idx];
 	monster_type *mb_ptr = &m_list[cb_ptr->m_idx];
 	monster_race *ap_ra_ptr, *ap_rb_ptr;
@@ -637,8 +637,8 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 	}
 
 	/* An object get higher priority */
-	if (cave[y[a]][x[a]].o_idx && !cave[y[b]][x[b]].o_idx) return TRUE;
-	if (!cave[y[a]][x[a]].o_idx && cave[y[b]][x[b]].o_idx) return FALSE;
+	if (grid_array[y[a]][x[a]].o_idx && !grid_array[y[b]][x[b]].o_idx) return TRUE;
+	if (!grid_array[y[a]][x[a]].o_idx && grid_array[y[b]][x[b]].o_idx) return FALSE;
 
 	/* Priority from the terrain */
 	if (f_info[ca_ptr->feat].priority > f_info[cb_ptr->feat].priority) return TRUE;
@@ -741,7 +741,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 	if (p_ptr->image) return (FALSE);
 
 	/* Examine the grid */
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
 	/* Visible monsters */
 	if (c_ptr->m_idx)
@@ -819,7 +819,7 @@ static void target_set_prepare(BIT_FLAGS mode)
 			/* Require "interesting" contents */
 			if (!target_set_accept(y, x)) continue;
 
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 
 			/* Require target_able monsters for "TARGET_KILL" */
 			if ((mode & (TARGET_KILL)) && !target_able(c_ptr->m_idx)) continue;
@@ -948,7 +948,7 @@ bool show_gold_on_floor = FALSE;
  */
 static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
-	grid_type *c_ptr = &cave[y][x];
+	grid_type *c_ptr = &grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	concptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
@@ -1531,7 +1531,7 @@ bool target_set(BIT_FLAGS mode)
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
 			/* Access */
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 
 			/* Allow target */
 			if (target_able(c_ptr->m_idx))
@@ -1768,7 +1768,7 @@ bool target_set(BIT_FLAGS mode)
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
 			/* Access */
-			c_ptr = &cave[y][x];
+			c_ptr = &grid_array[y][x];
 
 			/* Default prompt */
 			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
@@ -2378,7 +2378,7 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 	if (p_ptr->image) return (FALSE);
 
 	/* Examine the grid */
-	c_ptr = &cave[y][x];
+	c_ptr = &grid_array[y][x];
 
 	/* Interesting memorized features */
 	if (c_ptr->info & (CAVE_MARK))
@@ -2494,7 +2494,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				/* Skip stairs which have defferent distance */
 				for (; n < temp_n; ++ n)
 				{
-					grid_type *c_ptr = &cave[temp_y[n]][temp_x[n]];
+					grid_type *c_ptr = &grid_array[temp_y[n]][temp_x[n]];
 
 					if (cave_have_flag_grid(c_ptr, FF_STAIRS) &&
 					    cave_have_flag_grid(c_ptr, ch == '>' ? FF_MORE : FF_LESS))

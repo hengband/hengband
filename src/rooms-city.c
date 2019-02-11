@@ -180,7 +180,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 * Town logic flow for generation of new town\n
 * Originally from Vanilla 3.0.3\n
 *\n
-* We start with a fully wiped cave of normal floors.\n
+* We start with a fully wiped grid_array of normal floors.\n
 *\n
 * Note that town_gen_hack() plays games with the R.N.G.\n
 *\n
@@ -205,9 +205,9 @@ bool build_type16(void)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			if (cave[y][x].feat == FF_STORE)
+			if (grid_array[y][x].feat == FF_STORE)
 			{
-				prevent_bm = (f_info[cave[y][x].feat].subtype == STORE_BLACK);
+				prevent_bm = (f_info[grid_array[y][x].feat].subtype == STORE_BLACK);
 				break;
 			}
 		}
