@@ -3994,8 +3994,7 @@ bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_ID
  */
 bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-	monster_type	*m_ptr = &m_list[m_idx];
-
+	monster_type *m_ptr = &m_list[m_idx];
 	POSITION y, x;
 
 	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
@@ -4458,26 +4457,6 @@ void update_smart_learn(MONSTER_IDX m_idx, int what)
 		if (p_ptr->reflect) m_ptr-> smart |= (SM_IMM_REFLECT);
 		break;
 	}
-}
-
-
-/*!
- * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
- * @param x 配置先X座標
- * @param y 配置先Y座標
- * @return 配置に成功したらTRUE
- */
-bool player_place(POSITION y, POSITION x)
-{
-	/* Paranoia XXX XXX */
-	if (grid_array[y][x].m_idx != 0) return FALSE;
-
-	/* Save player location */
-	p_ptr->y = y;
-	p_ptr->x = x;
-
-	/* Success */
-	return TRUE;
 }
 
 

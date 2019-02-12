@@ -104,6 +104,7 @@
 #include "trap.h"
 #include "monster.h"
 #include "quest.h"
+#include "player-status.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;

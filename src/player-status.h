@@ -15,3 +15,5 @@ extern bool player_has_no_spellbooks(void);
 
 extern void take_turn(player_type *creature_ptr, PERCENTAGE need_cost);
 extern void free_turn(player_type *creature_ptr);
+
+extern bool player_place(POSITION y, POSITION x);

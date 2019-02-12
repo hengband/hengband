@@ -3822,3 +3822,22 @@ void free_turn(player_type *creature_ptr)
 {
 	creature_ptr->energy_use = 0;
 }
+
+/*!
+ * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
+ * @param x 配置先X座標
+ * @param y 配置先Y座標
+ * @return 配置に成功したらTRUE
+ */
+bool player_place(POSITION y, POSITION x)
+{
+	/* Paranoia XXX XXX */
+	if (grid_array[y][x].m_idx != 0) return FALSE;
+
+	/* Save player location */
+	p_ptr->y = y;
+	p_ptr->x = x;
+
+	/* Success */
+	return TRUE;
+}
