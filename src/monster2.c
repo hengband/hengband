@@ -3577,7 +3577,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 	place_monster_m_idx = hack_m_idx_ii;
 
 	/* Reinforcement */
-	for(i = 0; i < A_MAX; i++)
+	for(i = 0; i < 6; i++)
 	{
 		if(!r_ptr->reinforce_id[i]) break;
 		n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
@@ -3734,8 +3734,8 @@ bool alloc_guardian(bool def_val)
 
 	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
-		int oy;
-		int ox;
+		POSITION oy;
+		POSITION ox;
 		int try_count = 4000;
 
 		/* Find a good position */
@@ -3775,7 +3775,7 @@ bool alloc_guardian(bool def_val)
  */
 bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 {
-	int y = 0, x = 0;
+	POSITION y = 0, x = 0;
 	int attempts_left = 10000;
 
 	/* Put the Guardian */
