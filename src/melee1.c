@@ -294,18 +294,18 @@ static void touch_zap_player(monster_type *m_ptr)
 * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
 * @return なし
 */
-static void natural_attack(s16b m_idx, int attack, bool *fear, bool *mdeath)
+static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdeath)
 {
 	HIT_POINT k;
 	int bonus, chance;
-	int             n_weight = 0;
-	monster_type    *m_ptr = &m_list[m_idx];
-	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
+	WEIGHT n_weight = 0;
+	monster_type *m_ptr = &m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
-	int             dice_num, dice_side;
+	int dice_num, dice_side;
 
-	concptr            atk_desc;
+	concptr atk_desc;
 
 	switch (attack)
 	{
