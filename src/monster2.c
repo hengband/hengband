@@ -1941,13 +1941,8 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		if (p_ptr->image)
 		{
 			/* Something silly happens... */
-#ifdef JP
-			msg_format("%s%sの顔を見てしまった！",
+			msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
 				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
-#else
-			msg_format("You behold the %s visage of %s!",
-				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
-#endif
 
 			if (one_in_(3))
 			{
@@ -1959,13 +1954,8 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		}
 
 		/* Something frightening happens... */
-#ifdef JP
-		msg_format("%s%sの顔を見てしまった！",
+		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
 			horror_desc[randint0(MAX_SAN_HORROR)], m_name);
-#else
-		msg_format("You behold the %s visage of %s!",
-			horror_desc[randint0(MAX_SAN_HORROR)], m_name);
-#endif
 
 		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
