@@ -739,7 +739,7 @@ static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
  *\n
  * The layout of the array is [x][0] = light and [x][1] = dark.\n
  */
-static byte lighting_colours[16][2] =
+static TERM_COLOR lighting_colours[16][2] =
 {
 	/* TERM_DARK */
 	{TERM_L_DARK, TERM_DARK},
@@ -2555,7 +2555,8 @@ void forget_lite(void)
  */
 void update_lite(void)
 {
-	int i, x, y, min_x, max_x, min_y, max_y;
+	int i;
+	POSITION x, y, min_x, max_x, min_y, max_y;
 	int p = p_ptr->cur_lite;
 	grid_type *g_ptr;
 
@@ -3655,7 +3656,6 @@ void update_view(void)
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
-
 	/*** Step 3 -- major axes ***/
 
 	/* Scan south */
@@ -3712,8 +3712,7 @@ void update_view(void)
 	/* Now check each "diagonal" (in parallel) */
 	for (n = 1; n <= over / 2; n++)
 	{
-		int ypn, ymn, xpn, xmn;
-
+		POSITION ypn, ymn, xpn, xmn;
 
 		/* Acquire the "bounds" of the maximal circle */
 		z = over - n - n;
@@ -3995,7 +3994,8 @@ void update_view(void)
  */
 void delayed_visual_update(void)
 {
-	int       i, y, x;
+	int i;
+	POSITION y, x;
 	grid_type *g_ptr;
 
 	/* Update needed grids */
@@ -4071,7 +4071,8 @@ static POSITION flow_y = 0;
  */
 void update_flow(void)
 {
-	POSITION x, y, d;
+	POSITION x, y;
+	DIRECTION d;
 	int flow_head = 1;
 	int flow_tail = 0;
 
