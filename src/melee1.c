@@ -2920,17 +2920,9 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-#ifdef JP
-						msg_format("%^sは突然熱くなった！", m_name);
-						if (mon_take_hit(m_idx, dam, &fear,
-						    "は灰の山になった。"))
-#else
-						msg_format("%^s is suddenly very hot!", m_name);
+						msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
 
-						if (mon_take_hit(m_idx, dam, &fear,
-						    " turns into a pile of ash."))
-#endif
-
+						if (mon_take_hit(m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -2952,17 +2944,8 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-#ifdef JP
-						msg_format("%^sは電撃をくらった！", m_name);
-						if (mon_take_hit(m_idx, dam, &fear,
-						    "は燃え殻の山になった。"))
-#else
-						msg_format("%^s gets zapped!", m_name);
-
-						if (mon_take_hit(m_idx, dam, &fear,
-						    " turns into a pile of cinder."))
-#endif
-
+						msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), m_name);
+						if (mon_take_hit(m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -2984,17 +2967,8 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-#ifdef JP
-						msg_format("%^sは冷気をくらった！", m_name);
-						if (mon_take_hit(m_idx, dam, &fear,
-						    "は凍りついた。"))
-#else
-						msg_format("%^s is very cold!", m_name);
-
-						if (mon_take_hit(m_idx, dam, &fear,
-						    " was frozen."))
-#endif
-
+						msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), m_name);
+						if (mon_take_hit(m_idx, dam, &fear, _("は凍りついた。", " was frozen.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3017,16 +2991,8 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-#ifdef JP
-						msg_format("%^sは鏡の破片をくらった！", m_name);
-						if (mon_take_hit(m_idx, dam, &fear,
-						    "はズタズタになった。"))
-#else
-						msg_format("%^s gets zapped!", m_name);
-
-						if (mon_take_hit(m_idx, dam, &fear,
-						    " had torn to pieces."))
-#endif
+						msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), m_name);
+						if (mon_take_hit(m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3055,16 +3021,8 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							/* Modify the damage */
 							dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-#ifdef JP
-							msg_format("%^sは聖なるオーラで傷ついた！", m_name);
-							if (mon_take_hit(m_idx, dam, &fear,
-							    "は倒れた。"))
-#else
-							msg_format("%^s is injured by holy power!", m_name);
-
-							if (mon_take_hit(m_idx, dam, &fear,
-							    " is destroyed."))
-#endif
+							msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), m_name);
+							if (mon_take_hit(m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
 							{
 								blinked = FALSE;
 								alive = FALSE;
@@ -3089,17 +3047,8 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-#ifdef JP
-						msg_format("%^sが鋭い闘気のオーラで傷ついた！", m_name);
-						if (mon_take_hit(m_idx, dam, &fear,
-						    "は倒れた。"))
-#else
-						msg_format("%^s is injured by the Force", m_name);
-
-						if (mon_take_hit(m_idx, dam, &fear,
-						    " is destroyed."))
-#endif
-
+						msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), m_name);
+						if (mon_take_hit(m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3132,14 +3081,8 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-#ifdef JP
-						msg_format("影のオーラが%^sに反撃した！", m_name);
-						if (mon_take_hit(m_idx, dam, &fear, "は倒れた。"))
-#else
-						msg_format("Enveloped shadows attack %^s.", m_name);
-
-						if (mon_take_hit(m_idx, dam, &fear, " is destroyed."))
-#endif
+						msg_format(_("影のオーラが%^sに反撃した！", "Enveloped shadows attack %^s."), m_name);
+						if (mon_take_hit(m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
