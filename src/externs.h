@@ -464,11 +464,11 @@ extern void get_height_weight(void);
 extern void player_outfit(void);
 extern void dump_yourself(FILE *fff);
 
-/* grid_array.c */
+/* grids.c */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern bool is_trap(IDX feat);
+extern bool is_trap(FEAT_IDX feat);
 extern bool is_known_trap(grid_type *g_ptr);
-extern bool is_closed_door(IDX feat);
+extern bool is_closed_door(FEAT_IDX feat);
 extern bool is_hidden_door(grid_type *g_ptr);
 extern bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(POSITION y, POSITION x);
@@ -476,7 +476,7 @@ extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool cave_valid_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
 extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_char[F_LIT_MAX]);
-extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, char *cp, TERM_COLOR *tap, char *tcp);
+extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
@@ -501,7 +501,7 @@ extern void wiz_lite(bool ninja);
 extern void wiz_dark(void);
 extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
 extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
-extern FEAT_IDX feat_state(IDX feat, int action);
+extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
 extern bool is_mirror_grid(grid_type *g_ptr);
@@ -675,7 +675,7 @@ extern bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, in
 
 
 /* init1.c */
-extern byte color_char_to_attr(char c);
+extern TERM_COLOR color_char_to_attr(SYMBOL_CODE c);
 extern s16b f_tag_to_index(concptr str);
 extern errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax);
 

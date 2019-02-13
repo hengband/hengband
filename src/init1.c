@@ -1140,7 +1140,7 @@ static bool add_tag(STR_OFFSET *offset, header *head, concptr buf)
  * @param c シンボル文字
  * @return カラーID
  */
-byte color_char_to_attr(char c)
+TERM_COLOR color_char_to_attr(SYMBOL_CODE c)
 {
 	switch (c)
 	{
