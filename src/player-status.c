@@ -4,6 +4,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-status.h"
+#include "object-hook.h"
 
 /* Hack, monk armour */
 static bool monk_armour_aux;

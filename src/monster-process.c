@@ -22,6 +22,7 @@
 #include "quest.h"
 #include "avatar.h"
 #include "realm-hex.h"
+#include "object-hook.h"
 
 
 /*!

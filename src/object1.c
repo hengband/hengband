@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "artifact.h"
 #include "cmd-activate.h"
+#include "object-hook.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify

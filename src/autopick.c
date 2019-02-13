@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "store.h"
 #include "player-status.h"
+#include "object-hook.h"
 
 #define MAX_LINELEN 1024
 

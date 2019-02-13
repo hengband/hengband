@@ -1375,28 +1375,6 @@ extern void py_pickup_floor(bool pickup);
 /* variable.c */
 extern bool easy_floor;
 
-/* obj_kind.c */
-extern bool object_is_potion(object_type *o_ptr);
-extern bool object_is_shoukinkubi(object_type *o_ptr);
-extern bool object_is_favorite(object_type *o_ptr);
-extern bool object_is_rare(object_type *o_ptr);
-extern bool object_is_weapon(object_type *o_ptr);
-extern bool object_is_weapon_ammo(object_type *o_ptr);
-extern bool object_is_ammo(object_type *o_ptr);
-extern bool object_is_armour(object_type *o_ptr);
-extern bool object_is_weapon_armour_ammo(object_type *o_ptr);
-extern bool object_is_melee_weapon(object_type *o_ptr);
-extern bool object_is_wearable(object_type *o_ptr);
-extern bool object_is_equipment(object_type *o_ptr);
-extern bool object_refuse_enchant_weapon(object_type *o_ptr);
-extern bool object_allow_enchant_weapon(object_type *o_ptr);
-extern bool object_allow_enchant_melee_weapon(object_type *o_ptr);
-extern bool object_is_smith(object_type *o_ptr);
-extern bool object_is_artifact(object_type *o_ptr);
-extern bool object_is_random_artifact(object_type *o_ptr);
-extern bool object_is_nameless(object_type *o_ptr);
-extern bool object_allow_two_hands_wielding(object_type *o_ptr);
-
 /* wild.c */
 extern void set_floor_and_wall(DUNGEON_IDX type);
 extern void wilderness_gen(void);

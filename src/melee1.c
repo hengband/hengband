@@ -22,6 +22,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "realm-hex.h"
+#include "object-hook.h"
 
 
 

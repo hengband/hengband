@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "player-damage.h"
 #include "artifact.h"
+#include "object-hook.h"
 
 
 /*!

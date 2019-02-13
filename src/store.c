@@ -19,6 +19,7 @@
 #include "cmd-spell.h"
 #include "rumor.h"
 #include "player-status.h"
+#include "object-hook.h"
 
 #define MIN_STOCK 12
 

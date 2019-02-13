@@ -15,6 +15,7 @@
 #include "avatar.h"
 #include "cmd-activate.h"
 #include "object-curse.h"
+#include "object-hook.h"
 #include "artifact.h"
 
 static bool has_extreme_damage_rate(object_type *o_ptr);

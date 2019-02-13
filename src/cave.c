@@ -19,6 +19,7 @@
 #include "angband.h"
 #include "world.h"
 #include "projection.h"
+#include "object-hook.h"
 
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;

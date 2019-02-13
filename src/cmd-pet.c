@@ -2,6 +2,7 @@
 #include "melee.h"
 #include "sort.h"
 #include "player-status.h"
+#include "object-hook.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定

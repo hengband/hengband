@@ -19,6 +19,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "realm-hex.h"
+#include "object-hook.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。
