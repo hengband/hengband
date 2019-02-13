@@ -724,11 +724,6 @@ monsterrace_hook_type get_mon_num2_hook;
 bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 
-/* Hack, monk armour */
-bool monk_armour_aux;
-bool monk_notify_aux;
-
-
 /*
  * Wilderness
  */

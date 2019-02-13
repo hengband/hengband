@@ -5,6 +5,10 @@
 #include "avatar.h"
 #include "spells-status.h"
 
+/* Hack, monk armour */
+static bool monk_armour_aux;
+static bool monk_notify_aux;
+
 /*
  * Return alignment title
  */
