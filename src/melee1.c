@@ -1515,18 +1515,16 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 	int ap_cnt;
 
 	INVENTORY_IDX i;
-	int k, tmp, ac, rlev;
+	int k, tmp;
+	ARMOUR_CLASS ac;
+	DEPTH rlev;
 	int do_cut, do_stun;
 
-	s32b gold;
-
+	PRICE gold;
 	object_type *o_ptr;
-
 	GAME_TEXT o_name[MAX_NLEN];
-
 	GAME_TEXT m_name[MAX_NLEN];
-
-	char ddesc[80];
+	GAME_TEXT ddesc[80];
 
 	bool blinked;
 	bool touched = FALSE, fear = FALSE, alive = TRUE;
