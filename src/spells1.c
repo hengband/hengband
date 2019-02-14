@@ -79,7 +79,7 @@ static void next_mirror(POSITION* next_y, POSITION* next_x, POSITION cury, POSIT
 	*next_x = curx + randint0(5) - 2;
 	return;
 }
-		
+
 /*!
  * @brief 万色表現用にランダムな色を選択する関数 /
  * Get a legal "multi-hued" color for drawing "spells"
