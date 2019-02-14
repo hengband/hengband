@@ -242,6 +242,7 @@
     <ClCompile Include="..\..\src\spells-object.c" />
     <ClCompile Include="..\..\src\spells-status.c" />
     <ClCompile Include="..\..\src\spells-summon.c" />
+    <ClCompile Include="..\..\src\spells-world.c" />
     <ClCompile Include="..\..\src\spells1.c" />
     <ClCompile Include="..\..\src\spells2.c" />
     <ClCompile Include="..\..\src\spells3.c" />
@@ -331,6 +332,7 @@
     <ClInclude Include="..\..\src\spells-summon.h" />
     <ClInclude Include="..\..\src\floor-streams.h" />
     <ClInclude Include="..\..\src\projection.h" />
+    <ClInclude Include="..\..\src\spells-world.h" />
     <ClInclude Include="..\..\src\spells.h" />
     <ClInclude Include="..\..\src\store.h" />
     <ClInclude Include="..\..\src\trap.h" />
