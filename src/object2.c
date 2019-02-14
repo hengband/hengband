@@ -45,7 +45,7 @@ static concptr const kaji_tips[5] =
  */
 static void one_sustain(object_type *o_ptr)
 {
-	switch (randint0(6))
+	switch (randint0(A_MAX))
 	{
 	case 0: add_flag(o_ptr->art_flags, TR_SUST_STR); break;
 	case 1: add_flag(o_ptr->art_flags, TR_SUST_INT); break;
@@ -892,7 +892,7 @@ byte value_check_aux2(object_type *o_ptr)
  * @param o_ptr 未鑑定価格を確認したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトの未鑑定価格
  */
-static s32b object_value_base(object_type *o_ptr)
+static PRICE object_value_base(object_type *o_ptr)
 {
 	/* Aware item -- use template cost */
 	if (object_is_aware(o_ptr)) return (k_info[o_ptr->k_idx].cost);
@@ -953,11 +953,11 @@ static s32b object_value_base(object_type *o_ptr)
  * @param plusses フラグに与える価格の基本重み
  * @return オブジェクトのフラグ価格
  */
-s32b flag_cost(object_type *o_ptr, int plusses)
+PRICE flag_cost(object_type *o_ptr, int plusses)
 {
-	s32b total = 0;
+	PRICE total = 0;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	s32b tmp_cost;
+	PRICE tmp_cost;
 	int count;
 	int i;
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
@@ -1470,10 +1470,8 @@ PRICE object_value(object_type *o_ptr)
 		value = object_value_base(o_ptr);
 	}
 
-
 	/* Apply discount (if any) */
 	if (o_ptr->discount) value -= (value * o_ptr->discount / 100L);
-
 
 	/* Return the final value */
 	return (value);
