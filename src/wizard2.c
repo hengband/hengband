@@ -87,17 +87,6 @@ static void wiz_create_named_art(void)
 	msg_print("Allocated.");
 }
 
-
-/*!
- * @brief ウィザードモード用モンスター調査 / Hack -- quick debugging hook
- * @return なし
- */
-static void do_cmd_wiz_hack_ben(void)
-{
-	msg_print("Oops.");
-	(void)probing();
-}
-
 /*!
  * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
  * @return なし
@@ -2006,7 +1995,7 @@ void do_cmd_debug(void)
 
 	/* Hack -- whatever I desire */
 	case '_':
-		do_cmd_wiz_hack_ben();
+		probing();
 		break;
 
 	/* For temporary test. */
