@@ -883,10 +883,7 @@ void do_cmd_uninscribe(void)
 
 	/* Remove the incription */
 	o_ptr->inscription = 0;
-
-	/* Combine the pack */
 	p_ptr->update |= (PU_COMBINE);
-
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 	/* .や$の関係で, 再計算が必要なはず -- henkma */
@@ -935,10 +932,7 @@ void do_cmd_inscribe(void)
 	{
 		/* Save the inscription */
 		o_ptr->inscription = quark_add(out_val);
-
-		/* Combine the pack */
 		p_ptr->update |= (PU_COMBINE);
-
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* .や$の関係で, 再計算が必要なはず -- henkma */

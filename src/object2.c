@@ -1503,10 +1503,7 @@ bool can_player_destroy_object(object_type *o_ptr)
 
 		/* We have "felt" it (again) */
 		o_ptr->ident |= (IDENT_SENSE);
-
-		/* Combine the pack */
 		p_ptr->update |= (PU_COMBINE);
-
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		return FALSE;
@@ -5343,10 +5340,7 @@ void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 
 		/* Recalculate mana XXX */
 		p_ptr->update |= (PU_MANA);
-
-		/* Combine the pack */
 		p_ptr->update |= (PU_COMBINE);
-
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Hack -- Clear temporary elemental brands if player takes off weapons */
@@ -7393,10 +7387,7 @@ static void drain_essence(void)
 
 	/* Apply autodestroy/inscription to the drained item */
 	autopick_alter_item(item, TRUE);
-
-	/* Combine the pack */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
 	p_ptr->window |= (PW_INVEN);
 }
 
@@ -7984,17 +7975,14 @@ static void add_essence(ESSENCE_IDX mode)
 		}
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 #ifdef JP
 	msg_format("%sに%sの能力を付加しました。", o_name, es_ptr->add_name);
 #else
 	msg_format("You have added ability of %s to %s.", es_ptr->add_name, o_name);
 #endif
-
-	/* Combine the pack */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
 	p_ptr->window |= (PW_INVEN);
 }
 
@@ -8035,10 +8023,7 @@ static void erase_essence(void)
 	object_flags(o_ptr, flgs);
 	if (!(have_pval_flags(flgs))) o_ptr->pval = 0;
 	msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
-
-	/* Combine the pack */
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
 	p_ptr->window |= (PW_INVEN);
 }
 

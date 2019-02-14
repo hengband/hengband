@@ -3679,8 +3679,6 @@ void update_creature(player_type *creature_ptr)
 		creature_ptr->update &= ~(PU_AUTODESTROY);
 		autopick_delayed_alter();
 	}
-
-	/* Combine the pack */
 	if (creature_ptr->update & (PU_COMBINE))
 	{
 		creature_ptr->update &= ~(PU_COMBINE);
