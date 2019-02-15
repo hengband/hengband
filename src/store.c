@@ -2248,7 +2248,7 @@ static void mass_produce(object_type *o_ptr)
 	int size = 1;
 	DISCOUNT_RATE discount = 0;
 
-	s32b cost = object_value(o_ptr);
+	PRICE cost = object_value(o_ptr);
 
 
 	/* Analyze the type */
@@ -2517,7 +2517,7 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
  */
 static int store_check_num(object_type *o_ptr)
 {
-	int 	   i;
+	int i;
 	object_type *j_ptr;
 
 	/* The "home" acts like the player */
@@ -3000,9 +3000,9 @@ bool combine_and_reorder_home(int store_num)
  */
 static int home_carry(object_type *o_ptr)
 {
-	int 				slot;
-	s32b			   value;
-	int 	i;
+	int slot;
+	PRICE value;
+	int i;
 	object_type *j_ptr;
 	bool old_stack_force_notes = stack_force_notes;
 	bool old_stack_force_costs = stack_force_costs;
@@ -3105,8 +3105,8 @@ static int home_carry(object_type *o_ptr)
  */
 static int store_carry(object_type *o_ptr)
 {
-	int 	i, slot;
-	s32b	value, j_value;
+	int i, slot;
+	PRICE value, j_value;
 	object_type *j_ptr;
 
 
