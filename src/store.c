@@ -3271,7 +3271,7 @@ static void store_item_optimize(INVENTORY_IDX item)
  */
 static bool black_market_crap(object_type *o_ptr)
 {
-	int 	i, j;
+	int i, j;
 
 	/* Ego items are never crap */
 	if (object_is_ego(o_ptr)) return (FALSE);
@@ -3463,8 +3463,8 @@ static void store_create(void)
  */
 static bool noneedtobargain(PRICE minprice)
 {
-	s32b good = st_ptr->good_buy;
-	s32b bad = st_ptr->bad_buy;
+	PRICE good = st_ptr->good_buy;
+	PRICE bad = st_ptr->bad_buy;
 
 	/* Cheap items are "boring" */
 	if (minprice < 10L) return (TRUE);
@@ -3526,12 +3526,12 @@ static void updatebargain(PRICE price, PRICE minprice, int num)
  */
 static void display_entry(int pos)
 {
-	int 		i, cur_col;
+	int i, cur_col;
 	object_type *o_ptr;
-	s32b		x;
+	s32b x;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	char		out_val[160];
+	char out_val[160];
 
 	int maxwid = 75;
 
@@ -3621,11 +3621,10 @@ static void display_entry(int pos)
 
 			/* Actually draw the price (not fixed) */
 #ifdef JP
-(void)sprintf(out_val, "%9ld固", (long)x);
+			(void)sprintf(out_val, "%9ld固", (long)x);
 #else
 			(void)sprintf(out_val, "%9ld F", (long)x);
 #endif
-
 			put_str(out_val, i+6, 68);
 		}
 
@@ -3979,10 +3978,10 @@ static s32b last_inc = 0L;
  */
 static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 {
-	s32b		i;
-	concptr		p;
-	char				buf[128];
-	char		out_val[160];
+	s32b i;
+	concptr p;
+	GAME_TEXT buf[128];
+	GAME_TEXT out_val[160];
 
 	/* Clear old increment if necessary */
 	if (!allow_inc) last_inc = 0L;
