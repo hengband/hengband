@@ -4324,17 +4324,11 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 	int     flag, loop_flag, noneed;
 	int     annoyed = 0, final = FALSE;
 	bool    cancel = FALSE;
-#ifdef JP
-	concptr pmt = "提示金額";
-#else
-	concptr    pmt = "Offer";
-#endif
+	concptr pmt = _("提示金額", "Offer");
 
 	char    out_val[160];
 
-
 	*price = 0;
-
 
 	/* Obtain the starting offer and the final offer */
 	cur_ask = price_item(o_ptr, ot_ptr->max_inflate, TRUE);
@@ -4358,12 +4352,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		/* No reason to haggle */
 		if (final_ask >= purse)
 		{
-#ifdef JP
-			msg_print("即座にこの金額にまとまった。");
-#else
-			msg_print("You instantly agree upon the price.");
-#endif
-
+			msg_print(_("即座にこの金額にまとまった。", "You instantly agree upon the price."));
 			msg_print(NULL);
 
 			/* Offer full purse */
@@ -4373,12 +4362,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		/* No need to haggle */
 		else if (noneed)
 		{
-#ifdef JP
-			msg_print("結局この金額にまとまった。");
-#else
-			msg_print("You eventually agree upon the price.");
-#endif
-
+			msg_print(_("結局この金額にまとまった。", "You eventually agree upon the price."));
 			msg_print(NULL);
 		}
 
@@ -4386,12 +4370,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		else
 		{
 			/* Message summary */
-#ifdef JP
-			msg_print("すんなりとこの金額にまとまった。");
-#else
-			msg_print("You quickly agree upon the price.");
-#endif
-
+			msg_print(_("すんなりとこの金額にまとまった。", "You quickly agree upon the price."));
 			msg_print(NULL);
 		}
 
@@ -4400,12 +4379,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 
 		/* Final offer */
 		final = TRUE;
-#ifdef JP
-		pmt = "最終提示金額";
-#else
-		pmt = "Final Offer";
-#endif
-
+		pmt = _("最終提示金額", "Final Offer");
 	}
 
 	/* Haggle for the whole pile */
@@ -4438,12 +4412,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 
 			(void)sprintf(out_val, "%s :  %ld", pmt, (long)cur_ask);
 			put_str(out_val, 1, 0);
-#ifdef JP
-			cancel = receive_offer("提示する価格? ",
-#else
-			cancel = receive_offer("What price do you ask? ",
-#endif
-
+			cancel = receive_offer(_("提示する価格? ", "What price do you ask? "),
 								   &offer, last_offer, -1, cur_ask, final);
 
 			if (cancel)
@@ -4496,11 +4465,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 			{
 				cur_ask = final_ask;
 				final = TRUE;
-#ifdef JP
-				pmt = "最終提示金額";
-#else
-				pmt = "Final Offer";
-#endif
+				pmt = _("最終提示金額", "Final Offer");
 
 				annoyed++;
 				if (annoyed > 3)
@@ -4525,12 +4490,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 				allow_inc = TRUE;
 				prt("", 1, 0);
 				(void)sprintf(out_val,
-#ifdef JP
-					      "前回の提示価格 $%ld", (long)last_offer);
-#else
-							  "Your last bid %ld", (long)last_offer);
-#endif
-
+					_("前回の提示価格 $%ld", "Your last bid %ld"), (long)last_offer);
 				put_str(out_val, 1, 39);
 				say_comment_3(cur_ask, annoyed);
 			}
@@ -4571,11 +4531,7 @@ static void store_purchase(void)
 
 	if (cur_store_num == STORE_MUSEUM)
 	{
-#ifdef JP
-		msg_print("博物館から取り出すことはできません。");
-#else
-		msg_print("Museum.");
-#endif
+		msg_print(_("博物館から取り出すことはできません。", "Museum."));
 		return;
 	}
 
@@ -4583,22 +4539,11 @@ static void store_purchase(void)
 	if (st_ptr->stock_num <= 0)
 	{
 		if (cur_store_num == STORE_HOME)
-#ifdef JP
-			msg_print("我が家には何も置いてありません。");
-#else
-			msg_print("Your home is empty.");
-#endif
-
+			msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
 		else
-#ifdef JP
-			msg_print("現在商品の在庫を切らしています。");
-#else
-			msg_print("I am currently out of stock.");
-#endif
-
+			msg_print(_("現在商品の在庫を切らしています。", "I am currently out of stock."));
 		return;
 	}
-
 
 	/* Find the number of objects on this and following pages */
 	i = (st_ptr->stock_num - store_top);
