@@ -3,6 +3,7 @@
 #include "spells-object.h"
 #include "object-hook.h"
 #include "player-status.h"
+#include "avatar.h"
 
 
 typedef struct
@@ -421,7 +422,6 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
 		/* Paranoia - reroll if nothing */
 		if (!(i_ptr->k_idx)) continue;
 
-		/* Drop the object */
 		(void)drop_near(i_ptr, -1, y1, x1);
 
 		num--;
@@ -462,7 +462,234 @@ void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bo
 			object_known(i_ptr);
 		}
 
-		/* Drop the object */
 		(void)drop_near(i_ptr, -1, y1, x1);
 	}
 }
+
+/*!
+ * @brief 防具呪縛処理 /
+ * Curse the players armor
+ * @return 実際に呪縛されたらTRUEを返す
+ */
+bool curse_armor(void)
+{
+	int i;
+	object_type *o_ptr;
+
+	GAME_TEXT o_name[MAX_NLEN];
+
+	/* Curse the body armor */
+	o_ptr = &inventory[INVEN_BODY];
+
+	/* Nothing to curse */
+	if (!o_ptr->k_idx) return (FALSE);
+
+	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+
+	/* Attempt a saving throw for artifacts */
+	if (object_is_artifact(o_ptr) && (randint0(100) < 50))
+	{
+		/* Cool */
+#ifdef JP
+		msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
+			"恐怖の暗黒オーラ", "防具", o_name);
+#else
+		msg_format("A %s tries to %s, but your %s resists the effects!",
+			"terrible black aura", "surround your armor", o_name);
+#endif
+
+	}
+
+	/* not artifact or failed save... */
+	else
+	{
+		msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
+		chg_virtue(V_ENCHANT, -5);
+
+		/* Blast the armor */
+		o_ptr->name1 = 0;
+		o_ptr->name2 = EGO_BLASTED;
+		o_ptr->to_a = 0 - randint1(5) - randint1(5);
+		o_ptr->to_h = 0;
+		o_ptr->to_d = 0;
+		o_ptr->ac = 0;
+		o_ptr->dd = 0;
+		o_ptr->ds = 0;
+
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			o_ptr->art_flags[i] = 0;
+
+		/* Curse it */
+		o_ptr->curse_flags = TRC_CURSED;
+
+		/* Break it */
+		o_ptr->ident |= (IDENT_BROKEN);
+		p_ptr->update |= (PU_BONUS | PU_MANA);
+		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	}
+
+	return (TRUE);
+}
+
+/*!
+ * @brief 武器呪縛処理 /
+ * Curse the players weapon
+ * @param force 無条件に呪縛を行うならばTRUE
+ * @param o_ptr 呪縛する武器のアイテム情報参照ポインタ
+ * @return 実際に呪縛されたらTRUEを返す
+ */
+bool curse_weapon_object(bool force, object_type *o_ptr)
+{
+	int i;
+	GAME_TEXT o_name[MAX_NLEN];
+
+	/* Nothing to curse */
+	if (!o_ptr->k_idx) return (FALSE);
+	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+
+	/* Attempt a saving throw */
+	if (object_is_artifact(o_ptr) && (randint0(100) < 50) && !force)
+	{
+		/* Cool */
+#ifdef JP
+		msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！",
+			"恐怖の暗黒オーラ", "武器", o_name);
+#else
+		msg_format("A %s tries to %s, but your %s resists the effects!",
+			"terrible black aura", "surround your weapon", o_name);
+#endif
+	}
+
+	/* not artifact or failed save... */
+	else
+	{
+		if (!force) msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
+		chg_virtue(V_ENCHANT, -5);
+
+		/* Shatter the weapon */
+		o_ptr->name1 = 0;
+		o_ptr->name2 = EGO_SHATTERED;
+		o_ptr->to_h = 0 - randint1(5) - randint1(5);
+		o_ptr->to_d = 0 - randint1(5) - randint1(5);
+		o_ptr->to_a = 0;
+		o_ptr->ac = 0;
+		o_ptr->dd = 0;
+		o_ptr->ds = 0;
+
+		for (i = 0; i < TR_FLAG_SIZE; i++)
+			o_ptr->art_flags[i] = 0;
+
+		/* Curse it */
+		o_ptr->curse_flags = TRC_CURSED;
+
+		/* Break it */
+		o_ptr->ident |= (IDENT_BROKEN);
+		p_ptr->update |= (PU_BONUS | PU_MANA);
+		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	}
+
+	return (TRUE);
+}
+
+/*!
+ * @brief 武器呪縛処理のメインルーチン /
+ * Curse the players weapon
+ * @param force 無条件に呪縛を行うならばTRUE
+ * @param slot 呪縛する武器の装備スロット
+ * @return 実際に呪縛されたらTRUEを返す
+ */
+bool curse_weapon(bool force, int slot)
+{
+	/* Curse the weapon */
+	return curse_weapon_object(force, &inventory[slot]);
+}
+
+
+/*!
+ * @brief 防具の錆止め防止処理
+ * @return ターン消費を要する処理を行ったならばTRUEを返す
+ */
+bool rustproof(void)
+{
+	OBJECT_IDX item;
+	object_type *o_ptr;
+	GAME_TEXT o_name[MAX_NLEN];
+	concptr q, s;
+
+	/* Select a piece of armour */
+	item_tester_hook = object_is_armour;
+
+	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
+	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
+
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	if (!o_ptr) return FALSE;
+
+	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+
+	add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
+
+	if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr))
+	{
+#ifdef JP
+		msg_format("%sは新品同様になった！", o_name);
+#else
+		msg_format("%s %s look%s as good as new!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
+#endif
+
+		o_ptr->to_a = 0;
+	}
+
+#ifdef JP
+	msg_format("%sは腐食しなくなった。", o_name);
+#else
+	msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "are" : "is"));
+#endif
+
+	calc_android_exp();
+	return TRUE;
+}
+
+/*!
+ * @brief ボルトのエゴ化処理(火炎エゴのみ) /
+ * Enchant some bolts
+ * @return 常にTRUEを返す
+ */
+bool brand_bolts(void)
+{
+	int i;
+
+	/* Use the first acceptable bolts */
+	for (i = 0; i < INVEN_PACK; i++)
+	{
+		object_type *o_ptr = &inventory[i];
+
+		/* Skip non-bolts */
+		if (o_ptr->tval != TV_BOLT) continue;
+
+		/* Skip artifacts and ego-items */
+		if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
+			continue;
+
+		/* Skip cursed/broken items */
+		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) continue;
+
+		/* Randomize */
+		if (randint0(100) < 75) continue;
+
+		msg_print(_("クロスボウの矢が炎のオーラに包まれた！", "Your bolts are covered in a fiery aura!"));
+
+		/* Ego-item */
+		o_ptr->name2 = EGO_FLAME;
+		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+		return (TRUE);
+	}
+
+	if (flush_failure) flush();
+
+	/* Fail */
+	msg_print(_("炎で強化するのに失敗した。", "The fiery enchantment failed."));
+
+	return (TRUE);
+}
+

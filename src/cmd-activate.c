@@ -15,6 +15,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-status.h"
+#include "spells-object.h"
 #include "realm-hex.h"
 #include "player-status.h"
 

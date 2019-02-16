@@ -3,6 +3,7 @@
 #include "projection.h"
 #include "spells-summon.h"
 #include "spells-status.h"
+#include "spells-object.h"
 #include "avatar.h"
 
 
