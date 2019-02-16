@@ -1798,7 +1798,7 @@ void do_cmd_debug(void)
 
 	/* Hitpoint rerating */
 	case 'h':
-		roll_hitdice(SPOP_DISPLAY_MES | SPOP_DEBUG);
+		roll_hitdice(p_ptr, SPOP_DISPLAY_MES | SPOP_DEBUG);
 		break;
 
 	case 'H':

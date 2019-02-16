@@ -1201,7 +1201,7 @@ static void get_extra(bool roll_hitdie)
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
 	/* Roll for hit point unless quick-start */
-	if (roll_hitdie) roll_hitdice(SPOP_NO_UPDATE);
+	if (roll_hitdie) roll_hitdice(p_ptr, SPOP_NO_UPDATE);
 
 	/* Initial hitpoints */
 	p_ptr->mhp = p_ptr->player_hp[0];

@@ -3688,7 +3688,7 @@ void change_race(CHARACTER_IDX new_race, concptr effect_msg)
 	else
 		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
-	roll_hitdice(0L);
+	roll_hitdice(p_ptr, 0L);
 
 	/* The experience level may be modified */
 	check_experience();
@@ -3818,7 +3818,7 @@ void do_poly_self(void)
 		power -= 10;
 
 		get_max_stats();
-		roll_hitdice(0L);
+		roll_hitdice(p_ptr, 0L);
 	}
 
 	while ((power > randint0(15)) && one_in_(3))

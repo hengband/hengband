@@ -12,7 +12,7 @@ extern bool poly_monster(DIRECTION dir, int power);
 extern bool clone_monster(DIRECTION dir);
 extern void stop_singing(void);
 extern bool time_walk(player_type *creature_ptr);
-extern void roll_hitdice(SPOP_FLAGS options);
+extern void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options);
 extern bool_hack life_stream(bool_hack message, bool_hack virtue_change);
 extern bool_hack heroism(int base);
 extern bool_hack berserk(int base);
