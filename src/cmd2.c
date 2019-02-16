@@ -2168,7 +2168,7 @@ void do_cmd_rest(void)
 
 	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) || INTERUPTING_SONG_EFFECT(p_ptr)))
 	{
-		stop_singing();
+		stop_singing(p_ptr);
 	}
 
 	/* Hex */

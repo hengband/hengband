@@ -529,7 +529,7 @@ static bool cmd_racial_power_aux(s32b command)
 			/* Singing is already stopped */
 			if (!SINGING_SONG_EFFECT(p_ptr) && !INTERUPTING_SONG_EFFECT(p_ptr)) return FALSE;
 
-			stop_singing();
+			stop_singing(p_ptr);
 			p_ptr->energy_use = 10;
 			break;
 		}

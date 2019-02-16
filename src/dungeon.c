@@ -1178,7 +1178,7 @@ static void check_music(void)
 
 	if (p_ptr->anti_magic)
 	{
-		stop_singing();
+		stop_singing(p_ptr);
 		return;
 	}
 
@@ -1193,7 +1193,7 @@ static void check_music(void)
 
 	if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, need_mana, need_mana_frac) < 0)
 	{
-		stop_singing();
+		stop_singing(p_ptr);
 		return;
 	}
 	else
@@ -2508,7 +2508,7 @@ static void process_world_aux_mutation(void)
 		msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
 		msg_print(NULL);
 		set_food(PY_FOOD_WEAK);
-		if (music_singing_any()) stop_singing();
+		if (music_singing_any()) stop_singing(p_ptr);
 		if (hex_spelling_any()) stop_hex_spell_all();
 	}
 

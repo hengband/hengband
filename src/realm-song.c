@@ -51,7 +51,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターを減速させる。抵抗されると無効。", "Attempts to slow all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -76,7 +76,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("命中率とACのボーナスを得る。", "Gives bonus to hit and AC for a few turns.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -99,7 +99,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("轟音のボルトを放つ。", "Fires a bolt of sound.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		{
 			DICE_NUMBER dice = 4 + (plev - 1) / 5;
@@ -121,7 +121,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターを朦朧させる。抵抗されると無効。", "Attempts to stun all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -148,7 +148,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("体力を少し回復させる。", "Heals HP a little.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -175,7 +175,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		{
 			DICE_NUMBER dice = 2;
@@ -197,7 +197,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターを恐怖させる。抵抗されると無効。", "Attempts to scare all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -223,7 +223,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("ヒーロー気分になる。", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -256,7 +256,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Detects traps, doors and stairs in your vicinity. And detects all monsters at level 15, treasures and items at level 20. Maps nearby area at level 25. Lights and know the whole level at level 40. These effects occurs by turns while this song continues.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -316,7 +316,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターに対して精神攻撃を行う。", "Damages all monsters in sight with PSI damages.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -343,7 +343,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("自分のいるマスと隣りのマスに落ちているアイテムを鑑定する。", "Identifies all items which are in the adjacent squares.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -373,7 +373,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("隠密行動能力を上昇させる。", "Gives improved stealth.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -396,7 +396,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターを混乱させる。抵抗されると無効。", "Attempts to confuse all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -422,7 +422,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターに対して轟音攻撃を行う。", "Damages all monsters in sight with booming sound.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -450,7 +450,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (cast || fail) stop_singing(p_ptr);
 
 			if (cast)
 			{
@@ -465,7 +465,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターを魅了する。抵抗されると無効。", "Attempts to charm all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -492,7 +492,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("壁を掘り進む。自分の足元のアイテムは蒸発する。", "Makes you be able to burrow into walls. Objects under your feet evaporate.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -519,7 +519,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -562,7 +562,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("加速する。", "Hastes you.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -591,7 +591,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (info) return info_radius(rad);
 
 			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (cast || fail) stop_singing(p_ptr);
 
 			if (cast)
 			{
@@ -607,7 +607,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Damages all monsters in sight. Hurts evil monsters greatly.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -634,7 +634,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターを減速させ、眠らせようとする。抵抗されると無効。", "Attempts to slow and sleep all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -667,7 +667,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (info) return info_damage(dice, sides, 0);
 
 			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (cast || fail) stop_singing(p_ptr);
 
 			if (cast)
 			{
@@ -689,7 +689,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (info) return info_delay(base, sides);
 
 			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (cast || fail) stop_singing(p_ptr);
 
 			if (cast)
 			{
@@ -705,7 +705,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Shakes dungeon structure, and results in random swapping of floors and walls.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -732,7 +732,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("視界内の全てのモンスターを麻痺させようとする。抵抗されると無効。", "Attempts to freeze all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -760,7 +760,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (cast || fail) stop_singing(p_ptr);
 
 			if (cast)
 			{
@@ -776,7 +776,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Hastes you. Gives heroism. Damages all monsters in sight.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -823,7 +823,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also heals cut and stun completely.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{
@@ -853,7 +853,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		{
 			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (cast || fail) stop_singing(p_ptr);
 
 			if (cast)
 			{
@@ -877,7 +877,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (info) return info_damage(dice, sides, 0);
 
 			/* Stop singing before start another */
-			if (cast || fail) stop_singing();
+			if (cast || fail) stop_singing(p_ptr);
 
 			if (cast)
 			{
@@ -894,7 +894,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			"Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks.");
 
 		/* Stop singing before start another */
-		if (cast || fail) stop_singing();
+		if (cast || fail) stop_singing(p_ptr);
 
 		if (cast)
 		{

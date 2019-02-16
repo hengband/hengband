@@ -38,7 +38,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 		return;
 	}
 
-	if (music_singing_any()) stop_singing();
+	if (music_singing_any()) stop_singing(p_ptr);
 	if (hex_spelling_any())
 	{
 		if (!hex_spelling(HEX_INHAIL)) stop_hex_spell_all();

@@ -58,7 +58,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		return;
 	}
 
-	if (music_singing_any()) stop_singing();
+	if (music_singing_any()) stop_singing(p_ptr);
 
 	/* Hex */
 	if (hex_spelling_any() && ((p_ptr->lev < 35) || hex_spell_fully())) stop_hex_spell_all();

@@ -92,7 +92,7 @@ void set_action(ACTION_IDX typ)
 	p_ptr->action = typ;
 
 	/* If we are requested other action, stop singing */
-	if (prev_typ == ACTION_SING) stop_singing();
+	if (prev_typ == ACTION_SING) stop_singing(p_ptr);
 	if (prev_typ == ACTION_SPELL) stop_hex_spell();
 
 	switch (p_ptr->action)

@@ -4596,7 +4596,7 @@ void cast_shuffle(void)
  */
 void stop_mouth(void)
 {
-	if (music_singing_any()) stop_singing();
+	if (music_singing_any()) stop_singing(p_ptr);
 	if (hex_spelling_any()) stop_hex_spell_all();
 }
 

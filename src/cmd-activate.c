@@ -452,7 +452,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	/* Special items */
 	else if (o_ptr->tval == TV_WHISTLE)
 	{
-		if (music_singing_any()) stop_singing();
+		if (music_singing_any()) stop_singing(p_ptr);
 		if (hex_spelling_any()) stop_hex_spell_all();
 
 		{
@@ -692,7 +692,7 @@ static bool activate_dragon_breath(object_type *o_ptr)
 	if (n == 0) return FALSE;
 
 	/* Stop speaking */
-	if (music_singing_any()) stop_singing();
+	if (music_singing_any()) stop_singing(p_ptr);
 	if (hex_spelling_any()) stop_hex_spell_all();
 
 	t = randint0(n);
@@ -1144,7 +1144,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_SCARE_AREA:
 	{
-		if (music_singing_any()) stop_singing();
+		if (music_singing_any()) stop_singing(p_ptr);
 		if (hex_spelling_any()) stop_hex_spell_all();
 		msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!",
 			"You wind a mighty blast; your enemies tremble!"));
