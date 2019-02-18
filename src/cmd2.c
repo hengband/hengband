@@ -584,7 +584,9 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
  */
 static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under)
 {
-	int d, count, xx, yy;
+	DIRECTION d;
+	int count;
+	POSITION xx, yy;
 
 	/* Count how many matches */
 	count = 0;
@@ -639,9 +641,9 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under
  */
 static int count_chests(POSITION *y, POSITION *x, bool trapped)
 {
-	int d, count;
+	DIRECTION d;
+	int count;
 	OBJECT_IDX o_idx;
-
 	object_type *o_ptr;
 
 	/* Count how many matches */
@@ -690,7 +692,7 @@ static int count_chests(POSITION *y, POSITION *x, bool trapped)
 static DIRECTION coords_to_dir(POSITION y, POSITION x)
 {
 	int d[3][3] = { {7, 4, 1}, {8, 5, 2}, {9, 6, 3} };
-	int dy, dx;
+	DIRECTION dy, dx;
 
 	dy = y - p_ptr->y;
 	dx = x - p_ptr->x;
@@ -1205,13 +1207,12 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
  */
 void do_cmd_tunnel(void)
 {
-	int			y, x, dir;
-
-	grid_type	*g_ptr;
+	POSITION y, x;
+	DIRECTION dir;
+	grid_type *g_ptr;
 	FEAT_IDX feat;
 
-	bool		more = FALSE;
-
+	bool more = FALSE;
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{

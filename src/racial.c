@@ -283,7 +283,7 @@ static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
 }
 
 
-static int  racial_cost;
+static int racial_cost;
 
 /*!
  * @brief レイシャル・パワーの発動の判定処理
