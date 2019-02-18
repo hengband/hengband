@@ -117,7 +117,7 @@ static TERM_COLOR mh_attr(int max)
  * @param type 魔法属性
  * @return 対応する色ID
  */
-static TERM_COLOR spell_color(int type)
+static TERM_COLOR spell_color(EFFECT_ID type)
 {
 	/* Check if A.B.'s new graphics should be used (rr9) */
 	if (streq(ANGBAND_GRAF, "new") || streq(ANGBAND_GRAF, "ne2"))
@@ -434,7 +434,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Locked doors are unlocked */
 			if (is_closed_door(g_ptr->feat) && f_ptr->power && have_flag(f_ptr->flags, FF_OPEN))
 			{
-				s16b old_feat = g_ptr->feat;
+				FEAT_IDX old_feat = g_ptr->feat;
 
 				/* Unlock the door */
 				cave_alter_feat(y, x, FF_DISARM);
