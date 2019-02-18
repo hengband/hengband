@@ -547,6 +547,7 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
+				concentration(p_ptr);
 			}
 			else if (command == -4)
 			{
