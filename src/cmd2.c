@@ -2994,7 +2994,8 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
  */
 static void travel_flow(POSITION ty, POSITION tx)
 {
-	POSITION x, y, d;
+	POSITION x, y;
+	DIRECTION d;
 	bool wall = FALSE;
 	feature_type *f_ptr = &f_info[grid_array[p_ptr->y][p_ptr->x].feat];
 
