@@ -1090,7 +1090,6 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 
 	take_turn(p_ptr, 100);;
 
-	/* Get grid */
 	g_ptr = &grid_array[y][x];
 	f_ptr = &f_info[g_ptr->feat];
 	power = f_ptr->power;
@@ -1237,7 +1236,6 @@ void do_cmd_tunnel(void)
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 
-		/* Get grid */
 		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
@@ -1649,7 +1647,6 @@ void do_cmd_disarm(void)
  */
 static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 {
-	/* Get grid */
 	grid_type	*g_ptr = &grid_array[y][x];
 
 	/* Get feature */
@@ -1774,7 +1771,6 @@ void do_cmd_bash(void)
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 
-		/* Get grid */
 		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
@@ -1857,7 +1853,6 @@ void do_cmd_alter(void)
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 
-		/* Get grid */
 		g_ptr = &grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
@@ -2089,7 +2084,7 @@ void do_cmd_walk(bool pickup)
 			change_wild_mode();
 
 			/* Give first move to monsters */
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			/* HACk -- set the encouter flag for the wilderness generation */
 			generate_encounter = TRUE;
@@ -2424,7 +2419,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if (object_is_cursed(o_ptr) && (item >= INVEN_RARM))
 	{
 		msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
-
 		return FALSE;
 	}
 
