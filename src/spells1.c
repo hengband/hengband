@@ -3957,7 +3957,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Redraw the monster grid */
 	lite_spot(y, x);
 
-
 	/* Update monster recall window */
 	if ((p_ptr->monster_race_idx == m_ptr->r_idx) && (seen || !m_ptr->r_idx))
 	{
@@ -5861,10 +5860,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 							if (m_ptr->ml)
 							{
-								/* Hack -- auto-recall */
 								if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-
-								/* Hack - auto-track */
 								health_track(grid_array[project_m_y][project_m_x].m_idx);
 							}
 						}
@@ -5888,10 +5884,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 					if (m_ptr->ml)
 					{
-						/* Hack -- auto-recall */
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-
-						/* Hack - auto-track */
 						health_track(grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
@@ -6020,10 +6013,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 					if (m_ptr->ml)
 					{
-						/* Hack -- auto-recall */
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-
-						/* Hack - auto-track */
 						health_track(grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
@@ -6547,10 +6537,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 				if (m_ptr->ml)
 				{
-					/* Hack -- auto-recall */
 					if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-
-					/* Hack - auto-track */
 					if (m_ptr->ml) health_track(grid_array[y][x].m_idx);
 				}
 			}
