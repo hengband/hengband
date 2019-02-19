@@ -5979,8 +5979,8 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			if( is_mirror_grid(&grid_array[y][x]) && !second_step )
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
-				monster_target_y=(s16b)y;
-				monster_target_x=(s16b)x;
+				monster_target_y = y;
+				monster_target_x = x;
 
 				remove_mirror(y,x);
 				for( j = 0; j <=i ; j++ )

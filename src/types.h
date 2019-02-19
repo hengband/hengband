@@ -1020,7 +1020,7 @@ struct player_type
 
 	PLAYER_LEVEL lev;			/* Level */
 
-	s16b town_num;			/* Current town number */
+	TOWN_IDX town_num;			/* Current town number */
 	s16b arena_number;		/* monster number in arena -KMW- */
 	bool inside_arena;		/* Is character inside arena? */
 	QUEST_IDX inside_quest;		/* Inside quest level */
@@ -1647,7 +1647,7 @@ typedef struct wilderness_type wilderness_type;
 struct wilderness_type
 {
 	int terrain;
-	int town;
+	TOWN_IDX town;
 	int road;
 	u32b seed;
 	DEPTH level;

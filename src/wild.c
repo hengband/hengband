@@ -321,7 +321,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 	POSITION x1, y1;
 
 	/* Number of the town (if any) */
-	p_ptr->town_num = (s16b)wilderness[y][x].town;
+	p_ptr->town_num = wilderness[y][x].town;
 
 	/* Set the base level */
 	base_level = wilderness[y][x].level;
@@ -747,8 +747,8 @@ typedef struct wilderness_grid wilderness_grid;
 struct wilderness_grid
 {
 	int		terrain;    /* Terrain type */
-	int		town;       /* Town number */
-	s16b	level;		/* Level of the wilderness */
+	TOWN_IDX town;   /* Town number */
+	DEPTH level;     /* Level of the wilderness */
 	byte	road;       /* Road */
 	char	name[32];	/* Name of the town/wilderness */
 };
@@ -811,7 +811,7 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 				w_letter[index].level = 0;
 			
 			if (num > 3)
-				w_letter[index].town = atoi(zz[3]);
+				w_letter[index].town = (TOWN_IDX)atoi(zz[3]);
 			else
 				w_letter[index].town = 0;
 			
