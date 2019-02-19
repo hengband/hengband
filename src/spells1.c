@@ -1240,9 +1240,6 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Assume a default death */
 	concptr note_dies = extract_note_dies(real_r_idx(m_ptr));
 
-	POSITION ty = m_ptr->fy;
-	POSITION tx = m_ptr->fx;
-
 	DEPTH caster_lev = (who > 0) ? r_info[caster_ptr->r_idx].level : (p_ptr->lev * 2);
 
 	/* Nobody here */
@@ -3944,90 +3941,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	if ((typ == GF_BLOOD_CURSE) && one_in_(4))
 	{
-		int curse_flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
-		int count = 0;
-		do
-		{
-			switch (randint1(28))
-			{
-			case 1: case 2:
-				if (!count)
-				{
-					msg_print(_("地面が揺れた...", "The ground trembles..."));
-					earthquake(ty, tx, 4 + randint0(4));
-					if (!one_in_(6)) break;
-				}
-			case 3: case 4: case 5: case 6:
-				if (!count)
-				{
-					int extra_dam = damroll(10, 10);
-					msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
-
-					project(0, 8, ty, tx, extra_dam, GF_MANA, curse_flg, -1);
-					if (!one_in_(6)) break;
-				}
-			case 7: case 8:
-				if (!count)
-				{
-					msg_print(_("空間が歪んだ！", "Space warps about you!"));
-
-					if (m_ptr->r_idx) teleport_away(g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
-					if (one_in_(13)) count += activate_hi_summon(ty, tx, TRUE);
-					if (!one_in_(6)) break;
-				}
-			case 9: case 10: case 11:
-				msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
-				project(0, 7, ty, tx, 50, GF_DISINTEGRATE, curse_flg, -1);
-				if (!one_in_(6)) break;
-			case 12: case 13: case 14: case 15: case 16:
-				aggravate_monsters(0);
-				if (!one_in_(6)) break;
-			case 17: case 18:
-				count += activate_hi_summon(ty, tx, TRUE);
-				if (!one_in_(6)) break;
-			case 19: case 20: case 21: case 22:
-			{
-				bool pet = !one_in_(3);
-				BIT_FLAGS mode = PM_ALLOW_GROUP;
-
-				if (pet) mode |= PM_FORCE_PET;
-				else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
-
-				count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev*2/3+randint1(p_ptr->lev/2) : dun_level), 0, mode, '\0');
-				if (!one_in_(6)) break;
-			}
-			case 23: case 24: case 25:
-				if (p_ptr->hold_exp && (randint0(100) < 75)) break;
-				msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
-
-				if (p_ptr->hold_exp) lose_exp(p_ptr->exp / 160);
-				else lose_exp(p_ptr->exp / 16);
-				if (!one_in_(6)) break;
-			case 26: case 27: case 28:
-			{
-				int i = 0;
-				if (one_in_(13))
-				{
-					while (i < A_MAX)
-					{
-						do
-						{
-							(void)do_dec_stat(i);
-						}
-						while (one_in_(2));
-
-						i++;
-					}
-				}
-				else
-				{
-					(void)do_dec_stat(randint0(6));
-				}
-				break;
-			}
-			}
-		}
-		while (one_in_(5));
+		blood_curse_to_enemy(who);
 	}
 
 	if (p_ptr->inside_battle)

@@ -1041,6 +1041,7 @@ extern bool eat_lock(void);
 extern bool shock_power(void);
 extern bool booze(player_type *creature_ptr);
 extern bool detonation(player_type *creature_ptr);
+extern void blood_curse_to_enemy(MONSTER_IDX m_idx);
 
 
 /* bldg.c */
