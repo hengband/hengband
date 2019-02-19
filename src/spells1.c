@@ -6538,7 +6538,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				if (m_ptr->ml)
 				{
 					if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-					if (m_ptr->ml) health_track(grid_array[y][x].m_idx);
+					health_track(grid_array[y][x].m_idx);
 				}
 			}
 		}
