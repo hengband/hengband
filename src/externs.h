@@ -563,6 +563,8 @@ extern bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken);
 #ifdef TRAVEL
 extern void do_cmd_travel(void);
 #endif
+extern bool easy_open_door(POSITION y, POSITION x);
+extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
 
 /* cmd4.c */
 #ifndef JP
@@ -1353,14 +1355,10 @@ extern void repeat_check(void);
 /* variable.c */
 extern bool easy_open;
 
-/* cmd2.c */
-extern bool easy_open_door(POSITION y, POSITION x);
 
 /* variable.c */
 extern bool easy_disarm;
 
-/* cmd2.c */
-extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
 
 /* object1.c */
 extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
