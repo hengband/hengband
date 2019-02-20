@@ -25,6 +25,7 @@
 #include "player-status.h"
 #include "realm-hex.h"
 #include "geometry.h"
+#include "wild.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

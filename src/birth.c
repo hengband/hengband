@@ -20,6 +20,7 @@
 #include "player-status.h"
 #include "spells.h"
 #include "spells-status.h"
+#include "wild.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

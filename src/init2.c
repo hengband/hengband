@@ -38,6 +38,7 @@
 #include "trap.h"
 #include "rooms.h"
 #include "store.h"
+#include "wild.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

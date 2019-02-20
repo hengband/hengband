@@ -16,6 +16,7 @@
 #include "grid.h"
 #include "monster.h"
 #include "quest.h"
+#include "wild.h"
 
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */

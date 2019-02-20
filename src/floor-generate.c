@@ -105,6 +105,7 @@
 #include "monster.h"
 #include "quest.h"
 #include "player-status.h"
+#include "wild.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;

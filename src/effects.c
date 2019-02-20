@@ -20,6 +20,7 @@
 #include "spells-status.h"
 #include "realm-hex.h"
 #include "object-hook.h"
+#include "wild.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

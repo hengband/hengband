@@ -51,6 +51,7 @@
 #include "monster.h"
 #include "artifact.h"
 #include "cmd-activate.h"
+#include "wild.h"
 
 
 
