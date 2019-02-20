@@ -34,14 +34,14 @@ extern int max_max_autopick;
 extern autopick_type *autopick_list;
 
 /* tables.c */
-extern const s16b ddd[9];
-extern const s16b ddx[10];
-extern const s16b ddy[10];
-extern const s16b ddx_ddd[9];
-extern const s16b ddy_ddd[9];
-extern const s16b cdd[8];
-extern const s16b ddx_cdd[8];
-extern const s16b ddy_cdd[8];
+extern const POSITION ddd[9];
+extern const POSITION ddx[10];
+extern const POSITION ddy[10];
+extern const POSITION ddx_ddd[9];
+extern const POSITION ddy_ddd[9];
+extern const POSITION cdd[8];
+extern const POSITION ddx_cdd[8];
+extern const POSITION ddy_cdd[8];
 extern const char hexsym[16];
 extern const char listsym[];
 extern const concptr color_char;

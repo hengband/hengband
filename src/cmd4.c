@@ -6168,7 +6168,7 @@ static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt,
 		int old_grp = grp;
 
 		/* Move up or down */
-		grp += ddy[d];
+		grp += (IDX)ddy[d];
 
 		/* Verify */
 		if (grp >= grp_cnt)	grp = grp_cnt - 1;
@@ -6180,7 +6180,7 @@ static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt,
 	else
 	{
 		/* Move up or down */
-		list += ddy[d];
+		list += (IDX)ddy[d];
 
 		/* Verify */
 		if (list >= list_cnt) list = list_cnt - 1;
@@ -6380,8 +6380,8 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 			if ((a == 0x7f) && (ddy[d] > 0)) d = 0;
 			if ((c == 0xff) && (ddx[d] > 0)) d = 0;
 
-			a += ddy[d];
-			c += ddx[d];
+			a += (TERM_COLOR)ddy[d];
+			c += (SYMBOL_CODE)ddx[d];
 
 			/* Force correct code for both ASCII character and tile */
 			if (c & 0x80) a |= 0x80;

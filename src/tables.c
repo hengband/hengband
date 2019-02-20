@@ -17,50 +17,50 @@
 /*!
  * キーパッドの方向を南から反時計回り順に列挙 / Global array for looping through the "keypad directions"
  */
-const s16b ddd[9] =
+const POSITION ddd[9] =
 { 2, 8, 6, 4, 3, 1, 9, 7, 5 };
 
 /*!
  * dddで定義した順にベクトルのX軸成分を定義 / Global arrays for converting "keypad direction" into offsets
  */
-const s16b ddx[10] =
+const POSITION ddx[10] =
 { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
 
 /*!
  * dddで定義した順にベクトルのY軸成分を定義 / Global arrays for converting "keypad direction" into offsets
  */
-const s16b ddy[10] =
+const POSITION ddy[10] =
 { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 };
 
 /*!
  * ddd越しにベクトルのX軸成分を定義 / Global arrays for optimizing "ddx[ddd[i]]" and "ddy[ddd[i]]"
  */
-const s16b ddx_ddd[9] =
+const POSITION ddx_ddd[9] =
 { 0, 0, 1, -1, 1, -1, 1, -1, 0 };
 
 /*!
  * ddd越しにベクトルのY軸成分を定義 / Global arrays for optimizing "ddx[ddd[i]]" and "ddy[ddd[i]]"
  */
-const s16b ddy_ddd[9] =
+const POSITION ddy_ddd[9] =
 { 1, -1, 0, 0, 1, 1, -1, -1, 0 };
 
 
 /*!
  * キーパッドの円環状方向配列 / Circular keypad direction array
  */
-const s16b cdd[8] =
+const POSITION cdd[8] =
 { 2, 3, 6, 9, 8, 7, 4, 1 };
 
 /*!
  * cdd越しにベクトルのX軸成分を定義 / Global arrays for optimizing "ddx[cdd[i]]" and "ddy[cdd[i]]"
  */
-const s16b ddx_cdd[8] =
+const POSITION ddx_cdd[8] =
 { 0, 1, 1, 1, 0, -1, -1, -1 };
 
 /*!
  * cdd越しにベクトルのY軸成分を定義 / Global arrays for optimizing "ddx[cdd[i]]" and "ddy[cdd[i]]"
  */
-const s16b ddy_cdd[8] =
+const POSITION ddy_cdd[8] =
 { 1, 1, 0, -1, -1, -1, 0, 1 };
 
 
