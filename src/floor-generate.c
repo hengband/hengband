@@ -587,8 +587,8 @@ static void gen_caverns_and_lakes(void)
  */
 static bool cave_gen(void)
 {
-	int i, k, y, x;
-
+	int i, k;
+	POSITION y, x;
 	dun_data dun_body;
 
 	/* Global data */
@@ -670,10 +670,8 @@ static bool cave_gen(void)
 		}
 	}
 
-
 	/* Generate various caverns and lakes */
 	gen_caverns_and_lakes();
-
 
 	/* Build maze */
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_MAZE)
@@ -768,7 +766,7 @@ static bool cave_gen(void)
 		/* Hack -- Scramble the room order */
 		for (i = 0; i < dun->cent_n; i++)
 		{
-			int ty, tx;
+			POSITION ty, tx;
 			int pick = rand_range(0, i);
 
 			ty = dun->cent[i].y;
