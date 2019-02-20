@@ -998,7 +998,7 @@ bool do_cmd_mane(bool baigaesi)
 		p_ptr->mane_dam[j] = p_ptr->mane_dam[j+1];
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	p_ptr->redraw |= (PR_IMITATION);
 	p_ptr->window |= (PW_PLAYER);

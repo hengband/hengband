@@ -49,7 +49,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		o_ptr = &o_list[0 - item];
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 	if (cmd_limit_time_walk(p_ptr)) return;
 
 	if (p_ptr->pclass == CLASS_BERSERKER)

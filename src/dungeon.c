@@ -3661,7 +3661,7 @@ static void process_world(void)
 				change_wild_mode();
 
 				/* Give first move to monsters */
-				take_turn(p_ptr, 100);;
+				take_turn(p_ptr, 100);
 
 				/* HACk -- set the encouter flag for the wilderness generation */
 				generate_encounter = TRUE;
@@ -5000,7 +5000,7 @@ static void process_player(void)
 		/* Paralyzed or Knocked Out */
 		else if (p_ptr->paralyzed || (p_ptr->stun >= 100))
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 		}
 
 		/* Resting */
@@ -5016,13 +5016,13 @@ static void process_player(void)
 				p_ptr->redraw |= (PR_STATE);
 			}
 
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 		}
 
 		/* Fishing */
 		else if (p_ptr->action == ACTION_FISH)
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 		}
 
 		/* Running */

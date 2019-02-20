@@ -355,7 +355,7 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 	}
 	target_pet = old_target_pet;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Get the level */
 	lev = k_info[o_ptr->k_idx].level;

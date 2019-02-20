@@ -41,7 +41,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 
 	sound(SOUND_EAT);
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Identity not known yet */
 	ident = FALSE;

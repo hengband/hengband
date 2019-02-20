@@ -349,7 +349,7 @@ static int racial_aux(power_desc_type *pd_ptr)
 	}
 
 	/* take time and pay the price */
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Success? */
 	if (randint1(p_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))

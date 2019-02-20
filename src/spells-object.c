@@ -338,7 +338,7 @@ bool import_magic_device(void)
 		floor_item_describe(0 - item);
 		floor_item_optimize(0 - item);
 	}
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 	return TRUE;
 }
 

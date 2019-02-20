@@ -1200,7 +1200,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			}
 
 			p_ptr->leaving = TRUE;
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			return;
 		}
@@ -2101,7 +2101,7 @@ void run_step(DIRECTION dir)
 	if (--running <= 0) return;
 
 	/* Take time */
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Move the player, using the "pickup" flag */
 	move_player(find_current, FALSE, FALSE);
@@ -2238,7 +2238,7 @@ void travel_step(void)
 		return;
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	move_player(travel.dir, always_pickup, FALSE);
 

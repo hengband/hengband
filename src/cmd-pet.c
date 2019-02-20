@@ -332,7 +332,7 @@ bool do_riding(bool force)
 
 		if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -389,7 +389,7 @@ bool do_riding(bool force)
 		if (r_info[m_ptr->r_idx].level > randint1((p_ptr->skill_exp[GINOU_RIDING] / 50 + p_ptr->lev / 2 + 20)))
 		{
 			msg_print(_("うまく乗れなかった。", "You failed to ride."));
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 			return FALSE;
 		}
 
@@ -409,7 +409,7 @@ bool do_riding(bool force)
 		if (p_ptr->riding == p_ptr->health_who) health_track(0);
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Mega-Hack -- Forget the view and lite */
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);

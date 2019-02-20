@@ -5939,7 +5939,7 @@ void do_cmd_store(void)
 
 	p_ptr->town_num = old_town_num;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Hack -- Character is no longer in "icky" mode */
 	character_icky = FALSE;

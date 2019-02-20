@@ -366,7 +366,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		o_ptr = &o_list[0 - item];
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;

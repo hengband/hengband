@@ -1615,7 +1615,7 @@ static bool cast_ninja_spell(int spell)
 			/* Gives a multiplier of 2 at first, up to 3 at 40th */
 			do_cmd_throw(1, FALSE, slot);
 
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 		}
 		break;
 	}
@@ -1982,7 +1982,7 @@ void do_cmd_mind(void)
 	}
 
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 	/* teleport from mirror costs small energy */
 	if( on_mirror && p_ptr->pclass == CLASS_MIRROR_MASTER )
 	{

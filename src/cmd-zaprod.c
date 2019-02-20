@@ -298,7 +298,7 @@ void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 	}
 
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;

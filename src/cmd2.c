@@ -463,7 +463,7 @@ void do_cmd_search(void)
 		/* Cancel the arg */
 		command_arg = 0;
 	}
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Search */
 	search();
@@ -521,7 +521,7 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	bool more = FALSE;
 	object_type *o_ptr = &o_list[o_idx];
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Attempt to unlock it */
 	if (o_ptr->pval > 0)
@@ -705,7 +705,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	bool more = FALSE;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Seeing true feature code (ignore mimic) */
 
@@ -854,7 +854,7 @@ void do_cmd_open(void)
 		/* Monster in the way */
 		else if (g_ptr->m_idx && p_ptr->riding != g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 			py_attack(y, x, 0);
 		}
@@ -897,7 +897,7 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
 	FEAT_IDX old_feat = g_ptr->feat;
 	bool more = FALSE;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Seeing true feature code (ignore mimic) */
 
@@ -996,7 +996,7 @@ void do_cmd_close(void)
 		/* Monster in the way */
 		else if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -1070,7 +1070,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	/* Verify legality */
 	if (!do_cmd_tunnel_test(y, x)) return (FALSE);
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	g_ptr = &grid_array[y][x];
 	f_ptr = &f_info[g_ptr->feat];
@@ -1238,7 +1238,7 @@ void do_cmd_tunnel(void)
 		/* A monster is in the way */
 		else if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -1368,7 +1368,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	bool more = FALSE;
 	object_type *o_ptr = &o_list[o_idx];
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Get the "disarm" factor */
 	i = p_ptr->skill_dis;
@@ -1463,7 +1463,7 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	int i = p_ptr->skill_dis;
 	int j;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Penalize some conditions */
 	if (p_ptr->blind || no_lite()) i = i / 10;
@@ -1645,7 +1645,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	concptr name = f_name + f_info[get_feat_mimic(g_ptr)].name;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
 
@@ -1767,7 +1767,7 @@ void do_cmd_bash(void)
 		/* Monster in the way */
 		else if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -1841,7 +1841,7 @@ void do_cmd_alter(void)
 		feat = get_feat_mimic(g_ptr);
 		f_ptr = &f_info[feat];
 
-		take_turn(p_ptr, 100);;
+		take_turn(p_ptr, 100);
 
 		if (g_ptr->m_idx)
 		{
@@ -1977,7 +1977,7 @@ void do_cmd_spike(void)
 		/* Is a monster in the way? */
 		else if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -1988,7 +1988,7 @@ void do_cmd_spike(void)
 		/* Go for it */
 		else
 		{
-			take_turn(p_ptr, 100);;
+			take_turn(p_ptr, 100);
 
 			/* Successful jamming */
 			msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
@@ -2031,7 +2031,7 @@ void do_cmd_walk(bool pickup)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir, FALSE))
 	{
-		take_turn(p_ptr, 100);;
+		take_turn(p_ptr, 100);
 
 		if ((dir != 5) && (p_ptr->special_defense & KATA_MUSOU))
 		{
@@ -2127,7 +2127,7 @@ void do_cmd_stay(bool pickup)
 		command_arg = 0;
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	if (pickup) mpe_mode |= MPE_DO_PICKUP;
 	(void)move_player_effect(p_ptr->y, p_ptr->x, mpe_mode);
@@ -2194,7 +2194,7 @@ void do_cmd_rest(void)
 	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);
 
 	/* Take a turn (?) */
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* The sin of sloth */
 	if (command_arg > 100) chg_virtue(V_DILIGENCE, -1);
@@ -2499,7 +2499,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		p_ptr->redraw |= (PR_EQUIPPY);
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Rogue and Ninja gets bonus */
 	if ((p_ptr->pclass == CLASS_ROGUE) || (p_ptr->pclass == CLASS_NINJA))

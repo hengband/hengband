@@ -342,7 +342,7 @@ void do_cmd_wield(void)
 		autopick_alter_item(item, FALSE);
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 	q_ptr = &forge;
 
 	/* Obtain local object */
@@ -728,7 +728,7 @@ void do_cmd_destroy(void)
 	object_desc(o_name, o_ptr, 0);
 	o_ptr->number = old_number;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	/* Artifacts cannot be destroyed */
 	if (!can_player_destroy_object(o_ptr))

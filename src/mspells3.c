@@ -1513,7 +1513,7 @@ bool do_cmd_cast_learned(void)
 		}
 	}
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	p_ptr->redraw |= (PR_MANA);
 	p_ptr->window |= (PW_PLAYER | PW_SPELL);

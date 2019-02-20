@@ -4192,7 +4192,7 @@ void do_cmd_quest(void)
 {
 	if(p_ptr->wild_mode) return;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
 	{
@@ -4234,7 +4234,7 @@ void do_cmd_bldg(void)
 
 	if(p_ptr->wild_mode) return;
 
-	take_turn(p_ptr, 100);;
+	take_turn(p_ptr, 100);
 
 	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_BLDG))
 	{
