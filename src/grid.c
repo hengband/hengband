@@ -704,49 +704,6 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
 	}
 }
 
-
-/*!
- * @brief build_tunnel用に通路を掘るための方向を位置関係通りに決める / Always picks a correct direction
- * @param rdir Y方向に取るべきベクトル値を返す参照ポインタ
- * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
- * @param y1 始点Y座標
- * @param x1 始点X座標
- * @param y2 終点Y座標
- * @param x2 終点X座標
- * @return なし
- */
-void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
-{
-	/* Extract vertical and horizontal directions */
-	*rdir = (y1 == y2) ? 0 : (y1 < y2) ? 1 : -1;
-	*cdir = (x1 == x2) ? 0 : (x1 < x2) ? 1 : -1;
-
-	/* Never move diagonally */
-	if (*rdir && *cdir)
-	{
-		if (randint0(100) < 50)
-			*rdir = 0;
-		else
-			*cdir = 0;
-	}
-}
-
-/*!
- * @brief build_tunnel用に通路を掘るための方向をランダムに決める / Pick a random direction
- * @param rdir Y方向に取るべきベクトル値を返す参照ポインタ
- * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
- * @return なし
- */
-void rand_dir(POSITION *rdir, POSITION *cdir)
-{
-	/* Pick a random direction */
-	int i = randint0(4);
-
-	/* Extract the dy/dx components */
-	*rdir = ddy_ddd[i];
-	*cdir = ddx_ddd[i];
-}
-
 /*!
  * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
  * @param x チェックするマスのX座標
