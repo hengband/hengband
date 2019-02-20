@@ -749,4 +749,31 @@ void set_floor(POSITION x, POSITION y)
 		place_floor_bold(y, x);
 }
 
+/*!
+ * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
+ * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
+ * @return なし
+ */
+void place_bound_perm_wall(grid_type *g_ptr)
+{
+	if (bound_walls_perm)
+	{
+		/* Clear boundary mimic */
+		g_ptr->mimic = 0;
+	}
+	else
+	{
+		feature_type *f_ptr = &f_info[g_ptr->feat];
 
+		/* Hack -- Decline boundary walls with known treasure  */
+		if ((have_flag(f_ptr->flags, FF_HAS_GOLD) || have_flag(f_ptr->flags, FF_HAS_ITEM)) &&
+			!have_flag(f_ptr->flags, FF_SECRET))
+			g_ptr->feat = feat_state(g_ptr->feat, FF_ENSECRET);
+
+		/* Set boundary mimic */
+		g_ptr->mimic = g_ptr->feat;
+	}
+
+	/* Add "solid" perma-wall */
+	place_solid_perm_grid(g_ptr);
+}

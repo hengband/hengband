@@ -462,36 +462,6 @@ bool place_quest_monsters(void)
 	return TRUE;
 }
 
-
-/*!
- * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
- * @param g_ptr 永久壁を廃止したいマス構造体の参照ポインタ
- * @return なし
- */
-static void set_bound_perm_wall(grid_type *g_ptr)
-{
-	if (bound_walls_perm)
-	{
-		/* Clear boundary mimic */
-		g_ptr->mimic = 0;
-	}
-	else
-	{
-		feature_type *f_ptr = &f_info[g_ptr->feat];
-
-		/* Hack -- Decline boundary walls with known treasure  */
-		if ((have_flag(f_ptr->flags, FF_HAS_GOLD) || have_flag(f_ptr->flags, FF_HAS_ITEM)) &&
-		    !have_flag(f_ptr->flags, FF_SECRET))
-			g_ptr->feat = feat_state(g_ptr->feat, FF_ENSECRET);
-
-		/* Set boundary mimic */
-		g_ptr->mimic = g_ptr->feat;
-	}
-
-	/* Add "solid" perma-wall */
-	place_solid_perm_grid(g_ptr);
-}
-
 /*!
  * @brief フロアに洞窟や湖を配置する / Generate various caverns and lakes
  * @details There were moved from cave_gen().
@@ -899,15 +869,15 @@ static bool cave_gen(void)
 	/* Special boundary walls -- Top and bottom */
 	for (x = 0; x < cur_wid; x++)
 	{
-		set_bound_perm_wall(&grid_array[0][x]);
-		set_bound_perm_wall(&grid_array[cur_hgt - 1][x]);
+		place_bound_perm_wall(&grid_array[0][x]);
+		place_bound_perm_wall(&grid_array[cur_hgt - 1][x]);
 	}
 
 	/* Special boundary walls -- Left and right */
 	for (y = 1; y < (cur_hgt - 1); y++)
 	{
-		set_bound_perm_wall(&grid_array[y][0]);
-		set_bound_perm_wall(&grid_array[y][cur_wid - 1]);
+		place_bound_perm_wall(&grid_array[y][0]);
+		place_bound_perm_wall(&grid_array[y][cur_wid - 1]);
 	}
 
 	/* Determine the character location */

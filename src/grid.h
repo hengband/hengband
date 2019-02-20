@@ -281,4 +281,5 @@ extern void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int nu
 
 extern bool get_is_floor(POSITION x, POSITION y);
 extern void set_floor(POSITION x, POSITION y);
+extern void place_bound_perm_wall(grid_type *g_ptr);
 
