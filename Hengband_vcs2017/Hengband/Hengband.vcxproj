@@ -250,6 +250,7 @@
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
     <ClCompile Include="..\..\src\tables.c" />
+    <ClCompile Include="..\..\src\term.c" />
     <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
     <ClCompile Include="..\..\src\variable.c" />
@@ -337,6 +338,7 @@
     <ClInclude Include="..\..\src\spells-world.h" />
     <ClInclude Include="..\..\src\spells.h" />
     <ClInclude Include="..\..\src\store.h" />
+    <ClInclude Include="..\..\src\term.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />
     <ClInclude Include="..\..\src\wild.h" />

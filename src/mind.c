@@ -1658,11 +1658,11 @@ static bool cast_ninja_spell(int spell)
 		grid_array[target_row][target_col].m_idx = 0;
 
 		/* Update the new location */
-		grid_array[ty][tx].m_idx = (s16b)m_idx;
+		grid_array[ty][tx].m_idx = m_idx;
 
 		/* Move the monster */
-		m_ptr->fy = (byte_hack)ty;
-		m_ptr->fx = (byte_hack)tx;
+		m_ptr->fy = ty;
+		m_ptr->fx = tx;
 
 		/* Wake the monster up */
 		(void)set_monster_csleep(m_idx, 0);
