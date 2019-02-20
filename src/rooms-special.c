@@ -72,7 +72,7 @@ bool build_type15(void)
 	{
 	case 1: /* 4 lite breathers + potion */
 	{
-		int dir1, dir2;
+		DIRECTION dir1, dir2;
 		get_mon_num_prep(vault_aux_lite, NULL);
 
 		/* Place fixed lite berathers */

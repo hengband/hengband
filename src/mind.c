@@ -1014,7 +1014,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 static bool cast_mindcrafter_spell(int spell)
 {
 	int             b = 0;
-	int             dir;
+	DIRECTION dir;
 	TIME_EFFECT t;
 	PLAYER_LEVEL plev = p_ptr->lev;
 
@@ -1300,7 +1300,7 @@ static int number_of_mirrors(void)
  */
 static bool cast_mirror_spell(int spell)
 {
-	int             dir;
+	DIRECTION dir;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int		tmp;
 	TIME_EFFECT t;
