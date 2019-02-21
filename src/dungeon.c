@@ -28,6 +28,7 @@
 #include "spells-summon.h"
 #include "spells-object.h"
 #include "spells-status.h"
+#include "spells-floor.h"
 #include "monsterrace-hook.h"
 #include "world.h"
 #include "mutation.h"

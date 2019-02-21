@@ -13,6 +13,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "realm-hex.h"
+#include "spells-floor.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

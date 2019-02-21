@@ -5,6 +5,7 @@
 #include "spells-status.h"
 #include "spells-object.h"
 #include "avatar.h"
+#include "spells-floor.h"
 
 
 /*!

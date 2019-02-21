@@ -21,6 +21,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "spells-floor.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

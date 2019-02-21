@@ -2,6 +2,7 @@
 #include "cmd-spell.h"
 #include "spells-status.h"
 #include "projection.h"
+#include "spells-floor.h"
 
 /*!
 * @brief 歌の開始を処理する / Start singing if the player is a Bard

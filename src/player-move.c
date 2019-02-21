@@ -146,6 +146,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "player-status.h"
+#include "spells-floor.h"
 
 
 

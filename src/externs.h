@@ -497,8 +497,6 @@ extern void forget_flow(void);
 extern void update_flow(void);
 extern void update_smell(void);
 extern void map_area(POSITION range);
-extern void wiz_lite(bool ninja);
-extern void wiz_dark(void);
 extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
 extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);

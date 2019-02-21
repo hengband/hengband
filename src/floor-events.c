@@ -111,3 +111,4 @@ MONSTER_NUMBER count_all_hostile_monsters(void)
 
 	return number_mon;
 }
+

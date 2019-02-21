@@ -4,6 +4,7 @@
 #include "spells-status.h"
 #include "projection.h"
 #include "avatar.h"
+#include "spells-floor.h"
 
 /*!
 * @brief 秘術領域魔法の各処理を行う

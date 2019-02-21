@@ -25,6 +25,7 @@
 #include "avatar.h"
 
 #include "spells-status.h"
+#include "spells-floor.h"
 #include "realm-hex.h"
 #include "object-hook.h"
 

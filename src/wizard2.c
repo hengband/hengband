@@ -24,6 +24,8 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-world.h"
+#include "spells-floor.h"
+
 #include "object-hook.h"
 
 #ifdef ALLOW_WIZARD

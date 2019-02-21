@@ -22,6 +22,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "cmd-spell.h"
+#include "spells-floor.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =
