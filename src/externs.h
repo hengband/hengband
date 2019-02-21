@@ -542,7 +542,6 @@ extern bool cmd_limit_time_walk(player_type *creature_ptr);
 extern bool cmd_limit_blind(player_type *creature_ptr);
 extern bool cmd_limit_confused(player_type *creature_ptr);
 extern void forget_travel_flow(void);
-extern bool confirm_leave_level(bool down_stair);
 extern void do_cmd_go_up(void);
 extern void do_cmd_go_down(void);
 extern void do_cmd_search(void);

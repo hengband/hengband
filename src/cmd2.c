@@ -32,7 +32,7 @@
  * @param down_stair TRUEならば階段を降りる処理、FALSEなら階段を昇る処理による内容
  * @return フロア移動を実際に行うならTRUE、キャンセルする場合はFALSE
  */
-bool confirm_leave_level(bool down_stair)
+static bool confirm_leave_level(bool down_stair)
 {
 	quest_type *q_ptr = &quest[p_ptr->inside_quest];
 
