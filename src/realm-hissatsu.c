@@ -5,6 +5,7 @@
 #include "projection.h"
 #include "artifact.h"
 #include "player-status.h"
+#include "feature.h"
 
 /*!
 * @brief 剣術の各処理を行う

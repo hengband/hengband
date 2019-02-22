@@ -16,6 +16,7 @@
 #include "object-curse.h"
 #include "artifact.h"
 #include "player-status.h"
+#include "feature.h"
 
 static void one_sustain(object_type *o_ptr);
 

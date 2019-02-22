@@ -19,6 +19,7 @@
 #include "generate.h"
 #include "floor-streams.h"
 #include "grid.h"
+#include "feature.h"
 
 
 /*!

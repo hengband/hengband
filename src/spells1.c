@@ -34,6 +34,8 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "term.h"
+#include "grid.h"
+#include "feature.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

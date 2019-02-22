@@ -464,12 +464,9 @@ extern void get_height_weight(void);
 extern void player_outfit(void);
 extern void dump_yourself(FILE *fff);
 
+
 /* grids.c */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern bool is_trap(FEAT_IDX feat);
-extern bool is_known_trap(grid_type *g_ptr);
-extern bool is_closed_door(FEAT_IDX feat);
-extern bool is_hidden_door(grid_type *g_ptr);
 extern bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(POSITION y, POSITION x);
 extern bool player_can_see_bold(POSITION y, POSITION x);

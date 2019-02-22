@@ -141,12 +141,14 @@
 
 #include "angband.h"
 #include "melee.h"
+#include "grid.h"
 #include "trap.h"
 #include "projection.h"
 #include "quest.h"
 #include "artifact.h"
 #include "player-status.h"
 #include "spells-floor.h"
+#include "feature.h"
 
 
 

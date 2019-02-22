@@ -6,6 +6,7 @@
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"
+#include "feature.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

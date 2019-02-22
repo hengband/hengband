@@ -27,6 +27,7 @@
 #include "rooms.h"
 #include "monster.h"
 #include "quest.h"
+#include "feature.h"
 
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;
@@ -831,15 +832,6 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	return d;
 }
 
-/*!
- * @brief 地形が罠持ちであるかの判定を行う。 / Return TRUE if the given feature is a trap
- * @param feat 地形情報のID
- * @return 罠持ちの地形ならばTRUEを返す。
- */
-bool is_trap(FEAT_IDX feat)
-{
-	return have_flag(f_info[feat].flags, FF_TRAP);
-}
 
 /*!
  * @brief マスに看破済みの罠があるかの判定を行う。 / Return TRUE if the given grid is a known trap
@@ -854,18 +846,7 @@ bool is_known_trap(grid_type *g_ptr)
 		return FALSE;
 }
 
-/*!
- * @brief 地形が閉じたドアであるかの判定を行う。 / Return TRUE if the given grid is a closed door
- * @param feat 地形情報のID
- * @return 閉じたドアのある地形ならばTRUEを返す。
- */
-bool is_closed_door(FEAT_IDX feat)
-{
-	feature_type *f_ptr = &f_info[feat];
 
-	return (have_flag(f_ptr->flags, FF_OPEN) || have_flag(f_ptr->flags, FF_BASH)) &&
-		!have_flag(f_ptr->flags, FF_MOVE);
-}
 
 /*!
  * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door

@@ -283,3 +283,5 @@ extern bool get_is_floor(POSITION x, POSITION y);
 extern void set_floor(POSITION x, POSITION y);
 extern void place_bound_perm_wall(grid_type *g_ptr);
 
+extern bool is_known_trap(grid_type *g_ptr);
+extern bool is_hidden_door(grid_type *g_ptr);
