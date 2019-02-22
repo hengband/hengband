@@ -21,6 +21,9 @@ hengband_SOURCES = \
 	floor.h floor-events.c floor-events.h floor-generate.c floor-save.c \
 	floor-streams.c floor-streams.h \
 	\
+	feature.c feature.h \
+	geometry.c geometry.h \
+	\
 	gameoption.c gameoption.h gamevalue.h \
 	generate.h grid.c grid.h h-basic.h h-config.h h-define.h hissatsu.c \
 	history.h history.c \
@@ -64,13 +67,15 @@ hengband_SOURCES = \
 	spells.h
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \
+	spells-floor.c spells-floor.h \
 	spells-object.c spells-object.h \
 	spells-status.c spells-status.h \
 	spells-summon.c spells-summon.h \
+	spells-world.c spells-world.h \
 	\
 	sort.c sort.h \
 	store.h store.c tables.c trap.c trap.h types.h util.c \
-	variable.c wild.c wizard1.c wizard2.c \
+	variable.c wild.h wild.c wizard1.c wizard2.c \
 	world.c world.h \
 	\
 	view-mainwindow.c\
