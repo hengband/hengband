@@ -499,9 +499,7 @@ extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
-extern bool is_mirror_grid(grid_type *g_ptr);
-extern bool is_glyph_grid(grid_type *g_ptr);
-extern bool is_explosive_rune_grid(grid_type *g_ptr);
+
 extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);

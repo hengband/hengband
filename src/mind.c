@@ -24,6 +24,7 @@
 #include "cmd-spell.h"
 #include "spells-floor.h"
 #include "feature.h"
+#include "grid.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

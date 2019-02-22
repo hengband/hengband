@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "grid.h"
 
 void day_break()
 {

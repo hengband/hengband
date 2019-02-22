@@ -24,6 +24,7 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "feature.h"
+#include "grid.h"
 
 
 /*!

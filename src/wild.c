@@ -15,6 +15,7 @@
 #include "monster.h"
 #include "realm-hex.h"
 #include "player-status.h"
+#include "grid.h"
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
