@@ -139,7 +139,6 @@
     <ClCompile Include="..\..\src\avatar.c" />
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\bldg.c" />
-    <ClCompile Include="..\..\src\cave.c" />
     <ClCompile Include="..\..\src\chest.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-activate.c" />
