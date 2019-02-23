@@ -1958,43 +1958,10 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_CRIMSON:
 	{
-		int num = 1;
-		int i;
-		BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-		int tx, ty;
-
 		/* Only for Crimson */
 		if (o_ptr->name1 != ART_CRIMSON) return FALSE;
-
 		msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
-
-		if (!get_aim_dir(&dir)) return FALSE;
-
-		/* Use the given direction */
-		tx = p_ptr->x + 99 * ddx[dir];
-		ty = p_ptr->y + 99 * ddy[dir];
-
-		/* Hack -- Use an actual "target" */
-		if ((dir == 5) && target_okay())
-		{
-			tx = target_col;
-			ty = target_row;
-		}
-
-		if (p_ptr->pclass == CLASS_ARCHER)
-		{
-			/* Extra shot at level 10 */
-			if (p_ptr->lev >= 10) num++;
-
-			/* Extra shot at level 30 */
-			if (p_ptr->lev >= 30) num++;
-
-			/* Extra shot at level 45 */
-			if (p_ptr->lev >= 45) num++;
-		}
-
-		for (i = 0; i < num; i++)
-			project(0, p_ptr->lev / 20 + 1, ty, tx, p_ptr->lev*p_ptr->lev * 6 / 50, GF_ROCKET, flg, -1);
+		if(!fire_crimson()) return FALSE;
 		break;
 	}
 
