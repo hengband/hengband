@@ -323,14 +323,7 @@ void gain_level_reward(int chosen_reward)
 			break;
 
 		case REW_GOOD_OBJ:
-#ifdef JP
-			msg_format("%sの声がささやいた:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s whispers:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+			msg_format(_("%sの声がささやいた:", "The voice of %s whispers:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
 			acquirement(p_ptr->y, p_ptr->x, 1, FALSE, FALSE, FALSE);
@@ -467,12 +460,7 @@ void gain_level_reward(int chosen_reward)
 			break;
 
 		case REW_TY_CURSE:
-#ifdef JP
-			msg_format("%sの声が轟き渡った:", chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s thunders:", chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+			msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「下僕よ、汝傲慢なり。」", "'Thou art growing arrogant, mortal.'"));
 
 			(void)activate_ty_curse(FALSE, &count);
@@ -503,14 +491,7 @@ void gain_level_reward(int chosen_reward)
 
 
 		case REW_DO_HAVOC:
-#ifdef JP
-			msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
 			call_chaos();
@@ -519,14 +500,7 @@ void gain_level_reward(int chosen_reward)
 
 
 		case REW_GAIN_ABL:
-#ifdef JP
-			msg_format("%sの声が鳴り響いた:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s rings out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+			msg_format(_("%sの声が鳴り響いた:", "The voice of %s rings out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」", "'Stay, mortal, and let me mold thee.'"));
 
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
@@ -538,14 +512,7 @@ void gain_level_reward(int chosen_reward)
 
 
 		case REW_LOSE_ABL:
-#ifdef JP
-			msg_format("%sの声が響き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s booms out:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「下僕よ、余は汝に飽みたり。」", "'I grow tired of thee, mortal.'"));
 
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
@@ -558,14 +525,7 @@ void gain_level_reward(int chosen_reward)
 
 		case REW_RUIN_ABL:
 
-#ifdef JP
-			msg_format("%sの声が轟き渡った:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#else
-			msg_format("The voice of %s thunders:",
-				chaos_patrons[p_ptr->chaos_patron]);
-#endif
-
+			msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、謙虚たることを学ぶべし！」", "'Thou needst a lesson in humility, mortal!'"));
 			msg_print(_("あなたは以前より弱くなった！", "You feel less powerful!"));
 
@@ -643,6 +603,7 @@ void gain_level_reward(int chosen_reward)
 			(void)curse_armor();
 			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
+
 		case REW_PISS_OFF:
 
 			msg_format(_("%sの声がささやいた:", "The voice of %s whispers:"), chaos_patrons[p_ptr->chaos_patron]);
@@ -787,9 +748,7 @@ void gain_level_reward(int chosen_reward)
 			break;
 
 		default:
-			msg_format(_("%sの声がどもった:", "The voice of %s stammers:"),
-
-				chaos_patrons[p_ptr->chaos_patron]);
+			msg_format(_("%sの声がどもった:", "The voice of %s stammers:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_format(_("「あー、あー、答えは %d/%d。質問は何？」", "'Uh... uh... the answer's %d/%d, what's the question?'"), type, effect);
 
 		}
