@@ -1897,36 +1897,12 @@ bool activate_artifact(object_type *o_ptr)
 	}
 
 	case ACT_FISHING:
-	{
-		POSITION x, y;
-
-		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
-		p_ptr->fishing_dir = dir;
-		if (!cave_have_flag_bold(y, x, FF_WATER))
-		{
-			msg_print(_("そこは水辺ではない。", "There is no fishing place."));
-			return FALSE;
-		}
-		else if (grid_array[y][x].m_idx)
-		{
-			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, &m_list[grid_array[y][x].m_idx], 0);
-			msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
-			free_turn(p_ptr);
-			return FALSE;
-		}
-		set_action(ACTION_FISH);
-		p_ptr->redraw |= (PR_STATE);
+		if(!fishing(p_ptr)) return FALSE;
 		break;
-	}
 
 	case ACT_INROU:
-	{
 		mitokohmon();
 		break;
-	}
 
 	case ACT_MURAMASA:
 	{
@@ -1957,13 +1933,10 @@ bool activate_artifact(object_type *o_ptr)
 	}
 
 	case ACT_CRIMSON:
-	{
-		/* Only for Crimson */
 		if (o_ptr->name1 != ART_CRIMSON) return FALSE;
 		msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
 		if(!fire_crimson()) return FALSE;
 		break;
-	}
 
 	default:
 	{

@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "avatar.h"
+#include "player-status.h"
 #include "spells-status.h"
 #include "projection.h"
 #include "spells.h"
@@ -388,4 +389,31 @@ bool restore_all_status(void)
 	if (do_res_stat(A_CON)) ident = TRUE;
 	if (do_res_stat(A_CHR)) ident = TRUE;
 	return ident;
+}
+
+bool fishing(player_type *creature_ptr)
+{
+	DIRECTION dir;
+	POSITION x, y;
+
+	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
+	y = creature_ptr->y + ddy[dir];
+	x = creature_ptr->x + ddx[dir];
+	creature_ptr->fishing_dir = dir;
+	if (!cave_have_flag_bold(y, x, FF_WATER))
+	{
+		msg_print(_("そこは水辺ではない。", "There is no fishing place."));
+		return FALSE;
+	}
+	else if (grid_array[y][x].m_idx)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+		monster_desc(m_name, &m_list[grid_array[y][x].m_idx], 0);
+		msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
+		free_turn(creature_ptr);
+		return FALSE;
+	}
+	set_action(ACTION_FISH);
+	creature_ptr->redraw |= (PR_STATE);
+	return TRUE;
 }

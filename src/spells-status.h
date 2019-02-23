@@ -23,3 +23,5 @@ extern bool_hack true_healing(HIT_POINT pow);
 extern bool_hack restore_mana(bool_hack magic_eater);
 extern bool restore_all_status(void);
 
+extern bool fishing(player_type *creature_ptr);
+
