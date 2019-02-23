@@ -302,3 +302,53 @@ int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 
 	return count;
 }
+
+
+void mitokohmon(void)
+{
+	int count = 0, i;
+	monster_type *m_ptr;
+	concptr kakusan = "";
+
+	if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_SUKE, PM_FORCE_PET))
+	{
+		msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
+		kakusan = "Suke-san";
+		count++;
+	}
+	if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_KAKU, PM_FORCE_PET))
+	{
+		msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
+		kakusan = "Kaku-san";
+		count++;
+	}
+	if (!count)
+	{
+		for (i = m_max - 1; i > 0; i--)
+		{
+			m_ptr = &m_list[i];
+			if (!m_ptr->r_idx) continue;
+			if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
+			if (!los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;
+			if (!projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;
+			count++;
+			break;
+		}
+	}
+
+	if (count)
+	{
+		msg_format(_("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」",
+			"%^s says 'WHO do you think this person is! Bow your head, down your knees!'"), kakusan);
+		sukekaku = TRUE;
+		stun_monsters(120);
+		confuse_monsters(120);
+		turn_monsters(120);
+		stasis_monsters(120);
+		sukekaku = FALSE;
+	}
+	else
+	{
+		msg_print(_("しかし、何も起きなかった。", "Nothing happen."));
+	}
+}
