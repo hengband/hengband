@@ -796,3 +796,44 @@ bool brand_bolts(void)
 	return (TRUE);
 }
 
+
+bool perilous_secrets(player_type *creature_ptr)
+{
+	if (!ident_spell(FALSE)) return FALSE;
+
+	if (mp_ptr->spell_book)
+	{
+		/* Sufficient mana */
+		if (20 <= p_ptr->csp)
+		{
+			/* Use some mana */
+			p_ptr->csp -= 20;
+		}
+
+		/* Over-exert the player */
+		else
+		{
+			int oops = 20 - p_ptr->csp;
+
+			/* No mana left */
+			p_ptr->csp = 0;
+			p_ptr->csp_frac = 0;
+
+			msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
+			/* Hack -- Bypass free action */
+			(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
+
+			/* Confusing. */
+			(void)set_confused(p_ptr->confused + randint1(5 * oops + 1));
+		}
+		p_ptr->redraw |= (PR_MANA);
+	}
+	take_hit(DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"), -1);
+	/* Confusing. */
+	if (one_in_(5)) (void)set_confused(p_ptr->confused + randint1(10));
+
+	/* Exercise a little care... */
+	if (one_in_(20)) take_hit(DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
+	return TRUE;
+
+}
