@@ -88,6 +88,22 @@ bool cast_summon_demon(int power)
 	return TRUE;
 }
 
+bool cast_summon_octopus(player_type *creature_ptr)
+{
+	BIT_FLAGS mode = PM_ALLOW_GROUP;
+	bool pet = !one_in_(5);
+	if (pet) mode |= PM_FORCE_PET;
+
+	if (summon_named_creature(0, creature_ptr->y, creature_ptr->x, MON_JIZOTAKO, mode))
+	{
+		if (pet)
+			msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servant."));
+		else
+			msg_print(_("蛸はあなたを睨んでいる！", "A group of octopuses appear as your enemy!"));
+	}
+
+	return TRUE;
+}
 
 /*!
 * @brief 悪魔領域のグレーターデーモン召喚に利用可能な死体かどうかを返す。 / An "item_tester_hook" for offer

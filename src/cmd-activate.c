@@ -1298,21 +1298,8 @@ bool activate_artifact(object_type *o_ptr)
 	}
 
 	case ACT_SUMMON_OCTOPUS:
-	{
-		BIT_FLAGS mode = PM_ALLOW_GROUP;
-		bool pet = !one_in_(5);
-		if (pet) mode |= PM_FORCE_PET;
-
-		if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_JIZOTAKO, mode))
-		{
-			if (pet)
-				msg_print(_("蛸があなたの下僕として出現した。", "A group of octopuses appear as your servant."));
-			else
-				msg_print(_("蛸はあなたを睨んでいる！", "A group of octopuses appear as your enemy!"));
-		}
-
+		if(!cast_summon_octopus(p_ptr)) return FALSE;
 		break;
-	}
 
 	/* Activate for healing */
 
