@@ -8,6 +8,7 @@ extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev
 extern bool cast_summon_demon(int power);
 extern bool cast_summon_undead(player_type *creature_ptr, int power);
 extern bool cast_summon_hound(player_type *creature_ptr, int power);
+extern bool cast_summon_elemental(player_type *creature_ptr, int power);
 extern bool cast_summon_octopus(player_type *creature_ptr);
 extern bool item_tester_offer(object_type *o_ptr);
 extern bool cast_summon_greater_demon(void);

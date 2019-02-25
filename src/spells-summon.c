@@ -132,6 +132,27 @@ bool cast_summon_hound(player_type *creature_ptr, int power)
 	return TRUE;
 }
 
+bool cast_summon_elemental(player_type *creature_ptr, int power)
+{
+	bool pet = one_in_(3);
+	BIT_FLAGS mode = 0L;
+
+	if (!(pet && (creature_ptr->lev < 50))) mode |= PM_ALLOW_GROUP;
+	if (pet) mode |= PM_FORCE_PET;
+	else mode |= PM_NO_PET;
+
+	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_ELEMENTAL, mode, '\0'))
+	{
+		msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
+		if (pet)
+			msg_print(_("あなたに服従しているようだ。", "It seems obedient to you."));
+		else
+			msg_print(_("それをコントロールできなかった！", "You fail to control it!"));
+	}
+
+	return TRUE;
+}
+
 
 bool cast_summon_octopus(player_type *creature_ptr)
 {

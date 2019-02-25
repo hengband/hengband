@@ -1216,25 +1216,8 @@ bool activate_artifact(object_type *o_ptr)
 	}
 
 	case ACT_SUMMON_ELEMENTAL:
-	{
-		bool pet = one_in_(3);
-		BIT_FLAGS mode = 0L;
-
-		if (!(pet && (plev < 50))) mode |= PM_ALLOW_GROUP;
-		if (pet) mode |= PM_FORCE_PET;
-		else mode |= PM_NO_PET;
-
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((plev * 3) / 2), SUMMON_ELEMENTAL, mode, '\0'))
-		{
-			msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
-			if (pet)
-				msg_print(_("あなたに服従しているようだ。", "It seems obedient to you."));
-			else
-				msg_print(_("それをコントロールできなかった！", "You fail to control it!"));
-		}
-
+		if (!cast_summon_elemental(p_ptr, (plev * 3) / 2)) return FALSE;
 		break;
-	}
 
 	case ACT_SUMMON_DEMON:
 	{

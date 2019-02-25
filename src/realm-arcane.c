@@ -420,7 +420,6 @@ concptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 25:
 		if (name) return _("エレメンタル召喚", "Conjure Elemental");
 		if (desc) return _("1体のエレメンタルを召喚する。", "Summons an elemental.");
-
 		{
 			if (cast)
 			{
