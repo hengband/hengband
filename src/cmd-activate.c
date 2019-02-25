@@ -1247,25 +1247,8 @@ bool activate_artifact(object_type *o_ptr)
 		break;
 
 	case ACT_SUMMON_HOUND:
-	{
-		BIT_FLAGS mode = PM_ALLOW_GROUP;
-		bool pet = !one_in_(5);
-		if (pet) mode |= PM_FORCE_PET;
-		else mode |= PM_NO_PET;
-
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, ((p_ptr->lev * 3) / 2), SUMMON_HOUND, mode, '\0'))
-		{
-
-			if (pet)
-				msg_print(_("ハウンドがあなたの下僕として出現した。",
-					"A group of hounds appear as your servant."));
-			else
-				msg_print(_("ハウンドはあなたに牙を向けている！",
-					"A group of hounds appear as your enemy!"));
-		}
-
+		if (!cast_summon_hound(p_ptr, (plev * 3) / 2)) return FALSE;
 		break;
-	}
 
 	case ACT_SUMMON_DAWN:
 	{

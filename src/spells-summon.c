@@ -114,6 +114,25 @@ bool cast_summon_undead(player_type *creature_ptr, int power)
 	return TRUE;
 }
 
+
+bool cast_summon_hound(player_type *creature_ptr, int power)
+{
+	BIT_FLAGS mode = PM_ALLOW_GROUP;
+	bool pet = !one_in_(5);
+	if (pet) mode |= PM_FORCE_PET;
+	else mode |= PM_NO_PET;
+
+	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_HOUND, mode, '\0'))
+	{
+		if (pet)
+			msg_print(_("ハウンドがあなたの下僕として出現した。", "A group of hounds appear as your servant."));
+		else
+			msg_print(_("ハウンドはあなたに牙を向けている！", "A group of hounds appear as your enemy!"));
+	}
+	return TRUE;
+}
+
+
 bool cast_summon_octopus(player_type *creature_ptr)
 {
 	BIT_FLAGS mode = PM_ALLOW_GROUP;
