@@ -1710,53 +1710,9 @@ bool activate_artifact(object_type *o_ptr)
 		break;
 	}
 
-
-	/* Unique activation */
 	case ACT_CAST_OFF:
-	{
-		INVENTORY_IDX inv;
-		int t;
-		OBJECT_IDX o_idx;
-		GAME_TEXT o_name[MAX_NLEN];
-		object_type forge;
-
-		/* Cast off activated item */
-		for (inv = INVEN_RARM; inv <= INVEN_FEET; inv++)
-		{
-			if (o_ptr == &inventory[inv]) break;
-		}
-
-		/* Paranoia */
-		if (inv > INVEN_FEET) return FALSE;
-
-		object_copy(&forge, o_ptr);
-		inven_item_increase(inv, (0 - o_ptr->number));
-		inven_item_optimize(inv);
-		o_idx = drop_near(&forge, 0, p_ptr->y, p_ptr->x);
-		o_ptr = &o_list[o_idx];
-
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
-		msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
-
-		/* Get effects */
-		msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
-		t = 20 + randint1(20);
-		(void)set_blind(p_ptr->blind + t);
-		(void)set_afraid(0);
-		(void)set_tim_esp(p_ptr->tim_esp + t, FALSE);
-		(void)set_tim_regen(p_ptr->tim_regen + t, FALSE);
-		(void)set_hero(p_ptr->hero + t, FALSE);
-		(void)set_blessed(p_ptr->blessed + t, FALSE);
-		(void)set_fast(p_ptr->fast + t, FALSE);
-		(void)set_shero(p_ptr->shero + t, FALSE);
-		if (p_ptr->pclass == CLASS_FORCETRAINER)
-		{
-			P_PTR_KI = plev * 5 + 190;
-			msg_print(_("気が爆発寸前になった。", "Your force are immediatly before explosion."));
-		}
-
+		cosmic_cast_off(p_ptr, o_ptr);
 		break;
-	}
 
 	case ACT_FALLING_STAR:
 	{

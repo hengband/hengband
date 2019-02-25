@@ -24,4 +24,5 @@ extern bool_hack restore_mana(bool_hack magic_eater);
 extern bool restore_all_status(void);
 
 extern bool fishing(player_type *creature_ptr);
+extern bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr);
 
