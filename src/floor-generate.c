@@ -1181,7 +1181,7 @@ static void generate_gambling_arena(void)
  * @brief 固定マップクエストのフロア生成 / Generate a quest level
  * @return なし
  */
-static void quest_gen(void)
+static void generate_fixed_floor(void)
 {
 	POSITION x, y;
 
@@ -1399,7 +1399,7 @@ void generate_random_floor(void)
 
 		else if (p_ptr->inside_quest)
 		{
-			quest_gen();
+			generate_fixed_floor();
 		}
 
 		/* Build the town */
