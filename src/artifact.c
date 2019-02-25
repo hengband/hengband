@@ -11,12 +11,13 @@
  */
 
 #include "angband.h"
+#include "artifact.h"
 
 #include "avatar.h"
 #include "cmd-activate.h"
 #include "object-curse.h"
 #include "object-hook.h"
-#include "artifact.h"
+#include "spells-object.h"
 
 static bool has_extreme_damage_rate(object_type *o_ptr);
 static bool weakening_artifact(object_type *o_ptr);

@@ -11,3 +11,4 @@ extern bool curse_weapon(bool force, int slot);
 extern bool rustproof(void);
 extern bool brand_bolts(void);
 extern bool perilous_secrets(player_type *creature_ptr);
+extern void get_bloody_moon_flags(object_type *o_ptr);
