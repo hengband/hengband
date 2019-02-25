@@ -522,43 +522,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 25:
 		if (name) return _("死者召喚", "Raise the Dead");
 		if (desc) return _("1体のアンデッドを召喚する。", "Summons an undead monster.");
-
-		{
-			if (cast)
-			{
-				int type;
-				bool pet = one_in_(3);
-				u32b flg = 0L;
-
-				type = (plev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
-
-				if (!pet || (pet && (plev > 24) && one_in_(3)))
-					flg |= PM_ALLOW_GROUP;
-
-				if (pet) flg |= PM_FORCE_PET;
-				else flg |= (PM_ALLOW_UNIQUE | PM_NO_PET);
-
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, type, flg, '\0'))
-				{
-					msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
-						"Cold winds begin to blow around you, carrying with them the stench of decay..."));
-
-
-					if (pet)
-					{
-						msg_print(_("古えの死せる者共があなたに仕えるため土から甦った！",
-							"Ancient, long-dead forms arise from the ground to serve you!"));
-					}
-					else
-					{
-						msg_print(_("死者が甦った。眠りを妨げるあなたを罰するために！",
-							"'The dead arise... to punish you for disturbing them!'"));
-					}
-
-					chg_virtue(V_UNLIFE, 1);
-				}
-			}
-		}
+		if (cast) cast_summon_undead(p_ptr, (plev * 3) / 2);
 		break;
 
 	case 26:

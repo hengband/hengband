@@ -88,6 +88,32 @@ bool cast_summon_demon(int power)
 	return TRUE;
 }
 
+bool cast_summon_undead(player_type *creature_ptr, int power)
+{
+	bool pet = one_in_(3);
+	int type;
+	BIT_FLAGS mode = 0L;
+
+	type = (creature_ptr->lev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
+
+	if (!pet || ((creature_ptr->lev > 24) && one_in_(3))) mode |= PM_ALLOW_GROUP;
+	if (pet) mode |= PM_FORCE_PET;
+	else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
+
+	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, type, mode, '\0'))
+	{
+		msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
+			"Cold winds begin to blow around you, carrying with them the stench of decay..."));
+		if (pet)
+			msg_print(_("古えの死せる者共があなたに仕えるため土から甦った！",
+				"Ancient, long-dead forms arise from the ground to serve you!"));
+		else
+			msg_print(_("死者が甦った。眠りを妨げるあなたを罰するために！",
+				"'The dead arise... to punish you for disturbing them!'"));
+	}
+	return TRUE;
+}
+
 bool cast_summon_octopus(player_type *creature_ptr)
 {
 	BIT_FLAGS mode = PM_ALLOW_GROUP;
