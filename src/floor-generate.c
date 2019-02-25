@@ -1277,7 +1277,7 @@ static bool level_gen(concptr *why)
  * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after grid_array generation
  * @return なし
  */
-void wipe_generate_cave_flags(void)
+void wipe_generate_random_floor_flags(void)
 {
 	POSITION x, y;
 
@@ -1366,7 +1366,7 @@ void clear_cave(void)
  * @return なし
  * @note Hack -- regenerate any "overflow" levels
  */
-void generate_cave(void)
+void generate_random_floor(void)
 {
 	int num;
 
@@ -1445,7 +1445,7 @@ void generate_cave(void)
 	/* Reset flag */
 	p_ptr->enter_dungeon = FALSE;
 
-	wipe_generate_cave_flags();
+	wipe_generate_random_floor_flags();
 }
 
 /*!

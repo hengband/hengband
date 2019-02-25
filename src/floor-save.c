@@ -343,7 +343,7 @@ static void build_dead_end(void)
 	/* Give one square */
 	place_floor_bold(p_ptr->y, p_ptr->x);
 
-	wipe_generate_cave_flags();
+	wipe_generate_random_floor_flags();
 }
 
 
@@ -1105,7 +1105,7 @@ void change_floor(void)
 	    !(change_floor_mode & CFM_FIRST_FLOOR))
 	{
 		/* Create grid_array */
-		generate_cave();
+		generate_random_floor();
 
 		/* Paranoia -- No new saved floor */
 		new_floor_id = 0;
@@ -1299,7 +1299,7 @@ void change_floor(void)
 			else
 			{
 				/* Newly create grid_array */
-				generate_cave();
+				generate_random_floor();
 			}
 
 			/* Record last visit turn */
