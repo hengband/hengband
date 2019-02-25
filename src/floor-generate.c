@@ -1129,7 +1129,7 @@ static void build_battle(void)
  * @brief モンスター闘技場への導入処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void battle_gen(void)
+static void generate_gambling_arena(void)
 {
 	POSITION y, x;
 	MONSTER_IDX i;
@@ -1394,7 +1394,7 @@ void generate_random_floor(void)
 		else if (p_ptr->inside_battle)
 		{
 			/* Small arena */
-			battle_gen();
+			generate_gambling_arena();
 		}
 
 		else if (p_ptr->inside_quest)
