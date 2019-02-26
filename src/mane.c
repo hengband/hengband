@@ -663,22 +663,7 @@ static bool use_mane(int spell)
 		teleport_player(plev * 5, 0L);
 		break;
 	case MS_WORLD:
-		p_ptr->timewalk = TRUE;
-		if (damage == 1 || damage == 2)
-			msg_print(_("「『ザ・ワールド』！時は止まった！」", "You yell 'The World! Time has stopped!'"));
-		else if (damage == 3 || damage == 6)
-			msg_print(_("「時よ！」", "You yell 'Time!'"));
-		else
-			msg_print("hek!");
-		msg_print(NULL);
-
-		/* Hack */
-		p_ptr->energy_need -= 1000 + (100 + randint1(200) + 200) * TURNS_PER_TICK / 10;
-		p_ptr->redraw |= (PR_MAP);
-		p_ptr->update |= (PU_MONSTERS);
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-		handle_stuff();
+		(void)time_walk(p_ptr);
 		break;
 	case MS_SPECIAL:
 		break;

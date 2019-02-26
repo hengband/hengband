@@ -177,6 +177,7 @@ bool time_walk(player_type *creature_ptr)
 	}
 	creature_ptr->timewalk = TRUE;
 	msg_print(_("「時よ！」", "You yell 'Time!'"));
+//	msg_print(_("「『ザ・ワールド』！時は止まった！」", "You yell 'The World! Time has stopped!'"));
 	msg_print(NULL);
 
 	/* Hack */
