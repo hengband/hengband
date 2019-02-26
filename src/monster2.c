@@ -3652,7 +3652,7 @@ bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
 
 	/* Pick a monster */
-	r_idx = get_mon_num(monster_level);
+	r_idx = get_mon_num(current_floor_ptr->monster_level);
 
 	/* Handle failure */
 	if (!r_idx) return (FALSE);
@@ -3682,7 +3682,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	while (--attempts)
 	{
 		/* Pick a monster */
-		r_idx = get_mon_num(monster_level);
+		r_idx = get_mon_num(current_floor_ptr->monster_level);
 
 		/* Handle failure */
 		if (!r_idx) return (FALSE);
@@ -3772,7 +3772,7 @@ bool alloc_guardian(bool def_val)
  * @details
  * Place the monster at least "dis" distance from the player.
  * Use "slp" to choose the initial "sleep" status
- * Use "monster_level" for the monster level
+ * Use "current_floor_ptr->monster_level" for the monster level
  */
 bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 {

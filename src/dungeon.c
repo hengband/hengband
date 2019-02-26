@@ -5418,7 +5418,7 @@ static void dungeon(bool load_game)
 	/*** Process this dungeon level ***/
 
 	/* Reset the monster generation level */
-	monster_level = current_floor_ptr->base_level;
+	current_floor_ptr->monster_level = current_floor_ptr->base_level;
 
 	/* Reset the object generation level */
 	current_floor_ptr->object_level = current_floor_ptr->base_level;

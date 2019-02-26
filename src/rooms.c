@@ -1407,9 +1407,9 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				if (value < 0)
 				{
 					/* Meanest monster + treasure */
-					monster_level = current_floor_ptr->base_level + 40;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level + 40;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = current_floor_ptr->base_level;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level;
 					current_floor_ptr->object_level = current_floor_ptr->base_level + 20;
 					place_object(y, x, AM_GOOD);
 					current_floor_ptr->object_level = current_floor_ptr->base_level;
@@ -1417,9 +1417,9 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				else if (value < 5)
 				{
 					/* Mean monster +treasure */
-					monster_level = current_floor_ptr->base_level + 20;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level + 20;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = current_floor_ptr->base_level;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level;
 					current_floor_ptr->object_level = current_floor_ptr->base_level + 10;
 					place_object(y, x, AM_GOOD);
 					current_floor_ptr->object_level = current_floor_ptr->base_level;
@@ -1427,9 +1427,9 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				else if (value < 10)
 				{
 					/* Monster */
-					monster_level = current_floor_ptr->base_level + 9;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level + 9;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = current_floor_ptr->base_level;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level;
 				}
 				else if (value < 17)
 				{
@@ -1457,9 +1457,9 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				else if (value < 30)
 				{
 					/* Monster and trap */
-					monster_level = current_floor_ptr->base_level + 5;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level + 5;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = current_floor_ptr->base_level;
+					current_floor_ptr->monster_level = current_floor_ptr->base_level;
 					place_trap(y, x);
 				}
 				else if (value < 40)
@@ -1467,9 +1467,9 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 					/* Monster or object */
 					if (randint0(100) < 50)
 					{
-						monster_level = current_floor_ptr->base_level + 3;
+						current_floor_ptr->monster_level = current_floor_ptr->base_level + 3;
 						place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-						monster_level = current_floor_ptr->base_level;
+						current_floor_ptr->monster_level = current_floor_ptr->base_level;
 					}
 					if (randint0(100) < 50)
 					{

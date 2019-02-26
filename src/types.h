@@ -1877,8 +1877,9 @@ typedef struct {
 typedef struct {
 	grid_type *grid_array[MAX_HGT];
 	DEPTH dun_level;		/*!< 現在の実ダンジョン階層base_levelの参照元となる / Current dungeon level */
-	DEPTH base_level;
+	DEPTH base_level;		/*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
 	DEPTH object_level;		/*!< アイテムの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current object creation level */
+	DEPTH monster_level;	/*!< モンスターの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current monster creation level */
 	POSITION width;			/* Current dungeon width */
 	POSITION height;		/* Current dungeon height */
 	MONSTER_NUMBER num_repro; /*!< Current reproducer count */

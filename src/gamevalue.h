@@ -11,7 +11,7 @@
 /*!
 * @brief 深層モンスターが生成される(NASTY生成)の基本確率(1/x)
 * @details
-* There is a 1/25 (4%) chance of inflating the requested monster_level
+* There is a 1/25 (4%) chance of inflating the requested current_floor_ptr->monster_level
 * during the creation of a monsters (see "get_mon_num()" in "monster.c").
 * Lower values yield harder monsters more often.
 */

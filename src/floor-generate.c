@@ -1198,7 +1198,7 @@ static void generate_fixed_floor(void)
 	current_floor_ptr->base_level = quest[p_ptr->inside_quest].level;
 	current_floor_ptr->dun_level = current_floor_ptr->base_level;
 	current_floor_ptr->object_level = current_floor_ptr->base_level;
-	monster_level = current_floor_ptr->base_level;
+	current_floor_ptr->monster_level = current_floor_ptr->base_level;
 
 	if (record_stair) do_cmd_write_nikki(NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
 	get_mon_num_prep(get_monster_hook(), NULL);
@@ -1354,7 +1354,7 @@ void clear_cave(void)
 	current_floor_ptr->base_level = current_floor_ptr->dun_level;
 
 	/* Reset the monster generation level */
-	monster_level = current_floor_ptr->base_level;
+	current_floor_ptr->monster_level = current_floor_ptr->base_level;
 
 	/* Reset the object generation level */
 	current_floor_ptr->object_level = current_floor_ptr->base_level;
