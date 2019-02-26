@@ -1604,8 +1604,8 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 			if (is_solid_bold(y, x)) continue;
 
 			/* Accept this location */
-			row1 = (POSITION)tmp_row;
-			col1 = (POSITION)tmp_col;
+			row1 = tmp_row;
+			col1 = tmp_col;
 
 			/* Save the wall location */
 			if (dun->wall_n < WALL_MAX)
@@ -2096,8 +2096,8 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 					/* Save the door location */
 					if (dun->door_n < DOOR_MAX)
 					{
-						dun->door[dun->door_n].y = (POSITION)y3;
-						dun->door[dun->door_n].x = (POSITION)x3;
+						dun->door[dun->door_n].y = y3;
+						dun->door[dun->door_n].x = x3;
 						dun->door_n++;
 					}
 					else return FALSE;
@@ -2114,9 +2114,9 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 		else
 		{
 			/* tunnel through walls */
-			if (build_tunnel2(x1, y1, (POSITION)x3, (POSITION)y3, type, cutoff))
+			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
 			{
-				retval = build_tunnel2((POSITION)x3, (POSITION)y3, x2, y2, type, cutoff);
+				retval = build_tunnel2(x3, y3, x2, y2, type, cutoff);
 				firstsuccede = TRUE;
 			}
 			else
