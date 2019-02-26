@@ -48,7 +48,7 @@ bool build_type14(void)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			g_ptr = &grid_array[y][x];
+			g_ptr = &current_floor->grid_array[y][x];
 			place_floor_grid(g_ptr);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
@@ -58,16 +58,16 @@ bool build_type14(void)
 	/* Walls around the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		g_ptr = &grid_array[y][x1 - 1];
+		g_ptr = &current_floor->grid_array[y][x1 - 1];
 		place_outer_grid(g_ptr);
-		g_ptr = &grid_array[y][x2 + 1];
+		g_ptr = &current_floor->grid_array[y][x2 + 1];
 		place_outer_grid(g_ptr);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		g_ptr = &grid_array[y1 - 1][x];
+		g_ptr = &current_floor->grid_array[y1 - 1][x];
 		place_outer_grid(g_ptr);
-		g_ptr = &grid_array[y2 + 1][x];
+		g_ptr = &current_floor->grid_array[y2 + 1][x];
 		place_outer_grid(g_ptr);
 	}
 
@@ -77,7 +77,7 @@ bool build_type14(void)
 		trap = feat_trap_armageddon;
 
 	/* Place a special trap */
-	g_ptr = &grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];
+	g_ptr = &current_floor->grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];
 	g_ptr->mimic = g_ptr->feat;
 	g_ptr->feat = trap;
 

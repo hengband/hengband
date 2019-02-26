@@ -315,7 +315,7 @@ bool do_riding(bool force)
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
-	g_ptr = &grid_array[y][x];
+	g_ptr = &current_floor->grid_array[y][x];
 
 	if (p_ptr->special_defense & KATA_MUSOU) set_action(ACTION_NONE);
 
@@ -442,9 +442,9 @@ static void do_name_pet(void)
 	}
 	target_pet = old_target_pet;
 
-	if (grid_array[target_row][target_col].m_idx)
+	if (current_floor->grid_array[target_row][target_col].m_idx)
 	{
-		m_ptr = &m_list[grid_array[target_row][target_col].m_idx];
+		m_ptr = &m_list[current_floor->grid_array[target_row][target_col].m_idx];
 
 		if (!is_pet(m_ptr))
 		{
@@ -877,10 +877,10 @@ void do_cmd_pet(void)
 		if (!target_set(TARGET_KILL)) pet_t_m_idx = 0;
 		else
 		{
-			grid_type *g_ptr = &grid_array[target_row][target_col];
+			grid_type *g_ptr = &current_floor->grid_array[target_row][target_col];
 			if (g_ptr->m_idx && (m_list[g_ptr->m_idx].ml))
 			{
-				pet_t_m_idx = grid_array[target_row][target_col].m_idx;
+				pet_t_m_idx = current_floor->grid_array[target_row][target_col].m_idx;
 				p_ptr->pet_follow_distance = PET_DESTROY_DIST;
 			}
 			else pet_t_m_idx = 0;
@@ -1093,7 +1093,7 @@ bool rakuba(HIT_POINT dam, bool force)
 			y = p_ptr->y + ddy_ddd[i];
 			x = p_ptr->x + ddx_ddd[i];
 
-			g_ptr = &grid_array[y][x];
+			g_ptr = &current_floor->grid_array[y][x];
 
 			if (g_ptr->m_idx) continue;
 

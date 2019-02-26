@@ -3901,7 +3901,7 @@ static errr parse_line_building(char *buf)
  */
 static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &current_floor->grid_array[y][x];
 	object_type *o_ptr;
 
 	OBJECT_IDX o_idx = o_pop();
@@ -3970,7 +3970,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 		return parse_line_feature(buf);
 	}
 
-	/* Process "D:<dungeon>" -- info for the grid_array grids */
+	/* Process "D:<dungeon>" -- info for the current_floor->grid_array grids */
 	else if (buf[0] == 'D')
 	{
 		object_type object_type_body;
@@ -3985,7 +3985,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 		for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
 		{
-			grid_type *g_ptr = &grid_array[*y][*x];
+			grid_type *g_ptr = &current_floor->grid_array[*y][*x];
 
 			int idx = s[0];
 

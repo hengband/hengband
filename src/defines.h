@@ -203,14 +203,14 @@
 #define MAX_SAVED_FLOORS       20 /*!< 保存フロアの最大数 / Maximum number of saved floors. */
 
 /*!
- * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "grid_array.c")
+ * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "current_floor->grid_array.c")
  * @details Note that the "lite radius" will NEVER exceed 14, and we would
  * never require more than 581 entries in the array for circular "lite".
  */
 #define LITE_MAX 600
 
 /*!
- * @brief モンスター用光源処理配列サイズ / Maximum size of the "mon_lite" array (see "grid_array.c")
+ * @brief モンスター用光源処理配列サイズ / Maximum size of the "mon_lite" array (see "current_floor->grid_array.c")
  * @details Note that the "view radius" will NEVER exceed 20, monster illumination
  * flags are dependent on CAVE_VIEW, and even if the "view" was octagonal,
  * we would never require more than 1520 entries in the array.
@@ -218,14 +218,14 @@
 #define MON_LITE_MAX 1536
 
 /*!
- * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "grid_array.c")
+ * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "current_floor->grid_array.c")
  * @details Note that the "view radius" will NEVER exceed 20, and even if the "view"
  * was octagonal, we would never require more than 1520 entries in the array.
  */
 #define VIEW_MAX 1536
 
 /*!
- * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "grid_array.c")
+ * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "current_floor->grid_array.c")
  * @details We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning
  * of "update_view()" and "update_lite()".  We must also be as large as the
  * largest illuminatable room, but no room is larger than 800 grids.  We
@@ -235,7 +235,7 @@
 #define TEMP_MAX 2298
 
 /*!
- * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "grid_array.c")
+ * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "current_floor->grid_array.c")
  * @details We must be large for proper functioning of delayed redrawing.
  * We must also be as large as two times of the largest view area.
  * Note that maximum view grids are 1149 entries.
@@ -1889,7 +1889,7 @@
 #define CAVE_MNLT       0x0100    /*!< モンスターの光源によって照らされている / Illuminated by monster */
 #define CAVE_MNDK       0x8000    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
 
-/* Used only while grid_array generation */
+/* Used only while current_floor->grid_array generation */
 #define CAVE_FLOOR      0x0200	/*!< フロア属性のあるマス */
 #define CAVE_EXTRA      0x0400
 #define CAVE_INNER      0x0800
@@ -1898,7 +1898,7 @@
 #define CAVE_VAULT      0x4000
 #define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
 
-/* Used only after grid_array generation */
+/* Used only after current_floor->grid_array generation */
 #define CAVE_KNOWN      0x0200    /* Directly viewed or map detected flag */
 #define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
 #define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */
@@ -3442,11 +3442,11 @@
  * Grid based version of "player_bold()"
  */
 #define player_grid(C) \
-	((C) == &grid_array[p_ptr->y][p_ptr->x])
+	((C) == &current_floor->grid_array[p_ptr->y][p_ptr->x])
 
 
 #define cave_have_flag_bold(Y,X,INDEX) \
-	(have_flag(f_info[grid_array[(Y)][(X)].feat].flags, (INDEX)))
+	(have_flag(f_info[current_floor->grid_array[(Y)][(X)].feat].flags, (INDEX)))
 
 
 #define cave_have_flag_grid(C,INDEX) \
@@ -3464,7 +3464,7 @@
  * Determine if a "legal" grid supports "los"
  */
 #define cave_los_bold(Y,X) \
-	(feat_supports_los(grid_array[(Y)][(X)].feat))
+	(feat_supports_los(current_floor->grid_array[(Y)][(X)].feat))
 
 #define cave_los_grid(C) \
 	(feat_supports_los((C)->feat))
@@ -3480,8 +3480,8 @@
  */
 #define cave_clean_bold(Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_FLOOR) && \
-	 !(grid_array[Y][X].info & CAVE_OBJECT) && \
-	  (grid_array[Y][X].o_idx == 0))
+	 !(current_floor->grid_array[Y][X].info & CAVE_OBJECT) && \
+	  (current_floor->grid_array[Y][X].o_idx == 0))
 
 
 /*
@@ -3492,7 +3492,7 @@
  */
 #define cave_drop_bold(Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_DROP) && \
-	 !(grid_array[Y][X].info & CAVE_OBJECT))
+	 !(current_floor->grid_array[Y][X].info & CAVE_OBJECT))
 
 
 /*
@@ -3505,7 +3505,7 @@
  */
 #define cave_empty_bold(Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_PLACE) && \
-	 !(grid_array[Y][X].m_idx) && \
+	 !(current_floor->grid_array[Y][X].m_idx) && \
 	 !player_bold(Y,X))
 
 
@@ -3530,7 +3530,7 @@
  */
 #define cave_naked_bold(Y,X) \
 	(cave_clean_bold(Y,X) && \
-	 !(grid_array[Y][X].m_idx) && \
+	 !(current_floor->grid_array[Y][X].m_idx) && \
 	 !player_bold(Y,X))
 
 
@@ -3585,7 +3585,7 @@
  * Note the use of comparison to zero to force a "boolean" result
  */
 #define player_has_los_bold(Y,X) \
-    (((grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->inside_battle)
+    (((current_floor->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->inside_battle)
 
 
 /*

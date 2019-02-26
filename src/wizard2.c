@@ -1550,7 +1550,7 @@ static void do_cmd_wiz_create_feature(void)
 
 	if (!tgt_pt(&x, &y)) return;
 
-	g_ptr = &grid_array[y][x];
+	g_ptr = &current_floor->grid_array[y][x];
 
 	/* Default */
 	sprintf(tmp_val, "%d", prev_feat);
@@ -1917,7 +1917,7 @@ void do_cmd_debug(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+				current_floor->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
 		}
 		wiz_lite(FALSE);

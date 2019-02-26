@@ -1624,7 +1624,7 @@ bool set_superstealth(bool set)
 	{
 		if (!(p_ptr->special_defense & NINJA_S_STEALTH))
 		{
-			if (grid_array[p_ptr->y][p_ptr->x].info & CAVE_MNLT)
+			if (current_floor->grid_array[p_ptr->y][p_ptr->x].info & CAVE_MNLT)
 			{
 				msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
 				p_ptr->monlite = p_ptr->old_monlite = TRUE;

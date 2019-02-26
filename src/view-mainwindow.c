@@ -1695,7 +1695,7 @@ void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
 	int i;
 
 	for(i=0;i<temp_n;i++){
-		grid_type* g_ptr = &grid_array[temp_y[i]][temp_x[i]];
+		grid_type* g_ptr = &current_floor->grid_array[temp_y[i]][temp_x[i]];
 		if(!g_ptr->m_idx || !m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
 		m_ptr = &m_list[g_ptr->m_idx];
 		if(is_pet(m_ptr))continue;//pet

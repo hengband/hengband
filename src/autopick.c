@@ -1658,7 +1658,7 @@ void autopick_delayed_alter(void)
 		autopick_delayed_alter_aux(item);
 
 	/* Scan the pile of objects */
-	item = grid_array[p_ptr->y][p_ptr->x].o_idx;
+	item = current_floor->grid_array[p_ptr->y][p_ptr->x].o_idx;
 	while (item)
 	{
 		OBJECT_IDX next = o_list[item].next_o_idx;

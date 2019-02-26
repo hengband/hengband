@@ -519,7 +519,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			/* Shatter Arrow */
 			if (snipe_type == SP_KILL_WALL)
 			{
-				g_ptr = &grid_array[ny][nx];
+				g_ptr = &current_floor->grid_array[ny][nx];
 
 				if (cave_have_flag_grid(g_ptr, FF_HURT_ROCK) && !g_ptr->m_idx)
 				{
@@ -537,7 +537,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			}
 
 			/* Stopped by walls/doors */
-			if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && !grid_array[ny][nx].m_idx) break;
+			if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && !current_floor->grid_array[ny][nx].m_idx) break;
 
 			/* Advance the distance */
 			cur_dis++;
@@ -545,7 +545,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			/* Sniper */
 			if (snipe_type == SP_LITE)
 			{
-				grid_array[ny][nx].info |= (CAVE_GLOW);
+				current_floor->grid_array[ny][nx].info |= (CAVE_GLOW);
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
 			}
@@ -582,7 +582,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			/* Sniper */
 			if (snipe_type == SP_EVILNESS)
 			{
-				grid_array[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
+				current_floor->grid_array[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
 			}
@@ -595,9 +595,9 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			y = ny;
 
 			/* Monster here, Try to hit it */
-			if (grid_array[y][x].m_idx)
+			if (current_floor->grid_array[y][x].m_idx)
 			{
-				grid_type *c_mon_ptr = &grid_array[y][x];
+				grid_type *c_mon_ptr = &current_floor->grid_array[y][x];
 
 				monster_type *m_ptr = &m_list[c_mon_ptr->m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -718,7 +718,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 					/* Sniper */
 					if (snipe_type == SP_HOLYNESS)
 					{
-						grid_array[ny][nx].info |= (CAVE_GLOW);
+						current_floor->grid_array[ny][nx].info |= (CAVE_GLOW);
 						note_spot(ny, nx);
 						lite_spot(ny, nx);
 					}
@@ -779,13 +779,13 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 								if (!in_bounds2(ny, nx)) break;
 
 								/* Stopped by walls/doors */
-								if (!player_can_enter(grid_array[ny][nx].feat, 0)) break;
+								if (!player_can_enter(current_floor->grid_array[ny][nx].feat, 0)) break;
 
 								/* Stopped by monsters */
 								if (!cave_empty_bold(ny, nx)) break;
 
-								grid_array[ny][nx].m_idx = m_idx;
-								grid_array[oy][ox].m_idx = 0;
+								current_floor->grid_array[ny][nx].m_idx = m_idx;
+								current_floor->grid_array[oy][ox].m_idx = 0;
 
 								m_ptr->fx = nx;
 								m_ptr->fy = ny;
@@ -825,7 +825,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 
 		if (stick_to)
 		{
-			MONSTER_IDX m_idx = grid_array[y][x].m_idx;
+			MONSTER_IDX m_idx = current_floor->grid_array[y][x].m_idx;
 			monster_type *m_ptr = &m_list[m_idx];
 			OBJECT_IDX o_idx = o_pop();
 

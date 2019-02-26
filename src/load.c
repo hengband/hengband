@@ -2619,8 +2619,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the grid_array */
-			g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			g_ptr = &current_floor->grid_array[y][x];
 
 			/* Extract "info" */
 			g_ptr->info = info;
@@ -2650,8 +2650,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the grid_array */
-			g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			g_ptr = &current_floor->grid_array[y][x];
 
 			/* Extract "feat" */
 			g_ptr->feat = (s16b)tmp8u;
@@ -2680,8 +2680,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the grid_array */
-			g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			g_ptr = &current_floor->grid_array[y][x];
 
 			/* Extract "mimic" */
 			g_ptr->mimic = (s16b)tmp8u;
@@ -2710,8 +2710,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the grid_array */
-			g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			g_ptr = &current_floor->grid_array[y][x];
 
 			/* Extract "feat" */
 			g_ptr->special = tmp16s;
@@ -2728,13 +2728,13 @@ static errr rd_dungeon_old(void)
 		}
 	}
 
-	/* Convert grid_array data */
+	/* Convert current_floor->grid_array data */
 	if (z_older_than(11, 0, 99))
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Wipe old unused flags */
-			grid_array[y][x].info &= ~(CAVE_MASK);
+			current_floor->grid_array[y][x].info &= ~(CAVE_MASK);
 		}
 	}
 
@@ -2742,8 +2742,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the grid_array */
-			g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			g_ptr = &current_floor->grid_array[y][x];
 
 			/* Very old */
 			if (g_ptr->feat == OLD_FEAT_INVIS)
@@ -2765,8 +2765,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the grid_array */
-			g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			g_ptr = &current_floor->grid_array[y][x];
 
 			/* Old CAVE_IN_MIRROR flag */
 			if (g_ptr->info & CAVE_OBJECT)
@@ -2805,8 +2805,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the grid_array */
-			g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			g_ptr = &current_floor->grid_array[y][x];
 
 			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
 			{
@@ -2887,7 +2887,7 @@ static errr rd_dungeon_old(void)
 		else
 		{
 			/* Access the item location */
-			g_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
+			g_ptr = &current_floor->grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
@@ -2934,7 +2934,7 @@ static errr rd_dungeon_old(void)
 
 
 		/* Access grid */
-		g_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &current_floor->grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		g_ptr->m_idx = m_idx;
@@ -2985,7 +2985,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	cave_template_type *templates;
 
 
-	/*** Wipe all grid_array ***/
+	/*** Wipe all current_floor->grid_array ***/
 	clear_cave();
 
 
@@ -3104,10 +3104,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the grid_array */
-			grid_type *g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			grid_type *g_ptr = &current_floor->grid_array[y][x];
 
-			/* Extract grid_array data */
+			/* Extract current_floor->grid_array data */
 			g_ptr->info = templates[id].info;
 			g_ptr->feat = templates[id].feat;
 			g_ptr->mimic = templates[id].mimic;
@@ -3130,8 +3130,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the grid_array */
-			grid_type *g_ptr = &grid_array[y][x];
+			/* Access the current_floor->grid_array */
+			grid_type *g_ptr = &current_floor->grid_array[y][x];
 
 			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
 			{
@@ -3205,7 +3205,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		else
 		{
 			/* Access the item location */
-			grid_type *g_ptr = &grid_array[o_ptr->iy][o_ptr->ix];
+			grid_type *g_ptr = &current_floor->grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
@@ -3245,7 +3245,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 
 		/* Access grid */
-		g_ptr = &grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &current_floor->grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		g_ptr->m_idx = m_idx;

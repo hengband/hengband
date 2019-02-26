@@ -5,7 +5,7 @@
 #include "rooms-normal.h"
 
 /*!
-* @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid_array system
+* @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal current_floor->grid_array system
 * @return なし
 */
 bool build_type9(void)

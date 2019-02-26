@@ -129,7 +129,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		POSITION y = j_ptr->iy;
 		POSITION x = j_ptr->ix;
 
-		g_ptr = &grid_array[y][x];
+		g_ptr = &current_floor->grid_array[y][x];
 
 		/* Scan all objects in the grid */
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -224,7 +224,7 @@ void delete_object(POSITION y, POSITION x)
 	/* Refuse "illegal" locations */
 	if (!in_bounds(y, x)) return;
 
-	g_ptr = &grid_array[y][x];
+	g_ptr = &current_floor->grid_array[y][x];
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -307,7 +307,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 		x = o_ptr->ix;
 
 		/* Acquire grid */
-		g_ptr = &grid_array[y][x];
+		g_ptr = &current_floor->grid_array[y][x];
 
 		/* Repair grid */
 		if (g_ptr->o_idx == i1)
@@ -495,7 +495,7 @@ void wipe_o_list(void)
 			POSITION x = o_ptr->ix;
 
 			/* Access grid */
-			g_ptr = &grid_array[y][x];
+			g_ptr = &current_floor->grid_array[y][x];
 
 			/* Hack -- see above */
 			g_ptr->o_idx = 0;
@@ -4728,7 +4728,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *g_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &current_floor->grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4842,7 +4842,7 @@ void place_gold(POSITION y, POSITION x)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *g_ptr = &grid_array[y][x];
+	grid_type *g_ptr = &current_floor->grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
@@ -4992,7 +4992,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			if (!projectable(y, x, ty, tx)) continue;
 
 			/* Obtain grid */
-			g_ptr = &grid_array[ty][tx];
+			g_ptr = &current_floor->grid_array[ty][tx];
 
 			/* Require floor space */
 			if (!cave_drop_bold(ty, tx)) continue;
@@ -5149,7 +5149,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	}
 
 
-	g_ptr = &grid_array[by][bx];
+	g_ptr = &current_floor->grid_array[by][bx];
 
 	/* Scan objects in that grid for combination */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -6573,7 +6573,7 @@ bool process_warning(POSITION xx, POSITION yy)
 
 			if (!in_bounds(my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
-			g_ptr = &grid_array[my][mx];
+			g_ptr = &current_floor->grid_array[my][mx];
 
 			if (!g_ptr->m_idx) continue;
 
@@ -6671,7 +6671,7 @@ bool process_warning(POSITION xx, POSITION yy)
 	}
 	else old_damage = old_damage / 2;
 
-	g_ptr = &grid_array[yy][xx];
+	g_ptr = &current_floor->grid_array[yy][xx];
 	if (((!easy_disarm && is_trap(g_ptr->feat))
 	    || (g_ptr->mimic && is_trap(g_ptr->feat))) && !one_in_(13))
 	{

@@ -50,8 +50,8 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
-		else if (is_friend && grid_array[y][x].m_idx > 0 &&
-			 !are_enemies(m_ptr, &m_list[grid_array[y][x].m_idx]))
+		else if (is_friend && current_floor->grid_array[y][x].m_idx > 0 &&
+			 !are_enemies(m_ptr, &m_list[current_floor->grid_array[y][x].m_idx]))
 		{
 			/* Friends don't shoot friends */
 			return FALSE;
@@ -317,7 +317,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* Is there counter attack target? */
 	if (!target_idx && m_ptr->target_y)
 	{
-		target_idx = grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
+		target_idx = current_floor->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
 
 		if (target_idx)
 		{

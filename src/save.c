@@ -851,8 +851,8 @@ static void wr_extra(void)
 
 
 /*!
- * @brief フロア保存時のgrid_array情報テンプレートをソートするための比較処理
- * @param u grid_arrayテンプレートの参照ポインタ
+ * @brief フロア保存時のcurrent_floor->grid_array情報テンプレートをソートするための比較処理
+ * @param u current_floor->grid_arrayテンプレートの参照ポインタ
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2
@@ -873,8 +873,8 @@ static bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 
 
 /*!
- * @brief フロア保存時のgrid_array情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
- * @param u grid_arrayテンプレートの参照ポインタ
+ * @brief フロア保存時のcurrent_floor->grid_array情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
+ * @param u current_floor->grid_arrayテンプレートの参照ポインタ
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2
@@ -973,7 +973,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *g_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &current_floor->grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
@@ -1042,18 +1042,18 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 
 
-	/*** "Run-Length-Encoding" of grid_array ***/
+	/*** "Run-Length-Encoding" of current_floor->grid_array ***/
 
 	/* Note that this will induce two wasted bytes */
 	count = 0;
 	prev_u16b = 0;
 
-	/* Dump the grid_array */
+	/* Dump the current_floor->grid_array */
 	for (y = 0; y < cur_hgt; y++)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *g_ptr = &grid_array[y][x];
+			grid_type *g_ptr = &current_floor->grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{

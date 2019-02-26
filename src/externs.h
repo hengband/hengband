@@ -264,7 +264,7 @@ extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
 extern const concptr angband_sound_name[SOUND_MAX];
 extern const concptr angband_music_basic_name[MUSIC_BASIC_MAX];
-extern grid_type *grid_array[MAX_HGT];
+extern floor_type *current_floor;
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;

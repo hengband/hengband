@@ -1233,7 +1233,7 @@ static bool cast_force_spell(int spell)
 		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		m_idx = grid_array[target_row][target_col].m_idx;
+		m_idx = current_floor->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
@@ -1289,7 +1289,7 @@ static int number_of_mirrors(void)
 	int val = 0;
 	for (x = 0; x < cur_wid; x++) {
 		for (y = 0; y < cur_hgt; y++) {
-			if (is_mirror_grid(&grid_array[y][x])) val++;
+			if (is_mirror_grid(&current_floor->grid_array[y][x])) val++;
 		}
 	}
 	return val;
@@ -1314,7 +1314,7 @@ static bool cast_mirror_spell(int spell)
 	{
 		/* mirror of seeing */
 	case 0:
-		tmp = is_mirror_grid(&grid_array[p_ptr->y][p_ptr->x]) ? 4 : 0;
+		tmp = is_mirror_grid(&current_floor->grid_array[p_ptr->y][p_ptr->x]) ? 4 : 0;
 		if (plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 		if (plev + tmp > 18)detect_monsters_invis(DETECT_RAD_DEFAULT);
 		if (plev + tmp > 28)set_tim_esp((TIME_EFFECT)plev, FALSE);
@@ -1334,7 +1334,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 	case 2:
 		if (!get_aim_dir(&dir)) return FALSE;
-		if (plev > 9 && is_mirror_grid(&grid_array[p_ptr->y][p_ptr->x])) {
+		if (plev > 9 && is_mirror_grid(&current_floor->grid_array[p_ptr->y][p_ptr->x])) {
 			fire_beam(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 		}
 		else {
@@ -1372,7 +1372,7 @@ static bool cast_mirror_spell(int spell)
 	case 9:
 		for (x = 0; x < cur_wid; x++) {
 			for (y = 0; y < cur_hgt; y++) {
-				if (is_mirror_grid(&grid_array[y][x])) {
+				if (is_mirror_grid(&current_floor->grid_array[y][x])) {
 					project(0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 				}
 			}
@@ -1401,7 +1401,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* illusion light */
 	case 14:
-		tmp = is_mirror_grid(&grid_array[p_ptr->y][p_ptr->x]) ? 4 : 3;
+		tmp = is_mirror_grid(&current_floor->grid_array[p_ptr->y][p_ptr->x]) ? 4 : 3;
 		slow_monsters(plev);
 		stun_monsters(plev*tmp);
 		confuse_monsters(plev*tmp);
@@ -1411,7 +1411,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* mirror shift */
 	case 15:
-		if (!is_mirror_grid(&grid_array[p_ptr->y][p_ptr->x])) {
+		if (!is_mirror_grid(&current_floor->grid_array[p_ptr->y][p_ptr->x])) {
 			msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
 			break;
 		}
@@ -1477,7 +1477,7 @@ static bool cast_berserk_spell(int spell)
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
 
-		if (!grid_array[y][x].m_idx)
+		if (!current_floor->grid_array[y][x].m_idx)
 		{
 			msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 			return FALSE;
@@ -1485,13 +1485,13 @@ static bool cast_berserk_spell(int spell)
 
 		py_attack(y, x, 0);
 
-		if (!player_can_enter(grid_array[y][x].feat, 0) || is_trap(grid_array[y][x].feat))
+		if (!player_can_enter(current_floor->grid_array[y][x].feat, 0) || is_trap(current_floor->grid_array[y][x].feat))
 			break;
 
 		y += ddy[dir];
 		x += ddx[dir];
 
-		if (player_can_enter(grid_array[y][x].feat, 0) && !is_trap(grid_array[y][x].feat) && !grid_array[y][x].m_idx)
+		if (player_can_enter(current_floor->grid_array[y][x].feat, 0) && !is_trap(current_floor->grid_array[y][x].feat) && !current_floor->grid_array[y][x].m_idx)
 		{
 			msg_print(NULL);
 			(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
@@ -1633,7 +1633,7 @@ static bool cast_ninja_spell(int spell)
 		POSITION ty, tx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		m_idx = grid_array[target_row][target_col].m_idx;
+		m_idx = current_floor->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (m_idx == p_ptr->riding) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
@@ -1647,7 +1647,7 @@ static bool cast_ninja_spell(int spell)
 		{
 			POSITION ny = GRID_Y(path_g[i]);
 			POSITION nx = GRID_X(path_g[i]);
-			grid_type *g_ptr = &grid_array[ny][nx];
+			grid_type *g_ptr = &current_floor->grid_array[ny][nx];
 
 			if (in_bounds(ny, nx) && cave_empty_bold(ny, nx) &&
 			    !(g_ptr->info & CAVE_OBJECT) &&
@@ -1658,10 +1658,10 @@ static bool cast_ninja_spell(int spell)
 			}
 		}
 		/* Update the old location */
-		grid_array[target_row][target_col].m_idx = 0;
+		current_floor->grid_array[target_row][target_col].m_idx = 0;
 
 		/* Update the new location */
-		grid_array[ty][tx].m_idx = m_idx;
+		current_floor->grid_array[ty][tx].m_idx = m_idx;
 
 		/* Move the monster */
 		m_ptr->fy = ty;
@@ -1969,7 +1969,7 @@ void do_cmd_mind(void)
 			break;
 		case MIND_MIRROR_MASTER:
 			/* Cast the spell */
-			if( is_mirror_grid(&grid_array[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
+			if( is_mirror_grid(&current_floor->grid_array[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
 			cast = cast_mirror_spell(n);
 			break;
 		case MIND_NINJUTSU:
