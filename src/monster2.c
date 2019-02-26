@@ -3002,8 +3002,8 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 				number_mon = 0;
 
 				/* Count all quest monsters */
-				for (i2 = 0; i2 < cur_wid; ++i2)
-					for (j2 = 0; j2 < cur_hgt; j2++)
+				for (i2 = 0; i2 < current_floor_ptr->width; ++i2)
+					for (j2 = 0; j2 < current_floor_ptr->height; j2++)
 						if (current_floor_ptr->grid_array[j2][i2].m_idx > 0)
 							if (m_list[current_floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
 								number_mon++;
@@ -3743,8 +3743,8 @@ bool alloc_guardian(bool def_val)
 		while (try_count)
 		{
 			/* Get a random spot */
-			oy = randint1(cur_hgt - 4) + 2;
-			ox = randint1(cur_wid - 4) + 2;
+			oy = randint1(current_floor_ptr->height - 4) + 2;
+			ox = randint1(current_floor_ptr->width - 4) + 2;
 
 			/* Is it a good spot ? */
 			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(current_floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
@@ -3786,8 +3786,8 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	while (attempts_left--)
 	{
 		/* Pick a location */
-		y = randint0(cur_hgt);
-		x = randint0(cur_wid);
+		y = randint0(current_floor_ptr->height);
+		x = randint0(current_floor_ptr->width);
 
 		/* Require empty floor grid (was "naked") */
 		if (current_floor_ptr->dun_level)

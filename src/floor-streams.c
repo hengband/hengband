@@ -164,8 +164,8 @@ void add_river(IDX feat1, IDX feat2)
 
 
 	/* Hack -- Choose starting point */
-	y2 = randint1(cur_hgt / 2 - 2) + cur_hgt / 2;
-	x2 = randint1(cur_wid / 2 - 2) + cur_wid / 2;
+	y2 = randint1(current_floor_ptr->height / 2 - 2) + current_floor_ptr->height / 2;
+	x2 = randint1(current_floor_ptr->width / 2 - 2) + current_floor_ptr->width / 2;
 
 	/* Hack -- Choose ending point somewhere on boundary */
 	switch(randint1(4))
@@ -173,7 +173,7 @@ void add_river(IDX feat1, IDX feat2)
 		case 1:
 		{
 			/* top boundary */
-			x1 = randint1(cur_wid-2)+1;
+			x1 = randint1(current_floor_ptr->width-2)+1;
 			y1 = 1;
 			break;
 		}
@@ -181,21 +181,21 @@ void add_river(IDX feat1, IDX feat2)
 		{
 			/* left boundary */
 			x1 = 1;
-			y1 = randint1(cur_hgt-2)+1;
+			y1 = randint1(current_floor_ptr->height-2)+1;
 			break;
 		}
 		case 3:
 		{
 			/* right boundary */
-			x1 = cur_wid-1;
-			y1 = randint1(cur_hgt-2)+1;
+			x1 = current_floor_ptr->width-1;
+			y1 = randint1(current_floor_ptr->height-2)+1;
 			break;
 		}
 		case 4:
 		{
 			/* bottom boundary */
-			x1 = randint1(cur_wid-2)+1;
-			y1 = cur_hgt-1;
+			x1 = randint1(current_floor_ptr->width-2)+1;
+			y1 = current_floor_ptr->height-1;
 			break;
 		}
 	}
@@ -241,8 +241,8 @@ void build_streamer(IDX feat, int chance)
 	bool streamer_may_have_gold = have_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
 
 	/* Hack -- Choose starting point */
-	y = rand_spread(cur_hgt / 2, cur_hgt / 6);
-	x = rand_spread(cur_wid / 2, cur_wid / 6);
+	y = rand_spread(current_floor_ptr->height / 2, current_floor_ptr->height / 6);
+	x = rand_spread(current_floor_ptr->width / 2, current_floor_ptr->width / 6);
 
 	/* Choose a random compass direction */
 	dir = randint0(8);
@@ -448,8 +448,8 @@ void destroy_level(void)
 	for (n = 0; n < randint1(5); n++)
 	{
 		/* Pick an epi-center */
-		x1 = rand_range(5, cur_wid - 1 - 5);
-		y1 = rand_range(5, cur_hgt - 1 - 5);
+		x1 = rand_range(5, current_floor_ptr->width - 1 - 5);
+		y1 = rand_range(5, current_floor_ptr->height - 1 - 5);
 
 		(void)destroy_area(y1, x1, 15, TRUE);
 	}

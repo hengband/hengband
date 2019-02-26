@@ -2435,8 +2435,8 @@ void resize_map(void)
 	panel_col_max = 0;
 
 	/* Reset the panels */
-	panel_row_min = cur_hgt;
-	panel_col_min = cur_wid;
+	panel_row_min = current_floor_ptr->height;
+	panel_col_min = current_floor_ptr->width;
 
 	verify_panel();
 
@@ -2497,11 +2497,11 @@ bool change_panel(POSITION dy, POSITION dx)
 	x = panel_col_min + dx * wid / 2;
 
 	/* Verify the row */
-	if (y > cur_hgt - hgt) y = cur_hgt - hgt;
+	if (y > current_floor_ptr->height - hgt) y = current_floor_ptr->height - hgt;
 	if (y < 0) y = 0;
 
 	/* Verify the col */
-	if (x > cur_wid - wid) x = cur_wid - wid;
+	if (x > current_floor_ptr->width - wid) x = current_floor_ptr->width - wid;
 	if (x < 0) x = 0;
 
 	/* Handle "changes" */

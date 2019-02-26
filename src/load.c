@@ -2579,9 +2579,9 @@ static errr rd_dungeon_old(void)
 	p_ptr->x = (POSITION)tmp16s;
 	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
 	rd_s16b(&tmp16s);
-	cur_hgt = (POSITION)tmp16s;
+	current_floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	cur_wid = (POSITION)tmp16s;
+	current_floor_ptr->width = (POSITION)tmp16s;
 	rd_s16b(&tmp16s); /* max_panel_rows */
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
@@ -2590,8 +2590,8 @@ static errr rd_dungeon_old(void)
 #endif
 
 	/* Maximal size */
-	ymax = cur_hgt;
-	xmax = cur_wid;
+	ymax = current_floor_ptr->height;
+	xmax = current_floor_ptr->width;
 
 
 	/*** Run length decoding ***/
@@ -3040,9 +3040,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	p_ptr->x = (POSITION)tmp16u;
 
 	rd_s16b(&tmp16s);
-	cur_hgt = (POSITION)tmp16s;
+	current_floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	cur_wid = (POSITION)tmp16s;
+	current_floor_ptr->width = (POSITION)tmp16s;
 
 	rd_byte(&p_ptr->feeling);
 
@@ -3080,8 +3080,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	/* Maximal size */
-	ymax = cur_hgt;
-	xmax = cur_wid;
+	ymax = current_floor_ptr->height;
+	xmax = current_floor_ptr->width;
 
 
 	/*** Run length decoding ***/

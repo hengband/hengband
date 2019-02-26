@@ -111,8 +111,6 @@ bool msg_flag;			/* Used in msg_print() for "buffering" */
 s16b running;			/* Current counter for running, if any */
 GAME_TURN resting;			/* Current counter for resting, if any */
 
-POSITION cur_hgt;		/* Current dungeon height */
-POSITION cur_wid;		/* Current dungeon width */
 MONSTER_NUMBER num_repro; /*!< Current reproducer count */
 DEPTH object_level;		/*!< アイテムの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current object creation level */
 DEPTH monster_level;	/*!< モンスターの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current monster creation level */

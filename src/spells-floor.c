@@ -40,10 +40,10 @@ void wiz_lite(bool ninja)
 	}
 
 	/* Scan all normal grids */
-	for (y = 1; y < cur_hgt - 1; y++)
+	for (y = 1; y < current_floor_ptr->height - 1; y++)
 	{
 		/* Scan all normal grids */
-		for (x = 1; x < cur_wid - 1; x++)
+		for (x = 1; x < current_floor_ptr->width - 1; x++)
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -115,9 +115,9 @@ void wiz_dark(void)
 	POSITION y, x;
 
 	/* Forget every grid */
-	for (y = 1; y < cur_hgt - 1; y++)
+	for (y = 1; y < current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < cur_wid - 1; x++)
+		for (x = 1; x < current_floor_ptr->width - 1; x++)
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -128,17 +128,17 @@ void wiz_dark(void)
 	}
 
 	/* Forget every grid on horizontal edge */
-	for (x = 0; x < cur_wid; x++)
+	for (x = 0; x < current_floor_ptr->width; x++)
 	{
 		current_floor_ptr->grid_array[0][x].info &= ~(CAVE_MARK);
-		current_floor_ptr->grid_array[cur_hgt - 1][x].info &= ~(CAVE_MARK);
+		current_floor_ptr->grid_array[current_floor_ptr->height - 1][x].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget every grid on vertical edge */
-	for (y = 1; y < (cur_hgt - 1); y++)
+	for (y = 1; y < (current_floor_ptr->height - 1); y++)
 	{
 		current_floor_ptr->grid_array[y][0].info &= ~(CAVE_MARK);
-		current_floor_ptr->grid_array[y][cur_wid - 1].info &= ~(CAVE_MARK);
+		current_floor_ptr->grid_array[y][current_floor_ptr->width - 1].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget all objects */

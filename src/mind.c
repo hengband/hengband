@@ -1287,8 +1287,8 @@ static int number_of_mirrors(void)
 {
 	POSITION x, y;
 	int val = 0;
-	for (x = 0; x < cur_wid; x++) {
-		for (y = 0; y < cur_hgt; y++) {
+	for (x = 0; x < current_floor_ptr->width; x++) {
+		for (y = 0; y < current_floor_ptr->height; y++) {
 			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x])) val++;
 		}
 	}
@@ -1370,8 +1370,8 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* mirror sleeping */
 	case 9:
-		for (x = 0; x < cur_wid; x++) {
-			for (y = 0; y < cur_hgt; y++) {
+		for (x = 0; x < current_floor_ptr->width; x++) {
+			for (y = 0; y < current_floor_ptr->height; y++) {
 				if (is_mirror_grid(&current_floor_ptr->grid_array[y][x])) {
 					project(0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 				}

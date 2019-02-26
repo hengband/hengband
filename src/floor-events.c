@@ -9,9 +9,9 @@ void day_break()
 	if (!p_ptr->wild_mode)
 	{
 		/* Hack -- Scan the town */
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < cur_wid; x++)
+			for (x = 0; x < current_floor_ptr->width; x++)
 			{
 				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -46,9 +46,9 @@ void night_falls(void)
 	if (!p_ptr->wild_mode)
 	{
 		/* Hack -- Scan the town */
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < cur_wid; x++)
+			for (x = 0; x < current_floor_ptr->width; x++)
 			{
 				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -97,9 +97,9 @@ MONSTER_NUMBER count_all_hostile_monsters(void)
 	POSITION x, y;
 	MONSTER_NUMBER number_mon = 0;
 
-	for (x = 0; x < cur_wid; ++x)
+	for (x = 0; x < current_floor_ptr->width; ++x)
 	{
-		for (y = 0; y < cur_hgt; ++y)
+		for (y = 0; y < current_floor_ptr->height; ++y)
 		{
 			MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
 

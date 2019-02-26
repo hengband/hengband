@@ -5089,9 +5089,9 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	{
 		int candidates = 0, pick;
 
-		for (ty = 1; ty < cur_hgt - 1; ty++)
+		for (ty = 1; ty < current_floor_ptr->height - 1; ty++)
 		{
-			for (tx = 1; tx < cur_wid - 1; tx++)
+			for (tx = 1; tx < current_floor_ptr->width - 1; tx++)
 			{
 				/* A valid space found */
 				if (cave_drop_bold(ty, tx)) candidates++;
@@ -5128,9 +5128,9 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		/* Choose a random one */
 		pick = randint1(candidates);
 
-		for (ty = 1; ty < cur_hgt - 1; ty++)
+		for (ty = 1; ty < current_floor_ptr->height - 1; ty++)
 		{
-			for (tx = 1; tx < cur_wid - 1; tx++)
+			for (tx = 1; tx < current_floor_ptr->width - 1; tx++)
 			{
 				if (cave_drop_bold(ty, tx))
 				{

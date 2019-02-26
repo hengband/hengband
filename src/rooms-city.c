@@ -201,9 +201,9 @@ bool build_type16(void)
 	bool prevent_bm = FALSE;
 
 	/* Hack -- If already exist black market, prevent building */
-	for (y = 0; (y < cur_hgt) && !prevent_bm; y++)
+	for (y = 0; (y < current_floor_ptr->height) && !prevent_bm; y++)
 	{
-		for (x = 0; x < cur_wid; x++)
+		for (x = 0; x < current_floor_ptr->width; x++)
 		{
 			if (current_floor_ptr->grid_array[y][x].feat == FF_STORE)
 			{

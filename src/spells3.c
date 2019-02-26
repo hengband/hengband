@@ -263,9 +263,9 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 	int min, pick, i;
 
 	int left = MAX(1, p_ptr->x - dis);
-	int right = MIN(cur_wid - 2, p_ptr->x + dis);
+	int right = MIN(current_floor_ptr->width - 2, p_ptr->x + dis);
 	int top = MAX(1, p_ptr->y - dis);
-	int bottom = MIN(cur_hgt - 2, p_ptr->y + dis);
+	int bottom = MIN(current_floor_ptr->height - 2, p_ptr->y + dis);
 
 	if (p_ptr->wild_mode) return FALSE;
 
@@ -1390,9 +1390,9 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Scan all normal grids */
-	for (y = 1; y < cur_hgt - 1; y++)
+	for (y = 1; y < current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < cur_wid - 1; x++)
+		for (x = 1; x < current_floor_ptr->width - 1; x++)
 		{
 			g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1424,7 +1424,7 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Special boundary walls -- Top and bottom */
-	for (x = 0; x < cur_wid; x++)
+	for (x = 0; x < current_floor_ptr->width; x++)
 	{
 		g_ptr = &current_floor_ptr->grid_array[0][x];
 		f_ptr = &f_info[g_ptr->mimic];
@@ -1441,7 +1441,7 @@ static bool vanish_dungeon(void)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &current_floor_ptr->grid_array[cur_hgt - 1][x];
+		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->height - 1][x];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1458,7 +1458,7 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Special boundary walls -- Left and right */
-	for (y = 1; y < (cur_hgt - 1); y++)
+	for (y = 1; y < (current_floor_ptr->height - 1); y++)
 	{
 		g_ptr = &current_floor_ptr->grid_array[y][0];
 		f_ptr = &f_info[g_ptr->mimic];
@@ -1475,7 +1475,7 @@ static bool vanish_dungeon(void)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &current_floor_ptr->grid_array[y][cur_wid - 1];
+		g_ptr = &current_floor_ptr->grid_array[y][current_floor_ptr->width - 1];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */

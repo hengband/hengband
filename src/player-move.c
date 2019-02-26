@@ -1138,8 +1138,8 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			{
 				p_ptr->wilderness_y--;
 				p_ptr->wilderness_x--;
-				p_ptr->oldpy = cur_hgt - 2;
-				p_ptr->oldpx = cur_wid - 2;
+				p_ptr->oldpy = current_floor_ptr->height - 2;
+				p_ptr->oldpx = current_floor_ptr->width - 2;
 				ambush_flag = FALSE;
 			}
 
@@ -1147,7 +1147,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			{
 				p_ptr->wilderness_y--;
 				p_ptr->wilderness_x++;
-				p_ptr->oldpy = cur_hgt - 2;
+				p_ptr->oldpy = current_floor_ptr->height - 2;
 				p_ptr->oldpx = 1;
 				ambush_flag = FALSE;
 			}
@@ -1157,7 +1157,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_y++;
 				p_ptr->wilderness_x--;
 				p_ptr->oldpy = 1;
-				p_ptr->oldpx = cur_wid - 2;
+				p_ptr->oldpx = current_floor_ptr->width - 2;
 				ambush_flag = FALSE;
 			}
 
@@ -1173,7 +1173,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			else if (y == 0)
 			{
 				p_ptr->wilderness_y--;
-				p_ptr->oldpy = cur_hgt - 2;
+				p_ptr->oldpy = current_floor_ptr->height - 2;
 				p_ptr->oldpx = x;
 				ambush_flag = FALSE;
 			}
@@ -1189,7 +1189,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			else if (x == 0)
 			{
 				p_ptr->wilderness_x--;
-				p_ptr->oldpx = cur_wid - 2;
+				p_ptr->oldpx = current_floor_ptr->width - 2;
 				p_ptr->oldpy = y;
 				ambush_flag = FALSE;
 			}
@@ -2278,9 +2278,9 @@ void forget_travel_flow(void)
 {
 	POSITION x, y;
 	/* Check the entire dungeon / Forget the old data */
-	for (y = 0; y < cur_hgt; y++)
+	for (y = 0; y < current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < cur_wid; x++)
+		for (x = 0; x < current_floor_ptr->width; x++)
 		{
 
 			travel.cost[y][x] = MAX_SHORT;

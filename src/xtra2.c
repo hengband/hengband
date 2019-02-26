@@ -299,8 +299,8 @@ void verify_panel(void)
 
 	get_screen_size(&wid, &hgt);
 
-	max_prow_min = cur_hgt - hgt;
-	max_pcol_min = cur_wid - wid;
+	max_prow_min = current_floor_ptr->height - hgt;
+	max_pcol_min = current_floor_ptr->width - wid;
 
 	/* Bounds checking */
 	if (max_prow_min < 0) max_prow_min = 0;
@@ -793,9 +793,9 @@ static void target_set_prepare(BIT_FLAGS mode)
 	{
 		/* Inner range */
 		min_hgt = MAX((p_ptr->y - MAX_RANGE), 0);
-		max_hgt = MIN((p_ptr->y + MAX_RANGE), cur_hgt - 1);
+		max_hgt = MIN((p_ptr->y + MAX_RANGE), current_floor_ptr->height - 1);
 		min_wid = MAX((p_ptr->x - MAX_RANGE), 0);
-		max_wid = MIN((p_ptr->x + MAX_RANGE), cur_wid - 1);
+		max_wid = MIN((p_ptr->x + MAX_RANGE), current_floor_ptr->width - 1);
 	}
 	else /* not targetting */
 	{
@@ -1746,11 +1746,11 @@ bool target_set(BIT_FLAGS mode)
 						}
 
 						/* Slide into legality */
-						if (x >= cur_wid-1) x = cur_wid - 2;
+						if (x >= current_floor_ptr->width-1) x = current_floor_ptr->width - 2;
 						else if (x <= 0) x = 1;
 
 						/* Slide into legality */
-						if (y >= cur_hgt-1) y = cur_hgt- 2;
+						if (y >= current_floor_ptr->height-1) y = current_floor_ptr->height- 2;
 						else if (y <= 0) y = 1;
 					}
 				}
@@ -1920,11 +1920,11 @@ bool target_set(BIT_FLAGS mode)
 				}
 
 				/* Slide into legality */
-				if (x >= cur_wid-1) x = cur_wid - 2;
+				if (x >= current_floor_ptr->width-1) x = current_floor_ptr->width - 2;
 				else if (x <= 0) x = 1;
 
 				/* Slide into legality */
-				if (y >= cur_hgt-1) y = cur_hgt- 2;
+				if (y >= current_floor_ptr->height-1) y = current_floor_ptr->height- 2;
 				else if (y <= 0) y = 1;
 			}
 		}
@@ -2410,9 +2410,9 @@ static void tgt_pt_prepare(void)
 	if (!expand_list) return;
 
 	/* Scan the current panel */
-	for (y = 1; y < cur_hgt; y++)
+	for (y = 1; y < current_floor_ptr->height; y++)
 	{
-		for (x = 1; x < cur_wid; x++)
+		for (x = 1; x < current_floor_ptr->width; x++)
 		{
 			/* Require "interesting" contents */
 			if (!tgt_pt_accept(y, x)) continue;
@@ -2579,11 +2579,11 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				}
 
 				/* Slide into legality */
-				if (x >= cur_wid-1) x = cur_wid - 2;
+				if (x >= current_floor_ptr->width-1) x = current_floor_ptr->width - 2;
 				else if (x <= 0) x = 1;
 
 				/* Slide into legality */
-				if (y >= cur_hgt-1) y = cur_hgt- 2;
+				if (y >= current_floor_ptr->height-1) y = current_floor_ptr->height- 2;
 				else if (y <= 0) y = 1;
 
 			}

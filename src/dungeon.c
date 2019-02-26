@@ -3406,8 +3406,8 @@ static void process_world(void)
 		int number_mon = 0;
 
 		/* Count all hostile monsters */
-		for (i2 = 0; i2 < cur_wid; ++i2)
-			for (j2 = 0; j2 < cur_hgt; j2++)
+		for (i2 = 0; i2 < current_floor_ptr->width; ++i2)
+			for (j2 = 0; j2 < current_floor_ptr->height; j2++)
 			{
 				grid_type *g_ptr = &current_floor_ptr->grid_array[j2][i2];
 
@@ -5962,8 +5962,8 @@ void play_game(bool new_game)
 	record_o_name[0] = '\0';
 
 	/* Reset map panel */
-	panel_row_min = cur_hgt;
-	panel_col_min = cur_wid;
+	panel_row_min = current_floor_ptr->height;
+	panel_col_min = current_floor_ptr->width;
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
 	if (p_ptr->pseikaku == SEIKAKU_SEXY)

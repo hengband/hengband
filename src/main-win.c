@@ -3176,8 +3176,8 @@ static void windows_map(void)
 	{
 		min_x = 0;
 		min_y = 0;
-		max_x = cur_wid;
-		max_y = cur_hgt;
+		max_x = current_floor_ptr->width;
+		max_y = current_floor_ptr->height;
 	}
 
 	/* Draw the map */

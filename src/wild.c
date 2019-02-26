@@ -424,8 +424,8 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 		/* Hack -- Induce consistant flavors */
 		Rand_state_set(wilderness[y][x].seed);
 
-		dy = rand_range(6, cur_hgt - 6);
-		dx = rand_range(6, cur_wid - 6);
+		dy = rand_range(6, current_floor_ptr->height - 6);
+		dx = rand_range(6, current_floor_ptr->width - 6);
 
 		current_floor_ptr->grid_array[dy][dx].feat = feat_entrance;
 		current_floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
@@ -455,12 +455,12 @@ void wilderness_gen(void)
 	feature_type *f_ptr;
 
 	/* Big town */
-	cur_hgt = MAX_HGT;
-	cur_wid = MAX_WID;
+	current_floor_ptr->height = MAX_HGT;
+	current_floor_ptr->width = MAX_WID;
 
 	/* Assume illegal panel */
-	panel_row_min = cur_hgt;
-	panel_col_min = cur_wid;
+	panel_row_min = current_floor_ptr->height;
+	panel_col_min = current_floor_ptr->width;
 
 	/* Init the wilderness */
 
@@ -564,9 +564,9 @@ void wilderness_gen(void)
 	current_floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
 
 	/* Light up or darken the area */
-	for (y = 0; y < cur_hgt; y++)
+	for (y = 0; y < current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < cur_wid; x++)
+		for (x = 0; x < current_floor_ptr->width; x++)
 		{
 			g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -610,9 +610,9 @@ void wilderness_gen(void)
 
 	if (p_ptr->teleport_town)
 	{
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < cur_wid; x++)
+			for (x = 0; x < current_floor_ptr->width; x++)
 			{
 				g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -635,9 +635,9 @@ void wilderness_gen(void)
 
 	else if (p_ptr->leaving_dungeon)
 	{
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < cur_wid; x++)
+			for (x = 0; x < current_floor_ptr->width; x++)
 			{
 				g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -725,15 +725,15 @@ void wilderness_gen_small(void)
 		current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
 	}
 
-	cur_hgt = (s16b) max_wild_y;
-	cur_wid = (s16b) max_wild_x;
+	current_floor_ptr->height = (s16b) max_wild_y;
+	current_floor_ptr->width = (s16b) max_wild_x;
 
-	if (cur_hgt > MAX_HGT) cur_hgt = MAX_HGT;
-	if (cur_wid > MAX_WID) cur_wid = MAX_WID;
+	if (current_floor_ptr->height > MAX_HGT) current_floor_ptr->height = MAX_HGT;
+	if (current_floor_ptr->width > MAX_WID) current_floor_ptr->width = MAX_WID;
 
 	/* Assume illegal panel */
-	panel_row_min = cur_hgt;
-	panel_col_min = cur_wid;
+	panel_row_min = current_floor_ptr->height;
+	panel_col_min = current_floor_ptr->width;
 
 	/* Place the player */
 	p_ptr->x = p_ptr->wilderness_x;

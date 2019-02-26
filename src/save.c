@@ -943,8 +943,8 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	wr_u16b((s16b)num_repro);
 	wr_u16b((u16b)p_ptr->y);
 	wr_u16b((u16b)p_ptr->x);
-	wr_u16b((u16b)cur_hgt);
-	wr_u16b((u16b)cur_wid);
+	wr_u16b((u16b)current_floor_ptr->height);
+	wr_u16b((u16b)current_floor_ptr->width);
 	wr_byte(p_ptr->feeling);
 
 
@@ -969,9 +969,9 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	C_MAKE(templates, max_num_temp, cave_template_type);
 
 	/* Extract template array */
-	for (y = 0; y < cur_hgt; y++)
+	for (y = 0; y < current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < cur_wid; x++)
+		for (x = 0; x < current_floor_ptr->width; x++)
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1049,9 +1049,9 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	prev_u16b = 0;
 
 	/* Dump the current_floor_ptr->grid_array */
-	for (y = 0; y < cur_hgt; y++)
+	for (y = 0; y < current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < cur_wid; x++)
+		for (x = 0; x < current_floor_ptr->width; x++)
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 

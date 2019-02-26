@@ -159,8 +159,6 @@ extern s16b command_new;
 extern bool msg_flag;
 extern s16b running;
 extern GAME_TURN resting;
-extern POSITION cur_hgt;
-extern POSITION cur_wid;
 extern MONSTER_NUMBER num_repro;
 extern DEPTH object_level;
 extern DEPTH monster_level;

@@ -656,7 +656,7 @@ bool build_type7(void)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
-	if (x + 2 > cur_hgt - 2)
+	if (x + 2 > current_floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
 		transno &= ~1;
@@ -736,7 +736,7 @@ bool build_type8(void)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
-	if (x + 2 > cur_hgt - 2)
+	if (x + 2 > current_floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
 		transno &= ~1;
@@ -1258,7 +1258,7 @@ bool build_type17(void)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
-	if (x + 2 > cur_hgt - 2)
+	if (x + 2 > current_floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
 		transno &= ~1;

@@ -4273,15 +4273,15 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				/* Hack - Set the dungeon size */
 				panels_y = (*y / SCREEN_HGT);
 				if (*y % SCREEN_HGT) panels_y++;
-				cur_hgt = panels_y * SCREEN_HGT;
+				current_floor_ptr->height = panels_y * SCREEN_HGT;
 
 				panels_x = (*x / SCREEN_WID);
 				if (*x % SCREEN_WID) panels_x++;
-				cur_wid = panels_x * SCREEN_WID;
+				current_floor_ptr->width = panels_x * SCREEN_WID;
 
 				/* Assume illegal panel */
-				panel_row_min = cur_hgt;
-				panel_col_min = cur_wid;
+				panel_row_min = current_floor_ptr->height;
+				panel_col_min = current_floor_ptr->width;
 
 				/* Place player in a quest level */
 				if (p_ptr->inside_quest)

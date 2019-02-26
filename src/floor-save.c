@@ -323,8 +323,8 @@ static void build_dead_end(void)
 	set_floor_and_wall(0);
 
 	/* Smallest area */
-	cur_hgt = SCREEN_HGT;
-	cur_wid = SCREEN_WID;
+	current_floor_ptr->height = SCREEN_HGT;
+	current_floor_ptr->width = SCREEN_WID;
 
 	/* Filled with permanent walls */
 	for (y = 0; y < MAX_HGT; y++)
@@ -337,8 +337,8 @@ static void build_dead_end(void)
 	}
 
 	/* Place at center of the floor */
-	p_ptr->y = cur_hgt / 2;
-	p_ptr->x = cur_wid / 2;
+	p_ptr->y = current_floor_ptr->height / 2;
+	p_ptr->x = current_floor_ptr->width / 2;
 
 	/* Give one square */
 	place_floor_bold(p_ptr->y, p_ptr->x);
@@ -756,9 +756,9 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 	int i;
 
 	/* Search usable stairs */
-	for (y = 0; y < cur_hgt; y++)
+	for (y = 0; y < current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < cur_wid; x++)
+		for (x = 0; x < current_floor_ptr->width; x++)
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 			feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -1473,9 +1473,9 @@ void stair_creation(void)
 	{
 		POSITION x, y;
 
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < cur_wid; x++)
+			for (x = 0; x < current_floor_ptr->width; x++)
 			{
 				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 

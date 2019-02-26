@@ -60,9 +60,9 @@ static void next_mirror(POSITION* next_y, POSITION* next_x, POSITION cury, POSIT
 	POSITION x, y;
 	int num;
 
-	for (x = 0; x < cur_wid; x++)
+	for (x = 0; x < current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
 			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x])) {
 				mirror_y[mirror_num] = y;
@@ -6486,9 +6486,9 @@ bool binding_field(HIT_POINT dam)
 	monster_target_y = p_ptr->y;
 	monster_target_x = p_ptr->x;
 
-	for (x = 0; x < cur_wid; x++)
+	for (x = 0; x < current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
 			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x]) &&
 				distance(p_ptr->y, p_ptr->x, y, x) <= MAX_RANGE &&
@@ -6620,9 +6620,9 @@ void seal_of_mirror(HIT_POINT dam)
 {
 	POSITION x, y;
 
-	for (x = 0; x < cur_wid; x++)
+	for (x = 0; x < current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < cur_hgt; y++)
+		for (y = 0; y < current_floor_ptr->height; y++)
 		{
 			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x]))
 			{
