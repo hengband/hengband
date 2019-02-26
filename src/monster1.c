@@ -3092,7 +3092,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	}
 
 	/* Reset the object level */
-	object_level = base_level;
+	object_level = current_floor->base_level;
 
 	/* Reset "coin" type */
 	coin_type = 0;

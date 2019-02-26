@@ -104,7 +104,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	}
 
 	/* Reset the object level */
-	object_level = base_level;
+	object_level = current_floor->base_level;
 
 	/* No longer opening a chest */
 	opening_chest = FALSE;

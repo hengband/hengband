@@ -5269,7 +5269,7 @@ static void dungeon(bool load_game)
 	int quest_num = 0;
 
 	/* Set the base level */
-	base_level = dun_level;
+	current_floor->base_level = dun_level;
 
 	/* Reset various flags */
 	is_loading_now = FALSE;
@@ -5418,10 +5418,10 @@ static void dungeon(bool load_game)
 	/*** Process this dungeon level ***/
 
 	/* Reset the monster generation level */
-	monster_level = base_level;
+	monster_level = current_floor->base_level;
 
 	/* Reset the object generation level */
-	object_level = base_level;
+	object_level = current_floor->base_level;
 
 	is_loading_now = TRUE;
 

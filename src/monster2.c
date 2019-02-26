@@ -2857,11 +2857,11 @@ static IDX initial_r_appearance(MONRACE_IDX r_idx)
 {
 	int attempts = 1000;
 	IDX ap_r_idx;
-	DEPTH min = MIN(base_level-5, 50);
+	DEPTH min = MIN(current_floor->base_level-5, 50);
 
 	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN)
 	{
-		if (base_level == 0 || one_in_(5)) return MON_ALIEN_JURAL;
+		if (current_floor->base_level == 0 || one_in_(5)) return MON_ALIEN_JURAL;
 	}
 
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
@@ -2871,7 +2871,7 @@ static IDX initial_r_appearance(MONRACE_IDX r_idx)
 
 	while (--attempts)
 	{
-		ap_r_idx = get_mon_num(base_level + 10);
+		ap_r_idx = get_mon_num(current_floor->base_level + 10);
 		if (r_info[ap_r_idx].level >= min) return ap_r_idx;
 	}
 

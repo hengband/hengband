@@ -165,7 +165,6 @@ extern DEPTH dun_level;
 extern MONSTER_NUMBER num_repro;
 extern DEPTH object_level;
 extern DEPTH monster_level;
-extern DEPTH base_level;
 extern bool invoking_midnight_curse;
 extern GAME_TURN turn;
 extern GAME_TURN turn_limit;

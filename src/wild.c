@@ -325,16 +325,16 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 	p_ptr->town_num = wilderness[y][x].town;
 
 	/* Set the base level */
-	base_level = wilderness[y][x].level;
+	current_floor->base_level = wilderness[y][x].level;
 
 	/* Set the dungeon level */
 	dun_level = 0;
 
 	/* Set the monster generation level */
-	monster_level = base_level;
+	monster_level = current_floor->base_level;
 
 	/* Set the object generation level */
-	object_level = base_level;
+	object_level = current_floor->base_level;
 
 
 	/* Create the town */

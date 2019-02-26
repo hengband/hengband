@@ -4006,11 +4006,11 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Create a monster */
 			if (random & RANDOM_MONSTER)
 			{
-				monster_level = base_level + monster_index;
+				monster_level = current_floor->base_level + monster_index;
 
 				place_monster(*y, *x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 
-				monster_level = base_level;
+				monster_level = current_floor->base_level;
 			}
 			else if (monster_index)
 			{
@@ -4058,7 +4058,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Object (and possible trap) */
 			if ((random & RANDOM_OBJECT) && (random & RANDOM_TRAP))
 			{
-				object_level = base_level + object_index;
+				object_level = current_floor->base_level + object_index;
 
 				/*
 				 * Random trap and random treasure defined
@@ -4073,11 +4073,11 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 					place_trap(*y, *x);
 				}
 
-				object_level = base_level;
+				object_level = current_floor->base_level;
 			}
 			else if (random & RANDOM_OBJECT)
 			{
-				object_level = base_level + object_index;
+				object_level = current_floor->base_level + object_index;
 
 				/* Create an out of deep object */
 				if (randint0(100) < 75)
@@ -4087,7 +4087,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				else
 					place_object(*y, *x, AM_GOOD | AM_GREAT);
 
-				object_level = base_level;
+				object_level = current_floor->base_level;
 			}
 			/* Random trap */
 			else if (random & RANDOM_TRAP)
@@ -4113,7 +4113,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 
 				/* Apply magic (no messages, no artifacts) */
-				apply_magic(o_ptr, base_level, AM_NO_FIXED_ART | AM_GOOD);
+				apply_magic(o_ptr, current_floor->base_level, AM_NO_FIXED_ART | AM_GOOD);
 
 				drop_here(o_ptr, *y, *x);
 			}

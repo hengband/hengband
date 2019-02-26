@@ -939,7 +939,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 		wr_s16b(sf_ptr->lower_floor_id);
 	}
 
-	wr_u16b((u16b)base_level);
+	wr_u16b((u16b)current_floor->base_level);
 	wr_u16b((s16b)num_repro);
 	wr_u16b((u16b)p_ptr->y);
 	wr_u16b((u16b)p_ptr->x);

@@ -113,11 +113,10 @@ GAME_TURN resting;			/* Current counter for resting, if any */
 
 POSITION cur_hgt;		/* Current dungeon height */
 POSITION cur_wid;		/* Current dungeon width */
-DEPTH dun_level;		/*!< 現在の実ダンジョン階層、base_levelの参照元となる / Current dungeon level */
+DEPTH dun_level;		/*!< 現在の実ダンジョン階層、current_floor->base_levelの参照元となる / Current dungeon level */
 MONSTER_NUMBER num_repro; /*!< Current reproducer count */
-DEPTH base_level;		/*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
-DEPTH object_level;		/*!< アイテムの生成レベル、base_levelを起点に一時変更する時に参照 / Current object creation level */
-DEPTH monster_level;	/*!< モンスターの生成レベル、base_levelを起点に一時変更する時に参照 / Current monster creation level */
+DEPTH object_level;		/*!< アイテムの生成レベル、current_floor->base_levelを起点に一時変更する時に参照 / Current object creation level */
+DEPTH monster_level;	/*!< モンスターの生成レベル、current_floor->base_levelを起点に一時変更する時に参照 / Current monster creation level */
 bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
 
 GAME_TURN turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */

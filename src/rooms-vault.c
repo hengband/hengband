@@ -461,9 +461,9 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 			case 'A':
 				/* Reward for Pattern walk */
-				object_level = base_level + 12;
+				object_level = current_floor->base_level + 12;
 				place_object(y, x, AM_GOOD | AM_GREAT);
-				object_level = base_level;
+				object_level = current_floor->base_level;
 				break;
 
 			case '~':
@@ -554,42 +554,42 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				/* Monster */
 			case '&':
 			{
-				monster_level = base_level + 5;
+				monster_level = current_floor->base_level + 5;
 				place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-				monster_level = base_level;
+				monster_level = current_floor->base_level;
 				break;
 			}
 
 			/* Meaner monster */
 			case '@':
 			{
-				monster_level = base_level + 11;
+				monster_level = current_floor->base_level + 11;
 				place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-				monster_level = base_level;
+				monster_level = current_floor->base_level;
 				break;
 			}
 
 			/* Meaner monster, plus treasure */
 			case '9':
 			{
-				monster_level = base_level + 9;
+				monster_level = current_floor->base_level + 9;
 				place_monster(y, x, PM_ALLOW_SLEEP);
-				monster_level = base_level;
-				object_level = base_level + 7;
+				monster_level = current_floor->base_level;
+				object_level = current_floor->base_level + 7;
 				place_object(y, x, AM_GOOD);
-				object_level = base_level;
+				object_level = current_floor->base_level;
 				break;
 			}
 
 			/* Nasty monster and treasure */
 			case '8':
 			{
-				monster_level = base_level + 40;
+				monster_level = current_floor->base_level + 40;
 				place_monster(y, x, PM_ALLOW_SLEEP);
-				monster_level = base_level;
-				object_level = base_level + 20;
+				monster_level = current_floor->base_level;
+				object_level = current_floor->base_level + 20;
 				place_object(y, x, AM_GOOD | AM_GREAT);
-				object_level = base_level;
+				object_level = current_floor->base_level;
 				break;
 			}
 
@@ -598,15 +598,15 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 			{
 				if (randint0(100) < 50)
 				{
-					monster_level = base_level + 3;
+					monster_level = current_floor->base_level + 3;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = base_level;
+					monster_level = current_floor->base_level;
 				}
 				if (randint0(100) < 50)
 				{
-					object_level = base_level + 7;
+					object_level = current_floor->base_level + 7;
 					place_object(y, x, 0L);
-					object_level = base_level;
+					object_level = current_floor->base_level;
 				}
 				break;
 			}

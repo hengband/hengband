@@ -1876,4 +1876,5 @@ typedef struct {
 
 typedef struct {
 	grid_type *grid_array[MAX_HGT];
+	DEPTH base_level;
 } floor_type;

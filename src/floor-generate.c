@@ -937,7 +937,7 @@ static bool cave_gen(void)
 	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
 
 	/* Set back to default */
-	object_level = base_level;
+	object_level = current_floor->base_level;
 
 	/* Put the Guardian */
 	if (!alloc_guardian(TRUE)) return FALSE;
@@ -1195,10 +1195,10 @@ static void generate_fixed_floor(void)
 	}
 
 	/* Set the quest level */
-	base_level = quest[p_ptr->inside_quest].level;
-	dun_level = base_level;
-	object_level = base_level;
-	monster_level = base_level;
+	current_floor->base_level = quest[p_ptr->inside_quest].level;
+	dun_level = current_floor->base_level;
+	object_level = current_floor->base_level;
+	monster_level = current_floor->base_level;
 
 	if (record_stair) do_cmd_write_nikki(NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
 	get_mon_num_prep(get_monster_hook(), NULL);
@@ -1351,13 +1351,13 @@ void clear_cave(void)
 	p_ptr->x = p_ptr->y = 0;
 
 	/* Set the base level */
-	base_level = dun_level;
+	current_floor->base_level = dun_level;
 
 	/* Reset the monster generation level */
-	monster_level = base_level;
+	monster_level = current_floor->base_level;
 
 	/* Reset the object generation level */
-	object_level = base_level;
+	object_level = current_floor->base_level;
 }
 
 

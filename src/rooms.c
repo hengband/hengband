@@ -1407,29 +1407,29 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				if (value < 0)
 				{
 					/* Meanest monster + treasure */
-					monster_level = base_level + 40;
+					monster_level = current_floor->base_level + 40;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = base_level;
-					object_level = base_level + 20;
+					monster_level = current_floor->base_level;
+					object_level = current_floor->base_level + 20;
 					place_object(y, x, AM_GOOD);
-					object_level = base_level;
+					object_level = current_floor->base_level;
 				}
 				else if (value < 5)
 				{
 					/* Mean monster +treasure */
-					monster_level = base_level + 20;
+					monster_level = current_floor->base_level + 20;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = base_level;
-					object_level = base_level + 10;
+					monster_level = current_floor->base_level;
+					object_level = current_floor->base_level + 10;
 					place_object(y, x, AM_GOOD);
-					object_level = base_level;
+					object_level = current_floor->base_level;
 				}
 				else if (value < 10)
 				{
 					/* Monster */
-					monster_level = base_level + 9;
+					monster_level = current_floor->base_level + 9;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = base_level;
+					monster_level = current_floor->base_level;
 				}
 				else if (value < 17)
 				{
@@ -1457,9 +1457,9 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				else if (value < 30)
 				{
 					/* Monster and trap */
-					monster_level = base_level + 5;
+					monster_level = current_floor->base_level + 5;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					monster_level = base_level;
+					monster_level = current_floor->base_level;
 					place_trap(y, x);
 				}
 				else if (value < 40)
@@ -1467,15 +1467,15 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 					/* Monster or object */
 					if (randint0(100) < 50)
 					{
-						monster_level = base_level + 3;
+						monster_level = current_floor->base_level + 3;
 						place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-						monster_level = base_level;
+						monster_level = current_floor->base_level;
 					}
 					if (randint0(100) < 50)
 					{
-						object_level = base_level + 7;
+						object_level = current_floor->base_level + 7;
 						place_object(y, x, 0L);
-						object_level = base_level;
+						object_level = current_floor->base_level;
 					}
 				}
 				else if (value < 50)
