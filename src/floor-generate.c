@@ -1015,10 +1015,10 @@ static void build_arena(void)
 }
 
 /*!
- * @brief 闘技場への入場処理 / Town logic flow for generation of arena -KMW-
+ * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void arena_gen(void)
+static void generate_challenge_arena(void)
 {
 	POSITION y, x;
 	POSITION qy = 0;
@@ -1387,7 +1387,7 @@ void generate_random_floor(void)
 		if (p_ptr->inside_arena)
 		{
 			/* Small arena */
-			arena_gen();
+			generate_challenge_arena();
 		}
 
 		/* Build the battle -KMW- */
