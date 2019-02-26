@@ -21,7 +21,7 @@ void vault_prep_clone(void)
 	get_mon_num_prep(vault_aux_simple, NULL);
 
 	/* Pick a race to clone */
-	vault_aux_race = get_mon_num(dun_level + 10);
+	vault_aux_race = get_mon_num(current_floor_ptr->dun_level + 10);
 
 	/* Remove the monster restriction */
 	get_mon_num_prep(NULL, NULL);
@@ -40,7 +40,7 @@ void vault_prep_symbol(void)
 	get_mon_num_prep(vault_aux_simple, NULL);
 
 	/* Pick a race to clone */
-	r_idx = get_mon_num(dun_level + 10);
+	r_idx = get_mon_num(current_floor_ptr->dun_level + 10);
 
 	/* Remove the monster restriction */
 	get_mon_num_prep(NULL, NULL);

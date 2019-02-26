@@ -180,17 +180,17 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 	if (have_flag(f_ptr->flags, FF_LESS))
 	{
 		/* No up stairs in town or in ironman mode */
-		if (ironman_downward || !dun_level) return TRUE;
+		if (ironman_downward || !current_floor_ptr->dun_level) return TRUE;
 
-		if (dun_level > d_info[p_ptr->dungeon_idx].mindepth)
+		if (current_floor_ptr->dun_level > d_info[p_ptr->dungeon_idx].mindepth)
 			shaft_num = (randint1(num+1))/2;
 	}
 	else if (have_flag(f_ptr->flags, FF_MORE))
 	{
-		QUEST_IDX q_idx = quest_number(dun_level);
+		QUEST_IDX q_idx = quest_number(current_floor_ptr->dun_level);
 
 		/* No downstairs on quest levels */
-		if (dun_level > 1 && q_idx)
+		if (current_floor_ptr->dun_level > 1 && q_idx)
 		{
 			monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
 
@@ -200,9 +200,9 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 		}
 
 		/* No downstairs at the bottom */
-		if (dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) return TRUE;
+		if (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) return TRUE;
 
-		if ((dun_level < d_info[p_ptr->dungeon_idx].maxdepth-1) && !quest_number(dun_level+1))
+		if ((current_floor_ptr->dun_level < d_info[p_ptr->dungeon_idx].maxdepth-1) && !quest_number(current_floor_ptr->dun_level+1))
 			shaft_num = (randint1(num)+1)/2;
 	}
 
@@ -391,7 +391,7 @@ bool place_quest_monsters(void)
 		if (quest[i].status != QUEST_STATUS_TAKEN ||
 		    (quest[i].type != QUEST_TYPE_KILL_LEVEL &&
 		     quest[i].type != QUEST_TYPE_RANDOM) ||
-		    quest[i].level != dun_level ||
+		    quest[i].level != current_floor_ptr->dun_level ||
 		    p_ptr->dungeon_idx != quest[i].dungeon ||
 		    (quest[i].flags & QUEST_FLAG_PRESET))
 		{
@@ -471,7 +471,7 @@ static void gen_caverns_and_lakes(void)
 {
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	/* Possible "destroyed" level */
-	if ((dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_DESTROY))
+	if ((current_floor_ptr->dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_DESTROY))
 	{
 		dun->destroyed = TRUE;
 
@@ -492,38 +492,38 @@ static void gen_caverns_and_lakes(void)
 		if (d_info[p_ptr->dungeon_idx].flags1 & DF1_LAKE_LAVA)
 		{
 			/* Lake of Lava */
-			if ((dun_level > 80) && (randint0(count) < 2)) dun->laketype = LAKE_T_LAVA;
+			if ((current_floor_ptr->dun_level > 80) && (randint0(count) < 2)) dun->laketype = LAKE_T_LAVA;
 			count -= 2;
 
 			/* Lake of Lava2 */
-			if (!dun->laketype && (dun_level > 80) && one_in_(count)) dun->laketype = LAKE_T_FIRE_VAULT;
+			if (!dun->laketype && (current_floor_ptr->dun_level > 80) && one_in_(count)) dun->laketype = LAKE_T_FIRE_VAULT;
 			count--;
 		}
 
 		if ((d_info[p_ptr->dungeon_idx].flags1 & DF1_LAKE_WATER) && !dun->laketype)
 		{
 			/* Lake of Water */
-			if ((dun_level > 50) && randint0(count) < 2) dun->laketype = LAKE_T_WATER;
+			if ((current_floor_ptr->dun_level > 50) && randint0(count) < 2) dun->laketype = LAKE_T_WATER;
 			count -= 2;
 
 			/* Lake of Water2 */
-			if (!dun->laketype && (dun_level > 50) && one_in_(count)) dun->laketype = LAKE_T_WATER_VAULT;
+			if (!dun->laketype && (current_floor_ptr->dun_level > 50) && one_in_(count)) dun->laketype = LAKE_T_WATER_VAULT;
 			count--;
 		}
 
 		if ((d_info[p_ptr->dungeon_idx].flags1 & DF1_LAKE_RUBBLE) && !dun->laketype)
 		{
 			/* Lake of rubble */
-			if ((dun_level > 35) && (randint0(count) < 2)) dun->laketype = LAKE_T_CAVE;
+			if ((current_floor_ptr->dun_level > 35) && (randint0(count) < 2)) dun->laketype = LAKE_T_CAVE;
 			count -= 2;
 
 			/* Lake of rubble2 */
-			if (!dun->laketype && (dun_level > 35) && one_in_(count)) dun->laketype = LAKE_T_EARTH_VAULT;
+			if (!dun->laketype && (current_floor_ptr->dun_level > 35) && one_in_(count)) dun->laketype = LAKE_T_EARTH_VAULT;
 			count--;
 		}
 
 		/* Lake of tree */
-		if ((dun_level > 5) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_LAKE_TREE) && !dun->laketype) dun->laketype = LAKE_T_AIR_VAULT;
+		if ((current_floor_ptr->dun_level > 5) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_LAKE_TREE) && !dun->laketype) dun->laketype = LAKE_T_AIR_VAULT;
 
 		if (dun->laketype)
 		{
@@ -532,9 +532,9 @@ static void gen_caverns_and_lakes(void)
 		}
 	}
 
-	if ((dun_level > DUN_CAVERN) && !dun->empty_level &&
+	if ((current_floor_ptr->dun_level > DUN_CAVERN) && !dun->empty_level &&
 	    (d_info[p_ptr->dungeon_idx].flags1 & DF1_CAVERN) &&
-	    !dun->laketype && !dun->destroyed && (randint1(1000) < dun_level))
+	    !dun->laketype && !dun->destroyed && (randint1(1000) < current_floor_ptr->dun_level))
 	{
 		dun->cavern = TRUE;
 
@@ -546,7 +546,7 @@ static void gen_caverns_and_lakes(void)
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
 	/* Hack -- No destroyed "quest" levels */
-	if (quest_number(dun_level)) dun->destroyed = FALSE;
+	if (quest_number(current_floor_ptr->dun_level)) dun->destroyed = FALSE;
 }
 
 
@@ -667,7 +667,7 @@ static bool cave_gen(void)
 
 
 		/* Make a hole in the dungeon roof sometimes at level 1 */
-		if (dun_level == 1)
+		if (current_floor_ptr->dun_level == 1)
 		{
 			while (one_in_(DUN_MOS_DEN))
 			{
@@ -679,12 +679,12 @@ static bool cave_gen(void)
 		if (dun->destroyed) destroy_level();
 
 		/* Hack -- Add some rivers */
-		if (one_in_(3) && (randint1(dun_level) > 5))
+		if (one_in_(3) && (randint1(current_floor_ptr->dun_level) > 5))
 		{
 			FEAT_IDX feat1 = 0, feat2 = 0;
 
 			/* Choose water mainly */
-			if ((randint1(MAX_DEPTH * 2) - 1 > dun_level) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_WATER_RIVER))
+			if ((randint1(MAX_DEPTH * 2) - 1 > current_floor_ptr->dun_level) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_WATER_RIVER))
 			{
 				feat1 = feat_deep_water;
 				feat2 = feat_shallow_water;
@@ -764,7 +764,7 @@ static bool cave_gen(void)
 			dun->wall_n = 0;
 
 			/* Connect the room to the previous room */
-			if (randint1(dun_level) > d_info[p_ptr->dungeon_idx].tunnel_percent)
+			if (randint1(current_floor_ptr->dun_level) > d_info[p_ptr->dungeon_idx].tunnel_percent)
 			{
 				/* make cavelike tunnel */
 				(void)build_tunnel2(dun->cent[i].x, dun->cent[i].y, x, y, 2, 2);
@@ -886,7 +886,7 @@ static bool cave_gen(void)
 	if (!place_quest_monsters()) return FALSE;
 
 	/* Basic "amount" */
-	k = (dun_level / 3);
+	k = (current_floor_ptr->dun_level / 3);
 	if (k > 10) k = 10;
 	if (k < 2) k = 2;
 
@@ -923,7 +923,7 @@ static bool cave_gen(void)
 	if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE)) alloc_object(ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(k));
 
 	/* Mega Hack -- No object at first level of deeper dungeon */
-	if (p_ptr->enter_dungeon && dun_level > 1)
+	if (p_ptr->enter_dungeon && current_floor_ptr->dun_level > 1)
 	{
 		/* No stair scum! */
 		object_level = 1;
@@ -942,7 +942,7 @@ static bool cave_gen(void)
 	/* Put the Guardian */
 	if (!alloc_guardian(TRUE)) return FALSE;
 
-	if (dun->empty_level && (!one_in_(DARK_EMPTY) || (randint1(100) > dun_level)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+	if (dun->empty_level && (!one_in_(DARK_EMPTY) || (randint1(100) > current_floor_ptr->dun_level)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 	{
 		/* Lite the current_floor_ptr->grid_array */
 		for (y = 0; y < cur_hgt; y++)
@@ -1196,7 +1196,7 @@ static void generate_fixed_floor(void)
 
 	/* Set the quest level */
 	current_floor_ptr->base_level = quest[p_ptr->inside_quest].level;
-	dun_level = current_floor_ptr->base_level;
+	current_floor_ptr->dun_level = current_floor_ptr->base_level;
 	object_level = current_floor_ptr->base_level;
 	monster_level = current_floor_ptr->base_level;
 
@@ -1290,7 +1290,7 @@ void wipe_generate_random_floor_flags(void)
 		}
 	}
 
-	if (dun_level)
+	if (current_floor_ptr->dun_level)
 	{
 		for (y = 1; y < cur_hgt - 1; y++)
 		{
@@ -1351,7 +1351,7 @@ void clear_cave(void)
 	p_ptr->x = p_ptr->y = 0;
 
 	/* Set the base level */
-	current_floor_ptr->base_level = dun_level;
+	current_floor_ptr->base_level = current_floor_ptr->dun_level;
 
 	/* Reset the monster generation level */
 	monster_level = current_floor_ptr->base_level;
@@ -1403,7 +1403,7 @@ void generate_random_floor(void)
 		}
 
 		/* Build the town */
-		else if (!dun_level)
+		else if (!current_floor_ptr->dun_level)
 		{
 			/* Make the wilderness */
 			if (p_ptr->wild_mode) wilderness_gen_small();

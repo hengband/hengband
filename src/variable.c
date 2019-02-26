@@ -113,7 +113,6 @@ GAME_TURN resting;			/* Current counter for resting, if any */
 
 POSITION cur_hgt;		/* Current dungeon height */
 POSITION cur_wid;		/* Current dungeon width */
-DEPTH dun_level;		/*!< 現在の実ダンジョン階層、current_floor_ptr->base_levelの参照元となる / Current dungeon level */
 MONSTER_NUMBER num_repro; /*!< Current reproducer count */
 DEPTH object_level;		/*!< アイテムの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current object creation level */
 DEPTH monster_level;	/*!< モンスターの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current monster creation level */

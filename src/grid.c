@@ -58,7 +58,7 @@ bool new_player_spot(void)
 
 		/* Must be a "naked" floor grid */
 		if (g_ptr->m_idx) continue;
-		if (dun_level)
+		if (current_floor_ptr->dun_level)
 		{
 			f_ptr = &f_info[g_ptr->feat];
 
@@ -113,16 +113,16 @@ void place_random_stairs(POSITION y, POSITION x)
 	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
 
 	/* Town */
-	if (!dun_level) up_stairs = FALSE;
+	if (!current_floor_ptr->dun_level) up_stairs = FALSE;
 
 	/* Ironman */
 	if (ironman_downward) up_stairs = FALSE;
 
 	/* Bottom */
-	if (dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
+	if (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
 
 	/* Quest-level */
-	if (quest_number(dun_level) && (dun_level > 1)) down_stairs = FALSE;
+	if (quest_number(current_floor_ptr->dun_level) && (current_floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
 	if (down_stairs && up_stairs)
@@ -3759,14 +3759,14 @@ void update_mon_lite(void)
 			if (!rad) continue;
 			else if (rad > 0)
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!dun_level && is_daytime()) || p_ptr->inside_battle)) continue;
+				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && is_daytime()) || p_ptr->inside_battle)) continue;
 				if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) rad = 1;
 				add_mon_lite = mon_lite_hack;
 				f_flag = FF_LOS;
 			}
 			else
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (MON_CSLEEP(m_ptr) || (!dun_level && !is_daytime()))) continue;
+				if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && !is_daytime()))) continue;
 				add_mon_lite = mon_dark_hack;
 				f_flag = FF_PROJECT;
 				rad = -rad; /* Use absolute value */
@@ -4305,7 +4305,7 @@ void update_view(void)
 	/*** Initialize ***/
 
 	/* Optimize */
-	if (view_reduce_view && !dun_level)
+	if (view_reduce_view && !current_floor_ptr->dun_level)
 	{
 		/* Full radius (10) */
 		full = MAX_SIGHT / 2;
@@ -5253,7 +5253,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 		}
 
 		/* Handle item */
-		if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - dun_level / 2)))
+		if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - current_floor_ptr->dun_level / 2)))
 		{
 			/* Place object */
 			place_object(y, x, 0L);
@@ -5272,7 +5272,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 
 		if (have_flag(old_f_ptr->flags, FF_GLASS) && character_dungeon)
 		{
-			project(PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(dun_level, 100) / 4, GF_SHARDS,
+			project(PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(current_floor_ptr->dun_level, 100) / 4, GF_SHARDS,
 				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 		}
 	}

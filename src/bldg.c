@@ -3650,7 +3650,7 @@ bool tele_town(void)
 	POSITION x, y;
 	int num = 0;
 
-	if (dun_level)
+	if (current_floor_ptr->dun_level)
 	{
 		msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
 		return FALSE;
@@ -4213,7 +4213,7 @@ void do_cmd_quest(void)
 
 		leave_quest_check();
 
-		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;
+		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) current_floor_ptr->dun_level = 1;
 		p_ptr->inside_quest = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
 
 		p_ptr->leaving = TRUE;

@@ -750,7 +750,7 @@ static bool use_mane(int spell)
 	case MS_S_CYBER:
 	{
 		int k;
-		int max_cyber = (dun_level / 50) + randint1(3);
+		int max_cyber = (current_floor_ptr->dun_level / 50) + randint1(3);
 		if (!target_set(TARGET_KILL)) return FALSE;
 		msg_print(_("サイバーデーモンを召喚した！", "You summon Cyberdemons!"));
 		if (max_cyber > 4) max_cyber = 4;

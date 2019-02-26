@@ -33,7 +33,7 @@ bool build_type14(void)
 	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((current_floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 
 	/* Get corner values */
@@ -71,7 +71,7 @@ bool build_type14(void)
 		place_outer_grid(g_ptr);
 	}
 
-	if (dun_level < 30 + randint1(30))
+	if (current_floor_ptr->dun_level < 30 + randint1(30))
 		trap = feat_trap_piranha;
 	else
 		trap = feat_trap_armageddon;

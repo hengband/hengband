@@ -2483,7 +2483,7 @@ bool make_artifact(object_type *o_ptr)
 	ARTIFACT_IDX i;
 
 	/* No artifacts in the town */
-	if (!dun_level) return (FALSE);
+	if (!current_floor_ptr->dun_level) return (FALSE);
 
 	/* Paranoia -- no "plural" artifacts */
 	if (o_ptr->number != 1) return (FALSE);
@@ -2508,10 +2508,10 @@ bool make_artifact(object_type *o_ptr)
 		if (a_ptr->sval != o_ptr->sval) continue;
 
 		/* XXX XXX Enforce minimum "depth" (loosely) */
-		if (a_ptr->level > dun_level)
+		if (a_ptr->level > current_floor_ptr->dun_level)
 		{
 			/* Acquire the "out-of-depth factor" */
-			int d = (a_ptr->level - dun_level) * 2;
+			int d = (a_ptr->level - current_floor_ptr->dun_level) * 2;
 
 			/* Roll for out-of-depth creation */
 			if (!one_in_(d)) continue;
@@ -2551,7 +2551,7 @@ bool make_artifact_special(object_type *o_ptr)
 	KIND_OBJECT_IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
-	if (!dun_level) return (FALSE);
+	if (!current_floor_ptr->dun_level) return (FALSE);
 
 	/*! @note get_obj_num_hookによる指定がある場合は生成をキャンセルする / Themed object */
 	if (get_obj_num_hook) return (FALSE);

@@ -130,7 +130,7 @@ void check_quest_completion(monster_type *m_ptr)
 				continue;
 
 			/* Quest is not on this level */
-			if ((q_ptr->level != dun_level) &&
+			if ((q_ptr->level != current_floor_ptr->dun_level) &&
 				(q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL))
 				continue;
 
@@ -289,7 +289,7 @@ void check_quest_completion(monster_type *m_ptr)
 	{
 		int i;
 
-		for (i = 0; i < (dun_level / 15) + 1; i++)
+		for (i = 0; i < (current_floor_ptr->dun_level / 15) + 1; i++)
 		{
 			o_ptr = &forge;
 			object_wipe(o_ptr);

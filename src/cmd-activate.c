@@ -1211,7 +1211,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_SUMMON_PHANTOM:
 	{
 		msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0');
+		(void)summon_specific(-1, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0');
 		break;
 	}
 
@@ -1236,7 +1236,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_SUMMON_DAWN:
 	{
 		msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0');
+		(void)summon_specific(-1, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0');
 		break;
 	}
 

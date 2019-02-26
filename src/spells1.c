@@ -457,7 +457,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Turn off the light. */
 			if (do_dark)
 			{
-				if (dun_level || !is_daytime())
+				if (current_floor_ptr->dun_level || !is_daytime())
 				{
 					for (j = 0; j < 9; j++)
 					{

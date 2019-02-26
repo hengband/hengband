@@ -995,7 +995,7 @@ static bool restrict_monster_to_dungeon(MONRACE_IDX r_idx)
 	}
 	if (d_ptr->flags1 & DF1_BEGINNER)
 	{
-		if (r_ptr->level > dun_level)
+		if (r_ptr->level > current_floor_ptr->dun_level)
 			return FALSE;
 	}
 
@@ -1197,14 +1197,14 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 
 			/* Depth Monsters never appear out of depth */
 			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) &&
-			    (r_ptr->level > dun_level))
+			    (r_ptr->level > current_floor_ptr->dun_level))
 				continue;
 		}
 
 		/* Accept this monster */
 		entry->prob2 = entry->prob1;
 
-		if (dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) && !restrict_monster_to_dungeon(entry->index) && !p_ptr->inside_battle)
+		if (current_floor_ptr->dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) && !restrict_monster_to_dungeon(entry->index) && !p_ptr->inside_battle)
 		{
 			int hoge = entry->prob2 * d_info[p_ptr->dungeon_idx].special_div;
 			entry->prob2 = hoge / 64;
@@ -2747,10 +2747,10 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 		if (old_unique)
 			level = r_info[MON_CHAMELEON_K].level;
-		else if (!dun_level)
+		else if (!current_floor_ptr->dun_level)
 			level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
 		else
-			level = dun_level;
+			level = current_floor_ptr->dun_level;
 
 		if (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level+= 2+randint1(3);
 
@@ -2983,7 +2983,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 
 		/* Depth monsters may NOT be created out of depth, unless in Nightmare mode */
-		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (dun_level < r_ptr->level) &&
+		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (current_floor_ptr->dun_level < r_ptr->level) &&
 		    (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
 		{
 			/* Cannot create */
@@ -2991,9 +2991,9 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 	}
 
-	if (quest_number(dun_level))
+	if (quest_number(current_floor_ptr->dun_level))
 	{
-		int hoge = quest_number(dun_level);
+		int hoge = quest_number(current_floor_ptr->dun_level);
 		if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
 		{
 			if(r_idx == quest[hoge].r_idx)
@@ -3417,16 +3417,16 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 	total = randint1(10);
 
 	/* Hard monsters, small groups */
-	if (r_ptr->level > dun_level)
+	if (r_ptr->level > current_floor_ptr->dun_level)
 	{
-		extra = r_ptr->level - dun_level;
+		extra = r_ptr->level - current_floor_ptr->dun_level;
 		extra = 0 - randint1(extra);
 	}
 
 	/* Easy monsters, large groups */
-	else if (r_ptr->level < dun_level)
+	else if (r_ptr->level < current_floor_ptr->dun_level)
 	{
-		extra = dun_level - r_ptr->level;
+		extra = current_floor_ptr->dun_level - r_ptr->level;
 		extra = randint1(extra);
 	}
 
@@ -3714,7 +3714,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	{
 		scatter(&cy, &cx, y, x, 5, 0);
 
-		(void)summon_specific(m_idx, cy, cx, dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, r_ptr->d_char);
+		(void)summon_specific(m_idx, cy, cx, current_floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, r_ptr->d_char);
 
 		y = cy;
 		x = cx;
@@ -3733,7 +3733,7 @@ bool alloc_guardian(bool def_val)
 {
 	MONRACE_IDX guardian = d_info[p_ptr->dungeon_idx].final_guardian;
 
-	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
+	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == current_floor_ptr->dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
 		POSITION oy;
 		POSITION ox;
@@ -3790,7 +3790,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 		x = randint0(cur_wid);
 
 		/* Require empty floor grid (was "naked") */
-		if (dun_level)
+		if (current_floor_ptr->dun_level)
 		{
 			if (!cave_empty_bold2(y, x)) continue;
 		}
@@ -3814,7 +3814,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	}
 
 
-	if (randint1(5000) <= dun_level)
+	if (randint1(5000) <= current_floor_ptr->dun_level)
 	{
 		if (alloc_horde(y, x))
 		{
@@ -3931,7 +3931,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));
 
 	/* Pick a monster, using the level calculation */
-	r_idx = get_mon_num((dun_level + lev) / 2 + 5);
+	r_idx = get_mon_num((current_floor_ptr->dun_level + lev) / 2 + 5);
 
 	/* Handle failure */
 	if (!r_idx)

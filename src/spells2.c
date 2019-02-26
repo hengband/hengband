@@ -1039,7 +1039,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
 	else if (m_idx == p_ptr->riding) resist = TRUE;
-	else if ((p_ptr->inside_quest && !random_quest_number(dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle) resist = TRUE;
+	else if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle) resist = TRUE;
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 
@@ -1118,7 +1118,7 @@ bool symbol_genocide(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent genocide in quest levels */
-	if ((p_ptr->inside_quest && !random_quest_number(dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle)
+	if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle)
 	{
 		msg_print(_("何も起きないようだ……", "It seems nothing happen here..."));
 		return (FALSE);
@@ -1164,7 +1164,7 @@ bool mass_genocide(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
-	if ((p_ptr->inside_quest && !random_quest_number(dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle)
+	if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle)
 	{
 		return (FALSE);
 	}
@@ -1206,7 +1206,7 @@ bool mass_genocide_undead(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
-	if ((p_ptr->inside_quest && !random_quest_number(dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle)
+	if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->inside_battle)
 	{
 		return (FALSE);
 	}
@@ -1400,7 +1400,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 	bool flag = FALSE;
 
 	/* Prevent destruction of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !current_floor_ptr->dun_level)
 	{
 		return (FALSE);
 	}
@@ -1688,7 +1688,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	bool map[32][32];
 
 	/* Prevent destruction of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !current_floor_ptr->dun_level)
 	{
 		return (FALSE);
 	}
@@ -2282,7 +2282,7 @@ static void cave_temp_room_unlite(void)
 		/* Darken the grid */
 		if (do_dark)
 		{
-			if (dun_level || !is_daytime())
+			if (current_floor_ptr->dun_level || !is_daytime())
 			{
 				for (j = 0; j < 9; j++)
 				{
@@ -3347,7 +3347,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			(*count) += activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
-			(*count) += summon_specific(0, p_ptr->y, p_ptr->x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+			(*count) += summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
 			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
@@ -3379,7 +3379,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			/*
 			 * Only summon Cyberdemons deep in the dungeon.
 			 */
-			if ((dun_level > 65) && !stop_ty)
+			if ((current_floor_ptr->dun_level > 65) && !stop_ty)
 			{
 				(*count) += summon_cyber(-1, p_ptr->y, p_ptr->x);
 				stop_ty = TRUE;
@@ -3434,11 +3434,11 @@ int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 
 	if (!pet) mode |= PM_NO_PET;
 
-	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : dun_level);
+	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : current_floor_ptr->dun_level);
 
-	for (i = 0; i < (randint1(7) + (dun_level / 40)); i++)
+	for (i = 0; i < (randint1(7) + (current_floor_ptr->dun_level / 40)); i++)
 	{
-		switch (randint1(25) + (dun_level / 20))
+		switch (randint1(25) + (current_floor_ptr->dun_level / 20))
 		{
 			case 1: case 2:
 				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode, '\0');
@@ -4022,7 +4022,7 @@ void wild_magic(int spell)
 	case 35:
 		while (counter++ < 8)
 		{
-			(void)summon_specific(0, p_ptr->y, p_ptr->x, (dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET), '\0');
+			(void)summon_specific(0, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET), '\0');
 		}
 		break;
 	case 36:
@@ -4303,7 +4303,7 @@ void cast_invoke_spirits(DIRECTION dir)
 		msg_print(_("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！",
 			"Oh no! Mouldering forms rise from the earth around you!"));
 
-		(void)summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+		(void)summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
 		chg_virtue(V_UNLIFE, 1);
 	}
 	else if (die < 14)
@@ -4463,7 +4463,7 @@ void cast_shuffle(void)
 	else if (die < 14)
 	{
 		msg_print(_("なんてこった！《悪魔》だ！", "Oh no! It's the Devil!"));
-		summon_specific(0, p_ptr->y, p_ptr->x, dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+		summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
 	}
 	else if (die < 18)
 	{
@@ -4485,7 +4485,7 @@ void cast_shuffle(void)
 	else if (die < 30)
 	{
 		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
-		trump_summoning(1, FALSE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+		trump_summoning(1, FALSE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
 	}
 	else if (die < 33)
 	{
@@ -4536,22 +4536,22 @@ void cast_shuffle(void)
 	else if (die < 82)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_MOLD, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
 	}
 	else if (die < 84)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_BAT, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
 	}
 	else if (die < 86)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_VORTEX, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
 	}
 	else if (die < 88)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
 	}
 	else if (die < 96)
 	{

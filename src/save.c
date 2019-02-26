@@ -924,7 +924,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		/*** Not a saved floor ***/
 
-		wr_s16b((s16b)dun_level);
+		wr_s16b((s16b)current_floor_ptr->dun_level);
 	}
 	else
 	{

@@ -187,7 +187,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		msg_print(_("突如吹き出した煙に包み込まれた！", "You are enveloped in a cloud of smoke!"));
 		for (i = 0; i < num; i++)
 		{
-			if (randint1(100)<dun_level)
+			if (randint1(100)<current_floor_ptr->dun_level)
 				activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			else
 				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');

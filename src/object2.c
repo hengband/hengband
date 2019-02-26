@@ -3982,7 +3982,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 
 				r_ptr = &r_info[i];
 
-				check = (dun_level < r_ptr->level) ? (r_ptr->level - dun_level) : 0;
+				check = (current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - current_floor_ptr->dun_level) : 0;
 
 				/* Ignore dead monsters */
 				if (!r_ptr->rarity) continue;
@@ -4028,11 +4028,11 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 			/* Pick a random non-unique monster race */
 			while (1)
 			{
-				i = get_mon_num(dun_level);
+				i = get_mon_num(current_floor_ptr->dun_level);
 
 				r_ptr = &r_info[i];
 
-				check = (dun_level < r_ptr->level) ? (r_ptr->level - dun_level) : 0;
+				check = (current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - current_floor_ptr->dun_level) : 0;
 
 				/* Ignore dead monsters */
 				if (!r_ptr->rarity) continue;
@@ -4096,7 +4096,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 			o_ptr->pval = randint1(obj_level);
 			if (o_ptr->sval == SV_CHEST_KANDUME) o_ptr->pval = 6;
 
-			o_ptr->xtra3 = dun_level + 5;
+			o_ptr->xtra3 = current_floor_ptr->dun_level + 5;
 
 			/* Never exceed "difficulty" of 55 to 59 */
 			if (o_ptr->pval > 55) o_ptr->pval = 55 + (byte)randint0(5);

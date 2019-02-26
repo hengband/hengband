@@ -1718,7 +1718,7 @@ void select_floor_music(void)
 	{ // TODO マクロで類似条件を統合すること
 		if(quest[i].status == QUEST_STATUS_TAKEN &&
 			(quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_RANDOM) &&
-			 quest[i].level == dun_level && p_ptr->dungeon_idx == quest[i].dungeon)
+			 quest[i].level == current_floor_ptr->dun_level && p_ptr->dungeon_idx == quest[i].dungeon)
 		{
 			if(play_music(TERM_XTRA_MUSIC_QUEST, i)) 
 			{
@@ -1736,8 +1736,8 @@ void select_floor_music(void)
 		{
 			if(play_music(TERM_XTRA_MUSIC_DUNGEON, p_ptr->dungeon_idx))
 			{
-				if(dun_level < 40) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW);
-				else if(dun_level < 80) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED);
+				if(current_floor_ptr->dun_level < 40) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW);
+				else if(current_floor_ptr->dun_level < 80) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED);
 				else play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_HIGH);
 			}
 		}
@@ -1753,7 +1753,7 @@ void select_floor_music(void)
 		return;
 	}
 
-	if(!dun_level)
+	if(!current_floor_ptr->dun_level)
 	{
 		if(p_ptr->lev >= 45) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD3);
 		else if(p_ptr->lev >= 25) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD2);
@@ -4230,7 +4230,7 @@ static char inkey_from_menu(void)
 					if (p_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					break;
 				case MENU_WILD:
-					if (!dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
+					if (!current_floor_ptr->dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
 					{
 						if ((byte)p_ptr->wild_mode == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					}

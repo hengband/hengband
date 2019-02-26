@@ -886,7 +886,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		if ((!p_ptr->blind && !no_lite()) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
 
 		/* For get everything when requested hehe I'm *NASTY* */
-		if (dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark();
+		if (current_floor_ptr->dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark();
 		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff();
 
 		if (p_ptr->pclass == CLASS_NINJA)
@@ -981,7 +981,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		leave_quest_check();
 
 		p_ptr->inside_quest = g_ptr->special;
-		dun_level = 0;
+		current_floor_ptr->dun_level = 0;
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
 
@@ -1126,7 +1126,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	bool do_past = FALSE;
 
 	/* Exit the area */
-	if (!dun_level && !p_ptr->wild_mode &&
+	if (!current_floor_ptr->dun_level && !p_ptr->wild_mode &&
 		((x == 0) || (x == MAX_WID - 1) ||
 		 (y == 0) || (y == MAX_HGT - 1)))
 	{
@@ -2352,7 +2352,7 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 	if (!in_bounds(y, x)) return;
 
 	/* Ignore unknown grid except in wilderness */
-	if (dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
+	if (current_floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
 
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||

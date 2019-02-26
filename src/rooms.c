@@ -1142,7 +1142,7 @@ void build_cavern(void)
 	bool done, light;
 
 	light = done = FALSE;
-	if ((dun_level <= randint1(50)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((current_floor_ptr->dun_level <= randint1(50)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	/* Make a current_floor_ptr->grid_array the size of the dungeon */
 	xsize = cur_wid - 1;
@@ -1697,7 +1697,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && is_vault && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((current_floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Pick a random room size - randomized by calling routine */
 	dy = ysize / 2 - 1;
@@ -2127,7 +2127,7 @@ bool generate_rooms(void)
 	int prob_list[ROOM_T_MAX];
 	int rooms_built = 0;
 	int area_size = 100 * (cur_hgt*cur_wid) / (MAX_HGT*MAX_WID);
-	int level_index = MIN(10, div_round(dun_level, 10));
+	int level_index = MIN(10, div_round(current_floor_ptr->dun_level, 10));
 
 	/* Number of each type of room on this level */
 	s16b room_num[ROOM_T_MAX];
@@ -2144,7 +2144,7 @@ bool generate_rooms(void)
 	for (i = 0; i < ROOM_T_MAX; i++)
 	{
 		/* No rooms allowed above their minimum depth. */
-		if (dun_level < room_info_ptr[i].min_level)
+		if (current_floor_ptr->dun_level < room_info_ptr[i].min_level)
 		{
 			prob_list[i] = 0;
 		}

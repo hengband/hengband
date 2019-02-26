@@ -285,7 +285,7 @@ FLOOR_IDX get_new_floor_id(void)
 	sf_ptr->visit_mark = latest_visit_mark++;
 
 	/* sf_ptr->dun_level may be changed later */
-	sf_ptr->dun_level = dun_level;
+	sf_ptr->dun_level = current_floor_ptr->dun_level;
 
 
 	/* Increment number of floor_id */
@@ -879,7 +879,7 @@ void leave_floor(void)
 		if ((quest[i].status == QUEST_STATUS_TAKEN) &&
 		    ((quest[i].type == QUEST_TYPE_KILL_LEVEL) ||
 		    (quest[i].type == QUEST_TYPE_RANDOM)) &&
-		    (quest[i].level == dun_level) &&
+		    (quest[i].level == current_floor_ptr->dun_level) &&
 		    (p_ptr->dungeon_idx == quest[i].dungeon) &&
 		    !(quest[i].flags & QUEST_FLAG_PRESET))
 		{
@@ -971,20 +971,20 @@ void leave_floor(void)
 		/* Get out from or Enter the dungeon */
 		if (change_floor_mode & CFM_DOWN)
 		{
-			if (!dun_level)
+			if (!current_floor_ptr->dun_level)
 				move_num = d_info[p_ptr->dungeon_idx].mindepth;
 		}
 		else if (change_floor_mode & CFM_UP)
 		{
-			if (dun_level + move_num < d_info[p_ptr->dungeon_idx].mindepth)
-				move_num = -dun_level;
+			if (current_floor_ptr->dun_level + move_num < d_info[p_ptr->dungeon_idx].mindepth)
+				move_num = -current_floor_ptr->dun_level;
 		}
 
-		dun_level += move_num;
+		current_floor_ptr->dun_level += move_num;
 	}
 
 	/* Leaving the dungeon to town */
-	if (!dun_level && p_ptr->dungeon_idx)
+	if (!current_floor_ptr->dun_level && p_ptr->dungeon_idx)
 	{
 		p_ptr->leaving_dungeon = TRUE;
 		if (!vanilla_town && !lite_town)
@@ -1305,8 +1305,8 @@ void change_floor(void)
 			/* Record last visit turn */
 			sf_ptr->last_visit = turn;
 
-			/* Set correct dun_level value */
-			sf_ptr->dun_level = dun_level;
+			/* Set correct current_floor_ptr->dun_level value */
+			sf_ptr->dun_level = current_floor_ptr->dun_level;
 
 			/* Create connected stairs */
 			if (!(change_floor_mode & CFM_NO_RETURN))
@@ -1317,7 +1317,7 @@ void change_floor(void)
 				/*** Create connected stairs ***/
 
 				/* No stairs down from Quest */
-				if ((change_floor_mode & CFM_UP) && !quest_number(dun_level))
+				if ((change_floor_mode & CFM_UP) && !quest_number(current_floor_ptr->dun_level))
 				{
 					g_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}
@@ -1417,10 +1417,10 @@ void stair_creation(void)
 	if (ironman_downward) up = FALSE;
 
 	/* Forbid down staircases on quest level */
-	if (quest_number(dun_level) || (dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) down = FALSE;
+	if (quest_number(current_floor_ptr->dun_level) || (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) down = FALSE;
 
 	/* No effect out of standard dungeon floor */
-	if (!dun_level || (!up && !down) ||
+	if (!current_floor_ptr->dun_level || (!up && !down) ||
 	    (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) ||
 	    p_ptr->inside_arena || p_ptr->inside_battle)
 	{
@@ -1510,13 +1510,13 @@ void stair_creation(void)
 	if (up)
 	{
 		cave_set_feat(p_ptr->y, p_ptr->x,
-			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= dun_level - 2)) ?
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= current_floor_ptr->dun_level - 2)) ?
 			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
 		cave_set_feat(p_ptr->y, p_ptr->x,
-			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= dun_level + 2)) ?
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= current_floor_ptr->dun_level + 2)) ?
 			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
 

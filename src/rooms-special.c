@@ -28,7 +28,7 @@ bool build_type15(void)
 	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
-	light = ((dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((current_floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Get corner values */
 	y1 = yval - ysize / 2;
@@ -79,7 +79,7 @@ bool build_type15(void)
 		/* Place fixed lite berathers */
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
-			MONRACE_IDX r_idx = get_mon_num(dun_level);
+			MONRACE_IDX r_idx = get_mon_num(current_floor_ptr->dun_level);
 
 			y = yval + 2 * ddy_ddd[dir1];
 			x = xval + 2 * ddx_ddd[dir1];
@@ -143,7 +143,7 @@ bool build_type15(void)
 		g_ptr->feat = feat_glass_wall;
 		get_mon_num_prep(vault_aux_lite, NULL);
 
-		r_idx = get_mon_num(dun_level);
+		r_idx = get_mon_num(current_floor_ptr->dun_level);
 		if (r_idx) place_monster_aux(0, yval, xval, r_idx, 0L);
 
 		/* Walls around the breather */
@@ -206,7 +206,7 @@ bool build_type15(void)
 		/* Place shard berathers */
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
-			MONRACE_IDX r_idx = get_mon_num(dun_level);
+			MONRACE_IDX r_idx = get_mon_num(current_floor_ptr->dun_level);
 
 			y = yval + ddy_ddd[dir1];
 			x = xval + ddx_ddd[dir1];

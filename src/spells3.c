@@ -630,7 +630,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 
 	/* Down only */ 
-	if ((ironman_downward && (m_idx <= 0)) || (dun_level <= d_info[p_ptr->dungeon_idx].mindepth))
+	if ((ironman_downward && (m_idx <= 0)) || (current_floor_ptr->dun_level <= d_info[p_ptr->dungeon_idx].mindepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは床を突き破って沈んでいく。", m_name);
@@ -639,7 +639,7 @@ void teleport_level(MONSTER_IDX m_idx)
 #endif
 		if (m_idx <= 0) /* To player */
 		{
-			if (!dun_level)
+			if (!current_floor_ptr->dun_level)
 			{
 				p_ptr->dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : p_ptr->recall_dungeon;
 				p_ptr->oldpy = p_ptr->y;
@@ -650,9 +650,9 @@ void teleport_level(MONSTER_IDX m_idx)
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
-			if (!dun_level)
+			if (!current_floor_ptr->dun_level)
 			{
-				dun_level = d_info[p_ptr->dungeon_idx].mindepth;
+				current_floor_ptr->dun_level = d_info[p_ptr->dungeon_idx].mindepth;
 				prepare_change_floor_mode(CFM_RAND_PLACE);
 			}
 			else
@@ -666,7 +666,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 
 	/* Up only */
-	else if (quest_number(dun_level) || (dun_level >= d_info[p_ptr->dungeon_idx].maxdepth))
+	else if (quest_number(current_floor_ptr->dun_level) || (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -722,7 +722,7 @@ void teleport_level(MONSTER_IDX m_idx)
 		if (m_idx <= 0) /* To player */
 		{
 			/* Never reach this code on the surface */
-			/* if (!dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
+			/* if (!current_floor_ptr->dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
 
 			if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
 
@@ -860,11 +860,11 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		return TRUE;
 	}
 
-	if (dun_level && (max_dlv[p_ptr->dungeon_idx] > dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
+	if (current_floor_ptr->dun_level && (max_dlv[p_ptr->dungeon_idx] > current_floor_ptr->dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
 	{
 		if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? ")))
 		{
-			max_dlv[p_ptr->dungeon_idx] = dun_level;
+			max_dlv[p_ptr->dungeon_idx] = current_floor_ptr->dun_level;
 			if (record_maxdepth)
 				do_cmd_write_nikki(NIKKI_TRUMP, p_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
 		}
@@ -872,7 +872,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 	}
 	if (!creature_ptr->word_recall)
 	{
-		if (!dun_level)
+		if (!current_floor_ptr->dun_level)
 		{
 			DUNGEON_IDX select_dungeon;
 			select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
@@ -955,7 +955,7 @@ bool reset_recall(void)
 		(int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
 
 	/* Default */
-	sprintf(tmp_val, "%d", (int)MAX(dun_level, 1));
+	sprintf(tmp_val, "%d", (int)MAX(current_floor_ptr->dun_level, 1));
 
 	/* Ask for a level */
 	if (get_string(ppp, tmp_val, 10))
@@ -1270,7 +1270,7 @@ void brand_weapon(int brand_type)
 				act = _("は鋭さを増した！", "becomes very sharp!");
 
 				o_ptr->name2 = EGO_SHARPNESS;
-				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, dun_level) + 1;
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, current_floor_ptr->dun_level) + 1;
 
 				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
 					o_ptr->pval = 2;
@@ -1279,7 +1279,7 @@ void brand_weapon(int brand_type)
 			{
 				act = _("は破壊力を増した！", "seems very powerful.");
 				o_ptr->name2 = EGO_EARTHQUAKES;
-				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, dun_level);
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, current_floor_ptr->dun_level);
 			}
 			break;
 		case 16:
@@ -1384,7 +1384,7 @@ static bool vanish_dungeon(void)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Prevent vasishing of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !current_floor_ptr->dun_level)
 	{
 		return FALSE;
 	}
@@ -1543,7 +1543,7 @@ void call_the_(void)
 	}
 
 	/* Prevent destruction of quest levels and town */
-	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !dun_level)
+	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !current_floor_ptr->dun_level)
 	{
 		msg_print(_("地面が揺れた。", "The ground trembles."));
 	}
@@ -3880,7 +3880,7 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 	for (i = 0; i < 1000; i++)
 	{
 		/* Pick a new race, using a level calculation */
-		r = get_mon_num((dun_level + r_ptr->level) / 2 + 5);
+		r = get_mon_num((current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
 
 		/* Handle failure */
 		if (!r) break;
@@ -4590,7 +4590,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
-			count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : dun_level), 0, mode, '\0');
+			count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : current_floor_ptr->dun_level), 0, mode, '\0');
 			if (!one_in_(6)) break;
 		}
 		case 23: case 24: case 25:

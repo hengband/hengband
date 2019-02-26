@@ -63,10 +63,10 @@ FEAT_IDX choose_random_trap(void)
 		if (!have_flag(f_info[feat].flags, FF_MORE)) break;
 
 		/* Hack -- no trap doors on special levels */
-		if (p_ptr->inside_arena || quest_number(dun_level)) continue;
+		if (p_ptr->inside_arena || quest_number(current_floor_ptr->dun_level)) continue;
 
 		/* Hack -- no trap doors on the deepest level */
-		if (dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) continue;
+		if (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) continue;
 
 		break;
 	}
@@ -362,10 +362,10 @@ void hit_trap(bool break_trap)
 		num = 2 + randint1(3);
 		for (i = 0; i < num; i++)
 		{
-			(void)summon_specific(0, y, x, dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
 		}
 
-		if (dun_level > randint1(100)) /* No nasty effect for low levels */
+		if (current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
 		{
 			bool stop_ty = FALSE;
 			int count = 0;
@@ -510,7 +510,7 @@ void hit_trap(bool break_trap)
 		msg_print(_("突然天界の戦争に巻き込まれた！", "Suddenly, you are surrounded by immotal beings!"));
 
 		/* Summon Demons and Angels */
-		for (lev = dun_level; lev >= 20; lev -= 1 + lev / 16)
+		for (lev = current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16)
 		{
 			num = levs[MIN(lev / 10, 9)];
 			for (i = 0; i < num; i++)
@@ -555,10 +555,10 @@ void hit_trap(bool break_trap)
 		fire_ball_hide(GF_WATER_FLOW, 0, 1, 10);
 
 		/* Summon Piranhas */
-		num = 1 + dun_level / 20;
+		num = 1 + current_floor_ptr->dun_level / 20;
 		for (i = 0; i < num; i++)
 		{
-			(void)summon_specific(0, y, x, dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET), '\0');
+			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET), '\0');
 		}
 		break;
 	}

@@ -159,7 +159,7 @@ concptr map_name(void)
 		return _("アリーナ", "Arena");
 	else if (p_ptr->inside_battle)
 		return _("闘技場", "Monster Arena");
-	else if (!dun_level && p_ptr->town_num)
+	else if (!current_floor_ptr->dun_level && p_ptr->town_num)
 		return town_info[p_ptr->town_num].name;
 	else
 		return d_name+d_info[p_ptr->dungeon_idx].name;
@@ -932,7 +932,7 @@ static void prt_depth(void)
 	col_depth = wid + COL_DEPTH;
 	row_depth = hgt + ROW_DEPTH;
 
-	if (!dun_level)
+	if (!current_floor_ptr->dun_level)
 	{
 		strcpy(depths, _("地上", "Surf."));
 	}
@@ -942,8 +942,8 @@ static void prt_depth(void)
 	}
 	else
 	{
-		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)dun_level * 50);
-		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)dun_level);
+		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)current_floor_ptr->dun_level * 50);
+		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)current_floor_ptr->dun_level);
 
 		/* Get color of level based on feeling  -JSV- */
 		switch (p_ptr->feeling)

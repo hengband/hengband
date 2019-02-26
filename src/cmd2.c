@@ -63,7 +63,7 @@ static bool confirm_leave_level(bool down_stair)
  */
 bool cmd_limit_cast(player_type *creature_ptr)
 {
-	if (dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
+	if (current_floor_ptr->dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
 	{
 		msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 		msg_print(NULL);
@@ -188,7 +188,7 @@ void do_cmd_go_up(void)
 		/* Leaving a quest */
 		if (!p_ptr->inside_quest)
 		{
-			dun_level = 0;
+			current_floor_ptr->dun_level = 0;
 		}
 
 		/* Leaving */
@@ -203,7 +203,7 @@ void do_cmd_go_up(void)
 		return;
 	}
 
-	if (!dun_level)
+	if (!current_floor_ptr->dun_level)
 	{
 		go_up = TRUE;
 	}
@@ -235,7 +235,7 @@ void do_cmd_go_up(void)
 		leave_quest_check();
 
 		p_ptr->inside_quest = g_ptr->special;
-		dun_level = 0;
+		current_floor_ptr->dun_level = 0;
 		up_num = 0;
 	}
 
@@ -259,15 +259,15 @@ void do_cmd_go_up(void)
 		}
 
 		/* Get out from current dungeon */
-		if (dun_level - up_num < d_info[p_ptr->dungeon_idx].mindepth)
-			up_num = dun_level;
+		if (current_floor_ptr->dun_level - up_num < d_info[p_ptr->dungeon_idx].mindepth)
+			up_num = current_floor_ptr->dun_level;
 	}
 	if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
 	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
 		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
-	else if (up_num == dun_level)
+	else if (up_num == current_floor_ptr->dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
 	else
 		msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
@@ -340,7 +340,7 @@ void do_cmd_go_down(void)
 		/* Leaving a quest */
 		if (!p_ptr->inside_quest)
 		{
-			dun_level = 0;
+			current_floor_ptr->dun_level = 0;
 		}
 
 		/* Leaving */
@@ -355,7 +355,7 @@ void do_cmd_go_down(void)
 	{
 		DUNGEON_IDX target_dungeon = 0;
 
-		if (!dun_level)
+		if (!current_floor_ptr->dun_level)
 		{
 			target_dungeon = have_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
 
@@ -391,7 +391,7 @@ void do_cmd_go_down(void)
 		if (have_flag(f_ptr->flags, FF_SHAFT)) down_num += 2;
 		else down_num += 1;
 
-		if (!dun_level)
+		if (!current_floor_ptr->dun_level)
 		{
 			/* Enter the dungeon just now */
 			p_ptr->enter_dungeon = TRUE;

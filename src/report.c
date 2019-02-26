@@ -469,7 +469,7 @@ errr report_score(void)
 #endif
 	buf_sprintf(score, "score: %d\n", total_points());
 	buf_sprintf(score, "level: %d\n", p_ptr->lev);
-	buf_sprintf(score, "depth: %d\n", dun_level);
+	buf_sprintf(score, "depth: %d\n", current_floor_ptr->dun_level);
 	buf_sprintf(score, "maxlv: %d\n", p_ptr->max_plv);
 	buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
 	buf_sprintf(score, "au: %d\n", p_ptr->au);

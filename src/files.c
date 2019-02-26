@@ -3930,7 +3930,7 @@ void display_player(int mode)
 					sprintf(statmsg, "...You %s after the winning.", streq(p_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
 #endif
 				}
-				else if (!dun_level)
+				else if (!current_floor_ptr->dun_level)
 				{
 #ifdef JP
 					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), p_ptr->died_from);
@@ -3955,15 +3955,15 @@ void display_player(int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)dun_level, p_ptr->died_from);
+					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)current_floor_ptr->dun_level, p_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, dun_level, map_name());
+					sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, current_floor_ptr->dun_level, map_name());
 #endif
 				}
 			}
 			else if (character_dungeon)
 			{
-				if (!dun_level)
+				if (!current_floor_ptr->dun_level)
 				{
 					sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name());
 				}
@@ -3987,9 +3987,9 @@ void display_player(int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)dun_level);
+					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)current_floor_ptr->dun_level);
 #else
-					sprintf(statmsg, "...Now, you are exploring level %d of %s.", dun_level, map_name());
+					sprintf(statmsg, "...Now, you are exploring level %d of %s.", current_floor_ptr->dun_level, map_name());
 #endif
 				}
 			}
@@ -6256,12 +6256,12 @@ static void make_bones(void)
 	if (!(p_ptr->noscore & 0x00FF))
 	{
 		/* Ignore people who die in town */
-		if (dun_level)
+		if (current_floor_ptr->dun_level)
 		{
 			char tmp[128];
 
 			/* "Bones" name */
-			sprintf(tmp, "bone.%03d", dun_level);
+			sprintf(tmp, "bone.%03d", current_floor_ptr->dun_level);
 
 			/* Build the filename */
 			path_build(str, sizeof(str), ANGBAND_DIR_BONE, tmp);
@@ -6464,7 +6464,7 @@ static void print_tomb(void)
 
 		if (!streq(p_ptr->died_from, "ripe") && !streq(p_ptr->died_from, "Seppuku"))
 		{
-			if (dun_level == 0)
+			if (current_floor_ptr->dun_level == 0)
 			{
 				concptr field_name = p_ptr->town_num ? "街" : "荒野";
 				if (streq(p_ptr->died_from, "途中終了"))
@@ -6480,18 +6480,18 @@ static void print_tomb(void)
 			{
 				if (streq(p_ptr->died_from, "途中終了"))
 				{
-					sprintf(tmp, "地下 %d 階で死んだ", (int)dun_level);
+					sprintf(tmp, "地下 %d 階で死んだ", (int)current_floor_ptr->dun_level);
 				}
 				else
 				{
-					sprintf(tmp, "に地下 %d 階で殺された", (int)dun_level);
+					sprintf(tmp, "に地下 %d 階で殺された", (int)current_floor_ptr->dun_level);
 				}
 			}
 			center_string(buf, tmp);
 			put_str(buf, 15 + extra_line, 11);
 		}
 #else
-		(void)sprintf(tmp, "Killed on Level %d", dun_level);
+		(void)sprintf(tmp, "Killed on Level %d", current_floor_ptr->dun_level);
 		center_string(buf, tmp);
 		put_str(buf, 14, 11);
 

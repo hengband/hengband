@@ -1954,7 +1954,7 @@ static void rd_extra(void)
 	rd_s16b(&tmp16s);
 	p_ptr->oldpy = (POSITION)tmp16s;
 
-	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
+	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
 
 	/* Was p_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
@@ -2557,7 +2557,7 @@ static errr rd_dungeon_old(void)
 
 	/* Header info */
 	rd_s16b(&tmp16s);
-	dun_level = (DEPTH)tmp16s;
+	current_floor_ptr->dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) p_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
 	{ 
@@ -2566,7 +2566,7 @@ static errr rd_dungeon_old(void)
 	}
 
 	/* Set the base level for old versions */
-	current_floor_ptr->base_level = dun_level;
+	current_floor_ptr->base_level = current_floor_ptr->dun_level;
 
 	rd_s16b(&tmp16s);
 	current_floor_ptr->base_level = (DEPTH)tmp16s;
@@ -2577,7 +2577,7 @@ static errr rd_dungeon_old(void)
 	p_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
 	p_ptr->x = (POSITION)tmp16s;
-	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
+	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
 	rd_s16b(&tmp16s);
 	cur_hgt = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
@@ -2808,7 +2808,7 @@ static errr rd_dungeon_old(void)
 			/* Access the current_floor_ptr->grid_array */
 			g_ptr = &current_floor_ptr->grid_array[y][x];
 
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !current_floor_ptr->dun_level)
 			{
 				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
@@ -2946,7 +2946,7 @@ static errr rd_dungeon_old(void)
 	/*** Success ***/
 
 	/* The dungeon is ready */
-	if (z_older_than(10, 3, 13) && !dun_level && !p_ptr->inside_arena)
+	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena)
 		character_dungeon = FALSE;
 	else
 		character_dungeon = TRUE;
@@ -2998,8 +2998,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/*** Not a saved floor ***/
 
 		rd_s16b(&tmp16s);
-		dun_level = (DEPTH)tmp16s;
-		current_floor_ptr->base_level = dun_level;
+		current_floor_ptr->dun_level = (DEPTH)tmp16s;
+		current_floor_ptr->base_level = current_floor_ptr->dun_level;
 	}
 	else
 	{
@@ -3013,7 +3013,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		rd_s16b(&tmp16s);
 		if (tmp16s != sf_ptr->dun_level) return 171;
-		dun_level = sf_ptr->dun_level;
+		current_floor_ptr->dun_level = sf_ptr->dun_level;
 
 		rd_s32b(&tmp32s);
 		if (tmp32s != sf_ptr->last_visit) return 171;
@@ -3133,7 +3133,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 			/* Access the current_floor_ptr->grid_array */
 			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !current_floor_ptr->dun_level)
 			{
 				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
@@ -3286,7 +3286,7 @@ static errr rd_dungeon(void)
 		if (p_ptr->dungeon_idx)
 		{
 			p_ptr->floor_id = get_new_floor_id();
-			get_sf_ptr(p_ptr->floor_id)->dun_level = dun_level;
+			get_sf_ptr(p_ptr->floor_id)->dun_level = current_floor_ptr->dun_level;
 		}
 
 		return err;
@@ -3960,7 +3960,7 @@ static errr rd_savefile_new_aux(void)
 		if (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
 		{
 			p_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
-			dun_level = 1;
+			current_floor_ptr->dun_level = 1;
 			p_ptr->inside_quest = 0;
 		}
 	}

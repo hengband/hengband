@@ -931,17 +931,17 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 	xsize = xhsize * 2;
 	ysize = yhsize * 2;
 
-	if (dun_level < 25)
+	if (current_floor_ptr->dun_level < 25)
 	{
 		/* Earth vault  (Rubble) */
 		type = LAKE_T_EARTH_VAULT;
 	}
-	else if (dun_level < 50)
+	else if (current_floor_ptr->dun_level < 50)
 	{
 		/* Air vault (Trees) */
 		type = LAKE_T_AIR_VAULT;
 	}
-	else if (dun_level < 75)
+	else if (current_floor_ptr->dun_level < 75)
 	{
 		/* Water vault (shallow water) */
 		type = LAKE_T_WATER_VAULT;

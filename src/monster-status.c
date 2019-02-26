@@ -96,7 +96,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside * 2);
 
 	/* Special penalty in the wilderness */
-	if (!dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
+	if (!current_floor_ptr->dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
 		s64b_mul(&div_h, &div_l, 0, 5);
 
 	/* Do division first to prevent overflaw */
@@ -853,7 +853,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 
 	new_exp = s_ptr->mexp * s_ptr->level / (r_ptr->level + 2);
 	if (m_idx == p_ptr->riding) new_exp = (new_exp + 1) / 2;
-	if (!dun_level) new_exp /= 5;
+	if (!current_floor_ptr->dun_level) new_exp /= 5;
 	m_ptr->exp += new_exp;
 	if (m_ptr->mflag2 & MFLAG2_CHAMELEON) return;
 
@@ -1123,13 +1123,13 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 
 		if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 		{
-			if (!dun_level && !ambush_flag && !p_ptr->inside_arena)
+			if (!current_floor_ptr->dun_level && !ambush_flag && !p_ptr->inside_arena)
 			{
 				chg_virtue(V_VALOUR, -1);
 			}
-			else if (r_ptr->level > dun_level)
+			else if (r_ptr->level > current_floor_ptr->dun_level)
 			{
-				if (randint1(10) <= (r_ptr->level - dun_level))
+				if (randint1(10) <= (r_ptr->level - current_floor_ptr->dun_level))
 					chg_virtue(V_VALOUR, 1);
 			}
 			if (r_ptr->level > 60)
@@ -1158,14 +1158,14 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 			chg_virtue(V_COMPASSION, -1);
 		}
 
-		if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100)))
+		if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100)))
 			chg_virtue(V_UNLIFE, 1);
 
 		if (r_ptr->d_char == 'A')
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(V_FAITH, -2);
-			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100))
+			else if ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100))
 			{
 				if (r_ptr->flags3 & RF3_GOOD) chg_virtue(V_FAITH, -1);
 				else chg_virtue(V_FAITH, 1);
@@ -1175,7 +1175,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(V_FAITH, 2);
-			else if ((r_ptr->level) / 10 + (3 * dun_level) >= randint1(100))
+			else if ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100))
 				chg_virtue(V_FAITH, 1);
 		}
 
@@ -1188,7 +1188,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 			{
 				chg_virtue(V_HONOUR, 10);
 			}
-			else if ((r_ptr->level) / 10 + (2 * dun_level) >= randint1(100))
+			else if ((r_ptr->level) / 10 + (2 * current_floor_ptr->dun_level) >= randint1(100))
 			{
 				chg_virtue(V_HONOUR, 1);
 			}
@@ -1215,7 +1215,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(V_JUSTICE, 3);
-			else if (1 + ((r_ptr->level) / 10 + (2 * dun_level)) >= randint1(100))
+			else if (1 + ((r_ptr->level) / 10 + (2 * current_floor_ptr->dun_level)) >= randint1(100))
 				chg_virtue(V_JUSTICE, 1);
 		}
 		else if (innocent)

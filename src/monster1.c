@@ -2134,7 +2134,7 @@ void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr
  */
 monsterrace_hook_type get_monster_hook(void)
 {
-	if (!dun_level && !p_ptr->inside_quest)
+	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest)
 	{
 		switch (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain)
 		{
@@ -2728,13 +2728,13 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		break;
 
 	case MON_RAAL:
-		if (drop_chosen_item && (dun_level > 9))
+		if (drop_chosen_item && (current_floor_ptr->dun_level > 9))
 		{
 			q_ptr = &forge;
 			object_wipe(q_ptr);
 
 			/* Activate restriction */
-			if ((dun_level > 49) && one_in_(5))
+			if ((current_floor_ptr->dun_level > 49) && one_in_(5))
 				get_obj_num_hook = kind_is_good_book;
 			else
 				get_obj_num_hook = kind_is_book;
@@ -2892,7 +2892,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		switch (r_ptr->d_char)
 		{
 		case '(':
-			if (dun_level > 0)
+			if (current_floor_ptr->dun_level > 0)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -2907,7 +2907,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			break;
 
 		case '/':
-			if (dun_level > 4)
+			if (current_floor_ptr->dun_level > 4)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -2922,7 +2922,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			break;
 
 		case '[':
-			if (dun_level > 19)
+			if (current_floor_ptr->dun_level > 19)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -2937,7 +2937,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			break;
 
 		case '\\':
-			if (dun_level > 4)
+			if (current_floor_ptr->dun_level > 4)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -3063,7 +3063,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	coin_type = force_coin;
 
 	/* Average dungeon and monster levels */
-	object_level = (dun_level + r_ptr->level) / 2;
+	object_level = (current_floor_ptr->dun_level + r_ptr->level) / 2;
 
 	/* Drop some objects */
 	for (j = 0; j < number; j++)

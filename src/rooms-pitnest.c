@@ -68,13 +68,13 @@ static int pick_vault_type(vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 		if (!n_ptr->name) break;
 
 		/* Ignore excessive depth */
-		if (n_ptr->level > dun_level) continue;
+		if (n_ptr->level > current_floor_ptr->dun_level) continue;
 
 		/* Not matched with pit/nest flag */
 		if (!(allow_flag_mask & (1L << count))) continue;
 
 		/* Count this possibility */
-		total += n_ptr->chance * MAX_DEPTH / (MIN(dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
+		total += n_ptr->chance * MAX_DEPTH / (MIN(current_floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
 	}
 
 	/* Pick a random type */
@@ -87,13 +87,13 @@ static int pick_vault_type(vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 		if (!n_ptr->name) break;
 
 		/* Ignore excessive depth */
-		if (n_ptr->level > dun_level) continue;
+		if (n_ptr->level > current_floor_ptr->dun_level) continue;
 
 		/* Not matched with pit/nest flag */
 		if (!(allow_flag_mask & (1L << count))) continue;
 
 		/* Count this possibility */
-		total += n_ptr->chance * MAX_DEPTH / (MIN(dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
+		total += n_ptr->chance * MAX_DEPTH / (MIN(current_floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
 
 		/* Found the type */
 		if (tmp < total) break;
@@ -310,7 +310,7 @@ bool build_type5(void)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 11);
+			r_idx = get_mon_num(current_floor_ptr->dun_level + 11);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
@@ -521,7 +521,7 @@ bool build_type6(void)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 11);
+			r_idx = get_mon_num(current_floor_ptr->dun_level + 11);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
@@ -829,7 +829,7 @@ bool build_type13(void)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(dun_level + 0);
+			r_idx = get_mon_num(current_floor_ptr->dun_level + 0);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
