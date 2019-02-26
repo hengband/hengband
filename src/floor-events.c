@@ -13,7 +13,7 @@ void day_break()
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				grid_type *g_ptr = &current_floor->grid_array[y][x];
+				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
 				/* Assume lit */
 				g_ptr->info |= (CAVE_GLOW);
@@ -33,7 +33,7 @@ void day_break()
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (current_floor->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(FALSE);
+		if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(FALSE);
 	}
 
 }
@@ -50,7 +50,7 @@ void night_falls(void)
 		{
 			for (x = 0; x < cur_wid; x++)
 			{
-				grid_type *g_ptr = &current_floor->grid_array[y][x];
+				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
 				/* Feature code (applying "mimic" field) */
 				feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
@@ -83,7 +83,7 @@ void night_falls(void)
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (current_floor->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(FALSE);
+		if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(FALSE);
 	}
 
 }
@@ -101,7 +101,7 @@ MONSTER_NUMBER count_all_hostile_monsters(void)
 	{
 		for (y = 0; y < cur_hgt; ++y)
 		{
-			MONSTER_IDX m_idx = current_floor->grid_array[y][x].m_idx;
+			MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
 
 			if (m_idx > 0 && is_hostile(&m_list[m_idx]))
 			{

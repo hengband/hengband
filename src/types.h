@@ -427,7 +427,7 @@ struct skill_table
 /*
  * A single "grid" in a Cave
  *
- * Note that several aspects of the code restrict the actual current_floor->grid_array
+ * Note that several aspects of the code restrict the actual current_floor_ptr->grid_array
  * to a max size of 256 by 256.  In partcular, locations are often
  * saved as bytes, limiting each coordinate to the 0-255 range.
  *
@@ -454,13 +454,13 @@ typedef struct grid_type grid_type;
 
 struct grid_type
 {
-	BIT_FLAGS info;		/* Hack -- current_floor->grid_array flags */
+	BIT_FLAGS info;		/* Hack -- current_floor_ptr->grid_array flags */
 
 	FEAT_IDX feat;		/* Hack -- feature type */
 	OBJECT_IDX o_idx;		/* Object in this grid */
 	MONSTER_IDX m_idx;		/* Monster in this grid */
 
-	/*! 地形の特別な情報を保存する / Special current_floor->grid_array info
+	/*! 地形の特別な情報を保存する / Special current_floor_ptr->grid_array info
 	 * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
 	 * 各ダンジョン入口の移行先ダンジョンID、
 	 * 

@@ -2079,7 +2079,7 @@ static void castle_quest(void)
 	clear_bldg(4, 18);
 
 	/* Current quest of the building */
-	q_index = current_floor->grid_array[p_ptr->y][p_ptr->x].special;
+	q_index = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
 
 	/* Is there a quest available at the building? */
 	if (!q_index)
@@ -4214,7 +4214,7 @@ void do_cmd_quest(void)
 		leave_quest_check();
 
 		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) dun_level = 1;
-		p_ptr->inside_quest = current_floor->grid_array[p_ptr->y][p_ptr->x].special;
+		p_ptr->inside_quest = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
 
 		p_ptr->leaving = TRUE;
 	}
@@ -4242,7 +4242,7 @@ void do_cmd_bldg(void)
 		return;
 	}
 
-	which = f_info[current_floor->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
+	which = f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
 
 	bldg = &building[which];
 

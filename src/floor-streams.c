@@ -109,7 +109,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 					{
 						if (!in_bounds2(ty, tx)) continue;
 
-						g_ptr = &current_floor->grid_array[ty][tx];
+						g_ptr = &current_floor_ptr->grid_array[ty][tx];
 
 						if (g_ptr->feat == feat1) continue;
 						if (g_ptr->feat == feat2) continue;
@@ -265,7 +265,7 @@ void build_streamer(IDX feat, int chance)
 				if (!in_bounds2(ty, tx)) continue;
 				break;
 			}
-			g_ptr = &current_floor->grid_array[ty][tx];
+			g_ptr = &current_floor_ptr->grid_array[ty][tx];
 			f_ptr = &f_info[g_ptr->feat];
 
 			if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
@@ -391,7 +391,7 @@ void place_trees(POSITION x, POSITION y)
 		for (j = y - 3; j < y + 4; j++)
 		{
 			if (!in_bounds(j, i)) continue;
-			g_ptr = &current_floor->grid_array[j][i];
+			g_ptr = &current_floor_ptr->grid_array[j][i];
 
 			if (g_ptr->info & CAVE_ICKY) continue;
 			if (g_ptr->o_idx) continue;
@@ -406,18 +406,18 @@ void place_trees(POSITION x, POSITION y)
 				if ((distance(j, i, y, x) > 1) || (randint1(100) < 25))
 				{
 					if (randint1(100) < 75)
-						current_floor->grid_array[j][i].feat = feat_tree;
+						current_floor_ptr->grid_array[j][i].feat = feat_tree;
 				}
 				else
 				{
-					current_floor->grid_array[j][i].feat = feat_rubble;
+					current_floor_ptr->grid_array[j][i].feat = feat_rubble;
 				}
 
 				/* Clear garbage of hidden trap or door */
 				g_ptr->mimic = 0;
 
 				/* Light area since is open above */
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) current_floor->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
 			}
 		}
 	}
@@ -426,7 +426,7 @@ void place_trees(POSITION x, POSITION y)
 	if (!ironman_downward && one_in_(3))
 	{
 		/* up stair */
-		current_floor->grid_array[y][x].feat = feat_up_stair;
+		current_floor_ptr->grid_array[y][x].feat = feat_up_stair;
 	}
 }
 

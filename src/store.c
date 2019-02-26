@@ -5712,7 +5712,7 @@ void do_cmd_store(void)
 	store_bottom = MIN_STOCK + xtra_stock;
 
 	/* Access the player grid */
-	g_ptr = &current_floor->grid_array[p_ptr->y][p_ptr->x];
+	g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
 
 	/* Verify a store */
 	if (!cave_have_flag_grid(g_ptr, FF_STORE))

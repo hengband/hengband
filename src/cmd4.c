@@ -5274,7 +5274,7 @@ static void do_cmd_knowledge_artifacts(void)
 	{
 		for (x = 0; x < cur_wid; x++)
 		{
-			grid_type *g_ptr = &current_floor->grid_array[y][x];
+			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
 			OBJECT_IDX this_o_idx, next_o_idx = 0;
 

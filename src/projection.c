@@ -166,7 +166,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(y, x) || current_floor->grid_array[y][x].m_idx != 0))
+					(player_bold(y, x) || current_floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
@@ -255,7 +255,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(y, x) || current_floor->grid_array[y][x].m_idx != 0))
+					(player_bold(y, x) || current_floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
@@ -326,7 +326,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(y, x) || current_floor->grid_array[y][x].m_idx != 0))
+					(player_bold(y, x) || current_floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 

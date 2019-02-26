@@ -45,7 +45,7 @@ void wiz_lite(bool ninja)
 		/* Scan all normal grids */
 		for (x = 1; x < cur_wid - 1; x++)
 		{
-			grid_type *g_ptr = &current_floor->grid_array[y][x];
+			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
 			/* Memorize terrain of the grid */
 			g_ptr->info |= (CAVE_KNOWN);
@@ -62,7 +62,7 @@ void wiz_lite(bool ninja)
 				{
 					POSITION yy = y + ddy_ddd[i];
 					POSITION xx = x + ddx_ddd[i];
-					g_ptr = &current_floor->grid_array[yy][xx];
+					g_ptr = &current_floor_ptr->grid_array[yy][xx];
 
 					/* Feature code (applying "mimic" field) */
 					f_ptr = &f_info[get_feat_mimic(g_ptr)];
@@ -101,7 +101,7 @@ void wiz_lite(bool ninja)
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (current_floor->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(FALSE);
+		if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(FALSE);
 	}
 }
 
@@ -119,7 +119,7 @@ void wiz_dark(void)
 	{
 		for (x = 1; x < cur_wid - 1; x++)
 		{
-			grid_type *g_ptr = &current_floor->grid_array[y][x];
+			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
 			/* Process the grid */
 			g_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
@@ -130,15 +130,15 @@ void wiz_dark(void)
 	/* Forget every grid on horizontal edge */
 	for (x = 0; x < cur_wid; x++)
 	{
-		current_floor->grid_array[0][x].info &= ~(CAVE_MARK);
-		current_floor->grid_array[cur_hgt - 1][x].info &= ~(CAVE_MARK);
+		current_floor_ptr->grid_array[0][x].info &= ~(CAVE_MARK);
+		current_floor_ptr->grid_array[cur_hgt - 1][x].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget every grid on vertical edge */
 	for (y = 1; y < (cur_hgt - 1); y++)
 	{
-		current_floor->grid_array[y][0].info &= ~(CAVE_MARK);
-		current_floor->grid_array[y][cur_wid - 1].info &= ~(CAVE_MARK);
+		current_floor_ptr->grid_array[y][0].info &= ~(CAVE_MARK);
+		current_floor_ptr->grid_array[y][cur_wid - 1].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget all objects */

@@ -3901,7 +3901,7 @@ static errr parse_line_building(char *buf)
  */
 static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &current_floor->grid_array[y][x];
+	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 	object_type *o_ptr;
 
 	OBJECT_IDX o_idx = o_pop();
@@ -3970,7 +3970,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 		return parse_line_feature(buf);
 	}
 
-	/* Process "D:<dungeon>" -- info for the current_floor->grid_array grids */
+	/* Process "D:<dungeon>" -- info for the current_floor_ptr->grid_array grids */
 	else if (buf[0] == 'D')
 	{
 		object_type object_type_body;
@@ -3985,7 +3985,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 
 		for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
 		{
-			grid_type *g_ptr = &current_floor->grid_array[*y][*x];
+			grid_type *g_ptr = &current_floor_ptr->grid_array[*y][*x];
 
 			int idx = s[0];
 
@@ -4006,11 +4006,11 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Create a monster */
 			if (random & RANDOM_MONSTER)
 			{
-				monster_level = current_floor->base_level + monster_index;
+				monster_level = current_floor_ptr->base_level + monster_index;
 
 				place_monster(*y, *x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 
-				monster_level = current_floor->base_level;
+				monster_level = current_floor_ptr->base_level;
 			}
 			else if (monster_index)
 			{
@@ -4058,7 +4058,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Object (and possible trap) */
 			if ((random & RANDOM_OBJECT) && (random & RANDOM_TRAP))
 			{
-				object_level = current_floor->base_level + object_index;
+				object_level = current_floor_ptr->base_level + object_index;
 
 				/*
 				 * Random trap and random treasure defined
@@ -4073,11 +4073,11 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 					place_trap(*y, *x);
 				}
 
-				object_level = current_floor->base_level;
+				object_level = current_floor_ptr->base_level;
 			}
 			else if (random & RANDOM_OBJECT)
 			{
-				object_level = current_floor->base_level + object_index;
+				object_level = current_floor_ptr->base_level + object_index;
 
 				/* Create an out of deep object */
 				if (randint0(100) < 75)
@@ -4087,7 +4087,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				else
 					place_object(*y, *x, AM_GOOD | AM_GREAT);
 
-				object_level = current_floor->base_level;
+				object_level = current_floor_ptr->base_level;
 			}
 			/* Random trap */
 			else if (random & RANDOM_TRAP)
@@ -4113,7 +4113,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 
 				/* Apply magic (no messages, no artifacts) */
-				apply_magic(o_ptr, current_floor->base_level, AM_NO_FIXED_ART | AM_GOOD);
+				apply_magic(o_ptr, current_floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
 
 				drop_here(o_ptr, *y, *x);
 			}

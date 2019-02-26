@@ -263,7 +263,7 @@ void check_quest_completion(monster_type *m_ptr)
 		POSITION ny, nx;
 
 		/* Stagger around */
-		while (cave_perma_bold(y, x) || current_floor->grid_array[y][x].o_idx || (current_floor->grid_array[y][x].info & CAVE_OBJECT))
+		while (cave_perma_bold(y, x) || current_floor_ptr->grid_array[y][x].o_idx || (current_floor_ptr->grid_array[y][x].info & CAVE_OBJECT))
 		{
 			/* Pick a location */
 			scatter(&ny, &nx, y, x, 1, 0);

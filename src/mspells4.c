@@ -1980,7 +1980,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 			if (p_ptr->inside_arena || p_ptr->inside_battle || !summon_possible(m_ptr->fy, m_ptr->fx)) 
 				return -1;
 
-			delete_monster_idx(current_floor->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+			delete_monster_idx(current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
 			summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, mode);
 			m_list[hack_m_idx_ii].hp = dummy_hp;
 			m_list[hack_m_idx_ii].maxhp = dummy_maxhp;

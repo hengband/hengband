@@ -113,10 +113,10 @@ GAME_TURN resting;			/* Current counter for resting, if any */
 
 POSITION cur_hgt;		/* Current dungeon height */
 POSITION cur_wid;		/* Current dungeon width */
-DEPTH dun_level;		/*!< 現在の実ダンジョン階層、current_floor->base_levelの参照元となる / Current dungeon level */
+DEPTH dun_level;		/*!< 現在の実ダンジョン階層、current_floor_ptr->base_levelの参照元となる / Current dungeon level */
 MONSTER_NUMBER num_repro; /*!< Current reproducer count */
-DEPTH object_level;		/*!< アイテムの生成レベル、current_floor->base_levelを起点に一時変更する時に参照 / Current object creation level */
-DEPTH monster_level;	/*!< モンスターの生成レベル、current_floor->base_levelを起点に一時変更する時に参照 / Current monster creation level */
+DEPTH object_level;		/*!< アイテムの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current object creation level */
+DEPTH monster_level;	/*!< モンスターの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current monster creation level */
 bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
 
 GAME_TURN turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
@@ -218,23 +218,23 @@ char player_base[32];
 char savefile[1024];
 char savefile_base[40];
 
-POSITION_IDX lite_n; //!< Array of grids lit by player lite (see "current_floor->grid_array.c")
+POSITION_IDX lite_n; //!< Array of grids lit by player lite (see "current_floor_ptr->grid_array.c")
 POSITION lite_y[LITE_MAX];
 POSITION lite_x[LITE_MAX];
 
-POSITION_IDX mon_lite_n; //!< Array of grids lit by player lite (see "current_floor->grid_array.c")
+POSITION_IDX mon_lite_n; //!< Array of grids lit by player lite (see "current_floor_ptr->grid_array.c")
 POSITION mon_lite_y[MON_LITE_MAX];
 POSITION mon_lite_x[MON_LITE_MAX];
 
-POSITION_IDX view_n; //!< Array of grids viewable to the player (see "current_floor->grid_array.c")
+POSITION_IDX view_n; //!< Array of grids viewable to the player (see "current_floor_ptr->grid_array.c")
 POSITION view_y[VIEW_MAX];
 POSITION view_x[VIEW_MAX];
 
-POSITION_IDX temp_n; //!< Array of grids for use by various functions (see "current_floor->grid_array.c")
+POSITION_IDX temp_n; //!< Array of grids for use by various functions (see "current_floor_ptr->grid_array.c")
 POSITION temp_y[TEMP_MAX];
 POSITION temp_x[TEMP_MAX];
 
-POSITION_IDX redraw_n = 0; //!< Array of grids for delayed visual updating (see "current_floor->grid_array.c")
+POSITION_IDX redraw_n = 0; //!< Array of grids for delayed visual updating (see "current_floor_ptr->grid_array.c")
 POSITION redraw_y[REDRAW_MAX];
 POSITION redraw_x[REDRAW_MAX];
 
@@ -460,12 +460,12 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 
 
 /*
- * The array of "current_floor->grid_array grids" [MAX_WID][MAX_HGT].
+ * The array of "current_floor_ptr->grid_array grids" [MAX_WID][MAX_HGT].
  * Not completely allocated, that would be inefficient
  * Not completely hardcoded, that would overflow memory
  */
 floor_type floor;
-floor_type *current_floor = &floor;
+floor_type *current_floor_ptr = &floor;
 
 
 
