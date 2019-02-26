@@ -926,7 +926,7 @@ static bool cave_gen(void)
 	if (p_ptr->enter_dungeon && current_floor_ptr->dun_level > 1)
 	{
 		/* No stair scum! */
-		object_level = 1;
+		current_floor_ptr->object_level = 1;
 	}
 
 	/* Put some objects in rooms */
@@ -937,7 +937,7 @@ static bool cave_gen(void)
 	alloc_object(ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
 
 	/* Set back to default */
-	object_level = current_floor_ptr->base_level;
+	current_floor_ptr->object_level = current_floor_ptr->base_level;
 
 	/* Put the Guardian */
 	if (!alloc_guardian(TRUE)) return FALSE;
@@ -1197,7 +1197,7 @@ static void generate_fixed_floor(void)
 	/* Set the quest level */
 	current_floor_ptr->base_level = quest[p_ptr->inside_quest].level;
 	current_floor_ptr->dun_level = current_floor_ptr->base_level;
-	object_level = current_floor_ptr->base_level;
+	current_floor_ptr->object_level = current_floor_ptr->base_level;
 	monster_level = current_floor_ptr->base_level;
 
 	if (record_stair) do_cmd_write_nikki(NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
@@ -1357,7 +1357,7 @@ void clear_cave(void)
 	monster_level = current_floor_ptr->base_level;
 
 	/* Reset the object generation level */
-	object_level = current_floor_ptr->base_level;
+	current_floor_ptr->object_level = current_floor_ptr->base_level;
 }
 
 

@@ -4637,7 +4637,7 @@ static bool kind_is_good(KIND_OBJECT_IDX k_idx)
  * @return 生成に成功したらTRUEを返す。
  * @details
  * This routine plays nasty games to generate the "special artifacts".\n
- * This routine uses "object_level" for the "generation level".\n
+ * This routine uses "current_floor_ptr->object_level" for the "generation level".\n
  * We assume that the given object has been "wiped".\n
  */
 bool make_object(object_type *j_ptr, BIT_FLAGS mode)
@@ -4650,7 +4650,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 	prob = ((mode & AM_GOOD) ? 10 : 1000);
 
 	/* Base level for the object */
-	base = ((mode & AM_GOOD) ? (object_level + 10) : object_level);
+	base = ((mode & AM_GOOD) ? (current_floor_ptr->object_level + 10) : current_floor_ptr->object_level);
 
 
 	/* Generate a special object, or a normal object */
@@ -4689,7 +4689,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 	}
 
 	/* Apply magic (allow artifacts) */
-	apply_magic(j_ptr, object_level, mode);
+	apply_magic(j_ptr, current_floor_ptr->object_level, mode);
 
 	/* Hack -- generate multiple spikes/missiles */
 	switch (j_ptr->tval)
@@ -4720,7 +4720,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
  * @return 生成に成功したらTRUEを返す。
  * @details
  * This routine plays nasty games to generate the "special artifacts".\n
- * This routine uses "object_level" for the "generation level".\n
+ * This routine uses "current_floor_ptr->object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
 void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
@@ -4800,12 +4800,12 @@ bool make_gold(object_type *j_ptr)
 	s32b base;
 
 	/* Hack -- Pick a Treasure variety */
-	i = ((randint1(object_level + 2) + 2) / 2) - 1;
+	i = ((randint1(current_floor_ptr->object_level + 2) + 2) / 2) - 1;
 
 	/* Apply "extra" magic */
 	if (one_in_(GREAT_OBJ))
 	{
-		i += randint1(object_level + 1);
+		i += randint1(current_floor_ptr->object_level + 1);
 	}
 
 	/* Hack -- Creeping Coins only generate "themselves" */

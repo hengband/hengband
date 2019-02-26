@@ -2571,10 +2571,10 @@ bool make_artifact_special(object_type *o_ptr)
 
 		/*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /
 		 *  XXX XXX Enforce minimum "depth" (loosely) */
-		if (a_ptr->level > object_level)
+		if (a_ptr->level > current_floor_ptr->object_level)
 		{
 			/* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-			int d = (a_ptr->level - object_level) * 2;
+			int d = (a_ptr->level - current_floor_ptr->object_level) * 2;
 			if (!one_in_(d)) continue;
 		}
 
@@ -2584,9 +2584,9 @@ bool make_artifact_special(object_type *o_ptr)
 		/*! @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。ベースアイテムの生成階層が足りない場合1/(不足階層*5) を満たさないと除外される。 /
 		 *  Find the base object. XXX XXX Enforce minimum "object" level (loosely). Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
 		k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
-		if (k_info[k_idx].level > object_level)
+		if (k_info[k_idx].level > current_floor_ptr->object_level)
 		{
-			int d = (k_info[k_idx].level - object_level) * 5;
+			int d = (k_info[k_idx].level - current_floor_ptr->object_level) * 5;
 			if (!one_in_(d)) continue;
 		}
 

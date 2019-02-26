@@ -2,7 +2,7 @@
 /*!
 * @brief ベースアイテム生成階層が加算される確率
 * @details
-* There is a 1/10 (10%) chance of inflating the requested object_level
+* There is a 1/10 (10%) chance of inflating the requested current_floor_ptr->object_level
 * during the creation of an object (see "get_obj_num()" in "object.c").
 * Lower values yield better objects more often.
 */

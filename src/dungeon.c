@@ -5421,7 +5421,7 @@ static void dungeon(bool load_game)
 	monster_level = current_floor_ptr->base_level;
 
 	/* Reset the object generation level */
-	object_level = current_floor_ptr->base_level;
+	current_floor_ptr->object_level = current_floor_ptr->base_level;
 
 	is_loading_now = TRUE;
 

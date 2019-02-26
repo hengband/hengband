@@ -461,9 +461,9 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 			case 'A':
 				/* Reward for Pattern walk */
-				object_level = current_floor_ptr->base_level + 12;
+				current_floor_ptr->object_level = current_floor_ptr->base_level + 12;
 				place_object(y, x, AM_GOOD | AM_GREAT);
-				object_level = current_floor_ptr->base_level;
+				current_floor_ptr->object_level = current_floor_ptr->base_level;
 				break;
 
 			case '~':
@@ -575,9 +575,9 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				monster_level = current_floor_ptr->base_level + 9;
 				place_monster(y, x, PM_ALLOW_SLEEP);
 				monster_level = current_floor_ptr->base_level;
-				object_level = current_floor_ptr->base_level + 7;
+				current_floor_ptr->object_level = current_floor_ptr->base_level + 7;
 				place_object(y, x, AM_GOOD);
-				object_level = current_floor_ptr->base_level;
+				current_floor_ptr->object_level = current_floor_ptr->base_level;
 				break;
 			}
 
@@ -587,9 +587,9 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				monster_level = current_floor_ptr->base_level + 40;
 				place_monster(y, x, PM_ALLOW_SLEEP);
 				monster_level = current_floor_ptr->base_level;
-				object_level = current_floor_ptr->base_level + 20;
+				current_floor_ptr->object_level = current_floor_ptr->base_level + 20;
 				place_object(y, x, AM_GOOD | AM_GREAT);
-				object_level = current_floor_ptr->base_level;
+				current_floor_ptr->object_level = current_floor_ptr->base_level;
 				break;
 			}
 
@@ -604,9 +604,9 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				}
 				if (randint0(100) < 50)
 				{
-					object_level = current_floor_ptr->base_level + 7;
+					current_floor_ptr->object_level = current_floor_ptr->base_level + 7;
 					place_object(y, x, 0L);
-					object_level = current_floor_ptr->base_level;
+					current_floor_ptr->object_level = current_floor_ptr->base_level;
 				}
 				break;
 			}

@@ -1870,7 +1870,7 @@ static bool kankin(void)
 
 				/* Prepare to make a prize */
 				object_prep(&forge, lookup_kind(prize_list[num-1].tval, prize_list[num-1].sval));
-				apply_magic(&forge, object_level, AM_NO_FIXED_ART);
+				apply_magic(&forge, current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
 				object_aware(&forge);
 				object_known(&forge);

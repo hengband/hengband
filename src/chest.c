@@ -45,12 +45,12 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 		number = 5;
 		small = FALSE;
 		mode |= AM_GREAT;
-		object_level = o_ptr->xtra3;
+		current_floor_ptr->object_level = o_ptr->xtra3;
 	}
 	else
 	{
 		/* Determine the "value" of the items */
-		object_level = ABS(o_ptr->pval) + 10;
+		current_floor_ptr->object_level = ABS(o_ptr->pval) + 10;
 	}
 
 	/* Zero pval means empty chest */
@@ -104,7 +104,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	}
 
 	/* Reset the object level */
-	object_level = current_floor_ptr->base_level;
+	current_floor_ptr->object_level = current_floor_ptr->base_level;
 
 	/* No longer opening a chest */
 	opening_chest = FALSE;
