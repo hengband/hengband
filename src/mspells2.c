@@ -26,10 +26,11 @@
  * @param m_ptr 使用するモンスターの構造体参照ポインタ
  * @return ビームが到達可能ならばTRUEを返す
  */
-static bool direct_beam(int y1, int x1, int y2, int x2, monster_type *m_ptr)
+static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
 	bool hit2 = FALSE;
-	int i, y, x;
+	int i;
+	POSITION y, x;
 
 	int grid_n = 0;
 	u16b grid_g[512];
