@@ -1880,4 +1880,5 @@ typedef struct {
 	DEPTH base_level;
 	POSITION width;			/* Current dungeon width */
 	POSITION height;		/* Current dungeon height */
+	MONSTER_NUMBER num_repro; /*!< Current reproducer count */
 } floor_type;

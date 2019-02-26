@@ -2256,7 +2256,7 @@ bool mutation_power_aux(int power)
 		case MUT1_STERILITY:
 			msg_print(_("突然頭が痛くなった！", "You suddenly have a headache!"));
 			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"), -1);
-			num_repro += MAX_REPRO;
+			current_floor_ptr->num_repro += MAX_REPRO;
 			break;
 
 		case MUT1_PANIC_HIT:

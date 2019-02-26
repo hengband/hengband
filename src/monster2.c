@@ -246,7 +246,7 @@ void delete_monster_idx(MONSTER_IDX i)
 	real_r_ptr(m_ptr)->cur_num--;
 
 	/* Hack -- count the number of "reproducers" */
-	if (r_ptr->flags2 & (RF2_MULTIPLY)) num_repro--;
+	if (r_ptr->flags2 & (RF2_MULTIPLY)) current_floor_ptr->num_repro--;
 
 	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(i, 0);
 	if (MON_FAST(m_ptr)) (void)set_monster_fast(i, 0);
@@ -567,7 +567,7 @@ void wipe_m_list(void)
 	for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 0;
 
 	/* Hack -- reset "reproducer" count */
-	num_repro = 0;
+	current_floor_ptr->num_repro = 0;
 
 	/* Hack -- no more target */
 	target_who = 0;
@@ -3232,7 +3232,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		real_r_ptr(m_ptr)->floor_id = p_ptr->floor_id;
 
 	/* Hack -- Count the number of "reproducers" */
-	if (r_ptr->flags2 & RF2_MULTIPLY) num_repro++;
+	if (r_ptr->flags2 & RF2_MULTIPLY) current_floor_ptr->num_repro++;
 
 	/* Hack -- Notice new multi-hued monsters */
 	{

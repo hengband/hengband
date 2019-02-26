@@ -369,7 +369,7 @@ concptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				num_repro += MAX_REPRO;
+				current_floor_ptr->num_repro += MAX_REPRO;
 			}
 		}
 		break;

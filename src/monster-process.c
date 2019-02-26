@@ -2332,7 +2332,7 @@ void process_monster(MONSTER_IDX m_idx)
 	ox = m_ptr->fx;
 
 	/* Attempt to "multiply" if able and allowed */
-	if ((r_ptr->flags2 & RF2_MULTIPLY) && (num_repro < MAX_REPRO))
+	if ((r_ptr->flags2 & RF2_MULTIPLY) && (current_floor_ptr->num_repro < MAX_REPRO))
 	{
 		int k;
 		POSITION y, x;
