@@ -1054,7 +1054,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!current_floor_ptr->grid_array[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
-		m_ptr = &m_list[current_floor_ptr->grid_array[target_row][target_col].m_idx];
+		m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
 		if (r_ptr->flagsr & RFR_RES_TELE)

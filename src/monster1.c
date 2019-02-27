@@ -2531,7 +2531,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	int dump_gold = 0;
 	int number = 0;
 
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	bool visible = ((m_ptr->ml && !p_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE));

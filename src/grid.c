@@ -1989,7 +1989,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	/* Handle monsters */
 	if (g_ptr->m_idx && display_autopick == 0)
 	{
-		monster_type *m_ptr = &m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Visible monster */
 		if (m_ptr->ml)
@@ -2501,7 +2501,7 @@ void prt_path(POSITION y, POSITION x)
 			TERM_COLOR ta = default_color;
 			char tc = '*';
 
-			if (g_ptr->m_idx && m_list[g_ptr->m_idx].ml)
+			if (g_ptr->m_idx && current_floor_ptr->m_list[g_ptr->m_idx].ml)
 			{
 				/* Determine what is there */
 				map_info(ny, nx, &a, &c, &ta, &tc);
@@ -3737,7 +3737,7 @@ void update_mon_lite(void)
 		/* Loop through monsters, adding newly lit squares to changes list */
 		for (i = 1; i < m_max; i++)
 		{
-			m_ptr = &m_list[i];
+			m_ptr = &current_floor_ptr->m_list[i];
 			r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Skip dead monsters */
@@ -5636,7 +5636,7 @@ void glow_deep_lava_and_bldg(void)
 */
 bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	grid_type    *g_ptr = &current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 

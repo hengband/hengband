@@ -1820,8 +1820,8 @@ static void display_player_middle(void)
 		}
 		else
 		{
-			if (MON_FAST(&m_list[p_ptr->riding])) tmp_speed += 10;
-			if (MON_SLOW(&m_list[p_ptr->riding])) tmp_speed -= 10;
+			if (MON_FAST(&current_floor_ptr->m_list[p_ptr->riding])) tmp_speed += 10;
+			if (MON_SLOW(&current_floor_ptr->m_list[p_ptr->riding])) tmp_speed -= 10;
 		}
 
 		if (tmp_speed)
@@ -4187,7 +4187,7 @@ static void dump_aux_pet(FILE *fff)
 
 	for (i = m_max - 1; i >= 1; i--)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		if (!m_ptr->r_idx) continue;
 		if (!is_pet(m_ptr)) continue;

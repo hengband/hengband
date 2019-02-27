@@ -308,8 +308,8 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 	int w1 = who[a];
 	int w2 = who[b];
 
-	monster_type *m_ptr1 = &m_list[w1];
-	monster_type *m_ptr2 = &m_list[w2];
+	monster_type *m_ptr1 = &current_floor_ptr->m_list[w1];
+	monster_type *m_ptr2 = &current_floor_ptr->m_list[w2];
 	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
 	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
 
@@ -463,12 +463,12 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 			u16b dummy_why;
 
 			/* Allocate the "who" array */
-			C_MAKE(who, max_m_idx, MONSTER_IDX);
+			C_MAKE(who, current_floor_ptr->max_m_idx, MONSTER_IDX);
 
 			/* Process the monsters (backwards) */
 			for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
-				if (is_pet(&m_list[pet_ctr]) && (p_ptr->riding != pet_ctr))
+				if (is_pet(&current_floor_ptr->m_list[pet_ctr]) && (p_ptr->riding != pet_ctr))
 				  who[max_pet++] = pet_ctr;
 			}
 
@@ -486,7 +486,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 			}
 
 			/* Free the "who" array */
-			C_KILL(who, max_m_idx, IDX);
+			C_KILL(who, current_floor_ptr->max_m_idx, IDX);
 		}
 		o_ptr->timeout = 100 + randint1(100);
 		return;
@@ -557,10 +557,10 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 			{
 				if (place_monster_aux(0, p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
 				{
-					if (o_ptr->xtra3) m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
-					if (o_ptr->xtra5) m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;
-					if (o_ptr->xtra4) m_list[hack_m_idx_ii].hp = o_ptr->xtra4;
-					m_list[hack_m_idx_ii].maxhp = m_list[hack_m_idx_ii].max_maxhp;
+					if (o_ptr->xtra3) current_floor_ptr->m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
+					if (o_ptr->xtra5) current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;
+					if (o_ptr->xtra4) current_floor_ptr->m_list[hack_m_idx_ii].hp = o_ptr->xtra4;
+					current_floor_ptr->m_list[hack_m_idx_ii].maxhp = current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
 					if (o_ptr->inscription)
 					{
 						char buf[80];
@@ -602,7 +602,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 								s--;
 #endif
 							*s = '\0';
-							m_list[hack_m_idx_ii].nickname = quark_add(buf);
+							current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
 							t = quark_str(o_ptr->inscription);
 							s = buf;
 							while(*t && (*t != '#'))
@@ -1605,7 +1605,7 @@ bool activate_artifact(object_type *o_ptr)
 		for (i = m_max - 1; i >= 1; i--)
 		{
 			/* Access the monster */
-			m_ptr = &m_list[i];
+			m_ptr = &current_floor_ptr->m_list[i];
 
 			/* Ignore "dead" monsters */
 			if (!m_ptr->r_idx) continue;

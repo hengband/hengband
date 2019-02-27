@@ -409,7 +409,7 @@ bool fishing(player_type *creature_ptr)
 	else if (current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(m_name, &m_list[current_floor_ptr->grid_array[y][x].m_idx], 0);
+		monster_desc(m_name, &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx], 0);
 		msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
 		free_turn(creature_ptr);
 		return FALSE;

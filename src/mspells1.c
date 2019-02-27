@@ -73,7 +73,7 @@ static bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
  */
 static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	u32b f4 = (*f4p);
@@ -485,7 +485,7 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 
 		if ((current_floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2)))
 		{
-			monster_type *m_ptr = &m_list[current_floor_ptr->grid_array[y][x].m_idx];
+			monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx];
 			if (is_friend == is_pet(m_ptr))
 			{
 				return (FALSE);
@@ -580,7 +580,7 @@ void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
  */
 void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
 {
-    monster_type *m_ptr = &m_list[m_idx];
+    monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
 	BIT_FLAGS flg = 0x00;
@@ -861,7 +861,7 @@ static bool spell_dispel(byte spell)
  */
 bool dispel_check(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Invulnabilty (including the song) */
@@ -947,9 +947,9 @@ bool dispel_check(MONSTER_IDX m_idx)
 	/* Light speed */
 	if (p_ptr->lightspeed && (m_ptr->mspeed < 136)) return (TRUE);
 
-	if (p_ptr->riding && (m_list[p_ptr->riding].mspeed < 135))
+	if (p_ptr->riding && (current_floor_ptr->m_list[p_ptr->riding].mspeed < 135))
 	{
-		if (MON_FAST(&m_list[p_ptr->riding])) return (TRUE);
+		if (MON_FAST(&current_floor_ptr->m_list[p_ptr->riding])) return (TRUE);
 	}
 
 	/* No need to cast dispel spell */
@@ -978,7 +978,7 @@ bool dispel_check(MONSTER_IDX m_idx)
  */
 static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	byte escape[96], escape_num = 0;
@@ -1347,7 +1347,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	PERCENTAGE failrate;
 	byte spell[96], num = 0;
 	BIT_FLAGS f4, f5, f6;
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 #ifndef JP

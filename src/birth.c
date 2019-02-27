@@ -4548,7 +4548,7 @@ void player_birth(void)
 
 	/* 
 	 * Wipe monsters in old dungeon
-	 * This wipe destroys value of m_list[].cur_num .
+	 * This wipe destroys value of current_floor_ptr->m_list[].cur_num .
 	 */
 	wipe_m_list();
 

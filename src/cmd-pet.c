@@ -65,8 +65,8 @@ static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 	int w1 = who[a];
 	int w2 = who[b];
 
-	monster_type *m_ptr1 = &m_list[w1];
-	monster_type *m_ptr2 = &m_list[w2];
+	monster_type *m_ptr1 = &current_floor_ptr->m_list[w1];
+	monster_type *m_ptr2 = &current_floor_ptr->m_list[w2];
 	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
 	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
 
@@ -114,7 +114,7 @@ int calculate_upkeep(void)
 		monster_type *m_ptr;
 		monster_race *r_ptr;
 
-		m_ptr = &m_list[m_idx];
+		m_ptr = &current_floor_ptr->m_list[m_idx];
 		if (!m_ptr->r_idx) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
@@ -180,12 +180,12 @@ void do_cmd_pet_dismiss(void)
 	Term->scr->cv = 1;
 
 	/* Allocate the "who" array */
-	C_MAKE(who, max_m_idx, MONSTER_IDX);
+	C_MAKE(who, current_floor_ptr->max_m_idx, MONSTER_IDX);
 
 	/* Process the monsters (backwards) */
 	for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
 	{
-		if (is_pet(&m_list[pet_ctr]))
+		if (is_pet(&current_floor_ptr->m_list[pet_ctr]))
 			who[max_pet++] = pet_ctr;
 	}
 
@@ -204,7 +204,7 @@ void do_cmd_pet_dismiss(void)
 
 		/* Access the monster */
 		pet_ctr = who[i];
-		m_ptr = &m_list[pet_ctr];
+		m_ptr = &current_floor_ptr->m_list[pet_ctr];
 
 		delete_this = FALSE;
 		kakunin = ((pet_ctr == p_ptr->riding) || (m_ptr->nickname));
@@ -286,7 +286,7 @@ void do_cmd_pet_dismiss(void)
 	Term->scr->cv = cv;
 	Term_fresh();
 
-	C_KILL(who, max_m_idx, MONSTER_IDX);
+	C_KILL(who, current_floor_ptr->max_m_idx, MONSTER_IDX);
 
 #ifdef JP
 	msg_format("%d 体のペットを放しました。", Dismissed);
@@ -348,7 +348,7 @@ bool do_riding(bool force)
 	{
 		if (cmd_limit_confused(p_ptr)) return FALSE;
 
-		m_ptr = &m_list[g_ptr->m_idx];
+		m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 		if (!g_ptr->m_idx || !m_ptr->ml)
 		{
@@ -444,7 +444,7 @@ static void do_name_pet(void)
 
 	if (current_floor_ptr->grid_array[target_row][target_col].m_idx)
 	{
-		m_ptr = &m_list[current_floor_ptr->grid_array[target_row][target_col].m_idx];
+		m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[target_row][target_col].m_idx];
 
 		if (!is_pet(m_ptr))
 		{
@@ -532,10 +532,10 @@ void do_cmd_pet(void)
 
 #ifdef JP
 	sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
-		(pet_t_m_idx ? (p_ptr->image ? "何か奇妙な物" : (r_name + r_info[m_list[pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
+		(pet_t_m_idx ? (p_ptr->image ? "何か奇妙な物" : (r_name + r_info[current_floor_ptr->m_list[pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
 #else
 	sprintf(target_buf, "specify a target of pet (now:%s)",
-		(pet_t_m_idx ? (p_ptr->image ? "something strange" : (r_name + r_info[m_list[pet_t_m_idx].ap_r_idx].name)) : "nothing"));
+		(pet_t_m_idx ? (p_ptr->image ? "something strange" : (r_name + r_info[current_floor_ptr->m_list[pet_t_m_idx].ap_r_idx].name)) : "nothing"));
 #endif
 	power_desc[num] = target_buf;
 	powers[num++] = PET_TARGET;
@@ -859,7 +859,7 @@ void do_cmd_pet(void)
 		for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
 		{
 			/* Player has pet */
-			if (is_pet(&m_list[pet_ctr])) break;
+			if (is_pet(&current_floor_ptr->m_list[pet_ctr])) break;
 		}
 
 		if (!pet_ctr)
@@ -878,7 +878,7 @@ void do_cmd_pet(void)
 		else
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[target_row][target_col];
-			if (g_ptr->m_idx && (m_list[g_ptr->m_idx].ml))
+			if (g_ptr->m_idx && (current_floor_ptr->m_list[g_ptr->m_idx].ml))
 			{
 				pet_t_m_idx = current_floor_ptr->grid_array[target_row][target_col].m_idx;
 				p_ptr->pet_follow_distance = PET_DESTROY_DIST;
@@ -937,7 +937,7 @@ void do_cmd_pet(void)
 			for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
 				/* Access the monster */
-				m_ptr = &m_list[pet_ctr];
+				m_ptr = &current_floor_ptr->m_list[pet_ctr];
 
 				if (is_pet(m_ptr))
 				{
@@ -1042,7 +1042,7 @@ bool rakuba(HIT_POINT dam, bool force)
 	int i, y, x, oy, ox;
 	int sn = 0, sy = 0, sx = 0;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_type *m_ptr = &m_list[p_ptr->riding];
+	monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool fall_dam = FALSE;
 

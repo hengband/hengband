@@ -2874,7 +2874,7 @@ static errr rd_dungeon_old(void)
 			monster_type *m_ptr;
 
 			/* Monster */
-			m_ptr = &m_list[o_ptr->held_m_idx];
+			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -2904,7 +2904,7 @@ static errr rd_dungeon_old(void)
 	rd_u16b(&limit);
 
 	/* Hack -- verify */
-	if (limit > max_m_idx)
+	if (limit > current_floor_ptr->max_m_idx)
 	{
 		note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
 		return (161);
@@ -2927,7 +2927,7 @@ static errr rd_dungeon_old(void)
 
 
 		/* Acquire monster */
-		m_ptr = &m_list[m_idx];
+		m_ptr = &current_floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
 		rd_monster(m_ptr);
@@ -3192,7 +3192,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 			monster_type *m_ptr;
 
 			/* Monster */
-			m_ptr = &m_list[o_ptr->held_m_idx];
+			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -3222,7 +3222,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Hack -- verify */
-	if (limit > max_m_idx) return 161;
+	if (limit > current_floor_ptr->max_m_idx) return 161;
 
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
@@ -3238,7 +3238,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 
 		/* Acquire monster */
-		m_ptr = &m_list[m_idx];
+		m_ptr = &current_floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
 		rd_monster(m_ptr);

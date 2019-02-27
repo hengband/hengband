@@ -1474,7 +1474,7 @@ static void do_cmd_wiz_zap(void)
 	/* Genocide everyone nearby */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -1511,7 +1511,7 @@ static void do_cmd_wiz_zap_all(void)
 	/* Genocide everyone */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
 		if (!m_ptr->r_idx) continue;

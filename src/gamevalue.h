@@ -44,7 +44,7 @@
 * @details
 * A monster can only "multiply" (reproduce) if there are fewer than 100
 * monsters on the level capable of such spontaneous reproduction.  This
-* is a hack which prevents the "m_list[]" array from exploding due to
+* is a hack which prevents the "current_floor_ptr->m_list[]" array from exploding due to
 * reproducing monsters.  Messy, but necessary.
 */
 #define MAX_REPRO       100

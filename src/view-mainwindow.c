@@ -1191,7 +1191,7 @@ static void prt_speed(void)
 	{
 		if (p_ptr->riding)
 		{
-			monster_type *m_ptr = &m_list[p_ptr->riding];
+			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
 			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_GREEN;
@@ -1212,7 +1212,7 @@ static void prt_speed(void)
 	{
 		if (p_ptr->riding)
 		{
-			monster_type *m_ptr = &m_list[p_ptr->riding];
+			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
 			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_RED;
@@ -1398,7 +1398,7 @@ static void health_redraw(bool riding)
 		col = COL_INFO;
 	}
 
-	m_ptr = &m_list[health_who];
+	m_ptr = &current_floor_ptr->m_list[health_who];
 
 	if (p_ptr->wizard && p_ptr->inside_battle)
 	{
@@ -1410,32 +1410,32 @@ static void health_redraw(bool riding)
 		Term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
 		Term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
 
-		if(m_list[1].r_idx)
+		if(current_floor_ptr->m_list[1].r_idx)
 		{
-			Term_putstr(col - 2, row, 2, r_info[m_list[1].r_idx].x_attr, format("%c", r_info[m_list[1].r_idx].x_char));
-			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", m_list[1].hp));
-			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", m_list[1].max_maxhp));
+			Term_putstr(col - 2, row, 2, r_info[current_floor_ptr->m_list[1].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[1].r_idx].x_char));
+			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[1].hp));
+			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[1].max_maxhp));
 		}
 
-		if(m_list[2].r_idx)
+		if(current_floor_ptr->m_list[2].r_idx)
 		{
-			Term_putstr(col - 2, row + 1, 2, r_info[m_list[2].r_idx].x_attr, format("%c", r_info[m_list[2].r_idx].x_char));
-			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", m_list[2].hp));
-			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", m_list[2].max_maxhp));
+			Term_putstr(col - 2, row + 1, 2, r_info[current_floor_ptr->m_list[2].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[2].r_idx].x_char));
+			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[2].hp));
+			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[2].max_maxhp));
 		}
 
-		if(m_list[3].r_idx)
+		if(current_floor_ptr->m_list[3].r_idx)
 		{
-			Term_putstr(col - 2, row + 2, 2, r_info[m_list[3].r_idx].x_attr, format("%c", r_info[m_list[3].r_idx].x_char));
-			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", m_list[3].hp));
-			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", m_list[3].max_maxhp));
+			Term_putstr(col - 2, row + 2, 2, r_info[current_floor_ptr->m_list[3].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[3].r_idx].x_char));
+			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[3].hp));
+			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[3].max_maxhp));
 		}
 
-		if(m_list[4].r_idx)
+		if(current_floor_ptr->m_list[4].r_idx)
 		{
-			Term_putstr(col - 2, row + 3, 2, r_info[m_list[4].r_idx].x_attr, format("%c", r_info[m_list[4].r_idx].x_char));
-			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", m_list[4].hp));
-			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", m_list[4].max_maxhp));
+			Term_putstr(col - 2, row + 3, 2, r_info[current_floor_ptr->m_list[4].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[4].r_idx].x_char));
+			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[4].hp));
+			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[4].max_maxhp));
 		}
 	}
 	else
@@ -1696,8 +1696,8 @@ void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
 
 	for(i=0;i<temp_n;i++){
 		grid_type* g_ptr = &current_floor_ptr->grid_array[temp_y[i]][temp_x[i]];
-		if(!g_ptr->m_idx || !m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
-		m_ptr = &m_list[g_ptr->m_idx];
+		if(!g_ptr->m_idx || !current_floor_ptr->m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
+		m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 		if(is_pet(m_ptr))continue;//pet
 		if(!m_ptr->r_idx)continue;//dead?
 		{

@@ -3246,7 +3246,7 @@
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
 
 #define is_friendly_idx(IDX) \
-	 (bool)((IDX) > 0 && is_friendly(&m_list[(IDX)]))
+	 (bool)((IDX) > 0 && is_friendly(&current_floor_ptr->m_list[(IDX)]))
 
 #define is_pet(A) \
 	 (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)

@@ -4047,7 +4047,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				if (clone)
 				{
 					/* clone */
-					m_list[hack_m_idx_ii].smart |= SM_CLONED;
+					current_floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
 
 					/* Make alive again for real unique monster */
 					r_info[monster_index].cur_num = old_cur_num;
@@ -4383,7 +4383,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Maximum m_idx */
 			else if (zz[0][0] == 'M')
 			{
-				max_m_idx = (IDX)atoi(zz[1]);
+				current_floor_ptr->max_m_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Wilderness size */

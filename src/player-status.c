@@ -1800,7 +1800,7 @@ void calc_bonuses(void)
 	}
 	else
 	{
-		monster_type *riding_m_ptr = &m_list[p_ptr->riding];
+		monster_type *riding_m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 		monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
 		SPEED speed = riding_m_ptr->mspeed;
 
@@ -2169,7 +2169,7 @@ void calc_bonuses(void)
 				}
 				else
 				{
-					penalty = r_info[m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 80;
+					penalty = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 80;
 					penalty += 30;
 					if (penalty < 30) penalty = 30;
 				}
@@ -2208,7 +2208,7 @@ void calc_bonuses(void)
 		}
 		else
 		{
-			penalty = r_info[m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 80;
+			penalty = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 80;
 			penalty += 30;
 			if (penalty < 30) penalty = 30;
 		}

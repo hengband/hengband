@@ -277,7 +277,7 @@ void revenge_store(HIT_POINT dam)
  */
 bool teleport_barrier(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!hex_spelling(HEX_ANTI_TELE)) return FALSE;
@@ -293,7 +293,7 @@ bool teleport_barrier(MONSTER_IDX m_idx)
  */
 bool magic_barrier(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!hex_spelling(HEX_ANTI_MAGIC)) return FALSE;
@@ -309,7 +309,7 @@ bool magic_barrier(MONSTER_IDX m_idx)
  */
 bool multiply_barrier(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!hex_spelling(HEX_ANTI_MULTI)) return FALSE;

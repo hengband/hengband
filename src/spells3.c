@@ -47,7 +47,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 
 	bool look = TRUE;
 
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	/* Paranoia */
 	if (!m_ptr->r_idx) return (FALSE);
@@ -154,7 +154,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	int attempts = 500;
 	POSITION dis = 2;
 	bool look = TRUE;
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	/* Paranoia */
 	if(!m_ptr->r_idx) return;
@@ -387,7 +387,7 @@ void teleport_player(POSITION dis, BIT_FLAGS mode)
 			/* A monster except your mount may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx))
 			{
-				monster_type *m_ptr = &m_list[tmp_m_idx];
+				monster_type *m_ptr = &current_floor_ptr->m_list[tmp_m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/*
@@ -429,7 +429,7 @@ void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
 			/* A monster except your mount or caster may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))
 			{
-				monster_type *m_ptr = &m_list[tmp_m_idx];
+				monster_type *m_ptr = &current_floor_ptr->m_list[tmp_m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/*
@@ -503,7 +503,7 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 
 void teleport_away_followable(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	POSITION oldfy = m_ptr->fy;
 	POSITION oldfx = m_ptr->fx;
 	bool old_ml = m_ptr->ml;
@@ -566,7 +566,7 @@ bool teleport_level_other(player_type *creature_ptr)
 	if (!target_m_idx) return TRUE;
 	if (!player_has_los_bold(target_row, target_col)) return TRUE;
 	if (!projectable(creature_ptr->y, creature_ptr->x, target_row, target_col)) return TRUE;
-	m_ptr = &m_list[target_m_idx];
+	m_ptr = &current_floor_ptr->m_list[target_m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 	monster_desc(m_name, m_ptr, 0);
 	msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
@@ -598,7 +598,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 	else /* To monster */
 	{
-		monster_type *m_ptr = &m_list[m_idx];
+		monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 		/* Get the monster name (or "it") */
 		monster_desc(m_name, m_ptr, 0);
@@ -738,7 +738,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	/* Monster level teleportation is simple deleting now */
 	if (m_idx > 0)
 	{
-		monster_type *m_ptr = &m_list[m_idx];
+		monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 		/* Check for quest completion */
 		check_quest_completion(m_ptr);
@@ -1402,7 +1402,7 @@ static bool vanish_dungeon(void)
 			/* Lose room and vault */
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-			m_ptr = &m_list[g_ptr->m_idx];
+			m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Awake monster */
 			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
@@ -3560,7 +3560,7 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
 	if (p_ptr->riding)
-		chance += (MAX(r_info[m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
+		chance += (MAX(r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
 
 	/* Extract mana consumption rate */
 	need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
@@ -3912,7 +3912,7 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 bool polymorph_monster(POSITION y, POSITION x)
 {
 	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
-	monster_type *m_ptr = &m_list[g_ptr->m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 	bool polymorphed = FALSE;
 	MONRACE_IDX new_r_idx;
 	MONRACE_IDX old_r_idx = m_ptr->r_idx;
@@ -3951,9 +3951,9 @@ bool polymorph_monster(POSITION y, POSITION x)
 		/* Create a new monster (no groups) */
 		if (place_monster_aux(0, y, x, new_r_idx, mode))
 		{
-			m_list[hack_m_idx_ii].nickname = back_m.nickname;
-			m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
-			m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
+			current_floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
+			current_floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
+			current_floor_ptr->m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
 
 			/* Success */
 			polymorphed = TRUE;
@@ -3963,7 +3963,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 			/* Placing the new monster failed */
 			if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
 			{
-				m_list[hack_m_idx_ii] = back_m;
+				current_floor_ptr->m_list[hack_m_idx_ii] = back_m;
 
 				/* Re-initialize monster process */
 				mproc_init();
@@ -4358,7 +4358,7 @@ void massacre(void)
 		y = p_ptr->y + ddy_ddd[dir];
 		x = p_ptr->x + ddx_ddd[dir];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
-		m_ptr = &m_list[g_ptr->m_idx];
+		m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Hack -- attack monsters */
 		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
@@ -4392,7 +4392,7 @@ bool eat_lock(void)
 	}
 	else if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 		msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
 		if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(y, x, 0);
@@ -4449,7 +4449,7 @@ bool shock_power(void)
 		POSITION ty = y, tx = x;
 		POSITION oy = y, ox = x;
 		MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
-		monster_type *m_ptr = &m_list[m_idx];
+		monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		GAME_TEXT m_name[MAX_NLEN];
 
@@ -4539,7 +4539,7 @@ bool detonation(player_type *creature_ptr)
 
 void blood_curse_to_enemy(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	grid_type *g_ptr = &current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
 	BIT_FLAGS curse_flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 	int count = 0;

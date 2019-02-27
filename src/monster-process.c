@@ -42,19 +42,19 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 	int start;
 	int plus = 1;
 
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_type *t_ptr;
 
 	if (riding_t_m_idx && player_bold(m_ptr->fy, m_ptr->fx))
 	{
-		y = m_list[riding_t_m_idx].fy;
-		x = m_list[riding_t_m_idx].fx;
+		y = current_floor_ptr->m_list[riding_t_m_idx].fy;
+		x = current_floor_ptr->m_list[riding_t_m_idx].fx;
 	}
 	else if (is_pet(m_ptr) && pet_t_m_idx)
 	{
-		y = m_list[pet_t_m_idx].fy;
-		x = m_list[pet_t_m_idx].fx;
+		y = current_floor_ptr->m_list[pet_t_m_idx].fy;
+		x = current_floor_ptr->m_list[pet_t_m_idx].fx;
 	}
 	else
 	{
@@ -73,7 +73,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 			if (!dummy) continue;
 
 			t_idx = dummy;
-			t_ptr = &m_list[t_idx];
+			t_ptr = &current_floor_ptr->m_list[t_idx];
 
 			/* The monster itself isn't a target */
 			if (t_ptr == m_ptr) continue;
@@ -203,7 +203,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
  */
 void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, IDX who)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[160];
 	bool seen = is_seen(m_ptr);
@@ -356,9 +356,9 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 
 	if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (who != m_idx))
 	{
-		if (is_pet(&m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
+		if (is_pet(&current_floor_ptr->m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
 		{
-			set_target(m_ptr, m_list[who].fy, m_list[who].fx);
+			set_target(m_ptr, current_floor_ptr->m_list[who].fy, current_floor_ptr->m_list[who].fx);
 		}
 	}
 
@@ -397,7 +397,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
  */
 static bool mon_will_run(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 #ifdef ALLOW_TERROR
 
@@ -479,7 +479,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	bool can_open_door = FALSE;
 	int now_cost;
 
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Monster location */
@@ -583,7 +583,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	grid_type *g_ptr;
 	bool use_scent = FALSE;
 
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Can monster cast attack spell? */
@@ -700,7 +700,7 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	int score = -1;
 	int i;
 
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	/* Monster location */
 	fy = m_ptr->fy;
@@ -887,7 +887,7 @@ static POSITION *dist_offsets_x[10] =
  */
 static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	POSITION fy = m_ptr->fy;
 	POSITION fx = m_ptr->fx;
@@ -981,7 +981,7 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
  */
 static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	POSITION fy = m_ptr->fy;
@@ -1055,7 +1055,7 @@ static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
  */
 static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	POSITION     y = 0, ay, x = 0, ax;
 	int          move_val = 0;
@@ -1074,7 +1074,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 
 		/* The monster must be an enemy, and in LOS */
 		if (t_m_idx &&
-		    are_enemies(m_ptr, &m_list[t_m_idx]) &&
+		    are_enemies(m_ptr, &current_floor_ptr->m_list[t_m_idx]) &&
 		    los(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) &&
 		    projectable(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 		{
@@ -1424,8 +1424,8 @@ static int check_hit2(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
  */
 static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-	monster_type    *m_ptr = &m_list[m_idx];
-	monster_type    *t_ptr = &m_list[t_idx];
+	monster_type    *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type    *t_ptr = &current_floor_ptr->m_list[t_idx];
 
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -2078,7 +2078,7 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
  */
 void process_monster(MONSTER_IDX m_idx)
 {
-	monster_type    *m_ptr = &m_list[m_idx];
+	monster_type    *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race    *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
@@ -2120,7 +2120,7 @@ void process_monster(MONSTER_IDX m_idx)
 			msg_print("地面に落とされた。");
 #else
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, &m_list[p_ptr->riding], 0);
+			monster_desc(m_name, &current_floor_ptr->m_list[p_ptr->riding], 0);
 			msg_format("You have fallen from %s.", m_name);
 #endif
 		}
@@ -2144,7 +2144,7 @@ void process_monster(MONSTER_IDX m_idx)
 	}
 
 	/* Are there its parent? */
-	if (m_ptr->parent_m_idx && !m_list[m_ptr->parent_m_idx].r_idx)
+	if (m_ptr->parent_m_idx && !current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx)
 	{
 		/* Its parent have gone, it also goes away. */
 
@@ -2358,7 +2358,7 @@ void process_monster(MONSTER_IDX m_idx)
 			if (multiply_monster(m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
 			{
 				/* Take note if visible */
-				if (m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(m_ptr))
+				if (current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(m_ptr))
 				{
 					r_ptr->r_flags2 |= (RF2_MULTIPLY);
 				}
@@ -2386,7 +2386,7 @@ void process_monster(MONSTER_IDX m_idx)
 					{
 						if (summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode), '\0'))
 						{
-							if (m_list[hack_m_idx_ii].ml) count++;
+							if (current_floor_ptr->m_list[hack_m_idx_ii].ml) count++;
 						}
 					}
 
@@ -2452,7 +2452,7 @@ void process_monster(MONSTER_IDX m_idx)
 			MONSTER_IDX t_m_idx = current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
 
 			/* The monster must be an enemy, and projectable */
-			if (t_m_idx && are_enemies(m_ptr, &m_list[t_m_idx]) &&
+			if (t_m_idx && are_enemies(m_ptr, &current_floor_ptr->m_list[t_m_idx]) &&
 			    projectable(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 			{
 				counterattack = TRUE;
@@ -2628,7 +2628,7 @@ void process_monster(MONSTER_IDX m_idx)
 		can_cross = monster_can_cross_terrain(g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
 
 		/* Access that grid's contents */
-		y_ptr = &m_list[g_ptr->m_idx];
+		y_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Hack -- player 'in' wall */
 		if (player_bold(ny, nx))
@@ -2942,7 +2942,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 		if (is_riding_mon)
 		{
-			if (!p_ptr->riding_ryoute && !MON_MONFEAR(&m_list[p_ptr->riding])) do_move = FALSE;
+			if (!p_ptr->riding_ryoute && !MON_MONFEAR(&current_floor_ptr->m_list[p_ptr->riding])) do_move = FALSE;
 		}
 
 		if (did_kill_wall && do_move)
@@ -3370,7 +3370,7 @@ void process_monsters(void)
 	for (i = m_max - 1; i >= 1; i--)
 	{
 		/* Access the monster */
-		m_ptr = &m_list[i];
+		m_ptr = &current_floor_ptr->m_list[i];
 		r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Handle "leaving" */

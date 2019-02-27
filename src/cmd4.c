@@ -5851,7 +5851,7 @@ static void do_cmd_knowledge_pets(void)
 	for (i = m_max - 1; i >= 1; i--)
 	{
 		/* Access the monster */
-		m_ptr = &m_list[i];
+		m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
 		if (!m_ptr->r_idx) continue;

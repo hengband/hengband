@@ -165,7 +165,7 @@ int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type)
 */
 static void mproc_add(MONSTER_IDX m_idx, int mproc_type)
 {
-	if (mproc_max[mproc_type] < max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = (s16b)m_idx;
+	if (mproc_max[mproc_type] < current_floor_ptr->max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = (s16b)m_idx;
 }
 
 
@@ -199,7 +199,7 @@ void mproc_init(void)
 	for (i = m_max - 1; i >= 1; i--)
 	{
 		/* Access the monster */
-		m_ptr = &m_list[i];
+		m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
 		if (!m_ptr->r_idx) continue;
@@ -221,7 +221,7 @@ void mproc_init(void)
 */
 bool set_monster_csleep(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
@@ -272,7 +272,7 @@ bool set_monster_csleep(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_fast(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -312,7 +312,7 @@ bool set_monster_fast(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_slow(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -356,7 +356,7 @@ bool set_monster_slow(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_stunned(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -396,7 +396,7 @@ bool set_monster_stunned(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_confused(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -436,7 +436,7 @@ bool set_monster_confused(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_monfear(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -486,7 +486,7 @@ bool set_monster_monfear(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -537,7 +537,7 @@ static u32b csleep_noise;
 */
 static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	switch (mtimed_idx)
 	{
@@ -748,7 +748,7 @@ void process_monsters_mtimed(int mtimed_idx)
 */
 void dispel_monster_status(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
 	monster_desc(m_name, m_ptr, 0);
@@ -775,7 +775,7 @@ void dispel_monster_status(MONSTER_IDX m_idx)
 */
 bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 {
-	monster_type *m_ptr = &m_list[hack_m_idx];  /* the world monster */
+	monster_type *m_ptr = &current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
 
 	if (world_monster) return (FALSE);
 
@@ -839,7 +839,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 	/* Paranoia */
 	if (m_idx <= 0 || s_idx <= 0) return;
 
-	m_ptr = &m_list[m_idx];
+	m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	/* Paranoia -- Skip dead monsters */
 	if (!m_ptr->r_idx) return;
@@ -973,7 +973,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
  */
 bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_type exp_mon;
 

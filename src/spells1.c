@@ -842,7 +842,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					int i;
 					BIT_FLAGS mode = 0L;
 
-					if (!who || is_pet(&m_list[who]))
+					if (!who || is_pet(&current_floor_ptr->m_list[who]))
 						mode |= PM_FORCE_PET;
 
 					for (i = 0; i < o_ptr->number ; i++)
@@ -997,8 +997,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
-	monster_type *m_ptr = &m_list[g_ptr->m_idx];
-	monster_type *caster_ptr = (who > 0) ? &m_list[who] : NULL;
+	monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+	monster_type *caster_ptr = (who > 0) ? &current_floor_ptr->m_list[who] : NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -3586,7 +3586,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			/* Hack -- Get new monster */
-			m_ptr = &m_list[g_ptr->m_idx];
+			m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Hack -- Get new race */
 			r_ptr = &r_info[m_ptr->r_idx];
@@ -3911,16 +3911,16 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		{
 			do
 			{
-				t_y = m_list[who].fy - 1 + randint1(3);
-				t_x = m_list[who].fx - 1 + randint1(3);
+				t_y = current_floor_ptr->m_list[who].fy - 1 + randint1(3);
+				t_x = current_floor_ptr->m_list[who].fx - 1 + randint1(3);
 				max_attempts--;
 			}
 			while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(p_ptr->y, p_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
-				t_y = m_list[who].fy;
-				t_x = m_list[who].fx;
+				t_y = current_floor_ptr->m_list[who].fy;
+				t_x = current_floor_ptr->m_list[who].fx;
 			}
 		}
 		else
@@ -3948,7 +3948,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 
 	if (who > 0)
 	{
-		m_ptr = &m_list[who];
+		m_ptr = &current_floor_ptr->m_list[who];
 		rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
 		monster_desc(m_name, m_ptr, 0);
 
@@ -5503,9 +5503,9 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	/* Start at monster */
 	else if (who > 0)
 	{
-		x1 = m_list[who].fx;
-		y1 = m_list[who].fy;
-		monster_desc(who_name, &m_list[who], MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+		x1 = current_floor_ptr->m_list[who].fx;
+		y1 = current_floor_ptr->m_list[who].fy;
+		monster_desc(who_name, &current_floor_ptr->m_list[who], MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 	}
 
 	else
@@ -5673,7 +5673,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					if (project_m(0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
 					if (!who && (project_m_n == 1) && !jump) {
 						if (current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
-							monster_type *m_ptr = &m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+							monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 							if (m_ptr->ml)
 							{
@@ -5697,7 +5697,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			if (!who && (project_m_n == 1) && !jump) {
 				if (current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
 				{
-					monster_type *m_ptr = &m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+					monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 					if (m_ptr->ml)
 					{
@@ -5826,7 +5826,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			(void)project_m(0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
 			if(!who && (project_m_n == 1) && !jump){
 				if(current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx >0 ){
-					monster_type *m_ptr = &m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+					monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 					if (m_ptr->ml)
 					{
@@ -6106,7 +6106,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 	if (flg & PROJECT_KILL)
 	{
-		see_s_msg = (who > 0) ? is_seen(&m_list[who]) :
+		see_s_msg = (who > 0) ? is_seen(&current_floor_ptr->m_list[who]) :
 			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)));
 	}
 
@@ -6204,7 +6204,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			/* A single bolt may be reflected */
 			if (grids <= 1)
 			{
-				monster_type *m_ptr = &m_list[current_floor_ptr->grid_array[y][x].m_idx];
+				monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx];
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
 
 				if ((flg & PROJECT_REFLECTABLE) && current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
@@ -6350,7 +6350,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			/* Track if possible */
 			if (current_floor_ptr->grid_array[y][x].m_idx > 0)
 			{
-				monster_type *m_ptr = &m_list[current_floor_ptr->grid_array[y][x].m_idx];
+				monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx];
 
 				if (m_ptr->ml)
 				{
@@ -6441,7 +6441,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, &m_list[p_ptr->riding], 0);
+		monster_desc(m_name, &current_floor_ptr->m_list[p_ptr->riding], 0);
 
 		if (rakubadam_m > 0)
 		{

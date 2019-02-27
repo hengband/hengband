@@ -1138,7 +1138,7 @@ bool change_wild_mode(void)
 
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		if (!m_ptr->r_idx) continue;
 		if (is_pet(m_ptr) && i != p_ptr->riding) have_pet = TRUE;

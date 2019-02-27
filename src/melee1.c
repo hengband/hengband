@@ -301,7 +301,7 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 	HIT_POINT k;
 	int bonus, chance;
 	WEIGHT n_weight = 0;
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -438,7 +438,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 
 	grid_type       *g_ptr = &current_floor_ptr->grid_array[y][x];
 
-	monster_type    *m_ptr = &m_list[g_ptr->m_idx];
+	monster_type    *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Access the weapon */
@@ -1152,7 +1152,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 					}
 
 					/* Hack -- Get new monster */
-					m_ptr = &m_list[g_ptr->m_idx];
+					m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 					/* Oops, we need a different name... */
 					monster_desc(m_name, m_ptr, 0);
@@ -1163,7 +1163,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 			}
 			else if (o_ptr->name1 == ART_G_HAMMER)
 			{
-				monster_type *target_ptr = &m_list[g_ptr->m_idx];
+				monster_type *target_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 				if (target_ptr->hold_o_idx)
 				{
@@ -1327,7 +1327,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 	bool            stormbringer = FALSE;
 
 	grid_type       *g_ptr = &current_floor_ptr->grid_array[y][x];
-	monster_type    *m_ptr = &m_list[g_ptr->m_idx];
+	monster_type    *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -1448,7 +1448,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
 
 		if (cur < max)
 		{
-			DEPTH ridinglevel = r_info[m_list[p_ptr->riding].r_idx].level;
+			DEPTH ridinglevel = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level;
 			DEPTH targetlevel = r_ptr->level;
 			int inc = 0;
 
@@ -1511,7 +1511,7 @@ bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
  */
 bool make_attack_normal(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	int ap_cnt;
@@ -3203,7 +3203,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		if (p_ptr->riding && damage)
 		{
 			char m_steed_name[MAX_NLEN];
-			monster_desc(m_steed_name, &m_list[p_ptr->riding], 0);
+			monster_desc(m_steed_name, &current_floor_ptr->m_list[p_ptr->riding], 0);
 			if (rakuba((damage > 200) ? 200 : damage, FALSE))
 			{
 				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);

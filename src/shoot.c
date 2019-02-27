@@ -599,7 +599,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 			{
 				grid_type *c_mon_ptr = &current_floor_ptr->grid_array[y][x];
 
-				monster_type *m_ptr = &m_list[c_mon_ptr->m_idx];
+				monster_type *m_ptr = &current_floor_ptr->m_list[c_mon_ptr->m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/* Check the visibility */
@@ -632,7 +632,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 				if (p_ptr->riding)
 				{
 					if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING])
-						&& ((p_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[m_list[p_ptr->riding].r_idx].level)
+						&& ((p_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level)
 						&& one_in_(2))
 					{
 						p_ptr->skill_exp[GINOU_RIDING] += 1;
@@ -826,7 +826,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 		if (stick_to)
 		{
 			MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
-			monster_type *m_ptr = &m_list[m_idx];
+			monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 			OBJECT_IDX o_idx = o_pop();
 
 			if (!o_idx)

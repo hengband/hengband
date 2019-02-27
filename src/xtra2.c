@@ -490,7 +490,7 @@ concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
  */
 bool target_able(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	/* Monster must be alive */
 	if (!m_ptr->r_idx) return (FALSE);
@@ -532,7 +532,7 @@ bool target_okay(void)
 		/* Accept reasonable targets */
 		if (target_able(target_who))
 		{
-			monster_type *m_ptr = &m_list[target_who];
+			monster_type *m_ptr = &current_floor_ptr->m_list[target_who];
 
 			/* Acquire monster location */
 			target_row = m_ptr->fy;
@@ -592,8 +592,8 @@ static bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 	POSITION *y = (POSITION*)(v);
 	grid_type *ca_ptr = &current_floor_ptr->grid_array[y[a]][x[a]];
 	grid_type *cb_ptr = &current_floor_ptr->grid_array[y[b]][x[b]];
-	monster_type *ma_ptr = &m_list[ca_ptr->m_idx];
-	monster_type *mb_ptr = &m_list[cb_ptr->m_idx];
+	monster_type *ma_ptr = &current_floor_ptr->m_list[ca_ptr->m_idx];
+	monster_type *mb_ptr = &current_floor_ptr->m_list[cb_ptr->m_idx];
 	monster_race *ap_ra_ptr, *ap_rb_ptr;
 
 	/* The player grid */
@@ -746,7 +746,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 	/* Visible monsters */
 	if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Visible monsters */
 		if (m_ptr->ml) return (TRUE);
@@ -824,7 +824,7 @@ static void target_set_prepare(BIT_FLAGS mode)
 			/* Require target_able monsters for "TARGET_KILL" */
 			if ((mode & (TARGET_KILL)) && !target_able(g_ptr->m_idx)) continue;
 
-			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&m_list[g_ptr->m_idx])) continue;
+			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&current_floor_ptr->m_list[g_ptr->m_idx])) continue;
 
 			/* Save the location */
 			temp_x[temp_n] = x;
@@ -1012,9 +1012,9 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 
 
 	/* Actual monsters */
-	if (g_ptr->m_idx && m_list[g_ptr->m_idx].ml)
+	if (g_ptr->m_idx && current_floor_ptr->m_list[g_ptr->m_idx].ml)
 	{
-		monster_type *m_ptr = &m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 		GAME_TEXT m_name[MAX_NLEN];
 		bool recall = FALSE;
@@ -2155,7 +2155,7 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 	}
 	else if (p_ptr->riding && with_steed)
 	{
-		monster_type *m_ptr = &m_list[p_ptr->riding];
+		monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (MON_CONFUSED(m_ptr))
@@ -2190,7 +2190,7 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 		else
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_type *m_ptr = &m_list[p_ptr->riding];
+			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
@@ -2300,7 +2300,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	}
 	else if (p_ptr->riding)
 	{
-		monster_type *m_ptr = &m_list[p_ptr->riding];
+		monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (MON_CONFUSED(m_ptr))
@@ -2335,7 +2335,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 		else
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_type *m_ptr = &m_list[p_ptr->riding];
+			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))

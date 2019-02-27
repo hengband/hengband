@@ -1638,7 +1638,7 @@ static bool cast_ninja_spell(int spell)
 		if (m_idx == p_ptr->riding) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
 		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
-		m_ptr = &m_list[m_idx];
+		m_ptr = &current_floor_ptr->m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
 		path_n = project_path(path_g, MAX_RANGE, target_row, target_col, p_ptr->y, p_ptr->x, 0);

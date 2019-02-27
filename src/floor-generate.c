@@ -1164,11 +1164,11 @@ static void generate_gambling_arena(void)
 	for(i = 0; i < 4; i++)
 	{
 		place_monster_aux(0, p_ptr->y + 8 + (i/2)*4, p_ptr->x - 2 + (i%2)*4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
-		set_friendly(&m_list[current_floor_ptr->grid_array[p_ptr->y+8+(i/2)*4][p_ptr->x-2+(i%2)*4].m_idx]);
+		set_friendly(&current_floor_ptr->m_list[current_floor_ptr->grid_array[p_ptr->y+8+(i/2)*4][p_ptr->x-2+(i%2)*4].m_idx]);
 	}
 	for(i = 1; i < m_max; i++)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		if (!m_ptr->r_idx) continue;
 
@@ -1320,7 +1320,7 @@ void clear_cave(void)
 	/* Very simplified version of wipe_m_list() */
 	for (i = 1; i < max_r_idx; i++)
 		r_info[i].cur_num = 0;
-	(void)C_WIPE(m_list, m_max, monster_type);
+	(void)C_WIPE(current_floor_ptr->m_list, m_max, monster_type);
 	m_max = 1;
 	m_cnt = 0;
 	for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 0;
@@ -1424,7 +1424,7 @@ void generate_random_floor(void)
 			okay = FALSE;
 		}
 		/* Prevent monster over-flow */
-		else if (m_max >= max_m_idx)
+		else if (m_max >= current_floor_ptr->max_m_idx)
 		{
 			why = _("モンスターが多すぎる", "too many monsters");
 			okay = FALSE;

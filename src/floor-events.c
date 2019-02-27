@@ -103,7 +103,7 @@ MONSTER_NUMBER count_all_hostile_monsters(void)
 		{
 			MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
 
-			if (m_idx > 0 && is_hostile(&m_list[m_idx]))
+			if (m_idx > 0 && is_hostile(&current_floor_ptr->m_list[m_idx]))
 			{
 				++number_mon;
 			}

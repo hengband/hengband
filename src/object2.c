@@ -78,7 +78,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		monster_type *m_ptr;
 
 		/* Monster */
-		m_ptr = &m_list[j_ptr->held_m_idx];
+		m_ptr = &current_floor_ptr->m_list[j_ptr->held_m_idx];
 
 		/* Scan all objects in the grid */
 		for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -287,7 +287,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 		monster_type *m_ptr;
 
 		/* Acquire monster */
-		m_ptr = &m_list[o_ptr->held_m_idx];
+		m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 		/* Repair monster */
 		if (m_ptr->hold_o_idx == i1)
@@ -384,7 +384,7 @@ void compact_objects(int size)
 				monster_type *m_ptr;
 
 				/* Acquire monster */
-				m_ptr = &m_list[o_ptr->held_m_idx];
+				m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 				y = m_ptr->fy;
 				x = m_ptr->fx;
@@ -479,7 +479,7 @@ void wipe_o_list(void)
 			monster_type *m_ptr;
 
 			/* Monster */
-			m_ptr = &m_list[o_ptr->held_m_idx];
+			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Hack -- see above */
 			m_ptr->hold_o_idx = 0;
@@ -6464,7 +6464,7 @@ static void spell_damcalc(monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int
 */
 void spell_damcalc_by_spellnum(int spell_num, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
 {
-    monster_type *m_ptr = &m_list[m_idx];
+    monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
     HIT_POINT dam = monspell_damage((spell_num), m_idx, DAM_MAX);
     spell_damcalc(m_ptr, typ, dam, max);
 }
@@ -6577,7 +6577,7 @@ bool process_warning(POSITION xx, POSITION yy)
 
 			if (!g_ptr->m_idx) continue;
 
-			m_ptr = &m_list[g_ptr->m_idx];
+			m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 			if (MON_CSLEEP(m_ptr)) continue;
 			if (!is_hostile(m_ptr)) continue;

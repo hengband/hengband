@@ -371,7 +371,7 @@ int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 	/* Summoned by a monster */
 	if (who > 0)
 	{
-		monster_type *m_ptr = &m_list[who];
+		monster_type *m_ptr = &current_floor_ptr->m_list[who];
 		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 	}
 
@@ -408,7 +408,7 @@ void mitokohmon(void)
 	{
 		for (i = m_max - 1; i > 0; i--)
 		{
-			m_ptr = &m_list[i];
+			m_ptr = &current_floor_ptr->m_list[i];
 			if (!m_ptr->r_idx) continue;
 			if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
 			if (!los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;

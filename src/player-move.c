@@ -800,7 +800,7 @@ bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode)
 {
 	feature_type *f_ptr = &f_info[feature];
 
-	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
+	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
 
 	if (have_flag(f_ptr->flags, FF_PATTERN))
 	{
@@ -850,7 +850,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 			if (om_idx > 0) /* Monster on old spot (or p_ptr->riding) */
 			{
-				monster_type *om_ptr = &m_list[om_idx];
+				monster_type *om_ptr = &current_floor_ptr->m_list[om_idx];
 				om_ptr->fy = ny;
 				om_ptr->fx = nx;
 				update_monster(om_idx, TRUE);
@@ -858,7 +858,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 			if (nm_idx > 0) /* Monster on new spot */
 			{
-				monster_type *nm_ptr = &m_list[nm_idx];
+				monster_type *nm_ptr = &current_floor_ptr->m_list[nm_idx];
 				nm_ptr->fy = oy;
 				nm_ptr->fx = ox;
 				update_monster(nm_idx, TRUE);
@@ -1113,7 +1113,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 	monster_type *m_ptr;
 
-	monster_type *riding_m_ptr = &m_list[p_ptr->riding];
+	monster_type *riding_m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 	monster_race *riding_r_ptr = &r_info[p_ptr->riding ? riding_m_ptr->r_idx : 0]; /* Paranoia */
 
 	GAME_TEXT m_name[MAX_NLEN];
@@ -1213,7 +1213,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 		p_can_enter = FALSE;
 	}
 
-	m_ptr = &m_list[g_ptr->m_idx];
+	m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 	if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 	if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
@@ -1792,7 +1792,7 @@ static bool run_test(void)
 		/* Visible monsters abort running */
 		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &m_list[g_ptr->m_idx];
+			monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return (TRUE);
@@ -2182,7 +2182,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 		/* Visible monsters abort running */
 		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &m_list[g_ptr->m_idx];
+			monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return (0);

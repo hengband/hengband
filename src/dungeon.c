@@ -902,7 +902,7 @@ static void regen_monsters(void)
 	for (i = 1; i < m_max; i++)
 	{
 		/* Check the i'th monster */
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 
@@ -1675,27 +1675,27 @@ static void process_world_aux_hp_and_sp(void)
 	if (p_ptr->riding)
 	{
 		HIT_POINT damage;
-		if ((r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !p_ptr->immune_fire)
+		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !p_ptr->immune_fire)
 		{
-			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
+			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
 			if (prace_is_(RACE_ENT)) damage += damage / 3;
 			if (p_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 			msg_print(_("熱い！", "It's hot!"));
 			take_hit(DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
 		}
-		if ((r_info[m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !p_ptr->immune_elec)
+		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !p_ptr->immune_elec)
 		{
-			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
+			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
 			if (prace_is_(RACE_ANDROID)) damage += damage / 3;
 			if (p_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
 			msg_print(_("痛い！", "It hurts!"));
 			take_hit(DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
 		}
-		if ((r_info[m_list[p_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !p_ptr->immune_cold)
+		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !p_ptr->immune_cold)
 		{
-			damage = r_info[m_list[p_ptr->riding].r_idx].level / 2;
+			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
 			if (p_ptr->resist_cold) damage = damage / 3;
 			if (IS_OPPOSE_COLD()) damage = damage / 3;
 			msg_print(_("冷たい！", "It's cold!"));
@@ -2527,7 +2527,7 @@ static void process_world_aux_mutation(void)
 
 		for (monster = 0; monster < m_max; monster++)
 		{
-			monster_type *m_ptr = &m_list[monster];
+			monster_type *m_ptr = &current_floor_ptr->m_list[monster];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Paranoia -- Skip dead monsters */
@@ -3149,7 +3149,7 @@ static void process_world_aux_movement(void)
  */
 static int get_monster_crowd_number(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	POSITION my = m_ptr->fy;
 	POSITION mx = m_ptr->fx;
 	int i;
@@ -3193,7 +3193,7 @@ static byte get_dungeon_feeling(void)
 	/* Examine each monster */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr;
 		int delta = 0;
 
@@ -3430,7 +3430,7 @@ static void process_world(void)
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *wm_ptr;
 
-			wm_ptr = &m_list[win_m_idx];
+			wm_ptr = &current_floor_ptr->m_list[win_m_idx];
 
 			monster_desc(m_name, wm_ptr, 0);
 			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
@@ -4746,7 +4746,7 @@ static void process_player(void)
 	{
 		for(i = 1; i < m_max; i++)
 		{
-			monster_type *m_ptr = &m_list[i];
+			monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 			if (!m_ptr->r_idx) continue;
 
@@ -4818,7 +4818,7 @@ static void process_player(void)
 				if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, &m_list[current_floor_ptr->grid_array[y][x].m_idx], 0);
+					monster_desc(m_name, &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx], 0);
 					msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 					success = TRUE;
 				}
@@ -4855,7 +4855,7 @@ static void process_player(void)
 
 	if (p_ptr->riding && !p_ptr->confused && !p_ptr->blind)
 	{
-		monster_type *m_ptr = &m_list[p_ptr->riding];
+		monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (MON_CSLEEP(m_ptr))
@@ -5115,7 +5115,7 @@ static void process_player(void)
 					monster_race *r_ptr;
 
 					/* Access monster */
-					m_ptr = &m_list[i];
+					m_ptr = &current_floor_ptr->m_list[i];
 
 					/* Skip dead monsters */
 					if (!m_ptr->r_idx) continue;
@@ -5151,7 +5151,7 @@ static void process_player(void)
 					monster_type *m_ptr;
 
 					/* Access monster */
-					m_ptr = &m_list[i];
+					m_ptr = &current_floor_ptr->m_list[i];
 
 					/* Skip dead monsters */
 					if (!m_ptr->r_idx) continue;
@@ -5439,7 +5439,7 @@ static void dungeon(bool load_game)
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((m_cnt + 32 > max_m_idx) && !p_ptr->inside_battle) compact_monsters(64);
+		if ((m_cnt + 32 > current_floor_ptr->max_m_idx) && !p_ptr->inside_battle) compact_monsters(64);
 
 		/* Hack -- Compress the monster list occasionally */
 		if ((m_cnt + 32 < m_max) && !p_ptr->inside_battle) compact_monsters(0);
@@ -5942,7 +5942,7 @@ void play_game(bool new_game)
 			p_ptr->riding = 0;
 			for (i = m_max; i > 0; i--)
 			{
-				if (player_bold(m_list[i].fy, m_list[i].fx))
+				if (player_bold(current_floor_ptr->m_list[i].fy, current_floor_ptr->m_list[i].fx))
 				{
 					p_ptr->riding = i;
 					break;
@@ -6103,7 +6103,7 @@ void play_game(bool new_game)
 		monster_race *r_ptr = &r_info[pet_r_idx];
 		place_monster_aux(0, p_ptr->y, p_ptr->x - 1, pet_r_idx,
 				  (PM_FORCE_PET | PM_NO_KAGE));
-		m_ptr = &m_list[hack_m_idx_ii];
+		m_ptr = &current_floor_ptr->m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;
 		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;
 		m_ptr->max_maxhp = m_ptr->maxhp;

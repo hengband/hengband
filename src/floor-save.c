@@ -367,7 +367,7 @@ static void preserve_pet(void)
 
 	if (p_ptr->riding)
 	{
-		monster_type *m_ptr = &m_list[p_ptr->riding];
+		monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 
 		/* Pet of other pet don't follow. */
 		if (m_ptr->parent_m_idx)
@@ -394,7 +394,7 @@ static void preserve_pet(void)
 	{
 		for (i = m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--)
 		{
-			monster_type *m_ptr = &m_list[i];
+			monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 			if (!m_ptr->r_idx) continue;
 			if (!is_pet(m_ptr)) continue;
@@ -430,7 +430,7 @@ static void preserve_pet(void)
 				}
 			}
 
-			(void)COPY(&party_mon[num], &m_list[i], monster_type);
+			(void)COPY(&party_mon[num], &current_floor_ptr->m_list[i], monster_type);
 
 			num++;
 
@@ -443,7 +443,7 @@ static void preserve_pet(void)
 	{
 		for (i = m_max - 1; i >=1; i--)
 		{
-			monster_type *m_ptr = &m_list[i];
+			monster_type *m_ptr = &current_floor_ptr->m_list[i];
 			GAME_TEXT m_name[MAX_NLEN];
 
 			if (!m_ptr->r_idx) continue;
@@ -460,10 +460,10 @@ static void preserve_pet(void)
 	/* Pet of other pet may disappear. */
 	for (i = m_max - 1; i >=1; i--)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Are there its parent? */
-		if (m_ptr->parent_m_idx && !m_list[m_ptr->parent_m_idx].r_idx)
+		if (m_ptr->parent_m_idx && !current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx)
 		{
 			/* Its parent have gone, it also goes away. */
 
@@ -549,7 +549,7 @@ static void place_pet(void)
 
 		if (m_idx)
 		{
-			monster_type *m_ptr = &m_list[m_idx];
+			monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 			monster_race *r_ptr;
 
 			current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
@@ -634,7 +634,7 @@ static void update_unique_artifact(s16b cur_floor_id)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_race *r_ptr;
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -717,7 +717,7 @@ static void get_out_monster(void)
 
 		/*** It's a good place ***/
 
-		m_ptr = &m_list[m_idx];
+		m_ptr = &current_floor_ptr->m_list[m_idx];
 
 		/* Update the old location */
 		current_floor_ptr->grid_array[oy][ox].m_idx = 0;
@@ -891,7 +891,7 @@ void leave_floor(void)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_race *r_ptr;
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Skip dead monsters */
 		if (!m_ptr->r_idx) continue;
@@ -1201,7 +1201,7 @@ void change_floor(void)
 			for (i = 1; i < m_max; i++)
 			{
 				monster_race *r_ptr;
-				monster_type *m_ptr = &m_list[i];
+				monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 				/* Skip dead monsters */
 				if (!m_ptr->r_idx) continue;

@@ -2296,7 +2296,7 @@ bool mutation_power_aux(int power)
 					break;
 				}
 
-				m_ptr = &m_list[g_ptr->m_idx];
+				m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 				r_ptr = &r_info[m_ptr->r_idx];
 
 				if ((r_ptr->flags3 & RF3_EVIL) &&

@@ -482,13 +482,9 @@ FLOOR_IDX max_floor_id;
 u32b saved_floor_file_sign;
 
 
-/*
- * The array of dungeon monsters [max_m_idx]
- */
-monster_type *m_list;
 
 /*
- * The array to process dungeon monsters [max_m_idx]
+ * The array to process dungeon monsters [current_floor_ptr->max_m_idx]
  */
 s16b *mproc_list[MAX_MTIMED];
 s16b mproc_max[MAX_MTIMED]; /* Number of monsters to be processed */
@@ -765,11 +761,6 @@ EGO_IDX max_e_idx;
  * Maximum number of dungeon in e_info.txt
  */
 DUNGEON_IDX max_d_idx;
-
-/*
- * Maximum number of monsters in the level
- */
-MONSTER_IDX max_m_idx;
 
 /*
  * Maximum size of the wilderness

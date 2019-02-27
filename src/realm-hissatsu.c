@@ -288,7 +288,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				POSITION ty = y, tx = x;
 				POSITION oy = y, ox = x;
 				MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
-				monster_type *m_ptr = &m_list[m_idx];
+				monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 				GAME_TEXT m_name[MAX_NLEN];
 
 				monster_desc(m_name, m_ptr, 0);
@@ -526,7 +526,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				y = p_ptr->y + ddy_ddd[dir];
 				x = p_ptr->x + ddx_ddd[dir];
 				g_ptr = &current_floor_ptr->grid_array[y][x];
-				m_ptr = &m_list[g_ptr->m_idx];
+				m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
 				/* Hack -- attack monsters */
 				if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
@@ -661,7 +661,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				ny = y + ddy[dir];
 				nx = x + ddx[dir];
 				m_idx = g_ptr->m_idx;
-				m_ptr = &m_list[m_idx];
+				m_ptr = &current_floor_ptr->m_list[m_idx];
 
 				/* Monster cannot move back? */
 				if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx], 0))

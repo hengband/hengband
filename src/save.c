@@ -1134,7 +1134,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/* Dump the monsters */
 	for (i = 1; i < m_max; i++)
 	{
-		monster_type *m_ptr = &m_list[i];
+		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Dump it */
 		wr_monster(m_ptr);
