@@ -392,7 +392,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -474,7 +474,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 
 	object_type *o_ptr;
 
-	o_ptr = &o_list[o_idx];
+	o_ptr = &current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
 	object_desc(old_name, o_ptr, OD_NAME_ONLY);
@@ -575,7 +575,7 @@ void carry(bool pickup)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 #ifdef ALLOW_EASY_SENSE /* TNB */
 
@@ -1802,7 +1802,7 @@ static bool run_test(void)
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &o_list[this_o_idx];
+			o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;

@@ -333,7 +333,7 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 	/* Get the item (on the floor) */
 	else
 	{
-		o_ptr = &o_list[0 - item];
+		o_ptr = &current_floor_ptr->o_list[0 - item];
 	}
 
 	/* Mega-Hack -- refuse to aim a pile from the ground */

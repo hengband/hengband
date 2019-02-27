@@ -2835,7 +2835,7 @@ static errr rd_dungeon_old(void)
 	rd_u16b(&limit);
 
 	/* Verify maximum */
-	if (limit > max_o_idx)
+	if (limit > current_floor_ptr->max_o_idx)
 	{
 		note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
 		return (151);
@@ -2860,7 +2860,7 @@ static errr rd_dungeon_old(void)
 
 
 		/* Acquire place */
-		o_ptr = &o_list[o_idx];
+		o_ptr = &current_floor_ptr->o_list[o_idx];
 
 		/* Read the item */
 		rd_item(o_ptr);
@@ -3164,7 +3164,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Verify maximum */
-	if (limit > max_o_idx) return 151;
+	if (limit > current_floor_ptr->max_o_idx) return 151;
 
 
 	/* Read the dungeon items */
@@ -3180,7 +3180,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		if (i != o_idx) return 152;
 
 		/* Acquire place */
-		o_ptr = &o_list[o_idx];
+		o_ptr = &current_floor_ptr->o_list[o_idx];
 
 		/* Read the item */
 		rd_item(o_ptr);

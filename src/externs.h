@@ -340,7 +340,6 @@ extern FEAT_IDX max_f_idx;
 extern ARTIFACT_IDX max_a_idx;
 extern EGO_IDX max_e_idx;
 extern DUNGEON_IDX max_d_idx;
-extern OBJECT_IDX max_o_idx;
 extern MONSTER_IDX max_m_idx;
 extern POSITION max_wild_x;
 extern POSITION max_wild_y;

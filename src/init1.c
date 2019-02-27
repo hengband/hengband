@@ -3907,7 +3907,7 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 	OBJECT_IDX o_idx = o_pop();
 
 	/* Access new object */
-	o_ptr = &o_list[o_idx];
+	o_ptr = &current_floor_ptr->o_list[o_idx];
 
 	/* Structure copy */
 	object_copy(o_ptr, j_ptr);
@@ -4377,7 +4377,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Maximum o_idx */
 			else if (zz[0][0] == 'O')
 			{
-				max_o_idx = (IDX)atoi(zz[1]);
+				current_floor_ptr->max_o_idx = (IDX)atoi(zz[1]);
 			}
 
 			/* Maximum m_idx */

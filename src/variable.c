@@ -483,11 +483,6 @@ u32b saved_floor_file_sign;
 
 
 /*
- * The array of dungeon items [max_o_idx]
- */
-object_type *o_list;
-
-/*
  * The array of dungeon monsters [max_m_idx]
  */
 monster_type *m_list;
@@ -770,11 +765,6 @@ EGO_IDX max_e_idx;
  * Maximum number of dungeon in e_info.txt
  */
 DUNGEON_IDX max_d_idx;
-
-/*
- * Maximum number of objects in the level
- */
-OBJECT_IDX max_o_idx;
 
 /*
  * Maximum number of monsters in the level

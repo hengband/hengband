@@ -441,7 +441,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	inven_item_increase(inv, (0 - o_ptr->number));
 	inven_item_optimize(inv);
 	o_idx = drop_near(&forge, 0, creature_ptr->y, creature_ptr->x);
-	o_ptr = &o_list[o_idx];
+	o_ptr = &current_floor_ptr->o_list[o_idx];
 
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);

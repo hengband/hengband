@@ -27,7 +27,7 @@ void wiz_lite(bool ninja)
 	/* Memorize objects */
 	for (i = 1; i < o_max; i++)
 	{
-		object_type *o_ptr = &o_list[i];
+		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		/* Skip dead objects */
 		if (!o_ptr->k_idx) continue;
@@ -144,7 +144,7 @@ void wiz_dark(void)
 	/* Forget all objects */
 	for (i = 1; i < o_max; i++)
 	{
-		object_type *o_ptr = &o_list[i];
+		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		/* Skip dead objects */
 		if (!o_ptr->k_idx) continue;

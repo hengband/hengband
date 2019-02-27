@@ -1375,7 +1375,7 @@ bool cave_valid_bold(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -1942,7 +1942,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -2230,7 +2230,7 @@ void note_spot(POSITION y, POSITION x)
 	/* Hack -- memorize objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		object_type *o_ptr = &o_list[this_o_idx];
+		object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;

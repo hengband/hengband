@@ -294,7 +294,7 @@ void build_streamer(IDX feat, int chance)
 				/* Scan all objects in the grid */
 				for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
-					object_type *o_ptr = &o_list[this_o_idx];
+					object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 					/* Acquire next object */
 					next_o_idx = o_ptr->next_o_idx;

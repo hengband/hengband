@@ -2953,7 +2953,7 @@ static void process_world_aux_recharge(void)
 	/* Process objects on floor */
 	for (i = 1; i < o_max; i++)
 	{
-		object_type *o_ptr = &o_list[i];
+		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		/* Skip dead objects */
 		if (!o_ptr->k_idx) continue;
@@ -3242,7 +3242,7 @@ static byte get_dungeon_feeling(void)
 	/* Examine each unidentified object */
 	for (i = 1; i < o_max; i++)
 	{
-		object_type *o_ptr = &o_list[i];
+		object_type *o_ptr = &current_floor_ptr->o_list[i];
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 		int delta = 0;
 
@@ -5446,7 +5446,7 @@ static void dungeon(bool load_game)
 
 
 		/* Hack -- Compact the object list occasionally */
-		if (o_cnt + 32 > max_o_idx) compact_objects(64);
+		if (o_cnt + 32 > current_floor_ptr->max_o_idx) compact_objects(64);
 
 		/* Hack -- Compress the object list occasionally */
 		if (o_cnt + 32 < o_max) compact_objects(0);

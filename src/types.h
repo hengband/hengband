@@ -1883,4 +1883,9 @@ typedef struct {
 	POSITION width;			/* Current dungeon width */
 	POSITION height;		/* Current dungeon height */
 	MONSTER_NUMBER num_repro; /*!< Current reproducer count */
+
+	object_type *o_list; /*!< The array of dungeon items [current_floor_ptr->max_o_idx] */
+	OBJECT_IDX max_o_idx; /*!< Maximum number of objects in the level */
+
 } floor_type;
+

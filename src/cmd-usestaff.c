@@ -288,7 +288,7 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 	/* Get the item (on the floor) */
 	else
 	{
-		o_ptr = &o_list[0 - item];
+		o_ptr = &current_floor_ptr->o_list[0 - item];
 	}
 
 

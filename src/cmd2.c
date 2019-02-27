@@ -489,7 +489,7 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 	{
 		object_type *o_ptr;
 
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Skip unknown chests XXX XXX */
@@ -521,7 +521,7 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	int i, j;
 	bool flag = TRUE;
 	bool more = FALSE;
-	object_type *o_ptr = &o_list[o_idx];
+	object_type *o_ptr = &current_floor_ptr->o_list[o_idx];
 
 	take_turn(p_ptr, 100);
 
@@ -664,7 +664,7 @@ static int count_chests(POSITION *y, POSITION *x, bool trapped)
 		if ((o_idx = chest_check(yy, xx, FALSE)) == 0) continue;
 
 		/* Grab the object */
-		o_ptr = &o_list[o_idx];
+		o_ptr = &current_floor_ptr->o_list[o_idx];
 
 		/* Already open */
 		if (o_ptr->pval == 0) continue;
@@ -1368,7 +1368,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
 	bool more = FALSE;
-	object_type *o_ptr = &o_list[o_idx];
+	object_type *o_ptr = &current_floor_ptr->o_list[o_idx];
 
 	take_turn(p_ptr, 100);
 

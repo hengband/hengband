@@ -370,7 +370,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 	}
 	else
 	{
-		o_ptr = &o_list[0 - item];
+		o_ptr = &current_floor_ptr->o_list[0 - item];
 	}
 
 	/* Sniper - Cannot shot a single arrow twice */
@@ -839,7 +839,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 				return;
 			}
 
-			o_ptr = &o_list[o_idx];
+			o_ptr = &current_floor_ptr->o_list[o_idx];
 			object_copy(o_ptr, q_ptr);
 
 			/* Forget mark */

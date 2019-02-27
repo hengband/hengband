@@ -70,7 +70,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	OBJECT_IDX prev_o_idx = 0;
 
 	/* Object */
-	j_ptr = &o_list[o_idx];
+	j_ptr = &current_floor_ptr->o_list[o_idx];
 
 	/* Monster */
 	if (j_ptr->held_m_idx)
@@ -84,7 +84,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &o_list[this_o_idx];
+			o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
@@ -104,7 +104,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 					object_type *k_ptr;
 
 					/* Previous object */
-					k_ptr = &o_list[prev_o_idx];
+					k_ptr = &current_floor_ptr->o_list[prev_o_idx];
 
 					/* Remove from list */
 					k_ptr->next_o_idx = next_o_idx;
@@ -135,7 +135,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &o_list[this_o_idx];
+			o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
@@ -155,7 +155,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 					object_type *k_ptr;
 
 					/* Previous object */
-					k_ptr = &o_list[prev_o_idx];
+					k_ptr = &current_floor_ptr->o_list[prev_o_idx];
 
 					/* Remove from list */
 					k_ptr->next_o_idx = next_o_idx;
@@ -189,7 +189,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	excise_object_idx(o_idx);
 
 	/* Object */
-	j_ptr = &o_list[o_idx];
+	j_ptr = &current_floor_ptr->o_list[o_idx];
 
 	/* Dungeon floor */
 	if (!(j_ptr->held_m_idx))
@@ -230,7 +230,7 @@ void delete_object(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -267,7 +267,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	/* Repair objects */
 	for (i = 1; i < o_max; i++)
 	{
-		o_ptr = &o_list[i];
+		o_ptr = &current_floor_ptr->o_list[i];
 
 		/* Skip "dead" objects */
 		if (!o_ptr->k_idx) continue;
@@ -279,7 +279,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 			o_ptr->next_o_idx = i2;
 		}
 	}
-	o_ptr = &o_list[i1];
+	o_ptr = &current_floor_ptr->o_list[i1];
 
 	/* Monster */
 	if (o_ptr->held_m_idx)
@@ -318,7 +318,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	}
 
 	/* Structure copy */
-	o_list[i2] = o_list[i1];
+	current_floor_ptr->o_list[i2] = current_floor_ptr->o_list[i1];
 
 	/* Wipe the hole */
 	object_wipe(o_ptr);
@@ -370,7 +370,7 @@ void compact_objects(int size)
 		/* Examine the objects */
 		for (i = 1; i < o_max; i++)
 		{
-			o_ptr = &o_list[i];
+			o_ptr = &current_floor_ptr->o_list[i];
 
 			/* Skip dead objects */
 			if (!o_ptr->k_idx) continue;
@@ -424,7 +424,7 @@ void compact_objects(int size)
 	/* Excise dead objects (backwards!) */
 	for (i = o_max - 1; i >= 1; i--)
 	{
-		o_ptr = &o_list[i];
+		o_ptr = &current_floor_ptr->o_list[i];
 
 		/* Skip real objects */
 		if (o_ptr->k_idx) continue;
@@ -457,7 +457,7 @@ void wipe_o_list(void)
 	/* Delete the existing objects */
 	for (i = 1; i < o_max; i++)
 	{
-		object_type *o_ptr = &o_list[i];
+		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		/* Skip dead objects */
 		if (!o_ptr->k_idx) continue;
@@ -524,7 +524,7 @@ OBJECT_IDX o_pop(void)
 	OBJECT_IDX i;
 
 	/* Initial allocation */
-	if (o_max < max_o_idx)
+	if (o_max < current_floor_ptr->max_o_idx)
 	{
 		/* Get next space */
 		i = o_max;
@@ -544,7 +544,7 @@ OBJECT_IDX o_pop(void)
 	for (i = 1; i < o_max; i++)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[i];
+		o_ptr = &current_floor_ptr->o_list[i];
 
 		/* Skip live objects */
 		if (o_ptr->k_idx) continue;
@@ -4757,7 +4757,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	if (o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[o_idx];
+		o_ptr = &current_floor_ptr->o_list[o_idx];
 
 		/* Structure Copy */
 		object_copy(o_ptr, q_ptr);
@@ -4870,7 +4870,7 @@ void place_gold(POSITION y, POSITION x)
 	if (o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[o_idx];
+		o_ptr = &current_floor_ptr->o_list[o_idx];
 
 		/* Copy the object */
 		object_copy(o_ptr, q_ptr);
@@ -5004,7 +5004,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
-				o_ptr = &o_list[this_o_idx];
+				o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 				/* Acquire next object */
 				next_o_idx = o_ptr->next_o_idx;
@@ -5155,7 +5155,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -5200,10 +5200,10 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	if (!done)
 	{
 		/* Structure copy */
-		object_copy(&o_list[o_idx], j_ptr);
+		object_copy(&current_floor_ptr->o_list[o_idx], j_ptr);
 
 		/* Access new object */
-		j_ptr = &o_list[o_idx];
+		j_ptr = &current_floor_ptr->o_list[o_idx];
 
 		/* Locate */
 		j_ptr->iy = by;
@@ -5426,7 +5426,7 @@ void inven_item_optimize(INVENTORY_IDX item)
  */
 void floor_item_charges(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &o_list[item];
+	object_type *o_ptr = &current_floor_ptr->o_list[item];
 
 	/* Require staff/wand */
 	if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND)) return;
@@ -5467,7 +5467,7 @@ void floor_item_charges(INVENTORY_IDX item)
  */
 void floor_item_describe(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &o_list[item];
+	object_type *o_ptr = &current_floor_ptr->o_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
@@ -5498,7 +5498,7 @@ void floor_item_describe(INVENTORY_IDX item)
  */
 void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
-	object_type *o_ptr = &o_list[item];
+	object_type *o_ptr = &current_floor_ptr->o_list[item];
 
 	/* Apply */
 	num += o_ptr->number;
@@ -5523,7 +5523,7 @@ void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
  */
 void floor_item_optimize(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &o_list[item];
+	object_type *o_ptr = &current_floor_ptr->o_list[item];
 
 	/* Paranoia -- be sure it exists */
 	if (!o_ptr->k_idx) return;

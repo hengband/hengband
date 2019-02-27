@@ -1221,7 +1221,7 @@ static errr init_other(void)
 	/*** Prepare the "dungeon" information ***/
 
 	/* Allocate and Wipe the object list */
-	C_MAKE(o_list, max_o_idx, object_type);
+	C_MAKE(current_floor_ptr->o_list, current_floor_ptr->max_o_idx, object_type);
 
 	/* Allocate and Wipe the monster list */
 	C_MAKE(m_list, max_m_idx, monster_type);

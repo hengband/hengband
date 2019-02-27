@@ -1167,7 +1167,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 
 				if (target_ptr->hold_o_idx)
 				{
-					object_type *q_ptr = &o_list[target_ptr->hold_o_idx];
+					object_type *q_ptr = &current_floor_ptr->o_list[target_ptr->hold_o_idx];
 					GAME_TEXT o_name[MAX_NLEN];
 
 					object_desc(o_name, q_ptr, OD_NAME_ONLY);
@@ -2187,7 +2187,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						if (o_idx)
 						{
 							object_type *j_ptr;
-							j_ptr = &o_list[o_idx];
+							j_ptr = &current_floor_ptr->o_list[o_idx];
 							object_copy(j_ptr, o_ptr);
 
 							/* Modify number */

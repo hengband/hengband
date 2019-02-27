@@ -1659,7 +1659,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 		while (!g_ptr->o_idx);
 	}
 
-	o_ptr = &o_list[g_ptr->o_idx];
+	o_ptr = &current_floor_ptr->o_list[g_ptr->o_idx];
 
 	if (o_ptr->weight > wgt)
 	{
@@ -3976,7 +3976,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 		{
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
-				object_type *o_ptr = &o_list[this_o_idx];
+				object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 				/* Acquire next object */
 				next_o_idx = o_ptr->next_o_idx;
@@ -3990,7 +3990,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				/* Acquire next object */
-				next_o_idx = o_list[this_o_idx].next_o_idx;
+				next_o_idx = current_floor_ptr->o_list[this_o_idx].next_o_idx;
 				delete_object_idx(this_o_idx);
 			}
 		}

@@ -756,7 +756,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -1112,7 +1112,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			GAME_TEXT o_name[MAX_NLEN];
 
 			object_type *o_ptr;
-			o_ptr = &o_list[this_o_idx];
+			o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
@@ -1160,7 +1160,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_type *o_ptr;
-				o_ptr = &o_list[floor_list[0]];
+				o_ptr = &current_floor_ptr->o_list[floor_list[0]];
 
 				object_desc(o_name, o_ptr, 0);
 
@@ -1236,18 +1236,18 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				o_idx = g_ptr->o_idx;
  
 				/* Only rotate a pile of two or more objects. */
-				if (!(o_idx && o_list[o_idx].next_o_idx)) continue;
+				if (!(o_idx && current_floor_ptr->o_list[o_idx].next_o_idx)) continue;
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
-				while (o_list[i].next_o_idx)
-					i = o_list[i].next_o_idx;
+				while (current_floor_ptr->o_list[i].next_o_idx)
+					i = current_floor_ptr->o_list[i].next_o_idx;
 
 				/* Add after the last object. */
-				o_list[i].next_o_idx = o_idx;
+				current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 				/* Loop and re-display the list */
 			}
@@ -1260,7 +1260,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &o_list[this_o_idx];
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 
 		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;

@@ -277,7 +277,7 @@ void do_cmd_zap_rod_aux(INVENTORY_IDX item)
 	/* Get the item (on the floor) */
 	else
 	{
-		o_ptr = &o_list[0 - item];
+		o_ptr = &current_floor_ptr->o_list[0 - item];
 	}
 
 
