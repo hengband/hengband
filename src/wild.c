@@ -464,7 +464,7 @@ void wilderness_gen(void)
 
 	/* Init the wilderness */
 
-	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
+	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	x = p_ptr->wilderness_x;
 	y = p_ptr->wilderness_y;
@@ -703,11 +703,11 @@ void wilderness_gen_small(void)
 	}
 
 	/* Init the wilderness */
-	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
+	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	/* Fill the map */
-	for (i = 0; i < max_wild_x; i++)
-	for (j = 0; j < max_wild_y; j++)
+	for (i = 0; i < current_world_ptr->max_wild_x; i++)
+	for (j = 0; j < current_world_ptr->max_wild_y; j++)
 	{
 		if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN))
 		{
@@ -725,8 +725,8 @@ void wilderness_gen_small(void)
 		current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
 	}
 
-	current_floor_ptr->height = (s16b) max_wild_y;
-	current_floor_ptr->width = (s16b) max_wild_x;
+	current_floor_ptr->height = (s16b) current_world_ptr->max_wild_y;
+	current_floor_ptr->width = (s16b) current_world_ptr->max_wild_x;
 
 	if (current_floor_ptr->height > MAX_HGT) current_floor_ptr->height = MAX_HGT;
 	if (current_floor_ptr->width > MAX_WID) current_floor_ptr->width = MAX_WID;
@@ -872,9 +872,9 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 				p_ptr->wilderness_x = atoi(zz[1]);
 				
 				if ((p_ptr->wilderness_x < 1) ||
-				    (p_ptr->wilderness_x > max_wild_x) ||
+				    (p_ptr->wilderness_x > current_world_ptr->max_wild_x) ||
 				    (p_ptr->wilderness_y < 1) ||
-				    (p_ptr->wilderness_y > max_wild_y))
+				    (p_ptr->wilderness_y > current_world_ptr->max_wild_y))
 				{
 					return (PARSE_ERROR_OUT_OF_BOUNDS);
 				}
@@ -917,9 +917,9 @@ void seed_wilderness(void)
 	POSITION x, y;
 
 	/* Init wilderness seeds */
-	for (x = 0; x < max_wild_x; x++)
+	for (x = 0; x < current_world_ptr->max_wild_x; x++)
 	{
-		for (y = 0; y < max_wild_y; y++)
+		for (y = 0; y < current_world_ptr->max_wild_y; y++)
 		{
 			wilderness[y][x].seed = randint0(0x10000000);
 			wilderness[y][x].entrance = 0;
@@ -944,12 +944,12 @@ errr init_wilderness(void)
 	int i;
 
 	/* Allocate the wilderness (two-dimension array) */
-	C_MAKE(wilderness, max_wild_y, wilderness_type_ptr);
-	C_MAKE(wilderness[0], max_wild_x * max_wild_y, wilderness_type);
+	C_MAKE(wilderness, current_world_ptr->max_wild_y, wilderness_type_ptr);
+	C_MAKE(wilderness[0], current_world_ptr->max_wild_x * current_world_ptr->max_wild_y, wilderness_type);
 
 	/* Init the other pointers */
-	for (i = 1; i < max_wild_y; i++)
-		wilderness[i] = wilderness[0] + i * max_wild_x;
+	for (i = 1; i < current_world_ptr->max_wild_y; i++)
+		wilderness[i] = wilderness[0] + i * current_world_ptr->max_wild_x;
 
 	generate_encounter = FALSE;
 

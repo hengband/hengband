@@ -8083,7 +8083,7 @@ static void do_cmd_knowledge_home(void)
 	GAME_TEXT o_name[MAX_NLEN];
 	concptr		paren = ")";
 
-	process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x);
+	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);

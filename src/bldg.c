@@ -3699,9 +3699,9 @@ bool tele_town(void)
 		break;
 	}
 
-	for (y = 0; y < max_wild_y; y++)
+	for (y = 0; y < current_world_ptr->max_wild_y; y++)
 	{
-		for (x = 0; x < max_wild_x; x++)
+		for (x = 0; x < current_world_ptr->max_wild_x; x++)
 		{
 			if(wilderness[y][x].town == (i-'a'+1))
 			{

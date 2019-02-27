@@ -3707,7 +3707,7 @@ static errr rd_savefile_new_aux(void)
 		rd_s32b(&wild_y_size);
 
 		/* Incompatible save files */
-		if ((wild_x_size > max_wild_x) || (wild_y_size > max_wild_y))
+		if ((wild_x_size > current_world_ptr->max_wild_x) || (wild_y_size > current_world_ptr->max_wild_y))
 		{
 			note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
 			return (23);

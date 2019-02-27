@@ -4391,10 +4391,10 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			{
 				/* Maximum wild_x_size */
 				if (zz[0][1] == 'X')
-					max_wild_x = atoi(zz[1]);
+					current_world_ptr->max_wild_x = atoi(zz[1]);
 				/* Maximum wild_y_size */
 				if (zz[0][1] == 'Y')
-					max_wild_y = atoi(zz[1]);
+					current_world_ptr->max_wild_y = atoi(zz[1]);
 			}
 
 			return (0);

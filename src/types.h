@@ -1895,3 +1895,10 @@ typedef struct {
 
 } floor_type;
 
+typedef struct {
+	/*
+	 * Maximum size of the wilderness
+	 */
+	POSITION max_wild_x;
+	POSITION max_wild_y;
+} world_type;

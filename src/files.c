@@ -4896,7 +4896,7 @@ static void dump_aux_home_museum(FILE *fff)
 	store_type  *st_ptr;
 
 	/* Do we need it?? */
-	/* process_dungeon_file("w_info.txt", 0, 0, max_wild_y, max_wild_x); */
+	/* process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x); */
 
 	/* Print the home */
 	st_ptr = &town_info[1].store[STORE_HOME];

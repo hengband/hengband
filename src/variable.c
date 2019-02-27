@@ -461,8 +461,6 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 floor_type floor;
 floor_type *current_floor_ptr = &floor;
 
-
-
 /*
  * The array of saved floors
  */
@@ -473,6 +471,10 @@ saved_floor_type saved_floors[MAX_SAVED_FLOORS];
  * Number of floor_id used from birth
  */
 FLOOR_IDX max_floor_id;
+
+
+world_type world;
+world_type *current_world_ptr = &world;
 
 
 /*
@@ -754,11 +756,7 @@ EGO_IDX max_e_idx;
  */
 DUNGEON_IDX max_d_idx;
 
-/*
- * Maximum size of the wilderness
- */
-POSITION max_wild_x;
-POSITION max_wild_y;
+
 
 /*
  * Quest info

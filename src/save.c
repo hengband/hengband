@@ -1411,13 +1411,13 @@ static bool wr_savefile_new(void)
 	wr_byte(p_ptr->wild_mode);
 	wr_byte(ambush_flag);
 
-	wr_s32b(max_wild_x);
-	wr_s32b(max_wild_y);
+	wr_s32b(current_world_ptr->max_wild_x);
+	wr_s32b(current_world_ptr->max_wild_y);
 
 	/* Dump the wilderness seeds */
-	for (i = 0; i < max_wild_x; i++)
+	for (i = 0; i < current_world_ptr->max_wild_x; i++)
 	{
-		for (j = 0; j < max_wild_y; j++)
+		for (j = 0; j < current_world_ptr->max_wild_y; j++)
 		{
 			wr_u32b(wilderness[j][i].seed);
 		}
