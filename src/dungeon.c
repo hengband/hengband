@@ -3598,7 +3598,7 @@ static void process_world(void)
 		/* Hack -- Process the counters of monsters if needed */
 		for (i = 0; i < MAX_MTIMED; i++)
 		{
-			if (mproc_max[i] > 0) process_monsters_mtimed(i);
+			if (current_floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(i);
 		}
 	}
 

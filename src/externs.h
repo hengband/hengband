@@ -261,8 +261,6 @@ extern floor_type *current_floor_ptr;
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;
-extern s16b *mproc_list[MAX_MTIMED];
-extern s16b mproc_max[MAX_MTIMED];
 extern TOWN_IDX max_towns;
 extern town_type *town_info;
 extern object_type *inventory;

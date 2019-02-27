@@ -1323,7 +1323,7 @@ void clear_cave(void)
 	(void)C_WIPE(current_floor_ptr->m_list, m_max, monster_type);
 	m_max = 1;
 	m_cnt = 0;
-	for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 0;
+	for (i = 0; i < MAX_MTIMED; i++) current_floor_ptr->mproc_max[i] = 0;
 
 	/* Pre-calc cur_num of pets in party_mon[] */
 	precalc_cur_num_of_pet();

@@ -146,10 +146,10 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 */
 int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type)
 {
-	s16b *cur_mproc_list = mproc_list[mproc_type];
+	s16b *cur_mproc_list = current_floor_ptr->mproc_list[mproc_type];
 	int i;
 
-	for (i = mproc_max[mproc_type] - 1; i >= 0; i--)
+	for (i = current_floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--)
 	{
 		if (cur_mproc_list[i] == m_idx) return i;
 	}
@@ -165,7 +165,7 @@ int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type)
 */
 static void mproc_add(MONSTER_IDX m_idx, int mproc_type)
 {
-	if (mproc_max[mproc_type] < current_floor_ptr->max_m_idx) mproc_list[mproc_type][mproc_max[mproc_type]++] = (s16b)m_idx;
+	if (current_floor_ptr->mproc_max[mproc_type] < current_floor_ptr->max_m_idx) current_floor_ptr->mproc_list[mproc_type][current_floor_ptr->mproc_max[mproc_type]++] = (s16b)m_idx;
 }
 
 
@@ -178,7 +178,7 @@ static void mproc_add(MONSTER_IDX m_idx, int mproc_type)
 static void mproc_remove(MONSTER_IDX m_idx, int mproc_type)
 {
 	int mproc_idx = get_mproc_idx(m_idx, mproc_type);
-	if (mproc_idx >= 0) mproc_list[mproc_type][mproc_idx] = mproc_list[mproc_type][--mproc_max[mproc_type]];
+	if (mproc_idx >= 0) current_floor_ptr->mproc_list[mproc_type][mproc_idx] = current_floor_ptr->mproc_list[mproc_type][--current_floor_ptr->mproc_max[mproc_type]];
 }
 
 
@@ -192,8 +192,8 @@ void mproc_init(void)
 	MONSTER_IDX i;
 	int cmi;
 
-	/* Reset "mproc_max[]" */
-	for (cmi = 0; cmi < MAX_MTIMED; cmi++) mproc_max[cmi] = 0;
+	/* Reset "current_floor_ptr->mproc_max[]" */
+	for (cmi = 0; cmi < MAX_MTIMED; cmi++) current_floor_ptr->mproc_max[cmi] = 0;
 
 	/* Process the monsters (backwards) */
 	for (i = m_max - 1; i >= 1; i--)
@@ -728,13 +728,13 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 void process_monsters_mtimed(int mtimed_idx)
 {
 	int  i;
-	s16b *cur_mproc_list = mproc_list[mtimed_idx];
+	s16b *cur_mproc_list = current_floor_ptr->mproc_list[mtimed_idx];
 
 	/* Hack -- calculate the "player noise" */
 	if (mtimed_idx == MTIMED_CSLEEP) csleep_noise = (1L << (30 - p_ptr->skill_stl));
 
 	/* Process the monsters (backwards) */
-	for (i = mproc_max[mtimed_idx] - 1; i >= 0; i--)
+	for (i = current_floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--)
 	{
 		/* Access the monster */
 		process_monsters_mtimed_aux(cur_mproc_list[i], mtimed_idx);

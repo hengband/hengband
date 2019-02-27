@@ -1890,6 +1890,8 @@ typedef struct {
 	monster_type *m_list; /*!< The array of dungeon monsters [current_floor_ptr->max_m_idx] */
 	MONSTER_IDX max_m_idx; /*!< Maximum number of monsters in the level */
 
+	s16b *mproc_list[MAX_MTIMED]; /*!< The array to process dungeon monsters[max_m_idx] */
+	s16b mproc_max[MAX_MTIMED]; /*!< Number of monsters to be processed */
 
 } floor_type;
 

@@ -482,14 +482,6 @@ FLOOR_IDX max_floor_id;
 u32b saved_floor_file_sign;
 
 
-
-/*
- * The array to process dungeon monsters [current_floor_ptr->max_m_idx]
- */
-s16b *mproc_list[MAX_MTIMED];
-s16b mproc_max[MAX_MTIMED]; /* Number of monsters to be processed */
-
-
 /*
  * Maximum number of towns
  */

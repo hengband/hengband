@@ -401,7 +401,7 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 	for (i = 0; i < MAX_MTIMED; i++)
 	{
 		int mproc_idx = get_mproc_idx(i1, i);
-		if (mproc_idx >= 0) mproc_list[i][mproc_idx] = i2;
+		if (mproc_idx >= 0) current_floor_ptr->mproc_list[i][mproc_idx] = i2;
 	}
 }
 
@@ -563,8 +563,8 @@ void wipe_m_list(void)
 	/* Reset "m_cnt" */
 	m_cnt = 0;
 
-	/* Reset "mproc_max[]" */
-	for (i = 0; i < MAX_MTIMED; i++) mproc_max[i] = 0;
+	/* Reset "current_floor_ptr->mproc_max[]" */
+	for (i = 0; i < MAX_MTIMED; i++) current_floor_ptr->mproc_max[i] = 0;
 
 	/* Hack -- reset "reproducer" count */
 	current_floor_ptr->num_repro = 0;
