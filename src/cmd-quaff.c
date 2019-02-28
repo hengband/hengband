@@ -489,7 +489,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 				{
 					if (one_in_(2))
 					{
-						if(gain_random_mutation(0)) ident = TRUE;
+						if(gain_mutation(p_ptr, 0)) ident = TRUE;
 					}
 					else if (lose_mutation(0)) ident = TRUE;
 				} while(!ident || one_in_(2));

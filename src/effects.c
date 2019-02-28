@@ -3826,7 +3826,7 @@ void do_poly_self(void)
 	while ((power > randint0(15)) && one_in_(3))
 	{
 		power -= 7;
-		(void)gain_random_mutation(0);
+		(void)gain_mutation(p_ptr, 0);
 	}
 
 	if (power > randint0(5))

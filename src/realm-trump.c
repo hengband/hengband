@@ -459,7 +459,7 @@ concptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					mutation = 77;
 
 				/* Gain the mutation */
-				if (gain_random_mutation(mutation))
+				if (gain_mutation(p_ptr, mutation))
 				{
 					msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
 				}

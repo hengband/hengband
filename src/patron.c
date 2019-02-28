@@ -266,7 +266,7 @@ void gain_level_reward(int chosen_reward)
 	if (one_in_(6) && !chosen_reward)
 	{
 		msg_format(_("%^sは褒美としてあなたを突然変異させた。", "%^s rewards you with a mutation!"), chaos_patrons[p_ptr->chaos_patron]);
-		(void)gain_random_mutation(0);
+		(void)gain_mutation(p_ptr, 0);
 		reward = _("変異した。", "mutation");
 	}
 	else

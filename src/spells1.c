@@ -4204,7 +4204,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					if (one_in_(3))
 					{
 						msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
-						(void)gain_random_mutation(0);
+						(void)gain_mutation(p_ptr, 0);
 					}
 				}
 				if (!p_ptr->resist_neth && !p_ptr->resist_chaos)

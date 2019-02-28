@@ -4731,7 +4731,7 @@ static void process_player(void)
 	{
 		msg_print(_("何か変わった気がする！", "You feel different!"));
 
-		(void)gain_random_mutation(0);
+		(void)gain_mutation(p_ptr, 0);
 		hack_mutation = FALSE;
 	}
 

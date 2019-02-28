@@ -1834,7 +1834,7 @@ void do_cmd_debug(void)
 
 	/* Mutation */
 	case 'M':
-		(void)gain_random_mutation(command_arg);
+		(void)gain_mutation(p_ptr, command_arg);
 		break;
 
 	/* Reset Class */

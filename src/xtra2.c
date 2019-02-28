@@ -161,7 +161,7 @@ void check_experience(void)
 		if (level_mutation)
 		{
 			msg_print(_("あなたは変わった気がする...", "You feel different..."));
-			(void)gain_random_mutation(0);
+			(void)gain_mutation(p_ptr, 0);
 			level_mutation = FALSE;
 		}
 
