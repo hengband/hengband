@@ -1904,5 +1904,6 @@ typedef struct {
 	GAME_TURN game_turn;			/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
 	GAME_TURN game_turn_limit;		/*!< game_turnの最大値 / Limit of game_turn */
 	GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game current_world_ptr->game_turn in dungeon */
+	GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
 
 } world_type;
