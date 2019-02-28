@@ -160,7 +160,6 @@ extern bool msg_flag;
 extern s16b running;
 extern GAME_TURN resting;
 extern bool invoking_midnight_curse;
-extern GAME_TURN turn_limit;
 extern GAME_TURN dungeon_turn;
 extern GAME_TURN dungeon_turn_limit;
 extern GAME_TURN old_turn;

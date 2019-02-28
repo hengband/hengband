@@ -1897,12 +1897,12 @@ static void init_turn(void)
 	{
 		/* Undead start just after midnight */
 		current_world_ptr->game_turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
-		turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+		current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 	else
 	{
 		current_world_ptr->game_turn = 1;
-		turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
+		current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 
 	dungeon_turn = 1;

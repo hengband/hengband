@@ -1901,5 +1901,7 @@ typedef struct {
 	 */
 	POSITION max_wild_x;
 	POSITION max_wild_y;
-	GAME_TURN game_turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
+	GAME_TURN game_turn;			/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
+	GAME_TURN game_turn_limit;		/*!< game_turnの最大値 / Limit of game_turn */
+
 } world_type;

@@ -6228,9 +6228,9 @@ void prevent_turn_overflow(void)
 	int rollback_days, i, j;
 	s32b rollback_turns;
 
-	if (current_world_ptr->game_turn < turn_limit) return;
+	if (current_world_ptr->game_turn < current_world_ptr->game_turn_limit) return;
 
-	rollback_days = 1 + (current_world_ptr->game_turn - turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
+	rollback_days = 1 + (current_world_ptr->game_turn - current_world_ptr->game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
 	rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
 
 	if (current_world_ptr->game_turn > rollback_turns) current_world_ptr->game_turn -= rollback_turns;
