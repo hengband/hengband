@@ -426,7 +426,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 			chg_virtue(V_ENLIGHTEN, 1);
 			if (p_ptr->exp < PY_MAX_EXP)
 			{
-				s32b ee = (p_ptr->exp / 2) + 10;
+				EXP ee = (p_ptr->exp / 2) + 10;
 				if (ee > 100000L) ee = 100000L;
 				msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 				gain_exp(ee);
