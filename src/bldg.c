@@ -1948,10 +1948,10 @@ static bool inn_comm(int cmd)
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
 				
 				current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
-				if (dungeon_turn < dungeon_turn_limit)
+				if (current_world_ptr->dungeon_turn < dungeon_turn_limit)
 				{
-					dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
-					if (dungeon_turn > dungeon_turn_limit) dungeon_turn = dungeon_turn_limit;
+					current_world_ptr->dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
+					if (current_world_ptr->dungeon_turn > dungeon_turn_limit) current_world_ptr->dungeon_turn = dungeon_turn_limit;
 				}
 
 				prevent_turn_overflow();

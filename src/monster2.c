@@ -1254,8 +1254,8 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	int pls_kakuritu, pls_level;
 	int delay = mysqrt(level * 10000L) + 400L;
 
-	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
-	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10)) ;
+	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
+	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10)) ;
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_MAZE)
 	{

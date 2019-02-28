@@ -113,8 +113,7 @@ GAME_TURN resting;			/* Current counter for resting, if any */
 
 bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
 
-GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game current_world_ptr->game_turn in dungeon */
-GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game current_world_ptr->game_turn in dungeon */
+GAME_TURN dungeon_turn_limit;	/*!< current_world_ptr->dungeon_turnの最大値 / Limit of game current_world_ptr->game_turn in dungeon */
 GAME_TURN old_turn;			/* Turn when level began */
 GAME_TURN old_battle;
 
@@ -155,6 +154,7 @@ MONSTER_IDX m_cnt = 0; /* Number of live monsters */
 
 MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
+
 bool multi_rew = FALSE;
 char summon_kin_type;   /* Hack, by Julian Lighton: summon 'relatives' */
 

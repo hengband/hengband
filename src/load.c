@@ -2282,16 +2282,16 @@ static void rd_extra(void)
 
 	if (z_older_than(10, 3, 12))
 	{
-		dungeon_turn = current_world_ptr->game_turn;
+		current_world_ptr->dungeon_turn = current_world_ptr->game_turn;
 	}
-	else rd_s32b(&dungeon_turn);
+	else rd_s32b(&current_world_ptr->dungeon_turn);
 
 	if (z_older_than(11, 0, 13))
 	{
 		old_turn /= 2;
 		p_ptr->feeling_turn /= 2;
 		current_world_ptr->game_turn /= 2;
-		dungeon_turn /= 2;
+		current_world_ptr->dungeon_turn /= 2;
 	}
 
 	if (z_older_than(10, 3, 13))
