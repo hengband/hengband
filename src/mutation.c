@@ -2356,3 +2356,19 @@ bool mutation_power_aux(int power)
 
 	return TRUE;
 }
+
+become_living_trump(player_type *creature_ptr)
+{
+	MUTATION_IDX mutation;
+
+	if (one_in_(7))
+		mutation = 12; /* Teleport control */
+	else
+		mutation = 77; /* Random teleportation (uncontrolled) */
+
+	/* Gain the mutation */
+	if (gain_mutation(creature_ptr, mutation))
+	{
+		msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
+	}
+}

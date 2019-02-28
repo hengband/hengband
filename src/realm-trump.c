@@ -445,26 +445,7 @@ concptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("人間トランプ", "Living Trump");
 		if (desc) return _("ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。",
 			"Gives mutation which makes you teleport randomly or makes you able to teleport at will.");
-
-		{
-			if (cast)
-			{
-				int mutation;
-
-				if (one_in_(7))
-					/* Teleport control */
-					mutation = 12;
-				else
-					/* Random teleportation (uncontrolled) */
-					mutation = 77;
-
-				/* Gain the mutation */
-				if (gain_mutation(p_ptr, mutation))
-				{
-					msg_print(_("あなたは生きているカードに変わった。", "You have turned into a Living Trump."));
-				}
-			}
-		}
+		if (cast) become_living_trump(p_ptr);
 		break;
 
 	case 23:
