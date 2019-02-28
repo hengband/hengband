@@ -25,7 +25,7 @@
  * @param choose_mut 与えたい突然変異のID、0ならばランダムに選択
  * @return なし
  */
-bool gain_random_mutation(int choose_mut)
+bool gain_random_mutation(MUTATION_IDX choose_mut)
 {
 	int attempts_left = 20;
 	concptr muta_desc = "";
@@ -863,7 +863,7 @@ bool gain_random_mutation(int choose_mut)
  * @param choose_mut 取り除きたい突然変異のID、0ならばランダムに消去
  * @return なし
  */
-bool lose_mutation(int choose_mut)
+bool lose_mutation(MUTATION_IDX choose_mut)
 {
 	int attempts_left = 20;
 	concptr muta_desc = "";

@@ -483,7 +483,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				int mutation;
+				MUTATION_IDX mutation;
 
 				if (one_in_(7))
 					/* Teleport control */
