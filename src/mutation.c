@@ -429,7 +429,7 @@ bool gain_random_mutation(int choose_mut)
 		case 120: case 121: case 122:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_HYPER_STR;
-			muta_desc = _( "超人的に強くなった！",  "You turn into a superhuman he-man!");
+			muta_desc = _( "超人的に強くなった！",  "You current_world_ptr->game_turn into a superhuman he-man!");
 
 			break;
 		case 123: case 124: case 125:
@@ -465,7 +465,7 @@ bool gain_random_mutation(int choose_mut)
 		case 136: case 137:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_ALBINO;
-			muta_desc = _( "アルビノになった！弱くなった気がする...",  "You turn into an albino! You feel frail...");
+			muta_desc = _( "アルビノになった！弱くなった気がする...",  "You current_world_ptr->game_turn into an albino! You feel frail...");
 
 			break;
 		case 138: case 139: case 140:
@@ -525,7 +525,7 @@ bool gain_random_mutation(int choose_mut)
 		case 159: case 160:
 			muta_class = &(p_ptr->muta3);
 			muta_which = MUT3_SHORT_LEG;
-			muta_desc = _( "足が短い突起になってしまった！",  "Your legs turn into short stubs!");
+			muta_desc = _( "足が短い突起になってしまった！",  "Your legs current_world_ptr->game_turn into short stubs!");
 
 			break;
 		case 161: case 162:
@@ -1601,7 +1601,7 @@ void dump_mutations(FILE *OutFile)
 		}
 		if (p_ptr->muta1 & MUT1_MIDAS_TCH)
 		{
-			fprintf(OutFile, _(" あなたは通常アイテムを金に変えることができる。\n", " You can turn ordinary items to gold.\n"));
+			fprintf(OutFile, _(" あなたは通常アイテムを金に変えることができる。\n", " You can current_world_ptr->game_turn ordinary items to gold.\n"));
 
 		}
 		if (p_ptr->muta1 & MUT1_GROW_MOLD)

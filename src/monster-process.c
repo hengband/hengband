@@ -2851,7 +2851,7 @@ void process_monster(MONSTER_IDX m_idx)
 				do_move = FALSE;
 			}
 
-			/* In anti-melee dungeon, stupid or confused monster takes useless turn */
+			/* In anti-melee dungeon, stupid or confused monster takes useless current_world_ptr->game_turn */
 			if (do_move && (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
 			{
 				if (!MON_CONFUSED(m_ptr))
@@ -2875,7 +2875,7 @@ void process_monster(MONSTER_IDX m_idx)
 					/* Do not move */
 					do_move = FALSE;
 
-					/* Took a turn */
+					/* Took a current_world_ptr->game_turn */
 					do_turn = TRUE;
 				}
 			}
@@ -2907,7 +2907,7 @@ void process_monster(MONSTER_IDX m_idx)
 					{
 						if (monst_attack_monst(m_idx, g_ptr->m_idx)) return;
 
-						/* In anti-melee dungeon, stupid or confused monster takes useless turn */
+						/* In anti-melee dungeon, stupid or confused monster takes useless current_world_ptr->game_turn */
 						else if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 						{
 							if (MON_CONFUSED(m_ptr)) return;
@@ -3273,10 +3273,10 @@ void process_monster(MONSTER_IDX m_idx)
 
 /*!
  * @brief 全モンスターのターン管理メインルーチン /
- * Process all the "live" monsters, once per game turn.
+ * Process all the "live" monsters, once per game current_world_ptr->game_turn.
  * @return なし
  * @details
- * During each game turn, we scan through the list of all the "live" monsters,\n
+ * During each game current_world_ptr->game_turn, we scan through the list of all the "live" monsters,\n
  * (backwards, so we can excise any "freshly dead" monsters), energizing each\n
  * monster, and allowing fully energized monsters to move, attack, pass, etc.\n
  *\n
@@ -3295,8 +3295,8 @@ void process_monster(MONSTER_IDX m_idx)
  *\n
  * Note the special "MFLAG_BORN" flag, which allows us to ignore "fresh"\n
  * monsters while they are still being "born".  A monster is "fresh" only\n
- * during the turn in which it is created, and we use the "hack_m_idx" to\n
- * determine if the monster is yet to be processed during the current turn.\n
+ * during the current_world_ptr->game_turn in which it is created, and we use the "hack_m_idx" to\n
+ * determine if the monster is yet to be processed during the current current_world_ptr->game_turn.\n
  *\n
  * Note the special "MFLAG_NICE" flag, which allows the player to get one\n
  * move before any "nasty" monsters get to use their spell attacks.\n

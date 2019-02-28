@@ -1241,7 +1241,7 @@ bool set_wraith_form(TIME_EFFECT v, bool do_dec)
 		}
 		else if (!p_ptr->wraith_form)
 		{
-			msg_print(_("物質界を離れて幽鬼のような存在になった！", "You leave the physical world and turn into a wraith-being!"));
+			msg_print(_("物質界を離れて幽鬼のような存在になった！", "You leave the physical world and current_world_ptr->game_turn into a wraith-being!"));
 			notice = TRUE;
 			chg_virtue(V_UNLIFE, 3);
 			chg_virtue(V_HONOUR, -2);
@@ -3655,7 +3655,7 @@ void change_race(CHARACTER_IDX new_race, concptr effect_msg)
 #ifdef JP
 	msg_format("あなたは%s%sに変化した！", effect_msg, title);
 #else
-	msg_format("You turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
+	msg_format("You current_world_ptr->game_turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
 #endif
 
 	chg_virtue(V_CHANCE, 2);

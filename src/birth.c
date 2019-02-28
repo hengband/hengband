@@ -1884,7 +1884,7 @@ static void init_dungeon_quests(void)
 }
 
 /*!
- * @brief ゲームターンを初期化する / Reset turn
+ * @brief ゲームターンを初期化する / Reset current_world_ptr->game_turn
  * @details アンデッド系種族は開始時刻を夜からにする。
  * @return なし
  */
@@ -1896,12 +1896,12 @@ static void init_turn(void)
 		(p_ptr->prace == RACE_SPECTRE))
 	{
 		/* Undead start just after midnight */
-		turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
+		current_world_ptr->game_turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
 		turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 	else
 	{
-		turn = 1;
+		current_world_ptr->game_turn = 1;
 		turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 
@@ -4119,7 +4119,7 @@ static bool player_birth_aux(void)
 	/* Clear */
 	clear_from(10);
 
-	/* Reset turn; before auto-roll and after choosing race */
+	/* Reset current_world_ptr->game_turn; before auto-roll and after choosing race */
 	init_turn();
 
 	/*** Generate ***/

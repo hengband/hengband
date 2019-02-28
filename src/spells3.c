@@ -1933,7 +1933,7 @@ bool alchemy(void)
 	if (command_arg > 0) force = TRUE;
 
 	q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
-	s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
+	s = _("金に変えられる物がありません。", "You have nothing to current_world_ptr->game_turn to gold.");
 
 	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
 	if (!o_ptr) return (FALSE);
@@ -1959,7 +1959,7 @@ bool alchemy(void)
 		if (confirm_destroy || (object_value(o_ptr) > 0))
 		{
 			/* Make a verification */
-			sprintf(out_val, _("本当に%sを金に変えますか？", "Really turn %s to gold? "), o_name);
+			sprintf(out_val, _("本当に%sを金に変えますか？", "Really current_world_ptr->game_turn %s to gold? "), o_name);
 			if (!get_check(out_val)) return FALSE;
 		}
 	}
@@ -1967,7 +1967,7 @@ bool alchemy(void)
 	/* Artifacts cannot be destroyed */
 	if (!can_player_destroy_object(o_ptr))
 	{
-		msg_format(_("%sを金に変えることに失敗した。", "You fail to turn %s to gold!"), o_name);
+		msg_format(_("%sを金に変えることに失敗した。", "You fail to current_world_ptr->game_turn %s to gold!"), o_name);
 
 		return FALSE;
 	}
@@ -1976,7 +1976,7 @@ bool alchemy(void)
 
 	if (price <= 0)
 	{
-		msg_format(_("%sをニセの金に変えた。", "You turn %s to fool's gold."), o_name);
+		msg_format(_("%sをニセの金に変えた。", "You current_world_ptr->game_turn %s to fool's gold."), o_name);
 	}
 	else
 	{
@@ -1985,7 +1985,7 @@ bool alchemy(void)
 		if (amt > 1) price *= amt;
 
 		if (price > 30000) price = 30000;
-		msg_format(_("%sを＄%d の金に変えた。", "You turn %s to %ld coins worth of gold."), o_name, price);
+		msg_format(_("%sを＄%d の金に変えた。", "You current_world_ptr->game_turn %s to %ld coins worth of gold."), o_name, price);
 
 		p_ptr->au += price;
 		p_ptr->redraw |= (PR_GOLD);
@@ -2343,7 +2343,7 @@ bool identify_item(object_type *o_ptr)
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	strcpy(record_o_name, o_name);
-	record_turn = turn;
+	record_turn = current_world_ptr->game_turn;
 
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 

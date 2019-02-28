@@ -2085,11 +2085,11 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		{
 			if ((p_ptr->stat_use[A_INT] < 4) && (p_ptr->stat_use[A_WIS] < 4))
 			{
-				msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
+				msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You current_world_ptr->game_turn into an utter moron!"));
 			}
 			else
 			{
-				msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
+				msg_print(_("あなたは完璧な馬鹿になった！", "You current_world_ptr->game_turn into an utter moron!"));
 			}
 
 			if (p_ptr->muta3 & MUT3_HYPER_INT)

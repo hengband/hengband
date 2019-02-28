@@ -1303,7 +1303,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 				is_outer_bold(y0 + y - yhsize, x0 + x - xhsize))
 				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
 
-			/* turn off icky flag (no longer needed.) */
+			/* current_world_ptr->game_turn off icky flag (no longer needed.) */
 			current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 
 			/* Light lava */

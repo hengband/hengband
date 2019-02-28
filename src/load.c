@@ -2277,12 +2277,12 @@ static void rd_extra(void)
 		rd_s32b(&p_ptr->feeling_turn);
 	}
 
-	/* Current turn */
-	rd_s32b(&turn);
+	/* Current current_world_ptr->game_turn */
+	rd_s32b(&current_world_ptr->game_turn);
 
 	if (z_older_than(10, 3, 12))
 	{
-		dungeon_turn = turn;
+		dungeon_turn = current_world_ptr->game_turn;
 	}
 	else rd_s32b(&dungeon_turn);
 
@@ -2290,13 +2290,13 @@ static void rd_extra(void)
 	{
 		old_turn /= 2;
 		p_ptr->feeling_turn /= 2;
-		turn /= 2;
+		current_world_ptr->game_turn /= 2;
 		dungeon_turn /= 2;
 	}
 
 	if (z_older_than(10, 3, 13))
 	{
-		old_battle = turn;
+		old_battle = current_world_ptr->game_turn;
 	}
 	else rd_s32b(&old_battle);
 

@@ -1201,7 +1201,7 @@ void do_cmd_cast(void)
 	/* Process spell */
 	else
 	{
-		/* Canceled spells cost neither a turn nor mana */
+		/* Canceled spells cost neither a current_world_ptr->game_turn nor mana */
 		if (!do_spell(realm, spell, SPELL_CAST)) return;
 
 		if (randint1(100) < chance)

@@ -342,7 +342,7 @@ static bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
  * <pre>
  * Currently, only (some) artifacts, and Dragon Scale Mail, can be activated.
  * But one could, for example, easily make an activatable "Ring of Plasma".
- * Note that it always takes a turn to activate an artifact, even if
+ * Note that it always takes a current_world_ptr->game_turn to activate an artifact, even if
  * the user hits "escape" at the "direction" prompt.
  * </pre>
  */

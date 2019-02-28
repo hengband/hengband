@@ -786,9 +786,9 @@ struct store_type
 	s16b good_buy;			/* Number of "good" buys */
 	s16b bad_buy;			/* Number of "bad" buys */
 
-	s32b store_open;		/* Closed until this turn */
+	s32b store_open;		/* Closed until this current_world_ptr->game_turn */
 
-	s32b last_visit;		/* Last visited on this turn */
+	s32b last_visit;		/* Last visited on this current_world_ptr->game_turn */
 
 	s16b table_num;			/* Table -- Number of entries */
 	s16b table_size;		/* Table -- Total Size of Array */
@@ -1284,7 +1284,7 @@ struct player_type
 	bool autopick_autoregister; /* auto register is in-use or not */
 
 	byte feeling;		/* Most recent dungeon feeling */
-	s32b feeling_turn;	/* The turn of the last dungeon feeling */
+	s32b feeling_turn;	/* The current_world_ptr->game_turn of the last dungeon feeling */
 
 
 	/*** Temporary fields ***/
@@ -1502,7 +1502,7 @@ struct player_type
 
 	byte pspeed;		/* Current speed */
 
-	ENERGY energy_use;	/* Energy use this turn */
+	ENERGY energy_use;	/* Energy use this current_world_ptr->game_turn */
 
 	POSITION y;	/* Player location in dungeon */
 	POSITION x;	/* Player location in dungeon */
@@ -1901,4 +1901,5 @@ typedef struct {
 	 */
 	POSITION max_wild_x;
 	POSITION max_wild_y;
+	GAME_TURN game_turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
 } world_type;

@@ -1137,7 +1137,7 @@ const byte adj_chr_chm[] =
  * @brief
  * 魅力による魅了能力修正テーブル /
  * This table is used to help calculate the number of blows the player can
- * make in a single round of attacks (one player turn) with a normal weapon.
+ * make in a single round of attacks (one player current_world_ptr->game_turn) with a normal weapon.
  * @details
  * <pre>
  * This number ranges from a single blow/round for weak players to up to six
@@ -1266,11 +1266,11 @@ const arena_type arena_info[MAX_ARENA_MONS + 2] =
  * Note that the table has been changed at high speeds.  From
  * "Slow (-40)" to "Fast (+30)" is pretty much unchanged, but
  * at speeds above "Fast (+30)", one approaches an asymptotic
- * effective limit of 50 energy per turn.  This means that it
+ * effective limit of 50 energy per current_world_ptr->game_turn.  This means that it
  * is relatively easy to reach "Fast (+30)" and get about 40
- * energy per turn, but then speed becomes very "expensive",
+ * energy per current_world_ptr->game_turn, but then speed becomes very "expensive",
  * and you must get all the way to "Fast (+50)" to reach the
- * point of getting 45 energy per turn.  After that point,
+ * point of getting 45 energy per current_world_ptr->game_turn.  After that point,
  * furthur increases in speed are more or less pointless,
  * except to balance out heavy inventory.
  *

@@ -1659,7 +1659,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
  * @details
  * <pre>
  *
- * This will turn some walls into floors and some floors into walls.
+ * This will current_world_ptr->game_turn some walls into floors and some floors into walls.
  *
  * The player will take damage and "jump" into a safe grid if possible,
  * otherwise, he will "tunnel" through the rubble instantaneously.
@@ -1671,7 +1671,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
  * Note that thus the player and monsters (except eaters of walls and
  * passers through walls) will never occupy the same grid as a wall.
  * Note that as of now (2.7.8) no monster may occupy a "wall" grid, even
- * for a single turn, unless that monster can pass_walls or kill_walls.
+ * for a single current_world_ptr->game_turn, unless that monster can pass_walls or kill_walls.
  * This has allowed massive simplification of the "monster" code.
  * </pre>
  */

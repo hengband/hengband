@@ -473,7 +473,7 @@ errr report_score(void)
 	buf_sprintf(score, "maxlv: %d\n", p_ptr->max_plv);
 	buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
 	buf_sprintf(score, "au: %d\n", p_ptr->au);
-	buf_sprintf(score, "turns: %d\n", turn_real(turn));
+	buf_sprintf(score, "turns: %d\n", turn_real(current_world_ptr->game_turn));
 	buf_sprintf(score, "sex: %d\n", p_ptr->psex);
 	buf_sprintf(score, "race: %s\n", rp_ptr->title);
 	buf_sprintf(score, "class: %s\n", cp_ptr->title);

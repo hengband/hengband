@@ -661,7 +661,7 @@ static bool cave_gen(void)
 		int tunnel_fail_count = 0;
 
 		/*
-		 * Build each type of room in turn until we cannot build any more.
+		 * Build each type of room in current_world_ptr->game_turn until we cannot build any more.
 		 */
 		if (!generate_rooms()) return FALSE;
 

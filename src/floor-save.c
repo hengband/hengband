@@ -1052,8 +1052,8 @@ void leave_floor(void)
 		/* Get out of the my way! */
 		get_out_monster();
 
-		/* Record the last visit turn of current floor */
-		sf_ptr->last_visit = turn;
+		/* Record the last visit current_world_ptr->game_turn of current floor */
+		sf_ptr->last_visit = current_world_ptr->game_turn;
 
 		forget_lite();
 		forget_view();
@@ -1194,8 +1194,8 @@ void change_floor(void)
 			int alloc_chance = d_info[p_ptr->dungeon_idx].max_m_alloc_chance;
 			GAME_TURN alloc_times;
 
-			while (tmp_last_visit > turn) tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
-			absence_ticks = (turn - tmp_last_visit) / TURNS_PER_TICK;
+			while (tmp_last_visit > current_world_ptr->game_turn) tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
+			absence_ticks = (current_world_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
 
 			/* Maintain monsters */
 			for (i = 1; i < m_max; i++)
@@ -1302,8 +1302,8 @@ void change_floor(void)
 				generate_random_floor();
 			}
 
-			/* Record last visit turn */
-			sf_ptr->last_visit = turn;
+			/* Record last visit current_world_ptr->game_turn */
+			sf_ptr->last_visit = current_world_ptr->game_turn;
 
 			/* Set correct current_floor_ptr->dun_level value */
 			sf_ptr->dun_level = current_floor_ptr->dun_level;
@@ -1358,9 +1358,9 @@ void change_floor(void)
 		/*
 		 * Update visit mark
 		 *
-		 * The "turn" is not always different number because
-		 * the level teleport doesn't take any turn.  Use
-		 * visit mark instead of last visit turn to find the
+		 * The "current_world_ptr->game_turn" is not always different number because
+		 * the level teleport doesn't take any current_world_ptr->game_turn.  Use
+		 * visit mark instead of last visit current_world_ptr->game_turn to find the
 		 * oldest saved floor.
 		 */
 		sf_ptr->visit_mark = latest_visit_mark++;
@@ -1386,7 +1386,7 @@ void change_floor(void)
 		wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
 
 	/* Remember when this level was "created" */
-	old_turn = turn;
+	old_turn = current_world_ptr->game_turn;
 
 	/* No dungeon feeling yet */
 	p_ptr->feeling_turn = old_turn;

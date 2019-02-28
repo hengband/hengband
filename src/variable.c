@@ -113,10 +113,9 @@ GAME_TURN resting;			/* Current counter for resting, if any */
 
 bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
 
-GAME_TURN turn;				/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
-GAME_TURN turn_limit;		/*!< turnの最大値 / Limit of game turn */
-GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
-GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game turn in dungeon */
+GAME_TURN turn_limit;		/*!< current_world_ptr->game_turnの最大値 / Limit of game current_world_ptr->game_turn */
+GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game current_world_ptr->game_turn in dungeon */
+GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game current_world_ptr->game_turn in dungeon */
 GAME_TURN old_turn;			/* Turn when level began */
 GAME_TURN old_battle;
 

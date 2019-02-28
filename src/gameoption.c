@@ -173,7 +173,7 @@ bool cheat_know;	/* Know complete monster info */
 bool cheat_live;	/* Allow player to avoid death */
 bool cheat_save;	/* Ask for saving death */
 bool cheat_diary_output; /* Detailed info to diary */
-bool cheat_turn;	/* Peek turn */
+bool cheat_turn;	/* Peek current_world_ptr->game_turn */
 bool cheat_sight;
 
 
@@ -611,7 +611,7 @@ const option_type cheat_info[CHEAT_MAX] =
 	},
 
 	{ &cheat_turn,	FALSE,	255,	0x81, 0x00,
-	"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put turn to game message.")
+	"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put current_world_ptr->game_turn to game message.")
 	},
 
 	{ &cheat_sight,	FALSE,	255,	0x82, 0x00,

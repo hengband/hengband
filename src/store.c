@@ -3921,7 +3921,7 @@ static int increase_insults(void)
 		st_ptr->bad_buy = 0;
 
 		/* Open tomorrow */
-		st_ptr->store_open = turn + TURNS_PER_TICK*TOWN_DAWN/8 + randint1(TURNS_PER_TICK*TOWN_DAWN/8);
+		st_ptr->store_open = current_world_ptr->game_turn + TURNS_PER_TICK*TOWN_DAWN/8 + randint1(TURNS_PER_TICK*TOWN_DAWN/8);
 
 		/* Closed */
 		return (TRUE);
@@ -4680,7 +4680,7 @@ static void store_purchase(void)
 			choice = purchase_haggle(j_ptr, &price);
 
 			/* Hack -- Got kicked out */
-			if (st_ptr->store_open >= turn) return;
+			if (st_ptr->store_open >= current_world_ptr->game_turn) return;
 		}
 
 		/* Player wants it */
@@ -4724,7 +4724,7 @@ static void store_purchase(void)
 				msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), o_name, (long)price);
 
 				strcpy(record_o_name, o_name);
-				record_turn = turn;
+				record_turn = current_world_ptr->game_turn;
 
 				if (record_buy) do_cmd_write_nikki(NIKKI_BUY, 0, o_name);
 				object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -5007,7 +5007,7 @@ static void store_sell(void)
 		choice = sell_haggle(q_ptr, &price);
 
 		/* Kicked out */
-		if (st_ptr->store_open >= turn) return;
+		if (st_ptr->store_open >= current_world_ptr->game_turn) return;
 
 		/* Sold... */
 		if (choice == 0)
@@ -5730,7 +5730,7 @@ void do_cmd_store(void)
 	inner_town_num = p_ptr->town_num;
 
 	/* Hack -- Check the "locked doors" */
-	if ((town_info[p_ptr->town_num].store[which].store_open >= turn) ||
+	if ((town_info[p_ptr->town_num].store[which].store_open >= current_world_ptr->game_turn) ||
 	    (ironman_shops))
 	{
 		msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
@@ -5739,7 +5739,7 @@ void do_cmd_store(void)
 	}
 
 	/* Calculate the number of store maintainances since the last visit */
-	maintain_num = (turn - town_info[p_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
+	maintain_num = (current_world_ptr->game_turn - town_info[p_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
 
 	/* Maintain the store max. 10 times */
 	if (maintain_num > 10) maintain_num = 10;
@@ -5751,7 +5751,7 @@ void do_cmd_store(void)
 			store_maint(p_ptr->town_num, which);
 
 		/* Save the visit */
-		town_info[p_ptr->town_num].store[which].last_visit = turn;
+		town_info[p_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
 	}
 
 	forget_lite();
@@ -5932,7 +5932,7 @@ void do_cmd_store(void)
 		if (need_redraw_store_inv) display_inventory();
 
 		/* Hack -- get kicked out of the store */
-		if (st_ptr->store_open >= turn) leave_store = TRUE;
+		if (st_ptr->store_open >= current_world_ptr->game_turn) leave_store = TRUE;
 	}
 
 	select_floor_music();

@@ -17,7 +17,7 @@ bool set_gametime(void)
 	/* Verify */
 	if (tmp_int >= dungeon_turn_limit) tmp_int = dungeon_turn_limit - 1;
 	else if (tmp_int < 0) tmp_int = 0;
-	dungeon_turn = turn = tmp_int;
+	dungeon_turn = current_world_ptr->game_turn = tmp_int;
 	return (TRUE);
 
 }

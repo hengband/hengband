@@ -280,7 +280,7 @@ static void hit_trap_slow(void)
 * @param trap_message メッセージの補完文字列
 * @param resist 状態異常に抵抗する判定が出たならTRUE
 * @param set_status 状態異常を指定する関数ポインタ
-* @param turn 状態異常の追加ターン量
+* @param current_world_ptr->game_turn 状態異常の追加ターン量
 * @return なし
 */
 static void hit_trap_set_abnormal_status(concptr trap_message, bool resist, bool(*set_status)(IDX), IDX turn_aux)

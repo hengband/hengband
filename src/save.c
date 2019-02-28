@@ -825,8 +825,8 @@ static void wr_extra(void)
 	/* Turn of last "feeling" */
 	wr_s32b(p_ptr->feeling_turn);
 
-	/* Current turn */
-	wr_s32b(turn);
+	/* Current current_world_ptr->game_turn */
+	wr_s32b(current_world_ptr->game_turn);
 
 	wr_s32b(dungeon_turn);
 
@@ -1771,7 +1771,7 @@ bool load_player(void)
 
 
 	/* Paranoia */
-	turn = 0;
+	current_world_ptr->game_turn = 0;
 
 	/* Paranoia */
 	p_ptr->is_dead = FALSE;
@@ -1891,8 +1891,8 @@ bool load_player(void)
 	/* Paranoia */
 	if (!err)
 	{
-		/* Invalid turn */
-		if (!turn) err = -1;
+		/* Invalid current_world_ptr->game_turn */
+		if (!current_world_ptr->game_turn) err = -1;
 
 		/* Message (below) */
 		if (err) what = _("セーブファイルが壊れています", "Broken savefile");

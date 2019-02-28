@@ -2820,7 +2820,7 @@ void msg_print(concptr msg)
 	}
 	else
 	{
-		sprintf(buf, ("T:%d - %s"), (int)turn, msg);
+		sprintf(buf, ("T:%d - %s"), (int)current_world_ptr->game_turn, msg);
 	}
 
 	/* New Message Length */

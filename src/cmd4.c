@@ -852,11 +852,11 @@ static void do_cmd_last_get(void)
 	sprintf(buf,_("%sの入手を記録します。", "Do you really want to record getting %s? "),record_o_name);
 	if (!get_check(buf)) return;
 
-	turn_tmp = turn;
-	turn = record_turn;
+	turn_tmp = current_world_ptr->game_turn;
+	current_world_ptr->game_turn = record_turn;
 	sprintf(buf,_("%sを手に入れた。", "descover %s."), record_o_name);
 	do_cmd_write_nikki(NIKKI_BUNSHOU, 0, buf);
-	turn = turn_tmp;
+	current_world_ptr->game_turn = turn_tmp;
 }
 
 /*!

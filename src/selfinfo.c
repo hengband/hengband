@@ -302,7 +302,7 @@ void self_knowledge(void)
 			break;
 		case RACE_GOLEM:
 			if (plev > 19)
-				info[i++] = _("あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)", "You can turn your skin to stone, dur d20+30 (cost 15).");
+				info[i++] = _("あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)", "You can current_world_ptr->game_turn your skin to stone, dur d20+30 (cost 15).");
 			break;
 		case RACE_ZOMBIE:
 		case RACE_SKELETON:
@@ -501,7 +501,7 @@ void self_knowledge(void)
 		case CLASS_CAVALRY:
 			if (plev > 9)
 			{
-				info[i++] = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster forcibly to turn it into pet.");
+				info[i++] = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster forcibly to current_world_ptr->game_turn it into pet.");
 			}
 			break;
 		case CLASS_BERSERKER:
@@ -599,7 +599,7 @@ void self_knowledge(void)
 		}
 		if (p_ptr->muta1 & MUT1_MIDAS_TCH)
 		{
-			info[i++] = _("あなたは通常アイテムを金に変えることができる。", "You can turn ordinary items to gold.");
+			info[i++] = _("あなたは通常アイテムを金に変えることができる。", "You can current_world_ptr->game_turn ordinary items to gold.");
 		}
 		if (p_ptr->muta1 & MUT1_GROW_MOLD)
 		{

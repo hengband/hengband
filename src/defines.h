@@ -4677,8 +4677,8 @@ extern int PlayerUID;
 #define IS_WIZARD_CLASS() \
 	(p_ptr->pclass == CLASS_MAGE || p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER || p_ptr->pclass == CLASS_MAGIC_EATER || p_ptr->pclass == CLASS_BLUE_MAGE)
 
-/* Multishadow effects is determined by turn */
-#define CHECK_MULTISHADOW() (p_ptr->multishadow && (turn & 1))
+/* Multishadow effects is determined by current_world_ptr->game_turn */
+#define CHECK_MULTISHADOW() (p_ptr->multishadow && (current_world_ptr->game_turn & 1))
 
 /* Is "teleport level" ineffective to this target? */
 #define TELE_LEVEL_IS_INEFF(TARGET) \

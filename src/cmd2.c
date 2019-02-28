@@ -450,7 +450,7 @@ void do_cmd_go_down(void)
 
 
 /*!
- * @brief 探索コマンドのメインルーチン / Simple command to "search" for one turn
+ * @brief 探索コマンドのメインルーチン / Simple command to "search" for one current_world_ptr->game_turn
  * @return なし
  */
 void do_cmd_search(void)
@@ -1182,7 +1182,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
  * @details
  * <pre>
  * Note that you must tunnel in order to hit invisible monsters
- * in walls, though moving into walls still takes a turn anyway.
+ * in walls, though moving into walls still takes a current_world_ptr->game_turn anyway.
  *
  * Digging is very difficult without a "digger" weapon, but can be
  * accomplished by strong players using heavy weapons.
@@ -1801,7 +1801,7 @@ void do_cmd_bash(void)
  *
  * Consider confusion 
  *
- * This command must always take a turn, to prevent free detection
+ * This command must always take a current_world_ptr->game_turn, to prevent free detection
  * of invisible monsters.
  * </pre>
  */
@@ -2195,7 +2195,7 @@ void do_cmd_rest(void)
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);
 
-	/* Take a turn (?) */
+	/* Take a current_world_ptr->game_turn (?) */
 	take_turn(p_ptr, 100);
 
 	/* The sin of sloth */

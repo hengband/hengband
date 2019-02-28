@@ -28,7 +28,7 @@
  * <pre>
  * Certain scrolls can be "aborted" without losing the scroll.  These
  * include scrolls with no effects but recharge or identify, which are
- * cancelled before use.  XXX Reading them still takes a turn, though.
+ * cancelled before use.  XXX Reading them still takes a current_world_ptr->game_turn, though.
  * </pre>
  */
 void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)

@@ -5994,16 +5994,16 @@ void do_cmd_edit_autopick(void)
 	tb->dirty_line = -1;
 	tb->filename_mode = PT_DEFAULT;
 
-	if (turn < old_autosave_turn)
+	if (current_world_ptr->game_turn < old_autosave_turn)
 	{
-		while (old_autosave_turn > turn) old_autosave_turn -= TURNS_PER_TICK * TOWN_DAWN;
+		while (old_autosave_turn > current_world_ptr->game_turn) old_autosave_turn -= TURNS_PER_TICK * TOWN_DAWN;
 	}
 
 	/* Autosave */
-	if (turn > old_autosave_turn + 100L)
+	if (current_world_ptr->game_turn > old_autosave_turn + 100L)
 	{
 		do_cmd_save_game(TRUE);
-		old_autosave_turn = turn;
+		old_autosave_turn = current_world_ptr->game_turn;
 	}
 
 	/* HACK -- Reset start_time to stop counting playtime while edit */

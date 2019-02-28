@@ -428,8 +428,8 @@ static concptr item_activation_aux(object_type *o_ptr)
 	constant = act_ptr->timeout.constant;
 	dice = act_ptr->timeout.dice;
 	if (constant == 0 && dice == 0) {
-		/* We can activate it every turn */
-		strcpy(timeout, _("いつでも", "every turn"));
+		/* We can activate it every current_world_ptr->game_turn */
+		strcpy(timeout, _("いつでも", "every current_world_ptr->game_turn"));
 	} else if (constant < 0) {
 		/* Activations that have special timeout */
 		switch (act_ptr->index) {
@@ -558,7 +558,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	/* Figurines, a hack */
 	if (o_ptr->name1 == ART_STONEMASK)
 	{
-		info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
+		info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you current_world_ptr->game_turn into a vampire permanently.");
 	}
 
 	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI))

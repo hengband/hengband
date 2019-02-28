@@ -1466,10 +1466,10 @@ static bool kakutoujou(void)
 	char out_val[160], tmp_str[80];
 	concptr p;
 
-	if ((turn - old_battle) > TURNS_PER_TICK*250)
+	if ((current_world_ptr->game_turn - old_battle) > TURNS_PER_TICK*250)
 	{
 		battle_monsters();
-		old_battle = turn;
+		old_battle = current_world_ptr->game_turn;
 	}
 
 	screen_save();
@@ -1938,7 +1938,7 @@ static bool inn_comm(int cmd)
 			}
 			else
 			{
-				s32b oldturn = turn;
+				s32b oldturn = current_world_ptr->game_turn;
 				int prev_day, prev_hour, prev_min;
 
 				extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
@@ -1947,10 +1947,10 @@ static bool inn_comm(int cmd)
 				else
 					do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
 				
-				turn = (turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
+				current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
 				if (dungeon_turn < dungeon_turn_limit)
 				{
-					dungeon_turn += MIN((turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
+					dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
 					if (dungeon_turn > dungeon_turn_limit) dungeon_turn = dungeon_turn_limit;
 				}
 

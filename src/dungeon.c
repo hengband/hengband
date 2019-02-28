@@ -1026,7 +1026,7 @@ static void notice_lite_change(object_type *o_ptr)
 	else if (o_ptr->name2 == EGO_LITE_LONG)
 	{
 		if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5))
-		    && (turn % (TURNS_PER_TICK*2)))
+		    && (current_world_ptr->game_turn % (TURNS_PER_TICK*2)))
 		{
 			if (disturb_minor) disturb(FALSE, TRUE);
 			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
@@ -1313,7 +1313,7 @@ static void process_world_aux_digestion(void)
 		}
 
 		/* Digest normally -- Every 50 game turns */
-		else if (!(turn % (TURNS_PER_TICK * 5)))
+		else if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 5)))
 		{
 			/* Basic digestion rate based on speed */
 			int digestion = SPEED_TO_ENERGY(p_ptr->pspeed);
@@ -2165,7 +2165,7 @@ static void process_world_aux_light(void)
 			/* Decrease life-span */
 			if (o_ptr->name2 == EGO_LITE_LONG)
 			{
-				if (turn % (TURNS_PER_TICK*2)) o_ptr->xtra4--;
+				if (current_world_ptr->game_turn % (TURNS_PER_TICK*2)) o_ptr->xtra4--;
 			}
 			else o_ptr->xtra4--;
 
@@ -2905,7 +2905,7 @@ static void process_world_aux_recharge(void)
 	/*
 	 * Recharge rods.  Rods now use timeout to control charging status,
 	 * and each charging rod in a stack decreases the stack's timeout by
-	 * one per turn. -LM-
+	 * one per current_world_ptr->game_turn. -LM-
 	 */
 	for (changed = FALSE, i = 0; i < INVEN_PACK; i++)
 	{
@@ -3334,7 +3334,7 @@ static void update_dungeon_feeling(void)
 	delay = MAX(10, 150 - p_ptr->skill_fos) * (150 - current_floor_ptr->dun_level) * TURNS_PER_TICK / 100;
 
  	/* Not yet felt anything */
-	if (turn < p_ptr->feeling_turn + delay && !cheat_xtra) return;
+	if (current_world_ptr->game_turn < p_ptr->feeling_turn + delay && !cheat_xtra) return;
 
 	/* Extract quest number (if any) */
 	quest_num = quest_number(current_floor_ptr->dun_level);
@@ -3350,7 +3350,7 @@ static void update_dungeon_feeling(void)
 	new_feeling = get_dungeon_feeling();
 
 	/* Remember last time updated */
-	p_ptr->feeling_turn = turn;
+	p_ptr->feeling_turn = current_world_ptr->game_turn;
 
 	/* No change */
 	if (p_ptr->feeling == new_feeling) return;
@@ -3379,7 +3379,7 @@ static void process_world(void)
 	int day, hour, min;
 
 	const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
-	s32b prev_turn_in_today = ((turn - TURNS_PER_TICK) % A_DAY + A_DAY / 4) % A_DAY;
+	s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % A_DAY + A_DAY / 4) % A_DAY;
 	int prev_min = (1440 * prev_turn_in_today / A_DAY) % 60;
 	
 	extract_day_hour_min(&day, &hour, &min);
@@ -3450,7 +3450,7 @@ static void process_world(void)
 			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
-		else if (turn - old_turn == 150 * TURNS_PER_TICK)
+		else if (current_world_ptr->game_turn - old_turn == 150 * TURNS_PER_TICK)
 		{
 			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
 			p_ptr->au += kakekin;
@@ -3461,11 +3461,11 @@ static void process_world(void)
 	}
 
 	/* Every 10 game turns */
-	if (turn % TURNS_PER_TICK) return;
+	if (current_world_ptr->game_turn % TURNS_PER_TICK) return;
 
 	/*** Check the Time and Load ***/
 
-	if (!(turn % (50*TURNS_PER_TICK)))
+	if (!(current_world_ptr->game_turn % (50*TURNS_PER_TICK)))
 	{
 		/* Check time and load */
 		if ((0 != check_time()) || (0 != check_load()))
@@ -3500,7 +3500,7 @@ static void process_world(void)
 	/*** Attempt timed autosave ***/
 	if (autosave_t && autosave_freq && !p_ptr->inside_battle)
 	{
-		if (!(turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
+		if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
 			do_cmd_save_game(TRUE);
 	}
 
@@ -3515,12 +3515,12 @@ static void process_world(void)
 	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest && !p_ptr->inside_battle && !p_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
-		if (!(turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
+		if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
 		{
 			bool dawn;
 
 			/* Check for dawn */
-			dawn = (!(turn % (TURNS_PER_TICK * TOWN_DAWN)));
+			dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
 
 			if (dawn) day_break();
 			else night_falls();
@@ -3534,7 +3534,7 @@ static void process_world(void)
 		/*** Shuffle the Storekeepers ***/
 
 		/* Chance is only once a day (while in dungeon) */
-		if (!(turn % (TURNS_PER_TICK * STORE_TICKS)))
+		if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS)))
 		{
 			/* Sometimes, shuffle the shop-keepers */
 			if (one_in_(STORE_SHUFFLE))
@@ -3588,8 +3588,8 @@ static void process_world(void)
 	}
 
 	/* Hack -- Check for creature regeneration */
-	if (!(turn % (TURNS_PER_TICK * 10)) && !p_ptr->inside_battle) regen_monsters();
-	if (!(turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !p_ptr->inside_battle) regen_monsters();
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
 
 	if (!p_ptr->leaving)
 	{
@@ -4696,7 +4696,7 @@ static void process_upkeep_with_speed(void)
 		p_ptr->enchant_energy_need -= SPEED_TO_ENERGY(p_ptr->pspeed);
 	}
 	
-	/* No turn yet */
+	/* No current_world_ptr->game_turn yet */
 	if (p_ptr->enchant_energy_need > 0) return;
 	
 	while (p_ptr->enchant_energy_need <= 0)
@@ -4762,7 +4762,7 @@ static void process_player(void)
 		p_ptr->energy_need -= SPEED_TO_ENERGY(p_ptr->pspeed);
 	}
 
-	/* No turn yet */
+	/* No current_world_ptr->game_turn yet */
 	if (p_ptr->energy_need > 0) return;
 	if (!command_rep) prt_time();
 
@@ -4984,7 +4984,7 @@ static void process_player(void)
 		/* Hack -- cancel "lurking browse mode" */
 		if (!command_new) command_see = FALSE;
 
-		/* Assume free turn */
+		/* Assume free current_world_ptr->game_turn */
 		free_turn(p_ptr);
 
 		if (p_ptr->inside_battle)
@@ -5496,12 +5496,12 @@ static void dungeon(bool load_game)
 		if (!p_ptr->playing || p_ptr->is_dead) break;
 
 		/* Count game turns */
-		turn++;
+		current_world_ptr->game_turn++;
 
 		if (dungeon_turn < dungeon_turn_limit)
 		{
 			if (!p_ptr->wild_mode || wild_regen) dungeon_turn++;
-			else if (p_ptr->wild_mode && !(turn % ((MAX_HGT + MAX_WID) / 2))) dungeon_turn++;
+			else if (p_ptr->wild_mode && !(current_world_ptr->game_turn % ((MAX_HGT + MAX_WID) / 2))) dungeon_turn++;
 		}
 
 		prevent_turn_overflow();
@@ -5783,7 +5783,7 @@ void play_game(bool new_game)
 		}
 	}
 
-	/* Hack -- turn off the cursor */
+	/* Hack -- current_world_ptr->game_turn off the cursor */
 	(void)Term_set_cursor(0);
 
 
@@ -6228,13 +6228,13 @@ void prevent_turn_overflow(void)
 	int rollback_days, i, j;
 	s32b rollback_turns;
 
-	if (turn < turn_limit) return;
+	if (current_world_ptr->game_turn < turn_limit) return;
 
-	rollback_days = 1 + (turn - turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
+	rollback_days = 1 + (current_world_ptr->game_turn - turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
 	rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
 
-	if (turn > rollback_turns) turn -= rollback_turns;
-	else turn = 1; /* Paranoia */
+	if (current_world_ptr->game_turn > rollback_turns) current_world_ptr->game_turn -= rollback_turns;
+	else current_world_ptr->game_turn = 1; /* Paranoia */
 	if (old_turn > rollback_turns) old_turn -= rollback_turns;
 	else old_turn = 1;
 	if (old_battle > rollback_turns) old_battle -= rollback_turns;
