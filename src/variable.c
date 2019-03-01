@@ -521,7 +521,7 @@ alloc_entry *alloc_race_table;
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
 TERM_COLOR misc_to_attr[256];
-char misc_to_char[256];
+SYMBOL_CODE misc_to_char[256];
 
 
 /*
@@ -529,7 +529,7 @@ char misc_to_char[256];
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
 TERM_COLOR tval_to_attr[128];
-char tval_to_char[128];
+SYMBOL_CODE tval_to_char[128];
 
 
 /*
