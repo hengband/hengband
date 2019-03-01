@@ -2357,7 +2357,7 @@ bool mutation_power_aux(int power)
 	return TRUE;
 }
 
-become_living_trump(player_type *creature_ptr)
+void become_living_trump(player_type *creature_ptr)
 {
 	MUTATION_IDX mutation;
 
