@@ -1893,6 +1893,10 @@ typedef struct {
 	s16b *mproc_list[MAX_MTIMED]; /*!< The array to process dungeon monsters[max_m_idx] */
 	s16b mproc_max[MAX_MTIMED]; /*!< Number of monsters to be processed */
 
+	POSITION_IDX lite_n; //!< Array of grids lit by player lite (see "current_floor_ptr->grid_array.c")
+	POSITION lite_y[LITE_MAX];
+	POSITION lite_x[LITE_MAX];
+
 } floor_type;
 
 typedef struct {

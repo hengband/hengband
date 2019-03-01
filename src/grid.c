@@ -3217,13 +3217,13 @@ void forget_lite(void)
 	int i, x, y;
 
 	/* None to forget */
-	if (!lite_n) return;
+	if (!current_floor_ptr->lite_n) return;
 
 	/* Clear them all */
-	for (i = 0; i < lite_n; i++)
+	for (i = 0; i < current_floor_ptr->lite_n; i++)
 	{
-		y = lite_y[i];
-		x = lite_x[i];
+		y = current_floor_ptr->lite_y[i];
+		x = current_floor_ptr->lite_x[i];
 
 		/* Forget "LITE" flag */
 		current_floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
@@ -3232,7 +3232,7 @@ void forget_lite(void)
 	}
 
 	/* None left */
-	lite_n = 0;
+	current_floor_ptr->lite_n = 0;
 }
 
 
@@ -3271,8 +3271,8 @@ void forget_lite(void)
 	if (!(current_floor_ptr->grid_array[Y][X].info & (CAVE_LITE))) \
 	{ \
 		current_floor_ptr->grid_array[Y][X].info |= (CAVE_LITE); \
-		lite_y[lite_n] = (Y); \
-		lite_x[lite_n++] = (X); \
+		current_floor_ptr->lite_y[current_floor_ptr->lite_n] = (Y); \
+		current_floor_ptr->lite_x[current_floor_ptr->lite_n++] = (X); \
 	} \
 }
 
@@ -3325,10 +3325,10 @@ void update_lite(void)
 	/*** Save the old "lite" grids for later ***/
 
 	/* Clear them all */
-	for (i = 0; i < lite_n; i++)
+	for (i = 0; i < current_floor_ptr->lite_n; i++)
 	{
-		y = lite_y[i];
-		x = lite_x[i];
+		y = current_floor_ptr->lite_y[i];
+		x = current_floor_ptr->lite_x[i];
 
 		/* Mark the grid as not "lite" */
 		current_floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
@@ -3343,7 +3343,7 @@ void update_lite(void)
 	}
 
 	/* None left */
-	lite_n = 0;
+	current_floor_ptr->lite_n = 0;
 
 
 	/*** Collect the new "lite" grids ***/
@@ -3482,10 +3482,10 @@ void update_lite(void)
 	/*** Complete the algorithm ***/
 
 	/* Draw the new grids */
-	for (i = 0; i < lite_n; i++)
+	for (i = 0; i < current_floor_ptr->lite_n; i++)
 	{
-		y = lite_y[i];
-		x = lite_x[i];
+		y = current_floor_ptr->lite_y[i];
+		x = current_floor_ptr->lite_x[i];
 
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
