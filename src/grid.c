@@ -3713,10 +3713,10 @@ void update_mon_lite(void)
 		(MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
 
 	/* Clear all monster lit squares */
-	for (i = 0; i < mon_lite_n; i++)
+	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
 	{
 		/* Point to grid */
-		g_ptr = &current_floor_ptr->grid_array[mon_lite_y[i]][mon_lite_x[i]];
+		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->mon_lite_y[i]][current_floor_ptr->mon_lite_x[i]];
 
 		/* Set temp or xtra flag */
 		g_ptr->info |= (g_ptr->info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA;
@@ -3904,10 +3904,10 @@ void update_mon_lite(void)
 	/*
 	 * Look at old set flags to see if there are any changes.
 	 */
-	for (i = 0; i < mon_lite_n; i++)
+	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
 	{
-		fx = mon_lite_x[i];
-		fy = mon_lite_y[i];
+		fx = current_floor_ptr->mon_lite_x[i];
+		fy = current_floor_ptr->mon_lite_y[i];
 
 		/* We trust this grid is in bounds */
 
@@ -3942,7 +3942,7 @@ void update_mon_lite(void)
 	}
 
 	/* Clear the lite array */
-	mon_lite_n = 0;
+	current_floor_ptr->mon_lite_n = 0;
 
 	/* Copy the temp array into the lit array lighting the new squares. */
 	for (i = 0; i < end_temp; i++)
@@ -3977,9 +3977,9 @@ void update_mon_lite(void)
 		}
 
 		/* Save in the monster lit or darkened array */
-		mon_lite_x[mon_lite_n] = fx;
-		mon_lite_y[mon_lite_n] = fy;
-		mon_lite_n++;
+		current_floor_ptr->mon_lite_x[current_floor_ptr->mon_lite_n] = fx;
+		current_floor_ptr->mon_lite_y[current_floor_ptr->mon_lite_n] = fy;
+		current_floor_ptr->mon_lite_n++;
 	}
 
 	/* Clear the temp flag for the old lit or darken grids */
@@ -4021,17 +4021,17 @@ void clear_mon_lite(void)
 	grid_type *g_ptr;
 
 	/* Clear all monster lit squares */
-	for (i = 0; i < mon_lite_n; i++)
+	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
 	{
 		/* Point to grid */
-		g_ptr = &current_floor_ptr->grid_array[mon_lite_y[i]][mon_lite_x[i]];
+		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->mon_lite_y[i]][current_floor_ptr->mon_lite_x[i]];
 
 		/* Clear monster illumination flag */
 		g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
 	}
 
 	/* Empty the array */
-	mon_lite_n = 0;
+	current_floor_ptr->mon_lite_n = 0;
 }
 
 

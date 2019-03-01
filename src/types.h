@@ -1898,6 +1898,9 @@ typedef struct {
 	POSITION lite_y[LITE_MAX];
 	POSITION lite_x[LITE_MAX];
 
+	POSITION_IDX mon_lite_n; //!< Array of grids lit by player lite (see "current_floor_ptr->grid_array.c")
+	POSITION mon_lite_y[MON_LITE_MAX];
+	POSITION mon_lite_x[MON_LITE_MAX];
 } floor_type;
 
 typedef struct {

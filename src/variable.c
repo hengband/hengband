@@ -209,10 +209,6 @@ char player_base[32];
 char savefile[1024];
 char savefile_base[40];
 
-POSITION_IDX mon_lite_n; //!< Array of grids lit by player lite (see "current_floor_ptr->grid_array.c")
-POSITION mon_lite_y[MON_LITE_MAX];
-POSITION mon_lite_x[MON_LITE_MAX];
-
 POSITION_IDX view_n; //!< Array of grids viewable to the player (see "current_floor_ptr->grid_array.c")
 POSITION view_y[VIEW_MAX];
 POSITION view_x[VIEW_MAX];
