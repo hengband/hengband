@@ -1034,6 +1034,7 @@ struct player_type
 	HIT_POINT mhp;			/* Max hit pts */
 	HIT_POINT chp;			/* Cur hit pts */
 	u32b chp_frac;		/* Cur hit frac (times 2^16) */
+	PERCENTAGE mutant_regenerate_mod;
 
 	MANA_POINT msp;			/* Max mana pts */
 	MANA_POINT csp;			/* Cur mana pts */

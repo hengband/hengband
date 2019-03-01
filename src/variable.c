@@ -782,8 +782,6 @@ int init_flags;
  */
 int highscore_fd = -1;
 
-int mutant_regenerate_mod = 100;
-
 bool can_save = FALSE;        /* Game can be saved */
 
 s16b world_monster;

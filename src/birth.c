@@ -1738,7 +1738,7 @@ static void player_wipe_without_name(void)
 	p_ptr->knowledge = 0;
 
 	/* Clean the mutation count */
-	mutant_regenerate_mod = 100;
+	p_ptr->mutant_regenerate_mod = 100;
 
 	/* Clear "cheat" options */
 	cheat_peek = FALSE;

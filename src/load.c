@@ -2184,7 +2184,7 @@ static void rd_extra(void)
 	}
 
 	/* Calc the regeneration modifier for mutations */
-	mutant_regenerate_mod = calc_mutant_regenerate_mod();
+	p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod();
 
 	if (z_older_than(10,0,9))
 	{

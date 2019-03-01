@@ -1824,7 +1824,7 @@ static void process_world_aux_hp_and_sp(void)
 	/* Special floor -- Pattern, in a wall -- yields no healing */
 	if (cave_no_regen) regen_amount = 0;
 
-	regen_amount = (regen_amount * mutant_regenerate_mod) / 100;
+	regen_amount = (regen_amount * p_ptr->mutant_regenerate_mod) / 100;
 
 	/* Regenerate Hit Points if needed */
 	if ((p_ptr->chp < p_ptr->mhp) && !cave_no_regen)

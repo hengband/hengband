@@ -336,7 +336,6 @@ extern int quest_text_line;
 extern s16b gf_color[MAX_GF];
 extern int init_flags;
 extern int highscore_fd;
-extern int mutant_regenerate_mod;
 extern bool can_save;
 extern s16b world_monster;
 extern int cap_mon;

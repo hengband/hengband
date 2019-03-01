@@ -1061,7 +1061,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 								drain_msg = FALSE;
 							}
 
-							drain_heal = (drain_heal * mutant_regenerate_mod) / 100;
+							drain_heal = (drain_heal * p_ptr->mutant_regenerate_mod) / 100;
 
 							hp_player(drain_heal);
 							/* We get to keep some of it! */
