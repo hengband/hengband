@@ -2783,7 +2783,7 @@ void msg_print(concptr msg)
 	char *t;
 	char buf[1024];
 
-	if (world_monster) return;
+	if (current_world_ptr->timewalk_m_idx) return;
 
 	/* Hack -- Reset */
 	if (!msg_flag) {

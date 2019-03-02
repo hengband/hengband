@@ -511,7 +511,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 
 	teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
 
-	if (old_ml && (old_cdis <= MAX_SIGHT) && !world_monster && !p_ptr->inside_battle && los(p_ptr->y, p_ptr->x, oldfy, oldfx))
+	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !p_ptr->inside_battle && los(p_ptr->y, p_ptr->x, oldfy, oldfx))
 	{
 		bool follow = FALSE;
 

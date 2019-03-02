@@ -777,7 +777,7 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 {
 	monster_type *m_ptr = &current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
 
-	if (world_monster) return (FALSE);
+	if (current_world_ptr->timewalk_m_idx) return (FALSE);
 
 	if (vs_player)
 	{
@@ -794,14 +794,14 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 	}
 
 	/* This monster cast spells */
-	world_monster = hack_m_idx;
+	current_world_ptr->timewalk_m_idx = hack_m_idx;
 
 	if (vs_player) do_cmd_redraw();
 
 	while (num--)
 	{
 		if (!m_ptr->r_idx) break;
-		process_monster(world_monster);
+		process_monster(current_world_ptr->timewalk_m_idx);
 		reset_target(m_ptr);
 		handle_stuff();
 
@@ -812,7 +812,7 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 	p_ptr->update |= (PU_MONSTERS);
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-	world_monster = 0;
+	current_world_ptr->timewalk_m_idx = 0;
 	if (vs_player || (player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
 	{
 		msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));

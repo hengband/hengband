@@ -773,7 +773,6 @@ int highscore_fd = -1;
 
 bool can_save = FALSE;        /* Game can be saved */
 
-s16b world_monster;
 
 int cap_mon;
 int cap_mspeed;

@@ -5955,7 +5955,7 @@ void play_game(bool new_game)
 
 	p_ptr->teleport_town = FALSE;
 	p_ptr->sutemi = FALSE;
-	world_monster = FALSE;
+	current_world_ptr->timewalk_m_idx = 0;
 	p_ptr->now_damaged = FALSE;
 	now_message = 0;
 	start_time = time(NULL) - 1;

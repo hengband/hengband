@@ -328,7 +328,6 @@ extern TERM_COLOR gf_color[MAX_GF];
 extern int init_flags;
 extern int highscore_fd;
 extern bool can_save;
-extern s16b world_monster;
 extern int cap_mon;
 extern int cap_mspeed;
 extern HIT_POINT cap_hp;

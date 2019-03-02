@@ -2550,7 +2550,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		&& !p_ptr->inside_battle && !is_pet(m_ptr);
 
 	/* The caster is dead? */
-	if (world_monster && world_monster == m_idx) world_monster = 0;
+	if (current_world_ptr->timewalk_m_idx && current_world_ptr->timewalk_m_idx == m_idx) current_world_ptr->timewalk_m_idx = 0;
 
 	/* Notice changes in view */
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))

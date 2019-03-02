@@ -2151,7 +2151,7 @@ void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
 		/* Hack -- fake monochrome */
 		if (!use_graphics)
 		{
-			if (world_monster) a = TERM_DARK;
+			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
 			else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
@@ -2315,7 +2315,7 @@ void display_dungeon(void)
 				/* Hack -- fake monochrome */
 				if (!use_graphics)
 				{
-					if (world_monster) a = TERM_DARK;
+					if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
 					else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
 					else if (p_ptr->wraith_form) a = TERM_L_DARK;
 				}
@@ -2366,7 +2366,7 @@ void lite_spot(POSITION y, POSITION x)
 		/* Hack -- fake monochrome */
 		if (!use_graphics)
 		{
-			if (world_monster) a = TERM_DARK;
+			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
 			else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
@@ -2447,7 +2447,7 @@ void prt_map(void)
 			/* Hack -- fake monochrome */
 			if (!use_graphics)
 			{
-				if (world_monster) a = TERM_DARK;
+				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
 				else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
@@ -2516,7 +2516,7 @@ void prt_path(POSITION y, POSITION x)
 
 			if (!use_graphics)
 			{
-				if (world_monster) a = TERM_DARK;
+				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
 				else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
@@ -2828,7 +2828,7 @@ void display_map(int *cy, int *cx)
 			/* Hack -- fake monochrome */
 			if (!use_graphics)
 			{
-				if (world_monster) ta = TERM_DARK;
+				if (current_world_ptr->timewalk_m_idx) ta = TERM_DARK;
 				else if (IS_INVULN() || p_ptr->timewalk) ta = TERM_WHITE;
 				else if (p_ptr->wraith_form) ta = TERM_L_DARK;
 			}
@@ -3729,7 +3729,7 @@ void update_mon_lite(void)
 	temp_n = 0;
 
 	/* If a monster stops time, don't process */
-	if (!world_monster)
+	if (!current_world_ptr->timewalk_m_idx)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;

@@ -1923,5 +1923,6 @@ typedef struct {
 	GAME_TURN game_turn_limit;		/*!< game_turnの最大値 / Limit of game_turn */
 	GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game current_world_ptr->game_turn in dungeon */
 	GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
+	MONSTER_IDX timewalk_m_idx;     /*!< 現在時間停止を行っているモンスターのID */
 
 } world_type;

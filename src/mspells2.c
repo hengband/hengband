@@ -705,7 +705,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	dam = monspell_to_monster(thrown_spell, y, x, m_idx, target_idx);
 	if (dam < 0) return FALSE;
 
-	if (m_ptr->ml && maneable && !world_monster && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))
+	if (m_ptr->ml && maneable && !current_world_ptr->timewalk_m_idx && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))
 	{
 		if (thrown_spell != 167) /* Not RF6_SPECIAL */
 		{

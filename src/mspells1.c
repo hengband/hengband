@@ -1050,7 +1050,7 @@ static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 	/*** Try to pick an appropriate spell type ***/
 
 	/* world */
-	if (world_num && (randint0(100) < 15) && !world_monster)
+	if (world_num && (randint0(100) < 15) && !current_world_ptr->timewalk_m_idx)
 	{
 		/* Choose haste spell */
 		return (world[randint0(world_num)]);
@@ -1109,7 +1109,7 @@ static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 	}
 
 	/* Player is close and we have attack spells, blink away */
-	if ((distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->a_ability_flags2 & RF6_TRAPS)) && (randint0(100) < 75) && !world_monster)
+	if ((distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->a_ability_flags2 & RF6_TRAPS)) && (randint0(100) < 75) && !current_world_ptr->timewalk_m_idx)
 	{
 		/* Choose tactical spell */
 		if (tactic_num) return (tactic[randint0(tactic_num)]);
@@ -1160,7 +1160,7 @@ static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 	}
 
 	/* Try another tactical spell (sometimes) */
-	if (tactic_num && (randint0(100) < 50) && !world_monster)
+	if (tactic_num && (randint0(100) < 50) && !current_world_ptr->timewalk_m_idx)
 	{
 		/* Choose tactic spell */
 		return (tactic[randint0(tactic_num)]);
@@ -1769,7 +1769,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 		learn_spell(thrown_spell - 96);
 	}
 
-	if (seen && maneable && !world_monster && (p_ptr->pclass == CLASS_IMITATOR))
+	if (seen && maneable && !current_world_ptr->timewalk_m_idx && (p_ptr->pclass == CLASS_IMITATOR))
 	{
 		if (thrown_spell != 167) /* Not RF6_SPECIAL */
 		{
