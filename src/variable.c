@@ -209,10 +209,6 @@ char player_base[32];
 char savefile[1024];
 char savefile_base[40];
 
-POSITION_IDX view_n; //!< Array of grids viewable to the player (see "current_floor_ptr->grid_array.c")
-POSITION view_y[VIEW_MAX];
-POSITION view_x[VIEW_MAX];
-
 POSITION_IDX temp_n; //!< Array of grids for use by various functions (see "current_floor_ptr->grid_array.c")
 POSITION temp_y[TEMP_MAX];
 POSITION temp_x[TEMP_MAX];

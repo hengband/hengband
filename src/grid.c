@@ -4046,13 +4046,13 @@ void forget_view(void)
 	grid_type *g_ptr;
 
 	/* None to forget */
-	if (!view_n) return;
+	if (!current_floor_ptr->view_n) return;
 
 	/* Clear them all */
-	for (i = 0; i < view_n; i++)
+	for (i = 0; i < current_floor_ptr->view_n; i++)
 	{
-		POSITION y = view_y[i];
-		POSITION x = view_x[i];
+		POSITION y = current_floor_ptr->view_y[i];
+		POSITION x = current_floor_ptr->view_x[i];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		/* Forget that the grid is viewable */
@@ -4065,7 +4065,7 @@ void forget_view(void)
 	}
 
 	/* None left */
-	view_n = 0;
+	current_floor_ptr->view_n = 0;
 }
 
 
@@ -4080,9 +4080,9 @@ void forget_view(void)
 {\
     if (!((C)->info & (CAVE_VIEW))){\
     (C)->info |= (CAVE_VIEW); \
-    view_y[view_n] = (Y); \
-    view_x[view_n] = (X); \
-    view_n++;}\
+    current_floor_ptr->view_y[current_floor_ptr->view_n] = (Y); \
+    current_floor_ptr->view_x[current_floor_ptr->view_n] = (X); \
+    current_floor_ptr->view_n++;}\
 }
 
 
@@ -4328,10 +4328,10 @@ void update_view(void)
 	/*** Step 0 -- Begin ***/
 
 	/* Save the old "view" grids for later */
-	for (n = 0; n < view_n; n++)
+	for (n = 0; n < current_floor_ptr->view_n; n++)
 	{
-		y = view_y[n];
-		x = view_x[n];
+		y = current_floor_ptr->view_y[n];
+		x = current_floor_ptr->view_x[n];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		/* Mark the grid as not in "view" */
@@ -4347,7 +4347,7 @@ void update_view(void)
 	}
 
 	/* Start over with the "view" array */
-	view_n = 0;
+	current_floor_ptr->view_n = 0;
 
 	/*** Step 1 -- adjacent grids ***/
 
@@ -4695,10 +4695,10 @@ void update_view(void)
 	/*** Step 5 -- Complete the algorithm ***/
 
 	/* Update all the new grids */
-	for (n = 0; n < view_n; n++)
+	for (n = 0; n < current_floor_ptr->view_n; n++)
 	{
-		y = view_y[n];
-		x = view_x[n];
+		y = current_floor_ptr->view_y[n];
+		x = current_floor_ptr->view_x[n];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		/* Clear the "CAVE_XTRA" flag */
