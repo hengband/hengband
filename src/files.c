@@ -623,7 +623,7 @@ errr process_pref_file_command(char *buf)
 				if (streq(gf_desc[i].name, buf + 2))
 				{
 					/* Remember this color set */
-					gf_color[gf_desc[i].num] = quark_add(t);
+					gf_color[gf_desc[i].num] = (TERM_COLOR)quark_add(t);
 
 					/* Success */
 					return 0;

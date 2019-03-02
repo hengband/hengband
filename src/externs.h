@@ -324,7 +324,7 @@ extern DUNGEON_IDX max_d_idx;
 extern quest_type *quest;
 extern char quest_text[10][80];
 extern int quest_text_line;
-extern s16b gf_color[MAX_GF];
+extern TERM_COLOR gf_color[MAX_GF];
 extern int init_flags;
 extern int highscore_fd;
 extern bool can_save;
