@@ -410,7 +410,6 @@ extern FEAT_IDX feat_wall_outer;
 extern FEAT_IDX feat_wall_inner;
 extern FEAT_IDX feat_wall_solid;
 extern FEAT_IDX feat_ground_type[100], feat_wall_type[100];
-extern bool now_damaged;
 extern COMMAND_CODE now_message;
 extern bool use_menu;
 

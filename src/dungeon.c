@@ -4968,7 +4968,7 @@ static void process_player(void)
 		p_ptr->window |= PW_PLAYER;
 		p_ptr->sutemi = FALSE;
 		p_ptr->counter = FALSE;
-		now_damaged = FALSE;
+		p_ptr->now_damaged = FALSE;
 
 		handle_stuff();
 
@@ -5956,7 +5956,7 @@ void play_game(bool new_game)
 	p_ptr->teleport_town = FALSE;
 	p_ptr->sutemi = FALSE;
 	world_monster = FALSE;
-	now_damaged = FALSE;
+	p_ptr->now_damaged = FALSE;
 	now_message = 0;
 	start_time = time(NULL) - 1;
 	record_o_name[0] = '\0';

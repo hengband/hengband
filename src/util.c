@@ -2699,7 +2699,7 @@ static void msg_flush(int x)
 	byte a = TERM_L_BLUE;
 	bool nagasu = FALSE;
 
-	if ((auto_more && !now_damaged) || num_more < 0){
+	if ((auto_more && !p_ptr->now_damaged) || num_more < 0){
 		int i;
 		for (i = 0; i < 8; i++)
 		{
@@ -2714,7 +2714,7 @@ static void msg_flush(int x)
 			nagasu = TRUE;
 		}
 	}
-	now_damaged = FALSE;
+	p_ptr->now_damaged = FALSE;
 
 	if (!p_ptr->playing || !nagasu)
 	{

@@ -3876,7 +3876,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 		disturb(TRUE, TRUE);
 		if (auto_more)
 		{
-			now_damaged = TRUE;
+			p_ptr->now_damaged = TRUE;
 		}
 	}
 
@@ -4182,7 +4182,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 		if (auto_more)
 		{
 			/* stop auto_more even if DAMAGE_USELIFE */
-			now_damaged = TRUE;
+			p_ptr->now_damaged = TRUE;
 		}
 
 		msg_print(_("*** 警告:低ヒット・ポイント！ ***", "*** LOW HITPOINT WARNING! ***"));
