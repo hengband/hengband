@@ -213,9 +213,6 @@ POSITION_IDX temp_n; //!< Array of grids for use by various functions (see "curr
 POSITION temp_y[TEMP_MAX];
 POSITION temp_x[TEMP_MAX];
 
-POSITION_IDX redraw_n = 0; //!< Array of grids for delayed visual updating (see "current_floor_ptr->grid_array.c")
-POSITION redraw_y[REDRAW_MAX];
-POSITION redraw_x[REDRAW_MAX];
 
 
 /*

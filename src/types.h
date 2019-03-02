@@ -1906,6 +1906,10 @@ typedef struct {
 	POSITION view_y[VIEW_MAX];
 	POSITION view_x[VIEW_MAX];
 
+	POSITION_IDX redraw_n; //!< Array of grids for delayed visual updating (see "current_floor_ptr->grid_array.c")
+	POSITION redraw_y[REDRAW_MAX];
+	POSITION redraw_x[REDRAW_MAX];
+
 } floor_type;
 
 typedef struct {

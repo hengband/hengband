@@ -561,6 +561,11 @@ static bool cave_gen(void)
 	POSITION y, x;
 	dun_data dun_body;
 
+	current_floor_ptr->lite_n = 0;
+	current_floor_ptr->mon_lite_n = 0;
+	current_floor_ptr->redraw_n = 0;
+	current_floor_ptr->view_n = 0;
+
 	/* Global data */
 	dun = &dun_body;
 

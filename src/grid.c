@@ -3254,8 +3254,8 @@ void forget_lite(void)
 	if (!((C)->info & CAVE_REDRAW)) \
 	{ \
 		(C)->info |= CAVE_REDRAW; \
-		redraw_y[redraw_n] = (Y); \
-		redraw_x[redraw_n++] = (X); \
+		current_floor_ptr->redraw_y[current_floor_ptr->redraw_n] = (Y); \
+		current_floor_ptr->redraw_x[current_floor_ptr->redraw_n++] = (X); \
 	} \
 }
 
@@ -4747,10 +4747,10 @@ void delayed_visual_update(void)
 	grid_type *g_ptr;
 
 	/* Update needed grids */
-	for (i = 0; i < redraw_n; i++)
+	for (i = 0; i < current_floor_ptr->redraw_n; i++)
 	{
-		y = redraw_y[i];
-		x = redraw_x[i];
+		y = current_floor_ptr->redraw_y[i];
+		x = current_floor_ptr->redraw_x[i];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		/* Update only needed grids (prevent multiple updating) */
@@ -4769,7 +4769,7 @@ void delayed_visual_update(void)
 	}
 
 	/* None left */
-	redraw_n = 0;
+	current_floor_ptr->redraw_n = 0;
 }
 
 
