@@ -1461,12 +1461,12 @@ void battle_monsters(void)
  */
 static bool kakutoujou(void)
 {
-	s32b maxbet;
-	s32b wager;
+	PRICE maxbet;
+	PRICE wager;
 	char out_val[160], tmp_str[80];
 	concptr p;
 
-	if ((current_world_ptr->game_turn - old_battle) > TURNS_PER_TICK*250)
+	if ((current_world_ptr->game_turn - old_battle) > TURNS_PER_TICK * 250)
 	{
 		battle_monsters();
 		old_battle = current_world_ptr->game_turn;
@@ -1520,9 +1520,9 @@ static bool kakutoujou(void)
 			else bell();
 		}
 
-		clear_bldg(4,4);
-		for (i=0;i<4;i++)
-			if (i !=sel_monster) clear_bldg(i+5,i+5);
+		clear_bldg(4, 4);
+		for (i = 0; i < 4; i++)
+			if (i != sel_monster) clear_bldg(i + 5, i + 5);
 
 		maxbet = p_ptr->lev * 200;
 
