@@ -1162,12 +1162,7 @@ static void prt_speed(void)
 		else if ((is_fast && !p_ptr->slow) || p_ptr->lightspeed) attr = TERM_YELLOW;
 		else if (p_ptr->slow && !is_fast) attr = TERM_VIOLET;
 		else attr = TERM_L_GREEN;
-#ifdef JP
-		sprintf(buf, "%s(+%d)", (p_ptr->riding ? "乗馬" : "加速"), (i - 110));
-#else
-		sprintf(buf, "Fast(+%d)", (i - 110));
-#endif
-
+		sprintf(buf, "%s(+%d)", (p_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), (i - 110));
 	}
 
 	/* Slow */
@@ -1183,11 +1178,7 @@ static void prt_speed(void)
 		else if (is_fast && !p_ptr->slow) attr = TERM_YELLOW;
 		else if (p_ptr->slow && !is_fast) attr = TERM_VIOLET;
 		else attr = TERM_L_UMBER;
-#ifdef JP
-		sprintf(buf, "%s(-%d)", (p_ptr->riding ? "乗馬" : "減速"), (110 - i));
-#else
-		sprintf(buf, "Slow(-%d)", (110 - i));
-#endif
+		sprintf(buf, "%s(-%d)", (p_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), (110 - i));
 	}
 	else if (p_ptr->riding)
 	{
