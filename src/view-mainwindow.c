@@ -1475,8 +1475,6 @@ static void health_redraw(bool riding)
 static void prt_frame_basic(void)
 {
 	int i;
-
-	/* Race and Class */
 	if (p_ptr->mimic_form)
 		prt_field(mimic_info[p_ptr->mimic_form].title, ROW_RACE, COL_RACE);
 	else
@@ -1485,36 +1483,16 @@ static void prt_frame_basic(void)
 		my_strcpy(str, rp_ptr->title, sizeof(str));
 		prt_field(str, ROW_RACE, COL_RACE);
 	}
-/*	prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS); */
-/*	prt_field(ap_ptr->title, ROW_SEIKAKU, COL_SEIKAKU); */
 
-
-	/* Title */
 	prt_title();
-
-	/* Level/Experience */
 	prt_level();
 	prt_exp();
-
-	/* All Stats */
 	for (i = 0; i < A_MAX; i++) prt_stat(i);
-
-	/* Armor */
 	prt_ac();
-
-	/* Hitpoints */
 	prt_hp();
-
-	/* Spellpoints */
 	prt_sp();
-
-	/* Gold */
 	prt_gold();
-
-	/* Current depth */
 	prt_depth();
-
-	/* Special */
 	health_redraw(FALSE);
 	health_redraw(TRUE);
 }
@@ -1526,24 +1504,13 @@ static void prt_frame_basic(void)
  */
 static void prt_frame_extra(void)
 {
-	/* Cut/Stun */
 	prt_cut();
 	prt_stun();
-
-	/* Food */
 	prt_hunger();
-
-	/* State */
 	prt_state();
-
-	/* Speed */
 	prt_speed();
-
-	/* Study spells */
 	prt_study();
-
 	prt_imitation();
-
 	prt_status();
 }
 
