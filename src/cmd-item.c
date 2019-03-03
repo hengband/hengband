@@ -64,7 +64,7 @@ void do_cmd_inven(void)
 	/* Process "Escape" */
 	if (command_new == ESCAPE)
 	{
-		int wid, hgt;
+		TERM_LEN wid, hgt;
 
 		Term_get_size(&wid, &hgt);
 
@@ -89,7 +89,6 @@ void do_cmd_inven(void)
 void do_cmd_equip(void)
 {
 	char out_val[160];
-
 
 	/* Note that we are in "equipment" mode */
 	command_wrk = TRUE;
@@ -118,7 +117,7 @@ void do_cmd_equip(void)
 	/* Process "Escape" */
 	if (command_new == ESCAPE)
 	{
-		int wid, hgt;
+		TERM_LEN wid, hgt;
 
 		Term_get_size(&wid, &hgt);
 
