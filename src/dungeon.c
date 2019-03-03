@@ -3450,7 +3450,7 @@ static void process_world(void)
 			p_ptr->energy_need = 0;
 			battle_monsters();
 		}
-		else if (current_world_ptr->game_turn - old_turn == 150 * TURNS_PER_TICK)
+		else if (current_world_ptr->game_turn - current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
 		{
 			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
 			p_ptr->au += kakekin;
@@ -6235,8 +6235,8 @@ void prevent_turn_overflow(void)
 
 	if (current_world_ptr->game_turn > rollback_turns) current_world_ptr->game_turn -= rollback_turns;
 	else current_world_ptr->game_turn = 1; /* Paranoia */
-	if (old_turn > rollback_turns) old_turn -= rollback_turns;
-	else old_turn = 1;
+	if (current_floor_ptr->generated_turn > rollback_turns) current_floor_ptr->generated_turn -= rollback_turns;
+	else current_floor_ptr->generated_turn = 1;
 	if (old_battle > rollback_turns) old_battle -= rollback_turns;
 	else old_battle = 1;
 	if (p_ptr->feeling_turn > rollback_turns) p_ptr->feeling_turn -= rollback_turns;

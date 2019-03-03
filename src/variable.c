@@ -113,7 +113,6 @@ GAME_TURN resting;			/* Current counter for resting, if any */
 
 bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
 
-GAME_TURN old_turn;			/* Turn when level began */
 GAME_TURN old_battle;
 
 bool use_sound;			/* The "sound" mode is enabled */

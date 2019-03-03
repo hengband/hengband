@@ -1386,10 +1386,10 @@ void change_floor(void)
 		wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
 
 	/* Remember when this level was "created" */
-	old_turn = current_world_ptr->game_turn;
+	current_floor_ptr->generated_turn = current_world_ptr->game_turn;
 
 	/* No dungeon feeling yet */
-	p_ptr->feeling_turn = old_turn;
+	p_ptr->feeling_turn = current_floor_ptr->generated_turn;
 	p_ptr->feeling = 0;
 
 	/* Clear all flags */

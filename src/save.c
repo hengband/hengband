@@ -820,7 +820,7 @@ static void wr_extra(void)
 	wr_byte(p_ptr->feeling);
 
 	/* Turn when level began */
-	wr_s32b(old_turn);
+	wr_s32b(current_floor_ptr->generated_turn);
 
 	/* Turn of last "feeling" */
 	wr_s32b(p_ptr->feeling_turn);

@@ -2265,11 +2265,11 @@ static void rd_extra(void)
 	current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 
 	/* Turn when level began */
-	rd_s32b(&old_turn);
+	rd_s32b(&current_floor_ptr->generated_turn);
 
 	if (h_older_than(1, 7, 0, 4))
 	{
-		p_ptr->feeling_turn = old_turn;
+		p_ptr->feeling_turn = current_floor_ptr->generated_turn;
 	}
 	else
 	{
@@ -2288,7 +2288,7 @@ static void rd_extra(void)
 
 	if (z_older_than(11, 0, 13))
 	{
-		old_turn /= 2;
+		current_floor_ptr->generated_turn /= 2;
 		p_ptr->feeling_turn /= 2;
 		current_world_ptr->game_turn /= 2;
 		current_world_ptr->dungeon_turn /= 2;
