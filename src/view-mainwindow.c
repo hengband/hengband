@@ -1050,60 +1050,23 @@ static void prt_state(void)
 				break;
 			}
 			case ACTION_REST:
-			{
-				int i;
-
 				/* Start with "Rest" */
 				strcpy(text, _("    ", "    "));
 
-				/* Extensive (timed) rest */
-				if (p_ptr->resting >= 1000)
+				if (p_ptr->resting > 0)
 				{
-					i = p_ptr->resting / 100;
-					text[3] = '0';
-					text[2] = '0';
-					text[1] = '0' + (i % 10);
-					text[0] = '0' + (i / 10);
+					sprintf(text, "%4d", p_ptr->resting);
 				}
-
-				/* Long (timed) rest */
-				else if (p_ptr->resting >= 100)
-				{
-					i = p_ptr->resting;
-					text[3] = '0' + (i % 10);
-					i = i / 10;
-					text[2] = '0' + (i % 10);
-					text[1] = '0' + (i / 10);
-				}
-
-				/* Medium (timed) rest */
-				else if (p_ptr->resting >= 10)
-				{
-					i = p_ptr->resting;
-					text[3] = '0' + (i % 10);
-					text[2] = '0' + (i / 10);
-				}
-
-				/* Short (timed) rest */
-				else if (p_ptr->resting > 0)
-				{
-					i = p_ptr->resting;
-					text[3] = '0' + (i);
-				}
-
-				/* Rest until healed */
 				else if (p_ptr->resting == COMMAND_ARG_REST_FULL_HEALING)
 				{
 					text[0] = text[1] = text[2] = text[3] = '*';
 				}
-
-				/* Rest until done */
 				else if (p_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE)
 				{
 					text[0] = text[1] = text[2] = text[3] = '&';
 				}
 				break;
-			}
+
 			case ACTION_LEARN:
 			{
 				strcpy(text, _("学習", "lear"));
