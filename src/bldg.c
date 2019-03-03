@@ -1637,9 +1637,9 @@ static void shoukinkubi(void)
 	{
 		byte color;
 		concptr done_mark;
-		monster_race *r_ptr = &r_info[(kubi_r_idx[i] > 10000 ? kubi_r_idx[i] - 10000 : kubi_r_idx[i])];
+		monster_race *r_ptr = &r_info[(current_world_ptr->bounty_r_idx[i] > 10000 ? current_world_ptr->bounty_r_idx[i] - 10000 : current_world_ptr->bounty_r_idx[i])];
 
-		if (kubi_r_idx[i] > 10000)
+		if (current_world_ptr->bounty_r_idx[i] > 10000)
 		{
 			color = TERM_RED;
 			done_mark = _("(済)", "(done)");
@@ -1829,7 +1829,7 @@ static bool kankin(void)
 		for (i = INVEN_PACK-1; i >= 0; i--)
 		{
 			o_ptr = &inventory[i];
-			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == kubi_r_idx[j]))
+			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == current_world_ptr->bounty_r_idx[j]))
 			{
 				char buf[MAX_NLEN+20];
 				int num, k;
@@ -1841,14 +1841,14 @@ static bool kankin(void)
 				if (!get_check(buf)) continue;
 
 #if 0 /* Obsoleted */
-				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[kubi_r_idx[j]].level + 1) * 300 * o_ptr->number);
-				p_ptr->au += (r_info[kubi_r_idx[j]].level+1) * 300 * o_ptr->number;
+				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number);
+				p_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level+1) * 300 * o_ptr->number;
 				p_ptr->redraw |= (PR_GOLD);
 				inven_item_increase(i, -o_ptr->number);
 				inven_item_describe(i);
 				inven_item_optimize(i);
 				chg_virtue(V_JUSTICE, 5);
-				kubi_r_idx[j] += 10000;
+				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				change = TRUE;
 #endif /* Obsoleted */
@@ -1859,12 +1859,12 @@ static bool kankin(void)
 				inven_item_optimize(i);
 
 				chg_virtue(V_JUSTICE, 5);
-				kubi_r_idx[j] += 10000;
+				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				/* Count number of unique corpses already handed */
 				for (num = 0, k = 0; k < MAX_KUBI; k++)
 				{
-					if (kubi_r_idx[k] >= 10000) num++;
+					if (current_world_ptr->bounty_r_idx[k] >= 10000) num++;
 				}
 				msg_format(_("これで合計 %d ポイント獲得しました。" ,"You earned %d point%s total."), num, (num > 1 ? "s" : ""));
 

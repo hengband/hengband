@@ -1927,4 +1927,6 @@ typedef struct {
 	GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
 	MONSTER_IDX timewalk_m_idx;     /*!< 現在時間停止を行っているモンスターのID */
 
+	MONRACE_IDX bounty_r_idx[MAX_KUBI];
+
 } world_type;

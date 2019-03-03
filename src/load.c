@@ -1899,14 +1899,14 @@ static void rd_extra(void)
 		for (i = 0; i < MAX_KUBI; i++)
 		{
 			/* Is this bounty unique already dead? */
-			if (!r_info[kubi_r_idx[i]].max_num) kubi_r_idx[i] += 10000;
+			if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num) current_world_ptr->bounty_r_idx[i] += 10000;
 		}
 	}
 	else
 	{
 		for (i = 0; i < MAX_KUBI; i++)
 		{
-			rd_s16b(&kubi_r_idx[i]);
+			rd_s16b(&current_world_ptr->bounty_r_idx[i]);
 		}
 	}
 

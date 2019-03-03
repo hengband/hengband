@@ -4181,7 +4181,7 @@ static IDX collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 			int j;
 			for (j = 0; j < MAX_KUBI; j++)
 			{
-				if (kubi_r_idx[j] == i || kubi_r_idx[j] - 10000 == i ||
+				if (current_world_ptr->bounty_r_idx[j] == i || current_world_ptr->bounty_r_idx[j] - 10000 == i ||
 					(p_ptr->today_mon && p_ptr->today_mon == i))
 				{
 					wanted = TRUE;
@@ -7535,9 +7535,9 @@ static void do_cmd_knowledge_kubi(void)
 
 		for (i = 0; i < MAX_KUBI; i++)
 		{
-			if (kubi_r_idx[i] <= 10000)
+			if (current_world_ptr->bounty_r_idx[i] <= 10000)
 			{
-				fprintf(fff,"%s\n", r_name + r_info[kubi_r_idx[i]].name);
+				fprintf(fff,"%s\n", r_name + r_info[current_world_ptr->bounty_r_idx[i]].name);
 
 				listed = TRUE;
 			}

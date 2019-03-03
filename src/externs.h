@@ -339,7 +339,6 @@ extern PRICE kakekin;
 extern u32b mon_odds[4];
 extern MONSTER_IDX pet_t_m_idx;
 extern MONSTER_IDX riding_t_m_idx;
-extern MONRACE_IDX kubi_r_idx[MAX_KUBI];
 extern MONRACE_IDX today_mon;
 extern bool write_level;
 extern u32b playtime;

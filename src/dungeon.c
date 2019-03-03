@@ -5651,8 +5651,8 @@ void determine_bounty_uniques(void)
 	{
 		while (1)
 		{
-			kubi_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
-			r_ptr = &r_info[kubi_r_idx[i]];
+			current_world_ptr->bounty_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
+			r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
 
 			if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
 
@@ -5660,10 +5660,10 @@ void determine_bounty_uniques(void)
 
 			if (r_ptr->rarity > 100) continue;
 
-			if (no_questor_or_bounty_uniques(kubi_r_idx[i])) continue;
+			if (no_questor_or_bounty_uniques(current_world_ptr->bounty_r_idx[i])) continue;
 
 			for (j = 0; j < i; j++)
-				if (kubi_r_idx[i] == kubi_r_idx[j]) break;
+				if (current_world_ptr->bounty_r_idx[i] == current_world_ptr->bounty_r_idx[j]) break;
 
 			if (j == i) break;
 		}
@@ -5674,11 +5674,11 @@ void determine_bounty_uniques(void)
 	{
 		for (j = i; j < MAX_KUBI; j++)
 		{
-			if (r_info[kubi_r_idx[i]].level > r_info[kubi_r_idx[j]].level)
+			if (r_info[current_world_ptr->bounty_r_idx[i]].level > r_info[current_world_ptr->bounty_r_idx[j]].level)
 			{
-				tmp = kubi_r_idx[i];
-				kubi_r_idx[i] = kubi_r_idx[j];
-				kubi_r_idx[j] = tmp;
+				tmp = current_world_ptr->bounty_r_idx[i];
+				current_world_ptr->bounty_r_idx[i] = current_world_ptr->bounty_r_idx[j];
+				current_world_ptr->bounty_r_idx[j] = tmp;
 			}
 		}
 	}

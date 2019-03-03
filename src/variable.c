@@ -788,7 +788,6 @@ u32b mon_odds[4];
 MONSTER_IDX pet_t_m_idx;
 MONSTER_IDX riding_t_m_idx;
 
-MONSTER_IDX kubi_r_idx[MAX_KUBI];
 MONSTER_IDX today_mon;
 
 bool write_level;

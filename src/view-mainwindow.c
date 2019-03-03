@@ -1652,7 +1652,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type* m_ptr, int 
 	if(r_ptr->flags1&RF1_UNIQUE){//unique
 		bool is_kubi = FALSE;
 		for(i=0;i<MAX_KUBI;i++){
-			if(kubi_r_idx[i] == r_idx){
+			if(current_world_ptr->bounty_r_idx[i] == r_idx){
 				is_kubi = TRUE;
 				break;
 			}

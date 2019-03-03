@@ -664,7 +664,7 @@ static void wr_extra(void)
 
 	for (i = 0; i < MAX_KUBI; i++)
 	{
-		wr_s16b(kubi_r_idx[i]);
+		wr_s16b(current_world_ptr->bounty_r_idx[i]);
 	}
 
 	for (i = 0; i < 4; i++)

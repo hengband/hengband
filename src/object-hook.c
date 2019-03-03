@@ -546,7 +546,7 @@ bool object_is_shoukinkubi(object_type *o_ptr)
 
 	/* Unique monster */
 	for (i = 0; i < MAX_KUBI; i++)
-		if (o_ptr->pval == kubi_r_idx[i]) break;
+		if (o_ptr->pval == current_world_ptr->bounty_r_idx[i]) break;
 	if (i < MAX_KUBI) return TRUE;
 
 	/* Not wanted */

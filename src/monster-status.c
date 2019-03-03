@@ -1301,7 +1301,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		{
 			for (i = 0; i < MAX_KUBI; i++)
 			{
-				if ((kubi_r_idx[i] == m_ptr->r_idx) && !(m_ptr->mflag2 & MFLAG2_CHAMELEON))
+				if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && !(m_ptr->mflag2 & MFLAG2_CHAMELEON))
 				{
 					msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
 					break;
