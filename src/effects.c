@@ -49,7 +49,7 @@ void set_action(ACTION_IDX typ)
 			}
 			case ACTION_REST:
 			{
-				resting = 0;
+				p_ptr->resting = 0;
 				break;
 			}
 			case ACTION_LEARN:

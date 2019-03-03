@@ -1107,7 +1107,7 @@ struct player_type
 	TIME_EFFECT dustrobe;          /* Timed -- Robe of dust */
 
 	bool timewalk;
-
+	GAME_TURN resting;	/* Current counter for resting, if any */
 
 	PATRON_IDX chaos_patron;
 

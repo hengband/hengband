@@ -1057,9 +1057,9 @@ static void prt_state(void)
 				strcpy(text, _("    ", "    "));
 
 				/* Extensive (timed) rest */
-				if (resting >= 1000)
+				if (p_ptr->resting >= 1000)
 				{
-					i = resting / 100;
+					i = p_ptr->resting / 100;
 					text[3] = '0';
 					text[2] = '0';
 					text[1] = '0' + (i % 10);
@@ -1067,9 +1067,9 @@ static void prt_state(void)
 				}
 
 				/* Long (timed) rest */
-				else if (resting >= 100)
+				else if (p_ptr->resting >= 100)
 				{
-					i = resting;
+					i = p_ptr->resting;
 					text[3] = '0' + (i % 10);
 					i = i / 10;
 					text[2] = '0' + (i % 10);
@@ -1077,28 +1077,28 @@ static void prt_state(void)
 				}
 
 				/* Medium (timed) rest */
-				else if (resting >= 10)
+				else if (p_ptr->resting >= 10)
 				{
-					i = resting;
+					i = p_ptr->resting;
 					text[3] = '0' + (i % 10);
 					text[2] = '0' + (i / 10);
 				}
 
 				/* Short (timed) rest */
-				else if (resting > 0)
+				else if (p_ptr->resting > 0)
 				{
-					i = resting;
+					i = p_ptr->resting;
 					text[3] = '0' + (i);
 				}
 
 				/* Rest until healed */
-				else if (resting == COMMAND_ARG_REST_FULL_HEALING)
+				else if (p_ptr->resting == COMMAND_ARG_REST_FULL_HEALING)
 				{
 					text[0] = text[1] = text[2] = text[3] = '*';
 				}
 
 				/* Rest until done */
-				else if (resting == COMMAND_ARG_REST_UNTIL_DONE)
+				else if (p_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE)
 				{
 					text[0] = text[1] = text[2] = text[3] = '&';
 				}

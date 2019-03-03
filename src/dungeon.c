@@ -4769,10 +4769,10 @@ static void process_player(void)
 	/*** Check for interupts ***/
 
 	/* Complete resting */
-	if (resting < 0)
+	if (p_ptr->resting < 0)
 	{
 		/* Basic resting */
-		if (resting == COMMAND_ARG_REST_FULL_HEALING)
+		if (p_ptr->resting == COMMAND_ARG_REST_FULL_HEALING)
 		{
 			/* Stop resting */
 			if ((p_ptr->chp == p_ptr->mhp) &&
@@ -4783,7 +4783,7 @@ static void process_player(void)
 		}
 
 		/* Complete resting */
-		else if (resting == COMMAND_ARG_REST_UNTIL_DONE)
+		else if (p_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE)
 		{
 			/* Stop resting */
 			if ((p_ptr->chp == p_ptr->mhp) &&
@@ -5008,12 +5008,12 @@ static void process_player(void)
 		else if (p_ptr->action == ACTION_REST)
 		{
 			/* Timed rest */
-			if (resting > 0)
+			if (p_ptr->resting > 0)
 			{
 				/* Reduce rest count */
-				resting--;
+				p_ptr->resting--;
 
-				if (!resting) set_action(ACTION_NONE);
+				if (!p_ptr->resting) set_action(ACTION_NONE);
 				p_ptr->redraw |= (PR_STATE);
 			}
 

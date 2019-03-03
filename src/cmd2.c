@@ -2213,7 +2213,7 @@ void do_cmd_rest(void)
 			chg_virtue(V_DILIGENCE, -1);
 
 	/* Save the rest code */
-	resting = command_arg;
+	p_ptr->resting = command_arg;
 	p_ptr->action = ACTION_REST;
 	p_ptr->update |= (PU_BONUS);
 	update_creature(p_ptr);
