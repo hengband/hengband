@@ -77,7 +77,7 @@ void complete_quest(QUEST_IDX quest_num)
 	q_ptr->status = QUEST_STATUS_COMPLETED;
 	q_ptr->complev = p_ptr->lev;
 	update_playtime();
-	q_ptr->comptime = playtime;
+	q_ptr->comptime = current_world_ptr->play_time;
 
 	if (!(q_ptr->flags & QUEST_FLAG_SILENT))
 	{
@@ -354,7 +354,7 @@ void quest_discovery(QUEST_IDX q_idx)
 			quest[q_idx].status = QUEST_STATUS_FINISHED;
 			q_ptr->complev = 0;
 			update_playtime();
-			q_ptr->comptime = playtime;
+			q_ptr->comptime = current_world_ptr->play_time;
 		}
 		else
 		{

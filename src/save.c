@@ -842,7 +842,7 @@ static void wr_extra(void)
 	/* Save temporary preserved pets (obsolated) */
 	wr_s16b(0);
 
-	wr_u32b(playtime);
+	wr_u32b(current_world_ptr->play_time);
 
 	wr_s32b(p_ptr->visit);
 
@@ -1610,7 +1610,7 @@ static bool save_player_aux(char *name)
 	/* Failure */
 	if (!ok) return (FALSE);
 
-	counts_write(0, playtime);
+	counts_write(0, current_world_ptr->play_time);
 
 	/* Successful save */
 	character_saved = TRUE;
@@ -1960,9 +1960,9 @@ bool load_player(void)
 			u32b tmp = counts_read(2);
 			if (tmp > p_ptr->count)
 				p_ptr->count = tmp;
-			if (counts_read(0) > playtime || counts_read(1) == playtime)
+			if (counts_read(0) > current_world_ptr->play_time || counts_read(1) == current_world_ptr->play_time)
 				counts_write(2, ++p_ptr->count);
-			counts_write(1, playtime);
+			counts_write(1, current_world_ptr->play_time);
 		}
 
 		/* Success */

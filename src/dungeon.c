@@ -1061,7 +1061,7 @@ void leave_quest_check(void)
 			q_ptr->status = QUEST_STATUS_FAILED;
 			q_ptr->complev = p_ptr->lev;
 			update_playtime();
-			q_ptr->comptime = playtime;
+			q_ptr->comptime = current_world_ptr->play_time;
 
 			/* Additional settings */
 			switch (q_ptr->type)
@@ -1111,7 +1111,7 @@ void leave_tower_check(void)
 			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
 			quest[QUEST_TOWER1].complev = p_ptr->lev;
 			update_playtime();
-			quest[QUEST_TOWER1].comptime = playtime;
+			quest[QUEST_TOWER1].comptime = current_world_ptr->play_time;
 		}
 	}
 }
@@ -3087,7 +3087,7 @@ static void process_world_aux_movement(void)
 							q_ptr->status = QUEST_STATUS_FAILED;
 							q_ptr->complev = (byte)p_ptr->lev;
 							update_playtime();
-							q_ptr->comptime = playtime;
+							q_ptr->comptime = current_world_ptr->play_time;
 							r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
 						}
 					}

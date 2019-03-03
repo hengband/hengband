@@ -6006,7 +6006,7 @@ void do_cmd_edit_autopick(void)
 		old_autosave_turn = current_world_ptr->game_turn;
 	}
 
-	/* HACK -- Reset start_time to stop counting playtime while edit */
+	/* HACK -- Reset start_time to stop counting current_world_ptr->play_time while edit */
 	update_playtime();
 
 	/* Free old entries */
@@ -6132,7 +6132,7 @@ void do_cmd_edit_autopick(void)
 	/* Reload autopick pref */
 	process_autopick_file(buf);
 
-	/* HACK -- reset start_time so that playtime is not increase while edit */
+	/* HACK -- reset start_time so that current_world_ptr->play_time is not increase while edit */
 	start_time = (u32b)time(NULL);
 
 	/* Save cursor location */

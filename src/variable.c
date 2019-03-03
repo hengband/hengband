@@ -792,7 +792,6 @@ MONSTER_IDX today_mon;
 
 bool write_level;
 
-u32b playtime;
 u32b start_time;
 
 bool sukekaku;

@@ -1916,11 +1916,8 @@ typedef struct {
 } floor_type;
 
 typedef struct {
-	/*
-	 * Maximum size of the wilderness
-	 */
-	POSITION max_wild_x;
-	POSITION max_wild_y;
+	POSITION max_wild_x; /*!< Maximum size of the wilderness */
+	POSITION max_wild_y; /*!< Maximum size of the wilderness */
 	GAME_TURN game_turn;			/*!< 画面表示上のゲーム時間基準となるターン / Current game turn */
 	GAME_TURN game_turn_limit;		/*!< game_turnの最大値 / Limit of game_turn */
 	GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game current_world_ptr->game_turn in dungeon */
@@ -1929,4 +1926,5 @@ typedef struct {
 
 	MONRACE_IDX bounty_r_idx[MAX_KUBI];
 
+	u32b play_time; /*!< 実プレイ時間 */
 } world_type;

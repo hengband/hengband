@@ -2413,7 +2413,7 @@ void update_playtime(void)
 	if (start_time != 0)
 	{
 		u32b tmp = (u32b)time(NULL);
-		playtime += (tmp - start_time);
+		current_world_ptr->play_time += (tmp - start_time);
 		start_time = tmp;
 	}
 }

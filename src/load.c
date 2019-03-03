@@ -2349,11 +2349,11 @@ static void rd_extra(void)
 
 	if (z_older_than(10,1,2))
 	{
-		playtime = 0;
+		current_world_ptr->play_time = 0;
 	}
 	else
 	{
-		rd_u32b(&playtime);
+		rd_u32b(&current_world_ptr->play_time);
 	}
 
 	if (z_older_than(10,3,9))

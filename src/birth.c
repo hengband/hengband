@@ -4544,7 +4544,7 @@ void player_birth(void)
 	int i, j;
 	char buf[80];
 
-	playtime = 0;
+	current_world_ptr->play_time = 0;
 
 	/* 
 	 * Wipe monsters in old dungeon
