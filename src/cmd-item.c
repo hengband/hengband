@@ -297,16 +297,12 @@ void do_cmd_wield(void)
 
 	if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
 	{
-		char dummy[MAX_NLEN+80];
+		char dummy[MAX_NLEN+100];
 
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-#ifdef JP
-		sprintf(dummy, "%sを装備すると吸血鬼になります。よろしいですか？", o_name);
-#else
-		msg_format("%s will transforms you into a vampire permanently when equiped.", o_name);
-		sprintf(dummy, "Do you become a vampire?");
-#endif
+		sprintf(dummy, _("%sを装備すると吸血鬼になります。よろしいですか？",
+			"%s will transforms you into a vampire permanently when equiped. Do you become a vampire?"), o_name);
 
 		if (!get_check(dummy)) return;
 	}
