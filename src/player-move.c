@@ -2496,3 +2496,70 @@ void do_cmd_travel(void)
 	}
 }
 #endif
+
+/*
+ * Something has happened to disturb the player.
+ * The first arg indicates a major disturbance, which affects search.
+ * The second arg is currently unused, but could induce output flush.
+ * All disturbance cancels repeated commands, resting, and running.
+ */
+void disturb(bool stop_search, bool stop_travel)
+{
+#ifndef TRAVEL
+	/* Unused */
+	stop_travel = stop_travel;
+#endif
+
+	/* Cancel auto-commands */
+	/* command_new = 0; */
+
+	/* Cancel repeated commands */
+	if (command_rep)
+	{
+		/* Cancel */
+		command_rep = 0;
+
+		/* Redraw the state (later) */
+		p_ptr->redraw |= (PR_STATE);
+	}
+
+	/* Cancel Resting */
+	if ((p_ptr->action == ACTION_REST) || (p_ptr->action == ACTION_FISH) || (stop_search && (p_ptr->action == ACTION_SEARCH)))
+	{
+		/* Cancel */
+		set_action(ACTION_NONE);
+	}
+
+	/* Cancel running */
+	if (running)
+	{
+		/* Cancel */
+		running = 0;
+
+		/* Check for new panel if appropriate */
+		if (center_player && !center_running) verify_panel();
+
+		/* Calculate torch radius */
+		p_ptr->update |= (PU_TORCH);
+
+		/* Update monster flow */
+		p_ptr->update |= (PU_FLOW);
+	}
+
+#ifdef TRAVEL
+	if (stop_travel)
+	{
+		/* Cancel */
+		travel.run = 0;
+
+		/* Check for new panel if appropriate */
+		if (center_player && !center_running) verify_panel();
+
+		/* Calculate torch radius */
+		p_ptr->update |= (PU_TORCH);
+	}
+#endif
+
+	/* Flush the input if requested */
+	if (flush_disturb) flush();
+}

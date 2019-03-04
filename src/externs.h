@@ -469,7 +469,6 @@ extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION
 extern void health_track(MONSTER_IDX m_idx);
 extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(KIND_OBJECT_IDX k_idx);
-extern void disturb(bool stop_search, bool flush_output);
 extern void glow_deep_lava_and_bldg(void);
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
@@ -1398,3 +1397,4 @@ extern void kamaenaoshi(INVENTORY_IDX item);
 extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
 
+extern void disturb(bool stop_search, bool flush_output);
