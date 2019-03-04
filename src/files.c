@@ -23,6 +23,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "shoot.h"
+#include "player-move.h"
 
 
 /*

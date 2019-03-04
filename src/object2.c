@@ -17,6 +17,7 @@
 #include "artifact.h"
 #include "player-status.h"
 #include "feature.h"
+#include "player-move.h"
 
 static void one_sustain(object_type *o_ptr);
 

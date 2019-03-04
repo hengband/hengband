@@ -23,6 +23,7 @@
 #include "patron.h"
 #include "mutation.h"
 #include "floor-events.h"
+#include "player-move.h"
 
 #define REWARD_CHANCE 10
 

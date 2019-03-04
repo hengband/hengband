@@ -15,6 +15,7 @@
 #include "artifact.h"
 #include "cmd-activate.h"
 #include "object-hook.h"
+#include "player-move.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify

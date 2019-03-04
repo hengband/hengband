@@ -24,6 +24,7 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "grid.h"
+#include "player-move.h"
 
 
 

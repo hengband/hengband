@@ -22,6 +22,7 @@
 #include "object-hook.h"
 #include "wild.h"
 #include "spells-floor.h"
+#include "player-move.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

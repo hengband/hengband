@@ -25,6 +25,7 @@
 #include "object-hook.h"
 #include "feature.h"
 #include "grid.h"
+#include "player-move.h"
 
 
 /*!

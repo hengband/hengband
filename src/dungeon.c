@@ -35,6 +35,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "player-move.h"
 #include "player-status.h"
 #include "cmd-spell.h"
 #include "realm-hex.h"

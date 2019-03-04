@@ -12,6 +12,7 @@
 #include "artifact.h"
 #include "player-status.h"
 #include "realm-hex.h"
+#include "player-move.h"
 
 /*!
 * @brief モンスターIDを取り、モンスター名をm_nameに代入する /

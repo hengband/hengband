@@ -146,6 +146,7 @@
 #include "projection.h"
 #include "quest.h"
 #include "artifact.h"
+#include "player-move.h"
 #include "player-status.h"
 #include "spells-floor.h"
 #include "feature.h"

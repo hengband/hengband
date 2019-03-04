@@ -303,6 +303,7 @@
     <ClInclude Include="..\..\src\objectkind-hook.h" />
     <ClInclude Include="..\..\src\patron.h" />
     <ClInclude Include="..\..\src\player-damage.h" />
+    <ClInclude Include="..\..\src\player-move.h" />
     <ClInclude Include="..\..\src\player-status.h" />
     <ClInclude Include="..\..\src\quest.h" />
     <ClInclude Include="..\..\src\readdib.h" />
