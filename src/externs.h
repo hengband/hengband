@@ -476,7 +476,6 @@ extern bool is_open(FEAT_IDX feat);
 
 /* cmd1.c */
 extern HIT_POINT critical_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam);
-extern HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
 extern void search(void);
 extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern void carry(bool pickup);
