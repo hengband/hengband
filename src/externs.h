@@ -1253,7 +1253,6 @@ extern HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int 
 /* hissatsu.c */
 extern void do_cmd_hissatsu(void);
 extern void do_cmd_gain_hissatsu(void);
-extern MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode);
 
 
 /*
