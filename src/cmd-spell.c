@@ -371,7 +371,6 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 				/* Show the list */
 				if (!redraw)
 				{
-					/* Show list */
 					redraw = TRUE;
 					screen_save();
 

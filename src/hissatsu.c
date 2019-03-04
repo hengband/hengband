@@ -181,8 +181,6 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 			{
 				char psi_desc[80];
 				int line;
-
-				/* Show list */
 				redraw = TRUE;
 				if (!use_menu) screen_save();
 

@@ -421,8 +421,6 @@ static bool get_learned_power(SPELL_IDX *sn)
 			if (!redraw || use_menu)
 			{
 				char psi_desc[80];
-
-				/* Show list */
 				redraw = TRUE;
 				if (!use_menu) screen_save();
 

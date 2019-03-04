@@ -839,8 +839,6 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 			{
 				char psi_desc[80];
 				bool has_weapon[2];
-
-				/* Show list */
 				redraw = TRUE;
 				if (!only_browse && !use_menu) screen_save();
 

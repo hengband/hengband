@@ -284,8 +284,6 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 			if (!redraw)
 			{
 				char psi_desc[80];
-
-				/* Show list */
 				redraw = TRUE;
 				if (!only_browse) screen_save();
 

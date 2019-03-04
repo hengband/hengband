@@ -7610,8 +7610,6 @@ static void add_essence(ESSENCE_IDX mode)
 				byte col;
 
 				strcpy(dummy, "");
-
-				/* Show list */
 				redraw = TRUE;
 				if (!use_menu) screen_save();
 

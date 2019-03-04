@@ -1877,8 +1877,6 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 				TERM_LEN x1, y1;
 
 				strcpy(dummy, "");
-
-				/* Show list */
 				redraw = TRUE;
 				if (!use_menu) screen_save();
 

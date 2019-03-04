@@ -132,8 +132,6 @@ static int get_mane_power(int *sn, bool baigaesi)
 			if (!redraw)
 			{
 				char psi_desc[80];
-
-				/* Show list */
 				redraw = TRUE;
 				screen_save();
 

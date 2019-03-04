@@ -772,8 +772,6 @@ void do_cmd_pet(void)
 				{
 					byte y = 1, x = 0;
 					PET_COMMAND_IDX ctr = 0;
-
-					/* Show list */
 					redraw = TRUE;
 					if (!use_menu) screen_save();
 
