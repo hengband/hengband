@@ -1710,9 +1710,7 @@ void autopick_pickup_items(grid_type *g_ptr)
 	{
 		int idx;
 			object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
-		
-		/* Acquire next object */
-		next_o_idx = o_ptr->next_o_idx;
+				next_o_idx = o_ptr->next_o_idx;
 
 		idx = is_autopick(o_ptr);
 

@@ -5283,8 +5283,6 @@ static void do_cmd_knowledge_artifacts(void)
 			{
 				object_type *o_ptr;
 				o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-				/* Acquire next object */
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Ignore non-artifacts */

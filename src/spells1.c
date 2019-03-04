@@ -652,8 +652,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		/* Get the "plural"-ness */
 		bool plural = (o_ptr->number > 1);
 #endif
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 		object_flags(o_ptr, flgs);
 

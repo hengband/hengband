@@ -3075,8 +3075,6 @@ void process_monster(MONSTER_IDX m_idx)
 					BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
 					GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
 					object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-					/* Acquire next object */
 					next_o_idx = o_ptr->next_o_idx;
 
 					if (do_take)

@@ -193,8 +193,6 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Skip non-chests */
@@ -389,11 +387,8 @@ void carry(bool pickup)
 #endif /* ALLOW_EASY_SENSE -- TNB */
 
 		object_desc(o_name, o_ptr, 0);
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		/* Hack -- disturb */
 		disturb(FALSE, FALSE);
 
 		/* Pick up gold */
@@ -1603,8 +1598,6 @@ static bool run_test(void)
 		{
 			object_type *o_ptr;
 			o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Visible object */

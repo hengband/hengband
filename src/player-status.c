@@ -2647,8 +2647,6 @@ void calc_bonuses(void)
 	for (this_o_idx = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 #if 0

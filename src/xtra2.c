@@ -758,8 +758,6 @@ static bool target_set_accept(POSITION y, POSITION x)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized object */
@@ -1114,8 +1112,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 
 			object_type *o_ptr;
 			o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Obtain an object description */
@@ -1262,8 +1258,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		if (o_ptr->marked & OM_FOUND)

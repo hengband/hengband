@@ -3977,8 +3977,6 @@ bool polymorph_monster(POSITION y, POSITION x)
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-				/* Acquire next object */
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Held by new monster */
@@ -3989,7 +3987,6 @@ bool polymorph_monster(POSITION y, POSITION x)
 		{
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
-				/* Acquire next object */
 				next_o_idx = current_floor_ptr->o_list[this_o_idx].next_o_idx;
 				delete_object_idx(this_o_idx);
 			}

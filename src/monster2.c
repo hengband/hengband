@@ -274,8 +274,6 @@ void delete_monster_idx(MONSTER_IDX i)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		/*
@@ -360,8 +358,6 @@ static void compact_monsters_aux(IDX i1, IDX i2)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Reset monster pointer */
@@ -4479,8 +4475,6 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 		q_ptr = &forge;
 

@@ -2844,8 +2844,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 		{
 			object_type *o_ptr;
 			o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Accept the item on the floor if legal */
@@ -3194,8 +3192,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 					{
 						object_type *o_ptr;
 						o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-						/* Acquire next object */
 						next_o_idx = o_ptr->next_o_idx;
 
 						/* Validate the item */
@@ -3488,8 +3484,6 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Item tester */
@@ -4854,7 +4848,6 @@ void py_pickup_floor(bool pickup)
 		/* Access the next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		/* Hack -- disturb */
 		disturb(FALSE, FALSE);
 
 		/* Pick up gold */

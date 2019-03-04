@@ -86,8 +86,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		{
 			object_type *o_ptr;
 			o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
 
 			if (this_o_idx == o_idx)
@@ -137,8 +135,6 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		{
 			object_type *o_ptr;
 			o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-			/* Acquire next object */
 			next_o_idx = o_ptr->next_o_idx;
 
 			if (this_o_idx == o_idx)
@@ -232,8 +228,6 @@ void delete_object(POSITION y, POSITION x)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 		object_wipe(o_ptr);
 
@@ -5006,8 +5000,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			{
 				object_type *o_ptr;
 				o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-				/* Acquire next object */
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Check for possible combination */
@@ -5157,8 +5149,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
-
-		/* Acquire next object */
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Check for combination */
