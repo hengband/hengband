@@ -882,7 +882,6 @@ bool object_is_nameless(object_type *o_ptr)
 	return FALSE;
 }
 
-
 /*!
  * @brief オブジェクトが両手持ち可能な武器かを返す /
  * Check if an object is melee weapon and allows wielding with two-hands
@@ -895,3 +894,20 @@ bool object_allow_two_hands_wielding(object_type *o_ptr)
 
 	return FALSE;
 }
+
+/*!
+ * @brief オブジェクトが松明に束ねられるかどうかを判定する
+ * An "item_tester_hook" for refilling torches
+ * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @return オブジェクトが松明に束ねられるならばTRUEを返す
+ */
+bool object_can_refill_torch(object_type *o_ptr)
+{
+	/* Torches are okay */
+	if ((o_ptr->tval == TV_LITE) &&
+		(o_ptr->sval == SV_LITE_TORCH)) return (TRUE);
+
+	/* Assume not okay */
+	return (FALSE);
+}
+

@@ -1002,24 +1002,6 @@ static void do_cmd_refill_lamp(void)
 	p_ptr->update |= (PU_TORCH);
 }
 
-
-/*!
- * @brief オブジェクトが松明に束ねられるかどうかを判定する
- * An "item_tester_hook" for refilling torches
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return オブジェクトが松明に束ねられるならばTRUEを返す
- */
-static bool item_tester_refill_torch(object_type *o_ptr)
-{
-	/* Torches are okay */
-	if ((o_ptr->tval == TV_LITE) &&
-	    (o_ptr->sval == SV_LITE_TORCH)) return (TRUE);
-
-	/* Assume not okay */
-	return (FALSE);
-}
-
-
 /*!
  * @brief 松明を束ねるコマンドのメインルーチン
  * Refuel the players torch (from the pack or floor)
@@ -1035,7 +1017,7 @@ static void do_cmd_refill_torch(void)
 	concptr q, s;
 
 	/* Restrict the choices */
-	item_tester_hook = item_tester_refill_torch;
+	item_tester_hook = object_can_refill_torch;
 
 	q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
 	s = _("他に松明がない。", "You have no extra torches.");

@@ -47,3 +47,4 @@ extern bool object_is_artifact(object_type *o_ptr);
 extern bool object_is_random_artifact(object_type *o_ptr);
 extern bool object_is_nameless(object_type *o_ptr);
 extern bool object_allow_two_hands_wielding(object_type *o_ptr);
+extern bool object_can_refill_torch(object_type *o_ptr);
