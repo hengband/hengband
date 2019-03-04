@@ -359,9 +359,7 @@ void do_cmd_hissatsu(void)
 	/* Limit */
 	if (p_ptr->csp < 0) p_ptr->csp = 0;
 	p_ptr->redraw |= (PR_MANA);
-
-	p_ptr->window |= (PW_PLAYER);
-	p_ptr->window |= (PW_SPELL);
+	p_ptr->window |= (PW_PLAYER | PW_SPELL);
 }
 
 
@@ -399,14 +397,9 @@ void do_cmd_gain_hissatsu(void)
 	}
 
 #ifdef JP
-	if( p_ptr->new_spells < 10 ){
-		msg_format("あと %d つの必殺技を学べる。", p_ptr->new_spells);
-	}else{
-		msg_format("あと %d 個の必殺技を学べる。", p_ptr->new_spells);
-	}
+	msg_format("あと %d 種の必殺技を学べる。", p_ptr->new_spells);
 #else
-	msg_format("You can learn %d new special attack%s.", p_ptr->new_spells,
-		(p_ptr->new_spells == 1?"":"s"));
+	msg_format("You can learn %d new special attack%s.", p_ptr->new_spells, (p_ptr->new_spells == 1?"":"s"));
 #endif
 
 	item_tester_tval = TV_HISSATSU_BOOK;
@@ -434,12 +427,14 @@ void do_cmd_gain_hissatsu(void)
 		gain = TRUE;
 	}
 
-	/* No gain ... */
 	if (!gain)
+	{
 		msg_print(_("何も覚えられなかった。", "You were not able to learn any special attacks."));
-
+	}
 	else
+	{
 		take_turn(p_ptr, 100);
+	}
 
 	p_ptr->update |= (PU_SPELLS);
 }
