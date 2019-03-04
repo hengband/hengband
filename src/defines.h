@@ -4456,40 +4456,6 @@ extern int PlayerUID;
 #define music_singing(X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
 #define music_singing_any() ((p_ptr->pclass == CLASS_BARD) && p_ptr->magic_num1[0])
 
-#define HISSATSU_NONE   0
-#define HISSATSU_2      1
-#define HISSATSU_3WAY   2
-#define HISSATSU_SUTEMI 3
-#define HISSATSU_FIRE   4
-#define HISSATSU_COLD   5
-#define HISSATSU_POISON 6
-#define HISSATSU_ELEC   7
-#define HISSATSU_NYUSIN 8
-#define HISSATSU_FUKI   9
-#define HISSATSU_MAJIN  10
-#define HISSATSU_BOOMER 11
-#define HISSATSU_DRAIN  12
-#define HISSATSU_SEKIRYUKA 13
-#define HISSATSU_OTAKEBI 14
-#define HISSATSU_SHOUGE 15
-#define HISSATSU_CONF   16
-#define HISSATSU_ISSEN  17
-#define HISSATSU_KYUSHO 18
-#define HISSATSU_KONSIN 19
-#define HISSATSU_HYAKU  20
-#define HISSATSU_MINEUCHI 21
-#define HISSATSU_MEKIKI 22
-#define HISSATSU_ZANMA  23
-#define HISSATSU_UNDEAD 24
-#define HISSATSU_HAGAN  25
-#define HISSATSU_QUAKE  26
-#define HISSATSU_COUNTER 27
-#define HISSATSU_HARAI  28
-#define HISSATSU_3DAN   29
-#define HISSATSU_100NIN 30
-
-#define HISSATSU_IAI    100
-
 /*
  *  Special essence id for Weapon smith
  */

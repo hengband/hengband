@@ -630,7 +630,7 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, BIT_FLAGS mode)
+static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, COMBAT_OPTION_IDX mode)
 {
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
@@ -1519,7 +1519,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-bool py_attack(POSITION y, POSITION x, BIT_FLAGS mode)
+bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 {
 	bool            fear = FALSE;
 	bool            mdeath = FALSE;
