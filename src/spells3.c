@@ -1091,37 +1091,6 @@ bool apply_disenchant(BIT_FLAGS mode)
 	return (TRUE);
 }
 
-/*!
- * @brief プレイヤーの突然変異処理
- * @return なし
- */
-void mutate_player(void)
-{
-	BASE_STATUS max1, cur1, max2, cur2;
-	int ii, jj, i;
-
-	/* Pick a pair of stats */
-	ii = randint0(A_MAX);
-	for (jj = ii; jj == ii; jj = randint0(A_MAX)) /* loop */;
-
-	max1 = p_ptr->stat_max[ii];
-	cur1 = p_ptr->stat_cur[ii];
-	max2 = p_ptr->stat_max[jj];
-	cur2 = p_ptr->stat_cur[jj];
-
-	p_ptr->stat_max[ii] = max2;
-	p_ptr->stat_cur[ii] = cur2;
-	p_ptr->stat_max[jj] = max1;
-	p_ptr->stat_cur[jj] = cur1;
-
-	for (i = 0; i < A_MAX; i++)
-	{
-		if(p_ptr->stat_max[i] > p_ptr->stat_max_max[i]) p_ptr->stat_max[i] = p_ptr->stat_max_max[i];
-		if(p_ptr->stat_cur[i] > p_ptr->stat_max_max[i]) p_ptr->stat_cur[i] = p_ptr->stat_max_max[i];
-	}
-
-	p_ptr->update |= (PU_BONUS);
-}
 
 /*!
  * @brief 寿命つき光源の燃素追加処理 /

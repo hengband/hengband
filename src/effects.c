@@ -3839,7 +3839,7 @@ void do_poly_self(void)
 	/* Note: earlier deductions may have left power < 0 already. */
 	while (power > 0)
 	{
-		mutate_player();
+		status_shuffle();
 		power--;
 	}
 }
