@@ -49,23 +49,18 @@ void curse_equipment(PERCENTAGE chance, PERCENTAGE heavy_chance)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	if (randint1(100) > chance) return;
-
 	if (!o_ptr->k_idx) return;
-
 	object_flags(o_ptr, oflgs);
-
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Extra, biased saving throw for blessed items */
 	if (have_flag(oflgs, TR_BLESSED))
 	{
 #ifdef JP
-		msg_format("祝福された%sは呪いを跳ね返した！", o_name,
+		msg_format("祝福された%sは呪いを跳ね返した！", o_name);
 #else
-		msg_format("Your blessed %s resist%s cursing!", o_name,
+		msg_format("Your blessed %s resist%s cursing!", o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
-
-			((o_ptr->number > 1) ? "" : "s"));
 		/* Hmmm -- can we wear multiple items? If not, this is unnecessary */
 		return;
 	}
