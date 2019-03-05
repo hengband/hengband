@@ -14,6 +14,7 @@
 #include "spells-status.h"
 #include "realm-hex.h"
 #include "spells-floor.h"
+#include "object-broken.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

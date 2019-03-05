@@ -35,6 +35,7 @@
 #include "player-move.h"
 #include "realm-hex.h"
 #include "object-hook.h"
+#include "object-broken.h"
 #include "term.h"
 #include "grid.h"
 #include "feature.h"

@@ -974,7 +974,6 @@ extern bool mundane_spell(bool only_equip);
 extern bool identify_item(object_type *o_ptr);
 extern bool identify_fully(bool only_equip);
 extern bool recharge(int power);
-extern bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx);
 extern void display_spell_list(void);
 extern EXP experience_of_spell(SPELL_IDX spell, REALM_IDX use_realm);
 extern MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm);
