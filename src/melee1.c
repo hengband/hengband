@@ -1,6 +1,6 @@
 ﻿/*!
  * @file melee1.c
- * @brief モンスターの打撃処理 / Monster attacks
+ * @brief 打撃処理 / Melee process.
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n

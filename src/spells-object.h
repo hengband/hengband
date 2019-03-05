@@ -13,4 +13,6 @@ extern bool brand_bolts(void);
 extern bool perilous_secrets(player_type *creature_ptr);
 extern void get_bloody_moon_flags(object_type *o_ptr);
 extern void phlogiston(void);
+extern bool bless_weapon(void);
+extern bool pulish_shield(void);
 
