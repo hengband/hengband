@@ -143,6 +143,7 @@
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-activate.c" />
     <ClCompile Include="..\..\src\cmd-eat.c" />
+    <ClCompile Include="..\..\src\cmd-hissatsu.c" />
     <ClCompile Include="..\..\src\cmd-pet.c" />
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
@@ -197,7 +198,6 @@
     <ClCompile Include="..\..\src\flavor.c" />
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
-    <ClCompile Include="..\..\src\hissatsu.c" />
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\init1.c" />
     <ClCompile Include="..\..\src\init2.c" />
