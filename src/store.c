@@ -4627,11 +4627,7 @@ static void store_purchase(void)
 		{
 			msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
 		}
-
-		/* Get a quantity */
 		amt = get_quantity(NULL, o_ptr->number);
-
-		/* Allow user abort */
 		if (amt <= 0) return;
 	}
 	j_ptr = &forge;
@@ -4895,7 +4891,6 @@ static void store_sell(void)
 
 	object_type forge;
 	object_type *q_ptr;
-
 	object_type *o_ptr;
 
 	concptr q, s;
@@ -4943,13 +4938,9 @@ static void store_sell(void)
 	/* Assume one item */
 	amt = 1;
 
-	/* Find out how many the player wants (letter means "all") */
 	if (o_ptr->number > 1)
 	{
-		/* Get a quantity */
 		amt = get_quantity(NULL, o_ptr->number);
-
-		/* Allow user abort */
 		if (amt <= 0) return;
 	}
 	q_ptr = &forge;

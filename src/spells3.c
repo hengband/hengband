@@ -1102,8 +1102,7 @@ void brand_weapon(int brand_type)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	concptr        q, s;
-
+	concptr q, s;
 
 	/* Assume enchant weapon */
 	item_tester_hook = object_allow_enchant_melee_weapon;
@@ -1808,7 +1807,6 @@ bool alchemy(void)
 	/* See how many items */
 	if (o_ptr->number > 1)
 	{
-		/* Get a quantity */
 		amt = get_quantity(NULL, o_ptr->number);
 
 		/* Allow user abort */

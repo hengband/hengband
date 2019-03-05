@@ -594,14 +594,9 @@ void do_cmd_drop(void)
 		return;
 	}
 
-
-	/* See how many items */
 	if (o_ptr->number > 1)
 	{
-		/* Get a quantity */
 		amt = get_quantity(NULL, o_ptr->number);
-
-		/* Allow user abort */
 		if (amt <= 0) return;
 	}
 
@@ -707,13 +702,9 @@ void do_cmd_destroy(void)
 		} /* while (TRUE) */
 	}
 
-	/* See how many items */
 	if (o_ptr->number > 1)
 	{
-		/* Get a quantity */
 		amt = get_quantity(NULL, o_ptr->number);
-
-		/* Allow user abort */
 		if (amt <= 0) return;
 	}
 
