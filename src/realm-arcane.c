@@ -1,10 +1,12 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
-#include "spells-summon.h"
-#include "spells-status.h"
 #include "projection.h"
 #include "avatar.h"
+
 #include "spells-floor.h"
+#include "spells-object.h"
+#include "spells-summon.h"
+#include "spells-status.h"
 
 /*!
 * @brief 秘術領域魔法の各処理を行う

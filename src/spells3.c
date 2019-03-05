@@ -1093,56 +1093,6 @@ bool apply_disenchant(BIT_FLAGS mode)
 
 
 /*!
- * @brief 寿命つき光源の燃素追加処理 /
- * Charge a lite (torch or latern)
- * @return なし
- */
-void phlogiston(void)
-{
-	GAME_TURN max_flog = 0;
-	object_type * o_ptr = &inventory[INVEN_LITE];
-
-	/* It's a lamp */
-	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_LANTERN))
-	{
-		max_flog = FUEL_LAMP;
-	}
-
-	/* It's a torch */
-	else if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
-	{
-		max_flog = FUEL_TORCH;
-	}
-
-	/* No torch to refill */
-	else
-	{
-		msg_print(_("燃素を消費するアイテムを装備していません。", "You are not wielding anything which uses phlogiston."));
-		return;
-	}
-
-	if (o_ptr->xtra4 >= max_flog)
-	{
-		msg_print(_("このアイテムにはこれ以上燃素を補充できません。", "No more phlogiston can be put in this item."));
-		return;
-	}
-
-	/* Refuel */
-	o_ptr->xtra4 += (XTRA16)(max_flog / 2);
-
-	msg_print(_("照明用アイテムに燃素を補充した。", "You add phlogiston to your light item."));
-
-	if (o_ptr->xtra4 >= max_flog)
-	{
-		o_ptr->xtra4 = (XTRA16)max_flog;
-		msg_print(_("照明用アイテムは満タンになった。", "Your light item is full."));
-	}
-
-	p_ptr->update |= (PU_TORCH);
-}
-
-
-/*!
  * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
