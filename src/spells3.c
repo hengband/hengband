@@ -1220,7 +1220,6 @@ void phlogiston(void)
 		msg_print(_("照明用アイテムは満タンになった。", "Your light item is full."));
 	}
 
-	/* Recalculate torch */
 	p_ptr->update |= (PU_TORCH);
 }
 

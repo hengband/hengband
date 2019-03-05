@@ -998,7 +998,6 @@ static void do_cmd_refill_lamp(void)
 		floor_item_optimize(0 - item);
 	}
 
-	/* Recalculate torch */
 	p_ptr->update |= (PU_TORCH);
 }
 
@@ -1074,7 +1073,6 @@ static void do_cmd_refill_torch(void)
 		floor_item_optimize(0 - item);
 	}
 
-	/* Recalculate torch */
 	p_ptr->update |= (PU_TORCH);
 }
 

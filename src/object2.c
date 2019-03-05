@@ -5397,7 +5397,6 @@ void inven_item_optimize(INVENTORY_IDX item)
 		object_wipe(&inventory[item]);
 		p_ptr->update |= (PU_BONUS);
 
-		/* Recalculate torch */
 		p_ptr->update |= (PU_TORCH);
 
 		/* Recalculate mana XXX */

@@ -2809,7 +2809,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			/* Increment the equip counter by hand */
 			equip_cnt++;
 
-			/* Recalculate torch */
 			p_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
 			p_ptr->window |= (PW_EQUIP);
 		}
