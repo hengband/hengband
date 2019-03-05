@@ -3493,60 +3493,6 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 }
 
 
-/*!
- * @brief 魔法が利用可能かどうかを返す /
- * Determine if a spell is "okay" for the player to cast or study
- * The spell must be legible, not forgotten, and also, to cast,
- * it must be known, and to study, it must not be known.
- * @param spell 呪文ID
- * @param learned 使用可能な判定ならばTRUE、学習可能かどうかの判定ならばFALSE
- * @param study_pray 祈りの学習判定目的ならばTRUE
- * @param use_realm 魔法領域ID
- * @return 失敗率(%)
- */
-bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
-{
-	const magic_type *s_ptr;
-
-	/* Access the spell */
-	if (!is_magic(use_realm))
-	{
-		s_ptr = &technic_info[use_realm - MIN_TECHNIC][spell];
-	}
-	else
-	{
-		s_ptr = &mp_ptr->info[use_realm - 1][spell];
-	}
-
-	/* Spell is illegal */
-	if (s_ptr->slevel > p_ptr->lev) return (FALSE);
-
-	/* Spell is forgotten */
-	if ((use_realm == p_ptr->realm2) ?
-	    (p_ptr->spell_forgotten2 & (1L << spell)) :
-	    (p_ptr->spell_forgotten1 & (1L << spell)))
-	{
-		/* Never okay */
-		return (FALSE);
-	}
-
-	if (p_ptr->pclass == CLASS_SORCERER) return (TRUE);
-	if (p_ptr->pclass == CLASS_RED_MAGE) return (TRUE);
-
-	/* Spell is learned */
-	if ((use_realm == p_ptr->realm2) ?
-	    (p_ptr->spell_learned2 & (1L << spell)) :
-	    (p_ptr->spell_learned1 & (1L << spell)))
-	{
-		/* Always true */
-		return (!study_pray);
-	}
-
-	/* Okay to study, not to cast */
-	return (!learned);
-}
-
-
 
 /*!
  * @brief 呪文情報の表示処理 /
