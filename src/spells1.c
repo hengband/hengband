@@ -19,6 +19,7 @@
 
 #include "monster.h"
 #include "monster-status.h"
+#include "spells-status.h"
 #include "spells-diceroll.h"
 #include "spells-summon.h"
 #include "monsterrace-hook.h"

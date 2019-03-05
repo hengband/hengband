@@ -956,7 +956,6 @@ extern bool free_level_recall(player_type *creature_ptr);
 extern bool reset_recall(void);
 extern bool apply_disenchant(BIT_FLAGS mode);
 extern void mutate_player(void);
-extern void apply_nexus(monster_type *m_ptr);
 extern void phlogiston(void);
 extern void brand_weapon(int brand_type);
 extern void call_the_(void);

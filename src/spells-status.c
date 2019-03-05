@@ -465,3 +465,52 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 
 	return TRUE;
 }
+
+
+/*!
+ * @brief プレイヤーの因果混乱処理 / Apply Nexus
+ * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
+ * @return なし
+ */
+void apply_nexus(monster_type *m_ptr)
+{
+	switch (randint1(7))
+	{
+	case 1: case 2: case 3:
+	{
+		teleport_player(200, TELEPORT_PASSIVE);
+		break;
+	}
+
+	case 4: case 5:
+	{
+		teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+		break;
+	}
+
+	case 6:
+	{
+		if (randint0(100) < p_ptr->skill_sav)
+		{
+			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+			break;
+		}
+		teleport_level(0);
+		break;
+	}
+
+	case 7:
+	{
+		if (randint0(100) < p_ptr->skill_sav)
+		{
+			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+			break;
+		}
+
+		msg_print(_("体がねじれ始めた...", "Your body starts to scramble..."));
+		mutate_player();
+		break;
+	}
+	}
+}
+
