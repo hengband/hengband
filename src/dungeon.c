@@ -1043,59 +1043,6 @@ static void notice_lite_change(object_type *o_ptr)
 }
 
 /*!
- * @brief クエスト階層から離脱する際の処理
- * @return なし
- */
-void leave_quest_check(void)
-{
-	/* Save quest number for dungeon pref file ($LEAVING_QUEST) */
-	leaving_quest = p_ptr->inside_quest;
-
-	/* Leaving an 'only once' quest marks it as failed */
-	if (leaving_quest)
-	{	
-		quest_type* const q_ptr = &quest[leaving_quest];
-		
-	    if(((q_ptr->flags & QUEST_FLAG_ONCE)  || (q_ptr->type == QUEST_TYPE_RANDOM)) &&
-	       (q_ptr->status == QUEST_STATUS_TAKEN))
-		{
-			q_ptr->status = QUEST_STATUS_FAILED;
-			q_ptr->complev = p_ptr->lev;
-			update_playtime();
-			q_ptr->comptime = current_world_ptr->play_time;
-
-			/* Additional settings */
-			switch (q_ptr->type)
-			{
-			  case QUEST_TYPE_TOWER:
-				quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
-				quest[QUEST_TOWER1].complev = p_ptr->lev;
-				break;
-			  case QUEST_TYPE_FIND_ARTIFACT:
-				a_info[q_ptr->k_idx].gen_flags &= ~(TRG_QUESTITEM);
-				break;
-			  case QUEST_TYPE_RANDOM:
-				r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
-
-				/* Floor of random quest will be blocked */
-				prepare_change_floor_mode(CFM_NO_RETURN);
-				break;
-			}
-
-			/* Record finishing a quest */
-			if (q_ptr->type == QUEST_TYPE_RANDOM)
-			{
-				if (record_rand_quest) do_cmd_write_nikki(NIKKI_RAND_QUEST_F, leaving_quest, NULL);
-			}
-			else
-			{
-				if (record_fix_quest) do_cmd_write_nikki(NIKKI_FIX_QUEST_F, leaving_quest, NULL);
-			}
-		}
-	}
-}
-
-/*!
  * @brief 「塔」クエストの各階層から離脱する際の処理
  * @return なし
  */

@@ -553,7 +553,6 @@ extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
 
 /* dungeon.c */
-extern void leave_quest_check(void);
 extern void leave_tower_check(void);
 extern void extract_option_vars(void);
 extern void determine_bounty_uniques(void);

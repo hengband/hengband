@@ -25,3 +25,4 @@ extern void check_find_art_quest_completion(object_type *o_ptr);
 void quest_discovery(QUEST_IDX q_idx);
 extern QUEST_IDX quest_number(DEPTH level);
 extern QUEST_IDX random_quest_number(DEPTH level);
+extern void leave_quest_check(void);
