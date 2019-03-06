@@ -687,11 +687,11 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 
 
 	/* Scan the locations */
-	for (i = 0; i < temp_n; i++)
+	for (i = 0; i < tmp_pos.n; i++)
 	{
 		/* Point 2 */
-		x2 = temp_x[i];
-		y2 = temp_y[i];
+		x2 = tmp_pos.x[i];
+		y2 = tmp_pos.y[i];
 
 		/* Directed distance */
 		x3 = (x2 - x1);
@@ -806,7 +806,7 @@ static void target_set_prepare(BIT_FLAGS mode)
 	}
 
 	/* Reset "temp" array */
-	temp_n = 0;
+	tmp_pos.n = 0;
 
 	/* Scan the current panel */
 	for (y = min_hgt; y <= max_hgt; y++)
@@ -826,9 +826,9 @@ static void target_set_prepare(BIT_FLAGS mode)
 			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&current_floor_ptr->m_list[g_ptr->m_idx])) continue;
 
 			/* Save the location */
-			temp_x[temp_n] = x;
-			temp_y[temp_n] = y;
-			temp_n++;
+			tmp_pos.x[tmp_pos.n] = x;
+			tmp_pos.y[tmp_pos.n] = y;
+			tmp_pos.n++;
 		}
 	}
 
@@ -847,18 +847,18 @@ static void target_set_prepare(BIT_FLAGS mode)
 	}
 
 	/* Sort the positions */
-	ang_sort(temp_x, temp_y, temp_n);
+	ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n);
 
-	if (p_ptr->riding && target_pet && (temp_n > 1) && (mode & (TARGET_KILL)))
+	if (p_ptr->riding && target_pet && (tmp_pos.n > 1) && (mode & (TARGET_KILL)))
 	{
 		POSITION tmp;
 
-		tmp = temp_y[0];
-		temp_y[0] = temp_y[1];
-		temp_y[1] = tmp;
-		tmp = temp_x[0];
-		temp_x[0] = temp_x[1];
-		temp_x[1] = tmp;
+		tmp = tmp_pos.y[0];
+		tmp_pos.y[0] = tmp_pos.y[1];
+		tmp_pos.y[1] = tmp;
+		tmp = tmp_pos.x[0];
+		tmp_pos.x[0] = tmp_pos.x[1];
+		tmp_pos.x[1] = tmp;
 	}
 }
 
@@ -1515,10 +1515,10 @@ bool target_set(BIT_FLAGS mode)
 	while (!done)
 	{
 		/* Interesting grids */
-		if (flag && temp_n)
+		if (flag && tmp_pos.n)
 		{
-			y = temp_y[m];
-			x = temp_x[m];
+			y = tmp_pos.y[m];
+			x = tmp_pos.x[m];
 
 			/* Set forcus */
 			change_panel_xy(y, x);
@@ -1596,7 +1596,7 @@ bool target_set(BIT_FLAGS mode)
 				case '*':
 				case '+':
 				{
-					if (++m == temp_n)
+					if (++m == tmp_pos.n)
 					{
 						m = 0;
 						if (!expand_list) done = TRUE;
@@ -1608,7 +1608,7 @@ bool target_set(BIT_FLAGS mode)
 				{
 					if (m-- == 0)
 					{
-						m = temp_n - 1;
+						m = tmp_pos.n - 1;
 						if (!expand_list) done = TRUE;
 					}
 					break;
@@ -1645,7 +1645,7 @@ bool target_set(BIT_FLAGS mode)
 				{
 					if(query == same_key)
 					{
-						if (++m == temp_n)
+						if (++m == tmp_pos.n)
 						{
 							m = 0;
 							if (!expand_list) done = TRUE;
@@ -1669,7 +1669,7 @@ bool target_set(BIT_FLAGS mode)
 				POSITION x2 = panel_col_min;
 
 				/* Find a new monster */
-				i = target_pick(temp_y[m], temp_x[m], ddy[d], ddx[d]);
+				i = target_pick(tmp_pos.y[m], tmp_pos.x[m], ddy[d], ddx[d]);
 
 				/* Request to target past last interesting grid */
 				while (flag && (i < 0))
@@ -1677,8 +1677,8 @@ bool target_set(BIT_FLAGS mode)
 					/* Note the change */
 					if (change_panel(ddy[d], ddx[d]))
 					{
-						int v = temp_y[m];
-						int u = temp_x[m];
+						int v = tmp_pos.y[m];
+						int u = tmp_pos.x[m];
 
 						/* Recalculate interesting grids */
 						target_set_prepare(mode);
@@ -1843,9 +1843,9 @@ bool target_set(BIT_FLAGS mode)
 					bd = 999;
 
 					/* Pick a nearby monster */
-					for (i = 0; i < temp_n; i++)
+					for (i = 0; i < tmp_pos.n; i++)
 					{
-						t = distance(y, x, temp_y[i], temp_x[i]);
+						t = distance(y, x, tmp_pos.y[i], tmp_pos.x[i]);
 
 						/* Pick closest */
 						if (t < bd)
@@ -1926,7 +1926,7 @@ bool target_set(BIT_FLAGS mode)
 	}
 
 	/* Forget */
-	temp_n = 0;
+	tmp_pos.n = 0;
 
 	/* Clear the top line */
 	prt("", 0, 0);
@@ -2400,7 +2400,7 @@ static void tgt_pt_prepare(void)
 	POSITION y, x;
 
 	/* Reset "temp" array */
-	temp_n = 0;
+	tmp_pos.n = 0;
 
 	if (!expand_list) return;
 
@@ -2413,9 +2413,9 @@ static void tgt_pt_prepare(void)
 			if (!tgt_pt_accept(y, x)) continue;
 
 			/* Save the location */
-			temp_x[temp_n] = x;
-			temp_y[temp_n] = y;
-			temp_n++;
+			tmp_pos.x[tmp_pos.n] = x;
+			tmp_pos.y[tmp_pos.n] = y;
+			tmp_pos.n++;
 		}
 	}
 
@@ -2424,7 +2424,7 @@ static void tgt_pt_prepare(void)
 	ang_sort_swap = ang_sort_swap_distance;
 
 	/* Sort the positions */
-	ang_sort(temp_x, temp_y, temp_n);
+	ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n);
 }
 
 /*
@@ -2478,7 +2478,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 		/* XAngband: Move cursor to stairs */
 		case '>':
 		case '<':
-			if (expand_list && temp_n)
+			if (expand_list && tmp_pos.n)
 			{
 				int dx, dy;
 				int cx = (panel_col_min + panel_col_max) / 2;
@@ -2487,9 +2487,9 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				n++;
 
 				/* Skip stairs which have defferent distance */
-				for (; n < temp_n; ++ n)
+				for (; n < tmp_pos.n; ++ n)
 				{
-					grid_type *g_ptr = &current_floor_ptr->grid_array[temp_y[n]][temp_x[n]];
+					grid_type *g_ptr = &current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
 
 					if (cave_have_flag_grid(g_ptr, FF_STAIRS) &&
 					    cave_have_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
@@ -2499,7 +2499,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 					}
 				}
 
-				if (n == temp_n)	/* Loop out taget list */
+				if (n == tmp_pos.n)	/* Loop out taget list */
 				{
 					n = 0;
 					y = p_ptr->y;
@@ -2515,8 +2515,8 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				}
 				else	/* move cursor to next stair and change panel */
 				{
-					y = temp_y[n];
-					x = temp_x[n];
+					y = tmp_pos.y[n];
+					x = tmp_pos.x[n];
 
 					dy = 2 * (y - cy) / hgt;
 					dx = 2 * (x - cx) / wid;

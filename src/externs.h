@@ -12,7 +12,7 @@
  * Note that some files have their own header files
  * (z-virt.h, z-util.h, z-form.h, term.h, random.h)
  */
-
+#include "geometry.h"
 
 /*
  * Automatically generated "variable" declarations
@@ -214,9 +214,7 @@ extern int player_egid;
 extern char player_base[32];
 extern char savefile[1024];
 extern char savefile_base[40];
-extern POSITION_IDX temp_n;
-extern POSITION temp_y[TEMP_MAX];
-extern POSITION temp_x[TEMP_MAX];
+extern pos_list tmp_pos;
 extern s16b macro__num;
 extern concptr *macro__pat;
 extern concptr *macro__act;

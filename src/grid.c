@@ -3331,9 +3331,9 @@ void update_lite(void)
 		current_floor_ptr->grid_array[y][x].info |= (CAVE_TEMP);
 
 		/* Add it to the "seen" set */
-		temp_y[temp_n] = y;
-		temp_x[temp_n] = x;
-		temp_n++;
+		tmp_pos.y[tmp_pos.n] = y;
+		tmp_pos.x[tmp_pos.n] = x;
+		tmp_pos.n++;
 	}
 
 	/* None left */
@@ -3491,10 +3491,10 @@ void update_lite(void)
 	}
 
 	/* Clear them all */
-	for (i = 0; i < temp_n; i++)
+	for (i = 0; i < tmp_pos.n; i++)
 	{
-		y = temp_y[i];
-		x = temp_x[i];
+		y = tmp_pos.y[i];
+		x = tmp_pos.x[i];
 
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -3509,7 +3509,7 @@ void update_lite(void)
 	}
 
 	/* None left */
-	temp_n = 0;
+	tmp_pos.n = 0;
 
 	/* Mega-Hack -- Visual update later */
 	p_ptr->update |= (PU_DELAY_VIS);
@@ -3583,15 +3583,15 @@ static void mon_lite_hack(POSITION y, POSITION x)
 		}
 	}
 
-	/* We trust temp_n does not exceed TEMP_MAX */
+	/* We trust tmp_pos.n does not exceed TEMP_MAX */
 
 	/* New grid */
 	if (!(g_ptr->info & CAVE_MNDK))
 	{
 		/* Save this square */
-		temp_x[temp_n] = x;
-		temp_y[temp_n] = y;
-		temp_n++;
+		tmp_pos.x[tmp_pos.n] = x;
+		tmp_pos.y[tmp_pos.n] = y;
+		tmp_pos.n++;
 	}
 
 	/* Darkened grid */
@@ -3669,12 +3669,12 @@ static void mon_dark_hack(POSITION y, POSITION x)
 		}
 	}
 
-	/* We trust temp_n does not exceed TEMP_MAX */
+	/* We trust tmp_pos.n does not exceed TEMP_MAX */
 
 	/* Save this square */
-	temp_x[temp_n] = x;
-	temp_y[temp_n] = y;
-	temp_n++;
+	tmp_pos.x[tmp_pos.n] = x;
+	tmp_pos.y[tmp_pos.n] = y;
+	tmp_pos.n++;
 
 	/* Darken it */
 	g_ptr->info |= CAVE_MNDK;
@@ -3720,7 +3720,7 @@ void update_mon_lite(void)
 	}
 
 	/* Empty temp list of new squares to lite up */
-	temp_n = 0;
+	tmp_pos.n = 0;
 
 	/* If a monster stops time, don't process */
 	if (!current_world_ptr->timewalk_m_idx)
@@ -3893,7 +3893,7 @@ void update_mon_lite(void)
 	}
 
 	/* Save end of list of new squares */
-	end_temp = temp_n;
+	end_temp = tmp_pos.n;
 
 	/*
 	 * Look at old set flags to see if there are any changes.
@@ -3930,9 +3930,9 @@ void update_mon_lite(void)
 		}
 
 		/* Add to end of temp array */
-		temp_x[temp_n] = fx;
-		temp_y[temp_n] = fy;
-		temp_n++;
+		tmp_pos.x[tmp_pos.n] = fx;
+		tmp_pos.y[tmp_pos.n] = fy;
+		tmp_pos.n++;
 	}
 
 	/* Clear the lite array */
@@ -3941,8 +3941,8 @@ void update_mon_lite(void)
 	/* Copy the temp array into the lit array lighting the new squares. */
 	for (i = 0; i < end_temp; i++)
 	{
-		fx = temp_x[i];
-		fy = temp_y[i];
+		fx = tmp_pos.x[i];
+		fy = tmp_pos.y[i];
 
 		/* We trust this grid is in bounds */
 
@@ -3977,15 +3977,15 @@ void update_mon_lite(void)
 	}
 
 	/* Clear the temp flag for the old lit or darken grids */
-	for (i = end_temp; i < temp_n; i++)
+	for (i = end_temp; i < tmp_pos.n; i++)
 	{
 		/* We trust this grid is in bounds */
 
-		current_floor_ptr->grid_array[temp_y[i]][temp_x[i]].info &= ~(CAVE_TEMP | CAVE_XTRA);
+		current_floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]].info &= ~(CAVE_TEMP | CAVE_XTRA);
 	}
 
-	/* Finished with temp_n */
-	temp_n = 0;
+	/* Finished with tmp_pos.n */
+	tmp_pos.n = 0;
 
 	/* Mega-Hack -- Visual update later */
 	p_ptr->update |= (PU_DELAY_VIS);
@@ -4335,9 +4335,9 @@ void update_view(void)
 		g_ptr->info |= (CAVE_TEMP);
 
 		/* Add it to the "seen" set */
-		temp_y[temp_n] = y;
-		temp_x[temp_n] = x;
-		temp_n++;
+		tmp_pos.y[tmp_pos.n] = y;
+		tmp_pos.x[tmp_pos.n] = x;
+		tmp_pos.n++;
 	}
 
 	/* Start over with the "view" array */
@@ -4706,10 +4706,10 @@ void update_view(void)
 	}
 
 	/* Wipe the old grids, update as needed */
-	for (n = 0; n < temp_n; n++)
+	for (n = 0; n < tmp_pos.n; n++)
 	{
-		y = temp_y[n];
-		x = temp_x[n];
+		y = tmp_pos.y[n];
+		x = tmp_pos.x[n];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		/* No longer in the array */
@@ -4723,7 +4723,7 @@ void update_view(void)
 	}
 
 	/* None left */
-	temp_n = 0;
+	tmp_pos.n = 0;
 
 	/* Mega-Hack -- Visual update later */
 	p_ptr->update |= (PU_DELAY_VIS);
@@ -4819,7 +4819,7 @@ void update_flow(void)
 	int flow_tail = 0;
 
 	/* Paranoia -- make sure the array is empty */
-	if (temp_n) return;
+	if (tmp_pos.n) return;
 
 	/* The last way-point is on the map */
 	if (running && in_bounds(flow_y, flow_x))
@@ -4843,8 +4843,8 @@ void update_flow(void)
 	flow_x = p_ptr->x;
 
 	/* Add the player's grid to the queue */
-	temp_y[0] = p_ptr->y;
-	temp_x[0] = p_ptr->x;
+	tmp_pos.y[0] = p_ptr->y;
+	tmp_pos.x[0] = p_ptr->x;
 
 	/* Now process the queue */
 	while (flow_head != flow_tail)
@@ -4852,8 +4852,8 @@ void update_flow(void)
 		int ty, tx;
 
 		/* Extract the next entry */
-		ty = temp_y[flow_tail];
-		tx = temp_x[flow_tail];
+		ty = tmp_pos.y[flow_tail];
+		tx = tmp_pos.x[flow_tail];
 
 		/* Forget that entry */
 		if (++flow_tail == TEMP_MAX) flow_tail = 0;
@@ -4891,8 +4891,8 @@ void update_flow(void)
 			if (n == MONSTER_FLOW_DEPTH) continue;
 
 			/* Enqueue that entry */
-			temp_y[flow_head] = y;
-			temp_x[flow_head] = x;
+			tmp_pos.y[flow_head] = y;
+			tmp_pos.x[flow_head] = x;
 
 			/* Advance the queue */
 			if (++flow_head == TEMP_MAX) flow_head = 0;

@@ -2191,10 +2191,10 @@ static void cave_temp_room_lite(void)
 	int i;
 
 	/* Clear them all */
-	for (i = 0; i < temp_n; i++)
+	for (i = 0; i < tmp_pos.n; i++)
 	{
-		POSITION y = temp_y[i];
-		POSITION x = temp_x[i];
+		POSITION y = tmp_pos.y[i];
+		POSITION x = tmp_pos.x[i];
 
 		grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -2243,7 +2243,7 @@ static void cave_temp_room_lite(void)
 	}
 
 	/* None left */
-	temp_n = 0;
+	tmp_pos.n = 0;
 }
 
 
@@ -2265,10 +2265,10 @@ static void cave_temp_room_unlite(void)
 	int i;
 
 	/* Clear them all */
-	for (i = 0; i < temp_n; i++)
+	for (i = 0; i < tmp_pos.n; i++)
 	{
-		POSITION y = temp_y[i];
-		POSITION x = temp_x[i];
+		POSITION y = tmp_pos.y[i];
+		POSITION x = tmp_pos.x[i];
 		int j;
 
 		grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
@@ -2324,7 +2324,7 @@ static void cave_temp_room_unlite(void)
 	}
 
 	/* None left */
-	temp_n = 0;
+	tmp_pos.n = 0;
 }
 
 
@@ -2393,7 +2393,7 @@ static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITIO
 
 
 /*!
- * @brief 部屋内にある一点の周囲に該当する地形数かいくつあるかをグローバル変数temp_nに返す / Aux function -- see below
+ * @brief 部屋内にある一点の周囲に該当する地形数かいくつあるかをグローバル変数tmp_pos.nに返す / Aux function -- see below
  * @param y 部屋内のy座標1点
  * @param x 部屋内のx座標1点
  * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
@@ -2433,15 +2433,15 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 	}
 
 	/* Paranoia -- verify space */
-	if (temp_n == TEMP_MAX) return;
+	if (tmp_pos.n == TEMP_MAX) return;
 
 	/* Mark the grid as "seen" */
 	g_ptr->info |= (CAVE_TEMP);
 
 	/* Add it to the "seen" set */
-	temp_y[temp_n] = y;
-	temp_x[temp_n] = x;
-	temp_n++;
+	tmp_pos.y[tmp_pos.n] = y;
+	tmp_pos.x[tmp_pos.n] = x;
+	tmp_pos.n++;
 }
 
 /*!
@@ -2456,7 +2456,7 @@ static bool cave_pass_lite_bold(POSITION y, POSITION x)
 }
 
 /*!
- * @brief 部屋内にある一点の周囲がいくつ光を通すかをグローバル変数temp_nに返す / Aux function -- see below
+ * @brief 部屋内にある一点の周囲がいくつ光を通すかをグローバル変数tmp_pos.nに返す / Aux function -- see below
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return なし
@@ -2479,7 +2479,7 @@ static bool cave_pass_dark_bold(POSITION y, POSITION x)
 
 
 /*!
- * @brief 部屋内にある一点の周囲がいくつ射線を通すかをグローバル変数temp_nに返す / Aux function -- see below
+ * @brief 部屋内にある一点の周囲がいくつ射線を通すかをグローバル変数tmp_pos.nに返す / Aux function -- see below
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return なし
@@ -2505,9 +2505,9 @@ void lite_room(POSITION y1, POSITION x1)
 	cave_temp_lite_room_aux(y1, x1);
 
 	/* While grids are in the queue, add their neighbors */
-	for (i = 0; i < temp_n; i++)
+	for (i = 0; i < tmp_pos.n; i++)
 	{
-		x = temp_x[i], y = temp_y[i];
+		x = tmp_pos.x[i], y = tmp_pos.y[i];
 
 		/* Walls get lit, but stop light */
 		if (!cave_pass_lite_bold(y, x)) continue;
@@ -2550,9 +2550,9 @@ void unlite_room(POSITION y1, POSITION x1)
 	cave_temp_unlite_room_aux(y1, x1);
 
 	/* Spread, breadth first */
-	for (i = 0; i < temp_n; i++)
+	for (i = 0; i < tmp_pos.n; i++)
 	{
-		x = temp_x[i], y = temp_y[i];
+		x = tmp_pos.x[i], y = tmp_pos.y[i];
 
 		/* Walls get dark, but stop darkness */
 		if (!cave_pass_dark_bold(y, x)) continue;

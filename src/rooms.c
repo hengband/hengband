@@ -877,15 +877,15 @@ static void cave_fill(POSITION y, POSITION x)
 	/*** Start Grid ***/
 
 	/* Enqueue that entry */
-	temp_y[0] = y;
-	temp_x[0] = x;
+	tmp_pos.y[0] = y;
+	tmp_pos.x[0] = x;
 
 	/* Now process the queue */
 	while (flow_head != flow_tail)
 	{
 		/* Extract the next entry */
-		ty = temp_y[flow_head];
-		tx = temp_x[flow_head];
+		ty = tmp_pos.y[flow_head];
+		tx = tmp_pos.x[flow_head];
 
 		/* Forget that entry */
 		if (++flow_head == TEMP_MAX) flow_head = 0;
@@ -918,8 +918,8 @@ static void cave_fill(POSITION y, POSITION x)
 					fill_data.info1, fill_data.info2, fill_data.info3))
 				{
 					/* Enqueue that entry */
-					temp_y[flow_tail] = (byte_hack)j;
-					temp_x[flow_tail] = (byte_hack)i;
+					tmp_pos.y[flow_tail] = (byte_hack)j;
+					tmp_pos.x[flow_tail] = (byte_hack)i;
 
 					/* Advance the queue */
 					if (++flow_tail == TEMP_MAX) flow_tail = 0;

@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "geometry.h"
 
 /*!
  * コピーライト情報 /
@@ -207,9 +208,8 @@ char player_base[32];
 char savefile[1024];
 char savefile_base[40];
 
-POSITION_IDX temp_n; //!< Array of grids for use by various functions (see "current_floor_ptr->grid_array.c")
-POSITION temp_y[TEMP_MAX];
-POSITION temp_x[TEMP_MAX];
+
+pos_list tmp_pos;
 
 
 /*
