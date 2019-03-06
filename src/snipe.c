@@ -391,7 +391,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
  * @return スレイの倍率(/10倍)
  */
-int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
+MULTIPLY tot_dam_aux_snipe(MULTIPLY mult, monster_type *m_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool seen = is_seen(m_ptr);
@@ -401,7 +401,7 @@ int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
 	case SP_LITE:
 		if (r_ptr->flags3 & (RF3_HURT_LITE))
 		{
-			int n = 20 + p_ptr->concent;
+			MULTIPLY n = 20 + p_ptr->concent;
 			if (seen) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 			if (mult < n) mult = n;
 		}
@@ -413,7 +413,7 @@ int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
 		}
 		else
 		{
-			int n = 15 + (p_ptr->concent * 3);
+			MULTIPLY n = 15 + (p_ptr->concent * 3);
 			if (mult < n) mult = n;
 		}
 		break;
@@ -424,7 +424,7 @@ int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
 		}
 		else
 		{
-			int n = 15 + (p_ptr->concent * 3);
+			MULTIPLY n = 15 + (p_ptr->concent * 3);
 			if (mult < n) mult = n;
 		}
 		break;
@@ -435,20 +435,20 @@ int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
 		}
 		else
 		{
-			int n = 18 + (p_ptr->concent * 4);
+			MULTIPLY n = 18 + (p_ptr->concent * 4);
 			if (mult < n) mult = n;
 		}
 		break;
 	case SP_KILL_WALL:
 		if (r_ptr->flags3 & RF3_HURT_ROCK)
 		{
-			int n = 15 + (p_ptr->concent * 2);
+			MULTIPLY n = 15 + (p_ptr->concent * 2);
 			if (seen) r_ptr->r_flags3 |= RF3_HURT_ROCK;
 			if (mult < n) mult = n;
 		}
 		else if (r_ptr->flags3 & RF3_NONLIVING)
 		{
-			int n = 15 + (p_ptr->concent * 2);
+			MULTIPLY n = 15 + (p_ptr->concent * 2);
 			if (seen) r_ptr->r_flags3 |= RF3_NONLIVING;
 			if (mult < n) mult = n;
 		}
@@ -456,7 +456,7 @@ int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
 	case SP_EVILNESS:
 		if (r_ptr->flags3 & RF3_GOOD)
 		{
-			int n = 15 + (p_ptr->concent * 4);
+			MULTIPLY n = 15 + (p_ptr->concent * 4);
 			if (seen) r_ptr->r_flags3 |= RF3_GOOD;
 			if (mult < n) mult = n;
 		}
@@ -464,7 +464,7 @@ int tot_dam_aux_snipe(int mult, monster_type *m_ptr)
 	case SP_HOLYNESS:
 		if (r_ptr->flags3 & RF3_EVIL)
 		{
-			int n = 12 + (p_ptr->concent * 3);
+			MULTIPLY n = 12 + (p_ptr->concent * 3);
 			if (seen) r_ptr->r_flags3 |= RF3_EVIL;
 			if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{

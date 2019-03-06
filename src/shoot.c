@@ -6,6 +6,7 @@
 #include "player-status.h"
 
 #include "shoot.h"
+
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /
  * Determines the odds of an object breaking when thrown at a monster
@@ -14,9 +15,9 @@
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイ倍率をかけたダメージ量
  */
-static s16b tot_dam_aux_shot(object_type *o_ptr, int tdam, monster_type *m_ptr)
+static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr)
 {
-	int mult = 10;
+	MULTIPLY mult = 10;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
