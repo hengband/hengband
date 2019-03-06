@@ -212,7 +212,6 @@ POSITION temp_y[TEMP_MAX];
 POSITION temp_x[TEMP_MAX];
 
 
-
 /*
  * Number of active macros.
  */
