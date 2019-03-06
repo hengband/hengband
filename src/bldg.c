@@ -17,6 +17,7 @@
 #include "object-hook.h"
 #include "monsterrace-hook.h"
 #include "melee.h"
+#include "wild.h"
 #include "world.h"
 #include "sort.h"
 

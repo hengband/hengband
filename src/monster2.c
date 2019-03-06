@@ -20,6 +20,7 @@
 #include "quest.h"
 #include "grid.h"
 #include "player-move.h"
+#include "wild.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */

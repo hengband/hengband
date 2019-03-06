@@ -682,13 +682,6 @@ monsterrace_hook_type get_mon_num2_hook;
  */
 bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
-
-/*
- * Wilderness
- */
-wilderness_type **wilderness;
-
-
 /*
  * Buildings
  */

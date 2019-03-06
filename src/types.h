@@ -1640,23 +1640,6 @@ struct border_type
 	s16b south_east;
 };
 
-
-/*
- * A structure describing a wilderness area
- * with a terrain or a town
- */
-typedef struct wilderness_type wilderness_type;
-struct wilderness_type
-{
-	int terrain;
-	TOWN_IDX town;
-	int road;
-	u32b seed;
-	DEPTH level;
-	byte entrance;
-};
-
-
 /*
  * A structure describing a town with
  * stores and buildings

@@ -307,7 +307,6 @@ extern void (*ang_sort_swap)(vptr u, vptr v, int a, int b);
 extern monsterrace_hook_type get_mon_num_hook;
 extern monsterrace_hook_type get_mon_num2_hook;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
-extern wilderness_type **wilderness;
 extern building_type building[MAX_BLDG];
 extern QUEST_IDX max_q_idx;
 extern MONRACE_IDX max_r_idx;

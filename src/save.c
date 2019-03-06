@@ -15,6 +15,7 @@
 #include "sort.h"
 #include "quest.h"
 #include "store.h"
+#include "wild.h"
 
 
 
