@@ -611,42 +611,6 @@ static void pattern_teleport(void)
 }
 
 /*!
- * @brief 種族アンバライトが出血時パターンの上に乗った際のペナルティ処理
- * @return なし
- */
-static void wreck_the_pattern(void)
-{
-	int to_ruin = 0;
-	POSITION r_y, r_x;
-	int pattern_type = f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
-
-	if (pattern_type == PATTERN_TILE_WRECKED)
-	{
-		/* Ruined already */
-		return;
-	}
-
-	msg_print(_("パターンを血で汚してしまった！", "You bleed on the Pattern!"));
-	msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
-
-	if (!IS_INVULN()) take_hit(DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
-	to_ruin = randint1(45) + 35;
-
-	while (to_ruin--)
-	{
-		scatter(&r_y, &r_x, p_ptr->y, p_ptr->x, 4, 0);
-
-		if (pattern_tile(r_y, r_x) &&
-		    (f_info[current_floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
-		{
-			cave_set_feat(r_y, r_x, feat_pattern_corrupted);
-		}
-	}
-
-	cave_set_feat(p_ptr->y, p_ptr->x, feat_pattern_corrupted);
-}
-
-/*!
  * @brief 各種パターン地形上の特別な処理 / Returns TRUE if we are on the Pattern...
  * @return 実際にパターン地形上にプレイヤーが居た場合はTRUEを返す。
  */
