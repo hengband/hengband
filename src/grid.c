@@ -3208,7 +3208,8 @@ void do_cmd_view_map(void)
   */
 void forget_lite(void)
 {
-	int i, x, y;
+	int i;
+	POSITION x, y;
 
 	/* None to forget */
 	if (!current_floor_ptr->lite_n) return;
@@ -3299,7 +3300,7 @@ void update_lite(void)
 {
 	int i;
 	POSITION x, y, min_x, max_x, min_y, max_y;
-	int p = p_ptr->cur_lite;
+	POSITION p = p_ptr->cur_lite;
 	grid_type *g_ptr;
 
 	/*** Special case ***/

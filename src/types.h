@@ -1320,7 +1320,7 @@ struct player_type
 	bool old_riding_ryoute;
 	bool old_monlite;
 
-	s16b old_lite;		/* Old radius of lite (if any) */
+	POSITION old_lite;		/* Old radius of lite (if any) */
 
 	bool cumber_armor;	/* Mana draining armor */
 	bool cumber_glove;	/* Mana draining gloves */
@@ -1331,7 +1331,7 @@ struct player_type
 	bool riding_ryoute;	/* Riding weapon */
 	bool monlite;
 
-	s16b cur_lite;		/* Radius of lite (if any) */
+	POSITION cur_lite;		/* Radius of lite (if any) */
 
 	BIT_FLAGS update;	/* Pending Updates */
 		#define PU_BONUS        0x00000001L     /*!< ステータス更新フラグ: 能力値修正 / Calculate bonuses */
@@ -1355,8 +1355,8 @@ struct player_type
 	BIT_FLAGS redraw;	/* Normal Redraws */
 	BIT_FLAGS window;	/* Window Redraws */
 
-	s16b stat_use[6];	/* Current modified stats */
-	s16b stat_top[6];	/* Maximal modified stats */
+	s16b stat_use[A_MAX];	/* Current modified stats */
+	s16b stat_top[A_MAX];	/* Maximal modified stats */
 
 	bool sutemi;
 	bool counter;
@@ -1371,8 +1371,8 @@ struct player_type
 
 	WEIGHT total_weight;	/*!< 所持品と装備品の計算総重量 / Total weight being carried */
 
-	s16b stat_add[6];	/* Modifiers to stat values */
-	s16b stat_ind[6];	/* Indexes into stat tables */
+	s16b stat_add[A_MAX];	/* Modifiers to stat values */
+	s16b stat_ind[A_MAX];	/* Indexes into stat tables */
 
 	bool immune_acid;	/* Immunity to acid */
 	bool immune_elec;	/* Immunity to lightning */
