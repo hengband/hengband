@@ -959,7 +959,6 @@ extern void brand_weapon(int brand_type);
 extern void call_the_(void);
 extern void fetch(DIRECTION dir, WEIGHT wgt, bool require_los);
 extern void alter_reality(void);
-extern bool place_mirror(void);
 extern void identify_pack(void);
 extern int remove_curse(void);
 extern int remove_all_curse(void);

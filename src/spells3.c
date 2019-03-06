@@ -1581,33 +1581,6 @@ void alter_reality(void)
 }
 
 /*!
- * @brief 鏡設置処理
- * @return 実際に設置が行われた場合TRUEを返す
- */
-bool place_mirror(void)
-{
-	if (!cave_clean_bold(p_ptr->y, p_ptr->x))
-	{
-		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-		return FALSE;
-	}
-
-	/* Create a mirror */
-	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info |= CAVE_OBJECT;
-	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].mimic = feat_mirror;
-
-	/* Turn on the light */
-	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info |= CAVE_GLOW;
-
-	note_spot(p_ptr->y, p_ptr->x);
-	lite_spot(p_ptr->y, p_ptr->x);
-	update_local_illumination(p_ptr->y, p_ptr->x);
-
-	return TRUE;
-}
-
-
-/*!
  * @brief 全所持アイテム鑑定処理 /
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
