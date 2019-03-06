@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-hook.c" />
     <ClCompile Include="..\..\src\objectkind-hook.c" />
+    <ClCompile Include="..\..\src\object-broken.c" />
     <ClCompile Include="..\..\src\patron.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
     <ClCompile Include="..\..\src\player-status.c" />
@@ -300,6 +301,7 @@
     <ClInclude Include="..\..\src\mutation.h" />
     <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-hook.h" />
+    <ClInclude Include="..\..\src\object-broken.h" />
     <ClInclude Include="..\..\src\objectkind-hook.h" />
     <ClInclude Include="..\..\src\patron.h" />
     <ClInclude Include="..\..\src\player-damage.h" />

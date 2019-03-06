@@ -165,3 +165,26 @@ void wiz_dark(void)
 	p_ptr->redraw |= (PR_MAP);
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
+
+/*!
+ * @brief 守りのルーン設置処理 /
+ * Leave a "glyph of warding" which prevents monster movement
+ * @return 実際に設置が行われた場合TRUEを返す
+ */
+bool warding_glyph(void)
+{
+	if (!cave_clean_bold(p_ptr->y, p_ptr->x))
+	{
+		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
+		return FALSE;
+	}
+
+	/* Create a glyph */
+	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info |= CAVE_OBJECT;
+	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].mimic = feat_glyph;
+
+	note_spot(p_ptr->y, p_ptr->x);
+	lite_spot(p_ptr->y, p_ptr->x);
+
+	return TRUE;
+}

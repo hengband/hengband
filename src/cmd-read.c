@@ -15,6 +15,7 @@
 #include "realm-hex.h"
 
 #include "spells-object.h"
+#include "spells-floor.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 
