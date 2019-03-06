@@ -21,6 +21,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "spells-object.h"
+#include "spells-floor.h"
 #include "cmd-spell.h"
 #include "realm-hex.h"
 
