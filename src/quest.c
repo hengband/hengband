@@ -480,3 +480,25 @@ void leave_quest_check(void)
 		}
 	}
 }
+
+/*!
+ * @brief 「塔」クエストの各階層から離脱する際の処理
+ * @return なし
+ */
+void leave_tower_check(void)
+{
+	leaving_quest = p_ptr->inside_quest;
+	/* Check for Tower Quest */
+	if (leaving_quest &&
+		(quest[leaving_quest].type == QUEST_TYPE_TOWER) &&
+		(quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED))
+	{
+		if (quest[leaving_quest].type == QUEST_TYPE_TOWER)
+		{
+			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
+			quest[QUEST_TOWER1].complev = p_ptr->lev;
+			update_playtime();
+			quest[QUEST_TOWER1].comptime = current_world_ptr->play_time;
+		}
+	}
+}
