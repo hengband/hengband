@@ -166,13 +166,8 @@ void display_snipe_list(void)
 
 	/* Display a list of spells */
 	prt("", y, x);
-#ifdef JP
-	put_str("名前", y, x + 5);
-	put_str("Lv   MP", y, x + 35);
-#else
-	put_str("Name", y, x + 5);
-	put_str("Lv Mana", y, x + 35);
-#endif
+	put_str(_("名前", "Name"), y, x + 5);
+	put_str(_("Lv   MP", "Lv Mana"), y, x + 35);
 
 	/* Dump the spells */
 	for (i = 0; i < MAX_SNIPE_POWERS; i++)
