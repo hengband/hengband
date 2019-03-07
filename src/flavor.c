@@ -2391,7 +2391,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 			t = object_desc_num(t,  fire_rate/100);
 			t = object_desc_chr(t,  '.');
 			t = object_desc_num(t,  fire_rate%100);
-			t = object_desc_str(t, "current_world_ptr->game_turn");
+			t = object_desc_str(t, "turn");
 			t = object_desc_chr(t, p2);
 		}
 		
