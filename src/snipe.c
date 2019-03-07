@@ -157,9 +157,9 @@ int boost_concentration_damage(int tdam)
  */
 void display_snipe_list(void)
 {
-	int             i;
-	int             y = 1;
-	int             x = 1;
+	int i;
+	TERM_LEN y = 1;
+	TERM_LEN x = 1;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	snipe_power     spell;
 	char            psi_desc[80];
