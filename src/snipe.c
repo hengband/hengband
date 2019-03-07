@@ -538,13 +538,7 @@ void do_cmd_snipe(void)
 
 	if(cmd_limit_confused(p_ptr)) return;
 	if(cmd_limit_image(p_ptr)) return;
-
-	/* not if stuned */
-	if (p_ptr->stun)
-	{
-		msg_print(_("頭が朦朧としていて集中できない！", "You are too stuned!"));
-		return;
-	}
+	if(cmd_limit_stun(p_ptr)) return;
 
 	if (!get_snipe_power(&n, FALSE)) return;
 
