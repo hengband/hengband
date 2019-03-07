@@ -1404,7 +1404,6 @@ bool do_cmd_cast_learned(void)
 
 	if (cmd_limit_confused(p_ptr)) return FALSE;
 
-	/* get power */
 	if (!get_learned_power(&n)) return FALSE;
 
 	spell = monster_powers[n];

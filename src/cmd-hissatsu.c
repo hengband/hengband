@@ -329,7 +329,6 @@ void do_cmd_hissatsu(void)
 		set_action(ACTION_NONE);
 	}
 
-	/* get power */
 	if (!get_hissatsu_power(&n)) return;
 
 	spell = technic_info[TECHNIC_HISSATSU][n];

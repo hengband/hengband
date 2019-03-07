@@ -1765,7 +1765,6 @@ void do_cmd_mind(void)
 
 	if (cmd_limit_confused(p_ptr)) return;
 
-	/* get power */
 	if (!get_mind_power(&n, FALSE)) return;
 
 #ifdef JP
@@ -2067,7 +2066,6 @@ void do_cmd_mind_browse(void)
 
 	while(1)
 	{
-		/* get power */
 		if (!get_mind_power(&n, TRUE))
 		{
 			screen_load();

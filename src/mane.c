@@ -926,7 +926,6 @@ bool do_cmd_mane(bool baigaesi)
 		return FALSE;
 	}
 
-	/* get power */
 	if (!get_mane_power(&n, baigaesi)) return FALSE;
 
 	spell = monster_powers[p_ptr->mane_spell[n]];

@@ -552,7 +552,6 @@ void do_cmd_snipe(void)
 		return;
 	}
 
-	/* get power */
 	if (!get_snipe_power(&n, FALSE)) return;
 
 	sound(SOUND_SHOOT);
@@ -581,7 +580,6 @@ void do_cmd_snipe_browse(void)
 
 	while(1)
 	{
-		/* get power */
 		if (!get_snipe_power(&n, TRUE))
 		{
 			screen_load();
