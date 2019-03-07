@@ -284,13 +284,8 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 
 				/* Display a list of spells */
 				prt("", y, x);
-#ifdef JP
-				put_str("名前", y, x + 5);
-				if (only_browse) put_str("Lv   集中度", y, x + 35);
-#else
-				put_str("Name", y, x + 5);
-				if (only_browse) put_str("Lv Pow", y, x + 35);
-#endif
+				put_str(_("名前", "Name"), y, x + 5);
+				if (only_browse) put_str(_("Lv   集中度", "Lv Pow"), y, x + 35);
 
 				/* Dump the spells */
 				for (i = 0; i < MAX_SNIPE_POWERS; i++)
