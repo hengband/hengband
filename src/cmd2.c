@@ -95,6 +95,16 @@ bool cmd_limit_confused(player_type *creature_ptr)
 	return FALSE;
 }
 
+bool cmd_limit_image(player_type *creature_ptr)
+{
+	if (creature_ptr->image)
+	{
+		msg_print(_("幻覚が見えて集中できない！", "You are too hallucinated!"));
+		return TRUE;
+	}
+	return FALSE;
+}
+
 bool cmd_limit_arena(player_type *creature_ptr)
 {
 	if (creature_ptr->inside_arena)

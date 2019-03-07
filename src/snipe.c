@@ -536,14 +536,8 @@ void do_cmd_snipe(void)
 	COMMAND_CODE n = 0;
 	bool            cast;
 
-	if (cmd_limit_confused(p_ptr)) return;
-
-	/* not if hullucinated */
-	if (p_ptr->image)
-	{
-		msg_print(_("幻覚が見えて集中できない！", "You are too hallucinated!"));
-		return;
-	}
+	if(cmd_limit_confused(p_ptr)) return;
+	if(cmd_limit_image(p_ptr)) return;
 
 	/* not if stuned */
 	if (p_ptr->stun)
