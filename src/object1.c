@@ -5040,7 +5040,7 @@ void py_pickup_floor(bool pickup)
  * @details
  * Note that artifacts never break, see the "drop_near()" function.
  */
-PERCENTAGE breakage_chance(object_type *o_ptr)
+PERCENTAGE breakage_chance(object_type *o_ptr, SPELL_IDX snipe_type)
 {
 	PERCENTAGE archer_bonus = (p_ptr->pclass == CLASS_ARCHER ? (PERCENTAGE)(p_ptr->lev - 1) / 7 + 4 : 0);
 

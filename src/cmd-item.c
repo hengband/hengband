@@ -1704,7 +1704,7 @@ void do_cmd_use(void)
 		case TV_ARROW:
 		case TV_BOLT:
 		{
-			exe_fire(item, &inventory[INVEN_BOW]);
+			exe_fire(item, &inventory[INVEN_BOW], SP_NONE);
 			break;
 		}
 

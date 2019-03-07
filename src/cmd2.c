@@ -2232,7 +2232,7 @@ void do_cmd_rest(void)
  * @brief 射撃処理のメインルーチン
  * @return なし
  */
-void do_cmd_fire(void)
+void do_cmd_fire(SPELL_IDX snipe_type)
 {
 	OBJECT_IDX item;
 	object_type *j_ptr, *ammo_ptr;
@@ -2288,7 +2288,7 @@ void do_cmd_fire(void)
 	}
 
 	/* Fire the item */
-	exe_fire(item, j_ptr);
+	exe_fire(item, j_ptr, snipe_type);
 
 	if (!is_fired || p_ptr->pclass != CLASS_SNIPER) return;
 
@@ -2691,7 +2691,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if (hit_body) torch_lost_fuel(q_ptr);
 
 	/* Chance of breakage (during attacks) */
-	j = (hit_body ? breakage_chance(q_ptr) : 0);
+	j = (hit_body ? breakage_chance(q_ptr, 0) : 0);
 
 	/* Figurines transform */
 	if ((q_ptr->tval == TV_FIGURINE) && !(p_ptr->inside_arena))

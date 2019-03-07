@@ -4195,7 +4195,7 @@ static void process_command(void)
 		/* Fire an item */
 		case 'f':
 		{
-			do_cmd_fire();
+			do_cmd_fire(SP_NONE);
 			break;
 		}
 

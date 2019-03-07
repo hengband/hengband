@@ -391,7 +391,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY tot_dam_aux_snipe(MULTIPLY mult, monster_type *m_ptr)
+MULTIPLY tot_dam_aux_snipe(MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool seen = is_seen(m_ptr);
@@ -492,6 +492,7 @@ MULTIPLY tot_dam_aux_snipe(MULTIPLY mult, monster_type *m_ptr)
 static bool cast_sniper_spell(int spell)
 {
 	object_type *o_ptr = &inventory[INVEN_BOW];
+	SPELL_IDX snipe_type = SP_NONE;
 
 	if (o_ptr->tval != TV_BOW)
 	{
@@ -526,8 +527,7 @@ static bool cast_sniper_spell(int spell)
 	}
 
 	command_cmd = 'f';
-	do_cmd_fire();
-	snipe_type = 0;
+	do_cmd_fire(snipe_type);
 
 	return (is_fired);
 }

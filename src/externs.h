@@ -507,8 +507,8 @@ extern void do_cmd_walk(bool pickup);
 extern void do_cmd_stay(bool pickup);
 extern void do_cmd_run(void);
 extern void do_cmd_rest(void);
-extern void do_cmd_fire(void);
-extern void exe_fire(INVENTORY_IDX item, object_type *j_ptr);
+extern void do_cmd_fire(SPELL_IDX snipe_type);
+extern void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type);
 extern bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken);
 #ifdef TRAVEL
 extern void do_cmd_travel(void);
@@ -732,7 +732,7 @@ extern void toggle_inven_equip(void);
 extern bool can_get_item(void);
 extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option);
-PERCENTAGE breakage_chance(object_type *o_ptr);
+PERCENTAGE breakage_chance(object_type *o_ptr, SPELL_IDX snipe_type);
 
 /* object2.c */
 extern void excise_object_idx(OBJECT_IDX o_idx);
@@ -1363,14 +1363,13 @@ extern travel_type travel;
 #endif
 
 /* variable.c (for snipers) */
-extern int snipe_type;
 extern bool reset_concent;   /* Concentration reset flag */
 extern bool is_fired;
 
 /* snipe.c */
 extern void reset_concentration(bool msg);
 extern void display_snipe_list(void);
-extern MULTIPLY tot_dam_aux_snipe (MULTIPLY mult, monster_type *m_ptr);
+extern MULTIPLY tot_dam_aux_snipe (MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type);
 extern void do_cmd_snipe(void);
 extern void do_cmd_snipe_browse(void);
 extern int boost_concentration_damage(int tdam);

@@ -15,7 +15,7 @@
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイ倍率をかけたダメージ量
  */
-static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr)
+static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
 	MULTIPLY mult = 10;
 
@@ -307,7 +307,7 @@ static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_typ
 	}
 
 	/* Sniper */
-	if (snipe_type) mult = tot_dam_aux_snipe(mult, m_ptr);
+	if (snipe_type) mult = tot_dam_aux_snipe(mult, m_ptr, snipe_type);
 
 	/* Return the total damage */
 	return (tdam * mult / 10);
@@ -338,7 +338,7 @@ static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_typ
  * Note that Bows of "Extra Shots" give an extra shot.
  * </pre>
  */
-void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
+void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 {
 	DIRECTION dir;
 	int i;
@@ -692,7 +692,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 					else
 					{
 						/* Apply special damage */
-						tdam = tot_dam_aux_shot(q_ptr, tdam, m_ptr);
+						tdam = tot_dam_aux_shot(q_ptr, tdam, m_ptr, snipe_type);
 						tdam = critical_shot(q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
 
 						/* No negative damage */
@@ -822,7 +822,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr)
 		}
 
 		/* Chance of breakage (during attacks) */
-		j = (hit_body ? breakage_chance(q_ptr) : 0);
+		j = (hit_body ? breakage_chance(q_ptr, snipe_type) : 0);
 
 		if (stick_to)
 		{
