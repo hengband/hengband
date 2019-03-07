@@ -209,8 +209,8 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 {
 	COMMAND_CODE i;
 	int             num = 0;
-	int             y = 1;
-	int             x = 20;
+	TERM_LEN y = 1;
+	TERM_LEN x = 20;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int             ask;
 	char            choice;
