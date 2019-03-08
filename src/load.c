@@ -2869,12 +2869,9 @@ static errr rd_dungeon_old(void)
 
 		/* XXX XXX */
 
-		/* Monster */
 		if (o_ptr->held_m_idx)
 		{
 			monster_type *m_ptr;
-
-			/* Monster */
 			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */
@@ -3186,13 +3183,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Read the item */
 		rd_item(o_ptr);
 
-
-		/* Monster */
 		if (o_ptr->held_m_idx)
 		{
 			monster_type *m_ptr;
-
-			/* Monster */
 			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */

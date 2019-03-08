@@ -1426,7 +1426,6 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				}
 				else if (value < 10)
 				{
-					/* Monster */
 					current_floor_ptr->monster_level = current_floor_ptr->base_level + 9;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					current_floor_ptr->monster_level = current_floor_ptr->base_level;

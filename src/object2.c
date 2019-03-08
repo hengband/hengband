@@ -73,12 +73,9 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	/* Object */
 	j_ptr = &current_floor_ptr->o_list[o_idx];
 
-	/* Monster */
 	if (j_ptr->held_m_idx)
 	{
 		monster_type *m_ptr;
-
-		/* Monster */
 		m_ptr = &current_floor_ptr->m_list[j_ptr->held_m_idx];
 
 		/* Scan all objects in the grid */
@@ -276,7 +273,6 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	}
 	o_ptr = &current_floor_ptr->o_list[i1];
 
-	/* Monster */
 	if (o_ptr->held_m_idx)
 	{
 		monster_type *m_ptr;
@@ -373,7 +369,6 @@ void compact_objects(int size)
 			/* Hack -- High level objects start out "immune" */
 			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
 
-			/* Monster */
 			if (o_ptr->held_m_idx)
 			{
 				monster_type *m_ptr;
@@ -468,12 +463,9 @@ void wipe_o_list(void)
 			}
 		}
 
-		/* Monster */
 		if (o_ptr->held_m_idx)
 		{
 			monster_type *m_ptr;
-
-			/* Monster */
 			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Hack -- see above */

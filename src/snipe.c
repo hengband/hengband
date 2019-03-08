@@ -169,7 +169,6 @@ void display_snipe_list(void)
 	put_str(_("名前", "Name"), y, x + 5);
 	put_str(_("Lv   MP", "Lv Mana"), y, x + 35);
 
-	/* Dump the spells */
 	for (i = 0; i < MAX_SNIPE_POWERS; i++)
 	{
 		/* Access the available spell */
@@ -177,7 +176,6 @@ void display_snipe_list(void)
 		if (spell.min_lev > plev) continue;
 		if (spell.mana_cost > (int)p_ptr->concent) continue;
 
-		/* Dump the spell */
 		sprintf(psi_desc, "  %c) %-30s%2d %4d",
 			I2A(i), spell.name, spell.min_lev, spell.mana_cost);
 
