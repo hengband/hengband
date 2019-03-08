@@ -49,12 +49,12 @@ static void one_sustain(object_type *o_ptr)
 {
 	switch (randint0(A_MAX))
 	{
-	case 0: add_flag(o_ptr->art_flags, TR_SUST_STR); break;
-	case 1: add_flag(o_ptr->art_flags, TR_SUST_INT); break;
-	case 2: add_flag(o_ptr->art_flags, TR_SUST_WIS); break;
-	case 3: add_flag(o_ptr->art_flags, TR_SUST_DEX); break;
-	case 4: add_flag(o_ptr->art_flags, TR_SUST_CON); break;
-	case 5: add_flag(o_ptr->art_flags, TR_SUST_CHR); break;
+		case 0: add_flag(o_ptr->art_flags, TR_SUST_STR); break;
+		case 1: add_flag(o_ptr->art_flags, TR_SUST_INT); break;
+		case 2: add_flag(o_ptr->art_flags, TR_SUST_WIS); break;
+		case 3: add_flag(o_ptr->art_flags, TR_SUST_DEX); break;
+		case 4: add_flag(o_ptr->art_flags, TR_SUST_CON); break;
+		case 5: add_flag(o_ptr->art_flags, TR_SUST_CHR); break;
 	}
 }
 
