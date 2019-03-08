@@ -17,8 +17,8 @@ typedef struct snipe_power snipe_power;
 /*! スナイパー技能情報の構造体 */
 struct snipe_power
 {
-	int     min_lev;
-	int     mana_cost;
+	PLAYER_LEVEL min_lev;
+	MANA_POINT mana_cost;
 	concptr name;
 };
 
