@@ -285,11 +285,8 @@ void delete_monster_idx(MONSTER_IDX i)
 		delete_object_idx(this_o_idx);
 	}
 
-
 	if (is_pet(m_ptr)) check_pets_num_and_align(m_ptr, FALSE);
 
-
-	/* Wipe the Monster */
 	(void)WIPE(m_ptr, monster_type);
 
 	/* Count monsters */
@@ -541,7 +538,6 @@ void wipe_m_list(void)
 		/* Monster is gone */
 		current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
 
-		/* Wipe the Monster */
 		(void)WIPE(m_ptr, monster_type);
 
 	}
