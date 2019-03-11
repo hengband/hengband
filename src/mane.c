@@ -113,11 +113,9 @@ static int get_mane_power(int *sn, bool baigaesi)
 	num = p_ptr->mane_num;
 
 	/* Build a prompt (accept all spells) */
-	(void)strnfmt(out_val, 78, 
-		      _("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
-		      I2A(0), I2A(num - 1), p);
-
-	/* Get a spell from the user */
+	(void)strnfmt(out_val, 78,
+		_("(%c-%c, '*'で一覧, ESC) どの%sをまねますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "),
+		I2A(0), I2A(num - 1), p);
 
 	choice= always_show_list ? ESCAPE:1 ;
 	while (!flag)

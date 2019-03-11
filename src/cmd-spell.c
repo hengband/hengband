@@ -368,8 +368,6 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 		p, I2A(0), I2A(num - 1), prompt, p);
 #endif
 
-	/* Get a spell from the user */
-
 	choice = (always_show_list || use_menu) ? ESCAPE : 1;
 	while (!flag)
 	{

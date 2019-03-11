@@ -762,32 +762,32 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
     /* No redraw yet */
     redraw = FALSE;
 
-    for (i = 0; i < MAX_MIND_POWERS; i++)
+	for (i = 0; i < MAX_MIND_POWERS; i++)
 	{
-	  if (mind_ptr->info[i].min_lev <= plev)
-	    {
-	      num++;
-	    }
+		if (mind_ptr->info[i].min_lev <= plev)
+		{
+			num++;
+		}
 	}
 
-    /* Build a prompt (accept all spells) */
-    if (only_browse)
+	/* Build a prompt (accept all spells) */
+	if (only_browse)
 	{
-		(void) strnfmt(out_val, 78, 
-					_("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
-				       p, I2A(0), I2A(num - 1), p);
+		(void)strnfmt(out_val, 78,
+			_("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+			p, I2A(0), I2A(num - 1), p);
 	}
 	else
 	{
-		(void) strnfmt(out_val, 78, 
-					_("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
-						p, I2A(0), I2A(num - 1), p);
+		(void)strnfmt(out_val, 78,
+			_("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+			p, I2A(0), I2A(num - 1), p);
 	}
 
 	if (use_menu && !only_browse) screen_save();
-	/* Get a spell from the user */
 
-	choice= (always_show_list || use_menu) ? ESCAPE:1 ;
+	choice = (always_show_list || use_menu) ? ESCAPE : 1;
+
 	while (!flag)
 	{
 		if(choice==ESCAPE) choice = ' '; 

@@ -1805,7 +1805,6 @@ void do_cmd_racial_power(void)
 
 if (!repeat_pull(&i) || i<0 || i>=num) {
 	if (use_menu) screen_save();
-	 /* Get a spell from the user */
 
 	choice = (always_show_list || use_menu) ? ESCAPE:1;
 	while (!flag)

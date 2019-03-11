@@ -879,8 +879,6 @@ static void add_essence(ESSENCE_IDX mode)
 		(void)strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの能力を付加しますか？", "(*=List, ESC=exit) Add which ability? "));
 		if (use_menu) screen_save();
 
-		/* Get a spell from the user */
-
 		choice = (always_show_list || use_menu) ? ESCAPE : 1;
 		while (!flag)
 		{

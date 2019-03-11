@@ -263,7 +263,6 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 					p, I2A(0), I2A(num), p);
 	}
 
-	/* Get a spell from the user */
 	choice = always_show_list ? ESCAPE : 1;
 	while (!flag)
 	{

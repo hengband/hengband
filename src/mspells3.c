@@ -344,8 +344,6 @@ static bool get_learned_power(SPELL_IDX *sn)
 
 	if (use_menu) screen_save();
 
-	/* Get a spell from the user */
-
 	choice= (always_show_list || use_menu) ? ESCAPE:1 ;
 	while (!flag)
 	{

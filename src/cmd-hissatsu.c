@@ -83,15 +83,13 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	}
 
 	/* Build a prompt (accept all spells) */
-	(void) strnfmt(out_val, 78, 
-		       _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
-		       p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num-1], p);
+	(void)strnfmt(out_val, 78,
+		_("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+		p, I2A(0), "abcdefghijklmnopqrstuvwxyz012345"[num - 1], p);
 
 	if (use_menu) screen_save();
+	choice = always_show_list ? ESCAPE : 1;
 
-	/* Get a spell from the user */
-
-	choice= always_show_list ? ESCAPE:1 ;
 	while (!flag)
 	{
 		if(choice==ESCAPE) choice = ' '; 
