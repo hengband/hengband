@@ -259,6 +259,7 @@
     <ClCompile Include="..\..\src\util.c" />
     <ClCompile Include="..\..\src\variable.c" />
     <ClCompile Include="..\..\src\view-mainwindow.c" />
+    <ClCompile Include="..\..\src\warning.c" />
     <ClCompile Include="..\..\src\wild.c" />
     <ClCompile Include="..\..\src\wizard1.c" />
     <ClCompile Include="..\..\src\wizard2.c" />
@@ -349,6 +350,7 @@
     <ClInclude Include="..\..\src\term.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />
+    <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\wild.h" />
     <ClInclude Include="..\..\src\world.h" />
     <ClInclude Include="..\..\src\z-config.h" />
