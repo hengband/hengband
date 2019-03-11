@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\src\cmd-pet.c" />
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
+    <ClCompile Include="..\..\src\cmd-smith.c" />
     <ClCompile Include="..\..\src\feature.c" />
     <ClCompile Include="..\..\src\floor-events.c" />
     <ClCompile Include="..\..\src\floor-generate.c" />
@@ -182,6 +183,7 @@
     <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
     <ClInclude Include="..\..\src\cmd-pet.h" />
+    <ClInclude Include="..\..\src\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-zapwand.h">

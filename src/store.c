@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "cmd-item.h"
+#include "cmd-smith.h"
 #include "cmd-zapwand.h"
 #include "cmd-magiceat.h"
 #include "store.h"

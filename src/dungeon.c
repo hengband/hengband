@@ -17,6 +17,7 @@
 #include "cmd-magiceat.h"
 #include "cmd-quaff.h"
 #include "cmd-read.h"
+#include "cmd-smith.h"
 #include "cmd-usestaff.h"
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
