@@ -16,7 +16,7 @@ hengband_SOURCES = \
 	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h cmd-pet.c cmd-pet.h \
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
-	cmd-zapwand.h cmd-smith.c cmd-smith.h \
+	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c\
 	\
 	defines.h dungeon.c effects.c externs.h files.c flavor.c \
 	\
@@ -27,7 +27,7 @@ hengband_SOURCES = \
 	geometry.c geometry.h \
 	\
 	gameoption.c gameoption.h gamevalue.h \
-	generate.h grid.c grid.h h-basic.h h-config.h h-define.h hissatsu.c \
+	generate.h grid.c grid.h h-basic.h h-config.h h-define.h \
 	history.h history.c \
 	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
 	main.c main-x11.c main-gcu.c mane.c \
@@ -40,7 +40,7 @@ hengband_SOURCES = \
 	\
 	mutation.h mutation.c \
 	\
-	object-curse.c object-curse.h \
+	object-curse.c object-curse.h object-broken.c object-broken.h\
 	object-hook.c object-hook.h object1.c object2.c \
 	objectkind-hook.c objectkind-hook.h \
 	\
@@ -48,7 +48,7 @@ hengband_SOURCES = \
 	\
 	projection.h projection.c\
 	\
-	player-move.c player-damage.c player-damage.h player-status.c player-status.h \
+	player-move.c player-move.h player-damage.c player-damage.h player-status.c player-status.h \
 	\
 	quest.h quest.c\
 	\
