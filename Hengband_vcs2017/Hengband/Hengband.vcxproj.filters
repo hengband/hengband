@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\bldg.c" />
+    <ClCompile Include="..\..\src\chuukei.c" />
+    <ClCompile Include="..\..\src\geometry.c" />
+    <ClCompile Include="..\..\src\history.c" />
+    <ClCompile Include="..\..\src\projection.c" />
+    <ClCompile Include="..\..\src\quest.c" />
+    <ClCompile Include="..\..\src\realm-craft.c" />
+    <ClCompile Include="..\..\src\realm-crusade.c" />
+    <ClCompile Include="..\..\src\realm-daemon.c" />
+    <ClCompile Include="..\..\src\realm-death.c" />
+    <ClCompile Include="..\..\src\realm-hissatsu.c" />
+    <ClCompile Include="..\..\src\realm-nature.c" />
+    <ClCompile Include="..\..\src\realm-song.c" />
+    <ClCompile Include="..\..\src\realm-sorcery.c" />
+    <ClCompile Include="..\..\src\dungeon.c" />
+    <ClCompile Include="..\..\src\effects.c" />
+    <ClCompile Include="..\..\src\files.c" />
+    <ClCompile Include="..\..\src\flavor.c" />
+    <ClCompile Include="..\..\src\gameoption.c" />
+    <ClCompile Include="..\..\src\grid.c" />
+    <ClCompile Include="..\..\src\inet.c" />
+    <ClCompile Include="..\..\src\init1.c" />
+    <ClCompile Include="..\..\src\init2.c" />
+    <ClCompile Include="..\..\src\japanese.c" />
+    <ClCompile Include="..\..\src\load.c" />
+    <ClCompile Include="..\..\src\main-win.c" />
+    <ClCompile Include="..\..\src\mane.c" />
+    <ClCompile Include="..\..\src\melee1.c" />
+    <ClCompile Include="..\..\src\mind.c" />
+    <ClCompile Include="..\..\src\racial.c" />
+    <ClCompile Include="..\..\src\readdib.c" />
+    <ClCompile Include="..\..\src\realm-arcane.c" />
+    <ClCompile Include="..\..\src\realm-chaos.c" />
+    <ClCompile Include="..\..\src\realm-hex.c" />
+    <ClCompile Include="..\..\src\realm-life.c" />
+    <ClCompile Include="..\..\src\realm-trump.c" />
+    <ClCompile Include="..\..\src\report.c" />
+    <ClCompile Include="..\..\src\rumor.c" />
+    <ClCompile Include="..\..\src\save.c" />
+    <ClCompile Include="..\..\src\scores.c" />
+    <ClCompile Include="..\..\src\selfinfo.c" />
+    <ClCompile Include="..\..\src\shoot.c" />
+    <ClCompile Include="..\..\src\snipe.c" />
+    <ClCompile Include="..\..\src\sort.c" />
+    <ClCompile Include="..\..\src\store.c" />
+    <ClCompile Include="..\..\src\tables.c" />
+    <ClCompile Include="..\..\src\term.c" />
+    <ClCompile Include="..\..\src\trap.c" />
+    <ClCompile Include="..\..\src\util.c" />
+    <ClCompile Include="..\..\src\variable.c" />
+    <ClCompile Include="..\..\src\view-mainwindow.c" />
+    <ClCompile Include="..\..\src\wild.c" />
+    <ClCompile Include="..\..\src\wizard1.c" />
+    <ClCompile Include="..\..\src\wizard2.c" />
+    <ClCompile Include="..\..\src\world.c" />
+    <ClCompile Include="..\..\src\xtra2.c" />
+    <ClCompile Include="..\..\src\z-form.c" />
+    <ClCompile Include="..\..\src\z-rand.c" />
+    <ClCompile Include="..\..\src\z-term.c" />
+    <ClCompile Include="..\..\src\z-util.c" />
+    <ClCompile Include="..\..\src\z-virt.c" />
+    <ClCompile Include="..\..\src\warning.c" />
+    <ClCompile Include="..\..\src\cmd2.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd4.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-activate.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-eat.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-hissatsu.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-magiceat.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-pet.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-quaff.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-read.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-smith.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-spell.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-usestaff.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-zaprod.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-zapwand.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells1.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells2.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells3.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells-diceroll.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells-floor.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells-object.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells-status.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells-summon.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spells-world.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor-events.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor-generate.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor-save.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor-streams.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-city.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-fractal.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-normal.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-pitnest.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-special.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-trap.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\rooms-vault.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object1.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object2.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-broken.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-curse.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-hook.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\objectkind-hook.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\patron.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-damage.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-move.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\avatar.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\birth.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\artifact.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\autopick.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\chest.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\feature.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster1.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster2.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-process.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monsterrace-hook.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-status.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspells1.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspells2.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspells3.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspells4.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\angband.h" />
+    <ClInclude Include="..\..\src\defines.h" />
+    <ClInclude Include="..\..\src\externs.h" />
+    <ClInclude Include="..\..\src\gameoption.h" />
+    <ClInclude Include="..\..\src\gamevalue.h" />
+    <ClInclude Include="..\..\src\generate.h" />
+    <ClInclude Include="..\..\src\geometry.h" />
+    <ClInclude Include="..\..\src\grid.h" />
+    <ClInclude Include="..\..\src\h-basic.h" />
+    <ClInclude Include="..\..\src\h-config.h" />
+    <ClInclude Include="..\..\src\h-define.h" />
+    <ClInclude Include="..\..\src\h-system.h" />
+    <ClInclude Include="..\..\src\h-type.h" />
+    <ClInclude Include="..\..\src\history.h" />
+    <ClInclude Include="..\..\src\init.h" />
+    <ClInclude Include="..\..\src\kajitips.h" />
+    <ClInclude Include="..\..\src\melee.h" />
+    <ClInclude Include="..\..\src\quest.h" />
+    <ClInclude Include="..\..\src\readdib.h" />
+    <ClInclude Include="..\..\src\realm-arcane.h" />
+    <ClInclude Include="..\..\src\realm-chaos.h" />
+    <ClInclude Include="..\..\src\realm-craft.h" />
+    <ClInclude Include="..\..\src\realm-crusade.h" />
+    <ClInclude Include="..\..\src\realm-daemon.h" />
+    <ClInclude Include="..\..\src\realm-death.h" />
+    <ClInclude Include="..\..\src\realm-hex.h" />
+    <ClInclude Include="..\..\src\realm-hissatsu.h" />
+    <ClInclude Include="..\..\src\realm-life.h" />
+    <ClInclude Include="..\..\src\realm-nature.h" />
+    <ClInclude Include="..\..\src\realm-song.h" />
+    <ClInclude Include="..\..\src\realm-sorcery.h" />
+    <ClInclude Include="..\..\src\realm-trump.h" />
+    <ClInclude Include="..\..\src\rumor.h" />
+    <ClInclude Include="..\..\src\selfinfo.h" />
+    <ClInclude Include="..\..\src\shoot.h" />
+    <ClInclude Include="..\..\src\sort.h" />
+    <ClInclude Include="..\..\src\projection.h" />
+    <ClInclude Include="..\..\src\store.h" />
+    <ClInclude Include="..\..\src\term.h" />
+    <ClInclude Include="..\..\src\trap.h" />
+    <ClInclude Include="..\..\src\types.h" />
+    <ClInclude Include="..\..\src\wild.h" />
+    <ClInclude Include="..\..\src\world.h" />
+    <ClInclude Include="..\..\src\z-config.h" />
+    <ClInclude Include="..\..\src\z-form.h" />
+    <ClInclude Include="..\..\src\z-rand.h" />
+    <ClInclude Include="..\..\src\z-term.h" />
+    <ClInclude Include="..\..\src\z-util.h" />
+    <ClInclude Include="..\..\src\z-virt.h" />
+    <ClInclude Include="..\..\src\warning.h" />
+    <ClInclude Include="..\..\src\cmd-activate.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-eat.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-magiceat.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-pet.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-quaff.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-read.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-smith.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-spell.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-usestaff.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-zaprod.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-zapwand.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spells.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spells-diceroll.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spells-floor.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spells-object.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spells-status.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spells-summon.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spells-world.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor-events.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor-streams.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-city.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-fractal.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-normal.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-pitnest.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-special.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-trap.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rooms-vault.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-broken.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-curse.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-hook.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objectkind-hook.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\patron.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-damage.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-move.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\avatar.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\artifact.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\chest.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\feature.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monsterrace-hook.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-status.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\src\angband.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\wall.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="cmd">
+      <UniqueIdentifier>{587cee92-bfe4-4674-9635-eed1992633f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spell">
+      <UniqueIdentifier>{4e443fe1-9ff8-4786-b43f-7e4d106760dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="floor">
+      <UniqueIdentifier>{c7e2056b-fda5-410a-8d23-03ba3f11c051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{52a3c5b6-2312-47a9-bb95-15c0d5e95192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player">
+      <UniqueIdentifier>{8fc15fd9-029b-4e7f-ae0b-75b2db215ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monster">
+      <UniqueIdentifier>{282dc0ea-8c5c-4253-b38c-4f4f0ad87ff9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
