@@ -845,7 +845,7 @@ static void do_cmd_bunshou(void)
 static void do_cmd_last_get(void)
 {
 	char buf[256];
-	s32b turn_tmp;
+	GAME_TURN turn_tmp;
 
 	if (record_o_name[0] == '\0') return;
 

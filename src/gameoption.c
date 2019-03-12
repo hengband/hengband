@@ -160,7 +160,7 @@ bool record_arena;	/* Record arena victories */
 bool record_ident;	/* Record first identified items */
 bool record_named_pet;	/* Record informations of named pets */
 char record_o_name[MAX_NLEN];
-s32b record_turn;
+GAME_TURN record_turn;
 
 
 /* Cheating options */

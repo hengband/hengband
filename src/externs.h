@@ -197,7 +197,7 @@ extern bool hack_mutation;
 
 
 extern char record_o_name[MAX_NLEN];
-extern s32b record_turn;
+extern GAME_TURN record_turn;
 extern bool closing_flag;
 extern POSITION panel_row_min, panel_row_max;
 extern POSITION panel_col_min, panel_col_max;
