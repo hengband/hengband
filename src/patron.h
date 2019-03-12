@@ -1,4 +1,7 @@
-﻿/* カオスパトロンからの報酬種別定義 / Chaos Warrior: Reward types: */
+﻿
+#define MAX_PATRON      16 /*!< カオスパトロンの最大定義数 / The number of "patrons" available (for Chaos Warriors) */
+
+/* カオスパトロンからの報酬種別定義 / Chaos Warrior: Reward types: */
 #define REW_POLY_SLF    1   /*!< カオスパトロンからの報酬: 自己変容 */
 #define REW_GAIN_EXP    2   /*!< カオスパトロンからの報酬: 経験値増加 */
 #define REW_LOSE_EXP    3   /*!< カオスパトロンからの報酬: 経験値減少 */
@@ -37,3 +40,6 @@
 #define REW_SER_MONS    36  /*!< カオスパトロンからの報酬: モンスターの下僕下賜 */
 
 extern void gain_level_reward(int chosen_reward);
+extern void admire_from_patron(player_type *creature_ptr);
+extern const concptr chaos_patrons[MAX_PATRON];
+

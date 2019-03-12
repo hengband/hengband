@@ -1,6 +1,7 @@
-﻿#include "patron.h"
-
+﻿
 #include "angband.h"
+
+#include "patron.h"
 #include "cmd-pet.h"
 #include "object-curse.h"
 #include "monsterrace-hook.h"
@@ -661,3 +662,11 @@ void gain_level_reward(int chosen_reward)
 	}
 }
 
+void admire_from_patron(player_type *creature_ptr)
+{
+	if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || (creature_ptr->muta2 & MUT2_CHAOS_GIFT))
+	{
+		msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
+		msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));
+	}
+}

@@ -16,6 +16,7 @@
 #include "history.h"
 #include "monsterrace-hook.h"
 #include "store.h"
+#include "patron.h"
 #include "quest.h"
 #include "player-status.h"
 #include "spells.h"

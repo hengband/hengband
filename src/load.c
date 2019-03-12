@@ -51,6 +51,7 @@
 #include "spells-status.h"
 #include "object-hook.h"
 #include "wild.h"
+#include "patron.h"
 
 
 /*

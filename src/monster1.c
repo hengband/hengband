@@ -17,6 +17,7 @@
 #include "projection.h"
 #include "monster.h"
 #include "spells-summon.h"
+#include "patron.h"
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
@@ -3123,11 +3124,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
 
-		if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || (p_ptr->muta2 & MUT2_CHAOS_GIFT))
-		{
-			msg_format(_("%sからの声が響いた。", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
-			msg_print(_("『よくやった、定命の者よ！』", "'Thou art donst well, mortal!'"));
-		}
+		admire_from_patron(p_ptr);
 
 		/* Congratulations */
 		msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));
