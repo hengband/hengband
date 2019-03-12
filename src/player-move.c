@@ -936,7 +936,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_x--;
 				p_ptr->oldpy = current_floor_ptr->height - 2;
 				p_ptr->oldpx = current_floor_ptr->width - 2;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			else if ((y == 0) && (x == MAX_WID - 1))
@@ -945,7 +945,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_x++;
 				p_ptr->oldpy = current_floor_ptr->height - 2;
 				p_ptr->oldpx = 1;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			else if ((y == MAX_HGT - 1) && (x == 0))
@@ -954,7 +954,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_x--;
 				p_ptr->oldpy = 1;
 				p_ptr->oldpx = current_floor_ptr->width - 2;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			else if ((y == MAX_HGT - 1) && (x == MAX_WID - 1))
@@ -963,7 +963,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_x++;
 				p_ptr->oldpy = 1;
 				p_ptr->oldpx = 1;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			else if (y == 0)
@@ -971,7 +971,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_y--;
 				p_ptr->oldpy = current_floor_ptr->height - 2;
 				p_ptr->oldpx = x;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			else if (y == MAX_HGT - 1)
@@ -979,7 +979,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_y++;
 				p_ptr->oldpy = 1;
 				p_ptr->oldpx = x;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			else if (x == 0)
@@ -987,7 +987,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_x--;
 				p_ptr->oldpx = current_floor_ptr->width - 2;
 				p_ptr->oldpy = y;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			else if (x == MAX_WID - 1)
@@ -995,7 +995,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 				p_ptr->wilderness_x++;
 				p_ptr->oldpx = 1;
 				p_ptr->oldpy = y;
-				ambush_flag = FALSE;
+				p_ptr->ambush_flag = FALSE;
 			}
 
 			p_ptr->leaving = TRUE;

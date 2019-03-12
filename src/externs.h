@@ -338,7 +338,6 @@ extern u32b start_time;
 extern bool sukekaku;
 extern bool new_mane;
 extern bool mon_fight;
-extern bool ambush_flag;
 extern bool generate_encounter;
 extern concptr screen_dump;
 

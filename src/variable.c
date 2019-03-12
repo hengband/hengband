@@ -790,7 +790,6 @@ bool new_mane;
 
 bool mon_fight;
 
-bool ambush_flag;
 bool generate_encounter;
 
 concptr screen_dump = NULL;

@@ -1263,6 +1263,7 @@ struct player_type
 	bool wait_report_score;   /* Waiting to report score */
 	bool is_dead;		  /* Player is dead */
 	bool now_damaged;
+	bool ambush_flag;
 
 	bool wizard;		  /* Player is in wizard mode */
 

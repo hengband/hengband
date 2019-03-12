@@ -1123,7 +1123,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 
 		if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 		{
-			if (!current_floor_ptr->dun_level && !ambush_flag && !p_ptr->inside_arena)
+			if (!current_floor_ptr->dun_level && !p_ptr->ambush_flag && !p_ptr->inside_arena)
 			{
 				chg_virtue(V_VALOUR, -1);
 			}
