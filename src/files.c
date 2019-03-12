@@ -1337,8 +1337,6 @@ errr check_time_init(void)
 		if (prefix(buf, "FRI:")) strcpy(days[5], buf);
 		if (prefix(buf, "SAT:")) strcpy(days[6], buf);
 	}
-
-	/* Close it */
 	my_fclose(fp);
 
 #endif
@@ -5048,8 +5046,6 @@ errr file_character(concptr name)
 	}
 
 	(void)make_character_dump(fff);
-
-	/* Close it */
 	my_fclose(fff);
 
 
@@ -5426,7 +5422,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 		/* Re-open the file if needed */
 		if (next > line)
 		{
-			/* Close it */
 			my_fclose(fff);
 
 			/* Hack -- Re-Open the file */
@@ -5705,8 +5700,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 			strcpy (xtmp, "");
 
 			if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80)) continue;
-
-			/* Close it */
 			my_fclose(fff);
 
 			/* Build the filename */
@@ -5730,8 +5723,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 
 			while (!my_fgets(fff, buff, sizeof(buff)))
 				my_fputs(ffp, buff, 80);
-
-			/* Close it */
 			my_fclose(fff);
 			my_fclose(ffp);
 

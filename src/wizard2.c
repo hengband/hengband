@@ -1666,8 +1666,6 @@ static void do_cmd_dump_options(void)
 	/* Free the "exist" array (2-dimension) */
 	C_KILL(*exist, NUM_O_BIT * NUM_O_SET, int);
 	C_KILL(exist, NUM_O_SET, int *);
-
-	/* Close it */
 	my_fclose(fff);
 
 	msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);

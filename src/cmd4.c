@@ -4627,8 +4627,6 @@ void do_cmd_load_screen(void)
 			Term_draw(x, y, a, c);
 		}
 	}
-
-	/* Close it */
 	my_fclose(fff);
 
 	prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
@@ -4952,8 +4950,6 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 
 	/* Skip a line */
 	fprintf(fff, "\n");
-
-	/* Close it */
 	my_fclose(fff);
 
 	if (message) {
@@ -5112,8 +5108,6 @@ void do_cmd_save_screen(void)
 
 		/* Skip a line */
 		fprintf(fff, "\n");
-
-		/* Close it */
 		my_fclose(fff);
 
 		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));

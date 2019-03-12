@@ -478,8 +478,6 @@ static errr init_info(concptr filename, header *head,
 		/* Attempt to parse the "raw" file */
 		if (!err)
 			err = init_info_raw(fd, head);
-
-		/* Close it */
 		(void)fd_close(fd);
 	}
 
@@ -516,8 +514,6 @@ static errr init_info(concptr filename, header *head,
 
 		/* Parse the file */
 		err = init_info_txt(fp, buf, head, head->parse_info_txt);
-
-		/* Close it */
 		my_fclose(fp);
 
 		/* Errors */
@@ -630,8 +626,6 @@ static errr init_info(concptr filename, header *head,
 
 		/* Attempt to parse the "raw" file */
 		err = init_info_raw(fd, head);
-
-		/* Close it */
 		(void)fd_close(fd);
 
 		/* Error */
@@ -1743,8 +1737,6 @@ void init_angband(void)
 		/* Crash and burn */
 		init_angband_aux(why);
 	}
-
-	/* Close it */
 	(void)fd_close(fd);
 
 
@@ -1811,8 +1803,6 @@ void init_angband(void)
 			init_angband_aux(why);
 		}
 	}
-
-	/* Close it */
 	(void)fd_close(fd);
 
 	put_title();
