@@ -874,8 +874,6 @@ static void do_cmd_erase_nikki(void)
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
-
-	/* Remove the file */
 	fd_kill(buf);
 
 	fff = my_fopen(buf, "w");
@@ -4812,8 +4810,6 @@ static void do_cmd_knowledge_inven(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -5371,8 +5367,6 @@ static void do_cmd_knowledge_artifacts(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -5496,8 +5490,6 @@ static void do_cmd_knowledge_uniques(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("まだ生きているユニーク・モンスター", "Alive Uniques"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -5553,8 +5545,6 @@ static void do_cmd_knowledge_weapon_exp(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("武器の経験値", "Weapon Proficiency"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -5642,8 +5632,6 @@ static void do_cmd_knowledge_spell_exp(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("魔法の経験値", "Spell Proficiency"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -5690,8 +5678,6 @@ static void do_cmd_knowledge_skill_exp(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("技能の経験値", "Miscellaneous Proficiency"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -5878,8 +5864,6 @@ static void do_cmd_knowledge_pets(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("現在のペット", "Current Pets"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -6038,8 +6022,6 @@ static void do_cmd_knowledge_kill_count(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -7550,8 +7532,6 @@ static void do_cmd_knowledge_kubi(void)
 	
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
-	
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -7580,8 +7560,6 @@ static void do_cmd_knowledge_virtues(void)
 	
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
-	
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -7624,8 +7602,6 @@ static void do_cmd_knowledge_dungeon(void)
 	
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
-	
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -7671,8 +7647,6 @@ static void do_cmd_knowledge_stat(void)
 	
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
-	
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -8059,8 +8033,6 @@ static void do_cmd_knowledge_quests(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 
 	/* Free Memory */
@@ -8141,8 +8113,6 @@ static void do_cmd_knowledge_home(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("我が家のアイテム", "Home Inventory"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 
@@ -8210,8 +8180,6 @@ static void do_cmd_knowledge_autopick(void)
 	my_fclose(fff);
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 

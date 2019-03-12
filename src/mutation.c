@@ -2018,8 +2018,6 @@ void do_cmd_knowledge_mutations(void)
 
 	/* Display the file contents */
 	show_file(TRUE, file_name, _("突然変異", "Mutations"), 0, 0);
-
-	/* Remove the file */
 	fd_kill(file_name);
 }
 

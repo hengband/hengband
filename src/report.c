@@ -297,8 +297,6 @@ static errr make_dump(BUF* dumpbuf)
 		(void)buf_sprintf(dumpbuf, "%s", buf);
 	}
 	my_fclose(fff);
-
-	/* Remove the file */
 	fd_kill(file_name);
 
 	/* Success */
