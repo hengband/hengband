@@ -2062,7 +2062,7 @@ static byte get_random_ego(byte slot, bool good)
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n
  */
-static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
+void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
 {
 	HIT_PROB tohit1 = randint1(5) + (HIT_PROB)m_bonus(5, level);
 	HIT_POINT todam1 = randint1(5) + (HIT_POINT)m_bonus(5, level);
@@ -2072,8 +2072,8 @@ static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 
 	if ((o_ptr->tval == TV_BOLT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_SHOT))
 	{
-		tohit2 = (tohit2+1)/2;
-		todam2 = (todam2+1)/2;
+		tohit2 = (tohit2 + 1) / 2;
+		todam2 = (todam2 + 1) / 2;
 	}
 
 	/* Good */
@@ -2144,7 +2144,6 @@ static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 			break;
 		}
 
-
 		case TV_HAFTED:
 		case TV_POLEARM:
 		case TV_SWORD:
@@ -2198,16 +2197,14 @@ static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 						do
 						{
 							o_ptr->dd++;
-						}
-						while (one_in_(o_ptr->dd));
-						
+						} while (one_in_(o_ptr->dd));
+
 						do
 						{
 							o_ptr->ds++;
-						}
-						while (one_in_(o_ptr->ds));
+						} while (one_in_(o_ptr->ds));
 					}
-					
+
 					if (one_in_(5))
 					{
 						add_flag(o_ptr->art_flags, TR_BRAND_POIS);
@@ -2245,15 +2242,15 @@ static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 						add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
 					break;
 				case EGO_DEMON:
-					
-					if(one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-					one_in_(3) ? 
+
+					if (one_in_(3)) o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+					one_in_(3) ?
 						add_flag(o_ptr->art_flags, TR_DRAIN_EXP) :
 						one_in_(2) ?
-							add_flag(o_ptr->art_flags, TR_DRAIN_HP) :
-							add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
-						
-					
+						add_flag(o_ptr->art_flags, TR_DRAIN_HP) :
+						add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+
+
 					if (one_in_(3)) add_flag(o_ptr->art_flags, TR_CHAOTIC);
 					if (one_in_(4)) add_flag(o_ptr->art_flags, TR_BLOWS);
 					if (one_in_(5)) add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
@@ -2277,7 +2274,7 @@ static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 				/* Roll for ego-item */
 				if (randint0(MAX_DEPTH) < level)
 				{
-					while(1)
+					while (1)
 					{
 						o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE);
 						if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD)
@@ -2366,6 +2363,7 @@ static void a_m_aux_1(object_type *o_ptr, DEPTH level, int power)
 		}
 	}
 }
+
 
 /*!
  * @brief ドラゴン装備にランダムな耐性を与える
@@ -4180,19 +4178,19 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 		case TV_ARROW:
 		case TV_BOLT:
 		{
-			if (power) a_m_aux_1(o_ptr, lev, power);
+			if (power) apply_magic_weapon(o_ptr, lev, power);
 			break;
 		}
 
 		case TV_POLEARM:
 		{
-			if (power && !(o_ptr->sval == SV_DEATH_SCYTHE)) a_m_aux_1(o_ptr, lev, power);
+			if (power && !(o_ptr->sval == SV_DEATH_SCYTHE)) apply_magic_weapon(o_ptr, lev, power);
 			break;
 		}
 
 		case TV_SWORD:
 		{
-			if (power && !(o_ptr->sval == SV_DOKUBARI)) a_m_aux_1(o_ptr, lev, power);
+			if (power && !(o_ptr->sval == SV_DOKUBARI)) apply_magic_weapon(o_ptr, lev, power);
 			break;
 		}
 
