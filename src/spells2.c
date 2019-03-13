@@ -2645,7 +2645,6 @@ bool unlite_area(HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
-	/* Hack -- Message */
 	if (!p_ptr->blind)
 	{
 		msg_print(_("暗闇が辺りを覆った。", "Darkness surrounds you."));

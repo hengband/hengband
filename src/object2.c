@@ -4916,7 +4916,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 #else
 		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-		/* Debug */
 		if (p_ptr->wizard) msg_print(_("(破損)", "(breakage)"));
 
 		/* Failure */
@@ -5019,8 +5018,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-
-		/* Debug */
 		if (p_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 		/* Failure */
@@ -5071,7 +5068,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-			/* Debug */
 			if (p_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 			/* Mega-Hack -- preserve artifacts */
@@ -5145,7 +5141,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-		/* Debug */
 		if (p_ptr->wizard) msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
 		/* Hack -- Preserve artifacts */
@@ -5300,8 +5295,6 @@ void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 		/* Add the weight */
 		p_ptr->total_weight += (num * o_ptr->weight);
 		p_ptr->update |= (PU_BONUS);
-
-		/* Recalculate mana XXX */
 		p_ptr->update |= (PU_MANA);
 		p_ptr->update |= (PU_COMBINE);
 		p_ptr->window |= (PW_INVEN | PW_EQUIP);
@@ -5367,10 +5360,7 @@ void inven_item_optimize(INVENTORY_IDX item)
 		/* Erase the empty slot */
 		object_wipe(&inventory[item]);
 		p_ptr->update |= (PU_BONUS);
-
 		p_ptr->update |= (PU_TORCH);
-
-		/* Recalculate mana XXX */
 		p_ptr->update |= (PU_MANA);
 
 		p_ptr->window |= (PW_EQUIP);
