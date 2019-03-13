@@ -83,3 +83,22 @@ int m_bonus(int max, DEPTH level)
 	if (value > max) return (max);
 	return (value);
 }
+
+/*!
+ * @brief 対象のオブジェクトにランダムな能力維持を一つ付加する。/ Choose one random sustain
+ * @details 重複の抑止はない。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+void one_sustain(object_type *o_ptr)
+{
+	switch (randint0(A_MAX))
+	{
+	case 0: add_flag(o_ptr->art_flags, TR_SUST_STR); break;
+	case 1: add_flag(o_ptr->art_flags, TR_SUST_INT); break;
+	case 2: add_flag(o_ptr->art_flags, TR_SUST_WIS); break;
+	case 3: add_flag(o_ptr->art_flags, TR_SUST_DEX); break;
+	case 4: add_flag(o_ptr->art_flags, TR_SUST_CON); break;
+	case 5: add_flag(o_ptr->art_flags, TR_SUST_CHR); break;
+	}
+}
