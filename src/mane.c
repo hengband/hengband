@@ -964,10 +964,7 @@ bool do_cmd_mane(bool baigaesi)
 	else
 	{
 		sound(SOUND_ZAP);
-
-		/* Cast the spell */
 		cast = use_mane(p_ptr->mane_spell[n]);
-
 		if (!cast) return FALSE;
 	}
 

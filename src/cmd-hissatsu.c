@@ -343,7 +343,6 @@ void do_cmd_hissatsu(void)
 
 	sound(SOUND_ZAP);
 
-	/* Cast the spell */
 	if (!do_spell(REALM_HISSATSU, n, SPELL_CAST)) return;
 
 	take_turn(p_ptr, 100);

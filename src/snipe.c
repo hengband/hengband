@@ -526,7 +526,7 @@ static bool cast_sniper_spell(int spell)
 void do_cmd_snipe(void)
 {
 	COMMAND_CODE n = 0;
-	bool            cast;
+	bool cast;
 
 	if(cmd_limit_confused(p_ptr)) return;
 	if(cmd_limit_image(p_ptr)) return;
@@ -535,13 +535,10 @@ void do_cmd_snipe(void)
 	if (!get_snipe_power(&n, FALSE)) return;
 
 	sound(SOUND_SHOOT);
-
-	/* Cast the spell */
 	cast = cast_sniper_spell(n);
 
 	if (!cast) return;
 	p_ptr->redraw |= (PR_HP | PR_MANA);
-
 	p_ptr->window |= (PW_PLAYER);
 	p_ptr->window |= (PW_SPELL);
 }

@@ -1462,16 +1462,12 @@ bool do_cmd_cast_learned(void)
 		sound(SOUND_FAIL);
 
 		if (n >= MS_S_KIN)
-			/* Cast the spell */
 			cast = cast_learned_spell(n, FALSE);
 	}
 	else
 	{
 		sound(SOUND_ZAP);
-
-		/* Cast the spell */
 		cast = cast_learned_spell(n, TRUE);
-
 		if (!cast) return FALSE;
 	}
 
