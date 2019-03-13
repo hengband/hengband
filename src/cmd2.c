@@ -212,8 +212,6 @@ void do_cmd_go_up(void)
 		{
 			current_floor_ptr->dun_level = 0;
 		}
-
-		/* Leaving */
 		p_ptr->leaving = TRUE;
 
 		p_ptr->oldpx = 0;
@@ -293,8 +291,6 @@ void do_cmd_go_up(void)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
 	else
 		msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
-
-	/* Leaving */
 	p_ptr->leaving = TRUE;
 }
 
@@ -364,8 +360,6 @@ void do_cmd_go_down(void)
 		{
 			current_floor_ptr->dun_level = 0;
 		}
-
-		/* Leaving */
 		p_ptr->leaving = TRUE;
 		p_ptr->oldpx = 0;
 		p_ptr->oldpy = 0;
@@ -446,8 +440,6 @@ void do_cmd_go_down(void)
 			}
 		}
 
-
-		/* Leaving */
 		p_ptr->leaving = TRUE;
 
 		if (fall_trap)

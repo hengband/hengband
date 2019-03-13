@@ -342,8 +342,6 @@ void hit_trap(bool break_trap)
 
 			do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("落とし戸に落ちた", "You have fallen through a trap door!"));
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-
-			/* Leaving */
 			p_ptr->leaving = TRUE;
 		}
 		break;

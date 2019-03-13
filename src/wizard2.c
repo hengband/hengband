@@ -1382,8 +1382,6 @@ static void do_cmd_wiz_jump(void)
 	 * and create a first saved floor
 	 */
 	prepare_change_floor_mode(CFM_FIRST_FLOOR);
-
-	/* Leaving */
 	p_ptr->leaving = TRUE;
 }
 
@@ -2088,8 +2086,6 @@ void cheat_death(player_type *creature_ptr)
 		creature_ptr->oldpy = 33;
 		creature_ptr->oldpx = 131;
 	}
-
-	/* Leaving */
 	creature_ptr->wild_mode = FALSE;
 	creature_ptr->leaving = TRUE;
 

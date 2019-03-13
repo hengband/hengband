@@ -6042,8 +6042,6 @@ void do_cmd_suicide(void)
 
 	/* Kill the player */
 	p_ptr->is_dead = TRUE;
-
-	/* Leaving */
 	p_ptr->leaving = TRUE;
 
 	if (!p_ptr->total_winner)
@@ -6133,8 +6131,6 @@ void do_cmd_save_game(int is_autosave)
 void do_cmd_save_and_exit(void)
 {
 	p_ptr->playing = FALSE;
-
-	/* Leaving */
 	p_ptr->leaving = TRUE;
 	do_cmd_write_nikki(NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 }
@@ -7324,8 +7320,6 @@ static void handle_signal_simple(int sig)
 
 		/* Suicide */
 		p_ptr->is_dead = TRUE;
-
-		/* Leaving */
 		p_ptr->leaving = TRUE;
 
 		/* Close stuff */

@@ -3969,8 +3969,6 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 		chg_virtue(V_SACRIFICE, 10);
 
 		handle_stuff();
-
-		/* Leaving */
 		p_ptr->leaving = TRUE;
 
 		/* Note death */

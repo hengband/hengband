@@ -659,8 +659,6 @@ void teleport_level(MONSTER_IDX m_idx)
 			{
 				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			}
-
-			/* Leaving */
 			p_ptr->leaving = TRUE;
 		}
 	}
@@ -684,8 +682,6 @@ void teleport_level(MONSTER_IDX m_idx)
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 			leave_quest_check();
-
-			/* Leaving */
 			p_ptr->inside_quest = 0;
 			p_ptr->leaving = TRUE;
 		}
@@ -706,8 +702,6 @@ void teleport_level(MONSTER_IDX m_idx)
 			if (autosave_l) do_cmd_save_game(TRUE);
 
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-
-			/* Leaving */
 			p_ptr->leaving = TRUE;
 		}
 	}
@@ -723,14 +717,10 @@ void teleport_level(MONSTER_IDX m_idx)
 		{
 			/* Never reach this code on the surface */
 			/* if (!current_floor_ptr->dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
-
 			if (record_stair) do_cmd_write_nikki(NIKKI_TELE_LEV, 1, NULL);
-
 			if (autosave_l) do_cmd_save_game(TRUE);
 
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-
-			/* Leaving */
 			p_ptr->leaving = TRUE;
 		}
 	}

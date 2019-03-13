@@ -1131,8 +1131,6 @@ bool change_wild_mode(void)
 
 		/* Go back to the ordinary map */
 		p_ptr->wild_mode = FALSE;
-
-		/* Leaving */
 		p_ptr->leaving = TRUE;
 
 		/* Succeed */
@@ -1180,8 +1178,6 @@ bool change_wild_mode(void)
 
 	/* Go into the global map */
 	p_ptr->wild_mode = TRUE;
-
-	/* Leaving */
 	p_ptr->leaving = TRUE;
 
 	/* Succeed */

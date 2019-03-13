@@ -606,8 +606,6 @@ static void pattern_teleport(void)
 	 * and create a first saved floor
 	 */
 	prepare_change_floor_mode(CFM_FIRST_FLOOR);
-
-	/* Leaving */
 	p_ptr->leaving = TRUE;
 }
 
@@ -2958,8 +2956,6 @@ static void process_world_aux_movement(void)
 				 * and create a first saved floor
 				 */
 				prepare_change_floor_mode(CFM_FIRST_FLOOR);
-
-				/* Leaving */
 				p_ptr->leaving = TRUE;
 
 				if (p_ptr->dungeon_idx == DUNGEON_ANGBAND)
@@ -3017,8 +3013,6 @@ static void process_world_aux_movement(void)
 				 * and create a first saved floor
 				 */
 				prepare_change_floor_mode(CFM_FIRST_FLOOR);
-
-				/* Leaving */
 				p_ptr->leaving = TRUE;
 			}
 			else
@@ -3381,8 +3375,6 @@ static void process_world(void)
 
 				/* Stop playing */
 				p_ptr->playing = FALSE;
-
-				/* Leaving */
 				p_ptr->leaving = TRUE;
 			}
 		}

@@ -1637,8 +1637,6 @@ bool activate_artifact(object_type *o_ptr)
 			if (get_check(_("この階を去りますか？", "Leave this level? ")))
 			{
 				if (autosave_l) do_cmd_save_game(TRUE);
-
-				/* Leaving */
 				p_ptr->leaving = TRUE;
 			}
 		}
