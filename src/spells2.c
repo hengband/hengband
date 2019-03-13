@@ -2210,7 +2210,7 @@ static void cave_temp_room_lite(void)
 		/* Process affected monsters */
 		if (g_ptr->m_idx)
 		{
-			int chance = 25;
+			PERCENTAGE chance = 25;
 			monster_type    *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 			update_monster(g_ptr->m_idx, FALSE);

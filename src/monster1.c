@@ -2975,7 +2975,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	if (drop_chosen_item)
 	{
 		ARTIFACT_IDX a_idx = 0;
-		int chance = 0;
+		PERCENTAGE chance = 0;
 
 		for (i = 0; i < 4; i++)
 		{

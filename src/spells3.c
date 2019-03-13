@@ -2652,9 +2652,9 @@ void display_spell_list(void)
 	    (p_ptr->pclass == CLASS_MIRROR_MASTER) ||
 	    (p_ptr->pclass == CLASS_FORCETRAINER))
 	{
-		int             minfail = 0;
+		PERCENTAGE minfail = 0;
 		PLAYER_LEVEL plev = p_ptr->lev;
-		int             chance = 0;
+		PERCENTAGE chance = 0;
 		mind_type       spell;
 		char            comment[80];
 		char            psi_desc[80];

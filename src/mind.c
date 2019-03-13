@@ -680,9 +680,9 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	int             num = 0;
 	TERM_LEN y = 1;
 	TERM_LEN x = 10;
-	int             minfail = 0;
+	PERCENTAGE minfail = 0;
 	PLAYER_LEVEL plev = p_ptr->lev;
-	int             chance = 0;
+	PERCENTAGE chance = 0;
 	int             ask = TRUE;
 	char            choice;
 	char            out_val[160];
@@ -1753,8 +1753,8 @@ void do_cmd_mind(void)
 {
 	SPELL_IDX n = 0;
 	int b = 0;
-	int             chance;
-	int             minfail = 0;
+	PERCENTAGE chance;
+	PERCENTAGE minfail = 0;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int             old_csp = p_ptr->csp;
 	mind_type       spell;
@@ -1953,24 +1953,24 @@ void do_cmd_mind(void)
 		switch(use_mind)
 		{
 		case MIND_MINDCRAFTER:
-			/* Cast the spell */
+			
 			cast = cast_mindcrafter_spell(n);
 			break;
 		case MIND_KI:
-			/* Cast the spell */
+			
 			cast = cast_force_spell(n);
 			break;
 		case MIND_BERSERKER:
-			/* Cast the spell */
+			
 			cast = cast_berserk_spell(n);
 			break;
 		case MIND_MIRROR_MASTER:
-			/* Cast the spell */
+			
 			if( is_mirror_grid(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
 			cast = cast_mirror_spell(n);
 			break;
 		case MIND_NINJUTSU:
-			/* Cast the spell */
+			
 			cast = cast_ninja_spell(n);
 			break;
 		default:
