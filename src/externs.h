@@ -707,8 +707,6 @@ extern byte get_mspeed(monster_race *r_ptr);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
 /* object1.c */
-extern int m_bonus(int max, DEPTH level);
-
 extern void reset_visuals(void);
 extern void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);

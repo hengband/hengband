@@ -2,6 +2,7 @@
 #include "angband.h"
 #include "artifact.h"
 #include "spells-object.h"
+#include "object-boost.h"
 #include "object-hook.h"
 #include "player-status.h"
 #include "avatar.h"

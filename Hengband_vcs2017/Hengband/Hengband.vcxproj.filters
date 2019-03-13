@@ -249,6 +249,9 @@
     <ClCompile Include="..\..\src\mspells4.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-boost.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -438,6 +441,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-status.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-boost.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
