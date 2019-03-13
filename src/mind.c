@@ -1982,11 +1982,14 @@ void do_cmd_mind(void)
 	}
 
 
-	take_turn(p_ptr, 100);
 	/* teleport from mirror costs small energy */
-	if( on_mirror && p_ptr->pclass == CLASS_MIRROR_MASTER )
+	if(on_mirror && p_ptr->pclass == CLASS_MIRROR_MASTER)
 	{
-	  if( n==3 || n==5 || n==7 || n==16 ) p_ptr->energy_use = 50;
+	  if( n==3 || n==5 || n==7 || n==16 ) take_turn(p_ptr, 50);
+	}
+	else
+	{
+		take_turn(p_ptr, 100);
 	}
 
 	if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU))

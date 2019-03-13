@@ -548,12 +548,12 @@ void do_cmd_takeoff(void)
 		else
 		{
 			msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
-			p_ptr->energy_use = 50;
+			take_turn(p_ptr, 50);
 			return;
 		}
 	}
 
-	p_ptr->energy_use = 50;
+	take_turn(p_ptr, 50);
 
 	/* Take off the item */
 	(void)inven_takeoff(item, 255);
@@ -600,7 +600,7 @@ void do_cmd_drop(void)
 		if (amt <= 0) return;
 	}
 
-	p_ptr->energy_use = 50;
+	take_turn(p_ptr, 50);
 
 	/* Drop (some of) the item */
 	inven_drop(item, amt);
@@ -948,7 +948,7 @@ static void do_cmd_refill_lamp(void)
 	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
 	if (!o_ptr) return;
 
-	p_ptr->energy_use = 50;
+	take_turn(p_ptr, 50);
 
 	/* Access the lantern */
 	j_ptr = &inventory[INVEN_LITE];
@@ -1015,7 +1015,7 @@ static void do_cmd_refill_torch(void)
 	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
 	if (!o_ptr) return;
 
-	p_ptr->energy_use = 50;
+	take_turn(p_ptr, 50);
 
 	/* Access the primary torch */
 	j_ptr = &inventory[INVEN_LITE];

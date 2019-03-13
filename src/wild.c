@@ -1166,8 +1166,7 @@ bool change_wild_mode(void)
 		}
 	}
 
-	/* HACK */
-	p_ptr->energy_use = 1000;
+	take_turn(p_ptr, 1000);
 
 	/* Remember the position */
 	p_ptr->oldpx = p_ptr->x;
