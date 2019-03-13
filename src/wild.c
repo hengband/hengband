@@ -1116,11 +1116,7 @@ bool change_wild_mode(void)
 
 	if (lite_town || vanilla_town)
 	{
-#ifdef JP
-		msg_print("荒野なんてない。");
-#else
-		msg_print("No global map.");
-#endif
+		msg_print(_("荒野なんてない。", "No global map."));
 		return FALSE;
 	}
 
@@ -1152,22 +1148,16 @@ bool change_wild_mode(void)
 		if (MON_CSLEEP(m_ptr)) continue;
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 		if (!is_hostile(m_ptr)) continue;
-#ifdef JP
-		msg_print("敵がすぐ近くにいるときは広域マップに入れない！");
-#else
-		msg_print("You cannot enter global map, since there is some monsters nearby!");
-#endif
+		msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！",
+			"You cannot enter global map, since there is some monsters nearby!"));
 		free_turn(p_ptr);
 		return FALSE;
 	}
 
 	if (have_pet)
 	{
-#ifdef JP
-		concptr msg = "ペットを置いて広域マップに入りますか？";
-#else
-		concptr msg = "Do you leave your pets behind? ";
-#endif
+		concptr msg = _("ペットを置いて広域マップに入りますか？",
+			"Do you leave your pets behind? ");
 
 		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))
 		{
