@@ -1410,7 +1410,7 @@ static bool wr_savefile_new(void)
 	wr_s32b(p_ptr->wilderness_y);
 
 	wr_byte(p_ptr->wild_mode);
-	wr_byte(ambush_flag);
+	wr_byte(p_ptr->ambush_flag);
 
 	wr_s32b(current_world_ptr->max_wild_x);
 	wr_s32b(current_world_ptr->max_wild_y);

@@ -1681,7 +1681,7 @@ void select_floor_music(void)
 	/* No sound */
 	if (!use_music) return;
 
-	if(ambush_flag)
+	if(p_ptr->ambush_flag)
 	{
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_AMBUSH);
 		return;

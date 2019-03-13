@@ -3984,7 +3984,7 @@ static void process_command(void)
 			{
 				if (vanilla_town) break;
 
-				if (ambush_flag)
+				if (p_ptr->ambush_flag)
 				{
 					msg_print(_("襲撃から逃げるにはマップの端まで移動しなければならない。", "To flee the ambush you have to reach the edge of the map."));
 					break;
@@ -5184,7 +5184,7 @@ static void dungeon(bool load_game)
 	target_who = 0;
 	pet_t_m_idx = 0;
 	riding_t_m_idx = 0;
-	ambush_flag = FALSE;
+	p_ptr->ambush_flag = FALSE;
 
 	/* Cancel the health bar */
 	health_track(0);

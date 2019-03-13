@@ -676,7 +676,7 @@ void wilderness_gen(void)
 		(void)alloc_monster(generate_encounter ? 0 : 3, mode);
 	}
 
-	if(generate_encounter) ambush_flag = TRUE;
+	if(generate_encounter) p_ptr->ambush_flag = TRUE;
 	generate_encounter = FALSE;
 
 	/* Fill the arrays of floors and walls in the good proportions */

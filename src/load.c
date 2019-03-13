@@ -3694,8 +3694,8 @@ static errr rd_savefile_new_aux(void)
 
 		if (z_older_than(10, 3, 7)) p_ptr->wild_mode = FALSE;
 		else rd_byte((byte *)&p_ptr->wild_mode);
-		if (z_older_than(10, 3, 7)) ambush_flag = FALSE;
-		else rd_byte((byte *)&ambush_flag);
+		if (z_older_than(10, 3, 7)) p_ptr->ambush_flag = FALSE;
+		else rd_byte((byte *)&p_ptr->ambush_flag);
 
 		/* Size of the wilderness */
 		rd_s32b(&wild_x_size);
