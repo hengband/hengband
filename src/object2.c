@@ -2327,59 +2327,6 @@ static void dragon_resist(object_type * o_ptr)
 	while (one_in_(2));
 }
 
-/*!
- * @brief オブジェクトにランダムな強いESPを与える
- * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
- * @return なし
- */
-static bool add_esp_strong(object_type *o_ptr)
-{
-	bool nonliv = FALSE;
-
-	switch (randint1(3))
-	{
-	case 1: add_flag(o_ptr->art_flags, TR_ESP_EVIL); break;
-	case 2: add_flag(o_ptr->art_flags, TR_TELEPATHY); break;
-	case 3:	add_flag(o_ptr->art_flags, TR_ESP_NONLIVING); nonliv = TRUE; break;
-	}
-
-	return nonliv;
-}
-
-/*!
- * @brief オブジェクトにランダムな弱いESPを与える
- * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
- * @param extra TRUEならばESPの最大付与数が増える(TRUE -> 3+1d6 / FALSE -> 1d3)
- * @return なし
- */
-static void add_esp_weak(object_type *o_ptr, bool extra)
-{
-	int i;
-	u32b weak_esp_list[] = {
-		TR_ESP_ANIMAL,
-		TR_ESP_UNDEAD,
-		TR_ESP_DEMON,
-		TR_ESP_ORC,
-		TR_ESP_TROLL,
-		TR_ESP_GIANT,
-		TR_ESP_DRAGON,
-		TR_ESP_HUMAN,
-		TR_ESP_GOOD,
-		TR_ESP_UNIQUE,
-	};
-	const int MAX_ESP_WEAK = sizeof(weak_esp_list) / sizeof(weak_esp_list[0]);
-	const int add_count = MIN(MAX_ESP_WEAK, (extra) ? (3 + randint1(randint1(6))) : randint1(3));
-
-	/* Add unduplicated weak esp flags randomly */
-	for (i = 0; i < add_count; ++ i)
-	{
-		int choice = rand_range(i, MAX_ESP_WEAK - 1);
-
-		add_flag(o_ptr->art_flags, weak_esp_list[choice]);
-		weak_esp_list[choice] = weak_esp_list[i];
-	}
-}
-
 
 /*!
  * @brief 防具系オブジェクトに生成ランクごとの強化を与えるサブルーチン
