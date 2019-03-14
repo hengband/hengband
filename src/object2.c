@@ -20,6 +20,8 @@
 #include "feature.h"
 #include "player-move.h"
 
+#include "monsterrace-hook.h"
+
 /*!
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
@@ -3580,26 +3582,6 @@ static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
 			break;
 		}
 	}
-}
-
-/*!
- * @brief モンスターが人形のベースにできるかを返す
- * @param r_idx チェックしたいモンスター種族のID
- * @return 人形にできるならTRUEを返す
- */
-static bool item_monster_okay(MONRACE_IDX r_idx)
-{
-	monster_race *r_ptr = &r_info[r_idx];
-
-	/* No uniques */
-	if (r_ptr->flags1 & RF1_UNIQUE) return (FALSE);
-	if (r_ptr->flags7 & RF7_KAGE) return (FALSE);
-	if (r_ptr->flagsr & RFR_RES_ALL) return (FALSE);
-	if (r_ptr->flags7 & RF7_NAZGUL) return (FALSE);
-	if (r_ptr->flags1 & RF1_FORCE_DEPTH) return (FALSE);
-	if (r_ptr->flags7 & RF7_UNIQUE2) return (FALSE);
-
-	return (TRUE);
 }
 
 

@@ -64,6 +64,7 @@ extern bool monster_hook_human(MONRACE_IDX r_idx);
 extern bool get_nightmare(MONRACE_IDX r_idx);
 extern bool monster_is_fishing_target(MONRACE_IDX r_idx);
 extern bool monster_can_entry_arena(MONRACE_IDX r_idx);
+extern bool item_monster_okay(MONRACE_IDX r_idx);
 
 
 
