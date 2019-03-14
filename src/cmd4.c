@@ -4470,7 +4470,6 @@ static FEAT_IDX collect_features(int grp_cur, FEAT_IDX *feat_idx, BIT_FLAGS8 mod
 	/* Check every feature */
 	for (i = 0; i < max_f_idx; i++)
 	{
-		/* Access the index */
 		feature_type *f_ptr = &f_info[i];
 
 		/* Skip empty index */
@@ -7100,13 +7099,8 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 	for (i = 0; i < per_page && (feat_idx[feat_top + i] >= 0); i++)
 	{
 		TERM_COLOR attr;
-
-		/* Get the index */
 		FEAT_IDX f_idx = feat_idx[feat_top + i];
-
-		/* Access the index */
 		feature_type *f_ptr = &f_info[f_idx];
-
 		int row_i = row + i;
 
 		/* Choose a color */

@@ -603,7 +603,6 @@ OBJECT_IDX get_obj_num(DEPTH level)
 		/* Default */
 		table[i].prob3 = 0;
 
-		/* Access the index */
 		k_idx = table[i].index;
 
 		/* Access the actual kind */

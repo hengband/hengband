@@ -3435,7 +3435,6 @@ static void process_world(void)
 				/* Check every feature */
 				for (i = 1; i < max_f_idx; i++)
 				{
-					/* Access the index */
 					feature_type *f_ptr = &f_info[i];
 
 					/* Skip empty index */

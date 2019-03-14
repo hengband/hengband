@@ -2189,9 +2189,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 	/* Output each entry */
 	for (j = 0; j < k; j++)
 	{
-		/* Get the index */
 		i = out_index[j];
-
 		o_ptr = &inventory[i];
 
 		/* Clear the line */
@@ -2361,9 +2359,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 	/* Output each entry */
 	for (j = 0; j < k; j++)
 	{
-		/* Get the index */
 		i = out_index[j];
-
 		o_ptr = &inventory[i];
 
 		/* Clear the line */
@@ -3590,9 +3586,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	/* Output each entry */
 	for (j = 0; j < k; j++)
 	{
-		/* Get the index */
 		m = floor_list[out_index[j]];
-
 		o_ptr = &current_floor_ptr->o_list[m];
 
 		/* Clear the line */
