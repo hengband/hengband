@@ -156,3 +156,79 @@ void add_esp_weak(object_type *o_ptr, bool extra)
 	}
 }
 
+/*!
+ * @brief 対象のオブジェクトに元素耐性を一つ付加する。/ Choose one random element resistance
+ * @details 候補は火炎、冷気、電撃、酸のいずれかであり、重複の抑止はない。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+void one_ele_resistance(object_type *o_ptr)
+{
+	switch (randint0(4))
+	{
+	case  0: add_flag(o_ptr->art_flags, TR_RES_ACID); break;
+	case  1: add_flag(o_ptr->art_flags, TR_RES_ELEC); break;
+	case  2: add_flag(o_ptr->art_flags, TR_RES_COLD); break;
+	case  3: add_flag(o_ptr->art_flags, TR_RES_FIRE); break;
+	}
+}
+
+/*!
+ * @brief 対象のオブジェクトにドラゴン装備向け元素耐性を一つ付加する。/ Choose one random element or poison resistance
+ * @details 候補は1/7の確率で毒、6/7の確率で火炎、冷気、電撃、酸のいずれか(one_ele_resistance()のコール)であり、重複の抑止はない。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+void one_dragon_ele_resistance(object_type *o_ptr)
+{
+	if (one_in_(7))
+	{
+		add_flag(o_ptr->art_flags, TR_RES_POIS);
+	}
+	else
+	{
+		one_ele_resistance(o_ptr);
+	}
+}
+
+/*!
+ * @brief 対象のオブジェクトにランダムな上位耐性を一つ付加する。/ Choose one random high resistance
+ * @details 重複の抑止はない。候補は毒、閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、劣化、恐怖のいずれか。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+void one_high_resistance(object_type *o_ptr)
+{
+	switch (randint0(12))
+	{
+	case  0: add_flag(o_ptr->art_flags, TR_RES_POIS);   break;
+	case  1: add_flag(o_ptr->art_flags, TR_RES_LITE);   break;
+	case  2: add_flag(o_ptr->art_flags, TR_RES_DARK);   break;
+	case  3: add_flag(o_ptr->art_flags, TR_RES_SHARDS); break;
+	case  4: add_flag(o_ptr->art_flags, TR_RES_BLIND);  break;
+	case  5: add_flag(o_ptr->art_flags, TR_RES_CONF);   break;
+	case  6: add_flag(o_ptr->art_flags, TR_RES_SOUND);  break;
+	case  7: add_flag(o_ptr->art_flags, TR_RES_NETHER); break;
+	case  8: add_flag(o_ptr->art_flags, TR_RES_NEXUS);  break;
+	case  9: add_flag(o_ptr->art_flags, TR_RES_CHAOS);  break;
+	case 10: add_flag(o_ptr->art_flags, TR_RES_DISEN);  break;
+	case 11: add_flag(o_ptr->art_flags, TR_RES_FEAR);   break;
+	}
+}
+
+/*!
+ * @brief ドラゴン装備にランダムな耐性を与える
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @return なし
+ */
+void dragon_resist(object_type * o_ptr)
+{
+	do
+	{
+		if (one_in_(4))
+			one_dragon_ele_resistance(o_ptr);
+		else
+			one_high_resistance(o_ptr);
+	} while (one_in_(2));
+}
+

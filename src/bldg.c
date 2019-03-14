@@ -14,6 +14,7 @@
 
 #include "angband.h"
 #include "floor.h"
+#include "object-boost.h"
 #include "object-hook.h"
 #include "monsterrace-hook.h"
 #include "melee.h"

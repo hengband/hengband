@@ -2312,25 +2312,6 @@ void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
 	}
 }
 
-
-/*!
- * @brief ドラゴン装備にランダムな耐性を与える
- * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
- * @return なし
- */
-static void dragon_resist(object_type * o_ptr)
-{
-	do
-	{
-		if (one_in_(4))
-			one_dragon_ele_resistance(o_ptr);
-		else
-			one_high_resistance(o_ptr);
-	}
-	while (one_in_(2));
-}
-
-
 /*!
  * @brief 防具系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be "armor"
