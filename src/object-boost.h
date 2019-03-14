@@ -8,6 +8,9 @@ extern void one_high_resistance(object_type *o_ptr);
 extern void one_ele_resistance(object_type *o_ptr);
 extern void dragon_resist(object_type * o_ptr);
 extern void one_resistance(object_type *o_ptr);
+extern void one_low_esp(object_type *o_ptr);
+extern void one_ability(object_type *o_ptr);
+extern void one_activation(object_type *o_ptr);
 
 
 extern void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power);
