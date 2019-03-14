@@ -428,3 +428,29 @@ void one_activation(object_type *o_ptr)
 	add_flag(o_ptr->art_flags, TR_ACTIVATE);
 	o_ptr->timeout = 0;
 }
+
+
+/*!
+ * @brief 対象のオブジェクトに王者の指輪向けの上位耐性を一つ付加する。/ Choose one random high resistance
+ * @details 候補は閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、恐怖であり
+ * 王者の指輪にあらかじめついている耐性をone_high_resistance()から除外したものである。
+ * ランダム付加そのものに重複の抑止はない。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+void one_lordly_high_resistance(object_type *o_ptr)
+{
+	switch (randint0(10))
+	{
+	case 0: add_flag(o_ptr->art_flags, TR_RES_LITE);   break;
+	case 1: add_flag(o_ptr->art_flags, TR_RES_DARK);   break;
+	case 2: add_flag(o_ptr->art_flags, TR_RES_SHARDS); break;
+	case 3: add_flag(o_ptr->art_flags, TR_RES_BLIND);  break;
+	case 4: add_flag(o_ptr->art_flags, TR_RES_CONF);   break;
+	case 5: add_flag(o_ptr->art_flags, TR_RES_SOUND);  break;
+	case 6: add_flag(o_ptr->art_flags, TR_RES_NETHER); break;
+	case 7: add_flag(o_ptr->art_flags, TR_RES_NEXUS);  break;
+	case 8: add_flag(o_ptr->art_flags, TR_RES_CHAOS);  break;
+	case 9: add_flag(o_ptr->art_flags, TR_RES_FEAR);   break;
+	}
+}

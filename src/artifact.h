@@ -1,5 +1,4 @@
 ﻿/* artifact.c */
-extern void one_lordly_high_resistance(object_type *o_ptr);
 extern bool create_artifact(object_type *o_ptr, bool a_scroll);
 extern int activation_index(object_type *o_ptr);
 extern const activation_type* find_activation_info(object_type *o_ptr);
