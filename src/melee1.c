@@ -52,10 +52,10 @@ bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
 PERCENTAGE hit_chance(HIT_RELIABILITY reli, ARMOUR_CLASS ac)
 {
 	PERCENTAGE chance = 5, chance_left = 90;
-	if (reli <= 0) return 5;
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE) chance_left = (chance_left * 19 + 9) / 20;
+	if(reli <= 0) return 5;
+	if(p_ptr->pseikaku == SEIKAKU_NAMAKE) chance_left = (chance_left * 19 + 9) / 20;
 	chance += (100 - ((ac * 75) / reli)) * chance_left / 100;
-
+	if (chance < 5) chance = 5;
 	return chance;
 }
 
