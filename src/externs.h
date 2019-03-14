@@ -745,7 +745,6 @@ extern byte value_check_aux1(object_type *o_ptr);
 extern byte value_check_aux2(object_type *o_ptr);
 extern PRICE object_value(object_type *o_ptr);
 extern PRICE object_value_real(object_type *o_ptr);
-extern bool can_player_destroy_object(object_type *o_ptr);
 extern void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt);
 extern void reduce_charges(object_type *o_ptr, int amt);
 extern int object_similar_part(object_type *o_ptr, object_type *j_ptr);

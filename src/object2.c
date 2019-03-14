@@ -1429,40 +1429,6 @@ PRICE object_value(object_type *o_ptr)
 
 
 
-/*!
- * @brief 破壊可能なアイテムかを返す /
- * Determines whether an object can be destroyed, and makes fake inscription.
- * @param o_ptr 破壊可能かを確認したいオブジェクトの構造体参照ポインタ
- * @return オブジェクトが破壊可能ならばTRUEを返す
- */
-bool can_player_destroy_object(object_type *o_ptr)
-{
-	/* Artifacts cannot be destroyed */
-	if (!object_is_artifact(o_ptr)) return TRUE;
-
-	/* If object is unidentified, makes fake inscription */
-	if (!object_is_known(o_ptr))
-	{
-		byte feel = FEEL_SPECIAL;
-
-		/* Hack -- Handle icky artifacts */
-		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) feel = FEEL_TERRIBLE;
-
-		/* Hack -- inscribe the artifact */
-		o_ptr->feeling = feel;
-
-		/* We have "felt" it (again) */
-		o_ptr->ident |= (IDENT_SENSE);
-		p_ptr->update |= (PU_COMBINE);
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
-
-		return FALSE;
-	}
-
-	/* Identified artifact -- Nothing to do */
-	return FALSE;
-}
-
 
 /*!
  * @brief 魔法棒やロッドのスロット分割時に使用回数を分配する /
