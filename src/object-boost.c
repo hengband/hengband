@@ -216,6 +216,7 @@ void one_high_resistance(object_type *o_ptr)
 	}
 }
 
+
 /*!
  * @brief ドラゴン装備にランダムな耐性を与える
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
@@ -231,4 +232,25 @@ void dragon_resist(object_type * o_ptr)
 			one_high_resistance(o_ptr);
 	} while (one_in_(2));
 }
+
+
+/*!
+ * @brief 対象のオブジェクトに耐性を一つ付加する。/ Choose one random resistance
+ * @details 1/3で元素耐性(one_ele_resistance())、2/3で上位耐性(one_high_resistance)
+ * をコールする。重複の抑止はない。
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+void one_resistance(object_type *o_ptr)
+{
+	if (one_in_(3))
+	{
+		one_ele_resistance(o_ptr);
+	}
+	else
+	{
+		one_high_resistance(o_ptr);
+	}
+}
+
 

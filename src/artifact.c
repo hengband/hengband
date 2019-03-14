@@ -129,26 +129,6 @@ void one_low_esp(object_type *o_ptr)
 
 
 /*!
- * @brief 対象のオブジェクトに耐性を一つ付加する。/ Choose one random resistance
- * @details 1/3で元素耐性(one_ele_resistance())、2/3で上位耐性(one_high_resistance)
- * をコールする。重複の抑止はない。
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
- */
-void one_resistance(object_type *o_ptr)
-{
-	if (one_in_(3))
-	{
-		one_ele_resistance(o_ptr);
-	}
-	else
-	{
-		one_high_resistance(o_ptr);
-	}
-}
-
-
-/*!
  * @brief 対象のオブジェクトに能力を一つ付加する。/ Choose one random ability
  * @details 候補は浮遊、永久光源+1、透明視、警告、遅消化、急回復、麻痺知らず、経験値維持のいずれか。
  * 重複の抑止はない。
