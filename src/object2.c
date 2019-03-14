@@ -4438,11 +4438,8 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 		/* Build a stack */
 		o_ptr->next_o_idx = g_ptr->o_idx;
 
-		/* Place the object */
 		g_ptr->o_idx = o_idx;
-
 		note_spot(y, x);
-
 		lite_spot(y, x);
 	}
 	else
@@ -4552,11 +4549,8 @@ void place_gold(POSITION y, POSITION x)
 		/* Build a stack */
 		o_ptr->next_o_idx = g_ptr->o_idx;
 
-		/* Place the object */
 		g_ptr->o_idx = o_idx;
-
 		note_spot(y, x);
-
 		lite_spot(y, x);
 	}
 }
@@ -4876,7 +4870,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		/* Build a stack */
 		j_ptr->next_o_idx = g_ptr->o_idx;
 
-		/* Place the object */
 		g_ptr->o_idx = o_idx;
 
 		/* Success */

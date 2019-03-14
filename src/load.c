@@ -2878,7 +2878,6 @@ static errr rd_dungeon_old(void)
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
 
-			/* Place the object */
 			m_ptr->hold_o_idx = o_idx;
 		}
 
@@ -2891,7 +2890,6 @@ static errr rd_dungeon_old(void)
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
 
-			/* Place the object */
 			g_ptr->o_idx = o_idx;
 		}
 	}
@@ -3192,7 +3190,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
 
-			/* Place the object */
 			m_ptr->hold_o_idx = o_idx;
 		}
 
@@ -3205,7 +3202,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
 
-			/* Place the object */
 			g_ptr->o_idx = o_idx;
 		}
 	}

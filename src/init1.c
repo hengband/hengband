@@ -3922,7 +3922,6 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 	/* Build a stack */
 	o_ptr->next_o_idx = g_ptr->o_idx;
 
-	/* Place the object */
 	g_ptr->o_idx = o_idx;
 }
 
