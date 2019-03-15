@@ -3506,7 +3506,6 @@ static void process_world(void)
 		/* Every 15 minutes after 11:00 pm */
 		if ((hour == 23) && !(min % 15))
 		{
-			/* Disturbing */
 			disturb(FALSE, TRUE);
 
 			switch (min / 15)
@@ -4545,7 +4544,6 @@ static void pack_overflow(void)
 		/* Access the slot to be dropped */
 		o_ptr = &inventory[INVEN_PACK];
 
-		/* Disturbing */
 		disturb(FALSE, TRUE);
 
 		/* Warning */

@@ -3525,7 +3525,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				/* Visible monsters */
 				if (m_ptr->ml)
 				{
-					/* Disturbing */
 					disturb(TRUE, TRUE);
 
 #ifdef JP
