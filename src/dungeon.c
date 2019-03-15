@@ -4784,7 +4784,6 @@ static void process_player(void)
 			}
 		}
 
-		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 	}
 	
@@ -4956,10 +4955,8 @@ static void process_player(void)
 			process_command();
 		}
 
-
 		/* Hack -- Pack Overflow */
 		pack_overflow();
-
 
 		/*** Clean up ***/
 
@@ -5101,7 +5098,6 @@ static void process_player(void)
 
 				p_ptr->redraw |= (PR_MAP);
 				p_ptr->update |= (PU_MONSTERS);
-
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 				msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
@@ -5109,7 +5105,6 @@ static void process_player(void)
 				p_ptr->timewalk = FALSE;
 				p_ptr->energy_need = ENERGY_NEED();
 
-				/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 				handle_stuff();
 			}
 		}
@@ -5227,19 +5222,9 @@ static void dungeon(bool load_game)
 	character_xtra = TRUE;
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
+	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
+	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
-	/* Redraw dungeon */
-	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY);
-
-	p_ptr->redraw |= (PR_MAP);
-
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-
-	/* Update lite/view */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH);
-	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
-
-	/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 	handle_stuff();
 
 	/* Leave "xtra" mode */
@@ -5336,7 +5321,6 @@ static void dungeon(bool load_game)
 		process_player();
 		process_upkeep_with_speed();
 
-		/* Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window" */
 		handle_stuff();
 
 		/* Hack -- Hilite the player */
