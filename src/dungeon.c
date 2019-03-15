@@ -4603,7 +4603,7 @@ static void process_upkeep_with_speed(void)
  */
 static void process_player(void)
 {
-	IDX i;
+	MONSTER_IDX m_idx;
 
 	/*** Apply energy ***/
 
@@ -4624,14 +4624,14 @@ static void process_player(void)
 
 	if (p_ptr->inside_battle)
 	{
-		for(i = 1; i < m_max; i++)
+		for(m_idx = 1; m_idx < m_max; m_idx++)
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[i];
+			monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 			if (!m_ptr->r_idx) continue;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(m_idx, FALSE);
 		}
 		prt_time();
 	}
@@ -4989,13 +4989,13 @@ static void process_player(void)
 				shimmer_monsters = FALSE;
 
 				/* Shimmer multi-hued monsters */
-				for (i = 1; i < m_max; i++)
+				for (m_idx = 1; m_idx < m_max; m_idx++)
 				{
 					monster_type *m_ptr;
 					monster_race *r_ptr;
 
 					/* Access monster */
-					m_ptr = &current_floor_ptr->m_list[i];
+					m_ptr = &current_floor_ptr->m_list[m_idx];
 
 					/* Skip dead monsters */
 					if (!m_ptr->r_idx) continue;
@@ -5026,12 +5026,12 @@ static void process_player(void)
 				repair_monsters = FALSE;
 
 				/* Rotate detection flags */
-				for (i = 1; i < m_max; i++)
+				for (m_idx = 1; m_idx < m_max; m_idx++)
 				{
 					monster_type *m_ptr;
 
 					/* Access monster */
-					m_ptr = &current_floor_ptr->m_list[i];
+					m_ptr = &current_floor_ptr->m_list[m_idx];
 
 					/* Skip dead monsters */
 					if (!m_ptr->r_idx) continue;
@@ -5064,10 +5064,10 @@ static void process_player(void)
 
 							/* Assume invisible */
 							m_ptr->ml = FALSE;
-							update_monster(i, FALSE);
+							update_monster(m_idx, FALSE);
 
-							if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
-							if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
+							if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
+							if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
 
 							/* Redraw regardless */
 							lite_spot(m_ptr->fy, m_ptr->fx);
@@ -5077,13 +5077,14 @@ static void process_player(void)
 			}
 			if (p_ptr->pclass == CLASS_IMITATOR)
 			{
+				int j;
 				if (p_ptr->mane_num > (p_ptr->lev > 44 ? 3 : p_ptr->lev > 29 ? 2 : 1))
 				{
 					p_ptr->mane_num--;
-					for (i = 0; i < p_ptr->mane_num; i++)
+					for (j = 0; j < p_ptr->mane_num; j++)
 					{
-						p_ptr->mane_spell[i] = p_ptr->mane_spell[i+1];
-						p_ptr->mane_dam[i] = p_ptr->mane_dam[i+1];
+						p_ptr->mane_spell[j] = p_ptr->mane_spell[j + 1];
+						p_ptr->mane_dam[j] = p_ptr->mane_dam[j + 1];
 					}
 				}
 				new_mane = FALSE;
