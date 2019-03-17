@@ -445,6 +445,9 @@
     <ClInclude Include="..\..\src\object-boost.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\floor-save.h">
+      <Filter>floor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

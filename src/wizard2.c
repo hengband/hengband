@@ -11,7 +11,6 @@
  */
 
 #include "angband.h"
-#include "floor.h"
 #include "selfinfo.h"
 #include "patron.h"
 #include "mutation.h"
@@ -28,6 +27,9 @@
 
 #include "object-hook.h"
 #include "monster-status.h"
+
+#include "floor.h"
+#include "floor-save.h"
 
 #ifdef ALLOW_WIZARD
 

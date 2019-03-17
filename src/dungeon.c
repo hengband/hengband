@@ -43,6 +43,7 @@
 #include "object-hook.h"
 #include "wild.h"
 #include "monster-status.h"
+#include "floor-save.h"
 
 
 static bool load = TRUE; /*!<ロード処理中の分岐フラグ*/

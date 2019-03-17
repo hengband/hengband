@@ -53,6 +53,8 @@
 #include "wild.h"
 #include "patron.h"
 
+#include "floor-save.h"
+
 
 /*
  * Maximum number of tries for selection of a proper quest monster

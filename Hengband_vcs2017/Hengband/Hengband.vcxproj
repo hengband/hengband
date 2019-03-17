@@ -283,6 +283,7 @@
     <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\feature.h" />
     <ClInclude Include="..\..\src\floor-events.h" />
+    <ClInclude Include="..\..\src\floor-save.h" />
     <ClInclude Include="..\..\src\floor.h" />
     <ClInclude Include="..\..\src\gameoption.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
