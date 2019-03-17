@@ -1474,8 +1474,6 @@ static void do_cmd_wiz_zap(void)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip the mount */
@@ -1511,8 +1509,6 @@ static void do_cmd_wiz_zap_all(void)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip the mount */

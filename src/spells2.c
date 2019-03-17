@@ -472,8 +472,6 @@ bool detect_monsters_evil(POSITION range)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -528,8 +526,6 @@ bool detect_monsters_nonliving(POSITION range)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -579,8 +575,6 @@ bool detect_monsters_mind(POSITION range)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -632,8 +626,6 @@ bool detect_monsters_string(POSITION range, concptr Match)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -687,8 +679,6 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -789,8 +779,6 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -979,8 +967,6 @@ void aggravate_monsters(MONSTER_IDX who)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip aggravating monster (or player) */
@@ -1130,8 +1116,6 @@ bool symbol_genocide(int power, bool player_cast)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip "wrong" monsters */
@@ -1171,8 +1155,6 @@ bool mass_genocide(int power, bool player_cast)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip distant monsters */
@@ -1214,8 +1196,6 @@ bool mass_genocide_undead(int power, bool player_cast)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		if (!(r_ptr->flags3 & RF3_UNDEAD)) continue;
@@ -1260,8 +1240,6 @@ bool probing(void)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Paranoia -- Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Require line of sight */

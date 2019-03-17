@@ -3735,8 +3735,6 @@ void update_mon_lite(void)
 		{
 			m_ptr = &current_floor_ptr->m_list[i];
 			r_ptr = &r_info[m_ptr->r_idx];
-
-			/* Skip dead monsters */
 			if (!monster_is_valid(m_ptr)) continue;
 
 			/* Is it too far away? */

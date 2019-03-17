@@ -870,8 +870,6 @@ static void regen_monsters(void)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-
-		/* Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Allow regeneration (if needed) */
@@ -2419,8 +2417,6 @@ static void process_world_aux_mutation(void)
 		{
 			monster_type *m_ptr = &current_floor_ptr->m_list[monster];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-			/* Paranoia -- Skip dead monsters */
 			if (!monster_is_valid(m_ptr)) continue;
 
 			if (r_ptr->level >= p_ptr->lev)
@@ -3082,8 +3078,6 @@ static byte get_dungeon_feeling(void)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr;
 		int delta = 0;
-
-		/* Skip dead monsters */
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Ignore pet */
@@ -4993,8 +4987,6 @@ static void process_player(void)
 					monster_race *r_ptr;
 
 					m_ptr = &current_floor_ptr->m_list[m_idx];
-
-					/* Skip dead monsters */
 					if (!monster_is_valid(m_ptr)) continue;
 
 					/* Skip unseen monsters */
@@ -5027,8 +5019,6 @@ static void process_player(void)
 				{
 					monster_type *m_ptr;
 					m_ptr = &current_floor_ptr->m_list[m_idx];
-
-					/* Skip dead monsters */
 					if (!monster_is_valid(m_ptr)) continue;
 
 					/* Nice monsters get mean */
