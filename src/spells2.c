@@ -787,7 +787,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 		if (!player_has_los_bold(y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)) continue;
 
 		/* Mark the monster */
-		m_ptr->mflag |= (MFLAG_TEMP);
+		m_ptr->mflag |= (MFLAG_LOS);
 	}
 
 	/* Affect all marked monsters */
@@ -796,10 +796,10 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Skip unmarked monsters */
-		if (!(m_ptr->mflag & (MFLAG_TEMP))) continue;
+		if (!(m_ptr->mflag & (MFLAG_LOS))) continue;
 
 		/* Remove mark */
-		m_ptr->mflag &= ~(MFLAG_TEMP);
+		m_ptr->mflag &= ~(MFLAG_LOS);
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
