@@ -774,7 +774,6 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 	BIT_FLAGS flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
 	bool obvious = FALSE;
 
-
 	/* Mark all (nearby) monsters */
 	for (i = 1; i < m_max; i++)
 	{

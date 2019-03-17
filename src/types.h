@@ -607,7 +607,21 @@ struct monster_type
 	POSITION cdis;		/* Current dis from player */
 
 	BIT_FLAGS8 mflag;	/* Extra monster flags */
+	#define MFLAG_VIEW      0x01    /* Monster is in line of sight */
+	#define MFLAG_TEMP      0x02    /* Monster is marked for project_all_los() */
+	#define MFLAG_XXX2      0x04    /* (unused) */
+	#define MFLAG_XXX3      0x08    /* (unused) */
+	#define MFLAG_BORN      0x10    /* Monster is still being born */
+	#define MFLAG_NICE      0x20    /* Monster is still being nice */
+
 	BIT_FLAGS8 mflag2;	/* Extra monster flags */
+	#define MFLAG2_KAGE      0x01    /* Monster is kage */
+	#define MFLAG2_NOPET     0x02    /* Cannot make monster pet */
+	#define MFLAG2_NOGENO    0x04    /* Cannot genocide */
+	#define MFLAG2_CHAMELEON 0x08    /* Monster is chameleon */
+	#define MFLAG2_NOFLOW    0x10    /* Monster is in no_flow_by_smell mode */
+	#define MFLAG2_SHOW      0x20    /* Monster is recently memorized */
+	#define MFLAG2_MARK      0x40    /* Monster is currently memorized */
 
 	bool ml;		/* Monster is "visible" */
 
