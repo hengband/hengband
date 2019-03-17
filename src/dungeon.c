@@ -6115,3 +6115,122 @@ void prevent_turn_overflow(void)
 		}
 	}
 }
+
+/*!
+ * @brief ゲーム終了処理 /
+ * Close up the current game (player may or may not be dead)
+ * @return なし
+ * @details
+ * <pre>
+ * This function is called only from "main.c" and "signals.c".
+ * </pre>
+ */
+void close_game(void)
+{
+	char buf[1024];
+	bool do_send = TRUE;
+
+	/*	concptr p = "[i:キャラクタの情報, f:ファイル書き出し, t:スコア, x:*鑑定*, ESC:ゲーム終了]"; */
+	handle_stuff();
+
+	/* Flush the messages */
+	msg_print(NULL);
+
+	/* Flush the input */
+	flush();
+
+
+	/* No suspending now */
+	signals_ignore_tstp();
+
+
+	/* Hack -- Character is now "icky" */
+	character_icky = TRUE;
+
+
+	/* Build the filename */
+	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
+
+	/* Grab permissions */
+	safe_setuid_grab();
+
+	/* Open the high score file, for reading/writing */
+	highscore_fd = fd_open(buf, O_RDWR);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
+	/* Handle death */
+	if (p_ptr->is_dead)
+	{
+		/* Handle retirement */
+		if (p_ptr->total_winner) kingly();
+
+		/* Save memories */
+		if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? ")))
+		{
+			if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
+		}
+		else do_send = FALSE;
+
+		/* You are dead */
+		print_tomb();
+
+		flush();
+
+		/* Show more info */
+		show_info();
+		Term_clear();
+
+		if (check_score())
+		{
+			if ((!send_world_score(do_send)))
+			{
+				if (get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
+					(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
+				{
+					p_ptr->wait_report_score = TRUE;
+					p_ptr->is_dead = FALSE;
+					if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
+				}
+			}
+			if (!p_ptr->wait_report_score)
+				(void)top_twenty();
+		}
+		else if (highscore_fd >= 0)
+		{
+			display_scores_aux(0, 10, -1, NULL);
+		}
+#if 0
+		/* Dump bones file */
+		make_bones();
+#endif
+	}
+
+	/* Still alive */
+	else
+	{
+		/* Save the game */
+		do_cmd_save_game(FALSE);
+
+		/* Prompt for scores */
+		prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
+
+		/* Predict score (or ESCAPE) */
+		if (inkey() != ESCAPE) predict_score();
+	}
+
+
+	/* Shut the high score file */
+	(void)fd_close(highscore_fd);
+
+	/* Forget the high score fd */
+	highscore_fd = -1;
+
+	/* Kill all temporal files */
+	clear_saved_floor_files();
+
+	/* Allow suspending now */
+	signals_handle_tstp();
+}

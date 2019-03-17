@@ -558,6 +558,7 @@ extern void determine_today_mon(bool conv_old);
 extern void play_game(bool new_game);
 extern s32b turn_real(s32b hoge);
 extern void prevent_turn_overflow(void);
+extern void close_game(void);
 
 
 /* files.c */
@@ -585,12 +586,14 @@ extern void get_name(void);
 extern void do_cmd_save_game(int is_autosave);
 extern void do_cmd_save_and_exit(void);
 extern long total_points(void);
-extern void close_game(void);
 extern void exit_game_panic(void);
 extern void signals_ignore_tstp(void);
 extern void signals_handle_tstp(void);
 extern void signals_init(void);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
+extern void print_tomb(void);
+extern void show_info(void);
+extern bool check_score(void);
 
 #ifdef JP
 extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count);
