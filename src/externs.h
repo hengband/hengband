@@ -545,6 +545,7 @@ extern void do_cmd_knowledge(void);
 extern void plural_aux(char * Name);
 extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
+extern void do_cmd_suicide(void);
 
 /* cmd-spell.c */
 extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
@@ -581,7 +582,6 @@ extern bool show_file(bool show_version, concptr name, concptr what, int line, B
 extern void do_cmd_help(void);
 extern void process_player_name(bool sf);
 extern void get_name(void);
-extern void do_cmd_suicide(void);
 extern void do_cmd_save_game(int is_autosave);
 extern void do_cmd_save_and_exit(void);
 extern long total_points(void);

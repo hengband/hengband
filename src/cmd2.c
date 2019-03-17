@@ -2851,3 +2851,83 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	return TRUE;
 }
+
+/*!
+ * @brief 自殺するコマンドのメインルーチン
+ * Hack -- commit suicide
+ * @return なし
+ * @details
+ */
+void do_cmd_suicide(void)
+{
+	int i;
+
+	/* Flush input */
+	flush();
+
+	/* Verify Retirement */
+	if (p_ptr->total_winner)
+	{
+		/* Verify */
+		if (!get_check_strict(_("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
+	}
+
+	/* Verify Suicide */
+	else
+	{
+		/* Verify */
+		if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) return;
+	}
+
+
+	if (!p_ptr->noscore)
+	{
+		/* Special Verification for suicide */
+		prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
+
+		flush();
+		i = inkey();
+		prt("", 0, 0);
+		if (i != '@') return;
+
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
+	}
+
+	/* Initialize "last message" buffer */
+	if (p_ptr->last_message) string_free(p_ptr->last_message);
+	p_ptr->last_message = NULL;
+
+	/* Hack -- Note *winning* message */
+	if (p_ptr->total_winner && last_words)
+	{
+		char buf[1024] = "";
+		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
+		do
+		{
+			while (!get_string(_("*勝利*メッセージ: ", "*Winning* message: "), buf, sizeof buf));
+		} while (!get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_NO_HISTORY));
+
+		if (buf[0])
+		{
+			p_ptr->last_message = string_make(buf);
+			msg_print(p_ptr->last_message);
+		}
+	}
+
+	/* Stop playing */
+	p_ptr->playing = FALSE;
+
+	/* Kill the player */
+	p_ptr->is_dead = TRUE;
+	p_ptr->leaving = TRUE;
+
+	if (!p_ptr->total_winner)
+	{
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("ダンジョンの探索に絶望して自殺した。", "give up all hope to commit suicide."));
+		do_cmd_write_nikki(NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+		do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "\n\n\n\n");
+	}
+
+	/* Cause of death */
+	(void)strcpy(p_ptr->died_from, _("途中終了", "Quitting"));
+}
