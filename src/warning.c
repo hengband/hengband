@@ -5,6 +5,7 @@
 #include "player-move.h"
 #include "feature.h"
 #include "warning.h"
+#include "player-status.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

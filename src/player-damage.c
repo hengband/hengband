@@ -3,6 +3,7 @@
 #include "artifact.h"
 #include "object-hook.h"
 #include "object-broken.h"
+#include "player-status.h"
 
 
 /*!

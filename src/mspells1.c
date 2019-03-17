@@ -44,6 +44,7 @@
 #include "quest.h"
 #include "realm-hex.h"
 #include "player-move.h"
+#include "player-status.h"
 
 
 /*!

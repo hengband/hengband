@@ -1,6 +1,7 @@
 ﻿
 #include "angband.h"
 #include "spells-summon.h"
+#include "player-status.h"
 
 /*!
 * @brief 箱からアイテムを引き出す /
