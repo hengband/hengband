@@ -2794,7 +2794,7 @@ static void tim_player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
  * @param mode オプション
  * @return なし
  */
-static void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
+void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
 	int i, max_i;
 
@@ -2828,15 +2828,6 @@ static void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 	}
 }
 
-
-/*!
- * @brief プレイヤーの装備一覧シンボルを固定位置に表示する
- * @return なし
- */
-void print_equippy(void)
-{
-	display_player_equippy(ROW_EQUIPPY, COL_EQUIPPY, 0);
-}
 
 /*!
  * @brief プレイヤーの装備による免疫フラグを返す
