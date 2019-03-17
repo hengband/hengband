@@ -4991,7 +4991,6 @@ static void process_player(void)
 					monster_type *m_ptr;
 					monster_race *r_ptr;
 
-					/* Access monster */
 					m_ptr = &current_floor_ptr->m_list[m_idx];
 
 					/* Skip dead monsters */
@@ -5026,8 +5025,6 @@ static void process_player(void)
 				for (m_idx = 1; m_idx < m_max; m_idx++)
 				{
 					monster_type *m_ptr;
-
-					/* Access monster */
 					m_ptr = &current_floor_ptr->m_list[m_idx];
 
 					/* Skip dead monsters */
