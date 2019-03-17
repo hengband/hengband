@@ -24,6 +24,7 @@
 #include "mutation.h"
 #include "floor-events.h"
 #include "player-move.h"
+#include "monster-status.h"
 
 #define REWARD_CHANCE 10
 
@@ -494,7 +495,7 @@ bool target_able(MONSTER_IDX m_idx)
 	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	/* Monster must be alive */
-	if (!m_ptr->r_idx) return (FALSE);
+	if (!monster_is_valid(m_ptr)) return (FALSE);
 
 	/* Hack -- no targeting hallucinations */
 	if (p_ptr->image) return (FALSE);

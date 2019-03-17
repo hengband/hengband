@@ -587,7 +587,7 @@ typedef struct monster_type monster_type;
 
 struct monster_type
 {
-	MONRACE_IDX r_idx;		/* Monster race index */
+	MONRACE_IDX r_idx;		/* Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */
 	byte sub_align;		/* Sub-alignment for a neutral monster */
 

@@ -23,6 +23,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-floor.h"
+#include "monster-status.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
@@ -51,7 +52,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
 	/* Paranoia */
-	if (!m_ptr->r_idx) return (FALSE);
+	if (!monster_is_valid(m_ptr)) return (FALSE);
 
 	oy = m_ptr->fy;
 	ox = m_ptr->fx;

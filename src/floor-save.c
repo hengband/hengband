@@ -18,6 +18,7 @@
 #include "quest.h"
 #include "wild.h"
 #include "spells-floor.h"
+#include "monster-status.h"
 
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
@@ -396,7 +397,7 @@ static void preserve_pet(void)
 		{
 			monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 			if (!is_pet(m_ptr)) continue;
 			if (i == p_ptr->riding) continue;
 
@@ -446,7 +447,7 @@ static void preserve_pet(void)
 			monster_type *m_ptr = &current_floor_ptr->m_list[i];
 			GAME_TEXT m_name[MAX_NLEN];
 
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 			if (!is_pet(m_ptr)) continue;
 			if (!m_ptr->nickname) continue;
 			if (p_ptr->riding == i) continue;
@@ -497,7 +498,7 @@ void precalc_cur_num_of_pet(void)
 		m_ptr = &party_mon[i];
 
 		/* Skip empty monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Hack -- Increase the racial counter */
 		real_r_ptr(m_ptr)->cur_num++;
@@ -636,8 +637,7 @@ static void update_unique_artifact(s16b cur_floor_id)
 		monster_race *r_ptr;
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
-		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Extract real monster race */
 		r_ptr = real_r_ptr(m_ptr);
@@ -893,8 +893,7 @@ void leave_floor(void)
 		monster_race *r_ptr;
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
-		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Only maintain quest monsters */
 		if (quest_r_idx != m_ptr->r_idx) continue;
@@ -1203,8 +1202,7 @@ void change_floor(void)
 				monster_race *r_ptr;
 				monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
-				/* Skip dead monsters */
-				if (!m_ptr->r_idx) continue;
+				if (!monster_is_valid(m_ptr)) continue;
 
 				if (!is_pet(m_ptr))
 				{

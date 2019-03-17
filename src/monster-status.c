@@ -76,7 +76,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 	s32b div_h;
 	u32b div_l;
 
-	if (!m_ptr->r_idx) return;
+	if (!monster_is_valid(m_ptr)) return;
 	if (is_pet(m_ptr) || p_ptr->inside_battle) return;
 
 	/*
@@ -202,7 +202,7 @@ void mproc_init(void)
 		m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		for (cmi = 0; cmi < MAX_MTIMED; cmi++)
 		{
@@ -800,7 +800,7 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 
 	while (num--)
 	{
-		if (!m_ptr->r_idx) break;
+		if (!monster_is_valid(m_ptr)) break;
 		process_monster(current_world_ptr->timewalk_m_idx);
 		reset_target(m_ptr);
 		handle_stuff();
@@ -841,8 +841,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 
 	m_ptr = &current_floor_ptr->m_list[m_idx];
 
-	/* Paranoia -- Skip dead monsters */
-	if (!m_ptr->r_idx) return;
+	if (!monster_is_valid(m_ptr)) return;
 
 	r_ptr = &r_info[m_ptr->r_idx];
 	s_ptr = &r_info[s_idx];
@@ -989,7 +988,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 	get_exp_from_mon(expdam, &exp_mon);
 
 	/* Genocided by chaos patron */
-	if (!m_ptr->r_idx) m_idx = 0;
+	if (!monster_is_valid(m_ptr)) m_idx = 0;
 
 	/* Redraw (later) if needed */
 	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
@@ -1381,3 +1380,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 	return (FALSE);
 }
 
+bool monster_is_valid(monster_type *m_ptr)
+{
+	return (!m_ptr->r_idx);
+}

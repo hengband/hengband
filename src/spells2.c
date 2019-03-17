@@ -28,6 +28,7 @@
 #include "spells-floor.h"
 #include "realm-hex.h"
 #include "object-hook.h"
+#include "monster-status.h"
 
 /*!
  * @brief プレイヤー周辺の地形を感知する
@@ -373,9 +374,7 @@ bool detect_monsters_normal(POSITION range)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -422,8 +421,7 @@ bool detect_monsters_invis(POSITION range)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -476,7 +474,7 @@ bool detect_monsters_evil(POSITION range)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -532,7 +530,7 @@ bool detect_monsters_nonliving(POSITION range)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -583,7 +581,7 @@ bool detect_monsters_mind(POSITION range)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -636,7 +634,7 @@ bool detect_monsters_string(POSITION range, concptr Match)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -691,7 +689,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -793,7 +791,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
@@ -983,7 +981,7 @@ void aggravate_monsters(MONSTER_IDX who)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip aggravating monster (or player) */
 		if (i == who) continue;
@@ -1134,7 +1132,7 @@ bool symbol_genocide(int power, bool player_cast)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip "wrong" monsters */
 		if (r_ptr->d_char != typ) continue;
@@ -1175,7 +1173,7 @@ bool mass_genocide(int power, bool player_cast)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip distant monsters */
 		if (m_ptr->cdis > MAX_SIGHT) continue;
@@ -1218,7 +1216,7 @@ bool mass_genocide_undead(int power, bool player_cast)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		if (!(r_ptr->flags3 & RF3_UNDEAD)) continue;
 
@@ -1264,7 +1262,7 @@ bool probing(void)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Require line of sight */
 		if (!player_has_los_bold(m_ptr->fy, m_ptr->fx)) continue;

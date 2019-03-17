@@ -25,6 +25,7 @@
 #include "shoot.h"
 #include "player-move.h"
 #include "patron.h"
+#include "monster-status.h"
 
 
 /*
@@ -4189,7 +4190,7 @@ static void dump_aux_pet(FILE *fff)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 		if (!is_pet(m_ptr)) continue;
 		pet_settings = TRUE;
 		if (!m_ptr->nickname && (p_ptr->riding != i)) continue;

@@ -16,6 +16,7 @@
 #include "quest.h"
 #include "realm-hex.h"
 #include "player-move.h"
+#include "monster-status.h"
 
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
@@ -362,8 +363,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			target_idx = dummy;
 			t_ptr = &current_floor_ptr->m_list[target_idx];
 
-			/* Skip dead monsters */
-			if (!t_ptr->r_idx) continue;
+			if (!monster_is_valid(t_ptr)) continue;
 
 			/* Monster must be 'an enemy' */
 			if ((m_idx == target_idx) || !are_enemies(m_ptr, t_ptr)) continue;

@@ -42,6 +42,7 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "wild.h"
+#include "monster-status.h"
 
 
 static bool load = TRUE; /*!<ロード処理中の分岐フラグ*/
@@ -871,7 +872,7 @@ static void regen_monsters(void)
 
 
 		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Allow regeneration (if needed) */
 		if (m_ptr->hp < m_ptr->maxhp)
@@ -2420,7 +2421,7 @@ static void process_world_aux_mutation(void)
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Paranoia -- Skip dead monsters */
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 
 			if (r_ptr->level >= p_ptr->lev)
 			{
@@ -3083,7 +3084,7 @@ static byte get_dungeon_feeling(void)
 		int delta = 0;
 
 		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Ignore pet */
 		if (is_pet(m_ptr)) continue;
@@ -4628,7 +4629,7 @@ static void process_player(void)
 		{
 			monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(m_idx, FALSE);
@@ -4994,7 +4995,7 @@ static void process_player(void)
 					m_ptr = &current_floor_ptr->m_list[m_idx];
 
 					/* Skip dead monsters */
-					if (!m_ptr->r_idx) continue;
+					if (!monster_is_valid(m_ptr)) continue;
 
 					/* Skip unseen monsters */
 					if (!m_ptr->ml) continue;
@@ -5028,7 +5029,7 @@ static void process_player(void)
 					m_ptr = &current_floor_ptr->m_list[m_idx];
 
 					/* Skip dead monsters */
-					if (!m_ptr->r_idx) continue;
+					if (!monster_is_valid(m_ptr)) continue;
 
 					/* Nice monsters get mean */
 					if (m_ptr->mflag & MFLAG_NICE)

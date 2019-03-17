@@ -3,6 +3,7 @@
 #include "sort.h"
 #include "player-status.h"
 #include "object-hook.h"
+#include "monster-status.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定
@@ -115,7 +116,7 @@ int calculate_upkeep(void)
 		monster_race *r_ptr;
 
 		m_ptr = &current_floor_ptr->m_list[m_idx];
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
 		if (is_pet(m_ptr))

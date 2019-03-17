@@ -26,6 +26,7 @@
 #include "feature.h"
 #include "grid.h"
 #include "player-move.h"
+#include "monster-status.h"
 
 
 /*!
@@ -79,8 +80,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 			/* The monster itself isn't a target */
 			if (t_ptr == m_ptr) continue;
 
-			/* Paranoia -- Skip dead monsters */
-			if (!t_ptr->r_idx) continue;
+			if (!monster_is_valid(t_ptr)) continue;
 
 			if (is_pet(m_ptr))
 			{
@@ -1494,7 +1494,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 		int d_dice = r_ptr->blow[ap_cnt].d_dice;
 		int d_side = r_ptr->blow[ap_cnt].d_side;
 
-		if (!m_ptr->r_idx) break;
+		if (!monster_is_valid(m_ptr)) break;
 
 		/* Stop attacking if the target dies! */
 		if (t_ptr->fx != x_saver || t_ptr->fy != y_saver)
@@ -2746,7 +2746,7 @@ void process_monster(MONSTER_IDX m_idx)
 				{
 					cave_alter_feat(ny, nx, FF_BASH);
 
-					if (!m_ptr->r_idx) /* Killed by shards of glass, etc. */
+					if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
 					{
 						/* Update some things */
 						p_ptr->update |= (PU_FLOW);
@@ -2833,7 +2833,7 @@ void process_monster(MONSTER_IDX m_idx)
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
 
-				if (!m_ptr->r_idx) return;
+				if (!monster_is_valid(m_ptr)) return;
 				/* Allow movement */
 				do_move = TRUE;
 			}
@@ -2958,7 +2958,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 			cave_alter_feat(ny, nx, FF_HURT_DISI);
 
-			if (!m_ptr->r_idx) /* Killed by shards of glass, etc. */
+			if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
 			{
 				/* Update some things */
 				p_ptr->update |= (PU_FLOW);
@@ -3376,7 +3376,7 @@ void process_monsters(void)
 		if (p_ptr->leaving) break;
 
 		/* Ignore "dead" monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		if (p_ptr->wild_mode) continue;
 

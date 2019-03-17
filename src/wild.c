@@ -17,6 +17,7 @@
 #include "realm-hex.h"
 #include "player-status.h"
 #include "grid.h"
+#include "monster-status.h"
 
  /*
   * Wilderness
@@ -1141,7 +1142,7 @@ bool change_wild_mode(void)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 		if (is_pet(m_ptr) && i != p_ptr->riding) have_pet = TRUE;
 		if (MON_CSLEEP(m_ptr)) continue;
 		if (m_ptr->cdis > MAX_SIGHT) continue;

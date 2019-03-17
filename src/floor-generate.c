@@ -106,6 +106,7 @@
 #include "quest.h"
 #include "player-status.h"
 #include "wild.h"
+#include "monster-status.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;
@@ -1175,7 +1176,7 @@ static void generate_gambling_arena(void)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 		update_monster(i, FALSE);

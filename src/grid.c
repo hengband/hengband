@@ -28,6 +28,7 @@
 #include "monster.h"
 #include "quest.h"
 #include "feature.h"
+#include "monster-status.h"
 
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;
@@ -3736,7 +3737,7 @@ void update_mon_lite(void)
 			r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Skip dead monsters */
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 
 			/* Is it too far away? */
 			if (m_ptr->cdis > dis_lim) continue;

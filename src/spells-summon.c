@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "spells-summon.h"
+#include "monster-status.h"
 
 /*!
 * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells
@@ -409,7 +410,7 @@ void mitokohmon(void)
 		for (i = m_max - 1; i > 0; i--)
 		{
 			m_ptr = &current_floor_ptr->m_list[i];
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 			if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
 			if (!los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;
 			if (!projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;

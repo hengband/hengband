@@ -50,6 +50,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "object-hook.h"
+#include "monster-status.h"
 
 
 /*
@@ -5831,7 +5832,7 @@ static void do_cmd_knowledge_pets(void)
 		m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Calculate "upkeep" for pets */
 		if (is_pet(m_ptr))

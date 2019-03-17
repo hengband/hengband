@@ -1970,8 +1970,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		int d_dice = r_ptr->blow[ap_cnt].d_dice;
 		int d_side = r_ptr->blow[ap_cnt].d_side;
 
-
-		if (!m_ptr->r_idx) break;
+		if (!monster_is_valid(m_ptr)) break;
 
 		/* Hack -- no more attacks */
 		if (!method) break;

@@ -27,6 +27,7 @@
 #include "spells-floor.h"
 
 #include "object-hook.h"
+#include "monster-status.h"
 
 #ifdef ALLOW_WIZARD
 
@@ -1475,7 +1476,7 @@ static void do_cmd_wiz_zap(void)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip the mount */
 		if (i == p_ptr->riding) continue;
@@ -1512,7 +1513,7 @@ static void do_cmd_wiz_zap_all(void)
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Paranoia -- Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip the mount */
 		if (i == p_ptr->riding) continue;

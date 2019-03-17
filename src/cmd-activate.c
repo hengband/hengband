@@ -19,6 +19,7 @@
 #include "spells-floor.h"
 #include "realm-hex.h"
 #include "player-status.h"
+#include "monster-status.h"
 
 /*!
  * @brief アイテムの発動効果テーブル /
@@ -1608,7 +1609,7 @@ bool activate_artifact(object_type *o_ptr)
 			m_ptr = &current_floor_ptr->m_list[i];
 
 			/* Ignore "dead" monsters */
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 
 			r_ptr = &r_info[m_ptr->r_idx];
 

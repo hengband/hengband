@@ -443,7 +443,7 @@ void compact_monsters(int size)
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Paranoia -- skip "dead" monsters */
-			if (!m_ptr->r_idx) continue;
+			if (!monster_is_valid(m_ptr)) continue;
 
 			/* Hack -- High level monsters start out "immune" */
 			if (r_ptr->level > cur_lev) continue;
@@ -532,9 +532,7 @@ void wipe_m_list(void)
 	for (i = m_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Monster is gone */
 		current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
@@ -2626,9 +2624,7 @@ void update_monsters(bool full)
 	for (i = 1; i < m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
-
-		/* Skip dead monsters */
-		if (!m_ptr->r_idx) continue;
+		if (!monster_is_valid(m_ptr)) continue;
 		update_monster(i, full);
 	}
 }
