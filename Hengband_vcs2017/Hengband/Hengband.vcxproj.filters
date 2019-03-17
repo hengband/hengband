@@ -448,6 +448,9 @@
     <ClInclude Include="..\..\src\floor-save.h">
       <Filter>floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\floor-generate.h">
+      <Filter>floor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

@@ -101,6 +101,7 @@
 #include "grid.h"
 #include "rooms.h"
 #include "floor-streams.h"
+#include "floor-generate.h"
 #include "trap.h"
 #include "monster.h"
 #include "quest.h"
