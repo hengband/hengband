@@ -20,7 +20,8 @@ hengband_SOURCES = \
 	\
 	defines.h dungeon.c effects.c externs.h files.c flavor.c \
 	\
-	floor.h floor-events.c floor-events.h floor-generate.c floor-save.c \
+	floor.h floor-events.c floor-events.h floor-generate.c floor-generate.h \
+	floor-save.h floor-save.c \
 	floor-streams.c floor-streams.h \
 	\
 	feature.c feature.h \
@@ -40,7 +41,8 @@ hengband_SOURCES = \
 	\
 	mutation.h mutation.c \
 	\
-	object-curse.c object-curse.h object-broken.c object-broken.h\
+	object-boost.c object-boost.h \
+	object-curse.c object-curse.h object-broken.c object-broken.h \
 	object-hook.c object-hook.h object1.c object2.c \
 	objectkind-hook.c objectkind-hook.h \
 	\
