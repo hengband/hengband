@@ -1951,16 +1951,15 @@ void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold
 void update_monster(MONSTER_IDX m_idx, bool full)
 {
 	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
-
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	bool do_disturb = disturb_move;
 
-	int d;
+	POSITION d;
 
 	/* Current location */
-	int fy = m_ptr->fy;
-	int fx = m_ptr->fx;
+	POSITION fy = m_ptr->fy;
+	POSITION fx = m_ptr->fx;
 
 	/* Seen at all */
 	bool flag = FALSE;
@@ -2341,7 +2340,7 @@ void update_monster(MONSTER_IDX m_idx, bool full)
  */
 void update_monsters(bool full)
 {
-	IDX i;
+	MONSTER_IDX i;
 
 	/* Update each (live) monster */
 	for (i = 1; i < m_max; i++)
