@@ -49,3 +49,5 @@ extern bool object_is_nameless(object_type *o_ptr);
 extern bool object_allow_two_hands_wielding(object_type *o_ptr);
 extern bool object_can_refill_torch(object_type *o_ptr);
 extern bool can_player_destroy_object(object_type *o_ptr);
+extern bool object_is_quest_target(object_type *o_ptr);
+

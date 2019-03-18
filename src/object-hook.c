@@ -945,3 +945,29 @@ bool can_player_destroy_object(object_type *o_ptr)
 	/* Identified artifact -- Nothing to do */
 	return FALSE;
 }
+
+/*!
+ * @brief オブジェクトがクエストの達成目的か否かを返す。
+ * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
+ * @return 現在クエスト達成目的のアイテムならばTRUEを返す。
+ */
+bool object_is_quest_target(object_type *o_ptr)
+{
+	if (p_ptr->inside_quest)
+	{
+		ARTIFACT_IDX a_idx = quest[p_ptr->inside_quest].k_idx;
+		if (a_idx)
+		{
+			artifact_type *a_ptr = &a_info[a_idx];
+			if (!(a_ptr->gen_flags & TRG_INSTA_ART))
+			{
+				if ((o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval))
+				{
+					return TRUE;
+				}
+			}
+		}
+	}
+	return FALSE;
+}
+
