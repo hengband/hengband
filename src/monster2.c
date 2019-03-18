@@ -1596,15 +1596,9 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 	else if ((mode & (MD_POSSESSIVE | MD_OBJECTIVE)) == (MD_POSSESSIVE | MD_OBJECTIVE))
 	{
 		/* The monster is visible, so use its gender */
-#ifdef JP
-		if (r_ptr->flags1 & (RF1_FEMALE)) strcpy(desc, "彼女自身");
-		else if (r_ptr->flags1 & (RF1_MALE)) strcpy(desc, "彼自身");
-		else strcpy(desc, "それ自身");
-#else
-		if (r_ptr->flags1 & RF1_FEMALE) strcpy(desc, "herself");
-		else if (r_ptr->flags1 & RF1_MALE) strcpy(desc, "himself");
-		else strcpy(desc, "itself");
-#endif
+		if (r_ptr->flags1 & (RF1_FEMALE)) strcpy(desc, _("彼女自身", "herself"));
+		else if (r_ptr->flags1 & (RF1_MALE)) strcpy(desc, _("彼自身", "himself"));
+		else strcpy(desc, _("それ自身", "itself"));
 	}
 
 
