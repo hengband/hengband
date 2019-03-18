@@ -105,15 +105,6 @@ u32b monster_u_mode(MONSTER_IDX m_idx)
 }
 
 /*!
-* @brief モンスターを起こす /
-* @param t_idx モンスターID
-*/
-void monster_wakeup(MONSTER_IDX t_idx)
-{
-	(void)set_monster_csleep(t_idx, 0);
-}
-
-/*!
  * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数 /
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
@@ -206,7 +197,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		monster_wakeup(t_idx);
+		set_monster_csleep(t_idx, 0);
 	}
 }
 
@@ -1456,7 +1447,7 @@ void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1,
 		{
 			if (see_t) msg_format(msg4, t_name);
 		}
-		monster_wakeup(t_idx);
+		set_monster_csleep(t_idx, 0);
 	}
 }
 
@@ -2253,7 +2244,8 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 			else 
 				teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
 		}
-		monster_wakeup(t_idx);
+
+		set_monster_csleep(t_idx, 0);
 	}
 }
 
@@ -2322,7 +2314,8 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 			else 
 				teleport_away(t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
 		}
-		monster_wakeup(t_idx);
+
+		set_monster_csleep(t_idx, 0);
 	}
 }
 

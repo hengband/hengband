@@ -213,7 +213,7 @@ void mproc_init(void)
 
 
 /*!
-* @brief モンスターの睡眠状態値をセットする /
+* @brief モンスターの睡眠状態値をセットする。0で起きる。 /
 * Set "m_ptr->mtimed[MTIMED_CSLEEP]", notice observable changes
 * @param m_idx モンスター参照ID
 * @param v セットする値
