@@ -618,8 +618,6 @@ extern void prepare_change_floor_mode(BIT_FLAGS mode);
 extern void precalc_cur_num_of_pet(void);
 extern void stair_creation(void);
 
-
-
 /* init1.c */
 extern TERM_COLOR color_char_to_attr(SYMBOL_CODE c);
 extern s16b f_tag_to_index(concptr str);
@@ -695,7 +693,6 @@ extern MONRACE_IDX get_mon_num(DEPTH level);
 extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 extern int lore_do_probe(MONRACE_IDX r_idx);
 extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
-extern void sanity_blast(monster_type *m_ptr, bool necro);
 extern void update_monster(MONSTER_IDX m_idx, bool full);
 extern void update_monsters(bool full);
 extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);

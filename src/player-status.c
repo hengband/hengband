@@ -5,6 +5,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "object-hook.h"
+#include "monsterrace-hook.h"
 
 /* Hack, monk armour */
 static bool monk_armour_aux;
@@ -3877,4 +3878,283 @@ void wreck_the_pattern(void)
 	}
 
 	cave_set_feat(p_ptr->y, p_ptr->x, feat_pattern_corrupted);
+}
+
+
+/*!
+ * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
+ * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ
+ * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
+ * @return なし
+ */
+void sanity_blast(monster_type *m_ptr, bool necro)
+{
+	int power = 100;
+
+	if (p_ptr->inside_battle || !character_dungeon) return;
+
+	if (!necro && m_ptr)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+		monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+
+		power = r_ptr->level / 2;
+
+		monster_desc(m_name, m_ptr, 0);
+
+		if (!(r_ptr->flags1 & RF1_UNIQUE))
+		{
+			if (r_ptr->flags1 & RF1_FRIENDS)
+				power /= 2;
+		}
+		else power *= 2;
+
+		if (!is_loading_now)
+			return; /* No effect yet, just loaded... */
+
+		if (!m_ptr->ml)
+			return; /* Cannot see it for some reason */
+
+		if (!(r_ptr->flags2 & RF2_ELDRITCH_HORROR))
+			return;
+
+		if (is_pet(m_ptr))
+			return; /* Pet eldritch horrors are safe most of the time */
+
+		if (randint1(100) > power) return;
+
+		if (saving_throw(p_ptr->skill_sav - power))
+		{
+			return; /* Save, no adverse effects */
+		}
+
+		if (p_ptr->image)
+		{
+			/* Something silly happens... */
+			msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
+				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
+
+			if (one_in_(3))
+			{
+				msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+				p_ptr->image = p_ptr->image + randint1(r_ptr->level);
+			}
+
+			return; /* Never mind; we can't see it clearly enough */
+		}
+
+		/* Something frightening happens... */
+		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
+			horror_desc[randint0(MAX_SAN_HORROR)], m_name);
+
+		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+
+		/* Demon characters are unaffected */
+		if (prace_is_(RACE_IMP) || prace_is_(RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) return;
+		if (p_ptr->wizard) return;
+
+		/* Undead characters are 50% likely to be unaffected */
+		if (prace_is_(RACE_SKELETON) || prace_is_(RACE_ZOMBIE)
+			|| prace_is_(RACE_VAMPIRE) || prace_is_(RACE_SPECTRE) ||
+			(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD))
+		{
+			if (saving_throw(25 + p_ptr->lev)) return;
+		}
+	}
+	else if (!necro)
+	{
+		monster_race *r_ptr;
+		GAME_TEXT m_name[MAX_NLEN];
+		concptr desc;
+
+		get_mon_num_prep(get_nightmare, NULL);
+
+		r_ptr = &r_info[get_mon_num(MAX_DEPTH)];
+		power = r_ptr->level + 10;
+		desc = r_name + r_ptr->name;
+
+		get_mon_num_prep(NULL, NULL);
+
+#ifndef JP
+		if (!(r_ptr->flags1 & RF1_UNIQUE))
+			sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
+		else
+#endif
+			sprintf(m_name, "%s", desc);
+
+		if (!(r_ptr->flags1 & RF1_UNIQUE))
+		{
+			if (r_ptr->flags1 & RF1_FRIENDS) power /= 2;
+		}
+		else power *= 2;
+
+		if (saving_throw(p_ptr->skill_sav * 100 / power))
+		{
+			msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name);
+			/* Safe */
+			return;
+		}
+
+		if (p_ptr->image)
+		{
+			/* Something silly happens... */
+			msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
+				funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
+
+			if (one_in_(3))
+			{
+				msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+				p_ptr->image = p_ptr->image + randint1(r_ptr->level);
+			}
+
+			/* Never mind; we can't see it clearly enough */
+			return;
+		}
+
+		/* Something frightening happens... */
+		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
+			horror_desc[randint0(MAX_SAN_HORROR)], desc);
+
+		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+
+		if (!p_ptr->mimic_form)
+		{
+			switch (p_ptr->prace)
+			{
+				/* Demons may make a saving throw */
+			case RACE_IMP:
+			case RACE_DEMON:
+				if (saving_throw(20 + p_ptr->lev)) return;
+				break;
+				/* Undead may make a saving throw */
+			case RACE_SKELETON:
+			case RACE_ZOMBIE:
+			case RACE_SPECTRE:
+			case RACE_VAMPIRE:
+				if (saving_throw(10 + p_ptr->lev)) return;
+				break;
+			}
+		}
+		else
+		{
+			/* Demons may make a saving throw */
+			if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
+			{
+				if (saving_throw(20 + p_ptr->lev)) return;
+			}
+			/* Undead may make a saving throw */
+			else if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)
+			{
+				if (saving_throw(10 + p_ptr->lev)) return;
+			}
+		}
+	}
+	else
+	{
+		msg_print(_("ネクロノミコンを読んで正気を失った！", "Your sanity is shaken by reading the Necronomicon!"));
+	}
+
+	if (saving_throw(p_ptr->skill_sav - power))
+	{
+		return;
+	}
+
+	do {
+		(void)do_dec_stat(A_INT);
+	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
+
+	do {
+		(void)do_dec_stat(A_WIS);
+	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
+
+	switch (randint1(21))
+	{
+	case 1:
+		if (!(p_ptr->muta3 & MUT3_MORONIC) && one_in_(5))
+		{
+			if ((p_ptr->stat_use[A_INT] < 4) && (p_ptr->stat_use[A_WIS] < 4))
+			{
+				msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You current_world_ptr->game_turn into an utter moron!"));
+			}
+			else
+			{
+				msg_print(_("あなたは完璧な馬鹿になった！", "You current_world_ptr->game_turn into an utter moron!"));
+			}
+
+			if (p_ptr->muta3 & MUT3_HYPER_INT)
+			{
+				msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
+				p_ptr->muta3 &= ~(MUT3_HYPER_INT);
+			}
+			p_ptr->muta3 |= MUT3_MORONIC;
+		}
+		break;
+	case 2:
+	case 3:
+	case 4:
+		if (!(p_ptr->muta2 & MUT2_COWARDICE) && !p_ptr->resist_fear)
+		{
+			msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
+
+			/* Duh, the following should never happen, but anyway... */
+			if (p_ptr->muta3 & MUT3_FEARLESS)
+			{
+				msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
+				p_ptr->muta3 &= ~(MUT3_FEARLESS);
+			}
+
+			p_ptr->muta2 |= MUT2_COWARDICE;
+		}
+		break;
+	case 5:
+	case 6:
+	case 7:
+		if (!(p_ptr->muta2 & MUT2_HALLU) && !p_ptr->resist_chaos)
+		{
+			msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
+			p_ptr->muta2 |= MUT2_HALLU;
+		}
+		break;
+	case 8:
+	case 9:
+	case 10:
+		if (!(p_ptr->muta2 & MUT2_BERS_RAGE))
+		{
+			msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
+			p_ptr->muta2 |= MUT2_BERS_RAGE;
+		}
+		break;
+	case 11:
+	case 12:
+	case 13:
+	case 14:
+	case 15:
+	case 16:
+		/* Brain smash */
+		if (!p_ptr->resist_conf)
+		{
+			(void)set_confused(p_ptr->confused + randint0(4) + 4);
+		}
+		if (!p_ptr->free_act)
+		{
+			(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
+		}
+		if (!p_ptr->resist_chaos)
+		{
+			(void)set_image(p_ptr->image + randint0(250) + 150);
+		}
+		break;
+	case 17:
+	case 18:
+	case 19:
+	case 20:
+	case 21:
+		/* Amnesia */
+		if (lose_all_info())
+			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
+		break;
+	}
+
+	p_ptr->update |= PU_BONUS;
+	handle_stuff();
 }
