@@ -91,14 +91,14 @@ bool monster_is_powerful(MONSTER_IDX m_idx)
 }
 
 /*!
-* @brief モンスターがユニーク召喚可能であるかを判定する /
+* @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
 * @param m_idx モンスターID
 * @return 召喚可能であればPM_ALLOW_UNIQUEを返す。
 */
-u32b monster_u_mode(MONSTER_IDX m_idx)
+BIT_FLAGS monster_u_mode(MONSTER_IDX m_idx)
 {
-	u32b u_mode = 0L;
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	BIT_FLAGS u_mode = 0L;
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	bool pet = is_pet(m_ptr);
 	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
 	return u_mode;
