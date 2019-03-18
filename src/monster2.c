@@ -2069,77 +2069,66 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 				}
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_animal) && (r_ptr->flags3 & (RF3_ANIMAL)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_ANIMAL);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_undead) && (r_ptr->flags3 & (RF3_UNDEAD)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_UNDEAD);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_demon) && (r_ptr->flags3 & (RF3_DEMON)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_DEMON);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_orc) && (r_ptr->flags3 & (RF3_ORC)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_ORC);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_troll) && (r_ptr->flags3 & (RF3_TROLL)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_TROLL);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_giant) && (r_ptr->flags3 & (RF3_GIANT)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_GIANT);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_dragon) && (r_ptr->flags3 & (RF3_DRAGON)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_DRAGON);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_human) && (r_ptr->flags2 & (RF2_HUMAN)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags2 |= (RF2_HUMAN);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_evil) && (r_ptr->flags3 & (RF3_EVIL)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_EVIL);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_good) && (r_ptr->flags3 & (RF3_GOOD)))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_GOOD);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_nonliving) &&
 			    ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING))
 			{
@@ -2147,7 +2136,6 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 				if (is_original_ap(m_ptr) && !p_ptr->image) r_ptr->r_flags3 |= (RF3_NONLIVING);
 			}
 
-			/* Magical sensing */
 			if ((p_ptr->esp_unique) && (r_ptr->flags1 & (RF1_UNIQUE)))
 			{
 				flag = TRUE;
