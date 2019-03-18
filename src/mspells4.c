@@ -65,15 +65,15 @@ bool spell_learnable(MONSTER_IDX m_idx)
 }
 
 /*!
-* @brief モンスターIDからモンスターのレベルを取得する /
+* @brief モンスターIDからモンスターのレベルを取得する(ただし最低1を保証する) /
 * @param m_idx モンスターID
 * @return モンスターのレベル
 */
-int monster_level_idx(MONSTER_IDX m_idx)
+DEPTH monster_level_idx(MONSTER_IDX m_idx)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
-	int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 	return rlev;
 }
 
@@ -1461,7 +1461,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1511,7 +1511,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1574,7 +1574,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1624,7 +1624,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1687,7 +1687,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1796,7 +1796,7 @@ HIT_POINT spell_RF6_HAND_DOOM(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -2330,7 +2330,7 @@ void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -2506,7 +2506,7 @@ void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
 */
 void spell_RF6_FORGET(MONSTER_IDX m_idx)
 {
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
@@ -2701,7 +2701,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	int count = 0;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN], m_poss[80];
 	monster_name(m_idx, m_name);
@@ -2790,7 +2790,7 @@ void spell_RF6_S_CYBER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 {
 	int count = 0;
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -2828,7 +2828,7 @@ void spell_RF6_S_CYBER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 void spell_RF6_S_MONSTER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -2866,7 +2866,7 @@ void spell_RF6_S_MONSTER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX 
 void spell_RF6_S_MONSTERS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -2904,7 +2904,7 @@ void spell_RF6_S_MONSTERS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX
 void spell_RF6_S_ANT(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -2940,7 +2940,7 @@ void spell_RF6_S_SPIDER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	int count = 0, k;
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -2972,7 +2972,7 @@ void spell_RF6_S_SPIDER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 void spell_RF6_S_HOUND(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -3006,7 +3006,7 @@ void spell_RF6_S_HOUND(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 void spell_RF6_S_HYDRA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -3043,7 +3043,7 @@ void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 	int num = 1;
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	
 	monspell_message(m_idx, t_idx,
@@ -3089,7 +3089,7 @@ void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 void spell_RF6_S_DEMON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	
 	monspell_message(m_idx, t_idx,
@@ -3122,7 +3122,7 @@ void spell_RF6_S_DEMON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 void spell_RF6_S_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	
 	monspell_message(m_idx, t_idx,
@@ -3155,7 +3155,7 @@ void spell_RF6_S_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 void spell_RF6_S_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	
 	monspell_message(m_idx, t_idx,
@@ -3248,7 +3248,7 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	int k, count = 0;
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -3299,7 +3299,7 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 void spell_RF6_S_HI_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -3339,7 +3339,7 @@ void spell_RF6_S_HI_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 void spell_RF6_S_AMBERITES(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	
@@ -3376,7 +3376,7 @@ void spell_RF6_S_UNIQUE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 {
 	int count = 0, k;
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	bool uniques_are_summoned = FALSE;
@@ -4103,7 +4103,7 @@ HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	int hp;
-	int rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(m_idx);
 	int shoot_dd = r_ptr->blow[0].d_dice;
 	int shoot_ds = r_ptr->blow[0].d_side;
 
