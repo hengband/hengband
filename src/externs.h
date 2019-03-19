@@ -1155,7 +1155,6 @@ extern bool change_panel(POSITION dy, POSITION dx);
 
 
 /* xtra2.c */
-extern void check_experience(void);
 extern concptr extract_note_dies(MONRACE_IDX r_idx);
 extern void monster_death(MONSTER_IDX m_idx, bool drop_item);
 extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);

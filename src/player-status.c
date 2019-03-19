@@ -6,6 +6,8 @@
 #include "spells-status.h"
 #include "object-hook.h"
 #include "monsterrace-hook.h"
+#include "mutation.h"
+#include "patron.h"
 
 /* Hack, monk armour */
 static bool monk_armour_aux;
@@ -4158,3 +4160,163 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	p_ptr->update |= PU_BONUS;
 	handle_stuff();
 }
+
+
+/*!
+ * @brief プレイヤーの経験値について整合性のためのチェックと調整を行う /
+ * Advance experience levels and print experience
+ * @return なし
+ */
+void check_experience(void)
+{
+	bool level_reward = FALSE;
+	bool level_mutation = FALSE;
+	bool level_inc_stat = FALSE;
+	bool android = (p_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
+	PLAYER_LEVEL old_lev = p_ptr->lev;
+
+	/* Hack -- lower limit */
+	if (p_ptr->exp < 0) p_ptr->exp = 0;
+	if (p_ptr->max_exp < 0) p_ptr->max_exp = 0;
+	if (p_ptr->max_max_exp < 0) p_ptr->max_max_exp = 0;
+
+	/* Hack -- upper limit */
+	if (p_ptr->exp > PY_MAX_EXP) p_ptr->exp = PY_MAX_EXP;
+	if (p_ptr->max_exp > PY_MAX_EXP) p_ptr->max_exp = PY_MAX_EXP;
+	if (p_ptr->max_max_exp > PY_MAX_EXP) p_ptr->max_max_exp = PY_MAX_EXP;
+
+	/* Hack -- maintain "max" experience */
+	if (p_ptr->exp > p_ptr->max_exp) p_ptr->max_exp = p_ptr->exp;
+
+	/* Hack -- maintain "max max" experience */
+	if (p_ptr->max_exp > p_ptr->max_max_exp) p_ptr->max_max_exp = p_ptr->max_exp;
+
+	/* Redraw experience */
+	p_ptr->redraw |= (PR_EXP);
+	handle_stuff();
+
+
+	/* Lose levels while possible */
+	while ((p_ptr->lev > 1) &&
+		(p_ptr->exp < ((android ? player_exp_a : player_exp)[p_ptr->lev - 2] * p_ptr->expfact / 100L)))
+	{
+		/* Lose a level */
+		p_ptr->lev--;
+		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		p_ptr->redraw |= (PR_LEV | PR_TITLE);
+		p_ptr->window |= (PW_PLAYER);
+		handle_stuff();
+	}
+
+
+	/* Gain levels while possible */
+	while ((p_ptr->lev < PY_MAX_LEVEL) &&
+		(p_ptr->exp >= ((android ? player_exp_a : player_exp)[p_ptr->lev - 1] * p_ptr->expfact / 100L)))
+	{
+		/* Gain a level */
+		p_ptr->lev++;
+
+		/* Save the highest level */
+		if (p_ptr->lev > p_ptr->max_plv)
+		{
+			p_ptr->max_plv = p_ptr->lev;
+
+			if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) ||
+				(p_ptr->muta2 & MUT2_CHAOS_GIFT))
+			{
+				level_reward = TRUE;
+			}
+			if (p_ptr->prace == RACE_BEASTMAN)
+			{
+				if (one_in_(5)) level_mutation = TRUE;
+			}
+			level_inc_stat = TRUE;
+
+			do_cmd_write_nikki(NIKKI_LEVELUP, p_ptr->lev, NULL);
+		}
+
+		sound(SOUND_LEVEL);
+
+		msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), p_ptr->lev);
+
+		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		p_ptr->redraw |= (PR_LEV | PR_TITLE | PR_EXP);
+		p_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
+
+		/* HPとMPの上昇量を表示 */
+		level_up = 1;
+		handle_stuff();
+
+		level_up = 0;
+
+		if (level_inc_stat)
+		{
+			if (!(p_ptr->max_plv % 10))
+			{
+				int choice;
+				screen_save();
+				while (1)
+				{
+					int n;
+					char tmp[32];
+
+					cnv_stat(p_ptr->stat_max[0], tmp);
+					prt(format(_("        a) 腕力 (現在値 %s)", "        a) Str (cur %s)"), tmp), 2, 14);
+					cnv_stat(p_ptr->stat_max[1], tmp);
+					prt(format(_("        b) 知能 (現在値 %s)", "        a) Int (cur %s)"), tmp), 3, 14);
+					cnv_stat(p_ptr->stat_max[2], tmp);
+					prt(format(_("        c) 賢さ (現在値 %s)", "        a) Wis (cur %s)"), tmp), 4, 14);
+					cnv_stat(p_ptr->stat_max[3], tmp);
+					prt(format(_("        d) 器用 (現在値 %s)", "        a) Dex (cur %s)"), tmp), 5, 14);
+					cnv_stat(p_ptr->stat_max[4], tmp);
+					prt(format(_("        e) 耐久 (現在値 %s)", "        a) Con (cur %s)"), tmp), 6, 14);
+					cnv_stat(p_ptr->stat_max[5], tmp);
+					prt(format(_("        f) 魅力 (現在値 %s)", "        a) Chr (cur %s)"), tmp), 7, 14);
+
+					prt("", 8, 14);
+					prt(_("        どの能力値を上げますか？", "        Which stat do you want to raise?"), 1, 14);
+
+					while (1)
+					{
+						choice = inkey();
+						if ((choice >= 'a') && (choice <= 'f')) break;
+					}
+					for (n = 0; n < A_MAX; n++)
+						if (n != choice - 'a')
+							prt("", n + 2, 14);
+					if (get_check(_("よろしいですか？", "Are you sure? "))) break;
+				}
+				do_inc_stat(choice - 'a');
+				screen_load();
+			}
+			else if (!(p_ptr->max_plv % 2))
+				do_inc_stat(randint0(6));
+		}
+
+		if (level_mutation)
+		{
+			msg_print(_("あなたは変わった気がする...", "You feel different..."));
+			(void)gain_mutation(p_ptr, 0);
+			level_mutation = FALSE;
+		}
+
+		/*
+		 * 報酬でレベルが上ると再帰的に check_experience() が
+		 * 呼ばれるので順番を最後にする。
+		 */
+		if (level_reward)
+		{
+			gain_level_reward(0);
+			level_reward = FALSE;
+		}
+
+		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		p_ptr->redraw |= (PR_LEV | PR_TITLE);
+		p_ptr->window |= (PW_PLAYER | PW_SPELL);
+		handle_stuff();
+	}
+
+	/* Load an autopick preference file */
+	if (old_lev != p_ptr->lev) autopick_load_pref(FALSE);
+}
+

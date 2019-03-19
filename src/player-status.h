@@ -19,6 +19,8 @@ extern void free_turn(player_type *creature_ptr);
 extern bool player_place(POSITION y, POSITION x);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 
+extern void check_experience(void);
+
 
 extern void wreck_the_pattern(void);
 

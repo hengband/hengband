@@ -29,6 +29,7 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "monster-status.h"
+#include "player-status.h"
 
 /*!
  * @brief プレイヤー周辺の地形を感知する
