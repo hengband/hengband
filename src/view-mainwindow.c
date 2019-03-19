@@ -2536,3 +2536,18 @@ void print_equippy(void)
 {
 	display_player_equippy(ROW_EQUIPPY, COL_EQUIPPY, 0);
 }
+
+/*!
+ * @brief 現在のコンソール表示の縦横を返す。 /
+ * Get term size and calculate screen size
+ * @param wid_p コンソールの表示幅文字数を返す
+ * @param hgt_p コンソールの表示行数を返す
+ * @return なし
+ */
+void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
+{
+	Term_get_size(wid_p, hgt_p);
+	*hgt_p -= ROW_MAP + 2;
+	*wid_p -= COL_MAP + 2;
+	if (use_bigtile) *wid_p /= 2;
+}
