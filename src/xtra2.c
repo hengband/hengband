@@ -24,10 +24,6 @@
 #include "player-move.h"
 #include "monster-status.h"
 
-#define REWARD_CHANCE 10
-
-
-
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /
  * Calculates current boundaries Called below and from "do_cmd_locate()".
