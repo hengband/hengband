@@ -2513,7 +2513,6 @@ bool change_panel(POSITION dy, POSITION dx)
 		panel_row_min = y;
 		panel_col_min = x;
 
-		/* Recalculate the boundaries */
 		panel_bounds_center();
 
 		p_ptr->update |= (PU_MONSTERS);

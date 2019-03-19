@@ -167,7 +167,6 @@ void verify_panel(void)
 	/* Hack -- optional disturb on "panel change" */
 	if (disturb_panel && !center_player) disturb(FALSE, FALSE);
 
-	/* Recalculate the boundaries */
 	panel_bounds_center();
 
 	p_ptr->update |= (PU_MONSTERS);
@@ -176,10 +175,7 @@ void verify_panel(void)
 }
 
 
-
-
 /*** Targeting Code ***/
-
 
 /*
  * Determine is a monster makes a reasonable target
@@ -280,7 +276,6 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 		if (dx && (x3 * dx <= 0)) continue;
 		if (dy && (y3 * dy <= 0)) continue;
 
-		/* Absolute distance */
 		x4 = ABS(x3);
 		y4 = ABS(y3);
 
@@ -292,11 +287,7 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 		v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
 
 		/* Penalize location */
-
-		/* Track best */
 		if ((b_i >= 0) && (v >= b_v)) continue;
-
-		/* Track best */
 		b_i = i; b_v = v;
 	}
 	return (b_i);
@@ -311,16 +302,13 @@ static bool target_set_accept(POSITION y, POSITION x)
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	/* Bounds */
 	if (!(in_bounds(y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
 	if (player_bold(y, x)) return (TRUE);
 
-	/* Handle hallucination */
 	if (p_ptr->image) return (FALSE);
 
-	/* Examine the grid */
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 
 	/* Visible monsters */
@@ -1942,13 +1930,11 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 
-	/* Bounds */
 	if (!(in_bounds(y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
 	if ((y == p_ptr->y) && (x == p_ptr->x)) return (TRUE);
 
-	/* Handle hallucination */
 	if (p_ptr->image) return (FALSE);
 
 	/* Examine the grid */

@@ -1933,7 +1933,6 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	{
 		if (one_in_(256))
 		{
-			/* Hallucinate */
 			image_random(ap, cp);
 		}
 	}
@@ -2009,7 +2008,6 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 				}
 				else
 				{
-					/* Hallucinatory monster */
 					image_monster(ap, cp);
 				}
 			}
@@ -2304,8 +2302,6 @@ void display_dungeon(void)
 		{
 			if (in_bounds2(y, x))
 			{
-
-				/* Examine the grid */
 				map_info(y, x, &a, &c, &ta, &tc);
 
 				/* Hack -- fake monochrome */
@@ -2352,11 +2348,9 @@ void lite_spot(POSITION y, POSITION x)
 	{
 		TERM_COLOR a;
 		SYMBOL_CODE c;
-
 		TERM_COLOR ta;
 		SYMBOL_CODE tc;
 
-		/* Examine the grid */
 		map_info(y, x, &a, &c, &ta, &tc);
 
 		/* Hack -- fake monochrome */
