@@ -3132,3 +3132,30 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		msg_print(_("準備が整ったら引退(自殺コマンド)しても結構です。", "You may retire (commit suicide) when you are ready."));
 	}
 }
+
+/*!
+ * @brief モンスターを撃破した際の述語メッセージを返す /
+ * Return monster death string
+ * @param r_ptr 撃破されたモンスターの種族情報を持つ構造体の参照ポインタ
+ * @return 撃破されたモンスターの述語
+ */
+concptr extract_note_dies(MONRACE_IDX r_idx)
+{
+	monster_race *r_ptr = &r_info[r_idx];
+	/* Some monsters get "destroyed" */
+	if (!monster_living(r_idx))
+	{
+		int i;
+
+		for (i = 0; i < 4; i++)
+		{
+			if (r_ptr->blow[i].method == RBM_EXPLODE)
+			{
+				return _("は爆発して粉々になった。", " explodes into tiny shreds.");
+			}
+		}
+		return _("を倒した。", " is destroyed.");
+	}
+
+	return _("は死んだ。", " dies.");
+}

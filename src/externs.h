@@ -661,6 +661,8 @@ extern void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern void display_roff(MONRACE_IDX r_idx);
 extern void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str));
 extern void create_name(int type, char *name);
+extern concptr extract_note_dies(MONRACE_IDX r_idx);
+extern void monster_death(MONSTER_IDX m_idx, bool drop_item);
 
 extern monsterrace_hook_type get_monster_hook(void);
 extern monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x);
@@ -1155,8 +1157,6 @@ extern bool change_panel(POSITION dy, POSITION dx);
 
 
 /* xtra2.c */
-extern concptr extract_note_dies(MONRACE_IDX r_idx);
-extern void monster_death(MONSTER_IDX m_idx, bool drop_item);
 extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 extern void panel_bounds_center(void);
 extern void verify_panel(void);
