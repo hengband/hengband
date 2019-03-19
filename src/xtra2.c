@@ -1937,7 +1937,6 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 
 	if (p_ptr->image) return (FALSE);
 
-	/* Examine the grid */
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 
 	/* Interesting memorized features */
