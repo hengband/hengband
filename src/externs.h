@@ -1359,6 +1359,3 @@ extern void do_cmd_snipe_browse(void);
 extern int boost_concentration_damage(int tdam);
 
 extern void kamaenaoshi(INVENTORY_IDX item);
-
-extern bool ang_sort_comp_hook(vptr u, vptr v, int a, int b);
-extern void ang_sort_swap_hook(vptr u, vptr v, int a, int b);
