@@ -1233,7 +1233,6 @@ void do_cmd_locate(void)
 }
 
 
-
 /*!
  * @brief モンスター種族情報を特定の基準によりソートするための比較処理
  * Sorting hook -- Comp function -- see below

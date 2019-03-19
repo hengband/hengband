@@ -263,7 +263,6 @@ bool ang_sort_art_comp(vptr u, vptr v, int a, int b)
 void ang_sort_art_swap(vptr u, vptr v, int a, int b)
 {
 	u16b *who = (u16b*)(u);
-
 	u16b holder;
 
 	/* Unused */
@@ -302,3 +301,41 @@ void ang_sort_swap_quest_num(vptr u, vptr v, int a, int b)
 	q_num[b] = tmp;
 }
 
+
+/*!
+* @brief ペット入りモンスターボールをソートするための比較関数
+* @param u 所持品配列の参照ポインタ
+* @param v 未使用
+* @param a 所持品ID1
+* @param b 所持品ID2
+* @return 1の方が大であればTRUE
+*/
+bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
+{
+	u16b *who = (u16b*)(u);
+
+	int w1 = who[a];
+	int w2 = who[b];
+
+	monster_type *m_ptr1 = &current_floor_ptr->m_list[w1];
+	monster_type *m_ptr2 = &current_floor_ptr->m_list[w2];
+	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
+	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
+
+	/* Unused */
+	(void)v;
+
+	if (m_ptr1->nickname && !m_ptr2->nickname) return TRUE;
+	if (m_ptr2->nickname && !m_ptr1->nickname) return FALSE;
+
+	if ((r_ptr1->flags1 & RF1_UNIQUE) && !(r_ptr2->flags1 & RF1_UNIQUE)) return TRUE;
+	if ((r_ptr2->flags1 & RF1_UNIQUE) && !(r_ptr1->flags1 & RF1_UNIQUE)) return FALSE;
+
+	if (r_ptr1->level > r_ptr2->level) return TRUE;
+	if (r_ptr2->level > r_ptr1->level) return FALSE;
+
+	if (m_ptr1->hp > m_ptr2->hp) return TRUE;
+	if (m_ptr2->hp > m_ptr1->hp) return FALSE;
+
+	return w1 <= w2;
+}
