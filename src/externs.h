@@ -675,6 +675,7 @@ extern bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_F
 extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
+extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 
 
 /* monster2.c */
@@ -1160,7 +1161,6 @@ extern bool change_panel(POSITION dy, POSITION dx);
 extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 extern void panel_bounds_center(void);
 extern void verify_panel(void);
-extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern bool target_able(MONSTER_IDX m_idx);
 extern bool target_okay(void);
 extern bool target_set(BIT_FLAGS mode);
