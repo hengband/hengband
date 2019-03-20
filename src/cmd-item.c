@@ -1377,9 +1377,7 @@ void do_cmd_query_symbol(void)
 	/* Nothing to recall */
 	if (!n)
 	{
-		/* Free the "who" array */
-		C_KILL(who, max_r_idx, IDX);
-
+		C_KILL(who, max_r_idx, MONRACE_IDX);
 		return;
 	}
 
@@ -1405,10 +1403,7 @@ void do_cmd_query_symbol(void)
 	/* Catch "escape" */
 	if (query != 'y')
 	{
-		/* Free the "who" array */
-		/* TODO */
-		C_KILL(who, max_r_idx, IDX);
-
+		C_KILL(who, max_r_idx, MONRACE_IDX);
 		return;
 	}
 
