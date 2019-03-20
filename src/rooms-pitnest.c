@@ -164,6 +164,7 @@ static concptr pit_subtype_string(int type, bool nest)
 *  @param v 未使用
 *  @param a 比較対象参照ID1
 *  @param b 比較対象参照ID2
+*  TODO: to sort.c
 */
 static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 {
@@ -204,6 +205,7 @@ static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 * @param v 未使用
 * @param a スワップ対象参照ID1
 * @param b スワップ対象参照ID2
+* TODO: to sort.c
 */
 static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
 {
@@ -428,9 +430,7 @@ bool build_type5(void)
 
 	if (cheat_room)
 	{
-		ang_sort_comp = ang_sort_comp_nest_mon_info;
-		ang_sort_swap = ang_sort_swap_nest_mon_info;
-		ang_sort(nest_mon_info, NULL, NUM_NEST_MON_TYPE);
+		ang_sort(nest_mon_info, NULL, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
 
 		/* Dump the entries (prevent multi-printing) */
 		for (i = 0; i < NUM_NEST_MON_TYPE; i++)

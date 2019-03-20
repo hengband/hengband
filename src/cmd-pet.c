@@ -145,11 +145,7 @@ void do_cmd_pet_dismiss(void)
 			who[max_pet++] = pet_ctr;
 	}
 
-	/* Select the sort method */
-	ang_sort_comp = ang_sort_comp_pet_dismiss;
-	ang_sort_swap = ang_sort_swap_hook;
-
-	ang_sort(who, &dummy_why, max_pet);
+	ang_sort(who, &dummy_why, max_pet, ang_sort_comp_pet_dismiss, ang_sort_swap_hook);
 
 	/* Process the monsters (backwards) */
 	for (i = 0; i < max_pet; i++)

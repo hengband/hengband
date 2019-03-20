@@ -1719,12 +1719,8 @@ static void spoil_mon_desc(concptr fname)
 		if (r_ptr->name) who[n++] = (s16b)i;
 	}
 
-	/* Select the sort method */
-	ang_sort_comp = ang_sort_comp_hook;
-	ang_sort_swap = ang_sort_swap_hook;
-
 	/* Sort the array by dungeon depth of monsters */
-	ang_sort(who, &why, n);
+	ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 
 	/* Scan again */
 	for (i = 0; i < n; i++)
@@ -2055,13 +2051,7 @@ static void spoil_mon_info(concptr fname)
 		if (r_ptr->name) who[n++] = (s16b)i;
 	}
 
-	/* Select the sort method */
-	ang_sort_comp = ang_sort_comp_hook;
-	ang_sort_swap = ang_sort_swap_hook;
-
-	/* Sort the array by dungeon depth of monsters */
-	ang_sort(who, &why, n);
-
+	ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 
 	/*
 	 * List all monsters in order
@@ -2307,13 +2297,7 @@ static void spoil_mon_evol(concptr fname)
 	}
 
 	/* Step 3: Sort the evolution trees */
-
-	/* Select the sort method */
-	ang_sort_comp = ang_sort_comp_evol_tree;
-	ang_sort_swap = ang_sort_swap_evol_tree;
-
-	/* Sort the array */
-	ang_sort(evol_tree, NULL, max_r_idx);
+	ang_sort(evol_tree, NULL, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
 
 	/* Step 4: Print the evolution trees */
 	for (i = 0; i < max_r_idx; i++)

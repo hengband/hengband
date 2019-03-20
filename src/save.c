@@ -970,13 +970,8 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 		}
 	}
 
-	/* Select the sort method */
-	ang_sort_comp = ang_sort_comp_cave_temp;
-	ang_sort_swap = ang_sort_swap_cave_temp;
-
 	/* Sort by occurrence */
-	ang_sort(templates, &dummy_why, num_temp);
-
+	ang_sort(templates, &dummy_why, num_temp, ang_sort_comp_cave_temp, ang_sort_swap_cave_temp);
 
 	/*** Dump templates ***/
 

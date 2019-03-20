@@ -1392,12 +1392,8 @@ void do_cmd_query_symbol(void)
 
 	why = 2;
 
-	/* Select the sort method */
-	ang_sort_comp = ang_sort_comp_hook;
-	ang_sort_swap = ang_sort_swap_hook;
-
 	/* Sort the array */
-	ang_sort(who, &why, n);
+	ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 
 	/* Sort by kills (and level) */
 	if (query == 'k')
@@ -1410,6 +1406,7 @@ void do_cmd_query_symbol(void)
 	if (query != 'y')
 	{
 		/* Free the "who" array */
+		/* TODO */
 		C_KILL(who, max_r_idx, IDX);
 
 		return;
@@ -1418,12 +1415,7 @@ void do_cmd_query_symbol(void)
 	/* Sort if needed */
 	if (why == 4)
 	{
-		/* Select the sort method */
-		ang_sort_comp = ang_sort_comp_hook;
-		ang_sort_swap = ang_sort_swap_hook;
-
-		/* Sort the array */
-		ang_sort(who, &why, n);
+		ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 	}
 
 

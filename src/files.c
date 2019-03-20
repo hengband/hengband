@@ -4444,9 +4444,7 @@ static void dump_aux_quest(FILE *fff)
 
 	/* Sort by compete level */
 	for (i = 1; i < max_q_idx; i++) quest_num[i] = i;
-	ang_sort_comp = ang_sort_comp_quest_num;
-	ang_sort_swap = ang_sort_swap_quest_num;
-	ang_sort(quest_num, &dummy, max_q_idx);
+	ang_sort(quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
 	/* Dump Quest Information */
 	fputc('\n', fff);
@@ -4706,13 +4704,8 @@ static void dump_aux_monsters(FILE *fff)
 		fprintf(fff, "You have defeated %ld %s including %ld unique monster%s in total.\n", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
 #endif
 
-
-		/* Select the sort method */
-		ang_sort_comp = ang_sort_comp_hook;
-		ang_sort_swap = ang_sort_swap_hook;
-
 		/* Sort the array by dungeon depth of monsters */
-		ang_sort(who, &why, uniq_total);
+		ang_sort(who, &why, uniq_total, ang_sort_comp_hook, ang_sort_swap_hook);
 		fprintf(fff, _("\n《上位%ld体のユニーク・モンスター》\n", "\n< Unique monsters top %ld >\n"), MIN(uniq_total, 10));
 
 		/* Print top 10 */
