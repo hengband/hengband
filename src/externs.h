@@ -299,8 +299,6 @@ extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 extern OBJECT_TYPE_VALUE item_tester_tval;
 extern bool (*item_tester_hook)(object_type *o_ptr);
-extern bool (*ang_sort_comp)(vptr u, vptr v, int a, int b);
-extern void (*ang_sort_swap)(vptr u, vptr v, int a, int b);
 extern monsterrace_hook_type get_mon_num_hook;
 extern monsterrace_hook_type get_mon_num2_hook;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);

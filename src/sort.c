@@ -1,6 +1,17 @@
 ﻿#include "angband.h"
 #include "sort.h"
 
+/*
+ * Current "comp" function for ang_sort()
+ */
+bool(*ang_sort_comp)(vptr u, vptr v, int a, int b);
+
+
+/*
+ * Current "swap" function for ang_sort()
+ */
+void(*ang_sort_swap)(vptr u, vptr v, int a, int b);
+
 
 /*
  * Angband sorting algorithm -- quick sort in place
