@@ -4100,30 +4100,6 @@ static concptr monster_group_char[] =
 
 
 /*
- * hook function to sort monsters by level
- */
-static bool ang_sort_comp_monster_level(vptr u, vptr v, int a, int b)
-{
-	u16b *who = (u16b*)(u);
-
-	int w1 = who[a];
-	int w2 = who[b];
-
-	monster_race *r_ptr1 = &r_info[w1];
-	monster_race *r_ptr2 = &r_info[w2];
-
-	/* Unused */
-	(void)v;
-
-	if (r_ptr2->level > r_ptr1->level) return TRUE;
-	if (r_ptr1->level > r_ptr2->level) return FALSE;
-
-	if ((r_ptr2->flags1 & RF1_UNIQUE) && !(r_ptr1->flags1 & RF1_UNIQUE)) return TRUE;
-	if ((r_ptr1->flags1 & RF1_UNIQUE) && !(r_ptr2->flags1 & RF1_UNIQUE)) return FALSE;
-	return w1 <= w2;
-}
-
-/*
  * Build a list of monster indexes in the given group. Return the number
  * of monsters in the group.
  *

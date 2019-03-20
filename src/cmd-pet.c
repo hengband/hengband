@@ -52,51 +52,6 @@ bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
 
 
 /*!
-* @brief ペットになっているモンスターをソートするための比較処理
-* @param u モンスターの構造体配列
-* @param v 未使用
-* @param a 比較対象のモンスターID1
-* @param b 比較対象のモンスターID2
-* @return 2番目が大ならばTRUEを返す
-*/
-static bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
-{
-	u16b *who = (u16b*)(u);
-
-	int w1 = who[a];
-	int w2 = who[b];
-
-	monster_type *m_ptr1 = &current_floor_ptr->m_list[w1];
-	monster_type *m_ptr2 = &current_floor_ptr->m_list[w2];
-	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
-	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
-
-	/* Unused */
-	(void)v;
-
-	if (w1 == p_ptr->riding) return TRUE;
-	if (w2 == p_ptr->riding) return FALSE;
-
-	if (m_ptr1->nickname && !m_ptr2->nickname) return TRUE;
-	if (m_ptr2->nickname && !m_ptr1->nickname) return FALSE;
-
-	if (!m_ptr1->parent_m_idx && m_ptr2->parent_m_idx) return TRUE;
-	if (!m_ptr2->parent_m_idx && m_ptr1->parent_m_idx) return FALSE;
-
-	if ((r_ptr1->flags1 & RF1_UNIQUE) && !(r_ptr2->flags1 & RF1_UNIQUE)) return TRUE;
-	if ((r_ptr2->flags1 & RF1_UNIQUE) && !(r_ptr1->flags1 & RF1_UNIQUE)) return FALSE;
-
-	if (r_ptr1->level > r_ptr2->level) return TRUE;
-	if (r_ptr2->level > r_ptr1->level) return FALSE;
-
-	if (m_ptr1->hp > m_ptr2->hp) return TRUE;
-	if (m_ptr2->hp > m_ptr1->hp) return FALSE;
-
-	return w1 <= w2;
-}
-
-
-/*!
 * @brief ペットの維持コスト計算
 * @return 維持コスト(%)
 */
