@@ -852,52 +852,6 @@ static void wr_extra(void)
 
 
 /*!
- * @brief フロア保存時のcurrent_floor_ptr->grid_array情報テンプレートをソートするための比較処理
- * @param u current_floor_ptr->grid_arrayテンプレートの参照ポインタ
- * @param v 未使用
- * @param a スワップするモンスター種族のID1
- * @param b スワップするモンスター種族のID2
- * @return aの方が大きければtrue
- */
-static bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
-{
-	cave_template_type *who = (cave_template_type *)(u);
-
-	u16b o1 = who[a].occurrence;
-	u16b o2 = who[b].occurrence;
-
-	/* Unused */
-	(void)v;
-
-	return o2 <= o1;
-}
-
-
-/*!
- * @brief フロア保存時のcurrent_floor_ptr->grid_array情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
- * @param u current_floor_ptr->grid_arrayテンプレートの参照ポインタ
- * @param v 未使用
- * @param a スワップするモンスター種族のID1
- * @param b スワップするモンスター種族のID2
- * @return なし
- */
-static void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
-{
-	cave_template_type *who = (cave_template_type *)(u);
-
-	cave_template_type holder;
-
-	/* Unused */
-	(void)v;
-
-	/* Swap */
-	holder = who[a];
-	who[a] = who[b];
-	who[b] = holder;
-}
-
-
-/*!
  * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
  * @param sf_ptr 保存したいフロアの参照ポインタ
  * @return なし

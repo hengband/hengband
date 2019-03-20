@@ -526,3 +526,48 @@ bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
+
+/*!
+ * @brief フロア保存時のcurrent_floor_ptr->grid_array情報テンプレートをソートするための比較処理
+ * @param u current_floor_ptr->grid_arrayテンプレートの参照ポインタ
+ * @param v 未使用
+ * @param a スワップするモンスター種族のID1
+ * @param b スワップするモンスター種族のID2
+ * @return aの方が大きければtrue
+ */
+bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
+{
+	cave_template_type *who = (cave_template_type *)(u);
+
+	u16b o1 = who[a].occurrence;
+	u16b o2 = who[b].occurrence;
+
+	/* Unused */
+	(void)v;
+
+	return o2 <= o1;
+}
+
+
+/*!
+ * @brief フロア保存時のcurrent_floor_ptr->grid_array情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
+ * @param u current_floor_ptr->grid_arrayテンプレートの参照ポインタ
+ * @param v 未使用
+ * @param a スワップするモンスター種族のID1
+ * @param b スワップするモンスター種族のID2
+ * @return なし
+ */
+void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
+{
+	cave_template_type *who = (cave_template_type *)(u);
+
+	cave_template_type holder;
+
+	/* Unused */
+	(void)v;
+
+	/* Swap */
+	holder = who[a];
+	who[a] = who[b];
+	who[b] = holder;
+}
