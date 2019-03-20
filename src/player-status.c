@@ -97,6 +97,7 @@ void calc_bonuses(void)
 	int default_hand = 0;
 	int empty_hands_status = empty_hands(TRUE);
 	int extra_blows[2];
+	MONSTER_IDX m_idx;
 	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	bool omoi = FALSE;
@@ -255,6 +256,21 @@ void calc_bonuses(void)
 	p_ptr->no_flowed = FALSE;
 
 	p_ptr->align = 0;
+
+	for (m_idx = m_max - 1; m_idx >= 1; m_idx--)
+	{
+		monster_type *m_ptr;
+		monster_race *r_ptr;
+		m_ptr = &current_floor_ptr->m_list[m_idx];
+		if (!monster_is_valid(m_ptr)) continue;
+		r_ptr = &r_info[m_ptr->r_idx];
+
+		if (is_pet(m_ptr))
+		{
+			if (r_ptr->flags3 & RF3_GOOD) p_ptr->align += r_ptr->level;
+			if (r_ptr->flags3 & RF3_EVIL) p_ptr->align -= r_ptr->level;
+		}
+	}
 
 	if (p_ptr->mimic_form) tmp_rp_ptr = &mimic_info[p_ptr->mimic_form];
 	else tmp_rp_ptr = &race_info[p_ptr->prace];
