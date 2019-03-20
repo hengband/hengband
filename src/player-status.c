@@ -254,7 +254,7 @@ void calc_bonuses(void)
 	p_ptr->hidarite = FALSE;
 	p_ptr->no_flowed = FALSE;
 
-	p_ptr->align = friend_align;
+	p_ptr->align = 0;
 
 	if (p_ptr->mimic_form) tmp_rp_ptr = &mimic_info[p_ptr->mimic_form];
 	else tmp_rp_ptr = &race_info[p_ptr->prace];

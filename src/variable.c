@@ -157,8 +157,6 @@ bool multi_rew = FALSE;
 char summon_kin_type;   /* Hack, by Julian Lighton: summon 'relatives' */
 
 int total_friends = 0;
-s32b friend_align = 0;
-
 int leaving_quest = 0;
 bool reinit_wilderness = FALSE;
 

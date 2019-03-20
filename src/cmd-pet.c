@@ -57,13 +57,11 @@ bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
 */
 int calculate_upkeep(void)
 {
-	s32b old_friend_align = friend_align;
 	MONSTER_IDX m_idx;
 	bool have_a_unique = FALSE;
 	s32b total_friend_levels = 0;
 
 	total_friends = 0;
-	friend_align = 0;
 
 	for (m_idx = m_max - 1; m_idx >= 1; m_idx--)
 	{
@@ -95,12 +93,9 @@ int calculate_upkeep(void)
 			else
 				total_friend_levels += r_ptr->level;
 
-			/* Determine pet alignment */
-			if (r_ptr->flags3 & RF3_GOOD) friend_align += r_ptr->level;
-			if (r_ptr->flags3 & RF3_EVIL) friend_align -= r_ptr->level;
 		}
 	}
-	if (old_friend_align != friend_align) p_ptr->update |= (PU_BONUS);
+
 	if (total_friends)
 	{
 		int upkeep_factor;
@@ -950,35 +945,6 @@ void do_cmd_pet(void)
 	}
 	}
 }
-
-
-/*!
-* @brief ペットの善悪属性に応じた維持コストの途中計算処理
-* @param m_ptr 計算基準となるモンスターの構造体参照ポインタ
-* @param inc m_ptrで指定したモンスターを維持コスト計算に加えるならTRUE、外すならFALSEを指定
-* @return なし
-*/
-void check_pets_num_and_align(monster_type *m_ptr, bool inc)
-{
-	s32b old_friend_align = friend_align;
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-	if (inc)
-	{
-		total_friends++;
-		if (r_ptr->flags3 & RF3_GOOD) friend_align += r_ptr->level;
-		if (r_ptr->flags3 & RF3_EVIL) friend_align -= r_ptr->level;
-	}
-	else
-	{
-		total_friends--;
-		if (r_ptr->flags3 & RF3_GOOD) friend_align -= r_ptr->level;
-		if (r_ptr->flags3 & RF3_EVIL) friend_align += r_ptr->level;
-	}
-
-	if (old_friend_align != friend_align) p_ptr->update |= (PU_BONUS);
-}
-
 
 
 /*!

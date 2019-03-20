@@ -2221,8 +2221,6 @@ void set_friendly(monster_type *m_ptr)
  */
 void set_pet(monster_type *m_ptr)
 {
-	if (!is_pet(m_ptr)) check_pets_num_and_align(m_ptr, TRUE);
-
 	/* Check for quest completion */
 	check_quest_completion(m_ptr);
 
@@ -2240,9 +2238,6 @@ void set_pet(monster_type *m_ptr)
 void set_hostile(monster_type *m_ptr)
 {
 	if (p_ptr->inside_battle) return;
-
-	if (is_pet(m_ptr)) check_pets_num_and_align(m_ptr, FALSE);
-
 	m_ptr->smart &= ~SM_PET;
 	m_ptr->smart &= ~SM_FRIENDLY;
 }

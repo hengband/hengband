@@ -182,7 +182,6 @@ extern MONSTER_IDX m_cnt;
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;
 extern int total_friends;
-extern s32b friend_align;
 extern int leaving_quest;
 extern bool reinit_wilderness;
 extern bool multi_rew;

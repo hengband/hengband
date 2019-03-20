@@ -287,8 +287,6 @@ void delete_monster_idx(MONSTER_IDX i)
 		delete_object_idx(this_o_idx);
 	}
 
-	if (is_pet(m_ptr)) check_pets_num_and_align(m_ptr, FALSE);
-
 	(void)WIPE(m_ptr, monster_type);
 
 	/* Count monsters */
@@ -2456,8 +2454,6 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 		if (!r_idx) return;
 	}
 
-	if (is_pet(m_ptr)) check_pets_num_and_align(m_ptr, FALSE);
-
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = r_idx;
 	update_monster(m_idx, FALSE);
@@ -2466,8 +2462,6 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 	if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) ||
 	    (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)))
 		p_ptr->update |= (PU_MON_LITE);
-
-	if (is_pet(m_ptr)) check_pets_num_and_align(m_ptr, TRUE);
 
 	if (born)
 	{
