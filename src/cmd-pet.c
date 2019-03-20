@@ -55,11 +55,11 @@ bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
 * @brief ペットの維持コスト計算
 * @return 維持コスト(%)
 */
-int calculate_upkeep(void)
+PERCENTAGE calculate_upkeep(void)
 {
 	MONSTER_IDX m_idx;
 	bool have_a_unique = FALSE;
-	s32b total_friend_levels = 0;
+	DEPTH total_friend_levels = 0;
 
 	total_friends = 0;
 
