@@ -25,3 +25,6 @@ extern bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b);
 
 extern bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b);
 extern void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b);
+
+extern bool ang_sort_comp_evol_tree(vptr u, vptr v, int a, int b);
+extern void ang_sort_swap_evol_tree(vptr u, vptr v, int a, int b);

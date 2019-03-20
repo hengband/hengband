@@ -2222,67 +2222,6 @@ static bool is_partial_tree(int *tree, int *partial_tree)
 	return FALSE;
 }
 
-
-/*!
- * @brief 進化ツリーをソートするためモンスター種族の判定関数 / 
- * Sorting hook -- Comp function
- * @param u 進化木構造データ
- * @param v 未使用
- * @param a 比較したいモンスター種族ID1
- * @param b 比較したいモンスター種族ID2
- * @return 2が大きければTRUEを返す
- */
-static bool ang_sort_comp_evol_tree(vptr u, vptr v, int a, int b)
-{
-	int **evol_tree = (int **)u;
-
-	int w1 = evol_tree[a][0];
-	int w2 = evol_tree[b][0];
-	monster_race *r1_ptr = &r_info[w1];
-	monster_race *r2_ptr = &r_info[w2];
-
-	/* Unused */
-	(void)v;
-
-	/* Used tree first */
-	if (w1 && !w2) return TRUE;
-	if (!w1 && w2) return FALSE;
-
-	/* Sort by monster level */
-	if (r1_ptr->level < r2_ptr->level) return TRUE;
-	if (r1_ptr->level > r2_ptr->level) return FALSE;
-
-	/* Sort by monster experience */
-	if (r1_ptr->mexp < r2_ptr->mexp) return TRUE;
-	if (r1_ptr->mexp > r2_ptr->mexp) return FALSE;
-
-	/* Compare indexes */
-	return w1 <= w2;
-}
-
-/*!
- * @brief 進化ツリーをソートするため木構造のスワップ関数 / 
- * Sorting hook -- Swap function
- * @param u 進化木構造データ
- * @param v 未使用
- * @param a スワップしたい木構造1
- * @param b スワップしたい木構造2
- * @return 2が大きければTRUEを返す
- */
-static void ang_sort_swap_evol_tree(vptr u, vptr v, int a, int b)
-{
-	int **evol_tree = (int **)u;
-	int *holder;
-
-	/* Unused */
-	(void)v;
-
-	/* Swap */
-	holder = evol_tree[a];
-	evol_tree[a] = evol_tree[b];
-	evol_tree[b] = holder;
-}
-
 /*!
  * @brief 進化ツリーをスポイラー出力するメインルーチン / 
  * Print monsters' evolution information to file
