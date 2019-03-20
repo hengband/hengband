@@ -362,8 +362,6 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			/* Destroy the feature */
 			cave_alter_feat(y, x, FF_HURT_ROCK);
-
-			/* Update some things */
 			p_ptr->update |= (PU_FLOW);
 		}
 		break;

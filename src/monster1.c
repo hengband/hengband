@@ -2557,7 +2557,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	/* Notice changes in view */
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 	{
-		/* Update some things */
 		p_ptr->update |= (PU_MON_LITE);
 	}
 

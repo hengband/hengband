@@ -342,8 +342,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Destroy the wall */
 				cave_alter_feat(y, x, FF_HURT_ROCK);
-
-				/* Update some things */
 				p_ptr->update |= (PU_FLOW);
 			}
 
@@ -529,8 +527,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Destroy the wall */
 				cave_alter_feat(y, x, FF_HURT_ROCK);
-
-				/* Update some things */
 				p_ptr->update |= (PU_FLOW);
 			}
 			break;
@@ -556,8 +552,6 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				/* Destroy the wall */
 				cave_alter_feat(y, x, FF_HURT_ROCK);
-
-				/* Update some things */
 				p_ptr->update |= (PU_FLOW);
 			}
 			break;

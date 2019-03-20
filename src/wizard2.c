@@ -1584,8 +1584,6 @@ static void do_cmd_wiz_create_feature(void)
 
 	note_spot(y, x);
 	lite_spot(y, x);
-
-	/* Update some things */
 	p_ptr->update |= (PU_FLOW);
 
 	prev_feat = tmp_feat;

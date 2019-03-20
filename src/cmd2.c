@@ -1124,8 +1124,6 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 
 			/* Remove the feature */
 			cave_alter_feat(y, x, FF_TUNNEL);
-
-			/* Update some things */
 			p_ptr->update |= (PU_FLOW);
 		}
 		else

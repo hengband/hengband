@@ -2748,7 +2748,6 @@ void process_monster(MONSTER_IDX m_idx)
 
 					if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
 					{
-						/* Update some things */
 						p_ptr->update |= (PU_FLOW);
 						p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
@@ -2960,7 +2959,6 @@ void process_monster(MONSTER_IDX m_idx)
 
 			if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
 			{
-				/* Update some things */
 				p_ptr->update |= (PU_FLOW);
 				p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
@@ -3220,7 +3218,6 @@ void process_monster(MONSTER_IDX m_idx)
 	if (do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
 		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !p_ptr->inside_battle)))
 	{
-		/* Update some things */
 		p_ptr->update |= (PU_MON_LITE);
 	}
 
