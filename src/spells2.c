@@ -1719,7 +1719,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 		/* Check around the player */
 		for (i = 0; i < 8; i++)
 		{
-			/* Access the location */
 			y = p_ptr->y + ddy_ddd[i];
 			x = p_ptr->x + ddx_ddd[i];
 

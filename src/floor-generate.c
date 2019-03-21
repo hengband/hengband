@@ -1592,8 +1592,6 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 			tmp_col = col1 + col_dir;
 		}
 
-
-		/* Access the location */
 		g_ptr = &current_floor_ptr->grid_array[tmp_row][tmp_col];
 
 		/* Avoid "solid" walls */

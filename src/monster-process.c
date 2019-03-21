@@ -3391,8 +3391,6 @@ void process_monsters(void)
 		/* Hack -- Require proximity */
 		if (m_ptr->cdis >= AAF_LIMIT) continue;
 
-
-		/* Access the location */
 		fx = m_ptr->fx;
 		fy = m_ptr->fy;
 

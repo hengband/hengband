@@ -1007,7 +1007,6 @@ bool rakuba(HIT_POINT dam, bool force)
 		{
 			grid_type *g_ptr;
 
-			/* Access the location */
 			y = p_ptr->y + ddy_ddd[i];
 			x = p_ptr->x + ddx_ddd[i];
 

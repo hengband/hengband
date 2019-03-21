@@ -2617,7 +2617,6 @@ byte get_mspeed(monster_race *r_ptr)
  */
 static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-	/* Access the location */
 	grid_type		*g_ptr = &current_floor_ptr->grid_array[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];

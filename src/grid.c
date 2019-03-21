@@ -3761,7 +3761,6 @@ void update_mon_lite(void)
 				rad = -rad; /* Use absolute value */
 			}
 
-			/* Access the location */
 			mon_fx = m_ptr->fx;
 			mon_fy = m_ptr->fy;
 
