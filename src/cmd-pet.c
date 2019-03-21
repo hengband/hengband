@@ -114,8 +114,8 @@ PERCENTAGE calculate_upkeep(void)
 */
 void do_cmd_pet_dismiss(void)
 {
-	monster_type	*m_ptr;
-	bool		all_pets = FALSE;
+	monster_type *m_ptr;
+	bool all_pets = FALSE;
 	MONSTER_IDX pet_ctr;
 	int i;
 	int Dismissed = 0;
@@ -215,14 +215,14 @@ void do_cmd_pet_dismiss(void)
 
 				p_ptr->riding = 0;
 
-				p_ptr->update |= (PU_BONUS | PU_MONSTERS);
+				p_ptr->update |= (PU_MONSTERS);
 				p_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
 			}
 
 			/* HACK : Add the line to message buffer */
 			msg_format(_("%s を放した。", "Dismissed %s."), friend_name);
+			p_ptr->update |= (PU_BONUS);
 			p_ptr->window |= (PW_MESSAGE);
-			handle_stuff();
 
 			delete_monster_idx(pet_ctr);
 			Dismissed++;
@@ -243,6 +243,8 @@ void do_cmd_pet_dismiss(void)
 #endif
 	if (Dismissed == 0 && all_pets)
 		msg_print(_("'U'nnamed は、乗馬以外の名前のないペットだけを全て解放します。", "'U'nnamed means all your pets except named pets and your mount."));
+
+	handle_stuff();
 }
 
 
