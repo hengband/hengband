@@ -2370,6 +2370,7 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
  * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
+ * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
 static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 {
@@ -2518,6 +2519,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
  * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
+ * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
 static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 {
