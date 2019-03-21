@@ -696,7 +696,7 @@ extern void update_monsters(bool full);
 extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
 extern void update_smart_learn(MONSTER_IDX m_idx, int what);
 extern void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
-extern byte get_mspeed(monster_race *r_ptr);
+extern SPEED get_mspeed(monster_race *r_ptr);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
 /* object1.c */

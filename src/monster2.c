@@ -2571,10 +2571,10 @@ static IDX initial_r_appearance(MONRACE_IDX r_idx)
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-byte get_mspeed(monster_race *r_ptr)
+SPEED get_mspeed(monster_race *r_ptr)
 {
 	/* Extract the monster base speed */
-	int mspeed = r_ptr->speed;
+	SPEED mspeed = r_ptr->speed;
 
 	/* Hack -- small racial variety */
 	if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->inside_arena)
@@ -2586,7 +2586,7 @@ byte get_mspeed(monster_race *r_ptr)
 
 	if (mspeed > 199) mspeed = 199;
 
-	return (byte)mspeed;
+	return mspeed;
 }
 
 
