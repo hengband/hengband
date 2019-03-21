@@ -1382,5 +1382,5 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 
 bool monster_is_valid(monster_type *m_ptr)
 {
-	return (m_ptr->r_idx);
+	return (m_ptr->r_idx != 0);
 }

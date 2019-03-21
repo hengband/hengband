@@ -5,6 +5,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "object-hook.h"
+#include "monster-status.h"
 #include "monsterrace-hook.h"
 #include "mutation.h"
 #include "patron.h"
@@ -92,12 +93,11 @@ int spell_exp_level(int spell_exp)
  */
 void calc_bonuses(void)
 {
-	int i, j, hold, neutral[2];
+	int i, j, hold;
 	int new_speed;
 	int default_hand = 0;
 	int empty_hands_status = empty_hands(TRUE);
 	int extra_blows[2];
-	MONSTER_IDX m_idx;
 	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	bool omoi = FALSE;
@@ -254,23 +254,6 @@ void calc_bonuses(void)
 	p_ptr->migite = FALSE;
 	p_ptr->hidarite = FALSE;
 	p_ptr->no_flowed = FALSE;
-
-	p_ptr->align = 0;
-
-	for (m_idx = m_max - 1; m_idx >= 1; m_idx--)
-	{
-		monster_type *m_ptr;
-		monster_race *r_ptr;
-		m_ptr = &current_floor_ptr->m_list[m_idx];
-		if (!monster_is_valid(m_ptr)) continue;
-		r_ptr = &r_info[m_ptr->r_idx];
-
-		if (is_pet(m_ptr))
-		{
-			if (r_ptr->flags3 & RF3_GOOD) p_ptr->align += r_ptr->level;
-			if (r_ptr->flags3 & RF3_EVIL) p_ptr->align -= r_ptr->level;
-		}
-	}
 
 	if (p_ptr->mimic_form) tmp_rp_ptr = &mimic_info[p_ptr->mimic_form];
 	else tmp_rp_ptr = &race_info[p_ptr->prace];
@@ -484,7 +467,6 @@ void calc_bonuses(void)
 			p_ptr->redraw |= PR_STATUS;
 			p_ptr->to_a += 10;
 			p_ptr->dis_to_a += 10;
-			p_ptr->align -= 200;
 			break;
 		case MIMIC_DEMON_LORD:
 			p_ptr->hold_exp = TRUE;
@@ -508,7 +490,6 @@ void calc_bonuses(void)
 			new_speed += 5;
 			p_ptr->to_a += 20;
 			p_ptr->dis_to_a += 20;
-			p_ptr->align -= 200;
 			break;
 		case MIMIC_VAMPIRE:
 			p_ptr->resist_dark = TRUE;
@@ -700,7 +681,6 @@ void calc_bonuses(void)
 		case RACE_ANGEL:
 			p_ptr->levitation = TRUE;
 			p_ptr->see_inv = TRUE;
-			p_ptr->align += 200;
 			break;
 		case RACE_DEMON:
 			p_ptr->resist_fire = TRUE;
@@ -712,7 +692,6 @@ void calc_bonuses(void)
 				p_ptr->oppose_fire = 1;
 				p_ptr->redraw |= PR_STATUS;
 			}
-			p_ptr->align -= 200;
 			break;
 		case RACE_DUNADAN:
 			p_ptr->sustain_con = TRUE;
@@ -2358,8 +2337,6 @@ void calc_bonuses(void)
 					if (p_ptr->num_blow[i] < 1) p_ptr->num_blow[i] = 1;
 				}
 			}
-
-			if (inventory[INVEN_RARM + i].name1 == ART_IRON_BALL) p_ptr->align -= 1000;
 		}
 	}
 
@@ -2482,43 +2459,6 @@ void calc_bonuses(void)
 	if (p_ptr->immune_fire) p_ptr->resist_fire = TRUE;
 	if (p_ptr->immune_cold) p_ptr->resist_cold = TRUE;
 
-	/* Determine player alignment */
-	for (i = 0, j = 0; i < 8; i++)
-	{
-		switch (p_ptr->vir_types[i])
-		{
-		case V_JUSTICE:
-			p_ptr->align += p_ptr->virtues[i] * 2;
-			break;
-		case V_CHANCE:
-			/* Do nothing */
-			break;
-		case V_NATURE:
-		case V_HARMONY:
-			neutral[j++] = i;
-			break;
-		case V_UNLIFE:
-			p_ptr->align -= p_ptr->virtues[i];
-			break;
-		default:
-			p_ptr->align += p_ptr->virtues[i];
-			break;
-		}
-	}
-
-	for (i = 0; i < j; i++)
-	{
-		if (p_ptr->align > 0)
-		{
-			p_ptr->align -= p_ptr->virtues[neutral[i]] / 2;
-			if (p_ptr->align < 0) p_ptr->align = 0;
-		}
-		else if (p_ptr->align < 0)
-		{
-			p_ptr->align += p_ptr->virtues[neutral[i]] / 2;
-			if (p_ptr->align > 0) p_ptr->align = 0;
-		}
-	}
 
 	/* Hack -- handle "xtra" mode */
 	if (character_xtra) return;
@@ -2703,6 +2643,99 @@ void calc_bonuses(void)
 	}
 }
 
+
+static void calc_alignment(void)
+{
+	MONSTER_IDX m_idx;
+	p_ptr->align = 0;
+	int i, j, neutral[2];
+
+	for (m_idx = m_max - 1; m_idx >= 1; m_idx--)
+	{
+		monster_type *m_ptr;
+		monster_race *r_ptr;
+		m_ptr = &current_floor_ptr->m_list[m_idx];
+		if (!monster_is_valid(m_ptr)) continue;
+		r_ptr = &r_info[m_ptr->r_idx];
+
+		if (is_pet(m_ptr))
+		{
+			if (r_ptr->flags3 & RF3_GOOD) p_ptr->align += r_ptr->level;
+			if (r_ptr->flags3 & RF3_EVIL) p_ptr->align -= r_ptr->level;
+		}
+	}
+
+	if (p_ptr->mimic_form)
+	{
+		switch (p_ptr->mimic_form)
+		{
+		case MIMIC_DEMON:
+			p_ptr->align -= 200;
+			break;
+		case MIMIC_DEMON_LORD:
+			p_ptr->align -= 200;
+			break;
+		}
+	}
+	else
+	{
+		switch (p_ptr->prace)
+		{
+		case RACE_ANGEL:
+			p_ptr->align += 200;
+			break;
+		case RACE_DEMON:
+			p_ptr->align -= 200;
+			break;
+		}
+	}
+
+	for (i = 0; i < 2; i++)
+	{
+		if (has_melee_weapon(INVEN_RARM + i))
+		{
+			if (inventory[INVEN_RARM + i].name1 == ART_IRON_BALL) p_ptr->align -= 1000;
+		}
+	}
+
+	/* Determine player alignment */
+	for (i = 0, j = 0; i < 8; i++)
+	{
+		switch (p_ptr->vir_types[i])
+		{
+		case V_JUSTICE:
+			p_ptr->align += p_ptr->virtues[i] * 2;
+			break;
+		case V_CHANCE:
+			/* Do nothing */
+			break;
+		case V_NATURE:
+		case V_HARMONY:
+			neutral[j++] = i;
+			break;
+		case V_UNLIFE:
+			p_ptr->align -= p_ptr->virtues[i];
+			break;
+		default:
+			p_ptr->align += p_ptr->virtues[i];
+			break;
+		}
+	}
+
+	for (i = 0; i < j; i++)
+	{
+		if (p_ptr->align > 0)
+		{
+			p_ptr->align -= p_ptr->virtues[neutral[i]] / 2;
+			if (p_ptr->align < 0) p_ptr->align = 0;
+		}
+		else if (p_ptr->align < 0)
+		{
+			p_ptr->align += p_ptr->virtues[neutral[i]] / 2;
+			if (p_ptr->align > 0) p_ptr->align = 0;
+		}
+	}
+}
 
 /*!
  * @brief プレイヤーの最大HPを計算する /
@@ -3712,6 +3745,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_BONUS))
 	{
 		creature_ptr->update &= ~(PU_BONUS);
+		calc_alignment();
 		calc_bonuses();
 	}
 
