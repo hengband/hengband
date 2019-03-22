@@ -151,6 +151,7 @@
 #include "spells-floor.h"
 #include "feature.h"
 #include "warning.h"
+#include "monster-spell.h"
 
 
 

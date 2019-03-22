@@ -451,6 +451,9 @@
     <ClInclude Include="..\..\src\floor-generate.h">
       <Filter>floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-spell.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

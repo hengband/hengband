@@ -27,6 +27,7 @@
 #include "grid.h"
 #include "player-move.h"
 #include "monster-status.h"
+#include "monster-spell.h"
 
 
 /*!

@@ -24,6 +24,7 @@
 #include "avatar.h"
 #include "spells-floor.h"
 #include "monster-status.h"
+#include "monster-spell.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

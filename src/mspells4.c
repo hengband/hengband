@@ -13,6 +13,7 @@
 #include "player-status.h"
 #include "realm-hex.h"
 #include "player-move.h"
+#include "monster-spell.h"
 
 /*!
 * @brief モンスターIDを取り、モンスター名をm_nameに代入する /

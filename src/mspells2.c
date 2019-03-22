@@ -17,6 +17,7 @@
 #include "realm-hex.h"
 #include "player-move.h"
 #include "monster-status.h"
+#include "monster-spell.h"
 
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

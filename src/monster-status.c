@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "monster.h"
 #include "monster-status.h"
+#include "monster-spell.h"
 #include "spells-summon.h"
 #include "monsterrace-hook.h"
 #include "object-curse.h"

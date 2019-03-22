@@ -16,6 +16,7 @@
 #include "objectkind-hook.h"
 #include "projection.h"
 #include "monster.h"
+#include "monster-spell.h"
 #include "spells-summon.h"
 #include "patron.h"
 #include "quest.h"
