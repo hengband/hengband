@@ -1929,8 +1929,6 @@ static concptr likert(int x, int y)
 	static char dummy[20] = "", dummy2[20] = "";
 	memset(dummy, 0, strlen(dummy));
 	memset(dummy2, 0, strlen(dummy2));
-
-	/* Paranoia */
 	if (y <= 0) y = 1;
 
 	if(show_actual_value)

@@ -14,8 +14,6 @@ DIRECTION coords_to_dir(POSITION y, POSITION x)
 
 	dy = y - p_ptr->y;
 	dx = x - p_ptr->x;
-
-	/* Paranoia */
 	if (ABS(dx) > 1 || ABS(dy) > 1) return (0);
 
 	return d[dx + 1][dy + 1];

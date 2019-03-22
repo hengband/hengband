@@ -433,8 +433,6 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	{
 		if (o_ptr == &inventory[inv]) break;
 	}
-
-	/* Paranoia */
 	if (inv > INVEN_FEET) return FALSE;
 
 	object_copy(&forge, o_ptr);

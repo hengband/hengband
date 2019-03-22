@@ -50,8 +50,6 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	bool look = TRUE;
 
 	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
-
-	/* Paranoia */
 	if (!monster_is_valid(m_ptr)) return (FALSE);
 
 	oy = m_ptr->fy;
@@ -157,8 +155,6 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	POSITION dis = 2;
 	bool look = TRUE;
 	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
-
-	/* Paranoia */
 	if(!m_ptr->r_idx) return;
 
 	/* "Skill" test */
@@ -954,11 +950,7 @@ bool reset_recall(void)
 	{
 		/* Extract request */
 		dummy = atoi(tmp_val);
-
-		/* Paranoia */
 		if (dummy < 1) dummy = 1;
-
-		/* Paranoia */
 		if (dummy > max_dlv[select_dungeon]) dummy = max_dlv[select_dungeon];
 		if (dummy < d_info[select_dungeon].mindepth) dummy = d_info[select_dungeon].mindepth;
 
@@ -2418,8 +2410,6 @@ bool recharge(int power)
 
 		/* All staffs, unstacked wands. */
 		else recharge_strength = (100 + power - lev - (8 * o_ptr->pval)) / 15;
-
-		/* Paranoia */
 		if (recharge_strength < 0) recharge_strength = 0;
 
 		/* Back-fire */
@@ -3489,8 +3479,6 @@ bool eat_magic(int power)
 	{
 		/* All staffs, wands. */
 		recharge_strength = (100 + power - lev) / 15;
-
-		/* Paranoia */
 		if (recharge_strength < 0) recharge_strength = 0;
 
 		/* Back-fire */

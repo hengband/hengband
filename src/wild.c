@@ -37,8 +37,6 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
 
 	lim[0] = prob[0].percent;
 	for (i = 1; i < DUNGEON_FEAT_PROB_NUM; i++) lim[i] = lim[i - 1] + prob[i].percent;
-
-	/* Paranoia */
 	if (lim[DUNGEON_FEAT_PROB_NUM - 1] < 100) lim[DUNGEON_FEAT_PROB_NUM - 1] = 100;
 
 	for (i = 0; i < 100; i++)
@@ -786,8 +784,6 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 	/* Unused */
 	(void)ymin;
 	(void)ymax;
-
-	/* Paranoia */
 	if (!(buf[0] == 'W')) return (PARSE_ERROR_GENERIC);
 
 	switch (buf[2])
@@ -1004,13 +1000,11 @@ static void init_terrain_table(int terrain, s16b feat_global, concptr fmt, ...)
 
 			check++;
 		}
-		else /* Paranoia */
+		else
 		{
 			plog_fmt("Format error");
 		}
 	}
-
-	/* Paranoia */
 	if (cur < MAX_FEAT_IN_TERRAIN)
 	{
 		plog_fmt("Too few parameters");

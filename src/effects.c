@@ -3166,8 +3166,6 @@ bool inc_stat(int stat)
 		{
 			/* Approximate gain value */
 			gain = (((p_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
-
-			/* Paranoia */
 			if (gain < 1) gain = 1;
 
 			/* Apply the bonus */
@@ -3251,8 +3249,6 @@ bool dec_stat(int stat, int amount, int permanent)
 			/* and one-half of the stat bonus times the percentage, with a */
 			/* minimum damage of half the percentage. -CWS */
 			loss = (((cur-18) / 2 + 1) / 2 + 1);
-
-			/* Paranoia */
 			if (loss < 1) loss = 1;
 
 			/* Randomize the loss */
@@ -3863,8 +3859,6 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 	char tmp[1024];
 
 	int warning = (p_ptr->mhp * hitpoint_warn / 10);
-
-	/* Paranoia */
 	if (p_ptr->is_dead) return 0;
 
 	if (p_ptr->sutemi) damage *= 2;

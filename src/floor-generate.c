@@ -207,8 +207,6 @@ static bool alloc_stairs(IDX feat, int num, int walls)
 		if ((current_floor_ptr->dun_level < d_info[p_ptr->dungeon_idx].maxdepth-1) && !quest_number(current_floor_ptr->dun_level+1))
 			shaft_num = (randint1(num)+1)/2;
 	}
-
-	/* Paranoia */
 	else return FALSE;
 
 

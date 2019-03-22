@@ -646,8 +646,6 @@ static bool activate_dragon_breath(object_type *o_ptr)
 			n++;
 		}
 	}
-
-	/* Paranoia */
 	if (n == 0) return FALSE;
 
 	/* Stop speaking */
@@ -673,8 +671,6 @@ bool activate_artifact(object_type *o_ptr)
 	DIRECTION dir;
 	concptr name = k_name + k_info[o_ptr->k_idx].name;
 	const activation_type* const act_ptr = find_activation_info(o_ptr);
-
-	/* Paranoia */
 	if (!act_ptr) {
 		/* Maybe forgot adding information to activation_info table ? */
 		msg_print("Activation information is not found.");

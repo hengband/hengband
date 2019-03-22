@@ -4661,8 +4661,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 
 			/* Add new object */
 			if (!comb) k++;
-
-			/* Paranoia */
 			if (k > 99) continue;
 
 			/* Calculate score */
@@ -5335,8 +5333,6 @@ s16b inven_carry(object_type *o_ptr)
 		}
 	}
 
-
-	/* Paranoia */
 	if (inven_cnt > INVEN_PACK) return (-1);
 
 	/* Find an empty slot */
@@ -5437,8 +5433,6 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 	/* Get the item to take off */
 	o_ptr = &inventory[item];
-
-	/* Paranoia */
 	if (amt <= 0) return (-1);
 
 	/* Verify */

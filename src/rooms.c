@@ -1221,8 +1221,6 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		feat2 = feat_deep_lava;
 		feat3 = feat_shallow_lava;
 		break;
-
-	/* Paranoia */
 	default: return FALSE;
 	}
 
@@ -2101,8 +2099,6 @@ static bool room_build(EFFECT_ID typ)
 	case ROOM_T_ARCADE:        return build_type16();
 	case ROOM_T_FIXED:         return build_type17();
 	}
-
-	/* Paranoia */
 	return FALSE;
 }
 
@@ -2240,8 +2236,6 @@ bool generate_rooms(void)
 			if (rand < prob_list[room_type]) break;
 			else rand -= prob_list[room_type];
 		}
-
-		/* Paranoia */
 		if (room_type >= ROOM_T_MAX) room_type = ROOM_T_NORMAL;
 
 		/* Increase the number of rooms of that type we should build. */

@@ -2201,8 +2201,6 @@ void do_cmd_rest(void)
 		}
 	}
 
-
-	/* Paranoia */
 	if (command_arg > 9999) command_arg = 9999;
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);

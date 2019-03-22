@@ -1687,7 +1687,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 		break;
 
 	default:
-		return FALSE; /* Paranoia */
+		return FALSE;
 	}
 
 	/* Abort if no spell was chosen */

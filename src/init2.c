@@ -1386,8 +1386,6 @@ static errr init_object_alloc(void)
 		/* Group by level */
 		num[i] += num[i-1];
 	}
-
-	/* Paranoia */
 	if (!num[0]) quit(_("町のアイテムがない！", "No town objects!"));
 
 	/*** Initialize object allocation info ***/
@@ -1545,8 +1543,6 @@ static errr init_alloc(void)
 		/* Group by level */
 		num[i] += num[i-1];
 	}
-
-	/* Paranoia */
 	if (!num[0]) quit(_("町のモンスターがない！", "No town monsters!"));
 
 	/*** Initialize monster allocation info ***/

@@ -1139,8 +1139,6 @@ void text_to_ascii(char *buf, concptr str)
 		{
 			/* Skip the backslash */
 			str++;
-
-			/* Paranoia */
 			if (!(*str)) break;
 
 			/* Macro Trigger */
@@ -2809,8 +2807,6 @@ void msg_print(concptr msg)
 
 	/* No message */
 	if (!msg) return;
-
-	/* Paranoia */
 	if (n > 1000) return;
 
 	/* Copy it */
@@ -3570,8 +3566,6 @@ bool askfor(char *buf, int len)
 bool get_string(concptr prompt, char *buf, int len)
 {
 	bool res;
-
-	/* Paranoia */
 	msg_print(NULL);
 
 	/* Display prompt */
@@ -3618,8 +3612,6 @@ bool get_check_strict(concptr prompt, BIT_FLAGS mode)
 		handle_stuff();
 		num_more = 0;
 	}
-
-	/* Paranoia */
 	msg_print(NULL);
 
 	if (!rogue_like_commands)
@@ -3721,7 +3713,6 @@ bool get_check_strict(concptr prompt, BIT_FLAGS mode)
  */
 bool get_com(concptr prompt, char *command, bool z_escape)
 {
-	/* Paranoia */
 	msg_print(NULL);
 
 	/* Display a prompt */
@@ -3799,8 +3790,6 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
 		/* Use that prompt */
 		prompt = tmp;
 	}
-
-	/* Paranoia */
 	msg_print(NULL);
 
 	/* Display prompt */
@@ -4540,8 +4529,6 @@ void request_command(int shopping)
 			continue;
 		}
 
-
-		/* Paranoia */
 		if (!cmd) continue;
 
 
@@ -4777,8 +4764,6 @@ int get_keymap_dir(char ch)
 			}
 		}
 	}
-
-	/* Paranoia */
 	if (d == 5) d = 0;
 
 	/* Return direction */
@@ -5274,8 +5259,6 @@ size_t my_strcpy(char *buf, concptr src, size_t bufsize)
 
 	size_t len = strlen(src);
 	size_t ret = len;
-
-	/* Paranoia */
 	if (bufsize == 0) return ret;
 
 	/* Truncate */

@@ -308,8 +308,6 @@ void delete_monster_idx(MONSTER_IDX i)
 void delete_monster(POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
-
-	/* Paranoia */
 	if (!in_bounds(y, x)) return;
 
 	/* Check the grid */
@@ -2450,8 +2448,6 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 		r_ptr = &r_info[r_idx];
 
 		chameleon_change_m_idx = 0;
-
-		/* Paranoia */
 		if (!r_idx) return;
 	}
 
@@ -2631,11 +2627,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 	/* Verify location */
 	if (!in_bounds(y, x)) return (FALSE);
-
-	/* Paranoia */
 	if (!r_idx) return (FALSE);
-
-	/* Paranoia */
 	if (!r_ptr->name) return (FALSE);
 
 	if (!(mode & PM_IGNORE_TERRAIN))
@@ -3656,8 +3648,6 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	POSITION x, y;
-
-	/* Paranoia */
 	/* if (!r_idx) return; */
 
 	/* Prevent illegal monsters */

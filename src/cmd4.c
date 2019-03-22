@@ -5203,8 +5203,6 @@ static void do_cmd_knowledge_artifacts(void)
 	for (k = 0; k < n; k++)
 	{
 		artifact_type *a_ptr = &a_info[who[k]];
-
-		/* Paranoia */
 		strcpy(base_name, _("未知の伝説のアイテム", "Unknown Artifact"));
 
 		/* Obtain the base object type */

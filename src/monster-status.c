@@ -835,8 +835,6 @@ void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
 	monster_race *r_ptr;
 	monster_race *s_ptr;
 	int new_exp;
-
-	/* Paranoia */
 	if (m_idx <= 0 || s_idx <= 0) return;
 
 	m_ptr = &current_floor_ptr->m_list[m_idx];

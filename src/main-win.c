@@ -1033,8 +1033,6 @@ static void term_getsize(term_data *td)
 {
 	RECT rc;
 	TERM_LEN wid, hgt;
-
-	/* Paranoia */
 	if (td->cols < 1) td->cols = 1;
 	if (td->rows < 1) td->rows = 1;
 
@@ -1081,8 +1079,6 @@ static void save_prefs_aux(int i)
 
 	RECT rc;
 	WINDOWPLACEMENT lpwndpl;
-
-	/* Paranoia */
 	if (!td->w) return;
 
 	/* Make section name */
@@ -3003,8 +2999,6 @@ static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 	HDC hdc;
 	HDC hdcSrc;
 	HBITMAP hbmSrcOld;
-
-	/* Paranoia */
 	if (!use_graphics)
 	{
 		/* Erase the grids */
@@ -3804,7 +3798,6 @@ static void process_menus(WORD wCmd)
 		{
 			if (game_in_progress && character_generated)
 			{
-				/* Paranoia */
 				if (!can_save)
 				{
 					plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
@@ -3833,7 +3826,6 @@ static void process_menus(WORD wCmd)
 		{
 			if (game_in_progress && character_generated)
 			{
-				/* Paranoia */
 				if (!can_save)
 				{
 					plog(_("今は終了できません。", "You may not do that right now."));
@@ -4148,7 +4140,6 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_NO_GRAPHICS:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4172,7 +4163,6 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_OLD_GRAPHICS:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4196,7 +4186,6 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_NEW_GRAPHICS:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4220,7 +4209,6 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_NEW2_GRAPHICS:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4245,8 +4233,6 @@ static void process_menus(WORD wCmd)
 		case IDM_OPTIONS_BIGTILE:
 		{
 			td = &data[0];
-
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4270,7 +4256,6 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_MUSIC:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4291,7 +4276,6 @@ static void process_menus(WORD wCmd)
 
 		case IDM_OPTIONS_SOUND:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4313,7 +4297,6 @@ static void process_menus(WORD wCmd)
 		/* bg */
 		case IDM_OPTIONS_BG:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -4337,7 +4320,6 @@ static void process_menus(WORD wCmd)
 		/* bg */
 		case IDM_OPTIONS_OPEN_BG:
 		{
-			/* Paranoia */
 			if (!inkey_flag)
 			{
 				plog("You may not do that right now.");
@@ -5786,11 +5768,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-
-	/* Paranoia */
 	quit(NULL);
-
-	/* Paranoia */
 	return (0);
 }
 

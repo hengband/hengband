@@ -1736,8 +1736,6 @@ errr parse_f_info(char *buf, header *head)
 		int j;
 		byte s_attr;
 		char char_tmp[F_LIT_MAX];
-
-		/* Paranoia */
 		if (buf[1] != ':') return (1);
 		if (!buf[2]) return (1);
 		if (buf[3] != ':') return (1);
@@ -1748,8 +1746,6 @@ errr parse_f_info(char *buf, header *head)
 
 		/* Extract the color */
 		s_attr = color_char_to_attr(buf[4]);
-
-		/* Paranoia */
 		if (s_attr > 127) return (1);
 
 		/* Save the standard values */
@@ -2190,8 +2186,6 @@ errr parse_k_info(char *buf, header *head)
 	{
 		char sym;
 		byte tmp;
-
-		/* Paranoia */
 		if (buf[1] != ':') return (1);
 		if (!buf[2]) return (1);
 		if (buf[3] != ':') return (1);
@@ -2202,8 +2196,6 @@ errr parse_k_info(char *buf, header *head)
 
 		/* Extract the attr */
 		tmp = color_char_to_attr(buf[4]);
-
-		/* Paranoia */
 		if (tmp > 127) return (1);
 
 		/* Save the values */
@@ -2939,8 +2931,6 @@ errr parse_r_info(char *buf, header *head)
 	{
 		char sym;
 		byte tmp;
-
-		/* Paranoia */
 		if (buf[1] != ':') return (1);
 		if (!buf[2]) return (1);
 		if (buf[3] != ':') return (1);
@@ -2951,8 +2941,6 @@ errr parse_r_info(char *buf, header *head)
 
 		/* Extract the attr */
 		tmp = color_char_to_attr(buf[4]);
-
-		/* Paranoia */
 		if (tmp > 127) return (1);
 
 		/* Save the values */

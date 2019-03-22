@@ -1080,8 +1080,6 @@ static void wiz_quantity_item(object_type *o_ptr)
 	{
 		/* Extract */
 		tmp_int = atoi(tmp_val);
-
-		/* Paranoia */
 		if (tmp_int < 1) tmp_int = 1;
 		if (tmp_int > 99) tmp_int = 99;
 
@@ -1351,8 +1349,6 @@ static void do_cmd_wiz_jump(void)
 
 		p_ptr->dungeon_idx = tmp_dungeon_type;
 	}
-
-	/* Paranoia */
 	if (command_arg < d_info[p_ptr->dungeon_idx].mindepth) command_arg = 0;
 	if (command_arg > d_info[p_ptr->dungeon_idx].maxdepth) command_arg = (COMMAND_ARG)d_info[p_ptr->dungeon_idx].maxdepth;
 

@@ -195,8 +195,6 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
 static void kill_saved_floor(saved_floor_type *sf_ptr)
 {
 	char floor_savefile[1024];
-
-	/* Paranoia */
 	if (!sf_ptr) return;
 
 	/* Already empty */
@@ -565,8 +563,6 @@ static void place_pet(void)
 			m_ptr->fx = cx;
 			m_ptr->ml = TRUE;
 			m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-
-			/* Paranoia */
 			m_ptr->hold_o_idx = 0;
 			m_ptr->target_y = 0;
 
@@ -1439,8 +1435,6 @@ void stair_creation(void)
 
 	/* Extract current floor data */
 	sf_ptr = get_sf_ptr(p_ptr->floor_id);
-
-	/* Paranoia */
 	if (!sf_ptr)
 	{
 		/* No floor id? -- Create now! */

@@ -584,8 +584,6 @@ static void rd_item_old(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_DEC_MANA);
 		}
 	}
-
-	/* Paranoia */
 	if (object_is_fixed_artifact(o_ptr))
 	{
 		artifact_type *a_ptr;
@@ -596,8 +594,6 @@ static void rd_item_old(object_type *o_ptr)
 		/* Verify that artifact */
 		if (!a_ptr->name) o_ptr->name1 = 0;
 	}
-
-	/* Paranoia */
 	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr;
@@ -792,7 +788,6 @@ static void rd_item(object_type *o_ptr)
 			}
 			else
 			{
-				/* Paranoia */
 				add_flag(o_ptr->art_flags, TR_LITE_M1);
 			}
 		}
@@ -4011,8 +4006,6 @@ errr rd_savefile_new(void)
 
 	/* Drop permissions */
 	safe_setuid_drop();
-
-	/* Paranoia */
 	if (!fff) return (-1);
 
 	/* Call the sub-function */

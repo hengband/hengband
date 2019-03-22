@@ -581,11 +581,7 @@ static void pattern_teleport(void)
 	{
 		return;
 	}
-
-	/* Paranoia */
 	if (command_arg < min_level) command_arg = (COMMAND_ARG)min_level;
-
-	/* Paranoia */
 	if (command_arg > max_level) command_arg = (COMMAND_ARG)max_level;
 
 	/* Accept request */
@@ -6088,7 +6084,7 @@ void prevent_turn_overflow(void)
 	rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
 
 	if (current_world_ptr->game_turn > rollback_turns) current_world_ptr->game_turn -= rollback_turns;
-	else current_world_ptr->game_turn = 1; /* Paranoia */
+	else current_world_ptr->game_turn = 1;
 	if (current_floor_ptr->generated_turn > rollback_turns) current_floor_ptr->generated_turn -= rollback_turns;
 	else current_floor_ptr->generated_turn = 1;
 	if (old_battle > rollback_turns) old_battle -= rollback_turns;

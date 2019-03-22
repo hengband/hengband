@@ -3842,8 +3842,6 @@ static int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 			return (TRUE);
 		}
 	}
-
-	/* Paranoia */
 	msg_print(NULL);
 
 	/* Assume failure */
@@ -4016,8 +4014,6 @@ static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 	{
 		sprintf(buf, "%s ", pmt);
 	}
-
-	/* Paranoia */
 	msg_print(NULL);
 
 	/* Ask until done */

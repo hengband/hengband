@@ -1719,11 +1719,7 @@ bool load_player(void)
 
 	concptr    what = "generic";
 
-
-	/* Paranoia */
 	current_world_ptr->game_turn = 0;
-
-	/* Paranoia */
 	p_ptr->is_dead = FALSE;
 
 
@@ -1837,8 +1833,6 @@ bool load_player(void)
 		/* Message (below) */
 		if (err) what = _("セーブファイルを解析出来ません。", "Cannot parse savefile");
 	}
-
-	/* Paranoia */
 	if (!err)
 	{
 		/* Invalid current_world_ptr->game_turn */

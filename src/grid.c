@@ -109,8 +109,6 @@ void place_random_stairs(POSITION y, POSITION x)
 	bool up_stairs = TRUE;
 	bool down_stairs = TRUE;
 	grid_type *g_ptr;
-
-	/* Paranoia */
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
 
@@ -484,9 +482,7 @@ static bool possible_doorway(POSITION y, POSITION x)
 * @return なし
 */
 void try_door(POSITION y, POSITION x)
-{
-	/* Paranoia */
-	if (!in_bounds(y, x)) return;
+{	if (!in_bounds(y, x)) return;
 
 	/* Ignore walls */
 	if (cave_have_flag_bold(y, x, FF_WALL)) return;

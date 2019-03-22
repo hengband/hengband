@@ -3966,8 +3966,6 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			strcpy(killer, _("罠", "a trap"));
 			break;
 		}
-
-		/* Paranoia */
 		strcpy(m_name, killer);
 	}
 
@@ -4891,7 +4889,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 
 				get_damage = take_hit(DAMAGE_ATTACK, dam, m_name, monspell);
 
-				if (p_ptr->chp < 1) p_ptr->chp = 1; /* Paranoia */
+				if (p_ptr->chp < 1) p_ptr->chp = 1;
 			}
 			break;
 		}

@@ -1210,8 +1210,6 @@ bool build_type10(void)
 	case 8: build_elemental_vault(x0, y0, xsize, ysize); break;
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 		/* I know how to add a few more... give me some time. */
-
-		/* Paranoia */
 	default: return FALSE;
 	}
 

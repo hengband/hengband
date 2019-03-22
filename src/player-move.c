@@ -910,7 +910,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	monster_type *m_ptr;
 
 	monster_type *riding_m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
-	monster_race *riding_r_ptr = &r_info[p_ptr->riding ? riding_m_ptr->r_idx : 0]; /* Paranoia */
+	monster_race *riding_r_ptr = &r_info[p_ptr->riding ? riding_m_ptr->r_idx : 0];
 
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -2274,8 +2274,6 @@ void do_cmd_travel(void)
 
 	/* Travel till 255 steps */
 	travel.run = 255;
-
-	/* Paranoia */
 	travel.dir = 0;
 
 	/* Decides first direction */

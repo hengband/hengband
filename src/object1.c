@@ -2379,7 +2379,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 			/* Prepare an index --(-- */
 			sprintf(tmp_val, "%c)", equip_label[i - INVEN_RARM]);
 		}
-		else /* Paranoia */
+		else
 		{
 			/* Prepare an index --(-- */
 			sprintf(tmp_val, "%c)", index_to_label(i));
@@ -2777,8 +2777,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			}
 		}
 	}
-
-	/* Paranoia */
 	msg_print(NULL);
 
 	/* Not done */
@@ -3773,8 +3771,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 		}
 	}
 
-
-	/* Paranoia */
 	msg_print(NULL);
 
 
