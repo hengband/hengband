@@ -154,11 +154,8 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	if (!(j_ptr->held_m_idx))
 	{
 		POSITION y, x;
-
 		y = j_ptr->iy;
 		x = j_ptr->ix;
-
-		/* Visual update */
 		lite_spot(y, x);
 	}
 	object_wipe(j_ptr);
@@ -200,7 +197,6 @@ void delete_object(POSITION y, POSITION x)
 	/* Objects are gone */
 	g_ptr->o_idx = 0;
 
-	/* Visual update */
 	lite_spot(y, x);
 }
 

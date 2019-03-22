@@ -292,10 +292,11 @@ void delete_monster_idx(MONSTER_IDX i)
 	/* Count monsters */
 	m_cnt--;
 
-	/* Visual update */
 	lite_spot(y, x);
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
+	{
 		p_ptr->update |= (PU_MON_LITE);
+	}
 }
 
 
