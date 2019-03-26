@@ -374,7 +374,7 @@ static MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_pt
  * @param tdam 現在算出途中のダメージ値
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @param mode 剣術のID
- * @param thrown 射撃処理ならばTRUEを指定する
+ * @param thrown 投擲処理ならばTRUEを指定する
  * @return 総合的なスレイを加味したダメージ値
  * @note
  * Note that "flasks of oil" do NOT do fire damage, although they\n
@@ -393,7 +393,6 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 
 	if (!thrown)
 	{
-		/* Magical Swords */
 		if (p_ptr->special_attack & (ATTACK_ACID)) add_flag(flgs, TR_BRAND_ACID);
 		if (p_ptr->special_attack & (ATTACK_COLD)) add_flag(flgs, TR_BRAND_COLD);
 		if (p_ptr->special_attack & (ATTACK_ELEC)) add_flag(flgs, TR_BRAND_ELEC);
@@ -401,10 +400,8 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 		if (p_ptr->special_attack & (ATTACK_POIS)) add_flag(flgs, TR_BRAND_POIS);
 	}
 
-	/* Hex - Slay Good (Runesword) */
 	if (hex_spelling(HEX_RUNESWORD)) add_flag(flgs, TR_SLAY_GOOD);
 
-	/* Some "weapons" and "ammo" do extra damage */
 	switch (o_ptr->tval)
 	{
 	case TV_SHOT:
@@ -416,19 +413,15 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 	case TV_DIGGING:
 	case TV_LITE:
 	{
-		/* Slaying */
 		mult = mult_slaying(mult, flgs, m_ptr);
 
-		/* Elemental Brand */
 		mult = mult_brand(mult, flgs, m_ptr);
 
-		/* Hissatsu */
 		if (p_ptr->pclass == CLASS_SAMURAI)
 		{
 			mult = mult_hissatsu(mult, flgs, m_ptr, mode);
 		}
 
-		/* Force Weapon */
 		if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 		{
 			p_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
@@ -436,7 +429,6 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 			mult = mult * 3 / 2 + 20;
 		}
 
-		/* Hack -- The Nothung cause special damage to Fafner */
 		if ((o_ptr->name1 == ART_NOTHUNG) && (m_ptr->r_idx == MON_FAFNER))
 			mult = 150;
 		break;
@@ -444,7 +436,6 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 	}
 	if (mult > 150) mult = 150;
 
-	/* Return the total damage */
 	return (tdam * mult / 10);
 }
 
