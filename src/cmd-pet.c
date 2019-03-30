@@ -3,6 +3,7 @@
 #include "sort.h"
 #include "player-status.h"
 #include "object-hook.h"
+#include "monster.h"
 #include "monster-status.h"
 
 /*!

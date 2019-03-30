@@ -25,6 +25,7 @@
 #include "shoot.h"
 #include "player-move.h"
 #include "patron.h"
+#include "monster.h"
 #include "monster-status.h"
 
 

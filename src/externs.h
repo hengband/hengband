@@ -688,7 +688,6 @@ extern void wipe_m_list(void);
 extern MONSTER_IDX m_pop(void);
 extern errr get_mon_num_prep(monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
 extern MONRACE_IDX get_mon_num(DEPTH level);
-extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 extern int lore_do_probe(MONRACE_IDX r_idx);
 extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void update_monster(MONSTER_IDX m_idx, bool full);

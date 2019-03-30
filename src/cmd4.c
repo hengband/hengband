@@ -50,6 +50,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "object-hook.h"
+#include "monster.h"
 #include "monster-status.h"
 
 

@@ -18,6 +18,7 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "projection.h"
+#include "monster.h"
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "avatar.h"

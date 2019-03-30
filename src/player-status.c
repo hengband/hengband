@@ -5,6 +5,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "object-hook.h"
+#include "monster.h"
 #include "monster-status.h"
 #include "monsterrace-hook.h"
 #include "mutation.h"

@@ -16,6 +16,7 @@
 #include "quest.h"
 #include "realm-hex.h"
 #include "player-move.h"
+#include "monster.h"
 #include "monster-status.h"
 #include "monster-spell.h"
 

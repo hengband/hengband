@@ -4,6 +4,7 @@
 #include "spells-status.h"
 #include "projection.h"
 #include "spells.h"
+#include "monster.h"
 
 /*!
  * @brief モンスター回復処理
