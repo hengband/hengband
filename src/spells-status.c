@@ -293,7 +293,7 @@ bool_hack berserk(int base)
 {
 	bool_hack ident = FALSE;
 	if (set_afraid(0)) ident = TRUE;
-	if (set_shero(p_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
+	if (set_shero(p_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
 	if (hp_player(30)) ident = TRUE;
 	return ident;
 }
