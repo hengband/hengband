@@ -2815,7 +2815,6 @@ static void calc_hitpoints(void)
 
 		/* Display hitpoints (later) */
 		p_ptr->redraw |= (PR_HP);
-
 		p_ptr->window |= (PW_PLAYER);
 	}
 }
@@ -2828,7 +2827,8 @@ static void calc_hitpoints(void)
  */
 static void calc_torch(void)
 {
-	int i, rad;
+	int i;
+	POSITION rad;
 	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -2864,7 +2864,7 @@ static void calc_torch(void)
 		if (have_flag(flgs, TR_LITE_M1)) rad -= 1;
 		if (have_flag(flgs, TR_LITE_M2)) rad -= 2;
 		if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
-		p_ptr->cur_lite += (s16b)rad;
+		p_ptr->cur_lite += rad;
 	}
 
 	/* max radius is 14 (was 5) without rewriting other code -- */
@@ -2915,7 +2915,6 @@ static void calc_spells(void)
 	const magic_type	*s_ptr;
 	REALM_IDX which;
 	int bonus = 0;
-
 
 	concptr p;
 
@@ -3098,11 +3097,9 @@ static void calc_spells(void)
 			}
 
 #ifdef JP
-			msg_format("%sの%sを忘れてしまった。",
-				do_spell(which, j % 32, SPELL_NAME), p);
+			msg_format("%sの%sを忘れてしまった。", do_spell(which, j % 32, SPELL_NAME), p);
 #else
-			msg_format("You have forgotten the %s of %s.", p,
-				do_spell(which, j % 32, SPELL_NAME));
+			msg_format("You have forgotten the %s of %s.", p, do_spell(which, j % 32, SPELL_NAME));
 #endif
 
 
@@ -3519,9 +3516,7 @@ static void calc_mana(void)
 
 		/* Display mana later */
 		p_ptr->redraw |= (PR_MANA);
-
-		p_ptr->window |= (PW_PLAYER);
-		p_ptr->window |= (PW_SPELL);
+		p_ptr->window |= (PW_PLAYER | PW_SPELL);
 	}
 
 
