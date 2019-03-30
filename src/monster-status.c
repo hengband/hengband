@@ -830,7 +830,7 @@ bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
 * @param s_idx 撃破されたモンスター種族の参照ID
 * @return なし
 */
-void monster_gain_exp(MONSTER_IDX m_idx, IDX s_idx)
+void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 {
 	monster_type *m_ptr;
 	monster_race *r_ptr;

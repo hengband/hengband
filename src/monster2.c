@@ -326,7 +326,7 @@ void delete_monster(POSITION y, POSITION x)
  * @param i2 配列移動先添字
  * @return なし
  */
-static void compact_monsters_aux(IDX i1, IDX i2)
+static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 {
 	POSITION y, x;
 	int i;
@@ -2540,10 +2540,10 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
  */
-static IDX initial_r_appearance(MONRACE_IDX r_idx)
+static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx)
 {
 	int attempts = 1000;
-	IDX ap_r_idx;
+	MONRACE_IDX ap_r_idx;
 	DEPTH min = MIN(current_floor_ptr->base_level-5, 50);
 
 	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN)

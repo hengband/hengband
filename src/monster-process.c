@@ -41,7 +41,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 {
 	int i;
 	POSITION x = 0, y = 0;
-	IDX t_idx;
+	MONSTER_IDX t_idx;
 	int start;
 	int plus = 1;
 
@@ -71,7 +71,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 		/* Scan thru all monsters */
 		for (i = start; ((i < start + m_max) && (i > start - m_max)); i+=plus)
 		{
-			IDX dummy = (i % m_max);
+			MONSTER_IDX dummy = (i % m_max);
 
 			if (!dummy) continue;
 
@@ -203,7 +203,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
  * @param who 打撃を行ったモンスターの参照ID
  * @return なし
  */
-void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, IDX who)
+void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
 	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -3304,7 +3304,7 @@ void process_monster(MONSTER_IDX m_idx)
  */
 void process_monsters(void)
 {
-	IDX i;
+	MONSTER_IDX i;
 	POSITION fx, fy;
 
 	bool            test;
