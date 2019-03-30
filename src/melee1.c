@@ -107,11 +107,11 @@ static MULTIPLY mult_slaying(MULTIPLY mult, const BIT_FLAGS* flgs, const monster
 		const struct slay_table_t* p = &slay_table[i];
 
 		if ((have_flag(flgs, p->slay_flag)) &&
-			(atoffset(u32b, r_ptr, p->flag_offset) & p->affect_race_flag))
+			(atoffset(BIT_FLAGS, r_ptr, p->flag_offset) & p->affect_race_flag))
 		{
 			if (is_original_ap_and_seen(m_ptr))
 			{
-				atoffset(u32b, r_ptr, p->r_flag_offset) |= p->affect_race_flag;
+				atoffset(BIT_FLAGS, r_ptr, p->r_flag_offset) |= p->affect_race_flag;
 			}
 
 			mult = MAX(mult, p->slay_mult);
@@ -631,7 +631,7 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if ((atoffset(u32b, r_ptr, flags_offset) & aura_flag) && !immune)
+	if ((atoffset(BIT_FLAGS, r_ptr, flags_offset) & aura_flag) && !immune)
 	{
 		GAME_TEXT mon_name[MAX_NLEN];
 		int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
@@ -645,7 +645,7 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 
 		if (is_original_ap_and_seen(m_ptr))
 		{
-			atoffset(u32b, r_ptr, r_flags_offset) |= aura_flag;
+			atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
 		}
 
 		handle_stuff();
