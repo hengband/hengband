@@ -636,11 +636,8 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 		GAME_TEXT mon_name[MAX_NLEN];
 		int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
-		/* Hack -- Get the "died from" name */
-		monster_desc(mon_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-
+		monster_desc(mon_name, m_ptr, MD_WRONGDOER_NAME);
 		msg_print(message);
-
 		dam_func(aura_damage, mon_name, -1, TRUE);
 
 		if (is_original_ap_and_seen(m_ptr))
@@ -1925,12 +1922,10 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 	/* Extract the effective monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
 
-	/* Get the "died from" information (i.e. "a kobold") */
-	monster_desc(ddesc, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+	monster_desc(ddesc, m_ptr, MD_WRONGDOER_NAME);
 
 	if (p_ptr->special_defense & KATA_IAI)
 	{

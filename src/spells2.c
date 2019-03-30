@@ -1811,10 +1811,7 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
-
-				/* Get the monster's real name */
-				monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-
+				monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
 				killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name);
 			}
 			else

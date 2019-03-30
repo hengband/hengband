@@ -2622,8 +2622,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			/* Extract monster name */
-			monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+			monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
 
 			do_cmd_write_nikki(NIKKI_ARENA, p_ptr->arena_number, m_name);
 		}

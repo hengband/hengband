@@ -1593,7 +1593,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						else
 						{
 							/* Injure +/- confusion */
-							monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+							monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
 							take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 							if (one_in_(4) && !CHECK_MULTISHADOW())
 							{
@@ -1683,7 +1683,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						else
 						{
 							/* Injure + mana drain */
-							monster_desc(killer, m_ptr, MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+							monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
 							if (!CHECK_MULTISHADOW())
 							{
 								msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
@@ -5499,7 +5499,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	{
 		x1 = current_floor_ptr->m_list[who].fx;
 		y1 = current_floor_ptr->m_list[who].fy;
-		monster_desc(who_name, &current_floor_ptr->m_list[who], MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+		monster_desc(who_name, &current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
 	}
 
 	else

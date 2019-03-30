@@ -1947,6 +1947,7 @@
 #define MD_TRUE_NAME      0x00000100 /* Chameleon's true name */
 #define MD_IGNORE_HALLU   0x00000200 /* Ignore hallucination, and penetrate shape change */
 
+#define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
 
 /*
  * Bit flags for object_desc()
