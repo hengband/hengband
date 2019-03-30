@@ -234,10 +234,8 @@ static bool dispel_check_monster(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	monster_type *t_ptr = &current_floor_ptr->m_list[t_idx];
 
-	/* Invulnabilty */
 	if (MON_INVULNER(t_ptr)) return TRUE;
 
-	/* Speed */
 	if (t_ptr->mspeed < 135)
 	{
 		if (MON_FAST(t_ptr)) return TRUE;

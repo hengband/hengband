@@ -2623,7 +2623,6 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 				/* Nothing */
 			}
 
-			/* Speed */
 			else if (have_flag(flgs, TR_SPEED))
 			{
 				/* Dump " to speed" */

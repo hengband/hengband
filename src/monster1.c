@@ -553,7 +553,6 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			if (speed != 110) hooked_roff(_("、かつ", ", and"));
 		}
 
-		/* Speed */
 		if (speed > 110)
 		{
 			if (speed > 139) hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));

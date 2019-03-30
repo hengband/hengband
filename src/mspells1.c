@@ -940,7 +940,6 @@ bool dispel_check(MONSTER_IDX m_idx)
 	if ((p_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) return (TRUE);
 	if ((p_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)) return (TRUE);
 
-	/* Speed */
 	if (p_ptr->pspeed < 145)
 	{
 		if (IS_FAST()) return (TRUE);

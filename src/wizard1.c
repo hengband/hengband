@@ -1746,14 +1746,12 @@ static void spoil_mon_desc(concptr fname)
 			sprintf(nam, _("    %s", "The %s"), name);
 		}
 
-
 		/* Level */
 		sprintf(lev, "%d", (int)r_ptr->level);
 
 		/* Rarity */
 		sprintf(rar, "%d", (int)r_ptr->rarity);
 
-		/* Speed */
 		if (r_ptr->speed >= 110)
 		{
 			sprintf(spd, "+%d", (r_ptr->speed - 110));
@@ -2109,7 +2107,6 @@ static void spoil_mon_info(concptr fname)
 		sprintf(buf, "Rar:%d  ", r_ptr->rarity);
 		spoil_out(buf);
 
-		/* Speed */
 		if (r_ptr->speed >= 110)
 		{
 			sprintf(buf, "Spd:+%d  ", (r_ptr->speed - 110));
