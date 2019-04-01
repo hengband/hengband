@@ -1188,10 +1188,6 @@ extern HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE);
 extern HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE);
 extern HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE);
 
-/* hissatsu.c */
-extern void do_cmd_hissatsu(void);
-extern void do_cmd_gain_hissatsu(void);
-
 
 /*
  * Hack -- conditional (or "bizarre") externs

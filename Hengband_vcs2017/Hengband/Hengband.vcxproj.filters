@@ -454,6 +454,9 @@
     <ClInclude Include="..\..\src\monster-spell.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\cmd-hissatsu.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

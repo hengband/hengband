@@ -181,6 +181,7 @@
     <ClInclude Include="..\..\src\artifact.h" />
     <ClInclude Include="..\..\src\avatar.h" />
     <ClInclude Include="..\..\src\chest.h" />
+    <ClInclude Include="..\..\src\cmd-hissatsu.h" />
     <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
     <ClInclude Include="..\..\src\cmd-pet.h" />

@@ -16,7 +16,7 @@ hengband_SOURCES = \
 	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h cmd-pet.c cmd-pet.h \
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
-	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c\
+	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c cmd-hissatsu.h\
 	\
 	defines.h dungeon.c effects.c externs.h files.c flavor.c \
 	\
