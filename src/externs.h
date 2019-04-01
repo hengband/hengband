@@ -650,15 +650,8 @@ extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool 
 extern bool process_the_world(int num, MONSTER_IDX who, bool vs_player);
 extern void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx);
 
-/* monster1.c */
-
-
-
 
 /* monster2.c */
-extern concptr horror_desc[MAX_SAN_HORROR];
-extern concptr funny_desc[MAX_SAN_FUNNY];
-extern concptr funny_comments[MAX_SAN_COMMENT];
 extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);
 extern void reset_target(monster_type *m_ptr);
 extern monster_race *real_r_ptr(monster_type *m_ptr);
