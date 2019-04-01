@@ -16,6 +16,7 @@
 #include "floor.h"
 #include "object-boost.h"
 #include "object-hook.h"
+#include "monster.h"
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "wild.h"

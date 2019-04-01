@@ -16,6 +16,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "monster.h"
 
  /*
   * Some screen locations for various display routines

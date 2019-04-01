@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "sort.h"
 #include "store.h"
+#include "monster.h"
 
 
 #ifdef ALLOW_SPOILERS

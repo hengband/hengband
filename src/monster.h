@@ -34,3 +34,23 @@ extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 #define MD_IGNORE_HALLU   0x00000200 /* Ignore hallucination, and penetrate shape change */
 
 #define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
+
+extern void roff_top(MONRACE_IDX r_idx);
+extern void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode);
+extern void display_roff(MONRACE_IDX r_idx);
+extern void output_monster_spoiler(MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str));
+extern void create_name(int type, char *name);
+extern concptr extract_note_dies(MONRACE_IDX r_idx);
+extern void monster_death(MONSTER_IDX m_idx, bool drop_item);
+extern monsterrace_hook_type get_monster_hook(void);
+extern monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x);
+extern void set_friendly(monster_type *m_ptr);
+extern void set_pet(monster_type *m_ptr);
+extern void set_hostile(monster_type *m_ptr);
+extern void anger_monster(monster_type *m_ptr);
+extern bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode);
+extern bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode);
+extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
+extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
+extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
+extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
