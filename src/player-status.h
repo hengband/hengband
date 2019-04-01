@@ -20,9 +20,9 @@ extern bool player_place(POSITION y, POSITION x);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 
 extern void check_experience(void);
-
-
 extern void wreck_the_pattern(void);
+extern void cnv_stat(int val, char *out_val);
+extern s16b modify_stat_value(int value, int amount);
 
 /* Temporary flags macro */
 #define IS_FAST() (p_ptr->fast || music_singing(MUSIC_SPEED) || music_singing(MUSIC_SHERO))

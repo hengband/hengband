@@ -1038,8 +1038,6 @@ extern int inkey_special(bool numpad_cursor);
 
 
 /* xtra1.c */
-extern void cnv_stat(int val, char *out_val);
-extern s16b modify_stat_value(int value, int amount);
 extern void prt_time(void);
 extern concptr map_name(void);
 extern int bow_tval_ammo(object_type *o_ptr);
