@@ -12,9 +12,7 @@
 bool item_tester_hook_convertible(object_type *o_ptr)
 {
 	if ((o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_SKELETON)) return TRUE;
-
 	if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON)) return TRUE;
-	/* Assume not */
 	return (FALSE);
 }
 
@@ -51,8 +49,6 @@ bool item_tester_hook_melee_weapon(object_type *o_ptr)
 {
 	/* Check for a usable slot */
 	if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) return (TRUE);
-
-	/* Assume not wearable */
 	return (FALSE);
 }
 
@@ -104,8 +100,6 @@ bool item_tester_hook_broken_weapon(object_type *o_ptr)
 bool item_tester_hook_boomerang(object_type *o_ptr)
 {
 	if ((o_ptr->tval == TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED)) return (TRUE);
-
-	/* Assume not */
 	return (FALSE);
 }
 
@@ -145,7 +139,6 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 			return TRUE;
 	}
 
-	/* Assume not */
 	return (FALSE);
 }
 
@@ -160,8 +153,6 @@ bool item_tester_hook_mochikae(object_type *o_ptr)
 	if (((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) ||
 		(o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CAPTURE) ||
 		(o_ptr->tval == TV_CARD)) return (TRUE);
-
-	/* Assume not wearable */
 	return (FALSE);
 }
 
@@ -182,7 +173,6 @@ bool item_tester_hook_activate(object_type *o_ptr)
 	/* Check activation flag */
 	if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
 
-	/* Assume not */
 	return (FALSE);
 }
 
@@ -199,7 +189,6 @@ bool item_tester_hook_wear(object_type *o_ptr)
 	/* Check for a usable slot */
 	if (wield_slot(o_ptr) >= INVEN_RARM) return (TRUE);
 
-	/* Assume not wearable */
 	return (FALSE);
 }
 
@@ -253,7 +242,6 @@ bool item_tester_hook_use(object_type *o_ptr)
 	}
 	}
 
-	/* Assume not */
 	return (FALSE);
 }
 
@@ -286,8 +274,6 @@ bool item_tester_hook_quaff(object_type *o_ptr)
 bool item_tester_hook_readable(object_type *o_ptr)
 {
 	if ((o_ptr->tval == TV_SCROLL) || (o_ptr->tval == TV_PARCHMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER)) return (TRUE);
-
-	/* Assume not */
 	return (FALSE);
 }
 
