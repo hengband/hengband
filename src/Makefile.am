@@ -13,7 +13,8 @@ hengband_SOURCES = \
 	\
 	birth.c bldg.c chest.c chest.h chuukei.c \
 	cmd2.c cmd4.c cmd-activate.c cmd-activate.h cmd-eat.c cmd-eat.h \
-	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h cmd-pet.c cmd-pet.h \
+	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h \
+	cmd-mane.c cmd-mane.h cmd-pet.c cmd-pet.h \
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c cmd-hissatsu.h\
@@ -31,7 +32,7 @@ hengband_SOURCES = \
 	generate.h grid.c grid.h h-basic.h h-config.h h-define.h \
 	history.h history.c \
 	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
-	main.c main-x11.c main-gcu.c mane.c \
+	main.c main-x11.c main-gcu.c \
 	melee.h melee1.c mind.c \
 	\
 	monster.h \

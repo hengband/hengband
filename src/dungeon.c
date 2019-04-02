@@ -16,6 +16,7 @@
 #include "cmd-hissatsu.h"
 #include "cmd-item.h"
 #include "cmd-magiceat.h"
+#include "cmd-mane.h"
 #include "cmd-quaff.h"
 #include "cmd-read.h"
 #include "cmd-smith.h"

@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "cmd-magiceat.h"
+#include "cmd-mane.h"
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
 #include "melee.h"

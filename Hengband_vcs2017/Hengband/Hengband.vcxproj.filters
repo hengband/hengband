@@ -27,7 +27,6 @@
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\mane.c" />
     <ClCompile Include="..\..\src\melee1.c" />
     <ClCompile Include="..\..\src\mind.c" />
     <ClCompile Include="..\..\src\racial.c" />
@@ -252,6 +251,9 @@
     <ClCompile Include="..\..\src\object-boost.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-mane.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -455,6 +457,9 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-hissatsu.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-mane.h">
       <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>

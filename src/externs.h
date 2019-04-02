@@ -1157,8 +1157,6 @@ extern void mindcraft_info(char *p, int use_mind, int power);
 extern void do_cmd_mind(void);
 extern void do_cmd_mind_browse(void);
 
-/* mane.c */
-extern bool do_cmd_mane(bool baigaesi);
 
 /* mspells1.c */
 extern bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);

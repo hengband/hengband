@@ -144,6 +144,7 @@
     <ClCompile Include="..\..\src\cmd-activate.c" />
     <ClCompile Include="..\..\src\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd-hissatsu.c" />
+    <ClCompile Include="..\..\src\cmd-mane.c" />
     <ClCompile Include="..\..\src\cmd-pet.c" />
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
@@ -184,6 +185,7 @@
     <ClInclude Include="..\..\src\cmd-hissatsu.h" />
     <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
+    <ClInclude Include="..\..\src\cmd-mane.h" />
     <ClInclude Include="..\..\src\cmd-pet.h" />
     <ClInclude Include="..\..\src\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd-spell.h" />
@@ -209,7 +211,6 @@
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\mane.c" />
     <ClCompile Include="..\..\src\melee1.c" />
     <ClCompile Include="..\..\src\mind.c" />
     <ClCompile Include="..\..\src\monster1.c" />
