@@ -15,16 +15,6 @@
 #include "player-move.h"
 #include "monster-spell.h"
 
-/*!
-* @brief モンスターIDを取り、モンスター名をm_nameに代入する /
-* @param m_idx モンスターID
-* @param m_name モンスター名を入力する配列
-*/
-void monster_name(MONSTER_IDX m_idx, char* m_name)
-{
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	monster_desc(m_name, m_ptr, 0x00);
-}
 
 /*!
 * @brief モンスター2体がプレイヤーの近くに居るかの判定 /

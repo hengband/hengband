@@ -35,6 +35,8 @@ extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 
 #define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
 
+extern void monster_name(MONSTER_IDX m_idx, char* m_name);
+
 extern void roff_top(MONRACE_IDX r_idx);
 extern void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern void display_roff(MONRACE_IDX r_idx);
