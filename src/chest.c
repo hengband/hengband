@@ -1,6 +1,7 @@
 ﻿
 #include "angband.h"
 #include "spells-summon.h"
+#include "trap.h"
 #include "player-status.h"
 
 /*!

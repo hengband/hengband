@@ -14,6 +14,7 @@
 #include "player-status.h"
 #include "shoot.h"
 #include "object-hook.h"
+#include "trap.h"
 
 /*!
  * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly 

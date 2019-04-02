@@ -14,6 +14,86 @@ static s16b normal_traps[MAX_NORMAL_TRAPS];
 
 
 /*!
+ * @brief 箱のトラップテーブル
+ * @details
+ * <pre>
+ * Each chest has a certain set of traps, determined by pval
+ * Each chest has a "pval" from 1 to the chest level (max 55)
+ * If the "pval" is negative then the trap has been disarmed
+ * The "pval" of a chest determines the quality of its treasure
+ * Note that disarming a trap on a chest also removes the lock.
+ * </pre>
+ */
+const int chest_traps[64] =
+{
+	0,                                      /* 0 == empty */
+	(CHEST_POISON),
+	(CHEST_LOSE_STR),
+	(CHEST_LOSE_CON),
+	(CHEST_LOSE_STR),
+	(CHEST_LOSE_CON),                       /* 5 == best small wooden */
+	0,
+	(CHEST_ALARM),
+	(CHEST_ALARM),
+	(CHEST_LOSE_STR),
+	(CHEST_LOSE_CON),
+	(CHEST_POISON),
+	(CHEST_SCATTER),
+	(CHEST_LOSE_STR | CHEST_LOSE_CON),
+	(CHEST_LOSE_STR | CHEST_LOSE_CON),
+	(CHEST_SUMMON),                 /* 15 == best large wooden */
+	0,
+	(CHEST_ALARM),
+	(CHEST_SCATTER),
+	(CHEST_PARALYZE),
+	(CHEST_LOSE_STR | CHEST_LOSE_CON),
+	(CHEST_SUMMON),
+	(CHEST_PARALYZE),
+	(CHEST_LOSE_STR),
+	(CHEST_LOSE_CON),
+	(CHEST_EXPLODE),                        /* 25 == best small iron */
+	0,
+	(CHEST_E_SUMMON),
+	(CHEST_POISON | CHEST_LOSE_CON),
+	(CHEST_LOSE_STR | CHEST_LOSE_CON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_BIRD_STORM),
+	(CHEST_POISON | CHEST_SUMMON),
+	(CHEST_E_SUMMON | CHEST_ALARM),
+	(CHEST_EXPLODE),
+	(CHEST_EXPLODE | CHEST_SUMMON), /* 35 == best large iron */
+	0,
+	(CHEST_SUMMON | CHEST_ALARM),
+	(CHEST_EXPLODE),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_POISON | CHEST_PARALYZE),
+	(CHEST_EXPLODE),
+	(CHEST_BIRD_STORM),
+	(CHEST_EXPLODE | CHEST_E_SUMMON | CHEST_ALARM),
+	(CHEST_H_SUMMON),        /* 45 == best small steel */
+	0,
+	(CHEST_EXPLODE | CHEST_SUMMON | CHEST_ALARM),
+	(CHEST_BIRD_STORM),
+	(CHEST_RUNES_OF_EVIL),
+	(CHEST_EXPLODE | CHEST_SUMMON | CHEST_ALARM),
+	(CHEST_BIRD_STORM | CHEST_ALARM),
+	(CHEST_H_SUMMON | CHEST_ALARM),
+	(CHEST_RUNES_OF_EVIL),
+	(CHEST_H_SUMMON | CHEST_SCATTER | CHEST_ALARM),
+	(CHEST_RUNES_OF_EVIL | CHEST_EXPLODE),  /* 55 == best large steel */
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+	(CHEST_EXPLODE | CHEST_SUMMON),
+};
+
+
+/*!
 * @brief タグに従って、基本トラップテーブルを初期化する / Initialize arrays for normal traps
 * @return なし
 */

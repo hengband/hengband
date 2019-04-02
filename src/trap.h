@@ -5,6 +5,8 @@ extern void disclose_grid(POSITION y, POSITION x);
 extern void place_trap(POSITION y, POSITION x);
 extern void hit_trap(bool break_trap);
 
+extern const int chest_traps[64];
+
 /* Types of normal traps */
 #define NOT_TRAP        -1
 #define TRAP_TRAPDOOR    0
