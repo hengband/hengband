@@ -1586,7 +1586,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 */
 void monster_name(MONSTER_IDX m_idx, char* m_name)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_desc(m_name, m_ptr, 0x00);
 }
 
