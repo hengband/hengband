@@ -2399,13 +2399,13 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
  */
-static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx)
+static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
 	int attempts = 1000;
 	MONRACE_IDX ap_r_idx;
 	DEPTH min = MIN(current_floor_ptr->base_level - 5, 50);
 
-	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN)
+	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
 	{
 		if (current_floor_ptr->base_level == 0 || one_in_(5)) return MON_ALIEN_JURAL;
 	}
@@ -2592,7 +2592,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
-	m_ptr->ap_r_idx = initial_r_appearance(r_idx);
+	m_ptr->ap_r_idx = initial_r_appearance(r_idx, mode);
 
 	/* No flags */
 	m_ptr->mflag = 0;
