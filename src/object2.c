@@ -4706,7 +4706,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		ty = rand_spread(by, 1);
 		tx = rand_spread(bx, 1);
 
-		/* Verify location */
 		if (!in_bounds(ty, tx)) continue;
 
 		/* Bounce to that location */

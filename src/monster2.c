@@ -1810,8 +1810,6 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 	bool do_disturb = disturb_move;
 
 	POSITION d;
-
-	/* Current location */
 	POSITION fy = m_ptr->fy;
 	POSITION fx = m_ptr->fx;
 
@@ -1859,10 +1857,8 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 		d = m_ptr->cdis;
 	}
 
-
 	/* Detected */
 	if (m_ptr->mflag2 & (MFLAG2_MARK)) flag = TRUE;
-
 
 	/* Nearby */
 	if (d <= (in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT))
@@ -2096,7 +2092,6 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 					r_ptr->r_sights++;
 			}
 
-			/* Eldritch Horror */
 			if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
 			{
 				sanity_blast(m_ptr, FALSE);
@@ -2408,7 +2403,7 @@ static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx)
 {
 	int attempts = 1000;
 	MONRACE_IDX ap_r_idx;
-	DEPTH min = MIN(current_floor_ptr->base_level-5, 50);
+	DEPTH min = MIN(current_floor_ptr->base_level - 5, 50);
 
 	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN)
 	{
@@ -2491,7 +2486,6 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
 	if (p_ptr->wild_mode) return FALSE;
 
-	/* Verify location */
 	if (!in_bounds(y, x)) return (FALSE);
 	if (!r_idx) return (FALSE);
 	if (!r_ptr->name) return (FALSE);

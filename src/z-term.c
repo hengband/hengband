@@ -1832,7 +1832,6 @@ errr Term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
 	int w = Term->wid;
 	int h = Term->hgt;
 
-	/* Verify location */
 	if ((x < 0) || (x >= w)) return (-1);
 	if ((y < 0) || (y >= h)) return (-1);
 
@@ -2349,7 +2348,6 @@ errr Term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
 	TERM_LEN w = Term->wid;
 	TERM_LEN h = Term->hgt;
 
-	/* Verify location */
 	if ((x < 0) || (x >= w)) return (-1);
 	if ((y < 0) || (y >= h)) return (-1);
 
