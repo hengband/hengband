@@ -2592,6 +2592,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 			monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+			GAME_TEXT m_name[MAX_NLEN];
+			monster_name(g_ptr->m_idx, m_name);
 
 			/* Check the visibility */
 			visible = m_ptr->ml;
@@ -2614,8 +2616,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				/* Handle visible monster */
 				else
 				{
-					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, m_ptr, 0);
 					msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
 					if (m_ptr->ml)
@@ -2684,8 +2684,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					if (fear && m_ptr->ml)
 					{
 						sound(SOUND_FLEE);
-						GAME_TEXT m_name[MAX_NLEN];
-						monster_desc(m_name, m_ptr, 0);
 						msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 					}
 				}
@@ -2714,7 +2712,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	}
 
-
 	/* Potions smash open */
 	if (object_is_potion(q_ptr))
 	{
@@ -2725,14 +2722,10 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			if (potion_smash_effect(0, y, x, q_ptr->k_idx))
 			{
 				monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx];
-
-				/* ToDo (Robert): fix the invulnerability */
-				if (current_floor_ptr->grid_array[y][x].m_idx &&
-				    is_friendly(&current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx]) &&
-				    !MON_INVULNER(m_ptr))
+				if (current_floor_ptr->grid_array[y][x].m_idx && is_friendly(m_ptr) && !MON_INVULNER(m_ptr))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx], 0);
+					monster_desc(m_name, m_ptr, 0);
 					msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
 					set_hostile(&current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx]);
 				}
