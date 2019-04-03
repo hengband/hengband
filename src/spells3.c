@@ -729,7 +729,6 @@ void teleport_level(MONSTER_IDX m_idx)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
-		/* Check for quest completion */
 		check_quest_completion(m_ptr);
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
@@ -1258,7 +1257,6 @@ static bool vanish_dungeon(void)
 			/* Awake monster */
 			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
 			{
-				/* Reset sleep counter */
 				(void)set_monster_csleep(g_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */

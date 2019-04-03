@@ -2221,7 +2221,6 @@ void set_friendly(monster_type *m_ptr)
  */
 void set_pet(monster_type *m_ptr)
 {
-	/* Check for quest completion */
 	check_quest_completion(m_ptr);
 
 	m_ptr->smart |= SM_PET;
@@ -2588,7 +2587,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 
-	/* Check for quest completion */
 	check_quest_completion(m_ptr);
 
 	/* Handle the possibility of player vanquishing arena combatant -KMW- */

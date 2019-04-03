@@ -2252,11 +2252,8 @@ void process_monster(MONSTER_IDX m_idx)
 					msg_print(_("地面に落とされた。", "You have fallen from riding pet."));
 				}
 
-				/* Check for quest completion */
 				check_quest_completion(m_ptr);
-
 				delete_monster_idx(m_idx);
-
 				return;
 			}
 		}
@@ -2273,7 +2270,6 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Handle non-aggravation - Still sleeping */
 		if (!(p_ptr->cursed & TRC_AGGRAVATE)) return;
 
-		/* Reset sleep counter */
 		(void)set_monster_csleep(m_idx, 0);
 
 		/* Notice the "waking up" */
@@ -2309,8 +2305,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 	/* Paranoia... no pet uniques outside wizard mode -- TY */
 	if (is_pet(m_ptr) && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
-	      monster_has_hostile_align(NULL, 10, -10, r_ptr))
-	     || (r_ptr->flagsr & RFR_RES_ALL)))
+	      monster_has_hostile_align(NULL, 10, -10, r_ptr)) || (r_ptr->flagsr & RFR_RES_ALL)))
 	{
 		gets_angry = TRUE;
 	}
