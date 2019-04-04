@@ -600,7 +600,7 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-static int count_dt(POSITION *y, POSITION *x, bool (*test)(IDX feat), bool under)
+static int count_dt(POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool under)
 {
 	DIRECTION d;
 	int count;

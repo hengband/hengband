@@ -2272,7 +2272,7 @@ bool make_artifact(object_type *o_ptr)
  */
 bool make_artifact_special(object_type *o_ptr)
 {
-	IDX i;
+	ARTIFACT_IDX i;
 	KIND_OBJECT_IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */

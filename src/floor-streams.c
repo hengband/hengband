@@ -157,7 +157,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
  * @param feat2 境界部地形ID
  * @return なし
  */
-void add_river(IDX feat1, IDX feat2)
+void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
 {
 	POSITION y2, x2;
 	POSITION y1 = 0, x1 = 0;
@@ -228,10 +228,11 @@ void add_river(IDX feat1, IDX feat2)
  * hidden gold types are currently unused.
  * </pre>
  */
-void build_streamer(IDX feat, int chance)
+void build_streamer(FEAT_IDX feat, int chance)
 {
-	int		i, tx, ty;
-	int		y, x, dir;
+	int i;
+	POSITION y, x, tx, ty;
+	DIRECTION dir;
 	int dummy = 0;
 
 	grid_type *g_ptr;

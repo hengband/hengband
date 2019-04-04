@@ -418,7 +418,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		if (hex_spelling_any()) stop_hex_spell_all();
 
 		{
-			IDX pet_ctr, i;
+			MONSTER_IDX pet_ctr, i;
 			MONSTER_IDX *who;
 			int max_pet = 0;
 			u16b dummy_why;

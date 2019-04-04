@@ -172,7 +172,7 @@ static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
  * @param walls 最低減隣接させたい外壁の数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-static bool alloc_stairs(IDX feat, int num, int walls)
+static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 {
 	int i;
 	int shaft_num = 0;
