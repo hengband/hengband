@@ -19,7 +19,6 @@
 
 #include "angband.h"
 #include "world.h"
-#include "projection.h"
 #include "object-hook.h"
 #include "generate.h"
 #include "grid.h"
@@ -5377,37 +5376,6 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 	}
 }
 
-
-
-/*
- * Determine if a bolt spell cast from (y1,x1) to (y2,x2) will arrive
- * at the final destination, assuming no monster gets in the way.
- *
- * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
- */
-bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
-{
-	POSITION y, x;
-
-	int grid_n = 0;
-	u16b grid_g[512];
-
-	/* Check the projection path */
-	grid_n = project_path(grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
-
-	/* Identical grid */
-	if (!grid_n) return TRUE;
-
-	/* Final grid */
-	y = GRID_Y(grid_g[grid_n - 1]);
-	x = GRID_X(grid_g[grid_n - 1]);
-
-	/* May not end in an unrequested grid */
-	if ((y != y2) || (x != x2)) return (FALSE);
-
-	/* Assume okay */
-	return (TRUE);
-}
 
 
 /*

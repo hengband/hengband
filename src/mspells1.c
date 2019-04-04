@@ -40,7 +40,6 @@
 
 #include "angband.h"
 #include "object-curse.h"
-#include "projection.h"
 #include "quest.h"
 #include "realm-hex.h"
 #include "player-move.h"

@@ -18,7 +18,6 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "world.h"
-#include "projection.h"
 #include "spells-summon.h"
 #include "mutation.h"
 #include "quest.h"

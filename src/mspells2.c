@@ -12,7 +12,6 @@
  */
 
 #include "angband.h"
-#include "projection.h"
 #include "quest.h"
 #include "realm-hex.h"
 #include "player-move.h"

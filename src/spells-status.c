@@ -2,7 +2,6 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "spells-status.h"
-#include "projection.h"
 #include "spells.h"
 #include "monster.h"
 

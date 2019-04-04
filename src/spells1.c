@@ -27,7 +27,6 @@
 
 #include "melee.h"
 #include "world.h"
-#include "projection.h"
 #include "mutation.h"
 #include "rooms.h"
 #include "artifact.h"

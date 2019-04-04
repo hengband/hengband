@@ -3,7 +3,6 @@
 #include "trap.h"
 #include "player-damage.h"
 #include "player-move.h"
-#include "projection.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"

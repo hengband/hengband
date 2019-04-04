@@ -16,7 +16,6 @@
 
 #include "angband.h"
 #include "melee.h"
-#include "projection.h"
 #include "spells-summon.h"
 #include "avatar.h"
 #include "player-status.h"

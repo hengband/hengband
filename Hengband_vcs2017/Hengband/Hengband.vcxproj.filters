@@ -5,7 +5,6 @@
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\geometry.c" />
     <ClCompile Include="..\..\src\history.c" />
-    <ClCompile Include="..\..\src\projection.c" />
     <ClCompile Include="..\..\src\quest.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
     <ClCompile Include="..\..\src\realm-crusade.c" />
@@ -292,7 +291,6 @@
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\shoot.h" />
     <ClInclude Include="..\..\src\sort.h" />
-    <ClInclude Include="..\..\src\projection.h" />
     <ClInclude Include="..\..\src\store.h" />
     <ClInclude Include="..\..\src\term.h" />
     <ClInclude Include="..\..\src\trap.h" />

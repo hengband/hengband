@@ -20,7 +20,6 @@
 #include "cmd-quaff.h"
 #include "object-hook.h"
 #include "object-curse.h"
-#include "projection.h"
 #include "spells-status.h"
 #include "player-status.h"
 

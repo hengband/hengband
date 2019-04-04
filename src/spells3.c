@@ -17,7 +17,6 @@
 #include "object-hook.h"
 #include "melee.h"
 #include "player-status.h"
-#include "projection.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"

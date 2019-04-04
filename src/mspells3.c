@@ -12,7 +12,6 @@
 
 #include "angband.h"
 #include "spells-summon.h"
-#include "projection.h"
 #include "avatar.h"
 #include "spells-status.h"
 #include "cmd-spell.h"

@@ -1,5 +1,4 @@
 ﻿#include "angband.h"
-#include "projection.h"
 
 /*!
  * @brief 薬の破損効果処理 /

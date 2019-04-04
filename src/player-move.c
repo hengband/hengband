@@ -143,7 +143,6 @@
 #include "melee.h"
 #include "grid.h"
 #include "trap.h"
-#include "projection.h"
 #include "quest.h"
 #include "artifact.h"
 #include "player-move.h"

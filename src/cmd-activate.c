@@ -11,7 +11,6 @@
 #include "object-hook.h"
 #include "spells-summon.h"
 #include "sort.h"
-#include "projection.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-status.h"

@@ -1,7 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
 #include "spells-status.h"
-#include "projection.h"
 #include "spells-floor.h"
 
 /*!

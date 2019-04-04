@@ -18,7 +18,6 @@
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
 #include "sort.h"
-#include "projection.h"
 #include "spells-summon.h"
 #include "floor-events.h"
 #include "player-move.h"

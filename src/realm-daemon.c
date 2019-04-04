@@ -3,7 +3,6 @@
 #include "cmd-spell.h"
 #include "spells-summon.h"
 #include "spells-status.h"
-#include "projection.h"
 
 /*!
 * @brief 悪魔領域魔法の各処理を行う

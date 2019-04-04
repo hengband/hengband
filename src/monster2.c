@@ -14,7 +14,6 @@
 #include "cmd-pet.h"
 #include "monsterrace-hook.h"
 #include "monster-status.h"
-#include "projection.h"
 #include "monster.h"
 #include "spells-summon.h"
 #include "quest.h"
