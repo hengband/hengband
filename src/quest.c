@@ -3,6 +3,7 @@
 #include "floor-events.h"
 #include "quest.h"
 #include "monsterrace-hook.h"
+#include "monster.h"
 
 
 /*!

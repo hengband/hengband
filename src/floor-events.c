@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "grid.h"
+#include "monster.h"
 
 void day_break()
 {

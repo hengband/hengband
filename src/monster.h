@@ -19,7 +19,6 @@ extern bool alloc_horde(POSITION y, POSITION x);
 extern bool alloc_guardian(bool def_val);
 extern bool alloc_monster(POSITION dis, BIT_FLAGS mode);
 
-
 extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 /* Bit flags for monster_desc() */
 #define MD_OBJECTIVE      0x00000001 /* Objective (or Reflexive) */
@@ -55,3 +54,15 @@ extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
+
+#define is_friendly(A) \
+	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
+
+#define is_friendly_idx(IDX) \
+	 (bool)((IDX) > 0 && is_friendly(&current_floor_ptr->m_list[(IDX)]))
+
+#define is_pet(A) \
+	 (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)
+
+#define is_hostile(A) \
+	 (bool)((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)

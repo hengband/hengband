@@ -2642,18 +2642,6 @@
 #define MR1_SINKA 0x01
 
 
-#define is_friendly(A) \
-	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
-
-#define is_friendly_idx(IDX) \
-	 (bool)((IDX) > 0 && is_friendly(&current_floor_ptr->m_list[(IDX)]))
-
-#define is_pet(A) \
-	 (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)
-
-#define is_hostile(A) \
-	 (bool)((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)
-
 /* Hack -- Determine monster race appearance index is same as race index */
 #define is_original_ap(A) \
 	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)

@@ -6,6 +6,7 @@
 #include "feature.h"
 #include "warning.h"
 #include "player-status.h"
+#include "monster.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /
