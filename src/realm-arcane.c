@@ -6,6 +6,7 @@
 #include "spells-object.h"
 #include "spells-summon.h"
 #include "spells-status.h"
+#include "player-status.h"
 
 /*!
 * @brief 秘術領域魔法の各処理を行う

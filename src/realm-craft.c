@@ -5,6 +5,7 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "mutation.h"
+#include "player-status.h"
 
 
 

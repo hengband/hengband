@@ -2,6 +2,7 @@
 #include "cmd-spell.h"
 #include "spells-status.h"
 #include "spells-floor.h"
+#include "player-status.h"
 
 /*!
 * @brief 生命領域魔法の各処理を行う

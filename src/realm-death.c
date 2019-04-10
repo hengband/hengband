@@ -3,6 +3,7 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "avatar.h"
+#include "player-status.h"
 
 
 
