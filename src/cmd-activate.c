@@ -8,11 +8,12 @@
 
 #include "angband.h"
 #include "cmd-activate.h"
+#include "floor.h"
 #include "object-hook.h"
-#include "spells-summon.h"
 #include "sort.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-object.h"
 #include "spells-floor.h"

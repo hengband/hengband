@@ -16,6 +16,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "cmd-spell.h"
 #include "cmd-quaff.h"
 #include "object-hook.h"

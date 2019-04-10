@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "floor.h"
 #include "melee.h"
 #include "sort.h"
 #include "player-status.h"

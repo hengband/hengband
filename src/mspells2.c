@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "quest.h"
 #include "realm-hex.h"
 #include "player-move.h"

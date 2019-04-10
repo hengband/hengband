@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "cmd-spell.h"

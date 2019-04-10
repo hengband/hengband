@@ -1,6 +1,7 @@
 ﻿
 #include "angband.h"
 #include "artifact.h"
+#include "floor.h"
 #include "spells-object.h"
 #include "object-boost.h"
 #include "object-hook.h"

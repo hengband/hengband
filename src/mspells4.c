@@ -7,6 +7,7 @@
 
 
 #include "angband.h"
+#include "floor.h"
 #include "spells-summon.h"
 #include "artifact.h"
 #include "player-status.h"

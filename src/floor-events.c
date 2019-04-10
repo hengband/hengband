@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "floor.h"
 #include "grid.h"
 #include "monster.h"
 

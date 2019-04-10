@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "wild.h"
 #include "world.h"
 #include "monster.h"

@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "floor.h"
 #include "monster.h"
 #include "monster-status.h"
 #include "monster-spell.h"

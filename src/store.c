@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "cmd-item.h"
 #include "cmd-smith.h"
 #include "cmd-zapwand.h"
