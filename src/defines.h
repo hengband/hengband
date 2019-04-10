@@ -375,6 +375,25 @@
 #define PY_MAX_LEVEL    50              /*!< プレイヤーレベルの最大値 / Maximum level */
 
 /*
+ * Player "food" crucial values
+ */
+#define PY_FOOD_MAX     15000   /*!< 食べ過ぎ～満腹の閾値 / Food value (Bloated) */
+#define PY_FOOD_FULL    10000   /*!< 満腹～平常の閾値 / Food value (Normal) */
+#define PY_FOOD_ALERT   2000    /*!< 平常～空腹の閾値 / Food value (Hungry) */
+#define PY_FOOD_WEAK    1000    /*!< 空腹～衰弱の閾値 / Food value (Weak) */
+#define PY_FOOD_FAINT   500     /*!< 衰弱～衰弱(赤表示/麻痺)の閾値 / Food value (Fainting) */
+#define PY_FOOD_STARVE  100     /*!< 衰弱(赤表示/麻痺)～飢餓ダメージの閾値 / Food value (Starving) */
+
+/*
+ * Player regeneration constants
+ */
+#define PY_REGEN_NORMAL         197     /* Regen factor*2^16 when full */
+#define PY_REGEN_WEAK           98      /* Regen factor*2^16 when weak */
+#define PY_REGEN_FAINT          33      /* Regen factor*2^16 when fainting */
+#define PY_REGEN_HPBASE         1442    /* Min amount hp regen*2^16 */
+#define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
+
+/*
  * 職業ごとの選択可能な魔法領域現在の所 bitrh.cとtables.cでのみ使用。
  * Possible realms that can be chosen currently used only by birth.c and tables.c
  */
@@ -795,6 +814,21 @@
 #define feat_jammed_door_random(DOOR_TYPE) \
 	(feat_door[(DOOR_TYPE)].num_jammed ? \
 	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
+
+
+
+
+/* Types of pattern tiles */
+#define NOT_PATTERN_TILE      -1
+#define PATTERN_TILE_START    0
+#define PATTERN_TILE_1        1
+#define PATTERN_TILE_2        2
+#define PATTERN_TILE_3        3
+#define PATTERN_TILE_4        4
+#define PATTERN_TILE_END      5
+#define PATTERN_TILE_OLD      6
+#define PATTERN_TILE_TELEPORT 7
+#define PATTERN_TILE_WRECKED  8
 
 
 /* Types of conversions */
@@ -1915,25 +1949,6 @@
 
 
 /*
- * p_ptr->special_attackによるプレイヤーの攻撃状態の定義 / Bit flags for the "p_ptr->special_attack" variable. -LM-
- *
- * Note:  The elemental and poison attacks should be managed using the 
- * function "set_ele_attack", in spell2.c.  This provides for timeouts and
- * prevents the player from getting more than one at a time.
- */
-#define ATTACK_CONFUSE	0x00000001 /*!< プレイヤーのステータス:混乱打撃 */
-#define ATTACK_XXX1		0x00000002 /*!< プレイヤーのステータス:未使用1 */
-#define ATTACK_XXX2		0x00000004 /*!< プレイヤーのステータス:未使用2 */
-#define ATTACK_XXX3	    0x00000008 /*!< プレイヤーのステータス:未使用3 */
-#define ATTACK_ACID		0x00000010 /*!< プレイヤーのステータス:魔法剣/溶解 */
-#define ATTACK_ELEC		0x00000020 /*!< プレイヤーのステータス:魔法剣/電撃 */
-#define ATTACK_FIRE		0x00000040 /*!< プレイヤーのステータス:魔法剣/火炎 */
-#define ATTACK_COLD		0x00000080 /*!< プレイヤーのステータス:魔法剣/冷凍 */
-#define ATTACK_POIS		0x00000100 /*!< プレイヤーのステータス:魔法剣/毒殺 */
-#define ATTACK_HOLY		0x00000200 /*!< プレイヤーのステータス:対邪?(未使用) */
-#define ATTACK_SUIKEN	0x00000400 /*!< プレイヤーのステータス:酔拳 */
-
-/*
  * p_ptr->special_defenseによるプレイヤーの防御状態の定義 / Bit flags for the "p_ptr->special_defense" variable. -LM-
  */
 #define DEFENSE_ACID	0x00000001 /*!< プレイヤーのステータス:酸免疫 */
@@ -2499,10 +2514,411 @@
 #define AM_CURSED       0x00000010 /* Generate cursed/worthless items */
 
 
+/*** Monster blow constants ***/
+
+
+/*!
+ * @note モンスターの打撃方法 / New monster blow methods
+ * 打撃の種別に応じて傷と朦朧が発生するかがコメントの通りに決まる
+ */
+#define RBM_HIT          1 /*!< モンスターの攻撃種別:殴る(傷/朦朧が半々) */
+#define RBM_TOUCH        2 /*!< モンスターの攻撃種別:触る */
+#define RBM_PUNCH        3 /*!< モンスターの攻撃種別:パンチする(朦朧) */
+#define RBM_KICK         4 /*!< モンスターの攻撃種別:蹴る(朦朧) */
+#define RBM_CLAW         5 /*!< モンスターの攻撃種別:ひっかく(傷) */
+#define RBM_BITE         6 /*!< モンスターの攻撃種別:噛む(傷) */
+#define RBM_STING        7 /*!< モンスターの攻撃種別:刺す */
+#define RBM_SLASH        8 /*!< モンスターの攻撃種別:斬る(傷) */
+#define RBM_BUTT         9 /*!< モンスターの攻撃種別:角で突く(朦朧) */
+#define RBM_CRUSH       10 /*!< モンスターの攻撃種別:体当たりする(朦朧) */
+#define RBM_ENGULF      11 /*!< モンスターの攻撃種別:飲み込む */
+#define RBM_CHARGE      12 /*!< モンスターの攻撃種別:請求書を寄越す */
+#define RBM_CRAWL       13 /*!< モンスターの攻撃種別:体の上を這い回る */
+#define RBM_DROOL       14 /*!< モンスターの攻撃種別:よだれをたらす */
+#define RBM_SPIT        15 /*!< モンスターの攻撃種別:つばを吐く */
+#define RBM_EXPLODE     16 /*!< モンスターの攻撃種別:爆発する */
+#define RBM_GAZE        17 /*!< モンスターの攻撃種別:にらむ */
+#define RBM_WAIL        18 /*!< モンスターの攻撃種別:泣き叫ぶ */
+#define RBM_SPORE       19 /*!< モンスターの攻撃種別:胞子を飛ばす */
+#define RBM_XXX4        20 /*!< モンスターの攻撃種別:未定義 */
+#define RBM_BEG         21 /*!< モンスターの攻撃種別:金をせがむ */
+#define RBM_INSULT      22 /*!< モンスターの攻撃種別:侮辱する */
+#define RBM_MOAN        23 /*!< モンスターの攻撃種別:うめく */
+#define RBM_SHOW        24 /*!< モンスターの攻撃種別:歌う */
+#define RBM_SHOOT       25 /*!< モンスターの攻撃種別:射撃(非打撃) */
+
+
+/*!
+ * @note モンスターの攻撃効果 / New monster blow effects
+ */
+#define RBE_HURT         1 /*!< モンスターの攻撃効果: 攻撃する*/
+#define RBE_POISON       2 /*!< モンスターの攻撃効果: 毒をくらわす*/
+#define RBE_UN_BONUS     3 /*!< モンスターの攻撃効果: 劣化させる*/
+#define RBE_UN_POWER     4 /*!< モンスターの攻撃効果: 充填魔力を吸収する*/
+#define RBE_EAT_GOLD     5 /*!< モンスターの攻撃効果: 金を盗む*/
+#define RBE_EAT_ITEM     6 /*!< モンスターの攻撃効果: アイテムを盗む*/
+#define RBE_EAT_FOOD     7 /*!< モンスターの攻撃効果: あなたの食糧を食べる*/
+#define RBE_EAT_LITE     8 /*!< モンスターの攻撃効果: 明かりを吸収する*/
+#define RBE_ACID         9 /*!< モンスターの攻撃効果: 酸を飛ばす*/
+#define RBE_ELEC        10 /*!< モンスターの攻撃効果: 感電させる*/
+#define RBE_FIRE        11 /*!< モンスターの攻撃効果: 燃やす*/
+#define RBE_COLD        12 /*!< モンスターの攻撃効果: 凍らせる*/
+#define RBE_BLIND       13 /*!< モンスターの攻撃効果: 盲目にする*/
+#define RBE_CONFUSE     14 /*!< モンスターの攻撃効果: 混乱させる*/
+#define RBE_TERRIFY     15 /*!< モンスターの攻撃効果: 恐怖させる*/
+#define RBE_PARALYZE    16 /*!< モンスターの攻撃効果: 麻痺させる*/
+#define RBE_LOSE_STR    17 /*!< モンスターの攻撃効果: 腕力を減少させる*/
+#define RBE_LOSE_INT    18 /*!< モンスターの攻撃効果: 知能を減少させる*/
+#define RBE_LOSE_WIS    19 /*!< モンスターの攻撃効果: 賢さを減少させる*/
+#define RBE_LOSE_DEX    20 /*!< モンスターの攻撃効果: 器用さを減少させる*/
+#define RBE_LOSE_CON    21 /*!< モンスターの攻撃効果: 耐久力を減少させる*/
+#define RBE_LOSE_CHR    22 /*!< モンスターの攻撃効果: 魅力を減少させる*/
+#define RBE_LOSE_ALL    23 /*!< モンスターの攻撃効果: 全ステータスを減少させる*/
+#define RBE_SHATTER     24 /*!< モンスターの攻撃効果: 粉砕する*/
+#define RBE_EXP_10      25 /*!< モンスターの攻撃効果: 経験値を減少(10d6+)させる*/
+#define RBE_EXP_20      26 /*!< モンスターの攻撃効果: 経験値を減少(20d6+)させる*/
+#define RBE_EXP_40      27 /*!< モンスターの攻撃効果: 経験値を減少(40d6+)させる*/
+#define RBE_EXP_80      28 /*!< モンスターの攻撃効果: 経験値を減少(80d6+)させる*/
+#define RBE_DISEASE     29 /*!< モンスターの攻撃効果: 病気にする*/
+#define RBE_TIME        30 /*!< モンスターの攻撃効果: 時間を逆戻りさせる*/
+#define RBE_DR_LIFE     31 /*!< モンスターの攻撃効果: 生命力を吸収する*/
+#define RBE_DR_MANA     32 /*!< モンスターの攻撃効果: 魔力を奪う*/
+#define RBE_SUPERHURT   33 /*!< モンスターの攻撃効果: 強力に攻撃する*/
+#define RBE_INERTIA     34 /*!< モンスターの攻撃効果: 減速させる*/
+#define RBE_STUN        35 /*!< モンスターの攻撃効果: 朦朧とさせる*/
 
 
 /*** Monster flag values (hard-coded) ***/
 
+
+/*
+ * New monster race bit flags
+ */
+#define RF1_UNIQUE              0x00000001  /*!< モンスター特性: ユニーク / Unique Monster */
+#define RF1_QUESTOR             0x00000002  /*!< モンスター特性: クエストモンスター / Quest Monster */
+#define RF1_MALE                0x00000004  /*!< モンスター特性: 男性 / Male gender */
+#define RF1_FEMALE              0x00000008  /*!< モンスター特性: 女性 / Female gender */
+#define RF1_CHAR_CLEAR          0x00000010  /*!< モンスター特性: シンボルが完全に透明 / Absorbs symbol */
+#define RF1_SHAPECHANGER        0x00000020  /*!< モンスター特性: シンボルアルファベットがランダムになる / TY: shapechanger */
+#define RF1_ATTR_CLEAR          0x00000040  /*!< モンスター特性: シンボルカラーが透明色になる(地形と同じ色になる) / Absorbs color */
+#define RF1_ATTR_MULTI          0x00000080  /*!< モンスター特性: シンボルカラーがランダムに変化する(基本7色) / Changes color */
+#define RF1_FORCE_DEPTH         0x00000100  /*!< モンスター特性: 指定階未満では生成されない / Start at "correct" depth */
+#define RF1_FORCE_MAXHP         0x00000200  /*!< モンスター特性: 通常生成時必ずHPがダイス最大値になる / Start with max hitpoints */
+#define RF1_FORCE_SLEEP         0x00000400  /*!< モンスター特性: 通常生成時必ず寝ている / Start out sleeping */
+#define RF1_FORCE_EXTRA         0x00000800  /*!< モンスター特性: (未使用) / Start out something */
+#define RF1_ATTR_SEMIRAND       0x00001000  /*!< モンスター特性: シンボルカラーがランダムに変化する(15色) / Color is determined semi-randomly */
+#define RF1_FRIENDS             0x00002000  /*!< モンスター特性: 同種の友軍を用意している / Arrive with some friends */
+#define RF1_ESCORT              0x00004000  /*!< モンスター特性: 護衛を用意している/ Arrive with an escort */
+#define RF1_ESCORTS             0x00008000  /*!< モンスター特性: さらに大量の護衛を用意している / Arrive with some escorts */
+#define RF1_NEVER_BLOW          0x00010000  /*!< モンスター特性: 打撃を一切行わない / Never make physical blow */
+#define RF1_NEVER_MOVE          0x00020000  /*!< モンスター特性: 移動を一切行わない / Never make physical move */
+#define RF1_RAND_25             0x00040000  /*!< モンスター特性: ランダムに移動する確率+25%/ Moves randomly (25%) */
+#define RF1_RAND_50             0x00080000  /*!< モンスター特性: ランダムに移動する確率+50%/ Moves randomly (50%) */
+#define RF1_ONLY_GOLD           0x00100000  /*!< モンスター特性: 財宝しか落とさない / Drop only gold */
+#define RF1_ONLY_ITEM           0x00200000  /*!< モンスター特性: アイテムしか落とさない / Drop only items */
+#define RF1_DROP_60             0x00400000  /*!< モンスター特性: 落とすアイテム数60%で+1/ Drop an item/gold (60%) */
+#define RF1_DROP_90             0x00800000  /*!< モンスター特性: 落とすアイテム数90%で+1 / Drop an item/gold (90%) */
+#define RF1_DROP_1D2            0x01000000  /*!< モンスター特性: 落とすアイテム数+1d2 / Drop 1d2 items/gold */
+#define RF1_DROP_2D2            0x02000000  /*!< モンスター特性: 落とすアイテム数+2d2 / Drop 2d2 items/gold */
+#define RF1_DROP_3D2            0x04000000  /*!< モンスター特性: 落とすアイテム数+3d2 / Drop 3d2 items/gold */
+#define RF1_DROP_4D2            0x08000000  /*!< モンスター特性: 落とすアイテム数+4d2 / Drop 4d2 items/gold */
+#define RF1_DROP_GOOD           0x10000000  /*!< モンスター特性: 必ず上質品をドロップする / Drop good items */
+#define RF1_DROP_GREAT          0x20000000  /*!< モンスター特性: 必ず高級品をドロップする / Drop great items */
+#define RF1_XXX2                0x40000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF1_XXX3                0x80000000  /*!< モンスター特性: 未使用 / XXX */
+
+/*
+ * New monster race bit flags
+ */
+#define RF2_STUPID          0x00000001  /*!< モンスター特性: 愚かな行動を取る / Monster is stupid */
+#define RF2_SMART           0x00000002  /*!< モンスター特性: 賢い行動を取る / Monster is smart */
+#define RF2_CAN_SPEAK       0x00000004  /*!< モンスター特性: 台詞をしゃべる / TY: can speak */
+#define RF2_REFLECTING      0x00000008  /*!< モンスター特性: 矢やボルト魔法を反射する / Reflects bolts */
+#define RF2_INVISIBLE       0x00000010  /*!< モンスター特性: 透明視力がないと見えない / Monster avoids vision */
+#define RF2_COLD_BLOOD      0x00000020  /*!< モンスター特性: 冷血動物である / Monster avoids infra */
+#define RF2_EMPTY_MIND      0x00000040  /*!< モンスター特性: 知性を持たない(テレパシー回避) / Monster avoids telepathy */
+#define RF2_WEIRD_MIND      0x00000080  /*!< モンスター特性: 異質な知性(テレパシーで感知づらい) / Monster avoids telepathy? */
+#define RF2_MULTIPLY        0x00000100  /*!< モンスター特性: 増殖する / Monster reproduces */
+#define RF2_REGENERATE      0x00000200  /*!< モンスター特性: 急激に回復する / Monster regenerates */
+#define RF2_CHAR_MULTI      0x00000400  /*!< モンスター特性: 未使用 / (Not implemented) */
+#define RF2_ATTR_ANY        0x00000800  /*!< モンスター特性: ATTR_MULTIの色数が増える / TY: Attr_any */
+#define RF2_POWERFUL        0x00001000  /*!< モンスター特性: 強力に魔法をあやつる / Monster has strong breath */
+#define RF2_ELDRITCH_HORROR 0x00002000  /*!< モンスター特性: 狂気を呼び起こす / Sanity-blasting horror    */
+#define RF2_AURA_FIRE       0x00004000  /*!< モンスター特性: 火炎のオーラを持つ / Burns in melee */
+#define RF2_AURA_ELEC       0x00008000  /*!< モンスター特性: 電撃のオーラを持つ / Shocks in melee */
+#define RF2_OPEN_DOOR       0x00010000  /*!< モンスター特性: ドアを開けることができる / Monster can open doors */
+#define RF2_BASH_DOOR       0x00020000  /*!< モンスター特性: ドアを破壊することができる / Monster can bash doors */
+#define RF2_PASS_WALL       0x00040000  /*!< モンスター特性: 壁を抜けることができる / Monster can pass walls */
+#define RF2_KILL_WALL       0x00080000  /*!< モンスター特性: 壁を破壊して進む / Monster can destroy walls */
+#define RF2_MOVE_BODY       0x00100000  /*!< モンスター特性: 道中の弱いモンスターを押しのけることができる / Monster can move monsters */
+#define RF2_KILL_BODY       0x00200000  /*!< モンスター特性: 道中の弱いモンスターを殺して進む / Monster can kill monsters */
+#define RF2_TAKE_ITEM       0x00400000  /*!< モンスター特性: 道中のアイテムを拾う / Monster can pick up items */
+#define RF2_KILL_ITEM       0x00800000  /*!< モンスター特性: 道中のアイテムを破壊する / Monster can crush items */
+#define RF2_XXX1            0x01000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF2_XXX2            0x02000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF2_XXX3            0x04000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF2_XXX4            0x08000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF2_XXX5            0x10000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF2_XXX6            0x20000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF2_HUMAN           0x40000000  /*!< モンスター特性: 人間 / Human */
+#define RF2_QUANTUM         0x80000000  /*!< モンスター特性: 量子的な振る舞いをする / Monster has quantum behavior */
+
+/*
+ * New monster race bit flags
+ */
+#define RF3_ORC             0x00000001  /*!< モンスター特性: オーク / Orc */
+#define RF3_TROLL           0x00000002  /*!< モンスター特性: トロル / Troll */
+#define RF3_GIANT           0x00000004  /*!< モンスター特性: 巨人 / Giant */
+#define RF3_DRAGON          0x00000008  /*!< モンスター特性: ドラゴン / Dragon */
+#define RF3_DEMON           0x00000010  /*!< モンスター特性: 悪魔 / Demon */
+#define RF3_UNDEAD          0x00000020  /*!< モンスター特性: アンデッド / Undead */
+#define RF3_EVIL            0x00000040  /*!< モンスター特性: 邪悪 / Evil */
+#define RF3_ANIMAL          0x00000080  /*!< モンスター特性: 動物 / Animal */
+#define RF3_AMBERITE        0x00000100  /*!< モンスター特性: アンバーの血族 / TY: Amberite */
+#define RF3_GOOD            0x00000200  /*!< モンスター特性: 善良 / Good */
+#define RF3_AURA_COLD       0x00000400  /*!< モンスター特性: 冷気オーラ / Freezes in melee */
+#define RF3_NONLIVING       0x00000800  /*!< モンスター特性: 無生物 / TY: Non-Living (?) */
+#define RF3_HURT_LITE       0x00001000  /*!< モンスター特性: 通常の光(GF_WEAK_LITE)でダメージを受ける / Hurt by lite */
+#define RF3_HURT_ROCK       0x00002000  /*!< モンスター特性: 岩石溶解(GF_KILL_WALL)でダメージを受ける / Hurt by rock remover */
+#define RF3_HURT_FIRE       0x00004000  /*!< モンスター特性: 火炎が弱点 / Hurt badly by fire */
+#define RF3_HURT_COLD       0x00008000  /*!< モンスター特性: 冷気が弱点 / Hurt badly by cold */
+#define RF3_ANGEL           0x00010000  /*!< モンスター特性: 天使 / ANGEL */
+#define RF3_XXX17           0x00020000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX18           0x00040000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX19           0x00080000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX20           0x00100000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX21           0x00200000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX22           0x00400000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX23           0x00800000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX24           0x01000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX25           0x02000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX26           0x04000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_XXX27           0x08000000  /*!< モンスター特性: 未使用 / XXX */
+#define RF3_NO_FEAR         0x10000000  /*!< モンスター特性: 恐怖しない / Cannot be scared */
+#define RF3_NO_STUN         0x20000000  /*!< モンスター特性: 朦朧としない / Cannot be stunned */
+#define RF3_NO_CONF         0x40000000  /*!< モンスター特性: 混乱しない / Cannot be confused and resist confusion */
+#define RF3_NO_SLEEP        0x80000000  /*!< モンスター特性: 眠らない / Cannot be slept */
+
+/*
+ * New monster race bit flags
+ */
+#define RF4_SHRIEK          0x00000001  /*!< モンスター能力: 叫ぶ / Shriek for help */
+#define RF4_XXX1            0x00000002  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_DISPEL          0x00000004  /*!< モンスター能力: 魔力消去 / Dispel magic */
+#define RF4_ROCKET          0x00000008  /*!< モンスター能力: ロケット / TY: Rocket */
+#define RF4_SHOOT           0x00000010  /*!< モンスター能力: 射撃/ Fire missiles */
+#define RF4_XXX2            0x00000020  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_XXX3            0x00000040  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_XXX4            0x00000080  /*!< モンスター能力: 未使用 / XXX */
+#define RF4_BR_ACID         0x00000100  /*!< モンスター能力: 酸のブレス / Breathe Acid */
+#define RF4_BR_ELEC         0x00000200  /*!< モンスター能力: 電撃のブレス / Breathe Elec */
+#define RF4_BR_FIRE         0x00000400  /*!< モンスター能力: 火炎のブレス / Breathe Fire */
+#define RF4_BR_COLD         0x00000800  /*!< モンスター能力: 冷気のブレス / Breathe Cold */
+#define RF4_BR_POIS         0x00001000  /*!< モンスター能力: 毒のブレス / Breathe Poison */
+#define RF4_BR_NETH         0x00002000  /*!< モンスター能力: 地獄のブレス / Breathe Nether */
+#define RF4_BR_LITE         0x00004000  /*!< モンスター能力: 閃光のブレス / Breathe Lite */
+#define RF4_BR_DARK         0x00008000  /*!< モンスター能力: 暗黒のブレス / Breathe Dark */
+#define RF4_BR_CONF         0x00010000  /*!< モンスター能力: 混乱のブレス / Breathe Confusion */
+#define RF4_BR_SOUN         0x00020000  /*!< モンスター能力: 轟音のブレス / Breathe Sound */
+#define RF4_BR_CHAO         0x00040000  /*!< モンスター能力: カオスのブレス / Breathe Chaos */
+#define RF4_BR_DISE         0x00080000  /*!< モンスター能力: 劣化のブレス / Breathe Disenchant */
+#define RF4_BR_NEXU         0x00100000  /*!< モンスター能力: 因果混乱のブレス / Breathe Nexus */
+#define RF4_BR_TIME         0x00200000  /*!< モンスター能力: 時間逆転のブレス / Breathe Time */
+#define RF4_BR_INER         0x00400000  /*!< モンスター能力: 遅鈍のブレス / Breathe Inertia */
+#define RF4_BR_GRAV         0x00800000  /*!< モンスター能力: 重力のブレス / Breathe Gravity */
+#define RF4_BR_SHAR         0x01000000  /*!< モンスター能力: 破片のブレス / Breathe Shards */
+#define RF4_BR_PLAS         0x02000000  /*!< モンスター能力: プラズマのブレス / Breathe Plasma */
+#define RF4_BR_WALL         0x04000000  /*!< モンスター能力: フォースのブレス / Breathe Force */
+#define RF4_BR_MANA         0x08000000  /*!< モンスター能力: 魔力のブレス / Breathe Mana */
+#define RF4_BA_NUKE         0x10000000  /*!< モンスター能力: 放射能球 / TY: Nuke Ball */
+#define RF4_BR_NUKE         0x20000000  /*!< モンスター能力: 放射性廃棄物のブレス / TY: Toxic Breath */
+#define RF4_BA_CHAO         0x40000000  /*!< モンスター能力: ログルス球 / TY: Logrus Ball */
+#define RF4_BR_DISI         0x80000000  /*!< モンスター能力: 分解のブレス / Breathe Disintegration */
+
+/*
+ * New monster race bit flags
+ */
+#define RF5_BA_ACID         0x00000001  /*!< モンスター能力: アシッド・ボール / Acid Ball */
+#define RF5_BA_ELEC         0x00000002  /*!< モンスター能力: サンダー・ボール / Elec Ball */
+#define RF5_BA_FIRE         0x00000004  /*!< モンスター能力: ファイア・ボール / Fire Ball */
+#define RF5_BA_COLD         0x00000008  /*!< モンスター能力: アイス・ボール / Cold Ball */
+#define RF5_BA_POIS         0x00000010  /*!< モンスター能力: 悪臭雲 / Poison Ball */
+#define RF5_BA_NETH         0x00000020  /*!< モンスター能力: 地獄球 / Nether Ball */
+#define RF5_BA_WATE         0x00000040  /*!< モンスター能力: ウォーター・ボール / Water Ball */
+#define RF5_BA_MANA         0x00000080  /*!< モンスター能力: 魔力の嵐 / Mana Storm */
+#define RF5_BA_DARK         0x00000100  /*!< モンスター能力: 暗黒の嵐 / Darkness Storm */
+#define RF5_DRAIN_MANA      0x00000200  /*!< モンスター能力: 魔力吸収 / Drain Mana */
+#define RF5_MIND_BLAST      0x00000400  /*!< モンスター能力: 精神攻撃 / Blast Mind */
+#define RF5_BRAIN_SMASH     0x00000800  /*!< モンスター能力: 脳攻撃 / Smash Brain */
+#define RF5_CAUSE_1         0x00001000  /*!< モンスター能力: 軽傷の呪い / Cause Light Wound */
+#define RF5_CAUSE_2         0x00002000  /*!< モンスター能力: 重症の頃い / Cause Serious Wound */
+#define RF5_CAUSE_3         0x00004000  /*!< モンスター能力: 致命傷の呪い / Cause Critical Wound */
+#define RF5_CAUSE_4         0x00008000  /*!< モンスター能力: 秘孔を突く / Cause Mortal Wound */
+#define RF5_BO_ACID         0x00010000  /*!< モンスター能力: アシッド・ボルト / Acid Bolt */
+#define RF5_BO_ELEC         0x00020000  /*!< モンスター能力: サンダー・ボルト / Elec Bolt */
+#define RF5_BO_FIRE         0x00040000  /*!< モンスター能力: ファイア・ボルト / Fire Bolt */
+#define RF5_BO_COLD         0x00080000  /*!< モンスター能力: アイス・ボルト / Cold Bolt */
+#define RF5_BA_LITE         0x00100000  /*!< モンスター能力: スター・バースト / StarBurst */
+#define RF5_BO_NETH         0x00200000  /*!< モンスター能力: 地獄の矢 / Nether Bolt */
+#define RF5_BO_WATE         0x00400000  /*!< モンスター能力: ウォーター・ボルト / Water Bolt */
+#define RF5_BO_MANA         0x00800000  /*!< モンスター能力: 魔力の矢 / Mana Bolt */
+#define RF5_BO_PLAS         0x01000000  /*!< モンスター能力: プラズマ・ボルト / Plasma Bolt */
+#define RF5_BO_ICEE         0x02000000  /*!< モンスター能力: 極寒の矢 / Ice Bolt */
+#define RF5_MISSILE         0x04000000  /*!< モンスター能力: マジック・ミサイルt / Magic Missile */
+#define RF5_SCARE           0x08000000  /*!< モンスター能力: 恐慌 / Frighten Player */
+#define RF5_BLIND           0x10000000  /*!< モンスター能力: 盲目 / Blind Player */
+#define RF5_CONF            0x20000000  /*!< モンスター能力: 混乱 / Confuse Player */
+#define RF5_SLOW            0x40000000  /*!< モンスター能力: 減速 / Slow Player */
+#define RF5_HOLD            0x80000000  /*!< モンスター能力: 麻痺 / Paralyze Player */
+
+/*
+ * New monster race bit flags
+ */
+#define RF6_HASTE           0x00000001  /* Speed self */
+#define RF6_HAND_DOOM       0x00000002  /* Hand of Doom */
+#define RF6_HEAL            0x00000004  /* Heal self */
+#define RF6_INVULNER        0x00000008  /* INVULNERABILITY! */
+#define RF6_BLINK           0x00000010  /* Teleport Short */
+#define RF6_TPORT           0x00000020  /* Teleport Long */
+#define RF6_WORLD           0x00000040  /* world */
+#define RF6_SPECIAL         0x00000080  /* Special Attack */
+#define RF6_TELE_TO         0x00000100  /* Move player to monster */
+#define RF6_TELE_AWAY       0x00000200  /* Move player far away */
+#define RF6_TELE_LEVEL      0x00000400  /* Move player vertically */
+#define RF6_PSY_SPEAR       0x00000800  /* Psyco-spear */
+#define RF6_DARKNESS        0x00001000  /* Create Darkness */
+#define RF6_TRAPS           0x00002000  /* Create Traps */
+#define RF6_FORGET          0x00004000  /* Cause amnesia */
+#define RF6_RAISE_DEAD      0x00008000  /* Raise Dead */
+#define RF6_S_KIN           0x00010000  /* Summon "kin" */
+#define RF6_S_CYBER         0x00020000  /* Summon Cyberdemons! */
+#define RF6_S_MONSTER       0x00040000  /* Summon Monster */
+#define RF6_S_MONSTERS      0x00080000  /* Summon Monsters */
+#define RF6_S_ANT           0x00100000  /* Summon Ants */
+#define RF6_S_SPIDER        0x00200000  /* Summon Spiders */
+#define RF6_S_HOUND         0x00400000  /* Summon Hounds */
+#define RF6_S_HYDRA         0x00800000  /* Summon Hydras */
+#define RF6_S_ANGEL         0x01000000  /* Summon Angel */
+#define RF6_S_DEMON         0x02000000  /* Summon Demon */
+#define RF6_S_UNDEAD        0x04000000  /* Summon Undead */
+#define RF6_S_DRAGON        0x08000000  /* Summon Dragon */
+#define RF6_S_HI_UNDEAD     0x10000000  /* Summon Greater Undead */
+#define RF6_S_HI_DRAGON     0x20000000  /* Summon Ancient Dragon */
+#define RF6_S_AMBERITES     0x40000000  /* Summon Amberites */
+#define RF6_S_UNIQUE        0x80000000  /* Summon Unique Monster */
+
+/*
+ * New monster race bit flags
+ */
+#define RF7_AQUATIC             0x00000001  /* Aquatic monster */
+#define RF7_CAN_SWIM            0x00000002  /* Monster can swim */
+#define RF7_CAN_FLY             0x00000004  /* Monster can fly */
+#define RF7_FRIENDLY            0x00000008  /* Monster is friendly */
+#define RF7_NAZGUL              0x00000010  /* Is a "Nazgul" unique */
+#define RF7_UNIQUE2             0x00000020  /* Fake unique */
+#define RF7_RIDING              0x00000040  /* Good for riding */
+#define RF7_KAGE                0x00000080  /* Is kage */
+#define RF7_HAS_LITE_1          0x00000100  /* Monster carries light */
+#define RF7_SELF_LITE_1         0x00000200  /* Monster lights itself */
+#define RF7_HAS_LITE_2          0x00000400  /* Monster carries light */
+#define RF7_SELF_LITE_2         0x00000800  /* Monster lights itself */
+#define RF7_GUARDIAN            0x00001000  /* Guardian of a dungeon */
+#define RF7_CHAMELEON           0x00002000  /* Chameleon can change */
+#define RF7_XXXX4XXX            0x00004000  /* Now Empty */
+#define RF7_TANUKI              0x00008000  /* Tanuki disguise */
+#define RF7_HAS_DARK_1          0x00010000  /* Monster carries darkness */
+#define RF7_SELF_DARK_1         0x00020000  /* Monster darkens itself */
+#define RF7_HAS_DARK_2          0x00040000  /* Monster carries darkness */
+#define RF7_SELF_DARK_2         0x00080000  /* Monster darkens itself */
+
+/*
+ * Monster race flags
+ */
+#define RF8_WILD_ONLY           0x00000001
+#define RF8_WILD_TOWN           0x00000002
+#define RF8_XXX8X02             0x00000004
+#define RF8_WILD_SHORE          0x00000008
+#define RF8_WILD_OCEAN          0x00000010
+#define RF8_WILD_WASTE          0x00000020
+#define RF8_WILD_WOOD           0x00000040
+#define RF8_WILD_VOLCANO        0x00000080
+#define RF8_XXX8X08             0x00000100
+#define RF8_WILD_MOUNTAIN       0x00000200
+#define RF8_WILD_GRASS          0x00000400
+#define RF8_WILD_ALL            0x80000000
+
+/*
+ * Monster drop info
+ */
+#define RF9_DROP_CORPSE         0x00000001
+#define RF9_DROP_SKELETON       0x00000002
+#define RF9_EAT_BLIND           0x00000004
+#define RF9_EAT_CONF            0x00000008
+#define RF9_EAT_MANA            0x00000010
+#define RF9_EAT_NEXUS           0x00000020
+#define RF9_EAT_SLEEP           0x00000040
+#define RF9_EAT_BERSERKER       0x00000080
+#define RF9_EAT_ACIDIC          0x00000100
+#define RF9_EAT_SPEED           0x00000200
+#define RF9_EAT_CURE            0x00000400
+#define RF9_EAT_FIRE_RES        0x00000800
+#define RF9_EAT_COLD_RES        0x00001000
+#define RF9_EAT_ACID_RES        0x00002000
+#define RF9_EAT_ELEC_RES        0x00004000
+#define RF9_EAT_POIS_RES        0x00008000
+#define RF9_EAT_INSANITY        0x00010000
+#define RF9_EAT_DRAIN_EXP       0x00020000
+#define RF9_EAT_POISONOUS       0x00040000
+#define RF9_EAT_GIVE_STR        0x00080000
+#define RF9_EAT_GIVE_INT        0x00100000
+#define RF9_EAT_GIVE_WIS        0x00200000
+#define RF9_EAT_GIVE_DEX        0x00400000
+#define RF9_EAT_GIVE_CON        0x00800000
+#define RF9_EAT_GIVE_CHR        0x01000000
+#define RF9_EAT_LOSE_STR        0x02000000
+#define RF9_EAT_LOSE_INT        0x04000000
+#define RF9_EAT_LOSE_WIS        0x08000000
+#define RF9_EAT_LOSE_DEX        0x10000000
+#define RF9_EAT_LOSE_CON        0x20000000
+#define RF9_EAT_LOSE_CHR        0x40000000
+#define RF9_EAT_DRAIN_MANA      0x80000000
+
+/*
+ * Monster bit flags of racial resistances
+ * Note: Resist confusion was merged to RFR_NO_CONF
+ */
+#define RFR_IM_ACID         0x00000001  /* Immunity acid */
+#define RFR_IM_ELEC         0x00000002  /* Immunity elec */
+#define RFR_IM_FIRE         0x00000004  /* Immunity fire */
+#define RFR_IM_COLD         0x00000008  /* Immunity cold */
+#define RFR_IM_POIS         0x00000010  /* Immunity poison */
+#define RFR_RES_LITE        0x00000020  /* Resist lite */
+#define RFR_RES_DARK        0x00000040  /* Resist dark */
+#define RFR_RES_NETH        0x00000080  /* Resist nether */
+#define RFR_RES_WATE        0x00000100  /* Resist water */
+#define RFR_RES_PLAS        0x00000200  /* Resist plasma */
+#define RFR_RES_SHAR        0x00000400  /* Resist shards */
+#define RFR_RES_SOUN        0x00000800  /* Resist sound */
+#define RFR_RES_CHAO        0x00001000  /* Resist chaos */
+#define RFR_RES_NEXU        0x00002000  /* Resist nexus */
+#define RFR_RES_DISE        0x00004000  /* Resist disenchantment */
+#define RFR_RES_WALL        0x00008000  /* Resist force */
+#define RFR_RES_INER        0x00010000  /* Resist inertia */
+#define RFR_RES_TIME        0x00020000  /* Resist time */
+#define RFR_RES_GRAV        0x00040000  /* Resist gravity */
+#define RFR_RES_ALL         0x00080000  /* Resist all */
+#define RFR_RES_TELE        0x00100000  /* Resist teleportation */
+#define RFR_XXX21           0x00200000
+#define RFR_XXX22           0x00400000
+#define RFR_XXX23           0x00800000
+#define RFR_XXX24           0x01000000
+#define RFR_XXX25           0x02000000
+#define RFR_XXX26           0x04000000
+#define RFR_XXX27           0x08000000
+#define RFR_XXX28           0x10000000
+#define RFR_XXX29           0x20000000
+#define RFR_XXX30           0x40000000
+#define RFR_XXX31           0x80000000
 
 
  /*
@@ -2536,6 +2952,18 @@
 #define MR1_SINKA 0x01
 
 
+#define is_friendly(A) \
+	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
+
+#define is_friendly_idx(IDX) \
+	 (bool)((IDX) > 0 && is_friendly(&current_floor_ptr->m_list[(IDX)]))
+
+#define is_pet(A) \
+	 (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)
+
+#define is_hostile(A) \
+	 (bool)((is_friendly(A) || is_pet(A)) ? FALSE : TRUE)
+
 /* Hack -- Determine monster race appearance index is same as race index */
 #define is_original_ap(A) \
 	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
@@ -2551,6 +2979,20 @@
 	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
 
 
+/*** Option Definitions ***/
+
+
+#define OPT_PAGE_INPUT          1
+#define OPT_PAGE_MAPSCREEN      2
+#define OPT_PAGE_TEXT           3
+#define OPT_PAGE_GAMEPLAY       4
+#define OPT_PAGE_DISTURBANCE    5
+#define OPT_PAGE_BIRTH          6
+#define OPT_PAGE_AUTODESTROY    7
+#define OPT_PAGE_PLAYRECORD    10
+
+#define OPT_PAGE_JAPANESE_ONLY 99
+
 
 /*** Macro Definitions ***/
 
@@ -2560,6 +3002,28 @@
  */
 #define term_screen     (angband_term[0])
 
+
+/*
+ * Determine if a given inventory item is "aware"
+ */
+#define object_is_aware(T) \
+    (k_info[(T)->k_idx].aware)
+
+/*
+ * Determine if a given inventory item is "tried"
+ */
+#define object_is_tried(T) \
+    (k_info[(T)->k_idx].tried)
+
+
+/*
+ * Determine if a given inventory item is "known"
+ * Test One -- Check for special "known" tag
+ * Test Two -- Check for "Easy Know" + "Aware"
+ */
+#define object_is_known(T) \
+    (((T)->ident & (IDENT_KNOWN)) || \
+     (k_info[(T)->k_idx].easy_know && k_info[(T)->k_idx].aware))
 
 
 /*
@@ -2571,7 +3035,7 @@
 	((k_info[(T)->k_idx].flavor) ? \
 	 (k_info[k_info[(T)->k_idx].flavor].x_attr) : \
 	 ((!(T)->k_idx || ((T)->tval != TV_CORPSE) || ((T)->sval != SV_CORPSE) || \
-	  (k_info[(T)->k_idx].x_attr != TERM_DARK)) ? \
+	   (k_info[(T)->k_idx].x_attr != TERM_DARK)) ? \
 	  (k_info[(T)->k_idx].x_attr) : (r_info[(T)->pval].x_attr)))
 
 /*
@@ -2583,6 +3047,32 @@
 	((k_info[(T)->k_idx].flavor) ? \
 	 (k_info[k_info[(T)->k_idx].flavor].x_char) : \
 	 (k_info[(T)->k_idx].x_char))
+
+
+/*
+ * Artifacts use the "name1" field
+ */
+#define object_is_fixed_artifact(T) \
+	((T)->name1 ? TRUE : FALSE)
+
+/*
+ * Ego-Items use the "name2" field
+ */
+#define object_is_ego(T) \
+	((T)->name2 ? TRUE : FALSE)
+
+
+/*
+ * Broken items.
+ */
+#define object_is_broken(T) \
+	((T)->ident & (IDENT_BROKEN))
+
+/*
+ * Cursed items.
+ */
+#define object_is_cursed(T) \
+	((T)->curse_flags)
 
 
 /*
@@ -2623,6 +3113,24 @@
 	((int)((G) % 256U))
 
 
+/*
+ * Determines if a map location is fully inside the outer walls
+ */
+#define in_bounds(Y,X) \
+   (((Y) > 0) && ((X) > 0) && ((Y) < current_floor_ptr->height-1) && ((X) < current_floor_ptr->width-1))
+
+/*
+ * Determines if a map location is on or inside the outer walls
+ */
+#define in_bounds2(Y,X) \
+   (((Y) >= 0) && ((X) >= 0) && ((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
+
+/*
+ * Determines if a map location is on or inside the outer walls
+ * (unsigned version)
+ */
+#define in_bounds2u(Y,X) \
+   (((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
 
 /*
  * Determines if a map location is currently "on screen" -RAK-
@@ -2632,6 +3140,176 @@
   (((Y) >= panel_row_min) && ((Y) <= panel_row_max) && \
    ((X) >= panel_col_min) && ((X) <= panel_col_max))
 
+
+/*
+ * Determine if player is on this grid
+ */
+#define player_bold(Y,X) \
+	(((Y) == p_ptr->y) && ((X) == p_ptr->x))
+
+
+/*
+ * Grid based version of "player_bold()"
+ */
+#define player_grid(C) \
+	((C) == &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])
+
+
+#define cave_have_flag_bold(Y,X,INDEX) \
+	(have_flag(f_info[current_floor_ptr->grid_array[(Y)][(X)].feat].flags, (INDEX)))
+
+
+#define cave_have_flag_grid(C,INDEX) \
+	(have_flag(f_info[(C)->feat].flags, (INDEX)))
+
+
+/*
+ * Determine if a "feature" supports "los"
+ */
+#define feat_supports_los(F) \
+	(have_flag(f_info[(F)].flags, FF_LOS))
+
+
+/*
+ * Determine if a "legal" grid supports "los"
+ */
+#define cave_los_bold(Y,X) \
+	(feat_supports_los(current_floor_ptr->grid_array[(Y)][(X)].feat))
+
+#define cave_los_grid(C) \
+	(feat_supports_los((C)->feat))
+
+
+/*
+ * Determine if a "legal" grid is a "clean" floor grid
+ * Determine if terrain-change spells are allowed in a grid.
+ *
+ * Line 1 -- forbid non-floors
+ * Line 2 -- forbid object terrains
+ * Line 3 -- forbid normal objects
+ */
+#define cave_clean_bold(Y,X) \
+	(cave_have_flag_bold((Y), (X), FF_FLOOR) && \
+	 !(current_floor_ptr->grid_array[Y][X].info & CAVE_OBJECT) && \
+	  (current_floor_ptr->grid_array[Y][X].o_idx == 0))
+
+
+/*
+ * Determine if an object can be dropped on a "legal" grid
+ *
+ * Line 1 -- forbid non-drops
+ * Line 2 -- forbid object terrains
+ */
+#define cave_drop_bold(Y,X) \
+	(cave_have_flag_bold((Y), (X), FF_DROP) && \
+	 !(current_floor_ptr->grid_array[Y][X].info & CAVE_OBJECT))
+
+
+/*
+ * Determine if a "legal" grid is an "empty" floor grid
+ * Determine if monsters are allowed to move into a grid
+ *
+ * Line 1 -- forbid non-placement grids
+ * Line 2 -- forbid normal monsters
+ * Line 3 -- forbid the player
+ */
+#define cave_empty_bold(Y,X) \
+	(cave_have_flag_bold((Y), (X), FF_PLACE) && \
+	 !(current_floor_ptr->grid_array[Y][X].m_idx) && \
+	 !player_bold(Y,X))
+
+
+/*
+ * Determine if a "legal" grid is an "empty" floor grid
+ * Determine if monster generation is allowed in a grid
+ *
+ * Line 1 -- forbid non-empty grids
+ * Line 2 -- forbid trees while dungeon generation
+ */
+#define cave_empty_bold2(Y,X) \
+	(cave_empty_bold(Y,X) && \
+	 (character_dungeon || !cave_have_flag_bold((Y), (X), FF_TREE)))
+
+
+/*
+ * Determine if a "legal" grid is an "naked" floor grid
+ *
+ * Line 1 -- forbid non-clean gird
+ * Line 2 -- forbid monsters
+ * Line 3 -- forbid the player
+ */
+#define cave_naked_bold(Y,X) \
+	(cave_clean_bold(Y,X) && \
+	 !(current_floor_ptr->grid_array[Y][X].m_idx) && \
+	 !player_bold(Y,X))
+
+
+/*
+ * Determine if a "legal" grid is "permanent"
+ *
+ * Line 1 -- permanent flag
+ */
+#define cave_perma_bold(Y,X) \
+	(cave_have_flag_bold((Y), (X), FF_PERMANENT))
+
+
+/*
+ * Grid based version of "cave_empty_bold()"
+ */
+#define cave_empty_grid(C) \
+	(cave_have_flag_grid((C), FF_PLACE) && \
+	 !((C)->m_idx) && \
+	 !player_grid(C))
+
+
+/*
+ * Grid based version of "cave_perma_bold()"
+ */
+#define cave_perma_grid(C) \
+	(cave_have_flag_grid((C), FF_PERMANENT))
+
+
+#define pattern_tile(Y,X) \
+	(cave_have_flag_bold((Y), (X), FF_PATTERN))
+
+/*
+ * Does the grid stop disintegration?
+ */
+#define cave_stop_disintegration(Y,X) \
+	(!cave_have_flag_bold((Y), (X), FF_PROJECT) && \
+	 (!cave_have_flag_bold((Y), (X), FF_HURT_DISI) || \
+	  cave_have_flag_bold((Y), (X), FF_PERMANENT)))
+
+
+/*
+ * Determine if a "legal" grid is within "los" of the player
+ *
+ * Note the use of comparison to zero to force a "boolean" result
+ */
+#define player_has_los_grid(C) \
+    (((C)->info & (CAVE_VIEW)) != 0)
+
+/*
+ * Determine if a "legal" grid is within "los" of the player
+ *
+ * Note the use of comparison to zero to force a "boolean" result
+ */
+#define player_has_los_bold(Y,X) \
+    (((current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->inside_battle)
+
+
+/*
+ * Determine if a "feature" is "permanent wall"
+ */
+#define permanent_wall(F) \
+	(have_flag((F)->flags, FF_WALL) && \
+	 have_flag((F)->flags, FF_PERMANENT))
+
+/*
+ * Get feature mimic from f_info[] (applying "mimic" field)
+ */
+#define get_feat_mimic(C) \
+	(f_info[(C)->mimic ? (C)->mimic : (C)->feat].mimic)
 
 /*
  * Hack -- Prepare to use the "Secure" routines
@@ -2874,6 +3552,30 @@ extern int PlayerUID;
 #define MAX_BACT                    48
 
 /*
+ * Quest status
+ */
+#define QUEST_STATUS_UNTAKEN              0 /*!< クエストステータス状態：未発生*/
+#define QUEST_STATUS_TAKEN                1 /*!< クエストステータス状態：発生中*/
+#define QUEST_STATUS_COMPLETED            2 /*!< クエストステータス状態：達成*/
+#define QUEST_STATUS_REWARDED             3 /*!< クエストステータス状態：報酬受け取り前*/
+#define QUEST_STATUS_FINISHED             4 /*!< クエストステータス状態：完了*/
+#define QUEST_STATUS_FAILED               5 /*!< クエストステータス状態：失敗*/
+#define QUEST_STATUS_FAILED_DONE          6 /*!< クエストステータス状態：失敗完了*/
+#define QUEST_STATUS_STAGE_COMPLETED      7 /*!< クエストステータス状態：ステージ毎達成*/
+
+/*
+ * Quest type
+ */
+#define QUEST_TYPE_KILL_LEVEL                1 /*!< クエスト目的: 特定のユニークモンスターを倒す */
+#define QUEST_TYPE_KILL_ANY_LEVEL            2 /*!< クエスト目的: イベント受託時点でランダムで選ばれた特定のユニークモンスターを倒す */
+#define QUEST_TYPE_FIND_ARTIFACT             3 /*!< クエスト目的: 特定のアーティファクトを発見する */
+#define QUEST_TYPE_FIND_EXIT                 4 /*!< クエスト目的: 脱出する */
+#define QUEST_TYPE_KILL_NUMBER               5 /*!< クエスト目的: モンスターを無差別に特定数倒す */
+#define QUEST_TYPE_KILL_ALL                  6 /*!< クエスト目的: エリア中のすべてのモンスターを全て倒す */
+#define QUEST_TYPE_RANDOM                    7 /*!< クエスト目的: ランダムクエストとして選ばれたユニーク1体を倒す */
+#define QUEST_TYPE_TOWER                     8 /*!< クエスト目的: 複数のエリアの全てのモンスターを倒す */
+
+/*
  * Initialization flags
  */
 #define INIT_NAME_ONLY          0x01
@@ -2882,6 +3584,14 @@ extern int PlayerUID;
 #define INIT_CREATE_DUNGEON     0x08
 #define INIT_ONLY_FEATURES      0x10
 #define INIT_ONLY_BUILDINGS     0x20
+
+/*
+ * Quest flags
+ */
+#define QUEST_FLAG_SILENT  0x01 /*!< クエストフラグ: クエスト進行に関する情報表示を抑止する / no messages from completion */
+#define QUEST_FLAG_PRESET  0x02 /*!< クエストフラグ: クエストがダンジョン外で発生する / quest is outside the main dungeon */
+#define QUEST_FLAG_ONCE    0x04 /*!< クエストフラグ: クエストがフロアを出た時点で完了する / quest is marked finished after leaving */
+#define QUEST_FLAG_TOWER   0x08 /*!< クエストフラグ: クエスト:塔の形式で進行する / Tower quest is special */
 
 /*
  * Available graphic modes
@@ -3125,6 +3835,273 @@ extern int PlayerUID;
 #define MS_S_AMBERITE     94
 #define MS_S_UNIQUE       95
 
+
+#define MON_BEGGAR        12
+#define MON_LEPER         13
+#define MON_BLACK_MARKET  14
+#define MON_LION_HEART    19
+#define MON_GHB           39
+#define MON_NOV_PRIEST    45
+#define MON_GRIP          53
+#define MON_WOLF          54
+#define MON_FANG          55
+#define MON_LOUSE         69
+#define MON_PIRANHA       70
+#define MON_COPPER_COINS  85
+#define MON_NOV_PALADIN   97
+#define MON_GREEN_G       100
+#define MON_NOV_PRIEST_G  109
+#define MON_SILVER_COINS  117
+#define MON_D_ELF         122
+#define MON_MANES         128
+#define MON_LOST_SOUL     133
+#define MON_ROBIN_HOOD    138
+#define MON_NOV_PALADIN_G 147
+#define MON_PHANTOM_W     152
+#define MON_WOUNDED_BEAR  159
+#define MON_D_ELF_MAGE    178
+#define MON_D_ELF_WARRIOR 182
+#define MON_BLUE_HORROR   189
+#define MON_GOLD_COINS    195
+#define MON_VORPAL_BUNNY  205
+#define MON_MASTER_YEEK   224
+#define MON_PRIEST        225
+#define MON_D_ELF_PRIEST  226
+#define MON_TIGER         230
+#define MON_MITHRIL_COINS 239
+#define MON_DRUID         241
+#define MON_PINK_HORROR   242
+#define MON_HILL_GIANT    255
+#define MON_WERERAT       270
+#define MON_UMBER_HULK    283
+#define MON_ORC_CAPTAIN   285
+#define MON_BERSERKER     293
+#define MON_IMP           296
+#define MON_SHAGRAT       314
+#define MON_GORBAG        315
+#define MON_STONE_GIANT   321
+#define MON_LIZARD_KING   332
+#define MON_WYVERN        334
+#define MON_SABRE_TIGER   339
+#define MON_D_ELF_LORD    348
+#define MON_FIRE_VOR      354
+#define MON_WATER_VOR     355
+#define MON_ARCH_VILE     357
+#define MON_COLD_VOR      358
+#define MON_ENERGY_VOR    359
+#define MON_IRON_GOLEM    367
+#define MON_JADE_MONK     370
+#define MON_D_ELF_WARLOCK 375
+#define MON_HAGEN         383
+#define MON_MENELDOR      384
+#define MON_PHANTOM_B     385
+#define MON_C_CRAWLER     395
+#define MON_XICLOTLAN     396
+#define MON_D_ELF_DRUID   400
+#define MON_TROLL_PRIEST  403
+#define MON_GWAIHIR       410
+#define MON_ANGEL         417
+#define MON_ADAMANT_COINS 423
+#define MON_COLBRAN       435
+#define MON_SPIRIT_NAGA   436
+#define MON_GACHAPIN      441
+#define MON_BASILISK      453
+#define MON_ARCHANGEL     456
+#define MON_MITHRIL_GOLEM 464
+#define MON_THORONDOR     468
+#define MON_SHADOW_DRAKE  471
+#define MON_GHOST         477
+#define MON_OGRE_SHAMAN   479
+#define MON_GHOUL_KING    483
+#define MON_NINJA         485
+#define MON_BICLOPS       490
+#define MON_IVORY_MONK    492
+#define MON_LOG_MASTER    498
+#define MON_ETHER_DRAKE   504
+#define MON_GOEMON        505
+#define MON_CHERUB        511
+#define MON_WATER_ELEM    512
+#define MON_JURT          517
+#define MON_LICH          518
+#define MON_BLOODLETTER   523
+#define MON_HALFLING_S    539
+#define MON_GRAV_HOUND    540
+#define MON_REVENANT      555
+#define MON_RAAL          557
+#define MON_COLOSSUS      558
+#define MON_NIGHTBLADE    564
+#define MON_ELDER_THING   569
+#define MON_CRYPT_THING   577
+#define MON_NEXUS_VOR     587
+#define MON_PLASMA_VOR    588
+#define MON_TIME_VOR      589
+#define MON_M_MH_DRAGON   593
+#define MON_MANDOR        598
+#define MON_SHIM_VOR      600
+#define MON_SERAPH        605
+#define MON_BARON_HELL    609
+#define MON_KAVLAX        616
+#define MON_ETTIN         621
+#define MON_VAMPIRE_LORD  623
+#define MON_JUBJUB        640
+#define MON_G_C_DRAKE     646
+#define MON_CLUB_DEMON    648
+#define MON_F_ANGEL       652
+#define MON_D_ELF_SORC    657
+#define MON_MASTER_LICH   658
+#define MON_RINALDO       660
+#define MON_ARCHON        661
+#define MON_UND_BEHOLDER  664
+#define MON_IRON_LICH     666
+#define MON_JACK_SHADOWS  670
+#define MON_LLOIGOR       682
+#define MON_DREADMASTER   690
+#define MON_DROLEM        691
+#define MON_DAWN          693
+#define MON_NAZGUL        696
+#define MON_SMAUG         697
+#define MON_STORMBRINGER  698
+#define MON_ULTRA_PALADIN 699
+#define MON_G_TITAN       702
+#define MON_S_TYRANNO     705
+#define MON_FAFNER        712
+#define MON_G_BALROG      720
+#define MON_TIME_HOUND    725
+#define MON_PLASMA_HOUND  726
+#define MON_BULLGATES     732
+#define MON_SANTACLAUS    733
+#define MON_LORD_CHAOS    737
+#define MON_TINDALOS      739
+#define MON_DEMILICH      742
+#define MON_NIGHTCRAWLER  744
+#define MON_CHAOS_VOR     751
+#define MON_AETHER_VOR    752
+#define MON_FUNDIN        762
+#define MON_DWORKIN       763
+#define MON_NIGHTWALKER   768
+#define MON_RAPHAEL       769
+#define MON_SARUMAN       771
+#define MON_GANDALF       772
+#define MON_BRAND         773
+#define MON_SHADOWLORD    774
+#define MON_ARCHLICH      776
+#define MON_JABBERWOCK    778
+#define MON_CHAOS_HOUND   779
+#define MON_ULT_BEHOLDER  781
+#define MON_SHAMBLER      786
+#define MON_BLEYS         789
+#define MON_FIONA         791
+#define MON_SKY_DRAKE     793
+#define MON_JULIAN        794
+#define MON_BLACK_REAVER  798
+#define MON_CAINE         799
+#define MON_GERARD        807
+#define MON_UNGOLIANT     808
+#define MON_ATLACH_NACHA  809
+#define MON_Y_GOLONAC     810
+#define MON_AETHER_HOUND  811
+#define MON_WARP_DEMON    812
+#define MON_ERIC          813
+#define MON_UNMAKER       815
+#define MON_CYBER         816
+#define MON_KLING         819
+#define MON_CORWIN        820
+#define MON_ANGMAR        825
+#define MON_CANTORAS      830
+#define MON_GODZILLA      832
+#define MON_SPAWN_CTH     836
+#define MON_SURTUR        837
+#define MON_TARRASQUE     838
+#define MON_LUNGORTHIN    839
+#define MON_CYBER_KING    843
+#define MON_WYRM_POWER    847
+#define MON_NODENS        849
+#define MON_JORMUNGAND    854
+#define MON_DESTROYER     855
+#define MON_GOTHMOG       856
+#define MON_G_CTHULHU     857
+#define MON_SAURON        858
+#define MON_UNICORN_ORD   859
+#define MON_OBERON        860
+#define MON_MORGOTH       861
+#define MON_SERPENT       862
+#define MON_ONE_RING      864
+#define MON_CAAWS         866
+#define MON_CULVERIN      867
+#define MON_EBONY_MONK    870
+#define MON_HAGURE        871
+#define MON_OROCHI        872
+#define MON_ECHIZEN       873
+#define MON_SPECT_WYRM    874
+#define MON_DIO           878
+#define MON_OHMU          879
+#define MON_WONG          880
+#define MON_ZOMBI_SERPENT 883
+#define MON_D_ELF_SHADE   886
+#define MON_MANA_HOUND    887
+#define MON_VENOM_WYRM    890
+#define MON_TROLL_KING    894
+#define MON_BAZOOKER      896
+#define MON_SHARD_VOR     897
+#define MON_ELF_LORD      900
+#define MON_MASTER_MYS    916
+#define MON_G_MASTER_MYS  917
+#define MON_IE            921
+#define MON_TSUCHINOKO    926
+#define MON_GCWADL        929
+#define MON_LOCKE_CLONE   930
+#define MON_CALDARM       931
+#define MON_BANORLUPART   932
+#define MON_BANOR         933
+#define MON_LUPART        934
+#define MON_KENSHIROU     936
+#define MON_W_KNIGHT      938
+#define MON_PLANETAR      942
+#define MON_SOLAR         943
+#define MON_BIKETAL       945
+#define MON_RICH          948
+#define MON_IKETA         949
+#define MON_B_DEATH_SWORD 953
+#define MON_YASE_HORSE    955
+#define MON_HORSE         956
+#define MON_BOTEI         963
+#define MON_KAGE          964
+#define MON_JAIAN         967
+#define MON_BELD          973
+#define MON_THAT_BAT      975
+#define MON_SHUTEN        979
+#define MON_FENGHUANG     988
+#define MON_KIRIN         989
+#define MON_BAHAMUT       1000
+#define MON_SUKE          1001
+#define MON_KAKU          1002
+#define MON_GHOST_Q       1003
+#define MON_PIP           1004
+#define MON_A_GOLD        1010
+#define MON_A_SILVER      1011
+#define MON_ROLENTO       1013
+#define MON_RAOU          1018
+#define MON_SHURYUUDAN    1023
+#define MON_WAHHA         1031
+#define MON_DEBBY         1032
+#define MON_KNI_TEMPLAR   1037
+#define MON_PALADIN       1038
+#define MON_CHAMELEON     1040
+#define MON_CHAMELEON_K   1041
+#define MON_TOPAZ_MONK    1047
+#define MON_M_MINDCRAFTER 1056
+#define MON_ELDER_VAMPIRE 1058
+#define MON_NOBORTA       1059
+#define MON_MORI_TROLL    1060
+#define MON_BARNEY        1061
+#define MON_GROO          1062
+#define MON_LOUSY         1063
+#define MON_WYRM_SPACE    1064
+#define MON_JIZOTAKO      1065
+#define MON_TANUKI        1067
+#define MON_ALIEN_JURAL   1082
+#define MON_HATOPOPPO     1083
+#define MON_KOGAN         1096
 
 /* Maximum "Nazguls" number */
 #define MAX_NAZGUL_NUM 5
