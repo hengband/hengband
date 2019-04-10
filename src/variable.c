@@ -435,31 +435,27 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
  * Not completely allocated, that would be inefficient
  * Not completely hardcoded, that would overflow memory
  */
-floor_type floor;
-floor_type *current_floor_ptr = &floor;
+floor_type floor_info;
+floor_type *current_floor_ptr = &floor_info;
 
 /*
  * The array of saved floors
  */
 saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
-
 /*
  * Number of floor_id used from birth
  */
 FLOOR_IDX max_floor_id;
 
-
 world_type world;
 world_type *current_world_ptr = &world;
-
 
 /*
  * Sign for current process used in temporal files.
  * Actually it is the start time of current process.
  */
 u32b saved_floor_file_sign;
-
 
 /*
  * Maximum number of towns
