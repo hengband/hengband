@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "player-move.h"
 #include "player-status.h"
 #include "floor.h"
 #include "artifact.h"
