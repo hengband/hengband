@@ -51,3 +51,13 @@ extern bool object_can_refill_torch(object_type *o_ptr);
 extern bool can_player_destroy_object(object_type *o_ptr);
 extern bool object_is_quest_target(object_type *o_ptr);
 
+/*
+ * Determine if a given inventory item is "aware"
+ */
+#define object_is_aware(T) (k_info[(T)->k_idx].aware)
+
+ /*
+  * Determine if a given inventory item is "tried"
+  */
+#define object_is_tried(T) (k_info[(T)->k_idx].tried)
+

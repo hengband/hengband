@@ -2,6 +2,7 @@
 #include "avatar.h"
 #include "spells-status.h"
 #include "player-status.h"
+#include "object-hook.h"
 
 /*!
  * @brief ロッドの効果を発動する

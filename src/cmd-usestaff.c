@@ -3,6 +3,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "spells-status.h"
+#include "object-hook.h"
 
 
 
