@@ -14,6 +14,7 @@
 #include "sort.h"
 #include "store.h"
 #include "monster.h"
+#include "object-hook.h"
 
 
 #ifdef ALLOW_SPOILERS

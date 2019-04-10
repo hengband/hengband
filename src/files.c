@@ -27,6 +27,7 @@
 #include "patron.h"
 #include "monster.h"
 #include "monster-status.h"
+#include "object-hook.h"
 
 
 /*

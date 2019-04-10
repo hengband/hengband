@@ -152,6 +152,7 @@
 #include "warning.h"
 #include "monster.h"
 #include "monster-spell.h"
+#include "object-hook.h"
 
 
 

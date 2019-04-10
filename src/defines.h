@@ -2667,15 +2667,6 @@
 #define term_screen     (angband_term[0])
 
 
-/*
- * Determine if a given inventory item is "known"
- * Test One -- Check for special "known" tag
- * Test Two -- Check for "Easy Know" + "Aware"
- */
-#define object_is_known(T) \
-    (((T)->ident & (IDENT_KNOWN)) || \
-     (k_info[(T)->k_idx].easy_know && k_info[(T)->k_idx].aware))
-
 
 /*
  * Return the "attr" for a given item.
@@ -2686,7 +2677,7 @@
 	((k_info[(T)->k_idx].flavor) ? \
 	 (k_info[k_info[(T)->k_idx].flavor].x_attr) : \
 	 ((!(T)->k_idx || ((T)->tval != TV_CORPSE) || ((T)->sval != SV_CORPSE) || \
-	   (k_info[(T)->k_idx].x_attr != TERM_DARK)) ? \
+	  (k_info[(T)->k_idx].x_attr != TERM_DARK)) ? \
 	  (k_info[(T)->k_idx].x_attr) : (r_info[(T)->pval].x_attr)))
 
 /*
@@ -2698,32 +2689,6 @@
 	((k_info[(T)->k_idx].flavor) ? \
 	 (k_info[k_info[(T)->k_idx].flavor].x_char) : \
 	 (k_info[(T)->k_idx].x_char))
-
-
-/*
- * Artifacts use the "name1" field
- */
-#define object_is_fixed_artifact(T) \
-	((T)->name1 ? TRUE : FALSE)
-
-/*
- * Ego-Items use the "name2" field
- */
-#define object_is_ego(T) \
-	((T)->name2 ? TRUE : FALSE)
-
-
-/*
- * Broken items.
- */
-#define object_is_broken(T) \
-	((T)->ident & (IDENT_BROKEN))
-
-/*
- * Cursed items.
- */
-#define object_is_cursed(T) \
-	((T)->curse_flags)
 
 
 /*

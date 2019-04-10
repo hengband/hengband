@@ -61,3 +61,31 @@ extern bool object_is_quest_target(object_type *o_ptr);
   */
 #define object_is_tried(T) (k_info[(T)->k_idx].tried)
 
+ /*
+  * Determine if a given inventory item is "known"
+  * Test One -- Check for special "known" tag
+  * Test Two -- Check for "Easy Know" + "Aware"
+  */
+#define object_is_known(T) (((T)->ident & (IDENT_KNOWN)) || (k_info[(T)->k_idx].easy_know && k_info[(T)->k_idx].aware))
+
+/*
+ * Artifacts use the "name1" field
+ */
+#define object_is_fixed_artifact(T) ((T)->name1 ? TRUE : FALSE)
+
+/*
+ * Ego-Items use the "name2" field
+ */
+#define object_is_ego(T) ((T)->name2 ? TRUE : FALSE)
+
+/*
+ * Broken items.
+ */
+#define object_is_broken(T) ((T)->ident & (IDENT_BROKEN))
+
+/*
+ * Cursed items.
+ */
+#define object_is_cursed(T) ((T)->curse_flags)
+
+
