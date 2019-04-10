@@ -2729,24 +2729,6 @@
 	((int)((G) % 256U))
 
 
-/*
- * Determines if a map location is fully inside the outer walls
- */
-#define in_bounds(Y,X) \
-   (((Y) > 0) && ((X) > 0) && ((Y) < current_floor_ptr->height-1) && ((X) < current_floor_ptr->width-1))
-
-/*
- * Determines if a map location is on or inside the outer walls
- */
-#define in_bounds2(Y,X) \
-   (((Y) >= 0) && ((X) >= 0) && ((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
-
-/*
- * Determines if a map location is on or inside the outer walls
- * (unsigned version)
- */
-#define in_bounds2u(Y,X) \
-   (((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
 
 /*
  * Determines if a map location is currently "on screen" -RAK-

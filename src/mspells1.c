@@ -39,6 +39,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "object-curse.h"
 #include "quest.h"
 #include "realm-hex.h"

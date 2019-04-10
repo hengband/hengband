@@ -17,10 +17,12 @@
 
 #include "angband.h"
 #include "generate.h"
+#include "floor.h"
 #include "floor-streams.h"
 #include "grid.h"
 #include "monster.h"
 #include "feature.h"
+#include "object-hook.h"
 
 
 /*!

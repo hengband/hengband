@@ -15,6 +15,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "melee.h"
 #include "spells-summon.h"
 #include "avatar.h"

@@ -37,6 +37,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "generate.h"
 #include "grid.h"
 #include "rooms.h"

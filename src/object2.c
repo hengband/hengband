@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "object-boost.h"
 #include "object-hook.h"
 #include "object-curse.h"

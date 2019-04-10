@@ -100,6 +100,7 @@
 #include "generate.h"
 #include "grid.h"
 #include "rooms.h"
+#include "floor.h"
 #include "floor-streams.h"
 #include "floor-generate.h"
 #include "trap.h"

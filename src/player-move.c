@@ -140,6 +140,7 @@
  */
 
 #include "angband.h"
+#include "floor.h"
 #include "melee.h"
 #include "grid.h"
 #include "trap.h"

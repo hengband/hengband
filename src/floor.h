@@ -13,3 +13,22 @@
 #define CFM_NO_RETURN    0x0100  /* Flee from random quest etc... */
 #define CFM_FIRST_FLOOR  0x0200  /* Create exit from the dungeon */
 
+ /*
+  * Determines if a map location is fully inside the outer walls
+  */
+#define in_bounds(Y,X) \
+   (((Y) > 0) && ((X) > 0) && ((Y) < current_floor_ptr->height-1) && ((X) < current_floor_ptr->width-1))
+
+  /*
+   * Determines if a map location is on or inside the outer walls
+   */
+#define in_bounds2(Y,X) \
+   (((Y) >= 0) && ((X) >= 0) && ((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
+
+   /*
+	* Determines if a map location is on or inside the outer walls
+	* (unsigned version)
+	*/
+#define in_bounds2u(Y,X) \
+   (((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
+

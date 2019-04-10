@@ -6,6 +6,7 @@
 #include "trap.h"
 #include "monster.h"
 #include "feature.h"
+#include "floor.h"
 
 /*
 * This function creates a random vault that looks like a collection of bubbles.

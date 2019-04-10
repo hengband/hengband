@@ -12,10 +12,11 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
-#include "monsterrace-hook.h"
+#include "floor.h"
 #include "objectkind-hook.h"
 #include "monster.h"
 #include "monster-spell.h"
+#include "monsterrace-hook.h"
 #include "spells-summon.h"
 #include "patron.h"
 #include "quest.h"

@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "floor.h"
 
 /*!
  * @brief プレイヤーから指定の座標がどの方角にあるかを返す /

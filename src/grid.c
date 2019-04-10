@@ -18,6 +18,7 @@
 
 
 #include "angband.h"
+#include "floor.h"
 #include "world.h"
 #include "object-hook.h"
 #include "generate.h"

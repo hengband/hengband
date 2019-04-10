@@ -19,7 +19,7 @@
 #include "wild.h"
 #include "spells-floor.h"
 #include "monster-status.h"
-
+#include "object-hook.h"
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */

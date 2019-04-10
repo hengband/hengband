@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "artifact.h"
+#include "floor.h"
 #include "cmd-activate.h"
 #include "object-hook.h"
 #include "player-move.h"
