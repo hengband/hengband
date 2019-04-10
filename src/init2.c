@@ -35,6 +35,7 @@
 #include "angband.h"
 
 #include "init.h"
+#include "quest.h"
 #include "trap.h"
 #include "rooms.h"
 #include "store.h"

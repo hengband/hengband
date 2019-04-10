@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "monsterrace-hook.h"
+#include "quest.h"
 
 
 static int num_more = 0;

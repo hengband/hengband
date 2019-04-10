@@ -19,6 +19,7 @@
 #include "player-status.h"
 #include "grid.h"
 #include "monster-status.h"
+#include "quest.h"
 
  /*
   * Wilderness
