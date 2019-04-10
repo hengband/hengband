@@ -21,7 +21,7 @@
 #include "player-status.h"
 #include "feature.h"
 #include "player-move.h"
-
+#include "monster.h"
 #include "monsterrace-hook.h"
 
 /*!

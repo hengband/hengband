@@ -1,6 +1,7 @@
 ﻿
 #include "angband.h"
 #include "object-hook.h"
+#include "monster.h"
 #include "artifact.h"
 
 /*!

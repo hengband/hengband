@@ -44,6 +44,7 @@
 #include "generate.h"
 #include "trap.h"
 #include "mutation.h"
+#include "monster.h"
 #include "quest.h"
 #include "store.h"
 #include "artifact.h"

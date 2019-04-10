@@ -17,6 +17,7 @@
 #include "cmd-activate.h"
 #include "object-hook.h"
 #include "player-move.h"
+#include "monster.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify
