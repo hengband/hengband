@@ -1284,6 +1284,16 @@ struct player_type
 	#define KATA_MASK (KATA_IAI | KATA_FUUJIN | KATA_KOUKIJIN | KATA_MUSOU) /*!< 修行僧の型ビット配列 */
 
 	ACTION_IDX action;		  /* Currently action */
+	#define ACTION_NONE     0 /*!< 持続行動: なし */
+	#define ACTION_SEARCH   1 /*!< 持続行動: 探索 */
+	#define ACTION_REST     2 /*!< 持続行動: 休憩 */
+	#define ACTION_LEARN    3 /*!< 持続行動: 青魔法ラーニング */
+	#define ACTION_FISH     4 /*!< 持続行動: 釣り */
+	#define ACTION_KAMAE    5 /*!< 持続行動: 修行僧の構え */
+	#define ACTION_KATA     6 /*!< 持続行動: 剣術家の型 */
+	#define ACTION_SING     7 /*!< 持続行動: 歌 */
+	#define ACTION_HAYAGAKE 8 /*!< 持続行動: 早駆け */
+	#define ACTION_SPELL    9 /*!< 持続行動: 呪術 */
 
 	BIT_FLAGS spell_learned1;	  /* bit mask of spells learned */
 	BIT_FLAGS spell_learned2;	  /* bit mask of spells learned */
