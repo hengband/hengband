@@ -29,6 +29,7 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "monster-status.h"
+#include "player-move.h"
 #include "player-status.h"
 
 /*!

@@ -4286,19 +4286,6 @@ extern int PlayerUID;
 #define SKEY_TOP    	  0xf007
 #define SKEY_BOTTOM 	  0xf008
 
-/*
- * Bit flags for move_player_effect()
- */
-#define MPE_STAYING       0x00000001
-#define MPE_FORGET_FLOW   0x00000002
-#define MPE_HANDLE_STUFF  0x00000004
-#define MPE_ENERGY_USE    0x00000008
-#define MPE_DONT_PICKUP   0x00000010
-#define MPE_DO_PICKUP     0x00000020
-#define MPE_BREAK_TRAP    0x00000040
-#define MPE_DONT_SWAP_MON 0x00000080
-
-
 #define MTIMED_CSLEEP   0 /* Monster is sleeping */
 #define MTIMED_FAST     1 /* Monster is temporarily fast */
 #define MTIMED_SLOW     2 /* Monster is temporarily slow */

@@ -2,6 +2,7 @@
 #include "floor.h"
 #include "melee.h"
 #include "sort.h"
+#include "player-move.h"
 #include "player-status.h"
 #include "object-hook.h"
 #include "monster.h"

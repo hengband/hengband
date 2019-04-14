@@ -19,6 +19,7 @@
 #include "melee.h"
 #include "spells-summon.h"
 #include "avatar.h"
+#include "player-move.h"
 #include "player-status.h"
 #include "spells-status.h"
 #include "cmd-spell.h"

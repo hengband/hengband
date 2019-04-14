@@ -5,6 +5,7 @@
 #include "monsterrace-hook.h"
 #include "artifact.h"
 #include "monster.h"
+#include "player-move.h"
 #include "player-status.h"
 #include "feature.h"
 
