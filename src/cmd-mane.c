@@ -14,6 +14,7 @@
 #include "floor.h"
 #include "spells-summon.h"
 #include "spells-status.h"
+#include "monster-spell.h"
 #include "cmd-spell.h"
 #include "player-status.h"
 
