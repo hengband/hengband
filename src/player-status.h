@@ -24,6 +24,10 @@ extern void wreck_the_pattern(void);
 extern void cnv_stat(int val, char *out_val);
 extern s16b modify_stat_value(int value, int amount);
 
+extern const s32b player_exp[PY_MAX_LEVEL];
+extern const s32b player_exp_a[PY_MAX_LEVEL];
+
+
 /* Temporary flags macro */
 #define IS_FAST() (p_ptr->fast || music_singing(MUSIC_SPEED) || music_singing(MUSIC_SHERO))
 #define IS_INVULN() (p_ptr->invuln || music_singing(MUSIC_INVULN))

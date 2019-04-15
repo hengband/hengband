@@ -70,8 +70,6 @@ extern const byte adj_chr_chm[];
 extern const byte blows_table[12][12];
 extern const arena_type arena_info[MAX_ARENA_MONS + 2];
 extern const byte extract_energy[200];
-extern const s32b player_exp[PY_MAX_LEVEL];
-extern const s32b player_exp_a[PY_MAX_LEVEL];
 extern const player_sex sex_info[MAX_SEXES];
 extern const player_race race_info[MAX_RACES];
 extern const player_class class_info[MAX_CLASS];
