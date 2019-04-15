@@ -55,6 +55,7 @@
 #include "patron.h"
 
 #include "floor-save.h"
+#include "floor.h"
 
 
 /*

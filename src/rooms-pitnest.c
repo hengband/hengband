@@ -6,6 +6,7 @@
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "sort.h"
+#include "floor.h"
 
 
 

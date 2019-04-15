@@ -23,6 +23,7 @@
 #include "object-curse.h"
 #include "spells-status.h"
 #include "player-status.h"
+#include "realm-hex.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

@@ -22,6 +22,7 @@
 #include "spells.h"
 #include "spells-status.h"
 #include "wild.h"
+#include "floor.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

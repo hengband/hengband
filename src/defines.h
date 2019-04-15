@@ -4095,71 +4095,7 @@ extern int PlayerUID;
 #define ESSENCE_SLAY_GLOVE    (MIN_SPECIAL_ESSENCE + 11)
 
 
-#define DUNGEON_MODE_NONE       0
-#define DUNGEON_MODE_AND        1
-#define DUNGEON_MODE_NAND       2
-#define DUNGEON_MODE_OR         3
-#define DUNGEON_MODE_NOR        4
-
-/*** Dungeon type flags -- DG ***/
-#define DF1_WINNER              0x00000001L
-#define DF1_MAZE                0x00000002L
-#define DF1_SMALLEST            0x00000004L
-#define DF1_BEGINNER            0x00000008L
-#define DF1_BIG                 0x00000010L
-#define DF1_NO_DOORS            0x00000020L
-#define DF1_WATER_RIVER         0x00000040L
-#define DF1_LAVA_RIVER          0x00000080L
-#define DF1_CURTAIN             0x00000100L
-#define DF1_GLASS_DOOR          0x00000200L
-#define DF1_CAVE                0x00000400L
-#define DF1_CAVERN              0x00000800L
-#define DF1_ARCADE              0x00001000L
-#define DF1_LAKE_ACID           0x00002000L
-#define DF1_LAKE_POISONOUS      0x00004000L
-#define DF1_XXX15               0x00008000L
-#define DF1_FORGET              0x00010000L
-#define DF1_LAKE_WATER          0x00020000L
-#define DF1_LAKE_LAVA           0x00040000L
-#define DF1_LAKE_RUBBLE         0x00080000L
-#define DF1_LAKE_TREE           0x00100000L
-#define DF1_NO_VAULT            0x00200000L
-#define DF1_ARENA               0x00400000L
-#define DF1_DESTROY             0x00800000L
-#define DF1_GLASS_ROOM          0x01000000L
-#define DF1_NO_CAVE             0x02000000L
-#define DF1_NO_MAGIC            0x04000000L
-#define DF1_NO_MELEE            0x08000000L
-#define DF1_CHAMELEON           0x10000000L
-#define DF1_DARKNESS            0x20000000L
-#define DF1_ACID_RIVER          0x40000000L
-#define DF1_POISONOUS_RIVER     0x80000000L
-
-#define DF1_LAKE_MASK (DF1_LAKE_WATER | DF1_LAKE_LAVA | DF1_LAKE_RUBBLE | DF1_LAKE_TREE | DF1_LAKE_POISONOUS | DF1_LAKE_ACID)
-
-#define DUNGEON_ANGBAND  1
-#define DUNGEON_GALGALS  2
-#define DUNGEON_ORC      3
-#define DUNGEON_MAZE     4
-#define DUNGEON_DRAGON   5
-#define DUNGEON_GRAVE    6
-#define DUNGEON_WOOD     7
-#define DUNGEON_VOLCANO  8
-#define DUNGEON_HELL     9
-#define DUNGEON_HEAVEN   10
-#define DUNGEON_OCEAN    11
-#define DUNGEON_CASTLE   12
-#define DUNGEON_CTH      13
-#define DUNGEON_MOUNTAIN 14
-#define DUNGEON_GOLD     15
-#define DUNGEON_NO_MAGIC 16
-#define DUNGEON_NO_MELEE 17
-#define DUNGEON_CHAMELEON 18
-#define DUNGEON_DARKNESS 19
-
-
 #define DUNGEON_FEAT_PROB_NUM 3
-
 
 /*
  * Flags for save/load temporal saved floor file
@@ -4346,43 +4282,6 @@ extern int PlayerUID;
 #define HEX_REVENGE_POWER(P_PTR) ((P_PTR)->magic_num1[2])
 #define HEX_REVENGE_TURN(P_PTR) ((P_PTR)->magic_num2[2])
 #define HEX_REVENGE_TYPE(P_PTR) ((P_PTR)->magic_num2[1])
-
-/* 1st book */
-#define HEX_BLESS             0
-#define HEX_CURE_LIGHT        1
-#define HEX_DEMON_AURA        2
-#define HEX_STINKING_MIST     3
-#define HEX_XTRA_MIGHT        4
-#define HEX_CURSE_WEAPON      5
-#define HEX_DETECT_EVIL       6
-#define HEX_PATIENCE          7
-/* 2nd book */
-#define HEX_ICE_ARMOR         8
-#define HEX_CURE_SERIOUS      9
-#define HEX_INHAIL           10
-#define HEX_VAMP_MIST        11
-#define HEX_RUNESWORD        12
-#define HEX_CONFUSION        13
-#define HEX_BUILDING         14
-#define HEX_ANTI_TELE        15
-/* 3rd book */
-#define HEX_SHOCK_CLOAK      16
-#define HEX_CURE_CRITICAL    17
-#define HEX_RECHARGE         18
-#define HEX_RAISE_DEAD       19
-#define HEX_CURSE_ARMOUR     20
-#define HEX_SHADOW_CLOAK     21
-#define HEX_PAIN_TO_MANA     22
-#define HEX_EYE_FOR_EYE      23
-/* 4th book */
-#define HEX_ANTI_MULTI       24
-#define HEX_RESTORE          25
-#define HEX_DRAIN_CURSE      26
-#define HEX_VAMP_BLADE       27
-#define HEX_STUN_MONSTERS    28
-#define HEX_SHADOW_MOVE      29
-#define HEX_ANTI_MAGIC       30
-#define HEX_REVENGE          31
 
 /*
   Language selection macro

@@ -28,6 +28,7 @@
 #include "monster.h"
 #include "monster-status.h"
 #include "object-hook.h"
+#include "realm-hex.h"
 
 
 /*

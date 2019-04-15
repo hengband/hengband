@@ -52,6 +52,7 @@
 #include "object-hook.h"
 #include "monster.h"
 #include "monster-status.h"
+#include "floor.h"
 
 
 /*

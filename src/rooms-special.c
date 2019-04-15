@@ -6,6 +6,7 @@
 #include "monsterrace-hook.h"
 #include "objectkind-hook.h"
 #include "feature.h"
+#include "floor.h"
 
 
 /*!

@@ -7,6 +7,7 @@
 
 #define _GNU_SOURCE /*!< 未使用*/
 #include "angband.h"
+#include "floor.h"
 
 #ifdef WORLD_SCORE
 

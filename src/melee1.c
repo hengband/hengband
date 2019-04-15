@@ -26,6 +26,7 @@
 #include "object-hook.h"
 #include "grid.h"
 #include "player-move.h"
+#include "floor.h"
 
 
 

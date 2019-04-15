@@ -11,6 +11,7 @@
 #include "monsterrace-hook.h"
 #include "mutation.h"
 #include "patron.h"
+#include "realm-hex.h"
 
 /* Hack, monk armour */
 static bool monk_armour_aux;

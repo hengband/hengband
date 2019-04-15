@@ -17,6 +17,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "monster.h"
+#include "realm-hex.h"
 
  /*
   * Some screen locations for various display routines
