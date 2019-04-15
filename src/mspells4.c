@@ -8,6 +8,7 @@
 
 #include "angband.h"
 #include "floor.h"
+#include "grid.h"
 #include "spells-summon.h"
 #include "artifact.h"
 #include "player-status.h"

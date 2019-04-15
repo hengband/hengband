@@ -1788,41 +1788,7 @@
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */
 
-
 /*** General flag values ***/
-
-
-/*
- * 特殊なマス状態フラグ / Special grid flags
- */
-#define CAVE_MARK       0x0001    /*!< 現在プレイヤーの記憶に収まっている / memorized feature */
-#define CAVE_GLOW       0x0002    /*!< マス自体が光源を持っている / self-illuminating */
-#define CAVE_ICKY       0x0004    /*!< 生成されたVaultの一部である / part of a vault */
-#define CAVE_ROOM       0x0008    /*!< 生成された部屋の一部である / part of a room */
-#define CAVE_LITE       0x0010    /*!< 現在光に照らされている / lite flag  */
-#define CAVE_VIEW       0x0020    /*!< 現在プレイヤーの視界に収まっている / view flag */
-#define CAVE_TEMP       0x0040    /*!< 光源に関する処理のアルゴリズム用記録フラグ / temp flag */
-#define CAVE_XTRA       0x0080    /*!< 視界に関する処理のアルゴリズム用記録フラグ(update_view()等参照) / misc flag */
-#define CAVE_MNLT       0x0100    /*!< モンスターの光源によって照らされている / Illuminated by monster */
-#define CAVE_MNDK       0x8000    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
-
-/* Used only while current_floor_ptr->grid_array generation */
-#define CAVE_FLOOR      0x0200	/*!< フロア属性のあるマス */
-#define CAVE_EXTRA      0x0400
-#define CAVE_INNER      0x0800
-#define CAVE_OUTER      0x1000
-#define CAVE_SOLID      0x2000
-#define CAVE_VAULT      0x4000
-#define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
-
-/* Used only after current_floor_ptr->grid_array generation */
-#define CAVE_KNOWN      0x0200    /* Directly viewed or map detected flag */
-#define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
-#define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */
-#define CAVE_OBJECT     0x1000    /* Mirror, glyph, etc. */
-#define CAVE_UNSAFE     0x2000    /* Might have trap */
-#define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
-
 
 /*
  * Special caster ID for project()

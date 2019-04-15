@@ -56,6 +56,7 @@
 
 #include "floor-save.h"
 #include "floor.h"
+#include "grid.h"
 
 
 /*

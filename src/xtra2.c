@@ -19,6 +19,7 @@
 #include "objectkind-hook.h"
 #include "sort.h"
 #include "spells-summon.h"
+#include "grid.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "player-move.h"

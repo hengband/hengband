@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "floor.h"
 #include "spells-floor.h"
+#include "grid.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

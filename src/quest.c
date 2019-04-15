@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "floor.h"
 #include "floor-events.h"
+#include "grid.h"
 #include "quest.h"
 #include "monsterrace-hook.h"
 #include "monster.h"

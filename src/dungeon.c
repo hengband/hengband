@@ -26,6 +26,7 @@
 #include "cmd-pet.h"
 #include "floor.h"
 #include "floor-events.h"
+#include "grid.h"
 #include "object-curse.h"
 #include "store.h"
 #include "spells-summon.h"

@@ -7,6 +7,7 @@
 #include "player-status.h"
 #include "object-hook.h"
 #include "floor.h"
+#include "grid.h"
 
 #include "shoot.h"
 

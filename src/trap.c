@@ -8,6 +8,7 @@
 #include "artifact.h"
 #include "feature.h"
 #include "player-status.h"
+#include "grid.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

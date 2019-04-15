@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "floor.h"
+#include "grid.h"
 #include "object-boost.h"
 #include "object-hook.h"
 #include "object-curse.h"

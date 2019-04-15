@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "floor.h"
+#include "grid.h"
 #include "spells-summon.h"
 #include "avatar.h"
 #include "spells-status.h"

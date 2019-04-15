@@ -30,6 +30,7 @@
 
 #include "floor.h"
 #include "floor-save.h"
+#include "grid.h"
 
 #ifdef ALLOW_WIZARD
 
