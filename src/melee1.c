@@ -2550,11 +2550,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 #else
 						msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
 #endif
-
 						chg_virtue(V_SACRIFICE, 1);
-
-
-						/* Make an object */
 						o_idx = o_pop();
 
 						/* Success */

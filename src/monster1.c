@@ -2792,7 +2792,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				a_ptr = &a_info[a_idx];
 			} while (a_ptr->cur_num);
 
-			/* Create the artifact */
 			if (create_named_art(a_idx, y, x))
 			{
 				a_ptr->cur_num = 1;
@@ -2965,7 +2964,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			if (!a_ptr->cur_num)
 			{
-				/* Create the artifact */
 				if (create_named_art(a_idx, y, x))
 				{
 					a_ptr->cur_num = 1;
@@ -2989,7 +2987,6 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				if (!a_ptr->cur_num)
 				{
-					/* Create the artifact */
 					if (create_named_art(a_idx, y, x))
 					{
 						a_ptr->cur_num = 1;
@@ -3048,21 +3045,14 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 
-		/* Make Gold */
 		if (do_gold && (!do_item || (randint0(100) < 50)))
 		{
-			/* Make some gold */
 			if (!make_gold(q_ptr)) continue;
-
 			dump_gold++;
 		}
-
-		/* Make Object */
 		else
 		{
-			/* Make an object */
 			if (!make_object(q_ptr, mo_mode)) continue;
-
 			dump_item++;
 		}
 		(void)drop_near(q_ptr, -1, y, x);

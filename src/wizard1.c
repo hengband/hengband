@@ -1561,7 +1561,6 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 
 	if (!i) return (FALSE);
 
-	/* Create the artifact */
 	object_prep(o_ptr, i);
 
 	/* Save the name */

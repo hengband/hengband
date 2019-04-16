@@ -6644,8 +6644,6 @@ static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
 	object_type object_type_body;
 	o_ptr = &object_type_body;
 	object_wipe(o_ptr);
-
-	/* Create the artifact */
 	object_prep(o_ptr, k_idx);
 
 	/* It's fully know */

@@ -4399,8 +4399,6 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	/* Make an object (if possible) */
 	if (!make_object(q_ptr, mode)) return;
 
-
-	/* Make an object */
 	o_idx = o_pop();
 
 	/* Success */
@@ -4510,7 +4508,6 @@ void place_gold(POSITION y, POSITION x)
 	/* Make some gold */
 	if (!make_gold(q_ptr)) return;
 
-	/* Make an object */
 	o_idx = o_pop();
 
 	/* Success */
@@ -4518,8 +4515,6 @@ void place_gold(POSITION y, POSITION x)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[o_idx];
-
-		/* Copy the object */
 		object_copy(o_ptr, q_ptr);
 
 		/* Save location */

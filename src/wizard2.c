@@ -63,7 +63,6 @@ static void wiz_create_named_art(void)
 	if(a_idx < 0) a_idx = 0;
 	if(a_idx >= max_a_idx) a_idx = 0; 
 
-	/* Create the artifact */
 	(void)create_named_art(a_idx, p_ptr->y, p_ptr->x);
 
 	/* All done */
@@ -735,7 +734,6 @@ static void wiz_tweak_item(object_type *o_ptr)
 	concptr p;
 	char tmp_val[80];
 
-	/* Hack -- leave artifacts alone */
 	if (object_is_artifact(o_ptr)) return;
 
 	p = "Enter new 'pval' setting: ";
@@ -774,20 +772,13 @@ static void wiz_reroll_item(object_type *o_ptr)
 {
 	object_type forge;
 	object_type *q_ptr;
-
 	char ch;
-
 	bool changed = FALSE;
 
-
-	/* Hack -- leave artifacts alone */
 	if (object_is_artifact(o_ptr)) return;
 
 	q_ptr = &forge;
-
-	/* Copy the object */
 	object_copy(q_ptr, o_ptr);
-
 
 	/* Main loop. Ask for magification and artifactification */
 	while (TRUE)
@@ -877,15 +868,12 @@ static void wiz_reroll_item(object_type *o_ptr)
 		q_ptr->marked = o_ptr->marked;
 	}
 
-
 	/* Notice change */
 	if (changed)
 	{
-		/* Apply changes */
 		object_copy(o_ptr, q_ptr);
 		p_ptr->update |= (PU_BONUS);
 		p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
 		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	}
 }

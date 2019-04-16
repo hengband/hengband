@@ -4120,7 +4120,6 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 				else
 				{
-					/* Create the artifact */
 					if (create_named_art(artifact_index, *y, *x))
 						a_info[artifact_index].cur_num = 1;
 				}

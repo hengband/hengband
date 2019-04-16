@@ -3312,7 +3312,6 @@ bool dec_stat(int stat, int amount, int permanent)
 		if (max != p_ptr->stat_max[stat]) res = TRUE;
 	}
 
-	/* Apply changes */
 	if (res)
 	{
 		/* Actually set the stat to its new value. */

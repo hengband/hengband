@@ -2043,7 +2043,6 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 
 	if (!i) return FALSE;
 
-	/* Create the artifact */
 	object_prep(q_ptr, i);
 
 	/* Save the name */
