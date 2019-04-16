@@ -337,7 +337,6 @@ void quest_discovery(QUEST_IDX q_idx)
 	MONSTER_NUMBER q_num = q_ptr->max_num;
 	GAME_TEXT name[MAX_NLEN];
 
-	/* No quest index */
 	if (!q_idx) return;
 
 	strcpy(name, (r_name + r_ptr->name));
@@ -347,9 +346,6 @@ void quest_discovery(QUEST_IDX q_idx)
 
 	if (q_num == 1)
 	{
-		/* Unique */
-
-		/* Hack -- "unique" monsters must be "unique" */
 		if ((r_ptr->flags1 & RF1_UNIQUE) && (0 == r_ptr->max_num))
 		{
 			msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
@@ -366,7 +362,6 @@ void quest_discovery(QUEST_IDX q_idx)
 	}
 	else
 	{
-		/* Normal monsters */
 #ifndef JP
 		plural_aux(name);
 #endif

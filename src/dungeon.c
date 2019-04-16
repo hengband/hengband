@@ -3080,12 +3080,10 @@ static byte get_dungeon_feeling(void)
 		int delta = 0;
 		if (!monster_is_valid(m_ptr)) continue;
 
-		/* Ignore pet */
 		if (is_pet(m_ptr)) continue;
 
 		r_ptr = &r_info[m_ptr->r_idx];
 
-		/* Unique monsters */
 		if (r_ptr->flags1 & (RF1_UNIQUE))
 		{
 			/* Nearly out-of-depth unique monsters */

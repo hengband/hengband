@@ -4656,7 +4656,6 @@ static void dump_aux_monsters(FILE *fff)
 		/* Ignore unused index */
  		if (!r_ptr->name) continue;
 
-		/* Unique monsters */
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
 			bool dead = (r_ptr->max_num == 0);
@@ -4668,8 +4667,6 @@ static void dump_aux_monsters(FILE *fff)
 				who[uniq_total++] = k;
 			}
 		}
-
-		/* Normal monsters */
 		else
 		{
 			if (r_ptr->r_pkills > 0)

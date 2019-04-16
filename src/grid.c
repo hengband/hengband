@@ -2013,7 +2013,6 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 				a = r_ptr->x_attr;
 				c = r_ptr->x_char;
 
-				/* Normal monsters */
 				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_SHAPECHANGER | RF1_ATTR_CLEAR
 					| RF1_ATTR_MULTI | RF1_ATTR_SEMIRAND)))
 				{
