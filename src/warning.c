@@ -9,6 +9,7 @@
 #include "player-status.h"
 #include "monster.h"
 #include "monster-spell.h"
+#include "spells.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

@@ -27,6 +27,7 @@
 #include "grid.h"
 #include "player-move.h"
 #include "floor.h"
+#include "spells.h"
 
 
 

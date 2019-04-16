@@ -8,6 +8,7 @@
 #include "object-hook.h"
 #include "floor.h"
 #include "grid.h"
+#include "spells.h"
 
 #include "shoot.h"
 

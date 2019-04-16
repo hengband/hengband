@@ -29,6 +29,7 @@
 #include "grid.h"
 #include "object-curse.h"
 #include "store.h"
+#include "spells.h"
 #include "spells-summon.h"
 #include "spells-object.h"
 #include "spells-status.h"

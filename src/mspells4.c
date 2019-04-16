@@ -15,6 +15,7 @@
 #include "realm-hex.h"
 #include "player-move.h"
 #include "monster-spell.h"
+#include "spells.h"
 
 
 /*!

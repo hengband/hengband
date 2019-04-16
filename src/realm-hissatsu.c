@@ -8,6 +8,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "feature.h"
+#include "spells.h"
 
 /*!
 * @brief 剣術の各処理を行う

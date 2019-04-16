@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "spells.h"
 
 /*!
  * @brief 薬の破損効果処理 /

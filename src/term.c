@@ -1,5 +1,11 @@
 ﻿#include "angband.h"
 #include "term.h"
+#include "spells.h"
+
+/*
+ * Default spell color table (quark index)
+ */
+TERM_COLOR gf_color[MAX_GF];
 
 /*!
  * @brief 万色表現用にランダムな色を選択する関数 /

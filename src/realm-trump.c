@@ -1,7 +1,8 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
-#include "spells-summon.h"
 #include "mutation.h"
+#include "spells.h"
+#include "spells-summon.h"
 #include "spells-status.h"
 
 

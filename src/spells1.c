@@ -21,6 +21,7 @@
 #include "monster.h"
 #include "monster-status.h"
 #include "monster-spell.h"
+#include "spells.h"
 #include "spells-status.h"
 #include "spells-diceroll.h"
 #include "spells-summon.h"

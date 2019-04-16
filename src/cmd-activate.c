@@ -13,6 +13,7 @@
 #include "sort.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-object.h"

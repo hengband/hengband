@@ -17,6 +17,7 @@
 #include "angband.h"
 #include "floor.h"
 #include "melee.h"
+#include "spells.h"
 #include "spells-summon.h"
 #include "avatar.h"
 #include "player-move.h"

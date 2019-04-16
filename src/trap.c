@@ -9,6 +9,7 @@
 #include "feature.h"
 #include "player-status.h"
 #include "grid.h"
+#include "spells.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

@@ -3,6 +3,7 @@
 #include "spells-status.h"
 #include "player-status.h"
 #include "object-hook.h"
+#include "spells.h"
 
 /*!
  * @brief ロッドの効果を発動する

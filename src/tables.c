@@ -13,6 +13,7 @@
 
 
 #include "angband.h"
+#include "spells.h"
 
 /*!
  * キーパッドの方向を南から反時計回り順に列挙 / Global array for looping through the "keypad directions"

@@ -728,11 +728,6 @@ char quest_text[10][80];
 int quest_text_line;
 
 /*
- * Default spell color table (quark index)
- */
-TERM_COLOR gf_color[MAX_GF];
-
-/*
  * Flags for initialization
  */
 int init_flags;

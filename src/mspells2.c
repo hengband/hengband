@@ -21,6 +21,7 @@
 #include "monster.h"
 #include "monster-status.h"
 #include "monster-spell.h"
+#include "spells.h"
 
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

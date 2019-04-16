@@ -10,6 +10,7 @@
 #include "artifact.h"
 #include "player-status.h"
 
+#include "spells.h"
 #include "spells-summon.h"
 #include "spells-object.h"
 #include "spells-status.h"

@@ -23,6 +23,7 @@
 #include "spells-status.h"
 #include "spells-object.h"
 #include "spells-floor.h"
+#include "spells.h"
 #include "cmd-spell.h"
 #include "realm-hex.h"
 

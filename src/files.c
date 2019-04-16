@@ -30,6 +30,8 @@
 #include "object-hook.h"
 #include "realm-hex.h"
 #include "cmd-pet.h"
+#include "spells.h"
+#include "term.h"
 
 
 /*

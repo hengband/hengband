@@ -22,6 +22,7 @@
 #include "object-hook.h"
 #include "object-curse.h"
 #include "spells-status.h"
+#include "spells.h"
 #include "player-status.h"
 #include "realm-hex.h"
 #include "grid.h"

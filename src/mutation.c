@@ -20,6 +20,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "object-hook.h"
+#include "spells.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

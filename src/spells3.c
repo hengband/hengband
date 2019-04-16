@@ -22,6 +22,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "spells.h"
 #include "spells-floor.h"
 #include "grid.h"
 #include "monster-status.h"

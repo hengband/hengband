@@ -23,6 +23,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "wild.h"
+#include "spells.h"
 
 
 /*

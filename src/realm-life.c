@@ -2,6 +2,7 @@
 #include "cmd-spell.h"
 #include "spells-status.h"
 #include "spells-floor.h"
+#include "spells.h"
 #include "player-status.h"
 
 /*!

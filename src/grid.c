@@ -30,6 +30,7 @@
 #include "feature.h"
 #include "monster-status.h"
 #include "player-status.h"
+#include "spells.h"
 
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;

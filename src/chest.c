@@ -1,5 +1,6 @@
 ﻿
 #include "angband.h"
+#include "spells.h"
 #include "spells-summon.h"
 #include "floor.h"
 #include "trap.h"

@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "floor.h"
 #include "grid.h"
+#include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "monster-spell.h"
