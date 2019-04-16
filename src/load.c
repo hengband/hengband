@@ -1914,7 +1914,7 @@ static void rd_extra(void)
 
 	if (z_older_than(10, 0, 3))
 	{
-		battle_monsters();
+		update_gambling_monsters();
 	}
 	else
 	{

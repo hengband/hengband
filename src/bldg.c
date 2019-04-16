@@ -1409,10 +1409,10 @@ static bool gamble_comm(int cmd)
 }
 
 /*!
- * @brief モンスター闘技場に参加するモンスターをリセットする。
+ * @brief モンスター闘技場に参加するモンスターを更新する。
  * @return なし
  */
-void battle_monsters(void)
+void update_gambling_monsters(void)
 {
 	int total, i;
 	int max_dl = 0;
@@ -1424,15 +1424,15 @@ void battle_monsters(void)
 	for (i = 0; i < max_d_idx; i++)
 		if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
 
-	mon_level = randint1(MIN(max_dl, 122))+5;
+	mon_level = randint1(MIN(max_dl, 122)) + 5;
 	if (randint0(100) < 60)
 	{
-		i = randint1(MIN(max_dl, 122))+5;
+		i = randint1(MIN(max_dl, 122)) + 5;
 		mon_level = MAX(i, mon_level);
 	}
 	if (randint0(100) < 30)
 	{
-		i = randint1(MIN(max_dl, 122))+5;
+		i = randint1(MIN(max_dl, 122)) + 5;
 		mon_level = MAX(i, mon_level);
 	}
 
@@ -1440,7 +1440,7 @@ void battle_monsters(void)
 	{
 		total = 0;
 		tekitou = FALSE;
-		for(i = 0; i < 4; i++)
+		for (i = 0; i < 4; i++)
 		{
 			MONRACE_IDX r_idx;
 			int j;
@@ -1458,8 +1458,8 @@ void battle_monsters(void)
 				}
 
 				for (j = 0; j < i; j++)
-					if(r_idx == battle_mon[j]) break;
-				if (j<i) continue;
+					if (r_idx == battle_mon[j]) break;
+				if (j < i) continue;
 
 				break;
 			}
@@ -1467,7 +1467,7 @@ void battle_monsters(void)
 			if (r_info[r_idx].level < 45) tekitou = TRUE;
 		}
 
-		for (i=0;i<4;i++)
+		for (i = 0; i < 4; i++)
 		{
 			monster_race *r_ptr = &r_info[battle_mon[i]];
 			int num_taisei = count_bits(r_ptr->flagsr & (RFR_IM_ACID | RFR_IM_ELEC | RFR_IM_FIRE | RFR_IM_COLD | RFR_IM_POIS));
@@ -1482,7 +1482,7 @@ void battle_monsters(void)
 			if (r_ptr->speed < 110)
 				power[i] = power[i] * (r_ptr->speed - 20) / 100;
 			if (num_taisei > 2)
-				power[i] = power[i] * (num_taisei*2+5) / 10;
+				power[i] = power[i] * (num_taisei * 2 + 5) / 10;
 			else if (r_ptr->a_ability_flags2 & RF6_INVULNER)
 				power[i] = power[i] * 4 / 3;
 			else if (r_ptr->a_ability_flags2 & RF6_HEAL)
@@ -1499,9 +1499,9 @@ void battle_monsters(void)
 
 			total += power[i];
 		}
-		for (i=0;i<4;i++)
+		for (i = 0; i < 4; i++)
 		{
-			power[i] = total*60/power[i];
+			power[i] = total * 60 / power[i];
 			if (tekitou && ((power[i] < 160) || power[i] > 1500)) break;
 			if ((power[i] < 160) && randint0(20)) break;
 			if (power[i] < 101) power[i] = 100 + randint1(5);
@@ -1524,7 +1524,7 @@ static bool kakutoujou(void)
 
 	if ((current_world_ptr->game_turn - old_battle) > TURNS_PER_TICK * 250)
 	{
-		battle_monsters();
+		update_gambling_monsters();
 		old_battle = current_world_ptr->game_turn;
 	}
 

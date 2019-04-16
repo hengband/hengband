@@ -941,7 +941,7 @@ extern bool fire_crimson(void);
 
 
 /* bldg.c */
-extern void battle_monsters(void);
+extern void update_gambling_monsters(void);
 extern void do_cmd_bldg(void);
 extern void do_cmd_quest(void);
 extern bool tele_town(void);

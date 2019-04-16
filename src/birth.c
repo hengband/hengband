@@ -1808,7 +1808,7 @@ static void player_wipe_without_name(void)
 	p_ptr->today_mon = 0;
 
 	/* Reset monster arena */
-	battle_monsters();
+	update_gambling_monsters();
 
 	/* Reset mutations */
 	p_ptr->muta1 = 0;

@@ -1736,7 +1736,7 @@ void do_cmd_debug(void)
 		break;
 
 	case 'B':
-		battle_monsters();
+		update_gambling_monsters();
 		break;
 
 	/* Create any object */
