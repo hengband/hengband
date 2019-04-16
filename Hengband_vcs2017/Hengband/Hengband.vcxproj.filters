@@ -460,6 +460,7 @@
     <ClInclude Include="..\..\src\cmd-mane.h">
       <Filter>cmd</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\bldg.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

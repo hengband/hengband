@@ -24,6 +24,7 @@
 #include "sort.h"
 
 #include "avatar.h"
+#include "bldg.h"
 #include "mutation.h"
 #include "quest.h"
 #include "artifact.h"
