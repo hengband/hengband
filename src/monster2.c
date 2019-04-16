@@ -4034,3 +4034,31 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 	/* Forget objects */
 	m_ptr->hold_o_idx = 0;
 }
+
+/*!
+ * @brief 指定したモンスターに隣接しているモンスターの数を返す。
+ * / Count number of adjacent monsters
+ * @param m_idx 隣接数を調べたいモンスターのID
+ * @return 隣接しているモンスターの数
+ */
+int get_monster_crowd_number(MONSTER_IDX m_idx)
+{
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	POSITION my = m_ptr->fy;
+	POSITION mx = m_ptr->fx;
+	int i;
+	int count = 0;
+
+	for (i = 0; i < 7; i++)
+	{
+		int ay = my + ddy_ddd[i];
+		int ax = mx + ddx_ddd[i];
+
+		if (!in_bounds(ay, ax)) continue;
+
+		/* Count number of monsters */
+		if (current_floor_ptr->grid_array[ay][ax].m_idx > 0) count++;
+	}
+
+	return count;
+}
