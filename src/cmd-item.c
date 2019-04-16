@@ -20,6 +20,7 @@
 #include "cmd-usestaff.h"
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
+#include "cmd-pet.h"
 
 #include "object-hook.h"
 #include "sort.h"

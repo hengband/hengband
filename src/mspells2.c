@@ -12,6 +12,7 @@
  */
 
 #include "angband.h"
+#include "cmd-pet.h"
 #include "floor.h"
 #include "grid.h"
 #include "quest.h"

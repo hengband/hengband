@@ -58,6 +58,8 @@
 #include "floor.h"
 #include "grid.h"
 
+#include "cmd-pet.h"
+
 
 /*
  * Maximum number of tries for selection of a proper quest monster

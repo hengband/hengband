@@ -7,6 +7,7 @@
 #include "object-hook.h"
 #include "monster.h"
 #include "monster-status.h"
+#include "cmd-pet.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定
