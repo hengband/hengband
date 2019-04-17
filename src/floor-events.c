@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "floor.h"
+#include "floor-events.h"
 #include "grid.h"
 #include "monster.h"
 #include "monster-status.h"
@@ -313,4 +314,44 @@ void update_dungeon_feeling(void)
 	p_ptr->redraw |= (PR_DEPTH);
 
 	if (disturb_minor) disturb(FALSE, FALSE);
+}
+
+
+/*
+ * Glow deep lava and building entrances in the floor
+ */
+void glow_deep_lava_and_bldg(void)
+{
+	POSITION y, x, yy, xx;
+	DIRECTION i;
+	grid_type *g_ptr;
+
+	/* Not in the darkness dungeon */
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) return;
+
+	for (y = 0; y < current_floor_ptr->height; y++)
+	{
+		for (x = 0; x < current_floor_ptr->width; x++)
+		{
+			g_ptr = &current_floor_ptr->grid_array[y][x];
+
+			/* Feature code (applying "mimic" field) */
+
+			if (have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_GLOW))
+			{
+				for (i = 0; i < 9; i++)
+				{
+					yy = y + ddy_ddd[i];
+					xx = x + ddx_ddd[i];
+					if (!in_bounds2(yy, xx)) continue;
+					current_floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
+				}
+			}
+		}
+	}
+
+	/* Update the view and lite */
+	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+
+	p_ptr->redraw |= (PR_MAP);
 }

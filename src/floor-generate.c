@@ -103,6 +103,7 @@
 #include "floor.h"
 #include "floor-streams.h"
 #include "floor-generate.h"
+#include "floor-events.h"
 #include "trap.h"
 #include "monster.h"
 #include "quest.h"
