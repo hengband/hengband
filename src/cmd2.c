@@ -30,6 +30,7 @@
 #include "feature.h"
 #include "player-move.h"
 #include "object-broken.h"
+#include "object-flavor.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

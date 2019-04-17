@@ -1,4 +1,6 @@
-﻿/*!
+﻿#pragma once
+
+/*!
  *  @file defines.h
  *  @brief 主要なマクロ定義ヘッダ / Purpose: global constants and macro definitions
  *  @date 2014/01/02
@@ -1859,20 +1861,6 @@
 /* xxx */
 #define PW_BORG_1       0x00004000L     /*!<サブウィンドウ描画フラグ: ボーグメッセージ / Display borg messages */
 #define PW_BORG_2       0x00008000L     /*!<サブウィンドウ描画フラグ: ボーグステータス / Display borg status */
-
-
-/*
- * Bit flags for object_desc()
- */
-#define OD_NAME_ONLY        0x00000001  /* Omit values, pval, inscription */
-#define OD_NAME_AND_ENCHANT 0x00000002  /* Omit pval, inscription */
-#define OD_OMIT_INSCRIPTION 0x00000004  /* Omit inscription */
-#define OD_OMIT_PREFIX      0x00000008  /* Omit numeric prefix */
-#define OD_NO_PLURAL        0x00000010  /* Don't use plural */
-#define OD_STORE            0x00000020  /* Assume to be aware and known */
-#define OD_NO_FLAVOR        0x00000040  /* Allow to hidden flavor */
-#define OD_FORCE_FLAVOR     0x00000080  /* Get un-shuffled flavor name */
-
 
 /* Empty hand status */
 #define EMPTY_HAND_NONE 0x0000 /* Both hands are used */

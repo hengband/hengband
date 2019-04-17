@@ -1,4 +1,6 @@
-﻿/*!
+﻿#pragma once
+
+/*!
  * @file h-type.h
  * @brief ゲーム中に用いる変数型定義 / Basic "types".
  * @date 2017/12/03

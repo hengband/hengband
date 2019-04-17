@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "player-damage.h"
 #include "artifact.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "object-broken.h"
 #include "player-status.h"

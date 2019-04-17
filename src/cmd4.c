@@ -49,6 +49,7 @@
 #include "store.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "monster.h"
 #include "monster-status.h"

@@ -5,6 +5,7 @@
 #include "spells-object.h"
 #include "object-boost.h"
 #include "object-hook.h"
+#include "object-flavor.h"
 #include "player-status.h"
 #include "avatar.h"
 

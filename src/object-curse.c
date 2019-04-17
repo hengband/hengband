@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 
 /*!

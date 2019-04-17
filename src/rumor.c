@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "object-flavor.h"
 
 /*
  * Display a rumor and apply its effects

@@ -22,6 +22,7 @@
 #include "grid.h"
 #include "monster.h"
 #include "feature.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 
 

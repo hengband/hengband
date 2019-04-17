@@ -25,6 +25,7 @@
 #include "spells-world.h"
 #include "spells-floor.h"
 
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "monster-status.h"
 

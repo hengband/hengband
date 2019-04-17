@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "cmd-pet.h"
 #include "floor.h"
+#include "object-flavor.h"
 #include "monsterrace-hook.h"
 #include "monster-status.h"
 #include "monster.h"

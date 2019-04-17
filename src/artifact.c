@@ -17,6 +17,7 @@
 #include "cmd-activate.h"
 #include "object-boost.h"
 #include "object-curse.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "spells-object.h"
 

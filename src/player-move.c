@@ -154,6 +154,7 @@
 #include "monster.h"
 #include "monster-spell.h"
 #include "object-hook.h"
+#include "object-flavor.h"
 #include "spells.h"
 
 

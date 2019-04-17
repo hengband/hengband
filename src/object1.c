@@ -15,6 +15,7 @@
 #include "artifact.h"
 #include "floor.h"
 #include "cmd-activate.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "player-move.h"
 #include "monster.h"

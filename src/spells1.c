@@ -38,6 +38,7 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "object-broken.h"
+#include "object-flavor.h"
 #include "quest.h"
 #include "term.h"
 #include "grid.h"

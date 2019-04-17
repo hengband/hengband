@@ -14,6 +14,7 @@
 #include "sort.h"
 #include "store.h"
 #include "monster.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 
 

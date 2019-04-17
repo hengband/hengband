@@ -19,6 +19,7 @@
 #include "floor.h"
 #include "cmd-spell.h"
 #include "cmd-quaff.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "object-curse.h"
 #include "spells-status.h"

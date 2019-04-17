@@ -1,4 +1,6 @@
-﻿/*!
+﻿#pragma once
+
+/*!
  * @file types.h
  * @brief グローバルな構造体の定義 / global type declarations
  * @date 2014/08/10
@@ -43,6 +45,8 @@
  * </pre>
  */
 
+#include "h-type.h"
+#include "defines.h"
 
 /*!
  * @struct feature_state

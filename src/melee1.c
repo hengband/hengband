@@ -23,6 +23,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "realm-hex.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "grid.h"
 #include "player-move.h"

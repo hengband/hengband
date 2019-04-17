@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "avatar.h"
 #include "floor.h"
+#include "object-flavor.h"
 #include "player-status.h"
 #include "spells-status.h"
 #include "spells.h"

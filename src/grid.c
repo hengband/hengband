@@ -20,6 +20,7 @@
 #include "angband.h"
 #include "floor.h"
 #include "world.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "generate.h"
 #include "grid.h"

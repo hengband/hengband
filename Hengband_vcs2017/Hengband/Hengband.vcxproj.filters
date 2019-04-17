@@ -17,7 +17,6 @@
     <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\effects.c" />
     <ClCompile Include="..\..\src\files.c" />
-    <ClCompile Include="..\..\src\flavor.c" />
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
@@ -252,6 +251,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-mane.c">
       <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-flavor.h">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-flavor.c">
+      <Filter>object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

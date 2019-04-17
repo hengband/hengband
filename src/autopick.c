@@ -15,6 +15,7 @@
 #include "store.h"
 #include "player-status.h"
 #include "player-move.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 
 #define MAX_LINELEN 1024

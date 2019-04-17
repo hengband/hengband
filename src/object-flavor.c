@@ -1,5 +1,5 @@
 ﻿/*!
- *  @file flavor.c
+ *  @file object-flavor.c
  *  @brief オブジェクトの記述処理 / Mbject flavor code
  *  @date 2014/01/03
  *  @author
@@ -14,6 +14,7 @@
 #include "player-status.h"
 #include "shoot.h"
 #include "object-hook.h"
+#include "object-flavor.h"
 #include "trap.h"
 
 /*!

@@ -22,6 +22,7 @@
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
 
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "sort.h"
 #include "quest.h"

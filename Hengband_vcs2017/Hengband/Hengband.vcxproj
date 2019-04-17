@@ -160,6 +160,8 @@
     <ClCompile Include="..\..\src\monsterrace-hook.c" />
     <ClCompile Include="..\..\src\object-boost.c" />
     <ClCompile Include="..\..\src\object-curse.c" />
+    <ClCompile Include="..\..\src\object-flavor.c" />
+    <ClCompile Include="..\..\src\object-flavor.h" />
     <ClCompile Include="..\..\src\object-hook.c" />
     <ClCompile Include="..\..\src\objectkind-hook.c" />
     <ClCompile Include="..\..\src\object-broken.c" />
@@ -202,7 +204,6 @@
     <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\effects.c" />
     <ClCompile Include="..\..\src\files.c" />
-    <ClCompile Include="..\..\src\flavor.c" />
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />

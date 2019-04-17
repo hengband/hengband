@@ -9,6 +9,7 @@
 #include "floor.h"
 #include "grid.h"
 #include "spells.h"
+#include "object-flavor.h"
 
 #include "shoot.h"
 

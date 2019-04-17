@@ -27,6 +27,7 @@
 #include "patron.h"
 #include "monster.h"
 #include "monster-status.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "realm-hex.h"
 #include "cmd-pet.h"

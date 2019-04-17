@@ -591,15 +591,6 @@ extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int c
 extern errr counts_write(int where, u32b count);
 extern u32b counts_read(int where);
 
-/* flavor.c */
-extern void get_table_name_aux(char *out_string);
-extern void get_table_name(char *out_string);
-extern void get_table_sindarin_aux(char *out_string);
-extern void get_table_sindarin(char *out_string);
-extern void flavor_init(void);
-extern char *object_desc_kosuu(char *t, object_type *o_ptr);
-extern void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode);
-
 /* floors.c */
 extern void clear_saved_floor_files(void);
 extern saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id);

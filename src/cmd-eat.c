@@ -8,6 +8,7 @@
 
 
 #include "angband.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "avatar.h"
 #include "spells-status.h"

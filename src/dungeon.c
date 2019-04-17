@@ -28,6 +28,7 @@
 #include "floor-events.h"
 #include "grid.h"
 #include "object-curse.h"
+#include "object-flavor.h"
 #include "store.h"
 #include "spells.h"
 #include "spells-summon.h"

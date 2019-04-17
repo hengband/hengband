@@ -15,6 +15,7 @@
 #include "floor.h"
 #include "grid.h"
 #include "object-boost.h"
+#include "object-flavor.h"
 #include "object-hook.h"
 #include "object-curse.h"
 #include "objectkind-hook.h"
