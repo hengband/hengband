@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "floor.h"
+#include "grid.h"
 #include "melee.h"
 #include "sort.h"
 #include "player-move.h"

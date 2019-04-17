@@ -1,5 +1,16 @@
 ﻿
 extern void disturb(bool stop_search, bool flush_output);
+extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
+extern void run_step(DIRECTION dir);
+extern bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
+extern void py_pickup_aux(OBJECT_IDX o_idx);
+extern bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
+extern bool trap_can_be_ignored(FEAT_IDX feat);
+extern void search(void);
+extern void carry(bool pickup);
+#ifdef TRAVEL
+extern void travel_step(void);
+#endif
 
 /* Types of pattern tiles */
 #define NOT_PATTERN_TILE      -1

@@ -590,34 +590,6 @@ bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 	}
 }
 
-
-/*!
- * @brief プレイヤーが地形踏破可能かを返す
- * @param feature 判定したい地形ID
- * @param mode 移動に関するオプションフラグ
- * @return 移動可能ならばTRUEを返す
- */
-bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode)
-{
-	feature_type *f_ptr = &f_info[feature];
-
-	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
-
-	if (have_flag(f_ptr->flags, FF_PATTERN))
-	{
-		if (!(mode & CEM_P_CAN_ENTER_PATTERN)) return FALSE;
-	}
-
-	if (have_flag(f_ptr->flags, FF_CAN_FLY) && p_ptr->levitation) return TRUE;
-	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && p_ptr->can_swim) return TRUE;
-	if (have_flag(f_ptr->flags, FF_CAN_PASS) && p_ptr->pass_wall) return TRUE;
-
-	if (!have_flag(f_ptr->flags, FF_MOVE)) return FALSE;
-
-	return TRUE;
-}
-
-
 /*!
  * @brief 移動に伴うプレイヤーのステータス変化処理
  * @param ny 移動先Y座標
