@@ -41,6 +41,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
+#include "cmd-spell.h"
 #include "world.h"
 #include "player-status.h"
 #include "sort.h"

@@ -13,6 +13,7 @@
 #include "patron.h"
 #include "realm-hex.h"
 #include "cmd-pet.h"
+#include "cmd-spell.h"
 
 /* Hack, monk armour */
 static bool monk_armour_aux;

@@ -5,6 +5,8 @@
 #define KWD_HEAL     _("回復:", "heal ")
 #define KWD_RANDOM   _("ランダム", "random")
 
+extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
+
 extern concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base);
 extern concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base);
 extern concptr info_duration(int base, DICE_SID sides);

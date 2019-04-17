@@ -489,7 +489,6 @@ extern void do_cmd_time(void);
 extern void do_cmd_suicide(void);
 
 /* cmd-spell.c */
-extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
 
 /* dungeon.c */

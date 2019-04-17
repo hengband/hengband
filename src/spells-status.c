@@ -6,6 +6,7 @@
 #include "spells-status.h"
 #include "spells.h"
 #include "monster.h"
+#include "cmd-spell.h"
 
 /*!
  * @brief モンスター回復処理

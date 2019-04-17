@@ -28,6 +28,7 @@
 #include "grid.h"
 #include "monster-status.h"
 #include "monster-spell.h"
+#include "cmd-spell.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
