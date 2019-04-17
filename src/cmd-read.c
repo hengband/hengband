@@ -21,6 +21,8 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 
+#include "cmd-basic.h"
+
 /*!
  * @brief 巻物を読むコマンドのサブルーチン
  * Read a scroll (from the pack or floor).

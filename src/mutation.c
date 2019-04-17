@@ -21,6 +21,7 @@
 #include "spells-status.h"
 #include "object-hook.h"
 #include "spells.h"
+#include "cmd-basic.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

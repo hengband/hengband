@@ -16,6 +16,7 @@
 #include "realm-hex.h"
 #include "spells-floor.h"
 #include "object-broken.h"
+#include "cmd-basic.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

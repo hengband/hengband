@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
+#include "cmd-basic.h"
 #include "floor.h"
 #include "melee.h"
 #include "monsterrace-hook.h"

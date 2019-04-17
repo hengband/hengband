@@ -14,6 +14,8 @@
 #include "monsterrace-hook.h"
 #include "player-status.h"
 
+#include "cmd-basic.h"
+
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 
 

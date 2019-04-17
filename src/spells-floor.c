@@ -3,6 +3,7 @@
 #include "spells-floor.h"
 #include "grid.h"
 #include "quest.h"
+#include "cmd-basic.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

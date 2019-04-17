@@ -53,6 +53,7 @@
  */
 
 #include "angband.h"
+#include "cmd-basic.h"
 #include "cmd-usestaff.h"
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"

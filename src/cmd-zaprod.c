@@ -4,6 +4,7 @@
 #include "player-status.h"
 #include "object-hook.h"
 #include "spells.h"
+#include "cmd-basic.h"
 
 /*!
  * @brief ロッドの効果を発動する

@@ -26,6 +26,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "object-hook.h"
+#include "cmd-basic.h"
 
 /*!
  * @brief

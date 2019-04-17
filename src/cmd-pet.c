@@ -9,6 +9,7 @@
 #include "monster.h"
 #include "monster-status.h"
 #include "cmd-pet.h"
+#include "cmd-basic.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定

@@ -2,6 +2,7 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "player-status.h"
+#include "cmd-basic.h"
 
 
 

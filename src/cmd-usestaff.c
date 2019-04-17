@@ -4,6 +4,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "object-hook.h"
+#include "cmd-basic.h"
 
 
 

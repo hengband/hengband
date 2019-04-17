@@ -8,6 +8,7 @@
 
 #include "angband.h"
 #include "cmd-activate.h"
+#include "cmd-basic.h"
 #include "floor.h"
 #include "object-hook.h"
 #include "sort.h"

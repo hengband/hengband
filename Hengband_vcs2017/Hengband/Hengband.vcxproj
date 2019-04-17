@@ -142,6 +142,7 @@
     <ClCompile Include="..\..\src\chest.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-activate.c" />
+    <ClCompile Include="..\..\src\cmd-basic.c" />
     <ClCompile Include="..\..\src\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd-hissatsu.c" />
     <ClCompile Include="..\..\src\cmd-mane.c" />
@@ -184,6 +185,7 @@
     <ClInclude Include="..\..\src\avatar.h" />
     <ClInclude Include="..\..\src\bldg.h" />
     <ClInclude Include="..\..\src\chest.h" />
+    <ClInclude Include="..\..\src\cmd-basic.h" />
     <ClInclude Include="..\..\src\cmd-hissatsu.h" />
     <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
@@ -196,7 +198,6 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClCompile Include="..\..\src\player-move.c" />
-    <ClCompile Include="..\..\src\cmd2.c" />
     <ClCompile Include="..\..\src\cmd-item.c" />
     <ClCompile Include="..\..\src\cmd4.c" />
     <ClCompile Include="..\..\src\cmd-magiceat.c" />

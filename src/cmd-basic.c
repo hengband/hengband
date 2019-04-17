@@ -33,6 +33,8 @@
 #include "object-flavor.h"
 #include "shoot.h"
 
+#include "cmd-basic.h"
+
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
  * @param down_stair TRUEならば階段を降りる処理、FALSEなら階段を昇る処理による内容

@@ -8,6 +8,7 @@
 
 #include "angband.h"
 #include "player-status.h"
+#include "cmd-basic.h"
 
 #define MAX_SNIPE_POWERS 16
 

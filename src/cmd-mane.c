@@ -19,6 +19,7 @@
 #include "monster-spell.h"
 #include "cmd-spell.h"
 #include "player-status.h"
+#include "cmd-basic.h"
 
 static int damage;
 

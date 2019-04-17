@@ -60,9 +60,6 @@
     <ClCompile Include="..\..\src\z-util.c" />
     <ClCompile Include="..\..\src\z-virt.c" />
     <ClCompile Include="..\..\src\warning.c" />
-    <ClCompile Include="..\..\src\cmd2.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd4.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -257,6 +254,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-flavor.c">
       <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-basic.c">
+      <Filter>cmd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -466,6 +466,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\bldg.h" />
+    <ClInclude Include="..\..\src\cmd-basic.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />
