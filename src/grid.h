@@ -319,3 +319,9 @@ extern bool is_hidden_door(grid_type *g_ptr);
 extern bool is_mirror_grid(grid_type *g_ptr);
 extern bool is_glyph_grid(grid_type *g_ptr);
 extern bool is_explosive_rune_grid(grid_type *g_ptr);
+
+/*!
+ * マス構造体のspecial要素を利用する地形かどうかを判定するマクロ / Is this feature has special meaning (except floor_id) with g_ptr->special?
+ */
+#define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
+

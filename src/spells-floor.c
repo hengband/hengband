@@ -2,6 +2,7 @@
 #include "floor.h"
 #include "spells-floor.h"
 #include "grid.h"
+#include "quest.h"
 
 /*
  * Light up the dungeon using "clairvoyance"
@@ -240,4 +241,129 @@ bool place_mirror(void)
 	update_local_illumination(p_ptr->y, p_ptr->x);
 
 	return TRUE;
+}
+
+/*!
+ * @brief プレイヤーの手による能動的な階段生成処理 /
+ * Create stairs at or move previously created stairs into the player location.
+ * @return なし
+ */
+void stair_creation(void)
+{
+	saved_floor_type *sf_ptr;
+	saved_floor_type *dest_sf_ptr;
+
+	bool up = TRUE;
+	bool down = TRUE;
+	FLOOR_IDX dest_floor_id = 0;
+
+
+	/* Forbid up staircases on Ironman mode */
+	if (ironman_downward) up = FALSE;
+
+	/* Forbid down staircases on quest level */
+	if (quest_number(current_floor_ptr->dun_level) || (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) down = FALSE;
+
+	/* No effect out of standard dungeon floor */
+	if (!current_floor_ptr->dun_level || (!up && !down) ||
+		(p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) ||
+		p_ptr->inside_arena || p_ptr->inside_battle)
+	{
+		/* arena or quest */
+		msg_print(_("効果がありません！", "There is no effect!"));
+		return;
+	}
+
+	/* Artifacts resists */
+	if (!cave_valid_bold(p_ptr->y, p_ptr->x))
+	{
+		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
+		return;
+	}
+
+	/* Destroy all objects in the grid */
+	delete_object(p_ptr->y, p_ptr->x);
+
+	/* Extract current floor data */
+	sf_ptr = get_sf_ptr(p_ptr->floor_id);
+	if (!sf_ptr)
+	{
+		/* No floor id? -- Create now! */
+		p_ptr->floor_id = get_new_floor_id();
+		sf_ptr = get_sf_ptr(p_ptr->floor_id);
+	}
+
+	/* Choose randomly */
+	if (up && down)
+	{
+		if (randint0(100) < 50) up = FALSE;
+		else down = FALSE;
+	}
+
+	/* Destination is already fixed */
+	if (up)
+	{
+		if (sf_ptr->upper_floor_id) dest_floor_id = sf_ptr->upper_floor_id;
+	}
+	else
+	{
+		if (sf_ptr->lower_floor_id) dest_floor_id = sf_ptr->lower_floor_id;
+	}
+
+
+	/* Search old stairs leading to the destination */
+	if (dest_floor_id)
+	{
+		POSITION x, y;
+
+		for (y = 0; y < current_floor_ptr->height; y++)
+		{
+			for (x = 0; x < current_floor_ptr->width; x++)
+			{
+				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+
+				if (!g_ptr->special) continue;
+				if (feat_uses_special(g_ptr->feat)) continue;
+				if (g_ptr->special != dest_floor_id) continue;
+
+				/* Remove old stairs */
+				g_ptr->special = 0;
+				cave_set_feat(y, x, feat_ground_type[randint0(100)]);
+			}
+		}
+	}
+
+	/* No old destination -- Get new one now */
+	else
+	{
+		dest_floor_id = get_new_floor_id();
+
+		/* Fix it */
+		if (up)
+			sf_ptr->upper_floor_id = dest_floor_id;
+		else
+			sf_ptr->lower_floor_id = dest_floor_id;
+	}
+
+	/* Extract destination floor data */
+	dest_sf_ptr = get_sf_ptr(dest_floor_id);
+
+
+	/* Create a staircase */
+	if (up)
+	{
+		cave_set_feat(p_ptr->y, p_ptr->x,
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= current_floor_ptr->dun_level - 2)) ?
+			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
+	}
+	else
+	{
+		cave_set_feat(p_ptr->y, p_ptr->x,
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= current_floor_ptr->dun_level + 2)) ?
+			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
+	}
+
+
+	/* Connect this stairs to the destination */
+	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special = dest_floor_id;
 }
