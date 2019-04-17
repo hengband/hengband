@@ -24,6 +24,7 @@ extern DIRECTION coords_to_dir(POSITION y, POSITION x);
 extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 
 extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 
 //!< 対象グリッドの一覧をまとめる構造体
 typedef struct

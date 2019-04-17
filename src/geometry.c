@@ -392,3 +392,50 @@ bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	/* Assume okay */
 	return (TRUE);
 }
+
+
+
+/*
+ * Standard "find me a location" function
+ *
+ * Obtains a legal location within the given distance of the initial
+ * location, and with "los()" from the source to destination location.
+ *
+ * This function is often called from inside a loop which searches for
+ * locations while increasing the "d" distance.
+ *
+ * Currently the "m" parameter is unused.
+ */
+void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+{
+	POSITION nx, ny;
+
+	/* Pick a location */
+	while (TRUE)
+	{
+		/* Pick a new location */
+		ny = rand_spread(y, d);
+		nx = rand_spread(x, d);
+
+		/* Ignore annoying locations */
+		if (!in_bounds(ny, nx)) continue;
+
+		/* Ignore "excessively distant" locations */
+		if ((d > 1) && (distance(y, x, ny, nx) > d)) continue;
+
+		if (mode & PROJECT_LOS)
+		{
+			if (los(y, x, ny, nx)) break;
+		}
+		else
+		{
+			if (projectable(y, x, ny, nx)) break;
+		}
+
+	}
+
+	/* Save the location */
+	(*yp) = ny;
+	(*xp) = nx;
+}
+

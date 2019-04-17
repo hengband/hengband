@@ -327,3 +327,37 @@ extern bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode);
  */
 #define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
 
+/* grids.c */
+extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern void update_local_illumination(POSITION y, POSITION x);
+extern bool player_can_see_bold(POSITION y, POSITION x);
+extern bool cave_valid_bold(POSITION y, POSITION x);
+extern bool no_lite(void);
+extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_char[F_LIT_MAX]);
+extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp);
+extern void move_cursor_relative(int row, int col);
+extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
+extern void note_spot(POSITION y, POSITION x);
+extern void display_dungeon(void);
+extern void lite_spot(POSITION y, POSITION x);
+extern void prt_map(void);
+extern void prt_path(POSITION y, POSITION x);
+extern void display_map(int *cy, int *cx);
+extern void do_cmd_view_map(void);
+extern void forget_lite(void);
+extern void update_lite(void);
+extern void forget_view(void);
+extern void update_view(void);
+extern void update_mon_lite(void);
+extern void clear_mon_lite(void);
+extern void delayed_visual_update(void);
+extern void forget_flow(void);
+extern void update_flow(void);
+extern void update_smell(void);
+extern void map_area(POSITION range);
+extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
+extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
+extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
+extern void cave_alter_feat(POSITION y, POSITION x, int action);
+extern void remove_mirror(POSITION y, POSITION x);
