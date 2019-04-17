@@ -449,7 +449,6 @@ extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
 
-extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void health_track(MONSTER_IDX m_idx);
 extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(KIND_OBJECT_IDX k_idx);

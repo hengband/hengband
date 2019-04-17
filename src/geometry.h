@@ -25,6 +25,7 @@ extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POS
 
 extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
+extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
 //!< 対象グリッドの一覧をまとめる構造体
 typedef struct
