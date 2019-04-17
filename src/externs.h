@@ -454,7 +454,6 @@ extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(KIND_OBJECT_IDX k_idx);
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
-extern bool is_open(FEAT_IDX feat);
 
 /* cmd4.c */
 #ifndef JP

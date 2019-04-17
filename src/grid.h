@@ -361,3 +361,4 @@ extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
+extern bool is_open(FEAT_IDX feat);
