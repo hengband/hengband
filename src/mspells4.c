@@ -15,6 +15,7 @@
 #include "realm-hex.h"
 #include "player-move.h"
 #include "monster-spell.h"
+#include "monster-status.h"
 #include "spells.h"
 
 

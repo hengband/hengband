@@ -24,6 +24,7 @@
 #include "wild.h"
 #include "spells-floor.h"
 #include "player-move.h"
+#include "monster-status.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

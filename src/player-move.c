@@ -153,6 +153,7 @@
 #include "warning.h"
 #include "monster.h"
 #include "monster-spell.h"
+#include "monster-status.h"
 #include "object-hook.h"
 #include "object-flavor.h"
 #include "spells.h"
