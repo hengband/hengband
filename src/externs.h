@@ -524,7 +524,6 @@ extern u32b counts_read(int where);
 
 
 /* init1.c */
-extern TERM_COLOR color_char_to_attr(SYMBOL_CODE c);
 extern s16b f_tag_to_index(concptr str);
 extern errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax);
 
