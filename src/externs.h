@@ -417,6 +417,7 @@ extern void player_outfit(void);
 extern void dump_yourself(FILE *fff);
 
 
+
 /* grids.c */
 extern void update_local_illumination(POSITION y, POSITION x);
 extern bool player_can_see_bold(POSITION y, POSITION x);
@@ -506,7 +507,6 @@ extern void process_player_name(bool sf);
 extern void get_name(void);
 extern void do_cmd_save_game(int is_autosave);
 extern void do_cmd_save_and_exit(void);
-extern long total_points(void);
 extern void exit_game_panic(void);
 extern void signals_ignore_tstp(void);
 extern void signals_handle_tstp(void);

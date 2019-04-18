@@ -23,6 +23,7 @@ extern void check_experience(void);
 extern void wreck_the_pattern(void);
 extern void cnv_stat(int val, char *out_val);
 extern s16b modify_stat_value(int value, int amount);
+extern long calc_score(void);
 
 extern const s32b player_exp[PY_MAX_LEVEL];
 extern const s32b player_exp_a[PY_MAX_LEVEL];

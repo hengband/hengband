@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "player-status.h"
 
 /*!
  * @brief i番目のスコア情報にバッファ位置をシークする / Seek score 'i' in the highscore file
@@ -474,7 +475,7 @@ errr top_twenty(void)
 		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
-	sprintf(the_score.pts, "%9ld", (long)total_points());
+	sprintf(the_score.pts, "%9ld", (long)calc_score());
 	the_score.pts[9] = '\0';
 
 	/* Save the current gold */
@@ -597,7 +598,7 @@ errr predict_score(void)
 		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
-	sprintf(the_score.pts, "%9ld", (long)total_points());
+	sprintf(the_score.pts, "%9ld", (long)calc_score());
 
 	/* Save the current gold */
 	sprintf(the_score.gold, "%9lu", (long)p_ptr->au);
