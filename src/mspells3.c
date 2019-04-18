@@ -19,6 +19,7 @@
 #include "cmd-spell.h"
 #include "player-status.h"
 #include "monster-spell.h"
+#include "monster-status.h"
 #include "spells.h"
 #include "cmd-basic.h"
 

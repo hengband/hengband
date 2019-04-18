@@ -15,7 +15,6 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
-#include "monsterrace-hook.h"
 #include "melee.h"
 #include "spells.h"
 #include "spells-summon.h"
@@ -29,6 +28,8 @@
 #include "player-move.h"
 #include "monster-status.h"
 #include "monster-spell.h"
+#include "monster-process.h"
+#include "monsterrace-hook.h"
 #include "floor.h"
 
 

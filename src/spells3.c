@@ -26,6 +26,7 @@
 #include "spells.h"
 #include "spells-floor.h"
 #include "grid.h"
+#include "monster-process.h"
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "cmd-spell.h"

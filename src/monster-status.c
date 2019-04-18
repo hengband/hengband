@@ -4,6 +4,7 @@
 #include "monster.h"
 #include "monster-status.h"
 #include "monster-spell.h"
+#include "monster-process.h"
 #include "spells-summon.h"
 #include "monsterrace-hook.h"
 #include "object-curse.h"
@@ -801,7 +802,7 @@ void dispel_monster_status(MONSTER_IDX m_idx)
 * @param vs_player TRUEならば時間停止開始処理を行う
 * @return 時間停止が行われている状態ならばTRUEを返す
 */
-bool process_the_world(int num, MONSTER_IDX who, bool vs_player)
+bool set_monster_timewalk(int num, MONSTER_IDX who, bool vs_player)
 {
 	monster_type *m_ptr = &current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
 

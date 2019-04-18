@@ -37,7 +37,6 @@
 #include "spells-object.h"
 #include "spells-status.h"
 #include "spells-floor.h"
-#include "monsterrace-hook.h"
 #include "world.h"
 #include "mutation.h"
 #include "quest.h"
@@ -49,7 +48,9 @@
 #include "realm-hex.h"
 #include "object-hook.h"
 #include "wild.h"
+#include "monster-process.h"
 #include "monster-status.h"
+#include "monsterrace-hook.h"
 #include "floor-save.h"
 
 #include "view-mainwindow.h"

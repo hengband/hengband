@@ -540,16 +540,6 @@ extern concptr get_check_sum(void);
 extern errr rd_savefile_new(void);
 extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
-/* monster-process.c */
-extern void process_monsters(void);
-extern void process_monster(MONSTER_IDX m_idx);
-extern int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type);
-extern void mproc_init(void);
-extern void process_monsters_mtimed(int mtimed_idx);
-extern void dispel_monster_status(MONSTER_IDX m_idx);
-extern bool process_the_world(int num, MONSTER_IDX who, bool vs_player);
-extern void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx);
-
 
 /* monster2.c */
 extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);

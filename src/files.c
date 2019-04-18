@@ -26,6 +26,7 @@
 #include "player-move.h"
 #include "patron.h"
 #include "monster.h"
+#include "monster-process.h"
 #include "monster-status.h"
 #include "object-flavor.h"
 #include "object-hook.h"

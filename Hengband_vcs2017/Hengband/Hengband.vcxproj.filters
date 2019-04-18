@@ -471,6 +471,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view-mainwindow.h" />
     <ClInclude Include="..\..\src\snipe.h" />
+    <ClInclude Include="..\..\src\monster-process.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />
