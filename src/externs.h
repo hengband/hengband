@@ -185,6 +185,9 @@ extern bool multi_rew;
 extern char summon_kin_type;
 extern bool is_loading_now;
 extern bool hack_mutation;
+extern bool reset_concent;
+extern bool is_fired;
+
 
 
 /*
@@ -1140,12 +1143,9 @@ extern void repeat_push(COMMAND_CODE what);
 extern bool repeat_pull(COMMAND_CODE *what);
 extern void repeat_check(void);
 
-/* variable.c */
-extern bool easy_open;
-
-
-/* variable.c */
 extern bool easy_disarm;
+extern bool easy_floor;
+extern bool easy_open;
 
 
 /* object1.c */
@@ -1153,9 +1153,6 @@ extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLA
 extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width);
 extern bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern void py_pickup_floor(bool pickup);
-
-/* variable.c */
-extern bool easy_floor;
 
 /* wizard1.c */
 extern void spoil_random_artifact(concptr fname);
@@ -1211,9 +1208,5 @@ extern bool browsing_movie;
 /* for travel */
 extern travel_type travel;
 #endif
-
-/* variable.c (for snipers) */
-extern bool reset_concent;   /* Concentration reset flag */
-extern bool is_fired;
 
 extern void kamaenaoshi(INVENTORY_IDX item);
