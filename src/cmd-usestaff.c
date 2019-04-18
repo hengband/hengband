@@ -3,6 +3,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "spells-status.h"
+#include "spells-floor.h"
 #include "object-hook.h"
 #include "cmd-basic.h"
 

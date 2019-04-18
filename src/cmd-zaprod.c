@@ -1,9 +1,10 @@
 ﻿#include "angband.h"
 #include "avatar.h"
-#include "spells-status.h"
 #include "player-status.h"
 #include "object-hook.h"
 #include "spells.h"
+#include "spells-status.h"
+#include "spells-floor.h"
 #include "cmd-basic.h"
 
 /*!

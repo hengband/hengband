@@ -368,3 +368,66 @@ void stair_creation(void)
 	/* Connect this stairs to the destination */
 	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special = dest_floor_id;
 }
+
+/*
+ * Hack -- map the current panel (plus some) ala "magic mapping"
+ */
+void map_area(POSITION range)
+{
+	int i;
+	POSITION x, y;
+	grid_type *g_ptr;
+	FEAT_IDX feat;
+	feature_type *f_ptr;
+
+	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+
+	/* Scan that area */
+	for (y = 1; y < current_floor_ptr->height - 1; y++)
+	{
+		for (x = 1; x < current_floor_ptr->width - 1; x++)
+		{
+			if (distance(p_ptr->y, p_ptr->x, y, x) > range) continue;
+
+			g_ptr = &current_floor_ptr->grid_array[y][x];
+
+			/* Memorize terrain of the grid */
+			g_ptr->info |= (CAVE_KNOWN);
+
+			/* Feature code (applying "mimic" field) */
+			feat = get_feat_mimic(g_ptr);
+			f_ptr = &f_info[feat];
+
+			/* All non-walls are "checked" */
+			if (!have_flag(f_ptr->flags, FF_WALL))
+			{
+				/* Memorize normal features */
+				if (have_flag(f_ptr->flags, FF_REMEMBER))
+				{
+					/* Memorize the object */
+					g_ptr->info |= (CAVE_MARK);
+				}
+
+				/* Memorize known walls */
+				for (i = 0; i < 8; i++)
+				{
+					g_ptr = &current_floor_ptr->grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
+
+					/* Feature code (applying "mimic" field) */
+					feat = get_feat_mimic(g_ptr);
+					f_ptr = &f_info[feat];
+
+					/* Memorize walls (etc) */
+					if (have_flag(f_ptr->flags, FF_REMEMBER))
+					{
+						/* Memorize the walls */
+						g_ptr->info |= (CAVE_MARK);
+					}
+				}
+			}
+		}
+	}
+
+	p_ptr->redraw |= (PR_MAP);
+	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+}
