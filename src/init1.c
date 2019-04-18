@@ -48,6 +48,7 @@
 
 #include "angband.h"
 #include "trap.h"
+#include "grid.h"
 #include "monster.h"
 #include "artifact.h"
 #include "cmd-activate.h"

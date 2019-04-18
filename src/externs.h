@@ -428,10 +428,6 @@ extern void forget_flow(void);
 extern void update_flow(void);
 extern void update_smell(void);
 extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
-extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
-extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
-extern void cave_alter_feat(POSITION y, POSITION x, int action);
-extern void remove_mirror(POSITION y, POSITION x);
 
 extern void health_track(MONSTER_IDX m_idx);
 extern void monster_race_track(MONRACE_IDX r_idx);
@@ -549,7 +545,6 @@ extern errr rd_savefile_new(void);
 extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* monster-process.c */
-extern bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name);
 extern void process_monsters(void);
 extern void process_monster(MONSTER_IDX m_idx);
 extern int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type);
