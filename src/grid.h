@@ -343,11 +343,6 @@ extern void lite_spot(POSITION y, POSITION x);
 extern void prt_map(void);
 extern void prt_path(POSITION y, POSITION x);
 extern void display_map(int *cy, int *cx);
-extern void update_lite(void);
-extern void forget_view(void);
-extern void update_view(void);
-extern void update_mon_lite(void);
-extern void clear_mon_lite(void);
 extern void delayed_visual_update(void);
 extern void forget_flow(void);
 extern void update_flow(void);
@@ -369,8 +364,62 @@ extern bool check_local_illumination(POSITION y, POSITION x);
 	((((C)->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && \
 	!p_ptr->see_nocto)
 
- /*
-  * Get feature mimic from f_info[] (applying "mimic" field)
-  */
+/*
+ * Get feature mimic from f_info[] (applying "mimic" field)
+ */
 #define get_feat_mimic(C) \
 	(f_info[(C)->mimic ? (C)->mimic : (C)->feat].mimic)
+
+/*
+ * This macro allows us to efficiently add a grid to the "lite" array,
+ * note that we are never called for illegal grids, or for grids which
+ * have already been placed into the "lite" array, and we are never
+ * called when the "lite" array is full.
+ */
+#define cave_lite_hack(Y,X) \
+{\
+	if (!(current_floor_ptr->grid_array[Y][X].info & (CAVE_LITE))) \
+	{ \
+		current_floor_ptr->grid_array[Y][X].info |= (CAVE_LITE); \
+		current_floor_ptr->lite_y[current_floor_ptr->lite_n] = (Y); \
+		current_floor_ptr->lite_x[current_floor_ptr->lite_n++] = (X); \
+	} \
+}
+
+/*
+ * For delayed visual update
+ */
+#define cave_note_and_redraw_later(C,Y,X) \
+{\
+	(C)->info |= CAVE_NOTE; \
+	cave_redraw_later((C), (Y), (X)); \
+}
+
+/*
+ * For delayed visual update
+ */
+#define cave_redraw_later(C,Y,X) \
+{\
+	if (!((C)->info & CAVE_REDRAW)) \
+	{ \
+		(C)->info |= CAVE_REDRAW; \
+		current_floor_ptr->redraw_y[current_floor_ptr->redraw_n] = (Y); \
+		current_floor_ptr->redraw_x[current_floor_ptr->redraw_n++] = (X); \
+	} \
+}
+
+ /*
+  * This macro allows us to efficiently add a grid to the "view" array,
+  * note that we are never called for illegal grids, or for grids which
+  * have already been placed into the "view" array, and we are never
+  * called when the "view" array is full.
+  */
+#define cave_view_hack(C,Y,X) \
+{\
+    if (!((C)->info & (CAVE_VIEW))){\
+    (C)->info |= (CAVE_VIEW); \
+    current_floor_ptr->view_y[current_floor_ptr->view_n] = (Y); \
+    current_floor_ptr->view_x[current_floor_ptr->view_n] = (X); \
+    current_floor_ptr->view_n++;}\
+}
+
