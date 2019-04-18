@@ -551,7 +551,6 @@ extern int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type);
 extern void mproc_init(void);
 extern void process_monsters_mtimed(int mtimed_idx);
 extern void dispel_monster_status(MONSTER_IDX m_idx);
-extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who);
 extern bool process_the_world(int num, MONSTER_IDX who, bool vs_player);
 extern void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx);
 

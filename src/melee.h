@@ -39,4 +39,5 @@ extern HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m
 extern HIT_POINT critical_norm(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
 extern bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode);
 extern bool make_attack_normal(MONSTER_IDX m_idx);
+extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who);
 

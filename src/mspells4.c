@@ -17,6 +17,7 @@
 #include "monster-spell.h"
 #include "monster-status.h"
 #include "spells.h"
+#include "melee.h"
 
 
 /*!
