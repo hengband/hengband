@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "quest.h"
 #include "cmd-basic.h"
+#include "floor-save.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

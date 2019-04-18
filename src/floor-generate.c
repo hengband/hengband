@@ -101,6 +101,7 @@
 #include "grid.h"
 #include "rooms.h"
 #include "floor.h"
+#include "floor-save.h"
 #include "floor-streams.h"
 #include "floor-generate.h"
 #include "floor-events.h"

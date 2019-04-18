@@ -17,6 +17,7 @@
 #include "store.h"
 #include "wild.h"
 #include "floor-events.h"
+#include "floor-save.h"
 
 
 
