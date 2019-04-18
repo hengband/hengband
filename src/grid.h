@@ -343,7 +343,6 @@ extern void lite_spot(POSITION y, POSITION x);
 extern void prt_map(void);
 extern void prt_path(POSITION y, POSITION x);
 extern void display_map(int *cy, int *cx);
-extern void forget_lite(void);
 extern void update_lite(void);
 extern void forget_view(void);
 extern void update_view(void);

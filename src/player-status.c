@@ -2,6 +2,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "floor.h"
+#include "floor-events.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-status.h"

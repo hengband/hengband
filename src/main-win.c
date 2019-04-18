@@ -99,6 +99,7 @@
 
 #include "angband.h"
 #include "view-mainwindow.h"
+#include "floor-events.h"
 
 #ifdef WINDOWS
 #include <windows.h>

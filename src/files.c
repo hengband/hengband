@@ -34,6 +34,7 @@
 #include "spells.h"
 #include "term.h"
 #include "view-mainwindow.h"
+#include "floor-events.h"
 
 
 /*

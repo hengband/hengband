@@ -14,6 +14,7 @@
 
 #include "angband.h"
 #include "floor.h"
+#include "floor-events.h"
 #include "object-boost.h"
 #include "object-flavor.h"
 #include "object-hook.h"

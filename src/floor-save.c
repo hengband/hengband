@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "floor.h"
+#include "floor-events.h"
 #include "generate.h"
 #include "grid.h"
 #include "monster.h"

@@ -355,3 +355,30 @@ void glow_deep_lava_and_bldg(void)
 
 	p_ptr->redraw |= (PR_MAP);
 }
+
+/*
+ * Actually erase the entire "lite" array, redrawing every grid
+ */
+void forget_lite(void)
+{
+	int i;
+	POSITION x, y;
+
+	/* None to forget */
+	if (!current_floor_ptr->lite_n) return;
+
+	/* Clear them all */
+	for (i = 0; i < current_floor_ptr->lite_n; i++)
+	{
+		y = current_floor_ptr->lite_y[i];
+		x = current_floor_ptr->lite_x[i];
+
+		/* Forget "LITE" flag */
+		current_floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
+
+		/* lite_spot(y, x); Perhaps don't need? */
+	}
+
+	/* None left */
+	current_floor_ptr->lite_n = 0;
+}

@@ -23,6 +23,7 @@
 #include "player-status.h"
 #include "object-flavor.h"
 #include "object-hook.h"
+#include "floor-events.h"
 
 #define MIN_STOCK 12
 
