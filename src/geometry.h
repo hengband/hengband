@@ -23,6 +23,7 @@ extern DIRECTION coords_to_dir(POSITION y, POSITION x);
 #define PROJECT_LOS         0x8000 /*!< 遠隔攻撃特性: /  */
 extern sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 
+extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);

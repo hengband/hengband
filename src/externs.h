@@ -415,7 +415,6 @@ extern void dump_yourself(FILE *fff);
 
 
 /* grids.c */
-extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(POSITION y, POSITION x);
 extern bool player_can_see_bold(POSITION y, POSITION x);
