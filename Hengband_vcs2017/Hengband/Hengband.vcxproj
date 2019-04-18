@@ -344,6 +344,7 @@
     <ClInclude Include="..\..\src\rumor.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\shoot.h" />
+    <ClInclude Include="..\..\src\snipe.h" />
     <ClInclude Include="..\..\src\sort.h" />
     <ClInclude Include="..\..\src\spells-diceroll.h" />
     <ClInclude Include="..\..\src\spells-floor.h" />

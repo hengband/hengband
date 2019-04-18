@@ -25,6 +25,7 @@
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
 #include "cmd-basic.h"
+#include "snipe.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "grid.h"

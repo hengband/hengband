@@ -470,6 +470,7 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view-mainwindow.h" />
+    <ClInclude Include="..\..\src\snipe.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

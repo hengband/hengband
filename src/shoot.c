@@ -12,6 +12,7 @@
 #include "object-flavor.h"
 
 #include "shoot.h"
+#include "snipe.h"
 
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /
