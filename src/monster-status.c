@@ -11,6 +11,31 @@
 #include "avatar.h"
 
 
+/*!
+* @brief モンスターIDからPOWERFULフラグの有無を取得する /
+* @param m_idx モンスターID
+* @return POWERFULフラグがあればTRUE、なければFALSEを返す。
+*/
+bool monster_is_powerful(MONSTER_IDX m_idx)
+{
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
+	return powerful;
+}
+
+/*!
+* @brief モンスターIDからモンスターのレベルを取得する(ただし最低1を保証する) /
+* @param m_idx モンスターID
+* @return モンスターのレベル
+*/
+DEPTH monster_level_idx(MONSTER_IDX m_idx)
+{
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+	return rlev;
+}
 
 /*!
  * @brief モンスターに与えたダメージの修正処理 /
