@@ -84,7 +84,7 @@ hengband_SOURCES = \
 	variable.c wild.h wild.c wizard1.c wizard2.c \
 	warning.c warning.h world.c world.h \
 	\
-	view-mainwindow.c\
+	view-mainwindow.c view-mainwindow.h\
 	\
 	xtra2.c z-config.h \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \

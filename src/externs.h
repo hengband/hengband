@@ -428,7 +428,6 @@ extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
 extern void display_dungeon(void);
 extern void lite_spot(POSITION y, POSITION x);
-extern void prt_map(void);
 extern void prt_path(POSITION y, POSITION x);
 extern void display_map(int *cy, int *cx);
 extern void do_cmd_view_map(void);

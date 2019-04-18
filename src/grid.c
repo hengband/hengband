@@ -32,6 +32,7 @@
 #include "monster-status.h"
 #include "player-status.h"
 #include "spells.h"
+#include "view-mainwindow.h"
 
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;
@@ -2109,17 +2110,6 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 
 
 /*
- * Calculate panel colum of a location in the map
- */
-static int panel_col_of(int col)
-{
-	col -= panel_col_min;
-	if (use_bigtile) col *= 2;
-	return col + 13;
-}
-
-
-/*
  * Moves the cursor to a given MAP (y,x) location
  */
 void move_cursor_relative(int row, int col)
@@ -2365,92 +2355,6 @@ void lite_spot(POSITION y, POSITION x)
 		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 }
-
-
-/*
- * Prints the map of the dungeon
- *
- * Note that, for efficiency, we contain an "optimized" version
- * of both "lite_spot()" and "print_rel()", and that we use the
- * "lite_spot()" function to display the player grid, if needed.
- */
-void prt_map(void)
-{
-	POSITION x, y;
-	int v;
-
-	/* map bounds */
-	POSITION xmin, xmax, ymin, ymax;
-
-	TERM_LEN wid, hgt;
-
-	Term_get_size(&wid, &hgt);
-
-	/* Remove map offset */
-	wid -= COL_MAP + 2;
-	hgt -= ROW_MAP + 2;
-
-	/* Access the cursor state */
-	(void)Term_get_cursor(&v);
-
-	/* Hide the cursor */
-	(void)Term_set_cursor(0);
-
-	/* Get bounds */
-	xmin = (0 < panel_col_min) ? panel_col_min : 0;
-	xmax = (current_floor_ptr->width - 1 > panel_col_max) ? panel_col_max : current_floor_ptr->width - 1;
-	ymin = (0 < panel_row_min) ? panel_row_min : 0;
-	ymax = (current_floor_ptr->height - 1 > panel_row_max) ? panel_row_max : current_floor_ptr->height - 1;
-
-	/* Bottom section of screen */
-	for (y = 1; y <= ymin - panel_row_prt; y++)
-	{
-		/* Erase the section */
-		Term_erase(COL_MAP, y, wid);
-	}
-
-	/* Top section of screen */
-	for (y = ymax - panel_row_prt; y <= hgt; y++)
-	{
-		/* Erase the section */
-		Term_erase(COL_MAP, y, wid);
-	}
-
-	/* Dump the map */
-	for (y = ymin; y <= ymax; y++)
-	{
-		/* Scan the columns of row "y" */
-		for (x = xmin; x <= xmax; x++)
-		{
-			TERM_COLOR a;
-			SYMBOL_CODE c;
-
-			TERM_COLOR ta;
-			SYMBOL_CODE tc;
-
-			/* Determine what is there */
-			map_info(y, x, &a, &c, &ta, &tc);
-
-			/* Hack -- fake monochrome */
-			if (!use_graphics)
-			{
-				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-				else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
-				else if (p_ptr->wraith_form) a = TERM_L_DARK;
-			}
-
-			/* Efficiency -- Redraw that grid of the map */
-			Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
-		}
-	}
-
-	/* Display player */
-	lite_spot(p_ptr->y, p_ptr->x);
-
-	/* Restore the cursor */
-	(void)Term_set_cursor(v);
-}
-
 
 
 /*

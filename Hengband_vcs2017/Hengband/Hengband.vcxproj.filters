@@ -469,6 +469,7 @@
     <ClInclude Include="..\..\src\cmd-basic.h">
       <Filter>cmd</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view-mainwindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />
