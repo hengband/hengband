@@ -20,7 +20,15 @@
 #include "realm-hex.h"
 #include "view-mainwindow.h"
 
+#include "object-flavor.h"
+
 #include "grid.h"
+#include "floor.h"
+
+static int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優先度を保管する */
+static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
+static int match_autopick;
+static object_type *autopick_obj; /*!< 各種自動拾い処理時に使うオブジェクトポインタ */
 
  /*
   * Some screen locations for various display routines
@@ -2564,4 +2572,1174 @@ void prt_map(void)
 	(void)Term_set_cursor(v);
 }
 
+
+
+/*!
+ * 一般的にモンスターシンボルとして扱われる記号を定義する(幻覚処理向け) / Hack -- Legal monster codes
+ */
+static char image_monster_hack[] = \
+"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/*!
+ * 一般的にオブジェクトシンボルとして扱われる記号を定義する(幻覚処理向け) /  Hack -- Legal object codes
+ */
+static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
+
+/*!
+ * @brief モンスターの表示を幻覚状態に差し替える / Mega-Hack -- Hallucinatory monster
+ * @param ap 本来の色
+ * @param cp 本来のシンボル
+ * @return なし
+ */
+static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
+{
+	/* Random symbol from set above */
+	if (use_graphics)
+	{
+		monster_race *r_ptr = &r_info[randint1(max_r_idx - 1)];
+
+		*cp = r_ptr->x_char;
+		*ap = r_ptr->x_attr;
+	}
+	else
+		/* Text mode */
+	{
+		*cp = (one_in_(25) ?
+			image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
+			image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
+
+		/* Random color */
+		*ap = randint1(15);
+	}
+}
+
+/*!
+ * @brief オブジェクトの表示を幻覚状態に差し替える / Hallucinatory object
+ * @param ap 本来の色
+ * @param cp 本来のシンボル
+ * @return なし
+ */
+static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
+{
+	if (use_graphics)
+	{
+		object_kind *k_ptr = &k_info[randint1(max_k_idx - 1)];
+
+		*cp = k_ptr->x_char;
+		*ap = k_ptr->x_attr;
+	}
+	else
+	{
+		int n = sizeof(image_object_hack) - 1;
+
+		*cp = image_object_hack[randint0(n)];
+
+		/* Random color */
+		*ap = randint1(15);
+	}
+}
+
+
+/*!
+ * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える / Hack -- Random hallucination
+ * @param ap 本来の色
+ * @param cp 本来のシンボル
+ * @return なし
+ */
+static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
+{
+	/* Normally, assume monsters */
+	if (randint0(100) < 75)
+	{
+		image_monster(ap, cp);
+	}
+
+	/* Otherwise, assume objects */
+	else
+	{
+		image_object(ap, cp);
+	}
+}
+
+/*!
+ * 照明の表現を行うための色合いの関係を{暗闇時, 照明時} で定義する /
+ * This array lists the effects of "brightness" on various "base" colours.\n
+ *\n
+ * This is used to do dynamic lighting effects in ascii :-)\n
+ * At the moment, only the various "floor" tiles are affected.\n
+ *\n
+ * The layout of the array is [x][0] = light and [x][1] = dark.\n
+ */
+static TERM_COLOR lighting_colours[16][2] =
+{
+	/* TERM_DARK */
+	{TERM_L_DARK, TERM_DARK},
+
+	/* TERM_WHITE */
+	{TERM_YELLOW, TERM_SLATE},
+
+	/* TERM_SLATE */
+	{TERM_WHITE, TERM_L_DARK},
+
+	/* TERM_ORANGE */
+	{TERM_L_UMBER, TERM_UMBER},
+
+	/* TERM_RED */
+	{TERM_RED, TERM_RED},
+
+	/* TERM_GREEN */
+	{TERM_L_GREEN, TERM_GREEN},
+
+	/* TERM_BLUE */
+	{TERM_BLUE, TERM_BLUE},
+
+	/* TERM_UMBER */
+	{TERM_L_UMBER, TERM_RED},
+
+	/* TERM_L_DARK */
+	{TERM_SLATE, TERM_L_DARK},
+
+	/* TERM_L_WHITE */
+	{TERM_WHITE, TERM_SLATE},
+
+	/* TERM_VIOLET */
+	{TERM_L_RED, TERM_BLUE},
+
+	/* TERM_YELLOW */
+	{TERM_YELLOW, TERM_ORANGE},
+
+	/* TERM_L_RED */
+	{TERM_L_RED, TERM_L_RED},
+
+	/* TERM_L_GREEN */
+	{TERM_L_GREEN, TERM_GREEN},
+
+	/* TERM_L_BLUE */
+	{TERM_L_BLUE, TERM_L_BLUE},
+
+	/* TERM_L_UMBER */
+	{TERM_L_UMBER, TERM_UMBER}
+};
+
+
+/*!
+ * @brief 調査中
+ * @todo コメントを付加すること
+ */
+void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_char[F_LIT_MAX])
+{
+	TERM_COLOR s_attr = f_attr[F_LIT_STANDARD];
+	SYMBOL_CODE s_char = f_char[F_LIT_STANDARD];
+	int i;
+
+	if (is_ascii_graphics(s_attr)) /* For ASCII */
+	{
+		f_attr[F_LIT_LITE] = lighting_colours[s_attr & 0x0f][0];
+		f_attr[F_LIT_DARK] = lighting_colours[s_attr & 0x0f][1];
+		for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_char[i] = s_char;
+	}
+	else /* For tile graphics */
+	{
+		for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_attr[i] = s_attr;
+		f_char[F_LIT_LITE] = s_char + 2;
+		f_char[F_LIT_DARK] = s_char + 1;
+	}
+}
+
+
+/*!
+ * @brief Mコマンドによる縮小マップの表示を行う / Extract the attr/char to display at the given (legal) map location
+ * @details
+ * Basically, we "paint" the chosen attr/char in several passes, starting\n
+ * with any known "terrain features" (defaulting to darkness), then adding\n
+ * any known "objects", and finally, adding any known "monsters".  This\n
+ * is not the fastest method but since most of the calls to this function\n
+ * are made for grids with no monsters or objects, it is fast enough.\n
+ *\n
+ * Note that this function, if used on the grid containing the "player",\n
+ * will return the attr/char of the grid underneath the player, and not\n
+ * the actual player attr/char itself, allowing a lot of optimization\n
+ * in various "display" functions.\n
+ *\n
+ * Note that the "zero" entry in the feature/object/monster arrays are\n
+ * used to provide "special" attr/char codes, with "monster zero" being\n
+ * used for the player attr/char, "object zero" being used for the "stack"\n
+ * attr/char, and "feature zero" being used for the "nothing" attr/char,\n
+ * though this function makes use of only "feature zero".\n
+ *\n
+ * Note that monsters can have some "special" flags, including "ATTR_MULTI",\n
+ * which means their color changes, and "ATTR_CLEAR", which means they take\n
+ * the color of whatever is under them, and "CHAR_CLEAR", which means that\n
+ * they take the symbol of whatever is under them.  Technically, the flag\n
+ * "CHAR_MULTI" is supposed to indicate that a monster looks strange when\n
+ * examined, but this flag is currently ignored.\n
+ *\n
+ * Currently, we do nothing with multi-hued objects, because there are\n
+ * not any.  If there were, they would have to set "shimmer_objects"\n
+ * when they were created, and then new "shimmer" code in "dungeon.c"\n
+ * would have to be created handle the "shimmer" effect, and the code\n
+ * in "current_floor_ptr->grid_array.c" would have to be updated to create the shimmer effect.\n
+ *\n
+ * Note the effects of hallucination.  Objects always appear as random\n
+ * "objects", monsters as random "monsters", and normal grids occasionally\n
+ * appear as random "monsters" or "objects", but note that these random\n
+ * "monsters" and "objects" are really just "colored ascii symbols".\n
+ *\n
+ * Note that "floors" and "invisible traps" (and "zero" features) are\n
+ * drawn as "floors" using a special check for optimization purposes,\n
+ * and these are the only features which get drawn using the special\n
+ * lighting effects activated by "view_special_lite".\n
+ *\n
+ * Note the use of the "mimic" field in the "terrain feature" processing,\n
+ * which allows any feature to "pretend" to be another feature.  This is\n
+ * used to "hide" secret doors, and to make all "doors" appear the same,\n
+ * and all "walls" appear the same, and "hidden" treasure stay hidden.\n
+ * It is possible to use this field to make a feature "look" like a floor,\n
+ * but the "special lighting effects" for floors will not be used.\n
+ *\n
+ * Note the use of the new "terrain feature" information.  Note that the\n
+ * assumption that all interesting "objects" and "terrain features" are\n
+ * memorized allows extremely optimized processing below.  Note the use\n
+ * of separate flags on objects to mark them as memorized allows a grid\n
+ * to have memorized "terrain" without granting knowledge of any object\n
+ * which may appear in that grid.\n
+ *\n
+ * Note the efficient code used to determine if a "floor" grid is\n
+ * "memorized" or "viewable" by the player, where the test for the\n
+ * grid being "viewable" is based on the facts that (1) the grid\n
+ * must be "lit" (torch-lit or perma-lit), (2) the grid must be in\n
+ * line of sight, and (3) the player must not be blind, and uses the\n
+ * assumption that all torch-lit grids are in line of sight.\n
+ *\n
+ * Note that floors (and invisible traps) are the only grids which are\n
+ * not memorized when seen, so only these grids need to check to see if\n
+ * the grid is "viewable" to the player (if it is not memorized).  Since\n
+ * most non-memorized grids are in fact walls, this induces *massive*\n
+ * efficiency, at the cost of *forcing* the memorization of non-floor\n
+ * grids when they are first seen.  Note that "invisible traps" are\n
+ * always treated exactly like "floors", which prevents "cheating".\n
+ *\n
+ * Note the "special lighting effects" which can be activated for floor\n
+ * grids using the "view_special_lite" option (for "white" floor grids),\n
+ * causing certain grids to be displayed using special colors.  If the\n
+ * player is "blind", we will use "dark gray", else if the grid is lit\n
+ * by the torch, and the "view_yellow_lite" option is set, we will use\n
+ * "yellow", else if the grid is "dark", we will use "dark gray", else\n
+ * if the grid is not "viewable", and the "view_bright_lite" option is\n
+ * set, and the we will use "slate" (gray).  We will use "white" for all\n
+ * other cases, in particular, for illuminated viewable floor grids.\n
+ *\n
+ * Note the "special lighting effects" which can be activated for wall\n
+ * grids using the "view_granite_lite" option (for "white" wall grids),\n
+ * causing certain grids to be displayed using special colors.  If the\n
+ * player is "blind", we will use "dark gray", else if the grid is lit\n
+ * by the torch, and the "view_yellow_lite" option is set, we will use\n
+ * "yellow", else if the "view_bright_lite" option is set, and the grid\n
+ * is not "viewable", or is "dark", or is glowing, but not when viewed\n
+ * from the player's current location, we will use "slate" (gray).  We\n
+ * will use "white" for all other cases, in particular, for correctly\n
+ * illuminated viewable wall grids.\n
+ *\n
+ * Note that, when "view_granite_lite" is set, we use an inline version\n
+ * of the "player_can_see_bold()" function to check the "viewability" of\n
+ * grids when the "view_bright_lite" option is set, and we do NOT use\n
+ * any special colors for "dark" wall grids, since this would allow the\n
+ * player to notice the walls of illuminated rooms from a hallway that\n
+ * happened to run beside the room.  The alternative, by the way, would\n
+ * be to prevent the generation of hallways next to rooms, but this\n
+ * would still allow problems when digging towards a room.\n
+ *\n
+ * Note that bizarre things must be done when the "attr" and/or "char"\n
+ * codes have the "high-bit" set, since these values are used to encode\n
+ * various "special" pictures in some versions, and certain situations,\n
+ * such as "multi-hued" or "clear" monsters, cause the attr/char codes\n
+ * to be "scrambled" in various ways.\n
+ *\n
+ * Note that eventually we may use the "&" symbol for embedded treasure,\n
+ * and use the "*" symbol to indicate multiple objects, though this will\n
+ * have to wait for Angband 2.8.0 or later.  Note that currently, this\n
+ * is not important, since only one object or terrain feature is allowed\n
+ * in each grid.  If needed, "k_info[0]" will hold the "stack" attr/char.\n
+ *\n
+ * Note the assumption that doing "x_ptr = &x_info[x]" plus a few of\n
+ * "x_ptr->xxx", is quicker than "x_info[x].xxx", if this is incorrect\n
+ * then a whole lot of code should be changed...  XXX XXX\n
+ */
+void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
+{
+	/* Get the current_floor_ptr->grid_array */
+	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+
+	OBJECT_IDX this_o_idx, next_o_idx = 0;
+
+	/* Feature code (applying "mimic" field) */
+	FEAT_IDX feat = get_feat_mimic(g_ptr);
+
+	/* Access floor */
+	feature_type *f_ptr = &f_info[feat];
+
+	TERM_COLOR a;
+	SYMBOL_CODE c;
+
+	/* Boring grids (floors, etc) */
+	if (!have_flag(f_ptr->flags, FF_REMEMBER))
+	{
+		/*
+		 * Handle Memorized or visible floor
+		 *
+		 * No visual when blinded.
+		 *   (to prevent strange effects on darkness breath)
+		 * otherwise,
+		 * - Can see grids with CAVE_MARK.
+		 * - Can see grids with CAVE_LITE or CAVE_MNLT.
+		 *   (Such grids also have CAVE_VIEW)
+		 * - Can see grids with CAVE_VIEW unless darkened by monsters.
+		 */
+		if (!p_ptr->blind &&
+			((g_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) ||
+			((g_ptr->info & CAVE_VIEW) && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))))
+		{
+			/* Normal attr/char */
+			a = f_ptr->x_attr[F_LIT_STANDARD];
+			c = f_ptr->x_char[F_LIT_STANDARD];
+
+			if (p_ptr->wild_mode)
+			{
+				/* Special lighting effects */
+				/* Handle "night" */
+				if (view_special_lite && !is_daytime())
+				{
+					/* Use a darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARK];
+					c = f_ptr->x_char[F_LIT_DARK];
+				}
+			}
+
+			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
+			else if (darkened_grid(g_ptr))
+			{
+				/* Unsafe grid -- idea borrowed from Unangband */
+				feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+
+				/* Access darkness */
+				f_ptr = &f_info[feat];
+
+				/* Char and attr of darkness */
+				a = f_ptr->x_attr[F_LIT_STANDARD];
+				c = f_ptr->x_char[F_LIT_STANDARD];
+			}
+
+			/* Special lighting effects */
+			else if (view_special_lite)
+			{
+				/* Handle "torch-lit" grids */
+				if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
+				{
+					/* Torch lite */
+					if (view_yellow_lite)
+					{
+						/* Use a brightly lit colour/tile */
+						a = f_ptr->x_attr[F_LIT_LITE];
+						c = f_ptr->x_char[F_LIT_LITE];
+					}
+				}
+
+				/* Handle "dark" grids */
+				else if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+				{
+					/* Use a darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARK];
+					c = f_ptr->x_char[F_LIT_DARK];
+				}
+
+				/* Handle "out-of-sight" grids */
+				else if (!(g_ptr->info & CAVE_VIEW))
+				{
+					/* Special flag */
+					if (view_bright_lite)
+					{
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
+					}
+				}
+			}
+		}
+
+		/* Unknown */
+		else
+		{
+			/* Unsafe grid -- idea borrowed from Unangband */
+			feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+
+			/* Access darkness */
+			f_ptr = &f_info[feat];
+
+			/* Normal attr/char */
+			a = f_ptr->x_attr[F_LIT_STANDARD];
+			c = f_ptr->x_char[F_LIT_STANDARD];
+		}
+	}
+
+	/* Interesting grids (non-floors) */
+	else
+	{
+		/* Memorized grids */
+		if (g_ptr->info & CAVE_MARK)
+		{
+			/* Normal attr/char */
+			a = f_ptr->x_attr[F_LIT_STANDARD];
+			c = f_ptr->x_char[F_LIT_STANDARD];
+
+			if (p_ptr->wild_mode)
+			{
+				/* Special lighting effects */
+				/* Handle "blind" or "night" */
+				if (view_granite_lite && (p_ptr->blind || !is_daytime()))
+				{
+					/* Use a darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARK];
+					c = f_ptr->x_char[F_LIT_DARK];
+				}
+			}
+
+			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
+			else if (darkened_grid(g_ptr) && !p_ptr->blind)
+			{
+				if (have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT))
+				{
+					/* Unsafe grid -- idea borrowed from Unangband */
+					feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+
+					/* Access darkness */
+					f_ptr = &f_info[feat];
+
+					/* Char and attr of darkness */
+					a = f_ptr->x_attr[F_LIT_STANDARD];
+					c = f_ptr->x_char[F_LIT_STANDARD];
+				}
+				else if (view_granite_lite && view_bright_lite)
+				{
+					/* Use a darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARK];
+					c = f_ptr->x_char[F_LIT_DARK];
+				}
+			}
+
+			/* Special lighting effects */
+			else if (view_granite_lite)
+			{
+				/* Handle "blind" */
+				if (p_ptr->blind)
+				{
+					/* Use a darkened colour/tile */
+					a = f_ptr->x_attr[F_LIT_DARK];
+					c = f_ptr->x_char[F_LIT_DARK];
+				}
+
+				/* Handle "torch-lit" grids */
+				else if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
+				{
+					/* Torch lite */
+					if (view_yellow_lite)
+					{
+						/* Use a brightly lit colour/tile */
+						a = f_ptr->x_attr[F_LIT_LITE];
+						c = f_ptr->x_char[F_LIT_LITE];
+					}
+				}
+
+				/* Handle "view_bright_lite" */
+				else if (view_bright_lite)
+				{
+					/* Not viewable */
+					if (!(g_ptr->info & CAVE_VIEW))
+					{
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
+					}
+
+					/* Not glowing */
+					else if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
+					{
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
+					}
+
+					/* Not glowing correctly */
+					else if (!have_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(y, x))
+					{
+						/* Use a darkened colour/tile */
+						a = f_ptr->x_attr[F_LIT_DARK];
+						c = f_ptr->x_char[F_LIT_DARK];
+					}
+				}
+			}
+		}
+
+		/* Unknown */
+		else
+		{
+			/* Unsafe grid -- idea borrowed from Unangband */
+			feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
+
+			/* Access feature */
+			f_ptr = &f_info[feat];
+
+			/* Normal attr/char */
+			a = f_ptr->x_attr[F_LIT_STANDARD];
+			c = f_ptr->x_char[F_LIT_STANDARD];
+		}
+	}
+
+	if (feat_priority == -1) feat_priority = f_ptr->priority;
+
+	/* Save the terrain info for the transparency effects */
+	(*tap) = a;
+	(*tcp) = c;
+
+	/* Save the info */
+	(*ap) = a;
+	(*cp) = c;
+
+	/* Hack -- rare random hallucination, except on outer dungeon walls */
+	if (p_ptr->image)
+	{
+		if (one_in_(256))
+		{
+			image_random(ap, cp);
+		}
+	}
+
+	/* Objects */
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	{
+		object_type *o_ptr;
+		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		next_o_idx = o_ptr->next_o_idx;
+
+		/* Memorized objects */
+		if (o_ptr->marked & OM_FOUND)
+		{
+			if (display_autopick)
+			{
+				byte act;
+
+				match_autopick = is_autopick(o_ptr);
+				if (match_autopick == -1)
+					continue;
+
+				act = autopick_list[match_autopick].action;
+
+				if ((act & DO_DISPLAY) && (act & display_autopick))
+				{
+					autopick_obj = o_ptr;
+				}
+				else
+				{
+					match_autopick = -1;
+					continue;
+				}
+			}
+			/* Normal char */
+			(*cp) = object_char(o_ptr);
+
+			/* Normal attr */
+			(*ap) = object_attr(o_ptr);
+
+			feat_priority = 20;
+
+			/* Hack -- hallucination */
+			if (p_ptr->image) image_object(ap, cp);
+
+			break;
+		}
+	}
+
+
+	/* Handle monsters */
+	if (g_ptr->m_idx && display_autopick == 0)
+	{
+		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+
+		/* Visible monster */
+		if (m_ptr->ml)
+		{
+			monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+
+			feat_priority = 30;
+
+			/* Hallucination */
+			if (p_ptr->image)
+			{
+				/*
+				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
+				 * flags are always unseen.
+				 */
+				if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
+				{
+					/* Do nothing */
+				}
+				else
+				{
+					image_monster(ap, cp);
+				}
+			}
+			else
+			{
+				/* Monster attr/char */
+				a = r_ptr->x_attr;
+				c = r_ptr->x_char;
+
+				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_SHAPECHANGER | RF1_ATTR_CLEAR
+					| RF1_ATTR_MULTI | RF1_ATTR_SEMIRAND)))
+				{
+					/* Desired monster attr/char */
+					*ap = a;
+					*cp = c;
+				}
+
+				/*
+				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
+				 * flags are always unseen.
+				 */
+				else if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
+				{
+					/* Do nothing */
+				}
+
+				else
+				{
+					/***  Monster's attr  ***/
+					if ((r_ptr->flags1 & RF1_ATTR_CLEAR) && (*ap != TERM_DARK) && !use_graphics)
+					{
+						/* Clear-attr */
+						/* Do nothing */
+					}
+					else if ((r_ptr->flags1 & RF1_ATTR_MULTI) && !use_graphics)
+					{
+						/* Multi-hued attr */
+						if (r_ptr->flags2 & RF2_ATTR_ANY) *ap = randint1(15);
+						else switch (randint1(7))
+						{
+						case 1: *ap = TERM_RED;     break;
+						case 2: *ap = TERM_L_RED;   break;
+						case 3: *ap = TERM_WHITE;   break;
+						case 4: *ap = TERM_L_GREEN; break;
+						case 5: *ap = TERM_BLUE;    break;
+						case 6: *ap = TERM_L_DARK;  break;
+						case 7: *ap = TERM_GREEN;   break;
+						}
+					}
+					else if ((r_ptr->flags1 & RF1_ATTR_SEMIRAND) && !use_graphics)
+					{
+						/* Use semi-random attr (usually mimics' colors vary) */
+						*ap = g_ptr->m_idx % 15 + 1;
+					}
+					else
+					{
+						/* Normal case */
+						*ap = a;
+					}
+
+					/***  Monster's char  ***/
+					if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && (*cp != ' ') && !use_graphics)
+					{
+						/* Clear-char */
+						/* Do nothing */
+					}
+					else if (r_ptr->flags1 & RF1_SHAPECHANGER)
+					{
+						if (use_graphics)
+						{
+							monster_race *tmp_r_ptr = &r_info[randint1(max_r_idx - 1)];
+							*cp = tmp_r_ptr->x_char;
+							*ap = tmp_r_ptr->x_attr;
+						}
+						else
+						{
+							*cp = (one_in_(25) ?
+								image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
+								image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
+						}
+					}
+					else
+					{
+						/* Normal case */
+						*cp = c;
+					}
+				}
+			}
+		}
+	}
+
+	/* Handle "player" */
+	if (player_bold(y, x))
+	{
+		monster_race *r_ptr = &r_info[0];
+		*ap = r_ptr->x_attr;
+		*cp = r_ptr->x_char;
+		feat_priority = 31;
+	}
+}
+
+
+static concptr simplify_list[][2] =
+{
+#ifdef JP
+	{"の魔法書", ""},
+	{NULL, NULL}
+#else
+	{"^Ring of ",   "="},
+	{"^Amulet of ", "\""},
+	{"^Scroll of ", "?"},
+	{"^Scroll titled ", "?"},
+	{"^Wand of "  , "-"},
+	{"^Rod of "   , "-"},
+	{"^Staff of " , "_"},
+	{"^Potion of ", "!"},
+	{" Spellbook ",""},
+	{"^Book of ",   ""},
+	{" Magic [",   "["},
+	{" Book [",    "["},
+	{" Arts [",    "["},
+	{"^Set of ",    ""},
+	{"^Pair of ",   ""},
+	{NULL, NULL}
+#endif
+};
+
+
+static void display_shortened_item_name(object_type *o_ptr, int y)
+{
+	char buf[MAX_NLEN];
+	char *c = buf;
+	int len = 0;
+	TERM_COLOR attr;
+
+	object_desc(buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
+	attr = tval_to_attr[o_ptr->tval % 128];
+
+	if (p_ptr->image)
+	{
+		attr = TERM_WHITE;
+		strcpy(buf, _("何か奇妙な物", "something strange"));
+	}
+
+	for (c = buf; *c; c++)
+	{
+		int i;
+		for (i = 0; simplify_list[i][1]; i++)
+		{
+			concptr org_w = simplify_list[i][0];
+
+			if (*org_w == '^')
+			{
+				if (c == buf)
+					org_w++;
+				else
+					continue;
+			}
+
+			if (!strncmp(c, org_w, strlen(org_w)))
+			{
+				char *s = c;
+				concptr tmp = simplify_list[i][1];
+				while (*tmp)
+					*s++ = *tmp++;
+				tmp = c + strlen(org_w);
+				while (*tmp)
+					*s++ = *tmp++;
+				*s = '\0';
+			}
+		}
+	}
+
+	c = buf;
+	len = 0;
+	/* 半角 12 文字分で切る */
+	while (*c)
+	{
+#ifdef JP
+		if (iskanji(*c))
+		{
+			if (len + 2 > 12) break;
+			c += 2;
+			len += 2;
+		}
+		else
+#endif
+		{
+			if (len + 1 > 12) break;
+			c++;
+			len++;
+		}
+	}
+	*c = '\0';
+	Term_putstr(0, y, 12, attr, buf);
+}
+
+/*
+ * Display a "small-scale" map of the dungeon in the active Term
+ */
+void display_map(int *cy, int *cx)
+{
+	int i, j, x, y;
+
+	TERM_COLOR ta;
+	SYMBOL_CODE tc;
+
+	byte tp;
+
+	TERM_COLOR **bigma;
+	SYMBOL_CODE **bigmc;
+	byte **bigmp;
+
+	TERM_COLOR **ma;
+	SYMBOL_CODE **mc;
+	byte **mp;
+
+	/* Save lighting effects */
+	bool old_view_special_lite = view_special_lite;
+	bool old_view_granite_lite = view_granite_lite;
+
+	TERM_LEN hgt, wid, yrat, xrat;
+
+	int **match_autopick_yx;
+	object_type ***object_autopick_yx;
+
+	Term_get_size(&wid, &hgt);
+	hgt -= 2;
+	wid -= 14;
+	if (use_bigtile) wid /= 2;
+
+	yrat = (current_floor_ptr->height + hgt - 1) / hgt;
+	xrat = (current_floor_ptr->width + wid - 1) / wid;
+
+	/* Disable lighting effects */
+	view_special_lite = FALSE;
+	view_granite_lite = FALSE;
+
+	/* Allocate the maps */
+	C_MAKE(ma, (hgt + 2), TERM_COLOR *);
+	C_MAKE(mc, (hgt + 2), char_ptr);
+	C_MAKE(mp, (hgt + 2), byte_ptr);
+	C_MAKE(match_autopick_yx, (hgt + 2), sint_ptr);
+	C_MAKE(object_autopick_yx, (hgt + 2), object_type **);
+
+	/* Allocate and wipe each line map */
+	for (y = 0; y < (hgt + 2); y++)
+	{
+		/* Allocate one row each array */
+		C_MAKE(ma[y], (wid + 2), TERM_COLOR);
+		C_MAKE(mc[y], (wid + 2), char);
+		C_MAKE(mp[y], (wid + 2), byte);
+		C_MAKE(match_autopick_yx[y], (wid + 2), int);
+		C_MAKE(object_autopick_yx[y], (wid + 2), object_type *);
+
+		for (x = 0; x < wid + 2; ++x)
+		{
+			match_autopick_yx[y][x] = -1;
+			object_autopick_yx[y][x] = NULL;
+
+			/* Nothing here */
+			ma[y][x] = TERM_WHITE;
+			mc[y][x] = ' ';
+
+			/* No priority */
+			mp[y][x] = 0;
+		}
+	}
+
+	/* Allocate the maps */
+	C_MAKE(bigma, (current_floor_ptr->height + 2), TERM_COLOR *);
+	C_MAKE(bigmc, (current_floor_ptr->height + 2), char_ptr);
+	C_MAKE(bigmp, (current_floor_ptr->height + 2), byte_ptr);
+
+	/* Allocate and wipe each line map */
+	for (y = 0; y < (current_floor_ptr->height + 2); y++)
+	{
+		/* Allocate one row each array */
+		C_MAKE(bigma[y], (current_floor_ptr->width + 2), TERM_COLOR);
+		C_MAKE(bigmc[y], (current_floor_ptr->width + 2), char);
+		C_MAKE(bigmp[y], (current_floor_ptr->width + 2), byte);
+
+		for (x = 0; x < current_floor_ptr->width + 2; ++x)
+		{
+			/* Nothing here */
+			bigma[y][x] = TERM_WHITE;
+			bigmc[y][x] = ' ';
+
+			/* No priority */
+			bigmp[y][x] = 0;
+		}
+	}
+
+	/* Fill in the map */
+	for (i = 0; i < current_floor_ptr->width; ++i)
+	{
+		for (j = 0; j < current_floor_ptr->height; ++j)
+		{
+			x = i / xrat + 1;
+			y = j / yrat + 1;
+
+			match_autopick = -1;
+			autopick_obj = NULL;
+			feat_priority = -1;
+
+			/* Extract the current attr/char at that map location */
+			map_info(j, i, &ta, &tc, &ta, &tc);
+
+			/* Extract the priority */
+			tp = (byte_hack)feat_priority;
+
+			if (match_autopick != -1
+				&& (match_autopick_yx[y][x] == -1
+					|| match_autopick_yx[y][x] > match_autopick))
+			{
+				match_autopick_yx[y][x] = match_autopick;
+				object_autopick_yx[y][x] = autopick_obj;
+				tp = 0x7f;
+			}
+
+			/* Save the char, attr and priority */
+			bigmc[j + 1][i + 1] = tc;
+			bigma[j + 1][i + 1] = ta;
+			bigmp[j + 1][i + 1] = tp;
+		}
+	}
+
+	for (j = 0; j < current_floor_ptr->height; ++j)
+	{
+		for (i = 0; i < current_floor_ptr->width; ++i)
+		{
+			x = i / xrat + 1;
+			y = j / yrat + 1;
+
+			tc = bigmc[j + 1][i + 1];
+			ta = bigma[j + 1][i + 1];
+			tp = bigmp[j + 1][i + 1];
+
+			/* rare feature has more priority */
+			if (mp[y][x] == tp)
+			{
+				int t;
+				int cnt = 0;
+
+				for (t = 0; t < 8; t++)
+				{
+					if (tc == bigmc[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]] &&
+						ta == bigma[j + 1 + ddy_cdd[t]][i + 1 + ddx_cdd[t]])
+						cnt++;
+				}
+				if (cnt <= 4)
+					tp++;
+			}
+
+			/* Save "best" */
+			if (mp[y][x] < tp)
+			{
+				/* Save the char, attr and priority */
+				mc[y][x] = tc;
+				ma[y][x] = ta;
+				mp[y][x] = tp;
+			}
+		}
+	}
+
+
+	/* Corners */
+	x = wid + 1;
+	y = hgt + 1;
+
+	/* Draw the corners */
+	mc[0][0] = mc[0][x] = mc[y][0] = mc[y][x] = '+';
+
+	/* Draw the horizontal edges */
+	for (x = 1; x <= wid; x++) mc[0][x] = mc[y][x] = '-';
+
+	/* Draw the vertical edges */
+	for (y = 1; y <= hgt; y++) mc[y][0] = mc[y][x] = '|';
+
+
+	/* Display each map line in order */
+	for (y = 0; y < hgt + 2; ++y)
+	{
+		/* Start a new line */
+		Term_gotoxy(COL_MAP, y);
+
+		/* Display the line */
+		for (x = 0; x < wid + 2; ++x)
+		{
+			ta = ma[y][x];
+			tc = mc[y][x];
+
+			/* Hack -- fake monochrome */
+			if (!use_graphics)
+			{
+				if (current_world_ptr->timewalk_m_idx) ta = TERM_DARK;
+				else if (IS_INVULN() || p_ptr->timewalk) ta = TERM_WHITE;
+				else if (p_ptr->wraith_form) ta = TERM_L_DARK;
+			}
+
+			/* Add the character */
+			Term_add_bigch(ta, tc);
+		}
+	}
+
+
+	for (y = 1; y < hgt + 1; ++y)
+	{
+		match_autopick = -1;
+		for (x = 1; x <= wid; x++) {
+			if (match_autopick_yx[y][x] != -1 &&
+				(match_autopick > match_autopick_yx[y][x] ||
+					match_autopick == -1)) {
+				match_autopick = match_autopick_yx[y][x];
+				autopick_obj = object_autopick_yx[y][x];
+			}
+		}
+
+		/* Clear old display */
+		Term_putstr(0, y, 12, 0, "            ");
+
+		if (match_autopick != -1)
+#if 1
+			display_shortened_item_name(autopick_obj, y);
+#else
+		{
+			char buf[13] = "\0";
+			strncpy(buf, autopick_list[match_autopick].name, 12);
+			buf[12] = '\0';
+			put_str(buf, y, 0);
+		}
+#endif
+
+	}
+
+	/* Player location */
+	(*cy) = p_ptr->y / yrat + 1 + ROW_MAP;
+	if (!use_bigtile)
+		(*cx) = p_ptr->x / xrat + 1 + COL_MAP;
+	else
+		(*cx) = (p_ptr->x / xrat + 1) * 2 + COL_MAP;
+
+	/* Restore lighting effects */
+	view_special_lite = old_view_special_lite;
+	view_granite_lite = old_view_granite_lite;
+
+	/* Free each line map */
+	for (y = 0; y < (hgt + 2); y++)
+	{
+		/* Free one row each array */
+		C_KILL(ma[y], (wid + 2), TERM_COLOR);
+		C_KILL(mc[y], (wid + 2), SYMBOL_CODE);
+		C_KILL(mp[y], (wid + 2), byte);
+		C_KILL(match_autopick_yx[y], (wid + 2), int);
+		C_KILL(object_autopick_yx[y], (wid + 2), object_type *);
+	}
+
+	/* Free each line map */
+	C_KILL(ma, (hgt + 2), TERM_COLOR *);
+	C_KILL(mc, (hgt + 2), char_ptr);
+	C_KILL(mp, (hgt + 2), byte_ptr);
+	C_KILL(match_autopick_yx, (hgt + 2), sint_ptr);
+	C_KILL(object_autopick_yx, (hgt + 2), object_type **);
+
+	/* Free each line map */
+	for (y = 0; y < (current_floor_ptr->height + 2); y++)
+	{
+		/* Free one row each array */
+		C_KILL(bigma[y], (current_floor_ptr->width + 2), TERM_COLOR);
+		C_KILL(bigmc[y], (current_floor_ptr->width + 2), SYMBOL_CODE);
+		C_KILL(bigmp[y], (current_floor_ptr->width + 2), byte);
+	}
+
+	/* Free each line map */
+	C_KILL(bigma, (current_floor_ptr->height + 2), TERM_COLOR *);
+	C_KILL(bigmc, (current_floor_ptr->height + 2), char_ptr);
+	C_KILL(bigmp, (current_floor_ptr->height + 2), byte_ptr);
+}
+
+
+/*
+ * Display a "small-scale" map of the dungeon for the player
+ *
+ * Currently, the "player" is displayed on the map.
+ */
+void do_cmd_view_map(void)
+{
+	int cy, cx;
+
+	screen_save();
+
+	prt(_("お待ち下さい...", "Please wait..."), 0, 0);
+
+	Term_fresh();
+	Term_clear();
+
+	display_autopick = 0;
+
+	/* Display the map */
+	display_map(&cy, &cx);
+
+	/* Wait for it */
+	if (max_autopick && !p_ptr->wild_mode)
+	{
+		display_autopick = ITEM_DISPLAY;
+
+		while (1)
+		{
+			int i;
+			byte flag;
+
+			int wid, hgt, row_message;
+
+			Term_get_size(&wid, &hgt);
+			row_message = hgt - 1;
+
+			put_str(_("何かキーを押してください('M':拾う 'N':放置 'D':M+N 'K':壊すアイテムを表示)",
+				" Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items."), row_message, 1);
+
+			/* Hilite the player */
+			move_cursor(cy, cx);
+
+			i = inkey();
+
+			if ('M' == i)
+				flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK);
+			else if ('N' == i)
+				flag = DONT_AUTOPICK;
+			else if ('K' == i)
+				flag = DO_AUTODESTROY;
+			else if ('D' == i)
+				flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK | DONT_AUTOPICK);
+			else
+				break;
+
+			Term_fresh();
+
+			if (~display_autopick & flag)
+				display_autopick |= flag;
+			else
+				display_autopick &= ~flag;
+			/* Display the map */
+			display_map(&cy, &cx);
+		}
+
+		display_autopick = 0;
+
+	}
+	else
+	{
+		put_str(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"), 23, 30);
+		/* Hilite the player */
+		move_cursor(cy, cx);
+		/* Get any key */
+		inkey();
+	}
+	screen_load();
+}
 

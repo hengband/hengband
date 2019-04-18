@@ -257,9 +257,3 @@
 #define permanent_wall(F) \
 	(have_flag((F)->flags, FF_WALL) && \
 	 have_flag((F)->flags, FF_PERMANENT))
-
-/*
- * Get feature mimic from f_info[] (applying "mimic" field)
- */
-#define get_feat_mimic(C) \
-	(f_info[(C)->mimic ? (C)->mimic : (C)->feat].mimic)

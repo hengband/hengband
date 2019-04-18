@@ -55,7 +55,7 @@
 #include "monster.h"
 #include "monster-status.h"
 #include "floor.h"
-
+#include "view-mainwindow.h"
 
 /*
  */

@@ -334,7 +334,6 @@ extern void update_local_illumination(POSITION y, POSITION x);
 extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool cave_valid_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
-extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_char[F_LIT_MAX]);
 extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp);
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
@@ -344,7 +343,6 @@ extern void lite_spot(POSITION y, POSITION x);
 extern void prt_map(void);
 extern void prt_path(POSITION y, POSITION x);
 extern void display_map(int *cy, int *cx);
-extern void do_cmd_view_map(void);
 extern void forget_lite(void);
 extern void update_lite(void);
 extern void forget_view(void);
@@ -363,3 +361,17 @@ extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
 extern void lite_spot(POSITION y, POSITION x);
 extern bool is_open(FEAT_IDX feat);
+extern bool check_local_illumination(POSITION y, POSITION x);
+
+/*!
+ * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
+ */
+#define darkened_grid(C) \
+	((((C)->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && \
+	!p_ptr->see_nocto)
+
+ /*
+  * Get feature mimic from f_info[] (applying "mimic" field)
+  */
+#define get_feat_mimic(C) \
+	(f_info[(C)->mimic ? (C)->mimic : (C)->feat].mimic)

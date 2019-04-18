@@ -53,6 +53,7 @@
 #include "cmd-activate.h"
 #include "wild.h"
 #include "quest.h"
+#include "view-mainwindow.h"
 
 
 

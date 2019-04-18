@@ -33,6 +33,7 @@
 #include "cmd-pet.h"
 #include "spells.h"
 #include "term.h"
+#include "view-mainwindow.h"
 
 
 /*

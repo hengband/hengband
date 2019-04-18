@@ -30,6 +30,9 @@ extern bool projectable(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
+extern bool player_can_see_bold(POSITION y, POSITION x);
+extern bool no_lite(void);
+
 //!< 対象グリッドの一覧をまとめる構造体
 typedef struct
 {

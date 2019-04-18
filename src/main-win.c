@@ -98,6 +98,7 @@
 */
 
 #include "angband.h"
+#include "view-mainwindow.h"
 
 #ifdef WINDOWS
 #include <windows.h>
