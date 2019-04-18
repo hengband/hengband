@@ -7,6 +7,10 @@
 #include "quest.h"
 #include "object-hook.h"
 #include "player-move.h"
+#include "world.h"
+
+static bool mon_invis;
+static POSITION mon_fy, mon_fx;
 
 void day_break()
 {
@@ -1309,6 +1313,512 @@ void update_view(void)
 
 	/* Mega-Hack -- Visual update later */
 	p_ptr->update |= (PU_DELAY_VIS);
+}
+
+
+/*
+ * Add a square to the changes array
+ */
+static void mon_lite_hack(POSITION y, POSITION x)
+{
+	grid_type *g_ptr;
+	int dpf, d;
+	POSITION midpoint;
+
+	/* We trust this grid is in bounds */
+	/* if (!in_bounds2(y, x)) return; */
+
+	g_ptr = &current_floor_ptr->grid_array[y][x];
+
+	/* Want a unlit square in view of the player */
+	if ((g_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW) return;
+
+	if (!cave_los_grid(g_ptr))
+	{
+		/* Hack -- Prevent monster lite leakage in walls */
+
+		/* Horizontal walls between player and a monster */
+		if (((y < p_ptr->y) && (y > mon_fy)) || ((y > p_ptr->y) && (y < mon_fy)))
+		{
+			dpf = p_ptr->y - mon_fy;
+			d = y - mon_fy;
+			midpoint = mon_fx + ((p_ptr->x - mon_fx) * ABS(d)) / ABS(dpf);
+
+			/* Only first wall viewed from mid-x is lit */
+			if (x < midpoint)
+			{
+				if (!cave_los_bold(y, x + 1)) return;
+			}
+			else if (x > midpoint)
+			{
+				if (!cave_los_bold(y, x - 1)) return;
+			}
+
+			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
+			else if (mon_invis) return;
+		}
+
+		/* Vertical walls between player and a monster */
+		if (((x < p_ptr->x) && (x > mon_fx)) || ((x > p_ptr->x) && (x < mon_fx)))
+		{
+			dpf = p_ptr->x - mon_fx;
+			d = x - mon_fx;
+			midpoint = mon_fy + ((p_ptr->y - mon_fy) * ABS(d)) / ABS(dpf);
+
+			/* Only first wall viewed from mid-y is lit */
+			if (y < midpoint)
+			{
+				if (!cave_los_bold(y + 1, x)) return;
+			}
+			else if (y > midpoint)
+			{
+				if (!cave_los_bold(y - 1, x)) return;
+			}
+
+			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
+			else if (mon_invis) return;
+		}
+	}
+
+	/* We trust tmp_pos.n does not exceed TEMP_MAX */
+
+	/* New grid */
+	if (!(g_ptr->info & CAVE_MNDK))
+	{
+		/* Save this square */
+		tmp_pos.x[tmp_pos.n] = x;
+		tmp_pos.y[tmp_pos.n] = y;
+		tmp_pos.n++;
+	}
+
+	/* Darkened grid */
+	else
+	{
+		/* No longer dark */
+		g_ptr->info &= ~(CAVE_MNDK);
+	}
+
+	/* Light it */
+	g_ptr->info |= CAVE_MNLT;
+}
+
+
+/*
+ * Add a square to the changes array
+ */
+static void mon_dark_hack(POSITION y, POSITION x)
+{
+	grid_type *g_ptr;
+	int       midpoint, dpf, d;
+
+	/* We trust this grid is in bounds */
+	/* if (!in_bounds2(y, x)) return; */
+
+	g_ptr = &current_floor_ptr->grid_array[y][x];
+
+	/* Want a unlit and undarkened square in view of the player */
+	if ((g_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) return;
+
+	if (!cave_los_grid(g_ptr) && !cave_have_flag_grid(g_ptr, FF_PROJECT))
+	{
+		/* Hack -- Prevent monster dark lite leakage in walls */
+
+		/* Horizontal walls between player and a monster */
+		if (((y < p_ptr->y) && (y > mon_fy)) || ((y > p_ptr->y) && (y < mon_fy)))
+		{
+			dpf = p_ptr->y - mon_fy;
+			d = y - mon_fy;
+			midpoint = mon_fx + ((p_ptr->x - mon_fx) * ABS(d)) / ABS(dpf);
+
+			/* Only first wall viewed from mid-x is lit */
+			if (x < midpoint)
+			{
+				if (!cave_los_bold(y, x + 1) && !cave_have_flag_bold(y, x + 1, FF_PROJECT)) return;
+			}
+			else if (x > midpoint)
+			{
+				if (!cave_los_bold(y, x - 1) && !cave_have_flag_bold(y, x - 1, FF_PROJECT)) return;
+			}
+
+			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
+			else if (mon_invis) return;
+		}
+
+		/* Vertical walls between player and a monster */
+		if (((x < p_ptr->x) && (x > mon_fx)) || ((x > p_ptr->x) && (x < mon_fx)))
+		{
+			dpf = p_ptr->x - mon_fx;
+			d = x - mon_fx;
+			midpoint = mon_fy + ((p_ptr->y - mon_fy) * ABS(d)) / ABS(dpf);
+
+			/* Only first wall viewed from mid-y is lit */
+			if (y < midpoint)
+			{
+				if (!cave_los_bold(y + 1, x) && !cave_have_flag_bold(y + 1, x, FF_PROJECT)) return;
+			}
+			else if (y > midpoint)
+			{
+				if (!cave_los_bold(y - 1, x) && !cave_have_flag_bold(y - 1, x, FF_PROJECT)) return;
+			}
+
+			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
+			else if (mon_invis) return;
+		}
+	}
+
+	/* We trust tmp_pos.n does not exceed TEMP_MAX */
+
+	/* Save this square */
+	tmp_pos.x[tmp_pos.n] = x;
+	tmp_pos.y[tmp_pos.n] = y;
+	tmp_pos.n++;
+
+	/* Darken it */
+	g_ptr->info |= CAVE_MNDK;
+}
+
+/*
+ * Update squares illuminated or darkened by monsters.
+ *
+ * Hack - use the CAVE_ROOM flag (renamed to be CAVE_MNLT) to
+ * denote squares illuminated by monsters.
+ *
+ * The CAVE_TEMP and CAVE_XTRA flag are used to store the state during the
+ * updating.  Only squares in view of the player, whos state
+ * changes are drawn via lite_spot().
+ */
+void update_mon_lite(void)
+{
+	int i, rad;
+	grid_type *g_ptr;
+
+	POSITION fx, fy;
+	void(*add_mon_lite)(POSITION, POSITION);
+	int f_flag;
+
+	s16b end_temp;
+
+	/* Non-Ninja player in the darkness */
+	int dis_lim = ((d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !p_ptr->see_nocto) ?
+		(MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
+
+	/* Clear all monster lit squares */
+	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
+	{
+		/* Point to grid */
+		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->mon_lite_y[i]][current_floor_ptr->mon_lite_x[i]];
+
+		/* Set temp or xtra flag */
+		g_ptr->info |= (g_ptr->info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA;
+
+		/* Clear monster illumination flag */
+		g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
+	}
+
+	/* Empty temp list of new squares to lite up */
+	tmp_pos.n = 0;
+
+	/* If a monster stops time, don't process */
+	if (!current_world_ptr->timewalk_m_idx)
+	{
+		monster_type *m_ptr;
+		monster_race *r_ptr;
+
+		/* Loop through monsters, adding newly lit squares to changes list */
+		for (i = 1; i < m_max; i++)
+		{
+			m_ptr = &current_floor_ptr->m_list[i];
+			r_ptr = &r_info[m_ptr->r_idx];
+			if (!monster_is_valid(m_ptr)) continue;
+
+			/* Is it too far away? */
+			if (m_ptr->cdis > dis_lim) continue;
+
+			/* Get lite radius */
+			rad = 0;
+
+			/* Note the radii are cumulative */
+			if (r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_SELF_LITE_1)) rad++;
+			if (r_ptr->flags7 & (RF7_HAS_LITE_2 | RF7_SELF_LITE_2)) rad += 2;
+			if (r_ptr->flags7 & (RF7_HAS_DARK_1 | RF7_SELF_DARK_1)) rad--;
+			if (r_ptr->flags7 & (RF7_HAS_DARK_2 | RF7_SELF_DARK_2)) rad -= 2;
+
+			/* Exit if has no light */
+			if (!rad) continue;
+			else if (rad > 0)
+			{
+				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && is_daytime()) || p_ptr->inside_battle)) continue;
+				if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) rad = 1;
+				add_mon_lite = mon_lite_hack;
+				f_flag = FF_LOS;
+			}
+			else
+			{
+				if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && !is_daytime()))) continue;
+				add_mon_lite = mon_dark_hack;
+				f_flag = FF_PROJECT;
+				rad = -rad; /* Use absolute value */
+			}
+
+			mon_fx = m_ptr->fx;
+			mon_fy = m_ptr->fy;
+
+			/* Is the monster visible? */
+			mon_invis = !(current_floor_ptr->grid_array[mon_fy][mon_fx].info & CAVE_VIEW);
+
+			/* The square it is on */
+			add_mon_lite(mon_fy, mon_fx);
+
+			/* Adjacent squares */
+			add_mon_lite(mon_fy + 1, mon_fx);
+			add_mon_lite(mon_fy - 1, mon_fx);
+			add_mon_lite(mon_fy, mon_fx + 1);
+			add_mon_lite(mon_fy, mon_fx - 1);
+			add_mon_lite(mon_fy + 1, mon_fx + 1);
+			add_mon_lite(mon_fy + 1, mon_fx - 1);
+			add_mon_lite(mon_fy - 1, mon_fx + 1);
+			add_mon_lite(mon_fy - 1, mon_fx - 1);
+
+			/* Radius 2 */
+			if (rad >= 2)
+			{
+				/* South of the monster */
+				if (cave_have_flag_bold(mon_fy + 1, mon_fx, f_flag))
+				{
+					add_mon_lite(mon_fy + 2, mon_fx + 1);
+					add_mon_lite(mon_fy + 2, mon_fx);
+					add_mon_lite(mon_fy + 2, mon_fx - 1);
+
+					g_ptr = &current_floor_ptr->grid_array[mon_fy + 2][mon_fx];
+
+					/* Radius 3 */
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
+					{
+						add_mon_lite(mon_fy + 3, mon_fx + 1);
+						add_mon_lite(mon_fy + 3, mon_fx);
+						add_mon_lite(mon_fy + 3, mon_fx - 1);
+					}
+				}
+
+				/* North of the monster */
+				if (cave_have_flag_bold(mon_fy - 1, mon_fx, f_flag))
+				{
+					add_mon_lite(mon_fy - 2, mon_fx + 1);
+					add_mon_lite(mon_fy - 2, mon_fx);
+					add_mon_lite(mon_fy - 2, mon_fx - 1);
+
+					g_ptr = &current_floor_ptr->grid_array[mon_fy - 2][mon_fx];
+
+					/* Radius 3 */
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
+					{
+						add_mon_lite(mon_fy - 3, mon_fx + 1);
+						add_mon_lite(mon_fy - 3, mon_fx);
+						add_mon_lite(mon_fy - 3, mon_fx - 1);
+					}
+				}
+
+				/* East of the monster */
+				if (cave_have_flag_bold(mon_fy, mon_fx + 1, f_flag))
+				{
+					add_mon_lite(mon_fy + 1, mon_fx + 2);
+					add_mon_lite(mon_fy, mon_fx + 2);
+					add_mon_lite(mon_fy - 1, mon_fx + 2);
+
+					g_ptr = &current_floor_ptr->grid_array[mon_fy][mon_fx + 2];
+
+					/* Radius 3 */
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
+					{
+						add_mon_lite(mon_fy + 1, mon_fx + 3);
+						add_mon_lite(mon_fy, mon_fx + 3);
+						add_mon_lite(mon_fy - 1, mon_fx + 3);
+					}
+				}
+
+				/* West of the monster */
+				if (cave_have_flag_bold(mon_fy, mon_fx - 1, f_flag))
+				{
+					add_mon_lite(mon_fy + 1, mon_fx - 2);
+					add_mon_lite(mon_fy, mon_fx - 2);
+					add_mon_lite(mon_fy - 1, mon_fx - 2);
+
+					g_ptr = &current_floor_ptr->grid_array[mon_fy][mon_fx - 2];
+
+					/* Radius 3 */
+					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
+					{
+						add_mon_lite(mon_fy + 1, mon_fx - 3);
+						add_mon_lite(mon_fy, mon_fx - 3);
+						add_mon_lite(mon_fy - 1, mon_fx - 3);
+					}
+				}
+			}
+
+			/* Radius 3 */
+			if (rad == 3)
+			{
+				/* South-East of the monster */
+				if (cave_have_flag_bold(mon_fy + 1, mon_fx + 1, f_flag))
+				{
+					add_mon_lite(mon_fy + 2, mon_fx + 2);
+				}
+
+				/* South-West of the monster */
+				if (cave_have_flag_bold(mon_fy + 1, mon_fx - 1, f_flag))
+				{
+					add_mon_lite(mon_fy + 2, mon_fx - 2);
+				}
+
+				/* North-East of the monster */
+				if (cave_have_flag_bold(mon_fy - 1, mon_fx + 1, f_flag))
+				{
+					add_mon_lite(mon_fy - 2, mon_fx + 2);
+				}
+
+				/* North-West of the monster */
+				if (cave_have_flag_bold(mon_fy - 1, mon_fx - 1, f_flag))
+				{
+					add_mon_lite(mon_fy - 2, mon_fx - 2);
+				}
+			}
+		}
+	}
+
+	/* Save end of list of new squares */
+	end_temp = tmp_pos.n;
+
+	/*
+	 * Look at old set flags to see if there are any changes.
+	 */
+	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
+	{
+		fx = current_floor_ptr->mon_lite_x[i];
+		fy = current_floor_ptr->mon_lite_y[i];
+
+		/* We trust this grid is in bounds */
+
+		/* Point to grid */
+		g_ptr = &current_floor_ptr->grid_array[fy][fx];
+
+		if (g_ptr->info & CAVE_TEMP) /* Pervious lit */
+		{
+			/* It it no longer lit? */
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW)
+			{
+				/* It is now unlit */
+				/* Add it to later visual update */
+				cave_note_and_redraw_later(g_ptr, fy, fx);
+			}
+		}
+		else /* Pervious darkened */
+		{
+			/* It it no longer darken? */
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW)
+			{
+				/* It is now undarken */
+				/* Add it to later visual update */
+				cave_note_and_redraw_later(g_ptr, fy, fx);
+			}
+		}
+
+		/* Add to end of temp array */
+		tmp_pos.x[tmp_pos.n] = fx;
+		tmp_pos.y[tmp_pos.n] = fy;
+		tmp_pos.n++;
+	}
+
+	/* Clear the lite array */
+	current_floor_ptr->mon_lite_n = 0;
+
+	/* Copy the temp array into the lit array lighting the new squares. */
+	for (i = 0; i < end_temp; i++)
+	{
+		fx = tmp_pos.x[i];
+		fy = tmp_pos.y[i];
+
+		/* We trust this grid is in bounds */
+
+		/* Point to grid */
+		g_ptr = &current_floor_ptr->grid_array[fy][fx];
+
+		if (g_ptr->info & CAVE_MNLT) /* Lit */
+		{
+			/* The is the square newly lit and visible? */
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW)
+			{
+				/* It is now lit */
+				/* Add it to later visual update */
+				cave_note_and_redraw_later(g_ptr, fy, fx);
+			}
+		}
+		else /* Darkened */
+		{
+			/* The is the square newly darkened and visible? */
+			if ((g_ptr->info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW)
+			{
+				/* It is now darkened */
+				/* Add it to later visual update */
+				cave_note_and_redraw_later(g_ptr, fy, fx);
+			}
+		}
+
+		/* Save in the monster lit or darkened array */
+		current_floor_ptr->mon_lite_x[current_floor_ptr->mon_lite_n] = fx;
+		current_floor_ptr->mon_lite_y[current_floor_ptr->mon_lite_n] = fy;
+		current_floor_ptr->mon_lite_n++;
+	}
+
+	/* Clear the temp flag for the old lit or darken grids */
+	for (i = end_temp; i < tmp_pos.n; i++)
+	{
+		/* We trust this grid is in bounds */
+
+		current_floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]].info &= ~(CAVE_TEMP | CAVE_XTRA);
+	}
+
+	/* Finished with tmp_pos.n */
+	tmp_pos.n = 0;
+
+	/* Mega-Hack -- Visual update later */
+	p_ptr->update |= (PU_DELAY_VIS);
+
+	p_ptr->monlite = (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_MNLT) ? TRUE : FALSE;
+
+	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		if (p_ptr->old_monlite != p_ptr->monlite)
+		{
+			if (p_ptr->monlite)
+			{
+				msg_print(_("影の覆いが薄れた気がする。", "Your mantle of shadow become thin."));
+			}
+			else
+			{
+				msg_print(_("影の覆いが濃くなった！", "Your mantle of shadow restored its original darkness."));
+			}
+		}
+	}
+	p_ptr->old_monlite = p_ptr->monlite;
+}
+
+void clear_mon_lite(void)
+{
+	int i;
+	grid_type *g_ptr;
+
+	/* Clear all monster lit squares */
+	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
+	{
+		/* Point to grid */
+		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->mon_lite_y[i]][current_floor_ptr->mon_lite_x[i]];
+
+		/* Clear monster illumination flag */
+		g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
+	}
+
+	/* Empty the array */
+	current_floor_ptr->mon_lite_n = 0;
 }
 
 

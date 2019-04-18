@@ -34,6 +34,8 @@
 #include "player-move.h"
 #include "player-status.h"
 
+#include "floor-events.h"
+
 /*!
  * @brief プレイヤー周辺の地形を感知する
  * @param range 効果範囲
