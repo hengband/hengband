@@ -5007,7 +5007,6 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 	if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
 
 	note_spot(y, x);
-
 	lite_spot(y, x);
 
 	/* Check if los has changed */

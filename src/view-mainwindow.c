@@ -20,6 +20,8 @@
 #include "realm-hex.h"
 #include "view-mainwindow.h"
 
+#include "grid.h"
+
  /*
   * Some screen locations for various display routines
   * Currently, row 8 and 15 are the only "blank" rows.
