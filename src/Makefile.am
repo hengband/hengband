@@ -19,7 +19,7 @@ hengband_SOURCES = \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c cmd-hissatsu.h\
 	\
-	defines.h dungeon.c effects.c externs.h files.c \
+	defines.h dungeon.c effects.c externs.h files.c files.h \
 	\
 	floor.h floor-events.c floor-events.h floor-generate.c floor-generate.h \
 	floor-save.h floor-save.c \
@@ -31,7 +31,8 @@ hengband_SOURCES = \
 	gameoption.c gameoption.h gamevalue.h \
 	generate.h grid.c grid.h h-basic.h h-config.h h-define.h \
 	history.h history.c \
-	h-system.h h-type.h inet.c init1.c init2.c init.h japanese.c load.c \
+	h-system.h h-type.h inet.c init.c init.h japanese.c load.c \
+	dungeon-file.c dungeon-file.h \
 	main.c main-x11.c main-gcu.c \
 	melee.h melee1.c mind.c \
 	\
