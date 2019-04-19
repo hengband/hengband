@@ -14,6 +14,7 @@
 #include "spells-status.h"
 #include "realm-hex.h"
 #include "player-status.h"
+#include "player-effects.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン

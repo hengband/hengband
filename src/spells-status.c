@@ -7,6 +7,7 @@
 #include "spells.h"
 #include "monster.h"
 #include "cmd-spell.h"
+#include "player-effects.h"
 
 /*!
  * @brief モンスター回復処理

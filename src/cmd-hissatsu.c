@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "monsterrace-hook.h"
 #include "player-status.h"
+#include "player-effects.h"
 
 #include "cmd-basic.h"
 #include "cmd-spell.h"

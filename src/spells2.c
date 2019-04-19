@@ -33,6 +33,7 @@
 #include "monster-status.h"
 #include "player-move.h"
 #include "player-status.h"
+#include "player-effects.h"
 
 #include "floor-events.h"
 

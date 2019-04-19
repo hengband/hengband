@@ -21,6 +21,7 @@
 #include "monster-process.h"
 #include "cmd-spell.h"
 #include "player-status.h"
+#include "player-effects.h"
 #include "cmd-basic.h"
 
 static int damage;

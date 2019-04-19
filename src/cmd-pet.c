@@ -5,6 +5,7 @@
 #include "sort.h"
 #include "player-move.h"
 #include "player-status.h"
+#include "player-effects.h"
 #include "object-hook.h"
 #include "monster.h"
 #include "monster-status.h"

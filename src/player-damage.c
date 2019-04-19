@@ -5,6 +5,7 @@
 #include "object-hook.h"
 #include "object-broken.h"
 #include "player-status.h"
+#include "player-effects.h"
 
 
 /*!

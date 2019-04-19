@@ -26,6 +26,7 @@
 #include "floor-events.h"
 #include "snipe.h"
 #include "files.h"
+#include "player-effects.h"
 
 #define MIN_STOCK 12
 

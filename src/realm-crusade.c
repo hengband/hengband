@@ -4,6 +4,7 @@
 #include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
+#include "player-effects.h"
 
 
 

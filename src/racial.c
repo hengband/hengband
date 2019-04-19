@@ -20,6 +20,7 @@
 #include "object-hook.h"
 
 #include "mutation.h"
+#include "player-effects.h"
 #include "player-status.h"
 #include "spells-status.h"
 #include "spells-object.h"

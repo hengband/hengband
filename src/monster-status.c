@@ -11,6 +11,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "files.h"
+#include "player-effects.h"
 
 
 /*!

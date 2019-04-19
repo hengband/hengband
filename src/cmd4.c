@@ -43,6 +43,7 @@
 #include "cmd-pet.h"
 #include "cmd-spell.h"
 #include "world.h"
+#include "player-effects.h"
 #include "player-status.h"
 #include "sort.h"
 #include "mutation.h"

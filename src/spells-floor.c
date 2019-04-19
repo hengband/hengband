@@ -5,6 +5,7 @@
 #include "quest.h"
 #include "cmd-basic.h"
 #include "floor-save.h"
+#include "player-effects.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

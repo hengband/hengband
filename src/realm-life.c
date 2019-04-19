@@ -4,6 +4,7 @@
 #include "spells-floor.h"
 #include "spells.h"
 #include "player-status.h"
+#include "player-effects.h"
 
 /*!
 * @brief 生命領域魔法の各処理を行う

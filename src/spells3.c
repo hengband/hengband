@@ -33,6 +33,7 @@
 #include "snipe.h"
 #include "floor-save.h"
 #include "files.h"
+#include "player-effects.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

@@ -20,9 +20,10 @@
 #include "object-curse.h"
 #include "objectkind-hook.h"
 #include "artifact.h"
-#include "player-status.h"
 #include "feature.h"
+#include "player-status.h"
 #include "player-move.h"
+#include "player-effects.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
 

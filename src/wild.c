@@ -17,6 +17,7 @@
 #include "monster.h"
 #include "realm-hex.h"
 #include "player-status.h"
+#include "player-effects.h"
 #include "grid.h"
 #include "monster-status.h"
 #include "quest.h"

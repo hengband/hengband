@@ -39,6 +39,7 @@
 #include "dungeon-file.h"
 
 #include "files.h"
+#include "player-effects.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

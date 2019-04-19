@@ -9,6 +9,7 @@
 #include "object-flavor.h"
 #include "player-status.h"
 #include "avatar.h"
+#include "player-effects.h"
 
 
 typedef struct

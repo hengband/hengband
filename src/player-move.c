@@ -148,6 +148,7 @@
 #include "artifact.h"
 #include "player-move.h"
 #include "player-status.h"
+#include "player-effects.h"
 #include "spells-floor.h"
 #include "feature.h"
 #include "warning.h"

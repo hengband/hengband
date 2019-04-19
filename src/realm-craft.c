@@ -6,6 +6,7 @@
 #include "spells-status.h"
 #include "mutation.h"
 #include "player-status.h"
+#include "player-effects.h"
 
 
 

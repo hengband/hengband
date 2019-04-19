@@ -8,6 +8,7 @@
 #include "object-hook.h"
 #include "player-move.h"
 #include "world.h"
+#include "player-effects.h"
 
 static bool mon_invis;
 static POSITION mon_fy, mon_fx;

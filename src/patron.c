@@ -10,6 +10,7 @@
 #include "mutation.h"
 #include "artifact.h"
 #include "player-status.h"
+#include "player-effects.h"
 
 #include "spells.h"
 #include "spells-summon.h"

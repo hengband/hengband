@@ -24,9 +24,11 @@
 #include "wild.h"
 #include "spells-floor.h"
 #include "player-move.h"
+#include "player-effects.h"
 #include "monster-status.h"
 #include "snipe.h"
 #include "files.h"
+#include "player-effects.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

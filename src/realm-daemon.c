@@ -5,6 +5,7 @@
 #include "spells-summon.h"
 #include "spells-floor.h"
 #include "spells-status.h"
+#include "player-effects.h"
 
 /*!
 * @brief 悪魔領域魔法の各処理を行う

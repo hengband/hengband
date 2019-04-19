@@ -18,6 +18,7 @@
 #include "spells-summon.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "player-effects.h"
 #include "spells-status.h"
 #include "object-hook.h"
 #include "spells.h"

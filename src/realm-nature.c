@@ -6,6 +6,7 @@
 #include "spells-object.h"
 #include "avatar.h"
 #include "spells-floor.h"
+#include "player-effects.h"
 
 
 /*!

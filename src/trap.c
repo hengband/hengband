@@ -2,6 +2,7 @@
 #include "trap.h"
 #include "player-damage.h"
 #include "player-move.h"
+#include "player-effects.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"

@@ -170,6 +170,7 @@
     <ClCompile Include="..\..\src\object-broken.c" />
     <ClCompile Include="..\..\src\patron.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
+    <ClCompile Include="..\..\src\player-effects.c" />
     <ClCompile Include="..\..\src\player-status.c" />
     <ClCompile Include="..\..\src\quest.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
@@ -206,7 +207,6 @@
     <ClCompile Include="..\..\src\cmd-magiceat.c" />
     <ClCompile Include="..\..\src\cmd-spell.c" />
     <ClCompile Include="..\..\src\dungeon.c" />
-    <ClCompile Include="..\..\src\effects.c" />
     <ClCompile Include="..\..\src\files.c" />
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
@@ -320,6 +320,7 @@
     <ClInclude Include="..\..\src\objectkind-hook.h" />
     <ClInclude Include="..\..\src\patron.h" />
     <ClInclude Include="..\..\src\player-damage.h" />
+    <ClInclude Include="..\..\src\player-effects.h" />
     <ClInclude Include="..\..\src\player-move.h" />
     <ClInclude Include="..\..\src\player-status.h" />
     <ClInclude Include="..\..\src\quest.h" />

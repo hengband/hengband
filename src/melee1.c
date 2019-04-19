@@ -30,6 +30,7 @@
 #include "floor.h"
 #include "spells.h"
 #include "files.h"
+#include "player-effects.h"
 
 
 

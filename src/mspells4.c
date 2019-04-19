@@ -18,6 +18,7 @@
 #include "monster-status.h"
 #include "spells.h"
 #include "melee.h"
+#include "player-effects.h"
 
 
 /*!

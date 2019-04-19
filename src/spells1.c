@@ -17,6 +17,7 @@
 #include "trap.h"
 #include "object-curse.h"
 #include "player-damage.h"
+#include "player-effects.h"
 
 #include "monster.h"
 #include "monster-status.h"

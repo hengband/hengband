@@ -31,6 +31,7 @@
 #include "feature.h"
 #include "monster-status.h"
 #include "player-status.h"
+#include "player-effects.h"
 #include "spells.h"
 #include "view-mainwindow.h"
 
