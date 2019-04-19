@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\bldg.c" />
-    <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\geometry.c" />
     <ClCompile Include="..\..\src\history.c" />
     <ClCompile Include="..\..\src\quest.c" />
@@ -262,6 +261,9 @@
     <ClCompile Include="..\..\src\files.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\chuukei.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -482,6 +484,9 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\files.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
