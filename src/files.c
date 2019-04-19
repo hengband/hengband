@@ -40,6 +40,7 @@
 #include "floor-events.h"
 #include "dungeon-file.h"
 #include "init.h"
+#include "monster-spell.h"
 
 
 /*

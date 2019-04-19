@@ -254,3 +254,5 @@
 #define RF6_NOMAGIC_MASK \
 	(RF6_BREATH_MASK | RF6_SPECIAL)
 
+extern const monster_power monster_powers[MAX_MONSPELLS];
+extern const concptr monster_powers_short[MAX_MONSPELLS];
