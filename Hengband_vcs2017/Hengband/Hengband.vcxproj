@@ -186,6 +186,7 @@
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
     <ClInclude Include="..\..\src\artifact.h" />
     <ClInclude Include="..\..\src\avatar.h" />
+    <ClInclude Include="..\..\src\birth.h" />
     <ClInclude Include="..\..\src\bldg.h" />
     <ClInclude Include="..\..\src\chest.h" />
     <ClInclude Include="..\..\src\chuukei.h" />

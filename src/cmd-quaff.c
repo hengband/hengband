@@ -7,6 +7,7 @@
  */
 
 #include "angband.h"
+#include "birth.h"
 #include "selfinfo.h"
 #include "object-hook.h"
 #include "mutation.h"

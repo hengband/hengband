@@ -13,6 +13,7 @@
  */
 
 #include "angband.h"
+#include "birth.h"
 #include "grid.h"
 #include "mutation.h"
 #include "quest.h"

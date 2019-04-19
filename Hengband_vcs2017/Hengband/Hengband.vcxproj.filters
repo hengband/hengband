@@ -578,6 +578,9 @@
     <ClInclude Include="..\..\src\rumor.h">
       <Filter>market</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\birth.h">
+      <Filter>player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

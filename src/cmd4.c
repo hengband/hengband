@@ -40,6 +40,7 @@
  */
 
 #include "angband.h"
+#include "birth.h"
 #include "cmd-pet.h"
 #include "cmd-spell.h"
 #include "world.h"

@@ -406,15 +406,6 @@ extern void autopick_pickup_items(grid_type *g_ptr);
 extern bool autopick_autoregister(object_type *o_ptr);
 extern void do_cmd_edit_autopick(void);
 
-/* birth.c */
-extern void add_history_from_pref_line(concptr t);
-extern void player_birth(void);
-extern void get_max_stats(void);
-extern void get_height_weight(void);
-extern void player_outfit(void);
-extern void dump_yourself(FILE *fff);
-
-
 
 /* grids.c */
 extern void update_local_illumination(POSITION y, POSITION x);

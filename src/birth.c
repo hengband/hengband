@@ -26,6 +26,7 @@
 #include "cmd-pet.h"
 #include "dungeon-file.h"
 #include "files.h"
+#include "birth.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

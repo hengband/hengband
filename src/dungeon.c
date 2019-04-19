@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "birth.h"
 #include "cmd-activate.h"
 #include "cmd-eat.h"
 #include "cmd-hissatsu.h"

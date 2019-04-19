@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "birth.h"
 #include "selfinfo.h"
 #include "patron.h"
 #include "mutation.h"

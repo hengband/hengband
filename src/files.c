@@ -14,6 +14,7 @@
 
 
 #include "angband.h"
+#include "birth.h"
 #include "files.h"
 
 #include "world.h"
