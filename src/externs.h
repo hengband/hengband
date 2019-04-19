@@ -523,19 +523,6 @@ extern errr counts_write(int where, u32b count);
 extern u32b counts_read(int where);
 
 
-/* init1.c */
-extern s16b f_tag_to_index(concptr str);
-extern errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax);
-
-/* init2.c */
-extern void init_file_paths(char *path);
-extern concptr err_str[PARSE_ERROR_MAX];
-extern errr init_v_info(void);
-extern errr init_buildings(void);
-extern s16b f_tag_to_index_in_init(concptr str);
-extern void init_angband(void);
-extern concptr get_check_sum(void);
-
 /* load.c */
 extern errr rd_savefile_new(void);
 extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);

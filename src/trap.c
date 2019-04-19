@@ -1,5 +1,4 @@
 ﻿#include "angband.h"
-#include "floor.h"
 #include "trap.h"
 #include "player-damage.h"
 #include "player-move.h"
@@ -10,7 +9,9 @@
 #include "player-status.h"
 #include "grid.h"
 #include "spells.h"
+#include "floor.h"
 #include "floor-save.h"
+#include "init.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

@@ -100,6 +100,7 @@
 #include "angband.h"
 #include "view-mainwindow.h"
 #include "floor-events.h"
+#include "init.h"
 
 #ifdef WINDOWS
 #include <windows.h>

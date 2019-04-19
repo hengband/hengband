@@ -40,6 +40,7 @@
 #include "rooms.h"
 #include "store.h"
 #include "wild.h"
+#include "dungeon-file.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

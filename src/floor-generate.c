@@ -111,6 +111,8 @@
 #include "player-status.h"
 #include "wild.h"
 #include "monster-status.h"
+#include "dungeon-file.h"
+#include "init.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;

@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
     <ClCompile Include="..\..\src\cmd-smith.c" />
+    <ClCompile Include="..\..\src\dungeon-file.c" />
     <ClCompile Include="..\..\src\feature.c" />
     <ClCompile Include="..\..\src\floor-events.c" />
     <ClCompile Include="..\..\src\floor-generate.c" />
@@ -208,7 +209,6 @@
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
-    <ClCompile Include="..\..\src\init1.c" />
     <ClCompile Include="..\..\src\init2.c" />
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
@@ -284,6 +284,7 @@
     <ClInclude Include="..\..\src\cmd-read.h" />
     <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\defines.h" />
+    <ClInclude Include="..\..\src\dungeon-file.h" />
     <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\feature.h" />
     <ClInclude Include="..\..\src\floor-events.h" />

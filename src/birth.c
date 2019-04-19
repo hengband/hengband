@@ -24,6 +24,7 @@
 #include "wild.h"
 #include "floor.h"
 #include "cmd-pet.h"
+#include "dungeon-file.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

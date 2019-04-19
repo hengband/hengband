@@ -35,6 +35,7 @@
 
 #include "cmd-basic.h"
 #include "floor-save.h"
+#include "dungeon-file.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

@@ -20,7 +20,6 @@
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
-    <ClCompile Include="..\..\src\init1.c" />
     <ClCompile Include="..\..\src\init2.c" />
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
@@ -258,6 +257,9 @@
     <ClCompile Include="..\..\src\cmd-basic.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\dungeon-file.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -474,6 +476,9 @@
     <ClInclude Include="..\..\src\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\dungeon-file.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />
@@ -499,6 +504,9 @@
     </Filter>
     <Filter Include="monster">
       <UniqueIdentifier>{282dc0ea-8c5c-4253-b38c-4f4f0ad87ff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{1be1a971-e67f-4d7c-ace0-aab22a039851}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

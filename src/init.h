@@ -138,3 +138,9 @@ extern header b_head;
 extern header g_head;
 
 #endif /* INCLUDED_INIT_H */
+
+extern s16b f_tag_to_index(concptr str);
+extern s16b f_tag_to_index_in_init(concptr str);
+extern void init_angband(void);
+extern concptr get_check_sum(void);
+extern void init_file_paths(char *path);

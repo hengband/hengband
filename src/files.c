@@ -36,6 +36,8 @@
 #include "term.h"
 #include "view-mainwindow.h"
 #include "floor-events.h"
+#include "dungeon-file.h"
+#include "init.h"
 
 
 /*

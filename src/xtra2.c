@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "cmd-pet.h"
+#include "dungeon-file.h"
 #include "object-curse.h"
 #include "object-flavor.h"
 #include "monster.h"

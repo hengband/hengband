@@ -20,6 +20,7 @@
 #include "grid.h"
 #include "monster-status.h"
 #include "quest.h"
+#include "dungeon-file.h"
 
  /*
   * Wilderness

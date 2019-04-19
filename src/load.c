@@ -59,6 +59,7 @@
 #include "grid.h"
 
 #include "cmd-pet.h"
+#include "dungeon-file.h"
 
 
 /*

@@ -36,6 +36,7 @@
 #include "player-status.h"
 #include "spells-status.h"
 #include "realm-hex.h"
+#include "dungeon-file.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
