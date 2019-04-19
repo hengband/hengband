@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "quest.h"
 #include "monster.h"
+#include "files.h"
 
 dungeon_grid letter[255];
 

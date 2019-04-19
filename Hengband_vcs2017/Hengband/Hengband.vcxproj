@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\src\floor-save.c" />
     <ClCompile Include="..\..\src\geometry.c" />
     <ClCompile Include="..\..\src\history.c" />
+    <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
     <ClCompile Include="..\..\src\monsterrace-hook.c" />
@@ -209,7 +210,6 @@
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
-    <ClCompile Include="..\..\src\init2.c" />
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
@@ -287,6 +287,7 @@
     <ClInclude Include="..\..\src\dungeon-file.h" />
     <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\feature.h" />
+    <ClInclude Include="..\..\src\files.h" />
     <ClInclude Include="..\..\src\floor-events.h" />
     <ClInclude Include="..\..\src\floor-generate.h" />
     <ClInclude Include="..\..\src\floor-save.h" />

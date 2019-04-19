@@ -26,6 +26,7 @@
 #include "player-move.h"
 #include "monster-status.h"
 #include "snipe.h"
+#include "files.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

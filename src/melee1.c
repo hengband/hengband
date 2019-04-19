@@ -29,6 +29,7 @@
 #include "player-move.h"
 #include "floor.h"
 #include "spells.h"
+#include "files.h"
 
 
 

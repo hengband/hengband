@@ -41,6 +41,7 @@
 #include "store.h"
 #include "wild.h"
 #include "dungeon-file.h"
+#include "files.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

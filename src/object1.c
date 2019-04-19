@@ -19,6 +19,7 @@
 #include "object-hook.h"
 #include "player-move.h"
 #include "monster.h"
+#include "files.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify

@@ -20,6 +20,7 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "spells-object.h"
+#include "files.h"
 
 static bool has_extreme_damage_rate(object_type *o_ptr);
 static bool weakening_artifact(object_type *o_ptr);

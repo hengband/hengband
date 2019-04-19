@@ -22,6 +22,7 @@
 #include "realm-hex.h"
 #include "player-status.h"
 #include "monster-status.h"
+#include "files.h"
 
 /*!
  * @brief アイテムの発動効果テーブル /

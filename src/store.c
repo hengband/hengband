@@ -25,6 +25,7 @@
 #include "object-hook.h"
 #include "floor-events.h"
 #include "snipe.h"
+#include "files.h"
 
 #define MIN_STOCK 12
 

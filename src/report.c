@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "floor.h"
 #include "player-status.h"
+#include "files.h"
 
 #ifdef WORLD_SCORE
 

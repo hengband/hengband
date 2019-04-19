@@ -17,6 +17,7 @@
 #include "object-flavor.h"
 #include "trap.h"
 #include "snipe.h"
+#include "files.h"
 
 /*!
  * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly 

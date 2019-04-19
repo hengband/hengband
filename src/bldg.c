@@ -38,6 +38,8 @@
 #include "realm-hex.h"
 #include "dungeon-file.h"
 
+#include "files.h"
+
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
  */

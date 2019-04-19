@@ -10,6 +10,7 @@
 #include "object-curse.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "files.h"
 
 
 /*!

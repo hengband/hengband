@@ -33,6 +33,7 @@
 #include "floor-save.h"
 #include "grid.h"
 #include "dungeon-file.h"
+#include "files.h"
 
 #ifdef ALLOW_WIZARD
 

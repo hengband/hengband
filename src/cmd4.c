@@ -57,6 +57,7 @@
 #include "floor.h"
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
+#include "files.h"
 
 /*
  */

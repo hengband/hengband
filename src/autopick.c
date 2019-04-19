@@ -18,6 +18,8 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 
+#include "files.h"
+
 #define MAX_LINELEN 1024
 
 /*

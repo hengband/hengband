@@ -31,6 +31,7 @@
 #include "monster-process.h"
 #include "monsterrace-hook.h"
 #include "floor.h"
+#include "files.h"
 
 
 /*!

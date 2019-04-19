@@ -32,6 +32,7 @@
 #include "cmd-spell.h"
 #include "snipe.h"
 #include "floor-save.h"
+#include "files.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

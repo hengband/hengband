@@ -60,6 +60,7 @@
 
 #include "cmd-pet.h"
 #include "dungeon-file.h"
+#include "files.h"
 
 
 /*

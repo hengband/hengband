@@ -22,6 +22,7 @@
 #include "spells-status.h"
 
 #include "cmd-basic.h"
+#include "files.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

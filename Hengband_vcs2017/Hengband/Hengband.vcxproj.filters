@@ -16,11 +16,9 @@
     <ClCompile Include="..\..\src\realm-sorcery.c" />
     <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\effects.c" />
-    <ClCompile Include="..\..\src\files.c" />
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
-    <ClCompile Include="..\..\src\init2.c" />
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
@@ -260,6 +258,10 @@
     <ClCompile Include="..\..\src\dungeon-file.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\init.c" />
+    <ClCompile Include="..\..\src\files.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -477,6 +479,9 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon-file.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\files.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
