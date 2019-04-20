@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "player-status.h"
 #include "files.h"
+#include "scores.h"
 
 /*!
  * @brief i番目のスコア情報にバッファ位置をシークする / Seek score 'i' in the highscore file

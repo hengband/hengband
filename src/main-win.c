@@ -102,6 +102,7 @@
 #include "floor-events.h"
 #include "init.h"
 #include "files.h"
+#include "scores.h"
 
 #ifdef WINDOWS
 #include <windows.h>

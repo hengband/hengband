@@ -29,12 +29,12 @@ hengband_SOURCES = \
 	geometry.c geometry.h \
 	\
 	gameoption.c gameoption.h gamevalue.h \
-	generate.h grid.c grid.h h-basic.h h-config.h h-define.h \
+	grid.c grid.h h-basic.h h-config.h h-define.h \
 	history.h history.c \
 	h-system.h h-type.h inet.c init.c init.h japanese.c load.c \
 	dungeon-file.c dungeon-file.h \
 	main.c main-x11.c main-gcu.c \
-	melee.h melee1.c mind.c \
+	melee.h melee1.c mind.c mind.h \
 	\
 	monster.h \
 	monsterrace-hook.c monsterrace-hook.h monster-process.c \
@@ -68,7 +68,7 @@ hengband_SOURCES = \
 	report.c rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
-	rooms-vault.h save.c scores.c selfinfo.c selfinfo.h \
+	rooms-vault.h save.c scores.c scores.h selfinfo.c selfinfo.h \
 	shoot.c shoot.h snipe.c snipe.h \
 	\
 	rumor.h rumor.c \

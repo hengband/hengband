@@ -40,6 +40,7 @@
 
 #include "files.h"
 #include "player-effects.h"
+#include "scores.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

@@ -894,17 +894,6 @@ extern bool tgt_pt(POSITION *x, POSITION *y);
 extern void do_poly_wounds(void);
 extern void change_race(CHARACTER_IDX new_race, concptr effect_msg);
 
-/* scores.c */
-extern void display_scores_aux(int from, int to, int note, high_score *score);
-extern void display_scores(int from, int to);
-extern void kingly(void);
-extern bool send_world_score(bool do_send);
-extern errr top_twenty(void);
-extern errr predict_score(void);
-extern void race_legends(void);
-extern void race_score(int race_num);
-extern void show_highclass(void);
-
 /* mspells1.c */
 extern bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
 extern bool summon_possible(POSITION y1, POSITION x1);

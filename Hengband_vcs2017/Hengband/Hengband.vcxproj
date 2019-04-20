@@ -348,6 +348,7 @@
     <ClInclude Include="..\..\src\rooms-vault.h" />
     <ClInclude Include="..\..\src\rooms.h" />
     <ClInclude Include="..\..\src\rumor.h" />
+    <ClInclude Include="..\..\src\scores.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\shoot.h" />
     <ClInclude Include="..\..\src\snipe.h" />
