@@ -97,7 +97,7 @@
  */
 
 #include "angband.h"
-#include "generate.h"
+#include "floor-generate.h"
 #include "grid.h"
 #include "rooms.h"
 #include "floor.h"

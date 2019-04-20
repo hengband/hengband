@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "grid.h"
-#include "generate.h"
+#include "floor-generate.h"
 #include "rooms.h"
 #include "rooms-normal.h"
 #include "floor.h"

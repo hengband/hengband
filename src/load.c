@@ -41,7 +41,7 @@
  */
 
 #include "angband.h"
-#include "generate.h"
+#include "floor-generate.h"
 #include "trap.h"
 #include "mutation.h"
 #include "monster.h"

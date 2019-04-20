@@ -296,7 +296,6 @@
     <ClInclude Include="..\..\src\floor.h" />
     <ClInclude Include="..\..\src\gameoption.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
-    <ClInclude Include="..\..\src\generate.h" />
     <ClInclude Include="..\..\src\geometry.h" />
     <ClInclude Include="..\..\src\grid.h" />
     <ClInclude Include="..\..\src\h-basic.h" />

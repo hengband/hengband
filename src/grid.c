@@ -22,7 +22,7 @@
 #include "world.h"
 #include "object-flavor.h"
 #include "object-hook.h"
-#include "generate.h"
+#include "floor-generate.h"
 #include "grid.h"
 #include "trap.h"
 #include "rooms.h"
