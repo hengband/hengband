@@ -6,3 +6,5 @@ extern void prt_map(void);
 extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp);
 extern void display_map(int *cy, int *cx);
 extern void do_cmd_view_map(void);
+
+extern void health_track(MONSTER_IDX m_idx);

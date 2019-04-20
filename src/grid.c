@@ -2138,23 +2138,6 @@ bool is_explosive_rune_grid(grid_type *g_ptr)
 
 
 /*
- * Track a new monster
- */
-void health_track(MONSTER_IDX m_idx)
-{
-	/* Mount monster is already tracked */
-	if (m_idx && m_idx == p_ptr->riding) return;
-
-	/* Track a new guy */
-	p_ptr->health_who = m_idx;
-
-	/* Redraw (later) */
-	p_ptr->redraw |= (PR_HEALTH);
-}
-
-
-
-/*
  * Hack -- track the given monster race
  */
 void monster_race_track(MONRACE_IDX r_idx)

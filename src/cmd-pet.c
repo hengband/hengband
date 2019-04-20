@@ -11,6 +11,7 @@
 #include "monster-status.h"
 #include "cmd-pet.h"
 #include "cmd-basic.h"
+#include "view-mainwindow.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定

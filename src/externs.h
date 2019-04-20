@@ -422,7 +422,6 @@ extern void update_flow(void);
 extern void update_smell(void);
 extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
 
-extern void health_track(MONSTER_IDX m_idx);
 extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(KIND_OBJECT_IDX k_idx);
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);

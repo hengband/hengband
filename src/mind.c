@@ -30,6 +30,7 @@
 #include "cmd-basic.h"
 #include "monster-status.h"
 #include "player-effects.h"
+#include "view-mainwindow.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

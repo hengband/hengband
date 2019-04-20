@@ -27,6 +27,7 @@
 #include "player-status.h"
 #include "monster-spell.h"
 #include "files.h"
+#include "view-mainwindow.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */

@@ -44,6 +44,7 @@
 #include "term.h"
 #include "grid.h"
 #include "feature.h"
+#include "view-mainwindow.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

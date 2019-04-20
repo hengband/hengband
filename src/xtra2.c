@@ -27,6 +27,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "monster-status.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /
