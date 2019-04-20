@@ -38,6 +38,7 @@
 #include "spells-object.h"
 #include "spells-status.h"
 #include "spells-floor.h"
+#include "mind.h"
 #include "world.h"
 #include "mutation.h"
 #include "quest.h"

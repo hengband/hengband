@@ -905,13 +905,6 @@ extern void race_legends(void);
 extern void race_score(int race_num);
 extern void show_highclass(void);
 
-/* mind.c */
-extern mind_power const mind_powers[5];
-extern void mindcraft_info(char *p, int use_mind, int power);
-extern void do_cmd_mind(void);
-extern void do_cmd_mind_browse(void);
-
-
 /* mspells1.c */
 extern bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
 extern bool summon_possible(POSITION y1, POSITION x1);

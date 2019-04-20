@@ -22,7 +22,7 @@
 #include "realm-song.h"
 #include "realm-sorcery.h"
 #include "realm-trump.h"
-#include "angband.h"
+#include "mind.h"
 #include "avatar.h"
 #include "player-status.h"
 #include "player-effects.h"

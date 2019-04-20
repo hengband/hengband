@@ -307,6 +307,7 @@
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\kajitips.h" />
     <ClInclude Include="..\..\src\melee.h" />
+    <ClInclude Include="..\..\src\mind.h" />
     <ClInclude Include="..\..\src\monster-process.h" />
     <ClInclude Include="..\..\src\monster-spell.h" />
     <ClInclude Include="..\..\src\monster-status.h" />

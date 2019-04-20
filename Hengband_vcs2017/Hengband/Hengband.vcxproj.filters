@@ -8,7 +8,6 @@
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\mind.c" />
     <ClCompile Include="..\..\src\racial.c" />
     <ClCompile Include="..\..\src\readdib.c" />
     <ClCompile Include="..\..\src\report.c" />
@@ -310,6 +309,9 @@
     <ClCompile Include="..\..\src\save.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind.c">
+      <Filter>spells</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -579,6 +581,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\birth.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind.h">
+      <Filter>spells</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
