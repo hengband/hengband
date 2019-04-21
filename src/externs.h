@@ -458,9 +458,6 @@ extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
 extern void do_cmd_suicide(void);
 
-/* cmd-spell.c */
-extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
-
 /* dungeon.c */
 extern void extract_option_vars(void);
 extern void determine_bounty_uniques(void);
@@ -470,13 +467,9 @@ extern s32b turn_real(s32b hoge);
 extern void prevent_turn_overflow(void);
 extern void close_game(void);
 
-
-
-
 /* load.c */
 extern errr rd_savefile_new(void);
 extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
-
 
 /* monster2.c */
 extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);
