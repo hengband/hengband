@@ -338,7 +338,6 @@ extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TE
 extern void move_cursor_relative(int row, int col);
 extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
-extern void display_dungeon(void);
 extern void lite_spot(POSITION y, POSITION x);
 extern void prt_map(void);
 extern void prt_path(POSITION y, POSITION x);

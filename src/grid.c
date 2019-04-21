@@ -1242,56 +1242,6 @@ void note_spot(POSITION y, POSITION x)
 	g_ptr->info |= (CAVE_KNOWN);
 }
 
-
-void display_dungeon(void)
-{
-	TERM_LEN x, y;
-	TERM_COLOR a;
-	SYMBOL_CODE c;
-
-	TERM_COLOR ta = 0;
-	SYMBOL_CODE tc = '\0';
-
-	for (x = p_ptr->x - Term->wid / 2 + 1; x <= p_ptr->x + Term->wid / 2; x++)
-	{
-		for (y = p_ptr->y - Term->hgt / 2 + 1; y <= p_ptr->y + Term->hgt / 2; y++)
-		{
-			if (in_bounds2(y, x))
-			{
-				map_info(y, x, &a, &c, &ta, &tc);
-
-				/* Hack -- fake monochrome */
-				if (!use_graphics)
-				{
-					if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-					else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
-					else if (p_ptr->wraith_form) a = TERM_L_DARK;
-				}
-
-				/* Hack -- Queue it */
-				Term_queue_char(x - p_ptr->x + Term->wid / 2 - 1, y - p_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
-			}
-			else
-			{
-				/* Clear out-of-bound tiles */
-
-				/* Access darkness */
-				feature_type *f_ptr = &f_info[feat_none];
-
-				/* Normal attr */
-				a = f_ptr->x_attr[F_LIT_STANDARD];
-
-				/* Normal char */
-				c = f_ptr->x_char[F_LIT_STANDARD];
-
-				/* Hack -- Queue it */
-				Term_queue_char(x - p_ptr->x + Term->wid / 2 - 1, y - p_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
-			}
-		}
-	}
-}
-
-
 /*
  * Redraw (on the screen) a given MAP location
  *
