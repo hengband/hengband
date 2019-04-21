@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 #include "monsterrace-hook.h"
+#include "view-mainwindow.h"
 #include "quest.h"
 
 
@@ -5548,3 +5549,4 @@ int inkey_special(bool numpad_cursor)
 	/* Return normal keycode */
 	return (int)((unsigned char)key);
 }
+

@@ -361,7 +361,6 @@ extern void update_local_illumination(POSITION y, POSITION x);
 extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool cave_valid_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
-extern void move_cursor_relative(int row, int col);
 extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void prt_path(POSITION y, POSITION x);
 extern void delayed_visual_update(void);

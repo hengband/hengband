@@ -1078,18 +1078,6 @@ bool cave_valid_bold(POSITION y, POSITION x)
 	return (TRUE);
 }
 
-/*
- * Moves the cursor to a given MAP (y,x) location
- */
-void move_cursor_relative(int row, int col)
-{
-	/* Real co-ords convert to screen positions */
-	row -= panel_row_prt;
-
-	/* Go there */
-	Term_gotoxy(panel_col_of(col), row);
-}
-
 
 
 /*

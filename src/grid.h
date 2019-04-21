@@ -335,7 +335,6 @@ extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool cave_valid_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
 extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp);
-extern void move_cursor_relative(int row, int col);
 extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
 extern void lite_spot(POSITION y, POSITION x);
@@ -351,7 +350,6 @@ extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
-extern void lite_spot(POSITION y, POSITION x);
 extern bool is_open(FEAT_IDX feat);
 extern bool check_local_illumination(POSITION y, POSITION x);
 

@@ -81,3 +81,4 @@ extern char *my_strstr(concptr haystack, concptr needle);
 extern char *my_strchr(concptr ptr, char ch);
 extern void str_tolower(char *str);
 extern int inkey_special(bool numpad_cursor);
+
