@@ -38,6 +38,7 @@
 #include "player-effects.h"
 
 #include "floor-events.h"
+#include "feature.h"
 
 /*!
  * @brief プレイヤー周辺の地形を感知する

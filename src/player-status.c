@@ -5,6 +5,7 @@
 #include "player-status.h"
 #include "floor.h"
 #include "floor-events.h"
+#include "feature.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-status.h"

@@ -10,6 +10,7 @@
 #include "monster.h"
 #include "player-status.h"
 #include "artifact.h"
+#include "feature.h"
 
 
 /*!

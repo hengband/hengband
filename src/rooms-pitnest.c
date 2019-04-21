@@ -9,6 +9,7 @@
 #include "monsterrace-hook.h"
 #include "sort.h"
 #include "floor.h"
+#include "feature.h"
 
 
 

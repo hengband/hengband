@@ -25,6 +25,7 @@
 #include "quest.h"
 #include "dungeon-file.h"
 #include "files.h"
+#include "feature.h"
 
  /*
   * Wilderness

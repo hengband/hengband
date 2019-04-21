@@ -43,6 +43,7 @@
 #include "wild.h"
 #include "dungeon-file.h"
 #include "files.h"
+#include "feature.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

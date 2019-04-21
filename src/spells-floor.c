@@ -8,6 +8,7 @@
 #include "cmd-basic.h"
 #include "floor-save.h"
 #include "player-effects.h"
+#include "feature.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

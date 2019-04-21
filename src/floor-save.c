@@ -16,6 +16,7 @@
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-generate.h"
+#include "feature.h"
 #include "grid.h"
 #include "monster.h"
 #include "quest.h"

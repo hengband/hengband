@@ -8,8 +8,6 @@
  * 不明(変愚蛮怒スタッフ？)
  */
 
-#define ALLOW_CAVERNS_AND_LAKES
-
 #define SAFE_MAX_ATTEMPTS 5000 /*!< 生成処理基本試行回数 */
 
 

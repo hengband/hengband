@@ -5,6 +5,7 @@
 #include "floor-generate.h"
 #include "rooms.h"
 #include "floor.h"
+#include "feature.h"
 
 
 /*!

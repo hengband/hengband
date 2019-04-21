@@ -57,6 +57,7 @@
 #include "monster-status.h"
 #include "monsterrace-hook.h"
 #include "floor-save.h"
+#include "feature.h"
 
 #include "view-mainwindow.h"
 #include "dungeon-file.h"

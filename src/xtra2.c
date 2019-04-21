@@ -30,6 +30,7 @@
 #include "player-status.h"
 #include "monster-status.h"
 #include "view-mainwindow.h"
+#include "feature.h"
 
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /

@@ -3,6 +3,7 @@
 #include "util.h"
 
 #include "dungeon-file.h"
+#include "feature.h"
 #include "grid.h"
 #include "quest.h"
 #include "monster.h"

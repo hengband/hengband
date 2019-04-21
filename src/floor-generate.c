@@ -99,7 +99,6 @@
 #include "angband.h"
 #include "util.h"
 
-#include "floor-generate.h"
 #include "grid.h"
 #include "rooms.h"
 #include "floor.h"
@@ -107,6 +106,8 @@
 #include "floor-streams.h"
 #include "floor-generate.h"
 #include "floor-events.h"
+#include "floor-generate.h"
+#include "feature.h"
 #include "trap.h"
 #include "monster.h"
 #include "quest.h"
@@ -115,6 +116,7 @@
 #include "monster-status.h"
 #include "dungeon-file.h"
 #include "init.h"
+#include "feature.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;
