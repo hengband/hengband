@@ -7,4 +7,8 @@ extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TE
 extern void display_map(int *cy, int *cx);
 extern void do_cmd_view_map(void);
 
+/* xtra1.c */
 extern void health_track(MONSTER_IDX m_idx);
+extern void prt_time(void);
+extern concptr map_name(void);
+extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);

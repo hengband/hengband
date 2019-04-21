@@ -958,3 +958,4 @@ bool object_is_quest_target(object_type *o_ptr)
 	return FALSE;
 }
 
+

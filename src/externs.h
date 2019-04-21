@@ -864,8 +864,6 @@ extern int inkey_special(bool numpad_cursor);
 
 
 /* xtra1.c */
-extern void prt_time(void);
-extern concptr map_name(void);
 extern int bow_tval_ammo(object_type *o_ptr);
 extern void handle_stuff(void);
 extern void update_output(void);
