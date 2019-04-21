@@ -774,7 +774,6 @@ extern bool fire_crimson(void);
 /* bldg.c */
 extern void update_gambling_monsters(void);
 extern void do_cmd_bldg(void);
-extern void do_cmd_quest(void);
 extern bool tele_town(void);
 extern HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow);
 extern HIT_POINT calc_expect_crit_shot(WEIGHT weight, int plus_ammo,int plus_bow, HIT_POINT dam);

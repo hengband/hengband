@@ -4246,43 +4246,6 @@ static void bldg_process_command(building_type *bldg, int i)
 }
 
 /*!
- * @brief クエスト入り口にプレイヤーが乗った際の処理 / Do building commands
- * @return なし
- */
-void do_cmd_quest(void)
-{
-	if(p_ptr->wild_mode) return;
-
-	take_turn(p_ptr, 100);
-
-	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
-	{
-		msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
-		return;
-	}
-	else
-	{
-		msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
-		if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
-			msg_print(_("『とにかく入ってみようぜぇ。』", ""));
-		else if(p_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
-
-		/* Player enters a new quest */
-		p_ptr->oldpy = 0;
-		p_ptr->oldpx = 0;
-
-		leave_quest_check();
-
-		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) current_floor_ptr->dun_level = 1;
-		p_ptr->inside_quest = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
-
-		p_ptr->leaving = TRUE;
-	}
-}
-
-
-/*!
  * @brief 施設入り口にプレイヤーが乗った際の処理 / Do building commands
  * @return なし
  */
