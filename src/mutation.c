@@ -12,6 +12,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "mutation.h"
 
 #include "selfinfo.h"

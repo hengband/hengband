@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "cmd-basic.h"
 #include "cmd-magiceat.h"
 #include "cmd-mane.h"

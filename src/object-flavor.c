@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "player-status.h"
 #include "shoot.h"
 #include "object-hook.h"

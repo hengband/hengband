@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "player-move.h"
 #include "player-status.h"
 #include "floor.h"

@@ -41,6 +41,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "floor-generate.h"
 #include "trap.h"
 #include "mutation.h"

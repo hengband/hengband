@@ -33,6 +33,7 @@
  */
 
 #include "angband.h"
+#include "util.h"
 
 #include "init.h"
 #include "quest.h"

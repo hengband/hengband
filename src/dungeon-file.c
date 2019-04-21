@@ -1,5 +1,7 @@
 ﻿
 #include "angband.h"
+#include "util.h"
+
 #include "dungeon-file.h"
 #include "grid.h"
 #include "quest.h"

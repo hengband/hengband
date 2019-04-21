@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "sort.h"
 #include "store.h"
 #include "monster.h"

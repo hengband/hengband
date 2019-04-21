@@ -7,6 +7,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "artifact.h"

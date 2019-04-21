@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "util.h"
 
 /*!
  * @brief プレイ日数を変更する / Set gametime.

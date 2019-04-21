@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "trap.h"
 #include "player-damage.h"
 #include "player-move.h"

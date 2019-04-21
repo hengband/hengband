@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "monsterrace-hook.h"
 #include "monster.h"
 #include "monster-spell.h"

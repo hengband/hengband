@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-generate.h"

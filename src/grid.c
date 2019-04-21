@@ -18,6 +18,8 @@
 
 
 #include "angband.h"
+#include "util.h"
+
 #include "floor.h"
 #include "world.h"
 #include "object-flavor.h"

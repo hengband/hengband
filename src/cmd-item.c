@@ -12,6 +12,8 @@
 
 
 #include "angband.h"
+#include "util.h"
+
 #include "selfinfo.h"
 #include "cmd-activate.h"
 #include "cmd-eat.h"

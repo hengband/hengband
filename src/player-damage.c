@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "player-damage.h"
 #include "artifact.h"
 #include "object-flavor.h"

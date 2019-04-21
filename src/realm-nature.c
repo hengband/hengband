@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "cmd-spell.h"
 #include "spells.h"
 #include "spells-summon.h"

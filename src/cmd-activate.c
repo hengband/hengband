@@ -7,6 +7,8 @@
 */
 
 #include "angband.h"
+#include "util.h"
+
 #include "cmd-activate.h"
 #include "cmd-basic.h"
 #include "floor.h"

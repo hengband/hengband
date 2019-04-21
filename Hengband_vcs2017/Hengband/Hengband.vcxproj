@@ -365,6 +365,7 @@
     <ClInclude Include="..\..\src\term.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\types.h" />
+    <ClInclude Include="..\..\src\util.h" />
     <ClInclude Include="..\..\src\view-mainwindow.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\wild.h" />

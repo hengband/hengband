@@ -12,6 +12,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "sort.h"
 #include "quest.h"
 #include "store.h"

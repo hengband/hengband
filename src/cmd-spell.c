@@ -7,6 +7,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "selfinfo.h"
 #include "spells-summon.h"
 #include "realm-arcane.h"

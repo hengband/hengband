@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "floor.h"
 #include "floor-save.h"
 #include "floor-events.h"

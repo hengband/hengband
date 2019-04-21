@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "chest.h"
 #include "trap.h"
 #include "floor.h"

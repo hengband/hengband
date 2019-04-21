@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "cmd-spell.h"
 #include "cmd-basic.h"
 #include "floor.h"

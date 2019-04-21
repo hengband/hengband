@@ -15,6 +15,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "player-status.h"
 #include "avatar.h"
 #include "realm-hex.h"

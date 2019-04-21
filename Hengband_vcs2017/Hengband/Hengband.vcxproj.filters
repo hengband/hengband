@@ -586,6 +586,7 @@
       <Filter>spells</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\scores.h" />
+    <ClInclude Include="..\..\src\util.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

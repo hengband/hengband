@@ -12,6 +12,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "cmd-pet.h"
 #include "floor.h"
 #include "grid.h"

@@ -98,6 +98,8 @@
 */
 
 #include "angband.h"
+#include "util.h"
+
 #include "view-mainwindow.h"
 #include "floor-events.h"
 #include "init.h"

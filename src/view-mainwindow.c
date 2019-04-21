@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "files.h"
 #include "world.h"
 #include "quest.h"

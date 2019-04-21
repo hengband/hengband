@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "files.h"
 #include "object-flavor.h"
 

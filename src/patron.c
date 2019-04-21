@@ -1,5 +1,6 @@
 ﻿
 #include "angband.h"
+#include "util.h"
 
 #include "patron.h"
 #include "cmd-pet.h"

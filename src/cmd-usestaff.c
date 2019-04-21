@@ -1,4 +1,6 @@
 ﻿#include "angband.h"
+#include "util.h"
+
 #include "spells-summon.h"
 #include "avatar.h"
 #include "player-status.h"

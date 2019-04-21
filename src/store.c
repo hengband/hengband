@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "floor.h"
 #include "cmd-item.h"
 #include "cmd-smith.h"

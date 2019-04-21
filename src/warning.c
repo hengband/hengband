@@ -1,6 +1,8 @@
 ﻿
 
 #include "angband.h"
+#include "util.h"
+
 #include "artifact.h"
 #include "player-move.h"
 #include "feature.h"

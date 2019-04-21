@@ -1,6 +1,8 @@
 ﻿/* File: inet.c */
 
 #include "angband.h"
+#include "util.h"
+
 
 #ifdef WORLD_SCORE
 

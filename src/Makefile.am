@@ -83,7 +83,7 @@ hengband_SOURCES = \
 	spells-world.c spells-world.h \
 	\
 	sort.c sort.h \
-	store.h store.c tables.c trap.c trap.h types.h util.c \
+	store.h store.c tables.c trap.c trap.h types.h util.c util.h \
 	variable.c wild.h wild.c wizard1.c wizard2.c \
 	warning.c warning.h world.c world.h \
 	\

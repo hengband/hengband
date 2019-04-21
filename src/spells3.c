@@ -12,6 +12,8 @@
  */
 
 #include "angband.h"
+#include "util.h"
+
 #include "floor.h"
 #include "object-boost.h"
 #include "object-flavor.h"
