@@ -43,6 +43,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "scores.h"
+#include "shoot.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
@@ -2239,124 +2240,6 @@ static void town_history(void)
 	/* Peruse the building help file */
 	(void)show_file(TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
 	screen_load();
-}
-
-/*!
- * @brief 射撃時クリティカルによるダメージ期待値修正計算（スナイパーの集中処理と武器経験値） / critical happens at i / 10000
- * @param plus_ammo 矢弾のダメージ修正
- * @param plus_bow 弓のダメージ修正
- * @return ダメージ期待値
- * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
- */
-HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow)
-{
-	HIT_POINT i;
-	object_type *j_ptr =  &inventory[INVEN_BOW];
-	
-	/* Extract "shot" power */
-	i = p_ptr->to_h_b + plus_ammo;
-	
-	if (p_ptr->tval_ammo == TV_BOLT)
-		i = (p_ptr->skill_thb + (p_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
-	else
-		i = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
-
-	/* Snipers can shot more critically with crossbows */
-	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
-	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
-	
-	/* Good bow makes more critical */
-	i += plus_bow * 8 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
-	
-	if (i < 0) i = 0;
-	
-	return i;
-}
-
-/*!
- * @brief 射撃時クリティカルによるダメージ期待値修正計算（重量依存部分） / critical happens at i / 10000
- * @param weight 武器の重量
- * @param plus_ammo 矢弾のダメージ修正
- * @param plus_bow 弓のダメージ修正
- * @param dam 基本ダメージ量
- * @return ダメージ期待値
- */
-HIT_POINT calc_expect_crit_shot(WEIGHT weight, int plus_ammo, int plus_bow,  HIT_POINT dam)
-{
-	u32b num;
-	int i, k, crit;
-	i = calc_crit_ratio_shot(plus_ammo, plus_bow);
-	
-	k = 0;
-	num = 0;
-	
-	crit = MIN(500, 900/weight);
-	num += dam * 3 /2 * crit;
-	k = crit;
-	
-	crit = MIN(500, 1350/weight);
-	crit -= k;
-	num += dam * 2 * crit;
-	k += crit;
-	
-	if(k < 500)
-	{
-		crit = 500 - k;
-		num += dam * 3 * crit;
-	}
-	
-	num /= 500;
-	
-	num *= i;
-	num += (10000 - i) * dam;
-	num /= 10000;
-	
-	return num;
-}
-
-/*!
- * @brief 攻撃時クリティカルによるダメージ期待値修正計算（重量と毒針処理） / critical happens at i / 10000
- * @param weight 武器の重量
- * @param plus 武器のダメージ修正
- * @param dam 基本ダメージ
- * @param meichuu 命中値
- * @param dokubari 毒針処理か否か
- * @return ダメージ期待値
- */
-HIT_POINT calc_expect_crit(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
-{
-	u32b k, num;
-	int i;
-	
-	if(dokubari) return dam;
-	
-	i = (weight + (meichuu * 3 + plus * 5) + p_ptr->skill_thn);
-	if (i < 0) i = 0;
-	
-	k = weight;
-	num = 0;
-	
-	if (k < 400)						num += (2 * dam + 5) * (400 - k);
-	if (k < 700)						num += (2 * dam + 10) * (MIN(700, k + 650) - MAX(400, k));
-	if (k > (700 - 650) && k < 900)		num += (3 * dam + 15) * (MIN(900, k + 650) - MAX(700, k));
-	if (k > (900 - 650) && k < 1300)		num += (3 * dam + 20) * (MIN(1300, k + 650) - MAX(900, k));
-	if (k > (1300 - 650))					num += (7 * dam / 2 + 25) * MIN(650, k - (1300 - 650));
-	
-	num /= 650;
-	if(p_ptr->pclass == CLASS_NINJA)
-	{
-		num *= i;
-		num += (4444 - i) * dam;
-		num /= 4444;
-	}
-	else
-	{
-		num *= i;
-		num += (5000 - i) * dam;
-		num /= 5000;
-	}
-	
-	return num;
 }
 
 /*!
