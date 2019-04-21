@@ -13,3 +13,4 @@ extern void prt_time(void);
 extern concptr map_name(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void move_cursor_relative(int row, int col);
+extern void prt_path(POSITION y, POSITION x);
