@@ -30,6 +30,7 @@
 #include "snipe.h"
 #include "files.h"
 #include "player-effects.h"
+#include "monster-spell.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

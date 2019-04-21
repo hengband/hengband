@@ -36,6 +36,7 @@
 #include "grid.h"
 #include "dungeon-file.h"
 #include "files.h"
+#include "monster-spell.h"
 
 #ifdef ALLOW_WIZARD
 
