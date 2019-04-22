@@ -97,12 +97,6 @@ const arena_type arena_info[MAX_ARENA_MONS + 2] =
 	{ MON_HAGURE,        TV_SCROLL, SV_SCROLL_ARTIFACT            },
 };
 
-
-/*!
- * ループ中で / hack as in leave_store in store.c
- */
-bool leave_bldg = FALSE;
-
 /*!
  * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
  * @details 各種ギルドや寺院など、特定の職業ならば優遇措置を得られる施設、
@@ -335,7 +329,7 @@ static void arena_comm(int cmd)
 
 						p_ptr->inside_arena = TRUE;
 						p_ptr->leaving = TRUE;
-						leave_bldg = TRUE;
+						p_ptr->leave_bldg = TRUE;
 					}
 					else
 					{
@@ -365,7 +359,7 @@ static void arena_comm(int cmd)
 
 				p_ptr->inside_arena = TRUE;
 				p_ptr->leaving = TRUE;
-				leave_bldg = TRUE;
+				p_ptr->leave_bldg = TRUE;
 			}
 			break;
 		case BACT_POSTER:
@@ -1644,7 +1638,7 @@ static bool kakutoujou(void)
 			p_ptr->inside_battle = TRUE;
 			p_ptr->leaving = TRUE;
 
-			leave_bldg = TRUE;
+			p_ptr->leave_bldg = TRUE;
 			screen_load();
 
 			return (TRUE);
@@ -4141,11 +4135,11 @@ void do_cmd_bldg(void)
 	command_new = 0;
 
 	show_building(bldg);
-	leave_bldg = FALSE;
+	p_ptr->leave_bldg = FALSE;
 
 	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
-	while (!leave_bldg)
+	while (!p_ptr->leave_bldg)
 	{
 		validcmd = FALSE;
 		prt("", 1, 0);
@@ -4156,7 +4150,7 @@ void do_cmd_bldg(void)
 
 		if (command == ESCAPE)
 		{
-			leave_bldg = TRUE;
+			p_ptr->leave_bldg = TRUE;
 			p_ptr->inside_arena = FALSE;
 			p_ptr->inside_battle = FALSE;
 			break;

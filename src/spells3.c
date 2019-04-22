@@ -4098,7 +4098,7 @@ bool tele_town(void)
 	}
 
 	p_ptr->leaving = TRUE;
-	leave_bldg = TRUE;
+	p_ptr->leave_bldg = TRUE;
 	p_ptr->teleport_town = TRUE;
 	screen_load();
 	return TRUE;
