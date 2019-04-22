@@ -534,7 +534,6 @@ extern void seal_of_mirror(HIT_POINT dam);
 extern concptr spell_category_name(OBJECT_TYPE_VALUE tval);
 
 /* spells2.c */
-extern void message_pain(MONSTER_IDX m_idx, HIT_POINT dam);
 extern bool detect_traps(POSITION range, bool known);
 extern bool detect_doors(POSITION range);
 extern bool detect_stairs(POSITION range);

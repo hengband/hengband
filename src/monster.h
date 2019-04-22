@@ -323,6 +323,7 @@ extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_e
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern int get_monster_crowd_number(MONSTER_IDX m_idx);
+extern void message_pain(MONSTER_IDX m_idx, HIT_POINT dam);
 
 #define is_friendly(A) \
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
