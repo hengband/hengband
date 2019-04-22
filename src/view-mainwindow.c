@@ -20,8 +20,10 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "monster.h"
-#include "realm-hex.h"
 #include "view-mainwindow.h"
+
+#include "spells.h"
+#include "realm-hex.h"
 
 #include "object-flavor.h"
 

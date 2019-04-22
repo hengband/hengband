@@ -36,6 +36,7 @@
 #include "cmd-spell.h"
 #include "rumor.h"
 #include "player-status.h"
+#include "spells.h"
 #include "spells-status.h"
 #include "realm-hex.h"
 #include "dungeon-file.h"

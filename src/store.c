@@ -18,6 +18,7 @@
 #include "cmd-smith.h"
 #include "cmd-zapwand.h"
 #include "cmd-magiceat.h"
+#include "spells.h"
 #include "store.h"
 #include "avatar.h"
 #include "cmd-spell.h"

@@ -53,3 +53,4 @@
 #define BACT_BROKEN_WEAPON          47
 #define MAX_BACT                    48
 
+extern const arena_type arena_info[MAX_ARENA_MONS + 2];

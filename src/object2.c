@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "spells.h"
 #include "floor.h"
 #include "grid.h"
 #include "object-boost.h"

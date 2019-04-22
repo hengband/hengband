@@ -61,6 +61,7 @@
 #include "cmd-zapwand.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "spells.h"
 
 
 /*!

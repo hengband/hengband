@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "bldg.h"
 #include "cmd-pet.h"
 #include "floor.h"
 #include "objectkind-hook.h"

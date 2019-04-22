@@ -111,3 +111,54 @@
 #define GF_WOUNDS         116		/*!< 魔法効果: 創傷*/
 
 #define MAX_GF         117
+
+
+
+/* spells3.c */
+extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
+extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
+extern bool teleport_player_aux(POSITION dis, BIT_FLAGS mode);
+extern void teleport_player(POSITION dis, BIT_FLAGS mode);
+extern void teleport_player_away(MONSTER_IDX m_idx, POSITION dis);
+extern void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode);
+extern void teleport_away_followable(MONSTER_IDX m_idx);
+extern bool teleport_level_other(player_type *creature_ptr);
+extern void teleport_level(MONSTER_IDX m_idx);
+extern DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);
+extern bool recall_player(player_type *creature_ptr, TIME_EFFECT turns);
+extern bool free_level_recall(player_type *creature_ptr);
+extern bool reset_recall(void);
+extern bool apply_disenchant(BIT_FLAGS mode);
+extern void brand_weapon(int brand_type);
+extern void call_the_(void);
+extern void fetch(DIRECTION dir, WEIGHT wgt, bool require_los);
+extern void alter_reality(void);
+extern void identify_pack(void);
+extern int remove_curse(void);
+extern int remove_all_curse(void);
+extern bool alchemy(void);
+extern bool enchant(object_type *o_ptr, int n, int eflag);
+extern bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac);
+extern bool artifact_scroll(void);
+extern bool ident_spell(bool only_equip);
+extern bool mundane_spell(bool only_equip);
+extern bool identify_item(object_type *o_ptr);
+extern bool identify_fully(bool only_equip);
+extern bool recharge(int power);
+extern void display_spell_list(void);
+extern EXP experience_of_spell(SPELL_IDX spell, REALM_IDX use_realm);
+extern MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm);
+extern PERCENTAGE mod_spell_chance_1(PERCENTAGE chance);
+extern PERCENTAGE mod_spell_chance_2(PERCENTAGE chance);
+extern PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX realm);
+extern void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX realm);
+extern bool polymorph_monster(POSITION y, POSITION x);
+extern bool dimension_door(void);
+extern bool mirror_tunnel(void);
+extern void massacre(void);
+extern bool eat_lock(void);
+extern bool shock_power(void);
+extern bool booze(player_type *creature_ptr);
+extern bool detonation(player_type *creature_ptr);
+extern void blood_curse_to_enemy(MONSTER_IDX m_idx);
+extern bool fire_crimson(void);

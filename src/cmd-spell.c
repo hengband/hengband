@@ -10,6 +10,7 @@
 #include "util.h"
 
 #include "selfinfo.h"
+#include "spells.h"
 #include "spells-summon.h"
 #include "realm-arcane.h"
 #include "realm-chaos.h"

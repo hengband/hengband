@@ -35,6 +35,7 @@
 #include "player-effects.h"
 #include "monster.h"
 #include "view-mainwindow.h"
+#include "spells.h"
 
 
 /*!

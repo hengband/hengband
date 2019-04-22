@@ -5,6 +5,7 @@
 #include "artifact.h"
 #include "floor.h"
 #include "grid.h"
+#include "spells.h"
 #include "spells-object.h"
 #include "object-boost.h"
 #include "object-hook.h"

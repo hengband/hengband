@@ -98,6 +98,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "bldg.h"
 
 #include "grid.h"
 #include "rooms.h"
@@ -117,6 +118,7 @@
 #include "dungeon-file.h"
 #include "init.h"
 #include "feature.h"
+#include "spells.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;

@@ -19,6 +19,8 @@
 #include "birth.h"
 #include "files.h"
 
+#include "bldg.h"
+
 #include "world.h"
 #include "player-status.h"
 #include "sort.h"
