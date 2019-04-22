@@ -44,6 +44,7 @@
 #include "player-effects.h"
 #include "scores.h"
 #include "shoot.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

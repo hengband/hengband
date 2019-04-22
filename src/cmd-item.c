@@ -34,6 +34,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "monster.h"
+#include "view-mainwindow.h"
 
 
 /*!

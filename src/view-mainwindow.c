@@ -3854,3 +3854,27 @@ void prt_path(POSITION y, POSITION x)
 		if (nx == x && ny == y) default_color = TERM_L_DARK;
 	}
 }
+
+
+/*
+ * Hack -- track the given monster race
+ */
+void monster_race_track(MONRACE_IDX r_idx)
+{
+	/* Save this monster ID */
+	p_ptr->monster_race_idx = r_idx;
+
+	p_ptr->window |= (PW_MONSTER);
+}
+
+/*
+ * Hack -- track the given object kind
+ */
+void object_kind_track(KIND_OBJECT_IDX k_idx)
+{
+	/* Save this monster ID */
+	p_ptr->object_kind_idx = k_idx;
+
+	p_ptr->window |= (PW_OBJECT);
+}
+

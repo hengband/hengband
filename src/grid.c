@@ -2006,32 +2006,6 @@ bool is_explosive_rune_grid(grid_type *g_ptr)
 		return FALSE;
 }
 
-
-/*
- * Hack -- track the given monster race
- */
-void monster_race_track(MONRACE_IDX r_idx)
-{
-	/* Save this monster ID */
-	p_ptr->monster_race_idx = r_idx;
-
-	p_ptr->window |= (PW_MONSTER);
-}
-
-
-
-/*
- * Hack -- track the given object kind
- */
-void object_kind_track(KIND_OBJECT_IDX k_idx)
-{
-	/* Save this monster ID */
-	p_ptr->object_kind_idx = k_idx;
-
-	p_ptr->window |= (PW_OBJECT);
-}
-
-
 /*!
 * @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
 * @param m_idx モンスターID

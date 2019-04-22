@@ -14,6 +14,7 @@
 #include "avatar.h"
 #include "files.h"
 #include "player-effects.h"
+#include "view-mainwindow.h"
 
 
 /*!
