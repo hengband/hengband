@@ -664,7 +664,6 @@ extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void update_playtime(void);
 
 /* xtra2.c */
-extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 extern void panel_bounds_center(void);
 extern void verify_panel(void);
 extern bool target_able(MONSTER_IDX m_idx);

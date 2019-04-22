@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 extern int panel_col_of(int col);
 extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_char[F_LIT_MAX]);
 extern void prt_map(void);
