@@ -587,6 +587,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\scores.h" />
     <ClInclude Include="..\..\src\util.h" />
+    <ClInclude Include="..\..\src\object.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

@@ -14,6 +14,8 @@
 #include "angband.h"
 #include "util.h"
 
+#include "object.h"
+
 #include "spells.h"
 #include "floor.h"
 #include "grid.h"

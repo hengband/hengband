@@ -45,7 +45,7 @@ hengband_SOURCES = \
 	\
 	object-boost.c object-boost.h \
 	object-curse.c object-curse.h object-broken.c object-broken.h \
-	object-hook.c object-hook.h object1.c object2.c \
+	object-hook.c object-hook.h object1.c object2.c object.h \
 	objectkind-hook.c objectkind-hook.h \
 	object-flavor.c object-flavor.h \
 	\

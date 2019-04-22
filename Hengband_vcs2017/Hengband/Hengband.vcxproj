@@ -318,6 +318,7 @@
     <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-hook.h" />
     <ClInclude Include="..\..\src\object-broken.h" />
+    <ClInclude Include="..\..\src\object.h" />
     <ClInclude Include="..\..\src\objectkind-hook.h" />
     <ClInclude Include="..\..\src\patron.h" />
     <ClInclude Include="..\..\src\player-damage.h" />

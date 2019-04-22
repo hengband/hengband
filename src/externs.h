@@ -658,7 +658,6 @@ extern bool clear_mind(player_type *creature_ptr);
 extern bool concentration(player_type *creature_ptr);
 
 /* xtra1.c */
-extern int bow_tval_ammo(object_type *o_ptr);
 extern void handle_stuff(void);
 extern void update_output(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
