@@ -664,12 +664,6 @@ extern void update_output(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void update_playtime(void);
 
-/* view-mainwindow.c */
-extern void resize_map(void);
-extern void redraw_window(void);
-extern bool change_panel(POSITION dy, POSITION dx);
-
-
 /* xtra2.c */
 extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);
 extern void panel_bounds_center(void);

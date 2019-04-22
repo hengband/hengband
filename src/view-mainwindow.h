@@ -7,7 +7,6 @@ extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TE
 extern void display_map(int *cy, int *cx);
 extern void do_cmd_view_map(void);
 
-/* xtra1.c */
 extern void health_track(MONSTER_IDX m_idx);
 extern void prt_time(void);
 extern concptr map_name(void);
@@ -16,3 +15,7 @@ extern void move_cursor_relative(int row, int col);
 extern void prt_path(POSITION y, POSITION x);
 extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(KIND_OBJECT_IDX k_idx);
+extern void resize_map(void);
+extern void redraw_window(void);
+extern bool change_panel(POSITION dy, POSITION dx);
+
