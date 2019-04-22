@@ -657,13 +657,6 @@ extern bool rodeo(player_type *creature_ptr);
 extern bool clear_mind(player_type *creature_ptr);
 extern bool concentration(player_type *creature_ptr);
 
-
-/* bldg.c */
-extern void update_gambling_monsters(void);
-extern void do_cmd_bldg(void);
-extern bool tele_town(void);
-
-
 /* xtra1.c */
 extern int bow_tval_ammo(object_type *o_ptr);
 extern void handle_stuff(void);

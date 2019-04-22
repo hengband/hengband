@@ -162,3 +162,4 @@ extern bool booze(player_type *creature_ptr);
 extern bool detonation(player_type *creature_ptr);
 extern void blood_curse_to_enemy(MONSTER_IDX m_idx);
 extern bool fire_crimson(void);
+extern bool tele_town(void);

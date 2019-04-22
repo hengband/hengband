@@ -42,6 +42,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "bldg.h"
 
 #include "feature.h"
 #include "floor-generate.h"

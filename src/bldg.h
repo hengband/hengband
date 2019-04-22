@@ -54,3 +54,8 @@
 #define MAX_BACT                    48
 
 extern const arena_type arena_info[MAX_ARENA_MONS + 2];
+extern void update_gambling_monsters(void);
+extern void do_cmd_bldg(void);
+
+extern bool leave_bldg;
+extern void clear_bldg(int min_row, int max_row);

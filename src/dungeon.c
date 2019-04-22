@@ -14,6 +14,7 @@
 #include "util.h"
 
 #include "birth.h"
+#include "bldg.h"
 #include "cmd-activate.h"
 #include "cmd-eat.h"
 #include "cmd-hissatsu.h"

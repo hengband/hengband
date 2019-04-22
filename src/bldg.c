@@ -101,7 +101,7 @@ const arena_type arena_info[MAX_ARENA_MONS + 2] =
 /*!
  * ループ中で / hack as in leave_store in store.c
  */
-static bool leave_bldg = FALSE;
+bool leave_bldg = FALSE;
 
 /*!
  * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
@@ -179,7 +179,7 @@ static bool is_member(building_type *bldg)
  * @param max_row 末尾行番号
  * @return なし
  */
-static void clear_bldg(int min_row, int max_row)
+void clear_bldg(int min_row, int max_row)
 {
 	int   i;
 
@@ -3589,84 +3589,6 @@ static void building_recharge_all(void)
 
 	/* Finished */
 	return;
-}
-
-/*!
- * @brief 町間のテレポートを行うメインルーチン。
- * @return テレポート処理を決定したか否か
- */
-bool tele_town(void)
-{
-	int i;
-	POSITION x, y;
-	int num = 0;
-
-	if (current_floor_ptr->dun_level)
-	{
-		msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
-		return FALSE;
-	}
-
-	if (p_ptr->inside_arena || p_ptr->inside_battle)
-	{
-		msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
-		return FALSE;
-	}
-
-	screen_save();
-	clear_bldg(4, 10);
-
-	for (i = 1; i < max_towns; i++)
-	{
-		char buf[80];
-
-		if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == p_ptr->town_num) || !(p_ptr->visit & (1L << (i - 1)))) continue;
-
-		sprintf(buf, "%c) %-20s", I2A(i - 1), town_info[i].name);
-		prt(buf, 5 + i, 5);
-		num++;
-	}
-
-	if (!num)
-	{
-		msg_print(_("まだ行けるところがない。", "You have not yet visited any town."));
-		msg_print(NULL);
-		screen_load();
-		return FALSE;
-	}
-
-	prt(_("どこに行きますか:", "Which town you go: "), 0, 0);
-	while(1)
-	{
-		i = inkey();
-
-		if (i == ESCAPE)
-		{
-			screen_load();
-			return FALSE;
-		}
-		else if ((i < 'a') || (i > ('a'+max_towns-2))) continue;
-		else if (((i-'a'+1) == p_ptr->town_num) || ((i-'a'+1) == NO_TOWN) || ((i-'a'+1) == SECRET_TOWN) || !(p_ptr->visit & (1L << (i-'a')))) continue;
-		break;
-	}
-
-	for (y = 0; y < current_world_ptr->max_wild_y; y++)
-	{
-		for (x = 0; x < current_world_ptr->max_wild_x; x++)
-		{
-			if(wilderness[y][x].town == (i-'a'+1))
-			{
-				p_ptr->wilderness_y = y;
-				p_ptr->wilderness_x = x;
-			}
-		}
-	}
-
-	p_ptr->leaving = TRUE;
-	leave_bldg = TRUE;
-	p_ptr->teleport_town = TRUE;
-	screen_load();
-	return TRUE;
 }
 
 /*!

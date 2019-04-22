@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "bldg.h"
 
 #include "avatar.h"
 #include "history.h"
