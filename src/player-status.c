@@ -21,11 +21,6 @@
 #include "cmd-spell.h"
 #include "player-effects.h"
 
-/* Hack, monk armour */
-static bool monk_armour_aux;
-static bool monk_notify_aux;
-
-
 /*!
  * @var horror_desc
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ（通常時）
@@ -378,6 +373,7 @@ void calc_bonuses(void)
 	bool omoi = FALSE;
 	bool yoiyami = FALSE;
 	bool down_saving = FALSE;
+
 #if 0
 	bool have_dd_s = FALSE, have_dd_t = FALSE;
 #endif
@@ -2576,11 +2572,11 @@ void calc_bonuses(void)
 
 	if (p_ptr->riding) p_ptr->levitation = riding_levitation;
 
-	monk_armour_aux = FALSE;
+	p_ptr->monk_armour_aux = FALSE;
 
 	if (heavy_armor())
 	{
-		monk_armour_aux = TRUE;
+		p_ptr->monk_armour_aux = TRUE;
 	}
 
 	for (i = 0; i < 2; i++)
@@ -2850,7 +2846,7 @@ void calc_bonuses(void)
 		p_ptr->old_riding_ryoute = p_ptr->riding_ryoute;
 	}
 
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_NINJA)) && (monk_armour_aux != monk_notify_aux))
+	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_NINJA)) && (p_ptr->monk_armour_aux != p_ptr->monk_notify_aux))
 	{
 		if (heavy_armor())
 		{
@@ -2865,7 +2861,7 @@ void calc_bonuses(void)
 			msg_print(_("バランスがとれるようになった。", "You regain your balance."));
 		}
 
-		monk_notify_aux = monk_armour_aux;
+		p_ptr->monk_notify_aux = p_ptr->monk_armour_aux;
 	}
 
 	for (i = 0; i < INVEN_PACK; i++)
