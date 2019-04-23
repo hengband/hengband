@@ -1702,26 +1702,15 @@ void display_equip(void)
 
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		/* Examine the item */
 		o_ptr = &inventory[i];
-
-		/* Start with an empty "index" */
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-
-		/* Is this item "acceptable"? */
 		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr))
 		{
-			/* Prepare an "index" */
 			tmp_val[0] = index_to_label(i);
-
-			/* Bracket the "index" --(-- */
 			tmp_val[1] = ')';
 		}
 
-		/* Display the index (or blank space) */
 		Term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-
-		/* Obtain an item description */
 		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
 		{
 			strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
@@ -1733,22 +1722,15 @@ void display_equip(void)
 			attr = tval_to_attr[o_ptr->tval % 128];
 		}
 
-		/* Obtain the length of the description */
 		n = strlen(o_name);
-
-		/* Grey out charging items */
 		if (o_ptr->timeout)
 		{
 			attr = TERM_L_DARK;
 		}
-
-		/* Display the entry itself */
 		Term_putstr(3, i - INVEN_RARM, n, attr, o_name);
 
-		/* Erase the rest of the line */
-		Term_erase(3+n, i - INVEN_RARM, 255);
+		Term_erase(3 + n, i - INVEN_RARM, 255);
 
-		/* Display the weight (if needed) */
 		if (show_weights)
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
@@ -1761,7 +1743,6 @@ void display_equip(void)
 			prt(tmp_val, i - INVEN_RARM, wid - (show_labels ? 28 : 9));
 		}
 
-		/* Display the slot description (if needed) */
 		if (show_labels)
 		{
 			Term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
@@ -1769,10 +1750,8 @@ void display_equip(void)
 		}
 	}
 
-	/* Erase the rest of the window */
 	for (i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++)
 	{
-		/* Clear that line */
 		Term_erase(0, i, 255);
 	}
 }
