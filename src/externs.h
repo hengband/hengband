@@ -94,10 +94,7 @@ extern const concptr game_inscriptions[];
 extern const kamae kamae_shurui[MAX_KAMAE];
 extern const kamae kata_shurui[MAX_KATA];
 extern const concptr exp_level_str[5];
-extern const concptr silly_attacks[MAX_SILLY_ATTACK];
-#ifdef JP
-extern const concptr silly_attacks2[MAX_SILLY_ATTACK];
-#endif
+
 extern const concptr ident_info[];
 extern const mbe_info_type mbe_info[];
 extern const byte feature_action_flags[FF_FLAG_MAX];

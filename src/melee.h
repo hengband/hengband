@@ -33,6 +33,11 @@ typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション�
 #define HISSATSU_100NIN 30
 #define HISSATSU_IAI    100
 
+extern const concptr silly_attacks[MAX_SILLY_ATTACK];
+#ifdef JP
+extern const concptr silly_attacks2[MAX_SILLY_ATTACK];
+#endif
+
 extern bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible);
 extern PERCENTAGE hit_chance(HIT_RELIABILITY chance, ARMOUR_CLASS ac);
 extern HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);
