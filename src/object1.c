@@ -1635,60 +1635,35 @@ void display_inven(void)
 
 	Term_get_size(&wid, &hgt);
 
-	/* Find the "final" slot */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
 		if (!o_ptr->k_idx) continue;
-
-		/* Track */
 		z = i + 1;
 	}
 
-	/* Display the pack */
 	for (i = 0; i < z; i++)
 	{
-		/* Examine the item */
 		o_ptr = &inventory[i];
-
-		/* Start with an empty "index" */
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-
-		/* Is this item "acceptable"? */
 		if (item_tester_okay(o_ptr))
 		{
-			/* Prepare an "index" */
 			tmp_val[0] = index_to_label(i);
-
-			/* Bracket the "index" --(-- */
 			tmp_val[1] = ')';
 		}
 
-		/* Display the index (or blank space) */
 		Term_putstr(0, i, 3, TERM_WHITE, tmp_val);
-
-		/* Obtain an item description */
 		object_desc(o_name, o_ptr, 0);
-
-		/* Obtain the length of the description */
 		n = strlen(o_name);
-
-		/* Get a color */
 		attr = tval_to_attr[o_ptr->tval % 128];
-
-		/* Grey out charging items */
 		if (o_ptr->timeout)
 		{
 			attr = TERM_L_DARK;
 		}
 
-		/* Display the entry itself */
 		Term_putstr(3, i, n, attr, o_name);
-
-		/* Erase the rest of the line */
 		Term_erase(3+n, i, 255);
 
-		/* Display the weight if needed */
 		if (show_weights)
 		{
 			int wgt = o_ptr->weight * o_ptr->number;
@@ -1697,15 +1672,12 @@ void display_inven(void)
 #else
 			sprintf(tmp_val, "%3d.%1d lb", wgt / 10, wgt % 10);
 #endif
-
 			prt(tmp_val, i, wid - 9);
 		}
 	}
 
-	/* Erase the rest of the window */
 	for (i = z; i < hgt; i++)
 	{
-		/* Erase the line */
 		Term_erase(0, i, 255);
 	}
 }
