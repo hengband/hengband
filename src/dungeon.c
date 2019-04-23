@@ -2555,7 +2555,6 @@ static void process_world_aux_curse(void)
 				o_ptr = &inventory[i];
 				if (!o_ptr->k_idx) continue;
 
-				/* Extract the item flags */
 				object_flags(o_ptr, flgs);
 
 				if (have_flag(flgs, TR_TELEPORT))

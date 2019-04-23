@@ -1270,7 +1270,6 @@ void calc_bonuses(void)
 		o_ptr = &inventory[i];
 		if (!o_ptr->k_idx) continue;
 
-		/* Extract the item flags */
 		object_flags(o_ptr, flgs);
 
 		p_ptr->cursed |= (o_ptr->curse_flags & (0xFFFFFFF0L));
@@ -3849,7 +3848,6 @@ s16b calc_num_fire(object_type *o_ptr)
 		/* Do not apply current equip */
 		if (i == INVEN_BOW) continue;
 
-		/* Extract the item flags */
 		object_flags(q_ptr, flgs);
 
 		/* Boost shots */
