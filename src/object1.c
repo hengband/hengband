@@ -1639,8 +1639,6 @@ void display_inven(void)
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Track */
@@ -1852,8 +1850,6 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 	for (i = start; i <= end; i++)
 	{
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Skip empty inscriptions */
@@ -1897,8 +1893,6 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 	for (i = start; i <= end; i++)
 	{
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Skip empty inscriptions */
@@ -2137,8 +2131,6 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Track */

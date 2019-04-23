@@ -5179,8 +5179,6 @@ bool inven_carry_okay(object_type *o_ptr)
 	for (j = 0; j < INVEN_PACK; j++)
 	{
 		object_type *j_ptr = &inventory[j];
-
-		/* Skip non-objects */
 		if (!j_ptr->k_idx) continue;
 
 		/* Check if the two items can be combined */
@@ -5311,8 +5309,6 @@ s16b inven_carry(object_type *o_ptr)
 	for (j = 0; j < INVEN_PACK; j++)
 	{
 		j_ptr = &inventory[j];
-
-		/* Skip non-objects */
 		if (!j_ptr->k_idx) continue;
 
 		/* Hack -- track last item */

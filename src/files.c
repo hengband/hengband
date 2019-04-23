@@ -6378,8 +6378,6 @@ void show_info(void)
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Aware and Known */
@@ -6395,8 +6393,6 @@ void show_info(void)
 		for (j = 0; j < st_ptr->stock_num; j++)
 		{
 			o_ptr = &st_ptr->stock[j];
-
-			/* Skip non-objects */
 			if (!o_ptr->k_idx) continue;
 
 			/* Aware and Known */

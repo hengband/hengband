@@ -85,8 +85,6 @@ void self_knowledge(void)
 		u32b tflgs[TR_FLAG_SIZE];
 
 		o_ptr = &inventory[k];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 		object_flags(o_ptr, tflgs);
 

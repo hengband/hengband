@@ -2553,8 +2553,6 @@ static void process_world_aux_curse(void)
 			{
 				BIT_FLAGS flgs[TR_FLAG_SIZE];
 				o_ptr = &inventory[i];
-
-				/* Skip non-objects */
 				if (!o_ptr->k_idx) continue;
 
 				/* Extract the item flags */
@@ -2779,8 +2777,6 @@ static void process_world_aux_recharge(void)
 	{
 		/* Get the object */
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Recharge activatable objects */
@@ -2814,8 +2810,6 @@ static void process_world_aux_recharge(void)
 	{
 		object_type *o_ptr = &inventory[i];
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Examine all charging rods or stacks of charging rods. */

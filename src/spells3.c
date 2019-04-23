@@ -1592,8 +1592,6 @@ void identify_pack(void)
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		identify_item(o_ptr);
@@ -1642,8 +1640,6 @@ static int remove_curse_aux(int all)
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Uncursed already */

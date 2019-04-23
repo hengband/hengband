@@ -276,8 +276,6 @@ int inven_damage(inven_func typ, int perc)
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Hack -- for now, skip artifacts */

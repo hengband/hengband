@@ -2544,8 +2544,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 						/* Obtain the item */
 						o_ptr = &inventory[i];
-
-						/* Skip non-objects */
 						if (!o_ptr->k_idx) continue;
 
 						/* Drain charged wands/staffs */
@@ -2679,8 +2677,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 						/* Obtain the item */
 						o_ptr = &inventory[i];
-
-						/* Skip non-objects */
 						if (!o_ptr->k_idx) continue;
 
 						/* Skip artifacts */
@@ -2757,8 +2753,6 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
 						o_ptr = &inventory[i];
-
-						/* Skip non-objects */
 						if (!o_ptr->k_idx) continue;
 
 						/* Skip non-food objects */

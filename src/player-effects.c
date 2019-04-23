@@ -3594,8 +3594,6 @@ bool lose_all_info(void)
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Allow "protection" by the MENTAL flag */

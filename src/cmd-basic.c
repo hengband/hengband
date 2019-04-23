@@ -1935,8 +1935,6 @@ static bool get_spike(INVENTORY_IDX *ip)
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Check the "tval" code */

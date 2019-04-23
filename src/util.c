@@ -4592,8 +4592,6 @@ void request_command(int shopping)
 		concptr s;
 
 		object_type *o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* No inscription */

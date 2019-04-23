@@ -1268,8 +1268,6 @@ void calc_bonuses(void)
 	{
 		int bonus_to_h, bonus_to_d;
 		o_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!o_ptr->k_idx) continue;
 
 		/* Extract the item flags */
@@ -3846,8 +3844,6 @@ s16b calc_num_fire(object_type *o_ptr)
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		q_ptr = &inventory[i];
-
-		/* Skip non-objects */
 		if (!q_ptr->k_idx) continue;
 
 		/* Do not apply current equip */
