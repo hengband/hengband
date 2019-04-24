@@ -14,6 +14,8 @@
 #include "angband.h"
 #include "util.h"
 
+#include "mind.h"
+
 #include "store.h"
 #include "player-status.h"
 #include "player-move.h"

@@ -17,6 +17,8 @@
 #include "angband.h"
 #include "util.h"
 
+#include "mind.h"
+
 #include "floor.h"
 #include "melee.h"
 #include "spells.h"
