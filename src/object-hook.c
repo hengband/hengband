@@ -5,6 +5,7 @@
 #include "object-hook.h"
 #include "monster.h"
 #include "artifact.h"
+#include "player-skill.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/

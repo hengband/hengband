@@ -93,7 +93,7 @@ extern const int monk_ave_damage[PY_MAX_LEVEL+1][3];
 extern const concptr game_inscriptions[];
 extern const kamae kamae_shurui[MAX_KAMAE];
 extern const kamae kata_shurui[MAX_KATA];
-extern const concptr exp_level_str[5];
+
 
 extern const concptr ident_info[];
 extern const mbe_info_type mbe_info[];

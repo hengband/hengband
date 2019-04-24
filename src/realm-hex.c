@@ -28,6 +28,7 @@
 #include "spells.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-skill.h"
 #include "realm-hex.h"
 #include "grid.h"
 

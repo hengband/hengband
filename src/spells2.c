@@ -36,6 +36,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-skill.h"
 
 #include "floor-events.h"
 #include "feature.h"

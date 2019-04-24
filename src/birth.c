@@ -30,6 +30,7 @@
 #include "dungeon-file.h"
 #include "files.h"
 #include "birth.h"
+#include "player-skill.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

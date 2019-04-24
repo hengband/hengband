@@ -37,6 +37,7 @@
 #include "floor-save.h"
 #include "files.h"
 #include "player-effects.h"
+#include "player-skill.h"
 #include "view-mainwindow.h"
 #include "mind.h"
 #include "wild.h"

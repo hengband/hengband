@@ -8,6 +8,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-skill.h"
 #include "object-hook.h"
 #include "monster.h"
 #include "monster-status.h"

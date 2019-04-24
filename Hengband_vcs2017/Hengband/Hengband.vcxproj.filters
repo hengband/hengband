@@ -312,6 +312,9 @@
     <ClCompile Include="..\..\src\mind.c">
       <Filter>spells</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-skill.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -589,6 +592,9 @@
     <ClInclude Include="..\..\src\util.h" />
     <ClInclude Include="..\..\src\object.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-skill.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

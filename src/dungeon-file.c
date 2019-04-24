@@ -8,6 +8,7 @@
 #include "quest.h"
 #include "monster.h"
 #include "files.h"
+#include "player-skill.h"
 
 dungeon_grid letter[255];
 

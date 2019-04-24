@@ -20,6 +20,7 @@
 #include "artifact.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-skill.h"
 
 #include "spells.h"
 #include "spells-object.h"

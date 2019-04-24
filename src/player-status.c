@@ -3,6 +3,8 @@
 
 #include "player-move.h"
 #include "player-status.h"
+#include "player-effects.h"
+#include "player-skill.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "feature.h"
@@ -19,7 +21,6 @@
 #include "realm-hex.h"
 #include "cmd-pet.h"
 #include "cmd-spell.h"
-#include "player-effects.h"
 
 /*!
  * @var horror_desc

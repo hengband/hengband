@@ -46,6 +46,7 @@
 #include "dungeon-file.h"
 #include "init.h"
 #include "monster-spell.h"
+#include "player-skill.h"
 
 
 /*

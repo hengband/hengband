@@ -48,6 +48,7 @@
 #include "world.h"
 #include "player-effects.h"
 #include "player-status.h"
+#include "player-skill.h"
 #include "sort.h"
 #include "mutation.h"
 #include "quest.h"

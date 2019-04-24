@@ -16,14 +16,12 @@
 
 #include "artifact.h"
 #include "cmd-pet.h"
-#include "player-damage.h"
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "monster.h"
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "avatar.h"
-#include "player-status.h"
 #include "realm-hex.h"
 #include "object-flavor.h"
 #include "object-hook.h"
@@ -33,6 +31,9 @@
 #include "spells.h"
 #include "files.h"
 #include "player-effects.h"
+#include "player-skill.h"
+#include "player-damage.h"
+#include "player-status.h"
 #include "view-mainwindow.h"
 
 

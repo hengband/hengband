@@ -47,6 +47,7 @@
 
 #include "h-type.h"
 #include "defines.h"
+//#include "player-skill.h"
 
 /*!
  * @struct feature_state

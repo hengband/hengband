@@ -7,6 +7,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "player-skill.h"
 #include "object-hook.h"
 #include "floor.h"
 #include "grid.h"
