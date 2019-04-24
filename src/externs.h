@@ -304,7 +304,6 @@ extern FEAT_IDX max_f_idx;
 extern ARTIFACT_IDX max_a_idx;
 extern EGO_IDX max_e_idx;
 extern DUNGEON_IDX max_d_idx;
-extern quest_type *quest;
 extern char quest_text[10][80];
 extern int quest_text_line;
 extern int init_flags;

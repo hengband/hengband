@@ -12,6 +12,10 @@
 #include "artifact.h"
 #include "feature.h"
 
+/*
+ * Quest info
+ */
+quest_type *quest;
 
 /*!
  * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription

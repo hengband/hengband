@@ -1,4 +1,6 @@
-﻿/*
+﻿#pragma once
+
+/*
  * Quest constants
  */
 #define MIN_RANDOM_QUEST 40 /*<! ランダムクエストを割り当てるクエストIDの開始値 */
@@ -49,7 +51,36 @@
 #define QUEST_OBERON 8 /*<! オベロン打倒クエストに割り振るクエストID */
 #define QUEST_SERPENT 9 /*<! サーペント打倒クエストに割り振るクエストID */
 
+/*!
+ * @struct quest_type
+ * @brief クエスト情報の構造体 / Structure for the "quests".
+ */
 
+struct quest_type
+{
+	QUEST_STATUS status;          /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
+	QUEST_TYPE type;              /*!< クエストの種別 / The quest type */
+
+	GAME_TEXT name[60];          /*!< クエスト名 / Quest name */
+	DEPTH level;            /*!< 処理階層 / Dungeon level */
+	MONRACE_IDX r_idx;      /*!< クエスト対象のモンスターID / Monster race */
+
+	MONSTER_NUMBER cur_num; /*!< 撃破したモンスターの数 / Number killed */
+	MONSTER_NUMBER max_num; /*!< 求められるモンスターの撃破数 / Number required */
+
+	KIND_OBJECT_IDX k_idx;              /*!< クエスト対象のアイテムID / object index */
+	MONSTER_NUMBER num_mon; /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
+
+	BIT_FLAGS flags;             /*!< クエストに関するフラグビット / quest flags */
+	DUNGEON_IDX dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */
+
+	PLAYER_LEVEL complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
+	REAL_TIME comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/
+};
+
+typedef struct quest_type quest_type;
+
+extern quest_type *quest;
 extern void determine_random_questor(quest_type *q_ptr);
 extern void complete_quest(QUEST_IDX quest_num);
 extern void check_quest_completion(monster_type *m_ptr);
@@ -60,3 +91,4 @@ extern QUEST_IDX random_quest_number(DEPTH level);
 extern void leave_quest_check(void);
 extern void leave_tower_check(void);
 extern void do_cmd_quest(void);
+

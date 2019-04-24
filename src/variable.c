@@ -711,12 +711,6 @@ EGO_IDX max_e_idx;
 DUNGEON_IDX max_d_idx;
 
 
-
-/*
- * Quest info
- */
-quest_type *quest;
-
 /*
  * Quest text
  */

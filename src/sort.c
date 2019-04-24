@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "sort.h"
+#include "quest.h"
 
 /*
  * Angband sorting algorithm -- quick sort in place
