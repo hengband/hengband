@@ -23,6 +23,7 @@
 #include "object-hook.h"
 
 #include "files.h"
+#include "floor.h"
 
 #define MAX_LINELEN 1024
 

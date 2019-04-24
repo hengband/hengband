@@ -15,6 +15,7 @@
 #include "monsterrace-hook.h"
 #include "view-mainwindow.h"
 #include "quest.h"
+#include "floor.h"
 
 
 static int num_more = 0;

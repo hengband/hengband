@@ -44,6 +44,7 @@
 #include "dungeon-file.h"
 #include "files.h"
 #include "feature.h"
+#include "floor.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

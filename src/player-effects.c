@@ -15,6 +15,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "floor.h"
 #include "bldg.h"
 #include "birth.h"
 #include "grid.h"

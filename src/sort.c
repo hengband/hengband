@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "sort.h"
+#include "floor.h"
 #include "quest.h"
 
 /*

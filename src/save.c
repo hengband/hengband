@@ -18,6 +18,7 @@
 #include "quest.h"
 #include "store.h"
 #include "wild.h"
+#include "floor.h"
 #include "floor-events.h"
 #include "floor-save.h"
 #include "files.h"

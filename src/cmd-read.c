@@ -26,6 +26,7 @@
 
 #include "cmd-basic.h"
 #include "files.h"
+#include "floor.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

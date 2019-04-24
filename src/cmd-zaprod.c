@@ -9,6 +9,7 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "cmd-basic.h"
+#include "floor.h"
 
 /*!
  * @brief ロッドの効果を発動する

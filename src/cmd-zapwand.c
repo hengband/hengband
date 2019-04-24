@@ -8,6 +8,7 @@
 #include "player-effects.h"
 #include "object-hook.h"
 #include "cmd-basic.h"
+#include "floor.h"
 
 
 /*!

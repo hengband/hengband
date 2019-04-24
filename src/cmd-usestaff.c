@@ -10,6 +10,7 @@
 #include "spells-floor.h"
 #include "object-hook.h"
 #include "cmd-basic.h"
+#include "floor.h"
 
 
 

@@ -26,6 +26,7 @@
 #include "spells.h"
 #include "cmd-basic.h"
 #include "files.h"
+#include "floor.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

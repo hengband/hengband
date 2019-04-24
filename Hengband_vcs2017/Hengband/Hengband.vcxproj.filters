@@ -315,6 +315,9 @@
     <ClCompile Include="..\..\src\player-skill.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />

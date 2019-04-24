@@ -2,6 +2,7 @@
 #include "util.h"
 
 #include "grid.h"
+#include "floor.h"
 #include "floor-generate.h"
 #include "rooms.h"
 #include "rooms-city.h"

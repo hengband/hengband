@@ -33,6 +33,7 @@
 #include "object-hook.h"
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
+#include "floor.h"
 
 /*!
  * @brief

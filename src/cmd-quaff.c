@@ -22,6 +22,7 @@
 #include "spells-floor.h"
 #include "object-broken.h"
 #include "cmd-basic.h"
+#include "floor.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

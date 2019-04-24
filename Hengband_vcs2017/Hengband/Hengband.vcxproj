@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\src\floor-events.c" />
     <ClCompile Include="..\..\src\floor-generate.c" />
     <ClCompile Include="..\..\src\floor-save.c" />
+    <ClCompile Include="..\..\src\floor.c" />
     <ClCompile Include="..\..\src\geometry.c" />
     <ClCompile Include="..\..\src\history.c" />
     <ClCompile Include="..\..\src\init.c" />

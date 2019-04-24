@@ -17,6 +17,7 @@
 #include "realm-hex.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "floor.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン
