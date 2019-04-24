@@ -1,4 +1,5 @@
-﻿
+﻿#pragma once
+
 /*** Option Definitions ***/
 
 #define OPT_PAGE_INPUT          1
@@ -182,3 +183,36 @@ extern byte delay_factor;
 extern s16b autosave_freq;
 extern bool autosave_t;
 extern bool autosave_l;
+
+/*
+ * Available "options"
+ *
+ *	- Address of actual option variable (or NULL)
+ *
+ *	- Normal Value (TRUE or FALSE)
+ *
+ *	- Option Page Number (or zero)
+ *
+ *	- Savefile Set (or zero)
+ *	- Savefile Bit in that set
+ *
+ *	- Textual name (or NULL)
+ *	- Textual description
+ */
+
+typedef struct option_type option_type;
+
+struct option_type
+{
+	bool	*o_var;
+	byte	o_norm;
+	byte	o_page;
+	byte	o_set;
+	byte	o_bit;
+	concptr	o_text;
+	concptr	o_desc;
+};
+
+extern const option_type option_info[];
+extern const option_type cheat_info[CHEAT_MAX];
+extern const option_type autosave_info[2];
