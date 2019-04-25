@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\src\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd-read.c" />
     <ClCompile Include="..\..\src\cmd-smith.c" />
+    <ClCompile Include="..\..\src\core.c" />
     <ClCompile Include="..\..\src\dungeon-file.c" />
     <ClCompile Include="..\..\src\feature.c" />
     <ClCompile Include="..\..\src\floor-events.c" />
@@ -209,7 +210,6 @@
     <ClCompile Include="..\..\src\cmd4.c" />
     <ClCompile Include="..\..\src\cmd-magiceat.c" />
     <ClCompile Include="..\..\src\cmd-spell.c" />
-    <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\files.c" />
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />

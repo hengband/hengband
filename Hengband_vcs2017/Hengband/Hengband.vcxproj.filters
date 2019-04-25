@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\history.c" />
     <ClCompile Include="..\..\src\quest.c" />
-    <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\japanese.c" />
@@ -318,6 +317,7 @@
     <ClCompile Include="..\..\src\floor.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
