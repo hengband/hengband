@@ -3,6 +3,7 @@
 
 #include "files.h"
 #include "object-flavor.h"
+#include "artifact.h"
 
 /*
  * Display a rumor and apply its effects

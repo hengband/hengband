@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "artifact.h"
 #include "sort.h"
 #include "quest.h"
 #include "store.h"

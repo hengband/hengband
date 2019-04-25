@@ -25,6 +25,13 @@
 #include "spells-object.h"
 #include "files.h"
 
+ /*
+  * The artifact arrays
+  */
+artifact_type *a_info;
+char *a_name;
+char *a_text;
+
 static bool has_extreme_damage_rate(object_type *o_ptr);
 static bool weakening_artifact(object_type *o_ptr);
 

@@ -565,13 +565,6 @@ char *k_name;
 char *k_text;
 
 /*
- * The artifact arrays
- */
-artifact_type *a_info;
-char *a_name;
-char *a_text;
-
-/*
  * The ego-item arrays
  */
 ego_item_type *e_info;

@@ -2,6 +2,7 @@
 #include "sort.h"
 #include "floor.h"
 #include "quest.h"
+#include "artifact.h"
 
 /*
  * Angband sorting algorithm -- quick sort in place

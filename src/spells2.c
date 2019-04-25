@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "artifact.h"
 #include "cmd-pet.h"
 #include "floor.h"
 #include "grid.h"

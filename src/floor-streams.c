@@ -18,6 +18,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "artifact.h"
 #include "floor-generate.h"
 #include "floor.h"
 #include "floor-streams.h"

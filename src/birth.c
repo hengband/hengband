@@ -15,6 +15,7 @@
 #include "util.h"
 #include "bldg.h"
 
+#include "artifact.h"
 #include "avatar.h"
 #include "history.h"
 #include "monsterrace-hook.h"
