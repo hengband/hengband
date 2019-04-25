@@ -286,7 +286,7 @@ extern bool (*item_tester_hook)(object_type *o_ptr);
 extern monsterrace_hook_type get_mon_num_hook;
 extern monsterrace_hook_type get_mon_num2_hook;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
-extern building_type building[MAX_BLDG];
+
 extern QUEST_IDX max_q_idx;
 extern MONRACE_IDX max_r_idx;
 extern KIND_OBJECT_IDX max_k_idx;

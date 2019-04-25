@@ -10,6 +10,7 @@
 #include "files.h"
 #include "player-skill.h"
 #include "floor.h"
+#include "bldg.h"
 
 dungeon_grid letter[255];
 

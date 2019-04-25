@@ -47,6 +47,13 @@
 #include "shoot.h"
 #include "view-mainwindow.h"
 
+
+/*
+ * Buildings
+ */
+building_type building[MAX_BLDG];
+
+
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
  */

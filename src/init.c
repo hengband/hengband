@@ -36,6 +36,7 @@
 #include "util.h"
 
 #include "artifact.h"
+#include "bldg.h"
 #include "init.h"
 #include "quest.h"
 #include "trap.h"

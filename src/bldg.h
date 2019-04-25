@@ -1,6 +1,32 @@
 ﻿#pragma once
 
 /*
+ * A structure to describe a building.
+ * From Kamband
+ */
+typedef struct building_type building_type;
+
+struct building_type
+{
+	GAME_TEXT name[20];                  /* proprietor name */
+	GAME_TEXT owner_name[20];            /* proprietor name */
+	GAME_TEXT owner_race[20];            /* proprietor race */
+
+	GAME_TEXT act_names[8][30];          /* action names */
+	PRICE member_costs[8];           /* Costs for class members of building */
+	PRICE other_costs[8];		    /* Costs for nonguild members */
+	char letters[8];                /* action letters */
+	BACT_IDX actions[8];                /* action codes */
+	BACT_RESTRICT_IDX action_restr[8];           /* action restrictions */
+
+	CLASS_IDX member_class[MAX_CLASS];   /* which classes are part of guild */
+	RACE_IDX member_race[MAX_RACES];    /* which classes are part of guild */
+	REALM_IDX member_realm[MAX_MAGIC + 1]; /* which realms are part of guild */
+};
+
+extern building_type building[MAX_BLDG];
+
+/*
  * Buildings actions
  */
 #define BACT_NOTHING                 0
