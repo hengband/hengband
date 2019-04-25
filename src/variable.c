@@ -558,13 +558,6 @@ skill_table *s_info;
 player_magic *m_info;
 
 /*
- * The terrain feature arrays
- */
-feature_type *f_info;
-char *f_name;
-char *f_tag;
-
-/*
  * The object kind arrays
  */
 object_kind *k_info;

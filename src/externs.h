@@ -251,7 +251,6 @@ extern char *v_name;
 extern char *v_text;
 extern skill_table *s_info;
 extern player_magic *m_info;
-extern feature_type *f_info;
 extern char *f_name;
 extern char *f_tag;
 extern object_kind *k_info;

@@ -49,55 +49,6 @@
 #include "defines.h"
 //#include "player-skill.h"
 
-/*!
- * @struct feature_state
- * @brief 地形状態変化指定構造体 / Feature state structure
- */
-typedef struct feature_state feature_state;
-
-struct feature_state
-{
-	FF_FLAGS_IDX action; /*!< 変化条件をFF_*のIDで指定 / Action (FF_*) */
-	STR_OFFSET result_tag; /*!< 変化先ID / Result (f_info ID) */
-	FEAT_IDX result; /*!< 変化先ID / Result (f_info ID) */
-};
-
-
-/*!
- * @struct feature_type
- * @brief 地形情報の構造体 / Information about terrain "features"
- */
-
-typedef struct feature_type feature_type;
-
-struct feature_type
-{
-	STR_OFFSET name;                /*!< 地形名参照のためのネームバッファオフセット値 / Name (offset) */
-	STR_OFFSET text;                /*!< 地形説明参照のためのネームバッファオフセット値 /  Text (offset) */
-	STR_OFFSET tag;                 /*!< 地形特性タグ参照のためのネームバッファオフセット値 /  Tag (offset) */
-
-	STR_OFFSET mimic_tag;
-	STR_OFFSET destroyed_tag;
-
-	FEAT_IDX mimic;               /*!< 未確定時の外形地形ID / Feature to mimic */
-	FEAT_IDX destroyed;           /*!< *破壊*に巻き込まれた時の地形移行先(未実装？) / Default destroyed state */
-
-	BIT_FLAGS flags[FF_FLAG_SIZE]; /*!< 地形の基本特性ビット配列 / Flags */
-
-	FEAT_PRIORITY priority;            /*!< 縮小表示で省略する際の表示優先度 / Map priority */
-
-	feature_state state[MAX_FEAT_STATES]; /*!< feature_state テーブル */
-
-	FEAT_SUBTYPE subtype;  /*!< 副特性値 */
-	FEAT_POWER power;    /*!< 地形強度 */
-
-	TERM_COLOR d_attr[F_LIT_MAX];   /*!< デフォルトの地形シンボルカラー / Default feature attribute */
-	SYMBOL_CODE d_char[F_LIT_MAX];   /*!< デフォルトの地形シンボルアルファベット / Default feature character */
-
-	TERM_COLOR x_attr[F_LIT_MAX];   /*!< 設定変更後の地形シンボルカラー / Desired feature attribute */
-	SYMBOL_CODE x_char[F_LIT_MAX];   /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
-};
-
 
 /*!
  * @struct object_kind
