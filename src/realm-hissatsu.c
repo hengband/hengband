@@ -3,6 +3,7 @@
 
 #include "cmd-spell.h"
 #include "cmd-basic.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "melee.h"
 #include "monsterrace-hook.h"

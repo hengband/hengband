@@ -42,6 +42,7 @@
 #include "util.h"
 
 #include "floor.h"
+#include "dungeon.h"
 #include "grid.h"
 #include "object-curse.h"
 #include "quest.h"

@@ -13,6 +13,7 @@
 #include "monster-spell.h"
 #include "spells.h"
 #include "object-flavor.h"
+#include "dungeon.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

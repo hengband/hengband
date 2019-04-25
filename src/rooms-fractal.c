@@ -4,6 +4,7 @@
 #include "rooms.h"
 #include "rooms-normal.h"
 #include "floor.h"
+#include "dungeon.h"
 
 /*!
 * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal current_floor_ptr->grid_array system

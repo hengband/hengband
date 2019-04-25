@@ -262,9 +262,7 @@ extern char *e_text;
 extern monster_race *r_info;
 extern char *r_name;
 extern char *r_text;
-extern dungeon_type *d_info;
-extern char *d_name;
-extern char *d_text;
+
 extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;

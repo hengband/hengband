@@ -21,6 +21,7 @@ hengband_SOURCES = \
 	\
 	core.c defines.h externs.h files.c files.h \
 	\
+	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h floor-generate.c floor-generate.h \
 	floor-save.h floor-save.c \
 	floor-streams.c floor-streams.h \

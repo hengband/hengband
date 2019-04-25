@@ -44,6 +44,7 @@
 #include "util.h"
 #include "bldg.h"
 
+#include "dungeon.h"
 #include "feature.h"
 #include "floor-generate.h"
 #include "trap.h"

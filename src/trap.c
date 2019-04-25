@@ -16,6 +16,7 @@
 #include "floor-save.h"
 #include "init.h"
 #include "files.h"
+#include "dungeon.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

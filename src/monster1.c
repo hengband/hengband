@@ -27,6 +27,7 @@
 #include "avatar.h"
 #include "wild.h"
 #include "spells.h"
+#include "dungeon.h"
 
 
 /*

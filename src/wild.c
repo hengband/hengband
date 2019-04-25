@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "dungeon.h"
 #include "floor.h"
 #include "wild.h"
 #include "world.h"

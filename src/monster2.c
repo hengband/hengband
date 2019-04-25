@@ -14,6 +14,7 @@
 #include "util.h"
 
 #include "cmd-pet.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "object-flavor.h"
 #include "monsterrace-hook.h"

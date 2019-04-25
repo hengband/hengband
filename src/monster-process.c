@@ -32,6 +32,7 @@
 #include "monster-spell.h"
 #include "monster-process.h"
 #include "monsterrace-hook.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "files.h"
 

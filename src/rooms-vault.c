@@ -9,6 +9,7 @@
 #include "monster.h"
 #include "feature.h"
 #include "floor.h"
+#include "dungeon.h"
 
 /*
 * This function creates a random vault that looks like a collection of bubbles.

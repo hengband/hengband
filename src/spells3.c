@@ -15,6 +15,7 @@
 #include "bldg.h"
 #include "util.h"
 
+#include "dungeon.h"
 #include "floor.h"
 #include "object-boost.h"
 #include "object-flavor.h"

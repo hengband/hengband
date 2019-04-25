@@ -17,6 +17,7 @@
 #include "object.h"
 
 #include "spells.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "grid.h"
 #include "object-boost.h"

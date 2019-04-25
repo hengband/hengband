@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "dungeon.h"
 #include "util.h"
 #include "birth.h"
 #include "selfinfo.h"

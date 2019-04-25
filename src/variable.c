@@ -579,15 +579,6 @@ monster_race *r_info;
 char *r_name;
 char *r_text;
 
-
-/*
- * The dungeon arrays
- */
-dungeon_type *d_info;
-char *d_name;
-char *d_text;
-
-
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
 

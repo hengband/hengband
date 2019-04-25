@@ -45,6 +45,7 @@
 #include "birth.h"
 #include "cmd-pet.h"
 #include "cmd-spell.h"
+#include "dungeon.h"
 #include "world.h"
 #include "player-effects.h"
 #include "player-status.h"

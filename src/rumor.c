@@ -4,6 +4,7 @@
 #include "files.h"
 #include "object-flavor.h"
 #include "artifact.h"
+#include "dungeon.h"
 
 /*
  * Display a rumor and apply its effects

@@ -102,6 +102,7 @@
 
 #include "grid.h"
 #include "rooms.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "floor-save.h"
 #include "floor-streams.h"

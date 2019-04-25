@@ -10,6 +10,7 @@
 #include "sort.h"
 #include "floor.h"
 #include "feature.h"
+#include "dungeon.h"
 
 
 

@@ -21,6 +21,7 @@
 #include "realm-hex.h"
 #include "cmd-pet.h"
 #include "cmd-spell.h"
+#include "dungeon.h"
 
 /*!
  * @var horror_desc

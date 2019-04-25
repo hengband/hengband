@@ -42,6 +42,7 @@
 #include "feature.h"
 #include "floor.h"
 #include "floor-generate.h"
+#include "dungeon.h"
 #include "grid.h"
 #include "rooms.h"
 

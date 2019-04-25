@@ -47,6 +47,7 @@
 #include "grid.h"
 #include "feature.h"
 #include "view-mainwindow.h"
+#include "dungeon.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */

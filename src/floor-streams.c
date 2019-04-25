@@ -20,6 +20,7 @@
 
 #include "artifact.h"
 #include "floor-generate.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "floor-streams.h"
 #include "grid.h"

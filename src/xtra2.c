@@ -33,6 +33,7 @@
 #include "view-mainwindow.h"
 #include "feature.h"
 #include "quest.h"
+#include "dungeon.h"
 
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /

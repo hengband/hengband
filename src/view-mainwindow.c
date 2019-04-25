@@ -28,6 +28,7 @@
 #include "object-flavor.h"
 
 #include "grid.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "feature.h"
 

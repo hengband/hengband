@@ -39,6 +39,7 @@
 #include "player-effects.h"
 #include "player-skill.h"
 
+#include "dungeon.h"
 #include "floor-events.h"
 #include "feature.h"
 #include "view-mainwindow.h"
