@@ -79,6 +79,17 @@ extern building_type building[MAX_BLDG];
 #define BACT_BROKEN_WEAPON          47
 #define MAX_BACT                    48
 
+ /*!
+  * @struct arena_type
+  * @brief 闘技場のモンスターエントリー構造体 / A structure type for arena entry
+  */
+typedef struct
+{
+	MONRACE_IDX r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
+	OBJECT_TYPE_VALUE tval;  /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */
+	OBJECT_SUBTYPE_VALUE sval;  /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
+} arena_type;
+
 extern const arena_type arena_info[MAX_ARENA_MONS + 2];
 extern void update_gambling_monsters(void);
 extern void do_cmd_bldg(void);
