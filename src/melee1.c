@@ -37,6 +37,7 @@
 #include "player-damage.h"
 #include "player-status.h"
 #include "view-mainwindow.h"
+#include "world.h"
 
 
  /*!

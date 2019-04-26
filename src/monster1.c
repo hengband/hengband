@@ -28,6 +28,7 @@
 #include "wild.h"
 #include "spells.h"
 #include "dungeon.h"
+#include "world.h"
 
 
 /*

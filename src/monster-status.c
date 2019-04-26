@@ -16,6 +16,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "view-mainwindow.h"
+#include "world.h"
 
 
 /*!

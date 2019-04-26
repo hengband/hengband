@@ -24,6 +24,7 @@
 
 #include "files.h"
 #include "floor.h"
+#include "world.h"
 
 #define MAX_LINELEN 1024
 

@@ -32,6 +32,7 @@
 #include "files.h"
 #include "birth.h"
 #include "player-skill.h"
+#include "world.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

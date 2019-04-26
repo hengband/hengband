@@ -23,7 +23,7 @@
 #include "floor-events.h"
 #include "floor-save.h"
 #include "files.h"
-
+#include "world.h"
 
 
 /*

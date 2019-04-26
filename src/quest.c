@@ -11,6 +11,7 @@
 #include "player-status.h"
 #include "artifact.h"
 #include "feature.h"
+#include "world.h"
 
 /*
  * Quest info

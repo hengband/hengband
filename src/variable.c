@@ -435,9 +435,6 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
  */
 FLOOR_IDX max_floor_id;
 
-world_type world;
-world_type *current_world_ptr = &world;
-
 /*
  * Sign for current process used in temporal files.
  * Actually it is the start time of current process.

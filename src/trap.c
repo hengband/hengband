@@ -17,6 +17,7 @@
 #include "init.h"
 #include "files.h"
 #include "dungeon.h"
+#include "world.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

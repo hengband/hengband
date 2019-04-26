@@ -1,4 +1,8 @@
 ﻿#include "angband.h"
+#include "world.h"
+
+world_type world;
+world_type *current_world_ptr = &world;
 
 /*!
  * @brief ゲーム時間が日中かどうかを返す /

@@ -9,6 +9,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "monster-spell.h"
+#include "world.h"
 
 
 /*!

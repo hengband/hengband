@@ -21,6 +21,7 @@
 #include "spells.h"
 #include "melee.h"
 #include "player-effects.h"
+#include "world.h"
 
 
 

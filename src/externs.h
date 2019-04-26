@@ -223,7 +223,6 @@ extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];
 extern const concptr angband_sound_name[SOUND_MAX];
 extern const concptr angband_music_basic_name[MUSIC_BASIC_MAX];
-extern world_type *current_world_ptr;
 extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;
 extern TOWN_IDX max_towns;

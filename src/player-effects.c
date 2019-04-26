@@ -36,6 +36,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "monster-spell.h"
+#include "world.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

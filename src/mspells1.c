@@ -52,6 +52,7 @@
 #include "monster.h"
 #include "monster-spell.h"
 #include "spells.h"
+#include "world.h"
 
 
 /*!

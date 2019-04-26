@@ -31,6 +31,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "mind.h"
+#include "world.h"
 
 #define MIN_STOCK 12
 

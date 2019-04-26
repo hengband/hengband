@@ -12,6 +12,7 @@
 #include "floor.h"
 #include "player-status.h"
 #include "files.h"
+#include "world.h"
 
 #ifdef WORLD_SCORE
 

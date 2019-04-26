@@ -7,6 +7,7 @@
 #include "artifact.h"
 #include "player-skill.h"
 #include "quest.h"
+#include "world.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/

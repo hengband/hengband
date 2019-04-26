@@ -163,6 +163,7 @@
 #include "spells.h"
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
+#include "world.h"
 
 
 

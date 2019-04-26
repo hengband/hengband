@@ -16,6 +16,7 @@
 #include "view-mainwindow.h"
 #include "quest.h"
 #include "floor.h"
+#include "world.h"
 
 
 static int num_more = 0;
