@@ -301,3 +301,4 @@ typedef struct {
 	 have_flag((F)->flags, FF_PERMANENT))
 
 extern floor_type *current_floor_ptr;
+extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];

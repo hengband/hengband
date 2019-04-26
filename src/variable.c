@@ -429,10 +429,6 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 	"ambush",
 };
 
-/*
- * The array of saved floors
- */
-saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 /*
  * Number of floor_id used from birth
