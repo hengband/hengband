@@ -88,8 +88,7 @@ extern const concptr color_names[16];
 extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 extern const concptr window_flag_desc[32];
-extern const martial_arts ma_blows[MAX_MA];
-extern const int monk_ave_damage[PY_MAX_LEVEL+1][3];
+
 extern const concptr game_inscriptions[];
 extern const kamae kamae_shurui[MAX_KAMAE];
 extern const kamae kata_shurui[MAX_KATA];

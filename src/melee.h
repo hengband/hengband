@@ -38,6 +38,9 @@ extern const concptr silly_attacks[MAX_SILLY_ATTACK];
 extern const concptr silly_attacks2[MAX_SILLY_ATTACK];
 #endif
 
+extern const martial_arts ma_blows[MAX_MA];
+extern const int monk_ave_damage[PY_MAX_LEVEL + 1][3];
+
 extern bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible);
 extern PERCENTAGE hit_chance(HIT_RELIABILITY chance, ARMOUR_CLASS ac);
 extern HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown);

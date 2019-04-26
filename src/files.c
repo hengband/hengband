@@ -49,6 +49,7 @@
 #include "player-skill.h"
 #include "floor.h"
 #include "dungeon.h"
+#include "melee.h"
 
 
 /*
