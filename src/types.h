@@ -1795,20 +1795,6 @@ struct monster_power
 };
 
 
-/* Border */
-typedef struct border_type border_type;
-struct border_type
-{
-	s16b north[MAX_WID];
-	s16b south[MAX_WID];
-	s16b east[MAX_HGT];
-	s16b west[MAX_HGT];
-	s16b north_west;
-	s16b north_east;
-	s16b south_west;
-	s16b south_east;
-};
-
 /*
  * A structure describing a town with
  * stores and buildings
