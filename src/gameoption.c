@@ -631,3 +631,37 @@ const option_type autosave_info[2] =
 	{ &autosave_t,      FALSE, 255, 0x02, 0x00,
 	"autosave_t",   _("一定ターン毎に自動セーブする", "Timed autosave") },
 };
+
+
+/*!
+ * @brief ビットセットからゲームオプションを展開する / Extract option variables from bit sets
+ * @return なし
+ */
+void extract_option_vars(void)
+{
+	int i;
+
+	for (i = 0; option_info[i].o_desc; i++)
+	{
+		int os = option_info[i].o_set;
+		int ob = option_info[i].o_bit;
+
+		/* Set the "default" options */
+		if (option_info[i].o_var)
+		{
+			/* Set */
+			if (option_flag[os] & (1L << ob))
+			{
+				/* Set */
+				(*option_info[i].o_var) = TRUE;
+			}
+
+			/* Clear */
+			else
+			{
+				/* Clear */
+				(*option_info[i].o_var) = FALSE;
+			}
+		}
+	}
+}

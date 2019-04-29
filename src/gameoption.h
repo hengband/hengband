@@ -216,3 +216,5 @@ struct option_type
 extern const option_type option_info[];
 extern const option_type cheat_info[CHEAT_MAX];
 extern const option_type autosave_info[2];
+
+extern void extract_option_vars(void);

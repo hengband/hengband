@@ -380,7 +380,6 @@ extern void do_cmd_time(void);
 extern void do_cmd_suicide(void);
 
 /* dungeon.c */
-extern void extract_option_vars(void);
 extern void play_game(bool new_game);
 extern s32b turn_real(s32b hoge);
 extern void prevent_turn_overflow(void);

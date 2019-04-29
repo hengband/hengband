@@ -5239,40 +5239,6 @@ static void load_all_pref_files(void)
 	autopick_load_pref(FALSE);
 }
 
-
-/*!
- * @brief ビットセットからゲームオプションを展開する / Extract option variables from bit sets
- * @return なし
- */
-void extract_option_vars(void)
-{
-	int i;
-
-	for (i = 0; option_info[i].o_desc; i++)
-	{
-		int os = option_info[i].o_set;
-		int ob = option_info[i].o_bit;
-
-		/* Set the "default" options */
-		if (option_info[i].o_var)
-		{
-			/* Set */
-			if (option_flag[os] & (1L << ob))
-			{
-				/* Set */
-				(*option_info[i].o_var) = TRUE;
-			}
-
-			/* Clear */
-			else
-			{
-				/* Clear */
-				(*option_info[i].o_var) = FALSE;
-			}
-		}
-	}
-}
-
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @return なし
