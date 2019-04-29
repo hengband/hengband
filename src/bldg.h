@@ -96,3 +96,4 @@ extern void do_cmd_bldg(void);
 
 extern void clear_bldg(int min_row, int max_row);
 extern void determine_today_mon(bool conv_old);
+extern void determine_bounty_uniques(void);

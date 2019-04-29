@@ -5273,55 +5273,6 @@ void extract_option_vars(void)
 	}
 }
 
-
-/*!
- * @brief 賞金首となるユニークを確定する / Determine bounty uniques
- * @return なし
- */
-void determine_bounty_uniques(void)
-{
-	int i, j;
-	MONRACE_IDX tmp;
-	monster_race *r_ptr;
-
-	get_mon_num_prep(NULL, NULL);
-	for (i = 0; i < MAX_KUBI; i++)
-	{
-		while (1)
-		{
-			current_world_ptr->bounty_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
-			r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
-
-			if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
-
-			if (!(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON))) continue;
-
-			if (r_ptr->rarity > 100) continue;
-
-			if (no_questor_or_bounty_uniques(current_world_ptr->bounty_r_idx[i])) continue;
-
-			for (j = 0; j < i; j++)
-				if (current_world_ptr->bounty_r_idx[i] == current_world_ptr->bounty_r_idx[j]) break;
-
-			if (j == i) break;
-		}
-	}
-
-	/* Sort them */
-	for (i = 0; i < MAX_KUBI - 1; i++)
-	{
-		for (j = i; j < MAX_KUBI; j++)
-		{
-			if (r_info[current_world_ptr->bounty_r_idx[i]].level > r_info[current_world_ptr->bounty_r_idx[j]].level)
-			{
-				tmp = current_world_ptr->bounty_r_idx[i];
-				current_world_ptr->bounty_r_idx[i] = current_world_ptr->bounty_r_idx[j];
-				current_world_ptr->bounty_r_idx[j] = tmp;
-			}
-		}
-	}
-}
-
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
  * @return なし
