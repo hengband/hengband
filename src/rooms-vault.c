@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "util.h"
+#include "rooms-vault.h"
 
 #include "floor-generate.h"
 #include "grid.h"
@@ -10,6 +11,13 @@
 #include "feature.h"
 #include "floor.h"
 #include "dungeon.h"
+
+/*
+ * The vault generation arrays
+ */
+vault_type *v_info;
+char *v_name;
+char *v_text;
 
 /*
 * This function creates a random vault that looks like a collection of bubbles.

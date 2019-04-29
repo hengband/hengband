@@ -13,6 +13,7 @@
 #include "floor.h"
 #include "bldg.h"
 #include "world.h"
+#include "rooms-vault.h"
 
 dungeon_grid letter[255];
 

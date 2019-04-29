@@ -593,25 +593,6 @@ struct monster_race
 };
 
 
-
-/*
- * Information about "vault generation"
- */
-
-typedef struct vault_type vault_type;
-
-struct vault_type
-{
-	STR_OFFSET name;	/* Name (offset) */
-	STR_OFFSET text;	/* Text (offset) */
-
-	ROOM_IDX typ;		/* Vault type */
-	PROB rat;			/* Vault rating (unused) */
-	POSITION hgt;		/* Vault height */
-	POSITION wid;		/* Vault width */
-};
-
-
 /*
  * Information about "skill"
  */

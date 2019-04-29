@@ -532,14 +532,6 @@ const player_magic *mp_ptr;
  */
 birther previous_char;
 
-
-/*
- * The vault generation arrays
- */
-vault_type *v_info;
-char *v_name;
-char *v_text;
-
 /*
  * The skill table
  */
