@@ -2,12 +2,27 @@
 
 extern const concptr exp_level_str[5];
 
+/*
+ * Information about "skill"
+ */
+
+typedef struct skill_table skill_table;
+
+struct skill_table
+{
+	SUB_EXP w_start[5][64];	  /* start weapon exp */
+	SUB_EXP w_max[5][64];        /* max weapon exp */
+	SUB_EXP s_start[10];	  /* start skill */
+	SUB_EXP s_max[10];           /* max skill */
+};
+
+extern skill_table *s_info;
+
 #define GINOU_SUDE      0
 #define GINOU_NITOURYU  1
 #define GINOU_RIDING    2
 #define GINOU_SHIELD    3
 #define GINOU_TEMPMAX   4
-
 
 /* Proficiency level */
 #define EXP_LEVEL_UNSKILLED 0

@@ -243,7 +243,6 @@ extern const player_class *cp_ptr;
 extern const player_seikaku *ap_ptr;
 extern const player_magic *mp_ptr;
 extern birther previous_char;
-extern skill_table *s_info;
 extern player_magic *m_info;
 extern char *f_name;
 extern char *f_tag;

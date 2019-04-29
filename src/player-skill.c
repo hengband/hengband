@@ -1,6 +1,11 @@
 ﻿#include "angband.h"
 #include "player-skill.h"
 
+/*
+ * The skill table
+ */
+skill_table *s_info;
+
 /*!
  * @brief 技能値到達表記テーブル
  */

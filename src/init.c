@@ -49,6 +49,7 @@
 #include "floor.h"
 #include "dungeon.h"
 #include "rooms-vault.h"
+#include "player-skill.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

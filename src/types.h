@@ -594,21 +594,6 @@ struct monster_race
 
 
 /*
- * Information about "skill"
- */
-
-typedef struct skill_table skill_table;
-
-struct skill_table
-{
-	SUB_EXP w_start[5][64];	  /* start weapon exp */
-	SUB_EXP w_max[5][64];        /* max weapon exp */
-	SUB_EXP s_start[10];	  /* start skill */
-	SUB_EXP s_max[10];           /* max skill */
-};
-
-
-/*
  * A single "grid" in a Cave
  *
  * Note that several aspects of the code restrict the actual current_floor_ptr->grid_array

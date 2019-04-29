@@ -533,11 +533,6 @@ const player_magic *mp_ptr;
 birther previous_char;
 
 /*
- * The skill table
- */
-skill_table *s_info;
-
-/*
  * The magic info
  */
 player_magic *m_info;
