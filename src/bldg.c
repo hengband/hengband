@@ -30,6 +30,7 @@
 
 #include "avatar.h"
 #include "bldg.h"
+#include "dungeon.h"
 #include "mutation.h"
 #include "quest.h"
 #include "artifact.h"
@@ -4200,3 +4201,47 @@ void do_cmd_bldg(void)
 	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
+
+
+/*!
+ * @brief 今日の賞金首を確定する / Determine today's bounty monster
+ * @return なし
+ * @note conv_old is used if loaded 0.0.3 or older save file
+ */
+void determine_today_mon(bool conv_old)
+{
+	int max_dl = 3, i;
+	bool old_inside_battle = p_ptr->inside_battle;
+	monster_race *r_ptr;
+
+	if (!conv_old)
+	{
+		for (i = 0; i < max_d_idx; i++)
+		{
+			if (max_dlv[i] < d_info[i].mindepth) continue;
+			if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
+		}
+	}
+	else max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
+
+	p_ptr->inside_battle = TRUE;
+	get_mon_num_prep(NULL, NULL);
+
+	while (1)
+	{
+		today_mon = get_mon_num(max_dl);
+		r_ptr = &r_info[today_mon];
+
+		if (r_ptr->flags1 & RF1_UNIQUE) continue;
+		if (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)) continue;
+		if (r_ptr->flags2 & RF2_MULTIPLY) continue;
+		if ((r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) continue;
+		if (r_ptr->level < MIN(max_dl / 2, 40)) continue;
+		if (r_ptr->rarity > 10) continue;
+		break;
+	}
+
+	p_ptr->today_mon = 0;
+	p_ptr->inside_battle = old_inside_battle;
+}
+

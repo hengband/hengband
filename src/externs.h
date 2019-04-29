@@ -382,7 +382,6 @@ extern void do_cmd_suicide(void);
 /* dungeon.c */
 extern void extract_option_vars(void);
 extern void determine_bounty_uniques(void);
-extern void determine_today_mon(bool conv_old);
 extern void play_game(bool new_game);
 extern s32b turn_real(s32b hoge);
 extern void prevent_turn_overflow(void);
