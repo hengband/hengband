@@ -811,8 +811,8 @@ static void wr_extra(void)
 
 
 	/* Write the "object seeds" */
-	wr_u32b(seed_flavor);
-	wr_u32b(seed_town);
+	wr_u32b(current_world_ptr->seed_flavor);
+	wr_u32b(current_world_ptr->seed_town);
 
 
 	/* Special stuff */

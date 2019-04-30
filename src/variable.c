@@ -91,9 +91,6 @@ bool character_xtra;		/* The game is in an icky startup mode */
 
 bool creating_savefile;		/* New savefile is currently created */
 
-u32b seed_flavor;		/* Hack -- consistent object colors */
-u32b seed_town;			/* Hack -- consistent town layout */
-
 s16b command_cmd;		/* Current "Angband Command" */
 
 COMMAND_ARG command_arg;	/*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */

@@ -4634,7 +4634,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			else if (prefix(b + 1, "RANDOM"))
 			{
 				/* "RANDOM" uses a special parameter to determine the number of the quest */
-				sprintf(tmp, "%d", (int)(seed_town%atoi(b + 7)));
+				sprintf(tmp, "%d", (int)(current_world_ptr->seed_town%atoi(b + 7)));
 				v = tmp;
 			}
 

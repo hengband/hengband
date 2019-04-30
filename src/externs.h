@@ -129,8 +129,6 @@ extern bool character_saved;
 extern bool character_icky;
 extern bool character_xtra;
 extern bool creating_savefile;
-extern u32b seed_flavor;
-extern u32b seed_town;
 extern COMMAND_CODE command_cmd;
 extern COMMAND_ARG command_arg;
 extern s16b command_rep;

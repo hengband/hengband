@@ -5418,10 +5418,10 @@ void play_game(bool new_game)
 		write_level = TRUE;
 
 		/* Hack -- seed for flavors */
-		seed_flavor = randint0(0x10000000);
+		current_world_ptr->seed_flavor = randint0(0x10000000);
 
 		/* Hack -- seed for town layout */
-		seed_town = randint0(0x10000000);
+		current_world_ptr->seed_town = randint0(0x10000000);
 
 		/* Roll up a new character */
 		player_birth();

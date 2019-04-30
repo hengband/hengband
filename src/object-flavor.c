@@ -21,6 +21,7 @@
 #include "trap.h"
 #include "snipe.h"
 #include "files.h"
+#include "world.h"
 
 /*!
  * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly 
@@ -297,7 +298,7 @@ void flavor_init(void)
 	Rand_state_backup(state_backup);
 
 	/* Hack -- Induce consistant flavors */
-	Rand_state_set(seed_flavor);
+	Rand_state_set(current_world_ptr->seed_flavor);
 
 
 	/* Initialize flavor index of each object by itself */

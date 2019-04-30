@@ -12,6 +12,10 @@ typedef struct {
 	MONRACE_IDX bounty_r_idx[MAX_KUBI];
 
 	u32b play_time; /*!< 実プレイ時間 */
+
+	u32b seed_flavor;		/* Hack -- consistent object colors */
+	u32b seed_town;			/* Hack -- consistent town layout */
+
 } world_type;
 
 extern bool is_daytime(void);

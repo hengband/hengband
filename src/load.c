@@ -2246,8 +2246,8 @@ static void rd_extra(void)
 
 
 	/* Hack -- the two "special seeds" */
-	rd_u32b(&seed_flavor);
-	rd_u32b(&seed_town);
+	rd_u32b(&current_world_ptr->seed_flavor);
+	rd_u32b(&current_world_ptr->seed_town);
 
 
 	/* Special stuff */
