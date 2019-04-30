@@ -17,7 +17,7 @@
 * @param o_ptr アイテムの情報参照ポインタ
 * @return 破損するならばTRUEを返す
 * Note that amulets, rods, and high-level spell books are immune
-* to "inventory damage" of any kind.  Also sling ammo and shovels.
+* to "p_ptr->inventory_list damage" of any kind.  Also sling ammo and shovels.
 * Does a given class of objects (usually) hate acid?
 * Note that acid can either melt or corrode something.
 */
@@ -276,7 +276,7 @@ int inven_damage(inven_func typ, int perc)
 	/* Scan through the slots backwards */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Hack -- for now, skip artifacts */
@@ -306,7 +306,7 @@ int inven_damage(inven_func typ, int perc)
 #endif
 
 #ifdef JP
-				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 					msg_print("やりやがったな！");
 				else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 				{
@@ -353,16 +353,16 @@ static bool acid_minus_ac(void)
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	GAME_TEXT o_name[MAX_NLEN];
 
-	/* Pick a (possibly empty) inventory slot */
+	/* Pick a (possibly empty) p_ptr->inventory_list slot */
 	switch (randint1(7))
 	{
-	case 1: o_ptr = &inventory[INVEN_RARM]; break;
-	case 2: o_ptr = &inventory[INVEN_LARM]; break;
-	case 3: o_ptr = &inventory[INVEN_BODY]; break;
-	case 4: o_ptr = &inventory[INVEN_OUTER]; break;
-	case 5: o_ptr = &inventory[INVEN_HANDS]; break;
-	case 6: o_ptr = &inventory[INVEN_HEAD]; break;
-	case 7: o_ptr = &inventory[INVEN_FEET]; break;
+	case 1: o_ptr = &p_ptr->inventory_list[INVEN_RARM]; break;
+	case 2: o_ptr = &p_ptr->inventory_list[INVEN_LARM]; break;
+	case 3: o_ptr = &p_ptr->inventory_list[INVEN_BODY]; break;
+	case 4: o_ptr = &p_ptr->inventory_list[INVEN_OUTER]; break;
+	case 5: o_ptr = &p_ptr->inventory_list[INVEN_HANDS]; break;
+	case 6: o_ptr = &p_ptr->inventory_list[INVEN_HEAD]; break;
+	case 7: o_ptr = &p_ptr->inventory_list[INVEN_FEET]; break;
 	}
 
 	if (!o_ptr->k_idx) return (FALSE);

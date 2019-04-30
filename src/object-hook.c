@@ -237,7 +237,7 @@ bool item_tester_hook_use(object_type *o_ptr)
 		/* HACK - only items from the equipment can be activated */
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			if (&inventory[i] == o_ptr)
+			if (&p_ptr->inventory_list[i] == o_ptr)
 			{
 				object_flags(o_ptr, flgs);
 

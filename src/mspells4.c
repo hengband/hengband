@@ -198,7 +198,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 		dispel_player();
 		if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
 
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("やりやがったな！", ""));
 		else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 		{
@@ -2242,7 +2242,7 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("くっそ～", ""));
 		else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 		{
@@ -4124,8 +4124,8 @@ HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
 	int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
 	object_type *o_ptr = NULL;
 
-	if (has_melee_weapon(INVEN_RARM)) o_ptr = &inventory[INVEN_RARM];
-	else if (has_melee_weapon(INVEN_LARM)) o_ptr = &inventory[INVEN_LARM];
+	if (has_melee_weapon(INVEN_RARM)) o_ptr = &p_ptr->inventory_list[INVEN_RARM];
+	else if (has_melee_weapon(INVEN_LARM)) o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 
 	if (o_ptr)
 	{

@@ -1422,10 +1422,10 @@ static bool wr_savefile_new(void)
 	}
 
 
-	/* Write the inventory */
+	/* Write the p_ptr->inventory_list */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Dump index */

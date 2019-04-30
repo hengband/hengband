@@ -1299,7 +1299,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 }
 
 /*!
- * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the inventory of the "Home"
+ * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the p_ptr->inventory_list of the "Home"
  * @param st_ptr 店舗の参照ポインタ
  * @param o_ptr アイテムオブジェクト参照ポインタ
  * @return なし
@@ -2391,16 +2391,16 @@ static void rd_extra(void)
 
 
 /*!
- * @brief プレイヤーの所持品情報を読み込む / Read the player inventory
+ * @brief プレイヤーの所持品情報を読み込む / Read the player p_ptr->inventory_list
  * @return なし
  * @details
- * Note that the inventory changed in Angband 2.7.4.  Two extra
+ * Note that the p_ptr->inventory_list changed in Angband 2.7.4.  Two extra
  * pack slots were added and the equipment was rearranged.  Note
  * that these two features combine when parsing old save-files, in
  * which items from the old "aux" slot are "carried", perhaps into
- * one of the two new "inventory" slots.
+ * one of the two new "p_ptr->inventory_list" slots.
  *
- * Note that the inventory is "re-sorted" later by "dungeon()".
+ * Note that the p_ptr->inventory_list is "re-sorted" later by "dungeon()".
  */
 static errr rd_inventory(void)
 {
@@ -2439,7 +2439,7 @@ static errr rd_inventory(void)
 		if (n >= INVEN_RARM)
 		{
 			q_ptr->marked |= OM_TOUCHED;
-			object_copy(&inventory[n], q_ptr);
+			object_copy(&p_ptr->inventory_list[n], q_ptr);
 
 			/* Add the weight */
 			p_ptr->total_weight += (q_ptr->number * q_ptr->weight);
@@ -2451,20 +2451,20 @@ static errr rd_inventory(void)
 		/* Warning -- backpack is full */
 		else if (inven_cnt == INVEN_PACK)
 		{
-			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory!"));
+			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the p_ptr->inventory_list!"));
 
 			/* Fail */
 			return (54);
 		}
 
-		/* Carry inventory */
+		/* Carry p_ptr->inventory_list */
 		else
 		{
 			/* Get a slot */
 			n = slot++;
 
 			q_ptr->marked |= OM_TOUCHED;
-			object_copy(&inventory[n], q_ptr);
+			object_copy(&p_ptr->inventory_list[n], q_ptr);
 
 			/* Add the weight */
 			p_ptr->total_weight += (q_ptr->number * q_ptr->weight);
@@ -3855,10 +3855,10 @@ static errr rd_savefile_new_aux(void)
 	}
 
 
-	/* Read the inventory */
+	/* Read the p_ptr->inventory_list */
 	if (rd_inventory())
 	{
-		note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
+		note(_("持ち物情報を読み込むことができません", "Unable to read p_ptr->inventory_list"));
 		return (21);
 	}
 

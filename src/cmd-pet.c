@@ -595,9 +595,9 @@ void do_cmd_pet(void)
 	if (p_ptr->riding)
 	{
 		if ((p_ptr->migite && (empty_hands(FALSE) == EMPTY_HAND_LARM) &&
-			object_allow_two_hands_wielding(&inventory[INVEN_RARM])) ||
+			object_allow_two_hands_wielding(&p_ptr->inventory_list[INVEN_RARM])) ||
 			(p_ptr->hidarite && (empty_hands(FALSE) == EMPTY_HAND_RARM) &&
-				object_allow_two_hands_wielding(&inventory[INVEN_LARM])))
+				object_allow_two_hands_wielding(&p_ptr->inventory_list[INVEN_LARM])))
 		{
 			if (p_ptr->pet_extra_flags & PF_RYOUTE)
 			{

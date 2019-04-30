@@ -48,7 +48,7 @@ void curse_equipment(PERCENTAGE chance, PERCENTAGE heavy_chance)
 	int curse_power = 0;
 	BIT_FLAGS new_curse;
 	BIT_FLAGS oflgs[TR_FLAG_SIZE];
-	object_type *o_ptr = &inventory[INVEN_RARM + randint0(12)];
+	object_type *o_ptr = &p_ptr->inventory_list[INVEN_RARM + randint0(12)];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	if (randint1(100) > chance) return;

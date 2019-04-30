@@ -1531,7 +1531,7 @@ static void prt_frame_extra(void)
 
 
 /*!
- * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
+ * @brief サブウィンドウに所持品一覧を表示する / Hack -- display p_ptr->inventory_list in sub-windows
  * @return なし
  */
 static void fix_inven(void)
@@ -1552,7 +1552,7 @@ static void fix_inven(void)
 		/* Activate */
 		Term_activate(angband_term[j]);
 
-		/* Display inventory */
+		/* Display p_ptr->inventory_list */
 		display_inven();
 		Term_fresh();
 		Term_activate(old);
@@ -2260,7 +2260,7 @@ static void window_stuff(void)
 	/* Nothing to do */
 	if (!p_ptr->window) return;
 
-	/* Display inventory */
+	/* Display p_ptr->inventory_list */
 	if (p_ptr->window & (PW_INVEN))
 	{
 		p_ptr->window &= ~(PW_INVEN);

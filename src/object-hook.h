@@ -52,17 +52,17 @@ extern bool can_player_destroy_object(object_type *o_ptr);
 extern bool object_is_quest_target(object_type *o_ptr);
 
 /*
- * Determine if a given inventory item is "aware"
+ * Determine if a given p_ptr->inventory_list item is "aware"
  */
 #define object_is_aware(T) (k_info[(T)->k_idx].aware)
 
  /*
-  * Determine if a given inventory item is "tried"
+  * Determine if a given p_ptr->inventory_list item is "tried"
   */
 #define object_is_tried(T) (k_info[(T)->k_idx].tried)
 
  /*
-  * Determine if a given inventory item is "known"
+  * Determine if a given p_ptr->inventory_list item is "known"
   * Test One -- Check for special "known" tag
   * Test Two -- Check for "Easy Know" + "Aware"
   */

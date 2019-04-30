@@ -456,12 +456,12 @@
 #define INVEN_AMMO     23
 
 /*
- * Total number of inventory slots (hard-coded).
+ * Total number of p_ptr->inventory_list slots (hard-coded).
  */
 #define INVEN_TOTAL     36
 
 /*
- * Fake inventory slot for selecting force (hard-coded).
+ * Fake p_ptr->inventory_list slot for selecting force (hard-coded).
  */
 #define INVEN_FORCE     1111
 
@@ -1061,7 +1061,7 @@
  * The values for the "tval" field of various objects.
  *
  * This value is the primary means by which items are sorted in the
- * player inventory, followed by "sval" and "cost".
+ * player p_ptr->inventory_list, followed by "sval" and "cost".
  *
  * Note that a "BOW" with tval = 19 and sval S = 10*N+P takes a missile
  * weapon with tval = 16+N, and does (xP) damage when so combined.  This

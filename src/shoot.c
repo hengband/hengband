@@ -204,7 +204,7 @@ static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_typ
 			}
 			if (mult < 30) mult = 30;
 			if ((o_ptr->name1 == ART_BARD_ARROW) && (m_ptr->r_idx == MON_SMAUG) &&
-				(inventory[INVEN_BOW].name1 == ART_BARD))
+				(p_ptr->inventory_list[INVEN_BOW].name1 == ART_BARD))
 				mult *= 5;
 		}
 
@@ -378,7 +378,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	/* Access the item (if in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 	else
 	{
@@ -491,7 +491,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 		/* Single object */
 		q_ptr->number = 1;
 
-		/* Reduce and describe inventory */
+		/* Reduce and describe p_ptr->inventory_list */
 		if (item >= 0)
 		{
 			inven_item_increase(item, -1);
@@ -965,7 +965,7 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 HIT_POINT critical_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
 	int i, k;
-	object_type *j_ptr = &inventory[INVEN_BOW];
+	object_type *j_ptr = &p_ptr->inventory_list[INVEN_BOW];
 
 	/* Extract "shot" power */
 	i = p_ptr->to_h_b + plus_ammo;
@@ -1137,7 +1137,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
 HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
 	HIT_POINT i;
-	object_type *j_ptr = &inventory[INVEN_BOW];
+	object_type *j_ptr = &p_ptr->inventory_list[INVEN_BOW];
 
 	/* Extract "shot" power */
 	i = p_ptr->to_h_b + plus_ammo;

@@ -4593,7 +4593,7 @@ void request_command(int shopping)
 	{
 		concptr s;
 
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* No inscription */

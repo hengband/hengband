@@ -313,7 +313,7 @@ bool wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool m
 * Handle "unstacking" in a logical manner.
 * For simplicity, you cannot use a stack of items from the
 * ground.  This would require too much nasty code.
-* There are no wands which can "destroy" themselves, in the inventory
+* There are no wands which can "destroy" themselves, in the p_ptr->inventory_list
 * or on the ground, so we can ignore this possibility.  Note that this
 * required giving "wand of wonder" the ability to ignore destruction
 * by electric balls.
@@ -334,7 +334,7 @@ void do_cmd_aim_wand_aux(INVENTORY_IDX item)
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 
 	/* Get the item (on the floor) */

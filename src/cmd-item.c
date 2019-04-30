@@ -39,21 +39,21 @@
 
 
 /*!
- * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory
+ * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display p_ptr->inventory_list
  * @return なし 
  */
 void do_cmd_inven(void)
 {
 	char out_val[160];
 
-	/* Note that we are in "inventory" mode */
+	/* Note that we are in "p_ptr->inventory_list" mode */
 	command_wrk = FALSE;
 
-	/* Note that we are in "inventory" mode */
+	/* Note that we are in "p_ptr->inventory_list" mode */
 	if (easy_floor) command_wrk = (USE_INVEN);
 	screen_save();
 
-	/* Display the inventory */
+	/* Display the p_ptr->inventory_list */
 	(void)show_inven(0, USE_FULL);
 
 #ifdef JP
@@ -206,8 +206,8 @@ void do_cmd_wield(void)
 		else if (has_melee_weapon(INVEN_LARM)) slot = INVEN_RARM;
 
 		/* Both arms are already used by non-weapon */
-		else if (inventory[INVEN_RARM].k_idx && !object_is_melee_weapon(&inventory[INVEN_RARM]) &&
-		         inventory[INVEN_LARM].k_idx && !object_is_melee_weapon(&inventory[INVEN_LARM]))
+		else if (p_ptr->inventory_list[INVEN_RARM].k_idx && !object_is_melee_weapon(&p_ptr->inventory_list[INVEN_RARM]) &&
+		         p_ptr->inventory_list[INVEN_LARM].k_idx && !object_is_melee_weapon(&p_ptr->inventory_list[INVEN_LARM]))
 		{
 			/* Restrict the choices */
 			item_tester_hook = item_tester_hook_mochikae;
@@ -230,13 +230,13 @@ void do_cmd_wield(void)
 			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_RARM;
 		}
 
-		else if (!inventory[INVEN_RARM].k_idx && has_melee_weapon(INVEN_LARM))
+		else if (!p_ptr->inventory_list[INVEN_RARM].k_idx && has_melee_weapon(INVEN_LARM))
 		{
 			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_LARM;
 		}
 
 		/* Both arms are already used */
-		else if (inventory[INVEN_LARM].k_idx && inventory[INVEN_RARM].k_idx)
+		else if (p_ptr->inventory_list[INVEN_LARM].k_idx && p_ptr->inventory_list[INVEN_RARM].k_idx)
 		{
 			/* Restrict the choices */
 			item_tester_hook = item_tester_hook_mochikae;
@@ -254,7 +254,7 @@ void do_cmd_wield(void)
 	/* Rings */
 	case TV_RING:
 		/* Choose a ring slot */
-		if (inventory[INVEN_LEFT].k_idx && inventory[INVEN_RIGHT].k_idx)
+		if (p_ptr->inventory_list[INVEN_LEFT].k_idx && p_ptr->inventory_list[INVEN_RIGHT].k_idx)
 		{
 			q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
 		}
@@ -277,9 +277,9 @@ void do_cmd_wield(void)
 	}
 
 	/* Prevent wielding into a cursed slot */
-	if (object_is_cursed(&inventory[slot]))
+	if (object_is_cursed(&p_ptr->inventory_list[slot]))
 	{
-		object_desc(o_name, &inventory[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		object_desc(o_name, &p_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
 		msg_format("%s%sは呪われているようだ。", describe_use(slot) , o_name );
@@ -316,10 +316,10 @@ void do_cmd_wield(void)
 		if (!get_check(dummy)) return;
 	}
 
-	if (need_switch_wielding && !object_is_cursed(&inventory[need_switch_wielding]))
+	if (need_switch_wielding && !object_is_cursed(&p_ptr->inventory_list[need_switch_wielding]))
 	{
-		object_type *slot_o_ptr = &inventory[slot];
-		object_type *switch_o_ptr = &inventory[need_switch_wielding];
+		object_type *slot_o_ptr = &p_ptr->inventory_list[slot];
+		object_type *switch_o_ptr = &p_ptr->inventory_list[need_switch_wielding];
 		object_type object_tmp;
 		object_type *otmp_ptr = &object_tmp;
 		GAME_TEXT switch_name[MAX_NLEN];
@@ -370,7 +370,7 @@ void do_cmd_wield(void)
 	}
 
 	/* Access the wield slot */
-	o_ptr = &inventory[slot];
+	o_ptr = &p_ptr->inventory_list[slot];
 
 	/* Take off existing item */
 	if (o_ptr->k_idx)
@@ -464,12 +464,12 @@ void kamaenaoshi(INVENTORY_IDX item)
 	{
 		if (has_melee_weapon(INVEN_LARM))
 		{
-			o_ptr = &inventory[INVEN_LARM];
+			o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 			object_desc(o_name, o_ptr, 0);
 
 			if (!object_is_cursed(o_ptr))
 			{
-				new_o_ptr = &inventory[INVEN_RARM];
+				new_o_ptr = &p_ptr->inventory_list[INVEN_RARM];
 				object_copy(new_o_ptr, o_ptr);
 				p_ptr->total_weight += o_ptr->weight;
 				inven_item_increase(INVEN_LARM, -((int)o_ptr->number));
@@ -489,7 +489,7 @@ void kamaenaoshi(INVENTORY_IDX item)
 	}
 	else if (item == INVEN_LARM)
 	{
-		o_ptr = &inventory[INVEN_RARM];
+		o_ptr = &p_ptr->inventory_list[INVEN_RARM];
 		if (o_ptr->k_idx) object_desc(o_name, o_ptr, 0);
 
 		if (has_melee_weapon(INVEN_RARM))
@@ -499,7 +499,7 @@ void kamaenaoshi(INVENTORY_IDX item)
 		}
 		else if (!(empty_hands(FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
 		{
-			new_o_ptr = &inventory[INVEN_LARM];
+			new_o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 			object_copy(new_o_ptr, o_ptr);
 			p_ptr->total_weight += o_ptr->weight;
 			inven_item_increase(INVEN_RARM, -((int)o_ptr->number));
@@ -960,7 +960,7 @@ static void do_cmd_refill_lamp(void)
 	take_turn(p_ptr, 50);
 
 	/* Access the lantern */
-	j_ptr = &inventory[INVEN_LITE];
+	j_ptr = &p_ptr->inventory_list[INVEN_LITE];
 
 	/* Refuel */
 	j_ptr->xtra4 += o_ptr->xtra4;
@@ -1027,7 +1027,7 @@ static void do_cmd_refill_torch(void)
 	take_turn(p_ptr, 50);
 
 	/* Access the primary torch */
-	j_ptr = &inventory[INVEN_LITE];
+	j_ptr = &p_ptr->inventory_list[INVEN_LITE];
 
 	/* Refuel */
 	j_ptr->xtra4 += o_ptr->xtra4 + 5;
@@ -1087,7 +1087,7 @@ void do_cmd_refill(void)
 	object_type *o_ptr;
 
 	/* Get the light */
-	o_ptr = &inventory[INVEN_LITE];
+	o_ptr = &p_ptr->inventory_list[INVEN_LITE];
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
@@ -1593,7 +1593,7 @@ void do_cmd_use(void)
 		case TV_ARROW:
 		case TV_BOLT:
 		{
-			exe_fire(item, &inventory[INVEN_BOW], SP_NONE);
+			exe_fire(item, &p_ptr->inventory_list[INVEN_BOW], SP_NONE);
 			break;
 		}
 

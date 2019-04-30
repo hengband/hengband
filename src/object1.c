@@ -1297,7 +1297,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 
 /*!
  * @brief オブジェクト選択時の選択アルファベットラベルを返す /
- * Convert an inventory index into a one character label
+ * Convert an p_ptr->inventory_list index into a one character label
  * @param i プレイヤーの所持/装備オブジェクトID
  * @return 対応するアルファベット
  * @details Note that the label does NOT distinguish inven/equip.
@@ -1328,7 +1328,7 @@ INVENTORY_IDX label_to_inven(int c)
 	if ((i < 0) || (i > INVEN_PACK)) return (-1);
 
 	/* Empty slots can never be chosen */
-	if (!inventory[i].k_idx) return (-1);
+	if (!p_ptr->inventory_list[i].k_idx) return (-1);
 
 	/* Return the index */
 	return (i);
@@ -1368,7 +1368,7 @@ INVENTORY_IDX label_to_equip(int c)
 	if (select_ring_slot) return is_ring_slot(i) ? i : -1;
 
 	/* Empty slots can never be chosen */
-	if (!inventory[i].k_idx) return (-1);
+	if (!p_ptr->inventory_list[i].k_idx) return (-1);
 
 	/* Return the index */
 	return (i);
@@ -1392,8 +1392,8 @@ s16b wield_slot(object_type *o_ptr)
 		case TV_POLEARM:
 		case TV_SWORD:
 		{
-			if (!inventory[INVEN_RARM].k_idx) return (INVEN_RARM);
-			if (inventory[INVEN_LARM].k_idx) return (INVEN_RARM);
+			if (!p_ptr->inventory_list[INVEN_RARM].k_idx) return (INVEN_RARM);
+			if (p_ptr->inventory_list[INVEN_LARM].k_idx) return (INVEN_RARM);
 			return (INVEN_LARM);
 		}
 
@@ -1401,8 +1401,8 @@ s16b wield_slot(object_type *o_ptr)
 		case TV_CARD:
 		case TV_SHIELD:
 		{
-			if (!inventory[INVEN_LARM].k_idx) return (INVEN_LARM);
-			if (inventory[INVEN_RARM].k_idx) return (INVEN_LARM);
+			if (!p_ptr->inventory_list[INVEN_LARM].k_idx) return (INVEN_LARM);
+			if (p_ptr->inventory_list[INVEN_RARM].k_idx) return (INVEN_LARM);
 			return (INVEN_RARM);
 		}
 
@@ -1414,7 +1414,7 @@ s16b wield_slot(object_type *o_ptr)
 		case TV_RING:
 		{
 			/* Use the right hand first */
-			if (!inventory[INVEN_RIGHT].k_idx) return (INVEN_RIGHT);
+			if (!p_ptr->inventory_list[INVEN_RIGHT].k_idx) return (INVEN_RIGHT);
 
 			/* Use the left hand for swapping (by default) */
 			return (INVEN_LEFT);
@@ -1489,7 +1489,7 @@ concptr mention_use(int i)
 		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "Just lifting" : (p_ptr->hidarite ? "Wielding" : "On arm"); break;
 #endif
 
-		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < p_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
 		case INVEN_RIGHT: p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand")); break;
 		case INVEN_LEFT:  p = (left_hander ? _("右手指", "On right hand") : _("左手指", "On left hand")); break;
 		case INVEN_NECK:  p = _("  首", "Around neck"); break;
@@ -1513,7 +1513,7 @@ concptr mention_use(int i)
  * @param i 状態表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 状態表現内容の文字列ポインタ
  * @details
- * Currently, only used for items in the equipment, not inventory.
+ * Currently, only used for items in the equipment, not p_ptr->inventory_list.
  */
 concptr describe_use(int i)
 {
@@ -1533,7 +1533,7 @@ concptr describe_use(int i)
 		case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "just lifting" : (p_ptr->hidarite ? "attacking monsters with" : "wearing on your arm"); break;
 #endif
 
-		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < inventory[i].weight / 10) ? _("持つだけで精一杯の", "just holding") : _("射撃用に装備している", "shooting missiles with"); break;
+		case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < p_ptr->inventory_list[i].weight / 10) ? _("持つだけで精一杯の", "just holding") : _("射撃用に装備している", "shooting missiles with"); break;
 		case INVEN_RIGHT: p = (left_hander ? _("左手の指にはめている", "wearing on your left hand") : _("右手の指にはめている", "wearing on your right hand")); break;
 		case INVEN_LEFT:  p = (left_hander ? _("右手の指にはめている", "wearing on your right hand") : _("左手の指にはめている", "wearing on your left hand")); break;
 		case INVEN_NECK:  p = _("首にかけている", "wearing around your neck"); break;
@@ -1637,14 +1637,14 @@ void display_inven(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 		z = i + 1;
 	}
 
 	for (i = 0; i < z; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 		if (item_tester_okay(o_ptr))
 		{
@@ -1702,7 +1702,7 @@ void display_equip(void)
 
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr))
 		{
@@ -1759,7 +1759,7 @@ void display_equip(void)
 
 /*!
  * @brief 所持/装備オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
- * Find the "first" inventory object with the given "tag".
+ * Find the "first" p_ptr->inventory_list object with the given "tag".
  * @param cp 対応するタグIDを与える参照ポインタ
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
  * @param mode 所持、装備の切り替え
@@ -1797,10 +1797,10 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
 
-	/* Check every inventory object */
+	/* Check every p_ptr->inventory_list object */
 	for (i = start; i <= end; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Skip empty inscriptions */
@@ -1818,7 +1818,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 			/* Check the special tags */
 			if ((s[1] == command_cmd) && (s[2] == tag))
 			{
-				/* Save the actual inventory ID */
+				/* Save the actual p_ptr->inventory_list ID */
 				*cp = i;
 
 				/* Success */
@@ -1843,7 +1843,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 	/* Check every object */
 	for (i = start; i <= end; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Skip empty inscriptions */
@@ -1861,7 +1861,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 			/* Check the normal tags */
 			if (s[1] == tag)
 			{
-				/* Save the actual inventory ID */
+				/* Save the actual p_ptr->inventory_list ID */
 				*cp = i;
 
 				/* Success */
@@ -1880,7 +1880,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 
 /*!
  * @brief 床オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
- * Find the "first" inventory object with the given "tag".
+ * Find the "first" p_ptr->inventory_list object with the given "tag".
  * @param cp 対応するタグIDを与える参照ポインタ
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
  * @param floor_list 床上アイテムの配列
@@ -2048,7 +2048,7 @@ static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM
 
 /*!
  * @brief 所持アイテムの表示を行う /
- * Display the inventory.
+ * Display the p_ptr->inventory_list.
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  * @details
@@ -2081,7 +2081,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 	/* Find the "final" slot */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Track */
@@ -2090,10 +2090,10 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 
 	prepare_label_string(inven_label, USE_INVEN);
 
-	/* Display the inventory */
+	/* Display the p_ptr->inventory_list */
 	for (k = 0, i = 0; i < z; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
 		if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
@@ -2139,7 +2139,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 	for (j = 0; j < k; j++)
 	{
 		i = out_index[j];
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -2241,7 +2241,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 	/* Scan the equipment list */
 	for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
 		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr) || (mode & USE_FULL)) &&
@@ -2309,7 +2309,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 	for (j = 0; j < k; j++)
 	{
 		i = out_index[j];
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -2447,7 +2447,7 @@ static bool verify(concptr prompt, INVENTORY_IDX item)
 	/* Inventory */
 	if (item >= 0)
 	{
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 
 	/* Floor */
@@ -2481,7 +2481,7 @@ static bool get_item_allow(INVENTORY_IDX item)
 	/* Inventory */
 	if (item >= 0)
 	{
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 
 	/* Floor */
@@ -2529,7 +2529,7 @@ static bool get_item_okay(OBJECT_IDX i)
 	if (select_ring_slot) return is_ring_slot(i);
 
 	/* Verify the item */
-	if (!item_tester_okay(&inventory[i])) return (FALSE);
+	if (!item_tester_okay(&p_ptr->inventory_list[i])) return (FALSE);
 
 	/* Assume okay */
 	return (TRUE);
@@ -2548,7 +2548,7 @@ bool can_get_item(void)
 	ITEM_NUMBER floor_num = 0;
 
 	for (j = 0; j < INVEN_TOTAL; j++)
-		if (item_tester_okay(&inventory[j]))
+		if (item_tester_okay(&p_ptr->inventory_list[j]))
 			return TRUE;
 
 	floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
@@ -2574,10 +2574,10 @@ bool can_get_item(void)
  * All "item_tester" restrictions are cleared before this function returns.\n
  *\n
  * The user is allowed to choose acceptable items from the equipment,\n
- * inventory, or floor, respectively, if the proper flag was given,\n
+ * p_ptr->inventory_list, or floor, respectively, if the proper flag was given,\n
  * and there are any acceptable items in that location.\n
  *\n
- * The equipment or inventory are displayed (even if no acceptable\n
+ * The equipment or p_ptr->inventory_list are displayed (even if no acceptable\n
  * items are in that location) if the proper flag was given.\n
  *\n
  * If there are no acceptable items available anywhere, and "str" is\n
@@ -2586,10 +2586,10 @@ bool can_get_item(void)
  *\n
  * Note that the user must press "-" to specify the item on the floor,\n
  * and there is no way to "examine" the item on the floor, while the\n
- * use of "capital" letters will "examine" an inventory/equipment item,\n
+ * use of "capital" letters will "examine" an p_ptr->inventory_list/equipment item,\n
  * and prompt for its use.\n
  *\n
- * If a legal item is selected from the inventory, we save it in "cp"\n
+ * If a legal item is selected from the p_ptr->inventory_list, we save it in "cp"\n
  * directly (0 to 35), and return TRUE.\n
  *\n
  * If a legal item is selected from the floor, we save it in "cp" as\n
@@ -2600,7 +2600,7 @@ bool can_get_item(void)
  *\n
  * If no item is selected, we do nothing to "cp", and return FALSE.\n
  *\n
- * Global "p_ptr->command_new" is used when viewing the inventory or equipment\n
+ * Global "p_ptr->command_new" is used when viewing the p_ptr->inventory_list or equipment\n
  * to allow the user to enter a command while viewing those screens, and\n
  * also to induce "auto-enter" of stores, and other such stuff.\n
  *\n
@@ -2608,7 +2608,7 @@ bool can_get_item(void)
  * out in "browse" mode.  It is cleared before this function returns.\n
  *\n
  * Global "p_ptr->command_wrk" is used to choose between equip/inven listings.\n
- * If it is TRUE then we are viewing inventory, else equipment.\n
+ * If it is TRUE then we are viewing p_ptr->inventory_list, else equipment.\n
  *\n
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
@@ -2735,19 +2735,19 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	item = FALSE;
 
 
-	/* Full inventory */
+	/* Full p_ptr->inventory_list */
 	i1 = 0;
 	i2 = INVEN_PACK - 1;
 
-	/* Forbid inventory */
+	/* Forbid p_ptr->inventory_list */
 	if (!inven) i2 = -1;
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_inven++;
 	}
 
-	/* Restrict inventory indexes */
+	/* Restrict p_ptr->inventory_list indexes */
 	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
 	while ((i1 <= i2) && (!get_item_okay(i2))) i2--;
 
@@ -2761,7 +2761,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
@@ -2817,7 +2817,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			command_wrk = TRUE;
 		}
 
-		/* Use inventory if allowed */
+		/* Use p_ptr->inventory_list if allowed */
 		else if (inven)
 		{
 			command_wrk = FALSE;
@@ -2829,7 +2829,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			command_wrk = TRUE;
 		}
 
-		/* Use inventory for floor */
+		/* Use p_ptr->inventory_list for floor */
 		else
 		{
 			command_wrk = FALSE;
@@ -2898,7 +2898,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			if (command_see) get_item_label = show_equip(menu_line, mode);
 		}
 
-		/* Viewing inventory */
+		/* Viewing p_ptr->inventory_list */
 		if (!command_wrk)
 		{
 			/* Begin the prompt */
@@ -3209,7 +3209,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			case '\n':
 			case '\r':
 			{
-				/* Choose "default" inventory item */
+				/* Choose "default" p_ptr->inventory_list item */
 				if (!command_wrk)
 				{
 					k = ((i1 == i2) ? i1 : -1);
@@ -3292,7 +3292,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				ver = isupper(which);
 				which = (char)tolower(which);
 
-				/* Convert letter to inventory index */
+				/* Convert letter to p_ptr->inventory_list index */
 				if (!command_wrk)
 				{
 					if (which == '(') k = i1;
@@ -3391,7 +3391,7 @@ object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS opti
 	if (item == INVEN_FORCE) return NULL;
 
 	/* Get the item (in the pack) */
-	else if (item >= 0) return &inventory[item];
+	else if (item >= 0) return &p_ptr->inventory_list[item];
 
 	/* Get the item (on the floor) */
 	else return &current_floor_ptr->o_list[0 - item];
@@ -3499,7 +3499,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 		/* Save the index */
 		out_index[k] = i;
 
-		/* Acquire inventory color */
+		/* Acquire p_ptr->inventory_list color */
 		out_color[k] = tval_to_attr[o_ptr->tval & 0x7F];
 
 		/* Save the object description */
@@ -3730,19 +3730,19 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	item = FALSE;
 
 
-	/* Full inventory */
+	/* Full p_ptr->inventory_list */
 	i1 = 0;
 	i2 = INVEN_PACK - 1;
 
-	/* Forbid inventory */
+	/* Forbid p_ptr->inventory_list */
 	if (!inven) i2 = -1;
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_inven++;
 	}
 
-	/* Restrict inventory indexes */
+	/* Restrict p_ptr->inventory_list indexes */
 	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
 	while ((i1 <= i2) && (!get_item_okay(i2))) i2--;
 
@@ -3756,7 +3756,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&inventory[j]) || (mode & USE_FULL)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
@@ -3784,7 +3784,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 		floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
 	}
 
-	/* Accept inventory */
+	/* Accept p_ptr->inventory_list */
 	if (i1 <= i2) allow_inven = TRUE;
 
 	/* Accept equipment */
@@ -3817,7 +3817,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			command_wrk = (USE_EQUIP);
 		}
 
-		/* Use inventory if allowed */
+		/* Use p_ptr->inventory_list if allowed */
 		else if (allow_inven)
 		{
 			command_wrk = (USE_INVEN);
@@ -3919,7 +3919,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			if (command_see) get_item_label = show_floor(menu_line, p_ptr->y, p_ptr->x, &min_width);
 		}
 
-		/* Viewing inventory */
+		/* Viewing p_ptr->inventory_list */
 		if (command_wrk == (USE_INVEN))
 		{
 			/* Begin the prompt */
@@ -4497,7 +4497,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			case '\n':
 			case '\r':
 			{
-				/* Choose "default" inventory item */
+				/* Choose "default" p_ptr->inventory_list item */
 				if (command_wrk == (USE_INVEN))
 				{
 					k = ((i1 == i2) ? i1 : -1);
@@ -4623,7 +4623,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				ver = isupper(which);
 				which = (char)tolower(which);
 
-				/* Convert letter to inventory index */
+				/* Convert letter to p_ptr->inventory_list index */
 				if (command_wrk == (USE_INVEN))
 				{
 					if (which == '(') k = i1;

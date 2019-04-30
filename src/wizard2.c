@@ -1971,7 +1971,7 @@ void do_cmd_debug(void)
 		INVENTORY_IDX i;
 		for(i = INVEN_TOTAL - 1; i >= 0; i--)
 		{
-			if(inventory[i].k_idx) inven_drop(i, 999);
+			if(p_ptr->inventory_list[i].k_idx) inven_drop(i, 999);
 		}
 		player_outfit();
 		break;

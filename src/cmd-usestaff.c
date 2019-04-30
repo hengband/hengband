@@ -289,7 +289,7 @@ void do_cmd_use_staff_aux(INVENTORY_IDX item)
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 
 	/* Get the item (on the floor) */

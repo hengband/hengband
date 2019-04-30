@@ -84,7 +84,7 @@ void self_knowledge(void)
 	{
 		u32b tflgs[TR_FLAG_SIZE];
 
-		o_ptr = &inventory[k];
+		o_ptr = &p_ptr->inventory_list[k];
 		if (!o_ptr->k_idx) continue;
 		object_flags(o_ptr, tflgs);
 
@@ -1436,7 +1436,7 @@ void self_knowledge(void)
 
 
 	/* Access the current weapon */
-	o_ptr = &inventory[INVEN_RARM];
+	o_ptr = &p_ptr->inventory_list[INVEN_RARM];
 
 	/* Analyze the weapon */
 	if (o_ptr->k_idx)

@@ -2556,14 +2556,14 @@ void spoil_random_artifact(concptr fname)
 		/* random artifacts wielding */
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			q_ptr = &inventory[i];
+			q_ptr = &p_ptr->inventory_list[i];
 			spoil_random_artifact_aux(q_ptr, j);
 		}
 
-		/* random artifacts in inventory */
+		/* random artifacts in p_ptr->inventory_list */
 		for (i = 0; i < INVEN_PACK; i++)
 		{
-			q_ptr = &inventory[i];
+			q_ptr = &p_ptr->inventory_list[i];
 			spoil_random_artifact_aux(q_ptr, j);
 		}
 

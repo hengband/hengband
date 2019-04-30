@@ -3901,7 +3901,7 @@ void do_cmd_feeling(void)
 	if (p_ptr->muta3 & MUT3_GOOD_LUCK)
 		msg_print(do_cmd_feeling_text_lucky[p_ptr->feeling]);
 	else if (p_ptr->pseikaku == SEIKAKU_COMBAT ||
-		 inventory[INVEN_BOW].name1 == ART_CRIMSON)
+		 p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON)
 		msg_print(do_cmd_feeling_text_combat[p_ptr->feeling]);
 	else
 		msg_print(do_cmd_feeling_text[p_ptr->feeling]);
@@ -4772,12 +4772,12 @@ static void do_cmd_knowledge_inven(void)
 		strcpy(where, _("装", "E "));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			do_cmd_knowledge_inven_aux(fff, &inventory[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(fff, &p_ptr->inventory_list[i], &j, tval, where);
 		}
 		strcpy(where, _("持", "I "));
 		for (i = 0; i < INVEN_PACK; i++)
 		{
-			do_cmd_knowledge_inven_aux(fff, &inventory[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(fff, &p_ptr->inventory_list[i], &j, tval, where);
 		}
 
 		st_ptr = &town_info[1].store[STORE_HOME];
@@ -5186,10 +5186,10 @@ static void do_cmd_knowledge_artifacts(void)
 		}
 	}
 
-	/* Check the inventory and equipment */
+	/* Check the p_ptr->inventory_list and equipment */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 
 		/* Ignore non-objects */
 		if (!o_ptr->k_idx) continue;
@@ -8082,7 +8082,7 @@ void do_cmd_knowledge(void)
 			prt("(5) Display kill count", 10, 5);
 			if (!vanilla_town) prt("(6) Display wanted monsters", 11, 5);
 			prt("(7) Display current pets", 12, 5);
-			prt("(8) Display home inventory", 13, 5);
+			prt("(8) Display home p_ptr->inventory_list", 13, 5);
 			prt("(9) Display *identified* equip.", 14, 5);
 			prt("(0) Display terrain symbols.", 15, 5);
 		}

@@ -372,7 +372,7 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 	sound(SOUND_TELEPORT);
 
 #ifdef JP
-	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 		msg_format("『こっちだぁ、%s』", p_ptr->name);
 #endif
 
@@ -541,7 +541,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{
-				o_ptr = &inventory[i];
+				o_ptr = &p_ptr->inventory_list[i];
 				if (o_ptr->k_idx && !object_is_cursed(o_ptr))
 				{
 					object_flags(o_ptr, flgs);
@@ -1019,7 +1019,7 @@ bool apply_disenchant(BIT_FLAGS mode)
 		case 8: t = INVEN_FEET; break;
 	}
 
-	o_ptr = &inventory[t];
+	o_ptr = &p_ptr->inventory_list[t];
 
 	/* No item, nothing happens */
 	if (!o_ptr->k_idx) return (FALSE);
@@ -1594,7 +1594,7 @@ void identify_pack(void)
 	/* Simply identify and know every item */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		identify_item(o_ptr);
@@ -1622,7 +1622,7 @@ static int enchant_table[16] =
 
 /*!
  * @brief 装備の解呪処理 /
- * Removes curses from items in inventory
+ * Removes curses from items in p_ptr->inventory_list
  * @param all 軽い呪いまでの解除ならば0
  * @return 解呪されたアイテムの数
  * @details
@@ -1642,7 +1642,7 @@ static int remove_curse_aux(int all)
 	/* Attempt to uncurse items being worn */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Uncursed already */
@@ -1933,7 +1933,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 
 /*!
  * @brief 装備修正強化処理のメインルーチン /
- * Enchant an item (in the inventory or on the floor)
+ * Enchant an item (in the p_ptr->inventory_list or on the floor)
  * @param num_hit 命中修正量
  * @param num_dam ダメージ修正量
  * @param num_ac AC修正量
@@ -2144,7 +2144,7 @@ bool identify_item(object_type *o_ptr)
 
 /*!
  * @brief アイテム鑑定のメインルーチン処理 /
- * Identify an object in the inventory (or on the floor)
+ * Identify an object in the p_ptr->inventory_list (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
@@ -2209,12 +2209,12 @@ bool ident_spell(bool only_equip)
 
 /*!
  * @brief アイテム凡庸化のメインルーチン処理 /
- * Identify an object in the inventory (or on the floor)
+ * Identify an object in the p_ptr->inventory_list (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に凡庸化をを行ったならばTRUEを返す
  * @details
  * <pre>
- * Mundanify an object in the inventory (or on the floor)
+ * Mundanify an object in the p_ptr->inventory_list (or on the floor)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was mundanified, else FALSE.
  * </pre>
@@ -2260,11 +2260,11 @@ bool mundane_spell(bool only_equip)
 
 /*!
  * @brief アイテム*鑑定*のメインルーチン処理 /
- * Identify an object in the inventory (or on the floor)
+ * Identify an object in the p_ptr->inventory_list (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
- * Fully "identify" an object in the inventory  -BEN-
+ * Fully "identify" an object in the p_ptr->inventory_list  -BEN-
  * This routine returns TRUE if an item was identified.
  */
 bool identify_fully(bool only_equip)
@@ -2570,7 +2570,7 @@ bool recharge(int power)
 				if (o_ptr->tval == TV_ROD) o_ptr->timeout = (o_ptr->number - 1) * k_ptr->pval;
 				if (o_ptr->tval == TV_WAND) o_ptr->pval = 0;
 
-				/* Reduce and describe inventory */
+				/* Reduce and describe p_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -1);
@@ -2595,7 +2595,7 @@ bool recharge(int power)
 				else
 					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-				/* Reduce and describe inventory */
+				/* Reduce and describe p_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -999);
@@ -3642,7 +3642,7 @@ bool eat_magic(int power)
 					msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
 				}
 				
-				/* Reduce and describe inventory */
+				/* Reduce and describe p_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -1);
@@ -3667,7 +3667,7 @@ bool eat_magic(int power)
 				else
 					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-				/* Reduce and describe inventory */
+				/* Reduce and describe p_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -999);

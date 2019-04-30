@@ -1686,10 +1686,10 @@ static void player_wipe_without_name(void)
 	inven_cnt = 0;
 	equip_cnt = 0;
 
-	/* Clear the inventory */
+	/* Clear the p_ptr->inventory_list */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_wipe(&inventory[i]);
+		object_wipe(&p_ptr->inventory_list[i]);
 	}
 
 
@@ -1939,7 +1939,7 @@ static void wield_all(void)
 	/* Scan through the slots backwards */ 
 	for (item = INVEN_PACK - 1; item >= 0; item--) 
 	{ 
-		o_ptr = &inventory[item]; 
+		o_ptr = &p_ptr->inventory_list[item]; 
  
 		/* Skip non-objects */ 
 		if (!o_ptr->k_idx) continue; 
@@ -1948,7 +1948,7 @@ static void wield_all(void)
 		slot = wield_slot(o_ptr); 
 		if (slot < INVEN_RARM) continue; 
 		if (slot == INVEN_LITE) continue; /* Does not wield toaches because buys a lantern soon */
-		if (inventory[slot].k_idx) continue; 
+		if (p_ptr->inventory_list[slot].k_idx) continue; 
  
 		i_ptr = &object_type_body; 
 		object_copy(i_ptr, o_ptr); 
@@ -1968,7 +1968,7 @@ static void wield_all(void)
 			floor_item_optimize(0 - item); 
 		} 
  
-		o_ptr = &inventory[slot]; 
+		o_ptr = &p_ptr->inventory_list[slot]; 
  		object_copy(o_ptr, i_ptr); 
  		p_ptr->total_weight += i_ptr->weight; 
  

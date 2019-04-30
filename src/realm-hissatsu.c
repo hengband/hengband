@@ -588,7 +588,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				int damage;
 
 				if (!has_melee_weapon(INVEN_RARM + i)) break;
-				o_ptr = &inventory[INVEN_RARM + i];
+				o_ptr = &p_ptr->inventory_list[INVEN_RARM + i];
 				basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
 				damage = o_ptr->to_d * 100;
 				object_flags(o_ptr, flgs);
@@ -867,7 +867,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				int damage;
 				if (!has_melee_weapon(INVEN_RARM + i)) break;
-				o_ptr = &inventory[INVEN_RARM + i];
+				o_ptr = &p_ptr->inventory_list[INVEN_RARM + i];
 				basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
 				damage = o_ptr->to_d * 100;
 				object_flags(o_ptr, flgs);

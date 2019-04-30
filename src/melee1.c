@@ -1070,7 +1070,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Access the weapon */
-	object_type     *o_ptr = &inventory[INVEN_RARM + hand];
+	object_type     *o_ptr = &p_ptr->inventory_list[INVEN_RARM + hand];
 
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -1148,8 +1148,8 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	{
 		if ((r_ptr->level + 10) > p_ptr->lev)
 		{
-			OBJECT_TYPE_VALUE tval = inventory[INVEN_RARM + hand].tval - TV_WEAPON_BEGIN;
-			OBJECT_SUBTYPE_VALUE sval = inventory[INVEN_RARM + hand].sval;
+			OBJECT_TYPE_VALUE tval = p_ptr->inventory_list[INVEN_RARM + hand].tval - TV_WEAPON_BEGIN;
+			OBJECT_SUBTYPE_VALUE sval = p_ptr->inventory_list[INVEN_RARM + hand].sval;
 			int now_exp = p_ptr->weapon_exp[tval][sval];
 			if (now_exp < s_info[p_ptr->pclass].w_max[tval][sval])
 			{
@@ -1986,7 +1986,7 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 	if ((r_ptr->flags1 & RF1_FEMALE) &&
 		!(p_ptr->stun || p_ptr->confused || p_ptr->image || !m_ptr->ml))
 	{
-		if ((inventory[INVEN_RARM].name1 == ART_ZANTETSU) || (inventory[INVEN_LARM].name1 == ART_ZANTETSU))
+		if ((p_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (p_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU))
 		{
 			msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
 			return FALSE;
@@ -2004,8 +2004,8 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 		!(p_ptr->stun || p_ptr->confused || p_ptr->image ||
 			p_ptr->shero || !m_ptr->ml))
 	{
-		if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
-		if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+		if (p_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+		if (p_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 		if (stormbringer)
 		{
 			msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
@@ -2651,7 +2651,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
 						/* Obtain the item */
-						o_ptr = &inventory[i];
+						o_ptr = &p_ptr->inventory_list[i];
 						if (!o_ptr->k_idx) continue;
 
 						/* Drain charged wands/staffs */
@@ -2784,7 +2784,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
 						/* Obtain the item */
-						o_ptr = &inventory[i];
+						o_ptr = &p_ptr->inventory_list[i];
 						if (!o_ptr->k_idx) continue;
 
 						/* Skip artifacts */
@@ -2860,7 +2860,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						/* Pick an item from the pack */
 						i = (INVENTORY_IDX)randint0(INVEN_PACK);
 
-						o_ptr = &inventory[i];
+						o_ptr = &p_ptr->inventory_list[i];
 						if (!o_ptr->k_idx) continue;
 
 						/* Skip non-food objects */
@@ -2889,7 +2889,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				case RBE_EAT_LITE:
 				{
 					/* Access the lite */
-					o_ptr = &inventory[INVEN_LITE];
+					o_ptr = &p_ptr->inventory_list[INVEN_LITE];
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
@@ -3679,7 +3679,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				if (hex_spelling(HEX_SHADOW_CLOAK) && alive && !p_ptr->is_dead)
 				{
 					HIT_POINT dam = 1;
-					object_type *o_armed_ptr = &inventory[INVEN_RARM];
+					object_type *o_armed_ptr = &p_ptr->inventory_list[INVEN_RARM];
 
 					if (!(r_ptr->flagsr & RFR_RES_ALL || r_ptr->flagsr & RFR_RES_DARK))
 					{
@@ -3690,7 +3690,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						}
 
 						/* Cursed armor makes damages doubled */
-						o_armed_ptr = &inventory[INVEN_BODY];
+						o_armed_ptr = &p_ptr->inventory_list[INVEN_BODY];
 						if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr)) dam *= 2;
 
 						/* Modify the damage */
@@ -3716,7 +3716,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							/* Some cursed armours gives an extra effect */
 							for (j = 0; j < 4; j++)
 							{
-								o_armed_ptr = &inventory[typ[j][0]];
+								o_armed_ptr = &p_ptr->inventory_list[typ[j][0]];
 								if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(o_armed_ptr))
 									project(0, 0, m_ptr->fy, m_ptr->fx, (p_ptr->lev * 2), typ[j][1], flg, -1);
 							}
@@ -3768,7 +3768,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 
 				/* Gain shield experience */
-				if (object_is_armour(&inventory[INVEN_RARM]) || object_is_armour(&inventory[INVEN_LARM]))
+				if (object_is_armour(&p_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&p_ptr->inventory_list[INVEN_LARM]))
 				{
 					int cur = p_ptr->skill_exp[GINOU_SHIELD];
 					int max = s_info[p_ptr->pclass].s_max[GINOU_SHIELD];

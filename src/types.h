@@ -1459,8 +1459,9 @@ struct player_type
 	byte feeling;		/* Most recent dungeon feeling */
 	s32b feeling_turn;	/* The current_world_ptr->game_turn of the last dungeon feeling */
 
+	object_type *inventory_list; /* The player's p_ptr->inventory_list [INVEN_TOTAL] */
 
-	/*** Temporary fields ***/
+							/*** Temporary fields ***/
 
 	bool playing;			/* True if player is playing */
 	bool leaving;			/* True if player is leaving */

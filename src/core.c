@@ -80,7 +80,7 @@ static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カ
 static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 {
 	byte feel;
-	object_type *o_ptr = &inventory[slot];
+	object_type *o_ptr = &p_ptr->inventory_list[slot];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* We know about it already, do not tell us again */
@@ -165,7 +165,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 
 	}
 
-	/* Message (inventory) */
+	/* Message (p_ptr->inventory_list) */
 	else
 	{
 #ifdef JP
@@ -198,7 +198,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
  * @brief 1プレイヤーターン毎に武器、防具の擬似鑑定が行われるかを判定する。
  * @return なし
  * @details
- * Sense the inventory\n
+ * Sense the p_ptr->inventory_list\n
  *\n
  *   Class 0 = Warrior --> fast and heavy\n
  *   Class 1 = Mage    --> slow and light\n
@@ -379,7 +379,7 @@ static void sense_inventory1(void)
 	{
 		bool okay = FALSE;
 
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
@@ -414,7 +414,7 @@ static void sense_inventory1(void)
 		/* Skip non-sense machines */
 		if (!okay) continue;
 
-		/* Occasional failure on inventory items */
+		/* Occasional failure on p_ptr->inventory_list items */
 		if ((i < INVEN_RARM) && (0 != randint0(5))) continue;
 
 		/* Good luck */
@@ -521,7 +521,7 @@ static void sense_inventory2(void)
 	{
 		bool okay = FALSE;
 
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
@@ -542,7 +542,7 @@ static void sense_inventory2(void)
 		/* Skip non-sense machines */
 		if (!okay) continue;
 
-		/* Occasional failure on inventory items */
+		/* Occasional failure on p_ptr->inventory_list items */
 		if ((i < INVEN_RARM) && (0 != randint0(5))) continue;
 
 		sense_inventory_aux(i, TRUE);
@@ -931,7 +931,7 @@ static void regen_captured_monsters(void)
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		monster_race *r_ptr;
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 
 		if (!o_ptr->k_idx) continue;
 		if (o_ptr->tval != TV_CAPTURE) continue;
@@ -1153,7 +1153,7 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 	/* Search Inventry */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 
 		if (o_ptr->curse_flags & flag)
 		{
@@ -1205,7 +1205,7 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 	}
 
 	/* Choice one of them */
-	return (&inventory[choices[randint0(number)]]);
+	return (&p_ptr->inventory_list[choices[randint0(number)]]);
 }
 
 static void process_world_aux_digestion(void)
@@ -1354,10 +1354,10 @@ static void process_world_aux_hp_and_sp(void)
 			}
 		}
 
-		if (inventory[INVEN_LITE].tval && (inventory[INVEN_LITE].name2 != EGO_LITE_DARKNESS) &&
+		if (p_ptr->inventory_list[INVEN_LITE].tval && (p_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS) &&
 		    !p_ptr->resist_lite)
 		{
-			object_type * o_ptr = &inventory[INVEN_LITE];
+			object_type * o_ptr = &p_ptr->inventory_list[INVEN_LITE];
 			GAME_TEXT o_name [MAX_NLEN];
 			char ouch [MAX_NLEN+40];
 
@@ -2061,7 +2061,7 @@ static void process_world_aux_timeout(void)
 static void process_world_aux_light(void)
 {
 	/* Check for light being wielded */
-	object_type *o_ptr = &inventory[INVEN_LITE];
+	object_type *o_ptr = &p_ptr->inventory_list[INVEN_LITE];
 
 	/* Burn some fuel in the current lite */
 	if (o_ptr->tval == TV_LITE)
@@ -2280,7 +2280,7 @@ static void process_world_aux_mutation(void)
 			hp_player(10);
 		}
 
-		o_ptr = &inventory[INVEN_LITE];
+		o_ptr = &p_ptr->inventory_list[INVEN_LITE];
 
 		/* Absorb some fuel in the current lite */
 		if (o_ptr->tval == TV_LITE)
@@ -2509,17 +2509,17 @@ static void process_world_aux_mutation(void)
 		if (has_melee_weapon(INVEN_RARM))
 		{
 			slot = INVEN_RARM;
-			o_ptr = &inventory[INVEN_RARM];
+			o_ptr = &p_ptr->inventory_list[INVEN_RARM];
 
 			if (has_melee_weapon(INVEN_LARM) && one_in_(2))
 			{
-				o_ptr = &inventory[INVEN_LARM];
+				o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 				slot = INVEN_LARM;
 			}
 		}
 		else if (has_melee_weapon(INVEN_LARM))
 		{
-			o_ptr = &inventory[INVEN_LARM];
+			o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 			slot = INVEN_LARM;
 		}
 		if (slot && !object_is_cursed(o_ptr))
@@ -2554,7 +2554,7 @@ static void process_world_aux_curse(void)
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{
 				BIT_FLAGS flgs[TR_FLAG_SIZE];
-				o_ptr = &inventory[i];
+				o_ptr = &p_ptr->inventory_list[i];
 				if (!o_ptr->k_idx) continue;
 
 				object_flags(o_ptr, flgs);
@@ -2570,7 +2570,7 @@ static void process_world_aux_curse(void)
 				}
 			}
 
-			o_ptr = &inventory[i_keep];
+			o_ptr = &p_ptr->inventory_list[i_keep];
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
 			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
@@ -2749,7 +2749,7 @@ static void process_world_aux_curse(void)
 	/* Rarely, take damage from the Jewel of Judgement */
 	if (one_in_(999) && !p_ptr->anti_magic)
 	{
-		object_type *o_ptr = &inventory[INVEN_LITE];
+		object_type *o_ptr = &p_ptr->inventory_list[INVEN_LITE];
 
 		if (o_ptr->name1 == ART_JUDGE)
 		{
@@ -2777,7 +2777,7 @@ static void process_world_aux_recharge(void)
 	for (changed = FALSE, i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		/* Get the object */
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Recharge activatable objects */
@@ -2809,7 +2809,7 @@ static void process_world_aux_recharge(void)
 	 */
 	for (changed = FALSE, i = 0; i < INVEN_PACK; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 		if (!o_ptr->k_idx) continue;
 
@@ -3356,7 +3356,7 @@ static void process_world(void)
 	/* Process recharging */
 	process_world_aux_recharge();
 
-	/* Feel the inventory */
+	/* Feel the p_ptr->inventory_list */
 	sense_inventory1();
 	sense_inventory2();
 
@@ -4312,17 +4312,17 @@ static void process_command(void)
  */
 static void pack_overflow(void)
 {
-	if (inventory[INVEN_PACK].k_idx)
+	if (p_ptr->inventory_list[INVEN_PACK].k_idx)
 	{
 		GAME_TEXT o_name[MAX_NLEN];
 		object_type *o_ptr;
 
 		/* Is auto-destroy done? */
 		update_creature(p_ptr);
-		if (!inventory[INVEN_PACK].k_idx) return;
+		if (!p_ptr->inventory_list[INVEN_PACK].k_idx) return;
 
 		/* Access the slot to be dropped */
-		o_ptr = &inventory[INVEN_PACK];
+		o_ptr = &p_ptr->inventory_list[INVEN_PACK];
 
 		disturb(FALSE, TRUE);
 

@@ -50,7 +50,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 
 	/* Get the item (on the floor) */

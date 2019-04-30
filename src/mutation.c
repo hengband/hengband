@@ -2180,7 +2180,7 @@ bool mutation_power_aux(int power)
 
 				for (i = 0; i < INVEN_TOTAL; i++)
 				{
-					object_type *o_ptr = &inventory[i];
+					object_type *o_ptr = &p_ptr->inventory_list[i];
 
 					if (!o_ptr->k_idx) continue;
 					if (!object_is_cursed(o_ptr)) continue;

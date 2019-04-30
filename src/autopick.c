@@ -1428,11 +1428,11 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_
 	{
 		/*
 		 * 'Collecting' means the item must be absorbed 
-		 * into an inventory slot.
+		 * into an p_ptr->inventory_list slot.
 		 * But an item can not be absorbed into itself!
 		 */
-		if ((&inventory[j] != o_ptr) &&
-		    object_similar(&inventory[j], o_ptr))
+		if ((&p_ptr->inventory_list[j] != o_ptr) &&
+		    object_similar(&p_ptr->inventory_list[j], o_ptr))
 			return TRUE;
 	}
 
@@ -1623,7 +1623,7 @@ static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 	object_type *o_ptr;
 
 	/* Get the item (in the pack) */
-	if (item >= 0) o_ptr = &inventory[item];
+	if (item >= 0) o_ptr = &p_ptr->inventory_list[item];
 
 	/* Get the item (on the floor) */
 	else o_ptr = &current_floor_ptr->o_list[0 - item];
@@ -1681,7 +1681,7 @@ void autopick_delayed_alter(void)
 /*
  * Auto-inscription and/or destroy
  *
- * Auto-destroyer works only on inventory or on floor stack only when
+ * Auto-destroyer works only on p_ptr->inventory_list or on floor stack only when
  * requested.
  */
 void autopick_alter_item(INVENTORY_IDX item, bool destroy)
@@ -1690,7 +1690,7 @@ void autopick_alter_item(INVENTORY_IDX item, bool destroy)
 	int idx;
 
 	/* Get the item (in the pack) */
-	if (item >= 0) o_ptr = &inventory[item];
+	if (item >= 0) o_ptr = &p_ptr->inventory_list[item];
 
 	/* Get the item (on the floor) */
 	else o_ptr = &current_floor_ptr->o_list[0 - item];
@@ -2404,7 +2404,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** Collecting items ***/
 	/*** Which can be absorbed into a slot as a bundle ***/
 	if (IS_FLG(FLG_COLLECTING))
-		which_str[which_n++] = "can be absorbed into an existing inventory slot";
+		which_str[which_n++] = "can be absorbed into an existing p_ptr->inventory_list slot";
 	
 	/*** Unaware items ***/
 	if (IS_FLG(FLG_UNAWARE))
@@ -3952,7 +3952,7 @@ static GAME_TEXT MN_SEARCH[] = "Search";
 static GAME_TEXT MN_SEARCH_STR[] = "Search by string";
 static GAME_TEXT MN_SEARCH_FORW[] = "Search forward";
 static GAME_TEXT MN_SEARCH_BACK[] = "Search backward";
-static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory object";
+static GAME_TEXT MN_SEARCH_OBJ[] = "Search by p_ptr->inventory_list object";
 static GAME_TEXT MN_SEARCH_DESTROYED[] = "Search by destroyed object";
 
 static GAME_TEXT MN_INSERT[] = "Insert...";

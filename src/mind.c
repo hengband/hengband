@@ -1614,7 +1614,7 @@ static bool cast_ninja_spell(int spell)
 
 			for (slot = 0; slot < INVEN_PACK; slot++)
 			{
-				if (inventory[slot].tval == TV_SPIKE) break;
+				if (p_ptr->inventory_list[slot].tval == TV_SPIKE) break;
 			}
 			if (slot == INVEN_PACK)
 			{

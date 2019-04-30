@@ -482,7 +482,7 @@ MULTIPLY tot_dam_aux_snipe(MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_t
  */
 static bool cast_sniper_spell(int spell)
 {
-	object_type *o_ptr = &inventory[INVEN_BOW];
+	object_type *o_ptr = &p_ptr->inventory_list[INVEN_BOW];
 	SPELL_IDX snipe_type = SP_NONE;
 
 	if (o_ptr->tval != TV_BOW)

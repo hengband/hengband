@@ -3596,7 +3596,7 @@ bool lose_all_info(void)
 	/* Forget info about objects */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Allow "protection" by the MENTAL flag */
@@ -4244,7 +4244,7 @@ void calc_android_exp(void)
 
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		object_type forge;
 		object_type *q_ptr = &forge;
 		u32b value, exp;

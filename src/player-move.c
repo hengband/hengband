@@ -268,7 +268,7 @@ void search(void)
  * だが、違和感が\n
  * あるという指摘をうけたので、「～を拾った、～を持っている」という表示\n
  * にかえてある。そのための配列。\n
- * Add the given dungeon object to the character's inventory.\n
+ * Add the given dungeon object to the character's p_ptr->inventory_list.\n
  * Delete the object afterwards.\n
  */
 void py_pickup_aux(OBJECT_IDX o_idx)
@@ -297,7 +297,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	slot = inven_carry(o_ptr);
 
 	/* Get the object again */
-	o_ptr = &inventory[slot];
+	o_ptr = &p_ptr->inventory_list[slot];
 
 	delete_object_idx(o_idx);
 
@@ -996,8 +996,8 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 
 	m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
-	if (inventory[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
-	if (inventory[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+	if (p_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+	if (p_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 
 	/* Player can not walk through "walls"... */
 	/* unless in Shadow Form */

@@ -496,18 +496,18 @@ void gain_level_reward(int chosen_reward)
 				dummy = INVEN_LARM;
 				if (has_melee_weapon(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 			}
-			object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
+			object_desc(o_name, &p_ptr->inventory_list[dummy], OD_NAME_ONLY);
 			(void)curse_weapon(FALSE, dummy);
 			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
 
 		case REW_CURSE_AR:
 
-			if (!inventory[INVEN_BODY].k_idx) break;
+			if (!p_ptr->inventory_list[INVEN_BODY].k_idx) break;
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、防具に頼ることなかれ。」", "'Thou reliest too much on thine equipment.'"));
 
-			object_desc(o_name, &inventory[INVEN_BODY], OD_NAME_ONLY);
+			object_desc(o_name, &p_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
 			(void)curse_armor();
 			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
@@ -537,14 +537,14 @@ void gain_level_reward(int chosen_reward)
 						dummy = INVEN_LARM;
 						if (has_melee_weapon(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 					}
-					object_desc(o_name, &inventory[dummy], OD_NAME_ONLY);
+					object_desc(o_name, &p_ptr->inventory_list[dummy], OD_NAME_ONLY);
 					(void)curse_weapon(FALSE, dummy);
 					reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 				}
 				else
 				{
-					if (!inventory[INVEN_BODY].k_idx) break;
-					object_desc(o_name, &inventory[INVEN_BODY], OD_NAME_ONLY);
+					if (!p_ptr->inventory_list[INVEN_BODY].k_idx) break;
+					object_desc(o_name, &p_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
 					(void)curse_armor();
 					reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 				}

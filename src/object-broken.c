@@ -11,7 +11,7 @@
  * @return 薬を浴びたモンスターが起こるならばTRUEを返す
  * @details
  * <pre>
- * (1) they are shattered while in the player's inventory,
+ * (1) they are shattered while in the player's p_ptr->inventory_list,
  * due to cold (etc) attacks;
  * (2) they are thrown at a monster, or obstacle;
  * (3) they are shattered by a "cold ball" or other such spell
@@ -21,10 +21,10 @@
  *    who   ---  who caused the potion to shatter (0=player)
  *          potions that smash on the floor are assumed to
  *          be caused by no-one (who = 1), as are those that
- *          shatter inside the player inventory.
+ *          shatter inside the player p_ptr->inventory_list.
  *          (Not anymore -- I changed this; TY)
  *    y, x  --- coordinates of the potion (or player if
- *          the potion was in her inventory);
+ *          the potion was in her p_ptr->inventory_list);
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */

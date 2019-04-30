@@ -4872,13 +4872,13 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 
 /*!
  * @brief 魔道具の使用回数の残量を示すメッセージを表示する /
- * Describe the charges on an item in the inventory.
+ * Describe the charges on an item in the p_ptr->inventory_list.
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
 void inven_item_charges(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &inventory[item];
+	object_type *o_ptr = &p_ptr->inventory_list[item];
 
 	/* Require staff/wand */
 	if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND)) return;
@@ -4913,13 +4913,13 @@ void inven_item_charges(INVENTORY_IDX item)
 
 /*!
  * @brief アイテムの残り所持数メッセージを表示する /
- * Describe an item in the inventory.
+ * Describe an item in the p_ptr->inventory_list.
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
 void inven_item_describe(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &inventory[item];
+	object_type *o_ptr = &p_ptr->inventory_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
@@ -4944,14 +4944,14 @@ void inven_item_describe(INVENTORY_IDX item)
 
 /*!
  * @brief アイテムを増減させ残り所持数メッセージを表示する /
- * Increase the "number" of an item in the inventory
+ * Increase the "number" of an item in the p_ptr->inventory_list
  * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
  * @param num 増やしたい量
  * @return なし
  */
 void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
-	object_type *o_ptr = &inventory[item];
+	object_type *o_ptr = &p_ptr->inventory_list[item];
 
 	/* Apply */
 	num += o_ptr->number;
@@ -4993,13 +4993,13 @@ void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 
 /*!
  * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する /
- * Erase an inventory slot if it has no more items
+ * Erase an p_ptr->inventory_list slot if it has no more items
  * @param item 消去したいプレイヤーのアイテム所持スロット
  * @return なし
  */
 void inven_item_optimize(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &inventory[item];
+	object_type *o_ptr = &p_ptr->inventory_list[item];
 
 	/* Only optimize real items */
 	if (!o_ptr->k_idx) return;
@@ -5019,11 +5019,11 @@ void inven_item_optimize(INVENTORY_IDX item)
 		for (i = item; i < INVEN_PACK; i++)
 		{
 			/* Structure copy */
-			inventory[i] = inventory[i+1];
+			p_ptr->inventory_list[i] = p_ptr->inventory_list[i+1];
 		}
 
 		/* Erase the "final" slot */
-		object_wipe(&inventory[i]);
+		object_wipe(&p_ptr->inventory_list[i]);
 
 		p_ptr->window |= (PW_INVEN);
 	}
@@ -5035,7 +5035,7 @@ void inven_item_optimize(INVENTORY_IDX item)
 		equip_cnt--;
 
 		/* Erase the empty slot */
-		object_wipe(&inventory[item]);
+		object_wipe(&p_ptr->inventory_list[item]);
 		p_ptr->update |= (PU_BONUS);
 		p_ptr->update |= (PU_TORCH);
 		p_ptr->update |= (PU_MANA);
@@ -5179,7 +5179,7 @@ bool inven_carry_okay(object_type *o_ptr)
 	/* Similar slot? */
 	for (j = 0; j < INVEN_PACK; j++)
 	{
-		object_type *j_ptr = &inventory[j];
+		object_type *j_ptr = &p_ptr->inventory_list[j];
 		if (!j_ptr->k_idx) continue;
 
 		/* Check if the two items can be combined */
@@ -5280,13 +5280,13 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 
 /*!
  * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン /
- * Add an item to the players inventory, and return the slot used.
+ * Add an item to the players p_ptr->inventory_list, and return the slot used.
  * @param o_ptr 拾うオブジェクトの構造体参照ポインタ
  * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
  * @details
- * If the new item can combine with an existing item in the inventory,\n
+ * If the new item can combine with an existing item in the p_ptr->inventory_list,\n
  * it will do so, using "object_similar()" and "object_absorb()", else,\n
- * the item will be placed into the "proper" location in the inventory.\n
+ * the item will be placed into the "proper" location in the p_ptr->inventory_list.\n
  *\n
  * This function can be used to "over-fill" the player's pack, but only\n
  * once, and such an action must trigger the "overflow" code immediately.\n
@@ -5296,7 +5296,7 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
  * combined.  This may be tricky.  See "dungeon.c" for info.\n
  *\n
  * Note that this code must remove any location/stack information\n
- * from the object once it is placed into the inventory.\n
+ * from the object once it is placed into the p_ptr->inventory_list.\n
  */
 s16b inven_carry(object_type *o_ptr)
 {
@@ -5309,7 +5309,7 @@ s16b inven_carry(object_type *o_ptr)
 	/* Check for combining */
 	for (j = 0; j < INVEN_PACK; j++)
 	{
-		j_ptr = &inventory[j];
+		j_ptr = &p_ptr->inventory_list[j];
 		if (!j_ptr->k_idx) continue;
 
 		/* Hack -- track last item */
@@ -5334,7 +5334,7 @@ s16b inven_carry(object_type *o_ptr)
 	/* Find an empty slot */
 	for (j = 0; j <= INVEN_PACK; j++)
 	{
-		j_ptr = &inventory[j];
+		j_ptr = &p_ptr->inventory_list[j];
 
 		/* Use it if found */
 		if (!j_ptr->k_idx) break;
@@ -5353,7 +5353,7 @@ s16b inven_carry(object_type *o_ptr)
 		/* Scan every occupied slot */
 		for (j = 0; j < INVEN_PACK; j++)
 		{
-			if (object_sort_comp(o_ptr, o_value, &inventory[j])) break;
+			if (object_sort_comp(o_ptr, o_value, &p_ptr->inventory_list[j])) break;
 		}
 
 		/* Use that slot */
@@ -5363,19 +5363,19 @@ s16b inven_carry(object_type *o_ptr)
 		for (k = n; k >= i; k--)
 		{
 			/* Hack -- Slide the item */
-			object_copy(&inventory[k+1], &inventory[k]);
+			object_copy(&p_ptr->inventory_list[k+1], &p_ptr->inventory_list[k]);
 		}
 
 		/* Wipe the empty slot */
-		object_wipe(&inventory[i]);
+		object_wipe(&p_ptr->inventory_list[i]);
 	}
 
 
 	/* Copy the item */
-	object_copy(&inventory[i], o_ptr);
+	object_copy(&p_ptr->inventory_list[i], o_ptr);
 
 	/* Access new object */
-	j_ptr = &inventory[i];
+	j_ptr = &p_ptr->inventory_list[i];
 
 	/* Forget stack */
 	j_ptr->next_o_idx = 0;
@@ -5411,7 +5411,7 @@ s16b inven_carry(object_type *o_ptr)
  * Note that only one item at a time can be wielded per slot.\n
  * Note that taking off an item when "full" may cause that item\n
  * to fall to the ground.\n
- * Return the inventory slot into which the item is placed.\n
+ * Return the p_ptr->inventory_list slot into which the item is placed.\n
  */
 INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 {
@@ -5428,7 +5428,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 
 	/* Get the item to take off */
-	o_ptr = &inventory[item];
+	o_ptr = &p_ptr->inventory_list[item];
 	if (amt <= 0) return (-1);
 
 	/* Verify */
@@ -5489,7 +5489,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 /*!
  * @brief 所持スロットから床下にオブジェクトを落とすメインルーチン /
- * Drop (some of) a non-cursed inventory/equipment item
+ * Drop (some of) a non-cursed p_ptr->inventory_list/equipment item
  * @param item 所持テーブルのID
  * @param amt 落としたい個数
  * @return なし
@@ -5505,7 +5505,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Access original object */
-	o_ptr = &inventory[item];
+	o_ptr = &p_ptr->inventory_list[item];
 
 	/* Error check */
 	if (amt <= 0) return;
@@ -5520,7 +5520,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 		item = inven_takeoff(item, amt);
 
 		/* Access original object */
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 
 	q_ptr = &forge;
@@ -5570,7 +5570,7 @@ void combine_pack(void)
 		/* Combine the pack (backwards) */
 		for (i = INVEN_PACK; i > 0; i--)
 		{
-			o_ptr = &inventory[i];
+			o_ptr = &p_ptr->inventory_list[i];
 
 			/* Skip empty items */
 			if (!o_ptr->k_idx) continue;
@@ -5580,7 +5580,7 @@ void combine_pack(void)
 			{
 				int max_num;
 
-				j_ptr = &inventory[j];
+				j_ptr = &p_ptr->inventory_list[j];
 
 				/* Skip empty items */
 				if (!j_ptr->k_idx) continue;
@@ -5609,11 +5609,11 @@ void combine_pack(void)
 						for (k = i; k < INVEN_PACK; k++)
 						{
 							/* Structure copy */
-							inventory[k] = inventory[k+1];
+							p_ptr->inventory_list[k] = p_ptr->inventory_list[k+1];
 						}
 
 						/* Erase the "final" slot */
-						object_wipe(&inventory[k]);
+						object_wipe(&p_ptr->inventory_list[k]);
 					}
 					else
 					{
@@ -5679,7 +5679,7 @@ void reorder_pack(void)
 		/* Mega-Hack -- allow "proper" over-flow */
 		if ((i == INVEN_PACK) && (inven_cnt == INVEN_PACK)) break;
 
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
@@ -5690,7 +5690,7 @@ void reorder_pack(void)
 		/* Scan every occupied slot */
 		for (j = 0; j < INVEN_PACK; j++)
 		{
-			if (object_sort_comp(o_ptr, o_value, &inventory[j])) break;
+			if (object_sort_comp(o_ptr, o_value, &p_ptr->inventory_list[j])) break;
 		}
 
 		/* Never move down */
@@ -5701,17 +5701,17 @@ void reorder_pack(void)
 		q_ptr = &forge;
 
 		/* Save a copy of the moving item */
-		object_copy(q_ptr, &inventory[i]);
+		object_copy(q_ptr, &p_ptr->inventory_list[i]);
 
 		/* Slide the objects */
 		for (k = i; k > j; k--)
 		{
 			/* Slide the item */
-			object_copy(&inventory[k], &inventory[k-1]);
+			object_copy(&p_ptr->inventory_list[k], &p_ptr->inventory_list[k-1]);
 		}
 
 		/* Insert the moving item */
-		object_copy(&inventory[j], q_ptr);
+		object_copy(&p_ptr->inventory_list[j], q_ptr);
 
 		p_ptr->window |= (PW_INVEN);
 	}

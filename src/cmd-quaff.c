@@ -58,7 +58,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 
 	/* Get the item (on the floor) */
@@ -74,7 +74,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 	/* Single object */
 	q_ptr->number = 1;
 
-	/* Reduce and describe inventory */
+	/* Reduce and describe p_ptr->inventory_list */
 	if (item >= 0)
 	{
 		inven_item_increase(item, -1);

@@ -1221,7 +1221,7 @@ const byte blows_table[12][12] =
  * and you must get all the way to "Fast (+50)" to reach the
  * point of getting 45 energy per current_world_ptr->game_turn.  After that point,
  * furthur increases in speed are more or less pointless,
- * except to balance out heavy inventory.
+ * except to balance out heavy p_ptr->inventory_list.
  *
  * Note that currently the fastest monster is "Fast (+30)".
  *

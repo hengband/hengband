@@ -3981,7 +3981,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 	/* Analyze the damage */
 	switch (typ)
 	{
-		/* Standard damage -- hurts inventory too */
+		/* Standard damage -- hurts p_ptr->inventory_list too */
 		case GF_ACID:
 		{
 			if (fuzzy) msg_print(_("酸で攻撃された！", "You are hit by acid!"));			
@@ -3989,7 +3989,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			break;
 		}
 
-		/* Standard damage -- hurts inventory too */
+		/* Standard damage -- hurts p_ptr->inventory_list too */
 		case GF_FIRE:
 		{
 			if (fuzzy) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
@@ -3997,7 +3997,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			break;
 		}
 
-		/* Standard damage -- hurts inventory too */
+		/* Standard damage -- hurts p_ptr->inventory_list too */
 		case GF_COLD:
 		{
 			if (fuzzy) msg_print(_("冷気で攻撃された！", "You are hit by cold!"));
@@ -4005,7 +4005,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			break;
 		}
 
-		/* Standard damage -- hurts inventory too */
+		/* Standard damage -- hurts p_ptr->inventory_list too */
 		case GF_ELEC:
 		{
 			if (fuzzy) msg_print(_("電撃で攻撃された！", "You are hit by lightning!"));
@@ -4102,7 +4102,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
 			}
-			else if ((inventory[INVEN_RARM].name1 == ART_ZANTETSU) || (inventory[INVEN_LARM].name1 == ART_ZANTETSU))
+			else if ((p_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (p_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU))
 			{
 				msg_print(_("矢を斬り捨てた！", "You cut down the arrow!"));
 				break;

@@ -366,7 +366,7 @@ static named_num gf_desc[] =
  *   F:\<num\>:\<a\>:\<c\>
  * Specify the attr/char values for unaware "objects" by kind tval
  *   U:\<tv\>:\<a\>:\<c\>
- * Specify the attr/char values for inventory "objects" by kind tval
+ * Specify the attr/char values for p_ptr->inventory_list "objects" by kind tval
  *   E:\<tv\>:\<a\>:\<c\>
  * Define a macro action, given an encoded macro action
  *   A:\<str\>
@@ -530,7 +530,7 @@ errr process_pref_file_command(char *buf)
 			}
 			break;
 
-		/* Process "E:<tv>:<a>" -- attribute for inventory objects */
+		/* Process "E:<tv>:<a>" -- attribute for p_ptr->inventory_list objects */
 		case 'E':
 			if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) == 2)
 			{
@@ -1709,7 +1709,7 @@ static void display_player_melee_bonus(int hand, int hand_entry)
 	char buf[160];
 	HIT_PROB show_tohit = p_ptr->dis_to_h[hand];
 	HIT_POINT show_todam = p_ptr->dis_to_d[hand];
-	object_type *o_ptr = &inventory[INVEN_RARM + hand];
+	object_type *o_ptr = &p_ptr->inventory_list[INVEN_RARM + hand];
 
 	/* Hack -- add in weapon info if known */
 	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
@@ -1744,7 +1744,7 @@ static void display_player_middle(void)
 	HIT_POINT show_todam = 0;
 
 	/* Range weapon */
-	object_type *o_ptr = &inventory[INVEN_BOW];
+	object_type *o_ptr = &p_ptr->inventory_list[INVEN_BOW];
 
 	int tmul = 0;
 	int e;
@@ -1788,9 +1788,9 @@ static void display_player_middle(void)
 	/* Range attacks */
 	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
 
-	if (inventory[INVEN_BOW].k_idx)
+	if (p_ptr->inventory_list[INVEN_BOW].k_idx)
 	{
-		tmul = bow_tmul(inventory[INVEN_BOW].sval);
+		tmul = bow_tmul(p_ptr->inventory_list[INVEN_BOW].sval);
 
 		/* Get extra "power" from "extra might" */
 		if (p_ptr->xtra_might) tmul++;
@@ -2065,7 +2065,7 @@ static void display_player_various(void)
 	xthn = p_ptr->skill_thn + (p_ptr->to_h_m * BTH_PLUS_ADJ);
 
 	/* Shooting Skill (with current bow and normal missile) */
-	o_ptr = &inventory[INVEN_BOW];
+	o_ptr = &p_ptr->inventory_list[INVEN_BOW];
 	tmp = p_ptr->to_h_b + o_ptr->to_h;
 	xthb = p_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
 
@@ -2122,7 +2122,7 @@ static void display_player_various(void)
 		}
 		else
 		{
-			o_ptr = &inventory[INVEN_RARM + i];
+			o_ptr = &p_ptr->inventory_list[INVEN_RARM + i];
 
 			/* Average damage per round */
 			if (o_ptr->k_idx)
@@ -2276,8 +2276,8 @@ static void player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 			add_flag(flgs, TR_SPEED);
 		else
 		{
-			if ((!inventory[INVEN_RARM].k_idx || p_ptr->migite) &&
-			    (!inventory[INVEN_LARM].k_idx || p_ptr->hidarite))
+			if ((!p_ptr->inventory_list[INVEN_RARM].k_idx || p_ptr->migite) &&
+			    (!p_ptr->inventory_list[INVEN_LARM].k_idx || p_ptr->hidarite))
 				add_flag(flgs, TR_SPEED);
 			if (p_ptr->lev>24)
 				add_flag(flgs, TR_FREE_ACT);
@@ -2833,7 +2833,7 @@ void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 	for (i = INVEN_RARM; i < max_i; i++)
 	{
 		/* Object */
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		a = object_attr(o_ptr);
 		c = object_char(o_ptr);
@@ -2874,7 +2874,7 @@ static void known_obj_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 		object_type *o_ptr;
 
 		/* Object */
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		if (!o_ptr->k_idx) continue;
 
@@ -3025,7 +3025,7 @@ static void display_flag_aux(TERM_LEN row, TERM_LEN col, concptr header,
 		object_type *o_ptr;
 
 		/* Object */
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Known flags */
 		object_flags_known(o_ptr, flgs);
@@ -3645,7 +3645,7 @@ static void display_player_stat_info(void)
 	/* Process equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Acquire "known" flags */
 		object_flags_known(o_ptr, flgs);
@@ -4861,7 +4861,7 @@ static void dump_aux_equipment_inventory(FILE *fff)
 		fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			object_desc(o_name, &inventory[i], 0);
+			object_desc(o_name, &p_ptr->inventory_list[i], 0);
 			if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
 				strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 
@@ -4871,16 +4871,16 @@ static void dump_aux_equipment_inventory(FILE *fff)
 		fprintf(fff, "\n\n");
 	}
 
-	/* Dump the inventory */
+	/* Dump the p_ptr->inventory_list */
 	fprintf(fff, _("  [キャラクタの持ち物]\n\n", "  [Character Inventory]\n\n"));
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		/* Don't dump the empty slots */
-		if (!inventory[i].k_idx) break;
+		if (!p_ptr->inventory_list[i].k_idx) break;
 
-		/* Dump the inventory slots */
-		object_desc(o_name, &inventory[i], 0);
+		/* Dump the p_ptr->inventory_list slots */
+		object_desc(o_name, &p_ptr->inventory_list[i], 0);
 		fprintf(fff, "%c) %s\n", index_to_label(i), o_name);
 	}
 
@@ -6381,7 +6381,7 @@ void show_info(void)
 	/* Hack -- Know everything in the inven/equip */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Aware and Known */
@@ -6445,14 +6445,14 @@ void show_info(void)
 	update_playtime();
 	display_player(0);
 
-	/* Prompt for inventory */
+	/* Prompt for p_ptr->inventory_list */
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 
 	/* Allow abort at this point */
 	if (inkey() == ESCAPE) return;
 
 
-	/* Show equipment and inventory */
+	/* Show equipment and p_ptr->inventory_list */
 
 	/* Equipment -- if any */
 	if (equip_cnt)

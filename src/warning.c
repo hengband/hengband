@@ -34,7 +34,7 @@ object_type *choose_warning_item(void)
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		BIT_FLAGS flgs[TR_FLAG_SIZE];
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 
 		object_flags(o_ptr, flgs);
 		if (have_flag(flgs, TR_WARNING))
@@ -45,7 +45,7 @@ object_type *choose_warning_item(void)
 	}
 
 	/* Choice one of them */
-	return number ? &inventory[choices[randint0(number)]] : NULL;
+	return number ? &p_ptr->inventory_list[choices[randint0(number)]] : NULL;
 }
 
 /*!
@@ -141,8 +141,8 @@ static void spell_damcalc(monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int
 
 	case GF_ARROW:
 		if (!p_ptr->blind &&
-			((inventory[INVEN_RARM].k_idx && (inventory[INVEN_RARM].name1 == ART_ZANTETSU)) ||
-			(inventory[INVEN_LARM].k_idx && (inventory[INVEN_LARM].name1 == ART_ZANTETSU))))
+			((p_ptr->inventory_list[INVEN_RARM].k_idx && (p_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU)) ||
+			(p_ptr->inventory_list[INVEN_LARM].k_idx && (p_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU))))
 		{
 			dam = 0;
 			ignore_wraith_form = TRUE;

@@ -1281,7 +1281,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		else if (!m_ptr->ml)
 		{
 #ifdef JP
-			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_format("せっかくだから%sを殺した。", m_name);
 			else
 				msg_format("%sを殺した。", m_name);
@@ -1307,7 +1307,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 			else
 			{
 #ifdef JP
-				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 					msg_format("せっかくだから%sを倒した。", m_name);
 				else
 					msg_format("%sを倒した。", m_name);
@@ -1321,7 +1321,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		else
 		{
 #ifdef JP
-			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_format("せっかくだから%sを葬り去った。", m_name);
 			else
 				msg_format("%sを葬り去った。", m_name);

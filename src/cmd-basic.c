@@ -201,7 +201,7 @@ void do_cmd_go_up(void)
 	
 		
 		/* Success */
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("上の階に登った。", "You enter the up staircase."));
@@ -299,7 +299,7 @@ void do_cmd_go_up(void)
 	if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
-	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 	else if (up_num == current_floor_ptr->dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
@@ -348,7 +348,7 @@ void do_cmd_go_down(void)
 		/* Confirm Leaving */
 		if(!confirm_leave_level(TRUE)) return;
 		
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
@@ -447,7 +447,7 @@ void do_cmd_go_down(void)
 			}
 			else
 			{
-				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (inventory[INVEN_BOW].name1 == ART_CRIMSON))
+				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 					msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 				else
 					msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));
@@ -1935,7 +1935,7 @@ static bool get_spike(INVENTORY_IDX *ip)
 	/* Check every item in the pack */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Check the "tval" code */
@@ -2263,7 +2263,7 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 	is_fired = FALSE;	/* not fired yet */
 
 	/* Get the "bow" (if any) */
-	j_ptr = &inventory[INVEN_BOW];
+	j_ptr = &p_ptr->inventory_list[INVEN_BOW];
 
 	/* Require a launcher */
 	if (!j_ptr->tval)
@@ -2382,7 +2382,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if (shuriken >= 0)
 	{
 		item = shuriken;
-		o_ptr = &inventory[item];
+		o_ptr = &p_ptr->inventory_list[item];
 	}
 	else if (boomerang)
 	{
@@ -2401,12 +2401,12 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		else if (has_melee_weapon(INVEN_LARM))
 		{
 			item = INVEN_LARM;
-			o_ptr = &inventory[item];
+			o_ptr = &p_ptr->inventory_list[item];
 		}
 		else
 		{
 			item = INVEN_RARM;
-			o_ptr = &inventory[item];
+			o_ptr = &p_ptr->inventory_list[item];
 		}
 	}
 	else
@@ -2502,7 +2502,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	    (q_ptr->name1 == ART_AEGISFANG) || boomerang)
 		return_when_thrown = TRUE;
 
-	/* Reduce and describe inventory */
+	/* Reduce and describe p_ptr->inventory_list */
 	if (item >= 0)
 	{
 		inven_item_increase(item, -1);
@@ -2813,7 +2813,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		if (item == INVEN_RARM || item == INVEN_LARM)
 		{
 			/* Access the wield slot */
-			o_ptr = &inventory[item];
+			o_ptr = &p_ptr->inventory_list[item];
 
 			/* Wear the new stuff */
 			object_copy(o_ptr, q_ptr);

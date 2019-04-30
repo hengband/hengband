@@ -727,7 +727,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
 			if (!o_ptr) return FALSE;
 
-			o_ptr = &inventory[item];
+			o_ptr = &p_ptr->inventory_list[item];
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			object_flags(o_ptr, f);
 
@@ -794,7 +794,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("影のオーラを身にまとい、敵に影のダメージを与える。", "Gives aura of shadow.");
 		if (cast)
 		{
-			object_type *o_ptr = &inventory[INVEN_OUTER];
+			object_type *o_ptr = &p_ptr->inventory_list[INVEN_OUTER];
 
 			if (!o_ptr->k_idx)
 			{
@@ -813,7 +813,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 		if (cont)
 		{
-			object_type *o_ptr = &inventory[INVEN_OUTER];
+			object_type *o_ptr = &p_ptr->inventory_list[INVEN_OUTER];
 
 			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
 			{

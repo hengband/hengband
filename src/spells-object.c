@@ -590,7 +590,7 @@ bool curse_armor(void)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Curse the body armor */
-	o_ptr = &inventory[INVEN_BODY];
+	o_ptr = &p_ptr->inventory_list[INVEN_BODY];
 
 	/* Nothing to curse */
 	if (!o_ptr->k_idx) return (FALSE);
@@ -711,7 +711,7 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
  */
 bool curse_weapon(bool force, int slot)
 {
-	return curse_weapon_object(force, &inventory[slot]);
+	return curse_weapon_object(force, &p_ptr->inventory_list[slot]);
 }
 
 
@@ -772,7 +772,7 @@ bool brand_bolts(void)
 	/* Use the first acceptable bolts */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		object_type *o_ptr = &inventory[i];
+		object_type *o_ptr = &p_ptr->inventory_list[i];
 
 		/* Skip non-bolts */
 		if (o_ptr->tval != TV_BOLT) continue;
@@ -887,7 +887,7 @@ void get_bloody_moon_flags(object_type *o_ptr)
 void phlogiston(void)
 {
 	GAME_TURN max_flog = 0;
-	object_type * o_ptr = &inventory[INVEN_LITE];
+	object_type * o_ptr = &p_ptr->inventory_list[INVEN_LITE];
 
 	/* It's a lamp */
 	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_LANTERN))

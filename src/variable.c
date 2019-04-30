@@ -141,7 +141,7 @@ bool repair_objects;	/* Hack -- optimize detect objects */
 bool is_loading_now;	/*!< ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 bool hack_mutation;
 
-s16b inven_cnt; /* Number of items in inventory */
+s16b inven_cnt; /* Number of items in p_ptr->inventory_list */
 s16b equip_cnt; /* Number of items in equipment */
 
 OBJECT_IDX o_max = 1; /* Number of allocated objects */
@@ -451,13 +451,6 @@ TOWN_IDX max_towns;
  */
 town_type *town_info;
 
-
-/*
- * The player's inventory [INVEN_TOTAL]
- */
-object_type *inventory;
-
-
 /*
  * The size of "alloc_kind_table" (at most max_k_idx * 4)
  */
@@ -489,7 +482,7 @@ SYMBOL_CODE misc_to_char[256];
 
 
 /*
- * Specify attr/char pairs for inventory items (by tval)
+ * Specify attr/char pairs for p_ptr->inventory_list items (by tval)
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
 TERM_COLOR tval_to_attr[128];

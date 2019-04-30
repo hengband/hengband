@@ -1781,10 +1781,10 @@ static bool kankin(void)
 	GAME_TEXT o_name[MAX_NLEN];
 	object_type *o_ptr;
 
-	/* Loop for inventory and right/left arm */
+	/* Loop for p_ptr->inventory_list and right/left arm */
 	for (i = 0; i <= INVEN_LARM; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Living Tsuchinoko worthes $1000000 */
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
@@ -1807,7 +1807,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Corpse of Tsuchinoko worthes $200000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
@@ -1830,7 +1830,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Bones of Tsuchinoko worthes $100000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
@@ -1853,7 +1853,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN+20];
@@ -1874,7 +1874,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
@@ -1899,7 +1899,7 @@ static bool kankin(void)
 		/* Need reverse order --- Positions will be changed in the loop */
 		for (i = INVEN_PACK-1; i >= 0; i--)
 		{
-			o_ptr = &inventory[i];
+			o_ptr = &p_ptr->inventory_list[i];
 			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == current_world_ptr->bounty_r_idx[j]))
 			{
 				char buf[MAX_NLEN+20];
@@ -2633,7 +2633,7 @@ static PRICE compare_weapons(PRICE bcost)
 	clear_bldg(0, 22);
 
 	/* Store copy of original wielded weapon */
-	i_ptr = &inventory[INVEN_RARM];
+	i_ptr = &p_ptr->inventory_list[INVEN_RARM];
 	object_copy(&orig_weapon, i_ptr);
 
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
@@ -3481,7 +3481,7 @@ static void building_recharge_all(void)
 	/* Calculate cost */
 	for ( i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 				
 		/* skip non magic device */
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
@@ -3545,7 +3545,7 @@ static void building_recharge_all(void)
 	
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &inventory[i];
+		o_ptr = &p_ptr->inventory_list[i];
 		k_ptr = &k_info[o_ptr->k_idx];
 
 		/* skip non magic device */

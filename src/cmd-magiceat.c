@@ -35,8 +35,8 @@
  * 400 item comparisons, but only occasionally.
  *
  * There may be a BIG problem with any "effect" that can cause "changes"
- * to the inventory.  For example, a "scroll of recharging" can cause
- * a wand/staff to "disappear", moving the inventory up.  Luckily, the
+ * to the p_ptr->inventory_list.  For example, a "scroll of recharging" can cause
+ * a wand/staff to "disappear", moving the p_ptr->inventory_list up.  Luckily, the
  * scrolls all appear BEFORE the staffs/wands, so this is not a problem.
  * But, for example, a "staff of recharging" could cause MAJOR problems.
  * In such a case, it will be best to either (1) "postpone" the effect
