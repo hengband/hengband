@@ -434,7 +434,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 			C_MAKE(who, current_floor_ptr->max_m_idx, MONSTER_IDX);
 
 			/* Process the monsters (backwards) */
-			for (pet_ctr = m_max - 1; pet_ctr >= 1; pet_ctr--)
+			for (pet_ctr = current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
 				if (is_pet(&current_floor_ptr->m_list[pet_ctr]) && (p_ptr->riding != pet_ctr))
 				  who[max_pet++] = pet_ctr;
@@ -1562,7 +1562,7 @@ bool activate_artifact(object_type *o_ptr)
 		monster_race *r_ptr;
 		msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
 		/* Process the monsters (backwards) */
-		for (i = m_max - 1; i >= 1; i--)
+		for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 		{
 			/* Access the monster */
 			m_ptr = &current_floor_ptr->m_list[i];

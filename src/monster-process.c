@@ -70,15 +70,15 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 	{
 		if (p_ptr->inside_battle)
 		{
-			start = randint1(m_max-1)+m_max;
+			start = randint1(current_floor_ptr->m_max-1)+current_floor_ptr->m_max;
 			if(randint0(2)) plus = -1;
 		}
-		else start = m_max + 1;
+		else start = current_floor_ptr->m_max + 1;
 
 		/* Scan thru all monsters */
-		for (i = start; ((i < start + m_max) && (i > start - m_max)); i+=plus)
+		for (i = start; ((i < start + current_floor_ptr->m_max) && (i > start - current_floor_ptr->m_max)); i+=plus)
 		{
-			MONSTER_IDX dummy = (i % m_max);
+			MONSTER_IDX dummy = (i % current_floor_ptr->m_max);
 
 			if (!dummy) continue;
 
@@ -3176,7 +3176,7 @@ void process_monsters(void)
 
 
 	/* Process the monsters (backwards) */
-	for (i = m_max - 1; i >= 1; i--)
+	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		/* Access the monster */
 		m_ptr = &current_floor_ptr->m_list[i];

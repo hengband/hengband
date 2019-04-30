@@ -1141,7 +1141,7 @@ bool change_wild_mode(void)
 		return TRUE;
 	}
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 

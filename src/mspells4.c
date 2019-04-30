@@ -1965,7 +1965,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 			if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) 
 				return -1;
 
-			for (k = 1; k < m_max; k++)
+			for (k = 1; k < current_floor_ptr->m_max; k++)
 			{
 				if (current_floor_ptr->m_list[k].r_idx == MON_BANOR || current_floor_ptr->m_list[k].r_idx == MON_LUPART)
 				{

@@ -4089,7 +4089,7 @@ void do_cmd_bldg(void)
 	}
 	else if ((which == 2) && p_ptr->inside_arena)
 	{
-		if (!p_ptr->exit_bldg && m_cnt > 0)
+		if (!p_ptr->exit_bldg && current_floor_ptr->m_cnt > 0)
 		{
 			prt(_("ゲートは閉まっている。モンスターがあなたを待っている！", "The gates are closed.  The monster awaits!"), 0, 0);
 		}

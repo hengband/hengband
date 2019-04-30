@@ -384,7 +384,7 @@ bool detect_monsters_normal(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -430,7 +430,7 @@ bool detect_monsters_invis(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -482,7 +482,7 @@ bool detect_monsters_evil(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -537,7 +537,7 @@ bool detect_monsters_nonliving(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -585,7 +585,7 @@ bool detect_monsters_mind(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -636,7 +636,7 @@ bool detect_monsters_string(POSITION range, concptr Match)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -689,7 +689,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -789,7 +789,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 	bool obvious = FALSE;
 
 	/* Mark all (nearby) monsters */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -805,7 +805,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 	}
 
 	/* Affect all marked monsters */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
@@ -977,7 +977,7 @@ void aggravate_monsters(MONSTER_IDX who)
 	bool speed = FALSE;
 
 	/* Aggravate everyone nearby */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -1125,7 +1125,7 @@ bool symbol_genocide(int power, bool player_cast)
 	while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE)) ;
 
 	/* Delete the monsters of that "type" */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1165,7 +1165,7 @@ bool mass_genocide(int power, bool player_cast)
 	}
 
 	/* Delete the (nearby) monsters */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -1205,7 +1205,7 @@ bool mass_genocide_undead(int power, bool player_cast)
 	}
 
 	/* Delete the (nearby) monsters */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1249,7 +1249,7 @@ bool probing(void)
 	Term->scr->cv = 1;
 
 	/* Probe all (nearby) monsters */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -2106,7 +2106,7 @@ void discharge_minion(void)
 	MONSTER_IDX i;
 	bool okay = TRUE;
 
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!m_ptr->r_idx || !is_pet(m_ptr)) continue;
@@ -2117,7 +2117,7 @@ void discharge_minion(void)
 		if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? ")))
 			return;
 	}
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		HIT_POINT dam;
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];

@@ -153,7 +153,7 @@ void delete_monster_idx(MONSTER_IDX i)
 	(void)WIPE(m_ptr, monster_type);
 
 	/* Count monsters */
-	m_cnt--;
+	current_floor_ptr->m_cnt--;
 
 	lite_spot(y, x);
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
@@ -238,7 +238,7 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	/* Hack -- Update parent index */
 	if (is_pet(m_ptr))
 	{
-		for (i = 1; i < m_max; i++)
+		for (i = 1; i < current_floor_ptr->m_max; i++)
 		{
 			monster_type *m2_ptr = &current_floor_ptr->m_list[i];
 
@@ -295,7 +295,7 @@ void compact_monsters(int size)
 		cur_dis = 5 * (20 - cnt);
 
 		/* Check all the monsters */
-		for (i = 1; i < m_max; i++)
+		for (i = 1; i < current_floor_ptr->m_max; i++)
 		{
 			monster_type *m_ptr = &current_floor_ptr->m_list[i];
 
@@ -340,7 +340,7 @@ void compact_monsters(int size)
 
 
 	/* Excise dead monsters (backwards!) */
-	for (i = m_max - 1; i >= 1; i--)
+	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		/* Get the i'th monster */
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
@@ -349,10 +349,10 @@ void compact_monsters(int size)
 		if (m_ptr->r_idx) continue;
 
 		/* Move last monster into open hole */
-		compact_monsters_aux(m_max - 1, i);
+		compact_monsters_aux(current_floor_ptr->m_max - 1, i);
 
-		/* Compress "m_max" */
-		m_max--;
+		/* Compress "current_floor_ptr->m_max" */
+		current_floor_ptr->m_max--;
 	}
 }
 
@@ -388,7 +388,7 @@ void wipe_m_list(void)
 	}
 
 	/* Delete all the monsters */
-	for (i = m_max - 1; i >= 1; i--)
+	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -409,11 +409,11 @@ void wipe_m_list(void)
 	/* Hack -- Wipe the racial counter of all monster races */
 	for (i = 1; i < max_r_idx; i++) r_info[i].cur_num = 0;
 
-	/* Reset "m_max" */
-	m_max = 1;
+	/* Reset "current_floor_ptr->m_max" */
+	current_floor_ptr->m_max = 1;
 
-	/* Reset "m_cnt" */
-	m_cnt = 0;
+	/* Reset "current_floor_ptr->m_cnt" */
+	current_floor_ptr->m_cnt = 0;
 
 	/* Reset "current_floor_ptr->mproc_max[]" */
 	for (i = 0; i < MAX_MTIMED; i++) current_floor_ptr->mproc_max[i] = 0;
@@ -442,23 +442,23 @@ MONSTER_IDX m_pop(void)
 	MONSTER_IDX i;
 
 	/* Normal allocation */
-	if (m_max < current_floor_ptr->max_m_idx)
+	if (current_floor_ptr->m_max < current_floor_ptr->max_m_idx)
 	{
 		/* Access the next hole */
-		i = m_max;
+		i = current_floor_ptr->m_max;
 
 		/* Expand the array */
-		m_max++;
+		current_floor_ptr->m_max++;
 
 		/* Count monsters */
-		m_cnt++;
+		current_floor_ptr->m_cnt++;
 
 		/* Return the index */
 		return (i);
 	}
 
 	/* Recycle dead monsters */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr;
 
@@ -469,7 +469,7 @@ MONSTER_IDX m_pop(void)
 		if (m_ptr->r_idx) continue;
 
 		/* Count monsters */
-		m_cnt++;
+		current_floor_ptr->m_cnt++;
 
 		/* Use this monster */
 		return (i);
@@ -2188,7 +2188,7 @@ void update_monsters(bool full)
 	MONSTER_IDX i;
 
 	/* Update each (live) monster */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;

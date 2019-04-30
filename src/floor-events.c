@@ -150,7 +150,7 @@ byte get_dungeon_feeling(void)
 	if (!current_floor_ptr->dun_level) return 0;
 
 	/* Examine each monster */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		monster_race *r_ptr;
@@ -1529,7 +1529,7 @@ void update_mon_lite(void)
 		monster_race *r_ptr;
 
 		/* Loop through monsters, adding newly lit squares to changes list */
-		for (i = 1; i < m_max; i++)
+		for (i = 1; i < current_floor_ptr->m_max; i++)
 		{
 			m_ptr = &current_floor_ptr->m_list[i];
 			r_ptr = &r_info[m_ptr->r_idx];

@@ -2920,7 +2920,7 @@ static void calc_alignment(void)
 	p_ptr->align = 0;
 	int i, j, neutral[2];
 
-	for (m_idx = m_max - 1; m_idx >= 1; m_idx--)
+	for (m_idx = current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;

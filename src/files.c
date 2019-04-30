@@ -4199,7 +4199,7 @@ static void dump_aux_pet(FILE *fff)
 	bool pet_settings = FALSE;
 	GAME_TEXT pet_name[MAX_NLEN];
 
-	for (i = m_max - 1; i >= 1; i--)
+	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 

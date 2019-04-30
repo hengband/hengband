@@ -5714,7 +5714,7 @@ static void do_cmd_knowledge_pets(void)
 	}
 
 	/* Process the monsters (backwards) */
-	for (i = m_max - 1; i >= 1; i--)
+	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		/* Access the monster */
 		m_ptr = &current_floor_ptr->m_list[i];

@@ -159,8 +159,6 @@ extern bool shimmer_monsters;
 extern bool shimmer_objects;
 extern bool repair_monsters;
 extern bool repair_objects;
-extern MONSTER_IDX m_max;
-extern MONSTER_IDX m_cnt;
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;
 extern int total_friends;

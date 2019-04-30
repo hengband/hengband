@@ -410,7 +410,7 @@ void mitokohmon(void)
 	}
 	if (!count)
 	{
-		for (i = m_max - 1; i > 0; i--)
+		for (i = current_floor_ptr->m_max - 1; i > 0; i--)
 		{
 			m_ptr = &current_floor_ptr->m_list[i];
 			if (!monster_is_valid(m_ptr)) continue;

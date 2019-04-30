@@ -883,7 +883,7 @@ static void regen_monsters(void)
 
 
 	/* Regenerate everyone */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		/* Check the i'th monster */
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
@@ -2432,7 +2432,7 @@ static void process_world_aux_mutation(void)
 		int danger_amount = 0;
 		MONSTER_IDX monster;
 
-		for (monster = 0; monster < m_max; monster++)
+		for (monster = 0; monster < current_floor_ptr->m_max; monster++)
 		{
 			monster_type *m_ptr = &current_floor_ptr->m_list[monster];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -4404,7 +4404,7 @@ static void process_player(void)
 
 	if (p_ptr->inside_battle)
 	{
-		for(m_idx = 1; m_idx < m_max; m_idx++)
+		for(m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
 		{
 			monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 
@@ -4766,7 +4766,7 @@ static void process_player(void)
 				shimmer_monsters = FALSE;
 
 				/* Shimmer multi-hued monsters */
-				for (m_idx = 1; m_idx < m_max; m_idx++)
+				for (m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
 				{
 					monster_type *m_ptr;
 					monster_race *r_ptr;
@@ -4800,7 +4800,7 @@ static void process_player(void)
 				repair_monsters = FALSE;
 
 				/* Rotate detection flags */
-				for (m_idx = 1; m_idx < m_max; m_idx++)
+				for (m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
 				{
 					monster_type *m_ptr;
 					m_ptr = &current_floor_ptr->m_list[m_idx];
@@ -5078,10 +5078,10 @@ static void dungeon(bool load_game)
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((m_cnt + 32 > current_floor_ptr->max_m_idx) && !p_ptr->inside_battle) compact_monsters(64);
+		if ((current_floor_ptr->m_cnt + 32 > current_floor_ptr->max_m_idx) && !p_ptr->inside_battle) compact_monsters(64);
 
 		/* Hack -- Compress the monster list occasionally */
-		if ((m_cnt + 32 < m_max) && !p_ptr->inside_battle) compact_monsters(0);
+		if ((current_floor_ptr->m_cnt + 32 < current_floor_ptr->m_max) && !p_ptr->inside_battle) compact_monsters(0);
 
 
 		/* Hack -- Compact the object list occasionally */
@@ -5452,7 +5452,7 @@ void play_game(bool new_game)
 		if (p_ptr->riding == -1)
 		{
 			p_ptr->riding = 0;
-			for (i = m_max; i > 0; i--)
+			for (i = current_floor_ptr->m_max; i > 0; i--)
 			{
 				if (player_bold(current_floor_ptr->m_list[i].fy, current_floor_ptr->m_list[i].fx))
 				{

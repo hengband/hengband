@@ -1468,7 +1468,7 @@ static void do_cmd_wiz_zap(void)
 	MONSTER_IDX i;
 
 	/* Genocide everyone nearby */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -1503,7 +1503,7 @@ static void do_cmd_wiz_zap_all(void)
 	MONSTER_IDX i;
 
 	/* Genocide everyone */
-	for (i = 1; i < m_max; i++)
+	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
