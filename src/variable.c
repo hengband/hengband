@@ -147,15 +147,6 @@ int total_friends = 0;
 int leaving_quest = 0;
 bool reinit_wilderness = FALSE;
 
-
-
-/*
- * Dungeon variables
- */
-
-bool closing_flag;		/* Dungeon is closing */
-
-
 /*
  * Dungeon size info
  */

@@ -3128,38 +3128,6 @@ static void process_world(void)
 	/* Every 10 game turns */
 	if (current_world_ptr->game_turn % TURNS_PER_TICK) return;
 
-	/*** Check the Time and Load ***/
-
-	if (!(current_world_ptr->game_turn % (50*TURNS_PER_TICK)))
-	{
-		/* Check time and load */
-		if ((0 != check_time()) || (0 != check_load()))
-		{
-			/* Warning */
-			if (closing_flag <= 2)
-			{
-				disturb(FALSE, TRUE);
-
-				/* Count warnings */
-				closing_flag++;
-
-				msg_print(_("アングバンドへの門が閉じかかっています...", "The gates to ANGBAND are closing..."));
-				msg_print(_("ゲームを終了するかセーブするかして下さい。", "Please finish up and/or save your game."));
-
-			}
-
-			/* Slam the gate */
-			else
-			{
-				msg_print(_("今、アングバンドへの門が閉ざされました。", "The gates to ANGBAND are now closed."));
-
-				/* Stop playing */
-				p_ptr->playing = FALSE;
-				p_ptr->leaving = TRUE;
-			}
-		}
-	}
-
 	/*** Attempt timed autosave ***/
 	if (autosave_t && autosave_freq && !p_ptr->inside_battle)
 	{

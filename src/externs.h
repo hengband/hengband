@@ -177,7 +177,6 @@ extern bool is_fired;
 
 extern char record_o_name[MAX_NLEN];
 extern GAME_TURN record_turn;
-extern bool closing_flag;
 extern POSITION panel_row_min, panel_row_max;
 extern POSITION panel_col_min, panel_col_max;
 extern POSITION panel_col_prt, panel_row_prt;
