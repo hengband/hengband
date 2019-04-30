@@ -4387,12 +4387,12 @@ static void process_player(void)
 
 	/*** Apply energy ***/
 
-	if (hack_mutation)
+	if (p_ptr->hack_mutation)
 	{
 		msg_print(_("何か変わった気がする！", "You feel different!"));
 
 		(void)gain_mutation(p_ptr, 0);
-		hack_mutation = FALSE;
+		p_ptr->hack_mutation = FALSE;
 	}
 
 	if (invoking_midnight_curse)
@@ -5274,7 +5274,7 @@ void play_game(bool new_game)
 		return;
 	}
 
-	hack_mutation = FALSE;
+	p_ptr->hack_mutation = FALSE;
 
 	/* Hack -- Character is "icky" */
 	character_icky = TRUE;

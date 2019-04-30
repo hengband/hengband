@@ -167,7 +167,6 @@ extern bool reinit_wilderness;
 extern bool multi_rew;
 extern char summon_kin_type;
 extern bool is_loading_now;
-extern bool hack_mutation;
 extern bool reset_concent;
 extern bool is_fired;
 

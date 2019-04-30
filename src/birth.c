@@ -4626,8 +4626,8 @@ void player_birth(void)
 	seed_wilderness();
 
 	/* Give beastman a mutation at character birth */
-	if (p_ptr->prace == RACE_BEASTMAN) hack_mutation = TRUE;
-	else hack_mutation = FALSE;
+	if (p_ptr->prace == RACE_BEASTMAN) p_ptr->hack_mutation = TRUE;
+	else p_ptr->hack_mutation = FALSE;
 
 	/* Set the message window flag as default */
 	if (!window_flag[1])
