@@ -72,7 +72,6 @@ extern const byte extract_energy[200];
 extern const player_sex sex_info[MAX_SEXES];
 extern const player_race race_info[MAX_RACES];
 extern const player_class class_info[MAX_CLASS];
-extern const magic_type technic_info[NUM_TECHNIC][32];
 extern const player_seikaku seikaku_info[MAX_SEIKAKU];
 extern const player_race mimic_info[];
 extern const u32b fake_spell_flags[4];

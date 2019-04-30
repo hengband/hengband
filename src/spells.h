@@ -112,7 +112,7 @@
 
 #define MAX_GF         117
 
-
+extern const magic_type technic_info[NUM_TECHNIC][32];
 
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);

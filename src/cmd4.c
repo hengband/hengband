@@ -65,6 +65,8 @@
 #include "dungeon-file.h"
 #include "files.h"
 #include "player-class.h"
+#include "player-move.h"
+#include "spells.h"
 
 /*
  */
