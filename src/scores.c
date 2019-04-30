@@ -14,6 +14,7 @@
 #include "util.h"
 
 #include "player-status.h"
+#include "player-class.h"
 #include "files.h"
 #include "scores.h"
 #include "floor.h"

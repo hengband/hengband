@@ -71,7 +71,7 @@ extern const byte blows_table[12][12];
 extern const byte extract_energy[200];
 extern const player_sex sex_info[MAX_SEXES];
 extern const player_race race_info[MAX_RACES];
-extern const player_class class_info[MAX_CLASS];
+
 extern const player_seikaku seikaku_info[MAX_SEIKAKU];
 extern const player_race mimic_info[];
 extern const u32b fake_spell_flags[4];
@@ -227,7 +227,6 @@ extern concptr keymap_act[KEYMAP_MODES][256];
 extern player_type *p_ptr;
 extern const player_sex *sp_ptr;
 extern const player_race *rp_ptr;
-extern const player_class *cp_ptr;
 extern const player_seikaku *ap_ptr;
 extern birther previous_char;
 extern char *f_name;

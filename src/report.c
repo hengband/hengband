@@ -11,6 +11,7 @@
 
 #include "floor.h"
 #include "player-status.h"
+#include "player-class.h"
 #include "files.h"
 #include "world.h"
 

@@ -19,6 +19,7 @@
 #include "store.h"
 #include "player-status.h"
 #include "player-move.h"
+#include "player-class.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 

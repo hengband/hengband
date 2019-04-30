@@ -492,7 +492,6 @@ player_type *p_ptr = &p_body;
  */
 const player_sex *sp_ptr;
 const player_race *rp_ptr;
-const player_class *cp_ptr;
 const player_seikaku *ap_ptr;
 
 
