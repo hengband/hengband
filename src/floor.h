@@ -16,6 +16,8 @@ typedef struct {
 
 	object_type *o_list; /*!< The array of dungeon items [current_floor_ptr->max_o_idx] */
 	OBJECT_IDX max_o_idx; /*!< Maximum number of objects in the level */
+	OBJECT_IDX o_max; /* Number of allocated objects */
+	OBJECT_IDX o_cnt; /* Number of live objects */
 
 	monster_type *m_list; /*!< The array of dungeon monsters [current_floor_ptr->max_m_idx] */
 	MONSTER_IDX max_m_idx; /*!< Maximum number of monsters in the level */

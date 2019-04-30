@@ -159,8 +159,6 @@ extern bool shimmer_monsters;
 extern bool shimmer_objects;
 extern bool repair_monsters;
 extern bool repair_objects;
-extern OBJECT_IDX o_max;
-extern OBJECT_IDX o_cnt;
 extern MONSTER_IDX m_max;
 extern MONSTER_IDX m_cnt;
 extern MONSTER_IDX hack_m_idx;

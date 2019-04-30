@@ -195,7 +195,7 @@ byte get_dungeon_feeling(void)
 	}
 
 	/* Examine each unidentified object */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];

@@ -2849,7 +2849,7 @@ static void process_world_aux_recharge(void)
 	}
 
 	/* Process objects on floor */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
@@ -5085,10 +5085,10 @@ static void dungeon(bool load_game)
 
 
 		/* Hack -- Compact the object list occasionally */
-		if (o_cnt + 32 > current_floor_ptr->max_o_idx) compact_objects(64);
+		if (current_floor_ptr->o_cnt + 32 > current_floor_ptr->max_o_idx) compact_objects(64);
 
 		/* Hack -- Compress the object list occasionally */
-		if (o_cnt + 32 < o_max) compact_objects(0);
+		if (current_floor_ptr->o_cnt + 32 < current_floor_ptr->o_max) compact_objects(0);
 
 		/* Process the player */
 		process_player();

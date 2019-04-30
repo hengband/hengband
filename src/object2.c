@@ -171,7 +171,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	object_wipe(j_ptr);
 
 	/* Count objects */
-	o_cnt--;
+	current_floor_ptr->o_cnt--;
 }
 
 
@@ -201,7 +201,7 @@ void delete_object(POSITION y, POSITION x)
 		object_wipe(o_ptr);
 
 		/* Count objects */
-		o_cnt--;
+		current_floor_ptr->o_cnt--;
 	}
 
 	/* Objects are gone */
@@ -228,7 +228,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	if (i1 == i2) return;
 
 	/* Repair objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		o_ptr = &current_floor_ptr->o_list[i];
 
@@ -330,7 +330,7 @@ void compact_objects(int size)
 		cur_dis = 5 * (20 - cnt);
 
 		/* Examine the objects */
-		for (i = 1; i < o_max; i++)
+		for (i = 1; i < current_floor_ptr->o_max; i++)
 		{
 			o_ptr = &current_floor_ptr->o_list[i];
 
@@ -383,7 +383,7 @@ void compact_objects(int size)
 
 
 	/* Excise dead objects (backwards!) */
-	for (i = o_max - 1; i >= 1; i--)
+	for (i = current_floor_ptr->o_max - 1; i >= 1; i--)
 	{
 		o_ptr = &current_floor_ptr->o_list[i];
 
@@ -391,10 +391,10 @@ void compact_objects(int size)
 		if (o_ptr->k_idx) continue;
 
 		/* Move last object into open hole */
-		compact_objects_aux(o_max - 1, i);
+		compact_objects_aux(current_floor_ptr->o_max - 1, i);
 
-		/* Compress "o_max" */
-		o_max--;
+		/* Compress "current_floor_ptr->o_max" */
+		current_floor_ptr->o_max--;
 	}
 }
 
@@ -416,7 +416,7 @@ void wipe_o_list(void)
 	int i;
 
 	/* Delete the existing objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
@@ -461,11 +461,11 @@ void wipe_o_list(void)
 		object_wipe(o_ptr);
 	}
 
-	/* Reset "o_max" */
-	o_max = 1;
+	/* Reset "current_floor_ptr->o_max" */
+	current_floor_ptr->o_max = 1;
 
-	/* Reset "o_cnt" */
-	o_cnt = 0;
+	/* Reset "current_floor_ptr->o_cnt" */
+	current_floor_ptr->o_cnt = 0;
 }
 
 
@@ -482,16 +482,16 @@ OBJECT_IDX o_pop(void)
 	OBJECT_IDX i;
 
 	/* Initial allocation */
-	if (o_max < current_floor_ptr->max_o_idx)
+	if (current_floor_ptr->o_max < current_floor_ptr->max_o_idx)
 	{
 		/* Get next space */
-		i = o_max;
+		i = current_floor_ptr->o_max;
 
 		/* Expand object array */
-		o_max++;
+		current_floor_ptr->o_max++;
 
 		/* Count objects */
-		o_cnt++;
+		current_floor_ptr->o_cnt++;
 
 		/* Use this object */
 		return (i);
@@ -499,7 +499,7 @@ OBJECT_IDX o_pop(void)
 
 
 	/* Recycle dead objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[i];
@@ -508,7 +508,7 @@ OBJECT_IDX o_pop(void)
 		if (o_ptr->k_idx) continue;
 
 		/* Count objects */
-		o_cnt++;
+		current_floor_ptr->o_cnt++;
 
 		/* Use this object */
 		return (i);

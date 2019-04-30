@@ -192,7 +192,7 @@ bool detect_objects_gold(POSITION range)
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
 	/* Scan objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
@@ -247,7 +247,7 @@ bool detect_objects_normal(POSITION range)
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
 	/* Scan objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
@@ -310,7 +310,7 @@ bool detect_objects_magic(POSITION range)
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan all objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 

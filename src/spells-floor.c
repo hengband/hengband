@@ -35,7 +35,7 @@ void wiz_lite(bool ninja)
 	feature_type *f_ptr;
 
 	/* Memorize objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
@@ -152,7 +152,7 @@ void wiz_dark(void)
 	}
 
 	/* Forget all objects */
-	for (i = 1; i < o_max; i++)
+	for (i = 1; i < current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 

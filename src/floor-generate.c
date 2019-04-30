@@ -1330,9 +1330,9 @@ void clear_cave(void)
 	int i;
 
 	/* Very simplified version of wipe_o_list() */
-	(void)C_WIPE(current_floor_ptr->o_list, o_max, object_type);
-	o_max = 1;
-	o_cnt = 0;
+	(void)C_WIPE(current_floor_ptr->o_list, current_floor_ptr->o_max, object_type);
+	current_floor_ptr->o_max = 1;
+	current_floor_ptr->o_cnt = 0;
 
 	/* Very simplified version of wipe_m_list() */
 	for (i = 1; i < max_r_idx; i++)
@@ -1435,7 +1435,7 @@ void generate_random_floor(void)
 
 
 		/* Prevent object over-flow */
-		if (o_max >= current_floor_ptr->max_o_idx)
+		if (current_floor_ptr->o_max >= current_floor_ptr->max_o_idx)
 		{
 			why = _("アイテムが多すぎる", "too many objects");
 			okay = FALSE;
