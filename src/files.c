@@ -4856,7 +4856,7 @@ static void dump_aux_equipment_inventory(FILE *fff)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Dump the equipment */
-	if (equip_cnt)
+	if (p_ptr->equip_cnt)
 	{
 		fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
@@ -6455,7 +6455,7 @@ void show_info(void)
 	/* Show equipment and p_ptr->inventory_list */
 
 	/* Equipment -- if any */
-	if (equip_cnt)
+	if (p_ptr->equip_cnt)
 	{
 		Term_clear();
 		(void)show_equip(0, USE_FULL);
@@ -6465,7 +6465,7 @@ void show_info(void)
 	}
 
 	/* Inventory -- if any */
-	if (inven_cnt)
+	if (p_ptr->inven_cnt)
 	{
 		Term_clear();
 		(void)show_inven(0, USE_FULL);

@@ -1683,8 +1683,8 @@ static void player_wipe_without_name(void)
 	p_ptr->total_weight = 0;
 
 	/* No items */
-	inven_cnt = 0;
-	equip_cnt = 0;
+	p_ptr->inven_cnt = 0;
+	p_ptr->equip_cnt = 0;
 
 	/* Clear the p_ptr->inventory_list */
 	for (i = 0; i < INVEN_TOTAL; i++)
@@ -1973,7 +1973,7 @@ static void wield_all(void)
  		p_ptr->total_weight += i_ptr->weight; 
  
 		/* Increment the equip counter by hand */ 
-		equip_cnt++;
+		p_ptr->equip_cnt++;
 
  	} 
 	return; 

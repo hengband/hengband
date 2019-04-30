@@ -387,7 +387,7 @@ void do_cmd_wield(void)
 	p_ptr->total_weight += q_ptr->weight;
 
 	/* Increment the equip counter by hand */
-	equip_cnt++;
+	p_ptr->equip_cnt++;
 
 #define STR_WIELD_RARM _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")
 #define STR_WIELD_LARM _("%s(%c)を左手に装備した。", "You are wielding %s (%c) in your left hand.")

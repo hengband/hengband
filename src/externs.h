@@ -159,8 +159,6 @@ extern bool shimmer_monsters;
 extern bool shimmer_objects;
 extern bool repair_monsters;
 extern bool repair_objects;
-extern s16b inven_cnt;
-extern s16b equip_cnt;
 extern OBJECT_IDX o_max;
 extern OBJECT_IDX o_cnt;
 extern MONSTER_IDX m_max;

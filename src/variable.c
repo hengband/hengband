@@ -141,9 +141,6 @@ bool repair_objects;	/* Hack -- optimize detect objects */
 bool is_loading_now;	/*!< ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 bool hack_mutation;
 
-s16b inven_cnt; /* Number of items in p_ptr->inventory_list */
-s16b equip_cnt; /* Number of items in equipment */
-
 OBJECT_IDX o_max = 1; /* Number of allocated objects */
 OBJECT_IDX o_cnt = 0; /* Number of live objects */
 
