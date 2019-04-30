@@ -22,6 +22,7 @@
 #include "store.h"
 #include "patron.h"
 #include "quest.h"
+#include "player-class.h"
 #include "player-status.h"
 #include "spells.h"
 #include "spells-status.h"

@@ -50,6 +50,7 @@
 #include "dungeon.h"
 #include "rooms-vault.h"
 #include "player-skill.h"
+#include "player-class.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME

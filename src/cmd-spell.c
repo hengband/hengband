@@ -30,6 +30,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-skill.h"
+#include "player-class.h"
 #include "object-hook.h"
 #include "cmd-basic.h"
 #include "view-mainwindow.h"

@@ -76,6 +76,7 @@ dungeon_grid letter[255];
 #include "wild.h"
 #include "quest.h"
 #include "view-mainwindow.h"
+#include "player-class.h"
 
 
 

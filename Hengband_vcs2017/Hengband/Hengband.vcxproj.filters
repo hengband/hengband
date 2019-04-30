@@ -321,6 +321,9 @@
     <ClCompile Include="..\..\src\dungeon.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-class.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -604,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-class.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

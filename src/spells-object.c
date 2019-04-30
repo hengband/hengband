@@ -13,6 +13,7 @@
 #include "player-status.h"
 #include "avatar.h"
 #include "player-effects.h"
+#include "player-class.h"
 
 
 typedef struct

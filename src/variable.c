@@ -494,7 +494,6 @@ const player_sex *sp_ptr;
 const player_race *rp_ptr;
 const player_class *cp_ptr;
 const player_seikaku *ap_ptr;
-const player_magic *mp_ptr;
 
 
 /*
@@ -502,11 +501,6 @@ const player_magic *mp_ptr;
  * holded for quick start
  */
 birther previous_char;
-
-/*
- * The magic info
- */
-player_magic *m_info;
 
 /*
  * The object kind arrays

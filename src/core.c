@@ -51,6 +51,7 @@
 #include "avatar.h"
 #include "player-move.h"
 #include "player-status.h"
+#include "player-class.h"
 #include "cmd-spell.h"
 #include "realm-hex.h"
 #include "object-hook.h"

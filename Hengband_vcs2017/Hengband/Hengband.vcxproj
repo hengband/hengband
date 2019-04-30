@@ -172,6 +172,7 @@
     <ClCompile Include="..\..\src\objectkind-hook.c" />
     <ClCompile Include="..\..\src\object-broken.c" />
     <ClCompile Include="..\..\src\patron.c" />
+    <ClCompile Include="..\..\src\player-class.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
     <ClCompile Include="..\..\src\player-effects.c" />
     <ClCompile Include="..\..\src\player-skill.c" />
@@ -325,6 +326,7 @@
     <ClInclude Include="..\..\src\object.h" />
     <ClInclude Include="..\..\src\objectkind-hook.h" />
     <ClInclude Include="..\..\src\patron.h" />
+    <ClInclude Include="..\..\src\player-class.h" />
     <ClInclude Include="..\..\src\player-damage.h" />
     <ClInclude Include="..\..\src\player-effects.h" />
     <ClInclude Include="..\..\src\player-move.h" />

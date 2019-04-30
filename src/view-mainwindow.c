@@ -19,6 +19,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
+#include "player-class.h"
 #include "monster.h"
 #include "view-mainwindow.h"
 

@@ -22,6 +22,7 @@
 #include "cmd-pet.h"
 #include "cmd-spell.h"
 #include "dungeon.h"
+#include "player-class.h"
 
 /*!
  * @var horror_desc

@@ -23,6 +23,7 @@
 #include "melee.h"
 #include "player-move.h"
 #include "player-status.h"
+#include "player-class.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"

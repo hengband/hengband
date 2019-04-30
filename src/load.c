@@ -67,6 +67,7 @@
 #include "dungeon-file.h"
 #include "files.h"
 #include "player-skill.h"
+#include "player-class.h"
 #include "world.h"
 
 

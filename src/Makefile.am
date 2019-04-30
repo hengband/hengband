@@ -55,7 +55,7 @@ hengband_SOURCES = \
 	projection.h projection.c\
 	\
 	player-move.c player-move.h player-damage.c player-damage.h player-status.c player-status.h \
-	player-effects.c player-effects.h player-skill.c player-skill.h \
+	player-effects.c player-effects.h player-skill.c player-skill.h player-class.c player-class.h \
 	\
 	quest.h quest.c\
 	\

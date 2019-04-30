@@ -26,6 +26,7 @@
 #include "avatar.h"
 #include "player-move.h"
 #include "player-status.h"
+#include "player-class.h"
 #include "spells-status.h"
 #include "cmd-spell.h"
 #include "spells-floor.h"
