@@ -1,5 +1,6 @@
 #include "angband.h"
 #include "floor.h"
+#include "floor-save.h"
 
 /*
  * The array of "current_floor_ptr->grid_array grids" [MAX_WID][MAX_HGT].
