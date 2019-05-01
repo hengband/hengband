@@ -36,6 +36,7 @@
 #include "world.h"
 #include "objectkind.h"
 #include "monsterrace.h"
+#include "autopick.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

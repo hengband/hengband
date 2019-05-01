@@ -31,6 +31,7 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "realm-hex.h"
+#include "autopick.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "monster-status.h"

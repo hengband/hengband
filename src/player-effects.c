@@ -39,6 +39,7 @@
 #include "monster-spell.h"
 #include "world.h"
 #include "objectkind.h"
+#include "autopick.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

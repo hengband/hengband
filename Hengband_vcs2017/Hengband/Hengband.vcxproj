@@ -192,6 +192,7 @@
     <ClCompile Include="..\..\src\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd-zapwand.c" />
     <ClInclude Include="..\..\src\artifact.h" />
+    <ClInclude Include="..\..\src\autopick.h" />
     <ClInclude Include="..\..\src\avatar.h" />
     <ClInclude Include="..\..\src\birth.h" />
     <ClInclude Include="..\..\src\bldg.h" />

@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "autopick.h"
 
 #include "selfinfo.h"
 #include "cmd-activate.h"
@@ -37,6 +38,7 @@
 #include "view-mainwindow.h"
 #include "spells.h"
 #include "objectkind.h"
+#include "autopick.h"
 
 
 /*!

@@ -17,6 +17,7 @@
 #include "cmd-pet.h"
 #include "floor.h"
 #include "trap.h"
+#include "autopick.h"
 #include "object-curse.h"
 #include "player-damage.h"
 #include "player-effects.h"

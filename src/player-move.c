@@ -142,6 +142,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "autopick.h"
 #include "dungeon.h"
 #include "floor.h"
 #include "melee.h"
@@ -165,6 +166,7 @@
 #include "view-mainwindow.h"
 #include "world.h"
 #include "objectkind.h"
+#include "autopick.h"
 
 
 #ifdef TRAVEL

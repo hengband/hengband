@@ -35,6 +35,7 @@
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
 #include "floor.h"
+#include "autopick.h"
 
 /*!
  * @brief

@@ -52,6 +52,7 @@
 #include "dungeon.h"
 #include "melee.h"
 #include "objectkind.h"
+#include "autopick.h"
 
 
 /*

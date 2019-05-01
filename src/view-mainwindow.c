@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "autopick.h"
 
 #include "files.h"
 #include "world.h"

@@ -41,6 +41,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "autopick.h"
 
 #include "birth.h"
 #include "cmd-pet.h"

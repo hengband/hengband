@@ -7,7 +7,7 @@ bin_PROGRAMS = hengband
 hengband_SOURCES = \
 	artifact.c artifact.h \
 	\
-	angband.h autopick.c \
+	angband.h autopick.c autopick.h\
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\

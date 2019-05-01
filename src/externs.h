@@ -32,12 +32,6 @@ extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
 extern int level_up;
 
-/* 
- *  List for auto-picker/destroyer entries
- */
-extern int max_autopick;
-extern int max_max_autopick;
-extern autopick_type *autopick_list;
 
 /* tables.c */
 extern const POSITION ddd[9];
@@ -304,17 +298,6 @@ extern FEAT_IDX feat_wall_solid;
 extern FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 extern COMMAND_CODE now_message;
 extern bool use_menu;
-
-/* autopick.c */
-extern void autopick_load_pref(bool disp_mes);
-extern errr process_autopick_file_command(char *buf);
-extern concptr autopick_line_from_entry(autopick_type *entry);
-extern int is_autopick(object_type *o_ptr);
-extern void autopick_alter_item(INVENTORY_IDX item, bool destroy);
-extern void autopick_delayed_alter(void);
-extern void autopick_pickup_items(grid_type *g_ptr);
-extern bool autopick_autoregister(object_type *o_ptr);
-extern void do_cmd_edit_autopick(void);
 
 
 /* grids.c */

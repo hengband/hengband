@@ -15,6 +15,7 @@
 #include "player-effects.h"
 #include "player-class.h"
 #include "objectkind.h"
+#include "autopick.h"
 
 
 typedef struct

@@ -623,6 +623,9 @@
     <ClInclude Include="..\..\src\monsterrace.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\autopick.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

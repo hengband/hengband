@@ -33,6 +33,7 @@
 #include "mind.h"
 #include "world.h"
 #include "objectkind.h"
+#include "autopick.h"
 
 #define MIN_STOCK 12
 

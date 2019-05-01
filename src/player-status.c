@@ -26,6 +26,7 @@
 #include "player-class.h"
 #include "objectkind.h"
 #include "monsterrace.h"
+#include "autopick.h"
 
 /*!
  * @var horror_desc

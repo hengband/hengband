@@ -18,6 +18,7 @@
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-save.h"
+#include "autopick.h"
 #include "objectkind.h"
 #include "object-boost.h"
 #include "object-flavor.h"
@@ -49,6 +50,7 @@
 #include "shoot.h"
 #include "view-mainwindow.h"
 #include "monsterrace.h"
+#include "autopick.h"
 
 
 /*

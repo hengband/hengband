@@ -36,13 +36,6 @@ concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
 int level_up = 0; /*!< レベルアップの際に遅延してcalc_mana()関数上で上昇量を表示するかどうかの判定フラグ */
 
 
-/* 
- * 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
- */
-int max_autopick = 0; /*!< 現在登録している自動拾い/破壊設定の数 */
-int max_max_autopick = 0; /*!< 自動拾い/破壊設定の限界数 */
-autopick_type *autopick_list = NULL; /*!< 自動拾い/破壊設定構造体のポインタ配列 */
-
 /*
  * Savefile version
  */

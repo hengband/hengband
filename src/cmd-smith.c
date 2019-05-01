@@ -6,6 +6,7 @@
 #include "player-status.h"
 #include "cmd-basic.h"
 #include "objectkind.h"
+#include "autopick.h"
 
 
 
