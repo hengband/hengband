@@ -18,6 +18,7 @@
 #include "monster.h"
 #include "monsterrace.h"
 #include "object.h"
+#include "player-status.h"
 
 /*
  * Automatically generated "variable" declarations
