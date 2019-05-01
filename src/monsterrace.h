@@ -1,6 +1,26 @@
 ﻿#pragma once
 
 /*
+ * Monster blow structure
+ *
+ *	- Method (RBM_*)
+ *	- Effect (RBE_*)
+ *	- Damage Dice
+ *	- Damage Sides
+ */
+
+typedef struct monster_blow monster_blow;
+
+struct monster_blow
+{
+	BLOW_METHOD method;
+	BLOW_EFFECT effect;
+	DICE_NUMBER d_dice;
+	DICE_SID d_side;
+};
+
+
+/*
  * Monster "race" information, including racial memories
  *
  * Note that "d_attr" and "d_char" are used for MORE than "visual" stuff.
