@@ -1,4 +1,21 @@
-﻿
+﻿#pragma once
+
+/*
+ * A store owner
+ */
+typedef struct owner_type owner_type;
+
+struct owner_type
+{
+	concptr owner_name;	/* Name */
+	PRICE max_cost;		/* Purse limit */
+	byte max_inflate;	/* Inflation (max) */
+	byte min_inflate;	/* Inflation (min) */
+	byte haggle_per;	/* Haggle unit */
+	byte insult_max;	/* Insult limit */
+	byte owner_race;	/* Owner race */
+};
+
 /*
  * Store types
  */
