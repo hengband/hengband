@@ -167,6 +167,10 @@
 #include "objectkind.h"
 
 
+#ifdef TRAVEL
+ /* for travel */
+travel_type travel;
+#endif
 
 /*!
  * @brief 地形やその上のアイテムの隠された要素を明かす /

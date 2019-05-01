@@ -420,19 +420,6 @@ typedef struct
 } cave_template_type;
 
 
-#ifdef TRAVEL
-/*
- *  A structure type for travel command
- */
-typedef struct {
-	int run; /* Remaining grid number */
-	int cost[MAX_HGT][MAX_WID];
-	POSITION x; /* Target X */
-	POSITION y; /* Target Y */
-	DIRECTION dir; /* Running direction */
-} travel_type;
-#endif
-
 typedef struct {
 	int flag;
 	int type;

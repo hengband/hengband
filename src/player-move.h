@@ -1,4 +1,5 @@
-﻿
+﻿#pragma once
+
 extern void disturb(bool stop_search, bool flush_output);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(DIRECTION dir);
@@ -35,3 +36,22 @@ extern void travel_step(void);
 #define MPE_DO_PICKUP     0x00000020
 #define MPE_BREAK_TRAP    0x00000040
 #define MPE_DONT_SWAP_MON 0x00000080
+
+
+
+#ifdef TRAVEL
+ /*
+  *  A structure type for travel command
+  */
+typedef struct {
+	int run; /* Remaining grid number */
+	int cost[MAX_HGT][MAX_WID];
+	POSITION x; /* Target X */
+	POSITION y; /* Target Y */
+	DIRECTION dir; /* Running direction */
+} travel_type;
+
+/* for travel */
+extern travel_type travel;
+#endif
+

@@ -734,9 +734,4 @@ extern void prepare_browse_movie(concptr filename);
 extern void browse_movie(void);
 extern bool browsing_movie;
 
-#ifdef TRAVEL
-/* for travel */
-extern travel_type travel;
-#endif
-
 extern void kamaenaoshi(INVENTORY_IDX item);

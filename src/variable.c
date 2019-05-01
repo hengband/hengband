@@ -680,10 +680,6 @@ int server_port;
 /* for movie */
 bool browsing_movie;
 
-#ifdef TRAVEL
-/* for travel */
-travel_type travel;
-#endif
 
 /* for snipers */
 bool reset_concent = FALSE;   /* Concentration reset flag */
