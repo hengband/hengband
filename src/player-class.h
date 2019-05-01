@@ -66,3 +66,6 @@ struct player_class
 
 extern const player_class *cp_ptr;
 extern const player_class class_info[MAX_CLASS];
+
+extern const s32b realm_choices1[];
+extern const s32b realm_choices2[];

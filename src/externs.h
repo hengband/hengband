@@ -75,8 +75,6 @@ extern const player_race race_info[MAX_RACES];
 extern const player_seikaku seikaku_info[MAX_SEIKAKU];
 extern const player_race mimic_info[];
 extern const u32b fake_spell_flags[4];
-extern const s32b realm_choices1[];
-extern const s32b realm_choices2[];
 extern const concptr realm_names[];
 #ifdef JP
 extern const concptr E_realm_names[];

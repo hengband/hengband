@@ -5,6 +5,7 @@
 #include "object-hook.h"
 #include "monster.h"
 #include "artifact.h"
+#include "player-class.h"
 #include "player-skill.h"
 #include "quest.h"
 #include "world.h"
