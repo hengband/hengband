@@ -3,6 +3,7 @@
 #include "floor.h"
 #include "quest.h"
 #include "artifact.h"
+#include "monsterrace.h"
 
 /*
  * Angband sorting algorithm -- quick sort in place

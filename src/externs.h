@@ -15,6 +15,7 @@
 #include "geometry.h"
 #include "grid.h"
 #include "floor-save.h"
+#include "monsterrace.h"
 
 /*
  * Automatically generated "variable" declarations
@@ -232,13 +233,9 @@ extern birther previous_char;
 extern char *f_name;
 extern char *f_tag;
 
-
 extern ego_item_type *e_info;
 extern char *e_name;
 extern char *e_text;
-extern monster_race *r_info;
-extern char *r_name;
-extern char *r_text;
 
 extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;

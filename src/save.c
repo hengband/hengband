@@ -25,6 +25,7 @@
 #include "files.h"
 #include "world.h"
 #include "objectkind.h"
+#include "monsterrace.h"
 
 
 /*

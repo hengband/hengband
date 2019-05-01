@@ -48,6 +48,7 @@
 #include "scores.h"
 #include "shoot.h"
 #include "view-mainwindow.h"
+#include "monsterrace.h"
 
 
 /*

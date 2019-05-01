@@ -327,6 +327,9 @@
     <ClCompile Include="..\..\src\objectkind.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monsterrace.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -616,6 +619,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\objectkind.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monsterrace.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿
+﻿#pragma once
+#include "monsterrace.h"
+
 #define MON_BEGGAR        12
 #define MON_LEPER         13
 #define MON_BLACK_MARKET  14

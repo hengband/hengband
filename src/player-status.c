@@ -25,6 +25,7 @@
 #include "dungeon.h"
 #include "player-class.h"
 #include "objectkind.h"
+#include "monsterrace.h"
 
 /*!
  * @var horror_desc

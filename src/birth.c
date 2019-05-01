@@ -35,6 +35,7 @@
 #include "player-skill.h"
 #include "world.h"
 #include "objectkind.h"
+#include "monsterrace.h"
 
 /*!
  * オートローラーの内容を描画する間隔 / 

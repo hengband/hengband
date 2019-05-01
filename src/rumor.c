@@ -5,6 +5,7 @@
 #include "object-flavor.h"
 #include "artifact.h"
 #include "dungeon.h"
+#include "monsterrace.h"
 
 /*
  * Display a rumor and apply its effects

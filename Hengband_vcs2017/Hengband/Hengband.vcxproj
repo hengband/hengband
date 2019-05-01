@@ -164,6 +164,7 @@
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
     <ClCompile Include="..\..\src\monsterrace-hook.c" />
+    <ClCompile Include="..\..\src\monsterrace.c" />
     <ClCompile Include="..\..\src\object-boost.c" />
     <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-flavor.c" />
@@ -319,6 +320,7 @@
     <ClInclude Include="..\..\src\monster-status.h" />
     <ClInclude Include="..\..\src\monster.h" />
     <ClInclude Include="..\..\src\monsterrace-hook.h" />
+    <ClInclude Include="..\..\src\monsterrace.h" />
     <ClInclude Include="..\..\src\mutation.h" />
     <ClInclude Include="..\..\src\object-boost.h" />
     <ClInclude Include="..\..\src\object-curse.h" />
