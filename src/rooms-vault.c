@@ -11,6 +11,7 @@
 #include "feature.h"
 #include "floor.h"
 #include "dungeon.h"
+#include "geometry.h"
 
 /*
  * The vault generation arrays

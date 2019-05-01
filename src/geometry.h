@@ -48,3 +48,16 @@ typedef struct
 	POSITION y;
 	POSITION x;
 } target_dir;
+
+/*
+ * Simple structure to hold a map location
+ */
+typedef struct coord coord;
+
+struct coord
+{
+	POSITION y;
+	POSITION x;
+};
+
+

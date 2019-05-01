@@ -582,20 +582,6 @@ struct grid_type
 };
 
 
-
-/*
- * Simple structure to hold a map location
- */
-typedef struct coord coord;
-
-struct coord
-{
-	POSITION y;
-	POSITION x;
-};
-
-
-
 /*
  * Object information, for a specific object.
  *
