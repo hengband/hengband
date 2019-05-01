@@ -25,6 +25,7 @@
 #include "object-hook.h"
 #include "spells-object.h"
 #include "files.h"
+#include "grid.h"
 
  /*
   * The artifact arrays

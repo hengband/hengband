@@ -1,4 +1,7 @@
-﻿extern bool do_riding(bool force);
+﻿#pragma once
+#include "grid.h"
+
+extern bool do_riding(bool force);
 extern PERCENTAGE calculate_upkeep(void);
 extern void do_cmd_pet_dismiss(void);
 extern void do_cmd_pet(void);

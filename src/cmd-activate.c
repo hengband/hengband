@@ -27,6 +27,7 @@
 #include "monster-status.h"
 #include "files.h"
 #include "objectkind.h"
+#include "grid.h"
 
 /*!
  * @brief アイテムの発動効果テーブル /

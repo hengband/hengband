@@ -8,6 +8,7 @@
 #include "trap.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "grid.h"
 
 /*!
 * @brief 箱からアイテムを引き出す /

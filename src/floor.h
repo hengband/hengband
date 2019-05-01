@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "feature.h"
+#include "grid.h"
 
 typedef struct {
 	grid_type *grid_array[MAX_HGT];

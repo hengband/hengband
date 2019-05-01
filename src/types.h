@@ -530,58 +530,6 @@ struct monster_race
 	u32b r_flagsr;			/* Observed racial resistance flags */
 };
 
-
-/*
- * A single "grid" in a Cave
- *
- * Note that several aspects of the code restrict the actual current_floor_ptr->grid_array
- * to a max size of 256 by 256.  In partcular, locations are often
- * saved as bytes, limiting each coordinate to the 0-255 range.
- *
- * The "o_idx" and "m_idx" fields are very interesting.  There are
- * many places in the code where we need quick access to the actual
- * monster or object(s) in a given grid.  The easiest way to
- * do this is to simply keep the index of the monster and object
- * (if any) with the grid, but this takes 198*66*4 bytes of memory.
- * Several other methods come to mind, which require only half this
- * amound of memory, but they all seem rather complicated, and would
- * probably add enough code that the savings would be lost.  So for
- * these reasons, we simply store an index into the "o_list" and
- * "current_floor_ptr->m_list" arrays, using "zero" when no monster/object is present.
- *
- * Note that "o_idx" is the index of the top object in a stack of
- * objects, using the "next_o_idx" field of objects (see below) to
- * create the singly linked list of objects.  If "o_idx" is zero
- * then there are no objects in the grid.
- *
- * Note the special fields for the "MONSTER_FLOW" code.
- */
-
-typedef struct grid_type grid_type;
-
-struct grid_type
-{
-	BIT_FLAGS info;		/* Hack -- current_floor_ptr->grid_array flags */
-
-	FEAT_IDX feat;		/* Hack -- feature type */
-	OBJECT_IDX o_idx;		/* Object in this grid */
-	MONSTER_IDX m_idx;		/* Monster in this grid */
-
-	/*! 地形の特別な情報を保存する / Special current_floor_ptr->grid_array info
-	 * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
-	 * 各ダンジョン入口の移行先ダンジョンID、
-	 * 
-	 */
-	s16b special;
-
-	FEAT_IDX mimic;		/* Feature to mimic */
-
-	byte cost;		/* Hack -- cost of flowing */
-	byte dist;		/* Hack -- distance from player */
-	byte when;		/* Hack -- when cost was computed */
-};
-
-
 /*
  * Object information, for a specific object.
  *

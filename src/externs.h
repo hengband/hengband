@@ -13,6 +13,7 @@
  * (z-virt.h, z-util.h, z-form.h, term.h, random.h)
  */
 #include "geometry.h"
+#include "grid.h"
 #include "floor-save.h"
 
 /*
