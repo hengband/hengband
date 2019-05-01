@@ -17,6 +17,7 @@
 #include "floor-save.h"
 #include "monster.h"
 #include "monsterrace.h"
+#include "object.h"
 
 /*
  * Automatically generated "variable" declarations
