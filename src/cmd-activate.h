@@ -1,6 +1,20 @@
-﻿extern void do_cmd_activate(void);
+﻿#pragma once
+
+extern void do_cmd_activate(void);
 extern void do_cmd_activate_aux(INVENTORY_IDX item);
 extern bool activate_artifact(object_type * o_ptr);
+
+typedef struct {
+	concptr flag;
+	byte index;
+	byte level;
+	s32b value;
+	struct {
+		int constant;
+		DICE_NUMBER dice;
+	} timeout;
+	concptr desc;
+} activation_type;
 
 extern const activation_type activation_info[];
 

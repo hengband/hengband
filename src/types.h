@@ -1708,18 +1708,6 @@ typedef struct {
 #endif
 
 typedef struct {
-	concptr flag;
-	byte index;
-	byte level;
-	s32b value;
-	struct {
-		int constant;
-		DICE_NUMBER dice;
-	} timeout;
-	concptr desc;
-} activation_type;
-
-typedef struct {
 	int flag;
 	int type;
 	concptr name;
