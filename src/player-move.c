@@ -164,6 +164,7 @@
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
 #include "world.h"
+#include "objectkind.h"
 
 
 

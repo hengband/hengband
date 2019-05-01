@@ -67,6 +67,7 @@
 #include "player-class.h"
 #include "player-move.h"
 #include "spells.h"
+#include "objectkind.h"
 
 /*
  */

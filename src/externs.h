@@ -229,9 +229,8 @@ extern const player_seikaku *ap_ptr;
 extern birther previous_char;
 extern char *f_name;
 extern char *f_tag;
-extern object_kind *k_info;
-extern char *k_name;
-extern char *k_text;
+
+
 extern ego_item_type *e_info;
 extern char *e_name;
 extern char *e_text;

@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "spells.h"
+#include "objectkind.h"
 
 /*!
  * @brief 薬の破損効果処理 /

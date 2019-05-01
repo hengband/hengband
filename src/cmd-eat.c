@@ -18,6 +18,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "floor.h"
+#include "objectkind.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン

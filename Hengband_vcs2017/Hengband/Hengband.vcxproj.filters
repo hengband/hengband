@@ -324,6 +324,9 @@
     <ClCompile Include="..\..\src\player-class.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\objectkind.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -610,6 +613,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-class.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objectkind.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -44,6 +44,7 @@
 #include "mind.h"
 #include "wild.h"
 #include "world.h"
+#include "objectkind.h"
 
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

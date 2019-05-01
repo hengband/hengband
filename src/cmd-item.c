@@ -36,6 +36,7 @@
 #include "monster.h"
 #include "view-mainwindow.h"
 #include "spells.h"
+#include "objectkind.h"
 
 
 /*!

@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\src\object-flavor.c" />
     <ClCompile Include="..\..\src\object-flavor.h" />
     <ClCompile Include="..\..\src\object-hook.c" />
+    <ClCompile Include="..\..\src\objectkind.c" />
     <ClCompile Include="..\..\src\objectkind-hook.c" />
     <ClCompile Include="..\..\src\object-broken.c" />
     <ClCompile Include="..\..\src\patron.c" />
@@ -325,6 +326,7 @@
     <ClInclude Include="..\..\src\object-broken.h" />
     <ClInclude Include="..\..\src\object.h" />
     <ClInclude Include="..\..\src\objectkind-hook.h" />
+    <ClInclude Include="..\..\src\objectkind.h" />
     <ClInclude Include="..\..\src\patron.h" />
     <ClInclude Include="..\..\src\player-class.h" />
     <ClInclude Include="..\..\src\player-damage.h" />

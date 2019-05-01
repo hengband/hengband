@@ -502,13 +502,6 @@ const player_seikaku *ap_ptr;
 birther previous_char;
 
 /*
- * The object kind arrays
- */
-object_kind *k_info;
-char *k_name;
-char *k_text;
-
-/*
  * The ego-item arrays
  */
 ego_item_type *e_info;

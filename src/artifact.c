@@ -18,6 +18,7 @@
 #include "avatar.h"
 #include "floor.h"
 #include "cmd-activate.h"
+#include "objectkind.h"
 #include "object-boost.h"
 #include "object-curse.h"
 #include "object-flavor.h"

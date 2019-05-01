@@ -24,6 +24,7 @@
 #include "cmd-spell.h"
 #include "dungeon.h"
 #include "player-class.h"
+#include "objectkind.h"
 
 /*!
  * @var horror_desc

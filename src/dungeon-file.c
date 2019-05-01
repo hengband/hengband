@@ -14,6 +14,7 @@
 #include "bldg.h"
 #include "world.h"
 #include "rooms-vault.h"
+#include "objectkind.h"
 
 dungeon_grid letter[255];
 

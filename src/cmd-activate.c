@@ -26,6 +26,7 @@
 #include "player-effects.h"
 #include "monster-status.h"
 #include "files.h"
+#include "objectkind.h"
 
 /*!
  * @brief アイテムの発動効果テーブル /

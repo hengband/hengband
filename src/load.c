@@ -69,6 +69,7 @@
 #include "player-skill.h"
 #include "player-class.h"
 #include "world.h"
+#include "objectkind.h"
 
 
 /*

@@ -19,6 +19,7 @@
 #include "monster.h"
 #include "object-flavor.h"
 #include "object-hook.h"
+#include "objectkind.h"
 
 
 #ifdef ALLOW_SPOILERS

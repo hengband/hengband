@@ -16,6 +16,7 @@
 #include "artifact.h"
 #include "player-status.h"
 #include "shoot.h"
+#include "objectkind.h"
 #include "object-hook.h"
 #include "object-flavor.h"
 #include "trap.h"

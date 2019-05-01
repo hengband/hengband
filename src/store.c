@@ -32,6 +32,7 @@
 #include "player-effects.h"
 #include "mind.h"
 #include "world.h"
+#include "objectkind.h"
 
 #define MIN_STOCK 12
 

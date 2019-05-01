@@ -34,6 +34,7 @@
 #include "feature.h"
 #include "player-move.h"
 #include "player-effects.h"
+#include "objectkind.h"
 #include "object-broken.h"
 #include "object-flavor.h"
 #include "shoot.h"

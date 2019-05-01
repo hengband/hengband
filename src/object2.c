@@ -20,6 +20,7 @@
 #include "dungeon.h"
 #include "floor.h"
 #include "grid.h"
+#include "objectkind.h"
 #include "object-boost.h"
 #include "object-flavor.h"
 #include "object-hook.h"

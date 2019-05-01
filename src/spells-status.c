@@ -10,6 +10,7 @@
 #include "monster.h"
 #include "cmd-spell.h"
 #include "player-effects.h"
+#include "objectkind.h"
 
 /*!
  * @brief モンスター回復処理

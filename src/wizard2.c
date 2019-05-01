@@ -41,6 +41,7 @@
 #include "files.h"
 #include "monster-spell.h"
 #include "bldg.h"
+#include "objectkind.h"
 
 #ifdef ALLOW_WIZARD
 

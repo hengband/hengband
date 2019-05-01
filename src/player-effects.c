@@ -38,6 +38,7 @@
 #include "files.h"
 #include "monster-spell.h"
 #include "world.h"
+#include "objectkind.h"
 
 /*!
  * @brief プレイヤーの継続行動を設定する。

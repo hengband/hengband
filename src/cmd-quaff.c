@@ -23,6 +23,7 @@
 #include "object-broken.h"
 #include "cmd-basic.h"
 #include "floor.h"
+#include "objectkind.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

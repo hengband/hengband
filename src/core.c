@@ -54,6 +54,7 @@
 #include "player-class.h"
 #include "cmd-spell.h"
 #include "realm-hex.h"
+#include "objectkind.h"
 #include "object-hook.h"
 #include "wild.h"
 #include "monster-process.h"

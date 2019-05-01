@@ -24,6 +24,7 @@
 #include "floor-save.h"
 #include "files.h"
 #include "world.h"
+#include "objectkind.h"
 
 
 /*
