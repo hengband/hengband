@@ -867,7 +867,7 @@ static void wr_extra(void)
  */
 static void wr_saved_floor(saved_floor_type *sf_ptr)
 {
-	cave_template_type *templates;
+	grid_template_type *templates;
 	u16b max_num_temp;
 	u16b num_temp = 0;
 	int dummy_why;
@@ -930,7 +930,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	max_num_temp = 255;
 
 	/* Allocate the "template" array */
-	C_MAKE(templates, max_num_temp, cave_template_type);
+	C_MAKE(templates, max_num_temp, grid_template_type);
 
 	/* Extract template array */
 	for (y = 0; y < current_floor_ptr->height; y++)
@@ -958,12 +958,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 			/* If the max_num_temp is too small, increase it. */
 			if (num_temp >= max_num_temp)
 			{
-				cave_template_type *old_template = templates;
+				grid_template_type *old_template = templates;
 
 				/* Re-allocate the "template" array */
-				C_MAKE(templates, max_num_temp + 255, cave_template_type);
-				(void)C_COPY(templates, old_template, max_num_temp, cave_template_type);
-				C_KILL(old_template, max_num_temp, cave_template_type);
+				C_MAKE(templates, max_num_temp + 255, grid_template_type);
+				(void)C_COPY(templates, old_template, max_num_temp, grid_template_type);
+				C_KILL(old_template, max_num_temp, grid_template_type);
 				max_num_temp += 255;
 			}
 
@@ -990,7 +990,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/* Dump the templates */
 	for (i = 0; i < num_temp; i++)
 	{
-		cave_template_type *ct_ptr = &templates[i];
+		grid_template_type *ct_ptr = &templates[i];
 
 		/* Dump it */
 		wr_u16b((u16b)ct_ptr->info);
@@ -1067,7 +1067,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 
 	/* Free the "template" array */
-	C_KILL(templates, max_num_temp, cave_template_type);
+	C_KILL(templates, max_num_temp, grid_template_type);
 
 
 	/*** Dump objects ***/

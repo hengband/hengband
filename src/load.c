@@ -2992,7 +2992,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	u32b tmp32u;
 	u16b limit;
 
-	cave_template_type *templates;
+	grid_template_type *templates;
 
 
 	/*** Wipe all current_floor_ptr->grid_array ***/
@@ -3064,12 +3064,12 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Allocate the "template" array */
-	C_MAKE(templates, limit, cave_template_type);
+	C_MAKE(templates, limit, grid_template_type);
 
 	/* Read the templates */
 	for (i = 0; i < limit; i++)
 	{
-		cave_template_type *ct_ptr = &templates[i];
+		grid_template_type *ct_ptr = &templates[i];
 
 		/* Read it */
 		rd_u16b(&tmp16u);
@@ -3165,7 +3165,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	/* Free the "template" array */
-	C_KILL(templates, limit, cave_template_type);
+	C_KILL(templates, limit, grid_template_type);
 
 
 	/*** Objects ***/

@@ -65,6 +65,18 @@ struct grid_type
 	byte when;		/* Hack -- when cost was computed */
 };
 
+/*
+ *  A structure type for terrain template of saving dungeon floor
+ */
+typedef struct
+{
+	BIT_FLAGS info;
+	FEAT_IDX feat;
+	FEAT_IDX mimic;
+	s16b special;
+	u16b occurrence;
+} grid_template_type;
+
 /* Macros */
 
 #define set_cave_feat(Y,X,F)    (current_floor_ptr->grid_array[(Y)][(X)].feat = (F))

@@ -406,20 +406,6 @@ typedef struct {
 	byte bonus;         /*!< アイテムのボーナス基準値 / Items which have more than 'bonus' magical bonus match */
 } autopick_type;
 
-
-/*
- *  A structure type for terrain template of saving dungeon floor
- */
-typedef struct
-{
-	BIT_FLAGS info;
-	FEAT_IDX feat;
-	FEAT_IDX mimic;
-	s16b special;
-	u16b occurrence;
-} cave_template_type;
-
-
 typedef struct {
 	int flag;
 	int type;

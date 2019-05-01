@@ -530,7 +530,7 @@ bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
  */
 bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 {
-	cave_template_type *who = (cave_template_type *)(u);
+	grid_template_type *who = (grid_template_type *)(u);
 
 	u16b o1 = who[a].occurrence;
 	u16b o2 = who[b].occurrence;
@@ -552,9 +552,9 @@ bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
  */
 void ang_sort_swap_cave_temp(vptr u, vptr v, int a, int b)
 {
-	cave_template_type *who = (cave_template_type *)(u);
+	grid_template_type *who = (grid_template_type *)(u);
 
-	cave_template_type holder;
+	grid_template_type holder;
 
 	/* Unused */
 	(void)v;
