@@ -26,6 +26,7 @@
 #include "spells-object.h"
 #include "files.h"
 #include "grid.h"
+#include "monster.h"
 
  /*
   * The artifact arrays

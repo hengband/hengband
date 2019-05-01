@@ -15,6 +15,7 @@
 #include "geometry.h"
 #include "grid.h"
 #include "floor-save.h"
+#include "monster.h"
 #include "monsterrace.h"
 
 /*

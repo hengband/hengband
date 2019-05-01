@@ -22,6 +22,7 @@
 #include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
+#include "monster.h"
 #include "monster-status.h"
 #include "quest.h"
 #include "artifact.h"

@@ -27,6 +27,7 @@
 #include "files.h"
 #include "floor.h"
 #include "world.h"
+#include "monster.h"
 #include "monsterrace.h"
 
 #define MAX_LINELEN 1024
