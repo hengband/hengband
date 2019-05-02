@@ -1,5 +1,16 @@
 #pragma once
 
+/*
+ * Sort-array element
+ */
+typedef struct tag_type tag_type;
+
+struct tag_type
+{
+	int tag;
+	int index;
+};
+
 /* util.c */
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);

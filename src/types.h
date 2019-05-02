@@ -248,17 +248,6 @@ struct kamae
 };
 
 
-/*
- * Sort-array element
- */
-typedef struct tag_type tag_type;
-
-struct tag_type
-{
-	int tag;
-	int index;
-};
-
 typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
 
 
