@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "store.h"
 
 /*
  * A structure describing a town with

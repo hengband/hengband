@@ -61,39 +61,6 @@ struct mbe_info_type
 	int explode_type; /* Explosion effect */
 };
 
-
-/*
- * A store, with an owner, various state flags, a current stock
- * of items, and a table of items that are often purchased.
- */
-typedef struct store_type store_type;
-
-struct store_type
-{
-	byte type;				/* Store type */
-
-	byte owner;				/* Owner index */
-	byte extra;				/* Unused for now */
-
-	s16b insult_cur;		/* Insult counter */
-
-	s16b good_buy;			/* Number of "good" buys */
-	s16b bad_buy;			/* Number of "bad" buys */
-
-	s32b store_open;		/* Closed until this current_world_ptr->game_turn */
-
-	s32b last_visit;		/* Last visited on this current_world_ptr->game_turn */
-
-	s16b table_num;			/* Table -- Number of entries */
-	s16b table_size;		/* Table -- Total Size of Array */
-	s16b *table;			/* Table -- Legal item kinds */
-
-	s16b stock_num;			/* Stock -- Number of entries */
-	s16b stock_size;		/* Stock -- Total Size of Array */
-	object_type *stock;		/* Stock -- Actual stock items */
-};
-
-
 /*
  * The "name" of spell 'N' is stored as spell_names[X][N],
  * where X is 0 for mage-spells and 1 for priest-spells.
