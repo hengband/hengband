@@ -65,5 +65,3 @@ struct magic_type
 	PERCENTAGE sfail;		/* Minimum chance of failure */
 	EXP sexp;				/* Encoded experience bonus */
 };
-
-typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);

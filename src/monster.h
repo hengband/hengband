@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "monsterrace.h"
 
+typedef bool(*monsterrace_hook_type)(MONRACE_IDX r_idx);
+
 /*
  * Monster information, for a specific monster.
  * Note: fy, fx constrain dungeon size to 256x256
