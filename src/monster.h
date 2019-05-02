@@ -425,6 +425,28 @@ extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern int get_monster_crowd_number(MONSTER_IDX m_idx);
 extern void message_pain(MONSTER_IDX m_idx, HIT_POINT dam);
 
+/* monster2.c */
+extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);
+extern void reset_target(monster_type *m_ptr);
+extern monster_race *real_r_ptr(monster_type *m_ptr);
+extern MONRACE_IDX real_r_idx(monster_type *m_ptr);
+extern void delete_monster_idx(MONSTER_IDX i);
+extern void delete_monster(POSITION y, POSITION x);
+extern void compact_monsters(int size);
+extern void wipe_m_list(void);
+extern MONSTER_IDX m_pop(void);
+extern errr get_mon_num_prep(monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
+extern MONRACE_IDX get_mon_num(DEPTH level);
+extern int lore_do_probe(MONRACE_IDX r_idx);
+extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
+extern void update_monster(MONSTER_IDX m_idx, bool full);
+extern void update_monsters(bool full);
+extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
+extern void update_smart_learn(MONSTER_IDX m_idx, int what);
+extern void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
+extern SPEED get_mspeed(monster_race *r_ptr);
+extern void monster_drop_carried_objects(monster_type *m_ptr);
+
 #define is_friendly(A) \
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
 

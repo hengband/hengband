@@ -111,6 +111,7 @@ extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLA
 PERCENTAGE breakage_chance(object_type *o_ptr, SPELL_IDX snipe_type);
 
 extern int bow_tval_ammo(object_type *o_ptr);
+
 /* object2.c */
 extern void excise_object_idx(OBJECT_IDX o_idx);
 extern void delete_object_idx(OBJECT_IDX o_idx);
