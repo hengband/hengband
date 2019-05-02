@@ -56,7 +56,7 @@ hengband_SOURCES = \
 	\
 	player-move.c player-move.h player-damage.c player-damage.h player-status.c player-status.h \
 	player-effects.c player-effects.h player-skill.c player-skill.h player-class.c player-class.h \
-	player-race.c player-race.h player-pesonality.c player-pesonality.h \
+	player-race.c player-race.h player-pesonality.c player-pesonality.h player-sex.c player-sex.h \
 	\
 	quest.h quest.c\
 	\

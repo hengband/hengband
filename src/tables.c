@@ -1255,36 +1255,6 @@ const byte extract_energy[200] =
 	/* Fast */    49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
 };
 
-
-/*!
- * @brief 性別表記 /
- * Player Sexes
- * @details
- * <pre>
- *      Title,
- *      Winner
- * </pre>
- */
-const player_sex sex_info[MAX_SEXES] =
-{
-	{
-#ifdef JP
-		"女性",
-		"クイーン",
-#endif
-		"Female",
-		"Queen"
-	},
-	{
-#ifdef JP
-		"男性",
-		"キング",
-#endif
-		"Male",
-		"King"
-	}
-};
-
 /*!
  * 魔法領域フラグ管理テーブル /
  * Zangband uses this array instead of the spell flags table, as there

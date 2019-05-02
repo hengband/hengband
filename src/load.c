@@ -71,6 +71,7 @@
 #include "player-class.h"
 #include "player-race.h"
 #include "player-personality.h"
+#include "player-sex.h"
 #include "birth.h"
 #include "world.h"
 #include "objectkind.h"

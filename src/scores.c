@@ -17,6 +17,7 @@
 #include "player-status.h"
 #include "player-class.h"
 #include "player-personality.h"
+#include "player-sex.h"
 #include "files.h"
 #include "scores.h"
 #include "floor.h"

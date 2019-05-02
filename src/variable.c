@@ -447,11 +447,6 @@ player_type p_body;
  */
 player_type *p_ptr = &p_body;
 
-/*
- * Pointer to the player tables
- * (sex, race, class, magic)
- */
-const player_sex *sp_ptr;
 
 
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file

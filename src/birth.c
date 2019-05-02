@@ -25,6 +25,7 @@
 #include "player-class.h"
 #include "player-status.h"
 #include "player-personality.h"
+#include "player-sex.h"
 #include "spells.h"
 #include "spells-status.h"
 #include "wild.h"

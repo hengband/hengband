@@ -69,7 +69,6 @@ extern const byte adj_con_mhp[];
 extern const byte adj_chr_chm[];
 extern const byte blows_table[12][12];
 extern const byte extract_energy[200];
-extern const player_sex sex_info[MAX_SEXES];
 
 extern const u32b fake_spell_flags[4];
 extern const concptr realm_names[];
@@ -214,7 +213,6 @@ extern TERM_COLOR tval_to_attr[128];
 extern SYMBOL_CODE tval_to_char[128];
 extern concptr keymap_act[KEYMAP_MODES][256];
 extern player_type *p_ptr;
-extern const player_sex *sp_ptr;
 extern char *f_name;
 extern char *f_tag;
 

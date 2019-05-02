@@ -181,6 +181,7 @@
     <ClCompile Include="..\..\src\player-effects.c" />
     <ClCompile Include="..\..\src\player-personality.c" />
     <ClCompile Include="..\..\src\player-race.c" />
+    <ClCompile Include="..\..\src\player-sex.c" />
     <ClCompile Include="..\..\src\player-skill.c" />
     <ClCompile Include="..\..\src\player-status.c" />
     <ClCompile Include="..\..\src\quest.c" />
@@ -343,6 +344,7 @@
     <ClInclude Include="..\..\src\player-move.h" />
     <ClInclude Include="..\..\src\player-personality.h" />
     <ClInclude Include="..\..\src\player-race.h" />
+    <ClInclude Include="..\..\src\player-sex.h" />
     <ClInclude Include="..\..\src\player-skill.h" />
     <ClInclude Include="..\..\src\player-status.h" />
     <ClInclude Include="..\..\src\quest.h" />

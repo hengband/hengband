@@ -76,24 +76,6 @@ struct magic_type
 };
 
 
-/*
- * Player sex info
- */
-
-typedef struct player_sex player_sex;
-
-struct player_sex
-{
-	concptr title;			/* Type of sex */
-	concptr winner;		/* Name of winner */
-#ifdef JP
-	concptr E_title;		/* 英語性別 */
-	concptr E_winner;		/* 英語性別 */
-#endif
-};
-
-
-
 typedef struct kamae kamae;
 
 struct kamae
