@@ -38,6 +38,18 @@ extern const concptr silly_attacks[MAX_SILLY_ATTACK];
 extern const concptr silly_attacks2[MAX_SILLY_ATTACK];
 #endif
 
+/* For Monk martial arts */
+typedef struct martial_arts martial_arts;
+struct martial_arts
+{
+	concptr desc;       /* A verbose attack description */
+	PLAYER_LEVEL min_level;  /* Minimum level to use */
+	int chance;     /* Chance of 'success' */
+	int dd;         /* Damage dice */
+	int ds;         /* Damage sides */
+	int effect;     /* Special effects */
+};
+
 extern const martial_arts ma_blows[MAX_MA];
 extern const int monk_ave_damage[PY_MAX_LEVEL + 1][3];
 
