@@ -45,6 +45,44 @@
 #include "objectkind.h"
 #include "autopick.h"
 
+
+ /*!
+  * @brief 修行僧の構え能力テーブル
+  */
+const kamae kamae_shurui[MAX_KAMAE] =
+{
+#ifdef JP
+	{"玄武", 25, ""},
+	{"白虎", 30, ""},
+	{"青竜", 35, ""},
+	{"朱雀", 40, ""},
+#else
+	{"Genbu", 25, "(Black Tortoise) "},
+	{"Byakko", 30, "(White Tiger) "},
+	{"Seiryuu", 35, "(Blue Dragon) "},
+	{"Suzaku", 40, "(Red Phoenix) "},
+#endif
+};
+
+/*!
+ * @brief 剣術家の構え能力テーブル
+ */
+const kamae kata_shurui[MAX_KATA] =
+{
+#ifdef JP
+	{"居合", 25, ""},
+	{"風塵", 30, ""},
+	{"降鬼", 35, ""},
+	{"無想", 40, ""},
+#else
+	{"Iai", 25, ""},
+	{"Huujin", 30, ""},
+	{"Kouki", 35, ""},
+	{"Musou", 40, ""},
+#endif
+};
+
+
 /*!
  * @brief プレイヤーの継続行動を設定する。
  * @param typ 継続行動のID\n

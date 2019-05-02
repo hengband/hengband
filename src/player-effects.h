@@ -1,5 +1,14 @@
 ﻿#pragma once
 
+typedef struct kamae kamae;
+
+struct kamae
+{
+	concptr desc;       /* A verbose kamae description */
+	PLAYER_LEVEL min_level;  /* Minimum level to use */
+	concptr info;
+};
+
 /* effects.c */
 extern void set_action(ACTION_IDX typ);
 extern void reset_tim_flags(void);
@@ -72,3 +81,6 @@ extern bool set_tim_esp(TIME_EFFECT v, bool do_dec);
 extern bool set_superstealth(bool set);
 extern void do_poly_wounds(void);
 extern void change_race(CHARACTER_IDX new_race, concptr effect_msg);
+
+extern const kamae kamae_shurui[MAX_KAMAE];
+extern const kamae kata_shurui[MAX_KATA];

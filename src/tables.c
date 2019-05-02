@@ -2290,43 +2290,6 @@ const concptr game_inscriptions[] =
 };
 
 /*!
- * @brief 修行僧の構え能力テーブル
- */
-const kamae kamae_shurui[MAX_KAMAE] =
-{
-#ifdef JP
-	{"玄武", 25, ""},
-	{"白虎", 30, ""},
-	{"青竜", 35, ""},
-	{"朱雀", 40, ""},
-#else
-	{"Genbu", 25, "(Black Tortoise) "},
-	{"Byakko", 30, "(White Tiger) "},
-	{"Seiryuu", 35, "(Blue Dragon) "},
-	{"Suzaku", 40, "(Red Phoenix) "},
-#endif
-};
-
-/*!
- * @brief 剣術家の構え能力テーブル
- */
-const kamae kata_shurui[MAX_KATA] =
-{
-#ifdef JP
-	{"居合", 25, ""},
-	{"風塵", 30, ""},
-	{"降鬼", 35, ""},
-	{"無想", 40, ""},
-#else
-	{"Iai", 25, ""},
-	{"Huujin", 30, ""},
-	{"Kouki", 35, ""},
-	{"Musou", 40, ""},
-#endif
-};
-
-
-/*!
  * @brief シンボル解説テーブル /
  * The table of "symbol info" -- each entry is a string of the form "X:desc" where "X" is the trigger, and "desc" is the "info".
  */

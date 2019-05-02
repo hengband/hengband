@@ -66,19 +66,7 @@ struct magic_type
 	EXP sexp;				/* Encoded experience bonus */
 };
 
-
-typedef struct kamae kamae;
-
-struct kamae
-{
-	concptr desc;       /* A verbose kamae description */
-	PLAYER_LEVEL min_level;  /* Minimum level to use */
-	concptr info;
-};
-
-
 typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
-
 
 /*
  * This seems like a pretty standard "typedef"

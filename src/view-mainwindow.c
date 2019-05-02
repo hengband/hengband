@@ -22,6 +22,7 @@
 #include "player-status.h"
 #include "player-class.h"
 #include "player-race.h"
+#include "player-effects.h"
 #include "monster.h"
 #include "view-mainwindow.h"
 
