@@ -93,8 +93,3 @@ typedef struct
 }
 feat_prob;
 
-typedef struct {
-	int flag;
-	int type;
-	concptr name;
-} dragonbreath_type;

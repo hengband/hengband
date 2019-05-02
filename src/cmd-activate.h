@@ -18,6 +18,13 @@ typedef struct {
 
 extern const activation_type activation_info[];
 
+typedef struct {
+	int flag;
+	int type;
+	concptr name;
+} dragonbreath_type;
+
+extern const dragonbreath_type dragonbreath_info[];
 
 /* Activation effects for random artifacts */
 #define ACT_SUNLIGHT            1
