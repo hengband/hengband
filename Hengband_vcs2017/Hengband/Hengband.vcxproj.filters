@@ -366,7 +366,6 @@
     <ClInclude Include="..\..\src\sort.h" />
     <ClInclude Include="..\..\src\term.h" />
     <ClInclude Include="..\..\src\trap.h" />
-    <ClInclude Include="..\..\src\types.h" />
     <ClInclude Include="..\..\src\wild.h" />
     <ClInclude Include="..\..\src\world.h" />
     <ClInclude Include="..\..\src\z-config.h" />

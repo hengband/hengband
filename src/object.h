@@ -1,4 +1,5 @@
 #pragma once
+#include "defines.h"
 
 /*
  * Object information, for a specific object.

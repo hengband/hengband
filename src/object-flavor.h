@@ -1,7 +1,7 @@
 #pragma once
 
-#include "types.h"
 #include "h-type.h"
+#include "object.h"
 
 /* flavor.c */
 extern void get_table_name_aux(char *out_string);
