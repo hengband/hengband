@@ -478,12 +478,6 @@ const player_race *rp_ptr;
 const player_seikaku *ap_ptr;
 
 
-/*
- * The last character rolled,
- * holded for quick start
- */
-birther previous_char;
-
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
 

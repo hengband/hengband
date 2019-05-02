@@ -23,7 +23,7 @@ hengband_SOURCES = \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h floor-generate.c floor-generate.h \
-	floor-save.h floor-save.c \
+	floor-save.h floor-save.c floor-town.h floor-town.c \
 	floor-streams.c floor-streams.h \
 	\
 	feature.c feature.h \

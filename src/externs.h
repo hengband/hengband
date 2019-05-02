@@ -224,7 +224,6 @@ extern player_type *p_ptr;
 extern const player_sex *sp_ptr;
 extern const player_race *rp_ptr;
 extern const player_seikaku *ap_ptr;
-extern birther previous_char;
 extern char *f_name;
 extern char *f_tag;
 

@@ -69,6 +69,7 @@
 #include "files.h"
 #include "player-skill.h"
 #include "player-class.h"
+#include "birth.h"
 #include "world.h"
 #include "objectkind.h"
 #include "object-ego.h"

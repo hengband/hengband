@@ -39,6 +39,12 @@
 #include "monsterrace.h"
 #include "autopick.h"
 
+ /*
+  * The last character rolled,
+  * holded for quick start
+  */
+birther previous_char;
+
 /*!
  * オートローラーの内容を描画する間隔 / 
  * How often the autoroller will update the display and pause
