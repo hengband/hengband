@@ -67,8 +67,3 @@ struct magic_type
 };
 
 typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
-
-/*
- * This seems like a pretty standard "typedef"
- */
-typedef int (*inven_func)(object_type *);

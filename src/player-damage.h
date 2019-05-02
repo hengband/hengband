@@ -1,4 +1,10 @@
-﻿
+﻿#pragma once
+
+/*
+ * This seems like a pretty standard "typedef"
+ */
+typedef int(*inven_func)(object_type *);
+
 extern bool hates_acid(object_type *o_ptr);
 extern bool hates_elec(object_type *o_ptr);
 extern bool hates_fire(object_type *o_ptr);
