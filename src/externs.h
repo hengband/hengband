@@ -355,31 +355,6 @@ extern void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern SPEED get_mspeed(monster_race *r_ptr);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
-/* object1.c */
-extern void reset_visuals(void);
-extern void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
-extern void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
-extern concptr item_activation(object_type *o_ptr);
-extern bool screen_object(object_type *o_ptr, BIT_FLAGS mode);
-extern char index_to_label(int i);
-extern INVENTORY_IDX label_to_inven(int c);
-extern INVENTORY_IDX label_to_equip(int c);
-extern s16b wield_slot(object_type *o_ptr);
-extern concptr mention_use(int i);
-extern concptr describe_use(int i);
-extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
-extern bool item_tester_okay(object_type *o_ptr);
-extern void display_inven(void);
-extern void display_equip(void);
-extern COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode);
-extern COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode);
-extern void toggle_inven_equip(void);
-extern bool can_get_item(void);
-extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode);
-extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option);
-PERCENTAGE breakage_chance(object_type *o_ptr, SPELL_IDX snipe_type);
-
-
 /* racial.c */
 extern void do_cmd_racial_power(void);
 
