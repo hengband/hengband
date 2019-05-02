@@ -211,8 +211,6 @@ extern const concptr angband_sound_name[SOUND_MAX];
 extern const concptr angband_music_basic_name[MUSIC_BASIC_MAX];
 extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;
-extern TOWN_IDX max_towns;
-extern town_type *town_info;
 extern s16b alloc_kind_size;
 extern alloc_entry *alloc_kind_table;
 extern s16b alloc_race_size;

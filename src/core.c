@@ -33,6 +33,7 @@
 #include "dungeon.h"
 #include "floor.h"
 #include "floor-events.h"
+#include "floor-town.h"
 #include "grid.h"
 #include "object-curse.h"
 #include "object-flavor.h"

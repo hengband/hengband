@@ -34,6 +34,7 @@
 #include "world.h"
 #include "objectkind.h"
 #include "autopick.h"
+#include "floor-town.h"
 
 #define MIN_STOCK 12
 

@@ -30,6 +30,7 @@
 #include "floor.h"
 #include "cmd-pet.h"
 #include "dungeon-file.h"
+#include "floor-town.h"
 #include "files.h"
 #include "birth.h"
 #include "player-skill.h"

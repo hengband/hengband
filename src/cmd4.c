@@ -69,6 +69,7 @@
 #include "player-move.h"
 #include "spells.h"
 #include "objectkind.h"
+#include "floor-town.h"
 
 /*
  */

@@ -32,6 +32,7 @@
 #include "grid.h"
 #include "dungeon.h"
 #include "floor.h"
+#include "floor-town.h"
 #include "feature.h"
 #include "objectkind.h"
 

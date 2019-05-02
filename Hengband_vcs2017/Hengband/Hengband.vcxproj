@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\src\floor-events.c" />
     <ClCompile Include="..\..\src\floor-generate.c" />
     <ClCompile Include="..\..\src\floor-save.c" />
+    <ClCompile Include="..\..\src\floor-town.c" />
     <ClCompile Include="..\..\src\floor.c" />
     <ClCompile Include="..\..\src\geometry.c" />
     <ClCompile Include="..\..\src\history.c" />
@@ -302,6 +303,7 @@
     <ClInclude Include="..\..\src\floor-events.h" />
     <ClInclude Include="..\..\src\floor-generate.h" />
     <ClInclude Include="..\..\src\floor-save.h" />
+    <ClInclude Include="..\..\src\floor-town.h" />
     <ClInclude Include="..\..\src\floor.h" />
     <ClInclude Include="..\..\src\gameoption.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />

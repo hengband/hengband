@@ -45,6 +45,7 @@
 #include "term.h"
 #include "view-mainwindow.h"
 #include "floor-events.h"
+#include "floor-town.h"
 #include "dungeon-file.h"
 #include "init.h"
 #include "monster-spell.h"

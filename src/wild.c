@@ -27,6 +27,7 @@
 #include "dungeon-file.h"
 #include "files.h"
 #include "feature.h"
+#include "floor-town.h"
 
  /*
   * Wilderness

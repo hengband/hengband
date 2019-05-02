@@ -17,6 +17,7 @@
 #include "objectkind.h"
 #include "object-ego.h"
 #include "monsterrace.h"
+#include "floor-town.h"
 
 dungeon_grid letter[255];
 

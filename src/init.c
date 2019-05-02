@@ -47,6 +47,7 @@
 #include "files.h"
 #include "feature.h"
 #include "floor.h"
+#include "floor-town.h"
 #include "dungeon.h"
 #include "rooms-vault.h"
 #include "player-skill.h"

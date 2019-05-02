@@ -300,19 +300,6 @@ struct monster_power
 
 
 /*
- * A structure describing a town with
- * stores and buildings
- */
-typedef struct town_type town_type;
-struct town_type
-{
-	GAME_TEXT name[32];
-	u32b seed;      /* Seed for RNG */
-	store_type *store;    /* The stores [MAX_STORES] */
-	byte numstores;
-};
-
-/*
  * Sort-array element
  */
 typedef struct tag_type tag_type;

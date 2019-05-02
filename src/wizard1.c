@@ -20,6 +20,7 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "objectkind.h"
+#include "floor-town.h"
 
 
 #ifdef ALLOW_SPOILERS

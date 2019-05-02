@@ -27,6 +27,7 @@
 #include "grid.h"
 #include "floor.h"
 #include "floor-events.h"
+#include "floor-town.h"
 #include "player-move.h"
 #include "player-status.h"
 #include "monster-status.h"

@@ -333,6 +333,9 @@
     <ClCompile Include="..\..\src\object-ego.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor-town.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -631,6 +634,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-ego.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor-town.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -413,16 +413,6 @@ FLOOR_IDX max_floor_id;
 u32b saved_floor_file_sign;
 
 /*
- * Maximum number of towns
- */
-TOWN_IDX max_towns;
-
-/*
- * The towns [max_towns]
- */
-town_type *town_info;
-
-/*
  * The size of "alloc_kind_table" (at most max_k_idx * 4)
  */
 s16b alloc_kind_size;
