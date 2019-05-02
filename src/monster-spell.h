@@ -1,5 +1,20 @@
 ﻿#pragma once
 
+
+/* Imitator */
+typedef struct monster_power monster_power;
+struct monster_power
+{
+	PLAYER_LEVEL level;
+	MANA_POINT smana;
+	PERCENTAGE fail;
+	int     manedam;
+	int     manefail;
+	int     use_stat;
+	concptr    name;
+};
+
+
 /* Monster Spells */
 #define MS_SHRIEK         0
 #define MS_XXX1           1

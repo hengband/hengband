@@ -248,21 +248,6 @@ struct kamae
 };
 
 
-/* Imitator */
-
-typedef struct monster_power monster_power;
-struct monster_power
-{
-	PLAYER_LEVEL level;
-	MANA_POINT smana;
-	PERCENTAGE fail;
-	int     manedam;
-	int     manefail;
-	int     use_stat;
-	concptr    name;
-};
-
-
 /*
  * Sort-array element
  */
