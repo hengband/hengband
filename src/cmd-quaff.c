@@ -18,6 +18,7 @@
 #include "spells-status.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-race.h"
 #include "realm-hex.h"
 #include "spells-floor.h"
 #include "object-broken.h"

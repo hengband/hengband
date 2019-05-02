@@ -9,6 +9,7 @@
 #include "monster.h"
 #include "files.h"
 #include "player-skill.h"
+#include "player-race.h"
 #include "dungeon.h"
 #include "floor.h"
 #include "bldg.h"

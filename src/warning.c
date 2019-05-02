@@ -14,6 +14,7 @@
 #include "spells.h"
 #include "object-flavor.h"
 #include "dungeon.h"
+#include "player-race.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

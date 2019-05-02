@@ -21,6 +21,7 @@
 #include "player-status.h"
 #include "player-move.h"
 #include "player-class.h"
+#include "player-race.h"
 #include "objectkind.h"
 #include "object-ego.h"
 #include "object-flavor.h"

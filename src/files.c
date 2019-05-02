@@ -22,6 +22,7 @@
 #include "bldg.h"
 
 #include "world.h"
+#include "player-race.h"
 #include "player-status.h"
 #include "player-move.h"
 #include "player-class.h"

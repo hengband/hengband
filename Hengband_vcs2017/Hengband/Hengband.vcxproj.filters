@@ -336,6 +336,9 @@
     <ClCompile Include="..\..\src\floor-town.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-race.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -637,6 +640,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor-town.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-race.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

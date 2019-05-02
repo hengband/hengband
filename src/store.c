@@ -30,6 +30,7 @@
 #include "snipe.h"
 #include "files.h"
 #include "player-effects.h"
+#include "player-race.h"
 #include "mind.h"
 #include "world.h"
 #include "objectkind.h"

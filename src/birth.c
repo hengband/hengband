@@ -33,6 +33,7 @@
 #include "floor-town.h"
 #include "files.h"
 #include "birth.h"
+#include "player-race.h"
 #include "player-skill.h"
 #include "world.h"
 #include "objectkind.h"

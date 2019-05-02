@@ -53,6 +53,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "player-class.h"
+#include "player-race.h"
 #include "cmd-spell.h"
 #include "realm-hex.h"
 #include "objectkind.h"

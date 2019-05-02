@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "player-race.h"
 #include "player-status.h"
 #include "player-class.h"
 #include "files.h"

@@ -17,6 +17,7 @@
 #include "realm-hex.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-race.h"
 #include "floor.h"
 #include "objectkind.h"
 

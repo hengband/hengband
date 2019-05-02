@@ -12,6 +12,7 @@
 #include "floor.h"
 #include "player-status.h"
 #include "player-class.h"
+#include "player-race.h"
 #include "files.h"
 #include "world.h"
 
