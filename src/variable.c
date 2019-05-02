@@ -452,7 +452,6 @@ player_type *p_ptr = &p_body;
  * (sex, race, class, magic)
  */
 const player_sex *sp_ptr;
-const player_seikaku *ap_ptr;
 
 
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file

@@ -70,6 +70,7 @@
 #include "player-skill.h"
 #include "player-class.h"
 #include "player-race.h"
+#include "player-personality.h"
 #include "birth.h"
 #include "world.h"
 #include "objectkind.h"

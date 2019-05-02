@@ -179,6 +179,7 @@
     <ClCompile Include="..\..\src\player-class.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
     <ClCompile Include="..\..\src\player-effects.c" />
+    <ClCompile Include="..\..\src\player-personality.c" />
     <ClCompile Include="..\..\src\player-race.c" />
     <ClCompile Include="..\..\src\player-skill.c" />
     <ClCompile Include="..\..\src\player-status.c" />
@@ -340,6 +341,7 @@
     <ClInclude Include="..\..\src\player-damage.h" />
     <ClInclude Include="..\..\src\player-effects.h" />
     <ClInclude Include="..\..\src\player-move.h" />
+    <ClInclude Include="..\..\src\player-personality.h" />
     <ClInclude Include="..\..\src\player-race.h" />
     <ClInclude Include="..\..\src\player-skill.h" />
     <ClInclude Include="..\..\src\player-status.h" />

@@ -7,6 +7,7 @@
 #include "player-skill.h"
 #include "player-race.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "feature.h"

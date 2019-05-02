@@ -27,6 +27,7 @@
 #include "player-move.h"
 #include "player-class.h"
 #include "player-skill.h"
+#include "player-personality.h"
 #include "sort.h"
 #include "mutation.h"
 #include "quest.h"

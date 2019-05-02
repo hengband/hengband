@@ -35,6 +35,7 @@
 #include "player-effects.h"
 #include "player-race.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "monster-status.h"
 #include "snipe.h"
 #include "files.h"

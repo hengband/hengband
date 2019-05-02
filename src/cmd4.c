@@ -51,6 +51,7 @@
 #include "player-effects.h"
 #include "player-status.h"
 #include "player-skill.h"
+#include "player-personality.h"
 #include "sort.h"
 #include "mutation.h"
 #include "quest.h"
