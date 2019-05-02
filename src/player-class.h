@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "spells.h"
 /*
  * Information about the player's "magic"
  *
