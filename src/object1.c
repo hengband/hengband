@@ -18,6 +18,7 @@
 #include "floor.h"
 #include "cmd-activate.h"
 #include "objectkind.h"
+#include "object-ego.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "player-move.h"

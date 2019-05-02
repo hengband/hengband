@@ -27,6 +27,7 @@
 #include "monster-status.h"
 #include "files.h"
 #include "objectkind.h"
+#include "object-ego.h"
 #include "grid.h"
 
 /*!

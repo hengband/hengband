@@ -24,6 +24,7 @@
 #include "files.h"
 #include "world.h"
 #include "monsterrace.h"
+#include "object-ego.h"
 
 /*!
  * @brief 最初から簡易な名称が明らかになるベースアイテムの判定。 /  Certain items, if aware, are known instantly 

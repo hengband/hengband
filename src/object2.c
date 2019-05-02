@@ -22,6 +22,7 @@
 #include "grid.h"
 #include "objectkind.h"
 #include "object-boost.h"
+#include "object-ego.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "object-curse.h"
@@ -33,6 +34,7 @@
 #include "player-effects.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
+#include "object-ego.h"
 
 /*!
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks

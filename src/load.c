@@ -70,6 +70,7 @@
 #include "player-class.h"
 #include "world.h"
 #include "objectkind.h"
+#include "object-ego.h"
 
 
 /*

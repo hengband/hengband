@@ -230,10 +230,6 @@ extern birther previous_char;
 extern char *f_name;
 extern char *f_tag;
 
-extern ego_item_type *e_info;
-extern char *e_name;
-extern char *e_text;
-
 extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;

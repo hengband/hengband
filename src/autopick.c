@@ -22,6 +22,7 @@
 #include "player-move.h"
 #include "player-class.h"
 #include "objectkind.h"
+#include "object-ego.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 

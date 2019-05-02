@@ -15,6 +15,7 @@
 #include "world.h"
 #include "rooms-vault.h"
 #include "objectkind.h"
+#include "object-ego.h"
 #include "monsterrace.h"
 
 dungeon_grid letter[255];

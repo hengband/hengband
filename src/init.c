@@ -52,6 +52,7 @@
 #include "player-skill.h"
 #include "player-class.h"
 #include "objectkind.h"
+#include "object-ego.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME
