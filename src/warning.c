@@ -15,6 +15,7 @@
 #include "object-flavor.h"
 #include "dungeon.h"
 #include "player-race.h"
+#include "melee.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

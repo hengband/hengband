@@ -29,6 +29,7 @@
 #include "spells.h"
 #include "dungeon.h"
 #include "world.h"
+#include "melee.h"
 
 
 /*

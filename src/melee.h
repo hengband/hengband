@@ -50,6 +50,14 @@ struct martial_arts
 	int effect;     /* Special effects */
 };
 
+typedef struct mbe_info_type mbe_info_type;
+
+struct mbe_info_type
+{
+	int power;        /* The attack "power" */
+	int explode_type; /* Explosion effect */
+};
+
 extern const martial_arts ma_blows[MAX_MA];
 extern const int monk_ave_damage[PY_MAX_LEVEL + 1][3];
 
@@ -61,3 +69,4 @@ extern bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode);
 extern bool make_attack_normal(MONSTER_IDX m_idx);
 extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who);
 
+extern const mbe_info_type mbe_info[];

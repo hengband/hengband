@@ -88,7 +88,6 @@ extern const kamae kata_shurui[MAX_KATA];
 
 
 extern const concptr ident_info[];
-extern const mbe_info_type mbe_info[];
 extern const byte feature_action_flags[FF_FLAG_MAX];
 extern const dragonbreath_type dragonbreath_info[];
 

@@ -52,15 +52,6 @@
 //#include "player-skill.h"
 
 
-
-typedef struct mbe_info_type mbe_info_type;
-
-struct mbe_info_type
-{
-	int power;        /* The attack "power" */
-	int explode_type; /* Explosion effect */
-};
-
 /*
  * The "name" of spell 'N' is stored as spell_names[X][N],
  * where X is 0 for mage-spells and 1 for priest-spells.
