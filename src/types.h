@@ -72,12 +72,3 @@ typedef bool (*monsterrace_hook_type)(MONRACE_IDX r_idx);
  * This seems like a pretty standard "typedef"
  */
 typedef int (*inven_func)(object_type *);
-
-
-typedef struct
-{
-	FEAT_IDX feat;    /* Feature tile */
-	PERCENTAGE percent; /* Chance of type */
-}
-feat_prob;
-

@@ -47,6 +47,7 @@
 #include "cmd-pet.h"
 #include "cmd-spell.h"
 #include "dungeon.h"
+#include "feature.h"
 #include "world.h"
 #include "player-effects.h"
 #include "player-status.h"

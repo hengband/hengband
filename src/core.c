@@ -31,6 +31,7 @@
 #include "cmd-basic.h"
 #include "snipe.h"
 #include "dungeon.h"
+#include "feature.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-town.h"

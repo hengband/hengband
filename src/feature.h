@@ -13,6 +13,12 @@ struct feature_state
 	FEAT_IDX result; /*!< 変化先ID / Result (f_info ID) */
 };
 
+typedef struct
+{
+	FEAT_IDX feat;    /* Feature tile */
+	PERCENTAGE percent; /* Chance of type */
+}
+feat_prob;
 
 /*!
  * @struct feature_type

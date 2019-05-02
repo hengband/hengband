@@ -16,6 +16,7 @@
 #include "chest.h"
 #include "trap.h"
 #include "dungeon.h"
+#include "feature.h"
 #include "floor.h"
 #include "melee.h"
 #include "object-hook.h"

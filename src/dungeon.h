@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "feature.h"
 
 /* A structure for the != dungeon types */
 typedef struct dungeon_type dungeon_type;
