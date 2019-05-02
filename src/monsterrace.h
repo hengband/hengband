@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "util.h"
 
 /*
  * Monster blow structure
@@ -444,3 +445,6 @@ struct monster_race
 monster_race *r_info;
 char *r_name;
 char *r_text;
+
+extern s16b alloc_race_size;
+extern alloc_entry *alloc_race_table;

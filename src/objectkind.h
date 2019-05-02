@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "util.h"
 
 /*!
  * @struct object_kind
@@ -64,3 +65,6 @@ struct object_kind
 extern object_kind *k_info;
 extern char *k_name;
 extern char *k_text;
+
+extern s16b alloc_kind_size;
+extern alloc_entry *alloc_kind_table;
