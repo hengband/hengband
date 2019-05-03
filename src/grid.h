@@ -417,6 +417,10 @@ extern void remove_mirror(POSITION y, POSITION x);
 extern bool is_open(FEAT_IDX feat);
 extern bool check_local_illumination(POSITION y, POSITION x);
 
+extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
+extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
+
+
 /*!
  * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
  */

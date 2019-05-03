@@ -276,22 +276,6 @@ extern FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 extern COMMAND_CODE now_message;
 extern bool use_menu;
 
-
-/* grids.c */
-extern void update_local_illumination(POSITION y, POSITION x);
-extern bool player_can_see_bold(POSITION y, POSITION x);
-extern bool cave_valid_bold(POSITION y, POSITION x);
-extern bool no_lite(void);
-extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
-extern void delayed_visual_update(void);
-extern void forget_flow(void);
-extern void update_flow(void);
-extern void update_smell(void);
-extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
-
-extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
-extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
-
 /* cmd4.c */
 #ifndef JP
 extern concptr get_ordinal_number_suffix(int num);
