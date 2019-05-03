@@ -37,6 +37,11 @@ artifact_type *a_info;
 char *a_name;
 char *a_text;
 
+/*
+ * Maximum number of artifacts in a_info.txt
+ */
+ARTIFACT_IDX max_a_idx;
+
 static bool has_extreme_damage_rate(object_type *o_ptr);
 static bool weakening_artifact(object_type *o_ptr);
 

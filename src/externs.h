@@ -233,12 +233,10 @@ extern monsterrace_hook_type get_mon_num_hook;
 extern monsterrace_hook_type get_mon_num2_hook;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
-extern QUEST_IDX max_q_idx;
-extern MONRACE_IDX max_r_idx;
-extern KIND_OBJECT_IDX max_k_idx;
+
 extern VAULT_IDX max_v_idx;
 extern FEAT_IDX max_f_idx;
-extern ARTIFACT_IDX max_a_idx;
+
 extern EGO_IDX max_e_idx;
 extern DUNGEON_IDX max_d_idx;
 extern char quest_text[10][80];

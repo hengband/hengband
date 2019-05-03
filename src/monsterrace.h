@@ -20,6 +20,7 @@ struct monster_blow
 	DICE_SID d_side;
 };
 
+extern MONRACE_IDX max_r_idx;
 
 /*
  * Monster "race" information, including racial memories

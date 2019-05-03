@@ -503,21 +503,6 @@ monsterrace_hook_type get_mon_num2_hook;
 bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 /*
- * Maximum number of quests
- */
-QUEST_IDX max_q_idx;
-
-/*
- * Maximum number of monsters in r_info.txt
- */
-MONRACE_IDX max_r_idx;
-
-/*
- * Maximum number of items in k_info.txt
- */
-KIND_OBJECT_IDX max_k_idx;
-
-/*
  * Maximum number of vaults in v_info.txt
  */
 VAULT_IDX max_v_idx;
@@ -526,11 +511,6 @@ VAULT_IDX max_v_idx;
  * Maximum number of terrain features in f_info.txt
  */
 FEAT_IDX max_f_idx;
-
-/*
- * Maximum number of artifacts in a_info.txt
- */
-ARTIFACT_IDX max_a_idx;
 
 /*
  * Maximum number of ego-items in e_info.txt

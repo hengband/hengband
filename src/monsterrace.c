@@ -16,3 +16,7 @@ s16b alloc_race_size;
  */
 alloc_entry *alloc_race_table;
 
+/*
+ * Maximum number of monsters in r_info.txt
+ */
+MONRACE_IDX max_r_idx;

@@ -107,6 +107,7 @@
 #include "init.h"
 #include "files.h"
 #include "scores.h"
+#include "quest.h"
 
 #ifdef WINDOWS
 #include <windows.h>

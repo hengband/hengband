@@ -19,6 +19,11 @@
  */
 quest_type *quest;
 
+/*
+ * Maximum number of quests
+ */
+QUEST_IDX max_q_idx;
+
 /*!
  * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription
  */

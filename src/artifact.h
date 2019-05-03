@@ -53,6 +53,8 @@ extern artifact_type *a_info;
 extern char *a_name;
 extern char *a_text;
 
+extern ARTIFACT_IDX max_a_idx;
+
 /* artifact.c */
 extern bool create_artifact(object_type *o_ptr, bool a_scroll);
 extern int activation_index(object_type *o_ptr);
