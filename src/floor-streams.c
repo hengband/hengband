@@ -28,6 +28,7 @@
 #include "feature.h"
 #include "object-flavor.h"
 #include "object-hook.h"
+#include "spells.h"
 
 
 /*!

@@ -172,3 +172,5 @@ extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 extern concptr essence_name[];
+
+extern s32b flag_cost(object_type *o_ptr, int plusses);

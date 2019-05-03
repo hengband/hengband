@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "floor.h"
-
+#include "spells.h"
 
 /*!
  * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique

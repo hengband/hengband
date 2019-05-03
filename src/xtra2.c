@@ -35,6 +35,7 @@
 #include "feature.h"
 #include "quest.h"
 #include "dungeon.h"
+#include "spells.h"
 
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /

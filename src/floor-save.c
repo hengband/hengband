@@ -31,6 +31,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "world.h"
+#include "spells.h"
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */

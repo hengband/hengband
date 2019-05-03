@@ -10,6 +10,7 @@ struct kamae
 };
 
 /* effects.c */
+extern int take_hit(int damage_type, HIT_POINT damage, concptr kb_str, int monspell);
 extern void set_action(ACTION_IDX typ);
 extern void reset_tim_flags(void);
 extern void dispel_player(void);

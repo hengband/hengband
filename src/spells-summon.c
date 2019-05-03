@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
+#include "spells.h"
 #include "spells-summon.h"
 #include "monster-status.h"
 #include "floor.h"
