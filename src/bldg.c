@@ -15,6 +15,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "core.h"
 #include "cmd-dump.h"
 #include "floor.h"
 #include "floor-events.h"

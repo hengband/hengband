@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "core.h"
 
 #include "player-race.h"
 #include "player-status.h"

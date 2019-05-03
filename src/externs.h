@@ -259,12 +259,6 @@ extern COMMAND_CODE now_message;
 extern bool use_menu;
 
 
-/* dungeon.c */
-extern void play_game(bool new_game);
-extern s32b turn_real(s32b hoge);
-extern void prevent_turn_overflow(void);
-extern void close_game(void);
-
 /* load.c */
 extern errr rd_savefile_new(void);
 extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);

@@ -8,6 +8,7 @@
 #define _GNU_SOURCE /*!< 未使用*/
 #include "angband.h"
 #include "util.h"
+#include "core.h"
 
 #include "floor.h"
 #include "player-status.h"
