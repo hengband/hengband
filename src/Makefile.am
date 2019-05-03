@@ -19,7 +19,7 @@ hengband_SOURCES = \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c cmd-hissatsu.h\
 	\
-	core.c defines.h externs.h files.c files.h \
+	core.c core.h defines.h externs.h files.c files.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h floor-generate.c floor-generate.h \

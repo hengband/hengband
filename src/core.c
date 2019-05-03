@@ -75,6 +75,16 @@
 #include "scores.h"
 #include "autopick.h"
 
+concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
+
+#ifdef JP
+concptr ANGBAND_KEYBOARD = "JAPAN"; //!< Hack -- The special Angband "Keyboard Suffix" This variable is used to choose an appropriate macro-trigger definition
+#else
+concptr ANGBAND_KEYBOARD = "0";
+#endif
+
+concptr ANGBAND_GRAF = "ascii"; //!< Hack -- The special Angband "Graphics Suffix" This variable is used to choose an appropriate "graf-xxx" file
+
 static bool load = TRUE; /*!<ロード処理中の分岐フラグ*/
 static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 

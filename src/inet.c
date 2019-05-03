@@ -2,6 +2,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "files.h"
 
 
 #ifdef WORLD_SCORE

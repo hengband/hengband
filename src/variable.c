@@ -448,32 +448,6 @@ player_type p_body;
 player_type *p_ptr = &p_body;
 
 
-
-concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
-
-
-#ifdef JP
-concptr ANGBAND_KEYBOARD = "JAPAN"; //!< Hack -- The special Angband "Keyboard Suffix" This variable is used to choose an appropriate macro-trigger definition
-#else
-concptr ANGBAND_KEYBOARD = "0";
-#endif
-
-concptr ANGBAND_GRAF = "ascii"; //!< Hack -- The special Angband "Graphics Suffix" This variable is used to choose an appropriate "graf-xxx" file
-concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
-concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
-concptr ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_DATA; //!< Binary image files for the "*_info" arrays (binary) These files are not portable between platforms
-concptr ANGBAND_DIR_EDIT; //!< Textual template files for the "*_info" arrays (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_SCRIPT; //!< Script files These files are portable between platforms.
-concptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
-concptr ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
-concptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
-concptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
-concptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
-concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
-
-
 /*
  * Here is a "pseudo-hook" used during calls to "get_item()" and
  * "show_inven()" and "show_equip()", and the choice window routines.

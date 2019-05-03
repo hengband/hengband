@@ -3,6 +3,7 @@
 
 #include "term.h"
 #include "spells.h"
+#include "core.h"
 
 /*
  * Default spell color table (quark index)

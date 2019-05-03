@@ -1,5 +1,19 @@
 ﻿#pragma once
 
+extern concptr ANGBAND_DIR;
+extern concptr ANGBAND_DIR_APEX;
+extern concptr ANGBAND_DIR_BONE;
+extern concptr ANGBAND_DIR_DATA;
+extern concptr ANGBAND_DIR_EDIT;
+extern concptr ANGBAND_DIR_SCRIPT;
+extern concptr ANGBAND_DIR_FILE;
+extern concptr ANGBAND_DIR_HELP;
+extern concptr ANGBAND_DIR_INFO;
+extern concptr ANGBAND_DIR_PREF;
+extern concptr ANGBAND_DIR_SAVE;
+extern concptr ANGBAND_DIR_USER;
+extern concptr ANGBAND_DIR_XTRA;
+
 /* files.c */
 extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);

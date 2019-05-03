@@ -21,6 +21,7 @@
 #include "object-hook.h"
 #include "objectkind.h"
 #include "floor-town.h"
+#include "files.h"
 
 
 #ifdef ALLOW_SPOILERS

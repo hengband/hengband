@@ -658,6 +658,7 @@
     <ClInclude Include="..\..\src\cmd-dump.h">
       <Filter>cmd</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

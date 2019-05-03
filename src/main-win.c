@@ -108,6 +108,8 @@
 #include "files.h"
 #include "scores.h"
 #include "quest.h"
+#include "files.h"
+#include "core.h"
 
 #ifdef WINDOWS
 #include <windows.h>

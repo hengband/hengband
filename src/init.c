@@ -34,6 +34,8 @@
 
 #include "angband.h"
 #include "util.h"
+#include "files.h"
+#include "core.h"
 
 #include "artifact.h"
 #include "bldg.h"
