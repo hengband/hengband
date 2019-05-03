@@ -17,6 +17,7 @@
 
 #include "artifact.h"
 #include "avatar.h"
+#include "cmd-dump.h"
 #include "history.h"
 #include "monsterrace-hook.h"
 #include "store.h"

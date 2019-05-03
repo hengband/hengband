@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-dump.h"
 #include "selfinfo.h"
 #include "spells.h"
 #include "spells-summon.h"

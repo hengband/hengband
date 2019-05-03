@@ -100,6 +100,7 @@
 #include "util.h"
 #include "bldg.h"
 
+#include "cmd-dump.h"
 #include "grid.h"
 #include "rooms.h"
 #include "dungeon.h"

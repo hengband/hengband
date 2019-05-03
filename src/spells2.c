@@ -16,6 +16,7 @@
 
 #include "artifact.h"
 #include "cmd-pet.h"
+#include "cmd-dump.h"
 #include "floor.h"
 #include "grid.h"
 #include "trap.h"

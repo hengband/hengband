@@ -9,6 +9,7 @@
 #include "angband.h"
 
 #include "util.h"
+#include "cmd-dump.h"
 
 #include <stdio.h>
 #include <stdarg.h>

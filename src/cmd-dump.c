@@ -41,6 +41,8 @@
 
 #include "angband.h"
 #include "util.h"
+#include "cmd-dump.h"
+
 #include "autopick.h"
 
 #include "birth.h"

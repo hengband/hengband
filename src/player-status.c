@@ -29,6 +29,7 @@
 #include "objectkind.h"
 #include "monsterrace.h"
 #include "autopick.h"
+#include "cmd-dump.h"
 
 /*!
  * @var horror_desc

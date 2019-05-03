@@ -16,6 +16,7 @@
 #include "birth.h"
 #include "bldg.h"
 #include "cmd-activate.h"
+#include "cmd-dump.h"
 #include "cmd-eat.h"
 #include "cmd-hissatsu.h"
 #include "cmd-item.h"

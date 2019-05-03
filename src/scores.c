@@ -22,6 +22,7 @@
 #include "scores.h"
 #include "floor.h"
 #include "world.h"
+#include "cmd-dump.h"
 
 /*!
  * @brief i番目のスコア情報にバッファ位置をシークする / Seek score 'i' in the highscore file

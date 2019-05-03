@@ -21,6 +21,7 @@
 
 #include "bldg.h"
 
+#include "cmd-dump.h"
 #include "world.h"
 #include "player-race.h"
 #include "player-status.h"

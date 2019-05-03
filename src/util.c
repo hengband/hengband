@@ -17,6 +17,7 @@
 #include "quest.h"
 #include "floor.h"
 #include "world.h"
+#include "cmd-dump.h"
 
 
 static int num_more = 0;

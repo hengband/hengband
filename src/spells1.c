@@ -15,6 +15,7 @@
 #include "util.h"
 
 #include "cmd-pet.h"
+#include "cmd-dump.h"
 #include "floor.h"
 #include "trap.h"
 #include "autopick.h"

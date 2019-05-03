@@ -14,6 +14,7 @@
 #include "player-effects.h"
 #include "objectkind.h"
 #include "object-ego.h"
+#include "cmd-dump.h"
 
 static bool mon_invis;
 static POSITION mon_fy, mon_fx;

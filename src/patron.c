@@ -2,6 +2,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-dump.h"
 #include "patron.h"
 #include "cmd-pet.h"
 #include "object-curse.h"

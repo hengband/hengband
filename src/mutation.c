@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-dump.h"
 #include "mutation.h"
 
 #include "selfinfo.h"

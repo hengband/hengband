@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-dump.h"
 #include "chest.h"
 #include "trap.h"
 #include "dungeon.h"

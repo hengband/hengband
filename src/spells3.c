@@ -36,6 +36,7 @@
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "cmd-spell.h"
+#include "cmd-dump.h"
 #include "snipe.h"
 #include "floor-save.h"
 #include "files.h"

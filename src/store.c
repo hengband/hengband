@@ -14,6 +14,7 @@
 #include "util.h"
 
 #include "floor.h"
+#include "cmd-dump.h"
 #include "cmd-item.h"
 #include "cmd-smith.h"
 #include "cmd-zapwand.h"

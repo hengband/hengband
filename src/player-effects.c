@@ -16,6 +16,7 @@
 #include "util.h"
 
 #include "artifact.h"
+#include "cmd-dump.h"
 #include "floor.h"
 #include "bldg.h"
 #include "birth.h"

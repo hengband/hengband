@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-dump.h"
 #include "bldg.h"
 #include "cmd-pet.h"
 #include "floor.h"

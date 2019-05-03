@@ -12,6 +12,7 @@
 #include "artifact.h"
 #include "feature.h"
 #include "world.h"
+#include "cmd-dump.h"
 
 /*
  * Quest info

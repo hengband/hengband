@@ -100,6 +100,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-dump.h"
 #include "view-mainwindow.h"
 #include "floor.h"
 #include "floor-events.h"
