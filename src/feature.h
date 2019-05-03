@@ -111,3 +111,8 @@ extern FEAT_IDX feat_tree;
 extern FEAT_IDX feat_mountain;
 extern FEAT_IDX feat_swamp;
 extern FEAT_IDX feat_undetected;
+
+extern FEAT_IDX feat_wall_outer;
+extern FEAT_IDX feat_wall_inner;
+extern FEAT_IDX feat_wall_solid;
+extern FEAT_IDX feat_ground_type[100], feat_wall_type[100];

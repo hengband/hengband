@@ -88,6 +88,12 @@ FEAT_IDX feat_swamp;
 /* Unknown grid (not detected) */
 FEAT_IDX feat_undetected;
 
+FEAT_IDX feat_wall_outer;
+FEAT_IDX feat_wall_inner;
+FEAT_IDX feat_wall_solid;
+FEAT_IDX feat_ground_type[100], feat_wall_type[100];
+
+
 /*!
  * @brief 地形が罠持ちであるかの判定を行う。 / Return TRUE if the given feature is a trap
  * @param feat 地形情報のID
