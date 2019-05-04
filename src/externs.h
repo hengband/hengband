@@ -339,10 +339,6 @@ extern bool easy_disarm;
 extern bool easy_floor;
 extern bool easy_open;
 
-
-/* object1.c */
-extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
-extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width);
 extern bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern void py_pickup_floor(bool pickup);
 
