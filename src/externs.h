@@ -61,8 +61,6 @@ extern const byte adj_str_th[];
 extern const byte adj_str_wgt[];
 extern const byte adj_str_hold[];
 extern const byte adj_str_dig[];
-extern const byte adj_str_blow[];
-extern const byte adj_dex_blow[];
 extern const byte adj_dex_safe[];
 extern const byte adj_con_fix[];
 extern const byte adj_con_mhp[];
