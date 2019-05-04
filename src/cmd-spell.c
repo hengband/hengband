@@ -38,6 +38,19 @@
 #include "floor.h"
 #include "autopick.h"
 
+ /*!
+  * 魔法領域フラグ管理テーブル /
+  * Zangband uses this array instead of the spell flags table, as there
+  * are 5 realms of magic, each with 4 spellbooks and 8 spells per book -- TY
+  */
+const u32b fake_spell_flags[4] =
+{
+	0x000000ff,
+	0x0000ff00,
+	0x00ff0000,
+	0xff000000
+};
+
 /*!
  * @brief
  * 魔法の効果を「キャプション:ダイス＋定数値」のフォーマットで出力する / Generate dice info string such as "foo 2d10"

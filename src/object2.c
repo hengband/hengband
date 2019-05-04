@@ -17,6 +17,7 @@
 #include "object.h"
 
 #include "cmd-dump.h"
+#include "cmd-spell.h"
 #include "spells.h"
 #include "dungeon.h"
 #include "floor.h"

@@ -1,9 +1,13 @@
-﻿#define KWD_DAM      _("損傷:", "dam ")
+﻿#pragma once
+
+#define KWD_DAM      _("損傷:", "dam ")
 #define KWD_RANGE    _("射程:", "rng ")
 #define KWD_DURATION _("期間:", "dur ")
 #define KWD_SPHERE   _("範囲:", "range ")
 #define KWD_HEAL     _("回復:", "heal ")
 #define KWD_RANDOM   _("ランダム", "random")
+
+extern const u32b fake_spell_flags[4];
 
 extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 

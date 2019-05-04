@@ -1089,19 +1089,6 @@ const byte extract_energy[200] =
 	/* Fast */    49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
 };
 
-/*!
- * 魔法領域フラグ管理テーブル /
- * Zangband uses this array instead of the spell flags table, as there
- * are 5 realms of magic, each with 4 spellbooks and 8 spells per book -- TY
- */
-const u32b fake_spell_flags[4]=
-{
-	0x000000ff,
-	0x0000ff00,
-	0x00ff0000,
-	0xff000000
-};
-
 #ifdef JP
 /*!
  * 領域魔法名称

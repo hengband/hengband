@@ -67,7 +67,6 @@ extern const byte adj_con_mhp[];
 extern const byte adj_chr_chm[];
 extern const byte extract_energy[200];
 
-extern const u32b fake_spell_flags[4];
 extern const concptr realm_names[];
 #ifdef JP
 extern const concptr E_realm_names[];
