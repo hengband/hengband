@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "term.h"
 
 #include "floor.h"
 #include "cmd-dump.h"

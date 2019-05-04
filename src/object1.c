@@ -24,6 +24,7 @@
 #include "player-move.h"
 #include "monster.h"
 #include "files.h"
+#include "term.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify

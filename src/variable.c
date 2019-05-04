@@ -412,21 +412,6 @@ FLOOR_IDX max_floor_id;
  */
 u32b saved_floor_file_sign;
 
-/*
- * Specify attr/char pairs for visual special effects
- * Be sure to use "index & 0x7F" to avoid illegal access
- */
-TERM_COLOR misc_to_attr[256];
-SYMBOL_CODE misc_to_char[256];
-
-
-/*
- * Specify attr/char pairs for p_ptr->inventory_list items (by tval)
- * Be sure to use "index & 0x7F" to avoid illegal access
- */
-TERM_COLOR tval_to_attr[128];
-SYMBOL_CODE tval_to_char[128];
-
 
 /*
  * Keymaps for each "mode" associated with each keypress.
