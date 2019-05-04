@@ -223,8 +223,6 @@ extern FEAT_IDX max_f_idx;
 
 extern EGO_IDX max_e_idx;
 extern DUNGEON_IDX max_d_idx;
-extern char quest_text[10][80];
-extern int quest_text_line;
 extern int init_flags;
 extern int highscore_fd;
 extern bool can_save;

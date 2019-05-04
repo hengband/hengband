@@ -496,17 +496,6 @@ EGO_IDX max_e_idx;
  */
 DUNGEON_IDX max_d_idx;
 
-
-/*
- * Quest text
- */
-char quest_text[10][80];
-
-/*
- * Current line of the quest text
- */
-int quest_text_line;
-
 /*
  * Flags for initialization
  */

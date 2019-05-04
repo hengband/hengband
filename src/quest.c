@@ -14,15 +14,10 @@
 #include "world.h"
 #include "cmd-dump.h"
 
-/*
- * Quest info
- */
-quest_type *quest;
-
-/*
- * Maximum number of quests
- */
-QUEST_IDX max_q_idx;
+quest_type *quest; /*!< Quest info */
+QUEST_IDX max_q_idx; /*!< Maximum number of quests */
+char quest_text[10][80]; /*!< Quest text */
+int quest_text_line; /*!< Current line of the quest text */
 
 /*!
  * @brief クエスト突入時のメッセージテーブル / Array of places to find an inscription

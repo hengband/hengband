@@ -81,6 +81,8 @@ struct quest_type
 typedef struct quest_type quest_type;
 extern quest_type *quest;
 extern QUEST_IDX max_q_idx;
+extern char quest_text[10][80];
+extern int quest_text_line;
 
 extern void determine_random_questor(quest_type *q_ptr);
 extern void complete_quest(QUEST_IDX quest_num);
