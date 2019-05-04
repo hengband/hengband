@@ -615,7 +615,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				/* Hack -- Complete the prompt (again) */
 				Term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), x_info, info));
 
-				/* Command */
 				query = inkey();
 
 				screen_load();
@@ -646,7 +645,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			/* Place cursor */
 			move_cursor_relative(y, x);
 
-			/* Command */
 			query = inkey();
 
 			/* Normal commands */
@@ -687,7 +685,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			o_ptr = &current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
-			/* Obtain an object description */
 			object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
@@ -743,7 +740,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				prt(out_val, 0, 0);
 				move_cursor_relative(y, x);
 
-				/* Command */
 				query = inkey();
 
 				/* End this grid */
@@ -763,7 +759,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				prt(out_val, 0, 0);
 				move_cursor_relative(y, x);
 
-				/* Command */
 				query = inkey();
 
 				/* No request for listing */
@@ -840,7 +835,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			/* Not boring */
 			boring = FALSE;
 
-			/* Obtain an object description */
 			object_desc(o_name, o_ptr, 0);
 
 #ifdef JP

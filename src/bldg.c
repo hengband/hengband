@@ -3802,7 +3802,6 @@ static bool research_mon(void)
 				old_i = i;
 			}
 
-			/* Command */
 			query = inkey();
 
 			/* Normal commands */

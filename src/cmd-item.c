@@ -1457,7 +1457,6 @@ void do_cmd_query_symbol(void)
 			/* Hack -- Complete the prompt */
 			Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ESC]", " [(r)ecall, ESC]"));
 
-			/* Command */
 			query = inkey();
 
 			/* Unrecall */
