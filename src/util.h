@@ -115,3 +115,7 @@ extern char *my_strchr(concptr ptr, char ch);
 extern void str_tolower(char *str);
 extern int inkey_special(bool numpad_cursor);
 
+/* util.c */
+extern void repeat_push(COMMAND_CODE what);
+extern bool repeat_pull(COMMAND_CODE *what);
+extern void repeat_check(void);

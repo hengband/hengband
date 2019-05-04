@@ -330,11 +330,6 @@ extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
 /* extern int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, ...); */
 #endif
 
-/* util.c */
-extern void repeat_push(COMMAND_CODE what);
-extern bool repeat_pull(COMMAND_CODE *what);
-extern void repeat_check(void);
-
 extern bool easy_disarm;
 extern bool easy_floor;
 extern bool easy_open;
