@@ -1136,7 +1136,7 @@ const byte adj_chr_chm[] =
 
 /*!
  * @brief
- * 魅力による魅了能力修正テーブル /
+ * 腕力、器用さに応じた攻撃回数テーブル /
  * This table is used to help calculate the number of blows the player can
  * make in a single round of attacks (one player current_world_ptr->game_turn) with a normal weapon.
  * @details
