@@ -69,3 +69,4 @@ extern const player_class class_info[MAX_CLASS];
 
 extern const s32b realm_choices1[];
 extern const s32b realm_choices2[];
+extern const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5];
