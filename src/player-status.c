@@ -30,6 +30,7 @@
 #include "monsterrace.h"
 #include "autopick.h"
 #include "cmd-dump.h"
+#include "melee.h"
 
 /*!
  * @var horror_desc

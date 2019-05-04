@@ -38,6 +38,8 @@ extern const concptr silly_attacks[MAX_SILLY_ATTACK];
 extern const concptr silly_attacks2[MAX_SILLY_ATTACK];
 #endif
 
+extern const byte blows_table[12][12];
+
 /* For Monk martial arts */
 typedef struct martial_arts martial_arts;
 struct martial_arts
