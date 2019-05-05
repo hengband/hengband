@@ -180,12 +180,7 @@ extern bool *macro__cmd;
 extern char *macro__buf;
 extern STR_OFFSET quark__num;
 extern concptr *quark__str;
-extern u32b message__next;
-extern u32b message__last;
-extern u32b message__head;
-extern u32b message__tail;
-extern u32b *message__ptr;
-extern char *message__buf;
+
 extern BIT_FLAGS option_flag[8];
 extern BIT_FLAGS option_mask[8];
 extern BIT_FLAGS window_flag[8];

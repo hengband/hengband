@@ -217,37 +217,6 @@ STR_OFFSET quark__num;
  */
 concptr *quark__str;
 
-
-/*
- * The next "free" index to use
- */
-u32b message__next;
-
-/*
- * The index of the oldest message (none yet)
- */
-u32b message__last;
-
-/*
- * The next "free" offset
- */
-u32b message__head;
-
-/*
- * The offset to the oldest used char (none yet)
- */
-u32b message__tail;
-
-/*
- * The array of offsets, by index [MESSAGE_MAX]
- */
-u32b *message__ptr;
-
-/*
- * The array of chars, by offset [MESSAGE_BUF]
- */
-char *message__buf;
-
 BIT_FLAGS option_flag[8]; //!< The array of normal options
 BIT_FLAGS option_mask[8]; //!< The array of normal options
 BIT_FLAGS window_flag[8]; //!< The array of window options

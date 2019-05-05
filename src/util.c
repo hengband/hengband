@@ -20,6 +20,36 @@
 #include "cmd-dump.h"
 
 
+/*
+ * The next "free" index to use
+ */
+u32b message__next;
+
+/*
+ * The index of the oldest message (none yet)
+ */
+u32b message__last;
+
+/*
+ * The next "free" offset
+ */
+u32b message__head;
+
+/*
+ * The offset to the oldest used char (none yet)
+ */
+u32b message__tail;
+
+/*
+ * The array of offsets, by index [MESSAGE_MAX]
+ */
+u32b *message__ptr;
+
+/*
+ * The array of chars, by offset [MESSAGE_BUF]
+ */
+char *message__buf;
+
 static int num_more = 0;
 
 /* Save macro trigger string for use in inkey_special() */

@@ -33,6 +33,13 @@ struct alloc_entry
 	u16b total;		/* Unused for now */
 };
 
+extern u32b message__next;
+extern u32b message__last;
+extern u32b message__head;
+extern u32b message__tail;
+extern u32b *message__ptr;
+extern char *message__buf;
+
 /* util.c */
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);
