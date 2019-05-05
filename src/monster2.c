@@ -831,9 +831,9 @@ static int chameleon_change_m_idx = 0;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(MONRACE_IDX r_idx)
+static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
 {
-	dungeon_type *d_ptr = &d_info[p_ptr->dungeon_idx];
+	dungeon_type *d_ptr = &d_info[d_idx];
 	monster_race *r_ptr = &r_info[r_idx];
 	byte a;
 
@@ -1069,7 +1069,8 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 		/* Accept this monster */
 		entry->prob2 = entry->prob1;
 
-		if (current_floor_ptr->dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) && !restrict_monster_to_dungeon(entry->index) && !p_ptr->inside_battle)
+		if (current_floor_ptr->dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) &&
+			!restrict_monster_to_dungeon(p_ptr->dungeon_idx, entry->index) && !p_ptr->inside_battle)
 		{
 			int hoge = entry->prob2 * d_info[p_ptr->dungeon_idx].special_div;
 			entry->prob2 = hoge / 64;
