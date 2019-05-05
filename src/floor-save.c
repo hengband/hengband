@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "load.h"
 #include "util.h"
 
 #include "artifact.h"

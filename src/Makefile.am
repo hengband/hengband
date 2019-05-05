@@ -32,7 +32,7 @@ hengband_SOURCES = \
 	gameoption.c gameoption.h gamevalue.h \
 	grid.c grid.h h-basic.h h-config.h h-define.h \
 	history.h history.c \
-	h-system.h h-type.h inet.c init.c init.h japanese.c load.c \
+	h-system.h h-type.h inet.c init.c init.h japanese.c load.c load.h \
 	dungeon-file.c dungeon-file.h \
 	main.c main-x11.c main-gcu.c \
 	melee.h melee1.c mind.c mind.h \

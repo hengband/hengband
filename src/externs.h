@@ -233,15 +233,9 @@ extern bool mon_fight;
 extern bool generate_encounter;
 extern concptr screen_dump;
 
-
 extern DEPTH *max_dlv;
 extern COMMAND_CODE now_message;
 extern bool use_menu;
-
-
-/* load.c */
-extern errr rd_savefile_new(void);
-extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 
 /* racial.c */
 extern void do_cmd_racial_power(void);

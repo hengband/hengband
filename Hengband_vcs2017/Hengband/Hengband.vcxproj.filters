@@ -738,6 +738,9 @@
     <ClInclude Include="..\..\src\save.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\load.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

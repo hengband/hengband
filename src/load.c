@@ -42,6 +42,8 @@
 
 #include "angband.h"
 #include "util.h"
+#include "load.h"
+
 #include "bldg.h"
 
 #include "dungeon.h"
