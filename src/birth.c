@@ -42,6 +42,7 @@
 #include "objectkind.h"
 #include "monsterrace.h"
 #include "autopick.h"
+#include "save.h"
 
  /*
   * The last character rolled,

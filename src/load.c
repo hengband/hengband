@@ -76,7 +76,7 @@
 #include "world.h"
 #include "objectkind.h"
 #include "object-ego.h"
-
+#include "save.h"
 
 /*
  * Maximum number of tries for selection of a proper quest monster

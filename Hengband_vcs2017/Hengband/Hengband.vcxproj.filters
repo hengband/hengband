@@ -735,6 +735,9 @@
     <ClInclude Include="..\..\src\snipe.h">
       <Filter>combat</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\save.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

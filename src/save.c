@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "save.h"
 
 #include "artifact.h"
 #include "sort.h"

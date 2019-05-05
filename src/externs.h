@@ -246,12 +246,6 @@ extern bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
 /* racial.c */
 extern void do_cmd_racial_power(void);
 
-/* save.c */
-extern bool save_player(void);
-extern bool load_player(void);
-extern void remove_loc(void);
-extern bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
-
 /* xtra1.c */
 extern void handle_stuff(void);
 extern void update_output(void);

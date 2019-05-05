@@ -75,6 +75,7 @@
 #include "player-effects.h"
 #include "scores.h"
 #include "autopick.h"
+#include "save.h"
 
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
