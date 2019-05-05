@@ -237,9 +237,6 @@ extern DEPTH *max_dlv;
 extern COMMAND_CODE now_message;
 extern bool use_menu;
 
-/* racial.c */
-extern void do_cmd_racial_power(void);
-
 /* xtra1.c */
 extern void handle_stuff(void);
 extern void update_output(void);

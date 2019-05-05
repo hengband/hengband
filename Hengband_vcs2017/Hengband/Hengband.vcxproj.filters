@@ -4,7 +4,6 @@
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\racial.c" />
     <ClCompile Include="..\..\src\readdib.c" />
     <ClCompile Include="..\..\src\tables.c" />
     <ClCompile Include="..\..\src\variable.c" />
@@ -373,9 +372,6 @@
     <ClCompile Include="..\..\src\z-rand.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\snipe.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\wizard2.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -384,6 +380,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\report.c">
       <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\racial.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\snipe.c">
+      <Filter>cmd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -732,14 +734,17 @@
     <ClInclude Include="..\..\src\z-rand.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\snipe.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\save.h">
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\racial.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\snipe.h">
+      <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

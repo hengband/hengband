@@ -351,6 +351,7 @@
     <ClInclude Include="..\..\src\player-skill.h" />
     <ClInclude Include="..\..\src\player-status.h" />
     <ClInclude Include="..\..\src\quest.h" />
+    <ClInclude Include="..\..\src\racial.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm-chaos.h" />

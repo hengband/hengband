@@ -31,6 +31,7 @@
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
 #include "cmd-basic.h"
+#include "racial.h"
 #include "snipe.h"
 #include "dungeon.h"
 #include "feature.h"
