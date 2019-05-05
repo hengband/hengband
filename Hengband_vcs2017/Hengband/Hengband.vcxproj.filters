@@ -6,18 +6,11 @@
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\racial.c" />
     <ClCompile Include="..\..\src\readdib.c" />
-    <ClCompile Include="..\..\src\report.c" />
-    <ClCompile Include="..\..\src\snipe.c" />
     <ClCompile Include="..\..\src\tables.c" />
     <ClCompile Include="..\..\src\variable.c" />
-    <ClCompile Include="..\..\src\wizard1.c" />
-    <ClCompile Include="..\..\src\wizard2.c" />
     <ClCompile Include="..\..\src\xtra2.c" />
     <ClCompile Include="..\..\src\z-form.c" />
-    <ClCompile Include="..\..\src\z-rand.c" />
     <ClCompile Include="..\..\src\z-term.c" />
-    <ClCompile Include="..\..\src\z-util.c" />
-    <ClCompile Include="..\..\src\z-virt.c" />
     <ClCompile Include="..\..\src\warning.c" />
     <ClCompile Include="..\..\src\cmd-activate.c">
       <Filter>cmd</Filter>
@@ -371,6 +364,27 @@
     <ClCompile Include="..\..\src\trap.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\z-util.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\z-virt.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\z-rand.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\snipe.c">
+      <Filter>combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard2.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard1.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\report.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\defines.h" />
@@ -386,10 +400,7 @@
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\z-config.h" />
     <ClInclude Include="..\..\src\z-form.h" />
-    <ClInclude Include="..\..\src\z-rand.h" />
     <ClInclude Include="..\..\src\z-term.h" />
-    <ClInclude Include="..\..\src\z-util.h" />
-    <ClInclude Include="..\..\src\z-virt.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\cmd-activate.h">
       <Filter>cmd</Filter>
@@ -547,7 +558,6 @@
     <ClInclude Include="..\..\src\cmd-basic.h">
       <Filter>cmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\snipe.h" />
     <ClInclude Include="..\..\src\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -712,6 +722,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\trap.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\z-util.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\z-virt.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\z-rand.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\snipe.h">
+      <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
