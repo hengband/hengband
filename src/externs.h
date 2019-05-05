@@ -122,7 +122,7 @@ extern s16b command_wrk;
 extern s16b command_new;
 extern bool msg_flag;
 extern s16b running;
-extern bool invoking_midnight_curse;
+
 extern GAME_TURN old_battle;
 extern bool use_sound;
 extern bool use_music;

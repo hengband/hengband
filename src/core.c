@@ -3317,7 +3317,7 @@ static void process_world(void)
 				generate_encounter = TRUE;
 			}
 
-			invoking_midnight_curse = TRUE;
+			p_ptr->invoking_midnight_curse = TRUE;
 		}
 	}
 
@@ -4383,11 +4383,11 @@ static void process_player(void)
 		p_ptr->hack_mutation = FALSE;
 	}
 
-	if (invoking_midnight_curse)
+	if (p_ptr->invoking_midnight_curse)
 	{
 		int count = 0;
 		activate_ty_curse(FALSE, &count);
-		invoking_midnight_curse = FALSE;
+		p_ptr->invoking_midnight_curse = FALSE;
 	}
 
 	if (p_ptr->inside_battle)

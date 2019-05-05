@@ -542,6 +542,7 @@ struct player_type
 	bool warning;
 	bool mighty_throw;
 	bool see_nocto;		/* Noctovision */
+	bool invoking_midnight_curse;
 
 	DICE_NUMBER to_dd[2]; /* Extra dice/sides */
 	DICE_SID to_ds[2];

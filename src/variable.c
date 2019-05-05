@@ -101,8 +101,6 @@ bool msg_flag;			/* Used in msg_print() for "buffering" */
 
 s16b running;			/* Current counter for running, if any */
 
-bool invoking_midnight_curse; /*!< 悪夢モード時の真夜中太古の呪い発生処理フラグ */
-
 GAME_TURN old_battle;
 
 bool use_sound;			/* The "sound" mode is enabled */
