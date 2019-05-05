@@ -146,7 +146,6 @@ extern int total_friends;
 extern int leaving_quest;
 extern bool reinit_wilderness;
 extern bool multi_rew;
-extern bool is_loading_now;
 extern bool reset_concent;
 extern bool is_fired;
 

@@ -4909,7 +4909,7 @@ static void dungeon(bool load_game)
 	current_floor_ptr->base_level = current_floor_ptr->dun_level;
 
 	/* Reset various flags */
-	is_loading_now = FALSE;
+	current_world_ptr->is_loading_now = FALSE;
 
 	/* Not leaving */
 	p_ptr->leaving = FALSE;
@@ -5050,7 +5050,7 @@ static void dungeon(bool load_game)
 	/* Reset the object generation level */
 	current_floor_ptr->object_level = current_floor_ptr->base_level;
 
-	is_loading_now = TRUE;
+	current_world_ptr->is_loading_now = TRUE;
 
 	if (p_ptr->energy_need > 0 && !p_ptr->inside_battle &&
 	    (current_floor_ptr->dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))

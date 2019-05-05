@@ -16,6 +16,8 @@ typedef struct {
 	u32b seed_flavor;		/* Hack -- consistent object colors */
 	u32b seed_town;			/* Hack -- consistent town layout */
 
+	bool is_loading_now;	/*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
+
 } world_type;
 
 extern bool is_daytime(void);

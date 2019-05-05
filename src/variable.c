@@ -126,8 +126,6 @@ bool shimmer_objects;	/* Hack -- optimize multi-hued objects */
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
-bool is_loading_now;	/*!< ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
-
 MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
 

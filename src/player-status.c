@@ -31,6 +31,7 @@
 #include "autopick.h"
 #include "cmd-dump.h"
 #include "melee.h"
+#include "world.h"
 
 /*!
  * @var horror_desc
@@ -2813,7 +2814,7 @@ void calc_bonuses(void)
 			if (p_ptr->icky_wield[i])
 			{
 				msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
-				if (is_loading_now)
+				if (current_world_ptr->is_loading_now)
 				{
 					chg_virtue(V_FAITH, -1);
 				}
@@ -2859,7 +2860,7 @@ void calc_bonuses(void)
 		if (heavy_armor())
 		{
 			msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
-			if (is_loading_now)
+			if (current_world_ptr->is_loading_now)
 			{
 				chg_virtue(V_HARMONY, -1);
 			}
@@ -4232,7 +4233,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		}
 		else power *= 2;
 
-		if (!is_loading_now)
+		if (!current_world_ptr->is_loading_now)
 			return; /* No effect yet, just loaded... */
 
 		if (!m_ptr->ml)
