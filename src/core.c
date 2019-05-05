@@ -2226,7 +2226,7 @@ static void process_world_aux_mutation(void)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, mode, '\0'))
+		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, mode))
 		{
 			msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
 			disturb(FALSE, TRUE);
@@ -2335,7 +2335,7 @@ static void process_world_aux_mutation(void)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, mode, '\0'))
+		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
 		{
 			msg_print(_("動物を引き寄せた！", "You have attracted an animal!"));
 			disturb(FALSE, TRUE);
@@ -2413,7 +2413,7 @@ static void process_world_aux_mutation(void)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON, mode, '\0'))
+		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
 		{
 			msg_print(_("ドラゴンを引き寄せた！", "You have attracted a dragon!"));
 			disturb(FALSE, TRUE);
@@ -2676,7 +2676,7 @@ static void process_world_aux_curse(void)
 		/* Call animal */
 		if ((p_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
 		{
-			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2688,7 +2688,7 @@ static void process_world_aux_curse(void)
 		/* Call demon */
 		if ((p_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
 		{
-			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2701,7 +2701,7 @@ static void process_world_aux_curse(void)
 		if ((p_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
 			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON,
-			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2714,7 +2714,7 @@ static void process_world_aux_curse(void)
 		if ((p_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111))
 		{
 			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD,
-			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 

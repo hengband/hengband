@@ -2210,7 +2210,7 @@ bool mutation_power_aux(int power)
 				DIRECTION i;
 				for (i = 0; i < 8; i++)
 				{
-					summon_specific(-1, p_ptr->y, p_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET, '\0');
+					summon_specific(-1, p_ptr->y, p_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
 				}
 			}
 			break;

@@ -55,7 +55,7 @@ bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int t
 
 	for (i = 0; i < num; i++)
 	{
-		if (summon_specific(who, y, x, lev, type, mode, '\0'))
+		if (summon_specific(who, y, x, lev, type, mode))
 			success = TRUE;
 	}
 
@@ -77,7 +77,7 @@ bool cast_summon_demon(int power)
 	else flg |= PM_NO_PET;
 	if (!(pet && (p_ptr->lev < 50))) flg |= PM_ALLOW_GROUP;
 
-	if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, power, SUMMON_DEMON, flg, '\0'))
+	if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, power, SUMMON_DEMON, flg))
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		if (pet)
@@ -105,7 +105,7 @@ bool cast_summon_undead(player_type *creature_ptr, int power)
 	if (pet) mode |= PM_FORCE_PET;
 	else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, type, mode, '\0'))
+	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, type, mode))
 	{
 		msg_print(_("冷たい風があなたの周りに吹き始めた。それは腐敗臭を運んでいる...",
 			"Cold winds begin to blow around you, carrying with them the stench of decay..."));
@@ -127,7 +127,7 @@ bool cast_summon_hound(player_type *creature_ptr, int power)
 	if (pet) mode |= PM_FORCE_PET;
 	else mode |= PM_NO_PET;
 
-	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_HOUND, mode, '\0'))
+	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_HOUND, mode))
 	{
 		if (pet)
 			msg_print(_("ハウンドがあなたの下僕として出現した。", "A group of hounds appear as your servant."));
@@ -146,7 +146,7 @@ bool cast_summon_elemental(player_type *creature_ptr, int power)
 	if (pet) mode |= PM_FORCE_PET;
 	else mode |= PM_NO_PET;
 
-	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_ELEMENTAL, mode, '\0'))
+	if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, power, SUMMON_ELEMENTAL, mode))
 	{
 		msg_print(_("エレメンタルが現れた...", "An elemental materializes..."));
 		if (pet)
@@ -213,7 +213,7 @@ bool cast_summon_greater_demon(void)
 
 	summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
 
-	if (summon_specific(-1, p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0'))
+	if (summon_specific(-1, p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
@@ -253,110 +253,8 @@ bool cast_summon_greater_demon(void)
 bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	bool pet = (bool)(mode & PM_FORCE_PET);
-	SYMBOL_CODE symbol = '\0';
 	if (!pet) mode |= PM_NO_PET;
-
-	switch (p_ptr->mimic_form)
-	{
-	case MIMIC_NONE:
-		switch (p_ptr->prace)
-		{
-		case RACE_HUMAN:
-		case RACE_AMBERITE:
-		case RACE_BARBARIAN:
-		case RACE_BEASTMAN:
-		case RACE_DUNADAN:
-			symbol = 'p';
-			break;
-		case RACE_HALF_ELF:
-		case RACE_ELF:
-		case RACE_HOBBIT:
-		case RACE_GNOME:
-		case RACE_DWARF:
-		case RACE_HIGH_ELF:
-		case RACE_NIBELUNG:
-		case RACE_DARK_ELF:
-		case RACE_MIND_FLAYER:
-		case RACE_KUTAR:
-		case RACE_S_FAIRY:
-			symbol = 'h';
-			break;
-		case RACE_HALF_ORC:
-			symbol = 'o';
-			break;
-		case RACE_HALF_TROLL:
-			symbol = 'T';
-			break;
-		case RACE_HALF_OGRE:
-			symbol = 'O';
-			break;
-		case RACE_HALF_GIANT:
-		case RACE_HALF_TITAN:
-		case RACE_CYCLOPS:
-			symbol = 'P';
-			break;
-		case RACE_YEEK:
-			symbol = 'y';
-			break;
-		case RACE_KLACKON:
-			symbol = 'K';
-			break;
-		case RACE_KOBOLD:
-			symbol = 'k';
-			break;
-		case RACE_IMP:
-			if (one_in_(13)) symbol = 'U';
-			else symbol = 'u';
-			break;
-		case RACE_DRACONIAN:
-			symbol = 'd';
-			break;
-		case RACE_GOLEM:
-		case RACE_ANDROID:
-			symbol = 'g';
-			break;
-		case RACE_SKELETON:
-			if (one_in_(13)) symbol = 'L';
-			else symbol = 's';
-			break;
-		case RACE_ZOMBIE:
-			symbol = 'z';
-			break;
-		case RACE_VAMPIRE:
-			symbol = 'V';
-			break;
-		case RACE_SPECTRE:
-			symbol = 'G';
-			break;
-		case RACE_SPRITE:
-			symbol = 'I';
-			break;
-		case RACE_ENT:
-			symbol = '#';
-			break;
-		case RACE_ANGEL:
-			symbol = 'A';
-			break;
-		case RACE_DEMON:
-			symbol = 'U';
-			break;
-		default:
-			symbol = 'p';
-			break;
-		}
-		break;
-	case MIMIC_DEMON:
-		if (one_in_(13)) symbol = 'U';
-		else symbol = 'u';
-		break;
-	case MIMIC_DEMON_LORD:
-		symbol = 'U';
-		break;
-	case MIMIC_VAMPIRE:
-		symbol = 'V';
-		break;
-	}
-	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode, symbol);
+	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
 }
 
 /*!
@@ -384,7 +282,7 @@ int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 
 	for (i = 0; i < max_cyber; i++)
 	{
-		count += summon_specific(who, y, x, 100, SUMMON_CYBER, mode, '\0');
+		count += summon_specific(who, y, x, 100, SUMMON_CYBER, mode);
 	}
 
 	return count;

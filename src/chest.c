@@ -198,7 +198,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 			if (randint1(100)<current_floor_ptr->dun_level)
 				activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			else
-				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 	}
 
@@ -208,7 +208,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		msg_print(_("宝を守るためにエレメンタルが現れた！", "Elemental beings appear to protect their treasures!"));
 		for (i = 0; i < randint1(3) + 5; i++)
 		{
-			(void)summon_specific(0, y, x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+			(void)summon_specific(0, y, x, mon_level, SUMMON_ELEMENTAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 	}
 
@@ -222,7 +222,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 
 		for (i = 0; i < randint1(5) + o_ptr->pval / 5; i++)
 		{
-			(void)summon_specific(0, y, x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+			(void)summon_specific(0, y, x, mon_level, SUMMON_BIRD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 	}
 
@@ -236,7 +236,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
 				(void)fire_meteor(-1, GF_FIRE, y, x, 10, 5);
-				(void)summon_specific(0, y, x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+				(void)summon_specific(0, y, x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 
@@ -246,7 +246,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 			msg_print(_("暗闇にドラゴンの影がぼんやりと現れた！", "Draconic forms loom out of the darkness!"));
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
-				(void)summon_specific(0, y, x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+				(void)summon_specific(0, y, x, mon_level, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 
@@ -256,7 +256,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 			msg_print(_("奇妙な姿の怪物が襲って来た！", "Creatures strange and twisted assault you!"));
 			for (i = 0; i < randint1(5) + 3; i++)
 			{
-				(void)summon_specific(0, y, x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+				(void)summon_specific(0, y, x, mon_level, SUMMON_HYBRID, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 
@@ -266,7 +266,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 			msg_print(_("渦巻が合体し、破裂した！", "Vortices coalesce and wreak destruction!"));
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
-				(void)summon_specific(0, y, x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+				(void)summon_specific(0, y, x, mon_level, SUMMON_VORTEX, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
 	}

@@ -3954,7 +3954,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
-			count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : current_floor_ptr->dun_level), 0, mode, '\0');
+			count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : current_floor_ptr->dun_level), 0, mode);
 			if (!one_in_(6)) break;
 		}
 		case 23: case 24: case 25:

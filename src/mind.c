@@ -1255,7 +1255,7 @@ static bool cast_force_spell(int spell)
 		bool success = FALSE;
 
 		for (i = 0; i < 1 + boost/100; i++)
-			if (summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET, '\0'))
+			if (summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
 				success = TRUE;
 		if (success)
 		{

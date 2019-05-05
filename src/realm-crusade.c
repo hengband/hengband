@@ -396,7 +396,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				else flg |= PM_NO_PET;
 				if (!(pet && (plev < 50))) flg |= PM_ALLOW_GROUP;
 
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg, '\0'))
+				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg))
 				{
 					if (pet)
 					{
@@ -558,7 +558,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 						if (cave_empty_bold2(my, mx)) break;
 					}
 					if (attempt < 0) continue;
-					summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE), '\0');
+					summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
 				}
 				set_hero(randint1(base) + base, FALSE);
 				set_blessed(randint1(base) + base, FALSE);

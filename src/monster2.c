@@ -26,9 +26,10 @@
 #include "quest.h"
 #include "grid.h"
 #include "player-move.h"
+#include "player-status.h"
+#include "player-race.h"
 #include "wild.h"
 #include "warning.h"
-#include "player-status.h"
 #include "monster-spell.h"
 #include "files.h"
 #include "view-mainwindow.h"
@@ -514,7 +515,7 @@ static bool summon_unique_okay = FALSE;
  * @return 召喚条件が一致するならtrue
  * @details
  */
-static bool summon_specific_aux(MONRACE_IDX r_idx)
+static bool summon_specific_aux(MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	int okay = FALSE;
@@ -652,6 +653,16 @@ static bool summon_specific_aux(MONRACE_IDX r_idx)
 
 		case SUMMON_KIN:
 		{
+			SYMBOL_CODE summon_kin_type;
+			if (summoner_idx)
+			{
+				summon_kin_type = r_info[summoner_idx].d_char;
+			}
+			else
+			{
+				summon_kin_type = get_summon_symbol_from_player(p_ptr);
+			}
+
 			okay = ((r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE));
 			break;
 		}
@@ -3264,7 +3275,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	{
 		scatter(&cy, &cx, y, x, 5, 0);
 
-		(void)summon_specific(m_idx, cy, cx, current_floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, r_ptr->d_char);
+		(void)summon_specific(m_idx, cy, cx, current_floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
 
 		y = cy;
 		x = cx;
@@ -3389,6 +3400,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 static bool summon_specific_okay(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[summon_specific_who];
 
 	/* Hack - Only summon dungeon monsters */
 	if (!mon_hook_dungeon(r_idx)) return (FALSE);
@@ -3396,7 +3408,6 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 	/* Hack -- identify the summoning monster */
 	if (summon_specific_who > 0)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[summon_specific_who];
 
 		/* Do not summon enemies */
 
@@ -3425,7 +3436,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON)) return TRUE;
 
-	return (summon_specific_aux(r_idx));
+	return (summon_specific_aux(m_ptr->r_idx, r_idx));
 }
 
 
@@ -3460,7 +3471,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
  *
  * Note that this function may not succeed, though this is very rare.
  */
-bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode, SYMBOL_CODE symbol)
+bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
 {
 	POSITION x, y;
 	MONRACE_IDX r_idx;
@@ -3474,8 +3485,6 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 
 	/* Save the "summon" type */
 	summon_specific_type = type;
-
-	summon_kin_type = symbol;
 
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
 	get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));

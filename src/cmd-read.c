@@ -129,7 +129,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+				if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -141,7 +141,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0'))
+				if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -151,7 +151,7 @@ void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_SUMMON_PET:
 		{
-			if (summon_specific(-1, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET), '\0'))
+			if (summon_specific(-1, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 			{
 				ident = TRUE;
 			}

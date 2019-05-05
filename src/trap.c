@@ -452,7 +452,7 @@ void hit_trap(bool break_trap)
 		num = 2 + randint1(3);
 		for (i = 0; i < num; i++)
 		{
-			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET), '\0');
+			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 
 		if (current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
@@ -614,10 +614,10 @@ void hit_trap(bool break_trap)
 				/* Require line of projection */
 				if (!projectable(p_ptr->y, p_ptr->x, y1, x1)) continue;
 
-				if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET), '\0'))
+				if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
 					evil_idx = hack_m_idx_ii;
 
-				if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET), '\0'))
+				if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_GOOD, (PM_NO_PET)))
 				{
 					good_idx = hack_m_idx_ii;
 				}
@@ -648,7 +648,7 @@ void hit_trap(bool break_trap)
 		num = 1 + current_floor_ptr->dun_level / 20;
 		for (i = 0; i < num; i++)
 		{
-			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET), '\0');
+			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 		break;
 	}

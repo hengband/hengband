@@ -53,7 +53,7 @@
 #define SUMMON_ARMAGE_GOOD          66 /*!< 召喚タイプ: ハルマゲドン・トラップ用天使陣営 */
 #define SUMMON_ARMAGE_EVIL          67 /*!< 召喚タイプ: ハルマゲドン・トラップ用悪魔陣営 */
 
-extern bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode, SYMBOL_CODE symbol);
+extern bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
 extern bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
 
 extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);

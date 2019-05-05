@@ -132,7 +132,6 @@ MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
 
 bool multi_rew = FALSE;
-char summon_kin_type;   /* Hack, by Julian Lighton: summon 'relatives' */
 
 int total_friends = 0;
 int leaving_quest = 0;
