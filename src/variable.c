@@ -103,11 +103,6 @@ s16b running;			/* Current counter for running, if any */
 
 GAME_TURN old_battle;
 
-bool use_sound;			/* The "sound" mode is enabled */
-bool use_music;			/* The "music" mode is enabled */
-bool use_graphics;		/* The "graphics" mode is enabled */
-bool use_bigtile = FALSE;
-
 s16b signal_count;		/* Hack -- Count interupts */
 
 bool inkey_base;		/* See the "inkey()" function */

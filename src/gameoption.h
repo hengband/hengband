@@ -184,6 +184,11 @@ extern s16b autosave_freq;
 extern bool autosave_t;
 extern bool autosave_l;
 
+extern bool use_sound;
+extern bool use_music;
+extern bool use_graphics;
+extern bool use_bigtile;
+
 /*
  * Available "options"
  *

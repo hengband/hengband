@@ -124,10 +124,7 @@ extern bool msg_flag;
 extern s16b running;
 
 extern GAME_TURN old_battle;
-extern bool use_sound;
-extern bool use_music;
-extern bool use_graphics;
-extern bool use_bigtile;
+
 extern s16b signal_count;
 extern bool inkey_base;
 extern bool inkey_xtra;
