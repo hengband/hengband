@@ -581,7 +581,7 @@ static errr get_obj_num_prep(void)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-OBJECT_IDX get_obj_num(DEPTH level)
+OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode)
 {
 	int i, j, p;
 	KIND_OBJECT_IDX k_idx;
@@ -619,8 +619,7 @@ OBJECT_IDX get_obj_num(DEPTH level)
 		/* Access the actual kind */
 		k_ptr = &k_info[k_idx];
 
-		/* Hack -- prevent embedded chests */
-		if (opening_chest && (k_ptr->tval == TV_CHEST)) continue;
+		if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == TV_CHEST)) continue;
 
 		/* Accept */
 		table[i].prob3 = table[i].prob2;
@@ -698,7 +697,6 @@ OBJECT_IDX get_obj_num(DEPTH level)
 
 	return (table[i].index);
 }
-
 
 /*!
  * @brief オブジェクトを鑑定済にする /
@@ -4332,7 +4330,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 		if (get_obj_num_hook) get_obj_num_prep();
 
 		/* Pick a random object */
-		k_idx = get_obj_num(base);
+		k_idx = get_obj_num(base, mode);
 
 		/* Restricted objects */
 		if (get_obj_num_hook)

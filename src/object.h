@@ -121,7 +121,7 @@ extern void delete_object(POSITION y, POSITION x);
 extern void compact_objects(int size);
 extern void wipe_o_list(void);
 extern OBJECT_IDX o_pop(void);
-extern OBJECT_IDX get_obj_num(DEPTH level);
+extern OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode);
 extern void object_known(object_type *o_ptr);
 extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
@@ -142,11 +142,12 @@ extern void object_copy(object_type *o_ptr, object_type *j_ptr);
 /*
  * Bit flags for apply_magic() (etc)
  */
-#define AM_NO_FIXED_ART 0x00000001 /* Don't allow roll for fixed artifacts */
-#define AM_GOOD         0x00000002 /* Generate good items */
-#define AM_GREAT        0x00000004 /* Generate great items */
-#define AM_SPECIAL      0x00000008 /* Generate artifacts (for debug mode only) */
-#define AM_CURSED       0x00000010 /* Generate cursed/worthless items */
+#define AM_NO_FIXED_ART 0x00000001 /*!< Don't allow roll for fixed artifacts */
+#define AM_GOOD         0x00000002 /*!< Generate good items */
+#define AM_GREAT        0x00000004 /*!< Generate great items */
+#define AM_SPECIAL      0x00000008 /*!< Generate artifacts (for debug mode only) */
+#define AM_CURSED       0x00000010 /*!< Generate cursed/worthless items */
+#define AM_FORBID_CHEST 0x00000020 /*!< ” ‚©‚ç‚³‚ç‚É” ‚ªoŒ»‚·‚é‚±‚Æ‚ð—}Ž~‚·‚é */
 extern void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
 extern bool make_object(object_type *j_ptr, BIT_FLAGS mode);

@@ -3387,10 +3387,8 @@ static void store_create(void)
 	object_type forge;
 	object_type *q_ptr;
 
-
 	/* Paranoia -- no room left */
 	if (st_ptr->stock_num >= st_ptr->stock_size) return;
-
 
 	/* Hack -- consider up to four items */
 	for (tries = 0; tries < 4; tries++)
@@ -3402,7 +3400,7 @@ static void store_create(void)
 			level = 25 + randint0(25);
 
 			/* Random item (usually of given level) */
-			i = get_obj_num(level);
+			i = get_obj_num(level, 0x00000000);
 
 			/* Handle failure */
 			if (!i) continue;

@@ -34,7 +34,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	int number;
 
 	bool small;
-	BIT_FLAGS mode = AM_GOOD;
+	BIT_FLAGS mode = AM_GOOD | AM_FORBID_CHEST;
 
 	object_type forge;
 	object_type *q_ptr;
@@ -64,8 +64,6 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	/* Zero pval means empty chest */
 	if (!o_ptr->pval) number = 0;
 
-	/* Opening a chest */
-	opening_chest = TRUE;
 
 	/* Drop some objects (non-chests) */
 	for (; number > 0; --number)
@@ -113,9 +111,6 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 
 	/* Reset the object level */
 	current_floor_ptr->object_level = current_floor_ptr->base_level;
-
-	/* No longer opening a chest */
-	opening_chest = FALSE;
 
 	/* Empty */
 	o_ptr->pval = 0;
