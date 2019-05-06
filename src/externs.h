@@ -34,14 +34,7 @@ extern int level_up;
 
 
 /* tables.c */
-extern const POSITION ddd[9];
-extern const POSITION ddx[10];
-extern const POSITION ddy[10];
-extern const POSITION ddx_ddd[9];
-extern const POSITION ddy_ddd[9];
-extern const POSITION cdd[8];
-extern const POSITION ddx_cdd[8];
-extern const POSITION ddy_cdd[8];
+
 extern const char hexsym[16];
 extern const char listsym[];
 extern const concptr color_char;
