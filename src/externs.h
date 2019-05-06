@@ -156,10 +156,6 @@ extern char *macro__buf;
 extern STR_OFFSET quark__num;
 extern concptr *quark__str;
 
-extern BIT_FLAGS option_flag[8];
-extern BIT_FLAGS option_mask[8];
-extern BIT_FLAGS window_flag[8];
-extern BIT_FLAGS window_mask[8];
 extern term *angband_term[8];
 extern const char angband_term_name[8][16];
 extern byte angband_color_table[256][4];

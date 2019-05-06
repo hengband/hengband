@@ -206,6 +206,10 @@ bool arg_force_original;	/* Command arg -- Request original keyset */
 bool arg_force_roguelike;	/* Command arg -- Request roguelike keyset */
 bool arg_bigtile = FALSE;	/* Command arg -- Request big tile mode */
 
+BIT_FLAGS option_flag[8]; //!< The array of normal options
+BIT_FLAGS option_mask[8]; //!< The array of normal options
+BIT_FLAGS window_flag[8]; //!< The array of window options
+BIT_FLAGS window_mask[8]; //!< The array of window options
 
 /*!
  * @brief オプションテーブル /
