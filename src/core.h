@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+extern const concptr copyright[5];
+
 extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;

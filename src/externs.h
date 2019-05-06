@@ -83,7 +83,7 @@ extern const concptr ident_info[];
 extern const byte feature_action_flags[FF_FLAG_MAX];
 
 /* variable.c */
-extern const concptr copyright[5];
+
 
 extern bool character_generated;
 extern bool character_dungeon;

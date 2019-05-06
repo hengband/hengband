@@ -13,19 +13,6 @@
 #include "angband.h"
 #include "geometry.h"
 
-/*!
- * コピーライト情報 /
- * Hack -- Link a copyright message into the executable
- */
-const concptr copyright[5] =
-{
-	"Copyright (c) 1989 James E. Wilson, Robert A. Keoneke",
-	"",
-	"This software may be copied and distributed for educational, research,",
-	"and not for profit purposes provided that this copyright and statement",
-	"are included in all such copies."
-};
-
 int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
 concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
 concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
