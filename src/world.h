@@ -18,6 +18,28 @@ typedef struct {
 
 	bool is_loading_now;	/*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 
+	/*
+	 * Savefile version
+	 */
+	byte h_ver_major; /* Savefile version for Hengband 1.1.1 and later */
+	byte h_ver_minor;
+	byte h_ver_patch;
+	byte h_ver_extra;
+
+	byte sf_extra;		/* Savefile's encoding key */
+
+	byte z_major;           /* Savefile version for Hengband */
+	byte z_minor;
+	byte z_patch;
+
+	/*
+	 * Savefile information
+	 */
+	u32b sf_system;			/* Operating system info */
+	u32b sf_when;			/* Time when savefile created */
+	u16b sf_lives;			/* Number of past "lives" with this file */
+	u16b sf_saves;			/* Number of "saves" during this life */
+
 } world_type;
 
 extern bool is_daytime(void);

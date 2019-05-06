@@ -126,20 +126,20 @@ static byte kanji_code = 0;
 static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
 	/* Much older, or much more recent */
-	if (h_ver_major < major) return (TRUE);
-	if (h_ver_major > major) return (FALSE);
+	if (current_world_ptr->h_ver_major < major) return (TRUE);
+	if (current_world_ptr->h_ver_major > major) return (FALSE);
 
 	/* Distinctly older, or distinctly more recent */
-	if (h_ver_minor < minor) return (TRUE);
-	if (h_ver_minor > minor) return (FALSE);
+	if (current_world_ptr->h_ver_minor < minor) return (TRUE);
+	if (current_world_ptr->h_ver_minor > minor) return (FALSE);
 
 	/* Barely older, or barely more recent */
-	if (h_ver_patch < patch) return (TRUE);
-	if (h_ver_patch > patch) return (FALSE);
+	if (current_world_ptr->h_ver_patch < patch) return (TRUE);
+	if (current_world_ptr->h_ver_patch > patch) return (FALSE);
 
 	/* Barely older, or barely more recent */
-	if (h_ver_extra < extra) return (TRUE);
-	if (h_ver_extra > extra) return (FALSE);
+	if (current_world_ptr->h_ver_extra < extra) return (TRUE);
+	if (current_world_ptr->h_ver_extra > extra) return (FALSE);
 
 	/* Identical versions */
 	return (FALSE);
@@ -156,16 +156,16 @@ static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 static bool z_older_than(byte x, byte y, byte z)
 {
 	/* Much older, or much more recent */
-	if (z_major < x) return (TRUE);
-	if (z_major > x) return (FALSE);
+	if (current_world_ptr->z_major < x) return (TRUE);
+	if (current_world_ptr->z_major > x) return (FALSE);
 
 	/* Distinctly older, or distinctly more recent */
-	if (z_minor < y) return (TRUE);
-	if (z_minor > y) return (FALSE);
+	if (current_world_ptr->z_minor < y) return (TRUE);
+	if (current_world_ptr->z_minor > y) return (FALSE);
 
 	/* Barely older, or barely more recent */
-	if (z_patch < z) return (TRUE);
-	if (z_patch > z) return (FALSE);
+	if (current_world_ptr->z_patch < z) return (TRUE);
+	if (current_world_ptr->z_patch > z) return (FALSE);
 
 	/* Identical versions */
 	return (FALSE);
@@ -954,7 +954,7 @@ static void rd_monster_old(monster_type *m_ptr)
 	rd_byte(&tmp8u);
 	m_ptr->mtimed[MTIMED_INVULNER] = (s16b)tmp8u;
 
-	if (!(z_major == 2 && z_minor == 0 && z_patch == 6))
+	if (!(current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6))
 		rd_u32b(&m_ptr->smart);
 	else
 		m_ptr->smart = 0;
@@ -2110,7 +2110,7 @@ static void rd_extra(void)
 	else rd_s16b(&p_ptr->tsuyoshi);
 
 	/* Old savefiles do not have the following fields... */
-	if ((z_major == 2) && (z_minor == 0) && (z_patch == 6))
+	if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6))
 	{
 		p_ptr->tim_esp = 0;
 		p_ptr->wraith_form = 0;
@@ -3447,7 +3447,7 @@ static errr rd_savefile_new_aux(void)
 	strip_bytes(4);
 
 	/* Hack -- decrypt */
-	xor_byte = sf_extra;
+	xor_byte = current_world_ptr->sf_extra;
 
 
 	/* Clear the checksums */
@@ -3456,28 +3456,28 @@ static errr rd_savefile_new_aux(void)
 
 	/* Read the version number of the savefile */
 	/* Old savefile will be version 0.0.0.3 */
-	rd_byte(&h_ver_extra);
-	rd_byte(&h_ver_patch);
-	rd_byte(&h_ver_minor);
-	rd_byte(&h_ver_major);
+	rd_byte(&current_world_ptr->h_ver_extra);
+	rd_byte(&current_world_ptr->h_ver_patch);
+	rd_byte(&current_world_ptr->h_ver_minor);
+	rd_byte(&current_world_ptr->h_ver_major);
 
 	/* Mention the savefile version */
 	note(format(
 		_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
-		(h_ver_major > 9) ? h_ver_major - 10 : h_ver_major, h_ver_minor, h_ver_patch, h_ver_extra));
+		(current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra));
 
 
 	/* Operating system info */
-	rd_u32b(&sf_system);
+	rd_u32b(&current_world_ptr->sf_system);
 
 	/* Time of savefile creation */
-	rd_u32b(&sf_when);
+	rd_u32b(&current_world_ptr->sf_when);
 
 	/* Number of resurrections */
-	rd_u16b(&sf_lives);
+	rd_u16b(&current_world_ptr->sf_lives);
 
 	/* Number of times played */
-	rd_u16b(&sf_saves);
+	rd_u16b(&current_world_ptr->sf_saves);
 
 
 	/* Later use (always zero) */
@@ -4067,10 +4067,10 @@ static bool load_floor_aux(saved_floor_type *sf_ptr)
 
 	/* Set the version number to current version */
 	/* Never load old temporal files */
-	h_ver_extra = H_VER_EXTRA;
-	h_ver_patch = H_VER_PATCH;
-	h_ver_minor = H_VER_MINOR;
-	h_ver_major = H_VER_MAJOR;
+	current_world_ptr->h_ver_extra = H_VER_EXTRA;
+	current_world_ptr->h_ver_patch = H_VER_PATCH;
+	current_world_ptr->h_ver_minor = H_VER_MINOR;
+	current_world_ptr->h_ver_major = H_VER_MAJOR;
 
 	/* Verify the sign */
 	rd_u32b(&tmp32u);
@@ -4154,10 +4154,10 @@ bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 		old_xor_byte = xor_byte;
 		old_v_check = v_check;
 		old_x_check = x_check;
-		old_h_ver_major = h_ver_major;
-		old_h_ver_minor = h_ver_minor;
-		old_h_ver_patch = h_ver_patch;
-		old_h_ver_extra = h_ver_extra;
+		old_h_ver_major = current_world_ptr->h_ver_major;
+		old_h_ver_minor = current_world_ptr->h_ver_minor;
+		old_h_ver_patch = current_world_ptr->h_ver_patch;
+		old_h_ver_extra = current_world_ptr->h_ver_extra;
 	}
 
 	/* floor savefile */
@@ -4203,10 +4203,10 @@ bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 		xor_byte = old_xor_byte;
 		v_check = old_v_check;
 		x_check = old_x_check;
-		h_ver_major = old_h_ver_major;
-		h_ver_minor = old_h_ver_minor;
-		h_ver_patch = old_h_ver_patch;
-		h_ver_extra = old_h_ver_extra;
+		current_world_ptr->h_ver_major = old_h_ver_major;
+		current_world_ptr->h_ver_minor = old_h_ver_minor;
+		current_world_ptr->h_ver_patch = old_h_ver_patch;
+		current_world_ptr->h_ver_extra = old_h_ver_extra;
 	}
 
 	/* Restore old knowledge */

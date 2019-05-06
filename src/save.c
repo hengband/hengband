@@ -1231,13 +1231,13 @@ static bool wr_savefile_new(void)
 
 
 	/* Note the operating system */
-	sf_system = 0L;
+	current_world_ptr->sf_system = 0L;
 
 	/* Note when the file was saved */
-	sf_when = now;
+	current_world_ptr->sf_when = now;
 
 	/* Note the number of saves */
-	sf_saves++;
+	current_world_ptr->sf_saves++;
 
 
 	/*** Actually write the file ***/
@@ -1267,17 +1267,17 @@ static bool wr_savefile_new(void)
 	wr_byte(H_VER_MAJOR);
 
 	/* Operating system */
-	wr_u32b(sf_system);
+	wr_u32b(current_world_ptr->sf_system);
 
 
 	/* Time file last saved */
-	wr_u32b(sf_when);
+	wr_u32b(current_world_ptr->sf_when);
 
 	/* Number of past lives */
-	wr_u16b(sf_lives);
+	wr_u16b(current_world_ptr->sf_lives);
 
 	/* Number of times saved */
-	wr_u16b(sf_saves);
+	wr_u16b(current_world_ptr->sf_saves);
 
 
 	/* Space */
@@ -1831,10 +1831,10 @@ bool load_player(void)
 	{
 
 		/* Extract version */
-		z_major = vvv[0];
-		z_minor = vvv[1];
-		z_patch = vvv[2];
-		sf_extra = vvv[3];
+		current_world_ptr->z_major = vvv[0];
+		current_world_ptr->z_minor = vvv[1];
+		current_world_ptr->z_patch = vvv[2];
+		current_world_ptr->sf_extra = vvv[3];
 
 		Term_clear();
 
@@ -1858,8 +1858,8 @@ bool load_player(void)
 	if (!err && !arg_wizard)
 	{
 		/* Hack -- Verify the timestamp */
-		if (sf_when > (statbuf.st_ctime + 100) ||
-		    sf_when < (statbuf.st_ctime - 100))
+		if (current_world_ptr->sf_when > (statbuf.st_ctime + 100) ||
+		    current_world_ptr->sf_when < (statbuf.st_ctime - 100))
 		{
 			what = _("無効なタイム・スタンプです", "Invalid timestamp");
 
@@ -1872,18 +1872,18 @@ bool load_player(void)
 	if (!err)
 	{
 		/* Give a conversion warning */
-		if ((FAKE_VER_MAJOR != z_major) ||
-		    (FAKE_VER_MINOR != z_minor) ||
-		    (FAKE_VER_PATCH != z_patch))
+		if ((FAKE_VER_MAJOR != current_world_ptr->z_major) ||
+		    (FAKE_VER_MINOR != current_world_ptr->z_minor) ||
+		    (FAKE_VER_PATCH != current_world_ptr->z_patch))
 		{
-			if (z_major == 2 && z_minor == 0 && z_patch == 6)
+			if (current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6)
 			{
 				msg_print(_("バージョン 2.0.* 用のセーブファイルを変換しました。", "Converted a 2.0.* savefile."));
 			}
 			else
 			{
 				msg_format(_("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。", "Converted a %d.%d.%d savefile."),
-				    (z_major > 9) ? z_major-10 : z_major , z_minor, z_patch);
+				    (current_world_ptr->z_major > 9) ? current_world_ptr->z_major-10 : current_world_ptr->z_major , current_world_ptr->z_minor, current_world_ptr->z_patch);
 			}
 			msg_print(NULL);
 		}
@@ -1903,7 +1903,7 @@ bool load_player(void)
 			p_ptr->is_dead = FALSE;
 
 			/* Count lives */
-			sf_lives++;
+			current_world_ptr->sf_lives++;
 
 			return (TRUE);
 		}
@@ -1943,7 +1943,7 @@ bool load_player(void)
 #endif
 
 	msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d savefile."),
-		what, (z_major>9) ? z_major - 10 : z_major, z_minor, z_patch);
+		what, (current_world_ptr->z_major>9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor, current_world_ptr->z_patch);
 
 	msg_print(NULL);
 

@@ -35,29 +35,6 @@ concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
 
 int level_up = 0; /*!< レベルアップの際に遅延してcalc_mana()関数上で上昇量を表示するかどうかの判定フラグ */
 
-
-/*
- * Savefile version
- */
-byte h_ver_major; /* Savefile version for Hengband 1.1.1 and later */
-byte h_ver_minor;
-byte h_ver_patch;
-byte h_ver_extra;
-
-byte sf_extra;		/* Savefile's encoding key */
-
-byte z_major;           /* Savefile version for Hengband */
-byte z_minor;
-byte z_patch;
-
-/*
- * Savefile information
- */
-u32b sf_system;			/* Operating system info */
-u32b sf_when;			/* Time when savefile created */
-u16b sf_lives;			/* Number of past "lives" with this file */
-u16b sf_saves;			/* Number of "saves" during this life */
-
 /*
  * Run-time arguments
  */

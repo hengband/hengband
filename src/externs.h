@@ -84,18 +84,7 @@ extern const byte feature_action_flags[FF_FLAG_MAX];
 
 /* variable.c */
 extern const concptr copyright[5];
-extern byte h_ver_major;
-extern byte h_ver_minor;
-extern byte h_ver_patch;
-extern byte h_ver_extra;
-extern byte sf_extra;
-extern u32b sf_system;
-extern byte z_major;
-extern byte z_minor;
-extern byte z_patch;
-extern u32b sf_when;
-extern u16b sf_lives;
-extern u16b sf_saves;
+
 extern bool arg_fiddle;
 extern bool arg_wizard;
 extern bool arg_music;
