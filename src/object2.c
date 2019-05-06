@@ -4548,7 +4548,7 @@ void place_gold(POSITION y, POSITION x)
  * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
  * Let an object fall to the ground at or near a location.
  * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ
- * @param chance ドロップの成功率(%)
+ * @param chance ドロップの消滅率(%)
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらオブジェクトのIDを返す。
