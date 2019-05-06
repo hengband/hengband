@@ -274,6 +274,7 @@
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
     <ClCompile Include="..\..\src\tables.c" />
+    <ClCompile Include="..\..\src\targeting.c" />
     <ClCompile Include="..\..\src\term.c" />
     <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
@@ -284,7 +285,6 @@
     <ClCompile Include="..\..\src\wizard1.c" />
     <ClCompile Include="..\..\src\wizard2.c" />
     <ClCompile Include="..\..\src\world.c" />
-    <ClCompile Include="..\..\src\xtra2.c" />
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-rand.c" />
     <ClCompile Include="..\..\src\z-term.c" />

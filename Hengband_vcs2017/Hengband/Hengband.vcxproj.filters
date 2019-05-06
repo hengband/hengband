@@ -7,7 +7,6 @@
     <ClCompile Include="..\..\src\readdib.c" />
     <ClCompile Include="..\..\src\tables.c" />
     <ClCompile Include="..\..\src\variable.c" />
-    <ClCompile Include="..\..\src\xtra2.c" />
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\warning.c" />
@@ -386,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\snipe.c">
       <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\targeting.c">
+      <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
