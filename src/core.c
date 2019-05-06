@@ -4759,38 +4759,27 @@ static void process_player(void)
 			/* Hack -- constant hallucination */
 			if (p_ptr->image) p_ptr->redraw |= (PR_MAP);
 
-
-			/* Shimmer monsters if needed */
-			if (shimmer_monsters)
+			/* Shimmer multi-hued monsters */
+			for (m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
 			{
-				/* Clear the flag */
-				shimmer_monsters = FALSE;
+				monster_type *m_ptr;
+				monster_race *r_ptr;
 
-				/* Shimmer multi-hued monsters */
-				for (m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
-				{
-					monster_type *m_ptr;
-					monster_race *r_ptr;
+				m_ptr = &current_floor_ptr->m_list[m_idx];
+				if (!monster_is_valid(m_ptr)) continue;
 
-					m_ptr = &current_floor_ptr->m_list[m_idx];
-					if (!monster_is_valid(m_ptr)) continue;
+				/* Skip unseen monsters */
+				if (!m_ptr->ml) continue;
 
-					/* Skip unseen monsters */
-					if (!m_ptr->ml) continue;
+				/* Access the monster race */
+				r_ptr = &r_info[m_ptr->ap_r_idx];
 
-					/* Access the monster race */
-					r_ptr = &r_info[m_ptr->ap_r_idx];
+				/* Skip non-multi-hued monsters */
+				if (!(r_ptr->flags1 & (RF1_ATTR_MULTI | RF1_SHAPECHANGER)))
+					continue;
 
-					/* Skip non-multi-hued monsters */
-					if (!(r_ptr->flags1 & (RF1_ATTR_MULTI | RF1_SHAPECHANGER)))
-						continue;
-
-					/* Reset the flag */
-					shimmer_monsters = TRUE;
-
-					/* Redraw regardless */
-					lite_spot(m_ptr->fy, m_ptr->fx);
-				}
+				/* Redraw regardless */
+				lite_spot(m_ptr->fy, m_ptr->fx);
 			}
 
 
@@ -4949,8 +4938,6 @@ static void dungeon(bool load_game)
 	health_track(0);
 
 	/* Check visual effects */
-	shimmer_monsters = TRUE;
-	shimmer_objects = TRUE;
 	repair_monsters = TRUE;
 	repair_objects = TRUE;
 

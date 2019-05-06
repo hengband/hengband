@@ -64,9 +64,6 @@ bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */
 
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
 
-bool shimmer_monsters;	/* Hack -- optimize multi-hued monsters */
-bool shimmer_objects;	/* Hack -- optimize multi-hued objects */
-
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 

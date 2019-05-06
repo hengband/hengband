@@ -105,8 +105,7 @@ extern bool inkey_scan;
 extern bool inkey_flag;
 extern bool get_com_no_macros;
 extern OBJECT_SUBTYPE_VALUE coin_type;
-extern bool shimmer_monsters;
-extern bool shimmer_objects;
+
 extern bool repair_monsters;
 extern bool repair_objects;
 extern MONSTER_IDX hack_m_idx;
