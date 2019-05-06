@@ -189,6 +189,16 @@ extern bool use_music;
 extern bool use_graphics;
 extern bool use_bigtile;
 
+extern bool arg_fiddle;
+extern bool arg_wizard;
+extern bool arg_music;
+extern bool arg_sound;
+extern byte arg_graphics;
+extern bool arg_monochrome;
+extern bool arg_force_original;
+extern bool arg_force_roguelike;
+extern bool arg_bigtile;
+
 /*
  * Available "options"
  *

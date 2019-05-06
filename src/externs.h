@@ -85,15 +85,6 @@ extern const byte feature_action_flags[FF_FLAG_MAX];
 /* variable.c */
 extern const concptr copyright[5];
 
-extern bool arg_fiddle;
-extern bool arg_wizard;
-extern bool arg_music;
-extern bool arg_sound;
-extern byte arg_graphics;
-extern bool arg_monochrome;
-extern bool arg_force_original;
-extern bool arg_force_roguelike;
-extern bool arg_bigtile;
 extern bool character_generated;
 extern bool character_dungeon;
 extern bool character_loaded;

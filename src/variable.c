@@ -36,19 +36,6 @@ concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
 int level_up = 0; /*!< レベルアップの際に遅延してcalc_mana()関数上で上昇量を表示するかどうかの判定フラグ */
 
 /*
- * Run-time arguments
- */
-bool arg_fiddle;			/* Command arg -- Request fiddle mode */
-bool arg_wizard;			/* Command arg -- Request wizard mode */
-bool arg_sound;				/* Command arg -- Request special sounds */
-bool arg_music;				/* Command arg -- Request special musics */
-byte arg_graphics;			/* Command arg -- Request graphics mode */
-bool arg_monochrome;		/* Command arg -- Request monochrome mode */
-bool arg_force_original;	/* Command arg -- Request original keyset */
-bool arg_force_roguelike;	/* Command arg -- Request roguelike keyset */
-bool arg_bigtile = FALSE;	/* Command arg -- Request big tile mode */
-
-/*
  * Various things
  */
 bool character_generated;	/* The character exists */
