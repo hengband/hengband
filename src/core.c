@@ -3169,7 +3169,7 @@ static void process_world(void)
 			do_cmd_save_game(TRUE);
 	}
 
-	if (mon_fight && !ignore_unview)
+	if (current_floor_ptr->monster_noise && !ignore_unview)
 	{
 		msg_print(_("何かが聞こえた。", "You hear noise."));
 	}

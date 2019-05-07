@@ -44,6 +44,8 @@ typedef struct {
 	POSITION redraw_y[REDRAW_MAX];
 	POSITION redraw_x[REDRAW_MAX];
 
+	bool monster_noise;
+
 } floor_type;
 
 #define DUNGEON_MODE_NONE       0

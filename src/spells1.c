@@ -3796,7 +3796,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				}
 				else
 				{
-					mon_fight = TRUE;
+					current_floor_ptr->monster_noise = TRUE;
 				}
 			}
 
@@ -3827,7 +3827,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 			else
 			{
-				mon_fight = TRUE;
+				current_floor_ptr->monster_noise = TRUE;
 			}
 
 			/* Hack -- handle sleep */

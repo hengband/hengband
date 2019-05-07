@@ -4197,7 +4197,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 				/* Unseen death by normal attack */
 				if (!seen)
 				{
-					mon_fight = TRUE;
+					current_floor_ptr->monster_noise = TRUE;
 				}
 				/* Death by special attack */
 				else if (note)

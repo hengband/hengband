@@ -1292,7 +1292,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 	if (!see_either && known)
 	{
-		mon_fight = TRUE;
+		current_floor_ptr->monster_noise = TRUE;
 	}
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
@@ -1837,7 +1837,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			}
 			else if (known)
 			{
-				mon_fight = TRUE;
+				current_floor_ptr->monster_noise = TRUE;
 			}
 		}
 		else
@@ -1848,7 +1848,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			}
 			else if (known)
 			{
-				mon_fight = TRUE;
+				current_floor_ptr->monster_noise = TRUE;
 			}
 
 			teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
@@ -3145,7 +3145,7 @@ void process_monsters(void)
 	SPEED speed;
 
 	/* Clear monster fighting indicator */
-	mon_fight = FALSE;
+	current_floor_ptr->monster_noise = FALSE;
 
 	/* Memorize old race */
 	old_monster_race_idx = p_ptr->monster_race_idx;
