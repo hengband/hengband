@@ -126,6 +126,12 @@ struct magic_type
 	EXP sexp;				/* Encoded experience bonus */
 };
 
+extern int cap_mon;
+extern int cap_mspeed;
+extern HIT_POINT cap_hp;
+extern HIT_POINT cap_maxhp;
+extern STR_OFFSET cap_nickname;
+
 extern const magic_type technic_info[NUM_TECHNIC][32];
 
 /* spells1.c */

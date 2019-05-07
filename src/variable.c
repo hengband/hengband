@@ -394,13 +394,6 @@ int highscore_fd = -1;
 
 bool can_save = FALSE;        /* Game can be saved */
 
-
-int cap_mon;
-int cap_mspeed;
-HIT_POINT cap_hp;
-HIT_POINT cap_maxhp;
-STR_OFFSET cap_nickname;
-
 MONRACE_IDX battle_mon[4];
 int sel_monster;
 int battle_odds;

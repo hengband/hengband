@@ -58,6 +58,11 @@ static int rakubadam_p; /*!< 落馬した際のダメージ量 */
 
 int project_length = 0; /*!< 投射の射程距離 */
 
+int cap_mon;
+int cap_mspeed;
+HIT_POINT cap_hp;
+HIT_POINT cap_maxhp;
+STR_OFFSET cap_nickname;
 
 /*!
  * @brief 歌、剣術、呪術領域情報テーブル
