@@ -21,6 +21,7 @@
 #include "object-ego.h"
 #include "monsterrace.h"
 #include "floor-town.h"
+#include "realm.h"
 
 dungeon_grid letter[255];
 

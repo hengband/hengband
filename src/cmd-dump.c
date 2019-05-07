@@ -74,7 +74,7 @@
 #include "spells.h"
 #include "objectkind.h"
 #include "floor-town.h"
-
+#include "realm.h"
 /*
  */
 

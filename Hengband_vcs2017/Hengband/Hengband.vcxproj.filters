@@ -389,6 +389,9 @@
     <ClCompile Include="..\..\src\targeting.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm.c">
+      <Filter>spells</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\defines.h" />
@@ -747,6 +750,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\snipe.h">
       <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm.h">
+      <Filter>spells</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

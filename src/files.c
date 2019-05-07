@@ -46,6 +46,7 @@
 #include "monster-status.h"
 #include "object-flavor.h"
 #include "object-hook.h"
+#include "realm.h"
 #include "realm-hex.h"
 #include "cmd-pet.h"
 #include "spells.h"

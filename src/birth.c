@@ -43,6 +43,7 @@
 #include "monsterrace.h"
 #include "autopick.h"
 #include "save.h"
+#include "realm.h"
 
  /*
   * The last character rolled,

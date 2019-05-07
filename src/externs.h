@@ -60,10 +60,7 @@ extern const byte adj_con_mhp[];
 extern const byte adj_chr_chm[];
 extern const byte extract_energy[200];
 
-extern const concptr realm_names[];
-#ifdef JP
-extern const concptr E_realm_names[];
-#endif
+
 extern const concptr spell_names[VALID_REALM][32];
 extern const concptr color_names[16];
 extern const concptr stat_names[6];

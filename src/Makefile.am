@@ -61,8 +61,8 @@ hengband_SOURCES = \
 	quest.h quest.c\
 	\
 	racial.c racial.h \
-	realm-arcane.c \
-	realm-arcane.h realm-chaos.c realm-chaos.h realm-craft.c realm-craft.h \
+	realm.c realm.h \
+	realm-arcane.c realm-arcane.h realm-chaos.c realm-chaos.h realm-craft.c realm-craft.h \
 	realm-crusade.c realm-crusade.h realm-daemon.c realm-daemon.h realm-death.c \
 	realm-death.h realm-hex.c realm-hex.h realm-hissatsu.c realm-hissatsu.h \
 	realm-life.c realm-life.h realm-nature.c realm-nature.h realm-song.c \

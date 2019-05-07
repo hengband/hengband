@@ -17,6 +17,7 @@
 #include "player-personality.h"
 #include "files.h"
 #include "world.h"
+#include "realm.h"
 
 #ifdef WORLD_SCORE
 

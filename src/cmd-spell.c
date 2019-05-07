@@ -13,6 +13,7 @@
 #include "selfinfo.h"
 #include "spells.h"
 #include "spells-summon.h"
+#include "realm.h"
 #include "realm-arcane.h"
 #include "realm-chaos.h"
 #include "realm-craft.h"

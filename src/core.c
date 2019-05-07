@@ -77,6 +77,7 @@
 #include "scores.h"
 #include "autopick.h"
 #include "save.h"
+#include "realm.h"
 
  /*!
   * コピーライト情報 /
