@@ -90,6 +90,12 @@ typedef struct
 	OBJECT_SUBTYPE_VALUE sval;  /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
 } arena_type;
 
+extern MONRACE_IDX battle_mon[4];
+extern u32b mon_odds[4];
+extern int battle_odds;
+extern PRICE kakekin;
+extern int sel_monster;
+
 extern const arena_type arena_info[MAX_ARENA_MONS + 2];
 extern void update_gambling_monsters(void);
 extern void do_cmd_bldg(void);

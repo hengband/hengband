@@ -60,6 +60,11 @@
  */
 building_type building[MAX_BLDG];
 
+MONRACE_IDX battle_mon[4];
+u32b mon_odds[4];
+int battle_odds;
+PRICE kakekin;
+int sel_monster;
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

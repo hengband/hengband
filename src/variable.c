@@ -394,11 +394,6 @@ int highscore_fd = -1;
 
 bool can_save = FALSE;        /* Game can be saved */
 
-MONRACE_IDX battle_mon[4];
-int sel_monster;
-int battle_odds;
-PRICE kakekin;
-u32b mon_odds[4];
 
 MONSTER_IDX pet_t_m_idx;
 MONSTER_IDX riding_t_m_idx;

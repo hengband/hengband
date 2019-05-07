@@ -171,11 +171,7 @@ extern DUNGEON_IDX max_d_idx;
 extern int init_flags;
 extern int highscore_fd;
 extern bool can_save;
-extern MONRACE_IDX battle_mon[4];
-extern int sel_monster;
-extern int battle_odds;
-extern PRICE kakekin;
-extern u32b mon_odds[4];
+
 extern MONSTER_IDX pet_t_m_idx;
 extern MONSTER_IDX riding_t_m_idx;
 extern MONRACE_IDX today_mon;
