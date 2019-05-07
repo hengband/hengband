@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "targeting.h"
 
 #include "bldg.h"
 #include "cmd-pet.h"

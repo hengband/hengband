@@ -43,6 +43,7 @@
 #include "monster-spell.h"
 #include "bldg.h"
 #include "objectkind.h"
+#include "targeting.h"
 
 #ifdef ALLOW_WIZARD
 

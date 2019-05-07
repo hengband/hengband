@@ -25,6 +25,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "cmd-basic.h"
+#include "targeting.h"
 
 static int damage;
 

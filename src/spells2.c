@@ -47,6 +47,7 @@
 #include "view-mainwindow.h"
 #include "objectkind.h"
 #include "monsterrace.h"
+#include "targeting.h"
 
 /*!
  * @brief プレイヤー周辺の地形を感知する

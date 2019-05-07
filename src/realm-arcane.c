@@ -11,6 +11,7 @@
 #include "spells-status.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "targeting.h"
 
 /*!
 * @brief 秘術領域魔法の各処理を行う

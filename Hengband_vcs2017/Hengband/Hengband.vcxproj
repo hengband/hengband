@@ -392,6 +392,7 @@
     <ClInclude Include="..\..\src\spells-world.h" />
     <ClInclude Include="..\..\src\spells.h" />
     <ClInclude Include="..\..\src\store.h" />
+    <ClInclude Include="..\..\src\targeting.h" />
     <ClInclude Include="..\..\src\term.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\util.h" />

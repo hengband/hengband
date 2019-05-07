@@ -25,6 +25,7 @@
 #include "spells.h"
 #include "cmd-basic.h"
 #include "player-effects.h"
+#include "targeting.h"
 
 #define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< モンスター魔法をプレイヤーが使用する場合の換算レベル */
 

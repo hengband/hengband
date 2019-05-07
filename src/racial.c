@@ -30,6 +30,7 @@
 #include "spells.h"
 #include "cmd-spell.h"
 #include "realm-hex.h"
+#include "targeting.h"
 
 /*!
  * @brief 修行僧の構え設定処理

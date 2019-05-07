@@ -6,6 +6,7 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells.h"
+#include "targeting.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う

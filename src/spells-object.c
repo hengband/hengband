@@ -16,6 +16,7 @@
 #include "player-class.h"
 #include "objectkind.h"
 #include "autopick.h"
+#include "targeting.h"
 
 
 typedef struct

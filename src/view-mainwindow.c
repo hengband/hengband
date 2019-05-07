@@ -38,6 +38,7 @@
 #include "floor-town.h"
 #include "feature.h"
 #include "objectkind.h"
+#include "targeting.h"
 
 static int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優先度を保管する */
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */

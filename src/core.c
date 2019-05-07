@@ -78,6 +78,7 @@
 #include "autopick.h"
 #include "save.h"
 #include "realm.h"
+#include "targeting.h"
 
  /*!
   * コピーライト情報 /

@@ -167,6 +167,7 @@
 #include "world.h"
 #include "objectkind.h"
 #include "autopick.h"
+#include "targeting.h"
 
 
 #ifdef TRAVEL

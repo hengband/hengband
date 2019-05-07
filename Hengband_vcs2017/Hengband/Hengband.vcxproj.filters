@@ -754,6 +754,9 @@
     <ClInclude Include="..\..\src\realm.h">
       <Filter>spells</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\targeting.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

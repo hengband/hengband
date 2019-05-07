@@ -6,6 +6,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "targeting.h"
 
 
 

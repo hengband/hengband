@@ -9,6 +9,7 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "player-effects.h"
+#include "targeting.h"
 
 /*!
 * @brief 仙術領域魔法の各処理を行う

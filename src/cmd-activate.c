@@ -29,6 +29,7 @@
 #include "objectkind.h"
 #include "object-ego.h"
 #include "grid.h"
+#include "targeting.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

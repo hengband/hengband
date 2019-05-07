@@ -7,6 +7,7 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "player-effects.h"
+#include "targeting.h"
 
 
 

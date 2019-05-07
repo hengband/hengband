@@ -18,6 +18,7 @@
 #include "snipe.h"
 #include "view-mainwindow.h"
 #include "objectkind.h"
+#include "targeting.h"
 
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /

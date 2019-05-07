@@ -10,7 +10,7 @@
 #include "object-hook.h"
 #include "cmd-basic.h"
 #include "floor.h"
-
+#include "targeting.h"
 
 /*!
 * @brief 魔法棒の効果を発動する

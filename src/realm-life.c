@@ -6,6 +6,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "floor.h"
+#include "targeting.h"
 
 /*!
 * @brief 生命領域魔法の各処理を行う

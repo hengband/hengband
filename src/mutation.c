@@ -28,6 +28,7 @@
 #include "cmd-basic.h"
 #include "files.h"
 #include "floor.h"
+#include "targeting.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

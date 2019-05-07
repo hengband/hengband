@@ -17,6 +17,7 @@
 #include "cmd-pet.h"
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
+#include "targeting.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定

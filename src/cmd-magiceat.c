@@ -64,7 +64,7 @@
 #include "spells.h"
 #include "player-class.h"
 #include "objectkind.h"
-
+#include "targeting.h"
 
 /*!
  * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /

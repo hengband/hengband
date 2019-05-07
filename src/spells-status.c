@@ -11,6 +11,7 @@
 #include "cmd-spell.h"
 #include "player-effects.h"
 #include "objectkind.h"
+#include "targeting.h"
 
 /*!
  * @brief モンスター回復処理
