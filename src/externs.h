@@ -237,9 +237,6 @@ extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
 /* extern int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, ...); */
 #endif
 
-extern bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode);
-extern void py_pickup_floor(bool pickup);
-
 /* wizard1.c */
 extern void spoil_random_artifact(concptr fname);
 
