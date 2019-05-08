@@ -165,6 +165,7 @@ extern bool record_arena;	/* Record arena victories */
 extern bool record_ident;	/* Record first identified items */
 extern bool record_named_pet;	/* Record informations of named pets */
 
+extern char record_o_name[MAX_NLEN];
 
 extern bool cheat_peek;
 extern bool cheat_hear;
