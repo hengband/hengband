@@ -18,6 +18,7 @@
 
 #include "artifact.h"
 #include "sort.h"
+#include "dungeon.h"
 #include "quest.h"
 #include "store.h"
 #include "wild.h"

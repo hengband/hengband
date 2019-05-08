@@ -377,11 +377,6 @@ FEAT_IDX max_f_idx;
 EGO_IDX max_e_idx;
 
 /*
- * Maximum number of dungeon in e_info.txt
- */
-DUNGEON_IDX max_d_idx;
-
-/*
  * Flags for initialization
  */
 int init_flags;

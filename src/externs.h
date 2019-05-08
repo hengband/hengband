@@ -161,7 +161,6 @@ extern VAULT_IDX max_v_idx;
 extern FEAT_IDX max_f_idx;
 
 extern EGO_IDX max_e_idx;
-extern DUNGEON_IDX max_d_idx;
 extern int init_flags;
 extern int highscore_fd;
 extern bool can_save;
