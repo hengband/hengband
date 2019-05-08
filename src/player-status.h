@@ -669,3 +669,5 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 #define PY_REGEN_FAINT          33      /* Regen factor*2^16 when fainting */
 #define PY_REGEN_HPBASE         1442    /* Min amount hp regen*2^16 */
 #define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
+
+extern void cheat_death(player_type *creature_ptr);
