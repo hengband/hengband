@@ -367,11 +367,6 @@ bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 VAULT_IDX max_v_idx;
 
 /*
- * Maximum number of ego-items in e_info.txt
- */
-EGO_IDX max_e_idx;
-
-/*
  * Flags for initialization
  */
 int init_flags;

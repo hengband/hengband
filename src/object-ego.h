@@ -31,6 +31,7 @@ struct ego_item_type
 	IDX act_idx;		/* Activative ability index */
 };
 
+extern EGO_IDX max_e_idx;
 extern ego_item_type *e_info;
 extern char *e_name;
 extern char *e_text;

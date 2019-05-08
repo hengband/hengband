@@ -159,7 +159,7 @@ extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 extern VAULT_IDX max_v_idx;
 
-extern EGO_IDX max_e_idx;
+
 extern int init_flags;
 extern int highscore_fd;
 extern bool can_save;
