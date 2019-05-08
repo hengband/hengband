@@ -40,6 +40,12 @@ extern u32b message__tail;
 extern u32b *message__ptr;
 extern char *message__buf;
 
+extern s16b macro__num;
+extern concptr *macro__pat;
+extern concptr *macro__act;
+extern bool *macro__cmd;
+extern char *macro__buf;
+
 /*
  * Hack -- conditional (or "bizarre") externs
  */

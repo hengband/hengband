@@ -136,11 +136,6 @@ extern char player_base[32];
 extern char savefile[1024];
 extern char savefile_base[40];
 extern pos_list tmp_pos;
-extern s16b macro__num;
-extern concptr *macro__pat;
-extern concptr *macro__act;
-extern bool *macro__cmd;
-extern char *macro__buf;
 extern STR_OFFSET quark__num;
 extern concptr *quark__str;
 
