@@ -46,6 +46,7 @@
 #include "objectkind.h"
 #include "autopick.h"
 #include "save.h"
+#include "report.h"
 
  /*!
   * @brief 修行僧の構え能力テーブル

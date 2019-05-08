@@ -757,6 +757,9 @@
     <ClInclude Include="..\..\src\targeting.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\report.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

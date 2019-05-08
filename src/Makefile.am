@@ -67,7 +67,7 @@ hengband_SOURCES = \
 	realm-death.h realm-hex.c realm-hex.h realm-hissatsu.c realm-hissatsu.h \
 	realm-life.c realm-life.h realm-nature.c realm-nature.h realm-song.c \
 	realm-song.h realm-sorcery.c realm-sorcery.h realm-trump.c realm-trump.h \
-	report.c rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
+	report.c report.h rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
 	rooms-vault.h save.c save.h scores.c scores.h selfinfo.c selfinfo.h \

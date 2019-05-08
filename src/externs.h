@@ -252,12 +252,6 @@ extern bool iskanji2(concptr s, int x);
 extern void guess_convert_to_system_encoding(char* strbuf, int buflen);
 #endif
 
-#ifdef WORLD_SCORE
-/* report.c */
-extern errr report_score(void);
-extern concptr make_screen_dump(void);
-#endif
-
 /* inet.c */
 extern int soc_write(int sd, char *buf, size_t sz);
 extern int soc_read(int sd, char *buf, size_t sz);

@@ -19,6 +19,7 @@
 #include "player-effects.h"
 #include "view-mainwindow.h"
 #include "world.h"
+#include "report.h"
 
 
 /*!

@@ -368,6 +368,7 @@
     <ClInclude Include="..\..\src\realm-sorcery.h" />
     <ClInclude Include="..\..\src\realm-trump.h" />
     <ClInclude Include="..\..\src\realm.h" />
+    <ClInclude Include="..\..\src\report.h" />
     <ClInclude Include="..\..\src\rooms-city.h" />
     <ClInclude Include="..\..\src\rooms-fractal.h" />
     <ClInclude Include="..\..\src\rooms-normal.h" />
