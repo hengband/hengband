@@ -40,6 +40,24 @@ extern u32b message__tail;
 extern u32b *message__ptr;
 extern char *message__buf;
 
+/*
+ * Hack -- conditional (or "bizarre") externs
+ */
+
+#ifdef SET_UID
+extern void user_name(char *buf, int id);
+#endif
+
+#if 0
+#ifndef HAS_STRICMP
+extern int stricmp(concptr a, concptr b);
+#endif
+#endif
+
+#ifndef HAVE_USLEEP
+extern int usleep(huge usecs);
+#endif
+
 /* util.c */
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);

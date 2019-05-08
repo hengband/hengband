@@ -192,27 +192,6 @@ extern void update_output(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void update_playtime(void);
 
-/*
- * Hack -- conditional (or "bizarre") externs
- */
-
-#ifdef SET_UID
-/* util.c */
-extern void user_name(char *buf, int id);
-#endif
-
-#if 0
-#ifndef HAS_STRICMP
-/* util.c */
-extern int stricmp(concptr a, concptr b);
-#endif
-#endif
-
-#ifndef HAVE_USLEEP
-/* util.c */
-extern int usleep(huge usecs);
-#endif
-
 #ifdef MACINTOSH
 /* main-mac.c */
 /* extern void main(void); */
