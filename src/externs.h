@@ -240,9 +240,6 @@ extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
 /* wizard1.c */
 extern void spoil_random_artifact(concptr fname);
 
-/* wizard2.c */
-extern void strip_name(char *buf, KIND_OBJECT_IDX k_idx);
-
 
 #ifdef JP
 /* japanese.c */

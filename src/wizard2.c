@@ -602,39 +602,6 @@ static tval_desc tvals[] =
 	{ 0,                    NULL                   }
 };
 
-
-/*!
- * @brief nameバッファ内からベースアイテム名を返す / Strip an "object name" into a buffer
- * @param buf ベースアイテム格納先の参照ポインタ
- * @param k_idx ベースアイテムID
- * @return なし
- */
-void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
-{
-	char *t;
-
-	object_kind *k_ptr = &k_info[k_idx];
-
-	concptr str = (k_name + k_ptr->name);
-
-
-	/* Skip past leading characters */
-	while ((*str == ' ') || (*str == '&')) str++;
-
-	/* Copy useful chars */
-	for (t = buf; *str; str++)
-	{
-#ifdef JP
-		if (iskanji(*str)) {*t++ = *str++; *t++ = *str; continue;}
-#endif
-		if (*str != '~') *t++ = *str;
-	}
-
-	/* Terminate the new name */
-	*t = '\0';
-}
-
-
 /*!
  * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
  * Specify tval and sval (type and subtype of object) originally
