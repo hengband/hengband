@@ -55,6 +55,8 @@ struct feature_type
 	SYMBOL_CODE x_char[F_LIT_MAX];   /*!< 設定変更後の地形シンボルアルファベット / Desired feature character */
 };
 
+extern FEAT_IDX max_f_idx;
+
 extern feature_type *f_info;
 
 extern bool is_closed_door(FEAT_IDX feat);
