@@ -20,16 +20,6 @@
 #include "object.h"
 #include "player-status.h"
 
-/*
- * Automatically generated "variable" declarations
- */
-extern int max_macrotrigger;
-extern concptr macro_template;
-extern concptr macro_modifier_chr;
-extern concptr macro_modifier_name[MAX_MACRO_MOD];
-extern concptr macro_trigger_name[MAX_MACRO_TRIG];
-extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
-
 extern int level_up;
 
 

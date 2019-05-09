@@ -47,6 +47,16 @@ extern bool *macro__cmd;
 extern char *macro__buf;
 
 /*
+ * Automatically generated "variable" declarations
+ */
+extern int max_macrotrigger;
+extern concptr macro_template;
+extern concptr macro_modifier_chr;
+extern concptr macro_modifier_name[MAX_MACRO_MOD];
+extern concptr macro_trigger_name[MAX_MACRO_TRIG];
+extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
+
+/*
  * Hack -- conditional (or "bizarre") externs
  */
 
