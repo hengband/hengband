@@ -55,13 +55,10 @@ extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 extern const concptr window_flag_desc[32];
 
-extern const concptr game_inscriptions[];
-
 extern const concptr ident_info[];
 extern const byte feature_action_flags[FF_FLAG_MAX];
 
 /* variable.c */
-
 
 extern bool character_generated;
 extern bool character_dungeon;

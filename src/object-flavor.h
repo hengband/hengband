@@ -13,6 +13,8 @@ extern char *object_desc_kosuu(char *t, object_type *o_ptr);
 extern void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode);
 extern void strip_name(char *buf, KIND_OBJECT_IDX k_idx);
 
+extern const concptr game_inscriptions[];
+
 /*
  * Bit flags for object_desc()
  */

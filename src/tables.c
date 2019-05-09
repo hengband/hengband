@@ -1166,36 +1166,6 @@ const concptr window_flag_desc[32] =
 };
 
 
-/*!
- * @brief アイテムの価値記述テーブル /
- * Table of game-generated inscriptions (indexed by the defines in defines.h). -- RG
- */
-const concptr game_inscriptions[] =
-{
-	NULL,            /* FEEL_NONE */
-#ifdef JP
-	"壊れている",    /* FEEL_BROKEN */
-	"恐ろしい",      /* FEEL_TERRIBLE */
-	"無価値",        /* FEEL_WORTHLESS */
-	"呪われている",  /* FEEL_CURSED */
-	"上質以上",      /* FEEL_UNCURSED */
-	"並",            /* FEEL_AVERAGE */
-	"上質",          /* FEEL_GOOD */
-	"高級品",        /* FEEL_EXCELLENT */
-	"特別製",        /* FEEL_SPECIAL */
-#else
-	"broken",        /* FEEL_BROKEN */
-	"terrible",      /* FEEL_TERRIBLE */
-	"worthless",     /* FEEL_WORTHLESS */
-	"cursed",        /* FEEL_CURSED */
-	"uncursed",      /* FEEL_UNCURSED */
-	"average",       /* FEEL_AVERAGE */
-	"good",          /* FEEL_GOOD */
-	"excellent",     /* FEEL_EXCELLENT */
-	"special",       /* FEEL_SPECIAL */
-#endif
-
-};
 
 /*!
  * @brief シンボル解説テーブル /
