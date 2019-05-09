@@ -3175,7 +3175,7 @@ bool set_food(TIME_EFFECT v)
 
 		if (p_ptr->wild_mode && (new_aux < 2))
 		{
-			change_wild_mode();
+			change_wild_mode(FALSE);
 		}
 
 		/* Change */
@@ -4242,7 +4242,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 	}
 	if (p_ptr->wild_mode && !p_ptr->leaving && (p_ptr->chp < MAX(warning, p_ptr->mhp/5)))
 	{
-		change_wild_mode();
+		change_wild_mode(FALSE);
 	}
 	return damage;
 }

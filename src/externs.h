@@ -171,7 +171,6 @@ extern bool write_level;
 extern u32b start_time;
 extern bool sukekaku;
 extern bool new_mane;
-extern bool generate_encounter;
 extern concptr screen_dump;
 
 extern DEPTH *max_dlv;

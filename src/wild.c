@@ -34,6 +34,8 @@
   */
 wilderness_type **wilderness;
 
+bool generate_encounter;
+
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
@@ -1108,12 +1110,14 @@ void init_wilderness_terrains(void)
 /*!
  * @brief 荒野から広域マップへの切り替え処理 /
  * Initialize arrays for wilderness terrains
+ * @param encount 襲撃時TRUE
  * @return 切り替えが行われた場合はTRUEを返す。
  */
-bool change_wild_mode(void)
+bool change_wild_mode(bool encount)
 {
 	int i;
 	bool have_pet = FALSE;
+	generate_encounter = encount;
 
 	/* It is in the middle of changing map */
 	if (p_ptr->leaving) return FALSE;

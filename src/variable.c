@@ -392,8 +392,6 @@ u32b start_time;
 bool sukekaku;
 bool new_mane;
 
-bool generate_encounter;
-
 concptr screen_dump = NULL;
 
 

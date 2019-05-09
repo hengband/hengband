@@ -3323,13 +3323,11 @@ static void process_world(void)
 				/* Go into large wilderness view */
 				p_ptr->oldpy = randint1(MAX_HGT - 2);
 				p_ptr->oldpx = randint1(MAX_WID - 2);
-				change_wild_mode();
+				change_wild_mode(TRUE);
 
 				/* Give first move to monsters */
 				take_turn(p_ptr, 100);
 
-				/* HACk -- set the encouter flag for the wilderness generation */
-				generate_encounter = TRUE;
 			}
 
 			p_ptr->invoking_midnight_curse = TRUE;
@@ -3769,7 +3767,7 @@ static void process_command(void)
 					break;
 				}
 
-				change_wild_mode();
+				change_wild_mode(FALSE);
 			}
 			else
 				do_cmd_go_up();
@@ -3780,7 +3778,7 @@ static void process_command(void)
 		case '>':
 		{
 			if (p_ptr->wild_mode)
-				change_wild_mode();
+				change_wild_mode(FALSE);
 			else
 				do_cmd_go_down();
 			break;
