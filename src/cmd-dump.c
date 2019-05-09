@@ -75,8 +75,6 @@
 #include "objectkind.h"
 #include "floor-town.h"
 #include "realm.h"
-/*
- */
 
 /*
  *  Mark strings for auto dump
@@ -90,6 +88,8 @@ static char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
 static FILE *auto_dump_stream;
 static concptr auto_dump_mark;
 static int auto_dump_line_num;
+
+bool write_level;
 
 
 /*!

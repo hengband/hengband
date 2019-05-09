@@ -30,3 +30,5 @@ extern void plural_aux(char * Name);
 extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
 extern void do_cmd_suicide(void);
+
+extern bool write_level;
