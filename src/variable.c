@@ -362,11 +362,6 @@ monsterrace_hook_type get_mon_num2_hook;
 bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 /*
- * Maximum number of vaults in v_info.txt
- */
-VAULT_IDX max_v_idx;
-
-/*
  * Flags for initialization
  */
 int init_flags;

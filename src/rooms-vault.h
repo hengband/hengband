@@ -1,4 +1,6 @@
-﻿/*
+﻿#pragma once 
+
+/*
  * Information about "vault generation"
  */
 
@@ -18,6 +20,8 @@ struct vault_type
 extern vault_type *v_info;
 extern char *v_name;
 extern char *v_text;
+
+extern VAULT_IDX max_v_idx;
 
 extern bool build_type7(void);
 extern bool build_type8(void);

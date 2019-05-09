@@ -21,6 +21,11 @@ char *v_name;
 char *v_text;
 
 /*
+ * Maximum number of vaults in v_info.txt
+ */
+VAULT_IDX max_v_idx;
+
+/*
 * This function creates a random vault that looks like a collection of bubbles.
 * It works by getting a set of coordinates that represent the center of each
 * bubble.  The entire room is made by seeing which bubble center is closest. If

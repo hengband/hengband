@@ -5,6 +5,7 @@
 
 #include "files.h"
 #include "dungeon-file.h"
+#include "rooms-vault.h"
 #include "feature.h"
 #include "grid.h"
 #include "quest.h"

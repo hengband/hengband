@@ -56,6 +56,7 @@
 #include "player-class.h"
 #include "objectkind.h"
 #include "object-ego.h"
+#include "rooms-vault.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME
