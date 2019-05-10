@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "autopick.h"
+#include "term.h"
 
 #include "selfinfo.h"
 #include "cmd-activate.h"

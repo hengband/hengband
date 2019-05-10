@@ -14,6 +14,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "term.h"
 
 #include "core.h"
 #include "cmd-dump.h"
