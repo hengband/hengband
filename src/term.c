@@ -308,6 +308,12 @@ const concptr ident_info[] =
 	NULL
 };
 
+/*!
+ * スクリーン表示色キャラクタ /
+ * Encode the screen colors
+ */
+const concptr color_char = "dwsorgbuDWvyRGBU";
+
 /*
  * Specify attr/char pairs for visual special effects
  * Be sure to use "index & 0x7F" to avoid illegal access

@@ -5,7 +5,7 @@
 extern const concptr color_names[16];
 extern const concptr window_flag_desc[32];
 extern const concptr ident_info[];
-
+extern const concptr color_char;
 
 extern TERM_COLOR misc_to_attr[256];
 extern SYMBOL_CODE misc_to_char[256];

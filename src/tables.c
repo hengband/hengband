@@ -32,13 +32,6 @@ const char listsym[] =
 
 
 /*!
- * スクリーン表示色キャラクタ /
- * Encode the screen colors
- */
-const concptr color_char = "dwsorgbuDWvyRGBU";
-
-
-/*!
  * 知力/賢さによるレベル毎の習得可能魔法数テーブル
  * Stat Table (INT/WIS) -- Number of half-spells per level
  */
