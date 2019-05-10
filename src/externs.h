@@ -25,7 +25,6 @@ extern int level_up;
 
 /* tables.c */
 
-extern const char hexsym[16];
 extern const char listsym[];
 extern const concptr color_char;
 extern const byte adj_mag_study[];

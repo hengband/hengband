@@ -17,18 +17,6 @@
 
 
 /*!
- * 10進数から16進数への変換テーブル /
- * Global array for converting numbers to uppercase hecidecimal digit
- * This array can also be used to convert a number to an octal digit
- */
-const char hexsym[16] =
-{
-	'0', '1', '2', '3', '4', '5', '6', '7',
-	'8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-};
-
-
-/*!
  * 選択処理用キーコード /
  * Global array for converting numbers to a logical list symbol
  */

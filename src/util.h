@@ -74,6 +74,8 @@ extern int stricmp(concptr a, concptr b);
 extern int usleep(huge usecs);
 #endif
 
+extern const char hexsym[16];
+
 /* util.c */
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);
