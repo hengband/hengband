@@ -52,8 +52,9 @@ hengband_SOURCES = \
 	\
 	patron.h patron.c \
 	\
-	projection.h projection.c\
+	projection.h projection.c \
 	\
+	creature.h creature.c \
 	player-move.c player-move.h player-damage.c player-damage.h player-status.c player-status.h \
 	player-effects.c player-effects.h player-skill.c player-skill.h player-class.c player-class.h \
 	player-race.c player-race.h player-pesonality.c player-pesonality.h player-sex.c player-sex.h \

@@ -14,6 +14,8 @@
 #include "angband.h"
 #include "util.h"
 
+#include "creature.h"
+
 #include "artifact.h"
 #include "cmd-pet.h"
 #include "cmd-dump.h"

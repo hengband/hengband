@@ -15,6 +15,8 @@
 #include "bldg.h"
 #include "util.h"
 
+#include "creature.h"
+
 #include "dungeon.h"
 #include "floor.h"
 #include "floor-town.h"

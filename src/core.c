@@ -14,6 +14,8 @@
 #include "util.h"
 #include "core.h"
 
+#include "creature.h"
+
 #include "birth.h"
 #include "bldg.h"
 #include "cmd-activate.h"

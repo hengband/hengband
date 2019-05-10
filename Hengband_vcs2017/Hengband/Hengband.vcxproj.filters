@@ -392,6 +392,9 @@
     <ClCompile Include="..\..\src\realm.c">
       <Filter>spells</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\creature.c">
+      <Filter>creature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\defines.h" />
@@ -760,6 +763,9 @@
     <ClInclude Include="..\..\src\report.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\creature.h">
+      <Filter>creature</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -794,6 +800,9 @@
     </Filter>
     <Filter Include="core">
       <UniqueIdentifier>{cbc72021-c88c-4625-b89b-ef126e300cf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="creature">
+      <UniqueIdentifier>{60e19cec-2b2f-46e7-9de6-e441c26fb1b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

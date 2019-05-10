@@ -15,6 +15,8 @@
 #include "angband.h"
 #include "util.h"
 
+#include "creature.h"
+
 #include "artifact.h"
 #include "cmd-dump.h"
 #include "floor.h"

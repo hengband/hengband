@@ -18,6 +18,7 @@
 
 #include "cmd-dump.h"
 #include "cmd-pet.h"
+#include "creature.h"
 #include "melee.h"
 #include "spells.h"
 #include "spells-summon.h"

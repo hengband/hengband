@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\src\cmd-read.c" />
     <ClCompile Include="..\..\src\cmd-smith.c" />
     <ClCompile Include="..\..\src\core.c" />
+    <ClCompile Include="..\..\src\creature.c" />
     <ClCompile Include="..\..\src\dungeon-file.c" />
     <ClCompile Include="..\..\src\dungeon.c" />
     <ClCompile Include="..\..\src\feature.c" />
@@ -300,6 +301,7 @@
     <ClInclude Include="..\..\src\cmd-read.h" />
     <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\core.h" />
+    <ClInclude Include="..\..\src\creature.h" />
     <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\dungeon-file.h" />
     <ClInclude Include="..\..\src\dungeon.h" />

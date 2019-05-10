@@ -48,7 +48,6 @@ extern const byte adj_dex_safe[];
 extern const byte adj_con_fix[];
 extern const byte adj_con_mhp[];
 extern const byte adj_chr_chm[];
-extern const byte extract_energy[200];
 
 extern const concptr color_names[16];
 extern const concptr stat_names[6];
