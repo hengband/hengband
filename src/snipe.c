@@ -521,7 +521,7 @@ static bool cast_sniper_spell(int spell)
 	command_cmd = 'f';
 	do_cmd_fire(snipe_type);
 
-	return (is_fired);
+	return (p_ptr->is_fired);
 }
 
 /*!

@@ -468,6 +468,7 @@ struct player_type
 	s16b stat_ind[A_MAX];	/* Indexes into stat tables */
 
 	bool hack_mutation;
+	bool is_fired;
 
 	bool immune_acid;	/* Immunity to acid */
 	bool immune_elec;	/* Immunity to lightning */

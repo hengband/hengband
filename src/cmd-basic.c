@@ -2263,7 +2263,7 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 
 	if(p_ptr->wild_mode) return;
 
-	is_fired = FALSE;	/* not fired yet */
+	p_ptr->is_fired = FALSE;	/* not fired yet */
 
 	/* Get the "bow" (if any) */
 	j_ptr = &p_ptr->inventory_list[INVEN_BOW];
@@ -2313,7 +2313,7 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 	/* Fire the item */
 	exe_fire(item, j_ptr, snipe_type);
 
-	if (!is_fired || p_ptr->pclass != CLASS_SNIPER) return;
+	if (!p_ptr->is_fired || p_ptr->pclass != CLASS_SNIPER) return;
 
 	/* Sniper actions after some shootings */
 	if (snipe_type == SP_AWAY)
