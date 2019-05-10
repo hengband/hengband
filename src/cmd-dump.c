@@ -8094,7 +8094,7 @@ void do_cmd_knowledge(void)
 			prt("(5) Display kill count", 10, 5);
 			if (!vanilla_town) prt("(6) Display wanted monsters", 11, 5);
 			prt("(7) Display current pets", 12, 5);
-			prt("(8) Display home p_ptr->inventory_list", 13, 5);
+			prt("(8) Display home inventory", 13, 5);
 			prt("(9) Display *identified* equip.", 14, 5);
 			prt("(0) Display terrain symbols.", 15, 5);
 		}

@@ -1672,8 +1672,12 @@ static void player_wipe_without_name(void)
 	/* Hack -- free the "last message" string */
 	if (p_ptr->last_message) string_free(p_ptr->last_message);
 
+	if (p_ptr->inventory_list != NULL) C_WIPE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
+
 	/* Hack -- zero the struct */
 	(void)WIPE(p_ptr, player_type);
+
+	C_MAKE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
 
 	/* Wipe the history */
 	for (i = 0; i < 4; i++)
@@ -1704,12 +1708,11 @@ static void player_wipe_without_name(void)
 	p_ptr->inven_cnt = 0;
 	p_ptr->equip_cnt = 0;
 
-	/* Clear the p_ptr->inventory_list */
+	/* Clear the inventory */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		object_wipe(&p_ptr->inventory_list[i]);
 	}
-
 
 	/* Start with no artifacts made yet */
 	for (i = 0; i < max_a_idx; i++)

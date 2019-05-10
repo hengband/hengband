@@ -1276,13 +1276,6 @@ static errr init_other(void)
 	/* Hack -- No messages yet */
 	message__tail = MESSAGE_BUF;
 
-
-	/*** Prepare the Player p_ptr->inventory_list ***/
-
-	/* Allocate it */
-	C_MAKE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
-
-
 	/*** Prepare the options ***/
 
 	/* Scan the options */

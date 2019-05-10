@@ -372,9 +372,9 @@ struct player_type
 	bool autopick_autoregister; /* auto register is in-use or not */
 
 	byte feeling;		/* Most recent dungeon feeling */
-	s32b feeling_turn;	/* The current_world_ptr->game_turn of the last dungeon feeling */
+	s32b feeling_turn;	/* The turn of the last dungeon feeling */
 
-	object_type *inventory_list; /* The player's p_ptr->inventory_list [INVEN_TOTAL] */
+	object_type *inventory_list; /* The player's inventory */
 	s16b inven_cnt; /* Number of items in inventory */
 	s16b equip_cnt; /* Number of items in equipment */
 

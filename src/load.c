@@ -2426,6 +2426,9 @@ static errr rd_inventory(void)
 	p_ptr->inven_cnt = 0;
 	p_ptr->equip_cnt = 0;
 
+	if (p_ptr->inventory_list != NULL) C_WIPE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
+	C_MAKE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
+
 	/* Read until done */
 	while (1)
 	{
