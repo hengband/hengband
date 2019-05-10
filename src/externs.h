@@ -49,8 +49,6 @@ extern const byte adj_con_fix[];
 extern const byte adj_con_mhp[];
 extern const byte adj_chr_chm[];
 
-extern const concptr stat_names[6];
-extern const concptr stat_names_reduced[6];
 extern const concptr window_flag_desc[32];
 
 extern const concptr ident_info[];

@@ -15,6 +15,9 @@
  * whenever anything important changes.
  */
 
+extern const concptr stat_names[6];
+extern const concptr stat_names_reduced[6];
+
 typedef struct player_type player_type;
 
 struct player_type

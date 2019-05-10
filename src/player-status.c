@@ -34,6 +34,32 @@
 #include "world.h"
 
 /*!
+ * @brief 能力値テーブル / Abbreviations of healthy stats
+ */
+const concptr stat_names[6] =
+{
+#ifdef JP
+	"腕力 :", "知能 :", "賢さ :", "器用 :", "耐久 :", "魅力 :"
+#else
+	"STR : ", "INT : ", "WIS : ", "DEX : ", "CON : ", "CHR : "
+#endif
+
+};
+
+/*!
+ * @brief 能力値テーブル(能力低下時) / Abbreviations of damaged stats
+ */
+const concptr stat_names_reduced[6] =
+{
+#ifdef JP
+	"腕力x:", "知能x:", "賢さx:", "器用x:", "耐久x:", "魅力x:"
+#else
+	"Str : ", "Int : ", "Wis : ", "Dex : ", "Con : ", "Chr : "
+#endif
+
+};
+
+/*!
  * @var horror_desc
  * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ（通常時）
  */
