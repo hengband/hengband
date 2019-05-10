@@ -990,62 +990,6 @@ const byte adj_chr_chm[] =
 
 
 /*!
- * @brief サブウィンドウ名称テーブル
- * @details
- * <pre>
- * Certain "screens" always use the main screen, including News, Birth,
- * Dungeon, Tomb-stone, High-scores, Macros, Colors, Visuals, Options.
- *
- * Later, special flags may allow sub-windows to "steal" stuff from the
- * main window, including File dump (help), File dump (artifacts, uniques),
- * Character screen, Small scale map, Previous Messages, Store screen, etc.
- *
- * The "ctrl-i" (tab) command flips the "Display inven/equip" and "Display
- * equip/inven" flags for all windows.
- *
- * The "ctrl-g" command (or pseudo-command) should perhaps grab a snapshot
- * of the main screen into any interested windows.
- * </pre>
- */
-const concptr window_flag_desc[32] =
-{
-	_("持ち物/装備一覧", "Display inven/equip"),
-	_("装備/持ち物一覧", "Display equip/inven"),
-	_("呪文一覧", "Display spell list"),
-	_("キャラクタ情報", "Display character"),
-	_("視界内のモンスター表示", "Display monsters in sight"),
-	NULL,
-	_("メッセージ", "Display messages"),
-	_("ダンジョン全体図", "Display overhead view"),
-	_("モンスターの思い出", "Display monster recall"),
-	_("アイテムの詳細", "Display object recall"),
-	_("自分の周囲を表示", "Display dungeon view"),
-	_("記念撮影", "Display snap-shot"),
-	NULL,
-	NULL,
-	_("ボーグ・メッセージ", "Display borg messages"),
-	_("ボーグ・ステータス", "Display borg status"),
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL
-};
-
-
-
-/*!
  * @brief シンボル解説テーブル /
  * The table of "symbol info" -- each entry is a string of the form "X:desc" where "X" is the trigger, and "desc" is the "info".
  */
