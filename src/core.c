@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 #include "core.h"
+#include "inet.h"
 
 #include "creature.h"
 

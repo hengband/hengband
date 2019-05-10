@@ -43,6 +43,7 @@
 #include "util.h"
 #include "cmd-dump.h"
 #include "term.h"
+#include "inet.h"
 
 #include "autopick.h"
 

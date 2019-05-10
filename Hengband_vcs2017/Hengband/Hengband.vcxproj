@@ -323,6 +323,7 @@
     <ClInclude Include="..\..\src\h-system.h" />
     <ClInclude Include="..\..\src\h-type.h" />
     <ClInclude Include="..\..\src\history.h" />
+    <ClInclude Include="..\..\src\inet.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\kajitips.h" />
     <ClInclude Include="..\..\src\load.h" />

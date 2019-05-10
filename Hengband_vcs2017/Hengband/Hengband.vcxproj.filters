@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\readdib.c" />
@@ -395,6 +394,9 @@
     <ClCompile Include="..\..\src\creature.c">
       <Filter>creature</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inet.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\defines.h" />
@@ -765,6 +767,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\creature.h">
       <Filter>creature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inet.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

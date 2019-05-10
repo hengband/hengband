@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "util.h"
 #include "core.h"
+#include "inet.h"
 
 #include "floor.h"
 #include "player-status.h"

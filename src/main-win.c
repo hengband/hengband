@@ -99,6 +99,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "inet.h"
 
 #include "cmd-dump.h"
 #include "view-mainwindow.h"
