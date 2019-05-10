@@ -42,6 +42,7 @@
 #include "angband.h"
 #include "util.h"
 #include "cmd-dump.h"
+#include "term.h"
 
 #include "autopick.h"
 

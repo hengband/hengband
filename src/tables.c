@@ -989,50 +989,6 @@ const byte adj_chr_chm[] =
 };
 
 /*!
- * @brief 色名称テーブル / Hack -- the "basic" color names (see "TERM_xxx")
- */
-const concptr color_names[16] =
-{
-#ifdef JP
-	"黒",
-	"白",
-	"青灰色",
-	"オレンジ",
-	"赤",
-	"緑",
-	"青",
-	"琥珀色",
-	"灰色",
-	"明青灰色",
-	"紫",
-	"黄",
-	"明るい赤",
-	"明るい緑",
-	"明るい青",
-	"明琥珀色",
-#else
-	"Dark",
-	"White",
-	"Slate",
-	"Orange",
-	"Red",
-	"Green",
-	"Blue",
-	"Umber",
-	"Light Dark",
-	"Light Slate",
-	"Violet",
-	"Yellow",
-	"Light Red",
-	"Light Green",
-	"Light Blue",
-	"Light Umber",
-#endif
-
-};
-
-
-/*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
  */
 const concptr stat_names[6] =

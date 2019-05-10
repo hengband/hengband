@@ -2,6 +2,8 @@
 
 #include "spells.h"
 
+extern const concptr color_names[16];
+
 extern TERM_COLOR misc_to_attr[256];
 extern SYMBOL_CODE misc_to_char[256];
 extern TERM_COLOR tval_to_attr[128];
