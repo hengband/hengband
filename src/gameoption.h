@@ -166,6 +166,7 @@ extern bool record_ident;	/* Record first identified items */
 extern bool record_named_pet;	/* Record informations of named pets */
 
 extern char record_o_name[MAX_NLEN];
+extern GAME_TURN record_turn;
 
 extern bool cheat_peek;
 extern bool cheat_hear;

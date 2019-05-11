@@ -84,8 +84,6 @@ extern bool reset_concent;
  * Software options (set via the '=' command).  See "tables.c"
  */
 
-
-extern GAME_TURN record_turn;
 extern POSITION panel_row_min, panel_row_max;
 extern POSITION panel_col_min, panel_col_max;
 extern POSITION panel_col_prt, panel_row_prt;
