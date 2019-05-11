@@ -13,9 +13,6 @@
 #include "angband.h"
 #include "geometry.h"
 
-int level_up = 0; /*!< レベルアップの際に遅延してcalc_mana()関数上で上昇量を表示するかどうかの判定フラグ */
-
-
 s16b command_cmd;		/* Current "Angband Command" */
 
 COMMAND_ARG command_arg;	/*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */

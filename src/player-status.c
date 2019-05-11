@@ -3110,7 +3110,7 @@ static void calc_hitpoints(void)
 
 #ifdef JP
 		/* レベルアップの時は上昇量を表示する */
-		if ((level_up == 1) && (mhp > p_ptr->mhp))
+		if (p_ptr->level_up_message && (mhp > p_ptr->mhp))
 		{
 			msg_format("最大ヒット・ポイントが %d 増加した！", (mhp - p_ptr->mhp));
 		}
@@ -3811,7 +3811,7 @@ static void calc_mana(void)
 
 #ifdef JP
 		/* レベルアップの時は上昇量を表示する */
-		if ((level_up == 1) && (msp > p_ptr->msp))
+		if (p_ptr->level_up_message && (msp > p_ptr->msp))
 		{
 			msg_format("最大マジック・ポイントが %d 増加した！", (msp - p_ptr->msp));
 		}
@@ -4592,10 +4592,10 @@ void check_experience(void)
 		p_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
 
 		/* HPとMPの上昇量を表示 */
-		level_up = 1;
+		p_ptr->level_up_message = TRUE;
 		handle_stuff();
 
-		level_up = 0;
+		p_ptr->level_up_message = FALSE;
 
 		if (level_inc_stat)
 		{

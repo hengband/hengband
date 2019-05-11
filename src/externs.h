@@ -20,9 +20,6 @@
 #include "object.h"
 #include "player-status.h"
 
-extern int level_up;
-
-
 /* tables.c */
 
 extern const char listsym[];

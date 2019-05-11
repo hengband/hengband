@@ -469,6 +469,7 @@ struct player_type
 
 	bool hack_mutation;
 	bool is_fired;
+	bool level_up_message;
 
 	bool immune_acid;	/* Immunity to acid */
 	bool immune_elec;	/* Immunity to lightning */
