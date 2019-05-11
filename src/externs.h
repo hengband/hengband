@@ -109,8 +109,6 @@ extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;
 extern concptr keymap_act[KEYMAP_MODES][256];
 extern player_type *p_ptr;
-extern char *f_name;
-extern char *f_tag;
 
 extern OBJECT_TYPE_VALUE item_tester_tval;
 extern bool (*item_tester_hook)(object_type *o_ptr);

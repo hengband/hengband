@@ -56,8 +56,9 @@ struct feature_type
 };
 
 extern FEAT_IDX max_f_idx;
-
 extern feature_type *f_info;
+extern char *f_name;
+extern char *f_tag;
 
 extern bool is_closed_door(FEAT_IDX feat);
 extern bool is_trap(FEAT_IDX feat);
