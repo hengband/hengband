@@ -2636,7 +2636,7 @@ static PRICE compare_weapons(PRICE bcost)
 	concptr q, s;
 	TERM_LEN row = 2;
 	TERM_LEN wid = 38, mgn = 2;
-	bool old_character_xtra = character_xtra;
+	bool old_character_xtra = current_world_ptr->character_xtra;
 	char ch;
 	PRICE total = 0;
 	PRICE cost = 0; /* First time no price */
@@ -2672,7 +2672,7 @@ static PRICE compare_weapons(PRICE bcost)
 		item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
 		/* Hack -- prevent "icky" message */
-		character_xtra = TRUE;
+		current_world_ptr->character_xtra = TRUE;
 
 		/* Diaplay selected weapon's infomation */
 		for (i = 0; i < n; i++)
@@ -2697,7 +2697,7 @@ static PRICE compare_weapons(PRICE bcost)
 		p_ptr->update |= PU_BONUS;
 		handle_stuff();
 
-		character_xtra = old_character_xtra;
+		current_world_ptr->character_xtra = old_character_xtra;
 
 #ifdef JP
 		put_str(format("[ 比較対象: 's'で変更 ($%d) ]", cost), 1, (wid + mgn));
@@ -4147,7 +4147,7 @@ void do_cmd_bldg(void)
 	forget_view();
 
 	/* Hack -- Increase "icky" depth */
-	character_icky++;
+	current_world_ptr->character_icky++;
 
 	command_arg = 0;
 	command_rep = 0;
@@ -4204,7 +4204,7 @@ void do_cmd_bldg(void)
 	}
 
 	/* Hack -- Decrease "icky" depth */
-	character_icky--;
+	current_world_ptr->character_icky--;
 
 	Term_clear();
 

@@ -630,7 +630,7 @@ errr process_pref_file_command(char *buf)
 					int os = option_info[i].o_set;
 					int ob = option_info[i].o_bit;
 
-					if ((p_ptr->playing || character_xtra) &&
+					if ((p_ptr->playing || current_world_ptr->character_xtra) &&
 						(OPT_PAGE_BIRTH == option_info[i].o_page) && !p_ptr->wizard)
 					{
 						msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
@@ -4001,7 +4001,7 @@ void display_player(int mode)
 #endif
 				}
 			}
-			else if (character_dungeon)
+			else if (current_world_ptr->character_dungeon)
 			{
 				if (!current_floor_ptr->dun_level)
 				{
@@ -5809,7 +5809,7 @@ void process_player_name(bool sf)
 	int i, k = 0;
 	char old_player_base[32] = "";
 
-	if (character_generated) strcpy(old_player_base, player_base);
+	if (current_world_ptr->character_generated) strcpy(old_player_base, player_base);
 
 	/* Cannot be too long */
 #if defined(MACINTOSH) || defined(ACORN)
@@ -5946,7 +5946,7 @@ void process_player_name(bool sf)
 	}
 
 	/* Load an autopick preference file */
-	if (character_generated)
+	if (current_world_ptr->character_generated)
 	{
 		if (!streq(old_player_base, player_base)) autopick_load_pref(FALSE);
 	}
@@ -6622,7 +6622,7 @@ bool check_score(void)
 void exit_game_panic(void)
 {
 	/* If nothing important has happened, just quit */
-	if (!character_generated || character_saved) quit(_("緊急事態", "panic"));
+	if (!current_world_ptr->character_generated || current_world_ptr->character_saved) quit(_("緊急事態", "panic"));
 
 	/* Mega-Hack -- see "msg_print()" */
 	msg_flag = FALSE;
@@ -6821,17 +6821,17 @@ errr process_histpref_file(concptr name)
 {
 	char buf[1024];
 	errr err = 0;
-	bool old_character_xtra = character_xtra;
+	bool old_character_xtra = current_world_ptr->character_xtra;
 
 	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
 	/* Hack -- prevent modification birth options in this file */
-	character_xtra = TRUE;
+	current_world_ptr->character_xtra = TRUE;
 
 	err = process_pref_file_aux(buf, PREF_TYPE_HISTPREF);
 
-	character_xtra = old_character_xtra;
+	current_world_ptr->character_xtra = old_character_xtra;
 	return (err);
 }
 
@@ -7042,7 +7042,7 @@ static void handle_signal_simple(int sig)
 
 
 	/* Nothing to save, just quit */
-	if (!character_generated || character_saved) quit(NULL);
+	if (!current_world_ptr->character_generated || current_world_ptr->character_saved) quit(NULL);
 
 
 	/* Count the signals */
@@ -7145,7 +7145,7 @@ static void handle_signal_abort(int sig)
 
 
 	/* Nothing to save, just quit */
-	if (!character_generated || character_saved) quit(NULL);
+	if (!current_world_ptr->character_generated || current_world_ptr->character_saved) quit(NULL);
 
 
 	forget_lite();

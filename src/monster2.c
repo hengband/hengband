@@ -480,7 +480,7 @@ MONSTER_IDX m_pop(void)
 	}
 
 	/* Warn the player (except during dungeon creation) */
-	if (character_dungeon) msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
+	if (current_world_ptr->character_dungeon) msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
 
 	/* Try not to crash */
 	return (0);
@@ -2790,14 +2790,14 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	 * Memorize location of the unique monster in saved floors.
 	 * A unique monster move from old saved floor.
 	 */
-	if (character_dungeon &&
+	if (current_world_ptr->character_dungeon &&
 	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
 		real_r_ptr(m_ptr)->floor_id = p_ptr->floor_id;
 
 	/* Hack -- Count the number of "reproducers" */
 	if (r_ptr->flags2 & RF2_MULTIPLY) current_floor_ptr->num_repro++;
 
-	if (p_ptr->warning && character_dungeon)
+	if (p_ptr->warning && current_world_ptr->character_dungeon)
 	{
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{

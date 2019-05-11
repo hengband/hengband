@@ -18,6 +18,7 @@
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
 #include "targeting.h"
+#include "world.h"
 
 /*!
 * @brief プレイヤーの騎乗/下馬処理判定
@@ -28,14 +29,14 @@
 bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
 {
 	bool p_can_enter;
-	bool old_character_xtra = character_xtra;
+	bool old_character_xtra = current_world_ptr->character_xtra;
 	MONSTER_IDX old_riding = p_ptr->riding;
 	bool old_riding_ryoute = p_ptr->riding_ryoute;
 	bool old_old_riding_ryoute = p_ptr->old_riding_ryoute;
 	bool old_pf_ryoute = (p_ptr->pet_extra_flags & PF_RYOUTE) ? TRUE : FALSE;
 
 	/* Hack -- prevent "icky" message */
-	character_xtra = TRUE;
+	current_world_ptr->character_xtra = TRUE;
 
 	if (now_riding) p_ptr->riding = g_ptr->m_idx;
 	else
@@ -59,7 +60,7 @@ bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
 	p_ptr->update |= PU_BONUS;
 	handle_stuff();
 
-	character_xtra = old_character_xtra;
+	current_world_ptr->character_xtra = old_character_xtra;
 
 	return p_can_enter;
 }

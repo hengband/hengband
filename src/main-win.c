@@ -111,6 +111,7 @@
 #include "quest.h"
 #include "files.h"
 #include "core.h"
+#include "world.h"
 
 #ifdef WINDOWS
 #include <windows.h>
@@ -3497,7 +3498,7 @@ static void setup_menus(void)
 
 
 	/* No character available */
-	if (!character_generated)
+	if (!current_world_ptr->character_generated)
 	{
 		/* Menu "File", Item "New" */
 		EnableMenuItem(hm, IDM_FILE_NEW, MF_BYCOMMAND | MF_ENABLED);
@@ -3507,7 +3508,7 @@ static void setup_menus(void)
 	}
 
 	/* A character available */
-	if (character_generated)
+	if (current_world_ptr->character_generated)
 	{
 		/* Menu "File", Item "Save" */
 		EnableMenuItem(hm, IDM_FILE_SAVE,
@@ -3811,7 +3812,7 @@ static void process_menus(WORD wCmd)
 		/* Save game */
 		case IDM_FILE_SAVE:
 		{
-			if (game_in_progress && character_generated)
+			if (game_in_progress && current_world_ptr->character_generated)
 			{
 				if (!can_save)
 				{
@@ -3839,7 +3840,7 @@ static void process_menus(WORD wCmd)
 		/* Exit */
 		case IDM_FILE_EXIT:
 		{
-			if (game_in_progress && character_generated)
+			if (game_in_progress && current_world_ptr->character_generated)
 			{
 				if (!can_save)
 				{
@@ -4785,7 +4786,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 		case WM_CLOSE:
 		{
-			if (game_in_progress && character_generated)
+			if (game_in_progress && current_world_ptr->character_generated)
 			{
 				if (!can_save)
 				{
@@ -4815,7 +4816,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 		case WM_QUERYENDSESSION:
 		{
-			if (game_in_progress && character_generated)
+			if (game_in_progress && current_world_ptr->character_generated)
 			{
 				/* Hack -- Forget messages */
 				msg_flag = FALSE;

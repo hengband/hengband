@@ -4985,7 +4985,7 @@ static void dungeon(bool load_game)
 
 
 	/* Enter "xtra" mode */
-	character_xtra = TRUE;
+	current_world_ptr->character_xtra = TRUE;
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
@@ -4994,7 +4994,7 @@ static void dungeon(bool load_game)
 	handle_stuff();
 
 	/* Leave "xtra" mode */
-	character_xtra = FALSE;
+	current_world_ptr->character_xtra = FALSE;
 
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
@@ -5270,7 +5270,7 @@ void play_game(bool new_game)
 	p_ptr->hack_mutation = FALSE;
 
 	/* Hack -- Character is "icky" */
-	character_icky = TRUE;
+	current_world_ptr->character_icky = TRUE;
 
 	/* Make sure main term is active */
 	Term_activate(angband_term[0]);
@@ -5321,7 +5321,7 @@ void play_game(bool new_game)
 		signals_ignore_tstp();
 		
 		/* Hack -- Character is now "icky" */
-		character_icky = TRUE;
+		current_world_ptr->character_icky = TRUE;
 
 		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
@@ -5358,16 +5358,16 @@ void play_game(bool new_game)
 		quit(0);
 	}
 
-	creating_savefile = new_game;
+	current_world_ptr->creating_savefile = new_game;
 
 	/* Nothing loaded */
-	if (!character_loaded)
+	if (!current_world_ptr->character_loaded)
 	{
 		/* Make new player */
 		new_game = TRUE;
 
 		/* The dungeon is not ready */
-		character_dungeon = FALSE;
+		current_world_ptr->character_dungeon = FALSE;
 
 		/* Prepare to init the RNG */
 		init_random_seed = TRUE;
@@ -5400,7 +5400,7 @@ void play_game(bool new_game)
 	if (new_game)
 	{
 		/* The dungeon is not ready */
-		character_dungeon = FALSE;
+		current_world_ptr->character_dungeon = FALSE;
 
 		/* Start in town */
 		current_floor_ptr->dun_level = 0;
@@ -5456,7 +5456,7 @@ void play_game(bool new_game)
 		}
 	}
 
-	creating_savefile = FALSE;
+	current_world_ptr->creating_savefile = FALSE;
 
 	p_ptr->teleport_town = FALSE;
 	p_ptr->sutemi = FALSE;
@@ -5529,7 +5529,7 @@ void play_game(bool new_game)
 
 
 	/* Generate a dungeon level if needed */
-	if (!character_dungeon)
+	if (!current_world_ptr->character_dungeon)
 	{
 		change_floor();
 	}
@@ -5555,11 +5555,11 @@ void play_game(bool new_game)
 	}
 
 	/* Character is now "complete" */
-	character_generated = TRUE;
+	current_world_ptr->character_generated = TRUE;
 
 
 	/* Hack -- Character is no longer "icky" */
-	character_icky = FALSE;
+	current_world_ptr->character_icky = FALSE;
 
 
 	if (new_game)
@@ -5629,11 +5629,11 @@ void play_game(bool new_game)
 		dungeon(load_game);
 
 		/* Hack -- prevent "icky" message */
-		character_xtra = TRUE;
+		current_world_ptr->character_xtra = TRUE;
 
 		handle_stuff();
 
-		character_xtra = FALSE;
+		current_world_ptr->character_xtra = FALSE;
 
 		/* Cancel the target */
 		target_who = 0;
@@ -5797,7 +5797,7 @@ void close_game(void)
 
 
 	/* Hack -- Character is now "icky" */
-	character_icky = TRUE;
+	current_world_ptr->character_icky = TRUE;
 
 
 	/* Build the filename */

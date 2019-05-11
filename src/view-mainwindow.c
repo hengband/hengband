@@ -2067,10 +2067,10 @@ static void redraw_stuff(void)
 	if (!p_ptr->redraw) return;
 
 	/* Character is not ready yet, no screen updates */
-	if (!character_generated) return;
+	if (!current_world_ptr->character_generated) return;
 
 	/* Character is in "icky" mode, no screen updates */
-	if (character_icky) return;
+	if (current_world_ptr->character_icky) return;
 
 	/* Hack -- clear the screen */
 	if (p_ptr->redraw & (PR_WIPE))
@@ -2382,7 +2382,7 @@ void update_playtime(void)
 void resize_map(void)
 {
 	/* Only if the dungeon exists */
-	if (!character_dungeon) return;
+	if (!current_world_ptr->character_dungeon) return;
 
 	/* Mega-Hack -- no panel yet */
 	panel_row_max = 0;
@@ -2420,7 +2420,7 @@ void resize_map(void)
 void redraw_window(void)
 {
 	/* Only if the dungeon exists */
-	if (!character_dungeon) return;
+	if (!current_world_ptr->character_dungeon) return;
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);

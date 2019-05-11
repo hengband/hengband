@@ -15,18 +15,6 @@
 
 int level_up = 0; /*!< レベルアップの際に遅延してcalc_mana()関数上で上昇量を表示するかどうかの判定フラグ */
 
-/*
- * Various things
- */
-bool character_generated;	/* The character exists */
-bool character_dungeon;		/* The character has a dungeon */
-bool character_loaded;		/* The character was loaded from a savefile */
-bool character_saved;		/* The character was just saved to a savefile */
-
-bool character_icky;		/* The game is in an icky full screen mode */
-bool character_xtra;		/* The game is in an icky startup mode */
-
-bool creating_savefile;		/* New savefile is currently created */
 
 s16b command_cmd;		/* Current "Angband Command" */
 

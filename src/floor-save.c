@@ -1083,7 +1083,7 @@ void change_floor(void)
 	bool loaded = FALSE;
 
 	/* The dungeon is not ready */
-	character_dungeon = FALSE;
+	current_world_ptr->character_dungeon = FALSE;
 
 	/* No longer in the trap detecteded region */
 	p_ptr->dtrap = FALSE;
@@ -1375,7 +1375,7 @@ void change_floor(void)
 	p_ptr->floor_id = new_floor_id;
 
 	/* The dungeon is ready */
-	character_dungeon = TRUE;
+	current_world_ptr->character_dungeon = TRUE;
 
 	/* Hack -- Munchkin characters always get whole map */
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)

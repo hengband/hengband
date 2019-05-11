@@ -2968,9 +2968,9 @@ static errr rd_dungeon_old(void)
 
 	/* The dungeon is ready */
 	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena)
-		character_dungeon = FALSE;
+		current_world_ptr->character_dungeon = FALSE;
 	else
-		character_dungeon = TRUE;
+		current_world_ptr->character_dungeon = TRUE;
 
 	/* Success */
 	return (0);
@@ -3416,7 +3416,7 @@ static errr rd_dungeon(void)
 	}
 
 	/* The dungeon is ready */
-	character_dungeon = TRUE;
+	current_world_ptr->character_dungeon = TRUE;
 
 	/* Success or Error */
 	return err;

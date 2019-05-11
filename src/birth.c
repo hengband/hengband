@@ -4456,7 +4456,7 @@ static bool player_birth_aux(void)
 	get_name();
 
 	/* Process the player name */
-	process_player_name(creating_savefile);
+	process_player_name(current_world_ptr->creating_savefile);
 
 	/*** Edit character background ***/
 	edit_history();

@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
+#include "world.h"
 #include "cmd-spell.h"
 #include "floor.h"
 #include "spells.h"

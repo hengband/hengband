@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "world.h"
 
 #include "object.h"
 
@@ -429,7 +430,7 @@ void wipe_o_list(void)
 		if (!o_ptr->k_idx) continue;
 
 		/* Mega-Hack -- preserve artifacts */
-		if (!character_dungeon || preserve_mode)
+		if (!current_world_ptr->character_dungeon || preserve_mode)
 		{
 			/* Hack -- Preserve unknown artifacts */
 			if (object_is_fixed_artifact(o_ptr) && !object_is_known(o_ptr))
@@ -521,7 +522,7 @@ OBJECT_IDX o_pop(void)
 
 
 	/* Warn the player (except during dungeon creation) */
-	if (character_dungeon) msg_print(_("アイテムが多すぎる！", "Too many objects!"));
+	if (current_world_ptr->character_dungeon) msg_print(_("アイテムが多すぎる！", "Too many objects!"));
 
 	return (0);
 }
@@ -3999,7 +4000,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 		a_ptr->cur_num = 1;
 
 		/* Hack -- Memorize location of artifact in saved floors */
-		if (character_dungeon)
+		if (current_world_ptr->character_dungeon)
 			a_ptr->floor_id = p_ptr->floor_id;
 
 		/* Extract the other fields */

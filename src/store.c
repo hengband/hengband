@@ -5761,7 +5761,7 @@ void do_cmd_store(void)
 	forget_view();
 
 	/* Hack -- Character is in "icky" mode */
-	character_icky = TRUE;
+	current_world_ptr->character_icky = TRUE;
 
 	/* command reset */
 	command_arg = 0;
@@ -5861,7 +5861,7 @@ void do_cmd_store(void)
 		need_redraw_store_inv = (p_ptr->update & PU_BONUS) ? TRUE : FALSE;
 
 		/* Hack -- Character is still in "icky" mode */
-		character_icky = TRUE;
+		current_world_ptr->character_icky = TRUE;
 
 		handle_stuff();
 
@@ -5945,7 +5945,7 @@ void do_cmd_store(void)
 	take_turn(p_ptr, 100);
 
 	/* Hack -- Character is no longer in "icky" mode */
-	character_icky = FALSE;
+	current_world_ptr->character_icky = FALSE;
 
 	/* Hack -- Cancel automatic command */
 	command_new = 0;

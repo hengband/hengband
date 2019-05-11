@@ -2767,7 +2767,7 @@ void calc_bonuses(void)
 
 
 	/* Hack -- handle "xtra" mode */
-	if (character_xtra) return;
+	if (current_world_ptr->character_xtra) return;
 
 	/* Take note when "heavy bow" changes */
 	if (p_ptr->old_heavy_shoot != p_ptr->heavy_shoot)
@@ -3227,10 +3227,10 @@ static void calc_spells(void)
 	if (!mp_ptr->spell_book) return;
 
 	/* Hack -- wait for creation */
-	if (!character_generated) return;
+	if (!current_world_ptr->character_generated) return;
 
 	/* Hack -- handle "xtra" mode */
-	if (character_xtra) return;
+	if (current_world_ptr->character_xtra) return;
 
 	if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
 	{
@@ -3826,7 +3826,7 @@ static void calc_mana(void)
 
 
 	/* Hack -- handle "xtra" mode */
-	if (character_xtra) return;
+	if (current_world_ptr->character_xtra) return;
 
 	/* Take note when "glove state" changes */
 	if (p_ptr->old_cumber_glove != p_ptr->cumber_glove)
@@ -4072,10 +4072,10 @@ void update_creature(player_type *creature_ptr)
 	}
 
 	/* Character is not ready yet, no screen updates */
-	if (!character_generated) return;
+	if (!current_world_ptr->character_generated) return;
 
 	/* Character is in "icky" mode, no screen updates */
-	if (character_icky) return;
+	if (current_world_ptr->character_icky) return;
 
 	if (creature_ptr->update & (PU_UN_LITE))
 	{
@@ -4241,7 +4241,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 {
 	int power = 100;
 
-	if (p_ptr->inside_battle || !character_dungeon) return;
+	if (p_ptr->inside_battle || !current_world_ptr->character_dungeon) return;
 
 	if (!necro && m_ptr)
 	{

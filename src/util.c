@@ -2089,7 +2089,7 @@ char (*inkey_hack)(int flush_first) = NULL;
  * is only requested (via "Term_inkey()") when "angband_term[0]" is active.
  *
  * Mega-Hack -- This function is used as the entry point for clearing the
- * "signal_count" variable, and of the "character_saved" variable.
+ * "signal_count" variable, and of the "current_world_ptr->character_saved" variable.
  *
  * Hack -- Note the use of "inkey_next" to allow "keymaps" to be processed.
  *
@@ -2154,7 +2154,7 @@ char inkey(void)
 	(void)Term_get_cursor(&v);
 
 	/* Show the cursor if waiting, except sometimes in "command" mode */
-	if (!inkey_scan && (!inkey_flag || hilite_player || character_icky))
+	if (!inkey_scan && (!inkey_flag || hilite_player || current_world_ptr->character_icky))
 	{
 		/* Show the cursor */
 		(void)Term_set_cursor(1);
@@ -2189,7 +2189,7 @@ char inkey(void)
 			Term_activate(angband_term[0]);
 
 			/* Mega-Hack -- reset saved flag */
-			character_saved = FALSE;
+			current_world_ptr->character_saved = FALSE;
 
 			/* Mega-Hack -- reset signal counter */
 			signal_count = 0;
@@ -2877,7 +2877,7 @@ void msg_print(concptr msg)
 	n = strlen(buf);
 
 	/* Memorize the message */
-	if (character_generated) message_add(buf);
+	if (current_world_ptr->character_generated) message_add(buf);
 
 	/* Analyze the buffer */
 	t = buf;
@@ -2941,7 +2941,7 @@ void msg_print(concptr msg)
 		msg_flush(split + 1);
 
 		/* Memorize the piece */
-		/* if (character_generated) message_add(t); */
+		/* if (current_world_ptr->character_generated) message_add(t); */
 
 		/* Restore the split character */
 		t[split] = oops;
@@ -2957,7 +2957,7 @@ void msg_print(concptr msg)
 	Term_putstr(p, 0, n, TERM_WHITE, t);
 
 	/* Memorize the tail */
-	/* if (character_generated) message_add(t); */
+	/* if (current_world_ptr->character_generated) message_add(t); */
 
 	p_ptr->window |= (PW_MESSAGE);
 	update_output();
@@ -3015,7 +3015,7 @@ void screen_save(void)
 	if (screen_depth++ == 0) Term_save();
 
 	/* Increase "icky" depth */
-	character_icky++;
+	current_world_ptr->character_icky++;
 }
 
 
@@ -3033,7 +3033,7 @@ void screen_load(void)
 	if (--screen_depth == 0) Term_load();
 
 	/* Decrease "icky" depth */
-	character_icky--;
+	current_world_ptr->character_icky--;
 }
 
 

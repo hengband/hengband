@@ -1576,7 +1576,7 @@ static bool save_player_aux(char *name)
 	counts_write(0, current_world_ptr->play_time);
 
 	/* Successful save */
-	character_saved = TRUE;
+	current_world_ptr->character_saved = TRUE;
 
 	/* Success */
 	return (TRUE);
@@ -1651,7 +1651,7 @@ bool save_player(void)
 		safe_setuid_drop();
 
 		/* Hack -- Pretend the character was loaded */
-		character_loaded = TRUE;
+		current_world_ptr->character_loaded = TRUE;
 
 #ifdef VERIFY_SAVEFILE
 
@@ -1712,7 +1712,7 @@ bool save_player(void)
  * allowed to save his game when he quits.
  *
  * We return "TRUE" if the savefile was usable, and we set the global
- * flag "character_loaded" if a real, living, character was loaded.
+ * flag "current_world_ptr->character_loaded" if a real, living, character was loaded.
  *
  * Note that we always try to load the "current" savefile, even if
  * there is no such file, so we must check for "empty" savefile names.
@@ -1897,7 +1897,7 @@ bool load_player(void)
 			if (arg_wizard)
 			{
 				/* A character was loaded */
-				character_loaded = TRUE;
+				current_world_ptr->character_loaded = TRUE;
 				return (TRUE);
 			}
 
@@ -1911,7 +1911,7 @@ bool load_player(void)
 		}
 
 		/* A character was loaded */
-		character_loaded = TRUE;
+		current_world_ptr->character_loaded = TRUE;
 
 		{
 			u32b tmp = counts_read(2);

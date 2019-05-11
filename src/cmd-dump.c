@@ -1638,7 +1638,7 @@ void do_cmd_options_aux(int page, concptr info)
 	int     i, k = 0, n = 0, l;
 	int     opt[24];
 	char    buf[80];
-	bool    browse_only = (page == OPT_PAGE_BIRTH) && character_generated &&
+	bool    browse_only = (page == OPT_PAGE_BIRTH) && current_world_ptr->character_generated &&
 	                      (!p_ptr->wizard || !allow_debug_opts);
 
 

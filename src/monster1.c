@@ -2805,7 +2805,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				a_ptr->cur_num = 1;
 
 				/* Hack -- Memorize location of artifact in saved floors */
-				if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+				if (current_world_ptr->character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
 			}
 			else if (!preserve_mode) a_ptr->cur_num = 1;
 		}
@@ -2977,7 +2977,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 					a_ptr->cur_num = 1;
 
 					/* Hack -- Memorize location of artifact in saved floors */
-					if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+					if (current_world_ptr->character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
 				}
 				else if (!preserve_mode) a_ptr->cur_num = 1;
 			}
@@ -3000,7 +3000,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 						a_ptr->cur_num = 1;
 
 						/* Hack -- Memorize location of artifact in saved floors */
-						if (character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+						if (current_world_ptr->character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
 					}
 					else if (!preserve_mode) a_ptr->cur_num = 1;
 

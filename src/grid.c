@@ -1737,7 +1737,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 	feature_type *f_ptr = &f_info[feat];
 	bool old_los, old_mirror;
 
-	if (!character_dungeon)
+	if (!current_world_ptr->character_dungeon)
 	{
 		/* Clear mimic type */
 		g_ptr->mimic = 0;
@@ -1929,7 +1929,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 			found = TRUE;
 		}
 
-		if (found && character_dungeon && player_can_see_bold(y, x))
+		if (found && current_world_ptr->character_dungeon && player_can_see_bold(y, x))
 		{
 			msg_print(_("何かを発見した！", "You have found something!"));
 		}
@@ -1939,7 +1939,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 	{
 		feature_type *old_f_ptr = &f_info[oldfeat];
 
-		if (have_flag(old_f_ptr->flags, FF_GLASS) && character_dungeon)
+		if (have_flag(old_f_ptr->flags, FF_GLASS) && current_world_ptr->character_dungeon)
 		{
 			project(PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(current_floor_ptr->dun_level, 100) / 4, GF_SHARDS,
 				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);

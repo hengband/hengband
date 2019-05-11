@@ -51,13 +51,6 @@ extern const byte feature_action_flags[FF_FLAG_MAX];
 
 /* variable.c */
 
-extern bool character_generated;
-extern bool character_dungeon;
-extern bool character_loaded;
-extern bool character_saved;
-extern bool character_icky;
-extern bool character_xtra;
-extern bool creating_savefile;
 extern COMMAND_CODE command_cmd;
 extern COMMAND_ARG command_arg;
 extern s16b command_rep;

@@ -40,6 +40,16 @@ typedef struct {
 	u16b sf_lives;			/* Number of past "lives" with this file */
 	u16b sf_saves;			/* Number of "saves" during this life */
 
+	bool character_generated;	/* The character exists */
+	bool character_dungeon;		/* The character has a dungeon */
+	bool character_loaded;		/* The character was loaded from a savefile */
+	bool character_saved;		/* The character was just saved to a savefile */
+
+	bool character_icky;		/* The game is in an icky full screen mode */
+	bool character_xtra;		/* The game is in an icky startup mode */
+
+	bool creating_savefile;		/* New savefile is currently created */
+
 } world_type;
 
 extern bool is_daytime(void);

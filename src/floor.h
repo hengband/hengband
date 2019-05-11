@@ -230,7 +230,7 @@ typedef struct {
  */
 #define cave_empty_bold2(Y,X) \
 	(cave_empty_bold(Y,X) && \
-	 (character_dungeon || !cave_have_flag_bold((Y), (X), FF_TREE)))
+	 (current_world_ptr->character_dungeon || !cave_have_flag_bold((Y), (X), FF_TREE)))
 
 
 /*
