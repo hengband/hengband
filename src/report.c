@@ -43,6 +43,8 @@
 #include <signal.h>
 #endif
 
+concptr screen_dump = NULL;
+
 /*
  * internet resource value
  */

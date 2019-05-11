@@ -45,6 +45,7 @@
 #include "load.h"
 
 #include "bldg.h"
+#include "report.h"
 
 #include "dungeon.h"
 #include "feature.h"

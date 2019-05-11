@@ -126,7 +126,6 @@ extern MONRACE_IDX today_mon;
 extern u32b start_time;
 extern bool sukekaku;
 extern bool new_mane;
-extern concptr screen_dump;
 
 extern DEPTH *max_dlv;
 extern COMMAND_CODE now_message;

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+extern concptr screen_dump;
+
 #ifdef WORLD_SCORE
 /* report.c */
 extern errr report_score(void);

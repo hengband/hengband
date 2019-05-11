@@ -15,6 +15,7 @@
 #include "util.h"
 #include "save.h"
 #include "load.h"
+#include "report.h"
 
 #include "artifact.h"
 #include "sort.h"
