@@ -137,11 +137,6 @@ concptr *quark__str;
 term *angband_term[8];
 
 /*
- * Number of floor_id used from birth
- */
-FLOOR_IDX max_floor_id;
-
-/*
  * Sign for current process used in temporal files.
  * Actually it is the start time of current process.
  */

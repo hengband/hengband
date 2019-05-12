@@ -102,7 +102,6 @@ extern concptr *quark__str;
 
 extern term *angband_term[8];
 
-extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;
 extern concptr keymap_act[KEYMAP_MODES][256];
 extern player_type *p_ptr;

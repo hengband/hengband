@@ -39,6 +39,10 @@ static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the desti
 static u32b change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
 
+/*
+ * Number of floor_id used from birth
+ */
+FLOOR_IDX max_floor_id;
 
 /*!
  * @brief 保存フロア配列を初期化する / Initialize saved_floors array. 
