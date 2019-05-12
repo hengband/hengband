@@ -2345,12 +2345,6 @@ static void spoil_mon_evol(concptr fname)
 }
 
 
-
-/*
- * Forward declare
- */
-extern void do_cmd_spoilers(void);
-
 /*!
  * @brief スポイラー出力を行うコマンドのメインルーチン / 
  * Create Spoiler files -BEN-

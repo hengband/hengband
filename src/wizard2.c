@@ -1631,23 +1631,10 @@ static void do_cmd_dump_options(void)
 	msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
 }
 
-
-#ifdef ALLOW_SPOILERS
-
-/*
- * External function
- */
-extern void do_cmd_spoilers(void);
-
-#endif /* ALLOW_SPOILERS */
-
-
-
 /*
  * Hack -- declare external function
  */
 extern void do_cmd_debug(void);
-
 
 
 /*!

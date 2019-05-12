@@ -31,4 +31,9 @@ extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
 extern void do_cmd_suicide(void);
 
+/*
+ * Forward declare
+ */
+extern void do_cmd_spoilers(void);
+
 extern bool write_level;
