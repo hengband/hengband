@@ -38,6 +38,7 @@
 #include "view-mainwindow.h"
 #include "floor.h"
 #include "autopick.h"
+#include "japanese.h"
 
  /*!
   * 魔法領域フラグ管理テーブル /

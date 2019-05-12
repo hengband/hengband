@@ -31,6 +31,7 @@
 #include "dungeon.h"
 #include "world.h"
 #include "melee.h"
+#include "japanese.h"
 
 
 /*

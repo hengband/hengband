@@ -18,6 +18,7 @@
 #include "floor.h"
 #include "world.h"
 #include "cmd-dump.h"
+#include "japanese.h"
 
 /*!
  * 10進数から16進数への変換テーブル /

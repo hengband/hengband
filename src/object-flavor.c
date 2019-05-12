@@ -25,6 +25,7 @@
 #include "world.h"
 #include "monsterrace.h"
 #include "object-ego.h"
+#include "japanese.h"
 
  /*!
   * @brief アイテムの価値記述テーブル /

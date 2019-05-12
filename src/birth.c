@@ -45,6 +45,7 @@
 #include "autopick.h"
 #include "save.h"
 #include "realm.h"
+#include "japanese.h"
 
  /*
   * The last character rolled,

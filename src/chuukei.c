@@ -12,6 +12,7 @@
 #include "util.h"
 #include "cmd-dump.h"
 #include "inet.h"
+#include "japanese.h"
 
 #include <stdio.h>
 #include <stdarg.h>

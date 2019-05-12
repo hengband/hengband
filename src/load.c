@@ -80,6 +80,7 @@
 #include "objectkind.h"
 #include "object-ego.h"
 #include "save.h"
+#include "japanese.h"
 
 /*
  * Maximum number of tries for selection of a proper quest monster

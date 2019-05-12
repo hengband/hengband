@@ -6,6 +6,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "japanese.h"
 
 #ifdef JP
 

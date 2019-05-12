@@ -292,6 +292,7 @@
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\z-util.c" />
     <ClCompile Include="..\..\src\z-virt.c" />
+    <ClInclude Include="japanese.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
@@ -325,7 +326,6 @@
     <ClInclude Include="..\..\src\history.h" />
     <ClInclude Include="..\..\src\inet.h" />
     <ClInclude Include="..\..\src\init.h" />
-    <ClInclude Include="..\..\src\kajitips.h" />
     <ClInclude Include="..\..\src\load.h" />
     <ClInclude Include="..\..\src\melee.h" />
     <ClInclude Include="..\..\src\mind.h" />
