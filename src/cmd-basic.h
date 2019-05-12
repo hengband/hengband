@@ -30,3 +30,5 @@ extern void do_cmd_travel(void);
 #endif
 extern bool easy_open_door(POSITION y, POSITION x);
 extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
+
+extern void kamaenaoshi(INVENTORY_IDX item);

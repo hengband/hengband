@@ -15,6 +15,7 @@
 #include "term.h"
 
 #include "floor.h"
+#include "cmd-basic.h"
 #include "cmd-dump.h"
 #include "cmd-item.h"
 #include "cmd-smith.h"
@@ -38,6 +39,7 @@
 #include "objectkind.h"
 #include "autopick.h"
 #include "floor-town.h"
+#include "japanese.h"
 
 #define MIN_STOCK 12
 

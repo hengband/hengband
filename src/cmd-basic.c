@@ -43,6 +43,7 @@
 #include "shoot.h"
 
 #include "cmd-basic.h"
+#include "cmd-item.h"
 #include "floor-save.h"
 #include "dungeon-file.h"
 #include "files.h"
