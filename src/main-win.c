@@ -112,6 +112,7 @@
 #include "files.h"
 #include "core.h"
 #include "world.h"
+#include "term.h"
 
 #ifdef WINDOWS
 #include <windows.h>

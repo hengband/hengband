@@ -101,8 +101,7 @@ extern STR_OFFSET quark__num;
 extern concptr *quark__str;
 
 extern term *angband_term[8];
-extern const char angband_term_name[8][16];
-extern byte angband_color_table[256][4];
+
 extern FLOOR_IDX max_floor_id;
 extern u32b saved_floor_file_sign;
 extern concptr keymap_act[KEYMAP_MODES][256];

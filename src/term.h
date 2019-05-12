@@ -12,6 +12,9 @@ extern SYMBOL_CODE misc_to_char[256];
 extern TERM_COLOR tval_to_attr[128];
 extern SYMBOL_CODE tval_to_char[128];
 
+extern const char angband_term_name[8][16];
+extern byte angband_color_table[256][4];
+
 TERM_COLOR mh_attr(int max);
 TERM_COLOR spell_color(EFFECT_ID type);
 u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ);
