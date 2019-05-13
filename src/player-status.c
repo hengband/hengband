@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
+#include "quest.h"
 #include "player-move.h"
 #include "player-status.h"
 #include "player-effects.h"

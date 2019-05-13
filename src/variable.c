@@ -45,7 +45,7 @@ MONSTER_IDX hack_m_idx_ii = 0;
 bool multi_rew = FALSE;
 
 int total_friends = 0;
-int leaving_quest = 0;
+
 bool reinit_wilderness = FALSE;
 
 /*
