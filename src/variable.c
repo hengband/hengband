@@ -129,13 +129,6 @@ player_type p_body;
  */
 player_type *p_ptr = &p_body;
 
-
-/*
- * Here is a "pseudo-hook" used during calls to "get_item()" and
- * "show_inven()" and "show_equip()", and the choice window routines.
- */
-OBJECT_TYPE_VALUE item_tester_tval;
-
 /*
  * Hack -- function hook to restrict "get_obj_num_prep()" function
  */

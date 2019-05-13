@@ -97,7 +97,6 @@ extern u32b saved_floor_file_sign;
 extern concptr keymap_act[KEYMAP_MODES][256];
 extern player_type *p_ptr;
 
-extern OBJECT_TYPE_VALUE item_tester_tval;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 extern int highscore_fd;
