@@ -1018,6 +1018,12 @@ static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+/*
+ * Hack -- function hooks to restrict "get_mon_num_prep()" function
+ */
+monsterrace_hook_type get_mon_num_hook;
+monsterrace_hook_type get_mon_num2_hook;
+
 /*!
  * @brief モンスター生成制限関数最大2つから / Apply a "monster restriction function" to the "monster allocation table"
  * @param monster_hook 制限関数1

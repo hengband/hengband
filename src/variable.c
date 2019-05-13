@@ -171,15 +171,6 @@ OBJECT_TYPE_VALUE item_tester_tval;
 bool (*item_tester_hook)(object_type*);
 
 
-
-
-/*
- * Hack -- function hooks to restrict "get_mon_num_prep()" function
- */
-monsterrace_hook_type get_mon_num_hook;
-monsterrace_hook_type get_mon_num2_hook;
-
-
 /*
  * Hack -- function hook to restrict "get_obj_num_prep()" function
  */
