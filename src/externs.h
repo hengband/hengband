@@ -43,8 +43,6 @@ extern const byte adj_con_fix[];
 extern const byte adj_con_mhp[];
 extern const byte adj_chr_chm[];
 
-extern const byte feature_action_flags[FF_FLAG_MAX];
-
 /* variable.c */
 
 extern COMMAND_CODE command_cmd;
