@@ -88,33 +88,6 @@ char savefile_base[40];
 
 pos_list tmp_pos;
 
-
-/*
- * Number of active macros.
- */
-s16b macro__num;
-
-/*
- * Array of macro patterns [MACRO_MAX]
- */
-concptr *macro__pat;
-
-/*
- * Array of macro actions [MACRO_MAX]
- */
-concptr *macro__act;
-
-/*
- * Array of macro types [MACRO_MAX]
- */
-bool *macro__cmd;
-
-/*
- * Current macro action [1024]
- */
-char *macro__buf;
-
-
 /*
  * The number of quarks
  */

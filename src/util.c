@@ -62,6 +62,32 @@ u32b *message__ptr;
  */
 char *message__buf;
 
+/*
+ * Number of active macros.
+ */
+s16b macro__num;
+
+/*
+ * Array of macro patterns [MACRO_MAX]
+ */
+concptr *macro__pat;
+
+/*
+ * Array of macro actions [MACRO_MAX]
+ */
+concptr *macro__act;
+
+/*
+ * Array of macro types [MACRO_MAX]
+ */
+bool *macro__cmd;
+
+/*
+ * Current macro action [1024]
+ */
+char *macro__buf;
+
+
 bool inkey_base;		/* See the "inkey()" function */
 bool inkey_xtra;		/* See the "inkey()" function */
 bool inkey_scan;		/* See the "inkey()" function */
