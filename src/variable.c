@@ -136,14 +136,6 @@ player_type *p_ptr = &p_body;
  */
 OBJECT_TYPE_VALUE item_tester_tval;
 
-
-/*
- * Here is a "hook" used during calls to "get_item()" and
- * "show_inven()" and "show_equip()", and the choice window routines.
- */
-bool (*item_tester_hook)(object_type*);
-
-
 /*
  * Hack -- function hook to restrict "get_obj_num_prep()" function
  */

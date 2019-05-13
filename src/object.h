@@ -86,6 +86,8 @@ struct object_type
 	ARTIFACT_BIAS_IDX artifact_bias; /*!< ランダムアーティファクト生成時のバイアスID */
 };
 
+extern bool(*item_tester_hook)(object_type *o_ptr);
+
 /* object1.c */
 extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
 extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width);

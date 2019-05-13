@@ -1577,6 +1577,12 @@ bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VA
 	return (REALM1_BOOK == book_tval || REALM2_BOOK == book_tval);
 }
 
+/*
+ * Here is a "hook" used during calls to "get_item()" and
+ * "show_inven()" and "show_equip()", and the choice window routines.
+ */
+bool(*item_tester_hook)(object_type*);
+
 /*!
  * @brief アイテムがitem_tester_hookグローバル関数ポインタの条件を満たしているかを返す汎用関数
  * Check an item against the item tester info
