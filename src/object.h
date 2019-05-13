@@ -88,6 +88,7 @@ struct object_type
 
 extern bool(*item_tester_hook)(object_type *o_ptr);
 extern OBJECT_TYPE_VALUE item_tester_tval;
+extern bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 /* object1.c */
 extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);

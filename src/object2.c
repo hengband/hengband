@@ -527,6 +527,10 @@ OBJECT_IDX o_pop(void)
 	return (0);
 }
 
+/*
+ * Hack -- function hook to restrict "get_obj_num_prep()" function
+ */
+bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 /*!
  * @brief オブジェクト生成テーブルに生成制約を加える /

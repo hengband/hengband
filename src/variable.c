@@ -130,12 +130,6 @@ player_type p_body;
 player_type *p_ptr = &p_body;
 
 /*
- * Hack -- function hook to restrict "get_obj_num_prep()" function
- */
-bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
-
-
-/*
  * The "highscore" file descriptor, if available.
  */
 int highscore_fd = -1;
