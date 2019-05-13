@@ -2322,9 +2322,9 @@ static void rd_extra(void)
 
 	if (z_older_than(10, 3, 13))
 	{
-		old_battle = current_world_ptr->game_turn;
+		current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
 	}
-	else rd_s32b(&old_battle);
+	else rd_s32b(&current_world_ptr->arena_start_turn);
 
 	if (z_older_than(10,0,3))
 	{

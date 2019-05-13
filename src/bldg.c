@@ -1549,10 +1549,10 @@ static bool kakutoujou(void)
 	char out_val[160], tmp_str[80];
 	concptr p;
 
-	if ((current_world_ptr->game_turn - old_battle) > TURNS_PER_TICK * 250)
+	if ((current_world_ptr->game_turn - current_world_ptr->arena_start_turn) > TURNS_PER_TICK * 250)
 	{
 		update_gambling_monsters();
-		old_battle = current_world_ptr->game_turn;
+		current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
 	}
 
 	screen_save();

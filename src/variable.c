@@ -30,14 +30,8 @@ bool msg_flag;			/* Used in msg_print() for "buffering" */
 
 s16b running;			/* Current counter for running, if any */
 
-GAME_TURN old_battle;
-
 s16b signal_count;		/* Hack -- Count interupts */
 
-bool inkey_base;		/* See the "inkey()" function */
-bool inkey_xtra;		/* See the "inkey()" function */
-bool inkey_scan;		/* See the "inkey()" function */
-bool inkey_flag;		/* See the "inkey()" function */
 bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */
 
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */

@@ -5747,8 +5747,8 @@ void prevent_turn_overflow(void)
 	else current_world_ptr->game_turn = 1;
 	if (current_floor_ptr->generated_turn > rollback_turns) current_floor_ptr->generated_turn -= rollback_turns;
 	else current_floor_ptr->generated_turn = 1;
-	if (old_battle > rollback_turns) old_battle -= rollback_turns;
-	else old_battle = 1;
+	if (current_world_ptr->arena_start_turn > rollback_turns) current_world_ptr->arena_start_turn -= rollback_turns;
+	else current_world_ptr->arena_start_turn = 1;
 	if (p_ptr->feeling_turn > rollback_turns) p_ptr->feeling_turn -= rollback_turns;
 	else p_ptr->feeling_turn = 1;
 

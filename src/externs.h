@@ -56,13 +56,8 @@ extern s16b command_new;
 extern bool msg_flag;
 extern s16b running;
 
-extern GAME_TURN old_battle;
-
 extern s16b signal_count;
-extern bool inkey_base;
-extern bool inkey_xtra;
-extern bool inkey_scan;
-extern bool inkey_flag;
+
 extern bool get_com_no_macros;
 extern OBJECT_SUBTYPE_VALUE coin_type;
 

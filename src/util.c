@@ -62,6 +62,11 @@ u32b *message__ptr;
  */
 char *message__buf;
 
+bool inkey_base;		/* See the "inkey()" function */
+bool inkey_xtra;		/* See the "inkey()" function */
+bool inkey_scan;		/* See the "inkey()" function */
+bool inkey_flag;		/* See the "inkey()" function */
+
 static int num_more = 0;
 
 /* Save macro trigger string for use in inkey_special() */

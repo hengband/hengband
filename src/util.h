@@ -46,6 +46,11 @@ extern concptr *macro__act;
 extern bool *macro__cmd;
 extern char *macro__buf;
 
+extern bool inkey_base;
+extern bool inkey_xtra;
+extern bool inkey_scan;
+extern bool inkey_flag;
+
 /*
  * Automatically generated "variable" declarations
  */

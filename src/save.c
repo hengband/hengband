@@ -847,7 +847,7 @@ static void wr_extra(void)
 
 	wr_s32b(current_world_ptr->dungeon_turn);
 
-	wr_s32b(old_battle);
+	wr_s32b(current_world_ptr->arena_start_turn);
 
 	wr_s16b(today_mon);
 	wr_s16b(p_ptr->today_mon);
