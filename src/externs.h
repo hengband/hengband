@@ -22,7 +22,6 @@
 
 /* tables.c */
 
-extern const char listsym[];
 extern const byte adj_mag_study[];
 extern const byte adj_mag_mana[];
 extern const byte adj_mag_fail[];

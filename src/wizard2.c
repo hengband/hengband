@@ -602,6 +602,21 @@ static tval_desc tvals[] =
 	{ 0,                    NULL                   }
 };
 
+
+/*!
+ * 選択処理用キーコード /
+ * Global array for converting numbers to a logical list symbol
+ */
+static const char listsym[] =
+{
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+	'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+	'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+	'\0'
+};
+
 /*!
  * @brief ベースアイテムのウィザード生成のために大項目IDと小項目IDを取得する /
  * Specify tval and sval (type and subtype of object) originally
