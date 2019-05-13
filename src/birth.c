@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "bldg.h"
+#include "core.h"
 
 #include "artifact.h"
 #include "avatar.h"

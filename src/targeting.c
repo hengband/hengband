@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "core.h"
 #include "targeting.h"
 
 #include "bldg.h"

@@ -109,6 +109,11 @@ concptr ANGBAND_GRAF = "ascii"; //!< Hack -- The special Angband "Graphics Suffi
 static bool load = TRUE; /*!<ロード処理中の分岐フラグ*/
 static int wild_regen = 20; /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 
+/*
+ * Flags for initialization
+ */
+int init_flags;
+
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID

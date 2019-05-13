@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "core.h"
 
 #include "dungeon.h"
 #include "floor.h"

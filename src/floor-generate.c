@@ -98,6 +98,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "core.h"
 #include "bldg.h"
 
 #include "cmd-dump.h"

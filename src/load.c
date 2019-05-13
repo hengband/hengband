@@ -42,8 +42,9 @@
 
 #include "angband.h"
 #include "util.h"
-#include "load.h"
+#include "core.h"
 
+#include "load.h"
 #include "bldg.h"
 #include "report.h"
 

@@ -44,6 +44,7 @@
 #include "cmd-dump.h"
 #include "term.h"
 #include "inet.h"
+#include "core.h"
 
 #include "autopick.h"
 
