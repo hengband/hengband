@@ -64,8 +64,6 @@
 #include "autopick.h"
 #include "save.h"
 
-#include "scores.h"
-
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
 concptr ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files are portable between platforms
@@ -6541,71 +6539,6 @@ void show_info(void)
 			}
 		}
 	}
-}
-
-/*!
- * @brief スコアファイル出力
- * Display some character info
- * @return なし
- */
-bool check_score(void)
-{
-	Term_clear();
-
-	/* No score file */
-	if (highscore_fd < 0)
-	{
-		msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
-		msg_print(NULL);
-		return FALSE;
-	}
-
-#ifndef SCORE_WIZARDS
-	/* Wizard-mode pre-empts scoring */
-	if (p_ptr->noscore & 0x000F)
-	{
-		msg_print(_("ウィザード・モードではスコアが記録されません。", "Score not registered for wizards."));
-		msg_print(NULL);
-		return FALSE;
-	}
-#endif
-
-#ifndef SCORE_BORGS
-	/* Borg-mode pre-empts scoring */
-	if (p_ptr->noscore & 0x00F0)
-	{
-		msg_print(_("ボーグ・モードではスコアが記録されません。", "Score not registered for borgs."));
-		msg_print(NULL);
-		return FALSE;
-	}
-#endif
-
-#ifndef SCORE_CHEATERS
-	/* Cheaters are not scored */
-	if (p_ptr->noscore & 0xFF00)
-	{
-		msg_print(_("詐欺をやった人はスコアが記録されません。", "Score not registered for cheaters."));
-		msg_print(NULL);
-		return FALSE;
-	}
-#endif
-
-	/* Interupted */
-	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("強制終了", "Interrupting")))
-	{
-		msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
-		msg_print(NULL);
-		return FALSE;
-	}
-
-	/* Quitter */
-	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("途中終了", "Quitting")))
-	{
-		msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
-		msg_print(NULL);
-		return FALSE;
-	}
-	return TRUE;
 }
 
 

@@ -926,3 +926,69 @@ void kingly(void)
 	/* Wait for response */
 	pause_line(hgt - 1);
 }
+
+/*!
+ * @brief スコアファイル出力
+ * Display some character info
+ * @return なし
+ */
+bool check_score(void)
+{
+	Term_clear();
+
+	/* No score file */
+	if (highscore_fd < 0)
+	{
+		msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
+		msg_print(NULL);
+		return FALSE;
+	}
+
+#ifndef SCORE_WIZARDS
+	/* Wizard-mode pre-empts scoring */
+	if (p_ptr->noscore & 0x000F)
+	{
+		msg_print(_("ウィザード・モードではスコアが記録されません。", "Score not registered for wizards."));
+		msg_print(NULL);
+		return FALSE;
+	}
+#endif
+
+#ifndef SCORE_BORGS
+	/* Borg-mode pre-empts scoring */
+	if (p_ptr->noscore & 0x00F0)
+	{
+		msg_print(_("ボーグ・モードではスコアが記録されません。", "Score not registered for borgs."));
+		msg_print(NULL);
+		return FALSE;
+	}
+#endif
+
+#ifndef SCORE_CHEATERS
+	/* Cheaters are not scored */
+	if (p_ptr->noscore & 0xFF00)
+	{
+		msg_print(_("詐欺をやった人はスコアが記録されません。", "Score not registered for cheaters."));
+		msg_print(NULL);
+		return FALSE;
+	}
+#endif
+
+	/* Interupted */
+	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("強制終了", "Interrupting")))
+	{
+		msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
+		msg_print(NULL);
+		return FALSE;
+	}
+
+	/* Quitter */
+	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("途中終了", "Quitting")))
+	{
+		msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
+		msg_print(NULL);
+		return FALSE;
+	}
+	return TRUE;
+}
+

@@ -47,4 +47,4 @@ extern errr predict_score(void);
 extern void race_legends(void);
 extern void race_score(int race_num);
 extern void show_highclass(void);
-
+extern bool check_score(void);
