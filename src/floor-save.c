@@ -44,6 +44,12 @@ static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / 
  */
 FLOOR_IDX max_floor_id;
 
+/*
+ * Sign for current process used in temporal files.
+ * Actually it is the start time of current process.
+ */
+u32b saved_floor_file_sign;
+
 /*!
  * @brief 保存フロア配列を初期化する / Initialize saved_floors array. 
  * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除する。

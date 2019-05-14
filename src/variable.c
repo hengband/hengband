@@ -90,13 +90,6 @@ concptr *quark__str;
 term *angband_term[8];
 
 /*
- * Sign for current process used in temporal files.
- * Actually it is the start time of current process.
- */
-u32b saved_floor_file_sign;
-
-
-/*
  * Keymaps for each "mode" associated with each keypress.
  */
 concptr keymap_act[KEYMAP_MODES][256];

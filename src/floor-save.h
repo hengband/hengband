@@ -14,6 +14,8 @@ typedef struct
 	FLOOR_IDX lower_floor_id;  /* a floor connected with level tel. and trap door */
 } saved_floor_type;
 
+extern u32b saved_floor_file_sign;
+
 extern void init_saved_floors(bool force);
 extern void change_floor(void);
 extern void leave_floor(void);
