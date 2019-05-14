@@ -73,12 +73,6 @@ int player_euid;
 int player_egid;
 
 /*
- * Stripped version of "player_name"
- */
-char player_base[32];
-
-
-/*
  * Buffer to hold the current savefile name
  * 'savefile' holds full path name. 'savefile_base' holds only base name.
  */

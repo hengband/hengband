@@ -1091,7 +1091,7 @@ void do_cmd_change_name(void)
 		/* File dump */
 		else if (c == 'f')
 		{
-			sprintf(tmp, "%s.txt", player_base);
+			sprintf(tmp, "%s.txt", p_ptr->base_name);
 			if (get_string(_("ファイル名: ", "File name: "), tmp, 80))
 			{
 				if (tmp[0] && (tmp[0] != ' '))
@@ -2624,7 +2624,7 @@ void do_cmd_macros(void)
 			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Ask for a file */
 			if (!askfor(tmp, 80)) continue;
@@ -2658,7 +2658,7 @@ void do_cmd_macros(void)
 			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Ask for a file */
 			if (!askfor(tmp, 80)) continue;
@@ -2780,7 +2780,7 @@ void do_cmd_macros(void)
 			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Ask for a file */
 			if (!askfor(tmp, 80)) continue;
@@ -3058,7 +3058,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Query */
 			if (!askfor(tmp, 70)) continue;
@@ -3083,7 +3083,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
@@ -3134,7 +3134,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
@@ -3201,7 +3201,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
@@ -3628,7 +3628,7 @@ void do_cmd_colors(void)
 			prt(_("ファイル: ", "File: "), 10, 0);
 
 			/* Default file */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Query */
 			if (!askfor(tmp, 70)) continue;
@@ -3657,7 +3657,7 @@ void do_cmd_colors(void)
 			prt(_("ファイル: ", "File: "), 10, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", player_base);
+			sprintf(tmp, "%s.prf", p_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;

@@ -5209,7 +5209,7 @@ static void load_all_pref_files(void)
 	process_pref_file(buf);
 
 	/* Access the "character" pref file */
-	sprintf(buf, "%s.prf", player_base);
+	sprintf(buf, "%s.prf", p_ptr->base_name);
 
 	/* Process that file */
 	process_pref_file(buf);

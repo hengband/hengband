@@ -607,6 +607,8 @@ struct player_type
 	POSITION y;	/* Player location in dungeon */
 	POSITION x;	/* Player location in dungeon */
 	GAME_TEXT name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
+	char base_name[32]; /*!< Stripped version of "player_name" */
+
 };
 
 extern concptr your_alignment(void);

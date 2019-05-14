@@ -84,7 +84,6 @@ extern POSITION target_row;
 extern int player_uid;
 extern int player_euid;
 extern int player_egid;
-extern char player_base[32];
 extern char savefile[1024];
 extern char savefile_base[40];
 extern pos_list tmp_pos;

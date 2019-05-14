@@ -91,7 +91,7 @@ void reset_visuals(void)
 		process_pref_file("graf.prf");
 
 		/* Access the "character" pref file */
-		sprintf(buf, "graf-%s.prf", player_base);
+		sprintf(buf, "graf-%s.prf", p_ptr->base_name);
 
 		/* Process "graf-<playername>.prf" */
 		process_pref_file(buf);
@@ -106,7 +106,7 @@ void reset_visuals(void)
 		process_pref_file("font.prf");
 
 		/* Access the "character" pref file */
-		sprintf(buf, "font-%s.prf", player_base);
+		sprintf(buf, "font-%s.prf", p_ptr->base_name);
 
 		/* Process "font-<playername>.prf" */
 		process_pref_file(buf);

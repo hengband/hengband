@@ -5809,7 +5809,7 @@ void process_player_name(bool sf)
 	int i, k = 0;
 	char old_player_base[32] = "";
 
-	if (current_world_ptr->character_generated) strcpy(old_player_base, player_base);
+	if (current_world_ptr->character_generated) strcpy(old_player_base, p_ptr->base_name);
 
 	/* Cannot be too long */
 #if defined(MACINTOSH) || defined(ACORN)
@@ -5854,7 +5854,7 @@ void process_player_name(bool sf)
 		if (c == '.') c = '_';
 
 		/* Accept all the letters */
-		player_base[k++] = c;
+		p_ptr->base_name[k++] = c;
 	}
 
 #else
@@ -5871,35 +5871,35 @@ void process_player_name(bool sf)
 		/* Accept some letters */
 #ifdef JP
 		if(iskanji(c)){
-		  if(k + 2 >= sizeof(player_base) || !p_ptr->name[i+1]) break;
-		  player_base[k++] = c;
+		  if(k + 2 >= sizeof(p_ptr->base_name) || !p_ptr->name[i+1]) break;
+		  p_ptr->base_name[k++] = c;
 		  i++;
-		  player_base[k++] = p_ptr->name[i];
+		  p_ptr->base_name[k++] = p_ptr->name[i];
 		}
 #ifdef SJIS
-		else if (iskana(c)) player_base[k++] = c;
+		else if (iskana(c)) p_ptr->base_name[k++] = c;
 #endif
 		else
 #endif
 		/* Convert path separator to underscore */
 		if (!strncmp(PATH_SEP, p_ptr->name+i, strlen(PATH_SEP))){
-			player_base[k++] = '_';
+			p_ptr->base_name[k++] = '_';
 			i += strlen(PATH_SEP);
 		}
 		/* Convert some characters to underscore */
 #if defined(WINDOWS)
-		else if (my_strchr("\"*,/:;<>?\\|", c)) player_base[k++] = '_';
+		else if (my_strchr("\"*,/:;<>?\\|", c)) p_ptr->base_name[k++] = '_';
 #endif
-		else if (isprint(c)) player_base[k++] = c;
+		else if (isprint(c)) p_ptr->base_name[k++] = c;
 	}
 
 #endif
 
 	/* Terminate */
-	player_base[k] = '\0';
+	p_ptr->base_name[k] = '\0';
 
 	/* Require a "base" name */
-	if (!player_base[0]) strcpy(player_base, "PLAYER");
+	if (!p_ptr->base_name[0]) strcpy(p_ptr->base_name, "PLAYER");
 
 
 #ifdef SAVEFILE_MUTABLE
@@ -5931,14 +5931,14 @@ void process_player_name(bool sf)
 	{
 		char temp[128];
 
-		strcpy(savefile_base, player_base);
+		strcpy(savefile_base, p_ptr->base_name);
 
 #ifdef SAVEFILE_USE_UID
-		/* Rename the savefile, using the player_uid and player_base */
-		(void)sprintf(temp, "%d.%s", player_uid, player_base);
+		/* Rename the savefile, using the player_uid and p_ptr->base_name */
+		(void)sprintf(temp, "%d.%s", player_uid, p_ptr->base_name);
 #else
-		/* Rename the savefile, using the player_base */
-		(void)sprintf(temp, "%s", player_base);
+		/* Rename the savefile, using the p_ptr->base_name */
+		(void)sprintf(temp, "%s", p_ptr->base_name);
 #endif
 
 		/* Build the filename */
@@ -5948,7 +5948,7 @@ void process_player_name(bool sf)
 	/* Load an autopick preference file */
 	if (current_world_ptr->character_generated)
 	{
-		if (!streq(old_player_base, player_base)) autopick_load_pref(FALSE);
+		if (!streq(old_player_base, p_ptr->base_name)) autopick_load_pref(FALSE);
 	}
 }
 

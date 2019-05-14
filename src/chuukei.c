@@ -662,7 +662,7 @@ void prepare_movie_hooks(void)
 	}
 	else
 	{
-		sprintf(tmp, "%s.amv", player_base);
+		sprintf(tmp, "%s.amv", p_ptr->base_name);
 		if (get_string(_("ムービー記録ファイル: ", "Movie file name: "), tmp, 80))
 		{
 			int fd;

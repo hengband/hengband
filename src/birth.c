@@ -3560,9 +3560,9 @@ static bool do_cmd_histpref(void)
 	histpref_buf = histbuf;
 
 #ifdef JP
-	sprintf(buf, "histedit-%s.prf", player_base);
+	sprintf(buf, "histedit-%s.prf", p_ptr->base_name);
 #else
-	sprintf(buf, "histpref-%s.prf", player_base);
+	sprintf(buf, "histpref-%s.prf", p_ptr->base_name);
 #endif
 	err = process_histpref_file(buf);
 

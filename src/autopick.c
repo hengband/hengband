@@ -767,7 +767,7 @@ static concptr pickpref_filename(int filename_mode)
 		return format("%s.prf", namebase);
 
 	case PT_WITH_PNAME:
-		return format("%s-%s.prf", namebase, player_base);
+		return format("%s-%s.prf", namebase, p_ptr->base_name);
 
 	default:
 		return NULL;
