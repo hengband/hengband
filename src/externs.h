@@ -93,7 +93,6 @@ extern u32b saved_floor_file_sign;
 extern concptr keymap_act[KEYMAP_MODES][256];
 extern player_type *p_ptr;
 
-extern int highscore_fd;
 extern bool can_save;
 
 extern MONSTER_IDX pet_t_m_idx;

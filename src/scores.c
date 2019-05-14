@@ -27,6 +27,11 @@
 #include "report.h"
 #include "japanese.h"
 
+ /*
+  * The "highscore" file descriptor, if available.
+  */
+int highscore_fd = -1;
+
 /*!
  * @brief i番目のスコア情報にバッファ位置をシークする / Seek score 'i' in the highscore file
  * @param i スコア情報ID

@@ -35,6 +35,8 @@ struct high_score
 	GAME_TEXT how[40];		/* Method of death (string) */
 };
 
+extern int highscore_fd;
+
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);
 extern void display_scores(int from, int to);

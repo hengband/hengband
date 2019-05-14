@@ -115,11 +115,6 @@ player_type p_body;
  */
 player_type *p_ptr = &p_body;
 
-/*
- * The "highscore" file descriptor, if available.
- */
-int highscore_fd = -1;
-
 bool can_save = FALSE;        /* Game can be saved */
 
 
