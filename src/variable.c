@@ -58,14 +58,6 @@ POSITION panel_col_prt, panel_row_prt;
 
 
 /*
- * Targetting variables
- */
-MONSTER_IDX target_who;
-POSITION target_col;
-POSITION target_row;
-
-
-/*
  * User info
  */
 int player_uid;

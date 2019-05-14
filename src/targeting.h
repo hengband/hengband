@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+extern MONSTER_IDX target_who;
+extern POSITION target_col;
+extern POSITION target_row;
+
 /* xtra2.c */
 extern void panel_bounds_center(void);
 extern void verify_panel(void);

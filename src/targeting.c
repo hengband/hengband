@@ -232,7 +232,12 @@ bool target_able(MONSTER_IDX m_idx)
 }
 
 
-
+/*
+ * Targetting variables
+ */
+MONSTER_IDX target_who;
+POSITION target_col;
+POSITION target_row;
 
 /*
  * Update (if necessary) and verify (if possible) the target.
