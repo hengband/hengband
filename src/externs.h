@@ -65,7 +65,7 @@ extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;
 extern int total_friends;
 extern bool reinit_wilderness;
-extern bool multi_rew;
+
 extern bool reset_concent;
 
 

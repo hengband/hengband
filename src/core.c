@@ -1818,9 +1818,9 @@ static void process_world_aux_timeout(void)
 		(void)set_tim_invis(p_ptr->tim_invis - 1, TRUE);
 	}
 
-	if (multi_rew)
+	if (p_ptr->suppress_multi_reward)
 	{
-		multi_rew = FALSE;
+		p_ptr->suppress_multi_reward = FALSE;
 	}
 
 	/* Timed esp */

@@ -247,8 +247,8 @@ void gain_level_reward(int chosen_reward)
 
 	if (!chosen_reward)
 	{
-		if (multi_rew) return;
-		else multi_rew = TRUE;
+		if (p_ptr->suppress_multi_reward) return;
+		else p_ptr->suppress_multi_reward = TRUE;
 	}
 
 
