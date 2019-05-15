@@ -4447,6 +4447,8 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 }
 
 
+OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
+
 /*!
  * @brief 生成階に応じた財宝オブジェクトの生成を行う。
  * Make a treasure object

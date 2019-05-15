@@ -34,8 +34,6 @@ s16b signal_count;		/* Hack -- Count interupts */
 
 bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */
 
-OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
-
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 

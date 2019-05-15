@@ -154,6 +154,8 @@ extern void object_copy(object_type *o_ptr, object_type *j_ptr);
 #define AM_FORBID_CHEST 0x00000020 /*!< ” ‚©‚ç‚³‚ç‚É” ‚ªoŒ»‚·‚é‚±‚Æ‚ð—}Ž~‚·‚é */
 extern void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
+extern OBJECT_SUBTYPE_VALUE coin_type;
+
 extern bool make_object(object_type *j_ptr, BIT_FLAGS mode);
 extern void place_object(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool make_gold(object_type *j_ptr);

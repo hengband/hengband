@@ -59,7 +59,6 @@ extern s16b running;
 extern s16b signal_count;
 
 extern bool get_com_no_macros;
-extern OBJECT_SUBTYPE_VALUE coin_type;
 
 extern bool repair_monsters;
 extern bool repair_objects;
