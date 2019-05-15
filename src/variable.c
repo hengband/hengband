@@ -28,8 +28,6 @@ s16b command_new;		/* Command chaining from inven/equip view */
 
 bool msg_flag;			/* Used in msg_print() for "buffering" */
 
-s16b running;			/* Current counter for running, if any */
-
 s16b signal_count;		/* Hack -- Count interupts */
 
 bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */

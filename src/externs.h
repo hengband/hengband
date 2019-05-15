@@ -54,7 +54,6 @@ extern TERM_LEN command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
 extern bool msg_flag;
-extern s16b running;
 
 extern s16b signal_count;
 

@@ -1137,7 +1137,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 	{
 		msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 		free_turn(p_ptr);
-		running = 0;
+		p_ptr->running = 0;
 		oktomove = FALSE;
 	}
 
@@ -1888,7 +1888,7 @@ void run_step(DIRECTION dir)
 	}
 
 	/* Decrease the run counter */
-	if (--running <= 0) return;
+	if (--p_ptr->running <= 0) return;
 
 	/* Take time */
 	take_turn(p_ptr, 100);
@@ -2316,10 +2316,10 @@ void disturb(bool stop_search, bool stop_travel)
 	}
 
 	/* Cancel running */
-	if (running)
+	if (p_ptr->running)
 	{
 		/* Cancel */
-		running = 0;
+		p_ptr->running = 0;
 
 		/* Check for new panel if appropriate */
 		if (center_player && !center_running) verify_panel();

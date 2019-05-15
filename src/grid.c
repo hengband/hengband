@@ -1687,7 +1687,7 @@ void update_flow(void)
 	if (tmp_pos.n) return;
 
 	/* The last way-point is on the map */
-	if (running && in_bounds(flow_y, flow_x))
+	if (p_ptr->running && in_bounds(flow_y, flow_x))
 	{
 		/* The way point is in sight - do not update.  (Speedup) */
 		if (current_floor_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW) return;

@@ -2128,7 +2128,7 @@ void do_cmd_run(void)
 	if (get_rep_dir(&dir,FALSE))
 	{
 		/* Hack -- Set the run counter */
-		running = (command_arg ? command_arg : 1000);
+		p_ptr->running = (command_arg ? command_arg : 1000);
 
 		/* First step */
 		run_step(dir);

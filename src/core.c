@@ -4506,7 +4506,7 @@ static void process_player(void)
 	if (check_abort)
 	{
 		/* Check for "player abort" (semi-efficiently for resting) */
-		if (running || travel.run || command_rep || (p_ptr->action == ACTION_REST) || (p_ptr->action == ACTION_FISH))
+		if (p_ptr->running || travel.run || command_rep || (p_ptr->action == ACTION_REST) || (p_ptr->action == ACTION_FISH))
 		{
 			/* Do not wait */
 			inkey_scan = TRUE;
@@ -4697,7 +4697,7 @@ static void process_player(void)
 		}
 
 		/* Running */
-		else if (running)
+		else if (p_ptr->running)
 		{
 			/* Take a step */
 			run_step(0);
