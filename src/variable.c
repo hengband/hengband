@@ -26,8 +26,6 @@ TERM_LEN command_gap = 999;         /* See "object1.c" */
 
 s16b command_new;		/* Command chaining from inven/equip view */
 
-bool msg_flag;			/* Used in msg_print() for "buffering" */
-
 bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */
 
 bool repair_monsters;	/* Hack -- optimize detect monsters */

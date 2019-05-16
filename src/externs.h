@@ -53,7 +53,6 @@ extern s16b command_see;
 extern TERM_LEN command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
-extern bool msg_flag;
 
 extern bool get_com_no_macros;
 

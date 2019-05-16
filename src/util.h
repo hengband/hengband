@@ -40,6 +40,8 @@ extern u32b message__tail;
 extern u32b *message__ptr;
 extern char *message__buf;
 
+extern bool msg_flag;
+
 extern s16b macro__num;
 extern concptr *macro__pat;
 extern concptr *macro__act;

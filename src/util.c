@@ -63,6 +63,8 @@ u32b *message__ptr;
  */
 char *message__buf;
 
+bool msg_flag;			/* Used in msg_print() for "buffering" */
+
 /*
  * Number of active macros.
  */
