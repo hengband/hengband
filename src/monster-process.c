@@ -3084,10 +3084,10 @@ void process_monster(MONSTER_IDX m_idx)
 
 /*!
  * @brief 全モンスターのターン管理メインルーチン /
- * Process all the "live" monsters, once per game current_world_ptr->game_turn.
+ * Process all the "live" monsters, once per game turn.
  * @return なし
  * @details
- * During each game current_world_ptr->game_turn, we scan through the list of all the "live" monsters,\n
+ * During each game current game turn, we scan through the list of all the "live" monsters,\n
  * (backwards, so we can excise any "freshly dead" monsters), energizing each\n
  * monster, and allowing fully energized monsters to move, attack, pass, etc.\n
  *\n
@@ -3106,8 +3106,8 @@ void process_monster(MONSTER_IDX m_idx)
  *\n
  * Note the special "MFLAG_BORN" flag, which allows us to ignore "fresh"\n
  * monsters while they are still being "born".  A monster is "fresh" only\n
- * during the current_world_ptr->game_turn in which it is created, and we use the "hack_m_idx" to\n
- * determine if the monster is yet to be processed during the current current_world_ptr->game_turn.\n
+ * during the game turn in which it is created, and we use the "hack_m_idx" to\n
+ * determine if the monster is yet to be processed during the game turn.\n
  *\n
  * Note the special "MFLAG_NICE" flag, which allows the player to get one\n
  * move before any "nasty" monsters get to use their spell attacks.\n
