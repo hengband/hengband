@@ -56,8 +56,6 @@ extern s16b command_new;
 
 extern bool repair_monsters;
 extern bool repair_objects;
-extern MONSTER_IDX hack_m_idx;
-extern MONSTER_IDX hack_m_idx_ii;
 extern int total_friends;
 extern bool reinit_wilderness;
 

@@ -1912,7 +1912,7 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 */
 HIT_POINT spell_RF6_WORLD(MONSTER_IDX m_idx)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
 	MONSTER_IDX who = 0;
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);

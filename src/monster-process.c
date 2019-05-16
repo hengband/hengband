@@ -3274,7 +3274,6 @@ void process_monsters(void)
 		/* Use up "some" energy */
 		m_ptr->energy_need += ENERGY_NEED();
 
-
 		/* Save global index */
 		hack_m_idx = i;
 

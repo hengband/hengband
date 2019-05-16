@@ -29,9 +29,6 @@ s16b command_new;		/* Command chaining from inven/equip view */
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
-MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
-MONSTER_IDX hack_m_idx_ii = 0;
-
 int total_friends = 0;
 
 bool reinit_wilderness = FALSE;

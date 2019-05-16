@@ -41,6 +41,8 @@
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */
 
+MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
+MONSTER_IDX hack_m_idx_ii = 0;
 
 /*!
  * @brief モンスターの目標地点をセットする / Set the target of counter attack
