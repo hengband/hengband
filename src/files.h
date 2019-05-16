@@ -14,6 +14,8 @@ extern concptr ANGBAND_DIR_SAVE;
 extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 
+extern s16b signal_count;
+
 /* files.c */
 extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);

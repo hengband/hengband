@@ -55,8 +55,6 @@ extern s16b command_wrk;
 extern s16b command_new;
 extern bool msg_flag;
 
-extern s16b signal_count;
-
 extern bool get_com_no_macros;
 
 extern bool repair_monsters;

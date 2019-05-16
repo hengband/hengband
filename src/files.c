@@ -78,6 +78,9 @@ concptr ANGBAND_DIR_SAVE; //!< Savefiles for current characters (binary)
 concptr ANGBAND_DIR_USER; //!< User "preference" files (ascii) These files are rarely portable between platforms
 concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rarely portable between platforms
 
+s16b signal_count;		/* Hack -- Count interupts */
+
+
 /*
  * You may or may not want to use the following "#undef".
  */
