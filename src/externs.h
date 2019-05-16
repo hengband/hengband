@@ -54,8 +54,6 @@ extern TERM_LEN command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
 
-extern bool get_com_no_macros;
-
 extern bool repair_monsters;
 extern bool repair_objects;
 extern MONSTER_IDX hack_m_idx;

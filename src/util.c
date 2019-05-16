@@ -90,6 +90,9 @@ bool *macro__cmd;
  */
 char *macro__buf;
 
+bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */
+
+
 
 bool inkey_base;		/* See the "inkey()" function */
 bool inkey_xtra;		/* See the "inkey()" function */

@@ -48,6 +48,8 @@ extern concptr *macro__act;
 extern bool *macro__cmd;
 extern char *macro__buf;
 
+extern bool get_com_no_macros;
+
 extern bool inkey_base;
 extern bool inkey_xtra;
 extern bool inkey_scan;
