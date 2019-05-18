@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+extern char savefile[1024];
+extern char savefile_base[40];
+
 extern concptr ANGBAND_DIR;
 extern concptr ANGBAND_DIR_APEX;
 extern concptr ANGBAND_DIR_BONE;

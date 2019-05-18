@@ -72,8 +72,6 @@ extern POSITION panel_col_prt, panel_row_prt;
 extern int player_uid;
 extern int player_euid;
 extern int player_egid;
-extern char savefile[1024];
-extern char savefile_base[40];
 extern pos_list tmp_pos;
 extern STR_OFFSET quark__num;
 extern concptr *quark__str;

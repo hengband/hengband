@@ -80,6 +80,14 @@ concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rare
 
 s16b signal_count;		/* Hack -- Count interupts */
 
+/*
+ * Buffer to hold the current savefile name
+ * 'savefile' holds full path name. 'savefile_base' holds only base name.
+ */
+char savefile[1024];
+char savefile_base[40];
+
+
 
 /*
  * You may or may not want to use the following "#undef".

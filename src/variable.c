@@ -49,14 +49,6 @@ int player_uid;
 int player_euid;
 int player_egid;
 
-/*
- * Buffer to hold the current savefile name
- * 'savefile' holds full path name. 'savefile_base' holds only base name.
- */
-char savefile[1024];
-char savefile_base[40];
-
-
 pos_list tmp_pos;
 
 /*
