@@ -98,6 +98,8 @@ const concptr copyright[5] =
 
 bool can_save = FALSE;        /* Game can be saved */
 
+COMMAND_CODE now_message;
+
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
 #ifdef JP

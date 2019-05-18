@@ -11,6 +11,7 @@
 /* Purpose: Angband utilities -BEN- */
 
 #include "angband.h"
+#include "core.h"
 #include "util.h"
 #include "files.h"
 #include "monsterrace-hook.h"

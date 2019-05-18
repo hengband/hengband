@@ -89,7 +89,6 @@ extern bool sukekaku;
 extern bool new_mane;
 
 extern DEPTH *max_dlv;
-extern COMMAND_CODE now_message;
 extern bool use_menu;
 
 /* xtra1.c */

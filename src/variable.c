@@ -101,7 +101,6 @@ bool new_mane;
  */
 DEPTH *max_dlv;
 
-COMMAND_CODE now_message;
 bool use_menu;
 
 #ifdef CHUUKEI
