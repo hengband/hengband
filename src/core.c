@@ -96,6 +96,8 @@ const concptr copyright[5] =
 	"are included in all such copies."
 };
 
+bool can_save = FALSE;        /* Game can be saved */
+
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
 #ifdef JP

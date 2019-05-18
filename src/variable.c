@@ -85,8 +85,6 @@ player_type p_body;
  */
 player_type *p_ptr = &p_body;
 
-bool can_save = FALSE;        /* Game can be saved */
-
 
 MONSTER_IDX pet_t_m_idx;
 MONSTER_IDX riding_t_m_idx;

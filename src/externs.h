@@ -81,8 +81,6 @@ extern term *angband_term[8];
 extern concptr keymap_act[KEYMAP_MODES][256];
 extern player_type *p_ptr;
 
-extern bool can_save;
-
 extern MONSTER_IDX pet_t_m_idx;
 extern MONSTER_IDX riding_t_m_idx;
 extern MONRACE_IDX today_mon;

@@ -15,6 +15,7 @@
 #include "autopick.h"
 #include "term.h"
 
+#include "core.h"
 #include "files.h"
 #include "world.h"
 #include "quest.h"
