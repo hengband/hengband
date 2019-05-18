@@ -95,7 +95,6 @@ extern bool use_menu;
 extern void handle_stuff(void);
 extern void update_output(void);
 extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
-extern void update_playtime(void);
 
 #ifdef MACINTOSH
 /* main-mac.c */

@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "autopick.h"
+#include "core.h"
 
 #include "mind.h"
 

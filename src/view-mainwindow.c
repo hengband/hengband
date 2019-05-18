@@ -2360,22 +2360,6 @@ void update_output(void)
 }
 
 /*!
- * @brief 実ゲームプレイ時間を更新する
- */
-void update_playtime(void)
-{
-	/* Check if the game has started */
-	if (start_time != 0)
-	{
-		u32b tmp = (u32b)time(NULL);
-		current_world_ptr->play_time += (tmp - start_time);
-		start_time = tmp;
-	}
-}
-
-
-
-/*!
  * @brief コンソールのリサイズに合わせてマップを再描画する /
  * Map resizing whenever the main term changes size
  * @return なし
@@ -3888,5 +3872,20 @@ void object_kind_track(KIND_OBJECT_IDX k_idx)
 	p_ptr->object_kind_idx = k_idx;
 
 	p_ptr->window |= (PW_OBJECT);
+}
+
+
+/*!
+ * @brief 実ゲームプレイ時間を更新する
+ */
+void update_playtime(void)
+{
+	/* Check if the game has started */
+	if (start_time != 0)
+	{
+		u32b tmp = (u32b)time(NULL);
+		current_world_ptr->play_time += (tmp - start_time);
+		start_time = tmp;
+	}
 }
 
