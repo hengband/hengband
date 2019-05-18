@@ -94,7 +94,6 @@ extern bool use_menu;
 /* xtra1.c */
 extern void handle_stuff(void);
 extern void update_output(void);
-extern void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 
 #ifdef MACINTOSH
 /* main-mac.c */
@@ -119,6 +118,3 @@ extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
 /* main-win.c */
 /* extern int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, ...); */
 #endif
-
-/* wizard1.c */
-extern void spoil_random_artifact(concptr fname);

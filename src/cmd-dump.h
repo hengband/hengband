@@ -36,4 +36,7 @@ extern void do_cmd_suicide(void);
  */
 extern void do_cmd_spoilers(void);
 
+/* wizard1.c */
+extern void spoil_random_artifact(concptr fname);
+
 extern bool write_level;
