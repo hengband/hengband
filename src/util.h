@@ -74,6 +74,8 @@ extern TERM_LEN command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
 
+extern concptr keymap_act[KEYMAP_MODES][256];
+
 
 /*
  * Hack -- conditional (or "bizarre") externs

@@ -33,6 +33,10 @@ const char hexsym[16] =
 	'8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
 };
 
+/*
+ * Keymaps for each "mode" associated with each keypress.
+ */
+concptr keymap_act[KEYMAP_MODES][256];
 
 /*
  * The next "free" index to use

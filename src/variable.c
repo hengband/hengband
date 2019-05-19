@@ -51,11 +51,6 @@ concptr *quark__str;
  */
 term *angband_term[8];
 
-/*
- * Keymaps for each "mode" associated with each keypress.
- */
-concptr keymap_act[KEYMAP_MODES][256];
-
 
 
 /*** Player information ***/
