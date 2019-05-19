@@ -8,6 +8,8 @@ extern void do_cmd_pet(void);
 extern bool player_can_ride_aux(grid_type *g_ptr, bool now_riding);
 extern bool rakuba(HIT_POINT dam, bool force);
 
+extern int total_friends;
+
 /*** Pet constants ***/
 
 

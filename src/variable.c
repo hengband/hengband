@@ -29,7 +29,6 @@ s16b command_new;		/* Command chaining from inven/equip view */
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
-int total_friends = 0;
 
 /*
  * Dungeon size info
