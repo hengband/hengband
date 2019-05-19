@@ -3881,11 +3881,11 @@ void object_kind_track(KIND_OBJECT_IDX k_idx)
 void update_playtime(void)
 {
 	/* Check if the game has started */
-	if (start_time != 0)
+	if (current_world_ptr->start_time != 0)
 	{
 		u32b tmp = (u32b)time(NULL);
-		current_world_ptr->play_time += (tmp - start_time);
-		start_time = tmp;
+		current_world_ptr->play_time += (tmp - current_world_ptr->start_time);
+		current_world_ptr->start_time = tmp;
 	}
 }
 

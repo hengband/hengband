@@ -76,8 +76,6 @@ MONSTER_IDX riding_t_m_idx;
 
 MONSTER_IDX today_mon;
 
-u32b start_time;
-
 bool sukekaku;
 bool new_mane;
 

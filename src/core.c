@@ -5324,7 +5324,7 @@ void play_game(bool new_game)
 
 		p_ptr->is_dead = TRUE;
 
-		start_time = (u32b)time(NULL);
+		current_world_ptr->start_time = (u32b)time(NULL);
 
 		/* No suspending now */
 		signals_ignore_tstp();
@@ -5472,7 +5472,7 @@ void play_game(bool new_game)
 	current_world_ptr->timewalk_m_idx = 0;
 	p_ptr->now_damaged = FALSE;
 	now_message = 0;
-	start_time = time(NULL) - 1;
+	current_world_ptr->start_time = time(NULL) - 1;
 	record_o_name[0] = '\0';
 
 	/* Reset map panel */

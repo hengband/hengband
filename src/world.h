@@ -9,6 +9,7 @@ typedef struct {
 	GAME_TURN dungeon_turn;			/*!< NASTY生成の計算に関わる内部ターン値 / Game current_world_ptr->game_turn in dungeon */
 	GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
 	GAME_TURN arena_start_turn;		/*!< 闘技場賭博の開始ターン値 */
+	u32b start_time;
 
 	MONSTER_IDX timewalk_m_idx;     /*!< 現在時間停止を行っているモンスターのID */
 
@@ -52,6 +53,7 @@ typedef struct {
 	bool character_xtra;		/* The game is in an icky startup mode */
 
 	bool creating_savefile;		/* New savefile is currently created */
+
 
 } world_type;
 
