@@ -45,19 +45,11 @@ extern const byte adj_chr_chm[];
 
 /* variable.c */
 
-extern COMMAND_CODE command_cmd;
-extern COMMAND_ARG command_arg;
-extern s16b command_rep;
-extern DIRECTION command_dir;
-extern s16b command_see;
-extern TERM_LEN command_gap;
-extern s16b command_wrk;
-extern s16b command_new;
-
 extern bool repair_monsters;
 extern bool repair_objects;
 
 extern bool reset_concent;
+
 
 
 /*

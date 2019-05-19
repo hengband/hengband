@@ -93,8 +93,6 @@ char *macro__buf;
 
 bool get_com_no_macros = FALSE;	/* Expand macros in "get_com" or not */
 
-
-
 bool inkey_base;		/* See the "inkey()" function */
 bool inkey_xtra;		/* See the "inkey()" function */
 bool inkey_scan;		/* See the "inkey()" function */
@@ -111,6 +109,16 @@ concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに�
 concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
 concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
 concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];  /*!< マクロの内容 */
+
+s16b command_cmd;		/* Current "Angband Command" */
+COMMAND_ARG command_arg;	/*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */
+COMMAND_NUM command_rep;	/*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
+DIRECTION command_dir;		/*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
+s16b command_see;		/* See "object1.c" */
+s16b command_wrk;		/* See "object1.c" */
+TERM_LEN command_gap = 999;         /* See "object1.c" */
+s16b command_new;		/* Command chaining from inven/equip view */
+
 
 #if 0
 #ifndef HAS_STRICMP
