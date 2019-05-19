@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "bldg.h"
 #include "load.h"
 #include "util.h"
 

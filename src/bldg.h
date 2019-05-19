@@ -25,6 +25,7 @@ struct building_type
 };
 
 extern building_type building[MAX_BLDG];
+extern bool reinit_wilderness;
 
 /*
  * Buildings actions

@@ -67,6 +67,8 @@ int battle_odds;
 PRICE kakekin;
 int sel_monster;
 
+bool reinit_wilderness = FALSE;
+
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
  */

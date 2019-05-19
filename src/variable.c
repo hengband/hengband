@@ -31,8 +31,6 @@ bool repair_objects;	/* Hack -- optimize detect objects */
 
 int total_friends = 0;
 
-bool reinit_wilderness = FALSE;
-
 /*
  * Dungeon size info
  */
