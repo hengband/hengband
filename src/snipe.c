@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "core.h"
 #include "util.h"
+#include "term.h"
 
 #include "player-status.h"
 #include "cmd-basic.h"

@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "bldg.h"
 #include "core.h"
+#include "term.h"
 #include "util.h"
 
 #include "creature.h"

@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "term.h"
 #include "autopick.h"
 #include "core.h"
 

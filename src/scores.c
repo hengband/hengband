@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "term.h"
 #include "util.h"
 #include "core.h"
 

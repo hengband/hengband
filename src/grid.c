@@ -19,6 +19,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "term.h"
 
 #include "floor.h"
 #include "world.h"

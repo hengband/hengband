@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "term.h"
 
 #include "cmd-dump.h"
 #include "bldg.h"

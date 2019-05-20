@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "world.h"
+#include "term.h"
 
 #include "object.h"
 

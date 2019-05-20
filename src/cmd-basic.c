@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 #include "core.h"
+#include "term.h"
 
 #include "cmd-dump.h"
 #include "chest.h"

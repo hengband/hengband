@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "core.h"
+#include "term.h"
 
 #include "dungeon.h"
 #include "cmd-dump.h"

@@ -11,6 +11,7 @@
 /* Purpose: a generic, efficient, terminal window package -BEN- */
 #include "angband.h"
 
+#include "term.h"
 #include "z-term.h"
 
 #include "z-virt.h"

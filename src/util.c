@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "core.h"
+#include "term.h"
 #include "util.h"
 #include "files.h"
 #include "monsterrace-hook.h"

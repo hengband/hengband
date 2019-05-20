@@ -15,6 +15,7 @@
 #include "util.h"
 #include "bldg.h"
 #include "core.h"
+#include "term.h"
 
 #include "artifact.h"
 #include "avatar.h"

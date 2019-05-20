@@ -13,6 +13,7 @@
  */
 
 #include "angband.h"
+#include "term.h"
 #include "core.h"
 #include "util.h"
 

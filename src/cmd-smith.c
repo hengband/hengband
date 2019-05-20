@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "util.h"
+#include "term.h"
 
 #include "object-flavor.h"
 #include "object-hook.h"
