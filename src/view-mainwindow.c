@@ -2063,7 +2063,7 @@ bool is_heavy_shoot(object_type *o_ptr)
  * @return なし
  * @details 更新処理の対象はゲーム中の全描画処理
  */
-static void redraw_stuff(void)
+void redraw_stuff(void)
 {
 	if (!p_ptr->redraw) return;
 
@@ -2248,7 +2248,7 @@ static void redraw_stuff(void)
  * @return なし
  * @details 更新処理の対象はサブウィンドウ全般
  */
-static void window_stuff(void)
+void window_stuff(void)
 {
 	int j;
 	BIT_FLAGS mask = 0L;
@@ -2338,25 +2338,6 @@ static void window_stuff(void)
 		p_ptr->window &= ~(PW_OBJECT);
 		fix_object();
 	}
-}
-
-
-/*!
- * @brief 全更新処理をチェックして処理していく
- * Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window"
- * @return なし
- */
-void handle_stuff(void)
-{
-	if (p_ptr->update) update_creature(p_ptr);
-	if (p_ptr->redraw) redraw_stuff();
-	if (p_ptr->window) window_stuff();
-}
-
-void update_output(void)
-{
-	if (p_ptr->redraw) redraw_stuff();
-	if (p_ptr->window) window_stuff();
 }
 
 /*!

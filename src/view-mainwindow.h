@@ -20,3 +20,6 @@ extern void resize_map(void);
 extern void redraw_window(void);
 extern bool change_panel(POSITION dy, POSITION dx);
 
+extern void window_stuff(void);
+extern void redraw_stuff(void);
+

@@ -5895,3 +5895,23 @@ void close_game(void)
 	/* Allow suspending now */
 	signals_handle_tstp();
 }
+
+
+/*!
+ * @brief 全更新処理をチェックして処理していく
+ * Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window"
+ * @return なし
+ */
+void handle_stuff(void)
+{
+	if (p_ptr->update) update_creature(p_ptr);
+	if (p_ptr->redraw) redraw_stuff();
+	if (p_ptr->window) window_stuff();
+}
+
+void update_output(void)
+{
+	if (p_ptr->redraw) redraw_stuff();
+	if (p_ptr->window) window_stuff();
+}
+

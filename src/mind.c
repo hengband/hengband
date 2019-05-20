@@ -15,6 +15,7 @@
  */
 
 #include "angband.h"
+#include "core.h"
 #include "util.h"
 
 #include "mind.h"

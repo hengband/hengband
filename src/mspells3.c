@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "core.h"
 #include "util.h"
 
 #include "floor.h"

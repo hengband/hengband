@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "core.h"
+
 #include "dungeon.h"
 #include "cmd-dump.h"
 #include "util.h"

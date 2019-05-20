@@ -79,10 +79,6 @@ extern bool new_mane;
 extern DEPTH *max_dlv;
 extern bool use_menu;
 
-/* xtra1.c */
-extern void handle_stuff(void);
-extern void update_output(void);
-
 #ifdef MACINTOSH
 /* main-mac.c */
 /* extern void main(void); */

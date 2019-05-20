@@ -7,6 +7,7 @@
  */
 
 #include "angband.h"
+#include "core.h"
 #include "util.h"
 
 #include "cmd-dump.h"

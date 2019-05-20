@@ -140,6 +140,7 @@
  */
 
 #include "angband.h"
+#include "core.h"
 #include "util.h"
 
 #include "autopick.h"
