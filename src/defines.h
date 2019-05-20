@@ -2576,21 +2576,6 @@ extern int PlayerUID;
  */
 #define TOKENIZE_CHECKQUOTE 0x01  /* Special handling of single quotes */
 
-/*
- * Parse errors
- */
-#define PARSE_ERROR_GENERIC                  1
-#define PARSE_ERROR_ABSOLETE_FILE            2
-#define PARSE_ERROR_MISSING_RECORD_HEADER    3
-#define PARSE_ERROR_NON_SEQUENTIAL_RECORDS   4
-#define PARSE_ERROR_INVALID_FLAG             5
-#define PARSE_ERROR_UNDEFINED_DIRECTIVE      6
-#define PARSE_ERROR_OUT_OF_MEMORY            7
-#define PARSE_ERROR_OUT_OF_BOUNDS            8
-#define PARSE_ERROR_TOO_FEW_ARGUMENTS        9
-#define PARSE_ERROR_UNDEFINED_TERRAIN_TAG   10
-#define PARSE_ERROR_MAX                     11
-
 #define GINOU_MAX      10
 
 #define NO_TOWN 6

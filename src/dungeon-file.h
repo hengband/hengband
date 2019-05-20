@@ -24,6 +24,21 @@ struct dungeon_grid
 #define RANDOM_ARTIFACT     0x00000010
 #define RANDOM_TRAP         0x00000020
 
+/*
+ * Parse errors
+ */
+#define PARSE_ERROR_GENERIC                  1
+#define PARSE_ERROR_ABSOLETE_FILE            2
+#define PARSE_ERROR_MISSING_RECORD_HEADER    3
+#define PARSE_ERROR_NON_SEQUENTIAL_RECORDS   4
+#define PARSE_ERROR_INVALID_FLAG             5
+#define PARSE_ERROR_UNDEFINED_DIRECTIVE      6
+#define PARSE_ERROR_OUT_OF_MEMORY            7
+#define PARSE_ERROR_OUT_OF_BOUNDS            8
+#define PARSE_ERROR_TOO_FEW_ARGUMENTS        9
+#define PARSE_ERROR_UNDEFINED_TERRAIN_TAG   10
+#define PARSE_ERROR_MAX                     11
+
 extern concptr err_str[PARSE_ERROR_MAX];
 extern errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax);
 extern errr init_v_info(void);
