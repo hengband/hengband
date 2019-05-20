@@ -36,6 +36,10 @@
 #include "spells.h"
 #include "cmd-dump.h"
 #include "save.h"
+
+#include "view-mainwindow.h"
+
+
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */

@@ -46,6 +46,15 @@ static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;
 static object_type *autopick_obj; /*!< 各種自動拾い処理時に使うオブジェクトポインタ */
 
+/*
+ * Dungeon size info
+ */
+
+POSITION panel_row_min, panel_row_max;
+POSITION panel_col_min, panel_col_max;
+POSITION panel_col_prt, panel_row_prt;
+
+
  /*
   * Some screen locations for various display routines
   * Currently, row 8 and 15 are the only "blank" rows.

@@ -56,9 +56,6 @@ extern bool reset_concent;
  * Software options (set via the '=' command).  See "tables.c"
  */
 
-extern POSITION panel_row_min, panel_row_max;
-extern POSITION panel_col_min, panel_col_max;
-extern POSITION panel_col_prt, panel_row_prt;
 extern int player_uid;
 extern int player_euid;
 extern int player_egid;

@@ -30,6 +30,8 @@
 #include "feature.h"
 #include "floor-town.h"
 
+#include "view-mainwindow.h"
+
  /*
   * Wilderness
   */

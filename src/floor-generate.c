@@ -123,6 +123,8 @@
 #include "feature.h"
 #include "spells.h"
 
+#include "view-mainwindow.h"
+
 int dun_tun_rnd; 
 int dun_tun_chg;
 int dun_tun_con;

@@ -2416,15 +2416,6 @@
 	((int)((G) % 256U))
 
 /*
- * Determines if a map location is currently "on screen" -RAK-
- * Note that "panel_contains(Y,X)" always implies "in_bounds2(Y,X)".
- */
-#define panel_contains(Y,X) \
-  (((Y) >= panel_row_min) && ((Y) <= panel_row_max) && \
-   ((X) >= panel_col_min) && ((X) <= panel_col_max))
-
-
-/*
  * Hack -- Prepare to use the "Secure" routines
  */
 #if defined(SET_UID) && defined(SECURE)

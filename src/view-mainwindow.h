@@ -23,3 +23,15 @@ extern bool change_panel(POSITION dy, POSITION dx);
 extern void window_stuff(void);
 extern void redraw_stuff(void);
 
+extern POSITION panel_row_min, panel_row_max;
+extern POSITION panel_col_min, panel_col_max;
+extern POSITION panel_col_prt, panel_row_prt;
+
+/*
+ * Determines if a map location is currently "on screen" -RAK-
+ * Note that "panel_contains(Y,X)" always implies "in_bounds2(Y,X)".
+ */
+#define panel_contains(Y,X) \
+  (((Y) >= panel_row_min) && ((Y) <= panel_row_max) && \
+   ((X) >= panel_col_min) && ((X) <= panel_col_max))
+

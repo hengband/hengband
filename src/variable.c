@@ -17,16 +17,6 @@
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
-
-/*
- * Dungeon size info
- */
-
-POSITION panel_row_min, panel_row_max;
-POSITION panel_col_min, panel_col_max;
-POSITION panel_col_prt, panel_row_prt;
-
-
 /*
  * User info
  */
