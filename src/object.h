@@ -186,3 +186,16 @@ extern s32b flag_cost(object_type *o_ptr, int plusses);
 
 extern bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern void py_pickup_floor(bool pickup);
+
+/*
+ * Return the "attr" for a given item.
+ * Use "flavor" if available.
+ * Default to user definitions.
+ */
+#define object_attr(T) \
+	((k_info[(T)->k_idx].flavor) ? \
+	 (k_info[k_info[(T)->k_idx].flavor].x_attr) : \
+	 ((!(T)->k_idx || ((T)->tval != TV_CORPSE) || ((T)->sval != SV_CORPSE) || \
+	   (k_info[(T)->k_idx].x_attr != TERM_DARK)) ? \
+	  (k_info[(T)->k_idx].x_attr) : (r_info[(T)->pval].x_attr)))
+
