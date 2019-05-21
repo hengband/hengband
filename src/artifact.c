@@ -14,6 +14,7 @@
 #include "util.h"
 
 #include "artifact.h"
+#include "cmd-smith.h"
 
 #include "avatar.h"
 #include "floor.h"

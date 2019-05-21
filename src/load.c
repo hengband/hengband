@@ -83,6 +83,7 @@
 #include "save.h"
 #include "japanese.h"
 #include "realm-song.h"
+#include "cmd-smith.h"
 
 /*
  * Maximum number of tries for selection of a proper quest monster

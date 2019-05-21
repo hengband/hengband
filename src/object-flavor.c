@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-smith.h"
 #include "artifact.h"
 #include "player-status.h"
 #include "shoot.h"

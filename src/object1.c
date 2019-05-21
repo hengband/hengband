@@ -26,6 +26,7 @@
 #include "monster.h"
 #include "files.h"
 #include "term.h"
+#include "cmd-smith.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify

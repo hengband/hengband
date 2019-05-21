@@ -6,6 +6,7 @@
 #include "object-hook.h"
 #include "player-status.h"
 #include "cmd-basic.h"
+#include "cmd-smith.h"
 #include "objectkind.h"
 #include "autopick.h"
 
