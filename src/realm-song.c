@@ -1,6 +1,8 @@
 ﻿#include "angband.h"
 #include "util.h"
 
+#include "realm-song.h"
+
 #include "cmd-spell.h"
 #include "spells.h"
 #include "spells-status.h"

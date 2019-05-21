@@ -143,6 +143,7 @@
 #include "core.h"
 #include "util.h"
 
+#include "realm-song.h"
 #include "autopick.h"
 #include "dungeon.h"
 #include "floor.h"

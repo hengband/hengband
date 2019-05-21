@@ -16,6 +16,7 @@
 #include "dungeon.h"
 #include "player-race.h"
 #include "melee.h"
+#include "realm-song.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

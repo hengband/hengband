@@ -33,6 +33,7 @@
 #include "grid.h"
 #include "monsterrace.h"
 #include "targeting.h"
+#include "realm-song.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

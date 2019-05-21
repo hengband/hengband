@@ -20,6 +20,7 @@
 #include "player-effects.h"
 #include "player-race.h"
 #include "realm-hex.h"
+#include "realm-song.h"
 #include "spells-floor.h"
 #include "object-broken.h"
 #include "cmd-basic.h"

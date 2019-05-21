@@ -30,6 +30,7 @@
 
 #include "spells.h"
 #include "realm-hex.h"
+#include "realm-song.h"
 
 #include "object-flavor.h"
 

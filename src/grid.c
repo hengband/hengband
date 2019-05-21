@@ -38,6 +38,7 @@
 #include "player-effects.h"
 #include "spells.h"
 #include "view-mainwindow.h"
+#include "realm-song.h"
 
 
 /*!

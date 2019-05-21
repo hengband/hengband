@@ -9,6 +9,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "grid.h"
+#include "realm-song.h"
 
 /*!
 * @brief 箱からアイテムを引き出す /

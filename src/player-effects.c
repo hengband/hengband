@@ -29,6 +29,7 @@
 #include "quest.h"
 #include "avatar.h"
 #include "spells-status.h"
+#include "realm-song.h"
 #include "realm-hex.h"
 #include "object-ego.h"
 #include "object-hook.h"

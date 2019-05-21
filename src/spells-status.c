@@ -13,6 +13,7 @@
 #include "player-effects.h"
 #include "objectkind.h"
 #include "targeting.h"
+#include "realm-song.h"
 
 /*!
  * @brief モンスター回復処理

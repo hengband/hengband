@@ -28,6 +28,7 @@
 #include "files.h"
 #include "floor.h"
 #include "objectkind.h"
+#include "realm-song.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

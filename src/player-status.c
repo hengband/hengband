@@ -25,6 +25,7 @@
 #include "mutation.h"
 #include "patron.h"
 #include "realm-hex.h"
+#include "realm-song.h"
 #include "cmd-pet.h"
 #include "cmd-spell.h"
 #include "dungeon.h"

@@ -81,6 +81,7 @@
 #include "autopick.h"
 #include "save.h"
 #include "realm.h"
+#include "realm-song.h"
 #include "targeting.h"
 
  /*!

@@ -20,6 +20,7 @@
 #include "player-status.h"
 #include "avatar.h"
 #include "realm-hex.h"
+#include "realm-song.h"
 
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.

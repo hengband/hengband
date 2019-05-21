@@ -43,6 +43,7 @@
 #include "player-status.h"
 #include "player-move.h"
 #include "realm-hex.h"
+#include "realm-song.h"
 #include "object-hook.h"
 #include "object-broken.h"
 #include "object-flavor.h"

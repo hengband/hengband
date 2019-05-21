@@ -38,6 +38,7 @@
 #include "player-effects.h"
 #include "view-mainwindow.h"
 #include "targeting.h"
+#include "realm-song.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

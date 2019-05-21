@@ -30,6 +30,7 @@
 #include "object-ego.h"
 #include "grid.h"
 #include "targeting.h"
+#include "realm-song.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /
