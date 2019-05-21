@@ -1,5 +1,34 @@
 ﻿#pragma once
 
+#define NIKKI_HIGAWARI     0
+#define NIKKI_BUNSHOU      1
+#define NIKKI_ART          2
+#define NIKKI_UNIQUE       3
+#define NIKKI_FIX_QUEST_C  4
+#define NIKKI_FIX_QUEST_F  5
+#define NIKKI_RAND_QUEST_C 6
+#define NIKKI_RAND_QUEST_F 7
+#define NIKKI_MAXDEAPTH    8
+#define NIKKI_TRUMP        9
+#define NIKKI_STAIR       10
+#define NIKKI_RECALL      11
+#define NIKKI_TO_QUEST    12
+#define NIKKI_TELE_LEV    13
+#define NIKKI_BUY         14
+#define NIKKI_SELL        15
+#define NIKKI_ARENA       16
+#define NIKKI_HANMEI      17
+#define NIKKI_LEVELUP     18
+#define NIKKI_GAMESTART   19
+#define NIKKI_WIZ_TELE    20
+#define NIKKI_NAMED_PET   21
+#define NIKKI_PAT_TELE    22
+#define NIKKI_ART_SCROLL  23
+
+#define NIKKI_WIZARD_LOG  24
+
+
+
 /* cmd4.c */
 #ifndef JP
 extern concptr get_ordinal_number_suffix(int num);
