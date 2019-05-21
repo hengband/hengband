@@ -22,6 +22,7 @@
 #include "view-mainwindow.h"
 #include "world.h"
 #include "report.h"
+#include "melee.h"
 
 
 /*!
