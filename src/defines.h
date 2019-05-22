@@ -2244,13 +2244,6 @@
 #define MR1_SINKA 0x01
 
 
-/* Hack -- Determine monster race appearance index is same as race index */
-#define is_original_ap(A) \
-	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
-
-#define is_original_ap_and_seen(A) \
-	 (bool)((A)->ml && !p_ptr->image && ((A)->ap_r_idx == (A)->r_idx))
-
 /*
  * Is the monster seen by the player?
  */
