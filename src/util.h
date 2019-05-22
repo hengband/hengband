@@ -78,6 +78,11 @@ extern concptr keymap_act[KEYMAP_MODES][256];
 
 
 /*
+ * Hack -- The main "screen"
+ */
+#define term_screen     (angband_term[0])
+
+/*
  * Hack -- conditional (or "bizarre") externs
  */
 

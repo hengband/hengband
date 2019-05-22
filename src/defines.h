@@ -2254,12 +2254,6 @@
 
 /*** Macro Definitions ***/
 
-
-/*
- * Hack -- The main "screen"
- */
-#define term_screen     (angband_term[0])
-
 /*
  * Return the "char" for a given item.
  * Use "flavor" if available.
