@@ -1925,23 +1925,6 @@
 /*** Object flag values ***/
 
 
-/*!
- * 箱のトラップ定義 Chest trap flags (see "tables.c")
- */
-#define CHEST_LOSE_STR          0x0001 /*!< 箱のトラップ: STR減少の毒針 */
-#define CHEST_LOSE_CON          0x0002 /*!< 箱のトラップ: CON減少の毒針 */
-#define CHEST_POISON            0x0004 /*!< 箱のトラップ: 毒針 */
-#define CHEST_PARALYZE          0x0008 /*!< 箱のトラップ: 麻痺ガス */
-#define CHEST_EXPLODE           0x0010 /*!< 箱のトラップ: 爆発 */
-#define CHEST_SUMMON            0x0020 /*!< 箱のトラップ: 召喚のルーン(モンスター) */
-#define CHEST_SCATTER           0x0040 /*!< 箱のトラップ: アイテム散乱 */
-#define CHEST_E_SUMMON          0x0080 /*!< 箱のトラップ: 召喚のルーン(エレメンタル) */
-#define CHEST_BIRD_STORM        0x0100 /*!< 箱のトラップ: 召喚のルーン(鳥) */
-#define CHEST_H_SUMMON          0x0200 /*!< 箱のトラップ: 召喚のルーン(強敵)  */
-#define CHEST_RUNES_OF_EVIL     0x0400 /*!< 箱のトラップ: 邪悪なルーン */
-#define CHEST_ALARM             0x0800 /*!< 箱のトラップ: 警報装置 */
-
-
 /*
  * Special Object Flags
  */
