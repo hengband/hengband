@@ -331,15 +331,6 @@
 #define PY_MAX_LEVEL    50              /*!< プレイヤーレベルの最大値 / Maximum level */
 
 /*
- * Player regeneration constants
- */
-#define PY_REGEN_NORMAL         197     /* Regen factor*2^16 when full */
-#define PY_REGEN_WEAK           98      /* Regen factor*2^16 when weak */
-#define PY_REGEN_FAINT          33      /* Regen factor*2^16 when fainting */
-#define PY_REGEN_HPBASE         1442    /* Min amount hp regen*2^16 */
-#define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
-
-/*
  * 職業ごとの選択可能な魔法領域現在の所 bitrh.cとtables.cでのみ使用。
  * Possible realms that can be chosen currently used only by birth.c and tables.c
  */
