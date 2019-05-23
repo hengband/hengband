@@ -48,6 +48,7 @@
 
 #include "autopick.h"
 
+#include "bldg.h"
 #include "birth.h"
 #include "cmd-pet.h"
 #include "cmd-spell.h"

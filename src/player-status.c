@@ -2,6 +2,7 @@
 #include "core.h"
 #include "util.h"
 
+#include "bldg.h"
 #include "quest.h"
 #include "player-move.h"
 #include "player-status.h"
