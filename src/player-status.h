@@ -15,6 +15,13 @@
  * whenever anything important changes.
  */
 
+/*
+ * Player constants
+ */
+#define PY_MAX_EXP      99999999L       /*!< プレイヤー経験値の最大値 / Maximum exp */
+#define PY_MAX_GOLD     999999999L      /*!< プレイヤー所持金の最大値 / Maximum gold */
+#define PY_MAX_LEVEL    50              /*!< プレイヤーレベルの最大値 / Maximum level */
+
 extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 

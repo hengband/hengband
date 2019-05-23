@@ -318,35 +318,6 @@
 #define MON_DRAIN_LIFE    2       /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
 #define USE_DEVICE        3       /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
 
-
-/*
- * Player constants
- */
-#define PY_MAX_EXP      99999999L       /*!< プレイヤー経験値の最大値 / Maximum exp */
-#define PY_MAX_GOLD     999999999L      /*!< プレイヤー所持金の最大値 / Maximum gold */
-#define PY_MAX_LEVEL    50              /*!< プレイヤーレベルの最大値 / Maximum level */
-
-/*
- * 職業ごとの選択可能な魔法領域現在の所 bitrh.cとtables.cでのみ使用。
- * Possible realms that can be chosen currently used only by birth.c and tables.c
- */
-#define CH_NONE         0x00
-#define CH_LIFE         0x01
-#define CH_SORCERY      0x02
-#define CH_NATURE       0x04
-#define CH_CHAOS        0x08
-#define CH_DEATH        0x10
-#define CH_TRUMP        0x20
-#define CH_ARCANE       0x40
-#define CH_ENCHANT      0x80
-#define CH_DAEMON       0x100
-#define CH_CRUSADE      0x200
-
-#define CH_MUSIC        0x08000	/* This is 16th bit */
-#define CH_HISSATSU     0x10000
-#define CH_HEX          0x20000
-
-
 /*
  * Magic realms
  */
