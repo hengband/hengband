@@ -1898,23 +1898,6 @@
 
 
 /*
- * アイテムの簡易鑑定定義 / Game generated inscription indices. These are stored in the object,
- * and are used to index the string array from tables.c.
- */
-#define FEEL_NONE              0 /*!< 簡易鑑定: 未鑑定 */
-#define FEEL_BROKEN            1 /*!< 簡易鑑定: 壊れている */
-#define FEEL_TERRIBLE          2 /*!< 簡易鑑定: 恐ろしい */
-#define FEEL_WORTHLESS         3 /*!< 簡易鑑定: 無価値 */
-#define FEEL_CURSED            4 /*!< 簡易鑑定: 呪われている */
-#define FEEL_UNCURSED          5 /*!< 簡易鑑定: 呪われていない */
-#define FEEL_AVERAGE           6 /*!< 簡易鑑定: 並 */
-#define FEEL_GOOD              7 /*!< 簡易鑑定: 上質 */
-#define FEEL_EXCELLENT         8 /*!< 簡易鑑定: 高級 */
-#define FEEL_SPECIAL           9 /*!< 簡易鑑定: 特別 */
-
-#define FEEL_MAX               9 /*!< 簡易鑑定の種別数 */
-
-/*
  * 変愚ver1.5.0以前に使われていたアイテムの追加特性フラグ / Hack -- special "xtra" object powers
  */
 #define EGO_XTRA_SUSTAIN        1 /*!< 旧版アイテムフラグ(非推奨): 追加維持能力 / Sustain one stat */

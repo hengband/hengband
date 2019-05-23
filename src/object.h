@@ -129,8 +129,25 @@ extern OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode);
 extern void object_known(object_type *o_ptr);
 extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
+
+/*
+ * アイテムの簡易鑑定定義 / Game generated inscription indices. These are stored in the object,
+ * and are used to index the string array from tables.c.
+ */
+#define FEEL_NONE              0 /*!< 簡易鑑定: 未鑑定 */
+#define FEEL_BROKEN            1 /*!< 簡易鑑定: 壊れている */
+#define FEEL_TERRIBLE          2 /*!< 簡易鑑定: 恐ろしい */
+#define FEEL_WORTHLESS         3 /*!< 簡易鑑定: 無価値 */
+#define FEEL_CURSED            4 /*!< 簡易鑑定: 呪われている */
+#define FEEL_UNCURSED          5 /*!< 簡易鑑定: 呪われていない */
+#define FEEL_AVERAGE           6 /*!< 簡易鑑定: 並 */
+#define FEEL_GOOD              7 /*!< 簡易鑑定: 上質 */
+#define FEEL_EXCELLENT         8 /*!< 簡易鑑定: 高級 */
+#define FEEL_SPECIAL           9 /*!< 簡易鑑定: 特別 */
+#define FEEL_MAX               9 /*!< 簡易鑑定の種別数 */
 extern byte value_check_aux1(object_type *o_ptr);
 extern byte value_check_aux2(object_type *o_ptr);
+
 extern PRICE object_value(object_type *o_ptr);
 extern PRICE object_value_real(object_type *o_ptr);
 extern void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt);
