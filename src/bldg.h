@@ -2,6 +2,8 @@
 
 #include "realm.h"
 
+#define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
+
 /*
  * A structure to describe a building.
  * From Kamband
