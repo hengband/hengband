@@ -20,6 +20,7 @@
 #include "player-race.h"
 #include "floor.h"
 #include "objectkind.h"
+#include "realm.h"
 #include "realm-song.h"
 
 /*!

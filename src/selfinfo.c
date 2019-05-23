@@ -19,6 +19,7 @@
 
 #include "player-status.h"
 #include "avatar.h"
+#include "realm.h"
 #include "realm-hex.h"
 #include "realm-song.h"
 

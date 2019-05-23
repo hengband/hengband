@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "realm.h"
+
 /*
  * A structure to describe a building.
  * From Kamband

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "spells.h"
+#include "realm.h"
 
 /*
  * 職業ごとの選択可能な魔法領域現在の所 bitrh.cとtables.cでのみ使用。
