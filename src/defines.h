@@ -319,10 +319,6 @@
 #define USE_DEVICE        3       /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
 
 
-
-#define CAN_TWO_HANDS_WIELDING() (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))
-
-
 /*
  * Player constants
  */
