@@ -290,42 +290,10 @@
 #define INVEN_PACK      23 /*!< アイテムスロット…所持品(0～) */
 
 /*
- * Indexes used for various "equipment" slots (hard-coded by savefiles, etc).
- */
-#define INVEN_RARM      24 /*!< アイテムスロット…右手 */
-#define INVEN_LARM      25 /*!< アイテムスロット…左手 */
-#define INVEN_BOW       26 /*!< アイテムスロット…射撃 */
-#define INVEN_RIGHT     27 /*!< アイテムスロット…右手指 */
-#define INVEN_LEFT      28 /*!< アイテムスロット…左手指 */
-#define INVEN_NECK      29 /*!< アイテムスロット…首 */
-#define INVEN_LITE      30 /*!< アイテムスロット…光源 */
-#define INVEN_BODY      31 /*!< アイテムスロット…体 */
-#define INVEN_OUTER     32 /*!< アイテムスロット…体の上 */
-#define INVEN_HEAD      33 /*!< アイテムスロット…頭部 */
-#define INVEN_HANDS     34 /*!< アイテムスロット…腕部 */
-#define INVEN_FEET      35 /*!< アイテムスロット…脚部 */
-
-/*
- * used for get_random_ego()
- */
-#define INVEN_AMMO     23
-
-/*
- * Total number of p_ptr->inventory_list slots (hard-coded).
- */
-#define INVEN_TOTAL     36
-
-/*
- * Fake p_ptr->inventory_list slot for selecting force (hard-coded).
- */
-#define INVEN_FORCE     1111
-
-/*
  * Player sex constants (hard-coded by save-files, arrays, etc)
  */
 #define SEX_FEMALE              0
 #define SEX_MALE                1
-
 
 /*
  * Player race constants (hard-coded by save-files, arrays, etc)
