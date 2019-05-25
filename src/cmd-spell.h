@@ -9,6 +9,14 @@
 
 extern const u32b fake_spell_flags[4];
 
+
+#define SPELL_NAME   0
+#define SPELL_DESC   1
+#define SPELL_INFO   2
+#define SPELL_CAST   3
+#define SPELL_FAIL   4
+#define SPELL_STOP   5
+#define SPELL_CONT   6
 extern concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
 
 extern concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base);

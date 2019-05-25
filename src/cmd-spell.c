@@ -9,6 +9,7 @@
 #include "angband.h"
 #include "core.h"
 #include "util.h"
+#include "cmd-spell.h"
 
 #include "cmd-dump.h"
 #include "selfinfo.h"
