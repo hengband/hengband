@@ -142,11 +142,6 @@
 #define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
 #define MAX_SEIKAKU     13 /*!< 性格の最大定義数 */
 
-
-#define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
-#define MA_KNEE 1 /*!< 金的効果ID */
-#define MA_SLOW 2 /*!< 膝蹴り効果ID */
-
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
 
 /*

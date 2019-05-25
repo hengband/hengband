@@ -81,6 +81,10 @@ typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション�
 #define RBE_INERTIA     34 /*!< モンスターの攻撃効果: 減速させる*/
 #define RBE_STUN        35 /*!< モンスターの攻撃効果: 朦朧とさせる*/
 
+#define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
+#define MA_KNEE 1 /*!< 金的効果ID */
+#define MA_SLOW 2 /*!< 膝蹴り効果ID */
+
 #define HISSATSU_NONE   0
 #define HISSATSU_2      1
 #define HISSATSU_3WAY   2
