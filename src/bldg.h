@@ -5,6 +5,10 @@
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 #define MAX_ARENA_MONS 41 /*<! 闘技場のイベント件数 -KMW- */
 
+#define BUILDING_NON_MEMBER 0 /*!< 不明(現在未使用) */
+#define BUILDING_MEMBER     1 /*!< 不明(現在未使用) */
+#define BUILDING_OWNER      2 /*!< 施設の種族/職業条件が一致している状態値 */
+
 /*
  * A structure to describe a building.
  * From Kamband
