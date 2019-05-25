@@ -20,6 +20,7 @@
 #include "monster.h"
 #include "object-flavor.h"
 #include "object-hook.h"
+#include "object-ego.h"
 #include "objectkind.h"
 #include "floor-town.h"
 #include "files.h"

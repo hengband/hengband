@@ -17,6 +17,7 @@
 #include "core.h"
 #include "term.h"
 
+#include "object-ego.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "cmd-dump.h"

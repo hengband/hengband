@@ -42,6 +42,7 @@
 #include "floor-events.h"
 #include "floor-town.h"
 #include "grid.h"
+#include "object-ego.h"
 #include "object-curse.h"
 #include "object-flavor.h"
 #include "store.h"

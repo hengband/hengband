@@ -16,6 +16,7 @@
 #include "core.h"
 #include "term.h"
 #include "util.h"
+#include "object-ego.h"
 
 #include "creature.h"
 

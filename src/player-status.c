@@ -20,6 +20,7 @@
 #include "spells-status.h"
 #include "object.h"
 #include "object-hook.h"
+#include "object-ego.h"
 #include "monster.h"
 #include "monster-status.h"
 #include "monsterrace-hook.h"
