@@ -82,6 +82,13 @@ struct player_type
 
 	s16b max_plv;		/* Max Player Level */
 
+	#define A_STR 0
+	#define A_INT 1
+	#define A_WIS 2
+	#define A_DEX 3
+	#define A_CON 4
+	#define A_CHR 5
+	#define A_MAX 6
 	BASE_STATUS stat_max[6];	/* Current "maximal" stat values */
 	BASE_STATUS stat_max_max[6];	/* Maximal "maximal" stat values */
 	BASE_STATUS stat_cur[6];	/* Current "natural" stat values */
