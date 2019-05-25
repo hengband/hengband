@@ -259,15 +259,6 @@
 #define MAX_NLEN        160
 
 /*
- * Special internal key
- */
-#define SPECIAL_KEY_QUEST    255
-#define SPECIAL_KEY_BUILDING 254
-#define SPECIAL_KEY_STORE    253
-#define SPECIAL_KEY_QUIT     252
-
-
-/*
  * Misc constants
  */
 #define TOWN_DAWN         10000   /*!< 1日分のターン / Number of ticks from dawn to dawn XXX */
