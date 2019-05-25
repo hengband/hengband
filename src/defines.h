@@ -434,20 +434,6 @@
 
 
 
-
-/* Types of pattern tiles */
-#define NOT_PATTERN_TILE      -1
-#define PATTERN_TILE_START    0
-#define PATTERN_TILE_1        1
-#define PATTERN_TILE_2        2
-#define PATTERN_TILE_3        3
-#define PATTERN_TILE_4        4
-#define PATTERN_TILE_END      5
-#define PATTERN_TILE_OLD      6
-#define PATTERN_TILE_TELEPORT 7
-#define PATTERN_TILE_WRECKED  8
-
-
 /* Types of conversions */
 #define CONVERT_TYPE_FLOOR   0
 #define CONVERT_TYPE_WALL    1
