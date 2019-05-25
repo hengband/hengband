@@ -269,6 +269,13 @@ extern bool rodeo(player_type *creature_ptr);
 extern bool clear_mind(player_type *creature_ptr);
 extern bool concentration(player_type *creature_ptr);
 
+/*
+ * Bit flags for teleportation
+ */
+#define TELEPORT_NONMAGICAL 0x00000001
+#define TELEPORT_PASSIVE    0x00000002
+#define TELEPORT_DEC_VALOUR 0x00000004
+
 /* spells3.c */
 extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
 extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);

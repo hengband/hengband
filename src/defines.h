@@ -448,15 +448,6 @@
 #define FAF_NO_DROP     0x02
 #define FAF_CRASH_GLASS 0x04
 
-
-/*
- * Bit flags for teleportation
- */
-#define TELEPORT_NONMAGICAL 0x00000001
-#define TELEPORT_PASSIVE    0x00000002
-#define TELEPORT_DEC_VALOUR 0x00000004
-
-
 /* Types of doors */
 #define DOOR_DEFAULT    -1
 #define DOOR_DOOR        0
