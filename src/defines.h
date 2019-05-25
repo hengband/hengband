@@ -1176,17 +1176,6 @@
 
 
 /*
- * Bit flags for control of get_check_strict()
- */
-#define CHECK_OKAY_CANCEL 0x01
-#define CHECK_NO_ESCAPE   0x02
-#define CHECK_NO_HISTORY  0x04
-#define CHECK_DEFAULT_Y   0x08
-
-
-
-
-/*
  * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
  */
 #define USE_EQUIP 0x01 /*!< アイテム表示/選択範囲: 装備品からの選択を許可する / Allow equip items */
