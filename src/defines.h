@@ -149,14 +149,6 @@
 
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
 
-
-#define MIND_MINDCRAFTER    0 /*!< 特殊能力: 超能力 */
-#define MIND_KI             1 /*!< 特殊能力: 練気 */
-#define MIND_BERSERKER      2 /*!< 特殊能力: 怒り */
-#define MIND_MIRROR_MASTER  3 /*!< 特殊能力: 鏡魔法 */
-#define MIND_NINJUTSU       4 /*!< 特殊能力: 忍術 */
-
-
 /*
  * Size of memory reserved for initialization of some arrays
  */
