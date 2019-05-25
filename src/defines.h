@@ -150,12 +150,6 @@
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
 
 
-#ifdef JP
-#define MAX_SILLY_ATTACK 41 /*!< 幻覚時のジョークメッセージ最大数 */
-#else
-#define MAX_SILLY_ATTACK 29 /*!< Hallucination stuff */
-#endif
-
 #define MIND_MINDCRAFTER    0 /*!< 特殊能力: 超能力 */
 #define MIND_KI             1 /*!< 特殊能力: 練気 */
 #define MIND_BERSERKER      2 /*!< 特殊能力: 怒り */

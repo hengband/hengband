@@ -2,6 +2,13 @@
 typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション型定義
 
 
+#ifdef JP
+#define MAX_SILLY_ATTACK 41 /*!< 幻覚時のジョークメッセージ最大数 */
+#else
+#define MAX_SILLY_ATTACK 29 /*!< Hallucination stuff */
+#endif
+
+
 /*** Monster blow constants ***/
 
 /*!
