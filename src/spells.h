@@ -299,8 +299,17 @@ extern void identify_pack(void);
 extern int remove_curse(void);
 extern int remove_all_curse(void);
 extern bool alchemy(void);
+
+/*
+ * Bit flags for the "enchant()" function
+ */
+#define ENCH_TOHIT      0x01 /*!< 装備強化処理: 命中強化 / Enchant to hit */
+#define ENCH_TODAM      0x02 /*!< 装備強化処理: ダメージ強化 / Enchant to damage */
+#define ENCH_TOAC       0x04 /*!< 装備強化処理: AC強化 / Enchant to AC */
+#define ENCH_FORCE      0x08 /*!< 装備強化処理: 無条件に成功させる / Force enchantment */
 extern bool enchant(object_type *o_ptr, int n, int eflag);
 extern bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac);
+
 extern bool artifact_scroll(void);
 extern bool ident_spell(bool only_equip);
 extern bool mundane_spell(bool only_equip);

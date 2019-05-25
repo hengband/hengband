@@ -1166,15 +1166,6 @@
 #define PROJECT_WHO_UNCTRL_POWER -1 /*!< 魔法効果の自然発生要因: 名状し難い力の解放 */
 #define PROJECT_WHO_GLASS_SHARDS -2 /*!< 魔法効果の自然発生要因: 破壊されたガラス地形の破片 */
 
-
-/*
- * Bit flags for the "enchant()" function
- */
-#define ENCH_TOHIT      0x01 /*!< 装備強化処理: 命中強化 / Enchant to hit */
-#define ENCH_TODAM      0x02 /*!< 装備強化処理: ダメージ強化 / Enchant to damage */
-#define ENCH_TOAC       0x04 /*!< 装備強化処理: AC強化 / Enchant to AC */
-#define ENCH_FORCE      0x08 /*!< 装備強化処理: 無条件に成功させる / Force enchantment */
-
 /*
  * target_set用関数の利用用途フラグ / Bit flags for the "target_set" function
  */
