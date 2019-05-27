@@ -9,6 +9,14 @@ extern void panel_bounds_center(void);
 extern void verify_panel(void);
 extern bool target_able(MONSTER_IDX m_idx);
 extern bool target_okay(void);
+
+/*
+ * target_set用関数の利用用途フラグ / Bit flags for the "target_set" function
+ */
+#define TARGET_KILL     0x01 /*!< モンスターへの狙いをつける(視界内モンスターのみクエリ対象) / Target monsters */
+#define TARGET_LOOK     0x02 /*!< "L"ookコマンド向けの既存情報確認向け(全ての有為な情報をクエリ対象) / Describe grid fully */
+#define TARGET_XTRA     0x04 /*!< 現在未使用 / Currently unused flag */
+#define TARGET_GRID     0x08 /*!< 全てのマス対象にする(現在未使用) / Select from all grids */
 extern bool target_set(BIT_FLAGS mode);
 extern void target_set_prepare_look(void);
 extern bool get_aim_dir(DIRECTION *dp);

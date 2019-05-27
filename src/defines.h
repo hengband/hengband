@@ -1167,15 +1167,6 @@
 #define PROJECT_WHO_GLASS_SHARDS -2 /*!< 魔法効果の自然発生要因: 破壊されたガラス地形の破片 */
 
 /*
- * target_set用関数の利用用途フラグ / Bit flags for the "target_set" function
- */
-#define TARGET_KILL     0x01 /*!< モンスターへの狙いをつける(視界内モンスターのみクエリ対象) / Target monsters */
-#define TARGET_LOOK     0x02 /*!< "L"ookコマンド向けの既存情報確認向け(全ての有為な情報をクエリ対象) / Describe grid fully */
-#define TARGET_XTRA     0x04 /*!< 現在未使用 / Currently unused flag */
-#define TARGET_GRID     0x08 /*!< 全てのマス対象にする(現在未使用) / Select from all grids */
-
-
-/*
  * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
  */
 #define USE_EQUIP 0x01 /*!< アイテム表示/選択範囲: 装備品からの選択を許可する / Allow equip items */
