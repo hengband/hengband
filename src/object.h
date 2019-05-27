@@ -52,7 +52,15 @@ struct object_type
 	ARTIFACT_IDX name1;		/* Artifact type, if any */
 	EGO_IDX name2;			/* Ego-Item type, if any */
 
+
+	/*
+	 * 変愚ver1.5.0以前に使われていたアイテムの追加特性フラグ / Hack -- special "xtra" object powers
+	 */
+	#define EGO_XTRA_SUSTAIN        1 /*!< 旧版アイテムフラグ(非推奨): 追加維持能力 / Sustain one stat */
+	#define EGO_XTRA_POWER          2 /*!< 旧版アイテムフラグ(非推奨): 追加上級耐性 / High resist */
+	#define EGO_XTRA_ABILITY        3 /*!< 旧版アイテムフラグ(非推奨): 追加能力 / Special ability */
 	XTRA8 xtra1;			/* Extra info type (now unused) */
+
 	XTRA8 xtra2;			/* Extra info activation index */
 	XTRA8 xtra3;			/* Extra info for weaponsmith */
 	XTRA16 xtra4;			/*!< 光源の残り寿命、あるいは捕らえたモンスターの現HP / Extra info fuel or captured monster's current HP */
