@@ -1196,30 +1196,6 @@
 /*** General index values ***/
 
 
-/*
- * Some things which induce learning
- */
-#define DRS_ACID         1
-#define DRS_ELEC         2
-#define DRS_FIRE         3
-#define DRS_COLD         4
-#define DRS_POIS         5
-#define DRS_NETH         6
-#define DRS_LITE         7
-#define DRS_DARK         8
-#define DRS_FEAR         9
-#define DRS_CONF        10
-#define DRS_CHAOS       11
-#define DRS_DISEN       12
-#define DRS_BLIND       13
-#define DRS_NEXUS       14
-#define DRS_SOUND       15
-#define DRS_SHARD       16
-#define DRS_FREE        30
-#define DRS_MANA        31
-#define DRS_REFLECT     32
-
-
 
 #define DAMAGE_FORCE    1
 #define DAMAGE_GENO     2
