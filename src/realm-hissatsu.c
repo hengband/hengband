@@ -17,6 +17,7 @@
 #include "spells.h"
 #include "grid.h"
 #include "targeting.h"
+#include "view-mainwindow.h"
 
 /*!
 * @brief 剣術の各処理を行う

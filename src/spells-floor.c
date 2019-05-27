@@ -10,6 +10,7 @@
 #include "floor-save.h"
 #include "player-effects.h"
 #include "feature.h"
+#include "view-mainwindow.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

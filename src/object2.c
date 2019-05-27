@@ -39,6 +39,7 @@
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "object-ego.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks

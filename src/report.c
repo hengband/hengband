@@ -20,6 +20,7 @@
 #include "world.h"
 #include "realm.h"
 #include "term.h"
+#include "view-mainwindow.h"
 
 #ifdef WORLD_SCORE
 

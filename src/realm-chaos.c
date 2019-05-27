@@ -7,6 +7,7 @@
 #include "spells-status.h"
 #include "spells.h"
 #include "targeting.h"
+#include "view-mainwindow.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う

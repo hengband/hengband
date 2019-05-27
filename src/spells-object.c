@@ -18,6 +18,7 @@
 #include "objectkind.h"
 #include "autopick.h"
 #include "targeting.h"
+#include "view-mainwindow.h"
 
 
 typedef struct

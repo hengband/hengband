@@ -37,6 +37,7 @@
 #include "cmd-dump.h"
 #include "melee.h"
 #include "world.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats

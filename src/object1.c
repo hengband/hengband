@@ -27,6 +27,7 @@
 #include "files.h"
 #include "term.h"
 #include "cmd-smith.h"
+#include "view-mainwindow.h"
 
 #if defined(MACINTOSH) || defined(MACH_O_CARBON)
 #ifdef verify

@@ -41,6 +41,7 @@
 #include "autopick.h"
 #include "floor-town.h"
 #include "japanese.h"
+#include "view-mainwindow.h"
 
 #define MIN_STOCK 12
 

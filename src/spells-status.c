@@ -14,6 +14,7 @@
 #include "objectkind.h"
 #include "targeting.h"
 #include "realm-song.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief モンスター回復処理

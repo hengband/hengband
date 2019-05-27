@@ -33,6 +33,7 @@
 #include "world.h"
 #include "melee.h"
 #include "japanese.h"
+#include "view-mainwindow.h"
 
 
 /*

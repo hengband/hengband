@@ -54,6 +54,7 @@
 #include "spells.h"
 #include "world.h"
 #include "realm-song.h"
+#include "view-mainwindow.h"
 
 
 /*!

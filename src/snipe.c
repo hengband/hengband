@@ -15,6 +15,7 @@
 #include "cmd-basic.h"
 #include "snipe.h"
 #include "monsterrace.h"
+#include "view-mainwindow.h"
 
 #define MAX_SNIPE_POWERS 16
 

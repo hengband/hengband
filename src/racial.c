@@ -33,6 +33,7 @@
 #include "cmd-spell.h"
 #include "realm-hex.h"
 #include "targeting.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief 修行僧の構え設定処理

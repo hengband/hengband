@@ -49,6 +49,7 @@
 #include "save.h"
 #include "realm.h"
 #include "japanese.h"
+#include "view-mainwindow.h"
 
  /*
   * The last character rolled,
