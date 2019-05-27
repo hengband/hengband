@@ -111,6 +111,16 @@ extern void display_equip(void);
 extern COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode);
 extern COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode);
 extern void toggle_inven_equip(void);
+
+/*
+ * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
+ */
+#define USE_EQUIP 0x01 /*!< アイテム表示/選択範囲: 装備品からの選択を許可する / Allow equip items */
+#define USE_INVEN 0x02 /*!< アイテム表示/選択範囲: 所持品からの選択を許可する /  Allow inven items */
+#define USE_FLOOR 0x04 /*!< アイテム表示/選択範囲: 床下のアイテムからの選択を許可する /  Allow floor items */
+#define USE_FORCE 0x08 /*!< 特殊: wキーで錬気術への切り替えを許可する */
+#define IGNORE_BOTHHAND_SLOT 0x10 /*!< アイテム表示/選択範囲: 両手持ちスロットを選択に含めない */
+#define USE_FULL  0x20 /*!< アイテム表示/選択範囲: 空欄まですべて表示する*/
 extern bool can_get_item(void);
 extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option);

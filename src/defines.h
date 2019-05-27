@@ -1166,23 +1166,6 @@
 #define PROJECT_WHO_UNCTRL_POWER -1 /*!< 魔法効果の自然発生要因: 名状し難い力の解放 */
 #define PROJECT_WHO_GLASS_SHARDS -2 /*!< 魔法効果の自然発生要因: 破壊されたガラス地形の破片 */
 
-/*
- * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
- */
-#define USE_EQUIP 0x01 /*!< アイテム表示/選択範囲: 装備品からの選択を許可する / Allow equip items */
-#define USE_INVEN 0x02 /*!< アイテム表示/選択範囲: 所持品からの選択を許可する /  Allow inven items */
-#define USE_FLOOR 0x04 /*!< アイテム表示/選択範囲: 床下のアイテムからの選択を許可する /  Allow floor items */
-#define USE_FORCE 0x08 /*!< 特殊: wキーで錬気術への切り替えを許可する */
-#define IGNORE_BOTHHAND_SLOT 0x10 /*!< アイテム表示/選択範囲: 両手持ちスロットを選択に含めない */
-#define USE_FULL  0x20 /*!< アイテム表示/選択範囲: 空欄まですべて表示する*/
-
-
-
-
-/*
- * p_ptr->updateに充てるプレイヤーステータス更新処理要求 / Bit flags for the "p_ptr->update" variable
- */
-
 
 /*
  * Bit flags for the "p_ptr->redraw" variable
