@@ -9,6 +9,18 @@
  * Only "aware" and "tried" are saved in the savefile
  */
 
+
+ /*
+  * Return the "char" for a given item.
+  * Use "flavor" if available.
+  * Default to user definitions.
+  */
+#define object_char(T) \
+	((k_info[(T)->k_idx].flavor) ? \
+	 (k_info[k_info[(T)->k_idx].flavor].x_char) : \
+	 (k_info[(T)->k_idx].x_char))
+
+
 typedef struct object_kind object_kind;
 
 struct object_kind
