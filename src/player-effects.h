@@ -10,7 +10,15 @@ struct kamae
 };
 
 /* effects.c */
+
+#define DAMAGE_FORCE    1
+#define DAMAGE_GENO     2
+#define DAMAGE_LOSELIFE 3
+#define DAMAGE_ATTACK   4
+#define DAMAGE_NOESCAPE 5
+#define DAMAGE_USELIFE  6
 extern int take_hit(int damage_type, HIT_POINT damage, concptr kb_str, int monspell);
+
 extern void set_action(ACTION_IDX typ);
 extern void reset_tim_flags(void);
 extern void dispel_player(void);
