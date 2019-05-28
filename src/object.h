@@ -77,7 +77,21 @@ struct object_type
 
 	TIME_EFFECT timeout;	/* Timeout Counter */
 
+	/*
+	 * Special Object Flags
+	 */
+	#define IDENT_SENSE     0x01    /* Item has been "sensed" */
+	#define IDENT_FIXED     0x02    /* Item has been "haggled" */
+	#define IDENT_EMPTY     0x04    /* Item charges are known */
+	#define IDENT_KNOWN     0x08    /* Item abilities are known */
+	#define IDENT_STORE     0x10    /* Item is storebought !!!! */
+	#define IDENT_MENTAL    0x20    /* Item information is known */
+	#if 0
+	#define IDENT_CURSED    0x40    /* Item is temporarily cursed */
+	#endif
+	#define IDENT_BROKEN    0x80    /* Item is permanently worthless */
 	byte ident;			/* Special flags  */
+
 	byte marked;		/* Object is marked */
 
 	u16b inscription;	/* Inscription index */
