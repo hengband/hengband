@@ -1405,15 +1405,6 @@ extern int PlayerUID;
 #define GRAPHICS_ADAM_BOLT  2
 #define GRAPHICS_HENGBAND   3
 
-/*
- * Modes for the random name generator
- */
-#define NAME_DWARF  1
-#define NAME_ELF    2
-#define NAME_GNOME  3
-#define NAME_HOBBIT 4
-#define NAME_HUMAN  5
-#define NAME_ORC    6
 
 #ifdef JP
 #define JVERB_AND 1
