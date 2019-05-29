@@ -1522,24 +1522,6 @@ extern int PlayerUID;
 /* Max size of screen dump buffer */
 #define SCREEN_BUF_MAX_SIZE (4 * 65536)
 
-
-/*
- * Special key code used for inkey_special()
- */
-#define SKEY_MOD_MASK     0x0f00
-#define SKEY_MOD_SHIFT    0x0100
-#define SKEY_MOD_CONTROL  0x0200
-
-#define SKEY_MASK         0xf000
-#define SKEY_DOWN   	  0xf001
-#define SKEY_LEFT   	  0xf002
-#define SKEY_RIGHT  	  0xf003
-#define SKEY_UP     	  0xf004
-#define SKEY_PGUP   	  0xf005
-#define SKEY_PGDOWN 	  0xf006
-#define SKEY_TOP    	  0xf007
-#define SKEY_BOTTOM 	  0xf008
-
 #define MTIMED_CSLEEP   0 /* Monster is sleeping */
 #define MTIMED_FAST     1 /* Monster is temporarily fast */
 #define MTIMED_SLOW     2 /* Monster is temporarily slow */
