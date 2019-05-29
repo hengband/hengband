@@ -55,6 +55,7 @@
 #include "world.h"
 #include "realm-song.h"
 #include "view-mainwindow.h"
+#include "player-race.h"
 
 
 /*!

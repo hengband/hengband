@@ -8,6 +8,7 @@
 #include "spells-object.h"
 #include "avatar.h"
 #include "spells-floor.h"
+#include "player-race.h"
 #include "player-effects.h"
 #include "targeting.h"
 

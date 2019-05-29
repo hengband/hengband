@@ -8,6 +8,7 @@
 #include "player-effects.h"
 #include "targeting.h"
 #include "player-class.h"
+#include "player-race.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う

@@ -24,6 +24,7 @@
 #include "realm-song.h"
 
 #include "mutation.h"
+#include "player-race.h"
 #include "player-effects.h"
 #include "player-status.h"
 #include "spells-status.h"

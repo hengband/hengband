@@ -9,6 +9,7 @@
 #include "spells-floor.h"
 #include "spells-status.h"
 #include "player-effects.h"
+#include "player-race.h"
 #include "targeting.h"
 
 /*!

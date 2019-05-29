@@ -1478,23 +1478,6 @@ extern int PlayerUID;
 #define SLF_NO_KILL      0x0002  /* Don't kill temporal files */
 
 
-
-
-/*
- * Constant for kinds of mimic
- */
-#define MIMIC_NONE       0
-#define MIMIC_DEMON      1
-#define MIMIC_DEMON_LORD 2
-#define MIMIC_VAMPIRE    3
-
-
-#define MIMIC_FLAGS choice
-#define MIMIC_IS_NONLIVING 0x00000001
-#define MIMIC_IS_DEMON     0x00000002
-#define MIMIC_IS_UNDEAD    0x00000004
-
-
 #define prace_is_(A) (!p_ptr->mimic_form && (p_ptr->prace == A))
 
 /* Sub-alignment flags for neutral monsters */

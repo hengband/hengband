@@ -18,6 +18,7 @@
 #include "util.h"
 
 #include "player-status.h"
+#include "player-race.h"
 #include "avatar.h"
 #include "realm.h"
 #include "realm-hex.h"
