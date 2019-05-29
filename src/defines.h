@@ -1502,9 +1502,6 @@ extern int PlayerUID;
 #define SUB_ALIGN_EVIL    0x0001
 #define SUB_ALIGN_GOOD    0x0002
 
-#define IS_WIZARD_CLASS() \
-	(p_ptr->pclass == CLASS_MAGE || p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER || p_ptr->pclass == CLASS_MAGIC_EATER || p_ptr->pclass == CLASS_BLUE_MAGE)
-
 /* Multishadow effects is determined by current_world_ptr->game_turn */
 #define CHECK_MULTISHADOW() (p_ptr->multishadow && (current_world_ptr->game_turn & 1))
 

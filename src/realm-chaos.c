@@ -2,6 +2,7 @@
 #include "util.h"
 
 #include "cmd-spell.h"
+#include "player-class.h"
 #include "player-effects.h"
 #include "spells-summon.h"
 #include "spells-status.h"
