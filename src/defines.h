@@ -1551,24 +1551,6 @@ extern int PlayerUID;
  */
 #define TRAVEL
 
-/* Sniper */
-#define SP_NONE          0
-#define SP_LITE          1
-#define SP_AWAY          2
-#define SP_FIRE          3
-#define SP_KILL_WALL     4
-#define SP_COLD          5
-#define SP_KILL_TRAP     6
-#define SP_ELEC          7
-#define SP_PIERCE        8
-#define SP_RUSH          9
-#define SP_DOUBLE        10
-#define SP_EXPLODE       11
-#define SP_EVILNESS      12
-#define SP_HOLYNESS      13
-#define SP_FINAL         14
-#define SP_NEEDLE        15
-
 #define CONCENT_RADAR_THRESHOLD 2
 #define CONCENT_TELE_THRESHOLD  5
 

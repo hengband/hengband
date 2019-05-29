@@ -43,6 +43,7 @@
 #include "objectkind.h"
 #include "autopick.h"
 #include "targeting.h"
+#include "snipe.h"
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display p_ptr->inventory_list

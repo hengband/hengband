@@ -44,6 +44,7 @@
 #include "object-broken.h"
 #include "object-flavor.h"
 #include "shoot.h"
+#include "snipe.h"
 
 #include "cmd-basic.h"
 #include "cmd-item.h"
