@@ -48,8 +48,6 @@ extern const byte adj_chr_chm[];
 extern bool repair_monsters;
 extern bool repair_objects;
 
-extern bool reset_concent;
-
 
 
 /*

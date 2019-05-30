@@ -80,9 +80,3 @@ int server_port;
 
 /* for movie */
 bool browsing_movie;
-
-
-/* for snipers */
-bool reset_concent = FALSE;   /* Concentration reset flag */
-
-

@@ -3523,7 +3523,7 @@ static void process_command(void)
 
 	/* Sniper */
 	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->concent))
-		reset_concent = TRUE;
+		p_ptr->reset_concent = TRUE;
 
 	/* Parse the command */
 	switch (command_cmd)
@@ -4896,7 +4896,7 @@ static void process_player(void)
 		}
 
 		/* Sniper */
-		if (p_ptr->energy_use && reset_concent) reset_concentration(TRUE);
+		if (p_ptr->energy_use && p_ptr->reset_concent) reset_concentration(TRUE);
 
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;

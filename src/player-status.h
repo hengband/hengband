@@ -364,6 +364,8 @@ struct player_type
 	bool now_damaged;
 	bool ambush_flag;
 
+	bool reset_concent;   /* Concentration reset flag */
+
 	bool wizard;		  /* Player is in wizard mode */
 
 	MONSTER_IDX riding;              /* Riding on a monster of this index */

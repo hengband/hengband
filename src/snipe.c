@@ -120,7 +120,7 @@ static bool snipe_concentrate(void)
 	if ((int)p_ptr->concent < (2 + (p_ptr->lev + 5) / 10)) p_ptr->concent++;
 
 	msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), p_ptr->concent);
-	reset_concent = FALSE;
+	p_ptr->reset_concent = FALSE;
 
 	p_ptr->update |= (PU_BONUS | PU_MONSTERS);
 	p_ptr->redraw |= (PR_STATUS);
@@ -140,7 +140,7 @@ void reset_concentration(bool msg)
 	}
 
 	p_ptr->concent = 0;
-	reset_concent = FALSE;
+	p_ptr->reset_concent = FALSE;
 
 	p_ptr->update |= (PU_BONUS | PU_MONSTERS);
 	p_ptr->redraw |= (PR_STATUS);
