@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "bldg.h"
 
 typedef struct {
 

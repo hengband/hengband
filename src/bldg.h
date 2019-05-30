@@ -9,6 +9,8 @@
 #define BUILDING_MEMBER     1 /*!< 不明(現在未使用) */
 #define BUILDING_OWNER      2 /*!< 施設の種族/職業条件が一致している状態値 */
 
+#define MAX_KUBI 20
+
 /*
  * A structure to describe a building.
  * From Kamband

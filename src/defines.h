@@ -1435,7 +1435,6 @@ extern int PlayerUID;
 #define EATER_CHARGE 0x10000L
 #define EATER_ROD_CHARGE 0x10L
 
-#define MAX_KUBI 20
 
 #define DETECT_RAD_DEFAULT 30
 #define DETECT_RAD_MAP     30
