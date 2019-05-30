@@ -1450,11 +1450,6 @@ extern int PlayerUID;
 #define ITEM_DISPLAY      0x10
 #define DO_QUERY_AUTOPICK 0x20
 
-
-#define MAGIC_GLOVE_REDUCE_MANA 0x0001
-#define MAGIC_FAIL_5PERCENT     0x0002
-#define MAGIC_GAIN_EXP          0x0004
-
 #define VIRTUE_LARGE 1
 #define VIRTUE_SMALL 2
 
