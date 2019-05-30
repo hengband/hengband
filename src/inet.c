@@ -34,6 +34,8 @@ static concptr errstr;
 static char	*proxy;
 static int	proxy_port;
 
+bool browsing_movie;
+
 #ifdef MACINTOSH
 static InetSvcRef inet_services = nil;
 static EndpointRef ep 		= kOTInvalidEndpointRef;

@@ -77,6 +77,3 @@ bool chuukei_client;
 char *server_name;
 int server_port;
 #endif
-
-/* for movie */
-bool browsing_movie;
