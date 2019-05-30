@@ -10,6 +10,7 @@
 #include "util.h"
 #include "core.h"
 #include "inet.h"
+#include "dungeon.h"
 
 #include "floor.h"
 #include "player-status.h"

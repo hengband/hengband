@@ -55,6 +55,7 @@ struct dungeon_type {
 	int obj_good;
 };
 
+extern DEPTH *max_dlv;
 extern DUNGEON_IDX max_d_idx;
 extern dungeon_type *d_info;
 extern char *d_name;

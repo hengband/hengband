@@ -12,3 +12,4 @@ char *d_text;
  * Maximum number of dungeon in d_info.txt
  */
 DUNGEON_IDX max_d_idx;
+DEPTH *max_dlv;

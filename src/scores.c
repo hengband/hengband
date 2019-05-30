@@ -15,6 +15,7 @@
 #include "util.h"
 #include "core.h"
 
+#include "dungeon.h"
 #include "player-race.h"
 #include "player-status.h"
 #include "player-class.h"

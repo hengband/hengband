@@ -71,7 +71,6 @@ extern MONRACE_IDX today_mon;
 extern bool sukekaku;
 extern bool new_mane;
 
-extern DEPTH *max_dlv;
 extern bool use_menu;
 
 #ifdef MACINTOSH

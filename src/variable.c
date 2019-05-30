@@ -64,11 +64,6 @@ MONSTER_IDX today_mon;
 bool sukekaku;
 bool new_mane;
 
-/*
- * Which dungeon ?
- */
-DEPTH *max_dlv;
-
 bool use_menu;
 
 #ifdef CHUUKEI
