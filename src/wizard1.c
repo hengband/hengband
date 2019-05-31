@@ -14,6 +14,7 @@
 #include "util.h"
 #include "term.h"
 
+#include "core.h"
 #include "artifact.h"
 #include "sort.h"
 #include "store.h"
