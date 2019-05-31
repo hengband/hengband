@@ -4,6 +4,16 @@
 #include "grid.h"
 
 /*!
+ * @brief ダンジョンの最深層 / Maximum dungeon level.
+ * @details
+ * The player can never reach this level
+ * in the dungeon, and this value is used for various calculations
+ * involving object and monster creation.  It must be at least 100.
+ * Setting it below 128 may prevent the creation of some objects.
+ */
+#define MAX_DEPTH       128 
+
+/*!
  * @brief generate.cで用いられる基本的なブロック数単位(垂直方向)
  * Number of grids in each block (vertically) Probably hard-coded to 11, see "generate.c"
  */

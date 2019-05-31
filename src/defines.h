@@ -95,20 +95,6 @@
 
 #define MAX_HISCORES    999 /*!< スコア情報保存の最大数 / Maximum number of high scores in the high score file */
 
-
-
-/*!
- * @brief ダンジョンの最深層 / Maximum dungeon level. 
- * @details
- * The player can never reach this level
- * in the dungeon, and this value is used for various calculations
- * involving object and monster creation.  It must be at least 100.
- * Setting it below 128 may prevent the creation of some objects.
- */
-#define MAX_DEPTH       128 
-
-#define MAX_SAVED_FLOORS       20 /*!< 保存フロアの最大数 / Maximum number of saved floors. */
-
 /*!
  * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "current_floor_ptr->grid_array.c")
  * @details Note that the "lite radius" will NEVER exceed 14, and we would

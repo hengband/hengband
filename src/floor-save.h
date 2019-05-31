@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define MAX_SAVED_FLOORS       20 /*!< 保存フロアの最大数 / Maximum number of saved floors. */
+
 /*
  *  A structure type for the saved floor
  */

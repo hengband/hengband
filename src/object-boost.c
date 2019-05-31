@@ -1,4 +1,5 @@
 ﻿#include "angband.h"
+#include "floor.h"
 #include "object-boost.h"
 #include "object-boost.h"
 #include "cmd-activate.h"
