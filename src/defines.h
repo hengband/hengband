@@ -40,18 +40,6 @@
 
 
 /*!
- * @brief generate.cで用いられる基本的なブロック数単位(垂直方向)
- * Number of grids in each block (vertically) Probably hard-coded to 11, see "generate.c"
- */
-#define BLOCK_HGT 11
-
-/*!
- * @brief generate.cで用いられる基本的なブロック数単位(水平方向)
- * Number of grids in each block (horizontally) Probably hard-coded to 11, see "generate.c"
- */
-#define BLOCK_WID 11
-
-/*!
  * @brief 表示上の基本的なパネル単位(垂直方向、BLOCK_HGTの倍数で設定すること)
  * Number of grids in each panel (vertically) Must be a multiple of BLOCK_HGT
  */

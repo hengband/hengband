@@ -3,6 +3,18 @@
 #include "feature.h"
 #include "grid.h"
 
+/*!
+ * @brief generate.cで用いられる基本的なブロック数単位(垂直方向)
+ * Number of grids in each block (vertically) Probably hard-coded to 11, see "generate.c"
+ */
+#define BLOCK_HGT 11
+
+ /*!
+  * @brief generate.cで用いられる基本的なブロック数単位(水平方向)
+  * Number of grids in each block (horizontally) Probably hard-coded to 11, see "generate.c"
+  */
+#define BLOCK_WID 11
+
 typedef struct {
 	grid_type *grid_array[MAX_HGT];
 	DEPTH dun_level;		/*!< 現在の実ダンジョン階層base_levelの参照元となる / Current dungeon level */
