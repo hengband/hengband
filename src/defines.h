@@ -357,29 +357,6 @@
 
 
 
-
-#define TRG_INSTA_ART           0x00000001L     /* Item must be an artifact */
-#define TRG_QUESTITEM           0x00000002L     /* quest level item -KMW- */
-#define TRG_XTRA_POWER          0x00000004L     /* Extra power */
-#define TRG_ONE_SUSTAIN         0x00000008L     /* One sustain */
-#define TRG_XTRA_RES_OR_POWER   0x00000010L     /* Extra resistance or power */
-#define TRG_XTRA_H_RES          0x00000020L     /* Extra high resistance */
-#define TRG_XTRA_E_RES          0x00000040L     /* Extra element resistance */
-#define TRG_XTRA_L_RES          0x00000080L     /* Extra lordly resistance */
-#define TRG_XTRA_D_RES          0x00000100L     /* Extra dragon resistance */
-#define TRG_XTRA_RES            0x00000200L     /* Extra resistance */
-#define TRG_CURSED              0x00000400L     /* Item is Cursed */
-#define TRG_HEAVY_CURSE         0x00000800L     /* Item is Heavily Cursed */
-#define TRG_PERMA_CURSE         0x00001000L     /* Item is Perma Cursed */
-#define TRG_RANDOM_CURSE0       0x00002000L     /* Item is Random Cursed */
-#define TRG_RANDOM_CURSE1       0x00004000L     /* Item is Random Cursed */
-#define TRG_RANDOM_CURSE2       0x00008000L     /* Item is Random Cursed */
-#define TRG_XTRA_DICE           0x00010000L     /* Extra dice */
-#define TRG_POWERFUL            0x00020000L     /* Item has good value even if Cursed */
-
-
-#define MAX_CURSE 18
-
 #define TRC_CURSED              0x00000001L
 #define TRC_HEAVY_CURSE         0x00000002L
 #define TRC_PERMA_CURSE         0x00000004L
@@ -402,6 +379,7 @@
 #define TRC_DRAIN_HP            0x00080000L
 #define TRC_DRAIN_MANA          0x00100000L
 #define TRC_CALL_UNDEAD         0x00200000L
+#define MAX_CURSE 18
 
 #define TRC_TELEPORT_SELF       0x00000001L
 #define TRC_CHAINSWORD          0x00000002L

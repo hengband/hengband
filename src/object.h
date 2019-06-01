@@ -175,7 +175,6 @@
 #define TR_FLAG_MAX            138
 #define TR_FLAG_SIZE           5
 
-
 typedef struct object_type object_type;
 
 struct object_type

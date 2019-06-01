@@ -36,6 +36,24 @@ struct artifact_type
 
 	BIT_FLAGS flags[TR_FLAG_SIZE];       /*! アイテムフラグ / Artifact Flags */
 
+	#define TRG_INSTA_ART           0x00000001L     /* Item must be an artifact */
+	#define TRG_QUESTITEM           0x00000002L     /* quest level item -KMW- */
+	#define TRG_XTRA_POWER          0x00000004L     /* Extra power */
+	#define TRG_ONE_SUSTAIN         0x00000008L     /* One sustain */
+	#define TRG_XTRA_RES_OR_POWER   0x00000010L     /* Extra resistance or power */
+	#define TRG_XTRA_H_RES          0x00000020L     /* Extra high resistance */
+	#define TRG_XTRA_E_RES          0x00000040L     /* Extra element resistance */
+	#define TRG_XTRA_L_RES          0x00000080L     /* Extra lordly resistance */
+	#define TRG_XTRA_D_RES          0x00000100L     /* Extra dragon resistance */
+	#define TRG_XTRA_RES            0x00000200L     /* Extra resistance */
+	#define TRG_CURSED              0x00000400L     /* Item is Cursed */
+	#define TRG_HEAVY_CURSE         0x00000800L     /* Item is Heavily Cursed */
+	#define TRG_PERMA_CURSE         0x00001000L     /* Item is Perma Cursed */
+	#define TRG_RANDOM_CURSE0       0x00002000L     /* Item is Random Cursed */
+	#define TRG_RANDOM_CURSE1       0x00004000L     /* Item is Random Cursed */
+	#define TRG_RANDOM_CURSE2       0x00008000L     /* Item is Random Cursed */
+	#define TRG_XTRA_DICE           0x00010000L     /* Extra dice */
+	#define TRG_POWERFUL            0x00020000L     /* Item has good value even if Cursed */
 	BIT_FLAGS gen_flags;		/*! アイテム生成フラグ / flags for generate */
 
 	DEPTH level;		/*! 基本生成階 / Artifact level */
