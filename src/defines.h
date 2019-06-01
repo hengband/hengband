@@ -283,12 +283,6 @@
 
 /*** General flag values ***/
 
-/*
- * Special caster ID for project()
- */
-#define PROJECT_WHO_UNCTRL_POWER -1 /*!< 魔法効果の自然発生要因: 名状し難い力の解放 */
-#define PROJECT_WHO_GLASS_SHARDS -2 /*!< 魔法効果の自然発生要因: 破壊されたガラス地形の破片 */
-
 
 /* Empty hand status */
 #define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
