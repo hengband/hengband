@@ -439,6 +439,14 @@ struct monster_race
 	u32b r_flagsr;			/* Observed racial resistance flags */
 };
 
+/*
+ * Hack -- "torch" masks
+ */
+#define RF7_LITE_MASK    (RF7_HAS_LITE_1 | RF7_SELF_LITE_1 | RF7_HAS_LITE_2 | RF7_SELF_LITE_2)
+#define RF7_DARK_MASK    (RF7_HAS_DARK_1 | RF7_SELF_DARK_1 | RF7_HAS_DARK_2 | RF7_SELF_DARK_2)
+#define RF7_HAS_LD_MASK  (RF7_HAS_LITE_1 | RF7_HAS_LITE_2 | RF7_HAS_DARK_1 | RF7_HAS_DARK_2)
+#define RF7_SELF_LD_MASK (RF7_SELF_LITE_1 | RF7_SELF_LITE_2 | RF7_SELF_DARK_1 | RF7_SELF_DARK_2)
+
 
 /*
  * The monster race arrays

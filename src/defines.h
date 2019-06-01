@@ -281,20 +281,10 @@
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */
 
-/*** General flag values ***/
-
-
 /* Empty hand status */
 #define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
 #define EMPTY_HAND_LARM 0x0001 /* Left hand is empty */
 #define EMPTY_HAND_RARM 0x0002 /* Right hand is empty */
-
-/*** General index values ***/
-
-
-
-/*** Object flag values ***/
-
 
 /*
  * Object flags
@@ -328,22 +318,6 @@
 #define is_pval_flag(INDEX) ((TR_STR <= (INDEX) && (INDEX) <= TR_MAGIC_MASTERY) || (TR_STEALTH <= (INDEX) && (INDEX) <= TR_BLOWS))
 #define have_pval_flags(ARRAY) !!((ARRAY)[0] & (0x00003f7f))
 
-
-
- /*
-  * Hack -- "torch" masks
-  */
-#define RF7_LITE_MASK \
-	(RF7_HAS_LITE_1 | RF7_SELF_LITE_1 | RF7_HAS_LITE_2 | RF7_SELF_LITE_2)
-
-#define RF7_DARK_MASK \
-	(RF7_HAS_DARK_1 | RF7_SELF_DARK_1 | RF7_HAS_DARK_2 | RF7_SELF_DARK_2)
-
-#define RF7_HAS_LD_MASK \
-	(RF7_HAS_LITE_1 | RF7_HAS_LITE_2 | RF7_HAS_DARK_1 | RF7_HAS_DARK_2)
-
-#define RF7_SELF_LD_MASK \
-	(RF7_SELF_LITE_1 | RF7_SELF_LITE_2 | RF7_SELF_DARK_1 | RF7_SELF_DARK_2)
 
   /*
    * Hack -- effective elemental and poison immunity mask
