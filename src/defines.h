@@ -165,21 +165,6 @@
 
 
 /*
- * Misc constants
- */
-#define TOWN_DAWN         10000   /*!< 1日分のターン / Number of ticks from dawn to dawn XXX */
-#define TURNS_PER_TICK    10L     /*!< 時間経過処理を行うターン数の刻み / Number of energy-gain-turns per ticks */
-#define INN_DUNGEON_TURN_ADJ 10   /*!< 宿屋で時間をつぶした場合に増えるcurrent_world_ptr->dungeon_turnの倍率 */
-#define MAX_DAYS          20000   /*!< 内部処理中で保持される最大日数 / Maximum days */
-#define BREAK_GLYPH       550     /*!< 守りのルーンの強靭度 / Rune of protection resistance */
-#define BREAK_MINOR_GLYPH 299     /*!< 爆発のルーンの発動しやすさ / For explosive runes */
-#define BTH_PLUS_ADJ      3       /*!< 武器経験値及びプレイヤーの打撃/射撃能力に応じた修正値倍率 / Adjust BTH per plus-to-hit */
-#define MON_MULT_ADJ      8       /*!< モンスターの増殖しにくさの基本倍率 / High value slows multiplication */
-#define MON_SUMMON_ADJ    2       /*!< 現在未使用 Adjust level of summoned creatures */
-#define MON_DRAIN_LIFE    2       /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
-#define USE_DEVICE        3       /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */
-
-/*
  * Magic-books for the realms
  */
 #define REALM1_BOOK     (p_ptr->realm1 + TV_LIFE_BOOK - 1)
