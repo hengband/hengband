@@ -135,13 +135,6 @@
  */
 #define REDRAW_MAX 2298
 
-#define KEYMAP_MODE_ORIG	0 /*!< オリジナルキー配置 / Mode for original keyset commands */
-#define KEYMAP_MODE_ROGUE	1 /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
-#define KEYMAP_MODES		2 /*!< キー配置の数 / Number of keymap modes */
-
-
-
-
 
 /*!
  * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")

@@ -1,5 +1,9 @@
 #pragma once
 
+#define KEYMAP_MODE_ORIG	0 /*!< オリジナルキー配置 / Mode for original keyset commands */
+#define KEYMAP_MODE_ROGUE	1 /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
+#define KEYMAP_MODES		2 /*!< キー配置の数 / Number of keymap modes */
+
 /*
  * Sort-array element
  */
