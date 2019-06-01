@@ -30,6 +30,7 @@
 #include "files.h"
 #include "grid.h"
 #include "monster.h"
+#include "view-mainwindow.h"
 
  /*
   * The artifact arrays

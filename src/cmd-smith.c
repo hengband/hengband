@@ -10,6 +10,7 @@
 #include "cmd-smith.h"
 #include "objectkind.h"
 #include "autopick.h"
+#include "view-mainwindow.h"
 
 
 

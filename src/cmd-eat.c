@@ -22,6 +22,7 @@
 #include "objectkind.h"
 #include "realm.h"
 #include "realm-song.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief 食料を食べるコマンドのサブルーチン

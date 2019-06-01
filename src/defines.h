@@ -290,27 +290,6 @@
 #define PROJECT_WHO_GLASS_SHARDS -2 /*!< 魔法効果の自然発生要因: 破壊されたガラス地形の破片 */
 
 
-/*
- * Bit flags for the "p_ptr->window" variable (etc)
- */
-#define PW_INVEN        0x00000001L     /*!<サブウィンドウ描画フラグ: 所持品-装備品 / Display inven/equip */
-#define PW_EQUIP        0x00000002L     /*!<サブウィンドウ描画フラグ: 装備品-所持品 / Display equip/inven */
-#define PW_SPELL        0x00000004L     /*!<サブウィンドウ描画フラグ: 魔法一覧 / Display spell list */
-#define PW_PLAYER       0x00000008L     /*!<サブウィンドウ描画フラグ: プレイヤーのステータス / Display character */
-#define PW_MONSTER_LIST 0x00000010L     /*!<サブウィンドウ描画フラグ: 視界内モンスターの一覧 / Display monster list */
-/* xxx */
-/* xxx */
-#define PW_MESSAGE      0x00000040L     /*!<サブウィンドウ描画フラグ: メッセージログ / Display messages */
-#define PW_OVERHEAD     0x00000080L     /*!<サブウィンドウ描画フラグ: 周辺の光景 / Display overhead view */
-#define PW_MONSTER      0x00000100L     /*!<サブウィンドウ描画フラグ: モンスターの思い出 / Display monster recall */
-#define PW_OBJECT       0x00000200L     /*!<サブウィンドウ描画フラグ: アイテムの知識 / Display object recall */
-#define PW_DUNGEON      0x00000400L     /*!<サブウィンドウ描画フラグ: ダンジョンの地形 / Display dungeon view */
-#define PW_SNAPSHOT     0x00000800L     /*!<サブウィンドウ描画フラグ: 記念写真 / Display snap-shot */
-/* xxx */
-/* xxx */
-#define PW_BORG_1       0x00004000L     /*!<サブウィンドウ描画フラグ: ボーグメッセージ / Display borg messages */
-#define PW_BORG_2       0x00008000L     /*!<サブウィンドウ描画フラグ: ボーグステータス / Display borg status */
-
 /* Empty hand status */
 #define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
 #define EMPTY_HAND_LARM 0x0001 /* Left hand is empty */

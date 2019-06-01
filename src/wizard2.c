@@ -47,6 +47,7 @@
 #include "bldg.h"
 #include "objectkind.h"
 #include "targeting.h"
+#include "view-mainwindow.h"
 
 #ifdef ALLOW_WIZARD
 

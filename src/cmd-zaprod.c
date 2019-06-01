@@ -12,6 +12,7 @@
 #include "cmd-basic.h"
 #include "floor.h"
 #include "targeting.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief ロッドの効果を発動する

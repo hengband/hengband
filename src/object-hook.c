@@ -11,6 +11,7 @@
 #include "quest.h"
 #include "world.h"
 #include "objectkind.h"
+#include "view-mainwindow.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/

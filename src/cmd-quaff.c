@@ -26,6 +26,7 @@
 #include "cmd-basic.h"
 #include "floor.h"
 #include "objectkind.h"
+#include "view-mainwindow.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

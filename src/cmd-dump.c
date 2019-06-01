@@ -79,6 +79,7 @@
 #include "objectkind.h"
 #include "floor-town.h"
 #include "realm.h"
+#include "view-mainwindow.h"
 
 /*
  *  Mark strings for auto dump

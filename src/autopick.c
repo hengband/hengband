@@ -34,6 +34,7 @@
 #include "world.h"
 #include "monster.h"
 #include "monsterrace.h"
+#include "view-mainwindow.h"
 
 #define MAX_LINELEN 1024
 
