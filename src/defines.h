@@ -363,14 +363,6 @@ extern int PlayerUID;
 
 /*** Color constants ***/
 
-/*
- * Not using graphical tiles for this feature?
- */
-#define is_ascii_graphics(A) (!((A) & 0x80))
-
-
-/*** Hack ***/
-
 
 /*
  * Hack -- attempt to reduce various values

@@ -43,6 +43,12 @@
 #include "objectkind.h"
 #include "targeting.h"
 
+ /*
+  * Not using graphical tiles for this feature?
+  */
+#define IS_ASCII_GRAPHICS(A) (!((A) & 0x80))
+
+
 static int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優先度を保管する */
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;
@@ -2734,7 +2740,7 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
 	SYMBOL_CODE s_char = f_char[F_LIT_STANDARD];
 	int i;
 
-	if (is_ascii_graphics(s_attr)) /* For ASCII */
+	if (IS_ASCII_GRAPHICS(s_attr)) /* For ASCII */
 	{
 		f_attr[F_LIT_LITE] = lighting_colours[s_attr & 0x0f][0];
 		f_attr[F_LIT_DARK] = lighting_colours[s_attr & 0x0f][1];
@@ -3814,7 +3820,7 @@ void prt_path(POSITION y, POSITION x)
 				/* Determine what is there */
 				map_info(ny, nx, &a, &c, &ta, &tc);
 
-				if (!is_ascii_graphics(a))
+				if (!IS_ASCII_GRAPHICS(a))
 					a = default_color;
 				else if (c == '.' && (a == TERM_WHITE || a == TERM_L_WHITE))
 					a = default_color;
