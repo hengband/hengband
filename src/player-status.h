@@ -26,6 +26,12 @@
 #define MAGIC_FAIL_5PERCENT     0x0002
 #define MAGIC_GAIN_EXP          0x0004
 
+ /*
+  * Magic-books for the realms
+  */
+#define REALM1_BOOK     (p_ptr->realm1 + TV_LIFE_BOOK - 1)
+#define REALM2_BOOK     (p_ptr->realm2 + TV_LIFE_BOOK - 1)
+
 extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 

@@ -165,12 +165,6 @@
 
 
 /*
- * Magic-books for the realms
- */
-#define REALM1_BOOK     (p_ptr->realm1 + TV_LIFE_BOOK - 1)
-#define REALM2_BOOK     (p_ptr->realm2 + TV_LIFE_BOOK - 1)
-
-/*
  * Maximum number of "normal" pack slots, and the index of the "overflow"
  * slot, which can hold an item, but only temporarily, since it causes the
  * pack to "overflow", dropping the "last" item onto the ground.  Since this
