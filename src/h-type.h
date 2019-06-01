@@ -68,6 +68,11 @@ typedef int errr;
 #undef bool
 #define bool bool_hack /*!< C++環境で重複を避けるためのbool_hack定義 Hack -- prevent problems with C++ */
 
+#define MAX_UCHAR       255 /*!< Maximum value storable in a "byte" (hard-coded) */
+#define MAX_SHORT       32767    /*!< Maximum value storable in a "s16b" (hard-coded) */
+
+#define MAX_NLEN        160 /*!< Maximum length of object's name */
+
 
 /* Note that "signed char" is not always "defined" */
 /* So always use "s16b" to hold small signed values */
@@ -78,7 +83,6 @@ typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note 
 typedef char bool; /*!< bool型をcharとして定義 / Note that a bool is smaller than a full "int" / Simple True/False type */
 typedef int sint; /*!< sint型をintとして定義 / A signed, standard integer (at least 2 bytes) */
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
-
 
 /* The largest possible signed integer (pre-defined) */
 /* typedef long long; */

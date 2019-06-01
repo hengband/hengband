@@ -65,6 +65,7 @@ extern const concptr copyright[5];
 #define INIT_CREATE_DUNGEON     0x08
 #define INIT_ONLY_FEATURES      0x10
 #define INIT_ONLY_BUILDINGS     0x20
+
 extern int init_flags;
 
 extern concptr ANGBAND_SYS;

@@ -165,21 +165,6 @@
 
 
 /*
- * Maximum value storable in a "byte" (hard-coded)
- */
-#define MAX_UCHAR       255
-
-/*
- * Maximum value storable in a "s16b" (hard-coded)
- */
-#define MAX_SHORT       32767
-
-/*
- * Maximum length of object's name
- */
-#define MAX_NLEN        160
-
-/*
  * Misc constants
  */
 #define TOWN_DAWN         10000   /*!< 1日分のターン / Number of ticks from dawn to dawn XXX */
