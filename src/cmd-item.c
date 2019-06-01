@@ -44,6 +44,7 @@
 #include "autopick.h"
 #include "targeting.h"
 #include "snipe.h"
+#include "player-race.h"
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display p_ptr->inventory_list

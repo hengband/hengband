@@ -30,6 +30,7 @@
 #include "files.h"
 #include "floor.h"
 #include "targeting.h"
+#include "player-race.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

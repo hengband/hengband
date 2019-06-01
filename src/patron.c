@@ -13,6 +13,7 @@
 #include "artifact.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-race.h"
 
 #include "spells.h"
 #include "spells-summon.h"

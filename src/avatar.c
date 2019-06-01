@@ -16,6 +16,7 @@
 #include "angband.h"
 #include "avatar.h"
 #include "realm.h"
+#include "player-race.h"
 
 /*!
  * 徳の名称 / The names of the virtues
