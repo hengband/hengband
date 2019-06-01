@@ -6,6 +6,7 @@
 #include "floor.h"
 #include "object-flavor.h"
 #include "player-status.h"
+#include "player-class.h"
 #include "spells-status.h"
 #include "spells.h"
 #include "monster.h"

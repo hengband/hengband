@@ -18,6 +18,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-race.h"
+#include "player-class.h"
 #include "floor.h"
 #include "objectkind.h"
 #include "realm.h"

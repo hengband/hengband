@@ -6,6 +6,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-class.h"
 #include "spells.h"
 #include "spells-status.h"
 #include "spells-floor.h"

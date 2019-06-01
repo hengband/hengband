@@ -24,6 +24,7 @@
 #include "player-damage.h"
 #include "player-effects.h"
 #include "player-race.h"
+#include "player-class.h"
 
 #include "monster.h"
 #include "monster-status.h"

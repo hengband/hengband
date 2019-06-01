@@ -35,6 +35,7 @@
 #include "realm-hex.h"
 #include "targeting.h"
 #include "view-mainwindow.h"
+#include "player-class.h"
 
 /*!
  * @brief 修行僧の構え設定処理

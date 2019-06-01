@@ -15,6 +15,7 @@
 #include "object-flavor.h"
 #include "dungeon.h"
 #include "player-race.h"
+#include "player-class.h"
 #include "melee.h"
 #include "realm-song.h"
 

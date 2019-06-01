@@ -32,6 +32,7 @@
 #include "targeting.h"
 #include "realm-song.h"
 #include "player-race.h"
+#include "player-class.h"
 #include "view-mainwindow.h"
 
 /*!

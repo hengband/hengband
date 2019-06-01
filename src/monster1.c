@@ -34,6 +34,7 @@
 #include "melee.h"
 #include "japanese.h"
 #include "view-mainwindow.h"
+#include "player-class.h"
 
 
 /*

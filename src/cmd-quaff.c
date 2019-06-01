@@ -27,6 +27,7 @@
 #include "floor.h"
 #include "objectkind.h"
 #include "view-mainwindow.h"
+#include "player-class.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

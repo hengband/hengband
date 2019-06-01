@@ -155,6 +155,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-class.h"
 #include "spells-floor.h"
 #include "feature.h"
 #include "warning.h"

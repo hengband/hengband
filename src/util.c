@@ -22,6 +22,7 @@
 #include "world.h"
 #include "cmd-dump.h"
 #include "japanese.h"
+#include "player-class.h"
 
 /*!
  * 10進数から16進数への変換テーブル /

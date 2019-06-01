@@ -39,6 +39,7 @@
 #include "player-damage.h"
 #include "player-status.h"
 #include "player-race.h"
+#include "player-class.h"
 #include "view-mainwindow.h"
 #include "world.h"
 

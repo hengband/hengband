@@ -23,6 +23,7 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "player-move.h"
+#include "player-class.h"
 #include "monster.h"
 #include "files.h"
 #include "term.h"

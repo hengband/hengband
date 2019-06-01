@@ -19,6 +19,7 @@
 
 #include "player-status.h"
 #include "player-race.h"
+#include "player-class.h"
 #include "avatar.h"
 #include "realm.h"
 #include "realm-hex.h"

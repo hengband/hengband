@@ -26,6 +26,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-skill.h"
+#include "player-class.h"
 
 #include "spells.h"
 #include "spells-object.h"

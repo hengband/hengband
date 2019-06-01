@@ -14,6 +14,7 @@
 #include "spells-summon.h"
 #include "artifact.h"
 #include "player-status.h"
+#include "player-class.h"
 #include "realm-hex.h"
 #include "player-move.h"
 #include "monster-spell.h"

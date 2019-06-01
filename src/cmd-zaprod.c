@@ -4,6 +4,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-class.h"
 #include "objectkind.h"
 #include "object-hook.h"
 #include "spells.h"

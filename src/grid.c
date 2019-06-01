@@ -36,6 +36,7 @@
 #include "monster-status.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-class.h"
 #include "spells.h"
 #include "view-mainwindow.h"
 #include "realm-song.h"

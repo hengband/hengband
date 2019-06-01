@@ -9,6 +9,7 @@
 #include "object-broken.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-class.h"
 #include "monster-spell.h"
 #include "world.h"
 #include "view-mainwindow.h"

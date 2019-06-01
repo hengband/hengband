@@ -6,6 +6,7 @@
 #include "spells-status.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-class.h"
 #include "objectkind.h"
 #include "object-hook.h"
 #include "cmd-basic.h"

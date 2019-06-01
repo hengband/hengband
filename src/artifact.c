@@ -31,6 +31,7 @@
 #include "grid.h"
 #include "monster.h"
 #include "view-mainwindow.h"
+#include "player-class.h"
 
  /*
   * The artifact arrays

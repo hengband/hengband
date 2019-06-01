@@ -10,6 +10,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "player-skill.h"
+#include "player-class.h"
 #include "object-hook.h"
 #include "floor.h"
 #include "grid.h"

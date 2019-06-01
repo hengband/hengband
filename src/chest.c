@@ -8,6 +8,7 @@
 #include "trap.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-class.h"
 #include "grid.h"
 #include "realm-song.h"
 
