@@ -1965,7 +1965,6 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 	}
 }
 
-
 FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat)
 {
 	feature_type *f_ptr = &f_info[newfeat];

@@ -357,6 +357,15 @@ typedef struct
 #define CAVE_UNSAFE     0x2000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
+/* Types of conversions */
+#define CONVERT_TYPE_FLOOR   0
+#define CONVERT_TYPE_WALL    1
+#define CONVERT_TYPE_INNER   2
+#define CONVERT_TYPE_OUTER   3
+#define CONVERT_TYPE_SOLID   4
+#define CONVERT_TYPE_STREAM1 5
+#define CONVERT_TYPE_STREAM2 6
+
 /* Externs */
 
 extern bool new_player_spot(void);

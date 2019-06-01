@@ -271,17 +271,6 @@
 	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
 
 
-
-/* Types of conversions */
-#define CONVERT_TYPE_FLOOR   0
-#define CONVERT_TYPE_WALL    1
-#define CONVERT_TYPE_INNER   2
-#define CONVERT_TYPE_OUTER   3
-#define CONVERT_TYPE_SOLID   4
-#define CONVERT_TYPE_STREAM1 5
-#define CONVERT_TYPE_STREAM2 6
-
-
 /*
  * Bit flags for the *_can_enter() and monster_can_cross_terrain()
  */
