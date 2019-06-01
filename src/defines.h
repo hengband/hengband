@@ -277,18 +277,6 @@
 #define CEM_RIDING              0x0001
 #define CEM_P_CAN_ENTER_PATTERN 0x0002
 
-
-/* Lighting levels of features' attr and char */
-
-#define F_LIT_STANDARD 0 /* Standard */
-#define F_LIT_LITE     1 /* Brightly lit */
-#define F_LIT_DARK     2 /* Darkened */
-
-#define F_LIT_NS_BEGIN 1 /* Nonstandard */
-#define F_LIT_MAX      3
-
-
-
 /*** Object "tval" and "sval" codes ***/
 
 

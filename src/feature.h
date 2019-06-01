@@ -127,6 +127,17 @@
 #define FF_FLAG_MAX      113
 #define FF_FLAG_SIZE     (1 + ((FF_FLAG_MAX - 1) / 32))
 
+
+/* Lighting levels of features' attr and char */
+
+#define F_LIT_STANDARD 0 /* Standard */
+#define F_LIT_LITE     1 /* Brightly lit */
+#define F_LIT_DARK     2 /* Darkened */
+
+#define F_LIT_NS_BEGIN 1 /* Nonstandard */
+#define F_LIT_MAX      3
+
+
 /*!
  * @struct feature_state
  * @brief 地形状態変化指定構造体 / Feature state structure
