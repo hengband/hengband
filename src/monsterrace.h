@@ -419,7 +419,9 @@ struct monster_race
 	byte r_wake;			/* Number of times woken up (?) */
 	byte r_ignore;			/* Number of times ignored (?) */
 
-	byte r_xtra1;			/* Something (unused) */
+	#define MR1_SINKA 0x01
+	byte r_xtra1;			/* Something */
+
 	byte r_xtra2;			/* Something (unused) */
 
 	ITEM_NUMBER r_drop_gold;	/*!< これまでに撃破時に落とした財宝の数 / Max number of gold dropped at once */
