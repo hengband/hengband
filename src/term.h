@@ -25,6 +25,25 @@
 #define TERM_L_BLUE             14  /*!< 'B' - 明るい青 0,4,4 */
 #define TERM_L_UMBER            15  /*!< 'U' - 明るい琥珀 3,2,1 */
 
+ /*** Macro Definitions ***/
+ /*
+  * Convert an "attr"/"char" pair into a "pict" (P)
+  */
+#define PICT(A,C) \
+	((((u16b)(A)) << 8) | ((byte)(C)))
+
+  /*
+   * Convert a "pict" (P) into an "attr" (A)
+   */
+#define PICT_A(P) \
+	((byte)((P) >> 8))
+
+   /*
+	* Convert a "pict" (P) into an "char" (C)
+	*/
+#define PICT_C(P) \
+	((char)((byte)(P)))
+
 extern const concptr color_names[16];
 extern const concptr window_flag_desc[32];
 extern const concptr ident_info[];
