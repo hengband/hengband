@@ -278,16 +278,6 @@
 	((bool)((A)->ml && (!ignore_unview || p_ptr->inside_battle || \
 	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
 
-/*
- * Hack -- Prepare to use the "Secure" routines
- */
-#if defined(SET_UID) && defined(SECURE)
-extern int PlayerUID;
-# define getuid() PlayerUID
-# define geteuid() PlayerUID
-#endif
-
-
 
 /*** Color constants ***/
 

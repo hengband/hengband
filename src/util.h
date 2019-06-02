@@ -1,5 +1,14 @@
 #pragma once
 
+/*
+ * Hack -- Prepare to use the "Secure" routines
+ */
+#if defined(SET_UID) && defined(SECURE)
+extern int PlayerUID;
+# define getuid() PlayerUID
+# define geteuid() PlayerUID
+#endif
+
 #define KEYMAP_MODE_ORIG	0 /*!< オリジナルキー配置 / Mode for original keyset commands */
 #define KEYMAP_MODE_ROGUE	1 /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
 #define KEYMAP_MODES		2 /*!< キー配置の数 / Number of keymap modes */
