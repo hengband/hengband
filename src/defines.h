@@ -207,14 +207,6 @@
 #define FAF_NO_DROP     0x02
 #define FAF_CRASH_GLASS 0x04
 
-/* Types of doors */
-#define DOOR_DEFAULT    -1
-#define DOOR_DOOR        0
-#define DOOR_GLASS_DOOR  1
-#define DOOR_CURTAIN     2
-
-#define MAX_DOOR_TYPES   3
-
 #define feat_locked_door_random(DOOR_TYPE) \
 	(feat_door[(DOOR_TYPE)].num_locked ? \
 	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)

@@ -372,9 +372,17 @@ extern bool new_player_spot(void);
 
 extern void place_random_stairs(POSITION y, POSITION x);
 extern void place_random_door(POSITION y, POSITION x, bool room);
-extern void place_closed_door(POSITION y, POSITION x, int type);
 extern void add_door(POSITION x, POSITION y);
+
+/* Types of doors */
+#define DOOR_DEFAULT    -1
+#define DOOR_DOOR        0
+#define DOOR_GLASS_DOOR  1
+#define DOOR_CURTAIN     2
+#define MAX_DOOR_TYPES   3
+extern void place_closed_door(POSITION y, POSITION x, int type);
 extern void place_secret_door(POSITION y, POSITION x, int type);
+
 extern void place_locked_door(POSITION y, POSITION x);
 extern void try_door(POSITION y, POSITION x);
 extern void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light);
