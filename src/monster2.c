@@ -29,6 +29,7 @@
 #include "player-status.h"
 #include "player-race.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "wild.h"
 #include "warning.h"
 #include "monster-spell.h"

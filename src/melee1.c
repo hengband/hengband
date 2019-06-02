@@ -40,6 +40,7 @@
 #include "player-status.h"
 #include "player-race.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "view-mainwindow.h"
 #include "world.h"
 

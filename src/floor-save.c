@@ -33,6 +33,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "world.h"
 #include "spells.h"
 #include "cmd-dump.h"

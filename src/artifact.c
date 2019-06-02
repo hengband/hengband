@@ -32,6 +32,7 @@
 #include "monster.h"
 #include "view-mainwindow.h"
 #include "player-class.h"
+#include "player-personality.h"
 
  /*
   * The artifact arrays

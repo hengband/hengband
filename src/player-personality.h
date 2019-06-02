@@ -1,5 +1,19 @@
 ﻿#pragma once
 
+#define SEIKAKU_FUTUU	 0
+#define SEIKAKU_CHIKARA	 1
+#define SEIKAKU_KIREMONO 2
+#define SEIKAKU_SHIAWASE 3
+#define SEIKAKU_SUBASI	 4
+#define SEIKAKU_INOCHI	 5
+#define SEIKAKU_COMBAT	 6
+#define SEIKAKU_NAMAKE	 7
+#define SEIKAKU_SEXY	 8
+#define SEIKAKU_LUCKY	 9
+#define SEIKAKU_GAMAN	 10
+#define SEIKAKU_MUNCHKIN 11
+#define SEIKAKU_CHARGEMAN 12
+
 typedef struct player_seikaku player_seikaku;
 struct player_seikaku
 {

@@ -7,6 +7,7 @@
 #include "player-move.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"

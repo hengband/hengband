@@ -47,6 +47,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "player-skill.h"
+#include "player-personality.h"
 #include "view-mainwindow.h"
 #include "mind.h"
 #include "wild.h"

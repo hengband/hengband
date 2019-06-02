@@ -50,6 +50,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "scores.h"
 #include "shoot.h"
 #include "view-mainwindow.h"

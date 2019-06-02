@@ -11,6 +11,7 @@
 #include "player-status.h"
 #include "player-skill.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "object-hook.h"
 #include "floor.h"
 #include "grid.h"

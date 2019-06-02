@@ -37,6 +37,7 @@
 #include "player-move.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "object-ego.h"

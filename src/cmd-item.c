@@ -38,6 +38,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "monster.h"
 #include "view-mainwindow.h"
 #include "spells.h"

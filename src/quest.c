@@ -10,6 +10,7 @@
 #include "monsterrace-hook.h"
 #include "monster.h"
 #include "player-status.h"
+#include "player-personality.h"
 #include "artifact.h"
 #include "feature.h"
 #include "world.h"

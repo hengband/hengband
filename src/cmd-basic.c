@@ -41,6 +41,7 @@
 #include "player-move.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "objectkind.h"
 #include "object-broken.h"
 #include "object-flavor.h"

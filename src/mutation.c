@@ -23,6 +23,7 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-personality.h"
 #include "player-class.h"
 #include "spells-status.h"
 #include "object-hook.h"

@@ -19,6 +19,7 @@
 #include "avatar.h"
 #include "files.h"
 #include "player-effects.h"
+#include "player-personality.h"
 #include "view-mainwindow.h"
 #include "world.h"
 #include "report.h"

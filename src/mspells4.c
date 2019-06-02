@@ -15,6 +15,7 @@
 #include "artifact.h"
 #include "player-status.h"
 #include "player-class.h"
+#include "player-personality.h"
 #include "realm-hex.h"
 #include "player-move.h"
 #include "monster-spell.h"

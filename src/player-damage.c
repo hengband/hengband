@@ -3,6 +3,7 @@
 
 #include "realm-song.h"
 #include "player-damage.h"
+#include "player-personality.h"
 #include "artifact.h"
 #include "object-flavor.h"
 #include "object-hook.h"
