@@ -4272,14 +4272,14 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			if (fuzzy) msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
 			if (p_ptr->resist_neth)
 			{
-				if (!prace_is_(RACE_SPECTRE))
+				if (!PRACE_IS_(RACE_SPECTRE))
 				{
 					dam *= 6; dam /= (randint1(4) + 7);
 				}
 			}
 			else if (!CHECK_MULTISHADOW()) drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
 
-			if (prace_is_(RACE_SPECTRE) && !CHECK_MULTISHADOW())
+			if (PRACE_IS_(RACE_SPECTRE) && !CHECK_MULTISHADOW())
 			{
 				msg_print(_("気分がよくなった。", "You feel invigorated!"));
 				hp_player(dam / 4);
@@ -4515,12 +4515,12 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				(void)set_blind(p_ptr->blind + randint1(5) + 2);
 			}
 
-			if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
+			if (PRACE_IS_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 			{
 				if (!CHECK_MULTISHADOW()) msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
 				dam *= 2;
 			}
-			else if (prace_is_(RACE_S_FAIRY))
+			else if (PRACE_IS_(RACE_S_FAIRY))
 			{
 				dam = dam * 4 / 3;
 			}
@@ -4550,7 +4550,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				dam *= 4; dam /= (randint1(4) + 7);
 
-				if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form) dam = 0;
+				if (PRACE_IS_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form) dam = 0;
 			}
 			else if (!blind && !p_ptr->resist_blind && !CHECK_MULTISHADOW())
 			{

@@ -375,8 +375,6 @@
 #define SLF_NO_KILL      0x0002  /* Don't kill temporal files */
 
 
-#define prace_is_(A) (!p_ptr->mimic_form && (p_ptr->prace == A))
-
 /* Sub-alignment flags for neutral monsters */
 #define SUB_ALIGN_NEUTRAL 0x0000
 #define SUB_ALIGN_EVIL    0x0001

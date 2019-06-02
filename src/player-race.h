@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define PRACE_IS_(A) (!p_ptr->mimic_form && (p_ptr->prace == A))
+
 /*
  * Player race constants (hard-coded by save-files, arrays, etc)
  */

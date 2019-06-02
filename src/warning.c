@@ -80,7 +80,7 @@ static void spell_damcalc(monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int
 		{
 			if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
 			if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
-			if (prace_is_(RACE_ANDROID)) dam += dam / 3;
+			if (PRACE_IS_(RACE_ANDROID)) dam += dam / 3;
 			if (p_ptr->resist_elec) dam = (dam + 2) / 3;
 			if (IS_OPPOSE_ELEC())
 				dam = (dam + 2) / 3;
@@ -132,7 +132,7 @@ static void spell_damcalc(monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int
 		else
 		{
 			if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-			if (prace_is_(RACE_ENT)) dam += dam / 3;
+			if (PRACE_IS_(RACE_ENT)) dam += dam / 3;
 			if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 			if (p_ptr->resist_fire) dam = (dam + 2) / 3;
 			if (IS_OPPOSE_FIRE()) dam = (dam + 2) / 3;
@@ -155,8 +155,8 @@ static void spell_damcalc(monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int
 
 	case GF_LITE:
 		if (p_ptr->resist_lite) dam /= 2; /* Worst case of 4 / (d4 + 7) */
-		if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) dam *= 2;
-		else if (prace_is_(RACE_S_FAIRY)) dam = dam * 4 / 3;
+		if (PRACE_IS_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) dam *= 2;
+		else if (PRACE_IS_(RACE_S_FAIRY)) dam = dam * 4 / 3;
 
 		/*
 		 * Cannot use "ignore_wraith_form" strictly (for "random one damage")
@@ -166,7 +166,7 @@ static void spell_damcalc(monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int
 		break;
 
 	case GF_DARK:
-		if (prace_is_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form)
+		if (PRACE_IS_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE) || p_ptr->wraith_form)
 		{
 			dam = 0;
 			ignore_wraith_form = TRUE;
@@ -191,7 +191,7 @@ static void spell_damcalc(monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int
 		break;
 
 	case GF_NETHER:
-		if (prace_is_(RACE_SPECTRE))
+		if (PRACE_IS_(RACE_SPECTRE))
 		{
 			dam = 0;
 			ignore_wraith_form = TRUE;

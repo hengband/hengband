@@ -478,7 +478,7 @@ HIT_POINT elec_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	/* Vulnerability (Ouch!) */
 	if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
 	if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
-	if (prace_is_(RACE_ANDROID)) dam += dam / 3;
+	if (PRACE_IS_(RACE_ANDROID)) dam += dam / 3;
 
 	/* Resist the damage */
 	if (p_ptr->resist_elec) dam = (dam + 2) / 3;
@@ -525,7 +525,7 @@ HIT_POINT fire_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 
 	/* Vulnerability (Ouch!) */
 	if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-	if (prace_is_(RACE_ENT)) dam += dam / 3;
+	if (PRACE_IS_(RACE_ENT)) dam += dam / 3;
 	if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 
 	/* Resist the damage */

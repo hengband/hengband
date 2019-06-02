@@ -124,7 +124,7 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 	if (o_ptr->tval == TV_FOOD) return TRUE;
 
 #if 0
-	if (prace_is_(RACE_SKELETON))
+	if (PRACE_IS_(RACE_SKELETON))
 	{
 		if (o_ptr->tval == TV_SKELETON ||
 			(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
@@ -133,15 +133,15 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 	else
 #endif
 
-	if (prace_is_(RACE_SKELETON) ||
-		prace_is_(RACE_GOLEM) ||
-		prace_is_(RACE_ZOMBIE) ||
-		prace_is_(RACE_SPECTRE))
+	if (PRACE_IS_(RACE_SKELETON) ||
+		PRACE_IS_(RACE_GOLEM) ||
+		PRACE_IS_(RACE_ZOMBIE) ||
+		PRACE_IS_(RACE_SPECTRE))
 	{
 		if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
 			return TRUE;
 	}
-	else if (prace_is_(RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
+	else if (PRACE_IS_(RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 			o_ptr->sval == SV_CORPSE &&
@@ -266,7 +266,7 @@ bool item_tester_hook_quaff(object_type *o_ptr)
 {
 	if (o_ptr->tval == TV_POTION) return TRUE;
 
-	if (prace_is_(RACE_ANDROID))
+	if (PRACE_IS_(RACE_ANDROID))
 	{
 		if (o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
 			return TRUE;

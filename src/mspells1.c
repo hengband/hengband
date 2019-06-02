@@ -261,7 +261,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p
 
 	if (smart & (SM_RES_NETH))
 	{
-		if (prace_is_(RACE_SPECTRE))
+		if (PRACE_IS_(RACE_SPECTRE))
 		{
 			f4 &= ~(RF4_BR_NETH);
 			f5 &= ~(RF5_BA_NETH);
@@ -283,7 +283,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p
 
 	if (smart & (SM_RES_DARK))
 	{
-		if (prace_is_(RACE_VAMPIRE))
+		if (PRACE_IS_(RACE_VAMPIRE))
 		{
 			f4 &= ~(RF4_BR_DARK);
 			f5 &= ~(RF5_BA_DARK);
