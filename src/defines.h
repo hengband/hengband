@@ -199,14 +199,6 @@
 	     (1UL << (FF_STRIKE % 32)) | \
 	     (1UL << (FF_SPREAD % 32)))))
 
-
-/*
- * Feature action flags
- */
-#define FAF_DESTROY     0x01
-#define FAF_NO_DROP     0x02
-#define FAF_CRASH_GLASS 0x04
-
 #define feat_locked_door_random(DOOR_TYPE) \
 	(feat_door[(DOOR_TYPE)].num_locked ? \
 	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)

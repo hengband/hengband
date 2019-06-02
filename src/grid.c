@@ -41,6 +41,12 @@
 #include "view-mainwindow.h"
 #include "realm-song.h"
 
+/*
+ * Feature action flags
+ */
+#define FAF_DESTROY     0x01
+#define FAF_NO_DROP     0x02
+#define FAF_CRASH_GLASS 0x04
 
 /*!
  * @brief 地形状態フラグテーブル /

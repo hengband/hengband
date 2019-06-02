@@ -379,6 +379,7 @@ extern void add_door(POSITION x, POSITION y);
 #define DOOR_DOOR        0
 #define DOOR_GLASS_DOOR  1
 #define DOOR_CURTAIN     2
+
 #define MAX_DOOR_TYPES   3
 extern void place_closed_door(POSITION y, POSITION x, int type);
 extern void place_secret_door(POSITION y, POSITION x, int type);
