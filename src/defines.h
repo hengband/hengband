@@ -234,11 +234,6 @@
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */
 
-/* Empty hand status */
-#define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
-#define EMPTY_HAND_LARM 0x0001 /* Left hand is empty */
-#define EMPTY_HAND_RARM 0x0002 /* Right hand is empty */
-
 /*
  * Object flags
  *
