@@ -275,19 +275,6 @@
 # define MESSAGE_BUF    4096
 #endif
 
-
-
-
-
-/*
- * Available graphic modes
- */
-#define GRAPHICS_NONE       0
-#define GRAPHICS_ORIGINAL   1
-#define GRAPHICS_ADAM_BOLT  2
-#define GRAPHICS_HENGBAND   3
-
-
 #ifdef JP
 #define JVERB_AND 1
 #define JVERB_TO  2

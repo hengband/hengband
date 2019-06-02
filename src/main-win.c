@@ -131,6 +131,13 @@
 # endif
 #endif
 
+/*
+ * Available graphic modes
+ */
+#define GRAPHICS_NONE       0
+#define GRAPHICS_ORIGINAL   1
+#define GRAPHICS_ADAM_BOLT  2
+#define GRAPHICS_HENGBAND   3
 
 /*
  * Hack -- allow use of "screen saver" mode
