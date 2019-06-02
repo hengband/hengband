@@ -31,6 +31,7 @@
 #include "realm-trump.h"
 #include "mind.h"
 #include "avatar.h"
+#include "player-damage.h"
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-skill.h"

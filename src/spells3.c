@@ -30,6 +30,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "player-class.h"
+#include "player-damage.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"

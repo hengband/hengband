@@ -25,6 +25,7 @@
 #include "player-effects.h"
 #include "player-personality.h"
 #include "player-class.h"
+#include "player-damage.h"
 #include "spells-status.h"
 #include "object-hook.h"
 #include "spells.h"

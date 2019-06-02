@@ -27,6 +27,7 @@
 #include "player-race.h"
 #include "player-effects.h"
 #include "player-status.h"
+#include "player-damage.h"
 #include "spells-status.h"
 #include "spells-object.h"
 #include "spells-floor.h"

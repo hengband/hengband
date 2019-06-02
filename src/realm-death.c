@@ -8,6 +8,7 @@
 #include "player-effects.h"
 #include "targeting.h"
 #include "player-class.h"
+#include "player-damage.h"
 #include "player-race.h"
 
 /*!

@@ -380,9 +380,6 @@
 #define SUB_ALIGN_EVIL    0x0001
 #define SUB_ALIGN_GOOD    0x0002
 
-/* Multishadow effects is determined by current_world_ptr->game_turn */
-#define CHECK_MULTISHADOW() (p_ptr->multishadow && (current_world_ptr->game_turn & 1))
-
 /* Is "teleport level" ineffective to this target? */
 #define TELE_LEVEL_IS_INEFF(TARGET) \
 	(p_ptr->inside_arena || p_ptr->inside_battle || \

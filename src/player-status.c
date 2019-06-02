@@ -11,6 +11,7 @@
 #include "player-race.h"
 #include "player-class.h"
 #include "player-personality.h"
+#include "player-damage.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "feature.h"
@@ -38,6 +39,7 @@
 #include "melee.h"
 #include "world.h"
 #include "view-mainwindow.h"
+#include "files.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats

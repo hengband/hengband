@@ -10,6 +10,7 @@
 #include "spells-status.h"
 #include "player-effects.h"
 #include "player-race.h"
+#include "player-damage.h"
 #include "targeting.h"
 
 /*!

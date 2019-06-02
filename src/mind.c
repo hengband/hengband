@@ -36,6 +36,7 @@
 #include "cmd-basic.h"
 #include "monster-status.h"
 #include "player-effects.h"
+#include "player-damage.h"
 #include "view-mainwindow.h"
 #include "targeting.h"
 #include "realm-song.h"

@@ -44,6 +44,7 @@
 #include "player-effects.h"
 #include "player-skill.h"
 #include "player-class.h"
+#include "player-damage.h"
 
 #include "dungeon.h"
 #include "floor-events.h"

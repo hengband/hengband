@@ -15,6 +15,7 @@
 #include "player-effects.h"
 #include "player-race.h"
 #include "player-class.h"
+#include "player-damage.h"
 
 #include "spells.h"
 #include "spells-summon.h"

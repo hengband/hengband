@@ -13,6 +13,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-damage.h"
 #include "feature.h"
 #include "spells.h"
 #include "grid.h"

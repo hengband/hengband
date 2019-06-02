@@ -14,8 +14,9 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
-#include "player-effects.h"
+#include "player-damage.h"
 #include "player-class.h"
+#include "player-effects.h"
 #include "rumor.h"
 #include "realm-hex.h"
 
