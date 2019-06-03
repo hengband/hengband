@@ -405,16 +405,6 @@
 #define RF5_SPELL_SIZE 32
 #define RF6_SPELL_SIZE 32
 
-/* Spell Damage Calc Flag*/
-#define DAM_ROLL 1
-#define DAM_MAX 2
-#define DAM_MIN 3
-#define DICE_NUM 4
-#define DICE_SIDE 5
-#define DICE_MULT 6
-#define DICE_DIV 7
-#define BASE_DAM 8
-
 /* Cheat Info Type */
 #define CHEAT_OBJECT 0
 #define CHEAT_MONSTER 1
