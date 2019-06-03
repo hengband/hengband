@@ -372,17 +372,6 @@
 #define CONCENT_RADAR_THRESHOLD 2
 #define CONCENT_TELE_THRESHOLD  5
 
-/* Hex */
-#define hex_spelling_any() \
-	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0]))
-#define hex_spelling(X) \
-	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0] & (1L << (X))))
-#define CASTING_HEX_FLAGS(P_PTR) ((P_PTR)->magic_num1[0])
-#define CASTING_HEX_NUM(P_PTR) ((P_PTR)->magic_num2[0])
-#define HEX_REVENGE_POWER(P_PTR) ((P_PTR)->magic_num1[2])
-#define HEX_REVENGE_TURN(P_PTR) ((P_PTR)->magic_num2[2])
-#define HEX_REVENGE_TYPE(P_PTR) ((P_PTR)->magic_num2[1])
-
 /*
   Language selection macro
 */
