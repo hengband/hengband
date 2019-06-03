@@ -7,6 +7,7 @@
 #include "rooms.h"
 #include "rooms-city.h"
 #include "store.h"
+#include "wild.h"
 
 
 

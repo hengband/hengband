@@ -288,17 +288,9 @@
 
 #define GINOU_MAX      10
 
-#define NO_TOWN 6
-#define SECRET_TOWN 5
-
 
 #define MAX_MANE 16
-#define MAX_MONSPELLS 96
-#define MONSPELL_TYPE_BOLT 1
-#define MONSPELL_TYPE_BALL 2
-#define MONSPELL_TYPE_BREATH 3
-#define MONSPELL_TYPE_SUMMON 4
-#define MONSPELL_TYPE_OTHER 5
+
 
 #define EATER_EXT 36
 #define EATER_CHARGE 0x10000L

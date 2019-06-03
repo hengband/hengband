@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#define NO_TOWN 6
+#define SECRET_TOWN 5
+
 /*
  * Wilderness terrains
  */

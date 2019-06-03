@@ -7,6 +7,7 @@
 #include "dungeon.h"
 #include "monsterrace.h"
 #include "floor-town.h"
+#include "wild.h"
 
 /*
  * Display a rumor and apply its effects

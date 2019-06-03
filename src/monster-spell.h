@@ -14,6 +14,12 @@ struct monster_power
 	concptr    name;
 };
 
+#define MAX_MONSPELLS 96
+#define MONSPELL_TYPE_BOLT 1
+#define MONSPELL_TYPE_BALL 2
+#define MONSPELL_TYPE_BREATH 3
+#define MONSPELL_TYPE_SUMMON 4
+#define MONSPELL_TYPE_OTHER 5
 
 /* Monster Spells */
 #define MS_SHRIEK         0

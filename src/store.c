@@ -43,6 +43,7 @@
 #include "floor-town.h"
 #include "japanese.h"
 #include "view-mainwindow.h"
+#include "wild.h"
 
 #define MIN_STOCK 12
 

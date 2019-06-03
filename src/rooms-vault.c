@@ -12,6 +12,7 @@
 #include "floor.h"
 #include "dungeon.h"
 #include "geometry.h"
+#include "wild.h"
 
 /*
  * The vault generation arrays
