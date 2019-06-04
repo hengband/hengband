@@ -393,7 +393,11 @@ extern void reset_visuals(void);
 extern void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 extern concptr item_activation(object_type *o_ptr);
+
+#define SCROBJ_FAKE_OBJECT  0x00000001
+#define SCROBJ_FORCE_DETAIL 0x00000002
 extern bool screen_object(object_type *o_ptr, BIT_FLAGS mode);
+
 extern char index_to_label(int i);
 extern INVENTORY_IDX label_to_inven(int c);
 extern INVENTORY_IDX label_to_equip(int c);
