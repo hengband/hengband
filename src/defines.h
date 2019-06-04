@@ -322,12 +322,6 @@
 #define SLF_SECOND     	 0x0001  /* Called from another save/load function */
 #define SLF_NO_KILL      0x0002  /* Don't kill temporal files */
 
-
-/* Sub-alignment flags for neutral monsters */
-#define SUB_ALIGN_NEUTRAL 0x0000
-#define SUB_ALIGN_EVIL    0x0001
-#define SUB_ALIGN_GOOD    0x0002
-
 /*
  * Max numbers of macro trigger names
  */

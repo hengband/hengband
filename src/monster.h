@@ -19,7 +19,12 @@ struct monster_type
 {
 	MONRACE_IDX r_idx;		/* Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */
-	byte sub_align;		/* Sub-alignment for a neutral monster */
+
+	/* Sub-alignment flags for neutral monsters */
+	#define SUB_ALIGN_NEUTRAL 0x0000
+	#define SUB_ALIGN_EVIL    0x0001
+	#define SUB_ALIGN_GOOD    0x0002
+	BIT_FLAGS8 sub_align;		/* Sub-alignment for a neutral monster */
 
 	POSITION fy;		/* Y location on map */
 	POSITION fx;		/* X location on map */
