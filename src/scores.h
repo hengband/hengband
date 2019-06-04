@@ -35,6 +35,8 @@ struct high_score
 	GAME_TEXT how[40];		/* Method of death (string) */
 };
 
+#define MAX_HISCORES    999 /*!< スコア情報保存の最大数 / Maximum number of high scores in the high score file */
+
 extern int highscore_fd;
 
 /* scores.c */

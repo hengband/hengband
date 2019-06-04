@@ -93,8 +93,6 @@
 #define FAKE_TEXT_SIZE 150 * 1024L /*!< ゲーム情報の種別毎に用意されるテキスト用バッファの容量 */
 #define FAKE_TAG_SIZE   10 * 1024L /*!< ゲーム情報の種別毎に用意されるタグ用バッファの容量 */
 
-#define MAX_HISCORES    999 /*!< スコア情報保存の最大数 / Maximum number of high scores in the high score file */
-
 /*!
  * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "current_floor_ptr->grid_array.c")
  * @details Note that the "lite radius" will NEVER exceed 14, and we would
