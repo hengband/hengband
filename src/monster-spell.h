@@ -14,6 +14,23 @@ struct monster_power
 	concptr    name;
 };
 
+/* Spell Type flag */
+#define MONSTER_TO_PLAYER     0x01
+#define MONSTER_TO_MONSTER    0x02
+
+/* summoning number */
+#define S_NUM_6     (easy_band ? 2 : 6)
+#define S_NUM_4     (easy_band ? 1 : 4)
+
+/* monster spell number */
+#define RF4_SPELL_START 32 * 3
+#define RF5_SPELL_START 32 * 4
+#define RF6_SPELL_START 32 * 5
+
+#define RF4_SPELL_SIZE 32
+#define RF5_SPELL_SIZE 32
+#define RF6_SPELL_SIZE 32
+
 /* Spell Damage Calc Flag*/
 #define DAM_ROLL 1
 #define DAM_MAX 2
