@@ -473,40 +473,6 @@
 #endif
 
 /*
- * Hack -- Special "ancient machine" versions
- */
-#if defined(ANGBAND_LITE_MAC)
-# ifndef ANGBAND_LITE
-#  define ANGBAND_LITE
-# endif
-#endif
-
-/*
- * OPTION: Attempt to minimize the size of the game
- */
-#ifndef ANGBAND_LITE
-/* #define ANGBAND_LITE */
-#endif
-
-/*
- * Hack -- React to the "ANGBAND_LITE" flag
- */
-#ifdef ANGBAND_LITE
-# undef ALLOW_COLORS
-# undef ALLOW_VISUALS
-# undef ALLOW_MACROS
-# undef ALLOW_OLD_SAVEFILES
-# undef ALLOW_BORG
-# undef ALLOW_WIZARD
-# undef ALLOW_SPOILERS
-# undef ALLOW_TEMPLATES
-# undef DELAY_LOAD_R_TEXT
-# define DELAY_LOAD_R_TEXT
-#endif
-
-
-
-/*
  * OPTION: Attempt to prevent all "cheating"
  */
 /* #define VERIFY_HONOR */
