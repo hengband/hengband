@@ -86,13 +86,6 @@
 
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
 
-/*
- * Size of memory reserved for initialization of some arrays
- */
-#define FAKE_NAME_SIZE  40 * 1024L /*!< ゲーム情報の種別毎に用意される名前用バッファの容量 */
-#define FAKE_TEXT_SIZE 150 * 1024L /*!< ゲーム情報の種別毎に用意されるテキスト用バッファの容量 */
-#define FAKE_TAG_SIZE   10 * 1024L /*!< ゲーム情報の種別毎に用意されるタグ用バッファの容量 */
-
 /*!
  * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "current_floor_ptr->grid_array.c")
  * @details Note that the "view radius" will NEVER exceed 20, and even if the "view"

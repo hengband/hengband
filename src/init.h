@@ -43,6 +43,13 @@ typedef struct header header;
 
 typedef errr (*parse_info_txt_func)(char *buf, header *head);
 
+/*
+ * Size of memory reserved for initialization of some arrays
+ */
+#define FAKE_NAME_SIZE  40 * 1024L /*!< ゲーム情報の種別毎に用意される名前用バッファの容量 */
+#define FAKE_TEXT_SIZE 150 * 1024L /*!< ゲーム情報の種別毎に用意されるテキスト用バッファの容量 */
+#define FAKE_TAG_SIZE   10 * 1024L /*!< ゲーム情報の種別毎に用意されるタグ用バッファの容量 */
+
 /*!
  * @struct header
  * @brief 各初期データ用ヘッダ構造体 / Template file header information (see "init.c").  16 bytes.
