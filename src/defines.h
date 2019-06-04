@@ -284,7 +284,6 @@
 /*
  * Modes for the tokenizer
  */
-#define TOKENIZE_CHECKQUOTE 0x01  /* Special handling of single quotes */
 
 
 #define MAX_MANE 16
