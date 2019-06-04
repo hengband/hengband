@@ -19,11 +19,26 @@
  */
 #define BLOCK_HGT 11
 
- /*!
-  * @brief generate.cで用いられる基本的なブロック数単位(水平方向)
-  * Number of grids in each block (horizontally) Probably hard-coded to 11, see "generate.c"
-  */
+/*!
+ * @brief generate.cで用いられる基本的なブロック数単位(水平方向)
+ * Number of grids in each block (horizontally) Probably hard-coded to 11, see "generate.c"
+ */
 #define BLOCK_WID 11
+
+/*!
+ * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "current_floor_ptr->grid_array.c")
+ * @details Note that the "lite radius" will NEVER exceed 14, and we would
+ * never require more than 581 entries in the array for circular "lite".
+ */
+#define LITE_MAX 600
+
+/*!
+ * @brief モンスター用光源処理配列サイズ / Maximum size of the "mon_lite" array (see "current_floor_ptr->grid_array.c")
+ * @details Note that the "view radius" will NEVER exceed 20, monster illumination
+ * flags are dependent on CAVE_VIEW, and even if the "view" was octagonal,
+ * we would never require more than 1520 entries in the array.
+ */
+#define MON_LITE_MAX 1536
 
 typedef struct {
 	grid_type *grid_array[MAX_HGT];
