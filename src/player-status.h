@@ -22,6 +22,8 @@
 #define PY_MAX_GOLD     999999999L      /*!< プレイヤー所持金の最大値 / Maximum gold */
 #define PY_MAX_LEVEL    50              /*!< プレイヤーレベルの最大値 / Maximum level */
 
+#define GINOU_MAX      10
+
 #define MAGIC_GLOVE_REDUCE_MANA 0x0001
 #define MAGIC_FAIL_5PERCENT     0x0002
 #define MAGIC_GAIN_EXP          0x0004
