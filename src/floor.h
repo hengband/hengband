@@ -40,6 +40,13 @@
  */
 #define MON_LITE_MAX 1536
 
+/*!
+ * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "current_floor_ptr->grid_array.c")
+ * @details Note that the "view radius" will NEVER exceed 20, and even if the "view"
+ * was octagonal, we would never require more than 1520 entries in the array.
+ */
+#define VIEW_MAX 1536
+
 typedef struct {
 	grid_type *grid_array[MAX_HGT];
 	DEPTH dun_level;		/*!< 現在の実ダンジョン階層base_levelの参照元となる / Current dungeon level */

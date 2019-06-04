@@ -87,13 +87,6 @@
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
 
 /*!
- * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "current_floor_ptr->grid_array.c")
- * @details Note that the "view radius" will NEVER exceed 20, and even if the "view"
- * was octagonal, we would never require more than 1520 entries in the array.
- */
-#define VIEW_MAX 1536
-
-/*!
  * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "current_floor_ptr->grid_array.c")
  * @details We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning
  * of "update_view()" and "update_lite()".  We must also be as large as the
