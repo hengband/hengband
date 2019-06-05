@@ -48,6 +48,14 @@
 #define FAF_NO_DROP     0x02
 #define FAF_CRASH_GLASS 0x04
 
+#define feat_locked_door_random(DOOR_TYPE) \
+	(feat_door[(DOOR_TYPE)].num_locked ? \
+	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)
+
+#define feat_jammed_door_random(DOOR_TYPE) \
+	(feat_door[(DOOR_TYPE)].num_jammed ? \
+	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
+
 /*!
  * @brief 地形状態フラグテーブル /
  * The table of features' actions

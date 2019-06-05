@@ -140,16 +140,6 @@
 #define ROW_MAP                 0
 #define COL_MAP                 12
 
-
-#define feat_locked_door_random(DOOR_TYPE) \
-	(feat_door[(DOOR_TYPE)].num_locked ? \
-	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)
-
-#define feat_jammed_door_random(DOOR_TYPE) \
-	(feat_door[(DOOR_TYPE)].num_jammed ? \
-	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
-
-
 /*
  * Bit flags for the *_can_enter() and monster_can_cross_terrain()
  */
