@@ -265,8 +265,6 @@
 #define MAX_MACRO_MOD 12
 #define MAX_MACRO_TRIG 200 /*!< 登録を許すマクロ（トリガー）の最大数 */
 
-/* Max size of screen dump buffer */
-#define SCREEN_BUF_MAX_SIZE (4 * 65536)
 
 #define MTIMED_CSLEEP   0 /* Monster is sleeping */
 #define MTIMED_FAST     1 /* Monster is temporarily fast */

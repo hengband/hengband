@@ -90,7 +90,6 @@
  */
 #define MAX_TRIES 100
 
-
 /*
  * Local "savefile" pointer
  */

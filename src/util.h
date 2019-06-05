@@ -13,6 +13,8 @@ extern int PlayerUID;
 #define KEYMAP_MODE_ROGUE	1 /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
 #define KEYMAP_MODES		2 /*!< キー配置の数 / Number of keymap modes */
 
+#define SCREEN_BUF_MAX_SIZE (4 * 65536) /*!< Max size of screen dump buffer */
+
 /*
  * Sort-array element
  */
