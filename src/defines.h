@@ -141,16 +141,6 @@
 #define COL_MAP                 12
 
 
-/* Which features are dynamic */
-#define have_dynamic_flags(ARRAY) \
-	(!!((ARRAY)[(FF_INSTANT / 32)] & \
-	    ((1UL << (FF_INSTANT % 32)) | \
-	     (1UL << (FF_EXPLODE % 32)) | \
-	     (1UL << (FF_TIMED % 32)) | \
-	     (1UL << (FF_ERUPT % 32)) | \
-	     (1UL << (FF_STRIKE % 32)) | \
-	     (1UL << (FF_SPREAD % 32)))))
-
 #define feat_locked_door_random(DOOR_TYPE) \
 	(feat_door[(DOOR_TYPE)].num_locked ? \
 	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)
