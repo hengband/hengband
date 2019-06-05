@@ -423,10 +423,16 @@ struct player_type
 	byte feeling;		/* Most recent dungeon feeling */
 	s32b feeling_turn;	/* The turn of the last dungeon feeling */
 
-
 	/*
+	 * Maximum number of "normal" pack slots, and the index of the "overflow"
+	 * slot, which can hold an item, but only temporarily, since it causes the
+	 * pack to "overflow", dropping the "last" item onto the ground.  Since this
+	 * value is used as an actual slot, it must be less than "INVEN_RARM" (below).
+	 * Note that "INVEN_PACK" is probably hard-coded by its use in savefiles, and
+	 * by the fact that the screen can only show 23 items plus a one-line prompt.
 	 * Indexes used for various "equipment" slots (hard-coded by savefiles, etc).
 	 */
+	#define INVEN_PACK      23 /*!< アイテムスロット…所持品(0～) */
 	#define INVEN_RARM      24 /*!< アイテムスロット…右手 */
 	#define INVEN_LARM      25 /*!< アイテムスロット…左手 */
 	#define INVEN_BOW       26 /*!< アイテムスロット…射撃 */
@@ -446,7 +452,7 @@ struct player_type
 	s16b inven_cnt; /* Number of items in inventory */
 	s16b equip_cnt; /* Number of items in equipment */
 
-							/*** Temporary fields ***/
+	/*** Temporary fields ***/
 
 	bool playing;			/* True if player is playing */
 	bool leaving;			/* True if player is leaving */

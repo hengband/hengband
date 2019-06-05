@@ -132,17 +132,6 @@
 #define MESSAGE_BUF 655360
 
 
-/*
- * Maximum number of "normal" pack slots, and the index of the "overflow"
- * slot, which can hold an item, but only temporarily, since it causes the
- * pack to "overflow", dropping the "last" item onto the ground.  Since this
- * value is used as an actual slot, it must be less than "INVEN_RARM" (below).
- * Note that "INVEN_PACK" is probably hard-coded by its use in savefiles, and
- * by the fact that the screen can only show 23 items plus a one-line prompt.
- */
-#define INVEN_PACK      23 /*!< アイテムスロット…所持品(0～) */
-
-
 /*** Screen Locations ***/
 
 #define VER_INFO_ROW 3   //!< タイトル表記(行)
