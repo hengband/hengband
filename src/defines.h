@@ -227,14 +227,6 @@
 	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
 
 
-/*** Color constants ***/
-
-#ifdef JP
-#define JVERB_AND 1
-#define JVERB_TO  2
-#define JVERB_OR  3
-#endif
-
 /*
  * Modes for the tokenizer
  */
