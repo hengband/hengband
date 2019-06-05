@@ -34,6 +34,12 @@
 #define REALM1_BOOK     (p_ptr->realm1 + TV_LIFE_BOOK - 1)
 #define REALM2_BOOK     (p_ptr->realm2 + TV_LIFE_BOOK - 1)
 
+/* no_flowed 判定対象となるスペル */
+#define SPELL_DD_S 27
+#define SPELL_DD_T 13
+#define SPELL_SW   22
+#define SPELL_KABE 20
+
 /* Empty hand status */
 #define EMPTY_HAND_NONE 0x0000 /* Both hands are used */
 #define EMPTY_HAND_LARM 0x0001 /* Left hand is empty */

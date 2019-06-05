@@ -250,10 +250,6 @@
 #define VIRTUE_LARGE 1
 #define VIRTUE_SMALL 2
 
-#define SPELL_DD_S 27
-#define SPELL_DD_T 13
-#define SPELL_SW   22
-#define SPELL_KABE 20
 
 #define DUNGEON_FEAT_PROB_NUM 3
 
