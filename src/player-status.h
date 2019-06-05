@@ -23,6 +23,7 @@
 #define PY_MAX_LEVEL    50              /*!< プレイヤーレベルの最大値 / Maximum level */
 
 #define GINOU_MAX      10
+#define MAX_MANE 16
 
 #define MAGIC_GLOVE_REDUCE_MANA 0x0001
 #define MAGIC_FAIL_5PERCENT     0x0002

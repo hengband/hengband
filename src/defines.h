@@ -195,7 +195,6 @@
  */
 
 
-#define MAX_MANE 16
 
 
 #define EATER_EXT 36
