@@ -255,11 +255,6 @@
 #define SPELL_SW   22
 #define SPELL_KABE 20
 
-#define KNOW_STAT   0x01
-#define KNOW_HPRATE 0x02
-
-
-
 #define DUNGEON_FEAT_PROB_NUM 3
 
 /*

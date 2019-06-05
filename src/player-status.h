@@ -386,7 +386,10 @@ struct player_type
 	bool wizard;		  /* Player is in wizard mode */
 
 	MONSTER_IDX riding;              /* Riding on a monster of this index */
-	byte knowledge;           /* Knowledge about yourself */
+
+	#define KNOW_STAT   0x01
+	#define KNOW_HPRATE 0x02
+	BIT_FLAGS8 knowledge;           /* Knowledge about yourself */
 	BIT_FLAGS visit;               /* Visited towns */
 
 	RACE_IDX start_race;          /* Race at birth */
