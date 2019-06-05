@@ -45,6 +45,13 @@
 #define EMPTY_HAND_LARM 0x0001 /* Left hand is empty */
 #define EMPTY_HAND_RARM 0x0002 /* Right hand is empty */
 
+/*
+ * Player sex constants (hard-coded by save-files, arrays, etc)
+ */
+#define SEX_FEMALE              0
+#define SEX_MALE                1
+#define MAX_SEXES        2 /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
+
 extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 

@@ -80,7 +80,6 @@
  */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
 
-#define MAX_SEXES        2 /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
 #define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
 #define MAX_SEIKAKU     13 /*!< 性格の最大定義数 */
 
@@ -143,11 +142,6 @@
  */
 #define INVEN_PACK      23 /*!< アイテムスロット…所持品(0～) */
 
-/*
- * Player sex constants (hard-coded by save-files, arrays, etc)
- */
-#define SEX_FEMALE              0
-#define SEX_MALE                1
 
 /*** Screen Locations ***/
 
