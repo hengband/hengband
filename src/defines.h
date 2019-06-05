@@ -254,12 +254,6 @@
 #define DUNGEON_FEAT_PROB_NUM 3
 
 /*
- * Flags for save/load temporal saved floor file
- */
-#define SLF_SECOND     	 0x0001  /* Called from another save/load function */
-#define SLF_NO_KILL      0x0002  /* Don't kill temporal files */
-
-/*
  * Max numbers of macro trigger names
  */
 #define MAX_MACRO_MOD 12
