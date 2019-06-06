@@ -3094,12 +3094,12 @@ static void display_flag_aux(TERM_LEN row, TERM_LEN col, concptr header,
 		}
 		else if (flag1 == TR_LITE_1)
 		{
-			if (have_dark_flag(flgs))
+			if (HAVE_DARK_FLAG(flgs))
 			{
 				c_put_str(TERM_L_DARK, "+", row, col);
 				header_color = TERM_WHITE;
 			}
-			else if (have_lite_flag(flgs))
+			else if (HAVE_LITE_FLAG(flgs))
 			{
 				c_put_str(TERM_WHITE, "+", row, col);
 				header_color = TERM_WHITE;

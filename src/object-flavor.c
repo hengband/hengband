@@ -1089,13 +1089,13 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 	}
 
 	/* Remove lite flags when this is a dark lite object */
-	if (have_dark_flag(flgs))
+	if (HAVE_DARK_FLAG(flgs))
 	{
 		if (have_flag(flgs, TR_LITE_1)) remove_flag(flgs, TR_LITE_1);
 		if (have_flag(flgs, TR_LITE_2)) remove_flag(flgs, TR_LITE_2);
 		if (have_flag(flgs, TR_LITE_3)) remove_flag(flgs, TR_LITE_3);
 	}
-	else if (have_lite_flag(flgs))
+	else if (HAVE_LITE_FLAG(flgs))
 	{
 		add_flag(flgs, TR_LITE_1);
 		if (have_flag(flgs, TR_LITE_2)) remove_flag(flgs, TR_LITE_2);

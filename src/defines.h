@@ -140,11 +140,3 @@
 #else
 #define _(JAPANESE,ENGLISH) (ENGLISH)
 #endif
-
-/* Lite flag macro */
-#define have_lite_flag(ARRAY) \
-	(have_flag(ARRAY, TR_LITE_1) || have_flag(ARRAY, TR_LITE_2) || have_flag(ARRAY, TR_LITE_3))
-
-#define have_dark_flag(ARRAY) \
-	(have_flag(ARRAY, TR_LITE_M1) || have_flag(ARRAY, TR_LITE_M2) || have_flag(ARRAY, TR_LITE_M3))
-

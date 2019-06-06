@@ -178,6 +178,13 @@
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */
 
+/* Lite flag macro */
+#define HAVE_LITE_FLAG(ARRAY) \
+	(have_flag(ARRAY, TR_LITE_1) || have_flag(ARRAY, TR_LITE_2) || have_flag(ARRAY, TR_LITE_3))
+
+#define HAVE_DARK_FLAG(ARRAY) \
+	(have_flag(ARRAY, TR_LITE_M1) || have_flag(ARRAY, TR_LITE_M2) || have_flag(ARRAY, TR_LITE_M3))
+
 typedef struct object_type object_type;
 
 struct object_type
