@@ -14,6 +14,8 @@
 #define SEIKAKU_MUNCHKIN 11
 #define SEIKAKU_CHARGEMAN 12
 
+#define MAX_SEIKAKU     13 /*!< 性格の最大定義数 */
+
 typedef struct player_seikaku player_seikaku;
 struct player_seikaku
 {
