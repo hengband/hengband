@@ -202,9 +202,6 @@
 #define EATER_ROD_CHARGE 0x10L
 
 
-#define DETECT_RAD_DEFAULT 30
-#define DETECT_RAD_MAP     30
-#define DETECT_RAD_ALL     255
 
 /* Maximum "Nazguls" number */
 #define MAX_NAZGUL_NUM 5
