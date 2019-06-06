@@ -55,6 +55,7 @@
 #define CLASS_MIRROR_MASTER     25
 #define CLASS_NINJA             26
 #define CLASS_SNIPER            27
+#define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
 
 #define IS_WIZARD_CLASS() \
 	(p_ptr->pclass == CLASS_MAGE || p_ptr->pclass == CLASS_HIGH_MAGE || p_ptr->pclass == CLASS_SORCERER || p_ptr->pclass == CLASS_MAGIC_EATER || p_ptr->pclass == CLASS_BLUE_MAGE)

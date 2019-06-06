@@ -2,6 +2,7 @@
 
 #include "realm.h"
 #include "player-race.h"
+#include "player-class.h"
 
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 #define MAX_ARENA_MONS 41 /*<! 闘技場のイベント件数 -KMW- */

@@ -43,7 +43,6 @@
  */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
 
-#define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
 #define MAX_SEIKAKU     13 /*!< 性格の最大定義数 */
 
 #define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
