@@ -63,18 +63,6 @@
  */
 #define SCREEN_WID 66
 
-/*!
- * @brief 表示上のダンジョンの最大垂直サイズ(SCREEN_HGTの3倍が望ましい)
- * Maximum dungeon height in grids, must be a multiple of SCREEN_HGT, probably hard-coded to SCREEN_HGT * 3.
- */
-#define MAX_HGT 66
-
-/*!
- * @brief 表示上のダンジョンの最大水平サイズ(SCREEN_WIDの3倍が望ましい)
- * Maximum dungeon width in grids, must be a multiple of SCREEN_WID, probably hard-coded to SCREEN_WID * 3.
- */
-#define MAX_WID 198
-
 /*
  * Arena constants
  */

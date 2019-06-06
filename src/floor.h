@@ -26,6 +26,18 @@
 #define BLOCK_WID 11
 
 /*!
+ * @brief 表示上のダンジョンの最大垂直サイズ(SCREEN_HGTの3倍が望ましい)
+ * Maximum dungeon height in grids, must be a multiple of SCREEN_HGT, probably hard-coded to SCREEN_HGT * 3.
+ */
+#define MAX_HGT 66
+
+/*!
+ * @brief 表示上のダンジョンの最大水平サイズ(SCREEN_WIDの3倍が望ましい)
+ * Maximum dungeon width in grids, must be a multiple of SCREEN_WID, probably hard-coded to SCREEN_WID * 3.
+ */
+#define MAX_WID 198
+
+/*!
  * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "current_floor_ptr->grid_array.c")
  * @details Note that the "lite radius" will NEVER exceed 14, and we would
  * never require more than 581 entries in the array for circular "lite".

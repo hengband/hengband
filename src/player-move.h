@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "floor.h"
 
 extern void disturb(bool stop_search, bool flush_output);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
