@@ -38,19 +38,6 @@
  * You have been warned.\n
  */
 
-
-/*!
- * @brief 表示上の基本的なブロック単位(垂直方向、PANEL_HGTの倍数で設定すること)
- * Number of grids used to display the dungeon (vertically). Must be a multiple of 11, probably hard-coded to 22.
- */
-#define SCREEN_HGT 22
-
-/*!
- * @brief 表示上の基本的なブロック単位(水平方向、PANEL_WIDの倍数で設定すること)
- * Number of grids used to display the dungeon (horizontally). Must be a multiple of 33, probably hard-coded to 66.
- */
-#define SCREEN_WID 66
-
 /*
  * Arena constants
  */
