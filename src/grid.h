@@ -421,8 +421,6 @@ extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TE
 extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
 extern void lite_spot(POSITION y, POSITION x);
-extern void prt_map(void);
-extern void display_map(int *cy, int *cx);
 extern void delayed_visual_update(void);
 extern void forget_flow(void);
 extern void update_flow(void);
