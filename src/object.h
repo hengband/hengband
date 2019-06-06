@@ -175,6 +175,9 @@
 #define TR_FLAG_MAX            138
 #define TR_FLAG_SIZE           5
 
+#define OBJ_GOLD_LIST   480     /* First "gold" entry */
+#define MAX_GOLD        18      /* Number of "gold" entries */
+
 typedef struct object_type object_type;
 
 struct object_type

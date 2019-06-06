@@ -94,10 +94,6 @@
 
 
 
-
-#define OBJ_GOLD_LIST   480     /* First "gold" entry */
-#define MAX_GOLD        18      /* Number of "gold" entries */
-
 /*
  * Object flags
  *
