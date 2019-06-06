@@ -18,6 +18,7 @@
 
 #include "core.h"
 #include "cmd-dump.h"
+#include "cmd-magiceat.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-save.h"

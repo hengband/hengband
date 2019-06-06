@@ -60,6 +60,7 @@
 #include "cmd-usestaff.h"
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
+#include "cmd-magiceat.h"
 #include "avatar.h"
 #include "player-status.h"
 #include "spells.h"

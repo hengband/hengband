@@ -40,6 +40,7 @@
 #include "world.h"
 #include "view-mainwindow.h"
 #include "files.h"
+#include "cmd-magiceat.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
