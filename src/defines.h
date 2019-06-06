@@ -98,13 +98,6 @@
 #define ROW_MAP                 0
 #define COL_MAP                 12
 
-/*
- * Bit flags for the *_can_enter() and monster_can_cross_terrain()
- */
-#define CEM_RIDING              0x0001
-#define CEM_P_CAN_ENTER_PATTERN 0x0002
-
-
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */
 
