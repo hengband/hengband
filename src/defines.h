@@ -92,7 +92,6 @@
 
 /*** Screen Locations ***/
 
-#define VER_INFO_ROW 3   //!< タイトル表記(行)
 
 
 #define ROW_MAP                 0
