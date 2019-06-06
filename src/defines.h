@@ -40,18 +40,6 @@
 
 
 /*!
- * @brief 表示上の基本的なパネル単位(垂直方向、BLOCK_HGTの倍数で設定すること)
- * Number of grids in each panel (vertically) Must be a multiple of BLOCK_HGT
- */
-#define PANEL_HGT 11
-
-/*!
- * @brief 表示上の基本的なパネル単位(水平方向、BLOCK_WIDの倍数で設定すること)
- * Number of grids in each panel (horizontally) Must be a multiple of BLOCK_WID
- */
-#define PANEL_WID 33
-
-/*!
  * @brief 表示上の基本的なブロック単位(垂直方向、PANEL_HGTの倍数で設定すること)
  * Number of grids used to display the dungeon (vertically). Must be a multiple of 11, probably hard-coded to 22.
  */
