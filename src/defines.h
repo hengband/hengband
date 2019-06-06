@@ -43,8 +43,6 @@
  */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
 
-#define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
-
 /*!
  * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "current_floor_ptr->grid_array.c")
  * @details We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning

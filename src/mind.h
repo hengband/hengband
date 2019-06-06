@@ -6,6 +6,8 @@
 #define MIND_MIRROR_MASTER  3 /*!< 特殊能力: 鏡魔法 */
 #define MIND_NINJUTSU       4 /*!< 特殊能力: 忍術 */
 
+#define MAX_MIND_POWERS  21 /*!< 超能力の数 / Mindcraft */
+
 /* Mindcrafters */
 typedef struct mind_type mind_type;
 struct mind_type
