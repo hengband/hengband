@@ -22,6 +22,12 @@ extern int PlayerUID;
 #define CHEAT_MISC 3
 
 /*
+ * Max numbers of macro trigger names
+ */
+#define MAX_MACRO_MOD 12
+#define MAX_MACRO_TRIG 200 /*!< “o˜^‚ð‹–‚·ƒ}ƒNƒiƒgƒŠƒK[j‚ÌÅ‘å” */
+
+ /*
  * Sort-array element
  */
 typedef struct tag_type tag_type;
