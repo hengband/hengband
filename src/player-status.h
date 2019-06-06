@@ -378,6 +378,8 @@ struct player_type
 	HIT_POINT mane_dam[MAX_MANE];
 	s16b mane_num;
 
+	#define CONCENT_RADAR_THRESHOLD 2
+	#define CONCENT_TELE_THRESHOLD  5
 	s16b concent;      /* Sniper's concentration level */
 
 	HIT_POINT player_hp[PY_MAX_LEVEL];

@@ -132,9 +132,6 @@
  */
 #define TRAVEL
 
-#define CONCENT_RADAR_THRESHOLD 2
-#define CONCENT_TELE_THRESHOLD  5
-
 /*
   Language selection macro
 */
