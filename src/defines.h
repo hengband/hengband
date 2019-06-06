@@ -94,8 +94,6 @@
 
 
 
-#define ROW_MAP                 0
-#define COL_MAP                 12
 
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */

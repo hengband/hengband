@@ -23,6 +23,9 @@ extern bool change_panel(POSITION dy, POSITION dx);
 
 extern void window_stuff(void);
 
+#define ROW_MAP                 0
+#define COL_MAP                 12
+
 /*
  * Bit flags for the "window" variable (etc)
  */
