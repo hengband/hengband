@@ -27,6 +27,38 @@ extern int PlayerUID;
 #define MAX_MACRO_MOD 12
 #define MAX_MACRO_TRIG 200 /*!< “o˜^‚ð‹–‚·ƒ}ƒNƒiƒgƒŠƒK[j‚ÌÅ‘å” */
 
+/*
+ * Object flags
+ *
+ * Old variables for object flags such as flags1, flags2, and flags3
+ * are obsolated.  Now single array flgs[TR_FLAG_SIZE] contains all
+ * object flags.  And each flag is refered by single index number
+ * instead of a bit mask.
+ *
+ * Therefore it's very easy to add a lot of new flags; no one need to
+ * worry about in which variable a new flag should be put, nor to
+ * modify a huge number of files all over the source directory at once
+ * to add new flag variables such as flags4, a_ability_flags1, etc...
+ *
+ * All management of flags is now treated using a set of macros
+ * instead of bit operations.
+ * Note: These macros are using division, modulo, and bit shift
+ * operations, and it seems that these operations are rather slower
+ * than original bit operation.  But since index numbers are almost
+ * always given as constant, such slow operations are performed in the
+ * compile time.  So there is no problem on the speed.
+ *
+ * Exceptions of new flag management is a set of flags to control
+ * object generation and the curse flags.  These are not yet rewritten
+ * in new index form; maybe these have no merit of rewriting.
+ */
+
+#define have_flag(ARRAY, INDEX) !!((ARRAY)[(INDEX)/32] & (1L << ((INDEX)%32)))
+#define add_flag(ARRAY, INDEX) ((ARRAY)[(INDEX)/32] |= (1L << ((INDEX)%32)))
+#define remove_flag(ARRAY, INDEX) ((ARRAY)[(INDEX)/32] &= ~(1L << ((INDEX)%32)))
+#define is_pval_flag(INDEX) ((TR_STR <= (INDEX) && (INDEX) <= TR_MAGIC_MASTERY) || (TR_STEALTH <= (INDEX) && (INDEX) <= TR_BLOWS))
+#define have_pval_flags(ARRAY) !!((ARRAY)[0] & (0x00003f7f))
+
  /*
  * Sort-array element
  */
