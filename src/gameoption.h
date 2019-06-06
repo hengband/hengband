@@ -14,6 +14,11 @@
 
 #define OPT_PAGE_JAPANESE_ONLY 99
 
+/*!
+ * チートオプションの最大数 / Number of cheating options
+ */
+#define CHEAT_MAX 10
+
 /*** Input Options ***/
 
 extern bool rogue_like_commands;	/* Rogue-like commands */

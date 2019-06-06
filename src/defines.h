@@ -190,13 +190,6 @@
 	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
 
 
-/*
- * Modes for the tokenizer
- */
-
-
-
-
 #define EATER_EXT 36
 #define EATER_CHARGE 0x10000L
 #define EATER_ROD_CHARGE 0x10L
@@ -270,7 +263,3 @@
 #define COMMAND_ARG_REST_UNTIL_DONE -2   /*!<休憩コマンド引数 … 必要な分だけ回復 */
 #define COMMAND_ARG_REST_FULL_HEALING -1 /*!<休憩コマンド引数 … HPとMPが全回復するまで */
 
-/*!
- * チートオプションの最大数 / Number of cheating options
- */
-#define CHEAT_MAX 10
