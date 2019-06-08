@@ -40,8 +40,6 @@
 
 /*** Screen Locations ***/
 
-/* Maximum "Nazguls" number */
-#define MAX_NAZGUL_NUM 5
 
 /*
   Language selection macro

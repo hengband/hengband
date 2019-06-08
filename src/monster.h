@@ -6,6 +6,9 @@ typedef bool(*monsterrace_hook_type)(MONRACE_IDX r_idx);
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;
 
+/* Maximum "Nazguls" number */
+#define MAX_NAZGUL_NUM 5
+
 #define MTIMED_CSLEEP   0 /* Monster is sleeping */
 #define MTIMED_FAST     1 /* Monster is temporarily fast */
 #define MTIMED_SLOW     2 /* Monster is temporarily slow */
