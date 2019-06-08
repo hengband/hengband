@@ -37,15 +37,6 @@
  *\n
  * You have been warned.\n
  */
-/*!
- * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "current_floor_ptr->grid_array.c")
- * @details We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning
- * of "update_view()" and "update_lite()".  We must also be as large as the
- * largest illuminatable room, but no room is larger than 800 grids.  We
- * must also be large enough to allow "good enough" use as a circular queue,
- * to calculate monster flow, but note that the flow code is "paranoid".
- */
-#define TEMP_MAX 2298
 
 /*!
  * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "current_floor_ptr->grid_array.c")
