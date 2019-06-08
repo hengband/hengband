@@ -40,14 +40,6 @@
 
 /*** Screen Locations ***/
 
-/*
- * Is the monster seen by the player?
- */
-#define is_seen(A) \
-	((bool)((A)->ml && (!ignore_unview || p_ptr->inside_battle || \
-	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
-
-
 /* Maximum "Nazguls" number */
 #define MAX_NAZGUL_NUM 5
 
