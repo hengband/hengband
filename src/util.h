@@ -60,6 +60,16 @@ extern int PlayerUID;
 #define have_pval_flags(ARRAY) !!((ARRAY)[0] & (0x00003f7f))
 
  /*
+   Language selection macro
+ */
+#ifdef JP
+#define _(JAPANESE,ENGLISH) (JAPANESE)
+#else
+#define _(JAPANESE,ENGLISH) (ENGLISH)
+#endif
+
+
+ /*
  * Sort-array element
  */
 typedef struct tag_type tag_type;
