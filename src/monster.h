@@ -6,6 +6,24 @@ typedef bool(*monsterrace_hook_type)(MONRACE_IDX r_idx);
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;
 
+#define MTIMED_CSLEEP   0 /* Monster is sleeping */
+#define MTIMED_FAST     1 /* Monster is temporarily fast */
+#define MTIMED_SLOW     2 /* Monster is temporarily slow */
+#define MTIMED_STUNNED  3 /* Monster is stunned */
+#define MTIMED_CONFUSED 4 /* Monster is confused */
+#define MTIMED_MONFEAR  5 /* Monster is afraid */
+#define MTIMED_INVULNER 6 /* Monster is temporarily invulnerable */
+
+#define MAX_MTIMED      7
+
+#define MON_CSLEEP(M_PTR)   ((M_PTR)->mtimed[MTIMED_CSLEEP])
+#define MON_FAST(M_PTR)     ((M_PTR)->mtimed[MTIMED_FAST])
+#define MON_SLOW(M_PTR)     ((M_PTR)->mtimed[MTIMED_SLOW])
+#define MON_STUNNED(M_PTR)  ((M_PTR)->mtimed[MTIMED_STUNNED])
+#define MON_CONFUSED(M_PTR) ((M_PTR)->mtimed[MTIMED_CONFUSED])
+#define MON_MONFEAR(M_PTR)  ((M_PTR)->mtimed[MTIMED_MONFEAR])
+#define MON_INVULNER(M_PTR) ((M_PTR)->mtimed[MTIMED_INVULNER])
+
 /*
  * Monster information, for a specific monster.
  * Note: fy, fx constrain dungeon size to 256x256
