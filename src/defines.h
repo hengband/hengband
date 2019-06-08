@@ -39,12 +39,6 @@
  */
 
 /*!
- * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
- * @note Default: assume at most 256 macros are used
- */
-#define MACRO_MAX       256
-
-/*!
  * @brief 銘情報の最大数 / Maximum number of "quarks" (see "io.c")
  * @note 
  * Default: assume at most 512 different inscriptions are used<br>

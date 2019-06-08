@@ -53,6 +53,13 @@ typedef errr (*parse_info_txt_func)(char *buf, header *head);
 #define VER_INFO_ROW 3   //!< タイトル表記(行)
 
 /*!
+ * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
+ * @note Default: assume at most 256 macros are used
+ */
+#define MACRO_MAX       256
+
+
+/*!
  * @struct header
  * @brief 各初期データ用ヘッダ構造体 / Template file header information (see "init.c").  16 bytes.
  * @details
