@@ -39,15 +39,6 @@
  */
 
 /*!
- * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "current_floor_ptr->grid_array.c")
- * @details We must be large for proper functioning of delayed redrawing.
- * We must also be as large as two times of the largest view area.
- * Note that maximum view grids are 1149 entries.
- */
-#define REDRAW_MAX 2298
-
-
-/*!
  * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
  * @note Default: assume at most 256 macros are used
  */

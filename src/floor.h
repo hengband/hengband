@@ -71,6 +71,15 @@
  */
 #define VIEW_MAX 1536
 
+/*!
+ * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "current_floor_ptr->grid_array.c")
+ * @details We must be large for proper functioning of delayed redrawing.
+ * We must also be as large as two times of the largest view area.
+ * Note that maximum view grids are 1149 entries.
+ */
+#define REDRAW_MAX 2298
+
+
 typedef struct {
 	grid_type *grid_array[MAX_HGT];
 	DEPTH dun_level;		/*!< 現在の実ダンジョン階層base_levelの参照元となる / Current dungeon level */
