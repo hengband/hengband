@@ -30,8 +30,7 @@
 #include "japanese.h"
 
  /*!
-  * @brief アイテムの価値記述テーブル /
-  * Table of game-generated inscriptions (indexed by the defines in defines.h). -- RG
+  * @brief アイテムの価値記述テーブル
   */
 const concptr game_inscriptions[] =
 {

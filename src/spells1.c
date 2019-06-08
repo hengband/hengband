@@ -5417,7 +5417,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
- * @param flg 効果フラグ / Extra bit flags (see PROJECT_xxxx in "defines.h")
+ * @param flg 効果フラグ / Extra bit flags (see PROJECT_xxxx)
  * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  * @details

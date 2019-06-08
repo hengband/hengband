@@ -42,7 +42,6 @@
 /*
  * Now, include the define's, the type's, and the extern's
  */
-#include "defines.h"
 #include "gamevalue.h"
 #include "externs.h"
 #include "gameoption.h"

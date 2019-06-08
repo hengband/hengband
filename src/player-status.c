@@ -3187,7 +3187,6 @@ static void calc_torch(void)
 	}
 
 	/* max radius is 14 (was 5) without rewriting other code -- */
-	/* see grid.c:update_lite() and defines.h:LITE_MAX */
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS && p_ptr->cur_lite > 1)
 		p_ptr->cur_lite = 1;
 

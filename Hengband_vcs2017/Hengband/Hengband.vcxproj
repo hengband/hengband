@@ -303,7 +303,6 @@
     <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\core.h" />
     <ClInclude Include="..\..\src\creature.h" />
-    <ClInclude Include="..\..\src\defines.h" />
     <ClInclude Include="..\..\src\dungeon-file.h" />
     <ClInclude Include="..\..\src\dungeon.h" />
     <ClInclude Include="..\..\src\externs.h" />
