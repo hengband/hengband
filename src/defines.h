@@ -37,12 +37,6 @@
  *\n
  * You have been warned.\n
  */
-
-/*
- * Arena constants
- */
-#define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
-
 /*!
  * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "current_floor_ptr->grid_array.c")
  * @details We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning
