@@ -103,9 +103,6 @@
 /* Maximum "Nazguls" number */
 #define MAX_NAZGUL_NUM 5
 
-#define VIRTUE_LARGE 1
-#define VIRTUE_SMALL 2
-
 #define MTIMED_CSLEEP   0 /* Monster is sleeping */
 #define MTIMED_FAST     1 /* Monster is temporarily fast */
 #define MTIMED_SLOW     2 /* Monster is temporarily slow */

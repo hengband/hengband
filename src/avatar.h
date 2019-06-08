@@ -20,6 +20,8 @@
 #define V_VALOUR	   17
 #define V_INDIVIDUALISM    18
 
+#define VIRTUE_LARGE 1
+#define VIRTUE_SMALL 2
 extern bool compare_virtue(int type, int num, int tekitou);
 extern int virtue_number(int type);
 extern concptr virtue[MAX_VIRTUE];
