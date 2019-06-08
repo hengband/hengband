@@ -1,6 +1,11 @@
 ﻿#pragma once
 #include "floor.h"
 
+/*
+ * For travel command (auto run)
+ */
+#define TRAVEL
+
 extern void disturb(bool stop_search, bool flush_output);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(DIRECTION dir);
@@ -11,6 +16,7 @@ extern bool trap_can_be_ignored(FEAT_IDX feat);
 extern void search(void);
 extern void carry(bool pickup);
 #ifdef TRAVEL
+extern void do_cmd_travel(void);
 extern void travel_step(void);
 #endif
 

@@ -128,11 +128,6 @@
 #define MON_INVULNER(M_PTR) ((M_PTR)->mtimed[MTIMED_INVULNER])
 
 /*
- * For travel command (auto run)
- */
-#define TRAVEL
-
-/*
   Language selection macro
 */
 #ifdef JP
