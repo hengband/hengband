@@ -234,10 +234,19 @@ extern concptr keymap_act[KEYMAP_MODES][256];
 #define SOUND_GLASS     65 /*!< A glass feature was crashed */
 #define SOUND_REFLECT   66 /*!< A bolt was reflected */
 
- /*
-  * Mega-Hack -- maximum known sounds
-  */
+/*
+ * Mega-Hack -- maximum known sounds
+ */
 #define SOUND_MAX 67 /*!< Œø‰Ê‰¹’è‹`‚ÌÅ‘å” */
+
+/*!
+ * @brief –Áî•ñ‚ÌÅ‘å” / Maximum number of "quarks" (see "io.c")
+ * @note
+ * Default: assume at most 512 different inscriptions are used<br>
+ * Was 512... 256 quarks added for random artifacts<br>
+ */
+#define QUARK_MAX       768
+
 
 
 /*

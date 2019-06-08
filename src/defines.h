@@ -38,14 +38,6 @@
  * You have been warned.\n
  */
 
-/*!
- * @brief 銘情報の最大数 / Maximum number of "quarks" (see "io.c")
- * @note 
- * Default: assume at most 512 different inscriptions are used<br>
- * Was 512... 256 quarks added for random artifacts<br>
- */
-#define QUARK_MAX       768
-
 /*
  * OPTION: Maximum number of messages to remember (see "io.c")
  * Default: assume maximal memorization of 2048 total messages
