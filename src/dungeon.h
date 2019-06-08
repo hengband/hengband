@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "feature.h"
 
+#define DUNGEON_FEAT_PROB_NUM 3
+
 /* A structure for the != dungeon types */
 typedef struct dungeon_type dungeon_type;
 struct dungeon_type {
