@@ -293,9 +293,16 @@ extern int stricmp(concptr a, concptr b);
 extern int usleep(huge usecs);
 #endif
 
+#if defined(MAC_MPW) && defined(CARBON)
+extern void convert_pathname(char *path);
+#endif
+
+#if defined(MACH_O_CARBON)
+extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
+#endif
+
 extern const char hexsym[16];
 
-/* util.c */
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);
 extern FILE *my_fopen(concptr file, concptr mode);
