@@ -17,11 +17,6 @@
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
-/*
- * User info
- */
-int player_euid;
-int player_egid;
 
 pos_list tmp_pos;
 

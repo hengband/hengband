@@ -150,11 +150,11 @@ void safe_setuid_grab(void)
 
 #  ifdef SAFE_SETUID_POSIX
 
-	if (setuid(player_euid) != 0)
+	if (setuid(p_ptr->player_egid) != 0)
 	{
 		quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
 	}
-	if (setgid(player_egid) != 0)
+	if (setgid(p_ptr->player_egid) != 0)
 	{
 		quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
 	}

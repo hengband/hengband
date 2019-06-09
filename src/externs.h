@@ -54,8 +54,6 @@ extern bool repair_objects;
  * Software options (set via the '=' command).  See "tables.c"
  */
 
-extern int player_euid;
-extern int player_egid;
 extern pos_list tmp_pos;
 extern STR_OFFSET quark__num;
 extern concptr *quark__str;

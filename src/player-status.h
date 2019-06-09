@@ -61,6 +61,8 @@ typedef struct player_type player_type;
 struct player_type
 {
 	int player_uid;
+	int player_euid;
+	int player_egid;
 
 	POSITION oldpy;		/* Previous player location -KMW- */
 	POSITION oldpx;		/* Previous player location -KMW- */

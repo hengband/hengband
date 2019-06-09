@@ -292,8 +292,8 @@ int main(int argc, char *argv[])
 #  ifdef _POSIX_SAVED_IDS
 
 	/* Save some info for later */
-	player_euid = geteuid();
-	player_egid = getegid();
+	p_ptr->player_euid = geteuid();
+	p_ptr->player_egid = getegid();
 
 #  endif
 
