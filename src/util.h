@@ -301,6 +301,12 @@ extern void convert_pathname(char *path);
 extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
 #endif
 
+#if defined(MAC_MPW) || defined(MACH_O_CARBON)
+/* Globals needed */
+extern  u32b _ftype;
+extern  u32b _fcreator;
+#endif
+
 extern const char hexsym[16];
 
 extern errr path_parse(char *buf, int max, concptr file);

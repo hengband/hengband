@@ -69,9 +69,3 @@ extern bool sukekaku;
 extern bool new_mane;
 
 extern bool use_menu;
-
-#if defined(MAC_MPW) || defined(MACH_O_CARBON)
-/* Globals needed */
-extern  u32b _ftype;
-extern  u32b _fcreator;
-#endif
