@@ -280,11 +280,11 @@ int main(int argc, char *argv[])
 #ifdef SET_UID
 
 	/* Get the user id (?) */
-	player_uid = getuid();
+	p_ptr->player_uid = getuid();
 
 #ifdef VMS
 	/* Mega-Hack -- Factor group id */
-	player_uid += (getgid() * 1000);
+	p_ptr->player_uid += (getgid() * 1000);
 #endif
 
 # ifdef SAFE_SETUID
@@ -339,9 +339,9 @@ int main(int argc, char *argv[])
 
 	/* Acquire the "user name" as a default player name */
 #ifdef ANGBAND_2_8_1
-	user_name(p_ptr->name, player_uid);
+	user_name(p_ptr->name, p_ptr->player_uid);
 #else /* ANGBAND_2_8_1 */
-	user_name(op_ptr->full_name, player_uid);
+	user_name(op_ptr->full_name, p_ptr->player_uid);
 #endif /* ANGBAND_2_8_1 */
 
 #ifdef PRIVATE_USER_PATH

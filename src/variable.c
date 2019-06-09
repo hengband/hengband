@@ -20,7 +20,6 @@ bool repair_objects;	/* Hack -- optimize detect objects */
 /*
  * User info
  */
-int player_uid;
 int player_euid;
 int player_egid;
 

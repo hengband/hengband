@@ -521,7 +521,7 @@ errr top_twenty(void)
 	sprintf(the_score.who, "%-.15s", p_ptr->name);
 
 	/* Save the player info */
-	sprintf(the_score.uid, "%7u", player_uid);
+	sprintf(the_score.uid, "%7u", p_ptr->player_uid);
 	sprintf(the_score.sex, "%c", (p_ptr->psex ? 'm' : 'f'));
 	sprintf(the_score.p_r, "%2d", MIN(p_ptr->prace, MAX_RACES));
 	sprintf(the_score.p_c, "%2d", MIN(p_ptr->pclass, MAX_CLASS));
@@ -634,7 +634,7 @@ errr predict_score(void)
 	sprintf(the_score.who, "%-.15s", p_ptr->name);
 
 	/* Save the player info */
-	sprintf(the_score.uid, "%7u", player_uid);
+	sprintf(the_score.uid, "%7u", p_ptr->player_uid);
 	sprintf(the_score.sex, "%c", (p_ptr->psex ? 'm' : 'f'));
 	sprintf(the_score.p_r, "%2d", MIN(p_ptr->prace, MAX_RACES));
 	sprintf(the_score.p_c, "%2d", MIN(p_ptr->pclass, MAX_CLASS));

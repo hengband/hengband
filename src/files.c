@@ -5947,8 +5947,8 @@ void process_player_name(bool sf)
 		strcpy(savefile_base, p_ptr->base_name);
 
 #ifdef SAVEFILE_USE_UID
-		/* Rename the savefile, using the player_uid and p_ptr->base_name */
-		(void)sprintf(temp, "%d.%s", player_uid, p_ptr->base_name);
+		/* Rename the savefile, using the p_ptr->player_uid and p_ptr->base_name */
+		(void)sprintf(temp, "%d.%s", p_ptr->player_uid, p_ptr->base_name);
 #else
 		/* Rename the savefile, using the p_ptr->base_name */
 		(void)sprintf(temp, "%s", p_ptr->base_name);
@@ -6799,7 +6799,7 @@ static errr counts_seek(int fd, u32b where, bool flag)
 	int i;
 
 #ifdef SAVEFILE_USE_UID
-	(void)sprintf(temp1, "%d.%s.%d%d%d", player_uid, savefile_base, p_ptr->pclass, p_ptr->pseikaku, p_ptr->age);
+	(void)sprintf(temp1, "%d.%s.%d%d%d", p_ptr->player_uid, savefile_base, p_ptr->pclass, p_ptr->pseikaku, p_ptr->age);
 #else
 	(void)sprintf(temp1, "%s.%d%d%d", savefile_base, p_ptr->pclass, p_ptr->pseikaku, p_ptr->age);
 #endif
