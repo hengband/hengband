@@ -73,11 +73,6 @@ extern bool new_mane;
 
 extern bool use_menu;
 
-#ifdef MACINTOSH
-/* main-mac.c */
-/* extern void main(void); */
-#endif
-
 #if defined(MAC_MPW) || defined(MACH_O_CARBON)
 /* Globals needed */
 extern  u32b _ftype;
@@ -90,9 +85,4 @@ extern void convert_pathname(char *path);
 
 #if defined(MACH_O_CARBON)
 extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
-#endif
-
-#ifdef WINDOWS
-/* main-win.c */
-/* extern int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, ...); */
 #endif
