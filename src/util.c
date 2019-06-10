@@ -106,6 +106,8 @@ bool inkey_flag;		/* See the "inkey()" function */
 
 bool use_menu;
 
+pos_list tmp_pos;
+
 static int num_more = 0;
 
 /* Save macro trigger string for use in inkey_special() */

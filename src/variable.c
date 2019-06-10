@@ -18,8 +18,6 @@ bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
 
-pos_list tmp_pos;
-
 /*
  * The number of quarks
  */

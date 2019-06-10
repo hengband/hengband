@@ -126,6 +126,8 @@ extern bool inkey_flag;
 
 extern bool use_menu;
 
+extern pos_list tmp_pos;
+
 /*
  * Automatically generated "variable" declarations
  */
