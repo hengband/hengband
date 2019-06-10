@@ -124,6 +124,8 @@ extern bool inkey_xtra;
 extern bool inkey_scan;
 extern bool inkey_flag;
 
+extern bool use_menu;
+
 /*
  * Automatically generated "variable" declarations
  */

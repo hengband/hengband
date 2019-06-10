@@ -53,8 +53,6 @@ MONSTER_IDX today_mon;
 bool sukekaku;
 bool new_mane;
 
-bool use_menu;
-
 #ifdef CHUUKEI
 bool chuukei_server;
 bool chuukei_client;
