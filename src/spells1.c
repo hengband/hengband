@@ -58,6 +58,7 @@
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
 static int rakubadam_p; /*!< 落馬した際のダメージ量 */
+bool sukekaku;
 
 int project_length = 0; /*!< 投射の射程距離 */
 

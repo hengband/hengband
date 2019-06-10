@@ -63,5 +63,5 @@ extern player_type *p_ptr;
 extern MONSTER_IDX pet_t_m_idx;
 extern MONSTER_IDX riding_t_m_idx;
 extern MONRACE_IDX today_mon;
-extern bool sukekaku;
+
 extern bool new_mane;

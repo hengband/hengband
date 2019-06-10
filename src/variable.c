@@ -50,7 +50,6 @@ MONSTER_IDX riding_t_m_idx;
 
 MONSTER_IDX today_mon;
 
-bool sukekaku;
 bool new_mane;
 
 #ifdef CHUUKEI
