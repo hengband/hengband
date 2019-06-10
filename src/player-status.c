@@ -335,6 +335,17 @@ const s32b player_exp_a[PY_MAX_LEVEL] =
 	5000000L
 };
 
+/*** Player information ***/
+
+/*
+ * Static player info record
+ */
+player_type p_body;
+
+/*
+ * Pointer to the player info
+ */
+player_type *p_ptr = &p_body;
 
 /*
  * Return alignment title

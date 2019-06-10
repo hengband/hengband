@@ -16,18 +16,3 @@
 
 bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
-
-
-/*** Player information ***/
-
-/*
- * Static player info record
- */
-player_type p_body;
-
-/*
- * Pointer to the player info
- */
-player_type *p_ptr = &p_body;
-
-

@@ -47,12 +47,3 @@ extern const byte adj_chr_chm[];
 
 extern bool repair_monsters;
 extern bool repair_objects;
-
-
-
-/*
- * Software options (set via the '=' command).  See "tables.c"
- */
-
-
-extern player_type *p_ptr;

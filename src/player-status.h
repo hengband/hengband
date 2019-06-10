@@ -700,6 +700,7 @@ struct player_type
 	char base_name[32]; /*!< Stripped version of "player_name" */
 
 };
+extern player_type *p_ptr;
 
 extern concptr your_alignment(void);
 extern int weapon_exp_level(int weapon_exp);
