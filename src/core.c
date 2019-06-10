@@ -4866,12 +4866,12 @@ static void process_player(void)
 						p_ptr->mane_dam[j] = p_ptr->mane_dam[j + 1];
 					}
 				}
-				new_mane = FALSE;
+				p_ptr->new_mane = FALSE;
 				p_ptr->redraw |= (PR_IMITATION);
 			}
 			if (p_ptr->action == ACTION_LEARN)
 			{
-				new_mane = FALSE;
+				p_ptr->new_mane = FALSE;
 				p_ptr->redraw |= (PR_STATE);
 			}
 

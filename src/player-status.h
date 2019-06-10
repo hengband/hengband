@@ -384,6 +384,7 @@ struct player_type
 	SPELL_IDX mane_spell[MAX_MANE];
 	HIT_POINT mane_dam[MAX_MANE];
 	s16b mane_num;
+	bool new_mane;
 
 	#define CONCENT_RADAR_THRESHOLD 2
 	#define CONCENT_TELE_THRESHOLD  5

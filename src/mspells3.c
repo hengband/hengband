@@ -1790,7 +1790,7 @@ void learn_spell(int monspell)
 
 		sound(SOUND_STUDY);
 
-		new_mane = TRUE;
+		p_ptr->new_mane = TRUE;
 		p_ptr->redraw |= (PR_STATE);
 	}
 }

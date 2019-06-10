@@ -48,8 +48,6 @@ MONSTER_IDX riding_t_m_idx;
 
 MONSTER_IDX today_mon;
 
-bool new_mane;
-
 #ifdef CHUUKEI
 bool chuukei_server;
 bool chuukei_client;

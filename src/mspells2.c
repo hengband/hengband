@@ -731,7 +731,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			p_ptr->mane_spell[p_ptr->mane_num] = thrown_spell - RF4_SPELL_START;
 			p_ptr->mane_dam[p_ptr->mane_num] = dam;
 			p_ptr->mane_num++;
-			new_mane = TRUE;
+			p_ptr->new_mane = TRUE;
 
 			p_ptr->redraw |= (PR_IMITATION);
 		}

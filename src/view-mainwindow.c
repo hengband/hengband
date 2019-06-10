@@ -1109,7 +1109,7 @@ static void prt_state(void)
 			case ACTION_LEARN:
 			{
 				strcpy(text, _("学習", "lear"));
-				if (new_mane) attr = TERM_L_RED;
+				if (p_ptr->new_mane) attr = TERM_L_RED;
 				break;
 			}
 			case ACTION_FISH:
@@ -1270,7 +1270,7 @@ static void prt_imitation(void)
 		if (p_ptr->mane_num)
 		{
 			TERM_COLOR attr;
-			if (new_mane) attr = TERM_L_RED;
+			if (p_ptr->new_mane) attr = TERM_L_RED;
 			else attr = TERM_WHITE;
 			c_put_str(attr, _("まね", "Imit"), row_study, col_study);
 		}
