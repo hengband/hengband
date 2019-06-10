@@ -54,6 +54,13 @@
 #define DEFAULT_DELAY 50
 #define RECVBUF_SIZE 1024
 
+#ifdef CHUUKEI
+bool chuukei_server;
+bool chuukei_client;
+char *server_name;
+int server_port;
+#endif
+
 static long epoch_time;  /* バッファ開始時刻 */
 static int browse_delay; /* 表示するまでの時間(100ms単位)(この間にラグを吸収する) */
 #ifdef CHUUKEI

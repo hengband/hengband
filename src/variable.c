@@ -47,10 +47,3 @@ MONSTER_IDX pet_t_m_idx;
 MONSTER_IDX riding_t_m_idx;
 
 MONSTER_IDX today_mon;
-
-#ifdef CHUUKEI
-bool chuukei_server;
-bool chuukei_client;
-char *server_name;
-int server_port;
-#endif
