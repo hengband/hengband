@@ -500,10 +500,10 @@ void do_cmd_pet(void)
 
 #ifdef JP
 	sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
-		(pet_t_m_idx ? (p_ptr->image ? "何か奇妙な物" : (r_name + r_info[current_floor_ptr->m_list[pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
+		(p_ptr->pet_t_m_idx ? (p_ptr->image ? "何か奇妙な物" : (r_name + r_info[current_floor_ptr->m_list[p_ptr->pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
 #else
 	sprintf(target_buf, "specify a target of pet (now:%s)",
-		(pet_t_m_idx ? (p_ptr->image ? "something strange" : (r_name + r_info[current_floor_ptr->m_list[pet_t_m_idx].ap_r_idx].name)) : "nothing"));
+		(p_ptr->pet_t_m_idx ? (p_ptr->image ? "something strange" : (r_name + r_info[current_floor_ptr->m_list[p_ptr->pet_t_m_idx].ap_r_idx].name)) : "nothing"));
 #endif
 	power_desc[num] = target_buf;
 	powers[num++] = PET_TARGET;
@@ -840,16 +840,16 @@ void do_cmd_pet(void)
 	case PET_TARGET:
 	{
 		project_length = -1;
-		if (!target_set(TARGET_KILL)) pet_t_m_idx = 0;
+		if (!target_set(TARGET_KILL)) p_ptr->pet_t_m_idx = 0;
 		else
 		{
 			grid_type *g_ptr = &current_floor_ptr->grid_array[target_row][target_col];
 			if (g_ptr->m_idx && (current_floor_ptr->m_list[g_ptr->m_idx].ml))
 			{
-				pet_t_m_idx = current_floor_ptr->grid_array[target_row][target_col].m_idx;
+				p_ptr->pet_t_m_idx = current_floor_ptr->grid_array[target_row][target_col].m_idx;
 				p_ptr->pet_follow_distance = PET_DESTROY_DIST;
 			}
-			else pet_t_m_idx = 0;
+			else p_ptr->pet_t_m_idx = 0;
 		}
 		project_length = 0;
 
@@ -859,14 +859,14 @@ void do_cmd_pet(void)
 	case PET_STAY_CLOSE:
 	{
 		p_ptr->pet_follow_distance = PET_CLOSE_DIST;
-		pet_t_m_idx = 0;
+		p_ptr->pet_t_m_idx = 0;
 		break;
 	}
 	/* "Follow Me" */
 	case PET_FOLLOW_ME:
 	{
 		p_ptr->pet_follow_distance = PET_FOLLOW_DIST;
-		pet_t_m_idx = 0;
+		p_ptr->pet_t_m_idx = 0;
 		break;
 	}
 	/* "Seek and destoy" */

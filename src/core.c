@@ -4949,8 +4949,8 @@ static void dungeon(bool load_game)
 
 	/* Cancel the target */
 	target_who = 0;
-	pet_t_m_idx = 0;
-	riding_t_m_idx = 0;
+	p_ptr->pet_t_m_idx = 0;
+	p_ptr->riding_t_m_idx = 0;
 	p_ptr->ambush_flag = FALSE;
 
 	/* Cancel the health bar */

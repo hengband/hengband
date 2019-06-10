@@ -56,6 +56,3 @@ extern bool repair_objects;
 
 
 extern player_type *p_ptr;
-
-extern MONSTER_IDX pet_t_m_idx;
-extern MONSTER_IDX riding_t_m_idx;

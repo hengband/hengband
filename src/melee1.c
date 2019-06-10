@@ -2306,7 +2306,7 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 		}
 	}
 
-	riding_t_m_idx = g_ptr->m_idx;
+	p_ptr->riding_t_m_idx = g_ptr->m_idx;
 	if (p_ptr->migite) py_attack_aux(y, x, &fear, &mdeath, 0, mode);
 	if (p_ptr->hidarite && !mdeath) py_attack_aux(y, x, &fear, &mdeath, 1, mode);
 

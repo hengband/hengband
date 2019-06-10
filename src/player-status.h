@@ -544,6 +544,8 @@ struct player_type
 	POSITION run_px;
 	DIRECTION fishing_dir;
 
+	MONSTER_IDX pet_t_m_idx;
+	MONSTER_IDX riding_t_m_idx;
 
 	/*** Extracted fields ***/
 

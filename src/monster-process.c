@@ -59,15 +59,15 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_type *t_ptr;
 
-	if (riding_t_m_idx && player_bold(m_ptr->fy, m_ptr->fx))
+	if (p_ptr->riding_t_m_idx && player_bold(m_ptr->fy, m_ptr->fx))
 	{
-		y = current_floor_ptr->m_list[riding_t_m_idx].fy;
-		x = current_floor_ptr->m_list[riding_t_m_idx].fx;
+		y = current_floor_ptr->m_list[p_ptr->riding_t_m_idx].fy;
+		x = current_floor_ptr->m_list[p_ptr->riding_t_m_idx].fx;
 	}
-	else if (is_pet(m_ptr) && pet_t_m_idx)
+	else if (is_pet(m_ptr) && p_ptr->pet_t_m_idx)
 	{
-		y = current_floor_ptr->m_list[pet_t_m_idx].fy;
-		x = current_floor_ptr->m_list[pet_t_m_idx].fx;
+		y = current_floor_ptr->m_list[p_ptr->pet_t_m_idx].fy;
+		x = current_floor_ptr->m_list[p_ptr->pet_t_m_idx].fx;
 	}
 	else
 	{

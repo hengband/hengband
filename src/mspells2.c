@@ -313,9 +313,9 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	f6 = r_ptr->a_ability_flags2;
 
 	/* Target is given for pet? */
-	if (pet_t_m_idx && pet)
+	if (p_ptr->pet_t_m_idx && pet)
 	{
-		target_idx = pet_t_m_idx;
+		target_idx = p_ptr->pet_t_m_idx;
 		t_ptr = &current_floor_ptr->m_list[target_idx];
 
 		/* Cancel if not projectable (for now) */
@@ -336,7 +336,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 			/* Cancel if neither enemy nor a given target */
 			if ((m_idx == target_idx) ||
-			    ((target_idx != pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
+			    ((target_idx != p_ptr->pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
 			{
 				target_idx = 0;
 			}
