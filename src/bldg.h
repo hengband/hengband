@@ -44,6 +44,7 @@ struct building_type
 
 extern building_type building[MAX_BLDG];
 extern bool reinit_wilderness;
+extern MONRACE_IDX today_mon;
 
 /*
  * Buildings actions

@@ -71,6 +71,7 @@ PRICE kakekin;
 int sel_monster;
 
 bool reinit_wilderness = FALSE;
+MONSTER_IDX today_mon;
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
