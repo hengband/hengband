@@ -57,11 +57,9 @@ static object_type *autopick_obj; /*!< 各種自動拾い処理時に使うオ�
 /*
  * Dungeon size info
  */
-
 POSITION panel_row_min, panel_row_max;
 POSITION panel_col_min, panel_col_max;
 POSITION panel_col_prt, panel_row_prt;
-
 
  /*
   * Some screen locations for various display routines

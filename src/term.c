@@ -346,6 +346,11 @@ const concptr ident_info[] =
 	NULL
 };
 
+/*
+ * The array of window pointers
+ */
+term *angband_term[8];
+
 /*!
  * スクリーン表示色キャラクタ /
  * Encode the screen colors

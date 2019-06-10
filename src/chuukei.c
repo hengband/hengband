@@ -10,9 +10,11 @@
 
 #include "files.h"
 #include "util.h"
+#include "term.h"
 #include "cmd-dump.h"
 #include "inet.h"
 #include "japanese.h"
+#include "term.h"
 
 #include <stdio.h>
 #include <stdarg.h>

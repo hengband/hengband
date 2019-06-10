@@ -58,8 +58,6 @@ extern pos_list tmp_pos;
 extern STR_OFFSET quark__num;
 extern concptr *quark__str;
 
-extern term *angband_term[8];
-
 extern player_type *p_ptr;
 
 extern MONSTER_IDX pet_t_m_idx;

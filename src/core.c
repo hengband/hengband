@@ -14,6 +14,7 @@
 #include "util.h"
 #include "core.h"
 #include "inet.h"
+#include "term.h"
 
 #include "creature.h"
 

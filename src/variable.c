@@ -30,11 +30,6 @@ STR_OFFSET quark__num;
  */
 concptr *quark__str;
 
-/*
- * The array of window pointers
- */
-term *angband_term[8];
-
 
 
 /*** Player information ***/
