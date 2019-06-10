@@ -108,6 +108,16 @@ bool use_menu;
 
 pos_list tmp_pos;
 
+/*
+ * The number of quarks
+ */
+STR_OFFSET quark__num;
+
+/*
+ * The pointers to the quarks [QUARK_MAX]
+ */
+concptr *quark__str;
+
 static int num_more = 0;
 
 /* Save macro trigger string for use in inkey_special() */
@@ -128,6 +138,7 @@ s16b command_see;		/* See "object1.c" */
 s16b command_wrk;		/* See "object1.c" */
 TERM_LEN command_gap = 999;         /* See "object1.c" */
 s16b command_new;		/* Command chaining from inven/equip view */
+
 
 
 #if 0

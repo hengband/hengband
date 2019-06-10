@@ -128,6 +128,8 @@ extern bool use_menu;
 
 extern pos_list tmp_pos;
 
+extern STR_OFFSET quark__num;
+extern concptr *quark__str;
 /*
  * Automatically generated "variable" declarations
  */

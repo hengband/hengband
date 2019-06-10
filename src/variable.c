@@ -18,18 +18,6 @@ bool repair_monsters;	/* Hack -- optimize detect monsters */
 bool repair_objects;	/* Hack -- optimize detect objects */
 
 
-/*
- * The number of quarks
- */
-STR_OFFSET quark__num;
-
-/*
- * The pointers to the quarks [QUARK_MAX]
- */
-concptr *quark__str;
-
-
-
 /*** Player information ***/
 
 /*
