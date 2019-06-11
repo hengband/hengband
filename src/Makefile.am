@@ -19,7 +19,7 @@ hengband_SOURCES = \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c cmd-hissatsu.h\
 	\
-	core.c core.h defines.h externs.h files.c files.h \
+	core.c core.h files.c files.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h floor-generate.c floor-generate.h \
@@ -86,8 +86,8 @@ hengband_SOURCES = \
 	spells-world.c spells-world.h \
 	\
 	sort.c sort.h \
-	store.h store.c tables.c trap.c trap.h types.h util.c util.h \
-	variable.c wild.h wild.c wizard1.c wizard2.c \
+	store.h store.c trap.c trap.h types.h util.c util.h \
+	wild.h wild.c wizard1.c wizard2.c \
 	warning.c warning.h world.c world.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c \
