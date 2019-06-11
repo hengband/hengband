@@ -1031,7 +1031,6 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			/* Disturb the monster */
 			(void)set_monster_csleep(g_ptr->m_idx, 0);
 
-			/* Extract monster name (or "it") */
 			monster_desc(m_name, m_ptr, 0);
 
 			if (m_ptr->ml)

@@ -942,8 +942,6 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 		if (m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-
-			/* Extract monster name */
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);
 		}

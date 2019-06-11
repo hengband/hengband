@@ -1126,7 +1126,6 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 			monster_race_track(m_ptr->ap_r_idx);
 		}
 
-		/* Extract monster name */
 		monster_desc(m_name, m_ptr, MD_TRUE_NAME);
 
 		/* Don't kill Amberites */

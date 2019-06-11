@@ -1189,7 +1189,6 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 
 	}
 
-	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Calculate the "attack quality" */
@@ -1376,7 +1375,6 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	/* Disturb the monster */
 	(void)set_monster_csleep(g_ptr->m_idx, 0);
 
-	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Calculate the "attack quality" */
@@ -2180,7 +2178,6 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 		return FALSE;
 	}
 
-	/* Extract monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0);
 
 	if (m_ptr->ml)
@@ -4129,7 +4126,6 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 	/* Can the player be aware of this attack? */
 	bool known = (m_ptr->cdis <= MAX_SIGHT);
 
-	/* Extract monster name */
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Redraw (later) if needed */
@@ -4282,7 +4278,6 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 
 	if (p_ptr->riding && (p_ptr->riding == m_idx) && (dam > 0))
 	{
-		/* Extract monster name */
 		monster_desc(m_name, m_ptr, 0);
 
 		if (m_ptr->hp > m_ptr->maxhp / 3) dam = (dam + 1) / 2;
