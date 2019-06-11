@@ -1037,18 +1037,14 @@ void do_cmd_redraw(void)
 
 
 /*!
- * @brief 名前を変更するコマンドのメインルーチン
- * Hack -- change name
+ * @brief プレイヤーのステータス表示
  * @return なし
  */
-void do_cmd_change_name(void)
+void do_cmd_player_status(void)
 {
-	char	c;
-
-	int		mode = 0;
-
-	char	tmp[160];
-
+	char c;
+	int mode = 0;
+	char tmp[160];
 	screen_save();
 
 	/* Forever */

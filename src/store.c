@@ -5547,7 +5547,7 @@ static void store_process_command(void)
 		case 'C':
 		{
 			p_ptr->town_num = old_town_num;
-			do_cmd_change_name();
+			do_cmd_player_status();
 			p_ptr->town_num = inner_town_num;
 			display_store();
 			break;
