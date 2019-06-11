@@ -2143,7 +2143,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	/* Mega-Hack -- apply earthquake brand */
 	if (do_quake)
 	{
-		earthquake(p_ptr->y, p_ptr->x, 10);
+		earthquake(p_ptr->y, p_ptr->x, 10, 0);
 		if (!current_floor_ptr->grid_array[y][x].m_idx) *mdeath = TRUE;
 	}
 }
@@ -3372,7 +3372,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Radius 8 earthquake centered at the monster */
 					if (damage > 23 || explode)
 					{
-						earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
+						earthquake(m_ptr->fy, m_ptr->fx, 8, m_idx);
 					}
 
 					break;

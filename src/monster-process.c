@@ -1621,7 +1621,7 @@ static bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 			case RBE_SHATTER:
 				damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-				if (damage > 23) earthquake_aux(m_ptr->fy, m_ptr->fx, 8, m_idx);
+				if (damage > 23) earthquake(m_ptr->fy, m_ptr->fx, 8, m_idx);
 				break;
 
 			case RBE_EXP_10:

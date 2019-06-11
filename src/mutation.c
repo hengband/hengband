@@ -2255,7 +2255,7 @@ bool mutation_power_aux(int power)
 			break;
 
 		case MUT1_EARTHQUAKE:
-			(void)earthquake(p_ptr->y, p_ptr->x, 10);
+			(void)earthquake(p_ptr->y, p_ptr->x, 10, 0);
 			break;
 
 		case MUT1_EAT_MAGIC:

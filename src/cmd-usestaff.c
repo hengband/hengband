@@ -233,7 +233,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_EARTHQUAKES:
 		{
-			if (earthquake(p_ptr->y, p_ptr->x, (powerful ? 15 : 10)))
+			if (earthquake(p_ptr->y, p_ptr->x, (powerful ? 15 : 10), 0))
 				ident = TRUE;
 			else
 				msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));

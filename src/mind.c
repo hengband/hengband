@@ -1520,7 +1520,7 @@ static bool cast_berserk_spell(int spell)
 		break;
 	}
 	case 3:
-		earthquake(p_ptr->y, p_ptr->x, 8+randint0(5));
+		earthquake(p_ptr->y, p_ptr->x, 8+randint0(5), 0);
 		break;
 	case 4:
 		massacre();

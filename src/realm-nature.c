@@ -441,7 +441,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				earthquake(p_ptr->y, p_ptr->x, rad);
+				earthquake(p_ptr->y, p_ptr->x, rad, 0);
 			}
 		}
 		break;
@@ -563,7 +563,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				dispel_monsters(d_dam);
-				earthquake(p_ptr->y, p_ptr->x, q_rad);
+				earthquake(p_ptr->y, p_ptr->x, q_rad, 0);
 				project(0, b_rad, p_ptr->y, p_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}

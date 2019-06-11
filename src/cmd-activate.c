@@ -1094,7 +1094,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_QUAKE:
 	{
-		earthquake(p_ptr->y, p_ptr->x, 5);
+		earthquake(p_ptr->y, p_ptr->x, 5, 0);
 		break;
 	}
 
