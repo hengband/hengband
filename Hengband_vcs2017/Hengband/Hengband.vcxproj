@@ -275,7 +275,6 @@
     <ClCompile Include="..\..\src\spells3.c" />
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
-    <ClCompile Include="..\..\src\tables.c" />
     <ClCompile Include="..\..\src\targeting.c" />
     <ClCompile Include="..\..\src\term.c" />
     <ClCompile Include="..\..\src\trap.c" />

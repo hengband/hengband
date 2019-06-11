@@ -8,7 +8,7 @@ extern void hit_trap(bool break_trap);
 extern const int chest_traps[64];
 
 /*!
- * 箱のトラップ定義 Chest trap flags (see "tables.c")
+ * 箱のトラップ定義 Chest trap flags
  */
 #define CHEST_LOSE_STR          0x0001 /*!< 箱のトラップ: STR減少の毒針 */
 #define CHEST_LOSE_CON          0x0002 /*!< 箱のトラップ: CON減少の毒針 */

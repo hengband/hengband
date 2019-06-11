@@ -3,8 +3,8 @@
 
 
 /*
-* Software options (set via the '=' command).  See "tables.c"
-*/
+ * Software options (set via the '=' command).
+ */
 
 /*** Input Options ***/
 

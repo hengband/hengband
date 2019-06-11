@@ -3,8 +3,8 @@
 #include "realm.h"
 
 /*
- * 職業ごとの選択可能な魔法領域現在の所 bitrh.cとtables.cでのみ使用。
- * Possible realms that can be chosen currently used only by birth.c and tables.c
+ * 職業ごとの選択可能な魔法領域現在の所 bitrh.c でのみ使用。
+ * Possible realms that can be chosen currently used only by birth.c.
  */
 #define CH_NONE         0x00
 #define CH_LIFE         0x01

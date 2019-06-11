@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\readdib.c" />
-    <ClCompile Include="..\..\src\tables.c" />
     <ClCompile Include="..\..\src\variable.c" />
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-term.c" />
