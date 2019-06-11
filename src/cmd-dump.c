@@ -1062,14 +1062,8 @@ void do_cmd_player_status(void)
 		}
 
 		/* Prompt */
-#ifdef JP
 		Term_putstr(2, 23, -1, TERM_WHITE,
-			    "['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]");
-#else
-		Term_putstr(2, 23, -1, TERM_WHITE,
-			"['c' to change name, 'f' to file, 'h' to change mode, or ESC]");
-#endif
-
+			    _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]"));
 
 		/* Query */
 		c = inkey();
