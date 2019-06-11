@@ -170,7 +170,7 @@ FEAT_IDX choose_random_trap(void)
 }
 
 /*!
-* @brief マスに存在するトラップを秘匿する /
+* @brief マスに存在する隠しトラップを公開する /
 * Disclose an invisible trap
 * @param y 秘匿したいマスのY座標
 * @param x 秘匿したいマスのX座標

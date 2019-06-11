@@ -3262,7 +3262,6 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 		/* Handle failure */
 		if (!r) break;
 
-		/* Obtain race */
 		r_ptr = &r_info[r];
 
 		/* Ignore unique monsters */

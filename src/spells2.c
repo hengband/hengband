@@ -93,17 +93,11 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 				}
 			}
 
-			/* Detect flags */
 			if (cave_have_flag_grid(g_ptr, flag))
 			{
-				/* Detect secrets */
 				disclose_grid(y, x);
-
-				/* Hack -- Memorize */
 				g_ptr->info |= (CAVE_MARK);
-
 				lite_spot(y, x);
-
 				detect = TRUE;
 			}
 		}
