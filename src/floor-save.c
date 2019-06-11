@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "bldg.h"
+#include "core.h"
 #include "load.h"
 #include "util.h"
 

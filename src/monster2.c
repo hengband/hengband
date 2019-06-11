@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "core.h"
 
 #include "cmd-dump.h"
 #include "cmd-pet.h"

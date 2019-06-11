@@ -20,8 +20,3 @@
 #include "object.h"
 #include "player-status.h"
 
-
-/* variable.c */
-
-extern bool repair_monsters;
-extern bool repair_objects;

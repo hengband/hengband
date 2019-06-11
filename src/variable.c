@@ -13,6 +13,3 @@
 #include "angband.h"
 #include "geometry.h"
 
-
-bool repair_monsters;	/* Hack -- optimize detect monsters */
-bool repair_objects;	/* Hack -- optimize detect objects */

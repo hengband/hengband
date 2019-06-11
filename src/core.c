@@ -105,6 +105,9 @@ bool can_save = FALSE;        /* Game can be saved */
 
 COMMAND_CODE now_message;
 
+bool repair_monsters;	/* Hack -- optimize detect monsters */
+bool repair_objects;	/* Hack -- optimize detect objects */
+
 concptr ANGBAND_SYS = "xxx"; //!< Hack -- The special Angband "System Suffix" This variable is used to choose an appropriate "pref-xxx" file
 
 #ifdef JP
