@@ -4351,12 +4351,10 @@ static bool player_birth_aux(void)
 
 		if (autoroller || autochara) sound(SOUND_LEVEL);
 
-		/* Flush input */
 		flush();
 
 		/*** Display ***/
 
-		/* Mode */
 		mode = 0;
 
 		/* Roll for base hitpoints */
@@ -4378,7 +4376,6 @@ static bool player_birth_aux(void)
 			p_ptr->chp = p_ptr->mhp;
 			p_ptr->csp = p_ptr->msp;
 
-			/* Display the player */
 			display_player(mode);
 
 			/* Prepare a prompt (must squeeze everything in) */
@@ -4392,7 +4389,6 @@ static bool player_birth_aux(void)
 			Term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
 			Term_addch(TERM_WHITE, b2);
 
-			/* Prompt and get a command */
 			c = inkey();
 
 			/* Quit */

@@ -3948,7 +3948,6 @@ static void process_menus(WORD wCmd)
 			break;
 		}
 
-		/* Exit */
 		case IDM_FILE_EXIT:
 		{
 			if (game_in_progress && current_world_ptr->character_generated)
@@ -5428,7 +5427,6 @@ static void hack_quit(concptr str)
 	/* Destroy the icon */
 	if (hIcon) DestroyIcon(hIcon);
 
-	/* Exit */
 	exit(0);
 }
 

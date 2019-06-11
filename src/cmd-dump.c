@@ -1051,8 +1051,6 @@ void do_cmd_player_status(void)
 	while (1)
 	{
 		update_playtime();
-
-		/* Display the player */
 		display_player(mode);
 
 		if (mode == 4)
@@ -1067,8 +1065,6 @@ void do_cmd_player_status(void)
 
 		/* Query */
 		c = inkey();
-
-		/* Exit */
 		if (c == ESCAPE) break;
 
 		/* Change name */
@@ -2033,7 +2029,6 @@ void do_cmd_options(void)
 			if (!(skey & SKEY_MASK)) k = (char)skey;
 			else k = 0;
 
-			/* Exit */
 			if (k == ESCAPE) break;
 
 			if (my_strchr("\n\r ", k))
@@ -2061,7 +2056,6 @@ void do_cmd_options(void)
 			if (!d) bell();
 		}
 
-		/* Exit */
 		if (k == ESCAPE) break;
 
 		/* Analyze */
