@@ -387,8 +387,6 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 			object_type forge;
 			object_type *q_ptr;
 			q_ptr = &forge;
-
-			/* Obtain a local object */
 			object_copy(q_ptr, o_ptr);
 
 			/* Modify quantity */

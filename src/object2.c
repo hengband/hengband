@@ -5442,8 +5442,6 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 	/* Verify */
 	if (amt > o_ptr->number) amt = o_ptr->number;
 	q_ptr = &forge;
-
-	/* Obtain a local object */
 	object_copy(q_ptr, o_ptr);
 
 	/* Modify quantity */

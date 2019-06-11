@@ -2450,8 +2450,6 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	}
 	q_ptr = &forge;
-
-	/* Obtain a local object */
 	object_copy(q_ptr, o_ptr);
 
 	/* Extract the thrown object's flags. */

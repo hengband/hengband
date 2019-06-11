@@ -73,8 +73,6 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 		o_ptr = &current_floor_ptr->o_list[0 - item];
 	}
 	q_ptr = &forge;
-
-	/* Obtain a local object */
 	object_copy(q_ptr, o_ptr);
 
 	/* Single object */

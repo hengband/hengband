@@ -490,8 +490,6 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 		y = p_ptr->y;
 		x = p_ptr->x;
 		q_ptr = &forge;
-
-		/* Obtain a local object */
 		object_copy(q_ptr, o_ptr);
 
 		/* Single object */

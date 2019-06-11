@@ -3526,8 +3526,6 @@ bool eat_magic(int power)
 					object_type forge;
 					object_type *q_ptr;
 					q_ptr = &forge;
-
-					/* Obtain a local object */
 					object_copy(q_ptr, o_ptr);
 
 					/* Modify quantity */
