@@ -279,7 +279,6 @@
     <ClCompile Include="..\..\src\term.c" />
     <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
-    <ClCompile Include="..\..\src\variable.c" />
     <ClCompile Include="..\..\src\view-mainwindow.c" />
     <ClCompile Include="..\..\src\warning.c" />
     <ClCompile Include="..\..\src\wild.c" />
@@ -304,7 +303,6 @@
     <ClInclude Include="..\..\src\creature.h" />
     <ClInclude Include="..\..\src\dungeon-file.h" />
     <ClInclude Include="..\..\src\dungeon.h" />
-    <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\feature.h" />
     <ClInclude Include="..\..\src\files.h" />
     <ClInclude Include="..\..\src\floor-events.h" />

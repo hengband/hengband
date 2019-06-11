@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\readdib.c" />
-    <ClCompile Include="..\..\src\variable.c" />
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\warning.c" />
@@ -400,7 +399,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\externs.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\h-basic.h" />
     <ClInclude Include="..\..\src\h-config.h" />

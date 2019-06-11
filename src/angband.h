@@ -1,4 +1,5 @@
-﻿/*!
+﻿#pragma once
+/*!
  * @file angband.h
  * @brief Angband(変愚蛮怒)メインヘッダファイル
  * Main "Angband" header file
@@ -38,13 +39,17 @@
  */
 #include "z-config.h"
 
-
-/*
- * Now, include the define's, the type's, and the extern's
- */
 #include "gamevalue.h"
-#include "externs.h"
 #include "gameoption.h"
+
+#include "geometry.h"
+#include "grid.h"
+#include "floor-save.h"
+#include "monster.h"
+#include "monsterrace.h"
+#include "object.h"
+#include "player-status.h"
+
 
 /***** Some copyright messages follow below *****/
 
