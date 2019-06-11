@@ -611,7 +611,6 @@ void hit_trap(bool break_trap)
 				POSITION x1 = rand_spread(x, 7);
 				POSITION y1 = rand_spread(y, 5);
 
-				/* Skip illegal grids */
 				if (!in_bounds(y1, x1)) continue;
 
 				/* Require line of projection */

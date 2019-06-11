@@ -4639,7 +4639,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			ty = y + dy;
 			tx = x + dx;
 
-			/* Skip illegal grids */
 			if (!in_bounds(ty, tx)) continue;
 
 			/* Require line of projection */
