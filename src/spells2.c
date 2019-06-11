@@ -208,9 +208,7 @@ bool detect_objects_gold(POSITION range)
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
-
-		/* Skip held objects */
-		if (o_ptr->held_m_idx) continue;
+		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
 
 		y = o_ptr->iy;
 		x = o_ptr->ix;
@@ -262,9 +260,7 @@ bool detect_objects_normal(POSITION range)
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
-
-		/* Skip held objects */
-		if (o_ptr->held_m_idx) continue;
+		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
 
 		y = o_ptr->iy;
 		x = o_ptr->ix;
@@ -324,9 +320,7 @@ bool detect_objects_magic(POSITION range)
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
-
-		/* Skip held objects */
-		if (o_ptr->held_m_idx) continue;
+		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
 
 		y = o_ptr->iy;
 		x = o_ptr->ix;

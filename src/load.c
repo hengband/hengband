@@ -2896,9 +2896,7 @@ static errr rd_dungeon_old(void)
 		rd_item(o_ptr);
 
 
-		/* XXX XXX */
-
-		if (o_ptr->held_m_idx)
+		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
 			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
@@ -2950,8 +2948,6 @@ static errr rd_dungeon_old(void)
 			return (162);
 		}
 
-
-		/* Acquire monster */
 		m_ptr = &current_floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
@@ -3210,7 +3206,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Read the item */
 		rd_item(o_ptr);
 
-		if (o_ptr->held_m_idx)
+		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
 			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
@@ -3255,8 +3251,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		if (i != m_idx) return 162;
 
-
-		/* Acquire monster */
 		m_ptr = &current_floor_ptr->m_list[m_idx];
 
 		/* Read the monster */

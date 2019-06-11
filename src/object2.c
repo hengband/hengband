@@ -58,7 +58,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	/* Object */
 	j_ptr = &current_floor_ptr->o_list[o_idx];
 
-	if (j_ptr->held_m_idx)
+	if (OBJECT_IS_HELD_MONSTER(j_ptr))
 	{
 		monster_type *m_ptr;
 		m_ptr = &current_floor_ptr->m_list[j_ptr->held_m_idx];
@@ -171,7 +171,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	j_ptr = &current_floor_ptr->o_list[o_idx];
 
 	/* Dungeon floor */
-	if (!(j_ptr->held_m_idx))
+	if (!OBJECT_IS_HELD_MONSTER(j_ptr))
 	{
 		POSITION y, x;
 		y = j_ptr->iy;
@@ -254,11 +254,9 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	}
 	o_ptr = &current_floor_ptr->o_list[i1];
 
-	if (o_ptr->held_m_idx)
+	if (OBJECT_IS_HELD_MONSTER(o_ptr))
 	{
 		monster_type *m_ptr;
-
-		/* Acquire monster */
 		m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 		/* Repair monster */
@@ -349,11 +347,9 @@ void compact_objects(int size)
 			/* Hack -- High level objects start out "immune" */
 			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
 
-			if (o_ptr->held_m_idx)
+			if (OBJECT_IS_HELD_MONSTER(o_ptr))
 			{
 				monster_type *m_ptr;
-
-				/* Acquire monster */
 				m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 				y = m_ptr->fy;
@@ -442,7 +438,7 @@ void wipe_o_list(void)
 			}
 		}
 
-		if (o_ptr->held_m_idx)
+		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
 			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];

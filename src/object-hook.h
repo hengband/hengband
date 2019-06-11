@@ -70,6 +70,8 @@ extern bool object_is_quest_target(object_type *o_ptr);
 
 #define OBJECT_IS_VALID(T) ((T)->k_idx != 0)
 
+#define OBJECT_IS_HELD_MONSTER(T) ((T)->held_m_idx != 0)
+
 /*
  * Artifacts use the "name1" field
  */

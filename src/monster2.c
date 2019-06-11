@@ -473,8 +473,6 @@ MONSTER_IDX m_pop(void)
 	for (i = 1; i < current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr;
-
-		/* Acquire monster */
 		m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Skip live monsters */

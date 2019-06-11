@@ -42,9 +42,7 @@ void wiz_lite(bool ninja)
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
-
-		/* Skip held objects */
-		if (o_ptr->held_m_idx) continue;
+		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
 
 		/* Memorize */
 		o_ptr->marked |= OM_FOUND;
@@ -158,9 +156,7 @@ void wiz_dark(void)
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
-
-		/* Skip held objects */
-		if (o_ptr->held_m_idx) continue;
+		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
 
 		/* Forget the object */
 		o_ptr->marked &= OM_TOUCHED;
