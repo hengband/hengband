@@ -407,7 +407,6 @@
     <ClInclude Include="..\..\src\h-type.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\readdib.h" />
-    <ClInclude Include="..\..\src\z-config.h" />
     <ClInclude Include="..\..\src\z-form.h" />
     <ClInclude Include="..\..\src\z-term.h" />
     <ClInclude Include="..\..\src\warning.h" />

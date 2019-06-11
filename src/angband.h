@@ -37,8 +37,6 @@
 /*
  * Include the "Angband" configuration header
  */
-#include "z-config.h"
-
 #include "gamevalue.h"
 #include "gameoption.h"
 

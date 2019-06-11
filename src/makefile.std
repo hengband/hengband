@@ -91,7 +91,7 @@ OBJS = \
 ## change the compiler to "cc", or remove the "debugging" options, or
 ## remove the X11 or Curses support, etc, as desired.
 ##
-## See also "z-config.h" and "h-config.h" for important information.
+## See also "h-config.h" for important information.
 ##
 ## Some "examples" are given below, they can be used by simply
 ## removing the FIRST column of "#" signs from the "block" of lines
@@ -130,8 +130,8 @@ JP_OPT= -D"JP" -D"EUC" -DDEFAULT_LOCALE="\"ja_JP.eucJP\""
 # "new curses" library instead of the "old curses" library, and
 # you may have to add "-l/usr/include/ncurses" to the "CFLAGS".
 #
-# See "main-gcu.c" and "z-config.h" for some optional "curses" defines,
-# including "USE_GETCH" and "USE_CURS_SET".  Note that "z-config.h" will
+# See "main-gcu.c" for some optional "curses" defines,
+# including "USE_GETCH" and "USE_CURS_SET".  Note that "h-config.h" will
 # attempt to "guess" at many of these flags based on your system.
 #
 #CFLAGS = -Wall -O1 -pipe -g -D"USE_X11" -D"USE_GCU"
@@ -299,7 +299,7 @@ HDRS = \
 
 INCS = \
 	angband.h \
-	z-config.h defines.h types.h externs.h \
+	defines.h types.h externs.h \
 	z-term.h z-rand.h z-util.h z-virt.h z-form.h $(HDRS)
 
 

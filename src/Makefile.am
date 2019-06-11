@@ -92,7 +92,6 @@ hengband_SOURCES = \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c \
 	\
-	z-config.h \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
 	z-virt.c z-virt.h 
 

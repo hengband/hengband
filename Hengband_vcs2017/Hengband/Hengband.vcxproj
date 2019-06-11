@@ -400,7 +400,6 @@
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\wild.h" />
     <ClInclude Include="..\..\src\world.h" />
-    <ClInclude Include="..\..\src\z-config.h" />
     <ClInclude Include="..\..\src\z-form.h" />
     <ClInclude Include="..\..\src\z-rand.h" />
     <ClInclude Include="..\..\src\z-term.h" />
