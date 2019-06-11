@@ -343,7 +343,6 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 			/* Flip / rotate */
 			coord_trans(&i, &j, xoffset, yoffset, transno);
 
-			/* Extract the location */
 			if (transno % 2 == 0)
 			{
 				/* no swap of x/y */
@@ -550,7 +549,6 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 			/* Flip / rotate */
 			coord_trans(&i, &j, xoffset, yoffset, transno);
 
-			/* Extract the location */
 			if (transno % 2 == 0)
 			{
 				/* no swap of x/y */

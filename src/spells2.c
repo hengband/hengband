@@ -1691,7 +1691,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	{
 		for (dx = -r; dx <= r; dx++)
 		{
-			/* Extract the location */
 			yy = cy + dy;
 			xx = cx + dx;
 
@@ -1834,7 +1833,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	{
 		for (dx = -r; dx <= r; dx++)
 		{
-			/* Extract the location */
 			yy = cy + dy;
 			xx = cx + dx;
 
@@ -1973,7 +1971,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	{
 		for (dx = -r; dx <= r; dx++)
 		{
-			/* Extract the location */
 			yy = cy + dy;
 			xx = cx + dx;
 
@@ -2029,7 +2026,6 @@ bool earthquake_aux(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	{
 		for (dx = -r; dx <= r; dx++)
 		{
-			/* Extract the location */
 			yy = cy + dy;
 			xx = cx + dx;
 

@@ -561,7 +561,6 @@ static int next_to_corr(POSITION y1, POSITION x1)
 	/* Scan adjacent grids */
 	for (i = 0; i < 4; i++)
 	{
-		/* Extract the location */
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
 		g_ptr = &current_floor_ptr->grid_array[y][x];

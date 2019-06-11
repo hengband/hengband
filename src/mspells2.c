@@ -183,10 +183,8 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 
 		for (i = 0; i < grids; i++)
 		{
-			/* Extract the location */
 			y = gy[i];
 			x = gx[i];
-
 			if ((y == y2) && (x == x2)) hit2 = TRUE;
 			if (player_bold(y, x)) hityou = TRUE;
 		}

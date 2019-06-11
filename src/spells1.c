@@ -6176,7 +6176,6 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			/* Dump everything with this radius */
 			for (i = gm[t]; i < gm[t+1]; i++)
 			{
-				/* Extract the location */
 				y = gy[i];
 				x = gx[i];
 
@@ -6221,7 +6220,6 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			/* Erase the explosion drawn above */
 			for (i = 0; i < grids; i++)
 			{
-				/* Extract the location */
 				y = gy[i];
 				x = gx[i];
 
