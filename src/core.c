@@ -2908,8 +2908,7 @@ static void process_world_aux_recharge(void)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 		/* Recharge rods on the ground.  No messages. */
 		if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout))

@@ -677,8 +677,7 @@ static void update_unique_artifact(s16b cur_floor_id)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 		/* Memorize location of the artifact */
 		if (object_is_fixed_artifact(o_ptr))
@@ -930,8 +929,7 @@ void leave_floor(void)
 	{
 		object_type *o_ptr = &p_ptr->inventory_list[i];
 
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 		/* Delete old memorized location of the artifact */
 		if (object_is_fixed_artifact(o_ptr))
@@ -1254,8 +1252,7 @@ void change_floor(void)
 			{
 				object_type *o_ptr = &current_floor_ptr->o_list[i];
 
-				/* Skip dead objects */
-				if (!o_ptr->k_idx) continue;
+				if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 				/* Ignore non-artifact */
 				if (!object_is_fixed_artifact(o_ptr)) continue;

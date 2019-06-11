@@ -344,8 +344,7 @@ void compact_objects(int size)
 		{
 			o_ptr = &current_floor_ptr->o_list[i];
 
-			/* Skip dead objects */
-			if (!o_ptr->k_idx) continue;
+			if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 			/* Hack -- High level objects start out "immune" */
 			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
@@ -430,8 +429,7 @@ void wipe_o_list(void)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 		/* Mega-Hack -- preserve artifacts */
 		if (!current_world_ptr->character_dungeon || preserve_mode)

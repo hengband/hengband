@@ -40,7 +40,6 @@ void day_break()
 				/* Hack -- Memorize lit grids if allowed */
 				if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
 
-				/* Hack -- Notice spot */
 				note_spot(y, x);
 			}
 		}
@@ -85,13 +84,11 @@ void night_falls(void)
 						/* Forget the normal floor grid */
 						g_ptr->info &= ~(CAVE_MARK);
 
-						/* Hack -- Notice spot */
 						note_spot(y, x);
 					}
 				}
 			}
 
-			/* Glow deep lava and building entrances */
 			glow_deep_lava_and_bldg();
 		}
 	}
@@ -205,8 +202,7 @@ byte get_dungeon_feeling(void)
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 		int delta = 0;
 
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 		/* Skip known objects */
 		if (object_is_known(o_ptr))

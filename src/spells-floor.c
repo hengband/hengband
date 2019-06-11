@@ -11,6 +11,7 @@
 #include "player-effects.h"
 #include "feature.h"
 #include "view-mainwindow.h"
+#include "object-hook.h"
 
 /*
  * Light up the dungeon using "clairvoyance"
@@ -40,8 +41,7 @@ void wiz_lite(bool ninja)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 		/* Skip held objects */
 		if (o_ptr->held_m_idx) continue;
@@ -157,8 +157,7 @@ void wiz_dark(void)
 	{
 		object_type *o_ptr = &current_floor_ptr->o_list[i];
 
-		/* Skip dead objects */
-		if (!o_ptr->k_idx) continue;
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
 		/* Skip held objects */
 		if (o_ptr->held_m_idx) continue;
