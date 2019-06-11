@@ -180,7 +180,7 @@ travel_type travel;
 #endif
 
 /*!
- * @brief 地形やその上のアイテムの隠された要素を明かす /
+ * @brief 地形やその上のアイテムの隠された要素を全て明かす /
  * Search for hidden things
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
@@ -195,11 +195,8 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	/* Invisible trap */
 	if (g_ptr->mimic && is_trap(g_ptr->feat))
 	{
-		/* Pick a trap */
 		disclose_grid(y, x);
-
 		msg_print(_("トラップを発見した。", "You have found a trap."));
-
 		disturb(FALSE, TRUE);
 	}
 
@@ -207,10 +204,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	if (is_hidden_door(g_ptr))
 	{
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
-
-		/* Disclose */
 		disclose_grid(y, x);
-
 		disturb(FALSE, FALSE);
 	}
 
@@ -220,22 +214,12 @@ static void discover_hidden_things(POSITION y, POSITION x)
 		object_type *o_ptr;
 		o_ptr = &current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
-
-		/* Skip non-chests */
 		if (o_ptr->tval != TV_CHEST) continue;
-
-		/* Skip non-trapped chests */
 		if (!chest_traps[o_ptr->pval]) continue;
-
-		/* Identify once */
 		if (!object_is_known(o_ptr))
 		{
 			msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
-
-			/* Know the trap */
 			object_known(o_ptr);
-
-			/* Notice it */
 			disturb(FALSE, FALSE);
 		}
 	}
