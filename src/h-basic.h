@@ -32,3 +32,14 @@
 
 #endif
 
+/*
+ * Hack -- Define NULL
+ */
+#ifndef NULL
+# ifdef __STDC__
+#  define NULL ((void*)0) /*!< コンパイル環境に定義がない場合のNULL定義 */
+# else
+#  define NULL ((char*)0) /*!< コンパイル環境に定義がない場合のNULL定義 */
+# endif /* __STDC__ */
+#endif /* NULL */
+

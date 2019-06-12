@@ -245,3 +245,6 @@ extern const option_type cheat_info[CHEAT_MAX];
 extern const option_type autosave_info[2];
 
 extern void extract_option_vars(void);
+
+extern void do_cmd_options_aux(int page, concptr info);
+extern void do_cmd_options(void);

@@ -54,8 +54,6 @@ extern void do_cmd_redraw(void);
 extern void do_cmd_player_status(void);
 extern void do_cmd_message_one(void);
 extern void do_cmd_messages(int num_now);
-extern void do_cmd_options_aux(int page, concptr info);
-extern void do_cmd_options(void);
 extern void do_cmd_pref(void);
 extern void do_cmd_reload_autopick(void);
 extern void do_cmd_macros(void);
