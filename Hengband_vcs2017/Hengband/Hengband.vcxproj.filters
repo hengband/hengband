@@ -180,12 +180,6 @@
     <ClCompile Include="..\..\src\cmd-mane.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-flavor.h">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-flavor.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-basic.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -322,9 +316,6 @@
     <ClCompile Include="..\..\src\core.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\gameoption.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -399,6 +390,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\english.c">
       <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-gameoption.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-flavor.c">
+      <Filter>object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -698,9 +695,6 @@
     <ClInclude Include="..\..\src\angband.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\gameoption.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\history.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -775,6 +769,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\english.h">
       <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-gameoption.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-flavor.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

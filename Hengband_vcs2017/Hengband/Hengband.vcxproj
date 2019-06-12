@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\src\cmd-basic.c" />
     <ClCompile Include="..\..\src\cmd-dump.c" />
     <ClCompile Include="..\..\src\cmd-eat.c" />
+    <ClCompile Include="..\..\src\cmd-gameoption.c" />
     <ClCompile Include="..\..\src\cmd-hissatsu.c" />
     <ClCompile Include="..\..\src\cmd-mane.c" />
     <ClCompile Include="..\..\src\cmd-pet.c" />
@@ -173,7 +174,6 @@
     <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-ego.c" />
     <ClCompile Include="..\..\src\object-flavor.c" />
-    <ClCompile Include="..\..\src\object-flavor.h" />
     <ClCompile Include="..\..\src\object-hook.c" />
     <ClCompile Include="..\..\src\objectkind.c" />
     <ClCompile Include="..\..\src\objectkind-hook.c" />
@@ -208,6 +208,7 @@
     <ClInclude Include="..\..\src\chuukei.h" />
     <ClInclude Include="..\..\src\cmd-basic.h" />
     <ClInclude Include="..\..\src\cmd-dump.h" />
+    <ClInclude Include="..\..\src\cmd-gameoption.h" />
     <ClInclude Include="..\..\src\cmd-hissatsu.h" />
     <ClInclude Include="..\..\src\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-magiceat.h" />
@@ -224,7 +225,6 @@
     <ClCompile Include="..\..\src\cmd-magiceat.c" />
     <ClCompile Include="..\..\src\cmd-spell.c" />
     <ClCompile Include="..\..\src\files.c" />
-    <ClCompile Include="..\..\src\gameoption.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\japanese.c" />
@@ -292,6 +292,7 @@
     <ClCompile Include="..\..\src\z-util.c" />
     <ClCompile Include="..\..\src\z-virt.c" />
     <ClInclude Include="..\..\src\english.h" />
+    <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="japanese.h" />
   </ItemGroup>
   <ItemGroup>
@@ -312,7 +313,6 @@
     <ClInclude Include="..\..\src\floor-save.h" />
     <ClInclude Include="..\..\src\floor-town.h" />
     <ClInclude Include="..\..\src\floor.h" />
-    <ClInclude Include="..\..\src\gameoption.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\geometry.h" />
     <ClInclude Include="..\..\src\grid.h" />

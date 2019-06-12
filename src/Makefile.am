@@ -14,7 +14,7 @@ hengband_SOURCES = \
 	bldg.c bldg.h chest.c chest.h chuukei.c \
 	cmd-basic.c cmd-basic.h cmd-dump.c cmd-dump.h cmd-activate.c cmd-activate.h cmd-eat.c cmd-eat.h \
 	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h \
-	cmd-mane.c cmd-mane.h cmd-pet.c cmd-pet.h \
+	cmd-mane.c cmd-mane.h cmd-pet.c cmd-pet.h cmd-gameoption.c cmd-gameoption.h\
 	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
 	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
 	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c cmd-hissatsu.h\
@@ -29,7 +29,7 @@ hengband_SOURCES = \
 	feature.c feature.h \
 	geometry.c geometry.h \
 	\
-	gameoption.c gameoption.h gamevalue.h \
+	gamevalue.h \
 	grid.c grid.h h-basic.h h-config.h h-define.h \
 	history.h history.c \
 	h-system.h h-type.h inet.c inet.h init.c init.h \

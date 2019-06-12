@@ -38,7 +38,7 @@
  * Include the "Angband" configuration header
  */
 #include "gamevalue.h"
-#include "gameoption.h"
+#include "cmd-gameoption.h"
 
 #include "geometry.h"
 #include "grid.h"
