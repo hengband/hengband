@@ -44,7 +44,6 @@
 
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
-BIT_FLAGS change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
 
 /*
@@ -139,7 +138,7 @@ void init_saved_floors(bool force)
 	new_floor_id = 0;
 
 	/* No change floor mode yet */
-	change_floor_mode = 0;
+	p_ptr->change_floor_mode = 0;
 
 #ifdef SET_UID
 # ifdef SECURE
@@ -336,7 +335,7 @@ FLOOR_IDX get_new_floor_id(void)
  */
 void prepare_change_floor_mode(BIT_FLAGS mode)
 {
-	change_floor_mode |= mode;
+	p_ptr->change_floor_mode |= mode;
 }
 
 /*!

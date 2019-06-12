@@ -17,7 +17,6 @@ typedef struct
 } saved_floor_type;
 
 extern u32b saved_floor_file_sign;
-extern BIT_FLAGS change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
 
 extern void init_saved_floors(bool force);
 extern void change_floor(BIT_FLAGS floor_mode);
