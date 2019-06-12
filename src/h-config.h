@@ -521,13 +521,6 @@
 /* #define SCORE_CHEATERS */
 
 
-
-/*
- * OPTION: Maximum flow depth when using "MONSTER_FLOW"
- */
-#define MONSTER_FLOW_DEPTH 32
-
-
 #ifdef USE_SPECIAL
 
 /*
