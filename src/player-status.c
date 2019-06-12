@@ -5882,7 +5882,7 @@ void cheat_death(player_type *creature_ptr)
 			"                            but revived."));
 
 	/* Prepare next floor */
-	leave_floor();
+	leave_floor(change_floor_mode);
 	wipe_m_list();
 
 }

@@ -762,7 +762,7 @@ static void get_out_monster(void)
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  * @return なし
  */
-static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS prev_floor_mode)
+static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
 {
 	POSITION x, y, sx = 0, sy = 0;
 	POSITION x_table[20];
@@ -779,7 +779,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS prev_flo
 			feature_type *f_ptr = &f_info[g_ptr->feat];
 			bool ok = FALSE;
 
-			if (prev_floor_mode & CFM_UP)
+			if (floor_mode & CFM_UP)
 			{
 				if (have_flag(f_ptr->flags, FF_LESS) && have_flag(f_ptr->flags, FF_STAIRS) &&
 				    !have_flag(f_ptr->flags, FF_SPECIAL))
@@ -796,7 +796,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS prev_flo
 				}
 			}
 
-			else if (prev_floor_mode & CFM_DOWN)
+			else if (floor_mode & CFM_DOWN)
 			{
 				if (have_flag(f_ptr->flags, FF_MORE) && have_flag(f_ptr->flags, FF_STAIRS) &&
 				    !have_flag(f_ptr->flags, FF_SPECIAL))
@@ -860,7 +860,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS prev_flo
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
  * @return なし
  */
-void leave_floor(void)
+void leave_floor(BIT_FLAGS floor_mode)
 {
 	grid_type *g_ptr = NULL;
 	feature_type *f_ptr;
@@ -881,8 +881,8 @@ void leave_floor(void)
 
 	/* Temporary get a floor_id (for Arena) */
 	if (!p_ptr->floor_id &&
-	    (change_floor_mode & CFM_SAVE_FLOORS) &&
-	    !(change_floor_mode & CFM_NO_RETURN))
+	    (floor_mode & CFM_SAVE_FLOORS) &&
+	    !(floor_mode & CFM_NO_RETURN))
 	{
 	    /* Get temporal floor_id */
 	    p_ptr->floor_id = get_new_floor_id();
@@ -942,13 +942,13 @@ void leave_floor(void)
 	sf_ptr = get_sf_ptr(p_ptr->floor_id);
 
 	/* Choose random stairs */
-	if ((change_floor_mode & CFM_RAND_CONNECT) && p_ptr->floor_id)
+	if ((floor_mode & CFM_RAND_CONNECT) && p_ptr->floor_id)
 	{
-		locate_connected_stairs(sf_ptr, change_floor_mode);
+		locate_connected_stairs(sf_ptr, floor_mode);
 	}
 
 	/* Extract new dungeon level */
-	if (change_floor_mode & CFM_SAVE_FLOORS)
+	if (floor_mode & CFM_SAVE_FLOORS)
 	{
 		/* Extract stair position */
 		g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
@@ -969,25 +969,25 @@ void leave_floor(void)
 	}
 
 	/* Climb up/down some sort of stairs */
-	if (change_floor_mode & (CFM_DOWN | CFM_UP))
+	if (floor_mode & (CFM_DOWN | CFM_UP))
 	{
 		int move_num = 0;
 
 		/* Extract level movement number */
-		if (change_floor_mode & CFM_DOWN) move_num = 1;
-		else if (change_floor_mode & CFM_UP) move_num = -1;
+		if (floor_mode & CFM_DOWN) move_num = 1;
+		else if (floor_mode & CFM_UP) move_num = -1;
 
 		/* Shafts are deeper than normal stairs */
-		if (change_floor_mode & CFM_SHAFT)
+		if (floor_mode & CFM_SHAFT)
 			move_num += SGN(move_num);
 
 		/* Get out from or Enter the dungeon */
-		if (change_floor_mode & CFM_DOWN)
+		if (floor_mode & CFM_DOWN)
 		{
 			if (!current_floor_ptr->dun_level)
 				move_num = d_info[p_ptr->dungeon_idx].mindepth;
 		}
-		else if (change_floor_mode & CFM_UP)
+		else if (floor_mode & CFM_UP)
 		{
 			if (current_floor_ptr->dun_level + move_num < d_info[p_ptr->dungeon_idx].mindepth)
 				move_num = -current_floor_ptr->dun_level;
@@ -1009,11 +1009,11 @@ void leave_floor(void)
 		p_ptr->dungeon_idx = 0;
 
 		/* Reach to the surface -- Clear all saved floors */
-		change_floor_mode &= ~CFM_SAVE_FLOORS;
+		floor_mode &= ~CFM_SAVE_FLOORS;
 	}
 
 	/* Kill some old saved floors */
-	if (!(change_floor_mode & CFM_SAVE_FLOORS))
+	if (!(floor_mode & CFM_SAVE_FLOORS))
 	{
 		/* Kill all saved floors */
 		for (i = 0; i < MAX_SAVED_FLOORS; i++)
@@ -1022,7 +1022,7 @@ void leave_floor(void)
 		/* Reset visit_mark count */
 		latest_visit_mark = 1;
 	}
-	else if (change_floor_mode & CFM_NO_RETURN)
+	else if (floor_mode & CFM_NO_RETURN)
 	{
 		/* Kill current floor */
 		kill_saved_floor(sf_ptr);
@@ -1050,17 +1050,17 @@ void leave_floor(void)
 	}
 
 	/* Fix connection -- level teleportation or trap door */
-	if (change_floor_mode & CFM_RAND_CONNECT)
+	if (floor_mode & CFM_RAND_CONNECT)
 	{
-		if (change_floor_mode & CFM_UP)
+		if (floor_mode & CFM_UP)
 			sf_ptr->upper_floor_id = new_floor_id;
-		else if (change_floor_mode & CFM_DOWN)
+		else if (floor_mode & CFM_DOWN)
 			sf_ptr->lower_floor_id = new_floor_id;
 	}
 
 	/* If you can return, you need to save previous floor */
-	if ((change_floor_mode & CFM_SAVE_FLOORS) &&
-	    !(change_floor_mode & CFM_NO_RETURN))
+	if ((floor_mode & CFM_SAVE_FLOORS) &&
+	    !(floor_mode & CFM_NO_RETURN))
 	{
 		/* Get out of the my way! */
 		get_out_monster();
@@ -1093,7 +1093,7 @@ void leave_floor(void)
  * restored from the temporal file.  If the floor is new one, new current_floor_ptr->grid_array\n
  * will be generated.\n
  */
-void change_floor(BIT_FLAGS next_floor_mode)
+void change_floor(BIT_FLAGS floor_mode)
 {
 	saved_floor_type *sf_ptr;
 	bool loaded = FALSE;
@@ -1114,8 +1114,8 @@ void change_floor(BIT_FLAGS next_floor_mode)
 	p_ptr->ambush_flag = FALSE;
 
 	/* No saved floors (On the surface etc.) */
-	if (!(next_floor_mode & CFM_SAVE_FLOORS) &&
-	    !(next_floor_mode & CFM_FIRST_FLOOR))
+	if (!(floor_mode & CFM_SAVE_FLOORS) &&
+	    !(floor_mode & CFM_FIRST_FLOOR))
 	{
 		/* Create current_floor_ptr->grid_array */
 		generate_random_floor();
@@ -1146,13 +1146,13 @@ void change_floor(BIT_FLAGS next_floor_mode)
 				loaded = TRUE;
 
 				/* Forbid return stairs */
-				if (next_floor_mode & CFM_NO_RETURN)
+				if (floor_mode & CFM_NO_RETURN)
 				{
 					grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
 
 					if (!feat_uses_special(g_ptr->feat))
 					{
-						if (next_floor_mode & (CFM_DOWN | CFM_UP))
+						if (floor_mode & (CFM_DOWN | CFM_UP))
 						{
 							/* Reset to floor */
 							g_ptr->feat = feat_ground_type[randint0(100)];
@@ -1175,13 +1175,13 @@ void change_floor(BIT_FLAGS next_floor_mode)
 		{
 			saved_floor_type *cur_sf_ptr = get_sf_ptr(p_ptr->floor_id);
 
-			if (next_floor_mode & CFM_UP)
+			if (floor_mode & CFM_UP)
 			{
 				/* New floor is right-above */
 				if (cur_sf_ptr->upper_floor_id == new_floor_id)
 					sf_ptr->lower_floor_id = p_ptr->floor_id;
 			}
-			else if (next_floor_mode & CFM_DOWN)
+			else if (floor_mode & CFM_DOWN)
 			{
 				/* New floor is right-under */
 				if (cur_sf_ptr->lower_floor_id == new_floor_id)
@@ -1192,9 +1192,9 @@ void change_floor(BIT_FLAGS next_floor_mode)
 		/* Break connection to killed floor */
 		else
 		{
-			if (next_floor_mode & CFM_UP)
+			if (floor_mode & CFM_UP)
 				sf_ptr->lower_floor_id = 0;
-			else if (next_floor_mode & CFM_DOWN)
+			else if (floor_mode & CFM_DOWN)
 				sf_ptr->upper_floor_id = 0;
 		}
 
@@ -1298,11 +1298,11 @@ void change_floor(BIT_FLAGS next_floor_mode)
 				build_dead_end();
 
 				/* Break connection */
-				if (next_floor_mode & CFM_UP)
+				if (floor_mode & CFM_UP)
 				{
 					sf_ptr->upper_floor_id = 0;
 				}
-				else if (next_floor_mode & CFM_DOWN)
+				else if (floor_mode & CFM_DOWN)
 				{
 					sf_ptr->lower_floor_id = 0;
 				}
@@ -1320,7 +1320,7 @@ void change_floor(BIT_FLAGS next_floor_mode)
 			sf_ptr->dun_level = current_floor_ptr->dun_level;
 
 			/* Create connected stairs */
-			if (!(next_floor_mode & CFM_NO_RETURN))
+			if (!(floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
 				grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
@@ -1328,15 +1328,15 @@ void change_floor(BIT_FLAGS next_floor_mode)
 				/*** Create connected stairs ***/
 
 				/* No stairs down from Quest */
-				if ((next_floor_mode & CFM_UP) && !quest_number(current_floor_ptr->dun_level))
+				if ((floor_mode & CFM_UP) && !quest_number(current_floor_ptr->dun_level))
 				{
-					g_ptr->feat = (next_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
+					g_ptr->feat = (floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}
 
 				/* No stairs up when ironman_downward */
-				else if ((next_floor_mode & CFM_DOWN) && !ironman_downward)
+				else if ((floor_mode & CFM_DOWN) && !ironman_downward)
 				{
-					g_ptr->feat = (next_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
+					g_ptr->feat = (floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
 				}
 
 				/* Paranoia -- Clear mimic */
@@ -1348,13 +1348,13 @@ void change_floor(BIT_FLAGS next_floor_mode)
 		}
 
 		/* Arrive at random grid */
-		if (next_floor_mode & (CFM_RAND_PLACE))
+		if (floor_mode & (CFM_RAND_PLACE))
 		{
 			(void)new_player_spot();
 		}
 
 		/* You see stairs blocked */
-		else if ((next_floor_mode & CFM_NO_RETURN) && (next_floor_mode & (CFM_DOWN | CFM_UP)))
+		else if ((floor_mode & CFM_NO_RETURN) && (floor_mode & (CFM_DOWN | CFM_UP)))
 		{
 			if (!p_ptr->blind)
 			{
@@ -1404,7 +1404,7 @@ void change_floor(BIT_FLAGS next_floor_mode)
 	p_ptr->feeling = 0;
 
 	/* Clear all flags */
-	next_floor_mode = 0L;
+	floor_mode = 0L;
 
 	select_floor_music();
 }
