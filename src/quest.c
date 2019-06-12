@@ -15,6 +15,7 @@
 #include "feature.h"
 #include "world.h"
 #include "cmd-dump.h"
+#include "english.h"
 
 quest_type *quest; /*!< Quest info */
 QUEST_IDX max_q_idx; /*!< Maximum number of quests */

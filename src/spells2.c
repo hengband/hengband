@@ -54,6 +54,7 @@
 #include "monsterrace.h"
 #include "targeting.h"
 #include "realm-song.h"
+#include "english.h"
 
 /*!
  * @brief プレイヤー周辺の地形を感知する

@@ -36,6 +36,7 @@
 #include "japanese.h"
 #include "view-mainwindow.h"
 #include "player-class.h"
+#include "english.h"
 
 
 /*

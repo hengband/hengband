@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\src\creature.c" />
     <ClCompile Include="..\..\src\dungeon-file.c" />
     <ClCompile Include="..\..\src\dungeon.c" />
+    <ClCompile Include="..\..\src\english.c" />
     <ClCompile Include="..\..\src\feature.c" />
     <ClCompile Include="..\..\src\floor-events.c" />
     <ClCompile Include="..\..\src\floor-generate.c" />
@@ -290,6 +291,7 @@
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\z-util.c" />
     <ClCompile Include="..\..\src\z-virt.c" />
+    <ClInclude Include="..\..\src\english.h" />
     <ClInclude Include="japanese.h" />
   </ItemGroup>
   <ItemGroup>

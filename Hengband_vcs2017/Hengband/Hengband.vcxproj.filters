@@ -397,6 +397,9 @@
     <ClCompile Include="..\..\src\japanese.c">
       <Filter>locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\english.c">
+      <Filter>locale</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -768,6 +771,9 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="japanese.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\english.h">
       <Filter>locale</Filter>
     </ClInclude>
   </ItemGroup>
