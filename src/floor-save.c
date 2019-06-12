@@ -44,7 +44,7 @@
 
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
-static u32b change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
+BIT_FLAGS change_floor_mode;  /*!<フロア移行処理に関するフラグ / Mode flags for changing floor */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
 
 /*
@@ -1093,7 +1093,7 @@ void leave_floor(void)
  * restored from the temporal file.  If the floor is new one, new current_floor_ptr->grid_array\n
  * will be generated.\n
  */
-void change_floor(void)
+void change_floor(BIT_FLAGS next_floor_mode)
 {
 	saved_floor_type *sf_ptr;
 	bool loaded = FALSE;
@@ -1114,8 +1114,8 @@ void change_floor(void)
 	p_ptr->ambush_flag = FALSE;
 
 	/* No saved floors (On the surface etc.) */
-	if (!(change_floor_mode & CFM_SAVE_FLOORS) &&
-	    !(change_floor_mode & CFM_FIRST_FLOOR))
+	if (!(next_floor_mode & CFM_SAVE_FLOORS) &&
+	    !(next_floor_mode & CFM_FIRST_FLOOR))
 	{
 		/* Create current_floor_ptr->grid_array */
 		generate_random_floor();
@@ -1146,13 +1146,13 @@ void change_floor(void)
 				loaded = TRUE;
 
 				/* Forbid return stairs */
-				if (change_floor_mode & CFM_NO_RETURN)
+				if (next_floor_mode & CFM_NO_RETURN)
 				{
 					grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
 
 					if (!feat_uses_special(g_ptr->feat))
 					{
-						if (change_floor_mode & (CFM_DOWN | CFM_UP))
+						if (next_floor_mode & (CFM_DOWN | CFM_UP))
 						{
 							/* Reset to floor */
 							g_ptr->feat = feat_ground_type[randint0(100)];
@@ -1175,13 +1175,13 @@ void change_floor(void)
 		{
 			saved_floor_type *cur_sf_ptr = get_sf_ptr(p_ptr->floor_id);
 
-			if (change_floor_mode & CFM_UP)
+			if (next_floor_mode & CFM_UP)
 			{
 				/* New floor is right-above */
 				if (cur_sf_ptr->upper_floor_id == new_floor_id)
 					sf_ptr->lower_floor_id = p_ptr->floor_id;
 			}
-			else if (change_floor_mode & CFM_DOWN)
+			else if (next_floor_mode & CFM_DOWN)
 			{
 				/* New floor is right-under */
 				if (cur_sf_ptr->lower_floor_id == new_floor_id)
@@ -1192,9 +1192,9 @@ void change_floor(void)
 		/* Break connection to killed floor */
 		else
 		{
-			if (change_floor_mode & CFM_UP)
+			if (next_floor_mode & CFM_UP)
 				sf_ptr->lower_floor_id = 0;
-			else if (change_floor_mode & CFM_DOWN)
+			else if (next_floor_mode & CFM_DOWN)
 				sf_ptr->upper_floor_id = 0;
 		}
 
@@ -1298,11 +1298,11 @@ void change_floor(void)
 				build_dead_end();
 
 				/* Break connection */
-				if (change_floor_mode & CFM_UP)
+				if (next_floor_mode & CFM_UP)
 				{
 					sf_ptr->upper_floor_id = 0;
 				}
-				else if (change_floor_mode & CFM_DOWN)
+				else if (next_floor_mode & CFM_DOWN)
 				{
 					sf_ptr->lower_floor_id = 0;
 				}
@@ -1320,7 +1320,7 @@ void change_floor(void)
 			sf_ptr->dun_level = current_floor_ptr->dun_level;
 
 			/* Create connected stairs */
-			if (!(change_floor_mode & CFM_NO_RETURN))
+			if (!(next_floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
 				grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
@@ -1328,15 +1328,15 @@ void change_floor(void)
 				/*** Create connected stairs ***/
 
 				/* No stairs down from Quest */
-				if ((change_floor_mode & CFM_UP) && !quest_number(current_floor_ptr->dun_level))
+				if ((next_floor_mode & CFM_UP) && !quest_number(current_floor_ptr->dun_level))
 				{
-					g_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
+					g_ptr->feat = (next_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}
 
 				/* No stairs up when ironman_downward */
-				else if ((change_floor_mode & CFM_DOWN) && !ironman_downward)
+				else if ((next_floor_mode & CFM_DOWN) && !ironman_downward)
 				{
-					g_ptr->feat = (change_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
+					g_ptr->feat = (next_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
 				}
 
 				/* Paranoia -- Clear mimic */
@@ -1348,13 +1348,13 @@ void change_floor(void)
 		}
 
 		/* Arrive at random grid */
-		if (change_floor_mode & (CFM_RAND_PLACE))
+		if (next_floor_mode & (CFM_RAND_PLACE))
 		{
 			(void)new_player_spot();
 		}
 
 		/* You see stairs blocked */
-		else if ((change_floor_mode & CFM_NO_RETURN) && (change_floor_mode & (CFM_DOWN | CFM_UP)))
+		else if ((next_floor_mode & CFM_NO_RETURN) && (next_floor_mode & (CFM_DOWN | CFM_UP)))
 		{
 			if (!p_ptr->blind)
 			{
@@ -1404,7 +1404,7 @@ void change_floor(void)
 	p_ptr->feeling = 0;
 
 	/* Clear all flags */
-	change_floor_mode = 0L;
+	next_floor_mode = 0L;
 
 	select_floor_music();
 }

@@ -5547,7 +5547,7 @@ void play_game(bool new_game)
 	/* Generate a dungeon level if needed */
 	if (!current_world_ptr->character_dungeon)
 	{
-		change_floor();
+		change_floor(change_floor_mode);
 	}
 
 	else
@@ -5559,7 +5559,7 @@ void play_game(bool new_game)
 			if (!p_ptr->y || !p_ptr->x)
 			{
 				msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location.  Regenerate the dungeon floor."));
-				change_floor();
+				change_floor(change_floor_mode);
 			}
 
 			/* Still no player?  -- Try to locate random place */
@@ -5709,7 +5709,7 @@ void play_game(bool new_game)
 		if (p_ptr->is_dead) break;
 
 		/* Make a new level */
-		change_floor();
+		change_floor(change_floor_mode);
 	}
 
 	/* Close stuff */
