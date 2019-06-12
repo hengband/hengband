@@ -762,7 +762,7 @@ static void get_out_monster(void)
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  * @return なし
  */
-static void locate_connected_stairs(saved_floor_type *sf_ptr)
+static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS prev_floor_mode)
 {
 	POSITION x, y, sx = 0, sy = 0;
 	POSITION x_table[20];
@@ -779,7 +779,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 			feature_type *f_ptr = &f_info[g_ptr->feat];
 			bool ok = FALSE;
 
-			if (change_floor_mode & CFM_UP)
+			if (prev_floor_mode & CFM_UP)
 			{
 				if (have_flag(f_ptr->flags, FF_LESS) && have_flag(f_ptr->flags, FF_STAIRS) &&
 				    !have_flag(f_ptr->flags, FF_SPECIAL))
@@ -796,7 +796,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr)
 				}
 			}
 
-			else if (change_floor_mode & CFM_DOWN)
+			else if (prev_floor_mode & CFM_DOWN)
 			{
 				if (have_flag(f_ptr->flags, FF_MORE) && have_flag(f_ptr->flags, FF_STAIRS) &&
 				    !have_flag(f_ptr->flags, FF_SPECIAL))
@@ -944,7 +944,7 @@ void leave_floor(void)
 	/* Choose random stairs */
 	if ((change_floor_mode & CFM_RAND_CONNECT) && p_ptr->floor_id)
 	{
-		locate_connected_stairs(sf_ptr);
+		locate_connected_stairs(sf_ptr, change_floor_mode);
 	}
 
 	/* Extract new dungeon level */
