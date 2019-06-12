@@ -2182,7 +2182,7 @@ static byte rgold_adj[MAX_RACES][MAX_RACES] =
  * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
  * @param greed 店主の強欲度
  * @param flip TRUEならば店主にとっての買取価格、FALSEなら売出価格を計算
- * @return なし
+ * @return アイテムの店舗価格
  * @details 
  * <pre>
  * This function takes into account the player's charisma, and the
@@ -2198,19 +2198,17 @@ static byte rgold_adj[MAX_RACES][MAX_RACES] =
  * "greed" value is always something (?).
  * </pre>
  */
-static s32b price_item(object_type *o_ptr, int greed, bool flip)
+static PRICE price_item(object_type *o_ptr, int greed, bool flip)
 {
-	int 	factor;
-	int 	adjust;
-	s32b	price;
-
+	int factor;
+	int adjust;
+	PRICE price;
 
 	/* Get the value of one of the items */
 	price = object_value(o_ptr);
 
 	/* Worthless items */
 	if (price <= 0) return (0L);
-
 
 	/* Compute the racial factor */
 	factor = rgold_adj[ot_ptr->owner_race][p_ptr->prace];
