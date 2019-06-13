@@ -397,6 +397,9 @@
     <ClCompile Include="..\..\src\object-flavor.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-inventory.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -775,6 +778,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-flavor.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-inventory.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

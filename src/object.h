@@ -522,6 +522,7 @@ extern s32b flag_cost(object_type *o_ptr, int plusses);
 
 extern bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern void py_pickup_floor(bool pickup);
+extern void prepare_label_string(char *label, BIT_FLAGS mode);
 
 /*
  * Return the "attr" for a given item.
