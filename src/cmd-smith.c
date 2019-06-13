@@ -1378,16 +1378,8 @@ void do_cmd_kaji(bool only_browse)
 	if (!only_browse)
 	{
 		if (cmd_limit_confused(p_ptr)) return;
-		if (p_ptr->blind)
-		{
-			msg_print(_("目が見えなくて作業できない！", "You are blind!"));
-			return;
-		}
-		if (p_ptr->image)
-		{
-			msg_print(_("うまく見えなくて作業できない！", "You are hallucinating!"));
-			return;
-		}
+		if (cmd_limit_blind(p_ptr)) return;
+		if (cmd_limit_image(p_ptr)) return;
 	}
 
 	if (!(repeat_pull(&mode) && 1 <= mode && mode <= 5))
