@@ -2185,7 +2185,6 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 		/* Auto-Recall if possible and visible */
 		if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-		/* Track a new monster */
 		health_track(g_ptr->m_idx);
 	}
 

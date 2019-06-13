@@ -1694,8 +1694,6 @@ static bool cast_ninja_spell(int spell)
 		{
 			/* Auto-Recall if possible and visible */
 			if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-
-			/* Track a new monster */
 			health_track(m_idx);
 		}
 
