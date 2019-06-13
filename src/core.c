@@ -5345,7 +5345,7 @@ void play_game(bool new_game)
 		/* Open the high score file, for reading/writing */
 		highscore_fd = fd_open(buf, O_RDWR);
 
-		/* 町名消失バグ対策(#38205) Init the wilderness */
+		/* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 		/* Handle score, show Top scores */
@@ -5531,25 +5531,17 @@ void play_game(bool new_game)
 	/* Initialize the town-buildings if necessary */
 	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest)
 	{
-		/* Init the wilderness */
-
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-
-		/* Init the town */
 		init_flags = INIT_ONLY_BUILDINGS;
-
 		process_dungeon_file("t_info.txt", 0, 0, MAX_HGT, MAX_WID);
-
 		select_floor_music();
 	}
-
 
 	/* Generate a dungeon level if needed */
 	if (!current_world_ptr->character_dungeon)
 	{
 		change_floor(p_ptr->change_floor_mode);
 	}
-
 	else
 	{
 		/* HACK -- Restore from panic-save */

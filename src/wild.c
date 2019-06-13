@@ -484,10 +484,7 @@ void wilderness_gen(void)
 	panel_row_min = current_floor_ptr->height;
 	panel_col_min = current_floor_ptr->width;
 
-	/* Init the wilderness */
-
 	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-
 	x = p_ptr->wilderness_x;
 	y = p_ptr->wilderness_y;
 	get_mon_num_prep(get_monster_hook(), NULL);
@@ -724,7 +721,6 @@ void wilderness_gen_small(void)
 		current_floor_ptr->grid_array[j][i].feat = feat_permanent;
 	}
 
-	/* Init the wilderness */
 	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	/* Fill the map */
