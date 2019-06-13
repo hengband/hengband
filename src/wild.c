@@ -753,10 +753,8 @@ void wilderness_gen_small(void)
 	panel_row_min = current_floor_ptr->height;
 	panel_col_min = current_floor_ptr->width;
 
-	/* Place the player */
 	p_ptr->x = p_ptr->wilderness_x;
 	p_ptr->y = p_ptr->wilderness_y;
-
 	p_ptr->town_num = 0;
 }
 

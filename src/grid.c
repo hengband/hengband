@@ -194,7 +194,6 @@ bool new_player_spot(void)
 	grid_type *g_ptr;
 	feature_type *f_ptr;
 
-	/* Place the player */
 	while (max_attempts--)
 	{
 		/* Pick a legal spot */
@@ -257,16 +256,9 @@ void place_random_stairs(POSITION y, POSITION x)
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
 
-	/* Town */
 	if (!current_floor_ptr->dun_level) up_stairs = FALSE;
-
-	/* Ironman */
 	if (ironman_downward) up_stairs = FALSE;
-
-	/* Bottom */
 	if (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
-
-	/* Quest-level */
 	if (quest_number(current_floor_ptr->dun_level) && (current_floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
@@ -278,8 +270,8 @@ void place_random_stairs(POSITION y, POSITION x)
 	}
 
 	/* Place the stairs */
-	if (up_stairs) place_up_stairs(y, x);
-	else if (down_stairs) place_down_stairs(y, x);
+	if (up_stairs) set_cave_feat(y, x, feat_up_stair);
+	else if (down_stairs) set_cave_feat(y, x, feat_down_stair);
 }
 
 /*!

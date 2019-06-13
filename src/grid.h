@@ -78,7 +78,6 @@ typedef struct
 } grid_template_type;
 
 /* Macros */
-
 #define set_cave_feat(Y,X,F)    (current_floor_ptr->grid_array[(Y)][(X)].feat = (F))
 #define add_cave_info(Y,X,I)    (current_floor_ptr->grid_array[(Y)][(X)].info |= (I))
 
@@ -86,28 +85,11 @@ typedef struct
 /*#define set_cave_info(Y,X,I)    (current_floor_ptr->grid_array[(Y)][(X)].info = (I)) */
 
 /*!
- * @brief 指定座標が瓦礫かどうかを返す
+ * @brief 指定座標に瓦礫を配置する
  * @param Y 指定Y座標
  * @param X 指定X座標
- * @return 瓦礫ならばTRUE
  */
 #define place_rubble(Y,X)       set_cave_feat(Y,X,feat_rubble)
-
-/*!
- * @brief 指定座標が上り階段かどうかを返す
- * @param Y 指定Y座標
- * @param X 指定X座標
- * @return 上り階段ならばTRUE
- */
-#define place_up_stairs(Y,X)    set_cave_feat(Y,X,feat_up_stair)
-
-/*!
- * @brief 指定座標が下り階段かどうかを返す
- * @param Y 指定Y座標
- * @param X 指定X座標
- * @return 下り階段ならばTRUE
- */
-#define place_down_stairs(Y,X)  set_cave_feat(Y,X,feat_down_stair)
 
 /*!
  * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
