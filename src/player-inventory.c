@@ -3336,3 +3336,67 @@ void py_pickup_floor(bool pickup)
 	}
 }
 
+
+
+/*!
+ * @brief 所持アイテム一覧を表示する /
+ * Choice window "shadow" of the "show_inven()" function
+ * @return なし
+ */
+void display_inven(void)
+{
+	register int i, n, z = 0;
+	object_type *o_ptr;
+	TERM_COLOR attr = TERM_WHITE;
+	char tmp_val[80];
+	GAME_TEXT o_name[MAX_NLEN];
+	TERM_LEN wid, hgt;
+
+	Term_get_size(&wid, &hgt);
+
+	for (i = 0; i < INVEN_PACK; i++)
+	{
+		o_ptr = &p_ptr->inventory_list[i];
+		if (!o_ptr->k_idx) continue;
+		z = i + 1;
+	}
+
+	for (i = 0; i < z; i++)
+	{
+		o_ptr = &p_ptr->inventory_list[i];
+		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
+		if (item_tester_okay(o_ptr))
+		{
+			tmp_val[0] = index_to_label(i);
+			tmp_val[1] = ')';
+		}
+
+		Term_putstr(0, i, 3, TERM_WHITE, tmp_val);
+		object_desc(o_name, o_ptr, 0);
+		n = strlen(o_name);
+		attr = tval_to_attr[o_ptr->tval % 128];
+		if (o_ptr->timeout)
+		{
+			attr = TERM_L_DARK;
+		}
+
+		Term_putstr(3, i, n, attr, o_name);
+		Term_erase(3 + n, i, 255);
+
+		if (show_weights)
+		{
+			int wgt = o_ptr->weight * o_ptr->number;
+#ifdef JP
+			sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt), lbtokg2(wgt));
+#else
+			sprintf(tmp_val, "%3d.%1d lb", wgt / 10, wgt % 10);
+#endif
+			prt(tmp_val, i, wid - 9);
+		}
+	}
+
+	for (i = z; i < hgt; i++)
+	{
+		Term_erase(0, i, 255);
+	}
+}
