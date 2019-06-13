@@ -161,7 +161,7 @@ bool cmd_limit_blind(player_type *creature_ptr)
 	}
 	if (no_lite())
 	{
-		msg_print(_("明かりがないので、暗くて読めない。", "You have no light to read by."));
+		msg_print(_("明かりがないので見えない。", "You have no light."));
 		return TRUE;
 	}
 	return FALSE;
