@@ -1318,9 +1318,9 @@ static bool cast_mirror_spell(int spell)
 {
 	DIRECTION dir;
 	PLAYER_LEVEL plev = p_ptr->lev;
-	int		tmp;
+	int tmp;
 	TIME_EFFECT t;
-	int		x, y;
+	POSITION x, y;
 
 	/* spell code */
 	switch (spell)
