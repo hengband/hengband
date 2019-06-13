@@ -6,6 +6,7 @@
 #include "player-effects.h"
 #include "spells-summon.h"
 #include "spells-status.h"
+#include "spells-floor.h"
 #include "spells.h"
 #include "targeting.h"
 #include "view-mainwindow.h"

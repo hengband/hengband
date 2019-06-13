@@ -21,6 +21,7 @@
 #include "creature.h"
 #include "melee.h"
 #include "spells.h"
+#include "spells-floor.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "avatar.h"

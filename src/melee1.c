@@ -43,6 +43,7 @@
 #include "player-personality.h"
 #include "view-mainwindow.h"
 #include "world.h"
+#include "spells-floor.h"
 
 
  /*!

@@ -9,7 +9,17 @@
 extern void disturb(bool stop_search, bool flush_output);
 extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(DIRECTION dir);
+
+#define MPE_STAYING       0x00000001
+#define MPE_FORGET_FLOW   0x00000002
+#define MPE_HANDLE_STUFF  0x00000004
+#define MPE_ENERGY_USE    0x00000008
+#define MPE_DONT_PICKUP   0x00000010
+#define MPE_DO_PICKUP     0x00000020
+#define MPE_BREAK_TRAP    0x00000040
+#define MPE_DONT_SWAP_MON 0x00000080
 extern bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
+
 extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
 extern bool trap_can_be_ignored(FEAT_IDX feat);
@@ -31,19 +41,6 @@ extern void travel_step(void);
 #define PATTERN_TILE_OLD      6
 #define PATTERN_TILE_TELEPORT 7
 #define PATTERN_TILE_WRECKED  8
-
-/*
- * Bit flags for move_player_effect()
- */
-#define MPE_STAYING       0x00000001
-#define MPE_FORGET_FLOW   0x00000002
-#define MPE_HANDLE_STUFF  0x00000004
-#define MPE_ENERGY_USE    0x00000008
-#define MPE_DONT_PICKUP   0x00000010
-#define MPE_DO_PICKUP     0x00000020
-#define MPE_BREAK_TRAP    0x00000040
-#define MPE_DONT_SWAP_MON 0x00000080
-
 
 
 #ifdef TRAVEL

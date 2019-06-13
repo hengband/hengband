@@ -27,6 +27,7 @@
 #include "player-class.h"
 #include "player-damage.h"
 #include "spells-status.h"
+#include "spells-floor.h"
 #include "object-hook.h"
 #include "spells.h"
 #include "cmd-basic.h"

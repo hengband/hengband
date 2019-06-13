@@ -192,8 +192,6 @@ extern bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 extern bool unleash_mana_storm(player_type *creature_ptr, bool powerful);
 extern bool crusade(void);
 extern bool turn_undead(void);
-extern bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate);
-extern bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx);
 extern void lite_room(POSITION y1, POSITION x1);
 extern bool starlight(bool magic);
 extern void unlite_room(POSITION y1, POSITION x1);
