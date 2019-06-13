@@ -2,6 +2,7 @@
 #include "util.h"
 
 #include "core.h"
+#include "dungeon.h"
 #include "floor.h"
 #include "floor-save.h"
 #include "floor-events.h"

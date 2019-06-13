@@ -293,7 +293,6 @@ extern void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode);
 extern void teleport_away_followable(MONSTER_IDX m_idx);
 extern bool teleport_level_other(player_type *creature_ptr);
 extern void teleport_level(MONSTER_IDX m_idx);
-extern DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);
 extern bool recall_player(player_type *creature_ptr, TIME_EFFECT turns);
 extern bool free_level_recall(player_type *creature_ptr);
 extern bool reset_recall(void);

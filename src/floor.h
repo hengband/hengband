@@ -167,26 +167,6 @@ typedef struct {
 
 #define DF1_LAKE_MASK (DF1_LAKE_WATER | DF1_LAKE_LAVA | DF1_LAKE_RUBBLE | DF1_LAKE_TREE | DF1_LAKE_POISONOUS | DF1_LAKE_ACID)
 
-#define DUNGEON_ANGBAND  1
-#define DUNGEON_GALGALS  2
-#define DUNGEON_ORC      3
-#define DUNGEON_MAZE     4
-#define DUNGEON_DRAGON   5
-#define DUNGEON_GRAVE    6
-#define DUNGEON_WOOD     7
-#define DUNGEON_VOLCANO  8
-#define DUNGEON_HELL     9
-#define DUNGEON_HEAVEN   10
-#define DUNGEON_OCEAN    11
-#define DUNGEON_CASTLE   12
-#define DUNGEON_CTH      13
-#define DUNGEON_MOUNTAIN 14
-#define DUNGEON_GOLD     15
-#define DUNGEON_NO_MAGIC 16
-#define DUNGEON_NO_MELEE 17
-#define DUNGEON_CHAMELEON 18
-#define DUNGEON_DARKNESS 19
-
 /*
  * Determines if a map location is fully inside the outer walls
  */
