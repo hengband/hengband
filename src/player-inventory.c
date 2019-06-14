@@ -70,7 +70,7 @@ void display_equip(void)
 	{
 		o_ptr = &p_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr))
+		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, item_tester_tval))
 		{
 			tmp_val[0] = index_to_label(i);
 			tmp_val[1] = ')';
@@ -159,7 +159,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
-		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr) || (mode & USE_FULL)) &&
+		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL)) &&
 			(!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
 			(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
@@ -359,7 +359,7 @@ bool get_item_okay(OBJECT_IDX i)
 	if (select_ring_slot) return is_ring_slot(i);
 
 	/* Verify the item */
-	if (!item_tester_okay(&p_ptr->inventory_list[i])) return (FALSE);
+	if (!item_tester_okay(&p_ptr->inventory_list[i], item_tester_tval)) return (FALSE);
 
 	/* Assume okay */
 	return (TRUE);
@@ -378,7 +378,7 @@ bool can_get_item(void)
 	ITEM_NUMBER floor_num = 0;
 
 	for (j = 0; j < INVEN_TOTAL; j++)
-		if (item_tester_okay(&p_ptr->inventory_list[j]))
+		if (item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval))
 			return TRUE;
 
 	floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
@@ -535,7 +535,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 		if (!o_ptr->inscription) continue;
 
 		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
+		if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
 		s = my_strchr(quark_str(o_ptr->inscription), '@');
@@ -578,7 +578,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 		if (!o_ptr->inscription) continue;
 
 		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
+		if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
 		s = my_strchr(quark_str(o_ptr->inscription), '@');
@@ -726,7 +726,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
-		if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
+		if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
 
 		object_desc(o_name, o_ptr, 0);
 
@@ -1041,7 +1041,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			o_ptr = &current_floor_ptr->o_list[k];
 
 			/* Validate the item */
-			if (item_tester_okay(o_ptr) || (mode & USE_FULL))
+			if (item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
 				item_tester_tval = 0;
@@ -1110,7 +1110,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_inven++;
 	}
 
 	/* Restrict p_ptr->inventory_list indexes */
@@ -1127,7 +1127,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
@@ -1156,7 +1156,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Accept the item on the floor if legal */
-			if ((item_tester_okay(o_ptr) || (mode & USE_FULL)) && (o_ptr->marked & OM_FOUND)) allow_floor = TRUE;
+			if ((item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL)) && (o_ptr->marked & OM_FOUND)) allow_floor = TRUE;
 		}
 	}
 
@@ -1504,7 +1504,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 						next_o_idx = o_ptr->next_o_idx;
 
 						/* Validate the item */
-						if (!item_tester_okay(o_ptr) && !(mode & USE_FULL)) continue;
+						if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
 
 						/* Special index */
 						k = 0 - this_o_idx;
@@ -1796,7 +1796,7 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Item tester */
-		if ((mode & 0x01) && !item_tester_okay(o_ptr)) continue;
+		if ((mode & 0x01) && !item_tester_okay(o_ptr, item_tester_tval)) continue;
 
 		/* Marked */
 		if ((mode & 0x02) && !(o_ptr->marked & OM_FOUND)) continue;
@@ -2034,7 +2034,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			}
 
 			/* Validate the item */
-			else if (item_tester_okay(&current_floor_ptr->o_list[0 - (*cp)]) || (mode & USE_FULL))
+			else if (item_tester_okay(&current_floor_ptr->o_list[0 - (*cp)], item_tester_tval) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
 				item_tester_tval = 0;
@@ -2105,7 +2105,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_inven++;
 	}
 
 	/* Restrict p_ptr->inventory_list indexes */
@@ -2122,7 +2122,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j]) || (mode & USE_FULL)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
@@ -3365,7 +3365,7 @@ void display_inven(void)
 	{
 		o_ptr = &p_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-		if (item_tester_okay(o_ptr))
+		if (item_tester_okay(o_ptr, item_tester_tval))
 		{
 			tmp_val[0] = index_to_label(i);
 			tmp_val[1] = ')';

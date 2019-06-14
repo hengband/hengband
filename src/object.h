@@ -414,7 +414,7 @@ extern s16b wield_slot(object_type *o_ptr);
 extern concptr mention_use(int i);
 extern concptr describe_use(int i);
 extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
-extern bool item_tester_okay(object_type *o_ptr);
+extern bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval);
 extern void display_inven(void);
 extern void display_equip(void);
 extern COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode);
