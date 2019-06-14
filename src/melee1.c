@@ -1009,25 +1009,36 @@ static int check_hit(int power, DEPTH level, int stun)
 {
 	int i, k, ac;
 
-	/* Percentile dice */
 	k = randint0(100);
-
 	if (stun && one_in_(2)) return FALSE;
-
-	/* Hack -- Always miss or hit */
 	if (k < 10) return (k < 5);
-
-	/* Calculate the "attack quality" */
 	i = (power + (level * 3));
 
-	/* Total armor */
 	ac = p_ptr->ac + p_ptr->to_a;
 	if (p_ptr->special_attack & ATTACK_SUIKEN) ac += (p_ptr->lev * 2);
 
-	/* Power and Level compete against Armor */
 	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
+	return (FALSE);
+}
 
-	/* Assume miss */
+/*!
+ * @brief モンスターから敵モンスターへの命中判定
+ * @param power 打撃属性による基本命中値
+ * @param level 攻撃側モンスターのレベル
+ * @param ac 目標モンスターのAC
+ * @param stun 攻撃側モンスターが朦朧状態ならTRUEを返す
+ * @return 命中ならばTRUEを返す
+ */
+static int check_hit2(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
+{
+	int i, k;
+
+	k = randint0(100);
+	if (stun && one_in_(2)) return FALSE;
+	if (k < 10) return (k < 5);
+	i = (power + (level * 3));
+
+	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
 	return (FALSE);
 }
 
