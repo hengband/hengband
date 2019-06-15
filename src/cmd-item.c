@@ -1546,73 +1546,45 @@ void do_cmd_use(void)
 
 	switch (o_ptr->tval)
 	{
-		/* Spike a door */
 		case TV_SPIKE:
-		{
 			do_cmd_spike();
 			break;
-		}
 
-		/* Eat some food */
 		case TV_FOOD:
-		{
 			do_cmd_eat_food_aux(item);
 			break;
-		}
 
-		/* Aim a wand */
 		case TV_WAND:
-		{
 			do_cmd_aim_wand_aux(item);
 			break;
-		}
 
-		/* Use a staff */
 		case TV_STAFF:
-		{
 			do_cmd_use_staff_aux(item);
 			break;
-		}
 
-		/* Zap a rod */
 		case TV_ROD:
-		{
 			do_cmd_zap_rod_aux(item);
 			break;
-		}
 
-		/* Quaff a potion */
 		case TV_POTION:
-		{
 			do_cmd_quaff_potion_aux(item);
 			break;
-		}
 
-		/* Read a scroll */
 		case TV_SCROLL:
-		{
 			if (cmd_limit_blind(p_ptr)) return;
 			if (cmd_limit_confused(p_ptr)) return;
-
 			do_cmd_read_scroll_aux(item, TRUE);
 			break;
-		}
 
-		/* Fire ammo */
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
-		{
 			exe_fire(item, &p_ptr->inventory_list[INVEN_BOW], SP_NONE);
 			break;
-		}
 
-		/* Activate an artifact */
 		default:
-		{
 			do_cmd_activate_aux(item);
 			break;
-		}
 	}
 }
 
