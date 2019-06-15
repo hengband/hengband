@@ -186,14 +186,14 @@ bool get_item_okay(OBJECT_IDX i)
  * @return アイテムを拾えるならばTRUEを返す。
  * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
-bool can_get_item(void)
+bool can_get_item(OBJECT_TYPE_VALUE tval)
 {
 	int j;
 	OBJECT_IDX floor_list[23];
 	ITEM_NUMBER floor_num = 0;
 
 	for (j = 0; j < INVEN_TOTAL; j++)
-		if (item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval))
+		if (item_tester_okay(&p_ptr->inventory_list[j], tval))
 			return TRUE;
 
 	floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);

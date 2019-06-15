@@ -430,7 +430,7 @@ extern void toggle_inven_equip(void);
 #define USE_FORCE 0x08 /*!< 特殊: wキーで錬気術への切り替えを許可する */
 #define IGNORE_BOTHHAND_SLOT 0x10 /*!< アイテム表示/選択範囲: 両手持ちスロットを選択に含めない */
 #define USE_FULL  0x20 /*!< アイテム表示/選択範囲: 空欄まですべて表示する*/
-extern bool can_get_item(void);
+extern bool can_get_item(OBJECT_TYPE_VALUE tval);
 extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode);
 extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option);
 PERCENTAGE breakage_chance(object_type *o_ptr, SPELL_IDX snipe_type);

@@ -2094,7 +2094,7 @@ bool ident_spell(bool only_equip)
 	else
 		item_tester_hook = item_tester_hook_identify;
 
-	if (can_get_item())
+	if (can_get_item(item_tester_tval))
 	{
 		q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
 	}
@@ -2210,7 +2210,7 @@ bool identify_fully(bool only_equip)
 	else
 		item_tester_hook = item_tester_hook_identify_fully;
 
-	if (can_get_item())
+	if (can_get_item(item_tester_tval))
 	{
 		q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
 	}
