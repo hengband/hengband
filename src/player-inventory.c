@@ -1563,10 +1563,10 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 /*
  * Choose an item and get auto-picker entry from it.
  */
-object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option)
+object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval)
 {
 	OBJECT_IDX item;
-	if (!get_item(&item, q, s, option, item_tester_tval)) return NULL;
+	if (!get_item(&item, q, s, option, tval)) return NULL;
 	if (idx) *idx = item;
 
 	if (item == INVEN_FORCE) return NULL;
@@ -2923,7 +2923,7 @@ static bool py_pickup_floor_aux(void)
 	q = _("どれを拾いますか？", "Get which item? ");
 	s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
 
-	if (choose_object(&item, q, s, (USE_FLOOR)))
+	if (choose_object(&item, q, s, (USE_FLOOR), 0))
 	{
 		this_o_idx = 0 - item;
 	}

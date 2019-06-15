@@ -2660,7 +2660,7 @@ static PRICE compare_weapons(PRICE bcost)
 	q = _("第一の武器は？", "What is your first weapon? ");
 	s = _("比べるものがありません。", "You have nothing to compare.");
 
-	o_ptr[0] = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
+	o_ptr[0] = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr[0])
 	{
 		screen_load();
@@ -2731,7 +2731,7 @@ static PRICE compare_weapons(PRICE bcost)
 			s = _("比べるものがありません。", "You have nothing to compare.");
 
 			/* Get the second weapon */
-			o_ptr[1] = choose_object(&item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
+			o_ptr[1] = choose_object(&item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
 			if (!o_ptr[1]) continue;
 
 			total += cost;
@@ -2921,7 +2921,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_broken_weapon;
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP), item_tester_tval);
 	if (!o_ptr) return (0);
 
 	/* It is worthless */
@@ -2948,7 +2948,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
-	mo_ptr = choose_object(&mater, q, s, (USE_INVEN | USE_EQUIP));
+	mo_ptr = choose_object(&mater, q, s, (USE_INVEN | USE_EQUIP), 0);
 	if (!mo_ptr) return (0);
 	if (mater == item)
 	{
@@ -3184,7 +3184,7 @@ static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_C
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるものがありません。", "You have nothing to improve.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester_tval);
 	if (!o_ptr) return (FALSE);
 
 	/* Check if the player has enough money */
@@ -3297,7 +3297,7 @@ static void building_recharge(void)
 	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
 	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	k_ptr = &k_info[o_ptr->k_idx];

@@ -521,7 +521,7 @@ void do_cmd_eat_food(void)
 	q = _("どれを食べますか? ", "Eat which item? ");
 	s = _("食べ物がない。", "You have nothing to eat.");
 
-	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Eat the object */
 	do_cmd_eat_food_aux(item);

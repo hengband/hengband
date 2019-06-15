@@ -538,7 +538,7 @@ static void drain_essence(void)
 	q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
 	s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
@@ -1120,7 +1120,7 @@ static void add_essence(ESSENCE_IDX mode)
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr)))
@@ -1339,7 +1339,7 @@ static void erase_essence(void)
 	q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
 	s = _("エッセンスを付加したアイテムがありません。", "You have nothing to remove essence.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));

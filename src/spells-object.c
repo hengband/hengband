@@ -178,7 +178,7 @@ bool create_ammo(void)
 
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
-		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 		if (!q_ptr) return FALSE;
 
 		q_ptr = &forge;
@@ -225,7 +225,7 @@ bool create_ammo(void)
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
 
-		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 		if (!q_ptr) return FALSE;
 
 		q_ptr = &forge;
@@ -282,7 +282,7 @@ bool import_magic_device(void)
 	q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
 	s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return (FALSE);
 
 	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
@@ -739,7 +739,7 @@ bool rustproof(void)
 	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
 	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -953,7 +953,7 @@ bool bless_weapon(void)
 	q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
 	s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1099,7 +1099,7 @@ bool pulish_shield(void)
 	q = _("どの盾を磨きますか？", "Pulish which weapon? ");
 	s = _("磨く盾がありません。", "You have weapon to pulish.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));

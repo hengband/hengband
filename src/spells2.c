@@ -3950,7 +3950,7 @@ bool psychometry(void)
 	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
 	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	/* It is fully known, no information needed */

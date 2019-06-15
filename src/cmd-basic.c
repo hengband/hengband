@@ -2303,14 +2303,10 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 		set_action(ACTION_NONE);
 	}
 
-	/* Require proper missile */
-	item_tester_tval = p_ptr->tval_ammo;
-
 	q = _("どれを撃ちますか? ", "Fire which item? ");
 	s = _("発射されるアイテムがありません。", "You have nothing to fire.");
 
-
-	ammo_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	ammo_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), p_ptr->tval_ammo);
 	if (!ammo_ptr)
 	{
 		flush();
@@ -2401,7 +2397,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 			item_tester_hook = item_tester_hook_boomerang;
 			q = _("どの武器を投げますか? ", "Throw which item? ");
 			s = _("投げる武器がない。", "You have nothing to throw.");
-			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr)
 			{
 				flush();
@@ -2423,7 +2419,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	{
 		q = _("どのアイテムを投げますか? ", "Throw which item? ");
 		s = _("投げるアイテムがない。", "You have nothing to throw.");
-		o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP));
+		o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP), 0);
 		if (!o_ptr)
 		{
 			flush();

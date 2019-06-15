@@ -432,7 +432,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どれを呪いますか？", "Which weapon do you curse?");
 			s = _("武器を装備していない。", "You wield no weapons.");
 
-			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -728,7 +728,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どれを呪いますか？", "Which piece of armour do you curse?");
 			s = _("防具を装備していない。", "You wield no piece of armours.");
 
-			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
 			o_ptr = &p_ptr->inventory_list[item];
@@ -935,7 +935,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
 			s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
-			o_ptr = choose_object(&item, q, s, (USE_EQUIP));
+			o_ptr = choose_object(&item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
 			object_flags(o_ptr, f);

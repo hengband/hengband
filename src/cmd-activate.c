@@ -650,7 +650,7 @@ void do_cmd_activate(void)
 	q = _("どのアイテムを始動させますか? ", "Activate which item? ");
 	s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
 
-	if (!choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
+	if (!choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 
 	/* Activate the item */
 	do_cmd_activate_aux(item);

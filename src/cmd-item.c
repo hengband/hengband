@@ -189,7 +189,7 @@ void do_cmd_wield(void)
 	q = _("どれを装備しますか? ", "Wear/Wield which item? ");
 	s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	/* Check the slot */
@@ -210,7 +210,7 @@ void do_cmd_wield(void)
 			/* Choose a weapon from the equipment only */
 			q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
 			s = _("おっと。", "Oops.");
-			if (!choose_object(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT))) return;
+			if (!choose_object(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
 		}
 
@@ -226,7 +226,7 @@ void do_cmd_wield(void)
 			/* Choose a hand */
 			q = _("どちらの手に装備しますか?", "Equip which hand? ");
 			s = _("おっと。", "Oops.");
-			if (!choose_object(&slot, q, s, (USE_EQUIP))) return;
+			if (!choose_object(&slot, q, s, (USE_EQUIP), 0)) return;
 		}
 		break;
 
@@ -256,7 +256,7 @@ void do_cmd_wield(void)
 			q = _("どちらの手に装備しますか?", "Equip which hand? ");
 			s = _("おっと。", "Oops.");
 			
-			if (!choose_object(&slot, q, s, (USE_EQUIP))) return;
+			if (!choose_object(&slot, q, s, (USE_EQUIP), 0)) return;
 			if ((slot == INVEN_LARM) && !has_melee_weapon(INVEN_RARM))
 				need_switch_wielding = INVEN_RARM;
 		}
@@ -278,7 +278,7 @@ void do_cmd_wield(void)
 		/* Restrict the choices */
 		select_ring_slot = TRUE;
 
-		if (!choose_object(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT)))
+		if (!choose_object(&slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
 		{
 			select_ring_slot = FALSE;
 			return;
@@ -539,7 +539,7 @@ void do_cmd_takeoff(void)
 	q = _("どれを装備からはずしますか? ", "Take off which item? ");
 	s = _("はずせる装備がない。", "You are not wearing anything to take off.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Item is cursed */
@@ -604,7 +604,7 @@ void do_cmd_drop(void)
 	q = _("どのアイテムを落としますか? ", "Drop which item? ");
 	s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Hack -- Cannot remove cursed items */
@@ -667,7 +667,7 @@ void do_cmd_destroy(void)
 	q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
 	s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	/* Verify unless quantity given beforehand */
@@ -844,7 +844,7 @@ void do_cmd_observe(void)
 	q = _("どのアイテムを調べますか? ", "Examine which item? ");
 	s = _("調べられるアイテムがない。", "You have nothing to examine.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Require full knowledge */
@@ -875,7 +875,7 @@ void do_cmd_uninscribe(void)
 	q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
 	s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Nothing to remove */
@@ -914,7 +914,7 @@ void do_cmd_inscribe(void)
 	q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
 	s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Describe the activity */
@@ -965,7 +965,7 @@ static void do_cmd_refill_lamp(void)
 	q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
 	s = _("油つぼがない。", "You have no flasks of oil.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	take_turn(p_ptr, 50);
@@ -1032,7 +1032,7 @@ static void do_cmd_refill_torch(void)
 	q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
 	s = _("他に松明がない。", "You have no extra torches.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	take_turn(p_ptr, 50);
@@ -1541,7 +1541,7 @@ void do_cmd_use(void)
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing to use.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	switch (o_ptr->tval)

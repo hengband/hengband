@@ -1042,7 +1042,7 @@ void brand_weapon(int brand_type)
 	q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
 	s = _("強化できる武器がない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* you can never modify artifacts / ego-items */
@@ -1653,7 +1653,7 @@ bool alchemy(void)
 	q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
 	s = _("金に変えられる物がありません。", "You have nothing to current_world_ptr->game_turn to gold.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return (FALSE);
 
 	/* See how many items */
@@ -1889,7 +1889,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1939,7 +1939,7 @@ bool artifact_scroll(void)
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -2110,7 +2110,7 @@ bool ident_spell(bool only_equip)
 
 	s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	old_known = identify_item(o_ptr);
@@ -2160,7 +2160,7 @@ bool mundane_spell(bool only_equip)
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing you can use.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
@@ -2226,7 +2226,7 @@ bool identify_fully(bool only_equip)
 
 	s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	old_known = identify_item(o_ptr);
@@ -2303,7 +2303,7 @@ bool recharge(int power)
 	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
 	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return (FALSE);
 
 	/* Get the object kind. */
@@ -3388,7 +3388,7 @@ bool eat_magic(int power)
 	q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
 	s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return FALSE;
 
 	k_ptr = &k_info[o_ptr->k_idx];

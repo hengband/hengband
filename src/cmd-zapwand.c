@@ -461,10 +461,6 @@ void do_cmd_aim_wand(void)
 
 	if (p_ptr->wild_mode) return;
 	if (cmd_limit_arena(p_ptr)) return;
-
-	/* Restrict choices to wands */
-	item_tester_tval = TV_WAND;
-
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
 		set_action(ACTION_NONE);
@@ -472,7 +468,7 @@ void do_cmd_aim_wand(void)
 
 	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
-	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR))) return;
+	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
 
 	do_cmd_aim_wand_aux(item);
 }

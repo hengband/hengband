@@ -1136,7 +1136,7 @@ static void do_cmd_wiz_play(void)
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 
 	if (!o_ptr) return;
 	

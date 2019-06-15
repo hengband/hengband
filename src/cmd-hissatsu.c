@@ -410,7 +410,7 @@ void do_cmd_gain_hissatsu(void)
 	q = _("どの書から学びますか? ", "Study which book? ");
 	s = _("読める書がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
 	if (!o_ptr) return;
 
 	for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++)

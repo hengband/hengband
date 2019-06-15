@@ -646,7 +646,7 @@ void do_cmd_read_scroll(void)
 	q = _("どの巻物を読みますか? ", "Read which scroll? ");
 	s = _("読める巻物がない。", "You have no scrolls to read.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR));
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	/* Read the scroll */

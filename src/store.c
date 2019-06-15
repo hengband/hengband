@@ -4941,7 +4941,7 @@ static void store_sell(void)
 		s = _("欲しい物がないですねえ。", "You have nothing that I want.");
 	}
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT));
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Hack -- Cannot remove cursed items */
