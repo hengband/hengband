@@ -345,7 +345,7 @@ const activation_type activation_info[] =
  * the user hits "escape" at the "direction" prompt.
  * </pre>
  */
-void do_cmd_activate_aux(INVENTORY_IDX item)
+void exe_activate(INVENTORY_IDX item)
 {
 	DIRECTION dir;
 	DEPTH lev;
@@ -653,7 +653,7 @@ void do_cmd_activate(void)
 	if (!choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 
 	/* Activate the item */
-	do_cmd_activate_aux(item);
+	exe_activate(item);
 }
 
 /*!
