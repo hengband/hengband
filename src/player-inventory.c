@@ -500,7 +500,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
+static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	COMMAND_CODE start, end;
@@ -535,7 +535,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 		if (!o_ptr->inscription) continue;
 
 		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
+		if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
 		s = my_strchr(quark_str(o_ptr->inscription), '@');
@@ -578,7 +578,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode)
 		if (!o_ptr->inscription) continue;
 
 		/* Skip non-choice */
-		if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
+		if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
 		s = my_strchr(quark_str(o_ptr->inscription), '@');
@@ -628,7 +628,7 @@ void prepare_label_string(char *label, BIT_FLAGS mode)
 		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
-		if (get_tag(&index, c, mode))
+		if (get_tag(&index, c, mode, item_tester_tval))
 		{
 			/* Delete the overwritten label */
 			if (label[i] == c) label[i] = ' ';
@@ -1059,7 +1059,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			if (prev_tag && command_cmd)
 			{
 				/* Look up the tag and validate the item */
-				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN)) /* Reject */;
+				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, item_tester_tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
 				else if (!get_item_okay(k)) /* Reject */;
 				else
@@ -1536,7 +1536,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			case '7': case '8': case '9':
 			{
 				/* Look up the tag */
-				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN))
+				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester_tval))
 				{
 					bell();
 					break;
@@ -1627,7 +1627,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				bool not_found = FALSE;
 
 				/* Look up the alphabetical tag */
-				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN))
+				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester_tval))
 				{
 					not_found = TRUE;
 				}
@@ -2052,7 +2052,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			if (prev_tag && command_cmd)
 			{
 				/* Look up the tag and validate the item */
-				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN)) /* Reject */;
+				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, item_tester_tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
 				else if (!get_item_okay(k)) /* Reject */;
 				else
@@ -2809,7 +2809,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				if (command_wrk != USE_FLOOR)
 				{
 					/* Look up the tag */
-					if (!get_tag(&k, which, command_wrk))
+					if (!get_tag(&k, which, command_wrk, item_tester_tval))
 					{
 						bell();
 						break;
@@ -2941,7 +2941,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 					bool not_found = FALSE;
 
 					/* Look up the alphabetical tag */
-					if (!get_tag(&k, which, command_wrk))
+					if (!get_tag(&k, which, command_wrk, item_tester_tval))
 					{
 						not_found = TRUE;
 					}
