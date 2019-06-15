@@ -1610,7 +1610,7 @@ void do_cmd_use(void)
 		/* Activate an artifact */
 		default:
 		{
-			do_cmd_activate_aux(item);
+			do_cmd_activate_aux(p_ptr, item);
 			break;
 		}
 	}

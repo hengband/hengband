@@ -345,7 +345,7 @@ const activation_type activation_info[] =
  * the user hits "escape" at the "direction" prompt.
  * </pre>
  */
-void do_cmd_activate_aux(INVENTORY_IDX item)
+void do_cmd_activate_aux(player_type *user_ptr, INVENTORY_IDX item)
 {
 	DIRECTION dir;
 	DEPTH lev;
@@ -357,7 +357,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &p_ptr->inventory_list[item];
+		o_ptr = &user_ptr->inventory_list[item];
 	}
 
 	/* Get the item (on the floor) */
@@ -366,7 +366,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		o_ptr = &current_floor_ptr->o_list[0 - item];
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(user_ptr, 100);
 
 	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;
@@ -383,10 +383,10 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	else if (((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)) && o_ptr->name2) lev = e_info[o_ptr->name2].level;
 
 	/* Base chance of success */
-	chance = p_ptr->skill_dev;
+	chance = user_ptr->skill_dev;
 
 	/* Confusion hurts skill */
-	if (p_ptr->confused) chance = chance / 2;
+	if (user_ptr->confused) chance = chance / 2;
 
 	fail = lev+5;
 	if (chance > fail) fail -= (chance - fail)*2;
@@ -394,9 +394,9 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	if (fail < USE_DEVICE) fail = USE_DEVICE;
 	if (chance < USE_DEVICE) chance = USE_DEVICE;
 
-	if(cmd_limit_time_walk(p_ptr)) return;
+	if(cmd_limit_time_walk(user_ptr)) return;
 
-	if (p_ptr->pclass == CLASS_BERSERKER) success = FALSE;
+	if (user_ptr->pclass == CLASS_BERSERKER) success = FALSE;
 	else if (chance > fail)
 	{
 		if (randint0(chance*2) < fail) success = FALSE;
@@ -429,7 +429,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN)))
 	{
 		msg_print(_("燃料がない。", "It has no fuel."));
-		free_turn(p_ptr);
+		free_turn(user_ptr);
 		return;
 	}
 
@@ -443,7 +443,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	{
 		(void)activate_artifact(o_ptr);
 
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+		user_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Success */
 		return;
@@ -452,7 +452,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	/* Special items */
 	else if (o_ptr->tval == TV_WHISTLE)
 	{
-		if (music_singing_any()) stop_singing(p_ptr);
+		if (music_singing_any()) stop_singing(user_ptr);
 		if (hex_spelling_any()) stop_hex_spell_all();
 
 		{
@@ -467,7 +467,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 			/* Process the monsters (backwards) */
 			for (pet_ctr = current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
-				if (is_pet(&current_floor_ptr->m_list[pet_ctr]) && (p_ptr->riding != pet_ctr))
+				if (is_pet(&current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
 				  who[max_pet++] = pet_ctr;
 			}
 
@@ -477,7 +477,7 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 			for (i = 0; i < max_pet; i++)
 			{
 				pet_ctr = who[i];
-				teleport_monster_to(pet_ctr, p_ptr->y, p_ptr->x, 100, TELEPORT_PASSIVE);
+				teleport_monster_to(pet_ctr, user_ptr->y, user_ptr->x, 100, TELEPORT_PASSIVE);
 			}
 
 			/* Free the "who" array */
@@ -548,9 +548,9 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 		{
 			success = FALSE;
 			if (!get_direction(&dir, FALSE, FALSE)) return;
-			if (monster_can_enter(p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
+			if (monster_can_enter(user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
 			{
-				if (place_monster_aux(0, p_ptr->y + ddy[dir], p_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
+				if (place_monster_aux(0, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
 				{
 					if (o_ptr->xtra3) current_floor_ptr->m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
 					if (o_ptr->xtra5) current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;
@@ -653,7 +653,7 @@ void do_cmd_activate(void)
 	if (!choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 
 	/* Activate the item */
-	do_cmd_activate_aux(item);
+	do_cmd_activate_aux(p_ptr, item);
 }
 
 /*!
