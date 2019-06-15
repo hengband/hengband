@@ -181,7 +181,7 @@ bool get_item_okay(OBJECT_IDX i)
 }
 
 /*!
- * @brief プレイヤーがオブジェクトを拾うことができる状態かを返す /
+ * @brief 規定の処理にできるアイテムがプレイヤーの利用可能範囲内にあるかどうかを返す /
  * Determine whether get_item() can get some item or not
  * @return アイテムを拾えるならばTRUEを返す。
  * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
