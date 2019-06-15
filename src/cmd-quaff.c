@@ -134,11 +134,11 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 		case SV_POTION_SALT_WATER:
 			msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
 
-			if (!(PRACE_IS_(RACE_GOLEM) ||
-			      PRACE_IS_(RACE_ZOMBIE) ||
-			      PRACE_IS_(RACE_DEMON) ||
-			      PRACE_IS_(RACE_ANDROID) ||
-			      PRACE_IS_(RACE_SPECTRE) ||
+			if (!(PRACE_IS_(p_ptr, RACE_GOLEM) ||
+			      PRACE_IS_(p_ptr, RACE_ZOMBIE) ||
+			      PRACE_IS_(p_ptr, RACE_DEMON) ||
+			      PRACE_IS_(p_ptr, RACE_ANDROID) ||
+			      PRACE_IS_(p_ptr, RACE_SPECTRE) ||
 			      (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)))
 			{
 				/* Only living creatures get thirsty */
@@ -512,7 +512,7 @@ void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
 		}
 	}
 
-	if (PRACE_IS_(RACE_SKELETON))
+	if (PRACE_IS_(p_ptr, RACE_SKELETON))
 	{
 		msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
 		(void)potion_smash_effect(0, p_ptr->y, p_ptr->x, q_ptr->k_idx);

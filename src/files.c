@@ -2743,7 +2743,7 @@ static void tim_player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 	if (IS_FAST() || p_ptr->slow)
 		add_flag(flgs, TR_SPEED);
 
-	if (IS_OPPOSE_ACID() && !(p_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(RACE_YEEK) && (p_ptr->lev > 19)))
+	if (IS_OPPOSE_ACID() && !(p_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(p_ptr, RACE_YEEK) && (p_ptr->lev > 19)))
 		add_flag(flgs, TR_RES_ACID);
 	if (IS_OPPOSE_ELEC() && !(p_ptr->special_defense & DEFENSE_ELEC))
 		add_flag(flgs, TR_RES_ELEC);
@@ -2942,13 +2942,13 @@ static void player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
-	if (PRACE_IS_(RACE_SPECTRE))
+	if (PRACE_IS_(p_ptr, RACE_SPECTRE))
 		add_flag(flgs, TR_RES_NETHER);
-	if (p_ptr->mimic_form == MIMIC_VAMPIRE || PRACE_IS_(RACE_VAMPIRE))
+	if (p_ptr->mimic_form == MIMIC_VAMPIRE || PRACE_IS_(p_ptr, RACE_VAMPIRE))
 		add_flag(flgs, TR_RES_DARK);
 	if (p_ptr->mimic_form == MIMIC_DEMON_LORD)
 		add_flag(flgs, TR_RES_FIRE);
-	else if (PRACE_IS_(RACE_YEEK) && p_ptr->lev > 19)
+	else if (PRACE_IS_(p_ptr, RACE_YEEK) && p_ptr->lev > 19)
 		add_flag(flgs, TR_RES_ACID);
 }
 
@@ -3001,11 +3001,11 @@ static void player_vuln_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_RES_FIRE);
 		add_flag(flgs, TR_RES_COLD);
 	}
-	if (PRACE_IS_(RACE_ANDROID))
+	if (PRACE_IS_(p_ptr, RACE_ANDROID))
 		add_flag(flgs, TR_RES_ELEC);
-	if (PRACE_IS_(RACE_ENT))
+	if (PRACE_IS_(p_ptr, RACE_ENT))
 		add_flag(flgs, TR_RES_FIRE);
-	if (PRACE_IS_(RACE_VAMPIRE) || PRACE_IS_(RACE_S_FAIRY) ||
+	if (PRACE_IS_(p_ptr, RACE_VAMPIRE) || PRACE_IS_(p_ptr, RACE_S_FAIRY) ||
 	    (p_ptr->mimic_form == MIMIC_VAMPIRE))
 		add_flag(flgs, TR_RES_LITE);
 }
@@ -3614,7 +3614,7 @@ static void display_player_stat_info(void)
 		if ((p_ptr->stat_max[i] > 18) && (p_ptr->stat_top[i] <= 18))
 			e_adj = p_ptr->stat_top[i] - (p_ptr->stat_max[i] - 19) / 10 - 19;
 
-		if (PRACE_IS_(RACE_ENT))
+		if (PRACE_IS_(p_ptr, RACE_ENT))
 		{
 			switch (i)
 			{

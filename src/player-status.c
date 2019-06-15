@@ -1643,8 +1643,8 @@ void calc_bonuses(void)
 		/* Unencumbered Monks become faster every 10 levels */
 		if (!(heavy_armor()))
 		{
-			if (!(PRACE_IS_(RACE_KLACKON) ||
-				PRACE_IS_(RACE_SPRITE) ||
+			if (!(PRACE_IS_(p_ptr, RACE_KLACKON) ||
+				PRACE_IS_(p_ptr, RACE_SPRITE) ||
 				(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
 				new_speed += (p_ptr->lev) / 10;
 
@@ -1695,8 +1695,8 @@ void calc_bonuses(void)
 			(!p_ptr->inventory_list[INVEN_LARM].k_idx || p_ptr->hidarite))
 		{
 			new_speed += 3;
-			if (!(PRACE_IS_(RACE_KLACKON) ||
-				PRACE_IS_(RACE_SPRITE) ||
+			if (!(PRACE_IS_(p_ptr, RACE_KLACKON) ||
+				PRACE_IS_(p_ptr, RACE_SPRITE) ||
 				(p_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
 				new_speed += (p_ptr->lev) / 10;
 			p_ptr->skill_stl += (p_ptr->lev) / 10;
@@ -2660,7 +2660,7 @@ void calc_bonuses(void)
 	if (p_ptr->sh_fire) p_ptr->lite = TRUE;
 
 	/* Golems also get an intrinsic AC bonus */
-	if (PRACE_IS_(RACE_GOLEM) || PRACE_IS_(RACE_ANDROID))
+	if (PRACE_IS_(p_ptr, RACE_GOLEM) || PRACE_IS_(p_ptr, RACE_ANDROID))
 	{
 		p_ptr->to_a += 10 + (p_ptr->lev * 2 / 5);
 		p_ptr->dis_to_a += 10 + (p_ptr->lev * 2 / 5);
@@ -3703,7 +3703,7 @@ void calc_bonuses(void)
 	p_ptr->skill_tht += ((cp_ptr->x_thb * p_ptr->lev / 10) + (ap_ptr->a_thb * p_ptr->lev / 50));
 
 
-	if ((PRACE_IS_(RACE_S_FAIRY)) && (p_ptr->pseikaku != SEIKAKU_SEXY) && (p_ptr->cursed & TRC_AGGRAVATE))
+	if ((PRACE_IS_(p_ptr, RACE_S_FAIRY)) && (p_ptr->pseikaku != SEIKAKU_SEXY) && (p_ptr->cursed & TRC_AGGRAVATE))
 	{
 		p_ptr->cursed &= ~(TRC_AGGRAVATE);
 		p_ptr->skill_stl = MIN(p_ptr->skill_stl - 3, (p_ptr->skill_stl + 2) / 2);
@@ -5264,12 +5264,12 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
 		/* Demon characters are unaffected */
-		if (PRACE_IS_(RACE_IMP) || PRACE_IS_(RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) return;
+		if (PRACE_IS_(p_ptr, RACE_IMP) || PRACE_IS_(p_ptr, RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) return;
 		if (p_ptr->wizard) return;
 
 		/* Undead characters are 50% likely to be unaffected */
-		if (PRACE_IS_(RACE_SKELETON) || PRACE_IS_(RACE_ZOMBIE)
-			|| PRACE_IS_(RACE_VAMPIRE) || PRACE_IS_(RACE_SPECTRE) ||
+		if (PRACE_IS_(p_ptr, RACE_SKELETON) || PRACE_IS_(p_ptr, RACE_ZOMBIE)
+			|| PRACE_IS_(p_ptr, RACE_VAMPIRE) || PRACE_IS_(p_ptr, RACE_SPECTRE) ||
 			(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD))
 		{
 			if (saving_throw(25 + p_ptr->lev)) return;

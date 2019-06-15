@@ -335,7 +335,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 
 
 	/* Food can feed the player */
-	if (PRACE_IS_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
+	if (PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
 		/* Reduced nutritional benefit */
 		(void)set_food(p_ptr->food + (o_ptr->pval / 10));
@@ -346,10 +346,10 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 			msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！",
 				"Your hunger can only be satisfied with fresh blood!"));
 	}
-	else if ((PRACE_IS_(RACE_SKELETON) ||
-		PRACE_IS_(RACE_GOLEM) ||
-		PRACE_IS_(RACE_ZOMBIE) ||
-		PRACE_IS_(RACE_SPECTRE)) &&
+	else if ((PRACE_IS_(p_ptr, RACE_SKELETON) ||
+		PRACE_IS_(p_ptr, RACE_GOLEM) ||
+		PRACE_IS_(p_ptr, RACE_ZOMBIE) ||
+		PRACE_IS_(p_ptr, RACE_SPECTRE)) &&
 		(o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND))
 	{
 		concptr staff;
@@ -420,7 +420,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 		/* Don't eat a staff/wand itself */
 		return;
 	}
-	else if ((PRACE_IS_(RACE_DEMON) ||
+	else if ((PRACE_IS_(p_ptr, RACE_DEMON) ||
 		(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
 		(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
 			my_strchr("pht", r_info[o_ptr->pval].d_char)))
@@ -431,7 +431,7 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 		msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
 		(void)set_food(PY_FOOD_MAX - 1);
 	}
-	else if (PRACE_IS_(RACE_SKELETON))
+	else if (PRACE_IS_(p_ptr, RACE_SKELETON))
 	{
 #if 0
 		if (o_ptr->tval == TV_SKELETON ||
@@ -460,12 +460,12 @@ void do_cmd_eat_food_aux(INVENTORY_IDX item)
 				msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
 			}
 	}
-	else if (PRACE_IS_(RACE_GOLEM) ||
-		PRACE_IS_(RACE_ZOMBIE) ||
-		PRACE_IS_(RACE_ENT) ||
-		PRACE_IS_(RACE_DEMON) ||
-		PRACE_IS_(RACE_ANDROID) ||
-		PRACE_IS_(RACE_SPECTRE) ||
+	else if (PRACE_IS_(p_ptr, RACE_GOLEM) ||
+		PRACE_IS_(p_ptr, RACE_ZOMBIE) ||
+		PRACE_IS_(p_ptr, RACE_ENT) ||
+		PRACE_IS_(p_ptr, RACE_DEMON) ||
+		PRACE_IS_(p_ptr, RACE_ANDROID) ||
+		PRACE_IS_(p_ptr, RACE_SPECTRE) ||
 		(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
 	{
 		msg_print(_("生者の食物はあなたにとってほとんど栄養にならない。", "The food of mortals is poor sustenance for you."));

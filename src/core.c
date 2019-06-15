@@ -694,7 +694,7 @@ static bool pattern_effect(void)
 
 	if (!pattern_tile(p_ptr->y, p_ptr->x)) return FALSE;
 
-	if ((PRACE_IS_(RACE_AMBERITE)) &&
+	if ((PRACE_IS_(p_ptr, RACE_AMBERITE)) &&
 	    (p_ptr->cut > 0) && one_in_(10))
 	{
 		wreck_the_pattern();
@@ -735,7 +735,7 @@ static bool pattern_effect(void)
 		break;
 
 	default:
-		if (PRACE_IS_(RACE_AMBERITE) && !one_in_(2))
+		if (PRACE_IS_(p_ptr, RACE_AMBERITE) && !one_in_(2))
 			return TRUE;
 		else if (!IS_INVULN())
 			take_hit(DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"), -1);
@@ -1397,7 +1397,7 @@ static void process_world_aux_hp_and_sp(void)
 	}
 
 	/* (Vampires) Take damage from sunlight */
-	if (PRACE_IS_(RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
+	if (PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
 		if (!current_floor_ptr->dun_level && !p_ptr->resist_lite && !IS_INVULN() && is_daytime())
 		{
@@ -1445,7 +1445,7 @@ static void process_world_aux_hp_and_sp(void)
 
 		if (damage)
 		{
-			if(PRACE_IS_(RACE_ENT)) damage += damage / 3;
+			if(PRACE_IS_(p_ptr, RACE_ENT)) damage += damage / 3;
 			if(p_ptr->resist_fire) damage = damage / 3;
 			if(IS_OPPOSE_FIRE()) damage = damage / 3;
 			if(p_ptr->levitation) damage = damage / 5;
@@ -1640,7 +1640,7 @@ static void process_world_aux_hp_and_sp(void)
 		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !p_ptr->immune_fire)
 		{
 			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
-			if (PRACE_IS_(RACE_ENT)) damage += damage / 3;
+			if (PRACE_IS_(p_ptr, RACE_ENT)) damage += damage / 3;
 			if (p_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 			msg_print(_("熱い！", "It's hot!"));
@@ -1649,7 +1649,7 @@ static void process_world_aux_hp_and_sp(void)
 		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !p_ptr->immune_elec)
 		{
 			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
-			if (PRACE_IS_(RACE_ANDROID)) damage += damage / 3;
+			if (PRACE_IS_(p_ptr, RACE_ANDROID)) damage += damage / 3;
 			if (p_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
 			msg_print(_("痛い！", "It hurts!"));

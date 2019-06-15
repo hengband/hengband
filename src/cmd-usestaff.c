@@ -262,8 +262,8 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 		case SV_STAFF_NOTHING:
 		{
 			msg_print(_("何も起らなかった。", "Nothing happen."));
-			if (PRACE_IS_(RACE_SKELETON) || PRACE_IS_(RACE_GOLEM) ||
-				PRACE_IS_(RACE_ZOMBIE) || PRACE_IS_(RACE_SPECTRE))
+			if (PRACE_IS_(p_ptr, RACE_SKELETON) || PRACE_IS_(p_ptr, RACE_GOLEM) ||
+				PRACE_IS_(p_ptr, RACE_ZOMBIE) || PRACE_IS_(p_ptr, RACE_SPECTRE))
 				msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
 			break;
 		}
