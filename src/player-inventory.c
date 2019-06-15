@@ -122,191 +122,6 @@ void display_equip(void)
 	}
 }
 
-
-/*!
- * @brief 装備アイテムの表示を行う /
- * Display the equipment.
- * @param target_item アイテムの選択処理を行うか否か。
- * @return 選択したアイテムのタグ
- */
-COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
-{
-	COMMAND_CODE i;
-	int j, k, l;
-	int             col, cur_col, len;
-	object_type *o_ptr;
-	char            tmp_val[80];
-	GAME_TEXT o_name[MAX_NLEN];
-	COMMAND_CODE    out_index[23];
-	TERM_COLOR      out_color[23];
-	char            out_desc[23][MAX_NLEN];
-	COMMAND_CODE target_item_label = 0;
-	TERM_LEN wid, hgt;
-	char            equip_label[52 + 1];
-
-	/* Starting column */
-	col = command_gap;
-
-	Term_get_size(&wid, &hgt);
-
-	/* Maximal length */
-	len = wid - col - 1;
-
-
-	/* Scan the equipment list */
-	for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++)
-	{
-		o_ptr = &p_ptr->inventory_list[i];
-
-		/* Is this item acceptable? */
-		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL)) &&
-			(!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
-			(mode & IGNORE_BOTHHAND_SLOT))) continue;
-
-		object_desc(o_name, o_ptr, 0);
-
-		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
-		{
-			(void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
-			out_color[k] = TERM_WHITE;
-		}
-		else
-		{
-			(void)strcpy(out_desc[k], o_name);
-			out_color[k] = tval_to_attr[o_ptr->tval % 128];
-		}
-
-		out_index[k] = i;
-		/* Grey out charging items */
-		if (o_ptr->timeout)
-		{
-			out_color[k] = TERM_L_DARK;
-		}
-
-		/* Extract the maximal length (see below) */
-#ifdef JP
-		l = strlen(out_desc[k]) + (2 + 1);
-#else
-		l = strlen(out_desc[k]) + (2 + 3);
-#endif
-
-
-		/* Increase length for labels (if needed) */
-#ifdef JP
-		if (show_labels) l += (7 + 2);
-#else
-		if (show_labels) l += (14 + 2);
-#endif
-
-
-		/* Increase length for weight (if needed) */
-		if (show_weights) l += 9;
-
-		if (show_item_graph) l += 2;
-
-		/* Maintain the max-length */
-		if (l > len) len = l;
-
-		/* Advance the entry */
-		k++;
-	}
-
-	/* Hack -- Find a column to start in */
-#ifdef JP
-	col = (len > wid - 6) ? 0 : (wid - len - 1);
-#else
-	col = (len > wid - 4) ? 0 : (wid - len - 1);
-#endif
-
-	prepare_label_string(equip_label, USE_EQUIP);
-
-	/* Output each entry */
-	for (j = 0; j < k; j++)
-	{
-		i = out_index[j];
-		o_ptr = &p_ptr->inventory_list[i];
-
-		/* Clear the line */
-		prt("", j + 1, col ? col - 2 : col);
-
-		if (use_menu && target_item)
-		{
-			if (j == (target_item - 1))
-			{
-				strcpy(tmp_val, _("》", "> "));
-				target_item_label = i;
-			}
-			else strcpy(tmp_val, "  ");
-		}
-		else if (i >= INVEN_RARM)
-		{
-			/* Prepare an index --(-- */
-			sprintf(tmp_val, "%c)", equip_label[i - INVEN_RARM]);
-		}
-		else
-		{
-			/* Prepare an index --(-- */
-			sprintf(tmp_val, "%c)", index_to_label(i));
-		}
-
-		/* Clear the line with the (possibly indented) index */
-		put_str(tmp_val, j + 1, col);
-
-		cur_col = col + 3;
-
-		/* Display graphics for object, if desired */
-		if (show_item_graph)
-		{
-			TERM_COLOR a = object_attr(o_ptr);
-			SYMBOL_CODE c = object_char(o_ptr);
-			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
-			if (use_bigtile) cur_col++;
-
-			cur_col += 2;
-		}
-
-		/* Use labels */
-		if (show_labels)
-		{
-			/* Mention the use */
-			(void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(i));
-
-			put_str(tmp_val, j + 1, cur_col);
-
-			/* Display the entry itself */
-			c_put_str(out_color[j], out_desc[j], j + 1, _(cur_col + 9, cur_col + 16));
-		}
-
-		/* No labels */
-		else
-		{
-			/* Display the entry itself */
-			c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
-		}
-
-		/* Display the weight if needed */
-		if (show_weights)
-		{
-			int wgt = o_ptr->weight * o_ptr->number;
-#ifdef JP
-			(void)sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt), lbtokg2(wgt));
-#else
-			(void)sprintf(tmp_val, "%3d.%d lb", wgt / 10, wgt % 10);
-#endif
-
-			prt(tmp_val, j + 1, wid - 9);
-		}
-	}
-
-	/* Make a "shadow" below the list (only if needed) */
-	if (j && (j < 23)) prt("", j + 1, col ? col - 2 : col);
-
-	/* Save the new column */
-	command_gap = col;
-
-	return target_item_label;
-}
-
 /*!
  * @brief サブウィンドウに所持品、装備品リストの表示を行う /
  * Flip "inven" and "equip" in any sub-windows
@@ -612,7 +427,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
  * @param mode 所持品リストか装備品リストかの切り替え
  * @return なし
  */
-void prepare_label_string(char *label, BIT_FLAGS mode)
+void prepare_label_string(char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
@@ -628,7 +443,7 @@ void prepare_label_string(char *label, BIT_FLAGS mode)
 		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
-		if (get_tag(&index, c, mode, item_tester_tval))
+		if (get_tag(&index, c, mode, tval))
 		{
 			/* Delete the overwritten label */
 			if (label[i] == c) label[i] = ' ';
@@ -718,7 +533,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 		z = i + 1;
 	}
 
-	prepare_label_string(inven_label, USE_INVEN);
+	prepare_label_string(inven_label, USE_INVEN, item_tester_tval);
 
 	/* Display the p_ptr->inventory_list */
 	for (k = 0, i = 0; i < z; i++)
@@ -3399,4 +3214,189 @@ void display_inven(void)
 	{
 		Term_erase(0, i, 255);
 	}
+}
+
+
+/*!
+ * @brief 装備アイテムの表示を行う /
+ * Display the equipment.
+ * @param target_item アイテムの選択処理を行うか否か。
+ * @return 選択したアイテムのタグ
+ */
+COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
+{
+	COMMAND_CODE i;
+	int j, k, l;
+	int             col, cur_col, len;
+	object_type *o_ptr;
+	char            tmp_val[80];
+	GAME_TEXT o_name[MAX_NLEN];
+	COMMAND_CODE    out_index[23];
+	TERM_COLOR      out_color[23];
+	char            out_desc[23][MAX_NLEN];
+	COMMAND_CODE target_item_label = 0;
+	TERM_LEN wid, hgt;
+	char            equip_label[52 + 1];
+
+	/* Starting column */
+	col = command_gap;
+
+	Term_get_size(&wid, &hgt);
+
+	/* Maximal length */
+	len = wid - col - 1;
+
+
+	/* Scan the equipment list */
+	for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	{
+		o_ptr = &p_ptr->inventory_list[i];
+
+		/* Is this item acceptable? */
+		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL)) &&
+			(!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
+			(mode & IGNORE_BOTHHAND_SLOT))) continue;
+
+		object_desc(o_name, o_ptr, 0);
+
+		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
+		{
+			(void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
+			out_color[k] = TERM_WHITE;
+		}
+		else
+		{
+			(void)strcpy(out_desc[k], o_name);
+			out_color[k] = tval_to_attr[o_ptr->tval % 128];
+		}
+
+		out_index[k] = i;
+		/* Grey out charging items */
+		if (o_ptr->timeout)
+		{
+			out_color[k] = TERM_L_DARK;
+		}
+
+		/* Extract the maximal length (see below) */
+#ifdef JP
+		l = strlen(out_desc[k]) + (2 + 1);
+#else
+		l = strlen(out_desc[k]) + (2 + 3);
+#endif
+
+
+		/* Increase length for labels (if needed) */
+#ifdef JP
+		if (show_labels) l += (7 + 2);
+#else
+		if (show_labels) l += (14 + 2);
+#endif
+
+
+		/* Increase length for weight (if needed) */
+		if (show_weights) l += 9;
+
+		if (show_item_graph) l += 2;
+
+		/* Maintain the max-length */
+		if (l > len) len = l;
+
+		/* Advance the entry */
+		k++;
+	}
+
+	/* Hack -- Find a column to start in */
+#ifdef JP
+	col = (len > wid - 6) ? 0 : (wid - len - 1);
+#else
+	col = (len > wid - 4) ? 0 : (wid - len - 1);
+#endif
+
+	prepare_label_string(equip_label, USE_EQUIP, item_tester_tval);
+
+	/* Output each entry */
+	for (j = 0; j < k; j++)
+	{
+		i = out_index[j];
+		o_ptr = &p_ptr->inventory_list[i];
+
+		/* Clear the line */
+		prt("", j + 1, col ? col - 2 : col);
+
+		if (use_menu && target_item)
+		{
+			if (j == (target_item - 1))
+			{
+				strcpy(tmp_val, _("》", "> "));
+				target_item_label = i;
+			}
+			else strcpy(tmp_val, "  ");
+		}
+		else if (i >= INVEN_RARM)
+		{
+			/* Prepare an index --(-- */
+			sprintf(tmp_val, "%c)", equip_label[i - INVEN_RARM]);
+		}
+		else
+		{
+			/* Prepare an index --(-- */
+			sprintf(tmp_val, "%c)", index_to_label(i));
+		}
+
+		/* Clear the line with the (possibly indented) index */
+		put_str(tmp_val, j + 1, col);
+
+		cur_col = col + 3;
+
+		/* Display graphics for object, if desired */
+		if (show_item_graph)
+		{
+			TERM_COLOR a = object_attr(o_ptr);
+			SYMBOL_CODE c = object_char(o_ptr);
+			Term_queue_bigchar(cur_col, j + 1, a, c, 0, 0);
+			if (use_bigtile) cur_col++;
+
+			cur_col += 2;
+		}
+
+		/* Use labels */
+		if (show_labels)
+		{
+			/* Mention the use */
+			(void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(i));
+
+			put_str(tmp_val, j + 1, cur_col);
+
+			/* Display the entry itself */
+			c_put_str(out_color[j], out_desc[j], j + 1, _(cur_col + 9, cur_col + 16));
+		}
+
+		/* No labels */
+		else
+		{
+			/* Display the entry itself */
+			c_put_str(out_color[j], out_desc[j], j + 1, cur_col);
+		}
+
+		/* Display the weight if needed */
+		if (show_weights)
+		{
+			int wgt = o_ptr->weight * o_ptr->number;
+#ifdef JP
+			(void)sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt), lbtokg2(wgt));
+#else
+			(void)sprintf(tmp_val, "%3d.%d lb", wgt / 10, wgt % 10);
+#endif
+
+			prt(tmp_val, j + 1, wid - 9);
+		}
+	}
+
+	/* Make a "shadow" below the list (only if needed) */
+	if (j && (j < 23)) prt("", j + 1, col ? col - 2 : col);
+
+	/* Save the new column */
+	command_gap = col;
+
+	return target_item_label;
 }
