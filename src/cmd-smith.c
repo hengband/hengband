@@ -865,7 +865,7 @@ static void add_essence(ESSENCE_IDX mode)
 	int use_essence;
 	essence_type *es_ptr;
 	bool able[22] = { 0 };
-
+	OBJECT_TYPE_VALUE tval = 0;
 	int menu_line = (use_menu ? 1 : 0);
 
 	for (i = 0; essence_info[i].add_name; i++)
@@ -1107,7 +1107,7 @@ static void add_essence(ESSENCE_IDX mode)
 	es_ptr = &essence_info[num[i]];
 
 	if (es_ptr->add == ESSENCE_SLAY_GLOVE)
-		item_tester_tval = TV_GLOVES;
+		tval = TV_GLOVES;
 	else if (mode == 1 || mode == 5)
 		item_tester_hook = item_tester_hook_melee_ammo;
 	else if (es_ptr->add == ESSENCE_ATTACK)
@@ -1120,7 +1120,7 @@ static void add_essence(ESSENCE_IDX mode)
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), tval);
 	if (!o_ptr) return;
 
 	if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr)))

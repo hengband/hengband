@@ -65,7 +65,7 @@ void do_cmd_inven(void)
 	screen_save();
 
 	/* Display the p_ptr->inventory_list */
-	(void)show_inven(0, USE_FULL, item_tester_tval);
+	(void)show_inven(0, USE_FULL, 0);
 
 #ifdef JP
 	sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
@@ -117,7 +117,7 @@ void do_cmd_equip(void)
 	if (easy_floor) command_wrk = (USE_EQUIP);
 	screen_save();
 
-	(void)show_equip(0, USE_FULL, item_tester_tval);
+	(void)show_equip(0, USE_FULL, 0);
 
 	/* Build a prompt */
 #ifdef JP

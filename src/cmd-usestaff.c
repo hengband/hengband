@@ -444,13 +444,9 @@ void do_cmd_use_staff(void)
 		set_action(ACTION_NONE);
 	}
 
-	/* Restrict choices to wands */
-	item_tester_tval = TV_STAFF;
-
 	q = _("どの杖を使いますか? ", "Use which staff? ");
 	s = _("使える杖がない。", "You have no staff to use.");
-
-	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval)) return;
+	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_STAFF)) return;
 
 	do_cmd_use_staff_aux(item);
 }

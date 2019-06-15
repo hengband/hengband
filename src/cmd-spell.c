@@ -670,7 +670,7 @@ void do_cmd_browse(void)
 	q = _("どの本を読みますか? ", "Browse which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), 0);
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester_tval);
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */

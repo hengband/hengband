@@ -405,12 +405,10 @@ void do_cmd_gain_hissatsu(void)
 	msg_format("You can learn %d new special attack%s.", p_ptr->new_spells, (p_ptr->new_spells == 1?"":"s"));
 #endif
 
-	item_tester_tval = TV_HISSATSU_BOOK;
-
 	q = _("どの書から学びますか? ", "Study which book? ");
 	s = _("読める書がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_HISSATSU_BOOK);
 	if (!o_ptr) return;
 
 	for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++)
