@@ -46,7 +46,7 @@
  * cancelled before use.  XXX Reading them still takes a current_world_ptr->game_turn, though.
  * </pre>
  */
-void do_cmd_read_scroll_aux(INVENTORY_IDX item, bool known)
+void exe_read(INVENTORY_IDX item, bool known)
 {
 	int         k, used_up, ident, lev;
 	object_type *o_ptr;
@@ -650,5 +650,5 @@ void do_cmd_read_scroll(void)
 	if (!o_ptr) return;
 
 	/* Read the scroll */
-	do_cmd_read_scroll_aux(item, object_is_aware(o_ptr));
+	exe_read(item, object_is_aware(o_ptr));
 }

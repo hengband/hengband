@@ -1594,7 +1594,7 @@ void do_cmd_use(void)
 			if (cmd_limit_blind(p_ptr)) return;
 			if (cmd_limit_confused(p_ptr)) return;
 
-			do_cmd_read_scroll_aux(item, TRUE);
+			exe_read(item, TRUE);
 			break;
 		}
 
