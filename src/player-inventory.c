@@ -794,7 +794,7 @@ static bool get_item_allow(INVENTORY_IDX item)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
+bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -827,7 +827,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	static char prev_tag = '\0';
 	char cur_tag = '\0';
 
-	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode, item_tester_tval);
+	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode, tval);
 
 	/* Extract args */
 	if (mode & USE_EQUIP) equip = TRUE;
@@ -840,7 +840,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 		/* the_force */
 		if (mode & USE_FORCE && (*cp == INVEN_FORCE))
 		{
-			item_tester_tval = 0;
+			tval = 0;
 			item_tester_hook = NULL;
 			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 			return (TRUE);
@@ -856,10 +856,10 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			o_ptr = &current_floor_ptr->o_list[k];
 
 			/* Validate the item */
-			if (item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL))
+			if (item_tester_okay(o_ptr, tval) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
-				item_tester_tval = 0;
+				tval = 0;
 				item_tester_hook = NULL;
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
@@ -874,7 +874,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			if (prev_tag && command_cmd)
 			{
 				/* Look up the tag and validate the item */
-				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, item_tester_tval)) /* Reject */;
+				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
 				else if (!get_item_okay(k)) /* Reject */;
 				else
@@ -883,7 +883,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 					(*cp) = k;
 
 					/* Forget restrictions */
-					item_tester_tval = 0;
+					tval = 0;
 					item_tester_hook = NULL;
 					command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
@@ -898,7 +898,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			else if (get_item_okay(*cp))
 			{
 				/* Forget restrictions */
-				item_tester_tval = 0;
+				tval = 0;
 				item_tester_hook = NULL;
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
@@ -925,7 +925,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
 	/* Restrict p_ptr->inventory_list indexes */
@@ -942,7 +942,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
@@ -971,7 +971,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Accept the item on the floor if legal */
-			if ((item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL)) && (o_ptr->marked & OM_FOUND)) allow_floor = TRUE;
+			if ((item_tester_okay(o_ptr, tval) || (mode & USE_FULL)) && (o_ptr->marked & OM_FOUND)) allow_floor = TRUE;
 		}
 	}
 
@@ -1069,14 +1069,14 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 		if (!command_wrk)
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line, mode, item_tester_tval);
+			if (command_see) get_item_label = show_inven(menu_line, mode, tval);
 		}
 
 		/* Equipment screen */
 		else
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line, mode, item_tester_tval);
+			if (command_see) get_item_label = show_equip(menu_line, mode, tval);
 		}
 
 		/* Viewing p_ptr->inventory_list */
@@ -1319,7 +1319,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 						next_o_idx = o_ptr->next_o_idx;
 
 						/* Validate the item */
-						if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
+						if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 						/* Special index */
 						k = 0 - this_o_idx;
@@ -1351,7 +1351,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			case '7': case '8': case '9':
 			{
 				/* Look up the tag */
-				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester_tval))
+				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
 				{
 					bell();
 					break;
@@ -1442,7 +1442,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				bool not_found = FALSE;
 
 				/* Look up the alphabetical tag */
-				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester_tval))
+				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
 				{
 					not_found = TRUE;
 				}
@@ -1531,8 +1531,8 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	}
 
 
-	/* Forget the item_tester_tval restriction */
-	item_tester_tval = 0;
+	/* Forget the tval restriction */
+	tval = 0;
 
 	/* Forget the item_tester_hook restriction */
 	item_tester_hook = NULL;
@@ -1566,7 +1566,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option)
 {
 	OBJECT_IDX item;
-	if (!get_item(&item, q, s, option)) return NULL;
+	if (!get_item(&item, q, s, option, item_tester_tval)) return NULL;
 	if (idx) *idx = item;
 
 	if (item == INVEN_FORCE) return NULL;
