@@ -6497,7 +6497,7 @@ void show_info(void)
 	if (p_ptr->equip_cnt)
 	{
 		Term_clear();
-		(void)show_equip(0, USE_FULL, item_tester_tval);
+		(void)show_equip(0, USE_FULL, 0);
 		prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;
@@ -6507,7 +6507,7 @@ void show_info(void)
 	if (p_ptr->inven_cnt)
 	{
 		Term_clear();
-		(void)show_inven(0, USE_FULL, item_tester_tval);
+		(void)show_inven(0, USE_FULL, 0);
 		prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;

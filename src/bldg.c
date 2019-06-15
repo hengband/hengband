@@ -2921,7 +2921,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_broken_weapon;
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP), item_tester_tval);
+	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_EQUIP), 0);
 	if (!o_ptr) return (0);
 
 	/* It is worthless */
