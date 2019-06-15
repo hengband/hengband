@@ -417,8 +417,8 @@ extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUB
 extern bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval);
 extern void display_inven(void);
 extern void display_equip(void);
-extern COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode);
-extern COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode);
+extern COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
+extern COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 extern void toggle_inven_equip(void);
 
 /*

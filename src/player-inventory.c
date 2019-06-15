@@ -499,7 +499,7 @@ static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
+COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	int j, k, l, z = 0;
@@ -533,7 +533,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 		z = i + 1;
 	}
 
-	prepare_label_string(inven_label, USE_INVEN, item_tester_tval);
+	prepare_label_string(inven_label, USE_INVEN, tval);
 
 	/* Display the p_ptr->inventory_list */
 	for (k = 0, i = 0; i < z; i++)
@@ -541,7 +541,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode)
 		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
-		if (!item_tester_okay(o_ptr, item_tester_tval) && !(mode & USE_FULL)) continue;
+		if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 		object_desc(o_name, o_ptr, 0);
 
@@ -1069,14 +1069,14 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 		if (!command_wrk)
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line, mode);
+			if (command_see) get_item_label = show_inven(menu_line, mode, item_tester_tval);
 		}
 
 		/* Equipment screen */
 		else
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line, mode);
+			if (command_see) get_item_label = show_equip(menu_line, mode, item_tester_tval);
 		}
 
 		/* Viewing p_ptr->inventory_list */
@@ -2072,7 +2072,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(i2);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line, mode);
+			if (command_see) get_item_label = show_inven(menu_line, mode, item_tester_tval);
 		}
 
 		/* Equipment screen */
@@ -2083,7 +2083,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line, mode);
+			if (command_see) get_item_label = show_equip(menu_line, mode, item_tester_tval);
 		}
 
 		/* Floor screen */
@@ -3223,7 +3223,7 @@ void display_inven(void)
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
+COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	int j, k, l;
@@ -3253,7 +3253,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 		o_ptr = &p_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
-		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, item_tester_tval) || (mode & USE_FULL)) &&
+		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, tval) || (mode & USE_FULL)) &&
 			(!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
 			(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
@@ -3312,7 +3312,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode)
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
 #endif
 
-	prepare_label_string(equip_label, USE_EQUIP, item_tester_tval);
+	prepare_label_string(equip_label, USE_EQUIP, tval);
 
 	/* Output each entry */
 	for (j = 0; j < k; j++)
