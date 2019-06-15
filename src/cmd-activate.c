@@ -479,7 +479,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			}
 
 			/* Free the "who" array */
-			C_KILL(who, current_floor_ptr->max_m_idx, IDX);
+			C_KILL(who, current_floor_ptr->max_m_idx, MONSTER_IDX);
 		}
 		o_ptr->timeout = 100 + randint1(100);
 		return;

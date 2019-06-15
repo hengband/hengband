@@ -65,7 +65,8 @@ void display_rumor(bool ex)
 		{
 			if (strcmp(zz[0], "ARTIFACT") == 0)
 			{
-				IDX a_idx, k_idx;
+				ARTIFACT_IDX a_idx;
+				KIND_OBJECT_IDX k_idx;
 				object_type forge;
 				object_type *q_ptr = &forge;
 				artifact_type *a_ptr;

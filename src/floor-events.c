@@ -145,7 +145,7 @@ byte get_dungeon_feeling(void)
 {
 	const int base = 10;
 	int rating = 0;
-	IDX i;
+	MONSTER_IDX i;
 
 	/* Hack -- no feeling in the town */
 	if (!current_floor_ptr->dun_level) return 0;

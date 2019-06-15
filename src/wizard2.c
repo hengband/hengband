@@ -1527,7 +1527,7 @@ static void do_cmd_wiz_create_feature(void)
 	grid_type    *g_ptr;
 	feature_type *f_ptr;
 	char         tmp_val[160];
-	IDX          tmp_feat, tmp_mimic;
+	FEAT_IDX          tmp_feat, tmp_mimic;
 	POSITION y, x;
 
 	if (!tgt_pt(&x, &y)) return;
@@ -1541,7 +1541,7 @@ static void do_cmd_wiz_create_feature(void)
 	if (!get_string(_("地形: ", "Feature: "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_feat = (IDX)atoi(tmp_val);
+	tmp_feat = (FEAT_IDX)atoi(tmp_val);
 	if (tmp_feat < 0) tmp_feat = 0;
 	else if (tmp_feat >= max_f_idx) tmp_feat = max_f_idx - 1;
 
@@ -1552,7 +1552,7 @@ static void do_cmd_wiz_create_feature(void)
 	if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_mimic = (IDX)atoi(tmp_val);
+	tmp_mimic = (FEAT_IDX)atoi(tmp_val);
 	if (tmp_mimic < 0) tmp_mimic = 0;
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 

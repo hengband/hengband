@@ -2983,7 +2983,7 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr->extra = (BIT_FLAGS16)pad;
 		r_ptr->mexp = (EXP)exp;
 		r_ptr->next_exp = (EXP)nextexp;
-		r_ptr->next_r_idx = (IDX)nextmon;
+		r_ptr->next_r_idx = (MONRACE_IDX)nextmon;
 	}
 
 	/* Process 'R' for "Reinforcement" (up to six lines) */
@@ -3610,7 +3610,7 @@ static errr parse_line_feature(char *buf)
 			if (zz[6][0] == '*')
 			{
 				letter[index].random |= RANDOM_ARTIFACT;
-				if (zz[6][1]) letter[index].artifact = (IDX)atoi(zz[6] + 1);
+				if (zz[6][1]) letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6] + 1);
 			}
 			else if (zz[6][0] == '!')
 			{
@@ -3621,7 +3621,7 @@ static errr parse_line_feature(char *buf)
 			}
 			else
 			{
-				letter[index].artifact = (IDX)atoi(zz[6]);
+				letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6]);
 			}
 			/* Fall through */
 		/* Ego-item */
@@ -3629,11 +3629,11 @@ static errr parse_line_feature(char *buf)
 			if (zz[5][0] == '*')
 			{
 				letter[index].random |= RANDOM_EGO;
-				if (zz[5][1]) letter[index].ego = (IDX)atoi(zz[5] + 1);
+				if (zz[5][1]) letter[index].ego = (EGO_IDX)atoi(zz[5] + 1);
 			}
 			else
 			{
-				letter[index].ego = (IDX)atoi(zz[5]);
+				letter[index].ego = (EGO_IDX)atoi(zz[5]);
 			}
 			/* Fall through */
 		/* Object */
@@ -3641,7 +3641,7 @@ static errr parse_line_feature(char *buf)
 			if (zz[4][0] == '*')
 			{
 				letter[index].random |= RANDOM_OBJECT;
-				if (zz[4][1]) letter[index].object = (IDX)atoi(zz[4] + 1);
+				if (zz[4][1]) letter[index].object = (OBJECT_IDX)atoi(zz[4] + 1);
 			}
 			else if (zz[4][0] == '!')
 			{
@@ -4290,55 +4290,55 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Maximum r_idx */
 			else if (zz[0][0] == 'R')
 			{
-				max_r_idx = (IDX)atoi(zz[1]);
+				max_r_idx = (RACE_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum k_idx */
 			else if (zz[0][0] == 'K')
 			{
-				max_k_idx = (IDX)atoi(zz[1]);
+				max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum v_idx */
 			else if (zz[0][0] == 'V')
 			{
-				max_v_idx = (IDX)atoi(zz[1]);
+				max_v_idx = (VAULT_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum f_idx */
 			else if (zz[0][0] == 'F')
 			{
-				max_f_idx = (IDX)atoi(zz[1]);
+				max_f_idx = (FEAT_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum a_idx */
 			else if (zz[0][0] == 'A')
 			{
-				max_a_idx = (IDX)atoi(zz[1]);
+				max_a_idx = (ARTIFACT_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum e_idx */
 			else if (zz[0][0] == 'E')
 			{
-				max_e_idx = (IDX)atoi(zz[1]);
+				max_e_idx = (EGO_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum d_idx */
 			else if (zz[0][0] == 'D')
 			{
-				max_d_idx = (IDX)atoi(zz[1]);
+				max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum o_idx */
 			else if (zz[0][0] == 'O')
 			{
-				current_floor_ptr->max_o_idx = (IDX)atoi(zz[1]);
+				current_floor_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum m_idx */
 			else if (zz[0][0] == 'M')
 			{
-				current_floor_ptr->max_m_idx = (IDX)atoi(zz[1]);
+				current_floor_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
 			}
 
 			/* Wilderness size */
@@ -4346,10 +4346,10 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			{
 				/* Maximum wild_x_size */
 				if (zz[0][1] == 'X')
-					current_world_ptr->max_wild_x = atoi(zz[1]);
+					current_world_ptr->max_wild_x = (POSITION)atoi(zz[1]);
 				/* Maximum wild_y_size */
 				if (zz[0][1] == 'Y')
-					current_world_ptr->max_wild_y = atoi(zz[1]);
+					current_world_ptr->max_wild_y = (POSITION)atoi(zz[1]);
 			}
 
 			return (0);

@@ -5612,7 +5612,7 @@ void play_game(bool new_game)
 	if (new_game && ((p_ptr->pclass == CLASS_CAVALRY) || (p_ptr->pclass == CLASS_BEASTMASTER)))
 	{
 		monster_type *m_ptr;
-		IDX pet_r_idx = ((p_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
+		MONRACE_IDX pet_r_idx = ((p_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
 		monster_race *r_ptr = &r_info[pet_r_idx];
 		place_monster_aux(0, p_ptr->y, p_ptr->x - 1, pet_r_idx,
 				  (PM_FORCE_PET | PM_NO_KAGE));
