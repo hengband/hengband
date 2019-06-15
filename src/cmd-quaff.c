@@ -36,7 +36,7 @@
  * @param item 飲む薬オブジェクトの所持品ID
  * @return なし
  */
-void do_cmd_quaff_potion_aux(INVENTORY_IDX item)
+void exe_quaff_potion(INVENTORY_IDX item)
 {
 	bool ident;
 	DEPTH lev;
@@ -622,5 +622,5 @@ void do_cmd_quaff_potion(void)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Quaff the potion */
-	do_cmd_quaff_potion_aux(item);
+	exe_quaff_potion(item);
 }

@@ -1549,29 +1549,29 @@ void do_cmd_use(void)
 			break;
 
 		case TV_FOOD:
-			do_cmd_eat_food_aux(item);
+			exe_eat_food(item);
 			break;
 
 		case TV_WAND:
-			do_cmd_aim_wand_aux(item);
+			exe_aim_wand(item);
 			break;
 
 		case TV_STAFF:
-			do_cmd_use_staff_aux(item);
+			exe_use_staff(item);
 			break;
 
 		case TV_ROD:
-			do_cmd_zap_rod_aux(item);
+			exe_zap_rod(item);
 			break;
 
 		case TV_POTION:
-			do_cmd_quaff_potion_aux(item);
+			exe_quaff_potion(item);
 			break;
 
 		case TV_SCROLL:
 			if (cmd_limit_blind(p_ptr)) return;
 			if (cmd_limit_confused(p_ptr)) return;
-			do_cmd_read_scroll_aux(item, TRUE);
+			exe_read(item, TRUE);
 			break;
 
 		case TV_SHOT:
@@ -1581,7 +1581,7 @@ void do_cmd_use(void)
 			break;
 
 		default:
-			do_cmd_activate_aux(p_ptr, item);
+			exe_activate(p_ptr, item);
 			break;
 	}
 }

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 extern void do_cmd_activate(void);
-extern void do_cmd_activate_aux(player_type *user_ptr, INVENTORY_IDX item);
+extern void exe_activate(player_type *user_ptr, INVENTORY_IDX item);
 extern bool activate_artifact(object_type * o_ptr);
 
 typedef struct {

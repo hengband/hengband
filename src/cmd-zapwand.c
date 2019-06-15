@@ -326,7 +326,7 @@ bool wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool m
 * as the basic "ball" rods.
 * </pre>
 */
-void do_cmd_aim_wand_aux(INVENTORY_IDX item)
+void exe_aim_wand(INVENTORY_IDX item)
 {
 	DEPTH lev;
 	int ident, chance;
@@ -470,5 +470,5 @@ void do_cmd_aim_wand(void)
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
 
-	do_cmd_aim_wand_aux(item);
+	exe_aim_wand(item);
 }
