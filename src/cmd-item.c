@@ -1440,7 +1440,6 @@ void do_cmd_query_symbol(void)
 	/* Scan the monster memory */
 	while (1)
 	{
-		/* Extract a race */
 		r_idx = who[i];
 
 		/* Hack -- Auto-recall */
