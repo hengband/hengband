@@ -1556,7 +1556,7 @@ void do_cmd_use(void)
 		/* Eat some food */
 		case TV_FOOD:
 		{
-			do_cmd_eat_food_aux(item);
+			exe_eat_food(item);
 			break;
 		}
 

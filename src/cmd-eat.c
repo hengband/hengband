@@ -31,7 +31,7 @@
  * @param item 食べるオブジェクトの所持品ID
  * @return なし
  */
-void do_cmd_eat_food_aux(INVENTORY_IDX item)
+void exe_eat_food(INVENTORY_IDX item)
 {
 	int ident, lev;
 	object_type *o_ptr;
@@ -524,6 +524,6 @@ void do_cmd_eat_food(void)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Eat the object */
-	do_cmd_eat_food_aux(item);
+	exe_eat_food(item);
 }
 
