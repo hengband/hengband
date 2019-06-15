@@ -3793,7 +3793,6 @@ static bool research_mon(void)
 		/* Interact */
 		while (1)
 		{
-			/* Recall */
 			if (recall)
 			{
 				/*** Recall on screen ***/

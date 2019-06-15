@@ -1450,7 +1450,6 @@ void do_cmd_query_symbol(void)
 		/* Interact */
 		while (1)
 		{
-			/* Recall */
 			if (recall)
 			{
 				screen_save();
