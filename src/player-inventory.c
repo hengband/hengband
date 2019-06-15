@@ -827,7 +827,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	static char prev_tag = '\0';
 	char cur_tag = '\0';
 
-	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode);
+	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode, item_tester_tval);
 
 	/* Extract args */
 	if (mode & USE_EQUIP) equip = TRUE;
@@ -1770,7 +1770,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
+bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
@@ -1816,7 +1816,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 		/* the_force */
 		if (force && (*cp == INVEN_FORCE))
 		{
-			item_tester_tval = 0;
+			tval = 0;
 			item_tester_hook = NULL;
 			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 			return (TRUE);
@@ -1837,7 +1837,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 					(*cp) = 0 - floor_list[k];
 
 					/* Forget restrictions */
-					item_tester_tval = 0;
+					tval = 0;
 					item_tester_hook = NULL;
 					command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
@@ -1849,10 +1849,10 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			}
 
 			/* Validate the item */
-			else if (item_tester_okay(&current_floor_ptr->o_list[0 - (*cp)], item_tester_tval) || (mode & USE_FULL))
+			else if (item_tester_okay(&current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
-				item_tester_tval = 0;
+				tval = 0;
 				item_tester_hook = NULL;
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
@@ -1867,7 +1867,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			if (prev_tag && command_cmd)
 			{
 				/* Look up the tag and validate the item */
-				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, item_tester_tval)) /* Reject */;
+				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
 				else if (!get_item_okay(k)) /* Reject */;
 				else
@@ -1876,7 +1876,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 					(*cp) = k;
 
 					/* Forget restrictions */
-					item_tester_tval = 0;
+					tval = 0;
 					item_tester_hook = NULL;
 					command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
@@ -1891,7 +1891,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 			else if (get_item_okay(*cp))
 			{
 				/* Forget restrictions */
-				item_tester_tval = 0;
+				tval = 0;
 				item_tester_hook = NULL;
 				command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 
@@ -1920,7 +1920,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
 	/* Restrict p_ptr->inventory_list indexes */
@@ -1937,7 +1937,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], item_tester_tval) || (mode & USE_FULL)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
 		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
@@ -2624,7 +2624,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 				if (command_wrk != USE_FLOOR)
 				{
 					/* Look up the tag */
-					if (!get_tag(&k, which, command_wrk, item_tester_tval))
+					if (!get_tag(&k, which, command_wrk, tval))
 					{
 						bell();
 						break;
@@ -2756,7 +2756,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 					bool not_found = FALSE;
 
 					/* Look up the alphabetical tag */
-					if (!get_tag(&k, which, command_wrk, item_tester_tval))
+					if (!get_tag(&k, which, command_wrk, tval))
 					{
 						not_found = TRUE;
 					}
@@ -2877,8 +2877,8 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode)
 	}
 
 
-	/* Forget the item_tester_tval restriction */
-	item_tester_tval = 0;
+	/* Forget the tval restriction */
+	tval = 0;
 
 	/* Forget the item_tester_hook restriction */
 	item_tester_hook = NULL;
