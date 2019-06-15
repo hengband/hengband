@@ -353,7 +353,6 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool success;
 
-
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
@@ -368,7 +367,6 @@ void do_cmd_activate_aux(INVENTORY_IDX item)
 
 	take_turn(p_ptr, 100);
 
-	/* Extract the item level */
 	lev = k_info[o_ptr->k_idx].level;
 
 	/* Hack -- use artifact level instead */
