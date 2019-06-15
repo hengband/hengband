@@ -837,7 +837,7 @@ static void do_cmd_disp_nikki(void)
 
 	if (p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_MONK || p_ptr->pclass == CLASS_SAMURAI || p_ptr->pclass == CLASS_BERSERKER)
 		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)]);
-	else if (IS_WIZARD_CLASS())
+	else if (IS_WIZARD_CLASS(p_ptr))
 		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)+1]);
 	else strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-2)+1]);
 

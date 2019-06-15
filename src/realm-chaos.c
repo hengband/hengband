@@ -109,7 +109,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
-			if (IS_WIZARD_CLASS())
+			if (IS_WIZARD_CLASS(p_ptr))
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;
