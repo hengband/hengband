@@ -3781,7 +3781,6 @@ static bool research_mon(void)
 	/* Scan the monster memory */
 	while (notpicked)
 	{
-		/* Extract a race */
 		r_idx = who[i];
 
 		/* Hack -- Begin the prompt */
@@ -3793,7 +3792,6 @@ static bool research_mon(void)
 		/* Interact */
 		while (1)
 		{
-			/* Recall */
 			if (recall)
 			{
 				/*** Recall on screen ***/

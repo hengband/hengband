@@ -612,7 +612,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 		{
 			char acount[10];
 
-			/* Recall */
 			if (recall)
 			{
 				screen_save();
