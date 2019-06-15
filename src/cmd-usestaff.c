@@ -280,7 +280,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
  * One charge of one staff disappears.
  * Hack -- staffs of identify can be "cancelled".
  */
-void do_cmd_use_staff_aux(INVENTORY_IDX item)
+void exe_use_staff(INVENTORY_IDX item)
 {
 	int         ident, chance, lev;
 	object_type *o_ptr;
@@ -448,5 +448,5 @@ void do_cmd_use_staff(void)
 	s = _("使える杖がない。", "You have no staff to use.");
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_STAFF)) return;
 
-	do_cmd_use_staff_aux(item);
+	exe_use_staff(item);
 }

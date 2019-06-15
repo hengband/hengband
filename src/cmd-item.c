@@ -1563,28 +1563,28 @@ void do_cmd_use(void)
 		/* Aim a wand */
 		case TV_WAND:
 		{
-			do_cmd_aim_wand_aux(item);
+			exe_aim_wand(item);
 			break;
 		}
 
 		/* Use a staff */
 		case TV_STAFF:
 		{
-			do_cmd_use_staff_aux(item);
+			exe_use_staff(item);
 			break;
 		}
 
 		/* Zap a rod */
 		case TV_ROD:
 		{
-			do_cmd_zap_rod_aux(item);
+			exe_zap_rod(item);
 			break;
 		}
 
 		/* Quaff a potion */
 		case TV_POTION:
 		{
-			do_cmd_quaff_potion_aux(item);
+			exe_quaff_potion(item);
 			break;
 		}
 

@@ -268,7 +268,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 * pvals are defined for each rod in k_info. -LM-
 * </pre>
 */
-void do_cmd_zap_rod_aux(INVENTORY_IDX item)
+void exe_zap_rod(INVENTORY_IDX item)
 {
 	int ident, chance, lev, fail;
 	DIRECTION dir = 0;
@@ -422,5 +422,5 @@ void do_cmd_zap_rod(void)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD)) return;
 
 	/* Zap the rod */
-	do_cmd_zap_rod_aux(item);
+	exe_zap_rod(item);
 }
