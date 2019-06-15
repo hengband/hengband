@@ -55,7 +55,7 @@ INVENTORY_IDX label_to_equip(int c)
  * Choice window "shadow" of the "show_equip()" function
  * @return なし
  */
-void display_equip(void)
+void display_equip(OBJECT_TYPE_VALUE tval)
 {
 	register int i, n;
 	object_type *o_ptr;
@@ -70,7 +70,7 @@ void display_equip(void)
 	{
 		o_ptr = &p_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, item_tester_tval))
+		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, tval))
 		{
 			tmp_val[0] = index_to_label(i);
 			tmp_val[1] = ')';
@@ -2072,7 +2072,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(i2);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line, mode, item_tester_tval);
+			if (command_see) get_item_label = show_inven(menu_line, mode, tval);
 		}
 
 		/* Equipment screen */
@@ -2083,7 +2083,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line, mode, item_tester_tval);
+			if (command_see) get_item_label = show_equip(menu_line, mode, tval);
 		}
 
 		/* Floor screen */
@@ -3158,7 +3158,7 @@ void py_pickup_floor(bool pickup)
  * Choice window "shadow" of the "show_inven()" function
  * @return なし
  */
-void display_inven(void)
+void display_inven(OBJECT_TYPE_VALUE tval)
 {
 	register int i, n, z = 0;
 	object_type *o_ptr;
@@ -3180,7 +3180,7 @@ void display_inven(void)
 	{
 		o_ptr = &p_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-		if (item_tester_okay(o_ptr, item_tester_tval))
+		if (item_tester_okay(o_ptr, tval))
 		{
 			tmp_val[0] = index_to_label(i);
 			tmp_val[1] = ')';

@@ -1577,7 +1577,7 @@ static void fix_inven(void)
 		Term_activate(angband_term[j]);
 
 		/* Display p_ptr->inventory_list */
-		display_inven();
+		display_inven(item_tester_tval);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -1764,7 +1764,7 @@ static void fix_equip(void)
 		Term_activate(angband_term[j]);
 
 		/* Display equipment */
-		display_equip();
+		display_equip(item_tester_tval);
 		Term_fresh();
 		Term_activate(old);
 	}
