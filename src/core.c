@@ -3789,7 +3789,7 @@ static void process_command(void)
 				change_wild_mode(FALSE);
 			}
 			else
-				do_cmd_go_up();
+				do_cmd_go_up(p_ptr);
 			break;
 		}
 

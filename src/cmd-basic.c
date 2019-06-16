@@ -183,17 +183,17 @@ bool cmd_limit_time_walk(player_type *creature_ptr)
  * @brief 階段を使って階層を昇る処理 / Go up one level
  * @return なし
  */
-void do_cmd_go_up(void)
+void do_cmd_go_up(player_type *creature_ptr)
 {
 	bool go_up = FALSE;
 
 	/* Player grid */
-	grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+	grid_type *g_ptr = &current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	int up_num = 0;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
 		set_action(ACTION_NONE);
 	}
@@ -209,41 +209,41 @@ void do_cmd_go_up(void)
 	if (have_flag(f_ptr->flags, FF_QUEST))
 	{
 		/* Cancel the command */
-		if (!confirm_leave_level(p_ptr, FALSE)) return;
+		if (!confirm_leave_level(creature_ptr, FALSE)) return;
 	
 		
 		/* Success */
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("上の階に登った。", "You enter the up staircase."));
 
 		leave_quest_check();
 
-		p_ptr->inside_quest = g_ptr->special;
+		creature_ptr->inside_quest = g_ptr->special;
 
 		/* Activate the quest */
-		if (!quest[p_ptr->inside_quest].status)
+		if (!quest[creature_ptr->inside_quest].status)
 		{
-			if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+			if (quest[creature_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
 				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 			}
-			quest[p_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+			quest[creature_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
 
 		/* Leaving a quest */
-		if (!p_ptr->inside_quest)
+		if (!creature_ptr->inside_quest)
 		{
 			current_floor_ptr->dun_level = 0;
 		}
-		p_ptr->leaving = TRUE;
+		creature_ptr->leaving = TRUE;
 
-		p_ptr->oldpx = 0;
-		p_ptr->oldpy = 0;
+		creature_ptr->oldpx = 0;
+		creature_ptr->oldpy = 0;
 		
-		take_turn(p_ptr, 100);
+		take_turn(creature_ptr, 100);
 
 		/* End the command */
 		return;
@@ -255,32 +255,32 @@ void do_cmd_go_up(void)
 	}
 	else
 	{
-		go_up = confirm_leave_level(p_ptr, FALSE);
+		go_up = confirm_leave_level(creature_ptr, FALSE);
 	}
 
 	/* Cancel the command */
 	if (!go_up) return;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	if (autosave_l) do_cmd_save_game(TRUE);
 
 	/* For a random quest */
-	if (p_ptr->inside_quest &&
-	    quest[p_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
+	if (creature_ptr->inside_quest &&
+	    quest[creature_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
 	{
 		leave_quest_check();
 
-		p_ptr->inside_quest = 0;
+		creature_ptr->inside_quest = 0;
 	}
 
 	/* For a fixed quest */
-	if (p_ptr->inside_quest &&
-	    quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+	if (creature_ptr->inside_quest &&
+	    quest[creature_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 	{
 		leave_quest_check();
 
-		p_ptr->inside_quest = g_ptr->special;
+		creature_ptr->inside_quest = g_ptr->special;
 		current_floor_ptr->dun_level = 0;
 		up_num = 0;
 	}
@@ -305,19 +305,19 @@ void do_cmd_go_up(void)
 		}
 
 		/* Get out from current dungeon */
-		if (current_floor_ptr->dun_level - up_num < d_info[p_ptr->dungeon_idx].mindepth)
+		if (current_floor_ptr->dun_level - up_num < d_info[creature_ptr->dungeon_idx].mindepth)
 			up_num = current_floor_ptr->dun_level;
 	}
 	if (record_stair) do_cmd_write_nikki(NIKKI_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
-	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 	else if (up_num == current_floor_ptr->dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
 	else
 		msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
-	p_ptr->leaving = TRUE;
+	creature_ptr->leaving = TRUE;
 }
 
 
