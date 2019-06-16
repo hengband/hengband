@@ -683,7 +683,7 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool 
  * @details
  * If requested, count only trapped chests.
  */
-static int count_chests(POSITION *y, POSITION *x, bool trapped)
+static int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, bool trapped)
 {
 	DIRECTION d;
 	int count;
@@ -697,8 +697,8 @@ static int count_chests(POSITION *y, POSITION *x, bool trapped)
 	for (d = 0; d < 9; d++)
 	{
 		/* Extract adjacent (legal) location */
-		POSITION yy = p_ptr->y + ddy_ddd[d];
-		POSITION xx = p_ptr->x + ddx_ddd[d];
+		POSITION yy = creature_ptr->y + ddy_ddd[d];
+		POSITION xx = creature_ptr->x + ddx_ddd[d];
 
 		/* No (visible) chest is there */
 		if ((o_idx = chest_check(yy, xx, FALSE)) == 0) continue;
@@ -846,7 +846,7 @@ void do_cmd_open(void)
 		num_doors = count_dt(&y, &x, is_closed_door, FALSE);
 
 		/* Count chests (locked) */
-		num_chests = count_chests(&y, &x, FALSE);
+		num_chests = count_chests(p_ptr, &y, &x, FALSE);
 
 		/* See if only one target */
 		if (num_doors || num_chests)
@@ -1582,7 +1582,7 @@ void do_cmd_disarm(void)
 		num_traps = count_dt(&y, &x, is_trap, TRUE);
 
 		/* Count chests (trapped) */
-		num_chests = count_chests(&y, &x, TRUE);
+		num_chests = count_chests(p_ptr, &y, &x, TRUE);
 
 		/* See if only one target */
 		if (num_traps || num_chests)
