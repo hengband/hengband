@@ -3965,7 +3965,7 @@ static void process_command(void)
 		/* Activate an artifact */
 		case 'A':
 		{
-			do_cmd_activate();
+			do_cmd_activate(p_ptr);
 			break;
 		}
 

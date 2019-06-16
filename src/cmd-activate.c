@@ -630,15 +630,15 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
  * @brief 装備を発動するコマンドのメインルーチン /
  * @return なし
  */
-void do_cmd_activate(void)
+void do_cmd_activate(player_type *user_ptr)
 {
 	OBJECT_IDX item;
 	concptr q, s;
 
-	if (p_ptr->wild_mode) return;
-	if (cmd_limit_arena(p_ptr)) return;
+	if (user_ptr->wild_mode) return;
+	if (cmd_limit_arena(user_ptr)) return;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
 		set_action(ACTION_NONE);
 	}
@@ -651,7 +651,7 @@ void do_cmd_activate(void)
 	if (!choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 
 	/* Activate the item */
-	exe_activate(p_ptr, item);
+	exe_activate(user_ptr, item);
 }
 
 /*!
