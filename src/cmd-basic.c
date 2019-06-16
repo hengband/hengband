@@ -62,12 +62,12 @@
  * @param down_stair TRUEならば階段を降りる処理、FALSEなら階段を昇る処理による内容
  * @return フロア移動を実際に行うならTRUE、キャンセルする場合はFALSE
  */
-static bool confirm_leave_level(bool down_stair)
+static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
 {
-	quest_type *q_ptr = &quest[p_ptr->inside_quest];
+	quest_type *q_ptr = &quest[creature_ptr->inside_quest];
 
 	/* Confirm leaving from once only quest */
-	if (confirm_quest && p_ptr->inside_quest &&
+	if (confirm_quest && creature_ptr->inside_quest &&
 	    (q_ptr->type == QUEST_TYPE_RANDOM ||
 	     (q_ptr->flags & QUEST_FLAG_ONCE &&
 						q_ptr->status != QUEST_STATUS_COMPLETED) ||
@@ -209,7 +209,7 @@ void do_cmd_go_up(void)
 	if (have_flag(f_ptr->flags, FF_QUEST))
 	{
 		/* Cancel the command */
-		if (!confirm_leave_level(FALSE)) return;
+		if (!confirm_leave_level(p_ptr, FALSE)) return;
 	
 		
 		/* Success */
@@ -255,7 +255,7 @@ void do_cmd_go_up(void)
 	}
 	else
 	{
-		go_up = confirm_leave_level(FALSE);
+		go_up = confirm_leave_level(p_ptr, FALSE);
 	}
 
 	/* Cancel the command */
@@ -358,7 +358,7 @@ void do_cmd_go_down(void)
 	else if (have_flag(f_ptr->flags, FF_QUEST))
 	{
 		/* Confirm Leaving */
-		if(!confirm_leave_level(TRUE)) return;
+		if(!confirm_leave_level(p_ptr, TRUE)) return;
 		
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
