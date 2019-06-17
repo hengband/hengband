@@ -3353,34 +3353,15 @@ static void process_world(void)
 		}
 	}
 
-
-
-	/* Check the Food */
 	process_world_aux_digestion();
-
-	/* Process timed damage and regeneration */
 	process_world_aux_hp_and_sp();
-
-	/* Process timeout */
 	process_world_aux_timeout();
-
-	/* Process light */
 	process_world_aux_light();
-
-	/* Process mutation effects */
 	process_world_aux_mutation();
-
-	/* Process curse effects */
 	process_world_aux_curse();
-
-	/* Process recharging */
 	process_world_aux_recharge();
-
-	/* Feel the p_ptr->inventory_list */
 	sense_inventory1();
 	sense_inventory2();
-
-	/* Involuntary Movement */
 	process_world_aux_movement();
 }
 
@@ -3563,8 +3544,6 @@ static void process_command(void)
 				msg_print(_("ウィザードモード突入。", "Wizard mode on."));
 			}
 			p_ptr->update |= (PU_MONSTERS);
-
-			/* Redraw "title" */
 			p_ptr->redraw |= (PR_TITLE);
 
 			break;
@@ -3576,7 +3555,6 @@ static void process_command(void)
 		/* Special "debug" commands */
 		case KTRL('A'):
 		{
-			/* Enter debug mode */
 			if (enter_debug_mode())
 			{
 				do_cmd_debug();
@@ -3592,12 +3570,10 @@ static void process_command(void)
 		/* Special "borg" commands */
 		case KTRL('Z'):
 		{
-			/* Enter borg mode */
 			if (enter_borg_mode())
 			{
 				if (!p_ptr->wild_mode) do_cmd_borg();
 			}
-
 			break;
 		}
 
