@@ -5290,22 +5290,14 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 	Term_get_size(&wid, &hgt);
 	rows = hgt - 4;
 
-	/* Wipe finder */
 	strcpy(finder_str, "");
-
-	/* Wipe shower */
 	strcpy(shower_str, "");
-
-	/* Wipe caption */
 	strcpy(caption, "");
-
-	/* Wipe the hooks */
 	for (i = 0; i < 68; i++)
 	{
 		hook[i][0] = '\0';
 	}
 
-	/* Copy the filename */
 	strcpy(filename, name);
 
 	n = strlen(filename);
@@ -5324,7 +5316,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 	/* Redirect the name */
 	name = filename;
 
-	/* Hack */
 	if (what)
 	{
 		/* Caption */

@@ -221,7 +221,6 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
 	(*lev) = k_info[q_ptr->k_idx].level;
 	(*val) = object_value(q_ptr);
 
-	/* Hack */
 	if (!buf || !dam || !chance || !wgt) return;
 
 	/* Description (too brief) */
