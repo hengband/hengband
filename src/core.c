@@ -1265,7 +1265,7 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 
 static void process_world_aux_digestion(void)
 {
-	if (!p_ptr->inside_battle)
+	if (!p_ptr->phase_out)
 	{
 		/* Digest quickly when gorged */
 		if (p_ptr->food >= PY_FOOD_MAX)
@@ -2149,7 +2149,7 @@ static void process_world_aux_mutation(void)
 	if (!p_ptr->muta2) return;
 
 	/* No effect on monster arena */
-	if (p_ptr->inside_battle) return;
+	if (p_ptr->phase_out) return;
 
 	/* No effect on the global map */
 	if (p_ptr->wild_mode) return;
@@ -2593,7 +2593,7 @@ static void process_world_aux_mutation(void)
  */
 static void process_world_aux_curse(void)
 {
-	if ((p_ptr->cursed & TRC_P_FLAG_MASK) && !p_ptr->inside_battle && !p_ptr->wild_mode)
+	if ((p_ptr->cursed & TRC_P_FLAG_MASK) && !p_ptr->phase_out && !p_ptr->wild_mode)
 	{
 		/*
 		 * Hack: Uncursed teleporting items (e.g. Trump Weapons)
@@ -2938,7 +2938,7 @@ static void process_world_aux_movement(void)
 		 * The player is yanked up/down as soon as
 		 * he loads the autosaved game.
 		 */
-		if (autosave_l && (p_ptr->word_recall == 1) && !p_ptr->inside_battle)
+		if (autosave_l && (p_ptr->word_recall == 1) && !p_ptr->phase_out)
 			do_cmd_save_game(TRUE);
 
 		/* Count down towards recall */
@@ -3052,7 +3052,7 @@ static void process_world_aux_movement(void)
 	/* Delayed Alter reality */
 	if (p_ptr->alter_reality)
 	{
-		if (autosave_l && (p_ptr->alter_reality == 1) && !p_ptr->inside_battle)
+		if (autosave_l && (p_ptr->alter_reality == 1) && !p_ptr->phase_out)
 			do_cmd_save_game(TRUE);
 
 		/* Count down towards alter */
@@ -3118,7 +3118,7 @@ static void process_world(void)
 	}
 
 	/*** Check monster arena ***/
-	if (p_ptr->inside_battle && !p_ptr->leaving)
+	if (p_ptr->phase_out && !p_ptr->leaving)
 	{
 		int i2, j2;
 		int win_m_idx = 0;
@@ -3183,7 +3183,7 @@ static void process_world(void)
 	if (current_world_ptr->game_turn % TURNS_PER_TICK) return;
 
 	/*** Attempt timed autosave ***/
-	if (autosave_t && autosave_freq && !p_ptr->inside_battle)
+	if (autosave_t && autosave_freq && !p_ptr->phase_out)
 	{
 		if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
 			do_cmd_save_game(TRUE);
@@ -3197,7 +3197,7 @@ static void process_world(void)
 	/*** Handle the wilderness/town (sunshine) ***/
 
 	/* While in town/wilderness */
-	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest && !p_ptr->inside_battle && !p_ptr->inside_arena)
+	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
 		if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
@@ -3214,7 +3214,7 @@ static void process_world(void)
 	}
 
 	/* While in the dungeon (vanilla_town or lite_town mode only) */
-	else if ((vanilla_town || (lite_town && !p_ptr->inside_quest && !p_ptr->inside_battle && !p_ptr->inside_arena)) && current_floor_ptr->dun_level)
+	else if ((vanilla_town || (lite_town && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)) && current_floor_ptr->dun_level)
 	{
 		/*** Shuffle the Storekeepers ***/
 
@@ -3265,14 +3265,14 @@ static void process_world(void)
 
 	/* Check for creature generation. */
 	if (one_in_(d_info[p_ptr->dungeon_idx].max_m_alloc_chance) &&
-	    !p_ptr->inside_arena && !p_ptr->inside_quest && !p_ptr->inside_battle)
+	    !p_ptr->inside_arena && !p_ptr->inside_quest && !p_ptr->phase_out)
 	{
 		/* Make a new monster */
 		(void)alloc_monster(MAX_SIGHT + 5, 0);
 	}
 
 	/* Hack -- Check for creature regeneration */
-	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !p_ptr->inside_battle) regen_monsters();
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !p_ptr->phase_out) regen_monsters();
 	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
 
 	if (!p_ptr->leaving)
@@ -4429,7 +4429,7 @@ static void process_player(void)
 		p_ptr->invoking_midnight_curse = FALSE;
 	}
 
-	if (p_ptr->inside_battle)
+	if (p_ptr->phase_out)
 	{
 		for(m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
 		{
@@ -4644,7 +4644,7 @@ static void process_player(void)
 		/* Assume free current_world_ptr->game_turn */
 		free_turn(p_ptr);
 
-		if (p_ptr->inside_battle)
+		if (p_ptr->phase_out)
 		{
 			/* Place the cursor on the player */
 			move_cursor_relative(p_ptr->y, p_ptr->x);
@@ -4997,7 +4997,7 @@ static void dungeon(bool load_game)
 	    !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
 	    !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling();
 
-	if (p_ptr->inside_battle)
+	if (p_ptr->phase_out)
 	{
 		if (load_game)
 		{
@@ -5049,7 +5049,7 @@ static void dungeon(bool load_game)
 
 	current_world_ptr->is_loading_now = TRUE;
 
-	if (p_ptr->energy_need > 0 && !p_ptr->inside_battle &&
+	if (p_ptr->energy_need > 0 && !p_ptr->phase_out &&
 	    (current_floor_ptr->dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))
 		p_ptr->energy_need = 0;
 
@@ -5063,10 +5063,10 @@ static void dungeon(bool load_game)
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((current_floor_ptr->m_cnt + 32 > current_floor_ptr->max_m_idx) && !p_ptr->inside_battle) compact_monsters(64);
+		if ((current_floor_ptr->m_cnt + 32 > current_floor_ptr->max_m_idx) && !p_ptr->phase_out) compact_monsters(64);
 
 		/* Hack -- Compress the monster list occasionally */
-		if ((current_floor_ptr->m_cnt + 32 < current_floor_ptr->m_max) && !p_ptr->inside_battle) compact_monsters(0);
+		if ((current_floor_ptr->m_cnt + 32 < current_floor_ptr->m_max) && !p_ptr->phase_out) compact_monsters(0);
 
 
 		/* Hack -- Compact the object list occasionally */
@@ -5396,7 +5396,7 @@ void play_game(bool new_game)
 		current_floor_ptr->dun_level = 0;
 		p_ptr->inside_quest = 0;
 		p_ptr->inside_arena = FALSE;
-		p_ptr->inside_battle = FALSE;
+		p_ptr->phase_out = FALSE;
 
 		write_level = TRUE;
 

@@ -72,7 +72,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 	}
 	else
 	{
-		if (p_ptr->inside_battle)
+		if (p_ptr->phase_out)
 		{
 			start = randint1(current_floor_ptr->m_max-1)+current_floor_ptr->m_max;
 			if(randint0(2)) plus = -1;
@@ -1370,7 +1370,7 @@ void process_monster(MONSTER_IDX m_idx)
 		if(dead) return;
 	}
 
-	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->inside_battle)
+	if ((is_pet(m_ptr) || is_friendly(m_ptr)) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->phase_out)
 	{
 		static int riding_pinch = 0;
 
@@ -1471,7 +1471,7 @@ void process_monster(MONSTER_IDX m_idx)
 		gets_angry = TRUE;
 	}
 
-	if (p_ptr->inside_battle) gets_angry = FALSE;
+	if (p_ptr->phase_out) gets_angry = FALSE;
 
 	if (gets_angry)
 	{
@@ -1532,7 +1532,7 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Hack -- Ohmu scatters molds! */
 		if (m_ptr->r_idx == MON_OHMU)
 		{
-			if (!p_ptr->inside_arena && !p_ptr->inside_battle)
+			if (!p_ptr->inside_arena && !p_ptr->phase_out)
 			{
 				if (r_ptr->freq_spell && (randint1(100) <= r_ptr->freq_spell))
 				{
@@ -1554,7 +1554,7 @@ void process_monster(MONSTER_IDX m_idx)
 		}
 	}
 
-	if (!p_ptr->inside_battle)
+	if (!p_ptr->phase_out)
 	{
 		/* Hack! "Cyber" monster makes noise... */
 		if (m_ptr->ap_r_idx == MON_CYBER &&
@@ -2373,7 +2373,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 	/* Notice changes in view */
 	if (do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
-		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !p_ptr->inside_battle)))
+		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !p_ptr->phase_out)))
 	{
 		p_ptr->update |= (PU_MON_LITE);
 	}
@@ -2568,7 +2568,7 @@ void process_monsters(void)
 		}
 
 		/* Handle "sight" and "aggravation" */
-        else if ((m_ptr->cdis <= MAX_SIGHT || p_ptr->inside_battle) &&
+        else if ((m_ptr->cdis <= MAX_SIGHT || p_ptr->phase_out) &&
 			(player_has_los_bold(fy, fx) || (p_ptr->cursed & TRC_AGGRAVATE)))
 		{
 			/* We can "see" or "feel" the player */

@@ -541,7 +541,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 
 	teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
 
-	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !p_ptr->inside_battle && los(p_ptr->y, p_ptr->x, oldfy, oldfx))
+	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !p_ptr->phase_out && los(p_ptr->y, p_ptr->x, oldfy, oldfx))
 	{
 		bool follow = FALSE;
 
@@ -3213,7 +3213,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 	bool health_tracked = (p_ptr->health_who == g_ptr->m_idx) ? TRUE : FALSE;
 	monster_type back_m;
 
-	if (p_ptr->inside_arena || p_ptr->inside_battle) return (FALSE);
+	if (p_ptr->inside_arena || p_ptr->phase_out) return (FALSE);
 
 	if ((p_ptr->riding == g_ptr->m_idx) || (m_ptr->mflag2 & MFLAG2_KAGE)) return (FALSE);
 
@@ -3968,7 +3968,7 @@ bool tele_town(void)
 		return FALSE;
 	}
 
-	if (p_ptr->inside_arena || p_ptr->inside_battle)
+	if (p_ptr->inside_arena || p_ptr->phase_out)
 	{
 		msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
 		return FALSE;

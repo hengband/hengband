@@ -120,7 +120,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 	u32b div_l;
 
 	if (!monster_is_valid(m_ptr)) return;
-	if (is_pet(m_ptr) || p_ptr->inside_battle) return;
+	if (is_pet(m_ptr) || p_ptr->phase_out) return;
 
 	/*
 	 * - Ratio of monster's level to player's level effects
@@ -887,7 +887,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 	r_ptr = &r_info[m_ptr->r_idx];
 	s_ptr = &r_info[s_idx];
 
-	if (p_ptr->inside_battle) return;
+	if (p_ptr->phase_out) return;
 
 	if (!r_ptr->next_exp) return;
 
@@ -1352,7 +1352,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		monster_death(m_idx, TRUE);
 
 		/* Mega hack : replace IKETA to BIKETAL */
-		if ((m_ptr->r_idx == MON_IKETA) && !(p_ptr->inside_arena || p_ptr->inside_battle))
+		if ((m_ptr->r_idx == MON_IKETA) && !(p_ptr->inside_arena || p_ptr->phase_out))
 		{
 			POSITION dummy_y = m_ptr->fy;
 			POSITION dummy_x = m_ptr->fx;

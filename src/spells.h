@@ -341,7 +341,7 @@ extern bool tele_town(void);
 
 /* Is "teleport level" ineffective to this target? */
 #define TELE_LEVEL_IS_INEFF(TARGET) \
-	(p_ptr->inside_arena || p_ptr->inside_battle || \
+	(p_ptr->inside_arena || p_ptr->phase_out || \
 	 (p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || \
 	 (((TARGET) <= 0) && (quest_number(current_floor_ptr->dun_level) || (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) && \
 	  (current_floor_ptr->dun_level >= 1) && ironman_downward))

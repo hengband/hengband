@@ -121,7 +121,7 @@ struct player_type
 	s16b arena_number;		/* monster number in arena -KMW- */
 	bool inside_arena;		/* Is character inside arena? */
 	QUEST_IDX inside_quest;		/* Inside quest level */
-	bool inside_battle;		/* Is character inside tougijou? */
+	bool phase_out;		/*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 
 	DUNGEON_IDX dungeon_idx; /* current dungeon index */
 	POSITION wilderness_x;	/* Coordinates in the wilderness */

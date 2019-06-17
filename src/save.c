@@ -697,7 +697,7 @@ static void wr_extra(void)
 	wr_s16b(p_ptr->arena_number);
 	wr_s16b(p_ptr->inside_arena);
 	wr_s16b(p_ptr->inside_quest);
-	wr_s16b(p_ptr->inside_battle);
+	wr_s16b(p_ptr->phase_out);
 	wr_byte(p_ptr->exit_bldg);
 	wr_byte(0); /* Unused */
 

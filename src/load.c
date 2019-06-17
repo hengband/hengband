@@ -1967,11 +1967,11 @@ static void rd_extra(void)
 	rd_s16b(&tmp16s);
 	p_ptr->inside_arena = (bool)tmp16s;
 	rd_s16b(&p_ptr->inside_quest);
-	if (z_older_than(10, 3, 5)) p_ptr->inside_battle = FALSE;
+	if (z_older_than(10, 3, 5)) p_ptr->phase_out = FALSE;
 	else
 	{
 		rd_s16b(&tmp16s);
-		p_ptr->inside_battle = (bool)tmp16s;
+		p_ptr->phase_out = (bool)tmp16s;
 	}
 	rd_byte(&p_ptr->exit_bldg);
 	rd_byte(&tmp8u);

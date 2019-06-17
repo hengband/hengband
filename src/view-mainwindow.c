@@ -196,7 +196,7 @@ concptr map_name(void)
 		return _("地上", "Surface");
 	else if (p_ptr->inside_arena)
 		return _("アリーナ", "Arena");
-	else if (p_ptr->inside_battle)
+	else if (p_ptr->phase_out)
 		return _("闘技場", "Monster Arena");
 	else if (!current_floor_ptr->dun_level && p_ptr->town_num)
 		return town_info[p_ptr->town_num].name;
@@ -1393,7 +1393,7 @@ static void health_redraw(bool riding)
 
 	m_ptr = &current_floor_ptr->m_list[health_who];
 
-	if (p_ptr->wizard && p_ptr->inside_battle)
+	if (p_ptr->wizard && p_ptr->phase_out)
 	{
 		row = ROW_INFO - 2;
 		col = COL_INFO + 2;

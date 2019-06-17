@@ -1452,7 +1452,7 @@ void update_gambling_monsters(void)
 	int mon_level;
 	int power[4];
 	bool tekitou;
-	bool old_inside_battle = p_ptr->inside_battle;
+	bool old_inside_battle = p_ptr->phase_out;
 
 	for (i = 0; i < max_d_idx; i++)
 		if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
@@ -1480,9 +1480,9 @@ void update_gambling_monsters(void)
 			while (1)
 			{
 				get_mon_num_prep(monster_can_entry_arena, NULL);
-				p_ptr->inside_battle = TRUE;
+				p_ptr->phase_out = TRUE;
 				r_idx = get_mon_num(mon_level);
-				p_ptr->inside_battle = old_inside_battle;
+				p_ptr->phase_out = old_inside_battle;
 				if (!r_idx) continue;
 
 				if ((r_info[r_idx].flags1 & RF1_UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2))
@@ -1661,10 +1661,10 @@ static bool kakutoujou(void)
 			/* Save the surface floor as saved floor */
 			prepare_change_floor_mode(CFM_SAVE_FLOORS);
 
-			p_ptr->inside_battle = TRUE;
+			p_ptr->phase_out = TRUE;
 			p_ptr->leaving = TRUE;
-
 			p_ptr->leave_bldg = TRUE;
+
 			screen_load();
 
 			return (TRUE);
@@ -4125,13 +4125,13 @@ void do_cmd_bldg(void)
 
 		return;
 	}
-	else if (p_ptr->inside_battle)
+	else if (p_ptr->phase_out)
 	{
 		/* Don't save the arena as saved floor */
 		prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
 
 		p_ptr->leaving = TRUE;
-		p_ptr->inside_battle = FALSE;
+		p_ptr->phase_out = FALSE;
 
 		/* Re-enter the monster arena */
 		command_new = SPECIAL_KEY_BUILDING;
@@ -4175,7 +4175,7 @@ void do_cmd_bldg(void)
 		{
 			p_ptr->leave_bldg = TRUE;
 			p_ptr->inside_arena = FALSE;
-			p_ptr->inside_battle = FALSE;
+			p_ptr->phase_out = FALSE;
 			break;
 		}
 
@@ -4226,7 +4226,7 @@ void do_cmd_bldg(void)
 void determine_today_mon(bool conv_old)
 {
 	int max_dl = 3, i;
-	bool old_inside_battle = p_ptr->inside_battle;
+	bool old_inside_battle = p_ptr->phase_out;
 	monster_race *r_ptr;
 
 	if (!conv_old)
@@ -4239,7 +4239,7 @@ void determine_today_mon(bool conv_old)
 	}
 	else max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
 
-	p_ptr->inside_battle = TRUE;
+	p_ptr->phase_out = TRUE;
 	get_mon_num_prep(NULL, NULL);
 
 	while (1)
@@ -4257,7 +4257,7 @@ void determine_today_mon(bool conv_old)
 	}
 
 	p_ptr->today_mon = 0;
-	p_ptr->inside_battle = old_inside_battle;
+	p_ptr->phase_out = old_inside_battle;
 }
 
 

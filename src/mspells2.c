@@ -354,7 +354,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	{
 		bool success = FALSE;
 
-		if (p_ptr->inside_battle)
+		if (p_ptr->phase_out)
 		{
 			start = randint1(current_floor_ptr->m_max-1) + current_floor_ptr->m_max;
 			if (randint0(2)) plus = -1;
@@ -434,7 +434,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		f6 &= (RF6_NOMAGIC_MASK);
 	}
 
-	if (p_ptr->inside_arena || p_ptr->inside_battle)
+	if (p_ptr->inside_arena || p_ptr->phase_out)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
@@ -443,7 +443,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		if (m_ptr->r_idx == MON_ROLENTO) f6 &= ~(RF6_SPECIAL);
 	}
 
-	if (p_ptr->inside_battle && !one_in_(3))
+	if (p_ptr->phase_out && !one_in_(3))
 	{
 		f6 &= ~(RF6_HEAL);
 	}

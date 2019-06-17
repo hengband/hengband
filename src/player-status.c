@@ -5205,7 +5205,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 {
 	int power = 100;
 
-	if (p_ptr->inside_battle || !current_world_ptr->character_dungeon) return;
+	if (p_ptr->phase_out || !current_world_ptr->character_dungeon) return;
 
 	if (!necro && m_ptr)
 	{
@@ -5847,7 +5847,7 @@ void cheat_death(player_type *creature_ptr)
 
 	current_floor_ptr->dun_level = 0;
 	creature_ptr->inside_arena = FALSE;
-	creature_ptr->inside_battle = FALSE;
+	creature_ptr->phase_out = FALSE;
 	leaving_quest = 0;
 	creature_ptr->inside_quest = 0;
 	if (p_ptr->dungeon_idx) creature_ptr->recall_dungeon = p_ptr->dungeon_idx;

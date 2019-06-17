@@ -340,7 +340,7 @@ typedef struct {
  * Note the use of comparison to zero to force a "boolean" result
  */
 #define player_has_los_bold(Y,X) \
-    (((current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->inside_battle)
+    (((current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->phase_out)
 
 
 /*

@@ -2234,7 +2234,7 @@ void set_pet(monster_type *m_ptr)
  */
 void set_hostile(monster_type *m_ptr)
 {
-	if (p_ptr->inside_battle) return;
+	if (p_ptr->phase_out) return;
 	m_ptr->smart &= ~SM_PET;
 	m_ptr->smart &= ~SM_FRIENDLY;
 }
@@ -2248,7 +2248,7 @@ void set_hostile(monster_type *m_ptr)
  */
 void anger_monster(monster_type *m_ptr)
 {
-	if (p_ptr->inside_battle) return;
+	if (p_ptr->phase_out) return;
 	if (is_friendly(m_ptr))
 	{
 		GAME_TEXT m_name[MAX_NLEN];
@@ -2407,7 +2407,7 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race *s_ptr = &r_info[n_ptr->r_idx];
 
-	if (p_ptr->inside_battle)
+	if (p_ptr->phase_out)
 	{
 		if (is_pet(m_ptr) || is_pet(n_ptr)) return FALSE;
 		return TRUE;
@@ -2541,7 +2541,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	object_type *q_ptr;
 
 	bool drop_chosen_item = drop_item && !cloned && !p_ptr->inside_arena
-		&& !p_ptr->inside_battle && !is_pet(m_ptr);
+		&& !p_ptr->phase_out && !is_pet(m_ptr);
 
 	/* The caster is dead? */
 	if (current_world_ptr->timewalk_m_idx && current_world_ptr->timewalk_m_idx == m_idx) current_world_ptr->timewalk_m_idx = 0;
@@ -2634,7 +2634,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	/* Drop a dead corpse? */
 	if (one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) &&
 		(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) &&
-		!(p_ptr->inside_arena || p_ptr->inside_battle || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+		!(p_ptr->inside_arena || p_ptr->phase_out || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
 	{
 		/* Assume skeleton */
 		bool corpse = FALSE;
@@ -2682,7 +2682,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	{
 	case MON_PINK_HORROR:
 		/* Pink horrors are replaced with 2 Blue horrors */
-		if (!(p_ptr->inside_arena || p_ptr->inside_battle))
+		if (!(p_ptr->inside_arena || p_ptr->phase_out))
 		{
 			bool notice = FALSE;
 
@@ -2741,7 +2741,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		 * Mega^3-hack: killing a 'Warrior of the Dawn' is likely to
 		 * spawn another in the fallen one's place!
 		 */
-		if (!p_ptr->inside_arena && !p_ptr->inside_battle)
+		if (!p_ptr->inside_arena && !p_ptr->phase_out)
 		{
 			if (!one_in_(7))
 			{
@@ -3040,7 +3040,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	if (cloned && !(r_ptr->flags1 & RF1_UNIQUE))
 		number = 0; /* Clones drop no stuff unless Cloning Pits */
 
-	if (is_pet(m_ptr) || p_ptr->inside_battle || p_ptr->inside_arena)
+	if (is_pet(m_ptr) || p_ptr->phase_out || p_ptr->inside_arena)
 		number = 0; /* Pets drop no stuff */
 	if (!drop_item && (r_ptr->d_char != '$')) number = 0;
 
@@ -3088,7 +3088,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 	/* Only process "Quest Monsters" */
 	if (!(r_ptr->flags1 & RF1_QUESTOR)) return;
-	if (p_ptr->inside_battle) return;
+	if (p_ptr->phase_out) return;
 
 	/* Winner? */
 	if ((m_ptr->r_idx == MON_SERPENT) && !cloned)

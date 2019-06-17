@@ -811,7 +811,7 @@ static bool spell_world(byte spell)
  */
 static bool spell_special(byte spell)
 {
-	if (p_ptr->inside_battle) return FALSE;
+	if (p_ptr->phase_out) return FALSE;
 	if (spell == 160 + 7) return (TRUE);
 	return (FALSE);
 }
@@ -1577,7 +1577,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	/* Remove the "ineffective" spells */
 	remove_bad_spells(m_idx, &f4, &f5, &f6);
 
-	if (p_ptr->inside_arena || p_ptr->inside_battle)
+	if (p_ptr->inside_arena || p_ptr->phase_out)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);

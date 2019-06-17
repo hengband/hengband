@@ -597,7 +597,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		case GF_DARK_WEAK:
 		case GF_DARK:
 		{
-			bool do_dark = !p_ptr->inside_battle && !is_mirror_grid(g_ptr);
+			bool do_dark = !p_ptr->phase_out && !is_mirror_grid(g_ptr);
 			int j;
 
 			/* Turn off the light. */
@@ -1154,7 +1154,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	bool obvious = FALSE;
 
 	/* Can the player know about this effect? */
-	bool known = ((m_ptr->cdis <= MAX_SIGHT) || p_ptr->inside_battle);
+	bool known = ((m_ptr->cdis <= MAX_SIGHT) || p_ptr->phase_out);
 
 	/* Were the effects "irrelevant"? */
 	bool skipped = FALSE;
@@ -3613,7 +3613,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_poly = FALSE;
 
 	/* "Unique" and "quest" monsters can only be "killed" by the player. */
-	if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->inside_battle)
+	if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->phase_out)
 	{
 		if (who && (dam > m_ptr->hp)) dam = m_ptr->hp;
 	}
@@ -3901,7 +3901,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		blood_curse_to_enemy(who);
 	}
 
-	if (p_ptr->inside_battle)
+	if (p_ptr->phase_out)
 	{
 		p_ptr->health_who = g_ptr->m_idx;
 		p_ptr->redraw |= (PR_HEALTH);

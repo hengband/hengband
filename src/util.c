@@ -1824,7 +1824,7 @@ void select_floor_music(void)
 		return;
 	}
 
-	if(p_ptr->inside_battle)
+	if(p_ptr->phase_out)
 	{
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BATTLE);
 		return;

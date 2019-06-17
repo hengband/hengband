@@ -1412,7 +1412,7 @@ void generate_random_floor(void)
 		}
 
 		/* Build the battle -KMW- */
-		else if (p_ptr->inside_battle)
+		else if (p_ptr->phase_out)
 		{
 			/* Small arena */
 			generate_gambling_arena();

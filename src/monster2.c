@@ -1063,7 +1063,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 		    (get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
 			continue;
 
-		if (!p_ptr->inside_battle && !chameleon_change_m_idx &&
+		if (!p_ptr->phase_out && !chameleon_change_m_idx &&
 		    summon_specific_type != SUMMON_GUARDIANS)
 		{
 			/* Hack -- don't create questors */
@@ -1083,7 +1083,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 		entry->prob2 = entry->prob1;
 
 		if (current_floor_ptr->dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) &&
-			!restrict_monster_to_dungeon(p_ptr->dungeon_idx, entry->index) && !p_ptr->inside_battle)
+			!restrict_monster_to_dungeon(p_ptr->dungeon_idx, entry->index) && !p_ptr->phase_out)
 		{
 			int hoge = entry->prob2 * d_info[p_ptr->dungeon_idx].special_div;
 			entry->prob2 = hoge / 64;
@@ -1145,7 +1145,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	}
 
 	/* Boost the level */
-	if (!p_ptr->inside_battle && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
+	if (!p_ptr->phase_out && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 	{
 		/* Nightmare mode allows more out-of depth monsters */
 		if (ironman_nightmare && !randint0(pls_kakuritu))
@@ -1185,7 +1185,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 		/* Access the actual race */
 		r_ptr = &r_info[r_idx];
 
-		if (!p_ptr->inside_battle && !chameleon_change_m_idx)
+		if (!p_ptr->phase_out && !chameleon_change_m_idx)
 		{
 			/* Hack -- "unique" monsters must be "unique" */
 			if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -1535,7 +1535,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 			}
 
 			/* Inside monster arena, and it is not your mount */
-			else if (p_ptr->inside_battle &&
+			else if (p_ptr->phase_out &&
 				 !(p_ptr->riding && (&current_floor_ptr->m_list[p_ptr->riding] == m_ptr)))
 			{
 				/* It is a fake unique monster */
@@ -2534,7 +2534,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		if (!monster_can_enter(y, x, r_ptr, 0)) return FALSE;
 	}
 
-	if (!p_ptr->inside_battle)
+	if (!p_ptr->phase_out)
 	{
 		/* Hack -- "unique" monsters must be "unique" */
 		if (((r_ptr->flags1 & (RF1_UNIQUE)) ||

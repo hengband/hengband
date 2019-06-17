@@ -33,7 +33,7 @@
 * More maximum values
 */
 #define MAX_SIGHT       20      /*!< プレイヤーの最大視界範囲(マス) / Maximum view distance */
-#define MAX_RANGE       (p_ptr->inside_battle ? 36 : 18)      /*!< プレイヤーの攻撃射程(マス) / Maximum range (spells, etc) */
+#define MAX_RANGE       (p_ptr->phase_out ? 36 : 18)      /*!< プレイヤーの攻撃射程(マス) / Maximum range (spells, etc) */
 #define AAF_LIMIT       100     /*!< モンスターの限界感知範囲(マス) Limit of sensing radius */
 
 #define MIN_M_ALLOC_TD          4 /*!< 街(昼間)の最低住人配置数 / The town starts out with 4 residents during the day */

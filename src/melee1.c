@@ -4813,7 +4813,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 	{
 		if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
 			(r_ptr->flags7 & RF7_NAZGUL)) &&
-			!p_ptr->inside_battle)
+			!p_ptr->phase_out)
 		{
 			m_ptr->hp = 1;
 		}

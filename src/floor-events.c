@@ -283,7 +283,7 @@ void update_dungeon_feeling(void)
 	if (!current_floor_ptr->dun_level) return;
 
 	/* No feeling in the arena */
-	if (p_ptr->inside_battle) return;
+	if (p_ptr->phase_out) return;
 
 	/* Extract delay time */
 	delay = MAX(10, 150 - p_ptr->skill_fos) * (150 - current_floor_ptr->dun_level) * TURNS_PER_TICK / 100;
@@ -1551,7 +1551,7 @@ void update_mon_lite(void)
 			if (!rad) continue;
 			else if (rad > 0)
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && is_daytime()) || p_ptr->inside_battle)) continue;
+				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && is_daytime()) || p_ptr->phase_out)) continue;
 				if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) rad = 1;
 				add_mon_lite = mon_lite_hack;
 				f_flag = FF_LOS;
