@@ -1590,8 +1590,6 @@ static void do_cmd_dump_options(void)
 	FILE *fff;
 	char buf[1024];
 	int  **exist;
-
-	/* Build the filename */
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");
 
 	/* File type is "TEXT" */

@@ -5314,8 +5314,6 @@ void play_game(bool new_game)
 		
 		/* Hack -- Character is now "icky" */
 		current_world_ptr->character_icky = TRUE;
-
-		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 		/* Open the high score file, for reading/writing */
@@ -5783,8 +5781,6 @@ void close_game(void)
 	/* Hack -- Character is now "icky" */
 	current_world_ptr->character_icky = TRUE;
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	/* Grab permissions */

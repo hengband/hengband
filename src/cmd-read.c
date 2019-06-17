@@ -556,8 +556,6 @@ void exe_read(INVENTORY_IDX item, bool known)
 
 		/* Display object description */
 		object_desc(o_name, o_ptr, OD_NAME_ONLY);
-
-		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
 
 		/* Peruse the help file */

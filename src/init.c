@@ -312,8 +312,6 @@ static errr check_modification_date(int fd, concptr template_file)
 	char buf[1024];
 
 	struct stat txt_stat, raw_stat;
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, template_file);
 
 	/* Access stats on text file */
@@ -477,8 +475,6 @@ static errr init_info(concptr filename, header *head,
 #ifdef ALLOW_TEMPLATES
 
 	/*** Load the binary image file ***/
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
 
@@ -520,8 +516,6 @@ static errr init_info(concptr filename, header *head,
 		if (tag)  (*tag)  = head->tag_ptr;
 
 		/*** Load the ascii template file ***/
-
-		/* Build the filename */
 
 		path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
 
@@ -579,8 +573,6 @@ static errr init_info(concptr filename, header *head,
 
 		/* File type is "DATA" */
 		FILE_TYPE(FILE_TYPE_DATA);
-
-		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
 
@@ -633,8 +625,6 @@ static errr init_info(concptr filename, header *head,
 
 
 		/*** Load the binary image file ***/
-
-		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
 		/* Attempt to open the "raw" file */
@@ -1728,8 +1718,6 @@ void init_angband(void)
 
 
 	/*** Verify the "news" file ***/
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Attempt to open the file */
@@ -1750,8 +1738,6 @@ void init_angband(void)
 
 	/*** Display the "news" file ***/
 	Term_clear();
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Open the News file */
@@ -1778,8 +1764,6 @@ void init_angband(void)
 
 
 	/*** Verify (or create) the "high score" file ***/
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	/* Attempt to open the high score file */

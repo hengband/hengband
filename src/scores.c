@@ -407,8 +407,6 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 void display_scores(int from, int to)
 {
 	char buf[1024];
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	/* Open the binary high score file, for reading */
@@ -688,8 +686,6 @@ void show_highclass(void)
 	char buf[1024], out_val[256];
 
 	screen_save();
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	highscore_fd = fd_open(buf, O_RDONLY);
@@ -769,8 +765,6 @@ void race_score(int race_num)
 	sprintf(tmp_str,_("最高の%s", "The Greatest of all the %s"), race_info[race_num].title);
 
 	prt(tmp_str, 5, 15);
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	highscore_fd = fd_open(buf, O_RDONLY);

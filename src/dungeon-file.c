@@ -4917,8 +4917,6 @@ errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax)
 	bool bypass = FALSE;
 	int x = xmin, y = ymin;
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
 
 	/* Open the file */

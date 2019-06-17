@@ -2903,8 +2903,6 @@ static bool write_text_lines(concptr filename, concptr *lines_list)
 
 	int lines = 0;
 	char buf[1024];
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
 	
 	/* Open the file */

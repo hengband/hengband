@@ -1274,8 +1274,6 @@ errr process_pref_file(concptr name)
 	char buf[1024];
 
 	errr err1, err2;
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
 	/* Process the system pref file */
@@ -1284,8 +1282,6 @@ errr process_pref_file(concptr name)
 	/* Stop at parser errors, but not at non-existing file */
 	if (err1 > 0) return err1;
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 	
 	/* Process the user pref file */
@@ -1370,8 +1366,6 @@ errr check_time_init(void)
 
 	char	buf[1024];
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "time.txt");
 
 	/* Open the file */
@@ -1496,8 +1490,6 @@ errr check_load_init(void)
 	char	temphost[MAXHOSTNAMELEN+1];
 	char	thishost[MAXHOSTNAMELEN+1];
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "load.txt");
 
 	/* Open the "load" file */
@@ -5051,8 +5043,6 @@ errr file_character(concptr name)
 	int		fd = -1;
 	FILE		*fff = NULL;
 	char		buf[1024];
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
 	/* File type is "TEXT" */
@@ -5352,8 +5342,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 	{
 		/* Caption */
 		sprintf(caption, _("ヘルプ・ファイル'%s'", "Help file '%s'"), name);
-
-		/* Build the filename */
 		path_build(path, sizeof(path), ANGBAND_DIR_HELP, name);
 
 		/* Open the file */
@@ -5365,8 +5353,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 	{
 		/* Caption */
 		sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
-
-		/* Build the filename */
 		path_build(path, sizeof(path), ANGBAND_DIR_INFO, name);
 
 		/* Open the file */
@@ -5376,7 +5362,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 	/* Look in "info" */
 	if (!fff)
 	{
-		/* Build the filename */
 		path_build(path, sizeof(path), ANGBAND_DIR, name);
 
 		for (i = 0; path[i]; i++)
@@ -5744,8 +5729,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 
 			if (!get_string(_("ファイル名: ", "File name: "), xtmp, 80)) continue;
 			my_fclose(fff);
-
-			/* Build the filename */
 			path_build(buff, sizeof(buff), ANGBAND_DIR_USER, xtmp);
 
 			/* Hack -- Re-Open the file */
@@ -5953,8 +5936,6 @@ void process_player_name(bool sf)
 		/* Rename the savefile, using the p_ptr->base_name */
 		(void)sprintf(temp, "%s", p_ptr->base_name);
 #endif
-
-		/* Build the filename */
 		path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
 	}
 
@@ -6148,8 +6129,6 @@ static void make_bones(void)
 
 			/* "Bones" name */
 			sprintf(tmp, "bone.%03d", current_floor_ptr->dun_level);
-
-			/* Build the filename */
 			path_build(str, sizeof(str), ANGBAND_DIR_BONE, tmp);
 
 			/* Attempt to open the bones file */
@@ -6226,8 +6205,6 @@ void print_tomb(void)
 		int    extra_line = 0;
 #endif
 		Term_clear();
-
-		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
 
 		/* Open the News file */
@@ -6620,8 +6597,6 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 	int     counter, test;
 	int     line_num = 0;
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, file_name);
 
 	/* Open the file */
@@ -6749,8 +6724,6 @@ errr process_autopick_file(concptr name)
 	char buf[1024];
 
 	errr err = 0;
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
 	err = process_pref_file_aux(buf, PREF_TYPE_AUTOPICK);
@@ -6770,8 +6743,6 @@ errr process_histpref_file(concptr name)
 	char buf[1024];
 	errr err = 0;
 	bool old_character_xtra = current_world_ptr->character_xtra;
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
 	/* Hack -- prevent modification birth options in this file */

@@ -311,8 +311,6 @@ static void spoil_obj_desc(concptr fname)
 	char chance[80];
 	char dam[80];
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
@@ -1606,8 +1604,6 @@ static void spoil_artifact(concptr fname)
 	object_type *q_ptr;
 	obj_desc_list artifact;
 	char buf[1024];
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
@@ -1690,8 +1686,6 @@ static void spoil_mon_desc(concptr fname)
 	char ac[80];
 	char hp[80];
 	char exp[80];
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
@@ -2024,8 +2018,6 @@ static void spoil_mon_info(concptr fname)
 
 	u16b why = 2;
 	MONRACE_IDX *who;
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
@@ -2232,8 +2224,6 @@ static void spoil_mon_evol(concptr fname)
 	monster_race *r_ptr;
 	int **evol_tree, i, j, n, r_idx;
 	int *evol_tree_zero; /* For C_KILL() */
-
-	/* Build the filename */
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
@@ -2530,8 +2520,6 @@ void spoil_random_artifact(concptr fname)
 	object_type *q_ptr;
 
 	char buf[1024];
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */

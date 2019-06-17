@@ -438,8 +438,6 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 
 	/* different filne name to avoid mixing */
 	sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
 	/* File type is "TEXT" */
@@ -831,8 +829,6 @@ static void do_cmd_disp_nikki(void)
 					   "Quest of The World's Greatest Brain"};
 #endif
 	sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
 	if (p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_MONK || p_ptr->pclass == CLASS_SAMURAI || p_ptr->pclass == CLASS_BERSERKER)
@@ -901,8 +897,6 @@ static void do_cmd_erase_nikki(void)
 
 	if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your record? "))) return;
 		sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 	fd_kill(buf);
 
@@ -1400,8 +1394,6 @@ static errr macro_dump(concptr fname)
 	int i;
 
 	char buf[1024];
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
@@ -1556,8 +1548,6 @@ static errr keymap_dump(concptr fname)
 		mode = KEYMAP_MODE_ORIG;
 	}
 
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
 	/* File type is "TEXT" */
@@ -2154,8 +2144,6 @@ void do_cmd_visuals(void)
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
-
-			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
@@ -2205,8 +2193,6 @@ void do_cmd_visuals(void)
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
-
-			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
@@ -2272,8 +2258,6 @@ void do_cmd_visuals(void)
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
-
-			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
@@ -2728,8 +2712,6 @@ void do_cmd_colors(void)
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
-
-			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 			/* Append to the file */
@@ -3619,8 +3601,6 @@ void do_cmd_load_screen(void)
 	TERM_LEN wid, hgt;
 
 	Term_get_size(&wid, &hgt);
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
 	/* Append to the file */
@@ -3924,8 +3904,6 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		return;
 	}
 	if (message) screen_save();
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
 	tmpfff = my_fopen(buf, "r");
 	if (!tmpfff) {
@@ -4032,8 +4010,6 @@ static void do_cmd_save_screen_html(void)
 
 	if (!get_string(_("ファイル名: ", "File name: "), tmp, 80))
 		return;
-
-	/* Build the filename */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
 
 	msg_print(NULL);
@@ -4105,8 +4081,6 @@ void do_cmd_save_screen(void)
 		SYMBOL_CODE c = ' ';
 		FILE *fff;
 		char buf[1024];
-
-		/* Build the filename */
 		path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 
 		/* File type is "TEXT" */

@@ -3982,8 +3982,6 @@ static void process_menus(WORD wCmd)
 		case IDM_FILE_SCORE:
 		{
 			char buf[1024];
-
-			/* Build the filename */
 			path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 			/* Open the binary high score file, for reading */
@@ -5590,8 +5588,6 @@ static void init_stuff(void)
 	validate_dir(ANGBAND_DIR_SAVE, FALSE);
 	validate_dir(ANGBAND_DIR_USER, TRUE);
 	validate_dir(ANGBAND_DIR_XTRA, TRUE);
-
-	/* Build the filename */
 	path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Hack -- Validate the "news.txt" file */
@@ -5607,8 +5603,6 @@ static void init_stuff(void)
 
 	/* Validate the "font" directory */
 	validate_dir(ANGBAND_DIR_XTRA_FONT, TRUE);
-
-	/* Build the filename */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
 
 	/* Hack -- Validate the basic font */
