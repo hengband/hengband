@@ -421,8 +421,13 @@ static errr path_temp(char *buf, int max)
 
 #endif
 
-/*
- * Create a new path by appending a file (or directory) to a path.
+/*!
+ * @brief ファイル入出力のためのパス生成する。/ Create a new path by appending a file (or directory) to a path.
+ * @param buf ファイルのフルを返すバッファ
+ * @param max bufのサイズ
+ * @param path ファイルパス
+ * @param file ファイル名
+ * @return エラーコード(ただし常に0を返す)
  *
  * This requires no special processing on simple machines, except
  * for verifying the size of the filename, but note the ability to
