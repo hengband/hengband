@@ -2,6 +2,7 @@
 #include "angband.h"
 #include "util.h"
 
+#include "cmd-basic.h"
 #include "artifact.h"
 #include "floor.h"
 #include "grid.h"
@@ -84,17 +85,8 @@ bool create_ammo(void)
 	else
 		sprintf(com, _("[S]弾:", "Create [S]hots ?"));
 
-	if (p_ptr->confused)
-	{
-		msg_print(_("混乱してる！", "You are too confused!"));
-		return FALSE;
-	}
-
-	if (p_ptr->blind)
-	{
-		msg_print(_("目が見えない！", "You are blind!"));
-		return FALSE;
-	}
+	if (cmd_limit_confused(p_ptr)) return FALSE;
+	if (cmd_limit_blind(p_ptr)) return FALSE;
 
 	while (TRUE)
 	{
