@@ -1331,3 +1331,147 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	return (TRUE);
 }
 
+
+
+/*!
+ * @brief 武器へのエゴ付加処理 /
+ * Brand the current weapon
+ * @param brand_type エゴ化ID(e_info.txtとは連動していない)
+ * @return なし
+ */
+void brand_weapon(int brand_type)
+{
+	OBJECT_IDX item;
+	object_type *o_ptr;
+	concptr q, s;
+
+	/* Assume enchant weapon */
+	item_tester_hook = object_allow_enchant_melee_weapon;
+
+	q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
+	s = _("強化できる武器がない。", "You have nothing to enchant.");
+
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
+	if (!o_ptr) return;
+
+	/* you can never modify artifacts / ego-items */
+	/* you can never modify cursed items */
+	/* TY: You _can_ modify broken items (if you're silly enough) */
+	if (o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) &&
+		!object_is_cursed(o_ptr) &&
+		!((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) &&
+		!((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) &&
+		!((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE)))
+	{
+		concptr act = NULL;
+
+		/* Let's get the name before it is changed... */
+		GAME_TEXT o_name[MAX_NLEN];
+		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+
+		switch (brand_type)
+		{
+		case 17:
+			if (o_ptr->tval == TV_SWORD)
+			{
+				act = _("は鋭さを増した！", "becomes very sharp!");
+
+				o_ptr->name2 = EGO_SHARPNESS;
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, current_floor_ptr->dun_level) + 1;
+
+				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
+					o_ptr->pval = 2;
+			}
+			else
+			{
+				act = _("は破壊力を増した！", "seems very powerful.");
+				o_ptr->name2 = EGO_EARTHQUAKES;
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, current_floor_ptr->dun_level);
+			}
+			break;
+		case 16:
+			act = _("は人間の血を求めている！", "seems to be looking for humans!");
+			o_ptr->name2 = EGO_KILL_HUMAN;
+			break;
+		case 15:
+			act = _("は電撃に覆われた！", "covered with lightning!");
+			o_ptr->name2 = EGO_BRAND_ELEC;
+			break;
+		case 14:
+			act = _("は酸に覆われた！", "coated with acid!");
+			o_ptr->name2 = EGO_BRAND_ACID;
+			break;
+		case 13:
+			act = _("は邪悪なる怪物を求めている！", "seems to be looking for evil monsters!");
+			o_ptr->name2 = EGO_KILL_EVIL;
+			break;
+		case 12:
+			act = _("は異世界の住人の肉体を求めている！", "seems to be looking for demons!");
+			o_ptr->name2 = EGO_KILL_DEMON;
+			break;
+		case 11:
+			act = _("は屍を求めている！", "seems to be looking for undead!");
+			o_ptr->name2 = EGO_KILL_UNDEAD;
+			break;
+		case 10:
+			act = _("は動物の血を求めている！", "seems to be looking for animals!");
+			o_ptr->name2 = EGO_KILL_ANIMAL;
+			break;
+		case 9:
+			act = _("はドラゴンの血を求めている！", "seems to be looking for dragons!");
+			o_ptr->name2 = EGO_KILL_DRAGON;
+			break;
+		case 8:
+			act = _("はトロルの血を求めている！", "seems to be looking for troll!s");
+			o_ptr->name2 = EGO_KILL_TROLL;
+			break;
+		case 7:
+			act = _("はオークの血を求めている！", "seems to be looking for orcs!");
+			o_ptr->name2 = EGO_KILL_ORC;
+			break;
+		case 6:
+			act = _("は巨人の血を求めている！", "seems to be looking for giants!");
+			o_ptr->name2 = EGO_KILL_GIANT;
+			break;
+		case 5:
+			act = _("は非常に不安定になったようだ。", "seems very unstable now.");
+			o_ptr->name2 = EGO_TRUMP;
+			o_ptr->pval = randint1(2);
+			break;
+		case 4:
+			act = _("は血を求めている！", "thirsts for blood!");
+			o_ptr->name2 = EGO_VAMPIRIC;
+			break;
+		case 3:
+			act = _("は毒に覆われた。", "is coated with poison.");
+			o_ptr->name2 = EGO_BRAND_POIS;
+			break;
+		case 2:
+			act = _("は純ログルスに飲み込まれた。", "is engulfed in raw Logrus!");
+			o_ptr->name2 = EGO_CHAOTIC;
+			break;
+		case 1:
+			act = _("は炎のシールドに覆われた！", "is covered in a fiery shield!");
+			o_ptr->name2 = EGO_BRAND_FIRE;
+			break;
+		default:
+			act = _("は深く冷たいブルーに輝いた！", "glows deep, icy blue!");
+			o_ptr->name2 = EGO_BRAND_COLD;
+			break;
+		}
+
+		msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
+		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+
+		o_ptr->discount = 99;
+		chg_virtue(V_ENCHANT, 2);
+	}
+	else
+	{
+		if (flush_failure) flush();
+
+		msg_print(_("属性付加に失敗した。", "The Branding failed."));
+		chg_virtue(V_ENCHANT, -2);
+	}
+	calc_android_exp();
+}

@@ -295,7 +295,6 @@ extern bool recall_player(player_type *creature_ptr, TIME_EFFECT turns);
 extern bool free_level_recall(player_type *creature_ptr);
 extern bool reset_recall(void);
 extern bool apply_disenchant(BIT_FLAGS mode);
-extern void brand_weapon(int brand_type);
 extern void call_the_(void);
 extern void fetch(DIRECTION dir, WEIGHT wgt, bool require_los);
 extern void alter_reality(void);

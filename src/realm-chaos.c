@@ -7,6 +7,7 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-floor.h"
+#include "spells-object.h"
 #include "spells.h"
 #include "targeting.h"
 #include "view-mainwindow.h"
