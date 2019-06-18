@@ -31,6 +31,22 @@ typedef struct
 	byte flag;
 } amuse_type;
 
+
+/*!
+ * @brief 装備強化処理の失敗率定数（千分率） /
+ * Used by the "enchant" function (chance of failure)
+ * (modified for Zangband, we need better stuff there...) -- TY
+ * @return なし
+ */
+static int enchant_table[16] =
+{
+	0, 10,  50, 100, 200,
+	300, 400, 500, 650, 800,
+	950, 987, 993, 995, 998,
+	1000
+};
+
+
 /*
  * Scatter some "amusing" objects near the player
  */
@@ -1124,3 +1140,194 @@ bool pulish_shield(void)
 
 	return FALSE;
 }
+
+/*!
+ * @brief 呪いの打ち破り処理 /
+ * Break the curse of an item
+ * @param o_ptr 呪い装備情報の参照ポインタ
+ * @return なし
+ */
+static void break_curse(object_type *o_ptr)
+{
+	if (object_is_cursed(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25))
+	{
+		msg_print(_("かけられていた呪いが打ち破られた！", "The curse is broken!"));
+
+		o_ptr->curse_flags = 0L;
+		o_ptr->ident |= (IDENT_SENSE);
+		o_ptr->feeling = FEEL_NONE;
+	}
+}
+
+/*!
+ * @brief 装備修正強化処理 /
+ * Enchants a plus onto an item. -RAK-
+ * @param o_ptr 強化するアイテムの参照ポインタ
+ * @param n 強化基本量
+ * @param eflag 強化オプション(命中/ダメージ/AC)
+ * @return 強化に成功した場合TRUEを返す
+ * @details
+ * <pre>
+ * Revamped!  Now takes item pointer, number of times to try enchanting,
+ * and a flag of what to try enchanting.  Artifacts resist enchantment
+ * some of the time, and successful enchantment to at least +0 might
+ * break a curse on the item. -CFT-
+ *
+ * Note that an item can technically be enchanted all the way to +15 if
+ * you wait a very, very, long time.  Going from +9 to +10 only works
+ * about 5% of the time, and from +10 to +11 only about 1% of the time.
+ *
+ * Note that this function can now be used on "piles" of items, and
+ * the larger the pile, the lower the chance of success.
+ * </pre>
+ */
+bool enchant(object_type *o_ptr, int n, int eflag)
+{
+	int     i, chance, prob;
+	bool    res = FALSE;
+	bool    a = object_is_artifact(o_ptr);
+	bool    force = (eflag & ENCH_FORCE);
+
+	/* Large piles resist enchantment */
+	prob = o_ptr->number * 100;
+
+	/* Missiles are easy to enchant */
+	if ((o_ptr->tval == TV_BOLT) ||
+		(o_ptr->tval == TV_ARROW) ||
+		(o_ptr->tval == TV_SHOT))
+	{
+		prob = prob / 20;
+	}
+
+	/* Try "n" times */
+	for (i = 0; i < n; i++)
+	{
+		/* Hack -- Roll for pile resistance */
+		if (!force && randint0(prob) >= 100) continue;
+
+		/* Enchant to hit */
+		if (eflag & ENCH_TOHIT)
+		{
+			if (o_ptr->to_h < 0) chance = 0;
+			else if (o_ptr->to_h > 15) chance = 1000;
+			else chance = enchant_table[o_ptr->to_h];
+
+			if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50))))
+			{
+				o_ptr->to_h++;
+				res = TRUE;
+
+				/* only when you get it above -1 -CFT */
+				if (o_ptr->to_h >= 0)
+					break_curse(o_ptr);
+			}
+		}
+
+		/* Enchant to damage */
+		if (eflag & ENCH_TODAM)
+		{
+			if (o_ptr->to_d < 0) chance = 0;
+			else if (o_ptr->to_d > 15) chance = 1000;
+			else chance = enchant_table[o_ptr->to_d];
+
+			if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50))))
+			{
+				o_ptr->to_d++;
+				res = TRUE;
+
+				/* only when you get it above -1 -CFT */
+				if (o_ptr->to_d >= 0)
+					break_curse(o_ptr);
+			}
+		}
+
+		/* Enchant to armor class */
+		if (eflag & ENCH_TOAC)
+		{
+			if (o_ptr->to_a < 0) chance = 0;
+			else if (o_ptr->to_a > 15) chance = 1000;
+			else chance = enchant_table[o_ptr->to_a];
+
+			if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50))))
+			{
+				o_ptr->to_a++;
+				res = TRUE;
+
+				/* only when you get it above -1 -CFT */
+				if (o_ptr->to_a >= 0)
+					break_curse(o_ptr);
+			}
+		}
+	}
+
+	/* Failure */
+	if (!res) return (FALSE);
+	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
+	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+
+	calc_android_exp();
+
+	/* Success */
+	return (TRUE);
+}
+
+
+/*!
+ * @brief 装備修正強化処理のメインルーチン /
+ * Enchant an item (in the p_ptr->inventory_list or on the floor)
+ * @param num_hit 命中修正量
+ * @param num_dam ダメージ修正量
+ * @param num_ac AC修正量
+ * @return 強化に成功した場合TRUEを返す
+ * @details
+ * Note that "num_ac" requires armour, else weapon
+ * Returns TRUE if attempted, FALSE if cancelled
+ */
+bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
+{
+	OBJECT_IDX item;
+	bool        okay = FALSE;
+	object_type *o_ptr;
+	GAME_TEXT o_name[MAX_NLEN];
+	concptr        q, s;
+
+	/* Assume enchant weapon */
+	item_tester_hook = object_allow_enchant_weapon;
+
+	/* Enchant armor if requested */
+	if (num_ac) item_tester_hook = object_is_armour;
+
+	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
+	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
+
+	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	if (!o_ptr) return (FALSE);
+
+	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+#ifdef JP
+	msg_format("%s は明るく輝いた！", o_name);
+#else
+	msg_format("%s %s glow%s brightly!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
+#endif
+
+	/* Enchant */
+	if (enchant(o_ptr, num_hit, ENCH_TOHIT)) okay = TRUE;
+	if (enchant(o_ptr, num_dam, ENCH_TODAM)) okay = TRUE;
+	if (enchant(o_ptr, num_ac, ENCH_TOAC)) okay = TRUE;
+
+	/* Failure */
+	if (!okay)
+	{
+		if (flush_failure) flush();
+		msg_print(_("強化に失敗した。", "The enchantment failed."));
+		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
+	}
+	else
+		chg_virtue(V_ENCHANT, 1);
+
+	calc_android_exp();
+
+	/* Something happened */
+	return (TRUE);
+}
+
