@@ -208,10 +208,8 @@ void do_cmd_go_up(player_type *creature_ptr)
 	/* Quest up stairs */
 	if (have_flag(f_ptr->flags, FF_QUEST))
 	{
-		/* Cancel the command */
 		if (!confirm_leave_level(creature_ptr, FALSE)) return;
 	
-		
 		/* Success */
 		if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
@@ -258,7 +256,6 @@ void do_cmd_go_up(player_type *creature_ptr)
 		go_up = confirm_leave_level(creature_ptr, FALSE);
 	}
 
-	/* Cancel the command */
 	if (!go_up) return;
 
 	take_turn(creature_ptr, 100);

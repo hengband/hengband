@@ -292,14 +292,11 @@ void do_cmd_wield(void)
 	if (object_is_cursed(&p_ptr->inventory_list[slot]))
 	{
 		object_desc(o_name, &p_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
 #ifdef JP
 		msg_format("%s%sは呪われているようだ。", describe_use(slot) , o_name );
 #else
 		msg_format("The %s you are %s appears to be cursed.", o_name, describe_use(slot));
 #endif
-
-		/* Cancel the command */
 		return;
 	}
 
