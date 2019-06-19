@@ -3776,7 +3776,7 @@ static void process_command(void)
 			if (p_ptr->wild_mode)
 				change_wild_mode(FALSE);
 			else
-				do_cmd_go_down();
+				do_cmd_go_down(p_ptr);
 			break;
 		}
 

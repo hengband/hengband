@@ -322,16 +322,16 @@ void do_cmd_go_up(player_type *creature_ptr)
  * @brief 階段を使って階層を降りる処理 / Go down one level
  * @return なし
  */
-void do_cmd_go_down(void)
+void do_cmd_go_down(player_type *creature_ptr)
 {
 	/* Player grid */
-	grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+	grid_type *g_ptr = &current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	bool fall_trap = FALSE;
 	int down_num = 0;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
 		set_action(ACTION_NONE);
 	}
@@ -355,9 +355,9 @@ void do_cmd_go_down(void)
 	else if (have_flag(f_ptr->flags, FF_QUEST))
 	{
 		/* Confirm Leaving */
-		if(!confirm_leave_level(p_ptr, TRUE)) return;
+		if(!confirm_leave_level(creature_ptr, TRUE)) return;
 		
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
@@ -365,29 +365,29 @@ void do_cmd_go_down(void)
 		leave_quest_check();
 		leave_tower_check();
 
-		p_ptr->inside_quest = g_ptr->special;
+		creature_ptr->inside_quest = g_ptr->special;
 
 		/* Activate the quest */
-		if (!quest[p_ptr->inside_quest].status)
+		if (!quest[creature_ptr->inside_quest].status)
 		{
-			if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+			if (quest[creature_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
 				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 			}
-			quest[p_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+			quest[creature_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
 
 		/* Leaving a quest */
-		if (!p_ptr->inside_quest)
+		if (!creature_ptr->inside_quest)
 		{
 			current_floor_ptr->dun_level = 0;
 		}
-		p_ptr->leaving = TRUE;
-		p_ptr->oldpx = 0;
-		p_ptr->oldpy = 0;
+		creature_ptr->leaving = TRUE;
+		creature_ptr->oldpx = 0;
+		creature_ptr->oldpy = 0;
 		
-		take_turn(p_ptr, 100);
+		take_turn(creature_ptr, 100);
 	}
 
 	else
@@ -411,9 +411,9 @@ void do_cmd_go_down(void)
 			}
 
 			/* Save old player position */
-			p_ptr->oldpx = p_ptr->x;
-			p_ptr->oldpy = p_ptr->y;
-			p_ptr->dungeon_idx = target_dungeon;
+			creature_ptr->oldpx = creature_ptr->x;
+			creature_ptr->oldpy = creature_ptr->y;
+			creature_ptr->dungeon_idx = target_dungeon;
 
 			/*
 			 * Clear all saved floors
@@ -422,7 +422,7 @@ void do_cmd_go_down(void)
 			prepare_change_floor_mode(CFM_FIRST_FLOOR);
 		}
 
-		take_turn(p_ptr, 100);
+		take_turn(creature_ptr, 100);
 
 		if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -433,8 +433,8 @@ void do_cmd_go_down(void)
 		if (!current_floor_ptr->dun_level)
 		{
 			/* Enter the dungeon just now */
-			p_ptr->enter_dungeon = TRUE;
-			down_num = d_info[p_ptr->dungeon_idx].mindepth;
+			creature_ptr->enter_dungeon = TRUE;
+			down_num = d_info[creature_ptr->dungeon_idx].mindepth;
 		}
 
 		if (record_stair)
@@ -452,18 +452,18 @@ void do_cmd_go_down(void)
 			/* Success */
 			if (target_dungeon)
 			{
-				msg_format(_("%sへ入った。", "You entered %s."), d_text + d_info[p_ptr->dungeon_idx].text);
+				msg_format(_("%sへ入った。", "You entered %s."), d_text + d_info[creature_ptr->dungeon_idx].text);
 			}
 			else
 			{
-				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+				if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 					msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 				else
 					msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));
 			}
 		}
 
-		p_ptr->leaving = TRUE;
+		creature_ptr->leaving = TRUE;
 
 		if (fall_trap)
 		{
