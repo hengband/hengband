@@ -31,6 +31,7 @@
 #include "player-status.h"
 #include "player-class.h"
 #include "player-damage.h"
+#include "player-inventory.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "artifact.h"
@@ -1651,7 +1652,7 @@ bool artifact_scroll(void)
 				floor_item_increase(0 - item, 1 - (o_ptr->number));
 			}
 		}
-		okay = create_artifact(o_ptr, TRUE);
+		okay = become_random_artifact(o_ptr, TRUE);
 	}
 
 	/* Failure */

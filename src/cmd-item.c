@@ -48,6 +48,7 @@
 #include "snipe.h"
 #include "player-race.h"
 #include "view-mainwindow.h"
+#include "player-inventory.h"
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display p_ptr->inventory_list
