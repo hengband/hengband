@@ -3708,7 +3708,7 @@ static void process_command(void)
 		/* Search for traps/doors */
 		case 's':
 		{
-			do_cmd_search();
+			do_cmd_search(p_ptr);
 			break;
 		}
 

@@ -490,19 +490,19 @@ void do_cmd_go_down(player_type *creature_ptr)
  * @brief 探索コマンドのメインルーチン / Simple command to "search" for one current_world_ptr->game_turn
  * @return なし
  */
-void do_cmd_search(void)
+void do_cmd_search(player_type * creature_ptr)
 {
 	/* Allow repeated command */
 	if (command_arg)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
 	}
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Search */
 	search();
