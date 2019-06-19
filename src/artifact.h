@@ -74,7 +74,7 @@ extern char *a_text;
 extern ARTIFACT_IDX max_a_idx;
 
 /* artifact.c */
-extern bool create_artifact(object_type *o_ptr, bool a_scroll);
+extern bool become_random_artifact(object_type *o_ptr, bool a_scroll);
 extern int activation_index(object_type *o_ptr);
 extern const activation_type* find_activation_info(object_type *o_ptr);
 extern void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr);

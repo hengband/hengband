@@ -108,7 +108,7 @@
 #define SINDARIN_NAME   10 /*!< ランダムアーティファクトにシンダリン銘をつける確率 */
 #define TABLE_NAME      20 /*!< ランダムアーティファクトに漢字銘をつける確率(正確には TABLE_NAME - SINDARIN_NAME %)となる */
 #define A_CURSED        13 /*!< 1/nの確率で生成の巻物以外のランダムアーティファクトが呪いつきになる。 */
-#define WEIRD_LUCK      12 /*!< 1/nの確率でrandom_resistance()の処理中バイアス外の耐性がつき、create_artifactで4を超えるpvalが許可される。*/
+#define WEIRD_LUCK      12 /*!< 1/nの確率でrandom_resistance()の処理中バイアス外の耐性がつき、become_random_artifactで4を超えるpvalが許可される。*/
 #define SWORDFISH_LUCK  6  /*!< 1/nの確率で一定以上のスレイダメージを超える武器のスレイ喪失が回避される。 */
 #define BIAS_LUCK       20 /*!< 1/nの確率でrandom_resistance()で付加する元素耐性が免疫になる */
 #define IM_LUCK         7 /*!< 1/nの確率でrandom_resistance()で複数免疫の除去処理が免除される */

@@ -1548,7 +1548,7 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
  * @param a_scroll アーティファクト生成の巻物上の処理。呪いのアーティファクトが生成対象外となる。
  * @return 常にTRUE(1)を返す
  */
-bool create_artifact(object_type *o_ptr, bool a_scroll)
+bool become_random_artifact(object_type *o_ptr, bool a_scroll)
 {
 	GAME_TEXT new_name[1024];
 	PARAMETER_VALUE has_pval = 0;
@@ -1700,7 +1700,7 @@ bool create_artifact(object_type *o_ptr, bool a_scroll)
 				random_slay(o_ptr);
 				break;
 			default:
-				if (p_ptr->wizard) msg_print("Switch error in create_artifact!");
+				if (p_ptr->wizard) msg_print("Switch error in become_random_artifact!");
 				powers++;
 		}
 	};
