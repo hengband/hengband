@@ -3783,7 +3783,7 @@ static void process_command(void)
 		/* Open a door or chest */
 		case 'o':
 		{
-			do_cmd_open();
+			do_cmd_open(p_ptr);
 			break;
 		}
 

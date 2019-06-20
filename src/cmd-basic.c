@@ -818,7 +818,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
-void do_cmd_open(void)
+void do_cmd_open(player_type *creature_ptr)
 {
 	POSITION y, x;
 	DIRECTION dir;
@@ -826,9 +826,9 @@ void do_cmd_open(void)
 
 	bool more = FALSE;
 
-	if (p_ptr->wild_mode) return;
+	if (creature_ptr->wild_mode) return;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
 		set_action(ACTION_NONE);
 	}
@@ -842,7 +842,7 @@ void do_cmd_open(void)
 		num_doors = count_dt(&y, &x, is_closed_door, FALSE);
 
 		/* Count chests (locked) */
-		num_chests = count_chests(p_ptr, &y, &x, FALSE);
+		num_chests = count_chests(creature_ptr, &y, &x, FALSE);
 
 		/* See if only one target */
 		if (num_doors || num_chests)
@@ -858,7 +858,7 @@ void do_cmd_open(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
@@ -871,8 +871,8 @@ void do_cmd_open(void)
 		grid_type *g_ptr;
 
 		/* Get requested location */
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
+		y = creature_ptr->y + ddy[dir];
+		x = creature_ptr->x + ddx[dir];
 
 		/* Get requested grid */
 		g_ptr = &current_floor_ptr->grid_array[y][x];
@@ -890,9 +890,9 @@ void do_cmd_open(void)
 		}
 
 		/* Monster in the way */
-		else if (g_ptr->m_idx && p_ptr->riding != g_ptr->m_idx)
+		else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);
+			take_turn(creature_ptr, 100);
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 			py_attack(y, x, 0);
 		}
