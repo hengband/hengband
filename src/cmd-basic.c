@@ -543,7 +543,7 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 }
 
 /*!
- * @brief 箱を開けるコマンドのメインルーチン /
+ * @brief 箱を開ける実行処理 /
  * Attempt to open the given chest at the given location
  * @param y 箱の存在するマスのY座標
  * @param x 箱の存在するマスのX座標
@@ -552,7 +552,7 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
  * @details
  * Assume there is no monster blocking the destination
  */
-static bool do_cmd_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
+static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
 	bool flag = TRUE;
@@ -890,7 +890,7 @@ void do_cmd_open(player_type *creature_ptr)
 		}
 		else if (o_idx)
 		{
-			more = do_cmd_open_chest(creature_ptr, y, x, o_idx);
+			more = exe_open_chest(creature_ptr, y, x, o_idx);
 		}
 		else
 		{
