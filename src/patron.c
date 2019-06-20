@@ -444,7 +444,7 @@ void gain_level_reward(int chosen_reward)
 
 			for (dummy = 0; dummy < A_MAX; dummy++)
 			{
-				(void)dec_stat(dummy, 10 + randint1(15), TRUE);
+				(void)dec_stat(p_ptr, dummy, 10 + randint1(15), TRUE);
 			}
 			reward = _("全能力値が下がった。", "decreasing all stats");
 			break;
@@ -557,7 +557,7 @@ void gain_level_reward(int chosen_reward)
 			default:
 				for (dummy = 0; dummy < A_MAX; dummy++)
 				{
-					(void)dec_stat(dummy, 10 + randint1(15), TRUE);
+					(void)dec_stat(p_ptr, dummy, 10 + randint1(15), TRUE);
 				}
 				reward = _("全能力値が下がった。", "decreasing all stats");
 				break;
@@ -572,7 +572,7 @@ void gain_level_reward(int chosen_reward)
 			take_hit(DAMAGE_LOSELIFE, p_ptr->lev * 4, wrath_reason, -1);
 			for (dummy = 0; dummy < A_MAX; dummy++)
 			{
-				(void)dec_stat(dummy, 10 + randint1(15), FALSE);
+				(void)dec_stat(p_ptr, dummy, 10 + randint1(15), FALSE);
 			}
 			activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			(void)activate_ty_curse(FALSE, &count);

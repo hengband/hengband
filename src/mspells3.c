@@ -1759,7 +1759,7 @@ bool do_cmd_cast_learned(void)
 			msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
 
 			/* Reduce constitution */
-			(void)dec_stat(A_CON, 15 + randint1(10), perm);
+			(void)dec_stat(p_ptr, A_CON, 15 + randint1(10), perm);
 		}
 	}
 

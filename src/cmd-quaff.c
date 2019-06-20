@@ -208,12 +208,12 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
 			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"), -1);
 
-			(void)dec_stat(A_DEX, 25, TRUE);
-			(void)dec_stat(A_WIS, 25, TRUE);
-			(void)dec_stat(A_CON, 25, TRUE);
-			(void)dec_stat(A_STR, 25, TRUE);
-			(void)dec_stat(A_CHR, 25, TRUE);
-			(void)dec_stat(A_INT, 25, TRUE);
+			(void)dec_stat(p_ptr, A_DEX, 25, TRUE);
+			(void)dec_stat(p_ptr, A_WIS, 25, TRUE);
+			(void)dec_stat(p_ptr, A_CON, 25, TRUE);
+			(void)dec_stat(p_ptr, A_STR, 25, TRUE);
+			(void)dec_stat(p_ptr, A_CHR, 25, TRUE);
+			(void)dec_stat(p_ptr, A_INT, 25, TRUE);
 			ident = TRUE;
 			break;
 

@@ -3143,12 +3143,12 @@ void ring_of_power(DIRECTION dir)
 		sound(SOUND_EVIL);
 
 		/* Decrease all stats (permanently) */
-		(void)dec_stat(A_STR, 50, TRUE);
-		(void)dec_stat(A_INT, 50, TRUE);
-		(void)dec_stat(A_WIS, 50, TRUE);
-		(void)dec_stat(A_DEX, 50, TRUE);
-		(void)dec_stat(A_CON, 50, TRUE);
-		(void)dec_stat(A_CHR, 50, TRUE);
+		(void)dec_stat(p_ptr, A_STR, 50, TRUE);
+		(void)dec_stat(p_ptr, A_INT, 50, TRUE);
+		(void)dec_stat(p_ptr, A_WIS, 50, TRUE);
+		(void)dec_stat(p_ptr, A_DEX, 50, TRUE);
+		(void)dec_stat(p_ptr, A_CON, 50, TRUE);
+		(void)dec_stat(p_ptr, A_CHR, 50, TRUE);
 
 		/* Lose some experience (permanently) */
 		p_ptr->exp -= (p_ptr->exp / 4);

@@ -58,7 +58,7 @@ extern bool set_stun(TIME_EFFECT v);
 extern bool set_cut(TIME_EFFECT v);
 extern bool set_food(TIME_EFFECT v);
 extern bool inc_stat(int stat);
-extern bool dec_stat(int stat, int amount, int permanent);
+extern bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent);
 extern bool res_stat(player_type *creature_ptr, int stat);
 extern bool hp_player(int num);
 extern bool do_dec_stat(player_type *creature_ptr, int stat);

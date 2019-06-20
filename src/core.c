@@ -2438,7 +2438,7 @@ static void process_world_aux_mutation(void)
 			disturb(FALSE, TRUE);
 			msg_print(_("自分が衰弱していくのが分かる！", "You can feel yourself wasting away!"));
 			msg_print(NULL);
-			(void)dec_stat(which_stat, randint1(6) + 6, one_in_(3));
+			(void)dec_stat(p_ptr, which_stat, randint1(6) + 6, one_in_(3));
 		}
 	}
 	if ((p_ptr->muta2 & MUT2_ATT_DRAGON) && !p_ptr->anti_magic && one_in_(3000))

@@ -2266,8 +2266,8 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("肉体が急速にしぼんでいった。", "Your body had quickly shriveled."));
 
-			(void)dec_stat(A_CON, 20, TRUE);
-			(void)dec_stat(A_STR, 20, TRUE);
+			(void)dec_stat(p_ptr, A_CON, 20, TRUE);
+			(void)dec_stat(p_ptr, A_STR, 20, TRUE);
 
 			notice = TRUE;
 			chg_virtue(V_VITALITY, -3);
@@ -3285,16 +3285,15 @@ bool inc_stat(int stat)
  * if your stat is already drained, the "max" value will not drop all\n
  * the way down to the "cur" value.\n
  */
-bool dec_stat(int stat, int amount, int permanent)
+bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 {
 	BASE_STATUS cur, max;
 	int loss, same;
 	bool res = FALSE;
 
-
 	/* Acquire current value */
-	cur = p_ptr->stat_cur[stat];
-	max = p_ptr->stat_max[stat];
+	cur = creature_ptr->stat_cur[stat];
+	max = creature_ptr->stat_max[stat];
 
 	/* Note when the values are identical */
 	same = (cur == max);
@@ -3337,7 +3336,7 @@ bool dec_stat(int stat, int amount, int permanent)
 		if (cur < 3) cur = 3;
 
 		/* Something happened */
-		if (cur != p_ptr->stat_cur[stat]) res = TRUE;
+		if (cur != creature_ptr->stat_cur[stat]) res = TRUE;
 	}
 
 	/* Damage "max" value */
@@ -3377,17 +3376,17 @@ bool dec_stat(int stat, int amount, int permanent)
 		if (same || (max < cur)) max = cur;
 
 		/* Something happened */
-		if (max != p_ptr->stat_max[stat]) res = TRUE;
+		if (max != creature_ptr->stat_max[stat]) res = TRUE;
 	}
 
 	if (res)
 	{
 		/* Actually set the stat to its new value. */
-		p_ptr->stat_cur[stat] = cur;
-		p_ptr->stat_max[stat] = max;
+		creature_ptr->stat_cur[stat] = cur;
+		creature_ptr->stat_max[stat] = max;
 
-		p_ptr->redraw |= (PR_STATS);
-		p_ptr->update |= (PU_BONUS);
+		creature_ptr->redraw |= (PR_STATS);
+		creature_ptr->update |= (PU_BONUS);
 	}
 
 	return (res);
@@ -3539,7 +3538,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 	}
 
 	/* Attempt to reduce the stat */
-	if (dec_stat(stat, 10, (ironman_nightmare && !randint0(13))))
+	if (dec_stat(p_ptr, stat, 10, (ironman_nightmare && !randint0(13))))
 	{
 		msg_format(_("ひどく%sなった気がする。", "You feel very %s."), desc_stat_neg[stat]);
 
@@ -3817,14 +3816,14 @@ void do_poly_self(void)
 			{
 				if (one_in_(2))
 				{
-					(void)dec_stat(tmp, randint1(6) + 6, one_in_(3));
+					(void)dec_stat(p_ptr, tmp, randint1(6) + 6, one_in_(3));
 					power -= 1;
 				}
 				tmp++;
 			}
 
 			/* Deformities are discriminated against! */
-			(void)dec_stat(A_CHR, randint1(6), TRUE);
+			(void)dec_stat(p_ptr, A_CHR, randint1(6), TRUE);
 
 			if (effect_msg[0])
 			{
@@ -3866,7 +3865,7 @@ void do_poly_self(void)
 
 		while (tmp < A_MAX)
 		{
-			(void)dec_stat(tmp, randint1(6) + 6, one_in_(3));
+			(void)dec_stat(p_ptr, tmp, randint1(6) + 6, one_in_(3));
 			tmp++;
 		}
 		if (one_in_(6))

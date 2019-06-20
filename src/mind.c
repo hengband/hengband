@@ -2051,7 +2051,7 @@ void do_cmd_mind(void)
 			msg_print(_("自分の精神を攻撃してしまった！", "You have damaged your mind!"));
 
 			/* Reduce constitution */
-			(void)dec_stat(A_WIS, 15 + randint1(10), perm);
+			(void)dec_stat(p_ptr, A_WIS, 15 + randint1(10), perm);
 		}
 	}
 	p_ptr->redraw |= (PR_MANA);
