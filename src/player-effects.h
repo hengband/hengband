@@ -61,7 +61,7 @@ extern bool inc_stat(int stat);
 extern bool dec_stat(int stat, int amount, int permanent);
 extern bool res_stat(int stat);
 extern bool hp_player(int num);
-extern bool do_dec_stat(int stat);
+extern bool do_dec_stat(player_type *creature_ptr, int stat);
 extern bool do_res_stat(int stat);
 extern bool do_inc_stat(int stat);
 extern bool restore_level(void);

@@ -2615,7 +2615,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			}
 			if (!one_in_(6)) break;
 		case 21: case 22: case 23:
-			(void)do_dec_stat(randint0(6));
+			(void)do_dec_stat(p_ptr, randint0(6));
 			if (!one_in_(6)) break;
 		case 24:
 			msg_print(_("ほえ？私は誰？ここで何してる？", "Huh? Who am I? What am I doing here?"));
@@ -2637,7 +2637,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			{
 				do
 				{
-					(void)do_dec_stat(i);
+					(void)do_dec_stat(p_ptr, i);
 				}
 				while (one_in_(2));
 
@@ -3725,8 +3725,8 @@ void cast_shuffle(void)
 	else if (die < 26)
 	{
 		msg_print(_("《愚者》だ。", "It's the Fool."));
-		do_dec_stat(A_INT);
-		do_dec_stat(A_WIS);
+		do_dec_stat(p_ptr, A_INT);
+		do_dec_stat(p_ptr, A_WIS);
 	}
 	else if (die < 30)
 	{

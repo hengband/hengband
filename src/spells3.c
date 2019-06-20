@@ -3544,7 +3544,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 				{
 					do
 					{
-						(void)do_dec_stat(i);
+						(void)do_dec_stat(p_ptr, i);
 					} while (one_in_(2));
 
 					i++;
@@ -3552,7 +3552,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			}
 			else
 			{
-				(void)do_dec_stat(randint0(6));
+				(void)do_dec_stat(p_ptr, randint0(6));
 			}
 			break;
 		}

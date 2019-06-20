@@ -155,7 +155,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	{
 		msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
 		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
-		(void)do_dec_stat(A_STR);
+		(void)do_dec_stat(p_ptr, A_STR);
 	}
 
 	/* Lose constitution */
@@ -163,7 +163,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	{
 		msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
 		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
-		(void)do_dec_stat(A_CON);
+		(void)do_dec_stat(p_ptr, A_CON);
 	}
 
 	/* Poison */
@@ -296,12 +296,12 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 				else if (one_in_(3)) apply_disenchant(0);
 				else if (one_in_(2))
 				{
-					(void)do_dec_stat(A_STR);
-					(void)do_dec_stat(A_DEX);
-					(void)do_dec_stat(A_CON);
-					(void)do_dec_stat(A_INT);
-					(void)do_dec_stat(A_WIS);
-					(void)do_dec_stat(A_CHR);
+					(void)do_dec_stat(p_ptr, A_STR);
+					(void)do_dec_stat(p_ptr, A_DEX);
+					(void)do_dec_stat(p_ptr, A_CON);
+					(void)do_dec_stat(p_ptr, A_INT);
+					(void)do_dec_stat(p_ptr, A_WIS);
+					(void)do_dec_stat(p_ptr, A_CHR);
 				}
 				else (void)fire_meteor(-1, GF_NETHER, y, x, 150, 1);
 			}

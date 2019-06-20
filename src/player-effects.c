@@ -2758,16 +2758,16 @@ bool set_stun(TIME_EFFECT v)
 
 			if (one_in_(3))
 			{
-				if (!p_ptr->sustain_int) (void)do_dec_stat(A_INT);
-				if (!p_ptr->sustain_wis) (void)do_dec_stat(A_WIS);
+				if (!p_ptr->sustain_int) (void)do_dec_stat(p_ptr, A_INT);
+				if (!p_ptr->sustain_wis) (void)do_dec_stat(p_ptr, A_WIS);
 			}
 			else if (one_in_(2))
 			{
-				if (!p_ptr->sustain_int) (void)do_dec_stat(A_INT);
+				if (!p_ptr->sustain_int) (void)do_dec_stat(p_ptr, A_INT);
 			}
 			else
 			{
-				if (!p_ptr->sustain_wis) (void)do_dec_stat(A_WIS);
+				if (!p_ptr->sustain_wis) (void)do_dec_stat(p_ptr, A_WIS);
 			}
 		}
 		if (p_ptr->special_defense & KATA_MASK)
@@ -2976,7 +2976,7 @@ bool set_cut(TIME_EFFECT v)
 			if (!p_ptr->sustain_chr)
 			{
 				msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
-				do_dec_stat(A_CHR);
+				do_dec_stat(p_ptr, A_CHR);
 			}
 		}
 	}
@@ -3513,19 +3513,19 @@ static concptr desc_stat_neg[] =
 /*
  * Lose a "point"
  */
-bool do_dec_stat(int stat)
+bool do_dec_stat(player_type *creature_ptr, int stat)
 {
 	bool sust = FALSE;
 
 	/* Access the "sustain" */
 	switch (stat)
 	{
-		case A_STR: if (p_ptr->sustain_str) sust = TRUE; break;
-		case A_INT: if (p_ptr->sustain_int) sust = TRUE; break;
-		case A_WIS: if (p_ptr->sustain_wis) sust = TRUE; break;
-		case A_DEX: if (p_ptr->sustain_dex) sust = TRUE; break;
-		case A_CON: if (p_ptr->sustain_con) sust = TRUE; break;
-		case A_CHR: if (p_ptr->sustain_chr) sust = TRUE; break;
+		case A_STR: if (creature_ptr->sustain_str) sust = TRUE; break;
+		case A_INT: if (creature_ptr->sustain_int) sust = TRUE; break;
+		case A_WIS: if (creature_ptr->sustain_wis) sust = TRUE; break;
+		case A_DEX: if (creature_ptr->sustain_dex) sust = TRUE; break;
+		case A_CON: if (creature_ptr->sustain_con) sust = TRUE; break;
+		case A_CHR: if (creature_ptr->sustain_chr) sust = TRUE; break;
 	}
 
 	/* Sustain */

@@ -5374,11 +5374,11 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	}
 
 	do {
-		(void)do_dec_stat(A_INT);
+		(void)do_dec_stat(p_ptr, A_INT);
 	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
 
 	do {
-		(void)do_dec_stat(A_WIS);
+		(void)do_dec_stat(p_ptr, A_WIS);
 	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
 
 	switch (randint1(21))

@@ -3296,7 +3296,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-					if (do_dec_stat(A_STR)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_STR)) obvious = TRUE;
 
 					break;
 				}
@@ -3306,7 +3306,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-					if (do_dec_stat(A_INT)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_INT)) obvious = TRUE;
 
 					break;
 				}
@@ -3316,7 +3316,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-					if (do_dec_stat(A_WIS)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_WIS)) obvious = TRUE;
 
 					break;
 				}
@@ -3326,7 +3326,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-					if (do_dec_stat(A_DEX)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_DEX)) obvious = TRUE;
 
 					break;
 				}
@@ -3336,7 +3336,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-					if (do_dec_stat(A_CON)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_CON)) obvious = TRUE;
 
 					break;
 				}
@@ -3346,7 +3346,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
-					if (do_dec_stat(A_CHR)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_CHR)) obvious = TRUE;
 
 					break;
 				}
@@ -3358,12 +3358,12 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
 					/* Damage (stats) */
-					if (do_dec_stat(A_STR)) obvious = TRUE;
-					if (do_dec_stat(A_DEX)) obvious = TRUE;
-					if (do_dec_stat(A_CON)) obvious = TRUE;
-					if (do_dec_stat(A_INT)) obvious = TRUE;
-					if (do_dec_stat(A_WIS)) obvious = TRUE;
-					if (do_dec_stat(A_CHR)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_STR)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_DEX)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_CON)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_INT)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_WIS)) obvious = TRUE;
+					if (do_dec_stat(p_ptr, A_CHR)) obvious = TRUE;
 
 					break;
 				}

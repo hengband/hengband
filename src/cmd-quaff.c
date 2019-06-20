@@ -218,27 +218,27 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_DEC_STR:
-			if (do_dec_stat(A_STR)) ident = TRUE;
+			if (do_dec_stat(p_ptr, A_STR)) ident = TRUE;
 			break;
 
 		case SV_POTION_DEC_INT:
-			if (do_dec_stat(A_INT)) ident = TRUE;
+			if (do_dec_stat(p_ptr, A_INT)) ident = TRUE;
 			break;
 
 		case SV_POTION_DEC_WIS:
-			if (do_dec_stat(A_WIS)) ident = TRUE;
+			if (do_dec_stat(p_ptr, A_WIS)) ident = TRUE;
 			break;
 
 		case SV_POTION_DEC_DEX:
-			if (do_dec_stat(A_DEX)) ident = TRUE;
+			if (do_dec_stat(p_ptr, A_DEX)) ident = TRUE;
 			break;
 
 		case SV_POTION_DEC_CON:
-			if (do_dec_stat(A_CON)) ident = TRUE;
+			if (do_dec_stat(p_ptr, A_CON)) ident = TRUE;
 			break;
 
 		case SV_POTION_DEC_CHR:
-			if (do_dec_stat(A_CHR)) ident = TRUE;
+			if (do_dec_stat(p_ptr, A_CHR)) ident = TRUE;
 			break;
 
 		case SV_POTION_DETONATIONS:

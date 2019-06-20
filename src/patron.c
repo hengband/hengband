@@ -429,9 +429,9 @@ void gain_level_reward(int chosen_reward)
 			msg_print(_("「下僕よ、余は汝に飽みたり。」", "'I grow tired of thee, mortal.'"));
 
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
-				do_dec_stat(chaos_stats[p_ptr->chaos_patron]);
+				do_dec_stat(p_ptr, chaos_stats[p_ptr->chaos_patron]);
 			else
-				(void)do_dec_stat(randint0(6));
+				(void)do_dec_stat(p_ptr, randint0(6));
 			reward = _("能力値が下がった。", "decreasing a stat");
 			break;
 

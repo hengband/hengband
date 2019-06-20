@@ -449,7 +449,7 @@ HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	{
 		if ((!(double_resist || p_ptr->resist_acid)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(A_CHR);
+			(void)do_dec_stat(p_ptr, A_CHR);
 
 		/* If any armor gets hit, defend the player */
 		if (acid_minus_ac()) dam = (dam + 1) / 2;
@@ -499,7 +499,7 @@ HIT_POINT elec_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	{
 		if ((!(double_resist || p_ptr->resist_elec)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(A_DEX);
+			(void)do_dec_stat(p_ptr, A_DEX);
 	}
 
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
@@ -547,7 +547,7 @@ HIT_POINT fire_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	{
 		if ((!(double_resist || p_ptr->resist_fire)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(A_STR);
+			(void)do_dec_stat(p_ptr, A_STR);
 	}
 
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
@@ -594,7 +594,7 @@ HIT_POINT cold_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	{
 		if ((!(double_resist || p_ptr->resist_cold)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(A_STR);
+			(void)do_dec_stat(p_ptr, A_STR);
 	}
 
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);

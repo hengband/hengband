@@ -354,7 +354,7 @@ static void hit_trap_lose_stat(int stat)
 {
 	if (hit_trap_dart())
 	{
-		do_dec_stat(stat);
+		do_dec_stat(p_ptr, stat);
 	}
 }
 
