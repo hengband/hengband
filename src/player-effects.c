@@ -3399,14 +3399,14 @@ bool dec_stat(int stat, int amount, int permanent)
  * @param stat 回復ステータスID
  * @return 実際に回復した場合TRUEを返す。
  */
-bool res_stat(int stat)
+bool res_stat(player_type *creature_ptr, int stat)
 {
 	/* Restore if needed */
-	if (p_ptr->stat_cur[stat] != p_ptr->stat_max[stat])
+	if (creature_ptr->stat_cur[stat] != creature_ptr->stat_max[stat])
 	{
-		p_ptr->stat_cur[stat] = p_ptr->stat_max[stat];
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->redraw |= (PR_STATS);
+		creature_ptr->stat_cur[stat] = creature_ptr->stat_max[stat];
+		creature_ptr->update |= (PU_BONUS);
+		creature_ptr->redraw |= (PR_STATS);
 
 		/* Success */
 		return (TRUE);
@@ -3558,7 +3558,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 bool do_res_stat(int stat)
 {
 	/* Attempt to increase */
-	if (res_stat(stat))
+	if (res_stat(p_ptr, stat))
 	{
 		msg_format(_("元通りに%sなった気がする。", "You feel less %s."), desc_stat_pos[stat]);
 
@@ -3578,7 +3578,7 @@ bool do_inc_stat(int stat)
 	bool res;
 
 	/* Restore strength */
-	res = res_stat(stat);
+	res = res_stat(p_ptr, stat);
 
 	/* Attempt to increase */
 	if (inc_stat(stat))
