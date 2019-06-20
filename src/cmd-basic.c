@@ -838,13 +838,8 @@ void do_cmd_open(player_type *creature_ptr)
 	{
 		int num_doors, num_chests;
 
-		/* Count closed doors (locked or jammed) */
 		num_doors = count_dt(&y, &x, is_closed_door, FALSE);
-
-		/* Count chests (locked) */
 		num_chests = count_chests(creature_ptr, &y, &x, FALSE);
-
-		/* See if only one target */
 		if (num_doors || num_chests)
 		{
 			bool too_many = (num_doors && num_chests) || (num_doors > 1) ||
@@ -883,31 +878,22 @@ void do_cmd_open(player_type *creature_ptr)
 		/* Check for chest */
 		o_idx = chest_check(y, x, FALSE);
 
-		/* Nothing useful */
 		if (!have_flag(f_info[feat].flags, FF_OPEN) && !o_idx)
 		{
 			msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
 		}
-
-		/* Monster in the way */
 		else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx)
 		{
 			take_turn(creature_ptr, 100);
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 			py_attack(y, x, 0);
 		}
-
-		/* Handle chests */
 		else if (o_idx)
 		{
-			/* Open the chest */
 			more = do_cmd_open_chest(y, x, o_idx);
 		}
-
-		/* Handle doors */
 		else
 		{
-			/* Open the door */
 			more = do_cmd_open_aux(y, x);
 		}
 	}
