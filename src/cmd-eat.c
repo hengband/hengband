@@ -281,7 +281,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			msg_print(_("これはひじょうに美味だ。", "That tastes good."));
 			(void)set_poisoned(0);
-			(void)hp_player(damroll(4, 8));
+			(void)hp_player(p_ptr, damroll(4, 8));
 			ident = TRUE;
 			break;
 		}

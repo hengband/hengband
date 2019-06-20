@@ -2333,7 +2333,7 @@ static void process_world_aux_mutation(void)
 		/* Absorb light from the current possition */
 		if ((current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 		{
-			hp_player(10);
+			hp_player(p_ptr, 10);
 		}
 
 		o_ptr = &p_ptr->inventory_list[INVEN_LITE];
@@ -2345,7 +2345,7 @@ static void process_world_aux_mutation(void)
 			if (!object_is_fixed_artifact(o_ptr) && (o_ptr->xtra4 > 0))
 			{
 				/* Heal the player a bit */
-				hp_player(o_ptr->xtra4 / 20);
+				hp_player(p_ptr, o_ptr->xtra4 / 20);
 
 				/* Decrease life-span of lite */
 				o_ptr->xtra4 /= 2;
@@ -2531,7 +2531,7 @@ static void process_world_aux_mutation(void)
 			HIT_POINT healing = p_ptr->csp;
 			if (healing > wounds) healing = wounds;
 
-			hp_player(healing);
+			hp_player(p_ptr, healing);
 			p_ptr->csp -= healing;
 			p_ptr->redraw |= (PR_HP | PR_MANA);
 		}

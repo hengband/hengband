@@ -286,7 +286,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 	(void)restore_all_status();
 	(void)set_shero(0, TRUE);
 	handle_stuff();
-	hp_player(5000);
+	hp_player(p_ptr, 5000);
 
 	return TRUE;
 }
@@ -296,7 +296,7 @@ bool_hack heroism(int base)
 	bool_hack ident = FALSE;
 	if (set_afraid(0)) ident = TRUE;
 	if (set_hero(p_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
-	if (hp_player(10)) ident = TRUE;
+	if (hp_player(p_ptr, 10)) ident = TRUE;
 	return ident;
 }
 
@@ -305,14 +305,14 @@ bool_hack berserk(int base)
 	bool_hack ident = FALSE;
 	if (set_afraid(0)) ident = TRUE;
 	if (set_shero(p_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
-	if (hp_player(30)) ident = TRUE;
+	if (hp_player(p_ptr, 30)) ident = TRUE;
 	return ident;
 }
 
 bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides)
 {
 	bool_hack ident = FALSE;
-	if (hp_player(damroll(dice, sides))) ident = TRUE;
+	if (hp_player(p_ptr, damroll(dice, sides))) ident = TRUE;
 	if (set_blind(0)) ident = TRUE;
 	if (set_cut(p_ptr->cut - 10)) ident = TRUE;
 	if (set_shero(0, TRUE)) ident = TRUE;
@@ -322,7 +322,7 @@ bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides)
 bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides)
 {
 	bool_hack ident = FALSE;
-	if (hp_player(damroll(dice, sides))) ident = TRUE;
+	if (hp_player(p_ptr, damroll(dice, sides))) ident = TRUE;
 	if (set_blind(0)) ident = TRUE;
 	if (set_confused(0)) ident = TRUE;
 	if (set_cut((p_ptr->cut / 2) - 50)) ident = TRUE;
@@ -333,7 +333,7 @@ bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides)
 bool_hack cure_critical_wounds(HIT_POINT pow)
 {
 	bool_hack ident = FALSE;
-	if (hp_player(pow)) ident = TRUE;
+	if (hp_player(p_ptr, pow)) ident = TRUE;
 	if (set_blind(0)) ident = TRUE;
 	if (set_confused(0)) ident = TRUE;
 	if (set_poisoned(0)) ident = TRUE;
@@ -346,7 +346,7 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 bool_hack true_healing(HIT_POINT pow)
 {
 	bool_hack ident = FALSE;
-	if (hp_player(pow)) ident = TRUE;
+	if (hp_player(p_ptr, pow)) ident = TRUE;
 	if (set_blind(0)) ident = TRUE;
 	if (set_confused(0)) ident = TRUE;
 	if (set_poisoned(0)) ident = TRUE;

@@ -1140,7 +1140,7 @@ static bool cast_mindcrafter_spell(int spell)
 		 */
 		if (!IS_FAST() || !IS_HERO())
 		{
-			hp_player(plev);
+			hp_player(p_ptr, plev);
 		}
 
 		t = 10 + randint1((plev * 3) / 2);

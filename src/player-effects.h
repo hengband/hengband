@@ -60,7 +60,7 @@ extern bool set_food(TIME_EFFECT v);
 extern bool inc_stat(player_type *creature_ptr, int stat);
 extern bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent);
 extern bool res_stat(player_type *creature_ptr, int stat);
-extern bool hp_player(int num);
+extern bool hp_player(player_type *creature_ptr, int num);
 extern bool do_dec_stat(player_type *creature_ptr, int stat);
 extern bool do_res_stat(player_type *creature_ptr, int stat);
 extern bool do_inc_stat(int stat);

@@ -266,7 +266,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				dispel_evil(randint1(dam_sides));
-				hp_player(heal);
+				hp_player(p_ptr, heal);
 				set_afraid(0);
 				set_poisoned(0);
 				set_stun(0);
@@ -531,7 +531,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				confuse_monsters(power);
 				turn_monsters(power);
 				stasis_monsters(power);
-				hp_player(heal);
+				hp_player(p_ptr, heal);
 			}
 		}
 		break;

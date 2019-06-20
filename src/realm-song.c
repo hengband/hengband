@@ -172,7 +172,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				hp_player(damroll(dice, sides));
+				hp_player(p_ptr, damroll(dice, sides));
 			}
 		}
 
@@ -237,7 +237,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			msg_print(_("激しい戦いの歌を歌った．．．", "You start singing a song of intense fighting..."));
 
-			(void)hp_player(10);
+			(void)hp_player(p_ptr, 10);
 			(void)set_afraid(0);
 
 			/* Recalculate hitpoints */
@@ -789,7 +789,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
-			(void)hp_player(10);
+			(void)hp_player(p_ptr, 10);
 			(void)set_afraid(0);
 
 			/* Recalculate hitpoints */
@@ -847,7 +847,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				hp_player(damroll(dice, sides));
+				hp_player(p_ptr, damroll(dice, sides));
 				set_stun(0);
 				set_cut(0);
 			}

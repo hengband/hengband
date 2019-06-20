@@ -917,7 +917,7 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	if (set_protevil((magic ? 0 : creature_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
 	if (set_poisoned(0)) ident = TRUE;
 	if (set_afraid(0)) ident = TRUE;
-	if (hp_player(50)) ident = TRUE;
+	if (hp_player(p_ptr, 50)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
 	return ident;
@@ -3507,7 +3507,7 @@ void cast_wonder(DIRECTION dir)
 		dispel_monsters(150);
 		slow_monsters(plev);
 		sleep_monsters(plev);
-		hp_player(300);
+		hp_player(p_ptr, 300);
 	}
 }
 
@@ -3651,7 +3651,7 @@ void cast_invoke_spirits(DIRECTION dir)
 		dispel_monsters(150);
 		slow_monsters(plev);
 		sleep_monsters(plev);
-		hp_player(300);
+		hp_player(p_ptr, 300);
 	}
 
 	if (die < 31)
@@ -3883,7 +3883,7 @@ bool_hack vampirism(void)
 	{
 		if (p_ptr->food < PY_FOOD_FULL)
 			/* No heal if we are "full" */
-			(void)hp_player(dummy);
+			(void)hp_player(p_ptr, dummy);
 		else
 			msg_print(_("あなたは空腹ではありません。", "You were not hungry."));
 
@@ -4292,7 +4292,7 @@ bool comvert_mp_to_hp(player_type *creature_ptr)
 	if (creature_ptr->csp >= creature_ptr->lev / 5)
 	{
 		creature_ptr->csp -= creature_ptr->lev / 5;
-		hp_player(creature_ptr->lev);
+		hp_player(p_ptr, creature_ptr->lev);
 	}
 	else
 	{

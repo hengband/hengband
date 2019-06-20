@@ -881,7 +881,7 @@ bool activate_artifact(object_type *o_ptr)
 		for (dummy = 0; dummy < 3; dummy++)
 		{
 			if (hypodynamic_bolt(dir, 50))
-				hp_player(50);
+				hp_player(p_ptr, 50);
 		}
 		break;
 	}
@@ -906,7 +906,7 @@ bool activate_artifact(object_type *o_ptr)
 		for (dummy = 0; dummy < 3; dummy++)
 		{
 			if (hypodynamic_bolt(dir, 100))
-				hp_player(100);
+				hp_player(p_ptr, 100);
 		}
 		break;
 	}
@@ -1036,7 +1036,7 @@ bool activate_artifact(object_type *o_ptr)
 		msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
 		(void)set_afraid(0);
 		(void)set_hero(randint1(50) + 50, FALSE);
-		(void)hp_player(10);
+		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(randint1(50) + 50, FALSE);
 		(void)set_oppose_acid(randint1(50) + 50, FALSE);
 		(void)set_oppose_elec(randint1(50) + 50, FALSE);
@@ -1246,7 +1246,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_CURE_LW:
 	{
 		(void)set_afraid(0);
-		(void)hp_player(30);
+		(void)hp_player(p_ptr, 30);
 		break;
 	}
 
@@ -1686,7 +1686,7 @@ bool activate_artifact(object_type *o_ptr)
 		TIME_EFFECT v = randint1(25) + 25;
 		(void)set_afraid(0);
 		(void)set_hero(v, FALSE);
-		(void)hp_player(10);
+		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(v, FALSE);
 		(void)set_oppose_acid(v, FALSE);
 		(void)set_oppose_elec(v, FALSE);

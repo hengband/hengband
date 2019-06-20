@@ -657,7 +657,7 @@ static bool use_mane(int spell)
 	}
 	case MS_HEAL:
 		msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
-		(void)hp_player(plev*6);
+		(void)hp_player(p_ptr, plev*6);
 		(void)set_stun(0);
 		(void)set_cut(0);
 		break;

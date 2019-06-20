@@ -1280,7 +1280,7 @@ static bool cast_learned_spell(int spell, bool success)
 	}
 	case MS_HEAL:
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
-		(void)hp_player(plev*4);
+		(void)hp_player(p_ptr, plev*4);
 		(void)set_stun(0);
 		(void)set_cut(0);
 		break;

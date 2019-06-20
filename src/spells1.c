@@ -3122,7 +3122,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					else
 					{
 						msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), m_name);
-						(void)hp_player(dam);
+						(void)hp_player(p_ptr, dam);
 					}
 				}
 				else
@@ -4283,7 +4283,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			if (PRACE_IS_(p_ptr, RACE_SPECTRE) && !CHECK_MULTISHADOW())
 			{
 				msg_print(_("気分がよくなった。", "You feel invigorated!"));
-				hp_player(dam / 4);
+				hp_player(p_ptr, dam / 4);
 				learn_spell(monspell);
 			}
 			else
@@ -4668,7 +4668,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		{
 			if (fuzzy) msg_print(_("何らかの攻撃によって気分がよくなった。", "You are hit by something invigorating!"));
 
-			(void)hp_player(dam);
+			(void)hp_player(p_ptr, dam);
 			dam = 0;
 			break;
 		}

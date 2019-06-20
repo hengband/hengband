@@ -313,7 +313,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					chg_virtue(V_SACRIFICE, -1);
 					chg_virtue(V_VITALITY, -1);
 
-					hp_player(dam);
+					hp_player(p_ptr, dam);
 
 					/*
 					* Gain nutritional sustenance:
@@ -469,7 +469,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				for (i = 0; i < 3; i++)
 				{
 					if (hypodynamic_bolt(dir, dam))
-						hp_player(dam);
+						hp_player(p_ptr, dam);
 				}
 			}
 		}
