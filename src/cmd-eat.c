@@ -218,13 +218,13 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_RESTORE_STR:
 		{
-			if (do_res_stat(A_STR)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_STR)) ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_RESTORE_CON:
 		{
-			if (do_res_stat(A_CON)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_CON)) ident = TRUE;
 			break;
 		}
 

@@ -345,27 +345,27 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_RES_STR:
-			if (do_res_stat(A_STR)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_STR)) ident = TRUE;
 			break;
 
 		case SV_POTION_RES_INT:
-			if (do_res_stat(A_INT)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_INT)) ident = TRUE;
 			break;
 
 		case SV_POTION_RES_WIS:
-			if (do_res_stat(A_WIS)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_WIS)) ident = TRUE;
 			break;
 
 		case SV_POTION_RES_DEX:
-			if (do_res_stat(A_DEX)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_DEX)) ident = TRUE;
 			break;
 
 		case SV_POTION_RES_CON:
-			if (do_res_stat(A_CON)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_CON)) ident = TRUE;
 			break;
 
 		case SV_POTION_RES_CHR:
-			if (do_res_stat(A_CHR)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_CHR)) ident = TRUE;
 			break;
 
 		case SV_POTION_INC_STR:

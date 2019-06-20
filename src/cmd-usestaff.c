@@ -177,7 +177,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_THE_MAGI:
 		{
-			if (do_res_stat(A_INT)) ident = TRUE;
+			if (do_res_stat(p_ptr, A_INT)) ident = TRUE;
 			ident |= restore_mana(FALSE);
 			if (set_shero(0, TRUE)) ident = TRUE;
 			break;

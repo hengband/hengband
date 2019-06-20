@@ -395,12 +395,12 @@ bool_hack restore_mana(bool_hack magic_eater)
 bool restore_all_status(void)
 {
 	bool ident = FALSE;
-	if (do_res_stat(A_STR)) ident = TRUE;
-	if (do_res_stat(A_INT)) ident = TRUE;
-	if (do_res_stat(A_WIS)) ident = TRUE;
-	if (do_res_stat(A_DEX)) ident = TRUE;
-	if (do_res_stat(A_CON)) ident = TRUE;
-	if (do_res_stat(A_CHR)) ident = TRUE;
+	if (do_res_stat(p_ptr, A_STR)) ident = TRUE;
+	if (do_res_stat(p_ptr, A_INT)) ident = TRUE;
+	if (do_res_stat(p_ptr, A_WIS)) ident = TRUE;
+	if (do_res_stat(p_ptr, A_DEX)) ident = TRUE;
+	if (do_res_stat(p_ptr, A_CON)) ident = TRUE;
+	if (do_res_stat(p_ptr, A_CHR)) ident = TRUE;
 	return ident;
 }
 
