@@ -229,17 +229,17 @@ static void discover_hidden_things(POSITION y, POSITION x)
  * @brief プレイヤーの探索処理判定
  * @return なし
  */
-void search(void)
+void search(player_type *creature_ptr)
 {
 	DIRECTION i;
 	PERCENTAGE chance;
 
 	/* Start with base search ability */
-	chance = p_ptr->skill_srh;
+	chance = creature_ptr->skill_srh;
 
 	/* Penalize various conditions */
-	if (p_ptr->blind || no_lite()) chance = chance / 10;
-	if (p_ptr->confused || p_ptr->image) chance = chance / 10;
+	if (creature_ptr->blind || no_lite()) chance = chance / 10;
+	if (creature_ptr->confused || creature_ptr->image) chance = chance / 10;
 
 	/* Search the nearby grids, which are always in bounds */
 	for (i = 0; i < 9; ++ i)
@@ -247,7 +247,7 @@ void search(void)
 		/* Sometimes, notice things */
 		if (randint0(100) < chance)
 		{
-			discover_hidden_things(p_ptr->y + ddy_ddd[i], p_ptr->x + ddx_ddd[i]);
+			discover_hidden_things(creature_ptr->y + ddy_ddd[i], creature_ptr->x + ddx_ddd[i]);
 		}
 	}
 }
@@ -702,13 +702,13 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		/* Spontaneous Searching */
 		if ((p_ptr->skill_fos >= 50) || (0 == randint0(50 - p_ptr->skill_fos)))
 		{
-			search();
+			search(p_ptr);
 		}
 
 		/* Continuous Searching */
 		if (p_ptr->action == ACTION_SEARCH)
 		{
-			search();
+			search(p_ptr);
 		}
 	}
 

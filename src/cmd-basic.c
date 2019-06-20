@@ -504,8 +504,7 @@ void do_cmd_search(player_type * creature_ptr)
 	}
 	take_turn(creature_ptr, 100);
 
-	/* Search */
-	search();
+	search(creature_ptr);
 }
 
 
@@ -1189,7 +1188,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 				/* We may continue chopping */
 				msg_format(_("%sを切っている。", "You chop away at the %s."), name);
 				/* Occasional Search XXX XXX */
-				if (randint0(100) < 25) search();
+				if (randint0(100) < 25) search(p_ptr);
 			}
 			else
 			{
@@ -1204,7 +1203,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	if (is_hidden_door(g_ptr))
 	{
 		/* Occasional Search XXX XXX */
-		if (randint0(100) < 25) search();
+		if (randint0(100) < 25) search(p_ptr);
 	}
 	return more;
 }
