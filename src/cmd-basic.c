@@ -552,14 +552,14 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
  * @details
  * Assume there is no monster blocking the destination
  */
-static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
+static bool do_cmd_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
 	bool flag = TRUE;
 	bool more = FALSE;
 	object_type *o_ptr = &current_floor_ptr->o_list[o_idx];
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Attempt to unlock it */
 	if (o_ptr->pval > 0)
@@ -568,11 +568,11 @@ static bool do_cmd_open_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		flag = FALSE;
 
 		/* Get the "disarm" factor */
-		i = p_ptr->skill_dis;
+		i = creature_ptr->skill_dis;
 
 		/* Penalize some conditions */
-		if (p_ptr->blind || no_lite()) i = i / 10;
-		if (p_ptr->confused || p_ptr->image) i = i / 10;
+		if (creature_ptr->blind || no_lite()) i = i / 10;
+		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 		/* Extract the difficulty */
 		j = i - o_ptr->pval;
@@ -890,7 +890,7 @@ void do_cmd_open(player_type *creature_ptr)
 		}
 		else if (o_idx)
 		{
-			more = do_cmd_open_chest(y, x, o_idx);
+			more = do_cmd_open_chest(creature_ptr, y, x, o_idx);
 		}
 		else
 		{
