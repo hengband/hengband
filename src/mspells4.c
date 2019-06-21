@@ -1505,7 +1505,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			(void)set_blind(12 + randint0(4));
+			(void)set_blind(p_ptr, 12 + randint0(4));
 		}
 		learn_spell(MS_BLIND);
 		update_smart_learn(m_idx, DRS_BLIND);

@@ -1822,7 +1822,7 @@ static void process_world_aux_timeout(void)
 	/* Blindness */
 	if (p_ptr->blind)
 	{
-		(void)set_blind(p_ptr->blind - dec_count);
+		(void)set_blind(p_ptr, p_ptr->blind - dec_count);
 	}
 
 	/* Times see-invisible */

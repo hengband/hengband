@@ -3179,7 +3179,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Increase "blind" */
 					if (!p_ptr->resist_blind && !CHECK_MULTISHADOW())
 					{
-						if (set_blind(p_ptr->blind + 10 + randint1(rlev)))
+						if (set_blind(p_ptr, p_ptr->blind + 10 + randint1(rlev)))
 						{
 #ifdef JP
 							if (m_ptr->r_idx == MON_DIO) msg_print("どうだッ！この血の目潰しはッ！");

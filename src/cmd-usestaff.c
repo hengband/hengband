@@ -41,7 +41,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 		{
 			if (!(p_ptr->resist_blind) && !(p_ptr->resist_dark))
 			{
-				if (set_blind(p_ptr->blind + 3 + randint1(5))) ident = TRUE;
+				if (set_blind(p_ptr, p_ptr->blind + 3 + randint1(5))) ident = TRUE;
 			}
 			if (unlite_area(10, (powerful ? 6 : 3))) ident = TRUE;
 			break;

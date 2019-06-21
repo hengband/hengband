@@ -421,19 +421,19 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, IDX p, bool do_dec)
  * Note that blindness is currently the only thing which can affect\n
  * "player_can_see_bold()".\n
  */
-bool set_blind(TIME_EFFECT v)
+bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (!p_ptr->blind)
+		if (!creature_ptr->blind)
 		{
-			if (p_ptr->prace == RACE_ANDROID)
+			if (creature_ptr->prace == RACE_ANDROID)
 			{
 				msg_print(_("センサーをやられた！", "You are blind!"));
 			}
@@ -450,9 +450,9 @@ bool set_blind(TIME_EFFECT v)
 	/* Shut */
 	else
 	{
-		if (p_ptr->blind)
+		if (creature_ptr->blind)
 		{
-			if (p_ptr->prace == RACE_ANDROID)
+			if (creature_ptr->prace == RACE_ANDROID)
 			{
 				msg_print(_("センサーが復旧した。", "You can see again."));
 			}
@@ -466,17 +466,17 @@ bool set_blind(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->blind = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->blind = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 	if (disturb_state) disturb(FALSE, FALSE);
 
 	/* Fully update the visuals */
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
+	creature_ptr->redraw |= (PR_MAP);
+	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	handle_stuff();
 	return (TRUE);
 }

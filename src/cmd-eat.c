@@ -82,7 +82,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			if (!p_ptr->resist_blind)
 			{
-				if (set_blind(p_ptr->blind + randint0(200) + 200))
+				if (set_blind(p_ptr, p_ptr->blind + randint0(200) + 200))
 				{
 					ident = TRUE;
 				}
@@ -194,7 +194,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_CURE_BLINDNESS:
 		{
-			if (set_blind(0)) ident = TRUE;
+			if (set_blind(p_ptr, 0)) ident = TRUE;
 			break;
 		}
 

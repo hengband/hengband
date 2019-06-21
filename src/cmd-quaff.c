@@ -163,7 +163,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 		case SV_POTION_BLINDNESS:
 			if (!p_ptr->resist_blind)
 			{
-				if (set_blind(p_ptr->blind + randint0(100) + 100))
+				if (set_blind(p_ptr, p_ptr->blind + randint0(100) + 100))
 				{
 					ident = TRUE;
 				}

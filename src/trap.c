@@ -387,6 +387,15 @@ static void hit_trap_set_abnormal_status(concptr trap_message, bool resist, bool
 	}
 }
 
+static void hit_trap_set_abnormal_status_p(concptr trap_message, bool resist, bool(*set_status)(player_type *, IDX), IDX turn_aux)
+{
+	msg_print(trap_message);
+	if (!resist)
+	{
+		set_status(p_ptr, turn_aux);
+	}
+}
+
 /*!
 * @brief プレイヤーへのトラップ作動処理メインルーチン /
 * Handle player hitting a real trap
@@ -520,7 +529,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_BLIND:
 	{
-		hit_trap_set_abnormal_status(
+		hit_trap_set_abnormal_status_p(
 			_("黒いガスに包み込まれた！", "A black gas surrounds you!"),
 			p_ptr->resist_blind,
 			set_blind, p_ptr->blind + (TIME_EFFECT)randint0(50) + 25);

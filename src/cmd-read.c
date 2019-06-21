@@ -96,7 +96,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 		{
 			if (!(p_ptr->resist_blind) && !(p_ptr->resist_dark))
 			{
-				(void)set_blind(p_ptr->blind + 3 + randint1(5));
+				(void)set_blind(p_ptr, p_ptr->blind + 3 + randint1(5));
 			}
 			if (unlite_area(10, 3)) ident = TRUE;
 			break;

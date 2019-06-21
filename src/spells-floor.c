@@ -693,7 +693,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 			if (!p_ptr->resist_blind && !p_ptr->resist_lite)
 			{
 				/* Become blind */
-				(void)set_blind(p_ptr->blind + 10 + randint1(10));
+				(void)set_blind(p_ptr, p_ptr->blind + 10 + randint1(10));
 			}
 		}
 

@@ -278,7 +278,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 	}
 	restore_level();
 	(void)set_poisoned(0);
-	(void)set_blind(0);
+	(void)set_blind(p_ptr, 0);
 	(void)set_confused(0);
 	(void)set_image(0);
 	(void)set_stun(0);
@@ -313,7 +313,7 @@ bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(p_ptr, damroll(dice, sides))) ident = TRUE;
-	if (set_blind(0)) ident = TRUE;
+	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_cut(p_ptr->cut - 10)) ident = TRUE;
 	if (set_shero(0, TRUE)) ident = TRUE;
 	return ident;
@@ -323,7 +323,7 @@ bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(p_ptr, damroll(dice, sides))) ident = TRUE;
-	if (set_blind(0)) ident = TRUE;
+	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(0)) ident = TRUE;
 	if (set_cut((p_ptr->cut / 2) - 50)) ident = TRUE;
 	if (set_shero(0, TRUE)) ident = TRUE;
@@ -334,7 +334,7 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(p_ptr, pow)) ident = TRUE;
-	if (set_blind(0)) ident = TRUE;
+	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(0)) ident = TRUE;
 	if (set_poisoned(0)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
@@ -347,7 +347,7 @@ bool_hack true_healing(HIT_POINT pow)
 {
 	bool_hack ident = FALSE;
 	if (hp_player(p_ptr, pow)) ident = TRUE;
-	if (set_blind(0)) ident = TRUE;
+	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(0)) ident = TRUE;
 	if (set_poisoned(0)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
@@ -459,7 +459,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	/* Get effects */
 	msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
 	t = 20 + randint1(20);
-	(void)set_blind(creature_ptr->blind + t);
+	(void)set_blind(p_ptr, creature_ptr->blind + t);
 	(void)set_afraid(0);
 	(void)set_tim_esp(creature_ptr->tim_esp + t, FALSE);
 	(void)set_tim_regen(creature_ptr->tim_regen + t, FALSE);

@@ -2065,7 +2065,7 @@ static bool inn_comm(int cmd)
 				}
 				else
 				{
-					set_blind(0);
+					set_blind(p_ptr, 0);
 					set_confused(0);
 					p_ptr->stun = 0;
 					p_ptr->chp = p_ptr->mhp;
