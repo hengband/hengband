@@ -17,7 +17,7 @@ extern void dispel_player(void);
 extern bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, IDX p, bool do_dec);
 extern bool set_blind(player_type *creature_ptr, TIME_EFFECT v);
 extern bool set_confused(player_type *creature_ptr, TIME_EFFECT v);
-extern bool set_poisoned(TIME_EFFECT v);
+extern bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v);
 extern bool set_afraid(TIME_EFFECT v);
 extern bool set_paralyzed(TIME_EFFECT v);
 extern bool set_image(TIME_EFFECT v);

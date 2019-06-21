@@ -277,7 +277,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 		msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
 	}
 	restore_level();
-	(void)set_poisoned(0);
+	(void)set_poisoned(p_ptr, 0);
 	(void)set_blind(p_ptr, 0);
 	(void)set_confused(p_ptr, 0);
 	(void)set_image(0);
@@ -336,7 +336,7 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 	if (hp_player(p_ptr, pow)) ident = TRUE;
 	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(p_ptr, 0)) ident = TRUE;
-	if (set_poisoned(0)) ident = TRUE;
+	if (set_poisoned(p_ptr, 0)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
 	if (set_shero(0, TRUE)) ident = TRUE;
@@ -349,7 +349,7 @@ bool_hack true_healing(HIT_POINT pow)
 	if (hp_player(p_ptr, pow)) ident = TRUE;
 	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(p_ptr, 0)) ident = TRUE;
-	if (set_poisoned(0)) ident = TRUE;
+	if (set_poisoned(p_ptr, 0)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
 	if (set_image(0)) ident = TRUE;

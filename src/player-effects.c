@@ -569,17 +569,17 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_poisoned(TIME_EFFECT v)
+bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (!p_ptr->poisoned)
+		if (!creature_ptr->poisoned)
 		{
 			msg_print(_("毒に侵されてしまった！", "You are poisoned!"));
 			notice = TRUE;
@@ -589,7 +589,7 @@ bool set_poisoned(TIME_EFFECT v)
 	/* Shut */
 	else
 	{
-		if (p_ptr->poisoned)
+		if (creature_ptr->poisoned)
 		{
 			msg_print(_("やっと毒の痛みがなくなった。", "You are no longer poisoned."));
 			notice = TRUE;
@@ -597,8 +597,8 @@ bool set_poisoned(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->poisoned = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->poisoned = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);

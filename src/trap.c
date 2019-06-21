@@ -315,7 +315,7 @@ static void hit_trap_pit(int trap_feat_type)
 			else
 			{
 				dam = dam * 2;
-				(void)set_poisoned(p_ptr->poisoned + randint1(dam));
+				(void)set_poisoned(p_ptr, p_ptr->poisoned + randint1(dam));
 			}
 		}
 	}
@@ -547,7 +547,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_POISON:
 	{
-		hit_trap_set_abnormal_status(
+		hit_trap_set_abnormal_status_p(
 			_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
 			p_ptr->resist_pois || IS_OPPOSE_POIS(),
 			set_poisoned, p_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);

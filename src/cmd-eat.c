@@ -70,7 +70,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
 			{
-				if (set_poisoned(p_ptr->poisoned + randint0(10) + 10))
+				if (set_poisoned(p_ptr, p_ptr->poisoned + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}
@@ -188,7 +188,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_CURE_POISON:
 		{
-			if (set_poisoned(0)) ident = TRUE;
+			if (set_poisoned(p_ptr, 0)) ident = TRUE;
 			break;
 		}
 
@@ -280,7 +280,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		case SV_FOOD_WAYBREAD:
 		{
 			msg_print(_("これはひじょうに美味だ。", "That tastes good."));
-			(void)set_poisoned(0);
+			(void)set_poisoned(p_ptr, 0);
 			(void)hp_player(p_ptr, damroll(4, 8));
 			ident = TRUE;
 			break;

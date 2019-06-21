@@ -1610,14 +1610,14 @@ static void process_world_aux_hp_and_sp(void)
 				msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
 				take_hit(DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
 					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name), -1);
-				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr->poisoned + 1);
+				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr, p_ptr->poisoned + 1);
 			}
 			else
 			{
 				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name;
 				msg_format(_("%sに毒された！", "The %s poisons you!"), name);
 				take_hit(DAMAGE_NOESCAPE, damage, name, -1);
-				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr->poisoned + 3);
+				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr, p_ptr->poisoned + 3);
 			}
 
 			cave_no_regen = TRUE;
@@ -2083,7 +2083,7 @@ static void process_world_aux_timeout(void)
 		int adjust = adj_con_fix[p_ptr->stat_ind[A_CON]] + 1;
 
 		/* Apply some healing */
-		(void)set_poisoned(p_ptr->poisoned - adjust);
+		(void)set_poisoned(p_ptr, p_ptr->poisoned - adjust);
 	}
 
 	/* Stun */

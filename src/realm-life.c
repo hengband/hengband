@@ -121,7 +121,7 @@ concptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				set_poisoned(0);
+				set_poisoned(p_ptr, 0);
 			}
 		}
 		break;

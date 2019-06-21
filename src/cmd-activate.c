@@ -1261,7 +1261,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("深青色に輝いている...", "It glows deep blue..."));
 		(void)set_afraid(0);
-		(void)set_poisoned(0);
+		(void)set_poisoned(p_ptr, 0);
 		break;
 	}
 

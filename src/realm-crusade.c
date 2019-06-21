@@ -128,7 +128,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				set_cut(0);
-				set_poisoned(0);
+				set_poisoned(p_ptr, 0);
 				set_stun(0);
 			}
 		}
@@ -268,7 +268,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				dispel_evil(randint1(dam_sides));
 				hp_player(p_ptr, heal);
 				set_afraid(0);
-				set_poisoned(0);
+				set_poisoned(p_ptr, 0);
 				set_stun(0);
 				set_cut(0);
 			}

@@ -2817,7 +2817,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Take "poison" effect */
 					if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()) && !CHECK_MULTISHADOW())
 					{
-						if (set_poisoned(p_ptr->poisoned + randint1(rlev) + 5))
+						if (set_poisoned(p_ptr, p_ptr->poisoned + randint1(rlev) + 5))
 						{
 							obvious = TRUE;
 						}
@@ -3451,7 +3451,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Take "poison" effect */
 					if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
 					{
-						if (set_poisoned(p_ptr->poisoned + randint1(rlev) + 5))
+						if (set_poisoned(p_ptr, p_ptr->poisoned + randint1(rlev) + 5))
 						{
 							obvious = TRUE;
 						}

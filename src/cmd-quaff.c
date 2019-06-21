@@ -145,7 +145,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 				(void)set_food(PY_FOOD_STARVE - 1);
 			}
 
-			(void)set_poisoned(0);
+			(void)set_poisoned(p_ptr, 0);
 			(void)set_paralyzed(p_ptr->paralyzed + 4);
 			ident = TRUE;
 			break;
@@ -153,7 +153,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 		case SV_POTION_POISON:
 			if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
 			{
-				if (set_poisoned(p_ptr->poisoned + randint0(15) + 10))
+				if (set_poisoned(p_ptr, p_ptr->poisoned + randint0(15) + 10))
 				{
 					ident = TRUE;
 				}
@@ -268,11 +268,11 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_SLOW_POISON:
-			if (set_poisoned(p_ptr->poisoned / 2)) ident = TRUE;
+			if (set_poisoned(p_ptr, p_ptr->poisoned / 2)) ident = TRUE;
 			break;
 
 		case SV_POTION_CURE_POISON:
-			if (set_poisoned(0)) ident = TRUE;
+			if (set_poisoned(p_ptr, 0)) ident = TRUE;
 			break;
 
 		case SV_POTION_BOLDNESS:
