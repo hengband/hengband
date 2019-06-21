@@ -916,7 +916,7 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	int k = 3 * creature_ptr->lev;
 	if (set_protevil((magic ? 0 : creature_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
 	if (set_poisoned(p_ptr, 0)) ident = TRUE;
-	if (set_afraid(0)) ident = TRUE;
+	if (set_afraid(p_ptr, 0)) ident = TRUE;
 	if (hp_player(p_ptr, 50)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
@@ -3556,7 +3556,7 @@ void cast_invoke_spirits(DIRECTION dir)
 	{
 		msg_print(_("名状し難い邪悪な存在があなたの心を通り過ぎて行った...", "An unnamable evil brushes against your mind..."));
 
-		set_afraid(p_ptr->afraid + randint1(4) + 4);
+		set_afraid(p_ptr, p_ptr->afraid + randint1(4) + 4);
 	}
 	else if (die < 26)
 	{

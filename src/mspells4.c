@@ -1455,7 +1455,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			(void)set_afraid(p_ptr->afraid + randint0(4) + 4);
+			(void)set_afraid(p_ptr, p_ptr->afraid + randint0(4) + 4);
 		}
 		learn_spell(MS_SCARE);
 		update_smart_learn(m_idx, DRS_FEAR);

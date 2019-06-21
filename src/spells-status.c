@@ -294,7 +294,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 bool_hack heroism(int base)
 {
 	bool_hack ident = FALSE;
-	if (set_afraid(0)) ident = TRUE;
+	if (set_afraid(p_ptr, 0)) ident = TRUE;
 	if (set_hero(p_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
 	if (hp_player(p_ptr, 10)) ident = TRUE;
 	return ident;
@@ -303,7 +303,7 @@ bool_hack heroism(int base)
 bool_hack berserk(int base)
 {
 	bool_hack ident = FALSE;
-	if (set_afraid(0)) ident = TRUE;
+	if (set_afraid(p_ptr, 0)) ident = TRUE;
 	if (set_shero(p_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
 	if (hp_player(p_ptr, 30)) ident = TRUE;
 	return ident;
@@ -460,7 +460,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
 	t = 20 + randint1(20);
 	(void)set_blind(p_ptr, creature_ptr->blind + t);
-	(void)set_afraid(0);
+	(void)set_afraid(p_ptr, 0);
 	(void)set_tim_esp(creature_ptr->tim_esp + t, FALSE);
 	(void)set_tim_regen(creature_ptr->tim_regen + t, FALSE);
 	(void)set_hero(creature_ptr->hero + t, FALSE);

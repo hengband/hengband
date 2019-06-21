@@ -665,7 +665,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_HALF_ORC:
 			msg_print(_("勇気を出した。", "You play tough."));
-			(void)set_afraid(0);
+			(void)set_afraid(p_ptr, 0);
 			break;
 
 		case RACE_HALF_TROLL:

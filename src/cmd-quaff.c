@@ -276,7 +276,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_BOLDNESS:
-			if (set_afraid(0)) ident = TRUE;
+			if (set_afraid(p_ptr, 0)) ident = TRUE;
 			break;
 
 		case SV_POTION_SPEED:

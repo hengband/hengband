@@ -1965,7 +1965,7 @@ static void process_world_aux_timeout(void)
 	/* Afraid */
 	if (p_ptr->afraid)
 	{
-		(void)set_afraid(p_ptr->afraid - dec_count);
+		(void)set_afraid(p_ptr, p_ptr->afraid - dec_count);
 	}
 
 	/* Fast */
@@ -2161,7 +2161,7 @@ static void process_world_aux_mutation(void)
 		msg_print(_("ウガァァア！", "RAAAAGHH!"));
 		msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
 		(void)set_shero(10 + randint1(p_ptr->lev), FALSE);
-		(void)set_afraid(0);
+		(void)set_afraid(p_ptr, 0);
 	}
 
 	if ((p_ptr->muta2 & MUT2_COWARDICE) && (randint1(3000) == 13))
@@ -2170,7 +2170,7 @@ static void process_world_aux_mutation(void)
 		{
 			disturb(FALSE, TRUE);
 			msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-			set_afraid(p_ptr->afraid + 13 + randint1(26));
+			set_afraid(p_ptr, p_ptr->afraid + 13 + randint1(26));
 		}
 	}
 
@@ -2765,7 +2765,7 @@ static void process_world_aux_curse(void)
 			{
 				disturb(FALSE, TRUE);
 				msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-				set_afraid(p_ptr->afraid + 13 + randint1(26));
+				set_afraid(p_ptr, p_ptr->afraid + 13 + randint1(26));
 			}
 		}
 		/* Teleport player */

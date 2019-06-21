@@ -614,33 +614,33 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_afraid(TIME_EFFECT v)
+bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (!p_ptr->afraid)
+		if (!creature_ptr->afraid)
 		{
 			msg_print(_("何もかも恐くなってきた！", "You are terrified!"));
 
-			if (p_ptr->special_defense & KATA_MASK)
+			if (creature_ptr->special_defense & KATA_MASK)
 			{
 				msg_print(_("型が崩れた。", "Your posture gets loose."));
-				p_ptr->special_defense &= ~(KATA_MASK);
-				p_ptr->update |= (PU_BONUS);
-				p_ptr->update |= (PU_MONSTERS);
-				p_ptr->redraw |= (PR_STATE);
-				p_ptr->redraw |= (PR_STATUS);
-				p_ptr->action = ACTION_NONE;
+				creature_ptr->special_defense &= ~(KATA_MASK);
+				creature_ptr->update |= (PU_BONUS);
+				creature_ptr->update |= (PU_MONSTERS);
+				creature_ptr->redraw |= (PR_STATE);
+				creature_ptr->redraw |= (PR_STATUS);
+				creature_ptr->action = ACTION_NONE;
 			}
 
 			notice = TRUE;
-			p_ptr->counter = FALSE;
+			creature_ptr->counter = FALSE;
 			chg_virtue(V_VALOUR, -1);
 		}
 	}
@@ -648,7 +648,7 @@ bool set_afraid(TIME_EFFECT v)
 	/* Shut */
 	else
 	{
-		if (p_ptr->afraid)
+		if (creature_ptr->afraid)
 		{
 			msg_print(_("やっと恐怖を振り払った。", "You feel bolder now."));
 			notice = TRUE;
@@ -656,8 +656,8 @@ bool set_afraid(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->afraid = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->afraid = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);

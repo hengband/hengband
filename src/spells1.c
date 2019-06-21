@@ -1754,7 +1754,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 										if (r_ptr->flags3 & RF3_NO_FEAR)
 											note = _("には効果がなかった。", " is unaffected.");
 										else
-											set_afraid(p_ptr->afraid + 3 + randint1(dam));
+											set_afraid(p_ptr, p_ptr->afraid + 3 + randint1(dam));
 										break;
 									}
 									default:
@@ -1949,7 +1949,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 									if (r_ptr->flags3 & RF3_NO_FEAR)
 										note = _("には効果がなかった。", " is unaffected.");
 									else
-										set_afraid(p_ptr->afraid + dam);
+										set_afraid(p_ptr, p_ptr->afraid + dam);
 								}
 							}
 						}

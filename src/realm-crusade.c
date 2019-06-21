@@ -65,7 +65,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("恐怖除去", "Remove Fear");
 		if (desc) return _("恐怖を取り除く。", "Removes fear.");
 		{
-			if (cast) set_afraid(0);
+			if (cast) set_afraid(p_ptr, 0);
 		}
 		break;
 
@@ -267,7 +267,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				dispel_evil(randint1(dam_sides));
 				hp_player(p_ptr, heal);
-				set_afraid(0);
+				set_afraid(p_ptr, 0);
 				set_poisoned(p_ptr, 0);
 				set_stun(0);
 				set_cut(0);
@@ -569,7 +569,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				set_blessed(randint1(base) + base, FALSE);
 				set_fast(randint1(sp_sides) + sp_base, FALSE);
 				set_protevil(randint1(base) + base, FALSE);
-				set_afraid(0);
+				set_afraid(p_ptr, 0);
 			}
 		}
 		break;

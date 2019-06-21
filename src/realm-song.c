@@ -238,7 +238,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			msg_print(_("激しい戦いの歌を歌った．．．", "You start singing a song of intense fighting..."));
 
 			(void)hp_player(p_ptr, 10);
-			(void)set_afraid(0);
+			(void)set_afraid(p_ptr, 0);
 
 			/* Recalculate hitpoints */
 			p_ptr->update |= (PU_HP);
@@ -790,7 +790,7 @@ concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			msg_print(_("英雄の歌を口ずさんだ．．．", "You chant a powerful, heroic call to arms..."));
 			(void)hp_player(p_ptr, 10);
-			(void)set_afraid(0);
+			(void)set_afraid(p_ptr, 0);
 
 			/* Recalculate hitpoints */
 			p_ptr->update |= (PU_HP);

@@ -1131,7 +1131,7 @@ static bool cast_mindcrafter_spell(int spell)
 		break;
 	case 9:
 		/* Adrenaline */
-		set_afraid(0);
+		set_afraid(p_ptr, 0);
 		set_stun(0);
 
 		/*

@@ -94,7 +94,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			if (!p_ptr->resist_fear)
 			{
-				if (set_afraid(p_ptr->afraid + randint0(10) + 10))
+				if (set_afraid(p_ptr, p_ptr->afraid + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}
@@ -200,7 +200,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_CURE_PARANOIA:
 		{
-			if (set_afraid(0)) ident = TRUE;
+			if (set_afraid(p_ptr, 0)) ident = TRUE;
 			break;
 		}
 

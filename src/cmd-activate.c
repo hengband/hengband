@@ -1034,7 +1034,7 @@ bool activate_artifact(object_type *o_ptr)
 		msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
 		fire_breath(GF_MISSILE, dir, 300, 4);
 		msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
-		(void)set_afraid(0);
+		(void)set_afraid(p_ptr, 0);
 		(void)set_hero(randint1(50) + 50, FALSE);
 		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(randint1(50) + 50, FALSE);
@@ -1245,7 +1245,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_CURE_LW:
 	{
-		(void)set_afraid(0);
+		(void)set_afraid(p_ptr, 0);
 		(void)hp_player(p_ptr, 30);
 		break;
 	}
@@ -1260,7 +1260,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_CURE_POISON:
 	{
 		msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-		(void)set_afraid(0);
+		(void)set_afraid(p_ptr, 0);
 		(void)set_poisoned(p_ptr, 0);
 		break;
 	}
@@ -1662,7 +1662,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_SHIKOFUMI:
 	{
 		msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
-		(void)set_afraid(0);
+		(void)set_afraid(p_ptr, 0);
 		(void)set_hero(randint1(20) + 20, FALSE);
 		dispel_evil(p_ptr->lev * 3);
 		break;
@@ -1684,7 +1684,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_ULTIMATE_RESIST:
 	{
 		TIME_EFFECT v = randint1(25) + 25;
-		(void)set_afraid(0);
+		(void)set_afraid(p_ptr, 0);
 		(void)set_hero(v, FALSE);
 		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(v, FALSE);

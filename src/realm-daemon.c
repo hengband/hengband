@@ -346,7 +346,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				set_oppose_fire(dur, FALSE);
 				set_oppose_cold(dur, FALSE);
 				set_tim_sh_fire(dur, FALSE);
-				set_afraid(0);
+				set_afraid(p_ptr, 0);
 				break;
 			}
 		}
