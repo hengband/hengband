@@ -402,7 +402,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_mimic(base + randint1(base), MIMIC_DEMON, FALSE);
+				set_mimic(p_ptr, base + randint1(base), MIMIC_DEMON, FALSE);
 			}
 		}
 		break;
@@ -586,7 +586,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_mimic(base + randint1(base), MIMIC_DEMON_LORD, FALSE);
+				set_mimic(p_ptr, base + randint1(base), MIMIC_DEMON_LORD, FALSE);
 			}
 		}
 		break;

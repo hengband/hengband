@@ -327,7 +327,7 @@ void dispel_player(void)
 	(void)set_oppose_cold(0, TRUE);
 	(void)set_oppose_pois(0, TRUE);
 	(void)set_ultimate_res(0, TRUE);
-	(void)set_mimic(0, 0, TRUE);
+	(void)set_mimic(p_ptr, 0, 0, TRUE);
 	(void)set_ele_attack(0, 0);
 	(void)set_ele_immune(0, 0);
 
@@ -361,24 +361,24 @@ void dispel_player(void)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
+bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, IDX p, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_mimic && (p_ptr->mimic_form == p) && !do_dec)
+		if (creature_ptr->tim_mimic && (creature_ptr->mimic_form == p) && !do_dec)
 		{
-			if (p_ptr->tim_mimic > v) return FALSE;
+			if (creature_ptr->tim_mimic > v) return FALSE;
 		}
-		else if ((!p_ptr->tim_mimic) || (p_ptr->mimic_form != p))
+		else if ((!creature_ptr->tim_mimic) || (creature_ptr->mimic_form != p))
 		{
 			msg_print(_("自分の体が変わってゆくのを感じた。", "You feel that your body changes."));
-			p_ptr->mimic_form = p;
+			creature_ptr->mimic_form = p;
 			notice = TRUE;
 		}
 	}
@@ -386,26 +386,26 @@ bool set_mimic(TIME_EFFECT v, IDX p, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_mimic)
+		if (creature_ptr->tim_mimic)
 		{
 			msg_print(_("変身が解けた。", "You are no longer transformed."));
-			if (p_ptr->mimic_form == MIMIC_DEMON) set_oppose_fire(0, TRUE);
-			p_ptr->mimic_form=0;
+			if (creature_ptr->mimic_form == MIMIC_DEMON) set_oppose_fire(0, TRUE);
+			creature_ptr->mimic_form=0;
 			notice = TRUE;
 			p = 0;
 		}
 	}
 
 	/* Use the value */
-	p_ptr->tim_mimic = v;
+	creature_ptr->tim_mimic = v;
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, TRUE);
 
-	p_ptr->redraw |= (PR_BASIC | PR_STATUS);
-	p_ptr->update |= (PU_BONUS | PU_HP);
+	creature_ptr->redraw |= (PR_BASIC | PR_STATUS);
+	creature_ptr->update |= (PU_BONUS | PU_HP);
 
 	handle_stuff();
 	return (TRUE);

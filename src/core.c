@@ -1810,7 +1810,7 @@ static void process_world_aux_timeout(void)
 	/* Mimic */
 	if (p_ptr->tim_mimic)
 	{
-		(void)set_mimic(p_ptr->tim_mimic - 1, p_ptr->mimic_form, TRUE);
+		(void)set_mimic(p_ptr, p_ptr->tim_mimic - 1, p_ptr->mimic_form, TRUE);
 	}
 
 	/* Hack -- Hallucinating */

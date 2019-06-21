@@ -562,7 +562,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_mimic(base + randint1(base), MIMIC_VAMPIRE, FALSE);
+				set_mimic(p_ptr, base + randint1(base), MIMIC_VAMPIRE, FALSE);
 			}
 		}
 		break;
