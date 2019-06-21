@@ -2066,7 +2066,7 @@ static bool inn_comm(int cmd)
 				else
 				{
 					set_blind(p_ptr, 0);
-					set_confused(0);
+					set_confused(p_ptr, 0);
 					p_ptr->stun = 0;
 					p_ptr->chp = p_ptr->mhp;
 					p_ptr->csp = p_ptr->msp;

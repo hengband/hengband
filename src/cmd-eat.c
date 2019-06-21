@@ -106,7 +106,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			if (!p_ptr->resist_conf)
 			{
-				if (set_confused(p_ptr->confused + randint0(10) + 10))
+				if (set_confused(p_ptr, p_ptr->confused + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}
@@ -206,7 +206,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_CURE_CONFUSION:
 		{
-			if (set_confused(0)) ident = TRUE;
+			if (set_confused(p_ptr, 0)) ident = TRUE;
 			break;
 		}
 

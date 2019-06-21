@@ -1568,7 +1568,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			(void)set_confused(p_ptr->confused + randint0(4) + 4);
+			(void)set_confused(p_ptr, p_ptr->confused + randint0(4) + 4);
 		}
 		learn_spell(MS_CONF);
 		update_smart_learn(m_idx, DRS_CONF);

@@ -5447,7 +5447,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		/* Brain smash */
 		if (!p_ptr->resist_conf)
 		{
-			(void)set_confused(p_ptr->confused + randint0(4) + 4);
+			(void)set_confused(p_ptr, p_ptr->confused + randint0(4) + 4);
 		}
 		if (!p_ptr->free_act)
 		{

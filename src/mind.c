@@ -1915,7 +1915,7 @@ void do_cmd_mind(void)
 				else if (b < 45)
 				{
 					msg_print(_("あなたの頭は混乱した！", "Your brain is addled!"));
-					set_confused(p_ptr->confused + randint1(8));
+					set_confused(p_ptr, p_ptr->confused + randint1(8));
 				}
 				else if (b < 90)
 				{

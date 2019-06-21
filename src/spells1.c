@@ -1744,7 +1744,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 								switch (randint1(4))
 								{
 									case 1:
-										set_confused(p_ptr->confused + 3 + randint1(dam));
+										set_confused(p_ptr, p_ptr->confused + 3 + randint1(dam));
 										break;
 									case 2:
 										set_stun(p_ptr->stun + randint1(dam));
@@ -1942,7 +1942,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 									set_stun(p_ptr->stun + dam / 2);
 									break;
 								case 2:
-									set_confused(p_ptr->confused + dam / 2);
+									set_confused(p_ptr, p_ptr->confused + dam / 2);
 									break;
 								default:
 								{
@@ -4306,7 +4306,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				}
 				if (!p_ptr->resist_conf && !p_ptr->resist_water)
 				{
-					set_confused(p_ptr->confused + randint1(5) + 5);
+					set_confused(p_ptr, p_ptr->confused + randint1(5) + 5);
 				}
 
 				if (one_in_(5) && !p_ptr->resist_water)
@@ -4334,7 +4334,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				if (!p_ptr->resist_conf)
 				{
-					(void)set_confused(p_ptr->confused + randint0(20) + 10);
+					(void)set_confused(p_ptr, p_ptr->confused + randint0(20) + 10);
 				}
 				if (!p_ptr->resist_chaos)
 				{
@@ -4416,7 +4416,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			}
 			else if (!CHECK_MULTISHADOW())
 			{
-				(void)set_confused(p_ptr->confused + randint1(20) + 10);
+				(void)set_confused(p_ptr, p_ptr->confused + randint1(20) + 10);
 			}
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
@@ -4876,7 +4876,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 
 					if (!p_ptr->resist_conf)
 					{
-						(void)set_confused(p_ptr->confused + randint0(4) + 4);
+						(void)set_confused(p_ptr, p_ptr->confused + randint0(4) + 4);
 					}
 
 					if (!p_ptr->resist_chaos && one_in_(3))
@@ -4930,7 +4930,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					}
 					if (!p_ptr->resist_conf)
 					{
-						(void)set_confused(p_ptr->confused + randint0(4) + 4);
+						(void)set_confused(p_ptr, p_ptr->confused + randint0(4) + 4);
 					}
 					if (!p_ptr->free_act)
 					{

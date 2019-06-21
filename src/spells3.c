@@ -3434,7 +3434,7 @@ bool booze(player_type *creature_ptr)
 	else if (!creature_ptr->resist_conf) creature_ptr->special_attack |= ATTACK_SUIKEN;
 	if (!creature_ptr->resist_conf)
 	{
-		if (set_confused(randint0(20) + 15))
+		if (set_confused(p_ptr, randint0(20) + 15))
 		{
 			ident = TRUE;
 		}

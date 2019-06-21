@@ -487,55 +487,55 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_confused(TIME_EFFECT v)
+bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (!p_ptr->confused)
+		if (!creature_ptr->confused)
 		{
 			msg_print(_("あなたは混乱した！", "You are confused!"));
 
-			if (p_ptr->action == ACTION_LEARN)
+			if (creature_ptr->action == ACTION_LEARN)
 			{
 				msg_print(_("学習が続けられない！", "You cannot continue Learning!"));
-				p_ptr->new_mane = FALSE;
+				creature_ptr->new_mane = FALSE;
 
-				p_ptr->redraw |= (PR_STATE);
-				p_ptr->action = ACTION_NONE;
+				creature_ptr->redraw |= (PR_STATE);
+				creature_ptr->action = ACTION_NONE;
 			}
-			if (p_ptr->action == ACTION_KAMAE)
+			if (creature_ptr->action == ACTION_KAMAE)
 			{
 				msg_print(_("構えがとけた。", "Your posture gets loose."));
-				p_ptr->special_defense &= ~(KAMAE_MASK);
-				p_ptr->update |= (PU_BONUS);
-				p_ptr->redraw |= (PR_STATE);
-				p_ptr->action = ACTION_NONE;
+				creature_ptr->special_defense &= ~(KAMAE_MASK);
+				creature_ptr->update |= (PU_BONUS);
+				creature_ptr->redraw |= (PR_STATE);
+				creature_ptr->action = ACTION_NONE;
 			}
-			else if (p_ptr->action == ACTION_KATA)
+			else if (creature_ptr->action == ACTION_KATA)
 			{
 				msg_print(_("型が崩れた。", "Your posture gets loose."));
-				p_ptr->special_defense &= ~(KATA_MASK);
-				p_ptr->update |= (PU_BONUS);
-				p_ptr->update |= (PU_MONSTERS);
-				p_ptr->redraw |= (PR_STATE);
-				p_ptr->redraw |= (PR_STATUS);
-				p_ptr->action = ACTION_NONE;
+				creature_ptr->special_defense &= ~(KATA_MASK);
+				creature_ptr->update |= (PU_BONUS);
+				creature_ptr->update |= (PU_MONSTERS);
+				creature_ptr->redraw |= (PR_STATE);
+				creature_ptr->redraw |= (PR_STATUS);
+				creature_ptr->action = ACTION_NONE;
 			}
 
 			/* Sniper */
-			if (p_ptr->concent) reset_concentration(TRUE);
+			if (creature_ptr->concent) reset_concentration(TRUE);
 
 			/* Hex */
 			if (hex_spelling_any()) stop_hex_spell_all();
 
 			notice = TRUE;
-			p_ptr->counter = FALSE;
+			creature_ptr->counter = FALSE;
 			chg_virtue(V_HARMONY, -1);
 		}
 	}
@@ -543,17 +543,17 @@ bool set_confused(TIME_EFFECT v)
 	/* Shut */
 	else
 	{
-		if (p_ptr->confused)
+		if (creature_ptr->confused)
 		{
 			msg_print(_("やっと混乱がおさまった。", "You feel less confused now."));
-			p_ptr->special_attack &= ~(ATTACK_SUIKEN);
+			creature_ptr->special_attack &= ~(ATTACK_SUIKEN);
 			notice = TRUE;
 		}
 	}
 
 	/* Use the value */
-	p_ptr->confused = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->confused = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);

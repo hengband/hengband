@@ -3563,7 +3563,7 @@ void cast_invoke_spirits(DIRECTION dir)
 		msg_print(_("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...",
 			"Your head is invaded by a horde of gibbering spectral voices..."));
 
-		set_confused(p_ptr->confused + randint1(4) + 4);
+		set_confused(p_ptr, p_ptr->confused + randint1(4) + 4);
 	}
 	else if (die < 31)
 	{

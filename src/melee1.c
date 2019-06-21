@@ -3206,7 +3206,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Increase "confused" */
 					if (!p_ptr->resist_conf && !CHECK_MULTISHADOW())
 					{
-						if (set_confused(p_ptr->confused + 3 + randint1(rlev)))
+						if (set_confused(p_ptr, p_ptr->confused + 3 + randint1(rlev)))
 						{
 							obvious = TRUE;
 						}

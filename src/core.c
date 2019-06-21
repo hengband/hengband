@@ -1959,7 +1959,7 @@ static void process_world_aux_timeout(void)
 	/* Confusion */
 	if (p_ptr->confused)
 	{
-		(void)set_confused(p_ptr->confused - dec_count);
+		(void)set_confused(p_ptr, p_ptr->confused - dec_count);
 	}
 
 	/* Afraid */
@@ -2196,7 +2196,7 @@ static void process_world_aux_mutation(void)
 
 		if (!p_ptr->resist_conf)
 		{
-			(void)set_confused(p_ptr->confused + randint0(20) + 15);
+			(void)set_confused(p_ptr, p_ptr->confused + randint0(20) + 15);
 		}
 
 		if (!p_ptr->resist_chaos)

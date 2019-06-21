@@ -538,7 +538,7 @@ void hit_trap(bool break_trap)
 
 	case TRAP_CONFUSE:
 	{
-		hit_trap_set_abnormal_status(
+		hit_trap_set_abnormal_status_p(
 			_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
 			p_ptr->resist_conf,
 			set_confused, p_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
