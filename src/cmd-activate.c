@@ -1346,14 +1346,14 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_SPEED:
 	{
 		msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
-		(void)set_fast(randint1(20) + 20, FALSE);
+		(void)set_fast(p_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
 	case ACT_XTRA_SPEED:
 	{
 		msg_print(_("明るく輝いている...", "It glows brightly..."));
-		(void)set_fast(randint1(75) + 75, FALSE);
+		(void)set_fast(p_ptr, randint1(75) + 75, FALSE);
 		break;
 	}
 
@@ -1377,7 +1377,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_HERO_SPEED:
 	{
-		(void)set_fast(randint1(50) + 50, FALSE);
+		(void)set_fast(p_ptr, randint1(50) + 50, FALSE);
 		(void)heroism(50);
 		break;
 	}
@@ -1729,7 +1729,7 @@ bool activate_artifact(object_type *o_ptr)
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
 		take_hit(DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"), -1);
 		t = 25 + randint1(25);
-		(void)set_fast(p_ptr->fast + t, FALSE);
+		(void)set_fast(p_ptr, p_ptr->fast + t, FALSE);
 		break;
 	}
 

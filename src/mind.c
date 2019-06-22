@@ -1146,7 +1146,7 @@ static bool cast_mindcrafter_spell(int spell)
 		t = 10 + randint1((plev * 3) / 2);
 		set_hero(t, FALSE);
 		/* Haste */
-		(void)set_fast(t, FALSE);
+		(void)set_fast(p_ptr, t, FALSE);
 		break;
 	case 10:
 		/* Telekinesis */

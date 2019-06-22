@@ -197,7 +197,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_SPEED:
 		{
-			if (set_fast(randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
+			if (set_fast(p_ptr, randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
 			break;
 		}
 

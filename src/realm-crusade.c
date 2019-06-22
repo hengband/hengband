@@ -567,7 +567,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				}
 				set_hero(randint1(base) + base, FALSE);
 				set_blessed(randint1(base) + base, FALSE);
-				set_fast(randint1(sp_sides) + sp_base, FALSE);
+				set_fast(p_ptr, randint1(sp_sides) + sp_base, FALSE);
 				set_protevil(randint1(base) + base, FALSE);
 				set_afraid(p_ptr, 0);
 			}

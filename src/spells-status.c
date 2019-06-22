@@ -465,7 +465,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	(void)set_tim_regen(creature_ptr->tim_regen + t, FALSE);
 	(void)set_hero(creature_ptr->hero + t, FALSE);
 	(void)set_blessed(creature_ptr->blessed + t, FALSE);
-	(void)set_fast(creature_ptr->fast + t, FALSE);
+	(void)set_fast(p_ptr, creature_ptr->fast + t, FALSE);
 	(void)set_shero(creature_ptr->shero + t, FALSE);
 	if (creature_ptr->pclass == CLASS_FORCETRAINER)
 	{

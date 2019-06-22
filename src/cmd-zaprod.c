@@ -118,7 +118,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 
 	case SV_ROD_SPEED:
 	{
-		if (set_fast(randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
+		if (set_fast(p_ptr, randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
 		break;
 	}
 

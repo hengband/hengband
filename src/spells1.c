@@ -4676,7 +4676,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		case GF_OLD_SPEED:
 		{
 			if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-			(void)set_fast(p_ptr->fast + randint1(5), FALSE);
+			(void)set_fast(p_ptr, p_ptr->fast + randint1(5), FALSE);
 			dam = 0;
 			break;
 		}

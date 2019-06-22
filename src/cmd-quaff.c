@@ -282,11 +282,11 @@ void exe_quaff_potion(INVENTORY_IDX item)
 		case SV_POTION_SPEED:
 			if (!p_ptr->fast)
 			{
-				if (set_fast(randint1(25) + 15, FALSE)) ident = TRUE;
+				if (set_fast(p_ptr, randint1(25) + 15, FALSE)) ident = TRUE;
 			}
 			else
 			{
-				(void)set_fast(p_ptr->fast + 5, FALSE);
+				(void)set_fast(p_ptr, p_ptr->fast + 5, FALSE);
 			}
 			break;
 

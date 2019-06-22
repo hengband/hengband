@@ -342,7 +342,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_fast(randint1(sides) + base, FALSE);
+				set_fast(p_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;

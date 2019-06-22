@@ -431,7 +431,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				(void)berserk(b_base + randint1(b_base));
-				set_fast(randint1(sp_sides) + sp_base, FALSE);
+				set_fast(p_ptr, randint1(sp_sides) + sp_base, FALSE);
 			}
 		}
 		break;

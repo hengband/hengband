@@ -21,7 +21,7 @@ extern bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v);
 extern bool set_afraid(player_type *creature_ptr, TIME_EFFECT v);
 extern bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v);
 extern bool set_image(player_type *creature_ptr, TIME_EFFECT v);
-extern bool set_fast(TIME_EFFECT v, bool do_dec);
+extern bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_slow(TIME_EFFECT v, bool do_dec);
 extern bool set_shield(TIME_EFFECT v, bool do_dec);
 extern bool set_tsubureru(TIME_EFFECT v, bool do_dec);

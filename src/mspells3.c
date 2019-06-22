@@ -1268,7 +1268,7 @@ static bool cast_learned_spell(int spell, bool success)
 		sleep_monster(dir, plev);
 		break;
 	case MS_SPEED:
-		(void)set_fast(randint1(20 + plev) + plev, FALSE);
+		(void)set_fast(p_ptr, randint1(20 + plev) + plev, FALSE);
 		break;
 	case MS_HAND_DOOM:
 	{
