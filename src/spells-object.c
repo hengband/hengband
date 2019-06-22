@@ -843,7 +843,7 @@ bool perilous_secrets(player_type *creature_ptr)
 
 			msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
 			/* Hack -- Bypass free action */
-			(void)set_paralyzed(creature_ptr->paralyzed + randint1(5 * oops + 1));
+			(void)set_paralyzed(p_ptr, creature_ptr->paralyzed + randint1(5 * oops + 1));
 
 			/* Confusing. */
 			(void)set_confused(p_ptr, creature_ptr->confused + randint1(5 * oops + 1));

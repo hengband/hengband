@@ -130,7 +130,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			if (!p_ptr->free_act)
 			{
-				if (set_paralyzed(p_ptr->paralyzed + randint0(10) + 10))
+				if (set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}

@@ -1428,7 +1428,7 @@ void do_cmd_cast(void)
 		msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
 
 		/* Hack -- Bypass free action */
-		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
+		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(5 * oops + 1));
 
 		switch (realm)
 		{

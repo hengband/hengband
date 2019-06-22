@@ -1681,7 +1681,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
+			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(4) + 4);
 		}
 		learn_spell(MS_SLEEP);
 		update_smart_learn(m_idx, DRS_FREE);

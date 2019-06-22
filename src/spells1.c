@@ -1759,7 +1759,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 									}
 									default:
 										if (!p_ptr->free_act)
-											(void)set_paralyzed(p_ptr->paralyzed + randint1(dam));
+											(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(dam));
 										break;
 								}
 							}
@@ -4700,7 +4700,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				sanity_blast(NULL, FALSE);
 			}
 
-			set_paralyzed(p_ptr->paralyzed + dam);
+			set_paralyzed(p_ptr, p_ptr->paralyzed + dam);
 			dam = 0;
 			break;
 		}
@@ -4934,7 +4934,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					}
 					if (!p_ptr->free_act)
 					{
-						(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
+						(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(4) + 4);
 					}
 					(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
 

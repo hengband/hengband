@@ -1718,7 +1718,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 		msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
 
 		/* Hack -- Lose balance ala paralysis */
-		(void)set_paralyzed(p_ptr->paralyzed + 2 + randint0(2));
+		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 2 + randint0(2));
 	}
 	return (more);
 }

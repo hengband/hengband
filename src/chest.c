@@ -182,7 +182,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		msg_print(_("突如吹き出した黄色いガスに包み込まれた！", "A puff of yellow gas surrounds you!"));
 		if (!p_ptr->free_act)
 		{
-			(void)set_paralyzed(p_ptr->paralyzed + 10 + randint1(20));
+			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 10 + randint1(20));
 		}
 	}
 
@@ -287,7 +287,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 				else if (one_in_(4))
 				{
 					if (!p_ptr->free_act)
-						(void)set_paralyzed(p_ptr->paralyzed + 2 +
+						(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 2 +
 							randint0(6));
 					else
 						(void)set_stun(p_ptr->stun + 10 +

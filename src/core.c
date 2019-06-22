@@ -1313,7 +1313,7 @@ static void process_world_aux_digestion(void)
 				disturb(TRUE, TRUE);
 
 				/* Hack -- faint (bypass free action) */
-				(void)set_paralyzed(p_ptr->paralyzed + 1 + randint0(5));
+				(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 1 + randint0(5));
 			}
 
 			/* Starve to death (slowly) */
@@ -1953,7 +1953,7 @@ static void process_world_aux_timeout(void)
 	/* Paralysis */
 	if (p_ptr->paralyzed)
 	{
-		(void)set_paralyzed(p_ptr->paralyzed - dec_count);
+		(void)set_paralyzed(p_ptr, p_ptr->paralyzed - dec_count);
 	}
 
 	/* Confusion */

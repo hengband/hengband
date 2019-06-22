@@ -668,30 +668,30 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 }
 
 /*!
- * @brief 麻痺の継続時間をセットする / Set "p_ptr->paralyzed", notice observable changes
+ * @brief 麻痺の継続時間をセットする / Set "paralyzed", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_paralyzed(TIME_EFFECT v)
+bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (!p_ptr->paralyzed)
+		if (!creature_ptr->paralyzed)
 		{
 			msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
 			/* Sniper */
-			if (p_ptr->concent) reset_concentration(TRUE);
+			if (creature_ptr->concent) reset_concentration(TRUE);
 
 			/* Hex */
 			if (hex_spelling_any()) stop_hex_spell_all();
 
-			p_ptr->counter = FALSE;
+			creature_ptr->counter = FALSE;
 			notice = TRUE;
 		}
 	}
@@ -699,7 +699,7 @@ bool set_paralyzed(TIME_EFFECT v)
 	/* Shut */
 	else
 	{
-		if (p_ptr->paralyzed)
+		if (creature_ptr->paralyzed)
 		{
 			msg_print(_("やっと動けるようになった。", "You can move again."));
 			notice = TRUE;
@@ -707,14 +707,14 @@ bool set_paralyzed(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->paralyzed = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->paralyzed = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->redraw |= (PR_STATE);
+	creature_ptr->redraw |= (PR_STATE);
 	handle_stuff();
 	return (TRUE);
 }

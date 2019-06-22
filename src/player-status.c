@@ -5451,7 +5451,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		}
 		if (!p_ptr->free_act)
 		{
-			(void)set_paralyzed(p_ptr->paralyzed + randint0(4) + 4);
+			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(4) + 4);
 		}
 		if (!p_ptr->resist_chaos)
 		{

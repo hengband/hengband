@@ -2041,7 +2041,7 @@ void do_cmd_mind(void)
 		msg_format(_("%sを集中しすぎて気を失ってしまった！", "You faint from the effort!"),p);
 
 		/* Hack -- Bypass free action */
-		(void)set_paralyzed(p_ptr->paralyzed + randint1(5 * oops + 1));
+		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(5 * oops + 1));
 
 		/* Damage WIS (possibly permanently) */
 		if (randint0(100) < 50)

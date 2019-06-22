@@ -569,7 +569,7 @@ void hit_trap(bool break_trap)
 				sanity_blast(NULL, FALSE);
 
 			}
-			(void)set_paralyzed(p_ptr->paralyzed + randint0(10) + 5);
+			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(10) + 5);
 		}
 		break;
 	}

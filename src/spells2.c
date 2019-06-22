@@ -2608,9 +2608,9 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			{
 				msg_print(_("彫像になった気分だ！", "You feel like a statue!"));
 				if (p_ptr->free_act)
-					set_paralyzed(p_ptr->paralyzed + randint1(3));
+					set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(3));
 				else
-					set_paralyzed(p_ptr->paralyzed + randint1(13));
+					set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(13));
 				stop_ty = TRUE;
 			}
 			if (!one_in_(6)) break;

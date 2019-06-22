@@ -146,7 +146,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			}
 
 			(void)set_poisoned(p_ptr, 0);
-			(void)set_paralyzed(p_ptr->paralyzed + 4);
+			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 4);
 			ident = TRUE;
 			break;
 
@@ -186,7 +186,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 					/* Have some nightmares */
 					sanity_blast(NULL, FALSE);
 				}
-				if (set_paralyzed(p_ptr->paralyzed + randint0(4) + 4))
+				if (set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(4) + 4))
 				{
 					ident = TRUE;
 				}
