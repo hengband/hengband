@@ -241,7 +241,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_protevil(randint1(sides) + base, FALSE);
+				set_protevil(p_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;

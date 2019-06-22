@@ -1328,7 +1328,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name);
 		k = 3 * p_ptr->lev;
-		(void)set_protevil(randint1(25) + k, FALSE);
+		(void)set_protevil(p_ptr, randint1(25) + k, FALSE);
 		break;
 	}
 

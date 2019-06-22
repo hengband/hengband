@@ -29,7 +29,7 @@ extern bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_protevil(TIME_EFFECT v, bool do_dec);
+extern bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_invuln(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_invis(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_infra(TIME_EFFECT v, bool do_dec);

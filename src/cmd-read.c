@@ -370,7 +370,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 		case SV_SCROLL_PROTECTION_FROM_EVIL:
 		{
 			k = 3 * p_ptr->lev;
-			if (set_protevil(p_ptr->protevil + randint1(25) + k, FALSE)) ident = TRUE;
+			if (set_protevil(p_ptr, p_ptr->protevil + randint1(25) + k, FALSE)) ident = TRUE;
 			break;
 		}
 

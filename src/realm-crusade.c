@@ -231,7 +231,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_protevil(randint1(sides) + base, FALSE);
+				set_protevil(p_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -568,7 +568,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				set_hero(p_ptr, randint1(base) + base, FALSE);
 				set_blessed(p_ptr, randint1(base) + base, FALSE);
 				set_fast(p_ptr, randint1(sp_sides) + sp_base, FALSE);
-				set_protevil(randint1(base) + base, FALSE);
+				set_protevil(p_ptr, randint1(base) + base, FALSE);
 				set_afraid(p_ptr, 0);
 			}
 		}

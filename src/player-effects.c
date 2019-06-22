@@ -298,7 +298,7 @@ void dispel_player(void)
 	(void)set_tsuyoshi(0, TRUE);
 	(void)set_hero(p_ptr, 0, TRUE);
 	(void)set_shero(p_ptr, 0, TRUE);
-	(void)set_protevil(0, TRUE);
+	(void)set_protevil(p_ptr, 0, TRUE);
 	(void)set_invuln(0, TRUE);
 	(void)set_wraith_form(0, TRUE);
 	(void)set_kabenuke(0, TRUE);
@@ -1245,21 +1245,21 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_protevil(TIME_EFFECT v, bool do_dec)
+bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->protevil && !do_dec)
+		if (creature_ptr->protevil && !do_dec)
 		{
-			if (p_ptr->protevil > v) return FALSE;
+			if (creature_ptr->protevil > v) return FALSE;
 		}
-		else if (!p_ptr->protevil)
+		else if (!creature_ptr->protevil)
 		{
 			msg_print(_("邪悪なる存在から守られているような感じがする！", "You feel safe from evil!"));
 			notice = TRUE;
@@ -1269,7 +1269,7 @@ bool set_protevil(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->protevil)
+		if (creature_ptr->protevil)
 		{
 			msg_print(_("邪悪なる存在から守られている感じがなくなった。", "You no longer feel safe from evil."));
 			notice = TRUE;
@@ -1277,8 +1277,8 @@ bool set_protevil(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->protevil = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->protevil = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
