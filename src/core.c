@@ -1977,7 +1977,7 @@ static void process_world_aux_timeout(void)
 	/* Slow */
 	if (p_ptr->slow)
 	{
-		(void)set_slow(p_ptr->slow - dec_count, TRUE);
+		(void)set_slow(p_ptr, p_ptr->slow - dec_count, TRUE);
 	}
 
 	/* Protection from evil */
@@ -2282,7 +2282,7 @@ static void process_world_aux_mutation(void)
 			}
 			else
 			{
-				set_slow(randint1(30) + 10, FALSE);
+				set_slow(p_ptr, randint1(30) + 10, FALSE);
 			}
 		}
 		else
@@ -2291,7 +2291,7 @@ static void process_world_aux_mutation(void)
 
 			if (p_ptr->slow > 0)
 			{
-				set_slow(0, TRUE);
+				set_slow(p_ptr, 0, TRUE);
 			}
 			else
 			{

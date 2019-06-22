@@ -366,7 +366,7 @@ static void hit_trap_slow(void)
 {
 	if (hit_trap_dart())
 	{
-		set_slow(p_ptr->slow + randint0(20) + 20, FALSE);
+		set_slow(p_ptr, p_ptr->slow + randint0(20) + 20, FALSE);
 	}
 }
 

@@ -4498,7 +4498,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		case GF_INERTIAL:
 		{
 			if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
-			if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+			if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr, p_ptr->slow + randint0(4) + 4, FALSE);
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
@@ -4634,7 +4634,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				teleport_player(5, TELEPORT_PASSIVE);
 				if (!p_ptr->levitation)
-					(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+					(void)set_slow(p_ptr, p_ptr->slow + randint0(4) + 4, FALSE);
 				if (!(p_ptr->resist_sound || p_ptr->levitation))
 				{
 					int plus_stun = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
@@ -4684,7 +4684,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		case GF_OLD_SLOW:
 		{
 			if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
-			(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+			(void)set_slow(p_ptr, p_ptr->slow + randint0(4) + 4, FALSE);
 			break;
 		}
 
@@ -4936,7 +4936,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					{
 						(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(4) + 4);
 					}
-					(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+					(void)set_slow(p_ptr, p_ptr->slow + randint0(4) + 4, FALSE);
 
 					while (randint0(100 + rlev / 2) > (MAX(5, p_ptr->skill_sav)))
 						(void)do_dec_stat(p_ptr, A_INT);

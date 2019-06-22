@@ -1618,7 +1618,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			(void)set_slow(p_ptr->slow + randint0(4) + 4, FALSE);
+			(void)set_slow(p_ptr, p_ptr->slow + randint0(4) + 4, FALSE);
 		}
 		learn_spell(MS_SLOW);
 		update_smart_learn(m_idx, DRS_FREE);

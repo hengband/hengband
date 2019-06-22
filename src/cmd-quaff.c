@@ -128,7 +128,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_SLOWNESS:
-			if (set_slow(randint1(25) + 15, FALSE)) ident = TRUE;
+			if (set_slow(p_ptr, randint1(25) + 15, FALSE)) ident = TRUE;
 			break;
 
 		case SV_POTION_SALT_WATER:

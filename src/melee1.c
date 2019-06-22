@@ -3633,7 +3633,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (set_slow((p_ptr->slow + 4 + randint0(rlev / 10)), FALSE))
+						if (set_slow(p_ptr, (p_ptr->slow + 4 + randint0(rlev / 10)), FALSE))
 						{
 							obvious = TRUE;
 						}

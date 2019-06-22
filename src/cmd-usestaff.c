@@ -49,7 +49,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_SLOWNESS:
 		{
-			if (set_slow(p_ptr->slow + randint1(30) + 15, FALSE)) ident = TRUE;
+			if (set_slow(p_ptr, p_ptr->slow + randint1(30) + 15, FALSE)) ident = TRUE;
 			break;
 		}
 

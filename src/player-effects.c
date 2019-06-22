@@ -292,7 +292,7 @@ void dispel_player(void)
 {
 	(void)set_fast(p_ptr, 0, TRUE);
 	(void)set_lightspeed(0, TRUE);
-	(void)set_slow(0, TRUE);
+	(void)set_slow(p_ptr, 0, TRUE);
 	(void)set_shield(0, TRUE);
 	(void)set_blessed(0, TRUE);
 	(void)set_tsuyoshi(0, TRUE);
@@ -885,21 +885,21 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_slow(TIME_EFFECT v, bool do_dec)
+bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->slow && !do_dec)
+		if (creature_ptr->slow && !do_dec)
 		{
-			if (p_ptr->slow > v) return FALSE;
+			if (creature_ptr->slow > v) return FALSE;
 		}
-		else if (!p_ptr->slow)
+		else if (!creature_ptr->slow)
 		{
 			msg_print(_("体の動きが遅くなってしまった！", "You feel yourself moving slower!"));
 			notice = TRUE;
@@ -909,7 +909,7 @@ bool set_slow(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->slow)
+		if (creature_ptr->slow)
 		{
 			msg_print(_("動きの遅さがなくなったようだ。", "You feel yourself speed up."));
 			notice = TRUE;
@@ -917,13 +917,13 @@ bool set_slow(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->slow = v;
+	creature_ptr->slow = v;
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }
