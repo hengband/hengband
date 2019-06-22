@@ -2031,7 +2031,7 @@ static void process_world_aux_timeout(void)
 	/* Magicdef */
 	if (p_ptr->magicdef)
 	{
-		(void)set_magicdef(p_ptr->magicdef - 1, TRUE);
+		(void)set_magicdef(p_ptr, p_ptr->magicdef - 1, TRUE);
 	}
 
 	/* Tsuyoshi */

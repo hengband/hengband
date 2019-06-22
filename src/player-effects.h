@@ -25,7 +25,7 @@ extern bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_magicdef(TIME_EFFECT v, bool do_dec);
+extern bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_blessed(TIME_EFFECT v, bool do_dec);
 extern bool set_hero(TIME_EFFECT v, bool do_dec);
 extern bool set_shero(TIME_EFFECT v, bool do_dec);

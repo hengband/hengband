@@ -406,7 +406,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_magicdef(randint1(base) + base, FALSE);
+				set_magicdef(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
