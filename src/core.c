@@ -2001,7 +2001,7 @@ static void process_world_aux_timeout(void)
 	/* Heroism */
 	if (p_ptr->hero)
 	{
-		(void)set_hero(p_ptr->hero - 1, TRUE);
+		(void)set_hero(p_ptr, p_ptr->hero - 1, TRUE);
 	}
 
 	/* Super Heroism */

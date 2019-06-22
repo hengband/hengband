@@ -1035,7 +1035,7 @@ bool activate_artifact(object_type *o_ptr)
 		fire_breath(GF_MISSILE, dir, 300, 4);
 		msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
 		(void)set_afraid(p_ptr, 0);
-		(void)set_hero(randint1(50) + 50, FALSE);
+		(void)set_hero(p_ptr, randint1(50) + 50, FALSE);
 		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_acid(randint1(50) + 50, FALSE);
@@ -1239,7 +1239,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("天国の歌が聞こえる...", "A heavenly choir sings..."));
 		(void)cure_critical_wounds(777);
-		(void)set_hero(randint1(25) + 25, FALSE);
+		(void)set_hero(p_ptr, randint1(25) + 25, FALSE);
 		break;
 	}
 
@@ -1663,7 +1663,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
 		(void)set_afraid(p_ptr, 0);
-		(void)set_hero(randint1(20) + 20, FALSE);
+		(void)set_hero(p_ptr, randint1(20) + 20, FALSE);
 		dispel_evil(p_ptr->lev * 3);
 		break;
 	}
@@ -1685,7 +1685,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		TIME_EFFECT v = randint1(25) + 25;
 		(void)set_afraid(p_ptr, 0);
-		(void)set_hero(v, FALSE);
+		(void)set_hero(p_ptr, v, FALSE);
 		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(p_ptr, v, FALSE);
 		(void)set_oppose_acid(v, FALSE);

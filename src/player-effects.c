@@ -296,7 +296,7 @@ void dispel_player(void)
 	(void)set_shield(p_ptr, 0, TRUE);
 	(void)set_blessed(p_ptr, 0, TRUE);
 	(void)set_tsuyoshi(0, TRUE);
-	(void)set_hero(0, TRUE);
+	(void)set_hero(p_ptr, 0, TRUE);
 	(void)set_shero(0, TRUE);
 	(void)set_protevil(0, TRUE);
 	(void)set_invuln(0, TRUE);
@@ -1138,19 +1138,19 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_hero(TIME_EFFECT v, bool do_dec)
+bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->hero && !do_dec)
+		if (creature_ptr->hero && !do_dec)
 		{
-			if (p_ptr->hero > v) return FALSE;
+			if (creature_ptr->hero > v) return FALSE;
 		}
 		else if (!IS_HERO())
 		{
@@ -1162,7 +1162,7 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->hero && !music_singing(MUSIC_HERO) && !music_singing(MUSIC_SHERO))
+		if (creature_ptr->hero && !music_singing(MUSIC_HERO) && !music_singing(MUSIC_SHERO))
 		{
 			msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
 			notice = TRUE;
@@ -1170,17 +1170,17 @@ bool set_hero(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->hero = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->hero = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
-	p_ptr->update |= (PU_HP);
+	creature_ptr->update |= (PU_HP);
 	handle_stuff();
 	return (TRUE);
 }
