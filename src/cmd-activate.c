@@ -1037,7 +1037,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_afraid(p_ptr, 0);
 		(void)set_hero(randint1(50) + 50, FALSE);
 		(void)hp_player(p_ptr, 10);
-		(void)set_blessed(randint1(50) + 50, FALSE);
+		(void)set_blessed(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_acid(randint1(50) + 50, FALSE);
 		(void)set_oppose_elec(randint1(50) + 50, FALSE);
 		(void)set_oppose_fire(randint1(50) + 50, FALSE);
@@ -1687,7 +1687,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_afraid(p_ptr, 0);
 		(void)set_hero(v, FALSE);
 		(void)hp_player(p_ptr, 10);
-		(void)set_blessed(v, FALSE);
+		(void)set_blessed(p_ptr, v, FALSE);
 		(void)set_oppose_acid(v, FALSE);
 		(void)set_oppose_elec(v, FALSE);
 		(void)set_oppose_fire(v, FALSE);

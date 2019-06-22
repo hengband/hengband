@@ -2013,7 +2013,7 @@ static void process_world_aux_timeout(void)
 	/* Blessed */
 	if (p_ptr->blessed)
 	{
-		(void)set_blessed(p_ptr->blessed - 1, TRUE);
+		(void)set_blessed(p_ptr, p_ptr->blessed - 1, TRUE);
 	}
 
 	/* Shield */

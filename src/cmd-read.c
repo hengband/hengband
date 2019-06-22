@@ -339,19 +339,19 @@ void exe_read(INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_BLESSING:
 		{
-			if (set_blessed(p_ptr->blessed + randint1(12) + 6, FALSE)) ident = TRUE;
+			if (set_blessed(p_ptr, p_ptr->blessed + randint1(12) + 6, FALSE)) ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_HOLY_CHANT:
 		{
-			if (set_blessed(p_ptr->blessed + randint1(24) + 12, FALSE)) ident = TRUE;
+			if (set_blessed(p_ptr, p_ptr->blessed + randint1(24) + 12, FALSE)) ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_HOLY_PRAYER:
 		{
-			if (set_blessed(p_ptr->blessed + randint1(48) + 24, FALSE)) ident = TRUE;
+			if (set_blessed(p_ptr, p_ptr->blessed + randint1(48) + 24, FALSE)) ident = TRUE;
 			break;
 		}
 

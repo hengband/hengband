@@ -78,7 +78,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_blessed(randint1(base) + base, FALSE);
+				set_blessed(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

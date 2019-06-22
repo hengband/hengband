@@ -3751,7 +3751,7 @@ void cast_shuffle(void)
 	else if (die < 42)
 	{
 		msg_print(_("《正義》だ。", "It's Justice."));
-		set_blessed(p_ptr->lev, FALSE);
+		set_blessed(p_ptr, p_ptr->lev, FALSE);
 	}
 	else if (die < 47)
 	{

@@ -294,7 +294,7 @@ void dispel_player(void)
 	(void)set_lightspeed(0, TRUE);
 	(void)set_slow(p_ptr, 0, TRUE);
 	(void)set_shield(p_ptr, 0, TRUE);
-	(void)set_blessed(0, TRUE);
+	(void)set_blessed(p_ptr, 0, TRUE);
 	(void)set_tsuyoshi(0, TRUE);
 	(void)set_hero(0, TRUE);
 	(void)set_shero(0, TRUE);
@@ -1087,19 +1087,19 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_blessed(TIME_EFFECT v, bool do_dec)
+bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->blessed && !do_dec)
+		if (creature_ptr->blessed && !do_dec)
 		{
-			if (p_ptr->blessed > v) return FALSE;
+			if (creature_ptr->blessed > v) return FALSE;
 		}
 		else if (!IS_BLESSED())
 		{
@@ -1111,7 +1111,7 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->blessed && !music_singing(MUSIC_BLESS))
+		if (creature_ptr->blessed && !music_singing(MUSIC_BLESS))
 		{
 			msg_print(_("高潔な気分が消え失せた。", "The prayer has expired."));
 			notice = TRUE;
@@ -1119,14 +1119,14 @@ bool set_blessed(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->blessed = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->blessed = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }
