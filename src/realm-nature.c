@@ -344,7 +344,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_shield(randint1(sides) + base, FALSE);
+				set_shield(p_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;

@@ -2019,13 +2019,13 @@ static void process_world_aux_timeout(void)
 	/* Shield */
 	if (p_ptr->shield)
 	{
-		(void)set_shield(p_ptr->shield - 1, TRUE);
+		(void)set_shield(p_ptr, p_ptr->shield - 1, TRUE);
 	}
 
 	/* Tsubureru */
 	if (p_ptr->tsubureru)
 	{
-		(void)set_tsubureru(p_ptr->tsubureru - 1, TRUE);
+		(void)set_tsubureru(p_ptr, p_ptr->tsubureru - 1, TRUE);
 	}
 
 	/* Magicdef */

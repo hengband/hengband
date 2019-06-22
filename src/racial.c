@@ -774,7 +774,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_GOLEM:
-			(void)set_shield(randint1(20) + 30, FALSE);
+			(void)set_shield(p_ptr, randint1(20) + 30, FALSE);
 			break;
 
 		case RACE_SKELETON:
@@ -805,7 +805,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_KUTAR:
-			(void)set_tsubureru(randint1(20) + 30, FALSE);
+			(void)set_tsubureru(p_ptr, randint1(20) + 30, FALSE);
 			break;
 
 		case RACE_ANDROID:

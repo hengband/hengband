@@ -1106,7 +1106,7 @@ static bool cast_mindcrafter_spell(int spell)
 		break;
 	case 6:
 		/* Character Armour */
-		set_shield((TIME_EFFECT)plev, FALSE);
+		set_shield(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev > 14) set_oppose_acid((TIME_EFFECT)plev, FALSE);
 		if (plev > 19) set_oppose_fire((TIME_EFFECT)plev, FALSE);
 		if (plev > 24) set_oppose_cold((TIME_EFFECT)plev, FALSE);
@@ -1403,7 +1403,7 @@ static bool cast_mirror_spell(int spell)
 		/* shield of water */
 	case 12:
 		t = 20 + randint1(20);
-		set_shield(t, FALSE);
+		set_shield(p_ptr, t, FALSE);
 		if (plev > 31)set_tim_reflect(t, FALSE);
 		if (plev > 39)set_resist_magic(t, FALSE);
 		break;
