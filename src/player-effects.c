@@ -297,7 +297,7 @@ void dispel_player(void)
 	(void)set_blessed(p_ptr, 0, TRUE);
 	(void)set_tsuyoshi(0, TRUE);
 	(void)set_hero(p_ptr, 0, TRUE);
-	(void)set_shero(0, TRUE);
+	(void)set_shero(p_ptr, 0, TRUE);
 	(void)set_protevil(0, TRUE);
 	(void)set_invuln(0, TRUE);
 	(void)set_wraith_form(0, TRUE);
@@ -1191,22 +1191,22 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec FALSEの場合現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_shero(TIME_EFFECT v, bool do_dec)
+bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
-	if (p_ptr->pclass == CLASS_BERSERKER) v = 1;
+	if (creature_ptr->pclass == CLASS_BERSERKER) v = 1;
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->shero && !do_dec)
+		if (creature_ptr->shero && !do_dec)
 		{
-			if (p_ptr->shero > v) return FALSE;
+			if (creature_ptr->shero > v) return FALSE;
 		}
-		else if (!p_ptr->shero)
+		else if (!creature_ptr->shero)
 		{
 			msg_print(_("殺戮マシーンになった気がする！", "You feel like a killing machine!"));
 			notice = TRUE;
@@ -1216,7 +1216,7 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->shero)
+		if (creature_ptr->shero)
 		{
 			msg_print(_("野蛮な気持ちが消え失せた。", "You feel less Berserk."));
 			notice = TRUE;
@@ -1224,17 +1224,17 @@ bool set_shero(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->shero = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->shero = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
-	p_ptr->update |= (PU_HP);
+	creature_ptr->update |= (PU_HP);
 	handle_stuff();
 	return (TRUE);
 }

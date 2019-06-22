@@ -99,7 +99,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 	case SV_ROD_CURING:
 	{
 		if (true_healing(0)) ident = TRUE;
-		if (set_shero(0, TRUE)) ident = TRUE;
+		if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
 		break;
 	}
 

@@ -284,7 +284,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 	(void)set_stun(0);
 	(void)set_cut(0);
 	(void)restore_all_status();
-	(void)set_shero(0, TRUE);
+	(void)set_shero(p_ptr, 0, TRUE);
 	handle_stuff();
 	hp_player(p_ptr, 5000);
 
@@ -304,7 +304,7 @@ bool_hack berserk(int base)
 {
 	bool_hack ident = FALSE;
 	if (set_afraid(p_ptr, 0)) ident = TRUE;
-	if (set_shero(p_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
+	if (set_shero(p_ptr, p_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
 	if (hp_player(p_ptr, 30)) ident = TRUE;
 	return ident;
 }
@@ -315,7 +315,7 @@ bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides)
 	if (hp_player(p_ptr, damroll(dice, sides))) ident = TRUE;
 	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_cut(p_ptr->cut - 10)) ident = TRUE;
-	if (set_shero(0, TRUE)) ident = TRUE;
+	if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
 	return ident;
 }
 
@@ -326,7 +326,7 @@ bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides)
 	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(p_ptr, 0)) ident = TRUE;
 	if (set_cut((p_ptr->cut / 2) - 50)) ident = TRUE;
-	if (set_shero(0, TRUE)) ident = TRUE;
+	if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
 	return ident;
 }
 
@@ -339,7 +339,7 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 	if (set_poisoned(p_ptr, 0)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
-	if (set_shero(0, TRUE)) ident = TRUE;
+	if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
 	return ident;
 }
 
@@ -466,7 +466,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	(void)set_hero(p_ptr, creature_ptr->hero + t, FALSE);
 	(void)set_blessed(p_ptr, creature_ptr->blessed + t, FALSE);
 	(void)set_fast(p_ptr, creature_ptr->fast + t, FALSE);
-	(void)set_shero(creature_ptr->shero + t, FALSE);
+	(void)set_shero(p_ptr, creature_ptr->shero + t, FALSE);
 	if (creature_ptr->pclass == CLASS_FORCETRAINER)
 	{
 		P_PTR_KI = creature_ptr->lev * 5 + 190;
