@@ -725,27 +725,26 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details Note that we must redraw the map when hallucination changes.
  */
-bool set_image(TIME_EFFECT v)
+bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
-	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN) v = 0;
-
+	if (creature_ptr->is_dead) return FALSE;
+	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN) v = 0;
 
 	/* Open */
 	if (v)
 	{
 		set_tsuyoshi(0, TRUE);
-		if (!p_ptr->image)
+		if (!creature_ptr->image)
 		{
 			msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
 
 			/* Sniper */
-			if (p_ptr->concent) reset_concentration(TRUE);
+			if (creature_ptr->concent) reset_concentration(TRUE);
 
-			p_ptr->counter = FALSE;
+			creature_ptr->counter = FALSE;
 			notice = TRUE;
 		}
 	}
@@ -753,7 +752,7 @@ bool set_image(TIME_EFFECT v)
 	/* Shut */
 	else
 	{
-		if (p_ptr->image)
+		if (creature_ptr->image)
 		{
 			msg_print(_("やっとはっきりと物が見えるようになった。", "You can see clearly again."));
 			notice = TRUE;
@@ -761,17 +760,17 @@ bool set_image(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->image = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->image = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, TRUE);
 
-	p_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	creature_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
+	creature_ptr->update |= (PU_MONSTERS);
+	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	handle_stuff();
 	return (TRUE);
 }

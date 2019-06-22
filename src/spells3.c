@@ -3444,7 +3444,7 @@ bool booze(player_type *creature_ptr)
 	{
 		if (one_in_(2))
 		{
-			if (set_image(creature_ptr->image + randint0(150) + 150))
+			if (set_image(p_ptr, creature_ptr->image + randint0(150) + 150))
 			{
 				ident = TRUE;
 			}

@@ -280,7 +280,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 	(void)set_poisoned(p_ptr, 0);
 	(void)set_blind(p_ptr, 0);
 	(void)set_confused(p_ptr, 0);
-	(void)set_image(0);
+	(void)set_image(p_ptr, 0);
 	(void)set_stun(0);
 	(void)set_cut(0);
 	(void)restore_all_status();
@@ -352,7 +352,7 @@ bool_hack true_healing(HIT_POINT pow)
 	if (set_poisoned(p_ptr, 0)) ident = TRUE;
 	if (set_stun(0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
-	if (set_image(0)) ident = TRUE;
+	if (set_image(p_ptr, 0)) ident = TRUE;
 	return ident;
 }
 

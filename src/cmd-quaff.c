@@ -475,7 +475,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_NEO_TSUYOSHI:
-			(void)set_image(0);
+			(void)set_image(p_ptr, 0);
 			(void)set_tsuyoshi(p_ptr->tsuyoshi + randint1(100) + 100, FALSE);
 			ident = TRUE;
 			break;
@@ -487,7 +487,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			(void)set_tsuyoshi(0, TRUE);
 			if (!p_ptr->resist_chaos)
 			{
-				(void)set_image(50 + randint1(50));
+				(void)set_image(p_ptr, 50 + randint1(50));
 			}
 			ident = TRUE;
 			break;

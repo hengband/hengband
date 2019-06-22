@@ -118,7 +118,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			if (!p_ptr->resist_chaos)
 			{
-				if (set_image(p_ptr->image + randint0(250) + 250))
+				if (set_image(p_ptr, p_ptr->image + randint0(250) + 250))
 				{
 					ident = TRUE;
 				}

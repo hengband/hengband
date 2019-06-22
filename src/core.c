@@ -706,7 +706,7 @@ static bool pattern_effect(void)
 	switch (pattern_type)
 	{
 	case PATTERN_TILE_END:
-		(void)set_image(0);
+		(void)set_image(p_ptr, 0);
 		(void)restore_all_status();
 		(void)restore_level();
 		(void)cure_critical_wounds(1000);
@@ -1816,7 +1816,7 @@ static void process_world_aux_timeout(void)
 	/* Hack -- Hallucinating */
 	if (p_ptr->image)
 	{
-		(void)set_image(p_ptr->image - dec_count);
+		(void)set_image(p_ptr, p_ptr->image - dec_count);
 	}
 
 	/* Blindness */
@@ -2216,7 +2216,7 @@ static void process_world_aux_mutation(void)
 				if (one_in_(3))
 				{
 					msg_print(_("き～れいなちょおちょらとんれいる～", "Thishcischs GooDSChtuff!"));
-					(void)set_image(p_ptr->image + randint0(150) + 150);
+					(void)set_image(p_ptr, p_ptr->image + randint0(150) + 150);
 				}
 			}
 		}
@@ -2228,7 +2228,7 @@ static void process_world_aux_mutation(void)
 		{
 			disturb(FALSE, TRUE);
 			p_ptr->redraw |= PR_EXTRA;
-			(void)set_image(p_ptr->image + randint0(50) + 20);
+			(void)set_image(p_ptr, p_ptr->image + randint0(50) + 20);
 		}
 	}
 

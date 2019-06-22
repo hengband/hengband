@@ -1910,7 +1910,7 @@ void do_cmd_mind(void)
 				else if (b < 15)
 				{
 					msg_print(_("奇妙な光景が目の前で踊っている...", "Weird visions seem to dance before your eyes..."));
-					set_image(p_ptr->image + 5 + randint1(10));
+					set_image(p_ptr, p_ptr->image + 5 + randint1(10));
 				}
 				else if (b < 45)
 				{
@@ -1944,7 +1944,7 @@ void do_cmd_mind(void)
 				else if (b < 96)
 				{
 					msg_print(_("まわりのものがキラキラ輝いている！", "Your brain is addled!"));
-					set_image(p_ptr->image + 5 + randint1(10));
+					set_image(p_ptr, p_ptr->image + 5 + randint1(10));
 				}
 				else
 				{

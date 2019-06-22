@@ -5455,7 +5455,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		}
 		if (!p_ptr->resist_chaos)
 		{
-			(void)set_image(p_ptr->image + randint0(250) + 150);
+			(void)set_image(p_ptr, p_ptr->image + randint0(250) + 150);
 		}
 		break;
 	case 17:
