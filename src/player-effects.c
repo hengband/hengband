@@ -291,7 +291,7 @@ void reset_tim_flags(void)
 void dispel_player(void)
 {
 	(void)set_fast(p_ptr, 0, TRUE);
-	(void)set_lightspeed(0, TRUE);
+	(void)set_lightspeed(p_ptr, 0, TRUE);
 	(void)set_slow(p_ptr, 0, TRUE);
 	(void)set_shield(p_ptr, 0, TRUE);
 	(void)set_blessed(p_ptr, 0, TRUE);
@@ -832,23 +832,23 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_lightspeed(TIME_EFFECT v, bool do_dec)
+bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
-	if (p_ptr->wild_mode) v = 0;
+	if (creature_ptr->wild_mode) v = 0;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->lightspeed && !do_dec)
+		if (creature_ptr->lightspeed && !do_dec)
 		{
-			if (p_ptr->lightspeed > v) return FALSE;
+			if (creature_ptr->lightspeed > v) return FALSE;
 		}
-		else if (!p_ptr->lightspeed)
+		else if (!creature_ptr->lightspeed)
 		{
 			msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely faster!"));
 			notice = TRUE;
@@ -860,7 +860,7 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->lightspeed)
+		if (creature_ptr->lightspeed)
 		{
 			msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
 			notice = TRUE;
@@ -868,13 +868,13 @@ bool set_lightspeed(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->lightspeed = v;
+	creature_ptr->lightspeed = v;
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }

@@ -4571,7 +4571,7 @@ static void process_player(void)
 	/* Fast */
 	if (p_ptr->lightspeed)
 	{
-		(void)set_lightspeed(p_ptr->lightspeed - 1, TRUE);
+		(void)set_lightspeed(p_ptr, p_ptr->lightspeed - 1, TRUE);
 	}
 	if ((p_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI)
 	{

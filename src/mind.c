@@ -1280,7 +1280,7 @@ static bool cast_force_spell(int spell)
 		fire_beam(GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
 		break;
 	case 13:
-		set_lightspeed(randint1(16) + 16 + boost / 20, FALSE);
+		set_lightspeed(p_ptr, randint1(16) + 16 + boost / 20, FALSE);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
