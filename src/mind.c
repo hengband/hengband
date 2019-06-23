@@ -1208,7 +1208,7 @@ static bool cast_force_spell(int spell)
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
 	case 2:
-		set_tim_levitation(randint1(30) + 30 + boost / 5, FALSE);
+		set_tim_levitation(p_ptr, randint1(30) + 30 + boost / 5, FALSE);
 		break;
 	case 3:
 		project_length = plev / 8 + 3;
@@ -1232,7 +1232,7 @@ static bool cast_force_spell(int spell)
 		else return TRUE;
 		break;
 	case 6:
-		set_tim_sh_touki(randint1(plev / 2) + 15 + boost / 7, FALSE);
+		set_tim_sh_touki(p_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
 		break;
 	case 7:
 		return shock_power();
@@ -1601,7 +1601,7 @@ static bool cast_ninja_spell(int spell)
 	case 7:
 		return ident_spell(FALSE);
 	case 8:
-		set_tim_levitation(randint1(20) + 20, FALSE);
+		set_tim_levitation(p_ptr, randint1(20) + 20, FALSE);
 		break;
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);

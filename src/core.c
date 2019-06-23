@@ -1875,13 +1875,13 @@ static void process_world_aux_timeout(void)
 	/* Timed levitation */
 	if (p_ptr->tim_levitation)
 	{
-		(void)set_tim_levitation(p_ptr->tim_levitation - 1, TRUE);
+		(void)set_tim_levitation(p_ptr, p_ptr->tim_levitation - 1, TRUE);
 	}
 
 	/* Timed sh_touki */
 	if (p_ptr->tim_sh_touki)
 	{
-		(void)set_tim_sh_touki(p_ptr->tim_sh_touki - 1, TRUE);
+		(void)set_tim_sh_touki(p_ptr, p_ptr->tim_sh_touki - 1, TRUE);
 	}
 
 	/* Timed sh_fire */

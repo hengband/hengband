@@ -314,8 +314,8 @@ void dispel_player(void)
 	(void)set_tim_esp(0, TRUE);
 	(void)set_tim_regen(p_ptr, 0, TRUE);
 	(void)set_tim_stealth(p_ptr, 0, TRUE);
-	(void)set_tim_levitation(0, TRUE);
-	(void)set_tim_sh_touki(0, TRUE);
+	(void)set_tim_levitation(p_ptr, 0, TRUE);
+	(void)set_tim_sh_touki(p_ptr, 0, TRUE);
 	(void)set_tim_sh_fire(0, TRUE);
 	(void)set_tim_sh_holy(0, TRUE);
 	(void)set_tim_eyeeye(0, TRUE);
@@ -1738,21 +1738,21 @@ bool set_superstealth(bool set)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
+bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_levitation && !do_dec)
+		if (creature_ptr->tim_levitation && !do_dec)
 		{
-			if (p_ptr->tim_levitation > v) return FALSE;
+			if (creature_ptr->tim_levitation > v) return FALSE;
 		}
-		else if (!p_ptr->tim_levitation)
+		else if (!creature_ptr->tim_levitation)
 		{
 			msg_print(_("体が宙に浮き始めた。", "You begin to fly!"));
 			notice = TRUE;
@@ -1762,7 +1762,7 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_levitation)
+		if (creature_ptr->tim_levitation)
 		{
 			msg_print(_("もう宙に浮かべなくなった。", "You stop flying."));
 			notice = TRUE;
@@ -1770,14 +1770,14 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_levitation = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_levitation = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }
@@ -1788,21 +1788,21 @@ bool set_tim_levitation(TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
+bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_sh_touki && !do_dec)
+		if (creature_ptr->tim_sh_touki && !do_dec)
 		{
-			if (p_ptr->tim_sh_touki > v) return FALSE;
+			if (creature_ptr->tim_sh_touki > v) return FALSE;
 		}
-		else if (!p_ptr->tim_sh_touki)
+		else if (!creature_ptr->tim_sh_touki)
 		{
 			msg_print(_("体が闘気のオーラで覆われた。", "You have enveloped by the aura of the Force!"));
 			notice = TRUE;
@@ -1812,7 +1812,7 @@ bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_sh_touki)
+		if (creature_ptr->tim_sh_touki)
 		{
 			msg_print(_("闘気が消えた。", "Aura of the Force disappeared."));
 			notice = TRUE;
@@ -1820,8 +1820,8 @@ bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_sh_touki = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_sh_touki = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
