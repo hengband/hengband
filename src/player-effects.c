@@ -313,7 +313,7 @@ void dispel_player(void)
 	(void)set_tim_infra(p_ptr, 0, TRUE);
 	(void)set_tim_esp(0, TRUE);
 	(void)set_tim_regen(p_ptr, 0, TRUE);
-	(void)set_tim_stealth(0, TRUE);
+	(void)set_tim_stealth(p_ptr, 0, TRUE);
 	(void)set_tim_levitation(0, TRUE);
 	(void)set_tim_sh_touki(0, TRUE);
 	(void)set_tim_sh_fire(0, TRUE);
@@ -1633,19 +1633,19 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
+bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_stealth && !do_dec)
+		if (creature_ptr->tim_stealth && !do_dec)
 		{
-			if (p_ptr->tim_stealth > v) return FALSE;
+			if (creature_ptr->tim_stealth > v) return FALSE;
 		}
 		else if (!IS_TIM_STEALTH())
 		{
@@ -1657,7 +1657,7 @@ bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_stealth && !music_singing(MUSIC_STEALTH))
+		if (creature_ptr->tim_stealth && !music_singing(MUSIC_STEALTH))
 		{
 			msg_print(_("足音が大きくなった。", "You no longer walk silently."));
 			notice = TRUE;
@@ -1665,14 +1665,14 @@ bool set_tim_stealth(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_stealth = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_stealth = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }

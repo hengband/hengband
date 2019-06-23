@@ -34,7 +34,7 @@ extern bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_tim_stealth(TIME_EFFECT v, bool do_dec);
+extern bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_lightspeed(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_levitation(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_sh_touki(TIME_EFFECT v, bool do_dec);

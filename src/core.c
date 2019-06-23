@@ -1869,7 +1869,7 @@ static void process_world_aux_timeout(void)
 	/* Timed stealth */
 	if (p_ptr->tim_stealth)
 	{
-		(void)set_tim_stealth(p_ptr->tim_stealth - 1, TRUE);
+		(void)set_tim_stealth(p_ptr, p_ptr->tim_stealth - 1, TRUE);
 	}
 
 	/* Timed levitation */
