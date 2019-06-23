@@ -41,7 +41,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_infra(base + randint1(base), FALSE);
+				set_tim_infra(p_ptr, base + randint1(base), FALSE);
 			}
 		}
 		break;

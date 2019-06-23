@@ -1863,7 +1863,7 @@ static void process_world_aux_timeout(void)
 	/* Timed infra-vision */
 	if (p_ptr->tim_infra)
 	{
-		(void)set_tim_infra(p_ptr->tim_infra - 1, TRUE);
+		(void)set_tim_infra(p_ptr, p_ptr->tim_infra - 1, TRUE);
 	}
 
 	/* Timed stealth */

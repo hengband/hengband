@@ -310,7 +310,7 @@ void dispel_player(void)
 	(void)set_dustrobe(0,TRUE);
 
 	(void)set_tim_invis(p_ptr, 0, TRUE);
-	(void)set_tim_infra(0, TRUE);
+	(void)set_tim_infra(p_ptr, 0, TRUE);
 	(void)set_tim_esp(0, TRUE);
 	(void)set_tim_regen(0, TRUE);
 	(void)set_tim_stealth(0, TRUE);
@@ -1530,21 +1530,21 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_infra(TIME_EFFECT v, bool do_dec)
+bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_infra && !do_dec)
+		if (creature_ptr->tim_infra && !do_dec)
 		{
-			if (p_ptr->tim_infra > v) return FALSE;
+			if (creature_ptr->tim_infra > v) return FALSE;
 		}
-		else if (!p_ptr->tim_infra)
+		else if (!creature_ptr->tim_infra)
 		{
 			msg_print(_("目がランランと輝き始めた！", "Your eyes begin to tingle!"));
 			notice = TRUE;
@@ -1554,7 +1554,7 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_infra)
+		if (creature_ptr->tim_infra)
 		{
 			msg_print(_("目の輝きがなくなった。", "Your eyes stop tingling."));
 			notice = TRUE;
@@ -1562,17 +1562,17 @@ bool set_tim_infra(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_infra = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_infra = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	/* Update the monsters */
-	p_ptr->update |= (PU_MONSTERS);
+	creature_ptr->update |= (PU_MONSTERS);
 	handle_stuff();
 	return (TRUE);
 }
