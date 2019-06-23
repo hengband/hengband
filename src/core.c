@@ -1899,7 +1899,7 @@ static void process_world_aux_timeout(void)
 	/* Timed eyeeye */
 	if (p_ptr->tim_eyeeye)
 	{
-		(void)set_tim_eyeeye(p_ptr->tim_eyeeye - 1, TRUE);
+		(void)set_tim_eyeeye(p_ptr, p_ptr->tim_eyeeye - 1, TRUE);
 	}
 
 	/* Timed resist-magic */

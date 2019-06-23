@@ -2109,7 +2109,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 				msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
 
 				project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
-				set_tim_eyeeye(p_ptr->tim_eyeeye - 5, TRUE);
+				set_tim_eyeeye(p_ptr, p_ptr->tim_eyeeye - 5, TRUE);
 			}
 		}
 

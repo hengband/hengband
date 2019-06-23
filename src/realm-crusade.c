@@ -488,7 +488,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_eyeeye(randint1(base) + base, FALSE);
+				set_tim_eyeeye(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
