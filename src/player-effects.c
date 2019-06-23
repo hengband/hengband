@@ -316,7 +316,7 @@ void dispel_player(void)
 	(void)set_tim_stealth(p_ptr, 0, TRUE);
 	(void)set_tim_levitation(p_ptr, 0, TRUE);
 	(void)set_tim_sh_touki(p_ptr, 0, TRUE);
-	(void)set_tim_sh_fire(0, TRUE);
+	(void)set_tim_sh_fire(p_ptr, 0, TRUE);
 	(void)set_tim_sh_holy(0, TRUE);
 	(void)set_tim_eyeeye(0, TRUE);
 	(void)set_magicdef(p_ptr, 0, TRUE);
@@ -1837,21 +1837,21 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
+bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_sh_fire && !do_dec)
+		if (creature_ptr->tim_sh_fire && !do_dec)
 		{
-			if (p_ptr->tim_sh_fire > v) return FALSE;
+			if (creature_ptr->tim_sh_fire > v) return FALSE;
 		}
-		else if (!p_ptr->tim_sh_fire)
+		else if (!creature_ptr->tim_sh_fire)
 		{
 			msg_print(_("体が炎のオーラで覆われた。", "You have enveloped by fiery aura!"));
 			notice = TRUE;
@@ -1861,7 +1861,7 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_sh_fire)
+		if (creature_ptr->tim_sh_fire)
 		{
 			msg_print(_("炎のオーラが消えた。", "Fiery aura disappeared."));
 			notice = TRUE;
@@ -1869,14 +1869,14 @@ bool set_tim_sh_fire(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_sh_fire = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_sh_fire = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }

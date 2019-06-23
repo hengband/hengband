@@ -1887,7 +1887,7 @@ static void process_world_aux_timeout(void)
 	/* Timed sh_fire */
 	if (p_ptr->tim_sh_fire)
 	{
-		(void)set_tim_sh_fire(p_ptr->tim_sh_fire - 1, TRUE);
+		(void)set_tim_sh_fire(p_ptr, p_ptr->tim_sh_fire - 1, TRUE);
 	}
 
 	/* Timed sh_holy */
