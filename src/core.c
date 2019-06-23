@@ -1828,7 +1828,7 @@ static void process_world_aux_timeout(void)
 	/* Times see-invisible */
 	if (p_ptr->tim_invis)
 	{
-		(void)set_tim_invis(p_ptr->tim_invis - 1, TRUE);
+		(void)set_tim_invis(p_ptr, p_ptr->tim_invis - 1, TRUE);
 	}
 
 	if (p_ptr->suppress_multi_reward)
