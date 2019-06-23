@@ -312,7 +312,7 @@ void dispel_player(void)
 	(void)set_tim_invis(p_ptr, 0, TRUE);
 	(void)set_tim_infra(p_ptr, 0, TRUE);
 	(void)set_tim_esp(0, TRUE);
-	(void)set_tim_regen(0, TRUE);
+	(void)set_tim_regen(p_ptr, 0, TRUE);
 	(void)set_tim_stealth(0, TRUE);
 	(void)set_tim_levitation(0, TRUE);
 	(void)set_tim_sh_touki(0, TRUE);
@@ -1583,21 +1583,21 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_regen(TIME_EFFECT v, bool do_dec)
+bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_regen && !do_dec)
+		if (creature_ptr->tim_regen && !do_dec)
 		{
-			if (p_ptr->tim_regen > v) return FALSE;
+			if (creature_ptr->tim_regen > v) return FALSE;
 		}
-		else if (!p_ptr->tim_regen)
+		else if (!creature_ptr->tim_regen)
 		{
 			msg_print(_("回復力が上がった！", "You feel yourself regenerating quickly!"));
 			notice = TRUE;
@@ -1607,7 +1607,7 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_regen)
+		if (creature_ptr->tim_regen)
 		{
 			msg_print(_("素早く回復する感じがなくなった。", "You feel yourself regenerating slowly."));
 			notice = TRUE;
@@ -1615,14 +1615,14 @@ bool set_tim_regen(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_regen = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_regen = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }
