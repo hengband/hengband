@@ -1286,7 +1286,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 	case MS_INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-		(void)set_invuln(randint1(4) + 4, FALSE);
+		(void)set_invuln(p_ptr, randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
 		teleport_player(10, 0L);

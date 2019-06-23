@@ -663,7 +663,7 @@ static bool use_mane(int spell)
 		break;
 	case MS_INVULNER:
 		msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-		(void)set_invuln(randint1(7) + 7, FALSE);
+		(void)set_invuln(p_ptr, randint1(7) + 7, FALSE);
 		break;
 	case MS_BLINK:
 		teleport_player(10, 0L);

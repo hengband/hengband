@@ -1989,7 +1989,7 @@ static void process_world_aux_timeout(void)
 	/* Invulnerability */
 	if (p_ptr->invuln)
 	{
-		(void)set_invuln(p_ptr->invuln - 1, TRUE);
+		(void)set_invuln(p_ptr, p_ptr->invuln - 1, TRUE);
 	}
 
 	/* Wraith form */
@@ -2519,7 +2519,7 @@ static void process_world_aux_mutation(void)
 		disturb(FALSE, TRUE);
 		msg_print(_("無敵な気がする！", "You feel invincible!"));
 		msg_print(NULL);
-		(void)set_invuln(randint1(8) + 8, FALSE);
+		(void)set_invuln(p_ptr, randint1(8) + 8, FALSE);
 	}
 
 	if ((p_ptr->muta2 & MUT2_SP_TO_HP) && one_in_(2000))

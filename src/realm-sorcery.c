@@ -549,7 +549,7 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_invuln(randint1(base) + base, FALSE);
+				set_invuln(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

@@ -462,7 +462,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_INVULNERABILITY:
-			(void)set_invuln(p_ptr->invuln + randint1(4) + 4, FALSE);
+			(void)set_invuln(p_ptr, p_ptr->invuln + randint1(4) + 4, FALSE);
 			ident = TRUE;
 			break;
 

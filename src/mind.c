@@ -1448,7 +1448,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* mirror of Ruffnor */
 	case 20:
-		(void)set_invuln(randint1(4) + 4, FALSE);
+		(void)set_invuln(p_ptr, randint1(4) + 4, FALSE);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
