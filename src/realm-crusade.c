@@ -318,7 +318,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_sh_holy(randint1(base) + base, FALSE);
+				set_tim_sh_holy(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

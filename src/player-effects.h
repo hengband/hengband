@@ -39,7 +39,7 @@ extern bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec
 extern bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_tim_sh_holy(TIME_EFFECT v, bool do_dec);
+extern bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_eyeeye(TIME_EFFECT v, bool do_dec);
 extern bool set_resist_magic(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_reflect(TIME_EFFECT v, bool do_dec);

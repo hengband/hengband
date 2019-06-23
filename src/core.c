@@ -1893,7 +1893,7 @@ static void process_world_aux_timeout(void)
 	/* Timed sh_holy */
 	if (p_ptr->tim_sh_holy)
 	{
-		(void)set_tim_sh_holy(p_ptr->tim_sh_holy - 1, TRUE);
+		(void)set_tim_sh_holy(p_ptr, p_ptr->tim_sh_holy - 1, TRUE);
 	}
 
 	/* Timed eyeeye */
