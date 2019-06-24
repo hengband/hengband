@@ -1848,7 +1848,7 @@ static void process_world_aux_timeout(void)
 		p_ptr->ele_attack--;
 
 		/* Clear all temporary elemental brands. */
-		if (!p_ptr->ele_attack) set_ele_attack(0, 0);
+		if (!p_ptr->ele_attack) set_ele_attack(p_ptr, 0, 0);
 	}
 
 	/* Timed temporary elemental immune. -LM- */

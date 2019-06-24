@@ -328,7 +328,7 @@ void dispel_player(void)
 	(void)set_oppose_pois(0, TRUE);
 	(void)set_ultimate_res(0, TRUE);
 	(void)set_mimic(p_ptr, 0, 0, TRUE);
-	(void)set_ele_attack(0, 0);
+	(void)set_ele_attack(p_ptr, 0, 0);
 	(void)set_ele_immune(0, 0);
 
 	/* Cancel glowing hands */
@@ -2295,44 +2295,44 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
+bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
 {
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	/* Clear all elemental attacks (only one is allowed at a time). */
-	if ((p_ptr->special_attack & (ATTACK_ACID)) && (attack_type != ATTACK_ACID))
+	if ((creature_ptr->special_attack & (ATTACK_ACID)) && (attack_type != ATTACK_ACID))
 	{
-		p_ptr->special_attack &= ~(ATTACK_ACID);
+		creature_ptr->special_attack &= ~(ATTACK_ACID);
 		msg_print(_("酸で攻撃できなくなった。", "Your temporary acidic brand fades away."));
 	}
-	if ((p_ptr->special_attack & (ATTACK_ELEC)) && (attack_type != ATTACK_ELEC))
+	if ((creature_ptr->special_attack & (ATTACK_ELEC)) && (attack_type != ATTACK_ELEC))
 	{
-		p_ptr->special_attack &= ~(ATTACK_ELEC);
+		creature_ptr->special_attack &= ~(ATTACK_ELEC);
 		msg_print(_("電撃で攻撃できなくなった。", "Your temporary electrical brand fades away."));
 	}
-	if ((p_ptr->special_attack & (ATTACK_FIRE)) && (attack_type != ATTACK_FIRE))
+	if ((creature_ptr->special_attack & (ATTACK_FIRE)) && (attack_type != ATTACK_FIRE))
 	{
-		p_ptr->special_attack &= ~(ATTACK_FIRE);
+		creature_ptr->special_attack &= ~(ATTACK_FIRE);
 		msg_print(_("火炎で攻撃できなくなった。", "Your temporary fiery brand fades away."));
 	}
-	if ((p_ptr->special_attack & (ATTACK_COLD)) && (attack_type != ATTACK_COLD))
+	if ((creature_ptr->special_attack & (ATTACK_COLD)) && (attack_type != ATTACK_COLD))
 	{
-		p_ptr->special_attack &= ~(ATTACK_COLD);
+		creature_ptr->special_attack &= ~(ATTACK_COLD);
 		msg_print(_("冷気で攻撃できなくなった。", "Your temporary frost brand fades away."));
 	}
-	if ((p_ptr->special_attack & (ATTACK_POIS)) && (attack_type != ATTACK_POIS))
+	if ((creature_ptr->special_attack & (ATTACK_POIS)) && (attack_type != ATTACK_POIS))
 	{
-		p_ptr->special_attack &= ~(ATTACK_POIS);
+		creature_ptr->special_attack &= ~(ATTACK_POIS);
 		msg_print(_("毒で攻撃できなくなった。", "Your temporary poison brand fades away."));
 	}
 
 	if ((v) && (attack_type))
 	{
 		/* Set attack type. */
-		p_ptr->special_attack |= (attack_type);
+		creature_ptr->special_attack |= (attack_type);
 
 		/* Set duration. */
-		p_ptr->ele_attack = v;
+		creature_ptr->ele_attack = v;
 
 #ifdef JP
 		msg_format("%sで攻撃できるようになった！",
@@ -2354,9 +2354,9 @@ bool set_ele_attack(u32b attack_type, TIME_EFFECT v)
 	}
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->redraw |= (PR_STATUS);
 
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 
 	return (TRUE);
@@ -4263,15 +4263,15 @@ bool choose_ele_attack(void)
 	choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
-		set_ele_attack(ATTACK_FIRE, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(p_ptr, ATTACK_FIRE, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'b') || (choice == 'B')) && (num >= 2))
-		set_ele_attack(ATTACK_COLD, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(p_ptr, ATTACK_COLD, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'c') || (choice == 'C')) && (num >= 3))
-		set_ele_attack(ATTACK_POIS, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(p_ptr, ATTACK_POIS, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'd') || (choice == 'D')) && (num >= 4))
-		set_ele_attack(ATTACK_ACID, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(p_ptr, ATTACK_ACID, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else if (((choice == 'e') || (choice == 'E')) && (num >= 5))
-		set_ele_attack(ATTACK_ELEC, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(p_ptr, ATTACK_ELEC, p_ptr->lev/2 + randint1(p_ptr->lev/2));
 	else
 	{
 		msg_print(_("魔法剣を使うのをやめた。", "You cancel the temporary branding."));
