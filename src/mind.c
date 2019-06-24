@@ -1107,7 +1107,7 @@ static bool cast_mindcrafter_spell(int spell)
 	case 6:
 		/* Character Armour */
 		set_shield(p_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev > 14) set_oppose_acid((TIME_EFFECT)plev, FALSE);
+		if (plev > 14) set_oppose_acid(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev > 19) set_oppose_fire((TIME_EFFECT)plev, FALSE);
 		if (plev > 24) set_oppose_cold((TIME_EFFECT)plev, FALSE);
 		if (plev > 29) set_oppose_elec((TIME_EFFECT)plev, FALSE);
@@ -1719,7 +1719,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	case 16:
 		(void)set_kabenuke(p_ptr, randint1(plev/2) + plev/2, FALSE);
-		set_oppose_acid((TIME_EFFECT)plev, FALSE);
+		set_oppose_acid(p_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 17:
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);

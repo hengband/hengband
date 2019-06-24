@@ -310,7 +310,7 @@ concptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_acid(randint1(base) + base, FALSE);
+				set_oppose_acid(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

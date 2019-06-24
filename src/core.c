@@ -2043,7 +2043,7 @@ static void process_world_aux_timeout(void)
 	/* Oppose Acid */
 	if (p_ptr->oppose_acid)
 	{
-		(void)set_oppose_acid(p_ptr->oppose_acid - 1, TRUE);
+		(void)set_oppose_acid(p_ptr, p_ptr->oppose_acid - 1, TRUE);
 	}
 
 	/* Oppose Lightning */

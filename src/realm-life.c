@@ -472,7 +472,7 @@ concptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				TIME_EFFECT v = randint1(base) + base;
 				set_fast(p_ptr, v, FALSE);
-				set_oppose_acid(v, FALSE);
+				set_oppose_acid(p_ptr, v, FALSE);
 				set_oppose_elec(v, FALSE);
 				set_oppose_fire(v, FALSE);
 				set_oppose_cold(v, FALSE);
