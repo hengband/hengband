@@ -329,7 +329,7 @@ void dispel_player(void)
 	(void)set_ultimate_res(0, TRUE);
 	(void)set_mimic(p_ptr, 0, 0, TRUE);
 	(void)set_ele_attack(p_ptr, 0, 0);
-	(void)set_ele_immune(0, 0);
+	(void)set_ele_immune(p_ptr, 0, 0);
 
 	/* Cancel glowing hands */
 	if (p_ptr->special_attack & ATTACK_CONFUSE)
@@ -2368,44 +2368,44 @@ bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
+bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
 {
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	/* Clear all elemental attacks (only one is allowed at a time). */
-	if ((p_ptr->special_defense & (DEFENSE_ACID)) && (immune_type != DEFENSE_ACID))
+	if ((creature_ptr->special_defense & (DEFENSE_ACID)) && (immune_type != DEFENSE_ACID))
 	{
-		p_ptr->special_defense &= ~(DEFENSE_ACID);
+		creature_ptr->special_defense &= ~(DEFENSE_ACID);
 		msg_print(_("酸の攻撃で傷つけられるようになった。。", "You are no longer immune to acid."));
 	}
-	if ((p_ptr->special_defense & (DEFENSE_ELEC)) && (immune_type != DEFENSE_ELEC))
+	if ((creature_ptr->special_defense & (DEFENSE_ELEC)) && (immune_type != DEFENSE_ELEC))
 	{
-		p_ptr->special_defense &= ~(DEFENSE_ELEC);
+		creature_ptr->special_defense &= ~(DEFENSE_ELEC);
 		msg_print(_("電撃の攻撃で傷つけられるようになった。。", "You are no longer immune to electricity."));
 	}
-	if ((p_ptr->special_defense & (DEFENSE_FIRE)) && (immune_type != DEFENSE_FIRE))
+	if ((creature_ptr->special_defense & (DEFENSE_FIRE)) && (immune_type != DEFENSE_FIRE))
 	{
-		p_ptr->special_defense &= ~(DEFENSE_FIRE);
+		creature_ptr->special_defense &= ~(DEFENSE_FIRE);
 		msg_print(_("火炎の攻撃で傷つけられるようになった。。", "You are no longer immune to fire."));
 	}
-	if ((p_ptr->special_defense & (DEFENSE_COLD)) && (immune_type != DEFENSE_COLD))
+	if ((creature_ptr->special_defense & (DEFENSE_COLD)) && (immune_type != DEFENSE_COLD))
 	{
-		p_ptr->special_defense &= ~(DEFENSE_COLD);
+		creature_ptr->special_defense &= ~(DEFENSE_COLD);
 		msg_print(_("冷気の攻撃で傷つけられるようになった。。", "You are no longer immune to cold."));
 	}
-	if ((p_ptr->special_defense & (DEFENSE_POIS)) && (immune_type != DEFENSE_POIS))
+	if ((creature_ptr->special_defense & (DEFENSE_POIS)) && (immune_type != DEFENSE_POIS))
 	{
-		p_ptr->special_defense &= ~(DEFENSE_POIS);
+		creature_ptr->special_defense &= ~(DEFENSE_POIS);
 		msg_print(_("毒の攻撃で傷つけられるようになった。。", "You are no longer immune to poison."));
 	}
 
 	if ((v) && (immune_type))
 	{
 		/* Set attack type. */
-		p_ptr->special_defense |= (immune_type);
+		creature_ptr->special_defense |= (immune_type);
 
 		/* Set duration. */
-		p_ptr->ele_immune = v;
+		creature_ptr->ele_immune = v;
 
 		msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, You are immune to %s"),
 			     ((immune_type == DEFENSE_ACID) ? _("酸", "acid!") :
@@ -2417,8 +2417,8 @@ bool set_ele_immune(u32b immune_type, TIME_EFFECT v)
 	}
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->redraw |= (PR_STATUS);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->redraw |= (PR_STATUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 
 	return (TRUE);
@@ -4307,13 +4307,13 @@ bool choose_ele_immune(TIME_EFFECT immune_turn)
 	choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
-		set_ele_immune(DEFENSE_FIRE, immune_turn);
+		set_ele_immune(p_ptr, DEFENSE_FIRE, immune_turn);
 	else if ((choice == 'b') || (choice == 'B'))
-		set_ele_immune(DEFENSE_COLD, immune_turn);
+		set_ele_immune(p_ptr, DEFENSE_COLD, immune_turn);
 	else if ((choice == 'c') || (choice == 'C'))
-		set_ele_immune(DEFENSE_ACID, immune_turn);
+		set_ele_immune(p_ptr, DEFENSE_ACID, immune_turn);
 	else if ((choice == 'd') || (choice == 'D'))
-		set_ele_immune(DEFENSE_ELEC, immune_turn);
+		set_ele_immune(p_ptr, DEFENSE_ELEC, immune_turn);
 	else
 	{
 		msg_print(_("免疫を付けるのをやめた。", "You cancel the temporary immune."));

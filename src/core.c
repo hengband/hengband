@@ -1857,7 +1857,7 @@ static void process_world_aux_timeout(void)
 		p_ptr->ele_immune--;
 
 		/* Clear all temporary elemental brands. */
-		if (!p_ptr->ele_immune) set_ele_immune(0, 0);
+		if (!p_ptr->ele_immune) set_ele_immune(p_ptr, 0, 0);
 	}
 
 	/* Timed infra-vision */
