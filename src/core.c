@@ -1935,7 +1935,7 @@ static void process_world_aux_timeout(void)
 	/* Multi-shadow */
 	if (p_ptr->multishadow)
 	{
-		(void)set_multishadow(p_ptr->multishadow - 1, TRUE);
+		(void)set_multishadow(p_ptr, p_ptr->multishadow - 1, TRUE);
 	}
 
 	/* Timed Robe of dust */

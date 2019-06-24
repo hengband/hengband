@@ -1440,7 +1440,7 @@ static bool cast_mirror_spell(int spell)
 		return recall_player(p_ptr, randint0(21) + 15);
 		/* multi-shadow */
 	case 18:
-		set_multishadow(6 + randint1(6), FALSE);
+		set_multishadow(p_ptr, 6 + randint1(6), FALSE);
 		break;
 		/* binding field */
 	case 19:
@@ -1749,7 +1749,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	}
 	case 19:
-		set_multishadow(6+randint1(6), FALSE);
+		set_multishadow(p_ptr, 6+randint1(6), FALSE);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
