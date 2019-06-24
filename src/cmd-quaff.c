@@ -476,7 +476,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 
 		case SV_POTION_NEO_TSUYOSHI:
 			(void)set_image(p_ptr, 0);
-			(void)set_tsuyoshi(p_ptr->tsuyoshi + randint1(100) + 100, FALSE);
+			(void)set_tsuyoshi(p_ptr, p_ptr->tsuyoshi + randint1(100) + 100, FALSE);
 			ident = TRUE;
 			break;
 
@@ -484,7 +484,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
 			msg_print(NULL);
 			p_ptr->tsuyoshi = 1;
-			(void)set_tsuyoshi(0, TRUE);
+			(void)set_tsuyoshi(p_ptr, 0, TRUE);
 			if (!p_ptr->resist_chaos)
 			{
 				(void)set_image(p_ptr, 50 + randint1(50));

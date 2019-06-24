@@ -295,7 +295,7 @@ void dispel_player(void)
 	(void)set_slow(p_ptr, 0, TRUE);
 	(void)set_shield(p_ptr, 0, TRUE);
 	(void)set_blessed(p_ptr, 0, TRUE);
-	(void)set_tsuyoshi(0, TRUE);
+	(void)set_tsuyoshi(p_ptr, 0, TRUE);
 	(void)set_hero(p_ptr, 0, TRUE);
 	(void)set_shero(p_ptr, 0, TRUE);
 	(void)set_protevil(p_ptr, 0, TRUE);
@@ -736,7 +736,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 	/* Open */
 	if (v)
 	{
-		set_tsuyoshi(0, TRUE);
+		set_tsuyoshi(p_ptr, 0, TRUE);
 		if (!creature_ptr->image)
 		{
 			msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
@@ -2236,21 +2236,21 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
+bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tsuyoshi && !do_dec)
+		if (creature_ptr->tsuyoshi && !do_dec)
 		{
-			if (p_ptr->tsuyoshi > v) return FALSE;
+			if (creature_ptr->tsuyoshi > v) return FALSE;
 		}
-		else if (!p_ptr->tsuyoshi)
+		else if (!creature_ptr->tsuyoshi)
 		{
 			msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
 			notice = TRUE;
@@ -2261,12 +2261,12 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tsuyoshi)
+		if (creature_ptr->tsuyoshi)
 		{
 			msg_print(_("肉体が急速にしぼんでいった。", "Your body had quickly shriveled."));
 
-			(void)dec_stat(p_ptr, A_CON, 20, TRUE);
-			(void)dec_stat(p_ptr, A_STR, 20, TRUE);
+			(void)dec_stat(creature_ptr, A_CON, 20, TRUE);
+			(void)dec_stat(creature_ptr, A_STR, 20, TRUE);
 
 			notice = TRUE;
 			chg_virtue(V_VITALITY, -3);
@@ -2274,17 +2274,17 @@ bool set_tsuyoshi(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tsuyoshi = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tsuyoshi = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
-	p_ptr->update |= (PU_HP);
+	creature_ptr->update |= (PU_HP);
 	handle_stuff();
 	return (TRUE);
 }

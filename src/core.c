@@ -2037,7 +2037,7 @@ static void process_world_aux_timeout(void)
 	/* Tsuyoshi */
 	if (p_ptr->tsuyoshi)
 	{
-		(void)set_tsuyoshi(p_ptr->tsuyoshi - 1, TRUE);
+		(void)set_tsuyoshi(p_ptr, p_ptr->tsuyoshi - 1, TRUE);
 	}
 
 	/* Oppose Acid */
