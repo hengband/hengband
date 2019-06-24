@@ -41,7 +41,7 @@ extern bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_d
 extern bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_resist_magic(TIME_EFFECT v, bool do_dec);
+extern bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_reflect(TIME_EFFECT v, bool do_dec);
 extern bool set_multishadow(TIME_EFFECT v, bool do_dec);
 extern bool set_dustrobe(TIME_EFFECT v, bool do_dec);

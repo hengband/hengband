@@ -1217,7 +1217,7 @@ static bool cast_force_spell(int spell)
 		fire_beam(GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
 		break;
 	case 4:
-		set_resist_magic(randint1(20) + 20 + boost / 5, FALSE);
+		set_resist_magic(p_ptr, randint1(20) + 20 + boost / 5, FALSE);
 		break;
 	case 5:
 		msg_print(_("気を練った。", "You improved the Force."));
@@ -1405,7 +1405,7 @@ static bool cast_mirror_spell(int spell)
 		t = 20 + randint1(20);
 		set_shield(p_ptr, t, FALSE);
 		if (plev > 31)set_tim_reflect(t, FALSE);
-		if (plev > 39)set_resist_magic(t, FALSE);
+		if (plev > 39)set_resist_magic(p_ptr, t, FALSE);
 		break;
 		/* super ray */
 	case 13:
