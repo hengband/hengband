@@ -307,7 +307,7 @@ void dispel_player(void)
 	/* by henkma */
 	(void)set_tim_reflect(p_ptr, 0,TRUE);
 	(void)set_multishadow(p_ptr, 0,TRUE);
-	(void)set_dustrobe(0,TRUE);
+	(void)set_dustrobe(p_ptr, 0,TRUE);
 
 	(void)set_tim_invis(p_ptr, 0, TRUE);
 	(void)set_tim_infra(p_ptr, 0, TRUE);
@@ -2136,21 +2136,21 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_dustrobe(TIME_EFFECT v, bool do_dec)
+bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->dustrobe && !do_dec)
+		if (creature_ptr->dustrobe && !do_dec)
 		{
-			if (p_ptr->dustrobe > v) return FALSE;
+			if (creature_ptr->dustrobe > v) return FALSE;
 		}
-		else if (!p_ptr->dustrobe)
+		else if (!creature_ptr->dustrobe)
 		{
 			msg_print(_("体が鏡のオーラで覆われた。", "You were enveloped by mirror shards."));
 			notice = TRUE;
@@ -2160,7 +2160,7 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->dustrobe)
+		if (creature_ptr->dustrobe)
 		{
 			msg_print(_("鏡のオーラが消えた。", "The mirror shards disappear."));
 			notice = TRUE;
@@ -2168,14 +2168,14 @@ bool set_dustrobe(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->dustrobe = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->dustrobe = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }
