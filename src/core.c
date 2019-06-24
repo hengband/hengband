@@ -1947,7 +1947,7 @@ static void process_world_aux_timeout(void)
 	/* Timed infra-vision */
 	if (p_ptr->kabenuke)
 	{
-		(void)set_kabenuke(p_ptr->kabenuke - 1, TRUE);
+		(void)set_kabenuke(p_ptr, p_ptr->kabenuke - 1, TRUE);
 	}
 
 	/* Paralysis */

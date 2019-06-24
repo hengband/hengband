@@ -358,7 +358,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_kabenuke(randint1(base) + base, FALSE);
+				set_kabenuke(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

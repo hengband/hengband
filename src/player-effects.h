@@ -45,7 +45,7 @@ extern bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_d
 extern bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_kabenuke(TIME_EFFECT v, bool do_dec);
+extern bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tsuyoshi(TIME_EFFECT v, bool do_dec);
 extern bool set_ele_attack(u32b attack_type, TIME_EFFECT v);
 extern bool set_ele_immune(u32b immune_type, TIME_EFFECT v);
