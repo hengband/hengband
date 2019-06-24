@@ -1404,7 +1404,7 @@ static bool cast_mirror_spell(int spell)
 	case 12:
 		t = 20 + randint1(20);
 		set_shield(p_ptr, t, FALSE);
-		if (plev > 31)set_tim_reflect(t, FALSE);
+		if (plev > 31)set_tim_reflect(p_ptr, t, FALSE);
 		if (plev > 39)set_resist_magic(p_ptr, t, FALSE);
 		break;
 		/* super ray */

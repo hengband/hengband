@@ -42,7 +42,7 @@ extern bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_de
 extern bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_tim_reflect(TIME_EFFECT v, bool do_dec);
+extern bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_multishadow(TIME_EFFECT v, bool do_dec);
 extern bool set_dustrobe(TIME_EFFECT v, bool do_dec);
 extern bool set_kabenuke(TIME_EFFECT v, bool do_dec);

@@ -305,7 +305,7 @@ void dispel_player(void)
 	(void)set_tim_res_nether(0, TRUE);
 	(void)set_tim_res_time(0, TRUE);
 	/* by henkma */
-	(void)set_tim_reflect(0,TRUE);
+	(void)set_tim_reflect(p_ptr, 0,TRUE);
 	(void)set_multishadow(0,TRUE);
 	(void)set_dustrobe(0,TRUE);
 
@@ -2038,21 +2038,21 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
+bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_reflect && !do_dec)
+		if (creature_ptr->tim_reflect && !do_dec)
 		{
-			if (p_ptr->tim_reflect > v) return FALSE;
+			if (creature_ptr->tim_reflect > v) return FALSE;
 		}
-		else if (!p_ptr->tim_reflect)
+		else if (!creature_ptr->tim_reflect)
 		{
 			msg_print(_("体の表面が滑かになった気がする。", "Your body becames smooth."));
 			notice = TRUE;
@@ -2062,7 +2062,7 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_reflect)
+		if (creature_ptr->tim_reflect)
 		{
 			msg_print(_("体の表面が滑かでなくなった。", "Your body is no longer smooth."));
 			notice = TRUE;
@@ -2070,14 +2070,14 @@ bool set_tim_reflect(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_reflect = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_reflect = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }
