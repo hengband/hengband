@@ -1039,7 +1039,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_acid(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_elec(randint1(50) + 50, FALSE);
+		(void)set_oppose_elec(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_fire(randint1(50) + 50, FALSE);
 		(void)set_oppose_cold(randint1(50) + 50, FALSE);
 		(void)set_oppose_pois(randint1(50) + 50, FALSE);
@@ -1336,7 +1336,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("様々な色に輝いている...", "It glows many colours..."));
 		(void)set_oppose_acid(p_ptr, randint1(40) + 40, FALSE);
-		(void)set_oppose_elec(randint1(40) + 40, FALSE);
+		(void)set_oppose_elec(p_ptr, randint1(40) + 40, FALSE);
 		(void)set_oppose_fire(randint1(40) + 40, FALSE);
 		(void)set_oppose_cold(randint1(40) + 40, FALSE);
 		(void)set_oppose_pois(randint1(40) + 40, FALSE);
@@ -1426,7 +1426,7 @@ bool activate_artifact(object_type *o_ptr)
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_ELEC, dir, 100, 2);
 		}
-		(void)set_oppose_elec(randint1(20) + 20, FALSE);
+		(void)set_oppose_elec(p_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
@@ -1689,7 +1689,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)hp_player(p_ptr, 10);
 		(void)set_blessed(p_ptr, v, FALSE);
 		(void)set_oppose_acid(p_ptr, v, FALSE);
-		(void)set_oppose_elec(v, FALSE);
+		(void)set_oppose_elec(p_ptr, v, FALSE);
 		(void)set_oppose_fire(v, FALSE);
 		(void)set_oppose_cold(v, FALSE);
 		(void)set_oppose_pois(v, FALSE);

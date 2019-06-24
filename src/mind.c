@@ -1110,7 +1110,7 @@ static bool cast_mindcrafter_spell(int spell)
 		if (plev > 14) set_oppose_acid(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev > 19) set_oppose_fire((TIME_EFFECT)plev, FALSE);
 		if (plev > 24) set_oppose_cold((TIME_EFFECT)plev, FALSE);
-		if (plev > 29) set_oppose_elec((TIME_EFFECT)plev, FALSE);
+		if (plev > 29) set_oppose_elec(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev > 34) set_oppose_pois((TIME_EFFECT)plev, FALSE);
 		break;
 	case 7:

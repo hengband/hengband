@@ -2049,7 +2049,7 @@ static void process_world_aux_timeout(void)
 	/* Oppose Lightning */
 	if (p_ptr->oppose_elec)
 	{
-		(void)set_oppose_elec(p_ptr->oppose_elec - 1, TRUE);
+		(void)set_oppose_elec(p_ptr, p_ptr->oppose_elec - 1, TRUE);
 	}
 
 	/* Oppose Fire */
