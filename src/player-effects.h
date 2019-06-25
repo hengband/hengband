@@ -55,7 +55,7 @@ extern bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_de
 extern bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_stun(player_type *creature_ptr, TIME_EFFECT v);
-extern bool set_cut(TIME_EFFECT v);
+extern bool set_cut(player_type *creature_ptr, TIME_EFFECT v);
 extern bool set_food(TIME_EFFECT v);
 extern bool inc_stat(player_type *creature_ptr, int stat);
 extern bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent);

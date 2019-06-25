@@ -283,7 +283,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 			if (randint1(100 + o_ptr->pval * 2) > p_ptr->skill_sav)
 			{
 				if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"), -1);
-				else if (one_in_(5)) (void)set_cut(p_ptr->cut + 200);
+				else if (one_in_(5)) (void)set_cut(p_ptr,p_ptr->cut + 200);
 				else if (one_in_(4))
 				{
 					if (!p_ptr->free_act)

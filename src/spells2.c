@@ -919,7 +919,7 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	if (set_afraid(p_ptr, 0)) ident = TRUE;
 	if (hp_player(p_ptr, 50)) ident = TRUE;
 	if (set_stun(p_ptr, 0)) ident = TRUE;
-	if (set_cut(0)) ident = TRUE;
+	if (set_cut(p_ptr,0)) ident = TRUE;
 	return ident;
 }
 

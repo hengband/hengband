@@ -529,9 +529,9 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			monster_type    *m_ptr;
 
 			if (p_ptr->cut < 300)
-				set_cut(p_ptr->cut + 300);
+				set_cut(p_ptr,p_ptr->cut + 300);
 			else
-				set_cut(p_ptr->cut * 2);
+				set_cut(p_ptr,p_ptr->cut * 2);
 
 			for (dir = 0; dir < 8; dir++)
 			{

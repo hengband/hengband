@@ -659,7 +659,7 @@ static bool use_mane(int spell)
 		msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
 		(void)hp_player(p_ptr, plev*6);
 		(void)set_stun(p_ptr, 0);
-		(void)set_cut(0);
+		(void)set_cut(p_ptr,0);
 		break;
 	case MS_INVULNER:
 		msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));

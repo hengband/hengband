@@ -2092,7 +2092,7 @@ static void process_world_aux_timeout(void)
 		int adjust = adj_con_fix[p_ptr->stat_ind[A_CON]] + 1;
 
 		/* Apply some healing */
-		(void)set_stun(p_ptr->stun - adjust);
+		(void)set_stun(p_ptr, p_ptr->stun - adjust);
 	}
 
 	/* Cut */
@@ -2104,7 +2104,7 @@ static void process_world_aux_timeout(void)
 		if (p_ptr->cut > 1000) adjust = 0;
 
 		/* Apply some healing */
-		(void)set_cut(p_ptr->cut - adjust);
+		(void)set_cut(p_ptr,p_ptr->cut - adjust);
 	}
 }
 

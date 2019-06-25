@@ -181,7 +181,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				hp_player(p_ptr, damroll(dice, sides));
-				set_cut(0);
+				set_cut(p_ptr,0);
 				set_poisoned(p_ptr, 0);
 			}
 		}

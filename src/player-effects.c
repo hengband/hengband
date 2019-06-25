@@ -2678,29 +2678,29 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool set_stun(TIME_EFFECT v)
+bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
-	if (PRACE_IS_(p_ptr, RACE_GOLEM) || ((p_ptr->pclass == CLASS_BERSERKER) && (p_ptr->lev > 34))) v = 0;
+	if (creature_ptr->is_dead) return FALSE;
+	if (PRACE_IS_(creature_ptr, RACE_GOLEM) || ((creature_ptr->pclass == CLASS_BERSERKER) && (creature_ptr->lev > 34))) v = 0;
 
 	/* Knocked out */
-	if (p_ptr->stun > 100)
+	if (creature_ptr->stun > 100)
 	{
 		old_aux = 3;
 	}
 
 	/* Heavy stun */
-	else if (p_ptr->stun > 50)
+	else if (creature_ptr->stun > 50)
 	{
 		old_aux = 2;
 	}
 
 	/* Stun */
-	else if (p_ptr->stun > 0)
+	else if (creature_ptr->stun > 0)
 	{
 		old_aux = 1;
 	}
@@ -2757,31 +2757,31 @@ bool set_stun(TIME_EFFECT v)
 
 			if (one_in_(3))
 			{
-				if (!p_ptr->sustain_int) (void)do_dec_stat(p_ptr, A_INT);
-				if (!p_ptr->sustain_wis) (void)do_dec_stat(p_ptr, A_WIS);
+				if (!creature_ptr->sustain_int) (void)do_dec_stat(creature_ptr, A_INT);
+				if (!creature_ptr->sustain_wis) (void)do_dec_stat(creature_ptr, A_WIS);
 			}
 			else if (one_in_(2))
 			{
-				if (!p_ptr->sustain_int) (void)do_dec_stat(p_ptr, A_INT);
+				if (!creature_ptr->sustain_int) (void)do_dec_stat(creature_ptr, A_INT);
 			}
 			else
 			{
-				if (!p_ptr->sustain_wis) (void)do_dec_stat(p_ptr, A_WIS);
+				if (!creature_ptr->sustain_wis) (void)do_dec_stat(creature_ptr, A_WIS);
 			}
 		}
-		if (p_ptr->special_defense & KATA_MASK)
+		if (creature_ptr->special_defense & KATA_MASK)
 		{
 			msg_print(_("型が崩れた。", "Your posture gets loose."));
-			p_ptr->special_defense &= ~(KATA_MASK);
-			p_ptr->update |= (PU_BONUS);
-			p_ptr->update |= (PU_MONSTERS);
-			p_ptr->redraw |= (PR_STATE);
-			p_ptr->redraw |= (PR_STATUS);
-			p_ptr->action = ACTION_NONE;
+			creature_ptr->special_defense &= ~(KATA_MASK);
+			creature_ptr->update |= (PU_BONUS);
+			creature_ptr->update |= (PU_MONSTERS);
+			creature_ptr->redraw |= (PR_STATE);
+			creature_ptr->redraw |= (PR_STATUS);
+			creature_ptr->action = ACTION_NONE;
 		}
 
 		/* Sniper */
-		if (p_ptr->concent) reset_concentration(TRUE);
+		if (creature_ptr->concent) reset_concentration(TRUE);
 
 		/* Hex */
 		if (hex_spelling_any()) stop_hex_spell_all();
@@ -2807,16 +2807,16 @@ bool set_stun(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->stun = v;
+	creature_ptr->stun = v;
 
 	/* No change */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	/* Redraw the "stun" */
-	p_ptr->redraw |= (PR_STUN);
+	creature_ptr->redraw |= (PR_STUN);
 	handle_stuff();
 	return (TRUE);
 }
@@ -2829,59 +2829,59 @@ bool set_stun(TIME_EFFECT v)
  * @details
  * Note the special code to only notice "range" changes.
  */
-bool set_cut(TIME_EFFECT v)
+bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
-	if ((p_ptr->prace == RACE_GOLEM ||
-	    p_ptr->prace == RACE_SKELETON ||
-	    p_ptr->prace == RACE_SPECTRE ||
-		(p_ptr->prace == RACE_ZOMBIE && p_ptr->lev > 11)) &&
-	    !p_ptr->mimic_form)
+	if ((creature_ptr->prace == RACE_GOLEM ||
+	    creature_ptr->prace == RACE_SKELETON ||
+	    creature_ptr->prace == RACE_SPECTRE ||
+		(creature_ptr->prace == RACE_ZOMBIE && creature_ptr->lev > 11)) &&
+	    !creature_ptr->mimic_form)
 		v = 0;
 
 	/* Mortal wound */
-	if (p_ptr->cut > 1000)
+	if (creature_ptr->cut > 1000)
 	{
 		old_aux = 7;
 	}
 
 	/* Deep gash */
-	else if (p_ptr->cut > 200)
+	else if (creature_ptr->cut > 200)
 	{
 		old_aux = 6;
 	}
 
 	/* Severe cut */
-	else if (p_ptr->cut > 100)
+	else if (creature_ptr->cut > 100)
 	{
 		old_aux = 5;
 	}
 
 	/* Nasty cut */
-	else if (p_ptr->cut > 50)
+	else if (creature_ptr->cut > 50)
 	{
 		old_aux = 4;
 	}
 
 	/* Bad cut */
-	else if (p_ptr->cut > 25)
+	else if (creature_ptr->cut > 25)
 	{
 		old_aux = 3;
 	}
 
 	/* Light cut */
-	else if (p_ptr->cut > 10)
+	else if (creature_ptr->cut > 10)
 	{
 		old_aux = 2;
 	}
 
 	/* Graze */
-	else if (p_ptr->cut > 0)
+	else if (creature_ptr->cut > 0)
 	{
 		old_aux = 1;
 	}
@@ -2972,10 +2972,10 @@ bool set_cut(TIME_EFFECT v)
 
 		if (randint1(1000) < v || one_in_(16))
 		{
-			if (!p_ptr->sustain_chr)
+			if (!creature_ptr->sustain_chr)
 			{
 				msg_print(_("ひどい傷跡が残ってしまった。", "You have been horribly scarred."));
-				do_dec_stat(p_ptr, A_CHR);
+				do_dec_stat(creature_ptr, A_CHR);
 			}
 		}
 	}
@@ -2988,7 +2988,7 @@ bool set_cut(TIME_EFFECT v)
 		{
 			/* None */
 			case 0:
-			msg_format(_("やっと%s。", "You are no longer bleeding."), p_ptr->prace == RACE_ANDROID ? "怪我が直った" : "出血が止まった");
+			msg_format(_("やっと%s。", "You are no longer bleeding."), creature_ptr->prace == RACE_ANDROID ? "怪我が直った" : "出血が止まった");
 
 			if (disturb_state) disturb(FALSE, FALSE);
 			break;
@@ -2998,16 +2998,16 @@ bool set_cut(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->cut = v;
+	creature_ptr->cut = v;
 
 	/* No change */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	/* Redraw the "cut" */
-	p_ptr->redraw |= (PR_CUT);
+	creature_ptr->redraw |= (PR_CUT);
 	handle_stuff();
 	return (TRUE);
 }
@@ -3695,11 +3695,11 @@ void do_poly_wounds(void)
 	{
 		msg_print(_("新たな傷ができた！", "A new wound was created!"));
 		take_hit(DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"), -1);
-		set_cut(change);
+		set_cut(p_ptr,change);
 	}
 	else
 	{
-		set_cut(p_ptr->cut - (change / 2));
+		set_cut(p_ptr,p_ptr->cut - (change / 2));
 	}
 }
 

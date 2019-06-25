@@ -127,7 +127,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				set_cut(0);
+				set_cut(p_ptr,0);
 				set_poisoned(p_ptr, 0);
 				set_stun(p_ptr, 0);
 			}
@@ -270,7 +270,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				set_afraid(p_ptr, 0);
 				set_poisoned(p_ptr, 0);
 				set_stun(p_ptr, 0);
-				set_cut(0);
+				set_cut(p_ptr,0);
 			}
 		}
 		break;

@@ -3702,7 +3702,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 
 				/* Apply the cut */
-				if (cut_plus) (void)set_cut(p_ptr->cut + cut_plus);
+				if (cut_plus) (void)set_cut(p_ptr,p_ptr->cut + cut_plus);
 			}
 
 			/* Handle stun */

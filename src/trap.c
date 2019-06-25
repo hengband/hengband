@@ -305,7 +305,7 @@ static void hit_trap_pit(int trap_feat_type)
 		msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
 
 		dam = dam * 2;
-		(void)set_cut(p_ptr->cut + randint1(dam));
+		(void)set_cut(p_ptr,p_ptr->cut + randint1(dam));
 
 		if (trap_feat_type == TRAP_POISON_PIT) {
 			if (p_ptr->resist_pois || IS_OPPOSE_POIS())
