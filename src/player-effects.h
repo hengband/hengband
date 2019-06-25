@@ -52,7 +52,7 @@ extern bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFF
 extern bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
-extern bool set_oppose_cold(TIME_EFFECT v, bool do_dec);
+extern bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_oppose_pois(TIME_EFFECT v, bool do_dec);
 extern bool set_stun(TIME_EFFECT v);
 extern bool set_cut(TIME_EFFECT v);

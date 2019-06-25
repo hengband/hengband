@@ -1041,7 +1041,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_oppose_acid(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_elec(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_fire(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_cold(randint1(50) + 50, FALSE);
+		(void)set_oppose_cold(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_pois(randint1(50) + 50, FALSE);
 		break;
 	}
@@ -1063,7 +1063,7 @@ bool activate_artifact(object_type *o_ptr)
 		fire_breath(GF_COLD, dir, 200, 2);
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 		{
-			(void)set_oppose_cold(randint1(20) + 20, FALSE);
+			(void)set_oppose_cold(p_ptr, randint1(20) + 20, FALSE);
 		}
 		break;
 	}
@@ -1338,7 +1338,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_oppose_acid(p_ptr, randint1(40) + 40, FALSE);
 		(void)set_oppose_elec(p_ptr, randint1(40) + 40, FALSE);
 		(void)set_oppose_fire(p_ptr, randint1(40) + 40, FALSE);
-		(void)set_oppose_cold(randint1(40) + 40, FALSE);
+		(void)set_oppose_cold(p_ptr, randint1(40) + 40, FALSE);
 		(void)set_oppose_pois(randint1(40) + 40, FALSE);
 		break;
 	}
@@ -1414,7 +1414,7 @@ bool activate_artifact(object_type *o_ptr)
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 100, 2);
 		}
-		(void)set_oppose_cold(randint1(20) + 20, FALSE);
+		(void)set_oppose_cold(p_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
@@ -1691,7 +1691,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_oppose_acid(p_ptr, v, FALSE);
 		(void)set_oppose_elec(p_ptr, v, FALSE);
 		(void)set_oppose_fire(p_ptr, v, FALSE);
-		(void)set_oppose_cold(v, FALSE);
+		(void)set_oppose_cold(p_ptr, v, FALSE);
 		(void)set_oppose_pois(v, FALSE);
 		(void)set_ultimate_res(v, FALSE);
 		break;

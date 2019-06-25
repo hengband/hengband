@@ -2244,7 +2244,7 @@ bool mutation_power_aux(int power)
 				}
 				if (randint0(2) < num)
 				{
-					(void)set_oppose_cold(dur, FALSE);
+					(void)set_oppose_cold(p_ptr, dur, FALSE);
 					num--;
 				}
 				if (num)

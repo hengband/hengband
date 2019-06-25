@@ -2061,7 +2061,7 @@ static void process_world_aux_timeout(void)
 	/* Oppose Cold */
 	if (p_ptr->oppose_cold)
 	{
-		(void)set_oppose_cold(p_ptr->oppose_cold - 1, TRUE);
+		(void)set_oppose_cold(p_ptr, p_ptr->oppose_cold - 1, TRUE);
 	}
 
 	/* Oppose Poison */

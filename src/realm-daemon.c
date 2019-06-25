@@ -344,7 +344,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				TIME_EFFECT dur = randint1(base) + base;
 
 				set_oppose_fire(p_ptr, dur, FALSE);
-				set_oppose_cold(dur, FALSE);
+				set_oppose_cold(p_ptr, dur, FALSE);
 				set_tim_sh_fire(p_ptr, dur, FALSE);
 				set_afraid(p_ptr, 0);
 				break;

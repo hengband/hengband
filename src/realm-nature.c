@@ -161,7 +161,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_cold(randint1(base) + base, FALSE);
+				set_oppose_cold(p_ptr, randint1(base) + base, FALSE);
 				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
 				set_oppose_elec(p_ptr, randint1(base) + base, FALSE);
 			}
@@ -364,7 +364,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				set_oppose_acid(p_ptr, randint1(base) + base, FALSE);
 				set_oppose_elec(p_ptr, randint1(base) + base, FALSE);
 				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_cold(randint1(base) + base, FALSE);
+				set_oppose_cold(p_ptr, randint1(base) + base, FALSE);
 				set_oppose_pois(randint1(base) + base, FALSE);
 			}
 		}
