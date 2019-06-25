@@ -2055,7 +2055,7 @@ static void process_world_aux_timeout(void)
 	/* Oppose Fire */
 	if (p_ptr->oppose_fire)
 	{
-		(void)set_oppose_fire(p_ptr->oppose_fire - 1, TRUE);
+		(void)set_oppose_fire(p_ptr, p_ptr->oppose_fire - 1, TRUE);
 	}
 
 	/* Oppose Cold */

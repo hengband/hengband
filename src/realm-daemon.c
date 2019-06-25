@@ -95,7 +95,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_fire(randint1(base) + base, FALSE);
+				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -343,7 +343,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				TIME_EFFECT dur = randint1(base) + base;
 
-				set_oppose_fire(dur, FALSE);
+				set_oppose_fire(p_ptr, dur, FALSE);
 				set_oppose_cold(dur, FALSE);
 				set_tim_sh_fire(p_ptr, dur, FALSE);
 				set_afraid(p_ptr, 0);

@@ -1108,7 +1108,7 @@ static bool cast_mindcrafter_spell(int spell)
 		/* Character Armour */
 		set_shield(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev > 14) set_oppose_acid(p_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev > 19) set_oppose_fire((TIME_EFFECT)plev, FALSE);
+		if (plev > 19) set_oppose_fire(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev > 24) set_oppose_cold((TIME_EFFECT)plev, FALSE);
 		if (plev > 29) set_oppose_elec(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev > 34) set_oppose_pois((TIME_EFFECT)plev, FALSE);
@@ -1606,7 +1606,7 @@ static bool cast_ninja_spell(int spell)
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
 		teleport_player(30, 0L);
-		set_oppose_fire((TIME_EFFECT)plev, FALSE);
+		set_oppose_fire(p_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 10:
 		return rush_attack(NULL);

@@ -2239,7 +2239,7 @@ bool mutation_power_aux(int power)
 				}
 				if (randint0(3) < num)
 				{
-					(void)set_oppose_fire(dur, FALSE);
+					(void)set_oppose_fire(p_ptr, dur, FALSE);
 					num--;
 				}
 				if (randint0(2) < num)

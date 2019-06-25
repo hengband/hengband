@@ -323,7 +323,7 @@ void dispel_player(void)
 	(void)set_resist_magic(p_ptr, 0, TRUE);
 	(void)set_oppose_acid(p_ptr, 0, TRUE);
 	(void)set_oppose_elec(p_ptr, 0, TRUE);
-	(void)set_oppose_fire(0, TRUE);
+	(void)set_oppose_fire(p_ptr, 0, TRUE);
 	(void)set_oppose_cold(0, TRUE);
 	(void)set_oppose_pois(0, TRUE);
 	(void)set_ultimate_res(0, TRUE);
@@ -389,7 +389,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, IDX p, bool do_dec)
 		if (creature_ptr->tim_mimic)
 		{
 			msg_print(_("変身が解けた。", "You are no longer transformed."));
-			if (creature_ptr->mimic_form == MIMIC_DEMON) set_oppose_fire(0, TRUE);
+			if (creature_ptr->mimic_form == MIMIC_DEMON) set_oppose_fire(p_ptr, 0, TRUE);
 			creature_ptr->mimic_form=0;
 			notice = TRUE;
 			p = 0;
@@ -2528,20 +2528,20 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
+bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
-	if ((PRACE_IS_(p_ptr, RACE_DEMON) && (p_ptr->lev > 44)) || (p_ptr->mimic_form == MIMIC_DEMON)) v = 1;
+	if ((PRACE_IS_(creature_ptr, RACE_DEMON) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON)) v = 1;
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->oppose_fire && !do_dec)
+		if (creature_ptr->oppose_fire && !do_dec)
 		{
-			if (p_ptr->oppose_fire > v) return FALSE;
+			if (creature_ptr->oppose_fire > v) return FALSE;
 		}
 		else if (!IS_OPPOSE_FIRE())
 		{
@@ -2553,7 +2553,7 @@ bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->oppose_fire && !music_singing(MUSIC_RESIST) && !(p_ptr->special_defense & KATA_MUSOU))
+		if (creature_ptr->oppose_fire && !music_singing(MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
 		{
 			msg_print(_("火への耐性が薄れた気がする。", "You feel less resistant to fire."));
 			notice = TRUE;
@@ -2561,11 +2561,11 @@ bool set_oppose_fire(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->oppose_fire = v;
+	creature_ptr->oppose_fire = v;
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
 	handle_stuff();

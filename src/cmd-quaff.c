@@ -291,7 +291,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_RESIST_HEAT:
-			if (set_oppose_fire(p_ptr->oppose_fire + randint1(10) + 10, FALSE))
+			if (set_oppose_fire(p_ptr, p_ptr->oppose_fire + randint1(10) + 10, FALSE))
 			{
 				ident = TRUE;
 			}
@@ -451,7 +451,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 		case SV_POTION_RESISTANCE:
 			(void)set_oppose_acid(p_ptr, p_ptr->oppose_acid + randint1(20) + 20, FALSE);
 			(void)set_oppose_elec(p_ptr, p_ptr->oppose_elec + randint1(20) + 20, FALSE);
-			(void)set_oppose_fire(p_ptr->oppose_fire + randint1(20) + 20, FALSE);
+			(void)set_oppose_fire(p_ptr, p_ptr->oppose_fire + randint1(20) + 20, FALSE);
 			(void)set_oppose_cold(p_ptr->oppose_cold + randint1(20) + 20, FALSE);
 			(void)set_oppose_pois(p_ptr->oppose_pois + randint1(20) + 20, FALSE);
 			ident = TRUE;
