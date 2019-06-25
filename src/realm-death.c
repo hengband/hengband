@@ -330,7 +330,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 					/* Not gorged already */
 					if (p_ptr->food < PY_FOOD_MAX)
-						set_food(dam >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dam);
+						set_food(p_ptr, dam >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dam);
 				}
 			}
 		}

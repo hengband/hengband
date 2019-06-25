@@ -142,7 +142,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			      (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)))
 			{
 				/* Only living creatures get thirsty */
-				(void)set_food(PY_FOOD_STARVE - 1);
+				(void)set_food(p_ptr, PY_FOOD_STARVE - 1);
 			}
 
 			(void)set_poisoned(p_ptr, 0);
@@ -545,7 +545,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 		switch (p_ptr->prace)
 		{
 			case RACE_VAMPIRE:
-				(void)set_food(p_ptr->food + (q_ptr->pval / 10));
+				(void)set_food(p_ptr, p_ptr->food + (q_ptr->pval / 10));
 				break;
 			case RACE_SKELETON:
 				/* Do nothing */
@@ -554,37 +554,37 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			case RACE_ZOMBIE:
 			case RACE_DEMON:
 			case RACE_SPECTRE:
-				set_food(p_ptr->food + ((q_ptr->pval) / 20));
+				set_food(p_ptr, p_ptr->food + ((q_ptr->pval) / 20));
 				break;
 			case RACE_ANDROID:
 				if (q_ptr->tval == TV_FLASK)
 				{
 					msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
-					set_food(p_ptr->food + 5000);
+					set_food(p_ptr, p_ptr->food + 5000);
 				}
 				else
 				{
-					set_food(p_ptr->food + ((q_ptr->pval) / 20));
+					set_food(p_ptr, p_ptr->food + ((q_ptr->pval) / 20));
 				}
 				break;
 			case RACE_ENT:
 				msg_print(_("水分を取り込んだ。", "You are moistened."));
-				set_food(MIN(p_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
+				set_food(p_ptr, MIN(p_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
 				break;
 			default:
-				(void)set_food(p_ptr->food + q_ptr->pval);
+				(void)set_food(p_ptr, p_ptr->food + q_ptr->pval);
 				break;
 		}
 		break;
 	case MIMIC_DEMON:
 	case MIMIC_DEMON_LORD:
-		set_food(p_ptr->food + ((q_ptr->pval) / 20));
+		set_food(p_ptr, p_ptr->food + ((q_ptr->pval) / 20));
 		break;
 	case MIMIC_VAMPIRE:
-		(void)set_food(p_ptr->food + (q_ptr->pval / 10));
+		(void)set_food(p_ptr, p_ptr->food + (q_ptr->pval / 10));
 		break;
 	default:
-		(void)set_food(p_ptr->food + q_ptr->pval);
+		(void)set_food(p_ptr, p_ptr->food + q_ptr->pval);
 		break;
 	}
 }

@@ -333,7 +333,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_SATISFY_HUNGER:
 		{
-			if (set_food(PY_FOOD_MAX - 1)) ident = TRUE;
+			if (set_food(p_ptr, PY_FOOD_MAX - 1)) ident = TRUE;
 			break;
 		}
 

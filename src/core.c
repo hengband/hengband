@@ -1272,7 +1272,7 @@ static void process_world_aux_digestion(void)
 		if (p_ptr->food >= PY_FOOD_MAX)
 		{
 			/* Digest a lot of food */
-			(void)set_food(p_ptr->food - 100);
+			(void)set_food(p_ptr, p_ptr->food - 100);
 		}
 
 		/* Digest normally -- Every 50 game turns */
@@ -1299,7 +1299,7 @@ static void process_world_aux_digestion(void)
 			if (digestion > 100) digestion = 100;
 
 			/* Digest some food */
-			(void)set_food(p_ptr->food - digestion);
+			(void)set_food(p_ptr, p_ptr->food - digestion);
 		}
 
 
@@ -2473,7 +2473,7 @@ static void process_world_aux_mutation(void)
 		disturb(FALSE, TRUE);
 		msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
 		msg_print(NULL);
-		set_food(PY_FOOD_WEAK);
+		set_food(p_ptr, PY_FOOD_WEAK);
 		if (music_singing_any()) stop_singing(p_ptr);
 		if (hex_spelling_any()) stop_hex_spell_all();
 	}

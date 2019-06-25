@@ -3893,7 +3893,7 @@ bool_hack vampirism(void)
 		/* But if we ARE Gorged,  it won't cure us */
 		dummy = p_ptr->food + MIN(5000, 100 * dummy);
 		if (p_ptr->food < PY_FOOD_MAX)   /* Not gorged already */
-			(void)set_food(dummy >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dummy);
+			(void)set_food(p_ptr, dummy >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dummy);
 	}
 	else
 		msg_print(_("げぇ！ひどい味だ。", "Yechh. That tastes foul."));

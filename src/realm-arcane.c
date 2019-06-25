@@ -403,7 +403,7 @@ concptr do_arcane_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				set_food(PY_FOOD_MAX - 1);
+				set_food(p_ptr, PY_FOOD_MAX - 1);
 			}
 		}
 		break;

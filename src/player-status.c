@@ -5843,7 +5843,7 @@ void cheat_death(player_type *creature_ptr)
 	creature_ptr->is_dead = FALSE;
 
 	/* Hack -- Prevent starvation */
-	(void)set_food(PY_FOOD_MAX - 1);
+	(void)set_food(p_ptr, PY_FOOD_MAX - 1);
 
 	current_floor_ptr->dun_level = 0;
 	creature_ptr->inside_arena = FALSE;

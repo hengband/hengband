@@ -2016,7 +2016,7 @@ static bool inn_comm(int cmd)
 				return FALSE;
 			}
 			msg_print(_("バーテンはいくらかの食べ物とビールをくれた。", "The barkeep gives you some gruel and a beer."));
-			(void)set_food(PY_FOOD_MAX - 1);
+			(void)set_food(p_ptr, PY_FOOD_MAX - 1);
 			break;
 
 		case BACT_REST: /* Rest for the night */

@@ -1500,7 +1500,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_SATIATE:
 	{
-		(void)set_food(PY_FOOD_MAX - 1);
+		(void)set_food(p_ptr, PY_FOOD_MAX - 1);
 		break;
 	}
 

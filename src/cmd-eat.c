@@ -338,7 +338,7 @@ void exe_eat_food(INVENTORY_IDX item)
 	if (PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
 		/* Reduced nutritional benefit */
-		(void)set_food(p_ptr->food + (o_ptr->pval / 10));
+		(void)set_food(p_ptr, p_ptr->food + (o_ptr->pval / 10));
 		msg_print(_("あなたのような者にとって食糧など僅かな栄養にしかならない。",
 			"Mere victuals hold scant sustenance for a being such as yourself."));
 
@@ -378,7 +378,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		o_ptr->pval--;
 
 		/* Eat a charge */
-		set_food(p_ptr->food + 5000);
+		set_food(p_ptr, p_ptr->food + 5000);
 
 		/* XXX Hack -- unstack if necessary */
 		if (o_ptr->tval == TV_STAFF &&
@@ -429,7 +429,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
-		(void)set_food(PY_FOOD_MAX - 1);
+		(void)set_food(p_ptr, PY_FOOD_MAX - 1);
 	}
 	else if (PRACE_IS_(p_ptr, RACE_SKELETON))
 	{
@@ -438,7 +438,7 @@ void exe_eat_food(INVENTORY_IDX item)
 			(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
 		{
 			msg_print(_("あなたは骨で自分の体を補った。", "Your body absorbs the bone."));
-			set_food(p_ptr->food + 5000);
+			set_food(p_ptr, p_ptr->food + 5000);
 		}
 		else
 #endif
@@ -469,17 +469,17 @@ void exe_eat_food(INVENTORY_IDX item)
 		(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
 	{
 		msg_print(_("生者の食物はあなたにとってほとんど栄養にならない。", "The food of mortals is poor sustenance for you."));
-		set_food(p_ptr->food + ((o_ptr->pval) / 20));
+		set_food(p_ptr, p_ptr->food + ((o_ptr->pval) / 20));
 	}
 	else if (o_ptr->tval == TV_FOOD && o_ptr->sval == SV_FOOD_WAYBREAD)
 	{
 		/* Waybread is always fully satisfying. */
-		set_food(MAX(p_ptr->food, PY_FOOD_MAX - 1));
+		set_food(p_ptr, MAX(p_ptr->food, PY_FOOD_MAX - 1));
 	}
 	else
 	{
 		/* Food can feed the player */
-		(void)set_food(p_ptr->food + o_ptr->pval);
+		(void)set_food(p_ptr, p_ptr->food + o_ptr->pval);
 	}
 
 	/* Destroy a food in the pack */

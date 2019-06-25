@@ -3038,7 +3038,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
  * game turns, or 500/(100/5) = 25 player turns (if nothing else is
  * affecting the player speed).\n
  */
-bool set_food(TIME_EFFECT v)
+bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 {
 	int old_aux, new_aux;
 
@@ -3046,31 +3046,31 @@ bool set_food(TIME_EFFECT v)
 	v = (v > 20000) ? 20000 : (v < 0) ? 0 : v;
 
 	/* Fainting / Starving */
-	if (p_ptr->food < PY_FOOD_FAINT)
+	if (creature_ptr->food < PY_FOOD_FAINT)
 	{
 		old_aux = 0;
 	}
 
 	/* Weak */
-	else if (p_ptr->food < PY_FOOD_WEAK)
+	else if (creature_ptr->food < PY_FOOD_WEAK)
 	{
 		old_aux = 1;
 	}
 
 	/* Hungry */
-	else if (p_ptr->food < PY_FOOD_ALERT)
+	else if (creature_ptr->food < PY_FOOD_ALERT)
 	{
 		old_aux = 2;
 	}
 
 	/* Normal */
-	else if (p_ptr->food < PY_FOOD_FULL)
+	else if (creature_ptr->food < PY_FOOD_FULL)
 	{
 		old_aux = 3;
 	}
 
 	/* Full */
-	else if (p_ptr->food < PY_FOOD_MAX)
+	else if (creature_ptr->food < PY_FOOD_MAX)
 	{
 		old_aux = 4;
 	}
@@ -3180,7 +3180,7 @@ bool set_food(TIME_EFFECT v)
 			case 4: msg_print(_("やっとお腹がきつくなくなった。", "You are no longer gorged.")); break;
 		}
 
-		if (p_ptr->wild_mode && (new_aux < 2))
+		if (creature_ptr->wild_mode && (new_aux < 2))
 		{
 			change_wild_mode(FALSE);
 		}
@@ -3190,16 +3190,16 @@ bool set_food(TIME_EFFECT v)
 	}
 
 	/* Use the value */
-	p_ptr->food = v;
+	creature_ptr->food = v;
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	/* Redraw hunger */
-	p_ptr->redraw |= (PR_HUNGER);
+	creature_ptr->redraw |= (PR_HUNGER);
 	handle_stuff();
 	return (TRUE);
 }
