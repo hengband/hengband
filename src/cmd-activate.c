@@ -1042,7 +1042,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_oppose_elec(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_fire(p_ptr, randint1(50) + 50, FALSE);
 		(void)set_oppose_cold(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_pois(randint1(50) + 50, FALSE);
+		(void)set_oppose_pois(p_ptr, randint1(50) + 50, FALSE);
 		break;
 	}
 
@@ -1339,7 +1339,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_oppose_elec(p_ptr, randint1(40) + 40, FALSE);
 		(void)set_oppose_fire(p_ptr, randint1(40) + 40, FALSE);
 		(void)set_oppose_cold(p_ptr, randint1(40) + 40, FALSE);
-		(void)set_oppose_pois(randint1(40) + 40, FALSE);
+		(void)set_oppose_pois(p_ptr, randint1(40) + 40, FALSE);
 		break;
 	}
 
@@ -1433,7 +1433,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_RESIST_POIS:
 	{
 		msg_format(_("%sが緑に輝いた...", "The %s grows green."), name);
-		(void)set_oppose_pois(randint1(20) + 20, FALSE);
+		(void)set_oppose_pois(p_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
@@ -1692,7 +1692,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_oppose_elec(p_ptr, v, FALSE);
 		(void)set_oppose_fire(p_ptr, v, FALSE);
 		(void)set_oppose_cold(p_ptr, v, FALSE);
-		(void)set_oppose_pois(v, FALSE);
+		(void)set_oppose_pois(p_ptr, v, FALSE);
 		(void)set_ultimate_res(v, FALSE);
 		break;
 	}

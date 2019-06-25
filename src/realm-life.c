@@ -476,7 +476,7 @@ concptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				set_oppose_elec(p_ptr, v, FALSE);
 				set_oppose_fire(p_ptr, v, FALSE);
 				set_oppose_cold(p_ptr, v, FALSE);
-				set_oppose_pois(v, FALSE);
+				set_oppose_pois(p_ptr, v, FALSE);
 				set_ultimate_res(v, FALSE);
 			}
 		}

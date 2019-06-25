@@ -1747,7 +1747,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 										set_confused(p_ptr, p_ptr->confused + 3 + randint1(dam));
 										break;
 									case 2:
-										set_stun(p_ptr->stun + randint1(dam));
+										set_stun(p_ptr, p_ptr->stun + randint1(dam));
 										break;
 									case 3:
 									{
@@ -1939,7 +1939,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 							switch (randint1(4))
 							{
 								case 1:
-									set_stun(p_ptr->stun + dam / 2);
+									set_stun(p_ptr, p_ptr->stun + dam / 2);
 									break;
 								case 2:
 									set_confused(p_ptr, p_ptr->confused + dam / 2);
@@ -4256,7 +4256,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
 				int plus_stun = (randint1((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
-				(void)set_stun(p_ptr->stun + plus_stun);
+				(void)set_stun(p_ptr, p_ptr->stun + plus_stun);
 			}
 
 			if (!(p_ptr->resist_fire || IS_OPPOSE_FIRE() || p_ptr->immune_fire))
@@ -4302,7 +4302,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				if (!p_ptr->resist_sound && !p_ptr->resist_water)
 				{
-					set_stun(p_ptr->stun + randint1(40));
+					set_stun(p_ptr, p_ptr->stun + randint1(40));
 				}
 				if (!p_ptr->resist_conf && !p_ptr->resist_water)
 				{
@@ -4394,7 +4394,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			else if (!CHECK_MULTISHADOW())
 			{
 				int plus_stun = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
-				(void)set_stun(p_ptr->stun + plus_stun);
+				(void)set_stun(p_ptr, p_ptr->stun + plus_stun);
 			}
 
 			if (!p_ptr->resist_sound || one_in_(13))
@@ -4460,7 +4460,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			if (fuzzy) msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
-				(void)set_stun(p_ptr->stun + randint1(20));
+				(void)set_stun(p_ptr, p_ptr->stun + randint1(20));
 			}
 			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
 			break;
@@ -4473,7 +4473,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			if (fuzzy) msg_print(_("爆発があった！", "There is an explosion!"));
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
-				(void)set_stun(p_ptr->stun + randint1(20));
+				(void)set_stun(p_ptr, p_ptr->stun + randint1(20));
 			}
 
 			if (p_ptr->resist_shard)
@@ -4638,7 +4638,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				if (!(p_ptr->resist_sound || p_ptr->levitation))
 				{
 					int plus_stun = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
-					(void)set_stun(p_ptr->stun + plus_stun);
+					(void)set_stun(p_ptr, p_ptr->stun + plus_stun);
 				}
 			}
 			if (p_ptr->levitation)
@@ -4751,7 +4751,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				}
 				if (!p_ptr->resist_sound)
 				{
-					(void)set_stun(p_ptr->stun + randint1(15));
+					(void)set_stun(p_ptr, p_ptr->stun + randint1(15));
 				}
 
 				if ((!(p_ptr->resist_cold || IS_OPPOSE_COLD())) || one_in_(12))

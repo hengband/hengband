@@ -281,7 +281,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 	(void)set_blind(p_ptr, 0);
 	(void)set_confused(p_ptr, 0);
 	(void)set_image(p_ptr, 0);
-	(void)set_stun(0);
+	(void)set_stun(p_ptr, 0);
 	(void)set_cut(0);
 	(void)restore_all_status();
 	(void)set_shero(p_ptr, 0, TRUE);
@@ -337,7 +337,7 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(p_ptr, 0)) ident = TRUE;
 	if (set_poisoned(p_ptr, 0)) ident = TRUE;
-	if (set_stun(0)) ident = TRUE;
+	if (set_stun(p_ptr, 0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
 	if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
 	return ident;
@@ -350,7 +350,7 @@ bool_hack true_healing(HIT_POINT pow)
 	if (set_blind(p_ptr, 0)) ident = TRUE;
 	if (set_confused(p_ptr, 0)) ident = TRUE;
 	if (set_poisoned(p_ptr, 0)) ident = TRUE;
-	if (set_stun(0)) ident = TRUE;
+	if (set_stun(p_ptr, 0)) ident = TRUE;
 	if (set_cut(0)) ident = TRUE;
 	if (set_image(p_ptr, 0)) ident = TRUE;
 	return ident;

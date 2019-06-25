@@ -325,7 +325,7 @@ void dispel_player(void)
 	(void)set_oppose_elec(p_ptr, 0, TRUE);
 	(void)set_oppose_fire(p_ptr, 0, TRUE);
 	(void)set_oppose_cold(p_ptr, 0, TRUE);
-	(void)set_oppose_pois(0, TRUE);
+	(void)set_oppose_pois(p_ptr, 0, TRUE);
 	(void)set_ultimate_res(0, TRUE);
 	(void)set_mimic(p_ptr, 0, 0, TRUE);
 	(void)set_ele_attack(p_ptr, 0, 0);
@@ -2627,20 +2627,20 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
+bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if ((p_ptr->pclass == CLASS_NINJA) && (p_ptr->lev > 44)) v = 1;
-	if (p_ptr->is_dead) return FALSE;
+	if ((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44)) v = 1;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->oppose_pois && !do_dec)
+		if (creature_ptr->oppose_pois && !do_dec)
 		{
-			if (p_ptr->oppose_pois > v) return FALSE;
+			if (creature_ptr->oppose_pois > v) return FALSE;
 		}
 		else if (!IS_OPPOSE_POIS())
 		{
@@ -2652,7 +2652,7 @@ bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->oppose_pois && !music_singing(MUSIC_RESIST) && !(p_ptr->special_defense & KATA_MUSOU))
+		if (creature_ptr->oppose_pois && !music_singing(MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
 		{
 			msg_print(_("毒への耐性が薄れた気がする。", "You feel less resistant to poison."));
 			notice = TRUE;
@@ -2660,11 +2660,11 @@ bool set_oppose_pois(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->oppose_pois = v;
+	creature_ptr->oppose_pois = v;
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
 	handle_stuff();

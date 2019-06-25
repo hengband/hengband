@@ -875,14 +875,14 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			{
 				msg_print(_("岩石があなたに直撃した!", "You are bashed by rubble!"));
 				damage = damroll(10, 4);
-				(void)set_stun(p_ptr->stun + randint1(50));
+				(void)set_stun(p_ptr, p_ptr->stun + randint1(50));
 				break;
 			}
 			case 3:
 			{
 				msg_print(_("あなたは床と壁との間に挟まれてしまった！", "You are crushed between the floor and ceiling!"));
 				damage = damroll(10, 4);
-				(void)set_stun(p_ptr->stun + randint1(50));
+				(void)set_stun(p_ptr, p_ptr->stun + randint1(50));
 				break;
 			}
 			}

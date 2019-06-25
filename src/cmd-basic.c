@@ -2309,7 +2309,7 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 	{
 		msg_print(_("射撃の反動が体を襲った。", "A reactionary of shooting attacked you. "));
 		(void)set_slow(p_ptr, p_ptr->slow + randint0(7) + 7, FALSE);
-		(void)set_stun(p_ptr->stun + randint1(25));
+		(void)set_stun(p_ptr, p_ptr->stun + randint1(25));
 	}
 }
 

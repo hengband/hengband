@@ -2067,7 +2067,7 @@ static void process_world_aux_timeout(void)
 	/* Oppose Poison */
 	if (p_ptr->oppose_pois)
 	{
-		(void)set_oppose_pois(p_ptr->oppose_pois - 1, TRUE);
+		(void)set_oppose_pois(p_ptr, p_ptr->oppose_pois - 1, TRUE);
 	}
 
 	if (p_ptr->ult_res)

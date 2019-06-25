@@ -290,7 +290,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 						(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 2 +
 							randint0(6));
 					else
-						(void)set_stun(p_ptr->stun + 10 +
+						(void)set_stun(p_ptr, p_ptr->stun + 10 +
 							randint0(100));
 				}
 				else if (one_in_(3)) apply_disenchant(0);

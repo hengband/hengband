@@ -2249,7 +2249,7 @@ bool mutation_power_aux(int power)
 				}
 				if (num)
 				{
-					(void)set_oppose_pois(dur, FALSE);
+					(void)set_oppose_pois(p_ptr, dur, FALSE);
 					num--;
 				}
 			}

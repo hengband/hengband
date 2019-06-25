@@ -3654,7 +3654,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (set_stun(p_ptr->stun + 10 + randint1(r_ptr->level / 4)))
+						if (set_stun(p_ptr, p_ptr->stun + 10 + randint1(r_ptr->level / 4)))
 						{
 							obvious = TRUE;
 						}
@@ -3727,7 +3727,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 
 				/* Apply the stun */
-				if (stun_plus) (void)set_stun(p_ptr->stun + stun_plus);
+				if (stun_plus) (void)set_stun(p_ptr, p_ptr->stun + stun_plus);
 			}
 
 			if (explode)

@@ -129,7 +129,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				set_cut(0);
 				set_poisoned(p_ptr, 0);
-				set_stun(0);
+				set_stun(p_ptr, 0);
 			}
 		}
 		break;
@@ -269,7 +269,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				hp_player(p_ptr, heal);
 				set_afraid(p_ptr, 0);
 				set_poisoned(p_ptr, 0);
-				set_stun(0);
+				set_stun(p_ptr, 0);
 				set_cut(0);
 			}
 		}
