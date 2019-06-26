@@ -5582,7 +5582,7 @@ void play_game(bool new_game)
 	/* Hack -- Enforce "delayed death" */
 	if (p_ptr->chp < 0) p_ptr->is_dead = TRUE;
 
-	if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
+	if (p_ptr->prace == RACE_ANDROID) calc_android_exp(p_ptr);
 
 	if (new_game && ((p_ptr->pclass == CLASS_CAVALRY) || (p_ptr->pclass == CLASS_BEASTMASTER)))
 	{

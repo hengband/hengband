@@ -618,7 +618,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			if (!success)
 				msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 		}
-		calc_android_exp();
+		calc_android_exp(p_ptr);
 		return;
 	}
 
@@ -1764,7 +1764,7 @@ bool activate_artifact(object_type *o_ptr)
 		if (o_ptr->name1 != ART_BLOOD) return FALSE;
 		msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
 		get_bloody_moon_flags(o_ptr);
-		if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
+		if (p_ptr->prace == RACE_ANDROID) calc_android_exp(p_ptr);
 		p_ptr->update |= (PU_BONUS | PU_HP);
 		break;
 	}

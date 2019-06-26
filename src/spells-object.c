@@ -771,7 +771,7 @@ bool rustproof(void)
 	msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "are" : "is"));
 #endif
 
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 	return TRUE;
 }
 
@@ -1082,7 +1082,7 @@ bool bless_weapon(void)
 
 	p_ptr->update |= (PU_BONUS);
 	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	return TRUE;
 }
@@ -1136,7 +1136,7 @@ bool pulish_shield(void)
 		msg_print(_("失敗した。", "Failed."));
 		chg_virtue(V_ENCHANT, -2);
 	}
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	return FALSE;
 }
@@ -1265,7 +1265,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	/* Success */
 	return (TRUE);
@@ -1325,7 +1325,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	else
 		chg_virtue(V_ENCHANT, 1);
 
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	/* Something happened */
 	return (TRUE);
@@ -1473,5 +1473,5 @@ void brand_weapon(int brand_type)
 		msg_print(_("属性付加に失敗した。", "The Branding failed."));
 		chg_virtue(V_ENCHANT, -2);
 	}
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 }

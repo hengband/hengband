@@ -2821,7 +2821,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	else if (equiped_item)
 	{
 		kamaenaoshi(item);
-		calc_android_exp();
+		calc_android_exp(p_ptr);
 	}
 
 	if (do_drop)

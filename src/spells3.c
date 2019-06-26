@@ -1018,7 +1018,7 @@ bool apply_disenchant(BIT_FLAGS mode)
 		p_ptr->update |= (PU_BONUS);
 		p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
-		calc_android_exp();
+		calc_android_exp(p_ptr);
 	}
 
 	return (TRUE);
@@ -1672,7 +1672,7 @@ bool artifact_scroll(void)
 		chg_virtue(V_ENCHANT, 1);
 	}
 
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	/* Something happened */
 	return (TRUE);
@@ -1831,7 +1831,7 @@ bool mundane_spell(bool only_equip)
 		o_ptr->inscription = inscription;
 		if (item >= 0) p_ptr->total_weight += (o_ptr->weight - weight);
 	}
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	/* Something happened */
 	return TRUE;

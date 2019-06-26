@@ -408,7 +408,7 @@ static bool acid_minus_ac(void)
 	p_ptr->update |= (PU_BONUS);
 	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	/* Item was damaged */
 	return (TRUE);

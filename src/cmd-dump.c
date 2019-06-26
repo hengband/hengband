@@ -1014,7 +1014,7 @@ void do_cmd_redraw(void)
 
 	handle_stuff();
 
-	if (p_ptr->prace == RACE_ANDROID) calc_android_exp();
+	if (p_ptr->prace == RACE_ANDROID) calc_android_exp(p_ptr);
 
 
 	/* Redraw every window */

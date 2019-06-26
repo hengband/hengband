@@ -3131,7 +3131,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	o_ptr->discount = 99;
 
 	p_ptr->total_weight += o_ptr->weight;
-	calc_android_exp();
+	calc_android_exp(p_ptr);
 
 	/* Decrease material object */
 	inven_item_increase(mater, -1);
@@ -3254,7 +3254,7 @@ static bool enchant_item(PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_C
 		/* Charge the money */
 		p_ptr->au -= (cost * o_ptr->number);
 
-		if (item >= INVEN_RARM) calc_android_exp();
+		if (item >= INVEN_RARM) calc_android_exp(p_ptr);
 
 		/* Something happened */
 		return (TRUE);

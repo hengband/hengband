@@ -3936,17 +3936,17 @@ void gain_exp(s32b amount)
 }
 
 
-void calc_android_exp(void)
+void calc_android_exp(player_type *creature_ptr)
 {
 	int i;
 	u32b total_exp = 0;
-	if (p_ptr->is_dead) return;
+	if (creature_ptr->is_dead) return;
 
-	if (p_ptr->prace != RACE_ANDROID) return;
+	if (creature_ptr->prace != RACE_ANDROID) return;
 
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		object_type forge;
 		object_type *q_ptr = &forge;
 		u32b value, exp;
@@ -3995,7 +3995,7 @@ void calc_android_exp(void)
 		value = object_value_real(q_ptr);
 
 		if (value <= 0) continue;
-		if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (p_ptr->pseikaku != SEIKAKU_SEXY)) value /= 32;
+		if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (creature_ptr->pseikaku != SEIKAKU_SEXY)) value /= 32;
 		if (value > 5000000L) value = 5000000L;
 		if ((o_ptr->tval == TV_DRAG_ARMOR) || (o_ptr->tval == TV_CARD)) level /= 2;
 
@@ -4024,7 +4024,7 @@ void calc_android_exp(void)
 		else total_exp += exp / 16;
 		if (i == INVEN_BODY) total_exp += exp / 32;
 	}
-	p_ptr->exp = p_ptr->max_exp = total_exp;
+	creature_ptr->exp = creature_ptr->max_exp = total_exp;
 
 	/* Check Experience */
 	check_experience();
