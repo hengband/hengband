@@ -2619,7 +2619,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			if (!one_in_(6)) break;
 		case 24:
 			msg_print(_("ほえ？私は誰？ここで何してる？", "Huh? Who am I? What am I doing here?"));
-			lose_all_info();
+			lose_all_info(p_ptr);
 			if (!one_in_(6)) break;
 		case 25:
 			/*
@@ -3256,7 +3256,7 @@ void wild_magic(int spell)
 		apply_disenchant(1);
 		break;
 	case 31:
-		lose_all_info();
+		lose_all_info(p_ptr);
 		break;
 	case 32:
 		fire_ball(GF_CHAOS, 0, spell + 5, 1 + (spell / 10));

@@ -2497,7 +2497,7 @@ void spell_RF6_FORGET(MONSTER_IDX m_idx)
 	{
 		msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 	}
-	else if (lose_all_info())
+	else if (lose_all_info(p_ptr))
 	{
 		msg_print(_("記憶が薄れてしまった。", "Your memories fade away."));
 	}

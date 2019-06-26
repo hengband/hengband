@@ -2204,7 +2204,7 @@ static void process_world_aux_mutation(void)
 			if (one_in_(20))
 			{
 				msg_print(NULL);
-				if (one_in_(3)) lose_all_info();
+				if (one_in_(3)) lose_all_info(p_ptr);
 				else wiz_dark();
 				(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 				wiz_dark();

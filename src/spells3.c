@@ -3452,7 +3452,7 @@ bool booze(player_type *creature_ptr)
 		if (one_in_(13) && (creature_ptr->pclass != CLASS_MONK))
 		{
 			ident = TRUE;
-			if (one_in_(3)) lose_all_info();
+			if (one_in_(3)) lose_all_info(p_ptr);
 			else wiz_dark();
 			(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 			wiz_dark();

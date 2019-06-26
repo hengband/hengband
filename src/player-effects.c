@@ -3638,7 +3638,7 @@ bool restore_level(player_type *creature_ptr)
 /*
  * Forget everything
  */
-bool lose_all_info(void)
+bool lose_all_info(player_type *creature_ptr)
 {
 	int i;
 
@@ -3648,7 +3648,7 @@ bool lose_all_info(void)
 	/* Forget info about objects */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Allow "protection" by the MENTAL flag */
@@ -3666,10 +3666,10 @@ bool lose_all_info(void)
 		/* Hack -- Clear the "felt" flag */
 		o_ptr->ident &= ~(IDENT_SENSE);
 	}
-	p_ptr->update |= (PU_BONUS);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	/* Mega-Hack -- Forget the map */
 	wiz_dark();

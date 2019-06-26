@@ -5464,7 +5464,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	case 20:
 	case 21:
 		/* Amnesia */
-		if (lose_all_info())
+		if (lose_all_info(p_ptr))
 			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
 		break;
 	}

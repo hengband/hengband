@@ -1905,7 +1905,7 @@ void do_cmd_mind(void)
 				if (b < 5)
 				{
 					msg_print(_("なんてこった！頭の中が真っ白になった！", "Oh, no! Your mind has gone blank!"));
-					lose_all_info();
+					lose_all_info(p_ptr);
 				}
 				else if (b < 15)
 				{
