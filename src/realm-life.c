@@ -431,7 +431,7 @@ concptr do_life_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				(void)restore_all_status();
-				restore_level();
+				restore_level(p_ptr);
 			}
 		}
 		break;

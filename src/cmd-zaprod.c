@@ -111,7 +111,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 
 	case SV_ROD_RESTORATION:
 	{
-		if(restore_level()) ident = TRUE;
+		if(restore_level(p_ptr)) ident = TRUE;
 		if(restore_all_status()) ident = TRUE;
 		break;
 	}

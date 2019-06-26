@@ -685,7 +685,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 				(void)true_healing(0);
 				(void)restore_all_status();
-				(void)restore_level();
+				(void)restore_level(p_ptr);
 			}
 			break;
 
@@ -780,7 +780,7 @@ static bool cmd_racial_power_aux(s32b command)
 		case RACE_SKELETON:
 		case RACE_ZOMBIE:
 			msg_print(_("あなたは失ったエネルギーを取り戻そうと試みた。", "You attempt to restore your lost energies."));
-			(void)restore_level();
+			(void)restore_level(p_ptr);
 			break;
 
 		case RACE_VAMPIRE:

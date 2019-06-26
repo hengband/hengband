@@ -3614,15 +3614,15 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 /*
  * Restores any drained experience
  */
-bool restore_level(void)
+bool restore_level(player_type *creature_ptr)
 {
 	/* Restore experience */
-	if (p_ptr->exp < p_ptr->max_exp)
+	if (creature_ptr->exp < creature_ptr->max_exp)
 	{
 		msg_print(_("経験値が戻ってきた気がする。", "You feel your experience returning."));
 
 		/* Restore the experience */
-		p_ptr->exp = p_ptr->max_exp;
+		creature_ptr->exp = creature_ptr->max_exp;
 
 		/* Check the experience */
 		check_experience();

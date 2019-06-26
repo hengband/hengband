@@ -1268,7 +1268,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_REST_EXP:
 	{
 		msg_print(_("深紅に輝いている...", "It glows a deep red..."));
-		restore_level();
+		restore_level(p_ptr);
 		break;
 	}
 
@@ -1276,7 +1276,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("濃緑色に輝いている...", "It glows a deep green..."));
 		(void)restore_all_status();
-		(void)restore_level();
+		(void)restore_level(p_ptr);
 		break;
 	}
 

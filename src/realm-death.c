@@ -574,7 +574,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				restore_level();
+				restore_level(p_ptr);
 			}
 		}
 		break;

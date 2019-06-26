@@ -276,7 +276,7 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 	{
 		msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
 	}
-	restore_level();
+	restore_level(p_ptr);
 	(void)set_poisoned(p_ptr, 0);
 	(void)set_blind(p_ptr, 0);
 	(void)set_confused(p_ptr, 0);

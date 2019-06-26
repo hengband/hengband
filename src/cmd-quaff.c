@@ -341,7 +341,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_RESTORE_EXP:
-			if (restore_level()) ident = TRUE;
+			if (restore_level(p_ptr)) ident = TRUE;
 			break;
 
 		case SV_POTION_RES_STR:
