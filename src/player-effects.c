@@ -3570,15 +3570,15 @@ bool do_res_stat(player_type *creature_ptr, int stat)
 /*
  * Gain a "point" in a stat
  */
-bool do_inc_stat(int stat)
+bool do_inc_stat(player_type *creature_ptr, int stat)
 {
 	bool res;
 
 	/* Restore strength */
-	res = res_stat(p_ptr, stat);
+	res = res_stat(creature_ptr, stat);
 
 	/* Attempt to increase */
-	if (inc_stat(p_ptr, stat))
+	if (inc_stat(creature_ptr, stat))
 	{
 		if (stat == A_WIS)
 		{

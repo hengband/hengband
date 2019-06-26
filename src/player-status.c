@@ -5598,11 +5598,11 @@ void check_experience(void)
 							prt("", n + 2, 14);
 					if (get_check(_("よろしいですか？", "Are you sure? "))) break;
 				}
-				do_inc_stat(choice - 'a');
+				do_inc_stat(p_ptr, choice - 'a');
 				screen_load();
 			}
 			else if (!(p_ptr->max_plv % 2))
-				do_inc_stat(randint0(6));
+				do_inc_stat(p_ptr, randint0(6));
 		}
 
 		if (level_mutation)

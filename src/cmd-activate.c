@@ -1748,7 +1748,7 @@ bool activate_artifact(object_type *o_ptr)
 		if (get_check(_("本当に使いますか？", "Are you sure?!")))
 		{
 			msg_print(_("村正が震えた．．．", "The Muramasa pulsates..."));
-			do_inc_stat(A_STR);
+			do_inc_stat(p_ptr, A_STR);
 			if (one_in_(2))
 			{
 				msg_print(_("村正は壊れた！", "The Muramasa is destroyed!"));

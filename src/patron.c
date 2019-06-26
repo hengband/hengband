@@ -417,9 +417,9 @@ void gain_level_reward(int chosen_reward)
 			msg_print(_("「留まるのだ、下僕よ。余が汝の肉体を鍛えん。」", "'Stay, mortal, and let me mold thee.'"));
 
 			if (one_in_(3) && !(chaos_stats[p_ptr->chaos_patron] < 0))
-				do_inc_stat(chaos_stats[p_ptr->chaos_patron]);
+				do_inc_stat(p_ptr, chaos_stats[p_ptr->chaos_patron]);
 			else
-				do_inc_stat(randint0(6));
+				do_inc_stat(p_ptr, randint0(6));
 			reward = _("能力値が上がった。", "increasing a stat");
 			break;
 
@@ -465,7 +465,7 @@ void gain_level_reward(int chosen_reward)
 
 			for (dummy = 0; dummy < A_MAX; dummy++)
 			{
-				(void)do_inc_stat(dummy);
+				(void)do_inc_stat(p_ptr, dummy);
 			}
 			reward = _("全能力値が上がった。", "increasing all stats");
 			break;
