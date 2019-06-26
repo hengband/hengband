@@ -3769,14 +3769,14 @@ void change_race(CHARACTER_IDX new_race, concptr effect_msg)
 }
 
 
-void do_poly_self(void)
+void do_poly_self(player_type *creature_ptr)
 {
-	int power = p_ptr->lev;
+	int power = creature_ptr->lev;
 
 	msg_print(_("あなたは変化の訪れを感じた...", "You feel a change coming over you..."));
 	chg_virtue(V_CHANCE, 1);
 
-	if ((power > randint0(20)) && one_in_(3) && (p_ptr->prace != RACE_ANDROID))
+	if ((power > randint0(20)) && one_in_(3) && (creature_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
 		CHARACTER_IDX new_race;
@@ -3789,16 +3789,16 @@ void do_poly_self(void)
 			/* sex change */
 			power -= 2;
 
-			if (p_ptr->psex == SEX_MALE)
+			if (creature_ptr->psex == SEX_MALE)
 			{
-				p_ptr->psex = SEX_FEMALE;
-				sp_ptr = &sex_info[p_ptr->psex];
+				creature_ptr->psex = SEX_FEMALE;
+				sp_ptr = &sex_info[creature_ptr->psex];
 				sprintf(effect_msg, _("女性の", "female "));
 			}
 			else
 			{
-				p_ptr->psex = SEX_MALE;
-				sp_ptr = &sex_info[p_ptr->psex];
+				creature_ptr->psex = SEX_MALE;
+				sp_ptr = &sex_info[creature_ptr->psex];
 				sprintf(effect_msg, _("男性の", "male "));
 			}
 		}
@@ -3814,14 +3814,14 @@ void do_poly_self(void)
 			{
 				if (one_in_(2))
 				{
-					(void)dec_stat(p_ptr, tmp, randint1(6) + 6, one_in_(3));
+					(void)dec_stat(creature_ptr, tmp, randint1(6) + 6, one_in_(3));
 					power -= 1;
 				}
 				tmp++;
 			}
 
 			/* Deformities are discriminated against! */
-			(void)dec_stat(p_ptr, A_CHR, randint1(6), TRUE);
+			(void)dec_stat(creature_ptr, A_CHR, randint1(6), TRUE);
 
 			if (effect_msg[0])
 			{
@@ -3848,7 +3848,7 @@ void do_poly_self(void)
 		{
 			new_race = (CHARACTER_IDX)randint0(MAX_RACES);
 		}
-		while ((new_race == p_ptr->prace) || (new_race == RACE_ANDROID));
+		while ((new_race == creature_ptr->prace) || (new_race == RACE_ANDROID));
 
 		change_race(new_race, effect_msg);
 	}
@@ -3859,17 +3859,17 @@ void do_poly_self(void)
 
 		/* Abomination! */
 		power -= 20;
-		msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), p_ptr->prace == RACE_ANDROID ? "機械" : "内臓");
+		msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), creature_ptr->prace == RACE_ANDROID ? "機械" : "内臓");
 
 		while (tmp < A_MAX)
 		{
-			(void)dec_stat(p_ptr, tmp, randint1(6) + 6, one_in_(3));
+			(void)dec_stat(creature_ptr, tmp, randint1(6) + 6, one_in_(3));
 			tmp++;
 		}
 		if (one_in_(6))
 		{
 			msg_print(_("現在の姿で生きていくのは困難なようだ！", "You find living difficult in your present form!"));
-			take_hit(DAMAGE_LOSELIFE, damroll(randint1(10), p_ptr->lev), _("致命的な突然変異", "a lethal mutation"), -1);
+			take_hit(DAMAGE_LOSELIFE, damroll(randint1(10), creature_ptr->lev), _("致命的な突然変異", "a lethal mutation"), -1);
 
 			power -= 10;
 		}
@@ -3880,13 +3880,13 @@ void do_poly_self(void)
 		power -= 10;
 
 		get_max_stats();
-		roll_hitdice(p_ptr, 0L);
+		roll_hitdice(creature_ptr, 0L);
 	}
 
 	while ((power > randint0(15)) && one_in_(3))
 	{
 		power -= 7;
-		(void)gain_mutation(p_ptr, 0);
+		(void)gain_mutation(creature_ptr, 0);
 	}
 
 	if (power > randint0(5))

@@ -2204,7 +2204,7 @@ bool mutation_power_aux(int power)
 
 		case MUT1_POLYMORPH:
 			if (!get_check(_("変身します。よろしいですか？", "You will polymorph your self. Are you sure? "))) return FALSE;
-			do_poly_self();
+			do_poly_self(p_ptr);
 			break;
 
 		case MUT1_MIDAS_TCH:

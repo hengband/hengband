@@ -4189,7 +4189,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				{
 					msg_print(_("奇形的な変身を遂げた！", "You undergo a freakish metamorphosis!"));
 					if (one_in_(4)) /* 4 */
-						do_poly_self();
+						do_poly_self(p_ptr);
 					else
 						status_shuffle();
 				}

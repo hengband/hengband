@@ -290,7 +290,7 @@ void gain_level_reward(int chosen_reward)
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[p_ptr->chaos_patron]);
 			msg_print(_("「汝、新たなる姿を必要とせり！」", "'Thou needst a new form, mortal!'"));
 
-			do_poly_self();
+			do_poly_self(p_ptr);
 			reward = _("変異した。", "polymorphing");
 			break;
 

@@ -536,7 +536,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				if (!get_check(_("変身します。よろしいですか？", "You will polymorph yourself. Are you sure? "))) return NULL;
-				do_poly_self();
+				do_poly_self(p_ptr);
 			}
 		}
 		break;
