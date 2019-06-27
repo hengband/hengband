@@ -1839,7 +1839,7 @@ static void process_world_aux_timeout(void)
 	/* Timed esp */
 	if (p_ptr->tim_esp)
 	{
-		(void)set_tim_esp(p_ptr->tim_esp - 1, TRUE);
+		(void)set_tim_esp(p_ptr, p_ptr->tim_esp - 1, TRUE);
 	}
 
 	/* Timed temporary elemental brands. -LM- */
@@ -2460,12 +2460,12 @@ static void process_world_aux_mutation(void)
 		if (p_ptr->tim_esp > 0)
 		{
 			msg_print(_("精神にもやがかかった！", "Your mind feels cloudy!"));
-			set_tim_esp(0, TRUE);
+			set_tim_esp(p_ptr, 0, TRUE);
 		}
 		else
 		{
 			msg_print(_("精神が広がった！", "Your mind expands!"));
-			set_tim_esp(p_ptr->lev, FALSE);
+			set_tim_esp(p_ptr, p_ptr->lev, FALSE);
 		}
 	}
 	if ((p_ptr->muta2 & MUT2_NAUSEA) && !p_ptr->slow_digest && one_in_(9000))

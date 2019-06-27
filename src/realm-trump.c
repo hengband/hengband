@@ -120,7 +120,7 @@ concptr do_trump_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_esp(randint1(sides) + base, FALSE);
+				set_tim_esp(p_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;

@@ -461,7 +461,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	t = 20 + randint1(20);
 	(void)set_blind(p_ptr, creature_ptr->blind + t);
 	(void)set_afraid(p_ptr, 0);
-	(void)set_tim_esp(creature_ptr->tim_esp + t, FALSE);
+	(void)set_tim_esp(p_ptr, creature_ptr->tim_esp + t, FALSE);
 	(void)set_tim_regen(p_ptr, creature_ptr->tim_regen + t, FALSE);
 	(void)set_hero(p_ptr, creature_ptr->hero + t, FALSE);
 	(void)set_blessed(p_ptr, creature_ptr->blessed + t, FALSE);

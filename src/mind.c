@@ -1062,7 +1062,7 @@ static bool cast_mindcrafter_spell(int spell)
 		}
 
 		if ((plev > 24) && (plev < 40))
-			set_tim_esp((TIME_EFFECT)plev, FALSE);
+			set_tim_esp(p_ptr, (TIME_EFFECT)plev, FALSE);
 
 		if (!b) msg_print(_("安全な気がする。", "You feel safe."));
 
@@ -1330,7 +1330,7 @@ static bool cast_mirror_spell(int spell)
 		tmp = is_mirror_grid(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) ? 4 : 0;
 		if (plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 		if (plev + tmp > 18)detect_monsters_invis(DETECT_RAD_DEFAULT);
-		if (plev + tmp > 28)set_tim_esp((TIME_EFFECT)plev, FALSE);
+		if (plev + tmp > 28)set_tim_esp(p_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev + tmp > 38)map_area(DETECT_RAD_MAP);
 		if (tmp == 0 && plev < 5) {
 			msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));

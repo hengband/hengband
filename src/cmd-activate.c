@@ -1314,7 +1314,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_ESP:
 	{
-		(void)set_tim_esp(randint1(30) + 25, FALSE);
+		(void)set_tim_esp(p_ptr, randint1(30) + 25, FALSE);
 		break;
 	}
 
