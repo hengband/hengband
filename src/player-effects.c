@@ -4217,7 +4217,7 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 /*
  * Choose a warrior-mage elemental attack. -LM-
  */
-bool choose_ele_attack(void)
+bool choose_ele_attack(player_type *creature_ptr)
 {
 	int num;
 
@@ -4230,7 +4230,7 @@ bool choose_ele_attack(void)
 	}
 	screen_save();
 
-	num = (p_ptr->lev - 20) / 5;
+	num = (creature_ptr->lev - 20) / 5;
 	c_prt(TERM_RED,    _("        a) 焼棄", "        a) Fire Brand"), 2, 14);
 
 	if (num >= 2) 
@@ -4263,15 +4263,15 @@ bool choose_ele_attack(void)
 	choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
-		set_ele_attack(p_ptr, ATTACK_FIRE, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(creature_ptr, ATTACK_FIRE, creature_ptr->lev/2 + randint1(creature_ptr->lev/2));
 	else if (((choice == 'b') || (choice == 'B')) && (num >= 2))
-		set_ele_attack(p_ptr, ATTACK_COLD, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(creature_ptr, ATTACK_COLD, creature_ptr->lev/2 + randint1(creature_ptr->lev/2));
 	else if (((choice == 'c') || (choice == 'C')) && (num >= 3))
-		set_ele_attack(p_ptr, ATTACK_POIS, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(creature_ptr, ATTACK_POIS, creature_ptr->lev/2 + randint1(creature_ptr->lev/2));
 	else if (((choice == 'd') || (choice == 'D')) && (num >= 4))
-		set_ele_attack(p_ptr, ATTACK_ACID, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(creature_ptr, ATTACK_ACID, creature_ptr->lev/2 + randint1(creature_ptr->lev/2));
 	else if (((choice == 'e') || (choice == 'E')) && (num >= 5))
-		set_ele_attack(p_ptr, ATTACK_ELEC, p_ptr->lev/2 + randint1(p_ptr->lev/2));
+		set_ele_attack(creature_ptr, ATTACK_ELEC, creature_ptr->lev/2 + randint1(creature_ptr->lev/2));
 	else
 	{
 		msg_print(_("魔法剣を使うのをやめた。", "You cancel the temporary branding."));
