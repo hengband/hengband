@@ -1995,7 +1995,7 @@ static void process_world_aux_timeout(void)
 	/* Wraith form */
 	if (p_ptr->wraith_form)
 	{
-		(void)set_wraith_form(p_ptr->wraith_form - 1, TRUE);
+		(void)set_wraith_form(p_ptr, p_ptr->wraith_form - 1, TRUE);
 	}
 
 	/* Heroism */
@@ -2397,7 +2397,7 @@ static void process_world_aux_mutation(void)
 		msg_print(_("非物質化した！", "You feel insubstantial!"));
 
 		msg_print(NULL);
-		set_wraith_form(randint1(p_ptr->lev / 2) + (p_ptr->lev / 2), FALSE);
+		set_wraith_form(p_ptr, randint1(p_ptr->lev / 2) + (p_ptr->lev / 2), FALSE);
 	}
 	if ((p_ptr->muta2 & MUT2_POLY_WOUND) && one_in_(3000))
 	{
