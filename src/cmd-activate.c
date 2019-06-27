@@ -1693,7 +1693,7 @@ bool activate_artifact(object_type *o_ptr)
 		(void)set_oppose_fire(p_ptr, v, FALSE);
 		(void)set_oppose_cold(p_ptr, v, FALSE);
 		(void)set_oppose_pois(p_ptr, v, FALSE);
-		(void)set_ultimate_res(v, FALSE);
+		(void)set_ultimate_res(p_ptr, v, FALSE);
 		break;
 	}
 

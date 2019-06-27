@@ -326,7 +326,7 @@ void dispel_player(void)
 	(void)set_oppose_fire(p_ptr, 0, TRUE);
 	(void)set_oppose_cold(p_ptr, 0, TRUE);
 	(void)set_oppose_pois(p_ptr, 0, TRUE);
-	(void)set_ultimate_res(0, TRUE);
+	(void)set_ultimate_res(p_ptr, 0, TRUE);
 	(void)set_mimic(p_ptr, 0, 0, TRUE);
 	(void)set_ele_attack(p_ptr, 0, 0);
 	(void)set_ele_immune(p_ptr, 0, 0);
@@ -4081,21 +4081,21 @@ bool drain_exp(s32b drain, s32b slip, int hold_exp_prob)
 }
 
 
-bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
+bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->ult_res && !do_dec)
+		if (creature_ptr->ult_res && !do_dec)
 		{
-			if (p_ptr->ult_res > v) return FALSE;
+			if (creature_ptr->ult_res > v) return FALSE;
 		}
-		else if (!p_ptr->ult_res)
+		else if (!creature_ptr->ult_res)
 		{
 			msg_print(_("あらゆることに対して耐性がついた気がする！", "You feel resistant!"));
 			notice = TRUE;
@@ -4105,7 +4105,7 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->ult_res)
+		if (creature_ptr->ult_res)
 		{
 			msg_print(_("あらゆることに対する耐性が薄れた気がする。", "You feel less resistant"));
 			notice = TRUE;
@@ -4113,14 +4113,14 @@ bool set_ultimate_res(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->ult_res = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->ult_res = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }

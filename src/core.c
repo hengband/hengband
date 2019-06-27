@@ -2072,7 +2072,7 @@ static void process_world_aux_timeout(void)
 
 	if (p_ptr->ult_res)
 	{
-		(void)set_ultimate_res(p_ptr->ult_res - 1, TRUE);
+		(void)set_ultimate_res(p_ptr, p_ptr->ult_res - 1, TRUE);
 	}
 
 	/*** Poison and Stun and Cut ***/
