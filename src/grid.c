@@ -1968,7 +1968,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 
 		if (p_ptr->special_defense & NINJA_S_STEALTH)
 		{
-			if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(FALSE);
+			if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
 		}
 	}
 }

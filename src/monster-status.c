@@ -1040,7 +1040,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 	/* Hack - Cancel any special player stealth magics. -LM- */
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		set_superstealth(FALSE);
+		set_superstealth(p_ptr, FALSE);
 	}
 
 	/* Genocided by chaos patron */

@@ -1682,51 +1682,51 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @param set TRUEならば超隠密状態になる。
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_superstealth(bool set)
+bool set_superstealth(player_type *creature_ptr, bool set)
 {
 	bool notice = FALSE;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (set)
 	{
-		if (!(p_ptr->special_defense & NINJA_S_STEALTH))
+		if (!(creature_ptr->special_defense & NINJA_S_STEALTH))
 		{
-			if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_MNLT)
+			if (current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_MNLT)
 			{
 				msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
-				p_ptr->monlite = p_ptr->old_monlite = TRUE;
+				creature_ptr->monlite = creature_ptr->old_monlite = TRUE;
 			}
 			else
 			{
 				msg_print(_("敵の目から影の中に覆い隠された！", "You are mantled in shadow from ordinary eyes!"));
-				p_ptr->monlite = p_ptr->old_monlite = FALSE;
+				creature_ptr->monlite = creature_ptr->old_monlite = FALSE;
 			}
 
 			notice = TRUE;
 
 			/* Use the value */
-			p_ptr->special_defense |= NINJA_S_STEALTH;
+			creature_ptr->special_defense |= NINJA_S_STEALTH;
 		}
 	}
 
 	/* Shut */
 	else
 	{
-		if (p_ptr->special_defense & NINJA_S_STEALTH)
+		if (creature_ptr->special_defense & NINJA_S_STEALTH)
 		{
 			msg_print(_("再び敵の目にさらされるようになった。", "You are exposed to common sight once more."));
 			notice = TRUE;
 
 			/* Use the value */
-			p_ptr->special_defense &= ~(NINJA_S_STEALTH);
+			creature_ptr->special_defense &= ~(NINJA_S_STEALTH);
 		}
 	}
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(FALSE, FALSE);
 	return (TRUE);

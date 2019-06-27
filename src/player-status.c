@@ -4162,7 +4162,7 @@ static void calc_torch(void)
 		p_ptr->old_lite = p_ptr->cur_lite;
 
 		if ((p_ptr->cur_lite > 0) && (p_ptr->special_defense & NINJA_S_STEALTH))
-			set_superstealth(FALSE);
+			set_superstealth(p_ptr, FALSE);
 	}
 }
 

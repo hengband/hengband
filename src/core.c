@@ -5038,7 +5038,7 @@ static void dungeon(bool load_game)
 #endif
 	}
 
-	if (!load_game && (p_ptr->special_defense & NINJA_S_STEALTH)) set_superstealth(FALSE);
+	if (!load_game && (p_ptr->special_defense & NINJA_S_STEALTH)) set_superstealth(p_ptr, FALSE);
 
 	/*** Process this dungeon level ***/
 

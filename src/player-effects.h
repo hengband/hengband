@@ -79,7 +79,7 @@ extern bool choose_ele_attack(void);
 extern bool choose_ele_immune(TIME_EFFECT turn);
 extern bool set_wraith_form(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_esp(TIME_EFFECT v, bool do_dec);
-extern bool set_superstealth(bool set);
+extern bool set_superstealth(player_type *creature_ptr, bool set);
 extern void do_poly_wounds(player_type *creature_ptr);
 extern void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effect_msg);
 

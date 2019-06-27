@@ -2207,7 +2207,7 @@ void do_cmd_rest(void)
 
 	if (command_arg > 9999) command_arg = 9999;
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(FALSE);
+	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(p_ptr, FALSE);
 
 	/* Take a current_world_ptr->game_turn (?) */
 	take_turn(p_ptr, 100);
