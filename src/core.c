@@ -1923,7 +1923,7 @@ static void process_world_aux_timeout(void)
 	/* Timed resist time */
 	if (p_ptr->tim_res_time)
 	{
-		(void)set_tim_res_time(p_ptr->tim_res_time - 1, TRUE);
+		(void)set_tim_res_time(p_ptr, p_ptr->tim_res_time - 1, TRUE);
 	}
 
 	/* Timed reflect */

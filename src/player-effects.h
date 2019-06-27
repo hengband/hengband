@@ -74,7 +74,7 @@ extern bool drain_exp(s32b drain, s32b slip, int hold_exp_prob);
 extern void do_poly_self(player_type *creature_ptr);
 extern bool set_ultimate_res(TIME_EFFECT v, bool do_dec);
 extern bool set_tim_res_nether(TIME_EFFECT v, bool do_dec);
-extern bool set_tim_res_time(TIME_EFFECT v, bool do_dec);
+extern bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool choose_ele_attack(player_type *creature_ptr);
 extern bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT turn);
 extern bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);

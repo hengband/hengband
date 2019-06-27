@@ -303,7 +303,7 @@ void dispel_player(void)
 	(void)set_wraith_form(p_ptr, 0, TRUE);
 	(void)set_kabenuke(p_ptr, 0, TRUE);
 	(void)set_tim_res_nether(0, TRUE);
-	(void)set_tim_res_time(0, TRUE);
+	(void)set_tim_res_time(p_ptr, 0, TRUE);
 	/* by henkma */
 	(void)set_tim_reflect(p_ptr, 0,TRUE);
 	(void)set_multishadow(p_ptr, 0,TRUE);
@@ -4169,21 +4169,21 @@ bool set_tim_res_nether(TIME_EFFECT v, bool do_dec)
 	return (TRUE);
 }
 
-bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
+bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	if (p_ptr->is_dead) return FALSE;
+	if (creature_ptr->is_dead) return FALSE;
 
 	/* Open */
 	if (v)
 	{
-		if (p_ptr->tim_res_time && !do_dec)
+		if (creature_ptr->tim_res_time && !do_dec)
 		{
-			if (p_ptr->tim_res_time > v) return FALSE;
+			if (creature_ptr->tim_res_time > v) return FALSE;
 		}
-		else if (!p_ptr->tim_res_time)
+		else if (!creature_ptr->tim_res_time)
 		{
 			msg_print(_("時間逆転の力に対して耐性がついた気がする！", "You feel time resistant!"));
 			notice = TRUE;
@@ -4193,7 +4193,7 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (p_ptr->tim_res_time)
+		if (creature_ptr->tim_res_time)
 		{
 			msg_print(_("時間逆転の力に対する耐性が薄れた気がする。", "You feel less time resistant"));
 			notice = TRUE;
@@ -4201,14 +4201,14 @@ bool set_tim_res_time(TIME_EFFECT v, bool do_dec)
 	}
 
 	/* Use the value */
-	p_ptr->tim_res_time = v;
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->tim_res_time = v;
+	creature_ptr->redraw |= (PR_STATUS);
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(FALSE, FALSE);
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
 }
