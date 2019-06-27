@@ -3707,10 +3707,10 @@ void do_poly_wounds(void)
 /*
  * Change player race
  */
-void change_race(CHARACTER_IDX new_race, concptr effect_msg)
+void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effect_msg)
 {
 	concptr title = race_info[new_race].title;
-	int  old_race = p_ptr->prace;
+	int  old_race = creature_ptr->prace;
 
 #ifdef JP
 	msg_format("あなたは%s%sに変化した！", effect_msg, title);
@@ -3720,52 +3720,52 @@ void change_race(CHARACTER_IDX new_race, concptr effect_msg)
 
 	chg_virtue(V_CHANCE, 2);
 
-	if (p_ptr->prace < 32)
+	if (creature_ptr->prace < 32)
 	{
-		p_ptr->old_race1 |= 1L << p_ptr->prace;
+		creature_ptr->old_race1 |= 1L << creature_ptr->prace;
 	}
 	else
 	{
-		p_ptr->old_race2 |= 1L << (p_ptr->prace - 32);
+		creature_ptr->old_race2 |= 1L << (creature_ptr->prace - 32);
 	}
-	p_ptr->prace = new_race;
-	rp_ptr = &race_info[p_ptr->prace];
+	creature_ptr->prace = new_race;
+	rp_ptr = &race_info[creature_ptr->prace];
 
 	/* Experience factor */
-	p_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
+	creature_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
 
 	/*
 	 * The speed bonus of Klackons and Sprites are disabled
 	 * and the experience penalty is decreased.
 	 */
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_NINJA)) && ((p_ptr->prace == RACE_KLACKON) || (p_ptr->prace == RACE_SPRITE)))
-		p_ptr->expfact -= 15;
+	if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA)) && ((creature_ptr->prace == RACE_KLACKON) || (creature_ptr->prace == RACE_SPRITE)))
+		creature_ptr->expfact -= 15;
 
 	/* Get character's height and weight */
 	get_height_weight();
 
 	/* Hitdice */
-	if (p_ptr->pclass == CLASS_SORCERER)
-		p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+	if (creature_ptr->pclass == CLASS_SORCERER)
+		creature_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 	else
-		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
-	roll_hitdice(p_ptr, 0L);
+	roll_hitdice(creature_ptr, 0L);
 
 	/* The experience level may be modified */
 	check_experience();
 
-	p_ptr->redraw |= (PR_BASIC);
+	creature_ptr->redraw |= (PR_BASIC);
 
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 	handle_stuff();
 
 	/* Load an autopick preference file */
-	if (old_race != p_ptr->prace) autopick_load_pref(FALSE);
+	if (old_race != creature_ptr->prace) autopick_load_pref(FALSE);
 
 	/* Player's graphic tile may change */
-	lite_spot(p_ptr->y, p_ptr->x);
+	lite_spot(creature_ptr->y, creature_ptr->x);
 }
 
 
@@ -3850,7 +3850,7 @@ void do_poly_self(player_type *creature_ptr)
 		}
 		while ((new_race == creature_ptr->prace) || (new_race == RACE_ANDROID));
 
-		change_race(new_race, effect_msg);
+		change_race(p_ptr, new_race, effect_msg);
 	}
 
 	if ((power > randint0(30)) && one_in_(6))

@@ -449,7 +449,7 @@ void do_cmd_wield(void)
 	if ((o_ptr->name1 == ART_STONEMASK) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
 	{
 		/* Turn into a vampire */
-		change_race(RACE_VAMPIRE, "");
+		change_race(p_ptr, RACE_VAMPIRE, "");
 	}
 
 	p_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
