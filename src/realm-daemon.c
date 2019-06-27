@@ -226,7 +226,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_res_nether(randint1(base) + base, FALSE);
+				set_tim_res_nether(p_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

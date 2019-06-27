@@ -1917,7 +1917,7 @@ static void process_world_aux_timeout(void)
 	/* Timed resist nether */
 	if (p_ptr->tim_res_nether)
 	{
-		(void)set_tim_res_nether(p_ptr->tim_res_nether - 1, TRUE);
+		(void)set_tim_res_nether(p_ptr, p_ptr->tim_res_nether - 1, TRUE);
 	}
 
 	/* Timed resist time */
