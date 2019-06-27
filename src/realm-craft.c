@@ -499,7 +499,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!choose_ele_immune(base + randint1(base))) return NULL;
+				if (!choose_ele_immune(p_ptr, base + randint1(base))) return NULL;
 			}
 		}
 		break;

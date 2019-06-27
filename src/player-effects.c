@@ -4286,7 +4286,7 @@ bool choose_ele_attack(void)
 /*
  * Choose a elemental immune. -LM-
  */
-bool choose_ele_immune(TIME_EFFECT immune_turn)
+bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 {
 	char choice;
 	screen_save();
@@ -4307,13 +4307,13 @@ bool choose_ele_immune(TIME_EFFECT immune_turn)
 	choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
-		set_ele_immune(p_ptr, DEFENSE_FIRE, immune_turn);
+		set_ele_immune(creature_ptr, DEFENSE_FIRE, immune_turn);
 	else if ((choice == 'b') || (choice == 'B'))
-		set_ele_immune(p_ptr, DEFENSE_COLD, immune_turn);
+		set_ele_immune(creature_ptr, DEFENSE_COLD, immune_turn);
 	else if ((choice == 'c') || (choice == 'C'))
-		set_ele_immune(p_ptr, DEFENSE_ACID, immune_turn);
+		set_ele_immune(creature_ptr, DEFENSE_ACID, immune_turn);
 	else if ((choice == 'd') || (choice == 'D'))
-		set_ele_immune(p_ptr, DEFENSE_ELEC, immune_turn);
+		set_ele_immune(creature_ptr, DEFENSE_ELEC, immune_turn);
 	else
 	{
 		msg_print(_("免疫を付けるのをやめた。", "You cancel the temporary immune."));
