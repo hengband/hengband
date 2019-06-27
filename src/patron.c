@@ -453,7 +453,7 @@ void gain_level_reward(int chosen_reward)
 
 			msg_format(_("%sの力が触れるのを感じた。", "You feel the power of %s touch you."),
 				chaos_patrons[p_ptr->chaos_patron]);
-			do_poly_wounds();
+			do_poly_wounds(p_ptr);
 			reward = _("傷が変化した。", "polymorphing wounds");
 			break;
 

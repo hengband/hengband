@@ -2401,7 +2401,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_POLY_WOUND) && one_in_(3000))
 	{
-		do_poly_wounds();
+		do_poly_wounds(p_ptr);
 	}
 	if ((p_ptr->muta2 & MUT2_WASTING) && one_in_(3000))
 	{

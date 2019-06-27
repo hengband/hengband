@@ -3679,27 +3679,27 @@ bool lose_all_info(player_type *creature_ptr)
 }
 
 
-void do_poly_wounds(void)
+void do_poly_wounds(player_type *creature_ptr)
 {
 	/* Changed to always provide at least _some_ healing */
-	s16b wounds = p_ptr->cut;
-	s16b hit_p = (p_ptr->mhp - p_ptr->chp);
-	s16b change = damroll(p_ptr->lev, 5);
+	s16b wounds = creature_ptr->cut;
+	s16b hit_p = (creature_ptr->mhp - creature_ptr->chp);
+	s16b change = damroll(creature_ptr->lev, 5);
 	bool Nasty_effect = one_in_(5);
 
 	if (!(wounds || hit_p || Nasty_effect)) return;
 
 	msg_print(_("傷がより軽いものに変化した。", "Your wounds are polymorphed into less serious ones."));
-	hp_player(p_ptr, change);
+	hp_player(creature_ptr, change);
 	if (Nasty_effect)
 	{
 		msg_print(_("新たな傷ができた！", "A new wound was created!"));
 		take_hit(DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"), -1);
-		set_cut(p_ptr,change);
+		set_cut(creature_ptr,change);
 	}
 	else
 	{
-		set_cut(p_ptr,p_ptr->cut - (change / 2));
+		set_cut(creature_ptr,creature_ptr->cut - (change / 2));
 	}
 }
 
@@ -3892,7 +3892,7 @@ void do_poly_self(player_type *creature_ptr)
 	if (power > randint0(5))
 	{
 		power -= 5;
-		do_poly_wounds();
+		do_poly_wounds(p_ptr);
 	}
 
 	/* Note: earlier deductions may have left power < 0 already. */
