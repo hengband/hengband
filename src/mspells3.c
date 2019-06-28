@@ -1786,7 +1786,7 @@ void learn_spell(int monspell)
 	{
 		p_ptr->magic_num2[monspell] = 1;
 		msg_format(_("%sを学習した！", "You have learned %s!"), monster_powers[monspell].name);
-		gain_exp(monster_powers[monspell].level * monster_powers[monspell].smana);
+		gain_exp(p_ptr, monster_powers[monspell].level * monster_powers[monspell].smana);
 
 		sound(SOUND_STUDY);
 

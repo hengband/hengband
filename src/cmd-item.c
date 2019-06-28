@@ -798,7 +798,7 @@ void do_cmd_destroy(void)
 			if (tester_exp<1) tester_exp = 1;
 
 			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-			gain_exp(tester_exp * amt);
+			gain_exp(p_ptr, tester_exp * amt);
 		}
 		if (item_tester_high_level_book(q_ptr) && q_ptr->tval == TV_LIFE_BOOK)
 		{

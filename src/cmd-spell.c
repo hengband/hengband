@@ -1304,7 +1304,7 @@ void do_cmd_cast(void)
 			}
 
 			/* Gain experience */
-			gain_exp(e * s_ptr->slevel);
+			gain_exp(p_ptr, e * s_ptr->slevel);
 
 			/* Redraw object recall */
 			p_ptr->window |= (PW_OBJECT);

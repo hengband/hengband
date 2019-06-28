@@ -328,7 +328,7 @@ void exe_eat_food(INVENTORY_IDX item)
 	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
-		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
+		gain_exp(p_ptr, (lev + (p_ptr->lev >> 1)) / p_ptr->lev);
 	}
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);

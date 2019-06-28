@@ -3832,7 +3832,7 @@ void cast_shuffle(void)
 			s32b ee = (p_ptr->exp / 25) + 1;
 			if (ee > 5000) ee = 5000;
 			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-			gain_exp(ee);
+			gain_exp(p_ptr, ee);
 		}
 	}
 }

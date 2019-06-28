@@ -3930,7 +3930,7 @@ void gain_exp_64(s32b amount, u32b amount_frac)
 /*
  * Gain experience
  */
-void gain_exp(s32b amount)
+void gain_exp(player_type *creature_ptr, s32b amount)
 {
 	gain_exp_64(amount, 0L);
 }

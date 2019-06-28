@@ -584,7 +584,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 		if (randint0(100) < j)
 		{
 			msg_print(_("鍵をはずした。", "You have picked the lock."));
-			gain_exp(1);
+			gain_exp(p_ptr, 1);
 			flag = TRUE;
 		}
 
@@ -784,7 +784,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 			sound(SOUND_OPENDOOR);
 
 			/* Experience */
-			gain_exp(1);
+			gain_exp(p_ptr, 1);
 		}
 
 		/* Failure */
@@ -1345,7 +1345,7 @@ bool easy_open_door(POSITION y, POSITION x)
 			sound(SOUND_OPENDOOR);
 
 			/* Experience */
-			gain_exp(1);
+			gain_exp(p_ptr, 1);
 		}
 
 		/* Failure */
@@ -1428,7 +1428,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	else if (randint0(100) < j)
 	{
 		msg_print(_("箱に仕掛けられていたトラップを解除した。", "You have disarmed the chest."));
-		gain_exp(o_ptr->pval);
+		gain_exp(p_ptr, o_ptr->pval);
 		o_ptr->pval = (0 - o_ptr->pval);
 	}
 
@@ -1503,7 +1503,7 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 		msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
 		
 		/* Reward */
-		gain_exp(power);
+		gain_exp(p_ptr, power);
 
 		/* Remove the trap */
 		cave_alter_feat(y, x, FF_DISARM);

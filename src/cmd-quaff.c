@@ -443,7 +443,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 				EXP ee = (p_ptr->exp / 2) + 10;
 				if (ee > 100000L) ee = 100000L;
 				msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-				gain_exp(ee);
+				gain_exp(p_ptr, ee);
 				ident = TRUE;
 			}
 			break;
@@ -533,7 +533,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 	if (ident && !object_is_aware(q_ptr))
 	{
 		object_aware(q_ptr);
-		gain_exp((lev + (p_ptr->lev >> 1)) / p_ptr->lev);
+		gain_exp(p_ptr, (lev + (p_ptr->lev >> 1)) / p_ptr->lev);
 	}
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);

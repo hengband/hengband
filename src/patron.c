@@ -309,7 +309,7 @@ void gain_level_reward(int chosen_reward)
 				if (ee > 100000L) ee = 100000L;
 				msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 
-				gain_exp(ee);
+				gain_exp(p_ptr, ee);
 				reward = _("経験値を得た", "experience");
 			}
 			break;
