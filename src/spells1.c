@@ -4278,7 +4278,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					dam *= 6; dam /= (randint1(4) + 7);
 				}
 			}
-			else if (!CHECK_MULTISHADOW()) drain_exp(200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
+			else if (!CHECK_MULTISHADOW()) drain_exp(p_ptr, 200 + (p_ptr->exp / 100), 200 + (p_ptr->exp / 1000), 75);
 
 			if (PRACE_IS_(p_ptr, RACE_SPECTRE) && !CHECK_MULTISHADOW())
 			{
@@ -4347,7 +4347,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				}
 				if (!p_ptr->resist_neth && !p_ptr->resist_chaos)
 				{
-					drain_exp(5000 + (p_ptr->exp / 100), 500 + (p_ptr->exp / 1000), 75);
+					drain_exp(p_ptr, 5000 + (p_ptr->exp / 100), 500 + (p_ptr->exp / 1000), 75);
 				}
 
 				if (!p_ptr->resist_chaos || one_in_(9))

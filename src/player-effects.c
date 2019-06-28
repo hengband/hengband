@@ -4053,12 +4053,12 @@ void lose_exp(s32b amount)
  * Drain experience
  * If resisted to draining, return FALSE
  */
-bool drain_exp(s32b drain, s32b slip, int hold_exp_prob)
+bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_prob)
 {
 	/* Androids and their mimics are never drained */
-	if (p_ptr->prace == RACE_ANDROID) return FALSE;
+	if (creature_ptr->prace == RACE_ANDROID) return FALSE;
 
-	if (p_ptr->hold_exp && (randint0(100) < hold_exp_prob))
+	if (creature_ptr->hold_exp && (randint0(100) < hold_exp_prob))
 	{
 		/* Hold experience */
 		msg_print(_("しかし自己の経験値を守りきった！", "You keep hold of your experience!"));
@@ -4066,7 +4066,7 @@ bool drain_exp(s32b drain, s32b slip, int hold_exp_prob)
 	}
 
 	/* Hold experience failed */
-	if (p_ptr->hold_exp)
+	if (creature_ptr->hold_exp)
 	{
 		msg_print(_("経験値を少し吸い取られた気がする！", "You feel your experience slipping away!"));
 		lose_exp(slip);
