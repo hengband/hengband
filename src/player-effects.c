@@ -3906,20 +3906,20 @@ void do_poly_self(player_type *creature_ptr)
 /*
  * Gain experience
  */
-void gain_exp_64(s32b amount, u32b amount_frac)
+void gain_exp_64(player_type *creature_ptr, s32b amount, u32b amount_frac)
 {
-	if (p_ptr->is_dead) return;
+	if (creature_ptr->is_dead) return;
 
-	if (p_ptr->prace == RACE_ANDROID) return;
+	if (creature_ptr->prace == RACE_ANDROID) return;
 
 	/* Gain some experience */
-	s64b_add(&(p_ptr->exp), &(p_ptr->exp_frac), amount, amount_frac);
+	s64b_add(&(creature_ptr->exp), &(creature_ptr->exp_frac), amount, amount_frac);
 
 	/* Slowly recover from experience drainage */
-	if (p_ptr->exp < p_ptr->max_exp)
+	if (creature_ptr->exp < creature_ptr->max_exp)
 	{
 		/* Gain max experience (20%) (was 10%) */
-		p_ptr->max_exp += amount / 5;
+		creature_ptr->max_exp += amount / 5;
 	}
 
 	/* Check Experience */
@@ -3932,7 +3932,7 @@ void gain_exp_64(s32b amount, u32b amount_frac)
  */
 void gain_exp(player_type *creature_ptr, s32b amount)
 {
-	gain_exp_64(amount, 0L);
+	gain_exp_64(creature_ptr, amount, 0L);
 }
 
 
