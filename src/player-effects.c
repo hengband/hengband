@@ -4034,15 +4034,15 @@ void calc_android_exp(player_type *creature_ptr)
 /*
  * Lose experience
  */
-void lose_exp(s32b amount)
+void lose_exp(player_type *creature_ptr, s32b amount)
 {
-	if (p_ptr->prace == RACE_ANDROID) return;
+	if (creature_ptr->prace == RACE_ANDROID) return;
 
 	/* Never drop below zero experience */
-	if (amount > p_ptr->exp) amount = p_ptr->exp;
+	if (amount > creature_ptr->exp) amount = creature_ptr->exp;
 
 	/* Lose some experience */
-	p_ptr->exp -= amount;
+	creature_ptr->exp -= amount;
 
 	/* Check Experience */
 	check_experience();
@@ -4069,12 +4069,12 @@ bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_pr
 	if (creature_ptr->hold_exp)
 	{
 		msg_print(_("経験値を少し吸い取られた気がする！", "You feel your experience slipping away!"));
-		lose_exp(slip);
+		lose_exp(p_ptr, slip);
 	}
 	else
 	{
 		msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away!"));
-		lose_exp(drain);
+		lose_exp(p_ptr, drain);
 	}
 
 	return TRUE;

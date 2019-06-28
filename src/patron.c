@@ -325,7 +325,7 @@ void gain_level_reward(int chosen_reward)
 			}
 			else
 			{
-				lose_exp(p_ptr->exp / 6);
+				lose_exp(p_ptr, p_ptr->exp / 6);
 				reward = _("経験値を失った。", "losing experience");
 			}
 			break;

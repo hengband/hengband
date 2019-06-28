@@ -69,7 +69,7 @@ extern bool lose_all_info(player_type *creature_ptr);
 extern void gain_exp_64(s32b amount, u32b amount_frac);
 extern void gain_exp(s32b amount);
 extern void calc_android_exp(player_type *creature_ptr);
-extern void lose_exp(s32b amount);
+extern void lose_exp(player_type *creature_ptr, s32b amount);
 extern bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_prob);
 extern void do_poly_self(player_type *creature_ptr);
 extern bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);

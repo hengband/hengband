@@ -3482,7 +3482,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							{
 								if (p_ptr->prace == RACE_ANDROID) break;
 								msg_print(_("人生が逆戻りした気がする。", "You feel life has clocked back."));
-								lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
+								lose_exp(p_ptr, 100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
 								break;
 							}
 

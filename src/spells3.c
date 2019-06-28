@@ -3532,8 +3532,8 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			if (p_ptr->hold_exp && (randint0(100) < 75)) break;
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
 
-			if (p_ptr->hold_exp) lose_exp(p_ptr->exp / 160);
-			else lose_exp(p_ptr->exp / 16);
+			if (p_ptr->hold_exp) lose_exp(p_ptr, p_ptr->exp / 160);
+			else lose_exp(p_ptr, p_ptr->exp / 16);
 			if (!one_in_(6)) break;
 		case 26: case 27: case 28:
 		{

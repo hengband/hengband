@@ -199,7 +199,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 				msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
 				chg_virtue(V_KNOWLEDGE, -5);
 
-				lose_exp(p_ptr->exp / 4);
+				lose_exp(p_ptr, p_ptr->exp / 4);
 				ident = TRUE;
 			}
 			break;

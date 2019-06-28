@@ -1263,7 +1263,7 @@ void do_cmd_cast(void)
 				take_hit(DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"), -1);
 
 				if ((spell > 15) && one_in_(6) && !p_ptr->hold_exp)
-					lose_exp(spell * 250);
+					lose_exp(p_ptr, spell * 250);
 			}
 		}
 		else if ((o_ptr->tval == TV_MUSIC_BOOK) && (randint1(200) < spell))
