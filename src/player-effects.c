@@ -3922,7 +3922,6 @@ void gain_exp_64(player_type *creature_ptr, s32b amount, u32b amount_frac)
 		creature_ptr->max_exp += amount / 5;
 	}
 
-	/* Check Experience */
 	check_experience();
 }
 
@@ -4025,8 +4024,6 @@ void calc_android_exp(player_type *creature_ptr)
 		if (i == INVEN_BODY) total_exp += exp / 32;
 	}
 	creature_ptr->exp = creature_ptr->max_exp = total_exp;
-
-	/* Check Experience */
 	check_experience();
 }
 
@@ -4037,14 +4034,10 @@ void calc_android_exp(player_type *creature_ptr)
 void lose_exp(player_type *creature_ptr, s32b amount)
 {
 	if (creature_ptr->prace == RACE_ANDROID) return;
-
-	/* Never drop below zero experience */
 	if (amount > creature_ptr->exp) amount = creature_ptr->exp;
 
-	/* Lose some experience */
 	creature_ptr->exp -= amount;
 
-	/* Check Experience */
 	check_experience();
 }
 
