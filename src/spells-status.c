@@ -169,7 +169,7 @@ void stop_singing(player_type *creature_ptr)
 	/* The player is singing? */
 	if (!SINGING_SONG_EFFECT(creature_ptr)) return;
 
-	/* Hack -- if called from set_action(p_ptr, ), avoid recursive loop */
+	/* Hack -- if called from set_action(p_ptr), avoid recursive loop */
 	if (creature_ptr->action == ACTION_SING) set_action(p_ptr, ACTION_NONE);
 
 	/* Message text of each song or etc. */

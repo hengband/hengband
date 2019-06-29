@@ -867,7 +867,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 			}
 		}
 
-		p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod();
+		p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(p_ptr);
 		creature_ptr->update |= PU_BONUS;
 		handle_stuff();
 		return TRUE;
@@ -1496,7 +1496,7 @@ bool lose_mutation(MUTATION_IDX choose_mut)
 
 		p_ptr->update |= PU_BONUS;
 		handle_stuff();
-		p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod();
+		p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(p_ptr);
 		return TRUE;
 	}
 }
@@ -1510,7 +1510,7 @@ void lose_all_mutations(player_type *creature_ptr)
 		creature_ptr->muta1 = creature_ptr->muta2 = creature_ptr->muta3 = 0;
 		creature_ptr->update |= PU_BONUS;
 		handle_stuff();
-		creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod();
+		creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(p_ptr);
 	}
 }
 
@@ -2055,7 +2055,7 @@ static int count_mutations(void)
  * Return the modifier to the regeneration rate (in percent)
  * @return ペナルティ修正(%)
  */
-int calc_mutant_regenerate_mod(void)
+int calc_mutant_regenerate_mod(player_type *creature_ptr)
 {
 	int regen;
 	int mod = 10;
@@ -2066,8 +2066,8 @@ int calc_mutant_regenerate_mod(void)
 	 * only 5% decrease per additional mutation
 	 */
 
-	if (p_ptr->pseikaku == SEIKAKU_LUCKY) count--;
-	if (p_ptr->prace == RACE_BEASTMAN)
+	if (creature_ptr->pseikaku == SEIKAKU_LUCKY) count--;
+	if (creature_ptr->prace == RACE_BEASTMAN)
 	{
 		count -= 10;
 		mod = 5;
