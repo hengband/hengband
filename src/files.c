@@ -4871,7 +4871,7 @@ static void dump_aux_mutations(FILE *fff)
 	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
 	{
 		fprintf(fff, _("\n\n  [突然変異]\n\n", "\n\n  [Mutations]\n\n"));
-		dump_mutations(fff);
+		dump_mutations(p_ptr, fff);
 	}
 }
 
