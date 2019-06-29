@@ -39,7 +39,7 @@
 #define REW_SER_DEMO    35  /*!< カオスパトロンからの報酬: 悪魔の下僕下賜 */
 #define REW_SER_MONS    36  /*!< カオスパトロンからの報酬: モンスターの下僕下賜 */
 
-extern void gain_level_reward(int chosen_reward);
+extern void gain_level_reward(player_type *creature_ptr, int chosen_reward);
 extern void admire_from_patron(player_type *creature_ptr);
 extern const concptr chaos_patrons[MAX_PATRON];
 

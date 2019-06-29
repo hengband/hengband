@@ -5618,7 +5618,7 @@ void check_experience(void)
 		 */
 		if (level_reward)
 		{
-			gain_level_reward(0);
+			gain_level_reward(p_ptr, 0);
 			level_reward = FALSE;
 		}
 

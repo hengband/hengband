@@ -1807,7 +1807,7 @@ void do_cmd_debug(void)
 
 	/* Specific reward */
 	case 'r':
-		(void)gain_level_reward(command_arg);
+		(void)gain_level_reward(p_ptr, command_arg);
 		break;
 
 	/* Summon _friendly_ named monster */
