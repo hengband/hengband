@@ -288,68 +288,68 @@ void reset_tim_flags(player_type *creature_ptr)
  * @brief プレイヤーに魔力消去効果を与える。
  * @return なし
  */
-void dispel_player(void)
+void dispel_player(player_type *creature_ptr)
 {
-	(void)set_fast(p_ptr, 0, TRUE);
-	(void)set_lightspeed(p_ptr, 0, TRUE);
-	(void)set_slow(p_ptr, 0, TRUE);
-	(void)set_shield(p_ptr, 0, TRUE);
-	(void)set_blessed(p_ptr, 0, TRUE);
-	(void)set_tsuyoshi(p_ptr, 0, TRUE);
-	(void)set_hero(p_ptr, 0, TRUE);
-	(void)set_shero(p_ptr, 0, TRUE);
-	(void)set_protevil(p_ptr, 0, TRUE);
-	(void)set_invuln(p_ptr, 0, TRUE);
-	(void)set_wraith_form(p_ptr, 0, TRUE);
-	(void)set_kabenuke(p_ptr, 0, TRUE);
-	(void)set_tim_res_nether(p_ptr, 0, TRUE);
-	(void)set_tim_res_time(p_ptr, 0, TRUE);
+	(void)set_fast(creature_ptr, 0, TRUE);
+	(void)set_lightspeed(creature_ptr, 0, TRUE);
+	(void)set_slow(creature_ptr, 0, TRUE);
+	(void)set_shield(creature_ptr, 0, TRUE);
+	(void)set_blessed(creature_ptr, 0, TRUE);
+	(void)set_tsuyoshi(creature_ptr, 0, TRUE);
+	(void)set_hero(creature_ptr, 0, TRUE);
+	(void)set_shero(creature_ptr, 0, TRUE);
+	(void)set_protevil(creature_ptr, 0, TRUE);
+	(void)set_invuln(creature_ptr, 0, TRUE);
+	(void)set_wraith_form(creature_ptr, 0, TRUE);
+	(void)set_kabenuke(creature_ptr, 0, TRUE);
+	(void)set_tim_res_nether(creature_ptr, 0, TRUE);
+	(void)set_tim_res_time(creature_ptr, 0, TRUE);
 	/* by henkma */
-	(void)set_tim_reflect(p_ptr, 0,TRUE);
-	(void)set_multishadow(p_ptr, 0,TRUE);
-	(void)set_dustrobe(p_ptr, 0,TRUE);
+	(void)set_tim_reflect(creature_ptr, 0,TRUE);
+	(void)set_multishadow(creature_ptr, 0,TRUE);
+	(void)set_dustrobe(creature_ptr, 0,TRUE);
 
-	(void)set_tim_invis(p_ptr, 0, TRUE);
-	(void)set_tim_infra(p_ptr, 0, TRUE);
-	(void)set_tim_esp(p_ptr, 0, TRUE);
-	(void)set_tim_regen(p_ptr, 0, TRUE);
-	(void)set_tim_stealth(p_ptr, 0, TRUE);
-	(void)set_tim_levitation(p_ptr, 0, TRUE);
-	(void)set_tim_sh_touki(p_ptr, 0, TRUE);
-	(void)set_tim_sh_fire(p_ptr, 0, TRUE);
-	(void)set_tim_sh_holy(p_ptr, 0, TRUE);
-	(void)set_tim_eyeeye(p_ptr, 0, TRUE);
-	(void)set_magicdef(p_ptr, 0, TRUE);
-	(void)set_resist_magic(p_ptr, 0, TRUE);
-	(void)set_oppose_acid(p_ptr, 0, TRUE);
-	(void)set_oppose_elec(p_ptr, 0, TRUE);
-	(void)set_oppose_fire(p_ptr, 0, TRUE);
-	(void)set_oppose_cold(p_ptr, 0, TRUE);
-	(void)set_oppose_pois(p_ptr, 0, TRUE);
-	(void)set_ultimate_res(p_ptr, 0, TRUE);
-	(void)set_mimic(p_ptr, 0, 0, TRUE);
-	(void)set_ele_attack(p_ptr, 0, 0);
-	(void)set_ele_immune(p_ptr, 0, 0);
+	(void)set_tim_invis(creature_ptr, 0, TRUE);
+	(void)set_tim_infra(creature_ptr, 0, TRUE);
+	(void)set_tim_esp(creature_ptr, 0, TRUE);
+	(void)set_tim_regen(creature_ptr, 0, TRUE);
+	(void)set_tim_stealth(creature_ptr, 0, TRUE);
+	(void)set_tim_levitation(creature_ptr, 0, TRUE);
+	(void)set_tim_sh_touki(creature_ptr, 0, TRUE);
+	(void)set_tim_sh_fire(creature_ptr, 0, TRUE);
+	(void)set_tim_sh_holy(creature_ptr, 0, TRUE);
+	(void)set_tim_eyeeye(creature_ptr, 0, TRUE);
+	(void)set_magicdef(creature_ptr, 0, TRUE);
+	(void)set_resist_magic(creature_ptr, 0, TRUE);
+	(void)set_oppose_acid(creature_ptr, 0, TRUE);
+	(void)set_oppose_elec(creature_ptr, 0, TRUE);
+	(void)set_oppose_fire(creature_ptr, 0, TRUE);
+	(void)set_oppose_cold(creature_ptr, 0, TRUE);
+	(void)set_oppose_pois(creature_ptr, 0, TRUE);
+	(void)set_ultimate_res(creature_ptr, 0, TRUE);
+	(void)set_mimic(creature_ptr, 0, 0, TRUE);
+	(void)set_ele_attack(creature_ptr, 0, 0);
+	(void)set_ele_immune(creature_ptr, 0, 0);
 
 	/* Cancel glowing hands */
-	if (p_ptr->special_attack & ATTACK_CONFUSE)
+	if (creature_ptr->special_attack & ATTACK_CONFUSE)
 	{
-		p_ptr->special_attack &= ~(ATTACK_CONFUSE);
+		creature_ptr->special_attack &= ~(ATTACK_CONFUSE);
 		msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
 	}
 
 	if (music_singing_any() || hex_spelling_any())
 	{
 		concptr str = (music_singing_any()) ? _("歌", "singing") : _("呪文", "spelling");
-		INTERUPTING_SONG_EFFECT(p_ptr) = SINGING_SONG_EFFECT(p_ptr);
-		SINGING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
+		INTERUPTING_SONG_EFFECT(creature_ptr) = SINGING_SONG_EFFECT(creature_ptr);
+		SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
 
-		p_ptr->action = ACTION_NONE;
-		p_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
-		p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-		p_ptr->energy_need += ENERGY_NEED();
+		creature_ptr->action = ACTION_NONE;
+		creature_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
+		creature_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+		creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		creature_ptr->energy_need += ENERGY_NEED();
 	}
 }
 

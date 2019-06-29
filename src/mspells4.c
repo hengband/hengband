@@ -199,7 +199,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		dispel_player();
+		dispel_player(p_ptr);
 		if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
 
 		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
@@ -214,7 +214,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		if (t_idx == p_ptr->riding) dispel_player();
+		if (t_idx == p_ptr->riding) dispel_player(p_ptr);
 		dispel_monster_status(t_idx);
 	}
 }
