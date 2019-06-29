@@ -2090,10 +2090,10 @@ int calc_mutant_regenerate_mod(void)
  * @param power 発動させる突然変異レイシャルのID
  * @return レイシャルを実行した場合TRUE、キャンセルした場合FALSEを返す
  */
-bool mutation_power_aux(int power)
+bool mutation_power_aux(player_type *creature_ptr, int power)
 {
 	DIRECTION dir = 0;
-	PLAYER_LEVEL lvl = p_ptr->lev;
+	PLAYER_LEVEL lvl = creature_ptr->lev;
 
 	switch (power)
 	{
@@ -2188,7 +2188,7 @@ bool mutation_power_aux(int power)
 
 				for (i = 0; i < INVEN_TOTAL; i++)
 				{
-					object_type *o_ptr = &p_ptr->inventory_list[i];
+					object_type *o_ptr = &creature_ptr->inventory_list[i];
 
 					if (!o_ptr->k_idx) continue;
 					if (!object_is_cursed(o_ptr)) continue;
@@ -2204,7 +2204,7 @@ bool mutation_power_aux(int power)
 
 		case MUT1_POLYMORPH:
 			if (!get_check(_("変身します。よろしいですか？", "You will polymorph your self. Are you sure? "))) return FALSE;
-			do_poly_self(p_ptr);
+			do_poly_self(creature_ptr);
 			break;
 
 		case MUT1_MIDAS_TCH:
@@ -2217,7 +2217,7 @@ bool mutation_power_aux(int power)
 				DIRECTION i;
 				for (i = 0; i < 8; i++)
 				{
-					summon_specific(-1, p_ptr->y, p_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
+					summon_specific(-1, creature_ptr->y, creature_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
 				}
 			}
 			break;
@@ -2229,38 +2229,38 @@ bool mutation_power_aux(int power)
 
 				if (randint0(5) < num)
 				{
-					(void)set_oppose_acid(p_ptr, dur, FALSE);
+					(void)set_oppose_acid(creature_ptr, dur, FALSE);
 					num--;
 				}
 				if (randint0(4) < num)
 				{
-					(void)set_oppose_elec(p_ptr, dur, FALSE);
+					(void)set_oppose_elec(creature_ptr, dur, FALSE);
 					num--;
 				}
 				if (randint0(3) < num)
 				{
-					(void)set_oppose_fire(p_ptr, dur, FALSE);
+					(void)set_oppose_fire(creature_ptr, dur, FALSE);
 					num--;
 				}
 				if (randint0(2) < num)
 				{
-					(void)set_oppose_cold(p_ptr, dur, FALSE);
+					(void)set_oppose_cold(creature_ptr, dur, FALSE);
 					num--;
 				}
 				if (num)
 				{
-					(void)set_oppose_pois(p_ptr, dur, FALSE);
+					(void)set_oppose_pois(creature_ptr, dur, FALSE);
 					num--;
 				}
 			}
 			break;
 
 		case MUT1_EARTHQUAKE:
-			(void)earthquake(p_ptr->y, p_ptr->x, 10, 0);
+			(void)earthquake(creature_ptr->y, creature_ptr->x, 10, 0);
 			break;
 
 		case MUT1_EAT_MAGIC:
-			if (!eat_magic(p_ptr->lev * 2)) return FALSE;
+			if (!eat_magic(creature_ptr->lev * 2)) return FALSE;
 			break;
 
 		case MUT1_WEIGH_MAG:
@@ -2289,7 +2289,7 @@ bool mutation_power_aux(int power)
 			break;
 
 		case MUT1_RECALL:
-			if (!recall_player(p_ptr, randint0(21) + 15)) return FALSE;
+			if (!recall_player(creature_ptr, randint0(21) + 15)) return FALSE;
 			break;
 
 		case MUT1_BANISH:
@@ -2299,8 +2299,8 @@ bool mutation_power_aux(int power)
 				monster_type *m_ptr;
 				monster_race *r_ptr;
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
-				y = p_ptr->y + ddy[dir];
-				x = p_ptr->x + ddx[dir];
+				y = creature_ptr->y + ddy[dir];
+				x = creature_ptr->x + ddx[dir];
 				g_ptr = &current_floor_ptr->grid_array[y][x];
 
 				if (!g_ptr->m_idx)
@@ -2316,8 +2316,8 @@ bool mutation_power_aux(int power)
 				if ((r_ptr->flags3 & RF3_EVIL) &&
 				    !(r_ptr->flags1 & RF1_QUESTOR) &&
 				    !(r_ptr->flags1 & RF1_UNIQUE) &&
-				    !p_ptr->inside_arena && !p_ptr->inside_quest &&
-					(r_ptr->level < randint1(p_ptr->lev+50)) &&
+				    !creature_ptr->inside_arena && !creature_ptr->inside_quest &&
+					(r_ptr->level < randint1(creature_ptr->lev+50)) &&
 					!(m_ptr->mflag2 & MFLAG2_NOGENO))
 				{
 					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
@@ -2344,8 +2344,8 @@ bool mutation_power_aux(int power)
 				POSITION x, y;
 				grid_type *g_ptr;
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
-				y = p_ptr->y + ddy[dir];
-				x = p_ptr->x + ddx[dir];
+				y = creature_ptr->y + ddy[dir];
+				x = creature_ptr->x + ddx[dir];
 				g_ptr = &current_floor_ptr->grid_array[y][x];
 				if (!g_ptr->m_idx)
 				{
@@ -2364,7 +2364,7 @@ bool mutation_power_aux(int power)
 			break;
 
 		default:
-			free_turn(p_ptr);
+			free_turn(creature_ptr);
 			msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);
 	}
 

@@ -2005,7 +2005,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 		if (power_desc[i].number < 0)
 			cast = cmd_racial_power_aux(power_desc[i].number);
 		else
-			cast = mutation_power_aux(power_desc[i].number);
+			cast = mutation_power_aux(p_ptr, power_desc[i].number);
 		break;
 	case 0:
 		cast = FALSE;
