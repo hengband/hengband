@@ -463,7 +463,7 @@ void do_cmd_aim_wand(void)
 	if (cmd_limit_arena(p_ptr)) return;
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");

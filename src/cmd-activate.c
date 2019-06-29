@@ -640,7 +640,7 @@ void do_cmd_activate(player_type *user_ptr)
 
 	if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	item_tester_hook = item_tester_hook_activate;

@@ -4211,7 +4211,7 @@ void hayagake(player_type *creature_ptr)
 {
 	if (creature_ptr->action == ACTION_HAYAGAKE)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 	else
 	{
@@ -4225,7 +4225,7 @@ void hayagake(player_type *creature_ptr)
 		}
 		else
 		{
-			set_action(ACTION_HAYAGAKE);
+			set_action(p_ptr, ACTION_HAYAGAKE);
 		}
 	}
 	creature_ptr->energy_use = 0;

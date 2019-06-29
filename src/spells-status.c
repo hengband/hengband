@@ -169,8 +169,8 @@ void stop_singing(player_type *creature_ptr)
 	/* The player is singing? */
 	if (!SINGING_SONG_EFFECT(creature_ptr)) return;
 
-	/* Hack -- if called from set_action(), avoid recursive loop */
-	if (creature_ptr->action == ACTION_SING) set_action(ACTION_NONE);
+	/* Hack -- if called from set_action(p_ptr, ), avoid recursive loop */
+	if (creature_ptr->action == ACTION_SING) set_action(p_ptr, ACTION_NONE);
 
 	/* Message text of each song or etc. */
 	do_spell(REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
@@ -426,7 +426,7 @@ bool fishing(player_type *creature_ptr)
 		free_turn(creature_ptr);
 		return FALSE;
 	}
-	set_action(ACTION_FISH);
+	set_action(p_ptr, ACTION_FISH);
 	creature_ptr->redraw |= (PR_STATE);
 	return TRUE;
 }

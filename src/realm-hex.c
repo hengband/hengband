@@ -54,7 +54,7 @@ bool stop_hex_spell_all(void)
 	CASTING_HEX_FLAGS(p_ptr) = 0;
 	CASTING_HEX_NUM(p_ptr) = 0;
 
-	if (p_ptr->action == ACTION_SPELL) set_action(ACTION_NONE);
+	if (p_ptr->action == ACTION_SPELL) set_action(p_ptr, ACTION_NONE);
 
 	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
@@ -824,7 +824,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				do_spell(REALM_HEX, spell, SPELL_STOP);
 				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << spell);
 				CASTING_HEX_NUM(p_ptr)--;
-				if (!SINGING_SONG_ID(p_ptr)) set_action(ACTION_NONE);
+				if (!SINGING_SONG_ID(p_ptr)) set_action(p_ptr, ACTION_NONE);
 			}
 		}
 		if (stop)
@@ -1122,7 +1122,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		CASTING_HEX_FLAGS(p_ptr) |= 1L << (spell);
 		CASTING_HEX_NUM(p_ptr)++;
 
-		if (p_ptr->action != ACTION_SPELL) set_action(ACTION_SPELL);
+		if (p_ptr->action != ACTION_SPELL) set_action(p_ptr, ACTION_SPELL);
 	}
 
 	if (!info)

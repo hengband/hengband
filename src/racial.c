@@ -78,7 +78,7 @@ static bool choose_kamae(void)
 		{
 			if (p_ptr->action == ACTION_KAMAE)
 			{
-				set_action(ACTION_NONE);
+				set_action(p_ptr, ACTION_NONE);
 			}
 			else
 				msg_print(_("もともと構えていない。", "You are not assuming a posture."));
@@ -106,7 +106,7 @@ static bool choose_kamae(void)
 			break;
 		}
 	}
-	set_action(ACTION_KAMAE);
+	set_action(p_ptr, ACTION_KAMAE);
 
 	if (p_ptr->special_defense & (KAMAE_GENBU << new_kamae))
 	{
@@ -177,7 +177,7 @@ static bool choose_kata(void)
 		{
 			if (p_ptr->action == ACTION_KATA)
 			{
-				set_action(ACTION_NONE);
+				set_action(p_ptr, ACTION_NONE);
 			}
 			else
 				msg_print(_("もともと構えていない。", "You are not assuming posture."));
@@ -205,7 +205,7 @@ static bool choose_kata(void)
 			break;
 		}
 	}
-	set_action(ACTION_KATA);
+	set_action(p_ptr, ACTION_KATA);
 
 	if (p_ptr->special_defense & (KATA_IAI << new_kata))
 	{
@@ -579,11 +579,11 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (p_ptr->action == ACTION_LEARN)
 			{
-				set_action(ACTION_NONE);
+				set_action(p_ptr, ACTION_NONE);
 			}
 			else
 			{
-				set_action(ACTION_LEARN);
+				set_action(p_ptr, ACTION_LEARN);
 			}
 			free_turn(p_ptr);
 			break;
@@ -855,7 +855,7 @@ void do_cmd_racial_power(void)
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	switch (p_ptr->pclass)

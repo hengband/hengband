@@ -3715,8 +3715,8 @@ static void process_command(void)
 		/* Toggle search mode */
 		case 'S':
 		{
-			if (p_ptr->action == ACTION_SEARCH) set_action(ACTION_NONE);
-			else set_action(ACTION_SEARCH);
+			if (p_ptr->action == ACTION_SEARCH) set_action(p_ptr, ACTION_NONE);
+			else set_action(p_ptr, ACTION_SEARCH);
 			break;
 		}
 
@@ -4274,7 +4274,7 @@ static void process_command(void)
 			if (!p_ptr->wild_mode) do_cmd_travel();
 			if (p_ptr->special_defense & KATA_MUSOU)
 			{
-				set_action(ACTION_NONE);
+				set_action(p_ptr, ACTION_NONE);
 			}
 			break;
 		}
@@ -4466,7 +4466,7 @@ static void process_player(void)
 			if ((p_ptr->chp == p_ptr->mhp) &&
 			    (p_ptr->csp >= p_ptr->msp))
 			{
-				set_action(ACTION_NONE);
+				set_action(p_ptr, ACTION_NONE);
 			}
 		}
 
@@ -4483,7 +4483,7 @@ static void process_player(void)
 			    !p_ptr->image && !p_ptr->word_recall &&
 			    !p_ptr->alter_reality)
 			{
-				set_action(ACTION_NONE);
+				set_action(p_ptr, ACTION_NONE);
 			}
 		}
 	}
@@ -4592,7 +4592,7 @@ static void process_player(void)
 			/* Mana run out */
 			p_ptr->csp = 0;
 			p_ptr->csp_frac = 0;
-			set_action(ACTION_NONE);
+			set_action(p_ptr, ACTION_NONE);
 		}
 		else
 		{
@@ -4608,7 +4608,7 @@ static void process_player(void)
 		{
 			if (p_ptr->csp < 3)
 			{
-				set_action(ACTION_NONE);
+				set_action(p_ptr, ACTION_NONE);
 			}
 			else
 			{
@@ -4671,7 +4671,7 @@ static void process_player(void)
 				/* Reduce rest count */
 				p_ptr->resting--;
 
-				if (!p_ptr->resting) set_action(ACTION_NONE);
+				if (!p_ptr->resting) set_action(p_ptr, ACTION_NONE);
 				p_ptr->redraw |= (PR_STATE);
 			}
 

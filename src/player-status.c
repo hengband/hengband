@@ -1615,7 +1615,7 @@ void calc_bonuses(void)
 	{
 		if (!(empty_hands_status & EMPTY_HAND_RARM))
 		{
-			set_action(ACTION_NONE);
+			set_action(p_ptr, ACTION_NONE);
 		}
 	}
 

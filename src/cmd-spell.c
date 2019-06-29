@@ -651,7 +651,7 @@ void do_cmd_browse(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	if (p_ptr->pclass == CLASS_FORCETRAINER)
@@ -829,7 +829,7 @@ void do_cmd_study(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 #ifdef JP

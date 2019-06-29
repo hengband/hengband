@@ -412,7 +412,7 @@ void do_cmd_zap_rod(void)
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	q = _("どのロッドを振りますか? ", "Zap which rod? ");

@@ -285,7 +285,7 @@ bool do_riding(bool force)
 	x = p_ptr->x + ddx[dir];
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 
-	if (p_ptr->special_defense & KATA_MUSOU) set_action(ACTION_NONE);
+	if (p_ptr->special_defense & KATA_MUSOU) set_action(p_ptr, ACTION_NONE);
 
 	if (p_ptr->riding)
 	{
@@ -369,7 +369,7 @@ bool do_riding(bool force)
 			msg_format(_("%sを起こした。", "You have waked %s up."), m_name);
 		}
 
-		if (p_ptr->action == ACTION_KAMAE) set_action(ACTION_NONE);
+		if (p_ptr->action == ACTION_KAMAE) set_action(p_ptr, ACTION_NONE);
 
 		p_ptr->riding = g_ptr->m_idx;
 

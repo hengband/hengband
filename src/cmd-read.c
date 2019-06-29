@@ -632,7 +632,7 @@ void do_cmd_read_scroll(void)
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	if (cmd_limit_blind(p_ptr)) return;

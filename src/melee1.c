@@ -2343,7 +2343,7 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 
 	if ((p_ptr->special_defense & KATA_IAI) && ((mode != HISSATSU_IAI) || mdeath))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	return mdeath;
@@ -4108,7 +4108,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 	if (p_ptr->special_defense & KATA_IAI)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Assume we attacked */

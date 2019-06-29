@@ -440,7 +440,7 @@ void do_cmd_use_staff(void)
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	q = _("どの杖を使いますか? ", "Use which staff? ");

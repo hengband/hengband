@@ -1181,7 +1181,7 @@ bool change_wild_mode(bool encount)
 	if (hex_spelling_any()) stop_hex_spell_all();
 
 	/* Cancel any special action */
-	set_action(ACTION_NONE);
+	set_action(p_ptr, ACTION_NONE);
 
 	/* Go into the global map */
 	p_ptr->wild_mode = TRUE;

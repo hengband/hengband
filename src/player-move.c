@@ -677,7 +677,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		     (!p_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP))))
 		{
 			msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
-			set_action(ACTION_NONE);
+			set_action(p_ptr, ACTION_NONE);
 		}
 		if (p_ptr->prace == RACE_MERFOLK)
 		{
@@ -2297,7 +2297,7 @@ void disturb(bool stop_search, bool stop_travel)
 	if ((p_ptr->action == ACTION_REST) || (p_ptr->action == ACTION_FISH) || (stop_search && (p_ptr->action == ACTION_SEARCH)))
 	{
 		/* Cancel */
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Cancel running */

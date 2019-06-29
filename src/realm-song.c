@@ -27,7 +27,7 @@ static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
 
 
 	/* Now the player is singing */
-	set_action(ACTION_SING);
+	set_action(p_ptr, ACTION_SING);
 
 	p_ptr->update |= (PU_BONUS);
 	p_ptr->redraw |= (PR_STATUS);

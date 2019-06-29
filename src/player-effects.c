@@ -99,9 +99,9 @@ const kamae kata_shurui[MAX_KATA] =
  * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_KAMAE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL から選択。
  * @return なし
  */
-void set_action(ACTION_IDX typ)
+void set_action(player_type *creature_ptr, ACTION_IDX typ)
 {
-	int prev_typ = p_ptr->action;
+	int prev_typ = creature_ptr->action;
 
 	if (typ == prev_typ)
 	{
@@ -114,32 +114,32 @@ void set_action(ACTION_IDX typ)
 			case ACTION_SEARCH:
 			{
 				msg_print(_("探索をやめた。", "You no longer walk carefully."));
-				p_ptr->redraw |= (PR_SPEED);
+				creature_ptr->redraw |= (PR_SPEED);
 				break;
 			}
 			case ACTION_REST:
 			{
-				p_ptr->resting = 0;
+				creature_ptr->resting = 0;
 				break;
 			}
 			case ACTION_LEARN:
 			{
 				msg_print(_("学習をやめた。", "You stop Learning"));
-				p_ptr->new_mane = FALSE;
+				creature_ptr->new_mane = FALSE;
 				break;
 			}
 			case ACTION_KAMAE:
 			{
 				msg_print(_("構えをといた。", "You stop assuming the posture."));
-				p_ptr->special_defense &= ~(KAMAE_MASK);
+				creature_ptr->special_defense &= ~(KAMAE_MASK);
 				break;
 			}
 			case ACTION_KATA:
 			{
 				msg_print(_("型を崩した。", "You stop assuming the posture."));
-				p_ptr->special_defense &= ~(KATA_MASK);
-				p_ptr->update |= (PU_MONSTERS);
-				p_ptr->redraw |= (PR_STATUS);
+				creature_ptr->special_defense &= ~(KATA_MASK);
+				creature_ptr->update |= (PU_MONSTERS);
+				creature_ptr->redraw |= (PR_STATUS);
 				break;
 			}
 			case ACTION_SING:
@@ -150,7 +150,7 @@ void set_action(ACTION_IDX typ)
 			case ACTION_HAYAGAKE:
 			{
 				msg_print(_("足が重くなった。", "You are no longer walking extremely fast."));
-				take_turn(p_ptr, 100);
+				take_turn(creature_ptr, 100);
 				break;
 			}
 			case ACTION_SPELL:
@@ -161,18 +161,18 @@ void set_action(ACTION_IDX typ)
 		}
 	}
 
-	p_ptr->action = typ;
+	creature_ptr->action = typ;
 
 	/* If we are requested other action, stop singing */
-	if (prev_typ == ACTION_SING) stop_singing(p_ptr);
+	if (prev_typ == ACTION_SING) stop_singing(creature_ptr);
 	if (prev_typ == ACTION_SPELL) stop_hex_spell();
 
-	switch (p_ptr->action)
+	switch (creature_ptr->action)
 	{
 		case ACTION_SEARCH:
 		{
 			msg_print(_("注意深く歩き始めた。", "You begin to walk carefully."));
-			p_ptr->redraw |= (PR_SPEED);
+			creature_ptr->redraw |= (PR_SPEED);
 			break;
 		}
 		case ACTION_LEARN:
@@ -195,8 +195,8 @@ void set_action(ACTION_IDX typ)
 			break;
 		}
 	}
-	p_ptr->update |= (PU_BONUS);
-	p_ptr->redraw |= (PR_STATE);
+	creature_ptr->update |= (PU_BONUS);
+	creature_ptr->redraw |= (PR_STATE);
 }
 
 /*!

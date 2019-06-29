@@ -181,7 +181,7 @@ void do_cmd_wield(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Restrict the choices */
@@ -531,7 +531,7 @@ void do_cmd_takeoff(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	q = _("どれを装備からはずしますか? ", "Take off which item? ");
@@ -596,7 +596,7 @@ void do_cmd_drop(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	q = _("どのアイテムを落としますか? ", "Drop which item? ");
@@ -656,7 +656,7 @@ void do_cmd_destroy(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Hack -- force destruction */
@@ -1100,7 +1100,7 @@ void do_cmd_refill(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* It is nothing */
@@ -1529,7 +1529,7 @@ void do_cmd_use(void)
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	item_tester_hook = item_tester_hook_use;

@@ -195,7 +195,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 
 	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Verify stairs */
@@ -333,7 +333,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 
 	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Verify stairs */
@@ -830,7 +830,7 @@ void do_cmd_open(player_type *creature_ptr)
 
 	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Option: Pick a direction */
@@ -974,7 +974,7 @@ void do_cmd_close(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Option: Pick a direction */
@@ -1219,7 +1219,7 @@ void do_cmd_tunnel(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Allow repeated command */
@@ -1552,7 +1552,7 @@ void do_cmd_disarm(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Option: Pick a direction */
@@ -1752,7 +1752,7 @@ void do_cmd_bash(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Allow repeated command */
@@ -1834,7 +1834,7 @@ void do_cmd_alter(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Allow repeated command */
@@ -1964,7 +1964,7 @@ void do_cmd_spike(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Get a "repeated" direction */
@@ -2055,7 +2055,7 @@ void do_cmd_walk(bool pickup)
 
 		if ((dir != 5) && (p_ptr->special_defense & KATA_MUSOU))
 		{
-			set_action(ACTION_NONE);
+			set_action(p_ptr, ACTION_NONE);
 		}
 
 		/* Hack -- In small scale wilderness it takes MUCH more time to move */
@@ -2108,7 +2108,7 @@ void do_cmd_run(void)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	/* Get a "repeated" direction */
@@ -2160,7 +2160,7 @@ void do_cmd_stay(bool pickup)
 void do_cmd_rest(void)
 {
 
-	set_action(ACTION_NONE);
+	set_action(p_ptr, ACTION_NONE);
 
 	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) || INTERUPTING_SONG_EFFECT(p_ptr)))
 	{
@@ -2282,7 +2282,7 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	q = _("どれを撃ちますか? ", "Fire which item? ");
@@ -2364,7 +2364,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	if (p_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(ACTION_NONE);
+		set_action(p_ptr, ACTION_NONE);
 	}
 
 	if (shuriken >= 0)
