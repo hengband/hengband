@@ -3815,7 +3815,7 @@ void cast_shuffle(void)
 	{
 		msg_print(_("《審判》だ。", "It's the Judgement."));
 		roll_hitdice(p_ptr, 0L);
-		lose_all_mutations();
+		lose_all_mutations(p_ptr);
 	}
 	else if (die < 120)
 	{

@@ -470,7 +470,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			roll_hitdice(p_ptr, 0L);
 			get_max_stats();
 			p_ptr->update |= PU_BONUS;
-			lose_all_mutations();
+			lose_all_mutations(p_ptr);
 			ident = TRUE;
 			break;
 
@@ -495,7 +495,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 		case SV_POTION_POLYMORPH:
 			if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && one_in_(23))
 			{
-				lose_all_mutations();
+				lose_all_mutations(p_ptr);
 			}
 			else
 			{

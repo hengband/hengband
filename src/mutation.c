@@ -1501,16 +1501,16 @@ bool lose_mutation(MUTATION_IDX choose_mut)
 	}
 }
 
-void lose_all_mutations(void)
+void lose_all_mutations(player_type *creature_ptr)
 {
-	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
+	if (creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3)
 	{
 		chg_virtue(V_CHANCE, -5);
 		msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-		p_ptr->muta1 = p_ptr->muta2 = p_ptr->muta3 = 0;
-		p_ptr->update |= PU_BONUS;
+		creature_ptr->muta1 = creature_ptr->muta2 = creature_ptr->muta3 = 0;
+		creature_ptr->update |= PU_BONUS;
 		handle_stuff();
-		p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod();
+		creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod();
 	}
 }
 
