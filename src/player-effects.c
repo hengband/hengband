@@ -355,7 +355,7 @@ void dispel_player(player_type *creature_ptr)
 
 
 /*!
- * @brief 変身効果の継続時間と変身先をセットする / Set "p_ptr->tim_mimic", and "p_ptr->mimic_form", notice observable changes
+ * @brief 変身効果の継続時間と変身先をセットする / Set "tim_mimic", and "mimic_form", notice observable changes
  * @param v 継続時間
  * @param p 変身内容
  * @param do_dec 現在の継続時間より長い値のみ上書きする
@@ -389,7 +389,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, IDX p, bool do_dec)
 		if (creature_ptr->tim_mimic)
 		{
 			msg_print(_("変身が解けた。", "You are no longer transformed."));
-			if (creature_ptr->mimic_form == MIMIC_DEMON) set_oppose_fire(p_ptr, 0, TRUE);
+			if (creature_ptr->mimic_form == MIMIC_DEMON) set_oppose_fire(creature_ptr, 0, TRUE);
 			creature_ptr->mimic_form=0;
 			notice = TRUE;
 			p = 0;
@@ -412,7 +412,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, IDX p, bool do_dec)
 }
 
 /*!
- * @brief 盲目の継続時間をセットする / Set "p_ptr->blind", notice observable changes
+ * @brief 盲目の継続時間をセットする / Set "blind", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details
@@ -483,7 +483,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 
 
 /*!
- * @brief 混乱の継続時間をセットする / Set "p_ptr->confused", notice observable changes
+ * @brief 混乱の継続時間をセットする / Set "confused", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
@@ -565,7 +565,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 
 
 /*!
- * @brief 毒の継続時間をセットする / Set "p_ptr->poisoned", notice observable changes
+ * @brief 毒の継続時間をセットする / Set "poisoned", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
@@ -610,7 +610,7 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 
 
 /*!
- * @brief 恐怖の継続時間をセットする / Set "p_ptr->afraid", notice observable changes
+ * @brief 恐怖の継続時間をセットする / Set "afraid", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
@@ -720,7 +720,7 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 }
 
 /*!
- * @brief 幻覚の継続時間をセットする / Set "p_ptr->image", notice observable changes
+ * @brief 幻覚の継続時間をセットする / Set "image", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details Note that we must redraw the map when hallucination changes.
@@ -736,7 +736,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 	/* Open */
 	if (v)
 	{
-		set_tsuyoshi(p_ptr, 0, TRUE);
+		set_tsuyoshi(creature_ptr, 0, TRUE);
 		if (!creature_ptr->image)
 		{
 			msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
@@ -776,7 +776,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 }
 
 /*!
- * @brief 加速の継続時間をセットする / Set "p_ptr->fast", notice observable changes
+ * @brief 加速の継続時間をセットする / Set "fast", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -827,7 +827,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 光速移動の継続時間をセットする / Set "p_ptr->lightspeed", notice observable changes
+ * @brief 光速移動の継続時間をセットする / Set "lightspeed", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -880,7 +880,7 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 減速の継続時間をセットする / Set "p_ptr->slow", notice observable changes
+ * @brief 減速の継続時間をセットする / Set "slow", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -930,7 +930,7 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 
 /*!
- * @brief 肌石化の継続時間をセットする / Set "p_ptr->shield", notice observable changes
+ * @brief 肌石化の継続時間をセットする / Set "shield", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -981,7 +981,7 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 
 /*!
- * @brief つぶれるの継続時間をセットする / Set "p_ptr->tsubureru", notice observable changes
+ * @brief つぶれるの継続時間をセットする / Set "tsubureru", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1032,7 +1032,7 @@ bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 
 /*!
- * @brief 魔法の鎧の継続時間をセットする / Set "p_ptr->magicdef", notice observable changes
+ * @brief 魔法の鎧の継続時間をセットする / Set "magicdef", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1082,7 +1082,7 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 祝福の継続時間をセットする / Set "p_ptr->blessed", notice observable changes
+ * @brief 祝福の継続時間をセットする / Set "blessed", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1133,7 +1133,7 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 
 /*!
- * @brief 士気高揚の継続時間をセットする / Set "p_ptr->hero", notice observable changes
+ * @brief 士気高揚の継続時間をセットする / Set "hero", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1186,7 +1186,7 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 狂戦士化の継続時間をセットする / Set "p_ptr->shero", notice observable changes
+ * @brief 狂戦士化の継続時間をセットする / Set "shero", notice observable changes
  * @param v 継続時間/ 0ならば無条件にリセット
  * @param do_dec FALSEの場合現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1240,7 +1240,7 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 対邪悪結界の継続時間をセットする / Set "p_ptr->protevil", notice observable changes
+ * @brief 対邪悪結界の継続時間をセットする / Set "protevil", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1289,7 +1289,7 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 幽体化の継続時間をセットする / Set "p_ptr->wraith_form", notice observable changes
+ * @brief 幽体化の継続時間をセットする / Set "wraith_form", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1354,7 +1354,7 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 無傷球の継続時間をセットする / Set "p_ptr->invuln", notice observable changes
+ * @brief 無傷球の継続時間をセットする / Set "invuln", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1421,7 +1421,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 時限ESPの継続時間をセットする / Set "p_ptr->tim_esp", notice observable changes
+ * @brief 時限ESPの継続時間をセットする / Set "tim_esp", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1472,7 +1472,7 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 時限透明視の継続時間をセットする / Set "p_ptr->tim_invis", notice observable changes
+ * @brief 時限透明視の継続時間をセットする / Set "tim_invis", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1525,7 +1525,7 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 時限赤外線視力の継続時間をセットする / Set "p_ptr->tim_infra", notice observable changes
+ * @brief 時限赤外線視力の継続時間をセットする / Set "tim_infra", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1578,7 +1578,7 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 時限急回復の継続時間をセットする / Set "p_ptr->tim_regen", notice observable changes
+ * @brief 時限急回復の継続時間をセットする / Set "tim_regen", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1628,7 +1628,7 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 隠密の歌の継続時間をセットする / Set "p_ptr->tim_stealth", notice observable changes
+ * @brief 隠密の歌の継続時間をセットする / Set "tim_stealth", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1733,7 +1733,7 @@ bool set_superstealth(player_type *creature_ptr, bool set)
 }
 
 /*!
- * @brief 一時的浮遊の継続時間をセットする / Set "p_ptr->tim_levitation", notice observable changes
+ * @brief 一時的浮遊の継続時間をセットする / Set "tim_levitation", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1783,7 +1783,7 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的闘気のオーラの継続時間をセットする / Set "p_ptr->tim_sh_touki", notice observable changes
+ * @brief 一時的闘気のオーラの継続時間をセットする / Set "tim_sh_touki", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1832,7 +1832,7 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的火炎のオーラの継続時間をセットする / Set "p_ptr->tim_sh_fire", notice observable changes
+ * @brief 一時的火炎のオーラの継続時間をセットする / Set "tim_sh_fire", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1882,7 +1882,7 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的聖なるのオーラの継続時間をセットする / Set "p_ptr->tim_sh_holy", notice observable changes
+ * @brief 一時的聖なるのオーラの継続時間をセットする / Set "tim_sh_holy", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1932,7 +1932,7 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 目には目をの残り時間をセットする / Set "p_ptr->tim_eyeeye", notice observable changes
+ * @brief 目には目をの残り時間をセットする / Set "tim_eyeeye", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -1983,7 +1983,7 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 
 /*!
- * @brief 一時的魔法防御の継続時間をセットする / Set "p_ptr->resist_magic", notice observable changes
+ * @brief 一時的魔法防御の継続時間をセットする / Set "resist_magic", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2033,7 +2033,7 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的反射の継続時間をセットする / Set "p_ptr->tim_reflect", notice observable changes
+ * @brief 一時的反射の継続時間をセットする / Set "tim_reflect", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2084,7 +2084,7 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 
 /*
- * Set "p_ptr->multishadow", notice observable changes
+ * Set "multishadow", notice observable changes
  */
 bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
@@ -2131,7 +2131,7 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的破片のオーラの継続時間をセットする / Set "p_ptr->dustrobe", notice observable changes
+ * @brief 一時的破片のオーラの継続時間をセットする / Set "dustrobe", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2181,7 +2181,7 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的壁抜けの継続時間をセットする / Set "p_ptr->kabenuke", notice observable changes
+ * @brief 一時的壁抜けの継続時間をセットする / Set "kabenuke", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2231,7 +2231,7 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief オクレ兄さんの継続時間をセットする / Set "p_ptr->tsuyoshi", notice observable changes
+ * @brief オクレ兄さんの継続時間をセットする / Set "tsuyoshi", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2425,7 +2425,7 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
 }
 
 /*!
- * @brief 一時的酸耐性の継続時間をセットする / Set "p_ptr->oppose_acid", notice observable changes
+ * @brief 一時的酸耐性の継続時間をセットする / Set "oppose_acid", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2474,7 +2474,7 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的電撃耐性の継続時間をセットする / Set "p_ptr->oppose_elec", notice observable changes
+ * @brief 一時的電撃耐性の継続時間をセットする / Set "oppose_elec", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2523,7 +2523,7 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的火炎耐性の継続時間をセットする / Set "p_ptr->oppose_fire", notice observable changes
+ * @brief 一時的火炎耐性の継続時間をセットする / Set "oppose_fire", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2573,7 +2573,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的冷気耐性の継続時間をセットする / Set "p_ptr->oppose_cold", notice observable changes
+ * @brief 一時的冷気耐性の継続時間をセットする / Set "oppose_cold", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2622,7 +2622,7 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 一時的毒耐性の継続時間をセットする / Set "p_ptr->oppose_pois", notice observable changes
+ * @brief 一時的毒耐性の継続時間をセットする / Set "oppose_pois", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
@@ -2672,7 +2672,7 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 }
 
 /*!
- * @brief 朦朧の継続時間をセットする / Set "p_ptr->stun", notice observable changes
+ * @brief 朦朧の継続時間をセットする / Set "stun", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details
@@ -2823,7 +2823,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 
 
 /*!
- * @brief 出血の継続時間をセットする / Set "p_ptr->cut", notice observable changes
+ * @brief 出血の継続時間をセットする / Set "cut", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details
@@ -3013,13 +3013,13 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 }
 
 /*!
- * @brief 空腹状態をセットする / Set "p_ptr->food", notice observable changes
+ * @brief 空腹状態をセットする / Set "food", notice observable changes
  * @param v 継続時間
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  * @details
  * Set "", notice observable changes\n
  *\n
- * The "p_ptr->food" variable can get as large as 20000, allowing the
+ * The "food" variable can get as large as 20000, allowing the
  * addition of the most "filling" item, Elvish Waybread, which adds
  * 7500 food units, without overflowing the 32767 maximum limit.\n
  *\n
@@ -3537,7 +3537,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 	}
 
 	/* Attempt to reduce the stat */
-	if (dec_stat(p_ptr, stat, 10, (ironman_nightmare && !randint0(13))))
+	if (dec_stat(creature_ptr, stat, 10, (ironman_nightmare && !randint0(13))))
 	{
 		msg_format(_("ひどく%sなった気がする。", "You feel very %s."), desc_stat_neg[stat]);
 
@@ -3850,7 +3850,7 @@ void do_poly_self(player_type *creature_ptr)
 		}
 		while ((new_race == creature_ptr->prace) || (new_race == RACE_ANDROID));
 
-		change_race(p_ptr, new_race, effect_msg);
+		change_race(creature_ptr, new_race, effect_msg);
 	}
 
 	if ((power > randint0(30)) && one_in_(6))
@@ -3892,7 +3892,7 @@ void do_poly_self(player_type *creature_ptr)
 	if (power > randint0(5))
 	{
 		power -= 5;
-		do_poly_wounds(p_ptr);
+		do_poly_wounds(creature_ptr);
 	}
 
 	/* Note: earlier deductions may have left power < 0 already. */
@@ -4062,12 +4062,12 @@ bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_pr
 	if (creature_ptr->hold_exp)
 	{
 		msg_print(_("経験値を少し吸い取られた気がする！", "You feel your experience slipping away!"));
-		lose_exp(p_ptr, slip);
+		lose_exp(creature_ptr, slip);
 	}
 	else
 	{
 		msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away!"));
-		lose_exp(p_ptr, drain);
+		lose_exp(creature_ptr, drain);
 	}
 
 	return TRUE;
