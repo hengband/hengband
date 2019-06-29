@@ -5654,7 +5654,7 @@ void play_game(bool new_game)
 				p_ptr->chp = 0;
 				p_ptr->chp_frac = 0;
 				p_ptr->exit_bldg = TRUE;
-				reset_tim_flags();
+				reset_tim_flags(p_ptr);
 
 				/* Leave through the exit */
 				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_RAND_CONNECT);

@@ -349,7 +349,7 @@ static void arena_comm(int cmd)
 						msg_print(NULL);
 					
 						p_ptr->exit_bldg = FALSE;
-						reset_tim_flags();
+						reset_tim_flags(p_ptr);
 
 						/* Save the surface floor as saved floor */
 						prepare_change_floor_mode(CFM_SAVE_FLOORS);
@@ -379,7 +379,7 @@ static void arena_comm(int cmd)
 			else
 			{
 				p_ptr->exit_bldg = FALSE;
-				reset_tim_flags();
+				reset_tim_flags(p_ptr);
 
 				/* Save the surface floor as saved floor */
 				prepare_change_floor_mode(CFM_SAVE_FLOORS);
@@ -1657,7 +1657,7 @@ static bool kakutoujou(void)
 			battle_odds = MAX(wager+1, wager * battle_odds / 100);
 			kakekin = wager;
 			p_ptr->au -= wager;
-			reset_tim_flags();
+			reset_tim_flags(p_ptr);
 
 			/* Save the surface floor as saved floor */
 			prepare_change_floor_mode(CFM_SAVE_FLOORS);

@@ -12,7 +12,7 @@ struct kamae
 /* effects.c */
 
 extern void set_action(ACTION_IDX typ);
-extern void reset_tim_flags(void);
+extern void reset_tim_flags(player_type *creature_ptr);
 extern void dispel_player(void);
 extern bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, IDX p, bool do_dec);
 extern bool set_blind(player_type *creature_ptr, TIME_EFFECT v);
