@@ -3996,7 +3996,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		if (p_ptr->muta1 || p_ptr->muta2 || (p_ptr->muta3 & ~MUT3_GOOD_LUCK) ||
 			(p_ptr->pseikaku != SEIKAKU_LUCKY && (p_ptr->muta3 & MUT3_GOOD_LUCK)))
 		{
-			while(!lose_mutation(0));
+			while(!lose_mutation(p_ptr, 0));
 			paid = TRUE;
 		}
 		else

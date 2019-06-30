@@ -3840,7 +3840,7 @@ void do_poly_self(player_type *creature_ptr)
 			/* Polymorph into a less mutated form */
 			power -= 10;
 
-			if (!lose_mutation(0))
+			if (!lose_mutation(p_ptr, 0))
 			msg_print(_("奇妙なくらい普通になった気がする。", "You feel oddly normal."));
 		}
 

@@ -505,7 +505,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 					{
 						if(gain_mutation(p_ptr, 0)) ident = TRUE;
 					}
-					else if (lose_mutation(0)) ident = TRUE;
+					else if (lose_mutation(p_ptr, 0)) ident = TRUE;
 				} while(!ident || one_in_(2));
 			}
 			break;

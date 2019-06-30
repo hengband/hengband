@@ -2388,7 +2388,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_NORMALITY) && one_in_(5000))
 	{
-		if (!lose_mutation(0))
+		if (!lose_mutation(p_ptr, 0))
 			msg_print(_("奇妙なくらい普通になった気がする。", "You feel oddly normal."));
 	}
 	if ((p_ptr->muta2 & MUT2_WRAITH) && !p_ptr->anti_magic && one_in_(3000))
