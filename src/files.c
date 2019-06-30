@@ -4085,7 +4085,7 @@ void display_player(int mode)
 
 	else if (mode == 4)
 	{
-		do_cmd_knowledge_mutations();
+		do_cmd_knowledge_mutations(p_ptr);
 	}
 }
 

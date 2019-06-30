@@ -2020,7 +2020,7 @@ void dump_mutations(player_type *creature_ptr, FILE *OutFile)
  * @brief 突然変異表示コマンドの実装 / List mutations we have...
  * @return なし
  */
-void do_cmd_knowledge_mutations(void)
+void do_cmd_knowledge_mutations(player_type *creature_ptr)
 {
 	FILE *fff;
 	GAME_TEXT file_name[1024];
@@ -2029,7 +2029,7 @@ void do_cmd_knowledge_mutations(void)
 	fff = my_fopen_temp(file_name, 1024);
 
 	/* Dump the mutations to file */
-	if (fff) dump_mutations(p_ptr, fff);
+	if (fff) dump_mutations(creature_ptr, fff);
 	my_fclose(fff);
 
 	/* Display the file contents */

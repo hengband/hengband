@@ -7081,7 +7081,7 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_stat();
 			break;
 		case 'b': /* Mutations */
-			do_cmd_knowledge_mutations();
+			do_cmd_knowledge_mutations(p_ptr);
 			break;
 		case 'c': /* weapon-exp */
 			do_cmd_knowledge_weapon_exp();
