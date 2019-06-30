@@ -2038,11 +2038,11 @@ void do_cmd_knowledge_mutations(player_type *creature_ptr)
  * @brief 現在プレイヤー得ている突然変異の数を返す。
  * @return 現在得ている突然変異の数
  */
-static int count_mutations(void)
+static int count_mutations(player_type *creature_ptr)
 {
-	return (count_bits(p_ptr->muta1) +
-		count_bits(p_ptr->muta2) +
-		count_bits(p_ptr->muta3));
+	return (count_bits(creature_ptr->muta1) +
+		count_bits(creature_ptr->muta2) +
+		count_bits(creature_ptr->muta3));
 }
 
 
@@ -2055,7 +2055,7 @@ int calc_mutant_regenerate_mod(player_type *creature_ptr)
 {
 	int regen;
 	int mod = 10;
-	int count = count_mutations();
+	int count = count_mutations(creature_ptr);
 
 	/*
 	 * Beastman get 10 "free" mutations and
