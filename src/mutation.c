@@ -2025,14 +2025,10 @@ void do_cmd_knowledge_mutations(player_type *creature_ptr)
 	FILE *fff;
 	GAME_TEXT file_name[1024];
 
-	/* Open a new file */
 	fff = my_fopen_temp(file_name, 1024);
-
-	/* Dump the mutations to file */
 	if (fff) dump_mutations(creature_ptr, fff);
 	my_fclose(fff);
 
-	/* Display the file contents */
 	show_file(TRUE, file_name, _("突然変異", "Mutations"), 0, 0);
 	fd_kill(file_name);
 }
