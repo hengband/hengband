@@ -867,7 +867,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 			}
 		}
 
-		p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(p_ptr);
+		creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
 		creature_ptr->update |= PU_BONUS;
 		handle_stuff();
 		return TRUE;
@@ -1510,7 +1510,7 @@ void lose_all_mutations(player_type *creature_ptr)
 		creature_ptr->muta1 = creature_ptr->muta2 = creature_ptr->muta3 = 0;
 		creature_ptr->update |= PU_BONUS;
 		handle_stuff();
-		creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(p_ptr);
+		creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
 	}
 }
 
