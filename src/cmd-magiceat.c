@@ -558,7 +558,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		msg_print(_("呪文をうまく唱えられなかった！", "You failed to get the magic off!"));
 		sound(SOUND_FAIL);
 		if (randint1(100) >= chance)
-			chg_virtue(V_CHANCE,-1);
+			chg_virtue(p_ptr, V_CHANCE,-1);
 		take_turn(p_ptr, 100);
 
 		return TRUE;
@@ -585,7 +585,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 			if (!use_charge) return FALSE;
 		}
 		if (randint1(100) < chance)
-			chg_virtue(V_CHANCE,1);
+			chg_virtue(p_ptr, V_CHANCE,1);
 	}
 	take_turn(p_ptr, 100);
 	if (tval == TV_ROD) p_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;

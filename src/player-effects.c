@@ -443,7 +443,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 			}
 
 			notice = TRUE;
-			chg_virtue(V_ENLIGHTEN, -1);
+			chg_virtue(p_ptr, V_ENLIGHTEN, -1);
 		}
 	}
 
@@ -536,7 +536,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 
 			notice = TRUE;
 			creature_ptr->counter = FALSE;
-			chg_virtue(V_HARMONY, -1);
+			chg_virtue(p_ptr, V_HARMONY, -1);
 		}
 	}
 
@@ -641,7 +641,7 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 
 			notice = TRUE;
 			creature_ptr->counter = FALSE;
-			chg_virtue(V_VALOUR, -1);
+			chg_virtue(p_ptr, V_VALOUR, -1);
 		}
 	}
 
@@ -799,8 +799,8 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("素早く動けるようになった！", "You feel yourself moving much faster!"));
 			notice = TRUE;
-			chg_virtue(V_PATIENCE, -1);
-			chg_virtue(V_DILIGENCE, 1);
+			chg_virtue(p_ptr, V_PATIENCE, -1);
+			chg_virtue(p_ptr, V_DILIGENCE, 1);
 		}
 	}
 
@@ -852,8 +852,8 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely faster!"));
 			notice = TRUE;
-			chg_virtue(V_PATIENCE, -1);
-			chg_virtue(V_DILIGENCE, 1);
+			chg_virtue(p_ptr, V_PATIENCE, -1);
+			chg_virtue(p_ptr, V_DILIGENCE, 1);
 		}
 	}
 
@@ -1312,10 +1312,10 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("物質界を離れて幽鬼のような存在になった！", "You leave the physical world and current_world_ptr->game_turn into a wraith-being!"));
 			notice = TRUE;
-			chg_virtue(V_UNLIFE, 3);
-			chg_virtue(V_HONOUR, -2);
-			chg_virtue(V_SACRIFICE, -2);
-			chg_virtue(V_VALOUR, -5);
+			chg_virtue(p_ptr, V_UNLIFE, 3);
+			chg_virtue(p_ptr, V_HONOUR, -2);
+			chg_virtue(p_ptr, V_SACRIFICE, -2);
+			chg_virtue(p_ptr, V_VALOUR, -5);
 
 			creature_ptr->redraw |= (PR_MAP);
 			creature_ptr->update |= (PU_MONSTERS);
@@ -1378,10 +1378,10 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			msg_print(_("無敵だ！", "Invulnerability!"));
 			notice = TRUE;
 
-			chg_virtue(V_UNLIFE, -2);
-			chg_virtue(V_HONOUR, -2);
-			chg_virtue(V_SACRIFICE, -3);
-			chg_virtue(V_VALOUR, -5);
+			chg_virtue(p_ptr, V_UNLIFE, -2);
+			chg_virtue(p_ptr, V_HONOUR, -2);
+			chg_virtue(p_ptr, V_SACRIFICE, -3);
+			chg_virtue(p_ptr, V_VALOUR, -5);
 
 			creature_ptr->redraw |= (PR_MAP);
 			creature_ptr->update |= (PU_MONSTERS);
@@ -2254,7 +2254,7 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
 			notice = TRUE;
-			chg_virtue(V_VITALITY, 2);
+			chg_virtue(p_ptr, V_VITALITY, 2);
 		}
 	}
 
@@ -2269,7 +2269,7 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			(void)dec_stat(creature_ptr, A_STR, 20, TRUE);
 
 			notice = TRUE;
-			chg_virtue(V_VITALITY, -3);
+			chg_virtue(p_ptr, V_VITALITY, -3);
 		}
 	}
 
@@ -3118,13 +3118,13 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 	}
 
 	if (old_aux < 1 && new_aux > 0)
-		chg_virtue(V_PATIENCE, 2);
+		chg_virtue(p_ptr, V_PATIENCE, 2);
 	else if (old_aux < 3 && (old_aux != new_aux))
-		chg_virtue(V_PATIENCE, 1);
+		chg_virtue(p_ptr, V_PATIENCE, 1);
 	if (old_aux == 2)
-		chg_virtue(V_TEMPERANCE, 1);
+		chg_virtue(p_ptr, V_TEMPERANCE, 1);
 	if (old_aux == 0)
-		chg_virtue(V_TEMPERANCE, -1);
+		chg_virtue(p_ptr, V_TEMPERANCE, -1);
 
 	/* Food increase */
 	if (new_aux > old_aux)
@@ -3147,9 +3147,9 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 			/* Bloated */
 			case 5:
 			msg_print(_("食べ過ぎだ！", "You have gorged yourself!"));
-			chg_virtue(V_HARMONY, -1);
-			chg_virtue(V_PATIENCE, -1);
-			chg_virtue(V_TEMPERANCE, -2);
+			chg_virtue(p_ptr, V_HARMONY, -1);
+			chg_virtue(p_ptr, V_PATIENCE, -1);
+			chg_virtue(p_ptr, V_TEMPERANCE, -2);
 
 			break;
 		}
@@ -3341,9 +3341,9 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 	/* Damage "max" value */
 	if (permanent && (max > 3))
 	{
-		chg_virtue(V_SACRIFICE, 1);
+		chg_virtue(p_ptr, V_SACRIFICE, 1);
 		if (stat == A_WIS || stat == A_INT)
-			chg_virtue(V_ENLIGHTEN, -2);
+			chg_virtue(p_ptr, V_ENLIGHTEN, -2);
 
 		/* Handle "low" values */
 		if (max <= 18)
@@ -3433,7 +3433,7 @@ bool hp_player(player_type *creature_ptr, int num)
 	if (creature_ptr->chp < creature_ptr->mhp)
 	{
 		if ((num > 0) && (creature_ptr->chp < (creature_ptr->mhp/3)))
-			chg_virtue(V_TEMPERANCE, 1);
+			chg_virtue(p_ptr, V_TEMPERANCE, 1);
 		/* Gain hitpoints */
 		creature_ptr->chp += num;
 
@@ -3582,16 +3582,16 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 	{
 		if (stat == A_WIS)
 		{
-			chg_virtue(V_ENLIGHTEN, 1);
-			chg_virtue(V_FAITH, 1);
+			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
+			chg_virtue(p_ptr, V_FAITH, 1);
 		}
 		else if (stat == A_INT)
 		{
-			chg_virtue(V_KNOWLEDGE, 1);
-			chg_virtue(V_ENLIGHTEN, 1);
+			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 		}
 		else if (stat == A_CON)
-			chg_virtue(V_VITALITY, 1);
+			chg_virtue(p_ptr, V_VITALITY, 1);
 
 		msg_format(_("ワーオ！とても%sなった！", "Wow!  You feel very %s!"), desc_stat_pos[stat]);
 
@@ -3642,8 +3642,8 @@ bool lose_all_info(player_type *creature_ptr)
 {
 	int i;
 
-	chg_virtue(V_KNOWLEDGE, -5);
-	chg_virtue(V_ENLIGHTEN, -5);
+	chg_virtue(p_ptr, V_KNOWLEDGE, -5);
+	chg_virtue(p_ptr, V_ENLIGHTEN, -5);
 
 	/* Forget info about objects */
 	for (i = 0; i < INVEN_TOTAL; i++)
@@ -3718,7 +3718,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 	msg_format("You current_world_ptr->game_turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
 #endif
 
-	chg_virtue(V_CHANCE, 2);
+	chg_virtue(p_ptr, V_CHANCE, 2);
 
 	if (creature_ptr->prace < 32)
 	{
@@ -3774,7 +3774,7 @@ void do_poly_self(player_type *creature_ptr)
 	int power = creature_ptr->lev;
 
 	msg_print(_("あなたは変化の訪れを感じた...", "You feel a change coming over you..."));
-	chg_virtue(V_CHANCE, 1);
+	chg_virtue(p_ptr, V_CHANCE, 1);
 
 	if ((power > randint0(20)) && one_in_(3) && (creature_ptr->prace != RACE_ANDROID))
 	{

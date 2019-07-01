@@ -1376,7 +1376,7 @@ static void home_carry(store_type *st_ptr, object_type *o_ptr)
 	/* Insert the new item */
 	st_ptr->stock[slot] = *o_ptr;
 
-	chg_virtue(V_SACRIFICE, -1);
+	chg_virtue(p_ptr, V_SACRIFICE, -1);
 
 	/* Return the location */
 	return;

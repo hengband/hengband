@@ -658,7 +658,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 	}
 	else
 	{
-		chg_virtue(V_CHANCE, 1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
 
 		/*
 		  some races are apt to gain specified mutations
@@ -1505,7 +1505,7 @@ void lose_all_mutations(player_type *creature_ptr)
 {
 	if (creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3)
 	{
-		chg_virtue(V_CHANCE, -5);
+		chg_virtue(p_ptr, V_CHANCE, -5);
 		msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
 		creature_ptr->muta1 = creature_ptr->muta2 = creature_ptr->muta3 = 0;
 		creature_ptr->update |= PU_BONUS;

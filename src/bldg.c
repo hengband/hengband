@@ -1428,12 +1428,12 @@ static bool gamble_comm(int cmd)
 			{
 				msg_print(_("「今回は儲けたな！でも次はこっちが勝ってやるからな、絶対に！」",
 							"You came out a winner! We'll win next time, I'm sure."));
-				chg_virtue(V_CHANCE, 3);
+				chg_virtue(p_ptr, V_CHANCE, 3);
 			}
 			else
 			{
 				msg_print(_("「金をスッてしまったな、わはは！うちに帰った方がいいぜ。」", "You lost gold! Haha, better head home."));
-				chg_virtue(V_CHANCE, -3);
+				chg_virtue(p_ptr, V_CHANCE, -3);
 			}
 		}
 		msg_print(NULL);
@@ -1937,7 +1937,7 @@ static bool kankin(void)
 				inven_item_increase(i, -o_ptr->number);
 				inven_item_describe(i);
 				inven_item_optimize(i);
-				chg_virtue(V_JUSTICE, 5);
+				chg_virtue(p_ptr, V_JUSTICE, 5);
 				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				change = TRUE;
@@ -1948,7 +1948,7 @@ static bool kankin(void)
 				inven_item_describe(i);
 				inven_item_optimize(i);
 
-				chg_virtue(V_JUSTICE, 5);
+				chg_virtue(p_ptr, V_JUSTICE, 5);
 				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				/* Count number of unique corpses already handed */

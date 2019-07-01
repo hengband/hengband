@@ -1557,8 +1557,8 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_JUDGE:
 	{
 		msg_format(_("%sは赤く明るく光った！", "The %s flashes bright red!"), name);
-		chg_virtue(V_KNOWLEDGE, 1);
-		chg_virtue(V_ENLIGHTEN, 1);
+		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+		chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 		wiz_lite(FALSE);
 
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);

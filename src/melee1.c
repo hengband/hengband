@@ -1460,7 +1460,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 			if ((have_flag(flgs, TR_CHAOTIC)) && one_in_(2))
 			{
 				if (one_in_(10))
-					chg_virtue(V_CHANCE, 1);
+					chg_virtue(p_ptr, V_CHANCE, 1);
 
 				if (randint1(5) < 3)
 				{
@@ -2147,7 +2147,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	{
 		if (one_in_(4))
 		{
-			chg_virtue(V_UNLIFE, 1);
+			chg_virtue(p_ptr, V_UNLIFE, 1);
 		}
 	}
 	/* Mega-Hack -- apply earthquake brand */
@@ -2226,19 +2226,19 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 		if (stormbringer)
 		{
 			msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
-			chg_virtue(V_INDIVIDUALISM, 1);
-			chg_virtue(V_HONOUR, -1);
-			chg_virtue(V_JUSTICE, -1);
-			chg_virtue(V_COMPASSION, -1);
+			chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
+			chg_virtue(p_ptr, V_HONOUR, -1);
+			chg_virtue(p_ptr, V_JUSTICE, -1);
+			chg_virtue(p_ptr, V_COMPASSION, -1);
 		}
 		else if (p_ptr->pclass != CLASS_BERSERKER)
 		{
 			if (get_check(_("本当に攻撃しますか？", "Really hit it? ")))
 			{
-				chg_virtue(V_INDIVIDUALISM, 1);
-				chg_virtue(V_HONOUR, -1);
-				chg_virtue(V_JUSTICE, -1);
-				chg_virtue(V_COMPASSION, -1);
+				chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
+				chg_virtue(p_ptr, V_HONOUR, -1);
+				chg_virtue(p_ptr, V_JUSTICE, -1);
+				chg_virtue(p_ptr, V_COMPASSION, -1);
 			}
 			else
 			{
@@ -2265,8 +2265,8 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 
 	if (MON_CSLEEP(m_ptr)) /* It is not honorable etc to attack helpless victims */
 	{
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_COMPASSION, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_HONOUR, -1);
 	}
 
 	if (p_ptr->migite && p_ptr->hidarite)
@@ -2948,13 +2948,13 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						{
 							msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
 							msg_format(_("$%ld のお金が盗まれた！", "%ld coins were stolen!"), (long)gold);
-							chg_virtue(V_SACRIFICE, 1);
+							chg_virtue(p_ptr, V_SACRIFICE, 1);
 						}
 						else
 						{
 							msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
 							msg_print(_("お金が全部盗まれた！", "All of your coins were stolen!"));
-							chg_virtue(V_SACRIFICE, 2);
+							chg_virtue(p_ptr, V_SACRIFICE, 2);
 						}
 
 						/* Redraw gold */
@@ -3014,7 +3014,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 #else
 						msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
 #endif
-						chg_virtue(V_SACRIFICE, 1);
+						chg_virtue(p_ptr, V_SACRIFICE, 1);
 						o_idx = o_pop();
 
 						/* Success */

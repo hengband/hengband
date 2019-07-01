@@ -2418,7 +2418,7 @@ void process_monster(MONSTER_IDX m_idx)
 			msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
 		}
 
-		if (m_ptr->ml) chg_virtue(V_COMPASSION, -1);
+		if (m_ptr->ml) chg_virtue(p_ptr, V_COMPASSION, -1);
 
 		/* Actually do something now (?) */
 	}

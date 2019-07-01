@@ -80,8 +80,8 @@ void self_knowledge(void)
 	info[i++] = buf[0];
 	info[i++] = "";
 
-	chg_virtue(V_KNOWLEDGE, 1);
-	chg_virtue(V_ENLIGHTEN, 1);
+	chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+	chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 
 	/* Acquire item flags from equipment */
 	for (k = INVEN_RARM; k < INVEN_TOTAL; k++)

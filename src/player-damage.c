@@ -710,8 +710,8 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 
 	if (damage_type != DAMAGE_GENO && p_ptr->chp == 0)
 	{
-		chg_virtue(V_SACRIFICE, 1);
-		chg_virtue(V_CHANCE, 2);
+		chg_virtue(p_ptr, V_SACRIFICE, 1);
+		chg_virtue(p_ptr, V_CHANCE, 2);
 	}
 
 	/* Dead player */
@@ -726,7 +726,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 
 		sound(SOUND_DEATH);
 
-		chg_virtue(V_SACRIFICE, 10);
+		chg_virtue(p_ptr, V_SACRIFICE, 10);
 
 		handle_stuff();
 		p_ptr->leaving = TRUE;

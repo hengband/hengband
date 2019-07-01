@@ -480,8 +480,8 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				chg_virtue(V_KNOWLEDGE, 1);
-				chg_virtue(V_ENLIGHTEN, 1);
+				chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+				chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 
 				wiz_lite(FALSE);
 

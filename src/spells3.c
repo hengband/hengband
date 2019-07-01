@@ -95,7 +95,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	    (((p_ptr->chp * 10) / p_ptr->mhp) > 5) &&
 		(4+randint1(5) < ((p_ptr->chp * 10) / p_ptr->mhp)))
 	{
-		chg_virtue(V_VALOUR, -1);
+		chg_virtue(p_ptr, V_VALOUR, -1);
 	}
 
 	/* Look until done */
@@ -1013,8 +1013,8 @@ bool apply_disenchant(BIT_FLAGS mode)
 			((o_ptr->number != 1) ? "were" : "was"));
 #endif
 
-		chg_virtue(V_HARMONY, 1);
-		chg_virtue(V_ENCHANT, -2);
+		chg_virtue(p_ptr, V_HARMONY, 1);
+		chg_virtue(p_ptr, V_ENCHANT, -2);
 		p_ptr->update |= (PU_BONUS);
 		p_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
@@ -1660,7 +1660,7 @@ bool artifact_scroll(void)
 	{
 		if (flush_failure) flush();
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
-		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
+		if (one_in_(3)) chg_virtue(p_ptr, V_ENCHANT, -1);
 	}
 	else
 	{
@@ -1669,7 +1669,7 @@ bool artifact_scroll(void)
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			do_cmd_write_nikki(NIKKI_ART_SCROLL, 0, o_name);
 		}
-		chg_virtue(V_ENCHANT, 1);
+		chg_virtue(p_ptr, V_ENCHANT, 1);
 	}
 
 	calc_android_exp(p_ptr);
@@ -1698,7 +1698,7 @@ bool identify_item(object_type *o_ptr)
 	if (!(o_ptr->ident & (IDENT_MENTAL)))
 	{
 		if (object_is_artifact(o_ptr) || one_in_(5))
-			chg_virtue(V_KNOWLEDGE, 1);
+			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
 	}
 
 	object_aware(o_ptr);
@@ -3430,7 +3430,7 @@ bool shock_power(void)
 bool booze(player_type *creature_ptr)
 {
 	bool ident = FALSE;
-	if (creature_ptr->pclass != CLASS_MONK) chg_virtue(V_HARMONY, -1);
+	if (creature_ptr->pclass != CLASS_MONK) chg_virtue(p_ptr, V_HARMONY, -1);
 	else if (!creature_ptr->resist_conf) creature_ptr->special_attack |= ATTACK_SUIKEN;
 	if (!creature_ptr->resist_conf)
 	{

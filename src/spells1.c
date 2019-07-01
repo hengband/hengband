@@ -2166,29 +2166,29 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				if (!who)
 				{
-					chg_virtue(V_VITALITY, 1);
+					chg_virtue(p_ptr, V_VITALITY, 1);
 
 					if (r_ptr->flags1 & RF1_UNIQUE)
-						chg_virtue(V_INDIVIDUALISM, 1);
+						chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
 
 					if (is_friendly(m_ptr))
-						chg_virtue(V_HONOUR, 1);
+						chg_virtue(p_ptr, V_HONOUR, 1);
 					else if (!(r_ptr->flags3 & RF3_EVIL))
 					{
 						if (r_ptr->flags3 & RF3_GOOD)
-							chg_virtue(V_COMPASSION, 2);
+							chg_virtue(p_ptr, V_COMPASSION, 2);
 						else
-							chg_virtue(V_COMPASSION, 1);
+							chg_virtue(p_ptr, V_COMPASSION, 1);
 					}
 
 					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(V_NATURE, 1);
+						chg_virtue(p_ptr, V_NATURE, 1);
 				}
 
 				if (m_ptr->r_idx == MON_LEPER)
 				{
 					heal_leper = TRUE;
-					if (!who) chg_virtue(V_COMPASSION, 5);
+					if (!who) chg_virtue(p_ptr, V_COMPASSION, 5);
 				}
 
 				/* Redraw (later) if needed */
@@ -2217,9 +2217,9 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (!who)
 				{
 					if (r_ptr->flags1 & RF1_UNIQUE)
-						chg_virtue(V_INDIVIDUALISM, 1);
+						chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
 					if (is_friendly(m_ptr))
-						chg_virtue(V_HONOUR, 1);
+						chg_virtue(p_ptr, V_HONOUR, 1);
 				}
 
 				/* No "real" damage */
@@ -2376,9 +2376,9 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
 					set_pet(m_ptr);
 
-					chg_virtue(V_INDIVIDUALISM, -1);
+					chg_virtue(p_ptr, V_INDIVIDUALISM, -1);
 					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(V_NATURE, 1);
+						chg_virtue(p_ptr, V_NATURE, 1);
 				}
 
 				/* No "real" damage */
@@ -2510,7 +2510,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					note = _("はなついた。", " is tamed!");
 					set_pet(m_ptr);
 					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(V_NATURE, 1);
+						chg_virtue(p_ptr, V_NATURE, 1);
 				}
 
 				/* No "real" damage */
@@ -2560,7 +2560,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					note = _("を支配した。", " is tamed!");
 					set_pet(m_ptr);
 					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(V_NATURE, 1);
+						chg_virtue(p_ptr, V_NATURE, 1);
 				}
 
 				/* No "real" damage */
@@ -3476,7 +3476,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (genocide_aux(g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 				{
 					if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
-					chg_virtue(V_VITALITY, -1);
+					chg_virtue(p_ptr, V_VITALITY, -1);
 					return TRUE;
 				}
 
@@ -3620,8 +3620,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	if (!who && slept)
 	{
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_COMPASSION, -1);
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(V_HONOUR, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_COMPASSION, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_HONOUR, -1);
 	}
 
 	/* Modify the damage */
@@ -3739,7 +3739,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			note = _("が消え去った！", " disappears!");
 
-			if (!who) chg_virtue(V_VALOUR, -1);
+			if (!who) chg_virtue(p_ptr, V_VALOUR, -1);
 
 			/* Teleport */
 			teleport_away(g_ptr->m_idx, do_dist,

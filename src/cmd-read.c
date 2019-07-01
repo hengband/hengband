@@ -569,9 +569,9 @@ void exe_read(INVENTORY_IDX item, bool known)
 
 	if (!(object_is_aware(o_ptr)))
 	{
-		chg_virtue(V_PATIENCE, -1);
-		chg_virtue(V_CHANCE, 1);
-		chg_virtue(V_KNOWLEDGE, -1);
+		chg_virtue(p_ptr, V_PATIENCE, -1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(p_ptr, V_KNOWLEDGE, -1);
 	}
 
 	/* The item was tried */

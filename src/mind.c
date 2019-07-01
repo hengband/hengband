@@ -1040,8 +1040,8 @@ static bool cast_mindcrafter_spell(int spell)
 	case 0:   /* Precog */
 		if (plev > 44)
 		{
-			chg_virtue(V_KNOWLEDGE, 1);
-			chg_virtue(V_ENLIGHTEN, 1);
+			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 			wiz_lite(FALSE);
 		}
 		else if (plev > 19)

@@ -3807,7 +3807,7 @@ void calc_bonuses(void)
 				msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
 				if (current_world_ptr->is_loading_now)
 				{
-					chg_virtue(V_FAITH, -1);
+					chg_virtue(p_ptr, V_FAITH, -1);
 				}
 			}
 			else if (has_melee_weapon(INVEN_RARM + i))
@@ -3853,7 +3853,7 @@ void calc_bonuses(void)
 			msg_print(_("装備が重くてバランスを取れない。", "The weight of your armor disrupts your balance."));
 			if (current_world_ptr->is_loading_now)
 			{
-				chg_virtue(V_HARMONY, -1);
+				chg_virtue(p_ptr, V_HARMONY, -1);
 			}
 		}
 		else

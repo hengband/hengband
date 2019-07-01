@@ -1164,77 +1164,77 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		{
 			if (!current_floor_ptr->dun_level && !p_ptr->ambush_flag && !p_ptr->inside_arena)
 			{
-				chg_virtue(V_VALOUR, -1);
+				chg_virtue(p_ptr, V_VALOUR, -1);
 			}
 			else if (r_ptr->level > current_floor_ptr->dun_level)
 			{
 				if (randint1(10) <= (r_ptr->level - current_floor_ptr->dun_level))
-					chg_virtue(V_VALOUR, 1);
+					chg_virtue(p_ptr, V_VALOUR, 1);
 			}
 			if (r_ptr->level > 60)
 			{
-				chg_virtue(V_VALOUR, 1);
+				chg_virtue(p_ptr, V_VALOUR, 1);
 			}
 			if (r_ptr->level >= 2 * (p_ptr->lev + 1))
-				chg_virtue(V_VALOUR, 2);
+				chg_virtue(p_ptr, V_VALOUR, 2);
 		}
 
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
-			if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) chg_virtue(V_HARMONY, 2);
+			if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) chg_virtue(p_ptr, V_HARMONY, 2);
 
 			if (r_ptr->flags3 & RF3_GOOD)
 			{
-				chg_virtue(V_UNLIFE, 2);
-				chg_virtue(V_VITALITY, -2);
+				chg_virtue(p_ptr, V_UNLIFE, 2);
+				chg_virtue(p_ptr, V_VITALITY, -2);
 			}
 
-			if (one_in_(3)) chg_virtue(V_INDIVIDUALISM, -1);
+			if (one_in_(3)) chg_virtue(p_ptr, V_INDIVIDUALISM, -1);
 		}
 
 		if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER)
 		{
-			chg_virtue(V_COMPASSION, -1);
+			chg_virtue(p_ptr, V_COMPASSION, -1);
 		}
 
 		if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100)))
-			chg_virtue(V_UNLIFE, 1);
+			chg_virtue(p_ptr, V_UNLIFE, 1);
 
 		if (r_ptr->d_char == 'A')
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
-				chg_virtue(V_FAITH, -2);
+				chg_virtue(p_ptr, V_FAITH, -2);
 			else if ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100))
 			{
-				if (r_ptr->flags3 & RF3_GOOD) chg_virtue(V_FAITH, -1);
-				else chg_virtue(V_FAITH, 1);
+				if (r_ptr->flags3 & RF3_GOOD) chg_virtue(p_ptr, V_FAITH, -1);
+				else chg_virtue(p_ptr, V_FAITH, 1);
 			}
 		}
 		else if (r_ptr->flags3 & RF3_DEMON)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
-				chg_virtue(V_FAITH, 2);
+				chg_virtue(p_ptr, V_FAITH, 2);
 			else if ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100))
-				chg_virtue(V_FAITH, 1);
+				chg_virtue(p_ptr, V_FAITH, 1);
 		}
 
 		if ((r_ptr->flags3 & RF3_UNDEAD) && (r_ptr->flags1 & RF1_UNIQUE))
-			chg_virtue(V_VITALITY, 2);
+			chg_virtue(p_ptr, V_VITALITY, 2);
 
 		if (r_ptr->r_deaths)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
-				chg_virtue(V_HONOUR, 10);
+				chg_virtue(p_ptr, V_HONOUR, 10);
 			}
 			else if ((r_ptr->level) / 10 + (2 * current_floor_ptr->dun_level) >= randint1(100))
 			{
-				chg_virtue(V_HONOUR, 1);
+				chg_virtue(p_ptr, V_HONOUR, 1);
 			}
 		}
 		if ((r_ptr->flags2 & RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10))
 		{
-			chg_virtue(V_VALOUR, -1);
+			chg_virtue(p_ptr, V_VALOUR, -1);
 		}
 
 		for (i = 0; i < 4; i++)
@@ -1253,18 +1253,18 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		if (thief)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
-				chg_virtue(V_JUSTICE, 3);
+				chg_virtue(p_ptr, V_JUSTICE, 3);
 			else if (1 + ((r_ptr->level) / 10 + (2 * current_floor_ptr->dun_level)) >= randint1(100))
-				chg_virtue(V_JUSTICE, 1);
+				chg_virtue(p_ptr, V_JUSTICE, 1);
 		}
 		else if (innocent)
 		{
-			chg_virtue(V_JUSTICE, -1);
+			chg_virtue(p_ptr, V_JUSTICE, -1);
 		}
 
 		if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) && !(r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) && !(r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
 		{
-			if (one_in_(4)) chg_virtue(V_NATURE, -1);
+			if (one_in_(4)) chg_virtue(p_ptr, V_NATURE, -1);
 		}
 
 		if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq)

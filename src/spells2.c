@@ -866,7 +866,7 @@ bool turn_undead(void)
 {
 	bool tester = (project_all_los(GF_TURN_UNDEAD, p_ptr->lev));
 	if (tester)
-		chg_virtue(V_UNLIFE, -1);
+		chg_virtue(p_ptr, V_UNLIFE, -1);
 	return tester;
 }
 
@@ -878,7 +878,7 @@ bool dispel_undead(HIT_POINT dam)
 {
 	bool tester = (project_all_los(GF_DISP_UNDEAD, dam));
 	if (tester)
-		chg_virtue(V_UNLIFE, -2);
+		chg_virtue(p_ptr, V_UNLIFE, -2);
 	return tester;
 }
 
@@ -1136,8 +1136,8 @@ bool symbol_genocide(int power, bool player_cast)
 
 	if (result)
 	{
-		chg_virtue(V_VITALITY, -2);
-		chg_virtue(V_CHANCE, -1);
+		chg_virtue(p_ptr, V_VITALITY, -2);
+		chg_virtue(p_ptr, V_CHANCE, -1);
 	}
 
 	return result;
@@ -1176,8 +1176,8 @@ bool mass_genocide(int power, bool player_cast)
 
 	if (result)
 	{
-		chg_virtue(V_VITALITY, -2);
-		chg_virtue(V_CHANCE, -1);
+		chg_virtue(p_ptr, V_VITALITY, -2);
+		chg_virtue(p_ptr, V_CHANCE, -1);
 	}
 
 	return result;
@@ -1219,8 +1219,8 @@ bool mass_genocide_undead(int power, bool player_cast)
 
 	if (result)
 	{
-		chg_virtue(V_UNLIFE, -2);
-		chg_virtue(V_CHANCE, -1);
+		chg_virtue(p_ptr, V_UNLIFE, -2);
+		chg_virtue(p_ptr, V_CHANCE, -1);
 	}
 
 	return result;
@@ -1355,7 +1355,7 @@ bool probing(void)
 
 	if (probe)
 	{
-		chg_virtue(V_KNOWLEDGE, 1);
+		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
 		msg_print(_("これで全部です。", "That's all."));
 	}
 	return (probe);
@@ -3454,7 +3454,7 @@ void cast_wonder(DIRECTION dir)
 	}
 
 	if (die < 26)
-		chg_virtue(V_CHANCE, 1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
 
 	if (die > 100)
 	{
@@ -3537,7 +3537,7 @@ void cast_invoke_spirits(DIRECTION dir)
 
 	msg_print(_("あなたは死者たちの力を招集した...", "You call on the power of the dead..."));
 	if (die < 26)
-		chg_virtue(V_CHANCE, 1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
 
 	if (die > 100)
 	{
@@ -3550,7 +3550,7 @@ void cast_invoke_spirits(DIRECTION dir)
 			"Oh no! Mouldering forms rise from the earth around you!"));
 
 		(void)summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
-		chg_virtue(V_UNLIFE, 1);
+		chg_virtue(p_ptr, V_UNLIFE, 1);
 	}
 	else if (die < 14)
 	{
@@ -3697,7 +3697,7 @@ void cast_shuffle(void)
 	msg_print(_("あなたはカードを切って一枚引いた...", "You shuffle the deck and draw a card..."));
 
 	if (die < 30)
-		chg_virtue(V_CHANCE, 1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
 
 	if (die < 7)
 	{
@@ -3820,8 +3820,8 @@ void cast_shuffle(void)
 	else if (die < 120)
 	{
 		msg_print(_("《太陽》だ。", "It's the Sun."));
-		chg_virtue(V_KNOWLEDGE, 1);
-		chg_virtue(V_ENLIGHTEN, 1);
+		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+		chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 		wiz_lite(FALSE);
 	}
 	else

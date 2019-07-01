@@ -197,7 +197,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			if (!p_ptr->hold_exp && (p_ptr->exp > 0))
 			{
 				msg_print(_("過去の記憶が薄れていく気がする。", "You feel your memories fade."));
-				chg_virtue(V_KNOWLEDGE, -5);
+				chg_virtue(p_ptr, V_KNOWLEDGE, -5);
 
 				lose_exp(p_ptr, p_ptr->exp / 4);
 				ident = TRUE;
@@ -246,8 +246,8 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_DEATH:
-			chg_virtue(V_VITALITY, -1);
-			chg_virtue(V_UNLIFE, 5);
+			chg_virtue(p_ptr, V_VITALITY, -1);
+			chg_virtue(p_ptr, V_UNLIFE, 5);
 			msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
 			take_hit(DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"), -1);
 			ident = TRUE;
@@ -403,16 +403,16 @@ void exe_quaff_potion(INVENTORY_IDX item)
 
 		case SV_POTION_ENLIGHTENMENT:
 			msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
-			chg_virtue(V_KNOWLEDGE, 1);
-			chg_virtue(V_ENLIGHTEN, 1);
+			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 			wiz_lite(FALSE);
 			ident = TRUE;
 			break;
 
 		case SV_POTION_STAR_ENLIGHTENMENT:
 			msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
-			chg_virtue(V_KNOWLEDGE, 1);
-			chg_virtue(V_ENLIGHTEN, 2);
+			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+			chg_virtue(p_ptr, V_ENLIGHTEN, 2);
 			msg_print(NULL);
 			wiz_lite(FALSE);
 			(void)do_inc_stat(p_ptr, A_INT);
@@ -437,7 +437,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 
 		case SV_POTION_EXPERIENCE:
 			if (p_ptr->prace == RACE_ANDROID) break;
-			chg_virtue(V_ENLIGHTEN, 1);
+			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 			if (p_ptr->exp < PY_MAX_EXP)
 			{
 				EXP ee = (p_ptr->exp / 2) + 10;
@@ -521,9 +521,9 @@ void exe_quaff_potion(INVENTORY_IDX item)
 
 	if (!(object_is_aware(q_ptr)))
 	{
-		chg_virtue(V_PATIENCE, -1);
-		chg_virtue(V_CHANCE, 1);
-		chg_virtue(V_KNOWLEDGE, -1);
+		chg_virtue(p_ptr, V_PATIENCE, -1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(p_ptr, V_KNOWLEDGE, -1);
 	}
 
 	/* The item has been tried */

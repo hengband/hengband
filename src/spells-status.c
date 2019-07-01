@@ -123,7 +123,7 @@ bool poly_monster(DIRECTION dir, int power)
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	bool tester = (project_hook(GF_OLD_POLY, dir, power, flg));
 	if (tester)
-		chg_virtue(V_CHANCE, 1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
 	return(tester);
 }
 
@@ -269,8 +269,8 @@ bool_hack life_stream(bool_hack message, bool_hack virtue_change)
 {
 	if (virtue_change)
 	{
-		chg_virtue(V_VITALITY, 1);
-		chg_virtue(V_UNLIFE, -5);
+		chg_virtue(p_ptr, V_VITALITY, 1);
+		chg_virtue(p_ptr, V_UNLIFE, -5);
 	}
 	if (message)
 	{

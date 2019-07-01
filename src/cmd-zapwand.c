@@ -48,7 +48,7 @@ bool wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool m
 			}
 		}
 		if (sval < SV_WAND_TELEPORT_AWAY)
-			chg_virtue(V_CHANCE, 1);
+			chg_virtue(p_ptr, V_CHANCE, 1);
 	}
 
 	/* Analyze the wand */
@@ -416,9 +416,9 @@ void exe_aim_wand(INVENTORY_IDX item)
 
 	if (!(object_is_aware(o_ptr)))
 	{
-		chg_virtue(V_PATIENCE, -1);
-		chg_virtue(V_CHANCE, 1);
-		chg_virtue(V_KNOWLEDGE, -1);
+		chg_virtue(p_ptr, V_PATIENCE, -1);
+		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(p_ptr, V_KNOWLEDGE, -1);
 	}
 
 	/* Mark it as tried */

@@ -630,7 +630,7 @@ bool curse_armor(void)
 	else
 	{
 		msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-		chg_virtue(V_ENCHANT, -5);
+		chg_virtue(p_ptr, V_ENCHANT, -5);
 
 		/* Blast the armor */
 		o_ptr->name1 = 0;
@@ -690,7 +690,7 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 	else
 	{
 		if (!force) msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-		chg_virtue(V_ENCHANT, -5);
+		chg_virtue(p_ptr, V_ENCHANT, -5);
 
 		/* Shatter the weapon */
 		o_ptr->name1 = 0;
@@ -1125,7 +1125,7 @@ bool pulish_shield(void)
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOAC);
 
 		o_ptr->discount = 99;
-		chg_virtue(V_ENCHANT, 2);
+		chg_virtue(p_ptr, V_ENCHANT, 2);
 
 		return TRUE;
 	}
@@ -1134,7 +1134,7 @@ bool pulish_shield(void)
 		if (flush_failure) flush();
 
 		msg_print(_("失敗した。", "Failed."));
-		chg_virtue(V_ENCHANT, -2);
+		chg_virtue(p_ptr, V_ENCHANT, -2);
 	}
 	calc_android_exp(p_ptr);
 
@@ -1320,10 +1320,10 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	{
 		if (flush_failure) flush();
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
-		if (one_in_(3)) chg_virtue(V_ENCHANT, -1);
+		if (one_in_(3)) chg_virtue(p_ptr, V_ENCHANT, -1);
 	}
 	else
-		chg_virtue(V_ENCHANT, 1);
+		chg_virtue(p_ptr, V_ENCHANT, 1);
 
 	calc_android_exp(p_ptr);
 
@@ -1464,14 +1464,14 @@ void brand_weapon(int brand_type)
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 
 		o_ptr->discount = 99;
-		chg_virtue(V_ENCHANT, 2);
+		chg_virtue(p_ptr, V_ENCHANT, 2);
 	}
 	else
 	{
 		if (flush_failure) flush();
 
 		msg_print(_("属性付加に失敗した。", "The Branding failed."));
-		chg_virtue(V_ENCHANT, -2);
+		chg_virtue(p_ptr, V_ENCHANT, -2);
 	}
 	calc_android_exp(p_ptr);
 }

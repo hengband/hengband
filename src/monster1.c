@@ -2258,10 +2258,10 @@ void anger_monster(monster_type *m_ptr)
 
 		set_hostile(m_ptr);
 
-		chg_virtue(V_INDIVIDUALISM, 1);
-		chg_virtue(V_HONOUR, -1);
-		chg_virtue(V_JUSTICE, -1);
-		chg_virtue(V_COMPASSION, -1);
+		chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
+		chg_virtue(p_ptr, V_HONOUR, -1);
+		chg_virtue(p_ptr, V_JUSTICE, -1);
+		chg_virtue(p_ptr, V_COMPASSION, -1);
 	}
 }
 

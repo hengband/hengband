@@ -1749,7 +1749,7 @@ bool do_cmd_cast_learned(void)
 		/* Hack -- Bypass free action */
 		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(5 * oops + 1));
 
-		chg_virtue(V_KNOWLEDGE, -10);
+		chg_virtue(p_ptr, V_KNOWLEDGE, -10);
 
 		/* Damage CON (possibly permanently) */
 		if (randint0(100) < 50)

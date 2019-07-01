@@ -402,59 +402,59 @@ void get_virtues(player_type *creature_ptr)
  * @param amount 加減量
  * @return なし
  */
-void chg_virtue(int virtue_id, int amount)
+void chg_virtue(player_type *creature_ptr, int virtue_id, int amount)
 {
 	int i = 0;
 
 	for (i = 0; i < 8; i++)
 	{
-		if (p_ptr->vir_types[i] == virtue_id)
+		if (creature_ptr->vir_types[i] == virtue_id)
 		{
 			if (amount > 0)
 			{
-				if ((amount + p_ptr->virtues[i] > 50) && one_in_(2))
+				if ((amount + creature_ptr->virtues[i] > 50) && one_in_(2))
 				{
-					p_ptr->virtues[i] = MAX(p_ptr->virtues[i], 50);
+					creature_ptr->virtues[i] = MAX(creature_ptr->virtues[i], 50);
 					return;
 				}
-				if ((amount + p_ptr->virtues[i] > 80) && one_in_(2))
+				if ((amount + creature_ptr->virtues[i] > 80) && one_in_(2))
 				{
-					p_ptr->virtues[i] = MAX(p_ptr->virtues[i], 80);
+					creature_ptr->virtues[i] = MAX(creature_ptr->virtues[i], 80);
 					return;
 				}
-				if ((amount + p_ptr->virtues[i] > 100) && one_in_(2))
+				if ((amount + creature_ptr->virtues[i] > 100) && one_in_(2))
 				{
-					p_ptr->virtues[i] = MAX(p_ptr->virtues[i], 100);
+					creature_ptr->virtues[i] = MAX(creature_ptr->virtues[i], 100);
 					return;
 				}
-				if (amount + p_ptr->virtues[i] > 125)
-					p_ptr->virtues[i] = 125;
+				if (amount + creature_ptr->virtues[i] > 125)
+					creature_ptr->virtues[i] = 125;
 				else
-					p_ptr->virtues[i] = p_ptr->virtues[i] + amount;
+					creature_ptr->virtues[i] = creature_ptr->virtues[i] + amount;
 			}
 			else
 			{
-				if ((amount + p_ptr->virtues[i] < -50) && one_in_(2))
+				if ((amount + creature_ptr->virtues[i] < -50) && one_in_(2))
 				{
-					p_ptr->virtues[i] = MIN(p_ptr->virtues[i], -50);
+					creature_ptr->virtues[i] = MIN(creature_ptr->virtues[i], -50);
 					return;
 				}
-				if ((amount + p_ptr->virtues[i] < -80) && one_in_(2))
+				if ((amount + creature_ptr->virtues[i] < -80) && one_in_(2))
 				{
-					p_ptr->virtues[i] = MIN(p_ptr->virtues[i], -80);
+					creature_ptr->virtues[i] = MIN(creature_ptr->virtues[i], -80);
 					return;
 				}
-				if ((amount + p_ptr->virtues[i] < -100) && one_in_(2))
+				if ((amount + creature_ptr->virtues[i] < -100) && one_in_(2))
 				{
-					p_ptr->virtues[i] = MIN(p_ptr->virtues[i], -100);
+					creature_ptr->virtues[i] = MIN(creature_ptr->virtues[i], -100);
 					return;
 				}
-				if (amount + p_ptr->virtues[i] < -125)
-					p_ptr->virtues[i] = -125;
+				if (amount + creature_ptr->virtues[i] < -125)
+					creature_ptr->virtues[i] = -125;
 				else
-					p_ptr->virtues[i] = p_ptr->virtues[i] + amount;
+					creature_ptr->virtues[i] = creature_ptr->virtues[i] + amount;
 			}
-			p_ptr->update |= (PU_BONUS);
+			creature_ptr->update |= (PU_BONUS);
 			return;
 		}
 	}

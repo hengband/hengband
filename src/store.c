@@ -1892,8 +1892,8 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	if ((value <= 0) && (price > value))
 	{
 		msg_print(comment_7a[randint0(MAX_COMMENT_7A)]);
-		chg_virtue(V_HONOUR, -1);
-		chg_virtue(V_JUSTICE, -1);
+		chg_virtue(p_ptr, V_HONOUR, -1);
+		chg_virtue(p_ptr, V_JUSTICE, -1);
 		sound(SOUND_STORE1);
 	}
 
@@ -1901,8 +1901,8 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	else if ((value < guess) && (price > value))
 	{
 		msg_print(comment_7b[randint0(MAX_COMMENT_7B)]);
-		chg_virtue(V_JUSTICE, -1);
-		if (one_in_(4)) chg_virtue(V_HONOUR, -1);
+		chg_virtue(p_ptr, V_JUSTICE, -1);
+		if (one_in_(4)) chg_virtue(p_ptr, V_HONOUR, -1);
 		sound(SOUND_STORE2);
 	}
 
@@ -1910,8 +1910,8 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	else if ((value > guess) && (value < (4 * guess)) && (price < value))
 	{
 		msg_print(comment_7c[randint0(MAX_COMMENT_7C)]);
-		if (one_in_(4)) chg_virtue(V_HONOUR, -1);
-		else if (one_in_(4)) chg_virtue(V_HONOUR, 1);
+		if (one_in_(4)) chg_virtue(p_ptr, V_HONOUR, -1);
+		else if (one_in_(4)) chg_virtue(p_ptr, V_HONOUR, 1);
 		sound(SOUND_STORE3);
 	}
 
@@ -1919,9 +1919,9 @@ static void purchase_analyze(PRICE price, PRICE value, PRICE guess)
 	else if ((value > guess) && (price < value))
 	{
 		msg_print(comment_7d[randint0(MAX_COMMENT_7D)]);
-		if (one_in_(2)) chg_virtue(V_HONOUR, -1);
-		if (one_in_(4)) chg_virtue(V_HONOUR, 1);
-		if (10 * price < value) chg_virtue(V_SACRIFICE, 1);
+		if (one_in_(2)) chg_virtue(p_ptr, V_HONOUR, -1);
+		if (one_in_(4)) chg_virtue(p_ptr, V_HONOUR, 1);
+		if (10 * price < value) chg_virtue(p_ptr, V_SACRIFICE, 1);
 		sound(SOUND_STORE4);
 	}
 }
@@ -3109,7 +3109,7 @@ static int home_carry(object_type *o_ptr)
 	/* Insert the new item */
 	st_ptr->stock[slot] = *o_ptr;
 
-	chg_virtue(V_SACRIFICE, -1);
+	chg_virtue(p_ptr, V_SACRIFICE, -1);
 
 	(void)combine_and_reorder_home(cur_store_num);
 
@@ -4708,9 +4708,9 @@ static void store_purchase(void)
 				say_comment_1();
 
 				if (cur_store_num == STORE_BLACK) /* The black market is illegal! */
-					chg_virtue(V_JUSTICE, -1);
+					chg_virtue(p_ptr, V_JUSTICE, -1);
 				if((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))
-					chg_virtue(V_NATURE, -1);
+					chg_virtue(p_ptr, V_NATURE, -1);
 
 				/* Make a sound */
 				sound(SOUND_BUY);
@@ -4882,7 +4882,7 @@ static void store_purchase(void)
 			else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
 			display_inventory();
 
-			chg_virtue(V_SACRIFICE, 1);
+			chg_virtue(p_ptr, V_SACRIFICE, 1);
 		}
 	}
 
@@ -5027,10 +5027,10 @@ static void store_sell(void)
 
 			/* Be happy */
 			if (cur_store_num == STORE_BLACK) /* The black market is illegal! */
-				chg_virtue(V_JUSTICE, -1);
+				chg_virtue(p_ptr, V_JUSTICE, -1);
 
 			if((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))
-				chg_virtue(V_NATURE, 1);
+				chg_virtue(p_ptr, V_NATURE, 1);
 			decrease_insults();
 
 			/* Get some money */

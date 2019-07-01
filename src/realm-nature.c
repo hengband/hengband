@@ -522,8 +522,8 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				fire_ball(GF_LITE, 0, dam, rad);
-				chg_virtue(V_KNOWLEDGE, 1);
-				chg_virtue(V_ENLIGHTEN, 1);
+				chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+				chg_virtue(p_ptr, V_ENLIGHTEN, 1);
 				wiz_lite(FALSE);
 
 				if ((PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
