@@ -6354,7 +6354,7 @@ static void do_cmd_knowledge_virtues(void)
 	if (fff)
 	{
 		fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment());
-		dump_virtues(fff);
+		dump_virtues(p_ptr, fff);
 	}
 		my_fclose(fff);
 	

@@ -485,7 +485,7 @@ void set_virtue(player_type *creature_ptr, int virtue_id, int amount)
  * @param OutFile ファイルポインタ。
  * @return なし
  */
-void dump_virtues(FILE *OutFile)
+void dump_virtues(player_type *creature_ptr, FILE *OutFile)
 {
 	int v_nr = 0;
 
@@ -494,11 +494,11 @@ void dump_virtues(FILE *OutFile)
 	for (v_nr = 0; v_nr < 8; v_nr++)
 	{
 		GAME_TEXT vir_name [20];
-		int tester = p_ptr->virtues[v_nr];
+		int tester = creature_ptr->virtues[v_nr];
 
-		strcpy(vir_name, virtue[(p_ptr->vir_types[v_nr])-1]);
+		strcpy(vir_name, virtue[(creature_ptr->vir_types[v_nr])-1]);
 
-		if (p_ptr->vir_types[v_nr] == 0 || p_ptr->vir_types[v_nr] > MAX_VIRTUE)
+		if (creature_ptr->vir_types[v_nr] == 0 || creature_ptr->vir_types[v_nr] > MAX_VIRTUE)
 			fprintf(OutFile, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
 
 		else if (tester < -100)

@@ -4857,7 +4857,7 @@ static void dump_aux_virtues(FILE *fff)
 
 	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment());
 	fprintf(fff, "\n");
-	dump_virtues(fff);
+	dump_virtues(p_ptr, fff);
 }
 
 
