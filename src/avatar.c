@@ -466,15 +466,15 @@ void chg_virtue(player_type *creature_ptr, int virtue_id, int amount)
  * @param amount セットしたい値。
  * @return なし
  */
-void set_virtue(int virtue_id, int amount)
+void set_virtue(player_type *creature_ptr, int virtue_id, int amount)
 {
 	int i = 0;
 
 	for (i = 0; i < 8; i++)
 	{
-		if (p_ptr->vir_types[i] == virtue_id)
+		if (creature_ptr->vir_types[i] == virtue_id)
 		{
-			p_ptr->virtues[i] = (s16b)amount;
+			creature_ptr->virtues[i] = (s16b)amount;
 			return;
 		}
 	}
