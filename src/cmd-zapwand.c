@@ -31,7 +31,7 @@ bool wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool m
 	/* XXX Hack -- Wand of wonder can do anything before it */
 	if (sval == SV_WAND_WONDER)
 	{
-		int vir = virtue_number(V_CHANCE);
+		int vir = virtue_number(p_ptr, V_CHANCE);
 		sval = (OBJECT_SUBTYPE_VALUE)randint0(SV_WAND_WONDER);
 
 		if (vir)

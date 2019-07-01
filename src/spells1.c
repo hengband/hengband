@@ -2341,13 +2341,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			case GF_CHARM:
 			{
 				int vir;
-				vir = virtue_number(V_HARMONY);
+				vir = virtue_number(p_ptr, V_HARMONY);
 				if (vir)
 				{
 					dam += p_ptr->virtues[vir-1]/10;
 				}
 
-				vir = virtue_number(V_INDIVIDUALISM);
+				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
 				if (vir)
 				{
 					dam -= p_ptr->virtues[vir-1]/20;
@@ -2392,13 +2392,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				int vir;
 				if (seen) obvious = TRUE;
 
-				vir = virtue_number(V_UNLIFE);
+				vir = virtue_number(p_ptr, V_UNLIFE);
 				if (vir)
 				{
 					dam += p_ptr->virtues[vir-1]/10;
 				}
 
-				vir = virtue_number(V_INDIVIDUALISM);
+				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
 				if (vir)
 				{
 					dam -= p_ptr->virtues[vir-1]/20;
@@ -2435,13 +2435,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				int vir;
 				if (seen) obvious = TRUE;
 
-				vir = virtue_number(V_UNLIFE);
+				vir = virtue_number(p_ptr, V_UNLIFE);
 				if (vir)
 				{
 					dam += p_ptr->virtues[vir-1]/10;
 				}
 
-				vir = virtue_number(V_INDIVIDUALISM);
+				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
 				if (vir)
 				{
 					dam -= p_ptr->virtues[vir-1]/20;
@@ -2478,13 +2478,13 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				int vir;
 				if (seen) obvious = TRUE;
 
-				vir = virtue_number(V_NATURE);
+				vir = virtue_number(p_ptr, V_NATURE);
 				if (vir)
 				{
 					dam += p_ptr->virtues[vir-1]/10;
 				}
 
-				vir = virtue_number(V_INDIVIDUALISM);
+				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
 				if (vir)
 				{
 					dam -= p_ptr->virtues[vir-1]/20;
@@ -2523,16 +2523,16 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				int vir;
 
-				vir = virtue_number(V_UNLIFE);
+				vir = virtue_number(p_ptr, V_UNLIFE);
 				if (seen) obvious = TRUE;
 
-				vir = virtue_number(V_UNLIFE);
+				vir = virtue_number(p_ptr, V_UNLIFE);
 				if (vir)
 				{
 					dam -= p_ptr->virtues[vir-1]/10;
 				}
 
-				vir = virtue_number(V_INDIVIDUALISM);
+				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
 				if (vir)
 				{
 					dam -= p_ptr->virtues[vir-1]/20;

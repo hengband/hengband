@@ -3421,7 +3421,7 @@ bool res_stat(player_type *creature_ptr, int stat)
 bool hp_player(player_type *creature_ptr, int num)
 {
 	int vir;
-	vir = virtue_number(V_VITALITY);
+	vir = virtue_number(p_ptr, V_VITALITY);
 
 	if(num <= 0) return (FALSE);
 

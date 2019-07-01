@@ -56,8 +56,8 @@ concptr virtue[MAX_VIRTUE] =
 bool compare_virtue(int type, int num, int tekitou)
 {
 	int vir;
-	if (virtue_number(type))
-		vir = p_ptr->virtues[virtue_number(type) - 1];
+	if (virtue_number(p_ptr, type))
+		vir = p_ptr->virtues[virtue_number(p_ptr, type) - 1];
 	else
 		vir = 0;
 
@@ -79,14 +79,14 @@ bool compare_virtue(int type, int num, int tekitou)
  * @param type 確認したい徳のID
  * @return スロットがあるならばスロットのID(0～7)+1、ない場合は0を返す。
  */
-int virtue_number(int type)
+int virtue_number(player_type *creature_ptr, int type)
 {
 	int i;
 
 	/* Search */
 	for (i = 0; i < 8; i++)
 	{
-		if (p_ptr->vir_types[i] == type) return i + 1;
+		if (creature_ptr->vir_types[i] == type) return i + 1;
 	}
 
 	/* No match */
@@ -103,7 +103,7 @@ static void get_random_virtue(int which)
 	int type = 0;
 
 	/* Randomly choose a type */
-	while (!(type) || virtue_number(type))
+	while (!(type) || virtue_number(p_ptr, type))
 	{
 		switch (randint1(29))
 		{
@@ -151,16 +151,16 @@ static VIRTUES_IDX get_realm_virtues(REALM_IDX realm)
 	switch (realm)
 	{
 	case REALM_LIFE:
-		if (virtue_number(V_VITALITY)) return V_TEMPERANCE;
+		if (virtue_number(p_ptr, V_VITALITY)) return V_TEMPERANCE;
 		else return V_VITALITY;
 	case REALM_SORCERY:
-		if (virtue_number(V_KNOWLEDGE)) return V_ENCHANT;
+		if (virtue_number(p_ptr, V_KNOWLEDGE)) return V_ENCHANT;
 		else return V_KNOWLEDGE;
 	case REALM_NATURE:
-		if (virtue_number(V_NATURE)) return V_HARMONY;
+		if (virtue_number(p_ptr, V_NATURE)) return V_HARMONY;
 		else return V_NATURE;
 	case REALM_CHAOS:
-		if (virtue_number(V_CHANCE)) return V_INDIVIDUALISM;
+		if (virtue_number(p_ptr, V_CHANCE)) return V_INDIVIDUALISM;
 		else return V_CHANCE;
 	case REALM_DEATH:
 		return V_UNLIFE;
@@ -169,16 +169,16 @@ static VIRTUES_IDX get_realm_virtues(REALM_IDX realm)
 	case REALM_ARCANE:
 		return 0;
 	case REALM_CRAFT:
-		if (virtue_number(V_ENCHANT)) return V_INDIVIDUALISM;
+		if (virtue_number(p_ptr, V_ENCHANT)) return V_INDIVIDUALISM;
 		else return V_ENCHANT;
 	case REALM_DAEMON:
-		if (virtue_number(V_JUSTICE)) return V_FAITH;
+		if (virtue_number(p_ptr, V_JUSTICE)) return V_FAITH;
 		else return V_JUSTICE;
 	case REALM_CRUSADE:
-		if (virtue_number(V_JUSTICE)) return V_HONOUR;
+		if (virtue_number(p_ptr, V_JUSTICE)) return V_HONOUR;
 		else return V_JUSTICE;
 	case REALM_HEX:
-		if (virtue_number(V_COMPASSION)) return V_JUSTICE;
+		if (virtue_number(p_ptr, V_COMPASSION)) return V_JUSTICE;
 		else return V_COMPASSION;
 	};
 

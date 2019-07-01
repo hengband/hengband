@@ -1396,7 +1396,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	if (p_ptr->special_defense & KATA_KOUKIJIN) chance += 150;
 	if (p_ptr->sutemi) chance = MAX(chance * 3 / 2, chance + 60);
 
-	vir = virtue_number(V_VALOUR);
+	vir = virtue_number(p_ptr, V_VALOUR);
 	if (vir)
 	{
 		chance += (p_ptr->virtues[vir - 1] / 10);
