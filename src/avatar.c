@@ -191,7 +191,7 @@ static VIRTUES_IDX get_realm_virtues(REALM_IDX realm)
  * @details 職業に応じて1～4種が固定、種族に応じて1種類が与えられ、後は重複なくランダムに選択される。
  * @return なし
  */
-void get_virtues(void)
+void get_virtues(player_type *creature_ptr)
 {
 	int i = 0, j = 0;
 	s16b tmp_vir;
@@ -199,183 +199,183 @@ void get_virtues(void)
 	/* Reset */
 	for (i = 0; i < 8; i++)
 	{
-		p_ptr->virtues[i] = 0;
-		p_ptr->vir_types[i] = 0;
+		creature_ptr->virtues[i] = 0;
+		creature_ptr->vir_types[i] = 0;
 	}
 
 	i = 0;
 
 	/* Get pre-defined types */
 	/* 1 or more virtues based on class */
-	switch (p_ptr->pclass)
+	switch (creature_ptr->pclass)
 	{
 	case CLASS_WARRIOR:
 	case CLASS_SAMURAI:
-		p_ptr->vir_types[i++] = V_VALOUR;
-		p_ptr->vir_types[i++] = V_HONOUR;
+		creature_ptr->vir_types[i++] = V_VALOUR;
+		creature_ptr->vir_types[i++] = V_HONOUR;
 		break;
 	case CLASS_MAGE:
-		p_ptr->vir_types[i++] = V_KNOWLEDGE;
-		p_ptr->vir_types[i++] = V_ENCHANT;
+		creature_ptr->vir_types[i++] = V_KNOWLEDGE;
+		creature_ptr->vir_types[i++] = V_ENCHANT;
 		break;
 	case CLASS_PRIEST:
-		p_ptr->vir_types[i++] = V_FAITH;
-		p_ptr->vir_types[i++] = V_TEMPERANCE;
+		creature_ptr->vir_types[i++] = V_FAITH;
+		creature_ptr->vir_types[i++] = V_TEMPERANCE;
 		break;
 	case CLASS_ROGUE:
 	case CLASS_SNIPER:
-		p_ptr->vir_types[i++] = V_HONOUR;
+		creature_ptr->vir_types[i++] = V_HONOUR;
 		break;
 	case CLASS_RANGER:
 	case CLASS_ARCHER:
-		p_ptr->vir_types[i++] = V_NATURE;
-		p_ptr->vir_types[i++] = V_TEMPERANCE;
+		creature_ptr->vir_types[i++] = V_NATURE;
+		creature_ptr->vir_types[i++] = V_TEMPERANCE;
 		break;
 	case CLASS_PALADIN:
-		p_ptr->vir_types[i++] = V_JUSTICE;
-		p_ptr->vir_types[i++] = V_VALOUR;
-		p_ptr->vir_types[i++] = V_HONOUR;
-		p_ptr->vir_types[i++] = V_FAITH;
+		creature_ptr->vir_types[i++] = V_JUSTICE;
+		creature_ptr->vir_types[i++] = V_VALOUR;
+		creature_ptr->vir_types[i++] = V_HONOUR;
+		creature_ptr->vir_types[i++] = V_FAITH;
 		break;
 	case CLASS_WARRIOR_MAGE:
 	case CLASS_RED_MAGE:
-		p_ptr->vir_types[i++] = V_ENCHANT;
-		p_ptr->vir_types[i++] = V_VALOUR;
+		creature_ptr->vir_types[i++] = V_ENCHANT;
+		creature_ptr->vir_types[i++] = V_VALOUR;
 		break;
 	case CLASS_CHAOS_WARRIOR:
-		p_ptr->vir_types[i++] = V_CHANCE;
-		p_ptr->vir_types[i++] = V_INDIVIDUALISM;
+		creature_ptr->vir_types[i++] = V_CHANCE;
+		creature_ptr->vir_types[i++] = V_INDIVIDUALISM;
 		break;
 	case CLASS_MONK:
 	case CLASS_FORCETRAINER:
-		p_ptr->vir_types[i++] = V_FAITH;
-		p_ptr->vir_types[i++] = V_HARMONY;
-		p_ptr->vir_types[i++] = V_TEMPERANCE;
-		p_ptr->vir_types[i++] = V_PATIENCE;
+		creature_ptr->vir_types[i++] = V_FAITH;
+		creature_ptr->vir_types[i++] = V_HARMONY;
+		creature_ptr->vir_types[i++] = V_TEMPERANCE;
+		creature_ptr->vir_types[i++] = V_PATIENCE;
 		break;
 	case CLASS_MINDCRAFTER:
 	case CLASS_MIRROR_MASTER:
-		p_ptr->vir_types[i++] = V_HARMONY;
-		p_ptr->vir_types[i++] = V_ENLIGHTEN;
-		p_ptr->vir_types[i++] = V_PATIENCE;
+		creature_ptr->vir_types[i++] = V_HARMONY;
+		creature_ptr->vir_types[i++] = V_ENLIGHTEN;
+		creature_ptr->vir_types[i++] = V_PATIENCE;
 		break;
 	case CLASS_HIGH_MAGE:
 	case CLASS_SORCERER:
-		p_ptr->vir_types[i++] = V_ENLIGHTEN;
-		p_ptr->vir_types[i++] = V_ENCHANT;
-		p_ptr->vir_types[i++] = V_KNOWLEDGE;
+		creature_ptr->vir_types[i++] = V_ENLIGHTEN;
+		creature_ptr->vir_types[i++] = V_ENCHANT;
+		creature_ptr->vir_types[i++] = V_KNOWLEDGE;
 		break;
 	case CLASS_TOURIST:
-		p_ptr->vir_types[i++] = V_ENLIGHTEN;
-		p_ptr->vir_types[i++] = V_CHANCE;
+		creature_ptr->vir_types[i++] = V_ENLIGHTEN;
+		creature_ptr->vir_types[i++] = V_CHANCE;
 		break;
 	case CLASS_IMITATOR:
-		p_ptr->vir_types[i++] = V_CHANCE;
+		creature_ptr->vir_types[i++] = V_CHANCE;
 		break;
 	case CLASS_BLUE_MAGE:
-		p_ptr->vir_types[i++] = V_CHANCE;
-		p_ptr->vir_types[i++] = V_KNOWLEDGE;
+		creature_ptr->vir_types[i++] = V_CHANCE;
+		creature_ptr->vir_types[i++] = V_KNOWLEDGE;
 		break;
 	case CLASS_BEASTMASTER:
-		p_ptr->vir_types[i++] = V_NATURE;
-		p_ptr->vir_types[i++] = V_CHANCE;
-		p_ptr->vir_types[i++] = V_VITALITY;
+		creature_ptr->vir_types[i++] = V_NATURE;
+		creature_ptr->vir_types[i++] = V_CHANCE;
+		creature_ptr->vir_types[i++] = V_VITALITY;
 		break;
 	case CLASS_MAGIC_EATER:
-		p_ptr->vir_types[i++] = V_ENCHANT;
-		p_ptr->vir_types[i++] = V_KNOWLEDGE;
+		creature_ptr->vir_types[i++] = V_ENCHANT;
+		creature_ptr->vir_types[i++] = V_KNOWLEDGE;
 		break;
 	case CLASS_BARD:
-		p_ptr->vir_types[i++] = V_HARMONY;
-		p_ptr->vir_types[i++] = V_COMPASSION;
+		creature_ptr->vir_types[i++] = V_HARMONY;
+		creature_ptr->vir_types[i++] = V_COMPASSION;
 		break;
 	case CLASS_CAVALRY:
-		p_ptr->vir_types[i++] = V_VALOUR;
-		p_ptr->vir_types[i++] = V_HARMONY;
+		creature_ptr->vir_types[i++] = V_VALOUR;
+		creature_ptr->vir_types[i++] = V_HARMONY;
 		break;
 	case CLASS_BERSERKER:
-		p_ptr->vir_types[i++] = V_VALOUR;
-		p_ptr->vir_types[i++] = V_INDIVIDUALISM;
+		creature_ptr->vir_types[i++] = V_VALOUR;
+		creature_ptr->vir_types[i++] = V_INDIVIDUALISM;
 		break;
 	case CLASS_SMITH:
-		p_ptr->vir_types[i++] = V_HONOUR;
-		p_ptr->vir_types[i++] = V_KNOWLEDGE;
+		creature_ptr->vir_types[i++] = V_HONOUR;
+		creature_ptr->vir_types[i++] = V_KNOWLEDGE;
 		break;
 	case CLASS_NINJA:
-		p_ptr->vir_types[i++] = V_PATIENCE;
-		p_ptr->vir_types[i++] = V_KNOWLEDGE;
-		p_ptr->vir_types[i++] = V_FAITH;
-		p_ptr->vir_types[i++] = V_UNLIFE;
+		creature_ptr->vir_types[i++] = V_PATIENCE;
+		creature_ptr->vir_types[i++] = V_KNOWLEDGE;
+		creature_ptr->vir_types[i++] = V_FAITH;
+		creature_ptr->vir_types[i++] = V_UNLIFE;
 		break;
 	};
 
 	/* Get one virtue based on race */
-	switch (p_ptr->prace)
+	switch (creature_ptr->prace)
 	{
 	case RACE_HUMAN: case RACE_HALF_ELF: case RACE_DUNADAN:
-		p_ptr->vir_types[i++] = V_INDIVIDUALISM;
+		creature_ptr->vir_types[i++] = V_INDIVIDUALISM;
 		break;
 	case RACE_ELF: case RACE_SPRITE: case RACE_ENT:
-		p_ptr->vir_types[i++] = V_NATURE;
+		creature_ptr->vir_types[i++] = V_NATURE;
 		break;
 	case RACE_HOBBIT: case RACE_HALF_OGRE:
-		p_ptr->vir_types[i++] = V_TEMPERANCE;
+		creature_ptr->vir_types[i++] = V_TEMPERANCE;
 		break;
 	case RACE_DWARF: case RACE_KLACKON: case RACE_ANDROID:
-		p_ptr->vir_types[i++] = V_DILIGENCE;
+		creature_ptr->vir_types[i++] = V_DILIGENCE;
 		break;
 	case RACE_GNOME: case RACE_CYCLOPS:
-		p_ptr->vir_types[i++] = V_KNOWLEDGE;
+		creature_ptr->vir_types[i++] = V_KNOWLEDGE;
 		break;
 	case RACE_HALF_ORC: case RACE_AMBERITE: case RACE_KOBOLD:
-		p_ptr->vir_types[i++] = V_HONOUR;
+		creature_ptr->vir_types[i++] = V_HONOUR;
 		break;
 	case RACE_HALF_TROLL: case RACE_BARBARIAN:
-		p_ptr->vir_types[i++] = V_VALOUR;
+		creature_ptr->vir_types[i++] = V_VALOUR;
 		break;
 	case RACE_HIGH_ELF: case RACE_KUTAR:
-		p_ptr->vir_types[i++] = V_VITALITY;
+		creature_ptr->vir_types[i++] = V_VITALITY;
 		break;
 	case RACE_HALF_GIANT: case RACE_GOLEM: case RACE_ANGEL: case RACE_DEMON:
-		p_ptr->vir_types[i++] = V_JUSTICE;
+		creature_ptr->vir_types[i++] = V_JUSTICE;
 		break;
 	case RACE_HALF_TITAN:
-		p_ptr->vir_types[i++] = V_HARMONY;
+		creature_ptr->vir_types[i++] = V_HARMONY;
 		break;
 	case RACE_YEEK:
-		p_ptr->vir_types[i++] = V_SACRIFICE;
+		creature_ptr->vir_types[i++] = V_SACRIFICE;
 		break;
 	case RACE_MIND_FLAYER:
-		p_ptr->vir_types[i++] = V_ENLIGHTEN;
+		creature_ptr->vir_types[i++] = V_ENLIGHTEN;
 		break;
 	case RACE_DARK_ELF: case RACE_DRACONIAN: case RACE_S_FAIRY:
-		p_ptr->vir_types[i++] = V_ENCHANT;
+		creature_ptr->vir_types[i++] = V_ENCHANT;
 		break;
 	case RACE_NIBELUNG:
-		p_ptr->vir_types[i++] = V_PATIENCE;
+		creature_ptr->vir_types[i++] = V_PATIENCE;
 		break;
 	case RACE_IMP:
-		p_ptr->vir_types[i++] = V_FAITH;
+		creature_ptr->vir_types[i++] = V_FAITH;
 		break;
 	case RACE_ZOMBIE: case RACE_SKELETON:
 	case RACE_VAMPIRE: case RACE_SPECTRE:
-		p_ptr->vir_types[i++] = V_UNLIFE;
+		creature_ptr->vir_types[i++] = V_UNLIFE;
 		break;
 	case RACE_BEASTMAN:
-		p_ptr->vir_types[i++] = V_CHANCE;
+		creature_ptr->vir_types[i++] = V_CHANCE;
 		break;
 	}
 
 	/* Get a virtue for realms */
-	if (p_ptr->realm1)
+	if (creature_ptr->realm1)
 	{
-		tmp_vir = get_realm_virtues(p_ptr->realm1);
-		if (tmp_vir) p_ptr->vir_types[i++] = tmp_vir;
+		tmp_vir = get_realm_virtues(creature_ptr->realm1);
+		if (tmp_vir) creature_ptr->vir_types[i++] = tmp_vir;
 	}
-	if (p_ptr->realm2)
+	if (creature_ptr->realm2)
 	{
-		tmp_vir = get_realm_virtues(p_ptr->realm2);
-		if (tmp_vir) p_ptr->vir_types[i++] = tmp_vir;
+		tmp_vir = get_realm_virtues(creature_ptr->realm2);
+		if (tmp_vir) creature_ptr->vir_types[i++] = tmp_vir;
 	}
 
 	/* Eliminate doubles */
@@ -383,15 +383,15 @@ void get_virtues(void)
 	{
 		for (j = i + 1; j < 8; j++)
 		{
-			if ((p_ptr->vir_types[j] != 0) && (p_ptr->vir_types[j] == p_ptr->vir_types[i]))
-				p_ptr->vir_types[j] = 0;
+			if ((creature_ptr->vir_types[j] != 0) && (creature_ptr->vir_types[j] == creature_ptr->vir_types[i]))
+				creature_ptr->vir_types[j] = 0;
 		}
 	}
 
 	/* Fill in the blanks */
 	for (i = 0; i < 8; i++)
 	{
-		if (p_ptr->vir_types[i] == 0) get_random_virtue(i);
+		if (creature_ptr->vir_types[i] == 0) get_random_virtue(i);
 	}
 }
 
