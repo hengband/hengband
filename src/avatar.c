@@ -146,21 +146,21 @@ static void get_random_virtue(int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static VIRTUES_IDX get_realm_virtues(REALM_IDX realm)
+static VIRTUES_IDX get_realm_virtues(player_type *creature_ptr, REALM_IDX realm)
 {
 	switch (realm)
 	{
 	case REALM_LIFE:
-		if (virtue_number(p_ptr, V_VITALITY)) return V_TEMPERANCE;
+		if (virtue_number(creature_ptr, V_VITALITY)) return V_TEMPERANCE;
 		else return V_VITALITY;
 	case REALM_SORCERY:
-		if (virtue_number(p_ptr, V_KNOWLEDGE)) return V_ENCHANT;
+		if (virtue_number(creature_ptr, V_KNOWLEDGE)) return V_ENCHANT;
 		else return V_KNOWLEDGE;
 	case REALM_NATURE:
-		if (virtue_number(p_ptr, V_NATURE)) return V_HARMONY;
+		if (virtue_number(creature_ptr, V_NATURE)) return V_HARMONY;
 		else return V_NATURE;
 	case REALM_CHAOS:
-		if (virtue_number(p_ptr, V_CHANCE)) return V_INDIVIDUALISM;
+		if (virtue_number(creature_ptr, V_CHANCE)) return V_INDIVIDUALISM;
 		else return V_CHANCE;
 	case REALM_DEATH:
 		return V_UNLIFE;
@@ -169,16 +169,16 @@ static VIRTUES_IDX get_realm_virtues(REALM_IDX realm)
 	case REALM_ARCANE:
 		return 0;
 	case REALM_CRAFT:
-		if (virtue_number(p_ptr, V_ENCHANT)) return V_INDIVIDUALISM;
+		if (virtue_number(creature_ptr, V_ENCHANT)) return V_INDIVIDUALISM;
 		else return V_ENCHANT;
 	case REALM_DAEMON:
-		if (virtue_number(p_ptr, V_JUSTICE)) return V_FAITH;
+		if (virtue_number(creature_ptr, V_JUSTICE)) return V_FAITH;
 		else return V_JUSTICE;
 	case REALM_CRUSADE:
-		if (virtue_number(p_ptr, V_JUSTICE)) return V_HONOUR;
+		if (virtue_number(creature_ptr, V_JUSTICE)) return V_HONOUR;
 		else return V_JUSTICE;
 	case REALM_HEX:
-		if (virtue_number(p_ptr, V_COMPASSION)) return V_JUSTICE;
+		if (virtue_number(creature_ptr, V_COMPASSION)) return V_JUSTICE;
 		else return V_COMPASSION;
 	};
 
@@ -369,12 +369,12 @@ void get_virtues(player_type *creature_ptr)
 	/* Get a virtue for realms */
 	if (creature_ptr->realm1)
 	{
-		tmp_vir = get_realm_virtues(creature_ptr->realm1);
+		tmp_vir = get_realm_virtues(creature_ptr, creature_ptr->realm1);
 		if (tmp_vir) creature_ptr->vir_types[i++] = tmp_vir;
 	}
 	if (creature_ptr->realm2)
 	{
-		tmp_vir = get_realm_virtues(creature_ptr->realm2);
+		tmp_vir = get_realm_virtues(creature_ptr, creature_ptr->realm2);
 		if (tmp_vir) creature_ptr->vir_types[i++] = tmp_vir;
 	}
 
