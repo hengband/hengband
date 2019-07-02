@@ -98,12 +98,12 @@ int virtue_number(player_type *creature_ptr, int type)
  * @param which 確認したい徳のID
  * @return なし
  */
-static void get_random_virtue(int which)
+static void get_random_virtue(player_type *creature_ptr, int which)
 {
 	int type = 0;
 
 	/* Randomly choose a type */
-	while (!(type) || virtue_number(p_ptr, type))
+	while (!(type) || virtue_number(creature_ptr, type))
 	{
 		switch (randint1(29))
 		{
@@ -138,7 +138,7 @@ static void get_random_virtue(int which)
 	}
 
 	/* Chosen */
-	p_ptr->vir_types[which] = (s16b)type;
+	creature_ptr->vir_types[which] = (s16b)type;
 }
 
 /*!
@@ -391,7 +391,7 @@ void get_virtues(player_type *creature_ptr)
 	/* Fill in the blanks */
 	for (i = 0; i < 8; i++)
 	{
-		if (creature_ptr->vir_types[i] == 0) get_random_virtue(i);
+		if (creature_ptr->vir_types[i] == 0) get_random_virtue(creature_ptr, i);
 	}
 }
 
