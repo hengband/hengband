@@ -426,7 +426,7 @@ static void sense_inventory1(void)
 		}
 	}
 
-	if (compare_virtue(V_KNOWLEDGE, 100, VIRTUE_LARGE)) heavy = TRUE;
+	if (compare_virtue(p_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE)) heavy = TRUE;
 
 	/*** Sense everything ***/
 

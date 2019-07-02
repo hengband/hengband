@@ -53,11 +53,11 @@ concptr virtue[MAX_VIRTUE] =
  * @return 比較の真偽値を返す
  * @todo 引数名を直しておく
  */
-bool compare_virtue(int type, int num, int tekitou)
+bool compare_virtue(player_type *creature_ptr, int type, int num, int tekitou)
 {
 	int vir;
-	if (virtue_number(p_ptr, type))
-		vir = p_ptr->virtues[virtue_number(p_ptr, type) - 1];
+	if (virtue_number(creature_ptr, type))
+		vir = creature_ptr->virtues[virtue_number(creature_ptr, type) - 1];
 	else
 		vir = 0;
 

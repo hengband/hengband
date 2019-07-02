@@ -22,7 +22,7 @@
 
 #define VIRTUE_LARGE 1
 #define VIRTUE_SMALL 2
-extern bool compare_virtue(int type, int num, int tekitou);
+extern bool compare_virtue(player_type *creature_ptr, int type, int num, int tekitou);
 extern int virtue_number(player_type *creature_ptr, int type);
 extern concptr virtue[MAX_VIRTUE];
 extern void get_virtues(player_type *creature_ptr);
