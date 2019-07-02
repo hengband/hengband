@@ -5408,7 +5408,7 @@ void play_game(bool new_game)
 		current_world_ptr->seed_town = randint0(0x10000000);
 
 		/* Roll up a new character */
-		player_birth();
+		player_birth(p_ptr);
 
 		counts_write(2,0);
 		p_ptr->count = 0;

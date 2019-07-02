@@ -38,7 +38,7 @@ extern birther previous_char;
 
 /* birth.c */
 extern void add_history_from_pref_line(concptr t);
-extern void player_birth(void);
+extern void player_birth(player_type *creature_ptr);
 extern void get_max_stats(void);
 extern void get_height_weight(void);
 extern void player_outfit(void);
