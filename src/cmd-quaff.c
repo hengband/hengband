@@ -468,7 +468,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 
 		case SV_POTION_NEW_LIFE:
 			roll_hitdice(p_ptr, 0L);
-			get_max_stats();
+			get_max_stats(p_ptr);
 			p_ptr->update |= PU_BONUS;
 			lose_all_mutations(p_ptr);
 			ident = TRUE;

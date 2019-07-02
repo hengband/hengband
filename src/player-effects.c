@@ -3879,7 +3879,7 @@ void do_poly_self(player_type *creature_ptr)
 	{
 		power -= 10;
 
-		get_max_stats();
+		get_max_stats(p_ptr);
 		roll_hitdice(creature_ptr, 0L);
 	}
 

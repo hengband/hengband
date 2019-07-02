@@ -1152,7 +1152,7 @@ static void get_stats(void)
  * @brief プレイヤーの限界ステータスを決める。
  * @return なし
  */
-void get_max_stats(void)
+void get_max_stats(player_type *creature_ptr)
 {
 	int i, j;
 	int dice[6];
@@ -1180,14 +1180,14 @@ void get_max_stats(void)
 		BASE_STATUS max_max = 18 + 60 + dice[i]*10;
 
 		/* Save that value */
-		p_ptr->stat_max_max[i] = max_max;
-		if (p_ptr->stat_max[i] > max_max)
-			p_ptr->stat_max[i] = max_max;
-		if (p_ptr->stat_cur[i] > max_max)
-			p_ptr->stat_cur[i] = max_max;
+		creature_ptr->stat_max_max[i] = max_max;
+		if (creature_ptr->stat_max[i] > max_max)
+			creature_ptr->stat_max[i] = max_max;
+		if (creature_ptr->stat_cur[i] > max_max)
+			creature_ptr->stat_cur[i] = max_max;
 	}
-	p_ptr->knowledge &= ~(KNOW_STAT);
-	p_ptr->redraw |= (PR_STATS);
+	creature_ptr->knowledge &= ~(KNOW_STAT);
+	creature_ptr->redraw |= (PR_STATS);
 }
 
 
@@ -4464,7 +4464,7 @@ static bool player_birth_aux(void)
 
 	/*** Finish up ***/
 
-	get_max_stats();
+	get_max_stats(p_ptr);
 
 	get_virtues(p_ptr);
 
