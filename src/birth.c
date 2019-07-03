@@ -806,7 +806,7 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
  * @brief 選択した魔法領域の解説を表示する / Choose the magical realms
  * @return ユーザが魔法領域の確定を選んだらTRUEを返す。
  */
-static bool get_player_realms(void)
+static bool get_player_realms(player_type *creature_ptr)
 {
 	int i, count;
 
@@ -816,17 +816,17 @@ static bool get_player_realms(void)
 	put_str("                                   ", 5, 40);
 
 	/* Select the first realm */
-	p_ptr->realm1 = REALM_NONE;
-	p_ptr->realm2 = 255;
+	creature_ptr->realm1 = REALM_NONE;
+	creature_ptr->realm2 = 255;
 	while (1)
 	{
 		char temp[80*10];
 		concptr t;
 		count = 0;
-		p_ptr->realm1 = choose_realm(p_ptr, realm_choices1[p_ptr->pclass], &count);
+		creature_ptr->realm1 = choose_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
 
-		if (255 == p_ptr->realm1) return FALSE;
-		if (!p_ptr->realm1) break;
+		if (255 == creature_ptr->realm1) return FALSE;
+		if (!creature_ptr->realm1) break;
 
 		/* Clean up*/
 		clear_from(10);
@@ -834,7 +834,7 @@ static bool get_player_realms(void)
 		put_str("                                   ", 4, 40);
 		put_str("                                   ", 5, 40);
 
-		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 74, temp, sizeof(temp));
+		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1)-1], 74, temp, sizeof(temp));
 		t = temp;
 		for (i = 0; i < 10; i++)
 		{
@@ -858,12 +858,12 @@ static bool get_player_realms(void)
 	}
 
 	/* Select the second realm */
-	p_ptr->realm2 = REALM_NONE;
-	if (p_ptr->realm1)
+	creature_ptr->realm2 = REALM_NONE;
+	if (creature_ptr->realm1)
 	{
 		/* Print the realm */
 		put_str(_("魔法        :", "Magic       :"), 6, 1);
-		c_put_str(TERM_L_BLUE, realm_names[p_ptr->realm1], 6, 15);
+		c_put_str(TERM_L_BLUE, realm_names[creature_ptr->realm1], 6, 15);
 
 		/* Select the second realm */
 		while (1)
@@ -872,10 +872,10 @@ static bool get_player_realms(void)
 			concptr t;
 
 			count = 0;
-			p_ptr->realm2 = choose_realm(p_ptr, realm_choices2[p_ptr->pclass], &count);
+			creature_ptr->realm2 = choose_realm(creature_ptr, realm_choices2[creature_ptr->pclass], &count);
 
-			if (255 == p_ptr->realm2) return FALSE;
-			if (!p_ptr->realm2) break;
+			if (255 == creature_ptr->realm2) return FALSE;
+			if (!creature_ptr->realm2) break;
 
 			/* Clean up*/
 			clear_from(10);
@@ -883,7 +883,7 @@ static bool get_player_realms(void)
 			put_str("                                   ", 4, 40);
 			put_str("                                   ", 5, 40);
 
-			roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 74, temp, sizeof(temp));
+			roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2)-1], 74, temp, sizeof(temp));
 			t = temp;
 			for (i = 0; i < A_MAX; i++)
 			{
@@ -905,10 +905,10 @@ static bool get_player_realms(void)
 			}
 			else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y)) break;
 		}
-		if (p_ptr->realm2)
+		if (creature_ptr->realm2)
 		{
 			/* Print the realm */
-			c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[p_ptr->realm1], realm_names[p_ptr->realm2]), 6, 15);
+			c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]), 6, 15);
 		}
 	}
 
@@ -4083,7 +4083,7 @@ static bool player_birth_aux(void)
 	}
 
 	/* Choose the magic realms */
-	if (!get_player_realms()) return FALSE;
+	if (!get_player_realms(p_ptr)) return FALSE;
 
 	/* Choose the players seikaku */
 	p_ptr->pseikaku = 0;
