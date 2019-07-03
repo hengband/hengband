@@ -1195,52 +1195,52 @@ void get_max_stats(player_type *creature_ptr)
  * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
  * @return なし
  */
-static void get_extra(bool roll_hitdie)
+static void get_extra(player_type *creature_ptr, bool roll_hitdie)
 {
 	int i, j;
 
 	/* Experience factor */
-	if (p_ptr->prace == RACE_ANDROID) p_ptr->expfact = rp_ptr->r_exp;
-	else p_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
+	if (creature_ptr->prace == RACE_ANDROID) creature_ptr->expfact = rp_ptr->r_exp;
+	else creature_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
 
-	if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER) || (p_ptr->pclass == CLASS_NINJA)) && ((p_ptr->prace == RACE_KLACKON) || (p_ptr->prace == RACE_SPRITE)))
-		p_ptr->expfact -= 15;
+	if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA)) && ((creature_ptr->prace == RACE_KLACKON) || (creature_ptr->prace == RACE_SPRITE)))
+		creature_ptr->expfact -= 15;
 
 	/* Reset record of race/realm changes */
-	p_ptr->start_race = p_ptr->prace;
-	p_ptr->old_race1 = 0L;
-	p_ptr->old_race2 = 0L;
-	p_ptr->old_realm = 0;
+	creature_ptr->start_race = creature_ptr->prace;
+	creature_ptr->old_race1 = 0L;
+	creature_ptr->old_race2 = 0L;
+	creature_ptr->old_realm = 0;
 
 	for (i = 0; i < 64; i++)
 	{
-		if (p_ptr->pclass == CLASS_SORCERER) p_ptr->spell_exp[i] = SPELL_EXP_MASTER;
-		else if (p_ptr->pclass == CLASS_RED_MAGE) p_ptr->spell_exp[i] = SPELL_EXP_SKILLED;
-		else p_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
+		if (creature_ptr->pclass == CLASS_SORCERER) creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
+		else if (creature_ptr->pclass == CLASS_RED_MAGE) creature_ptr->spell_exp[i] = SPELL_EXP_SKILLED;
+		else creature_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
 	}
 
 	for (i = 0; i < 5; i++)
 		for (j = 0; j < 64; j++)
-			p_ptr->weapon_exp[i][j] = s_info[p_ptr->pclass].w_start[i][j];
-	if ((p_ptr->pseikaku == SEIKAKU_SEXY) && (p_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER))
+			creature_ptr->weapon_exp[i][j] = s_info[creature_ptr->pclass].w_start[i][j];
+	if ((creature_ptr->pseikaku == SEIKAKU_SEXY) && (creature_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER))
 	{
-		p_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
+		creature_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
 	}
 
 	for (i = 0; i < GINOU_MAX; i++)
-		p_ptr->skill_exp[i] = s_info[p_ptr->pclass].s_start[i];
+		creature_ptr->skill_exp[i] = s_info[creature_ptr->pclass].s_start[i];
 
 	/* Hitdice */
-	if (p_ptr->pclass == CLASS_SORCERER)
-		p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+	if (creature_ptr->pclass == CLASS_SORCERER)
+		creature_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 	else
-		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
 	/* Roll for hit point unless quick-start */
-	if (roll_hitdie) roll_hitdice(p_ptr, SPOP_NO_UPDATE);
+	if (roll_hitdie) roll_hitdice(creature_ptr, SPOP_NO_UPDATE);
 
 	/* Initial hitpoints */
-	p_ptr->mhp = p_ptr->player_hp[0];
+	creature_ptr->mhp = creature_ptr->player_hp[0];
 }
 
 
@@ -4358,7 +4358,7 @@ static bool player_birth_aux(void)
 		mode = 0;
 
 		/* Roll for base hitpoints */
-		get_extra(TRUE);
+		get_extra(p_ptr, TRUE);
 
 		/* Roll for gold */
 		get_money();
@@ -4552,7 +4552,7 @@ static bool ask_quick_start(void)
 	ap_ptr = &seikaku_info[p_ptr->pseikaku];
 
 	/* Calc hitdie, but don't roll */
-	get_extra(FALSE);
+	get_extra(p_ptr, FALSE);
 
 	p_ptr->update |= (PU_BONUS | PU_HP);
 	update_creature(p_ptr);
