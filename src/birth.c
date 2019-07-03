@@ -1248,7 +1248,7 @@ static void get_extra(player_type *creature_ptr, bool roll_hitdie)
  * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
  * @return なし
  */
-static void get_history(void)
+static void get_history(player_type *creature_ptr)
 {
 	int i, n, chart, roll, social_class;
 
@@ -1257,7 +1257,7 @@ static void get_history(void)
 	char buf[240];
 
 	/* Clear the previous history strings */
-	for (i = 0; i < 4; i++) p_ptr->history[i][0] = '\0';
+	for (i = 0; i < 4; i++) creature_ptr->history[i][0] = '\0';
 
 	/* Clear the history text */
 	buf[0] = '\0';
@@ -1266,7 +1266,7 @@ static void get_history(void)
 	social_class = randint1(4);
 
 	/* Starting place */
-	switch (p_ptr->prace)
+	switch (creature_ptr->prace)
 	{
 		case RACE_AMBERITE:
 		{
@@ -1479,7 +1479,7 @@ static void get_history(void)
 	else if (social_class < 1) social_class = 1;
 
 	/* Save the social class */
-	p_ptr->sc = (s16b)social_class;
+	creature_ptr->sc = (s16b)social_class;
 
 
 	/* Skip leading spaces */
@@ -1498,7 +1498,7 @@ static void get_history(void)
 	t = temp;
 	for(i=0 ; i<4 ; i++){
 	     if(t[0]==0)break; 
-	     else {strcpy(p_ptr->history[i], t);t += strlen(t)+1;}
+	     else {strcpy(creature_ptr->history[i], t);t += strlen(t)+1;}
 	     }
        }
 }
@@ -4199,7 +4199,7 @@ static bool player_birth_aux(void)
 			get_ahw();
 
 			/* Roll for social class */
-			get_history();
+			get_history(p_ptr);
 		}
 
 		/* Feedback */
@@ -4300,7 +4300,7 @@ static bool player_birth_aux(void)
 				get_ahw();
 
 				/* Roll for social class */
-				get_history();
+				get_history(p_ptr);
 
 				if (autochara)
 				{
@@ -4342,7 +4342,7 @@ static bool player_birth_aux(void)
 					get_ahw();
 
 					/* Roll for social class */
-					get_history();
+					get_history(p_ptr);
 
 					break;
 				}
