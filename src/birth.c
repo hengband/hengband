@@ -567,7 +567,7 @@ static void show_help(concptr helpfile)
  * @param count 選択可能な魔法領域を返すポインタ群。
  * @return 選択した魔法領域のID
  */
-static byte choose_realm(s32b choices, int *count)
+static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 {
 	int picks[VALID_REALM] = {0};
 	int k, i, cs, os;
@@ -651,11 +651,11 @@ static byte choose_realm(s32b choices, int *count)
 	if ((*count) < 2) return auto_select;
 
 	/* Constraint to the 1st realm */
-	if (p_ptr->realm2 != 255)
+	if (creature_ptr->realm2 != 255)
 	{
-		if (p_ptr->pclass == CLASS_PRIEST)
+		if (creature_ptr->pclass == CLASS_PRIEST)
 		{
-			if (is_good_realm(p_ptr->realm1))
+			if (is_good_realm(creature_ptr->realm1))
 			{
 				choices &= ~(CH_DEATH | CH_DAEMON);
 			}
@@ -675,14 +675,14 @@ static byte choose_realm(s32b choices, int *count)
 		/* Analize realms */
 		if (choices & (1L << i))
 		{
-			if (p_ptr->realm1 == i+1)
+			if (creature_ptr->realm1 == i+1)
 			{
-				if (p_ptr->realm2 == 255)
+				if (creature_ptr->realm2 == 255)
 					cs = n;
 				else
 					continue;
 			}
-			if (p_ptr->realm2 == i+1)
+			if (creature_ptr->realm2 == i+1)
 				cs = n;
 
 			sym[n] = I2A(n);
@@ -823,7 +823,7 @@ static bool get_player_realms(void)
 		char temp[80*10];
 		concptr t;
 		count = 0;
-		p_ptr->realm1 = choose_realm(realm_choices1[p_ptr->pclass], &count);
+		p_ptr->realm1 = choose_realm(p_ptr, realm_choices1[p_ptr->pclass], &count);
 
 		if (255 == p_ptr->realm1) return FALSE;
 		if (!p_ptr->realm1) break;
@@ -872,7 +872,7 @@ static bool get_player_realms(void)
 			concptr t;
 
 			count = 0;
-			p_ptr->realm2 = choose_realm(realm_choices2[p_ptr->pclass], &count);
+			p_ptr->realm2 = choose_realm(p_ptr, realm_choices2[p_ptr->pclass], &count);
 
 			if (255 == p_ptr->realm2) return FALSE;
 			if (!p_ptr->realm2) break;
