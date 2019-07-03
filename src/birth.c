@@ -921,48 +921,48 @@ static bool get_player_realms(player_type *creature_ptr)
  * @param birther_ptr クイックスタート構造体の参照ポインタ
  * @return なし。
  */
-static void save_prev_data(birther *birther_ptr)
+static void save_prev_data(player_type *creature_ptr, birther *birther_ptr)
 {
 	int i;
 
 	/* Save the data */
-	birther_ptr->psex = p_ptr->psex;
-	birther_ptr->prace = p_ptr->prace;
-	birther_ptr->pclass = p_ptr->pclass;
-	birther_ptr->pseikaku = p_ptr->pseikaku;
-	birther_ptr->realm1 = p_ptr->realm1;
-	birther_ptr->realm2 = p_ptr->realm2;
-	birther_ptr->age = p_ptr->age;
-	birther_ptr->ht = p_ptr->ht;
-	birther_ptr->wt = p_ptr->wt;
-	birther_ptr->sc = p_ptr->sc;
-	birther_ptr->au = p_ptr->au;
+	birther_ptr->psex = creature_ptr->psex;
+	birther_ptr->prace = creature_ptr->prace;
+	birther_ptr->pclass = creature_ptr->pclass;
+	birther_ptr->pseikaku = creature_ptr->pseikaku;
+	birther_ptr->realm1 = creature_ptr->realm1;
+	birther_ptr->realm2 = creature_ptr->realm2;
+	birther_ptr->age = creature_ptr->age;
+	birther_ptr->ht = creature_ptr->ht;
+	birther_ptr->wt = creature_ptr->wt;
+	birther_ptr->sc = creature_ptr->sc;
+	birther_ptr->au = creature_ptr->au;
 
 	/* Save the stats */
 	for (i = 0; i < A_MAX; i++)
 	{
-		birther_ptr->stat_max[i] = p_ptr->stat_max[i];
-		birther_ptr->stat_max_max[i] = p_ptr->stat_max_max[i];
+		birther_ptr->stat_max[i] = creature_ptr->stat_max[i];
+		birther_ptr->stat_max_max[i] = creature_ptr->stat_max_max[i];
 	}
 
 	/* Save the hp */
 	for (i = 0; i < PY_MAX_LEVEL; i++)
 	{
-		birther_ptr->player_hp[i] = p_ptr->player_hp[i];
+		birther_ptr->player_hp[i] = creature_ptr->player_hp[i];
 	}
 
-	birther_ptr->chaos_patron = p_ptr->chaos_patron;
+	birther_ptr->chaos_patron = creature_ptr->chaos_patron;
 
 	/* Save the virtues */
 	for (i = 0; i < 8; i++)
 	{
-		birther_ptr->vir_types[i] = p_ptr->vir_types[i];
+		birther_ptr->vir_types[i] = creature_ptr->vir_types[i];
 	}
 
 	/* Save the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(birther_ptr->history[i], p_ptr->history[i]);
+		strcpy(birther_ptr->history[i], creature_ptr->history[i]);
 	}
 }
 
@@ -979,7 +979,7 @@ static void load_prev_data(bool swap)
 	birther	temp;
 
 	/*** Save the current data ***/
-	if (swap) save_prev_data(&temp);
+	if (swap) save_prev_data(p_ptr, &temp);
 
 
 	/*** Load the previous data ***/
@@ -4443,7 +4443,7 @@ static bool player_birth_aux(void)
 		if (c == '\r' || c == '\n' || c == ESCAPE) break;
 
 		/* Save this for the "previous" character */
-		save_prev_data(&previous_char);
+		save_prev_data(p_ptr, &previous_char);
 		previous_char.quick_ok = FALSE;
 
 		/* Note that a previous roll exists */
@@ -4490,7 +4490,7 @@ static bool player_birth_aux(void)
 	init_dungeon_quests();
 
 	/* Save character data for quick start */
-	save_prev_data(&previous_char);
+	save_prev_data(p_ptr, &previous_char);
 	previous_char.quick_ok = TRUE;
 
 	/* Accept */
