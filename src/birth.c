@@ -972,57 +972,57 @@ static void save_prev_data(player_type *creature_ptr, birther *birther_ptr)
  * @param swap TRUEならば現在のプレイヤー構造体上との内容をスワップする形で読み込む。
  * @return なし。
  */
-static void load_prev_data(bool swap)
+static void load_prev_data(player_type *creature_ptr, bool swap)
 {
 	int i;
 
 	birther	temp;
 
 	/*** Save the current data ***/
-	if (swap) save_prev_data(p_ptr, &temp);
+	if (swap) save_prev_data(creature_ptr, &temp);
 
 
 	/*** Load the previous data ***/
 
 	/* Load the data */
-	p_ptr->psex = previous_char.psex;
-	p_ptr->prace = previous_char.prace;
-	p_ptr->pclass = previous_char.pclass;
-	p_ptr->pseikaku = previous_char.pseikaku;
-	p_ptr->realm1 = previous_char.realm1;
-	p_ptr->realm2 = previous_char.realm2;
-	p_ptr->age = previous_char.age;
-	p_ptr->ht = previous_char.ht;
-	p_ptr->wt = previous_char.wt;
-	p_ptr->sc = previous_char.sc;
-	p_ptr->au = previous_char.au;
+	creature_ptr->psex = previous_char.psex;
+	creature_ptr->prace = previous_char.prace;
+	creature_ptr->pclass = previous_char.pclass;
+	creature_ptr->pseikaku = previous_char.pseikaku;
+	creature_ptr->realm1 = previous_char.realm1;
+	creature_ptr->realm2 = previous_char.realm2;
+	creature_ptr->age = previous_char.age;
+	creature_ptr->ht = previous_char.ht;
+	creature_ptr->wt = previous_char.wt;
+	creature_ptr->sc = previous_char.sc;
+	creature_ptr->au = previous_char.au;
 
 	/* Load the stats */
 	for (i = 0; i < A_MAX; i++)
 	{
-		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = previous_char.stat_max[i];
-		p_ptr->stat_max_max[i] = previous_char.stat_max_max[i];
+		creature_ptr->stat_cur[i] = creature_ptr->stat_max[i] = previous_char.stat_max[i];
+		creature_ptr->stat_max_max[i] = previous_char.stat_max_max[i];
 	}
 
 	/* Load the hp */
 	for (i = 0; i < PY_MAX_LEVEL; i++)
 	{
-		p_ptr->player_hp[i] = previous_char.player_hp[i];
+		creature_ptr->player_hp[i] = previous_char.player_hp[i];
 	}
-	p_ptr->mhp = p_ptr->player_hp[0];
-	p_ptr->chp = p_ptr->player_hp[0];
+	creature_ptr->mhp = creature_ptr->player_hp[0];
+	creature_ptr->chp = creature_ptr->player_hp[0];
 
-	p_ptr->chaos_patron = previous_char.chaos_patron;
+	creature_ptr->chaos_patron = previous_char.chaos_patron;
 
 	for (i = 0; i < 8; i++)
 	{
-		p_ptr->vir_types[i] = previous_char.vir_types[i];
+		creature_ptr->vir_types[i] = previous_char.vir_types[i];
 	}
 
 	/* Load the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(p_ptr->history[i], previous_char.history[i]);
+		strcpy(creature_ptr->history[i], previous_char.history[i]);
 	}
 
 	/*** Save the previous data ***/
@@ -4406,7 +4406,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			/* Previous character */
 			if (prev && (c == 'p'))
 			{
-				load_prev_data(TRUE);
+				load_prev_data(creature_ptr, TRUE);
 				continue;
 			}
 
@@ -4541,7 +4541,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 		}
 	}
 
-	load_prev_data(FALSE);
+	load_prev_data(creature_ptr, FALSE);
 	init_turn();
 	init_dungeon_quests();
 
