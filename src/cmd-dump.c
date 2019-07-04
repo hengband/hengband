@@ -6442,7 +6442,7 @@ static void do_cmd_knowledge_stat(void)
 		}
 	}
 
-	dump_yourself(fff);
+	dump_yourself(p_ptr, fff);
 	my_fclose(fff);
 	
 	/* Display the file contents */

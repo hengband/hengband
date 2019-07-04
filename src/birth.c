@@ -4665,7 +4665,7 @@ void player_birth(player_type *creature_ptr)
  * @param fff ファイルポインタ
  * @return なし
  */
-void dump_yourself(FILE *fff)
+void dump_yourself(player_type *creature_ptr, FILE *fff)
 {
 	char temp[80*10];
 	int i;
@@ -4673,9 +4673,9 @@ void dump_yourself(FILE *fff)
 
 	if (!fff) return;
 
-	roff_to_buf(race_jouhou[p_ptr->prace], 78, temp, sizeof(temp));
+	roff_to_buf(race_jouhou[creature_ptr->prace], 78, temp, sizeof(temp));
 	fprintf(fff, "\n\n");
-	fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[p_ptr->prace].title);
+	fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[creature_ptr->prace].title);
 
 	t = temp;
 	for (i = 0; i < 10; i++)
@@ -4685,9 +4685,9 @@ void dump_yourself(FILE *fff)
 		fprintf(fff, "%s\n",t);
 		t += strlen(t) + 1;
 	}
-	roff_to_buf(class_jouhou[p_ptr->pclass], 78, temp, sizeof(temp));
+	roff_to_buf(class_jouhou[creature_ptr->pclass], 78, temp, sizeof(temp));
 	fprintf(fff, "\n");
-	fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[p_ptr->pclass].title);
+	fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[creature_ptr->pclass].title);
 
 	t = temp;
 	for (i = 0; i < 10; i++)
@@ -4697,9 +4697,9 @@ void dump_yourself(FILE *fff)
 		fprintf(fff, "%s\n",t);
 		t += strlen(t) + 1;
 	}
-	roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 78, temp, sizeof(temp));
+	roff_to_buf(seikaku_jouhou[creature_ptr->pseikaku], 78, temp, sizeof(temp));
 	fprintf(fff, "\n");
-	fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[p_ptr->pseikaku].title);
+	fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[creature_ptr->pseikaku].title);
 
 	t = temp;
 	for (i = 0; i < A_MAX; i++)
@@ -4710,10 +4710,10 @@ void dump_yourself(FILE *fff)
 		t += strlen(t) + 1;
 	}
 	fprintf(fff, "\n");
-	if (p_ptr->realm1)
+	if (creature_ptr->realm1)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm1)-1], 78, temp, sizeof(temp));
-		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[p_ptr->realm1]);
+		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1)-1], 78, temp, sizeof(temp));
+		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
 
 		t = temp;
 		for (i = 0; i < A_MAX; i++)
@@ -4725,10 +4725,10 @@ void dump_yourself(FILE *fff)
 		}
 	}
 	fprintf(fff, "\n");
-	if (p_ptr->realm2)
+	if (creature_ptr->realm2)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(p_ptr->realm2)-1], 78, temp, sizeof(temp));
-		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[p_ptr->realm2]);
+		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2)-1], 78, temp, sizeof(temp));
+		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm2]);
 
 		t = temp;
 		for (i = 0; i < A_MAX; i++)

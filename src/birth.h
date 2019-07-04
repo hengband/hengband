@@ -42,5 +42,5 @@ extern void player_birth(player_type *creature_ptr);
 extern void get_max_stats(player_type *creature_ptr);
 extern void get_height_weight(void);
 extern void player_outfit(void);
-extern void dump_yourself(FILE *fff);
+extern void dump_yourself(player_type *creature_ptr, FILE *fff);
 
