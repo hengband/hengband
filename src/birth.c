@@ -4501,7 +4501,7 @@ static bool player_birth_aux(player_type *creature_ptr)
  * @brief クイックスタート処理の問い合わせと実行を行う。/Ask whether the player use Quick Start or not.
  * @return なし
  */
-static bool ask_quick_start(void)
+static bool ask_quick_start(player_type *creature_ptr)
 {
 	/* Doesn't have previous data */
 	if (!previous_char.quick_ok) return FALSE;
@@ -4545,19 +4545,19 @@ static bool ask_quick_start(void)
 	init_turn();
 	init_dungeon_quests();
 
-	sp_ptr = &sex_info[p_ptr->psex];
-	rp_ptr = &race_info[p_ptr->prace];
-	cp_ptr = &class_info[p_ptr->pclass];
-	mp_ptr = &m_info[p_ptr->pclass];
-	ap_ptr = &seikaku_info[p_ptr->pseikaku];
+	sp_ptr = &sex_info[creature_ptr->psex];
+	rp_ptr = &race_info[creature_ptr->prace];
+	cp_ptr = &class_info[creature_ptr->pclass];
+	mp_ptr = &m_info[creature_ptr->pclass];
+	ap_ptr = &seikaku_info[creature_ptr->pseikaku];
 
 	/* Calc hitdie, but don't roll */
-	get_extra(p_ptr, FALSE);
+	get_extra(creature_ptr, FALSE);
 
-	p_ptr->update |= (PU_BONUS | PU_HP);
-	update_creature(p_ptr);
-	p_ptr->chp = p_ptr->mhp;
-	p_ptr->csp = p_ptr->msp;
+	creature_ptr->update |= (PU_BONUS | PU_HP);
+	update_creature(creature_ptr);
+	creature_ptr->chp = creature_ptr->mhp;
+	creature_ptr->csp = creature_ptr->msp;
 
 	/* Process the player name */
 	process_player_name(FALSE);
@@ -4592,7 +4592,7 @@ void player_birth(player_type *creature_ptr)
 	/* Create a new character */
 
 	/* Quick start? */
-	if (!ask_quick_start())
+	if (!ask_quick_start(p_ptr))
 	{
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
 
