@@ -3853,7 +3853,7 @@ static void edit_history(void)
  * expensive CPU wise.  And it cuts down on player stupidity.
  * @return なし
  */
-static bool player_birth_aux(void)
+static bool player_birth_aux(player_type *creature_ptr)
 {
 	int i, k, n, cs, os;
 
@@ -3887,7 +3887,7 @@ static bool player_birth_aux(void)
 	put_str(_("職業        :", "Class       :"), 5, 1);
 
 	/* Dump the default name */
-	c_put_str(TERM_L_BLUE, p_ptr->name, 1, 34);
+	c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
 
 	/*** Instructions ***/
 
@@ -4005,8 +4005,8 @@ static bool player_birth_aux(void)
 	}
 
 	/* Set sex */
-	p_ptr->psex = (byte_hack)k;
-	sp_ptr = &sex_info[p_ptr->psex];
+	creature_ptr->psex = (byte_hack)k;
+	sp_ptr = &sex_info[creature_ptr->psex];
 
 	/* Display */
 	c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 15);
@@ -4015,7 +4015,7 @@ static bool player_birth_aux(void)
 	clear_from(10);
 
 	/* Choose the players race */
-	p_ptr->prace = 0;
+	creature_ptr->prace = 0;
 	while(1)
 	{
 		char temp[80*10];
@@ -4025,7 +4025,7 @@ static bool player_birth_aux(void)
 
 		clear_from(10);
 
-		roff_to_buf(race_jouhou[p_ptr->prace], 74, temp, sizeof(temp));
+		roff_to_buf(race_jouhou[creature_ptr->prace], 74, temp, sizeof(temp));
 		t = temp;
 
 		for (i = 0; i< 10; i++)
@@ -4051,7 +4051,7 @@ static bool player_birth_aux(void)
 	clear_from(10);
 
 	/* Choose the players class */
-	p_ptr->pclass = 0;
+	creature_ptr->pclass = 0;
 	while(1)
 	{
 		char temp[80*9];
@@ -4060,7 +4060,7 @@ static bool player_birth_aux(void)
 		if (!get_player_class()) return FALSE;
 
 		clear_from(10);
-		roff_to_buf(class_jouhou[p_ptr->pclass], 74, temp, sizeof(temp));
+		roff_to_buf(class_jouhou[creature_ptr->pclass], 74, temp, sizeof(temp));
 		t = temp;
 
 		for (i = 0; i< 9; i++)
@@ -4083,10 +4083,10 @@ static bool player_birth_aux(void)
 	}
 
 	/* Choose the magic realms */
-	if (!get_player_realms(p_ptr)) return FALSE;
+	if (!get_player_realms(creature_ptr)) return FALSE;
 
 	/* Choose the players seikaku */
-	p_ptr->pseikaku = 0;
+	creature_ptr->pseikaku = 0;
 	while(1)
 	{
 		char temp[80*8];
@@ -4095,7 +4095,7 @@ static bool player_birth_aux(void)
 		if (!get_player_seikaku()) return FALSE;
 
 		clear_from(10);
-		roff_to_buf(seikaku_jouhou[p_ptr->pseikaku], 74, temp, sizeof(temp));
+		roff_to_buf(seikaku_jouhou[creature_ptr->pseikaku], 74, temp, sizeof(temp));
 		t = temp;
 
 		for (i = 0; i< A_MAX; i++)
@@ -4113,8 +4113,8 @@ static bool player_birth_aux(void)
 #else
 		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
-		c_put_str(TERM_L_BLUE, p_ptr->name, 1, 34);
-		prt("", 1, 34+strlen(p_ptr->name));
+		c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
+		prt("", 1, 34+strlen(creature_ptr->name));
 	}
 
 	/* Clean up */
@@ -4193,13 +4193,13 @@ static bool player_birth_aux(void)
 		else
 		{
 			/* Get a new character */
-			get_stats(p_ptr);
+			get_stats(creature_ptr);
 
 			/* Roll for age/height/weight */
 			get_ahw();
 
 			/* Roll for social class */
-			get_history(p_ptr);
+			get_history(creature_ptr);
 		}
 
 		/* Feedback */
@@ -4255,7 +4255,7 @@ static bool player_birth_aux(void)
 			bool accept = TRUE;
 
 			/* Get a new character */
-			get_stats(p_ptr);
+			get_stats(creature_ptr);
 
 			/* Advance the round */
 			auto_round++;
@@ -4280,7 +4280,7 @@ static bool player_birth_aux(void)
 				for (i = 0; i < A_MAX; i++)
 				{
 					/* This stat is okay */
-					if (p_ptr->stat_max[i] >= stat_limit[i])
+					if (creature_ptr->stat_max[i] >= stat_limit[i])
 					{
 						stat_match[i]++;
 					}
@@ -4300,14 +4300,14 @@ static bool player_birth_aux(void)
 				get_ahw();
 
 				/* Roll for social class */
-				get_history(p_ptr);
+				get_history(creature_ptr);
 
 				if (autochara)
 				{
-					if ((p_ptr->age < chara_limit.agemin) || (p_ptr->age > chara_limit.agemax)) accept = FALSE;
-					if ((p_ptr->ht < chara_limit.htmin) || (p_ptr->ht > chara_limit.htmax)) accept = FALSE;
-					if ((p_ptr->wt < chara_limit.wtmin) || (p_ptr->wt > chara_limit.wtmax)) accept = FALSE;
-					if ((p_ptr->sc < chara_limit.scmin) || (p_ptr->sc > chara_limit.scmax)) accept = FALSE;
+					if ((creature_ptr->age < chara_limit.agemin) || (creature_ptr->age > chara_limit.agemax)) accept = FALSE;
+					if ((creature_ptr->ht < chara_limit.htmin) || (creature_ptr->ht > chara_limit.htmax)) accept = FALSE;
+					if ((creature_ptr->wt < chara_limit.wtmin) || (creature_ptr->wt > chara_limit.wtmax)) accept = FALSE;
+					if ((creature_ptr->sc < chara_limit.scmin) || (creature_ptr->sc > chara_limit.scmax)) accept = FALSE;
 				}
 				if (accept) break;
 			}
@@ -4342,7 +4342,7 @@ static bool player_birth_aux(void)
 					get_ahw();
 
 					/* Roll for social class */
-					get_history(p_ptr);
+					get_history(creature_ptr);
 
 					break;
 				}
@@ -4358,23 +4358,23 @@ static bool player_birth_aux(void)
 		mode = 0;
 
 		/* Roll for base hitpoints */
-		get_extra(p_ptr, TRUE);
+		get_extra(creature_ptr, TRUE);
 
 		/* Roll for gold */
 		get_money();
 
 		/* Hack -- get a chaos patron even if you are not a chaos warrior */
-		p_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
+		creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
 
 		/* Input loop */
 		while (TRUE)
 		{
 			/* Calculate the bonuses and hitpoints */
-			p_ptr->update |= (PU_BONUS | PU_HP);
-			update_creature(p_ptr);
+			creature_ptr->update |= (PU_BONUS | PU_HP);
+			update_creature(creature_ptr);
 
-			p_ptr->chp = p_ptr->mhp;
-			p_ptr->csp = p_ptr->msp;
+			creature_ptr->chp = creature_ptr->mhp;
+			creature_ptr->csp = creature_ptr->msp;
 
 			display_player(mode);
 
@@ -4443,7 +4443,7 @@ static bool player_birth_aux(void)
 		if (c == '\r' || c == '\n' || c == ESCAPE) break;
 
 		/* Save this for the "previous" character */
-		save_prev_data(p_ptr, &previous_char);
+		save_prev_data(creature_ptr, &previous_char);
 		previous_char.quick_ok = FALSE;
 
 		/* Note that a previous roll exists */
@@ -4464,9 +4464,9 @@ static bool player_birth_aux(void)
 
 	/*** Finish up ***/
 
-	get_max_stats(p_ptr);
+	get_max_stats(creature_ptr);
 
-	get_virtues(p_ptr);
+	get_virtues(creature_ptr);
 
 	/* Prompt for it */
 #ifdef JP
@@ -4490,7 +4490,7 @@ static bool player_birth_aux(void)
 	init_dungeon_quests();
 
 	/* Save character data for quick start */
-	save_prev_data(p_ptr, &previous_char);
+	save_prev_data(creature_ptr, &previous_char);
 	previous_char.quick_ok = TRUE;
 
 	/* Accept */
@@ -4600,7 +4600,7 @@ void player_birth(player_type *creature_ptr)
 		while (1)
 		{
 			/* Roll up a new character */
-			if (player_birth_aux()) break;
+			if (player_birth_aux(p_ptr)) break;
 
 			/* Wipe the player */
 			player_wipe_without_name();
