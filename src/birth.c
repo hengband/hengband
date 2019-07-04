@@ -1097,7 +1097,7 @@ static int adjust_stat(int value, int amount)
  * For efficiency, we include a chunk of "calc_bonuses()".\n
  * @return なし
  */
-static void get_stats(void)
+static void get_stats(player_type *creature_ptr)
 {
 	/* Roll and verify some stats */
 	while (TRUE)
@@ -1119,7 +1119,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i] = p_ptr->stat_max[3*i] = val;
+			creature_ptr->stat_cur[3*i] = creature_ptr->stat_max[3*i] = val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -1129,7 +1129,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+1] = p_ptr->stat_max[3*i+1] = val;
+			creature_ptr->stat_cur[3*i+1] = creature_ptr->stat_max[3*i+1] = val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -1139,7 +1139,7 @@ static void get_stats(void)
 
 			/* Save that value */
 			sum += val;
-			p_ptr->stat_cur[3*i+2] = p_ptr->stat_max[3*i+2] = val;
+			creature_ptr->stat_cur[3*i+2] = creature_ptr->stat_max[3*i+2] = val;
 		}
 
 		/* Verify totals */
@@ -4193,7 +4193,7 @@ static bool player_birth_aux(void)
 		else
 		{
 			/* Get a new character */
-			get_stats();
+			get_stats(p_ptr);
 
 			/* Roll for age/height/weight */
 			get_ahw();
@@ -4255,7 +4255,7 @@ static bool player_birth_aux(void)
 			bool accept = TRUE;
 
 			/* Get a new character */
-			get_stats();
+			get_stats(p_ptr);
 
 			/* Advance the round */
 			auto_round++;
