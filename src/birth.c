@@ -1549,36 +1549,36 @@ static void get_ahw(void)
  * @brief プレイヤーの初期所持金を決める。 / Get the player's starting money
  * @return なし
  */
-static void get_money(void)
+static void get_money(player_type *creature_ptr)
 {
 	int i, gold;
 
 	/* Social Class determines starting gold */
-	gold = (p_ptr->sc * 6) + randint1(100) + 300;
-	if (p_ptr->pclass == CLASS_TOURIST)
+	gold = (creature_ptr->sc * 6) + randint1(100) + 300;
+	if (creature_ptr->pclass == CLASS_TOURIST)
 	  gold += 2000;
 
 	/* Process the stats */
 	for (i = 0; i < A_MAX; i++)
 	{
 		/* Mega-Hack -- reduce gold for high stats */
-		if (p_ptr->stat_max[i] >= 18 + 50) gold -= 300;
-		else if (p_ptr->stat_max[i] >= 18 + 20) gold -= 200;
-		else if (p_ptr->stat_max[i] > 18) gold -= 150;
-		else gold -= (p_ptr->stat_max[i] - 8) * 10;
+		if (creature_ptr->stat_max[i] >= 18 + 50) gold -= 300;
+		else if (creature_ptr->stat_max[i] >= 18 + 20) gold -= 200;
+		else if (creature_ptr->stat_max[i] > 18) gold -= 150;
+		else gold -= (creature_ptr->stat_max[i] - 8) * 10;
 	}
 
 	/* Minimum 100 gold */
 	if (gold < 100) gold = 100;
 
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+	if (creature_ptr->pseikaku == SEIKAKU_NAMAKE)
 		gold /= 2;
-	else if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	else if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 		gold = 10000000;
-	if (p_ptr->prace == RACE_ANDROID) gold /= 5;
+	if (creature_ptr->prace == RACE_ANDROID) gold /= 5;
 
 	/* Save the gold */
-	p_ptr->au = gold;
+	creature_ptr->au = gold;
 }
 
 
@@ -4361,7 +4361,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		get_extra(creature_ptr, TRUE);
 
 		/* Roll for gold */
-		get_money();
+		get_money(creature_ptr);
 
 		/* Hack -- get a chaos patron even if you are not a chaos warrior */
 		creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
