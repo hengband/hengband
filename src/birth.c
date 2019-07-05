@@ -1507,25 +1507,25 @@ static void get_history(player_type *creature_ptr)
  * @brief プレイヤーの身長体重を決める / Get character's height and weight
  * @return なし
  */
-void get_height_weight(void)
+void get_height_weight(player_type *creature_ptr)
 {
 	int h_percent; /* 身長が平均にくらべてどのくらい違うか. */
 
 	/* Calculate the height/weight for males */
-	if (p_ptr->psex == SEX_MALE)
+	if (creature_ptr->psex == SEX_MALE)
 	{
-		p_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
-		h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
-		p_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent /100
+		creature_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
+		h_percent = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
+		creature_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent /100
 				    , (int)(rp_ptr->m_m_wt) * h_percent / 300 );
 	}
   
 	/* Calculate the height/weight for females */
-	else if (p_ptr->psex == SEX_FEMALE)
+	else if (creature_ptr->psex == SEX_FEMALE)
 	{
-		p_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
-		h_percent = (int)(p_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
-		p_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent /100
+		creature_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
+		h_percent = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
+		creature_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent /100
 				    , (int)(rp_ptr->f_m_wt) * h_percent / 300 );
 	}
 }
@@ -1542,7 +1542,7 @@ static void get_ahw(void)
 	p_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
 
 	/* Get character's height and weight */
-	get_height_weight();
+	get_height_weight(p_ptr);
 }
 
 /*!
