@@ -3742,7 +3742,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 		creature_ptr->expfact -= 15;
 
 	/* Get character's height and weight */
-	get_height_weight();
+	get_height_weight(p_ptr);
 
 	/* Hitdice */
 	if (creature_ptr->pclass == CLASS_SORCERER)

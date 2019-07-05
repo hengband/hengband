@@ -1666,28 +1666,28 @@ static void k_info_reset(void)
  * @brief プレイヤー構造体の内容を初期値で消去する(名前を除く) / Clear all the global "character" data (without name)
  * @return なし
  */
-static void player_wipe_without_name(void)
+static void player_wipe_without_name(player_type *creature_ptr)
 {
 	int i;
 	player_type tmp;
 
 	/* Temporary copy for migration - written back later */
-	COPY(&tmp, p_ptr, player_type);
+	COPY(&tmp, creature_ptr, player_type);
 
 	/* Hack -- free the "last message" string */
-	if (p_ptr->last_message) string_free(p_ptr->last_message);
+	if (creature_ptr->last_message) string_free(creature_ptr->last_message);
 
-	if (p_ptr->inventory_list != NULL) C_WIPE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
+	if (creature_ptr->inventory_list != NULL) C_WIPE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
 
 	/* Hack -- zero the struct */
-	(void)WIPE(p_ptr, player_type);
+	(void)WIPE(creature_ptr, player_type);
 
-	C_MAKE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
+	C_MAKE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
 
 	/* Wipe the history */
 	for (i = 0; i < 4; i++)
 	{
-		strcpy(p_ptr->history[i], "");
+		strcpy(creature_ptr->history[i], "");
 	}
 
 	/* Wipe the quests */
@@ -1707,16 +1707,16 @@ static void player_wipe_without_name(void)
 	}
 
 	/* No weight */
-	p_ptr->total_weight = 0;
+	creature_ptr->total_weight = 0;
 
 	/* No items */
-	p_ptr->inven_cnt = 0;
-	p_ptr->equip_cnt = 0;
+	creature_ptr->inven_cnt = 0;
+	creature_ptr->equip_cnt = 0;
 
 	/* Clear the inventory */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_wipe(&p_ptr->inventory_list[i]);
+		object_wipe(&creature_ptr->inventory_list[i]);
 	}
 
 	/* Start with no artifacts made yet */
@@ -1755,28 +1755,28 @@ static void player_wipe_without_name(void)
 
 
 	/* Hack -- Well fed player */
-	p_ptr->food = PY_FOOD_FULL - 1;
+	creature_ptr->food = PY_FOOD_FULL - 1;
 
 
 	/* Wipe the spells */
-	if (p_ptr->pclass == CLASS_SORCERER)
+	if (creature_ptr->pclass == CLASS_SORCERER)
 	{
-		p_ptr->spell_learned1 = p_ptr->spell_learned2 = 0xffffffffL;
-		p_ptr->spell_worked1 = p_ptr->spell_worked2 = 0xffffffffL;
+		creature_ptr->spell_learned1 = creature_ptr->spell_learned2 = 0xffffffffL;
+		creature_ptr->spell_worked1 = creature_ptr->spell_worked2 = 0xffffffffL;
 	}
 	else
 	{
-		p_ptr->spell_learned1 = p_ptr->spell_learned2 = 0L;
-		p_ptr->spell_worked1 = p_ptr->spell_worked2 = 0L;
+		creature_ptr->spell_learned1 = creature_ptr->spell_learned2 = 0L;
+		creature_ptr->spell_worked1 = creature_ptr->spell_worked2 = 0L;
 	}
-	p_ptr->spell_forgotten1 = p_ptr->spell_forgotten2 = 0L;
-	for (i = 0; i < 64; i++) p_ptr->spell_order[i] = 99;
-	p_ptr->learned_spells = 0;
-	p_ptr->add_spells = 0;
-	p_ptr->knowledge = 0;
+	creature_ptr->spell_forgotten1 = creature_ptr->spell_forgotten2 = 0L;
+	for (i = 0; i < 64; i++) creature_ptr->spell_order[i] = 99;
+	creature_ptr->learned_spells = 0;
+	creature_ptr->add_spells = 0;
+	creature_ptr->knowledge = 0;
 
 	/* Clean the mutation count */
-	p_ptr->mutant_regenerate_mod = 100;
+	creature_ptr->mutant_regenerate_mod = 100;
 
 	/* Clear "cheat" options */
 	cheat_peek = FALSE;
@@ -1790,23 +1790,23 @@ static void player_wipe_without_name(void)
 	cheat_turn = FALSE;
 
 	/* Assume no winning game */
-	p_ptr->total_winner = FALSE;
+	creature_ptr->total_winner = FALSE;
 
-	p_ptr->timewalk = FALSE;
+	creature_ptr->timewalk = FALSE;
 
 	/* Assume no panic save */
-	p_ptr->panic_save = 0;
+	creature_ptr->panic_save = 0;
 
 	/* Assume no cheating */
-	p_ptr->noscore = 0;
-	p_ptr->wizard = FALSE;
+	creature_ptr->noscore = 0;
+	creature_ptr->wizard = FALSE;
 
 	/* Not waiting to report score */
-	p_ptr->wait_report_score = FALSE;
+	creature_ptr->wait_report_score = FALSE;
 
 	/* Default pet command settings */
-	p_ptr->pet_follow_distance = PET_FOLLOW_DIST;
-	p_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
+	creature_ptr->pet_follow_distance = PET_FOLLOW_DIST;
+	creature_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
 	/* Wipe the recall depths */
 	for (i = 0; i < max_d_idx; i++)
@@ -1814,60 +1814,60 @@ static void player_wipe_without_name(void)
 		max_dlv[i] = 0;
 	}
 
-	p_ptr->visit = 1;
+	creature_ptr->visit = 1;
 
 	/* Reset wild_mode to FALSE */
-	p_ptr->wild_mode = FALSE;
+	creature_ptr->wild_mode = FALSE;
 
 	for (i = 0; i < 108; i++)
 	{
-		p_ptr->magic_num1[i] = 0;
-		p_ptr->magic_num2[i] = 0;
+		creature_ptr->magic_num1[i] = 0;
+		creature_ptr->magic_num2[i] = 0;
 	}
 
 	/* Level one */
-	p_ptr->max_plv = p_ptr->lev = 1;
+	creature_ptr->max_plv = creature_ptr->lev = 1;
 
 	/* Initialize arena and rewards information -KMW- */
-	p_ptr->arena_number = 0;
-	p_ptr->inside_arena = FALSE;
-	p_ptr->inside_quest = 0;
+	creature_ptr->arena_number = 0;
+	creature_ptr->inside_arena = FALSE;
+	creature_ptr->inside_quest = 0;
 	for (i = 0; i < MAX_MANE; i++)
 	{
-		p_ptr->mane_spell[i] = -1;
-		p_ptr->mane_dam[i] = 0;
+		creature_ptr->mane_spell[i] = -1;
+		creature_ptr->mane_dam[i] = 0;
 	}
-	p_ptr->mane_num = 0;
-	p_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
+	creature_ptr->mane_num = 0;
+	creature_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
 
 	/* Bounty */
-	p_ptr->today_mon = 0;
+	creature_ptr->today_mon = 0;
 
 	/* Reset monster arena */
 	update_gambling_monsters();
 
 	/* Reset mutations */
-	p_ptr->muta1 = 0;
-	p_ptr->muta2 = 0;
-	p_ptr->muta3 = 0;
+	creature_ptr->muta1 = 0;
+	creature_ptr->muta2 = 0;
+	creature_ptr->muta3 = 0;
 
 	/* Reset virtues */
-	for (i = 0; i < 8; i++) p_ptr->virtues[i]=0;
+	for (i = 0; i < 8; i++) creature_ptr->virtues[i]=0;
 
-	p_ptr->dungeon_idx = 0;
+	creature_ptr->dungeon_idx = 0;
 
 	/* Set the recall dungeon accordingly */
 	if (vanilla_town || ironman_downward)
 	{
-		p_ptr->recall_dungeon = DUNGEON_ANGBAND;
+		creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
 	}
 	else
 	{
-		p_ptr->recall_dungeon = DUNGEON_GALGALS;
+		creature_ptr->recall_dungeon = DUNGEON_GALGALS;
 	}
 
 	/* Data migration */
-	memcpy(p_ptr->name, tmp.name, sizeof(tmp.name));
+	memcpy(creature_ptr->name, tmp.name, sizeof(tmp.name));
 }
 
 
@@ -4587,7 +4587,7 @@ void player_birth(player_type *creature_ptr)
 	wipe_m_list();
 
 	/* Wipe the player */
-	player_wipe_without_name();
+	player_wipe_without_name(p_ptr);
 
 	/* Create a new character */
 
@@ -4603,7 +4603,7 @@ void player_birth(player_type *creature_ptr)
 			if (player_birth_aux(p_ptr)) break;
 
 			/* Wipe the player */
-			player_wipe_without_name();
+			player_wipe_without_name(p_ptr);
 		}
 	}
 
