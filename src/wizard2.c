@@ -1948,7 +1948,7 @@ void do_cmd_debug(void)
 		{
 			if(p_ptr->inventory_list[i].k_idx) inven_drop(i, 999);
 		}
-		player_outfit();
+		player_outfit(p_ptr);
 		break;
 	}
 
