@@ -3248,7 +3248,7 @@ static bool get_stat_limits(void)
  * @brief オートローラで得たい年齢、身長、体重、社会的地位の基準を決める。
  * @return なし
  */
-static bool get_chara_limits(void)
+static bool get_chara_limits(player_type *creature_ptr)
 {
 #define MAXITEMS 8
 
@@ -3270,7 +3270,7 @@ static bool get_chara_limits(void)
 	put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
 	put_str(_("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum is extremery rare."), 23, 2);
 	
-	if (p_ptr->psex == SEX_MALE)
+	if (creature_ptr->psex == SEX_MALE)
 	{
 		max_percent = (int)(rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1) * 100 / (int)(rp_ptr->m_b_ht);
 		min_percent = (int)(rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1) * 100 / (int)(rp_ptr->m_b_ht);
@@ -3298,19 +3298,19 @@ static bool get_chara_limits(void)
 			break;
 
 		case 2:	/* Minimum height */
-			if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1;
+			if (creature_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1;
 			else m = rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1;
 			break;
 		case 3:	/* Maximum height */
-			if (p_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1;
+			if (creature_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1;
 			else m = rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1;
 			break;
 		case 4:	/* Minimum weight */
-			if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) +1;
+			if (creature_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) +1;
 			else m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) +1;
 			break;
 		case 5:	/* Maximum weight */
-			if (p_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) -1;
+			if (creature_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) -1;
 			else m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) -1;
 			break;
 		case 6:	/* Minimum social class */
@@ -4149,7 +4149,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	if (autochara)
 	{
-		if (!get_chara_limits()) return FALSE;
+		if (!get_chara_limits(p_ptr)) return FALSE;
 	}
 
 #endif /* ALLOW_AUTOROLLER */
