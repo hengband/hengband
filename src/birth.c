@@ -4192,13 +4192,8 @@ static bool player_birth_aux(player_type *creature_ptr)
 		/* Otherwise just get a character */
 		else
 		{
-			/* Get a new character */
 			get_stats(creature_ptr);
-
-			/* Roll for age/height/weight */
 			get_ahw(creature_ptr);
-
-			/* Roll for social class */
 			get_history(creature_ptr);
 		}
 
@@ -4296,10 +4291,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			/* Break if "happy" */
 			if (accept)
 			{
-				/* Roll for age/height/weight */
 				get_ahw(creature_ptr);
-
-				/* Roll for social class */
 				get_history(creature_ptr);
 
 				if (autochara)
@@ -4338,12 +4330,8 @@ static bool player_birth_aux(player_type *creature_ptr)
 				/* Check for a keypress */
 				if (inkey())
 				{
-					/* Roll for age/height/weight */
 					get_ahw(creature_ptr);
-
-					/* Roll for social class */
 					get_history(creature_ptr);
-
 					break;
 				}
 			}
