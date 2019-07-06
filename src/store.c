@@ -5800,8 +5800,6 @@ void do_cmd_store(void)
 	{
 		/* Hack -- Clear line 1 */
 		prt("", 1, 0);
-
-		/* Clear */
 		clear_from(20 + xtra_stock);
 
 		/* Basic commands */

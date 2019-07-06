@@ -653,7 +653,6 @@ errr process_pref_file_command(char *buf)
 
 					if (buf[0] == 'X')
 					{
-						/* Clear */
 						option_flag[os] &= ~(1L << ob);
 						(*option_info[i].o_var) = FALSE;
 					}
@@ -2270,8 +2269,6 @@ static void display_player_various(void)
 static void player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
-
-	/* Clear */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
@@ -2719,8 +2716,6 @@ static void player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 static void tim_player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
-
-	/* Clear */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
@@ -2892,8 +2887,6 @@ void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 static void known_obj_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
-
-	/* Clear */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
@@ -2929,8 +2922,6 @@ static void known_obj_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 static void player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
-
-	/* Clear */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
@@ -2954,8 +2945,6 @@ static void player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 static void tim_player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
-
-	/* Clear */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
@@ -2981,8 +2970,6 @@ static void tim_player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 static void player_vuln_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
-
-	/* Clear */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 

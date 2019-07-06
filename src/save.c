@@ -522,11 +522,8 @@ static void wr_options(void)
 				/* Set */
 				option_flag[os] |= (1L << ob);
 			}
-
-			/* Clear */
 			else
 			{
-				/* Clear */
 				option_flag[os] &= ~(1L << ob);
 			}
 		}

@@ -1780,8 +1780,6 @@ void do_cmd_macros(void)
 
 			/* Get a macro trigger */
 			do_cmd_macro_aux(buf);
-
-			/* Clear */
 			clear_from(20);
 
 			/* Help message */
@@ -1901,8 +1899,6 @@ void do_cmd_macros(void)
 
 			/* Get a keymap trigger */
 			do_cmd_macro_aux_keymap(buf);
-
-			/* Clear */
 			clear_from(20);
 
 			/* Help message */
@@ -1959,8 +1955,6 @@ void do_cmd_macros(void)
 		{
 			/* Prompt */
 			prt(_("コマンド: マクロ行動の入力", "Command: Enter a new action"), 16, 0);
-
-			/* Clear */
 			clear_from(20);
 
 			/* Help message */
@@ -2763,8 +2757,6 @@ void do_cmd_colors(void)
 			{
 				concptr name;
 				byte j;
-
-				/* Clear */
 				clear_from(10);
 
 				/* Exhibit the normal colors */

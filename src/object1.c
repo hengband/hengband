@@ -241,8 +241,6 @@ void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 	int i;
 
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-	/* Clear */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0;
 

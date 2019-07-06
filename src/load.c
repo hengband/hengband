@@ -1585,11 +1585,8 @@ static void rd_options(void)
 						/* Set */
 						option_flag[n] |= (1L << i);
 					}
-
-					/* Clear */
 					else
 					{
-						/* Clear */
 						option_flag[n] &= ~(1L << i);
 					}
 				}
@@ -1649,11 +1646,8 @@ static void rd_options(void)
 						/* Set */
 						window_flag[n] |= (1L << i);
 					}
-
-					/* Clear */
 					else
 					{
-						/* Clear */
 						window_flag[n] &= ~(1L << i);
 					}
 				}

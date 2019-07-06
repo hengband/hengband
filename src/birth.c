@@ -4153,8 +4153,6 @@ static bool player_birth_aux(player_type *creature_ptr)
 	}
 
 #endif /* ALLOW_AUTOROLLER */
-
-	/* Clear */
 	clear_from(10);
 
 	/* Reset current_world_ptr->game_turn; before auto-roll and after choosing race */

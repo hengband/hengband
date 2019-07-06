@@ -1286,11 +1286,8 @@ static errr init_other(void)
 				/* Set */
 				option_flag[os] |= (1L << ob);
 			}
-
-			/* Clear */
 			else
 			{
-				/* Clear */
 				option_flag[os] &= ~(1L << ob);
 			}
 		}

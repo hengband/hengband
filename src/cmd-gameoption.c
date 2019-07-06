@@ -1163,11 +1163,8 @@ void extract_option_vars(void)
 				/* Set */
 				(*option_info[i].o_var) = TRUE;
 			}
-
-			/* Clear */
 			else
 			{
-				/* Clear */
 				(*option_info[i].o_var) = FALSE;
 			}
 		}
