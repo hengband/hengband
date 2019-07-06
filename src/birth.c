@@ -1876,18 +1876,18 @@ static void player_wipe_without_name(player_type *creature_ptr)
  * @brief ダンジョン内部のクエストを初期化する / Initialize random quests and final quests
  * @return なし
  */
-static void init_dungeon_quests(void)
+static void init_dungeon_quests(player_type *creature_ptr)
 {
 	int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
 	int i;
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
-	p_ptr->inside_quest = MIN_RANDOM_QUEST;
+	creature_ptr->inside_quest = MIN_RANDOM_QUEST;
 
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
-	p_ptr->inside_quest = 0;
+	creature_ptr->inside_quest = 0;
 
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
@@ -1907,18 +1907,18 @@ static void init_dungeon_quests(void)
 
 	/* Init the two main quests (Oberon + Serpent) */
 	init_flags = INIT_ASSIGN;
-	p_ptr->inside_quest = QUEST_OBERON;
+	creature_ptr->inside_quest = QUEST_OBERON;
 
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
 
-	p_ptr->inside_quest = QUEST_SERPENT;
+	creature_ptr->inside_quest = QUEST_SERPENT;
 
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
-	p_ptr->inside_quest = 0;
+	creature_ptr->inside_quest = 0;
 }
 
 /*!
@@ -4487,7 +4487,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 
 	/* Initialize random quests */
-	init_dungeon_quests();
+	init_dungeon_quests(p_ptr);
 
 	/* Save character data for quick start */
 	save_prev_data(creature_ptr, &previous_char);
@@ -4543,7 +4543,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 
 	load_prev_data(creature_ptr, FALSE);
 	init_turn();
-	init_dungeon_quests();
+	init_dungeon_quests(creature_ptr);
 
 	sp_ptr = &sex_info[creature_ptr->psex];
 	rp_ptr = &race_info[creature_ptr->prace];
