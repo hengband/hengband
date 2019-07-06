@@ -2814,7 +2814,7 @@ static bool get_player_class(void)
  * @brief プレイヤーの性格選択を行う / Player Player seikaku
  * @return なし
  */
-static bool get_player_seikaku(void)
+static bool get_player_seikaku(player_type *creature_ptr)
 {
 	int k;
 	int n, os, cs;
@@ -2832,7 +2832,7 @@ static bool get_player_seikaku(void)
 	/* Dump seikakus */
 	for (n = 0; n < MAX_SEIKAKU; n++)
 	{
-		if(seikaku_info[n].sex && (seikaku_info[n].sex != (p_ptr->psex+1))) continue;
+		if(seikaku_info[n].sex && (seikaku_info[n].sex != (creature_ptr->psex+1))) continue;
 
 		/* Analyze */
 		ap_ptr = &seikaku_info[n];
@@ -2851,7 +2851,7 @@ static bool get_player_seikaku(void)
 
 	/* Get a seikaku */
 	k = -1;
-	cs = p_ptr->pseikaku;
+	cs = creature_ptr->pseikaku;
 	os = MAX_SEIKAKU;
 	while (1)
 	{
@@ -2899,7 +2899,7 @@ static bool get_player_seikaku(void)
 				{
 					k = randint0(MAX_SEIKAKU);
 				}
-				while(seikaku_info[k].sex && (seikaku_info[k].sex != (p_ptr->psex+1)));
+				while(seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex+1)));
 				cs = k;
 				continue;
 			}
@@ -2915,14 +2915,14 @@ static bool get_player_seikaku(void)
 			{
 				k = randint0(n);
 			}
-			while(seikaku_info[k].sex && (seikaku_info[k].sex != (p_ptr->psex+1)));
+			while(seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex+1)));
 			cs = k;
 			continue;
 		}
 		if (c == '8')
 		{
 			if (cs >= 4) cs -= 4;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
 			{
 				if((cs - 4) > 0)
 					cs -= 4;
@@ -2933,7 +2933,7 @@ static bool get_player_seikaku(void)
 		if (c == '4')
 		{
 			if (cs > 0) cs--;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
 			{
 				if((cs - 1) > 0)
 					cs--;
@@ -2944,7 +2944,7 @@ static bool get_player_seikaku(void)
 		if (c == '6')
 		{
 			if (cs < MAX_SEIKAKU) cs++;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
 			{
 				if((cs + 1) <= MAX_SEIKAKU)
 					cs++;
@@ -2955,7 +2955,7 @@ static bool get_player_seikaku(void)
 		if (c == '2')
 		{
 			if ((cs + 4) <= MAX_SEIKAKU) cs += 4;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (p_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
 			{
 				if((cs + 4) <= MAX_SEIKAKU)
 					cs += 4;
@@ -2966,7 +2966,7 @@ static bool get_player_seikaku(void)
 		k = (islower(c) ? A2I(c) : -1);
 		if ((k >= 0) && (k < MAX_SEIKAKU))
 		{
-			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (p_ptr->psex+1)))
+			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex+1)))
 			{
 				cs = k;
 				continue;
@@ -2975,7 +2975,7 @@ static bool get_player_seikaku(void)
 		k = (isupper(c) ? (26 + c - 'A') : -1);
 		if ((k >= 26) && (k < MAX_SEIKAKU))
 		{
-			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (p_ptr->psex+1)))
+			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex+1)))
 			{
 				cs = k;
 				continue;
@@ -3000,8 +3000,8 @@ static bool get_player_seikaku(void)
 	}
 
 	/* Set seikaku */
-	p_ptr->pseikaku = (CHARACTER_IDX)k;
-	ap_ptr = &seikaku_info[p_ptr->pseikaku];
+	creature_ptr->pseikaku = (CHARACTER_IDX)k;
+	ap_ptr = &seikaku_info[creature_ptr->pseikaku];
 #ifdef JP
 	strcpy(tmp, ap_ptr->title);
 	if(ap_ptr->no == 1)
@@ -3010,7 +3010,7 @@ static bool get_player_seikaku(void)
 	strcpy(tmp, ap_ptr->title);
 	strcat(tmp," ");
 #endif
-	strcat(tmp,p_ptr->name);
+	strcat(tmp,creature_ptr->name);
 
 	c_put_str(TERM_L_BLUE, tmp, 1, 34);
 
@@ -4092,7 +4092,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		char temp[80*8];
 		concptr t;
 
-		if (!get_player_seikaku()) return FALSE;
+		if (!get_player_seikaku(creature_ptr)) return FALSE;
 
 		clear_from(10);
 		roff_to_buf(seikaku_jouhou[creature_ptr->pseikaku], 74, temp, sizeof(temp));
