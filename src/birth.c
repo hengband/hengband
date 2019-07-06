@@ -1536,13 +1536,13 @@ void get_height_weight(player_type *creature_ptr)
  * @details 内部でget_height_weight()も呼び出している。
  * @return なし
  */
-static void get_ahw(void)
+static void get_ahw(player_type *creature_ptr)
 {
 	/* Get character's age */
-	p_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
+	creature_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
 
 	/* Get character's height and weight */
-	get_height_weight(p_ptr);
+	get_height_weight(creature_ptr);
 }
 
 /*!
@@ -4196,7 +4196,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			get_stats(creature_ptr);
 
 			/* Roll for age/height/weight */
-			get_ahw();
+			get_ahw(creature_ptr);
 
 			/* Roll for social class */
 			get_history(creature_ptr);
@@ -4297,7 +4297,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			if (accept)
 			{
 				/* Roll for age/height/weight */
-				get_ahw();
+				get_ahw(creature_ptr);
 
 				/* Roll for social class */
 				get_history(creature_ptr);
@@ -4339,7 +4339,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 				if (inkey())
 				{
 					/* Roll for age/height/weight */
-					get_ahw();
+					get_ahw(creature_ptr);
 
 					/* Roll for social class */
 					get_history(creature_ptr);
