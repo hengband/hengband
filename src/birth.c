@@ -1926,12 +1926,12 @@ static void init_dungeon_quests(player_type *creature_ptr)
  * @details アンデッド系種族は開始時刻を夜からにする。
  * @return なし
  */
-static void init_turn(void)
+static void init_turn(player_type *creature_ptr)
 {
-	if ((p_ptr->prace == RACE_VAMPIRE) ||
-		(p_ptr->prace == RACE_SKELETON) ||
-		(p_ptr->prace == RACE_ZOMBIE) ||
-		(p_ptr->prace == RACE_SPECTRE))
+	if ((creature_ptr->prace == RACE_VAMPIRE) ||
+		(creature_ptr->prace == RACE_SKELETON) ||
+		(creature_ptr->prace == RACE_ZOMBIE) ||
+		(creature_ptr->prace == RACE_SPECTRE))
 	{
 		/* Undead start just after midnight */
 		current_world_ptr->game_turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
@@ -4158,7 +4158,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	clear_from(10);
 
 	/* Reset current_world_ptr->game_turn; before auto-roll and after choosing race */
-	init_turn();
+	init_turn(p_ptr);
 
 	/*** Generate ***/
 
@@ -4530,7 +4530,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 	}
 
 	load_prev_data(creature_ptr, FALSE);
-	init_turn();
+	init_turn(p_ptr);
 	init_dungeon_quests(creature_ptr);
 
 	sp_ptr = &sex_info[creature_ptr->psex];
