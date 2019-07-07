@@ -2643,7 +2643,7 @@ static bool get_player_race(void)
  * @brief プレイヤーの職業選択を行う / Player class
  * @return なし
  */
-static bool get_player_class(void)
+static bool get_player_class(player_type *creature_ptr)
 {
 	int     k, n, cs, os;
 	char    c;
@@ -2687,7 +2687,7 @@ static bool get_player_class(void)
 
 	/* Get a class */
 	k = -1;
-	cs = p_ptr->pclass;
+	cs = creature_ptr->pclass;
 	os = MAX_CLASS_CHOICE;
 	while (1)
 	{
@@ -2799,9 +2799,9 @@ static bool get_player_class(void)
 	}
 
 	/* Set class */
-	p_ptr->pclass = (byte_hack)k;
-	cp_ptr = &class_info[p_ptr->pclass];
-	mp_ptr = &m_info[p_ptr->pclass];
+	creature_ptr->pclass = (byte_hack)k;
+	cp_ptr = &class_info[creature_ptr->pclass];
+	mp_ptr = &m_info[creature_ptr->pclass];
 
 	/* Display */
 	c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
@@ -4057,7 +4057,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		char temp[80*9];
 		concptr t;
 
-		if (!get_player_class()) return FALSE;
+		if (!get_player_class(creature_ptr)) return FALSE;
 
 		clear_from(10);
 		roff_to_buf(class_jouhou[creature_ptr->pclass], 74, temp, sizeof(temp));
