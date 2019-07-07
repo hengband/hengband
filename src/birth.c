@@ -4156,7 +4156,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	clear_from(10);
 
 	/* Reset current_world_ptr->game_turn; before auto-roll and after choosing race */
-	init_turn(p_ptr);
+	init_turn(creature_ptr);
 
 	/*** Generate ***/
 
@@ -4446,7 +4446,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	process_player_name(current_world_ptr->creating_savefile);
 
 	/*** Edit character background ***/
-	edit_history(p_ptr);
+	edit_history(creature_ptr);
 
 	/*** Finish up ***/
 
@@ -4473,7 +4473,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 
 	/* Initialize random quests */
-	init_dungeon_quests(p_ptr);
+	init_dungeon_quests(creature_ptr);
 
 	/* Save character data for quick start */
 	save_prev_data(creature_ptr, &previous_char);
