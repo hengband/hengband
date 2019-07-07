@@ -3547,7 +3547,7 @@ void add_history_from_pref_line(concptr t)
  * @brief 生い立ちメッセージをファイルからロードする。
  * @return なし
  */
-static bool do_cmd_histpref(void)
+static bool do_cmd_histpref(player_type *creature_ptr)
 {
 	char buf[80];
 	errr err;
@@ -3563,9 +3563,9 @@ static bool do_cmd_histpref(void)
 	histpref_buf = histbuf;
 
 #ifdef JP
-	sprintf(buf, "histedit-%s.prf", p_ptr->base_name);
+	sprintf(buf, "histedit-%s.prf", creature_ptr->base_name);
 #else
-	sprintf(buf, "histpref-%s.prf", p_ptr->base_name);
+	sprintf(buf, "histpref-%s.prf", creature_ptr->base_name);
 #endif
 	err = process_histpref_file(buf);
 
@@ -3602,7 +3602,7 @@ static bool do_cmd_histpref(void)
 	}
 
 	/* Clear the previous history strings */
-	for (i = 0; i < 4; i++) p_ptr->history[i][0] = '\0';
+	for (i = 0; i < 4; i++) creature_ptr->history[i][0] = '\0';
 
 	/* Skip leading spaces */
 	for (s = histpref_buf; *s == ' '; s++) /* loop */;
@@ -3620,7 +3620,7 @@ static bool do_cmd_histpref(void)
 		if (t[0] == 0) break;
 		else
 		{
-			strcpy(p_ptr->history[i], t);
+			strcpy(creature_ptr->history[i], t);
 			t += strlen(t) + 1;
 		}
 	}
@@ -3628,10 +3628,10 @@ static bool do_cmd_histpref(void)
 	/* Fill the remaining spaces */
 	for (i = 0; i < 4; i++)
 	{
-		for (j = 0; p_ptr->history[i][j]; j++) /* loop */;
+		for (j = 0; creature_ptr->history[i][j]; j++) /* loop */;
 
-		for (; j < 59; j++) p_ptr->history[i][j] = ' ';
-		p_ptr->history[i][59] = '\0';
+		for (; j < 59; j++) creature_ptr->history[i][j] = ' ';
+		creature_ptr->history[i][59] = '\0';
 	}
 
 	/* Kill the buffer */
@@ -3772,7 +3772,7 @@ static void edit_history(player_type *creature_ptr)
 		}
 		else if (c == KTRL('A'))
 		{
-			if (do_cmd_histpref())
+			if (do_cmd_histpref(creature_ptr))
 			{
 #ifdef JP
 				if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1))) x--;
