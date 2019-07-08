@@ -47,7 +47,7 @@ int inven_damage(inven_func typ, int perc)
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
-	if (CHECK_MULTISHADOW()) return 0;
+	if (CHECK_MULTISHADOW(p_ptr)) return 0;
 
 	if (p_ptr->inside_arena) return 0;
 
@@ -211,7 +211,7 @@ HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	if (p_ptr->resist_acid) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW())
+	if (aura || !CHECK_MULTISHADOW(p_ptr))
 	{
 		if ((!(double_resist || p_ptr->resist_acid)) &&
 			one_in_(HURT_CHANCE))
@@ -261,7 +261,7 @@ HIT_POINT elec_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	if (p_ptr->resist_elec) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW())
+	if (aura || !CHECK_MULTISHADOW(p_ptr))
 	{
 		if ((!(double_resist || p_ptr->resist_elec)) &&
 			one_in_(HURT_CHANCE))
@@ -309,7 +309,7 @@ HIT_POINT fire_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	if (p_ptr->resist_fire) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW())
+	if (aura || !CHECK_MULTISHADOW(p_ptr))
 	{
 		if ((!(double_resist || p_ptr->resist_fire)) &&
 			one_in_(HURT_CHANCE))
@@ -356,7 +356,7 @@ HIT_POINT cold_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 	if (p_ptr->resist_cold) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW())
+	if (aura || !CHECK_MULTISHADOW(p_ptr))
 	{
 		if ((!(double_resist || p_ptr->resist_cold)) &&
 			one_in_(HURT_CHANCE))
@@ -428,7 +428,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			}
 		}
 
-		if (CHECK_MULTISHADOW())
+		if (CHECK_MULTISHADOW(p_ptr))
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{

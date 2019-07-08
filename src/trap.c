@@ -335,7 +335,7 @@ static bool hit_trap_dart(void)
 	{
 		msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
 		take_hit(p_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
-		if (!CHECK_MULTISHADOW()) hit = TRUE;
+		if (!CHECK_MULTISHADOW(p_ptr)) hit = TRUE;
 	}
 	else
 	{
