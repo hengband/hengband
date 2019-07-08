@@ -1054,7 +1054,7 @@ bool rakuba(HIT_POINT dam, bool force)
 		{
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s, but bumped into wall."), m_name);
-			take_hit(DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into wall"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into wall"), -1);
 			return FALSE;
 		}
 
@@ -1095,7 +1095,7 @@ bool rakuba(HIT_POINT dam, bool force)
 	}
 	else
 	{
-		take_hit(DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"), -1);
+		take_hit(p_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"), -1);
 		fall_dam = TRUE;
 	}
 

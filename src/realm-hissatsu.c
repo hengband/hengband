@@ -919,7 +919,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 				return NULL;
 			}
-			take_hit(DAMAGE_NOESCAPE, 100 + randint1(100), _("慶雲鬼忍剣を使った衝撃", "exhaustion on using Keiun-Kininken"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("慶雲鬼忍剣を使った衝撃", "exhaustion on using Keiun-Kininken"), -1);
 		}
 		break;
 
@@ -940,13 +940,13 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (i != '@') return NULL;
 			if (p_ptr->total_winner)
 			{
-				take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
+				take_hit(p_ptr, DAMAGE_FORCE, 9999, "Seppuku", -1);
 				p_ptr->total_winner = TRUE;
 			}
 			else
 			{
 				msg_print(_("武士道とは、死ぬことと見つけたり。", "Meaning of Bushi-do is found in the death."));
-				take_hit(DAMAGE_FORCE, 9999, "Seppuku", -1);
+				take_hit(p_ptr, DAMAGE_FORCE, 9999, "Seppuku", -1);
 			}
 		}
 		break;

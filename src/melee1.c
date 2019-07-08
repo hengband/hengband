@@ -2125,7 +2125,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 				k += (p_ptr->to_d[hand] + o_ptr->to_d);
 				if (k < 0) k = 0;
 
-				take_hit(DAMAGE_FORCE, k, _("死の大鎌", "Death scythe"), -1);
+				take_hit(p_ptr, DAMAGE_FORCE, k, _("死の大鎌", "Death scythe"), -1);
 				handle_stuff();
 			}
 			else
@@ -2798,7 +2798,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						msg_print(_("痛恨の一撃！", "It was a critical hit!"));
 						tmp_damage = MAX(damage, tmp_damage*2);
 
-						get_damage += take_hit(DAMAGE_ATTACK, tmp_damage, ddesc, -1);
+						get_damage += take_hit(p_ptr, DAMAGE_ATTACK, tmp_damage, ddesc, -1);
 						break;
 					}
 				}
@@ -2806,7 +2806,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					obvious = TRUE;
 					damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 					break;
 				}
 
@@ -2823,7 +2823,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						}
 					}
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_POIS);
@@ -2847,7 +2847,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						}
 					}
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
 					update_smart_learn(m_idx, DRS_DISEN);
@@ -2857,7 +2857,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_UN_POWER:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -2911,7 +2911,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_EAT_GOLD:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (MON_CONFUSED(m_ptr)) break;
@@ -2971,7 +2971,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_EAT_ITEM:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (MON_CONFUSED(m_ptr)) break;
@@ -3067,7 +3067,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_EAT_FOOD:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3107,7 +3107,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				{
 					/* Access the lite */
 					o_ptr = &p_ptr->inventory_list[INVEN_LITE];
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3173,7 +3173,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_BLIND:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 					if (p_ptr->is_dead) break;
 
 					/* Increase "blind" */
@@ -3199,7 +3199,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				case RBE_CONFUSE:
 				{
 					if (explode) break;
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead) break;
 
@@ -3220,7 +3220,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_TERRIFY:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead) break;
 
@@ -3255,7 +3255,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_PARALYZE:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead) break;
 
@@ -3293,7 +3293,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_STR:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 					if (do_dec_stat(p_ptr, A_STR)) obvious = TRUE;
@@ -3303,7 +3303,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_INT:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 					if (do_dec_stat(p_ptr, A_INT)) obvious = TRUE;
@@ -3313,7 +3313,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_WIS:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 					if (do_dec_stat(p_ptr, A_WIS)) obvious = TRUE;
@@ -3323,7 +3323,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_DEX:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 					if (do_dec_stat(p_ptr, A_DEX)) obvious = TRUE;
@@ -3333,7 +3333,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_CON:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 					if (do_dec_stat(p_ptr, A_CON)) obvious = TRUE;
@@ -3343,7 +3343,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_CHR:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 					if (do_dec_stat(p_ptr, A_CHR)) obvious = TRUE;
@@ -3353,7 +3353,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_LOSE_ALL:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3375,7 +3375,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 					/* Hack -- Reduce damage based on the player armor class */
 					damage -= (damage * ((ac < 150) ? ac : 150) / 250);
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Radius 8 earthquake centered at the monster */
 					if (damage > 23 || explode)
@@ -3392,7 +3392,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 					obvious = TRUE;
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3406,7 +3406,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 					obvious = TRUE;
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3420,7 +3420,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 					obvious = TRUE;
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3434,7 +3434,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 					obvious = TRUE;
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3444,7 +3444,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 				case RBE_DISEASE:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3531,7 +3531,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							}
 						}
 					}
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					break;
 				}
@@ -3542,7 +3542,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 					obvious = TRUE;
 
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead || CHECK_MULTISHADOW()) break;
 
@@ -3622,7 +3622,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 				case RBE_INERTIA:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead) break;
 
@@ -3643,7 +3643,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				}
 				case RBE_STUN:
 				{
-					get_damage += take_hit(DAMAGE_ATTACK, damage, ddesc, -1);
+					get_damage += take_hit(p_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					if (p_ptr->is_dead) break;
 

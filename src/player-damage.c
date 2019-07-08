@@ -221,7 +221,7 @@ HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 		if (acid_minus_ac(p_ptr)) dam = (dam + 1) / 2;
 	}
 
-	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!aura && !(double_resist && p_ptr->resist_acid))
@@ -268,7 +268,7 @@ HIT_POINT elec_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(p_ptr, A_DEX);
 	}
 
-	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!aura && !(double_resist && p_ptr->resist_elec))
@@ -316,7 +316,7 @@ HIT_POINT fire_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(p_ptr, A_STR);
 	}
 
-	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!aura && !(double_resist && p_ptr->resist_fire))
@@ -363,7 +363,7 @@ HIT_POINT cold_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(p_ptr, A_STR);
 	}
 
-	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
 	if (!aura && !(double_resist && p_ptr->resist_cold))
@@ -383,18 +383,18 @@ HIT_POINT cold_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
  * setting the player to "dead".
  */
 
-int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
+int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 {
-	int old_chp = p_ptr->chp;
+	int old_chp = creature_ptr->chp;
 
 	char death_message[1024];
 	char tmp[1024];
 
-	int warning = (p_ptr->mhp * hitpoint_warn / 10);
-	if (p_ptr->is_dead) return 0;
+	int warning = (creature_ptr->mhp * hitpoint_warn / 10);
+	if (creature_ptr->is_dead) return 0;
 
-	if (p_ptr->sutemi) damage *= 2;
-	if (p_ptr->special_defense & KATA_IAI) damage += (damage + 4) / 5;
+	if (creature_ptr->sutemi) damage *= 2;
+	if (creature_ptr->special_defense & KATA_IAI) damage += (damage + 4) / 5;
 
 	if (easy_band) damage = (damage + 1) / 2;
 
@@ -403,7 +403,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 		disturb(TRUE, TRUE);
 		if (auto_more)
 		{
-			p_ptr->now_damaged = TRUE;
+			creature_ptr->now_damaged = TRUE;
 		}
 	}
 
@@ -441,7 +441,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 			}
 		}
 
-		if (p_ptr->wraith_form)
+		if (creature_ptr->wraith_form)
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{
@@ -454,7 +454,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 			}
 		}
 
-		if (p_ptr->special_defense & KATA_MUSOU)
+		if (creature_ptr->special_defense & KATA_MUSOU)
 		{
 			damage /= 2;
 			if ((damage == 0) && one_in_(2)) damage = 1;
@@ -462,28 +462,28 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 	} /* not if LOSELIFE USELIFE */
 
 	/* Hurt the player */
-	p_ptr->chp -= damage;
-	if (damage_type == DAMAGE_GENO && p_ptr->chp < 0)
+	creature_ptr->chp -= damage;
+	if (damage_type == DAMAGE_GENO && creature_ptr->chp < 0)
 	{
-		damage += p_ptr->chp;
-		p_ptr->chp = 0;
+		damage += creature_ptr->chp;
+		creature_ptr->chp = 0;
 	}
 
 	/* Display the hitpoints */
-	p_ptr->redraw |= (PR_HP);
+	creature_ptr->redraw |= (PR_HP);
 
-	p_ptr->window |= (PW_PLAYER);
+	creature_ptr->window |= (PW_PLAYER);
 
-	if (damage_type != DAMAGE_GENO && p_ptr->chp == 0)
+	if (damage_type != DAMAGE_GENO && creature_ptr->chp == 0)
 	{
-		chg_virtue(p_ptr, V_SACRIFICE, 1);
-		chg_virtue(p_ptr, V_CHANCE, 2);
+		chg_virtue(creature_ptr, V_SACRIFICE, 1);
+		chg_virtue(creature_ptr, V_CHANCE, 2);
 	}
 
 	/* Dead player */
-	if (p_ptr->chp < 0)
+	if (creature_ptr->chp < 0)
 	{
-		bool android = (p_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
+		bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
 
 #ifdef JP       /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
 		if (!cheat_save)
@@ -492,26 +492,26 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 
 		sound(SOUND_DEATH);
 
-		chg_virtue(p_ptr, V_SACRIFICE, 10);
+		chg_virtue(creature_ptr, V_SACRIFICE, 10);
 
 		handle_stuff();
-		p_ptr->leaving = TRUE;
+		creature_ptr->leaving = TRUE;
 
 		/* Note death */
-		p_ptr->is_dead = TRUE;
+		creature_ptr->is_dead = TRUE;
 
-		if (p_ptr->inside_arena)
+		if (creature_ptr->inside_arena)
 		{
-			concptr m_name = r_name + r_info[arena_info[p_ptr->arena_number].r_idx].name;
+			concptr m_name = r_name + r_info[arena_info[creature_ptr->arena_number].r_idx].name;
 			msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
 			msg_print(NULL);
-			if (record_arena) do_cmd_write_nikki(NIKKI_ARENA, -1 - p_ptr->arena_number, m_name);
+			if (record_arena) do_cmd_write_nikki(NIKKI_ARENA, -1 - creature_ptr->arena_number, m_name);
 		}
 		else
 		{
 			QUEST_IDX q_idx = quest_number(current_floor_ptr->dun_level);
 			bool seppuku = streq(hit_from, "Seppuku");
-			bool winning_seppuku = p_ptr->total_winner && seppuku;
+			bool winning_seppuku = creature_ptr->total_winner && seppuku;
 
 			play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
@@ -523,24 +523,24 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 			/* Note cause of death */
 			if (seppuku)
 			{
-				strcpy(p_ptr->died_from, hit_from);
+				strcpy(creature_ptr->died_from, hit_from);
 #ifdef JP
-				if (!winning_seppuku) strcpy(p_ptr->died_from, "切腹");
+				if (!winning_seppuku) strcpy(creature_ptr->died_from, "切腹");
 #endif
 			}
 			else
 			{
 				char dummy[1024];
 #ifdef JP
-				sprintf(dummy, "%s%s%s", !p_ptr->paralyzed ? "" : p_ptr->free_act ? "彫像状態で" : "麻痺状態で", p_ptr->image ? "幻覚に歪んだ" : "", hit_from);
+				sprintf(dummy, "%s%s%s", !creature_ptr->paralyzed ? "" : creature_ptr->free_act ? "彫像状態で" : "麻痺状態で", creature_ptr->image ? "幻覚に歪んだ" : "", hit_from);
 #else
-				sprintf(dummy, "%s%s", hit_from, !p_ptr->paralyzed ? "" : " while helpless");
+				sprintf(dummy, "%s%s", hit_from, !creature_ptr->paralyzed ? "" : " while helpless");
 #endif
-				my_strcpy(p_ptr->died_from, dummy, sizeof p_ptr->died_from);
+				my_strcpy(creature_ptr->died_from, dummy, sizeof creature_ptr->died_from);
 			}
 
 			/* No longer a winner */
-			p_ptr->total_winner = FALSE;
+			creature_ptr->total_winner = FALSE;
 
 			if (winning_seppuku)
 			{
@@ -550,7 +550,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 			{
 				char buf[20];
 
-				if (p_ptr->inside_arena)
+				if (creature_ptr->inside_arena)
 					strcpy(buf, _("アリーナ", "in the Arena"));
 				else if (!current_floor_ptr->dun_level)
 					strcpy(buf, _("地上", "on the surface"));
@@ -560,7 +560,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 				else
 					sprintf(buf, _("%d階", "level %d"), (int)current_floor_ptr->dun_level);
 
-				sprintf(tmp, _("%sで%sに殺された。", "killed by %s %s."), buf, p_ptr->died_from);
+				sprintf(tmp, _("%sで%sに殺された。", "killed by %s %s."), buf, creature_ptr->died_from);
 				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, tmp);
 			}
 
@@ -577,8 +577,8 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 			flush();
 
 			/* Initialize "last message" buffer */
-			if (p_ptr->last_message) string_free(p_ptr->last_message);
-			p_ptr->last_message = NULL;
+			if (creature_ptr->last_message) string_free(creature_ptr->last_message);
+			creature_ptr->last_message = NULL;
 
 			/* Hack -- Note death */
 			if (!last_words)
@@ -619,7 +619,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 					strcpy(death_message, android ? "You are broken." : "You die.");
 #endif
 				}
-				else p_ptr->last_message = string_make(death_message);
+				else creature_ptr->last_message = string_make(death_message);
 
 #ifdef JP
 				if (winning_seppuku)
@@ -687,7 +687,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 	handle_stuff();
 
 	/* Hitpoint warning */
-	if (p_ptr->chp < warning)
+	if (creature_ptr->chp < warning)
 	{
 		/* Hack -- bell on first notice */
 		if (old_chp > warning) bell();
@@ -696,7 +696,7 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 
 		if (record_danger && (old_chp > warning))
 		{
-			if (p_ptr->image && damage_type == DAMAGE_ATTACK)
+			if (creature_ptr->image && damage_type == DAMAGE_ATTACK)
 				hit_from = _("何か", "something");
 
 			sprintf(tmp, _("%sによってピンチに陥った。", "A critical situation because of %s."), hit_from);
@@ -706,14 +706,14 @@ int take_hit(int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 		if (auto_more)
 		{
 			/* stop auto_more even if DAMAGE_USELIFE */
-			p_ptr->now_damaged = TRUE;
+			creature_ptr->now_damaged = TRUE;
 		}
 
 		msg_print(_("*** 警告:低ヒット・ポイント！ ***", "*** LOW HITPOINT WARNING! ***"));
 		msg_print(NULL);
 		flush();
 	}
-	if (p_ptr->wild_mode && !p_ptr->leaving && (p_ptr->chp < MAX(warning, p_ptr->mhp / 5)))
+	if (creature_ptr->wild_mode && !creature_ptr->leaving && (creature_ptr->chp < MAX(warning, creature_ptr->mhp / 5)))
 	{
 		change_wild_mode(FALSE);
 	}

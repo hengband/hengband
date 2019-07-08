@@ -612,7 +612,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball(GF_HELL_FIRE, dir, dam, rad);
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"), -1);
+				take_hit(p_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"), -1);
 			}
 		}
 		break;

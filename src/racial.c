@@ -2026,7 +2026,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 			{
 				actual_racial_cost -= p_ptr->csp;
 				p_ptr->csp = 0;
-				take_hit(DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
+				take_hit(p_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
 			}
 			else p_ptr->csp -= actual_racial_cost;
 

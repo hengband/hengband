@@ -5177,7 +5177,7 @@ void wreck_the_pattern(void)
 	msg_print(_("パターンを血で汚してしまった！", "You bleed on the Pattern!"));
 	msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
 
-	if (!IS_INVULN()) take_hit(DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
+	if (!IS_INVULN()) take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
 	to_ruin = randint1(45) + 35;
 
 	while (to_ruin--)

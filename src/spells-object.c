@@ -850,12 +850,12 @@ bool perilous_secrets(player_type *creature_ptr)
 		}
 		creature_ptr->redraw |= (PR_MANA);
 	}
-	take_hit(DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"), -1);
+	take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"), -1);
 	/* Confusing. */
 	if (one_in_(5)) (void)set_confused(p_ptr, creature_ptr->confused + randint1(10));
 
 	/* Exercise a little care... */
-	if (one_in_(20)) take_hit(DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
+	if (one_in_(20)) take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
 	return TRUE;
 
 }

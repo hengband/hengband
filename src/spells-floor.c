@@ -910,7 +910,7 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 				killer = _("地震", "an earthquake");
 			}
 
-			take_hit(DAMAGE_ATTACK, damage, killer, -1);
+			take_hit(p_ptr, DAMAGE_ATTACK, damage, killer, -1);
 		}
 	}
 

@@ -569,7 +569,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball_hide(GF_BLOOD_CURSE, dir, dam, rad);
-				take_hit(DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);
+				take_hit(p_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);
 			}
 		}
 		break;

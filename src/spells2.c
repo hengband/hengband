@@ -930,7 +930,7 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 	(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 	if ((creature_ptr->pclass != CLASS_MAGE) && (creature_ptr->pclass != CLASS_HIGH_MAGE) && (creature_ptr->pclass != CLASS_SORCERER) && (creature_ptr->pclass != CLASS_MAGIC_EATER) && (creature_ptr->pclass != CLASS_BLUE_MAGE))
 	{
-		(void)take_hit(DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
+		(void)take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
 	}
 	return TRUE;
 }
@@ -1081,7 +1081,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 
 	if (player_cast)
 	{
-		take_hit(DAMAGE_GENO, randint1(dam_side), format(_("%^sの呪文を唱えた疲労", "the strain of casting %^s"), spell_name), -1);
+		take_hit(p_ptr, DAMAGE_GENO, randint1(dam_side), format(_("%^sの呪文を唱えた疲労", "the strain of casting %^s"), spell_name), -1);
 	}
 
 	/* Visual feedback */
@@ -2566,7 +2566,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 				HIT_POINT dam = damroll(10, 10);
 				msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
 				project(0, 8, p_ptr->y, p_ptr->x, dam, GF_MANA, flg, -1);
-				take_hit(DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
+				take_hit(p_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
 				if (!one_in_(6)) break;
 			}
 		case 32: case 33:
@@ -2583,7 +2583,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			if (!randint0(7))
 			{
 				project(0, 7, p_ptr->y, p_ptr->x, 50, GF_KILL_WALL, flg, -1);
-				take_hit(DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"), -1);
+				take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"), -1);
 			}
 			if (!one_in_(6)) break;
 		case 1: case 2: case 3: case 16: case 17:
@@ -4269,7 +4269,7 @@ bool double_attack(player_type *creature_ptr)
 
 bool comvert_hp_to_mp(player_type *creature_ptr)
 {
-	int gain_sp = take_hit(DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
+	int gain_sp = take_hit(p_ptr, DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
 	if (gain_sp)
 	{
 		creature_ptr->csp += gain_sp;

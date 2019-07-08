@@ -320,7 +320,7 @@ static void hit_trap_pit(int trap_feat_type)
 		}
 	}
 
-	take_hit(DAMAGE_NOESCAPE, dam, trap_name, -1);
+	take_hit(p_ptr, DAMAGE_NOESCAPE, dam, trap_name, -1);
 }
 
 /*!
@@ -334,7 +334,7 @@ static bool hit_trap_dart(void)
 	if (check_hit(125))
 	{
 		msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
-		take_hit(DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
+		take_hit(p_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
 		if (!CHECK_MULTISHADOW()) hit = TRUE;
 	}
 	else
@@ -437,7 +437,7 @@ void hit_trap(bool break_trap)
 			dam = damroll(2, 8);
 			name = _("落とし戸", "a trap door");
 
-			take_hit(DAMAGE_NOESCAPE, dam, name, -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, dam, name, -1);
 
 			/* Still alive and autosave enabled */
 			if (autosave_l && (p_ptr->chp >= 0))

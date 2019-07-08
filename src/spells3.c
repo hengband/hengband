@@ -1226,7 +1226,7 @@ void call_the_(void)
 				msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));
 		}
 
-		take_hit(DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
+		take_hit(p_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
 	}
 }
 
@@ -3466,7 +3466,7 @@ bool booze(player_type *creature_ptr)
 bool detonation(player_type *creature_ptr)
 {
 	msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
-	take_hit(DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
+	take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
 	(void)set_stun(p_ptr, creature_ptr->stun + 75);
 	(void)set_cut(p_ptr,creature_ptr->cut + 5000);
 	return TRUE;

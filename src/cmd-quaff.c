@@ -206,7 +206,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 
 		case SV_POTION_RUINATION:
 			msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
-			take_hit(DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"), -1);
+			take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"), -1);
 
 			(void)dec_stat(p_ptr, A_DEX, 25, TRUE);
 			(void)dec_stat(p_ptr, A_WIS, 25, TRUE);
@@ -249,7 +249,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 			chg_virtue(p_ptr, V_VITALITY, -1);
 			chg_virtue(p_ptr, V_UNLIFE, 5);
 			msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
-			take_hit(DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"), -1);
+			take_hit(p_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"), -1);
 			ident = TRUE;
 			break;
 

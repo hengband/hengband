@@ -154,7 +154,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	if (trap & (CHEST_LOSE_STR))
 	{
 		msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
+		take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
 		(void)do_dec_stat(p_ptr, A_STR);
 	}
 
@@ -162,7 +162,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	if (trap & (CHEST_LOSE_CON))
 	{
 		msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
-		take_hit(DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
+		take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
 		(void)do_dec_stat(p_ptr, A_CON);
 	}
 
@@ -282,7 +282,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 			/* ...but a high saving throw does help a little. */
 			if (randint1(100 + o_ptr->pval * 2) > p_ptr->skill_sav)
 			{
-				if (one_in_(6)) take_hit(DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"), -1);
+				if (one_in_(6)) take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"), -1);
 				else if (one_in_(5)) (void)set_cut(p_ptr,p_ptr->cut + 200);
 				else if (one_in_(4))
 				{
@@ -322,7 +322,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		msg_print(_("箱の中の物はすべて粉々に砕け散った！", "Everything inside the chest is destroyed!"));
 		o_ptr->pval = 0;
 		sound(SOUND_EXPLODE);
-		take_hit(DAMAGE_ATTACK, damroll(5, 8), _("爆発する箱", "an exploding chest"), -1);
+		take_hit(p_ptr, DAMAGE_ATTACK, damroll(5, 8), _("爆発する箱", "an exploding chest"), -1);
 	}
 	/* Scatter contents. */
 	if ((trap & (CHEST_SCATTER)) && o_ptr->k_idx)

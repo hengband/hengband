@@ -3694,7 +3694,7 @@ void do_poly_wounds(player_type *creature_ptr)
 	if (Nasty_effect)
 	{
 		msg_print(_("新たな傷ができた！", "A new wound was created!"));
-		take_hit(DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"), -1);
+		take_hit(p_ptr, DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"), -1);
 		set_cut(creature_ptr,change);
 	}
 	else
@@ -3869,7 +3869,7 @@ void do_poly_self(player_type *creature_ptr)
 		if (one_in_(6))
 		{
 			msg_print(_("現在の姿で生きていくのは困難なようだ！", "You find living difficult in your present form!"));
-			take_hit(DAMAGE_LOSELIFE, damroll(randint1(10), creature_ptr->lev), _("致命的な突然変異", "a lethal mutation"), -1);
+			take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(randint1(10), creature_ptr->lev), _("致命的な突然変異", "a lethal mutation"), -1);
 
 			power -= 10;
 		}

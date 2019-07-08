@@ -9,7 +9,7 @@
 #define DAMAGE_ATTACK   4
 #define DAMAGE_NOESCAPE 5
 #define DAMAGE_USELIFE  6
-extern int take_hit(int damage_type, HIT_POINT damage, concptr kb_str, int monspell);
+extern int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concptr kb_str, int monspell);
 
 /*
  * This seems like a pretty standard "typedef"

@@ -125,7 +125,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if ((PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
 					msg_print(_("日の光があなたの肉体を焦がした！", "The daylight scorches your flesh!"));
-					take_hit(DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"), -1);
+					take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"), -1);
 				}
 			}
 		}
@@ -529,7 +529,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if ((PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
 				{
 					msg_print(_("日光があなたの肉体を焦がした！", "The sunlight scorches your flesh!"));
-					take_hit(DAMAGE_NOESCAPE, 50, _("日光", "sunlight"), -1);
+					take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"), -1);
 				}
 			}
 		}

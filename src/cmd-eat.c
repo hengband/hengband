@@ -140,7 +140,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_WEAKNESS:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
 			(void)do_dec_stat(p_ptr, A_STR);
 			ident = TRUE;
 			break;
@@ -148,7 +148,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_SICKNESS:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
 			(void)do_dec_stat(p_ptr, A_CON);
 			ident = TRUE;
 			break;
@@ -156,7 +156,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_STUPIDITY:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
 			(void)do_dec_stat(p_ptr, A_INT);
 			ident = TRUE;
 			break;
@@ -164,7 +164,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_NAIVETY:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
 			(void)do_dec_stat(p_ptr, A_WIS);
 			ident = TRUE;
 			break;
@@ -172,7 +172,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_UNHEALTH:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
 			(void)do_dec_stat(p_ptr, A_CON);
 			ident = TRUE;
 			break;
@@ -180,7 +180,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_DISEASE:
 		{
-			take_hit(DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
+			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
 			(void)do_dec_stat(p_ptr, A_STR);
 			ident = TRUE;
 			break;

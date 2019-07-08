@@ -2099,7 +2099,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 			/* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
 			-- henkma
 			*/
-			get_damage = take_hit(DAMAGE_NOESCAPE, dam, m_name, -1);
+			get_damage = take_hit(p_ptr, DAMAGE_NOESCAPE, dam, m_name, -1);
 			if (p_ptr->tim_eyeeye && get_damage > 0 && !p_ptr->is_dead)
 			{
 				GAME_TEXT m_name_self[80];

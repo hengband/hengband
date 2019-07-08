@@ -460,7 +460,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 			fire_ball(GF_FIRE, 0, 666, 4);
 			/* Note: "Double" damage since it is centered on the player ... */
 			if (!(IS_OPPOSE_FIRE() || p_ptr->resist_fire || p_ptr->immune_fire))
-				take_hit(DAMAGE_NOESCAPE, 50+randint1(50), _("炎の巻物", "a Scroll of Fire"), -1);
+				take_hit(p_ptr, DAMAGE_NOESCAPE, 50+randint1(50), _("炎の巻物", "a Scroll of Fire"), -1);
 
 			ident = TRUE;
 			break;
@@ -471,7 +471,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 		{
 			fire_ball(GF_ICE, 0, 777, 4);
 			if (!(IS_OPPOSE_COLD() || p_ptr->resist_cold || p_ptr->immune_cold))
-				take_hit(DAMAGE_NOESCAPE, 100+randint1(100), _("氷の巻物", "a Scroll of Ice"), -1);
+				take_hit(p_ptr, DAMAGE_NOESCAPE, 100+randint1(100), _("氷の巻物", "a Scroll of Ice"), -1);
 
 			ident = TRUE;
 			break;
@@ -481,7 +481,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 		{
 			fire_ball(GF_CHAOS, 0, 1000, 4);
 			if (!p_ptr->resist_chaos)
-				take_hit(DAMAGE_NOESCAPE, 111+randint1(111), _("ログルスの巻物", "a Scroll of Logrus"), -1);
+				take_hit(p_ptr, DAMAGE_NOESCAPE, 111+randint1(111), _("ログルスの巻物", "a Scroll of Logrus"), -1);
 
 			ident = TRUE;
 			break;

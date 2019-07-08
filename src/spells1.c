@@ -1738,7 +1738,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						{
 							/* Injure +/- confusion */
 							monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
-							take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
+							take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 							if (one_in_(4) && !CHECK_MULTISHADOW())
 							{
 								switch (randint1(4))
@@ -1836,7 +1836,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 								p_ptr->redraw |= PR_MANA;
 								p_ptr->window |= (PW_SPELL);
 							}
-							take_hit(DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
+							take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 						}
 						dam = 0;
 					}
@@ -4163,7 +4163,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				do_dec_stat(p_ptr, A_CON);
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 
 			if (!(double_resist || p_ptr->resist_pois) && !CHECK_MULTISHADOW())
 			{
@@ -4180,7 +4180,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 
 			if (p_ptr->resist_pois) dam = (2 * dam + 2) / 5;
 			if (double_resist) dam = (2 * dam + 2) / 5;
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			if (!(double_resist || p_ptr->resist_pois) && !CHECK_MULTISHADOW())
 			{
 				set_poisoned(p_ptr, p_ptr->poisoned + randint0(dam) + 10);
@@ -4206,7 +4206,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		case GF_MISSILE:
 		{
 			if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4218,7 +4218,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				dam /= 2;
 			else if (p_ptr->align < -10)
 				dam *= 2;
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4227,7 +4227,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 			if (p_ptr->align > 10)
 				dam *= 2;
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4243,7 +4243,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				msg_print(_("矢を斬り捨てた！", "You cut down the arrow!"));
 				break;
 			}
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4251,7 +4251,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		case GF_PLASMA:
 		{
 			if (fuzzy) msg_print(_("何かとても熱いもので攻撃された！", "You are hit by something *HOT*!"));
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 
 			if (!p_ptr->resist_sound && !CHECK_MULTISHADOW())
 			{
@@ -4288,7 +4288,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			}
 			else
 			{
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			}
 
 			break;
@@ -4317,7 +4317,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				if (p_ptr->resist_water) get_damage /= 4;
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4357,7 +4357,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				}
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4379,7 +4379,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				inven_damage(set_cold_destroy, 2);
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4402,7 +4402,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				inven_damage(set_cold_destroy, 2);
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4418,7 +4418,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				(void)set_confused(p_ptr, p_ptr->confused + randint1(20) + 10);
 			}
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4434,7 +4434,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				(void)apply_disenchant(0);
 			}
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4450,7 +4450,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				apply_nexus(m_ptr);
 			}
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4462,7 +4462,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				(void)set_stun(p_ptr, p_ptr->stun + randint1(20));
 			}
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4490,7 +4490,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				inven_damage(set_cold_destroy, 3);
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4499,7 +4499,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		{
 			if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
 			if (!CHECK_MULTISHADOW()) (void)set_slow(p_ptr, p_ptr->slow + randint0(4) + 4, FALSE);
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4527,7 +4527,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			}
 
 			if (p_ptr->wraith_form) dam *= 2;
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 
 			if (p_ptr->wraith_form && !CHECK_MULTISHADOW())
 			{
@@ -4557,7 +4557,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				(void)set_blind(p_ptr, p_ptr->blind + randint1(5) + 2);
 			}
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4620,7 +4620,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				}
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4651,7 +4651,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				inven_damage(set_cold_destroy, 2);
 			}
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4660,7 +4660,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		{
 			if (fuzzy) msg_print(_("純粋なエネルギーで攻撃された！", "You are hit by pure energy!"));
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4711,7 +4711,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		case GF_SUPER_RAY:
 		{
 			if (fuzzy) msg_print(_("魔法のオーラで攻撃された！", "You are hit by an aura of magic!"));
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;
 		}
 
@@ -4719,7 +4719,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		case GF_PSY_SPEAR:
 		{
 			if (fuzzy) msg_print(_("エネルギーの塊で攻撃された！", "You are hit by an energy!"));
-			get_damage = take_hit(DAMAGE_FORCE, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_FORCE, dam, killer, monspell);
 			break;
 		}
 
@@ -4728,7 +4728,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		{
 			if (fuzzy) msg_print(_("何かが空からあなたの頭上に落ちてきた！", "Something falls from the sky on you!"));
 
-			get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			if (!p_ptr->resist_shard || one_in_(13))
 			{
 				if (!p_ptr->immune_fire) inven_damage(set_fire_destroy, 2);
@@ -4771,7 +4771,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			if (p_ptr->mimic_form)
 			{
 				if (!(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
-					get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+					get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			else
 			{
@@ -4792,7 +4792,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				/* Hurt a lot */
 				default:
 				{
-					get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+					get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 					break;
 				}
 			}
@@ -4893,7 +4893,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					p_ptr->redraw |= PR_MANA;
 				}
 
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
@@ -4921,7 +4921,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					p_ptr->redraw |= PR_MANA;
 				}
 
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 				if (!CHECK_MULTISHADOW())
 				{
 					if (!p_ptr->resist_blind)
@@ -4963,7 +4963,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			else
 			{
 				if (!CHECK_MULTISHADOW()) curse_equipment(15, 0);
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
@@ -4979,7 +4979,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			else
 			{
 				if (!CHECK_MULTISHADOW()) curse_equipment(25, MIN(rlev / 2 - 15, 5));
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
@@ -4995,7 +4995,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			else
 			{
 				if (!CHECK_MULTISHADOW()) curse_equipment(33, MIN(rlev / 2 - 15, 15));
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			}
 			break;
 		}
@@ -5010,7 +5010,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			}
 			else
 			{
-				get_damage = take_hit(DAMAGE_ATTACK, dam, killer, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 				if (!CHECK_MULTISHADOW()) (void)set_cut(p_ptr,p_ptr->cut + damroll(10, 10));
 			}
 			break;
@@ -5032,7 +5032,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 					curse_equipment(40, 20);
 				}
 
-				get_damage = take_hit(DAMAGE_ATTACK, dam, m_name, monspell);
+				get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, m_name, monspell);
 
 				if (p_ptr->chp < 1) p_ptr->chp = 1;
 			}

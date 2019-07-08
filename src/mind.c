@@ -1227,7 +1227,7 @@ static bool cast_force_spell(int spell)
 		{
 			msg_print(_("気が暴走した！", "The Force exploded!"));
 			fire_ball(GF_MANA, 0, P_PTR_KI / 2, 10);
-			take_hit(DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
+			take_hit(p_ptr, DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
 		}
 		else return TRUE;
 		break;
@@ -2007,7 +2007,7 @@ void do_cmd_mind(void)
 
 	if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU))
 	{
-		take_hit(DAMAGE_USELIFE, mana_cost, _("過度の集中", "concentrating too hard"), -1);
+		take_hit(p_ptr, DAMAGE_USELIFE, mana_cost, _("過度の集中", "concentrating too hard"), -1);
 		/* Redraw hp */
 		p_ptr->redraw |= (PR_HP);
 	}

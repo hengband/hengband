@@ -1562,7 +1562,7 @@ bool activate_artifact(object_type *o_ptr)
 		wiz_lite(FALSE);
 
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
-		take_hit(DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
+		take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
 
 		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
@@ -1727,7 +1727,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		int t;
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
-		take_hit(DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"), -1);
+		take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"), -1);
 		t = 25 + randint1(25);
 		(void)set_fast(p_ptr, p_ptr->fast + t, FALSE);
 		break;

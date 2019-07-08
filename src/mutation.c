@@ -2265,7 +2265,7 @@ bool mutation_power_aux(player_type *creature_ptr, int power)
 
 		case MUT1_STERILITY:
 			msg_print(_("突然頭が痛くなった！", "You suddenly have a headache!"));
-			take_hit(DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"), -1);
+			take_hit(p_ptr, DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"), -1);
 			current_floor_ptr->num_repro += MAX_REPRO;
 			break;
 
