@@ -2212,7 +2212,7 @@ static byte player_init[MAX_CLASS][3][2] =
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
  * @return なし
  */
-static void add_outfit(object_type *o_ptr)
+static void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 {
 	s16b slot;
 
@@ -2224,7 +2224,7 @@ static void add_outfit(object_type *o_ptr)
 	autopick_alter_item(slot, FALSE);
 
 	/* Now try wielding everything */ 
-	wield_all(p_ptr); 
+	wield_all(creature_ptr); 
 }
 
 
@@ -2263,7 +2263,7 @@ void player_outfit(player_type *creature_ptr)
 			if(q_ptr->pval)
 			{
 				q_ptr->number = 1;
-				add_outfit(q_ptr);
+				add_outfit(creature_ptr, q_ptr);
 			}
 		}
 		break;
@@ -2276,14 +2276,14 @@ void player_outfit(player_type *creature_ptr)
 		object_prep(q_ptr, lookup_kind(TV_STAFF, SV_STAFF_NOTHING));
 		q_ptr->number = 1;
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 		break;
 
 	case RACE_ENT:
 		/* Potions of Water */
 		object_prep(q_ptr, lookup_kind(TV_POTION, SV_POTION_WATER));
 		q_ptr->number = (ITEM_NUMBER)rand_range(15, 23);
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 
 		break;
 
@@ -2295,7 +2295,7 @@ void player_outfit(player_type *creature_ptr)
 		apply_magic(q_ptr, 1, AM_NO_FIXED_ART);
 
 		q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 
 		break;
 
@@ -2304,7 +2304,7 @@ void player_outfit(player_type *creature_ptr)
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 		q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	q_ptr = &forge;
 
@@ -2315,7 +2315,7 @@ void player_outfit(player_type *creature_ptr)
 
 		q_ptr->number = (ITEM_NUMBER)rand_range(2, 5);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	else if (creature_ptr->pclass != CLASS_NINJA)
 	{
@@ -2324,7 +2324,7 @@ void player_outfit(player_type *creature_ptr)
 		q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
 		q_ptr->xtra4 = rand_range(3, 7) * 500;
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	q_ptr = &forge;
 
@@ -2332,7 +2332,7 @@ void player_outfit(player_type *creature_ptr)
 	{
 		object_prep(q_ptr, lookup_kind(TV_RING, SV_RING_LEVITATION_FALL));
 		q_ptr->number = 1;
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 
 	if ((creature_ptr->pclass == CLASS_RANGER) || (creature_ptr->pclass == CLASS_CAVALRY))
@@ -2341,14 +2341,14 @@ void player_outfit(player_type *creature_ptr)
 		object_prep(q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
 		q_ptr->number = (byte)rand_range(15, 20);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	if (creature_ptr->pclass == CLASS_RANGER)
 	{
 		/* Hack -- Give the player some arrows */
 		object_prep(q_ptr, lookup_kind(TV_BOW, SV_SHORT_BOW));
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	else if (creature_ptr->pclass == CLASS_ARCHER)
 	{
@@ -2356,7 +2356,7 @@ void player_outfit(player_type *creature_ptr)
 		object_prep(q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
 		q_ptr->number = (ITEM_NUMBER)rand_range(15, 20);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	else if (creature_ptr->pclass == CLASS_HIGH_MAGE)
 	{
@@ -2365,7 +2365,7 @@ void player_outfit(player_type *creature_ptr)
 		q_ptr->number = 1;
 		q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	else if (creature_ptr->pclass == CLASS_SORCERER)
 	{
@@ -2376,7 +2376,7 @@ void player_outfit(player_type *creature_ptr)
 			object_prep(q_ptr, lookup_kind(book_tval, 0));
 			q_ptr->number = 1;
 
-			add_outfit(q_ptr);
+			add_outfit(creature_ptr, q_ptr);
 		}
 	}
 	else if (creature_ptr->pclass == CLASS_TOURIST)
@@ -2387,33 +2387,33 @@ void player_outfit(player_type *creature_ptr)
 			object_prep(q_ptr, lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
 			q_ptr->number = rand_range(15, 20);
 
-			add_outfit(q_ptr);
+			add_outfit(creature_ptr, q_ptr);
 		}
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_BISCUIT));
 		q_ptr->number = rand_range(2, 4);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_WAYBREAD));
 		q_ptr->number = rand_range(2, 4);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_JERKY));
 		q_ptr->number = rand_range(1, 3);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_ALE));
 		q_ptr->number = rand_range(2, 4);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 
 		object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_WINE));
 		q_ptr->number = rand_range(2, 4);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	else if (creature_ptr->pclass == CLASS_NINJA)
 	{
@@ -2421,7 +2421,7 @@ void player_outfit(player_type *creature_ptr)
 		object_prep(q_ptr, lookup_kind(TV_SPIKE, 0));
 		q_ptr->number = rand_range(15, 20);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 	else if (creature_ptr->pclass == CLASS_SNIPER)
 	{
@@ -2429,7 +2429,7 @@ void player_outfit(player_type *creature_ptr)
 		object_prep(q_ptr, lookup_kind(TV_BOLT, SV_AMMO_NORMAL));
 		q_ptr->number = rand_range(15, 20);
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 
 	if(creature_ptr->pseikaku == SEIKAKU_SEXY)
@@ -2472,7 +2472,7 @@ void player_outfit(player_type *creature_ptr)
 			q_ptr->name2 = EGO_BRAND_POIS;
 		}
 
-		add_outfit(q_ptr);
+		add_outfit(creature_ptr, q_ptr);
 	}
 
 	/* Hack -- make aware of the water */
@@ -4527,7 +4527,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 	}
 
 	load_prev_data(creature_ptr, FALSE);
-	init_turn(p_ptr);
+	init_turn(creature_ptr);
 	init_dungeon_quests(creature_ptr);
 
 	sp_ptr = &sex_info[creature_ptr->psex];
