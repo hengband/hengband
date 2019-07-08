@@ -658,7 +658,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 	}
 	else
 	{
-		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(creature_ptr, V_CHANCE, 1);
 
 		/*
 		  some races are apt to gain specified mutations
