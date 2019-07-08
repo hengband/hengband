@@ -72,6 +72,49 @@ static INVENTORY_IDX label_to_inven(int c)
 	return (i);
 }
 
+
+/*!
+ * @brief 所持/装備オブジェクトIDの部位表現を返す /
+ * Return a string mentioning how a given item is carried
+ * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
+ * @return 部位表現の文字列ポインタ
+ */
+static concptr mention_use(int i)
+{
+	concptr p;
+
+	/* Examine the location */
+	switch (i)
+	{
+#ifdef JP
+	case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "運搬中" : ((p_ptr->ryoute && p_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
+#else
+	case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "Just lifting" : (p_ptr->migite ? "Wielding" : "On arm"); break;
+#endif
+
+#ifdef JP
+	case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "運搬中" : ((p_ptr->ryoute && p_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
+#else
+	case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "Just lifting" : (p_ptr->hidarite ? "Wielding" : "On arm"); break;
+#endif
+
+	case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < p_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
+	case INVEN_RIGHT: p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand")); break;
+	case INVEN_LEFT:  p = (left_hander ? _("右手指", "On right hand") : _("左手指", "On left hand")); break;
+	case INVEN_NECK:  p = _("  首", "Around neck"); break;
+	case INVEN_LITE:  p = _(" 光源", "Light source"); break;
+	case INVEN_BODY:  p = _("  体", "On body"); break;
+	case INVEN_OUTER: p = _("体の上", "About body"); break;
+	case INVEN_HEAD:  p = _("  頭", "On head"); break;
+	case INVEN_HANDS: p = _("  手", "On hands"); break;
+	case INVEN_FEET:  p = _("  足", "On feet"); break;
+	default:          p = _("ザック", "In pack"); break;
+	}
+
+	/* Return the result */
+	return p;
+}
+
 /*!
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
@@ -3421,48 +3464,6 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 	command_gap = col;
 
 	return target_item_label;
-}
-
-/*!
- * @brief 所持/装備オブジェクトIDの部位表現を返す /
- * Return a string mentioning how a given item is carried
- * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
- * @return 部位表現の文字列ポインタ
- */
-concptr mention_use(int i)
-{
-	concptr p;
-
-	/* Examine the location */
-	switch (i)
-	{
-#ifdef JP
-	case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "運搬中" : ((p_ptr->ryoute && p_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
-#else
-	case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "Just lifting" : (p_ptr->migite ? "Wielding" : "On arm"); break;
-#endif
-
-#ifdef JP
-	case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "運搬中" : ((p_ptr->ryoute && p_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
-#else
-	case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "Just lifting" : (p_ptr->hidarite ? "Wielding" : "On arm"); break;
-#endif
-
-	case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < p_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
-	case INVEN_RIGHT: p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand")); break;
-	case INVEN_LEFT:  p = (left_hander ? _("右手指", "On right hand") : _("左手指", "On left hand")); break;
-	case INVEN_NECK:  p = _("  首", "Around neck"); break;
-	case INVEN_LITE:  p = _(" 光源", "Light source"); break;
-	case INVEN_BODY:  p = _("  体", "On body"); break;
-	case INVEN_OUTER: p = _("体の上", "About body"); break;
-	case INVEN_HEAD:  p = _("  頭", "On head"); break;
-	case INVEN_HANDS: p = _("  手", "On hands"); break;
-	case INVEN_FEET:  p = _("  足", "On feet"); break;
-	default:          p = _("ザック", "In pack"); break;
-	}
-
-	/* Return the result */
-	return p;
 }
 
 
