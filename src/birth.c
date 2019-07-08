@@ -2483,7 +2483,7 @@ void player_outfit(player_type *creature_ptr)
  * @brief プレイヤーの種族選択を行う / Player race
  * @return なし
  */
-static bool get_player_race(void)
+static bool get_player_race(player_type *creature_ptr)
 {
 	int     k, n, cs, os;
 	concptr    str;
@@ -2518,7 +2518,7 @@ static bool get_player_race(void)
 
 	/* Choose */
 	k = -1;
-	cs = p_ptr->prace;
+	cs = creature_ptr->prace;
 	os = MAX_RACES;
 	while (1)
 	{
@@ -2626,9 +2626,9 @@ static bool get_player_race(void)
 	}
 
 	/* Set race */
-	p_ptr->prace = (byte_hack)k;
+	creature_ptr->prace = (byte_hack)k;
 
-	rp_ptr = &race_info[p_ptr->prace];
+	rp_ptr = &race_info[creature_ptr->prace];
 
 	/* Display */
 	c_put_str(TERM_L_BLUE, rp_ptr->title, 4, 15);
@@ -4020,7 +4020,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		char temp[80*10];
 		concptr t;
 
-		if (!get_player_race()) return FALSE;
+		if (!get_player_race(creature_ptr)) return FALSE;
 
 		clear_from(10);
 
