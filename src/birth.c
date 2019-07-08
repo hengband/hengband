@@ -1588,7 +1588,7 @@ static void get_money(player_type *creature_ptr)
  * @details See 'display_player()' for screen layout constraints.
  * @return なし
  */
-static void birth_put_stats(void)
+static void birth_put_stats(player_type *creature_ptr)
 {
 	int i, j, m, p;
 	int col;
@@ -1606,7 +1606,7 @@ static void birth_put_stats(void)
 			j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
 
 			/* Obtain the current stat */
-			m = adjust_stat(p_ptr->stat_max[i], j);
+			m = adjust_stat(creature_ptr->stat_max[i], j);
 
 			/* Put the stat */
 			cnv_stat(m, buf);
@@ -4308,7 +4308,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			if (flag)
 			{
 				/* Dump data */
-				birth_put_stats();
+				birth_put_stats(creature_ptr);
 
 				/* Dump round */
 				put_str(format("%10ld", auto_round), 10, col+20);
