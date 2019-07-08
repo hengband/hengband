@@ -30,7 +30,7 @@ bool is_ring_slot(int i)
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
-INVENTORY_IDX label_to_equip(int c)
+static INVENTORY_IDX label_to_equip(int c)
 {
 	INVENTORY_IDX i;
 
@@ -49,8 +49,28 @@ INVENTORY_IDX label_to_equip(int c)
 	return (i);
 }
 
+/*!
+ * @brief 選択アルファベットラベルからプレイヤーの所持オブジェクトIDを返す /
+ * Convert a label into the index of an item in the "inven"
+ * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
+ * @details Note that the label does NOT distinguish inven/equip.
+ */
+static INVENTORY_IDX label_to_inven(int c)
+{
+	INVENTORY_IDX i;
 
+	/* Convert */
+	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
+	/* Verify the index */
+	if ((i < 0) || (i > INVEN_PACK)) return (-1);
+
+	/* Empty slots can never be chosen */
+	if (!p_ptr->inventory_list[i].k_idx) return (-1);
+
+	/* Return the index */
+	return (i);
+}
 
 /*!
  * @brief 装備アイテム一覧を表示する /

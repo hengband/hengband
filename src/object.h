@@ -408,8 +408,6 @@ extern concptr item_activation(object_type *o_ptr);
 extern bool screen_object(object_type *o_ptr, BIT_FLAGS mode);
 
 extern char index_to_label(int i);
-extern INVENTORY_IDX label_to_inven(int c);
-extern INVENTORY_IDX label_to_equip(int c);
 extern s16b wield_slot(object_type *o_ptr);
 
 extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);

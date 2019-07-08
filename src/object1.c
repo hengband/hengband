@@ -1319,29 +1319,6 @@ char index_to_label(int i)
 }
 
 /*!
- * @brief 選択アルファベットラベルからプレイヤーの所持オブジェクトIDを返す /
- * Convert a label into the index of an item in the "inven"
- * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
- * @details Note that the label does NOT distinguish inven/equip.
- */
-INVENTORY_IDX label_to_inven(int c)
-{
-	INVENTORY_IDX i;
-
-	/* Convert */
-	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
-
-	/* Verify the index */
-	if ((i < 0) || (i > INVEN_PACK)) return (-1);
-
-	/* Empty slots can never be chosen */
-	if (!p_ptr->inventory_list[i].k_idx) return (-1);
-
-	/* Return the index */
-	return (i);
-}
-
-/*!
  * @brief オブジェクトの該当装備部位IDを返す /
  * Determine which equipment slot (if any) an item likes
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
