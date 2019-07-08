@@ -79,7 +79,7 @@ static INVENTORY_IDX label_to_inven(int c)
  * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 部位表現の文字列ポインタ
  */
-static concptr mention_use(int i)
+static concptr mention_use(player_type *creature_ptr, int i)
 {
 	concptr p;
 
@@ -87,18 +87,18 @@ static concptr mention_use(int i)
 	switch (i)
 	{
 #ifdef JP
-	case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "運搬中" : ((p_ptr->ryoute && p_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
+	case INVEN_RARM:  p = creature_ptr->heavy_wield[0] ? "運搬中" : ((creature_ptr->ryoute && creature_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
 #else
-	case INVEN_RARM:  p = p_ptr->heavy_wield[0] ? "Just lifting" : (p_ptr->migite ? "Wielding" : "On arm"); break;
+	case INVEN_RARM:  p = creature_ptr->heavy_wield[0] ? "Just lifting" : (creature_ptr->migite ? "Wielding" : "On arm"); break;
 #endif
 
 #ifdef JP
-	case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "運搬中" : ((p_ptr->ryoute && p_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
+	case INVEN_LARM:  p = creature_ptr->heavy_wield[1] ? "運搬中" : ((creature_ptr->ryoute && creature_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
 #else
-	case INVEN_LARM:  p = p_ptr->heavy_wield[1] ? "Just lifting" : (p_ptr->hidarite ? "Wielding" : "On arm"); break;
+	case INVEN_LARM:  p = creature_ptr->heavy_wield[1] ? "Just lifting" : (creature_ptr->hidarite ? "Wielding" : "On arm"); break;
 #endif
 
-	case INVEN_BOW:   p = (adj_str_hold[p_ptr->stat_ind[A_STR]] < p_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
+	case INVEN_BOW:   p = (adj_str_hold[creature_ptr->stat_ind[A_STR]] < creature_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
 	case INVEN_RIGHT: p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand")); break;
 	case INVEN_LEFT:  p = (left_hander ? _("右手指", "On right hand") : _("左手指", "On left hand")); break;
 	case INVEN_NECK:  p = _("  首", "Around neck"); break;
@@ -177,7 +177,7 @@ void display_equip(OBJECT_TYPE_VALUE tval)
 		if (show_labels)
 		{
 			Term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
-			prt(mention_use(i), i - INVEN_RARM, wid - 15);
+			prt(mention_use(p_ptr, i), i - INVEN_RARM, wid - 15);
 		}
 	}
 
@@ -3428,7 +3428,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 		if (show_labels)
 		{
 			/* Mention the use */
-			(void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(i));
+			(void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(p_ptr, i));
 
 			put_str(tmp_val, j + 1, cur_col);
 
