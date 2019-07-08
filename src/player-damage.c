@@ -362,22 +362,22 @@ int inven_damage(inven_func typ, int perc)
 * Note that the "base armor" of an object never changes.
 * If any armor is damaged (or resists), the player takes less damage.
 */
-static bool acid_minus_ac(void)
+static bool acid_minus_ac(player_type *creature_ptr)
 {
 	object_type *o_ptr = NULL;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	GAME_TEXT o_name[MAX_NLEN];
 
-	/* Pick a (possibly empty) p_ptr->inventory_list slot */
+	/* Pick a (possibly empty) creature_ptr->inventory_list slot */
 	switch (randint1(7))
 	{
-	case 1: o_ptr = &p_ptr->inventory_list[INVEN_RARM]; break;
-	case 2: o_ptr = &p_ptr->inventory_list[INVEN_LARM]; break;
-	case 3: o_ptr = &p_ptr->inventory_list[INVEN_BODY]; break;
-	case 4: o_ptr = &p_ptr->inventory_list[INVEN_OUTER]; break;
-	case 5: o_ptr = &p_ptr->inventory_list[INVEN_HANDS]; break;
-	case 6: o_ptr = &p_ptr->inventory_list[INVEN_HEAD]; break;
-	case 7: o_ptr = &p_ptr->inventory_list[INVEN_FEET]; break;
+	case 1: o_ptr = &creature_ptr->inventory_list[INVEN_RARM]; break;
+	case 2: o_ptr = &creature_ptr->inventory_list[INVEN_LARM]; break;
+	case 3: o_ptr = &creature_ptr->inventory_list[INVEN_BODY]; break;
+	case 4: o_ptr = &creature_ptr->inventory_list[INVEN_OUTER]; break;
+	case 5: o_ptr = &creature_ptr->inventory_list[INVEN_HANDS]; break;
+	case 6: o_ptr = &creature_ptr->inventory_list[INVEN_HEAD]; break;
+	case 7: o_ptr = &creature_ptr->inventory_list[INVEN_FEET]; break;
 	}
 
 	if (!o_ptr->k_idx) return (FALSE);
@@ -405,10 +405,10 @@ static bool acid_minus_ac(void)
 	o_ptr->to_a--;
 
 	/* Calculate bonuses */
-	p_ptr->update |= (PU_BONUS);
-	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
+	creature_ptr->update |= (PU_BONUS);
+	creature_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
-	calc_android_exp(p_ptr);
+	calc_android_exp(creature_ptr);
 
 	/* Item was damaged */
 	return (TRUE);
@@ -452,7 +452,7 @@ HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 			(void)do_dec_stat(p_ptr, A_CHR);
 
 		/* If any armor gets hit, defend the player */
-		if (acid_minus_ac()) dam = (dam + 1) / 2;
+		if (acid_minus_ac(p_ptr)) dam = (dam + 1) / 2;
 	}
 
 	get_damage = take_hit(aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
