@@ -412,10 +412,6 @@ extern s16b wield_slot(object_type *o_ptr);
 
 extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 extern bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval);
-extern void display_inven(OBJECT_TYPE_VALUE tval);
-extern void display_equip(OBJECT_TYPE_VALUE tval);
-extern COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
-extern COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 extern void toggle_inven_equip(void);
 
 /*

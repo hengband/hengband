@@ -26,6 +26,7 @@
 #include "cmd-magiceat.h"
 #include "cmd-dump.h"
 #include "world.h"
+#include "player-inventory.h"
 #include "player-race.h"
 #include "player-status.h"
 #include "player-move.h"

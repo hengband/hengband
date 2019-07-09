@@ -26,6 +26,7 @@
 #include "player-class.h"
 #include "player-race.h"
 #include "player-effects.h"
+#include "player-inventory.h"
 #include "monster.h"
 #include "view-mainwindow.h"
 
