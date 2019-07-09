@@ -4015,30 +4015,30 @@ static void calc_alignment(void)
  * @return なし
  * @details
  */
-static void calc_hitpoints(void)
+static void calc_hitpoints(player_type *creature_ptr)
 {
 	int bonus, mhp;
 	byte tmp_hitdie;
 
 	/* Un-inflate "half-hitpoint bonus per level" value */
-	bonus = ((int)(adj_con_mhp[p_ptr->stat_ind[A_CON]]) - 128) * p_ptr->lev / 4;
+	bonus = ((int)(adj_con_mhp[creature_ptr->stat_ind[A_CON]]) - 128) * creature_ptr->lev / 4;
 
 	/* Calculate hitpoints */
-	mhp = p_ptr->player_hp[p_ptr->lev - 1];
+	mhp = creature_ptr->player_hp[creature_ptr->lev - 1];
 
-	if (p_ptr->mimic_form)
+	if (creature_ptr->mimic_form)
 	{
-		if (p_ptr->pclass == CLASS_SORCERER)
-			tmp_hitdie = mimic_info[p_ptr->mimic_form].r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		if (creature_ptr->pclass == CLASS_SORCERER)
+			tmp_hitdie = mimic_info[creature_ptr->mimic_form].r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		else
-			tmp_hitdie = mimic_info[p_ptr->mimic_form].r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		mhp = mhp * tmp_hitdie / p_ptr->hitdie;
+			tmp_hitdie = mimic_info[creature_ptr->mimic_form].r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		mhp = mhp * tmp_hitdie / creature_ptr->hitdie;
 	}
 
-	if (p_ptr->pclass == CLASS_SORCERER)
+	if (creature_ptr->pclass == CLASS_SORCERER)
 	{
-		if (p_ptr->lev < 30)
-			mhp = (mhp * (45 + p_ptr->lev) / 100);
+		if (creature_ptr->lev < 30)
+			mhp = (mhp * (45 + creature_ptr->lev) / 100);
 		else
 			mhp = (mhp * 75 / 100);
 		bonus = (bonus * 65 / 100);
@@ -4046,46 +4046,46 @@ static void calc_hitpoints(void)
 
 	mhp += bonus;
 
-	if (p_ptr->pclass == CLASS_BERSERKER)
+	if (creature_ptr->pclass == CLASS_BERSERKER)
 	{
-		mhp = mhp * (110 + (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 110)) / 100;
+		mhp = mhp * (110 + (((creature_ptr->lev + 40) * (creature_ptr->lev + 40) - 1550) / 110)) / 100;
 	}
 
 	/* Always have at least one hitpoint per level */
-	if (mhp < p_ptr->lev + 1) mhp = p_ptr->lev + 1;
+	if (mhp < creature_ptr->lev + 1) mhp = creature_ptr->lev + 1;
 
 	/* Factor in the hero / superhero settings */
 	if (IS_HERO()) mhp += 10;
-	if (p_ptr->shero && (p_ptr->pclass != CLASS_BERSERKER)) mhp += 30;
-	if (p_ptr->tsuyoshi) mhp += 50;
+	if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER)) mhp += 30;
+	if (creature_ptr->tsuyoshi) mhp += 50;
 
 	/* Factor in the hex spell settings */
 	if (hex_spelling(HEX_XTRA_MIGHT)) mhp += 15;
 	if (hex_spelling(HEX_BUILDING)) mhp += 60;
 
 	/* New maximum hitpoints */
-	if (p_ptr->mhp != mhp)
+	if (creature_ptr->mhp != mhp)
 	{
 		/* Enforce maximum */
-		if (p_ptr->chp >= mhp)
+		if (creature_ptr->chp >= mhp)
 		{
-			p_ptr->chp = mhp;
-			p_ptr->chp_frac = 0;
+			creature_ptr->chp = mhp;
+			creature_ptr->chp_frac = 0;
 		}
 
 #ifdef JP
 		/* レベルアップの時は上昇量を表示する */
-		if (p_ptr->level_up_message && (mhp > p_ptr->mhp))
+		if (creature_ptr->level_up_message && (mhp > creature_ptr->mhp))
 		{
-			msg_format("最大ヒット・ポイントが %d 増加した！", (mhp - p_ptr->mhp));
+			msg_format("最大ヒット・ポイントが %d 増加した！", (mhp - creature_ptr->mhp));
 		}
 #endif
 		/* Save the new max-hitpoints */
-		p_ptr->mhp = mhp;
+		creature_ptr->mhp = mhp;
 
 		/* Display hitpoints (later) */
-		p_ptr->redraw |= (PR_HP);
-		p_ptr->window |= (PW_PLAYER);
+		creature_ptr->redraw |= (PR_HP);
+		creature_ptr->window |= (PW_PLAYER);
 	}
 }
 
@@ -5020,7 +5020,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_HP))
 	{
 		creature_ptr->update &= ~(PU_HP);
-		calc_hitpoints();
+		calc_hitpoints(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_MANA))
