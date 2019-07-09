@@ -4522,7 +4522,7 @@ static void calc_spells(void)
  * @details
  * This function induces status messages.
  */
-static void calc_mana(void)
+static void calc_mana(player_type *creature_ptr)
 {
 	int msp, levels, cur_wgt, max_wgt;
 
@@ -4532,49 +4532,49 @@ static void calc_mana(void)
 	/* Hack -- Must be literate */
 	if (!mp_ptr->spell_book) return;
 
-	if ((p_ptr->pclass == CLASS_MINDCRAFTER) ||
-		(p_ptr->pclass == CLASS_MIRROR_MASTER) ||
-		(p_ptr->pclass == CLASS_BLUE_MAGE))
+	if ((creature_ptr->pclass == CLASS_MINDCRAFTER) ||
+		(creature_ptr->pclass == CLASS_MIRROR_MASTER) ||
+		(creature_ptr->pclass == CLASS_BLUE_MAGE))
 	{
-		levels = p_ptr->lev;
+		levels = creature_ptr->lev;
 	}
 	else
 	{
-		if (mp_ptr->spell_first > p_ptr->lev)
+		if (mp_ptr->spell_first > creature_ptr->lev)
 		{
 			/* Save new mana */
-			p_ptr->msp = 0;
+			creature_ptr->msp = 0;
 
 			/* Display mana later */
-			p_ptr->redraw |= (PR_MANA);
+			creature_ptr->redraw |= (PR_MANA);
 			return;
 		}
 
 		/* Extract "effective" player level */
-		levels = (p_ptr->lev - mp_ptr->spell_first) + 1;
+		levels = (creature_ptr->lev - mp_ptr->spell_first) + 1;
 	}
 
-	if (p_ptr->pclass == CLASS_SAMURAI)
+	if (creature_ptr->pclass == CLASS_SAMURAI)
 	{
-		msp = (adj_mag_mana[p_ptr->stat_ind[mp_ptr->spell_stat]] + 10) * 2;
+		msp = (adj_mag_mana[creature_ptr->stat_ind[mp_ptr->spell_stat]] + 10) * 2;
 		if (msp) msp += (msp * rp_ptr->r_adj[mp_ptr->spell_stat] / 20);
 	}
 	else
 	{
 		/* Extract total mana */
-		msp = adj_mag_mana[p_ptr->stat_ind[mp_ptr->spell_stat]] * (levels + 3) / 4;
+		msp = adj_mag_mana[creature_ptr->stat_ind[mp_ptr->spell_stat]] * (levels + 3) / 4;
 
 		/* Hack -- usually add one mana */
 		if (msp) msp++;
 
 		if (msp) msp += (msp * rp_ptr->r_adj[mp_ptr->spell_stat] / 20);
 
-		if (msp && (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)) msp += msp / 2;
+		if (msp && (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)) msp += msp / 2;
 
 		/* Hack: High mages have a 25% mana bonus */
-		if (msp && (p_ptr->pclass == CLASS_HIGH_MAGE)) msp += msp / 4;
+		if (msp && (creature_ptr->pclass == CLASS_HIGH_MAGE)) msp += msp / 4;
 
-		if (msp && (p_ptr->pclass == CLASS_SORCERER)) msp += msp * (25 + p_ptr->lev) / 100;
+		if (msp && (creature_ptr->pclass == CLASS_SORCERER)) msp += msp * (25 + creature_ptr->lev) / 100;
 	}
 
 	/* Only mages are affected */
@@ -4583,10 +4583,10 @@ static void calc_mana(void)
 		BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 		/* Assume player is not encumbered by gloves */
-		p_ptr->cumber_glove = FALSE;
+		creature_ptr->cumber_glove = FALSE;
 
 		/* Get the gloves */
-		o_ptr = &p_ptr->inventory_list[INVEN_HANDS];
+		o_ptr = &creature_ptr->inventory_list[INVEN_HANDS];
 
 		/* Examine the gloves */
 		object_flags(o_ptr, flgs);
@@ -4600,7 +4600,7 @@ static void calc_mana(void)
 			!((have_flag(flgs, TR_DEX)) && (o_ptr->pval > 0)))
 		{
 			/* Encumbered */
-			p_ptr->cumber_glove = TRUE;
+			creature_ptr->cumber_glove = TRUE;
 
 			/* Reduce mana */
 			msp = (3 * msp) / 4;
@@ -4609,20 +4609,20 @@ static void calc_mana(void)
 
 
 	/* Assume player not encumbered by armor */
-	p_ptr->cumber_armor = FALSE;
+	creature_ptr->cumber_armor = FALSE;
 
 	/* Weigh the armor */
 	cur_wgt = 0;
-	if (p_ptr->inventory_list[INVEN_RARM].tval > TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_RARM].weight;
-	if (p_ptr->inventory_list[INVEN_LARM].tval > TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_LARM].weight;
-	cur_wgt += p_ptr->inventory_list[INVEN_BODY].weight;
-	cur_wgt += p_ptr->inventory_list[INVEN_HEAD].weight;
-	cur_wgt += p_ptr->inventory_list[INVEN_OUTER].weight;
-	cur_wgt += p_ptr->inventory_list[INVEN_HANDS].weight;
-	cur_wgt += p_ptr->inventory_list[INVEN_FEET].weight;
+	if (creature_ptr->inventory_list[INVEN_RARM].tval > TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_RARM].weight;
+	if (creature_ptr->inventory_list[INVEN_LARM].tval > TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_LARM].weight;
+	cur_wgt += creature_ptr->inventory_list[INVEN_BODY].weight;
+	cur_wgt += creature_ptr->inventory_list[INVEN_HEAD].weight;
+	cur_wgt += creature_ptr->inventory_list[INVEN_OUTER].weight;
+	cur_wgt += creature_ptr->inventory_list[INVEN_HANDS].weight;
+	cur_wgt += creature_ptr->inventory_list[INVEN_FEET].weight;
 
 	/* Subtract a percentage of maximum mana. */
-	switch (p_ptr->pclass)
+	switch (creature_ptr->pclass)
 	{
 		/* For these classes, mana is halved if armour
 		 * is 30 pounds over their weight limit. */
@@ -4633,8 +4633,8 @@ static void calc_mana(void)
 	case CLASS_FORCETRAINER:
 	case CLASS_SORCERER:
 	{
-		if (p_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_RARM].weight;
-		if (p_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_LARM].weight;
+		if (creature_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_RARM].weight;
+		if (creature_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_LARM].weight;
 		break;
 	}
 
@@ -4643,8 +4643,8 @@ static void calc_mana(void)
 	case CLASS_BARD:
 	case CLASS_TOURIST:
 	{
-		if (p_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_RARM].weight * 2 / 3;
-		if (p_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_LARM].weight * 2 / 3;
+		if (creature_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_RARM].weight * 2 / 3;
+		if (creature_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_LARM].weight * 2 / 3;
 		break;
 	}
 
@@ -4652,8 +4652,8 @@ static void calc_mana(void)
 	case CLASS_BEASTMASTER:
 	case CLASS_MIRROR_MASTER:
 	{
-		if (p_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_RARM].weight / 2;
-		if (p_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_LARM].weight / 2;
+		if (creature_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_RARM].weight / 2;
+		if (creature_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_LARM].weight / 2;
 		break;
 	}
 
@@ -4663,8 +4663,8 @@ static void calc_mana(void)
 	case CLASS_RED_MAGE:
 	case CLASS_WARRIOR_MAGE:
 	{
-		if (p_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_RARM].weight / 3;
-		if (p_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_LARM].weight / 3;
+		if (creature_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_RARM].weight / 3;
+		if (creature_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_LARM].weight / 3;
 		break;
 	}
 
@@ -4672,8 +4672,8 @@ static void calc_mana(void)
 	case CLASS_PALADIN:
 	case CLASS_CHAOS_WARRIOR:
 	{
-		if (p_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_RARM].weight / 5;
-		if (p_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += p_ptr->inventory_list[INVEN_LARM].weight / 5;
+		if (creature_ptr->inventory_list[INVEN_RARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_RARM].weight / 5;
+		if (creature_ptr->inventory_list[INVEN_LARM].tval <= TV_SWORD) cur_wgt += creature_ptr->inventory_list[INVEN_LARM].weight / 5;
 		break;
 	}
 
@@ -4691,10 +4691,10 @@ static void calc_mana(void)
 	if ((cur_wgt - max_wgt) > 0)
 	{
 		/* Encumbered */
-		p_ptr->cumber_armor = TRUE;
+		creature_ptr->cumber_armor = TRUE;
 
 		/* Subtract a percentage of maximum mana. */
-		switch (p_ptr->pclass)
+		switch (creature_ptr->pclass)
 		{
 			/* For these classes, mana is halved if armour
 			 * is 30 pounds over their weight limit. */
@@ -4746,7 +4746,7 @@ static void calc_mana(void)
 
 		case CLASS_SAMURAI:
 		{
-			p_ptr->cumber_armor = FALSE;
+			creature_ptr->cumber_armor = FALSE;
 			break;
 		}
 
@@ -4764,28 +4764,28 @@ static void calc_mana(void)
 
 
 	/* Maximum mana has changed */
-	if (p_ptr->msp != msp)
+	if (creature_ptr->msp != msp)
 	{
 		/* Enforce maximum */
-		if ((p_ptr->csp >= msp) && (p_ptr->pclass != CLASS_SAMURAI))
+		if ((creature_ptr->csp >= msp) && (creature_ptr->pclass != CLASS_SAMURAI))
 		{
-			p_ptr->csp = msp;
-			p_ptr->csp_frac = 0;
+			creature_ptr->csp = msp;
+			creature_ptr->csp_frac = 0;
 		}
 
 #ifdef JP
 		/* レベルアップの時は上昇量を表示する */
-		if (p_ptr->level_up_message && (msp > p_ptr->msp))
+		if (creature_ptr->level_up_message && (msp > creature_ptr->msp))
 		{
-			msg_format("最大マジック・ポイントが %d 増加した！", (msp - p_ptr->msp));
+			msg_format("最大マジック・ポイントが %d 増加した！", (msp - creature_ptr->msp));
 		}
 #endif
 		/* Save new mana */
-		p_ptr->msp = msp;
+		creature_ptr->msp = msp;
 
 		/* Display mana later */
-		p_ptr->redraw |= (PR_MANA);
-		p_ptr->window |= (PW_PLAYER | PW_SPELL);
+		creature_ptr->redraw |= (PR_MANA);
+		creature_ptr->window |= (PW_PLAYER | PW_SPELL);
 	}
 
 
@@ -4793,9 +4793,9 @@ static void calc_mana(void)
 	if (current_world_ptr->character_xtra) return;
 
 	/* Take note when "glove state" changes */
-	if (p_ptr->old_cumber_glove != p_ptr->cumber_glove)
+	if (creature_ptr->old_cumber_glove != creature_ptr->cumber_glove)
 	{
-		if (p_ptr->cumber_glove)
+		if (creature_ptr->cumber_glove)
 		{
 			msg_print(_("手が覆われて呪文が唱えにくい感じがする。", "Your covered hands feel unsuitable for spellcasting."));
 		}
@@ -4805,14 +4805,14 @@ static void calc_mana(void)
 		}
 
 		/* Save it */
-		p_ptr->old_cumber_glove = p_ptr->cumber_glove;
+		creature_ptr->old_cumber_glove = creature_ptr->cumber_glove;
 	}
 
 
 	/* Take note when "armor state" changes */
-	if (p_ptr->old_cumber_armor != p_ptr->cumber_armor)
+	if (creature_ptr->old_cumber_armor != creature_ptr->cumber_armor)
 	{
-		if (p_ptr->cumber_armor)
+		if (creature_ptr->cumber_armor)
 		{
 			msg_print(_("装備の重さで動きが鈍くなってしまっている。", "The weight of your equipment encumbers your movement."));
 		}
@@ -4822,7 +4822,7 @@ static void calc_mana(void)
 		}
 
 		/* Save it */
-		p_ptr->old_cumber_armor = p_ptr->cumber_armor;
+		creature_ptr->old_cumber_armor = creature_ptr->cumber_armor;
 	}
 }
 
@@ -5026,7 +5026,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_MANA))
 	{
 		creature_ptr->update &= ~(PU_MANA);
-		calc_mana();
+		calc_mana(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_SPELLS))
