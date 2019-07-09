@@ -4095,7 +4095,7 @@ static void calc_hitpoints(player_type *creature_ptr)
  * @details
  * SWD: Experimental modification: multiple light sources have additive effect.
  */
-static void calc_torch(void)
+static void calc_torch(player_type *creature_ptr)
 {
 	int i;
 	POSITION rad;
@@ -4103,16 +4103,16 @@ static void calc_torch(void)
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Assume no light */
-	p_ptr->cur_lite = 0;
+	creature_ptr->cur_lite = 0;
 
 	/* Loop through all wielded items */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
 
-		if (o_ptr->name2 == EGO_LITE_SHINE) p_ptr->cur_lite++;
+		if (o_ptr->name2 == EGO_LITE_SHINE) creature_ptr->cur_lite++;
 
 		/* Need Fuels */
 		if (o_ptr->name2 != EGO_LITE_DARKNESS)
@@ -4134,35 +4134,35 @@ static void calc_torch(void)
 		if (have_flag(flgs, TR_LITE_M1)) rad -= 1;
 		if (have_flag(flgs, TR_LITE_M2)) rad -= 2;
 		if (have_flag(flgs, TR_LITE_M3)) rad -= 3;
-		p_ptr->cur_lite += rad;
+		creature_ptr->cur_lite += rad;
 	}
 
 	/* max radius is 14 (was 5) without rewriting other code -- */
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS && p_ptr->cur_lite > 1)
-		p_ptr->cur_lite = 1;
+	if (d_info[creature_ptr->dungeon_idx].flags1 & DF1_DARKNESS && creature_ptr->cur_lite > 1)
+		creature_ptr->cur_lite = 1;
 
 	/*
 	 * check if the player doesn't have light radius,
 	 * but does weakly glow as an intrinsic.
 	 */
-	if (p_ptr->cur_lite <= 0 && p_ptr->lite) p_ptr->cur_lite++;
+	if (creature_ptr->cur_lite <= 0 && creature_ptr->lite) creature_ptr->cur_lite++;
 
-	if (p_ptr->cur_lite > 14) p_ptr->cur_lite = 14;
-	if (p_ptr->cur_lite < 0) p_ptr->cur_lite = 0;
+	if (creature_ptr->cur_lite > 14) creature_ptr->cur_lite = 14;
+	if (creature_ptr->cur_lite < 0) creature_ptr->cur_lite = 0;
 
 	/* end experimental mods */
 
 	/* Notice changes in the "lite radius" */
-	if (p_ptr->old_lite != p_ptr->cur_lite)
+	if (creature_ptr->old_lite != creature_ptr->cur_lite)
 	{
 		/* Hack -- PU_MON_LITE for monsters' darkness */
-		p_ptr->update |= (PU_LITE | PU_MON_LITE | PU_MONSTERS);
+		creature_ptr->update |= (PU_LITE | PU_MON_LITE | PU_MONSTERS);
 
 		/* Remember the old lite */
-		p_ptr->old_lite = p_ptr->cur_lite;
+		creature_ptr->old_lite = creature_ptr->cur_lite;
 
-		if ((p_ptr->cur_lite > 0) && (p_ptr->special_defense & NINJA_S_STEALTH))
-			set_superstealth(p_ptr, FALSE);
+		if ((creature_ptr->cur_lite > 0) && (creature_ptr->special_defense & NINJA_S_STEALTH))
+			set_superstealth(creature_ptr, FALSE);
 	}
 }
 
@@ -5014,7 +5014,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_TORCH))
 	{
 		creature_ptr->update &= ~(PU_TORCH);
-		calc_torch();
+		calc_torch(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_HP))
