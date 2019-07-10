@@ -656,7 +656,7 @@ void do_cmd_browse(void)
 
 	if (p_ptr->pclass == CLASS_FORCETRAINER)
 	{
-		if (player_has_no_spellbooks())
+		if (player_has_no_spellbooks(p_ptr))
 		{
 			confirm_use_force(TRUE);
 			return;
@@ -1095,7 +1095,7 @@ void do_cmd_cast(void)
 
 	if (p_ptr->pclass == CLASS_FORCETRAINER)
 	{
-		if (player_has_no_spellbooks())
+		if (player_has_no_spellbooks(p_ptr))
 		{
 			confirm_use_force(FALSE);
 			return;
