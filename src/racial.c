@@ -463,7 +463,7 @@ static bool cmd_racial_power_aux(s32b command)
 		}
 		case CLASS_MONK:
 		{
-			if (!(empty_hands(TRUE) & EMPTY_HAND_RARM))
+			if (!(empty_hands(p_ptr, TRUE) & EMPTY_HAND_RARM))
 			{
 				msg_print(_("素手じゃないとできません。", "You need to be bare hand."));
 				return FALSE;

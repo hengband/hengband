@@ -738,7 +738,7 @@ extern bool is_heavy_shoot(object_type *o_ptr);
 
 extern bool heavy_armor(player_type *creature_ptr);
 extern void update_creature(player_type *creature_ptr);
-extern BIT_FLAGS16 empty_hands(bool riding_control);
+extern BIT_FLAGS16 empty_hands(player_type *creature_ptr, bool riding_control);
 extern bool player_has_no_spellbooks(player_type *creature_ptr);
 
 extern void take_turn(player_type *creature_ptr, PERCENTAGE need_cost);

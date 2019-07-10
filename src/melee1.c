@@ -1342,7 +1342,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 	case CLASS_MONK:
 	case CLASS_FORCETRAINER:
 	case CLASS_BERSERKER:
-		if ((empty_hands(TRUE) & EMPTY_HAND_RARM) && !p_ptr->riding) monk_attack = TRUE;
+		if ((empty_hands(p_ptr, TRUE) & EMPTY_HAND_RARM) && !p_ptr->riding) monk_attack = TRUE;
 		break;
 	}
 
@@ -2186,7 +2186,7 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 		!(p_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES)))
 	{
 		msg_format(_("%s攻撃できない。", "You cannot do attacking."),
-			(empty_hands(FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
+			(empty_hands(p_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
 		return FALSE;
 	}
 

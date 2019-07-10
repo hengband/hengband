@@ -406,14 +406,14 @@ void do_cmd_wield(void)
 	switch (slot)
 	{
 	case INVEN_RARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_LARM) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(p_ptr, FALSE) == EMPTY_HAND_LARM) && CAN_TWO_HANDS_WIELDING())
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_LARM : STR_WIELD_RARM);
 		break;
 
 	case INVEN_LARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(FALSE) == EMPTY_HAND_RARM) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(p_ptr, FALSE) == EMPTY_HAND_RARM) && CAN_TWO_HANDS_WIELDING())
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_RARM : STR_WIELD_LARM);
@@ -506,7 +506,7 @@ void kamaenaoshi(INVENTORY_IDX item)
 			if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 				msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 		}
-		else if (!(empty_hands(FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
+		else if (!(empty_hands(p_ptr, FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
 		{
 			new_o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 			object_copy(new_o_ptr, o_ptr);

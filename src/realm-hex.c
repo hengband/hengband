@@ -613,7 +613,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("あなたの武器が黒く輝いた。");
 #else
-			if (!empty_hands(FALSE))
+			if (!empty_hands(p_ptr, FALSE))
 				msg_print("Your weapons glow bright black.");
 			else
 				msg_print("Your weapon glows bright black.");
@@ -624,7 +624,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("武器の輝きが消え去った。");
 #else
-			msg_format("Brightness of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
+			msg_format("Brightness of weapon%s disappeared.", (empty_hands(p_ptr, FALSE)) ? "" : "s");
 #endif
 		}
 		break;
@@ -974,7 +974,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("あなたの武器が血を欲している。");
 #else
-			if (!empty_hands(FALSE))
+			if (!empty_hands(p_ptr, FALSE))
 				msg_print("Your weapons want more blood now.");
 			else
 				msg_print("Your weapon wants more blood now.");
@@ -985,7 +985,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("武器の渇望が消え去った。");
 #else
-			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(FALSE)) ? "" : "s");
+			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(p_ptr, FALSE)) ? "" : "s");
 #endif
 		}
 		break;
