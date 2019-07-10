@@ -3369,7 +3369,7 @@ bool shock_power(void)
 	HIT_POINT dam;
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int boost = P_PTR_KI;
-	if (heavy_armor()) boost /= 2;
+	if (heavy_armor(p_ptr)) boost /= 2;
 
 	project_length = 1;
 	if (!get_aim_dir(&dir)) return FALSE;

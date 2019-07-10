@@ -592,7 +592,7 @@ void mindcraft_info(char *p, int use_mind, int power)
 	{
 		int boost = P_PTR_KI;
 
-		if (heavy_armor()) boost /= 2;
+		if (heavy_armor(p_ptr)) boost /= 2;
 
 		switch (power)
 		{
@@ -891,7 +891,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 
 						if (use_mind == MIND_KI)
 						{
-							if (heavy_armor()) chance += 20;
+							if (heavy_armor(p_ptr)) chance += 20;
 							if (p_ptr->icky_wield[0]) chance += 20;
 							else if (has_weapon[0]) chance += 10;
 							if (p_ptr->icky_wield[1]) chance += 20;
@@ -924,7 +924,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 
 						if (use_mind == MIND_KI)
 						{
-							if (heavy_armor()) chance += 5;
+							if (heavy_armor(p_ptr)) chance += 5;
 							if (p_ptr->icky_wield[0]) chance += 5;
 							if (p_ptr->icky_wield[1]) chance += 5;
 						}
@@ -1195,7 +1195,7 @@ static bool cast_force_spell(int spell)
 	PLAYER_LEVEL plev = p_ptr->lev;
 	int boost = P_PTR_KI;
 
-	if (heavy_armor()) boost /= 2;
+	if (heavy_armor(p_ptr)) boost /= 2;
 
 	/* spell code */
 	switch (spell)
@@ -1809,7 +1809,7 @@ void do_cmd_mind(void)
 	mana_cost = spell.mana_cost;
 	if (use_mind == MIND_KI)
 	{
-		if (heavy_armor()) chance += 20;
+		if (heavy_armor(p_ptr)) chance += 20;
 		if (p_ptr->icky_wield[0]) chance += 20;
 		else if (has_melee_weapon(INVEN_RARM)) chance += 10;
 		if (p_ptr->icky_wield[1]) chance += 20;
@@ -1871,7 +1871,7 @@ void do_cmd_mind(void)
 
 		if (use_mind == MIND_KI)
 		{
-			if (heavy_armor()) chance += 5;
+			if (heavy_armor(p_ptr)) chance += 5;
 			if (p_ptr->icky_wield[0]) chance += 5;
 			if (p_ptr->icky_wield[1]) chance += 5;
 		}

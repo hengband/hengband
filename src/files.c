@@ -2295,13 +2295,13 @@ static void player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 		break;
 	case CLASS_MONK:
 	case CLASS_FORCETRAINER:
-		if ((p_ptr->lev > 9) && !heavy_armor())
+		if ((p_ptr->lev > 9) && !heavy_armor(p_ptr))
 			add_flag(flgs, TR_SPEED);
-		if ((p_ptr->lev>24) && !heavy_armor())
+		if ((p_ptr->lev>24) && !heavy_armor(p_ptr))
 			add_flag(flgs, TR_FREE_ACT);
 		break;
 	case CLASS_NINJA:
-		if (heavy_armor())
+		if (heavy_armor(p_ptr))
 			add_flag(flgs, TR_SPEED);
 		else
 		{
