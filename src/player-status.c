@@ -3065,7 +3065,7 @@ void calc_bonuses(void)
 	if (!p_ptr->riding)
 	{
 		/* Extract the "weight limit" (in tenth pounds) */
-		i = (int)weight_limit();
+		i = (int)weight_limit(p_ptr);
 	}
 	else
 	{
@@ -4910,13 +4910,13 @@ s16b calc_num_fire(object_type *o_ptr)
  * Computes current weight limit.
  * @return 制限重量(ポンド)
  */
-WEIGHT weight_limit(void)
+WEIGHT weight_limit(player_type *creature_ptr)
 {
 	WEIGHT i;
 
 	/* Weight limit based only on strength */
-	i = (WEIGHT)adj_str_wgt[p_ptr->stat_ind[A_STR]] * 50; /* Constant was 100 */
-	if (p_ptr->pclass == CLASS_BERSERKER) i = i * 3 / 2;
+	i = (WEIGHT)adj_str_wgt[creature_ptr->stat_ind[A_STR]] * 50; /* Constant was 100 */
+	if (creature_ptr->pclass == CLASS_BERSERKER) i = i * 3 / 2;
 
 	/* Return the result */
 	return i;

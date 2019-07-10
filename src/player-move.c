@@ -1616,7 +1616,7 @@ static bool run_test(void)
 
 				/* Deep water */
 				else if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-				         (p_ptr->levitation || p_ptr->can_swim || (p_ptr->total_weight <= weight_limit())))
+				         (p_ptr->levitation || p_ptr->can_swim || (p_ptr->total_weight <= weight_limit(p_ptr))))
 				{
 					/* Ignore */
 					notice = FALSE;

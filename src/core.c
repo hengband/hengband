@@ -1627,7 +1627,7 @@ static void process_world_aux_hp_and_sp(void)
 	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
 	    !p_ptr->levitation && !p_ptr->can_swim && !p_ptr->resist_water)
 	{
-		if (p_ptr->total_weight > weight_limit())
+		if (p_ptr->total_weight > weight_limit(p_ptr))
 		{
 			msg_print(_("溺れている！", "You are drowning!"));
 			take_hit(p_ptr, DAMAGE_NOESCAPE, randint1(p_ptr->lev), _("溺れ", "drowning"), -1);
