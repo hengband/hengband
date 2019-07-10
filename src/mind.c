@@ -864,8 +864,8 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 				put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
 					((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y, x + 35);
 
-				has_weapon[0] = has_melee_weapon(INVEN_RARM);
-				has_weapon[1] = has_melee_weapon(INVEN_LARM);
+				has_weapon[0] = has_melee_weapon(p_ptr, INVEN_RARM);
+				has_weapon[1] = has_melee_weapon(p_ptr, INVEN_LARM);
 
 				/* Dump the spells */
 				for (i = 0; i < MAX_MIND_POWERS; i++)
@@ -1811,9 +1811,9 @@ void do_cmd_mind(void)
 	{
 		if (heavy_armor(p_ptr)) chance += 20;
 		if (p_ptr->icky_wield[0]) chance += 20;
-		else if (has_melee_weapon(INVEN_RARM)) chance += 10;
+		else if (has_melee_weapon(p_ptr, INVEN_RARM)) chance += 10;
 		if (p_ptr->icky_wield[1]) chance += 20;
-		else if (has_melee_weapon(INVEN_LARM)) chance += 10;
+		else if (has_melee_weapon(p_ptr, INVEN_LARM)) chance += 10;
 		if (n == 5)
 		{
 			int j;

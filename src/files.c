@@ -1752,7 +1752,7 @@ static void display_player_melee_bonus(int hand, int hand_entry)
 	sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
 
 	/* Dump the bonuses to hit/dam */
-	if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
+	if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
 		display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
 	else if (p_ptr->ryoute)
 		display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);

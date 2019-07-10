@@ -4019,7 +4019,7 @@ void calc_android_exp(player_type *creature_ptr)
 			if (value > 100000L)
 				exp += (value - 100000L) / 4  * level;
 		}
-		if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (has_melee_weapon(i))) || (i == INVEN_BOW)) total_exp += exp / 48;
+		if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (has_melee_weapon(p_ptr, i))) || (i == INVEN_BOW)) total_exp += exp / 48;
 		else total_exp += exp / 16;
 		if (i == INVEN_BODY) total_exp += exp / 32;
 	}
@@ -4216,7 +4216,7 @@ bool choose_ele_attack(player_type *creature_ptr)
 
 	char choice;
 
-	if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
+	if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
 	{
 		msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
 		return FALSE;

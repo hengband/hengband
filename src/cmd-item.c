@@ -203,7 +203,7 @@ void do_cmd_wield(void)
 	case TV_SHIELD:
 	case TV_CARD:
 		/* Dual wielding */
-		if (has_melee_weapon(INVEN_RARM) && has_melee_weapon(INVEN_LARM))
+		if (has_melee_weapon(p_ptr, INVEN_RARM) && has_melee_weapon(p_ptr, INVEN_LARM))
 		{
 			/* Restrict the choices */
 			item_tester_hook = item_tester_hook_melee_weapon;
@@ -215,7 +215,7 @@ void do_cmd_wield(void)
 			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
 		}
 
-		else if (has_melee_weapon(INVEN_LARM)) slot = INVEN_RARM;
+		else if (has_melee_weapon(p_ptr, INVEN_LARM)) slot = INVEN_RARM;
 
 		/* Both arms are already used by non-weapon */
 		else if (p_ptr->inventory_list[INVEN_RARM].k_idx && !object_is_melee_weapon(&p_ptr->inventory_list[INVEN_RARM]) &&
@@ -242,7 +242,7 @@ void do_cmd_wield(void)
 			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_RARM;
 		}
 
-		else if (!p_ptr->inventory_list[INVEN_RARM].k_idx && has_melee_weapon(INVEN_LARM))
+		else if (!p_ptr->inventory_list[INVEN_RARM].k_idx && has_melee_weapon(p_ptr, INVEN_LARM))
 		{
 			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_LARM;
 		}
@@ -258,7 +258,7 @@ void do_cmd_wield(void)
 			s = _("おっと。", "Oops.");
 			
 			if (!choose_object(&slot, q, s, (USE_EQUIP), 0)) return;
-			if ((slot == INVEN_LARM) && !has_melee_weapon(INVEN_RARM))
+			if ((slot == INVEN_LARM) && !has_melee_weapon(p_ptr, INVEN_RARM))
 				need_switch_wielding = INVEN_RARM;
 		}
 		break;
@@ -471,7 +471,7 @@ void kamaenaoshi(INVENTORY_IDX item)
 
 	if (item == INVEN_RARM)
 	{
-		if (has_melee_weapon(INVEN_LARM))
+		if (has_melee_weapon(p_ptr, INVEN_LARM))
 		{
 			o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 			object_desc(o_name, o_ptr, 0);
@@ -501,7 +501,7 @@ void kamaenaoshi(INVENTORY_IDX item)
 		o_ptr = &p_ptr->inventory_list[INVEN_RARM];
 		if (o_ptr->k_idx) object_desc(o_name, o_ptr, 0);
 
-		if (has_melee_weapon(INVEN_RARM))
+		if (has_melee_weapon(p_ptr, INVEN_RARM))
 		{
 			if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 				msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);

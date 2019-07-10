@@ -319,7 +319,7 @@ void do_cmd_hissatsu(void)
 	magic_type      spell;
 
 	if (cmd_limit_confused(p_ptr)) return;
-	if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
+	if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
 	{
 		if (flush_failure) flush();
 		msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));

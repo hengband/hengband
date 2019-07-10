@@ -4126,8 +4126,8 @@ HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
 	int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
 	object_type *o_ptr = NULL;
 
-	if (has_melee_weapon(INVEN_RARM)) o_ptr = &p_ptr->inventory_list[INVEN_RARM];
-	else if (has_melee_weapon(INVEN_LARM)) o_ptr = &p_ptr->inventory_list[INVEN_LARM];
+	if (has_melee_weapon(p_ptr, INVEN_RARM)) o_ptr = &p_ptr->inventory_list[INVEN_RARM];
+	else if (has_melee_weapon(p_ptr, INVEN_LARM)) o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 
 	if (o_ptr)
 	{

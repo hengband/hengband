@@ -491,15 +491,15 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
 		case REW_CURSE_WP:
 
-			if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM)) break;
+			if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM)) break;
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
 			dummy = INVEN_RARM;
-			if (has_melee_weapon(INVEN_LARM))
+			if (has_melee_weapon(p_ptr, INVEN_LARM))
 			{
 				dummy = INVEN_LARM;
-				if (has_melee_weapon(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+				if (has_melee_weapon(p_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 			}
 			object_desc(o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
 			(void)curse_weapon(FALSE, dummy);
@@ -535,12 +535,12 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			case 3:
 				if (one_in_(2))
 				{
-					if (!has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM)) break;
+					if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM)) break;
 					dummy = INVEN_RARM;
-					if (has_melee_weapon(INVEN_LARM))
+					if (has_melee_weapon(p_ptr, INVEN_LARM))
 					{
 						dummy = INVEN_LARM;
-						if (has_melee_weapon(INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+						if (has_melee_weapon(p_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 					}
 					object_desc(o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
 					(void)curse_weapon(FALSE, dummy);
@@ -580,12 +580,12 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			{
 				dummy = 0;
 
-				if (has_melee_weapon(INVEN_RARM))
+				if (has_melee_weapon(p_ptr, INVEN_RARM))
 				{
 					dummy = INVEN_RARM;
-					if (has_melee_weapon(INVEN_LARM) && one_in_(2)) dummy = INVEN_LARM;
+					if (has_melee_weapon(p_ptr, INVEN_LARM) && one_in_(2)) dummy = INVEN_LARM;
 				}
-				else if (has_melee_weapon(INVEN_LARM)) dummy = INVEN_LARM;
+				else if (has_melee_weapon(p_ptr, INVEN_LARM)) dummy = INVEN_LARM;
 
 				if (dummy) (void)curse_weapon(FALSE, dummy);
 			}

@@ -2562,18 +2562,18 @@ static void process_world_aux_mutation(void)
 		take_hit(p_ptr, DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), _("転倒", "tripping"), -1);
 
 		msg_print(NULL);
-		if (has_melee_weapon(INVEN_RARM))
+		if (has_melee_weapon(p_ptr, INVEN_RARM))
 		{
 			slot = INVEN_RARM;
 			o_ptr = &p_ptr->inventory_list[INVEN_RARM];
 
-			if (has_melee_weapon(INVEN_LARM) && one_in_(2))
+			if (has_melee_weapon(p_ptr, INVEN_LARM) && one_in_(2))
 			{
 				o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 				slot = INVEN_LARM;
 			}
 		}
-		else if (has_melee_weapon(INVEN_LARM))
+		else if (has_melee_weapon(p_ptr, INVEN_LARM))
 		{
 			o_ptr = &p_ptr->inventory_list[INVEN_LARM];
 			slot = INVEN_LARM;

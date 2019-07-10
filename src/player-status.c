@@ -1565,8 +1565,8 @@ void calc_bonuses(void)
 	/* Base skill -- digging */
 	p_ptr->skill_dig = 0;
 
-	if (has_melee_weapon(INVEN_RARM)) p_ptr->migite = TRUE;
-	if (has_melee_weapon(INVEN_LARM))
+	if (has_melee_weapon(p_ptr, INVEN_RARM)) p_ptr->migite = TRUE;
+	if (has_melee_weapon(p_ptr, INVEN_LARM))
 	{
 		p_ptr->hidarite = TRUE;
 		if (!p_ptr->migite) default_hand = 1;
@@ -2503,8 +2503,8 @@ void calc_bonuses(void)
 		}
 
 		/* Hack -- do not apply "weapon" bonuses */
-		if (i == INVEN_RARM && has_melee_weapon(i)) continue;
-		if (i == INVEN_LARM && has_melee_weapon(i)) continue;
+		if (i == INVEN_RARM && has_melee_weapon(p_ptr, i)) continue;
+		if (i == INVEN_LARM && has_melee_weapon(p_ptr, i)) continue;
 
 		/* Hack -- do not apply "bow" bonuses */
 		if (i == INVEN_BOW) continue;
@@ -3014,7 +3014,7 @@ void calc_bonuses(void)
 		p_ptr->dis_to_h[default_hand] += (p_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
 	}
 
-	if (has_melee_weapon(INVEN_RARM) && has_melee_weapon(INVEN_LARM))
+	if (has_melee_weapon(p_ptr, INVEN_RARM) && has_melee_weapon(p_ptr, INVEN_LARM))
 	{
 		int penalty1, penalty2;
 		penalty1 = ((100 - p_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - p_ptr->inventory_list[INVEN_RARM].weight) / 8);
@@ -3194,7 +3194,7 @@ void calc_bonuses(void)
 		p_ptr->icky_wield[i] = FALSE;
 		p_ptr->riding_wield[i] = FALSE;
 
-		if (!has_melee_weapon(INVEN_RARM + i))
+		if (!has_melee_weapon(p_ptr, INVEN_RARM + i))
 		{
 			p_ptr->num_blow[i] = 1;
 			continue;
@@ -3465,7 +3465,7 @@ void calc_bonuses(void)
 			case CLASS_MONK:
 			case CLASS_FORCETRAINER:
 			case CLASS_BERSERKER:
-				if ((empty_hands(p_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(INVEN_RARM) && !has_melee_weapon(INVEN_LARM))
+				if ((empty_hands(p_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
 					p_ptr->riding_ryoute = TRUE;
 				break;
 			}
@@ -3581,7 +3581,7 @@ void calc_bonuses(void)
 
 	for (i = 0; i < 2; i++)
 	{
-		if (has_melee_weapon(INVEN_RARM + i))
+		if (has_melee_weapon(p_ptr, INVEN_RARM + i))
 		{
 			OBJECT_TYPE_VALUE tval = p_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
 			OBJECT_SUBTYPE_VALUE sval = p_ptr->inventory_list[INVEN_RARM + i].sval;
@@ -3763,7 +3763,7 @@ void calc_bonuses(void)
 			{
 				msg_print(_("こんな重い武器を装備しているのは大変だ。", "You have trouble wielding such a heavy weapon."));
 			}
-			else if (has_melee_weapon(INVEN_RARM + i))
+			else if (has_melee_weapon(p_ptr, INVEN_RARM + i))
 			{
 				msg_print(_("これなら装備していても辛くない。", "You have no trouble wielding your weapon."));
 			}
@@ -3791,7 +3791,7 @@ void calc_bonuses(void)
 			{
 				msg_print(_("この武器は徒歩で使いやすい。", "This weapon was not suitable for use while riding."));
 			}
-			else if (has_melee_weapon(INVEN_RARM + i))
+			else if (has_melee_weapon(p_ptr, INVEN_RARM + i))
 			{
 				msg_print(_("これなら乗馬中にぴったりだ。", "This weapon is suitable for use while riding."));
 			}
@@ -3810,7 +3810,7 @@ void calc_bonuses(void)
 					chg_virtue(p_ptr, V_FAITH, -1);
 				}
 			}
-			else if (has_melee_weapon(INVEN_RARM + i))
+			else if (has_melee_weapon(p_ptr, INVEN_RARM + i))
 			{
 				msg_print(_("今の装備は自分にふさわしい気がする。", "You feel comfortable with your weapon."));
 			}
@@ -3963,7 +3963,7 @@ static void calc_alignment(void)
 
 	for (i = 0; i < 2; i++)
 	{
-		if (has_melee_weapon(INVEN_RARM + i))
+		if (has_melee_weapon(p_ptr, INVEN_RARM + i))
 		{
 			if (p_ptr->inventory_list[INVEN_RARM + i].name1 == ART_IRON_BALL) p_ptr->align -= 1000;
 		}
@@ -4927,9 +4927,9 @@ WEIGHT weight_limit(void)
  * @param i 判定する手のID(右手:0 左手:1)
  * @return 持っているならばTRUE
  */
-bool has_melee_weapon(int i)
+bool has_melee_weapon(player_type *creature_ptr, int i)
 {
-	return ((p_ptr->inventory_list[i].k_idx && object_is_melee_weapon(&p_ptr->inventory_list[i])) ? TRUE : FALSE);
+	return ((creature_ptr->inventory_list[i].k_idx && object_is_melee_weapon(&creature_ptr->inventory_list[i])) ? TRUE : FALSE);
 }
 
 /*!

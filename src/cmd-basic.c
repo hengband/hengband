@@ -2374,7 +2374,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	}
 	else if (boomerang)
 	{
-		if (has_melee_weapon(INVEN_RARM) && has_melee_weapon(INVEN_LARM))
+		if (has_melee_weapon(p_ptr, INVEN_RARM) && has_melee_weapon(p_ptr, INVEN_LARM))
 		{
 			item_tester_hook = item_tester_hook_boomerang;
 			q = _("どの武器を投げますか? ", "Throw which item? ");
@@ -2386,7 +2386,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				return FALSE;
 			}
 		}
-		else if (has_melee_weapon(INVEN_LARM))
+		else if (has_melee_weapon(p_ptr, INVEN_LARM))
 		{
 			item = INVEN_LARM;
 			o_ptr = &p_ptr->inventory_list[item];
