@@ -3168,7 +3168,7 @@ void calc_bonuses(void)
 		if (o_ptr->k_idx && !p_ptr->heavy_shoot)
 		{
 			/* Extra shots */
-			p_ptr->num_fire = calc_num_fire(o_ptr);
+			p_ptr->num_fire = calc_num_fire(p_ptr, o_ptr);
 
 			/* Snipers love Cross bows */
 			if ((p_ptr->pclass == CLASS_SNIPER) &&
@@ -4832,7 +4832,7 @@ static void calc_mana(player_type *creature_ptr)
  * @param o_ptr 計算する射撃武器のアイテム情報参照ポインタ
  * @return 射撃倍率の値(100で1.00倍)
  */
-s16b calc_num_fire(object_type *o_ptr)
+s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 {
 	int extra_shots = 0;
 	int i;
@@ -4841,10 +4841,10 @@ s16b calc_num_fire(object_type *o_ptr)
 	object_type *q_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-	/* Scan the usable p_ptr->inventory_list */
+	/* Scan the usable creature_ptr->inventory_list */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		q_ptr = &p_ptr->inventory_list[i];
+		q_ptr = &creature_ptr->inventory_list[i];
 		if (!q_ptr->k_idx) continue;
 
 		/* Do not apply current equip */
@@ -4866,40 +4866,40 @@ s16b calc_num_fire(object_type *o_ptr)
 		num += (extra_shots * 100);
 
 		/* Hack -- Rangers love Bows */
-		if ((p_ptr->pclass == CLASS_RANGER) &&
+		if ((creature_ptr->pclass == CLASS_RANGER) &&
 			(tval_ammo == TV_ARROW))
 		{
-			num += (p_ptr->lev * 4);
+			num += (creature_ptr->lev * 4);
 		}
 
-		if ((p_ptr->pclass == CLASS_CAVALRY) &&
+		if ((creature_ptr->pclass == CLASS_CAVALRY) &&
 			(tval_ammo == TV_ARROW))
 		{
-			num += (p_ptr->lev * 3);
+			num += (creature_ptr->lev * 3);
 		}
 
-		if (p_ptr->pclass == CLASS_ARCHER)
+		if (creature_ptr->pclass == CLASS_ARCHER)
 		{
 			if (tval_ammo == TV_ARROW)
-				num += ((p_ptr->lev * 5) + 50);
+				num += ((creature_ptr->lev * 5) + 50);
 			else if ((tval_ammo == TV_BOLT) || (tval_ammo == TV_SHOT))
-				num += (p_ptr->lev * 4);
+				num += (creature_ptr->lev * 4);
 		}
 
 		/*
 		 * Addendum -- also "Reward" high level warriors,
 		 * with _any_ missile weapon -- TY
 		 */
-		if (p_ptr->pclass == CLASS_WARRIOR &&
+		if (creature_ptr->pclass == CLASS_WARRIOR &&
 			(tval_ammo <= TV_BOLT) &&
 			(tval_ammo >= TV_SHOT))
 		{
-			num += (p_ptr->lev * 2);
+			num += (creature_ptr->lev * 2);
 		}
-		if ((p_ptr->pclass == CLASS_ROGUE) &&
+		if ((creature_ptr->pclass == CLASS_ROGUE) &&
 			(tval_ammo == TV_SHOT))
 		{
-			num += (p_ptr->lev * 4);
+			num += (creature_ptr->lev * 4);
 		}
 	}
 	return (s16b)num;

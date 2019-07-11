@@ -2400,7 +2400,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		t = object_desc_num(t, power);
 		t = object_desc_chr(t, p2);
 		
-		fire_rate = calc_num_fire(o_ptr);
+		fire_rate = calc_num_fire(p_ptr, o_ptr);
 		/* Show Fire rate */
 		if (fire_rate != 0 && power > 0 && known)
 		{	

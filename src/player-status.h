@@ -730,7 +730,7 @@ extern int weapon_exp_level(int weapon_exp);
 extern int riding_exp_level(int riding_exp);
 extern int spell_exp_level(int spell_exp);
 
-extern s16b calc_num_fire(object_type *o_ptr);
+extern s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
 extern void calc_bonuses(void);
 extern WEIGHT weight_limit(player_type *creature_ptr);
 extern bool has_melee_weapon(player_type *creature_ptr, int i);
