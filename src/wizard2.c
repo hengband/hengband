@@ -387,7 +387,7 @@ static void do_cmd_wiz_change_aux(void)
 		p_ptr->exp = tmp_long;
 
 		/* Update */
-		check_experience();
+		check_experience(p_ptr);
 	}
 }
 

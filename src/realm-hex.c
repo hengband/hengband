@@ -885,7 +885,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					p_ptr->exp += r;
 
 				/* Check the experience */
-				check_experience();
+				check_experience(p_ptr);
 
 				flag = TRUE;
 			}

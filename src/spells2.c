@@ -3153,7 +3153,7 @@ void ring_of_power(DIRECTION dir)
 		/* Lose some experience (permanently) */
 		p_ptr->exp -= (p_ptr->exp / 4);
 		p_ptr->max_exp -= (p_ptr->exp / 4);
-		check_experience();
+		check_experience(p_ptr);
 
 		break;
 	}

@@ -5479,91 +5479,91 @@ void sanity_blast(monster_type *m_ptr, bool necro)
  * Advance experience levels and print experience
  * @return なし
  */
-void check_experience(void)
+void check_experience(player_type *creature_ptr)
 {
 	bool level_reward = FALSE;
 	bool level_mutation = FALSE;
 	bool level_inc_stat = FALSE;
-	bool android = (p_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
-	PLAYER_LEVEL old_lev = p_ptr->lev;
+	bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
+	PLAYER_LEVEL old_lev = creature_ptr->lev;
 
 	/* Hack -- lower limit */
-	if (p_ptr->exp < 0) p_ptr->exp = 0;
-	if (p_ptr->max_exp < 0) p_ptr->max_exp = 0;
-	if (p_ptr->max_max_exp < 0) p_ptr->max_max_exp = 0;
+	if (creature_ptr->exp < 0) creature_ptr->exp = 0;
+	if (creature_ptr->max_exp < 0) creature_ptr->max_exp = 0;
+	if (creature_ptr->max_max_exp < 0) creature_ptr->max_max_exp = 0;
 
 	/* Hack -- upper limit */
-	if (p_ptr->exp > PY_MAX_EXP) p_ptr->exp = PY_MAX_EXP;
-	if (p_ptr->max_exp > PY_MAX_EXP) p_ptr->max_exp = PY_MAX_EXP;
-	if (p_ptr->max_max_exp > PY_MAX_EXP) p_ptr->max_max_exp = PY_MAX_EXP;
+	if (creature_ptr->exp > PY_MAX_EXP) creature_ptr->exp = PY_MAX_EXP;
+	if (creature_ptr->max_exp > PY_MAX_EXP) creature_ptr->max_exp = PY_MAX_EXP;
+	if (creature_ptr->max_max_exp > PY_MAX_EXP) creature_ptr->max_max_exp = PY_MAX_EXP;
 
 	/* Hack -- maintain "max" experience */
-	if (p_ptr->exp > p_ptr->max_exp) p_ptr->max_exp = p_ptr->exp;
+	if (creature_ptr->exp > creature_ptr->max_exp) creature_ptr->max_exp = creature_ptr->exp;
 
 	/* Hack -- maintain "max max" experience */
-	if (p_ptr->max_exp > p_ptr->max_max_exp) p_ptr->max_max_exp = p_ptr->max_exp;
+	if (creature_ptr->max_exp > creature_ptr->max_max_exp) creature_ptr->max_max_exp = creature_ptr->max_exp;
 
 	/* Redraw experience */
-	p_ptr->redraw |= (PR_EXP);
+	creature_ptr->redraw |= (PR_EXP);
 	handle_stuff();
 
 
 	/* Lose levels while possible */
-	while ((p_ptr->lev > 1) &&
-		(p_ptr->exp < ((android ? player_exp_a : player_exp)[p_ptr->lev - 2] * p_ptr->expfact / 100L)))
+	while ((creature_ptr->lev > 1) &&
+		(creature_ptr->exp < ((android ? player_exp_a : player_exp)[creature_ptr->lev - 2] * creature_ptr->expfact / 100L)))
 	{
 		/* Lose a level */
-		p_ptr->lev--;
-		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-		p_ptr->redraw |= (PR_LEV | PR_TITLE);
-		p_ptr->window |= (PW_PLAYER);
+		creature_ptr->lev--;
+		creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		creature_ptr->redraw |= (PR_LEV | PR_TITLE);
+		creature_ptr->window |= (PW_PLAYER);
 		handle_stuff();
 	}
 
 
 	/* Gain levels while possible */
-	while ((p_ptr->lev < PY_MAX_LEVEL) &&
-		(p_ptr->exp >= ((android ? player_exp_a : player_exp)[p_ptr->lev - 1] * p_ptr->expfact / 100L)))
+	while ((creature_ptr->lev < PY_MAX_LEVEL) &&
+		(creature_ptr->exp >= ((android ? player_exp_a : player_exp)[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)))
 	{
 		/* Gain a level */
-		p_ptr->lev++;
+		creature_ptr->lev++;
 
 		/* Save the highest level */
-		if (p_ptr->lev > p_ptr->max_plv)
+		if (creature_ptr->lev > creature_ptr->max_plv)
 		{
-			p_ptr->max_plv = p_ptr->lev;
+			creature_ptr->max_plv = creature_ptr->lev;
 
-			if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) ||
-				(p_ptr->muta2 & MUT2_CHAOS_GIFT))
+			if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) ||
+				(creature_ptr->muta2 & MUT2_CHAOS_GIFT))
 			{
 				level_reward = TRUE;
 			}
-			if (p_ptr->prace == RACE_BEASTMAN)
+			if (creature_ptr->prace == RACE_BEASTMAN)
 			{
 				if (one_in_(5)) level_mutation = TRUE;
 			}
 			level_inc_stat = TRUE;
 
-			do_cmd_write_nikki(NIKKI_LEVELUP, p_ptr->lev, NULL);
+			do_cmd_write_nikki(NIKKI_LEVELUP, creature_ptr->lev, NULL);
 		}
 
 		sound(SOUND_LEVEL);
 
-		msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), p_ptr->lev);
+		msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), creature_ptr->lev);
 
-		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-		p_ptr->redraw |= (PR_LEV | PR_TITLE | PR_EXP);
-		p_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
+		creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		creature_ptr->redraw |= (PR_LEV | PR_TITLE | PR_EXP);
+		creature_ptr->window |= (PW_PLAYER | PW_SPELL | PW_INVEN);
 
 		/* HPとMPの上昇量を表示 */
-		p_ptr->level_up_message = TRUE;
+		creature_ptr->level_up_message = TRUE;
 		handle_stuff();
 
-		p_ptr->level_up_message = FALSE;
+		creature_ptr->level_up_message = FALSE;
 
 		if (level_inc_stat)
 		{
-			if (!(p_ptr->max_plv % 10))
+			if (!(creature_ptr->max_plv % 10))
 			{
 				int choice;
 				screen_save();
@@ -5572,17 +5572,17 @@ void check_experience(void)
 					int n;
 					char tmp[32];
 
-					cnv_stat(p_ptr->stat_max[0], tmp);
+					cnv_stat(creature_ptr->stat_max[0], tmp);
 					prt(format(_("        a) 腕力 (現在値 %s)", "        a) Str (cur %s)"), tmp), 2, 14);
-					cnv_stat(p_ptr->stat_max[1], tmp);
+					cnv_stat(creature_ptr->stat_max[1], tmp);
 					prt(format(_("        b) 知能 (現在値 %s)", "        a) Int (cur %s)"), tmp), 3, 14);
-					cnv_stat(p_ptr->stat_max[2], tmp);
+					cnv_stat(creature_ptr->stat_max[2], tmp);
 					prt(format(_("        c) 賢さ (現在値 %s)", "        a) Wis (cur %s)"), tmp), 4, 14);
-					cnv_stat(p_ptr->stat_max[3], tmp);
+					cnv_stat(creature_ptr->stat_max[3], tmp);
 					prt(format(_("        d) 器用 (現在値 %s)", "        a) Dex (cur %s)"), tmp), 5, 14);
-					cnv_stat(p_ptr->stat_max[4], tmp);
+					cnv_stat(creature_ptr->stat_max[4], tmp);
 					prt(format(_("        e) 耐久 (現在値 %s)", "        a) Con (cur %s)"), tmp), 6, 14);
-					cnv_stat(p_ptr->stat_max[5], tmp);
+					cnv_stat(creature_ptr->stat_max[5], tmp);
 					prt(format(_("        f) 魅力 (現在値 %s)", "        a) Chr (cur %s)"), tmp), 7, 14);
 
 					prt("", 8, 14);
@@ -5598,38 +5598,38 @@ void check_experience(void)
 							prt("", n + 2, 14);
 					if (get_check(_("よろしいですか？", "Are you sure? "))) break;
 				}
-				do_inc_stat(p_ptr, choice - 'a');
+				do_inc_stat(creature_ptr, choice - 'a');
 				screen_load();
 			}
-			else if (!(p_ptr->max_plv % 2))
-				do_inc_stat(p_ptr, randint0(6));
+			else if (!(creature_ptr->max_plv % 2))
+				do_inc_stat(creature_ptr, randint0(6));
 		}
 
 		if (level_mutation)
 		{
 			msg_print(_("あなたは変わった気がする...", "You feel different..."));
-			(void)gain_mutation(p_ptr, 0);
+			(void)gain_mutation(creature_ptr, 0);
 			level_mutation = FALSE;
 		}
 
 		/*
-		 * 報酬でレベルが上ると再帰的に check_experience() が
+		 * 報酬でレベルが上ると再帰的に check_experience(creature_ptr) が
 		 * 呼ばれるので順番を最後にする。
 		 */
 		if (level_reward)
 		{
-			gain_level_reward(p_ptr, 0);
+			gain_level_reward(creature_ptr, 0);
 			level_reward = FALSE;
 		}
 
-		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-		p_ptr->redraw |= (PR_LEV | PR_TITLE);
-		p_ptr->window |= (PW_PLAYER | PW_SPELL);
+		creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		creature_ptr->redraw |= (PR_LEV | PR_TITLE);
+		creature_ptr->window |= (PW_PLAYER | PW_SPELL);
 		handle_stuff();
 	}
 
 	/* Load an autopick preference file */
-	if (old_lev != p_ptr->lev) autopick_load_pref(FALSE);
+	if (old_lev != creature_ptr->lev) autopick_load_pref(FALSE);
 }
 
 /*!

@@ -2662,7 +2662,7 @@ static void process_world_aux_curse(void)
 			if (p_ptr->exp < 0) p_ptr->exp = 0;
 			p_ptr->max_exp -= (p_ptr->lev + 1) / 2;
 			if (p_ptr->max_exp < 0) p_ptr->max_exp = 0;
-			check_experience();
+			check_experience(p_ptr);
 		}
 		/* Add light curse (Later) */
 		if ((p_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(2000))

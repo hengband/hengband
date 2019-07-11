@@ -3625,7 +3625,7 @@ bool restore_level(player_type *creature_ptr)
 		creature_ptr->exp = creature_ptr->max_exp;
 
 		/* Check the experience */
-		check_experience();
+		check_experience(p_ptr);
 
 		/* Did something */
 		return (TRUE);
@@ -3753,7 +3753,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 	roll_hitdice(creature_ptr, 0L);
 
 	/* The experience level may be modified */
-	check_experience();
+	check_experience(p_ptr);
 
 	creature_ptr->redraw |= (PR_BASIC);
 
@@ -3922,7 +3922,7 @@ void gain_exp_64(player_type *creature_ptr, s32b amount, u32b amount_frac)
 		creature_ptr->max_exp += amount / 5;
 	}
 
-	check_experience();
+	check_experience(p_ptr);
 }
 
 
@@ -4024,7 +4024,7 @@ void calc_android_exp(player_type *creature_ptr)
 		if (i == INVEN_BODY) total_exp += exp / 32;
 	}
 	creature_ptr->exp = creature_ptr->max_exp = total_exp;
-	check_experience();
+	check_experience(p_ptr);
 }
 
 
@@ -4038,7 +4038,7 @@ void lose_exp(player_type *creature_ptr, s32b amount)
 
 	creature_ptr->exp -= amount;
 
-	check_experience();
+	check_experience(p_ptr);
 }
 
 
