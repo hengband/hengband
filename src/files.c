@@ -3888,7 +3888,7 @@ void display_player(int mode)
 		display_player_one_line(ENTRY_WEIGHT, format("%d" ,(int)p_ptr->wt), TERM_L_BLUE);
 		display_player_one_line(ENTRY_SOCIAL, format("%d" ,(int)p_ptr->sc), TERM_L_BLUE);
 #endif
-		display_player_one_line(ENTRY_ALIGN, format("%s" ,your_alignment()), TERM_L_BLUE);
+		display_player_one_line(ENTRY_ALIGN, format("%s" ,your_alignment(p_ptr)), TERM_L_BLUE);
 
 
 		/* Display the stats */
@@ -4843,7 +4843,7 @@ static void dump_aux_virtues(FILE *fff)
 			else fprintf(fff, "%s ???\n", stat_names[v_nr]);
 		}
 
-	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment());
+	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment(p_ptr));
 	fprintf(fff, "\n");
 	dump_virtues(p_ptr, fff);
 }

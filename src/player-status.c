@@ -1290,14 +1290,14 @@ player_type *p_ptr = &p_body;
 /*
  * Return alignment title
  */
-concptr your_alignment(void)
+concptr your_alignment(player_type *creature_ptr)
 {
-	if (p_ptr->align > 150) return _("大善", "Lawful");
-	else if (p_ptr->align > 50) return _("中善", "Good");
-	else if (p_ptr->align > 10) return _("小善", "Neutral Good");
-	else if (p_ptr->align > -11) return _("中立", "Neutral");
-	else if (p_ptr->align > -51) return _("小悪", "Neutral Evil");
-	else if (p_ptr->align > -151) return _("中悪", "Evil");
+	if (creature_ptr->align > 150) return _("大善", "Lawful");
+	else if (creature_ptr->align > 50) return _("中善", "Good");
+	else if (creature_ptr->align > 10) return _("小善", "Neutral Good");
+	else if (creature_ptr->align > -11) return _("中立", "Neutral");
+	else if (creature_ptr->align > -51) return _("小悪", "Neutral Evil");
+	else if (creature_ptr->align > -151) return _("中悪", "Evil");
 	else return _("大悪", "Chaotic");
 }
 

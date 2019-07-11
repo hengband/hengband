@@ -725,7 +725,7 @@ struct player_type
 };
 extern player_type *p_ptr;
 
-extern concptr your_alignment(void);
+extern concptr your_alignment(player_type *creature_ptr);
 extern int weapon_exp_level(int weapon_exp);
 extern int riding_exp_level(int riding_exp);
 extern int spell_exp_level(int spell_exp);
