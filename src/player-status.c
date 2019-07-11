@@ -5162,11 +5162,11 @@ bool player_place(player_type *creature_ptr, POSITION y, POSITION x)
  * @brief 種族アンバライトが出血時パターンの上に乗った際のペナルティ処理
  * @return なし
  */
-void wreck_the_pattern(void)
+void wreck_the_pattern(player_type *creature_ptr)
 {
 	int to_ruin = 0;
 	POSITION r_y, r_x;
-	int pattern_type = f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
+	int pattern_type = f_info[current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)
 	{
@@ -5177,12 +5177,12 @@ void wreck_the_pattern(void)
 	msg_print(_("パターンを血で汚してしまった！", "You bleed on the Pattern!"));
 	msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
 
-	if (!IS_INVULN()) take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
+	if (!IS_INVULN()) take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
 	to_ruin = randint1(45) + 35;
 
 	while (to_ruin--)
 	{
-		scatter(&r_y, &r_x, p_ptr->y, p_ptr->x, 4, 0);
+		scatter(&r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
 
 		if (pattern_tile(r_y, r_x) &&
 			(f_info[current_floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
@@ -5191,7 +5191,7 @@ void wreck_the_pattern(void)
 		}
 	}
 
-	cave_set_feat(p_ptr->y, p_ptr->x, feat_pattern_corrupted);
+	cave_set_feat(creature_ptr->y, creature_ptr->x, feat_pattern_corrupted);
 }
 
 

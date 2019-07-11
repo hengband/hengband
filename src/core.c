@@ -698,7 +698,7 @@ static bool pattern_effect(void)
 	if ((PRACE_IS_(p_ptr, RACE_AMBERITE)) &&
 	    (p_ptr->cut > 0) && one_in_(10))
 	{
-		wreck_the_pattern();
+		wreck_the_pattern(p_ptr);
 	}
 
 	pattern_type = f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
