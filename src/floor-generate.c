@@ -1032,7 +1032,7 @@ static void build_arena(void)
 	j = xval;
 	current_floor_ptr->grid_array[i][j].feat = f_tag_to_index("ARENA_GATE");
 	current_floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
-	player_place(i, j);
+	player_place(p_ptr, i, j);
 }
 
 /*!
@@ -1143,7 +1143,7 @@ static void build_battle(void)
 	j = xval;
 	current_floor_ptr->grid_array[i][j].feat = f_tag_to_index("BUILDING_3");
 	current_floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
-	player_place(i, j);
+	player_place(p_ptr, i, j);
 }
 
 /*!

@@ -5145,14 +5145,14 @@ void free_turn(player_type *creature_ptr)
  * @param y 配置先Y座標
  * @return 配置に成功したらTRUE
  */
-bool player_place(POSITION y, POSITION x)
+bool player_place(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	/* Paranoia XXX XXX */
 	if (current_floor_ptr->grid_array[y][x].m_idx != 0) return FALSE;
 
 	/* Save player location */
-	p_ptr->y = y;
-	p_ptr->x = x;
+	creature_ptr->y = y;
+	creature_ptr->x = x;
 
 	/* Success */
 	return TRUE;

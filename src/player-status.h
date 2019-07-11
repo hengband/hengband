@@ -744,7 +744,7 @@ extern bool player_has_no_spellbooks(player_type *creature_ptr);
 extern void take_turn(player_type *creature_ptr, PERCENTAGE need_cost);
 extern void free_turn(player_type *creature_ptr);
 
-extern bool player_place(POSITION y, POSITION x);
+extern bool player_place(player_type *creature_ptr, POSITION y, POSITION x);
 extern void sanity_blast(monster_type *m_ptr, bool necro);
 
 extern void check_experience(void);
