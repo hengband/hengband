@@ -443,7 +443,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 			}
 
 			notice = TRUE;
-			chg_virtue(p_ptr, V_ENLIGHTEN, -1);
+			chg_virtue(creature_ptr, V_ENLIGHTEN, -1);
 		}
 	}
 
@@ -536,7 +536,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 
 			notice = TRUE;
 			creature_ptr->counter = FALSE;
-			chg_virtue(p_ptr, V_HARMONY, -1);
+			chg_virtue(creature_ptr, V_HARMONY, -1);
 		}
 	}
 
@@ -641,7 +641,7 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 
 			notice = TRUE;
 			creature_ptr->counter = FALSE;
-			chg_virtue(p_ptr, V_VALOUR, -1);
+			chg_virtue(creature_ptr, V_VALOUR, -1);
 		}
 	}
 
@@ -799,8 +799,8 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("素早く動けるようになった！", "You feel yourself moving much faster!"));
 			notice = TRUE;
-			chg_virtue(p_ptr, V_PATIENCE, -1);
-			chg_virtue(p_ptr, V_DILIGENCE, 1);
+			chg_virtue(creature_ptr, V_PATIENCE, -1);
+			chg_virtue(creature_ptr, V_DILIGENCE, 1);
 		}
 	}
 
@@ -852,8 +852,8 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely faster!"));
 			notice = TRUE;
-			chg_virtue(p_ptr, V_PATIENCE, -1);
-			chg_virtue(p_ptr, V_DILIGENCE, 1);
+			chg_virtue(creature_ptr, V_PATIENCE, -1);
+			chg_virtue(creature_ptr, V_DILIGENCE, 1);
 		}
 	}
 
@@ -1312,10 +1312,10 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("物質界を離れて幽鬼のような存在になった！", "You leave the physical world and current_world_ptr->game_turn into a wraith-being!"));
 			notice = TRUE;
-			chg_virtue(p_ptr, V_UNLIFE, 3);
-			chg_virtue(p_ptr, V_HONOUR, -2);
-			chg_virtue(p_ptr, V_SACRIFICE, -2);
-			chg_virtue(p_ptr, V_VALOUR, -5);
+			chg_virtue(creature_ptr, V_UNLIFE, 3);
+			chg_virtue(creature_ptr, V_HONOUR, -2);
+			chg_virtue(creature_ptr, V_SACRIFICE, -2);
+			chg_virtue(creature_ptr, V_VALOUR, -5);
 
 			creature_ptr->redraw |= (PR_MAP);
 			creature_ptr->update |= (PU_MONSTERS);
@@ -1378,10 +1378,10 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			msg_print(_("無敵だ！", "Invulnerability!"));
 			notice = TRUE;
 
-			chg_virtue(p_ptr, V_UNLIFE, -2);
-			chg_virtue(p_ptr, V_HONOUR, -2);
-			chg_virtue(p_ptr, V_SACRIFICE, -3);
-			chg_virtue(p_ptr, V_VALOUR, -5);
+			chg_virtue(creature_ptr, V_UNLIFE, -2);
+			chg_virtue(creature_ptr, V_HONOUR, -2);
+			chg_virtue(creature_ptr, V_SACRIFICE, -3);
+			chg_virtue(creature_ptr, V_VALOUR, -5);
 
 			creature_ptr->redraw |= (PR_MAP);
 			creature_ptr->update |= (PU_MONSTERS);
@@ -2254,7 +2254,7 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
 			notice = TRUE;
-			chg_virtue(p_ptr, V_VITALITY, 2);
+			chg_virtue(creature_ptr, V_VITALITY, 2);
 		}
 	}
 
@@ -2269,7 +2269,7 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			(void)dec_stat(creature_ptr, A_STR, 20, TRUE);
 
 			notice = TRUE;
-			chg_virtue(p_ptr, V_VITALITY, -3);
+			chg_virtue(creature_ptr, V_VITALITY, -3);
 		}
 	}
 
@@ -3118,13 +3118,13 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 	}
 
 	if (old_aux < 1 && new_aux > 0)
-		chg_virtue(p_ptr, V_PATIENCE, 2);
+		chg_virtue(creature_ptr, V_PATIENCE, 2);
 	else if (old_aux < 3 && (old_aux != new_aux))
-		chg_virtue(p_ptr, V_PATIENCE, 1);
+		chg_virtue(creature_ptr, V_PATIENCE, 1);
 	if (old_aux == 2)
-		chg_virtue(p_ptr, V_TEMPERANCE, 1);
+		chg_virtue(creature_ptr, V_TEMPERANCE, 1);
 	if (old_aux == 0)
-		chg_virtue(p_ptr, V_TEMPERANCE, -1);
+		chg_virtue(creature_ptr, V_TEMPERANCE, -1);
 
 	/* Food increase */
 	if (new_aux > old_aux)
@@ -3147,9 +3147,9 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 			/* Bloated */
 			case 5:
 			msg_print(_("食べ過ぎだ！", "You have gorged yourself!"));
-			chg_virtue(p_ptr, V_HARMONY, -1);
-			chg_virtue(p_ptr, V_PATIENCE, -1);
-			chg_virtue(p_ptr, V_TEMPERANCE, -2);
+			chg_virtue(creature_ptr, V_HARMONY, -1);
+			chg_virtue(creature_ptr, V_PATIENCE, -1);
+			chg_virtue(creature_ptr, V_TEMPERANCE, -2);
 
 			break;
 		}
@@ -3341,9 +3341,9 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 	/* Damage "max" value */
 	if (permanent && (max > 3))
 	{
-		chg_virtue(p_ptr, V_SACRIFICE, 1);
+		chg_virtue(creature_ptr, V_SACRIFICE, 1);
 		if (stat == A_WIS || stat == A_INT)
-			chg_virtue(p_ptr, V_ENLIGHTEN, -2);
+			chg_virtue(creature_ptr, V_ENLIGHTEN, -2);
 
 		/* Handle "low" values */
 		if (max <= 18)
@@ -3421,7 +3421,7 @@ bool res_stat(player_type *creature_ptr, int stat)
 bool hp_player(player_type *creature_ptr, int num)
 {
 	int vir;
-	vir = virtue_number(p_ptr, V_VITALITY);
+	vir = virtue_number(creature_ptr, V_VITALITY);
 
 	if(num <= 0) return (FALSE);
 
@@ -3433,7 +3433,7 @@ bool hp_player(player_type *creature_ptr, int num)
 	if (creature_ptr->chp < creature_ptr->mhp)
 	{
 		if ((num > 0) && (creature_ptr->chp < (creature_ptr->mhp/3)))
-			chg_virtue(p_ptr, V_TEMPERANCE, 1);
+			chg_virtue(creature_ptr, V_TEMPERANCE, 1);
 		/* Gain hitpoints */
 		creature_ptr->chp += num;
 
@@ -3582,16 +3582,16 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 	{
 		if (stat == A_WIS)
 		{
-			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
-			chg_virtue(p_ptr, V_FAITH, 1);
+			chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
+			chg_virtue(creature_ptr, V_FAITH, 1);
 		}
 		else if (stat == A_INT)
 		{
-			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
-			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
+			chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
+			chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
 		}
 		else if (stat == A_CON)
-			chg_virtue(p_ptr, V_VITALITY, 1);
+			chg_virtue(creature_ptr, V_VITALITY, 1);
 
 		msg_format(_("ワーオ！とても%sなった！", "Wow!  You feel very %s!"), desc_stat_pos[stat]);
 
@@ -3625,7 +3625,7 @@ bool restore_level(player_type *creature_ptr)
 		creature_ptr->exp = creature_ptr->max_exp;
 
 		/* Check the experience */
-		check_experience(p_ptr);
+		check_experience(creature_ptr);
 
 		/* Did something */
 		return (TRUE);
@@ -3642,8 +3642,8 @@ bool lose_all_info(player_type *creature_ptr)
 {
 	int i;
 
-	chg_virtue(p_ptr, V_KNOWLEDGE, -5);
-	chg_virtue(p_ptr, V_ENLIGHTEN, -5);
+	chg_virtue(creature_ptr, V_KNOWLEDGE, -5);
+	chg_virtue(creature_ptr, V_ENLIGHTEN, -5);
 
 	/* Forget info about objects */
 	for (i = 0; i < INVEN_TOTAL; i++)
@@ -3694,7 +3694,7 @@ void do_poly_wounds(player_type *creature_ptr)
 	if (Nasty_effect)
 	{
 		msg_print(_("新たな傷ができた！", "A new wound was created!"));
-		take_hit(p_ptr, DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"), -1);
+		take_hit(creature_ptr, DAMAGE_LOSELIFE, change / 2, _("変化した傷", "a polymorphed wound"), -1);
 		set_cut(creature_ptr,change);
 	}
 	else
@@ -3718,7 +3718,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 	msg_format("You current_world_ptr->game_turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
 #endif
 
-	chg_virtue(p_ptr, V_CHANCE, 2);
+	chg_virtue(creature_ptr, V_CHANCE, 2);
 
 	if (creature_ptr->prace < 32)
 	{
@@ -3742,7 +3742,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 		creature_ptr->expfact -= 15;
 
 	/* Get character's height and weight */
-	get_height_weight(p_ptr);
+	get_height_weight(creature_ptr);
 
 	/* Hitdice */
 	if (creature_ptr->pclass == CLASS_SORCERER)
@@ -3753,7 +3753,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 	roll_hitdice(creature_ptr, 0L);
 
 	/* The experience level may be modified */
-	check_experience(p_ptr);
+	check_experience(creature_ptr);
 
 	creature_ptr->redraw |= (PR_BASIC);
 
@@ -3774,7 +3774,7 @@ void do_poly_self(player_type *creature_ptr)
 	int power = creature_ptr->lev;
 
 	msg_print(_("あなたは変化の訪れを感じた...", "You feel a change coming over you..."));
-	chg_virtue(p_ptr, V_CHANCE, 1);
+	chg_virtue(creature_ptr, V_CHANCE, 1);
 
 	if ((power > randint0(20)) && one_in_(3) && (creature_ptr->prace != RACE_ANDROID))
 	{
@@ -3840,7 +3840,7 @@ void do_poly_self(player_type *creature_ptr)
 			/* Polymorph into a less mutated form */
 			power -= 10;
 
-			if (!lose_mutation(p_ptr, 0))
+			if (!lose_mutation(creature_ptr, 0))
 			msg_print(_("奇妙なくらい普通になった気がする。", "You feel oddly normal."));
 		}
 
@@ -3869,7 +3869,7 @@ void do_poly_self(player_type *creature_ptr)
 		if (one_in_(6))
 		{
 			msg_print(_("現在の姿で生きていくのは困難なようだ！", "You find living difficult in your present form!"));
-			take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(randint1(10), creature_ptr->lev), _("致命的な突然変異", "a lethal mutation"), -1);
+			take_hit(creature_ptr, DAMAGE_LOSELIFE, damroll(randint1(10), creature_ptr->lev), _("致命的な突然変異", "a lethal mutation"), -1);
 
 			power -= 10;
 		}
@@ -3879,7 +3879,7 @@ void do_poly_self(player_type *creature_ptr)
 	{
 		power -= 10;
 
-		get_max_stats(p_ptr);
+		get_max_stats(creature_ptr);
 		roll_hitdice(creature_ptr, 0L);
 	}
 
@@ -3922,7 +3922,7 @@ void gain_exp_64(player_type *creature_ptr, s32b amount, u32b amount_frac)
 		creature_ptr->max_exp += amount / 5;
 	}
 
-	check_experience(p_ptr);
+	check_experience(creature_ptr);
 }
 
 
@@ -4019,12 +4019,12 @@ void calc_android_exp(player_type *creature_ptr)
 			if (value > 100000L)
 				exp += (value - 100000L) / 4  * level;
 		}
-		if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (has_melee_weapon(p_ptr, i))) || (i == INVEN_BOW)) total_exp += exp / 48;
+		if ((((i == INVEN_RARM) || (i == INVEN_LARM)) && (has_melee_weapon(creature_ptr, i))) || (i == INVEN_BOW)) total_exp += exp / 48;
 		else total_exp += exp / 16;
 		if (i == INVEN_BODY) total_exp += exp / 32;
 	}
 	creature_ptr->exp = creature_ptr->max_exp = total_exp;
-	check_experience(p_ptr);
+	check_experience(creature_ptr);
 }
 
 
@@ -4038,7 +4038,7 @@ void lose_exp(player_type *creature_ptr, s32b amount)
 
 	creature_ptr->exp -= amount;
 
-	check_experience(p_ptr);
+	check_experience(creature_ptr);
 }
 
 
@@ -4216,7 +4216,7 @@ bool choose_ele_attack(player_type *creature_ptr)
 
 	char choice;
 
-	if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
+	if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 	{
 		msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
 		return FALSE;
