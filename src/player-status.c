@@ -4978,7 +4978,7 @@ bool heavy_armor(player_type *creature_ptr)
 }
 
 /*!
- * @brief p_ptr->update のフラグに応じた更新をまとめて行う / Handle "p_ptr->update"
+ * @brief update のフラグに応じた更新をまとめて行う / Handle "update"
  * @return なし
  * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
  */
@@ -5844,15 +5844,15 @@ void cheat_death(player_type *creature_ptr)
 	creature_ptr->is_dead = FALSE;
 
 	/* Hack -- Prevent starvation */
-	(void)set_food(p_ptr, PY_FOOD_MAX - 1);
+	(void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 
 	current_floor_ptr->dun_level = 0;
 	creature_ptr->inside_arena = FALSE;
 	creature_ptr->phase_out = FALSE;
 	leaving_quest = 0;
 	creature_ptr->inside_quest = 0;
-	if (p_ptr->dungeon_idx) creature_ptr->recall_dungeon = p_ptr->dungeon_idx;
-	p_ptr->dungeon_idx = 0;
+	if (creature_ptr->dungeon_idx) creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
+	creature_ptr->dungeon_idx = 0;
 	if (lite_town || vanilla_town)
 	{
 		creature_ptr->wilderness_y = 1;
@@ -5883,7 +5883,7 @@ void cheat_death(player_type *creature_ptr)
 			"                            but revived."));
 
 	/* Prepare next floor */
-	leave_floor(p_ptr->change_floor_mode);
+	leave_floor(creature_ptr->change_floor_mode);
 	wipe_m_list();
 
 }
