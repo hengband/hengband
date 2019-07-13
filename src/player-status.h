@@ -751,7 +751,7 @@ extern void check_experience(player_type *creature_ptr);
 extern void wreck_the_pattern(player_type *creature_ptr);
 extern void cnv_stat(int val, char *out_val);
 extern s16b modify_stat_value(int value, int amount);
-extern long calc_score(void);
+extern long calc_score(player_type *creature_ptr);
 
 extern const s32b player_exp[PY_MAX_LEVEL];
 extern const s32b player_exp_a[PY_MAX_LEVEL];

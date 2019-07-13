@@ -494,7 +494,7 @@ errr top_twenty(void)
 		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
-	sprintf(the_score.pts, "%9ld", (long)calc_score());
+	sprintf(the_score.pts, "%9ld", (long)calc_score(p_ptr));
 	the_score.pts[9] = '\0';
 
 	/* Save the current gold */
@@ -617,7 +617,7 @@ errr predict_score(void)
 		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
-	sprintf(the_score.pts, "%9ld", (long)calc_score());
+	sprintf(the_score.pts, "%9ld", (long)calc_score(p_ptr));
 
 	/* Save the current gold */
 	sprintf(the_score.gold, "%9lu", (long)p_ptr->au);

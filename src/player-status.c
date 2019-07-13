@@ -5727,12 +5727,12 @@ s16b modify_stat_value(int value, int amount)
  * @return なし
  * @details
  */
-long calc_score(void)
+long calc_score(player_type *creature_ptr)
 {
 	int i, mult = 100;
 	DEPTH max_dl = 0;
 	u32b point, point_h, point_l;
-	int arena_win = MIN(p_ptr->arena_number, MAX_ARENA_MONS);
+	int arena_win = MIN(creature_ptr->arena_number, MAX_ARENA_MONS);
 
 	if (!preserve_mode) mult += 10;
 	if (!autoroller) mult += 10;
@@ -5751,7 +5751,7 @@ long calc_score(void)
 		if (max_dlv[i] > max_dl)
 			max_dl = max_dlv[i];
 
-	point_l = (p_ptr->max_max_exp + (100 * max_dl));
+	point_l = (creature_ptr->max_max_exp + (100 * max_dl));
 	point_h = point_l / 0x10000L;
 	point_l = point_l % 0x10000L;
 	point_h *= mult;
@@ -5764,20 +5764,20 @@ long calc_score(void)
 	point_l /= 100;
 
 	point = (point_h << 16) + (point_l);
-	if (p_ptr->arena_number >= 0)
+	if (creature_ptr->arena_number >= 0)
 		point += (arena_win * arena_win * (arena_win > 29 ? 1000 : 100));
 
 	if (ironman_downward) point *= 2;
-	if (p_ptr->pclass == CLASS_BERSERKER)
+	if (creature_ptr->pclass == CLASS_BERSERKER)
 	{
-		if (p_ptr->prace == RACE_SPECTRE)
+		if (creature_ptr->prace == RACE_SPECTRE)
 			point = point / 5;
 	}
 
-	if ((p_ptr->pseikaku == SEIKAKU_MUNCHKIN) && point)
+	if ((creature_ptr->pseikaku == SEIKAKU_MUNCHKIN) && point)
 	{
 		point = 1;
-		if (p_ptr->total_winner) point = 2;
+		if (creature_ptr->total_winner) point = 2;
 	}
 	if (easy_band) point = (0 - point);
 

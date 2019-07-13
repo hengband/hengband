@@ -482,7 +482,7 @@ errr report_score(void)
 	buf_sprintf(score, "version: Hengband %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
-	buf_sprintf(score, "score: %d\n", calc_score());
+	buf_sprintf(score, "score: %d\n", calc_score(p_ptr));
 	buf_sprintf(score, "level: %d\n", p_ptr->lev);
 	buf_sprintf(score, "depth: %d\n", current_floor_ptr->dun_level);
 	buf_sprintf(score, "maxlv: %d\n", p_ptr->max_plv);
