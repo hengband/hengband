@@ -3916,10 +3916,10 @@ void calc_bonuses(player_type *creature_ptr)
 }
 
 
-static void calc_alignment(void)
+static void calc_alignment(player_type *creature_ptr)
 {
 	MONSTER_IDX m_idx;
-	p_ptr->align = 0;
+	creature_ptr->align = 0;
 	int i, j, neutral[2];
 
 	for (m_idx = current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
@@ -3932,51 +3932,51 @@ static void calc_alignment(void)
 
 		if (is_pet(m_ptr))
 		{
-			if (r_ptr->flags3 & RF3_GOOD) p_ptr->align += r_ptr->level;
-			if (r_ptr->flags3 & RF3_EVIL) p_ptr->align -= r_ptr->level;
+			if (r_ptr->flags3 & RF3_GOOD) creature_ptr->align += r_ptr->level;
+			if (r_ptr->flags3 & RF3_EVIL) creature_ptr->align -= r_ptr->level;
 		}
 	}
 
-	if (p_ptr->mimic_form)
+	if (creature_ptr->mimic_form)
 	{
-		switch (p_ptr->mimic_form)
+		switch (creature_ptr->mimic_form)
 		{
 		case MIMIC_DEMON:
-			p_ptr->align -= 200;
+			creature_ptr->align -= 200;
 			break;
 		case MIMIC_DEMON_LORD:
-			p_ptr->align -= 200;
+			creature_ptr->align -= 200;
 			break;
 		}
 	}
 	else
 	{
-		switch (p_ptr->prace)
+		switch (creature_ptr->prace)
 		{
 		case RACE_ANGEL:
-			p_ptr->align += 200;
+			creature_ptr->align += 200;
 			break;
 		case RACE_DEMON:
-			p_ptr->align -= 200;
+			creature_ptr->align -= 200;
 			break;
 		}
 	}
 
 	for (i = 0; i < 2; i++)
 	{
-		if (has_melee_weapon(p_ptr, INVEN_RARM + i))
+		if (has_melee_weapon(creature_ptr, INVEN_RARM + i))
 		{
-			if (p_ptr->inventory_list[INVEN_RARM + i].name1 == ART_IRON_BALL) p_ptr->align -= 1000;
+			if (creature_ptr->inventory_list[INVEN_RARM + i].name1 == ART_IRON_BALL) creature_ptr->align -= 1000;
 		}
 	}
 
 	/* Determine player alignment */
 	for (i = 0, j = 0; i < 8; i++)
 	{
-		switch (p_ptr->vir_types[i])
+		switch (creature_ptr->vir_types[i])
 		{
 		case V_JUSTICE:
-			p_ptr->align += p_ptr->virtues[i] * 2;
+			creature_ptr->align += creature_ptr->virtues[i] * 2;
 			break;
 		case V_CHANCE:
 			/* Do nothing */
@@ -3986,25 +3986,25 @@ static void calc_alignment(void)
 			neutral[j++] = i;
 			break;
 		case V_UNLIFE:
-			p_ptr->align -= p_ptr->virtues[i];
+			creature_ptr->align -= creature_ptr->virtues[i];
 			break;
 		default:
-			p_ptr->align += p_ptr->virtues[i];
+			creature_ptr->align += creature_ptr->virtues[i];
 			break;
 		}
 	}
 
 	for (i = 0; i < j; i++)
 	{
-		if (p_ptr->align > 0)
+		if (creature_ptr->align > 0)
 		{
-			p_ptr->align -= p_ptr->virtues[neutral[i]] / 2;
-			if (p_ptr->align < 0) p_ptr->align = 0;
+			creature_ptr->align -= creature_ptr->virtues[neutral[i]] / 2;
+			if (creature_ptr->align < 0) creature_ptr->align = 0;
 		}
-		else if (p_ptr->align < 0)
+		else if (creature_ptr->align < 0)
 		{
-			p_ptr->align += p_ptr->virtues[neutral[i]] / 2;
-			if (p_ptr->align > 0) p_ptr->align = 0;
+			creature_ptr->align += creature_ptr->virtues[neutral[i]] / 2;
+			if (creature_ptr->align > 0) creature_ptr->align = 0;
 		}
 	}
 }
@@ -5008,7 +5008,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_BONUS))
 	{
 		creature_ptr->update &= ~(PU_BONUS);
-		calc_alignment();
+		calc_alignment(creature_ptr);
 		calc_bonuses(creature_ptr);
 	}
 
