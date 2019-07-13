@@ -2442,7 +2442,8 @@ static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mo
 
 	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
 	{
-		if (current_floor_ptr->base_level == 0 || one_in_(5)) return MON_ALIEN_JURAL;
+		if (current_floor_ptr->base_level == 0 ||
+			(one_in_(5) && my_strchr("hkoptuyAHOPTUVY", r_info[r_idx].d_char))) return MON_ALIEN_JURAL;
 	}
 
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
