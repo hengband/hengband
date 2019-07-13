@@ -2510,7 +2510,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 			avgdam *= (p_ptr->num_fire * 100);
 			avgdam /= energy_fire;
 			t = object_desc_num(t, avgdam);
-			t = object_desc_str(t, show_ammo_detail ? "/current_world_ptr->game_turn" : "");
+			t = object_desc_str(t, show_ammo_detail ? "/turn" : "");
 			
 			if(show_ammo_crit_ratio)
 			{
