@@ -22517,3 +22517,22 @@ D:$This orc is succeeding demon blood. He wears brack flame.
 D:$This unclean combination is bred in unclean tribe
 D:このオークの体にはデーモンの血が流れており、そこから来る暗黒の炎をまとっている。
 D:この不浄な結合は、暗き風習を持つ生き物の中でしばしば育まれる。
+
+#Heng 弦ちゃん無性に出したくなった(DSKL)
+N:1123:巴流『葦名弦一郎』
+E:Way of Tomoe, Genichiro Ashina
+G:p:o
+I:120:30d24:20:70:10
+W:29:2:0:1800:0:0
+B:SHOOT:HURT:10d10
+B:SLASH:HURT:8d4
+B:KICK:HURT:4d5
+B:SLASH:ELEC:14d4
+F:UNIQUE | BASH_DOOR | OPEN_DOOR | ESCORT | DROP_90 |
+F:NO_SLEEP | NO_CONF | FORCE_MAXHP | DROP_4D2 | DROP_GOOD |
+F:MALE | DROP_CORPSE | DROP_SKELETON | CAN_SPEAK | HUMAN
+S:1_IN_5 | S_KIN | SHOOT | BO_ELEC
+D:葦名一心亡き後の故国の存亡を憂うこの一門の将は、いかなる異形の力を顧みず手に入れようとする。
+D:ゆえにそれらを求め鉄獄に至ったこともまた必然であるだろう。
+
+
