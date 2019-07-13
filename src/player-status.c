@@ -5201,11 +5201,11 @@ void wreck_the_pattern(player_type *creature_ptr)
  * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
  * @return なし
  */
-void sanity_blast(monster_type *m_ptr, bool necro)
+void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 {
 	int power = 100;
 
-	if (p_ptr->phase_out || !current_world_ptr->character_dungeon) return;
+	if (creature_ptr->phase_out || !current_world_ptr->character_dungeon) return;
 
 	if (!necro && m_ptr)
 	{
@@ -5237,12 +5237,12 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 
 		if (randint1(100) > power) return;
 
-		if (saving_throw(p_ptr->skill_sav - power))
+		if (saving_throw(creature_ptr->skill_sav - power))
 		{
 			return; /* Save, no adverse effects */
 		}
 
-		if (p_ptr->image)
+		if (creature_ptr->image)
 		{
 			/* Something silly happens... */
 			msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
@@ -5251,7 +5251,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 			if (one_in_(3))
 			{
 				msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-				p_ptr->image = p_ptr->image + randint1(r_ptr->level);
+				creature_ptr->image = creature_ptr->image + randint1(r_ptr->level);
 			}
 
 			return; /* Never mind; we can't see it clearly enough */
@@ -5264,15 +5264,15 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
 		/* Demon characters are unaffected */
-		if (PRACE_IS_(p_ptr, RACE_IMP) || PRACE_IS_(p_ptr, RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) return;
-		if (p_ptr->wizard) return;
+		if (PRACE_IS_(creature_ptr, RACE_IMP) || PRACE_IS_(creature_ptr, RACE_DEMON) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) return;
+		if (creature_ptr->wizard) return;
 
 		/* Undead characters are 50% likely to be unaffected */
-		if (PRACE_IS_(p_ptr, RACE_SKELETON) || PRACE_IS_(p_ptr, RACE_ZOMBIE)
-			|| PRACE_IS_(p_ptr, RACE_VAMPIRE) || PRACE_IS_(p_ptr, RACE_SPECTRE) ||
-			(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD))
+		if (PRACE_IS_(creature_ptr, RACE_SKELETON) || PRACE_IS_(creature_ptr, RACE_ZOMBIE)
+			|| PRACE_IS_(creature_ptr, RACE_VAMPIRE) || PRACE_IS_(creature_ptr, RACE_SPECTRE) ||
+			(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD))
 		{
-			if (saving_throw(25 + p_ptr->lev)) return;
+			if (saving_throw(25 + creature_ptr->lev)) return;
 		}
 	}
 	else if (!necro)
@@ -5302,14 +5302,14 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		}
 		else power *= 2;
 
-		if (saving_throw(p_ptr->skill_sav * 100 / power))
+		if (saving_throw(creature_ptr->skill_sav * 100 / power))
 		{
 			msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name);
 			/* Safe */
 			return;
 		}
 
-		if (p_ptr->image)
+		if (creature_ptr->image)
 		{
 			/* Something silly happens... */
 			msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
@@ -5318,7 +5318,7 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 			if (one_in_(3))
 			{
 				msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
-				p_ptr->image = p_ptr->image + randint1(r_ptr->level);
+				creature_ptr->image = creature_ptr->image + randint1(r_ptr->level);
 			}
 
 			/* Never mind; we can't see it clearly enough */
@@ -5331,35 +5331,35 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 
 		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
-		if (!p_ptr->mimic_form)
+		if (!creature_ptr->mimic_form)
 		{
-			switch (p_ptr->prace)
+			switch (creature_ptr->prace)
 			{
 				/* Demons may make a saving throw */
 			case RACE_IMP:
 			case RACE_DEMON:
-				if (saving_throw(20 + p_ptr->lev)) return;
+				if (saving_throw(20 + creature_ptr->lev)) return;
 				break;
 				/* Undead may make a saving throw */
 			case RACE_SKELETON:
 			case RACE_ZOMBIE:
 			case RACE_SPECTRE:
 			case RACE_VAMPIRE:
-				if (saving_throw(10 + p_ptr->lev)) return;
+				if (saving_throw(10 + creature_ptr->lev)) return;
 				break;
 			}
 		}
 		else
 		{
 			/* Demons may make a saving throw */
-			if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
+			if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
 			{
-				if (saving_throw(20 + p_ptr->lev)) return;
+				if (saving_throw(20 + creature_ptr->lev)) return;
 			}
 			/* Undead may make a saving throw */
-			else if (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)
+			else if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)
 			{
-				if (saving_throw(10 + p_ptr->lev)) return;
+				if (saving_throw(10 + creature_ptr->lev)) return;
 			}
 		}
 	}
@@ -5368,25 +5368,25 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 		msg_print(_("ネクロノミコンを読んで正気を失った！", "Your sanity is shaken by reading the Necronomicon!"));
 	}
 
-	if (saving_throw(p_ptr->skill_sav - power))
+	if (saving_throw(creature_ptr->skill_sav - power))
 	{
 		return;
 	}
 
 	do {
-		(void)do_dec_stat(p_ptr, A_INT);
-	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
+		(void)do_dec_stat(creature_ptr, A_INT);
+	} while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
 
 	do {
-		(void)do_dec_stat(p_ptr, A_WIS);
-	} while (randint0(100) > p_ptr->skill_sav && one_in_(2));
+		(void)do_dec_stat(creature_ptr, A_WIS);
+	} while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
 
 	switch (randint1(21))
 	{
 	case 1:
-		if (!(p_ptr->muta3 & MUT3_MORONIC) && one_in_(5))
+		if (!(creature_ptr->muta3 & MUT3_MORONIC) && one_in_(5))
 		{
-			if ((p_ptr->stat_use[A_INT] < 4) && (p_ptr->stat_use[A_WIS] < 4))
+			if ((creature_ptr->stat_use[A_INT] < 4) && (creature_ptr->stat_use[A_WIS] < 4))
 			{
 				msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You current_world_ptr->game_turn into an utter moron!"));
 			}
@@ -5395,47 +5395,47 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 				msg_print(_("あなたは完璧な馬鹿になった！", "You current_world_ptr->game_turn into an utter moron!"));
 			}
 
-			if (p_ptr->muta3 & MUT3_HYPER_INT)
+			if (creature_ptr->muta3 & MUT3_HYPER_INT)
 			{
 				msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
-				p_ptr->muta3 &= ~(MUT3_HYPER_INT);
+				creature_ptr->muta3 &= ~(MUT3_HYPER_INT);
 			}
-			p_ptr->muta3 |= MUT3_MORONIC;
+			creature_ptr->muta3 |= MUT3_MORONIC;
 		}
 		break;
 	case 2:
 	case 3:
 	case 4:
-		if (!(p_ptr->muta2 & MUT2_COWARDICE) && !p_ptr->resist_fear)
+		if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !creature_ptr->resist_fear)
 		{
 			msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
 
 			/* Duh, the following should never happen, but anyway... */
-			if (p_ptr->muta3 & MUT3_FEARLESS)
+			if (creature_ptr->muta3 & MUT3_FEARLESS)
 			{
 				msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
-				p_ptr->muta3 &= ~(MUT3_FEARLESS);
+				creature_ptr->muta3 &= ~(MUT3_FEARLESS);
 			}
 
-			p_ptr->muta2 |= MUT2_COWARDICE;
+			creature_ptr->muta2 |= MUT2_COWARDICE;
 		}
 		break;
 	case 5:
 	case 6:
 	case 7:
-		if (!(p_ptr->muta2 & MUT2_HALLU) && !p_ptr->resist_chaos)
+		if (!(creature_ptr->muta2 & MUT2_HALLU) && !creature_ptr->resist_chaos)
 		{
 			msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
-			p_ptr->muta2 |= MUT2_HALLU;
+			creature_ptr->muta2 |= MUT2_HALLU;
 		}
 		break;
 	case 8:
 	case 9:
 	case 10:
-		if (!(p_ptr->muta2 & MUT2_BERS_RAGE))
+		if (!(creature_ptr->muta2 & MUT2_BERS_RAGE))
 		{
 			msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
-			p_ptr->muta2 |= MUT2_BERS_RAGE;
+			creature_ptr->muta2 |= MUT2_BERS_RAGE;
 		}
 		break;
 	case 11:
@@ -5445,17 +5445,17 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	case 15:
 	case 16:
 		/* Brain smash */
-		if (!p_ptr->resist_conf)
+		if (!creature_ptr->resist_conf)
 		{
-			(void)set_confused(p_ptr, p_ptr->confused + randint0(4) + 4);
+			(void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
 		}
-		if (!p_ptr->free_act)
+		if (!creature_ptr->free_act)
 		{
-			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(4) + 4);
+			(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + randint0(4) + 4);
 		}
-		if (!p_ptr->resist_chaos)
+		if (!creature_ptr->resist_chaos)
 		{
-			(void)set_image(p_ptr, p_ptr->image + randint0(250) + 150);
+			(void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
 		}
 		break;
 	case 17:
@@ -5464,12 +5464,12 @@ void sanity_blast(monster_type *m_ptr, bool necro)
 	case 20:
 	case 21:
 		/* Amnesia */
-		if (lose_all_info(p_ptr))
+		if (lose_all_info(creature_ptr))
 			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
 		break;
 	}
 
-	p_ptr->update |= PU_BONUS;
+	creature_ptr->update |= PU_BONUS;
 	handle_stuff();
 }
 

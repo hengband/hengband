@@ -4697,7 +4697,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			{
 				msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 				/* Have some nightmares */
-				sanity_blast(NULL, FALSE);
+				sanity_blast(p_ptr, NULL, FALSE);
 			}
 
 			set_paralyzed(p_ptr, p_ptr->paralyzed + dam);

@@ -2056,7 +2056,7 @@ static bool inn_comm(int cmd)
 					/* Have some nightmares */
 					while(1)
 					{
-						sanity_blast(NULL, FALSE);
+						sanity_blast(p_ptr, NULL, FALSE);
 						if (!one_in_(3)) break;
 					}
 

@@ -2129,7 +2129,7 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 
 			if (r_info[m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
 			{
-				sanity_blast(m_ptr, FALSE);
+				sanity_blast(p_ptr, m_ptr, FALSE);
 			}
 
 			/* Disturb on appearance */

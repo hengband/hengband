@@ -184,7 +184,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 					msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 
 					/* Have some nightmares */
-					sanity_blast(NULL, FALSE);
+					sanity_blast(p_ptr, NULL, FALSE);
 				}
 				if (set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(4) + 4))
 				{

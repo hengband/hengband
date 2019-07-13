@@ -1255,7 +1255,7 @@ void do_cmd_cast(void)
 		{
 			if ((sval == 3) && one_in_(2))
 			{
-				sanity_blast(0, TRUE);
+				sanity_blast(p_ptr, 0, TRUE);
 			}
 			else
 			{

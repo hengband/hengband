@@ -745,7 +745,7 @@ extern void take_turn(player_type *creature_ptr, PERCENTAGE need_cost);
 extern void free_turn(player_type *creature_ptr);
 
 extern bool player_place(player_type *creature_ptr, POSITION y, POSITION x);
-extern void sanity_blast(monster_type *m_ptr, bool necro);
+extern void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro);
 
 extern void check_experience(player_type *creature_ptr);
 extern void wreck_the_pattern(player_type *creature_ptr);
