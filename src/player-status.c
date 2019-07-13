@@ -3151,7 +3151,7 @@ void calc_bonuses(void)
 	o_ptr = &p_ptr->inventory_list[INVEN_BOW];
 
 	/* It is hard to carholdry a heavy bow */
-	p_ptr->heavy_shoot = is_heavy_shoot(o_ptr);
+	p_ptr->heavy_shoot = is_heavy_shoot(p_ptr, o_ptr);
 	if (p_ptr->heavy_shoot)
 	{
 		/* Hard to wield a heavy bow */
@@ -4859,7 +4859,7 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 	object_flags(o_ptr, flgs);
 	if (have_flag(flgs, TR_XTRA_SHOTS)) extra_shots++;
 
-	if (o_ptr->k_idx && !is_heavy_shoot(o_ptr))
+	if (o_ptr->k_idx && !is_heavy_shoot(creature_ptr, o_ptr))
 	{
 		num = 100;
 		/* Extra shots */

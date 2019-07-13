@@ -2066,9 +2066,9 @@ static void fix_object(void)
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
  * @return 重すぎるならばTRUE
  */
-bool is_heavy_shoot(object_type *o_ptr)
+bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
 {
-	int hold = adj_str_hold[p_ptr->stat_ind[A_STR]];
+	int hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
 	/* It is hard to carholdry a heavy bow */
 	return (hold < o_ptr->weight / 10);
 }
