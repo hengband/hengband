@@ -1429,61 +1429,6 @@ bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VA
 	return (REALM1_BOOK == book_tval || REALM2_BOOK == book_tval);
 }
 
-/*
- * Here is a "hook" used during calls to "get_item()" and
- * "show_inven()" and "show_equip()", and the choice window routines.
- */
-bool(*item_tester_hook)(object_type*);
-
-/*
- * Here is a "pseudo-hook" used during calls to "get_item()" and
- * "show_inven()" and "show_equip()", and the choice window routines.
- */
-OBJECT_TYPE_VALUE item_tester_tval;
-
-/*!
- * @brief アイテムがitem_tester_hookグローバル関数ポインタの条件を満たしているかを返す汎用関数
- * Check an item against the item tester info
- * @param o_ptr 判定を行いたいオブジェクト構造体参照ポインタ
- * @return item_tester_hookの参照先、その他いくつかの例外に応じてTRUE/FALSEを返す。
- */
-bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
-{
-	/* Hack -- allow listing empty slots */
-	// if (item_tester_full) return (TRUE); // TODO:DELETE
-
-	/* Require an item */
-	if (!o_ptr->k_idx) return (FALSE);
-
-	/* Hack -- ignore "gold" */
-	if (o_ptr->tval == TV_GOLD)
-	{
-		/* See xtra2.c */
-		extern bool show_gold_on_floor;
-
-		if (!show_gold_on_floor) return (FALSE);
-	}
-
-	/* Check the tval */
-	if (tval)
-	{
-		/* Is it a spellbook? If so, we need a hack -- TY */
-		if ((tval <= TV_DEATH_BOOK) && (tval >= TV_LIFE_BOOK))
-			return check_book_realm(o_ptr->tval, o_ptr->sval);
-		else
-			if (tval != o_ptr->tval) return (FALSE);
-	}
-
-	/* Check the hook */
-	if (item_tester_hook)
-	{
-		if (!(*item_tester_hook)(o_ptr)) return (FALSE);
-	}
-
-	/* Assume okay */
-	return (TRUE);
-}
-
 /*!
  * @brief 矢弾を射撃した場合の破損確率を返す /
  * Determines the odds of an object breaking when thrown at a monster

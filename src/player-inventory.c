@@ -7,6 +7,7 @@
 #include "object.h"
 #include "objectkind.h"
 #include "object-flavor.h"
+#include "object-hook.h"
 #include "floor.h"
 #include "player-move.h"
 
