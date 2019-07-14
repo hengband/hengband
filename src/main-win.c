@@ -4270,15 +4270,10 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "arg_graphics" */
 			if (arg_graphics != GRAPHICS_NONE)
 			{
 				arg_graphics = GRAPHICS_NONE;
-
-				/* React to changes */
 				Term_xtra_win_react();
-
-				/* Hack -- Force redraw */
 				Term_key_push(KTRL('R'));
 			}
 
@@ -4293,15 +4288,10 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "arg_graphics" */
 			if (arg_graphics != GRAPHICS_ORIGINAL)
 			{
 				arg_graphics = GRAPHICS_ORIGINAL;
-
-				/* React to changes */
 				Term_xtra_win_react();
-
-				/* Hack -- Force redraw */
 				Term_key_push(KTRL('R'));
 			}
 
@@ -4316,15 +4306,10 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "arg_graphics" */
 			if (arg_graphics != GRAPHICS_ADAM_BOLT)
 			{
 				arg_graphics = GRAPHICS_ADAM_BOLT;
-
-				/* React to changes */
 				Term_xtra_win_react();
-
-				/* Hack -- Force redraw */
 				Term_key_push(KTRL('R'));
 			}
 
@@ -4339,15 +4324,10 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "arg_graphics" */
 			if (arg_graphics != GRAPHICS_HENGBAND)
 			{
 				arg_graphics = GRAPHICS_HENGBAND;
-
-				/* React to changes */
 				Term_xtra_win_react();
-
-				/* Hack -- Force redraw */
 				Term_key_push(KTRL('R'));
 			}
 
@@ -4363,18 +4343,10 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "arg_sound" */
 			arg_bigtile = !arg_bigtile;
-
-			/* Activate */
 			Term_activate(&td->t);
-
-			/* Resize the term */
 			Term_resize(td->cols, td->rows);
-
-			/* Redraw later */
 			InvalidateRect(td->w, NULL, TRUE);
-
 			break;
 		}
 
@@ -4386,15 +4358,9 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "arg_sound" */
 			arg_music = !arg_music;
-
-			/* React to changes */
 			Term_xtra_win_react();
-
-			/* Hack -- Force redraw */
 			Term_key_push(KTRL('R'));
-
 			break;
 		}
 
@@ -4406,15 +4372,9 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "arg_sound" */
 			arg_sound = !arg_sound;
-
-			/* React to changes */
 			Term_xtra_win_react();
-
-			/* Hack -- Force redraw */
 			Term_key_push(KTRL('R'));
-
 			break;
 		}
 
@@ -4427,17 +4387,10 @@ static void process_menus(WORD wCmd)
 				break;
 			}
 
-			/* Toggle "use_bg" */
 			use_bg = !use_bg;
-
 			init_bg();
-
-			/* React to changes */
 			Term_xtra_win_react();
-
-			/* Hack -- Force redraw */
 			Term_key_push(KTRL('R'));
-
 			break;
 		}
 

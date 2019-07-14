@@ -5483,7 +5483,6 @@ static void store_process_command(void)
 			break;
 		}
 
-		/* Hack -- toggle windows */
 		case KTRL('I'):
 		{
 			toggle_inven_equip(p_ptr);

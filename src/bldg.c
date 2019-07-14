@@ -3818,7 +3818,6 @@ static bool research_mon(void)
 			/* Normal commands */
 			if (query != 'r') break;
 
-			/* Toggle recall */
 			recall = !recall;
 		}
 

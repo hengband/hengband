@@ -3530,8 +3530,6 @@ static void process_command(void)
 		}
 
 		/*** Wizard Commands ***/
-
-		/* Toggle Wizard Mode */
 		case KTRL('W'):
 		{
 			if (p_ptr->wizard)
@@ -3636,7 +3634,6 @@ static void process_command(void)
 			break;
 		}
 
-		/* Hack -- toggle windows */
 		case KTRL('I'):
 		{
 			toggle_inven_equip(p_ptr);
@@ -3712,7 +3709,6 @@ static void process_command(void)
 			break;
 		}
 
-		/* Toggle search mode */
 		case 'S':
 		{
 			if (p_ptr->action == ACTION_SEARCH) set_action(p_ptr, ACTION_NONE);

@@ -1472,7 +1472,6 @@ void do_cmd_query_symbol(void)
 			/* Normal commands */
 			if (query != 'r') break;
 
-			/* Toggle recall */
 			recall = !recall;
 		}
 

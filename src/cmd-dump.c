@@ -1085,7 +1085,6 @@ void do_cmd_player_status(void)
 			}
 		}
 
-		/* Toggle mode */
 		else if (c == 'h')
 		{
 			mode++;

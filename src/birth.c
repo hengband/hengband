@@ -4395,7 +4395,6 @@ static bool player_birth_aux(player_type *creature_ptr)
 				continue;
 			}
 
-			/* Toggle the display */
 			if ((c == 'H') || (c == 'h'))
 			{
 				mode = ((mode != 0) ? 0 : 1);

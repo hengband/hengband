@@ -629,7 +629,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				/* Normal commands */
 				if (query != 'r') break;
 
-				/* Toggle recall */
 				recall = FALSE;
 
 				/* Cleare recall text and repeat */
@@ -657,7 +656,6 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			/* Normal commands */
 			if (query != 'r') break;
 
-			/* Toggle recall */
 			recall = TRUE;
 		}
 

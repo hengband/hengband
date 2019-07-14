@@ -1117,13 +1117,9 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 			if (window_flag[j] & (PW_EQUIP)) ne++;
 		}
 
-		/* Toggle if needed */
 		if ((command_wrk && ni && !ne) || (!command_wrk && !ni && ne))
 		{
-			/* Toggle */
 			toggle_inven_equip(p_ptr);
-
-			/* Track toggles */
 			toggle = !toggle;
 		}
 
@@ -1604,7 +1600,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 
 
 	/* Clean up  'show choices' */
-	/* Toggle again if needed */
 	if (toggle) toggle_inven_equip(p_ptr);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
@@ -2119,10 +2114,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 		if ((command_wrk == (USE_EQUIP) && ni && !ne) ||
 			(command_wrk == (USE_INVEN) && !ni && ne))
 		{
-			/* Toggle */
 			toggle_inven_equip(p_ptr);
-
-			/* Track toggles */
 			toggle = !toggle;
 		}
 
@@ -2950,7 +2942,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 
 
 	/* Clean up  'show choices' */
-	/* Toggle again if needed */
 	if (toggle) toggle_inven_equip(p_ptr);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
