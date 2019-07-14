@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "spells.h"
 #include "objectkind.h"
-
+#include "snipe.h"
 
 /*!
 * @brief アイテムが酸で破損するかどうかを判定する
@@ -402,4 +402,61 @@ bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_ID
 
 	/* XXX  those potions that explode need to become "known" */
 	return angry;
+}
+
+/*!
+ * @brief 矢弾を射撃した場合の破損確率を返す /
+ * Determines the odds of an object breaking when thrown at a monster
+ * @param o_ptr 矢弾のオブジェクト構造体参照ポインタ
+ * @return 破損確率(%)
+ * @details
+ * Note that artifacts never break, see the "drop_near()" function.
+ */
+PERCENTAGE breakage_chance(object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
+{
+	PERCENTAGE archer_bonus = (has_archer_bonus ? (PERCENTAGE)(p_ptr->lev - 1) / 7 + 4 : 0);
+
+	/* Examine the snipe type */
+	if (snipe_type)
+	{
+		if (snipe_type == SP_KILL_WALL) return (100);
+		if (snipe_type == SP_EXPLODE) return (100);
+		if (snipe_type == SP_PIERCE) return (100);
+		if (snipe_type == SP_FINAL) return (100);
+		if (snipe_type == SP_NEEDLE) return (100);
+		if (snipe_type == SP_EVILNESS) return (40);
+		if (snipe_type == SP_HOLYNESS) return (40);
+	}
+
+	/* Examine the item type */
+	switch (o_ptr->tval)
+	{
+		/* Always break */
+	case TV_FLASK:
+	case TV_POTION:
+	case TV_BOTTLE:
+	case TV_FOOD:
+	case TV_JUNK:
+		return (100);
+
+		/* Often break */
+	case TV_LITE:
+	case TV_SCROLL:
+	case TV_SKELETON:
+		return (50);
+
+		/* Sometimes break */
+	case TV_WAND:
+	case TV_SPIKE:
+		return (25);
+	case TV_ARROW:
+		return (20 - archer_bonus * 2);
+
+		/* Rarely break */
+	case TV_SHOT:
+	case TV_BOLT:
+		return (10 - archer_bonus);
+	default:
+		return (10);
+	}
 }

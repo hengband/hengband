@@ -424,7 +424,6 @@ extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUB
 extern bool can_get_item(OBJECT_TYPE_VALUE tval);
 extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval);
-PERCENTAGE breakage_chance(object_type *o_ptr, SPELL_IDX snipe_type);
 
 extern int bow_tval_ammo(object_type *o_ptr);
 

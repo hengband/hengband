@@ -13,6 +13,7 @@
 #include "player-class.h"
 #include "player-personality.h"
 #include "object-hook.h"
+#include "object-broken.h"
 #include "floor.h"
 #include "grid.h"
 #include "spells.h"
@@ -837,7 +838,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 		}
 
 		/* Chance of breakage (during attacks) */
-		j = (hit_body ? breakage_chance(q_ptr, snipe_type) : 0);
+		j = (hit_body ? breakage_chance(q_ptr, p_ptr->pclass == CLASS_ARCHER, snipe_type) : 0);
 
 		if (stick_to)
 		{

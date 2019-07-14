@@ -2695,7 +2695,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if (hit_body) torch_lost_fuel(q_ptr);
 
 	/* Chance of breakage (during attacks) */
-	j = (hit_body ? breakage_chance(q_ptr, 0) : 0);
+	j = (hit_body ? breakage_chance(q_ptr, p_ptr->pclass == CLASS_ARCHER, 0) : 0);
 
 	/* Figurines transform */
 	if ((q_ptr->tval == TV_FIGURINE) && !(p_ptr->inside_arena))
