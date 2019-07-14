@@ -2383,7 +2383,6 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		/* All done */
 		break;
 
-
 		/* Bows get a special "damage string" */
 		case TV_BOW:
 
@@ -2670,46 +2669,27 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 
 			else if (have_flag(flgs, TR_SPEED))
 			{
-				/* Dump " to speed" */
 				t = object_desc_str(t, _("加速", " to speed"));
 			}
-
-			/* Attack speed */
 			else if (have_flag(flgs, TR_BLOWS))
 			{
-				/* Add " attack" */
-#ifdef JP
-				t = object_desc_str(t, "攻撃");
-#else
-				t = object_desc_str(t, " attack");
-
-				/* Add "attacks" */
+				t = object_desc_str(t, _("攻撃", " attack"));
+#ifndef JP
 				if (ABS(o_ptr->pval) != 1) t = object_desc_chr(t, 's');
 #endif
 			}
-
-			/* Stealth */
 			else if (have_flag(flgs, TR_STEALTH))
 			{
-				/* Dump " to stealth" */
 				t = object_desc_str(t, _("隠密", " to stealth"));
 			}
-
-			/* Search */
 			else if (have_flag(flgs, TR_SEARCH))
 			{
-				/* Dump " to searching" */
 				t = object_desc_str(t, _("探索", " to searching"));
 			}
-
-			/* Infravision */
 			else if (have_flag(flgs, TR_INFRA))
 			{
-				/* Dump " to infravision" */
 				t = object_desc_str(t, _("赤外線視力", " to infravision"));
 			}
-
-			/* Finish the display */
 			t = object_desc_chr(t, p2);
 		}
 
@@ -2717,12 +2697,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		if ((o_ptr->tval == TV_LITE) && (!(object_is_fixed_artifact(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR))))
 		{
 			/* Hack -- Turns of light for normal lites */
-#ifdef JP
-			t = object_desc_chr(t, '(');
-#else
-			t = object_desc_str(t, " (with ");
-#endif
-
+			t = object_desc_chr(t, _('(', " (with "));
 			if (o_ptr->name2 == EGO_LITE_LONG) t = object_desc_num(t, o_ptr->xtra4 * 2);
 			else t = object_desc_num(t, o_ptr->xtra4);
 			t = object_desc_str(t, _("ターンの寿命)", " turns of light)"));
@@ -2731,15 +2706,12 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		/* Indicate charging objects, but not rods. */
 		if (o_ptr->timeout && (o_ptr->tval != TV_ROD))
 		{
-			/* Hack -- Dump " (charging)" if relevant */
 			t = object_desc_str(t, _("(充填中)", " (charging)"));
 		}
 	}
 
-
 	/* No more details wanted */
 	if (mode & OD_OMIT_INSCRIPTION) goto object_desc_done;
-
 
 	/* Prepare real inscriptions in a buffer */
 	tmp_val2[0] = '\0';
@@ -2766,13 +2738,8 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 	if (o_ptr->inscription)
 	{
 		char buff[1024];
-
 		if (tmp_val2[0]) strcat(tmp_val2, ", ");
-
-		/* Get inscription and convert {%} */
 		get_inscription(buff, o_ptr);
-
-		/* strcat with correct treating of kanji */
 		my_strcat(tmp_val2, buff, sizeof(tmp_val2));
 	}
 
