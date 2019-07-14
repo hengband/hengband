@@ -10,3 +10,4 @@ extern void display_inven(OBJECT_TYPE_VALUE tval);
 extern void display_equip(OBJECT_TYPE_VALUE tval);
 extern COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 extern COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
+extern void toggle_inven_equip(player_type *creature_ptr);

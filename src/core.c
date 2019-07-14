@@ -3639,7 +3639,7 @@ static void process_command(void)
 		/* Hack -- toggle windows */
 		case KTRL('I'):
 		{
-			toggle_inven_equip();
+			toggle_inven_equip(p_ptr);
 			break;
 		}
 

@@ -29,6 +29,7 @@
 #include "rumor.h"
 #include "player-status.h"
 #include "player-class.h"
+#include "player-inventory.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "floor-events.h"
@@ -5485,7 +5486,7 @@ static void store_process_command(void)
 		/* Hack -- toggle windows */
 		case KTRL('I'):
 		{
-			toggle_inven_equip();
+			toggle_inven_equip(p_ptr);
 			break;
 		}
 

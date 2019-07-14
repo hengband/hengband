@@ -192,7 +192,7 @@ void display_equip(OBJECT_TYPE_VALUE tval)
  * Flip "inven" and "equip" in any sub-windows
  * @return なし
  */
-void toggle_inven_equip(void)
+void toggle_inven_equip(player_type *creature_ptr)
 {
 	int j;
 
@@ -209,7 +209,7 @@ void toggle_inven_equip(void)
 			window_flag[j] &= ~(PW_INVEN);
 			window_flag[j] |= (PW_EQUIP);
 
-			p_ptr->window |= (PW_EQUIP);
+			creature_ptr->window |= (PW_EQUIP);
 		}
 
 		/* Flip inven to equip */
@@ -219,7 +219,7 @@ void toggle_inven_equip(void)
 			window_flag[j] &= ~(PW_EQUIP);
 			window_flag[j] |= (PW_INVEN);
 
-			p_ptr->window |= (PW_INVEN);
+			creature_ptr->window |= (PW_INVEN);
 		}
 	}
 }
@@ -1121,7 +1121,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 		if ((command_wrk && ni && !ne) || (!command_wrk && !ni && ne))
 		{
 			/* Toggle */
-			toggle_inven_equip();
+			toggle_inven_equip(p_ptr);
 
 			/* Track toggles */
 			toggle = !toggle;
@@ -1605,7 +1605,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 
 	/* Clean up  'show choices' */
 	/* Toggle again if needed */
-	if (toggle) toggle_inven_equip();
+	if (toggle) toggle_inven_equip(p_ptr);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 	handle_stuff();
@@ -2120,7 +2120,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			(command_wrk == (USE_INVEN) && !ni && ne))
 		{
 			/* Toggle */
-			toggle_inven_equip();
+			toggle_inven_equip(p_ptr);
 
 			/* Track toggles */
 			toggle = !toggle;
@@ -2951,7 +2951,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 
 	/* Clean up  'show choices' */
 	/* Toggle again if needed */
-	if (toggle) toggle_inven_equip();
+	if (toggle) toggle_inven_equip(p_ptr);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
 	handle_stuff();

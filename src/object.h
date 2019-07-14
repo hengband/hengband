@@ -412,7 +412,6 @@ extern s16b wield_slot(object_type *o_ptr);
 
 extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 extern bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval);
-extern void toggle_inven_equip(void);
 
 /*
  * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
