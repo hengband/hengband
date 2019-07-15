@@ -2474,7 +2474,7 @@ static void process_world_aux_mutation(void)
 		msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
 		msg_print(NULL);
 		set_food(p_ptr, PY_FOOD_WEAK);
-		if (music_singing_any()) stop_singing(p_ptr);
+		if (music_singing_any(p_ptr)) stop_singing(p_ptr);
 		if (hex_spelling_any()) stop_hex_spell_all();
 	}
 

@@ -73,7 +73,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 		return;
 	}
 
-	if (music_singing_any()) stop_singing(p_ptr);
+	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
 
 	/* Hex */
 	if (hex_spelling_any() && ((p_ptr->lev < 35) || hex_spell_fully())) stop_hex_spell_all();

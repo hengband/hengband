@@ -338,9 +338,9 @@ void dispel_player(player_type *creature_ptr)
 		msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
 	}
 
-	if (music_singing_any() || hex_spelling_any())
+	if (music_singing_any(p_ptr) || hex_spelling_any())
 	{
-		concptr str = (music_singing_any()) ? _("歌", "singing") : _("呪文", "spelling");
+		concptr str = (music_singing_any(p_ptr)) ? _("歌", "singing") : _("呪文", "spelling");
 		INTERUPTING_SONG_EFFECT(creature_ptr) = SINGING_SONG_EFFECT(creature_ptr);
 		SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);

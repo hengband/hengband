@@ -1857,7 +1857,7 @@ static void rd_extra(void)
 			}
 		}
 	}
-	if (music_singing_any()) p_ptr->action = ACTION_SING;
+	if (music_singing_any(p_ptr)) p_ptr->action = ACTION_SING;
 
 	if (z_older_than(11, 0, 7))
 	{
