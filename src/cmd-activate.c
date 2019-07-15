@@ -439,7 +439,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	/* Activate object */
 	if (activation_index(o_ptr))
 	{
-		(void)activate_artifact(o_ptr);
+		(void)activate_artifact(p_ptr, o_ptr);
 
 		user_ptr->window |= (PW_INVEN | PW_EQUIP);
 
@@ -618,7 +618,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			if (!success)
 				msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 		}
-		calc_android_exp(p_ptr);
+		calc_android_exp(user_ptr);
 		return;
 	}
 
@@ -694,14 +694,15 @@ static bool activate_dragon_breath(object_type *o_ptr)
 	return TRUE;
 }
 
+
 /*!
  * @brief アイテムの発動効果を処理する。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
-bool activate_artifact(object_type *o_ptr)
+bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = user_ptr->lev;
 	int k, dummy = 0;
 	DIRECTION dir;
 	concptr name = k_name + k_info[o_ptr->k_idx].name;
@@ -881,7 +882,7 @@ bool activate_artifact(object_type *o_ptr)
 		for (dummy = 0; dummy < 3; dummy++)
 		{
 			if (hypodynamic_bolt(dir, 50))
-				hp_player(p_ptr, 50);
+				hp_player(user_ptr, 50);
 		}
 		break;
 	}
@@ -906,7 +907,7 @@ bool activate_artifact(object_type *o_ptr)
 		for (dummy = 0; dummy < 3; dummy++)
 		{
 			if (hypodynamic_bolt(dir, 100))
-				hp_player(p_ptr, 100);
+				hp_player(user_ptr, 100);
 		}
 		break;
 	}
@@ -930,7 +931,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_DISP_EVIL:
 	{
 		msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
-		dispel_evil(p_ptr->lev * 5);
+		dispel_evil(user_ptr->lev * 5);
 		break;
 	}
 
@@ -945,7 +946,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_DISP_GOOD:
 	{
 		msg_print(_("邪悪な雰囲気が充満した...", "It floods the area with evil..."));
-		dispel_good(p_ptr->lev * 5);
+		dispel_good(user_ptr->lev * 5);
 		break;
 	}
 
@@ -992,7 +993,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
 		fire_ball(GF_LITE, 0, 300, 6);
-		confuse_monsters(3 * p_ptr->lev / 2);
+		confuse_monsters(3 * user_ptr->lev / 2);
 		break;
 	}
 
@@ -1016,7 +1017,7 @@ bool activate_artifact(object_type *o_ptr)
 
 			while (attempts--)
 			{
-				scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
+				scatter(&y, &x, user_ptr->y, user_ptr->x, 4, 0);
 				if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 				if (!player_bold(y, x)) break;
 			}
@@ -1034,15 +1035,15 @@ bool activate_artifact(object_type *o_ptr)
 		msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
 		fire_breath(GF_MISSILE, dir, 300, 4);
 		msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
-		(void)set_afraid(p_ptr, 0);
-		(void)set_hero(p_ptr, randint1(50) + 50, FALSE);
-		(void)hp_player(p_ptr, 10);
-		(void)set_blessed(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_acid(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_elec(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_fire(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_cold(p_ptr, randint1(50) + 50, FALSE);
-		(void)set_oppose_pois(p_ptr, randint1(50) + 50, FALSE);
+		(void)set_afraid(user_ptr, 0);
+		(void)set_hero(user_ptr, randint1(50) + 50, FALSE);
+		(void)hp_player(user_ptr, 10);
+		(void)set_blessed(user_ptr, randint1(50) + 50, FALSE);
+		(void)set_oppose_acid(user_ptr, randint1(50) + 50, FALSE);
+		(void)set_oppose_elec(user_ptr, randint1(50) + 50, FALSE);
+		(void)set_oppose_fire(user_ptr, randint1(50) + 50, FALSE);
+		(void)set_oppose_cold(user_ptr, randint1(50) + 50, FALSE);
+		(void)set_oppose_pois(user_ptr, randint1(50) + 50, FALSE);
 		break;
 	}
 
@@ -1052,7 +1053,7 @@ bool activate_artifact(object_type *o_ptr)
 		fire_breath(GF_FIRE, dir, 200, 2);
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
 		{
-			(void)set_oppose_fire(p_ptr, randint1(20) + 20, FALSE);
+			(void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
 		}
 		break;
 	}
@@ -1063,7 +1064,7 @@ bool activate_artifact(object_type *o_ptr)
 		fire_breath(GF_COLD, dir, 200, 2);
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 		{
-			(void)set_oppose_cold(p_ptr, randint1(20) + 20, FALSE);
+			(void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
 		}
 		break;
 	}
@@ -1092,13 +1093,13 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_QUAKE:
 	{
-		earthquake(p_ptr->y, p_ptr->x, 5, 0);
+		earthquake(user_ptr->y, user_ptr->x, 5, 0);
 		break;
 	}
 
 	case ACT_TERROR:
 	{
-		turn_monsters(40 + p_ptr->lev);
+		turn_monsters(40 + user_ptr->lev);
 		break;
 	}
 
@@ -1134,11 +1135,11 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_SCARE_AREA:
 	{
-		if (music_singing_any()) stop_singing(p_ptr);
+		if (music_singing_any()) stop_singing(user_ptr);
 		if (hex_spelling_any()) stop_hex_spell_all();
 		msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!",
 			"You wind a mighty blast; your enemies tremble!"));
-		(void)turn_monsters((3 * p_ptr->lev / 2) + 10);
+		(void)turn_monsters((3 * user_ptr->lev / 2) + 10);
 		break;
 	}
 
@@ -1193,19 +1194,19 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_SUMMON_ANIMAL:
 	{
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, user_ptr->y, user_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 
 	case ACT_SUMMON_PHANTOM:
 	{
 		msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, user_ptr->y, user_ptr->x, current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 
 	case ACT_SUMMON_ELEMENTAL:
-		if (!cast_summon_elemental(p_ptr, (plev * 3) / 2)) return FALSE;
+		if (!cast_summon_elemental(user_ptr, (plev * 3) / 2)) return FALSE;
 		break;
 
 	case ACT_SUMMON_DEMON:
@@ -1215,38 +1216,38 @@ bool activate_artifact(object_type *o_ptr)
 	}
 
 	case ACT_SUMMON_UNDEAD:
-		if (!cast_summon_undead(p_ptr, (plev * 3) / 2)) return FALSE;
+		if (!cast_summon_undead(user_ptr, (plev * 3) / 2)) return FALSE;
 		break;
 
 	case ACT_SUMMON_HOUND:
-		if (!cast_summon_hound(p_ptr, (plev * 3) / 2)) return FALSE;
+		if (!cast_summon_hound(user_ptr, (plev * 3) / 2)) return FALSE;
 		break;
 
 	case ACT_SUMMON_DAWN:
 	{
 		msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
-		(void)summon_specific(-1, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, user_ptr->y, user_ptr->x, current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 
 	case ACT_SUMMON_OCTOPUS:
-		if(!cast_summon_octopus(p_ptr)) return FALSE;
+		if (!cast_summon_octopus(user_ptr)) return FALSE;
 		break;
 
-	/* Activate for healing */
+		/* Activate for healing */
 
 	case ACT_CHOIR_SINGS:
 	{
 		msg_print(_("天国の歌が聞こえる...", "A heavenly choir sings..."));
 		(void)cure_critical_wounds(777);
-		(void)set_hero(p_ptr, randint1(25) + 25, FALSE);
+		(void)set_hero(user_ptr, randint1(25) + 25, FALSE);
 		break;
 	}
 
 	case ACT_CURE_LW:
 	{
-		(void)set_afraid(p_ptr, 0);
-		(void)hp_player(p_ptr, 30);
+		(void)set_afraid(user_ptr, 0);
+		(void)hp_player(user_ptr, 30);
 		break;
 	}
 
@@ -1260,15 +1261,15 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_CURE_POISON:
 	{
 		msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-		(void)set_afraid(p_ptr, 0);
-		(void)set_poisoned(p_ptr, 0);
+		(void)set_afraid(user_ptr, 0);
+		(void)set_poisoned(user_ptr, 0);
 		break;
 	}
 
 	case ACT_REST_EXP:
 	{
 		msg_print(_("深紅に輝いている...", "It glows a deep red..."));
-		restore_level(p_ptr);
+		restore_level(user_ptr);
 		break;
 	}
 
@@ -1276,7 +1277,7 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		msg_print(_("濃緑色に輝いている...", "It glows a deep green..."));
 		(void)restore_all_status();
-		(void)restore_level(p_ptr);
+		(void)restore_level(user_ptr);
 		break;
 	}
 
@@ -1314,7 +1315,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_ESP:
 	{
-		(void)set_tim_esp(p_ptr, randint1(30) + 25, FALSE);
+		(void)set_tim_esp(user_ptr, randint1(30) + 25, FALSE);
 		break;
 	}
 
@@ -1327,45 +1328,45 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_PROT_EVIL:
 	{
 		msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name);
-		k = 3 * p_ptr->lev;
-		(void)set_protevil(p_ptr, randint1(25) + k, FALSE);
+		k = 3 * user_ptr->lev;
+		(void)set_protevil(user_ptr, randint1(25) + k, FALSE);
 		break;
 	}
 
 	case ACT_RESIST_ALL:
 	{
 		msg_print(_("様々な色に輝いている...", "It glows many colours..."));
-		(void)set_oppose_acid(p_ptr, randint1(40) + 40, FALSE);
-		(void)set_oppose_elec(p_ptr, randint1(40) + 40, FALSE);
-		(void)set_oppose_fire(p_ptr, randint1(40) + 40, FALSE);
-		(void)set_oppose_cold(p_ptr, randint1(40) + 40, FALSE);
-		(void)set_oppose_pois(p_ptr, randint1(40) + 40, FALSE);
+		(void)set_oppose_acid(user_ptr, randint1(40) + 40, FALSE);
+		(void)set_oppose_elec(user_ptr, randint1(40) + 40, FALSE);
+		(void)set_oppose_fire(user_ptr, randint1(40) + 40, FALSE);
+		(void)set_oppose_cold(user_ptr, randint1(40) + 40, FALSE);
+		(void)set_oppose_pois(user_ptr, randint1(40) + 40, FALSE);
 		break;
 	}
 
 	case ACT_SPEED:
 	{
 		msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
-		(void)set_fast(p_ptr, randint1(20) + 20, FALSE);
+		(void)set_fast(user_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
 	case ACT_XTRA_SPEED:
 	{
 		msg_print(_("明るく輝いている...", "It glows brightly..."));
-		(void)set_fast(p_ptr, randint1(75) + 75, FALSE);
+		(void)set_fast(user_ptr, randint1(75) + 75, FALSE);
 		break;
 	}
 
 	case ACT_WRAITH:
 	{
-		set_wraith_form(p_ptr, randint1(plev / 2) + (plev / 2), FALSE);
+		set_wraith_form(user_ptr, randint1(plev / 2) + (plev / 2), FALSE);
 		break;
 	}
 
 	case ACT_INVULN:
 	{
-		(void)set_invuln(p_ptr, randint1(8) + 8, FALSE);
+		(void)set_invuln(user_ptr, randint1(8) + 8, FALSE);
 		break;
 	}
 
@@ -1377,7 +1378,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_HERO_SPEED:
 	{
-		(void)set_fast(p_ptr, randint1(50) + 50, FALSE);
+		(void)set_fast(user_ptr, randint1(50) + 50, FALSE);
 		(void)heroism(50);
 		break;
 	}
@@ -1390,7 +1391,7 @@ bool activate_artifact(object_type *o_ptr)
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_ACID, dir, 100, 2);
 		}
-		(void)set_oppose_acid(p_ptr, randint1(20) + 20, FALSE);
+		(void)set_oppose_acid(user_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
@@ -1402,7 +1403,7 @@ bool activate_artifact(object_type *o_ptr)
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_FIRE, dir, 100, 2);
 		}
-		(void)set_oppose_fire(p_ptr, randint1(20) + 20, FALSE);
+		(void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
@@ -1414,7 +1415,7 @@ bool activate_artifact(object_type *o_ptr)
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_COLD, dir, 100, 2);
 		}
-		(void)set_oppose_cold(p_ptr, randint1(20) + 20, FALSE);
+		(void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
@@ -1426,14 +1427,14 @@ bool activate_artifact(object_type *o_ptr)
 			if (!get_aim_dir(&dir)) return FALSE;
 			fire_ball(GF_ELEC, dir, 100, 2);
 		}
-		(void)set_oppose_elec(p_ptr, randint1(20) + 20, FALSE);
+		(void)set_oppose_elec(user_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
 	case ACT_RESIST_POIS:
 	{
 		msg_format(_("%sが緑に輝いた...", "The %s grows green."), name);
-		(void)set_oppose_pois(p_ptr, randint1(20) + 20, FALSE);
+		(void)set_oppose_pois(user_ptr, randint1(20) + 20, FALSE);
 		break;
 	}
 
@@ -1500,7 +1501,7 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_SATIATE:
 	{
-		(void)set_food(p_ptr, PY_FOOD_MAX - 1);
+		(void)set_food(user_ptr, PY_FOOD_MAX - 1);
 		break;
 	}
 
@@ -1550,19 +1551,19 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_RECALL:
 	{
 		msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
-		if (!recall_player(p_ptr, randint0(21) + 15)) return FALSE;
+		if (!recall_player(user_ptr, randint0(21) + 15)) return FALSE;
 		break;
 	}
 
 	case ACT_JUDGE:
 	{
 		msg_format(_("%sは赤く明るく光った！", "The %s flashes bright red!"), name);
-		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
-		chg_virtue(p_ptr, V_ENLIGHTEN, 1);
+		chg_virtue(user_ptr, V_KNOWLEDGE, 1);
+		chg_virtue(user_ptr, V_ENLIGHTEN, 1);
 		wiz_lite(FALSE);
 
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
-		take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
+		take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
 
 		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
@@ -1570,7 +1571,7 @@ bool activate_artifact(object_type *o_ptr)
 
 		if (get_check(_("帰還の力を使いますか？", "Activate recall? ")))
 		{
-			(void)recall_player(p_ptr, randint0(21) + 15);
+			(void)recall_player(user_ptr, randint0(21) + 15);
 		}
 
 		break;
@@ -1626,7 +1627,7 @@ bool activate_artifact(object_type *o_ptr)
 			if (get_check(_("この階を去りますか？", "Leave this level? ")))
 			{
 				if (autosave_l) do_cmd_save_game(TRUE);
-				p_ptr->leaving = TRUE;
+				user_ptr->leaving = TRUE;
 			}
 		}
 		break;
@@ -1656,15 +1657,15 @@ bool activate_artifact(object_type *o_ptr)
 
 	case ACT_LORE:
 		msg_print(_("石が隠された秘密を写し出した．．．", "The stone reveals hidden mysteries..."));
-		if(!perilous_secrets(p_ptr)) return FALSE;
+		if (!perilous_secrets(user_ptr)) return FALSE;
 		break;
 
 	case ACT_SHIKOFUMI:
 	{
 		msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
-		(void)set_afraid(p_ptr, 0);
-		(void)set_hero(p_ptr, randint1(20) + 20, FALSE);
-		dispel_evil(p_ptr->lev * 3);
+		(void)set_afraid(user_ptr, 0);
+		(void)set_hero(user_ptr, randint1(20) + 20, FALSE);
+		dispel_evil(user_ptr->lev * 3);
 		break;
 	}
 
@@ -1684,21 +1685,21 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_ULTIMATE_RESIST:
 	{
 		TIME_EFFECT v = randint1(25) + 25;
-		(void)set_afraid(p_ptr, 0);
-		(void)set_hero(p_ptr, v, FALSE);
-		(void)hp_player(p_ptr, 10);
-		(void)set_blessed(p_ptr, v, FALSE);
-		(void)set_oppose_acid(p_ptr, v, FALSE);
-		(void)set_oppose_elec(p_ptr, v, FALSE);
-		(void)set_oppose_fire(p_ptr, v, FALSE);
-		(void)set_oppose_cold(p_ptr, v, FALSE);
-		(void)set_oppose_pois(p_ptr, v, FALSE);
-		(void)set_ultimate_res(p_ptr, v, FALSE);
+		(void)set_afraid(user_ptr, 0);
+		(void)set_hero(user_ptr, v, FALSE);
+		(void)hp_player(user_ptr, 10);
+		(void)set_blessed(user_ptr, v, FALSE);
+		(void)set_oppose_acid(user_ptr, v, FALSE);
+		(void)set_oppose_elec(user_ptr, v, FALSE);
+		(void)set_oppose_fire(user_ptr, v, FALSE);
+		(void)set_oppose_cold(user_ptr, v, FALSE);
+		(void)set_oppose_pois(user_ptr, v, FALSE);
+		(void)set_ultimate_res(user_ptr, v, FALSE);
 		break;
 	}
 
 	case ACT_CAST_OFF:
-		cosmic_cast_off(p_ptr, o_ptr);
+		cosmic_cast_off(user_ptr, o_ptr);
 		break;
 
 	case ACT_FALLING_STAR:
@@ -1712,7 +1713,7 @@ bool activate_artifact(object_type *o_ptr)
 	case ACT_GRAND_CROSS:
 	{
 		msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
-		project(0, 8, p_ptr->y, p_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+		project(0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 		break;
 	}
 
@@ -1727,14 +1728,14 @@ bool activate_artifact(object_type *o_ptr)
 	{
 		int t;
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
-		take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"), -1);
+		take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"), -1);
 		t = 25 + randint1(25);
-		(void)set_fast(p_ptr, p_ptr->fast + t, FALSE);
+		(void)set_fast(user_ptr, user_ptr->fast + t, FALSE);
 		break;
 	}
 
 	case ACT_FISHING:
-		if(!fishing(p_ptr)) return FALSE;
+		if (!fishing(user_ptr)) return FALSE;
 		break;
 
 	case ACT_INROU:
@@ -1748,7 +1749,7 @@ bool activate_artifact(object_type *o_ptr)
 		if (get_check(_("本当に使いますか？", "Are you sure?!")))
 		{
 			msg_print(_("村正が震えた．．．", "The Muramasa pulsates..."));
-			do_inc_stat(p_ptr, A_STR);
+			do_inc_stat(user_ptr, A_STR);
 			if (one_in_(2))
 			{
 				msg_print(_("村正は壊れた！", "The Muramasa is destroyed!"));
@@ -1764,15 +1765,15 @@ bool activate_artifact(object_type *o_ptr)
 		if (o_ptr->name1 != ART_BLOOD) return FALSE;
 		msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
 		get_bloody_moon_flags(o_ptr);
-		if (p_ptr->prace == RACE_ANDROID) calc_android_exp(p_ptr);
-		p_ptr->update |= (PU_BONUS | PU_HP);
+		if (user_ptr->prace == RACE_ANDROID) calc_android_exp(user_ptr);
+		user_ptr->update |= (PU_BONUS | PU_HP);
 		break;
 	}
 
 	case ACT_CRIMSON:
 		if (o_ptr->name1 != ART_CRIMSON) return FALSE;
 		msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
-		if(!fire_crimson()) return FALSE;
+		if (!fire_crimson()) return FALSE;
 		break;
 
 	default:
@@ -1799,7 +1800,7 @@ bool activate_artifact(object_type *o_ptr)
 			o_ptr->timeout = ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250;
 			break;
 		case ACT_TERROR:
-			o_ptr->timeout = 3 * (p_ptr->lev + 10);
+			o_ptr->timeout = 3 * (user_ptr->lev + 10);
 			break;
 		case ACT_MURAMASA:
 			/* Nothing to do */
@@ -1812,4 +1813,5 @@ bool activate_artifact(object_type *o_ptr)
 
 	return TRUE;
 }
+
 
