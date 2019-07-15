@@ -439,7 +439,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	/* Activate object */
 	if (activation_index(o_ptr))
 	{
-		(void)activate_artifact(p_ptr, o_ptr);
+		(void)activate_artifact(user_ptr, o_ptr);
 
 		user_ptr->window |= (PW_INVEN | PW_EQUIP);
 
@@ -640,7 +640,7 @@ void do_cmd_activate(player_type *user_ptr)
 
 	if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(user_ptr, ACTION_NONE);
 	}
 
 	item_tester_hook = item_tester_hook_activate;
@@ -660,7 +660,7 @@ void do_cmd_activate(player_type *user_ptr)
 * @param o_ptr 対象のオブジェクト構造体ポインタ
 * @return 発動実行の是非を返す。
 */
-static bool activate_dragon_breath(object_type *o_ptr)
+static bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
 	int type[20];
@@ -684,7 +684,7 @@ static bool activate_dragon_breath(object_type *o_ptr)
 	if (n == 0) return FALSE;
 
 	/* Stop speaking */
-	if (music_singing_any()) stop_singing(p_ptr);
+	if (music_singing_any()) stop_singing(user_ptr);
 	if (hex_spelling_any()) stop_hex_spell_all();
 
 	t = randint0(n);
@@ -1071,7 +1071,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_BR_DRAGON:
 	{
-		if (!activate_dragon_breath(o_ptr)) return FALSE;
+		if (!activate_dragon_breath(user_ptr, o_ptr)) return FALSE;
 		break;
 	}
 
