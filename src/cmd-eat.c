@@ -37,7 +37,7 @@ void exe_eat_food(INVENTORY_IDX item)
 	object_type *o_ptr;
 
 	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
-	if (hex_spelling_any()) stop_hex_spell_all();
+	if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
 
 	/* Get the item (in the pack) */
 	if (item >= 0)

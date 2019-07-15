@@ -76,7 +76,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
 
 	/* Hex */
-	if (hex_spelling_any() && ((p_ptr->lev < 35) || hex_spell_fully())) stop_hex_spell_all();
+	if (hex_spelling_any(p_ptr) && ((p_ptr->lev < 35) || hex_spell_fully())) stop_hex_spell_all();
 
 	/* Not identified yet */
 	ident = FALSE;

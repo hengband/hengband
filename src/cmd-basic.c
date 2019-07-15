@@ -2168,7 +2168,7 @@ void do_cmd_rest(void)
 	}
 
 	/* Hex */
-	if (hex_spelling_any()) stop_hex_spell_all();
+	if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
 
 	/* Prompt for time if needed */
 	if (command_arg <= 0)

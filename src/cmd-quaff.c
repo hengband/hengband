@@ -56,7 +56,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 	}
 
 	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
-	if (hex_spelling_any())
+	if (hex_spelling_any(p_ptr))
 	{
 		if (!hex_spelling(HEX_INHAIL)) stop_hex_spell_all();
 	}

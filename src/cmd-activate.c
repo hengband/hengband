@@ -451,7 +451,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	else if (o_ptr->tval == TV_WHISTLE)
 	{
 		if (music_singing_any(user_ptr)) stop_singing(user_ptr);
-		if (hex_spelling_any()) stop_hex_spell_all();
+		if (hex_spelling_any(user_ptr)) stop_hex_spell_all();
 
 		{
 			MONSTER_IDX pet_ctr, i;
@@ -685,7 +685,7 @@ static bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 
 	/* Stop speaking */
 	if (music_singing_any(user_ptr)) stop_singing(user_ptr);
-	if (hex_spelling_any()) stop_hex_spell_all();
+	if (hex_spelling_any(user_ptr)) stop_hex_spell_all();
 
 	t = randint0(n);
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), name[t]);
@@ -1136,7 +1136,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_SCARE_AREA:
 	{
 		if (music_singing_any(user_ptr)) stop_singing(user_ptr);
-		if (hex_spelling_any()) stop_hex_spell_all();
+		if (hex_spelling_any(user_ptr)) stop_hex_spell_all();
 		msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!",
 			"You wind a mighty blast; your enemies tremble!"));
 		(void)turn_monsters((3 * user_ptr->lev / 2) + 10);

@@ -3,8 +3,8 @@
  */
 
  /* Hex */
-#define hex_spelling_any() \
-	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0]))
+#define hex_spelling_any(CREATURE_PTR) \
+	(((CREATURE_PTR)->realm1 == REALM_HEX) && ((CREATURE_PTR)->magic_num1[0]))
 #define hex_spelling(X) \
 	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0] & (1L << (X))))
 #define CASTING_HEX_FLAGS(P_PTR) ((P_PTR)->magic_num1[0])

@@ -338,7 +338,7 @@ void dispel_player(player_type *creature_ptr)
 		msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
 	}
 
-	if (music_singing_any(p_ptr) || hex_spelling_any())
+	if (music_singing_any(p_ptr) || hex_spelling_any(p_ptr))
 	{
 		concptr str = (music_singing_any(p_ptr)) ? _("歌", "singing") : _("呪文", "spelling");
 		INTERUPTING_SONG_EFFECT(creature_ptr) = SINGING_SONG_EFFECT(creature_ptr);
@@ -532,7 +532,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 			if (creature_ptr->concent) reset_concentration(TRUE);
 
 			/* Hex */
-			if (hex_spelling_any()) stop_hex_spell_all();
+			if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
 
 			notice = TRUE;
 			creature_ptr->counter = FALSE;
@@ -689,7 +689,7 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 			if (creature_ptr->concent) reset_concentration(TRUE);
 
 			/* Hex */
-			if (hex_spelling_any()) stop_hex_spell_all();
+			if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
 
 			creature_ptr->counter = FALSE;
 			notice = TRUE;
@@ -2784,7 +2784,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 		if (creature_ptr->concent) reset_concentration(TRUE);
 
 		/* Hex */
-		if (hex_spelling_any()) stop_hex_spell_all();
+		if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
 
 		notice = TRUE;
 	}

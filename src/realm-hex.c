@@ -76,7 +76,7 @@ bool stop_hex_spell(void)
 	TERM_LEN x = 20;
 	int sp[MAX_KEEP];
 
-	if (!hex_spelling_any())
+	if (!hex_spelling_any(p_ptr))
 	{
 		msg_print(_("呪文を詠唱していません。", "You are casting no spell."));
 		return FALSE;

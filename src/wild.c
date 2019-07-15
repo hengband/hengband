@@ -1178,7 +1178,7 @@ bool change_wild_mode(bool encount)
 	p_ptr->oldpy = p_ptr->y;
 
 	/* Cancel hex spelling */
-	if (hex_spelling_any()) stop_hex_spell_all();
+	if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
 
 	/* Cancel any special action */
 	set_action(p_ptr, ACTION_NONE);
