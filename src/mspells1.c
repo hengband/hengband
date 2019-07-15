@@ -903,7 +903,7 @@ bool dispel_check(MONSTER_IDX m_idx)
 	/* Elemental resistances */
 	if (r_ptr->flags4 & RF4_BR_ACID)
 	{
-		if (!p_ptr->immune_acid && (p_ptr->oppose_acid || music_singing(MUSIC_RESIST))) return (TRUE);
+		if (!p_ptr->immune_acid && (p_ptr->oppose_acid || music_singing(p_ptr, MUSIC_RESIST))) return (TRUE);
 		if (p_ptr->special_defense & DEFENSE_ACID) return (TRUE);
 	}
 
@@ -911,20 +911,20 @@ bool dispel_check(MONSTER_IDX m_idx)
 	{
 		if (!((p_ptr->prace == RACE_DEMON) && p_ptr->lev > 44))
 		{
-			if (!p_ptr->immune_fire && (p_ptr->oppose_fire || music_singing(MUSIC_RESIST))) return (TRUE);
+			if (!p_ptr->immune_fire && (p_ptr->oppose_fire || music_singing(p_ptr, MUSIC_RESIST))) return (TRUE);
 			if (p_ptr->special_defense & DEFENSE_FIRE) return (TRUE);
 		}
 	}
 
 	if (r_ptr->flags4 & RF4_BR_ELEC)
 	{
-		if (!p_ptr->immune_elec && (p_ptr->oppose_elec || music_singing(MUSIC_RESIST))) return (TRUE);
+		if (!p_ptr->immune_elec && (p_ptr->oppose_elec || music_singing(p_ptr, MUSIC_RESIST))) return (TRUE);
 		if (p_ptr->special_defense & DEFENSE_ELEC) return (TRUE);
 	}
 
 	if (r_ptr->flags4 & RF4_BR_COLD)
 	{
-		if (!p_ptr->immune_cold && (p_ptr->oppose_cold || music_singing(MUSIC_RESIST))) return (TRUE);
+		if (!p_ptr->immune_cold && (p_ptr->oppose_cold || music_singing(p_ptr, MUSIC_RESIST))) return (TRUE);
 		if (p_ptr->special_defense & DEFENSE_COLD) return (TRUE);
 	}
 
@@ -932,7 +932,7 @@ bool dispel_check(MONSTER_IDX m_idx)
 	{
 		if (!((p_ptr->pclass == CLASS_NINJA) && p_ptr->lev > 44))
 		{
-			if (p_ptr->oppose_pois || music_singing(MUSIC_RESIST)) return (TRUE);
+			if (p_ptr->oppose_pois || music_singing(p_ptr, MUSIC_RESIST)) return (TRUE);
 			if (p_ptr->special_defense & DEFENSE_POIS) return (TRUE);
 		}
 	}

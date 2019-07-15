@@ -119,7 +119,7 @@ bool detect_traps(POSITION range, bool known)
 
 	if (known) p_ptr->dtrap = TRUE;
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 	if (detect)
 	{
 		msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
@@ -137,7 +137,7 @@ bool detect_doors(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 	if (detect)
 	{
 		msg_print(_("ドアの存在を感じとった！", "You sense the presence of doors!"));
@@ -155,7 +155,7 @@ bool detect_stairs(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 	if (detect)
 	{
 		msg_print(_("階段の存在を感じとった！", "You sense the presence of stairs!"));
@@ -173,7 +173,7 @@ bool detect_treasure(POSITION range)
 {
 	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 	if (detect)
 	{
 		msg_print(_("埋蔵された財宝の存在を感じとった！", "You sense the presence of buried treasure!"));
@@ -220,7 +220,7 @@ bool detect_objects_gold(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 	if (detect)
 	{
 		msg_print(_("財宝の存在を感じとった！", "You sense the presence of treasure!"));
@@ -272,7 +272,7 @@ bool detect_objects_normal(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 	if (detect)
 	{
 		msg_print(_("アイテムの存在を感じとった！", "You sense the presence of objects!"));
@@ -405,7 +405,7 @@ bool detect_monsters_normal(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 	if (flag)
 	{
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
@@ -458,7 +458,7 @@ bool detect_monsters_invis(POSITION range)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 	if (flag)
 	{
 		msg_print(_("透明な生物の存在を感じとった！", "You sense the presence of invisible creatures!"));
@@ -663,7 +663,7 @@ bool detect_monsters_string(POSITION range, concptr Match)
 		}
 	}
 
-	if (music_singing(MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
+	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 3) flag = FALSE;
 	if (flag)
 	{
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));

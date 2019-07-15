@@ -691,7 +691,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 
 	if (mpe_mode & MPE_ENERGY_USE)
 	{
-		if (music_singing(MUSIC_WALL))
+		if (music_singing(p_ptr, MUSIC_WALL))
 		{
 			(void)project(0, 0, p_ptr->y, p_ptr->x, (60 + p_ptr->lev), GF_DISINTEGRATE,
 				PROJECT_KILL | PROJECT_ITEM, -1);

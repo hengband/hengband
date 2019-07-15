@@ -2079,7 +2079,7 @@ void calc_bonuses(player_type *creature_ptr)
 			new_speed += (creature_ptr->lev) / 10 + 5;
 	}
 
-	if (music_singing(MUSIC_WALL))
+	if (music_singing(p_ptr, MUSIC_WALL))
 	{
 		creature_ptr->kill_wall = TRUE;
 	}

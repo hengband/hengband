@@ -807,7 +807,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->fast && !creature_ptr->lightspeed && !music_singing(MUSIC_SPEED) && !music_singing(MUSIC_SHERO))
+		if (creature_ptr->fast && !creature_ptr->lightspeed && !music_singing(p_ptr, MUSIC_SPEED) && !music_singing(p_ptr, MUSIC_SHERO))
 		{
 			msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
 			notice = TRUE;
@@ -1111,7 +1111,7 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->blessed && !music_singing(MUSIC_BLESS))
+		if (creature_ptr->blessed && !music_singing(p_ptr, MUSIC_BLESS))
 		{
 			msg_print(_("高潔な気分が消え失せた。", "The prayer has expired."));
 			notice = TRUE;
@@ -1162,7 +1162,7 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->hero && !music_singing(MUSIC_HERO) && !music_singing(MUSIC_SHERO))
+		if (creature_ptr->hero && !music_singing(p_ptr, MUSIC_HERO) && !music_singing(p_ptr, MUSIC_SHERO))
 		{
 			msg_print(_("ヒーローの気分が消え失せた。", "The heroism wears off."));
 			notice = TRUE;
@@ -1393,7 +1393,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->invuln && !music_singing(MUSIC_INVULN))
+		if (creature_ptr->invuln && !music_singing(p_ptr, MUSIC_INVULN))
 		{
 			msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
 			notice = TRUE;
@@ -1450,7 +1450,7 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->tim_esp && !music_singing(MUSIC_MIND))
+		if (creature_ptr->tim_esp && !music_singing(p_ptr, MUSIC_MIND))
 		{
 			msg_print(_("意識は元に戻った。", "Your consciousness contracts again."));
 			notice = TRUE;
@@ -1657,7 +1657,7 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->tim_stealth && !music_singing(MUSIC_STEALTH))
+		if (creature_ptr->tim_stealth && !music_singing(p_ptr, MUSIC_STEALTH))
 		{
 			msg_print(_("足音が大きくなった。", "You no longer walk silently."));
 			notice = TRUE;
@@ -2454,7 +2454,7 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->oppose_acid && !music_singing(MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
+		if (creature_ptr->oppose_acid && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
 		{
 			msg_print(_("酸への耐性が薄れた気がする。", "You feel less resistant to acid."));
 			notice = TRUE;
@@ -2503,7 +2503,7 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->oppose_elec && !music_singing(MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
+		if (creature_ptr->oppose_elec && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
 		{
 			msg_print(_("電撃への耐性が薄れた気がする。", "You feel less resistant to electricity."));
 			notice = TRUE;
@@ -2553,7 +2553,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->oppose_fire && !music_singing(MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
+		if (creature_ptr->oppose_fire && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
 		{
 			msg_print(_("火への耐性が薄れた気がする。", "You feel less resistant to fire."));
 			notice = TRUE;
@@ -2602,7 +2602,7 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->oppose_cold && !music_singing(MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
+		if (creature_ptr->oppose_cold && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
 		{
 			msg_print(_("冷気への耐性が薄れた気がする。", "You feel less resistant to cold."));
 			notice = TRUE;
@@ -2652,7 +2652,7 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Shut */
 	else
 	{
-		if (creature_ptr->oppose_pois && !music_singing(MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
+		if (creature_ptr->oppose_pois && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
 		{
 			msg_print(_("毒への耐性が薄れた気がする。", "You feel less resistant to poison."));
 			notice = TRUE;
