@@ -5312,7 +5312,6 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 		/* Access the "file" */
 		strcpy(path, name);
 
-		/* Open */
 		fff = my_fopen(path, "r");
 	}
 

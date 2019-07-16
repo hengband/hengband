@@ -368,7 +368,6 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_mimic && (creature_ptr->mimic_form == p) && !do_dec)
@@ -383,7 +382,6 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_mimic)
@@ -428,7 +426,6 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (!creature_ptr->blind)
@@ -447,7 +444,6 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->blind)
@@ -494,7 +490,6 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (!creature_ptr->confused)
@@ -540,7 +535,6 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->confused)
@@ -576,7 +570,6 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (!creature_ptr->poisoned)
@@ -586,7 +579,6 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->poisoned)
@@ -621,7 +613,6 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (!creature_ptr->afraid)
@@ -645,7 +636,6 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->afraid)
@@ -679,7 +669,6 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (!creature_ptr->paralyzed)
@@ -696,7 +685,6 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->paralyzed)
@@ -733,7 +721,6 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 	if (creature_ptr->is_dead) return FALSE;
 	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN) v = 0;
 
-	/* Open */
 	if (v)
 	{
 		set_tsuyoshi(creature_ptr, 0, TRUE);
@@ -749,7 +736,6 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->image)
@@ -788,7 +774,6 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->fast && !do_dec)
@@ -804,7 +789,6 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->fast && !creature_ptr->lightspeed && !music_singing(p_ptr, MUSIC_SPEED) && !music_singing(p_ptr, MUSIC_SHERO))
@@ -841,7 +825,6 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->wild_mode) v = 0;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->lightspeed && !do_dec)
@@ -857,7 +840,6 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->lightspeed)
@@ -892,7 +874,6 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->slow && !do_dec)
@@ -906,7 +887,6 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->slow)
@@ -942,7 +922,6 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->shield && !do_dec)
@@ -956,7 +935,6 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->shield)
@@ -993,7 +971,6 @@ bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tsubureru && !do_dec)
@@ -1007,7 +984,6 @@ bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tsubureru)
@@ -1044,7 +1020,6 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->magicdef && !do_dec)
@@ -1058,7 +1033,6 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->magicdef)
@@ -1094,7 +1068,6 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->blessed && !do_dec)
@@ -1108,7 +1081,6 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->blessed && !music_singing(p_ptr, MUSIC_BLESS))
@@ -1145,7 +1117,6 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->hero && !do_dec)
@@ -1159,7 +1130,6 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->hero && !music_singing(p_ptr, MUSIC_HERO) && !music_singing(p_ptr, MUSIC_SHERO))
@@ -1199,7 +1169,6 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (creature_ptr->is_dead) return FALSE;
 
 	if (creature_ptr->pclass == CLASS_BERSERKER) v = 1;
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->shero && !do_dec)
@@ -1213,7 +1182,6 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->shero)
@@ -1252,7 +1220,6 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->protevil && !do_dec)
@@ -1266,7 +1233,6 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->protevil)
@@ -1301,7 +1267,6 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->wraith_form && !do_dec)
@@ -1324,7 +1289,6 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->wraith_form)
@@ -1366,7 +1330,6 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->invuln && !do_dec)
@@ -1390,7 +1353,6 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->invuln && !music_singing(p_ptr, MUSIC_INVULN))
@@ -1433,7 +1395,6 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_esp && !do_dec)
@@ -1447,7 +1408,6 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_esp && !music_singing(p_ptr, MUSIC_MIND))
@@ -1484,7 +1444,6 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_invis && !do_dec)
@@ -1498,7 +1457,6 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_invis)
@@ -1537,7 +1495,6 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_infra && !do_dec)
@@ -1551,7 +1508,6 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_infra)
@@ -1590,7 +1546,6 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_regen && !do_dec)
@@ -1604,7 +1559,6 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_regen)
@@ -1640,7 +1594,6 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_stealth && !do_dec)
@@ -1654,7 +1607,6 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_stealth && !music_singing(p_ptr, MUSIC_STEALTH))
@@ -1688,7 +1640,6 @@ bool set_superstealth(player_type *creature_ptr, bool set)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (set)
 	{
 		if (!(creature_ptr->special_defense & NINJA_S_STEALTH))
@@ -1711,7 +1662,6 @@ bool set_superstealth(player_type *creature_ptr, bool set)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->special_defense & NINJA_S_STEALTH)
@@ -1745,7 +1695,6 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_levitation && !do_dec)
@@ -1759,7 +1708,6 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_levitation)
@@ -1795,7 +1743,6 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_sh_touki && !do_dec)
@@ -1809,7 +1756,6 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_sh_touki)
@@ -1844,7 +1790,6 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_sh_fire && !do_dec)
@@ -1858,7 +1803,6 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_sh_fire)
@@ -1894,7 +1838,6 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_sh_holy && !do_dec)
@@ -1908,7 +1851,6 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_sh_holy)
@@ -1944,7 +1886,6 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_eyeeye && !do_dec)
@@ -1958,7 +1899,6 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_eyeeye)
@@ -1995,7 +1935,6 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->resist_magic && !do_dec)
@@ -2009,7 +1948,6 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->resist_magic)
@@ -2045,7 +1983,6 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_reflect && !do_dec)
@@ -2059,7 +1996,6 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_reflect)
@@ -2093,7 +2029,6 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->multishadow && !do_dec)
@@ -2107,7 +2042,6 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->multishadow)
@@ -2143,7 +2077,6 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->dustrobe && !do_dec)
@@ -2157,7 +2090,6 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->dustrobe)
@@ -2193,7 +2125,6 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->kabenuke && !do_dec)
@@ -2207,7 +2138,6 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->kabenuke)
@@ -2243,7 +2173,6 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tsuyoshi && !do_dec)
@@ -2258,7 +2187,6 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tsuyoshi)
@@ -2437,7 +2365,6 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->oppose_acid && !do_dec)
@@ -2451,7 +2378,6 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->oppose_acid && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2486,7 +2412,6 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->oppose_elec && !do_dec)
@@ -2500,7 +2425,6 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->oppose_elec && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2536,7 +2460,6 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (creature_ptr->is_dead) return FALSE;
 
 	if ((PRACE_IS_(creature_ptr, RACE_DEMON) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON)) v = 1;
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->oppose_fire && !do_dec)
@@ -2550,7 +2473,6 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->oppose_fire && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2585,7 +2507,6 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->oppose_cold && !do_dec)
@@ -2599,7 +2520,6 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->oppose_cold && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2635,7 +2555,6 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if ((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44)) v = 1;
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->oppose_pois && !do_dec)
@@ -2649,7 +2568,6 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->oppose_pois && !music_singing(p_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -4081,7 +3999,6 @@ bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->ult_res && !do_dec)
@@ -4095,7 +4012,6 @@ bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->ult_res)
@@ -4125,7 +4041,6 @@ bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_res_nether && !do_dec)
@@ -4139,7 +4054,6 @@ bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_res_nether)
@@ -4169,7 +4083,6 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (creature_ptr->is_dead) return FALSE;
 
-	/* Open */
 	if (v)
 	{
 		if (creature_ptr->tim_res_time && !do_dec)
@@ -4183,7 +4096,6 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (creature_ptr->tim_res_time)

@@ -268,7 +268,6 @@ bool set_monster_csleep(MONSTER_IDX m_idx, int v)
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	/* Open */
 	if (v)
 	{
 		if (!MON_CSLEEP(m_ptr))
@@ -278,7 +277,6 @@ bool set_monster_csleep(MONSTER_IDX m_idx, int v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (MON_CSLEEP(m_ptr))
@@ -319,7 +317,6 @@ bool set_monster_fast(MONSTER_IDX m_idx, int v)
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
-	/* Open */
 	if (v)
 	{
 		if (!MON_FAST(m_ptr))
@@ -329,7 +326,6 @@ bool set_monster_fast(MONSTER_IDX m_idx, int v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (MON_FAST(m_ptr))
@@ -359,7 +355,6 @@ bool set_monster_slow(MONSTER_IDX m_idx, int v)
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
-	/* Open */
 	if (v)
 	{
 		if (!MON_SLOW(m_ptr))
@@ -369,7 +364,6 @@ bool set_monster_slow(MONSTER_IDX m_idx, int v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (MON_SLOW(m_ptr))
@@ -403,7 +397,6 @@ bool set_monster_stunned(MONSTER_IDX m_idx, int v)
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
-	/* Open */
 	if (v)
 	{
 		if (!MON_STUNNED(m_ptr))
@@ -413,7 +406,6 @@ bool set_monster_stunned(MONSTER_IDX m_idx, int v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (MON_STUNNED(m_ptr))
@@ -443,7 +435,6 @@ bool set_monster_confused(MONSTER_IDX m_idx, int v)
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
-	/* Open */
 	if (v)
 	{
 		if (!MON_CONFUSED(m_ptr))
@@ -453,7 +444,6 @@ bool set_monster_confused(MONSTER_IDX m_idx, int v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (MON_CONFUSED(m_ptr))
@@ -483,7 +473,6 @@ bool set_monster_monfear(MONSTER_IDX m_idx, int v)
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
-	/* Open */
 	if (v)
 	{
 		if (!MON_MONFEAR(m_ptr))
@@ -493,7 +482,6 @@ bool set_monster_monfear(MONSTER_IDX m_idx, int v)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (MON_MONFEAR(m_ptr))
@@ -533,7 +521,6 @@ bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need)
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
-	/* Open */
 	if (v)
 	{
 		if (!MON_INVULNER(m_ptr))
@@ -543,7 +530,6 @@ bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need)
 		}
 	}
 
-	/* Shut */
 	else
 	{
 		if (MON_INVULNER(m_ptr))
