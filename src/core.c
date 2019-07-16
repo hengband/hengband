@@ -3793,7 +3793,7 @@ static void process_command(void)
 		/* Jam a door with spikes */
 		case 'j':
 		{
-			do_cmd_spike();
+			do_cmd_spike(p_ptr);
 			break;
 		}
 

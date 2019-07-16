@@ -1542,7 +1542,7 @@ void do_cmd_use(void)
 	switch (o_ptr->tval)
 	{
 		case TV_SPIKE:
-			do_cmd_spike();
+			do_cmd_spike(p_ptr);
 			break;
 
 		case TV_FOOD:
