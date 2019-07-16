@@ -1083,7 +1083,7 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
  * Do not use twall anymore
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_tunnel_aux(player_type *creature_ptr, POSITION y, POSITION x)
+static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
@@ -1271,7 +1271,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
 		else
 		{
 			/* Tunnel through walls */
-			more = do_cmd_tunnel_aux(creature_ptr, y, x);
+			more = exe_tunnel(creature_ptr, y, x);
 		}
 	}
 
@@ -1884,7 +1884,7 @@ void do_cmd_alter(void)
 		/* Tunnel through walls */
 		else if (have_flag(f_ptr->flags, FF_TUNNEL))
 		{
-			more = do_cmd_tunnel_aux(p_ptr, y, x);
+			more = exe_tunnel(p_ptr, y, x);
 		}
 
 		/* Close open doors */
