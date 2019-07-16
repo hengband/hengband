@@ -1083,7 +1083,7 @@ static bool do_cmd_tunnel_test(POSITION y, POSITION x)
  * Do not use twall anymore
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
+static bool do_cmd_tunnel_aux(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 	feature_type *f_ptr, *mimic_f_ptr;
@@ -1094,7 +1094,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	/* Verify legality */
 	if (!do_cmd_tunnel_test(y, x)) return (FALSE);
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 	f_ptr = &f_info[g_ptr->feat];
@@ -1126,13 +1126,13 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	else if (have_flag(f_ptr->flags, FF_CAN_DIG))
 	{
 		/* Dig */
-		if (p_ptr->skill_dig > randint0(20 * power))
+		if (creature_ptr->skill_dig > randint0(20 * power))
 		{
 			msg_format(_("%sをくずした。", "You have removed the %s."), name);
 
 			/* Remove the feature */
 			cave_alter_feat(y, x, FF_TUNNEL);
-			p_ptr->update |= (PU_FLOW);
+			creature_ptr->update |= (PU_FLOW);
 		}
 		else
 		{
@@ -1148,13 +1148,13 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 		bool tree = have_flag(mimic_f_ptr->flags, FF_TREE);
 
 		/* Tunnel */
-		if (p_ptr->skill_dig > power + randint0(40 * power))
+		if (creature_ptr->skill_dig > power + randint0(40 * power))
 		{
 			if (tree) msg_format(_("%sを切り払った。", "You have cleared away the %s."), name);
 			else
 			{
 				msg_print(_("穴を掘り終えた。", "You have finished the tunnel."));
-				p_ptr->update |= (PU_FLOW);
+				creature_ptr->update |= (PU_FLOW);
 			}
 			
 			if (have_flag(f_ptr->flags, FF_GLASS)) sound(SOUND_GLASS);
@@ -1162,8 +1162,8 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 			/* Remove the feature */
 			cave_alter_feat(y, x, FF_TUNNEL);
 
-			chg_virtue(p_ptr, V_DILIGENCE, 1);
-			chg_virtue(p_ptr, V_NATURE, -1);
+			chg_virtue(creature_ptr, V_DILIGENCE, 1);
+			chg_virtue(creature_ptr, V_NATURE, -1);
 		}
 
 		/* Keep trying */
@@ -1174,7 +1174,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 				/* We may continue chopping */
 				msg_format(_("%sを切っている。", "You chop away at the %s."), name);
 				/* Occasional Search XXX XXX */
-				if (randint0(100) < 25) search(p_ptr);
+				if (randint0(100) < 25) search(creature_ptr);
 			}
 			else
 			{
@@ -1189,7 +1189,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
 	if (is_hidden_door(g_ptr))
 	{
 		/* Occasional Search XXX XXX */
-		if (randint0(100) < 25) search(p_ptr);
+		if (randint0(100) < 25) search(creature_ptr);
 	}
 	return more;
 }
@@ -1261,7 +1261,6 @@ void do_cmd_tunnel(player_type *creature_ptr)
 		else if (g_ptr->m_idx)
 		{
 			take_turn(creature_ptr, 100);
-
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
@@ -1272,7 +1271,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
 		else
 		{
 			/* Tunnel through walls */
-			more = do_cmd_tunnel_aux(y, x);
+			more = do_cmd_tunnel_aux(creature_ptr, y, x);
 		}
 	}
 
@@ -1885,7 +1884,7 @@ void do_cmd_alter(void)
 		/* Tunnel through walls */
 		else if (have_flag(f_ptr->flags, FF_TUNNEL))
 		{
-			more = do_cmd_tunnel_aux(y, x);
+			more = do_cmd_tunnel_aux(p_ptr, y, x);
 		}
 
 		/* Close open doors */
