@@ -14,7 +14,7 @@ extern void do_cmd_go_down(player_type *creature_ptr);
 extern void do_cmd_search(player_type *creature_ptr);
 extern void do_cmd_open(player_type *creature_ptr);
 extern void do_cmd_close(player_type *creature_ptr);
-extern void do_cmd_tunnel(void);
+extern void do_cmd_tunnel(player_type *creature_ptr);
 extern void do_cmd_disarm(void);
 extern void do_cmd_bash(void);
 extern void do_cmd_alter(void);

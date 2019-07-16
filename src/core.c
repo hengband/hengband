@@ -3653,7 +3653,7 @@ static void process_command(void)
 		/* Dig a tunnel */
 		case 'T':
 		{
-			if (!p_ptr->wild_mode) do_cmd_tunnel();
+			if (!p_ptr->wild_mode) do_cmd_tunnel(p_ptr);
 			break;
 		}
 

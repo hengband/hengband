@@ -1208,7 +1208,7 @@ static bool do_cmd_tunnel_aux(POSITION y, POSITION x)
  * accomplished by strong players using heavy weapons.
  * </pre>
  */
-void do_cmd_tunnel(void)
+void do_cmd_tunnel(player_type *creature_ptr)
 {
 	POSITION y, x;
 	DIRECTION dir;
@@ -1217,9 +1217,9 @@ void do_cmd_tunnel(void)
 
 	bool more = FALSE;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Allow repeated command */
@@ -1227,7 +1227,7 @@ void do_cmd_tunnel(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
@@ -1237,8 +1237,8 @@ void do_cmd_tunnel(void)
 	if (get_rep_dir(&dir,FALSE))
 	{
 		/* Get location */
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
+		y = creature_ptr->y + ddy[dir];
+		x = creature_ptr->x + ddx[dir];
 
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1260,7 +1260,7 @@ void do_cmd_tunnel(void)
 		/* A monster is in the way */
 		else if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);
+			take_turn(creature_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
