@@ -3807,7 +3807,7 @@ static void process_command(void)
 		/* Disarm a trap or chest */
 		case 'D':
 		{
-			do_cmd_disarm();
+			do_cmd_disarm(p_ptr);
 			break;
 		}
 

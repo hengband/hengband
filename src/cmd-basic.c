@@ -1539,7 +1539,7 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
  * Disarms a trap, or chest
  * @return なし
  */
-void do_cmd_disarm(void)
+void do_cmd_disarm(player_type *creature_ptr)
 {
 	POSITION y, x;
 	DIRECTION dir;
@@ -1547,11 +1547,11 @@ void do_cmd_disarm(void)
 
 	bool more = FALSE;
 
-	if (p_ptr->wild_mode) return;
+	if (creature_ptr->wild_mode) return;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Option: Pick a direction */
@@ -1563,7 +1563,7 @@ void do_cmd_disarm(void)
 		num_traps = count_dt(&y, &x, is_trap, TRUE);
 
 		/* Count chests (trapped) */
-		num_chests = count_chests(p_ptr, &y, &x, TRUE);
+		num_chests = count_chests(creature_ptr, &y, &x, TRUE);
 
 		/* See if only one target */
 		if (num_traps || num_chests)
@@ -1579,7 +1579,7 @@ void do_cmd_disarm(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
@@ -1591,8 +1591,8 @@ void do_cmd_disarm(void)
 		grid_type *g_ptr;
 		FEAT_IDX feat;
 
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
+		y = creature_ptr->y + ddy[dir];
+		x = creature_ptr->x + ddx[dir];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
@@ -1608,7 +1608,7 @@ void do_cmd_disarm(void)
 		}
 
 		/* Monster in the way */
-		else if (g_ptr->m_idx && p_ptr->riding != g_ptr->m_idx)
+		else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx)
 		{
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
