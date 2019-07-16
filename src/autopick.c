@@ -2767,9 +2767,7 @@ static concptr *read_text_lines(concptr filename)
 	char buf[1024];
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-	
-	/* Open the file */
-	fff = my_fopen(buf, "r");
+		fff = my_fopen(buf, "r");
 
 	if (fff)
 	{
@@ -2904,9 +2902,7 @@ static bool write_text_lines(concptr filename, concptr *lines_list)
 	int lines = 0;
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-	
-	/* Open the file */
-	fff = my_fopen(buf, "w");
+		fff = my_fopen(buf, "w");
 	if (fff)
 	{
 		for (lines = 0; lines_list[lines]; lines++)

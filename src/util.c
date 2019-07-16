@@ -547,8 +547,6 @@ FILE *my_fopen_temp(char *buf, int max)
 {
 	/* Generate a temporary filename */
 	if (path_temp(buf, max)) return (NULL);
-
-	/* Open the file */
 	return (my_fopen(buf, "w"));
 }
 

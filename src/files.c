@@ -1146,8 +1146,6 @@ static errr process_pref_file_aux(concptr name, int preftype)
 
 	bool bypass = FALSE;
 
-
-	/* Open the file */
 	fp = my_fopen(name, "r");
 
 	/* No such file */
@@ -1367,8 +1365,6 @@ errr check_time_init(void)
 	char	buf[1024];
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, "time.txt");
-
-	/* Open the file */
 	fp = my_fopen(buf, "r");
 
 	/* No file, no restrictions */
@@ -5306,34 +5302,24 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 
 	if (what)
 	{
-		/* Caption */
 		strcpy(caption, what);
-
-		/* Access the "file" */
 		strcpy(path, name);
-
 		fff = my_fopen(path, "r");
 	}
 
 	/* Look in "help" */
 	if (!fff)
 	{
-		/* Caption */
 		sprintf(caption, _("ヘルプ・ファイル'%s'", "Help file '%s'"), name);
 		path_build(path, sizeof(path), ANGBAND_DIR_HELP, name);
-
-		/* Open the file */
 		fff = my_fopen(path, "r");
 	}
 
 	/* Look in "info" */
 	if (!fff)
 	{
-		/* Caption */
 		sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
 		path_build(path, sizeof(path), ANGBAND_DIR_INFO, name);
-
-		/* Open the file */
 		fff = my_fopen(path, "r");
 	}
 
@@ -5346,10 +5332,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 			if ('\\' == path[i])
 				path[i] = PATH_SEP[0];
 
-		/* Caption */
 		sprintf(caption, _("スポイラー・ファイル'%s'", "Info file '%s'"), name);
-
-		/* Open the file */
 		fff = my_fopen(path, "r");
 	}
 
@@ -6499,7 +6482,6 @@ void show_info(void)
 					c_put_str(tval_to_attr[o_ptr->tval], o_name, j+2, 7);
 				}
 
-				/* Caption */
 				prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k+1), 0, 0);
 
 				/* Wait for it */
@@ -6576,8 +6558,6 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 	int     line_num = 0;
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, file_name);
-
-	/* Open the file */
 	fp = my_fopen(buf, "r");
 
 	/* Failed */

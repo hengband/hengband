@@ -1594,8 +1594,6 @@ static void do_cmd_dump_options(void)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Open the file */
 	fff = my_fopen(buf, "a");
 
 	if (!fff)

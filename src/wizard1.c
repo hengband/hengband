@@ -314,8 +314,6 @@ static void spoil_obj_desc(concptr fname)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Open the file */
 	fff = my_fopen(buf, "w");
 
 	if (!fff)
@@ -1607,8 +1605,6 @@ static void spoil_artifact(concptr fname)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Open the file */
 	fff = my_fopen(buf, "w");
 
 	if (!fff)
@@ -1689,8 +1685,6 @@ static void spoil_mon_desc(concptr fname)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Open the file */
 	fff = my_fopen(buf, "w");
 
 	if (!fff)
@@ -2021,8 +2015,6 @@ static void spoil_mon_info(concptr fname)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Open the file */
 	fff = my_fopen(buf, "w");
 
 	if (!fff)
@@ -2227,8 +2219,6 @@ static void spoil_mon_evol(concptr fname)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Open the file */
 	fff = my_fopen(buf, "w");
 
 	if (!fff)
@@ -2523,8 +2513,6 @@ void spoil_random_artifact(concptr fname)
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
-	/* Open the file */
 	fff = my_fopen(buf, "w");
 
 	if (!fff)

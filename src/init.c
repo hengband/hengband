@@ -518,8 +518,6 @@ static errr init_info(concptr filename, header *head,
 		/*** Load the ascii template file ***/
 
 		path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
-
-		/* Open the file */
 		fp = my_fopen(buf, "r");
 
 		/* Parse it */

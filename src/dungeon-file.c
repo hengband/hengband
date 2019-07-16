@@ -4918,8 +4918,6 @@ errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax)
 	int x = xmin, y = ymin;
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
-
-	/* Open the file */
 	fp = my_fopen(buf, "r");
 
 	/* No such file */
