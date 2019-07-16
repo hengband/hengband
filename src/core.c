@@ -3786,7 +3786,7 @@ static void process_command(void)
 		/* Close a door */
 		case 'c':
 		{
-			do_cmd_close();
+			do_cmd_close(p_ptr);
 			break;
 		}
 

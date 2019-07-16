@@ -195,7 +195,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 
 	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Verify stairs */
@@ -963,18 +963,18 @@ static bool do_cmd_close_aux(POSITION y, POSITION x)
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
-void do_cmd_close(void)
+void do_cmd_close(player_type *creature_ptr)
 {
 	POSITION y, x;
 	DIRECTION dir;
 
 	bool more = FALSE;
 
-	if (p_ptr->wild_mode) return;
+	if (creature_ptr->wild_mode) return;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Option: Pick a direction */
@@ -992,7 +992,7 @@ void do_cmd_close(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
@@ -1004,8 +1004,8 @@ void do_cmd_close(void)
 		grid_type *g_ptr;
 		FEAT_IDX feat;
 
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
+		y = creature_ptr->y + ddy[dir];
+		x = creature_ptr->x + ddx[dir];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
@@ -1020,7 +1020,7 @@ void do_cmd_close(void)
 		/* Monster in the way */
 		else if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);
+			take_turn(creature_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
