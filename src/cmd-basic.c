@@ -91,7 +91,7 @@ static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
  */
 bool cmd_limit_cast(player_type *creature_ptr)
 {
-	if (current_floor_ptr->dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
+	if (current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
 	{
 		msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 		msg_print(NULL);
@@ -333,7 +333,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 
 	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Verify stairs */
@@ -584,7 +584,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 		if (randint0(100) < j)
 		{
 			msg_print(_("鍵をはずした。", "You have picked the lock."));
-			gain_exp(p_ptr, 1);
+			gain_exp(creature_ptr, 1);
 			flag = TRUE;
 		}
 
@@ -622,7 +622,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-static int count_dt(POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool under)
+static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool under)
 {
 	DIRECTION d;
 	int count;
@@ -641,8 +641,8 @@ static int count_dt(POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool 
 		if ((d == 8) && !under) continue;
 
 		/* Extract adjacent (legal) location */
-		yy = p_ptr->y + ddy_ddd[d];
-		xx = p_ptr->x + ddx_ddd[d];
+		yy = creature_ptr->y + ddy_ddd[d];
+		xx = creature_ptr->x + ddx_ddd[d];
 
 		/* Get the current_floor_ptr->grid_array */
 		g_ptr = &current_floor_ptr->grid_array[yy][xx];
@@ -838,7 +838,7 @@ void do_cmd_open(player_type *creature_ptr)
 	{
 		int num_doors, num_chests;
 
-		num_doors = count_dt(&y, &x, is_closed_door, FALSE);
+		num_doors = count_dt(creature_ptr, &y, &x, is_closed_door, FALSE);
 		num_chests = count_chests(creature_ptr, &y, &x, FALSE);
 		if (num_doors || num_chests)
 		{
@@ -981,7 +981,7 @@ void do_cmd_close(player_type *creature_ptr)
 	if (easy_open)
 	{
 		/* Count open doors */
-		if (count_dt(&y, &x, is_open, FALSE) == 1)
+		if (count_dt(creature_ptr, &y, &x, is_open, FALSE) == 1)
 		{
 			command_dir = coords_to_dir(y, x);
 		}
@@ -1560,7 +1560,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		int num_traps, num_chests;
 
 		/* Count visible traps */
-		num_traps = count_dt(&y, &x, is_trap, TRUE);
+		num_traps = count_dt(creature_ptr, &y, &x, is_trap, TRUE);
 
 		/* Count chests (trapped) */
 		num_chests = count_chests(creature_ptr, &y, &x, TRUE);
