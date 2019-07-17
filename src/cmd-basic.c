@@ -734,7 +734,7 @@ static int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, boo
  * Assume there is no monster blocking the destination
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_open_aux(player_type *creature_ptr, POSITION y, POSITION x)
+static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	int i, j;
 
@@ -894,7 +894,7 @@ void do_cmd_open(player_type *creature_ptr)
 		}
 		else
 		{
-			more = do_cmd_open_aux(creature_ptr, y, x);
+			more = exe_open(creature_ptr, y, x);
 		}
 	}
 
@@ -1290,7 +1290,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
  *	made (successful or not), otherwise return FALSE.
  *
  *	The code here should be nearly identical to that in
- *	do_cmd_open_test() and do_cmd_open_aux().
+ *	do_cmd_open_test() and exe_open().
  * </pre>
  */
 bool easy_open_door(POSITION y, POSITION x)
@@ -1872,7 +1872,7 @@ void do_cmd_alter(void)
 		/* Locked doors */
 		else if (have_flag(f_ptr->flags, FF_OPEN))
 		{
-			more = do_cmd_open_aux(p_ptr, y, x);
+			more = exe_open(p_ptr, y, x);
 		}
 
 		/* Bash jammed doors */
