@@ -654,11 +654,11 @@ static DIBINIT infMask;
  */
 static bool can_use_sound = FALSE;
 
-#define SAMPLE_MAX 8
+#define SAMPLE_SOUND_MAX 16
 /*
  * An array of sound file names
  */
-static concptr sound_file[SOUND_MAX][SAMPLE_MAX];
+static concptr sound_file[SOUND_MAX][SAMPLE_SOUND_MAX];
 
 #endif /* USE_SOUND */
 
@@ -1515,7 +1515,7 @@ static void load_sound_prefs(void)
 	char tmp[1024];
 	char ini_path[1024];
 	char wav_path[1024];
-	char *zz[SAMPLE_MAX];
+	char *zz[SAMPLE_SOUND_MAX];
 
 	/* Access the sound.cfg */
 
@@ -1525,7 +1525,7 @@ static void load_sound_prefs(void)
 	{
 		GetPrivateProfileString("Sound", angband_sound_name[i], "", tmp, 1024, ini_path);
 
-		num = tokenize_whitespace(tmp, SAMPLE_MAX, zz);
+		num = tokenize_whitespace(tmp, SAMPLE_SOUND_MAX, zz);
 
 		for (j = 0; j < num; j++)
 		{
@@ -1549,7 +1549,7 @@ static void load_music_prefs(void)
 	char tmp[1024];
 	char ini_path[1024];
 	char wav_path[1024];
-	char *zz[SAMPLE_MAX];
+	char *zz[SAMPLE_MUSIC_MAX];
 	char key[80];
 
 	/* Access the music.cfg */
@@ -2538,7 +2538,7 @@ static errr Term_xtra_win_sound(int v)
 #ifdef USE_SOUND
 
 	/* Count the samples */
-	for (i = 0; i < SAMPLE_MAX; i++)
+	for (i = 0; i < SAMPLE_SOUND_MAX; i++)
 	{
 		if (!sound_file[v][i])
 			break;
@@ -2580,6 +2580,11 @@ static errr Term_xtra_win_music(int n, int v)
 #endif /* USE_MUSIC */
 
 	/* Sound disabled */
+	if (n == TERM_XTRA_MUSIC_MUTE)
+	{
+		mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
+		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+	}
 
 	if(!use_music) return (1);
 
@@ -2592,48 +2597,22 @@ static errr Term_xtra_win_music(int n, int v)
 	switch(n)
 	{
 	case TERM_XTRA_MUSIC_BASIC:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!music_file[v][i]) break;
 		break;
 	case TERM_XTRA_MUSIC_DUNGEON:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!dungeon_music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!dungeon_music_file[v][i]) break;
 		break;
 	case TERM_XTRA_MUSIC_QUEST:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!quest_music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!quest_music_file[v][i]) break;
 		break;
 	case TERM_XTRA_MUSIC_TOWN:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!town_music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!town_music_file[v][i]) break;
 		break;
 	}
 
 	/* No sample */
 	if (i == 0)
 	{
-		//mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-		//mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
-		return (1);
-	}
-
-	switch(n)
-	{
-	case TERM_XTRA_MUSIC_BASIC:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!music_file[v][i]) break;
-		break;
-	case TERM_XTRA_MUSIC_DUNGEON:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!dungeon_music_file[v][i]) break;
-		break;
-	case TERM_XTRA_MUSIC_QUEST:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!quest_music_file[v][i]) break;
-		break;
-	case TERM_XTRA_MUSIC_TOWN:
-		for (i = 0; i < SAMPLE_MAX; i++) if(!town_music_file[v][i]) break;
-		break;
-	}
-
-	/* No sample */
-	if (i == 0)
-	{
-		mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 		return (1);
 	}
 

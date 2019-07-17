@@ -1800,90 +1800,87 @@ errr play_music(int type, int val)
  */
 void select_floor_music(void)
 {
-	int i;
-	/* No sound */
 	if (!use_music) return;
 
-	if(p_ptr->ambush_flag)
+	if (p_ptr->ambush_flag)
 	{
-		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_AMBUSH);
-		return;
-	}
+		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_AMBUSH)) return;
+	} 
 
 	if(p_ptr->wild_mode)
 	{
-		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WILD);
-		return;
+		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WILD)) return;
 	}
 
 	if(p_ptr->inside_arena)
 	{
-		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_ARENA);
-		return;
+		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_ARENA)) return;
 	}
 
 	if(p_ptr->phase_out)
 	{
-		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BATTLE);
-		return;
+		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BATTLE)) return;
 	}
 
 	if(p_ptr->inside_quest)
 	{
-		if(play_music(TERM_XTRA_MUSIC_QUEST, p_ptr->inside_quest))
-		{
-			play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST);
-		}
-		return;
-	}
-
-	for(i = 0; i < max_q_idx; i++)
-	{ // TODO マクロで類似条件を統合すること
-		if(quest[i].status == QUEST_STATUS_TAKEN &&
-			(quest[i].type == QUEST_TYPE_KILL_LEVEL || quest[i].type == QUEST_TYPE_RANDOM) &&
-			 quest[i].level == current_floor_ptr->dun_level && p_ptr->dungeon_idx == quest[i].dungeon)
-		{
-			if(play_music(TERM_XTRA_MUSIC_QUEST, i)) 
-			{
-				play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST);
-			}
-			return;
-		}
+		if (!play_music(TERM_XTRA_MUSIC_QUEST, p_ptr->inside_quest)) return;
+		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST)) return;
 	}
 
 	if(p_ptr->dungeon_idx)
 	{
-		if(p_ptr->feeling == 2) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2);
-		else if(p_ptr->feeling >= 3 && p_ptr->feeling <= 5) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1);
+		if (p_ptr->feeling == 2)
+		{
+			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2)) return;
+		}
+		else if (p_ptr->feeling >= 3 && p_ptr->feeling <= 5)
+		{
+			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1)) return;
+		}
 		else
 		{
-			if(play_music(TERM_XTRA_MUSIC_DUNGEON, p_ptr->dungeon_idx))
+			if (!play_music(TERM_XTRA_MUSIC_DUNGEON, p_ptr->dungeon_idx)) return;
+
+			if (current_floor_ptr->dun_level < 40)
 			{
-				if(current_floor_ptr->dun_level < 40) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW);
-				else if(current_floor_ptr->dun_level < 80) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED);
-				else play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_HIGH);
+				if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW)) return;
+			}
+			else if (current_floor_ptr->dun_level < 80)
+			{
+				if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED)) return;
+			}
+			else
+			{
+				if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_HIGH)) return;
 			}
 		}
-		return;
 	}
 
 	if(p_ptr->town_num)
 	{
-		if(play_music(TERM_XTRA_MUSIC_TOWN, p_ptr->town_num))
-		{
-			play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_TOWN);
-		}
+		if (!play_music(TERM_XTRA_MUSIC_TOWN, p_ptr->town_num)) return;
+		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_TOWN)) return;
 		return;
 	}
 
 	if(!current_floor_ptr->dun_level)
 	{
-		if(p_ptr->lev >= 45) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD3);
-		else if(p_ptr->lev >= 25) play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD2);
-		else play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD1);
-		return;
+		if (p_ptr->lev >= 45)
+		{
+			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD3)) return;
+		}
+		else if (p_ptr->lev >= 25)
+		{
+			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD2)) return;
+		}
+		else
+		{
+			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD1)) return;
+		}
 	}
 	
+	play_music(TERM_XTRA_MUSIC_MUTE, 0);
 }
 
 

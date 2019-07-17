@@ -142,7 +142,7 @@ struct term
 #define TERM_XTRA_MUSIC_DUNGEON 15 /* Play a music(dungeon) (optional) */
 #define TERM_XTRA_MUSIC_QUEST 16   /* Play a music(quest)   (optional) */
 #define TERM_XTRA_MUSIC_TOWN 17    /* Play a music(floor)   (optional) */
-
+#define TERM_XTRA_MUSIC_MUTE 18
 
 /**** Available Variables ****/
 
