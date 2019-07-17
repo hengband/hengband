@@ -1293,7 +1293,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
  *	do_cmd_open_test() and exe_open().
  * </pre>
  */
-bool easy_open_door(POSITION y, POSITION x)
+bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	int i, j;
 
@@ -1318,11 +1318,11 @@ bool easy_open_door(POSITION y, POSITION x)
 	else if (f_ptr->power)
 	{
 		/* Disarm factor */
-		i = p_ptr->skill_dis;
+		i = creature_ptr->skill_dis;
 
 		/* Penalize some conditions */
-		if (p_ptr->blind || no_lite()) i = i / 10;
-		if (p_ptr->confused || p_ptr->image) i = i / 10;
+		if (creature_ptr->blind || no_lite()) i = i / 10;
+		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 		/* Extract the lock power */
 		j = f_ptr->power;
@@ -1344,7 +1344,7 @@ bool easy_open_door(POSITION y, POSITION x)
 			sound(SOUND_OPENDOOR);
 
 			/* Experience */
-			gain_exp(p_ptr, 1);
+			gain_exp(creature_ptr, 1);
 		}
 
 		/* Failure */

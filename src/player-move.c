@@ -1197,7 +1197,7 @@ void move_player(DIRECTION dir, bool do_pickup, bool break_trap)
 			else
 			{
 				/* Closed doors */
-				if (easy_open && is_closed_door(feat) && easy_open_door(y, x)) return;
+				if (easy_open && is_closed_door(feat) && easy_open_door(p_ptr, y, x)) return;
 
 #ifdef JP
 				msg_format("%sが行く手をはばんでいる。", name);
