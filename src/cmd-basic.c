@@ -734,7 +734,7 @@ static int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, boo
  * Assume there is no monster blocking the destination
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_open_aux(POSITION y, POSITION x)
+static bool do_cmd_open_aux(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	int i, j;
 
@@ -743,7 +743,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	bool more = FALSE;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Seeing true feature code (ignore mimic) */
 
@@ -758,11 +758,11 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 	else if (f_ptr->power)
 	{
 		/* Disarm factor */
-		i = p_ptr->skill_dis;
+		i = creature_ptr->skill_dis;
 
 		/* Penalize some conditions */
-		if (p_ptr->blind || no_lite()) i = i / 10;
-		if (p_ptr->confused || p_ptr->image) i = i / 10;
+		if (creature_ptr->blind || no_lite()) i = i / 10;
+		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 		/* Extract the lock power */
 		j = f_ptr->power;
@@ -784,7 +784,7 @@ static bool do_cmd_open_aux(POSITION y, POSITION x)
 			sound(SOUND_OPENDOOR);
 
 			/* Experience */
-			gain_exp(p_ptr, 1);
+			gain_exp(creature_ptr, 1);
 		}
 
 		/* Failure */
@@ -894,7 +894,7 @@ void do_cmd_open(player_type *creature_ptr)
 		}
 		else
 		{
-			more = do_cmd_open_aux(y, x);
+			more = do_cmd_open_aux(creature_ptr, y, x);
 		}
 	}
 
@@ -1872,7 +1872,7 @@ void do_cmd_alter(void)
 		/* Locked doors */
 		else if (have_flag(f_ptr->flags, FF_OPEN))
 		{
-			more = do_cmd_open_aux(y, x);
+			more = do_cmd_open_aux(p_ptr, y, x);
 		}
 
 		/* Bash jammed doors */
