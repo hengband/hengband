@@ -1507,7 +1507,7 @@ static bool cast_berserk_spell(int spell)
 		if (player_can_enter(current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(current_floor_ptr->grid_array[y][x].feat) && !current_floor_ptr->grid_array[y][x].m_idx)
 		{
 			msg_print(NULL);
-			(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+			(void)move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 		}
 		break;
 	}

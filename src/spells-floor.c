@@ -888,7 +888,7 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			}
 
 			/* Move the player to the safe location */
-			(void)move_player_effect(sy, sx, MPE_DONT_PICKUP);
+			(void)move_player_effect(p_ptr, sy, sx, MPE_DONT_PICKUP);
 		}
 
 		/* Important -- no wall on player */

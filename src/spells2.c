@@ -2186,7 +2186,7 @@ bool teleport_swap(DIRECTION dir)
 	sound(SOUND_TELEPORT);
 
 	/* Swap the player and monster */
-	(void)move_player_effect(ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(p_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 
 	/* Success */
 	return TRUE;

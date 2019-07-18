@@ -217,7 +217,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (player_can_enter(current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(current_floor_ptr->grid_array[y][x].feat) && !current_floor_ptr->grid_array[y][x].m_idx)
 			{
 				msg_print(NULL);
-				(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+				(void)move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 			}
 		}
 		break;
@@ -699,7 +699,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				/* Player can move forward? */
 				if (player_can_enter(g_ptr->feat, 0))
 				{
-					if (!move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
+					if (!move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
 				}
 				else
 				{

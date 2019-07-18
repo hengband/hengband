@@ -2204,7 +2204,7 @@ void process_monster(MONSTER_IDX m_idx)
 			else
 			{
 				/* sound(SOUND_WALK); */
-				if (!move_player_effect(ny, nx, MPE_DONT_PICKUP)) break;
+				if (!move_player_effect(p_ptr, ny, nx, MPE_DONT_PICKUP)) break;
 			}
 
 			/* Possible disturb */

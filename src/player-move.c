@@ -475,7 +475,7 @@ void carry(bool pickup)
  * @param n_x プレイヤーの移動先X座標
  * @return 移動処理が可能である場合（可能な場合に選択した場合）TRUEを返す。
  */
-bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
+bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
 	feature_type *cur_f_ptr = &f_info[current_floor_ptr->grid_array[c_y][c_x].feat];
 	feature_type *new_f_ptr = &f_info[current_floor_ptr->grid_array[n_y][n_x].feat];
@@ -490,7 +490,7 @@ bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 
 	if (pattern_type_new == PATTERN_TILE_START)
 	{
-		if (!is_pattern_tile_cur && !p_ptr->confused && !p_ptr->stun && !p_ptr->image)
+		if (!is_pattern_tile_cur && !creature_ptr->confused && !creature_ptr->stun && !creature_ptr->image)
 		{
 			if (get_check(_("パターンの上を歩き始めると、全てを歩かなければなりません。いいですか？", 
 							"If you start walking the Pattern, you must walk the whole way. Ok? ")))
@@ -573,7 +573,7 @@ bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 					ok_move = PATTERN_TILE_1;
 					break;
 				default:
-					if (p_ptr->wizard)
+					if (creature_ptr->wizard)
 						msg_format(_("おかしなパターン歩行、%d。", "Funny Pattern walking, %d."), pattern_type_cur);
 
 					return TRUE; /* Goof-up */
@@ -1010,7 +1010,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		if (!is_hostile(m_ptr) &&
 		    !(creature_ptr->confused || creature_ptr->image || !m_ptr->ml || creature_ptr->stun ||
 		    ((creature_ptr->muta2 & MUT2_BERS_RAGE) && creature_ptr->shero)) &&
-		    pattern_seq(creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
+		    pattern_seq(p_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
 		{
 			/* Disturb the monster */
 			(void)set_monster_csleep(g_ptr->m_idx, 0);
@@ -1222,7 +1222,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	}
 
 	/* Normal movement */
-	if (oktomove && !pattern_seq(creature_ptr->y, creature_ptr->x, y, x))
+	if (oktomove && !pattern_seq(p_ptr, creature_ptr->y, creature_ptr->x, y, x))
 	{
 		if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
 		{

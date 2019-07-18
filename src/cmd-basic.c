@@ -2146,7 +2146,7 @@ void do_cmd_stay(bool pickup)
 	take_turn(p_ptr, 100);
 
 	if (pickup) mpe_mode |= MPE_DO_PICKUP;
-	(void)move_player_effect(p_ptr->y, p_ptr->x, mpe_mode);
+	(void)move_player_effect(p_ptr, p_ptr->y, p_ptr->x, mpe_mode);
 }
 
 

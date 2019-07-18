@@ -390,7 +390,7 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 		msg_format("『こっちだぁ、%s』", p_ptr->name);
 #endif
 
-	(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 	return TRUE;
 }
 
@@ -528,7 +528,7 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 	}
 
 	sound(SOUND_TELEPORT);
-	(void)move_player_effect(y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
 
@@ -3357,7 +3357,7 @@ bool eat_lock(void)
 	/* Destroy the wall */
 	cave_alter_feat(y, x, FF_HURT_ROCK);
 
-	(void)move_player_effect(y, x, MPE_DONT_PICKUP);
+	(void)move_player_effect(p_ptr, y, x, MPE_DONT_PICKUP);
 	return TRUE;
 }
 
