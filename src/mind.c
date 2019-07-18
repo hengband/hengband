@@ -1516,7 +1516,7 @@ static bool cast_berserk_spell(int spell)
 		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 		y = p_ptr->y + ddy[dir];
 		x = p_ptr->x + ddx[dir];
-		move_player(dir, easy_disarm, TRUE);
+		move_player(p_ptr, dir, easy_disarm, TRUE);
 		break;
 	}
 	case 3:

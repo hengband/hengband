@@ -7,7 +7,7 @@
 #define TRAVEL
 
 extern void disturb(bool stop_search, bool flush_output);
-extern void move_player(DIRECTION dir, bool do_pickup, bool break_trap);
+extern void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(DIRECTION dir);
 
 #define MPE_STAYING       0x00000001

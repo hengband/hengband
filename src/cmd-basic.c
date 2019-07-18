@@ -1508,7 +1508,7 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 		cave_alter_feat(y, x, FF_DISARM);
 
 		/* Move the player onto the trap */
-		move_player(dir, easy_disarm, FALSE);
+		move_player(p_ptr, dir, easy_disarm, FALSE);
 	}
 
 	/* Failure -- Keep trying */
@@ -1528,7 +1528,7 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	{
 		msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
 		/* Move the player onto the trap */
-		move_player(dir, easy_disarm, FALSE);
+		move_player(p_ptr, dir, easy_disarm, FALSE);
 	}
 	return (more);
 }
@@ -1698,7 +1698,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 		}
 
 		/* Hack -- Fall through the door */
-		move_player(dir, FALSE, FALSE);
+		move_player(p_ptr, dir, FALSE, FALSE);
 	}
 
 	/* Saving throw against stun */
@@ -2061,7 +2061,7 @@ void do_cmd_walk(bool pickup)
 		if (p_ptr->action == ACTION_HAYAGAKE) p_ptr->energy_use = p_ptr->energy_use * (45-(p_ptr->lev/2)) / 100;
 
 		/* Actually move the character */
-		move_player(dir, pickup, FALSE);
+		move_player(p_ptr, dir, pickup, FALSE);
 
 		/* Allow more walking */
 		more = TRUE;
