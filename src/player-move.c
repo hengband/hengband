@@ -812,7 +812,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
  * @param feat 地形ID
  * @return トラップが自動的に無効ならばTRUEを返す
  */
-bool trap_can_be_ignored(FEAT_IDX feat)
+bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 {
 	feature_type *f_ptr = &f_info[feat];
 
@@ -824,28 +824,28 @@ bool trap_can_be_ignored(FEAT_IDX feat)
 	case TRAP_PIT:
 	case TRAP_SPIKED_PIT:
 	case TRAP_POISON_PIT:
-		if (p_ptr->levitation) return TRUE;
+		if (creature_ptr->levitation) return TRUE;
 		break;
 	case TRAP_TELEPORT:
-		if (p_ptr->anti_tele) return TRUE;
+		if (creature_ptr->anti_tele) return TRUE;
 		break;
 	case TRAP_FIRE:
-		if (p_ptr->immune_fire) return TRUE;
+		if (creature_ptr->immune_fire) return TRUE;
 		break;
 	case TRAP_ACID:
-		if (p_ptr->immune_acid) return TRUE;
+		if (creature_ptr->immune_acid) return TRUE;
 		break;
 	case TRAP_BLIND:
-		if (p_ptr->resist_blind) return TRUE;
+		if (creature_ptr->resist_blind) return TRUE;
 		break;
 	case TRAP_CONFUSE:
-		if (p_ptr->resist_conf) return TRUE;
+		if (creature_ptr->resist_conf) return TRUE;
 		break;
 	case TRAP_POISON:
-		if (p_ptr->resist_pois) return TRUE;
+		if (creature_ptr->resist_pois) return TRUE;
 		break;
 	case TRAP_SLEEP:
-		if (p_ptr->free_act) return TRUE;
+		if (creature_ptr->free_act) return TRUE;
 		break;
 	}
 
@@ -1140,7 +1140,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	/* Disarm a visible trap */
 	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic)
 	{
-		if (!trap_can_be_ignored(g_ptr->feat))
+		if (!trap_can_be_ignored(p_ptr, g_ptr->feat))
 		{
 			(void)do_cmd_disarm_aux(y, x, dir);
 			return;
@@ -1985,7 +1985,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	if (!easy_open && is_closed_door(g_ptr->feat)) return (0);
 
 	/* Visible and unignorable trap abort tarveling */
-	if (!g_ptr->mimic && !trap_can_be_ignored(g_ptr->feat)) return (0);
+	if (!g_ptr->mimic && !trap_can_be_ignored(p_ptr, g_ptr->feat)) return (0);
 
 	/* Move new grid */
 	return (new_dir);
