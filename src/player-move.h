@@ -18,7 +18,7 @@ extern void run_step(DIRECTION dir);
 #define MPE_DO_PICKUP     0x00000020
 #define MPE_BREAK_TRAP    0x00000040
 #define MPE_DONT_SWAP_MON 0x00000080
-extern bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
+extern bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
 
 extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);

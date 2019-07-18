@@ -601,10 +601,10 @@ bool pattern_seq(POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
  * @param mpe_mode 移動オプションフラグ
  * @return プレイヤーが死亡やフロア離脱を行わず、実際に移動が可能ならばTRUEを返す。
  */
-bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
+bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 {
-	POSITION oy = p_ptr->y;
-	POSITION ox = p_ptr->x;
+	POSITION oy = creature_ptr->y;
+	POSITION ox = creature_ptr->x;
 	grid_type *g_ptr = &current_floor_ptr->grid_array[ny][nx];
 	grid_type *oc_ptr = &current_floor_ptr->grid_array[oy][ox];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -615,8 +615,8 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		MONSTER_IDX om_idx = oc_ptr->m_idx;
 		MONSTER_IDX nm_idx = g_ptr->m_idx;
 
-		p_ptr->y = ny;
-		p_ptr->x = nx;
+		creature_ptr->y = ny;
+		creature_ptr->x = nx;
 
 		/* Hack -- For moving monster or riding player's moving */
 		if (!(mpe_mode & MPE_DONT_SWAP_MON))
@@ -625,7 +625,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 			g_ptr->m_idx = om_idx;
 			oc_ptr->m_idx = nm_idx;
 
-			if (om_idx > 0) /* Monster on old spot (or p_ptr->riding) */
+			if (om_idx > 0) /* Monster on old spot (or creature_ptr->riding) */
 			{
 				monster_type *om_ptr = &current_floor_ptr->m_list[om_idx];
 				om_ptr->fy = ny;
@@ -652,63 +652,63 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		{
 			forget_flow();
 
-			p_ptr->update |= (PU_UN_VIEW);
-			p_ptr->redraw |= (PR_MAP);
+			creature_ptr->update |= (PU_UN_VIEW);
+			creature_ptr->redraw |= (PR_MAP);
 		}
 
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		creature_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_DISTANCE);
+		creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */
-		if ((!p_ptr->blind && !no_lite()) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
+		if ((!creature_ptr->blind && !no_lite()) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
 
 		/* For get everything when requested hehe I'm *NASTY* */
-		if (current_floor_ptr->dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark();
+		if (current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark();
 		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff();
 
-		if (p_ptr->pclass == CLASS_NINJA)
+		if (creature_ptr->pclass == CLASS_NINJA)
 		{
-			if (g_ptr->info & (CAVE_GLOW)) set_superstealth(p_ptr, FALSE);
-			else if (p_ptr->cur_lite <= 0) set_superstealth(p_ptr, TRUE);
+			if (g_ptr->info & (CAVE_GLOW)) set_superstealth(creature_ptr, FALSE);
+			else if (creature_ptr->cur_lite <= 0) set_superstealth(creature_ptr, TRUE);
 		}
 
-		if ((p_ptr->action == ACTION_HAYAGAKE) &&
+		if ((creature_ptr->action == ACTION_HAYAGAKE) &&
 		    (!have_flag(f_ptr->flags, FF_PROJECT) ||
-		     (!p_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP))))
+		     (!creature_ptr->levitation && have_flag(f_ptr->flags, FF_DEEP))))
 		{
 			msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
-			set_action(p_ptr, ACTION_NONE);
+			set_action(creature_ptr, ACTION_NONE);
 		}
-		if (p_ptr->prace == RACE_MERFOLK)
+		if (creature_ptr->prace == RACE_MERFOLK)
 		{
 			if(have_flag(f_ptr->flags, FF_WATER) ^ have_flag(of_ptr->flags, FF_WATER))
 			{
-				p_ptr->update |= PU_BONUS;
-				update_creature(p_ptr);
+				creature_ptr->update |= PU_BONUS;
+				update_creature(creature_ptr);
 			}
 		}
 	}
 
 	if (mpe_mode & MPE_ENERGY_USE)
 	{
-		if (music_singing(p_ptr, MUSIC_WALL))
+		if (music_singing(creature_ptr, MUSIC_WALL))
 		{
-			(void)project(0, 0, p_ptr->y, p_ptr->x, (60 + p_ptr->lev), GF_DISINTEGRATE,
+			(void)project(0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE,
 				PROJECT_KILL | PROJECT_ITEM, -1);
 
-			if (!player_bold(ny, nx) || p_ptr->is_dead || p_ptr->leaving) return FALSE;
+			if (!player_bold(ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
 		}
 
 		/* Spontaneous Searching */
-		if ((p_ptr->skill_fos >= 50) || (0 == randint0(50 - p_ptr->skill_fos)))
+		if ((creature_ptr->skill_fos >= 50) || (0 == randint0(50 - creature_ptr->skill_fos)))
 		{
-			search(p_ptr);
+			search(creature_ptr);
 		}
 
 		/* Continuous Searching */
-		if (p_ptr->action == ACTION_SEARCH)
+		if (creature_ptr->action == ACTION_SEARCH)
 		{
-			search(p_ptr);
+			search(creature_ptr);
 		}
 	}
 
@@ -723,7 +723,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	{
 		disturb(FALSE, TRUE);
 
-		free_turn(p_ptr);
+		free_turn(creature_ptr);
 		/* Hack -- Enter store */
 		command_new = SPECIAL_KEY_STORE;
 	}
@@ -733,7 +733,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	{
 		disturb(FALSE, TRUE);
 
-		free_turn(p_ptr);
+		free_turn(creature_ptr);
 		/* Hack -- Enter building */
 		command_new = SPECIAL_KEY_BUILDING;
 	}
@@ -743,26 +743,26 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 	{
 		disturb(FALSE, TRUE);
 
-		free_turn(p_ptr);
+		free_turn(creature_ptr);
 		/* Hack -- Enter quest level */
 		command_new = SPECIAL_KEY_QUEST;
 	}
 
 	else if (have_flag(f_ptr->flags, FF_QUEST_EXIT))
 	{
-		if (quest[p_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
+		if (quest[creature_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
 		{
-			complete_quest(p_ptr->inside_quest);
+			complete_quest(creature_ptr->inside_quest);
 		}
 
 		leave_quest_check();
 
-		p_ptr->inside_quest = g_ptr->special;
+		creature_ptr->inside_quest = g_ptr->special;
 		current_floor_ptr->dun_level = 0;
-		p_ptr->oldpx = 0;
-		p_ptr->oldpy = 0;
+		creature_ptr->oldpx = 0;
+		creature_ptr->oldpy = 0;
 
-		p_ptr->leaving = TRUE;
+		creature_ptr->leaving = TRUE;
 	}
 
 	/* Set off a trap */
@@ -776,21 +776,21 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 			msg_print(_("トラップだ！", "You found a trap!"));
 
 			/* Pick a trap */
-			disclose_grid(p_ptr->y, p_ptr->x);
+			disclose_grid(creature_ptr->y, creature_ptr->x);
 		}
 
 		/* Hit the trap */
 		hit_trap((mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
 
-		if (!player_bold(ny, nx) || p_ptr->is_dead || p_ptr->leaving) return FALSE;
+		if (!player_bold(ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
 	}
 
 	/* Warn when leaving trap detected region */
 	if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT))
+	    && creature_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
-		p_ptr->dtrap = FALSE;
+		creature_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
 		if (!(g_ptr->info & CAVE_UNSAFE))
@@ -804,7 +804,7 @@ bool move_player_effect(POSITION ny, POSITION nx, BIT_FLAGS mpe_mode)
 		}
 	}
 
-	return player_bold(ny, nx) && !p_ptr->is_dead && !p_ptr->leaving;
+	return player_bold(ny, nx) && !creature_ptr->is_dead && !creature_ptr->leaving;
 }
 
 /*!
@@ -1278,7 +1278,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		if (do_pickup != always_pickup) mpe_mode |= MPE_DO_PICKUP;
 		if (break_trap) mpe_mode |= MPE_BREAK_TRAP;
 
-		(void)move_player_effect(y, x, mpe_mode);
+		(void)move_player_effect(p_ptr, y, x, mpe_mode);
 	}
 }
 
