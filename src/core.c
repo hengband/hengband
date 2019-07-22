@@ -3698,7 +3698,7 @@ static void process_command(void)
 		/* Rest -- Arg is time */
 		case 'R':
 		{
-			do_cmd_rest();
+			do_cmd_rest(p_ptr);
 			break;
 		}
 

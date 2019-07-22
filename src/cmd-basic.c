@@ -2156,18 +2156,18 @@ void do_cmd_stay(bool pickup)
  * Resting allows a player to safely restore his hp	-RAK-
  * @return なし
  */
-void do_cmd_rest(void)
+void do_cmd_rest(player_type *creature_ptr)
 {
 
-	set_action(p_ptr, ACTION_NONE);
+	set_action(creature_ptr, ACTION_NONE);
 
-	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) || INTERUPTING_SONG_EFFECT(p_ptr)))
+	if ((creature_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(creature_ptr) || INTERUPTING_SONG_EFFECT(creature_ptr)))
 	{
-		stop_singing(p_ptr);
+		stop_singing(creature_ptr);
 	}
 
 	/* Hex */
-	if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
+	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
 
 	/* Prompt for time if needed */
 	if (command_arg <= 0)
@@ -2206,32 +2206,32 @@ void do_cmd_rest(void)
 
 	if (command_arg > 9999) command_arg = 9999;
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(p_ptr, FALSE);
+	if (creature_ptr->special_defense & NINJA_S_STEALTH) set_superstealth(creature_ptr, FALSE);
 
 	/* Take a current_world_ptr->game_turn (?) */
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* The sin of sloth */
-	if (command_arg > 100) chg_virtue(p_ptr, V_DILIGENCE, -1);
+	if (command_arg > 100) chg_virtue(creature_ptr, V_DILIGENCE, -1);
 	
 	/* Why are you sleeping when there's no need?  WAKE UP!*/
-	if ((p_ptr->chp == p_ptr->mhp) &&
-	    (p_ptr->csp == p_ptr->msp) &&
-	    !p_ptr->blind && !p_ptr->confused &&
-	    !p_ptr->poisoned && !p_ptr->afraid &&
-	    !p_ptr->stun && !p_ptr->cut &&
-	    !p_ptr->slow && !p_ptr->paralyzed &&
-	    !p_ptr->image && !p_ptr->word_recall &&
-	    !p_ptr->alter_reality)
-			chg_virtue(p_ptr, V_DILIGENCE, -1);
+	if ((creature_ptr->chp == creature_ptr->mhp) &&
+	    (creature_ptr->csp == creature_ptr->msp) &&
+	    !creature_ptr->blind && !creature_ptr->confused &&
+	    !creature_ptr->poisoned && !creature_ptr->afraid &&
+	    !creature_ptr->stun && !creature_ptr->cut &&
+	    !creature_ptr->slow && !creature_ptr->paralyzed &&
+	    !creature_ptr->image && !creature_ptr->word_recall &&
+	    !creature_ptr->alter_reality)
+			chg_virtue(creature_ptr, V_DILIGENCE, -1);
 
 	/* Save the rest code */
-	p_ptr->resting = command_arg;
-	p_ptr->action = ACTION_REST;
-	p_ptr->update |= (PU_BONUS);
-	update_creature(p_ptr);
+	creature_ptr->resting = command_arg;
+	creature_ptr->action = ACTION_REST;
+	creature_ptr->update |= (PU_BONUS);
+	update_creature(creature_ptr);
 
-	p_ptr->redraw |= (PR_STATE);
+	creature_ptr->redraw |= (PR_STATE);
 	update_output();
 
 	Term_fresh();
