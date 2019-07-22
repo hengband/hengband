@@ -2100,21 +2100,21 @@ void do_cmd_walk(bool pickup)
  * Start running.
  * @return なし
  */
-void do_cmd_run(void)
+void do_cmd_run(player_type *creature_ptr)
 {
 	DIRECTION dir;
-	if (cmd_limit_confused(p_ptr)) return;
+	if (cmd_limit_confused(creature_ptr)) return;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir,FALSE))
 	{
 		/* Hack -- Set the run counter */
-		p_ptr->running = (command_arg ? command_arg : 1000);
+		creature_ptr->running = (command_arg ? command_arg : 1000);
 
 		/* First step */
 		run_step(dir);

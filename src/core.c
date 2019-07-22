@@ -3677,7 +3677,7 @@ static void process_command(void)
 		/* Begin Running -- Arg is Max Distance */
 		case '.':
 		{
-			if (!p_ptr->wild_mode) do_cmd_run();
+			if (!p_ptr->wild_mode) do_cmd_run(p_ptr);
 			break;
 		}
 
