@@ -1743,9 +1743,10 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
  */
 void do_cmd_bash(player_type *creature_ptr)
 {
-	int	y, x, dir;
-	grid_type	*g_ptr;
-	bool		more = FALSE;
+	POSITION y, x;
+	DIRECTION dir;
+	grid_type *g_ptr;
+	bool more = FALSE;
 
 	if (creature_ptr->wild_mode) return;
 
