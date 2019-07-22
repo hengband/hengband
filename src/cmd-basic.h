@@ -16,7 +16,7 @@ extern void do_cmd_open(player_type *creature_ptr);
 extern void do_cmd_close(player_type *creature_ptr);
 extern void do_cmd_tunnel(player_type *creature_ptr);
 extern void do_cmd_disarm(player_type *creature_ptr);
-extern void do_cmd_bash(void);
+extern void do_cmd_bash(player_type *creature_ptr);
 extern void do_cmd_alter(void);
 extern void do_cmd_spike(player_type *creature_ptr);
 extern void do_cmd_walk(bool pickup);

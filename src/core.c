@@ -3800,7 +3800,7 @@ static void process_command(void)
 		/* Bash a door */
 		case 'B':
 		{
-			do_cmd_bash();
+			do_cmd_bash(p_ptr);
 			break;
 		}
 
