@@ -1648,7 +1648,7 @@ void do_cmd_disarm(player_type *creature_ptr)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
+static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
 	grid_type	*g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1657,7 +1657,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	/* Hack -- Bash power based on strength */
 	/* (Ranges from 3 to 20 to 100 to 200) */
-	int bash = adj_str_blow[p_ptr->stat_ind[A_STR]];
+	int bash = adj_str_blow[creature_ptr->stat_ind[A_STR]];
 
 	/* Extract door power */
 	int temp = f_ptr->power;
@@ -1666,14 +1666,14 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 
 	concptr name = f_name + f_info[get_feat_mimic(g_ptr)].name;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
 
 	/* Compare bash power to door power */
 	temp = (bash - (temp * 10));
 
-	if (p_ptr->pclass == CLASS_BERSERKER) temp *= 2;
+	if (creature_ptr->pclass == CLASS_BERSERKER) temp *= 2;
 
 	/* Hack -- always have a chance */
 	if (temp < 1) temp = 1;
@@ -1698,12 +1698,12 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 		}
 
 		/* Hack -- Fall through the door */
-		move_player(p_ptr, dir, FALSE, FALSE);
+		move_player(creature_ptr, dir, FALSE, FALSE);
 	}
 
 	/* Saving throw against stun */
-	else if (randint0(100) < adj_dex_safe[p_ptr->stat_ind[A_DEX]] +
-		 p_ptr->lev)
+	else if (randint0(100) < adj_dex_safe[creature_ptr->stat_ind[A_DEX]] +
+		 creature_ptr->lev)
 	{
 		msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
 
@@ -1717,7 +1717,7 @@ static bool do_cmd_bash_aux(POSITION y, POSITION x, DIRECTION dir)
 		msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
 
 		/* Hack -- Lose balance ala paralysis */
-		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 2 + randint0(2));
+		(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 2 + randint0(2));
 	}
 	return (more);
 }
@@ -1801,7 +1801,7 @@ void do_cmd_bash(player_type *creature_ptr)
 		else
 		{
 			/* Bash the door */
-			more = do_cmd_bash_aux(y, x, dir);
+			more = do_cmd_bash_aux(creature_ptr, y, x, dir);
 		}
 	}
 
@@ -1879,7 +1879,7 @@ void do_cmd_alter(void)
 		/* Bash jammed doors */
 		else if (have_flag(f_ptr->flags, FF_BASH))
 		{
-			more = do_cmd_bash_aux(y, x, dir);
+			more = do_cmd_bash_aux(p_ptr, y, x, dir);
 		}
 
 		/* Tunnel through walls */
