@@ -1142,7 +1142,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	{
 		if (!trap_can_be_ignored(p_ptr, g_ptr->feat))
 		{
-			(void)do_cmd_disarm_aux(creature_ptr, y, x, dir);
+			(void)exe_disarm(creature_ptr, y, x, dir);
 			return;
 		}
 	}

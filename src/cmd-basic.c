@@ -1466,7 +1466,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
  * </pre>
  */
 
-bool do_cmd_disarm_aux(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
+bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
 	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1625,7 +1625,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		/* Disarm trap */
 		else
 		{
-			more = do_cmd_disarm_aux(creature_ptr, y, x, dir);
+			more = exe_disarm(creature_ptr, y, x, dir);
 		}
 	}
 
@@ -1897,7 +1897,7 @@ void do_cmd_alter(void)
 		/* Disarm traps */
 		else if (have_flag(f_ptr->flags, FF_DISARM))
 		{
-			more = do_cmd_disarm_aux(p_ptr, y, x, dir);
+			more = exe_disarm(p_ptr, y, x, dir);
 		}
 
 		else
