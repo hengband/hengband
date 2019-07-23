@@ -3959,7 +3959,7 @@ static void process_command(void)
 		/* Fire an item */
 		case 'f':
 		{
-			do_cmd_fire(SP_NONE);
+			do_cmd_fire(p_ptr, SP_NONE);
 			break;
 		}
 

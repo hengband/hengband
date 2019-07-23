@@ -2243,18 +2243,18 @@ void do_cmd_rest(player_type *creature_ptr)
  * @brief 射撃処理のメインルーチン
  * @return なし
  */
-void do_cmd_fire(SPELL_IDX snipe_type)
+void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 {
 	OBJECT_IDX item;
 	object_type *j_ptr, *ammo_ptr;
 	concptr q, s;
 
-	if(p_ptr->wild_mode) return;
+	if(creature_ptr->wild_mode) return;
 
-	p_ptr->is_fired = FALSE;	/* not fired yet */
+	creature_ptr->is_fired = FALSE;	/* not fired yet */
 
 	/* Get the "bow" (if any) */
-	j_ptr = &p_ptr->inventory_list[INVEN_BOW];
+	j_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 
 	/* Require a launcher */
 	if (!j_ptr->tval)
@@ -2279,15 +2279,15 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 	}
 
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	q = _("どれを撃ちますか? ", "Fire which item? ");
 	s = _("発射されるアイテムがありません。", "You have nothing to fire.");
 
-	ammo_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), p_ptr->tval_ammo);
+	ammo_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), creature_ptr->tval_ammo);
 	if (!ammo_ptr)
 	{
 		flush();
@@ -2297,18 +2297,18 @@ void do_cmd_fire(SPELL_IDX snipe_type)
 	/* Fire the item */
 	exe_fire(item, j_ptr, snipe_type);
 
-	if (!p_ptr->is_fired || p_ptr->pclass != CLASS_SNIPER) return;
+	if (!creature_ptr->is_fired || creature_ptr->pclass != CLASS_SNIPER) return;
 
 	/* Sniper actions after some shootings */
 	if (snipe_type == SP_AWAY)
 	{
-		teleport_player(10 + (p_ptr->concent * 2), 0L);
+		teleport_player(10 + (creature_ptr->concent * 2), 0L);
 	}
 	if (snipe_type == SP_FINAL)
 	{
 		msg_print(_("射撃の反動が体を襲った。", "A reactionary of shooting attacked you. "));
-		(void)set_slow(p_ptr, p_ptr->slow + randint0(7) + 7, FALSE);
-		(void)set_stun(p_ptr, p_ptr->stun + randint1(25));
+		(void)set_slow(creature_ptr, creature_ptr->slow + randint0(7) + 7, FALSE);
+		(void)set_stun(creature_ptr, creature_ptr->stun + randint1(25));
 	}
 }
 
