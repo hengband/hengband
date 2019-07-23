@@ -2029,7 +2029,7 @@ void do_cmd_spike(player_type *creature_ptr)
  * @param pickup アイテムの自動拾いを行うならTRUE
  * @return なし
  */
-void do_cmd_walk(bool pickup)
+void do_cmd_walk(player_type *creature_ptr, bool pickup)
 {
 	DIRECTION dir;
 
@@ -2041,7 +2041,7 @@ void do_cmd_walk(bool pickup)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
@@ -2050,42 +2050,42 @@ void do_cmd_walk(bool pickup)
 	/* Get a "repeated" direction */
 	if (get_rep_dir(&dir, FALSE))
 	{
-		take_turn(p_ptr, 100);
+		take_turn(creature_ptr, 100);
 
-		if ((dir != 5) && (p_ptr->special_defense & KATA_MUSOU))
+		if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
 		{
-			set_action(p_ptr, ACTION_NONE);
+			set_action(creature_ptr, ACTION_NONE);
 		}
 
 		/* Hack -- In small scale wilderness it takes MUCH more time to move */
-		if (p_ptr->wild_mode) p_ptr->energy_use *= ((MAX_HGT + MAX_WID) / 2);
-		if (p_ptr->action == ACTION_HAYAGAKE) p_ptr->energy_use = p_ptr->energy_use * (45-(p_ptr->lev/2)) / 100;
+		if (creature_ptr->wild_mode) creature_ptr->energy_use *= ((MAX_HGT + MAX_WID) / 2);
+		if (creature_ptr->action == ACTION_HAYAGAKE) creature_ptr->energy_use = creature_ptr->energy_use * (45-(creature_ptr->lev/2)) / 100;
 
 		/* Actually move the character */
-		move_player(p_ptr, dir, pickup, FALSE);
+		move_player(creature_ptr, dir, pickup, FALSE);
 
 		/* Allow more walking */
 		more = TRUE;
 	}
 
 	/* Hack again -- Is there a special encounter ??? */
-	if (p_ptr->wild_mode && !cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_TOWN))
+	if (creature_ptr->wild_mode && !cave_have_flag_bold(creature_ptr->y, creature_ptr->x, FF_TOWN))
 	{
-		int tmp = 120 + p_ptr->lev*10 - wilderness[p_ptr->y][p_ptr->x].level + 5;
+		int tmp = 120 + creature_ptr->lev*10 - wilderness[creature_ptr->y][creature_ptr->x].level + 5;
 		if (tmp < 1) 
 			tmp = 1;
-		if (((wilderness[p_ptr->y][p_ptr->x].level + 5) > (p_ptr->lev / 2)) && randint0(tmp) < (21-p_ptr->skill_stl))
+		if (((wilderness[creature_ptr->y][creature_ptr->x].level + 5) > (creature_ptr->lev / 2)) && randint0(tmp) < (21-creature_ptr->skill_stl))
 		{
 			/* Inform the player of his horrible fate :=) */
 			msg_print(_("襲撃だ！", "You are ambushed !"));
 
 			/* Go into large wilderness view */
-			p_ptr->oldpy = randint1(MAX_HGT-2);
-			p_ptr->oldpx = randint1(MAX_WID-2);
+			creature_ptr->oldpy = randint1(MAX_HGT-2);
+			creature_ptr->oldpx = randint1(MAX_WID-2);
 			change_wild_mode(TRUE);
 
 			/* Give first move to monsters */
-			take_turn(p_ptr, 100);
+			take_turn(creature_ptr, 100);
 
 		}
 	}

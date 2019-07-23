@@ -3660,14 +3660,14 @@ static void process_command(void)
 		/* Move (usually pick up things) */
 		case ';':
 		{
-			do_cmd_walk(FALSE);
+			do_cmd_walk(p_ptr, FALSE);
 			break;
 		}
 
 		/* Move (usually do not pick up) */
 		case '-':
 		{
-			do_cmd_walk(TRUE);
+			do_cmd_walk(p_ptr, TRUE);
 			break;
 		}
 
