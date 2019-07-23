@@ -27,6 +27,6 @@ extern void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type);
 extern void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type);
 extern bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken);
 extern bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x);
-extern bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir);
+extern bool do_cmd_disarm_aux(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir);
 
 extern void kamaenaoshi(INVENTORY_IDX item);

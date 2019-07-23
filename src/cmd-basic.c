@@ -1466,7 +1466,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
  * </pre>
  */
 
-bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
+bool do_cmd_disarm_aux(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
 	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1481,14 +1481,14 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	bool more = FALSE;
 
 	/* Get the "disarm" factor */
-	int i = p_ptr->skill_dis;
+	int i = creature_ptr->skill_dis;
 	int j;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Penalize some conditions */
-	if (p_ptr->blind || no_lite()) i = i / 10;
-	if (p_ptr->confused || p_ptr->image) i = i / 10;
+	if (creature_ptr->blind || no_lite()) i = i / 10;
+	if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 	/* Extract the difficulty */
 	j = i - power;
@@ -1502,13 +1502,13 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 		msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
 		
 		/* Reward */
-		gain_exp(p_ptr, power);
+		gain_exp(creature_ptr, power);
 
 		/* Remove the trap */
 		cave_alter_feat(y, x, FF_DISARM);
 
 		/* Move the player onto the trap */
-		move_player(p_ptr, dir, easy_disarm, FALSE);
+		move_player(creature_ptr, dir, easy_disarm, FALSE);
 	}
 
 	/* Failure -- Keep trying */
@@ -1528,7 +1528,7 @@ bool do_cmd_disarm_aux(POSITION y, POSITION x, DIRECTION dir)
 	{
 		msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
 		/* Move the player onto the trap */
-		move_player(p_ptr, dir, easy_disarm, FALSE);
+		move_player(creature_ptr, dir, easy_disarm, FALSE);
 	}
 	return (more);
 }
@@ -1625,7 +1625,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		/* Disarm trap */
 		else
 		{
-			more = do_cmd_disarm_aux(y, x, dir);
+			more = do_cmd_disarm_aux(creature_ptr, y, x, dir);
 		}
 	}
 
@@ -1897,7 +1897,7 @@ void do_cmd_alter(void)
 		/* Disarm traps */
 		else if (have_flag(f_ptr->flags, FF_DISARM))
 		{
-			more = do_cmd_disarm_aux(y, x, dir);
+			more = do_cmd_disarm_aux(p_ptr, y, x, dir);
 		}
 
 		else
