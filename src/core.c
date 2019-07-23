@@ -3684,14 +3684,14 @@ static void process_command(void)
 		/* Stay still (usually pick things up) */
 		case ',':
 		{
-			do_cmd_stay(always_pickup);
+			do_cmd_stay(p_ptr, always_pickup);
 			break;
 		}
 
 		/* Stay still (usually do not pick up) */
 		case 'g':
 		{
-			do_cmd_stay(!always_pickup);
+			do_cmd_stay(p_ptr, !always_pickup);
 			break;
 		}
 

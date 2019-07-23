@@ -2129,7 +2129,7 @@ void do_cmd_run(player_type *creature_ptr)
  * @param pickup アイテムの自動拾いを行うならTRUE
  * @return なし
  */
-void do_cmd_stay(bool pickup)
+void do_cmd_stay(player_type *creature_ptr, bool pickup)
 {
 	u32b mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
 
@@ -2138,16 +2138,16 @@ void do_cmd_stay(bool pickup)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	if (pickup) mpe_mode |= MPE_DO_PICKUP;
-	(void)move_player_effect(p_ptr, p_ptr->y, p_ptr->x, mpe_mode);
+	(void)move_player_effect(creature_ptr, creature_ptr->y, creature_ptr->x, mpe_mode);
 }
 
 

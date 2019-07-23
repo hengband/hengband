@@ -20,7 +20,7 @@ extern void do_cmd_bash(player_type *creature_ptr);
 extern void do_cmd_alter(void);
 extern void do_cmd_spike(player_type *creature_ptr);
 extern void do_cmd_walk(player_type *creature_ptr, bool pickup);
-extern void do_cmd_stay(bool pickup);
+extern void do_cmd_stay(player_type *creature_ptr, bool pickup);
 extern void do_cmd_run(player_type *creature_ptr);
 extern void do_cmd_rest(player_type *creature_ptr);
 extern void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type);
