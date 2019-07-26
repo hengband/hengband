@@ -915,13 +915,13 @@ void do_cmd_open(player_type *creature_ptr)
  * Assume there is no monster blocking the destination
  * Returns TRUE if repeated commands may continue
  */
-static bool do_cmd_close_aux(POSITION y, POSITION x)
+static bool do_cmd_close_aux(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 	FEAT_IDX old_feat = g_ptr->feat;
 	bool more = FALSE;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Seeing true feature code (ignore mimic) */
 
@@ -1032,7 +1032,7 @@ void do_cmd_close(player_type *creature_ptr)
 		else
 		{
 			/* Close the door */
-			more = do_cmd_close_aux(y, x);
+			more = do_cmd_close_aux(creature_ptr, y, x);
 		}
 	}
 
@@ -1891,7 +1891,7 @@ void do_cmd_alter(void)
 		/* Close open doors */
 		else if (have_flag(f_ptr->flags, FF_CLOSE))
 		{
-			more = do_cmd_close_aux(y, x);
+			more = do_cmd_close_aux(p_ptr, y, x);
 		}
 
 		/* Disarm traps */
