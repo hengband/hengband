@@ -1370,7 +1370,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief 箱のトラップを解除するコマンドのメインルーチン /
+ * @brief 箱のトラップを解除する実行処理 /
  * Perform the basic "disarm" command
  * @param y 解除を行うマスのY座標
  * @param x 解除を行うマスのX座標
@@ -1383,7 +1383,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-static bool do_cmd_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
+static bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
 	bool more = FALSE;
@@ -1619,7 +1619,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		/* Disarm chest */
 		else if (o_idx)
 		{
-			more = do_cmd_disarm_chest(creature_ptr, y, x, o_idx);
+			more = exe_disarm_chest(creature_ptr, y, x, o_idx);
 		}
 
 		/* Disarm trap */
