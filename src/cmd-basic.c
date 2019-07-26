@@ -830,7 +830,7 @@ void do_cmd_open(player_type *creature_ptr)
 
 	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Option: Pick a direction */
@@ -1383,20 +1383,20 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
+static bool do_cmd_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, j;
 	bool more = FALSE;
 	object_type *o_ptr = &current_floor_ptr->o_list[o_idx];
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Get the "disarm" factor */
-	i = p_ptr->skill_dis;
+	i = creature_ptr->skill_dis;
 
 	/* Penalize some conditions */
-	if (p_ptr->blind || no_lite()) i = i / 10;
-	if (p_ptr->confused || p_ptr->image) i = i / 10;
+	if (creature_ptr->blind || no_lite()) i = i / 10;
+	if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 	/* Extract the difficulty */
 	j = i - o_ptr->pval;
@@ -1427,7 +1427,7 @@ static bool do_cmd_disarm_chest(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	else if (randint0(100) < j)
 	{
 		msg_print(_("箱に仕掛けられていたトラップを解除した。", "You have disarmed the chest."));
-		gain_exp(p_ptr, o_ptr->pval);
+		gain_exp(creature_ptr, o_ptr->pval);
 		o_ptr->pval = (0 - o_ptr->pval);
 	}
 
@@ -1619,7 +1619,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		/* Disarm chest */
 		else if (o_idx)
 		{
-			more = do_cmd_disarm_chest(y, x, o_idx);
+			more = do_cmd_disarm_chest(creature_ptr, y, x, o_idx);
 		}
 
 		/* Disarm trap */
