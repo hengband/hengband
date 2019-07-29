@@ -6035,7 +6035,7 @@ void do_cmd_save_and_exit(void)
 {
 	p_ptr->playing = FALSE;
 	p_ptr->leaving = TRUE;
-	do_cmd_write_nikki(NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
+	do_cmd_write_nikki(p_ptr, NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 }
 
 
@@ -7039,7 +7039,7 @@ static void handle_signal_abort(int sig)
 
 	Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
 
-	do_cmd_write_nikki(NIKKI_GAMESTART, 0, _("----ゲーム異常終了----", "---- Panic Save and Abort Game ----"));
+	do_cmd_write_nikki(p_ptr, NIKKI_GAMESTART, 0, _("----ゲーム異常終了----", "---- Panic Save and Abort Game ----"));
 
 	/* Flush output */
 	Term_fresh();

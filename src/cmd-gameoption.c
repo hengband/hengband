@@ -1104,7 +1104,7 @@ static void do_cmd_options_cheat(concptr info)
 		case '6':
 		{
 			if (!p_ptr->noscore)
-				do_cmd_write_nikki(NIKKI_BUNSHOU, 0,
+				do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0,
 					_("詐欺オプションをONにして、スコアを残せなくなった。", "give up sending score to use cheating options."));
 			p_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
 			(*cheat_info[k].o_var) = TRUE;

@@ -772,7 +772,7 @@ static void change_realm2(CHARACTER_IDX next_realm)
 	p_ptr->spell_forgotten2 = 0L;
 
 	sprintf(tmp, _("魔法の領域を%sから%sに変更した。", "change magic realm from %s to %s."), realm_names[p_ptr->realm2], realm_names[next_realm]);
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 0, tmp);
+	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, tmp);
 	p_ptr->old_realm |= 1 << (p_ptr->realm2 - 1);
 	p_ptr->realm2 = next_realm;
 

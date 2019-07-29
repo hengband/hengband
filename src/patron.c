@@ -668,7 +668,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 	}
 	if (reward)
 	{
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, format(_("パトロンの報酬で%s", "The patron rewards you with %s."), reward));
+		do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, format(_("パトロンの報酬で%s", "The patron rewards you with %s."), reward));
 	}
 }
 

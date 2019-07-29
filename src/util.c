@@ -3058,7 +3058,7 @@ void msg_print_wizard(int cheat_type, concptr msg)
 
 	if (cheat_diary_output)
 	{
-		do_cmd_write_nikki(NIKKI_WIZARD_LOG, 0, buf);
+		do_cmd_write_nikki(p_ptr, NIKKI_WIZARD_LOG, 0, buf);
 	}
 
 }

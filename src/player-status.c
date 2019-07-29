@@ -5545,7 +5545,7 @@ void check_experience(player_type *creature_ptr)
 			}
 			level_inc_stat = TRUE;
 
-			do_cmd_write_nikki(NIKKI_LEVELUP, creature_ptr->lev, NULL);
+			do_cmd_write_nikki(p_ptr, NIKKI_LEVELUP, creature_ptr->lev, NULL);
 		}
 
 		sound(SOUND_LEVEL);
@@ -5878,7 +5878,7 @@ void cheat_death(player_type *creature_ptr)
 	creature_ptr->wild_mode = FALSE;
 	creature_ptr->leaving = TRUE;
 
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 1,
+	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1,
 		_("                            しかし、生き返った。",
 			"                            but revived."));
 

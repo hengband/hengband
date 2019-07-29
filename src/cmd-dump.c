@@ -399,7 +399,7 @@ concptr get_ordinal_number_suffix(int num)
  * @param note 日記内容のIDに応じた文字列参照ポインタ
  * @return エラーID
  */
-errr do_cmd_write_nikki(int type, int num, concptr note)
+errr do_cmd_write_nikki(player_type *creature_ptr, int type, int num, concptr note)
 {
 	int day, hour, min;
 	FILE *fff = NULL;
@@ -424,8 +424,8 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 	{
 		QUEST_IDX old_quest;
 
-		old_quest = p_ptr->inside_quest;
-		p_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
+		old_quest = creature_ptr->inside_quest;
+		creature_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
 
 		/* Get the quest text */
 		init_flags = INIT_NAME_ONLY;
@@ -433,7 +433,7 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
-		p_ptr->inside_quest = old_quest;
+		creature_ptr->inside_quest = old_quest;
 	}
 
 	/* different filne name to avoid mixing */
@@ -458,7 +458,7 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 
 	if (write_level)
 	{
-		if (p_ptr->inside_arena)
+		if (creature_ptr->inside_arena)
 			note_level = _("アリーナ:", "Arane:");
 		else if (!current_floor_ptr->dun_level)
 			note_level = _("地上:", "Surface:");
@@ -468,9 +468,9 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 		else
 		{
 #ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", (int)current_floor_ptr->dun_level, d_name+d_info[p_ptr->dungeon_idx].name);
+			sprintf(note_level_buf, "%d階(%s):", (int)current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 #else
-			sprintf(note_level_buf, "%s L%d:", d_name+d_info[p_ptr->dungeon_idx].name, (int)current_floor_ptr->dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name+d_info[creature_ptr->dungeon_idx].name, (int)current_floor_ptr->dun_level);
 #endif
 			note_level = note_level_buf;
 		}
@@ -545,8 +545,8 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 		{
 			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
 						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
-						   _(d_name+d_info[p_ptr->dungeon_idx].name, num),
-						   _(num, d_name+d_info[p_ptr->dungeon_idx].name));
+						   _(d_name+d_info[creature_ptr->dungeon_idx].name, num),
+						   _(num, d_name+d_info[creature_ptr->dungeon_idx].name));
 			break;
 		}
 		case NIKKI_TRUMP:
@@ -577,8 +577,8 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 		{
 			if (!num)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"), 
-						hour, min, note_level, _(d_name+d_info[p_ptr->dungeon_idx].name, (int)max_dlv[p_ptr->dungeon_idx]), 
-											   _((int)max_dlv[p_ptr->dungeon_idx], d_name+d_info[p_ptr->dungeon_idx].name));
+						hour, min, note_level, _(d_name+d_info[creature_ptr->dungeon_idx].name, (int)max_dlv[creature_ptr->dungeon_idx]), 
+											   _((int)max_dlv[creature_ptr->dungeon_idx], d_name+d_info[creature_ptr->dungeon_idx].name));
 			else
 				fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
 			break;
@@ -637,7 +637,7 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 			if (!current_floor_ptr->dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), current_floor_ptr->dun_level, d_name+d_info[p_ptr->dungeon_idx].name);
+				to = format(_("%d階(%s)", "level %d of %s"), current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
 						   " %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
@@ -649,7 +649,7 @@ errr do_cmd_write_nikki(int type, int num, concptr note)
 			if (!current_floor_ptr->dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), current_floor_ptr->dun_level, d_name+d_info[p_ptr->dungeon_idx].name);
+				to = format(_("%d階(%s)", "level %d of %s"), current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
 						   " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
@@ -860,7 +860,7 @@ static void do_cmd_bunshou(void)
 	{
 		strcpy(bunshou, tmp);
 
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, bunshou);
+		do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, bunshou);
 	}
 }
 
@@ -881,7 +881,7 @@ static void do_cmd_last_get(void)
 	turn_tmp = current_world_ptr->game_turn;
 	current_world_ptr->game_turn = record_turn;
 	sprintf(buf,_("%sを手に入れた。", "descover %s."), record_o_name);
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 0, buf);
+	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, buf);
 	current_world_ptr->game_turn = turn_tmp;
 }
 

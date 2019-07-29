@@ -1357,7 +1357,7 @@ static void do_cmd_wiz_jump(void)
 
 	leave_quest_check();
 
-	if (record_stair) do_cmd_write_nikki(NIKKI_WIZ_TELE,0,NULL);
+	if (record_stair) do_cmd_write_nikki(p_ptr, NIKKI_WIZ_TELE,0,NULL);
 
 	p_ptr->inside_quest = 0;
 	free_turn(p_ptr);
@@ -1474,7 +1474,7 @@ static void do_cmd_wiz_zap(void)
 				GAME_TEXT m_name[MAX_NLEN];
 
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+				do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 			}
 
 			delete_monster_idx(i);
@@ -1506,7 +1506,7 @@ static void do_cmd_wiz_zap_all(void)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+			do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 		}
 
 		/* Delete this monster */

@@ -760,7 +760,7 @@ void object_aware(object_type *o_ptr)
 		q_ptr->number = 1;
 		object_desc(o_name, q_ptr, OD_NAME_ONLY);
 		
-		do_cmd_write_nikki(NIKKI_HANMEI, 0, o_name);
+		do_cmd_write_nikki(p_ptr, NIKKI_HANMEI, 0, o_name);
 	}
 }
 

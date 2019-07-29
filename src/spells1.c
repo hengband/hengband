@@ -3848,7 +3848,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			char m2_name[MAX_NLEN];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-			do_cmd_write_nikki(NIKKI_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+			do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
 		}
 
 		delete_monster_idx(g_ptr->m_idx);

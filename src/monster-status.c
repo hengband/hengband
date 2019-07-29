@@ -1257,7 +1257,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		{
 			char note_buf[160];
 			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? _("(クローン)", "(Clone)") : "");
-			do_cmd_write_nikki(NIKKI_UNIQUE, 0, note_buf);
+			do_cmd_write_nikki(p_ptr, NIKKI_UNIQUE, 0, note_buf);
 		}
 
 		/* Make a sound */

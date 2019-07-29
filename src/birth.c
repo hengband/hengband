@@ -4598,26 +4598,26 @@ void player_birth(player_type *creature_ptr)
 	message_add(" ");
 	message_add("  ");
 
-	do_cmd_write_nikki(NIKKI_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "-------- Start New Game --------"));
-	do_cmd_write_nikki(NIKKI_HIGAWARI, 0, NULL);
+	do_cmd_write_nikki(p_ptr, NIKKI_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "-------- Start New Game --------"));
+	do_cmd_write_nikki(p_ptr, NIKKI_HIGAWARI, 0, NULL);
 
 	sprintf(buf,_("                            性別に%sを選択した。", "                            choose %s personality."), sex_info[creature_ptr->psex].title);
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
+	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	sprintf(buf,_("                            種族に%sを選択した。", "                            choose %s race."), race_info[creature_ptr->prace].title);
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
+	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	sprintf(buf,_("                            職業に%sを選択した。", "                            choose %s class."), class_info[creature_ptr->pclass].title);
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
+	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	if (creature_ptr->realm1)
 	{
 		sprintf(buf,_("                            魔法の領域に%s%sを選択した。", "                            choose %s%s realm."),realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format("と%s",realm_names[creature_ptr->realm2]) : "");
-		do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
+		do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1, buf);
 	}
 
 	sprintf(buf,_("                            性格に%sを選択した。", "                            choose %s."), seikaku_info[creature_ptr->pseikaku].title);
-	do_cmd_write_nikki(NIKKI_BUNSHOU, 1, buf);
+	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	/* Init the shops */
 	for (i = 1; i < max_towns; i++)

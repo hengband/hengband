@@ -505,7 +505,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			concptr m_name = r_name + r_info[arena_info[creature_ptr->arena_number].r_idx].name;
 			msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
 			msg_print(NULL);
-			if (record_arena) do_cmd_write_nikki(NIKKI_ARENA, -1 - creature_ptr->arena_number, m_name);
+			if (record_arena) do_cmd_write_nikki(p_ptr, NIKKI_ARENA, -1 - creature_ptr->arena_number, m_name);
 		}
 		else
 		{
@@ -544,7 +544,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			if (winning_seppuku)
 			{
-				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("勝利の後切腹した。", "did Seppuku after the winning."));
+				do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("勝利の後切腹した。", "did Seppuku after the winning."));
 			}
 			else
 			{
@@ -561,11 +561,11 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 					sprintf(buf, _("%d階", "level %d"), (int)current_floor_ptr->dun_level);
 
 				sprintf(tmp, _("%sで%sに殺された。", "killed by %s %s."), buf, creature_ptr->died_from);
-				do_cmd_write_nikki(NIKKI_BUNSHOU, 0, tmp);
+				do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, tmp);
 			}
 
-			do_cmd_write_nikki(NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-			do_cmd_write_nikki(NIKKI_BUNSHOU, 1, "\n\n\n\n");
+			do_cmd_write_nikki(p_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+			do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
 
 			flush();
 
@@ -700,7 +700,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 				hit_from = _("何か", "something");
 
 			sprintf(tmp, _("%sによってピンチに陥った。", "A critical situation because of %s."), hit_from);
-			do_cmd_write_nikki(NIKKI_BUNSHOU, 0, tmp);
+			do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, tmp);
 		}
 
 		if (auto_more)

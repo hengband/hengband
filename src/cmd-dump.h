@@ -48,7 +48,7 @@
 #ifndef JP
 extern concptr get_ordinal_number_suffix(int num);
 #endif
-extern errr do_cmd_write_nikki(int type, int num, concptr note);
+extern errr do_cmd_write_nikki(player_type *creature_ptr, int type, int num, concptr note);
 extern void do_cmd_nikki(void);
 extern void do_cmd_redraw(void);
 extern void do_cmd_player_status(void);
