@@ -3646,7 +3646,7 @@ static void process_command(void)
 		/* Alter a grid */
 		case '+':
 		{
-			if (!p_ptr->wild_mode) do_cmd_alter();
+			if (!p_ptr->wild_mode) do_cmd_alter(p_ptr);
 			break;
 		}
 

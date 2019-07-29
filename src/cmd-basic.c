@@ -1825,16 +1825,16 @@ void do_cmd_bash(player_type *creature_ptr)
  * of invisible monsters.
  * </pre>
  */
-void do_cmd_alter(void)
+void do_cmd_alter(player_type *creature_ptr)
 {
 	POSITION y, x;
 	DIRECTION dir;
 	grid_type *g_ptr;
 	bool more = FALSE;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Allow repeated command */
@@ -1842,7 +1842,7 @@ void do_cmd_alter(void)
 	{
 		/* Set repeat count */
 		command_rep = command_arg - 1;
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 
 		/* Cancel the arg */
 		command_arg = 0;
@@ -1854,8 +1854,8 @@ void do_cmd_alter(void)
 		FEAT_IDX feat;
 		feature_type *f_ptr;
 
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
+		y = creature_ptr->y + ddy[dir];
+		x = creature_ptr->x + ddx[dir];
 
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1863,7 +1863,7 @@ void do_cmd_alter(void)
 		feat = get_feat_mimic(g_ptr);
 		f_ptr = &f_info[feat];
 
-		take_turn(p_ptr, 100);
+		take_turn(creature_ptr, 100);
 
 		if (g_ptr->m_idx)
 		{
@@ -1873,31 +1873,31 @@ void do_cmd_alter(void)
 		/* Locked doors */
 		else if (have_flag(f_ptr->flags, FF_OPEN))
 		{
-			more = exe_open(p_ptr, y, x);
+			more = exe_open(creature_ptr, y, x);
 		}
 
 		/* Bash jammed doors */
 		else if (have_flag(f_ptr->flags, FF_BASH))
 		{
-			more = do_cmd_bash_aux(p_ptr, y, x, dir);
+			more = do_cmd_bash_aux(creature_ptr, y, x, dir);
 		}
 
 		/* Tunnel through walls */
 		else if (have_flag(f_ptr->flags, FF_TUNNEL))
 		{
-			more = exe_tunnel(p_ptr, y, x);
+			more = exe_tunnel(creature_ptr, y, x);
 		}
 
 		/* Close open doors */
 		else if (have_flag(f_ptr->flags, FF_CLOSE))
 		{
-			more = exe_close(p_ptr, y, x);
+			more = exe_close(creature_ptr, y, x);
 		}
 
 		/* Disarm traps */
 		else if (have_flag(f_ptr->flags, FF_DISARM))
 		{
-			more = exe_disarm(p_ptr, y, x, dir);
+			more = exe_disarm(creature_ptr, y, x, dir);
 		}
 
 		else
