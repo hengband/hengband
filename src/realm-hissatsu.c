@@ -100,7 +100,7 @@ concptr do_hissatsu_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 		if (cast)
 		{
-			if (!do_cmd_throw(1, TRUE, -1)) return NULL;
+			if (!do_cmd_throw(p_ptr, 1, TRUE, -1)) return NULL;
 		}
 		break;
 

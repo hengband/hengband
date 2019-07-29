@@ -2329,7 +2329,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
  * the item to be destroyed?  Should it do any damage at all?
  * </pre>
  */
-bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
+bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_IDX shuriken)
 {
 	DIRECTION dir;
 	OBJECT_IDX item;
@@ -2359,21 +2359,21 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	bool come_back = FALSE;
 	bool do_drop = TRUE;
 
-	if (p_ptr->wild_mode) return FALSE;
+	if (creature_ptr->wild_mode) return FALSE;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	if (shuriken >= 0)
 	{
 		item = shuriken;
-		o_ptr = &p_ptr->inventory_list[item];
+		o_ptr = &creature_ptr->inventory_list[item];
 	}
 	else if (boomerang)
 	{
-		if (has_melee_weapon(p_ptr, INVEN_RARM) && has_melee_weapon(p_ptr, INVEN_LARM))
+		if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM))
 		{
 			item_tester_hook = item_tester_hook_boomerang;
 			q = _("どの武器を投げますか? ", "Throw which item? ");
@@ -2385,15 +2385,15 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				return FALSE;
 			}
 		}
-		else if (has_melee_weapon(p_ptr, INVEN_LARM))
+		else if (has_melee_weapon(creature_ptr, INVEN_LARM))
 		{
 			item = INVEN_LARM;
-			o_ptr = &p_ptr->inventory_list[item];
+			o_ptr = &creature_ptr->inventory_list[item];
 		}
 		else
 		{
 			item = INVEN_RARM;
-			o_ptr = &p_ptr->inventory_list[item];
+			o_ptr = &creature_ptr->inventory_list[item];
 		}
 	}
 	else
@@ -2415,7 +2415,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		return FALSE;
 	}
 
-	if (p_ptr->inside_arena && !boomerang)
+	if (creature_ptr->inside_arena && !boomerang)
 	{
 		if (o_ptr->tval != TV_SPIKE)
 		{
@@ -2441,7 +2441,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	object_desc(o_name, q_ptr, OD_OMIT_PREFIX);
 
-	if (p_ptr->mighty_throw) mult += 3;
+	if (creature_ptr->mighty_throw) mult += 3;
 
 	/* Extract a "distance multiplier" */
 	/* Changed for 'launcher' mutation */
@@ -2452,15 +2452,15 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if ((have_flag(flgs, TR_THROW)) || boomerang) div /= 2;
 
 	/* Hack -- Distance -- Reward strength, penalize weight */
-	tdis = (adj_str_blow[p_ptr->stat_ind[A_STR]] + 20) * mul / div;
+	tdis = (adj_str_blow[creature_ptr->stat_ind[A_STR]] + 20) * mul / div;
 
 	/* Max distance of 10-18 */
 	if (tdis > mul) tdis = mul;
 
 	if (shuriken >= 0)
 	{
-		ty = randint0(101) - 50 + p_ptr->y;
-		tx = randint0(101) - 50 + p_ptr->x;
+		ty = randint0(101) - 50 + creature_ptr->y;
+		tx = randint0(101) - 50 + creature_ptr->x;
 	}
 	else
 	{
@@ -2470,8 +2470,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		/* Predict the "target" location */
-		tx = p_ptr->x + 99 * ddx[dir];
-		ty = p_ptr->y + 99 * ddy[dir];
+		tx = creature_ptr->x + 99 * ddx[dir];
+		ty = creature_ptr->y + 99 * ddy[dir];
 
 		/* Check for "target request" */
 		if ((dir == 5) && target_okay())
@@ -2487,7 +2487,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	    (q_ptr->name1 == ART_AEGISFANG) || boomerang)
 		return_when_thrown = TRUE;
 
-	/* Reduce and describe p_ptr->inventory_list */
+	/* Reduce and describe creature_ptr->inventory_list */
 	if (item >= 0)
 	{
 		inven_item_increase(item, -1);
@@ -2505,28 +2505,28 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if (item >= INVEN_RARM)
 	{
 		equiped_item = TRUE;
-		p_ptr->redraw |= (PR_EQUIPPY);
+		creature_ptr->redraw |= (PR_EQUIPPY);
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Rogue and Ninja gets bonus */
-	if ((p_ptr->pclass == CLASS_ROGUE) || (p_ptr->pclass == CLASS_NINJA))
-		p_ptr->energy_use -= p_ptr->lev;
+	if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA))
+		creature_ptr->energy_use -= creature_ptr->lev;
 
 	/* Start at the player */
-	y = p_ptr->y;
-	x = p_ptr->x;
+	y = creature_ptr->y;
+	x = creature_ptr->x;
 
 	handle_stuff();
 
-	if ((p_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((have_flag(flgs, TR_THROW)) && (q_ptr->tval == TV_SWORD)))) shuriken = TRUE;
+	if ((creature_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((have_flag(flgs, TR_THROW)) && (q_ptr->tval == TV_SWORD)))) shuriken = TRUE;
 	else shuriken = FALSE;
 
 	/* Chance of hitting */
-	if (have_flag(flgs, TR_THROW)) chance = ((p_ptr->skill_tht) +
-		((p_ptr->to_h_b + q_ptr->to_h) * BTH_PLUS_ADJ));
-	else chance = (p_ptr->skill_tht + (p_ptr->to_h_b * BTH_PLUS_ADJ));
+	if (have_flag(flgs, TR_THROW)) chance = ((creature_ptr->skill_tht) +
+		((creature_ptr->to_h_b + q_ptr->to_h) * BTH_PLUS_ADJ));
+	else chance = (creature_ptr->skill_tht + (creature_ptr->to_h_b * BTH_PLUS_ADJ));
 
 	if (shuriken) chance *= 2;
 
@@ -2542,7 +2542,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		/* Calculate the new location (see "project()") */
 		ny[cur_dis] = y;
 		nx[cur_dis] = x;
-		mmove2(&ny[cur_dis], &nx[cur_dis], p_ptr->y, p_ptr->x, ty, tx);
+		mmove2(&ny[cur_dis], &nx[cur_dis], creature_ptr->y, creature_ptr->x, ty, tx);
 
 		/* Stopped by walls/doors */
 		if (!cave_have_flag_bold(ny[cur_dis], nx[cur_dis], FF_PROJECT))
@@ -2616,7 +2616,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 					if (m_ptr->ml)
 					{
-						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+						if (!creature_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 						health_track(g_ptr->m_idx);
 					}
 				}
@@ -2636,13 +2636,13 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 				if (boomerang)
 				{
-					tdam *= (mult+p_ptr->num_blow[item - INVEN_RARM]);
-					tdam += p_ptr->to_d_m;
+					tdam *= (mult+creature_ptr->num_blow[item - INVEN_RARM]);
+					tdam += creature_ptr->to_d_m;
 				}
 				else if (have_flag(flgs, TR_THROW))
 				{
 					tdam *= (3+mult);
-					tdam += p_ptr->to_d_m;
+					tdam += creature_ptr->to_d_m;
 				}
 				else
 				{
@@ -2650,7 +2650,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				}
 				if (shuriken)
 				{
-					tdam += ((p_ptr->lev+30)*(p_ptr->lev+30)-900)/55;
+					tdam += ((creature_ptr->lev+30)*(creature_ptr->lev+30)-900)/55;
 				}
 
 				/* No negative damage */
@@ -2694,10 +2694,10 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	if (hit_body) torch_lost_fuel(q_ptr);
 
 	/* Chance of breakage (during attacks) */
-	j = (hit_body ? breakage_chance(q_ptr, p_ptr->pclass == CLASS_ARCHER, 0) : 0);
+	j = (hit_body ? breakage_chance(q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
 
 	/* Figurines transform */
-	if ((q_ptr->tval == TV_FIGURINE) && !(p_ptr->inside_arena))
+	if ((q_ptr->tval == TV_FIGURINE) && !(creature_ptr->inside_arena))
 	{
 		j = 100;
 
@@ -2736,7 +2736,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
 	if (return_when_thrown)
 	{
-		int back_chance = randint1(30)+20+((int)(adj_dex_th[p_ptr->stat_ind[A_DEX]]) - 128);
+		int back_chance = randint1(30)+20+((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
 		char o2_name[MAX_NLEN];
 		bool super_boomerang = (((q_ptr->name1 == ART_MJOLLNIR) || (q_ptr->name1 == ART_AEGISFANG)) && boomerang);
 
@@ -2768,7 +2768,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 					Term_xtra(TERM_XTRA_DELAY, msec);
 				}
 			}
-			if((back_chance > 37) && !p_ptr->blind && (item >= 0))
+			if((back_chance > 37) && !creature_ptr->blind && (item >= 0))
 			{
 				msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), o2_name);
 				come_back = TRUE;
@@ -2783,8 +2783,8 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 				{
 					msg_format(_("%sが返ってきた。", "%s comes back."), o2_name);
 				}
-				y = p_ptr->y;
-				x = p_ptr->x;
+				y = creature_ptr->y;
+				x = creature_ptr->x;
 			}
 		}
 		else
@@ -2798,18 +2798,18 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 		if (item == INVEN_RARM || item == INVEN_LARM)
 		{
 			/* Access the wield slot */
-			o_ptr = &p_ptr->inventory_list[item];
+			o_ptr = &creature_ptr->inventory_list[item];
 
 			/* Wear the new stuff */
 			object_copy(o_ptr, q_ptr);
 
-			p_ptr->total_weight += q_ptr->weight;
+			creature_ptr->total_weight += q_ptr->weight;
 
 			/* Increment the equip counter by hand */
-			p_ptr->equip_cnt++;
+			creature_ptr->equip_cnt++;
 
-			p_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
-			p_ptr->window |= (PW_EQUIP);
+			creature_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
+			creature_ptr->window |= (PW_EQUIP);
 		}
 		else
 		{
@@ -2820,7 +2820,7 @@ bool do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 	else if (equiped_item)
 	{
 		kamaenaoshi(item);
-		calc_android_exp(p_ptr);
+		calc_android_exp(creature_ptr);
 	}
 
 	if (do_drop)

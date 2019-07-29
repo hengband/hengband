@@ -3966,7 +3966,7 @@ static void process_command(void)
 		/* Throw an item */
 		case 'v':
 		{
-			do_cmd_throw(1, FALSE, -1);
+			do_cmd_throw(p_ptr, 1, FALSE, -1);
 			break;
 		}
 
