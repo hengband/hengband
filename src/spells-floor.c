@@ -543,7 +543,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 						GAME_TEXT m_name[MAX_NLEN];
 
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-						do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
+						exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
 					}
 
 					/* Delete the monster (if any) */
@@ -1015,7 +1015,7 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 								char m2_name[MAX_NLEN];
 
 								monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-								do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
+								exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
 							}
 						}
 

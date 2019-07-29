@@ -1229,7 +1229,7 @@ static void generate_fixed_floor(void)
 	current_floor_ptr->object_level = current_floor_ptr->base_level;
 	current_floor_ptr->monster_level = current_floor_ptr->base_level;
 
-	if (record_stair) do_cmd_write_nikki(p_ptr, NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
+	if (record_stair) exe_write_diary(p_ptr, NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	init_flags = INIT_CREATE_DUNGEON;

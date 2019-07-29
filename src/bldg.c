@@ -2033,9 +2033,9 @@ static bool inn_comm(int cmd)
 
 				extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
 				if ((prev_hour >= 6) && (prev_hour <= 17)) 
-					do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
+					exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
 				else
-					do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
+					exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
 				
 				current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
 				if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
@@ -2046,7 +2046,7 @@ static bool inn_comm(int cmd)
 
 				prevent_turn_overflow();
 
-				if ((prev_hour >= 18) && (prev_hour <= 23)) do_cmd_write_nikki(p_ptr, NIKKI_HIGAWARI, 0, NULL);
+				if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(p_ptr, NIKKI_HIGAWARI, 0, NULL);
 				p_ptr->chp = p_ptr->mhp;
 
 				if (ironman_nightmare)
@@ -2061,7 +2061,7 @@ static bool inn_comm(int cmd)
 					}
 
 					msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
-					do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
+					exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
 				}
 				else
 				{
@@ -2086,12 +2086,12 @@ static bool inn_comm(int cmd)
 					if ((prev_hour >= 6) && (prev_hour <= 17))
 					{
 						msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
-						do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
+						exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
 					}
 					else
 					{
 						msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
-						do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
+						exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
 					}
 				}
 			}

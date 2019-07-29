@@ -87,10 +87,10 @@ void complete_quest(QUEST_IDX quest_num)
 	switch (q_ptr->type)
 	{
 	case QUEST_TYPE_RANDOM:
-		if (record_rand_quest) do_cmd_write_nikki(p_ptr, NIKKI_RAND_QUEST_C, quest_num, NULL);
+		if (record_rand_quest) exe_write_diary(p_ptr, NIKKI_RAND_QUEST_C, quest_num, NULL);
 		break;
 	default:
-		if (record_fix_quest) do_cmd_write_nikki(p_ptr, NIKKI_FIX_QUEST_C, quest_num, NULL);
+		if (record_fix_quest) exe_write_diary(p_ptr, NIKKI_FIX_QUEST_C, quest_num, NULL);
 		break;
 	}
 
@@ -485,11 +485,11 @@ void leave_quest_check(void)
 			/* Record finishing a quest */
 			if (q_ptr->type == QUEST_TYPE_RANDOM)
 			{
-				if (record_rand_quest) do_cmd_write_nikki(p_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+				if (record_rand_quest) exe_write_diary(p_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
 			}
 			else
 			{
-				if (record_fix_quest) do_cmd_write_nikki(p_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+				if (record_fix_quest) exe_write_diary(p_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
 			}
 		}
 	}

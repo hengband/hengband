@@ -1044,7 +1044,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 		}
 
 		delete_monster_idx(m_idx);
@@ -1411,7 +1411,7 @@ void discharge_minion(void)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
+			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
 		}
 
 		delete_monster_idx(i);

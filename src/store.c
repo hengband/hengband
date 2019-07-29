@@ -4739,10 +4739,10 @@ static void store_purchase(void)
 				strcpy(record_o_name, o_name);
 				record_turn = current_world_ptr->game_turn;
 
-				if (record_buy) do_cmd_write_nikki(p_ptr, NIKKI_BUY, 0, o_name);
+				if (record_buy) exe_write_diary(p_ptr, NIKKI_BUY, 0, o_name);
 				object_desc(o_name, o_ptr, OD_NAME_ONLY);
 				if(record_rand_art && o_ptr->art_name)
-					do_cmd_write_nikki(p_ptr, NIKKI_ART, 0, o_name);
+					exe_write_diary(p_ptr, NIKKI_ART, 0, o_name);
 
 				/* Erase the inscription */
 				j_ptr->inscription = 0;
@@ -5073,7 +5073,7 @@ static void store_sell(void)
 			/* Describe the result (in message buffer) */
 			msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, (long)price);
 
-			if (record_sell) do_cmd_write_nikki(p_ptr, NIKKI_SELL, 0, o_name);
+			if (record_sell) exe_write_diary(p_ptr, NIKKI_SELL, 0, o_name);
 
 			if (!((o_ptr->tval == TV_FIGURINE) && (value > 0)))
 			{

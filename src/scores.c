@@ -911,9 +911,9 @@ void kingly(void)
 	/* If player did Seppuku, that is already written in playrecord */
 	if (!seppuku)
 	{
-		do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
-		do_cmd_write_nikki(p_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-		do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
+		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+		exe_write_diary(p_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
 	}
 
 	/* Flush input */

@@ -677,7 +677,7 @@ void teleport_level(MONSTER_IDX m_idx)
 				p_ptr->oldpx = p_ptr->x;
 			}
 
-			if (record_stair) do_cmd_write_nikki(p_ptr, NIKKI_TELE_LEV, 1, NULL);
+			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, 1, NULL);
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -706,7 +706,7 @@ void teleport_level(MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) do_cmd_write_nikki(p_ptr, NIKKI_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -728,7 +728,7 @@ void teleport_level(MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) do_cmd_write_nikki(p_ptr, NIKKI_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -748,7 +748,7 @@ void teleport_level(MONSTER_IDX m_idx)
 		{
 			/* Never reach this code on the surface */
 			/* if (!current_floor_ptr->dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
-			if (record_stair) do_cmd_write_nikki(p_ptr, NIKKI_TELE_LEV, 1, NULL);
+			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, 1, NULL);
 			if (autosave_l) do_cmd_save_game(TRUE);
 
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -768,7 +768,7 @@ void teleport_level(MONSTER_IDX m_idx)
 			char m2_name[MAX_NLEN];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-			do_cmd_write_nikki(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
+			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
 		}
 
 		delete_monster_idx(m_idx);
@@ -803,7 +803,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		{
 			max_dlv[p_ptr->dungeon_idx] = current_floor_ptr->dun_level;
 			if (record_maxdepth)
-				do_cmd_write_nikki(p_ptr, NIKKI_TRUMP, p_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
+				exe_write_diary(p_ptr, NIKKI_TRUMP, p_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
 		}
 
 	}
@@ -856,7 +856,7 @@ bool free_level_recall(player_type *creature_ptr)
 		creature_ptr->recall_dungeon = select_dungeon;
 		max_dlv[creature_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
 		if (record_maxdepth)
-			do_cmd_write_nikki(p_ptr, NIKKI_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
+			exe_write_diary(p_ptr, NIKKI_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
 
 		msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
 
@@ -906,7 +906,7 @@ bool reset_recall(void)
 		max_dlv[select_dungeon] = dummy;
 
 		if (record_maxdepth)
-			do_cmd_write_nikki(p_ptr, NIKKI_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
+			exe_write_diary(p_ptr, NIKKI_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 					/* Accept request */
 #ifdef JP
 		msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
@@ -1667,7 +1667,7 @@ bool artifact_scroll(void)
 		if (record_rand_art)
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
-			do_cmd_write_nikki(p_ptr, NIKKI_ART_SCROLL, 0, o_name);
+			exe_write_diary(p_ptr, NIKKI_ART_SCROLL, 0, o_name);
 		}
 		chg_virtue(p_ptr, V_ENCHANT, 1);
 	}
@@ -1714,9 +1714,9 @@ bool identify_item(object_type *o_ptr)
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 	if(record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
-		do_cmd_write_nikki(p_ptr, NIKKI_ART, 0, o_name);
+		exe_write_diary(p_ptr, NIKKI_ART, 0, o_name);
 	if(record_rand_art && !old_known && o_ptr->art_name)
-		do_cmd_write_nikki(p_ptr, NIKKI_ART, 0, o_name);
+		exe_write_diary(p_ptr, NIKKI_ART, 0, o_name);
 
 	return old_known;
 }

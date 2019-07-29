@@ -443,7 +443,7 @@ void hit_trap(bool break_trap)
 			if (autosave_l && (p_ptr->chp >= 0))
 				do_cmd_save_game(TRUE);
 
-			do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, _("落とし戸に落ちた", "You have fallen through a trap door!"));
+			exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("落とし戸に落ちた", "You have fallen through a trap door!"));
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			p_ptr->leaving = TRUE;
 		}

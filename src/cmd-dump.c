@@ -399,7 +399,7 @@ concptr get_ordinal_number_suffix(int num)
  * @param note 日記内容のIDに応じた文字列参照ポインタ
  * @return エラーID
  */
-errr do_cmd_write_nikki(player_type *creature_ptr, int type, int num, concptr note)
+errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 {
 	int day, hour, min;
 	FILE *fff = NULL;
@@ -860,7 +860,7 @@ static void do_cmd_bunshou(void)
 	{
 		strcpy(bunshou, tmp);
 
-		do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, bunshou);
+		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, bunshou);
 	}
 }
 
@@ -881,7 +881,7 @@ static void do_cmd_last_get(void)
 	turn_tmp = current_world_ptr->game_turn;
 	current_world_ptr->game_turn = record_turn;
 	sprintf(buf,_("%sを手に入れた。", "descover %s."), record_o_name);
-	do_cmd_write_nikki(p_ptr, NIKKI_BUNSHOU, 0, buf);
+	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, buf);
 	current_world_ptr->game_turn = turn_tmp;
 }
 
