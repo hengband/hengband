@@ -70,7 +70,7 @@ extern void do_cmd_knowledge_quests_failed(FILE *fff, QUEST_IDX quest_num[]);
 extern void do_cmd_knowledge(void);
 extern void do_cmd_checkquest(void);
 extern void do_cmd_time(void);
-extern void do_cmd_suicide(void);
+extern void do_cmd_suicide(player_type *creature_ptr);
 
 /*
  * Forward declare

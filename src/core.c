@@ -4219,7 +4219,7 @@ static void process_command(void)
 		/* Quit (commit suicide) */
 		case 'Q':
 		{
-			do_cmd_suicide();
+			do_cmd_suicide(p_ptr);
 			break;
 		}
 

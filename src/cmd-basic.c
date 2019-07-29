@@ -2844,7 +2844,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
  * @return なし
  * @details
  */
-void do_cmd_suicide(void)
+void do_cmd_suicide(player_type *creature_ptr)
 {
 	int i;
 
@@ -2852,7 +2852,7 @@ void do_cmd_suicide(void)
 	flush();
 
 	/* Verify Retirement */
-	if (p_ptr->total_winner)
+	if (creature_ptr->total_winner)
 	{
 		/* Verify */
 		if (!get_check_strict(_("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
@@ -2866,7 +2866,7 @@ void do_cmd_suicide(void)
 	}
 
 
-	if (!p_ptr->noscore)
+	if (!creature_ptr->noscore)
 	{
 		/* Special Verification for suicide */
 		prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);
@@ -2880,11 +2880,11 @@ void do_cmd_suicide(void)
 	}
 
 	/* Initialize "last message" buffer */
-	if (p_ptr->last_message) string_free(p_ptr->last_message);
-	p_ptr->last_message = NULL;
+	if (creature_ptr->last_message) string_free(creature_ptr->last_message);
+	creature_ptr->last_message = NULL;
 
 	/* Hack -- Note *winning* message */
-	if (p_ptr->total_winner && last_words)
+	if (creature_ptr->total_winner && last_words)
 	{
 		char buf[1024] = "";
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
@@ -2895,19 +2895,19 @@ void do_cmd_suicide(void)
 
 		if (buf[0])
 		{
-			p_ptr->last_message = string_make(buf);
-			msg_print(p_ptr->last_message);
+			creature_ptr->last_message = string_make(buf);
+			msg_print(creature_ptr->last_message);
 		}
 	}
 
 	/* Stop playing */
-	p_ptr->playing = FALSE;
+	creature_ptr->playing = FALSE;
 
 	/* Kill the player */
-	p_ptr->is_dead = TRUE;
-	p_ptr->leaving = TRUE;
+	creature_ptr->is_dead = TRUE;
+	creature_ptr->leaving = TRUE;
 
-	if (!p_ptr->total_winner)
+	if (!creature_ptr->total_winner)
 	{
 		do_cmd_write_nikki(NIKKI_BUNSHOU, 0, _("ダンジョンの探索に絶望して自殺した。", "give up all hope to commit suicide."));
 		do_cmd_write_nikki(NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
@@ -2915,5 +2915,5 @@ void do_cmd_suicide(void)
 	}
 
 	/* Cause of death */
-	(void)strcpy(p_ptr->died_from, _("途中終了", "Quitting"));
+	(void)strcpy(creature_ptr->died_from, _("途中終了", "Quitting"));
 }
