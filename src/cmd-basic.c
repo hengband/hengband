@@ -1913,7 +1913,7 @@ void do_cmd_alter(player_type *creature_ptr)
 
 
 /*!
- * @brief 「くさびを打つ」ために必要なオブジェクトがあるかどうかの判定を返す /
+ * @brief 「くさびを打つ」ために必要なオブジェクトを所持しているかどうかの判定を返す /
  * Find the index of some "spikes", if possible.
  * @param ip くさびとして打てるオブジェクトのID
  * @return オブジェクトがある場合TRUEを返す
@@ -1922,14 +1922,14 @@ void do_cmd_alter(player_type *creature_ptr)
  * Let user choose a pile of spikes, perhaps?
  * </pre>
  */
-static bool get_spike(INVENTORY_IDX *ip)
+static bool get_spike(player_type *creature_ptr, INVENTORY_IDX *ip)
 {
 	INVENTORY_IDX i;
 
 	/* Check every item in the pack */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Check the "tval" code */
@@ -1988,7 +1988,7 @@ void do_cmd_spike(player_type *creature_ptr)
 		}
 
 		/* Get a spike */
-		else if (!get_spike(&item))
+		else if (!get_spike(creature_ptr, &item))
 		{
 			msg_print(_("くさびを持っていない！", "You have no spikes!"));
 		}
