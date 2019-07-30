@@ -755,7 +755,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
  * @details
  * 日記のタイトルは本関数の subtitle ローカル変数で定義されている。
  */
-static void do_cmd_disp_nikki(void)
+static void do_cmd_disp_nikki(player_type *creature_ptr)
 {
 	char nikki_title[256];
 	GAME_TEXT file_name[MAX_NLEN];
@@ -831,16 +831,16 @@ static void do_cmd_disp_nikki(void)
 	sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
-	if (p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_MONK || p_ptr->pclass == CLASS_SAMURAI || p_ptr->pclass == CLASS_BERSERKER)
+	if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_SAMURAI || creature_ptr->pclass == CLASS_BERSERKER)
 		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)]);
-	else if (IS_WIZARD_CLASS(p_ptr))
+	else if (IS_WIZARD_CLASS(creature_ptr))
 		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)+1]);
 	else strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-2)+1]);
 
 #ifdef JP
-	sprintf(nikki_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", p_ptr->name, tmp);
+	sprintf(nikki_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", creature_ptr->name, tmp);
 #else
-	sprintf(nikki_title, "Legend of %s %s '%s'", ap_ptr->title, p_ptr->name, tmp);
+	sprintf(nikki_title, "Legend of %s %s '%s'", ap_ptr->title, creature_ptr->name, tmp);
 #endif
 
 	/* Display the file contents */
@@ -949,7 +949,7 @@ void do_cmd_nikki(void)
 		switch (i)
 		{
 		case '1':
-			do_cmd_disp_nikki();
+			do_cmd_disp_nikki(p_ptr);
 			break;
 		case '2':
 			do_cmd_bunshou();
