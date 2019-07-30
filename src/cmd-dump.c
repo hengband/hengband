@@ -1036,7 +1036,7 @@ void do_cmd_redraw(void)
  * @brief プレイヤーのステータス表示
  * @return なし
  */
-void do_cmd_player_status(void)
+void do_cmd_player_status(player_type *creature_ptr)
 {
 	char c;
 	int mode = 0;
@@ -1047,12 +1047,12 @@ void do_cmd_player_status(void)
 	while (1)
 	{
 		update_playtime();
-		display_player(mode);
+		display_player(p_ptr, mode);
 
 		if (mode == 4)
 		{
 			mode = 0;
-			display_player(mode);
+			display_player(p_ptr, mode);
 		}
 
 		/* Prompt */
@@ -1075,7 +1075,7 @@ void do_cmd_player_status(void)
 		/* File dump */
 		else if (c == 'f')
 		{
-			sprintf(tmp, "%s.txt", p_ptr->base_name);
+			sprintf(tmp, "%s.txt", creature_ptr->base_name);
 			if (get_string(_("ファイル名: ", "File name: "), tmp, 80))
 			{
 				if (tmp[0] && (tmp[0] != ' '))
@@ -1097,7 +1097,7 @@ void do_cmd_player_status(void)
 		msg_erase();
 	}
 	screen_load();
-	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
 	handle_stuff();
 }

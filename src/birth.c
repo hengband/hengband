@@ -1585,7 +1585,7 @@ static void get_money(player_type *creature_ptr)
 
 /*!
  * @brief put_stats()のサブルーチンとして、オートロール中のステータスを表示する / Display stat values, subset of "put_stats()"
- * @details See 'display_player()' for screen layout constraints.
+ * @details See 'display_player(p_ptr, )' for screen layout constraints.
  * @return なし
  */
 static void birth_put_stats(player_type *creature_ptr)
@@ -3662,7 +3662,7 @@ static void edit_history(player_type *creature_ptr)
 		for (; j < 59; j++) creature_ptr->history[i][j] = ' ';
 		creature_ptr->history[i][59] = '\0';
 	}
-	display_player(1);
+	display_player(p_ptr, 1);
 #ifdef JP
 	c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
 	put_str("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", 17, 10);
@@ -4361,7 +4361,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			creature_ptr->chp = creature_ptr->mhp;
 			creature_ptr->csp = creature_ptr->msp;
 
-			display_player(mode);
+			display_player(p_ptr, mode);
 
 			/* Prepare a prompt (must squeeze everything in) */
 			Term_gotoxy(2, 23);

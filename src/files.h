@@ -25,7 +25,7 @@ extern s16b signal_count;
 extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);
 extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
-extern void display_player(int mode);
+extern void display_player(player_type *creature_ptr, int mode);
 extern errr make_character_dump(FILE *fff);
 extern errr file_character(concptr name);
 extern errr process_pref_file_command(char *buf);

@@ -3830,13 +3830,13 @@ static void display_player_stat_info(void)
  * Mode 4 = mutations
  * </pre>
  */
-void display_player(int mode)
+void display_player(player_type *creature_ptr, int mode)
 {
 	int i;
 	char buf[80];
 	char tmp[64];
 
-	if ((p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3) && display_mutations)
+	if ((creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) && display_mutations)
 		mode = (mode % 5);
 	else
 		mode = (mode % 4);
@@ -3849,49 +3849,49 @@ void display_player(int mode)
 	{
 		/* Name, Sex, Race, Class */
 #ifdef JP
-		sprintf(tmp, "%s%s%s", ap_ptr->title, ap_ptr->no == 1 ? "の":"", p_ptr->name);
+		sprintf(tmp, "%s%s%s", ap_ptr->title, ap_ptr->no == 1 ? "の":"", creature_ptr->name);
 #else
-		sprintf(tmp, "%s %s", ap_ptr->title, p_ptr->name);
+		sprintf(tmp, "%s %s", ap_ptr->title, creature_ptr->name);
 #endif
 
 		display_player_one_line(ENTRY_NAME, tmp, TERM_L_BLUE);
 		display_player_one_line(ENTRY_SEX, sp_ptr->title, TERM_L_BLUE);
-		display_player_one_line(ENTRY_RACE, (p_ptr->mimic_form ? mimic_info[p_ptr->mimic_form].title : rp_ptr->title), TERM_L_BLUE);
+		display_player_one_line(ENTRY_RACE, (creature_ptr->mimic_form ? mimic_info[creature_ptr->mimic_form].title : rp_ptr->title), TERM_L_BLUE);
 		display_player_one_line(ENTRY_CLASS, cp_ptr->title, TERM_L_BLUE);
 
-		if (p_ptr->realm1)
+		if (creature_ptr->realm1)
 		{
-			if (p_ptr->realm2)
-				sprintf(tmp, "%s, %s", realm_names[p_ptr->realm1], realm_names[p_ptr->realm2]);
+			if (creature_ptr->realm2)
+				sprintf(tmp, "%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]);
 			else
-				strcpy(tmp, realm_names[p_ptr->realm1]);
+				strcpy(tmp, realm_names[creature_ptr->realm1]);
 			display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);
 		}
 
-		if ((p_ptr->pclass == CLASS_CHAOS_WARRIOR) || (p_ptr->muta2 & MUT2_CHAOS_GIFT))
-			display_player_one_line(ENTRY_PATRON, chaos_patrons[p_ptr->chaos_patron], TERM_L_BLUE);
+		if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || (creature_ptr->muta2 & MUT2_CHAOS_GIFT))
+			display_player_one_line(ENTRY_PATRON, chaos_patrons[creature_ptr->chaos_patron], TERM_L_BLUE);
 
 		/* Age, Height, Weight, Social */
 		/* 身長はセンチメートルに、体重はキログラムに変更してあります */
 #ifdef JP
-		display_player_one_line(ENTRY_AGE, format("%d才" ,(int)p_ptr->age), TERM_L_BLUE);
-		display_player_one_line(ENTRY_HEIGHT, format("%dcm" ,(int)((p_ptr->ht*254)/100)), TERM_L_BLUE);
-		display_player_one_line(ENTRY_WEIGHT, format("%dkg" ,(int)((p_ptr->wt*4536)/10000)), TERM_L_BLUE);
-		display_player_one_line(ENTRY_SOCIAL, format("%d  " ,(int)p_ptr->sc), TERM_L_BLUE);
+		display_player_one_line(ENTRY_AGE, format("%d才" ,(int)creature_ptr->age), TERM_L_BLUE);
+		display_player_one_line(ENTRY_HEIGHT, format("%dcm" ,(int)((creature_ptr->ht*254)/100)), TERM_L_BLUE);
+		display_player_one_line(ENTRY_WEIGHT, format("%dkg" ,(int)((creature_ptr->wt*4536)/10000)), TERM_L_BLUE);
+		display_player_one_line(ENTRY_SOCIAL, format("%d  " ,(int)creature_ptr->sc), TERM_L_BLUE);
 #else
-		display_player_one_line(ENTRY_AGE, format("%d" ,(int)p_ptr->age), TERM_L_BLUE);
-		display_player_one_line(ENTRY_HEIGHT, format("%d" ,(int)p_ptr->ht), TERM_L_BLUE);
-		display_player_one_line(ENTRY_WEIGHT, format("%d" ,(int)p_ptr->wt), TERM_L_BLUE);
-		display_player_one_line(ENTRY_SOCIAL, format("%d" ,(int)p_ptr->sc), TERM_L_BLUE);
+		display_player_one_line(ENTRY_AGE, format("%d" ,(int)creature_ptr->age), TERM_L_BLUE);
+		display_player_one_line(ENTRY_HEIGHT, format("%d" ,(int)creature_ptr->ht), TERM_L_BLUE);
+		display_player_one_line(ENTRY_WEIGHT, format("%d" ,(int)creature_ptr->wt), TERM_L_BLUE);
+		display_player_one_line(ENTRY_SOCIAL, format("%d" ,(int)creature_ptr->sc), TERM_L_BLUE);
 #endif
-		display_player_one_line(ENTRY_ALIGN, format("%s" ,your_alignment(p_ptr)), TERM_L_BLUE);
+		display_player_one_line(ENTRY_ALIGN, format("%s" ,your_alignment(creature_ptr)), TERM_L_BLUE);
 
 
 		/* Display the stats */
 		for (i = 0; i < A_MAX; i++)
 		{
 			/* Special treatment of "injured" stats */
-			if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
+			if (creature_ptr->stat_cur[i] < creature_ptr->stat_max[i])
 			{
 				int value;
 
@@ -3899,7 +3899,7 @@ void display_player(int mode)
 				put_str(stat_names_reduced[i], 3 + i, 53);
 
 				/* Get the current stat */
-				value = p_ptr->stat_use[i];
+				value = creature_ptr->stat_use[i];
 
 				/* Obtain the current stat (modified) */
 				cnv_stat(value, buf);
@@ -3908,7 +3908,7 @@ void display_player(int mode)
 				c_put_str(TERM_YELLOW, buf, 3 + i, 60);
 
 				/* Acquire the max stat */
-				value = p_ptr->stat_top[i];
+				value = creature_ptr->stat_top[i];
 
 				/* Obtain the maximum stat (modified) */
 				cnv_stat(value, buf);
@@ -3924,13 +3924,13 @@ void display_player(int mode)
 				put_str(stat_names[i], 3 + i, 53);
 
 				/* Obtain the current stat (modified) */
-				cnv_stat(p_ptr->stat_use[i], buf);
+				cnv_stat(creature_ptr->stat_use[i], buf);
 
 				/* Display the current stat (modified) */
 				c_put_str(TERM_L_GREEN, buf, 3 + i, 60);
 			}
 
-			if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
+			if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
 			{
 				c_put_str(TERM_WHITE, "!", 3 + i, _(58, 58-2));
 			}
@@ -3944,30 +3944,30 @@ void display_player(int mode)
 
 			for (i = 0; i < 4; i++)
 			{
-				put_str(p_ptr->history[i], i + 12, 10);
+				put_str(creature_ptr->history[i], i + 12, 10);
 			}
 
 			*statmsg = '\0';
 
-			if (p_ptr->is_dead)
+			if (creature_ptr->is_dead)
 			{
-				if (p_ptr->total_winner)
+				if (creature_ptr->total_winner)
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは勝利の後%sした。", streq(p_ptr->died_from, "Seppuku") ? "切腹" : "引退");
+					sprintf(statmsg, "…あなたは勝利の後%sした。", streq(creature_ptr->died_from, "Seppuku") ? "切腹" : "引退");
 #else
-					sprintf(statmsg, "...You %s after the winning.", streq(p_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
+					sprintf(statmsg, "...You %s after the winning.", streq(creature_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
 #endif
 				}
 				else if (!current_floor_ptr->dun_level)
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), p_ptr->died_from);
+					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), creature_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s in %s.", p_ptr->died_from, map_name());
+					sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name());
 #endif
 				}
-				else if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest))
+				else if (creature_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->inside_quest))
 				{
 					/* Get the quest text */
 					/* Bewere that INIT_ASSIGN resets the cur_num. */
@@ -3976,17 +3976,17 @@ void display_player(int mode)
 					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 #ifdef JP
-					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[p_ptr->inside_quest].name, p_ptr->died_from);
+					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[creature_ptr->inside_quest].name, creature_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s in the quest '%s'.", p_ptr->died_from, quest[p_ptr->inside_quest].name);
+					sprintf(statmsg, "...You were killed by %s in the quest '%s'.", creature_ptr->died_from, quest[creature_ptr->inside_quest].name);
 #endif
 				}
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)current_floor_ptr->dun_level, p_ptr->died_from);
+					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)current_floor_ptr->dun_level, creature_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s on level %d of %s.", p_ptr->died_from, current_floor_ptr->dun_level, map_name());
+					sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, current_floor_ptr->dun_level, map_name());
 #endif
 				}
 			}
@@ -3996,7 +3996,7 @@ void display_player(int mode)
 				{
 					sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name());
 				}
-				else if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest))
+				else if (creature_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->inside_quest))
 				{
 					/* Clear the text */
 					/* Must be done before doing INIT_SHOW_TEXT */
@@ -4011,7 +4011,7 @@ void display_player(int mode)
 
 					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
-					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[p_ptr->inside_quest].name);
+					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[creature_ptr->inside_quest].name);
 				}
 				else
 				{
@@ -4069,7 +4069,7 @@ void display_player(int mode)
 
 	else if (mode == 4)
 	{
-		do_cmd_knowledge_mutations(p_ptr);
+		do_cmd_knowledge_mutations(creature_ptr);
 	}
 }
 
@@ -4085,7 +4085,7 @@ static void dump_aux_display_player(FILE *fff)
 	char c;
 	char buf[1024];
 
-	display_player(0);
+	display_player(p_ptr, 0);
 
 	/* Dump part of the screen */
 	for (y = 1; y < 22; y++)
@@ -4111,7 +4111,7 @@ static void dump_aux_display_player(FILE *fff)
 	}
 
 	/* Display history */
-	display_player(1);
+	display_player(p_ptr, 1);
 
 	/* Dump part of the screen */
 	for (y = 10; y < 19; y++)
@@ -4139,7 +4139,7 @@ static void dump_aux_display_player(FILE *fff)
 	fprintf(fff, "\n");
 
 	/* Display flags (part 1) */
-	display_player(2);
+	display_player(p_ptr, 2);
 
 	/* Dump part of the screen */
 	for (y = 2; y < 22; y++)
@@ -4170,7 +4170,7 @@ static void dump_aux_display_player(FILE *fff)
 	fprintf(fff, "\n");
 
 	/* Display flags (part 2) */
-	display_player(3);
+	display_player(p_ptr, 3);
 
 	/* Dump part of the screen */
 	for (y = 1; y < 22; y++)
@@ -5914,7 +5914,7 @@ void process_player_name(bool sf)
  * @return なし
  * @details
  * <pre>
- * Assumes that "display_player(0)" has just been called
+ * Assumes that "display_player(p_ptr, 0)" has just been called
  * Perhaps we should NOT ask for a name (at "birth()") on
  * Unix machines?  XXX XXX
  * What a horrible name for a global function.  
@@ -6420,7 +6420,7 @@ void show_info(void)
 	}
 
 	update_playtime();
-	display_player(0);
+	display_player(p_ptr, 0);
 
 	/* Prompt for p_ptr->inventory_list */
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);

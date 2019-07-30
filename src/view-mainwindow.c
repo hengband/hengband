@@ -1827,7 +1827,7 @@ static void fix_player(void)
 		Term_activate(angband_term[j]);
 
 		update_playtime();
-		display_player(0);
+		display_player(p_ptr, 0);
 		Term_fresh();
 		Term_activate(old);
 	}

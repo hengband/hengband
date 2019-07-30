@@ -4074,7 +4074,7 @@ static void process_command(void)
 		/* Character description */
 		case 'C':
 		{
-			do_cmd_player_status();
+			do_cmd_player_status(p_ptr);
 			break;
 		}
 
