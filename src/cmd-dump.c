@@ -851,7 +851,7 @@ static void display_diary(player_type *creature_ptr)
  * @brief 日記に任意の内容を表記するコマンドのメインルーチン /
  * @return なし
  */
-static void do_cmd_bunshou(void)
+static void do_cmd_bunshou(player_type *creature_ptr)
 {
 	char tmp[80] = "\0";
 	char bunshou[80] = "\0";
@@ -859,8 +859,7 @@ static void do_cmd_bunshou(void)
 	if (get_string(_("内容: ", "diary note: "), tmp, 79))
 	{
 		strcpy(bunshou, tmp);
-
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, bunshou);
+		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, bunshou);
 	}
 }
 
@@ -952,7 +951,7 @@ void do_cmd_nikki(void)
 			display_diary(p_ptr);
 			break;
 		case '2':
-			do_cmd_bunshou();
+			do_cmd_bunshou(p_ptr);
 			break;
 		case '3':
 			do_cmd_last_get();
