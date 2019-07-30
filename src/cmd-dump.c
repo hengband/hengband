@@ -755,7 +755,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
  * @details
  * 日記のタイトルは本関数の subtitle ローカル変数で定義されている。
  */
-static void do_cmd_disp_nikki(player_type *creature_ptr)
+static void display_diary(player_type *creature_ptr)
 {
 	char nikki_title[256];
 	GAME_TEXT file_name[MAX_NLEN];
@@ -949,7 +949,7 @@ void do_cmd_nikki(void)
 		switch (i)
 		{
 		case '1':
-			do_cmd_disp_nikki(p_ptr);
+			display_diary(p_ptr);
 			break;
 		case '2':
 			do_cmd_bunshou();
