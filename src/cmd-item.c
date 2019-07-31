@@ -1519,7 +1519,7 @@ void do_cmd_use(void)
 			break;
 
 		case TV_FOOD:
-			exe_eat_food(item);
+			exe_eat_food(p_ptr, item);
 			break;
 
 		case TV_WAND:

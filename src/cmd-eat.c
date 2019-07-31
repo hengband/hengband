@@ -31,18 +31,18 @@
  * @param item 食べるオブジェクトの所持品ID
  * @return なし
  */
-void exe_eat_food(INVENTORY_IDX item)
+void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 {
 	int ident, lev;
 	object_type *o_ptr;
 
-	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
-	if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
+	if (music_singing_any(creature_ptr)) stop_singing(creature_ptr);
+	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
 
 	/* Get the item (in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &p_ptr->inventory_list[item];
+		o_ptr = &creature_ptr->inventory_list[item];
 	}
 
 	/* Get the item (on the floor) */
@@ -53,7 +53,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 	sound(SOUND_EAT);
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Identity not known yet */
 	ident = FALSE;
@@ -68,9 +68,9 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 		case SV_FOOD_POISON:
 		{
-			if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
+			if (!(creature_ptr->resist_pois || IS_OPPOSE_POIS()))
 			{
-				if (set_poisoned(p_ptr, p_ptr->poisoned + randint0(10) + 10))
+				if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}
@@ -80,9 +80,9 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_BLINDNESS:
 		{
-			if (!p_ptr->resist_blind)
+			if (!creature_ptr->resist_blind)
 			{
-				if (set_blind(p_ptr, p_ptr->blind + randint0(200) + 200))
+				if (set_blind(creature_ptr, creature_ptr->blind + randint0(200) + 200))
 				{
 					ident = TRUE;
 				}
@@ -92,9 +92,9 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_PARANOIA:
 		{
-			if (!p_ptr->resist_fear)
+			if (!creature_ptr->resist_fear)
 			{
-				if (set_afraid(p_ptr, p_ptr->afraid + randint0(10) + 10))
+				if (set_afraid(creature_ptr, creature_ptr->afraid + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}
@@ -104,9 +104,9 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_CONFUSION:
 		{
-			if (!p_ptr->resist_conf)
+			if (!creature_ptr->resist_conf)
 			{
-				if (set_confused(p_ptr, p_ptr->confused + randint0(10) + 10))
+				if (set_confused(creature_ptr, creature_ptr->confused + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}
@@ -116,9 +116,9 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_HALLUCINATION:
 		{
-			if (!p_ptr->resist_chaos)
+			if (!creature_ptr->resist_chaos)
 			{
-				if (set_image(p_ptr, p_ptr->image + randint0(250) + 250))
+				if (set_image(creature_ptr, creature_ptr->image + randint0(250) + 250))
 				{
 					ident = TRUE;
 				}
@@ -128,9 +128,9 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_PARALYSIS:
 		{
-			if (!p_ptr->free_act)
+			if (!creature_ptr->free_act)
 			{
-				if (set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(10) + 10))
+				if (set_paralyzed(creature_ptr, creature_ptr->paralyzed + randint0(10) + 10))
 				{
 					ident = TRUE;
 				}
@@ -140,73 +140,73 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_WEAKNESS:
 		{
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
-			(void)do_dec_stat(p_ptr, A_STR);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
+			(void)do_dec_stat(creature_ptr, A_STR);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_SICKNESS:
 		{
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
-			(void)do_dec_stat(p_ptr, A_CON);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(6, 6), _("毒入り食料", "poisonous food"), -1);
+			(void)do_dec_stat(creature_ptr, A_CON);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_STUPIDITY:
 		{
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
-			(void)do_dec_stat(p_ptr, A_INT);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
+			(void)do_dec_stat(creature_ptr, A_INT);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_NAIVETY:
 		{
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
-			(void)do_dec_stat(p_ptr, A_WIS);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(8, 8), _("毒入り食料", "poisonous food"), -1);
+			(void)do_dec_stat(creature_ptr, A_WIS);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_UNHEALTH:
 		{
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
-			(void)do_dec_stat(p_ptr, A_CON);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
+			(void)do_dec_stat(creature_ptr, A_CON);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_DISEASE:
 		{
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
-			(void)do_dec_stat(p_ptr, A_STR);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(10, 10), _("毒入り食料", "poisonous food"), -1);
+			(void)do_dec_stat(creature_ptr, A_STR);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_CURE_POISON:
 		{
-			if (set_poisoned(p_ptr, 0)) ident = TRUE;
+			if (set_poisoned(creature_ptr, 0)) ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_CURE_BLINDNESS:
 		{
-			if (set_blind(p_ptr, 0)) ident = TRUE;
+			if (set_blind(creature_ptr, 0)) ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_CURE_PARANOIA:
 		{
-			if (set_afraid(p_ptr, 0)) ident = TRUE;
+			if (set_afraid(creature_ptr, 0)) ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_CURE_CONFUSION:
 		{
-			if (set_confused(p_ptr, 0)) ident = TRUE;
+			if (set_confused(creature_ptr, 0)) ident = TRUE;
 			break;
 		}
 
@@ -218,13 +218,13 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		case SV_FOOD_RESTORE_STR:
 		{
-			if (do_res_stat(p_ptr, A_STR)) ident = TRUE;
+			if (do_res_stat(creature_ptr, A_STR)) ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_RESTORE_CON:
 		{
-			if (do_res_stat(p_ptr, A_CON)) ident = TRUE;
+			if (do_res_stat(creature_ptr, A_CON)) ident = TRUE;
 			break;
 		}
 
@@ -280,8 +280,8 @@ void exe_eat_food(INVENTORY_IDX item)
 		case SV_FOOD_WAYBREAD:
 		{
 			msg_print(_("これはひじょうに美味だ。", "That tastes good."));
-			(void)set_poisoned(p_ptr, 0);
-			(void)hp_player(p_ptr, damroll(4, 8));
+			(void)set_poisoned(creature_ptr, 0);
+			(void)hp_player(creature_ptr, damroll(4, 8));
 			ident = TRUE;
 			break;
 		}
@@ -312,13 +312,13 @@ void exe_eat_food(INVENTORY_IDX item)
 
 		}
 	}
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))
 	{
-		chg_virtue(p_ptr, V_KNOWLEDGE, -1);
-		chg_virtue(p_ptr, V_PATIENCE, -1);
-		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
+		chg_virtue(creature_ptr, V_PATIENCE, -1);
+		chg_virtue(creature_ptr, V_CHANCE, 1);
 	}
 
 	/* We have tried it */
@@ -328,28 +328,28 @@ void exe_eat_food(INVENTORY_IDX item)
 	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
-		gain_exp(p_ptr, (lev + (p_ptr->lev >> 1)) / p_ptr->lev);
+		gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
 	}
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 
 	/* Food can feed the player */
-	if (PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
+	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
 		/* Reduced nutritional benefit */
-		(void)set_food(p_ptr, p_ptr->food + (o_ptr->pval / 10));
+		(void)set_food(creature_ptr, creature_ptr->food + (o_ptr->pval / 10));
 		msg_print(_("あなたのような者にとって食糧など僅かな栄養にしかならない。",
 			"Mere victuals hold scant sustenance for a being such as yourself."));
 
-		if (p_ptr->food < PY_FOOD_ALERT)   /* Hungry */
+		if (creature_ptr->food < PY_FOOD_ALERT)   /* Hungry */
 			msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！",
 				"Your hunger can only be satisfied with fresh blood!"));
 	}
-	else if ((PRACE_IS_(p_ptr, RACE_SKELETON) ||
-		PRACE_IS_(p_ptr, RACE_GOLEM) ||
-		PRACE_IS_(p_ptr, RACE_ZOMBIE) ||
-		PRACE_IS_(p_ptr, RACE_SPECTRE)) &&
+	else if ((PRACE_IS_(creature_ptr, RACE_SKELETON) ||
+		PRACE_IS_(creature_ptr, RACE_GOLEM) ||
+		PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||
+		PRACE_IS_(creature_ptr, RACE_SPECTRE)) &&
 		(o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND))
 	{
 		concptr staff;
@@ -367,8 +367,8 @@ void exe_eat_food(INVENTORY_IDX item)
 		{
 			msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
 			o_ptr->ident |= (IDENT_EMPTY);
-			p_ptr->update |= (PU_COMBINE | PU_REORDER);
-			p_ptr->window |= (PW_INVEN);
+			creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+			creature_ptr->window |= (PW_INVEN);
 
 			return;
 		}
@@ -378,7 +378,7 @@ void exe_eat_food(INVENTORY_IDX item)
 		o_ptr->pval--;
 
 		/* Eat a charge */
-		set_food(p_ptr, p_ptr->food + 5000);
+		set_food(creature_ptr, creature_ptr->food + 5000);
 
 		/* XXX Hack -- unstack if necessary */
 		if (o_ptr->tval == TV_STAFF &&
@@ -397,7 +397,7 @@ void exe_eat_food(INVENTORY_IDX item)
 
 			/* Unstack the used item */
 			o_ptr->number--;
-			p_ptr->total_weight -= q_ptr->weight;
+			creature_ptr->total_weight -= q_ptr->weight;
 			item = inven_carry(q_ptr);
 
 			msg_format(_("杖をまとめなおした。", "You unstack your staff."));
@@ -415,13 +415,13 @@ void exe_eat_food(INVENTORY_IDX item)
 			floor_item_charges(0 - item);
 		}
 
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+		creature_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* Don't eat a staff/wand itself */
 		return;
 	}
-	else if ((PRACE_IS_(p_ptr, RACE_DEMON) ||
-		(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
+	else if ((PRACE_IS_(creature_ptr, RACE_DEMON) ||
+		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
 		(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
 			my_strchr("pht", r_info[o_ptr->pval].d_char)))
 	{
@@ -429,16 +429,16 @@ void exe_eat_food(INVENTORY_IDX item)
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
-		(void)set_food(p_ptr, PY_FOOD_MAX - 1);
+		(void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 	}
-	else if (PRACE_IS_(p_ptr, RACE_SKELETON))
+	else if (PRACE_IS_(creature_ptr, RACE_SKELETON))
 	{
 #if 0
 		if (o_ptr->tval == TV_SKELETON ||
 			(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
 		{
 			msg_print(_("あなたは骨で自分の体を補った。", "Your body absorbs the bone."));
-			set_food(p_ptr, p_ptr->food + 5000);
+			set_food(creature_ptr, creature_ptr->food + 5000);
 		}
 		else
 #endif
@@ -453,33 +453,33 @@ void exe_eat_food(INVENTORY_IDX item)
 				object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
 
 				/* Drop the object from heaven */
-				(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
+				(void)drop_near(q_ptr, -1, creature_ptr->y, creature_ptr->x);
 			}
 			else
 			{
 				msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
 			}
 	}
-	else if (PRACE_IS_(p_ptr, RACE_GOLEM) ||
-		PRACE_IS_(p_ptr, RACE_ZOMBIE) ||
-		PRACE_IS_(p_ptr, RACE_ENT) ||
-		PRACE_IS_(p_ptr, RACE_DEMON) ||
-		PRACE_IS_(p_ptr, RACE_ANDROID) ||
-		PRACE_IS_(p_ptr, RACE_SPECTRE) ||
-		(mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
+	else if (PRACE_IS_(creature_ptr, RACE_GOLEM) ||
+		PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||
+		PRACE_IS_(creature_ptr, RACE_ENT) ||
+		PRACE_IS_(creature_ptr, RACE_DEMON) ||
+		PRACE_IS_(creature_ptr, RACE_ANDROID) ||
+		PRACE_IS_(creature_ptr, RACE_SPECTRE) ||
+		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
 	{
 		msg_print(_("生者の食物はあなたにとってほとんど栄養にならない。", "The food of mortals is poor sustenance for you."));
-		set_food(p_ptr, p_ptr->food + ((o_ptr->pval) / 20));
+		set_food(creature_ptr, creature_ptr->food + ((o_ptr->pval) / 20));
 	}
 	else if (o_ptr->tval == TV_FOOD && o_ptr->sval == SV_FOOD_WAYBREAD)
 	{
 		/* Waybread is always fully satisfying. */
-		set_food(p_ptr, MAX(p_ptr->food, PY_FOOD_MAX - 1));
+		set_food(creature_ptr, MAX(creature_ptr->food, PY_FOOD_MAX - 1));
 	}
 	else
 	{
 		/* Food can feed the player */
-		(void)set_food(p_ptr, p_ptr->food + o_ptr->pval);
+		(void)set_food(creature_ptr, creature_ptr->food + o_ptr->pval);
 	}
 
 	/* Destroy a food in the pack */
@@ -524,6 +524,6 @@ void do_cmd_eat_food(void)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Eat the object */
-	exe_eat_food(item);
+	exe_eat_food(p_ptr, item);
 }
 
