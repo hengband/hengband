@@ -711,7 +711,7 @@ void prepare_movie_hooks(void)
 #else
 			prepare_chuukei_hooks();
 #endif
-			do_cmd_redraw();
+			do_cmd_redraw(p_ptr);
 		}
 	}
 }

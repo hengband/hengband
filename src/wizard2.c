@@ -401,7 +401,7 @@ static void do_cmd_wiz_change(void)
 {
 	/* Interact */
 	do_cmd_wiz_change_aux();
-	do_cmd_redraw();
+	do_cmd_redraw(p_ptr);
 }
 
 

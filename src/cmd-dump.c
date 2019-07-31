@@ -987,7 +987,7 @@ void do_cmd_nikki(void)
  * the "TERM_XTRA_REACT" hook before redrawing the windows.
  * </pre>
  */
-void do_cmd_redraw(void)
+void do_cmd_redraw(player_type *creature_ptr)
 {
 	int j;
 	term *old = Term;
@@ -997,23 +997,23 @@ void do_cmd_redraw(void)
 	Term_xtra(TERM_XTRA_REACT, 0);
 
 	/* Combine and Reorder the pack (later) */
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-	p_ptr->update |= (PU_TORCH);
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-	p_ptr->update |= (PU_MONSTERS);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->update |= (PU_TORCH);
+	creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+	creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+	creature_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+	creature_ptr->update |= (PU_MONSTERS);
 
-	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+	creature_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
 	update_playtime();
 
 	handle_stuff();
 
-	if (p_ptr->prace == RACE_ANDROID) calc_android_exp(p_ptr);
+	if (creature_ptr->prace == RACE_ANDROID) calc_android_exp(creature_ptr);
 
 
 	/* Redraw every window */
@@ -2616,7 +2616,7 @@ void do_cmd_visuals(void)
 	}
 	screen_load();
 
-	if (need_redraw) do_cmd_redraw();
+	if (need_redraw) do_cmd_redraw(p_ptr);
 }
 
 
@@ -4055,7 +4055,7 @@ void do_cmd_save_screen(void)
 	if (html_dump)
 	{
 		do_cmd_save_screen_html();
-		do_cmd_redraw();
+		do_cmd_redraw(p_ptr);
 	}
 
 	/* Do we use a special screendump function ? */
@@ -7102,7 +7102,7 @@ void do_cmd_knowledge(void)
 	}
 	screen_load();
 
-	if (need_redraw) do_cmd_redraw();
+	if (need_redraw) do_cmd_redraw(p_ptr);
 }
 
 

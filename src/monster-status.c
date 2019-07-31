@@ -825,7 +825,7 @@ bool set_monster_timewalk(int num, MONSTER_IDX who, bool vs_player)
 	/* This monster cast spells */
 	current_world_ptr->timewalk_m_idx = hack_m_idx;
 
-	if (vs_player) do_cmd_redraw();
+	if (vs_player) do_cmd_redraw(p_ptr);
 
 	while (num--)
 	{

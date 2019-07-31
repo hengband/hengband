@@ -50,7 +50,7 @@ extern concptr get_ordinal_number_suffix(int num);
 #endif
 extern errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note);
 extern void do_cmd_nikki(void);
-extern void do_cmd_redraw(void);
+extern void do_cmd_redraw(player_type *creature_ptr);
 extern void do_cmd_player_status(player_type *creature_ptr);
 extern void do_cmd_message_one(void);
 extern void do_cmd_messages(int num_now);

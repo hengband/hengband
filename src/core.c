@@ -4118,7 +4118,7 @@ static void process_command(void)
 		case '%':
 		{
 			do_cmd_visuals();
-			do_cmd_redraw();
+			do_cmd_redraw(p_ptr);
 			break;
 		}
 
@@ -4126,7 +4126,7 @@ static void process_command(void)
 		case '&':
 		{
 			do_cmd_colors();
-			do_cmd_redraw();
+			do_cmd_redraw(p_ptr);
 			break;
 		}
 
@@ -4135,7 +4135,7 @@ static void process_command(void)
 		{
 			do_cmd_options();
 			(void)combine_and_reorder_home(STORE_HOME);
-			do_cmd_redraw();
+			do_cmd_redraw(p_ptr);
 			break;
 		}
 
@@ -4187,7 +4187,7 @@ static void process_command(void)
 		case KTRL('R'):
 		{
 			now_message = old_now_message;
-			do_cmd_redraw();
+			do_cmd_redraw(p_ptr);
 			break;
 		}
 

@@ -5404,7 +5404,7 @@ static void store_process_command(void)
 
 		case KTRL('R'):
 		{
-			do_cmd_redraw();
+			do_cmd_redraw(p_ptr);
 			display_store();
 			break;
 		}
@@ -5602,7 +5602,7 @@ static void store_process_command(void)
 		{
 			do_cmd_options();
 			(void)combine_and_reorder_home(STORE_HOME);
-			do_cmd_redraw();
+			do_cmd_redraw(p_ptr);
 			display_store();
 			break;
 		}
