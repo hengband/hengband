@@ -1,6 +1,6 @@
 ﻿/*!
- *  @file cmd3.c
- *  @brief プレイヤーのアイテムに関するコマンドの実装1 / Inventory commands
+ *  @file cmd-item.c
+ *  @brief プレイヤーのアイテムに関するコマンドの実装1 / Inventory and equipment commands
  *  @date 2014/01/02
  *  @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
@@ -57,15 +57,9 @@
 void do_cmd_inven(void)
 {
 	char out_val[160];
-
-	/* Note that we are in "p_ptr->inventory_list" mode */
 	command_wrk = FALSE;
-
-	/* Note that we are in "p_ptr->inventory_list" mode */
 	if (easy_floor) command_wrk = (USE_INVEN);
 	screen_save();
-
-	/* Display the p_ptr->inventory_list */
 	(void)show_inven(0, USE_FULL, 0);
 
 #ifdef JP
@@ -82,22 +76,15 @@ void do_cmd_inven(void)
 	command_new = inkey();
 	screen_load();
 
-	/* Process "Escape" */
 	if (command_new == ESCAPE)
 	{
 		TERM_LEN wid, hgt;
-
 		Term_get_size(&wid, &hgt);
-
-		/* Reset stuff */
 		command_new = 0;
 		command_gap = wid - 30;
 	}
-
-	/* Process normal keys */
 	else
 	{
-		/* Hack -- Use "display" mode */
 		command_see = TRUE;
 	}
 }
@@ -110,17 +97,12 @@ void do_cmd_inven(void)
 void do_cmd_equip(void)
 {
 	char out_val[160];
-
-	/* Note that we are in "equipment" mode */
 	command_wrk = TRUE;
-
-	/* Note that we are in "equipment" mode */
 	if (easy_floor) command_wrk = (USE_EQUIP);
 	screen_save();
 
 	(void)show_equip(0, USE_FULL, 0);
 
-	/* Build a prompt */
 #ifdef JP
 	sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
 	    (int)lbtokg1(p_ptr->total_weight) , (int)lbtokg2(p_ptr->total_weight) ,
@@ -135,28 +117,19 @@ void do_cmd_equip(void)
 	command_new = inkey();
 	screen_load();
 
-	/* Process "Escape" */
 	if (command_new == ESCAPE)
 	{
 		TERM_LEN wid, hgt;
-
 		Term_get_size(&wid, &hgt);
-
-		/* Reset stuff */
 		command_new = 0;
 		command_gap = wid - 30;
 	}
 
-	/* Process normal keys */
 	else
 	{
-		/* Enter "display" mode */
 		command_see = TRUE;
 	}
 }
-
-
-
 
 bool select_ring_slot = FALSE;
 
