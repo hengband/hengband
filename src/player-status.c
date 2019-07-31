@@ -4310,9 +4310,9 @@ static void calc_spells(player_type *creature_ptr)
 			}
 
 #ifdef JP
-			msg_format("%sの%sを忘れてしまった。", do_spell(which, j % 32, SPELL_NAME), p);
+			msg_format("%sの%sを忘れてしまった。", exe_spell(which, j % 32, SPELL_NAME), p);
 #else
-			msg_format("You have forgotten the %s of %s.", p, do_spell(which, j % 32, SPELL_NAME));
+			msg_format("You have forgotten the %s of %s.", p, exe_spell(which, j % 32, SPELL_NAME));
 #endif
 
 
@@ -4367,9 +4367,9 @@ static void calc_spells(player_type *creature_ptr)
 			}
 
 #ifdef JP
-			msg_format("%sの%sを忘れてしまった。", do_spell(which, j % 32, SPELL_NAME), p);
+			msg_format("%sの%sを忘れてしまった。", exe_spell(which, j % 32, SPELL_NAME), p);
 #else
-			msg_format("You have forgotten the %s of %s.", p, do_spell(which, j % 32, SPELL_NAME));
+			msg_format("You have forgotten the %s of %s.", p, exe_spell(which, j % 32, SPELL_NAME));
 #endif
 
 
@@ -4440,9 +4440,9 @@ static void calc_spells(player_type *creature_ptr)
 			}
 
 #ifdef JP
-			msg_format("%sの%sを思い出した。", do_spell(which, j % 32, SPELL_NAME), p);
+			msg_format("%sの%sを思い出した。", exe_spell(which, j % 32, SPELL_NAME), p);
 #else
-			msg_format("You have remembered the %s of %s.", p, do_spell(which, j % 32, SPELL_NAME));
+			msg_format("You have remembered the %s of %s.", p, exe_spell(which, j % 32, SPELL_NAME));
 #endif
 
 

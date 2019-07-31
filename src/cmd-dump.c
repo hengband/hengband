@@ -4515,7 +4515,7 @@ static void do_cmd_knowledge_spell_exp(void)
 			if (s_ptr->slevel >= 99) continue;
 			spell_exp = p_ptr->spell_exp[i];
 			exp_level = spell_exp_level(spell_exp);
-			fprintf(fff, "%-25s ", do_spell(p_ptr->realm1, i, SPELL_NAME));
+			fprintf(fff, "%-25s ", exe_spell(p_ptr->realm1, i, SPELL_NAME));
 			if (p_ptr->realm1 == REALM_HISSATSU)
 				fprintf(fff, "[--]");
 			else
@@ -4546,7 +4546,7 @@ static void do_cmd_knowledge_spell_exp(void)
 
 			spell_exp = p_ptr->spell_exp[i + 32];
 			exp_level = spell_exp_level(spell_exp);
-			fprintf(fff, "%-25s ", do_spell(p_ptr->realm2, i, SPELL_NAME));
+			fprintf(fff, "%-25s ", exe_spell(p_ptr->realm2, i, SPELL_NAME));
 			if (exp_level >= EXP_LEVEL_EXPERT) fprintf(fff, "!");
 			else fprintf(fff, " ");
 			fprintf(fff, "%s", exp_level_str[exp_level]);

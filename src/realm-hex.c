@@ -48,7 +48,7 @@ bool stop_hex_spell_all(void)
 
 	for (i = 0; i < 32; i++)
 	{
-		if (hex_spelling(i)) do_spell(REALM_HEX, i, SPELL_STOP);
+		if (hex_spelling(i)) exe_spell(REALM_HEX, i, SPELL_STOP);
 	}
 
 	CASTING_HEX_FLAGS(p_ptr) = 0;
@@ -104,7 +104,7 @@ bool stop_hex_spell(void)
 				if (hex_spelling(spell))
 				{
 					Term_erase(x, y + n + 1, 255);
-					put_str(format("%c)  %s", I2A(n), do_spell(REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
+					put_str(format("%c)  %s", I2A(n), exe_spell(REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
 					sp[n++] = spell;
 				}
 			}
@@ -128,7 +128,7 @@ bool stop_hex_spell(void)
 	{
 		int n = sp[A2I(choice)];
 
-		do_spell(REALM_HEX, n, SPELL_STOP);
+		exe_spell(REALM_HEX, n, SPELL_STOP);
 		CASTING_HEX_FLAGS(p_ptr) &= ~(1L << n);
 		CASTING_HEX_NUM(p_ptr)--;
 	}
@@ -236,7 +236,7 @@ void check_hex(void)
 	{
 		if (hex_spelling(spell))
 		{
-			do_spell(REALM_HEX, spell, SPELL_CONT);
+			exe_spell(REALM_HEX, spell, SPELL_CONT);
 		}
 	}
 }
@@ -265,8 +265,8 @@ void revenge_spell(void)
 
 	switch(HEX_REVENGE_TYPE(p_ptr))
 	{
-		case 1: do_spell(REALM_HEX, HEX_PATIENCE, SPELL_CONT); break;
-		case 2: do_spell(REALM_HEX, HEX_REVENGE, SPELL_CONT); break;
+		case 1: exe_spell(REALM_HEX, HEX_PATIENCE, SPELL_CONT); break;
+		case 2: exe_spell(REALM_HEX, HEX_REVENGE, SPELL_CONT); break;
 	}
 }
 
@@ -821,7 +821,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
 			{
-				do_spell(REALM_HEX, spell, SPELL_STOP);
+				exe_spell(REALM_HEX, spell, SPELL_STOP);
 				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << spell);
 				CASTING_HEX_NUM(p_ptr)--;
 				if (!SINGING_SONG_ID(p_ptr)) set_action(p_ptr, ACTION_NONE);
@@ -908,7 +908,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (!flag)
 			{
-				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), do_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
+				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
 				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << HEX_RESTORE);
 				if (cont) CASTING_HEX_NUM(p_ptr)--;
 				if (CASTING_HEX_NUM(p_ptr)) p_ptr->action = ACTION_NONE;

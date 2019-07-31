@@ -272,7 +272,7 @@ static bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
-concptr do_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
+concptr exe_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	switch (realm)
 	{
@@ -537,11 +537,11 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 			jverb(prompt, jverb_buf, JVERB_AND);
 			/* 英日切り替え機能に対応 */
 			(void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
-				do_spell(use_realm, spell, SPELL_NAME), need_mana,
+				exe_spell(use_realm, spell, SPELL_NAME), need_mana,
 				spell_chance(spell, use_realm), jverb_buf);
 #else
 			(void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ",
-				prompt, do_spell(use_realm, spell, SPELL_NAME), need_mana,
+				prompt, exe_spell(use_realm, spell, SPELL_NAME), need_mana,
 				spell_chance(spell, use_realm));
 #endif
 
@@ -734,7 +734,7 @@ void do_cmd_browse(void)
 		Term_erase(14, 12, 255);
 		Term_erase(14, 11, 255);
 
-		roff_to_buf(do_spell(use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
+		roff_to_buf(exe_spell(use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 
 		for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j]))
 		{
@@ -935,7 +935,7 @@ void do_cmd_study(void)
 		int max_exp = (spell < 32) ? SPELL_EXP_MASTER : SPELL_EXP_EXPERT;
 		int old_exp = p_ptr->spell_exp[spell];
 		int new_rank = EXP_LEVEL_UNSKILLED;
-		concptr name = do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME);
+		concptr name = exe_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME);
 
 		if (old_exp >= max_exp)
 		{
@@ -991,16 +991,16 @@ void do_cmd_study(void)
 		if (mp_ptr->spell_book == TV_MUSIC_BOOK)
 		{
 			msg_format("%sを学んだ。",
-				do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
+				exe_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
 		}
 		else
 		{
 			msg_format("%sの%sを学んだ。",
-				do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME), p);
+				exe_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME), p);
 		}
 #else
 		msg_format("You have learned the %s of %s.",
-			p, do_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
+			p, exe_spell(increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
 #endif
 	}
 
@@ -1243,7 +1243,7 @@ void do_cmd_cast(void)
 		}
 
 		/* Failure casting may activate some side effect */
-		do_spell(realm, spell, SPELL_FAIL);
+		exe_spell(realm, spell, SPELL_FAIL);
 
 
 		if ((o_ptr->tval == TV_CHAOS_BOOK) && (randint1(100) < spell))
@@ -1279,7 +1279,7 @@ void do_cmd_cast(void)
 	else
 	{
 		/* Canceled spells cost neither a current_world_ptr->game_turn nor mana */
-		if (!do_spell(realm, spell, SPELL_CAST)) return;
+		if (!exe_spell(realm, spell, SPELL_CAST)) return;
 
 		if (randint1(100) < chance)
 			chg_virtue(p_ptr, V_CHANCE, 1);
