@@ -3945,7 +3945,7 @@ static void process_command(void)
 		/* Eat some food */
 		case 'E':
 		{
-			do_cmd_eat_food();
+			do_cmd_eat_food(p_ptr);
 			break;
 		}
 

@@ -505,10 +505,10 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
  * Eat some food (from the pack or floor)
  * @return なし
  */
-void do_cmd_eat_food(void)
+void do_cmd_eat_food(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
-	concptr        q, s;
+	concptr q, s;
 
 	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
