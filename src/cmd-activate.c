@@ -10,6 +10,7 @@
 #include "util.h"
 
 #include "cmd-activate.h"
+#include "cmd-item.h"
 #include "cmd-basic.h"
 #include "floor.h"
 #include "object-hook.h"
@@ -353,20 +354,8 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool success;
 
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &user_ptr->inventory_list[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
-	}
-
+	o_ptr = REF_ITEM(user_ptr, current_floor_ptr, item);
 	take_turn(user_ptr, 100);
-
 	lev = k_info[o_ptr->k_idx].level;
 
 	/* Hack -- use artifact level instead */

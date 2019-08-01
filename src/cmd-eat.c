@@ -472,15 +472,12 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		(void)set_food(creature_ptr, creature_ptr->food + o_ptr->pval);
 	}
 
-	/* Destroy a food in the pack */
 	if (item >= 0)
 	{
 		inven_item_increase(item, -1);
 		inven_item_describe(item);
 		inven_item_optimize(item);
 	}
-
-	/* Destroy a food on the floor */
 	else
 	{
 		floor_item_increase(0 - item, -1);
@@ -505,7 +502,6 @@ void do_cmd_eat_food(player_type *creature_ptr)
 		set_action(creature_ptr, ACTION_NONE);
 	}
 
-	/* Restrict choices to food */
 	item_tester_hook = item_tester_hook_eatable;
 
 	q = _("どれを食べますか? ", "Eat which item? ");
@@ -513,7 +509,6 @@ void do_cmd_eat_food(player_type *creature_ptr)
 
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
-	/* Eat the object */
 	exe_eat_food(creature_ptr, item);
 }
 
