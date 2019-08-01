@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 /*
  * Flags for wr_item()/rd_item()

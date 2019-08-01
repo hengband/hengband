@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 extern int m_bonus(int max, DEPTH level);
 extern void one_sustain(object_type *o_ptr);
 extern bool add_esp_strong(object_type *o_ptr);

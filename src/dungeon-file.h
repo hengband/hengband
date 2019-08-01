@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 typedef struct dungeon_grid dungeon_grid;
 

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 /*
  * Player sex info
@@ -11,8 +11,8 @@ struct player_sex
 	concptr title;			/* Type of sex */
 	concptr winner;		/* Name of winner */
 #ifdef JP
-	concptr E_title;		/* ‰pŒê«•Ê */
-	concptr E_winner;		/* ‰pŒê«•Ê */
+	concptr E_title;		/* è‹±èªæ€§åˆ¥ */
+	concptr E_winner;		/* è‹±èªæ€§åˆ¥ */
 #endif
 };
 

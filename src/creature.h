@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 
-/*! @brief Á”ï‚·‚és“®ƒGƒlƒ‹ƒM[’l‚ð³‹K—”‚Å•Ô‚·(’†‰›100/•ªŽU25) / Random energy */
+/*! @brief æ¶ˆè²»ã™ã‚‹è¡Œå‹•ã‚¨ãƒãƒ«ã‚®ãƒ¼å€¤ã‚’æ­£è¦ä¹±æ•°ã§è¿”ã™(ä¸­å¤®100/åˆ†æ•£25) / Random energy */
 #define ENERGY_NEED() (randnor(100, 25))
 
-/*! @brief ‰Á‘¬’l‚É‰ž‚¶‚½Šî–{s“®ƒGƒlƒ‹ƒM[Á”ï—Ê‚ð•Ô‚· / Extract energy from speed (Assumes that SPEED is unsigned) */
+/*! @brief åŠ é€Ÿå€¤ã«å¿œã˜ãŸåŸºæœ¬è¡Œå‹•ã‚¨ãƒãƒ«ã‚®ãƒ¼æ¶ˆè²»é‡ã‚’è¿”ã™ / Extract energy from speed (Assumes that SPEED is unsigned) */
 #define SPEED_TO_ENERGY(SPEED) (((SPEED) > 199) ? 49 : extract_energy[(SPEED)])
 
 extern const byte extract_energy[200];

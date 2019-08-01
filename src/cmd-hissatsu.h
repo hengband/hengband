@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /* hissatsu.c */
 
 extern void do_cmd_hissatsu(void);

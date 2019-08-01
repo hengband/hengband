@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 /*
  * Object information, for a specific object.
@@ -290,17 +290,17 @@ struct object_type
 
 
 	/*
-	 * •Ï‹ğver1.5.0ˆÈ‘O‚Ég‚í‚ê‚Ä‚¢‚½ƒAƒCƒeƒ€‚Ì’Ç‰Á“Á«ƒtƒ‰ƒO / Hack -- special "xtra" object powers
+	 * å¤‰æ„šver1.5.0ä»¥å‰ã«ä½¿ã‚ã‚Œã¦ã„ãŸã‚¢ã‚¤ãƒ†ãƒ ã®è¿½åŠ ç‰¹æ€§ãƒ•ãƒ©ã‚° / Hack -- special "xtra" object powers
 	 */
-	#define EGO_XTRA_SUSTAIN        1 /*!< ‹Œ”ÅƒAƒCƒeƒ€ƒtƒ‰ƒO(”ñ„§): ’Ç‰ÁˆÛ”\—Í / Sustain one stat */
-	#define EGO_XTRA_POWER          2 /*!< ‹Œ”ÅƒAƒCƒeƒ€ƒtƒ‰ƒO(”ñ„§): ’Ç‰Áã‹‰‘Ï« / High resist */
-	#define EGO_XTRA_ABILITY        3 /*!< ‹Œ”ÅƒAƒCƒeƒ€ƒtƒ‰ƒO(”ñ„§): ’Ç‰Á”\—Í / Special ability */
+	#define EGO_XTRA_SUSTAIN        1 /*!< æ—§ç‰ˆã‚¢ã‚¤ãƒ†ãƒ ãƒ•ãƒ©ã‚°(éæ¨å¥¨): è¿½åŠ ç¶­æŒèƒ½åŠ› / Sustain one stat */
+	#define EGO_XTRA_POWER          2 /*!< æ—§ç‰ˆã‚¢ã‚¤ãƒ†ãƒ ãƒ•ãƒ©ã‚°(éæ¨å¥¨): è¿½åŠ ä¸Šç´šè€æ€§ / High resist */
+	#define EGO_XTRA_ABILITY        3 /*!< æ—§ç‰ˆã‚¢ã‚¤ãƒ†ãƒ ãƒ•ãƒ©ã‚°(éæ¨å¥¨): è¿½åŠ èƒ½åŠ› / Special ability */
 	XTRA8 xtra1;			/* Extra info type (now unused) */
 
 	XTRA8 xtra2;			/* Extra info activation index */
-	XTRA8 xtra3;			/*!< •¡”‚Ìg—p—p“r •ß‚ç‚¦‚½ƒ‚ƒ“ƒXƒ^[‚Ì‘¬“xC•t‰Á‚µ‚½“Áê‚ÈƒGƒbƒZƒ“ƒXID / Extra info for weaponsmith */
-	XTRA16 xtra4;			/*!< •¡”‚Ìg—p—p“r ŒõŒ¹‚Ìc‚èõ–½A‚ ‚é‚¢‚Í•ß‚ç‚¦‚½ƒ‚ƒ“ƒXƒ^[‚ÌŒ»HP / Extra info fuel or captured monster's current HP */
-	XTRA16 xtra5;			/*!< •¡”‚Ìg—p—p“r •ß‚ç‚¦‚½ƒ‚ƒ“ƒXƒ^[‚ÌÅ‘åHP / Extra info captured monster's max HP */
+	XTRA8 xtra3;			/*!< è¤‡æ•°ã®ä½¿ç”¨ç”¨é€” æ•ã‚‰ãˆãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®é€Ÿåº¦ï¼Œä»˜åŠ ã—ãŸç‰¹æ®Šãªã‚¨ãƒƒã‚»ãƒ³ã‚¹ID / Extra info for weaponsmith */
+	XTRA16 xtra4;			/*!< è¤‡æ•°ã®ä½¿ç”¨ç”¨é€” å…‰æºã®æ®‹ã‚Šå¯¿å‘½ã€ã‚ã‚‹ã„ã¯æ•ã‚‰ãˆãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ç¾HP / Extra info fuel or captured monster's current HP */
+	XTRA16 xtra5;			/*!< è¤‡æ•°ã®ä½¿ç”¨ç”¨é€” æ•ã‚‰ãˆãŸãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®æœ€å¤§HP / Extra info captured monster's max HP */
 
 	HIT_PROB to_h;			/* Plusses to hit */
 	HIT_POINT to_d;			/* Plusses to damage */
@@ -334,7 +334,7 @@ struct object_type
 	 * OM_NOMSG --- temporary flag to suppress messages which were
 	 *              already printed in autopick_pickup_items().
 	 */
-	#define OM_FOUND        0x01    /*!< ƒAƒCƒeƒ€‚ğˆê“x‚Å‚à‹ŠE‚Éû‚ß‚½‚±‚Æ‚ª‚ ‚é‚© */
+	#define OM_FOUND        0x01    /*!< ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä¸€åº¦ã§ã‚‚è¦–ç•Œã«åã‚ãŸã“ã¨ãŒã‚ã‚‹ã‹ */
 	#define OM_NOMSG        0x02    /* temporary flag to suppress messages */
 	#define OM_NO_QUERY     0x04    /* Query for auto-pick was already answered as 'No' */
 	#define OM_AUTODESTROY  0x08    /* Destroy later to avoid illegal inventry shift */
@@ -386,9 +386,9 @@ struct object_type
 	BIT_FLAGS curse_flags;        /* Flags for curse */
 
 	OBJECT_IDX next_o_idx;	/* Next object in stack (if any) */
-	MONSTER_IDX held_m_idx;	/*!< ƒAƒCƒeƒ€‚ğŠ‚µ‚Ä‚¢‚éƒ‚ƒ“ƒXƒ^[ID (‚¢‚È‚¢‚È‚ç 0) / Monster holding us (if any) */
+	MONSTER_IDX held_m_idx;	/*!< ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‰€æŒã—ã¦ã„ã‚‹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ID (ã„ãªã„ãªã‚‰ 0) / Monster holding us (if any) */
 
-	ARTIFACT_BIAS_IDX artifact_bias; /*!< ƒ‰ƒ“ƒ_ƒ€ƒA[ƒeƒBƒtƒ@ƒNƒg¶¬‚ÌƒoƒCƒAƒXID */
+	ARTIFACT_BIAS_IDX artifact_bias; /*!< ãƒ©ãƒ³ãƒ€ãƒ ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆç”Ÿæˆæ™‚ã®ãƒã‚¤ã‚¢ã‚¹ID */
 };
 
 extern bool(*item_tester_hook)(object_type *o_ptr);
@@ -413,14 +413,14 @@ extern s16b wield_slot(object_type *o_ptr);
 extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 
 /*
- * get_item()ŠÖ”‚ÅƒAƒCƒeƒ€‚Ì‘I‘ğ‚ğs‚¤ƒtƒ‰ƒO / Bit flags for the "get_item" function
+ * get_item()é–¢æ•°ã§ã‚¢ã‚¤ãƒ†ãƒ ã®é¸æŠã‚’è¡Œã†ãƒ•ãƒ©ã‚° / Bit flags for the "get_item" function
  */
-#define USE_EQUIP 0x01 /*!< ƒAƒCƒeƒ€•\¦/‘I‘ğ”ÍˆÍ: ‘•”õ•i‚©‚ç‚Ì‘I‘ğ‚ğ‹–‰Â‚·‚é / Allow equip items */
-#define USE_INVEN 0x02 /*!< ƒAƒCƒeƒ€•\¦/‘I‘ğ”ÍˆÍ: Š•i‚©‚ç‚Ì‘I‘ğ‚ğ‹–‰Â‚·‚é /  Allow inven items */
-#define USE_FLOOR 0x04 /*!< ƒAƒCƒeƒ€•\¦/‘I‘ğ”ÍˆÍ: °‰º‚ÌƒAƒCƒeƒ€‚©‚ç‚Ì‘I‘ğ‚ğ‹–‰Â‚·‚é /  Allow floor items */
-#define USE_FORCE 0x08 /*!< “Áê: wƒL[‚Å˜B‹Cp‚Ö‚ÌØ‚è‘Ö‚¦‚ğ‹–‰Â‚·‚é */
-#define IGNORE_BOTHHAND_SLOT 0x10 /*!< ƒAƒCƒeƒ€•\¦/‘I‘ğ”ÍˆÍ: —¼è‚¿ƒXƒƒbƒg‚ğ‘I‘ğ‚ÉŠÜ‚ß‚È‚¢ */
-#define USE_FULL  0x20 /*!< ƒAƒCƒeƒ€•\¦/‘I‘ğ”ÍˆÍ: ‹ó—“‚Ü‚Å‚·‚×‚Ä•\¦‚·‚é*/
+#define USE_EQUIP 0x01 /*!< ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤º/é¸æŠç¯„å›²: è£…å‚™å“ã‹ã‚‰ã®é¸æŠã‚’è¨±å¯ã™ã‚‹ / Allow equip items */
+#define USE_INVEN 0x02 /*!< ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤º/é¸æŠç¯„å›²: æ‰€æŒå“ã‹ã‚‰ã®é¸æŠã‚’è¨±å¯ã™ã‚‹ /  Allow inven items */
+#define USE_FLOOR 0x04 /*!< ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤º/é¸æŠç¯„å›²: åºŠä¸‹ã®ã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰ã®é¸æŠã‚’è¨±å¯ã™ã‚‹ /  Allow floor items */
+#define USE_FORCE 0x08 /*!< ç‰¹æ®Š: wã‚­ãƒ¼ã§éŒ¬æ°—è¡“ã¸ã®åˆ‡ã‚Šæ›¿ãˆã‚’è¨±å¯ã™ã‚‹ */
+#define IGNORE_BOTHHAND_SLOT 0x10 /*!< ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤º/é¸æŠç¯„å›²: ä¸¡æ‰‹æŒã¡ã‚¹ãƒ­ãƒƒãƒˆã‚’é¸æŠã«å«ã‚ãªã„ */
+#define USE_FULL  0x20 /*!< ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤º/é¸æŠç¯„å›²: ç©ºæ¬„ã¾ã§ã™ã¹ã¦è¡¨ç¤ºã™ã‚‹*/
 extern bool can_get_item(OBJECT_TYPE_VALUE tval);
 extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval);
@@ -440,20 +440,20 @@ extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
 
 /*
- * ƒAƒCƒeƒ€‚ÌŠÈˆÕŠÓ’è’è‹` / Game generated inscription indices. These are stored in the object,
+ * ã‚¢ã‚¤ãƒ†ãƒ ã®ç°¡æ˜“é‘‘å®šå®šç¾© / Game generated inscription indices. These are stored in the object,
  * and are used to index the string array from tables.c.
  */
-#define FEEL_NONE              0 /*!< ŠÈˆÕŠÓ’è: –¢ŠÓ’è */
-#define FEEL_BROKEN            1 /*!< ŠÈˆÕŠÓ’è: ‰ó‚ê‚Ä‚¢‚é */
-#define FEEL_TERRIBLE          2 /*!< ŠÈˆÕŠÓ’è: ‹°‚ë‚µ‚¢ */
-#define FEEL_WORTHLESS         3 /*!< ŠÈˆÕŠÓ’è: –³‰¿’l */
-#define FEEL_CURSED            4 /*!< ŠÈˆÕŠÓ’è: ô‚í‚ê‚Ä‚¢‚é */
-#define FEEL_UNCURSED          5 /*!< ŠÈˆÕŠÓ’è: ô‚í‚ê‚Ä‚¢‚È‚¢ */
-#define FEEL_AVERAGE           6 /*!< ŠÈˆÕŠÓ’è: •À */
-#define FEEL_GOOD              7 /*!< ŠÈˆÕŠÓ’è: ã¿ */
-#define FEEL_EXCELLENT         8 /*!< ŠÈˆÕŠÓ’è: ‚‹‰ */
-#define FEEL_SPECIAL           9 /*!< ŠÈˆÕŠÓ’è: “Á•Ê */
-#define FEEL_MAX               9 /*!< ŠÈˆÕŠÓ’è‚Ìí•Ê” */
+#define FEEL_NONE              0 /*!< ç°¡æ˜“é‘‘å®š: æœªé‘‘å®š */
+#define FEEL_BROKEN            1 /*!< ç°¡æ˜“é‘‘å®š: å£Šã‚Œã¦ã„ã‚‹ */
+#define FEEL_TERRIBLE          2 /*!< ç°¡æ˜“é‘‘å®š: æã‚ã—ã„ */
+#define FEEL_WORTHLESS         3 /*!< ç°¡æ˜“é‘‘å®š: ç„¡ä¾¡å€¤ */
+#define FEEL_CURSED            4 /*!< ç°¡æ˜“é‘‘å®š: å‘ªã‚ã‚Œã¦ã„ã‚‹ */
+#define FEEL_UNCURSED          5 /*!< ç°¡æ˜“é‘‘å®š: å‘ªã‚ã‚Œã¦ã„ãªã„ */
+#define FEEL_AVERAGE           6 /*!< ç°¡æ˜“é‘‘å®š: ä¸¦ */
+#define FEEL_GOOD              7 /*!< ç°¡æ˜“é‘‘å®š: ä¸Šè³ª */
+#define FEEL_EXCELLENT         8 /*!< ç°¡æ˜“é‘‘å®š: é«˜ç´š */
+#define FEEL_SPECIAL           9 /*!< ç°¡æ˜“é‘‘å®š: ç‰¹åˆ¥ */
+#define FEEL_MAX               9 /*!< ç°¡æ˜“é‘‘å®šã®ç¨®åˆ¥æ•° */
 extern byte value_check_aux1(object_type *o_ptr);
 extern byte value_check_aux2(object_type *o_ptr);
 
@@ -477,7 +477,7 @@ extern void object_copy(object_type *o_ptr, object_type *j_ptr);
 #define AM_GREAT        0x00000004 /*!< Generate great items */
 #define AM_SPECIAL      0x00000008 /*!< Generate artifacts (for debug mode only) */
 #define AM_CURSED       0x00000010 /*!< Generate cursed/worthless items */
-#define AM_FORBID_CHEST 0x00000020 /*!< ” ‚©‚ç‚³‚ç‚É” ‚ªoŒ»‚·‚é‚±‚Æ‚ğ—}~‚·‚é */
+#define AM_FORBID_CHEST 0x00000020 /*!< ç®±ã‹ã‚‰ã•ã‚‰ã«ç®±ãŒå‡ºç¾ã™ã‚‹ã“ã¨ã‚’æŠ‘æ­¢ã™ã‚‹ */
 extern void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
 extern OBJECT_SUBTYPE_VALUE coin_type;
@@ -1128,10 +1128,10 @@ extern void prepare_label_string(char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE 
 #define SV_FOOD_PINT_OF_WINE            39
 
 
-#define SV_ROD_MIN_DIRECTION    12 /*!< ‚±‚Ì’lˆÈ~‚Ì¬€–ÚID‚ğ‚Á‚½ƒƒbƒh‚Íg—p‚Éƒ^[ƒQƒbƒg‚ğ—v‹‚·‚é / Special "sval" limit -- first "aimed" rod */
+#define SV_ROD_MIN_DIRECTION    12 /*!< ã“ã®å€¤ä»¥é™ã®å°é …ç›®IDã‚’æŒã£ãŸãƒ­ãƒƒãƒ‰ã¯ä½¿ç”¨æ™‚ã«ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¦æ±‚ã™ã‚‹ / Special "sval" limit -- first "aimed" rod */
 
-#define SV_CHEST_MIN_LARGE      4  /*!< ‚±‚Ì’lˆÈ~‚Ì¬€–ÚID‚ğ‚Á‚½” ‚Í‘åŒ^‚Ì” ‚Æ‚µ‚Äƒhƒƒbƒv”‚ğ‘‚â‚· / Special "sval" limit -- first "large" chest */
-#define SV_CHEST_KANDUME        50 /*!< ” ƒAƒCƒeƒ€‚Ì¬€–ÚID: ‚¨‚à‚¿‚á‚ÌƒJƒ“ƒdƒ */
+#define SV_CHEST_MIN_LARGE      4  /*!< ã“ã®å€¤ä»¥é™ã®å°é …ç›®IDã‚’æŒã£ãŸç®±ã¯å¤§å‹ã®ç®±ã¨ã—ã¦ãƒ‰ãƒ­ãƒƒãƒ—æ•°ã‚’å¢—ã‚„ã™ / Special "sval" limit -- first "large" chest */
+#define SV_CHEST_KANDUME        50 /*!< ç®±ã‚¢ã‚¤ãƒ†ãƒ ã®å°é …ç›®ID: ãŠã‚‚ã¡ã‚ƒã®ã‚«ãƒ³ãƒ…ãƒ¡ */
 
 /*
  * Special "sval" limit -- first "good" magic/prayer book

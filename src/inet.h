@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 /* inet.c */
 extern int soc_write(int sd, char *buf, size_t sz);

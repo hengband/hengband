@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 
@@ -26,9 +26,9 @@ extern int PlayerUID;
 # define geteuid() PlayerUID
 #endif
 
-#define KEYMAP_MODE_ORIG	0 /*!< ƒIƒŠƒWƒiƒ‹ƒL[”z’u / Mode for original keyset commands */
-#define KEYMAP_MODE_ROGUE	1 /*!< ƒ[ƒOƒ‰ƒCƒNƒL[”z’u / Mode for roguelike keyset commands */
-#define KEYMAP_MODES		2 /*!< ƒL[”z’u‚Ì” / Number of keymap modes */
+#define KEYMAP_MODE_ORIG	0 /*!< ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚­ãƒ¼é…ç½® / Mode for original keyset commands */
+#define KEYMAP_MODE_ROGUE	1 /*!< ãƒ­ãƒ¼ã‚°ãƒ©ã‚¤ã‚¯ã‚­ãƒ¼é…ç½® / Mode for roguelike keyset commands */
+#define KEYMAP_MODES		2 /*!< ã‚­ãƒ¼é…ç½®ã®æ•° / Number of keymap modes */
 
 #define SCREEN_BUF_MAX_SIZE (4 * 65536) /*!< Max size of screen dump buffer */
 
@@ -42,7 +42,7 @@ extern int PlayerUID;
  * Max numbers of macro trigger names
  */
 #define MAX_MACRO_MOD 12
-#define MAX_MACRO_TRIG 200 /*!< “o˜^‚ð‹–‚·ƒ}ƒNƒiƒgƒŠƒK[j‚ÌÅ‘å” */
+#define MAX_MACRO_TRIG 200 /*!< ç™»éŒ²ã‚’è¨±ã™ãƒžã‚¯ãƒ­ï¼ˆãƒˆãƒªã‚¬ãƒ¼ï¼‰ã®æœ€å¤§æ•° */
 
 /*
  * Object flags
@@ -191,7 +191,7 @@ extern concptr keymap_act[KEYMAP_MODES][256];
 #define MUSIC_BASIC_QUEST_CLEAR 18
 #define MUSIC_BASIC_FINAL_QUEST_CLEAR 19
 #define MUSIC_BASIC_AMBUSH    20
-#define MUSIC_BASIC_MAX       21 /*!< BGM’è‹`‚ÌÅ‘å” */
+#define MUSIC_BASIC_MAX       21 /*!< BGMå®šç¾©ã®æœ€å¤§æ•° */
 
 /*** Sound constants ***/
 
@@ -270,10 +270,10 @@ extern concptr keymap_act[KEYMAP_MODES][256];
 /*
  * Mega-Hack -- maximum known sounds
  */
-#define SOUND_MAX 67 /*!< Œø‰Ê‰¹’è‹`‚ÌÅ‘å” */
+#define SOUND_MAX 67 /*!< åŠ¹æžœéŸ³å®šç¾©ã®æœ€å¤§æ•° */
 
 /*!
- * @brief –Áî•ñ‚ÌÅ‘å” / Maximum number of "quarks" (see "io.c")
+ * @brief éŠ˜æƒ…å ±ã®æœ€å¤§æ•° / Maximum number of "quarks" (see "io.c")
  * @note
  * Default: assume at most 512 different inscriptions are used<br>
  * Was 512... 256 quarks added for random artifacts<br>

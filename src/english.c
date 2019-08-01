@@ -1,13 +1,13 @@
-
+ï»¿
 #include "angband.h"
 #include "util.h"
 #include "japanese.h"
 
 
 /*!
- * @brief ‰p’PŒêA‹åAà‚ğ•¡”Œ`‚ğ•ÏŠ·‚·‚é / Pluralize a monster name
- * @param Name •ÏŠ·‚µ‚½‚¢•¶š—ñ‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @brief è‹±å˜èªã€å¥ã€èª¬ã‚’è¤‡æ•°å½¢ã‚’å¤‰æ›ã™ã‚‹ / Pluralize a monster name
+ * @param Name å¤‰æ›ã—ãŸã„æ–‡å­—åˆ—ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void plural_aux(char *Name)
 {

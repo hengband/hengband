@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "h-type.h"
 #include "object.h"

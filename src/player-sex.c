@@ -1,4 +1,4 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "player-sex.h"
 
 /*
@@ -8,7 +8,7 @@
 const player_sex *sp_ptr;
 
 /*!
- * @brief «•Ê•\‹L /
+ * @brief æ€§åˆ¥è¡¨è¨˜ /
  * Player Sexes
  * @details
  * <pre>
@@ -20,16 +20,16 @@ const player_sex sex_info[MAX_SEXES] =
 {
 	{
 #ifdef JP
-		"—«",
-		"ƒNƒC[ƒ“",
+		"å¥³æ€§",
+		"ã‚¯ã‚¤ãƒ¼ãƒ³",
 #endif
 		"Female",
 		"Queen"
 	},
 	{
 #ifdef JP
-		"’j«",
-		"ƒLƒ“ƒO",
+		"ç”·æ€§",
+		"ã‚­ãƒ³ã‚°",
 #endif
 		"Male",
 		"King"
