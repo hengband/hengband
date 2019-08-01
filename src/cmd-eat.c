@@ -510,9 +510,9 @@ void do_cmd_eat_food(player_type *creature_ptr)
 	OBJECT_IDX item;
 	concptr q, s;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Restrict choices to food */
@@ -524,6 +524,6 @@ void do_cmd_eat_food(player_type *creature_ptr)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Eat the object */
-	exe_eat_food(p_ptr, item);
+	exe_eat_food(creature_ptr, item);
 }
 
