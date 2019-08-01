@@ -21,7 +21,7 @@
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
 */
-concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -29,7 +29,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	switch (spell)
 	{
@@ -65,7 +65,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("恐怖除去", "Remove Fear");
 		if (desc) return _("恐怖を取り除く。", "Removes fear.");
 		{
-			if (cast) set_afraid(p_ptr, 0);
+			if (cast) set_afraid(caster_ptr, 0);
 		}
 		break;
 
@@ -127,9 +127,9 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				set_cut(p_ptr,0);
-				set_poisoned(p_ptr, 0);
-				set_stun(p_ptr, 0);
+				set_cut(caster_ptr,0);
+				set_poisoned(caster_ptr, 0);
+				set_stun(caster_ptr, 0);
 			}
 		}
 		break;
@@ -159,9 +159,9 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			DICE_SID sides = 6;
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
-			if (p_ptr->pclass == CLASS_PRIEST ||
-				p_ptr->pclass == CLASS_HIGH_MAGE ||
-				p_ptr->pclass == CLASS_SORCERER)
+			if (caster_ptr->pclass == CLASS_PRIEST ||
+				caster_ptr->pclass == CLASS_HIGH_MAGE ||
+				caster_ptr->pclass == CLASS_SORCERER)
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;
@@ -214,7 +214,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_invis(p_ptr, randint1(base) + base, FALSE);
+				set_tim_invis(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -231,7 +231,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_protevil(p_ptr, randint1(sides) + base, FALSE);
+				set_protevil(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -266,11 +266,11 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				dispel_evil(randint1(dam_sides));
-				hp_player(p_ptr, heal);
-				set_afraid(p_ptr, 0);
-				set_poisoned(p_ptr, 0);
-				set_stun(p_ptr, 0);
-				set_cut(p_ptr,0);
+				hp_player(caster_ptr, heal);
+				set_afraid(caster_ptr, 0);
+				set_poisoned(caster_ptr, 0);
+				set_stun(caster_ptr, 0);
+				set_cut(caster_ptr,0);
 			}
 		}
 		break;
@@ -318,7 +318,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_sh_holy(p_ptr, randint1(base) + base, FALSE);
+				set_tim_sh_holy(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -401,7 +401,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				else flg |= PM_NO_PET;
 				if (!(pet && (plev < 50))) flg |= PM_ALLOW_GROUP;
 
-				if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg))
+				if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, (plev * 3) / 2, SUMMON_ANGEL, flg))
 				{
 					if (pet)
 					{
@@ -471,7 +471,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				destroy_area(p_ptr->y, p_ptr->x, base + randint1(sides), FALSE);
+				destroy_area(caster_ptr->y, caster_ptr->x, base + randint1(sides), FALSE);
 			}
 		}
 		break;
@@ -488,7 +488,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_eyeeye(p_ptr, randint1(base) + base, FALSE);
+				set_tim_eyeeye(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -524,14 +524,14 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (info) return format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
 			if (cast)
 			{
-				project(0, 1, p_ptr->y, p_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
+				project(0, 1, caster_ptr->y, caster_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
 				dispel_monsters(d_dam);
 				slow_monsters(plev);
 				stun_monsters(power);
 				confuse_monsters(power);
 				turn_monsters(power);
 				stasis_monsters(power);
-				hp_player(p_ptr, heal);
+				hp_player(caster_ptr, heal);
 			}
 		}
 		break;
@@ -557,7 +557,7 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 					while (attempt--)
 					{
-						scatter(&my, &mx, p_ptr->y, p_ptr->x, 4, 0);
+						scatter(&my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
 
 						/* Require empty grids */
 						if (cave_empty_bold2(my, mx)) break;
@@ -565,11 +565,11 @@ concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					if (attempt < 0) continue;
 					summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
 				}
-				set_hero(p_ptr, randint1(base) + base, FALSE);
-				set_blessed(p_ptr, randint1(base) + base, FALSE);
-				set_fast(p_ptr, randint1(sp_sides) + sp_base, FALSE);
-				set_protevil(p_ptr, randint1(base) + base, FALSE);
-				set_afraid(p_ptr, 0);
+				set_hero(caster_ptr, randint1(base) + base, FALSE);
+				set_blessed(caster_ptr, randint1(base) + base, FALSE);
+				set_fast(caster_ptr, randint1(sp_sides) + sp_base, FALSE);
+				set_protevil(caster_ptr, randint1(base) + base, FALSE);
+				set_afraid(caster_ptr, 0);
 			}
 		}
 		break;

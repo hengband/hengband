@@ -337,7 +337,7 @@ bool multiply_barrier(MONSTER_IDX m_idx)
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
 */
-concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -348,7 +348,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 	bool add = TRUE;
 
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	HIT_POINT power;
 
 	switch (spell)
@@ -359,14 +359,14 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("祝福により攻撃精度と防御力が上がる。", "Attempts to increase +to_hit of a weapon and AC");
 		if (cast)
 		{
-			if (!p_ptr->blessed)
+			if (!caster_ptr->blessed)
 			{
 				msg_print(_("高潔な気分になった！", "You feel righteous!"));
 			}
 		}
 		if (stop)
 		{
-			if (!p_ptr->blessed)
+			if (!caster_ptr->blessed)
 			{
 				msg_print(_("高潔な気分が消え失せた。", "The prayer has expired."));
 			}
@@ -490,7 +490,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				o_ptr->curse_flags |= get_curse(curse_rank, o_ptr);
 			}
 
-			p_ptr->update |= (PU_BONUS);
+			caster_ptr->update |= (PU_BONUS);
 			add = FALSE;
 		}
 		break;
@@ -509,22 +509,22 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("我慢", "Patience");
 		if (desc) return _("数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。",
 			"Bursts hell fire strongly after patients any damage while few turns.");
-		power = MIN(200, (HEX_REVENGE_POWER(p_ptr) * 2));
+		power = MIN(200, (HEX_REVENGE_POWER(caster_ptr) * 2));
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
-			int a = 3 - (p_ptr->pspeed - 100) / 10;
+			int a = 3 - (caster_ptr->pspeed - 100) / 10;
 			MAGIC_NUM2 r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
-			if (HEX_REVENGE_TURN(p_ptr) > 0)
+			if (HEX_REVENGE_TURN(caster_ptr) > 0)
 			{
 				msg_print(_("すでに我慢をしている。", "You are already patienting."));
 				return NULL;
 			}
 
-			HEX_REVENGE_TYPE(p_ptr) = 1;
-			HEX_REVENGE_TURN(p_ptr) = r;
-			HEX_REVENGE_POWER(p_ptr) = 0;
+			HEX_REVENGE_TYPE(caster_ptr) = 1;
+			HEX_REVENGE_TURN(caster_ptr) = r;
+			HEX_REVENGE_POWER(caster_ptr) = 0;
 			msg_print(_("じっと耐えることにした。", "You decide to patient all damages."));
 			add = FALSE;
 		}
@@ -532,25 +532,25 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			POSITION rad = 2 + (power / 50);
 
-			HEX_REVENGE_TURN(p_ptr)--;
+			HEX_REVENGE_TURN(caster_ptr)--;
 
-			if ((HEX_REVENGE_TURN(p_ptr) <= 0) || (power >= 200))
+			if ((HEX_REVENGE_TURN(caster_ptr) <= 0) || (power >= 200))
 			{
 				msg_print(_("我慢が解かれた！", "Time for end of patioence!"));
 				if (power)
 				{
-					project(0, rad, p_ptr->y, p_ptr->x, power, GF_HELL_FIRE,
+					project(0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE,
 						(PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 				}
-				if (p_ptr->wizard)
+				if (caster_ptr->wizard)
 				{
 					msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
 				}
 
 				/* Reset */
-				HEX_REVENGE_TYPE(p_ptr) = 0;
-				HEX_REVENGE_TURN(p_ptr) = 0;
-				HEX_REVENGE_POWER(p_ptr) = 0;
+				HEX_REVENGE_TYPE(caster_ptr) = 0;
+				HEX_REVENGE_TURN(caster_ptr) = 0;
+				HEX_REVENGE_POWER(caster_ptr) = 0;
 			}
 		}
 		break;
@@ -585,9 +585,9 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling of casting a spell.");
 		if (cast)
 		{
-			CASTING_HEX_FLAGS(p_ptr) |= (1L << HEX_INHAIL);
+			CASTING_HEX_FLAGS(caster_ptr) |= (1L << HEX_INHAIL);
 			do_cmd_quaff_potion();
-			CASTING_HEX_FLAGS(p_ptr) &= ~(1L << HEX_INHAIL);
+			CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << HEX_INHAIL);
 			add = FALSE;
 		}
 		break;
@@ -613,7 +613,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("あなたの武器が黒く輝いた。");
 #else
-			if (!empty_hands(p_ptr, FALSE))
+			if (!empty_hands(caster_ptr, FALSE))
 				msg_print("Your weapons glow bright black.");
 			else
 				msg_print("Your weapon glows bright black.");
@@ -624,7 +624,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("武器の輝きが消え去った。");
 #else
-			msg_format("Brightness of weapon%s disappeared.", (empty_hands(p_ptr, FALSE)) ? "" : "s");
+			msg_format("Brightness of weapon%s disappeared.", (empty_hands(caster_ptr, FALSE)) ? "" : "s");
 #endif
 		}
 		break;
@@ -709,7 +709,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 		if (cast || cont)
 		{
-			animate_dead(0, p_ptr->y, p_ptr->x);
+			animate_dead(0, caster_ptr->y, caster_ptr->x);
 		}
 		break;
 
@@ -731,7 +731,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			o_ptr = choose_object(&item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
-			o_ptr = &p_ptr->inventory_list[item];
+			o_ptr = &caster_ptr->inventory_list[item];
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			object_flags(o_ptr, f);
 
@@ -788,7 +788,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				o_ptr->curse_flags |= get_curse(curse_rank, o_ptr);
 			}
 
-			p_ptr->update |= (PU_BONUS);
+			caster_ptr->update |= (PU_BONUS);
 			add = FALSE;
 		}
 		break;
@@ -798,7 +798,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("影のオーラを身にまとい、敵に影のダメージを与える。", "Gives aura of shadow.");
 		if (cast)
 		{
-			object_type *o_ptr = &p_ptr->inventory_list[INVEN_OUTER];
+			object_type *o_ptr = &caster_ptr->inventory_list[INVEN_OUTER];
 
 			if (!o_ptr->k_idx)
 			{
@@ -817,14 +817,14 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		}
 		if (cont)
 		{
-			object_type *o_ptr = &p_ptr->inventory_list[INVEN_OUTER];
+			object_type *o_ptr = &caster_ptr->inventory_list[INVEN_OUTER];
 
 			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
 			{
 				exe_spell(REALM_HEX, spell, SPELL_STOP);
-				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << spell);
-				CASTING_HEX_NUM(p_ptr)--;
-				if (!SINGING_SONG_ID(p_ptr)) set_action(p_ptr, ACTION_NONE);
+				CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << spell);
+				CASTING_HEX_NUM(caster_ptr)--;
+				if (!SINGING_SONG_ID(caster_ptr)) set_action(caster_ptr, ACTION_NONE);
 			}
 		}
 		if (stop)
@@ -873,34 +873,34 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast || cont)
 		{
 			bool flag = FALSE;
-			int d = (p_ptr->max_exp - p_ptr->exp);
-			int r = (p_ptr->exp / 20);
+			int d = (caster_ptr->max_exp - caster_ptr->exp);
+			int r = (caster_ptr->exp / 20);
 			int i;
 
 			if (d > 0)
 			{
 				if (d < r)
-					p_ptr->exp = p_ptr->max_exp;
+					caster_ptr->exp = caster_ptr->max_exp;
 				else
-					p_ptr->exp += r;
+					caster_ptr->exp += r;
 
 				/* Check the experience */
-				check_experience(p_ptr);
+				check_experience(caster_ptr);
 
 				flag = TRUE;
 			}
 			for (i = A_STR; i < A_MAX; i++)
 			{
-				if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
+				if (caster_ptr->stat_cur[i] < caster_ptr->stat_max[i])
 				{
-					if (p_ptr->stat_cur[i] < 18)
-						p_ptr->stat_cur[i]++;
+					if (caster_ptr->stat_cur[i] < 18)
+						caster_ptr->stat_cur[i]++;
 					else
-						p_ptr->stat_cur[i] += 10;
+						caster_ptr->stat_cur[i] += 10;
 
-					if (p_ptr->stat_cur[i] > p_ptr->stat_max[i])
-						p_ptr->stat_cur[i] = p_ptr->stat_max[i];
-					p_ptr->update |= (PU_BONUS);
+					if (caster_ptr->stat_cur[i] > caster_ptr->stat_max[i])
+						caster_ptr->stat_cur[i] = caster_ptr->stat_max[i];
+					caster_ptr->update |= (PU_BONUS);
 
 					flag = TRUE;
 				}
@@ -909,12 +909,12 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (!flag)
 			{
 				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(REALM_HEX, HEX_RESTORE, SPELL_NAME));
-				CASTING_HEX_FLAGS(p_ptr) &= ~(1L << HEX_RESTORE);
-				if (cont) CASTING_HEX_NUM(p_ptr)--;
-				if (CASTING_HEX_NUM(p_ptr)) p_ptr->action = ACTION_NONE;
+				CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << HEX_RESTORE);
+				if (cont) CASTING_HEX_NUM(caster_ptr)--;
+				if (CASTING_HEX_NUM(caster_ptr)) caster_ptr->action = ACTION_NONE;
 
-				p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-				p_ptr->redraw |= (PR_EXTRA);
+				caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+				caster_ptr->redraw |= (PR_EXTRA);
 
 				return "";
 			}
@@ -940,9 +940,9 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			object_flags(o_ptr, f);
 
-			p_ptr->csp += (p_ptr->lev / 5) + randint1(p_ptr->lev / 5);
-			if (have_flag(f, TR_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE)) p_ptr->csp += randint1(5);
-			if (p_ptr->csp > p_ptr->msp) p_ptr->csp = p_ptr->msp;
+			caster_ptr->csp += (caster_ptr->lev / 5) + randint1(caster_ptr->lev / 5);
+			if (have_flag(f, TR_TY_CURSE) || (o_ptr->curse_flags & TRC_TY_CURSE)) caster_ptr->csp += randint1(5);
+			if (caster_ptr->csp > caster_ptr->msp) caster_ptr->csp = caster_ptr->msp;
 
 			if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 			{
@@ -974,7 +974,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("あなたの武器が血を欲している。");
 #else
-			if (!empty_hands(p_ptr, FALSE))
+			if (!empty_hands(caster_ptr, FALSE))
 				msg_print("Your weapons want more blood now.");
 			else
 				msg_print("Your weapon wants more blood now.");
@@ -985,7 +985,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("武器の渇望が消え去った。");
 #else
-			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(p_ptr, FALSE)) ? "" : "s");
+			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(caster_ptr, FALSE)) ? "" : "s");
 #endif
 		}
 		break;
@@ -1025,7 +1025,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				}
 
 				if (!cave_empty_bold(y, x) || (current_floor_ptr->grid_array[y][x].info & CAVE_ICKY) ||
-					(distance(y, x, p_ptr->y, p_ptr->x) > plev + 2))
+					(distance(y, x, caster_ptr->y, caster_ptr->x) > plev + 2))
 				{
 					msg_print(_("そこには移動できない。", "Can not teleport to there."));
 					continue;
@@ -1062,30 +1062,30 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("復讐の宣告", "Revenge sentence");
 		if (desc) return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。",
 			"Fires  a ball of hell fire to try revenging after few turns.");
-		power = HEX_REVENGE_POWER(p_ptr);
+		power = HEX_REVENGE_POWER(caster_ptr);
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
 			MAGIC_NUM2 r;
-			int a = 3 - (p_ptr->pspeed - 100) / 10;
+			int a = 3 - (caster_ptr->pspeed - 100) / 10;
 			r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
-			if (HEX_REVENGE_TURN(p_ptr) > 0)
+			if (HEX_REVENGE_TURN(caster_ptr) > 0)
 			{
 				msg_print(_("すでに復讐は宣告済みだ。", "You already pronounced your revenge."));
 				return NULL;
 			}
 
-			HEX_REVENGE_TYPE(p_ptr) = 2;
-			HEX_REVENGE_TURN(p_ptr) = r;
+			HEX_REVENGE_TYPE(caster_ptr) = 2;
+			HEX_REVENGE_TURN(caster_ptr) = r;
 			msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You pronounce your revenge. %d turns left."), r);
 			add = FALSE;
 		}
 		if (cont)
 		{
-			HEX_REVENGE_TURN(p_ptr)--;
+			HEX_REVENGE_TURN(caster_ptr)--;
 
-			if (HEX_REVENGE_TURN(p_ptr) <= 0)
+			if (HEX_REVENGE_TURN(caster_ptr) <= 0)
 			{
 				DIRECTION dir;
 
@@ -1100,7 +1100,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 					fire_ball(GF_HELL_FIRE, dir, power, 1);
 
-					if (p_ptr->wizard)
+					if (caster_ptr->wizard)
 					{
 						msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
 					}
@@ -1109,7 +1109,7 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				{
 					msg_print(_("復讐する気が失せた。", "You are not a mood to revenge."));
 				}
-				HEX_REVENGE_POWER(p_ptr) = 0;
+				HEX_REVENGE_POWER(caster_ptr) = 0;
 			}
 		}
 		break;
@@ -1119,16 +1119,16 @@ concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	if ((cast) && (add))
 	{
 		/* add spell */
-		CASTING_HEX_FLAGS(p_ptr) |= 1L << (spell);
-		CASTING_HEX_NUM(p_ptr)++;
+		CASTING_HEX_FLAGS(caster_ptr) |= 1L << (spell);
+		CASTING_HEX_NUM(caster_ptr)++;
 
-		if (p_ptr->action != ACTION_SPELL) set_action(p_ptr, ACTION_SPELL);
+		if (caster_ptr->action != ACTION_SPELL) set_action(caster_ptr, ACTION_SPELL);
 	}
 
 	if (!info)
 	{
-		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-		p_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+		caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
 	}
 
 	return "";

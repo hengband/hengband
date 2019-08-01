@@ -276,19 +276,19 @@ concptr exe_spell(REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	switch (realm)
 	{
-	case REALM_LIFE:     return do_life_spell(spell, mode);
-	case REALM_SORCERY:  return do_sorcery_spell(spell, mode);
-	case REALM_NATURE:   return do_nature_spell(spell, mode);
-	case REALM_CHAOS:    return do_chaos_spell(spell, mode);
-	case REALM_DEATH:    return do_death_spell(spell, mode);
-	case REALM_TRUMP:    return do_trump_spell(spell, mode);
-	case REALM_ARCANE:   return do_arcane_spell(spell, mode);
-	case REALM_CRAFT:    return do_craft_spell(spell, mode);
-	case REALM_DAEMON:   return do_daemon_spell(spell, mode);
-	case REALM_CRUSADE:  return do_crusade_spell(spell, mode);
-	case REALM_MUSIC:    return do_music_spell(spell, mode);
-	case REALM_HISSATSU: return do_hissatsu_spell(spell, mode);
-	case REALM_HEX:      return do_hex_spell(spell, mode);
+	case REALM_LIFE:     return do_life_spell(p_ptr, spell, mode);
+	case REALM_SORCERY:  return do_sorcery_spell(p_ptr, spell, mode);
+	case REALM_NATURE:   return do_nature_spell(p_ptr, spell, mode);
+	case REALM_CHAOS:    return do_chaos_spell(p_ptr, spell, mode);
+	case REALM_DEATH:    return do_death_spell(p_ptr, spell, mode);
+	case REALM_TRUMP:    return do_trump_spell(p_ptr, spell, mode);
+	case REALM_ARCANE:   return do_arcane_spell(p_ptr, spell, mode);
+	case REALM_CRAFT:    return do_craft_spell(p_ptr, spell, mode);
+	case REALM_DAEMON:   return do_daemon_spell(p_ptr, spell, mode);
+	case REALM_CRUSADE:  return do_crusade_spell(p_ptr, spell, mode);
+	case REALM_MUSIC:    return do_music_spell(p_ptr, spell, mode);
+	case REALM_HISSATSU: return do_hissatsu_spell(p_ptr, spell, mode);
+	case REALM_HEX:      return do_hex_spell(p_ptr, spell, mode);
 	}
 
 	return NULL;

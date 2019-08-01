@@ -58,5 +58,5 @@ extern void revenge_store(HIT_POINT dam);
 extern bool teleport_barrier(MONSTER_IDX m_idx);
 extern bool magic_barrier(MONSTER_IDX m_idx);
 extern bool multiply_barrier(MONSTER_IDX m_idx);
-extern concptr do_hex_spell(SPELL_IDX spell, BIT_FLAGS mode);
+extern concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);
 

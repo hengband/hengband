@@ -20,7 +20,7 @@
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
 */
-concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -28,7 +28,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	switch (spell)
 	{
@@ -102,7 +102,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
 				/* Drop the object from heaven */
-				(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
+				(void)drop_near(q_ptr, -1, caster_ptr->y, caster_ptr->x);
 			}
 		}
 		break;
@@ -122,10 +122,10 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				lite_area(damroll(dice, sides), rad);
 
-				if ((PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
+				if ((PRACE_IS_(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !caster_ptr->resist_lite)
 				{
 					msg_print(_("日の光があなたの肉体を焦がした！", "The daylight scorches your flesh!"));
-					take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"), -1);
+					take_hit(caster_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"), -1);
 				}
 			}
 		}
@@ -161,9 +161,9 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_cold(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_elec(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_cold(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_fire(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_elec(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -180,9 +180,9 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				hp_player(p_ptr, damroll(dice, sides));
-				set_cut(p_ptr,0);
-				set_poisoned(p_ptr, 0);
+				hp_player(caster_ptr, damroll(dice, sides));
+				set_cut(caster_ptr,0);
+				set_poisoned(caster_ptr, 0);
 			}
 		}
 		break;
@@ -301,7 +301,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!(summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET))))
+				if (!(summon_specific(-1, caster_ptr->y, caster_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET))))
 				{
 					msg_print(_("動物は現れなかった。", "No animals arrive."));
 				}
@@ -344,7 +344,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_shield(p_ptr, randint1(sides) + base, FALSE);
+				set_shield(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -361,11 +361,11 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_acid(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_elec(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_cold(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_pois(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_acid(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_elec(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_fire(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_cold(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_pois(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -441,7 +441,7 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				earthquake(p_ptr->y, p_ptr->x, rad, 0);
+				earthquake(caster_ptr->y, caster_ptr->x, rad, 0);
 			}
 		}
 		break;
@@ -522,14 +522,14 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				fire_ball(GF_LITE, 0, dam, rad);
-				chg_virtue(p_ptr, V_KNOWLEDGE, 1);
-				chg_virtue(p_ptr, V_ENLIGHTEN, 1);
+				chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
+				chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
 				wiz_lite(FALSE);
 
-				if ((PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE)) && !p_ptr->resist_lite)
+				if ((PRACE_IS_(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !caster_ptr->resist_lite)
 				{
 					msg_print(_("日光があなたの肉体を焦がした！", "The sunlight scorches your flesh!"));
-					take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"), -1);
+					take_hit(caster_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"), -1);
 				}
 			}
 		}
@@ -563,8 +563,8 @@ concptr do_nature_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				dispel_monsters(d_dam);
-				earthquake(p_ptr->y, p_ptr->x, q_rad, 0);
-				project(0, b_rad, p_ptr->y, p_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
+				earthquake(caster_ptr->y, caster_ptr->x, q_rad, 0);
+				project(0, b_rad, caster_ptr->y, caster_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}
 		break;

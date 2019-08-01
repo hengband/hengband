@@ -20,7 +20,7 @@
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
 */
-concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -28,7 +28,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	switch (spell)
 	{
@@ -78,7 +78,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_blessed(p_ptr, randint1(base) + base, FALSE);
+				set_blessed(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -95,7 +95,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_fire(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -145,7 +145,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!summon_specific(-1, p_ptr->y, p_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
+				if (!summon_specific(-1, caster_ptr->y, caster_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
 					msg_print(_("古代の死霊は現れなかった。", "No Manes arrive."));
 				}
@@ -164,7 +164,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
-			if (IS_WIZARD_CLASS(p_ptr))
+			if (IS_WIZARD_CLASS(caster_ptr))
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;
@@ -226,7 +226,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_res_nether(p_ptr, randint1(base) + base, FALSE);
+				set_tim_res_nether(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -324,7 +324,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_esp(p_ptr, randint1(sides) + base, FALSE);
+				set_tim_esp(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -343,10 +343,10 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				TIME_EFFECT dur = randint1(base) + base;
 
-				set_oppose_fire(p_ptr, dur, FALSE);
-				set_oppose_cold(p_ptr, dur, FALSE);
-				set_tim_sh_fire(p_ptr, dur, FALSE);
-				set_afraid(p_ptr, 0);
+				set_oppose_fire(caster_ptr, dur, FALSE);
+				set_oppose_cold(caster_ptr, dur, FALSE);
+				set_tim_sh_fire(caster_ptr, dur, FALSE);
+				set_afraid(caster_ptr, 0);
 				break;
 			}
 		}
@@ -402,7 +402,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_mimic(p_ptr, base + randint1(base), MIMIC_DEMON, FALSE);
+				set_mimic(caster_ptr, base + randint1(base), MIMIC_DEMON, FALSE);
 			}
 		}
 		break;
@@ -483,7 +483,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_res_time(p_ptr, randint1(base) + base, FALSE);
+				set_tim_res_time(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -569,7 +569,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball_hide(GF_BLOOD_CURSE, dir, dam, rad);
-				take_hit(p_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);
+				take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);
 			}
 		}
 		break;
@@ -586,7 +586,7 @@ concptr do_daemon_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_mimic(p_ptr, base + randint1(base), MIMIC_DEMON_LORD, FALSE);
+				set_mimic(caster_ptr, base + randint1(base), MIMIC_DEMON_LORD, FALSE);
 			}
 		}
 		break;

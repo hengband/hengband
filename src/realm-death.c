@@ -18,7 +18,7 @@
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
 */
-concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -26,7 +26,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	switch (spell)
 	{
@@ -155,7 +155,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_pois(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_pois(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -207,7 +207,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
-			if (IS_WIZARD_CLASS(p_ptr))
+			if (IS_WIZARD_CLASS(caster_ptr))
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;
@@ -255,7 +255,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				project(0, rad, p_ptr->y, p_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM, -1);
+				project(0, rad, caster_ptr->y, caster_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}
 		break;
@@ -310,10 +310,10 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (hypodynamic_bolt(dir, dam))
 				{
-					chg_virtue(p_ptr, V_SACRIFICE, -1);
-					chg_virtue(p_ptr, V_VITALITY, -1);
+					chg_virtue(caster_ptr, V_SACRIFICE, -1);
+					chg_virtue(caster_ptr, V_VITALITY, -1);
 
-					hp_player(p_ptr, dam);
+					hp_player(caster_ptr, dam);
 
 					/*
 					* Gain nutritional sustenance:
@@ -326,11 +326,11 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 					* ARE Gorged, it won't cure
 					* us
 					*/
-					dam = p_ptr->food + MIN(5000, 100 * dam);
+					dam = caster_ptr->food + MIN(5000, 100 * dam);
 
 					/* Not gorged already */
-					if (p_ptr->food < PY_FOOD_MAX)
-						set_food(p_ptr, dam >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dam);
+					if (caster_ptr->food < PY_FOOD_MAX)
+						set_food(caster_ptr, dam >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dam);
 				}
 			}
 		}
@@ -343,7 +343,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				animate_dead(0, p_ptr->y, p_ptr->x);
+				animate_dead(0, caster_ptr->y, caster_ptr->x);
 			}
 		}
 		break;
@@ -431,7 +431,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				(void)berserk(b_base + randint1(b_base));
-				set_fast(p_ptr, randint1(sp_sides) + sp_base, FALSE);
+				set_fast(caster_ptr, randint1(sp_sides) + sp_base, FALSE);
 			}
 		}
 		break;
@@ -463,13 +463,13 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (!get_aim_dir(&dir)) return NULL;
 
-				chg_virtue(p_ptr, V_SACRIFICE, -1);
-				chg_virtue(p_ptr, V_VITALITY, -1);
+				chg_virtue(caster_ptr, V_SACRIFICE, -1);
+				chg_virtue(caster_ptr, V_VITALITY, -1);
 
 				for (i = 0; i < 3; i++)
 				{
 					if (hypodynamic_bolt(dir, dam))
-						hp_player(p_ptr, dam);
+						hp_player(caster_ptr, dam);
 				}
 			}
 		}
@@ -527,7 +527,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	case 25:
 		if (name) return _("死者召喚", "Raise the Dead");
 		if (desc) return _("1体のアンデッドを召喚する。", "Summons an undead monster.");
-		if (cast) cast_summon_undead(p_ptr, (plev * 3) / 2);
+		if (cast) cast_summon_undead(caster_ptr, (plev * 3) / 2);
 		break;
 
 	case 26:
@@ -562,7 +562,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_mimic(p_ptr, base + randint1(base), MIMIC_VAMPIRE, FALSE);
+				set_mimic(caster_ptr, base + randint1(base), MIMIC_VAMPIRE, FALSE);
 			}
 		}
 		break;
@@ -574,7 +574,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				restore_level(p_ptr);
+				restore_level(caster_ptr);
 			}
 		}
 		break;
@@ -612,7 +612,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				fire_ball(GF_HELL_FIRE, dir, dam, rad);
-				take_hit(p_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"), -1);
+				take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"), -1);
 			}
 		}
 		break;
@@ -629,7 +629,7 @@ concptr do_death_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_wraith_form(p_ptr, randint1(base) + base, FALSE);
+				set_wraith_form(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

@@ -1,1 +1,1 @@
-﻿extern concptr do_crusade_spell(SPELL_IDX spell, BIT_FLAGS mode);
+﻿extern concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);

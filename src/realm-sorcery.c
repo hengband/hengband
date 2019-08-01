@@ -17,7 +17,7 @@
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
 */
-concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -25,7 +25,7 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	switch (spell)
 	{
@@ -257,7 +257,7 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_fast(p_ptr, randint1(sides) + base, FALSE);
+				set_fast(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -339,7 +339,7 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_esp(p_ptr, randint1(sides) + base, FALSE);
+				set_tim_esp(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -395,7 +395,7 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!recall_player(p_ptr, randint0(21) + 15)) return NULL;
+				if (!recall_player(caster_ptr, randint0(21) + 15)) return NULL;
 			}
 		}
 		break;
@@ -480,14 +480,14 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				chg_virtue(p_ptr, V_KNOWLEDGE, 1);
-				chg_virtue(p_ptr, V_ENLIGHTEN, 1);
+				chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
+				chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
 
 				wiz_lite(FALSE);
 
-				if (!p_ptr->telepathy)
+				if (!caster_ptr->telepathy)
 				{
-					set_tim_esp(p_ptr, randint1(sides) + base, FALSE);
+					set_tim_esp(caster_ptr, randint1(sides) + base, FALSE);
 				}
 			}
 		}
@@ -549,7 +549,7 @@ concptr do_sorcery_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_invuln(p_ptr, randint1(base) + base, FALSE);
+				set_invuln(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;

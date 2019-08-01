@@ -19,14 +19,14 @@
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
 */
-concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
 	bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	switch (spell)
 	{
@@ -41,7 +41,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_infra(p_ptr, base + randint1(base), FALSE);
+				set_tim_infra(caster_ptr, base + randint1(base), FALSE);
 			}
 		}
 		break;
@@ -57,7 +57,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_regen(p_ptr, base + randint1(base), FALSE);
+				set_tim_regen(caster_ptr, base + randint1(base), FALSE);
 			}
 		}
 		break;
@@ -69,7 +69,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				set_food(p_ptr, PY_FOOD_MAX - 1);
+				set_food(caster_ptr, PY_FOOD_MAX - 1);
 			}
 		}
 		break;
@@ -86,7 +86,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_cold(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_cold(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -103,7 +103,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_fire(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -136,7 +136,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_elec(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_elec(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -153,7 +153,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_acid(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_acid(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -169,7 +169,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_invis(p_ptr, randint1(base) + base, FALSE);
+				set_tim_invis(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -195,7 +195,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_pois(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_pois(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -241,7 +241,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_protevil(p_ptr, randint1(sides) + base, FALSE);
+				set_protevil(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -270,7 +270,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!choose_ele_attack(p_ptr)) return NULL;
+				if (!choose_ele_attack(caster_ptr)) return NULL;
 			}
 		}
 		break;
@@ -287,7 +287,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_tim_esp(p_ptr, randint1(sides) + base, FALSE);
+				set_tim_esp(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -304,7 +304,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_shield(p_ptr, randint1(sides) + base, FALSE);
+				set_shield(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -321,11 +321,11 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_oppose_acid(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_elec(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_fire(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_cold(p_ptr, randint1(base) + base, FALSE);
-				set_oppose_pois(p_ptr, randint1(base) + base, FALSE);
+				set_oppose_acid(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_elec(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_fire(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_cold(caster_ptr, randint1(base) + base, FALSE);
+				set_oppose_pois(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -342,7 +342,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_fast(p_ptr, randint1(sides) + base, FALSE);
+				set_fast(caster_ptr, randint1(sides) + base, FALSE);
 			}
 		}
 		break;
@@ -358,7 +358,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_kabenuke(p_ptr, randint1(base) + base, FALSE);
+				set_kabenuke(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -382,7 +382,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_GOLEM, PM_FORCE_PET))
+				if (summon_specific(-1, caster_ptr->y, caster_ptr->x, plev, SUMMON_GOLEM, PM_FORCE_PET))
 				{
 					msg_print(_("ゴーレムを作った。", "You make a golem."));
 				}
@@ -406,7 +406,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				set_magicdef(p_ptr, randint1(base) + base, FALSE);
+				set_magicdef(caster_ptr, randint1(base) + base, FALSE);
 			}
 		}
 		break;
@@ -484,7 +484,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("人間トランプ", "Living Trump");
 		if (desc) return _("ランダムにテレポートする突然変異か、自分の意思でテレポートする突然変異が身につく。",
 			"Gives mutation which makes you teleport randomly or makes you able to teleport at will.");
-		if (cast) become_living_trump(p_ptr);
+		if (cast) become_living_trump(caster_ptr);
 		break;
 
 	case 31:
@@ -499,7 +499,7 @@ concptr do_craft_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!choose_ele_immune(p_ptr, base + randint1(base))) return NULL;
+				if (!choose_ele_immune(caster_ptr, base + randint1(base))) return NULL;
 			}
 		}
 		break;

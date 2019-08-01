@@ -36,4 +36,4 @@
 #define music_singing(p_ptr, X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
 #define music_singing_any(CREATURE_PTR) (((CREATURE_PTR)->pclass == CLASS_BARD) && (CREATURE_PTR)->magic_num1[0])
 
-extern concptr do_music_spell(SPELL_IDX spell, BIT_FLAGS mode);
+extern concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);

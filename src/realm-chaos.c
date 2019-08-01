@@ -18,7 +18,7 @@
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
 */
-concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
@@ -26,7 +26,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 	bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
 
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	switch (spell)
 	{
@@ -90,11 +90,11 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!(p_ptr->special_attack & ATTACK_CONFUSE))
+				if (!(caster_ptr->special_attack & ATTACK_CONFUSE))
 				{
 					msg_print(_("あなたの手は光り始めた。", "Your hands start glowing."));
-					p_ptr->special_attack |= ATTACK_CONFUSE;
-					p_ptr->redraw |= (PR_STATUS);
+					caster_ptr->special_attack |= ATTACK_CONFUSE;
+					caster_ptr->redraw |= (PR_STATUS);
 				}
 			}
 		}
@@ -110,7 +110,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			POSITION rad = (plev < 30) ? 2 : 3;
 			int base;
 
-			if (IS_WIZARD_CLASS(p_ptr))
+			if (IS_WIZARD_CLASS(caster_ptr))
 				base = plev + plev / 2;
 			else
 				base = plev + plev / 4;
@@ -236,7 +236,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				msg_print(_("ドーン！部屋が揺れた！", "BOOM! Shake the room!"));
-				project(0, rad, p_ptr->y, p_ptr->x, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
+				project(0, rad, caster_ptr->y, caster_ptr->x, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}
 		break;
@@ -307,7 +307,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				destroy_area(p_ptr->y, p_ptr->x, base + randint1(sides), FALSE);
+				destroy_area(caster_ptr->y, caster_ptr->x, base + randint1(sides), FALSE);
 			}
 		}
 		break;
@@ -536,7 +536,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				if (!get_check(_("変身します。よろしいですか？", "You will polymorph yourself. Are you sure? "))) return NULL;
-				do_poly_self(p_ptr);
+				do_poly_self(caster_ptr);
 			}
 		}
 		break;
@@ -564,7 +564,7 @@ concptr do_chaos_spell(SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("非常に強力なカオスの球を放つ。", "Fires an extremely powerful ball of chaos.");
 
 		{
-			HIT_POINT dam = p_ptr->chp;
+			HIT_POINT dam = caster_ptr->chp;
 			POSITION rad = 2;
 
 			if (info) return info_damage(0, 0, dam);
