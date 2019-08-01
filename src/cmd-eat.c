@@ -286,29 +286,19 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 		}
 
-#ifdef JP
 		case SV_FOOD_PINT_OF_ALE:
 		{
-			msg_print("のどごし爽やかだ。");
+			msg_print(_("のどごし爽やかだ。", "That tastes good."));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_FOOD_PINT_OF_WINE:
 		{
-			msg_print("That tastes good.");
+			msg_print(_("のどごし爽やかだ。", "That tastes good."));
 			ident = TRUE;
 			break;
 		}
-#else
-		case SV_FOOD_PINT_OF_ALE:
-		case SV_FOOD_PINT_OF_WINE:
-		{
-			msg_print("That tastes good.");
-			ident = TRUE;
-			break;
-		}
-#endif
 
 		}
 	}
