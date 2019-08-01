@@ -61,17 +61,7 @@ void exe_quaff_potion(INVENTORY_IDX item)
 		if (!hex_spelling(HEX_INHAIL)) stop_hex_spell_all();
 	}
 
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &p_ptr->inventory_list[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
-	}
+	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
 	q_ptr = &forge;
 	object_copy(q_ptr, o_ptr);
 

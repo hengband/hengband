@@ -38,18 +38,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
 	if (music_singing_any(creature_ptr)) stop_singing(creature_ptr);
 	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &creature_ptr->inventory_list[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
-	}
+	o_ptr = REF_ITEM(creature_ptr, current_floor_ptr, item);
 
 	sound(SOUND_EAT);
 

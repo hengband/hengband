@@ -1,7 +1,5 @@
 ﻿/* cmd3-item.h */
 
-#define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID > 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
-
 extern void do_cmd_inven(void);
 extern void do_cmd_equip(void);
 extern void do_cmd_wield(void);

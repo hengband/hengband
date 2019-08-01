@@ -1629,14 +1629,8 @@ object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS opti
 	OBJECT_IDX item;
 	if (!get_item(&item, q, s, option, tval)) return NULL;
 	if (idx) *idx = item;
-
 	if (item == INVEN_FORCE) return NULL;
-
-	/* Get the item (in the pack) */
-	else if (item >= 0) return &p_ptr->inventory_list[item];
-
-	/* Get the item (on the floor) */
-	else return &current_floor_ptr->o_list[0 - item];
+	return REF_ITEM(p_ptr, current_floor_ptr, item);
 }
 
 

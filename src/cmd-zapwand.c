@@ -334,17 +334,7 @@ void exe_aim_wand(INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool old_target_pet = target_pet;
 
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &p_ptr->inventory_list[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
-	}
+	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
 
 	/* Mega-Hack -- refuse to aim a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))

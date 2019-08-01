@@ -1639,11 +1639,7 @@ static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 {
 	object_type *o_ptr;
 
-	/* Get the item (in the pack) */
-	if (item >= 0) o_ptr = &p_ptr->inventory_list[item];
-
-	/* Get the item (on the floor) */
-	else o_ptr = &current_floor_ptr->o_list[0 - item];
+	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
 
 	if (o_ptr->k_idx && (o_ptr->marked & OM_AUTODESTROY))
 	{
@@ -1706,11 +1702,7 @@ void autopick_alter_item(INVENTORY_IDX item, bool destroy)
 	object_type *o_ptr;
 	int idx;
 
-	/* Get the item (in the pack) */
-	if (item >= 0) o_ptr = &p_ptr->inventory_list[item];
-
-	/* Get the item (on the floor) */
-	else o_ptr = &current_floor_ptr->o_list[0 - item];
+	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
 
 	/* Get the index in the auto-pick/destroy list */
 	idx = is_autopick(o_ptr);

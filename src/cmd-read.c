@@ -51,18 +51,7 @@ void exe_read(INVENTORY_IDX item, bool known)
 	int         k, used_up, ident, lev;
 	object_type *o_ptr;
 
-
-	/* Get the item (in the pack) */
-	if (item >= 0)
-	{
-		o_ptr = &p_ptr->inventory_list[item];
-	}
-
-	/* Get the item (on the floor) */
-	else
-	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
-	}
+	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
 
 	take_turn(p_ptr, 100);
 	if (cmd_limit_time_walk(p_ptr)) return;
