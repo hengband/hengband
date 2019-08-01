@@ -1882,7 +1882,6 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 					{
 						drain_heal = damroll(2, drain_result / 6);
 
-						/* Hex */
 						if (hex_spelling(HEX_VAMP_BLADE)) drain_heal *= 2;
 
 						if (cheat_xtra)

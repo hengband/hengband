@@ -2,7 +2,6 @@
  * @file realm-hex.h
  */
 
- /* Hex */
 #define hex_spelling_any(CREATURE_PTR) \
 	(((CREATURE_PTR)->realm1 == REALM_HEX) && ((CREATURE_PTR)->magic_num1[0]))
 #define hex_spelling(X) \

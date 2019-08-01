@@ -398,7 +398,6 @@ static struct {
 	{TERM_YELLOW, "隠", "超隠密"},
 	{TERM_WHITE, "帰", "帰還"},
 	{TERM_WHITE, "現", "現実変容"},
-	/* Hex */
 	{TERM_WHITE, "オ", "氷オーラ"},
 	{TERM_BLUE, "オ", "電オーラ"},
 	{TERM_L_DARK, "オ", "影オーラ"},
@@ -470,7 +469,6 @@ static struct {
 	{TERM_YELLOW, "Stlt", "Stealth"},
 	{TERM_WHITE, "Rc", "Recall"},
 	{TERM_WHITE, "Al", "Alter"},
-	/* Hex */
 	{TERM_WHITE, "SCo", "SCold"},
 	{TERM_BLUE, "SEl", "SElec"},
 	{TERM_L_DARK, "SSh", "SShadow"},

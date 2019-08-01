@@ -1506,7 +1506,6 @@ void process_monster(MONSTER_IDX m_idx)
 			}
 		}
 
-		/* Hex */
 		if (multiply_barrier(m_idx)) k = 8;
 
 		/* Hack -- multiply slower in crowded areas */

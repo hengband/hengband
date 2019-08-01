@@ -2166,7 +2166,6 @@ void do_cmd_rest(player_type *creature_ptr)
 		stop_singing(creature_ptr);
 	}
 
-	/* Hex */
 	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
 
 	/* Prompt for time if needed */

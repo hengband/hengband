@@ -48,7 +48,7 @@
  */
 void exe_read(INVENTORY_IDX item, bool known)
 {
-	int         k, used_up, ident, lev;
+	int k, used_up, ident, lev;
 	object_type *o_ptr;
 
 	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
@@ -63,8 +63,6 @@ void exe_read(INVENTORY_IDX item, bool known)
 	}
 
 	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
-
-	/* Hex */
 	if (hex_spelling_any(p_ptr) && ((p_ptr->lev < 35) || hex_spell_fully())) stop_hex_spell_all();
 
 	/* Not identified yet */

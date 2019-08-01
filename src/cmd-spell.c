@@ -1070,8 +1070,6 @@ void do_cmd_cast(void)
 	}
 
 	if (cmd_limit_confused(p_ptr)) return;
-
-	/* Hex */
 	if (p_ptr->realm1 == REALM_HEX)
 	{
 		if (hex_spell_fully())
@@ -1141,10 +1139,7 @@ void do_cmd_cast(void)
 	}
 #endif
 
-
 	use_realm = tval2realm(o_ptr->tval);
-
-	/* Hex */
 	if (use_realm == REALM_HEX)
 	{
 		if (hex_spelling(spell))
