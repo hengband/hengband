@@ -168,7 +168,6 @@ void do_cmd_pet_dismiss(void)
 		GAME_TEXT friend_name[MAX_NLEN];
 		bool kakunin;
 
-		/* Access the monster */
 		pet_ctr = who[i];
 		m_ptr = &current_floor_ptr->m_list[pet_ctr];
 
@@ -902,7 +901,6 @@ void do_cmd_pet(void)
 			p_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
 			for (pet_ctr = current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
-				/* Access the monster */
 				m_ptr = &current_floor_ptr->m_list[pet_ctr];
 
 				if (is_pet(m_ptr))
@@ -976,8 +974,9 @@ void do_cmd_pet(void)
 */
 bool rakuba(HIT_POINT dam, bool force)
 {
-	int i, y, x, oy, ox;
-	int sn = 0, sy = 0, sx = 0;
+	DIRECTION i;
+	POSITION y, x, oy, ox, sy = 0, sx = 0;
+	int sn = 0;
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];

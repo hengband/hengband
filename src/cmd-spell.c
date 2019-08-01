@@ -800,11 +800,8 @@ void do_cmd_study(void)
 
 	/* Spells of realm2 will have an increment of +32 */
 	SPELL_IDX spell = -1;
-
 	concptr p = spell_category_name(mp_ptr->spell_book);
-
 	object_type *o_ptr;
-
 	concptr q, s;
 
 	if (!p_ptr->realm1)
@@ -813,12 +810,7 @@ void do_cmd_study(void)
 		return;
 	}
 
-	if (p_ptr->blind || no_lite())
-	{
-		msg_print(_("目が見えない！", "You cannot see!"));
-		return;
-	}
-
+	if (cmd_limit_blind(p_ptr)) return;
 	if (cmd_limit_confused(p_ptr)) return;
 
 	if (!(p_ptr->new_spells))
@@ -1066,7 +1058,6 @@ void do_cmd_cast(void)
 		return;
 	}
 
-	/* Require lite */
 	if (p_ptr->blind || no_lite())
 	{
 		if (p_ptr->pclass == CLASS_FORCETRAINER) confirm_use_force(FALSE);
@@ -1303,10 +1294,7 @@ void do_cmd_cast(void)
 				p_ptr->spell_worked2 |= (1L << spell);
 			}
 
-			/* Gain experience */
 			gain_exp(p_ptr, e * s_ptr->slevel);
-
-			/* Redraw object recall */
 			p_ptr->window |= (PW_OBJECT);
 
 			switch (realm)

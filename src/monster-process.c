@@ -2522,7 +2522,6 @@ void process_monsters(void)
 	/* Process the monsters (backwards) */
 	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		/* Access the monster */
 		m_ptr = &current_floor_ptr->m_list[i];
 		r_ptr = &r_info[m_ptr->r_idx];
 

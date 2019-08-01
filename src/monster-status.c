@@ -175,7 +175,6 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 	/* Finally multiply base experience point of the monster */
 	s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
 
-	/* Gain experience */
 	gain_exp_64(p_ptr, new_exp, new_exp_frac);
 }
 
@@ -241,7 +240,6 @@ void mproc_init(void)
 	/* Process the monsters (backwards) */
 	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		/* Access the monster */
 		m_ptr = &current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
@@ -765,7 +763,6 @@ void process_monsters_mtimed(int mtimed_idx)
 	/* Process the monsters (backwards) */
 	for (i = current_floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--)
 	{
-		/* Access the monster */
 		process_monsters_mtimed_aux(cur_mproc_list[i], mtimed_idx);
 	}
 }
