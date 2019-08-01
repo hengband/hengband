@@ -385,12 +385,7 @@ void do_cmd_gain_hissatsu(void)
 		set_action(p_ptr, ACTION_NONE);
 	}
 
-	if (p_ptr->blind || no_lite())
-	{
-		msg_print(_("目が見えない！", "You cannot see!"));
-		return;
-	}
-
+	if (cmd_limit_blind(p_ptr)) return;
 	if (cmd_limit_confused(p_ptr)) return;
 
 	if (!(p_ptr->new_spells))
