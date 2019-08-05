@@ -4110,7 +4110,7 @@ static void process_command(void)
 		/* Interact with macros */
 		case '@':
 		{
-			do_cmd_macros();
+			do_cmd_macros(p_ptr);
 			break;
 		}
 

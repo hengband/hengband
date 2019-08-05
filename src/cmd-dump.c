@@ -1600,16 +1600,12 @@ static errr keymap_dump(concptr fname)
  * Could use some helpful instructions on this page.  
  * </pre>
  */
-void do_cmd_macros(void)
+void do_cmd_macros(player_type *creature_ptr)
 {
 	int i;
-
 	char tmp[1024];
-
 	char buf[1024];
-
 	BIT_FLAGS mode;
-
 
 	/* Roguelike */
 	if (rogue_like_commands)
@@ -1679,7 +1675,7 @@ void do_cmd_macros(void)
 			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Ask for a file */
 			if (!askfor(tmp, 80)) continue;
@@ -1713,7 +1709,7 @@ void do_cmd_macros(void)
 			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Ask for a file */
 			if (!askfor(tmp, 80)) continue;
@@ -1833,7 +1829,7 @@ void do_cmd_macros(void)
 			prt(_("ファイル: ", "File: "), 18, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Ask for a file */
 			if (!askfor(tmp, 80)) continue;
