@@ -2619,20 +2619,16 @@ void do_cmd_visuals(player_type *creature_ptr)
 /*
  * Interact with "colors"
  */
-void do_cmd_colors(void)
+void do_cmd_colors(player_type *creature_ptr)
 {
 	int i;
-
 	char tmp[160];
-
 	char buf[1024];
-
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	screen_save();
-
 
 	/* Interact until done */
 	while (1)
@@ -2667,7 +2663,7 @@ void do_cmd_colors(void)
 			prt(_("ファイル: ", "File: "), 10, 0);
 
 			/* Default file */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Query */
 			if (!askfor(tmp, 70)) continue;
@@ -2696,7 +2692,7 @@ void do_cmd_colors(void)
 			prt(_("ファイル: ", "File: "), 10, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;

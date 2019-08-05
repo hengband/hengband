@@ -5592,7 +5592,7 @@ static void store_process_command(void)
 		case '&':
 		{
 			p_ptr->town_num = old_town_num;
-			do_cmd_colors();
+			do_cmd_colors(p_ptr);
 			p_ptr->town_num = inner_town_num;
 			break;
 		}

@@ -58,7 +58,7 @@ extern void do_cmd_pref(void);
 extern void do_cmd_reload_autopick(void);
 extern void do_cmd_macros(player_type *creature_ptr);
 extern void do_cmd_visuals(player_type *creature_ptr);
-extern void do_cmd_colors(void);
+extern void do_cmd_colors(player_type *creature_ptr);
 extern void do_cmd_note(void);
 extern void do_cmd_version(void);
 extern void do_cmd_feeling(void);

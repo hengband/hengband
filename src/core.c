@@ -4125,7 +4125,7 @@ static void process_command(void)
 		/* Interact with colors */
 		case '&':
 		{
-			do_cmd_colors();
+			do_cmd_colors(p_ptr);
 			do_cmd_redraw(p_ptr);
 			break;
 		}
