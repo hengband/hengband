@@ -867,7 +867,7 @@ static void add_diary_note(player_type *creature_ptr)
  * @brief 最後に取得したアイテムの情報を日記に追加するメインルーチン /
  * @return なし
  */
-static void do_cmd_last_get(void)
+static void do_cmd_last_get(player_type *creaute_ptr)
 {
 	char buf[256];
 	GAME_TURN turn_tmp;
@@ -880,7 +880,7 @@ static void do_cmd_last_get(void)
 	turn_tmp = current_world_ptr->game_turn;
 	current_world_ptr->game_turn = record_turn;
 	sprintf(buf,_("%sを手に入れた。", "descover %s."), record_o_name);
-	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, buf);
+	exe_write_diary(creaute_ptr, NIKKI_BUNSHOU, 0, buf);
 	current_world_ptr->game_turn = turn_tmp;
 }
 
@@ -954,7 +954,7 @@ void do_cmd_nikki(void)
 			add_diary_note(p_ptr);
 			break;
 		case '3':
-			do_cmd_last_get();
+			do_cmd_last_get(p_ptr);
 			break;
 		case '4':
 			do_cmd_erase_nikki();
