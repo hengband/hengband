@@ -3906,7 +3906,6 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
 	/* Build a prompt if needed */
 	if (!prompt)
 	{
-		/* Build a prompt */
 		sprintf(tmp, _("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
 
 		/* Use that prompt */

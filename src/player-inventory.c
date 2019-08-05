@@ -3164,7 +3164,6 @@ void py_pickup_floor(bool pickup)
 
 			object_desc(o_name, o_ptr, 0);
 
-			/* Build a prompt */
 			(void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
 
 			/* Ask the user to confirm */

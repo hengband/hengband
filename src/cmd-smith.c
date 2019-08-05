@@ -885,7 +885,6 @@ static void add_essence(ESSENCE_IDX mode)
 		/* No redraw yet */
 		redraw = FALSE;
 
-		/* Build a prompt */
 		(void)strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの能力を付加しますか？", "(*=List, ESC=exit) Add which ability? "));
 		if (use_menu) screen_save();
 

@@ -666,13 +666,10 @@ void do_cmd_pet(void)
 		if (use_menu)
 		{
 			screen_save();
-
-			/* Build a prompt */
 			strnfmt(out_val, 78, _("(コマンド、ESC=終了) コマンドを選んでください:", "(Command, ESC=exit) Choose command from menu."));
 		}
 		else
 		{
-			/* Build a prompt */
 			strnfmt(out_val, 78,
 				_("(コマンド %c-%c、'*'=一覧、ESC=終了) コマンドを選んでください:", "(Command %c-%c, *=List, ESC=exit) Select a command: "),
 				I2A(0), I2A(num - 1));

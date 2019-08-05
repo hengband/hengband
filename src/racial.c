@@ -1811,7 +1811,6 @@ void do_cmd_racial_power(void)
 	/* No redraw yet */
 	redraw = FALSE;
 
-	/* Build a prompt */
 	(void) strnfmt(out_val, 78, 
 				_("(特殊能力 %c-%c, *'で一覧, ESCで中断) どの特殊能力を使いますか？", "(Powers %c-%c, *=List, ESC=exit) Use which power? "),
 				I2A(0), (num <= 26) ? I2A(num - 1) : '0' + num - 27);

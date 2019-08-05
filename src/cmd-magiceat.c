@@ -200,7 +200,6 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(bool only_browse)
 	/* Nothing chosen yet */
 	flag = FALSE;
 
-	/* Build a prompt */
 	if (only_browse) strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を見ますか？",
 											"(*=List, ESC=exit) Browse which power? "));
 	else strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を使いますか？",
