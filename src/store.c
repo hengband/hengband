@@ -5583,7 +5583,7 @@ static void store_process_command(void)
 		case '%':
 		{
 			p_ptr->town_num = old_town_num;
-			do_cmd_visuals();
+			do_cmd_visuals(p_ptr);
 			p_ptr->town_num = inner_town_num;
 			break;
 		}

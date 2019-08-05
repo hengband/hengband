@@ -1046,12 +1046,12 @@ void do_cmd_player_status(player_type *creature_ptr)
 	while (1)
 	{
 		update_playtime();
-		display_player(p_ptr, mode);
+		display_player(creature_ptr, mode);
 
 		if (mode == 4)
 		{
 			mode = 0;
-			display_player(p_ptr, mode);
+			display_player(creature_ptr, mode);
 		}
 
 		/* Prompt */
@@ -2065,7 +2065,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 /*
  * Interact with "visuals"
  */
-void do_cmd_visuals(void)
+void do_cmd_visuals(player_type *creature_ptr)
 {
 	int i;
 	char tmp[160];
@@ -2103,7 +2103,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Query */
 			if (!askfor(tmp, 70)) continue;
@@ -2128,7 +2128,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
@@ -2177,7 +2177,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
@@ -2242,7 +2242,7 @@ void do_cmd_visuals(void)
 			prt(_("ファイル: ", "File: "), 17, 0);
 
 			/* Default filename */
-			sprintf(tmp, "%s.prf", p_ptr->base_name);
+			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 
 			/* Get a filename */
 			if (!askfor(tmp, 70)) continue;
@@ -2612,7 +2612,7 @@ void do_cmd_visuals(void)
 	}
 	screen_load();
 
-	if (need_redraw) do_cmd_redraw(p_ptr);
+	if (need_redraw) do_cmd_redraw(creature_ptr);
 }
 
 

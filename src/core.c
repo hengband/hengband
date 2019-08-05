@@ -4117,7 +4117,7 @@ static void process_command(void)
 		/* Interact with visuals */
 		case '%':
 		{
-			do_cmd_visuals();
+			do_cmd_visuals(p_ptr);
 			do_cmd_redraw(p_ptr);
 			break;
 		}
