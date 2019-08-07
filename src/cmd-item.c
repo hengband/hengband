@@ -1541,7 +1541,7 @@ void do_cmd_use(void)
 		case TV_SCROLL:
 			if (cmd_limit_blind(p_ptr)) return;
 			if (cmd_limit_confused(p_ptr)) return;
-			exe_read(item, TRUE);
+			exe_read(p_ptr, item, TRUE);
 			break;
 
 		case TV_SHOT:
