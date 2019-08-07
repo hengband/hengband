@@ -24,10 +24,10 @@
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful, bool magic)
+int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful, bool magic)
 {
 	int ident = FALSE;
-	PLAYER_LEVEL lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
+	PLAYER_LEVEL lev = powerful ? creature_ptr->lev * 2 : creature_ptr->lev;
 	POSITION detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
 	POSITION rad = powerful ? 3 : 2;
 
@@ -64,7 +64,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 
 	case SV_ROD_RECALL:
 	{
-		if (!recall_player(p_ptr, randint0(21) + 15)) *use_charge = FALSE;
+		if (!recall_player(creature_ptr, randint0(21) + 15)) *use_charge = FALSE;
 		ident = TRUE;
 		break;
 	}
@@ -99,7 +99,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 	case SV_ROD_CURING:
 	{
 		if (true_healing(0)) ident = TRUE;
-		if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
+		if (set_shero(creature_ptr, 0, TRUE)) ident = TRUE;
 		break;
 	}
 
@@ -111,14 +111,14 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 
 	case SV_ROD_RESTORATION:
 	{
-		if(restore_level(p_ptr)) ident = TRUE;
+		if(restore_level(creature_ptr)) ident = TRUE;
 		if(restore_all_status()) ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_SPEED:
 	{
-		if (set_fast(p_ptr, randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
+		if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
 		break;
 	}
 
@@ -357,7 +357,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 
 	sound(SOUND_ZAP);
 
-	ident = rod_effect(o_ptr->sval, dir, &use_charge, FALSE, FALSE);
+	ident = rod_effect(creature_ptr, o_ptr->sval, dir, &use_charge, FALSE, FALSE);
 
 	/* Increase the timeout by the rod kind's pval. -LM- */
 	if (use_charge) o_ptr->timeout += k_ptr->pval;
