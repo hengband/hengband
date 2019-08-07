@@ -604,26 +604,26 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
  * Eat some food (from the pack or floor)
  * @return なし
  */
-void do_cmd_read_scroll(void)
+void do_cmd_read_scroll(player_type *creature_ptr)
 {
 	object_type *o_ptr;
 	OBJECT_IDX item;
 	concptr q, s;
 
-	if (p_ptr->wild_mode)
+	if (creature_ptr->wild_mode)
 	{
 		return;
 	}
 
-	if (cmd_limit_arena(p_ptr)) return;
+	if (cmd_limit_arena(creature_ptr)) return;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
-	if (cmd_limit_blind(p_ptr)) return;
-	if (cmd_limit_confused(p_ptr)) return;
+	if (cmd_limit_blind(creature_ptr)) return;
+	if (cmd_limit_confused(creature_ptr)) return;
 
 	/* Restrict choices to scrolls */
 	item_tester_hook = item_tester_hook_readable;
@@ -635,5 +635,5 @@ void do_cmd_read_scroll(void)
 	if (!o_ptr) return;
 
 	/* Read the scroll */
-	exe_read(p_ptr, item, object_is_aware(o_ptr));
+	exe_read(creature_ptr, item, object_is_aware(o_ptr));
 }

@@ -4001,7 +4001,7 @@ static void process_command(void)
 		/* Read a scroll */
 		case 'r':
 		{
-			do_cmd_read_scroll();
+			do_cmd_read_scroll(p_ptr);
 			break;
 		}
 
