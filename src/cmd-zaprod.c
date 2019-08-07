@@ -387,21 +387,21 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 * @brief ロッドを使うコマンドのメインルーチン /
 * @return なし
 */
-void do_cmd_zap_rod(void)
+void do_cmd_zap_rod(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	concptr q, s;
 
-	if (p_ptr->wild_mode)
+	if (creature_ptr->wild_mode)
 	{
 		return;
 	}
 
-	if (cmd_limit_arena(p_ptr)) return;
+	if (cmd_limit_arena(creature_ptr)) return;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	q = _("どのロッドを振りますか? ", "Zap which rod? ");
@@ -410,5 +410,5 @@ void do_cmd_zap_rod(void)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD)) return;
 
 	/* Zap the rod */
-	exe_zap_rod(p_ptr, item);
+	exe_zap_rod(creature_ptr, item);
 }

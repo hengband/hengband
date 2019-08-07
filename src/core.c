@@ -3986,7 +3986,7 @@ static void process_command(void)
 			}
 			else
 			{
-				do_cmd_zap_rod();
+				do_cmd_zap_rod(p_ptr);
 			}
 			break;
 		}
