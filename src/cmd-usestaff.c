@@ -27,11 +27,11 @@
 * @param known 判明済ならばTRUE
 * @return 発動により効果内容が確定したならばTRUEを返す
 */
-int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
+int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
 	int k;
 	int ident = FALSE;
-	PLAYER_LEVEL lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
+	PLAYER_LEVEL lev = powerful ? creature_ptr->lev * 2 : creature_ptr->lev;
 	POSITION detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
 
 	/* Analyze the staff */
@@ -39,9 +39,9 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 	{
 		case SV_STAFF_DARKNESS:
 		{
-			if (!(p_ptr->resist_blind) && !(p_ptr->resist_dark))
+			if (!(creature_ptr->resist_blind) && !(creature_ptr->resist_dark))
 			{
-				if (set_blind(p_ptr, p_ptr->blind + 3 + randint1(5))) ident = TRUE;
+				if (set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5))) ident = TRUE;
 			}
 			if (unlite_area(10, (powerful ? 6 : 3))) ident = TRUE;
 			break;
@@ -49,7 +49,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_SLOWNESS:
 		{
-			if (set_slow(p_ptr, p_ptr->slow + randint1(30) + 15, FALSE)) ident = TRUE;
+			if (set_slow(creature_ptr, creature_ptr->slow + randint1(30) + 15, FALSE)) ident = TRUE;
 			break;
 		}
 
@@ -64,7 +64,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 			const int times = randint1(powerful ? 8 : 4);
 			for (k = 0; k < times; k++)
 			{
-				if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -165,7 +165,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 		case SV_STAFF_CURING:
 		{
 			ident = true_healing(0);
-			if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
+			if (set_shero(creature_ptr, 0, TRUE)) ident = TRUE;
 			break;
 		}
 
@@ -177,9 +177,9 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_THE_MAGI:
 		{
-			if (do_res_stat(p_ptr, A_INT)) ident = TRUE;
+			if (do_res_stat(creature_ptr, A_INT)) ident = TRUE;
 			ident |= restore_mana(FALSE);
-			if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
+			if (set_shero(creature_ptr, 0, TRUE)) ident = TRUE;
 			break;
 		}
 
@@ -197,7 +197,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_SPEED:
 		{
-			if (set_fast(p_ptr, randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
+			if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), FALSE)) ident = TRUE;
 			break;
 		}
 
@@ -221,7 +221,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_HOLINESS:
 		{
-			ident = cleansing_nova(p_ptr, magic, powerful);
+			ident = cleansing_nova(creature_ptr, magic, powerful);
 			break;
 		}
 
@@ -233,7 +233,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_EARTHQUAKES:
 		{
-			if (earthquake(p_ptr->y, p_ptr->x, (powerful ? 15 : 10), 0))
+			if (earthquake(creature_ptr->y, creature_ptr->x, (powerful ? 15 : 10), 0))
 				ident = TRUE;
 			else
 				msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
@@ -243,27 +243,27 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
 
 		case SV_STAFF_DESTRUCTION:
 		{
-			ident = destroy_area(p_ptr->y, p_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
+			ident = destroy_area(creature_ptr->y, creature_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
 			break;
 		}
 
 		case SV_STAFF_ANIMATE_DEAD:
 		{
-			ident = animate_dead(0, p_ptr->y, p_ptr->x);
+			ident = animate_dead(0, creature_ptr->y, creature_ptr->x);
 			break;
 		}
 
 		case SV_STAFF_MSTORM:
 		{
-			ident = unleash_mana_storm(p_ptr, powerful);
+			ident = unleash_mana_storm(creature_ptr, powerful);
 			break;
 		}
 
 		case SV_STAFF_NOTHING:
 		{
 			msg_print(_("何も起らなかった。", "Nothing happen."));
-			if (PRACE_IS_(p_ptr, RACE_SKELETON) || PRACE_IS_(p_ptr, RACE_GOLEM) ||
-				PRACE_IS_(p_ptr, RACE_ZOMBIE) || PRACE_IS_(p_ptr, RACE_SPECTRE))
+			if (PRACE_IS_(creature_ptr, RACE_SKELETON) || PRACE_IS_(creature_ptr, RACE_GOLEM) ||
+				PRACE_IS_(creature_ptr, RACE_ZOMBIE) || PRACE_IS_(creature_ptr, RACE_SPECTRE))
 				msg_print(_("もったいない事をしたような気がする。食べ物は大切にしなくては。", "What a waste.  It's your food!"));
 			break;
 		}
@@ -345,7 +345,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
 	sound(SOUND_ZAP);
 
-	ident = staff_effect(o_ptr->sval, &use_charge, FALSE, FALSE, object_is_aware(o_ptr));
+	ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, FALSE, FALSE, object_is_aware(o_ptr));
 
 	if (!(object_is_aware(o_ptr)))
 	{

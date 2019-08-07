@@ -580,7 +580,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		}
 		else
 		{
-			staff_effect(sval, &use_charge, powerful, TRUE, TRUE);
+			staff_effect(p_ptr, sval, &use_charge, powerful, TRUE, TRUE);
 			if (!use_charge) return FALSE;
 		}
 		if (randint1(100) < chance)
