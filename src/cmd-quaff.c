@@ -586,21 +586,21 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
  * Quaff some potion (from the pack or floor)
  * @return なし
  */
-void do_cmd_quaff_potion(void)
+void do_cmd_quaff_potion(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	concptr q, s;
 
-	if (p_ptr->wild_mode)
+	if (creature_ptr->wild_mode)
 	{
 		return;
 	}
 
-	if (cmd_limit_arena(p_ptr)) return;
+	if (cmd_limit_arena(creature_ptr)) return;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Restrict choices to potions */
@@ -612,5 +612,5 @@ void do_cmd_quaff_potion(void)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Quaff the potion */
-	exe_quaff_potion(p_ptr, item);
+	exe_quaff_potion(creature_ptr, item);
 }

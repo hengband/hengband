@@ -3994,7 +3994,7 @@ static void process_command(void)
 		/* Quaff a potion */
 		case 'q':
 		{
-			do_cmd_quaff_potion();
+			do_cmd_quaff_potion(p_ptr);
 			break;
 		}
 

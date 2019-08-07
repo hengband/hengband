@@ -586,7 +586,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			CASTING_HEX_FLAGS(caster_ptr) |= (1L << HEX_INHAIL);
-			do_cmd_quaff_potion();
+			do_cmd_quaff_potion(p_ptr);
 			CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << HEX_INHAIL);
 			add = FALSE;
 		}
