@@ -1535,7 +1535,7 @@ void do_cmd_use(void)
 			break;
 
 		case TV_POTION:
-			exe_quaff_potion(item);
+			exe_quaff_potion(p_ptr, item);
 			break;
 
 		case TV_SCROLL:
