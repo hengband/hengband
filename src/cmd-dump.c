@@ -2908,21 +2908,21 @@ static concptr do_cmd_feeling_text_lucky[11] =
  * Note that "feeling" is set to zero unless some time has passed.
  * Note that this is done when the level is GENERATED, not entered.
  */
-void do_cmd_feeling(void)
+void do_cmd_feeling(player_type *creature_ptr)
 {
-	if (p_ptr->wild_mode) return;
+	if (creature_ptr->wild_mode) return;
 
 	/* No useful feeling in quests */
-	if (p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level))
+	if (creature_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level))
 	{
 		msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
 		return;
 	}
 
 	/* No useful feeling in town */
-	else if (p_ptr->town_num && !current_floor_ptr->dun_level)
+	else if (creature_ptr->town_num && !current_floor_ptr->dun_level)
 	{
-		if (!strcmp(town_info[p_ptr->town_num].name, _("荒野", "wilderness")))
+		if (!strcmp(town_info[creature_ptr->town_num].name, _("荒野", "wilderness")))
 		{
 			msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
 			return;
@@ -2942,13 +2942,13 @@ void do_cmd_feeling(void)
 	}
 
 	/* Display the feeling */
-	if (p_ptr->muta3 & MUT3_GOOD_LUCK)
-		msg_print(do_cmd_feeling_text_lucky[p_ptr->feeling]);
-	else if (p_ptr->pseikaku == SEIKAKU_COMBAT ||
-		 p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON)
-		msg_print(do_cmd_feeling_text_combat[p_ptr->feeling]);
+	if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
+		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
+	else if (creature_ptr->pseikaku == SEIKAKU_COMBAT ||
+		 creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON)
+		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
 	else
-		msg_print(do_cmd_feeling_text[p_ptr->feeling]);
+		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);
 }
 
 

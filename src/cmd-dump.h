@@ -61,7 +61,7 @@ extern void do_cmd_visuals(player_type *creature_ptr);
 extern void do_cmd_colors(player_type *creature_ptr);
 extern void do_cmd_note(void);
 extern void do_cmd_version(void);
-extern void do_cmd_feeling(void);
+extern void do_cmd_feeling(player_type *creature_ptr);
 extern void do_cmd_load_screen(void);
 extern void do_cmd_save_screen_html_aux(char *filename, int message);
 extern void do_cmd_save_screen(void);

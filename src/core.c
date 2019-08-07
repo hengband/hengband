@@ -4158,7 +4158,7 @@ static void process_command(void)
 		/* Repeat level feeling */
 		case KTRL('F'):
 		{
-			do_cmd_feeling();
+			do_cmd_feeling(p_ptr);
 			break;
 		}
 
@@ -4992,7 +4992,7 @@ static void dungeon(bool load_game)
 
 	if (quest_num && (is_fixed_quest_idx(quest_num) &&
 	    !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
-	    !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling();
+	    !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling(p_ptr);
 
 	if (p_ptr->phase_out)
 	{

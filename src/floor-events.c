@@ -314,7 +314,7 @@ void update_dungeon_feeling(void)
 	p_ptr->feeling = new_feeling;
 
 	/* Announce feeling */
-	do_cmd_feeling();
+	do_cmd_feeling(p_ptr);
 
 	select_floor_music();
 
