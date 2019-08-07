@@ -268,7 +268,7 @@ int rod_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool 
 * pvals are defined for each rod in k_info. -LM-
 * </pre>
 */
-void exe_zap_rod(INVENTORY_IDX item)
+void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 {
 	int ident, chance, lev, fail;
 	DIRECTION dir = 0;
@@ -280,7 +280,7 @@ void exe_zap_rod(INVENTORY_IDX item)
 
 	object_kind *k_ptr;
 
-	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, current_floor_ptr, item);
 
 	/* Mega-Hack -- refuse to zap a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
@@ -299,15 +299,15 @@ void exe_zap_rod(INVENTORY_IDX item)
 	}
 
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	lev = k_info[o_ptr->k_idx].level;
 
 	/* Base chance of success */
-	chance = p_ptr->skill_dev;
+	chance = creature_ptr->skill_dev;
 
 	/* Confusion hurts skill */
-	if (p_ptr->confused) chance = chance / 2;
+	if (creature_ptr->confused) chance = chance / 2;
 
 	fail = lev + 5;
 	if (chance > fail) fail -= (chance - fail) * 2;
@@ -315,9 +315,9 @@ void exe_zap_rod(INVENTORY_IDX item)
 	if (fail < USE_DEVICE) fail = USE_DEVICE;
 	if (chance < USE_DEVICE) chance = USE_DEVICE;
 
-	if (cmd_limit_time_walk(p_ptr)) return;
+	if (cmd_limit_time_walk(creature_ptr)) return;
 
-	if (p_ptr->pclass == CLASS_BERSERKER) success = FALSE;
+	if (creature_ptr->pclass == CLASS_BERSERKER) success = FALSE;
 	else if (chance > fail)
 	{
 		if (randint0(chance * 2) < fail) success = FALSE;
@@ -361,13 +361,13 @@ void exe_zap_rod(INVENTORY_IDX item)
 
 	/* Increase the timeout by the rod kind's pval. -LM- */
 	if (use_charge) o_ptr->timeout += k_ptr->pval;
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))
 	{
-		chg_virtue(p_ptr, V_PATIENCE, -1);
-		chg_virtue(p_ptr, V_CHANCE, 1);
-		chg_virtue(p_ptr, V_KNOWLEDGE, -1);
+		chg_virtue(creature_ptr, V_PATIENCE, -1);
+		chg_virtue(creature_ptr, V_CHANCE, 1);
+		chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
 	}
 
 	/* Tried the object */
@@ -377,10 +377,10 @@ void exe_zap_rod(INVENTORY_IDX item)
 	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
-		gain_exp(p_ptr, (lev + (p_ptr->lev >> 1)) / p_ptr->lev);
+		gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
 	}
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 }
 
 /*!
@@ -410,5 +410,5 @@ void do_cmd_zap_rod(void)
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD)) return;
 
 	/* Zap the rod */
-	exe_zap_rod(item);
+	exe_zap_rod(p_ptr, item);
 }

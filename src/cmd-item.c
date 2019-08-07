@@ -1531,7 +1531,7 @@ void do_cmd_use(void)
 			break;
 
 		case TV_ROD:
-			exe_zap_rod(item);
+			exe_zap_rod(p_ptr, item);
 			break;
 
 		case TV_POTION:
