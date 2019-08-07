@@ -1527,7 +1527,7 @@ void do_cmd_use(void)
 			break;
 
 		case TV_STAFF:
-			exe_use_staff(item);
+			exe_use_staff(p_ptr, item);
 			break;
 
 		case TV_ROD:

@@ -280,7 +280,7 @@ int staff_effect(OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, boo
  * One charge of one staff disappears.
  * Hack -- staffs of identify can be "cancelled".
  */
-void exe_use_staff(INVENTORY_IDX item)
+void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 {
 	int         ident, chance, lev;
 	object_type *o_ptr;
@@ -289,7 +289,7 @@ void exe_use_staff(INVENTORY_IDX item)
 	/* Hack -- let staffs of identify get aborted */
 	bool use_charge = TRUE;
 
-	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, current_floor_ptr, item);
 
 	/* Mega-Hack -- refuse to use a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
@@ -299,16 +299,16 @@ void exe_use_staff(INVENTORY_IDX item)
 	}
 
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	lev = k_info[o_ptr->k_idx].level;
 	if (lev > 50) lev = 50 + (lev - 50) / 2;
 
 	/* Base chance of success */
-	chance = p_ptr->skill_dev;
+	chance = creature_ptr->skill_dev;
 
 	/* Confusion hurts skill */
-	if (p_ptr->confused) chance = chance / 2;
+	if (creature_ptr->confused) chance = chance / 2;
 
 	/* Hight level objects are harder */
 	chance = chance - lev;
@@ -319,10 +319,10 @@ void exe_use_staff(INVENTORY_IDX item)
 		chance = USE_DEVICE;
 	}
 
-	if (cmd_limit_time_walk(p_ptr)) return;
+	if (cmd_limit_time_walk(creature_ptr)) return;
 
 	/* Roll for usage */
-	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (p_ptr->pclass == CLASS_BERSERKER))
+	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (creature_ptr->pclass == CLASS_BERSERKER))
 	{
 		if (flush_failure) flush();
 		msg_print(_("杖をうまく使えなかった。", "You failed to use the staff properly."));
@@ -336,8 +336,8 @@ void exe_use_staff(INVENTORY_IDX item)
 		if (flush_failure) flush();
 		msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
 		o_ptr->ident |= (IDENT_EMPTY);
-		p_ptr->update |= (PU_COMBINE | PU_REORDER);
-		p_ptr->window |= (PW_INVEN);
+		creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+		creature_ptr->window |= (PW_INVEN);
 
 		return;
 	}
@@ -349,11 +349,11 @@ void exe_use_staff(INVENTORY_IDX item)
 
 	if (!(object_is_aware(o_ptr)))
 	{
-		chg_virtue(p_ptr, V_PATIENCE, -1);
-		chg_virtue(p_ptr, V_CHANCE, 1);
-		chg_virtue(p_ptr, V_KNOWLEDGE, -1);
+		chg_virtue(creature_ptr, V_PATIENCE, -1);
+		chg_virtue(creature_ptr, V_CHANCE, 1);
+		chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
 	}
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	/* Tried the item */
 	object_tried(o_ptr);
@@ -362,10 +362,10 @@ void exe_use_staff(INVENTORY_IDX item)
 	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
-		gain_exp(p_ptr, (lev + (p_ptr->lev >> 1)) / p_ptr->lev);
+		gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
 	}
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 
 	/* Hack -- some uses are "free" */
@@ -391,7 +391,7 @@ void exe_use_staff(INVENTORY_IDX item)
 
 		/* Unstack the used item */
 		o_ptr->number--;
-		p_ptr->total_weight -= q_ptr->weight;
+		creature_ptr->total_weight -= q_ptr->weight;
 		item = inven_carry(q_ptr);
 
 		msg_print(_("杖をまとめなおした。", "You unstack your staff."));
@@ -435,5 +435,5 @@ void do_cmd_use_staff(void)
 	s = _("使える杖がない。", "You have no staff to use.");
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_STAFF)) return;
 
-	exe_use_staff(item);
+	exe_use_staff(p_ptr, item);
 }
