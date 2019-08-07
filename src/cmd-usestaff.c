@@ -414,26 +414,26 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 * @brief 杖を使うコマンドのメインルーチン /
 * @return なし
 */
-void do_cmd_use_staff(void)
+void do_cmd_use_staff(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	concptr q, s;
 
-	if (p_ptr->wild_mode)
+	if (creature_ptr->wild_mode)
 	{
 		return;
 	}
 
-	if (cmd_limit_arena(p_ptr)) return;
+	if (cmd_limit_arena(creature_ptr)) return;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	q = _("どの杖を使いますか? ", "Use which staff? ");
 	s = _("使える杖がない。", "You have no staff to use.");
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_STAFF)) return;
 
-	exe_use_staff(p_ptr, item);
+	exe_use_staff(creature_ptr, item);
 }

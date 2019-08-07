@@ -4011,7 +4011,7 @@ static void process_command(void)
 			if (use_command && !rogue_like_commands)
 				do_cmd_use();
 			else
-				do_cmd_use_staff();
+				do_cmd_use_staff(p_ptr);
 			break;
 		}
 
