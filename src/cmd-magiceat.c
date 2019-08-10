@@ -590,5 +590,5 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	if (tval == TV_ROD) p_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
 	else p_ptr->magic_num1[item] -= EATER_CHARGE;
 
-        return TRUE;
+	return TRUE;
 }

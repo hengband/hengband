@@ -326,7 +326,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 * as the basic "ball" rods.
 * </pre>
 */
-void exe_aim_wand(INVENTORY_IDX item)
+void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 {
 	DEPTH lev;
 	int ident, chance;
@@ -334,7 +334,7 @@ void exe_aim_wand(INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool old_target_pet = target_pet;
 
-	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, current_floor_ptr, item);
 
 	/* Mega-Hack -- refuse to aim a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
@@ -355,17 +355,17 @@ void exe_aim_wand(INVENTORY_IDX item)
 	}
 	target_pet = old_target_pet;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Get the level */
 	lev = k_info[o_ptr->k_idx].level;
 	if (lev > 50) lev = 50 + (lev - 50) / 2;
 
 	/* Base chance of success */
-	chance = p_ptr->skill_dev;
+	chance = creature_ptr->skill_dev;
 
 	/* Confusion hurts skill */
-	if (p_ptr->confused) chance = chance / 2;
+	if (creature_ptr->confused) chance = chance / 2;
 
 	/* Hight level objects are harder */
 	chance = chance - lev;
@@ -376,10 +376,10 @@ void exe_aim_wand(INVENTORY_IDX item)
 		chance = USE_DEVICE;
 	}
 
-	if (cmd_limit_time_walk(p_ptr)) return;
+	if (cmd_limit_time_walk(creature_ptr)) return;
 
 	/* Roll for usage */
-	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (p_ptr->pclass == CLASS_BERSERKER))
+	if ((chance < USE_DEVICE) || (randint1(chance) < USE_DEVICE) || (creature_ptr->pclass == CLASS_BERSERKER))
 	{
 		if (flush_failure) flush();
 		msg_print(_("魔法棒をうまく使えなかった。", "You failed to use the wand properly."));
@@ -393,22 +393,22 @@ void exe_aim_wand(INVENTORY_IDX item)
 		if (flush_failure) flush();
 		msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
 		o_ptr->ident |= (IDENT_EMPTY);
-		p_ptr->update |= (PU_COMBINE | PU_REORDER);
-		p_ptr->window |= (PW_INVEN);
+		creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+		creature_ptr->window |= (PW_INVEN);
 
 		return;
 	}
 
 	sound(SOUND_ZAP);
 
-	ident = wand_effect(p_ptr, o_ptr->sval, dir, FALSE, FALSE);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
+	ident = wand_effect(creature_ptr, o_ptr->sval, dir, FALSE, FALSE);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))
 	{
-		chg_virtue(p_ptr, V_PATIENCE, -1);
-		chg_virtue(p_ptr, V_CHANCE, 1);
-		chg_virtue(p_ptr, V_KNOWLEDGE, -1);
+		chg_virtue(creature_ptr, V_PATIENCE, -1);
+		chg_virtue(creature_ptr, V_CHANCE, 1);
+		chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
 	}
 
 	/* Mark it as tried */
@@ -418,10 +418,10 @@ void exe_aim_wand(INVENTORY_IDX item)
 	if (ident && !object_is_aware(o_ptr))
 	{
 		object_aware(o_ptr);
-		gain_exp(p_ptr, (lev + (p_ptr->lev >> 1)) / p_ptr->lev);
+		gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
 	}
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 
 	/* Use a single charge */
@@ -460,5 +460,5 @@ void do_cmd_aim_wand(void)
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
 
-	exe_aim_wand(item);
+	exe_aim_wand(p_ptr, item);
 }

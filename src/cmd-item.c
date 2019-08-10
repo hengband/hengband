@@ -1523,7 +1523,7 @@ void do_cmd_use(void)
 			break;
 
 		case TV_WAND:
-			exe_aim_wand(item);
+			exe_aim_wand(p_ptr, item);
 			break;
 
 		case TV_STAFF:
