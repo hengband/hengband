@@ -576,7 +576,7 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		else if (tval == TV_WAND)
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			wand_effect(sval, dir, powerful, TRUE);
+			wand_effect(p_ptr, sval, dir, powerful, TRUE);
 		}
 		else
 		{

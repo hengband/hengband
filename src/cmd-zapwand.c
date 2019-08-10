@@ -22,33 +22,33 @@
 * @param magic 魔道具術上の処理ならばTRUE
 * @return 発動により効果内容が確定したならばTRUEを返す
 */
-bool wand_effect(OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
+bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
 {
 	bool ident = FALSE;
-	PLAYER_LEVEL lev = powerful ? p_ptr->lev * 2 : p_ptr->lev;
+	PLAYER_LEVEL lev = powerful ? creature_ptr->lev * 2 : creature_ptr->lev;
 	POSITION rad = powerful ? 3 : 2;
 
 	/* XXX Hack -- Wand of wonder can do anything before it */
 	if (sval == SV_WAND_WONDER)
 	{
-		int vir = virtue_number(p_ptr, V_CHANCE);
+		int vir = virtue_number(creature_ptr, V_CHANCE);
 		sval = (OBJECT_SUBTYPE_VALUE)randint0(SV_WAND_WONDER);
 
 		if (vir)
 		{
-			if (p_ptr->virtues[vir - 1] > 0)
+			if (creature_ptr->virtues[vir - 1] > 0)
 			{
-				while (randint1(300) < p_ptr->virtues[vir - 1]) sval++;
+				while (randint1(300) < creature_ptr->virtues[vir - 1]) sval++;
 				if (sval > SV_WAND_COLD_BALL) sval = randint0(4) + SV_WAND_ACID_BALL;
 			}
 			else
 			{
-				while (randint1(300) < (0 - p_ptr->virtues[vir - 1])) sval--;
+				while (randint1(300) < (0 - creature_ptr->virtues[vir - 1])) sval--;
 				if (sval < SV_WAND_HEAL_MONSTER) sval = randint0(3) + SV_WAND_HEAL_MONSTER;
 			}
 		}
 		if (sval < SV_WAND_TELEPORT_AWAY)
-			chg_virtue(p_ptr, V_CHANCE, 1);
+			chg_virtue(creature_ptr, V_CHANCE, 1);
 	}
 
 	/* Analyze the wand */
@@ -401,7 +401,7 @@ void exe_aim_wand(INVENTORY_IDX item)
 
 	sound(SOUND_ZAP);
 
-	ident = wand_effect(o_ptr->sval, dir, FALSE, FALSE);
+	ident = wand_effect(p_ptr, o_ptr->sval, dir, FALSE, FALSE);
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	if (!(object_is_aware(o_ptr)))
