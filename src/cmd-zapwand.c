@@ -444,21 +444,21 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 * @brief 魔法棒を使うコマンドのメインルーチン /
 * @return なし
 */
-void do_cmd_aim_wand(void)
+void do_cmd_aim_wand(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	concptr q, s;
 
-	if (p_ptr->wild_mode) return;
-	if (cmd_limit_arena(p_ptr)) return;
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->wild_mode) return;
+	if (cmd_limit_arena(creature_ptr)) return;
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
 	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
 
-	exe_aim_wand(p_ptr, item);
+	exe_aim_wand(creature_ptr, item);
 }

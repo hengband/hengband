@@ -3973,7 +3973,7 @@ static void process_command(void)
 		/* Aim a wand */
 		case 'a':
 		{
-			do_cmd_aim_wand();
+			do_cmd_aim_wand(p_ptr);
 			break;
 		}
 
