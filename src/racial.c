@@ -42,20 +42,20 @@
  * @brief 修行僧の構え設定処理
  * @return 構えを変化させたらTRUE、構え不能かキャンセルしたらFALSEを返す。
  */
-static bool choose_kamae(void)
+static bool choose_kamae(player_type *creature_ptr)
 {
 	char choice;
 	int new_kamae = 0;
 	int i;
 	char buf[80];
 
-	if (cmd_limit_confused(p_ptr)) return FALSE;
+	if (cmd_limit_confused(creature_ptr)) return FALSE;
 	screen_save();
 	prt(_(" a) 構えをとく", " a) No form"), 2, 20);
 
 	for (i = 0; i < MAX_KAMAE; i++)
 	{
-		if (p_ptr->lev >= kamae_shurui[i].min_level)
+		if (creature_ptr->lev >= kamae_shurui[i].min_level)
 		{
 			sprintf(buf," %c) %-12s  %s",I2A(i+1), kamae_shurui[i].desc, kamae_shurui[i].info);
 			prt(buf, 3+i, 20);
@@ -76,9 +76,9 @@ static bool choose_kamae(void)
 		}
 		else if ((choice == 'a') || (choice == 'A'))
 		{
-			if (p_ptr->action == ACTION_KAMAE)
+			if (creature_ptr->action == ACTION_KAMAE)
 			{
-				set_action(p_ptr, ACTION_NONE);
+				set_action(creature_ptr, ACTION_NONE);
 			}
 			else
 				msg_print(_("もともと構えていない。", "You are not assuming a posture."));
@@ -90,37 +90,37 @@ static bool choose_kamae(void)
 			new_kamae = 0;
 			break;
 		}
-		else if (((choice == 'c') || (choice == 'C')) && (p_ptr->lev > 29))
+		else if (((choice == 'c') || (choice == 'C')) && (creature_ptr->lev > 29))
 		{
 			new_kamae = 1;
 			break;
 		}
-		else if (((choice == 'd') || (choice == 'D')) && (p_ptr->lev > 34))
+		else if (((choice == 'd') || (choice == 'D')) && (creature_ptr->lev > 34))
 		{
 			new_kamae = 2;
 			break;
 		}
-		else if (((choice == 'e') || (choice == 'E')) && (p_ptr->lev > 39))
+		else if (((choice == 'e') || (choice == 'E')) && (creature_ptr->lev > 39))
 		{
 			new_kamae = 3;
 			break;
 		}
 	}
-	set_action(p_ptr, ACTION_KAMAE);
+	set_action(creature_ptr, ACTION_KAMAE);
 
-	if (p_ptr->special_defense & (KAMAE_GENBU << new_kamae))
+	if (creature_ptr->special_defense & (KAMAE_GENBU << new_kamae))
 	{
 		msg_print(_("構え直した。", "You reassume a posture."));
 	}
 	else
 	{
-		p_ptr->special_defense &= ~(KAMAE_MASK);
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->special_defense &= ~(KAMAE_MASK);
+		creature_ptr->update |= (PU_BONUS);
+		creature_ptr->redraw |= (PR_STATE);
 		msg_format(_("%sの構えをとった。", "You assume a posture of %s form."),kamae_shurui[new_kamae].desc);
-		p_ptr->special_defense |= (KAMAE_GENBU << new_kamae);
+		creature_ptr->special_defense |= (KAMAE_GENBU << new_kamae);
 	}
-	p_ptr->redraw |= PR_STATE;
+	creature_ptr->redraw |= PR_STATE;
 	screen_load();
 	return TRUE;
 }
@@ -476,7 +476,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 			if (command == -3)
 			{
-				if (!choose_kamae()) return FALSE;
+				if (!choose_kamae(p_ptr)) return FALSE;
 				p_ptr->update |= (PU_BONUS);
 			}
 			else if (command == -4)
