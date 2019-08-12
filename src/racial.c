@@ -248,7 +248,7 @@ struct power_desc_type
  * @param pd_ptr 発動したいレイシャル・パワー情報の構造体参照ポインタ
  * @return 成功率(%)を返す
  */
-static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
+static PERCENTAGE racial_chance(player_type *creature_ptr, power_desc_type *pd_ptr)
 {
 	PLAYER_LEVEL min_level  = pd_ptr->level;
 	PERCENTAGE difficulty = pd_ptr->fail;
@@ -256,10 +256,10 @@ static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
 	int i;
 	int val;
 	int sum = 0;
-	BASE_STATUS stat = p_ptr->stat_cur[pd_ptr->stat];
+	BASE_STATUS stat = creature_ptr->stat_cur[pd_ptr->stat];
 
 	/* No chance for success */
-	if ((p_ptr->lev < min_level) || p_ptr->confused)
+	if ((creature_ptr->lev < min_level) || creature_ptr->confused)
 	{
 		return (0);
 	}
@@ -267,13 +267,13 @@ static PERCENTAGE racial_chance(power_desc_type *pd_ptr)
 	if (difficulty == 0) return 100;
 
 	/* Calculate difficulty */
-	if (p_ptr->stun)
+	if (creature_ptr->stun)
 	{
-		difficulty += (PERCENTAGE)p_ptr->stun;
+		difficulty += (PERCENTAGE)creature_ptr->stun;
 	}
-	else if (p_ptr->lev > min_level)
+	else if (creature_ptr->lev > min_level)
 	{
-		PERCENTAGE lev_adj = (PERCENTAGE)((p_ptr->lev - min_level) / 3);
+		PERCENTAGE lev_adj = (PERCENTAGE)((creature_ptr->lev - min_level) / 3);
 		if (lev_adj > 10) lev_adj = 10;
 		difficulty -= lev_adj;
 	}
@@ -1919,7 +1919,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 					}
 					strcat(dummy, format("%-23.23s %2d %4d %3d%%",
 						power_desc[ctr].name, power_desc[ctr].level, power_desc[ctr].cost,
-						100 - racial_chance(&power_desc[ctr])));
+						100 - racial_chance(p_ptr, &power_desc[ctr])));
 					prt(dummy, y1, x1);
 					ctr++;
 				}
