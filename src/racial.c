@@ -383,37 +383,37 @@ static int racial_aux(power_desc_type *pd_ptr)
  * @param command 発動するレイシャルのID
  * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cmd_racial_power_aux(s32b command)
+static bool cmd_racial_power_aux(player_type *creature_ptr, s32b command)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = creature_ptr->lev;
 	DIRECTION dir = 0;
 
 	if (command <= -3)
 	{
-		switch (p_ptr->pclass)
+		switch (creature_ptr->pclass)
 		{
 		case CLASS_WARRIOR:
 		{
-			return sword_dancing(p_ptr);
+			return sword_dancing(creature_ptr);
 			break;
 		}
 		case CLASS_HIGH_MAGE:
-		if (p_ptr->realm1 == REALM_HEX)
+		if (creature_ptr->realm1 == REALM_HEX)
 		{
 			bool retval = stop_hex_spell();
-			if (retval) p_ptr->energy_use = 10;
+			if (retval) creature_ptr->energy_use = 10;
 			return (retval);
 		}
 		case CLASS_MAGE:
 		/* case CLASS_HIGH_MAGE: */
 		case CLASS_SORCERER:
 		{
-			if (!eat_magic(p_ptr->lev * 2)) return FALSE;
+			if (!eat_magic(creature_ptr->lev * 2)) return FALSE;
 			break;
 		}
 		case CLASS_PRIEST:
 		{
-			if (is_good_realm(p_ptr->realm1))
+			if (is_good_realm(creature_ptr->realm1))
 			{
 				if (!bless_weapon()) return FALSE;
 			}
@@ -440,7 +440,7 @@ static bool cmd_racial_power_aux(s32b command)
 		case CLASS_PALADIN:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_beam(is_good_realm(p_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE,
+			fire_beam(is_good_realm(creature_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE,
 			          dir, plev * 3);
 			break;
 		}
@@ -448,27 +448,27 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				return comvert_hp_to_mp(p_ptr);
+				return comvert_hp_to_mp(creature_ptr);
 			}
 			else if (command == -4)
 			{
-				return comvert_mp_to_hp(p_ptr);
+				return comvert_mp_to_hp(creature_ptr);
 			}
 			break;
 		}
 		case CLASS_CHAOS_WARRIOR:
 		{
-			return confusing_light(p_ptr);
+			return confusing_light(creature_ptr);
 			break;
 		}
 		case CLASS_MONK:
 		{
-			if (!(empty_hands(p_ptr, TRUE) & EMPTY_HAND_RARM))
+			if (!(empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
 			{
 				msg_print(_("素手じゃないとできません。", "You need to be bare hand."));
 				return FALSE;
 			}
-			if (p_ptr->riding)
+			if (creature_ptr->riding)
 			{
 				msg_print(_("乗馬中はできません。", "You need to get off a pet."));
 				return FALSE;
@@ -476,19 +476,19 @@ static bool cmd_racial_power_aux(s32b command)
 
 			if (command == -3)
 			{
-				if (!choose_kamae(p_ptr)) return FALSE;
-				p_ptr->update |= (PU_BONUS);
+				if (!choose_kamae(creature_ptr)) return FALSE;
+				creature_ptr->update |= (PU_BONUS);
 			}
 			else if (command == -4)
 			{
-				return double_attack(p_ptr);
+				return double_attack(creature_ptr);
 			}
 			break;
 		}
 		case CLASS_MINDCRAFTER:
 		case CLASS_FORCETRAINER:
 		{
-			return clear_mind(p_ptr);
+			return clear_mind(creature_ptr);
 		}
 		case CLASS_TOURIST:
 		{
@@ -515,11 +515,11 @@ static bool cmd_racial_power_aux(s32b command)
 			if (command == -3)
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
-				(void)fire_ball_hide(GF_CHARM_LIVING, dir, p_ptr->lev, 0);
+				(void)fire_ball_hide(GF_CHARM_LIVING, dir, creature_ptr->lev, 0);
 			}
 			else if (command == -4)
 			{
-				project_all_los(GF_CHARM_LIVING, p_ptr->lev);
+				project_all_los(GF_CHARM_LIVING, creature_ptr->lev);
 			}
 			break;
 		}
@@ -533,7 +533,7 @@ static bool cmd_racial_power_aux(s32b command)
 			if (command == -3) {
 				if (!import_magic_device()) return FALSE;
 			} else if (command == -4) {
-				if (cmd_limit_cast(p_ptr)) return FALSE;
+				if (cmd_limit_cast(creature_ptr)) return FALSE;
 				if (!do_cmd_magic_eater(FALSE, TRUE)) return FALSE;
 			}
 			break;
@@ -541,19 +541,19 @@ static bool cmd_racial_power_aux(s32b command)
 		case CLASS_BARD:
 		{
 			/* Singing is already stopped */
-			if (!SINGING_SONG_EFFECT(p_ptr) && !INTERUPTING_SONG_EFFECT(p_ptr)) return FALSE;
+			if (!SINGING_SONG_EFFECT(creature_ptr) && !INTERUPTING_SONG_EFFECT(creature_ptr)) return FALSE;
 
-			stop_singing(p_ptr);
-			p_ptr->energy_use = 10;
+			stop_singing(creature_ptr);
+			creature_ptr->energy_use = 10;
 			break;
 		}
 		case CLASS_RED_MAGE:
 		{
-			if (cmd_limit_cast(p_ptr)) return FALSE;
+			if (cmd_limit_cast(creature_ptr)) return FALSE;
 			handle_stuff();
 			do_cmd_cast();
 			handle_stuff();
-			if (!p_ptr->paralyzed && !cmd_limit_cast(p_ptr))
+			if (!creature_ptr->paralyzed && !cmd_limit_cast(creature_ptr))
 				do_cmd_cast();
 			break;
 		}
@@ -561,45 +561,45 @@ static bool cmd_racial_power_aux(s32b command)
 		{
 			if (command == -3)
 			{
-				concentration(p_ptr);
+				concentration(creature_ptr);
 			}
 			else if (command == -4)
 			{
-				if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
+				if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 				{
 					msg_print(_("武器を持たないといけません。", "You need to wield a weapon."));
 					return FALSE;
 				}
-				if (!choose_kata(p_ptr)) return FALSE;
-				p_ptr->update |= (PU_BONUS);
+				if (!choose_kata(creature_ptr)) return FALSE;
+				creature_ptr->update |= (PU_BONUS);
 			}
 			break;
 		}
 		case CLASS_BLUE_MAGE:
 		{
-			if (p_ptr->action == ACTION_LEARN)
+			if (creature_ptr->action == ACTION_LEARN)
 			{
-				set_action(p_ptr, ACTION_NONE);
+				set_action(creature_ptr, ACTION_NONE);
 			}
 			else
 			{
-				set_action(p_ptr, ACTION_LEARN);
+				set_action(creature_ptr, ACTION_LEARN);
 			}
-			free_turn(p_ptr);
+			free_turn(creature_ptr);
 			break;
 		}
 		case CLASS_CAVALRY:
 		{
-			return rodeo(p_ptr);
+			return rodeo(creature_ptr);
 		}
 		case CLASS_BERSERKER:
 		{
-			if (!recall_player(p_ptr, randint0(21) + 15)) return FALSE;
+			if (!recall_player(creature_ptr, randint0(21) + 15)) return FALSE;
 			break;
 		}
 		case CLASS_SMITH:
 		{
-			if (p_ptr->lev > 29)
+			if (creature_ptr->lev > 29)
 			{
 				if (!identify_fully(TRUE)) return FALSE;
 			}
@@ -618,23 +618,23 @@ static bool cmd_racial_power_aux(s32b command)
 			}
 			else if (command == -4)
 			{
-				return mirror_concentration(p_ptr);
+				return mirror_concentration(creature_ptr);
 			}
 			break;
 		}
 		case CLASS_NINJA:
-			hayagake(p_ptr);
+			hayagake(creature_ptr);
 			break;
 		}
 	}
-	else if (p_ptr->mimic_form)
+	else if (creature_ptr->mimic_form)
 	{
-		switch (p_ptr->mimic_form)
+		switch (creature_ptr->mimic_form)
 		{
 		case MIMIC_DEMON:
 		case MIMIC_DEMON_LORD:
 		{
-			return demonic_breath(p_ptr);
+			return demonic_breath(creature_ptr);
 		}
 		case MIMIC_VAMPIRE:
 			vampirism();
@@ -645,7 +645,7 @@ static bool cmd_racial_power_aux(s32b command)
 	else 
 	{
 
-	switch (p_ptr->prace)
+	switch (creature_ptr->prace)
 	{
 		case RACE_DWARF:
 			msg_print(_("周囲を調べた。", "You examine your surroundings."));
@@ -655,7 +655,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_HOBBIT:
-			return create_ration(p_ptr);
+			return create_ration(creature_ptr);
 			break;
 
 		case RACE_GNOME:
@@ -665,7 +665,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 		case RACE_HALF_ORC:
 			msg_print(_("勇気を出した。", "You play tough."));
-			(void)set_afraid(p_ptr, 0);
+			(void)set_afraid(creature_ptr, 0);
 			break;
 
 		case RACE_HALF_TROLL:
@@ -685,7 +685,7 @@ static bool cmd_racial_power_aux(s32b command)
 
 				(void)true_healing(0);
 				(void)restore_all_status();
-				(void)restore_level(p_ptr);
+				(void)restore_level(creature_ptr);
 			}
 			break;
 
@@ -750,7 +750,7 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_DRACONIAN:
-			return draconian_breath(p_ptr);
+			return draconian_breath(creature_ptr);
 			break;
 
 		case RACE_MIND_FLAYER:
@@ -774,13 +774,13 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_GOLEM:
-			(void)set_shield(p_ptr, randint1(20) + 30, FALSE);
+			(void)set_shield(creature_ptr, randint1(20) + 30, FALSE);
 			break;
 
 		case RACE_SKELETON:
 		case RACE_ZOMBIE:
 			msg_print(_("あなたは失ったエネルギーを取り戻そうと試みた。", "You attempt to restore your lost energies."));
-			(void)restore_level(p_ptr);
+			(void)restore_level(creature_ptr);
 			break;
 
 		case RACE_VAMPIRE:
@@ -801,20 +801,20 @@ static bool cmd_racial_power_aux(s32b command)
 			break;
 
 		case RACE_DEMON:
-			return demonic_breath(p_ptr); 
+			return demonic_breath(creature_ptr); 
 			break;
 
 		case RACE_KUTAR:
-			(void)set_tsubureru(p_ptr, randint1(20) + 30, FALSE);
+			(void)set_tsubureru(creature_ptr, randint1(20) + 30, FALSE);
 			break;
 
 		case RACE_ANDROID:
-			return android_inside_weapon(p_ptr);
+			return android_inside_weapon(creature_ptr);
 			break;
 
 		default:
 			msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
-			free_turn(p_ptr);
+			free_turn(creature_ptr);
 	}
 	}
 	return TRUE;
@@ -1999,7 +1999,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 	{
 	case 1:
 		if (power_desc[i].number < 0)
-			cast = cmd_racial_power_aux(power_desc[i].number);
+			cast = cmd_racial_power_aux(p_ptr, power_desc[i].number);
 		else
 			cast = mutation_power_aux(p_ptr, power_desc[i].number);
 		break;
