@@ -129,22 +129,22 @@ static bool choose_kamae(player_type *creature_ptr)
  * @brief 剣術家の型設定処理
  * @return 型を変化させたらTRUE、型の構え不能かキャンセルしたらFALSEを返す。
  */
-static bool choose_kata(void)
+static bool choose_kata(player_type *creature_ptr)
 {
 	char choice;
 	int new_kata = 0;
 	int i;
 	char buf[80];
 
-	if (cmd_limit_confused(p_ptr)) return FALSE;
+	if (cmd_limit_confused(creature_ptr)) return FALSE;
 
-	if (p_ptr->stun)
+	if (creature_ptr->stun)
 	{
 		msg_print(_("意識がはっきりとしない。", "You are not clear headed"));
 		return FALSE;
 	}
 
-	if (p_ptr->afraid)
+	if (creature_ptr->afraid)
 	{
 		msg_print(_("体が震えて構えられない！", "You are trembling with fear!"));
 		return FALSE;
@@ -154,7 +154,7 @@ static bool choose_kata(void)
 
 	for (i = 0; i < MAX_KATA; i++)
 	{
-		if (p_ptr->lev >= kata_shurui[i].min_level)
+		if (creature_ptr->lev >= kata_shurui[i].min_level)
 		{
 			sprintf(buf,_(" %c) %sの型    %s", " %c) Form of %-12s  %s"),I2A(i+1), kata_shurui[i].desc, kata_shurui[i].info);
 			prt(buf, 3+i, 20);
@@ -175,9 +175,9 @@ static bool choose_kata(void)
 		}
 		else if ((choice == 'a') || (choice == 'A'))
 		{
-			if (p_ptr->action == ACTION_KATA)
+			if (creature_ptr->action == ACTION_KATA)
 			{
-				set_action(p_ptr, ACTION_NONE);
+				set_action(creature_ptr, ACTION_NONE);
 			}
 			else
 				msg_print(_("もともと構えていない。", "You are not assuming posture."));
@@ -189,36 +189,36 @@ static bool choose_kata(void)
 			new_kata = 0;
 			break;
 		}
-		else if (((choice == 'c') || (choice == 'C')) && (p_ptr->lev > 29))
+		else if (((choice == 'c') || (choice == 'C')) && (creature_ptr->lev > 29))
 		{
 			new_kata = 1;
 			break;
 		}
-		else if (((choice == 'd') || (choice == 'D')) && (p_ptr->lev > 34))
+		else if (((choice == 'd') || (choice == 'D')) && (creature_ptr->lev > 34))
 		{
 			new_kata = 2;
 			break;
 		}
-		else if (((choice == 'e') || (choice == 'E')) && (p_ptr->lev > 39))
+		else if (((choice == 'e') || (choice == 'E')) && (creature_ptr->lev > 39))
 		{
 			new_kata = 3;
 			break;
 		}
 	}
-	set_action(p_ptr, ACTION_KATA);
+	set_action(creature_ptr, ACTION_KATA);
 
-	if (p_ptr->special_defense & (KATA_IAI << new_kata))
+	if (creature_ptr->special_defense & (KATA_IAI << new_kata))
 	{
 		msg_print(_("構え直した。", "You reassume a posture."));
 	}
 	else
 	{
-		p_ptr->special_defense &= ~(KATA_MASK);
-		p_ptr->update |= (PU_BONUS | PU_MONSTERS);
+		creature_ptr->special_defense &= ~(KATA_MASK);
+		creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
 		msg_format(_("%sの型で構えた。", "You assume a posture of %s form."),kata_shurui[new_kata].desc);
-		p_ptr->special_defense |= (KATA_IAI << new_kata);
+		creature_ptr->special_defense |= (KATA_IAI << new_kata);
 	}
-	p_ptr->redraw |= (PR_STATE | PR_STATUS);
+	creature_ptr->redraw |= (PR_STATE | PR_STATUS);
 	screen_load();
 	return TRUE;
 }
@@ -570,7 +570,7 @@ static bool cmd_racial_power_aux(s32b command)
 					msg_print(_("武器を持たないといけません。", "You need to wield a weapon."));
 					return FALSE;
 				}
-				if (!choose_kata()) return FALSE;
+				if (!choose_kata(p_ptr)) return FALSE;
 				p_ptr->update |= (PU_BONUS);
 			}
 			break;
