@@ -117,10 +117,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 	/* Assume cancelled */
 	*sn = (-1);
 
-	/* Nothing chosen yet */
 	flag = FALSE;
-
-	/* No redraw yet */
 	redraw = FALSE;
 
 	num = p_ptr->mane_num;

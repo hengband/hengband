@@ -657,10 +657,7 @@ void do_cmd_pet(void)
 
 	if (!(repeat_pull(&i) && (i >= 0) && (i < num)))
 	{
-		/* Nothing chosen yet */
 		flag = FALSE;
-
-		/* No redraw yet */
 		redraw = FALSE;
 
 		if (use_menu)

@@ -242,10 +242,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 		}
 	}
 
-	/* Nothing chosen yet */
 	flag = FALSE;
-
-	/* No redraw yet */
 	redraw = FALSE;
 
 	for (i = 0; i < MAX_SNIPE_POWERS; i++)

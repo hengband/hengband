@@ -878,11 +878,7 @@ static void add_essence(ESSENCE_IDX mode)
 
 	if (!repeat_pull(&i) || i < 0 || i >= max_num)
 	{
-
-		/* Nothing chosen yet */
 		flag = FALSE;
-
-		/* No redraw yet */
 		redraw = FALSE;
 
 		(void)strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの能力を付加しますか？", "(*=List, ESC=exit) Add which ability? "));

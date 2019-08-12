@@ -771,11 +771,8 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 		}
 	}
 
-    /* Nothing chosen yet */
-    flag = FALSE;
-
-    /* No redraw yet */
-    redraw = FALSE;
+	flag = FALSE;
+	redraw = FALSE;
 
 	for (i = 0; i < MAX_MIND_POWERS; i++)
 	{

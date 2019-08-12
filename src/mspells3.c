@@ -477,10 +477,7 @@ static bool get_learned_power(SPELL_IDX *sn)
 	/* Assume cancelled */
 	*sn = (-1);
 
-	/* Nothing chosen yet */
 	flag = FALSE;
-
-	/* No redraw yet */
 	redraw = FALSE;
 
 	/* Get the spell, if available */

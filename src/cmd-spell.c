@@ -378,10 +378,7 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 	/* Assume cancelled */
 	*sn = (-1);
 
-	/* Nothing chosen yet */
 	flag = FALSE;
-
-	/* No redraw yet */
 	redraw = FALSE;
 
 	p_ptr->window |= (PW_SPELL);

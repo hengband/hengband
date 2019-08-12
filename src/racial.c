@@ -1805,10 +1805,7 @@ void do_cmd_racial_power(void)
 		}
 	}
 
-	/* Nothing chosen yet */
 	flag = FALSE;
-
-	/* No redraw yet */
 	redraw = FALSE;
 
 	(void) strnfmt(out_val, 78, 

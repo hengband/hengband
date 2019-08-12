@@ -76,10 +76,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 		}
 	}
 
-	/* Nothing chosen yet */
 	flag = FALSE;
-
-	/* No redraw yet */
 	redraw = FALSE;
 
 	for (i = 0; i < 32; i++)
