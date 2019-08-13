@@ -2086,7 +2086,7 @@ int calc_mutant_regenerate_mod(player_type *creature_ptr)
  * @param power 発動させる突然変異レイシャルのID
  * @return レイシャルを実行した場合TRUE、キャンセルした場合FALSEを返す
  */
-bool mutation_power_aux(player_type *creature_ptr, int power)
+bool exe_mutation_power(player_type *creature_ptr, int power)
 {
 	DIRECTION dir = 0;
 	PLAYER_LEVEL lvl = creature_ptr->lev;

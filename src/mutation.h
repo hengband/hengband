@@ -5,5 +5,5 @@ extern void lose_all_mutations(player_type *creature_ptr);
 extern void dump_mutations(player_type *creature_ptr, FILE *OutFile);
 extern void do_cmd_knowledge_mutations(player_type *creature_ptr);
 extern int calc_mutant_regenerate_mod(player_type *creature_ptr);
-extern bool mutation_power_aux(player_type *creature_ptr, int power);
+extern bool exe_mutation_power(player_type *creature_ptr, int power);
 extern void become_living_trump(player_type *creature_ptr);
