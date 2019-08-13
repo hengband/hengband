@@ -383,7 +383,7 @@ static int racial_aux(power_desc_type *pd_ptr)
  * @param command 発動するレイシャルのID
  * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cmd_racial_power_aux(player_type *creature_ptr, s32b command)
+static bool exe_racial_power(player_type *creature_ptr, s32b command)
 {
 	PLAYER_LEVEL plev = creature_ptr->lev;
 	DIRECTION dir = 0;
@@ -1999,7 +1999,7 @@ if (!repeat_pull(&i) || i<0 || i>=num) {
 	{
 	case 1:
 		if (power_desc[i].number < 0)
-			cast = cmd_racial_power_aux(p_ptr, power_desc[i].number);
+			cast = exe_racial_power(p_ptr, power_desc[i].number);
 		else
 			cast = mutation_power_aux(p_ptr, power_desc[i].number);
 		break;
