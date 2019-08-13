@@ -367,7 +367,7 @@ void do_cmd_hissatsu(player_type *creature_ptr)
  * @brief 剣術コマンドの学習
  * @return なし
  */
-void do_cmd_gain_hissatsu(void)
+void do_cmd_gain_hissatsu(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	int i, j;
@@ -377,24 +377,24 @@ void do_cmd_gain_hissatsu(void)
 
 	bool gain = FALSE;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
-	if (cmd_limit_blind(p_ptr)) return;
-	if (cmd_limit_confused(p_ptr)) return;
+	if (cmd_limit_blind(creature_ptr)) return;
+	if (cmd_limit_confused(creature_ptr)) return;
 
-	if (!(p_ptr->new_spells))
+	if (!(creature_ptr->new_spells))
 	{
 		msg_print(_("新しい必殺技を覚えることはできない！", "You cannot learn any new special attacks!"));
 		return;
 	}
 
 #ifdef JP
-	msg_format("あと %d 種の必殺技を学べる。", p_ptr->new_spells);
+	msg_format("あと %d 種の必殺技を学べる。", creature_ptr->new_spells);
 #else
-	msg_format("You can learn %d new special attack%s.", p_ptr->new_spells, (p_ptr->new_spells == 1?"":"s"));
+	msg_format("You can learn %d new special attack%s.", creature_ptr->new_spells, (creature_ptr->new_spells == 1?"":"s"));
 #endif
 
 	q = _("どの書から学びますか? ", "Study which book? ");
@@ -405,18 +405,18 @@ void do_cmd_gain_hissatsu(void)
 
 	for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++)
 	{
-		if (p_ptr->spell_learned1 & (1L << i)) continue;
-		if (technic_info[TECHNIC_HISSATSU][i].slevel > p_ptr->lev) continue;
+		if (creature_ptr->spell_learned1 & (1L << i)) continue;
+		if (technic_info[TECHNIC_HISSATSU][i].slevel > creature_ptr->lev) continue;
 
-		p_ptr->spell_learned1 |= (1L << i);
-		p_ptr->spell_worked1 |= (1L << i);
+		creature_ptr->spell_learned1 |= (1L << i);
+		creature_ptr->spell_worked1 |= (1L << i);
 		msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(REALM_HISSATSU, i, SPELL_NAME));
 		for (j = 0; j < 64; j++)
 		{
 			/* Stop at the first empty space */
-			if (p_ptr->spell_order[j] == 99) break;
+			if (creature_ptr->spell_order[j] == 99) break;
 		}
-		p_ptr->spell_order[j] = i;
+		creature_ptr->spell_order[j] = i;
 		gain = TRUE;
 	}
 
@@ -426,10 +426,10 @@ void do_cmd_gain_hissatsu(void)
 	}
 	else
 	{
-		take_turn(p_ptr, 100);
+		take_turn(creature_ptr, 100);
 	}
 
-	p_ptr->update |= (PU_SPELLS);
+	creature_ptr->update |= (PU_SPELLS);
 }
 
 

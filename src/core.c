@@ -3820,7 +3820,7 @@ static void process_command(void)
 			if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
 				msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
 			else if (p_ptr->pclass == CLASS_SAMURAI)
-				do_cmd_gain_hissatsu();
+				do_cmd_gain_hissatsu(p_ptr);
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 				import_magic_device();
 			else
