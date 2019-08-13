@@ -310,27 +310,27 @@ static int get_hissatsu_power(SPELL_IDX *sn)
  * @brief 剣術コマンドのメインルーチン
  * @return なし
  */
-void do_cmd_hissatsu(void)
+void do_cmd_hissatsu(player_type *creature_ptr)
 {
 	SPELL_IDX       n = 0;
 	magic_type      spell;
 
-	if (cmd_limit_confused(p_ptr)) return;
-	if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
+	if (cmd_limit_confused(creature_ptr)) return;
+	if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 	{
 		if (flush_failure) flush();
 		msg_print(_("武器を持たないと必殺技は使えない！", "You need to wield a weapon!"));
 		return;
 	}
-	if (!p_ptr->spell_learned1)
+	if (!creature_ptr->spell_learned1)
 	{
 		msg_print(_("何も技を知らない。", "You don't know any special attacks."));
 		return;
 	}
 
-	if (p_ptr->special_defense & KATA_MASK)
+	if (creature_ptr->special_defense & KATA_MASK)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	if (!get_hissatsu_power(&n)) return;
@@ -338,7 +338,7 @@ void do_cmd_hissatsu(void)
 	spell = technic_info[TECHNIC_HISSATSU][n];
 
 	/* Verify "dangerous" spells */
-	if (spell.smana > p_ptr->csp)
+	if (spell.smana > creature_ptr->csp)
 	{
 		if (flush_failure) flush();
 		/* Warning */
@@ -351,15 +351,15 @@ void do_cmd_hissatsu(void)
 
 	if (!exe_spell(REALM_HISSATSU, n, SPELL_CAST)) return;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Use some mana */
-	p_ptr->csp -= spell.smana;
+	creature_ptr->csp -= spell.smana;
 
 	/* Limit */
-	if (p_ptr->csp < 0) p_ptr->csp = 0;
-	p_ptr->redraw |= (PR_MANA);
-	p_ptr->window |= (PW_PLAYER | PW_SPELL);
+	if (creature_ptr->csp < 0) creature_ptr->csp = 0;
+	creature_ptr->redraw |= (PR_MANA);
+	creature_ptr->window |= (PW_PLAYER | PW_SPELL);
 }
 
 

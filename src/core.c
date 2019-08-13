@@ -3898,7 +3898,7 @@ static void process_command(void)
 					else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 						do_cmd_magic_eater(FALSE, FALSE);
 					else if (p_ptr->pclass == CLASS_SAMURAI)
-						do_cmd_hissatsu();
+						do_cmd_hissatsu(p_ptr);
 					else if (p_ptr->pclass == CLASS_BLUE_MAGE)
 						do_cmd_cast_learned();
 					else if (p_ptr->pclass == CLASS_SMITH)
