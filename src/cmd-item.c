@@ -137,7 +137,7 @@ bool select_ring_slot = FALSE;
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
  * @return なし 
  */
-void do_cmd_wield(void)
+void do_cmd_wield(player_type *creature_ptr)
 {
 	OBJECT_IDX item, slot;
 	object_type forge;
@@ -152,9 +152,9 @@ void do_cmd_wield(void)
 
 	OBJECT_IDX need_switch_wielding = 0;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Restrict the choices */
@@ -176,7 +176,7 @@ void do_cmd_wield(void)
 	case TV_SHIELD:
 	case TV_CARD:
 		/* Dual wielding */
-		if (has_melee_weapon(p_ptr, INVEN_RARM) && has_melee_weapon(p_ptr, INVEN_LARM))
+		if (has_melee_weapon(creature_ptr, INVEN_RARM) && has_melee_weapon(creature_ptr, INVEN_LARM))
 		{
 			/* Restrict the choices */
 			item_tester_hook = item_tester_hook_melee_weapon;
@@ -188,11 +188,11 @@ void do_cmd_wield(void)
 			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
 		}
 
-		else if (has_melee_weapon(p_ptr, INVEN_LARM)) slot = INVEN_RARM;
+		else if (has_melee_weapon(creature_ptr, INVEN_LARM)) slot = INVEN_RARM;
 
 		/* Both arms are already used by non-weapon */
-		else if (p_ptr->inventory_list[INVEN_RARM].k_idx && !object_is_melee_weapon(&p_ptr->inventory_list[INVEN_RARM]) &&
-		         p_ptr->inventory_list[INVEN_LARM].k_idx && !object_is_melee_weapon(&p_ptr->inventory_list[INVEN_LARM]))
+		else if (creature_ptr->inventory_list[INVEN_RARM].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_RARM]) &&
+		         creature_ptr->inventory_list[INVEN_LARM].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_LARM]))
 		{
 			/* Restrict the choices */
 			item_tester_hook = item_tester_hook_mochikae;
@@ -215,13 +215,13 @@ void do_cmd_wield(void)
 			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_RARM;
 		}
 
-		else if (!p_ptr->inventory_list[INVEN_RARM].k_idx && has_melee_weapon(p_ptr, INVEN_LARM))
+		else if (!creature_ptr->inventory_list[INVEN_RARM].k_idx && has_melee_weapon(creature_ptr, INVEN_LARM))
 		{
 			if (!get_check(_("二刀流で戦いますか？", "Dual wielding? "))) slot = INVEN_LARM;
 		}
 
 		/* Both arms are already used */
-		else if (p_ptr->inventory_list[INVEN_LARM].k_idx && p_ptr->inventory_list[INVEN_RARM].k_idx)
+		else if (creature_ptr->inventory_list[INVEN_LARM].k_idx && creature_ptr->inventory_list[INVEN_RARM].k_idx)
 		{
 			/* Restrict the choices */
 			item_tester_hook = item_tester_hook_mochikae;
@@ -231,7 +231,7 @@ void do_cmd_wield(void)
 			s = _("おっと。", "Oops.");
 			
 			if (!choose_object(&slot, q, s, (USE_EQUIP), 0)) return;
-			if ((slot == INVEN_LARM) && !has_melee_weapon(p_ptr, INVEN_RARM))
+			if ((slot == INVEN_LARM) && !has_melee_weapon(creature_ptr, INVEN_RARM))
 				need_switch_wielding = INVEN_RARM;
 		}
 		break;
@@ -239,7 +239,7 @@ void do_cmd_wield(void)
 	/* Rings */
 	case TV_RING:
 		/* Choose a ring slot */
-		if (p_ptr->inventory_list[INVEN_LEFT].k_idx && p_ptr->inventory_list[INVEN_RIGHT].k_idx)
+		if (creature_ptr->inventory_list[INVEN_LEFT].k_idx && creature_ptr->inventory_list[INVEN_RIGHT].k_idx)
 		{
 			q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
 		}
@@ -262,9 +262,9 @@ void do_cmd_wield(void)
 	}
 
 	/* Prevent wielding into a cursed slot */
-	if (object_is_cursed(&p_ptr->inventory_list[slot]))
+	if (object_is_cursed(&creature_ptr->inventory_list[slot]))
 	{
-		object_desc(o_name, &p_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		object_desc(o_name, &creature_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 		msg_format("%s%sは呪われているようだ。", describe_use(slot) , o_name );
 #else
@@ -286,7 +286,7 @@ void do_cmd_wield(void)
 		if (!get_check(dummy)) return;
 	}
 
-	if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
+	if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (creature_ptr->prace != RACE_VAMPIRE) && (creature_ptr->prace != RACE_ANDROID))
 	{
 		char dummy[MAX_NLEN+100];
 
@@ -298,10 +298,10 @@ void do_cmd_wield(void)
 		if (!get_check(dummy)) return;
 	}
 
-	if (need_switch_wielding && !object_is_cursed(&p_ptr->inventory_list[need_switch_wielding]))
+	if (need_switch_wielding && !object_is_cursed(&creature_ptr->inventory_list[need_switch_wielding]))
 	{
-		object_type *slot_o_ptr = &p_ptr->inventory_list[slot];
-		object_type *switch_o_ptr = &p_ptr->inventory_list[need_switch_wielding];
+		object_type *slot_o_ptr = &creature_ptr->inventory_list[slot];
+		object_type *switch_o_ptr = &creature_ptr->inventory_list[need_switch_wielding];
 		object_type object_tmp;
 		object_type *otmp_ptr = &object_tmp;
 		GAME_TEXT switch_name[MAX_NLEN];
@@ -320,7 +320,7 @@ void do_cmd_wield(void)
 
 	check_find_art_quest_completion(o_ptr);
 
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
 		identify_item(o_ptr);
 
@@ -328,7 +328,7 @@ void do_cmd_wield(void)
 		autopick_alter_item(item, FALSE);
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 	q_ptr = &forge;
 
 	/* Obtain local object */
@@ -352,7 +352,7 @@ void do_cmd_wield(void)
 	}
 
 	/* Access the wield slot */
-	o_ptr = &p_ptr->inventory_list[slot];
+	o_ptr = &creature_ptr->inventory_list[slot];
 
 	/* Take off existing item */
 	if (o_ptr->k_idx)
@@ -366,10 +366,10 @@ void do_cmd_wield(void)
 
 	o_ptr->marked |= OM_TOUCHED;
 
-	p_ptr->total_weight += q_ptr->weight;
+	creature_ptr->total_weight += q_ptr->weight;
 
 	/* Increment the equip counter by hand */
-	p_ptr->equip_cnt++;
+	creature_ptr->equip_cnt++;
 
 #define STR_WIELD_RARM _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")
 #define STR_WIELD_LARM _("%s(%c)を左手に装備した。", "You are wielding %s (%c) in your left hand.")
@@ -379,14 +379,14 @@ void do_cmd_wield(void)
 	switch (slot)
 	{
 	case INVEN_RARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(p_ptr, FALSE) == EMPTY_HAND_LARM) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM) && CAN_TWO_HANDS_WIELDING())
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_LARM : STR_WIELD_RARM);
 		break;
 
 	case INVEN_LARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(p_ptr, FALSE) == EMPTY_HAND_RARM) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM) && CAN_TWO_HANDS_WIELDING())
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_RARM : STR_WIELD_LARM);
@@ -412,24 +412,24 @@ void do_cmd_wield(void)
 	if (object_is_cursed(o_ptr))
 	{
 		msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
-		chg_virtue(p_ptr, V_HARMONY, -1);
+		chg_virtue(creature_ptr, V_HARMONY, -1);
 
 		/* Note the curse */
 		o_ptr->ident |= (IDENT_SENSE);
 	}
 
 	/* The Stone Mask make the player current_world_ptr->game_turn into a vampire! */
-	if ((o_ptr->name1 == ART_STONEMASK) && (p_ptr->prace != RACE_VAMPIRE) && (p_ptr->prace != RACE_ANDROID))
+	if ((o_ptr->name1 == ART_STONEMASK) && (creature_ptr->prace != RACE_VAMPIRE) && (creature_ptr->prace != RACE_ANDROID))
 	{
 		/* Turn into a vampire */
-		change_race(p_ptr, RACE_VAMPIRE, "");
+		change_race(creature_ptr, RACE_VAMPIRE, "");
 	}
 
-	p_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
-	p_ptr->redraw |= (PR_EQUIPPY);
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	creature_ptr->update |= (PU_BONUS | PU_TORCH | PU_MANA);
+	creature_ptr->redraw |= (PR_EQUIPPY);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-	calc_android_exp(p_ptr);
+	calc_android_exp(creature_ptr);
 }
 
 /*!

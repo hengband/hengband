@@ -3585,7 +3585,7 @@ static void process_command(void)
 		/* Wear/wield equipment */
 		case 'w':
 		{
-			if (!p_ptr->wild_mode) do_cmd_wield();
+			if (!p_ptr->wild_mode) do_cmd_wield(p_ptr);
 			break;
 		}
 

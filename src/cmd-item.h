@@ -2,7 +2,7 @@
 
 extern void do_cmd_inven(void);
 extern void do_cmd_equip(void);
-extern void do_cmd_wield(void);
+extern void do_cmd_wield(player_type *creature_ptr);
 extern void do_cmd_takeoff(void);
 extern void do_cmd_drop(void);
 extern void do_cmd_destroy(void);

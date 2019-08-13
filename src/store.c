@@ -5441,7 +5441,7 @@ static void store_process_command(void)
 		/* Wear/wield equipment */
 		case 'w':
 		{
-			do_cmd_wield();
+			do_cmd_wield(p_ptr);
 			break;
 		}
 
