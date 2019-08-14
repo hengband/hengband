@@ -2818,7 +2818,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	}
 	else if (equiped_item)
 	{
-		kamaenaoshi(item);
+		verify_equip_slot(item);
 		calc_android_exp(creature_ptr);
 	}
 

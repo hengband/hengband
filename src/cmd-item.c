@@ -437,7 +437,7 @@ void do_cmd_wield(player_type *creature_ptr)
  * @param item 持ち替えを行いたい装備部位ID
  * @return なし
  */
-void kamaenaoshi(INVENTORY_IDX item)
+void verify_equip_slot(INVENTORY_IDX item)
 {
 	object_type *o_ptr, *new_o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
@@ -548,7 +548,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
 
 	/* Take off the item */
 	(void)inven_takeoff(item, 255);
-	kamaenaoshi(item);
+	verify_equip_slot(item);
 	calc_android_exp(creature_ptr);
 	creature_ptr->redraw |= (PR_EQUIPPY);
 }
@@ -598,7 +598,7 @@ void do_cmd_drop(void)
 
 	if (item >= INVEN_RARM)
 	{
-		kamaenaoshi(item);
+		verify_equip_slot(item);
 		calc_android_exp(p_ptr);
 	}
 
