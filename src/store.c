@@ -5469,7 +5469,7 @@ static void store_process_command(void)
 		/* Inventory list */
 		case 'i':
 		{
-			do_cmd_inven();
+			do_cmd_inven(p_ptr);
 			break;
 		}
 

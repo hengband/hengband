@@ -54,7 +54,7 @@
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display p_ptr->inventory_list
  * @return なし 
  */
-void do_cmd_inven(void)
+void do_cmd_inven(player_type *creature_ptr)
 {
 	char out_val[160];
 	command_wrk = FALSE;
@@ -64,12 +64,12 @@ void do_cmd_inven(void)
 
 #ifdef JP
 	sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
-		(int)lbtokg1(p_ptr->total_weight) , (int)lbtokg2(p_ptr->total_weight) ,
-		(long int)((p_ptr->total_weight * 100) / weight_limit(p_ptr)));
+		(int)lbtokg1(creature_ptr->total_weight) , (int)lbtokg2(creature_ptr->total_weight) ,
+		(long int)((creature_ptr->total_weight * 100) / weight_limit(creature_ptr)));
 #else
 	sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ",
-		(int)(p_ptr->total_weight / 10), (int)(p_ptr->total_weight % 10),
-		(p_ptr->total_weight * 100) / weight_limit(p_ptr));
+		(int)(creature_ptr->total_weight / 10), (int)(creature_ptr->total_weight % 10),
+		(creature_ptr->total_weight * 100) / weight_limit(creature_ptr));
 #endif
 
 	prt(out_val, 0, 0);
