@@ -3599,7 +3599,7 @@ static void process_command(void)
 		/* Drop an item */
 		case 'd':
 		{
-			if (!p_ptr->wild_mode) do_cmd_drop();
+			if (!p_ptr->wild_mode) do_cmd_drop(p_ptr);
 			break;
 		}
 

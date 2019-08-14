@@ -558,7 +558,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
  * @brief アイテムを落とすコマンドのメインルーチン / Drop an item
  * @return なし
  */
-void do_cmd_drop(void)
+void do_cmd_drop(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	int amt = 1;
@@ -567,9 +567,9 @@ void do_cmd_drop(void)
 
 	concptr q, s;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	q = _("どのアイテムを落としますか? ", "Drop which item? ");
@@ -591,7 +591,7 @@ void do_cmd_drop(void)
 		if (amt <= 0) return;
 	}
 
-	take_turn(p_ptr, 50);
+	take_turn(creature_ptr, 50);
 
 	/* Drop (some of) the item */
 	inven_drop(item, amt);
@@ -599,10 +599,10 @@ void do_cmd_drop(void)
 	if (item >= INVEN_RARM)
 	{
 		verify_equip_slot(item);
-		calc_android_exp(p_ptr);
+		calc_android_exp(creature_ptr);
 	}
 
-	p_ptr->redraw |= (PR_EQUIPPY);
+	creature_ptr->redraw |= (PR_EQUIPPY);
 }
 
 
