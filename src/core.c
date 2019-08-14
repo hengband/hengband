@@ -3613,7 +3613,7 @@ static void process_command(void)
 		/* Equipment list */
 		case 'e':
 		{
-			do_cmd_equip();
+			do_cmd_equip(p_ptr);
 			break;
 		}
 

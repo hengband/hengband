@@ -94,7 +94,7 @@ void do_cmd_inven(void)
  * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
  * @return なし 
  */
-void do_cmd_equip(void)
+void do_cmd_equip(player_type *creature_ptr)
 {
 	char out_val[160];
 	command_wrk = TRUE;
@@ -105,12 +105,12 @@ void do_cmd_equip(void)
 
 #ifdef JP
 	sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
-	    (int)lbtokg1(p_ptr->total_weight) , (int)lbtokg2(p_ptr->total_weight) ,
-	    (long int)((p_ptr->total_weight * 100) / weight_limit(p_ptr)));
+	    (int)lbtokg1(creature_ptr->total_weight) , (int)lbtokg2(creature_ptr->total_weight) ,
+	    (long int)((creature_ptr->total_weight * 100) / weight_limit(creature_ptr)));
 #else
 	sprintf(out_val, "Equipment: carrying %d.%d pounds (%ld%% of capacity). Command: ",
-	    (int)(p_ptr->total_weight / 10), (int)(p_ptr->total_weight % 10),
-	    (long int)((p_ptr->total_weight * 100) / weight_limit(p_ptr)));
+	    (int)(creature_ptr->total_weight / 10), (int)(creature_ptr->total_weight % 10),
+	    (long int)((creature_ptr->total_weight * 100) / weight_limit(creature_ptr)));
 #endif
 
 	prt(out_val, 0, 0);
