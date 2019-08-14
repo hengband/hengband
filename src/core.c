@@ -3592,7 +3592,7 @@ static void process_command(void)
 		/* Take off equipment */
 		case 't':
 		{
-			if (!p_ptr->wild_mode) do_cmd_takeoff();
+			if (!p_ptr->wild_mode) do_cmd_takeoff(p_ptr);
 			break;
 		}
 

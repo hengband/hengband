@@ -496,15 +496,15 @@ void kamaenaoshi(INVENTORY_IDX item)
  * @brief 装備を外すコマンドのメインルーチン / Take off an item
  * @return なし
  */
-void do_cmd_takeoff(void)
+void do_cmd_takeoff(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	concptr q, s;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	q = _("どれを装備からはずしますか? ", "Take off which item? ");
@@ -516,7 +516,7 @@ void do_cmd_takeoff(void)
 	/* Item is cursed */
 	if (object_is_cursed(o_ptr))
 	{
-		if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (p_ptr->pclass != CLASS_BERSERKER))
+		if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER))
 		{
 			msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
 
@@ -531,26 +531,26 @@ void do_cmd_takeoff(void)
 			o_ptr->curse_flags = 0L;
 			o_ptr->feeling = FEEL_NONE;
 
-			p_ptr->update |= (PU_BONUS);
-			p_ptr->window |= (PW_EQUIP);
+			creature_ptr->update |= (PU_BONUS);
+			creature_ptr->window |= (PW_EQUIP);
 
 			msg_print(_("呪いを打ち破った。", "You break the curse."));
 		}
 		else
 		{
 			msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
-			take_turn(p_ptr, 50);
+			take_turn(creature_ptr, 50);
 			return;
 		}
 	}
 
-	take_turn(p_ptr, 50);
+	take_turn(creature_ptr, 50);
 
 	/* Take off the item */
 	(void)inven_takeoff(item, 255);
 	kamaenaoshi(item);
-	calc_android_exp(p_ptr);
-	p_ptr->redraw |= (PR_EQUIPPY);
+	calc_android_exp(creature_ptr);
+	creature_ptr->redraw |= (PR_EQUIPPY);
 }
 
 

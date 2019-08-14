@@ -5448,7 +5448,7 @@ static void store_process_command(void)
 		/* Take off equipment */
 		case 't':
 		{
-			do_cmd_takeoff();
+			do_cmd_takeoff(p_ptr);
 			break;
 		}
 
