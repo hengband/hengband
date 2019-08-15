@@ -8,7 +8,7 @@ extern void do_cmd_drop(player_type *creature_ptr);
 extern void do_cmd_destroy(player_type *creature_ptr);
 extern void do_cmd_observe(player_type *creature_ptr);
 extern void do_cmd_uninscribe(player_type *creature_ptr);
-extern void do_cmd_inscribe(void);
+extern void do_cmd_inscribe(player_type *creature_ptr);
 extern void do_cmd_refill(void);
 extern void do_cmd_target(void);
 extern void do_cmd_look(void);

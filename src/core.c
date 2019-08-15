@@ -3924,7 +3924,7 @@ static void process_command(void)
 		/* Inscribe an object */
 		case '{':
 		{
-			do_cmd_inscribe();
+			do_cmd_inscribe(p_ptr);
 			break;
 		}
 

@@ -874,7 +874,7 @@ void do_cmd_uninscribe(player_type *creature_ptr)
  * Inscribe an object with a comment
  * @return なし
  */
-void do_cmd_inscribe(void)
+void do_cmd_inscribe(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -885,7 +885,7 @@ void do_cmd_inscribe(void)
 	q = _("どのアイテムに銘を刻みますか? ", "Inscribe which item? ");
 	s = _("銘を刻めるアイテムがない。", "You have nothing to inscribe.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Describe the activity */
@@ -909,11 +909,11 @@ void do_cmd_inscribe(void)
 	{
 		/* Save the inscription */
 		o_ptr->inscription = quark_add(out_val);
-		p_ptr->update |= (PU_COMBINE);
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+		creature_ptr->update |= (PU_COMBINE);
+		creature_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 		/* .や$の関係で, 再計算が必要なはず -- henkma */
-		p_ptr->update |= (PU_BONUS);
+		creature_ptr->update |= (PU_BONUS);
 	}
 }
 
