@@ -837,7 +837,7 @@ void do_cmd_observe(player_type *creature_ptr)
  * Remove the inscription from an object XXX Mention item (when done)?
  * @return なし
  */
-void do_cmd_uninscribe(void)
+void do_cmd_uninscribe(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -846,7 +846,7 @@ void do_cmd_uninscribe(void)
 	q = _("どのアイテムの銘を消しますか? ", "Un-inscribe which item? ");
 	s = _("銘を消せるアイテムがない。", "You have nothing to un-inscribe.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Nothing to remove */
@@ -860,11 +860,11 @@ void do_cmd_uninscribe(void)
 
 	/* Remove the incription */
 	o_ptr->inscription = 0;
-	p_ptr->update |= (PU_COMBINE);
-	p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	creature_ptr->update |= (PU_COMBINE);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 	/* .や$の関係で, 再計算が必要なはず -- henkma */
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 
 }
 

@@ -3931,7 +3931,7 @@ static void process_command(void)
 		/* Uninscribe an object */
 		case '}':
 		{
-			do_cmd_uninscribe();
+			do_cmd_uninscribe(p_ptr);
 			break;
 		}
 
