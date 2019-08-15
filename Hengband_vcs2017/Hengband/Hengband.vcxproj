@@ -73,6 +73,9 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\..\src\cmd;..\..\src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -141,17 +144,23 @@
     <ClCompile Include="..\..\src\bldg.c" />
     <ClCompile Include="..\..\src\chest.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
-    <ClCompile Include="..\..\src\cmd-activate.c" />
-    <ClCompile Include="..\..\src\cmd-basic.c" />
-    <ClCompile Include="..\..\src\cmd-dump.c" />
-    <ClCompile Include="..\..\src\cmd-eat.c" />
-    <ClCompile Include="..\..\src\cmd-gameoption.c" />
-    <ClCompile Include="..\..\src\cmd-hissatsu.c" />
-    <ClCompile Include="..\..\src\cmd-mane.c" />
-    <ClCompile Include="..\..\src\cmd-pet.c" />
-    <ClCompile Include="..\..\src\cmd-quaff.c" />
-    <ClCompile Include="..\..\src\cmd-read.c" />
-    <ClCompile Include="..\..\src\cmd-smith.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-activate.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-basic.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-dump.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-eat.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-gameoption.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-item.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-magiceat.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-mane.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-pet.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-quaff.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-read.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-smith.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-spell.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-usestaff.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-zaprod.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-zapwand.c" />
     <ClCompile Include="..\..\src\core.c" />
     <ClCompile Include="..\..\src\creature.c" />
     <ClCompile Include="..\..\src\dungeon-file.c" />
@@ -197,9 +206,6 @@
     <ClCompile Include="..\..\src\realm-nature.c" />
     <ClCompile Include="..\..\src\realm-song.c" />
     <ClCompile Include="..\..\src\realm-sorcery.c" />
-    <ClCompile Include="..\..\src\cmd-usestaff.c" />
-    <ClCompile Include="..\..\src\cmd-zaprod.c" />
-    <ClCompile Include="..\..\src\cmd-zapwand.c" />
     <ClInclude Include="..\..\src\artifact.h" />
     <ClInclude Include="..\..\src\autopick.h" />
     <ClInclude Include="..\..\src\avatar.h" />
@@ -207,24 +213,7 @@
     <ClInclude Include="..\..\src\bldg.h" />
     <ClInclude Include="..\..\src\chest.h" />
     <ClInclude Include="..\..\src\chuukei.h" />
-    <ClInclude Include="..\..\src\cmd-basic.h" />
-    <ClInclude Include="..\..\src\cmd-dump.h" />
-    <ClInclude Include="..\..\src\cmd-gameoption.h" />
-    <ClInclude Include="..\..\src\cmd-hissatsu.h" />
-    <ClInclude Include="..\..\src\cmd-item.h" />
-    <ClInclude Include="..\..\src\cmd-magiceat.h" />
-    <ClInclude Include="..\..\src\cmd-mane.h" />
-    <ClInclude Include="..\..\src\cmd-pet.h" />
-    <ClInclude Include="..\..\src\cmd-smith.h" />
-    <ClInclude Include="..\..\src\cmd-spell.h" />
-    <ClInclude Include="..\..\src\cmd-zaprod.h" />
-    <ClInclude Include="..\..\src\cmd-zapwand.h">
-      <FileType>CppCode</FileType>
-    </ClInclude>
     <ClCompile Include="..\..\src\player-move.c" />
-    <ClCompile Include="..\..\src\cmd-item.c" />
-    <ClCompile Include="..\..\src\cmd-magiceat.c" />
-    <ClCompile Include="..\..\src\cmd-spell.c" />
     <ClCompile Include="..\..\src\files.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
@@ -292,6 +281,23 @@
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\z-util.c" />
     <ClCompile Include="..\..\src\z-virt.c" />
+    <ClInclude Include="..\..\src\cmd\cmd-activate.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-basic.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-dump.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-eat.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-gameoption.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-item.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-magiceat.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-mane.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-pet.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-quaff.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-read.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-smith.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-spell.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-usestaff.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-zaprod.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\english.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
@@ -299,11 +305,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\angband.h" />
-    <ClInclude Include="..\..\src\cmd-activate.h" />
-    <ClInclude Include="..\..\src\cmd-eat.h" />
-    <ClInclude Include="..\..\src\cmd-quaff.h" />
-    <ClInclude Include="..\..\src\cmd-read.h" />
-    <ClInclude Include="..\..\src\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\core.h" />
     <ClInclude Include="..\..\src\creature.h" />
     <ClInclude Include="..\..\src\dungeon-file.h" />
