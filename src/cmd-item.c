@@ -805,7 +805,7 @@ void do_cmd_destroy(player_type *creature_ptr)
  * @brief アイテムを調査するコマンドのメインルーチン / Observe an item which has been *identify*-ed
  * @return なし
  */
-void do_cmd_observe(void)
+void do_cmd_observe(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -815,7 +815,7 @@ void do_cmd_observe(void)
 	q = _("どのアイテムを調べますか? ", "Examine which item? ");
 	s = _("調べられるアイテムがない。", "You have nothing to examine.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Require full knowledge */
