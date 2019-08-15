@@ -610,7 +610,7 @@ void do_cmd_drop(player_type *creature_ptr)
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @return なし
  */
-void do_cmd_destroy(void)
+void do_cmd_destroy(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	QUANTITY amt = 1;
@@ -627,9 +627,9 @@ void do_cmd_destroy(void)
 
 	concptr q, s;
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Hack -- force destruction */
@@ -652,7 +652,7 @@ void do_cmd_destroy(void)
 
 		/* HACK : Add the line to message buffer */
 		message_add(out_val);
-		p_ptr->window |= (PW_MESSAGE);
+		creature_ptr->window |= (PW_MESSAGE);
 		handle_stuff();
 
 		/* Get an acceptable answer */
@@ -705,12 +705,12 @@ void do_cmd_destroy(void)
 	object_desc(o_name, o_ptr, 0);
 	o_ptr->number = old_number;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Artifacts cannot be destroyed */
 	if (!can_player_destroy_object(o_ptr))
 	{
-		free_turn(p_ptr);
+		free_turn(creature_ptr);
 
 		msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), o_name);
 		return;
@@ -744,16 +744,16 @@ void do_cmd_destroy(void)
 	{
 		bool gain_expr = FALSE;
 
-		if (p_ptr->prace == RACE_ANDROID)
+		if (creature_ptr->prace == RACE_ANDROID)
 		{
 		}
-		else if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_BERSERKER))
+		else if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_BERSERKER))
 		{
 			gain_expr = TRUE;
 		}
-		else if (p_ptr->pclass == CLASS_PALADIN)
+		else if (creature_ptr->pclass == CLASS_PALADIN)
 		{
-			if (is_good_realm(p_ptr->realm1))
+			if (is_good_realm(creature_ptr->realm1))
 			{
 				if (!is_good_realm(tval2realm(q_ptr->tval))) gain_expr = TRUE;
 			}
@@ -763,41 +763,41 @@ void do_cmd_destroy(void)
 			}
 		}
 
-		if (gain_expr && (p_ptr->exp < PY_MAX_EXP))
+		if (gain_expr && (creature_ptr->exp < PY_MAX_EXP))
 		{
-			s32b tester_exp = p_ptr->max_exp / 20;
+			s32b tester_exp = creature_ptr->max_exp / 20;
 			if (tester_exp > 10000) tester_exp = 10000;
 			if (q_ptr->sval < 3) tester_exp /= 4;
 			if (tester_exp<1) tester_exp = 1;
 
 			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-			gain_exp(p_ptr, tester_exp * amt);
+			gain_exp(creature_ptr, tester_exp * amt);
 		}
 		if (item_tester_high_level_book(q_ptr) && q_ptr->tval == TV_LIFE_BOOK)
 		{
-			chg_virtue(p_ptr, V_UNLIFE, 1);
-			chg_virtue(p_ptr, V_VITALITY, -1);
+			chg_virtue(creature_ptr, V_UNLIFE, 1);
+			chg_virtue(creature_ptr, V_VITALITY, -1);
 		}
 		else if (item_tester_high_level_book(q_ptr) && q_ptr->tval == TV_DEATH_BOOK)
 		{
-			chg_virtue(p_ptr, V_UNLIFE, -1);
-			chg_virtue(p_ptr, V_VITALITY, 1);
+			chg_virtue(creature_ptr, V_UNLIFE, -1);
+			chg_virtue(creature_ptr, V_VITALITY, 1);
 		}
 	
 		if (q_ptr->to_a || q_ptr->to_h || q_ptr->to_d)
-			chg_virtue(p_ptr, V_ENCHANT, -1);
+			chg_virtue(creature_ptr, V_ENCHANT, -1);
 	
 		if (object_value_real(q_ptr) > 30000)
-			chg_virtue(p_ptr, V_SACRIFICE, 2);
+			chg_virtue(creature_ptr, V_SACRIFICE, 2);
 	
 		else if (object_value_real(q_ptr) > 10000)
-			chg_virtue(p_ptr, V_SACRIFICE, 1);
+			chg_virtue(creature_ptr, V_SACRIFICE, 1);
 	}
 
 	if (q_ptr->to_a != 0 || q_ptr->to_d != 0 || q_ptr->to_h != 0)
-		chg_virtue(p_ptr, V_HARMONY, 1);
+		chg_virtue(creature_ptr, V_HARMONY, 1);
 
-	if (item >= INVEN_RARM) calc_android_exp(p_ptr);
+	if (item >= INVEN_RARM) calc_android_exp(creature_ptr);
 }
 
 

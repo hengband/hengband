@@ -5455,7 +5455,7 @@ static void store_process_command(void)
 		/* Destroy an item */
 		case 'k':
 		{
-			do_cmd_destroy();
+			do_cmd_destroy(p_ptr);
 			break;
 		}
 
