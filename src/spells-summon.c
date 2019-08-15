@@ -3,6 +3,7 @@
 
 #include "spells.h"
 #include "spells-summon.h"
+#include "player-inventory.h"
 #include "monster-status.h"
 #include "floor.h"
 
@@ -208,7 +209,7 @@ bool cast_summon_greater_demon(void)
 	item_tester_hook = item_tester_offer;
 	q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
 	s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return FALSE;
 
 	summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;

@@ -27,6 +27,7 @@
 #include "player-effects.h"
 #include "player-skill.h"
 #include "player-class.h"
+#include "player-inventory.h"
 
 #include "spells.h"
 #include "spells-object.h"
@@ -1136,7 +1137,7 @@ static void do_cmd_wiz_play(void)
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 
 	if (!o_ptr) return;
 	

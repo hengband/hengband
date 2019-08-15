@@ -7,6 +7,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-inventory.h"
 #include "objectkind.h"
 #include "object-hook.h"
 #include "cmd-basic.h"
@@ -458,7 +459,7 @@ void do_cmd_aim_wand(player_type *creature_ptr)
 
 	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
-	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
+	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
 
 	exe_aim_wand(creature_ptr, item);
 }

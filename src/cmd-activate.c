@@ -26,6 +26,7 @@
 #include "realm-hex.h"
 #include "player-status.h"
 #include "player-damage.h"
+#include "player-inventory.h"
 #include "monster-status.h"
 #include "files.h"
 #include "objectkind.h"
@@ -637,7 +638,7 @@ void do_cmd_activate(player_type *user_ptr)
 	q = _("どのアイテムを始動させますか? ", "Activate which item? ");
 	s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
 
-	if (!choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
+	if (!choose_object(p_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 
 	/* Activate the item */
 	exe_activate(user_ptr, item);

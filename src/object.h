@@ -426,8 +426,6 @@ extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, O
 
 #define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID > 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
 
-extern object_type *choose_object(OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval);
-
 extern int bow_tval_ammo(object_type *o_ptr);
 
 /* object2.c */

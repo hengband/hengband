@@ -36,6 +36,7 @@
 #include "player-effects.h"
 #include "player-skill.h"
 #include "player-class.h"
+#include "player-inventory.h"
 #include "object-hook.h"
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
@@ -667,7 +668,7 @@ void do_cmd_browse(void)
 	q = _("どの本を読みますか? ", "Browse which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester_tval);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester_tval);
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */
@@ -843,7 +844,7 @@ void do_cmd_study(void)
 	q = _("どの本から学びますか? ", "Study which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
 	if (!o_ptr) return;
 
 	/* Access the item's sval */
@@ -1093,7 +1094,7 @@ void do_cmd_cast(void)
 	q = _("どの呪文書を使いますか? ", "Use which book? ");
 	s = _("呪文書がない！", "You have no spell books!");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), mp_ptr->spell_book);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), mp_ptr->spell_book);
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */

@@ -5,6 +5,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-inventory.h"
 #include "objectkind.h"
 #include "object-hook.h"
 #include "spells.h"
@@ -407,7 +408,7 @@ void do_cmd_zap_rod(player_type *creature_ptr)
 	q = _("どのロッドを振りますか? ", "Zap which rod? ");
 	s = _("使えるロッドがない。", "You have no rod to zap.");
 
-	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD)) return;
+	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD)) return;
 
 	/* Zap the rod */
 	exe_zap_rod(creature_ptr, item);

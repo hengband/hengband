@@ -20,6 +20,7 @@
 #include "player-status.h"
 #include "player-damage.h"
 #include "player-race.h"
+#include "player-inventory.h"
 #include "realm-hex.h"
 #include "realm-song.h"
 #include "spells-floor.h"
@@ -609,7 +610,7 @@ void do_cmd_quaff_potion(player_type *creature_ptr)
 	q = _("どの薬を飲みますか? ", "Quaff which potion? ");
 	s = _("飲める薬がない。", "You have no potions to quaff.");
 
-	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
+	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Quaff the potion */
 	exe_quaff_potion(creature_ptr, item);

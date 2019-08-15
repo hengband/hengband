@@ -24,6 +24,7 @@
 #include "player-move.h"
 #include "player-class.h"
 #include "player-race.h"
+#include "player-inventory.h"
 #include "objectkind.h"
 #include "object-ego.h"
 #include "object-flavor.h"
@@ -3257,7 +3258,7 @@ static bool entry_from_choosed_object(autopick_type *entry)
 
 	q = _("どのアイテムを登録しますか? ", "Enter which item? ");
 	s = _("アイテムを持っていない。", "You have nothing to enter.");
-	o_ptr = choose_object(NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
+	o_ptr = choose_object(p_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
 	if (!o_ptr) return FALSE;
 
 	autopick_entry_from_object(entry, o_ptr);
@@ -3276,7 +3277,7 @@ static byte get_object_for_search(object_type **o_handle, concptr *search_strp)
 
 	q = _("どのアイテムを検索しますか? ", "Enter which item? ");
 	s = _("アイテムを持っていない。", "You have nothing to enter.");
-	o_ptr = choose_object(NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
+	o_ptr = choose_object(p_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
 	if (!o_ptr) return 0;
 
 	*o_handle = o_ptr;

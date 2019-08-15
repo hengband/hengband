@@ -45,6 +45,7 @@
 #include "player-skill.h"
 #include "player-class.h"
 #include "player-damage.h"
+#include "player-inventory.h"
 
 #include "dungeon.h"
 #include "floor-events.h"
@@ -3950,7 +3951,7 @@ bool psychometry(void)
 	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
 	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	/* It is fully known, no information needed */

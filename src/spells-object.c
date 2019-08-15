@@ -17,6 +17,7 @@
 #include "avatar.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-inventory.h"
 #include "objectkind.h"
 #include "autopick.h"
 #include "targeting.h"
@@ -186,7 +187,7 @@ bool create_ammo(void)
 
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
-		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
+		q_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 		if (!q_ptr) return FALSE;
 
 		q_ptr = &forge;
@@ -233,7 +234,7 @@ bool create_ammo(void)
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
 
-		q_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
+		q_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 		if (!q_ptr) return FALSE;
 
 		q_ptr = &forge;
@@ -290,7 +291,7 @@ bool import_magic_device(void)
 	q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
 	s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
 
-	o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return (FALSE);
 
 	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
@@ -747,7 +748,7 @@ bool rustproof(void)
 	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
 	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -961,7 +962,7 @@ bool bless_weapon(void)
 	q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
 	s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1107,7 +1108,7 @@ bool pulish_shield(void)
 	q = _("どの盾を磨きますか？", "Pulish which weapon? ");
 	s = _("磨く盾がありません。", "You have weapon to pulish.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1300,7 +1301,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1351,7 +1352,7 @@ void brand_weapon(int brand_type)
 	q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
 	s = _("強化できる武器がない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(&item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* you can never modify artifacts / ego-items */

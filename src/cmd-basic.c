@@ -42,6 +42,7 @@
 #include "player-effects.h"
 #include "player-class.h"
 #include "player-personality.h"
+#include "player-inventory.h"
 #include "objectkind.h"
 #include "object-broken.h"
 #include "object-flavor.h"
@@ -2286,7 +2287,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 	q = _("どれを撃ちますか? ", "Fire which item? ");
 	s = _("発射されるアイテムがありません。", "You have nothing to fire.");
 
-	ammo_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), creature_ptr->tval_ammo);
+	ammo_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), creature_ptr->tval_ammo);
 	if (!ammo_ptr)
 	{
 		flush();
@@ -2377,7 +2378,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			item_tester_hook = item_tester_hook_boomerang;
 			q = _("どの武器を投げますか? ", "Throw which item? ");
 			s = _("投げる武器がない。", "You have nothing to throw.");
-			o_ptr = choose_object(&item, q, s, (USE_EQUIP), 0);
+			o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr)
 			{
 				flush();
@@ -2399,7 +2400,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	{
 		q = _("どのアイテムを投げますか? ", "Throw which item? ");
 		s = _("投げるアイテムがない。", "You have nothing to throw.");
-		o_ptr = choose_object(&item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP), 0);
+		o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP), 0);
 		if (!o_ptr)
 		{
 			flush();

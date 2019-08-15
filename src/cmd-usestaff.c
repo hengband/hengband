@@ -7,6 +7,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-inventory.h"
 #include "spells.h"
 #include "spells-status.h"
 #include "spells-floor.h"
@@ -433,7 +434,7 @@ void do_cmd_use_staff(player_type *creature_ptr)
 
 	q = _("どの杖を使いますか? ", "Use which staff? ");
 	s = _("使える杖がない。", "You have no staff to use.");
-	if (!choose_object(&item, q, s, (USE_INVEN | USE_FLOOR), TV_STAFF)) return;
+	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_STAFF)) return;
 
 	exe_use_staff(creature_ptr, item);
 }
