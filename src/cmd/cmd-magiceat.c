@@ -509,7 +509,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
  * @param powerful 強力発動中の処理ならばTRUE
  * @return 実際にコマンドを実行したならばTRUEを返す。
  */
-bool do_cmd_magic_eater(bool only_browse, bool powerful)
+bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerful)
 {
 	OBJECT_SUBTYPE_VALUE item;
 	PERCENTAGE chance;
@@ -519,12 +519,12 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 	OBJECT_SUBTYPE_VALUE sval;
 	bool use_charge = TRUE;
 
-	if (cmd_limit_confused(p_ptr)) return FALSE;
+	if (cmd_limit_confused(creature_ptr)) return FALSE;
 
-	item = select_magic_eater(p_ptr, only_browse);
+	item = select_magic_eater(creature_ptr, only_browse);
 	if (item == -1)
 	{
-		free_turn(p_ptr);
+		free_turn(creature_ptr);
 		return FALSE;
 	}
 	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}
@@ -534,17 +534,17 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 
 	level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
 	chance = level * 4 / 5 + 20;
-	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+	chance -= 3 * (adj_mag_stat[creature_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 	level /= 2;
-	if (p_ptr->lev > level)
+	if (creature_ptr->lev > level)
 	{
-		chance -= 3 * (p_ptr->lev - level);
+		chance -= 3 * (creature_ptr->lev - level);
 	}
 	chance = mod_spell_chance_1(chance);
-	chance = MAX(chance, adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]]);
+	chance = MAX(chance, adj_mag_fail[creature_ptr->stat_ind[mp_ptr->spell_stat]]);
 	/* Stunning makes spells harder */
-	if (p_ptr->stun > 50) chance += 25;
-	else if (p_ptr->stun) chance += 15;
+	if (creature_ptr->stun > 50) chance += 25;
+	else if (creature_ptr->stun) chance += 15;
 
 	if (chance > 95) chance = 95;
 
@@ -557,8 +557,8 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		msg_print(_("呪文をうまく唱えられなかった！", "You failed to get the magic off!"));
 		sound(SOUND_FAIL);
 		if (randint1(100) >= chance)
-			chg_virtue(p_ptr, V_CHANCE,-1);
-		take_turn(p_ptr, 100);
+			chg_virtue(creature_ptr, V_CHANCE,-1);
+		take_turn(creature_ptr, 100);
 
 		return TRUE;
 	}
@@ -570,25 +570,25 @@ bool do_cmd_magic_eater(bool only_browse, bool powerful)
 		{
 			if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
 				if (!get_aim_dir(&dir)) return FALSE;
-			rod_effect(p_ptr, sval, dir, &use_charge, powerful, TRUE);
+			rod_effect(creature_ptr, sval, dir, &use_charge, powerful, TRUE);
 			if (!use_charge) return FALSE;
 		}
 		else if (tval == TV_WAND)
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			wand_effect(p_ptr, sval, dir, powerful, TRUE);
+			wand_effect(creature_ptr, sval, dir, powerful, TRUE);
 		}
 		else
 		{
-			staff_effect(p_ptr, sval, &use_charge, powerful, TRUE, TRUE);
+			staff_effect(creature_ptr, sval, &use_charge, powerful, TRUE, TRUE);
 			if (!use_charge) return FALSE;
 		}
 		if (randint1(100) < chance)
-			chg_virtue(p_ptr, V_CHANCE,1);
+			chg_virtue(creature_ptr, V_CHANCE,1);
 	}
-	take_turn(p_ptr, 100);
-	if (tval == TV_ROD) p_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
-	else p_ptr->magic_num1[item] -= EATER_CHARGE;
+	take_turn(creature_ptr, 100);
+	if (tval == TV_ROD) creature_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
+	else creature_ptr->magic_num1[item] -= EATER_CHARGE;
 
 	return TRUE;
 }

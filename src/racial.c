@@ -534,7 +534,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 				if (!import_magic_device()) return FALSE;
 			} else if (command == -4) {
 				if (cmd_limit_cast(creature_ptr)) return FALSE;
-				if (!do_cmd_magic_eater(FALSE, TRUE)) return FALSE;
+				if (!do_cmd_magic_eater(creature_ptr, FALSE, TRUE)) return FALSE;
 			}
 			break;
 		}
