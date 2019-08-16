@@ -44,14 +44,14 @@
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_hissatsu_power(SPELL_IDX *sn)
+static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 {
 	SPELL_IDX i;
 	int j = 0;
 	int num = 0;
 	POSITION y = 1;
 	POSITION x = 15;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = creature_ptr->lev;
 	int ask = TRUE;
 	char choice;
 	char out_val[160];
@@ -120,7 +120,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 					{
 						menu_line += 31;
 						if (menu_line > 32) menu_line -= 32;
-					} while(!(p_ptr->spell_learned1 & (1L << (menu_line-1))));
+					} while(!(creature_ptr->spell_learned1 & (1L << (menu_line-1))));
 					break;
 				}
 
@@ -132,7 +132,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 					{
 						menu_line++;
 						if (menu_line > 32) menu_line -= 32;
-					} while(!(p_ptr->spell_learned1 & (1L << (menu_line-1))));
+					} while(!(creature_ptr->spell_learned1 & (1L << (menu_line-1))));
 					break;
 				}
 
@@ -151,7 +151,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 						reverse = TRUE;
 					}
 					else menu_line+=16;
-					while(!(p_ptr->spell_learned1 & (1L << (menu_line-1))))
+					while(!(creature_ptr->spell_learned1 & (1L << (menu_line-1))))
 					{
 						if (reverse)
 						{
@@ -201,11 +201,11 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 
 					if (spell.slevel > PY_MAX_LEVEL) continue;
 					line++;
-					if (!(p_ptr->spell_learned1 >> i)) break;
+					if (!(creature_ptr->spell_learned1 >> i)) break;
 
 					/* Access the spell */
 					if (spell.slevel > plev)   continue;
-					if (!(p_ptr->spell_learned1 & (1L << i))) continue;
+					if (!(creature_ptr->spell_learned1 & (1L << i))) continue;
 					if (use_menu)
 					{
 						if (i == (menu_line-1))
@@ -266,7 +266,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 		}
 
 		/* Totally Illegal */
-		if ((i < 0) || (i >= 32) || !(p_ptr->spell_learned1 & (1 << sentaku[i])))
+		if ((i < 0) || (i >= 32) || !(creature_ptr->spell_learned1 & (1 << sentaku[i])))
 		{
 			bell();
 			continue;
@@ -291,7 +291,7 @@ static int get_hissatsu_power(SPELL_IDX *sn)
 	}
 	if (redraw) screen_load();
 
-	p_ptr->window |= (PW_SPELL);
+	creature_ptr->window |= (PW_SPELL);
 	handle_stuff();
 
 	/* Abort if needed */
@@ -334,7 +334,7 @@ void do_cmd_hissatsu(player_type *creature_ptr)
 		set_action(creature_ptr, ACTION_NONE);
 	}
 
-	if (!get_hissatsu_power(&n)) return;
+	if (!get_hissatsu_power(creature_ptr, &n)) return;
 
 	spell = technic_info[TECHNIC_HISSATSU][n];
 

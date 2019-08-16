@@ -1745,7 +1745,7 @@ static void process_world_aux_hp_and_sp(void)
 		regen_amount = regen_amount * 2;
 	}
 
-	upkeep_factor = calculate_upkeep();
+	upkeep_factor = calculate_upkeep(p_ptr);
 
 	/* No regeneration while special action */
 	if ((p_ptr->action == ACTION_LEARN) ||
@@ -1773,7 +1773,7 @@ static void process_world_aux_hp_and_sp(void)
 			msg_print(NULL);
 			do_cmd_pet_dismiss();
 
-			upkeep_factor = calculate_upkeep();
+			upkeep_factor = calculate_upkeep(p_ptr);
 
 			msg_format(_("維持ＭＰは %d%%", "Upkeep: %d%% mana."), upkeep_factor);
 			msg_print(NULL);
@@ -4962,7 +4962,7 @@ static void dungeon(bool load_game)
 		if (record_maxdepth) exe_write_diary(p_ptr, NIKKI_MAXDEAPTH, current_floor_ptr->dun_level, NULL);
 	}
 
-	(void)calculate_upkeep();
+	(void)calculate_upkeep(p_ptr);
 
 	/* Validate the panel */
 	panel_bounds_center();
