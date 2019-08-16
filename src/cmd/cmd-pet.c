@@ -74,7 +74,7 @@ bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
 * @brief ペットの維持コスト計算
 * @return 維持コスト(%)
 */
-PERCENTAGE calculate_upkeep(void)
+PERCENTAGE calculate_upkeep(player_type *creature_ptr)
 {
 	MONSTER_IDX m_idx;
 	bool have_a_unique = FALSE;
@@ -96,9 +96,9 @@ PERCENTAGE calculate_upkeep(void)
 			total_friends++;
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
-				if (p_ptr->pclass == CLASS_CAVALRY)
+				if (creature_ptr->pclass == CLASS_CAVALRY)
 				{
-					if (p_ptr->riding == m_idx)
+					if (creature_ptr->riding == m_idx)
 						total_friend_levels += (r_ptr->level + 5) * 2;
 					else if (!have_a_unique && (r_info[m_ptr->r_idx].flags7 & RF7_RIDING))
 						total_friend_levels += (r_ptr->level + 5) * 7 / 2;
@@ -118,7 +118,7 @@ PERCENTAGE calculate_upkeep(void)
 	if (total_friends)
 	{
 		int upkeep_factor;
-		upkeep_factor = (total_friend_levels - (p_ptr->lev * 80 / (cp_ptr->pet_upkeep_div)));
+		upkeep_factor = (total_friend_levels - (creature_ptr->lev * 80 / (cp_ptr->pet_upkeep_div)));
 		if (upkeep_factor < 0) upkeep_factor = 0;
 		if (upkeep_factor > 1000) upkeep_factor = 1000;
 		return upkeep_factor;
@@ -827,7 +827,7 @@ void do_cmd_pet(void)
 			break;
 		}
 		do_cmd_pet_dismiss();
-		(void)calculate_upkeep();
+		(void)calculate_upkeep(p_ptr);
 		break;
 	}
 	case PET_TARGET:
