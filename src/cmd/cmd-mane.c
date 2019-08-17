@@ -917,18 +917,18 @@ static bool use_mane(int spell)
  * when you run it. It's probably easy to fix but I haven't tried,
  * sorry.
  */
-bool do_cmd_mane(bool baigaesi)
+bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
 {
 	int n = 0, j;
 	PERCENTAGE chance;
 	PERCENTAGE minfail = 0;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = creature_ptr->lev;
 	monster_power   spell;
 	bool            cast;
 
-	if (cmd_limit_confused(p_ptr)) return FALSE;
+	if (cmd_limit_confused(creature_ptr)) return FALSE;
 
-	if (!p_ptr->mane_num)
+	if (!creature_ptr->mane_num)
 	{
 		msg_print(_("まねられるものが何もない！", "You don't remember any action!"));
 		return FALSE;
@@ -936,7 +936,7 @@ bool do_cmd_mane(bool baigaesi)
 
 	if (!get_mane_power(&n, baigaesi)) return FALSE;
 
-	spell = monster_powers[p_ptr->mane_spell[n]];
+	spell = monster_powers[creature_ptr->mane_spell[n]];
 
 	/* Spell failure chance */
 	chance = spell.manefail;
@@ -945,21 +945,21 @@ bool do_cmd_mane(bool baigaesi)
 	if (plev > spell.level) chance -= 3 * (plev - spell.level);
 
 	/* Reduce failure rate by 1 stat and DEX adjustment */
-	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[p_ptr->stat_ind[A_DEX]] - 2) / 2;
+	chance -= 3 * (adj_mag_stat[creature_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[creature_ptr->stat_ind[A_DEX]] - 2) / 2;
 
 	if (spell.manedam) chance = chance * damage / spell.manedam;
 
-	chance += p_ptr->to_m_chance;
+	chance += creature_ptr->to_m_chance;
 
 	/* Extract the minimum failure rate */
-	minfail = adj_mag_fail[p_ptr->stat_ind[spell.use_stat]];
+	minfail = adj_mag_fail[creature_ptr->stat_ind[spell.use_stat]];
 
 	/* Minimum failure rate */
 	if (chance < minfail) chance = minfail;
 
 	/* Stunning makes spells harder */
-	if (p_ptr->stun > 50) chance += 25;
-	else if (p_ptr->stun) chance += 15;
+	if (creature_ptr->stun > 50) chance += 25;
+	else if (creature_ptr->stun) chance += 15;
 
 	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
@@ -974,22 +974,22 @@ bool do_cmd_mane(bool baigaesi)
 	else
 	{
 		sound(SOUND_ZAP);
-		cast = use_mane(p_ptr->mane_spell[n]);
+		cast = use_mane(creature_ptr->mane_spell[n]);
 		if (!cast) return FALSE;
 	}
 
-	p_ptr->mane_num--;
-	for (j = n; j < p_ptr->mane_num;j++)
+	creature_ptr->mane_num--;
+	for (j = n; j < creature_ptr->mane_num;j++)
 	{
-		p_ptr->mane_spell[j] = p_ptr->mane_spell[j+1];
-		p_ptr->mane_dam[j] = p_ptr->mane_dam[j+1];
+		creature_ptr->mane_spell[j] = creature_ptr->mane_spell[j+1];
+		creature_ptr->mane_dam[j] = creature_ptr->mane_dam[j+1];
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
-	p_ptr->redraw |= (PR_IMITATION);
-	p_ptr->window |= (PW_PLAYER);
-	p_ptr->window |= (PW_SPELL);
+	creature_ptr->redraw |= (PR_IMITATION);
+	creature_ptr->window |= (PW_PLAYER);
+	creature_ptr->window |= (PW_SPELL);
 
 	return TRUE;
 }

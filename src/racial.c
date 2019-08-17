@@ -507,7 +507,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case CLASS_IMITATOR:
 		{
 			handle_stuff();
-			if (!do_cmd_mane(TRUE)) return FALSE;
+			if (!do_cmd_mane(p_ptr, TRUE)) return FALSE;
 			break;
 		}
 		case CLASS_BEASTMASTER:

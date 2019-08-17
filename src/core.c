@@ -3894,7 +3894,7 @@ static void process_command(void)
 					    )
 						do_cmd_mind();
 					else if (p_ptr->pclass == CLASS_IMITATOR)
-						do_cmd_mane(FALSE);
+						do_cmd_mane(p_ptr, FALSE);
 					else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 						do_cmd_magic_eater(p_ptr, FALSE, FALSE);
 					else if (p_ptr->pclass == CLASS_SAMURAI)
