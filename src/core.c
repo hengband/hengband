@@ -3952,7 +3952,7 @@ static void process_command(void)
 		/* Fuel your lantern/torch */
 		case 'F':
 		{
-			do_cmd_refill();
+			do_cmd_refill(p_ptr);
 			break;
 		}
 

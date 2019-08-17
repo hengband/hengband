@@ -1064,16 +1064,16 @@ static void do_cmd_refill_torch(void)
  * Refill the players lamp, or restock his torches
  * @return なし
  */
-void do_cmd_refill(void)
+void do_cmd_refill(player_type *creature_ptr)
 {
 	object_type *o_ptr;
 
 	/* Get the light */
-	o_ptr = &p_ptr->inventory_list[INVEN_LITE];
+	o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (creature_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* It is nothing */
