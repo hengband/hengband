@@ -1149,7 +1149,7 @@ void do_cmd_look(void)
  * Allow the player to examine other sectors on the map
  * @return なし
  */
-void do_cmd_locate(void)
+void do_cmd_locate(player_type *creature_ptr)
 {
 	DIRECTION dir;
 	POSITION y1, x1, y2, x2;
@@ -1217,9 +1217,9 @@ void do_cmd_locate(void)
 	/* Recenter the map around the player */
 	verify_panel();
 
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	creature_ptr->update |= (PU_MONSTERS);
+	creature_ptr->redraw |= (PR_MAP);
+	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	handle_stuff();
 }
 

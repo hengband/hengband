@@ -4035,7 +4035,7 @@ static void process_command(void)
 		/* Locate player on map */
 		case 'L':
 		{
-			do_cmd_locate();
+			do_cmd_locate(p_ptr);
 			break;
 		}
 
