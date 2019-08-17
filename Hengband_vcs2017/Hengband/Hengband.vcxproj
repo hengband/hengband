@@ -74,7 +74,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\src\cmd;..\..\src;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\src\cmd;..\..\src\combat;..\..\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,6 +161,8 @@
     <ClCompile Include="..\..\src\cmd\cmd-usestaff.c" />
     <ClCompile Include="..\..\src\cmd\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd\cmd-zapwand.c" />
+    <ClCompile Include="..\..\src\combat\melee1.c" />
+    <ClCompile Include="..\..\src\combat\shoot.c" />
     <ClCompile Include="..\..\src\core.c" />
     <ClCompile Include="..\..\src\creature.c" />
     <ClCompile Include="..\..\src\dungeon-file.c" />
@@ -220,7 +222,6 @@
     <ClCompile Include="..\..\src\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\melee1.c" />
     <ClCompile Include="..\..\src\mind.c" />
     <ClCompile Include="..\..\src\monster1.c" />
     <ClCompile Include="..\..\src\monster2.c" />
@@ -252,7 +253,6 @@
     <ClCompile Include="..\..\src\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
-    <ClCompile Include="..\..\src\shoot.c" />
     <ClCompile Include="..\..\src\snipe.c" />
     <ClCompile Include="..\..\src\sort.c" />
     <ClCompile Include="..\..\src\spells-diceroll.c" />
@@ -298,6 +298,8 @@
     <ClInclude Include="..\..\src\cmd\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\cmd\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd\cmd-zapwand.h" />
+    <ClInclude Include="..\..\src\combat\melee.h" />
+    <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\english.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
@@ -328,7 +330,6 @@
     <ClInclude Include="..\..\src\inet.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\load.h" />
-    <ClInclude Include="..\..\src\melee.h" />
     <ClInclude Include="..\..\src\mind.h" />
     <ClInclude Include="..\..\src\monster-process.h" />
     <ClInclude Include="..\..\src\monster-spell.h" />
@@ -385,7 +386,6 @@
     <ClInclude Include="..\..\src\save.h" />
     <ClInclude Include="..\..\src\scores.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
-    <ClInclude Include="..\..\src\shoot.h" />
     <ClInclude Include="..\..\src\snipe.h" />
     <ClInclude Include="..\..\src\sort.h" />
     <ClInclude Include="..\..\src\spells-diceroll.h" />

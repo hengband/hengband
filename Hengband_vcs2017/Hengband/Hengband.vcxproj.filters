@@ -208,12 +208,6 @@
     <ClCompile Include="..\..\src\grid.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee1.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\shoot.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\store.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -399,6 +393,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-zapwand.c">
       <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\combat\melee1.c">
+      <Filter>combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\combat\shoot.c">
+      <Filter>combat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -586,12 +586,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid.h">
       <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\melee.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\shoot.h">
-      <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\store.h">
       <Filter>market</Filter>
@@ -781,6 +775,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-zapwand.h">
       <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\melee.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\shoot.h">
+      <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
