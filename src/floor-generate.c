@@ -1241,7 +1241,7 @@ static void generate_fixed_floor(void)
  * @brief ダンジョン時のランダムフロア生成 / Make a real level
  * @return フロアの生成に成功したらTRUE
  */
-static bool level_gen(concptr *why)
+static bool level_gen(floor_type *floor_ptr, concptr *why)
 {
 	int level_height, level_width;
 
@@ -1271,30 +1271,30 @@ static bool level_gen(concptr *why)
 			while ((level_height == MAX_HGT/SCREEN_HGT) && (level_width == MAX_WID/SCREEN_WID));
 		}
 
-		current_floor_ptr->height = level_height * SCREEN_HGT;
-		current_floor_ptr->width = level_width * SCREEN_WID;
+		floor_ptr->height = level_height * SCREEN_HGT;
+		floor_ptr->width = level_width * SCREEN_WID;
 
 		/* Assume illegal panel */
-		panel_row_min = current_floor_ptr->height;
-		panel_col_min = current_floor_ptr->width;
+		panel_row_min = floor_ptr->height;
+		panel_col_min = floor_ptr->width;
 
 		msg_format_wizard(CHEAT_DUNGEON,
 			_("小さなフロア: X:%d, Y:%d", "A 'small' dungeon level: X:%d, Y:%d."),
-			current_floor_ptr->width, current_floor_ptr->height);
+			floor_ptr->width, floor_ptr->height);
 	}
 	else
 	{
 		/* Big dungeon */
-		current_floor_ptr->height = MAX_HGT;
-		current_floor_ptr->width = MAX_WID;
+		floor_ptr->height = MAX_HGT;
+		floor_ptr->width = MAX_WID;
 
 		/* Assume illegal panel */
-		panel_row_min = current_floor_ptr->height;
-		panel_col_min = current_floor_ptr->width;
+		panel_row_min = floor_ptr->height;
+		panel_col_min = floor_ptr->width;
 	}
 
 	/* Make a dungeon */
-	if (!cave_gen(current_floor_ptr))
+	if (!cave_gen(floor_ptr))
 	{
 		*why = _("ダンジョン生成に失敗", "could not place player");
 		return FALSE;
@@ -1442,7 +1442,7 @@ void generate_random_floor(void)
 		/* Build a real level */
 		else
 		{
-			okay = level_gen(&why);
+			okay = level_gen(current_floor_ptr, &why);
 		}
 
 
