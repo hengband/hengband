@@ -3532,14 +3532,14 @@ static void process_command(void)
 		/*** Wizard Commands ***/
 		case KTRL('W'):
 		{
-			if (p_ptr->wizard)
+			if (current_world_ptr->wizard)
 			{
-				p_ptr->wizard = FALSE;
+				current_world_ptr->wizard = FALSE;
 				msg_print(_("ウィザードモード解除。", "Wizard mode off."));
 			}
 			else if (enter_wizard_mode())
 			{
-				p_ptr->wizard = TRUE;
+				current_world_ptr->wizard = TRUE;
 				msg_print(_("ウィザードモード突入。", "Wizard mode on."));
 			}
 			p_ptr->update |= (PU_MONSTERS);
@@ -5479,7 +5479,7 @@ void play_game(bool new_game)
 	{
 		if (enter_wizard_mode())
 		{
-			p_ptr->wizard = TRUE;
+			current_world_ptr->wizard = TRUE;
 
 			if (p_ptr->is_dead || !p_ptr->y || !p_ptr->x)
 			{
@@ -5661,7 +5661,7 @@ void play_game(bool new_game)
 			else
 			{
 				/* Mega-Hack -- Allow player to cheat death */
-				if ((p_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
+				if ((current_world_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
 				{
 					cheat_death(p_ptr);
 				}

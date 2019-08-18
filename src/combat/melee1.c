@@ -1543,7 +1543,7 @@ static void py_attack_aux(POSITION y, POSITION x, bool *fear, bool *mdeath, s16b
 					{
 						old_ptr = ma_ptr;
 
-						if (p_ptr->wizard && cheat_xtra)
+						if (current_world_ptr->wizard && cheat_xtra)
 						{
 							msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
 						}

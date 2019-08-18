@@ -645,7 +645,7 @@ errr process_pref_file_command(char *buf)
 					int ob = option_info[i].o_bit;
 
 					if ((p_ptr->playing || current_world_ptr->character_xtra) &&
-						(OPT_PAGE_BIRTH == option_info[i].o_page) && !p_ptr->wizard)
+						(OPT_PAGE_BIRTH == option_info[i].o_page) && !current_world_ptr->wizard)
 					{
 						msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
 						msg_print(NULL);

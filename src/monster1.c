@@ -2041,7 +2041,7 @@ void roff_top(MONRACE_IDX r_idx)
 	Term_addstr(-1, TERM_WHITE, "'):");
 
 	/* Wizards get extra info */
-	if (p_ptr->wizard)
+	if (current_world_ptr->wizard)
 	{
 		char buf[16];
 
@@ -2972,7 +2972,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			chance = r_ptr->artifact_percent[i];
 		}
 
-		if ((a_idx > 0) && ((randint0(100) < chance) || p_ptr->wizard))
+		if ((a_idx > 0) && ((randint0(100) < chance) || current_world_ptr->wizard))
 		{
 			artifact_type *a_ptr = &a_info[a_idx];
 

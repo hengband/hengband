@@ -745,7 +745,7 @@ static void prt_title(void)
 	concptr p = "";
 	GAME_TEXT str[14];
 
-	if (p_ptr->wizard)
+	if (current_world_ptr->wizard)
 	{
 		p = _("[ウィザード]", "[=-WIZARD-=]");
 	}
@@ -1011,7 +1011,7 @@ static void prt_depth(void)
  */
 static void prt_hunger(void)
 {
-	if(p_ptr->wizard && p_ptr->inside_arena) return;
+	if(current_world_ptr->wizard && p_ptr->inside_arena) return;
 
 	/* Fainting / Starving */
 	if (p_ptr->food < PY_FOOD_FAINT)
@@ -1392,7 +1392,7 @@ static void health_redraw(bool riding)
 
 	m_ptr = &current_floor_ptr->m_list[health_who];
 
-	if (p_ptr->wizard && p_ptr->phase_out)
+	if (current_world_ptr->wizard && p_ptr->phase_out)
 	{
 		row = ROW_INFO - 2;
 		col = COL_INFO + 2;

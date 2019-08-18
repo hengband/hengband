@@ -39,6 +39,7 @@
 #include "quest.h"
 #include "dungeon.h"
 #include "spells.h"
+#include "world.h"
 
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /
@@ -465,7 +466,7 @@ static void evaluate_monster_exp(char *buf, monster_type *m_ptr)
 	}
 	else if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG2_KAGE))
 	{
-		if (!p_ptr->wizard)
+		if (!current_world_ptr->wizard)
 		{
 			sprintf(buf,"??");
 			return;
@@ -974,7 +975,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 #endif
 
 		/* Display a message */
-		if (p_ptr->wizard)
+		if (current_world_ptr->wizard)
 		{
 			char f_idx_str[32];
 			if (g_ptr->mimic) sprintf(f_idx_str, "%d/%d", g_ptr->feat, g_ptr->mimic);

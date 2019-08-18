@@ -1307,7 +1307,7 @@ void do_cmd_options(void)
 		case 'b':
 		{
 			/* Spawn */
-			do_cmd_options_aux(OPT_PAGE_BIRTH, (!p_ptr->wizard || !allow_debug_opts) ?
+			do_cmd_options_aux(OPT_PAGE_BIRTH, (!current_world_ptr->wizard || !allow_debug_opts) ?
 				_("初期オプション(参照のみ)", "Birth Options(browse only)") :
 				_("初期オプション((*)はスコアに影響)", "Birth Options((*)s effect score)"));
 			break;
@@ -1476,7 +1476,7 @@ void do_cmd_options_aux(int page, concptr info)
 	int     opt[24];
 	char    buf[80];
 	bool    browse_only = (page == OPT_PAGE_BIRTH) && current_world_ptr->character_generated &&
-		(!p_ptr->wizard || !allow_debug_opts);
+		(!current_world_ptr->wizard || !allow_debug_opts);
 
 
 	/* Lookup the options */

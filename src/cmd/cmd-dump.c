@@ -3427,7 +3427,7 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
 		}
 		else
 		{
-			if (!p_ptr->wizard)
+			if (!current_world_ptr->wizard)
 			{
 				/* Skip non-flavoured objects */
 				if (!k_ptr->flavor) continue;
@@ -5202,9 +5202,9 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		/* Hack -- visual_list mode */
 		if (per_page == 1)
 		{
-			c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (p_ptr->wizard || visual_only) ? 56 : 61);
+			c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (current_world_ptr->wizard || visual_only) ? 56 : 61);
 		}
-		if (p_ptr->wizard || visual_only)
+		if (current_world_ptr->wizard || visual_only)
 		{
 			c_prt(attr, format("%d", r_idx), row + i, 62);
 		}
@@ -5328,7 +5328,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 			prt(format(_("%s - モンスター", "%s - monsters"), !visual_only ? _("知識", "Knowledge") : _("表示", "Visuals")), 2, 0);
 			if (direct_r_idx < 0) prt(_("グループ", "Group"), 4, 0);
 			prt(_("名前", "Name"), 4, max + 3);
-			if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
+			if (current_world_ptr->wizard || visual_only) prt("Idx", 4, 62);
 			prt(_("文字", "Sym"), 4, 67);
 			if (!visual_only) prt(_("殺害数", "Kills"), 4, 72);
 
@@ -5534,9 +5534,9 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 		/* Hack -- visual_list mode */
 		if (per_page == 1)
 		{
-			c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (p_ptr->wizard || visual_only) ? 64 : 68);
+			c_prt(attr, format("%02x/%02x", flavor_k_ptr->x_attr, flavor_k_ptr->x_char), row + i, (current_world_ptr->wizard || visual_only) ? 64 : 68);
 		}
-		if (p_ptr->wizard || visual_only)
+		if (current_world_ptr->wizard || visual_only)
 		{
 			c_prt(attr, format("%d", k_idx), row + i, 70);
 		}
@@ -5698,13 +5698,13 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 			prt(format("%s - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
 			if (direct_k_idx < 0) prt("グループ", 4, 0);
 			prt("名前", 4, max + 3);
-			if (p_ptr->wizard || visual_only) prt("Idx", 4, 70);
+			if (current_world_ptr->wizard || visual_only) prt("Idx", 4, 70);
 			prt("文字", 4, 74);
 #else
 			prt(format("%s - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
 			if (direct_k_idx < 0) prt("Group", 4, 0);
 			prt("Name", 4, max + 3);
-			if (p_ptr->wizard || visual_only) prt("Idx", 4, 70);
+			if (current_world_ptr->wizard || visual_only) prt("Idx", 4, 70);
 			prt("Sym", 4, 75);
 #endif
 
@@ -5908,9 +5908,9 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 			/* Display lighting level */
 			c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + strlen(f_name + f_ptr->name));
 
-			c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], f_ptr->x_char[lighting_level]), row_i, f_idx_col - ((p_ptr->wizard || visual_only) ? 6 : 2));
+			c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], f_ptr->x_char[lighting_level]), row_i, f_idx_col - ((current_world_ptr->wizard || visual_only) ? 6 : 2));
 		}
-		if (p_ptr->wizard || visual_only)
+		if (current_world_ptr->wizard || visual_only)
 		{
 			c_prt(attr, format("%d", f_idx), row_i, f_idx_col);
 		}
@@ -6048,12 +6048,12 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 			prt(_("名前", "Name"), 4, max + 3);
 			if (use_bigtile)
 			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 62);
+				if (current_world_ptr->wizard || visual_only) prt("Idx", 4, 62);
 				prt(_("文字 ( l/ d)", "Sym ( l/ d)"), 4, 66);
 			}
 			else
 			{
-				if (p_ptr->wizard || visual_only) prt("Idx", 4, 64);
+				if (current_world_ptr->wizard || visual_only) prt("Idx", 4, 64);
 				prt(_("文字 (l/d)", "Sym (l/d)"), 4, 68);
 			}
 
@@ -6774,7 +6774,7 @@ static void do_cmd_knowledge_quests(void)
 	do_cmd_knowledge_quests_completed(fff, quest_num);
 	fputc('\n', fff);
 	do_cmd_knowledge_quests_failed(fff, quest_num);
-	if (p_ptr->wizard)
+	if (current_world_ptr->wizard)
 	{
 		fputc('\n', fff);
 		do_cmd_knowledge_quests_wiz_random(fff);

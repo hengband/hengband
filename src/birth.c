@@ -1799,7 +1799,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 
 	/* Assume no cheating */
 	creature_ptr->noscore = 0;
-	creature_ptr->wizard = FALSE;
+	current_world_ptr->wizard = FALSE;
 
 	/* Not waiting to report score */
 	creature_ptr->wait_report_score = FALSE;

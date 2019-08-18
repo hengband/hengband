@@ -4605,7 +4605,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 #else
 		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
-		if (p_ptr->wizard) msg_print(_("(破損)", "(breakage)"));
+		if (current_world_ptr->wizard) msg_print(_("(破損)", "(breakage)"));
 
 		/* Failure */
 		return (0);
@@ -4704,7 +4704,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-		if (p_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
+		if (current_world_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 		/* Failure */
 		return (0);
@@ -4753,7 +4753,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-			if (p_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
+			if (current_world_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 			/* Mega-Hack -- preserve artifacts */
 			if (preserve_mode)
@@ -4826,7 +4826,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
 #endif
 
-		if (p_ptr->wizard) msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
+		if (current_world_ptr->wizard) msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
 		/* Hack -- Preserve artifacts */
 		if (object_is_fixed_artifact(j_ptr))

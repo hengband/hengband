@@ -1034,7 +1034,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 
 	if (m_ptr->dealt_damage > m_ptr->max_maxhp * 100) m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
 
-	if (p_ptr->wizard)
+	if (current_world_ptr->wizard)
 	{
 		msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
 	}

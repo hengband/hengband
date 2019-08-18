@@ -33,6 +33,7 @@
 #include "view-mainwindow.h"
 #include "player-class.h"
 #include "player-personality.h"
+#include "world.h"
 
  /*
   * The artifact arrays
@@ -1700,7 +1701,7 @@ bool become_random_artifact(object_type *o_ptr, bool a_scroll)
 				random_slay(o_ptr);
 				break;
 			default:
-				if (p_ptr->wizard) msg_print("Switch error in become_random_artifact!");
+				if (current_world_ptr->wizard) msg_print("Switch error in become_random_artifact!");
 				powers++;
 		}
 	};

@@ -36,6 +36,7 @@
 #include "targeting.h"
 #include "realm-song.h"
 #include "view-mainwindow.h"
+#include "world.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 
@@ -543,7 +544,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					project(0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE,
 						(PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 				}
-				if (caster_ptr->wizard)
+				if (current_world_ptr->wizard)
 				{
 					msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
 				}
@@ -1101,7 +1102,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 					fire_ball(GF_HELL_FIRE, dir, power, 1);
 
-					if (caster_ptr->wizard)
+					if (current_world_ptr->wizard)
 					{
 						msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
 					}

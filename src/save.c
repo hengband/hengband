@@ -484,7 +484,7 @@ static void wr_options(void)
 
 	c = 0;
 
-	if (p_ptr->wizard) c |= 0x0002;
+	if (current_world_ptr->wizard) c |= 0x0002;
 
 	if (cheat_sight) c |= 0x0040;
 	if (cheat_turn) c |= 0x0080;

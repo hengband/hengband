@@ -514,7 +514,7 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 		}
 
 		/* Accept any grid when wizard mode */
-		if (p_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!current_floor_ptr->grid_array[y][x].m_idx || (current_floor_ptr->grid_array[y][x].m_idx == p_ptr->riding))) break;
+		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!current_floor_ptr->grid_array[y][x].m_idx || (current_floor_ptr->grid_array[y][x].m_idx == p_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
 		if (cave_player_teleportable_bold(y, x, mode)) break;
@@ -654,7 +654,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	if (randint0(100) < 50) go_up = TRUE;
 	else go_up = FALSE;
 
-	if ((m_idx <= 0) && p_ptr->wizard)
+	if ((m_idx <= 0) && current_world_ptr->wizard)
 	{
 		if (get_check("Force to go up? ")) go_up = TRUE;
 		else if (get_check("Force to go down? ")) go_up = FALSE;
@@ -2652,7 +2652,7 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 	char buf[256];
 	bool max = FALSE;
 
-	if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && p_ptr->wizard)
+	if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && current_world_ptr->wizard)
 	msg_print(_("警告！ print_spell が領域なしに呼ばれた", "Warning! print_spells called with null realm"));
 
 	/* Title the list */

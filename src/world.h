@@ -55,6 +55,8 @@ typedef struct {
 
 	bool creating_savefile;		/* New savefile is currently created */
 
+	bool wizard;		  /* This world under wizard mode */
+
 
 } world_type;
 
