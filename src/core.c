@@ -3982,7 +3982,7 @@ static void process_command(void)
 		{
 			if (use_command && rogue_like_commands)
 			{
-				do_cmd_use();
+				do_cmd_use(p_ptr);
 			}
 			else
 			{
@@ -4009,7 +4009,7 @@ static void process_command(void)
 		case 'u':
 		{
 			if (use_command && !rogue_like_commands)
-				do_cmd_use();
+				do_cmd_use(p_ptr);
 			else
 				do_cmd_use_staff(p_ptr);
 			break;

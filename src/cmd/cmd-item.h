@@ -14,4 +14,4 @@ extern void do_cmd_target(void);
 extern void do_cmd_look(void);
 extern void do_cmd_locate(player_type *creature_ptr);
 extern void do_cmd_query_symbol(void);
-extern void do_cmd_use(void);
+extern void do_cmd_use(player_type *creature_ptr);

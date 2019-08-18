@@ -1486,22 +1486,22 @@ void do_cmd_query_symbol(void)
  * @details
  * XXX - Add actions for other item types
  */
-void do_cmd_use(void)
+void do_cmd_use(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	concptr q, s;
 
-	if (p_ptr->wild_mode)
+	if (creature_ptr->wild_mode)
 	{
 		return;
 	}
 
-	if (cmd_limit_arena(p_ptr)) return;
+	if (cmd_limit_arena(creature_ptr)) return;
 
-	if (p_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+	if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	item_tester_hook = item_tester_hook_use;
@@ -1509,49 +1509,49 @@ void do_cmd_use(void)
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing to use.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	switch (o_ptr->tval)
 	{
 		case TV_SPIKE:
-			do_cmd_spike(p_ptr);
+			do_cmd_spike(creature_ptr);
 			break;
 
 		case TV_FOOD:
-			exe_eat_food(p_ptr, item);
+			exe_eat_food(creature_ptr, item);
 			break;
 
 		case TV_WAND:
-			exe_aim_wand(p_ptr, item);
+			exe_aim_wand(creature_ptr, item);
 			break;
 
 		case TV_STAFF:
-			exe_use_staff(p_ptr, item);
+			exe_use_staff(creature_ptr, item);
 			break;
 
 		case TV_ROD:
-			exe_zap_rod(p_ptr, item);
+			exe_zap_rod(creature_ptr, item);
 			break;
 
 		case TV_POTION:
-			exe_quaff_potion(p_ptr, item);
+			exe_quaff_potion(creature_ptr, item);
 			break;
 
 		case TV_SCROLL:
-			if (cmd_limit_blind(p_ptr)) return;
-			if (cmd_limit_confused(p_ptr)) return;
-			exe_read(p_ptr, item, TRUE);
+			if (cmd_limit_blind(creature_ptr)) return;
+			if (cmd_limit_confused(creature_ptr)) return;
+			exe_read(creature_ptr, item, TRUE);
 			break;
 
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
-			exe_fire(item, &p_ptr->inventory_list[INVEN_BOW], SP_NONE);
+			exe_fire(item, &creature_ptr->inventory_list[INVEN_BOW], SP_NONE);
 			break;
 
 		default:
-			exe_activate(p_ptr, item);
+			exe_activate(creature_ptr, item);
 			break;
 	}
 }
