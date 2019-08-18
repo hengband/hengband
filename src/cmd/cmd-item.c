@@ -51,7 +51,7 @@
 #include "player-inventory.h"
 
 /*!
- * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display p_ptr->inventory_list
+ * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list
  * @return なし 
  */
 void do_cmd_inven(player_type *creature_ptr)
@@ -163,7 +163,7 @@ void do_cmd_wield(player_type *creature_ptr)
 	q = _("どれを装備しますか? ", "Wear/Wield which item? ");
 	s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	/* Check the slot */
@@ -184,7 +184,7 @@ void do_cmd_wield(player_type *creature_ptr)
 			/* Choose a weapon from the equipment only */
 			q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
 			s = _("おっと。", "Oops.");
-			if (!choose_object(p_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
+			if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 			if (slot == INVEN_RARM) need_switch_wielding = INVEN_LARM;
 		}
 
@@ -200,7 +200,7 @@ void do_cmd_wield(player_type *creature_ptr)
 			/* Choose a hand */
 			q = _("どちらの手に装備しますか?", "Equip which hand? ");
 			s = _("おっと。", "Oops.");
-			if (!choose_object(p_ptr, &slot, q, s, (USE_EQUIP), 0)) return;
+			if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), 0)) return;
 		}
 		break;
 
@@ -230,7 +230,7 @@ void do_cmd_wield(player_type *creature_ptr)
 			q = _("どちらの手に装備しますか?", "Equip which hand? ");
 			s = _("おっと。", "Oops.");
 			
-			if (!choose_object(p_ptr, &slot, q, s, (USE_EQUIP), 0)) return;
+			if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), 0)) return;
 			if ((slot == INVEN_LARM) && !has_melee_weapon(creature_ptr, INVEN_RARM))
 				need_switch_wielding = INVEN_RARM;
 		}
@@ -252,7 +252,7 @@ void do_cmd_wield(player_type *creature_ptr)
 		/* Restrict the choices */
 		select_ring_slot = TRUE;
 
-		if (!choose_object(p_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
+		if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
 		{
 			select_ring_slot = FALSE;
 			return;
@@ -510,7 +510,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
 	q = _("どれを装備からはずしますか? ", "Take off which item? ");
 	s = _("はずせる装備がない。", "You are not wearing anything to take off.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Item is cursed */
@@ -638,7 +638,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 	q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
 	s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	/* Verify unless quantity given beforehand */

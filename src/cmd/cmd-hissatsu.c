@@ -401,7 +401,7 @@ void do_cmd_gain_hissatsu(player_type *creature_ptr)
 	q = _("どの書から学びますか? ", "Study which book? ");
 	s = _("読める書がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_HISSATSU_BOOK);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_HISSATSU_BOOK);
 	if (!o_ptr) return;
 
 	for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++)
