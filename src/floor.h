@@ -81,6 +81,7 @@
 
 
 typedef struct {
+	DUNGEON_IDX dungeon_idx;
 	grid_type *grid_array[MAX_HGT];
 	DEPTH dun_level;		/*!< 現在の実ダンジョン階層base_levelの参照元となる / Current dungeon level */
 	DEPTH base_level;		/*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
