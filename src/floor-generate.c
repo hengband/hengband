@@ -1158,7 +1158,7 @@ static void build_battle(void)
  * @brief モンスター闘技場への導入処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void generate_gambling_arena(void)
+static void generate_gambling_arena(floor_type *floor_ptr)
 {
 	POSITION y, x;
 	MONSTER_IDX i;
@@ -1174,7 +1174,7 @@ static void generate_gambling_arena(void)
 			place_solid_perm_bold(y, x);
 
 			/* Illuminate and memorize the walls */
-			current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	}
 
@@ -1184,7 +1184,7 @@ static void generate_gambling_arena(void)
 		for (x = qx + 1; x < qx + SCREEN_WID - 1; x++)
 		{
 			/* Create empty floor */
-			current_floor_ptr->grid_array[y][x].feat = feat_floor;
+			floor_ptr->grid_array[y][x].feat = feat_floor;
 		}
 	}
 
@@ -1193,11 +1193,11 @@ static void generate_gambling_arena(void)
 	for(i = 0; i < 4; i++)
 	{
 		place_monster_aux(0, p_ptr->y + 8 + (i/2)*4, p_ptr->x - 2 + (i%2)*4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
-		set_friendly(&current_floor_ptr->m_list[current_floor_ptr->grid_array[p_ptr->y+8+(i/2)*4][p_ptr->x-2+(i%2)*4].m_idx]);
+		set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[p_ptr->y+8+(i/2)*4][p_ptr->x-2+(i%2)*4].m_idx]);
 	}
-	for(i = 1; i < current_floor_ptr->m_max; i++)
+	for(i = 1; i < floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -1412,18 +1412,14 @@ void generate_random_floor(void)
 		/* Clear and empty the current_floor_ptr->grid_array */
 		clear_cave();
 
-		/* Build the arena -KMW- */
 		if (p_ptr->inside_arena)
 		{
-			/* Small arena */
 			generate_challenge_arena(current_floor_ptr);
 		}
 
-		/* Build the battle -KMW- */
 		else if (p_ptr->phase_out)
 		{
-			/* Small arena */
-			generate_gambling_arena();
+			generate_gambling_arena(current_floor_ptr);
 		}
 
 		else if (p_ptr->inside_quest)
