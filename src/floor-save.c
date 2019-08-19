@@ -342,18 +342,18 @@ void prepare_change_floor_mode(BIT_FLAGS mode)
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
  * @return なし
  */
-static void build_dead_end(void)
+static void build_dead_end(floor_type *floor_ptr)
 {
 	POSITION x, y;
 
-	clear_cave(current_floor_ptr);
+	clear_cave(floor_ptr);
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(0);
 
 	/* Smallest area */
-	current_floor_ptr->height = SCREEN_HGT;
-	current_floor_ptr->width = SCREEN_WID;
+	floor_ptr->height = SCREEN_HGT;
+	floor_ptr->width = SCREEN_WID;
 
 	/* Filled with permanent walls */
 	for (y = 0; y < MAX_HGT; y++)
@@ -366,13 +366,13 @@ static void build_dead_end(void)
 	}
 
 	/* Place at center of the floor */
-	p_ptr->y = current_floor_ptr->height / 2;
-	p_ptr->x = current_floor_ptr->width / 2;
+	p_ptr->y = floor_ptr->height / 2;
+	p_ptr->x = floor_ptr->width / 2;
 
 	/* Give one square */
 	place_floor_bold(p_ptr->y, p_ptr->x);
 
-	wipe_generate_random_floor_flags(current_floor_ptr);
+	wipe_generate_random_floor_flags(floor_ptr);
 }
 
 
@@ -1293,7 +1293,7 @@ void change_floor(BIT_FLAGS floor_mode)
 				msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
 
 				/* Create simple dead end */
-				build_dead_end();
+				build_dead_end(current_floor_ptr);
 
 				/* Break connection */
 				if (floor_mode & CFM_UP)
