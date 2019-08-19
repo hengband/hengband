@@ -1047,15 +1047,15 @@ static void build_arena(void)
  * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void generate_challenge_arena(void)
+static void generate_challenge_arena(floor_type *floor_ptr)
 {
 	POSITION y, x;
 	POSITION qy = 0;
 	POSITION qx = 0;
 
 	/* Smallest area */
-	current_floor_ptr->height = SCREEN_HGT;
-	current_floor_ptr->width = SCREEN_WID;
+	floor_ptr->height = SCREEN_HGT;
+	floor_ptr->width = SCREEN_WID;
 
 	/* Start with solid walls */
 	for (y = 0; y < MAX_HGT; y++)
@@ -1066,7 +1066,7 @@ static void generate_challenge_arena(void)
 			place_solid_perm_bold(y, x);
 
 			/* Illuminate and memorize the walls */
-			current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	}
 
@@ -1076,7 +1076,7 @@ static void generate_challenge_arena(void)
 		for (x = qx + 1; x < qx + SCREEN_WID - 1; x++)
 		{
 			/* Create empty floor */
-			current_floor_ptr->grid_array[y][x].feat = feat_floor;
+			floor_ptr->grid_array[y][x].feat = feat_floor;
 		}
 	}
 
@@ -1416,7 +1416,7 @@ void generate_random_floor(void)
 		if (p_ptr->inside_arena)
 		{
 			/* Small arena */
-			generate_challenge_arena();
+			generate_challenge_arena(current_floor_ptr);
 		}
 
 		/* Build the battle -KMW- */
