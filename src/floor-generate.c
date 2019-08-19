@@ -1336,34 +1336,34 @@ void wipe_generate_random_floor_flags(void)
  * @brief フロアの全情報を初期化する / Clear and empty the current_floor_ptr->grid_array
  * @return なし
  */
-void clear_cave(void)
+void clear_cave(floor_type *floor_ptr)
 {
 	POSITION x, y;
 	int i;
 
 	/* Very simplified version of wipe_o_list() */
-	(void)C_WIPE(current_floor_ptr->o_list, current_floor_ptr->o_max, object_type);
-	current_floor_ptr->o_max = 1;
-	current_floor_ptr->o_cnt = 0;
+	(void)C_WIPE(floor_ptr->o_list, floor_ptr->o_max, object_type);
+	floor_ptr->o_max = 1;
+	floor_ptr->o_cnt = 0;
 
 	/* Very simplified version of wipe_m_list() */
 	for (i = 1; i < max_r_idx; i++)
 		r_info[i].cur_num = 0;
-	(void)C_WIPE(current_floor_ptr->m_list, current_floor_ptr->m_max, monster_type);
-	current_floor_ptr->m_max = 1;
-	current_floor_ptr->m_cnt = 0;
-	for (i = 0; i < MAX_MTIMED; i++) current_floor_ptr->mproc_max[i] = 0;
+	(void)C_WIPE(floor_ptr->m_list, floor_ptr->m_max, monster_type);
+	floor_ptr->m_max = 1;
+	floor_ptr->m_cnt = 0;
+	for (i = 0; i < MAX_MTIMED; i++) floor_ptr->mproc_max[i] = 0;
 
 	/* Pre-calc cur_num of pets in party_mon[] */
 	precalc_cur_num_of_pet();
 
 
-	/* Start with a blank current_floor_ptr->grid_array */
+	/* Start with a blank floor_ptr->grid_array */
 	for (y = 0; y < MAX_HGT; y++)
 	{
 		for (x = 0; x < MAX_WID; x++)
 		{
-			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 			g_ptr->info = 0;
 			g_ptr->feat = 0;
 			g_ptr->o_idx = 0;
@@ -1380,13 +1380,13 @@ void clear_cave(void)
 	p_ptr->x = p_ptr->y = 0;
 
 	/* Set the base level */
-	current_floor_ptr->base_level = current_floor_ptr->dun_level;
+	floor_ptr->base_level = floor_ptr->dun_level;
 
 	/* Reset the monster generation level */
-	current_floor_ptr->monster_level = current_floor_ptr->base_level;
+	floor_ptr->monster_level = floor_ptr->base_level;
 
 	/* Reset the object generation level */
-	current_floor_ptr->object_level = current_floor_ptr->base_level;
+	floor_ptr->object_level = floor_ptr->base_level;
 }
 
 
@@ -1406,11 +1406,9 @@ void generate_random_floor(void)
 	for (num = 0; TRUE; num++)
 	{
 		bool okay = TRUE;
-
 		concptr why = NULL;
 
-		/* Clear and empty the current_floor_ptr->grid_array */
-		clear_cave();
+		clear_cave(current_floor_ptr);
 
 		if (p_ptr->inside_arena)
 		{

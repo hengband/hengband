@@ -2999,10 +2999,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 	grid_template_type *templates;
 
-
-	/*** Wipe all current_floor_ptr->grid_array ***/
-	clear_cave();
-
+	clear_cave(current_floor_ptr);
 
 	/*** Basic info ***/
 
