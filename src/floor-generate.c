@@ -1306,27 +1306,27 @@ static bool level_gen(floor_type *floor_ptr, concptr *why)
  * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after current_floor_ptr->grid_array generation
  * @return なし
  */
-void wipe_generate_random_floor_flags(void)
+void wipe_generate_random_floor_flags(floor_type *floor_ptr)
 {
 	POSITION x, y;
 
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
 			/* Wipe unused flags */
-			current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+			floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		}
 	}
 
-	if (current_floor_ptr->dun_level)
+	if (floor_ptr->dun_level)
 	{
-		for (y = 1; y < current_floor_ptr->height - 1; y++)
+		for (y = 1; y < floor_ptr->height - 1; y++)
 		{
-			for (x = 1; x < current_floor_ptr->width - 1; x++)
+			for (x = 1; x < floor_ptr->width - 1; x++)
 			{
 				/* There might be trap */
-				current_floor_ptr->grid_array[y][x].info |= CAVE_UNSAFE;
+				floor_ptr->grid_array[y][x].info |= CAVE_UNSAFE;
 			}
 		}
 	}
@@ -1468,7 +1468,7 @@ void generate_random_floor(void)
 	/* Reset flag */
 	p_ptr->enter_dungeon = FALSE;
 
-	wipe_generate_random_floor_flags();
+	wipe_generate_random_floor_flags(current_floor_ptr);
 }
 
 /*!

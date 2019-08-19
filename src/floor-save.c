@@ -372,7 +372,7 @@ static void build_dead_end(void)
 	/* Give one square */
 	place_floor_bold(p_ptr->y, p_ptr->x);
 
-	wipe_generate_random_floor_flags();
+	wipe_generate_random_floor_flags(current_floor_ptr);
 }
 
 
