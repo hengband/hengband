@@ -3105,7 +3105,7 @@ static void process_world(void)
 	extract_day_hour_min(&day, &hour, &min);
 
 	/* Update dungeon feeling, and announce it if changed */
-	update_dungeon_feeling();
+	update_dungeon_feeling(current_floor_ptr);
 
 	/* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
 	if (ironman_downward && (p_ptr->dungeon_idx != DUNGEON_ANGBAND && p_ptr->dungeon_idx != 0))

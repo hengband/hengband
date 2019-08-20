@@ -273,26 +273,26 @@ byte get_dungeon_feeling(floor_type *floor_ptr)
  * / Update dungeon feeling, and announce it if changed
  * @return なし
  */
-void update_dungeon_feeling(void)
+void update_dungeon_feeling(floor_type *floor_ptr)
 {
 	byte new_feeling;
 	int quest_num;
 	int delay;
 
 	/* No feeling on the surface */
-	if (!current_floor_ptr->dun_level) return;
+	if (!floor_ptr->dun_level) return;
 
 	/* No feeling in the arena */
 	if (p_ptr->phase_out) return;
 
 	/* Extract delay time */
-	delay = MAX(10, 150 - p_ptr->skill_fos) * (150 - current_floor_ptr->dun_level) * TURNS_PER_TICK / 100;
+	delay = MAX(10, 150 - p_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
 
 	/* Not yet felt anything */
 	if (current_world_ptr->game_turn < p_ptr->feeling_turn + delay && !cheat_xtra) return;
 
 	/* Extract quest number (if any) */
-	quest_num = quest_number(current_floor_ptr->dun_level);
+	quest_num = quest_number(floor_ptr->dun_level);
 
 	/* No feeling in a quest */
 	if (quest_num &&
@@ -302,7 +302,7 @@ void update_dungeon_feeling(void)
 
 
 	/* Get new dungeon feeling */
-	new_feeling = get_dungeon_feeling(current_floor_ptr);
+	new_feeling = get_dungeon_feeling(floor_ptr);
 
 	/* Remember last time updated */
 	p_ptr->feeling_turn = current_world_ptr->game_turn;
