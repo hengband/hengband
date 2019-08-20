@@ -141,19 +141,19 @@ MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
   * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
   * @return 算出されたダンジョンの雰囲気ランク
   */
-byte get_dungeon_feeling(void)
+byte get_dungeon_feeling(floor_type *floor_ptr)
 {
 	const int base = 10;
 	int rating = 0;
 	MONSTER_IDX i;
 
 	/* Hack -- no feeling in the town */
-	if (!current_floor_ptr->dun_level) return 0;
+	if (!floor_ptr->dun_level) return 0;
 
 	/* Examine each monster */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 		monster_race *r_ptr;
 		int delta = 0;
 		if (!monster_is_valid(m_ptr)) continue;
@@ -165,19 +165,19 @@ byte get_dungeon_feeling(void)
 		if (r_ptr->flags1 & (RF1_UNIQUE))
 		{
 			/* Nearly out-of-depth unique monsters */
-			if (r_ptr->level + 10 > current_floor_ptr->dun_level)
+			if (r_ptr->level + 10 > floor_ptr->dun_level)
 			{
 				/* Boost rating by twice delta-depth */
-				delta += (r_ptr->level + 10 - current_floor_ptr->dun_level) * 2 * base;
+				delta += (r_ptr->level + 10 - floor_ptr->dun_level) * 2 * base;
 			}
 		}
 		else
 		{
 			/* Out-of-depth monsters */
-			if (r_ptr->level > current_floor_ptr->dun_level)
+			if (r_ptr->level > floor_ptr->dun_level)
 			{
 				/* Boost rating by delta-depth */
-				delta += (r_ptr->level - current_floor_ptr->dun_level) * base;
+				delta += (r_ptr->level - floor_ptr->dun_level) * base;
 			}
 		}
 
@@ -196,9 +196,9 @@ byte get_dungeon_feeling(void)
 	}
 
 	/* Examine each unidentified object */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[i];
+		object_type *o_ptr = &floor_ptr->o_list[i];
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 		int delta = 0;
 
@@ -246,10 +246,10 @@ byte get_dungeon_feeling(void)
 		if (o_ptr->tval == TV_AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !object_is_cursed(o_ptr)) delta += 15 * base;
 
 		/* Out-of-depth objects */
-		if (!object_is_cursed(o_ptr) && !object_is_broken(o_ptr) && k_ptr->level > current_floor_ptr->dun_level)
+		if (!object_is_cursed(o_ptr) && !object_is_broken(o_ptr) && k_ptr->level > floor_ptr->dun_level)
 		{
 			/* Rating increase */
-			delta += (k_ptr->level - current_floor_ptr->dun_level) * base;
+			delta += (k_ptr->level - floor_ptr->dun_level) * base;
 		}
 
 		rating += RATING_BOOST(delta);
@@ -302,7 +302,7 @@ void update_dungeon_feeling(void)
 
 
 	/* Get new dungeon feeling */
-	new_feeling = get_dungeon_feeling();
+	new_feeling = get_dungeon_feeling(current_floor_ptr);
 
 	/* Remember last time updated */
 	p_ptr->feeling_turn = current_world_ptr->game_turn;
