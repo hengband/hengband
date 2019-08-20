@@ -200,7 +200,7 @@ void check_quest_completion(monster_type *m_ptr)
 		{
 			if (!is_hostile(m_ptr)) break;
 
-			if (count_all_hostile_monsters() == 1)
+			if (count_all_hostile_monsters(current_floor_ptr) == 1)
 			{
 				if (q_ptr->flags & QUEST_FLAG_SILENT)
 				{
@@ -260,7 +260,7 @@ void check_quest_completion(monster_type *m_ptr)
 		{
 			if (!is_hostile(m_ptr)) break;
 
-			if (count_all_hostile_monsters() == 1)
+			if (count_all_hostile_monsters(current_floor_ptr) == 1)
 			{
 				q_ptr->status = QUEST_STATUS_STAGE_COMPLETED;
 

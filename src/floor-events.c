@@ -108,18 +108,18 @@ void night_falls(void)
  * @brief 現在フロアに残っている敵モンスターの数を返す /
  * @return 現在の敵モンスターの数
  */
-MONSTER_NUMBER count_all_hostile_monsters(void)
+MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
 {
 	POSITION x, y;
 	MONSTER_NUMBER number_mon = 0;
 
-	for (x = 0; x < current_floor_ptr->width; ++x)
+	for (x = 0; x < floor_ptr->width; ++x)
 	{
-		for (y = 0; y < current_floor_ptr->height; ++y)
+		for (y = 0; y < floor_ptr->height; ++y)
 		{
-			MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
+			MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
 
-			if (m_idx > 0 && is_hostile(&current_floor_ptr->m_list[m_idx]))
+			if (m_idx > 0 && is_hostile(&floor_ptr->m_list[m_idx]))
 			{
 				++number_mon;
 			}
