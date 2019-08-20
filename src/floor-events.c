@@ -1491,7 +1491,7 @@ static void mon_dark_hack(POSITION y, POSITION x)
  * updating.  Only squares in view of the player, whos state
  * changes are drawn via lite_spot().
  */
-void update_mon_lite(void)
+void update_mon_lite(floor_type *floor_ptr)
 {
 	int i, rad;
 	grid_type *g_ptr;
@@ -1507,10 +1507,10 @@ void update_mon_lite(void)
 		(MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
 
 	/* Clear all monster lit squares */
-	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
+	for (i = 0; i < floor_ptr->mon_lite_n; i++)
 	{
 		/* Point to grid */
-		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->mon_lite_y[i]][current_floor_ptr->mon_lite_x[i]];
+		g_ptr = &floor_ptr->grid_array[floor_ptr->mon_lite_y[i]][floor_ptr->mon_lite_x[i]];
 
 		/* Set temp or xtra flag */
 		g_ptr->info |= (g_ptr->info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA;
@@ -1529,9 +1529,9 @@ void update_mon_lite(void)
 		monster_race *r_ptr;
 
 		/* Loop through monsters, adding newly lit squares to changes list */
-		for (i = 1; i < current_floor_ptr->m_max; i++)
+		for (i = 1; i < floor_ptr->m_max; i++)
 		{
-			m_ptr = &current_floor_ptr->m_list[i];
+			m_ptr = &floor_ptr->m_list[i];
 			r_ptr = &r_info[m_ptr->r_idx];
 			if (!monster_is_valid(m_ptr)) continue;
 
@@ -1551,14 +1551,14 @@ void update_mon_lite(void)
 			if (!rad) continue;
 			else if (rad > 0)
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && is_daytime()) || p_ptr->phase_out)) continue;
+				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || p_ptr->phase_out)) continue;
 				if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) rad = 1;
 				add_mon_lite = mon_lite_hack;
 				f_flag = FF_LOS;
 			}
 			else
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (MON_CSLEEP(m_ptr) || (!current_floor_ptr->dun_level && !is_daytime()))) continue;
+				if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (MON_CSLEEP(m_ptr) || (!floor_ptr->dun_level && !is_daytime()))) continue;
 				add_mon_lite = mon_dark_hack;
 				f_flag = FF_PROJECT;
 				rad = -rad; /* Use absolute value */
@@ -1568,7 +1568,7 @@ void update_mon_lite(void)
 			mon_fy = m_ptr->fy;
 
 			/* Is the monster visible? */
-			mon_invis = !(current_floor_ptr->grid_array[mon_fy][mon_fx].info & CAVE_VIEW);
+			mon_invis = !(floor_ptr->grid_array[mon_fy][mon_fx].info & CAVE_VIEW);
 
 			/* The square it is on */
 			add_mon_lite(mon_fy, mon_fx);
@@ -1593,7 +1593,7 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy + 2, mon_fx);
 					add_mon_lite(mon_fy + 2, mon_fx - 1);
 
-					g_ptr = &current_floor_ptr->grid_array[mon_fy + 2][mon_fx];
+					g_ptr = &floor_ptr->grid_array[mon_fy + 2][mon_fx];
 
 					/* Radius 3 */
 					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
@@ -1611,7 +1611,7 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy - 2, mon_fx);
 					add_mon_lite(mon_fy - 2, mon_fx - 1);
 
-					g_ptr = &current_floor_ptr->grid_array[mon_fy - 2][mon_fx];
+					g_ptr = &floor_ptr->grid_array[mon_fy - 2][mon_fx];
 
 					/* Radius 3 */
 					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
@@ -1629,7 +1629,7 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy, mon_fx + 2);
 					add_mon_lite(mon_fy - 1, mon_fx + 2);
 
-					g_ptr = &current_floor_ptr->grid_array[mon_fy][mon_fx + 2];
+					g_ptr = &floor_ptr->grid_array[mon_fy][mon_fx + 2];
 
 					/* Radius 3 */
 					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
@@ -1647,7 +1647,7 @@ void update_mon_lite(void)
 					add_mon_lite(mon_fy, mon_fx - 2);
 					add_mon_lite(mon_fy - 1, mon_fx - 2);
 
-					g_ptr = &current_floor_ptr->grid_array[mon_fy][mon_fx - 2];
+					g_ptr = &floor_ptr->grid_array[mon_fy][mon_fx - 2];
 
 					/* Radius 3 */
 					if ((rad == 3) && cave_have_flag_grid(g_ptr, f_flag))
@@ -1695,15 +1695,15 @@ void update_mon_lite(void)
 	/*
 	 * Look at old set flags to see if there are any changes.
 	 */
-	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
+	for (i = 0; i < floor_ptr->mon_lite_n; i++)
 	{
-		fx = current_floor_ptr->mon_lite_x[i];
-		fy = current_floor_ptr->mon_lite_y[i];
+		fx = floor_ptr->mon_lite_x[i];
+		fy = floor_ptr->mon_lite_y[i];
 
 		/* We trust this grid is in bounds */
 
 		/* Point to grid */
-		g_ptr = &current_floor_ptr->grid_array[fy][fx];
+		g_ptr = &floor_ptr->grid_array[fy][fx];
 
 		if (g_ptr->info & CAVE_TEMP) /* Pervious lit */
 		{
@@ -1733,7 +1733,7 @@ void update_mon_lite(void)
 	}
 
 	/* Clear the lite array */
-	current_floor_ptr->mon_lite_n = 0;
+	floor_ptr->mon_lite_n = 0;
 
 	/* Copy the temp array into the lit array lighting the new squares. */
 	for (i = 0; i < end_temp; i++)
@@ -1744,7 +1744,7 @@ void update_mon_lite(void)
 		/* We trust this grid is in bounds */
 
 		/* Point to grid */
-		g_ptr = &current_floor_ptr->grid_array[fy][fx];
+		g_ptr = &floor_ptr->grid_array[fy][fx];
 
 		if (g_ptr->info & CAVE_MNLT) /* Lit */
 		{
@@ -1768,9 +1768,9 @@ void update_mon_lite(void)
 		}
 
 		/* Save in the monster lit or darkened array */
-		current_floor_ptr->mon_lite_x[current_floor_ptr->mon_lite_n] = fx;
-		current_floor_ptr->mon_lite_y[current_floor_ptr->mon_lite_n] = fy;
-		current_floor_ptr->mon_lite_n++;
+		floor_ptr->mon_lite_x[floor_ptr->mon_lite_n] = fx;
+		floor_ptr->mon_lite_y[floor_ptr->mon_lite_n] = fy;
+		floor_ptr->mon_lite_n++;
 	}
 
 	/* Clear the temp flag for the old lit or darken grids */
@@ -1778,7 +1778,7 @@ void update_mon_lite(void)
 	{
 		/* We trust this grid is in bounds */
 
-		current_floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]].info &= ~(CAVE_TEMP | CAVE_XTRA);
+		floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]].info &= ~(CAVE_TEMP | CAVE_XTRA);
 	}
 
 	/* Finished with tmp_pos.n */
@@ -1787,7 +1787,7 @@ void update_mon_lite(void)
 	/* Mega-Hack -- Visual update later */
 	p_ptr->update |= (PU_DELAY_VIS);
 
-	p_ptr->monlite = (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_MNLT) ? TRUE : FALSE;
+	p_ptr->monlite = (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_MNLT) ? TRUE : FALSE;
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{

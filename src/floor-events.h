@@ -9,5 +9,5 @@ extern void forget_lite(void);
 extern void update_lite(void);
 extern void forget_view(void);
 extern void update_view(void);
-extern void update_mon_lite(void);
+extern void update_mon_lite(floor_type *floor_ptr);
 extern void clear_mon_lite(void);
