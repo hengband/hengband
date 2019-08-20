@@ -56,7 +56,7 @@ void day_break()
 
 }
 
-void night_falls(void)
+void night_falls(floor_type *floor_ptr)
 {
 	POSITION y, x;
 	msg_print(_("日が沈んだ。", "The sun has fallen."));
@@ -64,11 +64,11 @@ void night_falls(void)
 	if (!p_ptr->wild_mode)
 	{
 		/* Hack -- Scan the town */
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < floor_ptr->height; y++)
 		{
-			for (x = 0; x < current_floor_ptr->width; x++)
+			for (x = 0; x < floor_ptr->width; x++)
 			{
-				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+				grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 				/* Feature code (applying "mimic" field) */
 				feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
@@ -89,7 +89,7 @@ void night_falls(void)
 				}
 			}
 
-			glow_deep_lava_and_bldg(current_floor_ptr);
+			glow_deep_lava_and_bldg(floor_ptr);
 		}
 	}
 
@@ -99,7 +99,7 @@ void night_falls(void)
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
 	}
 
 }

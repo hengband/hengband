@@ -3209,7 +3209,7 @@ static void process_world(void)
 			dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
 
 			if (dawn) day_break();
-			else night_falls();
+			else night_falls(current_floor_ptr);
 
 		}
 	}
