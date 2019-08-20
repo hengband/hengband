@@ -1463,7 +1463,7 @@ void generate_random_floor(void)
 	}
 
 	/* Glow deep lava and building entrances */
-	glow_deep_lava_and_bldg();
+	glow_deep_lava_and_bldg(current_floor_ptr);
 
 	/* Reset flag */
 	p_ptr->enter_dungeon = FALSE;
