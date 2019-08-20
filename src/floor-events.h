@@ -1,5 +1,5 @@
 ﻿
-extern void day_break(void);
+extern void day_break(floor_type *floor_ptr);
 extern void night_falls(floor_type *floor_ptr);
 extern MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr);
 extern byte get_dungeon_feeling(floor_type *floor_ptr);

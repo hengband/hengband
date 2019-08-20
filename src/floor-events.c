@@ -20,7 +20,7 @@
 static bool mon_invis;
 static POSITION mon_fy, mon_fx;
 
-void day_break()
+void day_break(floor_type *floor_ptr)
 {
 	POSITION y, x;
 	msg_print(_("夜が明けた。", "The sun has risen."));
@@ -28,11 +28,11 @@ void day_break()
 	if (!p_ptr->wild_mode)
 	{
 		/* Hack -- Scan the town */
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < floor_ptr->height; y++)
 		{
-			for (x = 0; x < current_floor_ptr->width; x++)
+			for (x = 0; x < floor_ptr->width; x++)
 			{
-				grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+				grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 				/* Assume lit */
 				g_ptr->info |= (CAVE_GLOW);
@@ -51,7 +51,7 @@ void day_break()
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
 	}
 
 }
