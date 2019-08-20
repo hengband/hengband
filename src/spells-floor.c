@@ -477,7 +477,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 	}
 
 	/* Lose monster light */
-	if (!in_generate) clear_mon_lite();
+	if (!in_generate) clear_mon_lite(current_floor_ptr);
 
 	/* Big area of affect */
 	for (y = (y1 - r); y <= (y1 + r); y++)
@@ -1050,7 +1050,7 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 	}
 
 	/* Lose monster light */
-	clear_mon_lite();
+	clear_mon_lite(current_floor_ptr);
 
 	/* Examine the quaked region */
 	for (dy = -r; dy <= r; dy++)

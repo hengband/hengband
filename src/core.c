@@ -5622,7 +5622,7 @@ void play_game(bool new_game)
 
 		forget_lite();
 		forget_view();
-		clear_mon_lite();
+		clear_mon_lite(current_floor_ptr);
 
 		/* Handle "quit and save" */
 		if (!p_ptr->playing && !p_ptr->is_dead) break;

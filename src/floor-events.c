@@ -1806,23 +1806,23 @@ void update_mon_lite(floor_type *floor_ptr)
 	p_ptr->old_monlite = p_ptr->monlite;
 }
 
-void clear_mon_lite(void)
+void clear_mon_lite(floor_type *floor_ptr)
 {
 	int i;
 	grid_type *g_ptr;
 
 	/* Clear all monster lit squares */
-	for (i = 0; i < current_floor_ptr->mon_lite_n; i++)
+	for (i = 0; i < floor_ptr->mon_lite_n; i++)
 	{
 		/* Point to grid */
-		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->mon_lite_y[i]][current_floor_ptr->mon_lite_x[i]];
+		g_ptr = &floor_ptr->grid_array[floor_ptr->mon_lite_y[i]][floor_ptr->mon_lite_x[i]];
 
 		/* Clear monster illumination flag */
 		g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
 	}
 
 	/* Empty the array */
-	current_floor_ptr->mon_lite_n = 0;
+	floor_ptr->mon_lite_n = 0;
 }
 
 

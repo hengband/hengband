@@ -1068,7 +1068,7 @@ void leave_floor(BIT_FLAGS floor_mode)
 
 		forget_lite();
 		forget_view();
-		clear_mon_lite();
+		clear_mon_lite(current_floor_ptr);
 
 		/* Save current floor */
 		if (!save_floor(sf_ptr, 0))
