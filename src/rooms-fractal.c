@@ -35,7 +35,7 @@ bool build_type9(void)
 			* Still no space?!
 			* Try normal room
 			*/
-			return build_type1();
+			return build_type1(current_floor_ptr);
 		}
 	}
 
