@@ -7,6 +7,6 @@ typedef struct
 }
 nest_mon_info_type;
 
-extern bool build_type5(void);
-extern bool build_type6(void);
-extern bool build_type13(void);
+extern bool build_type5(floor_type *floor_ptr);
+extern bool build_type6(floor_type *floor_ptr);
+extern bool build_type13(floor_type *floor_ptr);
