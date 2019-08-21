@@ -850,7 +850,7 @@ static COMMAND_CODE choose_essence(void)
  * @param mode エッセンスの大別ID
  * @return なし
  */
-static void add_essence(ESSENCE_IDX mode)
+static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 {
 	OBJECT_IDX item;
 	int max_num = 0;
@@ -995,7 +995,7 @@ static void add_essence(ESSENCE_IDX mode)
 						if (es_ptr->essence != -1)
 						{
 							strcat(dummy, format("(%s)", essence_name[es_ptr->essence]));
-							if (p_ptr->magic_num1[es_ptr->essence] < es_ptr->value) able[ctr] = FALSE;
+							if (creature_ptr->magic_num1[es_ptr->essence] < es_ptr->value) able[ctr] = FALSE;
 						}
 						else
 						{
@@ -1003,32 +1003,32 @@ static void add_essence(ESSENCE_IDX mode)
 							{
 							case ESSENCE_SH_FIRE:
 								strcat(dummy, _("(焼棄+耐火炎)", "(brand fire + res.fire)"));
-								if (p_ptr->magic_num1[TR_BRAND_FIRE] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_BRAND_FIRE] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
 								break;
 							case ESSENCE_SH_ELEC:
 								strcat(dummy, _("(電撃+耐電撃)", "(brand elec. + res. elec.)"));
-								if (p_ptr->magic_num1[TR_BRAND_ELEC] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_BRAND_ELEC] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
 								break;
 							case ESSENCE_SH_COLD:
 								strcat(dummy, _("(凍結+耐冷気)", "(brand cold + res. cold)"));
-								if (p_ptr->magic_num1[TR_BRAND_COLD] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_BRAND_COLD] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
 								break;
 							case ESSENCE_RESISTANCE:
 								strcat(dummy, _("(耐火炎+耐冷気+耐電撃+耐酸)", "(r.fire+r.cold+r.elec+r.acid)"));
-								if (p_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_ACID] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_ACID] < es_ptr->value) able[ctr] = FALSE;
 								break;
 							case ESSENCE_SUSTAIN:
 								strcat(dummy, _("(耐火炎+耐冷気+耐電撃+耐酸)", "(r.fire+r.cold+r.elec+r.acid)"));
-								if (p_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
-								if (p_ptr->magic_num1[TR_RES_ACID] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_COLD] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value) able[ctr] = FALSE;
+								if (creature_ptr->magic_num1[TR_RES_ACID] < es_ptr->value) able[ctr] = FALSE;
 								break;
 							}
 						}
@@ -1037,7 +1037,7 @@ static void add_essence(ESSENCE_IDX mode)
 
 						if (es_ptr->essence != -1)
 						{
-							sprintf(dummy2, "%-49s %3d/%d", dummy, es_ptr->value, (int)p_ptr->magic_num1[es_ptr->essence]);
+							sprintf(dummy2, "%-49s %3d/%d", dummy, es_ptr->value, (int)creature_ptr->magic_num1[es_ptr->essence]);
 						}
 						else
 						{
@@ -1116,7 +1116,7 @@ static void add_essence(ESSENCE_IDX mode)
 	q = _("どのアイテムを改良しますか？", "Improve which item? ");
 	s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), tval);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), tval);
 	if (!o_ptr) return;
 
 	if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr)))
@@ -1137,7 +1137,7 @@ static void add_essence(ESSENCE_IDX mode)
 
 	if (es_ptr->essence != -1)
 	{
-		if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
+		if (creature_ptr->magic_num1[es_ptr->essence] < use_essence)
 		{
 			msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
 			return;
@@ -1169,7 +1169,7 @@ static void add_essence(ESSENCE_IDX mode)
 				char tmp[80];
 				char tmp_val[160];
 				PARAMETER_VALUE pval;
-				PARAMETER_VALUE limit = MIN(5, p_ptr->magic_num1[es_ptr->essence] / es_ptr->value);
+				PARAMETER_VALUE limit = MIN(5, creature_ptr->magic_num1[es_ptr->essence] / es_ptr->value);
 
 				sprintf(tmp, _("いくつ付加しますか？ (1-%d): ", "Enchant how many? (1-%d): "), limit);
 				strcpy(tmp_val, "1");
@@ -1183,7 +1183,7 @@ static void add_essence(ESSENCE_IDX mode)
 				msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence);
 			}
 
-			if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
+			if (creature_ptr->magic_num1[es_ptr->essence] < use_essence)
 			{
 				msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
 				return;
@@ -1197,13 +1197,13 @@ static void add_essence(ESSENCE_IDX mode)
 			HIT_POINT get_to_d;
 
 			strcpy(tmp_val, "1");
-			if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), p_ptr->lev / 7 + 3), tmp_val, 2)) return;
+			if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), creature_ptr->lev / 7 + 3), tmp_val, 2)) return;
 			val = atoi(tmp_val);
-			if (val > p_ptr->lev / 7 + 3) val = p_ptr->lev / 7 + 3;
+			if (val > creature_ptr->lev / 7 + 3) val = creature_ptr->lev / 7 + 3;
 			else if (val < 1) val = 1;
 			use_essence *= val;
 			msg_format(_("エッセンスを%d個使用します。", "It will take %d essences."), use_essence);
-			if (p_ptr->magic_num1[es_ptr->essence] < use_essence)
+			if (creature_ptr->magic_num1[es_ptr->essence] < use_essence)
 			{
 				msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
 				return;
@@ -1214,32 +1214,32 @@ static void add_essence(ESSENCE_IDX mode)
 			o_ptr->to_h += get_to_h;
 			o_ptr->to_d += get_to_d;
 		}
-		p_ptr->magic_num1[es_ptr->essence] -= use_essence;
+		creature_ptr->magic_num1[es_ptr->essence] -= use_essence;
 		if (es_ptr->add == ESSENCE_ATTACK)
 		{
-			if ((o_ptr->to_h >= p_ptr->lev / 5 + 5) && (o_ptr->to_d >= p_ptr->lev / 5 + 5))
+			if ((o_ptr->to_h >= creature_ptr->lev / 5 + 5) && (o_ptr->to_d >= creature_ptr->lev / 5 + 5))
 			{
 				msg_print(_("改良に失敗した。", "You failed to enchant."));
-				take_turn(p_ptr, 100);
+				take_turn(creature_ptr, 100);
 				return;
 			}
 			else
 			{
-				if (o_ptr->to_h < p_ptr->lev / 5 + 5) o_ptr->to_h++;
-				if (o_ptr->to_d < p_ptr->lev / 5 + 5) o_ptr->to_d++;
+				if (o_ptr->to_h < creature_ptr->lev / 5 + 5) o_ptr->to_h++;
+				if (o_ptr->to_d < creature_ptr->lev / 5 + 5) o_ptr->to_d++;
 			}
 		}
 		else if (es_ptr->add == ESSENCE_AC)
 		{
-			if (o_ptr->to_a >= p_ptr->lev / 5 + 5)
+			if (o_ptr->to_a >= creature_ptr->lev / 5 + 5)
 			{
 				msg_print(_("改良に失敗した。", "You failed to enchant."));
-				take_turn(p_ptr, 100);
+				take_turn(creature_ptr, 100);
 				return;
 			}
 			else
 			{
-				if (o_ptr->to_a < p_ptr->lev / 5 + 5) o_ptr->to_a++;
+				if (o_ptr->to_a < creature_ptr->lev / 5 + 5) o_ptr->to_a++;
 			}
 		}
 		else
@@ -1254,43 +1254,43 @@ static void add_essence(ESSENCE_IDX mode)
 		switch (es_ptr->add)
 		{
 		case ESSENCE_SH_FIRE:
-			if ((p_ptr->magic_num1[TR_BRAND_FIRE] < use_essence) || (p_ptr->magic_num1[TR_RES_FIRE] < use_essence))
+			if ((creature_ptr->magic_num1[TR_BRAND_FIRE] < use_essence) || (creature_ptr->magic_num1[TR_RES_FIRE] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[TR_BRAND_FIRE] -= use_essence;
-			p_ptr->magic_num1[TR_RES_FIRE] -= use_essence;
+			creature_ptr->magic_num1[TR_BRAND_FIRE] -= use_essence;
+			creature_ptr->magic_num1[TR_RES_FIRE] -= use_essence;
 			break;
 		case ESSENCE_SH_ELEC:
-			if ((p_ptr->magic_num1[TR_BRAND_ELEC] < use_essence) || (p_ptr->magic_num1[TR_RES_ELEC] < use_essence))
+			if ((creature_ptr->magic_num1[TR_BRAND_ELEC] < use_essence) || (creature_ptr->magic_num1[TR_RES_ELEC] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[TR_BRAND_ELEC] -= use_essence;
-			p_ptr->magic_num1[TR_RES_ELEC] -= use_essence;
+			creature_ptr->magic_num1[TR_BRAND_ELEC] -= use_essence;
+			creature_ptr->magic_num1[TR_RES_ELEC] -= use_essence;
 			break;
 		case ESSENCE_SH_COLD:
-			if ((p_ptr->magic_num1[TR_BRAND_COLD] < use_essence) || (p_ptr->magic_num1[TR_RES_COLD] < use_essence))
+			if ((creature_ptr->magic_num1[TR_BRAND_COLD] < use_essence) || (creature_ptr->magic_num1[TR_RES_COLD] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[TR_BRAND_COLD] -= use_essence;
-			p_ptr->magic_num1[TR_RES_COLD] -= use_essence;
+			creature_ptr->magic_num1[TR_BRAND_COLD] -= use_essence;
+			creature_ptr->magic_num1[TR_RES_COLD] -= use_essence;
 			break;
 		case ESSENCE_RESISTANCE:
 		case ESSENCE_SUSTAIN:
-			if ((p_ptr->magic_num1[TR_RES_ACID] < use_essence) || (p_ptr->magic_num1[TR_RES_ELEC] < use_essence) || (p_ptr->magic_num1[TR_RES_FIRE] < use_essence) || (p_ptr->magic_num1[TR_RES_COLD] < use_essence))
+			if ((creature_ptr->magic_num1[TR_RES_ACID] < use_essence) || (creature_ptr->magic_num1[TR_RES_ELEC] < use_essence) || (creature_ptr->magic_num1[TR_RES_FIRE] < use_essence) || (creature_ptr->magic_num1[TR_RES_COLD] < use_essence))
 			{
 				success = FALSE;
 				break;
 			}
-			p_ptr->magic_num1[TR_RES_ACID] -= use_essence;
-			p_ptr->magic_num1[TR_RES_ELEC] -= use_essence;
-			p_ptr->magic_num1[TR_RES_FIRE] -= use_essence;
-			p_ptr->magic_num1[TR_RES_COLD] -= use_essence;
+			creature_ptr->magic_num1[TR_RES_ACID] -= use_essence;
+			creature_ptr->magic_num1[TR_RES_ELEC] -= use_essence;
+			creature_ptr->magic_num1[TR_RES_FIRE] -= use_essence;
+			creature_ptr->magic_num1[TR_RES_COLD] -= use_essence;
 			break;
 		}
 		if (!success)
@@ -1311,11 +1311,11 @@ static void add_essence(ESSENCE_IDX mode)
 		}
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	msg_format(_("%sに%sの能力を付加しました。", "You have added ability of %s to %s."), o_name, es_ptr->add_name);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->window |= (PW_INVEN);
 }
 
 /*!
@@ -1509,8 +1509,8 @@ void do_cmd_kaji(bool only_browse)
 		mode = choose_essence();
 		if (mode == 0)
 			break;
-		add_essence(mode);
+		add_essence(p_ptr, mode);
 		break;
-	case 5: add_essence(10); break;
+	case 5: add_essence(p_ptr, 10); break;
 	}
 }
