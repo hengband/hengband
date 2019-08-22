@@ -5500,7 +5500,7 @@ static void store_process_command(void)
 			     (p_ptr->pclass == CLASS_MIRROR_MASTER) 
 			     ) do_cmd_mind_browse();
 			else if (p_ptr->pclass == CLASS_SMITH)
-				do_cmd_kaji(TRUE);
+				do_cmd_kaji(p_ptr, TRUE);
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 				do_cmd_magic_eater(p_ptr, TRUE, FALSE);
 			else if (p_ptr->pclass == CLASS_SNIPER)

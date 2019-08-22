@@ -1364,7 +1364,7 @@ static void erase_essence(player_type *creature_ptr)
  * @param only_browse TRUEならばエッセンス一覧の表示のみを行う
  * @return なし
  */
-void do_cmd_kaji(bool only_browse)
+void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
 {
 	COMMAND_CODE mode = 0;
 	char choice;
@@ -1373,9 +1373,9 @@ void do_cmd_kaji(bool only_browse)
 
 	if (!only_browse)
 	{
-		if (cmd_limit_confused(p_ptr)) return;
-		if (cmd_limit_blind(p_ptr)) return;
-		if (cmd_limit_image(p_ptr)) return;
+		if (cmd_limit_confused(creature_ptr)) return;
+		if (cmd_limit_blind(creature_ptr)) return;
+		if (cmd_limit_image(creature_ptr)) return;
 	}
 
 	if (!(repeat_pull(&mode) && 1 <= mode && mode <= 5))
@@ -1502,15 +1502,15 @@ void do_cmd_kaji(bool only_browse)
 	}
 	switch (mode)
 	{
-	case 1: display_essence(p_ptr); break;
-	case 2: drain_essence(p_ptr); break;
-	case 3: erase_essence(p_ptr); break;
+	case 1: display_essence(creature_ptr); break;
+	case 2: drain_essence(creature_ptr); break;
+	case 3: erase_essence(creature_ptr); break;
 	case 4:
 		mode = choose_essence();
 		if (mode == 0)
 			break;
-		add_essence(p_ptr, mode);
+		add_essence(creature_ptr, mode);
 		break;
-	case 5: add_essence(p_ptr, 10); break;
+	case 5: add_essence(creature_ptr, 10); break;
 	}
 }

@@ -3837,7 +3837,7 @@ static void process_command(void)
 			     (p_ptr->pclass == CLASS_MIRROR_MASTER) 
 			     ) do_cmd_mind_browse();
 			else if (p_ptr->pclass == CLASS_SMITH)
-				do_cmd_kaji(TRUE);
+				do_cmd_kaji(p_ptr, TRUE);
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 				do_cmd_magic_eater(p_ptr, TRUE, FALSE);
 			else if (p_ptr->pclass == CLASS_SNIPER)
@@ -3902,7 +3902,7 @@ static void process_command(void)
 					else if (p_ptr->pclass == CLASS_BLUE_MAGE)
 						do_cmd_cast_learned();
 					else if (p_ptr->pclass == CLASS_SMITH)
-						do_cmd_kaji(FALSE);
+						do_cmd_kaji(p_ptr, FALSE);
 					else if (p_ptr->pclass == CLASS_SNIPER)
 						do_cmd_snipe();
 					else
