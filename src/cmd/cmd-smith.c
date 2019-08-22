@@ -486,7 +486,7 @@ static concptr const kaji_tips[5] =
  * @brief 所持しているエッセンス一覧を表示する
  * @return なし
  */
-static void display_essence(void)
+static void display_essence(player_type *creature_ptr)
 {
 	int i, num = 0;
 
@@ -500,7 +500,7 @@ static void display_essence(void)
 	for (i = 0; essence_name[i]; i++)
 	{
 		if (!essence_name[i][0]) continue;
-		prt(format("%-11s %5d", essence_name[i], p_ptr->magic_num1[i]), 2 + num % 21, 8 + num / 21 * 22);
+		prt(format("%-11s %5d", essence_name[i], creature_ptr->magic_num1[i]), 2 + num % 21, 8 + num / 21 * 22);
 		num++;
 	}
 	prt(_("現在所持しているエッセンス", "List of all essences you have."), 0, 0);
@@ -1502,7 +1502,7 @@ void do_cmd_kaji(bool only_browse)
 	}
 	switch (mode)
 	{
-	case 1: display_essence(); break;
+	case 1: display_essence(p_ptr); break;
 	case 2: drain_essence(); break;
 	case 3: erase_essence(); break;
 	case 4:
