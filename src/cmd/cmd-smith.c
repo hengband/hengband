@@ -513,9 +513,9 @@ static void display_essence(player_type *creature_ptr)
  * @brief エッセンスの抽出処理
  * @return なし
  */
-static void drain_essence(void)
+static void drain_essence(player_type *creature_ptr)
 {
-	int drain_value[sizeof(p_ptr->magic_num1) / sizeof(s32b)];
+	int drain_value[sizeof(creature_ptr->magic_num1) / sizeof(s32b)];
 	int i;
 	OBJECT_IDX item;
 	int dec = 4;
@@ -539,7 +539,7 @@ static void drain_essence(void)
 	q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
 	s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
@@ -549,7 +549,7 @@ static void drain_essence(void)
 		if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name))) return;
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	object_flags(o_ptr, old_flgs);
 	if (have_flag(old_flgs, TR_KILL_DRAGON)) add_flag(old_flgs, TR_SLAY_DRAGON);
@@ -606,7 +606,7 @@ static void drain_essence(void)
 	o_ptr->marked = marked;
 	o_ptr->number = number;
 	if (o_ptr->tval == TV_DRAG_ARMOR) o_ptr->timeout = old_timeout;
-	if (item >= 0) p_ptr->total_weight += (o_ptr->weight*o_ptr->number - weight * number);
+	if (item >= 0) creature_ptr->total_weight += (o_ptr->weight*o_ptr->number - weight * number);
 	o_ptr->ident |= (IDENT_MENTAL);
 	object_aware(o_ptr);
 	object_known(o_ptr);
@@ -723,8 +723,8 @@ static void drain_essence(void)
 			if (!essence_name[i][0]) continue;
 			if (!drain_value[i]) continue;
 
-			p_ptr->magic_num1[i] += drain_value[i];
-			p_ptr->magic_num1[i] = MIN(20000, p_ptr->magic_num1[i]);
+			creature_ptr->magic_num1[i] += drain_value[i];
+			creature_ptr->magic_num1[i] = MIN(20000, creature_ptr->magic_num1[i]);
 			msg_print(NULL);
 			msg_format("%s...%d%s", essence_name[i], drain_value[i], _("。", ". "));
 		}
@@ -732,8 +732,8 @@ static void drain_essence(void)
 
 	/* Apply autodestroy/inscription to the drained item */
 	autopick_alter_item(item, TRUE);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->window |= (PW_INVEN);
 }
 
 /*!
@@ -1503,7 +1503,7 @@ void do_cmd_kaji(bool only_browse)
 	switch (mode)
 	{
 	case 1: display_essence(p_ptr); break;
-	case 2: drain_essence(); break;
+	case 2: drain_essence(p_ptr); break;
 	case 3: erase_essence(); break;
 	case 4:
 		mode = choose_essence();
