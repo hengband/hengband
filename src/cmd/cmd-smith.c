@@ -1322,7 +1322,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
  * @brief エッセンスを消去する
  * @return なし
  */
-static void erase_essence(void)
+static void erase_essence(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	concptr q, s;
@@ -1335,13 +1335,13 @@ static void erase_essence(void)
 	q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
 	s = _("エッセンスを付加したアイテムがありません。", "You have nothing to remove essence.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name))) return;
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	if (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE)
 	{
@@ -1355,8 +1355,8 @@ static void erase_essence(void)
 	object_flags(o_ptr, flgs);
 	if (!(have_pval_flags(flgs))) o_ptr->pval = 0;
 	msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->window |= (PW_INVEN);
 }
 
 /*!
@@ -1504,7 +1504,7 @@ void do_cmd_kaji(bool only_browse)
 	{
 	case 1: display_essence(p_ptr); break;
 	case 2: drain_essence(p_ptr); break;
-	case 3: erase_essence(); break;
+	case 3: erase_essence(p_ptr); break;
 	case 4:
 		mode = choose_essence();
 		if (mode == 0)
