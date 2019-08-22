@@ -4018,7 +4018,7 @@ static void process_command(void)
 		/* Use racial power */
 		case 'U':
 		{
-			do_cmd_racial_power();
+			do_cmd_racial_power(p_ptr);
 			break;
 		}
 
