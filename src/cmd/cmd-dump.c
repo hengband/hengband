@@ -4472,7 +4472,7 @@ static void do_cmd_knowledge_weapon_exp(void)
  * Display spell-exp
  * @return なし
  */
-static void do_cmd_knowledge_spell_exp(void)
+static void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 {
 	SPELL_IDX i = 0;
 	SUB_EXP spell_exp;
@@ -4491,24 +4491,24 @@ static void do_cmd_knowledge_spell_exp(void)
 	    return;
 	}
 
-	if (p_ptr->realm1 != REALM_NONE)
+	if (creature_ptr->realm1 != REALM_NONE)
 	{
-		fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), realm_names[p_ptr->realm1]);
+		fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), realm_names[creature_ptr->realm1]);
 		for (i = 0; i < 32; i++)
 		{
-			if (!is_magic(p_ptr->realm1))
+			if (!is_magic(creature_ptr->realm1))
 			{
-				s_ptr = &technic_info[p_ptr->realm1 - MIN_TECHNIC][i];
+				s_ptr = &technic_info[creature_ptr->realm1 - MIN_TECHNIC][i];
 			}
 			else
 			{
-				s_ptr = &mp_ptr->info[p_ptr->realm1 - 1][i];
+				s_ptr = &mp_ptr->info[creature_ptr->realm1 - 1][i];
 			}
 			if (s_ptr->slevel >= 99) continue;
-			spell_exp = p_ptr->spell_exp[i];
+			spell_exp = creature_ptr->spell_exp[i];
 			exp_level = spell_exp_level(spell_exp);
-			fprintf(fff, "%-25s ", exe_spell(p_ptr->realm1, i, SPELL_NAME));
-			if (p_ptr->realm1 == REALM_HISSATSU)
+			fprintf(fff, "%-25s ", exe_spell(creature_ptr->realm1, i, SPELL_NAME));
+			if (creature_ptr->realm1 == REALM_HISSATSU)
 				fprintf(fff, "[--]");
 			else
 			{
@@ -4521,24 +4521,24 @@ static void do_cmd_knowledge_spell_exp(void)
 		}
 	}
 
-	if (p_ptr->realm2 != REALM_NONE)
+	if (creature_ptr->realm2 != REALM_NONE)
 	{
-		fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), realm_names[p_ptr->realm2]);
+		fprintf(fff, _("%sの魔法書\n", "\n%s Spellbook\n"), realm_names[creature_ptr->realm2]);
 		for (i = 0; i < 32; i++)
 		{
-			if (!is_magic(p_ptr->realm1))
+			if (!is_magic(creature_ptr->realm1))
 			{
-				s_ptr = &technic_info[p_ptr->realm2 - MIN_TECHNIC][i];
+				s_ptr = &technic_info[creature_ptr->realm2 - MIN_TECHNIC][i];
 			}
 			else
 			{
-				s_ptr = &mp_ptr->info[p_ptr->realm2 - 1][i];
+				s_ptr = &mp_ptr->info[creature_ptr->realm2 - 1][i];
 			}
 			if (s_ptr->slevel >= 99) continue;
 
-			spell_exp = p_ptr->spell_exp[i + 32];
+			spell_exp = creature_ptr->spell_exp[i + 32];
 			exp_level = spell_exp_level(spell_exp);
-			fprintf(fff, "%-25s ", exe_spell(p_ptr->realm2, i, SPELL_NAME));
+			fprintf(fff, "%-25s ", exe_spell(creature_ptr->realm2, i, SPELL_NAME));
 			if (exp_level >= EXP_LEVEL_EXPERT) fprintf(fff, "!");
 			else fprintf(fff, " ");
 			fprintf(fff, "%s", exp_level_str[exp_level]);
@@ -7068,7 +7068,7 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_weapon_exp();
 			break;
 		case 'd': /* spell-exp */
-			do_cmd_knowledge_spell_exp();
+			do_cmd_knowledge_spell_exp(p_ptr);
 			break;
 		case 'e': /* skill-exp */
 			do_cmd_knowledge_skill_exp();
