@@ -1293,7 +1293,7 @@ static void wiz_create_item(void)
 static void do_cmd_wiz_cure_all(void)
 {
 	(void)life_stream(p_ptr, FALSE, FALSE);
-	(void)restore_mana(TRUE);
+	(void)restore_mana(p_ptr, TRUE);
 	(void)set_food(p_ptr, PY_FOOD_MAX - 1);
 }
 

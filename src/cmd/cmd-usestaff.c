@@ -179,7 +179,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 		case SV_STAFF_THE_MAGI:
 		{
 			if (do_res_stat(creature_ptr, A_INT)) ident = TRUE;
-			ident |= restore_mana(FALSE);
+			ident |= restore_mana(creature_ptr, FALSE);
 			if (set_shero(creature_ptr, 0, TRUE)) ident = TRUE;
 			break;
 		}

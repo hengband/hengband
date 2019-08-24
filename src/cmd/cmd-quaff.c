@@ -328,7 +328,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_RESTORE_MANA:
-			ident = restore_mana(TRUE);
+			ident = restore_mana(creature_ptr, TRUE);
 			break;
 
 		case SV_POTION_RESTORE_EXP:
