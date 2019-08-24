@@ -1290,7 +1290,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_CURING:
 	{
 		msg_format(_("%sの優しさに癒される...", "the %s cures you affectionately ..."), name);
-		true_healing(0);
+		true_healing(user_ptr, 0);
 		break;
 	}
 

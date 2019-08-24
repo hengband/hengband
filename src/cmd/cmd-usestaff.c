@@ -165,7 +165,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_CURING:
 		{
-			ident = true_healing(0);
+			ident = true_healing(creature_ptr, 0);
 			if (set_shero(creature_ptr, 0, TRUE)) ident = TRUE;
 			break;
 		}

@@ -485,7 +485,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
 			(void)restore_level(creature_ptr);
 			(void)restore_all_status();
-			(void)true_healing(5000);
+			(void)true_healing(creature_ptr, 5000);
 			reward = _("体力が回復した。", "healing");
 			break;
 

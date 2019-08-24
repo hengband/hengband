@@ -343,16 +343,16 @@ bool_hack cure_critical_wounds(HIT_POINT pow)
 	return ident;
 }
 
-bool_hack true_healing(HIT_POINT pow)
+bool_hack true_healing(player_type *creature_ptr, HIT_POINT pow)
 {
 	bool_hack ident = FALSE;
-	if (hp_player(p_ptr, pow)) ident = TRUE;
-	if (set_blind(p_ptr, 0)) ident = TRUE;
-	if (set_confused(p_ptr, 0)) ident = TRUE;
-	if (set_poisoned(p_ptr, 0)) ident = TRUE;
-	if (set_stun(p_ptr, 0)) ident = TRUE;
-	if (set_cut(p_ptr,0)) ident = TRUE;
-	if (set_image(p_ptr, 0)) ident = TRUE;
+	if (hp_player(creature_ptr, pow)) ident = TRUE;
+	if (set_blind(creature_ptr, 0)) ident = TRUE;
+	if (set_confused(creature_ptr, 0)) ident = TRUE;
+	if (set_poisoned(creature_ptr, 0)) ident = TRUE;
+	if (set_stun(creature_ptr, 0)) ident = TRUE;
+	if (set_cut(creature_ptr,0)) ident = TRUE;
+	if (set_image(creature_ptr, 0)) ident = TRUE;
 	return ident;
 }
 

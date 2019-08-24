@@ -253,7 +253,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				(void)true_healing(0);
+				(void)true_healing(caster_ptr, 0);
 			}
 		}
 		break;

@@ -19,7 +19,7 @@ extern bool_hack berserk(int base);
 extern bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides);
 extern bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides);
 extern bool_hack cure_critical_wounds(HIT_POINT pow);
-extern bool_hack true_healing(HIT_POINT pow);
+extern bool_hack true_healing(player_type *creature_ptr, HIT_POINT pow);
 extern bool_hack restore_mana(player_type *creature_ptr, bool_hack magic_eater);
 extern bool restore_all_status(void);
 

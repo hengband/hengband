@@ -449,7 +449,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_CURING:
-			if (true_healing(50)) ident = TRUE;
+			if (true_healing(creature_ptr, 50)) ident = TRUE;
 			break;
 
 		case SV_POTION_INVULNERABILITY:
