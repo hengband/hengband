@@ -1771,7 +1771,7 @@ static void process_world_aux_hp_and_sp(void)
 		{
 			msg_print(_("こんなに多くのペットを制御できない！", "Too many pets to control at once!"));
 			msg_print(NULL);
-			do_cmd_pet_dismiss();
+			do_cmd_pet_dismiss(p_ptr);
 
 			upkeep_factor = calculate_upkeep(p_ptr);
 

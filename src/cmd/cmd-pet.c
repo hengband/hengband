@@ -131,7 +131,7 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
 * @brief ペットを開放するコマンドのメインルーチン
 * @return なし
 */
-void do_cmd_pet_dismiss(void)
+void do_cmd_pet_dismiss(player_type *creature_ptr)
 {
 	monster_type *m_ptr;
 	bool all_pets = FALSE;
@@ -172,7 +172,7 @@ void do_cmd_pet_dismiss(void)
 		m_ptr = &current_floor_ptr->m_list[pet_ctr];
 
 		delete_this = FALSE;
-		kakunin = ((pet_ctr == p_ptr->riding) || (m_ptr->nickname));
+		kakunin = ((pet_ctr == creature_ptr->riding) || (m_ptr->nickname));
 		monster_desc(friend_name, m_ptr, MD_ASSUME_VISIBLE);
 
 		if (!all_pets)
@@ -224,23 +224,23 @@ void do_cmd_pet_dismiss(void)
 				GAME_TEXT m_name[MAX_NLEN];
 
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
+				exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
 			}
 
-			if (pet_ctr == p_ptr->riding)
+			if (pet_ctr == creature_ptr->riding)
 			{
 				msg_format(_("%sから降りた。", "You have got off %s. "), friend_name);
 
-				p_ptr->riding = 0;
+				creature_ptr->riding = 0;
 
-				p_ptr->update |= (PU_MONSTERS);
-				p_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
+				creature_ptr->update |= (PU_MONSTERS);
+				creature_ptr->redraw |= (PR_EXTRA | PR_UHEALTH);
 			}
 
 			/* HACK : Add the line to message buffer */
 			msg_format(_("%s を放した。", "Dismissed %s."), friend_name);
-			p_ptr->update |= (PU_BONUS);
-			p_ptr->window |= (PW_MESSAGE);
+			creature_ptr->update |= (PU_BONUS);
+			creature_ptr->window |= (PW_MESSAGE);
 
 			delete_monster_idx(pet_ctr);
 			Dismissed++;
@@ -826,7 +826,7 @@ void do_cmd_pet(player_type *creature_ptr)
 			msg_print(_("ペットがいない！", "You have no pets!"));
 			break;
 		}
-		do_cmd_pet_dismiss();
+		do_cmd_pet_dismiss(creature_ptr);
 		(void)calculate_upkeep(creature_ptr);
 		break;
 	}

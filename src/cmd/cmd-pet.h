@@ -3,7 +3,7 @@
 
 extern bool do_riding(bool force);
 extern PERCENTAGE calculate_upkeep(player_type *creature_ptr);
-extern void do_cmd_pet_dismiss(void);
+extern void do_cmd_pet_dismiss(player_type *creature_pt);
 extern void do_cmd_pet(player_type *creature_ptr);
 extern bool player_can_ride_aux(grid_type *g_ptr, bool now_riding);
 extern bool rakuba(HIT_POINT dam, bool force);
