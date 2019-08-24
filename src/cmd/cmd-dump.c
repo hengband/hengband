@@ -6390,7 +6390,7 @@ static void do_cmd_knowledge_dungeon(void)
 * List virtues & status
 *
 */
-static void do_cmd_knowledge_stat(void)
+static void do_cmd_knowledge_stat(player_type *creature_ptr)
 {
 	FILE *fff;
 	
@@ -6407,23 +6407,23 @@ static void do_cmd_knowledge_stat(void)
 	
 	if (fff)
 	{
-		percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
-			(2 * p_ptr->hitdie +
-			((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
+		percent = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
+			(2 * creature_ptr->hitdie +
+			((PY_MAX_LEVEL - 1+3) * (creature_ptr->hitdie + 1))));
 
-		if (p_ptr->knowledge & KNOW_HPRATE)
+		if (creature_ptr->knowledge & KNOW_HPRATE)
 			fprintf(fff, _("現在の体力ランク : %d/100\n\n", "Your current Life Rating is %d/100.\n\n"), percent);
 		else fprintf(fff, _("現在の体力ランク : ???\n\n", "Your current Life Rating is ???.\n\n"));
 
 		fprintf(fff, _("能力の最大値\n\n", "Limits of maximum stats\n\n"));
 		for (v_nr = 0; v_nr < A_MAX; v_nr++)
 		{
-			if ((p_ptr->knowledge & KNOW_STAT) || p_ptr->stat_max[v_nr] == p_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
+			if ((creature_ptr->knowledge & KNOW_STAT) || creature_ptr->stat_max[v_nr] == creature_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], creature_ptr->stat_max_max[v_nr]-18);
 			else fprintf(fff, "%s ???\n", stat_names[v_nr]);
 		}
 	}
 
-	dump_yourself(p_ptr, fff);
+	dump_yourself(creature_ptr, fff);
 	my_fclose(fff);
 	
 	/* Display the file contents */
