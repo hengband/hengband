@@ -7059,7 +7059,7 @@ void do_cmd_knowledge(void)
 			break;
 		/* Next page */
 		case 'a': /* Max stat */
-			do_cmd_knowledge_stat();
+			do_cmd_knowledge_stat(p_ptr);
 			break;
 		case 'b': /* Mutations */
 			do_cmd_knowledge_mutations(p_ptr);

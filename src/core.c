@@ -3915,7 +3915,7 @@ static void process_command(void)
 		/* Issue a pet command */
 		case 'p':
 		{
-			do_cmd_pet();
+			do_cmd_pet(p_ptr);
 			break;
 		}
 
