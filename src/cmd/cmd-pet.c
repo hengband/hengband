@@ -272,7 +272,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 * @param force 強制的に騎乗/下馬するならばTRUE
 * @return 騎乗/下馬できたらTRUE
 */
-bool do_riding(player_type *creature_ptr, bool force)
+bool do_cmd_riding(player_type *creature_ptr, bool force)
 {
 	POSITION x, y;
 	DIRECTION dir = 0;
@@ -938,7 +938,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
 	case PET_RIDING:
 	{
-		(void)do_riding(creature_ptr, FALSE);
+		(void)do_cmd_riding(creature_ptr, FALSE);
 		break;
 	}
 
