@@ -265,28 +265,28 @@ void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options)
 	}
 }
 
-bool_hack life_stream(bool_hack message, bool_hack virtue_change)
+bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack virtue_change)
 {
 	if (virtue_change)
 	{
-		chg_virtue(p_ptr, V_VITALITY, 1);
-		chg_virtue(p_ptr, V_UNLIFE, -5);
+		chg_virtue(creature_ptr, V_VITALITY, 1);
+		chg_virtue(creature_ptr, V_UNLIFE, -5);
 	}
 	if (message)
 	{
 		msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
 	}
-	restore_level(p_ptr);
-	(void)set_poisoned(p_ptr, 0);
-	(void)set_blind(p_ptr, 0);
-	(void)set_confused(p_ptr, 0);
-	(void)set_image(p_ptr, 0);
-	(void)set_stun(p_ptr, 0);
-	(void)set_cut(p_ptr,0);
+	restore_level(creature_ptr);
+	(void)set_poisoned(creature_ptr, 0);
+	(void)set_blind(creature_ptr, 0);
+	(void)set_confused(creature_ptr, 0);
+	(void)set_image(creature_ptr, 0);
+	(void)set_stun(creature_ptr, 0);
+	(void)set_cut(creature_ptr,0);
 	(void)restore_all_status();
-	(void)set_shero(p_ptr, 0, TRUE);
+	(void)set_shero(creature_ptr, 0, TRUE);
 	handle_stuff();
-	hp_player(p_ptr, 5000);
+	hp_player(creature_ptr, 5000);
 
 	return TRUE;
 }

@@ -5799,7 +5799,7 @@ void cheat_death(player_type *creature_ptr)
 	msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
 	msg_print(NULL);
 
-	(void)life_stream(FALSE, FALSE);
+	(void)life_stream(creature_ptr, FALSE, FALSE);
 
 	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
 	{
