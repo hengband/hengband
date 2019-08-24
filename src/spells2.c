@@ -4388,7 +4388,7 @@ bool rodeo(player_type *creature_ptr)
 		msg_print(_("今は乗馬中だ。", "You ARE riding."));
 		return FALSE;
 	}
-	if (!do_riding(TRUE)) return TRUE;
+	if (!do_riding(creature_ptr, TRUE)) return TRUE;
 
 	m_ptr = &current_floor_ptr->m_list[creature_ptr->riding];
 	r_ptr = &r_info[m_ptr->r_idx];

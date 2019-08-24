@@ -272,7 +272,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 * @param force 強制的に騎乗/下馬するならばTRUE
 * @return 騎乗/下馬できたらTRUE
 */
-bool do_riding(bool force)
+bool do_riding(player_type *creature_ptr, bool force)
 {
 	POSITION x, y;
 	DIRECTION dir = 0;
@@ -280,13 +280,13 @@ bool do_riding(bool force)
 	monster_type *m_ptr;
 
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
-	y = p_ptr->y + ddy[dir];
-	x = p_ptr->x + ddx[dir];
+	y = creature_ptr->y + ddy[dir];
+	x = creature_ptr->x + ddx[dir];
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 
-	if (p_ptr->special_defense & KATA_MUSOU) set_action(p_ptr, ACTION_NONE);
+	if (creature_ptr->special_defense & KATA_MUSOU) set_action(creature_ptr, ACTION_NONE);
 
-	if (p_ptr->riding)
+	if (creature_ptr->riding)
 	{
 		/* Skip non-empty grids */
 		if (!player_can_ride_aux(g_ptr, FALSE))
@@ -295,11 +295,11 @@ bool do_riding(bool force)
 			return FALSE;
 		}
 
-		if (!pattern_seq(p_ptr, p_ptr->y, p_ptr->x, y, x)) return FALSE;
+		if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x)) return FALSE;
 
 		if (g_ptr->m_idx)
 		{
-			take_turn(p_ptr, 100);
+			take_turn(creature_ptr, 100);
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -307,13 +307,13 @@ bool do_riding(bool force)
 			return FALSE;
 		}
 
-		p_ptr->riding = 0;
-		p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
-		p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
+		creature_ptr->riding = 0;
+		creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+		creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
 	}
 	else
 	{
-		if (cmd_limit_confused(p_ptr)) return FALSE;
+		if (cmd_limit_confused(creature_ptr)) return FALSE;
 
 		m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
 
@@ -333,7 +333,7 @@ bool do_riding(bool force)
 			return FALSE;
 		}
 
-		if (!pattern_seq(p_ptr, p_ptr->y, p_ptr->x, y, x)) return FALSE;
+		if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x)) return FALSE;
 
 		if (!player_can_ride_aux(g_ptr, TRUE))
 		{
@@ -353,10 +353,10 @@ bool do_riding(bool force)
 
 			return FALSE;
 		}
-		if (r_info[m_ptr->r_idx].level > randint1((p_ptr->skill_exp[GINOU_RIDING] / 50 + p_ptr->lev / 2 + 20)))
+		if (r_info[m_ptr->r_idx].level > randint1((creature_ptr->skill_exp[GINOU_RIDING] / 50 + creature_ptr->lev / 2 + 20)))
 		{
 			msg_print(_("うまく乗れなかった。", "You failed to ride."));
-			take_turn(p_ptr, 100);
+			take_turn(creature_ptr, 100);
 			return FALSE;
 		}
 
@@ -368,23 +368,23 @@ bool do_riding(bool force)
 			msg_format(_("%sを起こした。", "You have waked %s up."), m_name);
 		}
 
-		if (p_ptr->action == ACTION_KAMAE) set_action(p_ptr, ACTION_NONE);
+		if (creature_ptr->action == ACTION_KAMAE) set_action(creature_ptr, ACTION_NONE);
 
-		p_ptr->riding = g_ptr->m_idx;
+		creature_ptr->riding = g_ptr->m_idx;
 
 		/* Hack -- remove tracked monster */
-		if (p_ptr->riding == p_ptr->health_who) health_track(0);
+		if (creature_ptr->riding == creature_ptr->health_who) health_track(0);
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Mega-Hack -- Forget the view and lite */
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-	p_ptr->update |= (PU_BONUS);
-	p_ptr->redraw |= (PR_MAP | PR_EXTRA);
-	p_ptr->redraw |= (PR_UHEALTH);
+	creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+	creature_ptr->update |= (PU_BONUS);
+	creature_ptr->redraw |= (PR_MAP | PR_EXTRA);
+	creature_ptr->redraw |= (PR_UHEALTH);
 
-	(void)move_player_effect(p_ptr, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+	(void)move_player_effect(creature_ptr, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return TRUE;
 }
@@ -938,7 +938,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
 	case PET_RIDING:
 	{
-		(void)do_riding(FALSE);
+		(void)do_riding(creature_ptr, FALSE);
 		break;
 	}
 
