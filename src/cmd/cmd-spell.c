@@ -788,13 +788,13 @@ static void change_realm2(CHARACTER_IDX next_realm)
  * Study a book to gain a new spell/prayer
  * @return なし
  */
-void do_cmd_study(void)
+void do_cmd_study(player_type *caster_ptr)
 {
 	int	i;
 	OBJECT_IDX item;
 	OBJECT_SUBTYPE_VALUE sval;
 	int	increment = 0;
-	bool    learned = FALSE;
+	bool learned = FALSE;
 
 	/* Spells of realm2 will have an increment of +32 */
 	SPELL_IDX spell = -1;
@@ -802,49 +802,49 @@ void do_cmd_study(void)
 	object_type *o_ptr;
 	concptr q, s;
 
-	if (!p_ptr->realm1)
+	if (!caster_ptr->realm1)
 	{
 		msg_print(_("本を読むことができない！", "You cannot read books!"));
 		return;
 	}
 
-	if (cmd_limit_blind(p_ptr)) return;
-	if (cmd_limit_confused(p_ptr)) return;
+	if (cmd_limit_blind(caster_ptr)) return;
+	if (cmd_limit_confused(caster_ptr)) return;
 
-	if (!(p_ptr->new_spells))
+	if (!(caster_ptr->new_spells))
 	{
 		msg_format(_("新しい%sを覚えることはできない！", "You cannot learn any new %ss!"), p);
 		return;
 	}
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (caster_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(caster_ptr, ACTION_NONE);
 	}
 
 #ifdef JP
-	if (p_ptr->new_spells < 10) {
-		msg_format("あと %d つの%sを学べる。", p_ptr->new_spells, p);
+	if (caster_ptr->new_spells < 10) {
+		msg_format("あと %d つの%sを学べる。", caster_ptr->new_spells, p);
 	}
 	else {
-		msg_format("あと %d 個の%sを学べる。", p_ptr->new_spells, p);
+		msg_format("あと %d 個の%sを学べる。", caster_ptr->new_spells, p);
 	}
 #else
-	msg_format("You can learn %d new %s%s.", p_ptr->new_spells, p,
-		(p_ptr->new_spells == 1 ? "" : "s"));
+	msg_format("You can learn %d new %s%s.", caster_ptr->new_spells, p,
+		(caster_ptr->new_spells == 1 ? "" : "s"));
 #endif
 
 	msg_print(NULL);
 
 
 	/* Restrict choices to "useful" books */
-	if (p_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
+	if (caster_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
 	else item_tester_hook = item_tester_learn_spell;
 
 	q = _("どの本から学びますか? ", "Study which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
 	if (!o_ptr) return;
 
 	/* Access the item's sval */
@@ -883,7 +883,7 @@ void do_cmd_study(void)
 			{
 				/* Skip non "okay" prayers */
 				if (!spell_okay(spell, FALSE, TRUE,
-					(increment ? p_ptr->realm2 : p_ptr->realm1))) continue;
+					(increment ? caster_ptr->realm2 : caster_ptr->realm1))) continue;
 
 				/* Hack -- Prepare the randomizer */
 				k++;
@@ -911,21 +911,21 @@ void do_cmd_study(void)
 	/* Learn the spell */
 	if (spell < 32)
 	{
-		if (p_ptr->spell_learned1 & (1L << spell)) learned = TRUE;
-		else p_ptr->spell_learned1 |= (1L << spell);
+		if (caster_ptr->spell_learned1 & (1L << spell)) learned = TRUE;
+		else caster_ptr->spell_learned1 |= (1L << spell);
 	}
 	else
 	{
-		if (p_ptr->spell_learned2 & (1L << (spell - 32))) learned = TRUE;
-		else p_ptr->spell_learned2 |= (1L << (spell - 32));
+		if (caster_ptr->spell_learned2 & (1L << (spell - 32))) learned = TRUE;
+		else caster_ptr->spell_learned2 |= (1L << (spell - 32));
 	}
 
 	if (learned)
 	{
 		int max_exp = (spell < 32) ? SPELL_EXP_MASTER : SPELL_EXP_EXPERT;
-		int old_exp = p_ptr->spell_exp[spell];
+		int old_exp = caster_ptr->spell_exp[spell];
 		int new_rank = EXP_LEVEL_UNSKILLED;
-		concptr name = exe_spell(p_ptr, increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME);
+		concptr name = exe_spell(caster_ptr, increment ? caster_ptr->realm2 : caster_ptr->realm1, spell % 32, SPELL_NAME);
 
 		if (old_exp >= max_exp)
 		{
@@ -942,38 +942,38 @@ void do_cmd_study(void)
 		}
 		else if (old_exp >= SPELL_EXP_EXPERT)
 		{
-			p_ptr->spell_exp[spell] = SPELL_EXP_MASTER;
+			caster_ptr->spell_exp[spell] = SPELL_EXP_MASTER;
 			new_rank = EXP_LEVEL_MASTER;
 		}
 		else if (old_exp >= SPELL_EXP_SKILLED)
 		{
-			if (spell >= 32) p_ptr->spell_exp[spell] = SPELL_EXP_EXPERT;
-			else p_ptr->spell_exp[spell] += SPELL_EXP_EXPERT - SPELL_EXP_SKILLED;
+			if (spell >= 32) caster_ptr->spell_exp[spell] = SPELL_EXP_EXPERT;
+			else caster_ptr->spell_exp[spell] += SPELL_EXP_EXPERT - SPELL_EXP_SKILLED;
 			new_rank = EXP_LEVEL_EXPERT;
 		}
 		else if (old_exp >= SPELL_EXP_BEGINNER)
 		{
-			p_ptr->spell_exp[spell] = SPELL_EXP_SKILLED + (old_exp - SPELL_EXP_BEGINNER) * 2 / 3;
+			caster_ptr->spell_exp[spell] = SPELL_EXP_SKILLED + (old_exp - SPELL_EXP_BEGINNER) * 2 / 3;
 			new_rank = EXP_LEVEL_SKILLED;
 		}
 		else
 		{
-			p_ptr->spell_exp[spell] = SPELL_EXP_BEGINNER + old_exp / 3;
+			caster_ptr->spell_exp[spell] = SPELL_EXP_BEGINNER + old_exp / 3;
 			new_rank = EXP_LEVEL_BEGINNER;
 		}
 		msg_format(_("%sの熟練度が%sに上がった。", "Your proficiency of %s is now %s rank."), name, exp_level_str[new_rank]);
 	}
 	else
 	{
-		/* Find the next open entry in "p_ptr->spell_order[]" */
+		/* Find the next open entry in "caster_ptr->spell_order[]" */
 		for (i = 0; i < 64; i++)
 		{
 			/* Stop at the first empty space */
-			if (p_ptr->spell_order[i] == 99) break;
+			if (caster_ptr->spell_order[i] == 99) break;
 		}
 
 		/* Add the spell to the known list */
-		p_ptr->spell_order[i++] = spell;
+		caster_ptr->spell_order[i++] = spell;
 
 		/* Mention the result */
 #ifdef JP
@@ -981,48 +981,48 @@ void do_cmd_study(void)
 		if (mp_ptr->spell_book == TV_MUSIC_BOOK)
 		{
 			msg_format("%sを学んだ。",
-				exe_spell(p_ptr, increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
+				exe_spell(caster_ptr, increment ? caster_ptr->realm2 : caster_ptr->realm1, spell % 32, SPELL_NAME));
 		}
 		else
 		{
 			msg_format("%sの%sを学んだ。",
-				exe_spell(p_ptr, increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME), p);
+				exe_spell(caster_ptr, increment ? caster_ptr->realm2 : caster_ptr->realm1, spell % 32, SPELL_NAME), p);
 		}
 #else
 		msg_format("You have learned the %s of %s.",
-			p, exe_spell(p_ptr, increment ? p_ptr->realm2 : p_ptr->realm1, spell % 32, SPELL_NAME));
+			p, exe_spell(caster_ptr, increment ? caster_ptr->realm2 : caster_ptr->realm1, spell % 32, SPELL_NAME));
 #endif
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(caster_ptr, 100);
 
 	switch (mp_ptr->spell_book)
 	{
 	case TV_LIFE_BOOK:
-		chg_virtue(p_ptr, V_FAITH, 1);
+		chg_virtue(caster_ptr, V_FAITH, 1);
 		break;
 	case TV_DEATH_BOOK:
-		chg_virtue(p_ptr, V_UNLIFE, 1);
+		chg_virtue(caster_ptr, V_UNLIFE, 1);
 		break;
 	case TV_NATURE_BOOK:
-		chg_virtue(p_ptr, V_NATURE, 1);
+		chg_virtue(caster_ptr, V_NATURE, 1);
 		break;
 	default:
-		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+		chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
 		break;
 	}
 
 	sound(SOUND_STUDY);
 
 	/* One less spell available */
-	p_ptr->learned_spells++;
+	caster_ptr->learned_spells++;
 
 	/* Update Study */
-	p_ptr->update |= (PU_SPELLS);
-	update_creature(p_ptr);
+	caster_ptr->update |= (PU_SPELLS);
+	update_creature(caster_ptr);
 
 	/* Redraw object recall */
-	p_ptr->window |= (PW_OBJECT);
+	caster_ptr->window |= (PW_OBJECT);
 }
 
 

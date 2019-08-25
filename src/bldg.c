@@ -3966,7 +3966,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		paid = ident_spell(FALSE);
 		break;
 	case BACT_LEARN:
-		do_cmd_study();
+		do_cmd_study(p_ptr);
 		break;
 	case BACT_HEALING: /* needs work */
 		paid = cure_critical_wounds(200);

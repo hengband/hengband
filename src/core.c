@@ -3824,7 +3824,7 @@ static void process_command(void)
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 				import_magic_device();
 			else
-				do_cmd_study();
+				do_cmd_study(p_ptr);
 			break;
 		}
 
