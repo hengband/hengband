@@ -30,38 +30,38 @@ int total_friends = 0;
 * @param now_riding TRUEなら下馬処理、FALSEならば騎乗処理
 * @return 可能ならばTRUEを返す
 */
-bool player_can_ride_aux(grid_type *g_ptr, bool now_riding)
+bool player_can_ride_aux(player_type *creature_ptr, grid_type *g_ptr, bool now_riding)
 {
 	bool p_can_enter;
 	bool old_character_xtra = current_world_ptr->character_xtra;
-	MONSTER_IDX old_riding = p_ptr->riding;
-	bool old_riding_ryoute = p_ptr->riding_ryoute;
-	bool old_old_riding_ryoute = p_ptr->old_riding_ryoute;
-	bool old_pf_ryoute = (p_ptr->pet_extra_flags & PF_RYOUTE) ? TRUE : FALSE;
+	MONSTER_IDX old_riding = creature_ptr->riding;
+	bool old_riding_ryoute = creature_ptr->riding_ryoute;
+	bool old_old_riding_ryoute = creature_ptr->old_riding_ryoute;
+	bool old_pf_ryoute = (creature_ptr->pet_extra_flags & PF_RYOUTE) ? TRUE : FALSE;
 
 	/* Hack -- prevent "icky" message */
 	current_world_ptr->character_xtra = TRUE;
 
-	if (now_riding) p_ptr->riding = g_ptr->m_idx;
+	if (now_riding) creature_ptr->riding = g_ptr->m_idx;
 	else
 	{
-		p_ptr->riding = 0;
-		p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
-		p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
+		creature_ptr->riding = 0;
+		creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+		creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
 	}
 
-	p_ptr->update |= PU_BONUS;
+	creature_ptr->update |= PU_BONUS;
 	handle_stuff();
 
 	p_can_enter = player_can_enter(g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 
-	p_ptr->riding = old_riding;
-	if (old_pf_ryoute) p_ptr->pet_extra_flags |= (PF_RYOUTE);
-	else p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
-	p_ptr->riding_ryoute = old_riding_ryoute;
-	p_ptr->old_riding_ryoute = old_old_riding_ryoute;
+	creature_ptr->riding = old_riding;
+	if (old_pf_ryoute) creature_ptr->pet_extra_flags |= (PF_RYOUTE);
+	else creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+	creature_ptr->riding_ryoute = old_riding_ryoute;
+	creature_ptr->old_riding_ryoute = old_old_riding_ryoute;
 
-	p_ptr->update |= PU_BONUS;
+	creature_ptr->update |= PU_BONUS;
 	handle_stuff();
 
 	current_world_ptr->character_xtra = old_character_xtra;
@@ -289,7 +289,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 	if (creature_ptr->riding)
 	{
 		/* Skip non-empty grids */
-		if (!player_can_ride_aux(g_ptr, FALSE))
+		if (!player_can_ride_aux(creature_ptr, g_ptr, FALSE))
 		{
 			msg_print(_("そちらには降りられません。", "You cannot go to that direction."));
 			return FALSE;
@@ -335,7 +335,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
 		if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x)) return FALSE;
 
-		if (!player_can_ride_aux(g_ptr, TRUE))
+		if (!player_can_ride_aux(creature_ptr, g_ptr, TRUE))
 		{
 			/* Feature code (applying "mimic" field) */
 			feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
@@ -1029,7 +1029,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 			/* Skip non-empty grids */
 			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !cave_have_flag_grid(g_ptr, FF_CAN_FLY))
 			{
-				if (!player_can_ride_aux(g_ptr, FALSE)) continue;
+				if (!player_can_ride_aux(creature_ptr, g_ptr, FALSE)) continue;
 			}
 
 			if (cave_have_flag_grid(g_ptr, FF_PATTERN)) continue;
