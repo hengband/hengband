@@ -2260,7 +2260,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_WEIGH_MAG:
-			report_magics();
+			report_magics(creature_ptr);
 			break;
 
 		case MUT1_STERILITY:

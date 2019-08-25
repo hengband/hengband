@@ -5,4 +5,4 @@
  */
 
 extern void self_knowledge(void);
-extern void report_magics(void);
+extern void report_magics(player_type *creature_ptr);

@@ -1672,7 +1672,7 @@ static concptr report_magic_durations[] =
  * @brief 現在の一時的効果一覧を返す / Report all currently active magical effects.
  * @return なし
  */
-void report_magics(void)
+void report_magics(player_type *creature_ptr)
 {
 	int     i = 0, j, k;
 	char    Dummy[80];
@@ -1680,104 +1680,104 @@ void report_magics(void)
 	int     info2[128];
 
 
-	if (p_ptr->blind)
+	if (creature_ptr->blind)
 	{
-		info2[i]  = report_magics_aux(p_ptr->blind);
+		info2[i]  = report_magics_aux(creature_ptr->blind);
 		info[i++] = _("あなたは目が見えない", "You cannot see");
 	}
-	if (p_ptr->confused)
+	if (creature_ptr->confused)
 	{
-		info2[i]  = report_magics_aux(p_ptr->confused);
+		info2[i]  = report_magics_aux(creature_ptr->confused);
 		info[i++] = _("あなたは混乱している", "You are confused");
 	}
-	if (p_ptr->afraid)
+	if (creature_ptr->afraid)
 	{
-		info2[i]  = report_magics_aux(p_ptr->afraid);
+		info2[i]  = report_magics_aux(creature_ptr->afraid);
 		info[i++] = _("あなたは恐怖に侵されている", "You are terrified");
 	}
-	if (p_ptr->poisoned)
+	if (creature_ptr->poisoned)
 	{
-		info2[i]  = report_magics_aux(p_ptr->poisoned);
+		info2[i]  = report_magics_aux(creature_ptr->poisoned);
 		info[i++] = _("あなたは毒に侵されている", "You are poisoned");
 	}
-	if (p_ptr->image)
+	if (creature_ptr->image)
 	{
-		info2[i]  = report_magics_aux(p_ptr->image);
+		info2[i]  = report_magics_aux(creature_ptr->image);
 		info[i++] = _("あなたは幻覚を見ている", "You are hallucinating");
 	}
-	if (p_ptr->blessed)
+	if (creature_ptr->blessed)
 	{
-		info2[i]  = report_magics_aux(p_ptr->blessed);
+		info2[i]  = report_magics_aux(creature_ptr->blessed);
 		info[i++] = _("あなたは高潔さを感じている", "You feel rightous");
 	}
-	if (p_ptr->hero)
+	if (creature_ptr->hero)
 	{
-		info2[i]  = report_magics_aux(p_ptr->hero);
+		info2[i]  = report_magics_aux(creature_ptr->hero);
 		info[i++] = _("あなたはヒーロー気分だ", "You feel heroic");
 	}
-	if (p_ptr->shero)
+	if (creature_ptr->shero)
 	{
-		info2[i]  = report_magics_aux(p_ptr->shero);
+		info2[i]  = report_magics_aux(creature_ptr->shero);
 		info[i++] = _("あなたは戦闘狂だ", "You are in a battle rage");
 	}
-	if (p_ptr->protevil)
+	if (creature_ptr->protevil)
 	{
-		info2[i]  = report_magics_aux(p_ptr->protevil);
+		info2[i]  = report_magics_aux(creature_ptr->protevil);
 		info[i++] = _("あなたは邪悪なる存在から守られている", "You are protected from evil");
 	}
-	if (p_ptr->shield)
+	if (creature_ptr->shield)
 	{
-		info2[i]  = report_magics_aux(p_ptr->shield);
+		info2[i]  = report_magics_aux(creature_ptr->shield);
 		info[i++] = _("あなたは神秘のシールドで守られている", "You are protected by a mystic shield");
 	}
-	if (p_ptr->invuln)
+	if (creature_ptr->invuln)
 	{
-		info2[i]  = report_magics_aux(p_ptr->invuln);
+		info2[i]  = report_magics_aux(creature_ptr->invuln);
 		info[i++] = _("あなたは無敵だ", "You are invulnerable");
 	}
-	if (p_ptr->wraith_form)
+	if (creature_ptr->wraith_form)
 	{
-		info2[i]  = report_magics_aux(p_ptr->wraith_form);
+		info2[i]  = report_magics_aux(creature_ptr->wraith_form);
 		info[i++] = _("あなたは幽体化している", "You are incorporeal");
 	}
-	if (p_ptr->special_attack & ATTACK_CONFUSE)
+	if (creature_ptr->special_attack & ATTACK_CONFUSE)
 	{
 		info2[i]  = 7;
 		info[i++] = _("あなたの手は赤く輝いている", "Your hands are glowing dull red.");
 	}
-	if (p_ptr->word_recall)
+	if (creature_ptr->word_recall)
 	{
-		info2[i]  = report_magics_aux(p_ptr->word_recall);
+		info2[i]  = report_magics_aux(creature_ptr->word_recall);
 		info[i++] = _("この後帰還の詔が発動する", "You are waiting to be recalled");
 	}
-	if (p_ptr->alter_reality)
+	if (creature_ptr->alter_reality)
 	{
-		info2[i]  = report_magics_aux(p_ptr->alter_reality);
+		info2[i]  = report_magics_aux(creature_ptr->alter_reality);
 		info[i++] = _("この後現実変容が発動する", "You waiting to be altered");
 	}
-	if (p_ptr->oppose_acid)
+	if (creature_ptr->oppose_acid)
 	{
-		info2[i]  = report_magics_aux(p_ptr->oppose_acid);
+		info2[i]  = report_magics_aux(creature_ptr->oppose_acid);
 		info[i++] = _("あなたは酸への耐性を持っている", "You are resistant to acid");
 	}
-	if (p_ptr->oppose_elec)
+	if (creature_ptr->oppose_elec)
 	{
-		info2[i]  = report_magics_aux(p_ptr->oppose_elec);
+		info2[i]  = report_magics_aux(creature_ptr->oppose_elec);
 		info[i++] = _("あなたは電撃への耐性を持っている", "You are resistant to lightning");
 	}
-	if (p_ptr->oppose_fire)
+	if (creature_ptr->oppose_fire)
 	{
-		info2[i]  = report_magics_aux(p_ptr->oppose_fire);
+		info2[i]  = report_magics_aux(creature_ptr->oppose_fire);
 		info[i++] = _("あなたは火への耐性を持っている", "You are resistant to fire");
 	}
-	if (p_ptr->oppose_cold)
+	if (creature_ptr->oppose_cold)
 	{
-		info2[i]  = report_magics_aux(p_ptr->oppose_cold);
+		info2[i]  = report_magics_aux(creature_ptr->oppose_cold);
 		info[i++] = _("あなたは冷気への耐性を持っている", "You are resistant to cold");
 	}
-	if (p_ptr->oppose_pois)
+	if (creature_ptr->oppose_pois)
 	{
-		info2[i]  = report_magics_aux(p_ptr->oppose_pois);
+		info2[i]  = report_magics_aux(creature_ptr->oppose_pois);
 		info[i++] = _("あなたは毒への耐性を持っている", "You are resistant to poison");
 	}
 	screen_save();
