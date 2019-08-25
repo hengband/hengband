@@ -173,7 +173,7 @@ void stop_singing(player_type *creature_ptr)
 	if (creature_ptr->action == ACTION_SING) set_action(p_ptr, ACTION_NONE);
 
 	/* Message text of each song or etc. */
-	exe_spell(REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
+	exe_spell(p_ptr, REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
 
 	SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
 	SINGING_SONG_ID(creature_ptr) = 0;
