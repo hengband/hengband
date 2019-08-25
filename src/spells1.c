@@ -3344,7 +3344,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					cap_nickname = m_ptr->nickname; /* Quark transfer */
 					if (g_ptr->m_idx == p_ptr->riding)
 					{
-						if (rakuba(-1, FALSE))
+						if (rakuba(p_ptr, -1, FALSE))
 						{
 							msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
 						}
@@ -6581,14 +6581,14 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 		if (rakubadam_m > 0)
 		{
-			if (rakuba(rakubadam_m, FALSE))
+			if (rakuba(p_ptr, rakubadam_m, FALSE))
 			{
 				msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
 			}
 		}
 		if (p_ptr->riding && rakubadam_p > 0)
 		{
-			if(rakuba(rakubadam_p, FALSE))
+			if(rakuba(p_ptr, rakubadam_p, FALSE))
 			{
 				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name);
 			}

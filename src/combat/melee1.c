@@ -4032,7 +4032,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		{
 			char m_steed_name[MAX_NLEN];
 			monster_desc(m_steed_name, &current_floor_ptr->m_list[p_ptr->riding], 0);
-			if (rakuba((damage > 200) ? 200 : damage, FALSE))
+			if (rakuba(p_ptr, (damage > 200) ? 200 : damage, FALSE))
 			{
 				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
 			}
@@ -4918,7 +4918,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 		monster_desc(m_name, m_ptr, 0);
 
 		if (m_ptr->hp > m_ptr->maxhp / 3) dam = (dam + 1) / 2;
-		if (rakuba((dam > 200) ? 200 : dam, FALSE))
+		if (rakuba(p_ptr, (dam > 200) ? 200 : dam, FALSE))
 		{
 			msg_format(_("%^sに振り落とされた！", "You have thrown off from %s!"), m_name);
 		}

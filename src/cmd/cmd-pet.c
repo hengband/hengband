@@ -966,30 +966,30 @@ void do_cmd_pet(player_type *creature_ptr)
 * @param force TRUEならば強制的に落馬する
 * @return 実際に落馬したらTRUEを返す
 */
-bool rakuba(HIT_POINT dam, bool force)
+bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 {
 	DIRECTION i;
 	POSITION y, x, oy, ox, sy = 0, sx = 0;
 	int sn = 0;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+	monster_type *m_ptr = &current_floor_ptr->m_list[creature_ptr->riding];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool fall_dam = FALSE;
 
-	if (!p_ptr->riding) return FALSE;
-	if (p_ptr->wild_mode) return FALSE;
+	if (!creature_ptr->riding) return FALSE;
+	if (creature_ptr->wild_mode) return FALSE;
 
 	if (dam >= 0 || force)
 	{
 		if (!force)
 		{
-			int cur = p_ptr->skill_exp[GINOU_RIDING];
-			int max = s_info[p_ptr->pclass].s_max[GINOU_RIDING];
+			int cur = creature_ptr->skill_exp[GINOU_RIDING];
+			int max = s_info[creature_ptr->pclass].s_max[GINOU_RIDING];
 			int ridinglevel = r_ptr->level;
 
 			/* 落馬のしやすさ */
 			int rakubalevel = r_ptr->level;
-			if (p_ptr->riding_ryoute) rakubalevel += 20;
+			if (creature_ptr->riding_ryoute) rakubalevel += 20;
 
 			if ((cur < max) && (max > 1000) &&
 				(dam / 2 + ridinglevel) > (cur / 30 + 10))
@@ -1001,13 +1001,13 @@ bool rakuba(HIT_POINT dam, bool force)
 				else
 					inc += 1;
 
-				p_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
+				creature_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
 			}
 
 			/* レベルの低い乗馬からは落馬しにくい */
 			if (randint0(dam / 2 + rakubalevel * 2) < cur / 30 + 10)
 			{
-				if ((((p_ptr->pclass == CLASS_BEASTMASTER) || (p_ptr->pclass == CLASS_CAVALRY)) && !p_ptr->riding_ryoute) || !one_in_(p_ptr->lev*(p_ptr->riding_ryoute ? 2 : 3) + 30))
+				if ((((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) && !creature_ptr->riding_ryoute) || !one_in_(creature_ptr->lev*(creature_ptr->riding_ryoute ? 2 : 3) + 30))
 				{
 					return FALSE;
 				}
@@ -1019,8 +1019,8 @@ bool rakuba(HIT_POINT dam, bool force)
 		{
 			grid_type *g_ptr;
 
-			y = p_ptr->y + ddy_ddd[i];
-			x = p_ptr->x + ddx_ddd[i];
+			y = creature_ptr->y + ddy_ddd[i];
+			x = creature_ptr->x + ddx_ddd[i];
 
 			g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -1047,53 +1047,53 @@ bool rakuba(HIT_POINT dam, bool force)
 		{
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s, but bumped into wall."), m_name);
-			take_hit(p_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into wall"), -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into wall"), -1);
 			return FALSE;
 		}
 
-		oy = p_ptr->y;
-		ox = p_ptr->x;
+		oy = creature_ptr->y;
+		ox = creature_ptr->x;
 
-		p_ptr->y = sy;
-		p_ptr->x = sx;
+		creature_ptr->y = sy;
+		creature_ptr->x = sx;
 
 		/* Redraw the old spot */
 		lite_spot(oy, ox);
 
 		/* Redraw the new spot */
-		lite_spot(p_ptr->y, p_ptr->x);
+		lite_spot(creature_ptr->y, creature_ptr->x);
 
 		/* Check for new panel */
 		verify_panel();
 	}
 
-	p_ptr->riding = 0;
-	p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
-	p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
+	creature_ptr->riding = 0;
+	creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+	creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
 
-	p_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+	creature_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 	handle_stuff();
 
 
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-	p_ptr->redraw |= (PR_EXTRA);
+	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	creature_ptr->redraw |= (PR_EXTRA);
 
 	/* Update health track of mount */
-	p_ptr->redraw |= (PR_UHEALTH);
+	creature_ptr->redraw |= (PR_UHEALTH);
 
-	if (p_ptr->levitation && !force)
+	if (creature_ptr->levitation && !force)
 	{
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s, but make a good landing."), m_name);
 	}
 	else
 	{
-		take_hit(p_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"), -1);
+		take_hit(creature_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"), -1);
 		fall_dam = TRUE;
 	}
 
-	if (sy && !p_ptr->is_dead)
-		(void)move_player_effect(p_ptr, p_ptr->y, p_ptr->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+	if (sy && !creature_ptr->is_dead)
+		(void)move_player_effect(creature_ptr, creature_ptr->y, creature_ptr->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
 	return fall_dam;
 }
