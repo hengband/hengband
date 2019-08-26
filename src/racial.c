@@ -306,7 +306,7 @@ static int racial_cost;
  * 発動成功ならば1、発動失敗ならば-1、キャンセルならば0を返す。
  * return value indicates that we have succesfully used the power 1: Succeeded, 0: Cancelled, -1: Failed
  */
-static int racial_aux(power_desc_type *pd_ptr)
+static int racial_aux(player_type *caster_ptr, power_desc_type *pd_ptr)
 {
 	PLAYER_LEVEL min_level  = pd_ptr->level;
 	int use_stat   = pd_ptr->stat;
@@ -316,30 +316,30 @@ static int racial_aux(power_desc_type *pd_ptr)
 	racial_cost = pd_ptr->cost;
 
 	/* Not enough mana - use hp */
-	if (p_ptr->csp < racial_cost) use_hp = racial_cost - p_ptr->csp;
+	if (caster_ptr->csp < racial_cost) use_hp = racial_cost - caster_ptr->csp;
 
 	/* Power is not available yet */
-	if (p_ptr->lev < min_level)
+	if (caster_ptr->lev < min_level)
 	{
 		msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", 
 					 "You need to attain level %d to use this power."), min_level);
 
-		free_turn(p_ptr);
+		free_turn(caster_ptr);
 		return FALSE;
 	}
 
-	if (cmd_limit_confused(p_ptr))
+	if (cmd_limit_confused(caster_ptr))
 	{
-		free_turn(p_ptr);
+		free_turn(caster_ptr);
 		return FALSE;
 	}
 
 	/* Risk death? */
-	else if (p_ptr->chp < use_hp)
+	else if (caster_ptr->chp < use_hp)
 	{
 		if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? ")))
 		{
-			free_turn(p_ptr);
+			free_turn(caster_ptr);
 			return FALSE;
 		}
 	}
@@ -348,13 +348,13 @@ static int racial_aux(power_desc_type *pd_ptr)
 
 	if (difficulty)
 	{
-		if (p_ptr->stun)
+		if (caster_ptr->stun)
 		{
-			difficulty += p_ptr->stun;
+			difficulty += caster_ptr->stun;
 		}
-		else if (p_ptr->lev > min_level)
+		else if (caster_ptr->lev > min_level)
 		{
-			int lev_adj = ((p_ptr->lev - min_level) / 3);
+			int lev_adj = ((caster_ptr->lev - min_level) / 3);
 			if (lev_adj > 10) lev_adj = 10;
 			difficulty -= lev_adj;
 		}
@@ -363,10 +363,10 @@ static int racial_aux(power_desc_type *pd_ptr)
 	}
 
 	/* take time and pay the price */
-	take_turn(p_ptr, 100);
+	take_turn(caster_ptr, 100);
 
 	/* Success? */
-	if (randint1(p_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
+	if (randint1(caster_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
 	{
 		return 1;
 	}
@@ -1995,7 +1995,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
 		}
 		repeat_push(i);
 	} /*if (!repeat_pull(&i) || ...)*/
-	switch (racial_aux(&power_desc[i]))
+	switch (racial_aux(creature_ptr, &power_desc[i]))
 	{
 	case 1:
 		if (power_desc[i].number < 0)
