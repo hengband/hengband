@@ -415,14 +415,14 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			(void)detect_objects_gold(DETECT_RAD_DEFAULT);
 			(void)detect_objects_normal(DETECT_RAD_DEFAULT);
 			identify_pack();
-			self_knowledge();
+			self_knowledge(creature_ptr);
 			ident = TRUE;
 			break;
 
 		case SV_POTION_SELF_KNOWLEDGE:
 			msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
 			msg_print(NULL);
-			self_knowledge();
+			self_knowledge(creature_ptr);
 			ident = TRUE;
 			break;
 
