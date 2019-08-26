@@ -3906,7 +3906,7 @@ static void process_command(void)
 					else if (p_ptr->pclass == CLASS_SNIPER)
 						do_cmd_snipe();
 					else
-						do_cmd_cast();
+						do_cmd_cast(p_ptr);
 				}
 			}
 			break;

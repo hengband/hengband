@@ -551,10 +551,10 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		{
 			if (cmd_limit_cast(creature_ptr)) return FALSE;
 			handle_stuff();
-			do_cmd_cast();
+			do_cmd_cast(creature_ptr);
 			handle_stuff();
 			if (!creature_ptr->paralyzed && !cmd_limit_cast(creature_ptr))
-				do_cmd_cast();
+				do_cmd_cast(creature_ptr);
 			break;
 		}
 		case CLASS_SAMURAI:

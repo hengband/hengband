@@ -1031,7 +1031,7 @@ void do_cmd_study(player_type *caster_ptr)
  * Cast a spell
  * @return なし
  */
-void do_cmd_cast(void)
+void do_cmd_cast(player_type *caster_ptr)
 {
 	OBJECT_IDX item;
 	OBJECT_SUBTYPE_VALUE sval;
@@ -1050,15 +1050,15 @@ void do_cmd_cast(void)
 	bool over_exerted = FALSE;
 
 	/* Require spell ability */
-	if (!p_ptr->realm1 && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE))
+	if (!caster_ptr->realm1 && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE))
 	{
 		msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
 		return;
 	}
 
-	if (p_ptr->blind || no_lite())
+	if (caster_ptr->blind || no_lite())
 	{
-		if (p_ptr->pclass == CLASS_FORCETRAINER) confirm_use_force(FALSE);
+		if (caster_ptr->pclass == CLASS_FORCETRAINER) confirm_use_force(FALSE);
 		else
 		{
 			msg_print(_("目が見えない！", "You cannot see!"));
@@ -1067,22 +1067,22 @@ void do_cmd_cast(void)
 		return;
 	}
 
-	if (cmd_limit_confused(p_ptr)) return;
-	if (p_ptr->realm1 == REALM_HEX)
+	if (cmd_limit_confused(caster_ptr)) return;
+	if (caster_ptr->realm1 == REALM_HEX)
 	{
 		if (hex_spell_fully())
 		{
 			bool flag = FALSE;
 			msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not spell new spells more."));
 			flush();
-			if (p_ptr->lev >= 35) flag = stop_hex_spell();
+			if (caster_ptr->lev >= 35) flag = stop_hex_spell();
 			if (!flag) return;
 		}
 	}
 
-	if (p_ptr->pclass == CLASS_FORCETRAINER)
+	if (caster_ptr->pclass == CLASS_FORCETRAINER)
 	{
-		if (player_has_no_spellbooks(p_ptr))
+		if (player_has_no_spellbooks(caster_ptr))
 		{
 			confirm_use_force(FALSE);
 			return;
@@ -1094,7 +1094,7 @@ void do_cmd_cast(void)
 	q = _("どの呪文書を使いますか? ", "Use which book? ");
 	s = _("呪文書がない！", "You have no spell books!");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), mp_ptr->spell_book);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), mp_ptr->spell_book);
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */
@@ -1108,16 +1108,16 @@ void do_cmd_cast(void)
 	/* Access the item's sval */
 	sval = o_ptr->sval;
 
-	if ((p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE) && (o_ptr->tval == REALM2_BOOK)) increment = 32;
+	if ((caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE) && (o_ptr->tval == REALM2_BOOK)) increment = 32;
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
 	handle_stuff();
 
-	if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
+	if ((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE))
 		realm = o_ptr->tval - TV_LIFE_BOOK + 1;
-	else if (increment) realm = p_ptr->realm2;
-	else realm = p_ptr->realm1;
+	else if (increment) realm = caster_ptr->realm2;
+	else realm = caster_ptr->realm1;
 
 	/* Ask for a spell */
 #ifdef JP
@@ -1160,7 +1160,7 @@ void do_cmd_cast(void)
 	need_mana = mod_need_mana(s_ptr->smana, spell, realm);
 
 	/* Verify "dangerous" spells */
-	if (need_mana > p_ptr->csp)
+	if (need_mana > caster_ptr->csp)
 	{
 		if (flush_failure) flush();
 
@@ -1185,13 +1185,13 @@ void do_cmd_cast(void)
 	chance = spell_chance(spell, use_realm);
 
 	/* Sufficient mana */
-	if (need_mana <= p_ptr->csp)
+	if (need_mana <= caster_ptr->csp)
 	{
 		/* Use some mana */
-		p_ptr->csp -= need_mana;
+		caster_ptr->csp -= need_mana;
 	}
 	else over_exerted = TRUE;
-	p_ptr->redraw |= (PR_MANA);
+	caster_ptr->redraw |= (PR_MANA);
 
 	/* Failed spell */
 	if (randint0(100) < chance)
@@ -1204,30 +1204,30 @@ void do_cmd_cast(void)
 		switch (realm)
 		{
 		case REALM_LIFE:
-			if (randint1(100) < chance) chg_virtue(p_ptr, V_VITALITY, -1);
+			if (randint1(100) < chance) chg_virtue(caster_ptr, V_VITALITY, -1);
 			break;
 		case REALM_DEATH:
-			if (randint1(100) < chance) chg_virtue(p_ptr, V_UNLIFE, -1);
+			if (randint1(100) < chance) chg_virtue(caster_ptr, V_UNLIFE, -1);
 			break;
 		case REALM_NATURE:
-			if (randint1(100) < chance) chg_virtue(p_ptr, V_NATURE, -1);
+			if (randint1(100) < chance) chg_virtue(caster_ptr, V_NATURE, -1);
 			break;
 		case REALM_DAEMON:
-			if (randint1(100) < chance) chg_virtue(p_ptr, V_JUSTICE, 1);
+			if (randint1(100) < chance) chg_virtue(caster_ptr, V_JUSTICE, 1);
 			break;
 		case REALM_CRUSADE:
-			if (randint1(100) < chance) chg_virtue(p_ptr, V_JUSTICE, -1);
+			if (randint1(100) < chance) chg_virtue(caster_ptr, V_JUSTICE, -1);
 			break;
 		case REALM_HEX:
-			if (randint1(100) < chance) chg_virtue(p_ptr, V_COMPASSION, -1);
+			if (randint1(100) < chance) chg_virtue(caster_ptr, V_COMPASSION, -1);
 			break;
 		default:
-			if (randint1(100) < chance) chg_virtue(p_ptr, V_KNOWLEDGE, -1);
+			if (randint1(100) < chance) chg_virtue(caster_ptr, V_KNOWLEDGE, -1);
 			break;
 		}
 
 		/* Failure casting may activate some side effect */
-		exe_spell(p_ptr, realm, spell, SPELL_FAIL);
+		exe_spell(caster_ptr, realm, spell, SPELL_FAIL);
 
 
 		if ((o_ptr->tval == TV_CHAOS_BOOK) && (randint1(100) < spell))
@@ -1239,15 +1239,15 @@ void do_cmd_cast(void)
 		{
 			if ((sval == 3) && one_in_(2))
 			{
-				sanity_blast(p_ptr, 0, TRUE);
+				sanity_blast(caster_ptr, 0, TRUE);
 			}
 			else
 			{
 				msg_print(_("痛い！", "It hurts!"));
-				take_hit(p_ptr, DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"), -1);
+				take_hit(caster_ptr, DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"), -1);
 
-				if ((spell > 15) && one_in_(6) && !p_ptr->hold_exp)
-					lose_exp(p_ptr, spell * 250);
+				if ((spell > 15) && one_in_(6) && !caster_ptr->hold_exp)
+					lose_exp(caster_ptr, spell * 250);
 			}
 		}
 		else if ((o_ptr->tval == TV_MUSIC_BOOK) && (randint1(200) < spell))
@@ -1256,145 +1256,145 @@ void do_cmd_cast(void)
 			aggravate_monsters(0);
 		}
 		if (randint1(100) >= chance)
-			chg_virtue(p_ptr, V_CHANCE, -1);
+			chg_virtue(caster_ptr, V_CHANCE, -1);
 	}
 
 	/* Process spell */
 	else
 	{
 		/* Canceled spells cost neither a current_world_ptr->game_turn nor mana */
-		if (!exe_spell(p_ptr, realm, spell, SPELL_CAST)) return;
+		if (!exe_spell(caster_ptr, realm, spell, SPELL_CAST)) return;
 
 		if (randint1(100) < chance)
-			chg_virtue(p_ptr, V_CHANCE, 1);
+			chg_virtue(caster_ptr, V_CHANCE, 1);
 
 		/* A spell was cast */
 		if (!(increment ?
-			(p_ptr->spell_worked2 & (1L << spell)) :
-			(p_ptr->spell_worked1 & (1L << spell)))
-			&& (p_ptr->pclass != CLASS_SORCERER)
-			&& (p_ptr->pclass != CLASS_RED_MAGE))
+			(caster_ptr->spell_worked2 & (1L << spell)) :
+			(caster_ptr->spell_worked1 & (1L << spell)))
+			&& (caster_ptr->pclass != CLASS_SORCERER)
+			&& (caster_ptr->pclass != CLASS_RED_MAGE))
 		{
 			int e = s_ptr->sexp;
 
 			/* The spell worked */
-			if (realm == p_ptr->realm1)
+			if (realm == caster_ptr->realm1)
 			{
-				p_ptr->spell_worked1 |= (1L << spell);
+				caster_ptr->spell_worked1 |= (1L << spell);
 			}
 			else
 			{
-				p_ptr->spell_worked2 |= (1L << spell);
+				caster_ptr->spell_worked2 |= (1L << spell);
 			}
 
-			gain_exp(p_ptr, e * s_ptr->slevel);
-			p_ptr->window |= (PW_OBJECT);
+			gain_exp(caster_ptr, e * s_ptr->slevel);
+			caster_ptr->window |= (PW_OBJECT);
 
 			switch (realm)
 			{
 			case REALM_LIFE:
-				chg_virtue(p_ptr, V_TEMPERANCE, 1);
-				chg_virtue(p_ptr, V_COMPASSION, 1);
-				chg_virtue(p_ptr, V_VITALITY, 1);
-				chg_virtue(p_ptr, V_DILIGENCE, 1);
+				chg_virtue(caster_ptr, V_TEMPERANCE, 1);
+				chg_virtue(caster_ptr, V_COMPASSION, 1);
+				chg_virtue(caster_ptr, V_VITALITY, 1);
+				chg_virtue(caster_ptr, V_DILIGENCE, 1);
 				break;
 			case REALM_DEATH:
-				chg_virtue(p_ptr, V_UNLIFE, 1);
-				chg_virtue(p_ptr, V_JUSTICE, -1);
-				chg_virtue(p_ptr, V_FAITH, -1);
-				chg_virtue(p_ptr, V_VITALITY, -1);
+				chg_virtue(caster_ptr, V_UNLIFE, 1);
+				chg_virtue(caster_ptr, V_JUSTICE, -1);
+				chg_virtue(caster_ptr, V_FAITH, -1);
+				chg_virtue(caster_ptr, V_VITALITY, -1);
 				break;
 			case REALM_DAEMON:
-				chg_virtue(p_ptr, V_JUSTICE, -1);
-				chg_virtue(p_ptr, V_FAITH, -1);
-				chg_virtue(p_ptr, V_HONOUR, -1);
-				chg_virtue(p_ptr, V_TEMPERANCE, -1);
+				chg_virtue(caster_ptr, V_JUSTICE, -1);
+				chg_virtue(caster_ptr, V_FAITH, -1);
+				chg_virtue(caster_ptr, V_HONOUR, -1);
+				chg_virtue(caster_ptr, V_TEMPERANCE, -1);
 				break;
 			case REALM_CRUSADE:
-				chg_virtue(p_ptr, V_FAITH, 1);
-				chg_virtue(p_ptr, V_JUSTICE, 1);
-				chg_virtue(p_ptr, V_SACRIFICE, 1);
-				chg_virtue(p_ptr, V_HONOUR, 1);
+				chg_virtue(caster_ptr, V_FAITH, 1);
+				chg_virtue(caster_ptr, V_JUSTICE, 1);
+				chg_virtue(caster_ptr, V_SACRIFICE, 1);
+				chg_virtue(caster_ptr, V_HONOUR, 1);
 				break;
 			case REALM_NATURE:
-				chg_virtue(p_ptr, V_NATURE, 1);
-				chg_virtue(p_ptr, V_HARMONY, 1);
+				chg_virtue(caster_ptr, V_NATURE, 1);
+				chg_virtue(caster_ptr, V_HARMONY, 1);
 				break;
 			case REALM_HEX:
-				chg_virtue(p_ptr, V_JUSTICE, -1);
-				chg_virtue(p_ptr, V_FAITH, -1);
-				chg_virtue(p_ptr, V_HONOUR, -1);
-				chg_virtue(p_ptr, V_COMPASSION, -1);
+				chg_virtue(caster_ptr, V_JUSTICE, -1);
+				chg_virtue(caster_ptr, V_FAITH, -1);
+				chg_virtue(caster_ptr, V_HONOUR, -1);
+				chg_virtue(caster_ptr, V_COMPASSION, -1);
 				break;
 			default:
-				chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+				chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
 				break;
 			}
 		}
 		switch (realm)
 		{
 		case REALM_LIFE:
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_TEMPERANCE, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_COMPASSION, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_VITALITY, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_DILIGENCE, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_TEMPERANCE, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_COMPASSION, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_VITALITY, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_DILIGENCE, 1);
 			break;
 		case REALM_DEATH:
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_UNLIFE, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_JUSTICE, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_FAITH, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_VITALITY, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_UNLIFE, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_JUSTICE, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_FAITH, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_VITALITY, -1);
 			break;
 		case REALM_DAEMON:
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_JUSTICE, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_FAITH, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_HONOUR, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_TEMPERANCE, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_JUSTICE, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_FAITH, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_HONOUR, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_TEMPERANCE, -1);
 			break;
 		case REALM_CRUSADE:
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_FAITH, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_JUSTICE, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_SACRIFICE, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_HONOUR, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_FAITH, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_JUSTICE, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_SACRIFICE, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_HONOUR, 1);
 			break;
 		case REALM_NATURE:
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_NATURE, 1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_HARMONY, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_NATURE, 1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_HARMONY, 1);
 			break;
 		case REALM_HEX:
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_JUSTICE, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_FAITH, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_HONOUR, -1);
-			if (randint1(100 + p_ptr->lev) < need_mana) chg_virtue(p_ptr, V_COMPASSION, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_JUSTICE, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_FAITH, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_HONOUR, -1);
+			if (randint1(100 + caster_ptr->lev) < need_mana) chg_virtue(caster_ptr, V_COMPASSION, -1);
 			break;
 		}
 		if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP)
 		{
-			s16b cur_exp = p_ptr->spell_exp[(increment ? 32 : 0) + spell];
+			s16b cur_exp = caster_ptr->spell_exp[(increment ? 32 : 0) + spell];
 			s16b exp_gain = 0;
 
 			if (cur_exp < SPELL_EXP_BEGINNER)
 				exp_gain += 60;
 			else if (cur_exp < SPELL_EXP_SKILLED)
 			{
-				if ((current_floor_ptr->dun_level > 4) && ((current_floor_ptr->dun_level + 10) > p_ptr->lev))
+				if ((current_floor_ptr->dun_level > 4) && ((current_floor_ptr->dun_level + 10) > caster_ptr->lev))
 					exp_gain = 8;
 			}
 			else if (cur_exp < SPELL_EXP_EXPERT)
 			{
-				if (((current_floor_ptr->dun_level + 5) > p_ptr->lev) && ((current_floor_ptr->dun_level + 5) > s_ptr->slevel))
+				if (((current_floor_ptr->dun_level + 5) > caster_ptr->lev) && ((current_floor_ptr->dun_level + 5) > s_ptr->slevel))
 					exp_gain = 2;
 			}
 			else if ((cur_exp < SPELL_EXP_MASTER) && !increment)
 			{
-				if (((current_floor_ptr->dun_level + 5) > p_ptr->lev) && (current_floor_ptr->dun_level > s_ptr->slevel))
+				if (((current_floor_ptr->dun_level + 5) > caster_ptr->lev) && (current_floor_ptr->dun_level > s_ptr->slevel))
 					exp_gain = 1;
 			}
-			p_ptr->spell_exp[(increment ? 32 : 0) + spell] += exp_gain;
+			caster_ptr->spell_exp[(increment ? 32 : 0) + spell] += exp_gain;
 		}
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(caster_ptr, 100);
 
 
 	/* Over-exert the player */
@@ -1403,36 +1403,36 @@ void do_cmd_cast(void)
 		int oops = need_mana;
 
 		/* No mana left */
-		p_ptr->csp = 0;
-		p_ptr->csp_frac = 0;
+		caster_ptr->csp = 0;
+		caster_ptr->csp_frac = 0;
 
 		msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
 
 		/* Hack -- Bypass free action */
-		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(5 * oops + 1));
+		(void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(5 * oops + 1));
 
 		switch (realm)
 		{
 		case REALM_LIFE:
-			chg_virtue(p_ptr, V_VITALITY, -10);
+			chg_virtue(caster_ptr, V_VITALITY, -10);
 			break;
 		case REALM_DEATH:
-			chg_virtue(p_ptr, V_UNLIFE, -10);
+			chg_virtue(caster_ptr, V_UNLIFE, -10);
 			break;
 		case REALM_DAEMON:
-			chg_virtue(p_ptr, V_JUSTICE, 10);
+			chg_virtue(caster_ptr, V_JUSTICE, 10);
 			break;
 		case REALM_NATURE:
-			chg_virtue(p_ptr, V_NATURE, -10);
+			chg_virtue(caster_ptr, V_NATURE, -10);
 			break;
 		case REALM_CRUSADE:
-			chg_virtue(p_ptr, V_JUSTICE, -10);
+			chg_virtue(caster_ptr, V_JUSTICE, -10);
 			break;
 		case REALM_HEX:
-			chg_virtue(p_ptr, V_COMPASSION, 10);
+			chg_virtue(caster_ptr, V_COMPASSION, 10);
 			break;
 		default:
-			chg_virtue(p_ptr, V_KNOWLEDGE, -10);
+			chg_virtue(caster_ptr, V_KNOWLEDGE, -10);
 			break;
 		}
 
@@ -1444,10 +1444,10 @@ void do_cmd_cast(void)
 			msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
 
 			/* Reduce constitution */
-			(void)dec_stat(p_ptr, A_CON, 15 + randint1(10), perm);
+			(void)dec_stat(caster_ptr, A_CON, 15 + randint1(10), perm);
 		}
 	}
 
-	p_ptr->window |= (PW_PLAYER);
-	p_ptr->window |= (PW_SPELL);
+	caster_ptr->window |= (PW_PLAYER);
+	caster_ptr->window |= (PW_SPELL);
 }
