@@ -518,7 +518,7 @@ void apply_nexus(monster_type *m_ptr)
 		}
 
 		msg_print(_("体がねじれ始めた...", "Your body starts to scramble..."));
-		status_shuffle();
+		status_shuffle(p_ptr);
 		break;
 	}
 	}
@@ -528,7 +528,7 @@ void apply_nexus(monster_type *m_ptr)
  * @brief プレイヤーのステータスシャッフル処理
  * @return なし
  */
-void status_shuffle(void)
+void status_shuffle(player_type *creature_ptr)
 {
 	BASE_STATUS max1, cur1, max2, cur2;
 	int ii, jj, i;
@@ -537,21 +537,21 @@ void status_shuffle(void)
 	ii = randint0(A_MAX);
 	for (jj = ii; jj == ii; jj = randint0(A_MAX)) /* loop */;
 
-	max1 = p_ptr->stat_max[ii];
-	cur1 = p_ptr->stat_cur[ii];
-	max2 = p_ptr->stat_max[jj];
-	cur2 = p_ptr->stat_cur[jj];
+	max1 = creature_ptr->stat_max[ii];
+	cur1 = creature_ptr->stat_cur[ii];
+	max2 = creature_ptr->stat_max[jj];
+	cur2 = creature_ptr->stat_cur[jj];
 
-	p_ptr->stat_max[ii] = max2;
-	p_ptr->stat_cur[ii] = cur2;
-	p_ptr->stat_max[jj] = max1;
-	p_ptr->stat_cur[jj] = cur1;
+	creature_ptr->stat_max[ii] = max2;
+	creature_ptr->stat_cur[ii] = cur2;
+	creature_ptr->stat_max[jj] = max1;
+	creature_ptr->stat_cur[jj] = cur1;
 
 	for (i = 0; i < A_MAX; i++)
 	{
-		if (p_ptr->stat_max[i] > p_ptr->stat_max_max[i]) p_ptr->stat_max[i] = p_ptr->stat_max_max[i];
-		if (p_ptr->stat_cur[i] > p_ptr->stat_max_max[i]) p_ptr->stat_cur[i] = p_ptr->stat_max_max[i];
+		if (creature_ptr->stat_max[i] > creature_ptr->stat_max_max[i]) creature_ptr->stat_max[i] = creature_ptr->stat_max_max[i];
+		if (creature_ptr->stat_cur[i] > creature_ptr->stat_max_max[i]) creature_ptr->stat_cur[i] = creature_ptr->stat_max_max[i];
 	}
 
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 }

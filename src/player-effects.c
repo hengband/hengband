@@ -3810,7 +3810,7 @@ void do_poly_self(player_type *creature_ptr)
 	/* Note: earlier deductions may have left power < 0 already. */
 	while (power > 0)
 	{
-		status_shuffle();
+		status_shuffle(creature_ptr);
 		power--;
 	}
 }
