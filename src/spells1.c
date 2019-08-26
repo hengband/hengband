@@ -1221,7 +1221,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Get the monster possessive ("his"/"her"/"its") */
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-	if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
+	if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
 
 	if (r_ptr->flagsr & RFR_RES_ALL &&
 		typ != GF_OLD_CLONE && typ != GF_STAR_HEAL && typ != GF_OLD_HEAL
@@ -4071,7 +4071,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 
 		project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP|PROJECT_KILL|PROJECT_REFLECTABLE), monspell);
 
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 		return TRUE;
 	}
 
@@ -5071,7 +5071,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 	}
 
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 
 
 	if ((p_ptr->special_defense & NINJA_KAWARIMI) && dam && who && (who != p_ptr->riding))

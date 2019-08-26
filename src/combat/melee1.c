@@ -2177,7 +2177,7 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
-	disturb(FALSE, TRUE);
+	disturb(p_ptr, FALSE, TRUE);
 
 	take_turn(p_ptr, 100);
 
@@ -2455,7 +2455,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 		if (!effect || check_hit(power, rlev, MON_STUNNED(m_ptr)))
 		{
 			/* Always disturbing */
-			disturb(TRUE, TRUE);
+			disturb(p_ptr, TRUE, TRUE);
 
 
 			/* Hack -- Apply "protection from evil" */
@@ -3967,7 +3967,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 				/* Visible monsters */
 				if (m_ptr->ml)
 				{
-					disturb(TRUE, TRUE);
+					disturb(p_ptr, TRUE, TRUE);
 
 #ifdef JP
 					if (abbreviate)
@@ -4177,7 +4177,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 		current_floor_ptr->monster_noise = TRUE;
 	}
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
 
 	/* Scan through all four blows */
 	for (ap_cnt = 0; ap_cnt < 4; ap_cnt++)
@@ -4330,7 +4330,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 			case RBM_EXPLODE:
 			{
-				if (see_either) disturb(TRUE, TRUE);
+				if (see_either) disturb(p_ptr, TRUE, TRUE);
 				act = _("爆発した。", "explodes.");
 				explode = TRUE;
 				touched = FALSE;
@@ -4774,7 +4774,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 
 	(void)set_monster_csleep(m_idx, 0);
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
 
 	if (MON_INVULNER(m_ptr) && randint0(PENETRATE_INVULNERABILITY))
 	{

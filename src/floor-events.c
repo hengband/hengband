@@ -321,7 +321,7 @@ void update_dungeon_feeling(floor_type *floor_ptr)
 	/* Update the level indicator */
 	p_ptr->redraw |= (PR_DEPTH);
 
-	if (disturb_minor) disturb(FALSE, FALSE);
+	if (disturb_minor) disturb(p_ptr, FALSE, FALSE);
 }
 
 

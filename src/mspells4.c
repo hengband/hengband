@@ -104,7 +104,7 @@ static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr 
 	monster_name(t_idx, t_name);
 
 	if (mon_to_player || (mon_to_mon && known && see_either))
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 
 	if (msg_flag_aux)
 	{
@@ -439,7 +439,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 	}
 
 	if (mon_to_player || (mon_to_mon && known && see_either))
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 
 	if (m_ptr->r_idx == MON_JAIAN && GF_TYPE == GF_SOUND)
 	{
@@ -823,7 +823,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(m_idx))
 	{ 
@@ -860,7 +860,7 @@ HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 		if (!seen)
 			msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
 		else
@@ -897,7 +897,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONST
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 		if (!seen)
 			msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
 		else
@@ -936,7 +936,7 @@ void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 		if (p_ptr->blind)
 			msg_format(msg1, m_name);
 		else
@@ -1384,7 +1384,7 @@ void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1,
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 		if (p_ptr->blind)
 			msg_format(msg1, m_name);
 		else
@@ -1779,7 +1779,7 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 
 	monspell_message_base(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1863,7 +1863,7 @@ void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 	monster_name(m_idx, m_name);
 	
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 
 	if (teleport_barrier(m_idx))
 	{
@@ -1894,7 +1894,7 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 	monster_name(m_idx, m_name);
 	
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 	if (teleport_barrier(m_idx))
 	{
 		if(see_monster(m_idx))
@@ -1921,7 +1921,7 @@ HIT_POINT spell_RF6_WORLD(MONSTER_IDX m_idx)
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 	if (m_ptr->r_idx == MON_DIO) who = 1;
 	else if (m_ptr->r_idx == MON_WONG) who = 3;
 	if (!set_monster_timewalk(randint1(2) + 2, who, TRUE)) return (FALSE);
@@ -2046,7 +2046,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 	if (one_in_(3) || !direct)
 	{		
 		simple_monspell_message(m_idx, t_idx,
@@ -2136,7 +2136,7 @@ HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 	switch (m_ptr->r_idx)
 	{
 		case MON_OHMU:
@@ -2465,7 +2465,7 @@ void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 
 	if (p_ptr->blind)
 		msg_format(_("%^sが何かをつぶやいて邪悪に微笑んだ。",
@@ -2488,7 +2488,7 @@ void spell_RF6_FORGET(MONSTER_IDX m_idx)
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 
 	msg_format(_("%^sがあなたの記憶を消去しようとしている。",
 		"%^s tries to blank your mind."), m_name);
@@ -2684,7 +2684,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	monster_name(t_idx, t_name);
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 	if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
 	{
 		monspell_message(m_idx, t_idx,
@@ -2696,7 +2696,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	else
 	{
 		if (mon_to_player || (mon_to_mon && known && see_either))
-			disturb(TRUE, TRUE);
+			disturb(p_ptr, TRUE, TRUE);
 
 		if (p_ptr->blind)
 		{
@@ -3229,7 +3229,7 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 
 	if (((m_ptr->r_idx == MON_MORGOTH) || (m_ptr->r_idx == MON_SAURON) || (m_ptr->r_idx == MON_ANGMAR)) &&
 		((r_info[MON_NAZGUL].cur_num + 2) < r_info[MON_NAZGUL].max_num) &&

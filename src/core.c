@@ -201,7 +201,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 	}
 
 	/* Stop everything */
-	if (disturb_minor) disturb(FALSE, FALSE);
+	if (disturb_minor) disturb(p_ptr, FALSE, FALSE);
 
 	/* Get an object description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1050,7 +1050,7 @@ static void notice_lite_change(object_type *o_ptr)
 	/* The light is now out */
 	else if (o_ptr->xtra4 == 0)
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
 
 		/* Recalculate torch radius */
@@ -1066,7 +1066,7 @@ static void notice_lite_change(object_type *o_ptr)
 		if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5))
 		    && (current_world_ptr->game_turn % (TURNS_PER_TICK*2)))
 		{
-			if (disturb_minor) disturb(FALSE, TRUE);
+			if (disturb_minor) disturb(p_ptr, FALSE, TRUE);
 			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
 		}
 	}
@@ -1074,7 +1074,7 @@ static void notice_lite_change(object_type *o_ptr)
 	/* The light is getting dim */
 	else if ((o_ptr->xtra4 < 100) && (!(o_ptr->xtra4 % 10)))
 	{
-		if (disturb_minor) disturb(FALSE, TRUE);
+		if (disturb_minor) disturb(p_ptr, FALSE, TRUE);
 			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
 	}
 }
@@ -1116,7 +1116,7 @@ static void recharged_notice(object_type *o_ptr)
 				msg_format("Your %s is recharged.", o_name);
 #endif
 
-			disturb(FALSE, FALSE);
+			disturb(p_ptr, FALSE, FALSE);
 
 			/* Done. */
 			return;
@@ -1310,7 +1310,7 @@ static void process_world_aux_digestion(void)
 			if (!p_ptr->paralyzed && (randint0(100) < 10))
 			{
 				msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
-				disturb(TRUE, TRUE);
+				disturb(p_ptr, TRUE, TRUE);
 
 				/* Hack -- faint (bypass free action) */
 				(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 1 + randint0(5));
@@ -2157,7 +2157,7 @@ static void process_world_aux_mutation(void)
 
 	if ((p_ptr->muta2 & MUT2_BERS_RAGE) && one_in_(3000))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("ウガァァア！", "RAAAAGHH!"));
 		msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
 		(void)set_shero(p_ptr, 10 + randint1(p_ptr->lev), FALSE);
@@ -2168,7 +2168,7 @@ static void process_world_aux_mutation(void)
 	{
 		if (!p_ptr->resist_fear)
 		{
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 			msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
 			set_afraid(p_ptr, p_ptr->afraid + 13 + randint1(26));
 		}
@@ -2178,7 +2178,7 @@ static void process_world_aux_mutation(void)
 	{
 		if (!p_ptr->resist_nexus && !(p_ptr->muta1 & MUT1_VTELEPORT) && !p_ptr->anti_tele)
 		{
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 			msg_print(_("あなたの位置は突然ひじょうに不確定になった...", "Your position suddenly seems very uncertain..."));
 			msg_print(NULL);
 			teleport_player(40, TELEPORT_PASSIVE);
@@ -2189,7 +2189,7 @@ static void process_world_aux_mutation(void)
 	{
 		if (!p_ptr->resist_conf && !p_ptr->resist_chaos)
 		{
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 			p_ptr->redraw |= PR_EXTRA;
 			msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
 		}
@@ -2226,7 +2226,7 @@ static void process_world_aux_mutation(void)
 	{
 		if (!p_ptr->resist_chaos)
 		{
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 			p_ptr->redraw |= PR_EXTRA;
 			(void)set_image(p_ptr, p_ptr->image + randint0(50) + 20);
 		}
@@ -2234,7 +2234,7 @@ static void process_world_aux_mutation(void)
 
 	if ((p_ptr->muta2 & MUT2_FLATULENT) && (randint1(3000) == 13))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("ブゥーーッ！おっと。", "BRRAAAP! Oops."));
 		msg_print(NULL);
 		fire_ball(GF_POIS, 0, p_ptr->lev, 3);
@@ -2244,7 +2244,7 @@ static void process_world_aux_mutation(void)
 	    !p_ptr->anti_magic && one_in_(9000))
 	{
 		int dire = 0;
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("魔法のエネルギーが突然あなたの中に流れ込んできた！エネルギーを解放しなければならない！", 
 						"Magical energy flows through you! You must release it!"));
 
@@ -2265,13 +2265,13 @@ static void process_world_aux_mutation(void)
 		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, mode))
 		{
 			msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 	}
 
 	if ((p_ptr->muta2 & MUT2_SPEED_FLUX) && one_in_(6000))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		if (one_in_(2))
 		{
 			msg_print(_("精力的でなくなった気がする。", "You feel less energetic."));
@@ -2302,7 +2302,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_BANISH_ALL) && one_in_(9000))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
 		banish_monsters(100);
@@ -2374,13 +2374,13 @@ static void process_world_aux_mutation(void)
 		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
 		{
 			msg_print(_("動物を引き寄せた！", "You have attracted an animal!"));
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 	}
 
 	if ((p_ptr->muta2 & MUT2_RAW_CHAOS) && !p_ptr->anti_magic && one_in_(8000))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("周りの空間が歪んでいる気がする！", "You feel the world warping around you!"));
 
 		msg_print(NULL);
@@ -2393,7 +2393,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_WRAITH) && !p_ptr->anti_magic && one_in_(3000))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("非物質化した！", "You feel insubstantial!"));
 
 		msg_print(NULL);
@@ -2435,7 +2435,7 @@ static void process_world_aux_mutation(void)
 
 		if (!sustained)
 		{
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 			msg_print(_("自分が衰弱していくのが分かる！", "You can feel yourself wasting away!"));
 			msg_print(NULL);
 			(void)dec_stat(p_ptr, which_stat, randint1(6) + 6, one_in_(3));
@@ -2452,7 +2452,7 @@ static void process_world_aux_mutation(void)
 		if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
 		{
 			msg_print(_("ドラゴンを引き寄せた！", "You have attracted a dragon!"));
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 	}
 	if ((p_ptr->muta2 & MUT2_WEIRD_MIND) && !p_ptr->anti_magic && one_in_(3000))
@@ -2470,7 +2470,7 @@ static void process_world_aux_mutation(void)
 	}
 	if ((p_ptr->muta2 & MUT2_NAUSEA) && !p_ptr->slow_digest && one_in_(9000))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
 		msg_print(NULL);
 		set_food(p_ptr, PY_FOOD_WEAK);
@@ -2516,7 +2516,7 @@ static void process_world_aux_mutation(void)
 
 	if ((p_ptr->muta2 & MUT2_INVULN) && !p_ptr->anti_magic && one_in_(5000))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("無敵な気がする！", "You feel invincible!"));
 		msg_print(NULL);
 		(void)set_invuln(p_ptr, randint1(8) + 8, FALSE);
@@ -2557,7 +2557,7 @@ static void process_world_aux_mutation(void)
 		INVENTORY_IDX slot = 0;
 		object_type *o_ptr = NULL;
 
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		msg_print(_("足がもつれて転んだ！", "You trip over your own feet!"));
 		take_hit(p_ptr, DAMAGE_NOESCAPE, randint1(p_ptr->wt / 6), _("転倒", "tripping"), -1);
 
@@ -2631,14 +2631,14 @@ static void process_world_aux_curse(void)
 			msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
 			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
 			{
-				disturb(FALSE, TRUE);
+				disturb(p_ptr, FALSE, TRUE);
 				teleport_player(50, 0L);
 			}
 			else
 			{
 				msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。", 
 							 "You can inscribe {.} on your %s to disable random teleportation. "), o_name);
-				disturb(TRUE, TRUE);
+				disturb(p_ptr, TRUE, TRUE);
 			}
 		}
 		/* Make a chainsword noise */
@@ -2647,7 +2647,7 @@ static void process_world_aux_curse(void)
 			char noise[1024];
 			if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise))
 				msg_print(noise);
-			disturb(FALSE, FALSE);
+			disturb(p_ptr, FALSE, FALSE);
 		}
 		/* TY Curse */
 		if ((p_ptr->cursed & TRC_TY_CURSE) && one_in_(TY_CURSE_CHANCE))
@@ -2718,7 +2718,7 @@ static void process_world_aux_curse(void)
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが動物を引き寄せた！", "Your %s have attracted an animal!"), o_name);
-				disturb(FALSE, TRUE);
+				disturb(p_ptr, FALSE, TRUE);
 			}
 		}
 		/* Call demon */
@@ -2730,7 +2730,7 @@ static void process_world_aux_curse(void)
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが悪魔を引き寄せた！", "Your %s have attracted a demon!"), o_name);
-				disturb(FALSE, TRUE);
+				disturb(p_ptr, FALSE, TRUE);
 			}
 		}
 		/* Call dragon */
@@ -2743,7 +2743,7 @@ static void process_world_aux_curse(void)
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s have attracted an dragon!"), o_name);
-				disturb(FALSE, TRUE);
+				disturb(p_ptr, FALSE, TRUE);
 			}
 		}
 		/* Call undead */
@@ -2756,14 +2756,14 @@ static void process_world_aux_curse(void)
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが死霊を引き寄せた！", "Your %s have attracted an undead!"), o_name);
-				disturb(FALSE, TRUE);
+				disturb(p_ptr, FALSE, TRUE);
 			}
 		}
 		if ((p_ptr->cursed & TRC_COWARDICE) && one_in_(1500))
 		{
 			if (!p_ptr->resist_fear)
 			{
-				disturb(FALSE, TRUE);
+				disturb(p_ptr, FALSE, TRUE);
 				msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
 				set_afraid(p_ptr, p_ptr->afraid + 13 + randint1(26));
 			}
@@ -2771,7 +2771,7 @@ static void process_world_aux_curse(void)
 		/* Teleport player */
 		if ((p_ptr->cursed & TRC_TELEPORT) && one_in_(200) && !p_ptr->anti_tele)
 		{
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 
 			/* Teleport player */
 			teleport_player(40, TELEPORT_PASSIVE);
@@ -2951,7 +2951,7 @@ static void process_world_aux_movement(void)
 		if (!p_ptr->word_recall)
 		{
 			/* Disturbing! */
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 
 			/* Determine the level */
 			if (current_floor_ptr->dun_level || p_ptr->inside_quest || p_ptr->enter_dungeon)
@@ -3065,7 +3065,7 @@ static void process_world_aux_movement(void)
 		if (!p_ptr->alter_reality)
 		{
 			/* Disturbing! */
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 
 			/* Determine the level */
 			if (!quest_number(current_floor_ptr->dun_level) && current_floor_ptr->dun_level)
@@ -3309,7 +3309,7 @@ static void process_world(void)
 		/* Every 15 minutes after 11:00 pm */
 		if ((hour == 23) && !(min % 15))
 		{
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 
 			switch (min / 15)
 			{
@@ -3335,7 +3335,7 @@ static void process_world(void)
 		if (!hour && !min)
 		{
 
-			disturb(TRUE, TRUE);
+			disturb(p_ptr, TRUE, TRUE);
 			msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
 
 			if (p_ptr->wild_mode)
@@ -4317,7 +4317,7 @@ static void pack_overflow(void)
 		/* Access the slot to be dropped */
 		o_ptr = &p_ptr->inventory_list[INVEN_PACK];
 
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 
 		/* Warning */
 		msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
@@ -4393,7 +4393,7 @@ static void process_fishing(void)
 		{
 			msg_print(_("餌だけ食われてしまった！くっそ～！", "Damn!  The fish stole your bait!"));
 		}
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 	}
 }
 
@@ -4500,7 +4500,7 @@ static void process_player(void)
 			{
 				flush(); /* Flush input */
 
-				disturb(FALSE, TRUE);
+				disturb(p_ptr, FALSE, TRUE);
 
 				/* Hack -- Show a Message */
 				msg_print(_("中断しました。", "Canceled."));
@@ -4936,7 +4936,7 @@ static void dungeon(bool load_game)
 	repair_objects = TRUE;
 
 
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 
 	/* Get index of current quest (if any) */
 	quest_num = quest_number(current_floor_ptr->dun_level);

@@ -688,12 +688,12 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* Choose a spell to cast */
 	thrown_spell = spell[randint0(num)];
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(TRUE, TRUE);
+	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
 
 	/* Check for spell failure (inate attacks never fail) */
 	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 		if (see_m) msg_format(_("%^sは呪文を唱えようとしたが失敗した。", 
 			                    "%^s tries to cast a spell, but fails."), m_name);
 

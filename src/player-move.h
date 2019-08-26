@@ -6,7 +6,7 @@
  */
 #define TRAVEL
 
-extern void disturb(bool stop_search, bool flush_output);
+extern void disturb(player_type *creature_ptr, bool stop_search, bool flush_output);
 extern void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(DIRECTION dir);
 

@@ -3019,7 +3019,7 @@ void py_pickup_floor(bool pickup)
 		/* Access the next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		disturb(FALSE, FALSE);
+		disturb(p_ptr, FALSE, FALSE);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)

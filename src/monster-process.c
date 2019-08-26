@@ -1384,7 +1384,7 @@ void process_monster(MONSTER_IDX m_idx)
 				msg_format(_("%sは傷の痛さの余りあなたの束縛から逃れようとしている。",
 							 "%^s seems to be in so much pain, and trying to escape from your restriction."), m_name);
 				riding_pinch++;
-				disturb(TRUE, TRUE);
+				disturb(p_ptr, TRUE, TRUE);
 			}
 			else
 			{
@@ -1560,7 +1560,7 @@ void process_monster(MONSTER_IDX m_idx)
 		    one_in_(CYBERNOISE) &&
 		    !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT))
 		{
-			if (disturb_minor) disturb(FALSE, FALSE);
+			if (disturb_minor) disturb(p_ptr, FALSE, FALSE);
 			msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
 		}
 
@@ -1882,7 +1882,7 @@ void process_monster(MONSTER_IDX m_idx)
 						msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
 
 					/* Disturb (sometimes) */
-					if (disturb_minor) disturb(FALSE, FALSE);
+					if (disturb_minor) disturb(p_ptr, FALSE, FALSE);
 
 					/* The door was bashed open */
 					did_bash_door = TRUE;
@@ -2213,7 +2213,7 @@ void process_monster(MONSTER_IDX m_idx)
 			     (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
 			{
 				if (is_hostile(m_ptr))
-					disturb(FALSE, TRUE);
+					disturb(p_ptr, FALSE, TRUE);
 			}
 
 			/* Take or Kill objects on the floor */

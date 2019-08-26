@@ -197,7 +197,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	{
 		disclose_grid(y, x);
 		msg_print(_("トラップを発見した。", "You have found a trap."));
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 	}
 
 	/* Secret door */
@@ -205,7 +205,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	{
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
 		disclose_grid(y, x);
-		disturb(FALSE, FALSE);
+		disturb(p_ptr, FALSE, FALSE);
 	}
 
 	/* Scan all objects in the grid */
@@ -220,7 +220,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 		{
 			msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
 			object_known(o_ptr);
-			disturb(FALSE, FALSE);
+			disturb(p_ptr, FALSE, FALSE);
 		}
 	}
 }
@@ -399,7 +399,7 @@ void carry(bool pickup)
 		object_desc(o_name, o_ptr, 0);
 		next_o_idx = o_ptr->next_o_idx;
 
-		disturb(FALSE, FALSE);
+		disturb(p_ptr, FALSE, FALSE);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
@@ -721,7 +721,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 	/* Handle "store doors" */
 	if (have_flag(f_ptr->flags, FF_STORE))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 
 		free_turn(creature_ptr);
 		/* Hack -- Enter store */
@@ -731,7 +731,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 	/* Handle "building doors" -KMW- */
 	else if (have_flag(f_ptr->flags, FF_BLDG))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 
 		free_turn(creature_ptr);
 		/* Hack -- Enter building */
@@ -741,7 +741,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 	/* Handle quest areas -KMW- */
 	else if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 
 		free_turn(creature_ptr);
 		/* Hack -- Enter quest level */
@@ -768,7 +768,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 	/* Set off a trap */
 	else if (have_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING))
 	{
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 
 		/* Hidden trap */
 		if (g_ptr->mimic || have_flag(f_ptr->flags, FF_SECRET))
@@ -800,7 +800,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 				msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
 			}
 
-			if (disturb_trap_detect) disturb(FALSE, TRUE);
+			if (disturb_trap_detect) disturb(p_ptr, FALSE, TRUE);
 		}
 	}
 
@@ -1057,7 +1057,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			msg_print(_("動けない！", "Can't move!"));
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
@@ -1065,12 +1065,12 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			monster_desc(steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			oktomove = FALSE;
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 		else if (creature_ptr->riding_ryoute)
 		{
 			oktomove = FALSE;
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 		else if (have_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY))
 		{
@@ -1087,21 +1087,21 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
 			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
 			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 
 		if (oktomove && MON_STUNNED(riding_m_ptr) && one_in_(2))
@@ -1110,7 +1110,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			monster_desc(steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
 			oktomove = FALSE;
-			disturb(FALSE, TRUE);
+			disturb(p_ptr, FALSE, TRUE);
 		}
 	}
 
@@ -1216,7 +1216,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			}
 		}
 
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 
 		if (!boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
 	}
@@ -1230,7 +1230,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		}
 
 		/* To avoid a loop with running */
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 
 		oktomove = FALSE;
 	}
@@ -1852,7 +1852,7 @@ void run_step(DIRECTION dir)
 
 			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
 
-			disturb(FALSE, FALSE);
+			disturb(p_ptr, FALSE, FALSE);
 
 			return;
 		}
@@ -1866,7 +1866,7 @@ void run_step(DIRECTION dir)
 		/* Update run */
 		if (run_test())
 		{
-			disturb(FALSE, FALSE);
+			disturb(p_ptr, FALSE, FALSE);
 
 			return;
 		}
@@ -1885,7 +1885,7 @@ void run_step(DIRECTION dir)
 	{
 		p_ptr->run_py = 0;
 		p_ptr->run_px = 0;
-		disturb(FALSE, FALSE);
+		disturb(p_ptr, FALSE, FALSE);
 	}
 }
 
@@ -2009,7 +2009,7 @@ void travel_step(void)
 			msg_print(_("道筋が見つかりません！", "No route is found!"));
 			travel.y = travel.x = 0;
 		}
-		disturb(FALSE, TRUE);
+		disturb(p_ptr, FALSE, TRUE);
 		return;
 	}
 
@@ -2273,7 +2273,7 @@ void do_cmd_travel(void)
  * The second arg is currently unused, but could induce output flush.
  * All disturbance cancels repeated commands, resting, and running.
  */
-void disturb(bool stop_search, bool stop_travel)
+void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 {
 #ifndef TRAVEL
 	/* Unused */
@@ -2290,30 +2290,30 @@ void disturb(bool stop_search, bool stop_travel)
 		command_rep = 0;
 
 		/* Redraw the state (later) */
-		p_ptr->redraw |= (PR_STATE);
+		creature_ptr->redraw |= (PR_STATE);
 	}
 
 	/* Cancel Resting */
-	if ((p_ptr->action == ACTION_REST) || (p_ptr->action == ACTION_FISH) || (stop_search && (p_ptr->action == ACTION_SEARCH)))
+	if ((creature_ptr->action == ACTION_REST) || (creature_ptr->action == ACTION_FISH) || (stop_search && (creature_ptr->action == ACTION_SEARCH)))
 	{
 		/* Cancel */
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 
 	/* Cancel running */
-	if (p_ptr->running)
+	if (creature_ptr->running)
 	{
 		/* Cancel */
-		p_ptr->running = 0;
+		creature_ptr->running = 0;
 
 		/* Check for new panel if appropriate */
 		if (center_player && !center_running) verify_panel();
 
 		/* Calculate torch radius */
-		p_ptr->update |= (PU_TORCH);
+		creature_ptr->update |= (PU_TORCH);
 
 		/* Update monster flow */
-		p_ptr->update |= (PU_FLOW);
+		creature_ptr->update |= (PU_FLOW);
 	}
 
 #ifdef TRAVEL
@@ -2326,7 +2326,7 @@ void disturb(bool stop_search, bool stop_travel)
 		if (center_player && !center_running) verify_panel();
 
 		/* Calculate torch radius */
-		p_ptr->update |= (PU_TORCH);
+		creature_ptr->update |= (PU_TORCH);
 	}
 #endif
 

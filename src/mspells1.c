@@ -1714,7 +1714,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	if (!spell_is_inate(thrown_spell)
 	    && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 		msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
 
 		return (TRUE);

@@ -182,7 +182,7 @@ void verify_panel(void)
 	panel_col_min = pcol_min;
 
 	/* Hack -- optional disturb on "panel change" */
-	if (disturb_panel && !center_player) disturb(FALSE, FALSE);
+	if (disturb_panel && !center_player) disturb(p_ptr, FALSE, FALSE);
 
 	panel_bounds_center();
 

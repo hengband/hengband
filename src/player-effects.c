@@ -400,7 +400,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, TRUE);
+	if (disturb_state) disturb(p_ptr, FALSE, TRUE);
 
 	creature_ptr->redraw |= (PR_BASIC | PR_STATUS);
 	creature_ptr->update |= (PU_BONUS | PU_HP);
@@ -467,7 +467,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 
 	/* Fully update the visuals */
 	creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
@@ -551,7 +551,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -594,7 +594,7 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -651,7 +651,7 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -697,7 +697,7 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->redraw |= (PR_STATE);
 	handle_stuff();
 	return (TRUE);
@@ -748,7 +748,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, TRUE);
+	if (disturb_state) disturb(p_ptr, FALSE, TRUE);
 
 	creature_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
 	creature_ptr->update |= (PU_MONSTERS);
@@ -800,7 +800,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -851,7 +851,7 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -898,7 +898,7 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -947,7 +947,7 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -996,7 +996,7 @@ bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1045,7 +1045,7 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1093,7 +1093,7 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1142,7 +1142,7 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
@@ -1194,7 +1194,7 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
@@ -1245,7 +1245,7 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -1306,7 +1306,7 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1372,7 +1372,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1420,7 +1420,7 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	creature_ptr->update |= (PU_MONSTERS);
 	handle_stuff();
@@ -1469,7 +1469,7 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Update the monsters */
@@ -1520,7 +1520,7 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Update the monsters */
@@ -1571,7 +1571,7 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1619,7 +1619,7 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1674,7 +1674,7 @@ bool set_superstealth(player_type *creature_ptr, bool set)
 	if (!notice) return (FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	return (TRUE);
 }
 
@@ -1720,7 +1720,7 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1768,7 +1768,7 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -1815,7 +1815,7 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1863,7 +1863,7 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1911,7 +1911,7 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -1960,7 +1960,7 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2008,7 +2008,7 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2054,7 +2054,7 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2102,7 +2102,7 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2150,7 +2150,7 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -2204,7 +2204,7 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Recalculate hitpoints */
@@ -2277,7 +2277,7 @@ bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
 #endif
 	}
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 
 	creature_ptr->update |= (PU_BONUS);
@@ -2340,7 +2340,7 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
 					_("(なし)", "do nothing special.")))))));
 	}
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
@@ -2390,7 +2390,7 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -2437,7 +2437,7 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -2485,7 +2485,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -2532,7 +2532,7 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -2580,7 +2580,7 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	handle_stuff();
 	return (TRUE);
 }
@@ -2711,7 +2711,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 		case 0:
 			msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
 
-			if (disturb_state) disturb(FALSE, FALSE);
+			if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 			break;
 		}
 
@@ -2724,7 +2724,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 	/* No change */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Redraw the "stun" */
@@ -2902,7 +2902,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 			case 0:
 			msg_format(_("やっと%s。", "You are no longer bleeding."), creature_ptr->prace == RACE_ANDROID ? "怪我が直った" : "出血が止まった");
 
-			if (disturb_state) disturb(FALSE, FALSE);
+			if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 			break;
 		}
 
@@ -2915,7 +2915,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 	/* No change */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Redraw the "cut" */
@@ -3107,7 +3107,7 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 
 	/* Redraw hunger */
@@ -4022,7 +4022,7 @@ bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -4064,7 +4064,7 @@ bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);
@@ -4106,7 +4106,7 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	/* Nothing to notice */
 	if (!notice) return (FALSE);
 
-	if (disturb_state) disturb(FALSE, FALSE);
+	if (disturb_state) disturb(p_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 	return (TRUE);

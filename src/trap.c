@@ -411,7 +411,7 @@ void hit_trap(bool break_trap)
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
 	concptr name = _("トラップ", "a trap");
 
-	disturb(FALSE, TRUE);
+	disturb(p_ptr, FALSE, TRUE);
 
 	cave_alter_feat(y, x, FF_HIT_TRAP);
 

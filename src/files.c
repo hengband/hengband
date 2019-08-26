@@ -5975,7 +5975,7 @@ void do_cmd_save_game(int is_autosave)
 	}
 	else
 	{
-		disturb(TRUE, TRUE);
+		disturb(p_ptr, TRUE, TRUE);
 	}
 
 	/* Clear messages */
@@ -6516,7 +6516,7 @@ void exit_game_panic(void)
 	prt("", 0, 0);
 
 	/* Hack -- current_world_ptr->game_turn off some things */
-	disturb(TRUE, TRUE);
+	disturb(p_ptr, TRUE, TRUE);
 
 	/* Mega-Hack -- Delay death */
 	if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
