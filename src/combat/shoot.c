@@ -325,7 +325,7 @@ static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_typ
 	}
 
 	/* Sniper */
-	if (snipe_type) mult = tot_dam_aux_snipe(mult, m_ptr, snipe_type);
+	if (snipe_type) mult = tot_dam_aux_snipe(p_ptr, mult, m_ptr, snipe_type);
 
 	/* Return the total damage */
 	return (tdam * mult / 10);
