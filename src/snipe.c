@@ -115,15 +115,15 @@ static snipe_power const snipe_powers[MAX_SNIPE_POWERS] =
  * @brief スナイパーの集中度加算
  * @return 常にTRUEを返す
  */
-static bool snipe_concentrate(void)
+static bool snipe_concentrate(player_type *creature_ptr)
 {
-	if ((int)p_ptr->concent < (2 + (p_ptr->lev + 5) / 10)) p_ptr->concent++;
+	if ((int)creature_ptr->concent < (2 + (creature_ptr->lev + 5) / 10)) creature_ptr->concent++;
 
-	msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), p_ptr->concent);
-	p_ptr->reset_concent = FALSE;
+	msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), creature_ptr->concent);
+	creature_ptr->reset_concent = FALSE;
 
-	p_ptr->update |= (PU_BONUS | PU_MONSTERS);
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
+	creature_ptr->redraw |= (PR_STATUS);
 	return (TRUE);
 }
 
@@ -496,7 +496,7 @@ static bool cast_sniper_spell(int spell)
 	switch (spell)
 	{
 	case 0: /* Concentration */
-		if (!snipe_concentrate()) return (FALSE);
+		if (!snipe_concentrate(p_ptr)) return (FALSE);
 		take_turn(p_ptr, 100);
 		return (TRUE);
 	case 1: snipe_type = SP_LITE; break;
