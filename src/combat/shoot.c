@@ -889,7 +889,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	}
 
 	/* Sniper - Loose his/her concentration after any shot */
-	if (p_ptr->concent) reset_concentration(FALSE);
+	if (p_ptr->concent) reset_concentration(p_ptr, FALSE);
 }
 
 

@@ -132,18 +132,18 @@ static bool snipe_concentrate(player_type *creature_ptr)
  * @param msg TRUEならばメッセージを表示する
  * @return なし
  */
-void reset_concentration(bool msg)
+void reset_concentration(player_type *creature_ptr, bool msg)
 {
 	if (msg)
 	{
 		msg_print(_("集中力が途切れてしまった。", "Stop concentrating."));
 	}
 
-	p_ptr->concent = 0;
-	p_ptr->reset_concent = FALSE;
+	creature_ptr->concent = 0;
+	creature_ptr->reset_concent = FALSE;
 
-	p_ptr->update |= (PU_BONUS | PU_MONSTERS);
-	p_ptr->redraw |= (PR_STATUS);
+	creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
+	creature_ptr->redraw |= (PR_STATUS);
 }
 
 /*! 

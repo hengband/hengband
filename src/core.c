@@ -4874,7 +4874,7 @@ static void process_player(void)
 		}
 
 		/* Sniper */
-		if (p_ptr->energy_use && p_ptr->reset_concent) reset_concentration(TRUE);
+		if (p_ptr->energy_use && p_ptr->reset_concent) reset_concentration(p_ptr, TRUE);
 
 		/* Handle "leaving" */
 		if (p_ptr->leaving) break;

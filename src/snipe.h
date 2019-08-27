@@ -19,7 +19,7 @@
 #define SP_NEEDLE        15
 
 /* snipe.c */
-extern void reset_concentration(bool msg);
+extern void reset_concentration(player_type *creature_ptr, bool msg);
 extern void display_snipe_list(void);
 extern MULTIPLY tot_dam_aux_snipe(MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type);
 extern void do_cmd_snipe(void);
