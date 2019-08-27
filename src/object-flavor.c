@@ -2477,7 +2477,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		avgdam /= (100 * 10);
 
 		/* Get extra damage from concentration */
-		if (p_ptr->concent) avgdam = boost_concentration_damage(avgdam);
+		if (p_ptr->concent) avgdam = boost_concentration_damage(p_ptr, avgdam);
 		
 		if (avgdam < 0) avgdam = 0;
 

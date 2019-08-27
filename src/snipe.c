@@ -151,9 +151,9 @@ void reset_concentration(player_type *creature_ptr, bool msg)
  * @param tdam 算出中のダメージ
  * @return 集中度修正を加えたダメージ
  */
-int boost_concentration_damage(int tdam)
+int boost_concentration_damage(player_type *creature_ptr, int tdam)
 {
-	tdam *= (10 + p_ptr->concent);
+	tdam *= (10 + creature_ptr->concent);
 	tdam /= 10;
 
 	return (tdam);
