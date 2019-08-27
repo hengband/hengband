@@ -33,7 +33,7 @@
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイ倍率をかけたダメージ量
  */
-static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, SPELL_IDX snipe_type)
+static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
 	MULTIPLY mult = 10;
 
@@ -211,7 +211,7 @@ static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_typ
 			}
 			if (mult < 30) mult = 30;
 			if ((o_ptr->name1 == ART_BARD_ARROW) && (m_ptr->r_idx == MON_SMAUG) &&
-				(p_ptr->inventory_list[INVEN_BOW].name1 == ART_BARD))
+				(sniper_ptr->inventory_list[INVEN_BOW].name1 == ART_BARD))
 				mult *= 5;
 		}
 
@@ -314,10 +314,10 @@ static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_typ
 			}
 		}
 
-		if ((have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (p_ptr->msp / 30)))
+		if ((have_flag(flgs, TR_FORCE_WEAPON)) && (sniper_ptr->csp > (sniper_ptr->msp / 30)))
 		{
-			p_ptr->csp -= (1 + (p_ptr->msp / 30));
-			p_ptr->redraw |= (PR_MANA);
+			sniper_ptr->csp -= (1 + (sniper_ptr->msp / 30));
+			sniper_ptr->redraw |= (PR_MANA);
 			mult = mult * 5 / 2;
 		}
 		break;
@@ -325,7 +325,7 @@ static MULTIPLY tot_dam_aux_shot(object_type *o_ptr, HIT_POINT tdam, monster_typ
 	}
 
 	/* Sniper */
-	if (snipe_type) mult = tot_dam_aux_snipe(p_ptr, mult, m_ptr, snipe_type);
+	if (snipe_type) mult = tot_dam_aux_snipe(sniper_ptr, mult, m_ptr, snipe_type);
 
 	/* Return the total damage */
 	return (tdam * mult / 10);
@@ -708,7 +708,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 					else
 					{
 						/* Apply special damage */
-						tdam = tot_dam_aux_shot(q_ptr, tdam, m_ptr, snipe_type);
+						tdam = tot_dam_aux_shot(p_ptr, q_ptr, tdam, m_ptr, snipe_type);
 						tdam = critical_shot(q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
 
 						/* No negative damage */
