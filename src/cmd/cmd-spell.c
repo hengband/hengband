@@ -313,7 +313,7 @@ concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, BIT
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
+static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
 {
 	int i;
 	SPELL_IDX spell = -1;
@@ -372,9 +372,9 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 
 	/* No "okay" spells */
 	if (!okay) return (FALSE);
-	if (((use_realm) != p_ptr->realm1) && ((use_realm) != p_ptr->realm2) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE)) return FALSE;
-	if (((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE)) && !is_magic(use_realm)) return FALSE;
-	if ((p_ptr->pclass == CLASS_RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) return FALSE;
+	if (((use_realm) != caster_ptr->realm1) && ((use_realm) != caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE)) return FALSE;
+	if (((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE)) && !is_magic(use_realm)) return FALSE;
+	if ((caster_ptr->pclass == CLASS_RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) return FALSE;
 
 	/* Assume cancelled */
 	*sn = (-1);
@@ -382,7 +382,7 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 	flag = FALSE;
 	redraw = FALSE;
 
-	p_ptr->window |= (PW_SPELL);
+	caster_ptr->window |= (PW_SPELL);
 	handle_stuff();
 
 	/* Build a prompt (accept all spells) */
@@ -535,11 +535,11 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 			jverb(prompt, jverb_buf, JVERB_AND);
 			/* 英日切り替え機能に対応 */
 			(void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
-				exe_spell(p_ptr, use_realm, spell, SPELL_NAME), need_mana,
+				exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), need_mana,
 				spell_chance(spell, use_realm), jverb_buf);
 #else
 			(void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ",
-				prompt, exe_spell(p_ptr, use_realm, spell, SPELL_NAME), need_mana,
+				prompt, exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), need_mana,
 				spell_chance(spell, use_realm));
 #endif
 
@@ -554,7 +554,7 @@ static int get_spell(SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, b
 
 	if (redraw) screen_load();
 
-	p_ptr->window |= (PW_SPELL);
+	caster_ptr->window |= (PW_SPELL);
 	handle_stuff();
 
 	/* Abort if needed */
@@ -706,7 +706,7 @@ void do_cmd_browse(void)
 	while (TRUE)
 	{
 		/* Ask for a spell, allow cancel */
-		if (!get_spell(&spell, _("読む", "browse"), o_ptr->sval, TRUE, use_realm))
+		if (!get_spell(p_ptr, &spell, _("読む", "browse"), o_ptr->sval, TRUE, use_realm))
 		{
 			/* If cancelled, leave immediately. */
 			if (spell == -1) break;
@@ -866,7 +866,7 @@ void do_cmd_study(player_type *caster_ptr)
 	if (mp_ptr->spell_book != TV_LIFE_BOOK)
 	{
 		/* Ask for a spell, allow cancel */
-		if (!get_spell(&spell, _("学ぶ", "study"), sval, FALSE, o_ptr->tval - TV_LIFE_BOOK + 1) && (spell == -1)) return;
+		if (!get_spell(caster_ptr, &spell, _("学ぶ", "study"), sval, FALSE, o_ptr->tval - TV_LIFE_BOOK + 1) && (spell == -1)) return;
 	}
 
 	/* Priest -- Learn a random prayer */
@@ -1121,14 +1121,14 @@ void do_cmd_cast(player_type *caster_ptr)
 
 	/* Ask for a spell */
 #ifdef JP
-	if (!get_spell(&spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う" : "唱える"),
+	if (!get_spell(caster_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う" : "唱える"),
 		sval, TRUE, realm))
 	{
 		if (spell == -2) msg_format("その本には知っている%sがない。", prayer);
 		return;
 	}
 #else
-	if (!get_spell(&spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"),
+	if (!get_spell(caster_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"),
 		sval, TRUE, realm))
 	{
 		if (spell == -2)
