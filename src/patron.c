@@ -513,7 +513,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_print(_("「汝、防具に頼ることなかれ。」", "'Thou reliest too much on thine equipment.'"));
 
 			object_desc(o_name, &creature_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
-			(void)curse_armor();
+			(void)curse_armor(creature_ptr);
 			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
 
@@ -550,7 +550,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 				{
 					if (!creature_ptr->inventory_list[INVEN_BODY].k_idx) break;
 					object_desc(o_name, &creature_ptr->inventory_list[INVEN_BODY], OD_NAME_ONLY);
-					(void)curse_armor();
+					(void)curse_armor(creature_ptr);
 					reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 				}
 				break;
@@ -589,7 +589,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
 				if (dummy) (void)curse_weapon(FALSE, dummy);
 			}
-			if (one_in_(2)) (void)curse_armor();
+			if (one_in_(2)) (void)curse_armor(creature_ptr);
 			break;
 
 		case REW_DESTRUCT:

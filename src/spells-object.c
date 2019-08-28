@@ -598,7 +598,7 @@ void acquire_chaos_weapon(player_type *creature_ptr)
  * Curse the players armor
  * @return 実際に呪縛されたらTRUEを返す
  */
-bool curse_armor(void)
+bool curse_armor(player_type *owner_ptr)
 {
 	int i;
 	object_type *o_ptr;
@@ -606,7 +606,7 @@ bool curse_armor(void)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Curse the body armor */
-	o_ptr = &p_ptr->inventory_list[INVEN_BODY];
+	o_ptr = &owner_ptr->inventory_list[INVEN_BODY];
 
 	/* Nothing to curse */
 	if (!o_ptr->k_idx) return (FALSE);
@@ -631,7 +631,7 @@ bool curse_armor(void)
 	else
 	{
 		msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-		chg_virtue(p_ptr, V_ENCHANT, -5);
+		chg_virtue(owner_ptr, V_ENCHANT, -5);
 
 		/* Blast the armor */
 		o_ptr->name1 = 0;
@@ -651,8 +651,8 @@ bool curse_armor(void)
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);
-		p_ptr->update |= (PU_BONUS | PU_MANA);
-		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+		owner_ptr->update |= (PU_BONUS | PU_MANA);
+		owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 	}
 
 	return (TRUE);

@@ -100,7 +100,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_CURSE_ARMOR:
 		{
-			if (curse_armor()) ident = TRUE;
+			if (curse_armor(creature_ptr)) ident = TRUE;
 			break;
 		}
 
