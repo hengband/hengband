@@ -3782,7 +3782,7 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, OB
 /*
  * Display *ID* ed weapons/armors's resistances
  */
-static void do_cmd_knowledge_inven(void)
+static void do_cmd_knowledge_inven(player_type *creature_ptr)
 {
 	FILE *fff;
 	GAME_TEXT file_name[1024];
@@ -3814,12 +3814,12 @@ static void do_cmd_knowledge_inven(void)
 		strcpy(where, _("装", "E "));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			do_cmd_knowledge_inven_aux(fff, &p_ptr->inventory_list[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(fff, &creature_ptr->inventory_list[i], &j, tval, where);
 		}
 		strcpy(where, _("持", "I "));
 		for (i = 0; i < INVEN_PACK; i++)
 		{
-			do_cmd_knowledge_inven_aux(fff, &p_ptr->inventory_list[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(fff, &creature_ptr->inventory_list[i], &j, tval, where);
 		}
 
 		st_ptr = &town_info[1].store[STORE_HOME];
@@ -7049,7 +7049,7 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_home();
 			break;
 		case '9': /* Resist list */
-			do_cmd_knowledge_inven();
+			do_cmd_knowledge_inven(p_ptr);
 			break;
 		case '0': /* Feature list */
 			{
