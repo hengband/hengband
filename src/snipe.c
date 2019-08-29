@@ -481,9 +481,9 @@ MULTIPLY tot_dam_aux_snipe(player_type *sniper_ptr, MULTIPLY mult, monster_type 
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_sniper_spell(int spell)
+static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
 {
-	object_type *o_ptr = &p_ptr->inventory_list[INVEN_BOW];
+	object_type *o_ptr = &sniper_ptr->inventory_list[INVEN_BOW];
 	SPELL_IDX snipe_type = SP_NONE;
 
 	if (o_ptr->tval != TV_BOW)
@@ -496,8 +496,8 @@ static bool cast_sniper_spell(int spell)
 	switch (spell)
 	{
 	case 0: /* Concentration */
-		if (!snipe_concentrate(p_ptr)) return (FALSE);
-		take_turn(p_ptr, 100);
+		if (!snipe_concentrate(sniper_ptr)) return (FALSE);
+		take_turn(sniper_ptr, 100);
 		return (TRUE);
 	case 1: snipe_type = SP_LITE; break;
 	case 2: snipe_type = SP_AWAY; break;
@@ -519,9 +519,9 @@ static bool cast_sniper_spell(int spell)
 	}
 
 	command_cmd = 'f';
-	do_cmd_fire(p_ptr, snipe_type);
+	do_cmd_fire(sniper_ptr, snipe_type);
 
-	return (p_ptr->is_fired);
+	return (sniper_ptr->is_fired);
 }
 
 /*!
@@ -540,7 +540,7 @@ void do_cmd_snipe(void)
 	if (!get_snipe_power(&n, FALSE)) return;
 
 	sound(SOUND_SHOOT);
-	cast = cast_sniper_spell(n);
+	cast = cast_sniper_spell(p_ptr, n);
 
 	if (!cast) return;
 	p_ptr->redraw |= (PR_HP | PR_MANA);
