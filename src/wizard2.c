@@ -287,7 +287,7 @@ static void do_cmd_wiz_bamf(void)
  * Aux function for "do_cmd_wiz_change()".	-RAK-
  * @return なし
  */
-static void do_cmd_wiz_change_aux(void)
+static void do_cmd_wiz_change_aux(player_type *creature_ptr)
 {
 	int i, j;
 	int tmp_int;
@@ -300,10 +300,10 @@ static void do_cmd_wiz_change_aux(void)
 	for (i = 0; i < A_MAX; i++)
 	{
 		/* Prompt */
-		sprintf(ppp, "%s (3-%d): ", stat_names[i], p_ptr->stat_max_max[i]);
+		sprintf(ppp, "%s (3-%d): ", stat_names[i], creature_ptr->stat_max_max[i]);
 
 		/* Default */
-		sprintf(tmp_val, "%d", p_ptr->stat_max[i]);
+		sprintf(tmp_val, "%d", creature_ptr->stat_max[i]);
 
 		/* Query */
 		if (!get_string(ppp, tmp_val, 3)) return;
@@ -312,11 +312,11 @@ static void do_cmd_wiz_change_aux(void)
 		tmp_int = atoi(tmp_val);
 
 		/* Verify */
-		if (tmp_int > p_ptr->stat_max_max[i]) tmp_int = p_ptr->stat_max_max[i];
+		if (tmp_int > creature_ptr->stat_max_max[i]) tmp_int = creature_ptr->stat_max_max[i];
 		else if (tmp_int < 3) tmp_int = 3;
 
 		/* Save it */
-		p_ptr->stat_cur[i] = p_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
+		creature_ptr->stat_cur[i] = creature_ptr->stat_max[i] = (BASE_STATUS)tmp_int;
 	}
 
 
@@ -337,24 +337,24 @@ static void do_cmd_wiz_change_aux(void)
 	{
 		for (i = 0;i < 64;i++)
 		{
-			p_ptr->weapon_exp[j][i] = tmp_s16b;
-			if (p_ptr->weapon_exp[j][i] > s_info[p_ptr->pclass].w_max[j][i]) p_ptr->weapon_exp[j][i] = s_info[p_ptr->pclass].w_max[j][i];
+			creature_ptr->weapon_exp[j][i] = tmp_s16b;
+			if (creature_ptr->weapon_exp[j][i] > s_info[creature_ptr->pclass].w_max[j][i]) creature_ptr->weapon_exp[j][i] = s_info[creature_ptr->pclass].w_max[j][i];
 		}
 	}
 
 	for (j = 0; j < 10; j++)
 	{
-		p_ptr->skill_exp[j] = tmp_s16b;
-		if (p_ptr->skill_exp[j] > s_info[p_ptr->pclass].s_max[j]) p_ptr->skill_exp[j] = s_info[p_ptr->pclass].s_max[j];
+		creature_ptr->skill_exp[j] = tmp_s16b;
+		if (creature_ptr->skill_exp[j] > s_info[creature_ptr->pclass].s_max[j]) creature_ptr->skill_exp[j] = s_info[creature_ptr->pclass].s_max[j];
 	}
 
 	for (j = 0; j < 32; j++)
-		p_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
+		creature_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
 	for (; j < 64; j++)
-		p_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
+		creature_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
 
 	/* Default */
-	sprintf(tmp_val, "%ld", (long)(p_ptr->au));
+	sprintf(tmp_val, "%ld", (long)(creature_ptr->au));
 
 	/* Query */
 	if (!get_string("Gold: ", tmp_val, 9)) return;
@@ -366,10 +366,10 @@ static void do_cmd_wiz_change_aux(void)
 	if (tmp_long < 0) tmp_long = 0L;
 
 	/* Save */
-	p_ptr->au = tmp_long;
+	creature_ptr->au = tmp_long;
 
 	/* Default */
-	sprintf(tmp_val, "%ld", (long)(p_ptr->max_exp));
+	sprintf(tmp_val, "%ld", (long)(creature_ptr->max_exp));
 
 	/* Query */
 	if (!get_string("Experience: ", tmp_val, 9)) return;
@@ -380,14 +380,14 @@ static void do_cmd_wiz_change_aux(void)
 	/* Verify */
 	if (tmp_long < 0) tmp_long = 0L;
 
-	if (p_ptr->prace != RACE_ANDROID)
+	if (creature_ptr->prace != RACE_ANDROID)
 	{
 		/* Save */
-		p_ptr->max_exp = tmp_long;
-		p_ptr->exp = tmp_long;
+		creature_ptr->max_exp = tmp_long;
+		creature_ptr->exp = tmp_long;
 
 		/* Update */
-		check_experience(p_ptr);
+		check_experience(creature_ptr);
 	}
 }
 
@@ -400,7 +400,7 @@ static void do_cmd_wiz_change_aux(void)
 static void do_cmd_wiz_change(void)
 {
 	/* Interact */
-	do_cmd_wiz_change_aux();
+	do_cmd_wiz_change_aux(p_ptr);
 	do_cmd_redraw(p_ptr);
 }
 
