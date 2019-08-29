@@ -5183,7 +5183,7 @@ static void store_sell(void)
 	if ((choice == 0) && (item >= INVEN_RARM))
 	{
 		calc_android_exp(p_ptr);
-		verify_equip_slot(item);
+		verify_equip_slot(p_ptr, item);
 	}
 }
 

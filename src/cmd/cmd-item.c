@@ -437,23 +437,23 @@ void do_cmd_wield(player_type *creature_ptr)
  * @param item 持ち替えを行いたい装備部位ID
  * @return なし
  */
-void verify_equip_slot(INVENTORY_IDX item)
+void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 {
 	object_type *o_ptr, *new_o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
 	if (item == INVEN_RARM)
 	{
-		if (has_melee_weapon(p_ptr, INVEN_LARM))
+		if (has_melee_weapon(owner_ptr, INVEN_LARM))
 		{
-			o_ptr = &p_ptr->inventory_list[INVEN_LARM];
+			o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
 			object_desc(o_name, o_ptr, 0);
 
 			if (!object_is_cursed(o_ptr))
 			{
-				new_o_ptr = &p_ptr->inventory_list[INVEN_RARM];
+				new_o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
 				object_copy(new_o_ptr, o_ptr);
-				p_ptr->total_weight += o_ptr->weight;
+				owner_ptr->total_weight += o_ptr->weight;
 				inven_item_increase(INVEN_LARM, -((int)o_ptr->number));
 				inven_item_optimize(INVEN_LARM);
 				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
@@ -471,19 +471,19 @@ void verify_equip_slot(INVENTORY_IDX item)
 	}
 	else if (item == INVEN_LARM)
 	{
-		o_ptr = &p_ptr->inventory_list[INVEN_RARM];
+		o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
 		if (o_ptr->k_idx) object_desc(o_name, o_ptr, 0);
 
-		if (has_melee_weapon(p_ptr, INVEN_RARM))
+		if (has_melee_weapon(owner_ptr, INVEN_RARM))
 		{
 			if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 				msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 		}
-		else if (!(empty_hands(p_ptr, FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
+		else if (!(empty_hands(owner_ptr, FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
 		{
-			new_o_ptr = &p_ptr->inventory_list[INVEN_LARM];
+			new_o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
 			object_copy(new_o_ptr, o_ptr);
-			p_ptr->total_weight += o_ptr->weight;
+			owner_ptr->total_weight += o_ptr->weight;
 			inven_item_increase(INVEN_RARM, -((int)o_ptr->number));
 			inven_item_optimize(INVEN_RARM);
 			msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);
@@ -548,7 +548,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
 
 	/* Take off the item */
 	(void)inven_takeoff(item, 255);
-	verify_equip_slot(item);
+	verify_equip_slot(creature_ptr, item);
 	calc_android_exp(creature_ptr);
 	creature_ptr->redraw |= (PR_EQUIPPY);
 }
@@ -598,7 +598,7 @@ void do_cmd_drop(player_type *creature_ptr)
 
 	if (item >= INVEN_RARM)
 	{
-		verify_equip_slot(item);
+		verify_equip_slot(creature_ptr, item);
 		calc_android_exp(creature_ptr);
 	}
 

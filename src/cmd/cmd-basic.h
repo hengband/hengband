@@ -30,4 +30,4 @@ extern bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OB
 extern bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x);
 extern bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir);
 
-extern void verify_equip_slot(INVENTORY_IDX item);
+extern void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item);
