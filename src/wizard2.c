@@ -296,7 +296,6 @@ static void do_cmd_wiz_change_aux(void)
 	char tmp_val[160];
 	char ppp[80];
 
-
 	/* Query the stats */
 	for (i = 0; i < A_MAX; i++)
 	{
@@ -1303,7 +1302,7 @@ static void do_cmd_wiz_cure_all(void)
  * Go to any level
  * @return なし
  */
-static void do_cmd_wiz_jump(void)
+static void do_cmd_wiz_jump(player_type *creature_ptr)
 {
 	/* Ask for level */
 	if (command_arg <= 0)
@@ -1316,7 +1315,7 @@ static void do_cmd_wiz_jump(void)
 		sprintf(ppp, "Jump which dungeon : ");
 
 		/* Default */
-		sprintf(tmp_val, "%d", p_ptr->dungeon_idx);
+		sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 2)) return;
@@ -1337,10 +1336,10 @@ static void do_cmd_wiz_jump(void)
 		/* Extract request */
 		command_arg = (COMMAND_ARG)atoi(tmp_val);
 
-		p_ptr->dungeon_idx = tmp_dungeon_type;
+		creature_ptr->dungeon_idx = tmp_dungeon_type;
 	}
-	if (command_arg < d_info[p_ptr->dungeon_idx].mindepth) command_arg = 0;
-	if (command_arg > d_info[p_ptr->dungeon_idx].maxdepth) command_arg = (COMMAND_ARG)d_info[p_ptr->dungeon_idx].maxdepth;
+	if (command_arg < d_info[creature_ptr->dungeon_idx].mindepth) command_arg = 0;
+	if (command_arg > d_info[creature_ptr->dungeon_idx].maxdepth) command_arg = (COMMAND_ARG)d_info[creature_ptr->dungeon_idx].maxdepth;
 
 	/* Accept request */
 	msg_format("You jump to dungeon level %d.", command_arg);
@@ -1352,26 +1351,26 @@ static void do_cmd_wiz_jump(void)
 
 	prepare_change_floor_mode(CFM_RAND_PLACE);
 
-	if (!current_floor_ptr->dun_level) p_ptr->dungeon_idx = 0;
-	p_ptr->inside_arena = FALSE;
-	p_ptr->wild_mode = FALSE;
+	if (!current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
+	creature_ptr->inside_arena = FALSE;
+	creature_ptr->wild_mode = FALSE;
 
 	leave_quest_check();
 
-	if (record_stair) exe_write_diary(p_ptr, NIKKI_WIZ_TELE,0,NULL);
+	if (record_stair) exe_write_diary(creature_ptr, NIKKI_WIZ_TELE,0,NULL);
 
-	p_ptr->inside_quest = 0;
-	free_turn(p_ptr);
+	creature_ptr->inside_quest = 0;
+	free_turn(creature_ptr);
 
 	/* Prevent energy_need from being too lower than 0 */
-	p_ptr->energy_need = 0;
+	creature_ptr->energy_need = 0;
 
 	/*
 	 * Clear all saved floors
 	 * and create a first saved floor
 	 */
 	prepare_change_floor_mode(CFM_FIRST_FLOOR);
-	p_ptr->leaving = TRUE;
+	creature_ptr->leaving = TRUE;
 }
 
 
@@ -1776,7 +1775,7 @@ void do_cmd_debug(void)
 
 	/* Go up or down in the dungeon */
 	case 'j':
-		do_cmd_wiz_jump();
+		do_cmd_wiz_jump(p_ptr);
 		break;
 
 	/* Self-Knowledge */
