@@ -923,7 +923,7 @@ void do_cmd_inscribe(player_type *creature_ptr)
  * Refill the players lamp (from the pack or floor)
  * @return なし
  */
-static void do_cmd_refill_lamp(void)
+static void do_cmd_refill_lamp(player_type *user_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -936,13 +936,13 @@ static void do_cmd_refill_lamp(void)
 	q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
 	s = _("油つぼがない。", "You have no flasks of oil.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(user_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
-	take_turn(p_ptr, 50);
+	take_turn(user_ptr, 50);
 
 	/* Access the lantern */
-	j_ptr = &p_ptr->inventory_list[INVEN_LITE];
+	j_ptr = &user_ptr->inventory_list[INVEN_LITE];
 
 	/* Refuel */
 	j_ptr->xtra4 += o_ptr->xtra4;
@@ -980,7 +980,7 @@ static void do_cmd_refill_lamp(void)
 		floor_item_optimize(0 - item);
 	}
 
-	p_ptr->update |= (PU_TORCH);
+	user_ptr->update |= (PU_TORCH);
 }
 
 /*!
@@ -1085,7 +1085,7 @@ void do_cmd_refill(player_type *creature_ptr)
 	/* It's a lamp */
 	else if (o_ptr->sval == SV_LITE_LANTERN)
 	{
-		do_cmd_refill_lamp();
+		do_cmd_refill_lamp(creature_ptr);
 	}
 
 	/* It's a torch */
