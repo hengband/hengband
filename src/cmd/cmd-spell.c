@@ -223,7 +223,7 @@ concptr info_weight(WEIGHT weight)
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
  */
-static bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
+static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool study_pray, int use_realm)
 {
 	const magic_type *s_ptr;
 
@@ -238,24 +238,24 @@ static bool spell_okay(int spell, bool learned, bool study_pray, int use_realm)
 	}
 
 	/* Spell is illegal */
-	if (s_ptr->slevel > p_ptr->lev) return (FALSE);
+	if (s_ptr->slevel > caster_ptr->lev) return (FALSE);
 
 	/* Spell is forgotten */
-	if ((use_realm == p_ptr->realm2) ?
-		(p_ptr->spell_forgotten2 & (1L << spell)) :
-		(p_ptr->spell_forgotten1 & (1L << spell)))
+	if ((use_realm == caster_ptr->realm2) ?
+		(caster_ptr->spell_forgotten2 & (1L << spell)) :
+		(caster_ptr->spell_forgotten1 & (1L << spell)))
 	{
 		/* Never okay */
 		return (FALSE);
 	}
 
-	if (p_ptr->pclass == CLASS_SORCERER) return (TRUE);
-	if (p_ptr->pclass == CLASS_RED_MAGE) return (TRUE);
+	if (caster_ptr->pclass == CLASS_SORCERER) return (TRUE);
+	if (caster_ptr->pclass == CLASS_RED_MAGE) return (TRUE);
 
 	/* Spell is learned */
-	if ((use_realm == p_ptr->realm2) ?
-		(p_ptr->spell_learned2 & (1L << spell)) :
-		(p_ptr->spell_learned1 & (1L << spell)))
+	if ((use_realm == caster_ptr->realm2) ?
+		(caster_ptr->spell_learned2 & (1L << spell)) :
+		(caster_ptr->spell_learned1 & (1L << spell)))
 	{
 		/* Always true */
 		return (!study_pray);
@@ -337,7 +337,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 	{
 		*sn = (SPELL_IDX)code;
 		/* Verify the spell */
-		if (spell_okay(*sn, learned, FALSE, use_realm))
+		if (spell_okay(caster_ptr, *sn, learned, FALSE, use_realm))
 		{
 			/* Success */
 			return (TRUE);
@@ -367,7 +367,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 	for (i = 0; i < num; i++)
 	{
 		/* Look for "okay" spells */
-		if (spell_okay(spells[i], learned, FALSE, use_realm)) okay = TRUE;
+		if (spell_okay(caster_ptr, spells[i], learned, FALSE, use_realm)) okay = TRUE;
 	}
 
 	/* No "okay" spells */
@@ -493,7 +493,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 		spell = spells[i];
 
 		/* Require "okay" spells */
-		if (!spell_okay(spell, learned, FALSE, use_realm))
+		if (!spell_okay(caster_ptr, spell, learned, FALSE, use_realm))
 		{
 			bell();
 #ifdef JP
@@ -882,7 +882,7 @@ void do_cmd_study(player_type *caster_ptr)
 			if ((fake_spell_flags[sval] & (1L << spell)))
 			{
 				/* Skip non "okay" prayers */
-				if (!spell_okay(spell, FALSE, TRUE,
+				if (!spell_okay(caster_ptr, spell, FALSE, TRUE,
 					(increment ? caster_ptr->realm2 : caster_ptr->realm1))) continue;
 
 				/* Hack -- Prepare the randomizer */
