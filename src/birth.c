@@ -422,7 +422,7 @@ static concptr seikaku_jouhou[MAX_SEIKAKU] =
 
 "\"munchkin\" is a personality for beginners.  It raises all your stats and skills.  With this personality, you can win the game easily, but gain little honor in doing so.",
 
-"\ChargeMan\" is crazy killer. It render you powerfull strength and constitution, but poor intelligence.you are not confused and seen the illusion because this you go mad from the beginning.",
+"\"ChargeMan\" is crazy killer. It render you powerfull strength and constitution, but poor intelligence.you are not confused and seen the illusion because this you go mad from the beginning.",
 
 #endif
 };

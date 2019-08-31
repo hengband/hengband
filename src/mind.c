@@ -1774,7 +1774,6 @@ void do_cmd_mind(void)
 	bool		on_mirror = FALSE;
 
 	if (cmd_limit_confused(p_ptr)) return;
-
 	if (!get_mind_power(&n, FALSE)) return;
 
 #ifdef JP
@@ -1791,12 +1790,13 @@ void do_cmd_mind(void)
 	switch(p_ptr->pclass)
 	{
 		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER; break;
-		case CLASS_FORCETRAINER:          use_mind = MIND_KI; break;
+		case CLASS_FORCETRAINER: use_mind = MIND_KI; break;
 		case CLASS_BERSERKER:   use_mind = MIND_BERSERKER; break;
 		case CLASS_MIRROR_MASTER:   use_mind = MIND_MIRROR_MASTER; break;
 		case CLASS_NINJA:       use_mind = MIND_NINJUTSU; break;
 		default:                use_mind = 0; break;
 	}
+	p = "skill";
 #endif
 	spell = mind_powers[use_mind].info[n];
 

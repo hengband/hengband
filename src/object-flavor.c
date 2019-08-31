@@ -1432,7 +1432,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 					sprintf(tmp_val2, " (%s)",r_name + r_ptr->name);
 					modstr = tmp_val2;
 #else
-					concptr t = r_name + r_ptr->name;
+					t = r_name + r_ptr->name;
 
 					if (!(r_ptr->flags1 & RF1_UNIQUE))
 					{
@@ -1461,7 +1461,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 #ifdef JP
 			modstr = r_name + r_ptr->name;
 #else
-			concptr t = r_name + r_ptr->name;
+			t = r_name + r_ptr->name;
 
 			if (!(r_ptr->flags1 & RF1_UNIQUE))
 			{
@@ -2697,7 +2697,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		if ((o_ptr->tval == TV_LITE) && (!(object_is_fixed_artifact(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR))))
 		{
 			/* Hack -- Turns of light for normal lites */
-			t = object_desc_chr(t, _('(', " (with "));
+			t = object_desc_str(t, _("(", " (with "));
 			if (o_ptr->name2 == EGO_LITE_LONG) t = object_desc_num(t, o_ptr->xtra4 * 2);
 			else t = object_desc_num(t, o_ptr->xtra4);
 			t = object_desc_str(t, _("ターンの寿命)", " turns of light)"));

@@ -445,7 +445,7 @@ bool send_world_score(bool do_send)
 			msg_print(_("初心者モードではワールドスコアに登録できません。",
 			"Since you are in the Easy Mode, you cannot send score to world score server."));
 		}
-		else if(get_check_strict(_("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score sever? "), 
+		else if(get_check_strict(_("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), 
 				(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 		{
 			errr err;

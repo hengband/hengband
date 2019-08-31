@@ -2073,7 +2073,7 @@ static void spoil_mon_info(concptr fname)
 		}
 
 		/* Name */
-		sprintf(buf, _("%s/%s  (", "%s  ("), (r_name + r_ptr->name), _(r_name+r_ptr->E_name, ""));  /* ---)--- */
+		sprintf(buf, _("%s/%s  (", "%s%s ("), (r_name + r_ptr->name), _(r_name+r_ptr->E_name, ""));  /* ---)--- */
 
 		spoil_out(buf);
 
