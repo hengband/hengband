@@ -1313,7 +1313,11 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 
 	take_turn(creature_ptr, 100);
 
-	msg_format(_("%sに%sの能力を付加しました。", "You have added ability of %s to %s."), o_name, es_ptr->add_name);
+#ifdef JP
+	msg_format("%sに%sの能力を付加しました。", o_name, es_ptr->add_name);
+#else
+	msg_format("You have added ability of %s to %s.", es_ptr->add_name, o_name);
+#endif
 	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 	creature_ptr->window |= (PW_INVEN);
 }

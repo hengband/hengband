@@ -660,14 +660,12 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 				(long)1000 / (p_ptr->max_plv + 2) + 5) / 10);
 
 #ifdef JP
-			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。",
-				p_ptr->lev, (long)i, (long)j ));
+			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", p_ptr->lev, (long)i, (long)j ));
 #else
 
 			/* Mention the experience */
 			hooked_roff(format(" is worth about %ld.%02ld point%s for level %d player",
-				(long)i, (long)j,
-				(((i == 1) && (j == 0)) ? "" : "s")), p_ptr->lev);
+				(long)i, (long)j, ((i == 1) && (j == 0)) ? "" : "s" , p_ptr->lev));
 
 			/* Take account of annoying English */
 			p = "th";

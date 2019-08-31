@@ -1881,7 +1881,7 @@ void do_cmd_mind(void)
 	if (randint0(100) < chance)
 	{
 		if (flush_failure) flush();
-		msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough!"), p);
+		msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough for %s!"), p);
 
 		sound(SOUND_FAIL);
 
