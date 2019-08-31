@@ -900,7 +900,7 @@ void do_cmd_open(player_type *creature_ptr)
 	}
 
 	/* Cancel repeat unless we may continue */
-	if (!more) disturb(p_ptr, FALSE, FALSE);
+	if (!more) disturb(creature_ptr, FALSE, FALSE);
 }
 
 
@@ -1038,7 +1038,7 @@ void do_cmd_close(player_type *creature_ptr)
 	}
 
 	/* Cancel repeat unless we may continue */
-	if (!more) disturb(p_ptr, FALSE, FALSE);
+	if (!more) disturb(creature_ptr, FALSE, FALSE);
 }
 
 
@@ -1277,7 +1277,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
 	}
 
 	/* Cancel repetition unless we can continue */
-	if (!more) disturb(p_ptr, FALSE, FALSE);
+	if (!more) disturb(creature_ptr, FALSE, FALSE);
 }
 
 /*!
@@ -1631,7 +1631,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 	}
 
 	/* Cancel repeat unless told not to */
-	if (!more) disturb(p_ptr, FALSE, FALSE);
+	if (!more) disturb(creature_ptr, FALSE, FALSE);
 }
 
 
@@ -1807,7 +1807,7 @@ void do_cmd_bash(player_type *creature_ptr)
 	}
 
 	/* Unless valid action taken, cancel bash */
-	if (!more) disturb(p_ptr, FALSE, FALSE);
+	if (!more) disturb(creature_ptr, FALSE, FALSE);
 }
 
 
@@ -1908,7 +1908,7 @@ void do_cmd_alter(player_type *creature_ptr)
 	}
 
 	/* Cancel repetition unless we can continue */
-	if (!more) disturb(p_ptr, FALSE, FALSE);
+	if (!more) disturb(creature_ptr, FALSE, FALSE);
 }
 
 
@@ -2092,7 +2092,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
 	}
 
 	/* Cancel repeat unless we may continue */
-	if (!more) disturb(p_ptr, FALSE, FALSE);
+	if (!more) disturb(creature_ptr, FALSE, FALSE);
 }
 
 
@@ -2287,7 +2287,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 	q = _("どれを撃ちますか? ", "Fire which item? ");
 	s = _("発射されるアイテムがありません。", "You have nothing to fire.");
 
-	ammo_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), creature_ptr->tval_ammo);
+	ammo_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), creature_ptr->tval_ammo);
 	if (!ammo_ptr)
 	{
 		flush();
@@ -2378,7 +2378,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			item_tester_hook = item_tester_hook_boomerang;
 			q = _("どの武器を投げますか? ", "Throw which item? ");
 			s = _("投げる武器がない。", "You have nothing to throw.");
-			o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP), 0);
+			o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr)
 			{
 				flush();
@@ -2400,7 +2400,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	{
 		q = _("どのアイテムを投げますか? ", "Throw which item? ");
 		s = _("投げるアイテムがない。", "You have nothing to throw.");
-		o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP), 0);
+		o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | USE_EQUIP), 0);
 		if (!o_ptr)
 		{
 			flush();
