@@ -748,34 +748,34 @@ void do_cmd_browse(player_type *caster_ptr)
  * @param next_realm 変更先の魔法領域ID
  * @return なし
  */
-static void change_realm2(CHARACTER_IDX next_realm)
+static void change_realm2(player_type *caster_ptr, CHARACTER_IDX next_realm)
 {
 	int i, j = 0;
 	char tmp[80];
 
 	for (i = 0; i < 64; i++)
 	{
-		p_ptr->spell_order[j] = p_ptr->spell_order[i];
-		if (p_ptr->spell_order[i] < 32) j++;
+		caster_ptr->spell_order[j] = caster_ptr->spell_order[i];
+		if (caster_ptr->spell_order[i] < 32) j++;
 	}
 	for (; j < 64; j++)
-		p_ptr->spell_order[j] = 99;
+		caster_ptr->spell_order[j] = 99;
 
 	for (i = 32; i < 64; i++)
 	{
-		p_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
+		caster_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
 	}
-	p_ptr->spell_learned2 = 0L;
-	p_ptr->spell_worked2 = 0L;
-	p_ptr->spell_forgotten2 = 0L;
+	caster_ptr->spell_learned2 = 0L;
+	caster_ptr->spell_worked2 = 0L;
+	caster_ptr->spell_forgotten2 = 0L;
 
-	sprintf(tmp, _("魔法の領域を%sから%sに変更した。", "change magic realm from %s to %s."), realm_names[p_ptr->realm2], realm_names[next_realm]);
-	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, tmp);
-	p_ptr->old_realm |= 1 << (p_ptr->realm2 - 1);
-	p_ptr->realm2 = next_realm;
+	sprintf(tmp, _("魔法の領域を%sから%sに変更した。", "change magic realm from %s to %s."), realm_names[caster_ptr->realm2], realm_names[next_realm]);
+	exe_write_diary(caster_ptr, NIKKI_BUNSHOU, 0, tmp);
+	caster_ptr->old_realm |= 1 << (caster_ptr->realm2 - 1);
+	caster_ptr->realm2 = next_realm;
 
-	p_ptr->update |= (PU_REORDER);
-	p_ptr->update |= (PU_SPELLS);
+	caster_ptr->update |= (PU_REORDER);
+	caster_ptr->update |= (PU_SPELLS);
 	handle_stuff();
 
 	/* Load an autopick preference file */
@@ -854,7 +854,7 @@ void do_cmd_study(player_type *caster_ptr)
 	else if (o_ptr->tval != REALM1_BOOK)
 	{
 		if (!get_check(_("本当に魔法の領域を変更しますか？", "Really, change magic realm? "))) return;
-		change_realm2(tval2realm(o_ptr->tval));
+		change_realm2(caster_ptr, tval2realm(o_ptr->tval));
 		increment = 32;
 	}
 
