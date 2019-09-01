@@ -96,14 +96,14 @@ static void mane_info(char *p, int power, HIT_POINT dam)
  * when you run it. It's probably easy to fix but I haven't tried,
  * sorry.
  */
-static int get_mane_power(int *sn, bool baigaesi)
+static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
 {
 	int             i = 0;
 	int             num = 0;
 	TERM_LEN y = 1;
 	TERM_LEN x = 18;
 	PERCENTAGE minfail = 0;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	PERCENTAGE chance = 0;
 	int             ask;
 	char            choice;
@@ -120,7 +120,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 	flag = FALSE;
 	redraw = FALSE;
 
-	num = p_ptr->mane_num;
+	num = caster_ptr->mane_num;
 
 	/* Build a prompt (accept all spells) */
 	(void)strnfmt(out_val, 78,
@@ -153,7 +153,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 				for (i = 0; i < num; i++)
 				{
 					/* Access the spell */
-					spell = monster_powers[p_ptr->mane_spell[i]];
+					spell = monster_powers[caster_ptr->mane_spell[i]];
 
 					chance = spell.manefail;
 
@@ -161,27 +161,27 @@ static int get_mane_power(int *sn, bool baigaesi)
 					if (plev > spell.level) chance -= 3 * (plev - spell.level);
 
 					/* Reduce failure rate by INT/WIS adjustment */
-					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[p_ptr->stat_ind[A_DEX]] - 2) / 2;
+					chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[caster_ptr->stat_ind[A_DEX]] - 2) / 2;
 
-					if (spell.manedam) chance = chance * (baigaesi ? p_ptr->mane_dam[i] * 2 : p_ptr->mane_dam[i]) / spell.manedam;
+					if (spell.manedam) chance = chance * (baigaesi ? caster_ptr->mane_dam[i] * 2 : caster_ptr->mane_dam[i]) / spell.manedam;
 
-					chance += p_ptr->to_m_chance;
+					chance += caster_ptr->to_m_chance;
 
 					/* Extract the minimum failure rate */
-					minfail = adj_mag_fail[p_ptr->stat_ind[spell.use_stat]];
+					minfail = adj_mag_fail[caster_ptr->stat_ind[spell.use_stat]];
 
 					/* Minimum failure rate */
 					if (chance < minfail) chance = minfail;
 
 					/* Stunning makes spells harder */
-					if (p_ptr->stun > 50) chance += 25;
-					else if (p_ptr->stun) chance += 15;
+					if (caster_ptr->stun > 50) chance += 25;
+					else if (caster_ptr->stun) chance += 15;
 
 					/* Always a 5 percent chance of working */
 					if (chance > 95) chance = 95;
 
 					/* Get info */
-					mane_info(comment, p_ptr->mane_spell[i], (baigaesi ? p_ptr->mane_dam[i]*2 : p_ptr->mane_dam[i]));
+					mane_info(comment, caster_ptr->mane_spell[i], (baigaesi ? caster_ptr->mane_dam[i]*2 : caster_ptr->mane_dam[i]));
 
 					/* Dump the spell --(-- */
 					sprintf(psi_desc, "  %c) %-30s %3d%%%s",
@@ -223,7 +223,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 		}
 
 		/* Save the spell index */
-		spell = monster_powers[p_ptr->mane_spell[i]];
+		spell = monster_powers[caster_ptr->mane_spell[i]];
 
 		/* Verify it */
 		if (ask)
@@ -231,7 +231,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 			char tmp_val[160];
 
 			/* Prompt */
-			(void) strnfmt(tmp_val, 78, _("%sをまねますか？", "Use %s? "), monster_powers[p_ptr->mane_spell[i]].name);
+			(void) strnfmt(tmp_val, 78, _("%sをまねますか？", "Use %s? "), monster_powers[caster_ptr->mane_spell[i]].name);
 
 			/* Belay that order */
 			if (!get_check(tmp_val)) continue;
@@ -242,7 +242,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 	}
 	if (redraw) screen_load();
 
-	p_ptr->window |= (PW_SPELL);
+	caster_ptr->window |= (PW_SPELL);
 	handle_stuff();
 
 	/* Abort if needed */
@@ -251,7 +251,7 @@ static int get_mane_power(int *sn, bool baigaesi)
 	/* Save the choice */
 	(*sn) = i;
 
-	damage = (baigaesi ? p_ptr->mane_dam[i]*2 : p_ptr->mane_dam[i]);
+	damage = (baigaesi ? caster_ptr->mane_dam[i]*2 : caster_ptr->mane_dam[i]);
 
 	/* Success */
 	return (TRUE);
@@ -934,7 +934,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
 		return FALSE;
 	}
 
-	if (!get_mane_power(&n, baigaesi)) return FALSE;
+	if (!get_mane_power(creature_ptr, &n, baigaesi)) return FALSE;
 
 	spell = monster_powers[creature_ptr->mane_spell[n]];
 
