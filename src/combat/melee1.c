@@ -845,7 +845,7 @@ static MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_pt
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown)
+HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown)
 {
 	MULTIPLY mult = 10;
 
@@ -855,11 +855,11 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 
 	if (!thrown)
 	{
-		if (p_ptr->special_attack & (ATTACK_ACID)) add_flag(flgs, TR_BRAND_ACID);
-		if (p_ptr->special_attack & (ATTACK_COLD)) add_flag(flgs, TR_BRAND_COLD);
-		if (p_ptr->special_attack & (ATTACK_ELEC)) add_flag(flgs, TR_BRAND_ELEC);
-		if (p_ptr->special_attack & (ATTACK_FIRE)) add_flag(flgs, TR_BRAND_FIRE);
-		if (p_ptr->special_attack & (ATTACK_POIS)) add_flag(flgs, TR_BRAND_POIS);
+		if (attacker_ptr->special_attack & (ATTACK_ACID)) add_flag(flgs, TR_BRAND_ACID);
+		if (attacker_ptr->special_attack & (ATTACK_COLD)) add_flag(flgs, TR_BRAND_COLD);
+		if (attacker_ptr->special_attack & (ATTACK_ELEC)) add_flag(flgs, TR_BRAND_ELEC);
+		if (attacker_ptr->special_attack & (ATTACK_FIRE)) add_flag(flgs, TR_BRAND_FIRE);
+		if (attacker_ptr->special_attack & (ATTACK_POIS)) add_flag(flgs, TR_BRAND_POIS);
 	}
 
 	if (hex_spelling(HEX_RUNESWORD)) add_flag(flgs, TR_SLAY_GOOD);
@@ -879,15 +879,15 @@ HIT_POINT tot_dam_aux(object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, B
 
 		mult = mult_brand(mult, flgs, m_ptr);
 
-		if (p_ptr->pclass == CLASS_SAMURAI)
+		if (attacker_ptr->pclass == CLASS_SAMURAI)
 		{
 			mult = mult_hissatsu(mult, flgs, m_ptr, mode);
 		}
 
-		if ((p_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
+		if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 		{
-			p_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
-			p_ptr->redraw |= (PR_MANA);
+			attacker_ptr->csp -= (1 + (o_ptr->dd * o_ptr->ds / 5));
+			attacker_ptr->redraw |= (PR_MANA);
 			mult = mult * 3 / 2 + 20;
 		}
 
@@ -1638,7 +1638,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			else if (o_ptr->k_idx)
 			{
 				k = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
-				k = tot_dam_aux(o_ptr, k, m_ptr, mode, FALSE);
+				k = tot_dam_aux(attacker_ptr, o_ptr, k, m_ptr, mode, FALSE);
 
 				if (backstab)
 				{

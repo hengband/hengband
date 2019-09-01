@@ -2627,7 +2627,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 				torch_dice(q_ptr, &dd, &ds); /* throwing a torch */
 				tdam = damroll(dd, ds);
 				/* Apply special damage */
-				tdam = tot_dam_aux(q_ptr, tdam, m_ptr, 0, TRUE);
+				tdam = tot_dam_aux(creature_ptr, q_ptr, tdam, m_ptr, 0, TRUE);
 				tdam = critical_shot(q_ptr->weight, q_ptr->to_h, 0, tdam);
 				if (q_ptr->to_d > 0)
 					tdam += q_ptr->to_d;
