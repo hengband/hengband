@@ -1087,7 +1087,7 @@ static void wiz_quantity_item(object_type *o_ptr)
  * debug command for blue mage
  * @return なし
  */
-static void do_cmd_wiz_blue_mage(void)
+static void do_cmd_wiz_blue_mage(player_type *caster_ptr)
 {
 	int i = 0;
 	int j = 0;
@@ -1099,15 +1099,15 @@ static void do_cmd_wiz_blue_mage(void)
 
 		for (i = 0; i < 32; i++)
 		{
-			if ((0x00000001 << i) & f4) p_ptr->magic_num2[i] = 1;
+			if ((0x00000001 << i) & f4) caster_ptr->magic_num2[i] = 1;
 		}
 		for (; i < 64; i++)
 		{
-			if ((0x00000001 << (i - 32)) & f5) p_ptr->magic_num2[i] = 1;
+			if ((0x00000001 << (i - 32)) & f5) caster_ptr->magic_num2[i] = 1;
 		}
 		for (; i < 96; i++)
 		{
-			if ((0x00000001 << (i - 64)) & f6) p_ptr->magic_num2[i] = 1;
+			if ((0x00000001 << (i - 64)) & f6) caster_ptr->magic_num2[i] = 1;
 		}
 	}
 }
@@ -1739,7 +1739,7 @@ void do_cmd_debug(void)
 	case 'E':
 		if (p_ptr->pclass == CLASS_BLUE_MAGE)
 		{
-			do_cmd_wiz_blue_mage();
+			do_cmd_wiz_blue_mage(p_ptr);
 		}
 		break;
 
