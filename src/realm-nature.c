@@ -524,7 +524,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 				fire_ball(GF_LITE, 0, dam, rad);
 				chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
 				chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
-				wiz_lite(FALSE);
+				wiz_lite(p_ptr, FALSE);
 
 				if ((PRACE_IS_(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !caster_ptr->resist_lite)
 				{

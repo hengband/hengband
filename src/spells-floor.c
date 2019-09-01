@@ -42,7 +42,7 @@
  * since this would prevent the use of "view_torch_grids" as a method to
  * keep track of what grids have been observed directly.
  */
-void wiz_lite(bool ninja)
+void wiz_lite(player_type *caster_ptr, bool ninja)
 {
 	OBJECT_IDX i;
 	POSITION y, x;
@@ -90,7 +90,7 @@ void wiz_lite(bool ninja)
 					f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 					/* Perma-lite the grid */
-					if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !ninja)
+					if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !ninja)
 					{
 						g_ptr->info |= (CAVE_GLOW);
 					}
@@ -117,13 +117,13 @@ void wiz_lite(bool ninja)
 		}
 	}
 
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	caster_ptr->update |= (PU_MONSTERS);
+	caster_ptr->redraw |= (PR_MAP);
+	caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	if (caster_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		if (current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
 	}
 }
 

@@ -1392,7 +1392,7 @@ void change_floor(BIT_FLAGS floor_mode)
 
 	/* Hack -- Munchkin characters always get whole map */
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
-		wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
+		wiz_lite(p_ptr, (bool)(p_ptr->pclass == CLASS_NINJA));
 
 	/* Remember when this level was "created" */
 	current_floor_ptr->generated_turn = current_world_ptr->game_turn;

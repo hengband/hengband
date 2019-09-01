@@ -1039,7 +1039,7 @@ static bool cast_mindcrafter_spell(int spell)
 		{
 			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
 			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
-			wiz_lite(FALSE);
+			wiz_lite(p_ptr, FALSE);
 		}
 		else if (plev > 19)
 			map_area(DETECT_RAD_MAP);
@@ -1550,7 +1550,7 @@ static bool cast_ninja_spell(int spell)
 	case 1:
 		if (plev > 44)
 		{
-			wiz_lite(TRUE);
+			wiz_lite(p_ptr, TRUE);
 		}
 		detect_monsters_normal(DETECT_RAD_DEFAULT);
 		if (plev > 4)

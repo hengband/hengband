@@ -396,7 +396,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
 			chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
 			chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
-			wiz_lite(FALSE);
+			wiz_lite(p_ptr, FALSE);
 			ident = TRUE;
 			break;
 
@@ -405,7 +405,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
 			chg_virtue(creature_ptr, V_ENLIGHTEN, 2);
 			msg_print(NULL);
-			wiz_lite(FALSE);
+			wiz_lite(p_ptr, FALSE);
 			(void)do_inc_stat(creature_ptr, A_INT);
 			(void)do_inc_stat(creature_ptr, A_WIS);
 			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);

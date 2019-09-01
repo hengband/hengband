@@ -3823,7 +3823,7 @@ void cast_shuffle(void)
 		msg_print(_("《太陽》だ。", "It's the Sun."));
 		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
 		chg_virtue(p_ptr, V_ENLIGHTEN, 1);
-		wiz_lite(FALSE);
+		wiz_lite(p_ptr, FALSE);
 	}
 	else
 	{

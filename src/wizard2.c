@@ -1881,7 +1881,7 @@ void do_cmd_debug(void)
 				current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
 		}
-		wiz_lite(FALSE);
+		wiz_lite(p_ptr, FALSE);
 		break;
 
 	/* Summon Random Monster(s) */
@@ -1915,7 +1915,7 @@ void do_cmd_debug(void)
 
 	/* Wizard Light the Level */
 	case 'w':
-		wiz_lite((bool)(p_ptr->pclass == CLASS_NINJA));
+		wiz_lite(p_ptr, (bool)(p_ptr->pclass == CLASS_NINJA));
 		break;
 
 	/* Increase Experience */
