@@ -163,14 +163,14 @@ int boost_concentration_damage(player_type *creature_ptr, int tdam)
  * @brief スナイパーの技能リストを表示する
  * @return なし
  */
-void display_snipe_list(void)
+void display_snipe_list(player_type *sniper_ptr)
 {
 	int i;
 	TERM_LEN y = 1;
 	TERM_LEN x = 1;
-	PLAYER_LEVEL plev = p_ptr->lev;
-	snipe_power     spell;
-	char            psi_desc[80];
+	PLAYER_LEVEL plev = sniper_ptr->lev;
+	snipe_power spell;
+	char psi_desc[80];
 
 	/* Display a list of spells */
 	prt("", y, x);
@@ -182,7 +182,7 @@ void display_snipe_list(void)
 		/* Access the available spell */
 		spell = snipe_powers[i];
 		if (spell.min_lev > plev) continue;
-		if (spell.mana_cost > (int)p_ptr->concent) continue;
+		if (spell.mana_cost > (int)sniper_ptr->concent) continue;
 
 		sprintf(psi_desc, "  %c) %-30s%2d %4d",
 			I2A(i), spell.name, spell.min_lev, spell.mana_cost);
