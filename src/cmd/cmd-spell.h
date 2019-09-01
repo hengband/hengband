@@ -33,6 +33,6 @@ extern concptr info_radius(POSITION rad);
 extern concptr info_weight(WEIGHT weight);
 
 /* cmd5.c */
-extern void do_cmd_browse(void);
+extern void do_cmd_browse(player_type *caster_ptr);
 extern void do_cmd_study(player_type *caster_ptr);
 extern void do_cmd_cast(player_type *caster_ptr);

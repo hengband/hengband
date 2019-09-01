@@ -624,7 +624,7 @@ static void confirm_use_force(bool browse_only)
  * and in the dark, primarily to allow browsing in stores.
  * </pre>
  */
-void do_cmd_browse(void)
+void do_cmd_browse(player_type *caster_ptr)
 {
 	OBJECT_IDX item;
 	OBJECT_SUBTYPE_VALUE sval;
@@ -641,20 +641,20 @@ void do_cmd_browse(void)
 	concptr q, s;
 
 	/* Warriors are illiterate */
-	if (!(p_ptr->realm1 || p_ptr->realm2) && (p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE))
+	if (!(caster_ptr->realm1 || caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE))
 	{
 		msg_print(_("本を読むことができない！", "You cannot read books!"));
 		return;
 	}
 
-	if (p_ptr->special_defense & KATA_MUSOU)
+	if (caster_ptr->special_defense & KATA_MUSOU)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(caster_ptr, ACTION_NONE);
 	}
 
-	if (p_ptr->pclass == CLASS_FORCETRAINER)
+	if (caster_ptr->pclass == CLASS_FORCETRAINER)
 	{
-		if (player_has_no_spellbooks(p_ptr))
+		if (player_has_no_spellbooks(caster_ptr))
 		{
 			confirm_use_force(TRUE);
 			return;
@@ -662,13 +662,13 @@ void do_cmd_browse(void)
 	}
 
 	/* Restrict choices to "useful" books */
-	if (p_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
+	if (caster_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
 	else item_tester_hook = item_tester_learn_spell;
 
 	q = _("どの本を読みますか? ", "Browse which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (p_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester_tval);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester_tval);
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */
@@ -706,7 +706,7 @@ void do_cmd_browse(void)
 	while (TRUE)
 	{
 		/* Ask for a spell, allow cancel */
-		if (!get_spell(p_ptr, &spell, _("読む", "browse"), o_ptr->sval, TRUE, use_realm))
+		if (!get_spell(caster_ptr, &spell, _("読む", "browse"), o_ptr->sval, TRUE, use_realm))
 		{
 			/* If cancelled, leave immediately. */
 			if (spell == -1) break;
@@ -732,7 +732,7 @@ void do_cmd_browse(void)
 		Term_erase(14, 12, 255);
 		Term_erase(14, 11, 255);
 
-		roff_to_buf(exe_spell(p_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
+		roff_to_buf(exe_spell(caster_ptr, use_realm, spell, SPELL_DESC), 62, temp, sizeof(temp));
 
 		for (j = 0, line = 11; temp[j]; j += 1 + strlen(&temp[j]))
 		{

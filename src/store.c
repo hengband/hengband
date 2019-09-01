@@ -5505,7 +5505,7 @@ static void store_process_command(void)
 				do_cmd_magic_eater(p_ptr, TRUE, FALSE);
 			else if (p_ptr->pclass == CLASS_SNIPER)
 				do_cmd_snipe_browse(p_ptr);
-			else do_cmd_browse();
+			else do_cmd_browse(p_ptr);
 			break;
 		}
 
