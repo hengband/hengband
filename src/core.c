@@ -3841,7 +3841,7 @@ static void process_command(void)
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
 				do_cmd_magic_eater(p_ptr, TRUE, FALSE);
 			else if (p_ptr->pclass == CLASS_SNIPER)
-				do_cmd_snipe_browse();
+				do_cmd_snipe_browse(p_ptr);
 			else do_cmd_browse();
 			break;
 		}

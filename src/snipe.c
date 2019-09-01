@@ -552,7 +552,7 @@ void do_cmd_snipe(void)
  * @brief スナイパー技能コマンドの表示 /
  * @return なし
  */
-void do_cmd_snipe_browse(void)
+void do_cmd_snipe_browse(player_type *sniper_ptr)
 {
 	COMMAND_CODE n = 0;
 	int j, line;
@@ -562,7 +562,7 @@ void do_cmd_snipe_browse(void)
 
 	while(1)
 	{
-		if (!get_snipe_power(p_ptr, &n, TRUE))
+		if (!get_snipe_power(sniper_ptr, &n, TRUE))
 		{
 			screen_load();
 			return;
