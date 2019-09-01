@@ -234,7 +234,7 @@ static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_LE
  * @return なし
  * @todo 魔法領域の再選択などがまだ不完全、要実装。
  */
-static void do_cmd_wiz_reset_class(void)
+static void do_cmd_wiz_reset_class(player_type *creature_ptr)
 {
 	int tmp_int;
 	char tmp_val[160];
@@ -244,7 +244,7 @@ static void do_cmd_wiz_reset_class(void)
 	sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
 
 	/* Default */
-	sprintf(tmp_val, "%d", p_ptr->pclass);
+	sprintf(tmp_val, "%d", creature_ptr->pclass);
 
 	/* Query */
 	if (!get_string(ppp, tmp_val, 2)) return;
@@ -256,13 +256,13 @@ static void do_cmd_wiz_reset_class(void)
 	if (tmp_int < 0 || tmp_int >= MAX_CLASS) return;
 
 	/* Save it */
-	p_ptr->pclass = (byte_hack)tmp_int;
+	creature_ptr->pclass = (byte_hack)tmp_int;
 
 	/* Redraw inscription */
-	p_ptr->window |= (PW_PLAYER);
+	creature_ptr->window |= (PW_PLAYER);
 
-	/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+	/* {.} and {$} effect creature_ptr->warning and TRC_TELEPORT_SELF */
+	creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
 	handle_stuff();
 }
@@ -1800,7 +1800,7 @@ void do_cmd_debug(void)
 
 	/* Reset Class */
 	case 'R':
-		(void)do_cmd_wiz_reset_class();
+		(void)do_cmd_wiz_reset_class(p_ptr);
 		break;
 
 	/* Specific reward */
@@ -1951,7 +1951,7 @@ void do_cmd_debug(void)
 	}
 
 	case 'V':
-		do_cmd_wiz_reset_class();
+		do_cmd_wiz_reset_class(p_ptr);
 		break;
 
 	/* Not a Wizard Command */
