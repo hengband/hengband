@@ -1520,7 +1520,7 @@ static void do_cmd_wiz_zap_all(void)
  * Create desired feature
  * @return なし
  */
-static void do_cmd_wiz_create_feature(void)
+static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 {
 	static int   prev_feat = 0;
 	static int   prev_mimic = 0;
@@ -1569,7 +1569,7 @@ static void do_cmd_wiz_create_feature(void)
 
 	note_spot(y, x);
 	lite_spot(y, x);
-	p_ptr->update |= (PU_FLOW);
+	creature_ptr->update |= (PU_FLOW);
 
 	prev_feat = tmp_feat;
 	prev_mimic = tmp_mimic;
@@ -1750,7 +1750,7 @@ void do_cmd_debug(void)
 
 	/* Create desired feature */
 	case 'F':
-		do_cmd_wiz_create_feature();
+		do_cmd_wiz_create_feature(p_ptr);
 		break;
 
 	/* Good Objects */
