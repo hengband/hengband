@@ -264,10 +264,10 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
  * @param spell 発動するモンスター攻撃のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool use_mane(int spell)
+static bool use_mane(player_type *caster_ptr, int spell)
 {
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	BIT_FLAGS mode = (PM_ALLOW_GROUP | PM_FORCE_PET);
 	BIT_FLAGS u_mode = 0L;
 
@@ -294,7 +294,7 @@ static bool use_mane(int spell)
 		m_idx = current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -642,7 +642,7 @@ static bool use_mane(int spell)
 		sleep_monster(dir, plev);
 		break;
 	case MS_SPEED:
-		(void)set_fast(p_ptr, randint1(20 + plev) + plev, FALSE);
+		(void)set_fast(caster_ptr, randint1(20 + plev) + plev, FALSE);
 		break;
 	case MS_HAND_DOOM:
 	{
@@ -654,13 +654,13 @@ static bool use_mane(int spell)
 	}
 	case MS_HEAL:
 		msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
-		(void)hp_player(p_ptr, plev*6);
-		(void)set_stun(p_ptr, 0);
-		(void)set_cut(p_ptr,0);
+		(void)hp_player(caster_ptr, plev*6);
+		(void)set_stun(caster_ptr, 0);
+		(void)set_cut(caster_ptr,0);
 		break;
 	case MS_INVULNER:
 		msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-		(void)set_invuln(p_ptr, randint1(7) + 7, FALSE);
+		(void)set_invuln(caster_ptr, randint1(7) + 7, FALSE);
 		break;
 	case MS_BLINK:
 		teleport_player(10, 0L);
@@ -669,7 +669,7 @@ static bool use_mane(int spell)
 		teleport_player(plev * 5, 0L);
 		break;
 	case MS_WORLD:
-		(void)time_walk(p_ptr);
+		(void)time_walk(caster_ptr);
 		break;
 	case MS_SPECIAL:
 		break;
@@ -682,7 +682,7 @@ static bool use_mane(int spell)
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!current_floor_ptr->grid_array[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -705,7 +705,7 @@ static bool use_mane(int spell)
 		}
 		msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
 
-		teleport_monster_to(current_floor_ptr->grid_array[target_row][target_col].m_idx, p_ptr->y, p_ptr->x, 100, TELEPORT_PASSIVE);
+		teleport_monster_to(current_floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
 		break;
 	}
 	case MS_TELE_AWAY:
@@ -715,7 +715,7 @@ static bool use_mane(int spell)
 		break;
 
 	case MS_TELE_LEVEL:
-		return teleport_level_other(p_ptr);
+		return teleport_level_other(caster_ptr);
 		break;
 
 	case MS_PSY_SPEAR:
@@ -739,7 +739,7 @@ static bool use_mane(int spell)
 		break;
 	case MS_RAISE_DEAD:
 		msg_print(_("死者復活の呪文を唱えた。", "You cast a animate dead."));
-		(void)animate_dead(0, p_ptr->y, p_ptr->x);
+		(void)animate_dead(0, caster_ptr->y, caster_ptr->x);
 		break;
 	case MS_S_KIN:
 	{
@@ -974,7 +974,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
 	else
 	{
 		sound(SOUND_ZAP);
-		cast = use_mane(creature_ptr->mane_spell[n]);
+		cast = use_mane(creature_ptr, creature_ptr->mane_spell[n]);
 		if (!cast) return FALSE;
 	}
 
