@@ -528,24 +528,24 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
  * @brief スナイパー技能コマンドのメインルーチン /
  * @return なし
  */
-void do_cmd_snipe(void)
+void do_cmd_snipe(player_type *sniper_ptr)
 {
 	COMMAND_CODE n = 0;
 	bool cast;
 
-	if(cmd_limit_confused(p_ptr)) return;
-	if(cmd_limit_image(p_ptr)) return;
-	if(cmd_limit_stun(p_ptr)) return;
+	if(cmd_limit_confused(sniper_ptr)) return;
+	if(cmd_limit_image(sniper_ptr)) return;
+	if(cmd_limit_stun(sniper_ptr)) return;
 
-	if (!get_snipe_power(p_ptr, &n, FALSE)) return;
+	if (!get_snipe_power(sniper_ptr, &n, FALSE)) return;
 
 	sound(SOUND_SHOOT);
-	cast = cast_sniper_spell(p_ptr, n);
+	cast = cast_sniper_spell(sniper_ptr, n);
 
 	if (!cast) return;
-	p_ptr->redraw |= (PR_HP | PR_MANA);
-	p_ptr->window |= (PW_PLAYER);
-	p_ptr->window |= (PW_SPELL);
+	sniper_ptr->redraw |= (PR_HP | PR_MANA);
+	sniper_ptr->window |= (PW_PLAYER);
+	sniper_ptr->window |= (PW_SPELL);
 }
 
 /*!

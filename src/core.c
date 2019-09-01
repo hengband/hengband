@@ -3904,7 +3904,7 @@ static void process_command(void)
 					else if (p_ptr->pclass == CLASS_SMITH)
 						do_cmd_kaji(p_ptr, FALSE);
 					else if (p_ptr->pclass == CLASS_SNIPER)
-						do_cmd_snipe();
+						do_cmd_snipe(p_ptr);
 					else
 						do_cmd_cast(p_ptr);
 				}
