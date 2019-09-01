@@ -211,19 +211,19 @@ void display_snipe_list(player_type *sniper_ptr)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
+static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_browse)
 {
 	COMMAND_CODE i;
-	int             num = 0;
+	int num = 0;
 	TERM_LEN y = 1;
 	TERM_LEN x = 20;
-	PLAYER_LEVEL plev = p_ptr->lev;
-	int             ask;
-	char            choice;
-	char            out_val[160];
-	concptr            p = _("射撃術", "power");
-	snipe_power     spell;
-	bool            flag, redraw;
+	PLAYER_LEVEL plev = sniper_ptr->lev;
+	int ask;
+	char choice;
+	char out_val[160];
+	concptr p = _("射撃術", "power");
+	snipe_power spell;
+	bool flag, redraw;
 
 	repeat_push(*sn);
 
@@ -235,7 +235,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 	if (repeat_pull(sn))
 	{
 		/* Verify the spell */
-		if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= (int)p_ptr->concent))
+		if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= (int)sniper_ptr->concent))
 		{
 			/* Success */
 			return (TRUE);
@@ -248,7 +248,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 	for (i = 0; i < MAX_SNIPE_POWERS; i++)
 	{
 		if ((snipe_powers[i].min_lev <= plev) &&
-			((only_browse) || (snipe_powers[i].mana_cost <= (int)p_ptr->concent)))
+			((only_browse) || (snipe_powers[i].mana_cost <= (int)sniper_ptr->concent)))
 		{
 			num = i;
 		}
@@ -297,7 +297,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 					/* Access the spell */
 					spell = snipe_powers[i];
 					if (spell.min_lev > plev) continue;
-					if (!only_browse && (spell.mana_cost > (int)p_ptr->concent)) continue;
+					if (!only_browse && (spell.mana_cost > (int)sniper_ptr->concent)) continue;
 
 					/* Dump the spell --(-- */
 					if (only_browse)
@@ -335,7 +335,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 
 		/* Totally Illegal */
 		if ((i < 0) || (i > num) || 
-			(!only_browse &&(snipe_powers[i].mana_cost > (int)p_ptr->concent)))
+			(!only_browse &&(snipe_powers[i].mana_cost > (int)sniper_ptr->concent)))
 		{
 			bell();
 			continue;
@@ -361,7 +361,7 @@ static int get_snipe_power(COMMAND_CODE *sn, bool only_browse)
 	}
 	if (redraw && !only_browse) screen_load();
 
-	p_ptr->window |= (PW_SPELL);
+	sniper_ptr->window |= (PW_SPELL);
 	handle_stuff();
 
 	/* Abort if needed */
@@ -537,7 +537,7 @@ void do_cmd_snipe(void)
 	if(cmd_limit_image(p_ptr)) return;
 	if(cmd_limit_stun(p_ptr)) return;
 
-	if (!get_snipe_power(&n, FALSE)) return;
+	if (!get_snipe_power(p_ptr, &n, FALSE)) return;
 
 	sound(SOUND_SHOOT);
 	cast = cast_sniper_spell(p_ptr, n);
@@ -562,7 +562,7 @@ void do_cmd_snipe_browse(void)
 
 	while(1)
 	{
-		if (!get_snipe_power(&n, TRUE))
+		if (!get_snipe_power(p_ptr, &n, TRUE))
 		{
 			screen_load();
 			return;
