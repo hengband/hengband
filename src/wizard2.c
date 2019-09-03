@@ -768,7 +768,7 @@ static void wiz_tweak_item(object_type *o_ptr)
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
  * @return なし
  */
-static void wiz_reroll_item(object_type *o_ptr)
+static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -872,9 +872,9 @@ static void wiz_reroll_item(object_type *o_ptr)
 	if (changed)
 	{
 		object_copy(o_ptr, q_ptr);
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->update |= (PU_COMBINE | PU_REORDER);
-		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+		owner_ptr->update |= (PU_BONUS);
+		owner_ptr->update |= (PU_COMBINE | PU_REORDER);
+		owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	}
 }
 
@@ -1175,7 +1175,7 @@ static void do_cmd_wiz_play(void)
 
 		if (ch == 'r' || ch == 'r')
 		{
-			wiz_reroll_item(q_ptr);
+			wiz_reroll_item(p_ptr, q_ptr);
 		}
 
 		if (ch == 't' || ch == 'T')
