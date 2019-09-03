@@ -3090,7 +3090,7 @@ bool rush_attack(bool *mdeath)
 
 		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
 		moved = TRUE;
-		tmp_mdeath = py_attack(ny, nx, HISSATSU_NYUSIN);
+		tmp_mdeath = py_attack(p_ptr, ny, nx, HISSATSU_NYUSIN);
 
 		break;
 	}
@@ -3911,7 +3911,7 @@ bool panic_hit(void)
 	x = p_ptr->x + ddx[dir];
 	if (current_floor_ptr->grid_array[y][x].m_idx)
 	{
-		py_attack(y, x, 0);
+		py_attack(p_ptr, y, x, 0);
 		if (randint0(p_ptr->skill_dis) < 7)
 			msg_print(_("うまく逃げられなかった。", "You failed to run away."));
 		else
@@ -4252,11 +4252,11 @@ bool double_attack(player_type *creature_ptr)
 			msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！",
 				"Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
 
-		py_attack(y, x, 0);
+		py_attack(p_ptr, y, x, 0);
 		if (current_floor_ptr->grid_array[y][x].m_idx)
 		{
 			handle_stuff();
-			py_attack(y, x, 0);
+			py_attack(p_ptr, y, x, 0);
 		}
 		creature_ptr->energy_need += ENERGY_NEED();
 	}
@@ -4356,7 +4356,7 @@ bool sword_dancing(player_type *creature_ptr)
 
 		/* Hack -- attack monsters */
 		if (g_ptr->m_idx)
-			py_attack(y, x, 0);
+			py_attack(p_ptr, y, x, 0);
 		else
 		{
 			msg_print(_("攻撃が空をきった。", "You attack the empty air."));

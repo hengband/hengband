@@ -2166,7 +2166,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
+bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 {
 	bool            fear = FALSE;
 	bool            mdeath = FALSE;
@@ -2177,15 +2177,15 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
-	disturb(p_ptr, FALSE, TRUE);
+	disturb(attacker_ptr, FALSE, TRUE);
 
-	take_turn(p_ptr, 100);
+	take_turn(attacker_ptr, 100);
 
-	if (!p_ptr->migite && !p_ptr->hidarite &&
-		!(p_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES)))
+	if (!attacker_ptr->migite && !attacker_ptr->hidarite &&
+		!(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES)))
 	{
 		msg_format(_("%s攻撃できない。", "You cannot do attacking."),
-			(empty_hands(p_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
+			(empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
 		return FALSE;
 	}
 
@@ -2194,22 +2194,22 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 	if (m_ptr->ml)
 	{
 		/* Auto-Recall if possible and visible */
-		if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+		if (!attacker_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
 		health_track(g_ptr->m_idx);
 	}
 
 	if ((r_ptr->flags1 & RF1_FEMALE) &&
-		!(p_ptr->stun || p_ptr->confused || p_ptr->image || !m_ptr->ml))
+		!(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || !m_ptr->ml))
 	{
-		if ((p_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (p_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU))
+		if ((attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (attacker_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU))
 		{
 			msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
 			return FALSE;
 		}
 	}
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+	if (d_info[attacker_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 	{
 		msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
 		return FALSE;
@@ -2217,27 +2217,27 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 
 	/* Stop if friendly */
 	if (!is_hostile(m_ptr) &&
-		!(p_ptr->stun || p_ptr->confused || p_ptr->image ||
-			p_ptr->shero || !m_ptr->ml))
+		!(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image ||
+			attacker_ptr->shero || !m_ptr->ml))
 	{
-		if (p_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
-		if (p_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+		if (attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
+		if (attacker_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 		if (stormbringer)
 		{
 			msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
-			chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
-			chg_virtue(p_ptr, V_HONOUR, -1);
-			chg_virtue(p_ptr, V_JUSTICE, -1);
-			chg_virtue(p_ptr, V_COMPASSION, -1);
+			chg_virtue(attacker_ptr, V_INDIVIDUALISM, 1);
+			chg_virtue(attacker_ptr, V_HONOUR, -1);
+			chg_virtue(attacker_ptr, V_JUSTICE, -1);
+			chg_virtue(attacker_ptr, V_COMPASSION, -1);
 		}
-		else if (p_ptr->pclass != CLASS_BERSERKER)
+		else if (attacker_ptr->pclass != CLASS_BERSERKER)
 		{
 			if (get_check(_("本当に攻撃しますか？", "Really hit it? ")))
 			{
-				chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
-				chg_virtue(p_ptr, V_HONOUR, -1);
-				chg_virtue(p_ptr, V_JUSTICE, -1);
-				chg_virtue(p_ptr, V_COMPASSION, -1);
+				chg_virtue(attacker_ptr, V_INDIVIDUALISM, 1);
+				chg_virtue(attacker_ptr, V_HONOUR, -1);
+				chg_virtue(attacker_ptr, V_JUSTICE, -1);
+				chg_virtue(attacker_ptr, V_COMPASSION, -1);
 			}
 			else
 			{
@@ -2249,7 +2249,7 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 
 
 	/* Handle player fear */
-	if (p_ptr->afraid)
+	if (attacker_ptr->afraid)
 	{
 		if (m_ptr->ml)
 			msg_format(_("恐くて%sを攻撃できない！", "You are too afraid to attack %s!"), m_name);
@@ -2264,35 +2264,35 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 
 	if (MON_CSLEEP(m_ptr)) /* It is not honorable etc to attack helpless victims */
 	{
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_COMPASSION, -1);
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_HONOUR, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(attacker_ptr, V_COMPASSION, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(attacker_ptr, V_HONOUR, -1);
 	}
 
-	if (p_ptr->migite && p_ptr->hidarite)
+	if (attacker_ptr->migite && attacker_ptr->hidarite)
 	{
-		if ((p_ptr->skill_exp[GINOU_NITOURYU] < s_info[p_ptr->pclass].s_max[GINOU_NITOURYU]) && ((p_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_ptr->level))
+		if ((attacker_ptr->skill_exp[GINOU_NITOURYU] < s_info[attacker_ptr->pclass].s_max[GINOU_NITOURYU]) && ((attacker_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_ptr->level))
 		{
-			if (p_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_BEGINNER)
-				p_ptr->skill_exp[GINOU_NITOURYU] += 80;
-			else if (p_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_SKILLED)
-				p_ptr->skill_exp[GINOU_NITOURYU] += 4;
-			else if (p_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_EXPERT)
-				p_ptr->skill_exp[GINOU_NITOURYU] += 1;
-			else if (p_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_MASTER)
-				if (one_in_(3)) p_ptr->skill_exp[GINOU_NITOURYU] += 1;
-			p_ptr->update |= (PU_BONUS);
+			if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_BEGINNER)
+				attacker_ptr->skill_exp[GINOU_NITOURYU] += 80;
+			else if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_SKILLED)
+				attacker_ptr->skill_exp[GINOU_NITOURYU] += 4;
+			else if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_EXPERT)
+				attacker_ptr->skill_exp[GINOU_NITOURYU] += 1;
+			else if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_MASTER)
+				if (one_in_(3)) attacker_ptr->skill_exp[GINOU_NITOURYU] += 1;
+			attacker_ptr->update |= (PU_BONUS);
 		}
 	}
 
 	/* Gain riding experience */
-	if (p_ptr->riding)
+	if (attacker_ptr->riding)
 	{
-		int cur = p_ptr->skill_exp[GINOU_RIDING];
-		int max = s_info[p_ptr->pclass].s_max[GINOU_RIDING];
+		int cur = attacker_ptr->skill_exp[GINOU_RIDING];
+		int max = s_info[attacker_ptr->pclass].s_max[GINOU_RIDING];
 
 		if (cur < max)
 		{
-			DEPTH ridinglevel = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level;
+			DEPTH ridinglevel = r_info[current_floor_ptr->m_list[attacker_ptr->riding].r_idx].level;
 			DEPTH targetlevel = r_ptr->level;
 			int inc = 0;
 
@@ -2308,27 +2308,27 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 					inc += 1;
 			}
 
-			p_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
-			p_ptr->update |= (PU_BONUS);
+			attacker_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
+			attacker_ptr->update |= (PU_BONUS);
 		}
 	}
 
-	p_ptr->riding_t_m_idx = g_ptr->m_idx;
-	if (p_ptr->migite) py_attack_aux(p_ptr, y, x, &fear, &mdeath, 0, mode);
-	if (p_ptr->hidarite && !mdeath) py_attack_aux(p_ptr, y, x, &fear, &mdeath, 1, mode);
+	attacker_ptr->riding_t_m_idx = g_ptr->m_idx;
+	if (attacker_ptr->migite) py_attack_aux(attacker_ptr, y, x, &fear, &mdeath, 0, mode);
+	if (attacker_ptr->hidarite && !mdeath) py_attack_aux(attacker_ptr, y, x, &fear, &mdeath, 1, mode);
 
 	/* Mutations which yield extra 'natural' attacks */
 	if (!mdeath)
 	{
-		if ((p_ptr->muta2 & MUT2_HORNS) && !mdeath)
+		if ((attacker_ptr->muta2 & MUT2_HORNS) && !mdeath)
 			natural_attack(g_ptr->m_idx, MUT2_HORNS, &fear, &mdeath);
-		if ((p_ptr->muta2 & MUT2_BEAK) && !mdeath)
+		if ((attacker_ptr->muta2 & MUT2_BEAK) && !mdeath)
 			natural_attack(g_ptr->m_idx, MUT2_BEAK, &fear, &mdeath);
-		if ((p_ptr->muta2 & MUT2_SCOR_TAIL) && !mdeath)
+		if ((attacker_ptr->muta2 & MUT2_SCOR_TAIL) && !mdeath)
 			natural_attack(g_ptr->m_idx, MUT2_SCOR_TAIL, &fear, &mdeath);
-		if ((p_ptr->muta2 & MUT2_TRUNK) && !mdeath)
+		if ((attacker_ptr->muta2 & MUT2_TRUNK) && !mdeath)
 			natural_attack(g_ptr->m_idx, MUT2_TRUNK, &fear, &mdeath);
-		if ((p_ptr->muta2 & MUT2_TENTACLES) && !mdeath)
+		if ((attacker_ptr->muta2 & MUT2_TENTACLES) && !mdeath)
 			natural_attack(g_ptr->m_idx, MUT2_TENTACLES, &fear, &mdeath);
 	}
 
@@ -2340,9 +2340,9 @@ bool py_attack(POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 		msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 	}
 
-	if ((p_ptr->special_defense & KATA_IAI) && ((mode != HISSATSU_IAI) || mdeath))
+	if ((attacker_ptr->special_defense & KATA_IAI) && ((mode != HISSATSU_IAI) || mdeath))
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(attacker_ptr, ACTION_NONE);
 	}
 
 	return mdeath;
@@ -2398,7 +2398,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 	if (p_ptr->special_defense & KATA_IAI)
 	{
 		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, draw and cut in one motion before %s move."), m_name);
-		if (py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
+		if (py_attack(p_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
 	}
 
 	if ((p_ptr->special_defense & NINJA_KAWARIMI) && (randint0(55) < (p_ptr->lev*3/5+20)))
@@ -4071,7 +4071,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 
 		p_ptr->csp -= 7;
 		msg_format(_("%^sに反撃した！", "Your counterattack to %s!"), m_target_name);
-		py_attack(m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
+		py_attack(p_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
 		p_ptr->redraw |= (PR_MANA);
 	}

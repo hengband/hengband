@@ -1493,7 +1493,7 @@ static bool cast_berserk_spell(int spell)
 			return FALSE;
 		}
 
-		py_attack(y, x, 0);
+		py_attack(p_ptr, y, x, 0);
 
 		if (!player_can_enter(current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(current_floor_ptr->grid_array[y][x].feat))
 			break;

@@ -303,7 +303,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
-			py_attack(y, x, 0);
+			py_attack(p_ptr, y, x, 0);
 			return FALSE;
 		}
 
