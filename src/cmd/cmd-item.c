@@ -1547,7 +1547,7 @@ void do_cmd_use(player_type *creature_ptr)
 		case TV_SHOT:
 		case TV_ARROW:
 		case TV_BOLT:
-			exe_fire(item, &creature_ptr->inventory_list[INVEN_BOW], SP_NONE);
+			exe_fire(creature_ptr, item, &creature_ptr->inventory_list[INVEN_BOW], SP_NONE);
 			break;
 
 		default:

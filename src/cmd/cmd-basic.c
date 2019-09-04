@@ -2295,7 +2295,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 	}
 
 	/* Fire the item */
-	exe_fire(item, j_ptr, snipe_type);
+	exe_fire(creature_ptr, item, j_ptr, snipe_type);
 
 	if (!creature_ptr->is_fired || creature_ptr->pclass != CLASS_SNIPER) return;
 

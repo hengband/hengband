@@ -356,7 +356,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
  * Note that Bows of "Extra Shots" give an extra shot.
  * </pre>
  */
-void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
+void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 {
 	DIRECTION dir;
 	int i;
@@ -385,7 +385,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	/* Access the item (if in the pack) */
 	if (item >= 0)
 	{
-		o_ptr = &p_ptr->inventory_list[item];
+		o_ptr = &shooter_ptr->inventory_list[item];
 	}
 	else
 	{
@@ -398,7 +398,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Use the proper number of shots */
-	thits = p_ptr->num_fire;
+	thits = shooter_ptr->num_fire;
 
 	/* Use a base distance */
 	tdis = 10;
@@ -407,19 +407,19 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	tdam_base = damroll(o_ptr->dd, o_ptr->ds) + o_ptr->to_d + j_ptr->to_d;
 
 	/* Actually "fire" the object */
-	bonus = (p_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
+	bonus = (shooter_ptr->to_h_b + o_ptr->to_h + j_ptr->to_h);
 	if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
-		chance = (p_ptr->skill_thb + (p_ptr->weapon_exp[0][j_ptr->sval] / 400 + bonus) * BTH_PLUS_ADJ);
+		chance = (shooter_ptr->skill_thb + (shooter_ptr->weapon_exp[0][j_ptr->sval] / 400 + bonus) * BTH_PLUS_ADJ);
 	else
-		chance = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
+		chance = (shooter_ptr->skill_thb + ((shooter_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
 
-	p_ptr->energy_use = bow_energy(j_ptr->sval);
+	shooter_ptr->energy_use = bow_energy(j_ptr->sval);
 	tmul = bow_tmul(j_ptr->sval);
 
 	/* Get extra "power" from "extra might" */
-	if (p_ptr->xtra_might) tmul++;
+	if (shooter_ptr->xtra_might) tmul++;
 
-	tmul = tmul * (100 + (int)(adj_str_td[p_ptr->stat_ind[A_STR]]) - 128);
+	tmul = tmul * (100 + (int)(adj_str_td[shooter_ptr->stat_ind[A_STR]]) - 128);
 
 	/* Boost the damage */
 	tdam_base *= tmul;
@@ -429,8 +429,8 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	tdis = 13 + tmul / 80;
 	if ((j_ptr->sval == SV_LIGHT_XBOW) || (j_ptr->sval == SV_HEAVY_XBOW))
 	{
-		if (p_ptr->concent)
-			tdis -= (5 - (p_ptr->concent + 1) / 2);
+		if (shooter_ptr->concent)
+			tdis -= (5 - (shooter_ptr->concent + 1) / 2);
 		else
 			tdis -= 5;
 	}
@@ -440,7 +440,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	/* Get a direction (or cancel) */
 	if (!get_aim_dir(&dir))
 	{
-		free_turn(p_ptr);
+		free_turn(shooter_ptr);
 
 		if (snipe_type == SP_AWAY) snipe_type = SP_NONE;
 
@@ -450,8 +450,8 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	}
 
 	/* Predict the "target" location */
-	tx = p_ptr->x + 99 * ddx[dir];
-	ty = p_ptr->y + 99 * ddy[dir];
+	tx = shooter_ptr->x + 99 * ddx[dir];
+	ty = shooter_ptr->y + 99 * ddy[dir];
 
 	/* Check for "target request" */
 	if ((dir == 5) && target_okay())
@@ -461,14 +461,14 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	}
 
 	/* Get projection path length */
-	tdis = project_path(path_g, project_length, p_ptr->y, p_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
+	tdis = project_path(path_g, project_length, shooter_ptr->y, shooter_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
 
 	project_length = 0; /* reset to default */
 
 	/* Don't shoot at my feet */
-	if (tx == p_ptr->x && ty == p_ptr->y)
+	if (tx == shooter_ptr->x && ty == shooter_ptr->y)
 	{
-		free_turn(p_ptr);
+		free_turn(shooter_ptr);
 
 		/* project_length is already reset to 0 */
 
@@ -477,26 +477,26 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 
 
 	/* Take a (partial) current_world_ptr->game_turn */
-	p_ptr->energy_use = (p_ptr->energy_use / thits);
-	p_ptr->is_fired = TRUE;
+	shooter_ptr->energy_use = (shooter_ptr->energy_use / thits);
+	shooter_ptr->is_fired = TRUE;
 
 	/* Sniper - Difficult to shot twice at 1 current_world_ptr->game_turn */
-	if (snipe_type == SP_DOUBLE)  p_ptr->concent = (p_ptr->concent + 1) / 2;
+	if (snipe_type == SP_DOUBLE)  shooter_ptr->concent = (shooter_ptr->concent + 1) / 2;
 
 	/* Sniper - Repeat shooting when double shots */
 	for (i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++)
 	{
 
 		/* Start at the player */
-		y = p_ptr->y;
-		x = p_ptr->x;
+		y = shooter_ptr->y;
+		x = shooter_ptr->x;
 		q_ptr = &forge;
 		object_copy(q_ptr, o_ptr);
 
 		/* Single object */
 		q_ptr->number = 1;
 
-		/* Reduce and describe p_ptr->inventory_list */
+		/* Reduce and describe shooter_ptr->inventory_list */
 		if (item >= 0)
 		{
 			inven_item_increase(item, -1);
@@ -531,7 +531,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 			/* Calculate the new location (see "project()") */
 			ny = y;
 			nx = x;
-			mmove2(&ny, &nx, p_ptr->y, p_ptr->x, ty, tx);
+			mmove2(&ny, &nx, shooter_ptr->y, shooter_ptr->x, ty, tx);
 
 			/* Shatter Arrow */
 			if (snipe_type == SP_KILL_WALL)
@@ -543,7 +543,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 					if (g_ptr->info & (CAVE_MARK)) msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
 					/* Forget the wall */
 					g_ptr->info &= ~(CAVE_MARK);
-					p_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
+					shooter_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 					/* Destroy the wall */
 					cave_alter_feat(ny, nx, FF_HURT_ROCK);
@@ -627,33 +627,33 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 
 				if (MON_CSLEEP(m_ptr))
 				{
-					if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_COMPASSION, -1);
-					if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_HONOUR, -1);
+					if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(shooter_ptr, V_COMPASSION, -1);
+					if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(shooter_ptr, V_HONOUR, -1);
 				}
 
-				if ((r_ptr->level + 10) > p_ptr->lev)
+				if ((r_ptr->level + 10) > shooter_ptr->lev)
 				{
-					int now_exp = p_ptr->weapon_exp[0][j_ptr->sval];
-					if (now_exp < s_info[p_ptr->pclass].w_max[0][j_ptr->sval])
+					int now_exp = shooter_ptr->weapon_exp[0][j_ptr->sval];
+					if (now_exp < s_info[shooter_ptr->pclass].w_max[0][j_ptr->sval])
 					{
 						SUB_EXP amount = 0;
 						if (now_exp < WEAPON_EXP_BEGINNER) amount = 80;
 						else if (now_exp < WEAPON_EXP_SKILLED) amount = 25;
-						else if ((now_exp < WEAPON_EXP_EXPERT) && (p_ptr->lev > 19)) amount = 10;
-						else if (p_ptr->lev > 34) amount = 2;
-						p_ptr->weapon_exp[0][j_ptr->sval] += amount;
-						p_ptr->update |= (PU_BONUS);
+						else if ((now_exp < WEAPON_EXP_EXPERT) && (shooter_ptr->lev > 19)) amount = 10;
+						else if (shooter_ptr->lev > 34) amount = 2;
+						shooter_ptr->weapon_exp[0][j_ptr->sval] += amount;
+						shooter_ptr->update |= (PU_BONUS);
 					}
 				}
 
-				if (p_ptr->riding)
+				if (shooter_ptr->riding)
 				{
-					if ((p_ptr->skill_exp[GINOU_RIDING] < s_info[p_ptr->pclass].s_max[GINOU_RIDING])
-						&& ((p_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level)
+					if ((shooter_ptr->skill_exp[GINOU_RIDING] < s_info[shooter_ptr->pclass].s_max[GINOU_RIDING])
+						&& ((shooter_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[current_floor_ptr->m_list[shooter_ptr->riding].r_idx].level)
 						&& one_in_(2))
 					{
-						p_ptr->skill_exp[GINOU_RIDING] += 1;
-						p_ptr->update |= (PU_BONUS);
+						shooter_ptr->skill_exp[GINOU_RIDING] += 1;
+						shooter_ptr->update |= (PU_BONUS);
 					}
 				}
 
@@ -664,7 +664,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 					int tdam = tdam_base;
 
 					/* Get extra damage from concentration */
-					if (p_ptr->concent) tdam = boost_concentration_damage(p_ptr, tdam);
+					if (shooter_ptr->concent) tdam = boost_concentration_damage(shooter_ptr, tdam);
 
 					/* Handle unseen monster */
 					if (!visible)
@@ -685,14 +685,14 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 
 						if (m_ptr->ml)
 						{
-							if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+							if (!shooter_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 							health_track(c_mon_ptr->m_idx);
 						}
 					}
 
 					if (snipe_type == SP_NEEDLE)
 					{
-						if ((randint1(randint1(r_ptr->level / (3 + p_ptr->concent)) + (8 - p_ptr->concent)) == 1)
+						if ((randint1(randint1(r_ptr->level / (3 + shooter_ptr->concent)) + (8 - shooter_ptr->concent)) == 1)
 							&& !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
 						{
 							GAME_TEXT m_name[MAX_NLEN];
@@ -708,7 +708,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 					else
 					{
 						/* Apply special damage */
-						tdam = tot_dam_aux_shot(p_ptr, q_ptr, tdam, m_ptr, snipe_type);
+						tdam = tot_dam_aux_shot(shooter_ptr, q_ptr, tdam, m_ptr, snipe_type);
 						tdam = critical_shot(q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
 
 						/* No negative damage */
@@ -728,7 +728,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 						u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
 						sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
-						project(0, ((p_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg, -1);
+						project(0, ((shooter_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg, -1);
 						break;
 					}
 
@@ -751,7 +751,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 					{
 						/* STICK TO */
 						if (object_is_fixed_artifact(q_ptr) &&
-							(p_ptr->pclass != CLASS_SNIPER || p_ptr->concent == 0))
+							(shooter_ptr->pclass != CLASS_SNIPER || shooter_ptr->concent == 0))
 						{
 							GAME_TEXT m_name[MAX_NLEN];
 
@@ -774,7 +774,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 							msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 						}
 
-						set_target(m_ptr, p_ptr->y, p_ptr->x);
+						set_target(m_ptr, shooter_ptr->y, shooter_ptr->x);
 
 						/* Sniper */
 						if (snipe_type == SP_RUSH)
@@ -790,7 +790,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 								if (!n) break;
 
 								/* Calculate the new location (see "project()") */
-								mmove2(&ny, &nx, p_ptr->y, p_ptr->x, ty, tx);
+								mmove2(&ny, &nx, shooter_ptr->y, shooter_ptr->x, ty, tx);
 
 								/* Stopped by wilderness boundary */
 								if (!in_bounds2(ny, nx)) break;
@@ -827,8 +827,8 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 				/* Sniper */
 				if (snipe_type == SP_PIERCE)
 				{
-					if (p_ptr->concent < 1) break;
-					p_ptr->concent--;
+					if (shooter_ptr->concent < 1) break;
+					shooter_ptr->concent--;
 					continue;
 				}
 
@@ -838,7 +838,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 		}
 
 		/* Chance of breakage (during attacks) */
-		j = (hit_body ? breakage_chance(q_ptr, p_ptr->pclass == CLASS_ARCHER, snipe_type) : 0);
+		j = (hit_body ? breakage_chance(q_ptr, shooter_ptr->pclass == CLASS_ARCHER, snipe_type) : 0);
 
 		if (stick_to)
 		{
@@ -889,7 +889,7 @@ void exe_fire(INVENTORY_IDX item, object_type *j_ptr, SPELL_IDX snipe_type)
 	}
 
 	/* Sniper - Loose his/her concentration after any shot */
-	if (p_ptr->concent) reset_concentration(p_ptr, FALSE);
+	if (shooter_ptr->concent) reset_concentration(shooter_ptr, FALSE);
 }
 
 
