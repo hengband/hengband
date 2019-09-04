@@ -638,7 +638,7 @@ void do_cmd_activate(player_type *user_ptr)
 	q = _("どのアイテムを始動させますか? ", "Activate which item? ");
 	s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
 
-	if (!choose_object(p_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
+	if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) return;
 
 	/* Activate the item */
 	exe_activate(user_ptr, item);
@@ -1297,7 +1297,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_CURE_MANA_FULL:
 	{
 		msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
-		restore_mana(p_ptr, TRUE);
+		restore_mana(user_ptr, TRUE);
 		break;
 	}
 
@@ -1550,7 +1550,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		msg_format(_("%sは赤く明るく光った！", "The %s flashes bright red!"), name);
 		chg_virtue(user_ptr, V_KNOWLEDGE, 1);
 		chg_virtue(user_ptr, V_ENLIGHTEN, 1);
-		wiz_lite(p_ptr, FALSE);
+		wiz_lite(user_ptr, FALSE);
 
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
 		take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);

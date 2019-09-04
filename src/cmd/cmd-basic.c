@@ -887,7 +887,7 @@ void do_cmd_open(player_type *creature_ptr)
 		{
 			take_turn(creature_ptr, 100);
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 		else if (o_idx)
 		{
@@ -1026,7 +1026,7 @@ void do_cmd_close(player_type *creature_ptr)
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 
 		/* Close the door */
@@ -1265,7 +1265,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 
 		/* Try digging */
@@ -1614,7 +1614,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 
 		/* Disarm chest */
@@ -1795,7 +1795,7 @@ void do_cmd_bash(player_type *creature_ptr)
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 
 		/* Bash a closed door */
@@ -1868,7 +1868,7 @@ void do_cmd_alter(player_type *creature_ptr)
 
 		if (g_ptr->m_idx)
 		{
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 
 		/* Locked doors */
@@ -2002,7 +2002,7 @@ void do_cmd_spike(player_type *creature_ptr)
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
 			/* Attack */
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 
 		/* Go for it */

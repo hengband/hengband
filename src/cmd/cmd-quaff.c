@@ -324,7 +324,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_LIFE:
-			ident = life_stream(p_ptr, TRUE, TRUE);
+			ident = life_stream(creature_ptr, TRUE, TRUE);
 			break;
 
 		case SV_POTION_RESTORE_MANA:
@@ -396,7 +396,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
 			chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
 			chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
-			wiz_lite(p_ptr, FALSE);
+			wiz_lite(creature_ptr, FALSE);
 			ident = TRUE;
 			break;
 
@@ -405,7 +405,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
 			chg_virtue(creature_ptr, V_ENLIGHTEN, 2);
 			msg_print(NULL);
-			wiz_lite(p_ptr, FALSE);
+			wiz_lite(creature_ptr, FALSE);
 			(void)do_inc_stat(creature_ptr, A_INT);
 			(void)do_inc_stat(creature_ptr, A_WIS);
 			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
@@ -610,7 +610,7 @@ void do_cmd_quaff_potion(player_type *creature_ptr)
 	q = _("どの薬を飲みますか? ", "Quaff which potion? ");
 	s = _("飲める薬がない。", "You have no potions to quaff.");
 
-	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
+	if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	/* Quaff the potion */
 	exe_quaff_potion(creature_ptr, item);
