@@ -1801,310 +1801,310 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
  * / Handle timeout every 10 game turns
  * @return なし
  */
-static void process_world_aux_timeout(void)
+static void process_world_aux_timeout(player_type *creature_ptr)
 {
 	const int dec_count = (easy_band ? 2 : 1);
 
 	/*** Timeout Various Things ***/
 
 	/* Mimic */
-	if (p_ptr->tim_mimic)
+	if (creature_ptr->tim_mimic)
 	{
-		(void)set_mimic(p_ptr, p_ptr->tim_mimic - 1, p_ptr->mimic_form, TRUE);
+		(void)set_mimic(creature_ptr, creature_ptr->tim_mimic - 1, creature_ptr->mimic_form, TRUE);
 	}
 
 	/* Hack -- Hallucinating */
-	if (p_ptr->image)
+	if (creature_ptr->image)
 	{
-		(void)set_image(p_ptr, p_ptr->image - dec_count);
+		(void)set_image(creature_ptr, creature_ptr->image - dec_count);
 	}
 
 	/* Blindness */
-	if (p_ptr->blind)
+	if (creature_ptr->blind)
 	{
-		(void)set_blind(p_ptr, p_ptr->blind - dec_count);
+		(void)set_blind(creature_ptr, creature_ptr->blind - dec_count);
 	}
 
 	/* Times see-invisible */
-	if (p_ptr->tim_invis)
+	if (creature_ptr->tim_invis)
 	{
-		(void)set_tim_invis(p_ptr, p_ptr->tim_invis - 1, TRUE);
+		(void)set_tim_invis(creature_ptr, creature_ptr->tim_invis - 1, TRUE);
 	}
 
-	if (p_ptr->suppress_multi_reward)
+	if (creature_ptr->suppress_multi_reward)
 	{
-		p_ptr->suppress_multi_reward = FALSE;
+		creature_ptr->suppress_multi_reward = FALSE;
 	}
 
 	/* Timed esp */
-	if (p_ptr->tim_esp)
+	if (creature_ptr->tim_esp)
 	{
-		(void)set_tim_esp(p_ptr, p_ptr->tim_esp - 1, TRUE);
+		(void)set_tim_esp(creature_ptr, creature_ptr->tim_esp - 1, TRUE);
 	}
 
 	/* Timed temporary elemental brands. -LM- */
-	if (p_ptr->ele_attack)
+	if (creature_ptr->ele_attack)
 	{
-		p_ptr->ele_attack--;
+		creature_ptr->ele_attack--;
 
 		/* Clear all temporary elemental brands. */
-		if (!p_ptr->ele_attack) set_ele_attack(p_ptr, 0, 0);
+		if (!creature_ptr->ele_attack) set_ele_attack(creature_ptr, 0, 0);
 	}
 
 	/* Timed temporary elemental immune. -LM- */
-	if (p_ptr->ele_immune)
+	if (creature_ptr->ele_immune)
 	{
-		p_ptr->ele_immune--;
+		creature_ptr->ele_immune--;
 
 		/* Clear all temporary elemental brands. */
-		if (!p_ptr->ele_immune) set_ele_immune(p_ptr, 0, 0);
+		if (!creature_ptr->ele_immune) set_ele_immune(creature_ptr, 0, 0);
 	}
 
 	/* Timed infra-vision */
-	if (p_ptr->tim_infra)
+	if (creature_ptr->tim_infra)
 	{
-		(void)set_tim_infra(p_ptr, p_ptr->tim_infra - 1, TRUE);
+		(void)set_tim_infra(creature_ptr, creature_ptr->tim_infra - 1, TRUE);
 	}
 
 	/* Timed stealth */
-	if (p_ptr->tim_stealth)
+	if (creature_ptr->tim_stealth)
 	{
-		(void)set_tim_stealth(p_ptr, p_ptr->tim_stealth - 1, TRUE);
+		(void)set_tim_stealth(creature_ptr, creature_ptr->tim_stealth - 1, TRUE);
 	}
 
 	/* Timed levitation */
-	if (p_ptr->tim_levitation)
+	if (creature_ptr->tim_levitation)
 	{
-		(void)set_tim_levitation(p_ptr, p_ptr->tim_levitation - 1, TRUE);
+		(void)set_tim_levitation(creature_ptr, creature_ptr->tim_levitation - 1, TRUE);
 	}
 
 	/* Timed sh_touki */
-	if (p_ptr->tim_sh_touki)
+	if (creature_ptr->tim_sh_touki)
 	{
-		(void)set_tim_sh_touki(p_ptr, p_ptr->tim_sh_touki - 1, TRUE);
+		(void)set_tim_sh_touki(creature_ptr, creature_ptr->tim_sh_touki - 1, TRUE);
 	}
 
 	/* Timed sh_fire */
-	if (p_ptr->tim_sh_fire)
+	if (creature_ptr->tim_sh_fire)
 	{
-		(void)set_tim_sh_fire(p_ptr, p_ptr->tim_sh_fire - 1, TRUE);
+		(void)set_tim_sh_fire(creature_ptr, creature_ptr->tim_sh_fire - 1, TRUE);
 	}
 
 	/* Timed sh_holy */
-	if (p_ptr->tim_sh_holy)
+	if (creature_ptr->tim_sh_holy)
 	{
-		(void)set_tim_sh_holy(p_ptr, p_ptr->tim_sh_holy - 1, TRUE);
+		(void)set_tim_sh_holy(creature_ptr, creature_ptr->tim_sh_holy - 1, TRUE);
 	}
 
 	/* Timed eyeeye */
-	if (p_ptr->tim_eyeeye)
+	if (creature_ptr->tim_eyeeye)
 	{
-		(void)set_tim_eyeeye(p_ptr, p_ptr->tim_eyeeye - 1, TRUE);
+		(void)set_tim_eyeeye(creature_ptr, creature_ptr->tim_eyeeye - 1, TRUE);
 	}
 
 	/* Timed resist-magic */
-	if (p_ptr->resist_magic)
+	if (creature_ptr->resist_magic)
 	{
-		(void)set_resist_magic(p_ptr, p_ptr->resist_magic - 1, TRUE);
+		(void)set_resist_magic(creature_ptr, creature_ptr->resist_magic - 1, TRUE);
 	}
 
 	/* Timed regeneration */
-	if (p_ptr->tim_regen)
+	if (creature_ptr->tim_regen)
 	{
-		(void)set_tim_regen(p_ptr, p_ptr->tim_regen - 1, TRUE);
+		(void)set_tim_regen(creature_ptr, creature_ptr->tim_regen - 1, TRUE);
 	}
 
 	/* Timed resist nether */
-	if (p_ptr->tim_res_nether)
+	if (creature_ptr->tim_res_nether)
 	{
-		(void)set_tim_res_nether(p_ptr, p_ptr->tim_res_nether - 1, TRUE);
+		(void)set_tim_res_nether(creature_ptr, creature_ptr->tim_res_nether - 1, TRUE);
 	}
 
 	/* Timed resist time */
-	if (p_ptr->tim_res_time)
+	if (creature_ptr->tim_res_time)
 	{
-		(void)set_tim_res_time(p_ptr, p_ptr->tim_res_time - 1, TRUE);
+		(void)set_tim_res_time(creature_ptr, creature_ptr->tim_res_time - 1, TRUE);
 	}
 
 	/* Timed reflect */
-	if (p_ptr->tim_reflect)
+	if (creature_ptr->tim_reflect)
 	{
-		(void)set_tim_reflect(p_ptr, p_ptr->tim_reflect - 1, TRUE);
+		(void)set_tim_reflect(creature_ptr, creature_ptr->tim_reflect - 1, TRUE);
 	}
 
 	/* Multi-shadow */
-	if (p_ptr->multishadow)
+	if (creature_ptr->multishadow)
 	{
-		(void)set_multishadow(p_ptr, p_ptr->multishadow - 1, TRUE);
+		(void)set_multishadow(creature_ptr, creature_ptr->multishadow - 1, TRUE);
 	}
 
 	/* Timed Robe of dust */
-	if (p_ptr->dustrobe)
+	if (creature_ptr->dustrobe)
 	{
-		(void)set_dustrobe(p_ptr, p_ptr->dustrobe - 1, TRUE);
+		(void)set_dustrobe(creature_ptr, creature_ptr->dustrobe - 1, TRUE);
 	}
 
 	/* Timed infra-vision */
-	if (p_ptr->kabenuke)
+	if (creature_ptr->kabenuke)
 	{
-		(void)set_kabenuke(p_ptr, p_ptr->kabenuke - 1, TRUE);
+		(void)set_kabenuke(creature_ptr, creature_ptr->kabenuke - 1, TRUE);
 	}
 
 	/* Paralysis */
-	if (p_ptr->paralyzed)
+	if (creature_ptr->paralyzed)
 	{
-		(void)set_paralyzed(p_ptr, p_ptr->paralyzed - dec_count);
+		(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed - dec_count);
 	}
 
 	/* Confusion */
-	if (p_ptr->confused)
+	if (creature_ptr->confused)
 	{
-		(void)set_confused(p_ptr, p_ptr->confused - dec_count);
+		(void)set_confused(creature_ptr, creature_ptr->confused - dec_count);
 	}
 
 	/* Afraid */
-	if (p_ptr->afraid)
+	if (creature_ptr->afraid)
 	{
-		(void)set_afraid(p_ptr, p_ptr->afraid - dec_count);
+		(void)set_afraid(creature_ptr, creature_ptr->afraid - dec_count);
 	}
 
 	/* Fast */
-	if (p_ptr->fast)
+	if (creature_ptr->fast)
 	{
-		(void)set_fast(p_ptr, p_ptr->fast - 1, TRUE);
+		(void)set_fast(creature_ptr, creature_ptr->fast - 1, TRUE);
 	}
 
 	/* Slow */
-	if (p_ptr->slow)
+	if (creature_ptr->slow)
 	{
-		(void)set_slow(p_ptr, p_ptr->slow - dec_count, TRUE);
+		(void)set_slow(creature_ptr, creature_ptr->slow - dec_count, TRUE);
 	}
 
 	/* Protection from evil */
-	if (p_ptr->protevil)
+	if (creature_ptr->protevil)
 	{
-		(void)set_protevil(p_ptr, p_ptr->protevil - 1, TRUE);
+		(void)set_protevil(creature_ptr, creature_ptr->protevil - 1, TRUE);
 	}
 
 	/* Invulnerability */
-	if (p_ptr->invuln)
+	if (creature_ptr->invuln)
 	{
-		(void)set_invuln(p_ptr, p_ptr->invuln - 1, TRUE);
+		(void)set_invuln(creature_ptr, creature_ptr->invuln - 1, TRUE);
 	}
 
 	/* Wraith form */
-	if (p_ptr->wraith_form)
+	if (creature_ptr->wraith_form)
 	{
-		(void)set_wraith_form(p_ptr, p_ptr->wraith_form - 1, TRUE);
+		(void)set_wraith_form(creature_ptr, creature_ptr->wraith_form - 1, TRUE);
 	}
 
 	/* Heroism */
-	if (p_ptr->hero)
+	if (creature_ptr->hero)
 	{
-		(void)set_hero(p_ptr, p_ptr->hero - 1, TRUE);
+		(void)set_hero(creature_ptr, creature_ptr->hero - 1, TRUE);
 	}
 
 	/* Super Heroism */
-	if (p_ptr->shero)
+	if (creature_ptr->shero)
 	{
-		(void)set_shero(p_ptr, p_ptr->shero - 1, TRUE);
+		(void)set_shero(creature_ptr, creature_ptr->shero - 1, TRUE);
 	}
 
 	/* Blessed */
-	if (p_ptr->blessed)
+	if (creature_ptr->blessed)
 	{
-		(void)set_blessed(p_ptr, p_ptr->blessed - 1, TRUE);
+		(void)set_blessed(creature_ptr, creature_ptr->blessed - 1, TRUE);
 	}
 
 	/* Shield */
-	if (p_ptr->shield)
+	if (creature_ptr->shield)
 	{
-		(void)set_shield(p_ptr, p_ptr->shield - 1, TRUE);
+		(void)set_shield(creature_ptr, creature_ptr->shield - 1, TRUE);
 	}
 
 	/* Tsubureru */
-	if (p_ptr->tsubureru)
+	if (creature_ptr->tsubureru)
 	{
-		(void)set_tsubureru(p_ptr, p_ptr->tsubureru - 1, TRUE);
+		(void)set_tsubureru(creature_ptr, creature_ptr->tsubureru - 1, TRUE);
 	}
 
 	/* Magicdef */
-	if (p_ptr->magicdef)
+	if (creature_ptr->magicdef)
 	{
-		(void)set_magicdef(p_ptr, p_ptr->magicdef - 1, TRUE);
+		(void)set_magicdef(creature_ptr, creature_ptr->magicdef - 1, TRUE);
 	}
 
 	/* Tsuyoshi */
-	if (p_ptr->tsuyoshi)
+	if (creature_ptr->tsuyoshi)
 	{
-		(void)set_tsuyoshi(p_ptr, p_ptr->tsuyoshi - 1, TRUE);
+		(void)set_tsuyoshi(creature_ptr, creature_ptr->tsuyoshi - 1, TRUE);
 	}
 
 	/* Oppose Acid */
-	if (p_ptr->oppose_acid)
+	if (creature_ptr->oppose_acid)
 	{
-		(void)set_oppose_acid(p_ptr, p_ptr->oppose_acid - 1, TRUE);
+		(void)set_oppose_acid(creature_ptr, creature_ptr->oppose_acid - 1, TRUE);
 	}
 
 	/* Oppose Lightning */
-	if (p_ptr->oppose_elec)
+	if (creature_ptr->oppose_elec)
 	{
-		(void)set_oppose_elec(p_ptr, p_ptr->oppose_elec - 1, TRUE);
+		(void)set_oppose_elec(creature_ptr, creature_ptr->oppose_elec - 1, TRUE);
 	}
 
 	/* Oppose Fire */
-	if (p_ptr->oppose_fire)
+	if (creature_ptr->oppose_fire)
 	{
-		(void)set_oppose_fire(p_ptr, p_ptr->oppose_fire - 1, TRUE);
+		(void)set_oppose_fire(creature_ptr, creature_ptr->oppose_fire - 1, TRUE);
 	}
 
 	/* Oppose Cold */
-	if (p_ptr->oppose_cold)
+	if (creature_ptr->oppose_cold)
 	{
-		(void)set_oppose_cold(p_ptr, p_ptr->oppose_cold - 1, TRUE);
+		(void)set_oppose_cold(creature_ptr, creature_ptr->oppose_cold - 1, TRUE);
 	}
 
 	/* Oppose Poison */
-	if (p_ptr->oppose_pois)
+	if (creature_ptr->oppose_pois)
 	{
-		(void)set_oppose_pois(p_ptr, p_ptr->oppose_pois - 1, TRUE);
+		(void)set_oppose_pois(creature_ptr, creature_ptr->oppose_pois - 1, TRUE);
 	}
 
-	if (p_ptr->ult_res)
+	if (creature_ptr->ult_res)
 	{
-		(void)set_ultimate_res(p_ptr, p_ptr->ult_res - 1, TRUE);
+		(void)set_ultimate_res(creature_ptr, creature_ptr->ult_res - 1, TRUE);
 	}
 
 	/*** Poison and Stun and Cut ***/
 
 	/* Poison */
-	if (p_ptr->poisoned)
+	if (creature_ptr->poisoned)
 	{
-		int adjust = adj_con_fix[p_ptr->stat_ind[A_CON]] + 1;
+		int adjust = adj_con_fix[creature_ptr->stat_ind[A_CON]] + 1;
 
 		/* Apply some healing */
-		(void)set_poisoned(p_ptr, p_ptr->poisoned - adjust);
+		(void)set_poisoned(creature_ptr, creature_ptr->poisoned - adjust);
 	}
 
 	/* Stun */
-	if (p_ptr->stun)
+	if (creature_ptr->stun)
 	{
-		int adjust = adj_con_fix[p_ptr->stat_ind[A_CON]] + 1;
+		int adjust = adj_con_fix[creature_ptr->stat_ind[A_CON]] + 1;
 
 		/* Apply some healing */
-		(void)set_stun(p_ptr, p_ptr->stun - adjust);
+		(void)set_stun(creature_ptr, creature_ptr->stun - adjust);
 	}
 
 	/* Cut */
-	if (p_ptr->cut)
+	if (creature_ptr->cut)
 	{
-		int adjust = adj_con_fix[p_ptr->stat_ind[A_CON]] + 1;
+		int adjust = adj_con_fix[creature_ptr->stat_ind[A_CON]] + 1;
 
 		/* Hack -- Truly "mortal" wound */
-		if (p_ptr->cut > 1000) adjust = 0;
+		if (creature_ptr->cut > 1000) adjust = 0;
 
 		/* Apply some healing */
-		(void)set_cut(p_ptr,p_ptr->cut - adjust);
+		(void)set_cut(creature_ptr,creature_ptr->cut - adjust);
 	}
 }
 
@@ -3356,7 +3356,7 @@ static void process_world(void)
 
 	process_world_aux_digestion();
 	process_world_aux_hp_and_sp(p_ptr);
-	process_world_aux_timeout();
+	process_world_aux_timeout(p_ptr);
 	process_world_aux_light();
 	process_world_aux_mutation();
 	process_world_aux_curse();
