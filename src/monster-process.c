@@ -2026,7 +2026,7 @@ void process_monster(MONSTER_IDX m_idx)
 				if (!p_ptr->riding || one_in_(2))
 				{
 					/* Do the attack */
-					(void)make_attack_normal(m_idx);
+					(void)make_attack_normal(p_ptr, m_idx);
 
 					/* Do not move */
 					do_move = FALSE;
