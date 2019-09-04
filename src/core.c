@@ -1333,9 +1333,9 @@ static void process_world_aux_digestion(void)
  *  / Handle timed damage and regeneration every 10 game turns
  * @return なし
  */
-static void process_world_aux_hp_and_sp(void)
+static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 {
-	feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat];
+	feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 	bool cave_no_regen = FALSE;
 	int upkeep_factor = 0;
 
@@ -1346,44 +1346,44 @@ static void process_world_aux_hp_and_sp(void)
 	/*** Damage over Time ***/
 
 	/* Take damage from poison */
-	if (p_ptr->poisoned && !IS_INVULN())
+	if (creature_ptr->poisoned && !IS_INVULN())
 	{
-		take_hit(p_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison"), -1);
+		take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison"), -1);
 	}
 
 	/* Take damage from cuts */
-	if (p_ptr->cut && !IS_INVULN())
+	if (creature_ptr->cut && !IS_INVULN())
 	{
 		HIT_POINT dam;
 
 		/* Mortal wound or Deep Gash */
-		if (p_ptr->cut > 1000)
+		if (creature_ptr->cut > 1000)
 		{
 			dam = 200;
 		}
 
-		else if (p_ptr->cut > 200)
+		else if (creature_ptr->cut > 200)
 		{
 			dam = 80;
 		}
 
 		/* Severe cut */
-		else if (p_ptr->cut > 100)
+		else if (creature_ptr->cut > 100)
 		{
 			dam = 32;
 		}
 
-		else if (p_ptr->cut > 50)
+		else if (creature_ptr->cut > 50)
 		{
 			dam = 16;
 		}
 
-		else if (p_ptr->cut > 25)
+		else if (creature_ptr->cut > 25)
 		{
 			dam = 7;
 		}
 
-		else if (p_ptr->cut > 10)
+		else if (creature_ptr->cut > 10)
 		{
 			dam = 3;
 		}
@@ -1394,26 +1394,26 @@ static void process_world_aux_hp_and_sp(void)
 			dam = 1;
 		}
 
-		take_hit(p_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"), -1);
+		take_hit(creature_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"), -1);
 	}
 
 	/* (Vampires) Take damage from sunlight */
-	if (PRACE_IS_(p_ptr, RACE_VAMPIRE) || (p_ptr->mimic_form == MIMIC_VAMPIRE))
+	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
-		if (!current_floor_ptr->dun_level && !p_ptr->resist_lite && !IS_INVULN() && is_daytime())
+		if (!current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN() && is_daytime())
 		{
-			if ((current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+			if ((current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
 				msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
-				take_hit(p_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
 				cave_no_regen = TRUE;
 			}
 		}
 
-		if (p_ptr->inventory_list[INVEN_LITE].tval && (p_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS) &&
-		    !p_ptr->resist_lite)
+		if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS) &&
+		    !creature_ptr->resist_lite)
 		{
-			object_type * o_ptr = &p_ptr->inventory_list[INVEN_LITE];
+			object_type * o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
 			GAME_TEXT o_name [MAX_NLEN];
 			char ouch [MAX_NLEN+40];
 
@@ -1427,11 +1427,11 @@ static void process_world_aux_hp_and_sp(void)
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
-			if (!IS_INVULN()) take_hit(p_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
+			if (!IS_INVULN()) take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_LAVA) && !IS_INVULN() && !p_ptr->immune_fire)
+	if (have_flag(f_ptr->flags, FF_LAVA) && !IS_INVULN() && !creature_ptr->immune_fire)
 	{
 		int damage = 0;
 
@@ -1439,38 +1439,38 @@ static void process_world_aux_hp_and_sp(void)
 		{
 			damage = 6000 + randint0(4000);
 		}
-		else if (!p_ptr->levitation)
+		else if (!creature_ptr->levitation)
 		{
 			damage = 3000 + randint0(2000);
 		}
 
 		if (damage)
 		{
-			if(PRACE_IS_(p_ptr, RACE_ENT)) damage += damage / 3;
-			if(p_ptr->resist_fire) damage = damage / 3;
+			if(PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
+			if(creature_ptr->resist_fire) damage = damage / 3;
 			if(IS_OPPOSE_FIRE()) damage = damage / 3;
-			if(p_ptr->levitation) damage = damage / 5;
+			if(creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
-			if (p_ptr->levitation)
+			if (creature_ptr->levitation)
 			{
 				msg_print(_("熱で火傷した！", "The heat burns you!"));
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), 
-								f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name), -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), 
+								f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sで火傷した！", "The %s burns you!"), name);
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, name, -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
 
 			cave_no_regen = TRUE;
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !IS_INVULN() && !p_ptr->immune_cold)
+	if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !IS_INVULN() && !creature_ptr->immune_cold)
 	{
 		int damage = 0;
 
@@ -1478,37 +1478,37 @@ static void process_world_aux_hp_and_sp(void)
 		{
 			damage = 6000 + randint0(4000);
 		}
-		else if (!p_ptr->levitation)
+		else if (!creature_ptr->levitation)
 		{
 			damage = 3000 + randint0(2000);
 		}
 
 		if (damage)
 		{
-			if (p_ptr->resist_cold) damage = damage / 3;
+			if (creature_ptr->resist_cold) damage = damage / 3;
 			if (IS_OPPOSE_COLD()) damage = damage / 3;
-			if (p_ptr->levitation) damage = damage / 5;
+			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
-			if (p_ptr->levitation)
+			if (creature_ptr->levitation)
 			{
 				msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name), -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, name, -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
 
 			cave_no_regen = TRUE;
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !IS_INVULN() && !p_ptr->immune_elec)
+	if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !IS_INVULN() && !creature_ptr->immune_elec)
 	{
 		int damage = 0;
 
@@ -1516,37 +1516,37 @@ static void process_world_aux_hp_and_sp(void)
 		{
 			damage = 6000 + randint0(4000);
 		}
-		else if (!p_ptr->levitation)
+		else if (!creature_ptr->levitation)
 		{
 			damage = 3000 + randint0(2000);
 		}
 
 		if (damage)
 		{
-			if (p_ptr->resist_elec) damage = damage / 3;
+			if (creature_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
-			if (p_ptr->levitation) damage = damage / 5;
+			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
-			if (p_ptr->levitation)
+			if (creature_ptr->levitation)
 			{
 				msg_print(_("電撃を受けた！", "The electric shocks you!"));
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name), -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに感電した！", "The %s shocks you!"), name);
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, name, -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
 
 			cave_no_regen = TRUE;
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !IS_INVULN() && !p_ptr->immune_acid)
+	if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !IS_INVULN() && !creature_ptr->immune_acid)
 	{
 		int damage = 0;
 
@@ -1554,30 +1554,30 @@ static void process_world_aux_hp_and_sp(void)
 		{
 			damage = 6000 + randint0(4000);
 		}
-		else if (!p_ptr->levitation)
+		else if (!creature_ptr->levitation)
 		{
 			damage = 3000 + randint0(2000);
 		}
 
 		if (damage)
 		{
-			if (p_ptr->resist_acid) damage = damage / 3;
+			if (creature_ptr->resist_acid) damage = damage / 3;
 			if (IS_OPPOSE_ACID()) damage = damage / 3;
-			if (p_ptr->levitation) damage = damage / 5;
+			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
-			if (p_ptr->levitation)
+			if (creature_ptr->levitation)
 			{
 				msg_print(_("酸が飛び散った！", "The acid melt you!"));
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name), -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, name, -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
 
 			cave_no_regen = TRUE;
@@ -1592,32 +1592,32 @@ static void process_world_aux_hp_and_sp(void)
 		{
 			damage = 6000 + randint0(4000);
 		}
-		else if (!p_ptr->levitation)
+		else if (!creature_ptr->levitation)
 		{
 			damage = 3000 + randint0(2000);
 		}
 
 		if (damage)
 		{
-			if (p_ptr->resist_pois) damage = damage / 3;
+			if (creature_ptr->resist_pois) damage = damage / 3;
 			if (IS_OPPOSE_POIS()) damage = damage / 3;
-			if (p_ptr->levitation) damage = damage / 5;
+			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
-			if (p_ptr->levitation)
+			if (creature_ptr->levitation)
 			{
 				msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name), -1);
-				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr, p_ptr->poisoned + 1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+				if (creature_ptr->resist_pois) (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに毒された！", "The %s poisons you!"), name);
-				take_hit(p_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-				if (p_ptr->resist_pois) (void)set_poisoned(p_ptr, p_ptr->poisoned + 3);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
+				if (creature_ptr->resist_pois) (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 3);
 			}
 
 			cave_no_regen = TRUE;
@@ -1625,44 +1625,44 @@ static void process_world_aux_hp_and_sp(void)
 	}
 
 	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-	    !p_ptr->levitation && !p_ptr->can_swim && !p_ptr->resist_water)
+	    !creature_ptr->levitation && !creature_ptr->can_swim && !creature_ptr->resist_water)
 	{
-		if (p_ptr->total_weight > weight_limit(p_ptr))
+		if (creature_ptr->total_weight > weight_limit(creature_ptr))
 		{
 			msg_print(_("溺れている！", "You are drowning!"));
-			take_hit(p_ptr, DAMAGE_NOESCAPE, randint1(p_ptr->lev), _("溺れ", "drowning"), -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"), -1);
 			cave_no_regen = TRUE;
 		}
 	}
 
-	if (p_ptr->riding)
+	if (creature_ptr->riding)
 	{
 		HIT_POINT damage;
-		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !p_ptr->immune_fire)
+		if ((r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire)
 		{
-			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
-			if (PRACE_IS_(p_ptr, RACE_ENT)) damage += damage / 3;
-			if (p_ptr->resist_fire) damage = damage / 3;
+			damage = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			if (PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
+			if (creature_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 			msg_print(_("熱い！", "It's hot!"));
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
 		}
-		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !p_ptr->immune_elec)
+		if ((r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec)
 		{
-			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
-			if (PRACE_IS_(p_ptr, RACE_ANDROID)) damage += damage / 3;
-			if (p_ptr->resist_elec) damage = damage / 3;
+			damage = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			if (PRACE_IS_(creature_ptr, RACE_ANDROID)) damage += damage / 3;
+			if (creature_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
 			msg_print(_("痛い！", "It hurts!"));
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
 		}
-		if ((r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !p_ptr->immune_cold)
+		if ((r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !creature_ptr->immune_cold)
 		{
-			damage = r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level / 2;
-			if (p_ptr->resist_cold) damage = damage / 3;
+			damage = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			if (creature_ptr->resist_cold) damage = damage / 3;
 			if (IS_OPPOSE_COLD()) damage = damage / 3;
 			msg_print(_("冷たい！", "It's cold!"));
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"), -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"), -1);
 		}
 	}
 
@@ -1675,12 +1675,12 @@ static void process_world_aux_hp_and_sp(void)
 	 */
 	if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
 	{
-		if (!IS_INVULN() && !p_ptr->wraith_form && !p_ptr->kabenuke && ((p_ptr->chp > (p_ptr->lev / 5)) || !p_ptr->pass_wall))
+		if (!IS_INVULN() && !creature_ptr->wraith_form && !creature_ptr->kabenuke && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall))
 		{
 			concptr dam_desc;
 			cave_no_regen = TRUE;
 
-			if (p_ptr->pass_wall)
+			if (creature_ptr->pass_wall)
 			{
 				msg_print(_("体の分子が分解した気がする！", "Your molecules feel disrupted!"));
 				dam_desc = _("密度", "density");
@@ -1691,7 +1691,7 @@ static void process_world_aux_hp_and_sp(void)
 				dam_desc = _("硬い岩", "solid rock");
 			}
 
-			take_hit(p_ptr, DAMAGE_NOESCAPE, 1 + (p_ptr->lev / 5), dam_desc, -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, 1 + (creature_ptr->lev / 5), dam_desc, -1);
 		}
 	}
 
@@ -1699,14 +1699,14 @@ static void process_world_aux_hp_and_sp(void)
 	/*** handle regeneration ***/
 
 	/* Getting Weak */
-	if (p_ptr->food < PY_FOOD_WEAK)
+	if (creature_ptr->food < PY_FOOD_WEAK)
 	{
 		/* Lower regeneration */
-		if (p_ptr->food < PY_FOOD_STARVE)
+		if (creature_ptr->food < PY_FOOD_STARVE)
 		{
 			regen_amount = 0;
 		}
-		else if (p_ptr->food < PY_FOOD_FAINT)
+		else if (creature_ptr->food < PY_FOOD_FAINT)
 		{
 			regen_amount = PY_REGEN_FAINT;
 		}
@@ -1724,15 +1724,15 @@ static void process_world_aux_hp_and_sp(void)
 	else
 	{
 		/* Regeneration ability */
-		if (p_ptr->regenerate)
+		if (creature_ptr->regenerate)
 		{
 			regen_amount = regen_amount * 2;
 		}
-		if (p_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
+		if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
 		{
 			regen_amount /= 2;
 		}
-		if (p_ptr->cursed & TRC_SLOW_REGEN)
+		if (creature_ptr->cursed & TRC_SLOW_REGEN)
 		{
 			regen_amount /= 5;
 		}
@@ -1740,17 +1740,17 @@ static void process_world_aux_hp_and_sp(void)
 
 
 	/* Searching or Resting */
-	if ((p_ptr->action == ACTION_SEARCH) || (p_ptr->action == ACTION_REST))
+	if ((creature_ptr->action == ACTION_SEARCH) || (creature_ptr->action == ACTION_REST))
 	{
 		regen_amount = regen_amount * 2;
 	}
 
-	upkeep_factor = calculate_upkeep(p_ptr);
+	upkeep_factor = calculate_upkeep(creature_ptr);
 
 	/* No regeneration while special action */
-	if ((p_ptr->action == ACTION_LEARN) ||
-	    (p_ptr->action == ACTION_HAYAGAKE) ||
-	    (p_ptr->special_defense & KATA_KOUKIJIN))
+	if ((creature_ptr->action == ACTION_LEARN) ||
+	    (creature_ptr->action == ACTION_HAYAGAKE) ||
+	    (creature_ptr->special_defense & KATA_KOUKIJIN))
 	{
 		upkeep_factor += 100;
 	}
@@ -1760,20 +1760,20 @@ static void process_world_aux_hp_and_sp(void)
 
 
 	/* Recharge magic eater's power */
-	if (p_ptr->pclass == CLASS_MAGIC_EATER)
+	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
 	{
 		regenmagic(regen_amount);
 	}
 
-	if ((p_ptr->csp == 0) && (p_ptr->csp_frac == 0))
+	if ((creature_ptr->csp == 0) && (creature_ptr->csp_frac == 0))
 	{
 		while (upkeep_factor > 100)
 		{
 			msg_print(_("こんなに多くのペットを制御できない！", "Too many pets to control at once!"));
 			msg_print(NULL);
-			do_cmd_pet_dismiss(p_ptr);
+			do_cmd_pet_dismiss(creature_ptr);
 
-			upkeep_factor = calculate_upkeep(p_ptr);
+			upkeep_factor = calculate_upkeep(creature_ptr);
 
 			msg_format(_("維持ＭＰは %d%%", "Upkeep: %d%% mana."), upkeep_factor);
 			msg_print(NULL);
@@ -1781,16 +1781,16 @@ static void process_world_aux_hp_and_sp(void)
 	}
 
 	/* Poisoned or cut yields no healing */
-	if (p_ptr->poisoned) regen_amount = 0;
-	if (p_ptr->cut) regen_amount = 0;
+	if (creature_ptr->poisoned) regen_amount = 0;
+	if (creature_ptr->cut) regen_amount = 0;
 
 	/* Special floor -- Pattern, in a wall -- yields no healing */
 	if (cave_no_regen) regen_amount = 0;
 
-	regen_amount = (regen_amount * p_ptr->mutant_regenerate_mod) / 100;
+	regen_amount = (regen_amount * creature_ptr->mutant_regenerate_mod) / 100;
 
 	/* Regenerate Hit Points if needed */
-	if ((p_ptr->chp < p_ptr->mhp) && !cave_no_regen)
+	if ((creature_ptr->chp < creature_ptr->mhp) && !cave_no_regen)
 	{
 		regenhp(regen_amount);
 	}
@@ -3355,7 +3355,7 @@ static void process_world(void)
 	}
 
 	process_world_aux_digestion();
-	process_world_aux_hp_and_sp();
+	process_world_aux_hp_and_sp(p_ptr);
 	process_world_aux_timeout();
 	process_world_aux_light();
 	process_world_aux_mutation();
