@@ -1032,16 +1032,16 @@ static void regen_captured_monsters(void)
  * @param o_ptr 現在光源として使っているオブジェクトの構造体参照ポインタ
  * @return なし
  */
-static void notice_lite_change(object_type *o_ptr)
+static void notice_lite_change(player_type *creature_ptr, object_type *o_ptr)
 {
 	/* Hack -- notice interesting fuel steps */
 	if ((o_ptr->xtra4 < 100) || (!(o_ptr->xtra4 % 100)))
 	{
-		p_ptr->window |= (PW_EQUIP);
+		creature_ptr->window |= (PW_EQUIP);
 	}
 
 	/* Hack -- Special treatment when blind */
-	if (p_ptr->blind)
+	if (creature_ptr->blind)
 	{
 		/* Hack -- save some light for later */
 		if (o_ptr->xtra4 == 0) o_ptr->xtra4++;
@@ -1050,14 +1050,14 @@ static void notice_lite_change(object_type *o_ptr)
 	/* The light is now out */
 	else if (o_ptr->xtra4 == 0)
 	{
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(creature_ptr, FALSE, TRUE);
 		msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
 
 		/* Recalculate torch radius */
-		p_ptr->update |= (PU_TORCH);
+		creature_ptr->update |= (PU_TORCH);
 
 		/* Some ego light lose its effects without fuel */
-		p_ptr->update |= (PU_BONUS);
+		creature_ptr->update |= (PU_BONUS);
 	}
 
 	/* The light is getting dim */
@@ -1066,7 +1066,7 @@ static void notice_lite_change(object_type *o_ptr)
 		if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5))
 		    && (current_world_ptr->game_turn % (TURNS_PER_TICK*2)))
 		{
-			if (disturb_minor) disturb(p_ptr, FALSE, TRUE);
+			if (disturb_minor) disturb(creature_ptr, FALSE, TRUE);
 			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
 		}
 	}
@@ -1074,7 +1074,7 @@ static void notice_lite_change(object_type *o_ptr)
 	/* The light is getting dim */
 	else if ((o_ptr->xtra4 < 100) && (!(o_ptr->xtra4 % 10)))
 	{
-		if (disturb_minor) disturb(p_ptr, FALSE, TRUE);
+		if (disturb_minor) disturb(creature_ptr, FALSE, TRUE);
 			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
 	}
 }
@@ -1131,7 +1131,7 @@ static void recharged_notice(object_type *o_ptr)
  * @brief プレイヤーの歌に関する継続処理
  * @return なし
  */
-static void check_music(void)
+static void check_music(player_type *creature_ptr)
 {
 	const magic_type *s_ptr;
 	int spell;
@@ -1139,16 +1139,16 @@ static void check_music(void)
 	u32b need_mana_frac;
 
 	/* Music singed by player */
-	if (p_ptr->pclass != CLASS_BARD) return;
-	if (!SINGING_SONG_EFFECT(p_ptr) && !INTERUPTING_SONG_EFFECT(p_ptr)) return;
+	if (creature_ptr->pclass != CLASS_BARD) return;
+	if (!SINGING_SONG_EFFECT(creature_ptr) && !INTERUPTING_SONG_EFFECT(creature_ptr)) return;
 
-	if (p_ptr->anti_magic)
+	if (creature_ptr->anti_magic)
 	{
-		stop_singing(p_ptr);
+		stop_singing(creature_ptr);
 		return;
 	}
 
-	spell = SINGING_SONG_ID(p_ptr);
+	spell = SINGING_SONG_ID(creature_ptr);
 	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
 	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
@@ -1157,38 +1157,38 @@ static void check_music(void)
 	/* Divide by 2 */
 	s64b_RSHIFT(need_mana, need_mana_frac, 1);
 
-	if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, need_mana, need_mana_frac) < 0)
+	if (s64b_cmp(creature_ptr->csp, creature_ptr->csp_frac, need_mana, need_mana_frac) < 0)
 	{
-		stop_singing(p_ptr);
+		stop_singing(creature_ptr);
 		return;
 	}
 	else
 	{
-		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), need_mana, need_mana_frac);
+		s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), need_mana, need_mana_frac);
 
-		p_ptr->redraw |= PR_MANA;
-		if (INTERUPTING_SONG_EFFECT(p_ptr))
+		creature_ptr->redraw |= PR_MANA;
+		if (INTERUPTING_SONG_EFFECT(creature_ptr))
 		{
-			SINGING_SONG_EFFECT(p_ptr) = INTERUPTING_SONG_EFFECT(p_ptr);
-			INTERUPTING_SONG_EFFECT(p_ptr) = MUSIC_NONE;
+			SINGING_SONG_EFFECT(creature_ptr) = INTERUPTING_SONG_EFFECT(creature_ptr);
+			INTERUPTING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
 			msg_print(_("歌を再開した。", "You restart singing."));
-			p_ptr->action = ACTION_SING;
-			p_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
-			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+			creature_ptr->action = ACTION_SING;
+			creature_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
+			creature_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+			creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
-	if (p_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
-		p_ptr->spell_exp[spell] += 5;
-	else if(p_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
-	{ if (one_in_(2) && (current_floor_ptr->dun_level > 4) && ((current_floor_ptr->dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[spell] += 1; }
-	else if(p_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
-	{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > p_ptr->lev) && ((current_floor_ptr->dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
-	else if(p_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
-	{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > p_ptr->lev) && (current_floor_ptr->dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
+	if (creature_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
+		creature_ptr->spell_exp[spell] += 5;
+	else if(creature_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
+	{ if (one_in_(2) && (current_floor_ptr->dun_level > 4) && ((current_floor_ptr->dun_level + 10) > creature_ptr->lev)) creature_ptr->spell_exp[spell] += 1; }
+	else if(creature_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
+	{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > creature_ptr->lev) && ((current_floor_ptr->dun_level + 5) > s_ptr->slevel)) creature_ptr->spell_exp[spell] += 1; }
+	else if(creature_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
+	{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > creature_ptr->lev) && (current_floor_ptr->dun_level > s_ptr->slevel)) creature_ptr->spell_exp[spell] += 1; }
 
 	/* Do any effects of continual song */
-	exe_spell(p_ptr, REALM_MUSIC, spell, SPELL_CONT);
+	exe_spell(creature_ptr, REALM_MUSIC, spell, SPELL_CONT);
 }
 
 /*!
@@ -2133,7 +2133,7 @@ static void process_world_aux_light(player_type *creature_ptr)
 			else o_ptr->xtra4--;
 
 			/* Notice interesting fuel steps */
-			notice_lite_change(o_ptr);
+			notice_lite_change(creature_ptr, o_ptr);
 		}
 	}
 }
@@ -2352,7 +2352,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 				msg_print(_("光源からエネルギーを吸収した！", "You absorb energy from your light!"));
 
 				/* Notice interesting fuel steps */
-				notice_lite_change(o_ptr);
+				notice_lite_change(creature_ptr, o_ptr);
 			}
 		}
 
@@ -4355,7 +4355,7 @@ static void process_upkeep_with_speed(void)
 	while (p_ptr->enchant_energy_need <= 0)
 	{
 		/* Handle the player song */
-		if (!load) check_music();
+		if (!load) check_music(p_ptr);
 
 		/* Hex - Handle the hex spells */
 		if (!load) check_hex();
