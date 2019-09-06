@@ -2114,10 +2114,10 @@ static void process_world_aux_timeout(player_type *creature_ptr)
  * / Handle burning fuel every 10 game turns
  * @return なし
  */
-static void process_world_aux_light(void)
+static void process_world_aux_light(player_type *creature_ptr)
 {
 	/* Check for light being wielded */
-	object_type *o_ptr = &p_ptr->inventory_list[INVEN_LITE];
+	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
 
 	/* Burn some fuel in the current lite */
 	if (o_ptr->tval == TV_LITE)
@@ -3357,7 +3357,7 @@ static void process_world(void)
 	process_world_aux_digestion();
 	process_world_aux_hp_and_sp(p_ptr);
 	process_world_aux_timeout(p_ptr);
-	process_world_aux_light();
+	process_world_aux_light(p_ptr);
 	process_world_aux_mutation(p_ptr);
 	process_world_aux_curse();
 	process_world_aux_recharge();
