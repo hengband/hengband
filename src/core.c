@@ -2592,15 +2592,15 @@ static void process_world_aux_mutation(player_type *creature_ptr)
  * / Handle curse effects once every 10 game turns
  * @return なし
  */
-static void process_world_aux_curse(void)
+static void process_world_aux_curse(player_type *creature_ptr)
 {
-	if ((p_ptr->cursed & TRC_P_FLAG_MASK) && !p_ptr->phase_out && !p_ptr->wild_mode)
+	if ((creature_ptr->cursed & TRC_P_FLAG_MASK) && !creature_ptr->phase_out && !creature_ptr->wild_mode)
 	{
 		/*
 		 * Hack: Uncursed teleporting items (e.g. Trump Weapons)
 		 * can actually be useful!
 		 */
-		if ((p_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(200))
+		if ((creature_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(200))
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 			object_type *o_ptr;
@@ -2610,7 +2610,7 @@ static void process_world_aux_curse(void)
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{
 				BIT_FLAGS flgs[TR_FLAG_SIZE];
-				o_ptr = &p_ptr->inventory_list[i];
+				o_ptr = &creature_ptr->inventory_list[i];
 				if (!o_ptr->k_idx) continue;
 
 				object_flags(o_ptr, flgs);
@@ -2626,46 +2626,46 @@ static void process_world_aux_curse(void)
 				}
 			}
 
-			o_ptr = &p_ptr->inventory_list[i_keep];
+			o_ptr = &creature_ptr->inventory_list[i_keep];
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
 			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
 			{
-				disturb(p_ptr, FALSE, TRUE);
+				disturb(creature_ptr, FALSE, TRUE);
 				teleport_player(50, 0L);
 			}
 			else
 			{
 				msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。", 
 							 "You can inscribe {.} on your %s to disable random teleportation. "), o_name);
-				disturb(p_ptr, TRUE, TRUE);
+				disturb(creature_ptr, TRUE, TRUE);
 			}
 		}
 		/* Make a chainsword noise */
-		if ((p_ptr->cursed & TRC_CHAINSWORD) && one_in_(CHAINSWORD_NOISE))
+		if ((creature_ptr->cursed & TRC_CHAINSWORD) && one_in_(CHAINSWORD_NOISE))
 		{
 			char noise[1024];
 			if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise))
 				msg_print(noise);
-			disturb(p_ptr, FALSE, FALSE);
+			disturb(creature_ptr, FALSE, FALSE);
 		}
 		/* TY Curse */
-		if ((p_ptr->cursed & TRC_TY_CURSE) && one_in_(TY_CURSE_CHANCE))
+		if ((creature_ptr->cursed & TRC_TY_CURSE) && one_in_(TY_CURSE_CHANCE))
 		{
 			int count = 0;
 			(void)activate_ty_curse(FALSE, &count);
 		}
 		/* Handle experience draining */
-		if (p_ptr->prace != RACE_ANDROID && ((p_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)))
+		if (creature_ptr->prace != RACE_ANDROID && ((creature_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)))
 		{
-			p_ptr->exp -= (p_ptr->lev + 1) / 2;
-			if (p_ptr->exp < 0) p_ptr->exp = 0;
-			p_ptr->max_exp -= (p_ptr->lev + 1) / 2;
-			if (p_ptr->max_exp < 0) p_ptr->max_exp = 0;
-			check_experience(p_ptr);
+			creature_ptr->exp -= (creature_ptr->lev + 1) / 2;
+			if (creature_ptr->exp < 0) creature_ptr->exp = 0;
+			creature_ptr->max_exp -= (creature_ptr->lev + 1) / 2;
+			if (creature_ptr->max_exp < 0) creature_ptr->max_exp = 0;
+			check_experience(creature_ptr);
 		}
 		/* Add light curse (Later) */
-		if ((p_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(2000))
+		if ((creature_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(2000))
 		{
 			BIT_FLAGS new_curse;
 			object_type *o_ptr;
@@ -2684,11 +2684,11 @@ static void process_world_aux_curse(void)
 
 				o_ptr->feeling = FEEL_NONE;
 
-				p_ptr->update |= (PU_BONUS);
+				creature_ptr->update |= (PU_BONUS);
 			}
 		}
 		/* Add heavy curse (Later) */
-		if ((p_ptr->cursed & TRC_ADD_H_CURSE) && one_in_(2000))
+		if ((creature_ptr->cursed & TRC_ADD_H_CURSE) && one_in_(2000))
 		{
 			BIT_FLAGS new_curse;
 			object_type *o_ptr;
@@ -2706,106 +2706,106 @@ static void process_world_aux_curse(void)
 				msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
 				o_ptr->feeling = FEEL_NONE;
 
-				p_ptr->update |= (PU_BONUS);
+				creature_ptr->update |= (PU_BONUS);
 			}
 		}
 		/* Call animal */
-		if ((p_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
+		if ((creature_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
 		{
-			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが動物を引き寄せた！", "Your %s have attracted an animal!"), o_name);
-				disturb(p_ptr, FALSE, TRUE);
+				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
 		/* Call demon */
-		if ((p_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
+		if ((creature_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
 		{
-			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが悪魔を引き寄せた！", "Your %s have attracted a demon!"), o_name);
-				disturb(p_ptr, FALSE, TRUE);
+				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
 		/* Call dragon */
-		if ((p_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
+		if ((creature_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
-			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON,
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s have attracted an dragon!"), o_name);
-				disturb(p_ptr, FALSE, TRUE);
+				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
 		/* Call undead */
-		if ((p_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111))
+		if ((creature_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111))
 		{
-			if (summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD,
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが死霊を引き寄せた！", "Your %s have attracted an undead!"), o_name);
-				disturb(p_ptr, FALSE, TRUE);
+				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
-		if ((p_ptr->cursed & TRC_COWARDICE) && one_in_(1500))
+		if ((creature_ptr->cursed & TRC_COWARDICE) && one_in_(1500))
 		{
-			if (!p_ptr->resist_fear)
+			if (!creature_ptr->resist_fear)
 			{
-				disturb(p_ptr, FALSE, TRUE);
+				disturb(creature_ptr, FALSE, TRUE);
 				msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-				set_afraid(p_ptr, p_ptr->afraid + 13 + randint1(26));
+				set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
 			}
 		}
 		/* Teleport player */
-		if ((p_ptr->cursed & TRC_TELEPORT) && one_in_(200) && !p_ptr->anti_tele)
+		if ((creature_ptr->cursed & TRC_TELEPORT) && one_in_(200) && !creature_ptr->anti_tele)
 		{
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Teleport player */
 			teleport_player(40, TELEPORT_PASSIVE);
 		}
 		/* Handle HP draining */
-		if ((p_ptr->cursed & TRC_DRAIN_HP) && one_in_(666))
+		if ((creature_ptr->cursed & TRC_DRAIN_HP) && one_in_(666))
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
-			take_hit(p_ptr, DAMAGE_LOSELIFE, MIN(p_ptr->lev*2, 100), o_name, -1);
+			take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev*2, 100), o_name, -1);
 		}
 		/* Handle mana draining */
-		if ((p_ptr->cursed & TRC_DRAIN_MANA) && p_ptr->csp && one_in_(666))
+		if ((creature_ptr->cursed & TRC_DRAIN_MANA) && creature_ptr->csp && one_in_(666))
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
-			p_ptr->csp -= MIN(p_ptr->lev, 50);
-			if (p_ptr->csp < 0)
+			creature_ptr->csp -= MIN(creature_ptr->lev, 50);
+			if (creature_ptr->csp < 0)
 			{
-				p_ptr->csp = 0;
-				p_ptr->csp_frac = 0;
+				creature_ptr->csp = 0;
+				creature_ptr->csp_frac = 0;
 			}
-			p_ptr->redraw |= PR_MANA;
+			creature_ptr->redraw |= PR_MANA;
 		}
 	}
 
 	/* Rarely, take damage from the Jewel of Judgement */
-	if (one_in_(999) && !p_ptr->anti_magic)
+	if (one_in_(999) && !creature_ptr->anti_magic)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[INVEN_LITE];
+		object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
 
 		if (o_ptr->name1 == ART_JUDGE)
 		{
@@ -2813,7 +2813,7 @@ static void process_world_aux_curse(void)
 				msg_print(_("『審判の宝石』はあなたの体力を吸収した！", "The Jewel of Judgement drains life from you!"));
 			else
 				msg_print(_("なにかがあなたの体力を吸収した！", "Something drains life from you!"));
-			take_hit(p_ptr, DAMAGE_LOSELIFE, MIN(p_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"), -1);
+			take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"), -1);
 		}
 	}
 }
@@ -3359,7 +3359,7 @@ static void process_world(void)
 	process_world_aux_timeout(p_ptr);
 	process_world_aux_light(p_ptr);
 	process_world_aux_mutation(p_ptr);
-	process_world_aux_curse();
+	process_world_aux_curse(p_ptr);
 	process_world_aux_recharge();
 	sense_inventory1();
 	sense_inventory2();
