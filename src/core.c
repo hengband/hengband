@@ -2824,7 +2824,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
  * / Handle recharging objects once every 10 game turns
  * @return なし
  */
-static void process_world_aux_recharge(void)
+static void process_world_aux_recharge(player_type *creature_ptr)
 {
 	int i;
 	bool changed;
@@ -2833,7 +2833,7 @@ static void process_world_aux_recharge(void)
 	for (changed = FALSE, i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		/* Get the object */
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Recharge activatable objects */
@@ -2854,7 +2854,7 @@ static void process_world_aux_recharge(void)
 	/* Notice changes */
 	if (changed)
 	{
-		p_ptr->window |= (PW_EQUIP);
+		creature_ptr->window |= (PW_EQUIP);
 		wild_regen = 20;
 	}
 
@@ -2865,7 +2865,7 @@ static void process_world_aux_recharge(void)
 	 */
 	for (changed = FALSE, i = 0; i < INVEN_PACK; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		object_kind *k_ptr = &k_info[o_ptr->k_idx];
 		if (!o_ptr->k_idx) continue;
 
@@ -2900,7 +2900,7 @@ static void process_world_aux_recharge(void)
 	/* Notice changes */
 	if (changed)
 	{
-		p_ptr->window |= (PW_INVEN);
+		creature_ptr->window |= (PW_INVEN);
 		wild_regen = 20;
 	}
 
@@ -3360,7 +3360,7 @@ static void process_world(void)
 	process_world_aux_light(p_ptr);
 	process_world_aux_mutation(p_ptr);
 	process_world_aux_curse(p_ptr);
-	process_world_aux_recharge();
+	process_world_aux_recharge(p_ptr);
 	sense_inventory1();
 	sense_inventory2();
 	process_world_aux_movement();
