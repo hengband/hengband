@@ -525,7 +525,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		}
 		case CLASS_ARCHER:
 		{
-			if (!create_ammo()) return FALSE;
+			if (!create_ammo(creature_ptr)) return FALSE;
 			break;
 		}
 		case CLASS_MAGIC_EATER:

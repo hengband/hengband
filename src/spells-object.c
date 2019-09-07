@@ -82,7 +82,7 @@ static amuse_type amuse_info[] =
  * Hook to determine if an object is contertible in an arrow/bolt
  * @return 製造を実際に行ったらTRUE、キャンセルしたらFALSEを返す
  */
-bool create_ammo(void)
+bool create_ammo(player_type *creature_ptr)
 {
 	int ext = 0;
 	char ch;
@@ -95,15 +95,15 @@ bool create_ammo(void)
 
 	q_ptr = &forge;
 
-	if (p_ptr->lev >= 20)
+	if (creature_ptr->lev >= 20)
 		sprintf(com, _("[S]弾, [A]矢, [B]クロスボウの矢 :", "Create [S]hots, Create [A]rrow or Create [B]olt ?"));
-	else if (p_ptr->lev >= 10)
+	else if (creature_ptr->lev >= 10)
 		sprintf(com, _("[S]弾, [A]矢:", "Create [S]hots or Create [A]rrow ?"));
 	else
 		sprintf(com, _("[S]弾:", "Create [S]hots ?"));
 
-	if (cmd_limit_confused(p_ptr)) return FALSE;
-	if (cmd_limit_blind(p_ptr)) return FALSE;
+	if (cmd_limit_confused(creature_ptr)) return FALSE;
+	if (cmd_limit_blind(creature_ptr)) return FALSE;
 
 	while (TRUE)
 	{
@@ -116,12 +116,12 @@ bool create_ammo(void)
 			ext = 1;
 			break;
 		}
-		if ((ch == 'A' || ch == 'a') && (p_ptr->lev >= 10))
+		if ((ch == 'A' || ch == 'a') && (creature_ptr->lev >= 10))
 		{
 			ext = 2;
 			break;
 		}
-		if ((ch == 'B' || ch == 'b') && (p_ptr->lev >= 20))
+		if ((ch == 'B' || ch == 'b') && (creature_ptr->lev >= 20))
 		{
 			ext = 3;
 			break;
@@ -136,8 +136,8 @@ bool create_ammo(void)
 		grid_type *g_ptr;
 
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
+		y = creature_ptr->y + ddy[dir];
+		x = creature_ptr->x + ddx[dir];
 		g_ptr = &current_floor_ptr->grid_array[y][x];
 
 		if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG))
@@ -155,11 +155,11 @@ bool create_ammo(void)
 			q_ptr = &forge;
 
 			/* Hack -- Give the player some small firestones */
-			object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev) + 1));
+			object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 			q_ptr->number = (byte)rand_range(15, 30);
 			object_aware(q_ptr);
 			object_known(q_ptr);
-			apply_magic(q_ptr, p_ptr->lev, AM_NO_FIXED_ART);
+			apply_magic(q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
 			q_ptr->discount = 99;
 
 			slot = inven_carry(q_ptr);
@@ -173,7 +173,7 @@ bool create_ammo(void)
 			/* Destroy the wall */
 			cave_alter_feat(y, x, FF_HURT_ROCK);
 
-			p_ptr->update |= (PU_FLOW);
+			creature_ptr->update |= (PU_FLOW);
 		}
 	}
 	/**********Create arrows*********/
@@ -187,17 +187,17 @@ bool create_ammo(void)
 
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
-		q_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+		q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 		if (!q_ptr) return FALSE;
 
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev) + 1));
+		object_prep(q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 		q_ptr->number = (byte)rand_range(5, 10);
 		object_aware(q_ptr);
 		object_known(q_ptr);
-		apply_magic(q_ptr, p_ptr->lev, AM_NO_FIXED_ART);
+		apply_magic(q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
 
 		q_ptr->discount = 99;
 
@@ -234,17 +234,17 @@ bool create_ammo(void)
 		q = _("どのアイテムから作りますか？ ", "Convert which item? ");
 		s = _("材料を持っていない。", "You have no item to convert.");
 
-		q_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+		q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 		if (!q_ptr) return FALSE;
 
 		q_ptr = &forge;
 
 		/* Hack -- Give the player some small firestones */
-		object_prep(q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, p_ptr->lev) + 1));
+		object_prep(q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 		q_ptr->number = (byte)rand_range(4, 8);
 		object_aware(q_ptr);
 		object_known(q_ptr);
-		apply_magic(q_ptr, p_ptr->lev, AM_NO_FIXED_ART);
+		apply_magic(q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
 
 		q_ptr->discount = 99;
 
