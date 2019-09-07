@@ -1264,33 +1264,33 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 	return (&p_ptr->inventory_list[choices[randint0(number)]]);
 }
 
-static void process_world_aux_digestion(void)
+static void process_world_aux_digestion(player_type *creature_ptr)
 {
-	if (!p_ptr->phase_out)
+	if (!creature_ptr->phase_out)
 	{
 		/* Digest quickly when gorged */
-		if (p_ptr->food >= PY_FOOD_MAX)
+		if (creature_ptr->food >= PY_FOOD_MAX)
 		{
 			/* Digest a lot of food */
-			(void)set_food(p_ptr, p_ptr->food - 100);
+			(void)set_food(creature_ptr, creature_ptr->food - 100);
 		}
 
 		/* Digest normally -- Every 50 game turns */
 		else if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 5)))
 		{
 			/* Basic digestion rate based on speed */
-			int digestion = SPEED_TO_ENERGY(p_ptr->pspeed);
+			int digestion = SPEED_TO_ENERGY(creature_ptr->pspeed);
 
 			/* Regeneration takes more food */
-			if (p_ptr->regenerate)
+			if (creature_ptr->regenerate)
 				digestion += 20;
-			if (p_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
+			if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
 				digestion += 20;
-			if (p_ptr->cursed & TRC_FAST_DIGEST)
+			if (creature_ptr->cursed & TRC_FAST_DIGEST)
 				digestion += 30;
 
 			/* Slow digestion takes less food */
-			if (p_ptr->slow_digest)
+			if (creature_ptr->slow_digest)
 				digestion -= 5;
 
 			/* Minimal digestion */
@@ -1299,30 +1299,30 @@ static void process_world_aux_digestion(void)
 			if (digestion > 100) digestion = 100;
 
 			/* Digest some food */
-			(void)set_food(p_ptr, p_ptr->food - digestion);
+			(void)set_food(creature_ptr, creature_ptr->food - digestion);
 		}
 
 
 		/* Getting Faint */
-		if ((p_ptr->food < PY_FOOD_FAINT))
+		if ((creature_ptr->food < PY_FOOD_FAINT))
 		{
 			/* Faint occasionally */
-			if (!p_ptr->paralyzed && (randint0(100) < 10))
+			if (!creature_ptr->paralyzed && (randint0(100) < 10))
 			{
 				msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
-				disturb(p_ptr, TRUE, TRUE);
+				disturb(creature_ptr, TRUE, TRUE);
 
 				/* Hack -- faint (bypass free action) */
-				(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 1 + randint0(5));
+				(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 1 + randint0(5));
 			}
 
 			/* Starve to death (slowly) */
-			if (p_ptr->food < PY_FOOD_STARVE)
+			if (creature_ptr->food < PY_FOOD_STARVE)
 			{
 				/* Calculate damage */
-				HIT_POINT dam = (PY_FOOD_STARVE - p_ptr->food) / 10;
+				HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
 
-				if (!IS_INVULN()) take_hit(p_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
+				if (!IS_INVULN()) take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
 			}
 		}
 	}
@@ -3354,7 +3354,7 @@ static void process_world(void)
 		}
 	}
 
-	process_world_aux_digestion();
+	process_world_aux_digestion(p_ptr);
 	process_world_aux_hp_and_sp(p_ptr);
 	process_world_aux_timeout(p_ptr);
 	process_world_aux_light(p_ptr);
