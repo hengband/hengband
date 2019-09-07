@@ -802,32 +802,32 @@ static void regenhp(int percent)
  * @param regen_amount 回復量
  * @return なし
  */
-static void regenmana(MANA_POINT upkeep_factor, MANA_POINT regen_amount)
+static void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 {
-	MANA_POINT old_csp = p_ptr->csp;
+	MANA_POINT old_csp = creature_ptr->csp;
 	s32b regen_rate = regen_amount * 100 - upkeep_factor * PY_REGEN_NORMAL;
 
 	/*
 	 * Excess mana will decay 32 times faster than normal
 	 * regeneration rate.
 	 */
-	if (p_ptr->csp > p_ptr->msp)
+	if (creature_ptr->csp > creature_ptr->msp)
 	{
 		/* PY_REGEN_NORMAL is the Regen factor in unit (1/2^16) */
 		s32b decay = 0;
-		u32b decay_frac = (p_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
+		u32b decay_frac = (creature_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
 		s64b_LSHIFT(decay, decay_frac, 16);
 
 		/* Decay */
-		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), decay, decay_frac);
+		s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), decay, decay_frac);
 
 		/* Stop decaying */
-		if (p_ptr->csp < p_ptr->msp)
+		if (creature_ptr->csp < creature_ptr->msp)
 		{
-			p_ptr->csp = p_ptr->msp;
-			p_ptr->csp_frac = 0;
+			creature_ptr->csp = creature_ptr->msp;
+			creature_ptr->csp_frac = 0;
 		}
 	}
 
@@ -836,19 +836,19 @@ static void regenmana(MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 	{
 		/* (percent/100) is the Regen factor in unit (1/2^16) */
 		MANA_POINT new_mana = 0;
-		u32b new_mana_frac = (p_ptr->msp * regen_rate / 100 + PY_REGEN_MNBASE);
+		u32b new_mana_frac = (creature_ptr->msp * regen_rate / 100 + PY_REGEN_MNBASE);
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
 		s64b_LSHIFT(new_mana, new_mana_frac, 16);
 
 		/* Regenerate */
-		s64b_add(&(p_ptr->csp), &(p_ptr->csp_frac), new_mana, new_mana_frac);
+		s64b_add(&(creature_ptr->csp), &(creature_ptr->csp_frac), new_mana, new_mana_frac);
 
 		/* Must set frac to zero even if equal */
-		if (p_ptr->csp >= p_ptr->msp)
+		if (creature_ptr->csp >= creature_ptr->msp)
 		{
-			p_ptr->csp = p_ptr->msp;
-			p_ptr->csp_frac = 0;
+			creature_ptr->csp = creature_ptr->msp;
+			creature_ptr->csp_frac = 0;
 		}
 	}
 
@@ -858,27 +858,27 @@ static void regenmana(MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 	{
 		/* PY_REGEN_NORMAL is the Regen factor in unit (1/2^16) */
 		s32b reduce_mana = 0;
-		u32b reduce_mana_frac = (p_ptr->msp * (-1) * regen_rate / 100 + PY_REGEN_MNBASE);
+		u32b reduce_mana_frac = (creature_ptr->msp * (-1) * regen_rate / 100 + PY_REGEN_MNBASE);
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
 		s64b_LSHIFT(reduce_mana, reduce_mana_frac, 16);
 
 		/* Reduce mana */
-		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), reduce_mana, reduce_mana_frac);
+		s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), reduce_mana, reduce_mana_frac);
 
 		/* Check overflow */
-		if (p_ptr->csp < 0)
+		if (creature_ptr->csp < 0)
 		{
-			p_ptr->csp = 0;
-			p_ptr->csp_frac = 0;
+			creature_ptr->csp = 0;
+			creature_ptr->csp_frac = 0;
 		}
 	}
 
-	if (old_csp != p_ptr->csp)
+	if (old_csp != creature_ptr->csp)
 	{
-		p_ptr->redraw |= (PR_MANA);
-		p_ptr->window |= (PW_PLAYER);
-		p_ptr->window |= (PW_SPELL);
+		creature_ptr->redraw |= (PR_MANA);
+		creature_ptr->window |= (PW_PLAYER);
+		creature_ptr->window |= (PW_SPELL);
 		wild_regen = 20;
 	}
 }
@@ -1756,7 +1756,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	}
 
 	/* Regenerate the mana */
-	regenmana(upkeep_factor, regen_amount);
+	regenmana(creature_ptr, upkeep_factor, regen_amount);
 
 
 	/* Recharge magic eater's power */
