@@ -2929,64 +2929,64 @@ static void process_world_aux_recharge(player_type *creature_ptr)
  * / Handle involuntary movement once every 10 game turns
  * @return なし
  */
-static void process_world_aux_movement(void)
+static void process_world_aux_movement(player_type *creature_ptr)
 {
 	/* Delayed Word-of-Recall */
-	if (p_ptr->word_recall)
+	if (creature_ptr->word_recall)
 	{
 		/*
 		 * HACK: Autosave BEFORE resetting the recall counter (rr9)
 		 * The player is yanked up/down as soon as
 		 * he loads the autosaved game.
 		 */
-		if (autosave_l && (p_ptr->word_recall == 1) && !p_ptr->phase_out)
+		if (autosave_l && (creature_ptr->word_recall == 1) && !creature_ptr->phase_out)
 			do_cmd_save_game(TRUE);
 
 		/* Count down towards recall */
-		p_ptr->word_recall--;
+		creature_ptr->word_recall--;
 
-		p_ptr->redraw |= (PR_STATUS);
+		creature_ptr->redraw |= (PR_STATUS);
 
 		/* Activate the recall */
-		if (!p_ptr->word_recall)
+		if (!creature_ptr->word_recall)
 		{
 			/* Disturbing! */
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (current_floor_ptr->dun_level || p_ptr->inside_quest || p_ptr->enter_dungeon)
+			if (current_floor_ptr->dun_level || creature_ptr->inside_quest || creature_ptr->enter_dungeon)
 			{
 				msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
 
-				if (p_ptr->dungeon_idx) p_ptr->recall_dungeon = p_ptr->dungeon_idx;
+				if (creature_ptr->dungeon_idx) creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
 				if (record_stair)
-					exe_write_diary(p_ptr, NIKKI_RECALL, current_floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, NIKKI_RECALL, current_floor_ptr->dun_level, NULL);
 
 				current_floor_ptr->dun_level = 0;
-				p_ptr->dungeon_idx = 0;
+				creature_ptr->dungeon_idx = 0;
 
 				leave_quest_check();
 				leave_tower_check();
 
-				p_ptr->inside_quest = 0;
+				creature_ptr->inside_quest = 0;
 
-				p_ptr->leaving = TRUE;
+				creature_ptr->leaving = TRUE;
 			}
 			else
 			{
 				msg_print(_("下に引きずり降ろされる感じがする！", "You feel yourself yanked downwards!"));
 
-				p_ptr->dungeon_idx = p_ptr->recall_dungeon;
+				creature_ptr->dungeon_idx = creature_ptr->recall_dungeon;
 
 				if (record_stair)
-					exe_write_diary(p_ptr, NIKKI_RECALL, current_floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, NIKKI_RECALL, current_floor_ptr->dun_level, NULL);
 
 				/* New depth */
-				current_floor_ptr->dun_level = max_dlv[p_ptr->dungeon_idx];
+				current_floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
 				if (current_floor_ptr->dun_level < 1) current_floor_ptr->dun_level = 1;
 
 				/* Nightmare mode makes recall more dangerous */
-				if (ironman_nightmare && !randint0(666) && (p_ptr->dungeon_idx == DUNGEON_ANGBAND))
+				if (ironman_nightmare && !randint0(666) && (creature_ptr->dungeon_idx == DUNGEON_ANGBAND))
 				{
 					if (current_floor_ptr->dun_level < 50)
 					{
@@ -2998,31 +2998,31 @@ static void process_world_aux_movement(void)
 					}
 					else if (current_floor_ptr->dun_level > 100)
 					{
-						current_floor_ptr->dun_level = d_info[p_ptr->dungeon_idx].maxdepth - 1;
+						current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].maxdepth - 1;
 					}
 				}
 
-				if (p_ptr->wild_mode)
+				if (creature_ptr->wild_mode)
 				{
-					p_ptr->wilderness_y = p_ptr->y;
-					p_ptr->wilderness_x = p_ptr->x;
+					creature_ptr->wilderness_y = creature_ptr->y;
+					creature_ptr->wilderness_x = creature_ptr->x;
 				}
 				else
 				{
 					/* Save player position */
-					p_ptr->oldpx = p_ptr->x;
-					p_ptr->oldpy = p_ptr->y;
+					creature_ptr->oldpx = creature_ptr->x;
+					creature_ptr->oldpy = creature_ptr->y;
 				}
-				p_ptr->wild_mode = FALSE;
+				creature_ptr->wild_mode = FALSE;
 
 				/*
 				 * Clear all saved floors
 				 * and create a first saved floor
 				 */
 				prepare_change_floor_mode(CFM_FIRST_FLOOR);
-				p_ptr->leaving = TRUE;
+				creature_ptr->leaving = TRUE;
 
-				if (p_ptr->dungeon_idx == DUNGEON_ANGBAND)
+				if (creature_ptr->dungeon_idx == DUNGEON_ANGBAND)
 				{
 					int i;
 
@@ -3036,7 +3036,7 @@ static void process_world_aux_movement(void)
 						    (q_ptr->level < current_floor_ptr->dun_level))
 						{
 							q_ptr->status = QUEST_STATUS_FAILED;
-							q_ptr->complev = (byte)p_ptr->lev;
+							q_ptr->complev = (byte)creature_ptr->lev;
 							update_playtime();
 							q_ptr->comptime = current_world_ptr->play_time;
 							r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
@@ -3051,21 +3051,21 @@ static void process_world_aux_movement(void)
 
 
 	/* Delayed Alter reality */
-	if (p_ptr->alter_reality)
+	if (creature_ptr->alter_reality)
 	{
-		if (autosave_l && (p_ptr->alter_reality == 1) && !p_ptr->phase_out)
+		if (autosave_l && (creature_ptr->alter_reality == 1) && !creature_ptr->phase_out)
 			do_cmd_save_game(TRUE);
 
 		/* Count down towards alter */
-		p_ptr->alter_reality--;
+		creature_ptr->alter_reality--;
 
-		p_ptr->redraw |= (PR_STATUS);
+		creature_ptr->redraw |= (PR_STATUS);
 
 		/* Activate the alter reality */
-		if (!p_ptr->alter_reality)
+		if (!creature_ptr->alter_reality)
 		{
 			/* Disturbing! */
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
 			if (!quest_number(current_floor_ptr->dun_level) && current_floor_ptr->dun_level)
@@ -3077,7 +3077,7 @@ static void process_world_aux_movement(void)
 				 * and create a first saved floor
 				 */
 				prepare_change_floor_mode(CFM_FIRST_FLOOR);
-				p_ptr->leaving = TRUE;
+				creature_ptr->leaving = TRUE;
 			}
 			else
 			{
@@ -3363,7 +3363,7 @@ static void process_world(void)
 	process_world_aux_recharge(p_ptr);
 	sense_inventory1();
 	sense_inventory2();
-	process_world_aux_movement();
+	process_world_aux_movement(p_ptr);
 }
 
 /*!
