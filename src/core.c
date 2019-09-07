@@ -888,41 +888,41 @@ static void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_
  * @param regen_amount 回復量
  * @return なし
  */
-static void regenmagic(int regen_amount)
+static void regenmagic(player_type *creature_ptr, int regen_amount)
 {
 	MANA_POINT new_mana;
 	int i;
 	int dev = 30;
-	int mult = (dev + adj_mag_mana[p_ptr->stat_ind[A_INT]]); /* x1 to x2 speed bonus for recharging */
+	int mult = (dev + adj_mag_mana[creature_ptr->stat_ind[A_INT]]); /* x1 to x2 speed bonus for recharging */
 
 	for (i = 0; i < EATER_EXT*2; i++)
 	{
-		if (!p_ptr->magic_num2[i]) continue;
-		if (p_ptr->magic_num1[i] == ((long)p_ptr->magic_num2[i] << 16)) continue;
+		if (!creature_ptr->magic_num2[i]) continue;
+		if (creature_ptr->magic_num1[i] == ((long)creature_ptr->magic_num2[i] << 16)) continue;
 
 		/* Increase remaining charge number like float value */
-		new_mana = (regen_amount * mult * ((long)p_ptr->magic_num2[i] + 13)) / (dev * 8);
-		p_ptr->magic_num1[i] += new_mana;
+		new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 13)) / (dev * 8);
+		creature_ptr->magic_num1[i] += new_mana;
 
 		/* Check maximum charge */
-		if (p_ptr->magic_num1[i] > (p_ptr->magic_num2[i] << 16))
+		if (creature_ptr->magic_num1[i] > (creature_ptr->magic_num2[i] << 16))
 		{
-			p_ptr->magic_num1[i] = ((long)p_ptr->magic_num2[i] << 16);
+			creature_ptr->magic_num1[i] = ((long)creature_ptr->magic_num2[i] << 16);
 		}
 		wild_regen = 20;
 	}
 	for (i = EATER_EXT*2; i < EATER_EXT*3; i++)
 	{
-		if (!p_ptr->magic_num1[i]) continue;
-		if (!p_ptr->magic_num2[i]) continue;
+		if (!creature_ptr->magic_num1[i]) continue;
+		if (!creature_ptr->magic_num2[i]) continue;
 
 		/* Decrease remaining period for charging */
-		new_mana = (regen_amount * mult * ((long)p_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) 
+		new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) 
 					/ (dev * 16 * PY_REGEN_NORMAL); 
-		p_ptr->magic_num1[i] -= new_mana;
+		creature_ptr->magic_num1[i] -= new_mana;
 
 		/* Check minimum remaining period for charging */
-		if (p_ptr->magic_num1[i] < 0) p_ptr->magic_num1[i] = 0;
+		if (creature_ptr->magic_num1[i] < 0) creature_ptr->magic_num1[i] = 0;
 		wild_regen = 20;
 	}
 }
@@ -1762,7 +1762,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	/* Recharge magic eater's power */
 	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
 	{
-		regenmagic(regen_amount);
+		regenmagic(creature_ptr, regen_amount);
 	}
 
 	if ((creature_ptr->csp == 0) && (creature_ptr->csp_frac == 0))
