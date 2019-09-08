@@ -650,7 +650,7 @@ static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_t
  * @param mode 剣術のスレイ型ID
  * @return スレイの倍率(/10倍)
  */
-static MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode)
+static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -802,9 +802,9 @@ static MULTIPLY mult_hissatsu(MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_pt
 	}
 
 	/* Bloody Maelstrom */
-	if ((mode == HISSATSU_SEKIRYUKA) && p_ptr->cut && monster_living(m_ptr->r_idx))
+	if ((mode == HISSATSU_SEKIRYUKA) && attacker_ptr->cut && monster_living(m_ptr->r_idx))
 	{
-		MULTIPLY tmp = MIN(100, MAX(10, p_ptr->cut / 10));
+		MULTIPLY tmp = MIN(100, MAX(10, attacker_ptr->cut / 10));
 		if (mult < tmp) mult = tmp;
 	}
 
@@ -881,7 +881,7 @@ HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT t
 
 		if (attacker_ptr->pclass == CLASS_SAMURAI)
 		{
-			mult = mult_hissatsu(mult, flgs, m_ptr, mode);
+			mult = mult_hissatsu(attacker_ptr, mult, flgs, m_ptr, mode);
 		}
 
 		if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
