@@ -417,11 +417,11 @@ void forget_lite(void)
  *                 ***         *****
  *                              ***
  */
-void update_lite(void)
+void update_lite(player_type *player_ptr)
 {
 	int i;
 	POSITION x, y, min_x, max_x, min_y, max_y;
-	POSITION p = p_ptr->cur_lite;
+	POSITION p = player_ptr->cur_lite;
 	grid_type *g_ptr;
 
 	/*** Special case ***/
@@ -434,7 +434,7 @@ void update_lite(void)
 		/* forget_lite(); Perhaps don't need? */
 
 		/* Add it to later visual update */
-		cave_redraw_later(&current_floor_ptr->grid_array[p_ptr->y][p_ptr->x], p_ptr->y, p_ptr->x);
+		cave_redraw_later(&current_floor_ptr->grid_array[player_ptr->y][player_ptr->x], player_ptr->y, player_ptr->x);
 	}
 #endif
 
@@ -468,54 +468,54 @@ void update_lite(void)
 	if (p >= 1)
 	{
 		/* Player grid */
-		cave_lite_hack(p_ptr->y, p_ptr->x);
+		cave_lite_hack(player_ptr->y, player_ptr->x);
 
 		/* Adjacent grid */
-		cave_lite_hack(p_ptr->y + 1, p_ptr->x);
-		cave_lite_hack(p_ptr->y - 1, p_ptr->x);
-		cave_lite_hack(p_ptr->y, p_ptr->x + 1);
-		cave_lite_hack(p_ptr->y, p_ptr->x - 1);
+		cave_lite_hack(player_ptr->y + 1, player_ptr->x);
+		cave_lite_hack(player_ptr->y - 1, player_ptr->x);
+		cave_lite_hack(player_ptr->y, player_ptr->x + 1);
+		cave_lite_hack(player_ptr->y, player_ptr->x - 1);
 
 		/* Diagonal grids */
-		cave_lite_hack(p_ptr->y + 1, p_ptr->x + 1);
-		cave_lite_hack(p_ptr->y + 1, p_ptr->x - 1);
-		cave_lite_hack(p_ptr->y - 1, p_ptr->x + 1);
-		cave_lite_hack(p_ptr->y - 1, p_ptr->x - 1);
+		cave_lite_hack(player_ptr->y + 1, player_ptr->x + 1);
+		cave_lite_hack(player_ptr->y + 1, player_ptr->x - 1);
+		cave_lite_hack(player_ptr->y - 1, player_ptr->x + 1);
+		cave_lite_hack(player_ptr->y - 1, player_ptr->x - 1);
 	}
 
 	/* Radius 2 -- lantern radius */
 	if (p >= 2)
 	{
 		/* South of the player */
-		if (cave_los_bold(p_ptr->y + 1, p_ptr->x))
+		if (cave_los_bold(player_ptr->y + 1, player_ptr->x))
 		{
-			cave_lite_hack(p_ptr->y + 2, p_ptr->x);
-			cave_lite_hack(p_ptr->y + 2, p_ptr->x + 1);
-			cave_lite_hack(p_ptr->y + 2, p_ptr->x - 1);
+			cave_lite_hack(player_ptr->y + 2, player_ptr->x);
+			cave_lite_hack(player_ptr->y + 2, player_ptr->x + 1);
+			cave_lite_hack(player_ptr->y + 2, player_ptr->x - 1);
 		}
 
 		/* North of the player */
-		if (cave_los_bold(p_ptr->y - 1, p_ptr->x))
+		if (cave_los_bold(player_ptr->y - 1, player_ptr->x))
 		{
-			cave_lite_hack(p_ptr->y - 2, p_ptr->x);
-			cave_lite_hack(p_ptr->y - 2, p_ptr->x + 1);
-			cave_lite_hack(p_ptr->y - 2, p_ptr->x - 1);
+			cave_lite_hack(player_ptr->y - 2, player_ptr->x);
+			cave_lite_hack(player_ptr->y - 2, player_ptr->x + 1);
+			cave_lite_hack(player_ptr->y - 2, player_ptr->x - 1);
 		}
 
 		/* East of the player */
-		if (cave_los_bold(p_ptr->y, p_ptr->x + 1))
+		if (cave_los_bold(player_ptr->y, player_ptr->x + 1))
 		{
-			cave_lite_hack(p_ptr->y, p_ptr->x + 2);
-			cave_lite_hack(p_ptr->y + 1, p_ptr->x + 2);
-			cave_lite_hack(p_ptr->y - 1, p_ptr->x + 2);
+			cave_lite_hack(player_ptr->y, player_ptr->x + 2);
+			cave_lite_hack(player_ptr->y + 1, player_ptr->x + 2);
+			cave_lite_hack(player_ptr->y - 1, player_ptr->x + 2);
 		}
 
 		/* West of the player */
-		if (cave_los_bold(p_ptr->y, p_ptr->x - 1))
+		if (cave_los_bold(player_ptr->y, player_ptr->x - 1))
 		{
-			cave_lite_hack(p_ptr->y, p_ptr->x - 2);
-			cave_lite_hack(p_ptr->y + 1, p_ptr->x - 2);
-			cave_lite_hack(p_ptr->y - 1, p_ptr->x - 2);
+			cave_lite_hack(player_ptr->y, player_ptr->x - 2);
+			cave_lite_hack(player_ptr->y + 1, player_ptr->x - 2);
+			cave_lite_hack(player_ptr->y - 1, player_ptr->x - 2);
 		}
 	}
 
@@ -528,43 +528,43 @@ void update_lite(void)
 		if (p > 14) p = 14;
 
 		/* South-East of the player */
-		if (cave_los_bold(p_ptr->y + 1, p_ptr->x + 1))
+		if (cave_los_bold(player_ptr->y + 1, player_ptr->x + 1))
 		{
-			cave_lite_hack(p_ptr->y + 2, p_ptr->x + 2);
+			cave_lite_hack(player_ptr->y + 2, player_ptr->x + 2);
 		}
 
 		/* South-West of the player */
-		if (cave_los_bold(p_ptr->y + 1, p_ptr->x - 1))
+		if (cave_los_bold(player_ptr->y + 1, player_ptr->x - 1))
 		{
-			cave_lite_hack(p_ptr->y + 2, p_ptr->x - 2);
+			cave_lite_hack(player_ptr->y + 2, player_ptr->x - 2);
 		}
 
 		/* North-East of the player */
-		if (cave_los_bold(p_ptr->y - 1, p_ptr->x + 1))
+		if (cave_los_bold(player_ptr->y - 1, player_ptr->x + 1))
 		{
-			cave_lite_hack(p_ptr->y - 2, p_ptr->x + 2);
+			cave_lite_hack(player_ptr->y - 2, player_ptr->x + 2);
 		}
 
 		/* North-West of the player */
-		if (cave_los_bold(p_ptr->y - 1, p_ptr->x - 1))
+		if (cave_los_bold(player_ptr->y - 1, player_ptr->x - 1))
 		{
-			cave_lite_hack(p_ptr->y - 2, p_ptr->x - 2);
+			cave_lite_hack(player_ptr->y - 2, player_ptr->x - 2);
 		}
 
 		/* Maximal north */
-		min_y = p_ptr->y - p;
+		min_y = player_ptr->y - p;
 		if (min_y < 0) min_y = 0;
 
 		/* Maximal south */
-		max_y = p_ptr->y + p;
+		max_y = player_ptr->y + p;
 		if (max_y > current_floor_ptr->height - 1) max_y = current_floor_ptr->height - 1;
 
 		/* Maximal west */
-		min_x = p_ptr->x - p;
+		min_x = player_ptr->x - p;
 		if (min_x < 0) min_x = 0;
 
 		/* Maximal east */
-		max_x = p_ptr->x + p;
+		max_x = player_ptr->x + p;
 		if (max_x > current_floor_ptr->width - 1) max_x = current_floor_ptr->width - 1;
 
 		/* Scan the maximal box */
@@ -572,8 +572,8 @@ void update_lite(void)
 		{
 			for (x = min_x; x <= max_x; x++)
 			{
-				int dy = (p_ptr->y > y) ? (p_ptr->y - y) : (y - p_ptr->y);
-				int dx = (p_ptr->x > x) ? (p_ptr->x - x) : (x - p_ptr->x);
+				int dy = (player_ptr->y > y) ? (player_ptr->y - y) : (y - player_ptr->y);
+				int dx = (player_ptr->x > x) ? (player_ptr->x - x) : (x - player_ptr->x);
 
 				/* Skip the "central" grids (above) */
 				if ((dy <= 2) && (dx <= 2)) continue;
@@ -634,7 +634,7 @@ void update_lite(void)
 	tmp_pos.n = 0;
 
 	/* Mega-Hack -- Visual update later */
-	p_ptr->update |= (PU_DELAY_VIS);
+	player_ptr->update |= (PU_DELAY_VIS);
 }
 
 

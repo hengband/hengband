@@ -5063,7 +5063,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_LITE))
 	{
 		creature_ptr->update &= ~(PU_LITE);
-		update_lite();
+		update_lite(p_ptr);
 	}
 
 
