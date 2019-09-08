@@ -709,7 +709,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					{
 						/* Apply special damage */
 						tdam = tot_dam_aux_shot(shooter_ptr, q_ptr, tdam, m_ptr, snipe_type);
-						tdam = critical_shot(q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
+						tdam = critical_shot(shooter_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
 
 						/* No negative damage */
 						if (tdam < 0) tdam = 0;
@@ -965,26 +965,26 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 * @param dam 現在算出中のダメージ値
 * @return クリティカル修正が入ったダメージ値
 */
-HIT_POINT critical_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT critical_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
 	int i, k;
-	object_type *j_ptr = &p_ptr->inventory_list[INVEN_BOW];
+	object_type *j_ptr = &shooter_ptr->inventory_list[INVEN_BOW];
 
 	/* Extract "shot" power */
-	i = p_ptr->to_h_b + plus_ammo;
+	i = shooter_ptr->to_h_b + plus_ammo;
 
-	if (p_ptr->tval_ammo == TV_BOLT)
-		i = (p_ptr->skill_thb + (p_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
+	if (shooter_ptr->tval_ammo == TV_BOLT)
+		i = (shooter_ptr->skill_thb + (shooter_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
 	else
-		i = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
+		i = (shooter_ptr->skill_thb + ((shooter_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
 
 
 	/* Snipers can shot more critically with crossbows */
-	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
-	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
+	if (shooter_ptr->concent) i += ((i * shooter_ptr->concent) / 5);
+	if ((shooter_ptr->pclass == CLASS_SNIPER) && (shooter_ptr->tval_ammo == TV_BOLT)) i *= 2;
 
 	/* Good bow makes more critical */
-	i += plus_bow * 8 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
+	i += plus_bow * 8 * (shooter_ptr->concent ? shooter_ptr->concent + 5 : 5);
 
 	/* Critical hit */
 	if (randint1(10000) <= i)
