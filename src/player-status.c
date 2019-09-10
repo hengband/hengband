@@ -5576,15 +5576,15 @@ void check_experience(player_type *creature_ptr)
 					cnv_stat(creature_ptr->stat_max[0], tmp);
 					prt(format(_("        a) 腕力 (現在値 %s)", "        a) Str (cur %s)"), tmp), 2, 14);
 					cnv_stat(creature_ptr->stat_max[1], tmp);
-					prt(format(_("        b) 知能 (現在値 %s)", "        a) Int (cur %s)"), tmp), 3, 14);
+					prt(format(_("        b) 知能 (現在値 %s)", "        b) Int (cur %s)"), tmp), 3, 14);
 					cnv_stat(creature_ptr->stat_max[2], tmp);
-					prt(format(_("        c) 賢さ (現在値 %s)", "        a) Wis (cur %s)"), tmp), 4, 14);
+					prt(format(_("        c) 賢さ (現在値 %s)", "        c) Wis (cur %s)"), tmp), 4, 14);
 					cnv_stat(creature_ptr->stat_max[3], tmp);
-					prt(format(_("        d) 器用 (現在値 %s)", "        a) Dex (cur %s)"), tmp), 5, 14);
+					prt(format(_("        d) 器用 (現在値 %s)", "        d) Dex (cur %s)"), tmp), 5, 14);
 					cnv_stat(creature_ptr->stat_max[4], tmp);
-					prt(format(_("        e) 耐久 (現在値 %s)", "        a) Con (cur %s)"), tmp), 6, 14);
+					prt(format(_("        e) 耐久 (現在値 %s)", "        e) Con (cur %s)"), tmp), 6, 14);
 					cnv_stat(creature_ptr->stat_max[5], tmp);
-					prt(format(_("        f) 魅力 (現在値 %s)", "        a) Chr (cur %s)"), tmp), 7, 14);
+					prt(format(_("        f) 魅力 (現在値 %s)", "        f) Chr (cur %s)"), tmp), 7, 14);
 
 					prt("", 8, 14);
 					prt(_("        どの能力値を上げますか？", "        Which stat do you want to raise?"), 1, 14);
