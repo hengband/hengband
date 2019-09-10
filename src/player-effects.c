@@ -3470,7 +3470,7 @@ bool do_res_stat(player_type *creature_ptr, int stat)
 	/* Attempt to increase */
 	if (res_stat(creature_ptr, stat))
 	{
-		msg_format(_("元通りに%sなった気がする。", "You feel less %s."), desc_stat_pos[stat]);
+		msg_format(_("元通りに%sなった気がする。", "You feel more %s."), desc_stat_pos[stat]);
 		return (TRUE);
 	}
 
@@ -3513,7 +3513,7 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 	/* Restoration worked */
 	if (res)
 	{
-		msg_format(_("元通りに%sなった気がする。", "You feel less %s."), desc_stat_pos[stat]);
+		msg_format(_("元通りに%sなった気がする。", "You feel more %s."), desc_stat_pos[stat]);
 
 		return (TRUE);
 	}
