@@ -798,7 +798,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	}
 	else if (have_flag(flgs, TR_SLAY_GIANT))
 	{
-		info[i++] = _("それはジャイアントに対して特に恐るべき力を発揮する。", "It is especially deadly against giants.");
+		info[i++] = _("それは巨人に対して特に恐るべき力を発揮する。", "It is especially deadly against giants.");
 	}
 
 	if (have_flag(flgs, TR_KILL_DEMON))

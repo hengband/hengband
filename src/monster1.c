@@ -632,7 +632,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		/* Describe the "race" */
 			if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
 			if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, _("デーモン", " demon"));
-			if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, _("ジャイアント", " giant"));
+			if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, _("巨人", " giant"));
 			if (flags3 & RF3_TROLL)    hook_c_roff(TERM_BLUE, _("トロル", " troll"));
 			if (flags3 & RF3_ORC)      hook_c_roff(TERM_UMBER, _("オーク", " orc"));
 			if (flags2 & RF2_HUMAN)    hook_c_roff(TERM_L_WHITE, _("人間", " human"));

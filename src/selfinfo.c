@@ -1552,11 +1552,11 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (have_flag(flgs, TR_KILL_GIANT))
 		{
-			info[i++] = _("あなたの武器はジャイアントの天敵である。", "Your weapon is a great bane of giants.");
+			info[i++] = _("あなたの武器は巨人の天敵である。", "Your weapon is a great bane of giants.");
 		}
 		else if (have_flag(flgs, TR_SLAY_GIANT))
 		{
-			info[i++] = _("あなたの武器はジャイアントに対して特に強い力を発揮する。", "Your weapon is especially deadly against giants.");
+			info[i++] = _("あなたの武器は巨人に対して特に強い力を発揮する。", "Your weapon is especially deadly against giants.");
 		}
 		/* Special "kill" flags */
 		if (have_flag(flgs, TR_KILL_DRAGON))

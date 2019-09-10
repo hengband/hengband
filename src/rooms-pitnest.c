@@ -249,7 +249,7 @@ static vault_aux_type pit_types[] =
 {
 	{ _("オーク", "orc"),            vault_aux_orc,      NULL,               5, 6 },
 	{ _("トロル", "troll"),          vault_aux_troll,    NULL,              20, 6 },
-	{ _("ジャイアント", "giant"),    vault_aux_giant,    NULL,              50, 6 },
+	{ _("巨人", "giant"),    vault_aux_giant,    NULL,              50, 6 },
 	{ _("狂気", "lovecraftian"),     vault_aux_cthulhu,  NULL,              80, 2 },
 	{ _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
 	{ _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
