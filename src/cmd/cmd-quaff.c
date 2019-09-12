@@ -304,7 +304,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_CURE_LIGHT:
-			ident = cure_light_wounds(2, 8);
+			ident = cure_light_wounds(p_ptr, 2, 8);
 			break;
 
 		case SV_POTION_CURE_SERIOUS:

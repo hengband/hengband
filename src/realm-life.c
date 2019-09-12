@@ -33,7 +33,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			DICE_NUMBER dice = 2;
 			DICE_SID sides = 10;
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_light_wounds(dice, sides);			
+			if (cast) (void)cure_light_wounds(caster_ptr, dice, sides);
 		}
 		break;
 

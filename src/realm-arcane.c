@@ -153,7 +153,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			DICE_SID sides = 8;
 
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_light_wounds(dice, sides);
+			if (cast) (void)cure_light_wounds(caster_ptr, dice, sides);
 		}
 		break;
 

@@ -16,7 +16,7 @@ extern void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options);
 extern bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack virtue_change);
 extern bool_hack heroism(player_type *creature_ptr, int base);
 extern bool_hack berserk(player_type *creature_ptr, int base);
-extern bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides);
+extern bool_hack cure_light_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides);
 extern bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides);
 extern bool_hack cure_critical_wounds(HIT_POINT pow);
 extern bool_hack true_healing(player_type *creature_ptr, HIT_POINT pow);

@@ -383,7 +383,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			msg_print(_("気分が良くなってくる。", "You feel better and better."));
 		}
-		if (cast || cont) (void)cure_light_wounds(1, 10);
+		if (cast || cont) (void)cure_light_wounds(caster_ptr, 1, 10);
 		break;
 
 	case 2:

@@ -159,7 +159,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_CURE_LIGHT:
 		{
-			ident = cure_light_wounds((powerful ? 4 : 2), 8);
+			ident = cure_light_wounds(creature_ptr, (powerful ? 4 : 2), 8);
 			break;
 		}
 
