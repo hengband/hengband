@@ -402,16 +402,16 @@ static void hit_trap_set_abnormal_status_p(concptr trap_message, bool resist, bo
 * @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
 * @return なし
 */
-void hit_trap(bool break_trap)
+void hit_trap(player_type *trapped_ptr, bool break_trap)
 {
 	int i, num, dam;
-	POSITION x = p_ptr->x, y = p_ptr->y;
+	POSITION x = trapped_ptr->x, y = trapped_ptr->y;
 	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
 	concptr name = _("トラップ", "a trap");
 
-	disturb(p_ptr, FALSE, TRUE);
+	disturb(trapped_ptr, FALSE, TRUE);
 
 	cave_alter_feat(y, x, FF_HIT_TRAP);
 
@@ -420,16 +420,16 @@ void hit_trap(bool break_trap)
 	{
 	case TRAP_TRAPDOOR:
 	{
-		if (p_ptr->levitation)
+		if (trapped_ptr->levitation)
 		{
 			msg_print(_("落とし戸を飛び越えた。", "You fly over a trap door."));
 		}
 		else
 		{
 			msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
-			if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+			if ((trapped_ptr->pseikaku == SEIKAKU_COMBAT) || (trapped_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 				msg_print(_("くっそ～！", ""));
-			else if((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+			else if((trapped_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 				msg_print(_("ジュラル星人の仕業に違いない！", ""));
 
 
@@ -437,15 +437,15 @@ void hit_trap(bool break_trap)
 			dam = damroll(2, 8);
 			name = _("落とし戸", "a trap door");
 
-			take_hit(p_ptr, DAMAGE_NOESCAPE, dam, name, -1);
+			take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, name, -1);
 
 			/* Still alive and autosave enabled */
-			if (autosave_l && (p_ptr->chp >= 0))
+			if (autosave_l && (trapped_ptr->chp >= 0))
 				do_cmd_save_game(TRUE);
 
-			exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("落とし戸に落ちた", "You have fallen through a trap door!"));
+			exe_write_diary(trapped_ptr, NIKKI_BUNSHOU, 0, _("落とし戸に落ちた", "You have fallen through a trap door!"));
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-			p_ptr->leaving = TRUE;
+			trapped_ptr->leaving = TRUE;
 		}
 		break;
 	}
@@ -531,8 +531,8 @@ void hit_trap(bool break_trap)
 	{
 		hit_trap_set_abnormal_status_p(
 			_("黒いガスに包み込まれた！", "A black gas surrounds you!"),
-			p_ptr->resist_blind,
-			set_blind, p_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
+			trapped_ptr->resist_blind,
+			set_blind, trapped_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
 		break;
 	}
 
@@ -540,8 +540,8 @@ void hit_trap(bool break_trap)
 	{
 		hit_trap_set_abnormal_status_p(
 			_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
-			p_ptr->resist_conf,
-			set_confused, p_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
+			trapped_ptr->resist_conf,
+			set_confused, trapped_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
 		break;
 	}
 
@@ -549,15 +549,15 @@ void hit_trap(bool break_trap)
 	{
 		hit_trap_set_abnormal_status_p(
 			_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
-			p_ptr->resist_pois || IS_OPPOSE_POIS(),
-			set_poisoned, p_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
+			trapped_ptr->resist_pois || IS_OPPOSE_POIS(),
+			set_poisoned, trapped_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
 		break;
 	}
 
 	case TRAP_SLEEP:
 	{
 		msg_print(_("奇妙な白い霧に包まれた！", "A strange white mist surrounds you!"));
-		if (!p_ptr->free_act)
+		if (!trapped_ptr->free_act)
 		{
 			msg_print(_("あなたは眠りに就いた。", "You fall asleep."));
 
@@ -566,10 +566,10 @@ void hit_trap(bool break_trap)
 				msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
 
 				/* Have some nightmares */
-				sanity_blast(p_ptr, NULL, FALSE);
+				sanity_blast(trapped_ptr, NULL, FALSE);
 
 			}
-			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint0(10) + 5);
+			(void)set_paralyzed(trapped_ptr, trapped_ptr->paralyzed + randint0(10) + 5);
 		}
 		break;
 	}
@@ -623,7 +623,7 @@ void hit_trap(bool break_trap)
 				if (!in_bounds(y1, x1)) continue;
 
 				/* Require line of projection */
-				if (!projectable(p_ptr->y, p_ptr->x, y1, x1)) continue;
+				if (!projectable(trapped_ptr->y, trapped_ptr->x, y1, x1)) continue;
 
 				if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
 					evil_idx = hack_m_idx_ii;

@@ -3,7 +3,7 @@ extern void init_normal_traps(void);
 extern FEAT_IDX choose_random_trap(void);
 extern void disclose_grid(POSITION y, POSITION x);
 extern void place_trap(POSITION y, POSITION x);
-extern void hit_trap(bool break_trap);
+extern void hit_trap(player_type *trapped_ptr, bool break_trap);
 
 extern const int chest_traps[64];
 

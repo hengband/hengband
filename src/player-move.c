@@ -780,7 +780,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		}
 
 		/* Hit the trap */
-		hit_trap((mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
+		hit_trap(creature_ptr, (mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
 
 		if (!player_bold(ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
 	}
