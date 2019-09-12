@@ -291,12 +291,12 @@ bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack vi
 	return TRUE;
 }
 
-bool_hack heroism(int base)
+bool_hack heroism(player_type *creature_ptr, int base)
 {
 	bool_hack ident = FALSE;
-	if (set_afraid(p_ptr, 0)) ident = TRUE;
-	if (set_hero(p_ptr, p_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
-	if (hp_player(p_ptr, 10)) ident = TRUE;
+	if (set_afraid(creature_ptr, 0)) ident = TRUE;
+	if (set_hero(creature_ptr, creature_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
+	if (hp_player(creature_ptr, 10)) ident = TRUE;
 	return ident;
 }
 

@@ -296,7 +296,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_HEROISM:
-			ident = heroism(25);
+			ident = heroism(p_ptr, 25);
 			break;
 
 		case SV_POTION_BESERK_STRENGTH:

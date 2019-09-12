@@ -1362,14 +1362,14 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_HERO:
 	{
-		(void)heroism(25);
+		(void)heroism(p_ptr, 25);
 		break;
 	}
 
 	case ACT_HERO_SPEED:
 	{
 		(void)set_fast(user_ptr, randint1(50) + 50, FALSE);
-		(void)heroism(50);
+		(void)heroism(p_ptr, 50);
 		break;
 	}
 

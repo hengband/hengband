@@ -14,7 +14,7 @@ extern void stop_singing(player_type *creature_ptr);
 extern bool time_walk(player_type *creature_ptr);
 extern void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options);
 extern bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack virtue_change);
-extern bool_hack heroism(int base);
+extern bool_hack heroism(player_type *creature_ptr, int base);
 extern bool_hack berserk(int base);
 extern bool_hack cure_light_wounds(DICE_NUMBER dice, DICE_SID sides);
 extern bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides);

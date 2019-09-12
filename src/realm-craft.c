@@ -119,7 +119,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				(void)heroism(base);
+				(void)heroism(p_ptr, base);
 			}
 		}
 		break;
