@@ -1244,7 +1244,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_CURE_MW:
 	{
 		msg_print(_("深紫色の光を発している...", "It radiates deep purple..."));
-		(void)cure_serious_wounds(4, 8);
+		(void)cure_serious_wounds(user_ptr, 4, 8);
 		break;
 	}
 

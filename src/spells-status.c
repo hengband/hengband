@@ -319,14 +319,14 @@ bool_hack cure_light_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SI
 	return ident;
 }
 
-bool_hack cure_serious_wounds(DICE_NUMBER dice, DICE_SID sides)
+bool_hack cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides)
 {
 	bool_hack ident = FALSE;
-	if (hp_player(p_ptr, damroll(dice, sides))) ident = TRUE;
-	if (set_blind(p_ptr, 0)) ident = TRUE;
-	if (set_confused(p_ptr, 0)) ident = TRUE;
-	if (set_cut(p_ptr,(p_ptr->cut / 2) - 50)) ident = TRUE;
-	if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
+	if (hp_player(creature_ptr, damroll(dice, sides))) ident = TRUE;
+	if (set_blind(creature_ptr, 0)) ident = TRUE;
+	if (set_confused(creature_ptr, 0)) ident = TRUE;
+	if (set_cut(creature_ptr,(creature_ptr->cut / 2) - 50)) ident = TRUE;
+	if (set_shero(creature_ptr, 0, TRUE)) ident = TRUE;
 	return ident;
 }
 

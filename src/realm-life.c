@@ -111,7 +111,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			DICE_SID sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_serious_wounds(dice, sides);
+			if (cast) (void)cure_serious_wounds(caster_ptr, dice, sides);
 		}
 		break;
 

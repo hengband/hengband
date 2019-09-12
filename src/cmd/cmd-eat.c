@@ -202,7 +202,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
 		case SV_FOOD_CURE_SERIOUS:
 		{
-			ident = cure_serious_wounds(4, 8);
+			ident = cure_serious_wounds(creature_ptr, 4, 8);
 			break;
 		}
 
