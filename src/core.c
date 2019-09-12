@@ -3447,7 +3447,7 @@ static bool enter_debug_mode(void)
 /*
  * Hack -- Declare the Debug Routines
  */
-extern void do_cmd_debug(void);
+extern void do_cmd_debug(player_type *creature_ptr);
 
 #endif /* ALLOW_WIZARD */
 
@@ -3556,7 +3556,7 @@ static void process_command(void)
 		{
 			if (enter_debug_mode())
 			{
-				do_cmd_debug();
+				do_cmd_debug(p_ptr);
 			}
 			break;
 		}

@@ -1650,7 +1650,7 @@ static void do_cmd_dump_options(void)
 /*
  * Hack -- declare external function
  */
-extern void do_cmd_debug(void);
+extern void do_cmd_debug(player_type *creature_ptr);
 
 
 /*!
@@ -1659,7 +1659,7 @@ extern void do_cmd_debug(void);
  * The "command_arg" may have been set.
  * @return なし
  */
-void do_cmd_debug(void)
+void do_cmd_debug(player_type *creature_ptr)
 {
 	int     x, y;
 	char    cmd;
@@ -1698,7 +1698,7 @@ void do_cmd_debug(void)
 
 	/* Know alignment */
 	case 'A':
-		msg_format("Your alignment is %d.", p_ptr->align);
+		msg_format("Your alignment is %d.", creature_ptr->align);
 		break;
 
 	/* Teleport to target */
@@ -1737,9 +1737,9 @@ void do_cmd_debug(void)
 
 	/* Blue Mage Only */
 	case 'E':
-		if (p_ptr->pclass == CLASS_BLUE_MAGE)
+		if (creature_ptr->pclass == CLASS_BLUE_MAGE)
 		{
-			do_cmd_wiz_blue_mage(p_ptr);
+			do_cmd_wiz_blue_mage(creature_ptr);
 		}
 		break;
 
@@ -1750,18 +1750,18 @@ void do_cmd_debug(void)
 
 	/* Create desired feature */
 	case 'F':
-		do_cmd_wiz_create_feature(p_ptr);
+		do_cmd_wiz_create_feature(creature_ptr);
 		break;
 
 	/* Good Objects */
 	case 'g':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(p_ptr->y, p_ptr->x, command_arg, FALSE, FALSE, TRUE);
+		acquirement(creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
 		break;
 
 	/* Hitpoint rerating */
 	case 'h':
-		roll_hitdice(p_ptr, SPOP_DISPLAY_MES | SPOP_DEBUG);
+		roll_hitdice(creature_ptr, SPOP_DISPLAY_MES | SPOP_DEBUG);
 		break;
 
 	case 'H':
@@ -1775,12 +1775,12 @@ void do_cmd_debug(void)
 
 	/* Go up or down in the dungeon */
 	case 'j':
-		do_cmd_wiz_jump(p_ptr);
+		do_cmd_wiz_jump(creature_ptr);
 		break;
 
 	/* Self-Knowledge */
 	case 'k':
-		self_knowledge(p_ptr);
+		self_knowledge(creature_ptr);
 		break;
 
 	/* Learn about objects */
@@ -1795,17 +1795,17 @@ void do_cmd_debug(void)
 
 	/* Mutation */
 	case 'M':
-		(void)gain_mutation(p_ptr, command_arg);
+		(void)gain_mutation(creature_ptr, command_arg);
 		break;
 
 	/* Reset Class */
 	case 'R':
-		(void)do_cmd_wiz_reset_class(p_ptr);
+		(void)do_cmd_wiz_reset_class(creature_ptr);
 		break;
 
 	/* Specific reward */
 	case 'r':
-		(void)gain_level_reward(p_ptr, command_arg);
+		(void)gain_level_reward(creature_ptr, command_arg);
 		break;
 
 	/* Summon _friendly_ named monster */
@@ -1848,20 +1848,20 @@ void do_cmd_debug(void)
 			if(tmp_int < 0) break;
 			if(tmp_int >= max_q_idx) break;
 
-			p_ptr->inside_quest = (QUEST_IDX)tmp_int;
+			creature_ptr->inside_quest = (QUEST_IDX)tmp_int;
 			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 			quest[tmp_int].status = QUEST_STATUS_TAKEN;
-			p_ptr->inside_quest = 0;
+			creature_ptr->inside_quest = 0;
 		}
 		break;
 
 	/* Complete a Quest -KMW- */
 	case 'q':
-		if(p_ptr->inside_quest)
+		if(creature_ptr->inside_quest)
 		{
-			if (quest[p_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
+			if (quest[creature_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
 			{
-				complete_quest(p_ptr->inside_quest);
+				complete_quest(creature_ptr->inside_quest);
 				break;
 			}
 		}
@@ -1881,7 +1881,7 @@ void do_cmd_debug(void)
 				current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
 		}
-		wiz_lite(p_ptr, FALSE);
+		wiz_lite(creature_ptr, FALSE);
 		break;
 
 	/* Summon Random Monster(s) */
@@ -1893,7 +1893,7 @@ void do_cmd_debug(void)
 	/* Special(Random Artifact) Objects */
 	case 'S':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(p_ptr->y, p_ptr->x, command_arg, TRUE, TRUE, TRUE);
+		acquirement(creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
 		break;
 
 	/* Teleport */
@@ -1910,17 +1910,17 @@ void do_cmd_debug(void)
 	/* Very Good Objects */
 	case 'v':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(p_ptr->y, p_ptr->x, command_arg, TRUE, FALSE, TRUE);
+		acquirement(creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
 		break;
 
 	/* Wizard Light the Level */
 	case 'w':
-		wiz_lite(p_ptr, (bool)(p_ptr->pclass == CLASS_NINJA));
+		wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
 		break;
 
 	/* Increase Experience */
 	case 'x':
-		gain_exp(p_ptr, command_arg ? command_arg : (p_ptr->exp + 1));
+		gain_exp(creature_ptr, command_arg ? command_arg : (creature_ptr->exp + 1));
 		break;
 
 	/* Zap Monsters (Genocide) */
@@ -1944,14 +1944,14 @@ void do_cmd_debug(void)
 		INVENTORY_IDX i;
 		for(i = INVEN_TOTAL - 1; i >= 0; i--)
 		{
-			if(p_ptr->inventory_list[i].k_idx) inven_drop(i, 999);
+			if(creature_ptr->inventory_list[i].k_idx) inven_drop(i, 999);
 		}
-		player_outfit(p_ptr);
+		player_outfit(creature_ptr);
 		break;
 	}
 
 	case 'V':
-		do_cmd_wiz_reset_class(p_ptr);
+		do_cmd_wiz_reset_class(creature_ptr);
 		break;
 
 	/* Not a Wizard Command */
