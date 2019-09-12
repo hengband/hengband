@@ -911,15 +911,15 @@ HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT t
 * @param mode オプションフラグ
 * @return クリティカル修正が入ったダメージ値
 */
-HIT_POINT critical_norm(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
+HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
 {
 	int i, k;
 
 	/* Extract "blow" power */
-	i = (weight + (meichuu * 3 + plus * 5) + p_ptr->skill_thn);
+	i = (weight + (meichuu * 3 + plus * 5) + attacker_ptr->skill_thn);
 
 	/* Chance */
-	if ((randint1((p_ptr->pclass == CLASS_NINJA) ? 4444 : 5000) <= i) || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
+	if ((randint1((attacker_ptr->pclass == CLASS_NINJA) ? 4444 : 5000) <= i) || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
 	{
 		k = weight + randint1(650);
 		if ((mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN)) k += randint1(650);
@@ -1214,7 +1214,7 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 		msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
 
 		k = damroll(dice_num, dice_side);
-		k = critical_norm(n_weight, bonus, k, (s16b)bonus, 0);
+		k = critical_norm(p_ptr, n_weight, bonus, k, (s16b)bonus, 0);
 
 		/* Apply the player damage bonuses */
 		k += p_ptr->to_d_m;
@@ -1598,7 +1598,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 					if (weight > 20) weight = 20;
 				}
 
-				k = critical_norm(attacker_ptr->lev * weight, min_level, k, attacker_ptr->to_h[0], 0);
+				k = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, k, attacker_ptr->to_h[0], 0);
 
 				if ((special_effect == MA_KNEE) && ((k + attacker_ptr->to_d[hand]) < m_ptr->hp))
 				{
@@ -1660,7 +1660,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				}
 
 				if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_DOKUBARI)) && !(mode == HISSATSU_KYUSHO))
-					k = critical_norm(o_ptr->weight, o_ptr->to_h, k, attacker_ptr->to_h[hand], mode);
+					k = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, k, attacker_ptr->to_h[hand], mode);
 
 				drain_result = k;
 
@@ -2108,7 +2108,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 					k /= 10;
 				}
 
-				k = critical_norm(o_ptr->weight, o_ptr->to_h, k, attacker_ptr->to_h[hand], mode);
+				k = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, k, attacker_ptr->to_h[hand], mode);
 				if (one_in_(6))
 				{
 					int mult = 2;
