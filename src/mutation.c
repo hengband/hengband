@@ -2195,7 +2195,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_BERSERK:
-			(void)berserk(randint1(25) + 25);
+			(void)berserk(p_ptr, randint1(25) + 25);
 			break;
 
 		case MUT1_POLYMORPH:

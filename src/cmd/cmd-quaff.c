@@ -300,7 +300,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_BESERK_STRENGTH:
-			ident = berserk(randint1(25) + 25);
+			ident = berserk(p_ptr, randint1(25) + 25);
 			break;
 
 		case SV_POTION_CURE_LIGHT:

@@ -300,12 +300,12 @@ bool_hack heroism(player_type *creature_ptr, int base)
 	return ident;
 }
 
-bool_hack berserk(int base)
+bool_hack berserk(player_type *creature_ptr, int base)
 {
 	bool_hack ident = FALSE;
-	if (set_afraid(p_ptr, 0)) ident = TRUE;
-	if (set_shero(p_ptr, p_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
-	if (hp_player(p_ptr, 30)) ident = TRUE;
+	if (set_afraid(creature_ptr, 0)) ident = TRUE;
+	if (set_shero(creature_ptr, creature_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
+	if (hp_player(creature_ptr, 30)) ident = TRUE;
 	return ident;
 }
 

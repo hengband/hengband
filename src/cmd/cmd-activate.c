@@ -1311,7 +1311,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_BERSERK:
 	{
-		(void)berserk(randint1(25) + 25);
+		(void)berserk(p_ptr, randint1(25) + 25);
 		break;
 	}
 

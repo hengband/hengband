@@ -670,7 +670,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_HALF_TROLL:
 			msg_print(_("うがぁぁ！", "RAAAGH!"));
-			(void)berserk(10 + randint1(plev));
+			(void)berserk(p_ptr, 10 + randint1(plev));
 			break;
 
 		case RACE_AMBERITE:
@@ -691,7 +691,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_BARBARIAN:
 			msg_print(_("うぉぉおお！", "Raaagh!"));
-			(void)berserk(10 + randint1(plev));
+			(void)berserk(p_ptr, 10 + randint1(plev));
 			break;
 
 		case RACE_HALF_OGRE:
