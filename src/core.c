@@ -709,7 +709,7 @@ static bool pattern_effect(void)
 		(void)set_image(p_ptr, 0);
 		(void)restore_all_status();
 		(void)restore_level(p_ptr);
-		(void)cure_critical_wounds(1000);
+		(void)cure_critical_wounds(p_ptr, 1000);
 
 		cave_set_feat(p_ptr->y, p_ptr->x, feat_pattern_old);
 		msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));

@@ -330,16 +330,16 @@ bool_hack cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_
 	return ident;
 }
 
-bool_hack cure_critical_wounds(HIT_POINT pow)
+bool_hack cure_critical_wounds(player_type *creature_ptr, HIT_POINT pow)
 {
 	bool_hack ident = FALSE;
-	if (hp_player(p_ptr, pow)) ident = TRUE;
-	if (set_blind(p_ptr, 0)) ident = TRUE;
-	if (set_confused(p_ptr, 0)) ident = TRUE;
-	if (set_poisoned(p_ptr, 0)) ident = TRUE;
-	if (set_stun(p_ptr, 0)) ident = TRUE;
-	if (set_cut(p_ptr,0)) ident = TRUE;
-	if (set_shero(p_ptr, 0, TRUE)) ident = TRUE;
+	if (hp_player(creature_ptr, pow)) ident = TRUE;
+	if (set_blind(creature_ptr, 0)) ident = TRUE;
+	if (set_confused(creature_ptr, 0)) ident = TRUE;
+	if (set_poisoned(creature_ptr, 0)) ident = TRUE;
+	if (set_stun(creature_ptr, 0)) ident = TRUE;
+	if (set_cut(creature_ptr,0)) ident = TRUE;
+	if (set_shero(creature_ptr, 0, TRUE)) ident = TRUE;
 	return ident;
 }
 

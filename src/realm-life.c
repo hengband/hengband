@@ -170,7 +170,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			DICE_SID sides = 10;
 
 			if (info) return info_heal(dice, sides, 0);
-			if (cast) (void)cure_critical_wounds(damroll(dice, sides));
+			if (cast) (void)cure_critical_wounds(caster_ptr, damroll(dice, sides));
 		}
 		break;
 
@@ -227,7 +227,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int heal = 300;
 			if (info) return info_heal(0, 0, heal);
-			if (cast) (void)cure_critical_wounds(heal);
+			if (cast) (void)cure_critical_wounds(caster_ptr, heal);
 		}
 		break;
 
@@ -443,7 +443,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			int heal = 2000;
 			if (info) return info_heal(0, 0, heal);
-			if (cast) (void)cure_critical_wounds(heal);
+			if (cast) (void)cure_critical_wounds(caster_ptr, heal);
 		}
 		break;
 

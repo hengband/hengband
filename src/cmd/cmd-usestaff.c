@@ -172,7 +172,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_HEALING:
 		{
-			if (cure_critical_wounds(powerful ? 500 : 300)) ident = TRUE;
+			if (cure_critical_wounds(creature_ptr, powerful ? 500 : 300)) ident = TRUE;
 			break;
 		}
 

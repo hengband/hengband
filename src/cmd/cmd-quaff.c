@@ -312,15 +312,15 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_CURE_CRITICAL:
-			ident = cure_critical_wounds(damroll(6, 8));
+			ident = cure_critical_wounds(creature_ptr, damroll(6, 8));
 			break;
 
 		case SV_POTION_HEALING:
-			ident = cure_critical_wounds(300);
+			ident = cure_critical_wounds(creature_ptr, 300);
 			break;
 
 		case SV_POTION_STAR_HEALING:
-			ident = cure_critical_wounds(1200);
+			ident = cure_critical_wounds(creature_ptr, 1200);
 			break;
 
 		case SV_POTION_LIFE:

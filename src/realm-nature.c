@@ -316,7 +316,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			int heal = 500;
 			if (info) return info_heal(0, 0, heal);
-			if (cast) (void)cure_critical_wounds(heal);
+			if (cast) (void)cure_critical_wounds(caster_ptr, heal);
 		}
 		break;
 
