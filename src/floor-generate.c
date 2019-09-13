@@ -1395,7 +1395,7 @@ void clear_cave(floor_type *floor_ptr)
  * @return なし
  * @note Hack -- regenerate any "overflow" levels
  */
-void generate_random_floor(void)
+void generate_random_floor(floor_type *floor_ptr)
 {
 	int num;
 
@@ -1408,16 +1408,16 @@ void generate_random_floor(void)
 		bool okay = TRUE;
 		concptr why = NULL;
 
-		clear_cave(current_floor_ptr);
+		clear_cave(floor_ptr);
 
 		if (p_ptr->inside_arena)
 		{
-			generate_challenge_arena(current_floor_ptr);
+			generate_challenge_arena(floor_ptr);
 		}
 
 		else if (p_ptr->phase_out)
 		{
-			generate_gambling_arena(current_floor_ptr);
+			generate_gambling_arena(floor_ptr);
 		}
 
 		else if (p_ptr->inside_quest)
@@ -1426,7 +1426,7 @@ void generate_random_floor(void)
 		}
 
 		/* Build the town */
-		else if (!current_floor_ptr->dun_level)
+		else if (!floor_ptr->dun_level)
 		{
 			/* Make the wilderness */
 			if (p_ptr->wild_mode) wilderness_gen_small();
@@ -1436,18 +1436,18 @@ void generate_random_floor(void)
 		/* Build a real level */
 		else
 		{
-			okay = level_gen(current_floor_ptr, &why);
+			okay = level_gen(floor_ptr, &why);
 		}
 
 
 		/* Prevent object over-flow */
-		if (current_floor_ptr->o_max >= current_floor_ptr->max_o_idx)
+		if (floor_ptr->o_max >= floor_ptr->max_o_idx)
 		{
 			why = _("アイテムが多すぎる", "too many objects");
 			okay = FALSE;
 		}
 		/* Prevent monster over-flow */
-		else if (current_floor_ptr->m_max >= current_floor_ptr->max_m_idx)
+		else if (floor_ptr->m_max >= floor_ptr->max_m_idx)
 		{
 			why = _("モンスターが多すぎる", "too many monsters");
 			okay = FALSE;
@@ -1463,12 +1463,12 @@ void generate_random_floor(void)
 	}
 
 	/* Glow deep lava and building entrances */
-	glow_deep_lava_and_bldg(current_floor_ptr);
+	glow_deep_lava_and_bldg(floor_ptr);
 
 	/* Reset flag */
 	p_ptr->enter_dungeon = FALSE;
 
-	wipe_generate_random_floor_flags(current_floor_ptr);
+	wipe_generate_random_floor_flags(floor_ptr);
 }
 
 /*!

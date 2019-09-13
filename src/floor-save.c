@@ -1116,7 +1116,7 @@ void change_floor(BIT_FLAGS floor_mode)
 	    !(floor_mode & CFM_FIRST_FLOOR))
 	{
 		/* Create current_floor_ptr->grid_array */
-		generate_random_floor();
+		generate_random_floor(current_floor_ptr);
 
 		/* Paranoia -- No new saved floor */
 		new_floor_id = 0;
@@ -1308,7 +1308,7 @@ void change_floor(BIT_FLAGS floor_mode)
 			else
 			{
 				/* Newly create current_floor_ptr->grid_array */
-				generate_random_floor();
+				generate_random_floor(current_floor_ptr);
 			}
 
 			/* Record last visit current_world_ptr->game_turn */
