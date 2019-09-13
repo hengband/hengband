@@ -424,7 +424,7 @@ extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUB
 extern bool can_get_item(OBJECT_TYPE_VALUE tval);
 extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 
-#define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID > 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
+#define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID >= 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
 
 extern int bow_tval_ammo(object_type *o_ptr);
 

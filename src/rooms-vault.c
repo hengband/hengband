@@ -37,7 +37,7 @@ VAULT_IDX max_v_idx;
 * Note: If two centers are on the same point then this algorithm will create a
 *       blank bubble filled with walls. - This is prevented from happening.
 */
-static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_bubble_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 #define BUBBLENUM 10		/* number of bubbles */
 
@@ -89,9 +89,9 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		int side_x = x0 - xhsize + i;
 
 		place_outer_noperm_bold(y0 - yhsize + 0, side_x);
-		current_floor_ptr->grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(y0 - yhsize + ysize - 1, side_x);
-		current_floor_ptr->grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
@@ -100,9 +100,9 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		int side_y = y0 - yhsize + i;
 
 		place_outer_noperm_bold(side_y, x0 - xhsize + 0);
-		current_floor_ptr->grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(side_y, x0 - xhsize + xsize - 1);
-		current_floor_ptr->grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Fill in middle with bubbles */
@@ -152,7 +152,7 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 			}
 
 			/* clean up rest of flags */
-			current_floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= (CAVE_ROOM | CAVE_ICKY);
+			floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= (CAVE_ROOM | CAVE_ICKY);
 		}
 	}
 
@@ -165,7 +165,7 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
+	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
@@ -1216,7 +1216,7 @@ bool build_type10(void)
 	switch (vtype)
 	{
 		/* Build an appropriate room */
-	case 1: case  9: build_bubble_vault(x0, y0, xsize, ysize); break;
+	case 1: case  9: build_bubble_vault(current_floor_ptr, x0, y0, xsize, ysize); break;
 	case 2: case 10: build_room_vault(x0, y0, xsize, ysize); break;
 	case 3: case 11: build_cave_vault(x0, y0, xsize, ysize); break;
 	case 4: case 12: build_maze_vault(x0, y0, xsize, ysize, TRUE); break;
