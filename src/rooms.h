@@ -9,6 +9,9 @@
  * are included in all such copies.  Other copyrights may also apply.<br
  */
 
+#pragma once
+#include "floor.h"
+
 #define ALLOW_CAVERNS_AND_LAKES
 
 #define DUN_ROOMS_MAX	40 /*!< 部屋生成処理の最大試行数 / Number of rooms to attempt (was 50) */
@@ -95,7 +98,7 @@ extern void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION 
 extern void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff);
 extern bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int cutoff, bool light, bool room);
-extern void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty);
+extern void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty);
 extern bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type);
 extern void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power);
 extern void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2);

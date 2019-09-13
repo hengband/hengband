@@ -1379,7 +1379,7 @@ void build_lake(int type)
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.
  */
-void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
+void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
 {
 	POSITION x, y, cx, cy, size;
 	s32b value;
@@ -1410,28 +1410,28 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				if (value < 0)
 				{
 					/* Meanest monster + treasure */
-					current_floor_ptr->monster_level = current_floor_ptr->base_level + 40;
+					floor_ptr->monster_level = floor_ptr->base_level + 40;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					current_floor_ptr->monster_level = current_floor_ptr->base_level;
-					current_floor_ptr->object_level = current_floor_ptr->base_level + 20;
+					floor_ptr->monster_level = floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level + 20;
 					place_object(y, x, AM_GOOD);
-					current_floor_ptr->object_level = current_floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level;
 				}
 				else if (value < 5)
 				{
 					/* Mean monster +treasure */
-					current_floor_ptr->monster_level = current_floor_ptr->base_level + 20;
+					floor_ptr->monster_level = floor_ptr->base_level + 20;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					current_floor_ptr->monster_level = current_floor_ptr->base_level;
-					current_floor_ptr->object_level = current_floor_ptr->base_level + 10;
+					floor_ptr->monster_level = floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level + 10;
 					place_object(y, x, AM_GOOD);
-					current_floor_ptr->object_level = current_floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level;
 				}
 				else if (value < 10)
 				{
-					current_floor_ptr->monster_level = current_floor_ptr->base_level + 9;
+					floor_ptr->monster_level = floor_ptr->base_level + 9;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					current_floor_ptr->monster_level = current_floor_ptr->base_level;
+					floor_ptr->monster_level = floor_ptr->base_level;
 				}
 				else if (value < 17)
 				{
@@ -1459,9 +1459,9 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 				else if (value < 30)
 				{
 					/* Monster and trap */
-					current_floor_ptr->monster_level = current_floor_ptr->base_level + 5;
+					floor_ptr->monster_level = floor_ptr->base_level + 5;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					current_floor_ptr->monster_level = current_floor_ptr->base_level;
+					floor_ptr->monster_level = floor_ptr->base_level;
 					place_trap(y, x);
 				}
 				else if (value < 40)
@@ -1469,15 +1469,15 @@ void fill_treasure(POSITION x1, POSITION x2, POSITION y1, POSITION y2, int diffi
 					/* Monster or object */
 					if (randint0(100) < 50)
 					{
-						current_floor_ptr->monster_level = current_floor_ptr->base_level + 3;
+						floor_ptr->monster_level = floor_ptr->base_level + 3;
 						place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-						current_floor_ptr->monster_level = current_floor_ptr->base_level;
+						floor_ptr->monster_level = floor_ptr->base_level;
 					}
 					if (randint0(100) < 50)
 					{
-						current_floor_ptr->object_level = current_floor_ptr->base_level + 7;
+						floor_ptr->object_level = floor_ptr->base_level + 7;
 						place_object(y, x, 0L);
-						current_floor_ptr->object_level = current_floor_ptr->base_level;
+						floor_ptr->object_level = floor_ptr->base_level;
 					}
 				}
 				else if (value < 50)
@@ -1746,7 +1746,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	r_visit(y1, x1, y2, x2, randint0(num_vertices), 0, visited);
 
 	/* Fill with monsters and treasure, low difficulty */
-	if (is_vault) fill_treasure(x1, x2, y1, y2, randint1(5));
+	if (is_vault) fill_treasure(current_floor_ptr, x1, x2, y1, y2, randint1(5));
 
 	C_KILL(visited, num_vertices, int);
 }

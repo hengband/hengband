@@ -165,7 +165,7 @@ static void build_bubble_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
+	fill_treasure(current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
@@ -213,7 +213,7 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 	}
 
 	/* Fill with monsters and treasure, high difficulty */
-	fill_treasure(x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5) + 5);
+	fill_treasure(current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5) + 5);
 }
 
 
@@ -264,7 +264,7 @@ static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION y
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(x0 - xhsize + 1, x0 - xhsize + xsize - 1, y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
+	fill_treasure(current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1, y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
 }
 
 
@@ -918,7 +918,7 @@ static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	add_door(x0, y0 - y);
 
 	/* Fill with stuff - medium difficulty */
-	fill_treasure(x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);
+	fill_treasure(current_floor_ptr, x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);
 }
 
 
@@ -1010,7 +1010,7 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(x0 - xhsize + 1, x0 - xhsize + xsize - 1,
+	fill_treasure(current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1,
 		y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
 }
 #endif /* ALLOW_CAVERNS_AND_LAKES */
@@ -1135,7 +1135,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	}
 
 	/* Fill with monsters and treasure, highest difficulty */
-	fill_treasure(x1, x2, y1, y2, 10);
+	fill_treasure(current_floor_ptr, x1, x2, y1, y2, 10);
 
 	C_KILL(visited, num_vertices, int);
 }
@@ -1178,7 +1178,7 @@ static void build_castle_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	build_recursive_room(x1, y1, x2, y2, randint1(5));
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(x1, x2, y1, y2, randint1(3));
+	fill_treasure(current_floor_ptr, x1, x2, y1, y2, randint1(3));
 }
 
 
