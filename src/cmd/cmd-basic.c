@@ -2598,7 +2598,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			hit_body = TRUE;
 
 			/* Did we hit it (penalize range) */
-			if (test_hit_fire(chance - cur_dis, m_ptr, m_ptr->ml, o_name))
+			if (test_hit_fire(creature_ptr, chance - cur_dis, m_ptr, m_ptr->ml, o_name))
 			{
 				bool fear = FALSE;
 

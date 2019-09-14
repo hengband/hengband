@@ -658,7 +658,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 				}
 
 				/* Did we hit it (penalize range) */
-				if (test_hit_fire(chance - cur_dis, m_ptr, m_ptr->ml, o_name))
+				if (test_hit_fire(shooter_ptr, chance - cur_dis, m_ptr, m_ptr->ml, o_name))
 				{
 					bool fear = FALSE;
 					int tdam = tdam_base;
@@ -903,7 +903,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 * @return 命中と判定された場合TRUEを返す
 * @note Always miss 5%, always hit 5%, otherwise random.
 */
-bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
+bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, int vis, char* o_name)
 {
 	int k;
 	ARMOUR_CLASS ac;
@@ -913,22 +913,22 @@ bool test_hit_fire(int chance, monster_type *m_ptr, int vis, char* o_name)
 	k = randint1(100);
 
 	/* Snipers with high-concentration reduce instant miss percentage.*/
-	k += p_ptr->concent;
+	k += shooter_ptr->concent;
 
 	/* Hack -- Instant miss or hit */
 	if (k <= 5) return (FALSE);
 	if (k > 95) return (TRUE);
 
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+	if (shooter_ptr->pseikaku == SEIKAKU_NAMAKE)
 		if (one_in_(20)) return (FALSE);
 
 	/* Never hit */
 	if (chance <= 0) return (FALSE);
 
 	ac = r_ptr->ac;
-	if (p_ptr->concent)
+	if (shooter_ptr->concent)
 	{
-		ac *= (8 - p_ptr->concent);
+		ac *= (8 - shooter_ptr->concent);
 		ac /= 8;
 	}
 
