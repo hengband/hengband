@@ -575,7 +575,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				g_ptr->info |= (CAVE_GLOW);
 				note_spot(y, x);
 				lite_spot(y, x);
-				update_local_illumination(y, x);
+				update_local_illumination(p_ptr, y, x);
 
 				/* Observe */
 				if (player_can_see_bold(y, x)) obvious = TRUE;
@@ -638,7 +638,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 				lite_spot(y, x);
 
-				update_local_illumination(y, x);
+				update_local_illumination(p_ptr, y, x);
 
 				if (player_can_see_bold(y, x)) obvious = TRUE;
 

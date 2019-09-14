@@ -1489,7 +1489,7 @@ static void cave_temp_room_lite(void)
 
 		note_spot(y, x);
 		lite_spot(y, x);
-		update_local_illumination(y, x);
+		update_local_illumination(p_ptr, y, x);
 	}
 
 	/* None left */
@@ -1569,7 +1569,7 @@ static void cave_temp_room_unlite(void)
 			}
 
 			lite_spot(y, x);
-			update_local_illumination(y, x);
+			update_local_illumination(p_ptr, y, x);
 		}
 	}
 

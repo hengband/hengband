@@ -1011,11 +1011,12 @@ bool check_local_illumination(POSITION y, POSITION x)
 
 /*!
  * @brief 指定された座標の照明状態を更新する / Update "local" illumination
- * @param y y座標
- * @param x x座標
+ * @param creature_ptr 視界元のクリーチャー
+ * @param y 視界先y座標
+ * @param x 視界先x座標
  * @return なし
  */
-void update_local_illumination(POSITION y, POSITION x)
+void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION x)
 {
 	int i;
 	POSITION yy, xx;
@@ -1024,17 +1025,17 @@ void update_local_illumination(POSITION y, POSITION x)
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
-	if ((y != p_ptr->y) && (x != p_ptr->x))
+	if ((y != creature_ptr->y) && (x != creature_ptr->x))
 	{
-		yy = (y < p_ptr->y) ? (y - 1) : (y + 1);
-		xx = (x < p_ptr->x) ? (x - 1) : (x + 1);
+		yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
+		xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
 		update_local_illumination_aux(yy, xx);
 		update_local_illumination_aux(y, xx);
 		update_local_illumination_aux(yy, x);
 	}
-	else if (x != p_ptr->x) /* y == p_ptr->y */
+	else if (x != creature_ptr->x) /* y == creature_ptr->y */
 	{
-		xx = (x < p_ptr->x) ? (x - 1) : (x + 1);
+		xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
 		for (i = -1; i <= 1; i++)
 		{
 			yy = y + i;
@@ -1045,9 +1046,9 @@ void update_local_illumination(POSITION y, POSITION x)
 		yy = y + 1;
 		update_local_illumination_aux(yy, x);
 	}
-	else if (y != p_ptr->y) /* x == p_ptr->x */
+	else if (y != creature_ptr->y) /* x == creature_ptr->x */
 	{
-		yy = (y < p_ptr->y) ? (y - 1) : (y + 1);
+		yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
 		for (i = -1; i <= 1; i++)
 		{
 			xx = x + i;
@@ -1070,24 +1071,24 @@ void update_local_illumination(POSITION y, POSITION x)
 
 #else /* COMPLEX_WALL_ILLUMINATION */
 
-	if ((y != p_ptr->y) && (x != p_ptr->x))
+	if ((y != creature_ptr->y) && (x != creature_ptr->x))
 	{
-		yy = (y < p_ptr->y) ? (y - 1) : (y + 1);
-		xx = (x < p_ptr->x) ? (x - 1) : (x + 1);
+		yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
+		xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
 		update_local_illumination_aux(yy, xx);
 	}
-	else if (x != p_ptr->x) /* y == p_ptr->y */
+	else if (x != creature_ptr->x) /* y == creature_ptr->y */
 	{
-		xx = (x < p_ptr->x) ? (x - 1) : (x + 1);
+		xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
 		for (i = -1; i <= 1; i++)
 		{
 			yy = y + i;
 			update_local_illumination_aux(yy, xx);
 		}
 	}
-	else if (y != p_ptr->y) /* x == p_ptr->x */
+	else if (y != creature_ptr->y) /* x == creature_ptr->x */
 	{
-		yy = (y < p_ptr->y) ? (y - 1) : (y + 1);
+		yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
 		for (i = -1; i <= 1; i++)
 		{
 			xx = x + i;
@@ -1915,7 +1916,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 		g_ptr->info &= ~(CAVE_GLOW);
 		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
 
-		update_local_illumination(y, x);
+		update_local_illumination(p_ptr, y, x);
 	}
 
 	/* Check for change to boring grid */
@@ -1931,7 +1932,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
-		update_local_illumination(y, x);
+		update_local_illumination(p_ptr, y, x);
 
 #endif /* COMPLEX_WALL_ILLUMINATION */
 
@@ -1963,7 +1964,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 				lite_spot(yy, xx);
 			}
 
-			update_local_illumination(yy, xx);
+			update_local_illumination(p_ptr, yy, xx);
 		}
 
 		if (p_ptr->special_defense & NINJA_S_STEALTH)
@@ -2097,7 +2098,7 @@ void remove_mirror(POSITION y, POSITION x)
 		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
 		if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
 
-		update_local_illumination(y, x);
+		update_local_illumination(p_ptr, y, x);
 	}
 
 	note_spot(y, x);

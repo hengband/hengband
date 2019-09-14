@@ -41,6 +41,9 @@
   * Note the special fields for the "MONSTER_FLOW" code.
   */
 
+typedef struct player_type player_type;
+
+
 typedef struct grid_type grid_type;
 
 struct grid_type
@@ -395,7 +398,7 @@ extern bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode);
 /* grids.c */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern void update_local_illumination(POSITION y, POSITION x);
+extern void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
 extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool cave_valid_bold(POSITION y, POSITION x);
 extern bool no_lite(void);

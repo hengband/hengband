@@ -253,7 +253,7 @@ bool place_mirror(void)
 
 	note_spot(p_ptr->y, p_ptr->x);
 	lite_spot(p_ptr->y, p_ptr->x);
-	update_local_illumination(p_ptr->y, p_ptr->x);
+	update_local_illumination(p_ptr, p_ptr->y, p_ptr->x);
 
 	return TRUE;
 }
