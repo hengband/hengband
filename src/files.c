@@ -3540,7 +3540,7 @@ put_str("ＭＰ  :", 8, 1);
  * No mod, no sustain, will be a slate '.'
  * </pre>
  */
-static void display_player_stat_info(void)
+static void display_player_stat_info(player_type *creature_ptr)
 {
 	int i, e_adj;
 	int stat_col, stat;
@@ -3573,37 +3573,37 @@ static void display_player_stat_info(void)
 	{
 		int r_adj;
 
-		if (p_ptr->mimic_form) r_adj = mimic_info[p_ptr->mimic_form].r_adj[i];
+		if (creature_ptr->mimic_form) r_adj = mimic_info[creature_ptr->mimic_form].r_adj[i];
 		else r_adj = rp_ptr->r_adj[i];
 
 		/* Calculate equipment adjustment */
 		e_adj = 0;
 
 		/* Icky formula to deal with the 18 barrier */
-		if ((p_ptr->stat_max[i] > 18) && (p_ptr->stat_top[i] > 18))
-			e_adj = (p_ptr->stat_top[i] - p_ptr->stat_max[i]) / 10;
-		if ((p_ptr->stat_max[i] <= 18) && (p_ptr->stat_top[i] <= 18))
-			e_adj = p_ptr->stat_top[i] - p_ptr->stat_max[i];
-		if ((p_ptr->stat_max[i] <= 18) && (p_ptr->stat_top[i] > 18))
-			e_adj = (p_ptr->stat_top[i] - 18) / 10 - p_ptr->stat_max[i] + 18;
+		if ((creature_ptr->stat_max[i] > 18) && (creature_ptr->stat_top[i] > 18))
+			e_adj = (creature_ptr->stat_top[i] - creature_ptr->stat_max[i]) / 10;
+		if ((creature_ptr->stat_max[i] <= 18) && (creature_ptr->stat_top[i] <= 18))
+			e_adj = creature_ptr->stat_top[i] - creature_ptr->stat_max[i];
+		if ((creature_ptr->stat_max[i] <= 18) && (creature_ptr->stat_top[i] > 18))
+			e_adj = (creature_ptr->stat_top[i] - 18) / 10 - creature_ptr->stat_max[i] + 18;
 
-		if ((p_ptr->stat_max[i] > 18) && (p_ptr->stat_top[i] <= 18))
-			e_adj = p_ptr->stat_top[i] - (p_ptr->stat_max[i] - 19) / 10 - 19;
+		if ((creature_ptr->stat_max[i] > 18) && (creature_ptr->stat_top[i] <= 18))
+			e_adj = creature_ptr->stat_top[i] - (creature_ptr->stat_max[i] - 19) / 10 - 19;
 
-		if (PRACE_IS_(p_ptr, RACE_ENT))
+		if (PRACE_IS_(creature_ptr, RACE_ENT))
 		{
 			switch (i)
 			{
 				case A_STR:
 				case A_CON:
-					if (p_ptr->lev > 25) r_adj++;
-					if (p_ptr->lev > 40) r_adj++;
-					if (p_ptr->lev > 45) r_adj++;
+					if (creature_ptr->lev > 25) r_adj++;
+					if (creature_ptr->lev > 40) r_adj++;
+					if (creature_ptr->lev > 45) r_adj++;
 					break;
 				case A_DEX:
-					if (p_ptr->lev > 25) r_adj--;
-					if (p_ptr->lev > 40) r_adj--;
-					if (p_ptr->lev > 45) r_adj--;
+					if (creature_ptr->lev > 25) r_adj--;
+					if (creature_ptr->lev > 40) r_adj--;
+					if (creature_ptr->lev > 45) r_adj--;
 					break;
 			}
 		}
@@ -3612,7 +3612,7 @@ static void display_player_stat_info(void)
 		e_adj -= cp_ptr->c_adj[i];
 		e_adj -= ap_ptr->a_adj[i];
 
-		if (p_ptr->stat_cur[i] < p_ptr->stat_max[i])
+		if (creature_ptr->stat_cur[i] < creature_ptr->stat_max[i])
 			/* Reduced name of stat */
 			c_put_str(TERM_WHITE, stat_names_reduced[i], row + i+1, stat_col+1);
 		else
@@ -3621,8 +3621,8 @@ static void display_player_stat_info(void)
 
 		/* Internal "natural" max value.  Maxes at 18/100 */
 		/* This is useful to see if you are maxed out */
-		cnv_stat(p_ptr->stat_max[i], buf);
-		if (p_ptr->stat_max[i] == p_ptr->stat_max_max[i])
+		cnv_stat(creature_ptr->stat_max[i], buf);
+		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
 		{
 			c_put_str(TERM_WHITE, "!", row + i+1, _(stat_col + 6, stat_col + 4));
 		}
@@ -3639,13 +3639,13 @@ static void display_player_stat_info(void)
 		c_put_str(TERM_L_BLUE, buf, row + i+1, stat_col + 22);
 
 		/* Actual maximal modified value */
-		cnv_stat(p_ptr->stat_top[i], buf);
+		cnv_stat(creature_ptr->stat_top[i], buf);
 		c_put_str(TERM_L_GREEN, buf, row + i+1, stat_col + 26);
 
 		/* Only display stat_use if not maximal */
-		if (p_ptr->stat_use[i] < p_ptr->stat_top[i])
+		if (creature_ptr->stat_use[i] < creature_ptr->stat_top[i])
 		{
-			cnv_stat(p_ptr->stat_use[i], buf);
+			cnv_stat(creature_ptr->stat_use[i], buf);
 			c_put_str(TERM_YELLOW, buf, row + i+1, stat_col + 33);
 		}
 	}
@@ -3660,7 +3660,7 @@ static void display_player_stat_info(void)
 	/* Process equipment */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 
 		/* Acquire "known" flags */
 		object_flags_known(o_ptr, flgs);
@@ -3732,43 +3732,43 @@ static void display_player_stat_info(void)
 		c = '.';
 
 		/* Mutations ... */
-		if (p_ptr->muta3 || p_ptr->tsuyoshi)
+		if (creature_ptr->muta3 || creature_ptr->tsuyoshi)
 		{
 			int dummy = 0;
 
 			if (stat == A_STR)
 			{
-				if (p_ptr->muta3 & MUT3_HYPER_STR) dummy += 4;
-				if (p_ptr->muta3 & MUT3_PUNY) dummy -= 4;
-				if (p_ptr->tsuyoshi) dummy += 4;
+				if (creature_ptr->muta3 & MUT3_HYPER_STR) dummy += 4;
+				if (creature_ptr->muta3 & MUT3_PUNY) dummy -= 4;
+				if (creature_ptr->tsuyoshi) dummy += 4;
 			}
 			else if (stat == A_WIS || stat == A_INT)
 			{
-				if (p_ptr->muta3 & MUT3_HYPER_INT) dummy += 4;
-				if (p_ptr->muta3 & MUT3_MORONIC) dummy -= 4;
+				if (creature_ptr->muta3 & MUT3_HYPER_INT) dummy += 4;
+				if (creature_ptr->muta3 & MUT3_MORONIC) dummy -= 4;
 			}
 			else if (stat == A_DEX)
 			{
-				if (p_ptr->muta3 & MUT3_IRON_SKIN) dummy -= 1;
-				if (p_ptr->muta3 & MUT3_LIMBER) dummy += 3;
-				if (p_ptr->muta3 & MUT3_ARTHRITIS) dummy -= 3;
+				if (creature_ptr->muta3 & MUT3_IRON_SKIN) dummy -= 1;
+				if (creature_ptr->muta3 & MUT3_LIMBER) dummy += 3;
+				if (creature_ptr->muta3 & MUT3_ARTHRITIS) dummy -= 3;
 			}
 			else if (stat == A_CON)
 			{
-				if (p_ptr->muta3 & MUT3_RESILIENT) dummy += 4;
-				if (p_ptr->muta3 & MUT3_XTRA_FAT) dummy += 2;
-				if (p_ptr->muta3 & MUT3_ALBINO) dummy -= 4;
-				if (p_ptr->muta3 & MUT3_FLESH_ROT) dummy -= 2;
-				if (p_ptr->tsuyoshi) dummy += 4;
+				if (creature_ptr->muta3 & MUT3_RESILIENT) dummy += 4;
+				if (creature_ptr->muta3 & MUT3_XTRA_FAT) dummy += 2;
+				if (creature_ptr->muta3 & MUT3_ALBINO) dummy -= 4;
+				if (creature_ptr->muta3 & MUT3_FLESH_ROT) dummy -= 2;
+				if (creature_ptr->tsuyoshi) dummy += 4;
 			}
 			else if (stat == A_CHR)
 			{
-				if (p_ptr->muta3 & MUT3_SILLY_VOI) dummy -= 4;
-				if (p_ptr->muta3 & MUT3_BLANK_FAC) dummy -= 1;
-				if (p_ptr->muta3 & MUT3_FLESH_ROT) dummy -= 1;
-				if (p_ptr->muta3 & MUT3_SCALES) dummy -= 1;
-				if (p_ptr->muta3 & MUT3_WART_SKIN) dummy -= 2;
-				if (p_ptr->muta3 & MUT3_ILL_NORM) dummy = 0;
+				if (creature_ptr->muta3 & MUT3_SILLY_VOI) dummy -= 4;
+				if (creature_ptr->muta3 & MUT3_BLANK_FAC) dummy -= 1;
+				if (creature_ptr->muta3 & MUT3_FLESH_ROT) dummy -= 1;
+				if (creature_ptr->muta3 & MUT3_SCALES) dummy -= 1;
+				if (creature_ptr->muta3 & MUT3_WART_SKIN) dummy -= 2;
+				if (creature_ptr->muta3 & MUT3_ILL_NORM) dummy = 0;
 			}
 
 			/* Boost */
@@ -4057,7 +4057,7 @@ void display_player(player_type *creature_ptr, int mode)
 
 		/* Dump the info */
 		display_player_misc_info();
-		display_player_stat_info();
+		display_player_stat_info(creature_ptr);
 		display_player_flag_info();
 	}
 
