@@ -2710,59 +2710,59 @@ static void player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void tim_player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
+static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
-	if (IS_HERO() || p_ptr->shero)
+	if (IS_HERO() || creature_ptr->shero)
 		add_flag(flgs, TR_RES_FEAR);
-	if (p_ptr->tim_invis)
+	if (creature_ptr->tim_invis)
 		add_flag(flgs, TR_SEE_INVIS);
-	if (p_ptr->tim_regen)
+	if (creature_ptr->tim_regen)
 		add_flag(flgs, TR_REGEN);
 	if (IS_TIM_ESP())
 		add_flag(flgs, TR_TELEPATHY);
-	if (IS_FAST() || p_ptr->slow)
+	if (IS_FAST() || creature_ptr->slow)
 		add_flag(flgs, TR_SPEED);
 
-	if (IS_OPPOSE_ACID() && !(p_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(p_ptr, RACE_YEEK) && (p_ptr->lev > 19)))
+	if (IS_OPPOSE_ACID() && !(creature_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(creature_ptr, RACE_YEEK) && (creature_ptr->lev > 19)))
 		add_flag(flgs, TR_RES_ACID);
-	if (IS_OPPOSE_ELEC() && !(p_ptr->special_defense & DEFENSE_ELEC))
+	if (IS_OPPOSE_ELEC() && !(creature_ptr->special_defense & DEFENSE_ELEC))
 		add_flag(flgs, TR_RES_ELEC);
-	if (IS_OPPOSE_FIRE() && !(p_ptr->special_defense & DEFENSE_FIRE))
+	if (IS_OPPOSE_FIRE() && !(creature_ptr->special_defense & DEFENSE_FIRE))
 		add_flag(flgs, TR_RES_FIRE);
-	if (IS_OPPOSE_COLD() && !(p_ptr->special_defense & DEFENSE_COLD))
+	if (IS_OPPOSE_COLD() && !(creature_ptr->special_defense & DEFENSE_COLD))
 		add_flag(flgs, TR_RES_COLD);
 	if (IS_OPPOSE_POIS())
 		add_flag(flgs, TR_RES_POIS);
 
-	if (p_ptr->special_attack & ATTACK_ACID)
+	if (creature_ptr->special_attack & ATTACK_ACID)
 		add_flag(flgs, TR_BRAND_ACID);
-	if (p_ptr->special_attack & ATTACK_ELEC)
+	if (creature_ptr->special_attack & ATTACK_ELEC)
 		add_flag(flgs, TR_BRAND_ELEC);
-	if (p_ptr->special_attack & ATTACK_FIRE)
+	if (creature_ptr->special_attack & ATTACK_FIRE)
 		add_flag(flgs, TR_BRAND_FIRE);
-	if (p_ptr->special_attack & ATTACK_COLD)
+	if (creature_ptr->special_attack & ATTACK_COLD)
 		add_flag(flgs, TR_BRAND_COLD);
-	if (p_ptr->special_attack & ATTACK_POIS)
+	if (creature_ptr->special_attack & ATTACK_POIS)
 		add_flag(flgs, TR_BRAND_POIS);
-	if (p_ptr->special_defense & DEFENSE_ACID)
+	if (creature_ptr->special_defense & DEFENSE_ACID)
 		add_flag(flgs, TR_IM_ACID);
-	if (p_ptr->special_defense & DEFENSE_ELEC)
+	if (creature_ptr->special_defense & DEFENSE_ELEC)
 		add_flag(flgs, TR_IM_ELEC);
-	if (p_ptr->special_defense & DEFENSE_FIRE)
+	if (creature_ptr->special_defense & DEFENSE_FIRE)
 		add_flag(flgs, TR_IM_FIRE);
-	if (p_ptr->special_defense & DEFENSE_COLD)
+	if (creature_ptr->special_defense & DEFENSE_COLD)
 		add_flag(flgs, TR_IM_COLD);
-	if (p_ptr->wraith_form)
+	if (creature_ptr->wraith_form)
 		add_flag(flgs, TR_REFLECT);
 	/* by henkma */
-	if (p_ptr->tim_reflect)
+	if (creature_ptr->tim_reflect)
 		add_flag(flgs, TR_REFLECT);
 
-	if (p_ptr->magicdef)
+	if (creature_ptr->magicdef)
 	{
 		add_flag(flgs, TR_RES_BLIND);
 		add_flag(flgs, TR_RES_CONF);
@@ -2770,15 +2770,15 @@ static void tim_player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 		add_flag(flgs, TR_FREE_ACT);
 		add_flag(flgs, TR_LEVITATION);
 	}
-	if (p_ptr->tim_res_nether)
+	if (creature_ptr->tim_res_nether)
 	{
 		add_flag(flgs, TR_RES_NETHER);
 	}
-	if (p_ptr->tim_sh_fire)
+	if (creature_ptr->tim_sh_fire)
 	{
 		add_flag(flgs, TR_SH_FIRE);
 	}
-	if (p_ptr->ult_res)
+	if (creature_ptr->ult_res)
 	{
 		add_flag(flgs, TR_RES_FEAR);
 		add_flag(flgs, TR_RES_LITE);
@@ -2812,7 +2812,7 @@ static void tim_player_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
 	}
 
 	/* Hex bonuses */
-	if (p_ptr->realm1 == REALM_HEX)
+	if (creature_ptr->realm1 == REALM_HEX)
 	{
 		if (hex_spelling(HEX_DEMON_AURA))
 		{
@@ -3157,7 +3157,7 @@ static void display_player_flag_info(void)
 
 	/* Extract flags and store */
 	player_flags(f.player_flags);
-	tim_player_flags(f.tim_player_flags);
+	tim_player_flags(p_ptr, f.tim_player_flags);
 	player_immunity(f.player_imm);
 	tim_player_immunity(f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
@@ -3288,7 +3288,7 @@ static void display_player_other_flag_info(void)
 
 	/* Extract flags and store */
 	player_flags(f.player_flags);
-	tim_player_flags(f.tim_player_flags);
+	tim_player_flags(p_ptr, f.tim_player_flags);
 	player_immunity(f.player_imm);
 	tim_player_immunity(f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
