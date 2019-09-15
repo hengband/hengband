@@ -5940,7 +5940,7 @@ void do_cmd_store(void)
 		if (st_ptr->store_open >= current_world_ptr->game_turn) leave_store = TRUE;
 	}
 
-	select_floor_music();
+	select_floor_music(p_ptr);
 
 	p_ptr->town_num = old_town_num;
 

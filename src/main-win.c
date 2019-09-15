@@ -2355,7 +2355,7 @@ static errr Term_xtra_win_react(void)
 		use_music = arg_music;
 
 		if(!arg_music) stop_music();
-		else select_floor_music();
+		else select_floor_music(p_ptr);
 
 	}
 

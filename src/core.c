@@ -5505,7 +5505,7 @@ void play_game(bool new_game)
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 		init_flags = INIT_ONLY_BUILDINGS;
 		process_dungeon_file("t_info.txt", 0, 0, MAX_HGT, MAX_WID);
-		select_floor_music();
+		select_floor_music(p_ptr);
 	}
 
 	/* Generate a dungeon level if needed */
@@ -5599,7 +5599,7 @@ void play_game(bool new_game)
 	(void)combine_and_reorder_home(STORE_HOME);
 	(void)combine_and_reorder_home(STORE_MUSEUM);
 
-	select_floor_music();
+	select_floor_music(p_ptr);
 
 	/* Process */
 	while (TRUE)

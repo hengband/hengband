@@ -4197,7 +4197,7 @@ void do_cmd_bldg(void)
 		handle_stuff();
 	}
 
-	select_floor_music();
+	select_floor_music(p_ptr);
 
 	msg_flag = FALSE;
 	msg_erase();

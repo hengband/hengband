@@ -1798,49 +1798,49 @@ errr play_music(int type, int val)
 /*
  * Hack -- Select floor music.
  */
-void select_floor_music(void)
+void select_floor_music(player_type *player_ptr)
 {
 	if (!use_music) return;
 
-	if (p_ptr->ambush_flag)
+	if (player_ptr->ambush_flag)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_AMBUSH)) return;
 	} 
 
-	if(p_ptr->wild_mode)
+	if(player_ptr->wild_mode)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WILD)) return;
 	}
 
-	if(p_ptr->inside_arena)
+	if(player_ptr->inside_arena)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_ARENA)) return;
 	}
 
-	if(p_ptr->phase_out)
+	if(player_ptr->phase_out)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BATTLE)) return;
 	}
 
-	if(p_ptr->inside_quest)
+	if(player_ptr->inside_quest)
 	{
-		if (!play_music(TERM_XTRA_MUSIC_QUEST, p_ptr->inside_quest)) return;
+		if (!play_music(TERM_XTRA_MUSIC_QUEST, player_ptr->inside_quest)) return;
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST)) return;
 	}
 
-	if(p_ptr->dungeon_idx)
+	if(player_ptr->dungeon_idx)
 	{
-		if (p_ptr->feeling == 2)
+		if (player_ptr->feeling == 2)
 		{
 			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL2)) return;
 		}
-		else if (p_ptr->feeling >= 3 && p_ptr->feeling <= 5)
+		else if (player_ptr->feeling >= 3 && player_ptr->feeling <= 5)
 		{
 			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_FEEL1)) return;
 		}
 		else
 		{
-			if (!play_music(TERM_XTRA_MUSIC_DUNGEON, p_ptr->dungeon_idx)) return;
+			if (!play_music(TERM_XTRA_MUSIC_DUNGEON, player_ptr->dungeon_idx)) return;
 
 			if (current_floor_ptr->dun_level < 40)
 			{
@@ -1857,20 +1857,20 @@ void select_floor_music(void)
 		}
 	}
 
-	if(p_ptr->town_num)
+	if(player_ptr->town_num)
 	{
-		if (!play_music(TERM_XTRA_MUSIC_TOWN, p_ptr->town_num)) return;
+		if (!play_music(TERM_XTRA_MUSIC_TOWN, player_ptr->town_num)) return;
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_TOWN)) return;
 		return;
 	}
 
 	if(!current_floor_ptr->dun_level)
 	{
-		if (p_ptr->lev >= 45)
+		if (player_ptr->lev >= 45)
 		{
 			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD3)) return;
 		}
-		else if (p_ptr->lev >= 25)
+		else if (player_ptr->lev >= 25)
 		{
 			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD2)) return;
 		}

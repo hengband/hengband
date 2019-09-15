@@ -316,7 +316,7 @@ void update_dungeon_feeling(floor_type *floor_ptr)
 	/* Announce feeling */
 	do_cmd_feeling(p_ptr);
 
-	select_floor_music();
+	select_floor_music(p_ptr);
 
 	/* Update the level indicator */
 	p_ptr->redraw |= (PR_DEPTH);

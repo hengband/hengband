@@ -1404,6 +1404,6 @@ void change_floor(BIT_FLAGS floor_mode)
 	/* Clear all flags */
 	floor_mode = 0L;
 
-	select_floor_music();
+	select_floor_music(p_ptr);
 	p_ptr->change_floor_mode = 0;
 }

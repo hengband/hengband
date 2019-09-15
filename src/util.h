@@ -379,7 +379,7 @@ extern errr fd_close(int fd);
 extern void flush(void);
 extern void bell(void);
 extern errr play_music(int type, int num);
-extern void select_floor_music(void);
+extern void select_floor_music(player_type *player_ptr);
 extern void sound(int num);
 extern void move_cursor(int row, int col);
 extern void text_to_ascii(char *buf, concptr str);
