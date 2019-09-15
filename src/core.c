@@ -263,10 +263,10 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
  *   Class 4 = Ranger  --> slow but heavy  (changed!)\n
  *   Class 5 = Paladin --> slow but heavy\n
  */
-static void sense_inventory1(void)
+static void sense_inventory1(player_type *creature_ptr)
 {
 	INVENTORY_IDX i;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = creature_ptr->lev;
 	bool heavy = FALSE;
 	object_type *o_ptr;
 
@@ -274,10 +274,10 @@ static void sense_inventory1(void)
 	/*** Check for "sensing" ***/
 
 	/* No sensing when confused */
-	if (p_ptr->confused) return;
+	if (creature_ptr->confused) return;
 
 	/* Analyze the class */
-	switch (p_ptr->pclass)
+	switch (creature_ptr->pclass)
 	{
 		case CLASS_WARRIOR:
 		case CLASS_ARCHER:
@@ -426,7 +426,7 @@ static void sense_inventory1(void)
 		}
 	}
 
-	if (compare_virtue(p_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE)) heavy = TRUE;
+	if (compare_virtue(creature_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE)) heavy = TRUE;
 
 	/*** Sense everything ***/
 
@@ -435,7 +435,7 @@ static void sense_inventory1(void)
 	{
 		bool okay = FALSE;
 
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
@@ -470,11 +470,11 @@ static void sense_inventory1(void)
 		/* Skip non-sense machines */
 		if (!okay) continue;
 
-		/* Occasional failure on p_ptr->inventory_list items */
+		/* Occasional failure on creature_ptr->inventory_list items */
 		if ((i < INVEN_RARM) && (0 != randint0(5))) continue;
 
 		/* Good luck */
-		if ((p_ptr->muta3 & MUT3_GOOD_LUCK) && !randint0(13))
+		if ((creature_ptr->muta3 & MUT3_GOOD_LUCK) && !randint0(13))
 		{
 			heavy = TRUE;
 		}
@@ -3361,7 +3361,7 @@ static void process_world(void)
 	process_world_aux_mutation(p_ptr);
 	process_world_aux_curse(p_ptr);
 	process_world_aux_recharge(p_ptr);
-	sense_inventory1();
+	sense_inventory1(p_ptr);
 	sense_inventory2(p_ptr);
 	process_world_aux_movement(p_ptr);
 }
