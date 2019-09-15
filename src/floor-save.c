@@ -537,10 +537,10 @@ void precalc_cur_num_of_pet(void)
  * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
  * @return なし
  */
-static void place_pet(void)
+static void place_pet(player_type *master_ptr)
 {
 	int i;
-	int max_num = p_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+	int max_num = master_ptr->wild_mode ? 1 : MAX_PARTY_MON;
 
 	for (i = 0; i < max_num; i++)
 	{
@@ -552,11 +552,11 @@ static void place_pet(void)
 		if (i == 0)
 		{
 			m_idx = m_pop();
-			p_ptr->riding = m_idx;
+			master_ptr->riding = m_idx;
 			if (m_idx)
 			{
-				cy = p_ptr->y;
-				cx = p_ptr->x;
+				cy = master_ptr->y;
+				cx = master_ptr->x;
 			}
 		}
 		else
@@ -568,7 +568,7 @@ static void place_pet(void)
 			{
 				for (j = 1000; j > 0; j--)
 				{
-					scatter(&cy, &cx, p_ptr->y, p_ptr->x, d, 0);
+					scatter(&cy, &cx, master_ptr->y, master_ptr->x, d, 0);
 					if (monster_can_enter(cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
 				}
 				if (j) break;
@@ -625,7 +625,7 @@ static void place_pet(void)
 			if (record_named_pet && m_ptr->nickname)
 			{
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
+				exe_write_diary(master_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
 			}
 
 			/* Pre-calculated in precalc_cur_num_of_pet(), but need to decrease */
@@ -1376,7 +1376,7 @@ void change_floor(BIT_FLAGS floor_mode)
 	}
 
 	/* Place preserved pet monsters */
-	place_pet();
+	place_pet(p_ptr);
 
 	/* Reset travel target place */
 	forget_travel_flow();
