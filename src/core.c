@@ -4267,7 +4267,7 @@ static void process_command(void)
 #ifdef TRAVEL
 		case '`':
 		{
-			if (!p_ptr->wild_mode) do_cmd_travel();
+			if (!p_ptr->wild_mode) do_cmd_travel(p_ptr);
 			if (p_ptr->special_defense & KATA_MUSOU)
 			{
 				set_action(p_ptr, ACTION_NONE);

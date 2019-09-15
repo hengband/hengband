@@ -2212,7 +2212,7 @@ static void travel_flow(POSITION ty, POSITION tx)
  * @brief トラベル処理のメインルーチン
  * @return なし
  */
-void do_cmd_travel(void)
+void do_cmd_travel(player_type *creature_ptr)
 {
 	POSITION x, y;
 	int i;
@@ -2227,7 +2227,7 @@ void do_cmd_travel(void)
 	}
 	else if (!tgt_pt(&x, &y)) return;
 
-	if ((x == p_ptr->x) && (y == p_ptr->y))
+	if ((x == creature_ptr->x) && (y == creature_ptr->y))
 	{
 		msg_print(_("すでにそこにいます！", "You are already there!!"));
 		return;
@@ -2255,10 +2255,10 @@ void do_cmd_travel(void)
 	travel.dir = 0;
 
 	/* Decides first direction */
-	dx = abs(p_ptr->x - x);
-	dy = abs(p_ptr->y - y);
-	sx = ((x == p_ptr->x) || (dx < dy)) ? 0 : ((x > p_ptr->x) ? 1 : -1);
-	sy = ((y == p_ptr->y) || (dy < dx)) ? 0 : ((y > p_ptr->y) ? 1 : -1);
+	dx = abs(creature_ptr->x - x);
+	dy = abs(creature_ptr->y - y);
+	sx = ((x == creature_ptr->x) || (dx < dy)) ? 0 : ((x > creature_ptr->x) ? 1 : -1);
+	sy = ((y == creature_ptr->y) || (dy < dx)) ? 0 : ((y > creature_ptr->y) ? 1 : -1);
 
 	for (i = 1; i <= 9; i++)
 	{

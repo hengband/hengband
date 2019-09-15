@@ -26,7 +26,7 @@ extern bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat);
 extern void search(player_type *creature_ptr);
 extern void carry(bool pickup);
 #ifdef TRAVEL
-extern void do_cmd_travel(void);
+extern void do_cmd_travel(player_type *creature_ptr);
 extern void travel_step(void);
 #endif
 
