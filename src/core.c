@@ -487,20 +487,20 @@ static void sense_inventory1(void)
  * @brief 1プレイヤーターン毎に武器、防具以外の擬似鑑定が行われるかを判定する。
  * @return なし
  */
-static void sense_inventory2(void)
+static void sense_inventory2(player_type *creature_ptr)
 {
 	INVENTORY_IDX i;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = creature_ptr->lev;
 	object_type *o_ptr;
 
 
 	/*** Check for "sensing" ***/
 
 	/* No sensing when confused */
-	if (p_ptr->confused) return;
+	if (creature_ptr->confused) return;
 
 	/* Analyze the class */
-	switch (p_ptr->pclass)
+	switch (creature_ptr->pclass)
 	{
 		case CLASS_WARRIOR:
 		case CLASS_ARCHER:
@@ -577,7 +577,7 @@ static void sense_inventory2(void)
 	{
 		bool okay = FALSE;
 
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
@@ -598,7 +598,7 @@ static void sense_inventory2(void)
 		/* Skip non-sense machines */
 		if (!okay) continue;
 
-		/* Occasional failure on p_ptr->inventory_list items */
+		/* Occasional failure on creature_ptr->inventory_list items */
 		if ((i < INVEN_RARM) && (0 != randint0(5))) continue;
 
 		sense_inventory_aux(i, TRUE);
@@ -3362,7 +3362,7 @@ static void process_world(void)
 	process_world_aux_curse(p_ptr);
 	process_world_aux_recharge(p_ptr);
 	sense_inventory1();
-	sense_inventory2();
+	sense_inventory2(p_ptr);
 	process_world_aux_movement(p_ptr);
 }
 
