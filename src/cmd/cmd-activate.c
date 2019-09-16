@@ -1742,7 +1742,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 			if (one_in_(2))
 			{
 				msg_print(_("村正は壊れた！", "The Muramasa is destroyed!"));
-				curse_weapon_object(TRUE, o_ptr);
+				curse_weapon_object(user_ptr, TRUE, o_ptr);
 			}
 		}
 		break;

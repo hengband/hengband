@@ -662,11 +662,12 @@ bool curse_armor(player_type *owner_ptr)
 /*!
  * @brief 武器呪縛処理 /
  * Curse the players weapon
+ * @param owner_ptr 所持者の参照ポインタ
  * @param force 無条件に呪縛を行うならばTRUE
  * @param o_ptr 呪縛する武器のアイテム情報参照ポインタ
  * @return 実際に呪縛されたらTRUEを返す
  */
-bool curse_weapon_object(bool force, object_type *o_ptr)
+bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 {
 	int i;
 	GAME_TEXT o_name[MAX_NLEN];
@@ -692,7 +693,7 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 	else
 	{
 		if (!force) msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
-		chg_virtue(p_ptr, V_ENCHANT, -5);
+		chg_virtue(owner_ptr, V_ENCHANT, -5);
 
 		/* Shatter the weapon */
 		o_ptr->name1 = 0;
@@ -712,8 +713,8 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
 
 		/* Break it */
 		o_ptr->ident |= (IDENT_BROKEN);
-		p_ptr->update |= (PU_BONUS | PU_MANA);
-		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+		owner_ptr->update |= (PU_BONUS | PU_MANA);
+		owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 	}
 
 	return (TRUE);
@@ -728,7 +729,7 @@ bool curse_weapon_object(bool force, object_type *o_ptr)
  */
 bool curse_weapon(bool force, int slot)
 {
-	return curse_weapon_object(force, &p_ptr->inventory_list[slot]);
+	return curse_weapon_object(p_ptr, force, &p_ptr->inventory_list[slot]);
 }
 
 
