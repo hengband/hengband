@@ -5057,13 +5057,13 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_VIEW))
 	{
 		creature_ptr->update &= ~(PU_VIEW);
-		update_view();
+		update_view(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_LITE))
 	{
 		creature_ptr->update &= ~(PU_LITE);
-		update_lite(p_ptr);
+		update_lite(creature_ptr);
 	}
 
 

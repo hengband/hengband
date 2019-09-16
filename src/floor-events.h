@@ -8,6 +8,6 @@ extern void glow_deep_lava_and_bldg(floor_type *floor_ptr);
 extern void forget_lite(void);
 extern void update_lite(player_type *p_ptr);
 extern void forget_view(void);
-extern void update_view(void);
+extern void update_view(player_type *subject_ptr);
 extern void update_mon_lite(floor_type *floor_ptr);
 extern void clear_mon_lite(floor_type *floor_ptr);

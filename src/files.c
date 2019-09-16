@@ -4045,7 +4045,7 @@ void display_player(player_type *creature_ptr, int mode)
 		/* Display "various" info */
 		else
 		{
-			display_player_middle(p_ptr);
+			display_player_middle(creature_ptr);
 			display_player_various();
 		}
 	}
