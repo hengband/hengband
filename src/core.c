@@ -689,29 +689,29 @@ static void pattern_teleport(void)
  * @brief 各種パターン地形上の特別な処理 / Returns TRUE if we are on the Pattern...
  * @return 実際にパターン地形上にプレイヤーが居た場合はTRUEを返す。
  */
-static bool pattern_effect(void)
+static bool pattern_effect(player_type *creature_ptr)
 {
 	int pattern_type;
 
-	if (!pattern_tile(p_ptr->y, p_ptr->x)) return FALSE;
+	if (!pattern_tile(creature_ptr->y, creature_ptr->x)) return FALSE;
 
-	if ((PRACE_IS_(p_ptr, RACE_AMBERITE)) &&
-	    (p_ptr->cut > 0) && one_in_(10))
+	if ((PRACE_IS_(creature_ptr, RACE_AMBERITE)) &&
+	    (creature_ptr->cut > 0) && one_in_(10))
 	{
-		wreck_the_pattern(p_ptr);
+		wreck_the_pattern(creature_ptr);
 	}
 
-	pattern_type = f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
+	pattern_type = f_info[current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	switch (pattern_type)
 	{
 	case PATTERN_TILE_END:
-		(void)set_image(p_ptr, 0);
+		(void)set_image(creature_ptr, 0);
 		(void)restore_all_status();
-		(void)restore_level(p_ptr);
-		(void)cure_critical_wounds(p_ptr, 1000);
+		(void)restore_level(creature_ptr);
+		(void)cure_critical_wounds(creature_ptr, 1000);
 
-		cave_set_feat(p_ptr->y, p_ptr->x, feat_pattern_old);
+		cave_set_feat(creature_ptr->y, creature_ptr->x, feat_pattern_old);
 		msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
 		/*
@@ -732,14 +732,14 @@ static bool pattern_effect(void)
 
 	case PATTERN_TILE_WRECKED:
 		if (!IS_INVULN())
-			take_hit(p_ptr, DAMAGE_NOESCAPE, 200, _("壊れた「パターン」を歩いたダメージ", "walking the corrupted Pattern"), -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, 200, _("壊れた「パターン」を歩いたダメージ", "walking the corrupted Pattern"), -1);
 		break;
 
 	default:
-		if (PRACE_IS_(p_ptr, RACE_AMBERITE) && !one_in_(2))
+		if (PRACE_IS_(creature_ptr, RACE_AMBERITE) && !one_in_(2))
 			return TRUE;
 		else if (!IS_INVULN())
-			take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"), -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"), -1);
 		break;
 	}
 
@@ -1717,7 +1717,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	}
 
 	/* Are we walking the pattern? */
-	if (pattern_effect())
+	if (pattern_effect(creature_ptr))
 	{
 		cave_no_regen = TRUE;
 	}
