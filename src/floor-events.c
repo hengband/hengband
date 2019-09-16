@@ -1320,8 +1320,10 @@ void update_view(void)
 }
 
 
-/*
- * Add a square to the changes array
+/*!
+ * @brief モンスターによる光量状態更新 / Add a square to the changes array
+ * @param y Y座標
+ * @param x X座標
  */
 static void mon_lite_hack(POSITION y, POSITION x)
 {
