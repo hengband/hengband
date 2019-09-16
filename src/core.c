@@ -3499,7 +3499,7 @@ extern void do_cmd_borg(void);
  * @todo Make some "blocks"
  * @return なし
  */
-static void process_command(void)
+static void process_command(player_type *creature_ptr)
 {
 	COMMAND_CODE old_now_message = now_message;
 
@@ -3509,8 +3509,8 @@ static void process_command(void)
 	now_message = 0;
 
 	/* Sniper */
-	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->concent))
-		p_ptr->reset_concent = TRUE;
+	if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->concent))
+		creature_ptr->reset_concent = TRUE;
 
 	/* Parse the command */
 	switch (command_cmd)
@@ -3542,8 +3542,8 @@ static void process_command(void)
 				current_world_ptr->wizard = TRUE;
 				msg_print(_("ウィザードモード突入。", "Wizard mode on."));
 			}
-			p_ptr->update |= (PU_MONSTERS);
-			p_ptr->redraw |= (PR_TITLE);
+			creature_ptr->update |= (PU_MONSTERS);
+			creature_ptr->redraw |= (PR_TITLE);
 
 			break;
 		}
@@ -3556,7 +3556,7 @@ static void process_command(void)
 		{
 			if (enter_debug_mode())
 			{
-				do_cmd_debug(p_ptr);
+				do_cmd_debug(creature_ptr);
 			}
 			break;
 		}
@@ -3571,7 +3571,7 @@ static void process_command(void)
 		{
 			if (enter_borg_mode())
 			{
-				if (!p_ptr->wild_mode) do_cmd_borg();
+				if (!creature_ptr->wild_mode) do_cmd_borg();
 			}
 			break;
 		}
@@ -3585,42 +3585,42 @@ static void process_command(void)
 		/* Wear/wield equipment */
 		case 'w':
 		{
-			if (!p_ptr->wild_mode) do_cmd_wield(p_ptr);
+			if (!creature_ptr->wild_mode) do_cmd_wield(creature_ptr);
 			break;
 		}
 
 		/* Take off equipment */
 		case 't':
 		{
-			if (!p_ptr->wild_mode) do_cmd_takeoff(p_ptr);
+			if (!creature_ptr->wild_mode) do_cmd_takeoff(creature_ptr);
 			break;
 		}
 
 		/* Drop an item */
 		case 'd':
 		{
-			if (!p_ptr->wild_mode) do_cmd_drop(p_ptr);
+			if (!creature_ptr->wild_mode) do_cmd_drop(creature_ptr);
 			break;
 		}
 
 		/* Destroy an item */
 		case 'k':
 		{
-			do_cmd_destroy(p_ptr);
+			do_cmd_destroy(creature_ptr);
 			break;
 		}
 
 		/* Equipment list */
 		case 'e':
 		{
-			do_cmd_equip(p_ptr);
+			do_cmd_equip(creature_ptr);
 			break;
 		}
 
 		/* Inventory list */
 		case 'i':
 		{
-			do_cmd_inven(p_ptr);
+			do_cmd_inven(creature_ptr);
 			break;
 		}
 
@@ -3630,13 +3630,13 @@ static void process_command(void)
 		/* Identify an object */
 		case 'I':
 		{
-			do_cmd_observe(p_ptr);
+			do_cmd_observe(creature_ptr);
 			break;
 		}
 
 		case KTRL('I'):
 		{
-			toggle_inven_equip(p_ptr);
+			toggle_inven_equip(creature_ptr);
 			break;
 		}
 
@@ -3646,28 +3646,28 @@ static void process_command(void)
 		/* Alter a grid */
 		case '+':
 		{
-			if (!p_ptr->wild_mode) do_cmd_alter(p_ptr);
+			if (!creature_ptr->wild_mode) do_cmd_alter(creature_ptr);
 			break;
 		}
 
 		/* Dig a tunnel */
 		case 'T':
 		{
-			if (!p_ptr->wild_mode) do_cmd_tunnel(p_ptr);
+			if (!creature_ptr->wild_mode) do_cmd_tunnel(creature_ptr);
 			break;
 		}
 
 		/* Move (usually pick up things) */
 		case ';':
 		{
-			do_cmd_walk(p_ptr, FALSE);
+			do_cmd_walk(creature_ptr, FALSE);
 			break;
 		}
 
 		/* Move (usually do not pick up) */
 		case '-':
 		{
-			do_cmd_walk(p_ptr, TRUE);
+			do_cmd_walk(creature_ptr, TRUE);
 			break;
 		}
 
@@ -3677,42 +3677,42 @@ static void process_command(void)
 		/* Begin Running -- Arg is Max Distance */
 		case '.':
 		{
-			if (!p_ptr->wild_mode) do_cmd_run(p_ptr);
+			if (!creature_ptr->wild_mode) do_cmd_run(creature_ptr);
 			break;
 		}
 
 		/* Stay still (usually pick things up) */
 		case ',':
 		{
-			do_cmd_stay(p_ptr, always_pickup);
+			do_cmd_stay(creature_ptr, always_pickup);
 			break;
 		}
 
 		/* Stay still (usually do not pick up) */
 		case 'g':
 		{
-			do_cmd_stay(p_ptr, !always_pickup);
+			do_cmd_stay(creature_ptr, !always_pickup);
 			break;
 		}
 
 		/* Rest -- Arg is time */
 		case 'R':
 		{
-			do_cmd_rest(p_ptr);
+			do_cmd_rest(creature_ptr);
 			break;
 		}
 
 		/* Search for traps/doors */
 		case 's':
 		{
-			do_cmd_search(p_ptr);
+			do_cmd_search(creature_ptr);
 			break;
 		}
 
 		case 'S':
 		{
-			if (p_ptr->action == ACTION_SEARCH) set_action(p_ptr, ACTION_NONE);
-			else set_action(p_ptr, ACTION_SEARCH);
+			if (creature_ptr->action == ACTION_SEARCH) set_action(creature_ptr, ACTION_NONE);
+			else set_action(creature_ptr, ACTION_SEARCH);
 			break;
 		}
 
@@ -3743,17 +3743,17 @@ static void process_command(void)
 		/* Go up staircase */
 		case '<':
 		{
-			if (!p_ptr->wild_mode && !current_floor_ptr->dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
+			if (!creature_ptr->wild_mode && !current_floor_ptr->dun_level && !creature_ptr->inside_arena && !creature_ptr->inside_quest)
 			{
 				if (vanilla_town) break;
 
-				if (p_ptr->ambush_flag)
+				if (creature_ptr->ambush_flag)
 				{
 					msg_print(_("襲撃から逃げるにはマップの端まで移動しなければならない。", "To flee the ambush you have to reach the edge of the map."));
 					break;
 				}
 
-				if (p_ptr->food < PY_FOOD_WEAK)
+				if (creature_ptr->food < PY_FOOD_WEAK)
 				{
 					msg_print(_("その前に食事をとらないと。", "You must eat something here."));
 					break;
@@ -3762,52 +3762,52 @@ static void process_command(void)
 				change_wild_mode(FALSE);
 			}
 			else
-				do_cmd_go_up(p_ptr);
+				do_cmd_go_up(creature_ptr);
 			break;
 		}
 
 		/* Go down staircase */
 		case '>':
 		{
-			if (p_ptr->wild_mode)
+			if (creature_ptr->wild_mode)
 				change_wild_mode(FALSE);
 			else
-				do_cmd_go_down(p_ptr);
+				do_cmd_go_down(creature_ptr);
 			break;
 		}
 
 		/* Open a door or chest */
 		case 'o':
 		{
-			do_cmd_open(p_ptr);
+			do_cmd_open(creature_ptr);
 			break;
 		}
 
 		/* Close a door */
 		case 'c':
 		{
-			do_cmd_close(p_ptr);
+			do_cmd_close(creature_ptr);
 			break;
 		}
 
 		/* Jam a door with spikes */
 		case 'j':
 		{
-			do_cmd_spike(p_ptr);
+			do_cmd_spike(creature_ptr);
 			break;
 		}
 
 		/* Bash a door */
 		case 'B':
 		{
-			do_cmd_bash(p_ptr);
+			do_cmd_bash(creature_ptr);
 			break;
 		}
 
 		/* Disarm a trap or chest */
 		case 'D':
 		{
-			do_cmd_disarm(p_ptr);
+			do_cmd_disarm(creature_ptr);
 			break;
 		}
 
@@ -3817,32 +3817,32 @@ static void process_command(void)
 		/* Gain new spells/prayers */
 		case 'G':
 		{
-			if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
+			if ((creature_ptr->pclass == CLASS_SORCERER) || (creature_ptr->pclass == CLASS_RED_MAGE))
 				msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
-			else if (p_ptr->pclass == CLASS_SAMURAI)
-				do_cmd_gain_hissatsu(p_ptr);
-			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				import_magic_device(p_ptr);
+			else if (creature_ptr->pclass == CLASS_SAMURAI)
+				do_cmd_gain_hissatsu(creature_ptr);
+			else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+				import_magic_device(creature_ptr);
 			else
-				do_cmd_study(p_ptr);
+				do_cmd_study(creature_ptr);
 			break;
 		}
 
 		/* Browse a book */
 		case 'b':
 		{
-			if ( (p_ptr->pclass == CLASS_MINDCRAFTER) ||
-			     (p_ptr->pclass == CLASS_BERSERKER) ||
-			     (p_ptr->pclass == CLASS_NINJA) ||
-			     (p_ptr->pclass == CLASS_MIRROR_MASTER) 
+			if ( (creature_ptr->pclass == CLASS_MINDCRAFTER) ||
+			     (creature_ptr->pclass == CLASS_BERSERKER) ||
+			     (creature_ptr->pclass == CLASS_NINJA) ||
+			     (creature_ptr->pclass == CLASS_MIRROR_MASTER) 
 			     ) do_cmd_mind_browse();
-			else if (p_ptr->pclass == CLASS_SMITH)
-				do_cmd_kaji(p_ptr, TRUE);
-			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				do_cmd_magic_eater(p_ptr, TRUE, FALSE);
-			else if (p_ptr->pclass == CLASS_SNIPER)
-				do_cmd_snipe_browse(p_ptr);
-			else do_cmd_browse(p_ptr);
+			else if (creature_ptr->pclass == CLASS_SMITH)
+				do_cmd_kaji(creature_ptr, TRUE);
+			else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+				do_cmd_magic_eater(creature_ptr, TRUE, FALSE);
+			else if (creature_ptr->pclass == CLASS_SNIPER)
+				do_cmd_snipe_browse(creature_ptr);
+			else do_cmd_browse(creature_ptr);
 			break;
 		}
 
@@ -3850,63 +3850,63 @@ static void process_command(void)
 		case 'm':
 		{
 			/* -KMW- */
-			if (!p_ptr->wild_mode)
+			if (!creature_ptr->wild_mode)
 			{
-				if ((p_ptr->pclass == CLASS_WARRIOR) || (p_ptr->pclass == CLASS_ARCHER) || (p_ptr->pclass == CLASS_CAVALRY))
+				if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_ARCHER) || (creature_ptr->pclass == CLASS_CAVALRY))
 				{
 					msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
 				}
-				else if (current_floor_ptr->dun_level && (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
+				else if (current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
 				{
 					msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 					msg_print(NULL);
 				}
-				else if (p_ptr->anti_magic && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH))
+				else if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
 				{
 					concptr which_power = _("魔法", "magic");
-					if (p_ptr->pclass == CLASS_MINDCRAFTER)
+					if (creature_ptr->pclass == CLASS_MINDCRAFTER)
 						which_power = _("超能力", "psionic powers");
-					else if (p_ptr->pclass == CLASS_IMITATOR)
+					else if (creature_ptr->pclass == CLASS_IMITATOR)
 						which_power = _("ものまね", "imitation");
-					else if (p_ptr->pclass == CLASS_SAMURAI)
+					else if (creature_ptr->pclass == CLASS_SAMURAI)
 						which_power = _("必殺剣", "hissatsu");
-					else if (p_ptr->pclass == CLASS_MIRROR_MASTER)
+					else if (creature_ptr->pclass == CLASS_MIRROR_MASTER)
 						which_power = _("鏡魔法", "mirror magic");
-					else if (p_ptr->pclass == CLASS_NINJA)
+					else if (creature_ptr->pclass == CLASS_NINJA)
 						which_power = _("忍術", "ninjutsu");
 					else if (mp_ptr->spell_book == TV_LIFE_BOOK)
 						which_power = _("祈り", "prayer");
 
 					msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
-					free_turn(p_ptr);
+					free_turn(creature_ptr);
 				}
-				else if (p_ptr->shero && (p_ptr->pclass != CLASS_BERSERKER))
+				else if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
 				{
 					msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-					free_turn(p_ptr);
+					free_turn(creature_ptr);
 				}
 				else
 				{
-					if ((p_ptr->pclass == CLASS_MINDCRAFTER) ||
-					    (p_ptr->pclass == CLASS_BERSERKER) ||
-					    (p_ptr->pclass == CLASS_NINJA) ||
-					    (p_ptr->pclass == CLASS_MIRROR_MASTER)
+					if ((creature_ptr->pclass == CLASS_MINDCRAFTER) ||
+					    (creature_ptr->pclass == CLASS_BERSERKER) ||
+					    (creature_ptr->pclass == CLASS_NINJA) ||
+					    (creature_ptr->pclass == CLASS_MIRROR_MASTER)
 					    )
 						do_cmd_mind();
-					else if (p_ptr->pclass == CLASS_IMITATOR)
-						do_cmd_mane(p_ptr, FALSE);
-					else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-						do_cmd_magic_eater(p_ptr, FALSE, FALSE);
-					else if (p_ptr->pclass == CLASS_SAMURAI)
-						do_cmd_hissatsu(p_ptr);
-					else if (p_ptr->pclass == CLASS_BLUE_MAGE)
+					else if (creature_ptr->pclass == CLASS_IMITATOR)
+						do_cmd_mane(creature_ptr, FALSE);
+					else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+						do_cmd_magic_eater(creature_ptr, FALSE, FALSE);
+					else if (creature_ptr->pclass == CLASS_SAMURAI)
+						do_cmd_hissatsu(creature_ptr);
+					else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
 						do_cmd_cast_learned();
-					else if (p_ptr->pclass == CLASS_SMITH)
-						do_cmd_kaji(p_ptr, FALSE);
-					else if (p_ptr->pclass == CLASS_SNIPER)
-						do_cmd_snipe(p_ptr);
+					else if (creature_ptr->pclass == CLASS_SMITH)
+						do_cmd_kaji(creature_ptr, FALSE);
+					else if (creature_ptr->pclass == CLASS_SNIPER)
+						do_cmd_snipe(creature_ptr);
 					else
-						do_cmd_cast(p_ptr);
+						do_cmd_cast(creature_ptr);
 				}
 			}
 			break;
@@ -3915,7 +3915,7 @@ static void process_command(void)
 		/* Issue a pet command */
 		case 'p':
 		{
-			do_cmd_pet(p_ptr);
+			do_cmd_pet(creature_ptr);
 			break;
 		}
 
@@ -3924,56 +3924,56 @@ static void process_command(void)
 		/* Inscribe an object */
 		case '{':
 		{
-			do_cmd_inscribe(p_ptr);
+			do_cmd_inscribe(creature_ptr);
 			break;
 		}
 
 		/* Uninscribe an object */
 		case '}':
 		{
-			do_cmd_uninscribe(p_ptr);
+			do_cmd_uninscribe(creature_ptr);
 			break;
 		}
 
 		/* Activate an artifact */
 		case 'A':
 		{
-			do_cmd_activate(p_ptr);
+			do_cmd_activate(creature_ptr);
 			break;
 		}
 
 		/* Eat some food */
 		case 'E':
 		{
-			do_cmd_eat_food(p_ptr);
+			do_cmd_eat_food(creature_ptr);
 			break;
 		}
 
 		/* Fuel your lantern/torch */
 		case 'F':
 		{
-			do_cmd_refill(p_ptr);
+			do_cmd_refill(creature_ptr);
 			break;
 		}
 
 		/* Fire an item */
 		case 'f':
 		{
-			do_cmd_fire(p_ptr, SP_NONE);
+			do_cmd_fire(creature_ptr, SP_NONE);
 			break;
 		}
 
 		/* Throw an item */
 		case 'v':
 		{
-			do_cmd_throw(p_ptr, 1, FALSE, -1);
+			do_cmd_throw(creature_ptr, 1, FALSE, -1);
 			break;
 		}
 
 		/* Aim a wand */
 		case 'a':
 		{
-			do_cmd_aim_wand(p_ptr);
+			do_cmd_aim_wand(creature_ptr);
 			break;
 		}
 
@@ -3982,11 +3982,11 @@ static void process_command(void)
 		{
 			if (use_command && rogue_like_commands)
 			{
-				do_cmd_use(p_ptr);
+				do_cmd_use(creature_ptr);
 			}
 			else
 			{
-				do_cmd_zap_rod(p_ptr);
+				do_cmd_zap_rod(creature_ptr);
 			}
 			break;
 		}
@@ -3994,14 +3994,14 @@ static void process_command(void)
 		/* Quaff a potion */
 		case 'q':
 		{
-			do_cmd_quaff_potion(p_ptr);
+			do_cmd_quaff_potion(creature_ptr);
 			break;
 		}
 
 		/* Read a scroll */
 		case 'r':
 		{
-			do_cmd_read_scroll(p_ptr);
+			do_cmd_read_scroll(creature_ptr);
 			break;
 		}
 
@@ -4009,16 +4009,16 @@ static void process_command(void)
 		case 'u':
 		{
 			if (use_command && !rogue_like_commands)
-				do_cmd_use(p_ptr);
+				do_cmd_use(creature_ptr);
 			else
-				do_cmd_use_staff(p_ptr);
+				do_cmd_use_staff(creature_ptr);
 			break;
 		}
 
 		/* Use racial power */
 		case 'U':
 		{
-			do_cmd_racial_power(p_ptr);
+			do_cmd_racial_power(creature_ptr);
 			break;
 		}
 
@@ -4035,7 +4035,7 @@ static void process_command(void)
 		/* Locate player on map */
 		case 'L':
 		{
-			do_cmd_locate(p_ptr);
+			do_cmd_locate(creature_ptr);
 			break;
 		}
 
@@ -4074,7 +4074,7 @@ static void process_command(void)
 		/* Character description */
 		case 'C':
 		{
-			do_cmd_player_status(p_ptr);
+			do_cmd_player_status(creature_ptr);
 			break;
 		}
 
@@ -4110,23 +4110,23 @@ static void process_command(void)
 		/* Interact with macros */
 		case '@':
 		{
-			do_cmd_macros(p_ptr);
+			do_cmd_macros(creature_ptr);
 			break;
 		}
 
 		/* Interact with visuals */
 		case '%':
 		{
-			do_cmd_visuals(p_ptr);
-			do_cmd_redraw(p_ptr);
+			do_cmd_visuals(creature_ptr);
+			do_cmd_redraw(creature_ptr);
 			break;
 		}
 
 		/* Interact with colors */
 		case '&':
 		{
-			do_cmd_colors(p_ptr);
-			do_cmd_redraw(p_ptr);
+			do_cmd_colors(creature_ptr);
+			do_cmd_redraw(creature_ptr);
 			break;
 		}
 
@@ -4135,7 +4135,7 @@ static void process_command(void)
 		{
 			do_cmd_options();
 			(void)combine_and_reorder_home(STORE_HOME);
-			do_cmd_redraw(p_ptr);
+			do_cmd_redraw(creature_ptr);
 			break;
 		}
 
@@ -4158,7 +4158,7 @@ static void process_command(void)
 		/* Repeat level feeling */
 		case KTRL('F'):
 		{
-			do_cmd_feeling(p_ptr);
+			do_cmd_feeling(creature_ptr);
 			break;
 		}
 
@@ -4187,7 +4187,7 @@ static void process_command(void)
 		case KTRL('R'):
 		{
 			now_message = old_now_message;
-			do_cmd_redraw(p_ptr);
+			do_cmd_redraw(creature_ptr);
 			break;
 		}
 
@@ -4219,7 +4219,7 @@ static void process_command(void)
 		/* Quit (commit suicide) */
 		case 'Q':
 		{
-			do_cmd_suicide(p_ptr);
+			do_cmd_suicide(creature_ptr);
 			break;
 		}
 
@@ -4267,10 +4267,10 @@ static void process_command(void)
 #ifdef TRAVEL
 		case '`':
 		{
-			if (!p_ptr->wild_mode) do_cmd_travel(p_ptr);
-			if (p_ptr->special_defense & KATA_MUSOU)
+			if (!creature_ptr->wild_mode) do_cmd_travel(creature_ptr);
+			if (creature_ptr->special_defense & KATA_MUSOU)
 			{
-				set_action(p_ptr, ACTION_NONE);
+				set_action(creature_ptr, ACTION_NONE);
 			}
 			break;
 		}
@@ -4295,7 +4295,7 @@ static void process_command(void)
 			break;
 		}
 	}
-	if (!p_ptr->energy_use && !now_message)
+	if (!creature_ptr->energy_use && !now_message)
 		now_message = old_now_message;
 }
 
@@ -4649,7 +4649,7 @@ static void process_player(void)
 			command_cmd = SPECIAL_KEY_BUILDING;
 
 			/* Process the command */
-			process_command();
+			process_command(p_ptr);
 		}
 
 		/* Paralyzed or Knocked Out */
@@ -4712,7 +4712,7 @@ static void process_player(void)
 			prt("", 0, 0);
 
 			/* Process the command */
-			process_command();
+			process_command(p_ptr);
 		}
 
 		/* Normal command */
@@ -4727,7 +4727,7 @@ static void process_player(void)
 			can_save = FALSE;
 
 			/* Process the command */
-			process_command();
+			process_command(p_ptr);
 		}
 
 		/* Hack -- Pack Overflow */
