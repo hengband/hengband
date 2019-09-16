@@ -1762,7 +1762,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_CRIMSON:
 		if (o_ptr->name1 != ART_CRIMSON) return FALSE;
 		msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
-		if (!fire_crimson()) return FALSE;
+		if (!fire_crimson(user_ptr)) return FALSE;
 		break;
 
 	default:

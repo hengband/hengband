@@ -3560,8 +3560,15 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 	} while (one_in_(5));
 }
 
-
-bool fire_crimson(void)
+/*!
+ * @brief クリムゾンを発射する / Fire Crimson, evoluting gun.
+ @ @param shooter_ptr 射撃を行うクリーチャー参照
+ * @return キャンセルした場合 false.
+ * @details
+ * Need to analyze size of the window.
+ * Need more color coding.
+ */
+bool fire_crimson(player_type *shooter_ptr)
 {
 	int num = 1;
 	int i;
@@ -3572,8 +3579,8 @@ bool fire_crimson(void)
 	if (!get_aim_dir(&dir)) return FALSE;
 
 	/* Use the given direction */
-	tx = p_ptr->x + 99 * ddx[dir];
-	ty = p_ptr->y + 99 * ddy[dir];
+	tx = shooter_ptr->x + 99 * ddx[dir];
+	ty = shooter_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay())
@@ -3582,20 +3589,20 @@ bool fire_crimson(void)
 		ty = target_row;
 	}
 
-	if (p_ptr->pclass == CLASS_ARCHER)
+	if (shooter_ptr->pclass == CLASS_ARCHER)
 	{
 		/* Extra shot at level 10 */
-		if (p_ptr->lev >= 10) num++;
+		if (shooter_ptr->lev >= 10) num++;
 
 		/* Extra shot at level 30 */
-		if (p_ptr->lev >= 30) num++;
+		if (shooter_ptr->lev >= 30) num++;
 
 		/* Extra shot at level 45 */
-		if (p_ptr->lev >= 45) num++;
+		if (shooter_ptr->lev >= 45) num++;
 	}
 
 	for (i = 0; i < num; i++)
-		project(0, p_ptr->lev / 20 + 1, ty, tx, p_ptr->lev*p_ptr->lev * 6 / 50, GF_ROCKET, flg, -1);
+		project(0, shooter_ptr->lev / 20 + 1, ty, tx, shooter_ptr->lev*shooter_ptr->lev * 6 / 50, GF_ROCKET, flg, -1);
 
 	return TRUE;
 }
