@@ -5322,6 +5322,7 @@ static bool leave_store = FALSE;
 /*!
  * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
+ * @param client_ptr 顧客となるクリーチャーの参照ポインタ
  * @return なし
  * @note
  * <pre>
@@ -5331,7 +5332,7 @@ static bool leave_store = FALSE;
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-static void store_process_command(void)
+static void store_process_command(player_type *client_ptr)
 {
 	/* Handle repeating the last command */
 	repeat_check();
@@ -5356,7 +5357,7 @@ static void store_process_command(void)
 		case '-':
 		{
 			if (st_ptr->stock_num <= store_bottom) {
-				msg_print(_("これで全部です。", "Entire p_ptr->inventory_list is shown."));
+				msg_print(_("これで全部です。", "Entire client_ptr->inventory_list is shown."));
 			}
 			else{
 				store_top -= store_bottom;
@@ -5374,7 +5375,7 @@ static void store_process_command(void)
 		{
 			if (st_ptr->stock_num <= store_bottom)
 			{
-				msg_print(_("これで全部です。", "Entire p_ptr->inventory_list is shown."));
+				msg_print(_("これで全部です。", "Entire client_ptr->inventory_list is shown."));
 			}
 			else
 			{
@@ -5404,7 +5405,7 @@ static void store_process_command(void)
 
 		case KTRL('R'):
 		{
-			do_cmd_redraw(p_ptr);
+			do_cmd_redraw(client_ptr);
 			display_store();
 			break;
 		}
@@ -5441,35 +5442,35 @@ static void store_process_command(void)
 		/* Wear/wield equipment */
 		case 'w':
 		{
-			do_cmd_wield(p_ptr);
+			do_cmd_wield(client_ptr);
 			break;
 		}
 
 		/* Take off equipment */
 		case 't':
 		{
-			do_cmd_takeoff(p_ptr);
+			do_cmd_takeoff(client_ptr);
 			break;
 		}
 
 		/* Destroy an item */
 		case 'k':
 		{
-			do_cmd_destroy(p_ptr);
+			do_cmd_destroy(client_ptr);
 			break;
 		}
 
 		/* Equipment list */
 		case 'e':
 		{
-			do_cmd_equip(p_ptr);
+			do_cmd_equip(client_ptr);
 			break;
 		}
 
 		/* Inventory list */
 		case 'i':
 		{
-			do_cmd_inven(p_ptr);
+			do_cmd_inven(client_ptr);
 			break;
 		}
 
@@ -5479,13 +5480,13 @@ static void store_process_command(void)
 		/* Identify an object */
 		case 'I':
 		{
-			do_cmd_observe(p_ptr);
+			do_cmd_observe(client_ptr);
 			break;
 		}
 
 		case KTRL('I'):
 		{
-			toggle_inven_equip(p_ptr);
+			toggle_inven_equip(client_ptr);
 			break;
 		}
 
@@ -5494,32 +5495,32 @@ static void store_process_command(void)
 		/* Browse a book */
 		case 'b':
 		{
-			if ( (p_ptr->pclass == CLASS_MINDCRAFTER) ||
-			     (p_ptr->pclass == CLASS_BERSERKER) ||
-			     (p_ptr->pclass == CLASS_NINJA) ||
-			     (p_ptr->pclass == CLASS_MIRROR_MASTER) 
+			if ( (client_ptr->pclass == CLASS_MINDCRAFTER) ||
+			     (client_ptr->pclass == CLASS_BERSERKER) ||
+			     (client_ptr->pclass == CLASS_NINJA) ||
+			     (client_ptr->pclass == CLASS_MIRROR_MASTER) 
 			     ) do_cmd_mind_browse();
-			else if (p_ptr->pclass == CLASS_SMITH)
-				do_cmd_kaji(p_ptr, TRUE);
-			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				do_cmd_magic_eater(p_ptr, TRUE, FALSE);
-			else if (p_ptr->pclass == CLASS_SNIPER)
-				do_cmd_snipe_browse(p_ptr);
-			else do_cmd_browse(p_ptr);
+			else if (client_ptr->pclass == CLASS_SMITH)
+				do_cmd_kaji(client_ptr, TRUE);
+			else if (client_ptr->pclass == CLASS_MAGIC_EATER)
+				do_cmd_magic_eater(client_ptr, TRUE, FALSE);
+			else if (client_ptr->pclass == CLASS_SNIPER)
+				do_cmd_snipe_browse(client_ptr);
+			else do_cmd_browse(client_ptr);
 			break;
 		}
 
 		/* Inscribe an object */
 		case '{':
 		{
-			do_cmd_inscribe(p_ptr);
+			do_cmd_inscribe(client_ptr);
 			break;
 		}
 
 		/* Uninscribe an object */
 		case '}':
 		{
-			do_cmd_uninscribe(p_ptr);
+			do_cmd_uninscribe(client_ptr);
 			break;
 		}
 
@@ -5544,9 +5545,9 @@ static void store_process_command(void)
 		/* Character description */
 		case 'C':
 		{
-			p_ptr->town_num = old_town_num;
-			do_cmd_player_status(p_ptr);
-			p_ptr->town_num = inner_town_num;
+			client_ptr->town_num = old_town_num;
+			do_cmd_player_status(client_ptr);
+			client_ptr->town_num = inner_town_num;
 			display_store();
 			break;
 		}
@@ -5564,36 +5565,36 @@ static void store_process_command(void)
 		/* Single line from a pref file */
 		case '"':
 		{
-			p_ptr->town_num = old_town_num;
+			client_ptr->town_num = old_town_num;
 			do_cmd_pref();
-			p_ptr->town_num = inner_town_num;
+			client_ptr->town_num = inner_town_num;
 			break;
 		}
 
 		/* Interact with macros */
 		case '@':
 		{
-			p_ptr->town_num = old_town_num;
-			do_cmd_macros(p_ptr);
-			p_ptr->town_num = inner_town_num;
+			client_ptr->town_num = old_town_num;
+			do_cmd_macros(client_ptr);
+			client_ptr->town_num = inner_town_num;
 			break;
 		}
 
 		/* Interact with visuals */
 		case '%':
 		{
-			p_ptr->town_num = old_town_num;
-			do_cmd_visuals(p_ptr);
-			p_ptr->town_num = inner_town_num;
+			client_ptr->town_num = old_town_num;
+			do_cmd_visuals(client_ptr);
+			client_ptr->town_num = inner_town_num;
 			break;
 		}
 
 		/* Interact with colors */
 		case '&':
 		{
-			p_ptr->town_num = old_town_num;
-			do_cmd_colors(p_ptr);
-			p_ptr->town_num = inner_town_num;
+			client_ptr->town_num = old_town_num;
+			do_cmd_colors(client_ptr);
+			client_ptr->town_num = inner_town_num;
 			break;
 		}
 
@@ -5602,7 +5603,7 @@ static void store_process_command(void)
 		{
 			do_cmd_options();
 			(void)combine_and_reorder_home(STORE_HOME);
-			do_cmd_redraw(p_ptr);
+			do_cmd_redraw(client_ptr);
 			display_store();
 			break;
 		}
@@ -5626,7 +5627,7 @@ static void store_process_command(void)
 		/* Repeat level feeling */
 		case KTRL('F'):
 		{
-			do_cmd_feeling(p_ptr);
+			do_cmd_feeling(client_ptr);
 			break;
 		}
 
@@ -5854,7 +5855,7 @@ void do_cmd_store(void)
 		request_command(TRUE);
 
 		/* Process the command */
-		store_process_command();
+		store_process_command(p_ptr);
 
 		/*
 		 * Hack -- To redraw missiles damage and prices in store
