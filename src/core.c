@@ -5146,7 +5146,7 @@ static void dungeon(bool load_game)
 		 * Maintain Unique monsters and artifact, save current
 		 * floor, then prepare next floor
 		 */
-		leave_floor(p_ptr->change_floor_mode);
+		leave_floor(p_ptr, p_ptr->change_floor_mode);
 
 		/* Forget the flag */
 		reinit_wilderness = FALSE;
@@ -5656,7 +5656,7 @@ void play_game(bool new_game)
 				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
 
 				/* prepare next floor */
-				leave_floor(p_ptr->change_floor_mode);
+				leave_floor(p_ptr, p_ptr->change_floor_mode);
 			}
 			else
 			{
