@@ -2201,14 +2201,15 @@ bool recharge(int power)
 
 
 /*!
- * @brief プレイヤーの全既知呪文を表示する /
+ * @brief クリーチャー全既知呪文を表示する /
  * Hack -- Display all known spells in a window
+ * @param caster_ptr 術者の参照ポインタ
  * return なし
  * @details
  * Need to analyze size of the window.
  * Need more color coding.
  */
-void display_spell_list(void)
+void display_spell_list(player_type *caster_ptr)
 {
 	int i, j;
 	TERM_LEN y, x;
@@ -2220,24 +2221,24 @@ void display_spell_list(void)
 	clear_from(0);
 
 	/* They have too many spells to list */
-	if (p_ptr->pclass == CLASS_SORCERER) return;
-	if (p_ptr->pclass == CLASS_RED_MAGE) return;
+	if (caster_ptr->pclass == CLASS_SORCERER) return;
+	if (caster_ptr->pclass == CLASS_RED_MAGE) return;
 
-	if (p_ptr->pclass == CLASS_SNIPER)
+	if (caster_ptr->pclass == CLASS_SNIPER)
 	{
-		display_snipe_list(p_ptr);
+		display_snipe_list(caster_ptr);
 		return;
 	}
 
 	/* mind.c type classes */
-	if ((p_ptr->pclass == CLASS_MINDCRAFTER) ||
-	    (p_ptr->pclass == CLASS_BERSERKER) ||
-	    (p_ptr->pclass == CLASS_NINJA) ||
-	    (p_ptr->pclass == CLASS_MIRROR_MASTER) ||
-	    (p_ptr->pclass == CLASS_FORCETRAINER))
+	if ((caster_ptr->pclass == CLASS_MINDCRAFTER) ||
+	    (caster_ptr->pclass == CLASS_BERSERKER) ||
+	    (caster_ptr->pclass == CLASS_NINJA) ||
+	    (caster_ptr->pclass == CLASS_MIRROR_MASTER) ||
+	    (caster_ptr->pclass == CLASS_FORCETRAINER))
 	{
 		PERCENTAGE minfail = 0;
-		PLAYER_LEVEL plev = p_ptr->lev;
+		PLAYER_LEVEL plev = caster_ptr->lev;
 		PERCENTAGE chance = 0;
 		mind_type       spell;
 		char            comment[80];
@@ -2253,7 +2254,7 @@ void display_spell_list(void)
 		put_str(_("名前", "Name"), y, x + 5);
 		put_str(_("Lv   MP 失率 効果", "Lv Mana Fail Info"), y, x + 35);
 
-		switch(p_ptr->pclass)
+		switch(caster_ptr->pclass)
 		{
 		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER;break;
 		case CLASS_FORCETRAINER:          use_mind = MIND_KI;break;
@@ -2276,24 +2277,24 @@ void display_spell_list(void)
 			chance = spell.fail;
 
 			/* Reduce failure rate by "effective" level adjustment */
-			chance -= 3 * (p_ptr->lev - spell.min_lev);
+			chance -= 3 * (caster_ptr->lev - spell.min_lev);
 
 			/* Reduce failure rate by INT/WIS adjustment */
-			chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+			chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
 			if (!use_hp)
 			{
 				/* Not enough mana to cast */
-				if (spell.mana_cost > p_ptr->csp)
+				if (spell.mana_cost > caster_ptr->csp)
 				{
-					chance += 5 * (spell.mana_cost - p_ptr->csp);
+					chance += 5 * (spell.mana_cost - caster_ptr->csp);
 					a = TERM_ORANGE;
 				}
 			}
 			else
 			{
 				/* Not enough hp to cast */
-				if (spell.mana_cost > p_ptr->chp)
+				if (spell.mana_cost > caster_ptr->chp)
 				{
 					chance += 100;
 					a = TERM_RED;
@@ -2301,14 +2302,14 @@ void display_spell_list(void)
 			}
 
 			/* Extract the minimum failure rate */
-			minfail = adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]];
+			minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
 
 			/* Minimum failure rate */
 			if (chance < minfail) chance = minfail;
 
 			/* Stunning makes spells harder */
-			if (p_ptr->stun > 50) chance += 25;
-			else if (p_ptr->stun) chance += 15;
+			if (caster_ptr->stun > 50) chance += 25;
+			else if (caster_ptr->stun) chance += 15;
 
 			/* Always a 5 percent chance of working */
 			if (chance > 95) chance = 95;
@@ -2327,12 +2328,12 @@ void display_spell_list(void)
 	}
 
 	/* Cannot read spellbooks */
-	if (REALM_NONE == p_ptr->realm1) return;
+	if (REALM_NONE == caster_ptr->realm1) return;
 
 	/* Normal spellcaster with books */
 
 	/* Scan books */
-	for (j = 0; j < ((p_ptr->realm2 > REALM_NONE) ? 2 : 1); j++)
+	for (j = 0; j < ((caster_ptr->realm2 > REALM_NONE) ? 2 : 1); j++)
 	{
 		int n = 0;
 
@@ -2351,16 +2352,16 @@ void display_spell_list(void)
 			byte a = TERM_WHITE;
 
 			/* Access the spell */
-			if (!is_magic((j < 1) ? p_ptr->realm1 : p_ptr->realm2))
+			if (!is_magic((j < 1) ? caster_ptr->realm1 : caster_ptr->realm2))
 			{
-				s_ptr = &technic_info[((j < 1) ? p_ptr->realm1 : p_ptr->realm2) - MIN_TECHNIC][i % 32];
+				s_ptr = &technic_info[((j < 1) ? caster_ptr->realm1 : caster_ptr->realm2) - MIN_TECHNIC][i % 32];
 			}
 			else
 			{
-				s_ptr = &mp_ptr->info[((j < 1) ? p_ptr->realm1 : p_ptr->realm2) - 1][i % 32];
+				s_ptr = &mp_ptr->info[((j < 1) ? caster_ptr->realm1 : caster_ptr->realm2) - 1][i % 32];
 			}
 
-			strcpy(name, exe_spell(p_ptr, (j < 1) ? p_ptr->realm1 : p_ptr->realm2, i % 32, SPELL_NAME));
+			strcpy(name, exe_spell(caster_ptr, (j < 1) ? caster_ptr->realm1 : caster_ptr->realm2, i % 32, SPELL_NAME));
 
 			/* Illegible */
 			if (s_ptr->slevel >= 99)
@@ -2374,8 +2375,8 @@ void display_spell_list(void)
 
 			/* Forgotten */
 			else if ((j < 1) ?
-				((p_ptr->spell_forgotten1 & (1L << i))) :
-				((p_ptr->spell_forgotten2 & (1L << (i % 32)))))
+				((caster_ptr->spell_forgotten1 & (1L << i))) :
+				((caster_ptr->spell_forgotten2 & (1L << (i % 32)))))
 			{
 				/* Forgotten */
 				a = TERM_ORANGE;
@@ -2383,8 +2384,8 @@ void display_spell_list(void)
 
 			/* Unknown */
 			else if (!((j < 1) ?
-				(p_ptr->spell_learned1 & (1L << i)) :
-				(p_ptr->spell_learned2 & (1L << (i % 32)))))
+				(caster_ptr->spell_learned1 & (1L << i)) :
+				(caster_ptr->spell_learned2 & (1L << (i % 32)))))
 			{
 				/* Unknown */
 				a = TERM_RED;
@@ -2392,8 +2393,8 @@ void display_spell_list(void)
 
 			/* Untried */
 			else if (!((j < 1) ?
-				(p_ptr->spell_worked1 & (1L << i)) :
-				(p_ptr->spell_worked2 & (1L << (i % 32)))))
+				(caster_ptr->spell_worked1 & (1L << i)) :
+				(caster_ptr->spell_worked2 & (1L << (i % 32)))))
 			{
 				/* Untried */
 				a = TERM_YELLOW;

@@ -1794,7 +1794,7 @@ static void fix_spell(void)
 		Term_activate(angband_term[j]);
 
 		/* Display spell list */
-		display_spell_list();
+		display_spell_list(p_ptr);
 		Term_fresh();
 		Term_activate(old);
 	}
