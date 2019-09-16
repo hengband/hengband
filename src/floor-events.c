@@ -273,7 +273,7 @@ byte get_dungeon_feeling(floor_type *floor_ptr)
  * / Update dungeon feeling, and announce it if changed
  * @return なし
  */
-void update_dungeon_feeling(floor_type *floor_ptr)
+void update_dungeon_feeling(player_type *subject_ptr, floor_type *floor_ptr)
 {
 	byte new_feeling;
 	int quest_num;
@@ -283,13 +283,13 @@ void update_dungeon_feeling(floor_type *floor_ptr)
 	if (!floor_ptr->dun_level) return;
 
 	/* No feeling in the arena */
-	if (p_ptr->phase_out) return;
+	if (subject_ptr->phase_out) return;
 
 	/* Extract delay time */
-	delay = MAX(10, 150 - p_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
+	delay = MAX(10, 150 - subject_ptr->skill_fos) * (150 - floor_ptr->dun_level) * TURNS_PER_TICK / 100;
 
 	/* Not yet felt anything */
-	if (current_world_ptr->game_turn < p_ptr->feeling_turn + delay && !cheat_xtra) return;
+	if (current_world_ptr->game_turn < subject_ptr->feeling_turn + delay && !cheat_xtra) return;
 
 	/* Extract quest number (if any) */
 	quest_num = quest_number(floor_ptr->dun_level);
@@ -305,23 +305,23 @@ void update_dungeon_feeling(floor_type *floor_ptr)
 	new_feeling = get_dungeon_feeling(floor_ptr);
 
 	/* Remember last time updated */
-	p_ptr->feeling_turn = current_world_ptr->game_turn;
+	subject_ptr->feeling_turn = current_world_ptr->game_turn;
 
 	/* No change */
-	if (p_ptr->feeling == new_feeling) return;
+	if (subject_ptr->feeling == new_feeling) return;
 
 	/* Dungeon feeling is changed */
-	p_ptr->feeling = new_feeling;
+	subject_ptr->feeling = new_feeling;
 
 	/* Announce feeling */
-	do_cmd_feeling(p_ptr);
+	do_cmd_feeling(subject_ptr);
 
-	select_floor_music(p_ptr);
+	select_floor_music(subject_ptr);
 
 	/* Update the level indicator */
-	p_ptr->redraw |= (PR_DEPTH);
+	subject_ptr->redraw |= (PR_DEPTH);
 
-	if (disturb_minor) disturb(p_ptr, FALSE, FALSE);
+	if (disturb_minor) disturb(subject_ptr, FALSE, FALSE);
 }
 
 
