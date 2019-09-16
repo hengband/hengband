@@ -3822,7 +3822,7 @@ static void process_command(void)
 			else if (p_ptr->pclass == CLASS_SAMURAI)
 				do_cmd_gain_hissatsu(p_ptr);
 			else if (p_ptr->pclass == CLASS_MAGIC_EATER)
-				import_magic_device();
+				import_magic_device(p_ptr);
 			else
 				do_cmd_study(p_ptr);
 			break;

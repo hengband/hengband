@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 extern bool create_ammo(player_type *creature_ptr);
-extern bool import_magic_device(void);
+extern bool import_magic_device(player_type *creature_ptr);
 extern void amusement(POSITION y1, POSITION x1, int num, bool known);
 extern void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
 extern void acquire_chaos_weapon(player_type *creature_ptr);

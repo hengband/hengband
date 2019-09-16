@@ -274,9 +274,10 @@ bool create_ammo(player_type *creature_ptr)
 
 /*!
  * @brief 魔道具術師の魔力取り込み処理
+ * @param user_ptr アイテムを取り込むクリーチャー
  * @return 取り込みを実行したらTRUE、キャンセルしたらFALSEを返す
  */
-bool import_magic_device(void)
+bool import_magic_device(player_type *user_ptr)
 {
 	OBJECT_IDX item;
 	PARAMETER_VALUE pval;
@@ -291,7 +292,7 @@ bool import_magic_device(void)
 	q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
 	s = _("魔力を取り込めるアイテムがない。", "You have nothing to gain power.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(user_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return (FALSE);
 
 	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
@@ -320,8 +321,8 @@ bool import_magic_device(void)
 
 	if (o_ptr->tval == TV_ROD)
 	{
-		p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)o_ptr->number;
-		if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
+		user_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)o_ptr->number;
+		if (user_ptr->magic_num2[o_ptr->sval + ext] > 99) user_ptr->magic_num2[o_ptr->sval + ext] = 99;
 	}
 	else
 	{
@@ -330,17 +331,17 @@ bool import_magic_device(void)
 		{
 			int gain_num = pval;
 			if (o_ptr->tval == TV_WAND) gain_num = (pval + num - 1) / num;
-			if (p_ptr->magic_num2[o_ptr->sval + ext])
+			if (user_ptr->magic_num2[o_ptr->sval + ext])
 			{
 				gain_num *= 256;
 				gain_num = (gain_num / 3 + randint0(gain_num / 3)) / 256;
 				if (gain_num < 1) gain_num = 1;
 			}
-			p_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)gain_num;
-			if (p_ptr->magic_num2[o_ptr->sval + ext] > 99) p_ptr->magic_num2[o_ptr->sval + ext] = 99;
-			p_ptr->magic_num1[o_ptr->sval + ext] += pval * 0x10000;
-			if (p_ptr->magic_num1[o_ptr->sval + ext] > 99 * 0x10000) p_ptr->magic_num1[o_ptr->sval + ext] = 99 * 0x10000;
-			if (p_ptr->magic_num1[o_ptr->sval + ext] > p_ptr->magic_num2[o_ptr->sval + ext] * 0x10000) p_ptr->magic_num1[o_ptr->sval + ext] = p_ptr->magic_num2[o_ptr->sval + ext] * 0x10000;
+			user_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)gain_num;
+			if (user_ptr->magic_num2[o_ptr->sval + ext] > 99) user_ptr->magic_num2[o_ptr->sval + ext] = 99;
+			user_ptr->magic_num1[o_ptr->sval + ext] += pval * 0x10000;
+			if (user_ptr->magic_num1[o_ptr->sval + ext] > 99 * 0x10000) user_ptr->magic_num1[o_ptr->sval + ext] = 99 * 0x10000;
+			if (user_ptr->magic_num1[o_ptr->sval + ext] > user_ptr->magic_num2[o_ptr->sval + ext] * 0x10000) user_ptr->magic_num1[o_ptr->sval + ext] = user_ptr->magic_num2[o_ptr->sval + ext] * 0x10000;
 			if (o_ptr->tval == TV_WAND) pval -= (pval + num - 1) / num;
 		}
 	}
@@ -363,7 +364,7 @@ bool import_magic_device(void)
 		floor_item_describe(0 - item);
 		floor_item_optimize(0 - item);
 	}
-	take_turn(p_ptr, 100);
+	take_turn(user_ptr, 100);
 	return TRUE;
 }
 
