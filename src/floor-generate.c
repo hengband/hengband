@@ -483,11 +483,11 @@ bool place_quest_monsters(void)
  * @details There were moved from cave_gen().
  * @return なし
  */
-static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr)
+static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_ptr)
 {
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	/* Possible "destroyed" level */
-	if ((current_floor_ptr->dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (dungeon_ptr->flags1 & DF1_DESTROY))
+	if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (dungeon_ptr->flags1 & DF1_DESTROY))
 	{
 		dun->destroyed = TRUE;
 
@@ -508,38 +508,38 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr)
 		if (dungeon_ptr->flags1 & DF1_LAKE_LAVA)
 		{
 			/* Lake of Lava */
-			if ((current_floor_ptr->dun_level > 80) && (randint0(count) < 2)) dun->laketype = LAKE_T_LAVA;
+			if ((floor_ptr->dun_level > 80) && (randint0(count) < 2)) dun->laketype = LAKE_T_LAVA;
 			count -= 2;
 
 			/* Lake of Lava2 */
-			if (!dun->laketype && (current_floor_ptr->dun_level > 80) && one_in_(count)) dun->laketype = LAKE_T_FIRE_VAULT;
+			if (!dun->laketype && (floor_ptr->dun_level > 80) && one_in_(count)) dun->laketype = LAKE_T_FIRE_VAULT;
 			count--;
 		}
 
 		if ((dungeon_ptr->flags1 & DF1_LAKE_WATER) && !dun->laketype)
 		{
 			/* Lake of Water */
-			if ((current_floor_ptr->dun_level > 50) && randint0(count) < 2) dun->laketype = LAKE_T_WATER;
+			if ((floor_ptr->dun_level > 50) && randint0(count) < 2) dun->laketype = LAKE_T_WATER;
 			count -= 2;
 
 			/* Lake of Water2 */
-			if (!dun->laketype && (current_floor_ptr->dun_level > 50) && one_in_(count)) dun->laketype = LAKE_T_WATER_VAULT;
+			if (!dun->laketype && (floor_ptr->dun_level > 50) && one_in_(count)) dun->laketype = LAKE_T_WATER_VAULT;
 			count--;
 		}
 
 		if ((dungeon_ptr->flags1 & DF1_LAKE_RUBBLE) && !dun->laketype)
 		{
 			/* Lake of rubble */
-			if ((current_floor_ptr->dun_level > 35) && (randint0(count) < 2)) dun->laketype = LAKE_T_CAVE;
+			if ((floor_ptr->dun_level > 35) && (randint0(count) < 2)) dun->laketype = LAKE_T_CAVE;
 			count -= 2;
 
 			/* Lake of rubble2 */
-			if (!dun->laketype && (current_floor_ptr->dun_level > 35) && one_in_(count)) dun->laketype = LAKE_T_EARTH_VAULT;
+			if (!dun->laketype && (floor_ptr->dun_level > 35) && one_in_(count)) dun->laketype = LAKE_T_EARTH_VAULT;
 			count--;
 		}
 
 		/* Lake of tree */
-		if ((current_floor_ptr->dun_level > 5) && (dungeon_ptr->flags1 & DF1_LAKE_TREE) && !dun->laketype) dun->laketype = LAKE_T_AIR_VAULT;
+		if ((floor_ptr->dun_level > 5) && (dungeon_ptr->flags1 & DF1_LAKE_TREE) && !dun->laketype) dun->laketype = LAKE_T_AIR_VAULT;
 
 		if (dun->laketype)
 		{
@@ -548,13 +548,13 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr)
 		}
 	}
 
-	if ((current_floor_ptr->dun_level > DUN_CAVERN) && !dun->empty_level &&
+	if ((floor_ptr->dun_level > DUN_CAVERN) && !dun->empty_level &&
 	    (dungeon_ptr->flags1 & DF1_CAVERN) &&
-	    !dun->laketype && !dun->destroyed && (randint1(1000) < current_floor_ptr->dun_level))
+	    !dun->laketype && !dun->destroyed && (randint1(1000) < floor_ptr->dun_level))
 	{
 		dun->cavern = TRUE;
 
-		/* make a large fractal current_floor_ptr->grid_array in the middle of the dungeon */
+		/* make a large fractal floor_ptr->grid_array in the middle of the dungeon */
 
 		msg_print_wizard(CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
 		build_cavern();
@@ -562,7 +562,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr)
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
 	/* Hack -- No destroyed "quest" levels */
-	if (quest_number(current_floor_ptr->dun_level)) dun->destroyed = FALSE;
+	if (quest_number(floor_ptr->dun_level)) dun->destroyed = FALSE;
 }
 
 
@@ -662,7 +662,7 @@ static bool cave_gen(dungeon_type* dungeon_ptr, floor_type *floor_ptr)
 	}
 
 	/* Generate various caverns and lakes */
-	gen_caverns_and_lakes(dungeon_ptr);
+	gen_caverns_and_lakes(dungeon_ptr, floor_ptr);
 
 	/* Build maze */
 	if (dungeon_ptr->flags1 & DF1_MAZE)
