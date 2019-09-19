@@ -872,7 +872,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
  * just use an optimized hack of "you see me, so I see you", and then use the
  * actual "projectable()" function to check spell attacks.
  */
-void update_view(player_type *subject_ptr)
+void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 {
 	int n, m, d, k, z;
 	POSITION y, x;
@@ -881,15 +881,15 @@ void update_view(player_type *subject_ptr)
 
 	int full, over;
 
-	POSITION y_max = current_floor_ptr->height - 1;
-	POSITION x_max = current_floor_ptr->width - 1;
+	POSITION y_max = floor_ptr->height - 1;
+	POSITION x_max = floor_ptr->width - 1;
 
 	grid_type *g_ptr;
 
 	/*** Initialize ***/
 
 	/* Optimize */
-	if (view_reduce_view && !current_floor_ptr->dun_level)
+	if (view_reduce_view && !floor_ptr->dun_level)
 	{
 		/* Full radius (10) */
 		full = MAX_SIGHT / 2;
@@ -912,11 +912,11 @@ void update_view(player_type *subject_ptr)
 	/*** Step 0 -- Begin ***/
 
 	/* Save the old "view" grids for later */
-	for (n = 0; n < current_floor_ptr->view_n; n++)
+	for (n = 0; n < floor_ptr->view_n; n++)
 	{
-		y = current_floor_ptr->view_y[n];
-		x = current_floor_ptr->view_x[n];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		y = floor_ptr->view_y[n];
+		x = floor_ptr->view_x[n];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Mark the grid as not in "view" */
 		g_ptr->info &= ~(CAVE_VIEW);
@@ -931,14 +931,14 @@ void update_view(player_type *subject_ptr)
 	}
 
 	/* Start over with the "view" array */
-	current_floor_ptr->view_n = 0;
+	floor_ptr->view_n = 0;
 
 	/*** Step 1 -- adjacent grids ***/
 
 	/* Now start on the player */
 	y = subject_ptr->y;
 	x = subject_ptr->x;
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Assume the player grid is easily viewable */
 	g_ptr->info |= (CAVE_XTRA);
@@ -955,7 +955,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan south-east */
 	for (d = 1; d <= z; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y + d][x + d];
+		g_ptr = &floor_ptr->grid_array[y + d][x + d];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y + d, x + d);
 		if (!cave_los_grid(g_ptr)) break;
@@ -964,7 +964,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan south-west */
 	for (d = 1; d <= z; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y + d][x - d];
+		g_ptr = &floor_ptr->grid_array[y + d][x - d];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y + d, x - d);
 		if (!cave_los_grid(g_ptr)) break;
@@ -973,7 +973,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan north-east */
 	for (d = 1; d <= z; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y - d][x + d];
+		g_ptr = &floor_ptr->grid_array[y - d][x + d];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y - d, x + d);
 		if (!cave_los_grid(g_ptr)) break;
@@ -982,7 +982,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan north-west */
 	for (d = 1; d <= z; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y - d][x - d];
+		g_ptr = &floor_ptr->grid_array[y - d][x - d];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y - d, x - d);
 		if (!cave_los_grid(g_ptr)) break;
@@ -993,7 +993,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan south */
 	for (d = 1; d <= full; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y + d][x];
+		g_ptr = &floor_ptr->grid_array[y + d][x];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y + d, x);
 		if (!cave_los_grid(g_ptr)) break;
@@ -1005,7 +1005,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan north */
 	for (d = 1; d <= full; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y - d][x];
+		g_ptr = &floor_ptr->grid_array[y - d][x];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y - d, x);
 		if (!cave_los_grid(g_ptr)) break;
@@ -1017,7 +1017,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan east */
 	for (d = 1; d <= full; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y][x + d];
+		g_ptr = &floor_ptr->grid_array[y][x + d];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y, x + d);
 		if (!cave_los_grid(g_ptr)) break;
@@ -1029,7 +1029,7 @@ void update_view(player_type *subject_ptr)
 	/* Scan west */
 	for (d = 1; d <= full; d++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y][x - d];
+		g_ptr = &floor_ptr->grid_array[y][x - d];
 		g_ptr->info |= (CAVE_XTRA);
 		cave_view_hack(g_ptr, y, x - d);
 		if (!cave_los_grid(g_ptr)) break;
@@ -1279,11 +1279,11 @@ void update_view(player_type *subject_ptr)
 	/*** Step 5 -- Complete the algorithm ***/
 
 	/* Update all the new grids */
-	for (n = 0; n < current_floor_ptr->view_n; n++)
+	for (n = 0; n < floor_ptr->view_n; n++)
 	{
-		y = current_floor_ptr->view_y[n];
-		x = current_floor_ptr->view_x[n];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		y = floor_ptr->view_y[n];
+		x = floor_ptr->view_x[n];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Clear the "CAVE_XTRA" flag */
 		g_ptr->info &= ~(CAVE_XTRA);
@@ -1300,7 +1300,7 @@ void update_view(player_type *subject_ptr)
 	{
 		y = tmp_pos.y[n];
 		x = tmp_pos.x[n];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_TEMP);
