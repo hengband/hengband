@@ -795,6 +795,71 @@ void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT
 	(*xp) = nx;
 }
 
+
+/*!
+ * @brief 指定された座標をプレイヤーが視覚に収められるかを返す。 / Can the player "see" the given grid in detail?
+ * @param y y座標
+ * @param x x座標
+ * @return 視覚に収められる状態ならTRUEを返す
+ * @details
+ * He must have vision, illumination, and line of sight.\n
+ * \n
+ * Note -- "CAVE_LITE" is only set if the "torch" has "los()".\n
+ * So, given "CAVE_LITE", we know that the grid is "fully visible".\n
+ *\n
+ * Note that "CAVE_GLOW" makes little sense for a wall, since it would mean\n
+ * that a wall is visible from any direction.  That would be odd.  Except\n
+ * under wizard light, which might make sense.  Thus, for walls, we require\n
+ * not only that they be "CAVE_GLOW", but also, that they be adjacent to a\n
+ * grid which is not only "CAVE_GLOW", but which is a non-wall, and which is\n
+ * in line of sight of the player.\n
+ *\n
+ * This extra check is expensive, but it provides a more "correct" semantics.\n
+ *\n
+ * Note that we should not run this check on walls which are "outer walls" of\n
+ * the dungeon, or we will induce a memory fault, but actually verifying all\n
+ * of the locations would be extremely expensive.\n
+ *\n
+ * Thus, to speed up the function, we assume that all "perma-walls" which are\n
+ * "CAVE_GLOW" are "illuminated" from all sides.  This is correct for all cases\n
+ * except "vaults" and the "buildings" in town.  But the town is a hack anyway,\n
+ * and the player has more important things on his mind when he is attacking a\n
+ * monster vault.  It is annoying, but an extremely important optimization.\n
+ *\n
+ * Note that "glowing walls" are only considered to be "illuminated" if the\n
+ * grid which is next to the wall in the direction of the player is also a\n
+ * "glowing" grid.  This prevents the player from being able to "see" the\n
+ * walls of illuminated rooms from a corridor outside the room.\n
+ */
+bool player_can_see_bold(POSITION y, POSITION x)
+{
+	grid_type *g_ptr;
+
+	/* Blind players see nothing */
+	if (p_ptr->blind) return FALSE;
+
+	g_ptr = &current_floor_ptr->grid_array[y][x];
+
+	/* Note that "torch-lite" yields "illumination" */
+	if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;
+
+	/* Require line of sight to the grid */
+	if (!player_has_los_bold(y, x)) return FALSE;
+
+	/* Noctovision of Ninja */
+	if (p_ptr->see_nocto) return TRUE;
+
+	/* Require "perma-lite" of the grid */
+	if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) return FALSE;
+
+	/* Feature code (applying "mimic" field) */
+	/* Floors are simple */
+	if (feat_supports_los(get_feat_mimic(g_ptr))) return TRUE;
+
+	/* Check for "local" illumination */
+	return check_local_illumination(y, x);
+}
+
 /*
  * Calculate "incremental motion". Used by project() and shoot().
  * Assumes that (*y,*x) lies on the path from (y1,x1) to (y2,x2).
