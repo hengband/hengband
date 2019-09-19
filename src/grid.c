@@ -270,8 +270,8 @@ void place_random_stairs(POSITION y, POSITION x)
 	}
 
 	/* Place the stairs */
-	if (up_stairs) set_cave_feat(y, x, feat_up_stair);
-	else if (down_stairs) set_cave_feat(y, x, feat_down_stair);
+	if (up_stairs) set_cave_feat(current_floor_ptr, y, x, feat_up_stair);
+	else if (down_stairs) set_cave_feat(current_floor_ptr, y, x, feat_down_stair);
 }
 
 /*!
@@ -347,7 +347,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 	{
 		if (feat != feat_none)
 		{
-			set_cave_feat(y, x, feat);
+			set_cave_feat(current_floor_ptr, y, x, feat);
 		}
 		else
 		{
@@ -427,7 +427,7 @@ void place_locked_door(POSITION y, POSITION x)
 	}
 	else
 	{
-		set_cave_feat(y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+		set_cave_feat(current_floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
 		current_floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}

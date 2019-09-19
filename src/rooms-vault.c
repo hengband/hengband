@@ -444,37 +444,37 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 				/* Black market in a dungeon */
 			case 'S':
-				set_cave_feat(y, x, feat_black_market);
+				set_cave_feat(current_floor_ptr, y, x, feat_black_market);
 				store_init(NO_TOWN, STORE_BLACK);
 				break;
 
 				/* The Pattern */
 			case 'p':
-				set_cave_feat(y, x, feat_pattern_start);
+				set_cave_feat(current_floor_ptr, y, x, feat_pattern_start);
 				break;
 
 			case 'a':
-				set_cave_feat(y, x, feat_pattern_1);
+				set_cave_feat(current_floor_ptr, y, x, feat_pattern_1);
 				break;
 
 			case 'b':
-				set_cave_feat(y, x, feat_pattern_2);
+				set_cave_feat(current_floor_ptr, y, x, feat_pattern_2);
 				break;
 
 			case 'c':
-				set_cave_feat(y, x, feat_pattern_3);
+				set_cave_feat(current_floor_ptr, y, x, feat_pattern_3);
 				break;
 
 			case 'd':
-				set_cave_feat(y, x, feat_pattern_4);
+				set_cave_feat(current_floor_ptr, y, x, feat_pattern_4);
 				break;
 
 			case 'P':
-				set_cave_feat(y, x, feat_pattern_end);
+				set_cave_feat(current_floor_ptr, y, x, feat_pattern_end);
 				break;
 
 			case 'B':
-				set_cave_feat(y, x, feat_pattern_exit);
+				set_cave_feat(current_floor_ptr, y, x, feat_pattern_exit);
 				break;
 
 			case 'A':
@@ -485,51 +485,51 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				break;
 
 			case '~':
-				set_cave_feat(y, x, feat_shallow_water);
+				set_cave_feat(current_floor_ptr, y, x, feat_shallow_water);
 				break;
 
 			case '=':
-				set_cave_feat(y, x, feat_deep_water);
+				set_cave_feat(current_floor_ptr, y, x, feat_deep_water);
 				break;
 
 			case 'v':
-				set_cave_feat(y, x, feat_shallow_lava);
+				set_cave_feat(current_floor_ptr, y, x, feat_shallow_lava);
 				break;
 
 			case 'w':
-				set_cave_feat(y, x, feat_deep_lava);
+				set_cave_feat(current_floor_ptr, y, x, feat_deep_lava);
 				break;
 
 			case 'f':
-				set_cave_feat(y, x, feat_shallow_acid_puddle);
+				set_cave_feat(current_floor_ptr, y, x, feat_shallow_acid_puddle);
 				break;
 
 			case 'F':
-				set_cave_feat(y, x, feat_deep_acid_puddle);
+				set_cave_feat(current_floor_ptr, y, x, feat_deep_acid_puddle);
 				break;
 
 			case 'g':
-				set_cave_feat(y, x, feat_shallow_poisonous_puddle);
+				set_cave_feat(current_floor_ptr, y, x, feat_shallow_poisonous_puddle);
 				break;
 
 			case 'G':
-				set_cave_feat(y, x, feat_deep_poisonous_puddle);
+				set_cave_feat(current_floor_ptr, y, x, feat_deep_poisonous_puddle);
 				break;
 
 			case 'h':
-				set_cave_feat(y, x, feat_cold_zone);
+				set_cave_feat(current_floor_ptr, y, x, feat_cold_zone);
 				break;
 
 			case 'H':
-				set_cave_feat(y, x, feat_heavy_cold_zone);
+				set_cave_feat(current_floor_ptr, y, x, feat_heavy_cold_zone);
 				break;
 
 			case 'i':
-				set_cave_feat(y, x, feat_electrical_zone);
+				set_cave_feat(current_floor_ptr, y, x, feat_electrical_zone);
 				break;
 
 			case 'I':
-				set_cave_feat(y, x, feat_heavy_electrical_zone);
+				set_cave_feat(current_floor_ptr, y, x, feat_heavy_electrical_zone);
 				break;
 
 			}

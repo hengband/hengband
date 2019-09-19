@@ -81,7 +81,7 @@ typedef struct
 } grid_template_type;
 
 /* Macros */
-#define set_cave_feat(Y,X,F)    (current_floor_ptr->grid_array[(Y)][(X)].feat = (F))
+#define set_cave_feat(FL,Y,X,F)    ((FL)->grid_array[(Y)][(X)].feat = (F))
 #define add_cave_info(Y,X,I)    (current_floor_ptr->grid_array[(Y)][(X)].info |= (I))
 
 /* This should not be used */
@@ -92,7 +92,7 @@ typedef struct
  * @param Y 指定Y座標
  * @param X 指定X座標
  */
-#define place_rubble(Y,X)       set_cave_feat(Y,X,feat_rubble)
+#define place_rubble(Y,X)       set_cave_feat(current_floor_ptr,Y,X,feat_rubble)
 
 /*!
  * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
@@ -115,7 +115,7 @@ typedef struct
 
 #define place_floor_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_ground_type[randint0(100)]); \
+	set_cave_feat(current_floor_ptr, Y,X,feat_ground_type[randint0(100)]); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_FLOOR); \
 	delete_monster(Y, X); \
@@ -131,7 +131,7 @@ typedef struct
 
 #define place_extra_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_wall_type[randint0(100)]); \
+	set_cave_feat(current_floor_ptr, Y,X,feat_wall_type[randint0(100)]); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_EXTRA); \
 	delete_monster(Y, X); \
@@ -147,7 +147,7 @@ typedef struct
 
 #define place_extra_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_permanent); \
+	set_cave_feat(floor_ptr, Y,X,feat_permanent); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_EXTRA); \
 	delete_monster(Y, X); \
@@ -164,7 +164,7 @@ typedef struct
 #define place_extra_noperm_bold(Y, X) \
 { \
 	feature_type *_f_ptr; \
-	set_cave_feat(Y,X,feat_wall_type[randint0(100)]); \
+	set_cave_feat(floor_ptr, Y,X,feat_wall_type[randint0(100)]); \
 	_f_ptr = &f_info[current_floor_ptr->grid_array[Y][X].feat]; \
 	if (permanent_wall(_f_ptr)) current_floor_ptr->grid_array[Y][X].feat = feat_state(current_floor_ptr->grid_array[Y][X].feat, FF_UNPERM); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
@@ -174,7 +174,7 @@ typedef struct
 
 #define place_inner_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_wall_inner); \
+	set_cave_feat(current_floor_ptr, Y,X,feat_wall_inner); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_INNER); \
 	delete_monster(Y, X); \
@@ -190,7 +190,7 @@ typedef struct
 
 #define place_inner_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_permanent); \
+	set_cave_feat(current_floor_ptr, Y,X,feat_permanent); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_INNER); \
 	delete_monster(Y, X); \
@@ -206,7 +206,7 @@ typedef struct
 
 #define place_outer_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_wall_outer); \
+	set_cave_feat(current_floor_ptr, Y,X,feat_wall_outer); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_OUTER); \
 	delete_monster(Y, X); \
@@ -222,7 +222,7 @@ typedef struct
 
 #define place_outer_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_permanent); \
+	set_cave_feat(floor_ptr, Y,X,feat_permanent); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_OUTER); \
 	delete_monster(Y, X); \
@@ -239,8 +239,8 @@ typedef struct
 #define place_outer_noperm_bold(Y, X) \
 { \
 	feature_type *_f_ptr = &f_info[feat_wall_outer]; \
-	if (permanent_wall(_f_ptr)) set_cave_feat(Y, X, (s16b)feat_state(feat_wall_outer, FF_UNPERM)); \
-	else set_cave_feat(Y,X,feat_wall_outer); \
+	if (permanent_wall(_f_ptr)) set_cave_feat(current_floor_ptr, Y, X, (s16b)feat_state(feat_wall_outer, FF_UNPERM)); \
+	else set_cave_feat(current_floor_ptr, Y,X,feat_wall_outer); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,(CAVE_OUTER | CAVE_VAULT)); \
 	delete_monster(Y, X); \
@@ -258,7 +258,7 @@ typedef struct
 
 #define place_solid_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_wall_solid); \
+	set_cave_feat(current_floor_ptr, Y,X,feat_wall_solid); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_SOLID); \
 	delete_monster(Y, X); \
@@ -274,7 +274,7 @@ typedef struct
 
 #define place_solid_perm_bold(Y, X) \
 { \
-	set_cave_feat(Y,X,feat_permanent); \
+	set_cave_feat(floor_ptr, Y,X,feat_permanent); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_SOLID); \
 	delete_monster(Y, X); \
@@ -292,8 +292,8 @@ typedef struct
 { \
 	feature_type *_f_ptr = &f_info[feat_wall_solid]; \
 	if ((current_floor_ptr->grid_array[Y][X].info & CAVE_VAULT) && permanent_wall(_f_ptr)) \
-		set_cave_feat(Y, X, feat_state(feat_wall_solid, FF_UNPERM)); \
-	else set_cave_feat(Y,X,feat_wall_solid); \
+		set_cave_feat(current_floor_ptr, Y, X, feat_state(feat_wall_solid, FF_UNPERM)); \
+	else set_cave_feat(current_floor_ptr, Y,X,feat_wall_solid); \
 	current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(Y,X,CAVE_SOLID); \
 	delete_monster(Y, X); \
