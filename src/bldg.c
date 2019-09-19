@@ -4148,7 +4148,7 @@ void do_cmd_bldg(void)
 		p_ptr->oldpx = p_ptr->x;
 	}
 
-	forget_lite();
+	forget_lite(current_floor_ptr);
 	forget_view();
 
 	/* Hack -- Increase "icky" depth */

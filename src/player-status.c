@@ -5045,7 +5045,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_UN_LITE))
 	{
 		creature_ptr->update &= ~(PU_UN_LITE);
-		forget_lite();
+		forget_lite(current_floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_UN_VIEW))

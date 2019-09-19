@@ -6932,7 +6932,7 @@ static void handle_signal_simple(int sig)
 		/* Mark the savefile */
 		(void)strcpy(p_ptr->died_from, _("強制終了", "Abortion"));
 
-		forget_lite();
+		forget_lite(current_floor_ptr);
 		forget_view();
 		clear_mon_lite(current_floor_ptr);
 
@@ -6949,7 +6949,7 @@ static void handle_signal_simple(int sig)
 		/* Cause of "death" */
 		(void)strcpy(p_ptr->died_from, _("強制終了中", "Interrupting"));
 
-		forget_lite();
+		forget_lite(current_floor_ptr);
 		forget_view();
 		clear_mon_lite(current_floor_ptr);
 
@@ -7025,7 +7025,7 @@ static void handle_signal_abort(int sig)
 	if (!current_world_ptr->character_generated || current_world_ptr->character_saved) quit(NULL);
 
 
-	forget_lite();
+	forget_lite(current_floor_ptr);
 	forget_view();
 	clear_mon_lite(current_floor_ptr);
 

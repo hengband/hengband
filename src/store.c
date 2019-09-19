@@ -5762,7 +5762,7 @@ void do_cmd_store(void)
 		town_info[p_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
 	}
 
-	forget_lite();
+	forget_lite(current_floor_ptr);
 	forget_view();
 
 	/* Hack -- Character is in "icky" mode */

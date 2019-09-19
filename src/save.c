@@ -1116,7 +1116,7 @@ static bool wr_dungeon(void)
 	saved_floor_type *cur_sf_ptr;
 	int i;
 
-	forget_lite();
+	forget_lite(current_floor_ptr);
 	forget_view();
 	clear_mon_lite(current_floor_ptr);
 

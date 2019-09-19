@@ -5620,7 +5620,7 @@ void play_game(bool new_game)
 		/* Cancel the health bar */
 		health_track(0);
 
-		forget_lite();
+		forget_lite(current_floor_ptr);
 		forget_view();
 		clear_mon_lite(current_floor_ptr);
 

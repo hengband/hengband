@@ -1066,7 +1066,7 @@ void leave_floor(player_type *creature_ptr, BIT_FLAGS floor_mode)
 		/* Record the last visit current_world_ptr->game_turn of current floor */
 		sf_ptr->last_visit = current_world_ptr->game_turn;
 
-		forget_lite();
+		forget_lite(current_floor_ptr);
 		forget_view();
 		clear_mon_lite(current_floor_ptr);
 
