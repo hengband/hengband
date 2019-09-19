@@ -1210,24 +1210,24 @@ static void generate_gambling_arena(floor_type *floor_ptr)
  * @brief 固定マップクエストのフロア生成 / Generate a quest level
  * @return なし
  */
-static void generate_fixed_floor(void)
+static void generate_fixed_floor(floor_type *floor_ptr)
 {
 	POSITION x, y;
 
 	/* Start with perm walls */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
 			place_solid_perm_bold(y, x);
 		}
 	}
 
 	/* Set the quest level */
-	current_floor_ptr->base_level = quest[p_ptr->inside_quest].level;
-	current_floor_ptr->dun_level = current_floor_ptr->base_level;
-	current_floor_ptr->object_level = current_floor_ptr->base_level;
-	current_floor_ptr->monster_level = current_floor_ptr->base_level;
+	floor_ptr->base_level = quest[p_ptr->inside_quest].level;
+	floor_ptr->dun_level = floor_ptr->base_level;
+	floor_ptr->object_level = floor_ptr->base_level;
+	floor_ptr->monster_level = floor_ptr->base_level;
 
 	if (record_stair) exe_write_diary(p_ptr, NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
 	get_mon_num_prep(get_monster_hook(), NULL);
@@ -1422,7 +1422,7 @@ void generate_random_floor(floor_type *floor_ptr)
 
 		else if (p_ptr->inside_quest)
 		{
-			generate_fixed_floor();
+			generate_fixed_floor(floor_ptr);
 		}
 
 		/* Build the town */
