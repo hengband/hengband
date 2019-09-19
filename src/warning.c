@@ -415,7 +415,7 @@ bool process_warning(POSITION xx, POSITION yy)
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 
-			if (!in_bounds(my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
+			if (!in_bounds(current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
 			g_ptr = &current_floor_ptr->grid_array[my][mx];
 

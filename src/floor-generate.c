@@ -143,17 +143,17 @@ dun_data *dun;
  * @param y 基準のy座標
  * @param x 基準のx座標
  * @return 隣接する外壁の数
- * @note Assumes "in_bounds(y, x)"
+ * @note Assumes "in_bounds(current_floor_ptr, y, x)"
  * @details We count only granite walls and permanent walls.
  */
 static int next_to_walls(POSITION y, POSITION x)
 {
 	int k = 0;
 
-	if (in_bounds(y + 1, x) && is_extra_bold(y + 1, x)) k++;
-	if (in_bounds(y - 1, x) && is_extra_bold(y - 1, x)) k++;
-	if (in_bounds(y, x + 1) && is_extra_bold(y, x + 1)) k++;
-	if (in_bounds(y, x - 1) && is_extra_bold(y, x - 1)) k++;
+	if (in_bounds(current_floor_ptr, y + 1, x) && is_extra_bold(y + 1, x)) k++;
+	if (in_bounds(current_floor_ptr, y - 1, x) && is_extra_bold(y - 1, x)) k++;
+	if (in_bounds(current_floor_ptr, y, x + 1) && is_extra_bold(y, x + 1)) k++;
+	if (in_bounds(current_floor_ptr, y, x - 1) && is_extra_bold(y, x - 1)) k++;
 
 	return (k);
 }
@@ -1592,7 +1592,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 
 
 		/* Extremely Important -- do not leave the dungeon */
-		while (!in_bounds(tmp_row, tmp_col))
+		while (!in_bounds(current_floor_ptr, tmp_row, tmp_col))
 		{
 			/* Acquire the correct direction */
 			correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -1748,7 +1748,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 
 	grid_type *g_ptr = &current_floor_ptr->grid_array[*y][*x];
 
-	if (!in_bounds(*y, *x)) return TRUE;
+	if (!in_bounds(current_floor_ptr, *y, *x)) return TRUE;
 
 	if (is_inner_grid(g_ptr))
 	{
@@ -1823,7 +1823,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 			dy = randint0(3) - 1;
 			dx = randint0(3) - 1;
 
-			if (!in_bounds(*y + dy, *x + dx))
+			if (!in_bounds(current_floor_ptr, *y + dy, *x + dx))
 			{
 				dx = 0;
 				dy = 0;
@@ -2061,7 +2061,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 		y3 = y1 + dy + changey;
 
 		/* See if in bounds - if not - do not perturb point */
-		if (!in_bounds(y3, x3))
+		if (!in_bounds(current_floor_ptr, y3, x3))
 		{
 			x3 = (x1 + x2) / 2;
 			y3 = (y1 + y2) / 2;
@@ -2080,7 +2080,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 			{
 				dy = randint0(3) - 1;
 				dx = randint0(3) - 1;
-				if (!in_bounds(y3 + dy, x3 + dx))
+				if (!in_bounds(current_floor_ptr, y3 + dy, x3 + dx))
 				{
 					dx = 0;
 					dy = 0;

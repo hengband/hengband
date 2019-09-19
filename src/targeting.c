@@ -324,7 +324,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	if (!(in_bounds(y, x))) return (FALSE);
+	if (!(in_bounds(current_floor_ptr, y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
 	if (player_bold(y, x)) return (TRUE);
@@ -1936,7 +1936,7 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 
-	if (!(in_bounds(y, x))) return (FALSE);
+	if (!(in_bounds(current_floor_ptr, y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
 	if ((y == p_ptr->y) && (x == p_ptr->x)) return (TRUE);

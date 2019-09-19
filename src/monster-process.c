@@ -739,7 +739,7 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			x = fx + dx;
 
 			/* Skip illegal locations */
-			if (!in_bounds(y, x)) continue;
+			if (!in_bounds(current_floor_ptr, y, x)) continue;
 
 			g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -831,7 +831,7 @@ static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			x = fx + dx;
 
 			/* Skip illegal locations */
-			if (!in_bounds(y, x)) continue;
+			if (!in_bounds(current_floor_ptr, y, x)) continue;
 
 			/* Skip occupied locations */
 			if (!monster_can_enter(y, x, r_ptr, 0)) continue;

@@ -210,7 +210,7 @@ void place_trap(POSITION y, POSITION x)
 	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
 
 	/* Paranoia -- verify location */
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	/* Require empty, clean, floor grid */
 	if (!cave_clean_bold(y, x)) return;
@@ -620,7 +620,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 				POSITION x1 = rand_spread(x, 7);
 				POSITION y1 = rand_spread(y, 5);
 
-				if (!in_bounds(y1, x1)) continue;
+				if (!in_bounds(current_floor_ptr, y1, x1)) continue;
 
 				/* Require line of projection */
 				if (!projectable(trapped_ptr->y, trapped_ptr->x, y1, x1)) continue;

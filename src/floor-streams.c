@@ -83,7 +83,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 			changey = 0;
 		}
 
-		if (!in_bounds(y1 + dy + changey, x1 + dx + changex))
+		if (!in_bounds(current_floor_ptr, y1 + dy + changey, x1 + dx + changex))
 		{
 			changex = 0;
 			changey = 0;
@@ -372,7 +372,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 		}
 
 		/* Quit before leaving the dungeon */
-		if (!in_bounds(y, x)) break;
+		if (!in_bounds(current_floor_ptr, y, x)) break;
 	}
 }
 
@@ -399,7 +399,7 @@ void place_trees(POSITION x, POSITION y)
 	{
 		for (j = y - 3; j < y + 4; j++)
 		{
-			if (!in_bounds(j, i)) continue;
+			if (!in_bounds(current_floor_ptr, j, i)) continue;
 			g_ptr = &current_floor_ptr->grid_array[j][i];
 
 			if (g_ptr->info & CAVE_ICKY) continue;

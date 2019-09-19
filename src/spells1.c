@@ -5139,7 +5139,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	if ((ax < 2) && (ay < 2)) return (TRUE);
 
 	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(y1, x1)) return (FALSE); */
+	/* if (!in_bounds(current_floor_ptr, y1, x1)) return (FALSE); */
 
 	/* Directly South/North */
 	if (!dx)
@@ -5362,7 +5362,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 				for (x = bx - cdis; x <= bx + cdis; x++)
 				{
 					/* Ignore "illegal" locations */
-					if (!in_bounds(y, x)) continue;
+					if (!in_bounds(current_floor_ptr, y, x)) continue;
 
 					/* Enforce a circular "ripple" */
 					if (distance(y1, x1, y, x) != bdis) continue;

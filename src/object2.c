@@ -198,7 +198,7 @@ void delete_object(POSITION y, POSITION x)
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 
@@ -4399,7 +4399,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 
 
 	/* Paranoia -- check bounds */
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	/* Require floor space */
 	if (!cave_drop_bold(y, x)) return;
@@ -4510,7 +4510,7 @@ void place_gold(POSITION y, POSITION x)
 
 
 	/* Paranoia -- check bounds */
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	/* Require floor space */
 	if (!cave_drop_bold(y, x)) return;
@@ -4556,7 +4556,7 @@ void place_gold(POSITION y, POSITION x)
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらオブジェクトのIDを返す。
  * @details
- * The initial location is assumed to be "in_bounds()".\n
+ * The initial location is assumed to be "in_bounds(current_floor_ptr, )".\n
  *\n
  * This function takes a parameter "chance".  This is the percentage\n
  * chance that the item will "disappear" instead of drop.  If the object\n
@@ -4639,7 +4639,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			ty = y + dy;
 			tx = x + dx;
 
-			if (!in_bounds(ty, tx)) continue;
+			if (!in_bounds(current_floor_ptr, ty, tx)) continue;
 
 			/* Require line of projection */
 			if (!projectable(y, x, ty, tx)) continue;
@@ -4718,7 +4718,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		ty = rand_spread(by, 1);
 		tx = rand_spread(bx, 1);
 
-		if (!in_bounds(ty, tx)) continue;
+		if (!in_bounds(current_floor_ptr, ty, tx)) continue;
 
 		/* Bounce to that location */
 		by = ty;

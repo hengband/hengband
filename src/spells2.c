@@ -1678,7 +1678,7 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 		 * properly.
 		 * This leaves only a check for 6 bounding walls!
 		 */
-		if (in_bounds(y, x) && pass_bold(y, x) &&
+		if (in_bounds(current_floor_ptr, y, x) && pass_bold(y, x) &&
 		    (next_to_walls_adj(y, x, pass_bold) == 6) && (next_to_open(y, x, pass_bold) <= 1)) return;
 	}
 
@@ -3019,7 +3019,7 @@ bool rush_attack(bool *mdeath)
 		ty = target_row;
 	}
 
-	if (in_bounds(ty, tx)) tm_idx = current_floor_ptr->grid_array[ty][tx].m_idx;
+	if (in_bounds(current_floor_ptr, ty, tx)) tm_idx = current_floor_ptr->grid_array[ty][tx].m_idx;
 
 	path_n = project_path(path_g, project_length, p_ptr->y, p_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
 	project_length = 0;
@@ -3322,7 +3322,7 @@ void cast_meteor(HIT_POINT dam, POSITION rad)
 
 			if (d >= 9) continue;
 
-			if (!in_bounds(y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)
+			if (!in_bounds(current_floor_ptr, y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)
 				|| !cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 			/* Valid position */
@@ -3414,7 +3414,7 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 		if (count < 0) continue;
 
 		/* Cannot penetrate perm walls */
-		if (!in_bounds(y, x) ||
+		if (!in_bounds(current_floor_ptr, y, x) ||
 			cave_stop_disintegration(y, x) ||
 			!in_disintegration_range(ty, tx, y, x))
 			continue;

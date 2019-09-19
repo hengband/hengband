@@ -184,7 +184,7 @@ void delete_monster_idx(MONSTER_IDX i)
 void delete_monster(POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	/* Check the grid */
 	g_ptr = &current_floor_ptr->grid_array[y][x];
@@ -2522,7 +2522,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
 	if (p_ptr->wild_mode) return FALSE;
 
-	if (!in_bounds(y, x)) return (FALSE);
+	if (!in_bounds(current_floor_ptr, y, x)) return (FALSE);
 	if (!r_idx) return (FALSE);
 	if (!r_ptr->name) return (FALSE);
 
@@ -2910,7 +2910,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 		for (ny = y - max_dist; ny <= y + max_dist; ny++)
 		{
 			/* Ignore annoying locations */
-			if (!in_bounds(ny, nx)) continue;
+			if (!in_bounds(current_floor_ptr, ny, nx)) continue;
 
 			/* Require "line of projection" */
 			if (!projectable(y, x, ny, nx)) continue;
@@ -4080,7 +4080,7 @@ int get_monster_crowd_number(MONSTER_IDX m_idx)
 		int ay = my + ddy_ddd[i];
 		int ax = mx + ddx_ddd[i];
 
-		if (!in_bounds(ay, ax)) continue;
+		if (!in_bounds(current_floor_ptr, ay, ax)) continue;
 
 		/* Count number of monsters */
 		if (current_floor_ptr->grid_array[ay][ax].m_idx > 0) count++;

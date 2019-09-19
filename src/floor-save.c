@@ -722,7 +722,7 @@ static void get_out_monster(void)
 		if (tries > 20 * dis * dis) dis++;
 
 		/* Ignore illegal locations */
-		if (!in_bounds(ny, nx)) continue;
+		if (!in_bounds(current_floor_ptr, ny, nx)) continue;
 
 		/* Require "empty" floor space */
 		if (!cave_empty_bold(ny, nx)) continue;

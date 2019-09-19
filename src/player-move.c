@@ -2121,7 +2121,7 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 	int cost;
 
 	/* Ignore out of bounds */
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	/* Ignore unknown grid except in wilderness */
 	if (current_floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;

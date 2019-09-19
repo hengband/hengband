@@ -119,7 +119,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 			}
 
 			/* Ignore illegal locations */
-			if (!in_bounds(ny, nx)) continue;
+			if (!in_bounds(current_floor_ptr, ny, nx)) continue;
 
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
@@ -220,7 +220,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 			}
 
 			/* Ignore illegal locations */
-			if (!in_bounds(ny, nx)) continue;
+			if (!in_bounds(current_floor_ptr, ny, nx)) continue;
 
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
@@ -510,7 +510,7 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 		{
 			y = (POSITION)rand_spread(ny, dis);
 			x = (POSITION)rand_spread(nx, dis);
-			if (in_bounds(y, x)) break;
+			if (in_bounds(current_floor_ptr, y, x)) break;
 		}
 
 		/* Accept any grid when wizard mode */

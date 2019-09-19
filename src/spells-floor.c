@@ -484,7 +484,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 	{
 		for (x = (x1 - r); x <= (x1 + r); x++)
 		{
-			if (!in_bounds(y, x)) continue;
+			if (!in_bounds(current_floor_ptr, y, x)) continue;
 
 			/* Extract the distance */
 			k = distance(y1, x1, y, x);
@@ -652,7 +652,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 		{
 			for (x = (x1 - r); x <= (x1 + r); x++)
 			{
-				if (!in_bounds(y, x)) continue;
+				if (!in_bounds(current_floor_ptr, y, x)) continue;
 
 				/* Extract the distance */
 				k = distance(y1, x1, y, x);
@@ -780,7 +780,7 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			yy = cy + dy;
 			xx = cx + dx;
 
-			if (!in_bounds(yy, xx)) continue;
+			if (!in_bounds(current_floor_ptr, yy, xx)) continue;
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;
@@ -1115,7 +1115,7 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 			yy = cy + dy;
 			xx = cx + dx;
 
-			if (!in_bounds(yy, xx)) continue;
+			if (!in_bounds(current_floor_ptr, yy, xx)) continue;
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;

@@ -905,7 +905,7 @@ static void cave_fill(POSITION y, POSITION x)
 			i = tx + ddx_ddd[d];
 
 			/* Paranoia Don't leave the current_floor_ptr->grid_array */
-			if (!in_bounds(j, i))
+			if (!in_bounds(current_floor_ptr, j, i))
 			{
 				/* affect boundary */
 				current_floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
@@ -1969,7 +1969,7 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 	feature_type *f_ptr;
 	int i, j;
 
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	g_ptr = &current_floor_ptr->grid_array[y][x];
 

@@ -1045,7 +1045,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	/* generate the room */
 	for (x = x1 - 2; x <= x2 + 2; x++)
 	{
-		if (!in_bounds(y1 - 2, x)) break;
+		if (!in_bounds(current_floor_ptr, y1 - 2, x)) break;
 
 		current_floor_ptr->grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -1054,7 +1054,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 
 	for (x = x1 - 2; x <= x2 + 2; x++)
 	{
-		if (!in_bounds(y2 + 2, x)) break;
+		if (!in_bounds(current_floor_ptr, y2 + 2, x)) break;
 
 		current_floor_ptr->grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -1063,7 +1063,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
 	{
-		if (!in_bounds(y, x1 - 2)) break;
+		if (!in_bounds(current_floor_ptr, y, x1 - 2)) break;
 
 		current_floor_ptr->grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -1072,7 +1072,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
 	{
-		if (!in_bounds(y, x2 + 2)) break;
+		if (!in_bounds(current_floor_ptr, y, x2 + 2)) break;
 
 		current_floor_ptr->grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
 

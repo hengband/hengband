@@ -50,14 +50,14 @@
 #define MAX_WID 198
 
 /*!
- * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "current_floor_ptr->grid_array.c")
+ * @brief プレイヤー用光源処理配列サイズ / Maximum size of the "lite" array (see "grid.c")
  * @details Note that the "lite radius" will NEVER exceed 14, and we would
  * never require more than 581 entries in the array for circular "lite".
  */
 #define LITE_MAX 600
 
 /*!
- * @brief モンスター用光源処理配列サイズ / Maximum size of the "mon_lite" array (see "current_floor_ptr->grid_array.c")
+ * @brief モンスター用光源処理配列サイズ / Maximum size of the "mon_lite" array (see ">grid.c")
  * @details Note that the "view radius" will NEVER exceed 20, monster illumination
  * flags are dependent on CAVE_VIEW, and even if the "view" was octagonal,
  * we would never require more than 1520 entries in the array.
@@ -171,8 +171,8 @@ typedef struct {
 /*
  * Determines if a map location is fully inside the outer walls
  */
-#define in_bounds(Y,X) \
-   (((Y) > 0) && ((X) > 0) && ((Y) < current_floor_ptr->height-1) && ((X) < current_floor_ptr->width-1))
+#define in_bounds(F,Y,X) \
+   (((Y) > 0) && ((X) > 0) && ((Y) < (F)->height-1) && ((X) < (F)->width-1))
 
 /*
  * Determines if a map location is on or inside the outer walls

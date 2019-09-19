@@ -1656,7 +1656,7 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
 	ITEM_NUMBER num = 0;
 
 	/* Sanity */
-	if (!in_bounds(y, x)) return 0;
+	if (!in_bounds(current_floor_ptr, y, x)) return 0;
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = current_floor_ptr->grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)

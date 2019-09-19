@@ -3,7 +3,7 @@
 #include "floor-save.h"
 
 /*
- * The array of "current_floor_ptr->grid_array grids" [MAX_WID][MAX_HGT].
+ * The array of floor [MAX_WID][MAX_HGT].
  * Not completely allocated, that would be inefficient
  * Not completely hardcoded, that would overflow memory
  */

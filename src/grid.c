@@ -222,7 +222,7 @@ bool new_player_spot(void)
 			if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) continue;
 		}
 		if (!player_can_enter(g_ptr->feat, 0)) continue;
-		if (!in_bounds(y, x)) continue;
+		if (!in_bounds(current_floor_ptr, y, x)) continue;
 
 		/* Refuse to start on anti-teleport grids */
 		if (g_ptr->info & (CAVE_ICKY)) continue;
@@ -539,7 +539,7 @@ void add_door(POSITION x, POSITION y)
 * @param y1 基準となるマスのY座標
 * @param x1 基準となるマスのX座標
 * @return 通路の数
-* @note Assumes "in_bounds(y1, x1)"
+* @note Assumes "in_bounds(current_floor_ptr, y1, x1)"
 * @details
 * XXX XXX This routine currently only counts actual "empty floor"\n
 * grids which are not in rooms.  We might want to also count stairs,\n
@@ -582,10 +582,10 @@ static int next_to_corr(POSITION y1, POSITION x1)
 * @param y 判定を行いたいマスのY座標
 * @param x 判定を行いたいマスのX座標
 * @return ドアを設置可能ならばTRUEを返す
-* @note Assumes "in_bounds(y1, x1)"
+* @note Assumes "in_bounds(current_floor_ptr, y1, x1)"
 * @details
 * \n
-* Assumes "in_bounds(y, x)"\n
+* Assumes "in_bounds(current_floor_ptr, y, x)"\n
 */
 static bool possible_doorway(POSITION y, POSITION x)
 {
@@ -618,7 +618,7 @@ static bool possible_doorway(POSITION y, POSITION x)
 * @return なし
 */
 void try_door(POSITION y, POSITION x)
-{	if (!in_bounds(y, x)) return;
+{	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 	/* Ignore walls */
 	if (cave_have_flag_bold(y, x, FF_WALL)) return;
@@ -719,7 +719,7 @@ void vault_objects(POSITION y, POSITION x, int num)
 				j = rand_spread(y, 2);
 				k = rand_spread(x, 3);
 				dummy++;
-				if (!in_bounds(j, k)) continue;
+				if (!in_bounds(current_floor_ptr, j, k)) continue;
 				break;
 			}
 
@@ -773,7 +773,7 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 			y1 = rand_spread(y, yd);
 			x1 = rand_spread(x, xd);
 			dummy++;
-			if (!in_bounds(y1, x1)) continue;
+			if (!in_bounds(current_floor_ptr, y1, x1)) continue;
 			break;
 		}
 
@@ -860,7 +860,7 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
  */
 bool get_is_floor(POSITION x, POSITION y)
 {
-	if (!in_bounds(y, x))
+	if (!in_bounds(current_floor_ptr, y, x))
 	{
 		/* Out of bounds */
 		return (FALSE);
@@ -880,7 +880,7 @@ bool get_is_floor(POSITION x, POSITION y)
  */
 void set_floor(POSITION x, POSITION y)
 {
-	if (!in_bounds(y, x))
+	if (!in_bounds(current_floor_ptr, y, x))
 	{
 		/* Out of bounds */
 		return;
@@ -1021,7 +1021,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 	int i;
 	POSITION yy, xx;
 
-	if (!in_bounds(y, x)) return;
+	if (!in_bounds(current_floor_ptr, y, x)) return;
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
@@ -1698,7 +1698,7 @@ void update_flow(void)
 	if (tmp_pos.n) return;
 
 	/* The last way-point is on the map */
-	if (p_ptr->running && in_bounds(flow_y, flow_x))
+	if (p_ptr->running && in_bounds(current_floor_ptr, flow_y, flow_x))
 	{
 		/* The way point is in sight - do not update.  (Speedup) */
 		if (current_floor_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW) return;
@@ -1843,7 +1843,7 @@ void update_smell(void)
 			x = j + p_ptr->x - 2;
 
 			/* Check Bounds */
-			if (!in_bounds(y, x)) continue;
+			if (!in_bounds(current_floor_ptr, y, x)) continue;
 
 			g_ptr = &current_floor_ptr->grid_array[y][x];
 
