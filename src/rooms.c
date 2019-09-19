@@ -794,13 +794,13 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 }
 
 
-static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, FEAT_IDX feat1, FEAT_IDX feat2, FEAT_IDX feat3, BIT_FLAGS info1, BIT_FLAGS info2, BIT_FLAGS info3)
+static bool hack_isnt_wall(floor_type *floor_ptr, POSITION y, POSITION x, int c1, int c2, int c3, FEAT_IDX feat1, FEAT_IDX feat2, FEAT_IDX feat3, BIT_FLAGS info1, BIT_FLAGS info2, BIT_FLAGS info3)
 {
 	/*
 	 * function used to convert from height-map back to the
-	 *  normal angband current_floor_ptr->grid_array format
+	 *  normal angband floor_ptr->grid_array format
 	 */
-	if (current_floor_ptr->grid_array[y][x].info & CAVE_ICKY)
+	if (floor_ptr->grid_array[y][x].info & CAVE_ICKY)
 	{
 		/* already done */
 		return FALSE;
@@ -808,50 +808,50 @@ static bool hack_isnt_wall(POSITION y, POSITION x, int c1, int c2, int c3, FEAT_
 	else
 	{
 		/* Show that have looked at this square */
-		current_floor_ptr->grid_array[y][x].info|= (CAVE_ICKY);
+		floor_ptr->grid_array[y][x].info|= (CAVE_ICKY);
 
 		/* Use cutoffs c1-c3 to allocate regions of floor /water/ lava etc. */
-		if (current_floor_ptr->grid_array[y][x].feat <= c1)
+		if (floor_ptr->grid_array[y][x].feat <= c1)
 		{
 			/* 25% of the time use the other tile : it looks better this way */
 			if (randint1(100) < 75)
 			{
-				current_floor_ptr->grid_array[y][x].feat = feat1;
-				current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-				current_floor_ptr->grid_array[y][x].info |= info1;
+				floor_ptr->grid_array[y][x].feat = feat1;
+				floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+				floor_ptr->grid_array[y][x].info |= info1;
 				return TRUE;
 			}
 			else
 			{
-				current_floor_ptr->grid_array[y][x].feat = feat2;
-				current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-				current_floor_ptr->grid_array[y][x].info |= info2;
+				floor_ptr->grid_array[y][x].feat = feat2;
+				floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+				floor_ptr->grid_array[y][x].info |= info2;
 				return TRUE;
 			}
 		}
-		else if (current_floor_ptr->grid_array[y][x].feat <= c2)
+		else if (floor_ptr->grid_array[y][x].feat <= c2)
 		{
 			/* 25% of the time use the other tile : it looks better this way */
 			if (randint1(100) < 75)
 			{
-				current_floor_ptr->grid_array[y][x].feat = feat2;
-				current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-				current_floor_ptr->grid_array[y][x].info |= info2;
+				floor_ptr->grid_array[y][x].feat = feat2;
+				floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+				floor_ptr->grid_array[y][x].info |= info2;
 				return TRUE;
 			}
 			else
 			{
-				current_floor_ptr->grid_array[y][x].feat = feat1;
-				current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-				current_floor_ptr->grid_array[y][x].info |= info1;
+				floor_ptr->grid_array[y][x].feat = feat1;
+				floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+				floor_ptr->grid_array[y][x].info |= info1;
 				return TRUE;
 			}
 		}
-		else if (current_floor_ptr->grid_array[y][x].feat <= c3)
+		else if (floor_ptr->grid_array[y][x].feat <= c3)
 		{
-			current_floor_ptr->grid_array[y][x].feat = feat3;
-			current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-			current_floor_ptr->grid_array[y][x].info |= info3;
+			floor_ptr->grid_array[y][x].feat = feat3;
+			floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+			floor_ptr->grid_array[y][x].info |= info3;
 			return TRUE;
 		}
 		/* if greater than cutoff then is a wall */
@@ -917,7 +917,7 @@ static void cave_fill(POSITION y, POSITION x)
 				&& (j > fill_data.ymin) && (j < fill_data.ymax))
 			{
 				/* If not a wall or floor done before */
-				if (hack_isnt_wall(j, i,
+				if (hack_isnt_wall(current_floor_ptr, j, i,
 					fill_data.c1, fill_data.c2, fill_data.c3,
 					fill_data.feat1, fill_data.feat2, fill_data.feat3,
 					fill_data.info1, fill_data.info2, fill_data.info3))
