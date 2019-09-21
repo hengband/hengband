@@ -1623,7 +1623,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 
 			/* Hack -- Avoid outer/solid walls */
 			if (is_outer_bold(p_ptr->current_floor_ptr, y, x)) continue;
-			if (is_solid_bold(y, x)) continue;
+			if (is_solid_bold(p_ptr->current_floor_ptr, y, x)) continue;
 
 			/* Accept this location */
 			row1 = tmp_row;
@@ -1819,7 +1819,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 
 		dy = 0;
 		dx = 0;
-		while ((i > 0) && is_solid_bold(*y + dy, *x + dx))
+		while ((i > 0) && is_solid_bold(p_ptr->current_floor_ptr, *y + dy, *x + dx))
 		{
 			dy = randint0(3) - 1;
 			dx = randint0(3) - 1;
@@ -2077,7 +2077,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 
 			dy = 0;
 			dx = 0;
-			while ((i > 0) && is_solid_bold(y3 + dy, x3 + dx))
+			while ((i > 0) && is_solid_bold(p_ptr->current_floor_ptr, y3 + dy, x3 + dx))
 			{
 				dy = randint0(3) - 1;
 				dx = randint0(3) - 1;
