@@ -1335,7 +1335,7 @@ static void process_world_aux_digestion(player_type *creature_ptr)
  */
 static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 {
-	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+	feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 	bool cave_no_regen = FALSE;
 	int upkeep_factor = 0;
 
@@ -1400,9 +1400,9 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	/* (Vampires) Take damage from sunlight */
 	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
-		if (!p_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN() && is_daytime())
+		if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN() && is_daytime())
 		{
-			if ((p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+			if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
 				msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
@@ -1457,11 +1457,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("熱で火傷した！", "The heat burns you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), 
-								f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+								f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sで火傷した！", "The %s burns you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1495,11 +1495,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1533,11 +1533,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("電撃を受けた！", "The electric shocks you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに感電した！", "The %s shocks you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1571,11 +1571,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("酸が飛び散った！", "The acid melt you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1609,12 +1609,12 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 				if (creature_ptr->resist_pois) (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに毒された！", "The %s poisons you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 				if (creature_ptr->resist_pois) (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 3);
@@ -1638,27 +1638,27 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	if (creature_ptr->riding)
 	{
 		HIT_POINT damage;
-		if ((r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire)
+		if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire)
 		{
-			damage = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
 			if (creature_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 			msg_print(_("熱い！", "It's hot!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
 		}
-		if ((r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec)
+		if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec)
 		{
-			damage = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ANDROID)) damage += damage / 3;
 			if (creature_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
 			msg_print(_("痛い！", "It hurts!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
 		}
-		if ((r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !creature_ptr->immune_cold)
+		if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !creature_ptr->immune_cold)
 		{
-			damage = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (creature_ptr->resist_cold) damage = damage / 3;
 			if (IS_OPPOSE_COLD()) damage = damage / 3;
 			msg_print(_("冷たい！", "It's cold!"));
