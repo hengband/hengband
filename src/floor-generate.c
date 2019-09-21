@@ -151,10 +151,10 @@ static int next_to_walls(POSITION y, POSITION x)
 {
 	int k = 0;
 
-	if (in_bounds(p_ptr->current_floor_ptr, y + 1, x) && is_extra_bold(y + 1, x)) k++;
-	if (in_bounds(p_ptr->current_floor_ptr, y - 1, x) && is_extra_bold(y - 1, x)) k++;
-	if (in_bounds(p_ptr->current_floor_ptr, y, x + 1) && is_extra_bold(y, x + 1)) k++;
-	if (in_bounds(p_ptr->current_floor_ptr, y, x - 1) && is_extra_bold(y, x - 1)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y + 1, x) && is_extra_bold(p_ptr->current_floor_ptr, y + 1, x)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y - 1, x) && is_extra_bold(p_ptr->current_floor_ptr, y - 1, x)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y, x + 1) && is_extra_bold(p_ptr->current_floor_ptr, y, x + 1)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y, x - 1) && is_extra_bold(p_ptr->current_floor_ptr, y, x - 1)) k++;
 
 	return (k);
 }
@@ -1756,7 +1756,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		return TRUE;
 	}
 
-	if (is_extra_bold(*y, *x))
+	if (is_extra_bold(p_ptr->current_floor_ptr, *y, *x))
 	{
 		/* Save the tunnel location */
 		if (dun->tunn_n < TUNN_MAX)

@@ -100,7 +100,7 @@ typedef struct
  * @return FLOOR属性を持っているならばTRUE
  */
 #define is_floor_bold(F,Y,X) (F->grid_array[Y][X].info & CAVE_FLOOR)
-#define is_extra_bold(Y,X) (p_ptr->current_floor_ptr->grid_array[Y][X].info & CAVE_EXTRA)
+#define is_extra_bold(F,Y,X) (F->grid_array[Y][X].info & CAVE_EXTRA)
 
 #define is_inner_bold(Y,X) (p_ptr->current_floor_ptr->grid_array[Y][X].info & CAVE_INNER)
 #define is_outer_bold(Y,X) (p_ptr->current_floor_ptr->grid_array[Y][X].info & CAVE_OUTER)

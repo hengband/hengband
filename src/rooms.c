@@ -1569,7 +1569,7 @@ void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 	{
 		for (y = 1; y < ysize; y++)
 		{
-			if (is_extra_bold(y1+y, x1+x))
+			if (is_extra_bold(p_ptr->current_floor_ptr, y1+y, x1+x))
 			{
 				/* clear the untouched region */
 				place_floor_bold(y1 + y, x1 + x);
@@ -1997,7 +1997,7 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 			}
 		}
 	}
-	else if (is_extra_bold(y, x))
+	else if (is_extra_bold(p_ptr->current_floor_ptr, y, x))
 	{
 		/* Set bounding walls */
 		place_outer_bold(y, x);

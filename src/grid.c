@@ -893,7 +893,7 @@ void set_floor(POSITION x, POSITION y)
 	}
 
 	/* Set to be floor if is a wall (don't touch lakes). */
-	if (is_extra_bold(y, x))
+	if (is_extra_bold(p_ptr->current_floor_ptr, y, x))
 		place_floor_bold(y, x);
 }
 
