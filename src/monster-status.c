@@ -33,7 +33,7 @@
 */
 bool monster_is_powerful(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
 	return powerful;
@@ -46,7 +46,7 @@ bool monster_is_powerful(MONSTER_IDX m_idx)
 */
 DEPTH monster_level_idx(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 	return rlev;
@@ -139,7 +139,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside * 2);
 
 	/* Special penalty in the wilderness */
-	if (!current_floor_ptr->dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
+	if (!p_ptr->current_floor_ptr->dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
 		s64b_mul(&div_h, &div_l, 0, 5);
 
 	/* Do division first to prevent overflaw */
@@ -188,10 +188,10 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 */
 int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type)
 {
-	s16b *cur_mproc_list = current_floor_ptr->mproc_list[mproc_type];
+	s16b *cur_mproc_list = p_ptr->current_floor_ptr->mproc_list[mproc_type];
 	int i;
 
-	for (i = current_floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--)
+	for (i = p_ptr->current_floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--)
 	{
 		if (cur_mproc_list[i] == m_idx) return i;
 	}
@@ -207,7 +207,7 @@ int get_mproc_idx(MONSTER_IDX m_idx, int mproc_type)
 */
 static void mproc_add(MONSTER_IDX m_idx, int mproc_type)
 {
-	if (current_floor_ptr->mproc_max[mproc_type] < current_floor_ptr->max_m_idx) current_floor_ptr->mproc_list[mproc_type][current_floor_ptr->mproc_max[mproc_type]++] = (s16b)m_idx;
+	if (p_ptr->current_floor_ptr->mproc_max[mproc_type] < current_world_ptr->max_m_idx) p_ptr->current_floor_ptr->mproc_list[mproc_type][p_ptr->current_floor_ptr->mproc_max[mproc_type]++] = (s16b)m_idx;
 }
 
 
@@ -220,7 +220,7 @@ static void mproc_add(MONSTER_IDX m_idx, int mproc_type)
 static void mproc_remove(MONSTER_IDX m_idx, int mproc_type)
 {
 	int mproc_idx = get_mproc_idx(m_idx, mproc_type);
-	if (mproc_idx >= 0) current_floor_ptr->mproc_list[mproc_type][mproc_idx] = current_floor_ptr->mproc_list[mproc_type][--current_floor_ptr->mproc_max[mproc_type]];
+	if (mproc_idx >= 0) p_ptr->current_floor_ptr->mproc_list[mproc_type][mproc_idx] = p_ptr->current_floor_ptr->mproc_list[mproc_type][--p_ptr->current_floor_ptr->mproc_max[mproc_type]];
 }
 
 
@@ -234,13 +234,13 @@ void mproc_init(void)
 	MONSTER_IDX i;
 	int cmi;
 
-	/* Reset "current_floor_ptr->mproc_max[]" */
-	for (cmi = 0; cmi < MAX_MTIMED; cmi++) current_floor_ptr->mproc_max[cmi] = 0;
+	/* Reset "p_ptr->current_floor_ptr->mproc_max[]" */
+	for (cmi = 0; cmi < MAX_MTIMED; cmi++) p_ptr->current_floor_ptr->mproc_max[cmi] = 0;
 
 	/* Process the monsters (backwards) */
-	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
+	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		m_ptr = &current_floor_ptr->m_list[i];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
 		if (!monster_is_valid(m_ptr)) continue;
@@ -262,7 +262,7 @@ void mproc_init(void)
 */
 bool set_monster_csleep(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
@@ -311,7 +311,7 @@ bool set_monster_csleep(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_fast(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -349,7 +349,7 @@ bool set_monster_fast(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_slow(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -391,7 +391,7 @@ bool set_monster_slow(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_stunned(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -429,7 +429,7 @@ bool set_monster_stunned(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_confused(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -467,7 +467,7 @@ bool set_monster_confused(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_monfear(MONSTER_IDX m_idx, int v)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -515,7 +515,7 @@ bool set_monster_monfear(MONSTER_IDX m_idx, int v)
 */
 bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool notice = FALSE;
 	v = (v > 200) ? 200 : (v < 0) ? 0 : v;
 
@@ -564,7 +564,7 @@ static u32b csleep_noise;
 */
 static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 	switch (mtimed_idx)
 	{
@@ -755,13 +755,13 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 void process_monsters_mtimed(int mtimed_idx)
 {
 	int  i;
-	s16b *cur_mproc_list = current_floor_ptr->mproc_list[mtimed_idx];
+	s16b *cur_mproc_list = p_ptr->current_floor_ptr->mproc_list[mtimed_idx];
 
 	/* Hack -- calculate the "player noise" */
 	if (mtimed_idx == MTIMED_CSLEEP) csleep_noise = (1L << (30 - p_ptr->skill_stl));
 
 	/* Process the monsters (backwards) */
-	for (i = current_floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--)
+	for (i = p_ptr->current_floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--)
 	{
 		process_monsters_mtimed_aux(cur_mproc_list[i], mtimed_idx);
 	}
@@ -774,7 +774,7 @@ void process_monsters_mtimed(int mtimed_idx)
 */
 void dispel_monster_status(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
 	monster_desc(m_name, m_ptr, 0);
@@ -801,7 +801,7 @@ void dispel_monster_status(MONSTER_IDX m_idx)
 */
 bool set_monster_timewalk(int num, MONSTER_IDX who, bool vs_player)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
 
 	if (current_world_ptr->timewalk_m_idx) return (FALSE);
 
@@ -863,7 +863,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 	int new_exp;
 	if (m_idx <= 0 || s_idx <= 0) return;
 
-	m_ptr = &current_floor_ptr->m_list[m_idx];
+	m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 	if (!monster_is_valid(m_ptr)) return;
 
@@ -876,7 +876,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 
 	new_exp = s_ptr->mexp * s_ptr->level / (r_ptr->level + 2);
 	if (m_idx == p_ptr->riding) new_exp = (new_exp + 1) / 2;
-	if (!current_floor_ptr->dun_level) new_exp /= 5;
+	if (!p_ptr->current_floor_ptr->dun_level) new_exp /= 5;
 	m_ptr->exp += new_exp;
 	if (m_ptr->mflag2 & MFLAG2_CHAMELEON) return;
 
@@ -996,7 +996,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
  */
 bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_type exp_mon;
 
@@ -1145,13 +1145,13 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 
 		if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 		{
-			if (!current_floor_ptr->dun_level && !p_ptr->ambush_flag && !p_ptr->inside_arena)
+			if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->ambush_flag && !p_ptr->inside_arena)
 			{
 				chg_virtue(p_ptr, V_VALOUR, -1);
 			}
-			else if (r_ptr->level > current_floor_ptr->dun_level)
+			else if (r_ptr->level > p_ptr->current_floor_ptr->dun_level)
 			{
-				if (randint1(10) <= (r_ptr->level - current_floor_ptr->dun_level))
+				if (randint1(10) <= (r_ptr->level - p_ptr->current_floor_ptr->dun_level))
 					chg_virtue(p_ptr, V_VALOUR, 1);
 			}
 			if (r_ptr->level > 60)
@@ -1180,14 +1180,14 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 			chg_virtue(p_ptr, V_COMPASSION, -1);
 		}
 
-		if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100)))
+		if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * p_ptr->current_floor_ptr->dun_level) >= randint1(100)))
 			chg_virtue(p_ptr, V_UNLIFE, 1);
 
 		if (r_ptr->d_char == 'A')
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(p_ptr, V_FAITH, -2);
-			else if ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100))
+			else if ((r_ptr->level) / 10 + (3 * p_ptr->current_floor_ptr->dun_level) >= randint1(100))
 			{
 				if (r_ptr->flags3 & RF3_GOOD) chg_virtue(p_ptr, V_FAITH, -1);
 				else chg_virtue(p_ptr, V_FAITH, 1);
@@ -1197,7 +1197,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(p_ptr, V_FAITH, 2);
-			else if ((r_ptr->level) / 10 + (3 * current_floor_ptr->dun_level) >= randint1(100))
+			else if ((r_ptr->level) / 10 + (3 * p_ptr->current_floor_ptr->dun_level) >= randint1(100))
 				chg_virtue(p_ptr, V_FAITH, 1);
 		}
 
@@ -1210,7 +1210,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 			{
 				chg_virtue(p_ptr, V_HONOUR, 10);
 			}
-			else if ((r_ptr->level) / 10 + (2 * current_floor_ptr->dun_level) >= randint1(100))
+			else if ((r_ptr->level) / 10 + (2 * p_ptr->current_floor_ptr->dun_level) >= randint1(100))
 			{
 				chg_virtue(p_ptr, V_HONOUR, 1);
 			}
@@ -1237,7 +1237,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 				chg_virtue(p_ptr, V_JUSTICE, 3);
-			else if (1 + ((r_ptr->level) / 10 + (2 * current_floor_ptr->dun_level)) >= randint1(100))
+			else if (1 + ((r_ptr->level) / 10 + (2 * p_ptr->current_floor_ptr->dun_level)) >= randint1(100))
 				chg_virtue(p_ptr, V_JUSTICE, 1);
 		}
 		else if (innocent)

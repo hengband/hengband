@@ -63,8 +63,8 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
-		else if (is_friend && current_floor_ptr->grid_array[y][x].m_idx > 0 &&
-			 !are_enemies(m_ptr, &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx]))
+		else if (is_friend && p_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0 &&
+			 !are_enemies(m_ptr, &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx]))
 		{
 			/* Friends don't shoot friends */
 			return FALSE;
@@ -239,7 +239,7 @@ void get_project_point(POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT
  */
 static bool dispel_check_monster(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-	monster_type *t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type *t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 
 	if (MON_INVULNER(t_ptr)) return TRUE;
 
@@ -285,7 +285,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	char m_poss[160];
 #endif
 
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_type *t_ptr = NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -296,7 +296,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
 	bool pet = is_pet(m_ptr);
 
-	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && current_floor_ptr->dun_level
+	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && p_ptr->current_floor_ptr->dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
 	bool can_use_lite_area = FALSE;
@@ -314,7 +314,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	if (p_ptr->pet_t_m_idx && pet)
 	{
 		target_idx = p_ptr->pet_t_m_idx;
-		t_ptr = &current_floor_ptr->m_list[target_idx];
+		t_ptr = &p_ptr->current_floor_ptr->m_list[target_idx];
 
 		/* Cancel if not projectable (for now) */
 		if ((m_idx == target_idx) || !projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
@@ -326,11 +326,11 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* Is there counter attack target? */
 	if (!target_idx && m_ptr->target_y)
 	{
-		target_idx = current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
+		target_idx = p_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
 
 		if (target_idx)
 		{
-			t_ptr = &current_floor_ptr->m_list[target_idx];
+			t_ptr = &p_ptr->current_floor_ptr->m_list[target_idx];
 
 			/* Cancel if neither enemy nor a given target */
 			if ((m_idx == target_idx) ||
@@ -356,19 +356,19 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 		if (p_ptr->phase_out)
 		{
-			start = randint1(current_floor_ptr->m_max-1) + current_floor_ptr->m_max;
+			start = randint1(p_ptr->current_floor_ptr->m_max-1) + p_ptr->current_floor_ptr->m_max;
 			if (randint0(2)) plus = -1;
 		}
-		else start = current_floor_ptr->m_max + 1;
+		else start = p_ptr->current_floor_ptr->m_max + 1;
 
 		/* Scan thru all monsters */
-		for (i = start; ((i < start + current_floor_ptr->m_max) && (i > start - current_floor_ptr->m_max)); i += plus)
+		for (i = start; ((i < start + p_ptr->current_floor_ptr->m_max) && (i > start - p_ptr->current_floor_ptr->m_max)); i += plus)
 		{
-			MONSTER_IDX dummy = (i % current_floor_ptr->m_max);
+			MONSTER_IDX dummy = (i % p_ptr->current_floor_ptr->m_max);
 			if (!dummy) continue;
 
 			target_idx = dummy;
-			t_ptr = &current_floor_ptr->m_list[target_idx];
+			t_ptr = &p_ptr->current_floor_ptr->m_list[target_idx];
 
 			if (!monster_is_valid(t_ptr)) continue;
 

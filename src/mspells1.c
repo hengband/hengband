@@ -87,7 +87,7 @@ static bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
  */
 static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	u32b f4 = (*f4p);
@@ -389,7 +389,7 @@ bool summon_possible(POSITION y1, POSITION x1)
 		for (x = x1 - 2; x <= x1 + 2; x++)
 		{
 			/* Ignore illegal locations */
-			if (!in_bounds(current_floor_ptr, y, x)) continue;
+			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
 
 			/* Only check a circular area */
 			if (distance(y1, x1, y, x)>2) continue;
@@ -428,11 +428,11 @@ bool raise_possible(monster_type *m_ptr)
 			if (!los(y, x, yy, xx)) continue;
 			if (!projectable(y, x, yy, xx)) continue;
 
-			g_ptr = &current_floor_ptr->grid_array[yy][xx];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
 			/* Scan the pile of objects */
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
-				object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
+				object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Known to be worthless? */
@@ -495,9 +495,9 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 		y = GRID_Y(grid_g[i]);
 		x = GRID_X(grid_g[i]);
 
-		if ((current_floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2)))
+		if ((p_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2)))
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 			if (is_friend == is_pet(m_ptr))
 			{
 				return (FALSE);
@@ -592,7 +592,7 @@ void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
  */
 void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
 {
-    monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
 	BIT_FLAGS flg = 0x00;
@@ -873,7 +873,7 @@ static bool spell_dispel(byte spell)
  */
 bool dispel_check(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Invulnabilty (including the song) */
@@ -958,9 +958,9 @@ bool dispel_check(MONSTER_IDX m_idx)
 	/* Light speed */
 	if (p_ptr->lightspeed && (m_ptr->mspeed < 136)) return (TRUE);
 
-	if (p_ptr->riding && (current_floor_ptr->m_list[p_ptr->riding].mspeed < 135))
+	if (p_ptr->riding && (p_ptr->current_floor_ptr->m_list[p_ptr->riding].mspeed < 135))
 	{
-		if (MON_FAST(&current_floor_ptr->m_list[p_ptr->riding])) return (TRUE);
+		if (MON_FAST(&p_ptr->current_floor_ptr->m_list[p_ptr->riding])) return (TRUE);
 	}
 
 	/* No need to cast dispel spell */
@@ -989,7 +989,7 @@ bool dispel_check(MONSTER_IDX m_idx)
  */
 static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	byte escape[96], escape_num = 0;
@@ -1271,7 +1271,7 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 		grid_type *g_ptr;
 
 		/* Access the next grid */
-		g_ptr = &current_floor_ptr->grid_array[next_y][next_x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[next_y][next_x];
 
 		/* Skip this feature */
 		if (!cave_have_flag_grid(g_ptr, f_flag)) continue;
@@ -1358,7 +1358,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	PERCENTAGE failrate;
 	byte spell[96], num = 0;
 	BIT_FLAGS f4, f5, f6;
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 #ifndef JP
@@ -1382,7 +1382,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	/* Check "projectable" */
 	bool direct;
 
-	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && current_floor_ptr->dun_level
+	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && p_ptr->current_floor_ptr->dun_level
 		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
 
 	bool can_use_lite_area = FALSE;
@@ -1425,7 +1425,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 		if (los(m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
 		{
-			feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
+			feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
 
 			if (!have_flag(f_ptr->flags, FF_LOS))
 			{
@@ -1447,7 +1447,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	/* Check path */
 	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
 	{
-		feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[y][x].feat];
+		feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
 
 		if (!have_flag(f_ptr->flags, FF_PROJECT))
 		{

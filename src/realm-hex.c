@@ -226,11 +226,11 @@ void check_hex(void)
 		if (p_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
 			p_ptr->spell_exp[spell] += 5;
 		else if(p_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
-		{ if (one_in_(2) && (current_floor_ptr->dun_level > 4) && ((current_floor_ptr->dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[spell] += 1; }
+		{ if (one_in_(2) && (p_ptr->current_floor_ptr->dun_level > 4) && ((p_ptr->current_floor_ptr->dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[spell] += 1; }
 		else if(p_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
-		{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > p_ptr->lev) && ((current_floor_ptr->dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
+		{ if (one_in_(5) && ((p_ptr->current_floor_ptr->dun_level + 5) > p_ptr->lev) && ((p_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
 		else if(p_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
-		{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > p_ptr->lev) && (current_floor_ptr->dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
+		{ if (one_in_(5) && ((p_ptr->current_floor_ptr->dun_level + 5) > p_ptr->lev) && (p_ptr->current_floor_ptr->dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
 	}
 
 	/* Do any effects of continual spells */
@@ -292,7 +292,7 @@ void revenge_store(HIT_POINT dam)
  */
 bool teleport_barrier(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!hex_spelling(HEX_ANTI_TELE)) return FALSE;
@@ -308,7 +308,7 @@ bool teleport_barrier(MONSTER_IDX m_idx)
  */
 bool magic_barrier(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!hex_spelling(HEX_ANTI_MAGIC)) return FALSE;
@@ -324,7 +324,7 @@ bool magic_barrier(MONSTER_IDX m_idx)
  */
 bool multiply_barrier(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!hex_spelling(HEX_ANTI_MULTI)) return FALSE;
@@ -1023,10 +1023,10 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					int dy = y + ddy_ddd[dir];
 					int dx = x + ddx_ddd[dir];
 					if (dir == 5) continue;
-					if (current_floor_ptr->grid_array[dy][dx].m_idx) flag = TRUE;
+					if (p_ptr->current_floor_ptr->grid_array[dy][dx].m_idx) flag = TRUE;
 				}
 
-				if (!cave_empty_bold(y, x) || (current_floor_ptr->grid_array[y][x].info & CAVE_ICKY) ||
+				if (!cave_empty_bold(y, x) || (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ICKY) ||
 					(distance(y, x, caster_ptr->y, caster_ptr->x) > plev + 2))
 				{
 					msg_print(_("そこには移動できない。", "Can not teleport to there."));

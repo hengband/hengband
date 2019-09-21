@@ -52,7 +52,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 	int k, used_up, ident, lev;
 	object_type *o_ptr;
 
-	o_ptr = REF_ITEM(creature_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
 
 	take_turn(creature_ptr, 100);
 	if (cmd_limit_time_walk(creature_ptr)) return;
@@ -121,7 +121,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -133,7 +133,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -143,7 +143,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_SUMMON_PET:
 		{
-			if (summon_specific(-1, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET)))
+			if (summon_specific(-1, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 			{
 				ident = TRUE;
 			}

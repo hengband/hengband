@@ -387,7 +387,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
 			for (dummy = 0; dummy < randint1(5) + 1; dummy++)
 			{
-				(void)summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+				(void)summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 			reward = _("モンスターを召喚された。", "summoning hostile monsters");
 			break;
@@ -633,7 +633,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
 			msg_format(_("%sは褒美として悪魔の使いをよこした！", "%s rewards you with a demonic servant!"), chaos_patrons[creature_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET))
+			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("悪魔がペットになった。", "a demonic servant");
@@ -643,7 +643,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 		case REW_SER_MONS:
 			msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"), chaos_patrons[creature_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, 0, PM_FORCE_PET))
+			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("モンスターがペットになった。", "a servant");
@@ -653,7 +653,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 		case REW_SER_UNDE:
 			msg_format(_("%sは褒美としてアンデッドの使いをよこした。", "%s rewards you with an undead servant!"), chaos_patrons[creature_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
+			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("アンデッドがペットになった。", "an undead servant");

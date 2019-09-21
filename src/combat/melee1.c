@@ -1150,7 +1150,7 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 	HIT_POINT k;
 	int bonus, chance;
 	WEIGHT n_weight = 0;
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -1284,9 +1284,9 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
 
-	grid_type       *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type       *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
-	monster_type    *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+	monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Access the weapon */
@@ -1998,7 +1998,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 					}
 
 					/* Hack -- Get new monster */
-					m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+					m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 					/* Oops, we need a different name... */
 					monster_desc(m_name, m_ptr, 0);
@@ -2009,11 +2009,11 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			}
 			else if (o_ptr->name1 == ART_G_HAMMER)
 			{
-				monster_type *target_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+				monster_type *target_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 				if (target_ptr->hold_o_idx)
 				{
-					object_type *q_ptr = &current_floor_ptr->o_list[target_ptr->hold_o_idx];
+					object_type *q_ptr = &p_ptr->current_floor_ptr->o_list[target_ptr->hold_o_idx];
 					GAME_TEXT o_name[MAX_NLEN];
 
 					object_desc(o_name, q_ptr, OD_NAME_ONLY);
@@ -2153,7 +2153,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	if (do_quake)
 	{
 		earthquake(attacker_ptr->y, attacker_ptr->x, 10, 0);
-		if (!current_floor_ptr->grid_array[y][x].m_idx) *mdeath = TRUE;
+		if (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx) *mdeath = TRUE;
 	}
 }
 
@@ -2172,8 +2172,8 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 	bool            mdeath = FALSE;
 	bool            stormbringer = FALSE;
 
-	grid_type       *g_ptr = &current_floor_ptr->grid_array[y][x];
-	monster_type    *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+	grid_type       *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -2292,7 +2292,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 
 		if (cur < max)
 		{
-			DEPTH ridinglevel = r_info[current_floor_ptr->m_list[attacker_ptr->riding].r_idx].level;
+			DEPTH ridinglevel = r_info[p_ptr->current_floor_ptr->m_list[attacker_ptr->riding].r_idx].level;
 			DEPTH targetlevel = r_ptr->level;
 			int inc = 0;
 
@@ -2355,7 +2355,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
  */
 bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	int ap_cnt;
@@ -3018,7 +3018,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						if (o_idx)
 						{
 							object_type *j_ptr;
-							j_ptr = &current_floor_ptr->o_list[o_idx];
+							j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 							object_copy(j_ptr, o_ptr);
 
 							/* Modify number */
@@ -3833,7 +3833,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
 					}
 
-					if (is_mirror_grid(&current_floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
+					if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
 					{
 						teleport_player(10, 0L);
 					}
@@ -4031,7 +4031,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (target_ptr->riding && damage)
 		{
 			char m_steed_name[MAX_NLEN];
-			monster_desc(m_steed_name, &current_floor_ptr->m_list[target_ptr->riding], 0);
+			monster_desc(m_steed_name, &p_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
 			if (rakuba(target_ptr, (damage > 200) ? 200 : damage, FALSE))
 			{
 				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
@@ -4126,8 +4126,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
  */
 bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-	monster_type    *m_ptr = &current_floor_ptr->m_list[m_idx];
-	monster_type    *t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type    *t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -4174,7 +4174,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 	if (!see_either && known)
 	{
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 	}
 
 	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
@@ -4719,7 +4719,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			}
 			else if (known)
 			{
-				current_floor_ptr->monster_noise = TRUE;
+				p_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 		}
 		else
@@ -4730,7 +4730,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			}
 			else if (known)
 			{
-				current_floor_ptr->monster_noise = TRUE;
+				p_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 
 			teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
@@ -4755,7 +4755,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
  */
 void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[160];
 	bool seen = is_seen(m_ptr);
@@ -4834,7 +4834,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 				/* Unseen death by normal attack */
 				if (!seen)
 				{
-					current_floor_ptr->monster_noise = TRUE;
+					p_ptr->current_floor_ptr->monster_noise = TRUE;
 				}
 				/* Death by special attack */
 				else if (note)
@@ -4907,9 +4907,9 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 
 	if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (who != m_idx))
 	{
-		if (is_pet(&current_floor_ptr->m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
+		if (is_pet(&p_ptr->current_floor_ptr->m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
 		{
-			set_target(m_ptr, current_floor_ptr->m_list[who].fy, current_floor_ptr->m_list[who].fx);
+			set_target(m_ptr, p_ptr->current_floor_ptr->m_list[who].fy, p_ptr->current_floor_ptr->m_list[who].fx);
 		}
 	}
 

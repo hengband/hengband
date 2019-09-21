@@ -622,14 +622,14 @@ static void pattern_teleport(void)
 
 		/* Only downward in ironman mode */
 		if (ironman_downward)
-			min_level = current_floor_ptr->dun_level;
+			min_level = p_ptr->current_floor_ptr->dun_level;
 
 		/* Maximum level */
 		if (p_ptr->dungeon_idx == DUNGEON_ANGBAND)
 		{
-			if (current_floor_ptr->dun_level > 100)
+			if (p_ptr->current_floor_ptr->dun_level > 100)
 				max_level = MAX_DEPTH - 1;
-			else if (current_floor_ptr->dun_level == 100)
+			else if (p_ptr->current_floor_ptr->dun_level == 100)
 				max_level = 100;
 		}
 		else
@@ -642,7 +642,7 @@ static void pattern_teleport(void)
 		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
 
 		/* Default */
-		sprintf(tmp_val, "%d", (int)current_floor_ptr->dun_level);
+		sprintf(tmp_val, "%d", (int)p_ptr->current_floor_ptr->dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
@@ -668,7 +668,7 @@ static void pattern_teleport(void)
 	if (autosave_l) do_cmd_save_game(TRUE);
 
 	/* Change level */
-	current_floor_ptr->dun_level = command_arg;
+	p_ptr->current_floor_ptr->dun_level = command_arg;
 
 	leave_quest_check();
 
@@ -701,7 +701,7 @@ static bool pattern_effect(player_type *creature_ptr)
 		wreck_the_pattern(creature_ptr);
 	}
 
-	pattern_type = f_info[current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
+	pattern_type = f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	switch (pattern_type)
 	{
@@ -939,10 +939,10 @@ static void regen_monsters(void)
 
 
 	/* Regenerate everyone */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
 		/* Check the i'th monster */
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (!monster_is_valid(m_ptr)) continue;
@@ -1181,11 +1181,11 @@ static void check_music(player_type *creature_ptr)
 	if (creature_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
 		creature_ptr->spell_exp[spell] += 5;
 	else if(creature_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
-	{ if (one_in_(2) && (current_floor_ptr->dun_level > 4) && ((current_floor_ptr->dun_level + 10) > creature_ptr->lev)) creature_ptr->spell_exp[spell] += 1; }
+	{ if (one_in_(2) && (p_ptr->current_floor_ptr->dun_level > 4) && ((p_ptr->current_floor_ptr->dun_level + 10) > creature_ptr->lev)) creature_ptr->spell_exp[spell] += 1; }
 	else if(creature_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
-	{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > creature_ptr->lev) && ((current_floor_ptr->dun_level + 5) > s_ptr->slevel)) creature_ptr->spell_exp[spell] += 1; }
+	{ if (one_in_(5) && ((p_ptr->current_floor_ptr->dun_level + 5) > creature_ptr->lev) && ((p_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel)) creature_ptr->spell_exp[spell] += 1; }
 	else if(creature_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
-	{ if (one_in_(5) && ((current_floor_ptr->dun_level + 5) > creature_ptr->lev) && (current_floor_ptr->dun_level > s_ptr->slevel)) creature_ptr->spell_exp[spell] += 1; }
+	{ if (one_in_(5) && ((p_ptr->current_floor_ptr->dun_level + 5) > creature_ptr->lev) && (p_ptr->current_floor_ptr->dun_level > s_ptr->slevel)) creature_ptr->spell_exp[spell] += 1; }
 
 	/* Do any effects of continual song */
 	exe_spell(creature_ptr, REALM_MUSIC, spell, SPELL_CONT);
@@ -1335,7 +1335,7 @@ static void process_world_aux_digestion(player_type *creature_ptr)
  */
 static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 {
-	feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 	bool cave_no_regen = FALSE;
 	int upkeep_factor = 0;
 
@@ -1400,9 +1400,9 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	/* (Vampires) Take damage from sunlight */
 	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
-		if (!current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN() && is_daytime())
+		if (!p_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN() && is_daytime())
 		{
-			if ((current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+			if ((p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
 				msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
@@ -1457,11 +1457,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("熱で火傷した！", "The heat burns you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), 
-								f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+								f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sで火傷した！", "The %s burns you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1495,11 +1495,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1533,11 +1533,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("電撃を受けた！", "The electric shocks you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに感電した！", "The %s shocks you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1571,11 +1571,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("酸が飛び散った！", "The acid melt you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 			}
@@ -1609,12 +1609,12 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			{
 				msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-					f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+					f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 				if (creature_ptr->resist_pois) (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 1);
 			}
 			else
 			{
-				concptr name = f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+				concptr name = f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
 				msg_format(_("%sに毒された！", "The %s poisons you!"), name);
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
 				if (creature_ptr->resist_pois) (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 3);
@@ -1638,27 +1638,27 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	if (creature_ptr->riding)
 	{
 		HIT_POINT damage;
-		if ((r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire)
+		if ((r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_FIRE) && !creature_ptr->immune_fire)
 		{
-			damage = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			damage = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
 			if (creature_ptr->resist_fire) damage = damage / 3;
 			if (IS_OPPOSE_FIRE()) damage = damage / 3;
 			msg_print(_("熱い！", "It's hot!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
 		}
-		if ((r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec)
+		if ((r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !creature_ptr->immune_elec)
 		{
-			damage = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			damage = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ANDROID)) damage += damage / 3;
 			if (creature_ptr->resist_elec) damage = damage / 3;
 			if (IS_OPPOSE_ELEC()) damage = damage / 3;
 			msg_print(_("痛い！", "It hurts!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
 		}
-		if ((r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !creature_ptr->immune_cold)
+		if ((r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !creature_ptr->immune_cold)
 		{
-			damage = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
+			damage = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (creature_ptr->resist_cold) damage = damage / 3;
 			if (IS_OPPOSE_COLD()) damage = damage / 3;
 			msg_print(_("冷たい！", "It's cold!"));
@@ -2262,7 +2262,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, mode))
+		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, mode))
 		{
 			msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2306,7 +2306,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
 		banish_monsters(100);
-		if (!current_floor_ptr->dun_level && creature_ptr->town_num)
+		if (!p_ptr->current_floor_ptr->dun_level && creature_ptr->town_num)
 		{
 			int n;
 
@@ -2331,7 +2331,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		msg_print(NULL);
 
 		/* Absorb light from the current possition */
-		if ((current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+		if ((p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 		{
 			hp_player(creature_ptr, 10);
 		}
@@ -2371,7 +2371,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
+		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
 		{
 			msg_print(_("動物を引き寄せた！", "You have attracted an animal!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2449,7 +2449,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
+		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
 		{
 			msg_print(_("ドラゴンを引き寄せた！", "You have attracted a dragon!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2488,9 +2488,9 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		int danger_amount = 0;
 		MONSTER_IDX monster;
 
-		for (monster = 0; monster < current_floor_ptr->m_max; monster++)
+		for (monster = 0; monster < p_ptr->current_floor_ptr->m_max; monster++)
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[monster];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[monster];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 			if (!monster_is_valid(m_ptr)) continue;
 
@@ -2712,7 +2712,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call animal */
 		if ((creature_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2724,7 +2724,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call demon */
 		if ((creature_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2736,7 +2736,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call dragon */
 		if ((creature_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_DRAGON,
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
@@ -2749,7 +2749,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call undead */
 		if ((creature_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD,
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
@@ -2905,9 +2905,9 @@ static void process_world_aux_recharge(player_type *creature_ptr)
 	}
 
 	/* Process objects on floor */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[i];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
@@ -2954,15 +2954,15 @@ static void process_world_aux_movement(player_type *creature_ptr)
 			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (current_floor_ptr->dun_level || creature_ptr->inside_quest || creature_ptr->enter_dungeon)
+			if (p_ptr->current_floor_ptr->dun_level || creature_ptr->inside_quest || creature_ptr->enter_dungeon)
 			{
 				msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
 
 				if (creature_ptr->dungeon_idx) creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
 				if (record_stair)
-					exe_write_diary(creature_ptr, NIKKI_RECALL, current_floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, NIKKI_RECALL, p_ptr->current_floor_ptr->dun_level, NULL);
 
-				current_floor_ptr->dun_level = 0;
+				p_ptr->current_floor_ptr->dun_level = 0;
 				creature_ptr->dungeon_idx = 0;
 
 				leave_quest_check();
@@ -2979,26 +2979,26 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				creature_ptr->dungeon_idx = creature_ptr->recall_dungeon;
 
 				if (record_stair)
-					exe_write_diary(creature_ptr, NIKKI_RECALL, current_floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, NIKKI_RECALL, p_ptr->current_floor_ptr->dun_level, NULL);
 
 				/* New depth */
-				current_floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
-				if (current_floor_ptr->dun_level < 1) current_floor_ptr->dun_level = 1;
+				p_ptr->current_floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
+				if (p_ptr->current_floor_ptr->dun_level < 1) p_ptr->current_floor_ptr->dun_level = 1;
 
 				/* Nightmare mode makes recall more dangerous */
 				if (ironman_nightmare && !randint0(666) && (creature_ptr->dungeon_idx == DUNGEON_ANGBAND))
 				{
-					if (current_floor_ptr->dun_level < 50)
+					if (p_ptr->current_floor_ptr->dun_level < 50)
 					{
-						current_floor_ptr->dun_level *= 2;
+						p_ptr->current_floor_ptr->dun_level *= 2;
 					}
-					else if (current_floor_ptr->dun_level < 99)
+					else if (p_ptr->current_floor_ptr->dun_level < 99)
 					{
-						current_floor_ptr->dun_level = (current_floor_ptr->dun_level + 99) / 2;
+						p_ptr->current_floor_ptr->dun_level = (p_ptr->current_floor_ptr->dun_level + 99) / 2;
 					}
-					else if (current_floor_ptr->dun_level > 100)
+					else if (p_ptr->current_floor_ptr->dun_level > 100)
 					{
-						current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].maxdepth - 1;
+						p_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].maxdepth - 1;
 					}
 				}
 
@@ -3033,7 +3033,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 						
 						if ((q_ptr->type == QUEST_TYPE_RANDOM) &&
 						    (q_ptr->status == QUEST_STATUS_TAKEN) &&
-						    (q_ptr->level < current_floor_ptr->dun_level))
+						    (q_ptr->level < p_ptr->current_floor_ptr->dun_level))
 						{
 							q_ptr->status = QUEST_STATUS_FAILED;
 							q_ptr->complev = (byte)creature_ptr->lev;
@@ -3068,7 +3068,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (!quest_number(current_floor_ptr->dun_level) && current_floor_ptr->dun_level)
+			if (!quest_number(p_ptr->current_floor_ptr->dun_level) && p_ptr->current_floor_ptr->dun_level)
 			{
 				msg_print(_("世界が変わった！", "The world changes!"));
 
@@ -3105,12 +3105,12 @@ static void process_world(void)
 	extract_day_hour_min(&day, &hour, &min);
 
 	/* Update dungeon feeling, and announce it if changed */
-	update_dungeon_feeling(p_ptr, current_floor_ptr);
+	update_dungeon_feeling(p_ptr, p_ptr->current_floor_ptr);
 
 	/* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
 	if (ironman_downward && (p_ptr->dungeon_idx != DUNGEON_ANGBAND && p_ptr->dungeon_idx != 0))
 	{
-		current_floor_ptr->dun_level = 0;
+		p_ptr->current_floor_ptr->dun_level = 0;
 		p_ptr->dungeon_idx = 0;
 		prepare_change_floor_mode(CFM_FIRST_FLOOR | CFM_RAND_PLACE);
 		p_ptr->inside_arena = FALSE;
@@ -3126,10 +3126,10 @@ static void process_world(void)
 		int number_mon = 0;
 
 		/* Count all hostile monsters */
-		for (i2 = 0; i2 < current_floor_ptr->width; ++i2)
-			for (j2 = 0; j2 < current_floor_ptr->height; j2++)
+		for (i2 = 0; i2 < p_ptr->current_floor_ptr->width; ++i2)
+			for (j2 = 0; j2 < p_ptr->current_floor_ptr->height; j2++)
 			{
-				grid_type *g_ptr = &current_floor_ptr->grid_array[j2][i2];
+				grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[j2][i2];
 
 				if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != p_ptr->riding))
 				{
@@ -3150,7 +3150,7 @@ static void process_world(void)
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *wm_ptr;
 
-			wm_ptr = &current_floor_ptr->m_list[win_m_idx];
+			wm_ptr = &p_ptr->current_floor_ptr->m_list[win_m_idx];
 
 			monster_desc(m_name, wm_ptr, 0);
 			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
@@ -3170,7 +3170,7 @@ static void process_world(void)
 			p_ptr->energy_need = 0;
 			update_gambling_monsters();
 		}
-		else if (current_world_ptr->game_turn - current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
+		else if (current_world_ptr->game_turn - p_ptr->current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
 		{
 			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
 			p_ptr->au += kakekin;
@@ -3190,7 +3190,7 @@ static void process_world(void)
 			do_cmd_save_game(TRUE);
 	}
 
-	if (current_floor_ptr->monster_noise && !ignore_unview)
+	if (p_ptr->current_floor_ptr->monster_noise && !ignore_unview)
 	{
 		msg_print(_("何かが聞こえた。", "You hear noise."));
 	}
@@ -3198,7 +3198,7 @@ static void process_world(void)
 	/*** Handle the wilderness/town (sunshine) ***/
 
 	/* While in town/wilderness */
-	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)
+	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
 		if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
@@ -3208,14 +3208,14 @@ static void process_world(void)
 			/* Check for dawn */
 			dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
 
-			if (dawn) day_break(current_floor_ptr);
-			else night_falls(current_floor_ptr);
+			if (dawn) day_break(p_ptr->current_floor_ptr);
+			else night_falls(p_ptr->current_floor_ptr);
 
 		}
 	}
 
 	/* While in the dungeon (vanilla_town or lite_town mode only) */
-	else if ((vanilla_town || (lite_town && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)) && current_floor_ptr->dun_level)
+	else if ((vanilla_town || (lite_town && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)) && p_ptr->current_floor_ptr->dun_level)
 	{
 		/*** Shuffle the Storekeepers ***/
 
@@ -3283,7 +3283,7 @@ static void process_world(void)
 		/* Hack -- Process the counters of monsters if needed */
 		for (i = 0; i < MAX_MTIMED; i++)
 		{
-			if (current_floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(i);
+			if (p_ptr->current_floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(i);
 		}
 	}
 
@@ -3743,7 +3743,7 @@ static void process_command(player_type *creature_ptr)
 		/* Go up staircase */
 		case '<':
 		{
-			if (!creature_ptr->wild_mode && !current_floor_ptr->dun_level && !creature_ptr->inside_arena && !creature_ptr->inside_quest)
+			if (!creature_ptr->wild_mode && !p_ptr->current_floor_ptr->dun_level && !creature_ptr->inside_arena && !creature_ptr->inside_quest)
 			{
 				if (vanilla_town) break;
 
@@ -3856,7 +3856,7 @@ static void process_command(player_type *creature_ptr)
 				{
 					msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
 				}
-				else if (current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
+				else if (p_ptr->current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
 				{
 					msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 					msg_print(NULL);
@@ -4374,7 +4374,7 @@ static void process_fishing(void)
 		MONRACE_IDX r_idx;
 		bool success = FALSE;
 		get_mon_num_prep(monster_is_fishing_target, NULL);
-		r_idx = get_mon_num(current_floor_ptr->dun_level ? current_floor_ptr->dun_level : wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level);
+		r_idx = get_mon_num(p_ptr->current_floor_ptr->dun_level ? p_ptr->current_floor_ptr->dun_level : wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level);
 		msg_print(NULL);
 		if (r_idx && one_in_(2))
 		{
@@ -4384,7 +4384,7 @@ static void process_fishing(void)
 			if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx], 0);
+				monster_desc(m_name, &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
 				msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 				success = TRUE;
 			}
@@ -4428,9 +4428,9 @@ static void process_player(void)
 
 	if (p_ptr->phase_out)
 	{
-		for(m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
+		for(m_idx = 1; m_idx < p_ptr->current_floor_ptr->m_max; m_idx++)
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 			if (!monster_is_valid(m_ptr)) continue;
 
@@ -4510,7 +4510,7 @@ static void process_player(void)
 
 	if (p_ptr->riding && !p_ptr->confused && !p_ptr->blind)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (MON_CSLEEP(m_ptr))
@@ -4754,12 +4754,12 @@ static void process_player(void)
 			if (p_ptr->image) p_ptr->redraw |= (PR_MAP);
 
 			/* Shimmer multi-hued monsters */
-			for (m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
+			for (m_idx = 1; m_idx < p_ptr->current_floor_ptr->m_max; m_idx++)
 			{
 				monster_type *m_ptr;
 				monster_race *r_ptr;
 
-				m_ptr = &current_floor_ptr->m_list[m_idx];
+				m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 				if (!monster_is_valid(m_ptr)) continue;
 
 				/* Skip unseen monsters */
@@ -4784,10 +4784,10 @@ static void process_player(void)
 				repair_monsters = FALSE;
 
 				/* Rotate detection flags */
-				for (m_idx = 1; m_idx < current_floor_ptr->m_max; m_idx++)
+				for (m_idx = 1; m_idx < p_ptr->current_floor_ptr->m_max; m_idx++)
 				{
 					monster_type *m_ptr;
-					m_ptr = &current_floor_ptr->m_list[m_idx];
+					m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 					if (!monster_is_valid(m_ptr)) continue;
 
 					/* Nice monsters get mean */
@@ -4902,7 +4902,7 @@ static void dungeon(bool load_game)
 	int quest_num = 0;
 
 	/* Set the base level */
-	current_floor_ptr->base_level = current_floor_ptr->dun_level;
+	p_ptr->current_floor_ptr->base_level = p_ptr->current_floor_ptr->dun_level;
 
 	/* Reset various flags */
 	current_world_ptr->is_loading_now = FALSE;
@@ -4939,7 +4939,7 @@ static void dungeon(bool load_game)
 	disturb(p_ptr, TRUE, TRUE);
 
 	/* Get index of current quest (if any) */
-	quest_num = quest_number(current_floor_ptr->dun_level);
+	quest_num = quest_number(p_ptr->current_floor_ptr->dun_level);
 
 	/* Inside a quest? */
 	if (quest_num)
@@ -4956,10 +4956,10 @@ static void dungeon(bool load_game)
 
 
 	/* Track maximum dungeon level (if not in quest -KMW-) */
-	if ((max_dlv[p_ptr->dungeon_idx] < current_floor_ptr->dun_level) && !p_ptr->inside_quest)
+	if ((max_dlv[p_ptr->dungeon_idx] < p_ptr->current_floor_ptr->dun_level) && !p_ptr->inside_quest)
 	{
-		max_dlv[p_ptr->dungeon_idx] = current_floor_ptr->dun_level;
-		if (record_maxdepth) exe_write_diary(p_ptr, NIKKI_MAXDEAPTH, current_floor_ptr->dun_level, NULL);
+		max_dlv[p_ptr->dungeon_idx] = p_ptr->current_floor_ptr->dun_level;
+		if (record_maxdepth) exe_write_diary(p_ptr, NIKKI_MAXDEAPTH, p_ptr->current_floor_ptr->dun_level, NULL);
 	}
 
 	(void)calculate_upkeep(p_ptr);
@@ -5017,10 +5017,10 @@ static void dungeon(bool load_game)
 	/* Print quest message if appropriate */
 	if (!p_ptr->inside_quest && (p_ptr->dungeon_idx == DUNGEON_ANGBAND))
 	{
-		quest_discovery(random_quest_number(current_floor_ptr->dun_level));
-		p_ptr->inside_quest = random_quest_number(current_floor_ptr->dun_level);
+		quest_discovery(random_quest_number(p_ptr->current_floor_ptr->dun_level));
+		p_ptr->inside_quest = random_quest_number(p_ptr->current_floor_ptr->dun_level);
 	}
-	if ((current_floor_ptr->dun_level == d_info[p_ptr->dungeon_idx].maxdepth) && d_info[p_ptr->dungeon_idx].final_guardian)
+	if ((p_ptr->current_floor_ptr->dun_level == d_info[p_ptr->dungeon_idx].maxdepth) && d_info[p_ptr->dungeon_idx].final_guardian)
 	{
 		if (r_info[d_info[p_ptr->dungeon_idx].final_guardian].max_num)
 #ifdef JP
@@ -5039,15 +5039,15 @@ static void dungeon(bool load_game)
 	/*** Process this dungeon level ***/
 
 	/* Reset the monster generation level */
-	current_floor_ptr->monster_level = current_floor_ptr->base_level;
+	p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
 
 	/* Reset the object generation level */
-	current_floor_ptr->object_level = current_floor_ptr->base_level;
+	p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
 
 	current_world_ptr->is_loading_now = TRUE;
 
 	if (p_ptr->energy_need > 0 && !p_ptr->phase_out &&
-	    (current_floor_ptr->dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))
+	    (p_ptr->current_floor_ptr->dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))
 		p_ptr->energy_need = 0;
 
 	/* Not leaving dungeon */
@@ -5060,17 +5060,17 @@ static void dungeon(bool load_game)
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((current_floor_ptr->m_cnt + 32 > current_floor_ptr->max_m_idx) && !p_ptr->phase_out) compact_monsters(64);
+		if ((p_ptr->current_floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !p_ptr->phase_out) compact_monsters(64);
 
 		/* Hack -- Compress the monster list occasionally */
-		if ((current_floor_ptr->m_cnt + 32 < current_floor_ptr->m_max) && !p_ptr->phase_out) compact_monsters(0);
+		if ((p_ptr->current_floor_ptr->m_cnt + 32 < p_ptr->current_floor_ptr->m_max) && !p_ptr->phase_out) compact_monsters(0);
 
 
 		/* Hack -- Compact the object list occasionally */
-		if (current_floor_ptr->o_cnt + 32 > current_floor_ptr->max_o_idx) compact_objects(64);
+		if (p_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(64);
 
 		/* Hack -- Compress the object list occasionally */
-		if (current_floor_ptr->o_cnt + 32 < current_floor_ptr->o_max) compact_objects(0);
+		if (p_ptr->current_floor_ptr->o_cnt + 32 < p_ptr->current_floor_ptr->o_max) compact_objects(0);
 
 		/* Process the player */
 		process_player();
@@ -5390,7 +5390,7 @@ void play_game(bool new_game)
 		current_world_ptr->character_dungeon = FALSE;
 
 		/* Start in town */
-		current_floor_ptr->dun_level = 0;
+		p_ptr->current_floor_ptr->dun_level = 0;
 		p_ptr->inside_quest = 0;
 		p_ptr->inside_arena = FALSE;
 		p_ptr->phase_out = FALSE;
@@ -5432,9 +5432,9 @@ void play_game(bool new_game)
 		if (p_ptr->riding == -1)
 		{
 			p_ptr->riding = 0;
-			for (i = current_floor_ptr->m_max; i > 0; i--)
+			for (i = p_ptr->current_floor_ptr->m_max; i > 0; i--)
 			{
-				if (player_bold(current_floor_ptr->m_list[i].fy, current_floor_ptr->m_list[i].fx))
+				if (player_bold(p_ptr->current_floor_ptr->m_list[i].fy, p_ptr->current_floor_ptr->m_list[i].fx))
 				{
 					p_ptr->riding = i;
 					break;
@@ -5454,8 +5454,8 @@ void play_game(bool new_game)
 	record_o_name[0] = '\0';
 
 	/* Reset map panel */
-	panel_row_min = current_floor_ptr->height;
-	panel_col_min = current_floor_ptr->width;
+	panel_row_min = p_ptr->current_floor_ptr->height;
+	panel_col_min = p_ptr->current_floor_ptr->width;
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
 	if (p_ptr->pseikaku == SEIKAKU_SEXY)
@@ -5500,7 +5500,7 @@ void play_game(bool new_game)
 	}
 
 	/* Initialize the town-buildings if necessary */
-	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest)
+	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_quest)
 	{
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 		init_flags = INIT_ONLY_BUILDINGS;
@@ -5587,7 +5587,7 @@ void play_game(bool new_game)
 		monster_race *r_ptr = &r_info[pet_r_idx];
 		place_monster_aux(0, p_ptr->y, p_ptr->x - 1, pet_r_idx,
 				  (PM_FORCE_PET | PM_NO_KAGE));
-		m_ptr = &current_floor_ptr->m_list[hack_m_idx_ii];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;
 		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;
 		m_ptr->max_maxhp = m_ptr->maxhp;
@@ -5620,14 +5620,14 @@ void play_game(bool new_game)
 		/* Cancel the health bar */
 		health_track(0);
 
-		forget_lite(current_floor_ptr);
+		forget_lite(p_ptr->current_floor_ptr);
 		forget_view();
-		clear_mon_lite(current_floor_ptr);
+		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Handle "quit and save" */
 		if (!p_ptr->playing && !p_ptr->is_dead) break;
 
-		/* Erase the old current_floor_ptr->grid_array */
+		/* Erase the old p_ptr->current_floor_ptr->grid_array */
 		wipe_o_list();
 		if (!p_ptr->is_dead) wipe_m_list();
 
@@ -5719,8 +5719,8 @@ void prevent_turn_overflow(void)
 
 	if (current_world_ptr->game_turn > rollback_turns) current_world_ptr->game_turn -= rollback_turns;
 	else current_world_ptr->game_turn = 1;
-	if (current_floor_ptr->generated_turn > rollback_turns) current_floor_ptr->generated_turn -= rollback_turns;
-	else current_floor_ptr->generated_turn = 1;
+	if (p_ptr->current_floor_ptr->generated_turn > rollback_turns) p_ptr->current_floor_ptr->generated_turn -= rollback_turns;
+	else p_ptr->current_floor_ptr->generated_turn = 1;
 	if (current_world_ptr->arena_start_turn > rollback_turns) current_world_ptr->arena_start_turn -= rollback_turns;
 	else current_world_ptr->arena_start_turn = 1;
 	if (p_ptr->feeling_turn > rollback_turns) p_ptr->feeling_turn -= rollback_turns;

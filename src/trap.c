@@ -158,10 +158,10 @@ FEAT_IDX choose_random_trap(void)
 		if (!have_flag(f_info[feat].flags, FF_MORE)) break;
 
 		/* Hack -- no trap doors on special levels */
-		if (p_ptr->inside_arena || quest_number(current_floor_ptr->dun_level)) continue;
+		if (p_ptr->inside_arena || quest_number(p_ptr->current_floor_ptr->dun_level)) continue;
 
 		/* Hack -- no trap doors on the deepest level */
-		if (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) continue;
+		if (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) continue;
 
 		break;
 	}
@@ -178,7 +178,7 @@ FEAT_IDX choose_random_trap(void)
 */
 void disclose_grid(POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	if (cave_have_flag_grid(g_ptr, FF_SECRET))
 	{
@@ -207,10 +207,10 @@ void disclose_grid(POSITION y, POSITION x)
 */
 void place_trap(POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Paranoia -- verify location */
-	if (!in_bounds(current_floor_ptr, y, x)) return;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Require empty, clean, floor grid */
 	if (!cave_clean_bold(y, x)) return;
@@ -406,7 +406,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 {
 	int i, num, dam;
 	POSITION x = trapped_ptr->x, y = trapped_ptr->y;
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	int trap_feat_type = have_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
 	concptr name = _("トラップ", "a trap");
@@ -464,10 +464,10 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 		num = 2 + randint1(3);
 		for (i = 0; i < num; i++)
 		{
-			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+			(void)summon_specific(0, y, x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
 
-		if (current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
+		if (p_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
 		{
 			bool stop_ty = FALSE;
 			int count = 0;
@@ -612,7 +612,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 		msg_print(_("突然天界の戦争に巻き込まれた！", "Suddenly, you are surrounded by immotal beings!"));
 
 		/* Summon Demons and Angels */
-		for (lev = current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16)
+		for (lev = p_ptr->current_floor_ptr->dun_level; lev >= 20; lev -= 1 + lev / 16)
 		{
 			num = levs[MIN(lev / 10, 9)];
 			for (i = 0; i < num; i++)
@@ -620,7 +620,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 				POSITION x1 = rand_spread(x, 7);
 				POSITION y1 = rand_spread(y, 5);
 
-				if (!in_bounds(current_floor_ptr, y1, x1)) continue;
+				if (!in_bounds(p_ptr->current_floor_ptr, y1, x1)) continue;
 
 				/* Require line of projection */
 				if (!projectable(trapped_ptr->y, trapped_ptr->x, y1, x1)) continue;
@@ -636,8 +636,8 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 				/* Let them fight each other */
 				if (evil_idx && good_idx)
 				{
-					monster_type *evil_ptr = &current_floor_ptr->m_list[evil_idx];
-					monster_type *good_ptr = &current_floor_ptr->m_list[good_idx];
+					monster_type *evil_ptr = &p_ptr->current_floor_ptr->m_list[evil_idx];
+					monster_type *good_ptr = &p_ptr->current_floor_ptr->m_list[good_idx];
 					evil_ptr->target_y = good_ptr->fy;
 					evil_ptr->target_x = good_ptr->fx;
 					good_ptr->target_y = evil_ptr->fy;
@@ -656,10 +656,10 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 		fire_ball_hide(GF_WATER_FLOW, 0, 1, 10);
 
 		/* Summon Piranhas */
-		num = 1 + current_floor_ptr->dun_level / 20;
+		num = 1 + p_ptr->current_floor_ptr->dun_level / 20;
 		for (i = 0; i < num; i++)
 		{
-			(void)summon_specific(0, y, x, current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
+			(void)summon_specific(0, y, x, p_ptr->current_floor_ptr->dun_level, SUMMON_PIRANHAS, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 		break;
 	}

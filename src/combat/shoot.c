@@ -389,7 +389,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 	}
 	else
 	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[0 - item];
 	}
 
 	/* Sniper - Cannot shot a single arrow twice */
@@ -536,7 +536,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			/* Shatter Arrow */
 			if (snipe_type == SP_KILL_WALL)
 			{
-				g_ptr = &current_floor_ptr->grid_array[ny][nx];
+				g_ptr = &p_ptr->current_floor_ptr->grid_array[ny][nx];
 
 				if (cave_have_flag_grid(g_ptr, FF_HURT_ROCK) && !g_ptr->m_idx)
 				{
@@ -554,7 +554,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			}
 
 			/* Stopped by walls/doors */
-			if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && !current_floor_ptr->grid_array[ny][nx].m_idx) break;
+			if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && !p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) break;
 
 			/* Advance the distance */
 			cur_dis++;
@@ -562,7 +562,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			/* Sniper */
 			if (snipe_type == SP_LITE)
 			{
-				current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
+				p_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
 			}
@@ -599,7 +599,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			/* Sniper */
 			if (snipe_type == SP_EVILNESS)
 			{
-				current_floor_ptr->grid_array[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
+				p_ptr->current_floor_ptr->grid_array[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
 				note_spot(ny, nx);
 				lite_spot(ny, nx);
 			}
@@ -612,11 +612,11 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			y = ny;
 
 			/* Monster here, Try to hit it */
-			if (current_floor_ptr->grid_array[y][x].m_idx)
+			if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 			{
-				grid_type *c_mon_ptr = &current_floor_ptr->grid_array[y][x];
+				grid_type *c_mon_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
-				monster_type *m_ptr = &current_floor_ptr->m_list[c_mon_ptr->m_idx];
+				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/* Check the visibility */
@@ -649,7 +649,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 				if (shooter_ptr->riding)
 				{
 					if ((shooter_ptr->skill_exp[GINOU_RIDING] < s_info[shooter_ptr->pclass].s_max[GINOU_RIDING])
-						&& ((shooter_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[current_floor_ptr->m_list[shooter_ptr->riding].r_idx].level)
+						&& ((shooter_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200 < r_info[p_ptr->current_floor_ptr->m_list[shooter_ptr->riding].r_idx].level)
 						&& one_in_(2))
 					{
 						shooter_ptr->skill_exp[GINOU_RIDING] += 1;
@@ -735,7 +735,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					/* Sniper */
 					if (snipe_type == SP_HOLYNESS)
 					{
-						current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
+						p_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
 						note_spot(ny, nx);
 						lite_spot(ny, nx);
 					}
@@ -796,13 +796,13 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 								if (!in_bounds2(ny, nx)) break;
 
 								/* Stopped by walls/doors */
-								if (!player_can_enter(current_floor_ptr->grid_array[ny][nx].feat, 0)) break;
+								if (!player_can_enter(p_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0)) break;
 
 								/* Stopped by monsters */
 								if (!cave_empty_bold(ny, nx)) break;
 
-								current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
-								current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+								p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+								p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
 
 								m_ptr->fx = nx;
 								m_ptr->fy = ny;
@@ -842,8 +842,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
 		if (stick_to)
 		{
-			MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
-			monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+			MONSTER_IDX m_idx = p_ptr->current_floor_ptr->grid_array[y][x].m_idx;
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 			OBJECT_IDX o_idx = o_pop();
 
 			if (!o_idx)
@@ -856,7 +856,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 				return;
 			}
 
-			o_ptr = &current_floor_ptr->o_list[o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 			object_copy(o_ptr, q_ptr);
 
 			/* Forget mark */

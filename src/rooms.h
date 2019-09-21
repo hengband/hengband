@@ -36,7 +36,7 @@
 #define ROOM_T_PIT            5	 /*!<部屋型ID:モンスターPIT / Monster pit (33x11) */
 #define ROOM_T_LESSER_VAULT   6	 /*!<部屋型ID:小型VAULT / Lesser vault (33x22) */
 #define ROOM_T_GREATER_VAULT  7	 /*!<部屋型ID:大型VAULT / Greater vault (66x44) */
-#define ROOM_T_FRACAVE        8	 /*!<部屋型ID:フラクタル地形 / Fractal current_floor_ptr->grid_array (42x24) */
+#define ROOM_T_FRACAVE        8	 /*!<部屋型ID:フラクタル地形 / Fractal p_ptr->current_floor_ptr->grid_array (42x24) */
 #define ROOM_T_RANDOM_VAULT   9	 /*!<部屋型ID:ランダムVAULT / Random vault (44x22) */
 #define ROOM_T_OVAL          10	 /*!<部屋型ID:円形部屋 / Circular rooms (22x22) */
 #define ROOM_T_CRYPT         11	 /*!<部屋型ID:聖堂 / Crypts (22x22) */

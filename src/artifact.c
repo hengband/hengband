@@ -2234,7 +2234,7 @@ bool make_artifact(object_type *o_ptr)
 	ARTIFACT_IDX i;
 
 	/* No artifacts in the town */
-	if (!current_floor_ptr->dun_level) return (FALSE);
+	if (!p_ptr->current_floor_ptr->dun_level) return (FALSE);
 
 	/* Paranoia -- no "plural" artifacts */
 	if (o_ptr->number != 1) return (FALSE);
@@ -2259,10 +2259,10 @@ bool make_artifact(object_type *o_ptr)
 		if (a_ptr->sval != o_ptr->sval) continue;
 
 		/* XXX XXX Enforce minimum "depth" (loosely) */
-		if (a_ptr->level > current_floor_ptr->dun_level)
+		if (a_ptr->level > p_ptr->current_floor_ptr->dun_level)
 		{
 			/* Acquire the "out-of-depth factor" */
-			int d = (a_ptr->level - current_floor_ptr->dun_level) * 2;
+			int d = (a_ptr->level - p_ptr->current_floor_ptr->dun_level) * 2;
 
 			/* Roll for out-of-depth creation */
 			if (!one_in_(d)) continue;
@@ -2302,7 +2302,7 @@ bool make_artifact_special(object_type *o_ptr)
 	KIND_OBJECT_IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
-	if (!current_floor_ptr->dun_level) return (FALSE);
+	if (!p_ptr->current_floor_ptr->dun_level) return (FALSE);
 
 	/*! @note get_obj_num_hookによる指定がある場合は生成をキャンセルする / Themed object */
 	if (get_obj_num_hook) return (FALSE);
@@ -2322,10 +2322,10 @@ bool make_artifact_special(object_type *o_ptr)
 
 		/*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /
 		 *  XXX XXX Enforce minimum "depth" (loosely) */
-		if (a_ptr->level > current_floor_ptr->object_level)
+		if (a_ptr->level > p_ptr->current_floor_ptr->object_level)
 		{
 			/* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-			int d = (a_ptr->level - current_floor_ptr->object_level) * 2;
+			int d = (a_ptr->level - p_ptr->current_floor_ptr->object_level) * 2;
 			if (!one_in_(d)) continue;
 		}
 
@@ -2335,9 +2335,9 @@ bool make_artifact_special(object_type *o_ptr)
 		/*! @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。ベースアイテムの生成階層が足りない場合1/(不足階層*5) を満たさないと除外される。 /
 		 *  Find the base object. XXX XXX Enforce minimum "object" level (loosely). Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
 		k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
-		if (k_info[k_idx].level > current_floor_ptr->object_level)
+		if (k_info[k_idx].level > p_ptr->current_floor_ptr->object_level)
 		{
-			int d = (k_info[k_idx].level - current_floor_ptr->object_level) * 5;
+			int d = (k_info[k_idx].level - p_ptr->current_floor_ptr->object_level) * 5;
 			if (!one_in_(d)) continue;
 		}
 

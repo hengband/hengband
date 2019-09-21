@@ -58,6 +58,7 @@
 #include "objectkind.h"
 #include "object-ego.h"
 #include "rooms-vault.h"
+#include "world.h"
 
 #ifndef MACINTOSH
 #ifdef CHECK_MODIFICATION_TIME
@@ -1218,29 +1219,31 @@ static errr init_other(void)
 {
 	int i, n;
 
+	p_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
+
 
 	/*** Prepare the "dungeon" information ***/
 
 	/* Allocate and Wipe the object list */
-	C_MAKE(current_floor_ptr->o_list, current_floor_ptr->max_o_idx, object_type);
+	C_MAKE(p_ptr->current_floor_ptr->o_list, current_world_ptr->max_o_idx, object_type);
 
 	/* Allocate and Wipe the monster list */
-	C_MAKE(current_floor_ptr->m_list, current_floor_ptr->max_m_idx, monster_type);
+	C_MAKE(p_ptr->current_floor_ptr->m_list, current_world_ptr->max_m_idx, monster_type);
 
 	/* Allocate and Wipe the monster process list */
 	for (i = 0; i < MAX_MTIMED; i++)
 	{
-		C_MAKE(current_floor_ptr->mproc_list[i], current_floor_ptr->max_m_idx, s16b);
+		C_MAKE(p_ptr->current_floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, s16b);
 	}
 
 	/* Allocate and Wipe the max dungeon level */
 	C_MAKE(max_dlv, max_d_idx, DEPTH);
 
-	/* Allocate and wipe each line of the current_floor_ptr->grid_array */
+	/* Allocate and wipe each line of the p_ptr->current_floor_ptr->grid_array */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		/* Allocate one row of the current_floor_ptr->grid_array */
-		C_MAKE(current_floor_ptr->grid_array[i], MAX_WID, grid_type);
+		/* Allocate one row of the p_ptr->current_floor_ptr->grid_array */
+		C_MAKE(p_ptr->current_floor_ptr->grid_array[i], MAX_WID, grid_type);
 	}
 
 

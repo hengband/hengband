@@ -7,7 +7,7 @@
 #include "dungeon.h"
 
 /*!
-* @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal current_floor_ptr->grid_array system
+* @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal p_ptr->current_floor_ptr->grid_array system
 * @return なし
 */
 bool build_type9(void)
@@ -35,14 +35,14 @@ bool build_type9(void)
 			* Still no space?!
 			* Try normal room
 			*/
-			return build_type1(current_floor_ptr);
+			return build_type1(p_ptr->current_floor_ptr);
 		}
 	}
 
 	light = done = FALSE;
 	room = TRUE;
 
-	if ((current_floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((p_ptr->current_floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	while (!done)
 	{

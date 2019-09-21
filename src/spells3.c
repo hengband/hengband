@@ -82,7 +82,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 
 	bool look = TRUE;
 
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	if (!monster_is_valid(m_ptr)) return (FALSE);
 
 	oy = m_ptr->fy;
@@ -119,13 +119,13 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 			}
 
 			/* Ignore illegal locations */
-			if (!in_bounds(current_floor_ptr, ny, nx)) continue;
+			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
 
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
 			if (!(p_ptr->inside_quest || p_ptr->inside_arena))
-				if (current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY) continue;
+				if (p_ptr->current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY) continue;
 
 			/* This grid looks good */
 			look = FALSE;
@@ -147,10 +147,10 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	sound(SOUND_TPOTHER);
 
 	/* Update the old location */
-	current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+	p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
 
 	/* Update the new location */
-	current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+	p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
 	/* Move the monster */
 	m_ptr->fy = ny;
@@ -187,7 +187,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	int attempts = 500;
 	POSITION dis = 2;
 	bool look = TRUE;
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	if(!m_ptr->r_idx) return;
 
 	/* "Skill" test */
@@ -220,12 +220,12 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 			}
 
 			/* Ignore illegal locations */
-			if (!in_bounds(current_floor_ptr, ny, nx)) continue;
+			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
 
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
-			/* if (current_floor_ptr->grid_array[ny][nx].info & (CAVE_ICKY)) continue; */
+			/* if (p_ptr->current_floor_ptr->grid_array[ny][nx].info & (CAVE_ICKY)) continue; */
 
 			/* This grid looks good */
 			look = FALSE;
@@ -246,10 +246,10 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	sound(SOUND_TPOTHER);
 
 	/* Update the old location */
-	current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+	p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
 
 	/* Update the new location */
-	current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+	p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
 	/* Move the monster */
 	m_ptr->fy = ny;
@@ -294,9 +294,9 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 	int min, pick, i;
 
 	int left = MAX(1, p_ptr->x - dis);
-	int right = MIN(current_floor_ptr->width - 2, p_ptr->x + dis);
+	int right = MIN(p_ptr->current_floor_ptr->width - 2, p_ptr->x + dis);
 	int top = MAX(1, p_ptr->y - dis);
-	int bottom = MIN(current_floor_ptr->height - 2, p_ptr->y + dis);
+	int bottom = MIN(p_ptr->current_floor_ptr->height - 2, p_ptr->y + dis);
 
 	if (p_ptr->wild_mode) return FALSE;
 
@@ -413,12 +413,12 @@ void teleport_player(POSITION dis, BIT_FLAGS mode)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			MONSTER_IDX tmp_m_idx = current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
+			MONSTER_IDX tmp_m_idx = p_ptr->current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx))
 			{
-				monster_type *m_ptr = &current_floor_ptr->m_list[tmp_m_idx];
+				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[tmp_m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/*
@@ -455,12 +455,12 @@ void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			MONSTER_IDX tmp_m_idx = current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
+			MONSTER_IDX tmp_m_idx = p_ptr->current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount or caster may follow */
 			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))
 			{
-				monster_type *m_ptr = &current_floor_ptr->m_list[tmp_m_idx];
+				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[tmp_m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/*
@@ -510,11 +510,11 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 		{
 			y = (POSITION)rand_spread(ny, dis);
 			x = (POSITION)rand_spread(nx, dis);
-			if (in_bounds(current_floor_ptr, y, x)) break;
+			if (in_bounds(p_ptr->current_floor_ptr, y, x)) break;
 		}
 
 		/* Accept any grid when wizard mode */
-		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!current_floor_ptr->grid_array[y][x].m_idx || (current_floor_ptr->grid_array[y][x].m_idx == p_ptr->riding))) break;
+		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx || (p_ptr->current_floor_ptr->grid_array[y][x].m_idx == p_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
 		if (cave_player_teleportable_bold(y, x, mode)) break;
@@ -534,7 +534,7 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 
 void teleport_away_followable(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	POSITION oldfy = m_ptr->fy;
 	POSITION oldfx = m_ptr->fx;
 	bool old_ml = m_ptr->ml;
@@ -593,11 +593,11 @@ bool teleport_level_other(player_type *creature_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	if (!target_set(TARGET_KILL)) return FALSE;
-	target_m_idx = current_floor_ptr->grid_array[target_row][target_col].m_idx;
+	target_m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 	if (!target_m_idx) return TRUE;
 	if (!player_has_los_bold(target_row, target_col)) return TRUE;
 	if (!projectable(creature_ptr->y, creature_ptr->x, target_row, target_col)) return TRUE;
-	m_ptr = &current_floor_ptr->m_list[target_m_idx];
+	m_ptr = &p_ptr->current_floor_ptr->m_list[target_m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 	monster_desc(m_name, m_ptr, 0);
 	msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
@@ -629,7 +629,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 	else /* To monster */
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 		/* Get the monster name (or "it") */
 		monster_desc(m_name, m_ptr, 0);
@@ -661,7 +661,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 
 	/* Down only */ 
-	if ((ironman_downward && (m_idx <= 0)) || (current_floor_ptr->dun_level <= d_info[p_ptr->dungeon_idx].mindepth))
+	if ((ironman_downward && (m_idx <= 0)) || (p_ptr->current_floor_ptr->dun_level <= d_info[p_ptr->dungeon_idx].mindepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは床を突き破って沈んでいく。", m_name);
@@ -670,7 +670,7 @@ void teleport_level(MONSTER_IDX m_idx)
 #endif
 		if (m_idx <= 0) /* To player */
 		{
-			if (!current_floor_ptr->dun_level)
+			if (!p_ptr->current_floor_ptr->dun_level)
 			{
 				p_ptr->dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : p_ptr->recall_dungeon;
 				p_ptr->oldpy = p_ptr->y;
@@ -681,9 +681,9 @@ void teleport_level(MONSTER_IDX m_idx)
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
-			if (!current_floor_ptr->dun_level)
+			if (!p_ptr->current_floor_ptr->dun_level)
 			{
-				current_floor_ptr->dun_level = d_info[p_ptr->dungeon_idx].mindepth;
+				p_ptr->current_floor_ptr->dun_level = d_info[p_ptr->dungeon_idx].mindepth;
 				prepare_change_floor_mode(CFM_RAND_PLACE);
 			}
 			else
@@ -695,7 +695,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 
 	/* Up only */
-	else if (quest_number(current_floor_ptr->dun_level) || (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth))
+	else if (quest_number(p_ptr->current_floor_ptr->dun_level) || (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -747,7 +747,7 @@ void teleport_level(MONSTER_IDX m_idx)
 		if (m_idx <= 0) /* To player */
 		{
 			/* Never reach this code on the surface */
-			/* if (!current_floor_ptr->dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
+			/* if (!p_ptr->current_floor_ptr->dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
 			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, 1, NULL);
 			if (autosave_l) do_cmd_save_game(TRUE);
 
@@ -759,7 +759,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	/* Monster level teleportation is simple deleting now */
 	if (m_idx > 0)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 		check_quest_completion(m_ptr);
 
@@ -797,11 +797,11 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		return TRUE;
 	}
 
-	if (current_floor_ptr->dun_level && (max_dlv[p_ptr->dungeon_idx] > current_floor_ptr->dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
+	if (p_ptr->current_floor_ptr->dun_level && (max_dlv[p_ptr->dungeon_idx] > p_ptr->current_floor_ptr->dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
 	{
 		if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? ")))
 		{
-			max_dlv[p_ptr->dungeon_idx] = current_floor_ptr->dun_level;
+			max_dlv[p_ptr->dungeon_idx] = p_ptr->current_floor_ptr->dun_level;
 			if (record_maxdepth)
 				exe_write_diary(p_ptr, NIKKI_TRUMP, p_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
 		}
@@ -809,7 +809,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 	}
 	if (!creature_ptr->word_recall)
 	{
-		if (!current_floor_ptr->dun_level)
+		if (!p_ptr->current_floor_ptr->dun_level)
 		{
 			DUNGEON_IDX select_dungeon;
 			select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
@@ -892,7 +892,7 @@ bool reset_recall(void)
 		(int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
 
 	/* Default */
-	sprintf(tmp_val, "%d", (int)MAX(current_floor_ptr->dun_level, 1));
+	sprintf(tmp_val, "%d", (int)MAX(p_ptr->current_floor_ptr->dun_level, 1));
 
 	/* Ask for a level */
 	if (get_string(ppp, tmp_val, 10))
@@ -1039,17 +1039,17 @@ static bool vanish_dungeon(void)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Prevent vasishing of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !current_floor_ptr->dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !p_ptr->current_floor_ptr->dun_level)
 	{
 		return FALSE;
 	}
 
 	/* Scan all normal grids */
-	for (y = 1; y < current_floor_ptr->height - 1; y++)
+	for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < current_floor_ptr->width - 1; x++)
+		for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
 		{
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Seeing true feature code (ignore mimic) */
 			f_ptr = &f_info[g_ptr->feat];
@@ -1057,7 +1057,7 @@ static bool vanish_dungeon(void)
 			/* Lose room and vault */
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-			m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+			m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Awake monster */
 			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
@@ -1078,9 +1078,9 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Special boundary walls -- Top and bottom */
-	for (x = 0; x < current_floor_ptr->width; x++)
+	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[0][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[0][x];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1095,7 +1095,7 @@ static bool vanish_dungeon(void)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &current_floor_ptr->grid_array[current_floor_ptr->height - 1][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->current_floor_ptr->height - 1][x];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1112,9 +1112,9 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Special boundary walls -- Left and right */
-	for (y = 1; y < (current_floor_ptr->height - 1); y++)
+	for (y = 1; y < (p_ptr->current_floor_ptr->height - 1); y++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[y][0];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][0];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1129,7 +1129,7 @@ static bool vanish_dungeon(void)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &current_floor_ptr->grid_array[y][current_floor_ptr->width - 1];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][p_ptr->current_floor_ptr->width - 1];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1165,7 +1165,7 @@ void call_the_(void)
 
 	for (i = 0; i < 9; i++)
 	{
-		g_ptr = &current_floor_ptr->grid_array[p_ptr->y + ddy_ddd[i]][p_ptr->x + ddx_ddd[i]];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y + ddy_ddd[i]][p_ptr->x + ddx_ddd[i]];
 
 		if (!cave_have_flag_grid(g_ptr, FF_PROJECT))
 		{
@@ -1197,7 +1197,7 @@ void call_the_(void)
 	}
 
 	/* Prevent destruction of quest levels and town */
-	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !current_floor_ptr->dun_level)
+	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !p_ptr->current_floor_ptr->dun_level)
 	{
 		msg_print(_("地面が揺れた。", "The ground trembles."));
 	}
@@ -1248,7 +1248,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Check to see if an object is already there */
-	if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx)
+	if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx)
 	{
 		msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
 		return;
@@ -1266,7 +1266,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 			return;
 		}
 
-		g_ptr = &current_floor_ptr->grid_array[ty][tx];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 
 		/* We need an item to fetch */
 		if (!g_ptr->o_idx)
@@ -1305,7 +1305,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 		{
 			ty += ddy[dir];
 			tx += ddx[dir];
-			g_ptr = &current_floor_ptr->grid_array[ty][tx];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 
 			if ((distance(p_ptr->y, p_ptr->x, ty, tx) > MAX_RANGE) ||
 				!cave_have_flag_bold(ty, tx, FF_PROJECT)) return;
@@ -1313,7 +1313,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 		while (!g_ptr->o_idx);
 	}
 
-	o_ptr = &current_floor_ptr->o_list[g_ptr->o_idx];
+	o_ptr = &p_ptr->current_floor_ptr->o_list[g_ptr->o_idx];
 
 	if (o_ptr->weight > wgt)
 	{
@@ -1324,7 +1324,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 
 	i = g_ptr->o_idx;
 	g_ptr->o_idx = o_ptr->next_o_idx;
-	current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx = i; /* 'move' it */
+	p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx = i; /* 'move' it */
 
 	o_ptr->next_o_idx = 0;
 	o_ptr->iy = p_ptr->y;
@@ -2558,7 +2558,7 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
 	if (p_ptr->riding)
-		chance += (MAX(r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
+		chance += (MAX(r_info[p_ptr->current_floor_ptr->m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
 
 	/* Extract mana consumption rate */
 	need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
@@ -2824,7 +2824,7 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 	for (i = 0; i < 1000; i++)
 	{
 		/* Pick a new race, using a level calculation */
-		r = get_mon_num((current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
+		r = get_mon_num((p_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
 
 		/* Handle failure */
 		if (!r) break;
@@ -2854,8 +2854,8 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
  */
 bool polymorph_monster(POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
-	monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	bool polymorphed = FALSE;
 	MONRACE_IDX new_r_idx;
 	MONRACE_IDX old_r_idx = m_ptr->r_idx;
@@ -2894,9 +2894,9 @@ bool polymorph_monster(POSITION y, POSITION x)
 		/* Create a new monster (no groups) */
 		if (place_monster_aux(0, y, x, new_r_idx, mode))
 		{
-			current_floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
-			current_floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
-			current_floor_ptr->m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
 
 			/* Success */
 			polymorphed = TRUE;
@@ -2906,7 +2906,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 			/* Placing the new monster failed */
 			if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
 			{
-				current_floor_ptr->m_list[hack_m_idx_ii] = back_m;
+				p_ptr->current_floor_ptr->m_list[hack_m_idx_ii] = back_m;
 
 				/* Re-initialize monster process */
 				mproc_init();
@@ -2919,7 +2919,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 		{
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
-				object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
+				object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Held by new monster */
@@ -2930,7 +2930,7 @@ bool polymorph_monster(POSITION y, POSITION x)
 		{
 			for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
-				next_o_idx = current_floor_ptr->o_list[this_o_idx].next_o_idx;
+				next_o_idx = p_ptr->current_floor_ptr->o_list[this_o_idx].next_o_idx;
 				delete_object_idx(this_o_idx);
 			}
 		}
@@ -3293,8 +3293,8 @@ void massacre(void)
 	{
 		y = p_ptr->y + ddy_ddd[dir];
 		x = p_ptr->x + ddx_ddd[dir];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
-		m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Hack -- attack monsters */
 		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
@@ -3312,7 +3312,7 @@ bool eat_lock(void)
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	f_ptr = &f_info[g_ptr->feat];
 	mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
@@ -3328,7 +3328,7 @@ bool eat_lock(void)
 	}
 	else if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 		msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
 		if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(p_ptr, y, x, 0);
@@ -3379,13 +3379,13 @@ bool shock_power(void)
 	x = p_ptr->x + ddx[dir];
 	dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
 	fire_beam(GF_MISSILE, dir, dam);
-	if (current_floor_ptr->grid_array[y][x].m_idx)
+	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		int i;
 		POSITION ty = y, tx = x;
 		POSITION oy = y, ox = x;
-		MONSTER_IDX m_idx = current_floor_ptr->grid_array[y][x].m_idx;
-		monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+		MONSTER_IDX m_idx = p_ptr->current_floor_ptr->grid_array[y][x].m_idx;
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		GAME_TEXT m_name[MAX_NLEN];
 
@@ -3411,8 +3411,8 @@ bool shock_power(void)
 			if ((ty != oy) || (tx != ox))
 			{
 				msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
-				current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-				current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
+				p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+				p_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
 				m_ptr->fy = ty;
 				m_ptr->fx = tx;
 
@@ -3475,8 +3475,8 @@ bool detonation(player_type *creature_ptr)
 
 void blood_curse_to_enemy(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
-	grid_type *g_ptr = &current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
 	BIT_FLAGS curse_flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 	int count = 0;
 	do
@@ -3526,7 +3526,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
-			count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : current_floor_ptr->dun_level), 0, mode);
+			count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : p_ptr->current_floor_ptr->dun_level), 0, mode);
 			if (!one_in_(6)) break;
 		}
 		case 23: case 24: case 25:
@@ -3619,7 +3619,7 @@ bool tele_town(void)
 	POSITION x, y;
 	int num = 0;
 
-	if (current_floor_ptr->dun_level)
+	if (p_ptr->current_floor_ptr->dun_level)
 	{
 		msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
 		return FALSE;

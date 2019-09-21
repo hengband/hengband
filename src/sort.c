@@ -113,10 +113,10 @@ bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 {
 	POSITION *x = (POSITION*)(u);
 	POSITION *y = (POSITION*)(v);
-	grid_type *ca_ptr = &current_floor_ptr->grid_array[y[a]][x[a]];
-	grid_type *cb_ptr = &current_floor_ptr->grid_array[y[b]][x[b]];
-	monster_type *ma_ptr = &current_floor_ptr->m_list[ca_ptr->m_idx];
-	monster_type *mb_ptr = &current_floor_ptr->m_list[cb_ptr->m_idx];
+	grid_type *ca_ptr = &p_ptr->current_floor_ptr->grid_array[y[a]][x[a]];
+	grid_type *cb_ptr = &p_ptr->current_floor_ptr->grid_array[y[b]][x[b]];
+	monster_type *ma_ptr = &p_ptr->current_floor_ptr->m_list[ca_ptr->m_idx];
+	monster_type *mb_ptr = &p_ptr->current_floor_ptr->m_list[cb_ptr->m_idx];
 	monster_race *ap_ra_ptr, *ap_rb_ptr;
 
 	/* The player grid */
@@ -160,8 +160,8 @@ bool ang_sort_comp_importance(vptr u, vptr v, int a, int b)
 	}
 
 	/* An object get higher priority */
-	if (current_floor_ptr->grid_array[y[a]][x[a]].o_idx && !current_floor_ptr->grid_array[y[b]][x[b]].o_idx) return TRUE;
-	if (!current_floor_ptr->grid_array[y[a]][x[a]].o_idx && current_floor_ptr->grid_array[y[b]][x[b]].o_idx) return FALSE;
+	if (p_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx && !p_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx) return TRUE;
+	if (!p_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx && p_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx) return FALSE;
 
 	/* Priority from the terrain */
 	if (f_info[ca_ptr->feat].priority > f_info[cb_ptr->feat].priority) return TRUE;
@@ -321,8 +321,8 @@ bool ang_sort_comp_pet(vptr u, vptr v, int a, int b)
 	int w1 = who[a];
 	int w2 = who[b];
 
-	monster_type *m_ptr1 = &current_floor_ptr->m_list[w1];
-	monster_type *m_ptr2 = &current_floor_ptr->m_list[w2];
+	monster_type *m_ptr1 = &p_ptr->current_floor_ptr->m_list[w1];
+	monster_type *m_ptr2 = &p_ptr->current_floor_ptr->m_list[w2];
 	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
 	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
 
@@ -490,8 +490,8 @@ bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 	int w1 = who[a];
 	int w2 = who[b];
 
-	monster_type *m_ptr1 = &current_floor_ptr->m_list[w1];
-	monster_type *m_ptr2 = &current_floor_ptr->m_list[w2];
+	monster_type *m_ptr1 = &p_ptr->current_floor_ptr->m_list[w1];
+	monster_type *m_ptr2 = &p_ptr->current_floor_ptr->m_list[w2];
 	monster_race *r_ptr1 = &r_info[m_ptr1->r_idx];
 	monster_race *r_ptr2 = &r_info[m_ptr2->r_idx];
 
@@ -521,8 +521,8 @@ bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 
 
 /*!
- * @brief フロア保存時のcurrent_floor_ptr->grid_array情報テンプレートをソートするための比較処理
- * @param u current_floor_ptr->grid_arrayテンプレートの参照ポインタ
+ * @brief フロア保存時のp_ptr->current_floor_ptr->grid_array情報テンプレートをソートするための比較処理
+ * @param u p_ptr->current_floor_ptr->grid_arrayテンプレートの参照ポインタ
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2
@@ -543,8 +543,8 @@ bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 
 
 /*!
- * @brief フロア保存時のcurrent_floor_ptr->grid_array情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
- * @param u current_floor_ptr->grid_arrayテンプレートの参照ポインタ
+ * @brief フロア保存時のp_ptr->current_floor_ptr->grid_array情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
+ * @param u p_ptr->current_floor_ptr->grid_arrayテンプレートの参照ポインタ
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2

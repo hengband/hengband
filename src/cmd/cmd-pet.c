@@ -82,12 +82,12 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
 
 	total_friends = 0;
 
-	for (m_idx = current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
+	for (m_idx = p_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;
 
-		m_ptr = &current_floor_ptr->m_list[m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
@@ -150,12 +150,12 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 	Term->scr->cv = 1;
 
 	/* Allocate the "who" array */
-	C_MAKE(who, current_floor_ptr->max_m_idx, MONSTER_IDX);
+	C_MAKE(who, current_world_ptr->max_m_idx, MONSTER_IDX);
 
 	/* Process the monsters (backwards) */
-	for (pet_ctr = current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+	for (pet_ctr = p_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 	{
-		if (is_pet(&current_floor_ptr->m_list[pet_ctr]))
+		if (is_pet(&p_ptr->current_floor_ptr->m_list[pet_ctr]))
 			who[max_pet++] = pet_ctr;
 	}
 
@@ -169,7 +169,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 		bool kakunin;
 
 		pet_ctr = who[i];
-		m_ptr = &current_floor_ptr->m_list[pet_ctr];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[pet_ctr];
 
 		delete_this = FALSE;
 		kakunin = ((pet_ctr == creature_ptr->riding) || (m_ptr->nickname));
@@ -251,7 +251,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 	Term->scr->cv = cv;
 	Term_fresh();
 
-	C_KILL(who, current_floor_ptr->max_m_idx, MONSTER_IDX);
+	C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
 
 #ifdef JP
 	msg_format("%d 体のペットを放しました。", Dismissed);
@@ -282,7 +282,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = creature_ptr->y + ddy[dir];
 	x = creature_ptr->x + ddx[dir];
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	if (creature_ptr->special_defense & KATA_MUSOU) set_action(creature_ptr, ACTION_NONE);
 
@@ -315,7 +315,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 	{
 		if (cmd_limit_confused(creature_ptr)) return FALSE;
 
-		m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		if (!g_ptr->m_idx || !m_ptr->ml)
 		{
@@ -409,9 +409,9 @@ static void do_name_pet(void)
 	}
 	target_pet = old_target_pet;
 
-	if (current_floor_ptr->grid_array[target_row][target_col].m_idx)
+	if (p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx)
 	{
-		m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[target_row][target_col].m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 
 		if (!is_pet(m_ptr))
 		{
@@ -499,10 +499,10 @@ void do_cmd_pet(player_type *creature_ptr)
 
 #ifdef JP
 	sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
-		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "何か奇妙な物" : (r_name + r_info[current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
+		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "何か奇妙な物" : (r_name + r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
 #else
 	sprintf(target_buf, "specify a target of pet (now:%s)",
-		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "something strange" : (r_name + r_info[current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "nothing"));
+		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "something strange" : (r_name + r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "nothing"));
 #endif
 	power_desc[num] = target_buf;
 	powers[num++] = PET_TARGET;
@@ -815,10 +815,10 @@ void do_cmd_pet(player_type *creature_ptr)
 	case PET_DISMISS: /* Dismiss pets */
 	{
 		/* Check pets (backwards) */
-		for (pet_ctr = current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+		for (pet_ctr = p_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 		{
 			/* Player has pet */
-			if (is_pet(&current_floor_ptr->m_list[pet_ctr])) break;
+			if (is_pet(&p_ptr->current_floor_ptr->m_list[pet_ctr])) break;
 		}
 
 		if (!pet_ctr)
@@ -836,10 +836,10 @@ void do_cmd_pet(player_type *creature_ptr)
 		if (!target_set(TARGET_KILL)) creature_ptr->pet_t_m_idx = 0;
 		else
 		{
-			grid_type *g_ptr = &current_floor_ptr->grid_array[target_row][target_col];
-			if (g_ptr->m_idx && (current_floor_ptr->m_list[g_ptr->m_idx].ml))
+			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[target_row][target_col];
+			if (g_ptr->m_idx && (p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml))
 			{
-				creature_ptr->pet_t_m_idx = current_floor_ptr->grid_array[target_row][target_col].m_idx;
+				creature_ptr->pet_t_m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 				creature_ptr->pet_follow_distance = PET_DESTROY_DIST;
 			}
 			else creature_ptr->pet_t_m_idx = 0;
@@ -893,9 +893,9 @@ void do_cmd_pet(player_type *creature_ptr)
 		if (creature_ptr->pet_extra_flags & PF_PICKUP_ITEMS)
 		{
 			creature_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
-			for (pet_ctr = current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+			for (pet_ctr = p_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
-				m_ptr = &current_floor_ptr->m_list[pet_ctr];
+				m_ptr = &p_ptr->current_floor_ptr->m_list[pet_ctr];
 
 				if (is_pet(m_ptr))
 				{
@@ -972,7 +972,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 	POSITION y, x, oy, ox, sy = 0, sx = 0;
 	int sn = 0;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_type *m_ptr = &current_floor_ptr->m_list[creature_ptr->riding];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool fall_dam = FALSE;
 
@@ -1022,7 +1022,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 			y = creature_ptr->y + ddy_ddd[i];
 			x = creature_ptr->x + ddx_ddd[i];
 
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			if (g_ptr->m_idx) continue;
 

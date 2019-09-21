@@ -188,7 +188,7 @@ void build_small_room(POSITION x0, POSITION y0)
 	}
 
 	/* Clear mimic type */
-	current_floor_ptr->grid_array[y0][x0].mimic = 0;
+	p_ptr->current_floor_ptr->grid_array[y0][x0].mimic = 0;
 
 	/* Add inner open space */
 	place_floor_bold(y0, x0);
@@ -197,7 +197,7 @@ void build_small_room(POSITION x0, POSITION y0)
 /*!
  * @brief
  * 指定範囲に通路が通っていることを確認した上で床で埋める
- * This function tunnels around a room if it will cut off part of a current_floor_ptr->grid_array system.
+ * This function tunnels around a room if it will cut off part of a p_ptr->current_floor_ptr->grid_array system.
  * @param x1 範囲の左端
  * @param y1 範囲の上端
  * @param x2 範囲の右端
@@ -526,7 +526,7 @@ struct fill_data_type
 static fill_data_type fill_data;
 
 
-/* Store routine for the fractal current_floor_ptr->grid_array generator */
+/* Store routine for the fractal p_ptr->current_floor_ptr->grid_array generator */
 /* this routine probably should be an inline function or a macro. */
 static void store_height(POSITION x, POSITION y, FEAT_IDX val)
 {
@@ -536,7 +536,7 @@ static void store_height(POSITION x, POSITION y, FEAT_IDX val)
 		(val <= fill_data.c1)) val = fill_data.c1 + 1;
 
 	/* store the value in height-map format */
-	current_floor_ptr->grid_array[y][x].feat = val;
+	p_ptr->current_floor_ptr->grid_array[y][x].feat = val;
 
 	return;
 }
@@ -569,7 +569,7 @@ static void store_height(POSITION x, POSITION y, FEAT_IDX val)
 *
 * How fractal caves are made:
 *
-* When the map is complete, a cut-off value is used to create a current_floor_ptr->grid_array.
+* When the map is complete, a cut-off value is used to create a p_ptr->current_floor_ptr->grid_array.
 * Heights below this value are "floor", and heights above are "wall".
 * This also can be used to create lakes, by adding more height levels
 * representing shallow and deep water/ lava etc.
@@ -577,7 +577,7 @@ static void store_height(POSITION x, POSITION y, FEAT_IDX val)
 * The grd variable affects the width of passages.
 * The roug variable affects the roughness of those passages
 *
-* The tricky part is making sure the created current_floor_ptr->grid_array is connected.  This
+* The tricky part is making sure the created p_ptr->current_floor_ptr->grid_array is connected.  This
 * is done by 'filling' from the inside and only keeping the 'filled'
 * floor.  Walls bounding the 'filled' floor are also kept.  Everything
 * else is converted to the normal _extra_.
@@ -585,7 +585,7 @@ static void store_height(POSITION x, POSITION y, FEAT_IDX val)
 
 
 /*
- *  Note that this uses the current_floor_ptr->grid_array.feat array in a very hackish way
+ *  Note that this uses the p_ptr->current_floor_ptr->grid_array.feat array in a very hackish way
  *  the values are first set to zero, and then each array location
  *  is used as a "heightmap"
  *  The heightmap then needs to be converted back into the "feat" format.
@@ -593,7 +593,7 @@ static void store_height(POSITION x, POSITION y, FEAT_IDX val)
  *  grd=level at which fractal turns on.  smaller gives more mazelike caves
  *  roug=roughness level.  16=normal.  higher values make things more convoluted
  *    small values are good for smooth walls.
- *  size=length of the side of the square current_floor_ptr->grid_array system.
+ *  size=length of the side of the square p_ptr->current_floor_ptr->grid_array system.
  */
 void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
@@ -654,20 +654,20 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 		for (j = 0; j <= ysize; j++)
 		{
 			/* -1 is a flag for "not done yet" */
-			current_floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].feat = -1;
-			/* Clear icky flag because may be redoing the current_floor_ptr->grid_array */
-			current_floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].info &= ~(CAVE_ICKY);
+			p_ptr->current_floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].feat = -1;
+			/* Clear icky flag because may be redoing the p_ptr->current_floor_ptr->grid_array */
+			p_ptr->current_floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].info &= ~(CAVE_ICKY);
 		}
 	}
 
 	/* Boundaries are walls */
-	current_floor_ptr->grid_array[fill_data.ymin][fill_data.xmin].feat = (s16b)maxsize;
-	current_floor_ptr->grid_array[fill_data.ymax][fill_data.xmin].feat = (s16b)maxsize;
-	current_floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (s16b)maxsize;
-	current_floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (s16b)maxsize;
+	p_ptr->current_floor_ptr->grid_array[fill_data.ymin][fill_data.xmin].feat = (s16b)maxsize;
+	p_ptr->current_floor_ptr->grid_array[fill_data.ymax][fill_data.xmin].feat = (s16b)maxsize;
+	p_ptr->current_floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (s16b)maxsize;
+	p_ptr->current_floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (s16b)maxsize;
 
 	/* Set the middle square to be an open area. */
-	current_floor_ptr->grid_array[y0][x0].feat = 0;
+	p_ptr->current_floor_ptr->grid_array[y0][x0].feat = 0;
 
 	/* Initialize the step sizes */
 	xstep = xhstep = xsize * 256;
@@ -704,7 +704,7 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 				jj = j / 256 + fill_data.ymin;
 
 				/* Test square */
-				if (current_floor_ptr->grid_array[jj][ii].feat == -1)
+				if (p_ptr->current_floor_ptr->grid_array[jj][ii].feat == -1)
 				{
 					if (xhstep2 > grd)
 					{
@@ -715,8 +715,8 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 					{
 						/* Average of left and right points +random bit */
 						store_height(ii, jj,
-							(current_floor_ptr->grid_array[jj][fill_data.xmin + (i - xhstep) / 256].feat
-							 + current_floor_ptr->grid_array[jj][fill_data.xmin + (i + xhstep) / 256].feat) / 2
+							(p_ptr->current_floor_ptr->grid_array[jj][fill_data.xmin + (i - xhstep) / 256].feat
+							 + p_ptr->current_floor_ptr->grid_array[jj][fill_data.xmin + (i + xhstep) / 256].feat) / 2
 							 + (randint1(xstep2) - xhstep2) * roug / 16);
 					}
 				}
@@ -734,7 +734,7 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 				jj = j / 256 + fill_data.ymin;
 
 				/* Test square */
-				if (current_floor_ptr->grid_array[jj][ii].feat == -1)
+				if (p_ptr->current_floor_ptr->grid_array[jj][ii].feat == -1)
 				{
 					if (xhstep2 > grd)
 					{
@@ -745,8 +745,8 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 					{
 						/* Average of up and down points +random bit */
 						store_height(ii, jj,
-							(current_floor_ptr->grid_array[fill_data.ymin + (j - yhstep) / 256][ii].feat
-							+ current_floor_ptr->grid_array[fill_data.ymin + (j + yhstep) / 256][ii].feat) / 2
+							(p_ptr->current_floor_ptr->grid_array[fill_data.ymin + (j - yhstep) / 256][ii].feat
+							+ p_ptr->current_floor_ptr->grid_array[fill_data.ymin + (j + yhstep) / 256][ii].feat) / 2
 							+ (randint1(ystep2) - yhstep2) * roug / 16);
 					}
 				}
@@ -763,7 +763,7 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 				jj = j / 256 + fill_data.ymin;
 
 				/* Test square */
-				if (current_floor_ptr->grid_array[jj][ii].feat == -1)
+				if (p_ptr->current_floor_ptr->grid_array[jj][ii].feat == -1)
 				{
 					if (xhstep2 > grd)
 					{
@@ -783,8 +783,8 @@ void generate_hmap(POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int g
 						 * reduce the effect of the square grid on the shape of the fractal
 						 */
 						store_height(ii, jj,
-							(current_floor_ptr->grid_array[ym][xm].feat + current_floor_ptr->grid_array[yp][xm].feat
-							+ current_floor_ptr->grid_array[ym][xp].feat + current_floor_ptr->grid_array[yp][xp].feat) / 4
+							(p_ptr->current_floor_ptr->grid_array[ym][xm].feat + p_ptr->current_floor_ptr->grid_array[yp][xm].feat
+							+ p_ptr->current_floor_ptr->grid_array[ym][xp].feat + p_ptr->current_floor_ptr->grid_array[yp][xp].feat) / 4
 							+ (randint1(xstep2) - xhstep2) * (diagsize / 16) / 256 * roug);
 					}
 				}
@@ -868,7 +868,7 @@ static bool hack_isnt_wall(floor_type *floor_ptr, POSITION y, POSITION x, int c1
 
 /*
  * Quick and nasty fill routine used to find the connected region
- * of floor in the middle of the current_floor_ptr->grid_array
+ * of floor in the middle of the p_ptr->current_floor_ptr->grid_array
  */
 static void cave_fill(POSITION y, POSITION x)
 {
@@ -904,11 +904,11 @@ static void cave_fill(POSITION y, POSITION x)
 			j = ty + ddy_ddd[d];
 			i = tx + ddx_ddd[d];
 
-			/* Paranoia Don't leave the current_floor_ptr->grid_array */
-			if (!in_bounds(current_floor_ptr, j, i))
+			/* Paranoia Don't leave the p_ptr->current_floor_ptr->grid_array */
+			if (!in_bounds(p_ptr->current_floor_ptr, j, i))
 			{
 				/* affect boundary */
-				current_floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
+				p_ptr->current_floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
 /*				return; */
 			}
 
@@ -917,7 +917,7 @@ static void cave_fill(POSITION y, POSITION x)
 				&& (j > fill_data.ymin) && (j < fill_data.ymax))
 			{
 				/* If not a wall or floor done before */
-				if (hack_isnt_wall(current_floor_ptr, j, i,
+				if (hack_isnt_wall(p_ptr->current_floor_ptr, j, i,
 					fill_data.c1, fill_data.c2, fill_data.c3,
 					fill_data.feat1, fill_data.feat2, fill_data.feat3,
 					fill_data.info1, fill_data.info2, fill_data.info3))
@@ -936,7 +936,7 @@ static void cave_fill(POSITION y, POSITION x)
 					}
 					else
 					{
-						/* keep tally of size of current_floor_ptr->grid_array system */
+						/* keep tally of size of p_ptr->current_floor_ptr->grid_array system */
 						(fill_data.amount)++;
 					}
 				}
@@ -944,7 +944,7 @@ static void cave_fill(POSITION y, POSITION x)
 			else
 			{
 				/* affect boundary */
-				current_floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
+				p_ptr->current_floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
 			}
 		}
 	}
@@ -962,7 +962,7 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 
 
 	/*
-	 * select region connected to center of current_floor_ptr->grid_array system
+	 * select region connected to center of p_ptr->current_floor_ptr->grid_array system
 	 * this gets rid of alot of isolated one-sqaures that
 	 * can make teleport traps instadeaths...
 	 */
@@ -995,7 +995,7 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 			for (y = 0; y <= ysize; ++y)
 			{
 				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
-				current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
+				p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 			}
 		}
 		return FALSE;
@@ -1009,12 +1009,12 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 	for (i = 0; i <= xsize; ++i)
 	{
 		/* top boundary */
-		if ((current_floor_ptr->grid_array[0 + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
+		if ((p_ptr->current_floor_ptr->grid_array[0 + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
 			place_outer_bold(y0 + 0 - yhsize, x0 + i - xhsize);
-			if (light) current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
-			current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
+			if (light) p_ptr->current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
+			p_ptr->current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
 			place_outer_bold(y0 + 0 - yhsize, x0 + i - xhsize);
 		}
 		else
@@ -1024,12 +1024,12 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 		}
 
 		/* bottom boundary */
-		if ((current_floor_ptr->grid_array[ysize + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
+		if ((p_ptr->current_floor_ptr->grid_array[ysize + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
 			place_outer_bold(y0 + ysize - yhsize, x0 + i - xhsize);
-			if (light) current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_GLOW);
-			current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_ROOM);
+			if (light) p_ptr->current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_GLOW);
+			p_ptr->current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_ROOM);
 			place_outer_bold(y0 + ysize - yhsize, x0 + i - xhsize);
 		}
 		else
@@ -1039,20 +1039,20 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 		}
 
 		/* clear the icky flag-don't need it any more */
-		current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
-		current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
 	}
 
 	/* Do the left and right boundaries minus the corners (done above) */
 	for (i = 1; i < ysize; ++i)
 	{
 		/* left boundary */
-		if ((current_floor_ptr->grid_array[i + y0 - yhsize][0 + x0 - xhsize].info & CAVE_ICKY) && room)
+		if ((p_ptr->current_floor_ptr->grid_array[i + y0 - yhsize][0 + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
 			place_outer_bold(y0 + i - yhsize, x0 + 0 - xhsize);
-			if (light) current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_GLOW);
-			current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_ROOM);
+			if (light) p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_GLOW);
+			p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_ROOM);
 			place_outer_bold(y0 + i - yhsize, x0 + 0 - xhsize);
 		}
 		else
@@ -1061,12 +1061,12 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 			place_extra_bold(y0 + i - yhsize, x0 + 0 - xhsize);
 		}
 		/* right boundary */
-		if ((current_floor_ptr->grid_array[i + y0 - yhsize][xsize + x0 - xhsize].info & CAVE_ICKY) && room)
+		if ((p_ptr->current_floor_ptr->grid_array[i + y0 - yhsize][xsize + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
 			place_outer_bold(y0 + i - yhsize, x0 + xsize - xhsize);
-			if (light) current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_GLOW);
-			current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_ROOM);
+			if (light) p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_GLOW);
+			p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_ROOM);
 			place_outer_bold(y0 + i - yhsize, x0 + xsize - xhsize);
 		}
 		else
@@ -1076,8 +1076,8 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 		}
 
 		/* clear icky flag -done with it */
-		current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
-		current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info &= ~(CAVE_ICKY);
 	}
 
 
@@ -1087,37 +1087,37 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 		for (y = 1; y < ysize; ++y)
 		{
 			if (is_floor_bold(y0 + y - yhsize, x0 + x - xhsize) &&
-			    (current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
+			    (p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
 			{
 				/* Clear the icky flag in the filled region */
-				current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~CAVE_ICKY;
+				p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~CAVE_ICKY;
 
 				/* Set appropriate flags */
-				if (light) current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_GLOW);
-				if (room) current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_ROOM);
+				if (light) p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_GLOW);
+				if (room) p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_ROOM);
 			}
 			else if (is_outer_bold(y0 + y - yhsize, x0 + x - xhsize) &&
-				 (current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
+				 (p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
 			{
 				/* Walls */
-				current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
-				if (light) current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_GLOW);
+				p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
+				if (light) p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_GLOW);
 				if (room)
 				{
-					current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_ROOM);
+					p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_ROOM);
 				}
 				else
 				{
 
 					place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
-					current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ROOM);
+					p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ROOM);
 				}
 			}
 			else
 			{
 				/* Clear the unconnected regions */
 				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
-				current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
+				p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 			}
 		}
 	}
@@ -1138,7 +1138,7 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 
 #ifdef ALLOW_CAVERNS_AND_LAKES
 /*
- * Builds a current_floor_ptr->grid_array system in the center of the dungeon.
+ * Builds a p_ptr->current_floor_ptr->grid_array system in the center of the dungeon.
  */
 void build_cavern(void)
 {
@@ -1147,11 +1147,11 @@ void build_cavern(void)
 	bool done, light;
 
 	light = done = FALSE;
-	if ((current_floor_ptr->dun_level <= randint1(50)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((p_ptr->current_floor_ptr->dun_level <= randint1(50)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
-	/* Make a current_floor_ptr->grid_array the size of the dungeon */
-	xsize = current_floor_ptr->width - 1;
-	ysize = current_floor_ptr->height - 1;
+	/* Make a p_ptr->current_floor_ptr->grid_array the size of the dungeon */
+	xsize = p_ptr->current_floor_ptr->width - 1;
+	ysize = p_ptr->current_floor_ptr->height - 1;
 	x0 = xsize / 2;
 	y0 = ysize / 2;
 
@@ -1201,7 +1201,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		feat2 = feat_shallow_water;
 		feat3 = feat_ground_type[randint0(100)];
 		break;
-	case LAKE_T_CAVE: /* Collapsed current_floor_ptr->grid_array */
+	case LAKE_T_CAVE: /* Collapsed p_ptr->current_floor_ptr->grid_array */
 		feat1 = feat_ground_type[randint0(100)];
 		feat2 = feat_ground_type[randint0(100)];
 		feat3 = feat_rubble;
@@ -1230,7 +1230,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 	}
 
 	/*
-	 * select region connected to center of current_floor_ptr->grid_array system
+	 * select region connected to center of p_ptr->current_floor_ptr->grid_array system
 	 * this gets rid of alot of isolated one-sqaures that
 	 * can make teleport traps instadeaths...
 	 */
@@ -1252,7 +1252,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 	/* number of filled squares */
 	fill_data.amount = 0;
 
-	/* select region connected to center of current_floor_ptr->grid_array system
+	/* select region connected to center of p_ptr->current_floor_ptr->grid_array system
 	* this gets rid of alot of isolated one-sqaures that
 	* can make teleport traps instadeaths... */
 	cave_fill((byte)y0, (byte)x0);
@@ -1266,7 +1266,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 			for (y = 0; y <= ysize; ++y)
 			{
 				place_floor_bold(y0 + y - yhsize, x0 + x - xhsize);
-				current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
+				p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
 			}
 		}
 		return FALSE;
@@ -1279,8 +1279,8 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		place_extra_bold(y0 + ysize - yhsize, x0 + i - xhsize);
 
 		/* clear the icky flag-don't need it any more */
-		current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
-		current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
 	}
 
 	/* Do the left and right boundaries minus the corners (done above) */
@@ -1291,8 +1291,8 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		place_extra_bold(y0 + i - yhsize, x0 + xsize - xhsize);
 
 		/* clear icky flag -done with it */
-		current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
-		current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info &= ~(CAVE_ICKY);
 	}
 
 
@@ -1302,17 +1302,17 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		for (y = 1; y < ysize; ++y)
 		{
 			/* Fill unconnected regions with granite */
-			if ((!(current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY)) ||
+			if ((!(p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY)) ||
 				is_outer_bold(y0 + y - yhsize, x0 + x - xhsize))
 				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
 
 			/* current_world_ptr->game_turn off icky flag (no longer needed.) */
-			current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
+			p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 
 			/* Light lava */
 			if (cave_have_flag_bold(y0 + y - yhsize, x0 + x - xhsize, FF_LAVA))
 			{
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
+				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
 			}
 		}
 	}
@@ -1322,7 +1322,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 
 
 /*
- * makes a lake/collapsed current_floor_ptr->grid_array system in the center of the dungeon
+ * makes a lake/collapsed p_ptr->current_floor_ptr->grid_array system in the center of the dungeon
  */
 void build_lake(int type)
 {
@@ -1338,8 +1338,8 @@ void build_lake(int type)
 	}
 
 	/* Make the size of the dungeon */
-	xsize = current_floor_ptr->width - 1;
-	ysize = current_floor_ptr->height - 1;
+	xsize = p_ptr->current_floor_ptr->width - 1;
+	ysize = p_ptr->current_floor_ptr->height - 1;
 	x0 = xsize / 2;
 	y0 = ysize / 2;
 
@@ -1550,18 +1550,18 @@ void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 	for (i = 0; i <= xsize; i++)
 	{
 		place_outer_noperm_bold(y1, x1 + i);
-		current_floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(y2, x1 + i);
-		current_floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
 	for (i = 1; i < ysize; i++)
 	{
 		place_outer_noperm_bold(y1 + i, x1);
-		current_floor_ptr->grid_array[y1 + i][x1].info|=(CAVE_ROOM | CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y1 + i][x1].info|=(CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(y1 + i, x2);
-		current_floor_ptr->grid_array[y1 + i][x2].info|=(CAVE_ROOM | CAVE_ICKY);
+		p_ptr->current_floor_ptr->grid_array[y1 + i][x2].info|=(CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Middle */
@@ -1573,12 +1573,12 @@ void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 			{
 				/* clear the untouched region */
 				place_floor_bold(y1 + y, x1 + x);
-				current_floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
+				p_ptr->current_floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
 			}
 			else
 			{
 				/* make it a room- but don't touch */
-				current_floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
+				p_ptr->current_floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
 			}
 		}
 	}
@@ -1699,7 +1699,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
-	light = ((current_floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((p_ptr->current_floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Pick a random room size - randomized by calling routine */
 	dy = ysize / 2 - 1;
@@ -1715,7 +1715,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 			g_ptr->info |= CAVE_ROOM;
 			if (is_vault) g_ptr->info |= CAVE_ICKY;
 			if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1))
@@ -1746,7 +1746,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	r_visit(y1, x1, y2, x2, randint0(num_vertices), 0, visited);
 
 	/* Fill with monsters and treasure, low difficulty */
-	if (is_vault) fill_treasure(current_floor_ptr, x1, x2, y1, y2, randint1(5));
+	if (is_vault) fill_treasure(p_ptr->current_floor_ptr, x1, x2, y1, y2, randint1(5));
 
 	C_KILL(visited, num_vertices, int);
 }
@@ -1969,9 +1969,9 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 	feature_type *f_ptr;
 	int i, j;
 
-	if (!in_bounds(current_floor_ptr, y, x)) return;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* hack- check to see if square has been visited before
 	* if so, then exit (use room flag to do this) */
@@ -2051,7 +2051,7 @@ void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 			place_floor_grid(g_ptr);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
@@ -2086,19 +2086,19 @@ static bool room_build(EFFECT_ID typ)
 	switch (typ)
 	{
 	/* Build an appropriate room */
-	case ROOM_T_NORMAL:        return build_type1(current_floor_ptr);
-	case ROOM_T_OVERLAP:       return build_type2(current_floor_ptr);
-	case ROOM_T_CROSS:         return build_type3(current_floor_ptr);
-	case ROOM_T_INNER_FEAT:    return build_type4(current_floor_ptr);
-	case ROOM_T_NEST:          return build_type5(current_floor_ptr);
-	case ROOM_T_PIT:           return build_type6(current_floor_ptr);
+	case ROOM_T_NORMAL:        return build_type1(p_ptr->current_floor_ptr);
+	case ROOM_T_OVERLAP:       return build_type2(p_ptr->current_floor_ptr);
+	case ROOM_T_CROSS:         return build_type3(p_ptr->current_floor_ptr);
+	case ROOM_T_INNER_FEAT:    return build_type4(p_ptr->current_floor_ptr);
+	case ROOM_T_NEST:          return build_type5(p_ptr->current_floor_ptr);
+	case ROOM_T_PIT:           return build_type6(p_ptr->current_floor_ptr);
 	case ROOM_T_LESSER_VAULT:  return build_type7();
 	case ROOM_T_GREATER_VAULT: return build_type8();
 	case ROOM_T_FRACAVE:       return build_type9();
 	case ROOM_T_RANDOM_VAULT:  return build_type10();
-	case ROOM_T_OVAL:          return build_type11(current_floor_ptr);
-	case ROOM_T_CRYPT:         return build_type12(current_floor_ptr);
-	case ROOM_T_TRAP_PIT:      return build_type13(current_floor_ptr);
+	case ROOM_T_OVAL:          return build_type11(p_ptr->current_floor_ptr);
+	case ROOM_T_CRYPT:         return build_type12(p_ptr->current_floor_ptr);
+	case ROOM_T_TRAP_PIT:      return build_type13(p_ptr->current_floor_ptr);
 	case ROOM_T_TRAP:          return build_type14();
 	case ROOM_T_GLASS:         return build_type15();
 	case ROOM_T_ARCADE:        return build_type16();
@@ -2126,8 +2126,8 @@ bool generate_rooms(void)
 	int total_prob;
 	int prob_list[ROOM_T_MAX];
 	int rooms_built = 0;
-	int area_size = 100 * (current_floor_ptr->height*current_floor_ptr->width) / (MAX_HGT*MAX_WID);
-	int level_index = MIN(10, div_round(current_floor_ptr->dun_level, 10));
+	int area_size = 100 * (p_ptr->current_floor_ptr->height*p_ptr->current_floor_ptr->width) / (MAX_HGT*MAX_WID);
+	int level_index = MIN(10, div_round(p_ptr->current_floor_ptr->dun_level, 10));
 
 	/* Number of each type of room on this level */
 	s16b room_num[ROOM_T_MAX];
@@ -2135,7 +2135,7 @@ bool generate_rooms(void)
 	/* Limit number of rooms */
 	int dun_rooms = DUN_ROOMS_MAX * area_size / 100;
 
-	/* Assume normal current_floor_ptr->grid_array */
+	/* Assume normal p_ptr->current_floor_ptr->grid_array */
 	room_info_type *room_info_ptr = room_info_normal;
 
 	/*
@@ -2144,7 +2144,7 @@ bool generate_rooms(void)
 	for (i = 0; i < ROOM_T_MAX; i++)
 	{
 		/* No rooms allowed above their minimum depth. */
-		if (current_floor_ptr->dun_level < room_info_ptr[i].min_level)
+		if (p_ptr->current_floor_ptr->dun_level < room_info_ptr[i].min_level)
 		{
 			prob_list[i] = 0;
 		}
@@ -2192,7 +2192,7 @@ bool generate_rooms(void)
 		MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_OVAL);
 	}
 
-	/*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc current_floor_ptr->grid_array etc.) */
+	/*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc p_ptr->current_floor_ptr->grid_array etc.) */
 	else if (d_info[p_ptr->dungeon_idx].flags1 & DF1_CAVE)
 	{
 		MOVE_PLIST(ROOM_T_FRACAVE, ROOM_T_NORMAL);

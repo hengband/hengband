@@ -197,14 +197,14 @@ bool new_player_spot(void)
 	while (max_attempts--)
 	{
 		/* Pick a legal spot */
-		y = (POSITION)rand_range(1, current_floor_ptr->height - 2);
-		x = (POSITION)rand_range(1, current_floor_ptr->width - 2);
+		y = (POSITION)rand_range(1, p_ptr->current_floor_ptr->height - 2);
+		x = (POSITION)rand_range(1, p_ptr->current_floor_ptr->width - 2);
 
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Must be a "naked" floor grid */
 		if (g_ptr->m_idx) continue;
-		if (current_floor_ptr->dun_level)
+		if (p_ptr->current_floor_ptr->dun_level)
 		{
 			f_ptr = &f_info[g_ptr->feat];
 
@@ -222,7 +222,7 @@ bool new_player_spot(void)
 			if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) continue;
 		}
 		if (!player_can_enter(g_ptr->feat, 0)) continue;
-		if (!in_bounds(current_floor_ptr, y, x)) continue;
+		if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Refuse to start on anti-teleport grids */
 		if (g_ptr->info & (CAVE_ICKY)) continue;
@@ -253,13 +253,13 @@ void place_random_stairs(POSITION y, POSITION x)
 	bool up_stairs = TRUE;
 	bool down_stairs = TRUE;
 	grid_type *g_ptr;
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
 
-	if (!current_floor_ptr->dun_level) up_stairs = FALSE;
+	if (!p_ptr->current_floor_ptr->dun_level) up_stairs = FALSE;
 	if (ironman_downward) up_stairs = FALSE;
-	if (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
-	if (quest_number(current_floor_ptr->dun_level) && (current_floor_ptr->dun_level > 1)) down_stairs = FALSE;
+	if (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
+	if (quest_number(p_ptr->current_floor_ptr->dun_level) && (p_ptr->current_floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
 	if (down_stairs && up_stairs)
@@ -270,8 +270,8 @@ void place_random_stairs(POSITION y, POSITION x)
 	}
 
 	/* Place the stairs */
-	if (up_stairs) set_cave_feat(current_floor_ptr, y, x, feat_up_stair);
-	else if (down_stairs) set_cave_feat(current_floor_ptr, y, x, feat_down_stair);
+	if (up_stairs) set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_up_stair);
+	else if (down_stairs) set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_down_stair);
 }
 
 /*!
@@ -285,7 +285,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 {
 	int tmp, type;
 	FEAT_IDX feat = feat_none;
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Initialize mimic info */
 	g_ptr->mimic = 0;
@@ -347,7 +347,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 	{
 		if (feat != feat_none)
 		{
-			set_cave_feat(current_floor_ptr, y, x, feat);
+			set_cave_feat(p_ptr->current_floor_ptr, y, x, feat);
 		}
 		else
 		{
@@ -405,7 +405,7 @@ void place_closed_door(POSITION y, POSITION x, int type)
 		cave_set_feat(y, x, feat);
 
 		/* Now it is not floor */
-		current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+		p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 	}
 	else
 	{
@@ -427,8 +427,8 @@ void place_locked_door(POSITION y, POSITION x)
 	}
 	else
 	{
-		set_cave_feat(current_floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
-		current_floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
+		set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+		p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}
 }
@@ -449,7 +449,7 @@ void place_secret_door(POSITION y, POSITION x, int type)
 	}
 	else
 	{
-		grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		if (type == DOOR_DEFAULT)
 		{
@@ -539,7 +539,7 @@ void add_door(POSITION x, POSITION y)
 * @param y1 基準となるマスのY座標
 * @param x1 基準となるマスのX座標
 * @return 通路の数
-* @note Assumes "in_bounds(current_floor_ptr, y1, x1)"
+* @note Assumes "in_bounds(p_ptr->current_floor_ptr, y1, x1)"
 * @details
 * XXX XXX This routine currently only counts actual "empty floor"\n
 * grids which are not in rooms.  We might want to also count stairs,\n
@@ -557,7 +557,7 @@ static int next_to_corr(POSITION y1, POSITION x1)
 	{
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Skip non floors */
 		if (cave_have_flag_grid(g_ptr, FF_WALL)) continue;
@@ -582,10 +582,10 @@ static int next_to_corr(POSITION y1, POSITION x1)
 * @param y 判定を行いたいマスのY座標
 * @param x 判定を行いたいマスのX座標
 * @return ドアを設置可能ならばTRUEを返す
-* @note Assumes "in_bounds(current_floor_ptr, y1, x1)"
+* @note Assumes "in_bounds(p_ptr->current_floor_ptr, y1, x1)"
 * @details
 * \n
-* Assumes "in_bounds(current_floor_ptr, y, x)"\n
+* Assumes "in_bounds(p_ptr->current_floor_ptr, y, x)"\n
 */
 static bool possible_doorway(POSITION y, POSITION x)
 {
@@ -618,13 +618,13 @@ static bool possible_doorway(POSITION y, POSITION x)
 * @return なし
 */
 void try_door(POSITION y, POSITION x)
-{	if (!in_bounds(current_floor_ptr, y, x)) return;
+{	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Ignore walls */
 	if (cave_have_flag_bold(y, x, FF_WALL)) return;
 
 	/* Ignore room grids */
-	if (current_floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;
+	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;
 
 	/* Occasional door (if allowed) */
 	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
@@ -719,7 +719,7 @@ void vault_objects(POSITION y, POSITION x, int num)
 				j = rand_spread(y, 2);
 				k = rand_spread(x, 3);
 				dummy++;
-				if (!in_bounds(current_floor_ptr, j, k)) continue;
+				if (!in_bounds(p_ptr->current_floor_ptr, j, k)) continue;
 				break;
 			}
 
@@ -729,7 +729,7 @@ void vault_objects(POSITION y, POSITION x, int num)
 			}
 
 			/* Require "clean" floor space */
-			g_ptr = &current_floor_ptr->grid_array[j][k];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[j][k];
 			if (!is_floor_grid(g_ptr) || g_ptr->o_idx) continue;
 
 			if (randint0(100) < 75)
@@ -773,7 +773,7 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 			y1 = rand_spread(y, yd);
 			x1 = rand_spread(x, xd);
 			dummy++;
-			if (!in_bounds(current_floor_ptr, y1, x1)) continue;
+			if (!in_bounds(p_ptr->current_floor_ptr, y1, x1)) continue;
 			break;
 		}
 
@@ -783,7 +783,7 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 		}
 
 		/* Require "naked" floor grids */
-		g_ptr = &current_floor_ptr->grid_array[y1][x1];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y1][x1];
 		if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 		/* Place the trap */
@@ -841,13 +841,13 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
 			scatter(&y, &x, y1, x1, d, 0);
 
 			/* Require "empty" floor grids */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 			if (!cave_empty_grid(g_ptr)) continue;
 
 			/* Place the monster (allow groups) */
-			current_floor_ptr->monster_level = current_floor_ptr->base_level + 2;
+			p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level + 2;
 			(void)place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-			current_floor_ptr->monster_level = current_floor_ptr->base_level;
+			p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
 		}
 	}
 }
@@ -860,7 +860,7 @@ void vault_monsters(POSITION y1, POSITION x1, int num)
  */
 bool get_is_floor(POSITION x, POSITION y)
 {
-	if (!in_bounds(current_floor_ptr, y, x))
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x))
 	{
 		/* Out of bounds */
 		return (FALSE);
@@ -880,13 +880,13 @@ bool get_is_floor(POSITION x, POSITION y)
  */
 void set_floor(POSITION x, POSITION y)
 {
-	if (!in_bounds(current_floor_ptr, y, x))
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x))
 	{
 		/* Out of bounds */
 		return;
 	}
 
-	if (current_floor_ptr->grid_array[y][x].info & CAVE_ROOM)
+	if (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ROOM)
 	{
 		/* A room border don't touch. */
 		return;
@@ -975,12 +975,12 @@ bool check_local_illumination(POSITION y, POSITION x)
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
 	/* Check for "complex" illumination */
-	if ((feat_supports_los(get_feat_mimic(&current_floor_ptr->grid_array[yy][xx])) &&
-		(current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW)) ||
-		(feat_supports_los(get_feat_mimic(&current_floor_ptr->grid_array[y][xx])) &&
-		(current_floor_ptr->grid_array[y][xx].info & CAVE_GLOW)) ||
-			(feat_supports_los(get_feat_mimic(&current_floor_ptr->grid_array[yy][x])) &&
-		(current_floor_ptr->grid_array[yy][x].info & CAVE_GLOW)))
+	if ((feat_supports_los(get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[yy][xx])) &&
+		(p_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW)) ||
+		(feat_supports_los(get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[y][xx])) &&
+		(p_ptr->current_floor_ptr->grid_array[y][xx].info & CAVE_GLOW)) ||
+			(feat_supports_los(get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[yy][x])) &&
+		(p_ptr->current_floor_ptr->grid_array[yy][x].info & CAVE_GLOW)))
 	{
 		return TRUE;
 	}
@@ -989,7 +989,7 @@ bool check_local_illumination(POSITION y, POSITION x)
 #else /* COMPLEX_WALL_ILLUMINATION */
 
 	/* Check for "simple" illumination */
-	return (current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
+	return (p_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
 
 #endif /* COMPLEX_WALL_ILLUMINATION */
 }
@@ -1001,7 +1001,7 @@ bool check_local_illumination(POSITION y, POSITION x)
 	if (player_has_los_bold((Y), (X))) \
 	{ \
 		/* Update the monster */ \
-		if (current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster(current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
+		if (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster(p_ptr->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
 \
 		/* Notice and redraw */ \
 		note_spot((Y), (X)); \
@@ -1021,7 +1021,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 	int i;
 	POSITION yy, xx;
 
-	if (!in_bounds(current_floor_ptr, y, x)) return;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
@@ -1130,7 +1130,7 @@ bool no_lite(void)
  */
 bool cave_valid_bold(POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Forbid perma-grids */
@@ -1140,7 +1140,7 @@ bool cave_valid_bold(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Forbid artifact grids */
@@ -1219,7 +1219,7 @@ void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
  */
 void note_spot(POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Blind players see nothing */
@@ -1243,7 +1243,7 @@ void note_spot(POSITION y, POSITION x)
 	/* Hack -- memorize objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorize objects */
@@ -1553,11 +1553,11 @@ void delayed_visual_update(void)
 	grid_type *g_ptr;
 
 	/* Update needed grids */
-	for (i = 0; i < current_floor_ptr->redraw_n; i++)
+	for (i = 0; i < p_ptr->current_floor_ptr->redraw_n; i++)
 	{
-		y = current_floor_ptr->redraw_y[i];
-		x = current_floor_ptr->redraw_x[i];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		y = p_ptr->current_floor_ptr->redraw_y[i];
+		x = p_ptr->current_floor_ptr->redraw_x[i];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Update only needed grids (prevent multiple updating) */
 		if (!(g_ptr->info & CAVE_REDRAW)) continue;
@@ -1575,7 +1575,7 @@ void delayed_visual_update(void)
 	}
 
 	/* None left */
-	current_floor_ptr->redraw_n = 0;
+	p_ptr->current_floor_ptr->redraw_n = 0;
 }
 
 
@@ -1587,14 +1587,14 @@ void forget_flow(void)
 	POSITION x, y;
 
 	/* Check the entire dungeon */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
 			/* Forget the old data */
-			current_floor_ptr->grid_array[y][x].dist = 0;
-			current_floor_ptr->grid_array[y][x].cost = 0;
-			current_floor_ptr->grid_array[y][x].when = 0;
+			p_ptr->current_floor_ptr->grid_array[y][x].dist = 0;
+			p_ptr->current_floor_ptr->grid_array[y][x].cost = 0;
+			p_ptr->current_floor_ptr->grid_array[y][x].when = 0;
 		}
 	}
 }
@@ -1634,19 +1634,19 @@ void update_flow(void)
 	if (tmp_pos.n) return;
 
 	/* The last way-point is on the map */
-	if (p_ptr->running && in_bounds(current_floor_ptr, flow_y, flow_x))
+	if (p_ptr->running && in_bounds(p_ptr->current_floor_ptr, flow_y, flow_x))
 	{
 		/* The way point is in sight - do not update.  (Speedup) */
-		if (current_floor_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW) return;
+		if (p_ptr->current_floor_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW) return;
 	}
 
 	/* Erase all of the current flow information */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
-			current_floor_ptr->grid_array[y][x].cost = 0;
-			current_floor_ptr->grid_array[y][x].dist = 0;
+			p_ptr->current_floor_ptr->grid_array[y][x].cost = 0;
+			p_ptr->current_floor_ptr->grid_array[y][x].dist = 0;
 		}
 	}
 
@@ -1674,8 +1674,8 @@ void update_flow(void)
 		for (d = 0; d < 8; d++)
 		{
 			int old_head = flow_head;
-			byte_hack m = current_floor_ptr->grid_array[ty][tx].cost + 1;
-			byte_hack n = current_floor_ptr->grid_array[ty][tx].dist + 1;
+			byte_hack m = p_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
+			byte_hack n = p_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
 			grid_type *g_ptr;
 
 			/* Child location */
@@ -1685,7 +1685,7 @@ void update_flow(void)
 			/* Ignore player's grid */
 			if (player_bold(y, x)) continue;
 
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			if (is_closed_door(g_ptr->feat)) m += 3;
 
@@ -1753,12 +1753,12 @@ void update_smell(void)
 	if (++scent_when == 254)
 	{
 		/* Scan the entire dungeon */
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < current_floor_ptr->width; x++)
+			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 			{
-				int w = current_floor_ptr->grid_array[y][x].when;
-				current_floor_ptr->grid_array[y][x].when = (w > 128) ? (w - 128) : 0;
+				int w = p_ptr->current_floor_ptr->grid_array[y][x].when;
+				p_ptr->current_floor_ptr->grid_array[y][x].when = (w > 128) ? (w - 128) : 0;
 			}
 		}
 
@@ -1779,9 +1779,9 @@ void update_smell(void)
 			x = j + p_ptr->x - 2;
 
 			/* Check Bounds */
-			if (!in_bounds(current_floor_ptr, y, x)) continue;
+			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
 
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Walls, water, and lava cannot hold scent. */
 			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
@@ -1805,7 +1805,7 @@ void update_smell(void)
  */
 void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[feat];
 	bool old_los, old_mirror;
 
@@ -1828,7 +1828,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 				yy = y + ddy_ddd[i];
 				xx = x + ddx_ddd[i];
 				if (!in_bounds2(yy, xx)) continue;
-				current_floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
+				p_ptr->current_floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
 			}
 		}
 
@@ -1888,7 +1888,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 			yy = y + ddy_ddd[i];
 			xx = x + ddx_ddd[i];
 			if (!in_bounds2(yy, xx)) continue;
-			cc_ptr = &current_floor_ptr->grid_array[yy][xx];
+			cc_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
 			cc_ptr->info |= CAVE_GLOW;
 
 			if (player_has_los_grid(cc_ptr))
@@ -1905,7 +1905,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 
 		if (p_ptr->special_defense & NINJA_S_STEALTH)
 		{
-			if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+			if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
 		}
 	}
 }
@@ -1967,7 +1967,7 @@ FEAT_IDX feat_state(FEAT_IDX feat, int action)
 void cave_alter_feat(POSITION y, POSITION x, int action)
 {
 	/* Set old feature */
-	FEAT_IDX oldfeat = current_floor_ptr->grid_array[y][x].feat;
+	FEAT_IDX oldfeat = p_ptr->current_floor_ptr->grid_array[y][x].feat;
 
 	/* Get the new feat */
 	FEAT_IDX newfeat = feat_state(oldfeat, action);
@@ -1993,7 +1993,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 		}
 
 		/* Handle item */
-		if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - current_floor_ptr->dun_level / 2)))
+		if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - p_ptr->current_floor_ptr->dun_level / 2)))
 		{
 			/* Place object */
 			place_object(y, x, 0L);
@@ -2012,7 +2012,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 
 		if (have_flag(old_f_ptr->flags, FF_GLASS) && current_world_ptr->character_dungeon)
 		{
-			project(PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(current_floor_ptr->dun_level, 100) / 4, GF_SHARDS,
+			project(PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(p_ptr->current_floor_ptr->dun_level, 100) / 4, GF_SHARDS,
 				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 		}
 	}
@@ -2022,7 +2022,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 /* Remove a mirror */
 void remove_mirror(POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Remove the mirror */
 	g_ptr->info &= ~(CAVE_OBJECT);
@@ -2088,8 +2088,8 @@ bool is_explosive_rune_grid(grid_type *g_ptr)
 */
 bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
-	grid_type    *g_ptr = &current_floor_ptr->grid_array[y][x];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	grid_type    *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Require "teleportable" space */
@@ -2119,7 +2119,7 @@ bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, B
 */
 bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	grid_type    *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type    *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Require "teleportable" space */
@@ -2177,7 +2177,7 @@ bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode)
 {
 	feature_type *f_ptr = &f_info[feature];
 
-	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[current_floor_ptr->m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
+	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[p_ptr->current_floor_ptr->m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
 
 	if (have_flag(f_ptr->flags, FF_PATTERN))
 	{

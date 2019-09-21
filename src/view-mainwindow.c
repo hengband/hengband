@@ -199,7 +199,7 @@ concptr map_name(void)
 		return _("アリーナ", "Arena");
 	else if (p_ptr->phase_out)
 		return _("闘技場", "Monster Arena");
-	else if (!current_floor_ptr->dun_level && p_ptr->town_num)
+	else if (!p_ptr->current_floor_ptr->dun_level && p_ptr->town_num)
 		return town_info[p_ptr->town_num].name;
 	else
 		return d_name+d_info[p_ptr->dungeon_idx].name;
@@ -970,7 +970,7 @@ static void prt_depth(void)
 	col_depth = wid + COL_DEPTH;
 	row_depth = hgt + ROW_DEPTH;
 
-	if (!current_floor_ptr->dun_level)
+	if (!p_ptr->current_floor_ptr->dun_level)
 	{
 		strcpy(depths, _("地上", "Surf."));
 	}
@@ -980,8 +980,8 @@ static void prt_depth(void)
 	}
 	else
 	{
-		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)current_floor_ptr->dun_level * 50);
-		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)current_floor_ptr->dun_level);
+		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)p_ptr->current_floor_ptr->dun_level * 50);
+		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)p_ptr->current_floor_ptr->dun_level);
 
 		/* Get color of level based on feeling  -JSV- */
 		switch (p_ptr->feeling)
@@ -1192,7 +1192,7 @@ static void prt_speed(void)
 	{
 		if (p_ptr->riding)
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
 			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
 			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_GREEN;
@@ -1208,7 +1208,7 @@ static void prt_speed(void)
 	{
 		if (p_ptr->riding)
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
 			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
 			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_RED;
@@ -1390,7 +1390,7 @@ static void health_redraw(bool riding)
 		col = COL_INFO;
 	}
 
-	m_ptr = &current_floor_ptr->m_list[health_who];
+	m_ptr = &p_ptr->current_floor_ptr->m_list[health_who];
 
 	if (current_world_ptr->wizard && p_ptr->phase_out)
 	{
@@ -1402,32 +1402,32 @@ static void health_redraw(bool riding)
 		Term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
 		Term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
 
-		if(current_floor_ptr->m_list[1].r_idx)
+		if(p_ptr->current_floor_ptr->m_list[1].r_idx)
 		{
-			Term_putstr(col - 2, row, 2, r_info[current_floor_ptr->m_list[1].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[1].r_idx].x_char));
-			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[1].hp));
-			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[1].max_maxhp));
+			Term_putstr(col - 2, row, 2, r_info[p_ptr->current_floor_ptr->m_list[1].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[1].r_idx].x_char));
+			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[1].hp));
+			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[1].max_maxhp));
 		}
 
-		if(current_floor_ptr->m_list[2].r_idx)
+		if(p_ptr->current_floor_ptr->m_list[2].r_idx)
 		{
-			Term_putstr(col - 2, row + 1, 2, r_info[current_floor_ptr->m_list[2].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[2].r_idx].x_char));
-			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[2].hp));
-			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[2].max_maxhp));
+			Term_putstr(col - 2, row + 1, 2, r_info[p_ptr->current_floor_ptr->m_list[2].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[2].r_idx].x_char));
+			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[2].hp));
+			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[2].max_maxhp));
 		}
 
-		if(current_floor_ptr->m_list[3].r_idx)
+		if(p_ptr->current_floor_ptr->m_list[3].r_idx)
 		{
-			Term_putstr(col - 2, row + 2, 2, r_info[current_floor_ptr->m_list[3].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[3].r_idx].x_char));
-			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[3].hp));
-			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[3].max_maxhp));
+			Term_putstr(col - 2, row + 2, 2, r_info[p_ptr->current_floor_ptr->m_list[3].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[3].r_idx].x_char));
+			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[3].hp));
+			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[3].max_maxhp));
 		}
 
-		if(current_floor_ptr->m_list[4].r_idx)
+		if(p_ptr->current_floor_ptr->m_list[4].r_idx)
 		{
-			Term_putstr(col - 2, row + 3, 2, r_info[current_floor_ptr->m_list[4].r_idx].x_attr, format("%c", r_info[current_floor_ptr->m_list[4].r_idx].x_char));
-			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", current_floor_ptr->m_list[4].hp));
-			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", current_floor_ptr->m_list[4].max_maxhp));
+			Term_putstr(col - 2, row + 3, 2, r_info[p_ptr->current_floor_ptr->m_list[4].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[4].r_idx].x_char));
+			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[4].hp));
+			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[4].max_maxhp));
 		}
 	}
 	else
@@ -1654,9 +1654,9 @@ void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
 	int i;
 
 	for(i=0;i<tmp_pos.n;i++){
-		grid_type* g_ptr = &current_floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]];
-		if(!g_ptr->m_idx || !current_floor_ptr->m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
-		m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+		grid_type* g_ptr = &p_ptr->current_floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]];
+		if(!g_ptr->m_idx || !p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
+		m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 		if(is_pet(m_ptr))continue;//pet
 		if(!m_ptr->r_idx)continue;//dead?
 		{
@@ -2369,8 +2369,8 @@ void resize_map(void)
 	panel_col_max = 0;
 
 	/* Reset the panels */
-	panel_row_min = current_floor_ptr->height;
-	panel_col_min = current_floor_ptr->width;
+	panel_row_min = p_ptr->current_floor_ptr->height;
+	panel_col_min = p_ptr->current_floor_ptr->width;
 
 	verify_panel();
 
@@ -2431,11 +2431,11 @@ bool change_panel(POSITION dy, POSITION dx)
 	x = panel_col_min + dx * wid / 2;
 
 	/* Verify the row */
-	if (y > current_floor_ptr->height - hgt) y = current_floor_ptr->height - hgt;
+	if (y > p_ptr->current_floor_ptr->height - hgt) y = p_ptr->current_floor_ptr->height - hgt;
 	if (y < 0) y = 0;
 
 	/* Verify the col */
-	if (x > current_floor_ptr->width - wid) x = current_floor_ptr->width - wid;
+	if (x > p_ptr->current_floor_ptr->width - wid) x = p_ptr->current_floor_ptr->width - wid;
 	if (x < 0) x = 0;
 
 	/* Handle "changes" */
@@ -2524,9 +2524,9 @@ void prt_map(void)
 
 	/* Get bounds */
 	xmin = (0 < panel_col_min) ? panel_col_min : 0;
-	xmax = (current_floor_ptr->width - 1 > panel_col_max) ? panel_col_max : current_floor_ptr->width - 1;
+	xmax = (p_ptr->current_floor_ptr->width - 1 > panel_col_max) ? panel_col_max : p_ptr->current_floor_ptr->width - 1;
 	ymin = (0 < panel_row_min) ? panel_row_min : 0;
-	ymax = (current_floor_ptr->height - 1 > panel_row_max) ? panel_row_max : current_floor_ptr->height - 1;
+	ymax = (p_ptr->current_floor_ptr->height - 1 > panel_row_max) ? panel_row_max : p_ptr->current_floor_ptr->height - 1;
 
 	/* Bottom section of screen */
 	for (y = 1; y <= ymin - panel_row_prt; y++)
@@ -2783,7 +2783,7 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
  * not any.  If there were, they would have to set "shimmer_objects"\n
  * when they were created, and then new "shimmer" code in "dungeon.c"\n
  * would have to be created handle the "shimmer" effect, and the code\n
- * in "current_floor_ptr->grid_array.c" would have to be updated to create the shimmer effect.\n
+ * in "p_ptr->current_floor_ptr->grid_array.c" would have to be updated to create the shimmer effect.\n
  *\n
  * Note the effects of hallucination.  Objects always appear as random\n
  * "objects", monsters as random "monsters", and normal grids occasionally\n
@@ -2872,8 +2872,8 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
  */
 void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
-	/* Get the current_floor_ptr->grid_array */
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	/* Get the p_ptr->current_floor_ptr->grid_array */
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -3122,7 +3122,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized objects */
@@ -3167,7 +3167,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	/* Handle monsters */
 	if (g_ptr->m_idx && display_autopick == 0)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Visible monster */
 		if (m_ptr->ml)
@@ -3420,8 +3420,8 @@ void display_map(int *cy, int *cx)
 	wid -= 14;
 	if (use_bigtile) wid /= 2;
 
-	yrat = (current_floor_ptr->height + hgt - 1) / hgt;
-	xrat = (current_floor_ptr->width + wid - 1) / wid;
+	yrat = (p_ptr->current_floor_ptr->height + hgt - 1) / hgt;
+	xrat = (p_ptr->current_floor_ptr->width + wid - 1) / wid;
 
 	/* Disable lighting effects */
 	view_special_lite = FALSE;
@@ -3459,19 +3459,19 @@ void display_map(int *cy, int *cx)
 	}
 
 	/* Allocate the maps */
-	C_MAKE(bigma, (current_floor_ptr->height + 2), TERM_COLOR *);
-	C_MAKE(bigmc, (current_floor_ptr->height + 2), char_ptr);
-	C_MAKE(bigmp, (current_floor_ptr->height + 2), byte_ptr);
+	C_MAKE(bigma, (p_ptr->current_floor_ptr->height + 2), TERM_COLOR *);
+	C_MAKE(bigmc, (p_ptr->current_floor_ptr->height + 2), char_ptr);
+	C_MAKE(bigmp, (p_ptr->current_floor_ptr->height + 2), byte_ptr);
 
 	/* Allocate and wipe each line map */
-	for (y = 0; y < (current_floor_ptr->height + 2); y++)
+	for (y = 0; y < (p_ptr->current_floor_ptr->height + 2); y++)
 	{
 		/* Allocate one row each array */
-		C_MAKE(bigma[y], (current_floor_ptr->width + 2), TERM_COLOR);
-		C_MAKE(bigmc[y], (current_floor_ptr->width + 2), char);
-		C_MAKE(bigmp[y], (current_floor_ptr->width + 2), byte);
+		C_MAKE(bigma[y], (p_ptr->current_floor_ptr->width + 2), TERM_COLOR);
+		C_MAKE(bigmc[y], (p_ptr->current_floor_ptr->width + 2), char);
+		C_MAKE(bigmp[y], (p_ptr->current_floor_ptr->width + 2), byte);
 
-		for (x = 0; x < current_floor_ptr->width + 2; ++x)
+		for (x = 0; x < p_ptr->current_floor_ptr->width + 2; ++x)
 		{
 			/* Nothing here */
 			bigma[y][x] = TERM_WHITE;
@@ -3483,9 +3483,9 @@ void display_map(int *cy, int *cx)
 	}
 
 	/* Fill in the map */
-	for (i = 0; i < current_floor_ptr->width; ++i)
+	for (i = 0; i < p_ptr->current_floor_ptr->width; ++i)
 	{
-		for (j = 0; j < current_floor_ptr->height; ++j)
+		for (j = 0; j < p_ptr->current_floor_ptr->height; ++j)
 		{
 			x = i / xrat + 1;
 			y = j / yrat + 1;
@@ -3516,9 +3516,9 @@ void display_map(int *cy, int *cx)
 		}
 	}
 
-	for (j = 0; j < current_floor_ptr->height; ++j)
+	for (j = 0; j < p_ptr->current_floor_ptr->height; ++j)
 	{
-		for (i = 0; i < current_floor_ptr->width; ++i)
+		for (i = 0; i < p_ptr->current_floor_ptr->width; ++i)
 		{
 			x = i / xrat + 1;
 			y = j / yrat + 1;
@@ -3654,18 +3654,18 @@ void display_map(int *cy, int *cx)
 	C_KILL(object_autopick_yx, (hgt + 2), object_type **);
 
 	/* Free each line map */
-	for (y = 0; y < (current_floor_ptr->height + 2); y++)
+	for (y = 0; y < (p_ptr->current_floor_ptr->height + 2); y++)
 	{
 		/* Free one row each array */
-		C_KILL(bigma[y], (current_floor_ptr->width + 2), TERM_COLOR);
-		C_KILL(bigmc[y], (current_floor_ptr->width + 2), SYMBOL_CODE);
-		C_KILL(bigmp[y], (current_floor_ptr->width + 2), byte);
+		C_KILL(bigma[y], (p_ptr->current_floor_ptr->width + 2), TERM_COLOR);
+		C_KILL(bigmc[y], (p_ptr->current_floor_ptr->width + 2), SYMBOL_CODE);
+		C_KILL(bigmp[y], (p_ptr->current_floor_ptr->width + 2), byte);
 	}
 
 	/* Free each line map */
-	C_KILL(bigma, (current_floor_ptr->height + 2), TERM_COLOR *);
-	C_KILL(bigmc, (current_floor_ptr->height + 2), char_ptr);
-	C_KILL(bigmp, (current_floor_ptr->height + 2), byte_ptr);
+	C_KILL(bigma, (p_ptr->current_floor_ptr->height + 2), TERM_COLOR *);
+	C_KILL(bigmc, (p_ptr->current_floor_ptr->height + 2), char_ptr);
+	C_KILL(bigmp, (p_ptr->current_floor_ptr->height + 2), byte_ptr);
 }
 
 
@@ -3802,7 +3802,7 @@ void prt_path(POSITION y, POSITION x)
 	{
 		POSITION ny = GRID_Y(path_g[i]);
 		POSITION nx = GRID_X(path_g[i]);
-		grid_type *g_ptr = &current_floor_ptr->grid_array[ny][nx];
+		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[ny][nx];
 
 		if (panel_contains(ny, nx))
 		{
@@ -3812,7 +3812,7 @@ void prt_path(POSITION y, POSITION x)
 			TERM_COLOR ta = default_color;
 			char tc = '*';
 
-			if (g_ptr->m_idx && current_floor_ptr->m_list[g_ptr->m_idx].ml)
+			if (g_ptr->m_idx && p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)
 			{
 				/* Determine what is there */
 				map_info(ny, nx, &a, &c, &ta, &tc);

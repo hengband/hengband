@@ -184,7 +184,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 * Town logic flow for generation of new town\n
 * Originally from Vanilla 3.0.3\n
 *\n
-* We start with a fully wiped current_floor_ptr->grid_array of normal floors.\n
+* We start with a fully wiped p_ptr->current_floor_ptr->grid_array of normal floors.\n
 *\n
 * Note that town_gen_hack() plays games with the R.N.G.\n
 *\n
@@ -205,13 +205,13 @@ bool build_type16(void)
 	bool prevent_bm = FALSE;
 
 	/* Hack -- If already exist black market, prevent building */
-	for (y = 0; (y < current_floor_ptr->height) && !prevent_bm; y++)
+	for (y = 0; (y < p_ptr->current_floor_ptr->height) && !prevent_bm; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
-			if (current_floor_ptr->grid_array[y][x].feat == FF_STORE)
+			if (p_ptr->current_floor_ptr->grid_array[y][x].feat == FF_STORE)
 			{
-				prevent_bm = (f_info[current_floor_ptr->grid_array[y][x].feat].subtype == STORE_BLACK);
+				prevent_bm = (f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat].subtype == STORE_BLACK);
 				break;
 			}
 		}

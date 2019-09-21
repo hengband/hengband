@@ -268,14 +268,14 @@ bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 {
 	int i;
-	int max_cyber = (easy_band ? 1 : (current_floor_ptr->dun_level / 50) + randint1(2));
+	int max_cyber = (easy_band ? 1 : (p_ptr->current_floor_ptr->dun_level / 50) + randint1(2));
 	int count = 0;
 	BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 	/* Summoned by a monster */
 	if (who > 0)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[who];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[who];
 		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 	}
 
@@ -310,9 +310,9 @@ void mitokohmon(void)
 	}
 	if (!count)
 	{
-		for (i = current_floor_ptr->m_max - 1; i > 0; i--)
+		for (i = p_ptr->current_floor_ptr->m_max - 1; i > 0; i--)
 		{
-			m_ptr = &current_floor_ptr->m_list[i];
+			m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 			if (!monster_is_valid(m_ptr)) continue;
 			if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
 			if (!los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;

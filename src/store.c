@@ -5720,7 +5720,7 @@ void do_cmd_store(void)
 	store_bottom = MIN_STOCK + xtra_stock;
 
 	/* Access the player grid */
-	g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
 
 	/* Verify a store */
 	if (!cave_have_flag_grid(g_ptr, FF_STORE))
@@ -5734,7 +5734,7 @@ void do_cmd_store(void)
 
 	old_town_num = p_ptr->town_num;
 	if ((which == STORE_HOME) || (which == STORE_MUSEUM)) p_ptr->town_num = 1;
-	if (current_floor_ptr->dun_level) p_ptr->town_num = NO_TOWN;
+	if (p_ptr->current_floor_ptr->dun_level) p_ptr->town_num = NO_TOWN;
 	inner_town_num = p_ptr->town_num;
 
 	/* Hack -- Check the "locked doors" */
@@ -5762,7 +5762,7 @@ void do_cmd_store(void)
 		town_info[p_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
 	}
 
-	forget_lite(current_floor_ptr);
+	forget_lite(p_ptr->current_floor_ptr);
 	forget_view();
 
 	/* Hack -- Character is in "icky" mode */

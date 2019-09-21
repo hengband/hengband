@@ -527,7 +527,7 @@ errr top_twenty(void)
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)p_ptr->lev, 999));
-	sprintf(the_score.cur_dun, "%3d", (int)current_floor_ptr->dun_level);
+	sprintf(the_score.cur_dun, "%3d", (int)p_ptr->current_floor_ptr->dun_level);
 	sprintf(the_score.max_lev, "%3d", MIN((u16b)p_ptr->max_plv, 999));
 	sprintf(the_score.max_dun, "%3d", (int)max_dlv[p_ptr->dungeon_idx]);
 
@@ -640,7 +640,7 @@ errr predict_score(void)
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)p_ptr->lev, 999));
-	sprintf(the_score.cur_dun, "%3d", (int)current_floor_ptr->dun_level);
+	sprintf(the_score.cur_dun, "%3d", (int)p_ptr->current_floor_ptr->dun_level);
 	sprintf(the_score.max_lev, "%3d", MIN((u16b)p_ptr->max_plv, 999));
 	sprintf(the_score.max_dun, "%3d", (int)max_dlv[p_ptr->dungeon_idx]);
 
@@ -862,7 +862,7 @@ void kingly(void)
 	bool seppuku = streq(p_ptr->died_from, "Seppuku");
 
 	/* Hack -- retire in town */
-	current_floor_ptr->dun_level = 0;
+	p_ptr->current_floor_ptr->dun_level = 0;
 
 	/* Fake death */
 	if (!seppuku)

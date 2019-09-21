@@ -434,23 +434,23 @@ void update_lite(player_type *player_ptr)
 		/* forget_lite(); Perhaps don't need? */
 
 		/* Add it to later visual update */
-		cave_redraw_later(&current_floor_ptr->grid_array[player_ptr->y][player_ptr->x], player_ptr->y, player_ptr->x);
+		cave_redraw_later(&p_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x], player_ptr->y, player_ptr->x);
 	}
 #endif
 
 	/*** Save the old "lite" grids for later ***/
 
 	/* Clear them all */
-	for (i = 0; i < current_floor_ptr->lite_n; i++)
+	for (i = 0; i < p_ptr->current_floor_ptr->lite_n; i++)
 	{
-		y = current_floor_ptr->lite_y[i];
-		x = current_floor_ptr->lite_x[i];
+		y = p_ptr->current_floor_ptr->lite_y[i];
+		x = p_ptr->current_floor_ptr->lite_x[i];
 
 		/* Mark the grid as not "lite" */
-		current_floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
+		p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
 
 		/* Mark the grid as "seen" */
-		current_floor_ptr->grid_array[y][x].info |= (CAVE_TEMP);
+		p_ptr->current_floor_ptr->grid_array[y][x].info |= (CAVE_TEMP);
 
 		/* Add it to the "seen" set */
 		tmp_pos.y[tmp_pos.n] = y;
@@ -459,7 +459,7 @@ void update_lite(player_type *player_ptr)
 	}
 
 	/* None left */
-	current_floor_ptr->lite_n = 0;
+	p_ptr->current_floor_ptr->lite_n = 0;
 
 
 	/*** Collect the new "lite" grids ***/
@@ -557,7 +557,7 @@ void update_lite(player_type *player_ptr)
 
 		/* Maximal south */
 		max_y = player_ptr->y + p;
-		if (max_y > current_floor_ptr->height - 1) max_y = current_floor_ptr->height - 1;
+		if (max_y > p_ptr->current_floor_ptr->height - 1) max_y = p_ptr->current_floor_ptr->height - 1;
 
 		/* Maximal west */
 		min_x = player_ptr->x - p;
@@ -565,7 +565,7 @@ void update_lite(player_type *player_ptr)
 
 		/* Maximal east */
 		max_x = player_ptr->x + p;
-		if (max_x > current_floor_ptr->width - 1) max_x = current_floor_ptr->width - 1;
+		if (max_x > p_ptr->current_floor_ptr->width - 1) max_x = p_ptr->current_floor_ptr->width - 1;
 
 		/* Scan the maximal box */
 		for (y = min_y; y <= max_y; y++)
@@ -585,7 +585,7 @@ void update_lite(player_type *player_ptr)
 				if (d > p) continue;
 
 				/* Viewable, nearby, grids get "torch lit" */
-				if (current_floor_ptr->grid_array[y][x].info & CAVE_VIEW)
+				if (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_VIEW)
 				{
 					/* This grid is "torch lit" */
 					cave_lite_hack(y, x);
@@ -598,12 +598,12 @@ void update_lite(player_type *player_ptr)
 	/*** Complete the algorithm ***/
 
 	/* Draw the new grids */
-	for (i = 0; i < current_floor_ptr->lite_n; i++)
+	for (i = 0; i < p_ptr->current_floor_ptr->lite_n; i++)
 	{
-		y = current_floor_ptr->lite_y[i];
-		x = current_floor_ptr->lite_x[i];
+		y = p_ptr->current_floor_ptr->lite_y[i];
+		x = p_ptr->current_floor_ptr->lite_x[i];
 
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Update fresh grids */
 		if (g_ptr->info & (CAVE_TEMP)) continue;
@@ -618,7 +618,7 @@ void update_lite(player_type *player_ptr)
 		y = tmp_pos.y[i];
 		x = tmp_pos.x[i];
 
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_TEMP);
@@ -648,14 +648,14 @@ void forget_view(void)
 	grid_type *g_ptr;
 
 	/* None to forget */
-	if (!current_floor_ptr->view_n) return;
+	if (!p_ptr->current_floor_ptr->view_n) return;
 
 	/* Clear them all */
-	for (i = 0; i < current_floor_ptr->view_n; i++)
+	for (i = 0; i < p_ptr->current_floor_ptr->view_n; i++)
 	{
-		POSITION y = current_floor_ptr->view_y[i];
-		POSITION x = current_floor_ptr->view_x[i];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		POSITION y = p_ptr->current_floor_ptr->view_y[i];
+		POSITION x = p_ptr->current_floor_ptr->view_x[i];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Forget that the grid is viewable */
 		g_ptr->info &= ~(CAVE_VIEW);
@@ -667,7 +667,7 @@ void forget_view(void)
 	}
 
 	/* None left */
-	current_floor_ptr->view_n = 0;
+	p_ptr->current_floor_ptr->view_n = 0;
 }
 
 
@@ -699,8 +699,8 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	grid_type *g2_c_ptr;
 
 	/* Access the grids */
-	g1_c_ptr = &current_floor_ptr->grid_array[y1][x1];
-	g2_c_ptr = &current_floor_ptr->grid_array[y2][x2];
+	g1_c_ptr = &p_ptr->current_floor_ptr->grid_array[y1][x1];
+	g2_c_ptr = &p_ptr->current_floor_ptr->grid_array[y2][x2];
 
 
 	/* Check for walls */
@@ -718,7 +718,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Totally blocked by "unviewable neighbors" */
 	if (!v1 && !v2) return (TRUE);
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 
 	/* Check for walls */
@@ -1334,7 +1334,7 @@ static void mon_lite_hack(POSITION y, POSITION x)
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Want a unlit square in view of the player */
 	if ((g_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW) return;
@@ -1420,7 +1420,7 @@ static void mon_dark_hack(POSITION y, POSITION x)
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Want a unlit and undarkened square in view of the player */
 	if ((g_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) return;

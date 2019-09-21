@@ -1405,7 +1405,7 @@ void calc_bonuses(player_type *creature_ptr)
 	bool old_mighty_throw = creature_ptr->mighty_throw;
 
 	/* Current feature under player. */
-	feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 
 	/* Save the old armor class */
 	ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
@@ -3070,7 +3070,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 	else
 	{
-		monster_type *riding_m_ptr = &current_floor_ptr->m_list[creature_ptr->riding];
+		monster_type *riding_m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 		monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
 		SPEED speed = riding_m_ptr->mspeed;
 
@@ -3439,7 +3439,7 @@ void calc_bonuses(player_type *creature_ptr)
 				}
 				else
 				{
-					penalty = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+					penalty = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
 					penalty += 30;
 					if (penalty < 30) penalty = 30;
 				}
@@ -3478,7 +3478,7 @@ void calc_bonuses(player_type *creature_ptr)
 		}
 		else
 		{
-			penalty = r_info[current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+			penalty = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
 			penalty += 30;
 			if (penalty < 30) penalty = 30;
 		}
@@ -3875,9 +3875,9 @@ void calc_bonuses(player_type *creature_ptr)
 		if ((creature_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_kabe = TRUE;
 	}
 
-	for (this_o_idx = current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 #if 0
@@ -3922,11 +3922,11 @@ static void calc_alignment(player_type *creature_ptr)
 	creature_ptr->align = 0;
 	int i, j, neutral[2];
 
-	for (m_idx = current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
+	for (m_idx = p_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;
-		m_ptr = &current_floor_ptr->m_list[m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
@@ -5045,7 +5045,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_UN_LITE))
 	{
 		creature_ptr->update &= ~(PU_UN_LITE);
-		forget_lite(current_floor_ptr);
+		forget_lite(p_ptr->current_floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_UN_VIEW))
@@ -5057,7 +5057,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_VIEW))
 	{
 		creature_ptr->update &= ~(PU_VIEW);
-		update_view(creature_ptr, current_floor_ptr);
+		update_view(creature_ptr, p_ptr->current_floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_LITE))
@@ -5086,7 +5086,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_MON_LITE))
 	{
 		creature_ptr->update &= ~(PU_MON_LITE);
-		update_mon_lite(current_floor_ptr);
+		update_mon_lite(p_ptr->current_floor_ptr);
 	}
 
 	/*
@@ -5121,9 +5121,9 @@ bool player_has_no_spellbooks(player_type *creature_ptr)
 		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
-	for (i = current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
+	for (i = p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
 	{
-		o_ptr = &current_floor_ptr->o_list[i];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 		if (o_ptr->k_idx && (o_ptr->marked & OM_FOUND) && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
@@ -5149,7 +5149,7 @@ void free_turn(player_type *creature_ptr)
 bool player_place(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	/* Paranoia XXX XXX */
-	if (current_floor_ptr->grid_array[y][x].m_idx != 0) return FALSE;
+	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0) return FALSE;
 
 	/* Save player location */
 	creature_ptr->y = y;
@@ -5167,7 +5167,7 @@ void wreck_the_pattern(player_type *creature_ptr)
 {
 	int to_ruin = 0;
 	POSITION r_y, r_x;
-	int pattern_type = f_info[current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
+	int pattern_type = f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)
 	{
@@ -5186,7 +5186,7 @@ void wreck_the_pattern(player_type *creature_ptr)
 		scatter(&r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
 
 		if (pattern_tile(r_y, r_x) &&
-			(f_info[current_floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
+			(f_info[p_ptr->current_floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
 		{
 			cave_set_feat(r_y, r_x, feat_pattern_corrupted);
 		}
@@ -5846,7 +5846,7 @@ void cheat_death(player_type *creature_ptr)
 	/* Hack -- Prevent starvation */
 	(void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 
-	current_floor_ptr->dun_level = 0;
+	p_ptr->current_floor_ptr->dun_level = 0;
 	creature_ptr->inside_arena = FALSE;
 	creature_ptr->phase_out = FALSE;
 	leaving_quest = 0;

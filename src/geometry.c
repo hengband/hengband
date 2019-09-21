@@ -276,11 +276,11 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(y, x) || current_floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(y, x) || p_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
-			if (!in_bounds(current_floor_ptr, y, x)) break;
+			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) break;
 
 			/* Slant */
 			if (m)
@@ -365,11 +365,11 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(y, x) || current_floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(y, x) || p_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
-			if (!in_bounds(current_floor_ptr, y, x)) break;
+			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) break;
 
 			/* Slant */
 			if (m)
@@ -436,11 +436,11 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(y, x) || current_floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(y, x) || p_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
-			if (!in_bounds(current_floor_ptr, y, x)) break;
+			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) break;
 
 			/* Advance (Y) */
 			y += sy;
@@ -534,8 +534,8 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 
 
 	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(current_floor_ptr, y1, x1)) return FALSE; */
-	/* if (!in_bounds(current_floor_ptr, y2, x2)) return FALSE; */
+	/* if (!in_bounds(p_ptr->current_floor_ptr, y1, x1)) return FALSE; */
+	/* if (!in_bounds(p_ptr->current_floor_ptr, y2, x2)) return FALSE; */
 
 
 	/* Directly South/North */
@@ -774,7 +774,7 @@ void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT
 		nx = rand_spread(x, d);
 
 		/* Ignore annoying locations */
-		if (!in_bounds(current_floor_ptr, ny, nx)) continue;
+		if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
 
 		/* Ignore "excessively distant" locations */
 		if ((d > 1) && (distance(y, x, ny, nx) > d)) continue;
@@ -838,7 +838,7 @@ bool player_can_see_bold(POSITION y, POSITION x)
 	/* Blind players see nothing */
 	if (p_ptr->blind) return FALSE;
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Note that "torch-lite" yields "illumination" */
 	if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;

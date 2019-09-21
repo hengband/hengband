@@ -373,7 +373,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				current_floor_ptr->num_repro += MAX_REPRO;
+				p_ptr->current_floor_ptr->num_repro += MAX_REPRO;
 			}
 		}
 		break;

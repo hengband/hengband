@@ -43,7 +43,7 @@ extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
 
 /*!
- * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "current_floor_ptr->grid_array.c")
+ * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array (see "p_ptr->current_floor_ptr->grid_array.c")
  * @details We must be as large as "VIEW_MAX" and "LITE_MAX" for proper functioning
  * of "update_view()" and "update_lite()".  We must also be as large as the
  * largest illuminatable room, but no room is larger than 800 grids.  We

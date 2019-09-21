@@ -1975,7 +1975,7 @@ static void rd_extra(void)
 	rd_s16b(&tmp16s);
 	p_ptr->oldpy = (POSITION)tmp16s;
 
-	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
+	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
 
 	/* Was p_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
@@ -2286,11 +2286,11 @@ static void rd_extra(void)
 	current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 
 	/* Turn when level began */
-	rd_s32b(&current_floor_ptr->generated_turn);
+	rd_s32b(&p_ptr->current_floor_ptr->generated_turn);
 
 	if (h_older_than(1, 7, 0, 4))
 	{
-		p_ptr->feeling_turn = current_floor_ptr->generated_turn;
+		p_ptr->feeling_turn = p_ptr->current_floor_ptr->generated_turn;
 	}
 	else
 	{
@@ -2309,7 +2309,7 @@ static void rd_extra(void)
 
 	if (z_older_than(11, 0, 13))
 	{
-		current_floor_ptr->generated_turn /= 2;
+		p_ptr->current_floor_ptr->generated_turn /= 2;
 		p_ptr->feeling_turn /= 2;
 		current_world_ptr->game_turn /= 2;
 		current_world_ptr->dungeon_turn /= 2;
@@ -2581,7 +2581,7 @@ static errr rd_dungeon_old(void)
 
 	/* Header info */
 	rd_s16b(&tmp16s);
-	current_floor_ptr->dun_level = (DEPTH)tmp16s;
+	p_ptr->current_floor_ptr->dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) p_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
 	{ 
@@ -2590,22 +2590,22 @@ static errr rd_dungeon_old(void)
 	}
 
 	/* Set the base level for old versions */
-	current_floor_ptr->base_level = current_floor_ptr->dun_level;
+	p_ptr->current_floor_ptr->base_level = p_ptr->current_floor_ptr->dun_level;
 
 	rd_s16b(&tmp16s);
-	current_floor_ptr->base_level = (DEPTH)tmp16s;
+	p_ptr->current_floor_ptr->base_level = (DEPTH)tmp16s;
 
 	rd_s16b(&tmp16s);
-	current_floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
+	p_ptr->current_floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 	rd_s16b(&tmp16s);
 	p_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
 	p_ptr->x = (POSITION)tmp16s;
-	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
+	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
 	rd_s16b(&tmp16s);
-	current_floor_ptr->height = (POSITION)tmp16s;
+	p_ptr->current_floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	current_floor_ptr->width = (POSITION)tmp16s;
+	p_ptr->current_floor_ptr->width = (POSITION)tmp16s;
 	rd_s16b(&tmp16s); /* max_panel_rows */
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
@@ -2614,8 +2614,8 @@ static errr rd_dungeon_old(void)
 #endif
 
 	/* Maximal size */
-	ymax = current_floor_ptr->height;
-	xmax = current_floor_ptr->width;
+	ymax = p_ptr->current_floor_ptr->height;
+	xmax = p_ptr->current_floor_ptr->width;
 
 
 	/*** Run length decoding ***/
@@ -2643,8 +2643,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "info" */
 			g_ptr->info = info;
@@ -2674,8 +2674,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
 			g_ptr->feat = (s16b)tmp8u;
@@ -2704,8 +2704,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "mimic" */
 			g_ptr->mimic = (s16b)tmp8u;
@@ -2734,8 +2734,8 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
 			g_ptr->special = tmp16s;
@@ -2752,13 +2752,13 @@ static errr rd_dungeon_old(void)
 		}
 	}
 
-	/* Convert current_floor_ptr->grid_array data */
+	/* Convert p_ptr->current_floor_ptr->grid_array data */
 	if (z_older_than(11, 0, 99))
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Wipe old unused flags */
-			current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+			p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		}
 	}
 
@@ -2766,8 +2766,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Very old */
 			if (g_ptr->feat == OLD_FEAT_INVIS)
@@ -2789,8 +2789,8 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Old CAVE_IN_MIRROR flag */
 			if (g_ptr->info & CAVE_OBJECT)
@@ -2829,10 +2829,10 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !current_floor_ptr->dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !p_ptr->current_floor_ptr->dun_level)
 			{
 				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
@@ -2859,7 +2859,7 @@ static errr rd_dungeon_old(void)
 	rd_u16b(&limit);
 
 	/* Verify maximum */
-	if (limit > current_floor_ptr->max_o_idx)
+	if (limit > current_world_ptr->max_o_idx)
 	{
 		note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
 		return (151);
@@ -2884,7 +2884,7 @@ static errr rd_dungeon_old(void)
 
 
 		/* Acquire place */
-		o_ptr = &current_floor_ptr->o_list[o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 		/* Read the item */
 		rd_item(o_ptr);
@@ -2893,7 +2893,7 @@ static errr rd_dungeon_old(void)
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
-			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
+			m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -2905,7 +2905,7 @@ static errr rd_dungeon_old(void)
 		else
 		{
 			/* Access the item location */
-			g_ptr = &current_floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
@@ -2921,7 +2921,7 @@ static errr rd_dungeon_old(void)
 	rd_u16b(&limit);
 
 	/* Hack -- verify */
-	if (limit > current_floor_ptr->max_m_idx)
+	if (limit > current_world_ptr->max_m_idx)
 	{
 		note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
 		return (161);
@@ -2942,14 +2942,14 @@ static errr rd_dungeon_old(void)
 			return (162);
 		}
 
-		m_ptr = &current_floor_ptr->m_list[m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
 		rd_monster(m_ptr);
 
 
 		/* Access grid */
-		g_ptr = &current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		g_ptr->m_idx = m_idx;
@@ -2961,7 +2961,7 @@ static errr rd_dungeon_old(void)
 	/*** Success ***/
 
 	/* The dungeon is ready */
-	if (z_older_than(10, 3, 13) && !current_floor_ptr->dun_level && !p_ptr->inside_arena)
+	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena)
 		current_world_ptr->character_dungeon = FALSE;
 	else
 		current_world_ptr->character_dungeon = TRUE;
@@ -2999,7 +2999,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 	grid_template_type *templates;
 
-	clear_cave(current_floor_ptr);
+	clear_cave(p_ptr->current_floor_ptr);
 
 	/*** Basic info ***/
 
@@ -3010,8 +3010,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/*** Not a saved floor ***/
 
 		rd_s16b(&tmp16s);
-		current_floor_ptr->dun_level = (DEPTH)tmp16s;
-		current_floor_ptr->base_level = current_floor_ptr->dun_level;
+		p_ptr->current_floor_ptr->dun_level = (DEPTH)tmp16s;
+		p_ptr->current_floor_ptr->base_level = p_ptr->current_floor_ptr->dun_level;
 	}
 	else
 	{
@@ -3025,7 +3025,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		rd_s16b(&tmp16s);
 		if (tmp16s != sf_ptr->dun_level) return 171;
-		current_floor_ptr->dun_level = sf_ptr->dun_level;
+		p_ptr->current_floor_ptr->dun_level = sf_ptr->dun_level;
 
 		rd_s32b(&tmp32s);
 		if (tmp32s != sf_ptr->last_visit) return 171;
@@ -3041,9 +3041,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	rd_s16b(&tmp16s);
-	current_floor_ptr->base_level = (DEPTH)tmp16s;
+	p_ptr->current_floor_ptr->base_level = (DEPTH)tmp16s;
 	rd_s16b(&tmp16s);
-	current_floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
+	p_ptr->current_floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 
 	rd_u16b(&tmp16u);
 	p_ptr->y = (POSITION)tmp16u;
@@ -3052,9 +3052,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	p_ptr->x = (POSITION)tmp16u;
 
 	rd_s16b(&tmp16s);
-	current_floor_ptr->height = (POSITION)tmp16s;
+	p_ptr->current_floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	current_floor_ptr->width = (POSITION)tmp16s;
+	p_ptr->current_floor_ptr->width = (POSITION)tmp16s;
 
 	rd_byte(&p_ptr->feeling);
 
@@ -3092,8 +3092,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	/* Maximal size */
-	ymax = current_floor_ptr->height;
-	xmax = current_floor_ptr->width;
+	ymax = p_ptr->current_floor_ptr->height;
+	xmax = p_ptr->current_floor_ptr->width;
 
 
 	/*** Run length decoding ***/
@@ -3116,10 +3116,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
-			/* Extract current_floor_ptr->grid_array data */
+			/* Extract p_ptr->current_floor_ptr->grid_array data */
 			g_ptr->info = templates[id].info;
 			g_ptr->feat = templates[id].feat;
 			g_ptr->mimic = templates[id].mimic;
@@ -3142,10 +3142,10 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the current_floor_ptr->grid_array */
-			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+			/* Access the p_ptr->current_floor_ptr->grid_array */
+			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !current_floor_ptr->dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !p_ptr->current_floor_ptr->dun_level)
 			{
 				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
@@ -3176,7 +3176,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Verify maximum */
-	if (limit > current_floor_ptr->max_o_idx) return 151;
+	if (limit > current_world_ptr->max_o_idx) return 151;
 
 
 	/* Read the dungeon items */
@@ -3192,7 +3192,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		if (i != o_idx) return 152;
 
 		/* Acquire place */
-		o_ptr = &current_floor_ptr->o_list[o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 		/* Read the item */
 		rd_item(o_ptr);
@@ -3200,7 +3200,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
-			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
+			m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -3212,7 +3212,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		else
 		{
 			/* Access the item location */
-			grid_type *g_ptr = &current_floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
+			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
@@ -3228,7 +3228,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	rd_u16b(&limit);
 
 	/* Hack -- verify */
-	if (limit > current_floor_ptr->max_m_idx) return 161;
+	if (limit > current_world_ptr->max_m_idx) return 161;
 
 	/* Read the monsters */
 	for (i = 1; i < limit; i++)
@@ -3242,14 +3242,14 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		if (i != m_idx) return 162;
 
-		m_ptr = &current_floor_ptr->m_list[m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
 		rd_monster(m_ptr);
 
 
 		/* Access grid */
-		g_ptr = &current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		g_ptr->m_idx = m_idx;
@@ -3290,7 +3290,7 @@ static errr rd_dungeon(void)
 		if (p_ptr->dungeon_idx)
 		{
 			p_ptr->floor_id = get_new_floor_id();
-			get_sf_ptr(p_ptr->floor_id)->dun_level = current_floor_ptr->dun_level;
+			get_sf_ptr(p_ptr->floor_id)->dun_level = p_ptr->current_floor_ptr->dun_level;
 		}
 
 		return err;
@@ -3964,7 +3964,7 @@ static errr rd_savefile_new_aux(void)
 		if (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
 		{
 			p_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
-			current_floor_ptr->dun_level = 1;
+			p_ptr->current_floor_ptr->dun_level = 1;
 			p_ptr->inside_quest = 0;
 		}
 	}

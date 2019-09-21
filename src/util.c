@@ -1842,11 +1842,11 @@ void select_floor_music(player_type *player_ptr)
 		{
 			if (!play_music(TERM_XTRA_MUSIC_DUNGEON, player_ptr->dungeon_idx)) return;
 
-			if (current_floor_ptr->dun_level < 40)
+			if (p_ptr->current_floor_ptr->dun_level < 40)
 			{
 				if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW)) return;
 			}
-			else if (current_floor_ptr->dun_level < 80)
+			else if (p_ptr->current_floor_ptr->dun_level < 80)
 			{
 				if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED)) return;
 			}
@@ -1864,7 +1864,7 @@ void select_floor_music(player_type *player_ptr)
 		return;
 	}
 
-	if(!current_floor_ptr->dun_level)
+	if(!p_ptr->current_floor_ptr->dun_level)
 	{
 		if (player_ptr->lev >= 45)
 		{
@@ -4340,7 +4340,7 @@ static char inkey_from_menu(void)
 					if (p_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					break;
 				case MENU_WILD:
-					if (!current_floor_ptr->dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
+					if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
 					{
 						if ((byte)p_ptr->wild_mode == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					}

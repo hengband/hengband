@@ -1640,7 +1640,7 @@ static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 {
 	object_type *o_ptr;
 
-	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(p_ptr, p_ptr->current_floor_ptr, item);
 
 	if (o_ptr->k_idx && (o_ptr->marked & OM_AUTODESTROY))
 	{
@@ -1682,10 +1682,10 @@ void autopick_delayed_alter(void)
 		autopick_delayed_alter_aux(item);
 
 	/* Scan the pile of objects */
-	item = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx;
+	item = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx;
 	while (item)
 	{
-		OBJECT_IDX next = current_floor_ptr->o_list[item].next_o_idx;
+		OBJECT_IDX next = p_ptr->current_floor_ptr->o_list[item].next_o_idx;
 		autopick_delayed_alter_aux(-item);
 		item = next;
 	}
@@ -1703,7 +1703,7 @@ void autopick_alter_item(INVENTORY_IDX item, bool destroy)
 	object_type *o_ptr;
 	int idx;
 
-	o_ptr = REF_ITEM(p_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(p_ptr, p_ptr->current_floor_ptr, item);
 
 	/* Get the index in the auto-pick/destroy list */
 	idx = is_autopick(o_ptr);
@@ -1728,7 +1728,7 @@ void autopick_pickup_items(grid_type *g_ptr)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		int idx;
-			object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
+			object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 		idx = is_autopick(o_ptr);

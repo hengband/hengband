@@ -83,7 +83,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 			changey = 0;
 		}
 
-		if (!in_bounds(current_floor_ptr, y1 + dy + changey, x1 + dx + changex))
+		if (!in_bounds(p_ptr->current_floor_ptr, y1 + dy + changey, x1 + dx + changex))
 		{
 			changex = 0;
 			changey = 0;
@@ -119,7 +119,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 					{
 						if (!in_bounds2(ty, tx)) continue;
 
-						g_ptr = &current_floor_ptr->grid_array[ty][tx];
+						g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 
 						if (g_ptr->feat == feat1) continue;
 						if (g_ptr->feat == feat2) continue;
@@ -174,8 +174,8 @@ void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
 
 
 	/* Hack -- Choose starting point */
-	y2 = randint1(current_floor_ptr->height / 2 - 2) + current_floor_ptr->height / 2;
-	x2 = randint1(current_floor_ptr->width / 2 - 2) + current_floor_ptr->width / 2;
+	y2 = randint1(p_ptr->current_floor_ptr->height / 2 - 2) + p_ptr->current_floor_ptr->height / 2;
+	x2 = randint1(p_ptr->current_floor_ptr->width / 2 - 2) + p_ptr->current_floor_ptr->width / 2;
 
 	/* Hack -- Choose ending point somewhere on boundary */
 	switch(randint1(4))
@@ -183,7 +183,7 @@ void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
 		case 1:
 		{
 			/* top boundary */
-			x1 = randint1(current_floor_ptr->width-2)+1;
+			x1 = randint1(p_ptr->current_floor_ptr->width-2)+1;
 			y1 = 1;
 			break;
 		}
@@ -191,21 +191,21 @@ void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
 		{
 			/* left boundary */
 			x1 = 1;
-			y1 = randint1(current_floor_ptr->height-2)+1;
+			y1 = randint1(p_ptr->current_floor_ptr->height-2)+1;
 			break;
 		}
 		case 3:
 		{
 			/* right boundary */
-			x1 = current_floor_ptr->width-1;
-			y1 = randint1(current_floor_ptr->height-2)+1;
+			x1 = p_ptr->current_floor_ptr->width-1;
+			y1 = randint1(p_ptr->current_floor_ptr->height-2)+1;
 			break;
 		}
 		case 4:
 		{
 			/* bottom boundary */
-			x1 = randint1(current_floor_ptr->width-2)+1;
-			y1 = current_floor_ptr->height-1;
+			x1 = randint1(p_ptr->current_floor_ptr->width-2)+1;
+			y1 = p_ptr->current_floor_ptr->height-1;
 			break;
 		}
 	}
@@ -252,8 +252,8 @@ void build_streamer(FEAT_IDX feat, int chance)
 	bool streamer_may_have_gold = have_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
 
 	/* Hack -- Choose starting point */
-	y = rand_spread(current_floor_ptr->height / 2, current_floor_ptr->height / 6);
-	x = rand_spread(current_floor_ptr->width / 2, current_floor_ptr->width / 6);
+	y = rand_spread(p_ptr->current_floor_ptr->height / 2, p_ptr->current_floor_ptr->height / 6);
+	x = rand_spread(p_ptr->current_floor_ptr->width / 2, p_ptr->current_floor_ptr->width / 6);
 
 	/* Choose a random compass direction */
 	dir = randint0(8);
@@ -276,7 +276,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 				if (!in_bounds2(ty, tx)) continue;
 				break;
 			}
-			g_ptr = &current_floor_ptr->grid_array[ty][tx];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 			f_ptr = &f_info[g_ptr->feat];
 
 			if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
@@ -292,7 +292,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 				if (is_closed_door(g_ptr->feat)) continue;
 			}
 
-			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[current_floor_ptr->m_list[g_ptr->m_idx].r_idx], 0)))
+			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].r_idx], 0)))
 			{
 				/* Delete the monster (if any) */
 				delete_monster(ty, tx);
@@ -305,7 +305,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 				/* Scan all objects in the grid */
 				for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
-					object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
+					object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 					next_o_idx = o_ptr->next_o_idx;
 
 					/* Hack -- Preserve unknown artifacts */
@@ -372,7 +372,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 		}
 
 		/* Quit before leaving the dungeon */
-		if (!in_bounds(current_floor_ptr, y, x)) break;
+		if (!in_bounds(p_ptr->current_floor_ptr, y, x)) break;
 	}
 }
 
@@ -399,8 +399,8 @@ void place_trees(POSITION x, POSITION y)
 	{
 		for (j = y - 3; j < y + 4; j++)
 		{
-			if (!in_bounds(current_floor_ptr, j, i)) continue;
-			g_ptr = &current_floor_ptr->grid_array[j][i];
+			if (!in_bounds(p_ptr->current_floor_ptr, j, i)) continue;
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[j][i];
 
 			if (g_ptr->info & CAVE_ICKY) continue;
 			if (g_ptr->o_idx) continue;
@@ -415,18 +415,18 @@ void place_trees(POSITION x, POSITION y)
 				if ((distance(j, i, y, x) > 1) || (randint1(100) < 25))
 				{
 					if (randint1(100) < 75)
-						current_floor_ptr->grid_array[j][i].feat = feat_tree;
+						p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_tree;
 				}
 				else
 				{
-					current_floor_ptr->grid_array[j][i].feat = feat_rubble;
+					p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_rubble;
 				}
 
 				/* Clear garbage of hidden trap or door */
 				g_ptr->mimic = 0;
 
 				/* Light area since is open above */
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) p_ptr->current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
 			}
 		}
 	}
@@ -435,7 +435,7 @@ void place_trees(POSITION x, POSITION y)
 	if (!ironman_downward && one_in_(3))
 	{
 		/* up stair */
-		current_floor_ptr->grid_array[y][x].feat = feat_up_stair;
+		p_ptr->current_floor_ptr->grid_array[y][x].feat = feat_up_stair;
 	}
 }
 
@@ -457,8 +457,8 @@ void destroy_level(void)
 	for (n = 0; n < randint1(5); n++)
 	{
 		/* Pick an epi-center */
-		x1 = rand_range(5, current_floor_ptr->width - 1 - 5);
-		y1 = rand_range(5, current_floor_ptr->height - 1 - 5);
+		x1 = rand_range(5, p_ptr->current_floor_ptr->width - 1 - 5);
+		y1 = rand_range(5, p_ptr->current_floor_ptr->height - 1 - 5);
 
 		(void)destroy_area(y1, x1, 15, TRUE);
 	}

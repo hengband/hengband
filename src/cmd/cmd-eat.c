@@ -39,7 +39,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
 	if (music_singing_any(creature_ptr)) stop_singing(creature_ptr);
 	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
-	o_ptr = REF_ITEM(creature_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
 
 	sound(SOUND_EAT);
 

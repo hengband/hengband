@@ -123,6 +123,7 @@
 #include "feature.h"
 #include "spells.h"
 
+#include "world.h"
 #include "view-mainwindow.h"
 
 int dun_tun_rnd; 
@@ -143,17 +144,17 @@ dun_data *dun;
  * @param y 基準のy座標
  * @param x 基準のx座標
  * @return 隣接する外壁の数
- * @note Assumes "in_bounds(current_floor_ptr, y, x)"
+ * @note Assumes "in_bounds(p_ptr->current_floor_ptr, y, x)"
  * @details We count only granite walls and permanent walls.
  */
 static int next_to_walls(POSITION y, POSITION x)
 {
 	int k = 0;
 
-	if (in_bounds(current_floor_ptr, y + 1, x) && is_extra_bold(y + 1, x)) k++;
-	if (in_bounds(current_floor_ptr, y - 1, x) && is_extra_bold(y - 1, x)) k++;
-	if (in_bounds(current_floor_ptr, y, x + 1) && is_extra_bold(y, x + 1)) k++;
-	if (in_bounds(current_floor_ptr, y, x - 1) && is_extra_bold(y, x - 1)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y + 1, x) && is_extra_bold(y + 1, x)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y - 1, x) && is_extra_bold(y - 1, x)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y, x + 1) && is_extra_bold(y, x + 1)) k++;
+	if (in_bounds(p_ptr->current_floor_ptr, y, x - 1) && is_extra_bold(y, x - 1)) k++;
 
 	return (k);
 }
@@ -167,7 +168,7 @@ static int next_to_walls(POSITION y, POSITION x)
  */
 static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Require "naked" floor grid */
 	if (!is_floor_grid(g_ptr)) return FALSE;
@@ -198,17 +199,17 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 	if (have_flag(f_ptr->flags, FF_LESS))
 	{
 		/* No up stairs in town or in ironman mode */
-		if (ironman_downward || !current_floor_ptr->dun_level) return TRUE;
+		if (ironman_downward || !p_ptr->current_floor_ptr->dun_level) return TRUE;
 
-		if (current_floor_ptr->dun_level > d_info[p_ptr->dungeon_idx].mindepth)
+		if (p_ptr->current_floor_ptr->dun_level > d_info[p_ptr->dungeon_idx].mindepth)
 			shaft_num = (randint1(num+1))/2;
 	}
 	else if (have_flag(f_ptr->flags, FF_MORE))
 	{
-		QUEST_IDX q_idx = quest_number(current_floor_ptr->dun_level);
+		QUEST_IDX q_idx = quest_number(p_ptr->current_floor_ptr->dun_level);
 
 		/* No downstairs on quest levels */
-		if (current_floor_ptr->dun_level > 1 && q_idx)
+		if (p_ptr->current_floor_ptr->dun_level > 1 && q_idx)
 		{
 			monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
 
@@ -218,9 +219,9 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 		}
 
 		/* No downstairs at the bottom */
-		if (current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) return TRUE;
+		if (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) return TRUE;
 
-		if ((current_floor_ptr->dun_level < d_info[p_ptr->dungeon_idx].maxdepth-1) && !quest_number(current_floor_ptr->dun_level+1))
+		if ((p_ptr->current_floor_ptr->dun_level < d_info[p_ptr->dungeon_idx].maxdepth-1) && !quest_number(p_ptr->current_floor_ptr->dun_level+1))
 			shaft_num = (randint1(num)+1)/2;
 	}
 	else return FALSE;
@@ -237,9 +238,9 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 			int candidates = 0;
 			int pick;
 
-			for (y = 1; y < current_floor_ptr->height - 1; y++)
+			for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
 			{
-				for (x = 1; x < current_floor_ptr->width - 1; x++)
+				for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
 				{
 					if (alloc_stairs_aux(y, x, walls))
 					{
@@ -263,9 +264,9 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 			/* Choose a random one */
 			pick = randint1(candidates);
 
-			for (y = 1; y < current_floor_ptr->height - 1; y++)
+			for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
 			{
-				for (x = 1; x < current_floor_ptr->width - 1; x++)
+				for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
 				{
 					if (alloc_stairs_aux(y, x, walls))
 					{
@@ -278,7 +279,7 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 
 				if (!pick) break;
 			}
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Clear possible garbage of hidden trap */
 			g_ptr->mimic = 0;
@@ -407,7 +408,7 @@ bool place_quest_monsters(void)
 		if (quest[i].status != QUEST_STATUS_TAKEN ||
 		    (quest[i].type != QUEST_TYPE_KILL_LEVEL &&
 		     quest[i].type != QUEST_TYPE_RANDOM) ||
-		    quest[i].level != current_floor_ptr->dun_level ||
+		    quest[i].level != p_ptr->current_floor_ptr->dun_level ||
 		    p_ptr->dungeon_idx != quest[i].dungeon ||
 		    (quest[i].flags & QUEST_FLAG_PRESET))
 		{
@@ -441,10 +442,10 @@ bool place_quest_monsters(void)
 					grid_type    *g_ptr;
 					feature_type *f_ptr;
 
-					y = randint0(current_floor_ptr->height);
-					x = randint0(current_floor_ptr->width);
+					y = randint0(p_ptr->current_floor_ptr->height);
+					x = randint0(p_ptr->current_floor_ptr->width);
 
-					g_ptr = &current_floor_ptr->grid_array[y][x];
+					g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 					f_ptr = &f_info[g_ptr->feat];
 
 					if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) continue;
@@ -1303,7 +1304,7 @@ static bool level_gen(floor_type *floor_ptr, concptr *why)
 }
 
 /*!
- * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after current_floor_ptr->grid_array generation
+ * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after p_ptr->current_floor_ptr->grid_array generation
  * @return なし
  */
 void wipe_generate_random_floor_flags(floor_type *floor_ptr)
@@ -1333,7 +1334,7 @@ void wipe_generate_random_floor_flags(floor_type *floor_ptr)
 }
 
 /*!
- * @brief フロアの全情報を初期化する / Clear and empty the current_floor_ptr->grid_array
+ * @brief フロアの全情報を初期化する / Clear and empty the p_ptr->current_floor_ptr->grid_array
  * @return なし
  */
 void clear_cave(floor_type *floor_ptr)
@@ -1441,13 +1442,13 @@ void generate_random_floor(floor_type *floor_ptr)
 
 
 		/* Prevent object over-flow */
-		if (floor_ptr->o_max >= floor_ptr->max_o_idx)
+		if (floor_ptr->o_max >= current_world_ptr->max_o_idx)
 		{
 			why = _("アイテムが多すぎる", "too many objects");
 			okay = FALSE;
 		}
 		/* Prevent monster over-flow */
-		else if (floor_ptr->m_max >= floor_ptr->max_m_idx)
+		else if (floor_ptr->m_max >= current_world_ptr->max_m_idx)
 		{
 			why = _("モンスターが多すぎる", "too many monsters");
 			okay = FALSE;
@@ -1592,7 +1593,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 
 
 		/* Extremely Important -- do not leave the dungeon */
-		while (!in_bounds(current_floor_ptr, tmp_row, tmp_col))
+		while (!in_bounds(p_ptr->current_floor_ptr, tmp_row, tmp_col))
 		{
 			/* Acquire the correct direction */
 			correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -1608,7 +1609,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 			tmp_col = col1 + col_dir;
 		}
 
-		g_ptr = &current_floor_ptr->grid_array[tmp_row][tmp_col];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[tmp_row][tmp_col];
 
 		/* Avoid "solid" walls */
 		if (is_solid_grid(g_ptr)) continue;
@@ -1746,9 +1747,9 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
-	grid_type *g_ptr = &current_floor_ptr->grid_array[*y][*x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[*y][*x];
 
-	if (!in_bounds(current_floor_ptr, *y, *x)) return TRUE;
+	if (!in_bounds(p_ptr->current_floor_ptr, *y, *x)) return TRUE;
 
 	if (is_inner_grid(g_ptr))
 	{
@@ -1801,7 +1802,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		}
 
 		/* Clear mimic type */
-		current_floor_ptr->grid_array[*y][*x].mimic = 0;
+		p_ptr->current_floor_ptr->grid_array[*y][*x].mimic = 0;
 
 		place_floor_bold(*y, *x);
 
@@ -1823,7 +1824,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 			dy = randint0(3) - 1;
 			dx = randint0(3) - 1;
 
-			if (!in_bounds(current_floor_ptr, *y + dy, *x + dx))
+			if (!in_bounds(p_ptr->current_floor_ptr, *y + dy, *x + dx))
 			{
 				dx = 0;
 				dy = 0;
@@ -2061,13 +2062,13 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 		y3 = y1 + dy + changey;
 
 		/* See if in bounds - if not - do not perturb point */
-		if (!in_bounds(current_floor_ptr, y3, x3))
+		if (!in_bounds(p_ptr->current_floor_ptr, y3, x3))
 		{
 			x3 = (x1 + x2) / 2;
 			y3 = (y1 + y2) / 2;
 		}
 		/* cache g_ptr */
-		g_ptr = &current_floor_ptr->grid_array[y3][x3];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y3][x3];
 		if (is_solid_grid(g_ptr))
 		{
 			/* move midpoint a bit to avoid problem. */
@@ -2080,7 +2081,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 			{
 				dy = randint0(3) - 1;
 				dx = randint0(3) - 1;
-				if (!in_bounds(current_floor_ptr, y3 + dy, x3 + dx))
+				if (!in_bounds(p_ptr->current_floor_ptr, y3 + dy, x3 + dx))
 				{
 					dx = 0;
 					dy = 0;
@@ -2097,14 +2098,14 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 			}
 			y3 += dy;
 			x3 += dx;
-			g_ptr = &current_floor_ptr->grid_array[y3][x3];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y3][x3];
 		}
 
 		if (is_floor_grid(g_ptr))
 		{
 			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
 			{
-				if ((current_floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95))
+				if ((p_ptr->current_floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95))
 				{
 					/* do second half only if works + if have hit a room */
 					retval = build_tunnel2(x3, y3, x2, y2, type, cutoff);

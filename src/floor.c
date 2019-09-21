@@ -8,7 +8,6 @@
  * Not completely hardcoded, that would overflow memory
  */
 floor_type floor_info;
-floor_type *current_floor_ptr = &floor_info;
 
 /*
  * The array of saved floors

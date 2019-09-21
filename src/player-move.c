@@ -190,7 +190,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	grid_type *g_ptr;
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Invisible trap */
 	if (g_ptr->mimic && is_trap(g_ptr->feat))
@@ -212,7 +212,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 		if (o_ptr->tval != TV_CHEST) continue;
 		if (!chest_traps[o_ptr->pval]) continue;
@@ -282,7 +282,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 
 	object_type *o_ptr;
 
-	o_ptr = &current_floor_ptr->o_list[o_idx];
+	o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
 	object_desc(old_name, o_ptr, OD_NAME_ONLY);
@@ -356,7 +356,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
  */
 void carry(bool pickup)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -383,7 +383,7 @@ void carry(bool pickup)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 
 #ifdef ALLOW_EASY_SENSE /* TNB */
 
@@ -477,8 +477,8 @@ void carry(bool pickup)
  */
 bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x)
 {
-	feature_type *cur_f_ptr = &f_info[current_floor_ptr->grid_array[c_y][c_x].feat];
-	feature_type *new_f_ptr = &f_info[current_floor_ptr->grid_array[n_y][n_x].feat];
+	feature_type *cur_f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
+	feature_type *new_f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
 	bool is_pattern_tile_cur = have_flag(cur_f_ptr->flags, FF_PATTERN);
 	bool is_pattern_tile_new = have_flag(new_f_ptr->flags, FF_PATTERN);
 	int pattern_type_cur, pattern_type_new;
@@ -605,8 +605,8 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 {
 	POSITION oy = creature_ptr->y;
 	POSITION ox = creature_ptr->x;
-	grid_type *g_ptr = &current_floor_ptr->grid_array[ny][nx];
-	grid_type *oc_ptr = &current_floor_ptr->grid_array[oy][ox];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[ny][nx];
+	grid_type *oc_ptr = &p_ptr->current_floor_ptr->grid_array[oy][ox];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	feature_type *of_ptr = &f_info[oc_ptr->feat];
 
@@ -627,7 +627,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
 			if (om_idx > 0) /* Monster on old spot (or creature_ptr->riding) */
 			{
-				monster_type *om_ptr = &current_floor_ptr->m_list[om_idx];
+				monster_type *om_ptr = &p_ptr->current_floor_ptr->m_list[om_idx];
 				om_ptr->fy = ny;
 				om_ptr->fx = nx;
 				update_monster(om_idx, TRUE);
@@ -635,7 +635,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
 			if (nm_idx > 0) /* Monster on new spot */
 			{
-				monster_type *nm_ptr = &current_floor_ptr->m_list[nm_idx];
+				monster_type *nm_ptr = &p_ptr->current_floor_ptr->m_list[nm_idx];
 				nm_ptr->fy = oy;
 				nm_ptr->fx = ox;
 				update_monster(nm_idx, TRUE);
@@ -663,7 +663,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		if ((!creature_ptr->blind && !no_lite()) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
 
 		/* For get everything when requested hehe I'm *NASTY* */
-		if (current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark();
+		if (p_ptr->current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark();
 		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff();
 
 		if (creature_ptr->pclass == CLASS_NINJA)
@@ -758,7 +758,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		leave_quest_check();
 
 		creature_ptr->inside_quest = g_ptr->special;
-		current_floor_ptr->dun_level = 0;
+		p_ptr->current_floor_ptr->dun_level = 0;
 		creature_ptr->oldpx = 0;
 		creature_ptr->oldpy = 0;
 
@@ -884,13 +884,13 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	POSITION x = creature_ptr->x + ddx[dir];
 
 	/* Examine the destination */
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	monster_type *m_ptr;
 
-	monster_type *riding_m_ptr = &current_floor_ptr->m_list[creature_ptr->riding];
+	monster_type *riding_m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	monster_race *riding_r_ptr = &r_info[creature_ptr->riding ? riding_m_ptr->r_idx : 0];
 
 	GAME_TEXT m_name[MAX_NLEN];
@@ -903,7 +903,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	bool do_past = FALSE;
 
 	/* Exit the area */
-	if (!current_floor_ptr->dun_level && !creature_ptr->wild_mode &&
+	if (!p_ptr->current_floor_ptr->dun_level && !creature_ptr->wild_mode &&
 		((x == 0) || (x == MAX_WID - 1) ||
 		 (y == 0) || (y == MAX_HGT - 1)))
 	{
@@ -915,8 +915,8 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			{
 				creature_ptr->wilderness_y--;
 				creature_ptr->wilderness_x--;
-				creature_ptr->oldpy = current_floor_ptr->height - 2;
-				creature_ptr->oldpx = current_floor_ptr->width - 2;
+				creature_ptr->oldpy = p_ptr->current_floor_ptr->height - 2;
+				creature_ptr->oldpx = p_ptr->current_floor_ptr->width - 2;
 				creature_ptr->ambush_flag = FALSE;
 			}
 
@@ -924,7 +924,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			{
 				creature_ptr->wilderness_y--;
 				creature_ptr->wilderness_x++;
-				creature_ptr->oldpy = current_floor_ptr->height - 2;
+				creature_ptr->oldpy = p_ptr->current_floor_ptr->height - 2;
 				creature_ptr->oldpx = 1;
 				creature_ptr->ambush_flag = FALSE;
 			}
@@ -934,7 +934,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 				creature_ptr->wilderness_y++;
 				creature_ptr->wilderness_x--;
 				creature_ptr->oldpy = 1;
-				creature_ptr->oldpx = current_floor_ptr->width - 2;
+				creature_ptr->oldpx = p_ptr->current_floor_ptr->width - 2;
 				creature_ptr->ambush_flag = FALSE;
 			}
 
@@ -950,7 +950,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			else if (y == 0)
 			{
 				creature_ptr->wilderness_y--;
-				creature_ptr->oldpy = current_floor_ptr->height - 2;
+				creature_ptr->oldpy = p_ptr->current_floor_ptr->height - 2;
 				creature_ptr->oldpx = x;
 				creature_ptr->ambush_flag = FALSE;
 			}
@@ -966,7 +966,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			else if (x == 0)
 			{
 				creature_ptr->wilderness_x--;
-				creature_ptr->oldpx = current_floor_ptr->width - 2;
+				creature_ptr->oldpx = p_ptr->current_floor_ptr->width - 2;
 				creature_ptr->oldpy = y;
 				creature_ptr->ambush_flag = FALSE;
 			}
@@ -990,7 +990,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		p_can_enter = FALSE;
 	}
 
-	m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+	m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 	if (creature_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 	if (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
@@ -1030,7 +1030,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 				py_attack(p_ptr, y, x, 0);
 				oktomove = FALSE;
 			}
-			else if (monster_can_cross_terrain(current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
+			else if (monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
 			{
 				do_past = TRUE;
 			}
@@ -1091,7 +1091,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
-			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
+			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
 			free_turn(creature_ptr);
 			oktomove = FALSE;
 			disturb(p_ptr, FALSE, TRUE);
@@ -1305,7 +1305,7 @@ static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 	if (!in_bounds2(y, x)) return (FALSE);
 
 	/* Access grid */
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Must be known to the player */
 	if (g_ptr->info & (CAVE_MARK))
@@ -1348,7 +1348,7 @@ static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
 	if (!in_bounds2(y, x)) return (TRUE);
 
 	/* Memorized grids are always known */
-	if (current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return (FALSE);
+	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return (FALSE);
 
 	/* Viewable door/wall grids are known */
 	if (player_can_see_bold(y, x)) return (FALSE);
@@ -1523,13 +1523,13 @@ static bool run_test(void)
 
 	/* break run when leaving trap detected region */
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
+	    && p_ptr->dtrap && !(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
+		if (!(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -1557,7 +1557,7 @@ static bool run_test(void)
 		col = p_ptr->x + ddx[new_dir];
 
 		/* Access grid */
-		g_ptr = &current_floor_ptr->grid_array[row][col];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[row][col];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -1566,7 +1566,7 @@ static bool run_test(void)
 		/* Visible monsters abort running */
 		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return (TRUE);
@@ -1576,7 +1576,7 @@ static bool run_test(void)
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Visible object */
@@ -1914,13 +1914,13 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 
 	/* break run when leaving trap detected region */
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
+	    && p_ptr->dtrap && !(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
 		p_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
+		if (!(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -1949,12 +1949,12 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 		POSITION col = p_ptr->x + ddx[dir];
 
 		/* Access grid */
-		g_ptr = &current_floor_ptr->grid_array[row][col];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[row][col];
 
 		/* Visible monsters abort running */
 		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return (0);
@@ -1979,7 +1979,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	if (!new_dir) return (0);
 
 	/* Access newly move grid */
-	g_ptr = &current_floor_ptr->grid_array[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
 	if (!easy_open && is_closed_door(g_ptr->feat)) return (0);
@@ -2050,9 +2050,9 @@ void forget_travel_flow(void)
 {
 	POSITION x, y;
 	/* Check the entire dungeon / Forget the old data */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
 
 			travel.cost[y][x] = MAX_SHORT;
@@ -2069,7 +2069,7 @@ void forget_travel_flow(void)
  */
 static int travel_flow_cost(POSITION y, POSITION x)
 {
-	feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[y][x].feat];
+	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
 	int cost = 1;
 
 	/* Avoid obstacles (ex. trees) */
@@ -2093,7 +2093,7 @@ static int travel_flow_cost(POSITION y, POSITION x)
 	}
 
 	/* Detected traps and doors */
-	if (current_floor_ptr->grid_array[y][x].info & (CAVE_MARK))
+	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK))
 	{
 		if (have_flag(f_ptr->flags, FF_DOOR)) cost += 1;
 		if (have_flag(f_ptr->flags, FF_TRAP)) cost += 10;
@@ -2112,7 +2112,7 @@ static int travel_flow_cost(POSITION y, POSITION x)
  */
 static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	int old_head = flow_head;
 	int add_cost = 1;
@@ -2121,15 +2121,15 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 	int cost;
 
 	/* Ignore out of bounds */
-	if (!in_bounds(current_floor_ptr, y, x)) return;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Ignore unknown grid except in wilderness */
-	if (current_floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
+	if (p_ptr->current_floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
 
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||
 		have_flag(f_ptr->flags, FF_CAN_DIG) ||
-		(have_flag(f_ptr->flags, FF_DOOR) && current_floor_ptr->grid_array[y][x].mimic) ||
+		(have_flag(f_ptr->flags, FF_DOOR) && p_ptr->current_floor_ptr->grid_array[y][x].mimic) ||
 		(!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation))
 	{
 		if (!wall || !from_wall) return;
@@ -2172,7 +2172,7 @@ static void travel_flow(POSITION ty, POSITION tx)
 	POSITION x, y;
 	DIRECTION d;
 	bool wall = FALSE;
-	feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat];
+	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat];
 
 	/* Reset the "queue" */
 	flow_head = flow_tail = 0;
@@ -2233,12 +2233,12 @@ void do_cmd_travel(player_type *creature_ptr)
 		return;
 	}
 
-	f_ptr = &f_info[current_floor_ptr->grid_array[y][x].feat];
+	f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
 
-	if ((current_floor_ptr->grid_array[y][x].info & CAVE_MARK) &&
+	if ((p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_MARK) &&
 		(have_flag(f_ptr->flags, FF_WALL) ||
 			have_flag(f_ptr->flags, FF_CAN_DIG) ||
-			(have_flag(f_ptr->flags, FF_DOOR) && current_floor_ptr->grid_array[y][x].mimic)))
+			(have_flag(f_ptr->flags, FF_DOOR) && p_ptr->current_floor_ptr->grid_array[y][x].mimic)))
 	{
 		msg_print(_("そこには行くことができません！", "You cannot travel there!"));
 		return;

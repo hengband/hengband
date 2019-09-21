@@ -108,8 +108,8 @@ void verify_panel(void)
 
 	get_screen_size(&wid, &hgt);
 
-	max_prow_min = current_floor_ptr->height - hgt;
-	max_pcol_min = current_floor_ptr->width - wid;
+	max_prow_min = p_ptr->current_floor_ptr->height - hgt;
+	max_pcol_min = p_ptr->current_floor_ptr->width - wid;
 
 	/* Bounds checking */
 	if (max_prow_min < 0) max_prow_min = 0;
@@ -210,7 +210,7 @@ void verify_panel(void)
  */
 bool target_able(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 	/* Monster must be alive */
 	if (!monster_is_valid(m_ptr)) return (FALSE);
@@ -257,7 +257,7 @@ bool target_okay(void)
 		/* Accept reasonable targets */
 		if (target_able(target_who))
 		{
-			monster_type *m_ptr = &current_floor_ptr->m_list[target_who];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[target_who];
 
 			/* Acquire monster location */
 			target_row = m_ptr->fy;
@@ -324,19 +324,19 @@ static bool target_set_accept(POSITION y, POSITION x)
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	if (!(in_bounds(current_floor_ptr, y, x))) return (FALSE);
+	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
 	if (player_bold(y, x)) return (TRUE);
 
 	if (p_ptr->image) return (FALSE);
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Visible monsters */
 	if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Visible monsters */
 		if (m_ptr->ml) return (TRUE);
@@ -346,7 +346,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized object */
@@ -381,9 +381,9 @@ static void target_set_prepare(BIT_FLAGS mode)
 	{
 		/* Inner range */
 		min_hgt = MAX((p_ptr->y - MAX_RANGE), 0);
-		max_hgt = MIN((p_ptr->y + MAX_RANGE), current_floor_ptr->height - 1);
+		max_hgt = MIN((p_ptr->y + MAX_RANGE), p_ptr->current_floor_ptr->height - 1);
 		min_wid = MAX((p_ptr->x - MAX_RANGE), 0);
-		max_wid = MIN((p_ptr->x + MAX_RANGE), current_floor_ptr->width - 1);
+		max_wid = MIN((p_ptr->x + MAX_RANGE), p_ptr->current_floor_ptr->width - 1);
 	}
 	else /* not targetting */
 	{
@@ -407,12 +407,12 @@ static void target_set_prepare(BIT_FLAGS mode)
 			/* Require "interesting" contents */
 			if (!target_set_accept(y, x)) continue;
 
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Require target_able monsters for "TARGET_KILL" */
 			if ((mode & (TARGET_KILL)) && !target_able(g_ptr->m_idx)) continue;
 
-			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&current_floor_ptr->m_list[g_ptr->m_idx])) continue;
+			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&p_ptr->current_floor_ptr->m_list[g_ptr->m_idx])) continue;
 
 			/* Save the location */
 			tmp_pos.x[tmp_pos.n] = x;
@@ -529,7 +529,7 @@ bool show_gold_on_floor = FALSE;
  */
 static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	concptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
@@ -593,9 +593,9 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 
 
 	/* Actual monsters */
-	if (g_ptr->m_idx && current_floor_ptr->m_list[g_ptr->m_idx].ml)
+	if (g_ptr->m_idx && p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 		GAME_TEXT m_name[MAX_NLEN];
 		bool recall = FALSE;
@@ -688,7 +688,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			GAME_TEXT o_name[MAX_NLEN];
 
 			object_type *o_ptr;
-			o_ptr = &current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			object_desc(o_name, o_ptr, 0);
@@ -733,7 +733,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_type *o_ptr;
-				o_ptr = &current_floor_ptr->o_list[floor_list[0]];
+				o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[0]];
 
 				object_desc(o_name, o_ptr, 0);
 
@@ -807,18 +807,18 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				o_idx = g_ptr->o_idx;
  
 				/* Only rotate a pile of two or more objects. */
-				if (!(o_idx && current_floor_ptr->o_list[o_idx].next_o_idx)) continue;
+				if (!(o_idx && p_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) continue;
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
-				while (current_floor_ptr->o_list[i].next_o_idx)
-					i = current_floor_ptr->o_list[i].next_o_idx;
+				while (p_ptr->current_floor_ptr->o_list[i].next_o_idx)
+					i = p_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
 				/* Add after the last object. */
-				current_floor_ptr->o_list[i].next_o_idx = o_idx;
+				p_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 				/* Loop and re-display the list */
 			}
@@ -831,7 +831,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		if (o_ptr->marked & OM_FOUND)
@@ -1099,7 +1099,7 @@ bool target_set(BIT_FLAGS mode)
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
 			/* Access */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Allow target */
 			if (target_able(g_ptr->m_idx))
@@ -1314,11 +1314,11 @@ bool target_set(BIT_FLAGS mode)
 						}
 
 						/* Slide into legality */
-						if (x >= current_floor_ptr->width-1) x = current_floor_ptr->width - 2;
+						if (x >= p_ptr->current_floor_ptr->width-1) x = p_ptr->current_floor_ptr->width - 2;
 						else if (x <= 0) x = 1;
 
 						/* Slide into legality */
-						if (y >= current_floor_ptr->height-1) y = current_floor_ptr->height- 2;
+						if (y >= p_ptr->current_floor_ptr->height-1) y = p_ptr->current_floor_ptr->height- 2;
 						else if (y <= 0) y = 1;
 					}
 				}
@@ -1336,7 +1336,7 @@ bool target_set(BIT_FLAGS mode)
 			if (!(mode & TARGET_LOOK)) prt_path(y, x);
 
 			/* Access */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Default prompt */
 			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
@@ -1488,11 +1488,11 @@ bool target_set(BIT_FLAGS mode)
 				}
 
 				/* Slide into legality */
-				if (x >= current_floor_ptr->width-1) x = current_floor_ptr->width - 2;
+				if (x >= p_ptr->current_floor_ptr->width-1) x = p_ptr->current_floor_ptr->width - 2;
 				else if (x <= 0) x = 1;
 
 				/* Slide into legality */
-				if (y >= current_floor_ptr->height-1) y = current_floor_ptr->height- 2;
+				if (y >= p_ptr->current_floor_ptr->height-1) y = p_ptr->current_floor_ptr->height- 2;
 				else if (y <= 0) y = 1;
 			}
 		}
@@ -1723,7 +1723,7 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 	}
 	else if (p_ptr->riding && with_steed)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (MON_CONFUSED(m_ptr))
@@ -1758,7 +1758,7 @@ bool get_direction(DIRECTION *dp, bool allow_under, bool with_steed)
 		else
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
@@ -1868,7 +1868,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	}
 	else if (p_ptr->riding)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (MON_CONFUSED(m_ptr))
@@ -1903,7 +1903,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 		else
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_type *m_ptr = &current_floor_ptr->m_list[p_ptr->riding];
+			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
@@ -1936,14 +1936,14 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 
-	if (!(in_bounds(current_floor_ptr, y, x))) return (FALSE);
+	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
 	if ((y == p_ptr->y) && (x == p_ptr->x)) return (TRUE);
 
 	if (p_ptr->image) return (FALSE);
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Interesting memorized features */
 	if (g_ptr->info & (CAVE_MARK))
@@ -1975,9 +1975,9 @@ static void tgt_pt_prepare(void)
 	if (!expand_list) return;
 
 	/* Scan the current panel */
-	for (y = 1; y < current_floor_ptr->height; y++)
+	for (y = 1; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 1; x < current_floor_ptr->width; x++)
+		for (x = 1; x < p_ptr->current_floor_ptr->width; x++)
 		{
 			/* Require "interesting" contents */
 			if (!tgt_pt_accept(y, x)) continue;
@@ -2055,7 +2055,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				/* Skip stairs which have defferent distance */
 				for (; n < tmp_pos.n; ++ n)
 				{
-					grid_type *g_ptr = &current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
+					grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
 
 					if (cave_have_flag_grid(g_ptr, FF_STAIRS) &&
 					    cave_have_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
@@ -2140,11 +2140,11 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				}
 
 				/* Slide into legality */
-				if (x >= current_floor_ptr->width-1) x = current_floor_ptr->width - 2;
+				if (x >= p_ptr->current_floor_ptr->width-1) x = p_ptr->current_floor_ptr->width - 2;
 				else if (x <= 0) x = 1;
 
 				/* Slide into legality */
-				if (y >= current_floor_ptr->height-1) y = current_floor_ptr->height- 2;
+				if (y >= p_ptr->current_floor_ptr->height-1) y = p_ptr->current_floor_ptr->height- 2;
 				else if (y <= 0) y = 1;
 
 			}

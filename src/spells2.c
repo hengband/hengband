@@ -73,13 +73,13 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan the current panel */
-	for (y = 1; y < current_floor_ptr->height - 1; y++)
+	for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x <= current_floor_ptr->width - 1; x++)
+		for (x = 1; x <= p_ptr->current_floor_ptr->width - 1; x++)
 		{
 			int dist = distance(p_ptr->y, p_ptr->x, y, x);
 			if (dist > range) continue;
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Hack -- Safe */
 			if (flag == FF_TRAP)
@@ -199,9 +199,9 @@ bool detect_objects_gold(POSITION range)
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
 	/* Scan objects */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[i];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
@@ -251,9 +251,9 @@ bool detect_objects_normal(POSITION range)
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
 	/* Scan objects */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[i];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
@@ -311,9 +311,9 @@ bool detect_objects_magic(POSITION range)
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan all objects */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[i];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
@@ -382,9 +382,9 @@ bool detect_monsters_normal(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -428,9 +428,9 @@ bool detect_monsters_invis(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (!monster_is_valid(m_ptr)) continue;
@@ -480,9 +480,9 @@ bool detect_monsters_evil(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -535,9 +535,9 @@ bool detect_monsters_nonliving(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -583,9 +583,9 @@ bool detect_monsters_mind(POSITION range)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -634,9 +634,9 @@ bool detect_monsters_string(POSITION range, concptr Match)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -687,9 +687,9 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -787,9 +787,9 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 	bool obvious = FALSE;
 
 	/* Mark all (nearby) monsters */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
@@ -803,9 +803,9 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 	}
 
 	/* Affect all marked monsters */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 
 		/* Skip unmarked monsters */
 		if (!(m_ptr->mflag & (MFLAG_LOS))) continue;
@@ -975,9 +975,9 @@ void aggravate_monsters(MONSTER_IDX who)
 	bool speed = FALSE;
 
 	/* Aggravate everyone nearby */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip aggravating monster (or player) */
@@ -1024,7 +1024,7 @@ void aggravate_monsters(MONSTER_IDX who)
 bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
 {
 	int          msec = delay_factor * delay_factor * delay_factor;
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool         resist = FALSE;
 
@@ -1034,7 +1034,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
 	else if (m_idx == p_ptr->riding) resist = TRUE;
-	else if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out) resist = TRUE;
+	else if ((p_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out) resist = TRUE;
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 
@@ -1113,7 +1113,7 @@ bool symbol_genocide(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent genocide in quest levels */
-	if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
+	if ((p_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
 	{
 		msg_print(_("何も起きないようだ……", "It seems nothing happen here..."));
 		return (FALSE);
@@ -1123,9 +1123,9 @@ bool symbol_genocide(int power, bool player_cast)
 	while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE)) ;
 
 	/* Delete the monsters of that "type" */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -1157,15 +1157,15 @@ bool mass_genocide(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
-	if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
+	if ((p_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
 	{
 		return (FALSE);
 	}
 
 	/* Delete the (nearby) monsters */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip distant monsters */
@@ -1197,15 +1197,15 @@ bool mass_genocide_undead(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
-	if ((p_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
+	if ((p_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
 	{
 		return (FALSE);
 	}
 
 	/* Delete the (nearby) monsters */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -1247,9 +1247,9 @@ bool probing(void)
 	Term->scr->cv = 1;
 
 	/* Probe all (nearby) monsters */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -1371,9 +1371,9 @@ void discharge_minion(void)
 	MONSTER_IDX i;
 	bool okay = TRUE;
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		if (!m_ptr->r_idx || !is_pet(m_ptr)) continue;
 		if (m_ptr->nickname) okay = FALSE;
 	}
@@ -1382,10 +1382,10 @@ void discharge_minion(void)
 		if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? ")))
 			return;
 	}
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
 		HIT_POINT dam;
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr;
 
 		if (!m_ptr->r_idx || !is_pet(m_ptr)) continue;
@@ -1446,7 +1446,7 @@ static void cave_temp_room_lite(void)
 		POSITION y = tmp_pos.y[i];
 		POSITION x = tmp_pos.x[i];
 
-		grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_TEMP);
@@ -1461,7 +1461,7 @@ static void cave_temp_room_lite(void)
 		if (g_ptr->m_idx)
 		{
 			PERCENTAGE chance = 25;
-			monster_type    *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 			update_monster(g_ptr->m_idx, FALSE);
 
@@ -1521,7 +1521,7 @@ static void cave_temp_room_unlite(void)
 		POSITION x = tmp_pos.x[i];
 		int j;
 
-		grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 		bool do_dark = !is_mirror_grid(g_ptr);
 
 		/* No longer in the array */
@@ -1530,7 +1530,7 @@ static void cave_temp_room_unlite(void)
 		/* Darken the grid */
 		if (do_dark)
 		{
-			if (current_floor_ptr->dun_level || !is_daytime())
+			if (p_ptr->current_floor_ptr->dun_level || !is_daytime())
 			{
 				for (j = 0; j < 9; j++)
 				{
@@ -1539,7 +1539,7 @@ static void cave_temp_room_unlite(void)
 
 					if (in_bounds2(by, bx))
 					{
-						grid_type *cc_ptr = &current_floor_ptr->grid_array[by][bx];
+						grid_type *cc_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
 
 						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 						{
@@ -1653,7 +1653,7 @@ static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITIO
 static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pass_bold)(POSITION, POSITION))
 {
 	grid_type *g_ptr;
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Avoid infinite recursion */
 	if (g_ptr->info & (CAVE_TEMP)) return;
@@ -1678,7 +1678,7 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 		 * properly.
 		 * This leaves only a check for 6 bounding walls!
 		 */
-		if (in_bounds(current_floor_ptr, y, x) && pass_bold(y, x) &&
+		if (in_bounds(p_ptr->current_floor_ptr, y, x) && pass_bold(y, x) &&
 		    (next_to_walls_adj(y, x, pass_bold) == 6) && (next_to_open(y, x, pass_bold) <= 1)) return;
 	}
 
@@ -1780,7 +1780,7 @@ void lite_room(POSITION y1, POSITION x1)
 
 	if (p_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
 	}
 }
 
@@ -2152,7 +2152,7 @@ bool teleport_swap(DIRECTION dir)
 		tx = p_ptr->x + ddx[dir];
 		ty = p_ptr->y + ddy[dir];
 	}
-	g_ptr = &current_floor_ptr->grid_array[ty][tx];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 
 	if (p_ptr->anti_tele)
 	{
@@ -2172,7 +2172,7 @@ bool teleport_swap(DIRECTION dir)
 		return FALSE;
 	}
 
-	m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+	m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 
 	(void)set_monster_csleep(g_ptr->m_idx, 0);
@@ -2594,7 +2594,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			(*count) += activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
-			(*count) += summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+			(*count) += summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
@@ -2626,7 +2626,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			/*
 			 * Only summon Cyberdemons deep in the dungeon.
 			 */
-			if ((current_floor_ptr->dun_level > 65) && !stop_ty)
+			if ((p_ptr->current_floor_ptr->dun_level > 65) && !stop_ty)
 			{
 				(*count) += summon_cyber(-1, p_ptr->y, p_ptr->x);
 				stop_ty = TRUE;
@@ -2681,11 +2681,11 @@ int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 
 	if (!pet) mode |= PM_NO_PET;
 
-	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : current_floor_ptr->dun_level);
+	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : p_ptr->current_floor_ptr->dun_level);
 
-	for (i = 0; i < (randint1(7) + (current_floor_ptr->dun_level / 40)); i++)
+	for (i = 0; i < (randint1(7) + (p_ptr->current_floor_ptr->dun_level / 40)); i++)
 	{
-		switch (randint1(25) + (current_floor_ptr->dun_level / 20))
+		switch (randint1(25) + (p_ptr->current_floor_ptr->dun_level / 20))
 		{
 			case 1: case 2:
 				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode);
@@ -3019,7 +3019,7 @@ bool rush_attack(bool *mdeath)
 		ty = target_row;
 	}
 
-	if (in_bounds(current_floor_ptr, ty, tx)) tm_idx = current_floor_ptr->grid_array[ty][tx].m_idx;
+	if (in_bounds(p_ptr->current_floor_ptr, ty, tx)) tm_idx = p_ptr->current_floor_ptr->grid_array[ty][tx].m_idx;
 
 	path_n = project_path(path_g, project_length, p_ptr->y, p_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
 	project_length = 0;
@@ -3039,7 +3039,7 @@ bool rush_attack(bool *mdeath)
 		int ny = GRID_Y(path_g[i]);
 		int nx = GRID_X(path_g[i]);
 
-		if (cave_empty_bold(ny, nx) && player_can_enter(current_floor_ptr->grid_array[ny][nx].feat, 0))
+		if (cave_empty_bold(ny, nx) && player_can_enter(p_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0))
 		{
 			ty = ny;
 			tx = nx;
@@ -3048,7 +3048,7 @@ bool rush_attack(bool *mdeath)
 			continue;
 		}
 
-		if (!current_floor_ptr->grid_array[ny][nx].m_idx)
+		if (!p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
 		{
 			if (tm_idx)
 			{
@@ -3065,12 +3065,12 @@ bool rush_attack(bool *mdeath)
 
 		/* Move player before updating the monster */
 		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
-		update_monster(current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
+		update_monster(p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
 
 		/* Found a monster */
-		m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[ny][nx].m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx];
 
-		if (tm_idx != current_floor_ptr->grid_array[ny][nx].m_idx)
+		if (tm_idx != p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
 		{
 #ifdef JP
 			msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "", m_ptr->ml ? "モンスター" : "何か");
@@ -3111,11 +3111,11 @@ void remove_all_mirrors(bool explode)
 {
 	POSITION x, y;
 
-	for (x = 0; x < current_floor_ptr->width; x++)
+	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x]))
+			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]))
 			{
 				remove_mirror(y, x);
 				if (explode)
@@ -3269,7 +3269,7 @@ void wild_magic(int spell)
 	case 35:
 		while (counter++ < 8)
 		{
-			(void)summon_specific(0, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
+			(void)summon_specific(0, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 		break;
 	case 36:
@@ -3322,7 +3322,7 @@ void cast_meteor(HIT_POINT dam, POSITION rad)
 
 			if (d >= 9) continue;
 
-			if (!in_bounds(current_floor_ptr, y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)
+			if (!in_bounds(p_ptr->current_floor_ptr, y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)
 				|| !cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 			/* Valid position */
@@ -3382,7 +3382,7 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 		if (!cave_have_flag_bold(ny, nx, FF_PROJECT)) break;
 
 		/* Stopped by monsters */
-		if ((dir != 5) && current_floor_ptr->grid_array[ny][nx].m_idx != 0) break;
+		if ((dir != 5) && p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) break;
 
 		/* Save the new location */
 		x = nx;
@@ -3414,7 +3414,7 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 		if (count < 0) continue;
 
 		/* Cannot penetrate perm walls */
-		if (!in_bounds(current_floor_ptr, y, x) ||
+		if (!in_bounds(p_ptr->current_floor_ptr, y, x) ||
 			cave_stop_disintegration(y, x) ||
 			!in_disintegration_range(ty, tx, y, x))
 			continue;
@@ -3550,7 +3550,7 @@ void cast_invoke_spirits(DIRECTION dir)
 		msg_print(_("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！",
 			"Oh no! Mouldering forms rise from the earth around you!"));
 
-		(void)summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+		(void)summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		chg_virtue(p_ptr, V_UNLIFE, 1);
 	}
 	else if (die < 14)
@@ -3710,7 +3710,7 @@ void cast_shuffle(void)
 	else if (die < 14)
 	{
 		msg_print(_("なんてこった！《悪魔》だ！", "Oh no! It's the Devil!"));
-		summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+		summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 	}
 	else if (die < 18)
 	{
@@ -3732,7 +3732,7 @@ void cast_shuffle(void)
 	else if (die < 30)
 	{
 		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
-		trump_summoning(1, FALSE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+		trump_summoning(1, FALSE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
 	}
 	else if (die < 33)
 	{
@@ -3783,22 +3783,22 @@ void cast_shuffle(void)
 	else if (die < 82)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
 	}
 	else if (die < 84)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
 	}
 	else if (die < 86)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
 	}
 	else if (die < 88)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (current_floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
+		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
 	}
 	else if (die < 96)
 	{
@@ -3866,7 +3866,7 @@ bool_hack vampirism(void)
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	stop_mouth();
 
@@ -3909,7 +3909,7 @@ bool panic_hit(void)
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
-	if (current_floor_ptr->grid_array[y][x].m_idx)
+	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		py_attack(p_ptr, y, x, 0);
 		if (randint0(p_ptr->skill_dis) < 7)
@@ -4216,7 +4216,7 @@ void hayagake(player_type *creature_ptr)
 	}
 	else
 	{
-		grid_type *g_ptr = &current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 		feature_type *f_ptr = &f_info[g_ptr->feat];
 
 		if (!have_flag(f_ptr->flags, FF_PROJECT) ||
@@ -4240,7 +4240,7 @@ bool double_attack(player_type *creature_ptr)
 	if (!get_rep_dir(&dir, FALSE)) return FALSE;
 	y = creature_ptr->y + ddy[dir];
 	x = creature_ptr->x + ddx[dir];
-	if (current_floor_ptr->grid_array[y][x].m_idx)
+	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		if (one_in_(3))
 			msg_print(_("あーたたたたたたたたたたたたたたたたたたたたたた！！！",
@@ -4253,7 +4253,7 @@ bool double_attack(player_type *creature_ptr)
 				"Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
 
 		py_attack(p_ptr, y, x, 0);
-		if (current_floor_ptr->grid_array[y][x].m_idx)
+		if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 		{
 			handle_stuff();
 			py_attack(p_ptr, y, x, 0);
@@ -4321,7 +4321,7 @@ bool mirror_concentration(player_type *creature_ptr)
 		msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
 		return FALSE;
 	}
-	if (is_mirror_grid(&current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x]))
+	if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x]))
 	{
 		msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
 
@@ -4352,7 +4352,7 @@ bool sword_dancing(player_type *creature_ptr)
 		dir = randint0(8);
 		y = creature_ptr->y + ddy_ddd[dir];
 		x = creature_ptr->x + ddx_ddd[dir];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Hack -- attack monsters */
 		if (g_ptr->m_idx)
@@ -4390,7 +4390,7 @@ bool rodeo(player_type *creature_ptr)
 	}
 	if (!do_cmd_riding(creature_ptr, TRUE)) return TRUE;
 
-	m_ptr = &current_floor_ptr->m_list[creature_ptr->riding];
+	m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	r_ptr = &r_info[m_ptr->r_idx];
 	monster_desc(m_name, m_ptr, 0);
 	msg_format(_("%sに乗った。", "You ride on %s."), m_name);

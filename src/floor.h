@@ -65,14 +65,14 @@
 #define MON_LITE_MAX 1536
 
 /*!
- * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "current_floor_ptr->grid_array.c")
+ * @brief 視界処理配列サイズ / Maximum size of the "view" array (see "p_ptr->current_floor_ptr->grid_array.c")
  * @details Note that the "view radius" will NEVER exceed 20, and even if the "view"
  * was octagonal, we would never require more than 1520 entries in the array.
  */
 #define VIEW_MAX 1536
 
 /*!
- * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "current_floor_ptr->grid_array.c")
+ * @brief 再描画処理用配列サイズ / Maximum size of the "redraw" array (see "p_ptr->current_floor_ptr->grid_array.c")
  * @details We must be large for proper functioning of delayed redrawing.
  * We must also be as large as two times of the largest view area.
  * Note that maximum view grids are 1149 entries.
@@ -85,32 +85,30 @@ typedef struct {
 	grid_type *grid_array[MAX_HGT];
 	DEPTH dun_level;		/*!< 現在の実ダンジョン階層base_levelの参照元となる / Current dungeon level */
 	DEPTH base_level;		/*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
-	DEPTH object_level;		/*!< アイテムの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current object creation level */
-	DEPTH monster_level;	/*!< モンスターの生成レベル、current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current monster creation level */
+	DEPTH object_level;		/*!< アイテムの生成レベル、p_ptr->current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current object creation level */
+	DEPTH monster_level;	/*!< モンスターの生成レベル、p_ptr->current_floor_ptr->base_levelを起点に一時変更する時に参照 / Current monster creation level */
 	POSITION width;			/* Current dungeon width */
 	POSITION height;		/* Current dungeon height */
 	MONSTER_NUMBER num_repro; /*!< Current reproducer count */
 
 	GAME_TURN generated_turn; /* Turn when level began */
 
-	object_type *o_list; /*!< The array of dungeon items [current_floor_ptr->max_o_idx] */
-	OBJECT_IDX max_o_idx; /*!< Maximum number of objects in the level */
+	object_type *o_list; /*!< The array of dungeon items [current_world_ptr->max_o_idx] */
 	OBJECT_IDX o_max; /* Number of allocated objects */
 	OBJECT_IDX o_cnt; /* Number of live objects */
 
-	monster_type *m_list; /*!< The array of dungeon monsters [current_floor_ptr->max_m_idx] */
-	MONSTER_IDX max_m_idx; /*!< Maximum number of monsters in the level */
+	monster_type *m_list; /*!< The array of dungeon monsters [current_world_ptr->max_m_idx] */
 	MONSTER_IDX m_max; /* Number of allocated monsters */
 	MONSTER_IDX m_cnt; /* Number of live monsters */
 
 	s16b *mproc_list[MAX_MTIMED]; /*!< The array to process dungeon monsters[max_m_idx] */
 	s16b mproc_max[MAX_MTIMED]; /*!< Number of monsters to be processed */
 
-	POSITION_IDX lite_n; //!< Array of grids lit by player lite (see "current_floor_ptr->grid_array.c")
+	POSITION_IDX lite_n; //!< Array of grids lit by player lite (see "p_ptr->current_floor_ptr->grid_array.c")
 	POSITION lite_y[LITE_MAX];
 	POSITION lite_x[LITE_MAX];
 
-	POSITION_IDX mon_lite_n; //!< Array of grids lit by player lite (see "current_floor_ptr->grid_array.c")
+	POSITION_IDX mon_lite_n; //!< Array of grids lit by player lite (see "p_ptr->current_floor_ptr->grid_array.c")
 	POSITION mon_lite_y[MON_LITE_MAX];
 	POSITION mon_lite_x[MON_LITE_MAX];
 
@@ -118,13 +116,15 @@ typedef struct {
 	POSITION view_y[VIEW_MAX];
 	POSITION view_x[VIEW_MAX];
 
-	POSITION_IDX redraw_n; //!< Array of grids for delayed visual updating (see "current_floor_ptr->grid_array.c")
+	POSITION_IDX redraw_n; //!< Array of grids for delayed visual updating (see "p_ptr->current_floor_ptr->grid_array.c")
 	POSITION redraw_y[REDRAW_MAX];
 	POSITION redraw_x[REDRAW_MAX];
 
 	bool monster_noise;
 
 } floor_type;
+
+extern floor_type floor_info;
 
 #define DUNGEON_MODE_NONE       0
 #define DUNGEON_MODE_AND        1
@@ -178,14 +178,14 @@ typedef struct {
  * Determines if a map location is on or inside the outer walls
  */
 #define in_bounds2(Y,X) \
-   (((Y) >= 0) && ((X) >= 0) && ((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
+   (((Y) >= 0) && ((X) >= 0) && ((Y) < p_ptr->current_floor_ptr->height) && ((X) < p_ptr->current_floor_ptr->width))
 
 /*
  * Determines if a map location is on or inside the outer walls
  * (unsigned version)
  */
 #define in_bounds2u(Y,X) \
-   (((Y) < current_floor_ptr->height) && ((X) < current_floor_ptr->width))
+   (((Y) < p_ptr->current_floor_ptr->height) && ((X) < p_ptr->current_floor_ptr->width))
 
 
 /*
@@ -198,11 +198,11 @@ typedef struct {
  * Grid based version of "player_bold()"
  */
 #define player_grid(C) \
-	((C) == &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])
+	((C) == &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])
 
 
 #define cave_have_flag_bold(Y,X,INDEX) \
-	(have_flag(f_info[current_floor_ptr->grid_array[(Y)][(X)].feat].flags, (INDEX)))
+	(have_flag(f_info[p_ptr->current_floor_ptr->grid_array[(Y)][(X)].feat].flags, (INDEX)))
 
 
 #define cave_have_flag_grid(C,INDEX) \
@@ -220,7 +220,7 @@ typedef struct {
  * Determine if a "legal" grid supports "los"
  */
 #define cave_los_bold(Y,X) \
-	(feat_supports_los(current_floor_ptr->grid_array[(Y)][(X)].feat))
+	(feat_supports_los(p_ptr->current_floor_ptr->grid_array[(Y)][(X)].feat))
 
 #define cave_los_grid(C) \
 	(feat_supports_los((C)->feat))
@@ -236,8 +236,8 @@ typedef struct {
  */
 #define cave_clean_bold(Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_FLOOR) && \
-	 !(current_floor_ptr->grid_array[Y][X].info & CAVE_OBJECT) && \
-	  (current_floor_ptr->grid_array[Y][X].o_idx == 0))
+	 !(p_ptr->current_floor_ptr->grid_array[Y][X].info & CAVE_OBJECT) && \
+	  (p_ptr->current_floor_ptr->grid_array[Y][X].o_idx == 0))
 
 
 /*
@@ -248,7 +248,7 @@ typedef struct {
  */
 #define cave_drop_bold(Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_DROP) && \
-	 !(current_floor_ptr->grid_array[Y][X].info & CAVE_OBJECT))
+	 !(p_ptr->current_floor_ptr->grid_array[Y][X].info & CAVE_OBJECT))
 
 
 /*
@@ -261,7 +261,7 @@ typedef struct {
  */
 #define cave_empty_bold(Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_PLACE) && \
-	 !(current_floor_ptr->grid_array[Y][X].m_idx) && \
+	 !(p_ptr->current_floor_ptr->grid_array[Y][X].m_idx) && \
 	 !player_bold(Y,X))
 
 
@@ -286,7 +286,7 @@ typedef struct {
  */
 #define cave_naked_bold(Y,X) \
 	(cave_clean_bold(Y,X) && \
-	 !(current_floor_ptr->grid_array[Y][X].m_idx) && \
+	 !(p_ptr->current_floor_ptr->grid_array[Y][X].m_idx) && \
 	 !player_bold(Y,X))
 
 
@@ -341,7 +341,7 @@ typedef struct {
  * Note the use of comparison to zero to force a "boolean" result
  */
 #define player_has_los_bold(Y,X) \
-    (((current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->phase_out)
+    (((p_ptr->current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->phase_out)
 
 
 /*
@@ -351,7 +351,6 @@ typedef struct {
 	(have_flag((F)->flags, FF_WALL) && \
 	 have_flag((F)->flags, FF_PERMANENT))
 
-extern floor_type *current_floor_ptr;
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 /*

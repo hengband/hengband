@@ -296,7 +296,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
 	/* Check every object in the grid */
 	for (i = 0; i < floor_num && i < 23; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[floor_list[i]];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[i]];
 
 		/* Skip empty inscriptions */
 		if (!o_ptr->inscription) continue;
@@ -335,7 +335,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
 	/* Check every object in the grid */
 	for (i = 0; i < floor_num && i < 23; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[floor_list[i]];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[i]];
 
 		/* Skip empty inscriptions */
 		if (!o_ptr->inscription) continue;
@@ -743,7 +743,7 @@ static bool verify(concptr prompt, INVENTORY_IDX item)
 	/* Floor */
 	else
 	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[0 - item];
 	}
 	object_desc(o_name, o_ptr, 0);
 
@@ -777,7 +777,7 @@ static bool get_item_allow(INVENTORY_IDX item)
 	/* Floor */
 	else
 	{
-		o_ptr = &current_floor_ptr->o_list[0 - item];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[0 - item];
 	}
 
 	/* No inscription */
@@ -919,7 +919,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 
 			/* Special index */
 			k = 0 - (*cp);
-			o_ptr = &current_floor_ptr->o_list[k];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[k];
 
 			/* Validate the item */
 			if (item_tester_okay(o_ptr, tval) || (mode & USE_FULL))
@@ -1030,10 +1030,10 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		for (this_o_idx = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+		for (this_o_idx = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Accept the item on the floor if legal */
@@ -1374,10 +1374,10 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 				if (allow_floor)
 				{
 					/* Scan all objects in the grid */
-					for (this_o_idx = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+					for (this_o_idx = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 					{
 						object_type *o_ptr;
-						o_ptr = &current_floor_ptr->o_list[this_o_idx];
+						o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 						next_o_idx = o_ptr->next_o_idx;
 
 						/* Validate the item */
@@ -1630,7 +1630,7 @@ object_type *choose_object(player_type *creature_ptr, OBJECT_IDX *idx, concptr q
 	if (!get_item(&item, q, s, option, tval)) return NULL;
 	if (idx) *idx = item;
 	if (item == INVEN_FORCE) return NULL;
-	return REF_ITEM(creature_ptr, current_floor_ptr, item);
+	return REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
 }
 
 
@@ -1642,7 +1642,7 @@ object_type *choose_object(player_type *creature_ptr, OBJECT_IDX *idx, concptr q
  * @param mode オプションフラグ
  * @return 対象のマスに落ちているアイテム数
  * @details
- * Return a list of o_list[] indexes of items at the given current_floor_ptr->grid_array
+ * Return a list of o_list[] indexes of items at the given p_ptr->current_floor_ptr->grid_array
  * location. Valid flags are:
  *
  *		mode & 0x01 -- Item tester
@@ -1656,13 +1656,13 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
 	ITEM_NUMBER num = 0;
 
 	/* Sanity */
-	if (!in_bounds(current_floor_ptr, y, x)) return 0;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return 0;
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = current_floor_ptr->grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = p_ptr->current_floor_ptr->grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Item tester */
@@ -1728,7 +1728,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	/* Display the floor objects */
 	for (k = 0, i = 0; i < floor_num && i < 23; i++)
 	{
-		o_ptr = &current_floor_ptr->o_list[floor_list[i]];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[i]];
 
 		object_desc(o_name, o_ptr, 0);
 
@@ -1770,7 +1770,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	for (j = 0; j < k; j++)
 	{
 		m = floor_list[out_index[j]];
-		o_ptr = &current_floor_ptr->o_list[m];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[m];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -1904,7 +1904,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			}
 
 			/* Validate the item */
-			else if (item_tester_okay(&current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL))
+			else if (item_tester_okay(&p_ptr->current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
 				tval = 0;
@@ -2536,7 +2536,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			{
 				int i;
 				OBJECT_IDX o_idx;
-				grid_type *g_ptr = &current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+				grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;
 
@@ -2544,18 +2544,18 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 				o_idx = g_ptr->o_idx;
 
 				/* Only rotate a pile of two or more objects. */
-				if (!(o_idx && current_floor_ptr->o_list[o_idx].next_o_idx)) break;
+				if (!(o_idx && p_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
-				while (current_floor_ptr->o_list[i].next_o_idx)
-					i = current_floor_ptr->o_list[i].next_o_idx;
+				while (p_ptr->current_floor_ptr->o_list[i].next_o_idx)
+					i = p_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
 				/* Add after the last object. */
-				current_floor_ptr->o_list[i].next_o_idx = o_idx;
+				p_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 				/* Re-scan floor list */
 				floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
@@ -3009,10 +3009,10 @@ void py_pickup_floor(bool pickup)
 	int can_pickup = 0;
 
 	/* Scan the pile of objects */
-	for (this_o_idx = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		/* Access the object */
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 
 		object_desc(o_name, o_ptr, 0);
 
@@ -3078,7 +3078,7 @@ void py_pickup_floor(bool pickup)
 		if (floor_num == 1)
 		{
 			/* Access the object */
-			o_ptr = &current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3112,7 +3112,7 @@ void py_pickup_floor(bool pickup)
 		if (floor_num == 1)
 		{
 			/* Access the object */
-			o_ptr = &current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3149,7 +3149,7 @@ void py_pickup_floor(bool pickup)
 			char out_val[MAX_NLEN + 20];
 
 			/* Access the object */
-			o_ptr = &current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3174,7 +3174,7 @@ void py_pickup_floor(bool pickup)
 		}
 
 		/* Access the object */
-		o_ptr = &current_floor_ptr->o_list[floor_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 

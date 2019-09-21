@@ -835,7 +835,7 @@ static void wr_extra(void)
 	wr_byte(p_ptr->feeling);
 
 	/* Turn when level began */
-	wr_s32b(current_floor_ptr->generated_turn);
+	wr_s32b(p_ptr->current_floor_ptr->generated_turn);
 
 	/* Turn of last "feeling" */
 	wr_s32b(p_ptr->feeling_turn);
@@ -893,7 +893,7 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	{
 		/*** Not a saved floor ***/
 
-		wr_s16b((s16b)current_floor_ptr->dun_level);
+		wr_s16b((s16b)p_ptr->current_floor_ptr->dun_level);
 	}
 	else
 	{
@@ -908,12 +908,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 		wr_s16b(sf_ptr->lower_floor_id);
 	}
 
-	wr_u16b((u16b)current_floor_ptr->base_level);
-	wr_u16b((s16b)current_floor_ptr->num_repro);
+	wr_u16b((u16b)p_ptr->current_floor_ptr->base_level);
+	wr_u16b((s16b)p_ptr->current_floor_ptr->num_repro);
 	wr_u16b((u16b)p_ptr->y);
 	wr_u16b((u16b)p_ptr->x);
-	wr_u16b((u16b)current_floor_ptr->height);
-	wr_u16b((u16b)current_floor_ptr->width);
+	wr_u16b((u16b)p_ptr->current_floor_ptr->height);
+	wr_u16b((u16b)p_ptr->current_floor_ptr->width);
 	wr_byte(p_ptr->feeling);
 
 
@@ -938,11 +938,11 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	C_MAKE(templates, max_num_temp, grid_template_type);
 
 	/* Extract template array */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
-			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
@@ -1006,18 +1006,18 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 
 
-	/*** "Run-Length-Encoding" of current_floor_ptr->grid_array ***/
+	/*** "Run-Length-Encoding" of p_ptr->current_floor_ptr->grid_array ***/
 
 	/* Note that this will induce two wasted bytes */
 	count = 0;
 	prev_u16b = 0;
 
-	/* Dump the current_floor_ptr->grid_array */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	/* Dump the p_ptr->current_floor_ptr->grid_array */
+	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
-			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
@@ -1078,12 +1078,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/*** Dump objects ***/
 
 	/* Total objects */
-	wr_u16b(current_floor_ptr->o_max);
+	wr_u16b(p_ptr->current_floor_ptr->o_max);
 
 	/* Dump the objects */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[i];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		/* Dump it */
 		wr_item(o_ptr);
@@ -1093,12 +1093,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/*** Dump the monsters ***/
 
 	/* Total monsters */
-	wr_u16b(current_floor_ptr->m_max);
+	wr_u16b(p_ptr->current_floor_ptr->m_max);
 
 	/* Dump the monsters */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 
 		/* Dump it */
 		wr_monster(m_ptr);
@@ -1116,9 +1116,9 @@ static bool wr_dungeon(void)
 	saved_floor_type *cur_sf_ptr;
 	int i;
 
-	forget_lite(current_floor_ptr);
+	forget_lite(p_ptr->current_floor_ptr);
 	forget_view();
-	clear_mon_lite(current_floor_ptr);
+	clear_mon_lite(p_ptr->current_floor_ptr);
 
 	/* Update lite/view */
 	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);

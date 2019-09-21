@@ -308,7 +308,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 */
 void spell_damcalc_by_spellnum(int spell_num, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	HIT_POINT dam = monspell_damage((spell_num), m_idx, DAM_MAX);
 	spell_damcalc(p_ptr, m_ptr, typ, dam, max);
 }
@@ -415,13 +415,13 @@ bool process_warning(POSITION xx, POSITION yy)
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 
-			if (!in_bounds(current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
+			if (!in_bounds(p_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
-			g_ptr = &current_floor_ptr->grid_array[my][mx];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[my][mx];
 
 			if (!g_ptr->m_idx) continue;
 
-			m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+			m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			if (MON_CSLEEP(m_ptr)) continue;
 			if (!is_hostile(m_ptr)) continue;
@@ -515,7 +515,7 @@ bool process_warning(POSITION xx, POSITION yy)
 	}
 	else old_damage = old_damage / 2;
 
-	g_ptr = &current_floor_ptr->grid_array[yy][xx];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
 	if (((!easy_disarm && is_trap(g_ptr->feat))
 		|| (g_ptr->mimic && is_trap(g_ptr->feat))) && !one_in_(13))
 	{

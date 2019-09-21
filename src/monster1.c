@@ -2132,7 +2132,7 @@ void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr
  */
 monsterrace_hook_type get_monster_hook(void)
 {
-	if (!current_floor_ptr->dun_level && !p_ptr->inside_quest)
+	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_quest)
 	{
 		switch (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain)
 		{
@@ -2171,7 +2171,7 @@ monsterrace_hook_type get_monster_hook(void)
  */
 monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x)
 {
-	feature_type *f_ptr = &f_info[current_floor_ptr->grid_array[y][x].feat];
+	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
 
 	/* Set the monster list */
 
@@ -2362,7 +2362,7 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 m
  */
 bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Player or other monster */
 	if (player_bold(y, x)) return FALSE;
@@ -2523,7 +2523,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	int dump_gold = 0;
 	int number = 0;
 
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	bool visible = ((m_ptr->ml && !p_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE));
@@ -2605,7 +2605,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			/* Prepare to make a prize */
 			object_prep(q_ptr, lookup_kind(arena_info[p_ptr->arena_number].tval, arena_info[p_ptr->arena_number].sval));
-			apply_magic(q_ptr, current_floor_ptr->object_level, AM_NO_FIXED_ART);
+			apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 
@@ -2664,7 +2664,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		/* Prepare to make an object */
 		object_prep(q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
 
-		apply_magic(q_ptr, current_floor_ptr->object_level, AM_NO_FIXED_ART);
+		apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
 		q_ptr->pval = m_ptr->r_idx;
 		(void)drop_near(q_ptr, -1, y, x);
@@ -2711,19 +2711,19 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Prepare to make a Blade of Chaos */
 			object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
 
-			apply_magic(q_ptr, current_floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
+			apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 		break;
 
 	case MON_RAAL:
-		if (drop_chosen_item && (current_floor_ptr->dun_level > 9))
+		if (drop_chosen_item && (p_ptr->current_floor_ptr->dun_level > 9))
 		{
 			q_ptr = &forge;
 			object_wipe(q_ptr);
 
 			/* Activate restriction */
-			if ((current_floor_ptr->dun_level > 49) && one_in_(5))
+			if ((p_ptr->current_floor_ptr->dun_level > 49) && one_in_(5))
 				get_obj_num_hook = kind_is_good_book;
 			else
 				get_obj_num_hook = kind_is_book;
@@ -2750,7 +2750,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				do
 				{
 					scatter(&wy, &wx, y, x, 20, 0);
-				} while (!(in_bounds(current_floor_ptr, wy, wx) && cave_empty_bold2(wy, wx)) && --attempts);
+				} while (!(in_bounds(p_ptr->current_floor_ptr, wy, wx) && cave_empty_bold2(wy, wx)) && --attempts);
 
 				if (attempts > 0)
 				{
@@ -2862,7 +2862,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Prepare to make a Can of Toys */
 			object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
 
-			apply_magic(q_ptr, current_floor_ptr->object_level, AM_NO_FIXED_ART);
+			apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 			(void)drop_near(q_ptr, -1, y, x);
 		}
 		break;
@@ -2880,7 +2880,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		switch (r_ptr->d_char)
 		{
 		case '(':
-			if (current_floor_ptr->dun_level > 0)
+			if (p_ptr->current_floor_ptr->dun_level > 0)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -2895,7 +2895,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			break;
 
 		case '/':
-			if (current_floor_ptr->dun_level > 4)
+			if (p_ptr->current_floor_ptr->dun_level > 4)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -2910,7 +2910,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			break;
 
 		case '[':
-			if (current_floor_ptr->dun_level > 19)
+			if (p_ptr->current_floor_ptr->dun_level > 19)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -2925,7 +2925,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			break;
 
 		case '\\':
-			if (current_floor_ptr->dun_level > 4)
+			if (p_ptr->current_floor_ptr->dun_level > 4)
 			{
 				q_ptr = &forge;
 				object_wipe(q_ptr);
@@ -3020,7 +3020,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				/* Prepare to make a reward */
 				object_prep(q_ptr, k_idx);
 
-				apply_magic(q_ptr, current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
+				apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
 				(void)drop_near(q_ptr, -1, y, x);
 			}
 			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[p_ptr->dungeon_idx].name);
@@ -3049,7 +3049,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	coin_type = force_coin;
 
 	/* Average dungeon and monster levels */
-	current_floor_ptr->object_level = (current_floor_ptr->dun_level + r_ptr->level) / 2;
+	p_ptr->current_floor_ptr->object_level = (p_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2;
 
 	/* Drop some objects */
 	for (j = 0; j < number; j++)
@@ -3071,7 +3071,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	}
 
 	/* Reset the object level */
-	current_floor_ptr->object_level = current_floor_ptr->base_level;
+	p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
 
 	/* Reset "coin" type */
 	coin_type = 0;

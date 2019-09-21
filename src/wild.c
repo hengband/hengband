@@ -121,7 +121,7 @@ static void perturb_point_mid(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4
 	if (avg > depth_max) avg = depth_max;
 
 	/* Set the new value. */
-	current_floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
+	p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
 }
 
 
@@ -156,7 +156,7 @@ static void perturb_point_end(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xm
 	if (avg > depth_max) avg = depth_max;
 
 	/* Set the new value. */
-	current_floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
+	p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
 }
 
 
@@ -188,19 +188,19 @@ static void plasma_recursive(POSITION x1, POSITION y1, POSITION x2, POSITION y2,
 	/* Are we done? */
 	if (x1 + 1 == x2) return;
 
-	perturb_point_mid(current_floor_ptr->grid_array[y1][x1].feat, current_floor_ptr->grid_array[y2][x1].feat, current_floor_ptr->grid_array[y1][x2].feat,
-		current_floor_ptr->grid_array[y2][x2].feat, xmid, ymid, rough, depth_max);
+	perturb_point_mid(p_ptr->current_floor_ptr->grid_array[y1][x1].feat, p_ptr->current_floor_ptr->grid_array[y2][x1].feat, p_ptr->current_floor_ptr->grid_array[y1][x2].feat,
+		p_ptr->current_floor_ptr->grid_array[y2][x2].feat, xmid, ymid, rough, depth_max);
 
-	perturb_point_end(current_floor_ptr->grid_array[y1][x1].feat, current_floor_ptr->grid_array[y1][x2].feat, current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y1][x1].feat, p_ptr->current_floor_ptr->grid_array[y1][x2].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
 		xmid, y1, rough, depth_max);
 
-	perturb_point_end(current_floor_ptr->grid_array[y1][x2].feat, current_floor_ptr->grid_array[y2][x2].feat, current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y1][x2].feat, p_ptr->current_floor_ptr->grid_array[y2][x2].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
 		x2, ymid, rough, depth_max);
 
-	perturb_point_end(current_floor_ptr->grid_array[y2][x2].feat, current_floor_ptr->grid_array[y2][x1].feat, current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y2][x2].feat, p_ptr->current_floor_ptr->grid_array[y2][x1].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
 		xmid, y2, rough, depth_max);
 
-	perturb_point_end(current_floor_ptr->grid_array[y2][x1].feat, current_floor_ptr->grid_array[y1][x1].feat, current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y2][x1].feat, p_ptr->current_floor_ptr->grid_array[y1][x1].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
 		x1, ymid, rough, depth_max);
 
 
@@ -245,7 +245,7 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 		{
 			for (x1 = 0; x1 < MAX_WID; x1++)
 			{
-				current_floor_ptr->grid_array[y1][x1].feat = feat_permanent;
+				p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_permanent;
 			}
 		}
 
@@ -267,7 +267,7 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 		{
 			for (x1 = 0; x1 < MAX_WID; x1++)
 			{
-				current_floor_ptr->grid_array[y1][x1].feat = table_size / 2;
+				p_ptr->current_floor_ptr->grid_array[y1][x1].feat = table_size / 2;
 			}
 		}
 	}
@@ -277,42 +277,42 @@ static void generate_wilderness_area(int terrain, u32b seed, bool border, bool c
 	 * ToDo: calculate the medium height of the adjacent
 	 * terrains for every corner.
 	 */
-	current_floor_ptr->grid_array[1][1].feat = (s16b)randint0(table_size);
-	current_floor_ptr->grid_array[MAX_HGT-2][1].feat = (s16b)randint0(table_size);
-	current_floor_ptr->grid_array[1][MAX_WID-2].feat = (s16b)randint0(table_size);
-	current_floor_ptr->grid_array[MAX_HGT-2][MAX_WID-2].feat = (s16b)randint0(table_size);
+	p_ptr->current_floor_ptr->grid_array[1][1].feat = (s16b)randint0(table_size);
+	p_ptr->current_floor_ptr->grid_array[MAX_HGT-2][1].feat = (s16b)randint0(table_size);
+	p_ptr->current_floor_ptr->grid_array[1][MAX_WID-2].feat = (s16b)randint0(table_size);
+	p_ptr->current_floor_ptr->grid_array[MAX_HGT-2][MAX_WID-2].feat = (s16b)randint0(table_size);
 
 	if (!corner)
 	{
 		/* Hack -- preserve four corners */
-		s16b north_west = current_floor_ptr->grid_array[1][1].feat;
-		s16b south_west = current_floor_ptr->grid_array[MAX_HGT - 2][1].feat;
-		s16b north_east = current_floor_ptr->grid_array[1][MAX_WID - 2].feat;
-		s16b south_east = current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+		s16b north_west = p_ptr->current_floor_ptr->grid_array[1][1].feat;
+		s16b south_west = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][1].feat;
+		s16b north_east = p_ptr->current_floor_ptr->grid_array[1][MAX_WID - 2].feat;
+		s16b south_east = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
 		/* x1, y1, x2, y2, num_depths, roughness */
 		plasma_recursive(1, 1, MAX_WID-2, MAX_HGT-2, table_size-1, roughness);
 
 		/* Hack -- copyback four corners */
-		current_floor_ptr->grid_array[1][1].feat = north_west;
-		current_floor_ptr->grid_array[MAX_HGT - 2][1].feat = south_west;
-		current_floor_ptr->grid_array[1][MAX_WID - 2].feat = north_east;
-		current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = south_east;
+		p_ptr->current_floor_ptr->grid_array[1][1].feat = north_west;
+		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][1].feat = south_west;
+		p_ptr->current_floor_ptr->grid_array[1][MAX_WID - 2].feat = north_east;
+		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = south_east;
 
 		for (y1 = 1; y1 < MAX_HGT - 1; y1++)
 		{
 			for (x1 = 1; x1 < MAX_WID - 1; x1++)
 			{
-				current_floor_ptr->grid_array[y1][x1].feat = terrain_table[terrain][current_floor_ptr->grid_array[y1][x1].feat];
+				p_ptr->current_floor_ptr->grid_array[y1][x1].feat = terrain_table[terrain][p_ptr->current_floor_ptr->grid_array[y1][x1].feat];
 			}
 		}
 	}
 	else /* Hack -- only four corners */
 	{
-		current_floor_ptr->grid_array[1][1].feat = terrain_table[terrain][current_floor_ptr->grid_array[1][1].feat];
-		current_floor_ptr->grid_array[MAX_HGT - 2][1].feat = terrain_table[terrain][current_floor_ptr->grid_array[MAX_HGT - 2][1].feat];
-		current_floor_ptr->grid_array[1][MAX_WID - 2].feat = terrain_table[terrain][current_floor_ptr->grid_array[1][MAX_WID - 2].feat];
-		current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat];
+		p_ptr->current_floor_ptr->grid_array[1][1].feat = terrain_table[terrain][p_ptr->current_floor_ptr->grid_array[1][1].feat];
+		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][1].feat = terrain_table[terrain][p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][1].feat];
+		p_ptr->current_floor_ptr->grid_array[1][MAX_WID - 2].feat = terrain_table[terrain][p_ptr->current_floor_ptr->grid_array[1][MAX_WID - 2].feat];
+		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat];
 	}
 
 	/* Hack -- Restore the RNG state */
@@ -347,16 +347,16 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 	p_ptr->town_num = wilderness[y][x].town;
 
 	/* Set the base level */
-	current_floor_ptr->base_level = wilderness[y][x].level;
+	p_ptr->current_floor_ptr->base_level = wilderness[y][x].level;
 
 	/* Set the dungeon level */
-	current_floor_ptr->dun_level = 0;
+	p_ptr->current_floor_ptr->dun_level = 0;
 
 	/* Set the monster generation level */
-	current_floor_ptr->monster_level = current_floor_ptr->base_level;
+	p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
 
 	/* Set the object generation level */
-	current_floor_ptr->object_level = current_floor_ptr->base_level;
+	p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
 
 
 	/* Create the town */
@@ -391,7 +391,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 		 */
 		if (wilderness[y][x].road)
 		{
-			current_floor_ptr->grid_array[MAX_HGT/2][MAX_WID/2].feat = feat_floor;
+			p_ptr->current_floor_ptr->grid_array[MAX_HGT/2][MAX_WID/2].feat = feat_floor;
 
 			if (wilderness[y-1][x].road)
 			{
@@ -399,7 +399,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (y1 = 1; y1 < MAX_HGT/2; y1++)
 				{
 					x1 = MAX_WID/2;
-					current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 
@@ -409,7 +409,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (y1 = MAX_HGT/2; y1 < MAX_HGT - 1; y1++)
 				{
 					x1 = MAX_WID/2;
-					current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 
@@ -419,7 +419,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (x1 = MAX_WID/2; x1 < MAX_WID - 1; x1++)
 				{
 					y1 = MAX_HGT/2;
-					current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 
@@ -429,7 +429,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (x1 = 1; x1 < MAX_WID/2; x1++)
 				{
 					y1 = MAX_HGT/2;
-					current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 		}
@@ -446,11 +446,11 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 		/* Hack -- Induce consistant flavors */
 		Rand_state_set(wilderness[y][x].seed);
 
-		dy = rand_range(6, current_floor_ptr->height - 6);
-		dx = rand_range(6, current_floor_ptr->width - 6);
+		dy = rand_range(6, p_ptr->current_floor_ptr->height - 6);
+		dx = rand_range(6, p_ptr->current_floor_ptr->width - 6);
 
-		current_floor_ptr->grid_array[dy][dx].feat = feat_entrance;
-		current_floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
+		p_ptr->current_floor_ptr->grid_array[dy][dx].feat = feat_entrance;
+		p_ptr->current_floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
 
 		/* Hack -- Restore the RNG state */
 		Rand_state_restore(state_backup);
@@ -477,12 +477,12 @@ void wilderness_gen(void)
 	feature_type *f_ptr;
 
 	/* Big town */
-	current_floor_ptr->height = MAX_HGT;
-	current_floor_ptr->width = MAX_WID;
+	p_ptr->current_floor_ptr->height = MAX_HGT;
+	p_ptr->current_floor_ptr->width = MAX_WID;
 
 	/* Assume illegal panel */
-	panel_row_min = current_floor_ptr->height;
-	panel_col_min = current_floor_ptr->width;
+	panel_row_min = p_ptr->current_floor_ptr->height;
+	panel_col_min = p_ptr->current_floor_ptr->width;
 
 	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 	x = p_ptr->wilderness_x;
@@ -494,7 +494,7 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
-		border.north[i] = current_floor_ptr->grid_array[MAX_HGT - 2][i].feat;
+		border.north[i] = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][i].feat;
 	}
 
 	/* South border */
@@ -502,7 +502,7 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
-		border.south[i] = current_floor_ptr->grid_array[1][i].feat;
+		border.south[i] = p_ptr->current_floor_ptr->grid_array[1][i].feat;
 	}
 
 	/* West border */
@@ -510,7 +510,7 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
-		border.west[i] = current_floor_ptr->grid_array[i][MAX_WID - 2].feat;
+		border.west[i] = p_ptr->current_floor_ptr->grid_array[i][MAX_WID - 2].feat;
 	}
 
 	/* East border */
@@ -518,24 +518,24 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
-		border.east[i] = current_floor_ptr->grid_array[i][1].feat;
+		border.east[i] = p_ptr->current_floor_ptr->grid_array[i][1].feat;
 	}
 
 	/* North west corner */
 	generate_area(y - 1, x - 1, FALSE, TRUE);
-	border.north_west = current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+	border.north_west = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
 	/* North east corner */
 	generate_area(y - 1, x + 1, FALSE, TRUE);
-	border.north_east = current_floor_ptr->grid_array[MAX_HGT - 2][1].feat;
+	border.north_east = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][1].feat;
 
 	/* South west corner */
 	generate_area(y + 1, x - 1, FALSE, TRUE);
-	border.south_west = current_floor_ptr->grid_array[1][MAX_WID - 2].feat;
+	border.south_west = p_ptr->current_floor_ptr->grid_array[1][MAX_WID - 2].feat;
 
 	/* South east corner */
 	generate_area(y + 1, x + 1, FALSE, TRUE);
-	border.south_east = current_floor_ptr->grid_array[1][1].feat;
+	border.south_east = p_ptr->current_floor_ptr->grid_array[1][1].feat;
 
 
 	/* Create terrain of the current area */
@@ -545,49 +545,49 @@ void wilderness_gen(void)
 	/* Special boundary walls -- North */
 	for (i = 0; i < MAX_WID; i++)
 	{
-		current_floor_ptr->grid_array[0][i].feat = feat_permanent;
-		current_floor_ptr->grid_array[0][i].mimic = border.north[i];
+		p_ptr->current_floor_ptr->grid_array[0][i].feat = feat_permanent;
+		p_ptr->current_floor_ptr->grid_array[0][i].mimic = border.north[i];
 	}
 
 	/* Special boundary walls -- South */
 	for (i = 0; i < MAX_WID; i++)
 	{
-		current_floor_ptr->grid_array[MAX_HGT - 1][i].feat = feat_permanent;
-		current_floor_ptr->grid_array[MAX_HGT - 1][i].mimic = border.south[i];
+		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][i].feat = feat_permanent;
+		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][i].mimic = border.south[i];
 	}
 
 	/* Special boundary walls -- West */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		current_floor_ptr->grid_array[i][0].feat = feat_permanent;
-		current_floor_ptr->grid_array[i][0].mimic = border.west[i];
+		p_ptr->current_floor_ptr->grid_array[i][0].feat = feat_permanent;
+		p_ptr->current_floor_ptr->grid_array[i][0].mimic = border.west[i];
 	}
 
 	/* Special boundary walls -- East */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		current_floor_ptr->grid_array[i][MAX_WID - 1].feat = feat_permanent;
-		current_floor_ptr->grid_array[i][MAX_WID - 1].mimic = border.east[i];
+		p_ptr->current_floor_ptr->grid_array[i][MAX_WID - 1].feat = feat_permanent;
+		p_ptr->current_floor_ptr->grid_array[i][MAX_WID - 1].mimic = border.east[i];
 	}
 
 	/* North west corner */
-	current_floor_ptr->grid_array[0][0].mimic = border.north_west;
+	p_ptr->current_floor_ptr->grid_array[0][0].mimic = border.north_west;
 
 	/* North east corner */
-	current_floor_ptr->grid_array[0][MAX_WID - 1].mimic = border.north_east;
+	p_ptr->current_floor_ptr->grid_array[0][MAX_WID - 1].mimic = border.north_east;
 
 	/* South west corner */
-	current_floor_ptr->grid_array[MAX_HGT - 1][0].mimic = border.south_west;
+	p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][0].mimic = border.south_west;
 
 	/* South east corner */
-	current_floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
+	p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
 
 	/* Light up or darken the area */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			if (is_daytime())
 			{
@@ -629,11 +629,11 @@ void wilderness_gen(void)
 
 	if (p_ptr->teleport_town)
 	{
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < current_floor_ptr->width; x++)
+			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 			{
-				g_ptr = &current_floor_ptr->grid_array[y][x];
+				g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 				/* Seeing true feature code (ignore mimic) */
 				f_ptr = &f_info[g_ptr->feat];
@@ -654,11 +654,11 @@ void wilderness_gen(void)
 
 	else if (p_ptr->leaving_dungeon)
 	{
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < current_floor_ptr->width; x++)
+			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 			{
-				g_ptr = &current_floor_ptr->grid_array[y][x];
+				g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 				if (cave_have_flag_grid(g_ptr, FF_ENTRANCE))
 				{
@@ -718,7 +718,7 @@ void wilderness_gen_small(void)
 	for (i = 0; i < MAX_WID; i++)
 	for (j = 0; j < MAX_HGT; j++)
 	{
-		current_floor_ptr->grid_array[j][i].feat = feat_permanent;
+		p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_permanent;
 	}
 
 	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
@@ -729,29 +729,29 @@ void wilderness_gen_small(void)
 	{
 		if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN))
 		{
-			current_floor_ptr->grid_array[j][i].feat = (s16b)feat_town;
-			current_floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
+			p_ptr->current_floor_ptr->grid_array[j][i].feat = (s16b)feat_town;
+			p_ptr->current_floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
 		}
-		else if (wilderness[j][i].road) current_floor_ptr->grid_array[j][i].feat = feat_floor;
+		else if (wilderness[j][i].road) p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_floor;
 		else if (wilderness[j][i].entrance && (p_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
 		{
-			current_floor_ptr->grid_array[j][i].feat = feat_entrance;
-			current_floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
+			p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_entrance;
+			p_ptr->current_floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
 		}
-		else current_floor_ptr->grid_array[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
+		else p_ptr->current_floor_ptr->grid_array[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
 
-		current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+		p_ptr->current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
 	}
 
-	current_floor_ptr->height = (s16b) current_world_ptr->max_wild_y;
-	current_floor_ptr->width = (s16b) current_world_ptr->max_wild_x;
+	p_ptr->current_floor_ptr->height = (s16b) current_world_ptr->max_wild_y;
+	p_ptr->current_floor_ptr->width = (s16b) current_world_ptr->max_wild_x;
 
-	if (current_floor_ptr->height > MAX_HGT) current_floor_ptr->height = MAX_HGT;
-	if (current_floor_ptr->width > MAX_WID) current_floor_ptr->width = MAX_WID;
+	if (p_ptr->current_floor_ptr->height > MAX_HGT) p_ptr->current_floor_ptr->height = MAX_HGT;
+	if (p_ptr->current_floor_ptr->width > MAX_WID) p_ptr->current_floor_ptr->width = MAX_WID;
 
 	/* Assume illegal panel */
-	panel_row_min = current_floor_ptr->height;
-	panel_col_min = current_floor_ptr->width;
+	panel_row_min = p_ptr->current_floor_ptr->height;
+	panel_col_min = p_ptr->current_floor_ptr->width;
 
 	p_ptr->x = p_ptr->wilderness_x;
 	p_ptr->y = p_ptr->wilderness_y;
@@ -1144,9 +1144,9 @@ bool change_wild_mode(bool encount)
 		return TRUE;
 	}
 
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 
 		if (!monster_is_valid(m_ptr)) continue;
 		if (is_pet(m_ptr) && i != p_ptr->riding) have_pet = TRUE;

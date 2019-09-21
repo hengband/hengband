@@ -208,11 +208,11 @@ static void next_mirror(POSITION* next_y, POSITION* next_x, POSITION cury, POSIT
 	POSITION x, y;
 	int num;
 
-	for (x = 0; x < current_floor_ptr->width; x++)
+	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x])) {
+			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x])) {
 				mirror_y[mirror_num] = y;
 				mirror_x[mirror_num] = x;
 				mirror_num++;
@@ -270,7 +270,7 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  */
 static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	bool obvious = FALSE;
@@ -603,7 +603,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Turn off the light. */
 			if (do_dark)
 			{
-				if (current_floor_ptr->dun_level || !is_daytime())
+				if (p_ptr->current_floor_ptr->dun_level || !is_daytime())
 				{
 					for (j = 0; j < 9; j++)
 					{
@@ -612,7 +612,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 						if (in_bounds2(by, bx))
 						{
-							grid_type *cc_ptr = &current_floor_ptr->grid_array[by][bx];
+							grid_type *cc_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
 
 							if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 							{
@@ -757,7 +757,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  */
 static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -781,7 +781,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Scan all objects in the grid */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 
 		bool is_art = FALSE;
 		bool ignore = FALSE;
@@ -982,7 +982,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					int i;
 					BIT_FLAGS mode = 0L;
 
-					if (!who || is_pet(&current_floor_ptr->m_list[who]))
+					if (!who || is_pet(&p_ptr->current_floor_ptr->m_list[who]))
 						mode |= PM_FORCE_PET;
 
 					for (i = 0; i < o_ptr->number ; i++)
@@ -1135,10 +1135,10 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 {
 	int tmp;
 
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
-	monster_type *m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
-	monster_type *caster_ptr = (who > 0) ? &current_floor_ptr->m_list[who] : NULL;
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	monster_type *caster_ptr = (who > 0) ? &p_ptr->current_floor_ptr->m_list[who] : NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -3726,7 +3726,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			/* Hack -- Get new monster */
-			m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+			m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Hack -- Get new race */
 			r_ptr = &r_info[m_ptr->r_idx];
@@ -3750,7 +3750,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			x = m_ptr->fx;
 
 			/* Hack -- get new grid */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 		}
 
 		/* Fear */
@@ -3800,7 +3800,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				}
 				else
 				{
-					current_floor_ptr->monster_noise = TRUE;
+					p_ptr->current_floor_ptr->monster_noise = TRUE;
 				}
 			}
 
@@ -3831,7 +3831,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 			else
 			{
-				current_floor_ptr->monster_noise = TRUE;
+				p_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 
 			/* Hack -- handle sleep */
@@ -4051,16 +4051,16 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 		{
 			do
 			{
-				t_y = current_floor_ptr->m_list[who].fy - 1 + randint1(3);
-				t_x = current_floor_ptr->m_list[who].fx - 1 + randint1(3);
+				t_y = p_ptr->current_floor_ptr->m_list[who].fy - 1 + randint1(3);
+				t_x = p_ptr->current_floor_ptr->m_list[who].fx - 1 + randint1(3);
 				max_attempts--;
 			}
 			while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(p_ptr->y, p_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
-				t_y = current_floor_ptr->m_list[who].fy;
-				t_x = current_floor_ptr->m_list[who].fx;
+				t_y = p_ptr->current_floor_ptr->m_list[who].fy;
+				t_x = p_ptr->current_floor_ptr->m_list[who].fx;
 			}
 		}
 		else
@@ -4088,7 +4088,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 
 	if (who > 0)
 	{
-		m_ptr = &current_floor_ptr->m_list[who];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[who];
 		rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
 		monster_desc(m_name, m_ptr, 0);
 
@@ -5139,7 +5139,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	if ((ax < 2) && (ay < 2)) return (TRUE);
 
 	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(current_floor_ptr, y1, x1)) return (FALSE); */
+	/* if (!in_bounds(p_ptr->current_floor_ptr, y1, x1)) return (FALSE); */
 
 	/* Directly South/North */
 	if (!dx)
@@ -5362,7 +5362,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 				for (x = bx - cdis; x <= bx + cdis; x++)
 				{
 					/* Ignore "illegal" locations */
-					if (!in_bounds(current_floor_ptr, y, x)) continue;
+					if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
 
 					/* Enforce a circular "ripple" */
 					if (distance(y1, x1, y, x) != bdis) continue;
@@ -5641,9 +5641,9 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	/* Start at monster */
 	else if (who > 0)
 	{
-		x1 = current_floor_ptr->m_list[who].fx;
-		y1 = current_floor_ptr->m_list[who].fy;
-		monster_desc(who_name, &current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
+		x1 = p_ptr->current_floor_ptr->m_list[who].fx;
+		y1 = p_ptr->current_floor_ptr->m_list[who].fy;
+		monster_desc(who_name, &p_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
 	}
 
 	else
@@ -5794,7 +5794,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				}
 			}
 			if (project_o(0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
-			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x]))
+			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]))
 			{
 				/* The target of monsterspell becomes tha mirror(broken) */
 				monster_target_y = y;
@@ -5810,13 +5810,13 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					x = GRID_X(path_g[j]);
 					if (project_m(0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
 					if (!who && (project_m_n == 1) && !jump) {
-						if (current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
-							monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+						if (p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
+							monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 							if (m_ptr->ml)
 							{
 								if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-								health_track(current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+								health_track(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 							}
 						}
 					}
@@ -5833,14 +5833,14 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			if (project_m(0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
 				notice = TRUE;
 			if (!who && (project_m_n == 1) && !jump) {
-				if (current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
+				if (p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
 				{
-					monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+					monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 					if (m_ptr->ml)
 					{
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-						health_track(current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+						health_track(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
 			}
@@ -5931,7 +5931,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				if( second_step )continue;
 				break;
 			}
-			if( is_mirror_grid(&current_floor_ptr->grid_array[y][x]) && !second_step )
+			if( is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]) && !second_step )
 			{
 			  /* The target of monsterspell becomes tha mirror(broken) */
 				monster_target_y = y;
@@ -5963,13 +5963,13 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			px = GRID_X(path_g[i]);
 			(void)project_m(0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
 			if(!who && (project_m_n == 1) && !jump){
-				if(current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx >0 ){
-					monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+				if(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx >0 ){
+					monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 					if (m_ptr->ml)
 					{
 						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-						health_track(current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+						health_track(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
 			}
@@ -6242,7 +6242,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 	if (flg & PROJECT_KILL)
 	{
-		see_s_msg = (who > 0) ? is_seen(&current_floor_ptr->m_list[who]) :
+		see_s_msg = (who > 0) ? is_seen(&p_ptr->current_floor_ptr->m_list[who]) :
 			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)));
 	}
 
@@ -6340,11 +6340,11 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			/* A single bolt may be reflected */
 			if (grids <= 1)
 			{
-				monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx];
+				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
 
-				if ((flg & PROJECT_REFLECTABLE) && current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
-					((current_floor_ptr->grid_array[y][x].m_idx != p_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
+				if ((flg & PROJECT_REFLECTABLE) && p_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
+					((p_ptr->current_floor_ptr->grid_array[y][x].m_idx != p_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
 					(!who || dist_hack > 1) && !one_in_(10))
 				{
 					POSITION t_y, t_x;
@@ -6382,7 +6382,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					else flg |= PROJECT_PLAYER;
 
 					/* The bolt is reflected */
-					project(current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
+					project(p_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
 
 					/* Don't affect the monster any longer */
 					continue;
@@ -6484,14 +6484,14 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			y = project_m_y;
 
 			/* Track if possible */
-			if (current_floor_ptr->grid_array[y][x].m_idx > 0)
+			if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0)
 			{
-				monster_type *m_ptr = &current_floor_ptr->m_list[current_floor_ptr->grid_array[y][x].m_idx];
+				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 
 				if (m_ptr->ml)
 				{
 					if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-					health_track(current_floor_ptr->grid_array[y][x].m_idx);
+					health_track(p_ptr->current_floor_ptr->grid_array[y][x].m_idx);
 				}
 			}
 		}
@@ -6577,7 +6577,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, &current_floor_ptr->m_list[p_ptr->riding], 0);
+		monster_desc(m_name, &p_ptr->current_floor_ptr->m_list[p_ptr->riding], 0);
 
 		if (rakubadam_m > 0)
 		{
@@ -6622,11 +6622,11 @@ bool binding_field(HIT_POINT dam)
 	monster_target_y = p_ptr->y;
 	monster_target_x = p_ptr->x;
 
-	for (x = 0; x < current_floor_ptr->width; x++)
+	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x]) &&
+			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]) &&
 				distance(p_ptr->y, p_ptr->x, y, x) <= MAX_RANGE &&
 				distance(p_ptr->y, p_ptr->x, y, x) != 0 &&
 				player_has_los_bold(y, x) &&
@@ -6756,16 +6756,16 @@ void seal_of_mirror(HIT_POINT dam)
 {
 	POSITION x, y;
 
-	for (x = 0; x < current_floor_ptr->width; x++)
+	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&current_floor_ptr->grid_array[y][x]))
+			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]))
 			{
 				if (project_m(0, 0, y, x, dam, GF_GENOCIDE,
 					(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
 				{
-					if (!current_floor_ptr->grid_array[y][x].m_idx)
+					if (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 					{
 						remove_mirror(y, x);
 					}

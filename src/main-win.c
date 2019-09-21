@@ -3276,8 +3276,8 @@ static void windows_map(void)
 	{
 		min_x = 0;
 		min_y = 0;
-		max_x = current_floor_ptr->width;
-		max_y = current_floor_ptr->height;
+		max_x = p_ptr->current_floor_ptr->width;
+		max_y = p_ptr->current_floor_ptr->height;
 	}
 
 	/* Draw the map */
@@ -3940,9 +3940,9 @@ static void process_menus(WORD wCmd)
 				/* Hack -- Forget messages */
 				msg_flag = FALSE;
 
-				forget_lite(current_floor_ptr);
+				forget_lite(p_ptr->current_floor_ptr);
 				forget_view();
-				clear_mon_lite(current_floor_ptr);
+				clear_mon_lite(p_ptr->current_floor_ptr);
 
 				/* Save the game */
 #ifdef ZANGBAND
@@ -4837,9 +4837,9 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				/* Hack -- Forget messages */
 				msg_flag = FALSE;
 
-				forget_lite(current_floor_ptr);
+				forget_lite(p_ptr->current_floor_ptr);
 				forget_view();
-				clear_mon_lite(current_floor_ptr);
+				clear_mon_lite(p_ptr->current_floor_ptr);
 
 				/* Save the game */
 #ifdef ZANGBAND

@@ -454,13 +454,13 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		return (-1);
 	}
 
-	q_idx = quest_number(current_floor_ptr->dun_level);
+	q_idx = quest_number(p_ptr->current_floor_ptr->dun_level);
 
 	if (write_level)
 	{
 		if (creature_ptr->inside_arena)
 			note_level = _("アリーナ:", "Arane:");
-		else if (!current_floor_ptr->dun_level)
+		else if (!p_ptr->current_floor_ptr->dun_level)
 			note_level = _("地上:", "Surface:");
 		else if (q_idx && (is_fixed_quest_idx(q_idx)
 			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
@@ -468,9 +468,9 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		else
 		{
 #ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", (int)current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
+			sprintf(note_level_buf, "%d階(%s):", (int)p_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 #else
-			sprintf(note_level_buf, "%s L%d:", d_name+d_info[creature_ptr->dungeon_idx].name, (int)current_floor_ptr->dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name+d_info[creature_ptr->dungeon_idx].name, (int)p_ptr->current_floor_ptr->dun_level);
 #endif
 			note_level = note_level_buf;
 		}
@@ -567,8 +567,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			}
 			else
 			{
-				if (!(current_floor_ptr->dun_level+num)) to = _("地上", "the surface");
-				else to = format(_("%d階", "level %d"), current_floor_ptr->dun_level+num);
+				if (!(p_ptr->current_floor_ptr->dun_level+num)) to = _("地上", "the surface");
+				else to = format(_("%d階", "level %d"), p_ptr->current_floor_ptr->dun_level+num);
 			}
 			fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
 			break;
@@ -634,10 +634,10 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		case NIKKI_WIZ_TELE:
 		{
 			concptr to;
-			if (!current_floor_ptr->dun_level)
+			if (!p_ptr->current_floor_ptr->dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
+				to = format(_("%d階(%s)", "level %d of %s"), p_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
 						   " %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
@@ -646,10 +646,10 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		case NIKKI_PAT_TELE:
 		{
 			concptr to;
-			if (!current_floor_ptr->dun_level)
+			if (!p_ptr->current_floor_ptr->dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
+				to = format(_("%d階(%s)", "level %d of %s"), p_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
 						   " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
@@ -2913,14 +2913,14 @@ void do_cmd_feeling(player_type *creature_ptr)
 	if (creature_ptr->wild_mode) return;
 
 	/* No useful feeling in quests */
-	if (creature_ptr->inside_quest && !random_quest_number(current_floor_ptr->dun_level))
+	if (creature_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level))
 	{
 		msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
 		return;
 	}
 
 	/* No useful feeling in town */
-	else if (creature_ptr->town_num && !current_floor_ptr->dun_level)
+	else if (creature_ptr->town_num && !p_ptr->current_floor_ptr->dun_level)
 	{
 		if (!strcmp(town_info[creature_ptr->town_num].name, _("荒野", "wilderness")))
 		{
@@ -2935,7 +2935,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	}
 
 	/* No useful feeling in the wilderness */
-	else if (!current_floor_ptr->dun_level)
+	else if (!p_ptr->current_floor_ptr->dun_level)
 	{
 		msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
 		return;
@@ -4195,11 +4195,11 @@ static void do_cmd_knowledge_artifacts(void)
 	}
 
 	/* Check the dungeon */
-	for (y = 0; y < current_floor_ptr->height; y++)
+	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < current_floor_ptr->width; x++)
+		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 		{
-			grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -4207,7 +4207,7 @@ static void do_cmd_knowledge_artifacts(void)
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
-				o_ptr = &current_floor_ptr->o_list[this_o_idx];
+				o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Ignore non-artifacts */
@@ -4625,9 +4625,9 @@ static void do_cmd_knowledge_pets(void)
 	}
 
 	/* Process the monsters (backwards) */
-	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
+	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		m_ptr = &current_floor_ptr->m_list[i];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
 		if (!monster_is_valid(m_ptr)) continue;

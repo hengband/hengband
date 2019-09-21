@@ -509,7 +509,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 		}
 		else
 		{
-			QUEST_IDX q_idx = quest_number(current_floor_ptr->dun_level);
+			QUEST_IDX q_idx = quest_number(p_ptr->current_floor_ptr->dun_level);
 			bool seppuku = streq(hit_from, "Seppuku");
 			bool winning_seppuku = creature_ptr->total_winner && seppuku;
 
@@ -552,13 +552,13 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 				if (creature_ptr->inside_arena)
 					strcpy(buf, _("アリーナ", "in the Arena"));
-				else if (!current_floor_ptr->dun_level)
+				else if (!p_ptr->current_floor_ptr->dun_level)
 					strcpy(buf, _("地上", "on the surface"));
 				else if (q_idx && (is_fixed_quest_idx(q_idx) &&
 					!((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 					strcpy(buf, _("クエスト", "in a quest"));
 				else
-					sprintf(buf, _("%d階", "level %d"), (int)current_floor_ptr->dun_level);
+					sprintf(buf, _("%d階", "level %d"), (int)p_ptr->current_floor_ptr->dun_level);
 
 				sprintf(tmp, _("%sで%sに殺された。", "killed by %s %s."), buf, creature_ptr->died_from);
 				exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, tmp);

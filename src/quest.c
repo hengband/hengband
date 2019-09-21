@@ -150,7 +150,7 @@ void check_quest_completion(monster_type *m_ptr)
 				continue;
 
 			/* Quest is not on this level */
-			if ((q_ptr->level != current_floor_ptr->dun_level) &&
+			if ((q_ptr->level != p_ptr->current_floor_ptr->dun_level) &&
 				(q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL))
 				continue;
 
@@ -200,7 +200,7 @@ void check_quest_completion(monster_type *m_ptr)
 		{
 			if (!is_hostile(m_ptr)) break;
 
-			if (count_all_hostile_monsters(current_floor_ptr) == 1)
+			if (count_all_hostile_monsters(p_ptr->current_floor_ptr) == 1)
 			{
 				if (q_ptr->flags & QUEST_FLAG_SILENT)
 				{
@@ -260,7 +260,7 @@ void check_quest_completion(monster_type *m_ptr)
 		{
 			if (!is_hostile(m_ptr)) break;
 
-			if (count_all_hostile_monsters(current_floor_ptr) == 1)
+			if (count_all_hostile_monsters(p_ptr->current_floor_ptr) == 1)
 			{
 				q_ptr->status = QUEST_STATUS_STAGE_COMPLETED;
 
@@ -283,7 +283,7 @@ void check_quest_completion(monster_type *m_ptr)
 		POSITION ny, nx;
 
 		/* Stagger around */
-		while (cave_perma_bold(y, x) || current_floor_ptr->grid_array[y][x].o_idx || (current_floor_ptr->grid_array[y][x].info & CAVE_OBJECT))
+		while (cave_perma_bold(y, x) || p_ptr->current_floor_ptr->grid_array[y][x].o_idx || (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_OBJECT))
 		{
 			/* Pick a location */
 			scatter(&ny, &nx, y, x, 1, 0);
@@ -309,7 +309,7 @@ void check_quest_completion(monster_type *m_ptr)
 	{
 		int i;
 
-		for (i = 0; i < (current_floor_ptr->dun_level / 15) + 1; i++)
+		for (i = 0; i < (p_ptr->current_floor_ptr->dun_level / 15) + 1; i++)
 		{
 			o_ptr = &forge;
 			object_wipe(o_ptr);
@@ -547,8 +547,8 @@ void do_cmd_quest(void)
 
 		leave_quest_check();
 
-		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) current_floor_ptr->dun_level = 1;
-		p_ptr->inside_quest = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
+		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) p_ptr->current_floor_ptr->dun_level = 1;
+		p_ptr->inside_quest = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
 
 		p_ptr->leaving = TRUE;
 	}

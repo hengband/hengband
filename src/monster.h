@@ -512,7 +512,7 @@ extern void monster_drop_carried_objects(monster_type *m_ptr);
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
 
 #define is_friendly_idx(MONSTER_IDX) \
-	 (bool)((MONSTER_IDX) > 0 && is_friendly(&current_floor_ptr->m_list[(MONSTER_IDX)]))
+	 (bool)((MONSTER_IDX) > 0 && is_friendly(&p_ptr->current_floor_ptr->m_list[(MONSTER_IDX)]))
 
 #define is_pet(A) \
 	 (bool)(((A)->smart & SM_PET) ? TRUE : FALSE)

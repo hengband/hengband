@@ -1961,7 +1961,7 @@ static bool kankin(void)
 
 				/* Prepare to make a prize */
 				object_prep(&forge, lookup_kind(prize_list[num-1].tval, prize_list[num-1].sval));
-				apply_magic(&forge, current_floor_ptr->object_level, AM_NO_FIXED_ART);
+				apply_magic(&forge, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
 				object_aware(&forge);
 				object_known(&forge);
@@ -2170,7 +2170,7 @@ static void castle_quest(void)
 	clear_bldg(4, 18);
 
 	/* Current quest of the building */
-	q_index = current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
+	q_index = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
 
 	/* Is there a quest available at the building? */
 	if (!q_index)
@@ -4091,7 +4091,7 @@ void do_cmd_bldg(void)
 		return;
 	}
 
-	which = f_info[current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
+	which = f_info[p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat].subtype;
 
 	bldg = &building[which];
 
@@ -4105,7 +4105,7 @@ void do_cmd_bldg(void)
 	}
 	else if ((which == 2) && p_ptr->inside_arena)
 	{
-		if (!p_ptr->exit_bldg && current_floor_ptr->m_cnt > 0)
+		if (!p_ptr->exit_bldg && p_ptr->current_floor_ptr->m_cnt > 0)
 		{
 			prt(_("ゲートは閉まっている。モンスターがあなたを待っている！", "The gates are closed.  The monster awaits!"), 0, 0);
 		}
@@ -4148,7 +4148,7 @@ void do_cmd_bldg(void)
 		p_ptr->oldpx = p_ptr->x;
 	}
 
-	forget_lite(current_floor_ptr);
+	forget_lite(p_ptr->current_floor_ptr);
 	forget_view();
 
 	/* Hack -- Increase "icky" depth */

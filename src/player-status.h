@@ -1,5 +1,7 @@
 ﻿#pragma once 
 
+#include "floor.h"
+
 /*
  * Most of the "player" information goes here.
  *
@@ -79,6 +81,7 @@ extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 
 typedef struct player_type player_type;
+struct floor_type;
 
 struct player_type
 {
@@ -86,6 +89,7 @@ struct player_type
 	int player_euid;
 	int player_egid;
 
+	floor_type *current_floor_ptr;
 	POSITION oldpy;		/* Previous player location -KMW- */
 	POSITION oldpx;		/* Previous player location -KMW- */
 

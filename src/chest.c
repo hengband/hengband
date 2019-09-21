@@ -42,7 +42,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	object_type forge;
 	object_type *q_ptr;
 
-	object_type *o_ptr = &current_floor_ptr->o_list[o_idx];
+	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 
 	/* Small chests often hold "gold" */
@@ -56,12 +56,12 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 		number = 5;
 		small = FALSE;
 		mode |= AM_GREAT;
-		current_floor_ptr->object_level = o_ptr->xtra3;
+		p_ptr->current_floor_ptr->object_level = o_ptr->xtra3;
 	}
 	else
 	{
 		/* Determine the "value" of the items */
-		current_floor_ptr->object_level = ABS(o_ptr->pval) + 10;
+		p_ptr->current_floor_ptr->object_level = ABS(o_ptr->pval) + 10;
 	}
 
 	/* Zero pval means empty chest */
@@ -113,7 +113,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	}
 
 	/* Reset the object level */
-	current_floor_ptr->object_level = current_floor_ptr->base_level;
+	p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
 
 	/* Empty */
 	o_ptr->pval = 0;
@@ -140,7 +140,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, trap;
 
-	object_type *o_ptr = &current_floor_ptr->o_list[o_idx];
+	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 	int mon_level = o_ptr->xtra3;
 
@@ -193,7 +193,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		msg_print(_("突如吹き出した煙に包み込まれた！", "You are enveloped in a cloud of smoke!"));
 		for (i = 0; i < num; i++)
 		{
-			if (randint1(100)<current_floor_ptr->dun_level)
+			if (randint1(100)<p_ptr->current_floor_ptr->dun_level)
 				activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 			else
 				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));

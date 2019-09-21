@@ -1872,8 +1872,8 @@ static void display_player_middle(player_type *creature_ptr)
 		}
 		else
 		{
-			if (MON_FAST(&current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
-			if (MON_SLOW(&current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
+			if (MON_FAST(&p_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
+			if (MON_SLOW(&p_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
 		}
 
 		if (tmp_speed)
@@ -3959,7 +3959,7 @@ void display_player(player_type *creature_ptr, int mode)
 					sprintf(statmsg, "...You %s after the winning.", streq(creature_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
 #endif
 				}
-				else if (!current_floor_ptr->dun_level)
+				else if (!p_ptr->current_floor_ptr->dun_level)
 				{
 #ifdef JP
 					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), creature_ptr->died_from);
@@ -3984,15 +3984,15 @@ void display_player(player_type *creature_ptr, int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)current_floor_ptr->dun_level, creature_ptr->died_from);
+					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)p_ptr->current_floor_ptr->dun_level, creature_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, current_floor_ptr->dun_level, map_name());
+					sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, p_ptr->current_floor_ptr->dun_level, map_name());
 #endif
 				}
 			}
 			else if (current_world_ptr->character_dungeon)
 			{
-				if (!current_floor_ptr->dun_level)
+				if (!p_ptr->current_floor_ptr->dun_level)
 				{
 					sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name());
 				}
@@ -4016,9 +4016,9 @@ void display_player(player_type *creature_ptr, int mode)
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)current_floor_ptr->dun_level);
+					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)p_ptr->current_floor_ptr->dun_level);
 #else
-					sprintf(statmsg, "...Now, you are exploring level %d of %s.", current_floor_ptr->dun_level, map_name());
+					sprintf(statmsg, "...Now, you are exploring level %d of %s.", p_ptr->current_floor_ptr->dun_level, map_name());
 #endif
 				}
 			}
@@ -4214,9 +4214,9 @@ static void dump_aux_pet(FILE *fff)
 	bool pet_settings = FALSE;
 	GAME_TEXT pet_name[MAX_NLEN];
 
-	for (i = current_floor_ptr->m_max - 1; i >= 1; i--)
+	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 
 		if (!monster_is_valid(m_ptr)) continue;
 		if (!is_pet(m_ptr)) continue;
@@ -6084,12 +6084,12 @@ static void make_bones(void)
 	if (!(p_ptr->noscore & 0x00FF))
 	{
 		/* Ignore people who die in town */
-		if (current_floor_ptr->dun_level)
+		if (p_ptr->current_floor_ptr->dun_level)
 		{
 			char tmp[128];
 
 			/* "Bones" name */
-			sprintf(tmp, "bone.%03d", current_floor_ptr->dun_level);
+			sprintf(tmp, "bone.%03d", p_ptr->current_floor_ptr->dun_level);
 			path_build(str, sizeof(str), ANGBAND_DIR_BONE, tmp);
 
 			/* Attempt to open the bones file */
@@ -6288,7 +6288,7 @@ void print_tomb(void)
 
 		if (!streq(p_ptr->died_from, "ripe") && !streq(p_ptr->died_from, "Seppuku"))
 		{
-			if (current_floor_ptr->dun_level == 0)
+			if (p_ptr->current_floor_ptr->dun_level == 0)
 			{
 				concptr field_name = p_ptr->town_num ? "街" : "荒野";
 				if (streq(p_ptr->died_from, "途中終了"))
@@ -6304,18 +6304,18 @@ void print_tomb(void)
 			{
 				if (streq(p_ptr->died_from, "途中終了"))
 				{
-					sprintf(tmp, "地下 %d 階で死んだ", (int)current_floor_ptr->dun_level);
+					sprintf(tmp, "地下 %d 階で死んだ", (int)p_ptr->current_floor_ptr->dun_level);
 				}
 				else
 				{
-					sprintf(tmp, "に地下 %d 階で殺された", (int)current_floor_ptr->dun_level);
+					sprintf(tmp, "に地下 %d 階で殺された", (int)p_ptr->current_floor_ptr->dun_level);
 				}
 			}
 			center_string(buf, tmp);
 			put_str(buf, 15 + extra_line, 11);
 		}
 #else
-		(void)sprintf(tmp, "Killed on Level %d", current_floor_ptr->dun_level);
+		(void)sprintf(tmp, "Killed on Level %d", p_ptr->current_floor_ptr->dun_level);
 		center_string(buf, tmp);
 		put_str(buf, 14, 11);
 
@@ -6932,9 +6932,9 @@ static void handle_signal_simple(int sig)
 		/* Mark the savefile */
 		(void)strcpy(p_ptr->died_from, _("強制終了", "Abortion"));
 
-		forget_lite(current_floor_ptr);
+		forget_lite(p_ptr->current_floor_ptr);
 		forget_view();
-		clear_mon_lite(current_floor_ptr);
+		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Close stuff */
 		close_game();
@@ -6949,9 +6949,9 @@ static void handle_signal_simple(int sig)
 		/* Cause of "death" */
 		(void)strcpy(p_ptr->died_from, _("強制終了中", "Interrupting"));
 
-		forget_lite(current_floor_ptr);
+		forget_lite(p_ptr->current_floor_ptr);
 		forget_view();
-		clear_mon_lite(current_floor_ptr);
+		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Stop playing */
 		p_ptr->playing = FALSE;
@@ -7025,9 +7025,9 @@ static void handle_signal_abort(int sig)
 	if (!current_world_ptr->character_generated || current_world_ptr->character_saved) quit(NULL);
 
 
-	forget_lite(current_floor_ptr);
+	forget_lite(p_ptr->current_floor_ptr);
 	forget_view();
-	clear_mon_lite(current_floor_ptr);
+	clear_mon_lite(p_ptr->current_floor_ptr);
 
 	/* Clear the bottom line */
 	Term_erase(0, hgt - 1, 255);

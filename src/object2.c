@@ -56,18 +56,18 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	OBJECT_IDX prev_o_idx = 0;
 
 	/* Object */
-	j_ptr = &current_floor_ptr->o_list[o_idx];
+	j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 	if (OBJECT_IS_HELD_MONSTER(j_ptr))
 	{
 		monster_type *m_ptr;
-		m_ptr = &current_floor_ptr->m_list[j_ptr->held_m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[j_ptr->held_m_idx];
 
 		/* Scan all objects in the grid */
 		for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			if (this_o_idx == o_idx)
@@ -85,7 +85,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 					object_type *k_ptr;
 
 					/* Previous object */
-					k_ptr = &current_floor_ptr->o_list[prev_o_idx];
+					k_ptr = &p_ptr->current_floor_ptr->o_list[prev_o_idx];
 
 					/* Remove from list */
 					k_ptr->next_o_idx = next_o_idx;
@@ -110,13 +110,13 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		POSITION y = j_ptr->iy;
 		POSITION x = j_ptr->ix;
 
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Scan all objects in the grid */
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			if (this_o_idx == o_idx)
@@ -134,7 +134,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 					object_type *k_ptr;
 
 					/* Previous object */
-					k_ptr = &current_floor_ptr->o_list[prev_o_idx];
+					k_ptr = &p_ptr->current_floor_ptr->o_list[prev_o_idx];
 
 					/* Remove from list */
 					k_ptr->next_o_idx = next_o_idx;
@@ -168,7 +168,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	excise_object_idx(o_idx);
 
 	/* Object */
-	j_ptr = &current_floor_ptr->o_list[o_idx];
+	j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 	/* Dungeon floor */
 	if (!OBJECT_IS_HELD_MONSTER(j_ptr))
@@ -181,7 +181,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	object_wipe(j_ptr);
 
 	/* Count objects */
-	current_floor_ptr->o_cnt--;
+	p_ptr->current_floor_ptr->o_cnt--;
 }
 
 
@@ -198,20 +198,20 @@ void delete_object(POSITION y, POSITION x)
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
-	if (!in_bounds(current_floor_ptr, y, x)) return;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 		object_wipe(o_ptr);
 
 		/* Count objects */
-		current_floor_ptr->o_cnt--;
+		p_ptr->current_floor_ptr->o_cnt--;
 	}
 
 	/* Objects are gone */
@@ -238,9 +238,9 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	if (i1 == i2) return;
 
 	/* Repair objects */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
-		o_ptr = &current_floor_ptr->o_list[i];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		/* Skip "dead" objects */
 		if (!o_ptr->k_idx) continue;
@@ -252,12 +252,12 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 			o_ptr->next_o_idx = i2;
 		}
 	}
-	o_ptr = &current_floor_ptr->o_list[i1];
+	o_ptr = &p_ptr->current_floor_ptr->o_list[i1];
 
 	if (OBJECT_IS_HELD_MONSTER(o_ptr))
 	{
 		monster_type *m_ptr;
-		m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
+		m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 		/* Repair monster */
 		if (m_ptr->hold_o_idx == i1)
@@ -277,7 +277,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 		x = o_ptr->ix;
 
 		/* Acquire grid */
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Repair grid */
 		if (g_ptr->o_idx == i1)
@@ -288,7 +288,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	}
 
 	/* Structure copy */
-	current_floor_ptr->o_list[i2] = current_floor_ptr->o_list[i1];
+	p_ptr->current_floor_ptr->o_list[i2] = p_ptr->current_floor_ptr->o_list[i1];
 
 	/* Wipe the hole */
 	object_wipe(o_ptr);
@@ -338,9 +338,9 @@ void compact_objects(int size)
 		cur_dis = 5 * (20 - cnt);
 
 		/* Examine the objects */
-		for (i = 1; i < current_floor_ptr->o_max; i++)
+		for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 		{
-			o_ptr = &current_floor_ptr->o_list[i];
+			o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 			if (!OBJECT_IS_VALID(o_ptr)) continue;
 
@@ -350,7 +350,7 @@ void compact_objects(int size)
 			if (OBJECT_IS_HELD_MONSTER(o_ptr))
 			{
 				monster_type *m_ptr;
-				m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
+				m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 				y = m_ptr->fy;
 				x = m_ptr->fx;
@@ -388,18 +388,18 @@ void compact_objects(int size)
 
 
 	/* Excise dead objects (backwards!) */
-	for (i = current_floor_ptr->o_max - 1; i >= 1; i--)
+	for (i = p_ptr->current_floor_ptr->o_max - 1; i >= 1; i--)
 	{
-		o_ptr = &current_floor_ptr->o_list[i];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		/* Skip real objects */
 		if (o_ptr->k_idx) continue;
 
 		/* Move last object into open hole */
-		compact_objects_aux(current_floor_ptr->o_max - 1, i);
+		compact_objects_aux(p_ptr->current_floor_ptr->o_max - 1, i);
 
-		/* Compress "current_floor_ptr->o_max" */
-		current_floor_ptr->o_max--;
+		/* Compress "p_ptr->current_floor_ptr->o_max" */
+		p_ptr->current_floor_ptr->o_max--;
 	}
 }
 
@@ -421,9 +421,9 @@ void wipe_o_list(void)
 	int i;
 
 	/* Delete the existing objects */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &current_floor_ptr->o_list[i];
+		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
@@ -441,7 +441,7 @@ void wipe_o_list(void)
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
-			m_ptr = &current_floor_ptr->m_list[o_ptr->held_m_idx];
+			m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Hack -- see above */
 			m_ptr->hold_o_idx = 0;
@@ -457,7 +457,7 @@ void wipe_o_list(void)
 			POSITION x = o_ptr->ix;
 
 			/* Access grid */
-			g_ptr = &current_floor_ptr->grid_array[y][x];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Hack -- see above */
 			g_ptr->o_idx = 0;
@@ -465,11 +465,11 @@ void wipe_o_list(void)
 		object_wipe(o_ptr);
 	}
 
-	/* Reset "current_floor_ptr->o_max" */
-	current_floor_ptr->o_max = 1;
+	/* Reset "p_ptr->current_floor_ptr->o_max" */
+	p_ptr->current_floor_ptr->o_max = 1;
 
-	/* Reset "current_floor_ptr->o_cnt" */
-	current_floor_ptr->o_cnt = 0;
+	/* Reset "p_ptr->current_floor_ptr->o_cnt" */
+	p_ptr->current_floor_ptr->o_cnt = 0;
 }
 
 
@@ -486,16 +486,16 @@ OBJECT_IDX o_pop(void)
 	OBJECT_IDX i;
 
 	/* Initial allocation */
-	if (current_floor_ptr->o_max < current_floor_ptr->max_o_idx)
+	if (p_ptr->current_floor_ptr->o_max < current_world_ptr->max_o_idx)
 	{
 		/* Get next space */
-		i = current_floor_ptr->o_max;
+		i = p_ptr->current_floor_ptr->o_max;
 
 		/* Expand object array */
-		current_floor_ptr->o_max++;
+		p_ptr->current_floor_ptr->o_max++;
 
 		/* Count objects */
-		current_floor_ptr->o_cnt++;
+		p_ptr->current_floor_ptr->o_cnt++;
 
 		/* Use this object */
 		return (i);
@@ -503,16 +503,16 @@ OBJECT_IDX o_pop(void)
 
 
 	/* Recycle dead objects */
-	for (i = 1; i < current_floor_ptr->o_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[i];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
 
 		/* Skip live objects */
 		if (o_ptr->k_idx) continue;
 
 		/* Count objects */
-		current_floor_ptr->o_cnt++;
+		p_ptr->current_floor_ptr->o_cnt++;
 
 		/* Use this object */
 		return (i);
@@ -3732,7 +3732,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 
 				r_ptr = &r_info[i];
 
-				check = (current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - current_floor_ptr->dun_level) : 0;
+				check = (p_ptr->current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - p_ptr->current_floor_ptr->dun_level) : 0;
 
 				/* Ignore dead monsters */
 				if (!r_ptr->rarity) continue;
@@ -3778,11 +3778,11 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 			/* Pick a random non-unique monster race */
 			while (1)
 			{
-				i = get_mon_num(current_floor_ptr->dun_level);
+				i = get_mon_num(p_ptr->current_floor_ptr->dun_level);
 
 				r_ptr = &r_info[i];
 
-				check = (current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - current_floor_ptr->dun_level) : 0;
+				check = (p_ptr->current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - p_ptr->current_floor_ptr->dun_level) : 0;
 
 				/* Ignore dead monsters */
 				if (!r_ptr->rarity) continue;
@@ -3846,7 +3846,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 			o_ptr->pval = randint1(obj_level);
 			if (o_ptr->sval == SV_CHEST_KANDUME) o_ptr->pval = 6;
 
-			o_ptr->xtra3 = current_floor_ptr->dun_level + 5;
+			o_ptr->xtra3 = p_ptr->current_floor_ptr->dun_level + 5;
 
 			/* Never exceed "difficulty" of 55 to 59 */
 			if (o_ptr->pval > 55) o_ptr->pval = 55 + (byte)randint0(5);
@@ -4301,7 +4301,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
  * @return 生成に成功したらTRUEを返す。
  * @details
  * This routine plays nasty games to generate the "special artifacts".\n
- * This routine uses "current_floor_ptr->object_level" for the "generation level".\n
+ * This routine uses "p_ptr->current_floor_ptr->object_level" for the "generation level".\n
  * We assume that the given object has been "wiped".\n
  */
 bool make_object(object_type *j_ptr, BIT_FLAGS mode)
@@ -4314,7 +4314,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 	prob = ((mode & AM_GOOD) ? 10 : 1000);
 
 	/* Base level for the object */
-	base = ((mode & AM_GOOD) ? (current_floor_ptr->object_level + 10) : current_floor_ptr->object_level);
+	base = ((mode & AM_GOOD) ? (p_ptr->current_floor_ptr->object_level + 10) : p_ptr->current_floor_ptr->object_level);
 
 
 	/* Generate a special object, or a normal object */
@@ -4353,7 +4353,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 	}
 
 	/* Apply magic (allow artifacts) */
-	apply_magic(j_ptr, current_floor_ptr->object_level, mode);
+	apply_magic(j_ptr, p_ptr->current_floor_ptr->object_level, mode);
 
 	/* Hack -- generate multiple spikes/missiles */
 	switch (j_ptr->tval)
@@ -4384,7 +4384,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
  * @return 生成に成功したらTRUEを返す。
  * @details
  * This routine plays nasty games to generate the "special artifacts".\n
- * This routine uses "current_floor_ptr->object_level" for the "generation level".\n
+ * This routine uses "p_ptr->current_floor_ptr->object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
 void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
@@ -4392,14 +4392,14 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
 
 
 	/* Paranoia -- check bounds */
-	if (!in_bounds(current_floor_ptr, y, x)) return;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Require floor space */
 	if (!cave_drop_bold(y, x)) return;
@@ -4419,7 +4419,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	if (o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 		/* Structure Copy */
 		object_copy(o_ptr, q_ptr);
@@ -4461,12 +4461,12 @@ bool make_gold(object_type *j_ptr)
 	s32b base;
 
 	/* Hack -- Pick a Treasure variety */
-	i = ((randint1(current_floor_ptr->object_level + 2) + 2) / 2) - 1;
+	i = ((randint1(p_ptr->current_floor_ptr->object_level + 2) + 2) / 2) - 1;
 
 	/* Apply "extra" magic */
 	if (one_in_(GREAT_OBJ))
 	{
-		i += randint1(current_floor_ptr->object_level + 1);
+		i += randint1(p_ptr->current_floor_ptr->object_level + 1);
 	}
 
 	/* Hack -- Creeping Coins only generate "themselves" */
@@ -4503,14 +4503,14 @@ void place_gold(POSITION y, POSITION x)
 	OBJECT_IDX o_idx;
 
 	/* Acquire grid */
-	grid_type *g_ptr = &current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
 
 
 	/* Paranoia -- check bounds */
-	if (!in_bounds(current_floor_ptr, y, x)) return;
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Require floor space */
 	if (!cave_drop_bold(y, x)) return;
@@ -4530,7 +4530,7 @@ void place_gold(POSITION y, POSITION x)
 	if (o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 		object_copy(o_ptr, q_ptr);
 
 		/* Save location */
@@ -4556,7 +4556,7 @@ void place_gold(POSITION y, POSITION x)
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらオブジェクトのIDを返す。
  * @details
- * The initial location is assumed to be "in_bounds(current_floor_ptr, )".\n
+ * The initial location is assumed to be "in_bounds(p_ptr->current_floor_ptr, )".\n
  *\n
  * This function takes a parameter "chance".  This is the percentage\n
  * chance that the item will "disappear" instead of drop.  If the object\n
@@ -4639,13 +4639,13 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			ty = y + dy;
 			tx = x + dx;
 
-			if (!in_bounds(current_floor_ptr, ty, tx)) continue;
+			if (!in_bounds(p_ptr->current_floor_ptr, ty, tx)) continue;
 
 			/* Require line of projection */
 			if (!projectable(y, x, ty, tx)) continue;
 
 			/* Obtain grid */
-			g_ptr = &current_floor_ptr->grid_array[ty][tx];
+			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 
 			/* Require floor space */
 			if (!cave_drop_bold(ty, tx)) continue;
@@ -4657,7 +4657,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
-				o_ptr = &current_floor_ptr->o_list[this_o_idx];
+				o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Check for possible combination */
@@ -4718,7 +4718,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		ty = rand_spread(by, 1);
 		tx = rand_spread(bx, 1);
 
-		if (!in_bounds(current_floor_ptr, ty, tx)) continue;
+		if (!in_bounds(p_ptr->current_floor_ptr, ty, tx)) continue;
 
 		/* Bounce to that location */
 		by = ty;
@@ -4735,9 +4735,9 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	{
 		int candidates = 0, pick;
 
-		for (ty = 1; ty < current_floor_ptr->height - 1; ty++)
+		for (ty = 1; ty < p_ptr->current_floor_ptr->height - 1; ty++)
 		{
-			for (tx = 1; tx < current_floor_ptr->width - 1; tx++)
+			for (tx = 1; tx < p_ptr->current_floor_ptr->width - 1; tx++)
 			{
 				/* A valid space found */
 				if (cave_drop_bold(ty, tx)) candidates++;
@@ -4773,9 +4773,9 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		/* Choose a random one */
 		pick = randint1(candidates);
 
-		for (ty = 1; ty < current_floor_ptr->height - 1; ty++)
+		for (ty = 1; ty < p_ptr->current_floor_ptr->height - 1; ty++)
 		{
-			for (tx = 1; tx < current_floor_ptr->width - 1; tx++)
+			for (tx = 1; tx < p_ptr->current_floor_ptr->width - 1; tx++)
 			{
 				if (cave_drop_bold(ty, tx))
 				{
@@ -4794,13 +4794,13 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	}
 
 
-	g_ptr = &current_floor_ptr->grid_array[by][bx];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
 
 	/* Scan objects in that grid for combination */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Check for combination */
@@ -4842,10 +4842,10 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	if (!done)
 	{
 		/* Structure copy */
-		object_copy(&current_floor_ptr->o_list[o_idx], j_ptr);
+		object_copy(&p_ptr->current_floor_ptr->o_list[o_idx], j_ptr);
 
 		/* Access new object */
-		j_ptr = &current_floor_ptr->o_list[o_idx];
+		j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
 
 		/* Locate */
 		j_ptr->iy = by;
@@ -5061,7 +5061,7 @@ void inven_item_optimize(INVENTORY_IDX item)
  */
 void floor_item_charges(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &current_floor_ptr->o_list[item];
+	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
 
 	/* Require staff/wand */
 	if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND)) return;
@@ -5102,7 +5102,7 @@ void floor_item_charges(INVENTORY_IDX item)
  */
 void floor_item_describe(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &current_floor_ptr->o_list[item];
+	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
@@ -5133,7 +5133,7 @@ void floor_item_describe(INVENTORY_IDX item)
  */
 void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
-	object_type *o_ptr = &current_floor_ptr->o_list[item];
+	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
 
 	/* Apply */
 	num += o_ptr->number;
@@ -5158,7 +5158,7 @@ void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
  */
 void floor_item_optimize(INVENTORY_IDX item)
 {
-	object_type *o_ptr = &current_floor_ptr->o_list[item];
+	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
 
 	/* Paranoia -- be sure it exists */
 	if (!o_ptr->k_idx) return;

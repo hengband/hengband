@@ -820,42 +820,42 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 			case 'w': case 'W':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+				apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
 				break;
 			}
 			/* Apply bad magic, but first clear object */
 			case 'c': case 'C':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+				apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
 				break;
 			}
 			/* Apply normal magic, but first clear object */
 			case 'n': case 'N':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+				apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
 				break;
 			}
 			/* Apply good magic, but first clear object */
 			case 'g': case 'G':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+				apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
 				break;
 			}
 			/* Apply great magic, but first clear object */
 			case 'e': case 'E':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+				apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
 				break;
 			}
 			/* Apply special magic, but first clear object */
 			case 's': case 'S':
 			{
 				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+				apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
 
 				/* Failed to create artifact; make a random one */
 				if (!object_is_artifact(q_ptr)) become_random_artifact(q_ptr, FALSE);
@@ -952,7 +952,7 @@ static void wiz_statistics(object_type *o_ptr)
 
 		/* Let us know what we are doing */
 		msg_format("Creating a lot of %s items. Base level = %d.",
-					  quality, current_floor_ptr->dun_level);
+					  quality, p_ptr->current_floor_ptr->dun_level);
 		msg_print(NULL);
 
 		/* Set counters to zero */
@@ -1274,7 +1274,7 @@ static void wiz_create_item(void)
 	q_ptr = &forge;
 	object_prep(q_ptr, k_idx);
 
-	apply_magic(q_ptr, current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+	apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
 
 	/* Drop the object from heaven */
 	(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
@@ -1328,7 +1328,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 			(int)d_info[tmp_dungeon_type].mindepth, (int)d_info[tmp_dungeon_type].maxdepth);
 
 		/* Default */
-		sprintf(tmp_val, "%d", (int)current_floor_ptr->dun_level);
+		sprintf(tmp_val, "%d", (int)p_ptr->current_floor_ptr->dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
@@ -1347,11 +1347,11 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 	if (autosave_l) do_cmd_save_game(TRUE);
 
 	/* Change level */
-	current_floor_ptr->dun_level = command_arg;
+	p_ptr->current_floor_ptr->dun_level = command_arg;
 
 	prepare_change_floor_mode(CFM_RAND_PLACE);
 
-	if (!current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
+	if (!p_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
 	creature_ptr->inside_arena = FALSE;
 	creature_ptr->wild_mode = FALSE;
 
@@ -1413,7 +1413,7 @@ static void do_cmd_wiz_summon(int num)
 	int i;
 	for (i = 0; i < num; i++)
 	{
-		(void)summon_specific(0, p_ptr->y, p_ptr->x, current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		(void)summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 }
 
@@ -1458,9 +1458,9 @@ static void do_cmd_wiz_zap(void)
 	MONSTER_IDX i;
 
 	/* Genocide everyone nearby */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip the mount */
@@ -1493,9 +1493,9 @@ static void do_cmd_wiz_zap_all(void)
 	MONSTER_IDX i;
 
 	/* Genocide everyone */
-	for (i = 1; i < current_floor_ptr->m_max; i++)
+	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip the mount */
@@ -1532,7 +1532,7 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 
 	if (!tgt_pt(&x, &y)) return;
 
-	g_ptr = &current_floor_ptr->grid_array[y][x];
+	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Default */
 	sprintf(tmp_val, "%d", prev_feat);
@@ -1874,11 +1874,11 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Make every dungeon square "known" to test streamers -KMW- */
 	case 'u':
-		for (y = 0; y < current_floor_ptr->height; y++)
+		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < current_floor_ptr->width; x++)
+			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
 			{
-				current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+				p_ptr->current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
 		}
 		wiz_lite(creature_ptr, FALSE);

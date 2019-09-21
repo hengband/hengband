@@ -37,8 +37,8 @@
 */
 bool monster_near_player(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	return (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
 }
 
@@ -49,7 +49,7 @@ bool monster_near_player(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 */
 bool see_monster(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	return is_seen(m_ptr);
 }
 
@@ -60,7 +60,7 @@ bool see_monster(MONSTER_IDX m_idx)
 */
 bool spell_learnable(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	/* Extract the "see-able-ness" */
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 
@@ -76,7 +76,7 @@ bool spell_learnable(MONSTER_IDX m_idx)
 BIT_FLAGS monster_u_mode(MONSTER_IDX m_idx)
 {
 	BIT_FLAGS u_mode = 0L;
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool pet = is_pet(m_ptr);
 	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
 	return u_mode;
@@ -126,7 +126,7 @@ static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr 
 	}
 
 	if (mon_to_mon && known && !see_either)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -286,7 +286,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 	HIT_POINT dam, ms_type, drs_type = 0;
 	concptr type_s;
 	bool smart_learn_aux = TRUE;
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool known = monster_near_player(m_idx, t_idx);
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
@@ -468,7 +468,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 	}
 
 	if (mon_to_mon && known && !see_either)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 
 	sound(SOUND_BREATH);
 	breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
@@ -602,7 +602,7 @@ HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 	if (m_ptr->r_idx == MON_ROLENTO)
 	{
@@ -850,7 +850,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 */
 HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -887,7 +887,7 @@ HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 */
 HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -950,7 +950,7 @@ void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER
 		}
 		else
 		{
-			current_floor_ptr->monster_noise = TRUE;
+			p_ptr->current_floor_ptr->monster_noise = TRUE;
 		}
 	}
 	breath(y, x, m_idx, GF_TYPE, dam, 0, FALSE, MS_TYPE, TARGET_TYPE);
@@ -1409,7 +1409,7 @@ void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1,
 			}
 			else
 			{
-				current_floor_ptr->monster_noise = TRUE;
+				p_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 		}
 
@@ -1437,7 +1437,7 @@ void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1,
  */
 void spell_RF5_SCARE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
@@ -1487,7 +1487,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
  */
 void spell_RF5_BLIND(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
@@ -1550,7 +1550,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
  */
 void spell_RF5_CONF(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
@@ -1600,7 +1600,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
  */
 void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
@@ -1663,7 +1663,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
  */
 void spell_RF5_HOLD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
@@ -1714,7 +1714,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 void spell_RF6_HASTE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	bool see_m = see_monster(m_idx);
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
@@ -1773,7 +1773,7 @@ HIT_POINT spell_RF6_HAND_DOOM(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 */
 void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 	GAME_TEXT m_name[MAX_NLEN];
@@ -1839,7 +1839,7 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 */
 void spell_RF6_INVULNER(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 
 	monspell_message_base(m_idx, t_idx,
@@ -1916,7 +1916,7 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 */
 HIT_POINT spell_RF6_WORLD(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	MONSTER_IDX who = 0;
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -1934,7 +1934,7 @@ HIT_POINT spell_RF6_WORLD(MONSTER_IDX m_idx)
 */
 HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	HIT_POINT dummy_hp, dummy_maxhp;
 	MONSTER_IDX k;
 	POSITION dummy_y = m_ptr->fy;
@@ -1950,13 +1950,13 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 			if (p_ptr->inside_arena || p_ptr->phase_out || !summon_possible(m_ptr->fy, m_ptr->fx)) 
 				return -1;
 
-			delete_monster_idx(current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+			delete_monster_idx(p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
 			summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, mode);
-			current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-			current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 			summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, mode);
-			current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-			current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
 			msg_print(_("『バーノール・ルパート』が分裂した！","Banor=Rupart splits in two person!"));
 			break;
@@ -1969,23 +1969,23 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 			if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) 
 				return -1;
 
-			for (k = 1; k < current_floor_ptr->m_max; k++)
+			for (k = 1; k < p_ptr->current_floor_ptr->m_max; k++)
 			{
-				if (current_floor_ptr->m_list[k].r_idx == MON_BANOR || current_floor_ptr->m_list[k].r_idx == MON_LUPART)
+				if (p_ptr->current_floor_ptr->m_list[k].r_idx == MON_BANOR || p_ptr->current_floor_ptr->m_list[k].r_idx == MON_LUPART)
 				{
-					dummy_hp += current_floor_ptr->m_list[k].hp;
-					dummy_maxhp += current_floor_ptr->m_list[k].maxhp;
-					if (current_floor_ptr->m_list[k].r_idx != m_ptr->r_idx)
+					dummy_hp += p_ptr->current_floor_ptr->m_list[k].hp;
+					dummy_maxhp += p_ptr->current_floor_ptr->m_list[k].maxhp;
+					if (p_ptr->current_floor_ptr->m_list[k].r_idx != m_ptr->r_idx)
 					{
-						dummy_y = current_floor_ptr->m_list[k].fy;
-						dummy_x = current_floor_ptr->m_list[k].fx;
+						dummy_y = p_ptr->current_floor_ptr->m_list[k].fy;
+						dummy_x = p_ptr->current_floor_ptr->m_list[k].fx;
 					}
 					delete_monster_idx(k);
 				}
 			}
 			summon_named_creature(0, dummy_y, dummy_x, MON_BANORLUPART, mode);
-			current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-			current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
+			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
 			msg_print(_("『バーノール』と『ルパート』が合体した！", "Banor and Rupart combine into one!"));
 			break;
@@ -2037,8 +2037,8 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, M
 HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam = -1;
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	bool monster_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
@@ -2114,7 +2114,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 		}
 
 		if(monster_to_player && p_ptr->riding)
-			mon_take_hit_mon(p_ptr->riding, dam, &dead, &fear, extract_note_dies(real_r_idx(&current_floor_ptr->m_list[p_ptr->riding])), m_idx);
+			mon_take_hit_mon(p_ptr->riding, dam, &dead, &fear, extract_note_dies(real_r_idx(&p_ptr->current_floor_ptr->m_list[p_ptr->riding])), m_idx);
 
 		if(monster_to_monster)
 			mon_take_hit_mon(t_idx, dam, &dead, &fear, extract_note_dies(real_r_idx(t_ptr)), m_idx);
@@ -2133,7 +2133,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 */
 HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 
 	disturb(p_ptr, TRUE, TRUE);
@@ -2173,8 +2173,8 @@ HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 */
 void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 
 	simple_monspell_message(m_idx, t_idx,
@@ -2236,7 +2236,7 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 */
 void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 
 	simple_monspell_message(m_idx, t_idx,
@@ -2306,7 +2306,7 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 */
 void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
@@ -2383,8 +2383,8 @@ HIT_POINT spell_RF6_PSY_SPEAR(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 */
 void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &current_floor_ptr->m_list[t_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	bool can_use_lite_area = FALSE;
 	bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
@@ -2513,7 +2513,7 @@ void spell_RF6_FORGET(MONSTER_IDX m_idx)
 */
 void spell_RF6_RAISE_DEAD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type *m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 	monspell_message(m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -2675,7 +2675,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	bool see_either = see_monster(m_idx) || see_monster(t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	int count = 0;
@@ -2713,7 +2713,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 		}
 
 		if (mon_to_mon && known && !see_either)
-			current_floor_ptr->monster_noise = TRUE;
+			p_ptr->current_floor_ptr->monster_noise = TRUE;
 	}
 
 	switch (m_ptr->r_idx)
@@ -2750,7 +2750,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
 	if (known && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -2765,7 +2765,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 void spell_RF6_S_CYBER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0;
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -2789,7 +2789,7 @@ void spell_RF6_S_CYBER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 		msg_print(_("重厚な足音が近くで聞こえる。", "You hear heavy steps nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -2827,7 +2827,7 @@ void spell_RF6_S_MONSTER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX 
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -2865,7 +2865,7 @@ void spell_RF6_S_MONSTERS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -2899,7 +2899,7 @@ void spell_RF6_S_ANT(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -2933,7 +2933,7 @@ void spell_RF6_S_SPIDER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -2967,7 +2967,7 @@ void spell_RF6_S_HOUND(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3001,7 +3001,7 @@ void spell_RF6_S_HYDRA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3017,7 +3017,7 @@ void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 {
 	int count = 0, k;
 	int num = 1;
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
@@ -3050,7 +3050,7 @@ void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 	}
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3083,7 +3083,7 @@ void spell_RF6_S_DEMON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3116,7 +3116,7 @@ void spell_RF6_S_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3149,7 +3149,7 @@ void spell_RF6_S_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3223,7 +3223,7 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 {
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	int k, count = 0;
 	GAME_TEXT m_name[MAX_NLEN];
@@ -3260,7 +3260,7 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 	}
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3300,7 +3300,7 @@ void spell_RF6_S_HI_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 	}
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3336,7 +3336,7 @@ void spell_RF6_S_AMBERITES(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 	}
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3351,7 +3351,7 @@ void spell_RF6_S_AMBERITES(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 void spell_RF6_S_UNIQUE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int count = 0, k;
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
@@ -3388,7 +3388,7 @@ void spell_RF6_S_UNIQUE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	}
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		current_floor_ptr->monster_noise = TRUE;
+		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
 
@@ -4076,7 +4076,7 @@ HIT_POINT monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, i
 */
 HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
 {
-	monster_type	*m_ptr = &current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	int hp;
 	DEPTH rlev = monster_level_idx(m_idx);

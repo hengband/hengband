@@ -2266,7 +2266,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 		case MUT1_STERILITY:
 			msg_print(_("突然頭が痛くなった！", "You suddenly have a headache!"));
 			take_hit(p_ptr, DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"), -1);
-			current_floor_ptr->num_repro += MAX_REPRO;
+			p_ptr->current_floor_ptr->num_repro += MAX_REPRO;
 			break;
 
 		case MUT1_PANIC_HIT:
@@ -2297,7 +2297,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = creature_ptr->y + ddy[dir];
 				x = creature_ptr->x + ddx[dir];
-				g_ptr = &current_floor_ptr->grid_array[y][x];
+				g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 				if (!g_ptr->m_idx)
 				{
@@ -2306,7 +2306,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 					break;
 				}
 
-				m_ptr = &current_floor_ptr->m_list[g_ptr->m_idx];
+				m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 				r_ptr = &r_info[m_ptr->r_idx];
 
 				if ((r_ptr->flags3 & RF3_EVIL) &&
@@ -2342,7 +2342,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 				if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 				y = creature_ptr->y + ddy[dir];
 				x = creature_ptr->x + ddx[dir];
-				g_ptr = &current_floor_ptr->grid_array[y][x];
+				g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 				if (!g_ptr->m_idx)
 				{
 					msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));

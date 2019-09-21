@@ -138,7 +138,7 @@ bool create_ammo(player_type *creature_ptr)
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
-		g_ptr = &current_floor_ptr->grid_array[y][x];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 		if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG))
 		{
@@ -586,8 +586,8 @@ void acquire_chaos_weapon(player_type *creature_ptr)
 	}
 
 	object_prep(q_ptr, lookup_kind(dummy, dummy2));
-	q_ptr->to_h = 3 + randint1(current_floor_ptr->dun_level) % 10;
-	q_ptr->to_d = 3 + randint1(current_floor_ptr->dun_level) % 10;
+	q_ptr->to_h = 3 + randint1(p_ptr->current_floor_ptr->dun_level) % 10;
+	q_ptr->to_d = 3 + randint1(p_ptr->current_floor_ptr->dun_level) % 10;
 	one_resistance(q_ptr);
 	q_ptr->name2 = EGO_CHAOTIC;
 	(void)drop_near(q_ptr, -1, creature_ptr->y, creature_ptr->x);
@@ -1380,7 +1380,7 @@ void brand_weapon(int brand_type)
 				act = _("は鋭さを増した！", "becomes very sharp!");
 
 				o_ptr->name2 = EGO_SHARPNESS;
-				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, current_floor_ptr->dun_level) + 1;
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, p_ptr->current_floor_ptr->dun_level) + 1;
 
 				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
 					o_ptr->pval = 2;
@@ -1389,7 +1389,7 @@ void brand_weapon(int brand_type)
 			{
 				act = _("は破壊力を増した！", "seems very powerful.");
 				o_ptr->name2 = EGO_EARTHQUAKES;
-				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, current_floor_ptr->dun_level);
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, p_ptr->current_floor_ptr->dun_level);
 			}
 			break;
 		case 16:

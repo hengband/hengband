@@ -281,7 +281,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 
 	object_kind *k_ptr;
 
-	o_ptr = REF_ITEM(creature_ptr, current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
 
 	/* Mega-Hack -- refuse to zap a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
