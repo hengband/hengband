@@ -189,7 +189,7 @@ static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
  * @param walls 最低減隣接させたい外壁の数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
+static bool alloc_stairs(floor_type *floor_ptr, FEAT_IDX feat, int num, int walls)
 {
 	int i;
 	int shaft_num = 0;
@@ -199,17 +199,17 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 	if (have_flag(f_ptr->flags, FF_LESS))
 	{
 		/* No up stairs in town or in ironman mode */
-		if (ironman_downward || !p_ptr->current_floor_ptr->dun_level) return TRUE;
+		if (ironman_downward || !floor_ptr->dun_level) return TRUE;
 
-		if (p_ptr->current_floor_ptr->dun_level > d_info[p_ptr->dungeon_idx].mindepth)
+		if (floor_ptr->dun_level > d_info[p_ptr->dungeon_idx].mindepth)
 			shaft_num = (randint1(num+1))/2;
 	}
 	else if (have_flag(f_ptr->flags, FF_MORE))
 	{
-		QUEST_IDX q_idx = quest_number(p_ptr->current_floor_ptr->dun_level);
+		QUEST_IDX q_idx = quest_number(floor_ptr->dun_level);
 
 		/* No downstairs on quest levels */
-		if (p_ptr->current_floor_ptr->dun_level > 1 && q_idx)
+		if (floor_ptr->dun_level > 1 && q_idx)
 		{
 			monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
 
@@ -219,9 +219,9 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 		}
 
 		/* No downstairs at the bottom */
-		if (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) return TRUE;
+		if (floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) return TRUE;
 
-		if ((p_ptr->current_floor_ptr->dun_level < d_info[p_ptr->dungeon_idx].maxdepth-1) && !quest_number(p_ptr->current_floor_ptr->dun_level+1))
+		if ((floor_ptr->dun_level < d_info[p_ptr->dungeon_idx].maxdepth-1) && !quest_number(floor_ptr->dun_level+1))
 			shaft_num = (randint1(num)+1)/2;
 	}
 	else return FALSE;
@@ -238,9 +238,9 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 			int candidates = 0;
 			int pick;
 
-			for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
+			for (y = 1; y < floor_ptr->height - 1; y++)
 			{
-				for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
+				for (x = 1; x < floor_ptr->width - 1; x++)
 				{
 					if (alloc_stairs_aux(y, x, walls))
 					{
@@ -264,9 +264,9 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 			/* Choose a random one */
 			pick = randint1(candidates);
 
-			for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
+			for (y = 1; y < floor_ptr->height - 1; y++)
 			{
-				for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
+				for (x = 1; x < floor_ptr->width - 1; x++)
 				{
 					if (alloc_stairs_aux(y, x, walls))
 					{
@@ -279,7 +279,7 @@ static bool alloc_stairs(FEAT_IDX feat, int num, int walls)
 
 				if (!pick) break;
 			}
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Clear possible garbage of hidden trap */
 			g_ptr->mimic = 0;
@@ -671,10 +671,10 @@ static bool cave_gen(dungeon_type* dungeon_ptr, floor_type *floor_ptr)
 		build_maze_vault(floor_ptr->width/2-1, floor_ptr->height/2-1, floor_ptr->width-4, floor_ptr->height-4, FALSE);
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(feat_down_stair, rand_range(2, 3), 3)) return FALSE;
+		if (!alloc_stairs(floor_ptr, feat_down_stair, rand_range(2, 3), 3)) return FALSE;
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(feat_up_stair, 1, 3)) return FALSE;
+		if (!alloc_stairs(floor_ptr, feat_up_stair, 1, 3)) return FALSE;
 	}
 
 	/* Build some rooms */
@@ -869,10 +869,10 @@ static bool cave_gen(dungeon_type* dungeon_ptr, floor_type *floor_ptr)
 		}
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(feat_down_stair, rand_range(3, 4), 3)) return FALSE;
+		if (!alloc_stairs(floor_ptr, feat_down_stair, rand_range(3, 4), 3)) return FALSE;
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(feat_up_stair, rand_range(1, 2), 3)) return FALSE;
+		if (!alloc_stairs(floor_ptr, feat_up_stair, rand_range(1, 2), 3)) return FALSE;
 	}
 
 	if (!dun->laketype)
