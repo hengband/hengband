@@ -81,7 +81,7 @@ typedef struct
 
 /* Macros */
 #define set_cave_feat(FL,Y,X,F)    ((FL)->grid_array[(Y)][(X)].feat = (F))
-#define add_cave_info(Y,X,I)    (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].info |= (I))
+#define add_cave_info(FL,Y,X,I)    ((FL)->grid_array[(Y)][(X)].info |= (I))
 
 /* This should not be used */
 /*#define set_cave_info(Y,X,I)    (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].info = (I)) */
@@ -116,7 +116,7 @@ typedef struct
 { \
 	set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_ground_type[randint0(100)]); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_FLOOR); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_FLOOR); \
 	delete_monster(Y, X); \
 }
 
@@ -132,7 +132,7 @@ typedef struct
 { \
 	set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_type[randint0(100)]); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_EXTRA); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_EXTRA); \
 	delete_monster(Y, X); \
 }
 
@@ -148,7 +148,7 @@ typedef struct
 { \
 	set_cave_feat(floor_ptr, Y,X,feat_permanent); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_EXTRA); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_EXTRA); \
 	delete_monster(Y, X); \
 }
 
@@ -167,7 +167,7 @@ typedef struct
 	_f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[Y][X].feat]; \
 	if (permanent_wall(_f_ptr)) p_ptr->current_floor_ptr->grid_array[Y][X].feat = feat_state(p_ptr->current_floor_ptr->grid_array[Y][X].feat, FF_UNPERM); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_EXTRA); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_EXTRA); \
 	delete_monster(Y, X); \
 }
 
@@ -175,7 +175,7 @@ typedef struct
 { \
 	set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_inner); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_INNER); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_INNER); \
 	delete_monster(Y, X); \
 }
 
@@ -191,7 +191,7 @@ typedef struct
 { \
 	set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_permanent); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_INNER); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_INNER); \
 	delete_monster(Y, X); \
 }
 
@@ -207,7 +207,7 @@ typedef struct
 { \
 	set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_outer); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_OUTER); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_OUTER); \
 	delete_monster(Y, X); \
 }
 
@@ -223,7 +223,7 @@ typedef struct
 { \
 	set_cave_feat(floor_ptr, Y,X,feat_permanent); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_OUTER); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_OUTER); \
 	delete_monster(Y, X); \
 }
 
@@ -241,7 +241,7 @@ typedef struct
 	if (permanent_wall(_f_ptr)) set_cave_feat(p_ptr->current_floor_ptr, Y, X, (s16b)feat_state(feat_wall_outer, FF_UNPERM)); \
 	else set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_outer); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,(CAVE_OUTER | CAVE_VAULT)); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,(CAVE_OUTER | CAVE_VAULT)); \
 	delete_monster(Y, X); \
 }
 
@@ -259,7 +259,7 @@ typedef struct
 { \
 	set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_solid); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_SOLID); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_SOLID); \
 	delete_monster(Y, X); \
 }
 
@@ -275,7 +275,7 @@ typedef struct
 { \
 	set_cave_feat(floor_ptr, Y,X,feat_permanent); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_SOLID); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_SOLID); \
 	delete_monster(Y, X); \
 }
 
@@ -294,7 +294,7 @@ typedef struct
 		set_cave_feat(p_ptr->current_floor_ptr, Y, X, feat_state(feat_wall_solid, FF_UNPERM)); \
 	else set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_solid); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(Y,X,CAVE_SOLID); \
+	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_SOLID); \
 	delete_monster(Y, X); \
 }
 

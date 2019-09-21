@@ -654,8 +654,8 @@ void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			place_floor_bold(y, x);
-			add_cave_info(y, x, CAVE_ROOM);
-			if (light) add_cave_info(y, x, CAVE_GLOW);
+			add_cave_info(p_ptr->current_floor_ptr, y, x, CAVE_ROOM);
+			if (light) add_cave_info(p_ptr->current_floor_ptr, y, x, CAVE_GLOW);
 		}
 	}
 }
