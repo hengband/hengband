@@ -351,7 +351,7 @@ void glow_deep_lava_and_bldg(floor_type *floor_ptr)
 				{
 					yy = y + ddy_ddd[i];
 					xx = x + ddx_ddd[i];
-					if (!in_bounds2(yy, xx)) continue;
+					if (!in_bounds2(floor_ptr, yy, xx)) continue;
 					floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
 				}
 			}

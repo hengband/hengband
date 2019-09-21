@@ -177,8 +177,8 @@ extern floor_type floor_info;
 /*
  * Determines if a map location is on or inside the outer walls
  */
-#define in_bounds2(Y,X) \
-   (((Y) >= 0) && ((X) >= 0) && ((Y) < p_ptr->current_floor_ptr->height) && ((X) < p_ptr->current_floor_ptr->width))
+#define in_bounds2(F,Y,X) \
+   (((Y) >= 0) && ((X) >= 0) && ((Y) < (F)->height) && ((X) < (F)->width))
 
 /*
  * Determines if a map location is on or inside the outer walls

@@ -672,7 +672,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 					{
 						yy = y + ddy_ddd[i];
 						xx = x + ddx_ddd[i];
-						if (!in_bounds2(yy, xx)) continue;
+						if (!in_bounds2(p_ptr->current_floor_ptr, yy, xx)) continue;
 						cc_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
 						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 						{
@@ -1132,7 +1132,7 @@ bool earthquake(POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 				{
 					yyy = yy + ddy_ddd[ii];
 					xxx = xx + ddx_ddd[ii];
-					if (!in_bounds2(yyy, xxx)) continue;
+					if (!in_bounds2(p_ptr->current_floor_ptr, yyy, xxx)) continue;
 					cc_ptr = &p_ptr->current_floor_ptr->grid_array[yyy][xxx];
 					if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 					{

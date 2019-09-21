@@ -610,7 +610,7 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 						int by = y + ddy_ddd[j];
 						int bx = x + ddx_ddd[j];
 
-						if (in_bounds2(by, bx))
+						if (in_bounds2(p_ptr->current_floor_ptr, by, bx))
 						{
 							grid_type *cc_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
 
@@ -6128,7 +6128,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					for (x = bx - dist; x <= bx + dist; x++)
 					{
 						/* Ignore "illegal" locations */
-						if (!in_bounds2(y, x)) continue;
+						if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 
 						/* Enforce a "circular" explosion */
 						if (distance(by, bx, y, x) != dist) continue;

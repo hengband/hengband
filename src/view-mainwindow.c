@@ -1930,7 +1930,7 @@ static void display_dungeon(void)
 	{
 		for (y = p_ptr->y - Term->hgt / 2 + 1; y <= p_ptr->y + Term->hgt / 2; y++)
 		{
-			if (in_bounds2(y, x))
+			if (in_bounds2(p_ptr->current_floor_ptr, y, x))
 			{
 				map_info(y, x, &a, &c, &ta, &tc);
 

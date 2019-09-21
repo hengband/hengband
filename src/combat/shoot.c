@@ -793,7 +793,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 								mmove2(&ny, &nx, shooter_ptr->y, shooter_ptr->x, ty, tx);
 
 								/* Stopped by wilderness boundary */
-								if (!in_bounds2(ny, nx)) break;
+								if (!in_bounds2(shooter_ptr->current_floor_ptr, ny, nx)) break;
 
 								/* Stopped by walls/doors */
 								if (!player_can_enter(p_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0)) break;

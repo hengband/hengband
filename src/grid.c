@@ -1311,7 +1311,7 @@ void note_spot(POSITION y, POSITION x)
 void lite_spot(POSITION y, POSITION x)
 {
 	/* Redraw if on screen */
-	if (panel_contains(y, x) && in_bounds2(y, x))
+	if (panel_contains(y, x) && in_bounds2(p_ptr->current_floor_ptr, y, x))
 	{
 		TERM_COLOR a;
 		SYMBOL_CODE c;
@@ -1827,7 +1827,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 			{
 				yy = y + ddy_ddd[i];
 				xx = x + ddx_ddd[i];
-				if (!in_bounds2(yy, xx)) continue;
+				if (!in_bounds2(p_ptr->current_floor_ptr, yy, xx)) continue;
 				p_ptr->current_floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
 			}
 		}
@@ -1887,7 +1887,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 		{
 			yy = y + ddy_ddd[i];
 			xx = x + ddx_ddd[i];
-			if (!in_bounds2(yy, xx)) continue;
+			if (!in_bounds2(p_ptr->current_floor_ptr, yy, xx)) continue;
 			cc_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
 			cc_ptr->info |= CAVE_GLOW;
 

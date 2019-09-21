@@ -331,7 +331,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		x = x1 + ddx_ddd[i];
 
 		/* Ignore locations off of edge */
-		if (!in_bounds2(y, x)) continue;
+		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Simply move to player */
 		if (player_bold(y, x)) return (FALSE);
@@ -464,7 +464,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 		x = x1 + ddx_ddd[i];
 
 		/* Ignore locations off of edge */
-		if (!in_bounds2(y, x)) continue;
+		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 
 		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -542,7 +542,7 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		x = fx + ddx_ddd[i];
 
 		/* Ignore locations off of edge */
-		if (!in_bounds2(y, x)) continue;
+		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Don't move toward player */
 		/* if (p_ptr->current_floor_ptr->grid_array[y][x].dist < 3) continue; */ /* Hmm.. Need it? */
@@ -928,7 +928,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 				int xx = p_ptr->x + ddx_ddd[i];
 				int yy = p_ptr->y + ddy_ddd[i];
 
-				if (!in_bounds2(yy, xx)) continue;
+				if (!in_bounds2(p_ptr->current_floor_ptr, yy, xx)) continue;
 
 				g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
 
@@ -973,7 +973,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 					break;
 				}
 
-				if (!in_bounds2(y2, x2)) continue;
+				if (!in_bounds2(p_ptr->current_floor_ptr, y2, x2)) continue;
 
 				/* Ignore filled grids */
 				if (!monster_can_enter(y2, x2, r_ptr, 0)) continue;
@@ -1501,7 +1501,7 @@ void process_monster(MONSTER_IDX m_idx)
 			for (x = ox - 1; x <= ox + 1; x++)
 			{
 				/* Ignore locations off of edge */
-				if (!in_bounds2(y, x)) continue;
+				if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 				if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx) k++;
 			}
 		}
@@ -1777,7 +1777,7 @@ void process_monster(MONSTER_IDX m_idx)
 		nx = ox + ddx[d];
 
 		/* Ignore locations off of edge */
-		if (!in_bounds2(ny, nx)) continue;
+		if (!in_bounds2(p_ptr->current_floor_ptr, ny, nx)) continue;
 
 		/* Access that grid */
 		g_ptr = &p_ptr->current_floor_ptr->grid_array[ny][nx];

@@ -117,7 +117,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 				{
 					for (tx = x - width - 1; tx <= x + width + 1; tx++)
 					{
-						if (!in_bounds2(ty, tx)) continue;
+						if (!in_bounds2(p_ptr->current_floor_ptr, ty, tx)) continue;
 
 						g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 
@@ -273,7 +273,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 			{
 				ty = rand_spread(y, d);
 				tx = rand_spread(x, d);
-				if (!in_bounds2(ty, tx)) continue;
+				if (!in_bounds2(p_ptr->current_floor_ptr, ty, tx)) continue;
 				break;
 			}
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];

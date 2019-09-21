@@ -1537,7 +1537,7 @@ static void cave_temp_room_unlite(void)
 					POSITION by = y + ddy_ddd[j];
 					POSITION bx = x + ddx_ddd[j];
 
-					if (in_bounds2(by, bx))
+					if (in_bounds2(p_ptr->current_floor_ptr, by, bx))
 					{
 						grid_type *cc_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
 
@@ -1664,7 +1664,7 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 		if (only_room) return;
 
 		/* Verify */
-		if (!in_bounds2(y, x)) return;
+		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return;
 
 		/* Do not exceed the maximum spell range */
 		if (distance(p_ptr->y, p_ptr->x, y, x) > MAX_RANGE) return;

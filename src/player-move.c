@@ -1302,7 +1302,7 @@ static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 	x += ddx[dir];
 
 	/* Illegal grids are not known walls */
-	if (!in_bounds2(y, x)) return (FALSE);
+	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return (FALSE);
 
 	/* Access grid */
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
@@ -1345,7 +1345,7 @@ static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
 	x += ddx[dir];
 
 	/* Illegal grids are unknown */
-	if (!in_bounds2(y, x)) return (TRUE);
+	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return (TRUE);
 
 	/* Memorized grids are always known */
 	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return (FALSE);
