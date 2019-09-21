@@ -1743,20 +1743,20 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 * routine.\n
 * @todo 特に詳細な処理の意味を調査すべし
 */
-static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
+static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[*y][*x];
+	grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
 
-	if (!in_bounds(p_ptr->current_floor_ptr, *y, *x)) return TRUE;
+	if (!in_bounds(floor_ptr, *y, *x)) return TRUE;
 
 	if (is_inner_grid(g_ptr))
 	{
 		return TRUE;
 	}
 
-	if (is_extra_bold(p_ptr->current_floor_ptr, *y, *x))
+	if (is_extra_bold(floor_ptr, *y, *x))
 	{
 		/* Save the tunnel location */
 		if (dun->tunn_n < TUNN_MAX)
@@ -1770,7 +1770,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		else return FALSE;
 	}
 
-	if (is_floor_bold(p_ptr->current_floor_ptr, *y, *x))
+	if (is_floor_bold(floor_ptr, *y, *x))
 	{
 		/* Don't do anything */
 		return TRUE;
@@ -1793,7 +1793,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 			for (i = *x - 1; i <= *x + 1; i++)
 			{
 				/* Convert adjacent "outer" walls as "solid" walls */
-				if (is_outer_bold(p_ptr->current_floor_ptr, j, i))
+				if (is_outer_bold(floor_ptr, j, i))
 				{
 					/* Change the wall to a "solid" wall */
 					place_solid_noperm_bold(j, i);
@@ -1802,7 +1802,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		}
 
 		/* Clear mimic type */
-		p_ptr->current_floor_ptr->grid_array[*y][*x].mimic = 0;
+		floor_ptr->grid_array[*y][*x].mimic = 0;
 
 		place_floor_bold(*y, *x);
 
@@ -1819,12 +1819,12 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 
 		dy = 0;
 		dx = 0;
-		while ((i > 0) && is_solid_bold(p_ptr->current_floor_ptr, *y + dy, *x + dx))
+		while ((i > 0) && is_solid_bold(floor_ptr, *y + dy, *x + dx))
 		{
 			dy = randint0(3) - 1;
 			dx = randint0(3) - 1;
 
-			if (!in_bounds(p_ptr->current_floor_ptr, *y + dy, *x + dx))
+			if (!in_bounds(floor_ptr, *y + dy, *x + dx))
 			{
 				dx = 0;
 				dy = 0;
@@ -1868,19 +1868,19 @@ static void create_cata_tunnel(POSITION x, POSITION y)
 	/* Build tunnel */
 	x1 = x - 1;
 	y1 = y;
-	set_tunnel(&x1, &y1, FALSE);
+	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
 
 	x1 = x + 1;
 	y1 = y;
-	set_tunnel(&x1, &y1, FALSE);
+	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
 
 	x1 = x;
 	y1 = y - 1;
-	set_tunnel(&x1, &y1, FALSE);
+	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
 
 	x1 = x;
 	y1 = y + 1;
-	set_tunnel(&x1, &y1, FALSE);
+	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
 }
 
 
@@ -1926,7 +1926,7 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 		{
 			x = x1 + i * (x2 - x1) / length;
 			y = y1 + i * (y2 - y1) / length;
-			if (!set_tunnel(&x, &y, TRUE))
+			if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
 			{
 				if (count > 50)
 				{
@@ -1949,7 +1949,7 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = i;
 				y = y1;
-				if (!set_tunnel(&x, &y, TRUE))
+				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
 					short_seg_hack(x, y, i - 1, y1, 1, count, fail);
@@ -1967,7 +1967,7 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = i;
 				y = y1;
-				if (!set_tunnel(&x, &y, TRUE))
+				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
 					short_seg_hack(x, y, i - 1, y1, 1, count, fail);
@@ -1986,7 +1986,7 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = x2;
 				y = i;
-				if (!set_tunnel(&x, &y, TRUE))
+				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
 					short_seg_hack(x, y, x2, i - 1, 1, count, fail);
@@ -2004,7 +2004,7 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = x2;
 				y = i;
-				if (!set_tunnel(&x, &y, TRUE))
+				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
 					short_seg_hack(x, y, x2, i - 1, 1, count, fail);
@@ -2151,7 +2151,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 		if (firstsuccede)
 		{
 			/* only do this if the first half has worked */
-			set_tunnel(&x3, &y3, TRUE);
+			set_tunnel(p_ptr->current_floor_ptr, &x3, &y3, TRUE);
 		}
 		/* return value calculated above */
 		return retval;
