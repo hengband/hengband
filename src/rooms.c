@@ -1096,7 +1096,7 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 				if (light) p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_GLOW);
 				if (room) p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_ROOM);
 			}
-			else if (is_outer_bold(y0 + y - yhsize, x0 + x - xhsize) &&
+			else if (is_outer_bold(p_ptr->current_floor_ptr, y0 + y - yhsize, x0 + x - xhsize) &&
 				 (p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
 			{
 				/* Walls */
@@ -1303,7 +1303,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		{
 			/* Fill unconnected regions with granite */
 			if ((!(p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY)) ||
-				is_outer_bold(y0 + y - yhsize, x0 + x - xhsize))
+				is_outer_bold(p_ptr->current_floor_ptr, y0 + y - yhsize, x0 + x - xhsize))
 				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
 
 			/* current_world_ptr->game_turn off icky flag (no longer needed.) */

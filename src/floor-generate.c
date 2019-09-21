@@ -1622,7 +1622,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 			x = tmp_col + col_dir;
 
 			/* Hack -- Avoid outer/solid walls */
-			if (is_outer_bold(y, x)) continue;
+			if (is_outer_bold(p_ptr->current_floor_ptr, y, x)) continue;
 			if (is_solid_bold(y, x)) continue;
 
 			/* Accept this location */
@@ -1644,7 +1644,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 				for (x = col1 - 1; x <= col1 + 1; x++)
 				{
 					/* Convert adjacent "outer" walls as "solid" walls */
-					if (is_outer_bold(y, x))
+					if (is_outer_bold(p_ptr->current_floor_ptr, y, x))
 					{
 						/* Change the wall to a "solid" wall */
 						place_solid_noperm_bold(y, x);
@@ -1793,7 +1793,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 			for (i = *x - 1; i <= *x + 1; i++)
 			{
 				/* Convert adjacent "outer" walls as "solid" walls */
-				if (is_outer_bold(j, i))
+				if (is_outer_bold(p_ptr->current_floor_ptr, j, i))
 				{
 					/* Change the wall to a "solid" wall */
 					place_solid_noperm_bold(j, i);

@@ -491,7 +491,7 @@ void place_secret_door(POSITION y, POSITION x, int type)
 void add_door(POSITION x, POSITION y)
 {
 	/* Need to have a wall in the center square */
-	if (!is_outer_bold(y, x)) return;
+	if (!is_outer_bold(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* look at:
 	*  x#x
@@ -503,7 +503,7 @@ void add_door(POSITION x, POSITION y)
 	*/
 
 	if (is_floor_bold(p_ptr->current_floor_ptr, y - 1, x) && is_floor_bold(p_ptr->current_floor_ptr, y + 1, x) &&
-		(is_outer_bold(y, x - 1) && is_outer_bold(y, x + 1)))
+		(is_outer_bold(p_ptr->current_floor_ptr, y, x - 1) && is_outer_bold(p_ptr->current_floor_ptr, y, x + 1)))
 	{
 		/* secret door */
 		place_secret_door(y, x, DOOR_DEFAULT);
@@ -522,7 +522,7 @@ void add_door(POSITION x, POSITION y)
 	*  where x = don't care
 	*  .=floor, #=wall
 	*/
-	if (is_outer_bold(y - 1, x) && is_outer_bold(y + 1, x) &&
+	if (is_outer_bold(p_ptr->current_floor_ptr, y - 1, x) && is_outer_bold(p_ptr->current_floor_ptr, y + 1, x) &&
 		is_floor_bold(p_ptr->current_floor_ptr, y, x - 1) && is_floor_bold(p_ptr->current_floor_ptr, y, x + 1))
 	{
 		/* secret door */
