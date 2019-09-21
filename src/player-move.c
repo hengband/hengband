@@ -884,13 +884,13 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	POSITION x = creature_ptr->x + ddx[dir];
 
 	/* Examine the destination */
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	monster_type *m_ptr;
 
-	monster_type *riding_m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+	monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	monster_race *riding_r_ptr = &r_info[creature_ptr->riding ? riding_m_ptr->r_idx : 0];
 
 	GAME_TEXT m_name[MAX_NLEN];
@@ -903,7 +903,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	bool do_past = FALSE;
 
 	/* Exit the area */
-	if (!p_ptr->current_floor_ptr->dun_level && !creature_ptr->wild_mode &&
+	if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->wild_mode &&
 		((x == 0) || (x == MAX_WID - 1) ||
 		 (y == 0) || (y == MAX_HGT - 1)))
 	{
@@ -915,8 +915,8 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			{
 				creature_ptr->wilderness_y--;
 				creature_ptr->wilderness_x--;
-				creature_ptr->oldpy = p_ptr->current_floor_ptr->height - 2;
-				creature_ptr->oldpx = p_ptr->current_floor_ptr->width - 2;
+				creature_ptr->oldpy = creature_ptr->current_floor_ptr->height - 2;
+				creature_ptr->oldpx = creature_ptr->current_floor_ptr->width - 2;
 				creature_ptr->ambush_flag = FALSE;
 			}
 
@@ -924,7 +924,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			{
 				creature_ptr->wilderness_y--;
 				creature_ptr->wilderness_x++;
-				creature_ptr->oldpy = p_ptr->current_floor_ptr->height - 2;
+				creature_ptr->oldpy = creature_ptr->current_floor_ptr->height - 2;
 				creature_ptr->oldpx = 1;
 				creature_ptr->ambush_flag = FALSE;
 			}
@@ -934,7 +934,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 				creature_ptr->wilderness_y++;
 				creature_ptr->wilderness_x--;
 				creature_ptr->oldpy = 1;
-				creature_ptr->oldpx = p_ptr->current_floor_ptr->width - 2;
+				creature_ptr->oldpx = creature_ptr->current_floor_ptr->width - 2;
 				creature_ptr->ambush_flag = FALSE;
 			}
 
@@ -950,7 +950,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			else if (y == 0)
 			{
 				creature_ptr->wilderness_y--;
-				creature_ptr->oldpy = p_ptr->current_floor_ptr->height - 2;
+				creature_ptr->oldpy = creature_ptr->current_floor_ptr->height - 2;
 				creature_ptr->oldpx = x;
 				creature_ptr->ambush_flag = FALSE;
 			}
@@ -966,7 +966,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			else if (x == 0)
 			{
 				creature_ptr->wilderness_x--;
-				creature_ptr->oldpx = p_ptr->current_floor_ptr->width - 2;
+				creature_ptr->oldpx = creature_ptr->current_floor_ptr->width - 2;
 				creature_ptr->oldpy = y;
 				creature_ptr->ambush_flag = FALSE;
 			}
@@ -990,7 +990,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		p_can_enter = FALSE;
 	}
 
-	m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 	if (creature_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
 	if (creature_ptr->inventory_list[INVEN_LARM].name1 == ART_STORMBRINGER) stormbringer = TRUE;
@@ -1010,7 +1010,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		if (!is_hostile(m_ptr) &&
 		    !(creature_ptr->confused || creature_ptr->image || !m_ptr->ml || creature_ptr->stun ||
 		    ((creature_ptr->muta2 & MUT2_BERS_RAGE) && creature_ptr->shero)) &&
-		    pattern_seq(p_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
+		    pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
 		{
 			/* Disturb the monster */
 			(void)set_monster_csleep(g_ptr->m_idx, 0);
@@ -1027,10 +1027,10 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			/* displace? */
 			if ((stormbringer && (randint1(1000) > 666)) || (creature_ptr->pclass == CLASS_BERSERKER))
 			{
-				py_attack(p_ptr, y, x, 0);
+				py_attack(creature_ptr, y, x, 0);
 				oktomove = FALSE;
 			}
-			else if (monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
+			else if (monster_can_cross_terrain(creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
 			{
 				do_past = TRUE;
 			}
@@ -1045,7 +1045,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		}
 		else
 		{
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 			oktomove = FALSE;
 		}
 	}
@@ -1057,7 +1057,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			msg_print(_("動けない！", "Can't move!"));
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 		}
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
@@ -1065,12 +1065,12 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			monster_desc(steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			oktomove = FALSE;
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 		}
 		else if (creature_ptr->riding_ryoute)
 		{
 			oktomove = FALSE;
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 		}
 		else if (have_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY))
 		{
@@ -1087,21 +1087,21 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 		}
 		else if (!have_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC))
 		{
-			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
+			msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 		}
 		else if (have_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
 		{
 			msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(g_ptr)].name);
 			free_turn(creature_ptr);
 			oktomove = FALSE;
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 		}
 
 		if (oktomove && MON_STUNNED(riding_m_ptr) && one_in_(2))
@@ -1110,7 +1110,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			monster_desc(steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
 			oktomove = FALSE;
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 		}
 	}
 
@@ -1140,7 +1140,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 	/* Disarm a visible trap */
 	else if ((do_pickup != easy_disarm) && have_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic)
 	{
-		if (!trap_can_be_ignored(p_ptr, g_ptr->feat))
+		if (!trap_can_be_ignored(creature_ptr, g_ptr->feat))
 		{
 			(void)exe_disarm(creature_ptr, y, x, dir);
 			return;
@@ -1216,13 +1216,13 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			}
 		}
 
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(creature_ptr, FALSE, TRUE);
 
 		if (!boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) sound(SOUND_HITWALL);
 	}
 
 	/* Normal movement */
-	if (oktomove && !pattern_seq(p_ptr, creature_ptr->y, creature_ptr->x, y, x))
+	if (oktomove && !pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x))
 	{
 		if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
 		{
@@ -1230,7 +1230,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		}
 
 		/* To avoid a loop with running */
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(creature_ptr, FALSE, TRUE);
 
 		oktomove = FALSE;
 	}
@@ -1278,7 +1278,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		if (do_pickup != always_pickup) mpe_mode |= MPE_DO_PICKUP;
 		if (break_trap) mpe_mode |= MPE_BREAK_TRAP;
 
-		(void)move_player_effect(p_ptr, y, x, mpe_mode);
+		(void)move_player_effect(creature_ptr, y, x, mpe_mode);
 	}
 }
 
