@@ -6364,7 +6364,7 @@ static void do_cmd_knowledge_dungeon(void)
 	
 	if (fff)
 	{
-		for (i = 1; i < max_d_idx; i++)
+		for (i = 1; i < current_world_ptr->max_d_idx; i++)
 		{
 			bool seiha = FALSE;
 

@@ -714,7 +714,7 @@ static void wr_extra(void)
 
 	/* Max Player and Dungeon Levels */
 	wr_s16b(p_ptr->max_plv);
-	tmp8u = (byte)max_d_idx;
+	tmp8u = (byte)current_world_ptr->max_d_idx;
 	wr_byte(tmp8u);
 	for (i = 0; i < tmp8u; i++)
 		wr_s16b((s16b)max_dlv[i]);

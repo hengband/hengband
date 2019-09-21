@@ -1575,7 +1575,7 @@ static void load_music_prefs(void)
 		}
 	}
 
-	for (i = 0; i < max_d_idx; i++)
+	for (i = 0; i < current_world_ptr->max_d_idx; i++)
 	{
 		sprintf(key, "dungeon%03d", i);
 		GetPrivateProfileString("Dungeon", key, "", tmp, 1024, ini_path);

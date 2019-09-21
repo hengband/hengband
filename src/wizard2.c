@@ -50,6 +50,7 @@
 #include "objectkind.h"
 #include "targeting.h"
 #include "view-mainwindow.h"
+#include "world.h"
 
 #ifdef ALLOW_WIZARD
 
@@ -1321,7 +1322,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 		if (!get_string(ppp, tmp_val, 2)) return;
 
 		tmp_dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
-		if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > max_d_idx)) tmp_dungeon_type = DUNGEON_ANGBAND;
+		if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > current_world_ptr->max_d_idx)) tmp_dungeon_type = DUNGEON_ANGBAND;
 
 		/* Prompt */
 		sprintf(ppp, "Jump to level (0, %d-%d): ",

@@ -2029,7 +2029,7 @@ static void rd_extra(void)
 	}
 	else
 	{
-		byte max = (byte)max_d_idx;
+		byte max = (byte)current_world_ptr->max_d_idx;
 
 		rd_byte(&max);
 

@@ -4536,7 +4536,7 @@ static void dump_aux_recall(FILE *fff)
 	int y;
 	fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
 
-	for (y = 1; y < max_d_idx; y++)
+	for (y = 1; y < current_world_ptr->max_d_idx; y++)
 	{
 		bool seiha = FALSE;
 

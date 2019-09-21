@@ -4326,7 +4326,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Maximum d_idx */
 			else if (zz[0][0] == 'D')
 			{
-				max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
+				current_world_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
 			}
 
 			/* Maximum o_idx */

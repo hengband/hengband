@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "dungeon.h"
+#include "world.h"
 
 /*
  * The dungeon arrays
@@ -11,7 +12,6 @@ char *d_text;
 /*
  * Maximum number of dungeon in d_info.txt
  */
-DUNGEON_IDX max_d_idx;
 DEPTH *max_dlv;
 
 
@@ -42,10 +42,10 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	}
 
 	/* Allocate the "dun" array */
-	C_MAKE(dun, max_d_idx, DUNGEON_IDX);
+	C_MAKE(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
 
 	screen_save();
-	for (i = 1; i < max_d_idx; i++)
+	for (i = 1; i < current_world_ptr->max_d_idx; i++)
 	{
 		char buf[80];
 		bool seiha = FALSE;
@@ -76,7 +76,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		if ((i == ESCAPE) || !num)
 		{
 			/* Free the "dun" array */
-			C_KILL(dun, max_d_idx, DUNGEON_IDX);
+			C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
 
 			screen_load();
 			return 0;
@@ -91,7 +91,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	screen_load();
 
 	/* Free the "dun" array */
-	C_KILL(dun, max_d_idx, DUNGEON_IDX);
+	C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
 
 	return select_dungeon;
 }

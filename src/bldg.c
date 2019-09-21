@@ -1456,7 +1456,7 @@ void update_gambling_monsters(void)
 	bool tekitou;
 	bool old_inside_battle = p_ptr->phase_out;
 
-	for (i = 0; i < max_d_idx; i++)
+	for (i = 0; i < current_world_ptr->max_d_idx; i++)
 		if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
 
 	mon_level = randint1(MIN(max_dl, 122)) + 5;
@@ -4232,7 +4232,7 @@ void determine_today_mon(bool conv_old)
 
 	if (!conv_old)
 	{
-		for (i = 0; i < max_d_idx; i++)
+		for (i = 0; i < current_world_ptr->max_d_idx; i++)
 		{
 			if (max_dlv[i] < d_info[i].mindepth) continue;
 			if (max_dl < max_dlv[i]) max_dl = max_dlv[i];

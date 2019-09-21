@@ -1809,7 +1809,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	creature_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
 	/* Wipe the recall depths */
-	for (i = 0; i < max_d_idx; i++)
+	for (i = 0; i < current_world_ptr->max_d_idx; i++)
 	{
 		max_dlv[i] = 0;
 	}

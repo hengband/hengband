@@ -907,7 +907,7 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 		return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
 	}
 	
-	for (i = 1; i < max_d_idx; i++)
+	for (i = 1; i < current_world_ptr->max_d_idx; i++)
 	{
 		if (!d_info[i].maxdepth) continue;
 		wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte_hack)i;

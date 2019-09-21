@@ -778,7 +778,7 @@ static errr init_r_info(void)
 static errr init_d_info(void)
 {
 	/* Init the header */
-	init_header(&d_head, max_d_idx, sizeof(dungeon_type));
+	init_header(&d_head, current_world_ptr->max_d_idx, sizeof(dungeon_type));
 
 #ifdef ALLOW_TEMPLATES
 
@@ -1237,7 +1237,7 @@ static errr init_other(void)
 	}
 
 	/* Allocate and Wipe the max dungeon level */
-	C_MAKE(max_dlv, max_d_idx, DEPTH);
+	C_MAKE(max_dlv, current_world_ptr->max_d_idx, DEPTH);
 
 	/* Allocate and wipe each line of the p_ptr->current_floor_ptr->grid_array */
 	for (i = 0; i < MAX_HGT; i++)
@@ -1840,7 +1840,7 @@ void init_angband(void)
 	if (init_d_info()) quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
 	{
 		int i;
-		for (i = 1; i < max_d_idx; i++)
+		for (i = 1; i < current_world_ptr->max_d_idx; i++)
 			if (d_info[i].final_guardian)
 				r_info[d_info[i].final_guardian].flags7 |= RF7_GUARDIAN;
 	}

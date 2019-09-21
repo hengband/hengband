@@ -5747,7 +5747,7 @@ long calc_score(player_type *creature_ptr)
 
 	if (mult < 5) mult = 5;
 
-	for (i = 0; i < max_d_idx; i++)
+	for (i = 0; i < current_world_ptr->max_d_idx; i++)
 		if (max_dlv[i] > max_dl)
 			max_dl = max_dlv[i];
 
