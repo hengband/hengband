@@ -1770,7 +1770,7 @@ static bool set_tunnel(POSITION *x, POSITION *y, bool affectwall)
 		else return FALSE;
 	}
 
-	if (is_floor_bold(*y, *x))
+	if (is_floor_bold(p_ptr->current_floor_ptr, *y, *x))
 	{
 		/* Don't do anything */
 		return TRUE;

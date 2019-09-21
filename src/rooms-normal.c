@@ -1021,7 +1021,7 @@ bool build_type12(floor_type *floor_ptr)
 	{
 		for (y = y0 - 2; y <= y0 + 2; y++)
 		{
-			if (!is_floor_bold(y, x))
+			if (!is_floor_bold(floor_ptr, y, x))
 			{
 				/* Wall in the way */
 				emptyflag = FALSE;

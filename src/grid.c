@@ -502,7 +502,7 @@ void add_door(POSITION x, POSITION y)
 	*  .=floor, #=wall
 	*/
 
-	if (is_floor_bold(y - 1, x) && is_floor_bold(y + 1, x) &&
+	if (is_floor_bold(p_ptr->current_floor_ptr, y - 1, x) && is_floor_bold(p_ptr->current_floor_ptr, y + 1, x) &&
 		(is_outer_bold(y, x - 1) && is_outer_bold(y, x + 1)))
 	{
 		/* secret door */
@@ -523,7 +523,7 @@ void add_door(POSITION x, POSITION y)
 	*  .=floor, #=wall
 	*/
 	if (is_outer_bold(y - 1, x) && is_outer_bold(y + 1, x) &&
-		is_floor_bold(y, x - 1) && is_floor_bold(y, x + 1))
+		is_floor_bold(p_ptr->current_floor_ptr, y, x - 1) && is_floor_bold(p_ptr->current_floor_ptr, y, x + 1))
 	{
 		/* secret door */
 		place_secret_door(y, x, DOOR_DEFAULT);
@@ -867,7 +867,7 @@ bool get_is_floor(POSITION x, POSITION y)
 	}
 
 	/* Do the real check */
-	if (is_floor_bold(y, x)) return (TRUE);
+	if (is_floor_bold(p_ptr->current_floor_ptr, y, x)) return (TRUE);
 
 	return (FALSE);
 }

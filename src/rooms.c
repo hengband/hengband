@@ -1086,7 +1086,7 @@ bool generate_fracave(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, 
 	{
 		for (y = 1; y < ysize; ++y)
 		{
-			if (is_floor_bold(y0 + y - yhsize, x0 + x - xhsize) &&
+			if (is_floor_bold(p_ptr->current_floor_ptr, y0 + y - yhsize, x0 + x - xhsize) &&
 			    (p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
 			{
 				/* Clear the icky flag in the filled region */
@@ -1403,7 +1403,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 			if ((randint1(100) - difficulty * 3) > 50) value = 20;
 
 			 /* if floor, shallow water and lava */
-			if (is_floor_bold(y, x) ||
+			if (is_floor_bold(p_ptr->current_floor_ptr, y, x) ||
 			    (cave_have_flag_bold(y, x, FF_PLACE) && cave_have_flag_bold(y, x, FF_DROP)))
 			{
 				/* The smaller 'value' is, the better the stuff */
@@ -1982,7 +1982,7 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 
 	f_ptr = &f_info[g_ptr->feat];
 
-	if (is_floor_bold(y, x))
+	if (is_floor_bold(p_ptr->current_floor_ptr, y, x))
 	{
 		for (i = -1; i <= 1; i++)
 		{

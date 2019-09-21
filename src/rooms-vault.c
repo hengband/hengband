@@ -1111,7 +1111,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		{
 			total = x - x1 + y - y1;
 			/* If total is odd- and is a floor then make a wall */
-			if ((total % 2 == 1) && is_floor_bold(y, x))
+			if ((total % 2 == 1) && is_floor_bold(p_ptr->current_floor_ptr, y, x))
 			{
 				place_inner_bold(y, x);
 			}
