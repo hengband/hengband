@@ -92,7 +92,7 @@ static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
  */
 bool cmd_limit_cast(player_type *creature_ptr)
 {
-	if (p_ptr->current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
+	if (creature_ptr->current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
 	{
 		msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 		msg_print(NULL);
@@ -189,7 +189,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 	bool go_up = FALSE;
 
 	/* Player grid */
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	int up_num = 0;
@@ -235,7 +235,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		/* Leaving a quest */
 		if (!creature_ptr->inside_quest)
 		{
-			p_ptr->current_floor_ptr->dun_level = 0;
+			creature_ptr->current_floor_ptr->dun_level = 0;
 		}
 		creature_ptr->leaving = TRUE;
 
@@ -248,7 +248,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		return;
 	}
 
-	if (!p_ptr->current_floor_ptr->dun_level)
+	if (!creature_ptr->current_floor_ptr->dun_level)
 	{
 		go_up = TRUE;
 	}
@@ -279,7 +279,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		leave_quest_check();
 
 		creature_ptr->inside_quest = g_ptr->special;
-		p_ptr->current_floor_ptr->dun_level = 0;
+		creature_ptr->current_floor_ptr->dun_level = 0;
 		up_num = 0;
 	}
 
@@ -303,15 +303,15 @@ void do_cmd_go_up(player_type *creature_ptr)
 		}
 
 		/* Get out from current dungeon */
-		if (p_ptr->current_floor_ptr->dun_level - up_num < d_info[creature_ptr->dungeon_idx].mindepth)
-			up_num = p_ptr->current_floor_ptr->dun_level;
+		if (creature_ptr->current_floor_ptr->dun_level - up_num < d_info[creature_ptr->dungeon_idx].mindepth)
+			up_num = creature_ptr->current_floor_ptr->dun_level;
 	}
 	if (record_stair) exe_write_diary(creature_ptr, NIKKI_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
 	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
-	else if (up_num == p_ptr->current_floor_ptr->dun_level)
+	else if (up_num == creature_ptr->current_floor_ptr->dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
 	else
 		msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
@@ -326,7 +326,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 void do_cmd_go_down(player_type *creature_ptr)
 {
 	/* Player grid */
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	bool fall_trap = FALSE;
@@ -382,7 +382,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		/* Leaving a quest */
 		if (!creature_ptr->inside_quest)
 		{
-			p_ptr->current_floor_ptr->dun_level = 0;
+			creature_ptr->current_floor_ptr->dun_level = 0;
 		}
 		creature_ptr->leaving = TRUE;
 		creature_ptr->oldpx = 0;
@@ -395,7 +395,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 	{
 		DUNGEON_IDX target_dungeon = 0;
 
-		if (!p_ptr->current_floor_ptr->dun_level)
+		if (!creature_ptr->current_floor_ptr->dun_level)
 		{
 			target_dungeon = have_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
 
@@ -431,7 +431,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		if (have_flag(f_ptr->flags, FF_SHAFT)) down_num += 2;
 		else down_num += 1;
 
-		if (!p_ptr->current_floor_ptr->dun_level)
+		if (!creature_ptr->current_floor_ptr->dun_level)
 		{
 			/* Enter the dungeon just now */
 			creature_ptr->enter_dungeon = TRUE;
@@ -558,7 +558,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 	int i, j;
 	bool flag = TRUE;
 	bool more = FALSE;
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 	take_turn(creature_ptr, 100);
 
@@ -645,8 +645,8 @@ static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*
 		yy = creature_ptr->y + ddy_ddd[d];
 		xx = creature_ptr->x + ddx_ddd[d];
 
-		/* Get the p_ptr->current_floor_ptr->grid_array */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
+		/* Get the creature_ptr->current_floor_ptr->grid_array */
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
 
 		/* Must have knowledge */
 		if (!(g_ptr->info & (CAVE_MARK))) continue;
@@ -701,7 +701,7 @@ static int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, boo
 		if ((o_idx = chest_check(yy, xx, FALSE)) == 0) continue;
 
 		/* Grab the object */
-		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+		o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 		/* Already open */
 		if (o_ptr->pval == 0) continue;
@@ -740,7 +740,7 @@ static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 	int i, j;
 
 	/* Get requested grid */
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	bool more = FALSE;
 
@@ -871,7 +871,7 @@ void do_cmd_open(player_type *creature_ptr)
 		x = creature_ptr->x + ddx[dir];
 
 		/* Get requested grid */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -918,7 +918,7 @@ void do_cmd_open(player_type *creature_ptr)
  */
 static bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 	FEAT_IDX old_feat = g_ptr->feat;
 	bool more = FALSE;
 
@@ -1007,7 +1007,7 @@ void do_cmd_close(player_type *creature_ptr)
 
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -1097,7 +1097,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 
 	take_turn(creature_ptr, 100);
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 	f_ptr = &f_info[g_ptr->feat];
 	power = f_ptr->power;
 
@@ -1241,7 +1241,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -1298,7 +1298,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	int i, j;
 
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Must be a closed door */
@@ -1388,7 +1388,7 @@ static bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, 
 {
 	int i, j;
 	bool more = FALSE;
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 	take_turn(creature_ptr, 100);
 
@@ -1469,7 +1469,7 @@ static bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, 
 
 bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Get feature */
 	feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -1594,7 +1594,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -1651,7 +1651,7 @@ void do_cmd_disarm(player_type *creature_ptr)
  */
 static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
-	grid_type	*g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type	*g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Get feature */
 	feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -1776,7 +1776,7 @@ void do_cmd_bash(player_type *creature_ptr)
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -1858,7 +1858,7 @@ void do_cmd_alter(player_type *creature_ptr)
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -1977,7 +1977,7 @@ void do_cmd_spike(player_type *creature_ptr)
 
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -2548,7 +2548,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		if (!cave_have_flag_bold(ny[cur_dis], nx[cur_dis], FF_PROJECT))
 		{
 			hit_wall = TRUE;
-			if ((q_ptr->tval == TV_FIGURINE) || object_is_potion(q_ptr) || !p_ptr->current_floor_ptr->grid_array[ny[cur_dis]][nx[cur_dis]].m_idx) break;
+			if ((q_ptr->tval == TV_FIGURINE) || object_is_potion(q_ptr) || !creature_ptr->current_floor_ptr->grid_array[ny[cur_dis]][nx[cur_dis]].m_idx) break;
 		}
 
 		/* The player can see the (on screen) missile */
@@ -2584,10 +2584,10 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		cur_dis++;
 
 		/* Monster here, Try to hit it */
-		if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+		if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_name(g_ptr->m_idx, m_name);
 
@@ -2717,13 +2717,13 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
 			if (potion_smash_effect(0, y, x, q_ptr->k_idx))
 			{
-				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
-				if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx && is_friendly(m_ptr) && !MON_INVULNER(m_ptr))
+				monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+				if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx && is_friendly(m_ptr) && !MON_INVULNER(m_ptr))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
 					monster_desc(m_name, m_ptr, 0);
 					msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
-					set_hostile(&p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx]);
+					set_hostile(&creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx]);
 				}
 			}
 			do_drop = FALSE;
