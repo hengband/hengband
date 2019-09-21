@@ -92,7 +92,7 @@ typedef struct
  * @param Y 指定Y座標
  * @param X 指定X座標
  */
-#define place_rubble(Y,X)       set_cave_feat(p_ptr->current_floor_ptr,Y,X,feat_rubble)
+#define place_rubble(F,Y,X)       set_cave_feat(F,Y,X,feat_rubble)
 
 /*!
  * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す

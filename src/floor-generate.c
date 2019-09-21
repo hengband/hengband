@@ -360,7 +360,7 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
 		{
 			case ALLOC_TYP_RUBBLE:
 			{
-				place_rubble(y, x);
+				place_rubble(floor_ptr, y, x);
 				floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
 				break;
 			}
