@@ -4055,7 +4055,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 				t_x = p_ptr->current_floor_ptr->m_list[who].fx - 1 + randint1(3);
 				max_attempts--;
 			}
-			while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(p_ptr->y, p_ptr->x, t_y, t_x));
+			while (max_attempts && in_bounds2u(p_ptr->current_floor_ptr, t_y, t_x) && !projectable(p_ptr->y, p_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
@@ -6357,7 +6357,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 						t_x = x_saver - 1 + randint1(3);
 						max_attempts--;
 					}
-					while (max_attempts && in_bounds2u(t_y, t_x) && !projectable(y, x, t_y, t_x));
+					while (max_attempts && in_bounds2u(p_ptr->current_floor_ptr, t_y, t_x) && !projectable(y, x, t_y, t_x));
 
 					if (max_attempts < 1)
 					{
