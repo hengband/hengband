@@ -1284,9 +1284,10 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
 
-	grid_type       *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
+	grid_type       *g_ptr = &floor_ptr->grid_array[y][x];
 
-	monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	monster_type    *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Access the weapon */
@@ -1998,7 +1999,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 					}
 
 					/* Hack -- Get new monster */
-					m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+					m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 					/* Oops, we need a different name... */
 					monster_desc(m_name, m_ptr, 0);
@@ -2009,11 +2010,11 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			}
 			else if (o_ptr->name1 == ART_G_HAMMER)
 			{
-				monster_type *target_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+				monster_type *target_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 				if (target_ptr->hold_o_idx)
 				{
-					object_type *q_ptr = &p_ptr->current_floor_ptr->o_list[target_ptr->hold_o_idx];
+					object_type *q_ptr = &floor_ptr->o_list[target_ptr->hold_o_idx];
 					GAME_TEXT o_name[MAX_NLEN];
 
 					object_desc(o_name, q_ptr, OD_NAME_ONLY);
@@ -2153,7 +2154,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	if (do_quake)
 	{
 		earthquake(attacker_ptr->y, attacker_ptr->x, 10, 0);
-		if (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx) *mdeath = TRUE;
+		if (!floor_ptr->grid_array[y][x].m_idx) *mdeath = TRUE;
 	}
 }
 
