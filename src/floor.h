@@ -195,10 +195,10 @@ extern floor_type floor_info;
 	(((Y) == p_ptr->y) && ((X) == p_ptr->x))
 
 /*
- * Grid based version of "player_bold()"
+ * Grid based version of "creature_bold()"
  */
-#define player_grid(C) \
-	((C) == &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])
+#define player_grid(C, G) \
+	((G) == &(C)->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])
 
 
 #define cave_have_flag_bold(Y,X,INDEX) \
@@ -304,8 +304,7 @@ extern floor_type floor_info;
  */
 #define cave_empty_grid(C) \
 	(cave_have_flag_grid((C), FF_PLACE) && \
-	 !((C)->m_idx) && \
-	 !player_grid(C))
+	 !((C)->m_idx) && !player_grid(p_ptr, C))
 
 
 /*
