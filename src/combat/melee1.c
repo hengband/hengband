@@ -3594,7 +3594,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					if (CHECK_MULTISHADOW(target_ptr))
 					{
-						msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, you are unharmed!"));
+						msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
 					}
 					else
 					{

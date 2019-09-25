@@ -4811,7 +4811,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	{
 		if (CHECK_MULTISHADOW(target_ptr))
 		{
-			msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, you are unharmed!"));
+			msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
 		}
 		else if (target_ptr->csp)
 		{
