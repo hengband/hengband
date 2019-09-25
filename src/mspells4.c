@@ -1922,9 +1922,9 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
-		_("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
-		_("%^sが自分の傷に集中した。", "%^s concentrates on %s wounds."),
-		_("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
+		_("%^sは自分の傷に念を集中した。", "%^s concentrates on his wounds."),
+		_("%^sが自分の傷に集中した。", "%^s concentrates on his wounds."),
+		_("%^sは自分の傷に念を集中した。", "%^s concentrates on his wounds."),
 		target_ptr->blind > 0, TARGET_TYPE);
 
 	/* Heal some */
