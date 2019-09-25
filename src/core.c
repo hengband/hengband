@@ -1536,7 +1536,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 
 			if (creature_ptr->levitation)
 			{
-				msg_print(_("電撃を受けた！", "The electric shocks you!"));
+				msg_print(_("電撃を受けた！", "The electricity shocks you!"));
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
 					f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
