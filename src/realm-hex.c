@@ -391,11 +391,11 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("炎のオーラを身にまとい、回復速度が速くなる。", "Gives fire aura and regeneration.");
 		if (cast)
 		{
-			msg_print(_("体が炎のオーラで覆われた。", "You have enveloped by fiery aura!"));
+			msg_print(_("体が炎のオーラで覆われた。", "You are enveloped by a fiery aura!"));
 		}
 		if (stop)
 		{
-			msg_print(_("炎のオーラが消え去った。", "Fiery aura disappeared."));
+			msg_print(_("炎のオーラが消え去った。", "The fiery aura disappeared."));
 		}
 		break;
 
@@ -560,14 +560,14 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		/*** 2nd book (8-15) ***/
 	case 8:
 		if (name) return _("氷の鎧", "Ice armor");
-		if (desc) return _("氷のオーラを身にまとい、防御力が上昇する。", "Gives fire aura and bonus to AC.");
+		if (desc) return _("氷のオーラを身にまとい、防御力が上昇する。", "Surrounds you with an icy aura and bonus to AC.");
 		if (cast)
 		{
-			msg_print(_("体が氷の鎧で覆われた。", "You have enveloped by ice armor!"));
+			msg_print(_("体が氷の鎧で覆われた。", "You are enveloped by icy armor!"));
 		}
 		if (stop)
 		{
-			msg_print(_("氷の鎧が消え去った。", "Ice armor disappeared."));
+			msg_print(_("氷の鎧が消え去った。", "The icy armor disappeared."));
 		}
 		break;
 
@@ -671,11 +671,11 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("電気のオーラを身にまとい、動きが速くなる。", "Gives lightning aura and a bonus to speed.");
 		if (cast)
 		{
-			msg_print(_("体が稲妻のオーラで覆われた。", "You have enveloped by electrical aura!"));
+			msg_print(_("体が稲妻のオーラで覆われた。", "You are enveloped by an electrical aura!"));
 		}
 		if (stop)
 		{
-			msg_print(_("稲妻のオーラが消え去った。", "Electrical aura disappeared."));
+			msg_print(_("稲妻のオーラが消え去った。", "The electrical aura disappeared."));
 		}
 		break;
 
@@ -814,7 +814,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			}
 			else
 			{
-				msg_print(_("影のオーラを身にまとった。", "You have enveloped by shadow aura!"));
+				msg_print(_("影のオーラを身にまとった。", "You are enveloped by a shadowy aura!"));
 			}
 		}
 		if (cont)
@@ -831,7 +831,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		}
 		if (stop)
 		{
-			msg_print(_("影のオーラが消え去った。", "Shadow aura disappeared."));
+			msg_print(_("影のオーラが消え去った。", "The shadowy aura disappeared."));
 		}
 		break;
 
