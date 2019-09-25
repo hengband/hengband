@@ -1851,7 +1851,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				if (check_hp_for_feat_destruction(f_ptr, m_ptr) && (randint0(m_ptr->hp / 10) > f_ptr->power))
 				{
 					if (have_flag(f_ptr->flags, FF_GLASS))
-						msg_print(_("ガラスが砕ける音がした！", "You hear a glass was crashed!"));
+						msg_print(_("ガラスが砕ける音がした！", "You hear glass breaking!"));
 					else
 						msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
 
