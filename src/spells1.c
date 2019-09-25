@@ -4877,7 +4877,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		{
 			if (!CHECK_MULTISHADOW(target_ptr))
 			{
-				msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psyonic energy."));
+				msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
 
 				if (!target_ptr->resist_conf)
 				{
@@ -4915,7 +4915,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		{
 			if (!CHECK_MULTISHADOW(target_ptr))
 			{
-				msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psyonic energy."));
+				msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
 
 				target_ptr->csp -= 100;
 				if (target_ptr->csp < 0)
