@@ -1725,7 +1725,7 @@ void update_mon_lite(player_type *subject_ptr)
 	}
 	else
 	{
-		msg_print(_("影の覆いが濃くなった！", "Your mantle of shadow restored its original darkness."));
+		msg_print(_("影の覆いが濃くなった！", "Your mantle of shadow is restored to its original darkness."));
 	}
 
 	subject_ptr->old_monlite = subject_ptr->monlite;
