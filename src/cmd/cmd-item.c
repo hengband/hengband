@@ -998,7 +998,7 @@ static void do_cmd_refill_torch(player_type *creature_ptr)
 	else if ((o_ptr->name2 == EGO_LITE_DARKNESS) || (j_ptr->name2 == EGO_LITE_DARKNESS))
 	{
 		j_ptr->xtra4 = 0;
-		msg_print(_("しかし松明は全く光らない。", "Curiously, your torche don't light."));
+		msg_print(_("しかし松明は全く光らない。", "Curiously, your torch doesn't light."));
 	}
 	/* Over-fuel message */
 	else if (j_ptr->xtra4 >= FUEL_TORCH)
