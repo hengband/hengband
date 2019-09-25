@@ -541,7 +541,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Releases a confusion ball which doesn't inflict any damage.",
 	"Swaps positions of you and a monster.",
 	"Sets a glyph under you. The glyph will explode when a monster moves on it.",
-	"Become ethereal form which gives ability to pass walls, and gives resistance to acid for a while. This resistance can be added to which from equipment for more powerful resistance.",
+	"Become ethereal for a period of time. While ethereal, you can pass through walls and are resistant to acid. This resistance can be added to which from equipment for more powerful resistance.",
 	"Generates huge balls of poison, drain life and confusion, then teleport in a time.",
 	"Fires some number of beams of fire, nether or plasma in random directions.",
 	"Creates shadows of yourself which gives you abillity to completely evade any attacks at one in two chance for a while.",
