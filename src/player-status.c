@@ -3808,7 +3808,7 @@ void calc_bonuses(player_type *creature_ptr)
 #ifdef JP
 			msg_format("%s馬を操れない。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "両手がふさがっていて" : "");
 #else
-			msg_print("You are using both hand for fighting, and you can't control a riding pet.");
+			msg_print("You are using both hand for fighting, and you can't control the pet you're riding.");
 #endif
 		}
 		else
@@ -3816,7 +3816,7 @@ void calc_bonuses(player_type *creature_ptr)
 #ifdef JP
 			msg_format("%s馬を操れるようになった。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "手が空いて" : "");
 #else
-			msg_print("You began to control riding pet with one hand.");
+			msg_print("You began to control the pet you're riding with one hand.");
 #endif
 		}
 

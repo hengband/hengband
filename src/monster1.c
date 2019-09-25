@@ -2461,7 +2461,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	{
 		if (rakuba(player_ptr, -1, FALSE))
 		{
-			msg_print(_("地面に落とされた。", "You have fallen from your riding pet."));
+			msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
 		}
 	}
 
