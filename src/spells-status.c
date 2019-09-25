@@ -495,7 +495,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	if (creature_ptr->pclass == CLASS_FORCETRAINER)
 	{
 		P_PTR_KI = creature_ptr->lev * 5 + 190;
-		msg_print(_("気が爆発寸前になった。", "Your force are immediatly before explosion."));
+		msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));
 	}
 
 	return TRUE;
