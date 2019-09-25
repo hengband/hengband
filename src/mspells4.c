@@ -2170,10 +2170,10 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITIO
 	{
 		count += summon_named_creature(target_ptr, m_idx, y, x, MON_SHURYUUDAN, mode);
 	}
-
 	if (target_ptr->blind && count)
-		msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things are scattered nearby."));
-
+	{
+		msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things scattered nearby."));
+	}
 	return 0;
 }
 
