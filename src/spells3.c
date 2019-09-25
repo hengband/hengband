@@ -3466,7 +3466,7 @@ bool tele_town(player_type *caster_ptr)
 		return FALSE;
 	}
 
-	prt(_("どこに行きますか:", "Which town you go: "), 0, 0);
+	prt(_("どこに行きますか:", "Where do you want to go: "), 0, 0);
 	while (TRUE)
 	{
 		i = inkey();

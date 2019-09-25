@@ -3620,7 +3620,6 @@ static void building_recharge_all(player_type *player_ptr)
 	player_ptr->au -= total_cost;
 }
 
-
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
  * @param player_ptr プレーヤーへの参照ポインタ
