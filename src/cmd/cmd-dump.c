@@ -940,7 +940,7 @@ void do_cmd_diary(player_type *creature_ptr)
 		/* Give some choices */
 		prt(_("(1) 記録を見る", "(1) Display your record"), 4, 5);
 		prt(_("(2) 文章を記録する", "(2) Add record"), 5, 5);
-		prt(_("(3) 直前に入手又は鑑定したものを記録する", "(3) Record item you last get/identify"), 6, 5);
+		prt(_("(3) 直前に入手又は鑑定したものを記録する", "(3) Record the last item you got or identified"), 6, 5);
 		prt(_("(4) 記録を消去する", "(4) Delete your record"), 7, 5);
 
 		prt(_("(R) プレイ動画を記録する/中止する", "(R) Record playing movie / or stop it"), 9, 5);
