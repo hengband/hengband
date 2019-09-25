@@ -829,7 +829,7 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 		else if (!creature_ptr->lightspeed)
 		{
-			msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely faster!"));
+			msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely fast!"));
 			notice = TRUE;
 			chg_virtue(creature_ptr, V_PATIENCE, -1);
 			chg_virtue(creature_ptr, V_DILIGENCE, 1);
