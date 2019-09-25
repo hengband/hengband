@@ -1199,7 +1199,7 @@ void do_cmd_options(void)
 		Term_clear();
 
 		/* Why are we here */
-		prt(_("[ オプションの設定 ]", "TinyAngband options"), 1, 0);
+		prt(_("[ オプションの設定 ]", "Game options"), 1, 0);
 
 		while (TRUE)
 		{
