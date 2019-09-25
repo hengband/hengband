@@ -1181,7 +1181,7 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	{
 		if (creature_ptr->shero)
 		{
-			msg_print(_("野蛮な気持ちが消え失せた。", "You feel less Berserk."));
+			msg_print(_("野蛮な気持ちが消え失せた。", "You feel less berserk."));
 			notice = TRUE;
 		}
 	}
