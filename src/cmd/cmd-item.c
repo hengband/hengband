@@ -526,7 +526,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
 
 		if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && one_in_(7)) || one_in_(4))
 		{
-			msg_print(_("呪われた装備を力づくで剥がした！", "You teared a cursed equipment off by sheer strength!"));
+			msg_print(_("呪われた装備を力づくで剥がした！", "You tore off a piece of cursed equipment by sheer strength!"));
 
 			o_ptr->ident |= (IDENT_SENSE);
 			o_ptr->curse_flags = 0L;
