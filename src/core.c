@@ -3146,7 +3146,7 @@ static void process_world(player_type *player_ptr)
 
 		if (number_mon == 0)
 		{
-			msg_print(_("相打ちに終わりました。", "They have kill each other at the same time."));
+			msg_print(_("相打ちに終わりました。", "Nothing survived."));
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
 			update_gambling_monsters(player_ptr);
@@ -3159,7 +3159,7 @@ static void process_world(player_type *player_ptr)
 			wm_ptr = &floor_ptr->m_list[win_m_idx];
 
 			monster_desc(m_name, wm_ptr, 0);
-			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
+			msg_format(_("%sが勝利した！", "%s won!"), m_name);
 			msg_print(NULL);
 
 			if (win_m_idx == (sel_monster + 1))
