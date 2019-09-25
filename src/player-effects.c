@@ -4187,10 +4187,10 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 	char choice;
 	screen_save();
 
-	c_prt(TERM_RED,    _("        a) 火炎", "        a) Immune Fire"), 2, 14);
-	c_prt(TERM_L_WHITE,_("        b) 冷気", "        b) Immune Cold"), 3, 14);
-	c_prt(TERM_L_DARK, _("        c) 酸", "        c) Immune Acid"), 4, 14);
-	c_prt(TERM_BLUE,   _("        d) 電撃", "        d) Immune Elec"), 5, 14);
+	c_prt(TERM_RED,    _("        a) 火炎", "        a) Immunity to fire"), 2, 14);
+	c_prt(TERM_L_WHITE,_("        b) 冷気", "        b) Immunity to cold"), 3, 14);
+	c_prt(TERM_L_DARK, _("        c) 酸", "        c) Immunity to acid"), 4, 14);
+	c_prt(TERM_BLUE,   _("        d) 電撃", "        d) Immunity to elec"), 5, 14);
 
 	prt("", 6, 14);
 	prt("", 7, 14);
@@ -4198,7 +4198,7 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 	prt("", 9, 14);
 
 	prt("", 1, 0);
-	prt(_("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immune "), 1, 14);
+	prt(_("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immunity "), 1, 14);
 
 	choice = inkey();
 
@@ -4212,7 +4212,7 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 		set_ele_immune(creature_ptr, DEFENSE_ELEC, immune_turn);
 	else
 	{
-		msg_print(_("免疫を付けるのをやめた。", "You cancel the temporary immune."));
+		msg_print(_("免疫を付けるのをやめた。", "You cancel the temporary immunity."));
 		screen_load();
 		return FALSE;
 	}
