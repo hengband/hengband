@@ -2185,7 +2185,7 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	{
 		if (creature_ptr->tsuyoshi)
 		{
-			msg_print(_("肉体が急速にしぼんでいった。", "Your body had quickly shriveled."));
+			msg_print(_("肉体が急速にしぼんでいった。", "Your body has quickly shriveled."));
 
 			(void)dec_stat(creature_ptr, A_CON, 20, TRUE);
 			(void)dec_stat(creature_ptr, A_STR, 20, TRUE);
