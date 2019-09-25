@@ -291,7 +291,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 		/* Skip non-empty grids */
 		if (!player_can_ride_aux(creature_ptr, g_ptr, FALSE))
 		{
-			msg_print(_("そちらには降りられません。", "You cannot go to that direction."));
+			msg_print(_("そちらには降りられません。", "You cannot go that direction."));
 			return FALSE;
 		}
 
