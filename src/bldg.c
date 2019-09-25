@@ -3177,7 +3177,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 			one_ability(o_ptr);
 		}
 
-		msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptionally."));
+		msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptional."));
 	}
 
 	object_desc(basenm, o_ptr, OD_NAME_ONLY);
