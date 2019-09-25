@@ -2238,7 +2238,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 
 	if (j_ptr->sval == SV_CRIMSON)
 	{
-		msg_print(_("この武器は発動して使うもののようだ。", "Do activate."));
+		msg_print(_("この武器は発動して使うもののようだ。", "It's already activated."));
 		flush();
 		return;
 	}
