@@ -506,7 +506,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 			}
 			if (creature_ptr->action == ACTION_KAMAE)
 			{
-				msg_print(_("構えがとけた。", "Your posture gets loose."));
+				msg_print(_("構えがとけた。", "You lose your stance."));
 				creature_ptr->special_defense &= ~(KAMAE_MASK);
 				creature_ptr->update |= (PU_BONUS);
 				creature_ptr->redraw |= (PR_STATE);
@@ -514,7 +514,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 			}
 			else if (creature_ptr->action == ACTION_KATA)
 			{
-				msg_print(_("型が崩れた。", "Your posture gets loose."));
+				msg_print(_("型が崩れた。", "You lose your stance."));
 				creature_ptr->special_defense &= ~(KATA_MASK);
 				creature_ptr->update |= (PU_BONUS);
 				creature_ptr->update |= (PU_MONSTERS);
@@ -620,7 +620,7 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 
 			if (creature_ptr->special_defense & KATA_MASK)
 			{
-				msg_print(_("型が崩れた。", "Your posture gets loose."));
+				msg_print(_("型が崩れた。", "You lose your stance."));
 				creature_ptr->special_defense &= ~(KATA_MASK);
 				creature_ptr->update |= (PU_BONUS);
 				creature_ptr->update |= (PU_MONSTERS);
@@ -2683,7 +2683,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 		}
 		if (creature_ptr->special_defense & KATA_MASK)
 		{
-			msg_print(_("型が崩れた。", "Your posture gets loose."));
+			msg_print(_("型が崩れた。", "You lose your stance."));
 			creature_ptr->special_defense &= ~(KATA_MASK);
 			creature_ptr->update |= (PU_BONUS);
 			creature_ptr->update |= (PU_MONSTERS);
