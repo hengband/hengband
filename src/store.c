@@ -5004,11 +5004,11 @@ static void store_sell(player_type *owner_ptr)
 
 		if (-1 == store_check_num(q_ptr))
 		{
-			msg_print(_("それと同じ品物は既に博物館にあるようです。", "The same object as it is already in the Museum."));
+			msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
 		}
 		else
 		{
-			msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take items which is given to the Museum back!!"));
+			msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
 		}
 
 		if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) return;
@@ -5162,7 +5162,7 @@ static void museum_remove_object(player_type *player_ptr)
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(player_ptr, o_name, o_ptr, 0);
 
-	msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "You cannot see items which is removed from the Museum!"));
+	msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "Once removed from the Museum, an item will be gone forever!"));
 	if (!get_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), o_name))) return;
 
 	msg_format(_("%sの展示をやめさせた。", "You ordered to remove %s."), o_name);
