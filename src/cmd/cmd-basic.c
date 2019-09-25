@@ -127,7 +127,7 @@ bool cmd_limit_image(player_type *creature_ptr)
 {
 	if (creature_ptr->image)
 	{
-		msg_print(_("幻覚が見えて集中できない！", "You are too hallucinated!"));
+		msg_print(_("幻覚が見えて集中できない！", "Your hallucinations prevent you from concentrating!"));
 		return TRUE;
 	}
 	return FALSE;
@@ -908,7 +908,7 @@ static bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 	if ((g_ptr->o_idx || (g_ptr->info & CAVE_OBJECT)) &&
 		(closed_feat != old_feat) && !have_flag(f_info[closed_feat].flags, FF_DROP))
 	{
-		msg_print(_("何かがつっかえて閉まらない。", "There seems stuck."));
+		msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
 	}
 	else
 	{
