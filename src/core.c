@@ -3178,7 +3178,7 @@ static void process_world(player_type *player_ptr)
 		}
 		else if (current_world_ptr->game_turn - floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
 		{
-			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
+			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle ended in a draw."));
 			player_ptr->au += kakekin;
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
@@ -5520,7 +5520,7 @@ void play_game(player_type *player_ptr, bool new_game)
 			/* No player?  -- Try to regenerate floor */
 			if (!player_ptr->y || !player_ptr->x)
 			{
-				msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location.  Regenerate the dungeon floor."));
+				msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location, regenerate the dungeon floor."));
 				change_floor(player_ptr);
 			}
 
