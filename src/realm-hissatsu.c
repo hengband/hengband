@@ -866,7 +866,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 			if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 			{
-				msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
+				msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
 				return "";
 			}
 			msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
