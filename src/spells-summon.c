@@ -212,7 +212,7 @@ bool cast_summon_greater_demon(player_type *caster_ptr)
 	}
 	else
 	{
-		msg_print(_("悪魔は現れなかった。", "No Greater Demon arrive."));
+		msg_print(_("悪魔は現れなかった。", "No Greater Demon arrives."));
 	}
 
 	return TRUE;
@@ -303,7 +303,7 @@ void mitokohmon(player_type *kohmon_ptr)
 
 	if (count == 0)
 	{
-		msg_print(_("しかし、何も起きなかった。", "Nothing happen."));
+		msg_print(_("しかし、何も起きなかった。", "Nothing happens."));
 		return;
 	}
 
