@@ -51,7 +51,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 	if (creature_ptr->timewalk)
 	{
 		if (flush_failure) flush();
-		msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from a bottle."));
+		msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from the bottle."));
 
 		sound(SOUND_FAIL);
 		return;
