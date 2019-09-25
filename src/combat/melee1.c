@@ -4080,7 +4080,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	{
 		if (teleport_barrier(target_ptr, m_idx))
 		{
-			msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But magic barrier obstructs it."));
+			msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
 		}
 		else
 		{
@@ -4706,7 +4706,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	{
 		if (see_m)
 		{
-			msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But magic barrier obstructs it."));
+			msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
 		}
 		else if (known)
 		{
