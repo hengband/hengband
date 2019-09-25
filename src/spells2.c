@@ -4708,7 +4708,7 @@ bool concentration(player_type *creature_ptr)
 
 	if (creature_ptr->special_defense & KATA_MASK)
 	{
-		msg_print(_("今は構えに集中している。", "You need concentration on your form."));
+		msg_print(_("今は構えに集中している。", "You're already concentrating on your stance."));
 		return FALSE;
 	}
 
