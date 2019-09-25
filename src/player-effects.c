@@ -124,7 +124,7 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
 			}
 			case ACTION_LEARN:
 			{
-				msg_print(_("学習をやめた。", "You stop Learning"));
+				msg_print(_("学習をやめた。", "You stop learning."));
 				creature_ptr->new_mane = FALSE;
 				break;
 			}
@@ -177,7 +177,7 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
 		}
 		case ACTION_LEARN:
 		{
-			msg_print(_("学習を始めた。", "You begin Learning"));
+			msg_print(_("学習を始めた。", "You begin learning"));
 			break;
 		}
 		case ACTION_FISH:
@@ -498,7 +498,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 
 			if (creature_ptr->action == ACTION_LEARN)
 			{
-				msg_print(_("学習が続けられない！", "You cannot continue Learning!"));
+				msg_print(_("学習が続けられない！", "You cannot continue learning!"));
 				creature_ptr->new_mane = FALSE;
 
 				creature_ptr->redraw |= (PR_STATE);
