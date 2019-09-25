@@ -732,7 +732,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
 	case MS_MAKE_TRAP:
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
-		msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackles evilly."));
+		msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
 		trap_creation(caster_ptr, target_row, target_col);
 		break;
 	case MS_FORGET:
