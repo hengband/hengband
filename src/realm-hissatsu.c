@@ -460,7 +460,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 16:
 		if (name) return _("捨て身", "Desperate Attack");
 		if (desc) return _("強力な攻撃を繰り出す。次のターンまでの間、食らうダメージが増える。",
-			"Attacks with all of your power. But all damages you take will be doubled for one current_world_ptr->game_turn.");
+			"Attacks with all of your power, but all damage you take will be doubled for one turn.");
 
 		if (cast)
 		{
