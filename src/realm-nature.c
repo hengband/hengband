@@ -336,7 +336,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 17:
 		if (name) return _("肌石化", "Stone Skin");
-		if (desc) return _("一定時間、ACを上昇させる。", "Gives bonus to AC for a while.");
+		if (desc) return _("一定時間、ACを上昇させる。", "Gives a bonus to AC for a while.");
 
 		{
 			int base = 20;

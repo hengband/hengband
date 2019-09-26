@@ -110,7 +110,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 5:
 		if (name) return _("士気高揚", "Heroism");
-		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
+		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives a bonus to hit and 10 more HP for a while.");
 
 		{
 			int base = 25;
@@ -202,7 +202,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 11:
 		if (name) return _("狂戦士化", "Berserk");
-		if (desc) return _("狂戦士化し、恐怖を除去する。", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
+		if (desc) return _("狂戦士化し、恐怖を除去する。", "Gives a bonus to hit and HP, immunity to fear for a while. But decreases AC.");
 
 		{
 			int base = 25;
@@ -294,7 +294,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 17:
 		if (name) return _("肌石化", "Stone Skin");
-		if (desc) return _("一定時間、ACを上昇させる。", "Gives bonus to AC for a while.");
+		if (desc) return _("一定時間、ACを上昇させる。", "Gives a bonus to AC for a while.");
 
 		{
 			int base = 30;

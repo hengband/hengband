@@ -369,7 +369,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 16:
 		if (name) return _("狂戦士化", "Berserk");
-		if (desc) return _("狂戦士化し、恐怖を除去する。", "Gives bonus to hit and HP, immunity to fear for a while. But decreases AC.");
+		if (desc) return _("狂戦士化し、恐怖を除去する。", "Gives a bonus to hit and HP, immunity to fear for a while. But decreases AC.");
 
 		{
 			int base = 25;

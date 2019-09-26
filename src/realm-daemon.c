@@ -71,7 +71,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 2:
 		if (name) return _("邪なる祝福", "Evil Bless");
-		if (desc) return _("一定時間、命中率とACにボーナスを得る。", "Gives bonus to hit and AC for a few turns.");
+		if (desc) return _("一定時間、命中率とACにボーナスを得る。", "Gives a bonus to hit and AC for a few turns.");
 
 		{
 			int base = 12;

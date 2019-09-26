@@ -513,7 +513,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Causes any mirror to lull to sleep monsters close to the mirror.",
 	"Fires a beam of mana. If the beam hits a mirror, it breaks that mirror and reflects toward another mirror.",
 	"Eliminates a monster on a mirror from current dungeon level.",
-	"Gives bonus to AC. Gives reflection at level 32. Gives magic resistance at level 40.",
+	"Gives a bonus to AC. Gives reflection at level 32. Gives magic resistance at level 40.",
 	"Fires a powerful beam of mana. If the beam hits a mirror, it breaks that mirror and fires 8 beams of mana to 8 different directions from that point.",
 	"Attempts to slow, stun, confuse, scare, freeze all monsters in sight. Gets more power on a mirror.",
 	"Recreates current dungeon level. Can only be used on a mirror.",

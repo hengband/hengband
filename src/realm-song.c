@@ -84,7 +84,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 1:
 		if (name) return _("祝福の歌", "Song of Blessing");
-		if (desc) return _("命中率とACのボーナスを得る。", "Gives bonus to hit and AC for a few turns.");
+		if (desc) return _("命中率とACのボーナスを得る。", "Gives a bonus to hit and AC for a few turns.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing(caster_ptr);
