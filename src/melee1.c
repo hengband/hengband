@@ -3023,7 +3023,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 							case 1: case 2: case 3: case 4: case 5:
 							{
 								if (p_ptr->prace == RACE_ANDROID) break;
-								msg_print(_("人生が逆戻りした気がする。", "You feel life has clocked back."));
+								msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
 								lose_exp(100 + (p_ptr->exp / 100) * MON_DRAIN_LIFE);
 								break;
 							}
