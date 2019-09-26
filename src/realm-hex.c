@@ -707,7 +707,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("死体を蘇らせてペットにする。", "Raises corpses and skeletons from dead.");
 		if (cast)
 		{
-			msg_print(_("死者への呼びかけを始めた。", "You start to call deads.!"));
+			msg_print(_("死者への呼びかけを始めた。", "You start to call the dead.!"));
 		}
 		if (cast || cont)
 		{
