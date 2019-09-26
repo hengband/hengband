@@ -1063,7 +1063,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 31:
 		if (name) return _("復讐の宣告", "Revenge sentence");
 		if (desc) return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。",
-			"Fires  a ball of hell fire to try revenging after few turns.");
+			"Fires a ball of hell fire to try avenging damage from a few turns.");
 		power = HEX_REVENGE_POWER(caster_ptr);
 		if (info) return info_damage(0, 0, power);
 		if (cast)
@@ -1074,13 +1074,13 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (HEX_REVENGE_TURN(caster_ptr) > 0)
 			{
-				msg_print(_("すでに復讐は宣告済みだ。", "You already pronounced your revenge."));
+				msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));
 				return NULL;
 			}
 
 			HEX_REVENGE_TYPE(caster_ptr) = 2;
 			HEX_REVENGE_TURN(caster_ptr) = r;
-			msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You pronounce your revenge. %d turns left."), r);
+			msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
 			add = FALSE;
 		}
 		if (cont)
@@ -1097,7 +1097,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 					do
 					{
-						msg_print(_("復讐の時だ！", "Time to revenge!"));
+						msg_print(_("復讐の時だ！", "Time for revenge!"));
 					} while (!get_aim_dir(caster_ptr, &dir));
 
 					fire_ball(caster_ptr, GF_HELL_FIRE, dir, power, 1);
