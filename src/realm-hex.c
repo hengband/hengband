@@ -954,13 +954,13 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (one_in_(7))
 				{
-					msg_print(_("呪いを全て吸い取った。", "Heavy curse vanished away."));
+					msg_print(_("呪いを全て吸い取った。", "A heavy curse vanished."));
 					o_ptr->curse_flags = 0L;
 				}
 			}
 			else if ((o_ptr->curse_flags & (TRC_CURSED)) && one_in_(3))
 			{
-				msg_print(_("呪いを全て吸い取った。", "Curse vanished away."));
+				msg_print(_("呪いを全て吸い取った。", "A curse vanished."));
 				o_ptr->curse_flags = 0L;
 			}
 
