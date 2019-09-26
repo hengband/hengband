@@ -347,7 +347,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 19:
 		if (name) return _("街移動", "Teleport to town");
-		if (desc) return _("街へ移動する。地上にいるときしか使えない。", "Teleports you to a town which you choose in a moment. Can only be used outdoors.");
+		if (desc) return _("街へ移動する。地上にいるときしか使えない。", "Instantly teleports you to a town which you choose. Can only be used outdoors.");
 
 		{
 			if (cast)
