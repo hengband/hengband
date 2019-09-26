@@ -324,7 +324,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 16:
 		if (name) return _("階段生成", "Stair Building");
-		if (desc) return _("自分のいる位置に階段を作る。", "Creates a stair which goes down or up.");
+		if (desc) return _("自分のいる位置に階段を作る。", "Creates a staircase which goes down or up.");
 
 		{
 			if (cast)
