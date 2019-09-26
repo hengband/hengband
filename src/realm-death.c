@@ -264,7 +264,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 11:
 		if (name) return _("モンスター消滅", "Genocide One");
-		if (desc) return _("モンスター1体を消し去る。経験値やアイテムは手に入らない。抵抗されると無効。", "Attempts to vanish a monster.");
+		if (desc) return _("モンスター1体を消し去る。経験値やアイテムは手に入らない。抵抗されると無効。", "Attempts to eradicate one monster.");
 
 		{
 			int power = plev + 50;
