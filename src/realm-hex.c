@@ -432,7 +432,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			item_tester_hook = item_tester_hook_weapon_except_bow;
 			q = _("どれを呪いますか？", "Which weapon do you curse?");
-			s = _("武器を装備していない。", "You wield no weapons.");
+			s = _("武器を装備していない。", "You're not wielding a weapon.");
 
 			o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
