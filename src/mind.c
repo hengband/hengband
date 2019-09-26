@@ -501,7 +501,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"",
 },
 {
-	"Detects visible monsters in your vicinity and more and more. Detects invisible monsters at level 15. Gives telepathy at level 25. Magic mapping at level 35. All of effects need 4 more levels unless on a mirror.",
+	"Detects visible monsters in your vicinity. Detects invisible monsters at level 15. Gives telepathy at level 25. Magic mapping at level 35. All of the effects need 4 more levels unless on a mirror.",
 	"Makes a mirror under you.",
 	"Fires bolt of flash light. Or fires beam of light on a mirror at level 10.",
 	"Teleports you a short distance.",
