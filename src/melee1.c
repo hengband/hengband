@@ -3006,7 +3006,7 @@ bool make_attack_normal(MONSTER_IDX m_idx)
 						bool perm = one_in_(10);
 						if (dec_stat(A_CON, randint1(10), perm))
 						{
-							msg_print(_("病があなたを蝕んでいる気がする。", "You feel strange sickness."));
+							msg_print(_("病があなたを蝕んでいる気がする。", "You feel sickly."));
 							obvious = TRUE;
 						}
 					}
