@@ -448,7 +448,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 23:
 		if (name) return _("破滅の手", "Doom Hand");
-		if (desc) return _("破滅の手を放つ。食らったモンスターはそのときのHPの半分前後のダメージを受ける。", "Attempts to make a monster's HP almost half.");
+		if (desc) return _("破滅の手を放つ。食らったモンスターはそのときのHPの半分前後のダメージを受ける。", "Attempts to cut a monster's HP roughly in half.");
 
 		{
 			if (cast)
