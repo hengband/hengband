@@ -1337,7 +1337,7 @@ void reserve_alter_reality(player_type *caster_ptr)
 	if (caster_ptr->alter_reality)
 	{
 		caster_ptr->alter_reality = 0;
-		msg_print(_("景色が元に戻った...", "The view around you got back..."));
+		msg_print(_("景色が元に戻った...", "The view around you returns to normal..."));
 		caster_ptr->redraw |= PR_STATUS;
 		return;
 	}
