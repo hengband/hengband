@@ -4558,7 +4558,7 @@ bool mirror_concentration(player_type *creature_ptr)
 
 	if (!is_mirror_grid(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x]))
 	{
-		msg_print(_("鏡の上でないと集中できない！", "Here are not any mirrors!"));
+		msg_print(_("鏡の上でないと集中できない！", "There's no mirror here!"));
 		return TRUE;
 	}
 
