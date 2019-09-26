@@ -510,7 +510,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Gives aura of shards of mirror for a while. It cause counter attack to monsters which attacks you.",
 	"Teleports all monsters on the line away unless resisted.",
 	"Fires a ball of shards.",
-	"Generates balls which send monsters to sleep on all mirrors in the whole level.",
+	"Causes any mirror to lull to sleep monsters close to the mirror.",
 	"Fires a beam of mana. If the beam hits a mirror, it breaks that mirror and reflects toward another mirror.",
 	"Eliminates a monster on a mirror from current dungeon level.",
 	"Gives bonus to AC. Gives reflection at level 32. Gives magic resistance at level 40.",

@@ -88,7 +88,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 4:
 		if (name) return _("聖域", "Sanctuary");
-		if (desc) return _("隣接した全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep monsters in the adjacent squares.");
+		if (desc) return _("隣接した全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put to sleep monsters in the adjacent squares.");
 		{
 			PLAYER_LEVEL power = plev;
 			if (info) return info_power(power);

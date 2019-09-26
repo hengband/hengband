@@ -134,7 +134,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 6:
 		if (name) return _("スリープ・モンスター", "Sleep Monster");
-		if (desc) return _("モンスター1体を眠らせる。抵抗されると無効。", "Attempts to sleep a monster.");
+		if (desc) return _("モンスター1体を眠らせる。抵抗されると無効。", "Attempts to put a monster to sleep.");
 
 		{
 			int power = plev;
@@ -214,7 +214,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 11:
 		if (name) return _("周辺スリープ", "Mass Sleep");
-		if (desc) return _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep all monsters in sight.");
+		if (desc) return _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put all monsters in sight to sleep.");
 
 		{
 			int power = plev;

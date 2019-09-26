@@ -642,7 +642,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 21:
 		if (name) return _("サルマンの甘言", "The Voice of Saruman");
-		if (desc) return _("視界内の全てのモンスターを減速させ、眠らせようとする。抵抗されると無効。", "Attempts to slow and sleep all monsters in sight.");
+		if (desc) return _("視界内の全てのモンスターを減速させ、眠らせようとする。抵抗されると無効。", "Attempts to slow and put to sleep all monsters in sight.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing(caster_ptr);

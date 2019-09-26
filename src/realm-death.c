@@ -129,7 +129,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 4:
 		if (name) return _("黒い眠り", "Black Sleep");
-		if (desc) return _("1体のモンスターを眠らせる。抵抗されると無効。", "Attempts to sleep a monster.");
+		if (desc) return _("1体のモンスターを眠らせる。抵抗されると無効。", "Attempts to put a monster to sleep.");
 
 		{
 			int power = plev;
