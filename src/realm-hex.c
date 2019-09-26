@@ -503,7 +503,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (info) return info_range(MAX_SIGHT);
 		if (cast)
 		{
-			msg_print(_("邪悪な生物の存在を感じ取ろうとした。", "You attend to the presence of evil creatures."));
+			msg_print(_("邪悪な生物の存在を感じ取ろうとした。", "You sense the presence of evil creatures."));
 		}
 		break;
 
