@@ -507,7 +507,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Teleports you a short distance.",
 	"Lights up nearby area and the inside of a room permanently.",
 	"Teleports you a long distance.",
-	"Gives aura of shards of mirror for a while. It cause counter attack to monsters which attacks you.",
+	"Gives a temporary aura of mirror shards. The aura damages any monster that hits you in melee. If you are on a mirror, the aura will teleport you a short distance if a monster hits you in melee.",
 	"Teleports all monsters on the line away unless resisted.",
 	"Fires a ball of shards.",
 	"Causes any mirror to lull to sleep monsters close to the mirror.",
