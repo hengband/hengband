@@ -511,7 +511,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Teleports all monsters on the line away unless resisted.",
 	"Fires a ball of shards.",
 	"Causes any mirror to lull to sleep monsters close to the mirror.",
-	"Fires a beam of mana. If the beam hits a mirror, it breaks that mirror and reflects toward another mirror.",
+	"Fires a beam of mana. If the beam hits a mirror, it breaks that mirror and bounces toward another mirror.",
 	"Eliminates a monster on a mirror from current dungeon level.",
 	"Gives a bonus to AC. Gives reflection at level 32. Gives magic resistance at level 40.",
 	"Fires a powerful beam of mana. If the beam hits a mirror, it breaks that mirror and fires 8 beams of mana to 8 different directions from that point.",
