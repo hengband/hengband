@@ -510,7 +510,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 18:
 		if (name) return _("入身", "Rush Attack");
-		if (desc) return _("素早く相手に近寄り攻撃する。", "Steps close to a monster and attacks at a time.");
+		if (desc) return _("素早く相手に近寄り攻撃する。", "Steps close to a monster and attacks at the same time.");
 
 		if (cast)
 		{
