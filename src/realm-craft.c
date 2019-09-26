@@ -261,7 +261,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 15:
 		if (name) return _("魔法剣", "Mana Branding");
 		if (desc) return _("一定時間、武器に冷気、炎、電撃、酸、毒のいずれかの属性をつける。武器を持たないと使えない。",
-			"Makes current weapon some elemental branded. You must wield weapons.");
+			"Causes current weapon to temporarily do additional damage from cold, fire, lightning, acid or poison. You must be wielding one or more weapons.");
 
 		{
 			int base = plev / 2;
