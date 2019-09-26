@@ -395,7 +395,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 20:
 		if (name) return _("悪魔変化", "Polymorph Demon");
 		if (desc) return _("一定時間、悪魔に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔としての能力を得る。",
-			"Causes you to mimic a demon for a while. Loses abilities of original race and gets abilities as a demon.");
+			"Causes you to mimic a demon for a while. You lose the abilities of your original race and get the abilities of a demon for that time.");
 
 		{
 			int base = 10 + plev / 2;
@@ -579,7 +579,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 31:
 		if (name) return _("魔王変化", "Polymorph Demonlord");
 		if (desc) return _("悪魔の王に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔の王としての能力を得、壁を破壊しながら歩く。",
-			"Causes you to mimic a demon lord for a while. Loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.");
+			"Causes you to mimic a demon lord for a while. You lose the abilities of your original race and get the great abilities of a demon lord for that time. Even hard walls can't stop your walking.");
 
 		{
 			int base = 15;

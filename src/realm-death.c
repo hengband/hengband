@@ -555,7 +555,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 27:
 		if (name) return _("吸血鬼変化", "Polymorph Vampire");
 		if (desc) return _("一定時間、吸血鬼に変化する。変化している間は本来の種族の能力を失い、代わりに吸血鬼としての能力を得る。",
-			"Causes you to mimic a vampire for a while. Loses abilities of original race and gets abilities as a vampire.");
+			"Causes you to mimic a vampire for a while. You lose the abilities of your original race and get the abilities of a vampire for that time.");
 
 		{
 			int base = 10 + plev / 2;
