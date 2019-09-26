@@ -836,7 +836,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 22:
-		if (name) return _("苦痛を魔力に", "Pains to mana");
+		if (name) return _("苦痛を魔力に", "Pain to mana");
 		if (desc) return _("視界内のモンスターに精神ダメージ与え、魔力を吸い取る。", "Deals psychic damages to all monsters in sight and drains some mana.");
 		power = plev * 3 / 2;
 		if (info) return info_damage(1, power, 0);
