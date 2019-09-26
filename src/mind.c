@@ -462,7 +462,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Gives magic resistance for a while.",
 	"Increases your spirit energy temporarily. More spirit energy will boost the effect or duration of your force abilities. Too much spirit energy can result in an explosion.",
 	"Envelops you with a temporary aura that damages any monster which hits you in melee.",
-	"Damages an adjacent monster, and blows it away.",
+	"Damages an adjacent monster and blows it away.",
 	"Fires a large energy ball.",
 	"Dispels all magics which are effecting a monster.",
 	"Summons ghosts.",
