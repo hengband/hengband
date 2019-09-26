@@ -267,7 +267,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 12:
 		if (name) return _("テレポート・レベル", "Teleport Level");
-		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleports you to up or down stairs in a moment.");
+		if (desc) return _("瞬時に上か下の階にテレポートする。", "Instantly teleports you up or down a level.");
 
 		{
 			if (cast)
