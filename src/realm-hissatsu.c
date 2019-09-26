@@ -385,7 +385,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 13:
 		if (name) return _("乱れ雪月花", "Midare-Setsugekka");
 		if (desc) return _("攻撃回数が増え、冷気耐性のないモンスターに大ダメージを与える。",
-			"Attacks a monster with increased number of attacks and more damage unless it has resistance to cold.");
+			"Attacks a monster with an increased number of attacks and more damage unless it has resistance to cold.");
 
 		if (cast)
 		{
