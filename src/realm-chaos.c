@@ -518,7 +518,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 27:
 		if (name) return _("混沌召来", "Call Chaos");
-		if (desc) return _("ランダムな属性の球やビームを発生させる。", "Generates random kind of balls or beams.");
+		if (desc) return _("ランダムな属性の球やビームを発生させる。", "Generates random kinds of balls or beams.");
 
 		{
 			if (info) return format("%s150 / 250", KWD_DAM);
