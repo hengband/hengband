@@ -927,7 +927,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 31:
 		if (name) return _("切腹", "Harakiri");
-		if (desc) return _("「武士道とは、死ぬことと見つけたり。」", "'Busido is found in death'");
+		if (desc) return _("「武士道とは、死ぬことと見つけたり。」", "'Bushido, the way of warriors, is found in death'");
 
 		if (cast)
 		{
@@ -947,7 +947,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			}
 			else
 			{
-				msg_print(_("武士道とは、死ぬことと見つけたり。", "Meaning of Bushi-do is found in the death."));
+				msg_print(_("武士道とは、死ぬことと見つけたり。", "The meaning of bushido is found in death."));
 				take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku", -1);
 			}
 		}
