@@ -269,7 +269,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 12:
 		if (name) return _("太陽光線", "Ray of Sunlight");
-		if (desc) return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages to light-sensitive monsters.");
+		if (desc) return _("光線を放つ。光りを嫌うモンスターに効果がある。", "Fires a beam of light which damages light-sensitive monsters.");
 
 		{
 			DICE_NUMBER dice = 6;
