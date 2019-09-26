@@ -203,7 +203,7 @@ void check_hex(player_type *caster_ptr)
 		caster_ptr->redraw |= PR_MANA;
 		if (res)
 		{
-			msg_print(_("詠唱を再開した。", "You restart spelling."));
+			msg_print(_("詠唱を再開した。", "You restart casting."));
 
 			caster_ptr->action = ACTION_SPELL;
 
