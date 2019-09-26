@@ -466,7 +466,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Fires a large energy ball.",
 	"Dispels all magics which are effecting a monster.",
 	"Summons ghosts.",
-	"Generates a huge ball of frame which centered on you.",
+	"Generates a huge ball of flame centered on you.",
 	"Fires a long, powerful energy beam.",
 	"Gives extremely fast speed.",
 	"",
