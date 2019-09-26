@@ -521,7 +521,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 19:
 		if (name) return _("赤流渦", "Bloody Maelstrom");
 		if (desc) return _("自分自身も傷を作りつつ、その傷が深いほど大きい威力で全方向の敵を攻撃できる。生きていないモンスターには効果がない。",
-			"Attacks all adjacent monsters with power corresponding to your cut status. Then increases your cut status. No effect to unliving monsters.");
+			"Attacks all adjacent monsters with power corresponding to your cut status. Then increases your cut status. Has no effect on unliving monsters.");
 
 		if (cast)
 		{
