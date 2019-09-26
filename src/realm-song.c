@@ -396,7 +396,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (!caster_ptr->tim_stealth)
 			{
-				msg_print(_("姿がはっきりと見えるようになった。", "You are no longer hided."));
+				msg_print(_("姿がはっきりと見えるようになった。", "You are no longer hidden."));
 			}
 		}
 
