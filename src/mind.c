@@ -526,7 +526,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 
 {
 	"Darkens nearby area and inside of a room.",
-	"Detects visible monsters in your vicinity and more and more. Detects traps, doors and stairs at level 5, items at level 15. Lights and know the whole level at level 45.",
+	"Detects visible monsters in your vicinity and more and more. Detects traps, doors and stairs at level 5, items at level 15. Lights and reveals the whole level at level 45.",
 	"Teleports you a short distance.",
 	"Teleports as you recieve an attack. Might be able to teleport just before recieveing damages at higher level.",
 	"Teleports you a long distance.",
