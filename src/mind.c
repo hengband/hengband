@@ -539,7 +539,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Shoots 8 iron Spikes in 8 random directions.",
 	"Teleports a monster to a place adjacent to you.",
 	"Releases a confusion ball which doesn't inflict any damage.",
-	"Swaps positions of you and a monster.",
+	"Causes you and a targeted monster to exchange positions.",
 	"Sets a glyph under you. The glyph will explode when a monster moves on it.",
 	"Makes you ethereal for a period of time. While ethereal, you can pass through walls and are resistant to acid. The resistance can be added to that from equipment for more powerful resistance.",
 	"Generates huge balls of poison, drain life and confusion. Then immediately teleports you away.",
