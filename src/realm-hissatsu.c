@@ -132,7 +132,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 4:
 		if (name) return _("殺気感知", "Detect Ferocity");
-		if (desc) return _("近くの思考することができるモンスターを感知する。", "Detects all monsters except mindless in your vicinity.");
+		if (desc) return _("近くの思考することができるモンスターを感知する。", "Detects all monsters except the mindless in your vicinity.");
 
 		if (cast)
 		{
