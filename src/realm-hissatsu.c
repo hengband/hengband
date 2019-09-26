@@ -581,7 +581,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 21:
 		if (name) return _("地走り", "Crack");
-		if (desc) return _("衝撃波のビームを放つ。", "Fires a beam of shock wave.");
+		if (desc) return _("衝撃波のビームを放つ。", "Fires a shock wave as a beam.");
 
 		if (cast)
 		{
