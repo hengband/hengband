@@ -48,7 +48,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 1:
 		if (name) return _("ショート・テレポート", "Phase Door");
-		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
+		if (desc) return _("近距離のテレポートをする。", "Teleports you a short distance.");
 
 		{
 			POSITION range = 10;
@@ -118,7 +118,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 5:
 		if (name) return _("テレポート", "Teleport");
-		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
+		if (desc) return _("遠距離のテレポートをする。", "Teleports you a long distance.");
 
 		{
 			POSITION range = plev * 5;
@@ -347,7 +347,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 19:
 		if (name) return _("街移動", "Teleport to town");
-		if (desc) return _("街へ移動する。地上にいるときしか使えない。", "Teleport to a town which you choose in a moment. Can only be used outdoors.");
+		if (desc) return _("街へ移動する。地上にいるときしか使えない。", "Teleports you to a town which you choose in a moment. Can only be used outdoors.");
 
 		{
 			if (cast)
@@ -372,7 +372,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 21:
 		if (name) return _("テレポート・レベル", "Teleport Level");
-		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleport to up or down stairs in a moment.");
+		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleports you to up or down stairs in a moment.");
 
 		{
 			if (cast)
@@ -403,7 +403,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 23:
 		if (name) return _("次元の扉", "Dimension Door");
-		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
+		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleports you to a given location.");
 
 		{
 			POSITION range = plev / 2 + 10;

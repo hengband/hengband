@@ -247,7 +247,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 10:
 		if (name) return _("殺戮雲", "Cloud kill");
-		if (desc) return _("自分を中心とした毒の球を発生させる。", "Generate a ball of poison centered on you.");
+		if (desc) return _("自分を中心とした毒の球を発生させる。", "Generates a ball of poison centered on you.");
 
 		{
 			HIT_POINT dam = (30 + plev) * 2;
@@ -555,7 +555,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 27:
 		if (name) return _("吸血鬼変化", "Polymorph Vampire");
 		if (desc) return _("一定時間、吸血鬼に変化する。変化している間は本来の種族の能力を失い、代わりに吸血鬼としての能力を得る。",
-			"Mimic a vampire for a while. Loses abilities of original race and gets abilities as a vampire.");
+			"Causes you to mimic a vampire for a while. Loses abilities of original race and gets abilities as a vampire.");
 
 		{
 			int base = 10 + plev / 2;
@@ -571,7 +571,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 28:
 		if (name) return _("経験値復活", "Restore Life");
-		if (desc) return _("失った経験値を回復する。", "Restore lost experience.");
+		if (desc) return _("失った経験値を回復する。", "Restores lost experience.");
 
 		{
 			if (cast)

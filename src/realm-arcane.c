@@ -100,7 +100,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 4:
 		if (name) return _("ショート・テレポート", "Blink");
-		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
+		if (desc) return _("近距離のテレポートをする。", "Teleports you a short distance.");
 
 		{
 			POSITION range = 10;
@@ -332,7 +332,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 19:
 		if (name) return _("テレポート", "Teleport");
-		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
+		if (desc) return _("遠距離のテレポートをする。", "Teleports you a long distance.");
 
 		{
 			POSITION range = plev * 5;
@@ -442,7 +442,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 26:
 		if (name) return _("テレポート・レベル", "Teleport Level");
-		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleport to up or down stairs in a moment.");
+		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleports to up or down stairs in a moment.");
 
 		{
 			if (cast)

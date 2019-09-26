@@ -275,7 +275,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 10:
 		if (name) return _("裂風剣", "Wind Blast");
-		if (desc) return _("攻撃した相手を後方へ吹き飛ばす。", "Attacks an adjacent monster, and blow it away.");
+		if (desc) return _("攻撃した相手を後方へ吹き飛ばす。", "Attacks an adjacent monster, and blows it away.");
 
 		if (cast)
 		{
@@ -359,7 +359,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 12:
 		if (name) return _("破岩斬", "Rock Smash");
-		if (desc) return _("岩を壊し、岩石系のモンスターに大ダメージを与える。", "Breaks rock. Or greatly damage a monster made by rocks.");
+		if (desc) return _("岩を壊し、岩石系のモンスターに大ダメージを与える。", "Breaks rock. Or greatly damages a monster made by rocks.");
 
 		if (cast)
 		{

@@ -118,7 +118,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 6:
 		if (name) return _("解毒", "Cure Poison");
-		if (desc) return _("体内の毒を取り除く。", "Cure poison status.");
+		if (desc) return _("体内の毒を取り除く。", "Cures poison status.");
 		{
 			if (cast)
 			{

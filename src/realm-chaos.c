@@ -175,7 +175,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 7:
 		if (name) return _("テレポート", "Teleport Self");
-		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
+		if (desc) return _("遠距離のテレポートをする。", "Teleports you a long distance.");
 
 		{
 			POSITION range = plev * 5;
@@ -301,7 +301,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 14:
 		if (name) return _("破壊の言葉", "Word of Destruction");
-		if (desc) return _("周辺のアイテム、モンスター、地形を破壊する。", "Destroy everything in nearby area.");
+		if (desc) return _("周辺のアイテム、モンスター、地形を破壊する。", "Destroys everything in nearby area.");
 
 		{
 			int base = 12;
@@ -501,7 +501,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 26:
 		if (name) return _("焔の一撃", "Flame Strike");
-		if (desc) return _("自分を中心とした超巨大な炎の球を発生させる。", "Generate a huge ball of fire centered on you.");
+		if (desc) return _("自分を中心とした超巨大な炎の球を発生させる。", "Generates a huge ball of fire centered on you.");
 
 		{
 			HIT_POINT dam = 300 + 3 * plev;
@@ -518,7 +518,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 27:
 		if (name) return _("混沌召来", "Call Chaos");
-		if (desc) return _("ランダムな属性の球やビームを発生させる。", "Generate random kind of balls or beams.");
+		if (desc) return _("ランダムな属性の球やビームを発生させる。", "Generates random kind of balls or beams.");
 
 		{
 			if (info) return format("%s150 / 250", KWD_DAM);

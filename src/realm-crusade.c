@@ -98,7 +98,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 5:
 		if (name) return _("入口", "Portal");
-		if (desc) return _("中距離のテレポートをする。", "Teleport medium distance.");
+		if (desc) return _("中距離のテレポートをする。", "Teleports you a medium distance.");
 
 		{
 			POSITION range = 25 + plev / 2;
@@ -465,7 +465,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 27:
 		if (name) return _("ハルマゲドン", "Armageddon");
-		if (desc) return _("周辺のアイテム、モンスター、地形を破壊する。", "Destroy everything in nearby area.");
+		if (desc) return _("周辺のアイテム、モンスター、地形を破壊する。", "Destroys everything in nearby area.");
 
 		{
 			int base = 12;
@@ -541,7 +541,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 31:
 		if (name) return _("聖戦", "Crusade");
 		if (desc) return _("視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、ヒーロー、祝福、加速、対邪悪結界を得る。",
-			"Attempts to charm all good monsters in sight, and scare all non-charmed monsters, and summons great number of knights, and gives heroism, bless, speed and protection from evil.");
+			"Attempts to charm all good monsters in sight, and scares all non-charmed monsters, and summons great number of knights, and gives heroism, bless, speed and protection from evil.");
 
 		{
 			if (cast)

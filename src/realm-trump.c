@@ -34,7 +34,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	{
 	case 0:
 		if (name) return _("ショート・テレポート", "Phase Door");
-		if (desc) return _("近距離のテレポートをする。", "Teleport short distance.");
+		if (desc) return _("近距離のテレポートをする。", "Teleports you a short distance.");
 
 		{
 			POSITION range = 10;
@@ -95,7 +95,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 4:
 		if (name) return _("テレポート", "Teleport");
-		if (desc) return _("遠距離のテレポートをする。", "Teleport long distance.");
+		if (desc) return _("遠距離のテレポートをする。", "Teleports you a long distance.");
 
 		{
 			POSITION range = plev * 4;
@@ -267,7 +267,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 12:
 		if (name) return _("テレポート・レベル", "Teleport Level");
-		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleport to up or down stairs in a moment.");
+		if (desc) return _("瞬時に上か下の階にテレポートする。", "Teleports you to up or down stairs in a moment.");
 
 		{
 			if (cast)
@@ -280,7 +280,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 13:
 		if (name) return _("次元の扉", "Dimension Door");
-		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleport to given location.");
+		if (desc) return _("短距離内の指定した場所にテレポートする。", "Teleports you to a given location.");
 
 		{
 			POSITION range = plev / 2 + 10;
@@ -505,7 +505,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 26:
 		if (name) return _("回復モンスター", "Heal Monster");
-		if (desc) return _("モンスター1体の体力を回復させる。", "Heal a monster.");
+		if (desc) return _("モンスター1体の体力を回復させる。", "Heals a monster.");
 
 		{
 			int heal = plev * 10 + 200;

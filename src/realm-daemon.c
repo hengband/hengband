@@ -395,7 +395,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 20:
 		if (name) return _("悪魔変化", "Polymorph Demon");
 		if (desc) return _("一定時間、悪魔に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔としての能力を得る。",
-			"Mimic a demon for a while. Loses abilities of original race and gets abilities as a demon.");
+			"Causes you to mimic a demon for a while. Loses abilities of original race and gets abilities as a demon.");
 
 		{
 			int base = 10 + plev / 2;
@@ -493,7 +493,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 26:
 		if (name) return _("狂気の円環", "Insanity Circle");
 		if (desc) return _("自分を中心としたカオスの球、混乱の球を発生させ、近くのモンスターを魅了する。",
-			"Generate balls of chaos, confusion and charm centered on you.");
+			"Generates balls of chaos, confusion and charm centered on you.");
 
 		{
 			HIT_POINT dam = 50 + plev;
@@ -538,7 +538,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 29:
 		if (name) return _("地獄嵐", "Nether Storm");
-		if (desc) return _("超巨大な地獄の球を放つ。", "Generate a huge ball of nether.");
+		if (desc) return _("超巨大な地獄の球を放つ。", "Generates a huge ball of nether.");
 
 		{
 			HIT_POINT dam = plev * 15;
@@ -579,7 +579,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 31:
 		if (name) return _("魔王変化", "Polymorph Demonlord");
 		if (desc) return _("悪魔の王に変化する。変化している間は本来の種族の能力を失い、代わりに悪魔の王としての能力を得、壁を破壊しながら歩く。",
-			"Mimic a demon lord for a while. Loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.");
+			"Causes you to mimic a demon lord for a while. Loses abilities of original race and gets great abilities as a demon lord. Even hard walls can't stop your walking.");
 
 		{
 			int base = 15;
