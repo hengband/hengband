@@ -1424,7 +1424,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* mirror shift */
 	case 15:
 		if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x])) {
-			msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
+			msg_print(_("鏡の国の場所がわからない！", "You cannot find out where the mirror is!"));
 			break;
 		}
 		reserve_alter_reality(caster_ptr);
