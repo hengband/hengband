@@ -444,7 +444,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Removes fear and stun. Gives heroism and speed. Heals HP a little unless you already have heroism and a temporary speed boost.",
 	"Pulls a distant item close to you.",
 	"Fires a ball which damages. When not resisted, you gain SP. You will be occupied for 0 to 1.5 turns after casting as your mind recovers.",
-	"Fires a beam of pure energy which penetrates the invulnerability barrier.",
+	"Fires a beam of pure energy which penetrates invulnerability barriers.",
 	"Stops time. Consumes all of your SP. The more SP consumed, the longer the duration of spell.",
 	"",
 	"",
