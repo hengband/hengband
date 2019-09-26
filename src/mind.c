@@ -440,7 +440,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Fires a ball which hurts monsters with telekinesis.",
 	"Gives stone skin and some resistance to elements for a while. As your level increases, more resistances are given.",
 	"Gives feeling of an item. Or identifies an item at level 25.",
-	"Generates a ball centered on you which inflicts monster with PSI damage. Or inflicts all monsters with PSI damage at level 25.",
+	"Generates a ball centered on you which inflicts PSI damage on a monster or, at level 25 and higher, inflicts PSI damage on all monsters.",
 	"Removes fear and stun. Gives heroism and speed. Heals HP a little unless you already have heroism and a temporary speed boost.",
 	"Pulls a distant item close to you.",
 	"Fires a ball which damages, co. Absorbing is takes more turns which from 0 to 1.5.",
