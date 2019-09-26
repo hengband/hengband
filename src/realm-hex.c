@@ -401,7 +401,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 3:
 		if (name) return _("悪臭霧", "Stinking mist");
-		if (desc) return _("視界内のモンスターに微弱量の毒のダメージを与える。", "Deals few damages of poison to all monsters in your sight.");
+		if (desc) return _("視界内のモンスターに微弱量の毒のダメージを与える。", "Deals a little poison damage to all monsters in your sight.");
 		power = plev / 2 + 5;
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
