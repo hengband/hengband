@@ -415,7 +415,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("術者の腕力を上昇させる。", "Attempts to increase your strength.");
 		if (cast)
 		{
-			msg_print(_("何だか力が湧いて来る。", "You feel you get stronger."));
+			msg_print(_("何だか力が湧いて来る。", "You feel stronger."));
 		}
 		break;
 
