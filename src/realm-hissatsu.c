@@ -741,7 +741,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 25:
 		if (name) return _("幻惑", "Moon Dazzling");
-		if (desc) return _("視界内の起きている全モンスターに朦朧、混乱、眠りを与えようとする。", "Attempts to stun, confuse and sleep all waking monsters.");
+		if (desc) return _("視界内の起きている全モンスターに朦朧、混乱、眠りを与えようとする。", "Attempts to stun, confuse and put to sleep all waking monsters.");
 
 		if (cast)
 		{
