@@ -167,7 +167,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 6:
 		if (name) return _("カウンター", "Counter");
 		if (desc) return _("相手に攻撃されたときに反撃する。反撃するたびにMPを消費。",
-			"Prepares to counterattack. When attack by a monster, strikes back using SP each time.");
+			"Prepares to counterattack. When attacked by a monster, strikes back using SP each time.");
 
 		if (cast)
 		{
