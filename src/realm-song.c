@@ -527,7 +527,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 17:
 		if (name) return _("元素耐性", "Finrod's Resistance");
 		if (desc) return _("酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to which from equipment for more powerful resistances.");
+			"Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to those from equipment for more powerful resistances.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing(caster_ptr);

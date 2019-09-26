@@ -88,7 +88,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 3:
 		if (name) return _("耐火炎", "Resist Fire");
 		if (desc) return _("一定時間、炎への耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.");
+			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to those from equipment for more powerful resistances.");
 
 		{
 			int base = 20;
@@ -334,7 +334,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 17:
 		if (name) return _("悪魔のクローク", "Devil Cloak");
 		if (desc) return _("恐怖を取り除き、一定時間、炎と冷気の耐性、炎のオーラを得る。耐性は装備による耐性に累積する。",
-			"Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to which from equipment for more powerful resistances.");
+			"Removes fear. Gives resistance to fire and cold, and aura of fire. These resistances can be added to those from equipment for more powerful resistances.");
 
 		{
 			TIME_EFFECT base = 20;

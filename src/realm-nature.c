@@ -154,7 +154,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 6:
 		if (name) return _("環境への耐性", "Resist Environment");
 		if (desc) return _("一定時間、冷気、炎、電撃に対する耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to which from equipment for more powerful resistances.");
+			"Gives resistance to fire, cold and electricity for a while. These resistances can be added to those from equipment for more powerful resistances.");
 
 		{
 			int base = 20;
@@ -354,7 +354,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 18:
 		if (name) return _("真・耐性", "Resistance True");
 		if (desc) return _("一定時間、酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to which from equipment for more powerful resistances.");
+			"Gives resistance to fire, cold, electricity, acid and poison for a while. These resistances can be added to those from equipment for more powerful resistances.");
 
 		{
 			int base = 20;

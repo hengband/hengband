@@ -148,7 +148,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 5:
 		if (name) return _("耐毒", "Resist Poison");
 		if (desc) return _("一定時間、毒への耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to poison. This resistance can be added to which from equipment for more powerful resistance.");
+			"Gives resistance to poison. This resistance can be added to that from equipment for more powerful resistance.");
 
 		{
 			int base = 20;

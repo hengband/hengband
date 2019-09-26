@@ -178,7 +178,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 11:
 		if (name) return _("耐熱耐寒", "Resist Heat and Cold");
 		if (desc) return _("一定時間、火炎と冷気に対する耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to fire and cold. These resistances can be added to which from equipment for more powerful resistances.");
+			"Gives resistance to fire and cold. These resistances can be added to those from equipment for more powerful resistances.");
 
 		{
 			int base = 20;

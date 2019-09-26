@@ -252,7 +252,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 14:
 		if (name) return _("耐冷", "Resist Cold");
-		if (desc) return _("一定時間、冷気への耐性を得る。装備による耐性に累積する。", "Gives resistance to cold. This resistance can be added to which from equipment for more powerful resistance.");
+		if (desc) return _("一定時間、冷気への耐性を得る。装備による耐性に累積する。", "Gives resistance to cold. This resistance can be added to that from equipment for more powerful resistance.");
 
 		{
 			int base = 20;
@@ -269,7 +269,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 15:
 		if (name) return _("耐火", "Resist Fire");
 		if (desc) return _("一定時間、炎への耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to fire. This resistance can be added to which from equipment for more powerful resistance.");
+			"Gives resistance to fire. This resistance can be added to that from equipment for more powerful resistance.");
 
 		{
 			int base = 20;
@@ -286,7 +286,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 16:
 		if (name) return _("耐電", "Resist Lightning");
 		if (desc) return _("一定時間、電撃への耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to electricity. This resistance can be added to which from equipment for more powerful resistance.");
+			"Gives resistance to electricity. This resistance can be added to that from equipment for more powerful resistance.");
 
 		{
 			int base = 20;
@@ -303,7 +303,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 17:
 		if (name) return _("耐酸", "Resist Acid");
 		if (desc) return _("一定時間、酸への耐性を得る。装備による耐性に累積する。",
-			"Gives resistance to acid. This resistance can be added to which from equipment for more powerful resistance.");
+			"Gives resistance to acid. This resistance can be added to that from equipment for more powerful resistance.");
 
 		{
 			int base = 20;
