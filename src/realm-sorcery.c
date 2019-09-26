@@ -541,7 +541,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 31:
 		if (name) return _("無傷の球", "Globe of Invulnerability");
 		if (desc) return _("一定時間、ダメージを受けなくなるバリアを張る。切れた瞬間に少しターンを消費するので注意。",
-			"Generates barrier which completely protect you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.");
+			"Generates barrier which completely protects you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.");
 
 		{
 			int base = 4;

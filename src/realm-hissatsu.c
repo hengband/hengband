@@ -717,7 +717,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 24:
 		if (name) return _("吸血鬼の牙", "Vampire's Fang");
 		if (desc) return _("攻撃した相手の体力を吸いとり、自分の体力を回復させる。生命を持たないモンスターには通じない。",
-			"Attacks with vampiric strikes which absorbs HP from a monster and gives them to you. No effect to unliving monsters.");
+			"Attacks with vampiric strikes which absorb HP from a monster and heal you. No effect to unliving monsters.");
 
 		if (cast)
 		{
@@ -849,7 +849,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 29:
 		if (name) return _("虎伏絶刀勢", "Kofuku-Zettousei");
-		if (desc) return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even effect nearby monsters.");
+		if (desc) return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even effects nearby monsters.");
 
 		if (cast)
 		{

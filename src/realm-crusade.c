@@ -154,7 +154,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 9:
 		if (name) return _("聖なる光球", "Holy Orb");
 		if (desc) return _("聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。",
-			"Fires a ball with holy power. Hurts evil monsters greatly, but don't effect good monsters.");
+			"Fires a ball with holy power. Hurts evil monsters greatly, but doesn't effect good monsters.");
 
 		{
 			DICE_NUMBER dice = 3;
@@ -223,7 +223,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 13:
 		if (name) return _("対邪悪結界", "Protection from Evil");
-		if (desc) return _("邪悪なモンスターの攻撃を防ぐバリアを張る。", "Gives aura which protect you from evil monster's physical attack.");
+		if (desc) return _("邪悪なモンスターの攻撃を防ぐバリアを張る。", "Gives aura which protects you from evil monster's physical attack.");
 
 		{
 			int base = 25;
@@ -481,7 +481,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 28:
 		if (name) return _("目には目を", "An Eye for an Eye");
 		if (desc) return _("一定時間、自分がダメージを受けたときに攻撃を行ったモンスターに対して同等のダメージを与える。",
-			"Gives special aura for a while. When you are attacked by a monster, the monster are injured with same amount of damage as you take.");
+			"Gives special aura for a while. When you are attacked by a monster, the monster is injured with same amount of damage as you take.");
 
 		{
 			int base = 10;
