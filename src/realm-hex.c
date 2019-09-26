@@ -851,7 +851,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("打撃や魔法で受けたダメージを、攻撃元のモンスターにも与える。", "Returns same damage which you got to the monster which damaged you.");
 		if (cast)
 		{
-			msg_print(_("復讐したい欲望にかられた。", "You wish strongly you want to revenge anything."));
+			msg_print(_("復讐したい欲望にかられた。", "You feel verry vengeful."));
 		}
 		break;
 
