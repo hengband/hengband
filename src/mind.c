@@ -479,9 +479,9 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 },
 {
 	"Detects all monsters except mindless in your vicinity.",
-	"Attacks monster with your weapons normaly, then moves through counter side of the monster.",
+	"Attacks monster with your weapons normally, then moves through counter side of the monster.",
 	"Sets off a trap, then destroys that trap.",
-	"Shakes dungeon structure, and results in random swaping of floors and walls.",
+	"Shakes dungeon structure, and results in random swapping of floors and walls.",
 	"Attacks all adjacent monsters.",
 	"",
 	"",
@@ -521,14 +521,14 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Recalls player from dungeon to town, or from town to the deepest level of dungeon.",
 	"Completely protects you from any attacks at one in two chance.",
 	"Generates a magical triangle which damages all monsters in the area. The vertices of the triangle are you and two mirrors in sight.",
-	"Generates barrier which completly protects you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.",
+	"Generates barrier which completely protects you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.",
 },
 
 {
 	"Darkens nearby area and inside of a room.",
 	"Detects visible monsters in your vicinity and more and more. Detects traps, doors and stairs at level 5, items at level 15. Lights and reveals the whole level at level 45.",
 	"Teleports you a short distance.",
-	"Teleports as you recieve an attack. Might be able to teleport just before recieveing damages at higher level.",
+	"Teleports as you recieve an attack. Might be able to teleport just before receiving damages at higher level.",
 	"Teleports you a long distance.",
 	"Attacks and teleports in a time.",
 	"Attempts to freeze a monster.",
@@ -544,7 +544,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Makes you ethereal for a period of time. While ethereal, you can pass through walls and are resistant to acid. This resistance can be added to which from equipment for more powerful resistance.",
 	"Generates huge balls of poison, drain life and confusion, then teleports in a time.",
 	"Fires some number of beams of fire, nether or plasma in random directions.",
-	"Creates shadows of yourself which gives you abillity to completely evade any attacks at one in two chance for a while.",
+	"Creates shadows of yourself which gives you the ability to completely evade any attacks at one in two chance for a while.",
 	"",
 },
 #endif
