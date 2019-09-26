@@ -597,7 +597,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 11:
 		if (name) return _("衰弱の霧", "Hypodynamic mist");
 		if (desc) return _("視界内のモンスターに微弱量の衰弱属性のダメージを与える。",
-			"Deals few damages of hypodynamia to all monsters in your sight.");
+			"Deals a little life-draining damage to all monsters in your sight.");
 		power = (plev / 2) + 5;
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
