@@ -559,7 +559,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 		/*** 2nd book (8-15) ***/
 	case 8:
-		if (name) return _("氷の鎧", "Ice armor");
+		if (name) return _("氷の鎧", "Armor of ice");
 		if (desc) return _("氷のオーラを身にまとい、防御力が上昇する。", "Surrounds you with an icy aura and gives a bonus to AC.");
 		if (cast)
 		{
