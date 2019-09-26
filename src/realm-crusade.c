@@ -125,7 +125,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 7:
 		if (name) return _("身体浄化", "Purify");
-		if (desc) return _("傷、毒、朦朧から全快する。", "Heals all cut, stun and poison status.");
+		if (desc) return _("傷、毒、朦朧から全快する。", "Heals all cuts, poisons and being stunned.");
 		{
 			if (cast)
 			{
@@ -258,7 +258,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 15:
 		if (name) return _("聖なる御言葉", "Holy Word");
 		if (desc) return _("視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。",
-			"Damages all evil monsters in sight, heals HP somewhat, and completely heals poison, fear, stun and cut status.");
+			"Damages all evil monsters in sight, heals HP somewhat, and completely cures fear, poisons, cuts, and being stunned.");
 
 		{
 			int dam_sides = plev * 6;

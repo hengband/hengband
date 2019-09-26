@@ -29,7 +29,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	{
 	case 0:
 		if (name) return _("軽傷の治癒", "Cure Light Wounds");
-		if (desc) return _("怪我と体力を少し回復させる。", "Heals cut and HP a little.");
+		if (desc) return _("怪我と体力を少し回復させる。", "Heals cuts and HP a little.");
 		{
 			DICE_NUMBER dice = 2;
 			DICE_SID sides = 10;
@@ -106,7 +106,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 5:
 		if (name) return _("重傷の治癒", "Cure Medium Wounds");
-		if (desc) return _("怪我と体力を中程度回復させる。", "Heals cut and HP more.");
+		if (desc) return _("怪我と体力を中程度回復させる。", "Heals cuts and HP more.");
 		{
 			DICE_NUMBER dice = 4;
 			DICE_SID sides = 10;
@@ -118,7 +118,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 6:
 		if (name) return _("解毒", "Cure Poison");
-		if (desc) return _("体内の毒を取り除く。", "Cures poison status.");
+		if (desc) return _("体内の毒を取り除く。", "Cures yourself of any poisons.");
 		{
 			if (cast)
 			{
@@ -165,7 +165,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 10:
 		if (name) return _("致命傷の治癒", "Cure Critical Wounds");
-		if (desc) return _("体力を大幅に回復させ、負傷と朦朧状態も全快する。", "Heals cut, stun and HP greatly.");
+		if (desc) return _("体力を大幅に回復させ、負傷と朦朧状態も全快する。", "Heals HP greatly. Also cures cuts and being stunned.");
 		{
 			DICE_NUMBER dice = 8;
 			DICE_SID sides = 10;
@@ -223,7 +223,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 14:
 		if (name) return _("体力回復", "Healing");
-		if (desc) return _("極めて強力な回復呪文で、負傷と朦朧状態も全快する。", "Much powerful healing magic, and heals cut and stun completely.");
+		if (desc) return _("極めて強力な回復呪文で、負傷と朦朧状態も全快する。", "Is very powerful healing magic. Also completely cures cuts and being stunned.");
 
 		{
 			int heal = 300;
@@ -439,7 +439,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 29:
 		if (name) return _("*体力回復*", "Healing True");
-		if (desc) return _("最強の治癒の魔法で、負傷と朦朧状態も全快する。", "The greatest healing magic. Heals all HP, cut and stun.");
+		if (desc) return _("最強の治癒の魔法で、負傷と朦朧状態も全快する。", "Is the greatest healing magic. Heals all HP, cuts and being stunned.");
 
 		{
 			int heal = 2000;

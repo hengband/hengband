@@ -831,7 +831,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 28:
 		if (name) return _("ヤヴァンナの助け", "Relief of Yavanna");
-		if (desc) return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also heals cut and stun completely.");
+		if (desc) return _("強力な回復の歌で、負傷と朦朧状態も全快する。", "Powerful healing song. Also completely heals cuts and being stunned.");
 
 		/* Stop singing before start another */
 		if (cast || fail) stop_singing(caster_ptr);

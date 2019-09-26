@@ -172,7 +172,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 7:
 		if (name) return _("傷と毒治療", "Cure Wounds & Poison");
-		if (desc) return _("怪我を全快させ、毒を体から完全に取り除き、体力を少し回復させる。", "Heals all cut and poison status. Heals HP a little.");
+		if (desc) return _("怪我を全快させ、毒を体から完全に取り除き、体力を少し回復させる。", "Heals all cuts and poisons. Heals HP a little.");
 
 		{
 			DICE_NUMBER dice = 2;
@@ -314,7 +314,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 15:
 		if (name) return _("薬草治療", "Herbal Healing");
-		if (desc) return _("体力を大幅に回復させ、負傷、朦朧状態、毒から全快する。", "Heals HP greatly. And heals cut, stun and poison completely.");
+		if (desc) return _("体力を大幅に回復させ、負傷、朦朧状態、毒から全快する。", "Heals HP greatly. Completely cures cuts, poisons and being stunned.");
 		{
 			int heal = 500;
 			if (info) return info_heal(0, 0, heal);

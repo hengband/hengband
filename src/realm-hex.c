@@ -377,7 +377,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 1:
 		if (name) return _("軽傷の治癒", "Cure light wounds");
-		if (desc) return _("HPや傷を少し回復させる。", "Heals cut and HP a little.");
+		if (desc) return _("HPや傷を少し回復させる。", "Heals cuts and HP a little.");
 		if (info) return info_heal(1, 10, 0);
 		if (cast)
 		{
@@ -573,7 +573,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 9:
 		if (name) return _("重傷の治癒", "Cure serious wounds");
-		if (desc) return _("体力や傷を多少回復させる。", "Heals cut and HP more.");
+		if (desc) return _("体力や傷を多少回復させる。", "Heals cuts and HP.");
 		if (info) return info_heal(2, 10, 0);
 		if (cast)
 		{
@@ -681,7 +681,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 17:
 		if (name) return _("致命傷の治癒", "Cure critical wounds");
-		if (desc) return _("体力や傷を回復させる。", "Heals cut and HP greatry.");
+		if (desc) return _("体力や傷を回復させる。", "Heals cuts and HP greatly.");
 		if (info) return info_heal(4, 10, 0);
 		if (cast)
 		{
