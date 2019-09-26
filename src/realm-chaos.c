@@ -484,7 +484,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 25:
 		if (name) return _("流星群", "Meteor Swarm");
-		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
+		if (desc) return _("自分の周辺に隕石を落とす。", "Causes meteorites to fall down on nearby random locations.");
 
 		{
 			HIT_POINT dam = plev * 2;

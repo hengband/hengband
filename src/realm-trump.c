@@ -553,7 +553,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 28:
 		if (name) return _("隕石のカード", "Trump Meteor");
-		if (desc) return _("自分の周辺に隕石を落とす。", "Makes meteor balls fall down to nearby random locations.");
+		if (desc) return _("自分の周辺に隕石を落とす。", "Causes meteorites to fall down on nearby random locations.");
 
 		{
 			HIT_POINT dam = plev * 2;
