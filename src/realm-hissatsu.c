@@ -410,7 +410,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 14:
 		if (name) return _("急所突き", "Spot Aiming");
 		if (desc) return _("モンスターを一撃で倒す攻撃を繰り出す。失敗すると1点しかダメージを与えられない。",
-			"Attempts to kill a monster instantly. If failed cause only 1HP of damage.");
+			"Attempts to kill a monster instantly. If that fails, causes only 1HP of damage.");
 
 		if (cast)
 		{
