@@ -466,7 +466,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		{
 			if (!(empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
 			{
-				msg_print(_("素手じゃないとできません。", "You need to be bare hand."));
+				msg_print(_("素手じゃないとできません。", "You need to be barehanded."));
 				return FALSE;
 			}
 			if (creature_ptr->riding)
