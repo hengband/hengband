@@ -558,7 +558,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 30:
 		if (name) return _("血の呪い", "Bloody Curse");
 		if (desc) return _("自分がダメージを受けることによって対象に呪いをかけ、ダメージを与え様々な効果を引き起こす。",
-			"Puts blood curse which damages and causes various effects on a monster. You also take damage.");
+			"Puts blood curse, which damages and causes various effects, on a monster. You also take damage.");
 
 		{
 			HIT_POINT dam = 600;
