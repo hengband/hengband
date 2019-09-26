@@ -583,8 +583,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 31:
 		if (name) return _("虚無召来", "Call the Void");
 		if (desc) return _("自分の周囲に向かって、ロケット、純粋な魔力の球、放射性廃棄物の球を放つ。ただし、壁に隣接して使用すると広範囲を破壊する。",
-			"Fires rockets, mana balls and nuclear waste balls in all directions each unless you are not adjacent to any walls. Otherwise *destroys* huge area.");
-
+			"Fires rockets, mana balls and nuclear waste balls in all directions if you are not adjacent to any walls. Otherwise *destroys* huge area.");
 		{
 			if (info) return format("%s3 * 175", KWD_DAM);
 
