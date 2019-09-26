@@ -443,7 +443,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Generates a ball centered on you which inflicts PSI damage on a monster or, at level 25 and higher, inflicts PSI damage on all monsters.",
 	"Removes fear and stun. Gives heroism and speed. Heals HP a little unless you already have heroism and a temporary speed boost.",
 	"Pulls a distant item close to you.",
-	"Fires a ball which damages, co. Absorbing is takes more turns which from 0 to 1.5.",
+	"Fires a ball which damages. When not resisted, you gain SP. You will be occupied for 0 to 1.5 turns after casting as your mind recovers.",
 	"Fires a beam of pure energy which penetrates the invulnerability barrier.",
 	"Stops time. Consumes all of your SP. The more consumes SP, the longer duration of spell.",
 	"",
