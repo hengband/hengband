@@ -583,7 +583,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		break;
 
 	case 10:
-		if (name) return _("薬品吸入", "Inhail potion");
+		if (name) return _("薬品吸入", "Inhale potion");
 		if (desc) return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling of casting a spell.");
 		if (cast)
 		{
