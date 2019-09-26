@@ -521,7 +521,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Recalls player from dungeon to town, or from town to the deepest level of dungeon.",
 	"Completely protects you from any attacks at one in two chance.",
 	"Generates a magical triangle which damages all monsters in the area. The vertices of the triangle are you and two mirrors in sight.",
-	"Generates barrier which completely protects you from almost all damages. Takes a few your turns when the barrier breaks or duration time is exceeded.",
+	"Generates a barrier which completely protects you from almost all damage. Takes a few your turns when the barrier breaks or duration time is exceeded.",
 },
 
 {
