@@ -460,7 +460,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Gives levitaion a while.",
 	"Fires a short energy beam.",
 	"Gives magic resistance for a while.",
-	"Improves spirit energy power temporaly. Improved spirit energy will be more and more powerfull or have longer duration. Too many improving results in uncontrollable explosion of spirit energy.",
+	"Increases your spirit energy temporarily. More spirit energy will boost the effect or duration of your force abilities. Too much spirit energy can result in an explosion.",
 	"Gives aura which damages all monsters which attacked you for a while.",
 	"Damages an adjacent monster, and blows it away.",
 	"Fires a large energy ball.",
