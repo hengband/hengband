@@ -530,7 +530,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Teleports you a short distance.",
 	"Teleports you as you recieve an attack. Might be able to teleport just before receiving damage at higher levels.",
 	"Teleports you a long distance.",
-	"Attacks and teleports in a time.",
+	"Attacks an adjacent monster and teleports you away immediately after the attack.",
 	"Attempts to freeze a monster.",
 	"Identifies an item.",
 	"Gives levitation for a while.",
