@@ -176,7 +176,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
 				return NULL;
 			}
-			msg_print(_("相手の攻撃に対して身構えた。", "You prepare to counter blow."));
+			msg_print(_("相手の攻撃に対して身構えた。", "You prepare to counterattack."));
 			caster_ptr->counter = TRUE;
 		}
 		break;
