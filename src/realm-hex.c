@@ -626,7 +626,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("武器の輝きが消え去った。");
 #else
-			msg_format("Brightness of weapon%s disappeared.", (empty_hands(caster_ptr, FALSE)) ? "" : "s");
+			msg_format("Your weapon%s.", (empty_hands(caster_ptr, FALSE)) ? " no longer glows" : "s no longer glow");
 #endif
 		}
 		break;
@@ -640,7 +640,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		}
 		if (stop)
 		{
-			msg_print(_("手の輝きがなくなった。", "Brightness on your hands disappeard."));
+			msg_print(_("手の輝きがなくなった。", "Your hands no longer glow."));
 		}
 		break;
 
