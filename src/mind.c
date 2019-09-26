@@ -439,7 +439,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Stuns, confuses or scares a monster. Or attempts to charm all monsters in sight at level 30.",
 	"Fires a ball which hurts monsters with telekinesis.",
 	"Gives stone skin and some resistance to elements for a while. The level increased, the more number of resistances given.",
-	"Gives feeling of an item. Or identify an item at level 25.",
+	"Gives feeling of an item. Or identifies an item at level 25.",
 	"Generates a ball centered on you which inflicts monster with PSI damage. Or inflicts all monsters with PSI damage at level 25.",
 	"Removes fear and stun. Gives heroism and speed. Heals HP a little unless you already have heroism and a temporary speed boost.",
 	"Pulls a distant item close to you.",
