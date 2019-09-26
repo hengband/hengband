@@ -755,7 +755,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 26:
 		if (name) return _("百人斬り", "Hundred Slaughter");
 		if (desc) return _("連続して入身でモンスターを攻撃する。攻撃するたびにMPを消費。MPがなくなるか、モンスターを倒せなかったら百人斬りは終了する。",
-			"Performs a series of rush attacks. The series continues while killing each monster in a time and SP remains.");
+			"Performs a series of rush attacks. The series continues as long as the attacked monster dies and you have sufficient SP.");
 
 		if (cast)
 		{
