@@ -295,7 +295,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 13:
 		if (name) return _("吸血の矢", "Vampiric Bolt");
 		if (desc) return _("ボルトによりモンスター1体から生命力を吸いとる。吸いとった生命力によって満腹度が上がる。",
-			"Absorbs some HP from a monster and gives them to you by bolt. You will also gain nutritional sustenance from this.");
+			"Fires a bolt which transfers HP from a monster to you. You will also gain nutritional sustenance from this.");
 
 		{
 			DICE_NUMBER dice = 1;
