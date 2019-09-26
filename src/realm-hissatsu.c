@@ -623,7 +623,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 22:
 		if (name) return _("気迫の雄叫び", "War Cry");
 		if (desc) return _("視界内の全モンスターに対して轟音の攻撃を行う。さらに、近くにいるモンスターを怒らせる。",
-			"Damages all monsters in sight with sound. Aggravate nearby monsters.");
+			"Damages all monsters in sight with sound. Aggravates nearby monsters.");
 
 		if (cast)
 		{
