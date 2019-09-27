@@ -690,13 +690,13 @@ static void update_unique_artifact(s16b cur_floor_id)
  * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
  * @return なし
  */
-static void get_out_monster(void)
+static void get_out_monster(floor_type *floor_ptr, player_type *protected_ptr)
 {
 	int tries = 0;
 	POSITION dis = 1;
-	POSITION oy = p_ptr->y;
-	POSITION ox = p_ptr->x;
-	MONSTER_IDX m_idx = p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx;
+	POSITION oy = protected_ptr->y;
+	POSITION ox = protected_ptr->x;
+	MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
 	if (!m_idx) return;
@@ -722,27 +722,27 @@ static void get_out_monster(void)
 		if (tries > 20 * dis * dis) dis++;
 
 		/* Ignore illegal locations */
-		if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
+		if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 		/* Require "empty" floor space */
 		if (!cave_empty_bold(ny, nx)) continue;
 
 		/* Hack -- no teleport onto glyph of warding */
-		if (is_glyph_grid(&p_ptr->current_floor_ptr->grid_array[ny][nx])) continue;
-		if (is_explosive_rune_grid(&p_ptr->current_floor_ptr->grid_array[ny][nx])) continue;
+		if (is_glyph_grid(&floor_ptr->grid_array[ny][nx])) continue;
+		if (is_explosive_rune_grid(&floor_ptr->grid_array[ny][nx])) continue;
 
 		/* ...nor onto the Pattern */
 		if (pattern_tile(ny, nx)) continue;
 
 		/*** It's a good place ***/
 
-		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		m_ptr = &floor_ptr->m_list[m_idx];
 
 		/* Update the old location */
-		p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+		floor_ptr->grid_array[oy][ox].m_idx = 0;
 
 		/* Update the new location */
-		p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+		floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
 		/* Move the monster */
 		m_ptr->fy = ny;
@@ -1061,7 +1061,7 @@ void leave_floor(player_type *creature_ptr, BIT_FLAGS floor_mode)
 	    !(floor_mode & CFM_NO_RETURN))
 	{
 		/* Get out of the my way! */
-		get_out_monster();
+		get_out_monster(p_ptr->current_floor_ptr, creature_ptr);
 
 		/* Record the last visit current_world_ptr->game_turn of current floor */
 		sf_ptr->last_visit = current_world_ptr->game_turn;
