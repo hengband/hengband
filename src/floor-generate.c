@@ -797,12 +797,12 @@ static bool cave_gen(dungeon_type* dungeon_ptr, floor_type *floor_ptr)
 			if (randint1(floor_ptr->dun_level) > dungeon_ptr->tunnel_percent)
 			{
 				/* make cavelike tunnel */
-				(void)build_tunnel2(dun->cent[i].x, dun->cent[i].y, x, y, 2, 2);
+				(void)build_tunnel2(floor_ptr, dun->cent[i].x, dun->cent[i].y, x, y, 2, 2);
 			}
 			else
 			{
 				/* make normal tunnel */
-				if (!build_tunnel(dun->cent[i].y, dun->cent[i].x, y, x)) tunnel_fail_count++;
+				if (!build_tunnel(floor_ptr, dun->cent[i].y, dun->cent[i].x, y, x)) tunnel_fail_count++;
 			}
 
 			if (tunnel_fail_count >= 2) return FALSE;
@@ -1549,7 +1549,7 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
 *   outer -- outer room walls\n
 *   solid -- solid room walls\n
 */
-bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
+bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
 	POSITION y, x;
 	POSITION tmp_row, tmp_col;
@@ -1593,7 +1593,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 
 
 		/* Extremely Important -- do not leave the dungeon */
-		while (!in_bounds(p_ptr->current_floor_ptr, tmp_row, tmp_col))
+		while (!in_bounds(floor_ptr, tmp_row, tmp_col))
 		{
 			/* Acquire the correct direction */
 			correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -1609,7 +1609,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 			tmp_col = col1 + col_dir;
 		}
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[tmp_row][tmp_col];
+		g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
 
 		/* Avoid "solid" walls */
 		if (is_solid_grid(g_ptr)) continue;
@@ -1622,8 +1622,8 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 			x = tmp_col + col_dir;
 
 			/* Hack -- Avoid outer/solid walls */
-			if (is_outer_bold(p_ptr->current_floor_ptr, y, x)) continue;
-			if (is_solid_bold(p_ptr->current_floor_ptr, y, x)) continue;
+			if (is_outer_bold(floor_ptr, y, x)) continue;
+			if (is_solid_bold(floor_ptr, y, x)) continue;
 
 			/* Accept this location */
 			row1 = tmp_row;
@@ -1644,7 +1644,7 @@ bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 				for (x = col1 - 1; x <= col1 + 1; x++)
 				{
 					/* Convert adjacent "outer" walls as "solid" walls */
-					if (is_outer_bold(p_ptr->current_floor_ptr, y, x))
+					if (is_outer_bold(floor_ptr, y, x))
 					{
 						/* Change the wall to a "solid" wall */
 						place_solid_noperm_bold(y, x);
@@ -2034,7 +2034,7 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 * Note it is VERY important that the "stop if hit another passage" logic\n
 * stays as is.  Without this the dungeon turns into Swiss Cheese...\n
 */
-bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
+bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {
 	POSITION x3, y3, dx, dy;
 	POSITION changex, changey;
@@ -2062,13 +2062,13 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 		y3 = y1 + dy + changey;
 
 		/* See if in bounds - if not - do not perturb point */
-		if (!in_bounds(p_ptr->current_floor_ptr, y3, x3))
+		if (!in_bounds(floor_ptr, y3, x3))
 		{
 			x3 = (x1 + x2) / 2;
 			y3 = (y1 + y2) / 2;
 		}
 		/* cache g_ptr */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y3][x3];
+		g_ptr = &floor_ptr->grid_array[y3][x3];
 		if (is_solid_grid(g_ptr))
 		{
 			/* move midpoint a bit to avoid problem. */
@@ -2077,11 +2077,11 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 
 			dy = 0;
 			dx = 0;
-			while ((i > 0) && is_solid_bold(p_ptr->current_floor_ptr, y3 + dy, x3 + dx))
+			while ((i > 0) && is_solid_bold(floor_ptr, y3 + dy, x3 + dx))
 			{
 				dy = randint0(3) - 1;
 				dx = randint0(3) - 1;
-				if (!in_bounds(p_ptr->current_floor_ptr, y3 + dy, x3 + dx))
+				if (!in_bounds(floor_ptr, y3 + dy, x3 + dx))
 				{
 					dx = 0;
 					dy = 0;
@@ -2098,17 +2098,17 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 			}
 			y3 += dy;
 			x3 += dx;
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y3][x3];
+			g_ptr = &floor_ptr->grid_array[y3][x3];
 		}
 
 		if (is_floor_grid(g_ptr))
 		{
-			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
+			if (build_tunnel2(floor_ptr, x1, y1, x3, y3, type, cutoff))
 			{
-				if ((p_ptr->current_floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95))
+				if ((floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95))
 				{
 					/* do second half only if works + if have hit a room */
-					retval = build_tunnel2(x3, y3, x2, y2, type, cutoff);
+					retval = build_tunnel2(floor_ptr, x3, y3, x2, y2, type, cutoff);
 				}
 				else
 				{
@@ -2136,9 +2136,9 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 		else
 		{
 			/* tunnel through walls */
-			if (build_tunnel2(x1, y1, x3, y3, type, cutoff))
+			if (build_tunnel2(floor_ptr, x1, y1, x3, y3, type, cutoff))
 			{
-				retval = build_tunnel2(x3, y3, x2, y2, type, cutoff);
+				retval = build_tunnel2(floor_ptr, x3, y3, x2, y2, type, cutoff);
 				firstsuccede = TRUE;
 			}
 			else
@@ -2151,7 +2151,7 @@ bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type,
 		if (firstsuccede)
 		{
 			/* only do this if the first half has worked */
-			set_tunnel(p_ptr->current_floor_ptr, &x3, &y3, TRUE);
+			set_tunnel(floor_ptr, &x3, &y3, TRUE);
 		}
 		/* return value calculated above */
 		return retval;

@@ -105,5 +105,5 @@ extern void wipe_generate_random_floor_flags(floor_type *floor_ptr);
 extern void clear_cave(floor_type *floor_ptr);
 extern void generate_random_floor(floor_type *floor_ptr);
 
-extern bool build_tunnel(POSITION row1, POSITION col1, POSITION row2, POSITION col2);
-extern bool build_tunnel2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff);
+extern bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2);
+extern bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff);
