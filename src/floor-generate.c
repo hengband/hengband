@@ -1861,26 +1861,26 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 * Note that this routine is only called on "even" squares - so it gives
 * a natural checkerboard pattern.
 */
-static void create_cata_tunnel(POSITION x, POSITION y)
+static void create_cata_tunnel(floor_type *floor_ptr, POSITION x, POSITION y)
 {
 	POSITION x1, y1;
 
 	/* Build tunnel */
 	x1 = x - 1;
 	y1 = y;
-	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(floor_ptr, &x1, &y1, FALSE);
 
 	x1 = x + 1;
 	y1 = y;
-	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(floor_ptr, &x1, &y1, FALSE);
 
 	x1 = x;
 	y1 = y - 1;
-	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(floor_ptr, &x1, &y1, FALSE);
 
 	x1 = x;
 	y1 = y + 1;
-	set_tunnel(p_ptr->current_floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(floor_ptr, &x1, &y1, FALSE);
 }
 
 
@@ -1957,7 +1957,7 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(i, y1);
+					create_cata_tunnel(floor_ptr, i, y1);
 				}
 			}
 		}
@@ -1975,7 +1975,7 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(i, y1);
+					create_cata_tunnel(floor_ptr, i, y1);
 				}
 			}
 
@@ -1994,7 +1994,7 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(x2, i);
+					create_cata_tunnel(floor_ptr, x2, i);
 				}
 			}
 		}
@@ -2012,7 +2012,7 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(x2, i);
+					create_cata_tunnel(floor_ptr, x2, i);
 				}
 			}
 		}
