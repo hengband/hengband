@@ -469,7 +469,7 @@ static border_type border;
  * Build the wilderness area outside of the town.
  * @return なし
  */
-void wilderness_gen(void)
+void wilderness_gen(floor_type *floor_ptr)
 {
 	int i, lim;
 	POSITION y, x;
@@ -477,12 +477,12 @@ void wilderness_gen(void)
 	feature_type *f_ptr;
 
 	/* Big town */
-	p_ptr->current_floor_ptr->height = MAX_HGT;
-	p_ptr->current_floor_ptr->width = MAX_WID;
+	floor_ptr->height = MAX_HGT;
+	floor_ptr->width = MAX_WID;
 
 	/* Assume illegal panel */
-	panel_row_min = p_ptr->current_floor_ptr->height;
-	panel_col_min = p_ptr->current_floor_ptr->width;
+	panel_row_min = floor_ptr->height;
+	panel_col_min = floor_ptr->width;
 
 	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 	x = p_ptr->wilderness_x;
@@ -494,7 +494,7 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
-		border.north[i] = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][i].feat;
+		border.north[i] = floor_ptr->grid_array[MAX_HGT - 2][i].feat;
 	}
 
 	/* South border */
@@ -502,7 +502,7 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
-		border.south[i] = p_ptr->current_floor_ptr->grid_array[1][i].feat;
+		border.south[i] = floor_ptr->grid_array[1][i].feat;
 	}
 
 	/* West border */
@@ -510,7 +510,7 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
-		border.west[i] = p_ptr->current_floor_ptr->grid_array[i][MAX_WID - 2].feat;
+		border.west[i] = floor_ptr->grid_array[i][MAX_WID - 2].feat;
 	}
 
 	/* East border */
@@ -518,24 +518,24 @@ void wilderness_gen(void)
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
-		border.east[i] = p_ptr->current_floor_ptr->grid_array[i][1].feat;
+		border.east[i] = floor_ptr->grid_array[i][1].feat;
 	}
 
 	/* North west corner */
 	generate_area(y - 1, x - 1, FALSE, TRUE);
-	border.north_west = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+	border.north_west = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
 	/* North east corner */
 	generate_area(y - 1, x + 1, FALSE, TRUE);
-	border.north_east = p_ptr->current_floor_ptr->grid_array[MAX_HGT - 2][1].feat;
+	border.north_east = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
 
 	/* South west corner */
 	generate_area(y + 1, x - 1, FALSE, TRUE);
-	border.south_west = p_ptr->current_floor_ptr->grid_array[1][MAX_WID - 2].feat;
+	border.south_west = floor_ptr->grid_array[1][MAX_WID - 2].feat;
 
 	/* South east corner */
 	generate_area(y + 1, x + 1, FALSE, TRUE);
-	border.south_east = p_ptr->current_floor_ptr->grid_array[1][1].feat;
+	border.south_east = floor_ptr->grid_array[1][1].feat;
 
 
 	/* Create terrain of the current area */
@@ -545,49 +545,49 @@ void wilderness_gen(void)
 	/* Special boundary walls -- North */
 	for (i = 0; i < MAX_WID; i++)
 	{
-		p_ptr->current_floor_ptr->grid_array[0][i].feat = feat_permanent;
-		p_ptr->current_floor_ptr->grid_array[0][i].mimic = border.north[i];
+		floor_ptr->grid_array[0][i].feat = feat_permanent;
+		floor_ptr->grid_array[0][i].mimic = border.north[i];
 	}
 
 	/* Special boundary walls -- South */
 	for (i = 0; i < MAX_WID; i++)
 	{
-		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][i].feat = feat_permanent;
-		p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][i].mimic = border.south[i];
+		floor_ptr->grid_array[MAX_HGT - 1][i].feat = feat_permanent;
+		floor_ptr->grid_array[MAX_HGT - 1][i].mimic = border.south[i];
 	}
 
 	/* Special boundary walls -- West */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		p_ptr->current_floor_ptr->grid_array[i][0].feat = feat_permanent;
-		p_ptr->current_floor_ptr->grid_array[i][0].mimic = border.west[i];
+		floor_ptr->grid_array[i][0].feat = feat_permanent;
+		floor_ptr->grid_array[i][0].mimic = border.west[i];
 	}
 
 	/* Special boundary walls -- East */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		p_ptr->current_floor_ptr->grid_array[i][MAX_WID - 1].feat = feat_permanent;
-		p_ptr->current_floor_ptr->grid_array[i][MAX_WID - 1].mimic = border.east[i];
+		floor_ptr->grid_array[i][MAX_WID - 1].feat = feat_permanent;
+		floor_ptr->grid_array[i][MAX_WID - 1].mimic = border.east[i];
 	}
 
 	/* North west corner */
-	p_ptr->current_floor_ptr->grid_array[0][0].mimic = border.north_west;
+	floor_ptr->grid_array[0][0].mimic = border.north_west;
 
 	/* North east corner */
-	p_ptr->current_floor_ptr->grid_array[0][MAX_WID - 1].mimic = border.north_east;
+	floor_ptr->grid_array[0][MAX_WID - 1].mimic = border.north_east;
 
 	/* South west corner */
-	p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][0].mimic = border.south_west;
+	floor_ptr->grid_array[MAX_HGT - 1][0].mimic = border.south_west;
 
 	/* South east corner */
-	p_ptr->current_floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
+	floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
 
 	/* Light up or darken the area */
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			if (is_daytime())
 			{
@@ -629,11 +629,11 @@ void wilderness_gen(void)
 
 	if (p_ptr->teleport_town)
 	{
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < floor_ptr->height; y++)
 		{
-			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+			for (x = 0; x < floor_ptr->width; x++)
 			{
-				g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+				g_ptr = &floor_ptr->grid_array[y][x];
 
 				/* Seeing true feature code (ignore mimic) */
 				f_ptr = &f_info[g_ptr->feat];
@@ -654,11 +654,11 @@ void wilderness_gen(void)
 
 	else if (p_ptr->leaving_dungeon)
 	{
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < floor_ptr->height; y++)
 		{
-			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+			for (x = 0; x < floor_ptr->width; x++)
 			{
-				g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+				g_ptr = &floor_ptr->grid_array[y][x];
 
 				if (cave_have_flag_grid(g_ptr, FF_ENTRANCE))
 				{

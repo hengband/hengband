@@ -1431,7 +1431,7 @@ void generate_random_floor(floor_type *floor_ptr)
 		{
 			/* Make the wilderness */
 			if (p_ptr->wild_mode) wilderness_gen_small();
-			else wilderness_gen();
+			else wilderness_gen(floor_ptr);
 		}
 
 		/* Build a real level */

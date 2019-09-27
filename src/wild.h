@@ -26,7 +26,7 @@
 
 /* wild.c */
 extern void set_floor_and_wall(DUNGEON_IDX type);
-extern void wilderness_gen(void);
+extern void wilderness_gen(floor_type *floor_ptr);
 extern void wilderness_gen_small(void);
 extern errr init_wilderness(void);
 extern void init_wilderness_terrains(void);
