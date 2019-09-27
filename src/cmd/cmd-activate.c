@@ -356,7 +356,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool success;
 
-	o_ptr = REF_ITEM(user_ptr, p_ptr->current_floor_ptr, item);
+	o_ptr = REF_ITEM(user_ptr, user_ptr->current_floor_ptr, item);
 	take_turn(user_ptr, 100);
 	lev = k_info[o_ptr->k_idx].level;
 
@@ -454,9 +454,9 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			C_MAKE(who, current_world_ptr->max_m_idx, MONSTER_IDX);
 
 			/* Process the monsters (backwards) */
-			for (pet_ctr = p_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+			for (pet_ctr = user_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
-				if (is_pet(&p_ptr->current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
+				if (is_pet(&user_ptr->current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
 				  who[max_pet++] = pet_ctr;
 			}
 
@@ -541,10 +541,10 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			{
 				if (place_monster_aux(0, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
 				{
-					if (o_ptr->xtra3) p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
-					if (o_ptr->xtra5) p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;
-					if (o_ptr->xtra4) p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = o_ptr->xtra4;
-					p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
+					if (o_ptr->xtra3) user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
+					if (o_ptr->xtra5) user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;
+					if (o_ptr->xtra4) user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = o_ptr->xtra4;
+					user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp;
 					if (o_ptr->inscription)
 					{
 						char buf[80];
@@ -586,7 +586,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 								s--;
 #endif
 							*s = '\0';
-							p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
+							user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
 							t = quark_str(o_ptr->inscription);
 							s = buf;
 							while(*t && (*t != '#'))
