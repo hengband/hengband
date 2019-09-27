@@ -147,14 +147,14 @@ dun_data *dun;
  * @note Assumes "in_bounds(p_ptr->current_floor_ptr, y, x)"
  * @details We count only granite walls and permanent walls.
  */
-static int next_to_walls(POSITION y, POSITION x)
+static int next_to_walls(floor_type* floor_ptr, POSITION y, POSITION x)
 {
 	int k = 0;
 
-	if (in_bounds(p_ptr->current_floor_ptr, y + 1, x) && is_extra_bold(p_ptr->current_floor_ptr, y + 1, x)) k++;
-	if (in_bounds(p_ptr->current_floor_ptr, y - 1, x) && is_extra_bold(p_ptr->current_floor_ptr, y - 1, x)) k++;
-	if (in_bounds(p_ptr->current_floor_ptr, y, x + 1) && is_extra_bold(p_ptr->current_floor_ptr, y, x + 1)) k++;
-	if (in_bounds(p_ptr->current_floor_ptr, y, x - 1) && is_extra_bold(p_ptr->current_floor_ptr, y, x - 1)) k++;
+	if (in_bounds(floor_ptr, y + 1, x) && is_extra_bold(floor_ptr, y + 1, x)) k++;
+	if (in_bounds(floor_ptr, y - 1, x) && is_extra_bold(floor_ptr, y - 1, x)) k++;
+	if (in_bounds(floor_ptr, y, x + 1) && is_extra_bold(floor_ptr, y, x + 1)) k++;
+	if (in_bounds(floor_ptr, y, x - 1) && is_extra_bold(floor_ptr, y, x - 1)) k++;
 
 	return (k);
 }
@@ -176,7 +176,7 @@ static bool alloc_stairs_aux(POSITION y, POSITION x, int walls)
 	if (g_ptr->o_idx || g_ptr->m_idx) return FALSE;
 
 	/* Require a certain number of adjacent walls */
-	if (next_to_walls(y, x) < walls) return FALSE;
+	if (next_to_walls(p_ptr->current_floor_ptr, y, x) < walls) return FALSE;
 
 	return TRUE;
 }
