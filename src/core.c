@@ -2931,6 +2931,7 @@ static void process_world_aux_recharge(player_type *creature_ptr)
  */
 static void process_world_aux_movement(player_type *creature_ptr)
 {
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	/* Delayed Word-of-Recall */
 	if (creature_ptr->word_recall)
 	{
@@ -2954,15 +2955,15 @@ static void process_world_aux_movement(player_type *creature_ptr)
 			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (p_ptr->current_floor_ptr->dun_level || creature_ptr->inside_quest || creature_ptr->enter_dungeon)
+			if (floor_ptr->dun_level || creature_ptr->inside_quest || creature_ptr->enter_dungeon)
 			{
 				msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
 
 				if (creature_ptr->dungeon_idx) creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
 				if (record_stair)
-					exe_write_diary(creature_ptr, NIKKI_RECALL, p_ptr->current_floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, NIKKI_RECALL, floor_ptr->dun_level, NULL);
 
-				p_ptr->current_floor_ptr->dun_level = 0;
+				floor_ptr->dun_level = 0;
 				creature_ptr->dungeon_idx = 0;
 
 				leave_quest_check();
@@ -2979,26 +2980,26 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				creature_ptr->dungeon_idx = creature_ptr->recall_dungeon;
 
 				if (record_stair)
-					exe_write_diary(creature_ptr, NIKKI_RECALL, p_ptr->current_floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, NIKKI_RECALL, floor_ptr->dun_level, NULL);
 
 				/* New depth */
-				p_ptr->current_floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
-				if (p_ptr->current_floor_ptr->dun_level < 1) p_ptr->current_floor_ptr->dun_level = 1;
+				floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
+				if (floor_ptr->dun_level < 1) floor_ptr->dun_level = 1;
 
 				/* Nightmare mode makes recall more dangerous */
 				if (ironman_nightmare && !randint0(666) && (creature_ptr->dungeon_idx == DUNGEON_ANGBAND))
 				{
-					if (p_ptr->current_floor_ptr->dun_level < 50)
+					if (floor_ptr->dun_level < 50)
 					{
-						p_ptr->current_floor_ptr->dun_level *= 2;
+						floor_ptr->dun_level *= 2;
 					}
-					else if (p_ptr->current_floor_ptr->dun_level < 99)
+					else if (floor_ptr->dun_level < 99)
 					{
-						p_ptr->current_floor_ptr->dun_level = (p_ptr->current_floor_ptr->dun_level + 99) / 2;
+						floor_ptr->dun_level = (floor_ptr->dun_level + 99) / 2;
 					}
-					else if (p_ptr->current_floor_ptr->dun_level > 100)
+					else if (floor_ptr->dun_level > 100)
 					{
-						p_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].maxdepth - 1;
+						floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].maxdepth - 1;
 					}
 				}
 
@@ -3033,7 +3034,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 						
 						if ((q_ptr->type == QUEST_TYPE_RANDOM) &&
 						    (q_ptr->status == QUEST_STATUS_TAKEN) &&
-						    (q_ptr->level < p_ptr->current_floor_ptr->dun_level))
+						    (q_ptr->level < floor_ptr->dun_level))
 						{
 							q_ptr->status = QUEST_STATUS_FAILED;
 							q_ptr->complev = (byte)creature_ptr->lev;
@@ -3068,7 +3069,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (!quest_number(p_ptr->current_floor_ptr->dun_level) && p_ptr->current_floor_ptr->dun_level)
+			if (!quest_number(floor_ptr->dun_level) && floor_ptr->dun_level)
 			{
 				msg_print(_("世界が変わった！", "The world changes!"));
 
