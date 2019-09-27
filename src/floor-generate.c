@@ -1906,7 +1906,7 @@ static void create_cata_tunnel(POSITION x, POSITION y)
 * This, when used with longer line segments gives the "catacomb-like" tunnels seen near\n
 * the surface.\n
 */
-static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int count, bool *fail)
+static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int count, bool *fail)
 {
 	int i;
 	POSITION x, y;
@@ -1926,7 +1926,7 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 		{
 			x = x1 + i * (x2 - x1) / length;
 			y = y1 + i * (y2 - y1) / length;
-			if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
+			if (!set_tunnel(floor_ptr, &x, &y, TRUE))
 			{
 				if (count > 50)
 				{
@@ -1936,8 +1936,8 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 				}
 
 				/* solid wall - so try to go around */
-				short_seg_hack(x, y, x1 + (i - 1) * (x2 - x1) / length, y1 + (i - 1) * (y2 - y1) / length, 1, count, fail);
-				short_seg_hack(x, y, x1 + (i + 1) * (x2 - x1) / length, y1 + (i + 1) * (y2 - y1) / length, 1, count, fail);
+				short_seg_hack(floor_ptr, x, y, x1 + (i - 1) * (x2 - x1) / length, y1 + (i - 1) * (y2 - y1) / length, 1, count, fail);
+				short_seg_hack(floor_ptr, x, y, x1 + (i + 1) * (x2 - x1) / length, y1 + (i + 1) * (y2 - y1) / length, 1, count, fail);
 			}
 		}
 	}
@@ -1949,11 +1949,11 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = i;
 				y = y1;
-				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(x, y, i - 1, y1, 1, count, fail);
-					short_seg_hack(x, y, i + 1, y1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, i - 1, y1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, i + 1, y1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
@@ -1967,11 +1967,11 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = i;
 				y = y1;
-				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(x, y, i - 1, y1, 1, count, fail);
-					short_seg_hack(x, y, i + 1, y1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, i - 1, y1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, i + 1, y1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
@@ -1986,11 +1986,11 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = x2;
 				y = i;
-				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(x, y, x2, i - 1, 1, count, fail);
-					short_seg_hack(x, y, x2, i + 1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, x2, i - 1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, x2, i + 1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
@@ -2004,11 +2004,11 @@ static void short_seg_hack(POSITION x1, POSITION y1, POSITION x2, POSITION y2, i
 			{
 				x = x2;
 				y = i;
-				if (!set_tunnel(p_ptr->current_floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(x, y, x2, i - 1, 1, count, fail);
-					short_seg_hack(x, y, x2, i + 1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, x2, i - 1, 1, count, fail);
+					short_seg_hack(floor_ptr, x, y, x2, i + 1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
@@ -2160,7 +2160,7 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 	{
 		/* Do a short segment */
 		retval = TRUE;
-		short_seg_hack(x1, y1, x2, y2, type, 0, &retval);
+		short_seg_hack(floor_ptr, x1, y1, x2, y2, type, 0, &retval);
 
 		/* Hack - ignore return value so avoid infinite loops */
 		return TRUE;
