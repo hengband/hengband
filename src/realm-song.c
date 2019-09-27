@@ -773,7 +773,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				msg_print(_("歌が神聖な場を作り出した．．．", "The holy power of the Music is creating sacred field..."));
-				warding_glyph();
+				warding_glyph(caster_ptr);
 			}
 		}
 		break;

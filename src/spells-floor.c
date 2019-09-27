@@ -190,20 +190,20 @@ void wiz_dark(void)
  * Leave a "glyph of warding" which prevents monster movement
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool warding_glyph(void)
+bool warding_glyph(player_type *caster_ptr)
 {
-	if (!cave_clean_bold(p_ptr->y, p_ptr->x))
+	if (!cave_clean_bold(caster_ptr->y, caster_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
 	}
 
 	/* Create a glyph */
-	p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info |= CAVE_OBJECT;
-	p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].mimic = feat_glyph;
+	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_OBJECT;
+	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_glyph;
 
-	note_spot(p_ptr->y, p_ptr->x);
-	lite_spot(p_ptr->y, p_ptr->x);
+	note_spot(caster_ptr->y, caster_ptr->x);
+	lite_spot(caster_ptr->y, caster_ptr->x);
 
 	return TRUE;
 }

@@ -364,7 +364,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_RUNE_OF_PROTECTION:
 		{
-			warding_glyph();
+			warding_glyph(creature_ptr);
 			ident = TRUE;
 			break;
 		}

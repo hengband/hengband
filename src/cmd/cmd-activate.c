@@ -1486,7 +1486,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_RUNE_PROT:
 	{
 		msg_print(_("ブルーに明るく輝いている...", "It glows light blue..."));
-		warding_glyph();
+		warding_glyph(user_ptr);
 		break;
 	}
 
