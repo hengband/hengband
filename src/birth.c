@@ -1682,6 +1682,9 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	/* Hack -- zero the struct */
 	(void)WIPE(creature_ptr, player_type);
 
+	//TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
+	creature_ptr->current_floor_ptr = &floor_info;
+
 	C_MAKE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
 
 	/* Wipe the history */
