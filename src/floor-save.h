@@ -20,7 +20,7 @@ extern u32b saved_floor_file_sign;
 
 extern void init_saved_floors(bool force);
 extern void change_floor(BIT_FLAGS floor_mode);
-extern void leave_floor(player_type *creature_ptr, BIT_FLAGS floor_mode);
+extern void leave_floor(player_type *creature_ptr);
 extern void clear_saved_floor_files(void);
 extern saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id);
 extern FLOOR_IDX get_new_floor_id(void);

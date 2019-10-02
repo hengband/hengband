@@ -1343,10 +1343,10 @@ bool target_set(BIT_FLAGS mode)
 
 			if (cheat_sight)
 			{
-				char cheatinfo[30];
-				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d",
+				char cheatinfo[100];
+				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d",
 					los(p_ptr->y, p_ptr->x, y, x),
-					projectable(p_ptr->y, p_ptr->x, y, x));
+					projectable(p_ptr->y, p_ptr->x, y, x), g_ptr->special);
 				strcat(info, cheatinfo);
 			}
 
