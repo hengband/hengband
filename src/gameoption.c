@@ -63,6 +63,7 @@ bool abbrev_extra;	/* Describe obj's extra resistances by abbreviation */
 bool abbrev_all;	/* Describe obj's all resistances by abbreviation */
 bool exp_need;	/* Show the experience needed for next level */
 bool ignore_unview;	/* Ignore whenever any monster does */
+bool refresh_mon_list;	/* Refresh monster list before action */
 
 
 					/*** Game-Play Options ***/
@@ -344,6 +345,9 @@ const option_type option_info[] =
 
 	{ &ignore_unview,               FALSE, OPT_PAGE_TEXT, 2, 13,
 	"ignore_unview",                _("視界外のモンスターの行動を表示しない", "Ignore whenever any monster does") },
+
+	{ &refresh_mon_list,            FALSE, OPT_PAGE_TEXT, 2, 18,
+	"refresh_mon_list",             _("行動前に視界内モンスターリストを更新(重い)", "Refresh monster list before action") },
 
 	{ &show_ammo_detail,            TRUE, OPT_PAGE_TEXT, 2, 14,
 	"show_ammo_detail",             _("矢弾のダメージの説明を表示する", "Show description of ammo damage") },
