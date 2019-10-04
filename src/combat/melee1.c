@@ -2173,8 +2173,8 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 	bool            mdeath = FALSE;
 	bool            stormbringer = FALSE;
 
-	grid_type       *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-	monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	grid_type       *g_ptr = &attacker_ptr->current_floor_ptr->grid_array[y][x];
+	monster_type    *m_ptr = &attacker_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -2293,7 +2293,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 
 		if (cur < max)
 		{
-			DEPTH ridinglevel = r_info[p_ptr->current_floor_ptr->m_list[attacker_ptr->riding].r_idx].level;
+			DEPTH ridinglevel = r_info[attacker_ptr->current_floor_ptr->m_list[attacker_ptr->riding].r_idx].level;
 			DEPTH targetlevel = r_ptr->level;
 			int inc = 0;
 
