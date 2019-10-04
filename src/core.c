@@ -609,7 +609,7 @@ static void sense_inventory2(player_type *creature_ptr)
  * @brief パターン終点到達時のテレポート処理を行う
  * @return なし
  */
-static void pattern_teleport(void)
+static void pattern_teleport(player_type *creature_ptr)
 {
 	DEPTH min_level = 0;
 	DEPTH max_level = 99;
@@ -622,27 +622,27 @@ static void pattern_teleport(void)
 
 		/* Only downward in ironman mode */
 		if (ironman_downward)
-			min_level = p_ptr->current_floor_ptr->dun_level;
+			min_level = creature_ptr->current_floor_ptr->dun_level;
 
 		/* Maximum level */
-		if (p_ptr->dungeon_idx == DUNGEON_ANGBAND)
+		if (creature_ptr->dungeon_idx == DUNGEON_ANGBAND)
 		{
-			if (p_ptr->current_floor_ptr->dun_level > 100)
+			if (creature_ptr->current_floor_ptr->dun_level > 100)
 				max_level = MAX_DEPTH - 1;
-			else if (p_ptr->current_floor_ptr->dun_level == 100)
+			else if (creature_ptr->current_floor_ptr->dun_level == 100)
 				max_level = 100;
 		}
 		else
 		{
-			max_level = d_info[p_ptr->dungeon_idx].maxdepth;
-			min_level = d_info[p_ptr->dungeon_idx].mindepth;
+			max_level = d_info[creature_ptr->dungeon_idx].maxdepth;
+			min_level = d_info[creature_ptr->dungeon_idx].mindepth;
 		}
 
 		/* Prompt */
 		sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);
 
 		/* Default */
-		sprintf(tmp_val, "%d", (int)p_ptr->current_floor_ptr->dun_level);
+		sprintf(tmp_val, "%d", (int)creature_ptr->current_floor_ptr->dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
@@ -668,21 +668,21 @@ static void pattern_teleport(void)
 	if (autosave_l) do_cmd_save_game(TRUE);
 
 	/* Change level */
-	p_ptr->current_floor_ptr->dun_level = command_arg;
+	creature_ptr->current_floor_ptr->dun_level = command_arg;
 
 	leave_quest_check();
 
-	if (record_stair) exe_write_diary(p_ptr, NIKKI_PAT_TELE, 0, NULL);
+	if (record_stair) exe_write_diary(creature_ptr, NIKKI_PAT_TELE, 0, NULL);
 
-	p_ptr->inside_quest = 0;
-	free_turn(p_ptr);
+	creature_ptr->inside_quest = 0;
+	free_turn(creature_ptr);
 
 	/*
 	 * Clear all saved floors
 	 * and create a first saved floor
 	 */
 	prepare_change_floor_mode(CFM_FIRST_FLOOR);
-	p_ptr->leaving = TRUE;
+	creature_ptr->leaving = TRUE;
 }
 
 /*!
@@ -727,7 +727,7 @@ static bool pattern_effect(player_type *creature_ptr)
 		break;
 
 	case PATTERN_TILE_TELEPORT:
-		pattern_teleport();
+		pattern_teleport(creature_ptr);
 		break;
 
 	case PATTERN_TILE_WRECKED:
