@@ -1091,7 +1091,7 @@ void leave_floor(player_type *creature_ptr)
  * restored from the temporal file.  If the floor is new one, new p_ptr->current_floor_ptr->grid_array\n
  * will be generated.\n
  */
-void change_floor(BIT_FLAGS floor_mode)
+void change_floor(player_type *creature_ptr)
 {
 	saved_floor_type *sf_ptr;
 	bool loaded = FALSE;
@@ -1100,7 +1100,7 @@ void change_floor(BIT_FLAGS floor_mode)
 	current_world_ptr->character_dungeon = FALSE;
 
 	/* No longer in the trap detecteded region */
-	p_ptr->dtrap = FALSE;
+	creature_ptr->dtrap = FALSE;
 
 	/* Mega-Hack -- no panel yet */
 	panel_row_min = 0;
@@ -1109,14 +1109,14 @@ void change_floor(BIT_FLAGS floor_mode)
 	panel_col_max = 0;
 
 	/* Mega-Hack -- not ambushed on the wildness? */
-	p_ptr->ambush_flag = FALSE;
+	creature_ptr->ambush_flag = FALSE;
 
 	/* No saved floors (On the surface etc.) */
-	if (!(floor_mode & CFM_SAVE_FLOORS) &&
-	    !(floor_mode & CFM_FIRST_FLOOR))
+	if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) &&
+	    !(creature_ptr->change_floor_mode & CFM_FIRST_FLOOR))
 	{
-		/* Create p_ptr->current_floor_ptr->grid_array */
-		generate_random_floor(p_ptr->current_floor_ptr);
+		/* Create creature_ptr->current_floor_ptr->grid_array */
+		generate_random_floor(creature_ptr->current_floor_ptr);
 
 		/* Paranoia -- No new saved floor */
 		new_floor_id = 0;
@@ -1144,13 +1144,13 @@ void change_floor(BIT_FLAGS floor_mode)
 				loaded = TRUE;
 
 				/* Forbid return stairs */
-				if (floor_mode & CFM_NO_RETURN)
+				if (creature_ptr->change_floor_mode & CFM_NO_RETURN)
 				{
-					grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+					grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 
 					if (!feat_uses_special(g_ptr->feat))
 					{
-						if (floor_mode & (CFM_DOWN | CFM_UP))
+						if (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP))
 						{
 							/* Reset to floor */
 							g_ptr->feat = feat_ground_type[randint0(100)];
@@ -1169,30 +1169,30 @@ void change_floor(BIT_FLAGS floor_mode)
 		 * Stair creation/Teleport level/Trap door will take
 		 * you the same floor when you used it later again.
 		 */
-		if (p_ptr->floor_id)
+		if (creature_ptr->floor_id)
 		{
-			saved_floor_type *cur_sf_ptr = get_sf_ptr(p_ptr->floor_id);
+			saved_floor_type *cur_sf_ptr = get_sf_ptr(creature_ptr->floor_id);
 
-			if (floor_mode & CFM_UP)
+			if (creature_ptr->change_floor_mode & CFM_UP)
 			{
 				/* New floor is right-above */
 				if (cur_sf_ptr->upper_floor_id == new_floor_id)
-					sf_ptr->lower_floor_id = p_ptr->floor_id;
+					sf_ptr->lower_floor_id = creature_ptr->floor_id;
 			}
-			else if (floor_mode & CFM_DOWN)
+			else if (creature_ptr->change_floor_mode & CFM_DOWN)
 			{
 				/* New floor is right-under */
 				if (cur_sf_ptr->lower_floor_id == new_floor_id)
-					sf_ptr->upper_floor_id = p_ptr->floor_id;
+					sf_ptr->upper_floor_id = creature_ptr->floor_id;
 			}
 		}
 
 		/* Break connection to killed floor */
 		else
 		{
-			if (floor_mode & CFM_UP)
+			if (creature_ptr->change_floor_mode & CFM_UP)
 				sf_ptr->lower_floor_id = 0;
-			else if (floor_mode & CFM_DOWN)
+			else if (creature_ptr->change_floor_mode & CFM_DOWN)
 				sf_ptr->upper_floor_id = 0;
 		}
 
@@ -1202,17 +1202,17 @@ void change_floor(BIT_FLAGS floor_mode)
 			MONSTER_IDX i;
 			GAME_TURN tmp_last_visit = sf_ptr->last_visit;
 			GAME_TURN absence_ticks;
-			int alloc_chance = d_info[p_ptr->dungeon_idx].max_m_alloc_chance;
+			int alloc_chance = d_info[creature_ptr->dungeon_idx].max_m_alloc_chance;
 			GAME_TURN alloc_times;
 
 			while (tmp_last_visit > current_world_ptr->game_turn) tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
 			absence_ticks = (current_world_ptr->game_turn - tmp_last_visit) / TURNS_PER_TICK;
 
 			/* Maintain monsters */
-			for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+			for (i = 1; i < creature_ptr->current_floor_ptr->m_max; i++)
 			{
 				monster_race *r_ptr;
-				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+				monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
 
 				if (!monster_is_valid(m_ptr)) continue;
 
@@ -1246,9 +1246,9 @@ void change_floor(BIT_FLAGS floor_mode)
 			}
 
 			/* Maintain artifatcs */
-			for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+			for (i = 1; i < creature_ptr->current_floor_ptr->o_max; i++)
 			{
-				object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+				object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
 
 				if (!OBJECT_IS_VALID(o_ptr)) continue;
 
@@ -1293,68 +1293,68 @@ void change_floor(BIT_FLAGS floor_mode)
 				msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
 
 				/* Create simple dead end */
-				build_dead_end(p_ptr->current_floor_ptr);
+				build_dead_end(creature_ptr->current_floor_ptr);
 
 				/* Break connection */
-				if (floor_mode & CFM_UP)
+				if (creature_ptr->change_floor_mode & CFM_UP)
 				{
 					sf_ptr->upper_floor_id = 0;
 				}
-				else if (floor_mode & CFM_DOWN)
+				else if (creature_ptr->change_floor_mode & CFM_DOWN)
 				{
 					sf_ptr->lower_floor_id = 0;
 				}
 			}
 			else
 			{
-				/* Newly create p_ptr->current_floor_ptr->grid_array */
-				generate_random_floor(p_ptr->current_floor_ptr);
+				/* Newly create creature_ptr->current_floor_ptr->grid_array */
+				generate_random_floor(creature_ptr->current_floor_ptr);
 			}
 
 			/* Record last visit current_world_ptr->game_turn */
 			sf_ptr->last_visit = current_world_ptr->game_turn;
 
-			/* Set correct p_ptr->current_floor_ptr->dun_level value */
-			sf_ptr->dun_level = p_ptr->current_floor_ptr->dun_level;
+			/* Set correct creature_ptr->current_floor_ptr->dun_level value */
+			sf_ptr->dun_level = creature_ptr->current_floor_ptr->dun_level;
 
 			/* Create connected stairs */
-			if (!(floor_mode & CFM_NO_RETURN))
+			if (!(creature_ptr->change_floor_mode & CFM_NO_RETURN))
 			{
 				/* Extract stair position */
-				grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+				grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 
 				/*** Create connected stairs ***/
 
 				/* No stairs down from Quest */
-				if ((floor_mode & CFM_UP) && !quest_number(p_ptr->current_floor_ptr->dun_level))
+				if ((creature_ptr->change_floor_mode & CFM_UP) && !quest_number(creature_ptr->current_floor_ptr->dun_level))
 				{
-					g_ptr->feat = (floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
+					g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}
 
 				/* No stairs up when ironman_downward */
-				else if ((floor_mode & CFM_DOWN) && !ironman_downward)
+				else if ((creature_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward)
 				{
-					g_ptr->feat = (floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
+					g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
 				}
 
 				/* Paranoia -- Clear mimic */
 				g_ptr->mimic = 0;
 
 				/* Connect to previous floor */
-				g_ptr->special = p_ptr->floor_id;
+				g_ptr->special = creature_ptr->floor_id;
 			}
 		}
 
 		/* Arrive at random grid */
-		if (floor_mode & (CFM_RAND_PLACE))
+		if (creature_ptr->change_floor_mode & (CFM_RAND_PLACE))
 		{
 			(void)new_player_spot();
 		}
 
 		/* You see stairs blocked */
-		else if ((floor_mode & CFM_NO_RETURN) && (floor_mode & (CFM_DOWN | CFM_UP)))
+		else if ((creature_ptr->change_floor_mode & CFM_NO_RETURN) && (creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)))
 		{
-			if (!p_ptr->blind)
+			if (!creature_ptr->blind)
 			{
 				msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
 			}
@@ -1376,7 +1376,7 @@ void change_floor(BIT_FLAGS floor_mode)
 	}
 
 	/* Place preserved pet monsters */
-	place_pet(p_ptr);
+	place_pet(creature_ptr);
 
 	/* Reset travel target place */
 	forget_travel_flow();
@@ -1385,25 +1385,25 @@ void change_floor(BIT_FLAGS floor_mode)
 	update_unique_artifact(new_floor_id);
 
 	/* Now the player is in new floor */
-	p_ptr->floor_id = new_floor_id;
+	creature_ptr->floor_id = new_floor_id;
 
 	/* The dungeon is ready */
 	current_world_ptr->character_dungeon = TRUE;
 
 	/* Hack -- Munchkin characters always get whole map */
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
-		wiz_lite(p_ptr, (bool)(p_ptr->pclass == CLASS_NINJA));
+	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+		wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
 
 	/* Remember when this level was "created" */
-	p_ptr->current_floor_ptr->generated_turn = current_world_ptr->game_turn;
+	creature_ptr->current_floor_ptr->generated_turn = current_world_ptr->game_turn;
 
 	/* No dungeon feeling yet */
-	p_ptr->feeling_turn = p_ptr->current_floor_ptr->generated_turn;
-	p_ptr->feeling = 0;
+	creature_ptr->feeling_turn = creature_ptr->current_floor_ptr->generated_turn;
+	creature_ptr->feeling = 0;
 
 	/* Clear all flags */
-	floor_mode = 0L;
+	creature_ptr->change_floor_mode = 0L;
 
-	select_floor_music(p_ptr);
-	p_ptr->change_floor_mode = 0;
+	select_floor_music(creature_ptr);
+	creature_ptr->change_floor_mode = 0;
 }
