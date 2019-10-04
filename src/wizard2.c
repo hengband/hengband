@@ -1124,7 +1124,7 @@ static void do_cmd_wiz_blue_mage(player_type *caster_ptr)
  *   - Change properties (via wiz_tweak_item)<br>
  *   - Change the number of items (via wiz_quantity_item)<br>
  */
-static void do_cmd_wiz_play(void)
+static void do_cmd_wiz_play(player_type *creature_ptr)
 {
 	OBJECT_IDX item;
 	object_type	forge;
@@ -1137,7 +1137,7 @@ static void do_cmd_wiz_play(void)
 	q = "Play with which object? ";
 	s = "You have nothing to play with.";
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 
 	if (!o_ptr) return;
 	
@@ -1176,7 +1176,7 @@ static void do_cmd_wiz_play(void)
 
 		if (ch == 'r' || ch == 'r')
 		{
-			wiz_reroll_item(p_ptr, q_ptr);
+			wiz_reroll_item(creature_ptr, q_ptr);
 		}
 
 		if (ch == 't' || ch == 'T')
@@ -1201,17 +1201,17 @@ static void do_cmd_wiz_play(void)
 		/* Recalcurate object's weight */
 		if (item >= 0)
 		{
-			p_ptr->total_weight += (q_ptr->weight * q_ptr->number)
+			creature_ptr->total_weight += (q_ptr->weight * q_ptr->number)
 				- (o_ptr->weight * o_ptr->number);
 		}
 
 		/* Change */
 		object_copy(o_ptr, q_ptr);
 
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->update |= (PU_COMBINE | PU_REORDER);
+		creature_ptr->update |= (PU_BONUS);
+		creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
-		p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+		creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	}
 
 	/* Ignore change */
@@ -1826,7 +1826,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Object playing routines */
 	case 'o':
-		do_cmd_wiz_play();
+		do_cmd_wiz_play(creature_ptr);
 		break;
 
 	/* Phase Door */
