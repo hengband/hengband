@@ -1125,15 +1125,16 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 /*!
 * @brief 敵オーラによるプレイヤーのダメージ処理（メイン）
 * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
+* @param touched_ptr オーラを持つ相手に振れたクリーチャーの参照ポインタ
 * @return なし
 */
-static void touch_zap_player(monster_type *m_ptr)
+static void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 {
-	touch_zap_player_aux(m_ptr, p_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
+	touch_zap_player_aux(m_ptr, touched_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
 		fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
-	touch_zap_player_aux(m_ptr, p_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
+	touch_zap_player_aux(m_ptr, touched_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
 		cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
-	touch_zap_player_aux(m_ptr, p_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
+	touch_zap_player_aux(m_ptr, touched_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
 		elec_dam, _("電撃をくらった！", "You get zapped!"));
 }
 
@@ -1256,7 +1257,7 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 			*mdeath = mon_take_hit(m_idx, k, fear, NULL);
 		}
 
-		touch_zap_player(m_ptr);
+		touch_zap_player(m_ptr, p_ptr);
 	}
 	/* Player misses */
 	else
@@ -1846,7 +1847,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			/* Anger the monster */
 			if (k > 0) anger_monster(m_ptr);
 
-			touch_zap_player(m_ptr);
+			touch_zap_player(m_ptr, attacker_ptr);
 
 			/* Are we draining it?  A little note: If the monster is
 			dead, the drain does not work... */
