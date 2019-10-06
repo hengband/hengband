@@ -166,7 +166,7 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
  * @param feat2 境界部地形ID
  * @return なし
  */
-void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
+void add_river(floor_type *floor_ptr, FEAT_IDX feat1, FEAT_IDX feat2)
 {
 	POSITION y2, x2;
 	POSITION y1 = 0, x1 = 0;
@@ -174,8 +174,8 @@ void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
 
 
 	/* Hack -- Choose starting point */
-	y2 = randint1(p_ptr->current_floor_ptr->height / 2 - 2) + p_ptr->current_floor_ptr->height / 2;
-	x2 = randint1(p_ptr->current_floor_ptr->width / 2 - 2) + p_ptr->current_floor_ptr->width / 2;
+	y2 = randint1(floor_ptr->height / 2 - 2) + floor_ptr->height / 2;
+	x2 = randint1(floor_ptr->width / 2 - 2) + floor_ptr->width / 2;
 
 	/* Hack -- Choose ending point somewhere on boundary */
 	switch(randint1(4))
@@ -183,7 +183,7 @@ void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
 		case 1:
 		{
 			/* top boundary */
-			x1 = randint1(p_ptr->current_floor_ptr->width-2)+1;
+			x1 = randint1(floor_ptr->width-2)+1;
 			y1 = 1;
 			break;
 		}
@@ -191,21 +191,21 @@ void add_river(FEAT_IDX feat1, FEAT_IDX feat2)
 		{
 			/* left boundary */
 			x1 = 1;
-			y1 = randint1(p_ptr->current_floor_ptr->height-2)+1;
+			y1 = randint1(floor_ptr->height-2)+1;
 			break;
 		}
 		case 3:
 		{
 			/* right boundary */
-			x1 = p_ptr->current_floor_ptr->width-1;
-			y1 = randint1(p_ptr->current_floor_ptr->height-2)+1;
+			x1 = floor_ptr->width-1;
+			y1 = randint1(floor_ptr->height-2)+1;
 			break;
 		}
 		case 4:
 		{
 			/* bottom boundary */
-			x1 = randint1(p_ptr->current_floor_ptr->width-2)+1;
-			y1 = p_ptr->current_floor_ptr->height-1;
+			x1 = randint1(floor_ptr->width-2)+1;
+			y1 = floor_ptr->height-1;
 			break;
 		}
 	}

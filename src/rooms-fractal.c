@@ -60,10 +60,10 @@ bool build_type9(void)
 			randint1(xsize / 4) + randint1(ysize / 4);
 
 		/* make it */
-		generate_hmap(y0, x0, xsize, ysize, grd, roug, cutoff);
+		generate_hmap(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
 
 		/* Convert to normal format + clean up */
-		done = generate_fracave(y0, x0, xsize, ysize, cutoff, light, room);
+		done = generate_fracave(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, cutoff, light, room);
 	}
 
 	return TRUE;

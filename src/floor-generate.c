@@ -758,7 +758,7 @@ static bool cave_gen(dungeon_type* dungeon_ptr, floor_type *floor_ptr)
 				    ((dun->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER)) ||
 				     !dun->laketype)
 				{
-					add_river(feat1, feat2);
+					add_river(floor_ptr, feat1, feat2);
 				}
 			}
 		}

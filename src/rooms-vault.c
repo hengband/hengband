@@ -248,10 +248,10 @@ static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION y
 			randint1(xsize / 4) + randint1(ysize / 4);
 
 		/* make it */
-		generate_hmap(y0, x0, xsize, ysize, grd, roug, cutoff);
+		generate_hmap(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
 
 		/* Convert to normal format+ clean up */
-		done = generate_fracave(y0, x0, xsize, ysize, cutoff, light, room);
+		done = generate_fracave(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, cutoff, light, room);
 	}
 
 	/* Set icky flag because is a vault */
@@ -324,7 +324,7 @@ static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yof
 * @param transno 変換ID
 * @return なし
 */
-static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, concptr data,
+static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, concptr data,
 	POSITION xoffset, POSITION yoffset, int transno)
 {
 	POSITION dx, dy, x, y, i, j;
@@ -358,7 +358,7 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 			/* Hack -- skip "non-grids" */
 			if (*t == ' ') continue;
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Lay down a floor */
 			place_floor_grid(g_ptr);
@@ -444,92 +444,92 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 
 				/* Black market in a dungeon */
 			case 'S':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_black_market);
+				set_cave_feat(floor_ptr, y, x, feat_black_market);
 				store_init(NO_TOWN, STORE_BLACK);
 				break;
 
 				/* The Pattern */
 			case 'p':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_pattern_start);
+				set_cave_feat(floor_ptr, y, x, feat_pattern_start);
 				break;
 
 			case 'a':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_pattern_1);
+				set_cave_feat(floor_ptr, y, x, feat_pattern_1);
 				break;
 
 			case 'b':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_pattern_2);
+				set_cave_feat(floor_ptr, y, x, feat_pattern_2);
 				break;
 
 			case 'c':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_pattern_3);
+				set_cave_feat(floor_ptr, y, x, feat_pattern_3);
 				break;
 
 			case 'd':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_pattern_4);
+				set_cave_feat(floor_ptr, y, x, feat_pattern_4);
 				break;
 
 			case 'P':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_pattern_end);
+				set_cave_feat(floor_ptr, y, x, feat_pattern_end);
 				break;
 
 			case 'B':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_pattern_exit);
+				set_cave_feat(floor_ptr, y, x, feat_pattern_exit);
 				break;
 
 			case 'A':
 				/* Reward for Pattern walk */
-				p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level + 12;
+				floor_ptr->object_level = floor_ptr->base_level + 12;
 				place_object(y, x, AM_GOOD | AM_GREAT);
-				p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
+				floor_ptr->object_level = floor_ptr->base_level;
 				break;
 
 			case '~':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_shallow_water);
+				set_cave_feat(floor_ptr, y, x, feat_shallow_water);
 				break;
 
 			case '=':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_deep_water);
+				set_cave_feat(floor_ptr, y, x, feat_deep_water);
 				break;
 
 			case 'v':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_shallow_lava);
+				set_cave_feat(floor_ptr, y, x, feat_shallow_lava);
 				break;
 
 			case 'w':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_deep_lava);
+				set_cave_feat(floor_ptr, y, x, feat_deep_lava);
 				break;
 
 			case 'f':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_shallow_acid_puddle);
+				set_cave_feat(floor_ptr, y, x, feat_shallow_acid_puddle);
 				break;
 
 			case 'F':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_deep_acid_puddle);
+				set_cave_feat(floor_ptr, y, x, feat_deep_acid_puddle);
 				break;
 
 			case 'g':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_shallow_poisonous_puddle);
+				set_cave_feat(floor_ptr, y, x, feat_shallow_poisonous_puddle);
 				break;
 
 			case 'G':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_deep_poisonous_puddle);
+				set_cave_feat(floor_ptr, y, x, feat_deep_poisonous_puddle);
 				break;
 
 			case 'h':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_cold_zone);
+				set_cave_feat(floor_ptr, y, x, feat_cold_zone);
 				break;
 
 			case 'H':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_heavy_cold_zone);
+				set_cave_feat(floor_ptr, y, x, feat_heavy_cold_zone);
 				break;
 
 			case 'i':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_electrical_zone);
+				set_cave_feat(floor_ptr, y, x, feat_electrical_zone);
 				break;
 
 			case 'I':
-				set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_heavy_electrical_zone);
+				set_cave_feat(floor_ptr, y, x, feat_heavy_electrical_zone);
 				break;
 
 			}
@@ -570,42 +570,42 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 			{
 				case '&':
 				{
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level + 5;
+					floor_ptr->monster_level = floor_ptr->base_level + 5;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
+					floor_ptr->monster_level = floor_ptr->base_level;
 					break;
 				}
 
 				/* Meaner monster */
 				case '@':
 				{
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level + 11;
+					floor_ptr->monster_level = floor_ptr->base_level + 11;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
+					floor_ptr->monster_level = floor_ptr->base_level;
 					break;
 				}
 
 				/* Meaner monster, plus treasure */
 				case '9':
 				{
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level + 9;
+					floor_ptr->monster_level = floor_ptr->base_level + 9;
 					place_monster(y, x, PM_ALLOW_SLEEP);
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
-					p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level + 7;
+					floor_ptr->monster_level = floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level + 7;
 					place_object(y, x, AM_GOOD);
-					p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level;
 					break;
 				}
 
 				/* Nasty monster and treasure */
 				case '8':
 				{
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level + 40;
+					floor_ptr->monster_level = floor_ptr->base_level + 40;
 					place_monster(y, x, PM_ALLOW_SLEEP);
-					p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
-					p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level + 20;
+					floor_ptr->monster_level = floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level + 20;
 					place_object(y, x, AM_GOOD | AM_GREAT);
-					p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
+					floor_ptr->object_level = floor_ptr->base_level;
 					break;
 				}
 
@@ -614,15 +614,15 @@ static void build_vault(POSITION yval, POSITION xval, POSITION ymax, POSITION xm
 				{
 					if (randint0(100) < 50)
 					{
-						p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level + 3;
+						floor_ptr->monster_level = floor_ptr->base_level + 3;
 						place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-						p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
+						floor_ptr->monster_level = floor_ptr->base_level;
 					}
 					if (randint0(100) < 50)
 					{
-						p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level + 7;
+						floor_ptr->object_level = floor_ptr->base_level + 7;
 						place_object(y, x, 0L);
-						p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
+						floor_ptr->object_level = floor_ptr->base_level;
 					}
 					break;
 				}
@@ -708,7 +708,7 @@ bool build_type7(void)
 	msg_format_wizard(CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(p_ptr->current_floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
@@ -794,7 +794,7 @@ bool build_type8(void)
 	msg_format_wizard(CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(p_ptr->current_floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
@@ -987,7 +987,7 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 		c2 = (c1 + c3) / 2;
 
 		/* make it */
-		generate_hmap(y0, x0, xsize, ysize, grd, roug, c3);
+		generate_hmap(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, grd, roug, c3);
 
 		/* Convert to normal format+ clean up */
 		done = generate_lake(y0, x0, xsize, ysize, c1, c2, c3, type);
@@ -1308,7 +1308,7 @@ bool build_type17(void)
 	msg_format_wizard(CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(p_ptr->current_floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
