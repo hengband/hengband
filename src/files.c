@@ -3262,7 +3262,7 @@ static void display_player_flag_info(void)
 	display_flag_aux(row+0, col, "Speed     :", TR_SPEED, &f, 0);
 	display_flag_aux(row+1, col, "FreeAction:", TR_FREE_ACT, &f, 0);
 	display_flag_aux(row+2, col, "SeeInvisi.:", TR_SEE_INVIS, &f, 0);
-	display_flag_aux(row+3, col, "Hold Exp :", TR_HOLD_EXP, &f, 0);
+	display_flag_aux(row+3, col, "Hold Exp  :", TR_HOLD_EXP, &f, 0);
 	display_flag_aux(row+4, col, "Warning   :", TR_WARNING, &f, 0);
 	display_flag_aux(row+5, col, "SlowDigest:", TR_SLOW_DIGEST, &f, 0);
 	display_flag_aux(row+6, col, "Regene.   :", TR_REGEN, &f, 0);
