@@ -3972,7 +3972,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		paid = cure_critical_wounds(p_ptr, 200);
 		break;
 	case BACT_RESTORE: /* needs work */
-		paid = restore_all_status();
+		paid = restore_all_status(p_ptr);
 		break;
 	case BACT_ENCHANT_ARROWS:
 		item_tester_hook = item_tester_hook_ammo;

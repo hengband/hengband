@@ -113,7 +113,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 	case SV_ROD_RESTORATION:
 	{
 		if(restore_level(creature_ptr)) ident = TRUE;
-		if(restore_all_status()) ident = TRUE;
+		if(restore_all_status(creature_ptr)) ident = TRUE;
 		break;
 	}
 

@@ -684,7 +684,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 				msg_print(_("あなたは「パターン」を心に描いてその上を歩いた...", "You picture the Pattern in your mind and walk it..."));
 
 				(void)true_healing(creature_ptr, 0);
-				(void)restore_all_status();
+				(void)restore_all_status(creature_ptr);
 				(void)restore_level(creature_ptr);
 			}
 			break;

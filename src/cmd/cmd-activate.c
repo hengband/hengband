@@ -1267,7 +1267,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_REST_ALL:
 	{
 		msg_print(_("濃緑色に輝いている...", "It glows a deep green..."));
-		(void)restore_all_status();
+		(void)restore_all_status(user_ptr);
 		(void)restore_level(user_ptr);
 		break;
 	}

@@ -21,7 +21,7 @@ extern bool_hack cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice
 extern bool_hack cure_critical_wounds(player_type *creature_ptr, HIT_POINT pow);
 extern bool_hack true_healing(player_type *creature_ptr, HIT_POINT pow);
 extern bool_hack restore_mana(player_type *creature_ptr, bool_hack magic_eater);
-extern bool restore_all_status(void);
+extern bool restore_all_status(player_type *creature_ptr);
 
 extern bool fishing(player_type *creature_ptr);
 extern bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr);

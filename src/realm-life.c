@@ -430,7 +430,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				(void)restore_all_status();
+				(void)restore_all_status(caster_ptr);
 				restore_level(caster_ptr);
 			}
 		}

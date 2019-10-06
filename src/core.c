@@ -707,7 +707,7 @@ static bool pattern_effect(player_type *creature_ptr)
 	{
 	case PATTERN_TILE_END:
 		(void)set_image(creature_ptr, 0);
-		(void)restore_all_status();
+		(void)restore_all_status(creature_ptr);
 		(void)restore_level(creature_ptr);
 		(void)cure_critical_wounds(creature_ptr, 1000);
 

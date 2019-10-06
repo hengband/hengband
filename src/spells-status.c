@@ -283,7 +283,7 @@ bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack vi
 	(void)set_image(creature_ptr, 0);
 	(void)set_stun(creature_ptr, 0);
 	(void)set_cut(creature_ptr,0);
-	(void)restore_all_status();
+	(void)restore_all_status(creature_ptr);
 	(void)set_shero(creature_ptr, 0, TRUE);
 	handle_stuff();
 	hp_player(creature_ptr, 5000);
@@ -392,15 +392,15 @@ bool_hack restore_mana(player_type *creature_ptr, bool_hack magic_eater)
 	return ident;
 }
 
-bool restore_all_status(void)
+bool restore_all_status(player_type *creature_ptr)
 {
 	bool ident = FALSE;
-	if (do_res_stat(p_ptr, A_STR)) ident = TRUE;
-	if (do_res_stat(p_ptr, A_INT)) ident = TRUE;
-	if (do_res_stat(p_ptr, A_WIS)) ident = TRUE;
-	if (do_res_stat(p_ptr, A_DEX)) ident = TRUE;
-	if (do_res_stat(p_ptr, A_CON)) ident = TRUE;
-	if (do_res_stat(p_ptr, A_CHR)) ident = TRUE;
+	if (do_res_stat(creature_ptr, A_STR)) ident = TRUE;
+	if (do_res_stat(creature_ptr, A_INT)) ident = TRUE;
+	if (do_res_stat(creature_ptr, A_WIS)) ident = TRUE;
+	if (do_res_stat(creature_ptr, A_DEX)) ident = TRUE;
+	if (do_res_stat(creature_ptr, A_CON)) ident = TRUE;
+	if (do_res_stat(creature_ptr, A_CHR)) ident = TRUE;
 	return ident;
 }
 
