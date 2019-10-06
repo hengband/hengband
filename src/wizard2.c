@@ -398,11 +398,11 @@ static void do_cmd_wiz_change_aux(player_type *creature_ptr)
  * Change various "permanent" player variables.
  * @return なし
  */
-static void do_cmd_wiz_change(void)
+static void do_cmd_wiz_change(player_type *creature_ptr)
 {
 	/* Interact */
-	do_cmd_wiz_change_aux(p_ptr);
-	do_cmd_redraw(p_ptr);
+	do_cmd_wiz_change_aux(creature_ptr);
+	do_cmd_redraw(creature_ptr);
 }
 
 
@@ -1733,7 +1733,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Edit character */
 	case 'e':
-		do_cmd_wiz_change();
+		do_cmd_wiz_change(creature_ptr);
 		break;
 
 	/* Blue Mage Only */
