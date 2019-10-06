@@ -393,7 +393,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 * @brief ペットに名前をつけるコマンドのメインルーチン
 * @return なし
 */
-static void do_name_pet(void)
+static void do_name_pet(player_type *creature_ptr)
 {
 	monster_type *m_ptr;
 	char out_val[20];
@@ -409,9 +409,9 @@ static void do_name_pet(void)
 	}
 	target_pet = old_target_pet;
 
-	if (p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx)
+	if (creature_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx)
 	{
-		m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
+		m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 
 		if (!is_pet(m_ptr))
 		{
@@ -449,7 +449,7 @@ static void do_name_pet(void)
 				if (record_named_pet)
 				{
 					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-					exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
+					exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
 				}
 			}
 			else
@@ -457,7 +457,7 @@ static void do_name_pet(void)
 				if (record_named_pet && old_name)
 				{
 					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-					exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
+					exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
 				}
 				m_ptr->nickname = 0;
 			}
@@ -944,7 +944,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
 	case PET_NAME:
 	{
-		do_name_pet();
+		do_name_pet(creature_ptr);
 		break;
 	}
 
