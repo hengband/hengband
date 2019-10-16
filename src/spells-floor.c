@@ -263,8 +263,9 @@ bool place_mirror(void)
  * Create stairs at or move previously created stairs into the player location.
  * @return なし
  */
-void stair_creation(void)
+void stair_creation(player_type *caster_ptr)
 {
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	saved_floor_type *sf_ptr;
 	saved_floor_type *dest_sf_ptr;
 
@@ -277,10 +278,10 @@ void stair_creation(void)
 	if (ironman_downward) up = FALSE;
 
 	/* Forbid down staircases on quest level */
-	if (quest_number(p_ptr->current_floor_ptr->dun_level) || (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) down = FALSE;
+	if (quest_number(floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) down = FALSE;
 
 	/* No effect out of standard dungeon floor */
-	if (!p_ptr->current_floor_ptr->dun_level || (!up && !down) ||
+	if (!floor_ptr->dun_level || (!up && !down) ||
 		(p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) ||
 		p_ptr->inside_arena || p_ptr->phase_out)
 	{
@@ -331,11 +332,11 @@ void stair_creation(void)
 	{
 		POSITION x, y;
 
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < floor_ptr->height; y++)
 		{
-			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+			for (x = 0; x < floor_ptr->width; x++)
 			{
-				grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+				grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 				if (!g_ptr->special) continue;
 				if (feat_uses_special(g_ptr->feat)) continue;
@@ -368,19 +369,19 @@ void stair_creation(void)
 	if (up)
 	{
 		cave_set_feat(p_ptr->y, p_ptr->x,
-			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= p_ptr->current_floor_ptr->dun_level - 2)) ?
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ?
 			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
 		cave_set_feat(p_ptr->y, p_ptr->x,
-			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= p_ptr->current_floor_ptr->dun_level + 2)) ?
+			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ?
 			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
 
 
 	/* Connect this stairs to the destination */
-	p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special = dest_floor_id;
+	floor_ptr->grid_array[p_ptr->y][p_ptr->x].special = dest_floor_id;
 }
 
 /*

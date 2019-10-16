@@ -1611,7 +1611,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 			teleport_player(222, 0L);
 			break;
 		case 11: case 12:
-			(void)stair_creation();
+			(void)stair_creation(user_ptr);
 			break;
 		default:
 			if (get_check(_("この階を去りますか？", "Leave this level? ")))
