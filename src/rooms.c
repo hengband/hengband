@@ -2092,8 +2092,8 @@ static bool room_build(EFFECT_ID typ)
 	case ROOM_T_INNER_FEAT:    return build_type4(p_ptr->current_floor_ptr);
 	case ROOM_T_NEST:          return build_type5(p_ptr->current_floor_ptr);
 	case ROOM_T_PIT:           return build_type6(p_ptr->current_floor_ptr);
-	case ROOM_T_LESSER_VAULT:  return build_type7();
-	case ROOM_T_GREATER_VAULT: return build_type8();
+	case ROOM_T_LESSER_VAULT:  return build_type7(p_ptr->current_floor_ptr);
+	case ROOM_T_GREATER_VAULT: return build_type8(p_ptr->current_floor_ptr);
 	case ROOM_T_FRACAVE:       return build_type9();
 	case ROOM_T_RANDOM_VAULT:  return build_type10();
 	case ROOM_T_OVAL:          return build_type11(p_ptr->current_floor_ptr);
@@ -2102,7 +2102,7 @@ static bool room_build(EFFECT_ID typ)
 	case ROOM_T_TRAP:          return build_type14();
 	case ROOM_T_GLASS:         return build_type15();
 	case ROOM_T_ARCADE:        return build_type16();
-	case ROOM_T_FIXED:         return build_type17();
+	case ROOM_T_FIXED:         return build_type17(p_ptr->current_floor_ptr);
 	}
 	return FALSE;
 }

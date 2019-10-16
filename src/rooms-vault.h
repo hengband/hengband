@@ -23,8 +23,8 @@ extern char *v_text;
 
 extern VAULT_IDX max_v_idx;
 
-extern bool build_type7(void);
-extern bool build_type8(void);
+extern bool build_type7(floor_type *floor_ptr);
+extern bool build_type8(floor_type *floor_ptr);
 extern bool build_type10(void);
-extern bool build_type17(void);
+extern bool build_type17(floor_type *floor_ptr);
 

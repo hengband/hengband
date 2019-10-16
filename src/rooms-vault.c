@@ -638,7 +638,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 * @brief タイプ7の部屋…v_info.txtより小型vaultを生成する / Type 7 -- simple vaults (see "v_info.txt")
 * @return なし
 */
-bool build_type7(void)
+bool build_type7(floor_type *floor_ptr)
 {
 	vault_type *v_ptr = NULL;
 	int dummy;
@@ -672,7 +672,7 @@ bool build_type7(void)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
-	if (x + 2 > p_ptr->current_floor_ptr->height - 2)
+	if (x + 2 > floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
 		transno &= ~1;
@@ -708,7 +708,7 @@ bool build_type7(void)
 	msg_format_wizard(CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(p_ptr->current_floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
@@ -718,7 +718,7 @@ bool build_type7(void)
 * @brief タイプ8の部屋…v_info.txtより大型vaultを生成する / Type 8 -- greater vaults (see "v_info.txt")
 * @return なし
 */
-bool build_type8(void)
+bool build_type8(floor_type *floor_ptr)
 {
 	vault_type *v_ptr;
 	int dummy;
@@ -752,7 +752,7 @@ bool build_type8(void)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
-	if (x + 2 > p_ptr->current_floor_ptr->height - 2)
+	if (x + 2 > floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
 		transno &= ~1;
@@ -794,7 +794,7 @@ bool build_type8(void)
 	msg_format_wizard(CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(p_ptr->current_floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
@@ -1238,7 +1238,7 @@ bool build_type10(void)
 * @brief タイプ17の部屋…v_info.txtより固定特殊部屋を生成する / Type 17 -- fixed special room (see "v_info.txt")
 * @return なし
 */
-bool build_type17(void)
+bool build_type17(floor_type *floor_ptr)
 {
 	vault_type *v_ptr = NULL;
 	int dummy;
@@ -1272,7 +1272,7 @@ bool build_type17(void)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
-	if (x + 2 > p_ptr->current_floor_ptr->height - 2)
+	if (x + 2 > floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
 		transno &= ~1;
@@ -1308,7 +1308,7 @@ bool build_type17(void)
 	msg_format_wizard(CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(p_ptr->current_floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
