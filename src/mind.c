@@ -1336,7 +1336,7 @@ static bool cast_mirror_spell(int spell)
 		/* drip of light */
 	case 1:
 		if (number_of_mirrors() < 4 + plev / 10) {
-			place_mirror();
+			place_mirror(p_ptr);
 		}
 		else {
 			msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
