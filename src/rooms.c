@@ -1517,7 +1517,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
  * The area inside the walls is not touched:
  * only granite is removed- normal walls stay
  */
-void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
+void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 {
 	POSITION x, y, xsize, ysize;
 	int i, temp;
@@ -1550,18 +1550,18 @@ void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 	for (i = 0; i <= xsize; i++)
 	{
 		place_outer_noperm_bold(y1, x1 + i);
-		p_ptr->current_floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(y2, x1 + i);
-		p_ptr->current_floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
 	for (i = 1; i < ysize; i++)
 	{
 		place_outer_noperm_bold(y1 + i, x1);
-		p_ptr->current_floor_ptr->grid_array[y1 + i][x1].info|=(CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y1 + i][x1].info|=(CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(y1 + i, x2);
-		p_ptr->current_floor_ptr->grid_array[y1 + i][x2].info|=(CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y1 + i][x2].info|=(CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Middle */
@@ -1569,16 +1569,16 @@ void build_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2)
 	{
 		for (y = 1; y < ysize; y++)
 		{
-			if (is_extra_bold(p_ptr->current_floor_ptr, y1+y, x1+x))
+			if (is_extra_bold(floor_ptr, y1+y, x1+x))
 			{
 				/* clear the untouched region */
 				place_floor_bold(y1 + y, x1 + x);
-				p_ptr->current_floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
+				floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
 			}
 			else
 			{
 				/* make it a room- but don't touch */
-				p_ptr->current_floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
+				floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
 			}
 		}
 	}

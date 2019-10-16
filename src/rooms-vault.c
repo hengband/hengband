@@ -201,7 +201,7 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 		x2 = randint1(xhsize) * 2 + x0 - xhsize;
 		y1 = randint1(yhsize) * 2 + y0 - yhsize;
 		y2 = randint1(yhsize) * 2 + y0 - yhsize;
-		build_room(x1, x2, y1, y2);
+		build_room(p_ptr->current_floor_ptr, x1, x2, y1, y2);
 	}
 
 	/* Add some random doors */
