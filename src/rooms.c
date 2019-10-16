@@ -526,9 +526,9 @@ struct fill_data_type
 static fill_data_type fill_data;
 
 
-/* Store routine for the fractal p_ptr->current_floor_ptr->grid_array generator */
+/* Store routine for the fractal floor generator */
 /* this routine probably should be an inline function or a macro. */
-static void store_height(POSITION x, POSITION y, FEAT_IDX val)
+static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX val)
 {
 	/* if on boundary set val > cutoff so walls are not as square */
 	if (((x == fill_data.xmin) || (y == fill_data.ymin) ||
@@ -536,7 +536,7 @@ static void store_height(POSITION x, POSITION y, FEAT_IDX val)
 		(val <= fill_data.c1)) val = fill_data.c1 + 1;
 
 	/* store the value in height-map format */
-	p_ptr->current_floor_ptr->grid_array[y][x].feat = val;
+	floor_ptr->grid_array[y][x].feat = val;
 
 	return;
 }
@@ -709,12 +709,12 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 					if (xhstep2 > grd)
 					{
 						/* If greater than 'grid' level then is random */
-						store_height(ii, jj, randint1(maxsize));
+						store_height(floor_ptr, ii, jj, randint1(maxsize));
 					}
 					else
 					{
 						/* Average of left and right points +random bit */
-						store_height(ii, jj,
+						store_height(floor_ptr, ii, jj,
 							(floor_ptr->grid_array[jj][fill_data.xmin + (i - xhstep) / 256].feat
 							 + floor_ptr->grid_array[jj][fill_data.xmin + (i + xhstep) / 256].feat) / 2
 							 + (randint1(xstep2) - xhstep2) * roug / 16);
@@ -739,12 +739,12 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 					if (xhstep2 > grd)
 					{
 						/* If greater than 'grid' level then is random */
-						store_height(ii, jj, randint1(maxsize));
+						store_height(floor_ptr, ii, jj, randint1(maxsize));
 					}
 					else
 					{
 						/* Average of up and down points +random bit */
-						store_height(ii, jj,
+						store_height(floor_ptr, ii, jj,
 							(floor_ptr->grid_array[fill_data.ymin + (j - yhstep) / 256][ii].feat
 							+ floor_ptr->grid_array[fill_data.ymin + (j + yhstep) / 256][ii].feat) / 2
 							+ (randint1(ystep2) - yhstep2) * roug / 16);
@@ -768,7 +768,7 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 					if (xhstep2 > grd)
 					{
 						/* If greater than 'grid' level then is random */
-						store_height(ii, jj, randint1(maxsize));
+						store_height(floor_ptr, ii, jj, randint1(maxsize));
 					}
 					else
 					{
@@ -782,7 +782,7 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 						 * Average over all four corners + scale by diagsize to
 						 * reduce the effect of the square grid on the shape of the fractal
 						 */
-						store_height(ii, jj,
+						store_height(floor_ptr, ii, jj,
 							(floor_ptr->grid_array[ym][xm].feat + floor_ptr->grid_array[yp][xm].feat
 							+ floor_ptr->grid_array[ym][xp].feat + floor_ptr->grid_array[yp][xp].feat) / 4
 							+ (randint1(xstep2) - xhstep2) * (diagsize / 16) / 256 * roug);
