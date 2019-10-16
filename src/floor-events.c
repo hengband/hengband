@@ -468,19 +468,19 @@ void update_lite(player_type *subject_ptr)
 	if (p >= 1)
 	{
 		/* Player grid */
-		cave_lite_hack(subject_ptr->y, subject_ptr->x);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x);
 
 		/* Adjacent grid */
-		cave_lite_hack(subject_ptr->y + 1, subject_ptr->x);
-		cave_lite_hack(subject_ptr->y - 1, subject_ptr->x);
-		cave_lite_hack(subject_ptr->y, subject_ptr->x + 1);
-		cave_lite_hack(subject_ptr->y, subject_ptr->x - 1);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x + 1);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x - 1);
 
 		/* Diagonal grids */
-		cave_lite_hack(subject_ptr->y + 1, subject_ptr->x + 1);
-		cave_lite_hack(subject_ptr->y + 1, subject_ptr->x - 1);
-		cave_lite_hack(subject_ptr->y - 1, subject_ptr->x + 1);
-		cave_lite_hack(subject_ptr->y - 1, subject_ptr->x - 1);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1);
+		cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1);
 	}
 
 	/* Radius 2 -- lantern radius */
@@ -489,33 +489,33 @@ void update_lite(player_type *subject_ptr)
 		/* South of the player */
 		if (cave_los_bold(subject_ptr->y + 1, subject_ptr->x))
 		{
-			cave_lite_hack(subject_ptr->y + 2, subject_ptr->x);
-			cave_lite_hack(subject_ptr->y + 2, subject_ptr->x + 1);
-			cave_lite_hack(subject_ptr->y + 2, subject_ptr->x - 1);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x + 1);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x - 1);
 		}
 
 		/* North of the player */
 		if (cave_los_bold(subject_ptr->y - 1, subject_ptr->x))
 		{
-			cave_lite_hack(subject_ptr->y - 2, subject_ptr->x);
-			cave_lite_hack(subject_ptr->y - 2, subject_ptr->x + 1);
-			cave_lite_hack(subject_ptr->y - 2, subject_ptr->x - 1);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x + 1);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x - 1);
 		}
 
 		/* East of the player */
 		if (cave_los_bold(subject_ptr->y, subject_ptr->x + 1))
 		{
-			cave_lite_hack(subject_ptr->y, subject_ptr->x + 2);
-			cave_lite_hack(subject_ptr->y + 1, subject_ptr->x + 2);
-			cave_lite_hack(subject_ptr->y - 1, subject_ptr->x + 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x + 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x + 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x + 2);
 		}
 
 		/* West of the player */
 		if (cave_los_bold(subject_ptr->y, subject_ptr->x - 1))
 		{
-			cave_lite_hack(subject_ptr->y, subject_ptr->x - 2);
-			cave_lite_hack(subject_ptr->y + 1, subject_ptr->x - 2);
-			cave_lite_hack(subject_ptr->y - 1, subject_ptr->x - 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x - 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x - 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x - 2);
 		}
 	}
 
@@ -530,25 +530,25 @@ void update_lite(player_type *subject_ptr)
 		/* South-East of the player */
 		if (cave_los_bold(subject_ptr->y + 1, subject_ptr->x + 1))
 		{
-			cave_lite_hack(subject_ptr->y + 2, subject_ptr->x + 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x + 2);
 		}
 
 		/* South-West of the player */
 		if (cave_los_bold(subject_ptr->y + 1, subject_ptr->x - 1))
 		{
-			cave_lite_hack(subject_ptr->y + 2, subject_ptr->x - 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x - 2);
 		}
 
 		/* North-East of the player */
 		if (cave_los_bold(subject_ptr->y - 1, subject_ptr->x + 1))
 		{
-			cave_lite_hack(subject_ptr->y - 2, subject_ptr->x + 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x + 2);
 		}
 
 		/* North-West of the player */
 		if (cave_los_bold(subject_ptr->y - 1, subject_ptr->x - 1))
 		{
-			cave_lite_hack(subject_ptr->y - 2, subject_ptr->x - 2);
+			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x - 2);
 		}
 
 		/* Maximal north */
@@ -588,7 +588,7 @@ void update_lite(player_type *subject_ptr)
 				if (subject_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_VIEW)
 				{
 					/* This grid is "torch lit" */
-					cave_lite_hack(y, x);
+					cave_lite_hack(subject_ptr->current_floor_ptr, y, x);
 				}
 			}
 		}
