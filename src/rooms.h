@@ -66,7 +66,7 @@ struct room_info_type
 /* Externs */
 #ifdef ALLOW_CAVERNS_AND_LAKES
 extern void build_lake(int type);
-extern void build_cavern(void);
+extern void build_cavern(floor_type *floor_ptr);
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
 /* Maximum locked/jammed doors */

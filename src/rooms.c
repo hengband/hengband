@@ -1138,20 +1138,20 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 
 #ifdef ALLOW_CAVERNS_AND_LAKES
 /*
- * Builds a p_ptr->current_floor_ptr->grid_array system in the center of the dungeon.
+ * Builds a cave system in the center of the dungeon.
  */
-void build_cavern(void)
+void build_cavern(floor_type *floor_ptr)
 {
 	int grd, roug, cutoff;
 	POSITION xsize, ysize, x0, y0;
 	bool done, light;
 
 	light = done = FALSE;
-	if ((p_ptr->current_floor_ptr->dun_level <= randint1(50)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((floor_ptr->dun_level <= randint1(50)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
-	/* Make a p_ptr->current_floor_ptr->grid_array the size of the dungeon */
-	xsize = p_ptr->current_floor_ptr->width - 1;
-	ysize = p_ptr->current_floor_ptr->height - 1;
+	/* Make a cave the size of the dungeon */
+	xsize = floor_ptr->width - 1;
+	ysize = floor_ptr->height - 1;
 	x0 = xsize / 2;
 	y0 = ysize / 2;
 
@@ -1171,10 +1171,10 @@ void build_cavern(void)
 		cutoff = xsize / 2;
 
 		 /* make it */
-		generate_hmap(p_ptr->current_floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
+		generate_hmap(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
 
 		/* Convert to normal format+ clean up */
-		done = generate_fracave(p_ptr->current_floor_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, FALSE);
+		done = generate_fracave(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, FALSE);
 	}
 }
 

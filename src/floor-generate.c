@@ -558,7 +558,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_p
 		/* make a large fractal floor_ptr->grid_array in the middle of the dungeon */
 
 		msg_print_wizard(CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
-		build_cavern();
+		build_cavern(floor_ptr);
 	}
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
