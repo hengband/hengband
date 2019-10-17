@@ -4940,6 +4940,12 @@ static void process_player(void)
 			/* Place the cursor on the player */
 			move_cursor_relative(p_ptr->y, p_ptr->x);
 
+			if(refresh_mon_list)
+			{
+				p_ptr->window |= PW_MONSTER_LIST;
+				update_output();
+			}
+
 			can_save = TRUE;
 			/* Get a command (normal) */
 			request_command(FALSE);
