@@ -405,7 +405,7 @@ static concptr seikaku_jouhou[MAX_SEIKAKU] =
 
 "\"Pious\" deepens your faith in your God.  It makes your physical ability average, and your stats suitable for priest. ",
 
-"\"Nimble\" renders you highly skilled comparatively well, but reduces your physical ability. ",
+"\"Nimble\" improves most skills except for melee combat.",
 
 "\"Fearless\" raises both your melee and magical ability.  Stats such as magic defense and constitution are reduced.  Also it has a direct bad influence on your hit-points.",
 
