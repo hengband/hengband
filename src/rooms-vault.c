@@ -1023,7 +1023,7 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 * The vault has two entrances on opposite sides to guarantee
 * a way to get in even if the vault abuts a side of the dungeon.
 */
-static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION dy, dx;
 	POSITION y1, x1, y2, x2, y, x, total;
@@ -1045,36 +1045,36 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	/* generate the room */
 	for (x = x1 - 2; x <= x2 + 2; x++)
 	{
-		if (!in_bounds(p_ptr->current_floor_ptr, y1 - 2, x)) break;
+		if (!in_bounds(floor_ptr, y1 - 2, x)) break;
 
-		p_ptr->current_floor_ptr->grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y1 - 2, x);
 	}
 
 	for (x = x1 - 2; x <= x2 + 2; x++)
 	{
-		if (!in_bounds(p_ptr->current_floor_ptr, y2 + 2, x)) break;
+		if (!in_bounds(floor_ptr, y2 + 2, x)) break;
 
-		p_ptr->current_floor_ptr->grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y2 + 2, x);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
 	{
-		if (!in_bounds(p_ptr->current_floor_ptr, y, x1 - 2)) break;
+		if (!in_bounds(floor_ptr, y, x1 - 2)) break;
 
-		p_ptr->current_floor_ptr->grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y, x1 - 2);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
 	{
-		if (!in_bounds(p_ptr->current_floor_ptr, y, x2 + 2)) break;
+		if (!in_bounds(floor_ptr, y, x2 + 2)) break;
 
-		p_ptr->current_floor_ptr->grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
 		place_outer_noperm_bold(y, x2 + 2);
 	}
@@ -1083,7 +1083,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 			g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
@@ -1111,7 +1111,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		{
 			total = x - x1 + y - y1;
 			/* If total is odd- and is a floor then make a wall */
-			if ((total % 2 == 1) && is_floor_bold(p_ptr->current_floor_ptr, y, x))
+			if ((total % 2 == 1) && is_floor_bold(floor_ptr, y, x))
 			{
 				place_inner_bold(y, x);
 			}
@@ -1135,7 +1135,7 @@ static void build_mini_c_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	}
 
 	/* Fill with monsters and treasure, highest difficulty */
-	fill_treasure(p_ptr->current_floor_ptr, x1, x2, y1, y2, 10);
+	fill_treasure(floor_ptr, x1, x2, y1, y2, 10);
 
 	C_KILL(visited, num_vertices, int);
 }
@@ -1220,7 +1220,7 @@ bool build_type10(void)
 	case 2: case 10: build_room_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 	case 3: case 11: build_cave_vault(x0, y0, xsize, ysize); break;
 	case 4: case 12: build_maze_vault(x0, y0, xsize, ysize, TRUE); break;
-	case 5: case 13: build_mini_c_vault(x0, y0, xsize, ysize); break;
+	case 5: case 13: build_mini_c_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 	case 6: case 14: build_castle_vault(x0, y0, xsize, ysize); break;
 	case 7: case 15: build_target_vault(x0, y0, xsize, ysize); break;
 #ifdef ALLOW_CAVERNS_AND_LAKES
