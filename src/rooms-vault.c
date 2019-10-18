@@ -169,7 +169,7 @@ static void build_bubble_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
-static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_room_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION x1, x2, y1, y2, xhsize, yhsize;
 	int i;
@@ -190,7 +190,7 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 			POSITION y = y0 - yhsize + y1;
 
 			place_extra_bold(y, x);
-			p_ptr->current_floor_ptr->grid_array[y][x].info &= (~CAVE_ICKY);
+			floor_ptr->grid_array[y][x].info &= (~CAVE_ICKY);
 		}
 	}
 
@@ -201,7 +201,7 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 		x2 = randint1(xhsize) * 2 + x0 - xhsize;
 		y1 = randint1(yhsize) * 2 + y0 - yhsize;
 		y2 = randint1(yhsize) * 2 + y0 - yhsize;
-		build_room(p_ptr->current_floor_ptr, x1, x2, y1, y2);
+		build_room(floor_ptr, x1, x2, y1, y2);
 	}
 
 	/* Add some random doors */
@@ -213,7 +213,7 @@ static void build_room_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION 
 	}
 
 	/* Fill with monsters and treasure, high difficulty */
-	fill_treasure(p_ptr->current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5) + 5);
+	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5) + 5);
 }
 
 
@@ -1217,7 +1217,7 @@ bool build_type10(void)
 	{
 		/* Build an appropriate room */
 	case 1: case  9: build_bubble_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
-	case 2: case 10: build_room_vault(x0, y0, xsize, ysize); break;
+	case 2: case 10: build_room_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 	case 3: case 11: build_cave_vault(x0, y0, xsize, ysize); break;
 	case 4: case 12: build_maze_vault(x0, y0, xsize, ysize, TRUE); break;
 	case 5: case 13: build_mini_c_vault(x0, y0, xsize, ysize); break;
