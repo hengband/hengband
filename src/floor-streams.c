@@ -44,7 +44,7 @@
  * @param width 基本幅
  * @return なし
  */
-static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
+static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
 {
 	POSITION dx, dy, length, l, x, y;
 	POSITION changex, changey;
@@ -83,20 +83,20 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 			changey = 0;
 		}
 
-		if (!in_bounds(p_ptr->current_floor_ptr, y1 + dy + changey, x1 + dx + changex))
+		if (!in_bounds(floor_ptr, y1 + dy + changey, x1 + dx + changex))
 		{
 			changex = 0;
 			changey = 0;
 		}
 
 		/* construct river out of two smaller ones */
-		recursive_river(x1, y1, x1 + dx + changex, y1 + dy + changey, feat1, feat2, width);
-		recursive_river(x1 + dx + changex, y1 + dy + changey, x2, y2, feat1, feat2, width);
+		recursive_river(floor_ptr, x1, y1, x1 + dx + changex, y1 + dy + changey, feat1, feat2, width);
+		recursive_river(floor_ptr, x1 + dx + changex, y1 + dy + changey, x2, y2, feat1, feat2, width);
 
 		/* Split the river some of the time - junctions look cool */
 		if (one_in_(DUN_WAT_CHG) && (width > 0))
 		{
-			recursive_river(x1 + dx + changex, y1 + dy + changey,
+			recursive_river(floor_ptr, x1 + dx + changex, y1 + dy + changey,
 					x1 + 8 * (dx + changex), y1 + 8 * (dy + changey),
 					feat1, feat2, width - 1);
 		}
@@ -117,9 +117,9 @@ static void recursive_river(POSITION x1, POSITION y1, POSITION x2, POSITION y2, 
 				{
 					for (tx = x - width - 1; tx <= x + width + 1; tx++)
 					{
-						if (!in_bounds2(p_ptr->current_floor_ptr, ty, tx)) continue;
+						if (!in_bounds2(floor_ptr, ty, tx)) continue;
 
-						g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
+						g_ptr = &floor_ptr->grid_array[ty][tx];
 
 						if (g_ptr->feat == feat1) continue;
 						if (g_ptr->feat == feat2) continue;
@@ -211,7 +211,7 @@ void add_river(floor_type *floor_ptr, FEAT_IDX feat1, FEAT_IDX feat2)
 	}
 
 	wid = randint1(DUN_WAT_RNG);
-	recursive_river(x1, y1, x2, y2, feat1, feat2, wid);
+	recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
 
 	/* Hack - Save the location as a "room" */
 	if (dun->cent_n < CENT_MAX)
