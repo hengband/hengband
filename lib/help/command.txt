@@ -99,7 +99,7 @@ example, use "\" + "." + "6", to specify "run east".
               4     6
               1  2  3
 
- a  Aim a wand                           A  Activate an equipment
+ a  Aim a wand                           A  Activate equipped item
  b  Browse magic list                    B  Bash a door
  c  Close a door                         C  Character description
  d  Drop an item                         D  Disarm a trap
@@ -165,7 +165,7 @@ example, use "\" + "." + "6", to specify "run east".
               h     l
               b  j  n
 
- a  Zap a rod (Activate)                 A  Activate an artifact
+ a  Zap a rod (Activate)                 A  Activate equipped item
  b  (walk - south west)                  B  (run - south west)
  c  Close a door                         C  Character description
  d  Drop an item                         D  Disarm a trap or chest
