@@ -447,7 +447,7 @@ realms contain equivalent spells.
 ***** <MonkAttacks>
 === Monk Attacks ===
 
-The Monk and ForceTrainer is designed to be a barehanded fighter
+The Monk and ForceTrainer are designed to be barehanded fighters
 rather than using a weapon like the other Hengband classes. As a
 Monk's level increases the number of attacks they get per round
 increases and new, increasingly powerful attacks become
