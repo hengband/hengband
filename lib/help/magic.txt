@@ -91,7 +91,7 @@ See raceclas.txt#TheClasses [a] for more details.
 
      Life magic is very good for healing; it relies mostly on healing,
      protection and detection spells. Also life magic has a few
-     attack spells as well. It said that some high level spell of life
+     attack spells as well. It's said that some high level spells of life
      magic can disintegrate Undead monsters into ash.  The fail rate
      of Life spells goes up if the caster's alignment tends towards
      evil.
