@@ -806,7 +806,7 @@ bool build_type8(floor_type *floor_ptr)
 * This is made by two concentric "crypts" with perpendicular
 * walls creating the cross-hairs.
 */
-static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION rad, x, y;
 
@@ -835,10 +835,10 @@ static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 		for (y = y0 - rad; y <= y0 + rad; y++)
 		{
 			/* clear room flag */
-			p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_ROOM);
+			floor_ptr->grid_array[y][x].info &= ~(CAVE_ROOM);
 
 			/* Vault - so is "icky" */
-			p_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_ICKY;
+			floor_ptr->grid_array[y][x].info |= CAVE_ICKY;
 
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1)
 			{
@@ -918,7 +918,7 @@ static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	add_door(x0, y0 - y);
 
 	/* Fill with stuff - medium difficulty */
-	fill_treasure(p_ptr->current_floor_ptr, x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);
+	fill_treasure(floor_ptr, x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);
 }
 
 
@@ -1222,7 +1222,7 @@ bool build_type10(void)
 	case 4: case 12: build_maze_vault(x0, y0, xsize, ysize, TRUE); break;
 	case 5: case 13: build_mini_c_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 	case 6: case 14: build_castle_vault(x0, y0, xsize, ysize); break;
-	case 7: case 15: build_target_vault(x0, y0, xsize, ysize); break;
+	case 7: case 15: build_target_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	case 8: build_elemental_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 #endif /* ALLOW_CAVERNS_AND_LAKES */
