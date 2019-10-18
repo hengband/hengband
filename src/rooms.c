@@ -1604,7 +1604,7 @@ void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, PO
  * is the randint0(3) below; it governs the relative density of
  * twists and turns in the labyrinth: smaller number, more twists.
  */
-void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
+void r_visit(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
 {
 	int i, j, m, n, temp, x, y, adj[4];
 
@@ -2094,7 +2094,7 @@ static bool room_build(EFFECT_ID typ)
 	case ROOM_T_PIT:           return build_type6(p_ptr->current_floor_ptr);
 	case ROOM_T_LESSER_VAULT:  return build_type7(p_ptr->current_floor_ptr);
 	case ROOM_T_GREATER_VAULT: return build_type8(p_ptr->current_floor_ptr);
-	case ROOM_T_FRACAVE:       return build_type9();
+	case ROOM_T_FRACAVE:       return build_type9(p_ptr->current_floor_ptr);
 	case ROOM_T_RANDOM_VAULT:  return build_type10();
 	case ROOM_T_OVAL:          return build_type11(p_ptr->current_floor_ptr);
 	case ROOM_T_CRYPT:         return build_type12(p_ptr->current_floor_ptr);
