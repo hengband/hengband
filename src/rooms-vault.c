@@ -930,7 +930,7 @@ static void build_target_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 *
 * Miniture rooms are then scattered across the vault.
 */
-static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
+static void build_elemental_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
 	int grd, roug;
 	int c1, c2, c3;
@@ -947,17 +947,17 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 	xsize = xhsize * 2;
 	ysize = yhsize * 2;
 
-	if (p_ptr->current_floor_ptr->dun_level < 25)
+	if (floor_ptr->dun_level < 25)
 	{
 		/* Earth vault  (Rubble) */
 		type = LAKE_T_EARTH_VAULT;
 	}
-	else if (p_ptr->current_floor_ptr->dun_level < 50)
+	else if (floor_ptr->dun_level < 50)
 	{
 		/* Air vault (Trees) */
 		type = LAKE_T_AIR_VAULT;
 	}
-	else if (p_ptr->current_floor_ptr->dun_level < 75)
+	else if (floor_ptr->dun_level < 75)
 	{
 		/* Water vault (shallow water) */
 		type = LAKE_T_WATER_VAULT;
@@ -987,7 +987,7 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 		c2 = (c1 + c3) / 2;
 
 		/* make it */
-		generate_hmap(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, grd, roug, c3);
+		generate_hmap(floor_ptr, y0, x0, xsize, ysize, grd, roug, c3);
 
 		/* Convert to normal format+ clean up */
 		done = generate_lake(y0, x0, xsize, ysize, c1, c2, c3, type);
@@ -998,7 +998,7 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 	{
 		for (y = 0; y <= ysize; y++)
 		{
-			p_ptr->current_floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
+			floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
 		}
 	}
 
@@ -1010,7 +1010,7 @@ static void build_elemental_vault(POSITION x0, POSITION y0, POSITION xsiz, POSIT
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(p_ptr->current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1,
+	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1,
 		y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
 }
 #endif /* ALLOW_CAVERNS_AND_LAKES */
@@ -1224,7 +1224,7 @@ bool build_type10(void)
 	case 6: case 14: build_castle_vault(x0, y0, xsize, ysize); break;
 	case 7: case 15: build_target_vault(x0, y0, xsize, ysize); break;
 #ifdef ALLOW_CAVERNS_AND_LAKES
-	case 8: build_elemental_vault(x0, y0, xsize, ysize); break;
+	case 8: build_elemental_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 		/* I know how to add a few more... give me some time. */
 	default: return FALSE;
