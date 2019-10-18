@@ -15,7 +15,7 @@ attacks which may be of varying type, power and effect.
 
 In addition to pure damage, there can be a number of side-effects from
 a monster hitting you. For example, an especially powerful attack may
-stun you wound you. Stunning is cumulative and, if not addressed, may
+stun or wound you. Stunning is cumulative and, if not addressed, may
 eventually result in you becoming knocked out which allows your
 opponent to continue attacking while you lie helpless. Wounds will
 cause you to lose hit points each round until you either die or your
