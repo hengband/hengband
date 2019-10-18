@@ -183,17 +183,18 @@ above.
 === Background Edit-Mode ===
 
 The computer will randomly generate background information text of the
-character for you.  But you can modify or rewrite it after rolling up
-the character in Background edit-mode.  Use key-pad or cursor keys to
-move cursor, the Enter key to finish edit-mode, and the Escape key to
-finish edit-mode with discarding changes. Use Ctrl-A key to load the
-background information text from "histpref-<<playername>>.prf" or
-"histpref.prf" on lib/user.
+character for you.  After rolling up the character, you can modify or
+rewrite that text in Background edit-mode.  Use key-pad or cursor keys
+to move the cursor. Use the Enter key to finish edit-mode and save any
+changes. Use the Escape key to finish edit-mode and discard any
+changes. Use Ctrl-A to load the background information text from
+"histpref-<<playername>>.prf" or "histpref.prf" in lib/user.
 
-You can use conditional expressions like other pref files. Background
-information text can be modified in background information pref files
-as lines of the form "H:<str>". Text area is not much large, so too
-long text will cut down.
+Background information text can be supplied in the background
+information pref files as lines of the form "H:<str>". You can use
+conditional expressions as in other pref files. When displayed, the
+background information will be cropped to fit the area available for
+display, which is not very large.
 
 
 ***** <QuickStart>
