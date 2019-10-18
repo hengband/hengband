@@ -9,7 +9,7 @@ Weaponsmith: they deal in anything sharp and to the point.
 Armorer: to offer protection from the ravages of the dungeon.
 General Store: food, torches, ammo, some necessities.
 Temple Trade: those items permitted to the pious in life.
-Black Market: the prices are usurious, but some depths items!
+Black Market: the prices are usurious, but may have powerful items!
 Home: to store some of your precious treasures.
 
 Zangband additional (if you do not prefer Ironman/Vanilla):
