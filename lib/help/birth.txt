@@ -200,10 +200,11 @@ display, which is not very large.
 ***** <QuickStart>
 === Quick Start ===
 
-Once you have generated a character and dead or quit game, you will be
-asked whether you want to use quick start or not at start up.  If you
-choose to use quick start, you get new character with exactly same
-race, class, stat, background and etc. as your last character.
+If you have already generated a character and that character died or
+quit, you will be asked whether you want to use quick start or not at
+start up.  If you choose to use quick start, you get a new character
+with exactly same race, class, stat, background and etc. as your last
+character.
 
 
 ***** <PrimaryStats>
