@@ -14,7 +14,7 @@
 * @details
 * A special trap is placed at center of the room
 */
-bool build_type14(void)
+bool build_type14(floor_type *floor_ptr)
 {
 	POSITION y, x, y2, x2, yval, xval;
 	POSITION y1, x1, xsize, ysize;
@@ -37,7 +37,7 @@ bool build_type14(void)
 	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
-	light = ((p_ptr->current_floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 
 	/* Get corner values */
@@ -52,7 +52,7 @@ bool build_type14(void)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 			place_floor_grid(g_ptr);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
@@ -62,26 +62,26 @@ bool build_type14(void)
 	/* Walls around the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x1 - 1];
+		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
 		place_outer_grid(g_ptr);
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x2 + 1];
+		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
 		place_outer_grid(g_ptr);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y1 - 1][x];
+		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
 		place_outer_grid(g_ptr);
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y2 + 1][x];
+		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
 		place_outer_grid(g_ptr);
 	}
 
-	if (p_ptr->current_floor_ptr->dun_level < 30 + randint1(30))
+	if (floor_ptr->dun_level < 30 + randint1(30))
 		trap = feat_trap_piranha;
 	else
 		trap = feat_trap_armageddon;
 
 	/* Place a special trap */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];
+	g_ptr = &floor_ptr->grid_array[rand_spread(yval, ysize / 4)][rand_spread(xval, xsize / 4)];
 	g_ptr->mimic = g_ptr->feat;
 	g_ptr->feat = trap;
 

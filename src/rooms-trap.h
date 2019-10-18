@@ -1,1 +1,1 @@
-﻿extern bool build_type14(void);
+﻿extern bool build_type14(floor_type *floor_ptr);
