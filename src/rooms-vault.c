@@ -1146,7 +1146,7 @@ static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 *
 *This makes a vault that looks like a castle/ city in the dungeon.
 */
-static void build_castle_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_castle_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION dy, dx;
 	POSITION y1, x1, y2, x2;
@@ -1168,7 +1168,7 @@ static void build_castle_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			p_ptr->current_floor_ptr->grid_array[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
+			floor_ptr->grid_array[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
 			/* Make everything a floor */
 			place_floor_bold(y, x);
 		}
@@ -1178,7 +1178,7 @@ static void build_castle_vault(POSITION x0, POSITION y0, POSITION xsize, POSITIO
 	build_recursive_room(x1, y1, x2, y2, randint1(5));
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(p_ptr->current_floor_ptr, x1, x2, y1, y2, randint1(3));
+	fill_treasure(floor_ptr, x1, x2, y1, y2, randint1(3));
 }
 
 
@@ -1221,7 +1221,7 @@ bool build_type10(void)
 	case 3: case 11: build_cave_vault(x0, y0, xsize, ysize); break;
 	case 4: case 12: build_maze_vault(x0, y0, xsize, ysize, TRUE); break;
 	case 5: case 13: build_mini_c_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
-	case 6: case 14: build_castle_vault(x0, y0, xsize, ysize); break;
+	case 6: case 14: build_castle_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 	case 7: case 15: build_target_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	case 8: build_elemental_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
