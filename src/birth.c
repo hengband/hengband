@@ -510,7 +510,7 @@ static concptr realm_subinfo[VALID_REALM] =
 "Offensive and destructive.",
 "Ruins living creatures.",
 "Good at summoning and teleportation.",
-"Very useful but poor a bit.",
+"Very useful but not as potent.",
 "Support for melee fighting.",
 "Good at both offence and defence.",
 "Destroys evil creatures.",
