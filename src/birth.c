@@ -474,7 +474,7 @@ static concptr realm_jouhou[VALID_REALM] =
 
 "Craft magic can strengthen the caster or his or her equipment.  These spells can greatly improve the caster's fighting ability.  Using them against opponents directly is not possible.",
 
-"Demon is a very evil realm, same as Death.  It provides various attack spells and devilish detection spells.  at higher levels, Demon magic provides ability to dominate demons, and to polymorph yourself into a demon.",
+"Demon is a very evil realm, same as Death.  It provides various attack spells and devilish detection spells.  At higher levels, Demon magic provides the ability to dominate demons and to polymorph yourself into a demon.",
 
 "Crusade is a magic of 'Justice'.  It includes damage spells, which are greatly effective against foul and evil monsters, but have poor effects against good monsters.",
 
