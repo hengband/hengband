@@ -417,7 +417,8 @@ Ammunition of Slaying
     This ammunition will have unusually large damage dice.
 
 Ammunition of Wounding
-    This ammunition will have unusually bonuses +to-hit and +to-dam.
+    This ammunition will have unusually large bonuses +to-hit and
+    +to-dam.
 
 --- Other Items ---
 
