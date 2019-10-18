@@ -216,7 +216,7 @@ See raceclas.txt#TheClasses [a] for more details.
      powerful attack spells with the properties of Fire or Nether.
      There are a few detection spells which provide a map of the
      nearby area or temporary telepathy.  Daemon magic also provides
-     temporary trans- formation spells which allow caster to become a
+     temporary transformation spells which allow caster to become a
      Demon or a Demon Lord.  The fail rate of Daemon spells goes up
      for casters aligned towards good.
 
