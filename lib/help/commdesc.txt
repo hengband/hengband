@@ -369,7 +369,7 @@ Uninscribe an object (})
 ***** <MagicalObject>
 ---  Magical Object Commands ---
 
-Activate an artifact (A)
+Activate equipped item (A)
      You have heard rumors of special weapons and armor deep in the
      Pits, items that can let you breath fire like a dragon or light
      rooms with just a thought. Should you ever be lucky enough to
