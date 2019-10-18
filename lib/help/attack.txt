@@ -54,11 +54,11 @@ creature. If the creature is invisible and you do not have the ability
 to see invisible creatures, you must tunnel into the wall space
 containing the creature.
 
-Bolt spells do full damage to such creature in a wall, but ball
-spells will be stopped and blow up just in front of a wall and do
-only half damages. Inversely, when you have ghost like form, and are
-in a wall, you will take only half damage from ball spells and
-breathes of monsters, which is very important privilege.
+Bolt spells do full damage to a creature in a wall, but ball spells
+will be stopped and blow up just in front of a wall and do only half
+damage. Inversely, when you have ghost like form and are in a wall,
+you will take only half damage from ball spells and breaths of
+monsters, which is a very important privilege.
 
 ***** <MeleeWeapons>
 === Melee Weapons ===
