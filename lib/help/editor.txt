@@ -194,7 +194,7 @@ Keywords:
   You may also use keywords which match specified kinds of equipment:
   weapons, armors, missiles, magical devices, lights, junks, spellbooks, 
   hafted weapons, shields, bows, rings, amulets, suits, cloaks, helms, 
-  gloves, boots
+  gloves, boots.
 
 
 Character strings:
