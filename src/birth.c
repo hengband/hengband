@@ -482,7 +482,7 @@ static concptr realm_jouhou[VALID_REALM] =
 
 "The books of Kendo describe various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorizes them, you don't have to carry them.  When using a technique, wielding a weapon is required.",
 
-"Hex is an unsavory realm, like the death and demon realms. Spells gives continual effects when they are spelled continually like songs. Spells may obstract monsters' actions, may deal damages in sight, may revenge against enemies."
+"Hex is an unsavory realm, like the death and demon realms.  Many spells can act continuously by stringing together curses like a song.  Spells may obstract monsters' actions, may deal damages in sight, may revenge against enemies."
 #endif
 };
 
