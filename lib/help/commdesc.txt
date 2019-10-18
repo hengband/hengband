@@ -414,7 +414,7 @@ Fire an item (f) or Fire an item (t)
      throwing an object will often cause it to break, so be careful!
      If you throw something at a creature, your chances of hitting it
      are determined by your pluses to hit, your ability at throwing,
-     and the object's pluses to hit. Once the creature is it, the
+     and the object's pluses to hit. Once the creature is hit, the
      object may or may not do any damage to it. You've heard rumors
      that some objects found in the dungeon can do huge amounts of
      damage when thrown, but you're not sure which objects those
