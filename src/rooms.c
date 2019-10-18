@@ -1604,7 +1604,7 @@ void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, PO
  * is the randint0(3) below; it governs the relative density of
  * twists and turns in the labyrinth: smaller number, more twists.
  */
-void r_visit(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
+void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
 {
 	int i, j, m, n, temp, x, y, adj[4];
 

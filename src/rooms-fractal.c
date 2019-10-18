@@ -10,7 +10,7 @@
 * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal p_ptr->current_floor_ptr->grid_array system
 * @return なし
 */
-bool build_type9(void)
+bool build_type9(floor_type *floor_ptr)
 {
 	int grd, roug, cutoff;
 	POSITION xsize, ysize, y0, x0;
@@ -35,14 +35,14 @@ bool build_type9(void)
 			* Still no space?!
 			* Try normal room
 			*/
-			return build_type1(p_ptr->current_floor_ptr);
+			return build_type1(floor_ptr);
 		}
 	}
 
 	light = done = FALSE;
 	room = TRUE;
 
-	if ((p_ptr->current_floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	while (!done)
 	{
@@ -60,10 +60,10 @@ bool build_type9(void)
 			randint1(xsize / 4) + randint1(ysize / 4);
 
 		/* make it */
-		generate_hmap(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
+		generate_hmap(floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
 
 		/* Convert to normal format + clean up */
-		done = generate_fracave(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, cutoff, light, room);
+		done = generate_fracave(floor_ptr, y0, x0, xsize, ysize, cutoff, light, room);
 	}
 
 	return TRUE;
