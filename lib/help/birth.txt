@@ -231,7 +231,7 @@ after the "18/" is as "tenth" points, since it often takes the same
 magic to raise a stat from, say, 4 to 5, or 16 to 17, as it does from,
 say, 18/40 to 18/50.  The important thing to remember is that almost all
 internal calculations "ignore" the final digit of any "bonus", so that,
-for example, "18/40" and "18/49" are always have the same effects.
+for example, "18/40" and "18/49" always have the same effects.
 
 --- The Primary Statistics ---
 
