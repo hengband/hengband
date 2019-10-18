@@ -1175,7 +1175,7 @@ static void build_castle_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	}
 
 	/* Make the castle */
-	build_recursive_room(x1, y1, x2, y2, randint1(5));
+	build_recursive_room(floor_ptr, x1, y1, x2, y2, randint1(5));
 
 	/* Fill with monsters and treasure, low difficulty */
 	fill_treasure(floor_ptr, x1, x2, y1, y2, randint1(3));

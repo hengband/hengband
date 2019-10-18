@@ -1759,7 +1759,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
  * The power variable is a measure of how well defended a region is.
  * This alters the possible choices.
  */
-void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power)
+void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power)
 {
 	POSITION xsize, ysize;
 	POSITION x, y;
@@ -1844,12 +1844,12 @@ void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, in
 			/* Do outside areas */
 
 			/* Above and below keep */
-			build_recursive_room(x1 + 1, y1 + 1, x2 - 1, t1, power + 1);
-			build_recursive_room(x1 + 1, t2, x2 - 1, y2, power + 1);
+			build_recursive_room(floor_ptr, x1 + 1, y1 + 1, x2 - 1, t1, power + 1);
+			build_recursive_room(floor_ptr, x1 + 1, t2, x2 - 1, y2, power + 1);
 
 			/* Left and right of keep */
-			build_recursive_room(x1 + 1, t1 + 1, t3, t2 - 1, power + 3);
-			build_recursive_room(t4, t1 + 1, x2 - 1, t2 - 1, power + 3);
+			build_recursive_room(floor_ptr, x1 + 1, t1 + 1, t3, t2 - 1, power + 3);
+			build_recursive_room(floor_ptr, t4, t1 + 1, x2 - 1, t2 - 1, power + 3);
 
 			/* Make the keep itself: */
 			x1 = t3;
@@ -1909,7 +1909,7 @@ void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, in
 			}
 
 			/* Build the room */
-			build_recursive_room(x1 + 2, y1 + 2, x2 - 2, y2 - 2, power + 3);
+			build_recursive_room(floor_ptr, x1 + 2, y1 + 2, x2 - 2, y2 - 2, power + 3);
 			break;
 		}
 		case 2:
@@ -1929,8 +1929,8 @@ void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, in
 			}
 
 			t1 = randint1(xsize - 2) + x1 + 1;
-			build_recursive_room(x1, y1, t1, y2, power - 2);
-			build_recursive_room(t1 + 1, y1, x2, y2, power - 2);
+			build_recursive_room(floor_ptr, x1, y1, t1, y2, power - 2);
+			build_recursive_room(floor_ptr, t1 + 1, y1, x2, y2, power - 2);
 			break;
 		}
 		case 3:
@@ -1950,8 +1950,8 @@ void build_recursive_room(POSITION x1, POSITION y1, POSITION x2, POSITION y2, in
 			}
 
 			t1 = randint1(ysize - 2) + y1 + 1;
-			build_recursive_room(x1, y1, x2, t1, power - 2);
-			build_recursive_room(x1, t1 + 1, x2, y2, power - 2);
+			build_recursive_room(floor_ptr, x1, y1, x2, t1, power - 2);
+			build_recursive_room(floor_ptr, x1, t1 + 1, x2, y2, power - 2);
 			break;
 		}
 	}
