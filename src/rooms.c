@@ -2101,7 +2101,7 @@ static bool room_build(EFFECT_ID typ)
 	case ROOM_T_TRAP_PIT:      return build_type13(p_ptr->current_floor_ptr);
 	case ROOM_T_TRAP:          return build_type14(p_ptr->current_floor_ptr);
 	case ROOM_T_GLASS:         return build_type15(p_ptr->current_floor_ptr);
-	case ROOM_T_ARCADE:        return build_type16();
+	case ROOM_T_ARCADE:        return build_type16(p_ptr->current_floor_ptr);
 	case ROOM_T_FIXED:         return build_type17(p_ptr->current_floor_ptr);
 	}
 	return FALSE;

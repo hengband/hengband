@@ -191,7 +191,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 * This function does NOT do anything about the owners of the stores,\n
 * nor the contents thereof.  It only handles the physical layout.\n
 */
-bool build_type16(void)
+bool build_type16(floor_type *floor_ptr)
 {
 	int stores[] =
 	{
@@ -205,13 +205,13 @@ bool build_type16(void)
 	bool prevent_bm = FALSE;
 
 	/* Hack -- If already exist black market, prevent building */
-	for (y = 0; (y < p_ptr->current_floor_ptr->height) && !prevent_bm; y++)
+	for (y = 0; (y < floor_ptr->height) && !prevent_bm; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
-			if (p_ptr->current_floor_ptr->grid_array[y][x].feat == FF_STORE)
+			if (floor_ptr->grid_array[y][x].feat == FF_STORE)
 			{
-				prevent_bm = (f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat].subtype == STORE_BLACK);
+				prevent_bm = (f_info[floor_ptr->grid_array[y][x].feat].subtype == STORE_BLACK);
 				break;
 			}
 		}
