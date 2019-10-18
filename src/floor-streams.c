@@ -389,7 +389,7 @@ void build_streamer(FEAT_IDX feat, int chance)
  * This happens in real world lava tubes.
  * </pre>
  */
-void place_trees(POSITION x, POSITION y)
+void place_trees(floor_type *floor_ptr, POSITION x, POSITION y)
 {
 	int i, j;
 	grid_type *g_ptr;
@@ -399,8 +399,8 @@ void place_trees(POSITION x, POSITION y)
 	{
 		for (j = y - 3; j < y + 4; j++)
 		{
-			if (!in_bounds(p_ptr->current_floor_ptr, j, i)) continue;
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[j][i];
+			if (!in_bounds(floor_ptr, j, i)) continue;
+			g_ptr = &floor_ptr->grid_array[j][i];
 
 			if (g_ptr->info & CAVE_ICKY) continue;
 			if (g_ptr->o_idx) continue;
@@ -415,18 +415,18 @@ void place_trees(POSITION x, POSITION y)
 				if ((distance(j, i, y, x) > 1) || (randint1(100) < 25))
 				{
 					if (randint1(100) < 75)
-						p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_tree;
+						floor_ptr->grid_array[j][i].feat = feat_tree;
 				}
 				else
 				{
-					p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_rubble;
+					floor_ptr->grid_array[j][i].feat = feat_rubble;
 				}
 
 				/* Clear garbage of hidden trap or door */
 				g_ptr->mimic = 0;
 
 				/* Light area since is open above */
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) p_ptr->current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
 			}
 		}
 	}
@@ -435,7 +435,7 @@ void place_trees(POSITION x, POSITION y)
 	if (!ironman_downward && one_in_(3))
 	{
 		/* up stair */
-		p_ptr->current_floor_ptr->grid_array[y][x].feat = feat_up_stair;
+		floor_ptr->grid_array[y][x].feat = feat_up_stair;
 	}
 }
 
