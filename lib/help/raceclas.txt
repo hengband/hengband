@@ -696,7 +696,7 @@ command("U"/"O").
 --- Tourist ---
 
     Tourists have visited this world for the purpose of sightseeing.
-    Their fighting skills is bad, and they cannot cast powerful
+    Their fighting skills are bad, and they cannot cast powerful
     spells.  They are the most difficult class to win the game with.
     Intelligence determines a tourist's spell casting ability.
 
