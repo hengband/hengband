@@ -64,7 +64,7 @@ by the racial/class power command ("U"/"O").
 
     Gnomes are smaller than dwarves but larger than Halflings.  They,
     like the hobbits, live in the earth in burrow-like homes.  Gnomes
-    make excellent mages, and have very good saving throws.  They are
+    make excellent mages and have very good saving throws.  They are
     good at searching, disarming, perception, and stealth.  They have
     lower strength than humans so they are not very good at fighting
     with hand weapons.  Gnomes have fair infra-vision, so they can
@@ -96,7 +96,7 @@ by the racial/class power command ("U"/"O").
 ***** <Half-Troll>
 --- Half-Troll ---
 
-    Half-Trolls are incredibly strong, and have more hit points than
+    Half-Trolls are incredibly strong and have more hit points than
     most other races.  They are also very stupid and slow.  They are
     bad at searching, disarming, perception, and stealth.  They are so
     ugly that a Half-Orc grimaces in their presence.  They also happen
