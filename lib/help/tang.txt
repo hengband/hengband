@@ -224,7 +224,7 @@ draining attacks respectively.
 Resistances can be provided by certain items and also may be part of
 your racial characteristics. There are certain types of items that
 provide all four elemental resistances. These include Defender weapons,
-Robes of Permanence, armors/shields of Resistance, armor of Elvenkind,
+Robes of Permanence, armor or shields of Resistance, armor of Elvenkind,
 and Helms/Crowns of the Magi. Many artifacts also provide some or all
 of the basic resistances, and also perhaps one or two "high"
 resistances.
@@ -366,7 +366,7 @@ level" which gives you no information whatsoever.
 === On weapons and armor ===
 
 Your equipment will always carry around little numbers that tell you
-how effective it is. Armors take this form:
+how effective it is. Pieces of armor take this form:
  
 A Robe (+x,+y) [a,+b] (+c)
  
@@ -374,7 +374,7 @@ Weapons take this form:
  
 A Long Sword (XdY) (+x,+y) [+b] (+c)
  
-When unidentified, armors will show just this:
+When unidentified, pieces of armor will show just this:
  
 A Robe [a]
  
@@ -384,13 +384,14 @@ A Long Sword (XdY)
  
 (+x,+y). This is the item's magical bonuses to your to-hit and
 to-damage bonus respectively. These are added to whatever other
-bonuses you have when you attack. Some armors have similar bonuses to
-your to-hit and to-damage, but they are mostly artifacts, the
-exceptions being Gloves/Gauntlets/Cesti of Slaying and Power. Many
-body armors have a small negative number before the base armor bonus
-(see below); this is a penalty to your skill (the armor is so heavy
-that you have trouble moving around in it). However, this penalty is
-small enough for all but the youngest of characters to ignore.
+bonuses you have when you attack. Some pieces of armor have
+similar bonuses to your to-hit and to-damage, but they are mostly
+artifacts, the exceptions being Gloves/Gauntlets/Cesti of Slaying
+and Power. Many pieces of body armor have a small negative number
+before the base armor bonus (see below); this is a penalty to your
+skill (the armor is so heavy that you have trouble moving around
+in it). However, this penalty is small enough for all but the
+youngest of characters to ignore.
 
 Rings of Combat or Skill have a single (+y) or (+x). When worn, they
 affect your to-damage and to-hit bonus in melee battle respectively.
