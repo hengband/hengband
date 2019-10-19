@@ -978,7 +978,7 @@ command("U"/"O").
     navigate effectively with no light source, catch enemies unawares,
     and kill with a single blow.  Ninjas can use Ninjutsu, and are
     good at locating hidden traps and doors, disarming traps and
-    picking locks.  Since heavy armors, heavy weapons, or shields will
+    picking locks.  Since heavy armor, heavy weapons, or shields will
     restrict their motion greatly, they prefer light clothes, and
     become faster and more stealthy as they gain levels.  A Ninja
     knows no fear and, at high level, becomes almost immune to poison
