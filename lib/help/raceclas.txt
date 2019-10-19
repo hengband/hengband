@@ -1105,7 +1105,7 @@ its own adjustments to a character's stats and abilities.
 ***** <Munchkin>
 --- Munchkin ---
 
-    "munchkin" is a personality for beginners.  It raises all your
+    "Munchkin" is a personality for beginners.  It raises all your
     stats and skills.  With this personality, you can win the game
     easily, but gain little honor in doing so.
 
