@@ -762,7 +762,7 @@ Display overhead view
     and does not even look very good.
 
 Display monster recall
-    Display a description of the most monster which has been most recently
+    Display a description of the monster which has been most recently
     attacked, targeted, or examined in some way.
 
 Display object recall
