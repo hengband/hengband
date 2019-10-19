@@ -357,7 +357,7 @@ by the racial/class power command ("U"/"O").
 ***** <Beastman>
 --- Beastman ---
 
-    "This race is a blasphemous abomination produced by Chaos.  It is
+    This race is a blasphemous abomination produced by Chaos.  It is
     not an independent race but rather a humanoid creature, most often
     a human, twisted by the Chaos, or a nightmarish crossbreed of a
     human and a beast.  All Beastmen are accustomed to Chaos so much
