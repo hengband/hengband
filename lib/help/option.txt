@@ -48,7 +48,7 @@ Activate quick messages    [quick_messages]
 ***** <auto_more>
 Automatically clear '-more-' prompts    [auto_more]
     The game does not wait for a keypress when it comes to a -more-
-    prompt, but carries on going.
+    prompt and automatically displays the next message.
 
 ***** <command_menu>
 Enable command selection menu    [command_menu]
