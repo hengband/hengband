@@ -165,7 +165,7 @@ Keywords:
   good              : {good} items match.
   nameless          : Non ego/non artifact items match.
   average           : {average} items match.
-  rare              : Rare equipment such as Dragon armors etc. match.
+  rare              : Rare equipment such as Dragon armor etc. match.
   common            : Any equipments except 'rare' equipment match.
   wanted            : Wanted monster's corpses or skeletons match.
   unique monster's  : Unique monster's corpses, skeletons or statues match.
@@ -181,7 +181,8 @@ Keywords:
   items             : All items match. Use it with an adjective for 
                       readability (i.e. "unaware items").
   weapons           : All weapons including missile weapons match.
-  armors            : All armors match.
+  armors            : Any piece of armor (helm, cloak, body armor, shield,
+                      gloves, or boots) matches.
   missiles          : Arrows, bolts, and shots match.
   magical devices   : Wands, staffs, rods and scrolls match.
   lights            : Light sources match.
