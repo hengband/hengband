@@ -79,7 +79,7 @@ by the racial/class power command ("U"/"O").
     tend to be stronger and tougher but slower and less intelligent
     than humans.  Because they are so headstrong and are somewhat
     wise, they resist spells which are cast on them.  They are very
-    good at searching, perception, fighting, and bows.  Dwarves have a
+    good at searching, perception, fighting, and bows.  Dwarves have
     miserable stealth.  They can never be blinded.
 
 
