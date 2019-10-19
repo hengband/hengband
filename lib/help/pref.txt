@@ -51,8 +51,8 @@ intuitive way than the user pref commands allow. The commands include
 "Interact with macros" (@), "Interact with visuals" (%), and "Interact
 with colors" (&), described below.
 
-In Hengband, all preference which will be generated in-game are not
-simply appended to old files but replaces old lines. You don't need to
+In Hengband, all preferences which will be generated in-game are not
+simply appended to old files but replace old lines. You don't need to
 delete old lines with text editor.
 
 ***** <Commands>
