@@ -1051,8 +1051,7 @@ its own adjustments to a character's stats and abilities.
 ***** <Nimble>
 --- Nimble ---
 
-    "Nimble" renders you highly skilled comparatively well, but
-    reduces your physical ability.
+    "Nimble" improves most skills except for melee combat.
 
 
 ***** <Fearless>
