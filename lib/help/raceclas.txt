@@ -156,9 +156,9 @@ by the racial/class power command ("U"/"O").
 --- Half-Giant ---
 
     Half-Giants' limited intelligence makes it difficult for them to
-    become full spellcasters, but with their great strength they make
-    excellent warriors.  Their thick skin makes them resistant to
-    shards, and like Half-Ogres and Half-Trolls, they have their
+    become full spellcasters, but, with their great strength, they
+    make excellent warriors.  Their thick skin makes them resistant
+    to shards, and like Half-Ogres and Half-Trolls, they have their
     strength sustained.
 
 
