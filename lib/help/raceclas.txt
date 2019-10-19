@@ -932,15 +932,15 @@ command("U"/"O").
 ***** <Weaponsmith>
 --- Weaponsmith ---
 
-    A Weaponsmith can improve weapons and armors for him or herself.
+    A Weaponsmith can improve weapons and armor for him or herself.
     They are good at fighting, and they have potential ability to
-    become even better than Warriors using improved equipments.  They
+    become even better than Warriors using improved equipment.  They
     cannot cast spells, and are poor at skills such as stealth or
     magic defense.
 
     A Weaponsmith extract the essences of special effects from weapons
-    or armors which have various special abilities, and can add these
-    essences to another weapon or armor.  Normally, each equipment can
+    or armor which have various special abilities, and can add these
+    essences to another weapon or armor.  Normally, each item can
     be improved only once, but they can remove a previously added
     essence from improved equipment to improve it with another
     essence.  To-hit, to-damage bonus, and AC can be improved freely
