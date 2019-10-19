@@ -345,7 +345,7 @@ by the racial/class power command ("U"/"O").
 ***** <Sprite>
 --- Sprite ---
 
-    One of the several fairy races, Sprites are very small.  They have
+    One of several fairy races, Sprites are very small.  They have
     tiny wings and can fly over traps that may open up beneath them.
     They enjoy sunlight intensely, and need worry little about light
     based attacks.  Although physically among the weakest races,
@@ -419,9 +419,9 @@ by the racial/class power command ("U"/"O").
 ***** <Shadow-Fairy>
 --- Shadow Fairy ---
 
-    Shadow Fairies are one of the several fairy races.  They have
-    wings, and can fly over traps that may open up beneath them.
-    Shadow Fairies must beware of sunlight, as they are vulnerable to
+    Shadow Fairies are one of several fairy races.  They have wings,
+    and can fly over traps that may open up beneath them.  Shadow
+    Fairies must beware of sunlight, as they are vulnerable to
     bright light.  They are physically weak, but have advantages in
     using magic and are amazingly stealthy.  Shadow Fairies have a
     wonderful advantage in that they never aggravate monsters (If
