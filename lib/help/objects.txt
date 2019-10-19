@@ -227,13 +227,13 @@ your backpack. This sensing ability is called 'pseudo-id'. The speed
 and accuracy of your pseudo-id ability depends on a number of factors
 but the primary considerations are your class and level. Pseudo-id
 speed can be 'slow', 'medium' or 'fast'. Pseudo-id method of weapons
-and armors can be 'strong' or 'weak'. Pseudo-id method of others is
+and armor can be 'strong' or 'weak'. Pseudo-id method of others is
 always 'strong'.
 
 
 Table 1 - Pseudo-Id ability of the Classes
 
-                       Weapons and Armors       Others
+                       Weapons and Armor        Others
     Class              Method     Speed         Speed
     --------------------------------------------------------
     Warrior            Strong     Very Fast     Impossible
@@ -334,12 +334,12 @@ in the dungeon, some of them may be endowed with additional powers.
 These objects fall into three types: (b) artifacts which are dealt with
 below and can be identified by their name; (c) Ego Weapons which are
 described more fully in Attacking Monsters (see attack.txt#EgoArtifact
-[g]); and (d) Ego Armors which are discussed more fully in Defending
-Yourself (see defend.txt#EgoArtifact [h]).
+[g]); and (d) pieces of Ego Armor which are discussed more fully in
+Defending Yourself (see defend.txt#EgoArtifact [h]).
 
 Unlike artifacts which are unique and may only be found once in each
-game, it is not unusual to find several Ego Weapons or Ego Armor of the
-same type during the course of a character's adventures.
+game, it is not unusual to find several Ego Weapons or pieces of Ego
+Armor of the same type during the course of a character's adventures.
 
 Note that some Ego Armor types are limited to only certain types of
 armor. For example, you can find a Shield of Elvenkind but not Boots of
