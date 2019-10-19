@@ -909,7 +909,7 @@ Always generate very unusual rooms (*)    [ironman_rooms]
 Nightmare mode(it isn't even remotely fair!)(*)    [ironman_nightmare]
     If this option is enabled, all monsters become unusually
     powerful, and fast. And there will be various unbelievable
-    happening in various situations. Furthermore, at 12:00 every
+    happenings from time to time. Furthermore, at 12:00 every
     night, you will have a real nightmare.
 
 ***** <left_hander>
