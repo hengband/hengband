@@ -135,12 +135,12 @@ of attacks.
 
 In addition to the ordinary armor items your character may find in
 the dungeon, some of them may be endowed with additional powers.
-These armors are fall into two types(1) artifacts; and (2) ego armors.
+Those fall into two types:  (1) artifacts and (2) ego armor.
 Unlike artifacts which are unique and may only be found once in each
-game, it is not unusual to find several ego armors of the same type
-during the course of a character's adventures.
+game, it is not unusual to find several pieces of ego armor of the
+same type during the course of a character's adventures.
 
-In general, artifacts and ego armors may boost one or more of your
+In general, artifacts and ego armor may boost one or more of your
 primary statistics, may confer certain abilities upon your character
 and may grant resistance to certain forms of attack. Each Ego type may
 only be found on certain types of armor - for example, you can find a
@@ -308,7 +308,7 @@ Dragon Shields and Helms
      random resistances.
 
 Other items
-     Apart from these there are some very rare, and well made armors
+     Apart from these there are some very rare, and well made armor
      in the dungeon with not necessarily any special abilities. These
      include Adamantite Plate Mail, Mithril Plate Mail, Mithril Chain
      Mail, Shields of Deflection, and Shadow Cloaks. The first four
