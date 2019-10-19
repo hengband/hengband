@@ -102,7 +102,8 @@ by the racial/class power command ("U"/"O").
     ugly that a Half-Orc grimaces in their presence.  They also happen
     to be fun to run...  Half-trolls always have their strength
     sustained.  At higher levels, Half-Trolls regenerate wounds
-    automatically, and if he or her is warrior slowly.
+    automatically, and, if he or she is a warrior, require food less
+    often.
 
 
 ***** <Amberite>
