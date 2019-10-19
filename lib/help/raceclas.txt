@@ -522,8 +522,8 @@ command("U"/"O").
     determines his success at praying to his deity.
 
     Priest can select from Life, Death, Daemon, or Crusade as a first
-    realm, and choose second realm almost freely.  But pairs of a good
-    magic and an evil magic from these four realms are not allowed.
+    realm, and choose a second realm almost freely.  But pairs of a
+    good magic and an evil magic from these four realms are not allowed.
     Priests can learn all spells in the selected realms, even if not
     as efficiently as mages.  However, when learning spells, priests
     cannot voluntarily decide which spells to study: they are rewarded
