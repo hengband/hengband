@@ -111,8 +111,8 @@ by the racial/class power command ("U"/"O").
 
     The Amberites are a reputedly immortal race, who are endowed with
     numerous advantages in addition to their longevity.  They are very
-    tough and their constitution cannot be reduced, and their ability
-    to heal wounds far surpasses that of any other race.  Having seen
+    tough and their constitution cannot be reduced.  Their ability to
+    heal wounds far surpasses that of any other race.  Having seen
     virtually everything, very little is new to them, and they gain
     levels much slower than the other races.
 
