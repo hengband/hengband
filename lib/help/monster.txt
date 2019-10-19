@@ -186,7 +186,7 @@ Zangband), your pets are often so eager to destroy your opponents that
 they may forget all about you, and you get trampled under their feet
 as they charge at your foe.  In Hengband, however, pets will never
 attack you by mistake; you can walk around in safety even as your pet
-Great Hell Wyrm breaths.  Pets will also never be irritated with you;
+Great Hell Wyrm breathes.  Pets will also never be irritated with you;
 their will is perfectly dominated by you, and all pets are permanently
 your pets.
 
