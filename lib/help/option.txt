@@ -442,10 +442,10 @@ Send score dump to the world score server    [send_score]
 ***** <allow_debug_opts>
 Allow use of debug/cheat options  [allow_debug_opts]
     Since use of debug command(^A), wizard mode(^W), and Cheating
-    options ('C' in options panel) mark the player as "Cheater" who
-    can't register their score, these debug/cheat options are
+    options ('C' in options panel) mark the player as a "Cheater"
+    who can't register their score, these debug/cheat options are
     forbidden to use on default.  The allow_debug_opts option removes
-    these restrictions, and allow the player to become "Cheater".
+    these restrictions, and allow the player to become a "Cheater".
 
 
 ***** <Disturbance>
@@ -789,7 +789,7 @@ Display borg status
 ***** <Cheating>
 === Option C - Cheating Options ===
 
-Using the cheating options marks your character as "Cheater" and
+Using the cheating options marks your character as a "Cheater" and
 you won't get into the high-score list.  Turning off the cheating
 options later does NOT allow your character to get a highscore entry,
 so think twice before using any cheat.
