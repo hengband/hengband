@@ -518,8 +518,8 @@ command("U"/"O").
     magical devices which they believe act as foci for divine
     intervention in the natural order of things.  A priest wielding an
     edged weapon will be so uncomfortable with it that his fighting
-    ability.  A Priest's primary stat is Wisdom since this determines
-    his success at praying to his deity.
+    ability decreases.  A Priest's primary stat is Wisdom since this
+    determines his success at praying to his deity.
 
     Priest can select from Life, Death, Daemon, or Crusade as a first
     realm, and choose second realm almost freely.  But pairs of a good
