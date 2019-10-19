@@ -535,7 +535,7 @@ Disturb whenever player state changes    [disturb_state]
 
 ***** <disturb_minor>
 Disturb whenever boring things happen    [disturb_minor]
-    This option causes you to be disturbed by various bring things,
+    This option causes you to be disturbed by various boring things,
     including monsters bashing down doors, inventory feelings, and
     beginning to run out of fuel.
 
