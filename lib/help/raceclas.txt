@@ -734,11 +734,11 @@ command("U"/"O").
 
     Beastmasters are in tune with the minds of the creatures of the
     world of Hengband.  They are very good at riding, and have enough
-    fighting ability.  They use monsters which summoned or dominated
-    by him as his hands and feet.  Beastmasters can cast trump magic,
-    and are very good at summoning spells, but they can not summon
-    non-living creatures.  Charisma determines a Beastmaster's spell
-    casting ability.
+    fighting ability.  The monsters that a beastmaster summons or
+    dominates become the beastmaster's hands and feet.  Beastmasters
+    can cast trump magic, and are very good at summoning spells, but
+    they can not summon non-living creatures.  Charisma determines a
+    Beastmaster's spell casting ability.
 
     Beastmasters use Trump magic to make good use of their monster
     domination and riding abilities.  They are very good at summoning
