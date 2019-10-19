@@ -292,8 +292,8 @@ Plain object descriptions    [plain_descriptions]
 ***** <always_show_list>
 Always show list when choosing items    [always_show_list]
     When this option is set, all commands which lets you to choose an
-    item from inventory or equipment list will automatically show list
-    when activated.
+    item from inventory or equipment list will automatically show the
+    list when activated.
 
 ***** <depth_in_feet>
 Show dungeon level in feet    [depth_in_feet]
