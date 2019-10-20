@@ -2952,7 +2952,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		{
 			str++;
 			top = TRUE;
-			whose_str[whose_n++] = "name is beginning with \"";
+			whose_str[whose_n++] = "name begins with \"";
 		}
 		else
 			which_str[which_n++] = "have \"";
