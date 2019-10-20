@@ -465,7 +465,7 @@ rundown on slays:
        (x5 for *Slay*) damage dice against the relevant monster type
 
 The brands ("of Melting", "of Burning", "of Freezing", "of Shocking",
-and "of Poisoning") all do x2 damage dice to those monsters not
+and "of Poisoning") all do x2.5 damage dice to those monsters not
 resistant to the relevant element. There is also a "(Vampiric)" brand
 which will suck life from your foes and heal you at the same time and
 a "(Chaotic)" brand which can cause some unexpected results when using
