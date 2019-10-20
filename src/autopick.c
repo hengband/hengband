@@ -2751,7 +2751,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	{
 		before_str[before_n++] = "very rare";
 		body_str = "equipments";
-		after_str[after_n++] = "such like Dragon armors, Blades of Chaos, etc.";
+		after_str[after_n++] = "such as Dragon armors, Blades of Chaos, etc.";
 	}
 
 	/*** Common equipments ***/
