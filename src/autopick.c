@@ -2156,7 +2156,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 		fprintf(pref_fff, "%s\n", autoregister_header);
 
 		fprintf(pref_fff, "%s\n", _("# *警告!!* 以降の行は自動登録されたものです。",
-			"# *Warning!* The lines below will be deleated later."));
+			"# *Warning!* The lines below will be deleted later."));
 		fprintf(pref_fff, "%s\n", _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。",
 			"# Keep it by cut & paste if you need these lines for future characters."));
 		player_ptr->autopick_autoregister = TRUE;
