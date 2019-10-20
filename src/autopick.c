@@ -516,8 +516,8 @@ static GAME_TEXT MN_CL_QUERY[] = "';' (Query to pick up)";
 static GAME_TEXT MN_CL_NO_DISP[] = "'(' (No display on the large map)";
 
 static GAME_TEXT MN_ADJECTIVE_GEN[] = "Adjective (general)";
-static GAME_TEXT MN_RARE[] = "rare (equipments)";
-static GAME_TEXT MN_COMMON[] = "common (equipments)";
+static GAME_TEXT MN_RARE[] = "rare (equipment)";
+static GAME_TEXT MN_COMMON[] = "common (equipment)";
 
 static GAME_TEXT MN_ADJECTIVE_SPECIAL[] = "Adjective (special)";
 static GAME_TEXT MN_BOOSTED[] = "dice boosted (weapons)";
@@ -3876,7 +3876,6 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 		*search_strp = NULL;
 	}
 }
-
 
 /*
  * Search next line matches for o_ptr
