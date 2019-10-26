@@ -1220,7 +1220,7 @@ void call_the_(void)
 		}
 		else
 		{
-			if (destroy_area(p_ptr->y, p_ptr->x, 15 + p_ptr->lev + randint0(11), FALSE))
+			if (destroy_area(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, 15 + p_ptr->lev + randint0(11), FALSE))
 				msg_print(_("ダンジョンが崩壊した...", "The dungeon collapses..."));
 			else
 				msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));

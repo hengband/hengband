@@ -3496,7 +3496,7 @@ void cast_wonder(DIRECTION dir)
 	}
 	else if (die < 106)
 	{
-		(void)destroy_area(p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
+		(void)destroy_area(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
 	}
 	else if (die < 108)
 	{
@@ -3637,7 +3637,7 @@ void cast_invoke_spirits(DIRECTION dir)
 	}
 	else if (die < 106)
 	{
-		(void)destroy_area(p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
+		(void)destroy_area(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
 	}
 	else if (die < 108)
 	{

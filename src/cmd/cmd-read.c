@@ -377,7 +377,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_STAR_DESTRUCTION:
 		{
-			if (destroy_area(creature_ptr->y, creature_ptr->x, 13 + randint0(5), FALSE))
+			if (destroy_area(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, 13 + randint0(5), FALSE))
 				ident = TRUE;
 			else
 				msg_print(_("ダンジョンが揺れた...", "The dungeon trembles..."));

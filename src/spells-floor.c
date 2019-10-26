@@ -464,7 +464,7 @@ void map_area(POSITION range)
  * "earthquake" by using the "full" to select "destruction".
  * </pre>
  */
-bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
+bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
 	POSITION y, x;
 	int k, t;
@@ -472,27 +472,27 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 	bool flag = FALSE;
 
 	/* Prevent destruction of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !p_ptr->current_floor_ptr->dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
 		return (FALSE);
 	}
 
 	/* Lose monster light */
-	if (!in_generate) clear_mon_lite(p_ptr->current_floor_ptr);
+	if (!in_generate) clear_mon_lite(floor_ptr);
 
 	/* Big area of affect */
 	for (y = (y1 - r); y <= (y1 + r); y++)
 	{
 		for (x = (x1 - r); x <= (x1 + r); x++)
 		{
-			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!in_bounds(floor_ptr, y, x)) continue;
 
 			/* Extract the distance */
 			k = distance(y1, x1, y, x);
 
 			/* Stay in the circle of death */
 			if (k > r) continue;
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Lose room and vault */
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
@@ -521,7 +521,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 
 			if (g_ptr->m_idx)
 			{
-				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+				monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				if (in_generate) /* In generation */
@@ -561,7 +561,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 				for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
 					object_type *o_ptr;
-					o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+					o_ptr = &floor_ptr->o_list[this_o_idx];
 					next_o_idx = o_ptr->next_o_idx;
 
 					/* Hack -- Preserve unknown artifacts */
@@ -653,14 +653,14 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 		{
 			for (x = (x1 - r); x <= (x1 + r); x++)
 			{
-				if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
+				if (!in_bounds(floor_ptr, y, x)) continue;
 
 				/* Extract the distance */
 				k = distance(y1, x1, y, x);
 
 				/* Stay in the circle of death */
 				if (k > r) continue;
-				g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+				g_ptr = &floor_ptr->grid_array[y][x];
 
 				if (is_mirror_grid(g_ptr)) g_ptr->info |= CAVE_GLOW;
 				else if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
@@ -673,8 +673,8 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 					{
 						yy = y + ddy_ddd[i];
 						xx = x + ddx_ddd[i];
-						if (!in_bounds2(p_ptr->current_floor_ptr, yy, xx)) continue;
-						cc_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
+						if (!in_bounds2(floor_ptr, yy, xx)) continue;
+						cc_ptr = &floor_ptr->grid_array[yy][xx];
 						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 						{
 							g_ptr->info |= CAVE_GLOW;
@@ -707,7 +707,7 @@ bool destroy_area(POSITION y1, POSITION x1, POSITION r, bool in_generate)
 
 		if (p_ptr->special_defense & NINJA_S_STEALTH)
 		{
-			if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+			if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
 		}
 	}
 
