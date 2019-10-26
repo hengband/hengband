@@ -1319,7 +1319,7 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 #ifdef JP
 		lbtokg1(a_ptr->weight), lbtokg2(a_ptr->weight), (long int)a_ptr->cost);
 #else
-		a_ptr->weight / 10, a_ptr->weight % 10, a_ptr->cost);
+		a_ptr->weight / 10, a_ptr->weight % 10, (long int)a_ptr->cost);
 #endif
 }
 

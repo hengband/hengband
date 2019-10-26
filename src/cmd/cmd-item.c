@@ -65,12 +65,11 @@ void do_cmd_inven(player_type *creature_ptr)
 #ifdef JP
 	sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
 		(int)lbtokg1(creature_ptr->total_weight) , (int)lbtokg2(creature_ptr->total_weight) ,
-		(long int)((creature_ptr->total_weight * 100) / weight_limit(creature_ptr)));
 #else
 	sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ",
 		(int)(creature_ptr->total_weight / 10), (int)(creature_ptr->total_weight % 10),
-		(creature_ptr->total_weight * 100) / weight_limit(creature_ptr));
 #endif
+		(long int)(creature_ptr->total_weight * 100) / weight_limit(creature_ptr));
 
 	prt(out_val, 0, 0);
 	command_new = inkey();
