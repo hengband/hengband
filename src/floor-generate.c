@@ -1430,7 +1430,7 @@ void generate_random_floor(floor_type *floor_ptr)
 		else if (!floor_ptr->dun_level)
 		{
 			/* Make the wilderness */
-			if (p_ptr->wild_mode) wilderness_gen_small();
+			if (p_ptr->wild_mode) wilderness_gen_small(floor_ptr);
 			else wilderness_gen(floor_ptr);
 		}
 

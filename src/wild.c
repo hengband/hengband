@@ -710,7 +710,7 @@ static s16b conv_terrain2feat[MAX_WILDERNESS];
  * Build the wilderness area. -DG-
  * @return なし
  */
-void wilderness_gen_small(void)
+void wilderness_gen_small(floor_type *floor_ptr)
 {
 	int i, j;
 
@@ -718,7 +718,7 @@ void wilderness_gen_small(void)
 	for (i = 0; i < MAX_WID; i++)
 	for (j = 0; j < MAX_HGT; j++)
 	{
-		p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_permanent;
+		floor_ptr->grid_array[j][i].feat = feat_permanent;
 	}
 
 	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
@@ -729,29 +729,29 @@ void wilderness_gen_small(void)
 	{
 		if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN))
 		{
-			p_ptr->current_floor_ptr->grid_array[j][i].feat = (s16b)feat_town;
-			p_ptr->current_floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
+			floor_ptr->grid_array[j][i].feat = (s16b)feat_town;
+			floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
 		}
-		else if (wilderness[j][i].road) p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_floor;
+		else if (wilderness[j][i].road) floor_ptr->grid_array[j][i].feat = feat_floor;
 		else if (wilderness[j][i].entrance && (p_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
 		{
-			p_ptr->current_floor_ptr->grid_array[j][i].feat = feat_entrance;
-			p_ptr->current_floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
+			floor_ptr->grid_array[j][i].feat = feat_entrance;
+			floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
 		}
-		else p_ptr->current_floor_ptr->grid_array[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
+		else floor_ptr->grid_array[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
 
-		p_ptr->current_floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+		floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
 	}
 
-	p_ptr->current_floor_ptr->height = (s16b) current_world_ptr->max_wild_y;
-	p_ptr->current_floor_ptr->width = (s16b) current_world_ptr->max_wild_x;
+	floor_ptr->height = (s16b) current_world_ptr->max_wild_y;
+	floor_ptr->width = (s16b) current_world_ptr->max_wild_x;
 
-	if (p_ptr->current_floor_ptr->height > MAX_HGT) p_ptr->current_floor_ptr->height = MAX_HGT;
-	if (p_ptr->current_floor_ptr->width > MAX_WID) p_ptr->current_floor_ptr->width = MAX_WID;
+	if (floor_ptr->height > MAX_HGT) floor_ptr->height = MAX_HGT;
+	if (floor_ptr->width > MAX_WID) floor_ptr->width = MAX_WID;
 
 	/* Assume illegal panel */
-	panel_row_min = p_ptr->current_floor_ptr->height;
-	panel_col_min = p_ptr->current_floor_ptr->width;
+	panel_row_min = floor_ptr->height;
+	panel_col_min = floor_ptr->width;
 
 	p_ptr->x = p_ptr->wilderness_x;
 	p_ptr->y = p_ptr->wilderness_y;
