@@ -131,17 +131,17 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 /*
  * Forget the dungeon map (ala "Thinking of Maud...").
  */
-void wiz_dark(void)
+void wiz_dark(player_type *caster_ptr)
 {
 	OBJECT_IDX i;
 	POSITION y, x;
 
 	/* Forget every grid */
-	for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
+	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
+		for (x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Process the grid */
 			g_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
@@ -150,23 +150,23 @@ void wiz_dark(void)
 	}
 
 	/* Forget every grid on horizontal edge */
-	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
-		p_ptr->current_floor_ptr->grid_array[0][x].info &= ~(CAVE_MARK);
-		p_ptr->current_floor_ptr->grid_array[p_ptr->current_floor_ptr->height - 1][x].info &= ~(CAVE_MARK);
+		caster_ptr->current_floor_ptr->grid_array[0][x].info &= ~(CAVE_MARK);
+		caster_ptr->current_floor_ptr->grid_array[caster_ptr->current_floor_ptr->height - 1][x].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget every grid on vertical edge */
-	for (y = 1; y < (p_ptr->current_floor_ptr->height - 1); y++)
+	for (y = 1; y < (caster_ptr->current_floor_ptr->height - 1); y++)
 	{
-		p_ptr->current_floor_ptr->grid_array[y][0].info &= ~(CAVE_MARK);
-		p_ptr->current_floor_ptr->grid_array[y][p_ptr->current_floor_ptr->width - 1].info &= ~(CAVE_MARK);
+		caster_ptr->current_floor_ptr->grid_array[y][0].info &= ~(CAVE_MARK);
+		caster_ptr->current_floor_ptr->grid_array[y][caster_ptr->current_floor_ptr->width - 1].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget all objects */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
@@ -178,11 +178,11 @@ void wiz_dark(void)
 	/* Forget travel route when we have forgotten map */
 	forget_travel_flow();
 
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
+	caster_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+	caster_ptr->update |= (PU_MONSTERS);
+	caster_ptr->redraw |= (PR_MAP);
+	caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
 /*!

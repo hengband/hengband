@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 extern void wiz_lite(player_type *caster_ptr, bool ninja);
-extern void wiz_dark(void);
+extern void wiz_dark(player_type *caster_ptr);
 extern bool warding_glyph(player_type *caster_ptr);
 extern bool explosive_rune(void);
 extern bool place_mirror(player_type *caster_ptr);

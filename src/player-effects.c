@@ -3584,7 +3584,7 @@ bool lose_all_info(player_type *creature_ptr)
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	/* Mega-Hack -- Forget the map */
-	wiz_dark();
+	wiz_dark(creature_ptr);
 
 	/* It worked */
 	return (TRUE);
