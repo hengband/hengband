@@ -2095,7 +2095,7 @@ static bool room_build(EFFECT_ID typ)
 	case ROOM_T_LESSER_VAULT:  return build_type7(p_ptr->current_floor_ptr);
 	case ROOM_T_GREATER_VAULT: return build_type8(p_ptr->current_floor_ptr);
 	case ROOM_T_FRACAVE:       return build_type9(p_ptr->current_floor_ptr);
-	case ROOM_T_RANDOM_VAULT:  return build_type10();
+	case ROOM_T_RANDOM_VAULT:  return build_type10(p_ptr->current_floor_ptr);
 	case ROOM_T_OVAL:          return build_type11(p_ptr->current_floor_ptr);
 	case ROOM_T_CRYPT:         return build_type12(p_ptr->current_floor_ptr);
 	case ROOM_T_TRAP_PIT:      return build_type13(p_ptr->current_floor_ptr);

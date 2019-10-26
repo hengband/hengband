@@ -1187,7 +1187,7 @@ static void build_castle_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 * @brief タイプ10の部屋…ランダム生成vault / Type 10 -- Random vaults
 * @return なし
 */
-bool build_type10(void)
+bool build_type10(floor_type *floor_ptr)
 {
 	POSITION y0, x0, xsize, ysize, vtype;
 
@@ -1216,15 +1216,15 @@ bool build_type10(void)
 	switch (vtype)
 	{
 		/* Build an appropriate room */
-	case 1: case  9: build_bubble_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
-	case 2: case 10: build_room_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
+	case 1: case  9: build_bubble_vault(floor_ptr, x0, y0, xsize, ysize); break;
+	case 2: case 10: build_room_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 3: case 11: build_cave_vault(x0, y0, xsize, ysize); break;
 	case 4: case 12: build_maze_vault(x0, y0, xsize, ysize, TRUE); break;
-	case 5: case 13: build_mini_c_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
-	case 6: case 14: build_castle_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
-	case 7: case 15: build_target_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
+	case 5: case 13: build_mini_c_vault(floor_ptr, x0, y0, xsize, ysize); break;
+	case 6: case 14: build_castle_vault(floor_ptr, x0, y0, xsize, ysize); break;
+	case 7: case 15: build_target_vault(floor_ptr, x0, y0, xsize, ysize); break;
 #ifdef ALLOW_CAVERNS_AND_LAKES
-	case 8: build_elemental_vault(p_ptr->current_floor_ptr, x0, y0, xsize, ysize); break;
+	case 8: build_elemental_vault(floor_ptr, x0, y0, xsize, ysize); break;
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 		/* I know how to add a few more... give me some time. */
 	default: return FALSE;
