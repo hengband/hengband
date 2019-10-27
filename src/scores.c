@@ -855,32 +855,32 @@ void race_legends(void)
  * Change the player into a King! -RAK-
  * @return なし
  */
-void kingly(void)
+void kingly(player_type *winner_ptr)
 {
 	TERM_LEN wid, hgt;
 	TERM_LEN cx, cy;
-	bool seppuku = streq(p_ptr->died_from, "Seppuku");
+	bool seppuku = streq(winner_ptr->died_from, "Seppuku");
 
 	/* Hack -- retire in town */
-	p_ptr->current_floor_ptr->dun_level = 0;
+	winner_ptr->current_floor_ptr->dun_level = 0;
 
 	/* Fake death */
 	if (!seppuku)
 		/* 引退したときの識別文字 */
-		(void)strcpy(p_ptr->died_from, _("ripe", "Ripe Old Age"));
+		(void)strcpy(winner_ptr->died_from, _("ripe", "Ripe Old Age"));
 
 	/* Restore the experience */
-	p_ptr->exp = p_ptr->max_exp;
+	winner_ptr->exp = winner_ptr->max_exp;
 
 	/* Restore the level */
-	p_ptr->lev = p_ptr->max_plv;
+	winner_ptr->lev = winner_ptr->max_plv;
 
 	Term_get_size(&wid, &hgt);
 	cy = hgt / 2;
 	cx = wid / 2;
 
 	/* Hack -- Instant Gold */
-	p_ptr->au += 10000000L;
+	winner_ptr->au += 10000000L;
 	Term_clear();
 
 	/* Display a crown */
@@ -911,9 +911,9 @@ void kingly(void)
 	/* If player did Seppuku, that is already written in playrecord */
 	if (!seppuku)
 	{
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
-		exe_write_diary(p_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
+		exe_write_diary(winner_ptr, NIKKI_BUNSHOU, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+		exe_write_diary(winner_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+		exe_write_diary(winner_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
 	}
 
 	/* Flush input */

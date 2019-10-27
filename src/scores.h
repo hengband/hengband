@@ -42,7 +42,7 @@ extern int highscore_fd;
 /* scores.c */
 extern void display_scores_aux(int from, int to, int note, high_score *score);
 extern void display_scores(int from, int to);
-extern void kingly(void);
+extern void kingly(player_type *winner_ptr);
 extern bool send_world_score(bool do_send);
 extern errr top_twenty(void);
 extern errr predict_score(void);
