@@ -4212,11 +4212,11 @@ void hayagake(player_type *creature_ptr)
 {
 	if (creature_ptr->action == ACTION_HAYAGAKE)
 	{
-		set_action(p_ptr, ACTION_NONE);
+		set_action(creature_ptr, ACTION_NONE);
 	}
 	else
 	{
-		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+		grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 		feature_type *f_ptr = &f_info[g_ptr->feat];
 
 		if (!have_flag(f_ptr->flags, FF_PROJECT) ||
@@ -4226,7 +4226,7 @@ void hayagake(player_type *creature_ptr)
 		}
 		else
 		{
-			set_action(p_ptr, ACTION_HAYAGAKE);
+			set_action(creature_ptr, ACTION_HAYAGAKE);
 		}
 	}
 	creature_ptr->energy_use = 0;
