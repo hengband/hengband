@@ -2080,29 +2080,29 @@ void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
  * @return 部屋の精製に成功した場合 TRUE を返す。
  */
-static bool room_build(EFFECT_ID typ)
+static bool room_build(floor_type *floor_ptr, EFFECT_ID typ)
 {
 	/* Build a room */
 	switch (typ)
 	{
 	/* Build an appropriate room */
-	case ROOM_T_NORMAL:        return build_type1(p_ptr->current_floor_ptr);
-	case ROOM_T_OVERLAP:       return build_type2(p_ptr->current_floor_ptr);
-	case ROOM_T_CROSS:         return build_type3(p_ptr->current_floor_ptr);
-	case ROOM_T_INNER_FEAT:    return build_type4(p_ptr->current_floor_ptr);
-	case ROOM_T_NEST:          return build_type5(p_ptr->current_floor_ptr);
-	case ROOM_T_PIT:           return build_type6(p_ptr->current_floor_ptr);
-	case ROOM_T_LESSER_VAULT:  return build_type7(p_ptr->current_floor_ptr);
-	case ROOM_T_GREATER_VAULT: return build_type8(p_ptr->current_floor_ptr);
-	case ROOM_T_FRACAVE:       return build_type9(p_ptr->current_floor_ptr);
-	case ROOM_T_RANDOM_VAULT:  return build_type10(p_ptr->current_floor_ptr);
-	case ROOM_T_OVAL:          return build_type11(p_ptr->current_floor_ptr);
-	case ROOM_T_CRYPT:         return build_type12(p_ptr->current_floor_ptr);
-	case ROOM_T_TRAP_PIT:      return build_type13(p_ptr->current_floor_ptr);
-	case ROOM_T_TRAP:          return build_type14(p_ptr->current_floor_ptr);
-	case ROOM_T_GLASS:         return build_type15(p_ptr->current_floor_ptr);
-	case ROOM_T_ARCADE:        return build_type16(p_ptr->current_floor_ptr);
-	case ROOM_T_FIXED:         return build_type17(p_ptr->current_floor_ptr);
+	case ROOM_T_NORMAL:        return build_type1(floor_ptr);
+	case ROOM_T_OVERLAP:       return build_type2(floor_ptr);
+	case ROOM_T_CROSS:         return build_type3(floor_ptr);
+	case ROOM_T_INNER_FEAT:    return build_type4(floor_ptr);
+	case ROOM_T_NEST:          return build_type5(floor_ptr);
+	case ROOM_T_PIT:           return build_type6(floor_ptr);
+	case ROOM_T_LESSER_VAULT:  return build_type7(floor_ptr);
+	case ROOM_T_GREATER_VAULT: return build_type8(floor_ptr);
+	case ROOM_T_FRACAVE:       return build_type9(floor_ptr);
+	case ROOM_T_RANDOM_VAULT:  return build_type10(floor_ptr);
+	case ROOM_T_OVAL:          return build_type11(floor_ptr);
+	case ROOM_T_CRYPT:         return build_type12(floor_ptr);
+	case ROOM_T_TRAP_PIT:      return build_type13(floor_ptr);
+	case ROOM_T_TRAP:          return build_type14(floor_ptr);
+	case ROOM_T_GLASS:         return build_type15(floor_ptr);
+	case ROOM_T_ARCADE:        return build_type16(floor_ptr);
+	case ROOM_T_FIXED:         return build_type17(floor_ptr);
 	}
 	return FALSE;
 }
@@ -2289,7 +2289,7 @@ bool generate_rooms(void)
 			room_num[room_type]--;
 
 			/* Build the room. */
-			if (room_build(room_type))
+			if (room_build(p_ptr->current_floor_ptr, room_type))
 			{
 				/* Increase the room built count. */
 				rooms_built++;
