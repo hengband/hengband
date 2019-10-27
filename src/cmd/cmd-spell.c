@@ -536,11 +536,11 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 			/* 英日切り替え機能に対応 */
 			(void)strnfmt(tmp_val, 78, "%s(MP%d, 失敗率%d%%)を%sますか? ",
 				exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), need_mana,
-				spell_chance(spell, use_realm), jverb_buf);
+				spell_chance(caster_ptr, spell, use_realm), jverb_buf);
 #else
 			(void)strnfmt(tmp_val, 78, "%^s %s (%d mana, %d%% fail)? ",
 				prompt, exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), need_mana,
-				spell_chance(spell, use_realm));
+				spell_chance(caster_ptr, spell, use_realm));
 #endif
 
 
@@ -1182,7 +1182,7 @@ void do_cmd_cast(player_type *caster_ptr)
 	}
 
 	/* Spell failure chance */
-	chance = spell_chance(spell, use_realm);
+	chance = spell_chance(caster_ptr, spell, use_realm);
 
 	/* Sufficient mana */
 	if (need_mana <= caster_ptr->csp)

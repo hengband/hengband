@@ -2525,7 +2525,7 @@ PERCENTAGE mod_spell_chance_2(PERCENTAGE chance)
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
  */
-PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
+PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_realm)
 {
 	PERCENTAGE chance, minfail;
 	const magic_type *s_ptr;
@@ -2552,27 +2552,27 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 	chance = s_ptr->sfail;
 
 	/* Reduce failure rate by "effective" level adjustment */
-	chance -= 3 * (p_ptr->lev - s_ptr->slevel);
+	chance -= 3 * (caster_ptr->lev - s_ptr->slevel);
 
 	/* Reduce failure rate by INT/WIS adjustment */
-	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+	chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
-	if (p_ptr->riding)
-		chance += (MAX(r_info[p_ptr->current_floor_ptr->m_list[p_ptr->riding].r_idx].level - p_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
+	if (caster_ptr->riding)
+		chance += (MAX(r_info[caster_ptr->current_floor_ptr->m_list[caster_ptr->riding].r_idx].level - caster_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
 
 	/* Extract mana consumption rate */
 	need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
 
 	/* Not enough mana to cast */
-	if (need_mana > p_ptr->csp)
+	if (need_mana > caster_ptr->csp)
 	{
-		chance += 5 * (need_mana - p_ptr->csp);
+		chance += 5 * (need_mana - caster_ptr->csp);
 	}
 
-	if ((use_realm != p_ptr->realm1) && ((p_ptr->pclass == CLASS_MAGE) || (p_ptr->pclass == CLASS_PRIEST))) chance += 5;
+	if ((use_realm != caster_ptr->realm1) && ((caster_ptr->pclass == CLASS_MAGE) || (caster_ptr->pclass == CLASS_PRIEST))) chance += 5;
 
 	/* Extract the minimum failure rate */
-	minfail = adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]];
+	minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
 
 	/*
 	 * Non mage/priest characters never get too good
@@ -2584,8 +2584,8 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 	}
 
 	/* Hack -- Priest prayer penalty for "edged" weapons  -DGK */
-	if (((p_ptr->pclass == CLASS_PRIEST) || (p_ptr->pclass == CLASS_SORCERER)) && p_ptr->icky_wield[0]) chance += 25;
-	if (((p_ptr->pclass == CLASS_PRIEST) || (p_ptr->pclass == CLASS_SORCERER)) && p_ptr->icky_wield[1]) chance += 25;
+	if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[0]) chance += 25;
+	if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[1]) chance += 25;
 
 	chance = mod_spell_chance_1(chance);
 
@@ -2593,13 +2593,13 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 	switch (use_realm)
 	{
 	case REALM_NATURE:
-		if ((p_ptr->align > 50) || (p_ptr->align < -50)) chance += penalty;
+		if ((caster_ptr->align > 50) || (caster_ptr->align < -50)) chance += penalty;
 		break;
 	case REALM_LIFE: case REALM_CRUSADE:
-		if (p_ptr->align < -20) chance += penalty;
+		if (caster_ptr->align < -20) chance += penalty;
 		break;
 	case REALM_DEATH: case REALM_DAEMON: case REALM_HEX:
-		if (p_ptr->align > 20) chance += penalty;
+		if (caster_ptr->align > 20) chance += penalty;
 		break;
 	}
 
@@ -2607,14 +2607,14 @@ PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX use_realm)
 	if (chance < minfail) chance = minfail;
 
 	/* Stunning makes spells harder */
-	if (p_ptr->stun > 50) chance += 25;
-	else if (p_ptr->stun) chance += 15;
+	if (caster_ptr->stun > 50) chance += 25;
+	else if (caster_ptr->stun) chance += 15;
 
 	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
-	if ((use_realm == p_ptr->realm1) || (use_realm == p_ptr->realm2)
-	    || (p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
+	if ((use_realm == caster_ptr->realm1) || (use_realm == caster_ptr->realm2)
+	    || (caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE))
 	{
 		EXP exp = experience_of_spell(spell, use_realm);
 		if (exp >= SPELL_EXP_EXPERT) chance--;
@@ -2787,7 +2787,7 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 			strcat(out_val, format("%-25s%c%-4s %2d %4d %3d%% %s",
 			    exe_spell(p_ptr, use_realm, spell, SPELL_NAME), /* realm, spell */
 			    (max ? '!' : ' '), ryakuji,
-			    s_ptr->slevel, need_mana, spell_chance(spell, use_realm), comment));
+			    s_ptr->slevel, need_mana, spell_chance(p_ptr, spell, use_realm), comment));
 		}
 		c_prt(line_attr, out_val, y + i + 1, x);
 	}

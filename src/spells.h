@@ -314,7 +314,7 @@ extern EXP experience_of_spell(SPELL_IDX spell, REALM_IDX use_realm);
 extern MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm);
 extern PERCENTAGE mod_spell_chance_1(PERCENTAGE chance);
 extern PERCENTAGE mod_spell_chance_2(PERCENTAGE chance);
-extern PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX realm);
+extern PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX realm);
 extern void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX realm);
 extern bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool dimension_door(void);
