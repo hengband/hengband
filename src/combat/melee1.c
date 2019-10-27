@@ -1988,7 +1988,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				if (!(r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) &&
 					!(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
 				{
-					if (polymorph_monster(y, x))
+					if (polymorph_monster(attacker_ptr, y, x))
 					{
 						msg_format(_("%^sは変化した！", "%^s changes!"), m_name);
 						*fear = FALSE;

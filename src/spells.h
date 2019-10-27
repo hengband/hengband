@@ -316,7 +316,7 @@ extern PERCENTAGE mod_spell_chance_1(PERCENTAGE chance);
 extern PERCENTAGE mod_spell_chance_2(PERCENTAGE chance);
 extern PERCENTAGE spell_chance(SPELL_IDX spell, REALM_IDX realm);
 extern void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX realm);
-extern bool polymorph_monster(POSITION y, POSITION x);
+extern bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool dimension_door(void);
 extern bool mirror_tunnel(void);
 extern void massacre(void);
