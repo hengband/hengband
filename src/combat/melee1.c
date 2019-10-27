@@ -2154,7 +2154,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	/* Mega-Hack -- apply earthquake brand */
 	if (do_quake)
 	{
-		earthquake(attacker_ptr->y, attacker_ptr->x, 10, 0);
+		earthquake(attacker_ptr, attacker_ptr->y, attacker_ptr->x, 10, 0);
 		if (!floor_ptr->grid_array[y][x].m_idx) *mdeath = TRUE;
 	}
 }
@@ -3379,7 +3379,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					/* Radius 8 earthquake centered at the monster */
 					if (damage > 23 || explode)
 					{
-						earthquake(m_ptr->fy, m_ptr->fx, 8, m_idx);
+						earthquake(target_ptr, m_ptr->fy, m_ptr->fx, 8, m_idx);
 					}
 
 					break;
@@ -4503,7 +4503,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 			case RBE_SHATTER:
 				damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-				if (damage > 23) earthquake(m_ptr->fy, m_ptr->fx, 8, m_idx);
+				if (damage > 23) earthquake(p_ptr, m_ptr->fy, m_ptr->fx, 8, m_idx);
 				break;
 
 			case RBE_EXP_10:

@@ -573,7 +573,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 				py_attack(p_ptr, y, x, HISSATSU_QUAKE);
 			else
-				earthquake(caster_ptr->y, caster_ptr->x, 10, 0);
+				earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 10, 0);
 		}
 		break;
 

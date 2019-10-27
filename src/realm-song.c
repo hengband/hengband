@@ -728,7 +728,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				earthquake(caster_ptr->y, caster_ptr->x, 10, 0);
+				earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 10, 0);
 			}
 		}
 

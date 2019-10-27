@@ -234,7 +234,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_EARTHQUAKES:
 		{
-			if (earthquake(creature_ptr->y, creature_ptr->x, (powerful ? 15 : 10), 0))
+			if (earthquake(creature_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 15 : 10), 0))
 				ident = TRUE;
 			else
 				msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));

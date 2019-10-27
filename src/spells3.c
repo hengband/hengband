@@ -3487,7 +3487,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			if (!count)
 			{
 				msg_print(_("地面が揺れた...", "The ground trembles..."));
-				earthquake(m_ptr->fy, m_ptr->fx, 4 + randint0(4), 0);
+				earthquake(p_ptr, m_ptr->fy, m_ptr->fx, 4 + randint0(4), 0);
 				if (!one_in_(6)) break;
 			}
 		case 3: case 4: case 5: case 6:

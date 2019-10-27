@@ -2252,7 +2252,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_EARTHQUAKE:
-			(void)earthquake(creature_ptr->y, creature_ptr->x, 10, 0);
+			(void)earthquake(creature_ptr, creature_ptr->y, creature_ptr->x, 10, 0);
 			break;
 
 		case MUT1_EAT_MAGIC:

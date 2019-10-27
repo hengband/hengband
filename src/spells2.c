@@ -2558,7 +2558,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			if (!(*count))
 			{
 				msg_print(_("地面が揺れた...", "The ground trembles..."));
-				earthquake(p_ptr->y, p_ptr->x, 5 + randint0(10), 0);
+				earthquake(p_ptr, p_ptr->y, p_ptr->x, 5 + randint0(10), 0);
 				if (!one_in_(6)) break;
 			}
 		case 30: case 31:
@@ -2765,7 +2765,7 @@ void wall_breaker(void)
 	}
 	else if (randint1(100) > 30)
 	{
-		earthquake(p_ptr->y, p_ptr->x, 1, 0);
+		earthquake(p_ptr, p_ptr->y, p_ptr->x, 1, 0);
 	}
 	else
 	{
@@ -3246,7 +3246,7 @@ void wild_magic(int spell)
 		aggravate_monsters(0);
 		break;
 	case 26:
-		earthquake(p_ptr->y, p_ptr->x, 5, 0);
+		earthquake(p_ptr, p_ptr->y, p_ptr->x, 5, 0);
 		break;
 	case 27:
 	case 28:
@@ -3492,7 +3492,7 @@ void cast_wonder(DIRECTION dir)
 	else if (die < 101) hypodynamic_bolt(dir, 100 + plev);
 	else if (die < 104)
 	{
-		earthquake(p_ptr->y, p_ptr->x, 12, 0);
+		earthquake(p_ptr, p_ptr->y, p_ptr->x, 12, 0);
 	}
 	else if (die < 106)
 	{
@@ -3633,7 +3633,7 @@ void cast_invoke_spirits(DIRECTION dir)
 	}
 	else if (die < 104)
 	{
-		earthquake(p_ptr->y, p_ptr->x, 12, 0);
+		earthquake(p_ptr, p_ptr->y, p_ptr->x, 12, 0);
 	}
 	else if (die < 106)
 	{
@@ -3778,7 +3778,7 @@ void cast_shuffle(void)
 	{
 		msg_print(_("《塔》だ。", "It's the Tower."));
 
-		earthquake(p_ptr->y, p_ptr->x, 5, 0);
+		earthquake(p_ptr, p_ptr->y, p_ptr->x, 5, 0);
 	}
 	else if (die < 82)
 	{
