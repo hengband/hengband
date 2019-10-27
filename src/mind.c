@@ -1149,7 +1149,7 @@ static bool cast_mindcrafter_spell(int spell)
 		/* Telekinesis */
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		fetch(dir, plev * 15, FALSE);
+		fetch(p_ptr, dir, plev * 15, FALSE);
 
 		break;
 	case 11:

@@ -1239,7 +1239,7 @@ void call_the_(void)
  * @param require_los 射線の通りを要求するならばTRUE
  * @return なし
  */
-void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
+void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
 	POSITION ty, tx;
 	OBJECT_IDX i;
@@ -1248,7 +1248,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Check to see if an object is already there */
-	if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx)
+	if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx)
 	{
 		msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
 		return;
@@ -1260,13 +1260,13 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 		tx = target_col;
 		ty = target_row;
 
-		if (distance(p_ptr->y, p_ptr->x, ty, tx) > MAX_RANGE)
+		if (distance(caster_ptr->y, caster_ptr->x, ty, tx) > MAX_RANGE)
 		{
 			msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
 			return;
 		}
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
+		g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
 
 		/* We need an item to fetch */
 		if (!g_ptr->o_idx)
@@ -1290,7 +1290,7 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 				msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
 				return;
 			}
-			else if (!projectable(p_ptr->y, p_ptr->x, ty, tx))
+			else if (!projectable(caster_ptr->y, caster_ptr->x, ty, tx))
 			{
 				msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
 				return;
@@ -1299,21 +1299,21 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 	}
 	else
 	{
-		ty = p_ptr->y; 
-		tx = p_ptr->x;
+		ty = caster_ptr->y; 
+		tx = caster_ptr->x;
 		do
 		{
 			ty += ddy[dir];
 			tx += ddx[dir];
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
+			g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
 
-			if ((distance(p_ptr->y, p_ptr->x, ty, tx) > MAX_RANGE) ||
+			if ((distance(caster_ptr->y, caster_ptr->x, ty, tx) > MAX_RANGE) ||
 				!cave_have_flag_bold(ty, tx, FF_PROJECT)) return;
 		}
 		while (!g_ptr->o_idx);
 	}
 
-	o_ptr = &p_ptr->current_floor_ptr->o_list[g_ptr->o_idx];
+	o_ptr = &caster_ptr->current_floor_ptr->o_list[g_ptr->o_idx];
 
 	if (o_ptr->weight > wgt)
 	{
@@ -1324,17 +1324,17 @@ void fetch(DIRECTION dir, WEIGHT wgt, bool require_los)
 
 	i = g_ptr->o_idx;
 	g_ptr->o_idx = o_ptr->next_o_idx;
-	p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx = i; /* 'move' it */
+	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx = i; /* 'move' it */
 
 	o_ptr->next_o_idx = 0;
-	o_ptr->iy = p_ptr->y;
-	o_ptr->ix = p_ptr->x;
+	o_ptr->iy = caster_ptr->y;
+	o_ptr->ix = caster_ptr->x;
 
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
 
-	note_spot(p_ptr->y, p_ptr->x);
-	p_ptr->redraw |= PR_MAP;
+	note_spot(caster_ptr->y, caster_ptr->x);
+	caster_ptr->redraw |= PR_MAP;
 }
 
 /*!

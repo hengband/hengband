@@ -1572,7 +1572,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 		msg_format(_("%sを伸ばした。", "You stretched your %s."), name);
-		fetch(dir, 500, TRUE);
+		fetch(user_ptr, dir, 500, TRUE);
 		break;
 	}
 

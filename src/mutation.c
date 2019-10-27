@@ -2116,7 +2116,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 		case MUT1_TELEKINES:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
-			fetch(dir, lvl * 10, TRUE);
+			fetch(creature_ptr, dir, lvl * 10, TRUE);
 			break;
 
 		case MUT1_VTELEPORT:
