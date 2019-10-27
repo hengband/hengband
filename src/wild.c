@@ -339,7 +339,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
  * If corner is set then only the corners of the area are needed.
  * </pre>
  */
-static void generate_area(POSITION y, POSITION x, bool border, bool corner)
+static void generate_area(floor_type *floor_ptr, POSITION y, POSITION x, bool border, bool corner)
 {
 	POSITION x1, y1;
 
@@ -347,16 +347,16 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 	p_ptr->town_num = wilderness[y][x].town;
 
 	/* Set the base level */
-	p_ptr->current_floor_ptr->base_level = wilderness[y][x].level;
+	floor_ptr->base_level = wilderness[y][x].level;
 
 	/* Set the dungeon level */
-	p_ptr->current_floor_ptr->dun_level = 0;
+	floor_ptr->dun_level = 0;
 
 	/* Set the monster generation level */
-	p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
+	floor_ptr->monster_level = floor_ptr->base_level;
 
 	/* Set the object generation level */
-	p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
+	floor_ptr->object_level = floor_ptr->base_level;
 
 
 	/* Create the town */
@@ -380,7 +380,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 		int terrain = wilderness[y][x].terrain;
 		u32b seed = wilderness[y][x].seed;
 
-		generate_wilderness_area(p_ptr->current_floor_ptr, terrain, seed, border, corner);
+		generate_wilderness_area(floor_ptr, terrain, seed, border, corner);
 	}
 
 	if (!corner && !wilderness[y][x].town)
@@ -391,7 +391,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 		 */
 		if (wilderness[y][x].road)
 		{
-			p_ptr->current_floor_ptr->grid_array[MAX_HGT/2][MAX_WID/2].feat = feat_floor;
+			floor_ptr->grid_array[MAX_HGT/2][MAX_WID/2].feat = feat_floor;
 
 			if (wilderness[y-1][x].road)
 			{
@@ -399,7 +399,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (y1 = 1; y1 < MAX_HGT/2; y1++)
 				{
 					x1 = MAX_WID/2;
-					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 
@@ -409,7 +409,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (y1 = MAX_HGT/2; y1 < MAX_HGT - 1; y1++)
 				{
 					x1 = MAX_WID/2;
-					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 
@@ -419,7 +419,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (x1 = MAX_WID/2; x1 < MAX_WID - 1; x1++)
 				{
 					y1 = MAX_HGT/2;
-					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 
@@ -429,7 +429,7 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 				for (x1 = 1; x1 < MAX_WID/2; x1++)
 				{
 					y1 = MAX_HGT/2;
-					p_ptr->current_floor_ptr->grid_array[y1][x1].feat = feat_floor;
+					floor_ptr->grid_array[y1][x1].feat = feat_floor;
 				}
 			}
 		}
@@ -446,11 +446,11 @@ static void generate_area(POSITION y, POSITION x, bool border, bool corner)
 		/* Hack -- Induce consistant flavors */
 		Rand_state_set(wilderness[y][x].seed);
 
-		dy = rand_range(6, p_ptr->current_floor_ptr->height - 6);
-		dx = rand_range(6, p_ptr->current_floor_ptr->width - 6);
+		dy = rand_range(6, floor_ptr->height - 6);
+		dx = rand_range(6, floor_ptr->width - 6);
 
-		p_ptr->current_floor_ptr->grid_array[dy][dx].feat = feat_entrance;
-		p_ptr->current_floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
+		floor_ptr->grid_array[dy][dx].feat = feat_entrance;
+		floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
 
 		/* Hack -- Restore the RNG state */
 		Rand_state_restore(state_backup);
@@ -490,7 +490,7 @@ void wilderness_gen(floor_type *floor_ptr)
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	/* North border */
-	generate_area(y - 1, x, TRUE, FALSE);
+	generate_area(floor_ptr, y - 1, x, TRUE, FALSE);
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
@@ -498,7 +498,7 @@ void wilderness_gen(floor_type *floor_ptr)
 	}
 
 	/* South border */
-	generate_area(y + 1, x, TRUE, FALSE);
+	generate_area(floor_ptr, y + 1, x, TRUE, FALSE);
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
@@ -506,7 +506,7 @@ void wilderness_gen(floor_type *floor_ptr)
 	}
 
 	/* West border */
-	generate_area(y, x - 1, TRUE, FALSE);
+	generate_area(floor_ptr, y, x - 1, TRUE, FALSE);
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
@@ -514,7 +514,7 @@ void wilderness_gen(floor_type *floor_ptr)
 	}
 
 	/* East border */
-	generate_area(y, x + 1, TRUE, FALSE);
+	generate_area(floor_ptr, y, x + 1, TRUE, FALSE);
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
@@ -522,24 +522,24 @@ void wilderness_gen(floor_type *floor_ptr)
 	}
 
 	/* North west corner */
-	generate_area(y - 1, x - 1, FALSE, TRUE);
+	generate_area(floor_ptr, y - 1, x - 1, FALSE, TRUE);
 	border.north_west = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
 	/* North east corner */
-	generate_area(y - 1, x + 1, FALSE, TRUE);
+	generate_area(floor_ptr, y - 1, x + 1, FALSE, TRUE);
 	border.north_east = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
 
 	/* South west corner */
-	generate_area(y + 1, x - 1, FALSE, TRUE);
+	generate_area(floor_ptr, y + 1, x - 1, FALSE, TRUE);
 	border.south_west = floor_ptr->grid_array[1][MAX_WID - 2].feat;
 
 	/* South east corner */
-	generate_area(y + 1, x + 1, FALSE, TRUE);
+	generate_area(floor_ptr, y + 1, x + 1, FALSE, TRUE);
 	border.south_east = floor_ptr->grid_array[1][1].feat;
 
 
 	/* Create terrain of the current area */
-	generate_area(y, x, FALSE, FALSE);
+	generate_area(floor_ptr, y, x, FALSE, FALSE);
 
 
 	/* Special boundary walls -- North */
