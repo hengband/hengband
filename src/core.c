@@ -5848,7 +5848,7 @@ void close_game(void)
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
 
 		/* Predict score (or ESCAPE) */
-		if (inkey() != ESCAPE) predict_score();
+		if (inkey() != ESCAPE) predict_score(p_ptr);
 	}
 
 

@@ -596,12 +596,10 @@ errr top_twenty(void)
  * Predict the players location, and display it.
  * @return エラーコード
  */
-errr predict_score(void)
+errr predict_score(player_type *creature_ptr)
 {
-	int          j;
-
-	high_score   the_score;
-
+	int j;
+	high_score the_score;
 
 	/* No score file */
 	if (highscore_fd < 0)
@@ -611,16 +609,15 @@ errr predict_score(void)
 		return (0);
 	}
 
-
 	/* Save the version */
 	sprintf(the_score.what, "%u.%u.%u",
 		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
-	sprintf(the_score.pts, "%9ld", (long)calc_score(p_ptr));
+	sprintf(the_score.pts, "%9ld", (long)calc_score(creature_ptr));
 
 	/* Save the current gold */
-	sprintf(the_score.gold, "%9lu", (long)p_ptr->au);
+	sprintf(the_score.gold, "%9lu", (long)creature_ptr->au);
 
 	/* Save the current current_world_ptr->game_turn */
 	sprintf(the_score.turns, "%9lu", (long)turn_real(current_world_ptr->game_turn));
@@ -629,20 +626,20 @@ errr predict_score(void)
 	strcpy(the_score.day, _("今日", "TODAY"));
 
 	/* Save the player name (15 chars) */
-	sprintf(the_score.who, "%-.15s", p_ptr->name);
+	sprintf(the_score.who, "%-.15s", creature_ptr->name);
 
 	/* Save the player info */
-	sprintf(the_score.uid, "%7u", p_ptr->player_uid);
-	sprintf(the_score.sex, "%c", (p_ptr->psex ? 'm' : 'f'));
-	sprintf(the_score.p_r, "%2d", MIN(p_ptr->prace, MAX_RACES));
-	sprintf(the_score.p_c, "%2d", MIN(p_ptr->pclass, MAX_CLASS));
-	sprintf(the_score.p_a, "%2d", MIN(p_ptr->pseikaku, MAX_SEIKAKU));
+	sprintf(the_score.uid, "%7u", creature_ptr->player_uid);
+	sprintf(the_score.sex, "%c", (creature_ptr->psex ? 'm' : 'f'));
+	sprintf(the_score.p_r, "%2d", MIN(creature_ptr->prace, MAX_RACES));
+	sprintf(the_score.p_c, "%2d", MIN(creature_ptr->pclass, MAX_CLASS));
+	sprintf(the_score.p_a, "%2d", MIN(creature_ptr->pseikaku, MAX_SEIKAKU));
 
 	/* Save the level and such */
-	sprintf(the_score.cur_lev, "%3d", MIN((u16b)p_ptr->lev, 999));
-	sprintf(the_score.cur_dun, "%3d", (int)p_ptr->current_floor_ptr->dun_level);
-	sprintf(the_score.max_lev, "%3d", MIN((u16b)p_ptr->max_plv, 999));
-	sprintf(the_score.max_dun, "%3d", (int)max_dlv[p_ptr->dungeon_idx]);
+	sprintf(the_score.cur_lev, "%3d", MIN((u16b)creature_ptr->lev, 999));
+	sprintf(the_score.cur_dun, "%3d", (int)creature_ptr->current_floor_ptr->dun_level);
+	sprintf(the_score.max_lev, "%3d", MIN((u16b)creature_ptr->max_plv, 999));
+	sprintf(the_score.max_dun, "%3d", (int)max_dlv[creature_ptr->dungeon_idx]);
 
 	/* Hack -- no cause of death */
 	/* まだ死んでいないときの識別文字 */
