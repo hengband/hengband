@@ -2061,7 +2061,7 @@ void process_monster(MONSTER_IDX m_idx)
 					/* attack */
 					if (y_ptr->r_idx && (y_ptr->hp >= 0))
 					{
-						if (monst_attack_monst(m_idx, g_ptr->m_idx)) return;
+						if (monst_attack_monst(p_ptr, m_idx, g_ptr->m_idx)) return;
 
 						/* In anti-melee dungeon, stupid or confused monster takes useless current_world_ptr->game_turn */
 						else if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)

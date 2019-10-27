@@ -4126,10 +4126,10 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param t_idx 目標側モンスターの参照ID
  * @return 実際に打撃処理が行われた場合TRUEを返す
  */
-bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-	monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	monster_type    *t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
+	monster_type    *m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type    *t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
 
 	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race    *tr_ptr = &r_info[t_ptr->r_idx];
@@ -4152,7 +4152,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 	/* Can the player be aware of this attack? */
 	bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
-	bool do_silly_attack = (one_in_(2) && p_ptr->image);
+	bool do_silly_attack = (one_in_(2) && subject_ptr->image);
 
 	/* Cannot attack self */
 	if (m_idx == t_idx) return FALSE;
@@ -4160,7 +4160,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & RF1_NEVER_BLOW) return FALSE;
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) return (FALSE);
+	if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) return (FALSE);
 
 	/* Total armor */
 	ac = tr_ptr->ac;
@@ -4176,10 +4176,10 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 	if (!see_either && known)
 	{
-		p_ptr->current_floor_ptr->monster_noise = TRUE;
+		subject_ptr->current_floor_ptr->monster_noise = TRUE;
 	}
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
+	if (subject_ptr->riding && (m_idx == subject_ptr->riding)) disturb(subject_ptr, TRUE, TRUE);
 
 	/* Scan through all four blows */
 	for (ap_cnt = 0; ap_cnt < 4; ap_cnt++)
@@ -4219,8 +4219,8 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			if (t_ptr->ml)
 			{
 				/* Redraw the health bar */
-				if (p_ptr->health_who == t_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == t_idx) p_ptr->redraw |= (PR_UHEALTH);
+				if (subject_ptr->health_who == t_idx) subject_ptr->redraw |= (PR_HEALTH);
+				if (subject_ptr->riding == t_idx) subject_ptr->redraw |= (PR_UHEALTH);
 			}
 
 			/* Describe the attack method */
@@ -4332,7 +4332,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 			case RBM_EXPLODE:
 			{
-				if (see_either) disturb(p_ptr, TRUE, TRUE);
+				if (see_either) disturb(subject_ptr, TRUE, TRUE);
 				act = _("爆発した。", "explodes.");
 				explode = TRUE;
 				touched = FALSE;
@@ -4458,7 +4458,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 			case RBE_EAT_ITEM:
 			case RBE_EAT_GOLD:
-				if ((p_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
+				if ((subject_ptr->riding != m_idx) && one_in_(2)) blinked = TRUE;
 				break;
 
 			case RBE_EAT_FOOD:
@@ -4503,7 +4503,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 
 			case RBE_SHATTER:
 				damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-				if (damage > 23) earthquake(p_ptr, m_ptr->fy, m_ptr->fx, 8, m_idx);
+				if (damage > 23) earthquake(subject_ptr, m_ptr->fy, m_ptr->fx, 8, m_idx);
 				break;
 
 			case RBE_EXP_10:
@@ -4568,8 +4568,8 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 						if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
 
 						/* Redraw (later) if needed */
-						if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-						if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+						if (subject_ptr->health_who == m_idx) subject_ptr->redraw |= (PR_HEALTH);
+						if (subject_ptr->riding == m_idx) subject_ptr->redraw |= (PR_UHEALTH);
 
 						/* Special message */
 						if (see_m && did_heal)
@@ -4721,7 +4721,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			}
 			else if (known)
 			{
-				p_ptr->current_floor_ptr->monster_noise = TRUE;
+				subject_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 		}
 		else
@@ -4732,7 +4732,7 @@ bool monst_attack_monst(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 			}
 			else if (known)
 			{
-				p_ptr->current_floor_ptr->monster_noise = TRUE;
+				subject_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 
 			teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
