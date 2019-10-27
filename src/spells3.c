@@ -286,21 +286,21 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
  * </pre>
  */
 
-bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
+bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 {
 	int candidates_at[MAX_TELEPORT_DISTANCE + 1];
 	int total_candidates, cur_candidates;
 	POSITION y = 0, x = 0;
 	int min, pick, i;
 
-	int left = MAX(1, p_ptr->x - dis);
-	int right = MIN(p_ptr->current_floor_ptr->width - 2, p_ptr->x + dis);
-	int top = MAX(1, p_ptr->y - dis);
-	int bottom = MIN(p_ptr->current_floor_ptr->height - 2, p_ptr->y + dis);
+	int left = MAX(1, creature_ptr->x - dis);
+	int right = MIN(creature_ptr->current_floor_ptr->width - 2, creature_ptr->x + dis);
+	int top = MAX(1, creature_ptr->y - dis);
+	int bottom = MIN(creature_ptr->current_floor_ptr->height - 2, creature_ptr->y + dis);
 
-	if (p_ptr->wild_mode) return FALSE;
+	if (creature_ptr->wild_mode) return FALSE;
 
-	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
+	if (creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
 		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return FALSE;
@@ -325,7 +325,7 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 			if (!cave_player_teleportable_bold(y, x, mode)) continue;
 
 			/* Calculate distance */
-			d = distance(p_ptr->y, p_ptr->x, y, x);
+			d = distance(creature_ptr->y, creature_ptr->x, y, x);
 
 			/* Skip too far locations */
 			if (d > dis) continue;
@@ -364,7 +364,7 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 			if (!cave_player_teleportable_bold(y, x, mode)) continue;
 
 			/* Calculate distance */
-			d = distance(p_ptr->y, p_ptr->x, y, x);
+			d = distance(creature_ptr->y, creature_ptr->x, y, x);
 
 			/* Skip too far locations */
 			if (d > dis) continue;
@@ -386,11 +386,11 @@ bool teleport_player_aux(POSITION dis, BIT_FLAGS mode)
 	sound(SOUND_TELEPORT);
 
 #ifdef JP
-	if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
-		msg_format("『こっちだぁ、%s』", p_ptr->name);
+	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		msg_format("『こっちだぁ、%s』", creature_ptr->name);
 #endif
 
-	(void)move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(creature_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 	return TRUE;
 }
 
@@ -406,7 +406,7 @@ void teleport_player(POSITION dis, BIT_FLAGS mode)
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
 
-	if (!teleport_player_aux(dis, mode)) return;
+	if (!teleport_player_aux(p_ptr, dis, mode)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
@@ -448,7 +448,7 @@ void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
 	POSITION oy = p_ptr->y;
 	POSITION ox = p_ptr->x;
 
-	if (!teleport_player_aux(dis, TELEPORT_PASSIVE)) return;
+	if (!teleport_player_aux(p_ptr, dis, TELEPORT_PASSIVE)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
@@ -3455,7 +3455,7 @@ bool booze(player_type *creature_ptr)
 			ident = TRUE;
 			if (one_in_(3)) lose_all_info(p_ptr);
 			else wiz_dark(creature_ptr);
-			(void)teleport_player_aux(100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+			(void)teleport_player_aux(creature_ptr, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 			wiz_dark(creature_ptr);
 			msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
 			msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing, or how you got here!"));
