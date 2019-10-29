@@ -760,7 +760,7 @@ static void get_out_monster(floor_type *floor_ptr, player_type *protected_ptr)
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
  * @return なし
  */
-static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
+static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
 {
 	POSITION x, y, sx = 0, sy = 0;
 	POSITION x_table[20];
@@ -769,11 +769,11 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS floor_mo
 	int i;
 
 	/* Search usable stairs */
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 			feature_type *f_ptr = &f_info[g_ptr->feat];
 			bool ok = FALSE;
 
@@ -831,8 +831,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS floor_mo
 	if (sx)
 	{
 		/* Already fixed */
-		p_ptr->y = sy;
-		p_ptr->x = sx;
+		creature_ptr->y = sy;
+		creature_ptr->x = sx;
 	}
 	else if (!num)
 	{
@@ -840,7 +840,7 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS floor_mo
 		prepare_change_floor_mode(CFM_RAND_PLACE | CFM_NO_RETURN);
 
 		/* Mega Hack -- It's not the stairs you enter.  Disable it.  */
-		if (!feat_uses_special(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat)) p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special = 0;
+		if (!feat_uses_special(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat)) floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].special = 0;
 	}
 	else
 	{
@@ -848,8 +848,8 @@ static void locate_connected_stairs(saved_floor_type *sf_ptr, BIT_FLAGS floor_mo
 		i = randint0(num);
 
 		/* Point stair location */
-		p_ptr->y = y_table[i];
-		p_ptr->x = x_table[i];
+		creature_ptr->y = y_table[i];
+		creature_ptr->x = x_table[i];
 	}
 }
 
@@ -943,7 +943,7 @@ void leave_floor(player_type *creature_ptr)
 	/* Choose random stairs */
 	if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) && tmp_floor_idx)
 	{
-		locate_connected_stairs(sf_ptr, creature_ptr->change_floor_mode);
+		locate_connected_stairs(creature_ptr, creature_ptr->current_floor_ptr, sf_ptr, creature_ptr->change_floor_mode);
 	}
 
 	/* Extract new dungeon level */
