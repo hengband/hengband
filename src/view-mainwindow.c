@@ -1910,7 +1910,7 @@ static void fix_overhead(void)
 		if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2)
 		{
 
-			display_map(&cy, &cx);
+			display_map(p_ptr->current_floor_ptr, &cy, &cx);
 			Term_fresh();
 		}
 		Term_activate(old);
@@ -3389,7 +3389,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 /*
  * Display a "small-scale" map of the dungeon in the active Term
  */
-void display_map(int *cy, int *cx)
+void display_map(floor_type *floor_ptr, int *cy, int *cx)
 {
 	int i, j, x, y;
 
@@ -3420,8 +3420,8 @@ void display_map(int *cy, int *cx)
 	wid -= 14;
 	if (use_bigtile) wid /= 2;
 
-	yrat = (p_ptr->current_floor_ptr->height + hgt - 1) / hgt;
-	xrat = (p_ptr->current_floor_ptr->width + wid - 1) / wid;
+	yrat = (floor_ptr->height + hgt - 1) / hgt;
+	xrat = (floor_ptr->width + wid - 1) / wid;
 
 	/* Disable lighting effects */
 	view_special_lite = FALSE;
@@ -3459,19 +3459,19 @@ void display_map(int *cy, int *cx)
 	}
 
 	/* Allocate the maps */
-	C_MAKE(bigma, (p_ptr->current_floor_ptr->height + 2), TERM_COLOR *);
-	C_MAKE(bigmc, (p_ptr->current_floor_ptr->height + 2), char_ptr);
-	C_MAKE(bigmp, (p_ptr->current_floor_ptr->height + 2), byte_ptr);
+	C_MAKE(bigma, (floor_ptr->height + 2), TERM_COLOR *);
+	C_MAKE(bigmc, (floor_ptr->height + 2), char_ptr);
+	C_MAKE(bigmp, (floor_ptr->height + 2), byte_ptr);
 
 	/* Allocate and wipe each line map */
-	for (y = 0; y < (p_ptr->current_floor_ptr->height + 2); y++)
+	for (y = 0; y < (floor_ptr->height + 2); y++)
 	{
 		/* Allocate one row each array */
-		C_MAKE(bigma[y], (p_ptr->current_floor_ptr->width + 2), TERM_COLOR);
-		C_MAKE(bigmc[y], (p_ptr->current_floor_ptr->width + 2), char);
-		C_MAKE(bigmp[y], (p_ptr->current_floor_ptr->width + 2), byte);
+		C_MAKE(bigma[y], (floor_ptr->width + 2), TERM_COLOR);
+		C_MAKE(bigmc[y], (floor_ptr->width + 2), char);
+		C_MAKE(bigmp[y], (floor_ptr->width + 2), byte);
 
-		for (x = 0; x < p_ptr->current_floor_ptr->width + 2; ++x)
+		for (x = 0; x < floor_ptr->width + 2; ++x)
 		{
 			/* Nothing here */
 			bigma[y][x] = TERM_WHITE;
@@ -3483,9 +3483,9 @@ void display_map(int *cy, int *cx)
 	}
 
 	/* Fill in the map */
-	for (i = 0; i < p_ptr->current_floor_ptr->width; ++i)
+	for (i = 0; i < floor_ptr->width; ++i)
 	{
-		for (j = 0; j < p_ptr->current_floor_ptr->height; ++j)
+		for (j = 0; j < floor_ptr->height; ++j)
 		{
 			x = i / xrat + 1;
 			y = j / yrat + 1;
@@ -3516,9 +3516,9 @@ void display_map(int *cy, int *cx)
 		}
 	}
 
-	for (j = 0; j < p_ptr->current_floor_ptr->height; ++j)
+	for (j = 0; j < floor_ptr->height; ++j)
 	{
-		for (i = 0; i < p_ptr->current_floor_ptr->width; ++i)
+		for (i = 0; i < floor_ptr->width; ++i)
 		{
 			x = i / xrat + 1;
 			y = j / yrat + 1;
@@ -3654,18 +3654,18 @@ void display_map(int *cy, int *cx)
 	C_KILL(object_autopick_yx, (hgt + 2), object_type **);
 
 	/* Free each line map */
-	for (y = 0; y < (p_ptr->current_floor_ptr->height + 2); y++)
+	for (y = 0; y < (floor_ptr->height + 2); y++)
 	{
 		/* Free one row each array */
-		C_KILL(bigma[y], (p_ptr->current_floor_ptr->width + 2), TERM_COLOR);
-		C_KILL(bigmc[y], (p_ptr->current_floor_ptr->width + 2), SYMBOL_CODE);
-		C_KILL(bigmp[y], (p_ptr->current_floor_ptr->width + 2), byte);
+		C_KILL(bigma[y], (floor_ptr->width + 2), TERM_COLOR);
+		C_KILL(bigmc[y], (floor_ptr->width + 2), SYMBOL_CODE);
+		C_KILL(bigmp[y], (floor_ptr->width + 2), byte);
 	}
 
 	/* Free each line map */
-	C_KILL(bigma, (p_ptr->current_floor_ptr->height + 2), TERM_COLOR *);
-	C_KILL(bigmc, (p_ptr->current_floor_ptr->height + 2), char_ptr);
-	C_KILL(bigmp, (p_ptr->current_floor_ptr->height + 2), byte_ptr);
+	C_KILL(bigma, (floor_ptr->height + 2), TERM_COLOR *);
+	C_KILL(bigmc, (floor_ptr->height + 2), char_ptr);
+	C_KILL(bigmp, (floor_ptr->height + 2), byte_ptr);
 }
 
 
@@ -3688,7 +3688,7 @@ void do_cmd_view_map(void)
 	display_autopick = 0;
 
 	/* Display the map */
-	display_map(&cy, &cx);
+	display_map(p_ptr->current_floor_ptr, &cy, &cx);
 
 	/* Wait for it */
 	if (max_autopick && !p_ptr->wild_mode)
@@ -3731,7 +3731,7 @@ void do_cmd_view_map(void)
 			else
 				display_autopick &= ~flag;
 			/* Display the map */
-			display_map(&cy, &cx);
+			display_map(p_ptr->current_floor_ptr, &cy, &cx);
 		}
 
 		display_autopick = 0;
