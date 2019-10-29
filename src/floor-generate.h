@@ -100,7 +100,7 @@ struct dun_data
 
 extern dun_data *dun;
 
-extern bool place_quest_monsters(void);
+extern bool place_quest_monsters(floor_type *floor_ptr);
 extern void wipe_generate_random_floor_flags(floor_type *floor_ptr);
 extern void clear_cave(floor_type *floor_ptr);
 extern void generate_random_floor(floor_type *floor_ptr);

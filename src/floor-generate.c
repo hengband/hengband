@@ -394,7 +394,7 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
  * @brief クエストに関わるモンスターの配置を行う / Place quest monsters
  * @return 成功したならばTRUEを返す
  */
-bool place_quest_monsters(void)
+bool place_quest_monsters(floor_type *floor_ptr)
 {
 	int i;
 
@@ -408,7 +408,7 @@ bool place_quest_monsters(void)
 		if (quest[i].status != QUEST_STATUS_TAKEN ||
 		    (quest[i].type != QUEST_TYPE_KILL_LEVEL &&
 		     quest[i].type != QUEST_TYPE_RANDOM) ||
-		    quest[i].level != p_ptr->current_floor_ptr->dun_level ||
+		    quest[i].level != floor_ptr->dun_level ||
 		    p_ptr->dungeon_idx != quest[i].dungeon ||
 		    (quest[i].flags & QUEST_FLAG_PRESET))
 		{
@@ -442,10 +442,10 @@ bool place_quest_monsters(void)
 					grid_type    *g_ptr;
 					feature_type *f_ptr;
 
-					y = randint0(p_ptr->current_floor_ptr->height);
-					x = randint0(p_ptr->current_floor_ptr->width);
+					y = randint0(floor_ptr->height);
+					x = randint0(floor_ptr->width);
 
-					g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+					g_ptr = &floor_ptr->grid_array[y][x];
 					f_ptr = &f_info[g_ptr->feat];
 
 					if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) continue;
@@ -913,7 +913,7 @@ static bool cave_gen(dungeon_type* dungeon_ptr, floor_type *floor_ptr)
 	/* Determine the character location */
 	if (!new_player_spot()) return FALSE;
 
-	if (!place_quest_monsters()) return FALSE;
+	if (!place_quest_monsters(floor_ptr)) return FALSE;
 
 	/* Basic "amount" */
 	k = (floor_ptr->dun_level / 3);
