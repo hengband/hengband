@@ -1030,7 +1030,7 @@ bool apply_disenchant(BIT_FLAGS mode)
  * Vanish all walls in this floor
  * @return 実際に処理が反映された場合TRUE
  */
-static bool vanish_dungeon(void)
+static bool vanish_dungeon(floor_type *floor_ptr)
 {
 	POSITION y, x;
 	grid_type *g_ptr;
@@ -1039,17 +1039,17 @@ static bool vanish_dungeon(void)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Prevent vasishing of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !p_ptr->current_floor_ptr->dun_level)
+	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
 		return FALSE;
 	}
 
 	/* Scan all normal grids */
-	for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
+	for (y = 1; y < floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
+		for (x = 1; x < floor_ptr->width - 1; x++)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Seeing true feature code (ignore mimic) */
 			f_ptr = &f_info[g_ptr->feat];
@@ -1057,7 +1057,7 @@ static bool vanish_dungeon(void)
 			/* Lose room and vault */
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-			m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Awake monster */
 			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
@@ -1078,9 +1078,9 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Special boundary walls -- Top and bottom */
-	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+	for (x = 0; x < floor_ptr->width; x++)
 	{
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[0][x];
+		g_ptr = &floor_ptr->grid_array[0][x];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1095,7 +1095,7 @@ static bool vanish_dungeon(void)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->current_floor_ptr->height - 1][x];
+		g_ptr = &floor_ptr->grid_array[floor_ptr->height - 1][x];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1112,9 +1112,9 @@ static bool vanish_dungeon(void)
 	}
 
 	/* Special boundary walls -- Left and right */
-	for (y = 1; y < (p_ptr->current_floor_ptr->height - 1); y++)
+	for (y = 1; y < (floor_ptr->height - 1); y++)
 	{
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][0];
+		g_ptr = &floor_ptr->grid_array[y][0];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1129,7 +1129,7 @@ static bool vanish_dungeon(void)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][p_ptr->current_floor_ptr->width - 1];
+		g_ptr = &floor_ptr->grid_array[y][floor_ptr->width - 1];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1216,7 +1216,7 @@ void call_the_(void)
 
 		if (one_in_(666))
 		{
-			if (!vanish_dungeon()) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
+			if (!vanish_dungeon(p_ptr->current_floor_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
 		}
 		else
 		{
