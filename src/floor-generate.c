@@ -1161,7 +1161,7 @@ static void build_battle(floor_type *floor_ptr)
  * @brief モンスター闘技場への導入処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void generate_gambling_arena(floor_type *floor_ptr)
+static void generate_gambling_arena(floor_type *floor_ptr, player_type *creature_ptr)
 {
 	POSITION y, x;
 	MONSTER_IDX i;
@@ -1195,8 +1195,8 @@ static void generate_gambling_arena(floor_type *floor_ptr)
 
 	for(i = 0; i < 4; i++)
 	{
-		place_monster_aux(0, p_ptr->y + 8 + (i/2)*4, p_ptr->x - 2 + (i%2)*4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
-		set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[p_ptr->y+8+(i/2)*4][p_ptr->x-2+(i%2)*4].m_idx]);
+		place_monster_aux(0, creature_ptr->y + 8 + (i/2)*4, creature_ptr->x - 2 + (i%2)*4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
+		set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[creature_ptr->y+8+(i/2)*4][creature_ptr->x-2+(i%2)*4].m_idx]);
 	}
 	for(i = 1; i < floor_ptr->m_max; i++)
 	{
@@ -1421,7 +1421,7 @@ void generate_random_floor(floor_type *floor_ptr)
 
 		else if (p_ptr->phase_out)
 		{
-			generate_gambling_arena(floor_ptr);
+			generate_gambling_arena(floor_ptr, p_ptr);
 		}
 
 		else if (p_ptr->inside_quest)
