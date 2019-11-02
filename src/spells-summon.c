@@ -290,19 +290,19 @@ int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
 }
 
 
-void mitokohmon(void)
+void mitokohmon(player_type *kohmon_ptr)
 {
 	int count = 0, i;
 	monster_type *m_ptr;
 	concptr kakusan = "";
 
-	if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_SUKE, PM_FORCE_PET))
+	if (summon_named_creature(0, kohmon_ptr->y, kohmon_ptr->x, MON_SUKE, PM_FORCE_PET))
 	{
 		msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
 		kakusan = "Suke-san";
 		count++;
 	}
-	if (summon_named_creature(0, p_ptr->y, p_ptr->x, MON_KAKU, PM_FORCE_PET))
+	if (summon_named_creature(0, kohmon_ptr->y, kohmon_ptr->x, MON_KAKU, PM_FORCE_PET))
 	{
 		msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
 		kakusan = "Kaku-san";
@@ -310,13 +310,13 @@ void mitokohmon(void)
 	}
 	if (!count)
 	{
-		for (i = p_ptr->current_floor_ptr->m_max - 1; i > 0; i--)
+		for (i = kohmon_ptr->current_floor_ptr->m_max - 1; i > 0; i--)
 		{
-			m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			m_ptr = &kohmon_ptr->current_floor_ptr->m_list[i];
 			if (!monster_is_valid(m_ptr)) continue;
 			if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
-			if (!los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;
-			if (!projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) continue;
+			if (!los(m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x)) continue;
+			if (!projectable(m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x)) continue;
 			count++;
 			break;
 		}

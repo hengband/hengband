@@ -1729,7 +1729,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		break;
 
 	case ACT_INROU:
-		mitokohmon();
+		mitokohmon(user_ptr);
 		break;
 
 	case ACT_MURAMASA:

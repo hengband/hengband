@@ -67,5 +67,5 @@ extern bool cast_summon_greater_demon(void);
 extern bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
 extern int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x);
 
-extern void mitokohmon(void);
+extern void mitokohmon(player_type *kohmon_ptr);
 
