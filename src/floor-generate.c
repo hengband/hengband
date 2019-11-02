@@ -1242,22 +1242,22 @@ static void generate_fixed_floor(floor_type *floor_ptr)
  * @brief ダンジョン時のランダムフロア生成 / Make a real level
  * @return フロアの生成に成功したらTRUE
  */
-static bool level_gen(floor_type *floor_ptr, concptr *why)
+static bool level_gen(floor_type *floor_ptr, DUNGEON_IDX d_idx, concptr *why)
 {
 	int level_height, level_width;
 
 	if ((always_small_levels || ironman_small_levels ||
 	    (one_in_(SMALL_LEVEL) && small_levels) ||
-	     (d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER) ||
-	    (d_info[p_ptr->dungeon_idx].flags1 & DF1_SMALLEST)) &&
-	    !(d_info[p_ptr->dungeon_idx].flags1 & DF1_BIG))
+	     (d_info[d_idx].flags1 & DF1_BEGINNER) ||
+	    (d_info[d_idx].flags1 & DF1_SMALLEST)) &&
+	    !(d_info[d_idx].flags1 & DF1_BIG))
 	{
-		if (d_info[p_ptr->dungeon_idx].flags1 & DF1_SMALLEST)
+		if (d_info[d_idx].flags1 & DF1_SMALLEST)
 		{
 			level_height = 1;
 			level_width = 1;
 		}
-		else if (d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER)
+		else if (d_info[d_idx].flags1 & DF1_BEGINNER)
 		{
 			level_height = 2;
 			level_width = 2;
@@ -1295,7 +1295,7 @@ static bool level_gen(floor_type *floor_ptr, concptr *why)
 	}
 
 	/* Make a dungeon */
-	if (!cave_gen(&d_info[p_ptr->dungeon_idx], floor_ptr))
+	if (!cave_gen(&d_info[d_idx], floor_ptr))
 	{
 		*why = _("ダンジョン生成に失敗", "could not place player");
 		return FALSE;
@@ -1437,7 +1437,7 @@ void generate_random_floor(floor_type *floor_ptr)
 		/* Build a real level */
 		else
 		{
-			okay = level_gen(floor_ptr, &why);
+			okay = level_gen(floor_ptr, p_ptr->dungeon_idx, &why);
 		}
 
 
