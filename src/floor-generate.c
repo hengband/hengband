@@ -572,11 +572,13 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_p
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
  * @return ダンジョン生成が全て無事に成功したらTRUEを返す。
  */
-static bool cave_gen(dungeon_type* dungeon_ptr, floor_type *floor_ptr)
+static bool cave_gen(floor_type *floor_ptr)
 {
 	int i, k;
 	POSITION y, x;
 	dun_data dun_body;
+
+	dungeon_type* dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
 
 	floor_ptr->lite_n = 0;
 	floor_ptr->mon_lite_n = 0;
@@ -1295,7 +1297,8 @@ static bool level_gen(floor_type *floor_ptr, DUNGEON_IDX d_idx, concptr *why)
 	}
 
 	/* Make a dungeon */
-	if (!cave_gen(&d_info[d_idx], floor_ptr))
+	floor_ptr->dungeon_idx = d_idx;
+	if (!cave_gen(floor_ptr))
 	{
 		*why = _("ダンジョン生成に失敗", "could not place player");
 		return FALSE;
