@@ -1118,8 +1118,7 @@ void change_floor(player_type *creature_ptr)
 	if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) &&
 	    !(creature_ptr->change_floor_mode & CFM_FIRST_FLOOR))
 	{
-		/* Create creature_ptr->current_floor_ptr->grid_array */
-		generate_random_floor(creature_ptr->current_floor_ptr);
+		generate_floor(creature_ptr->current_floor_ptr);
 
 		/* Paranoia -- No new saved floor */
 		new_floor_id = 0;
@@ -1310,8 +1309,7 @@ void change_floor(player_type *creature_ptr)
 			}
 			else
 			{
-				/* Newly create creature_ptr->current_floor_ptr->grid_array */
-				generate_random_floor(creature_ptr->current_floor_ptr);
+				generate_floor(creature_ptr->current_floor_ptr);
 			}
 
 			/* Record last visit current_world_ptr->game_turn */

@@ -1399,7 +1399,7 @@ void clear_cave(floor_type *floor_ptr)
  * @return なし
  * @note Hack -- regenerate any "overflow" levels
  */
-void generate_random_floor(floor_type *floor_ptr)
+void generate_floor(floor_type *floor_ptr)
 {
 	int num;
 
