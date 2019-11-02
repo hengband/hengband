@@ -79,12 +79,20 @@ typedef struct
 	u16b occurrence;
 } grid_template_type;
 
+/* This should not be used */
+/*#define set_cave_info(Y,X,I)    (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].info = (I)) */
+
+#define feat_locked_door_random(DOOR_TYPE) \
+	(feat_door[(DOOR_TYPE)].num_locked ? \
+	 feat_door[(DOOR_TYPE)].locked[randint0(feat_door[(DOOR_TYPE)].num_locked)] : feat_none)
+
+#define feat_jammed_door_random(DOOR_TYPE) \
+	(feat_door[(DOOR_TYPE)].num_jammed ? \
+	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
+
 /* Macros */
 #define set_cave_feat(FL,Y,X,F)    ((FL)->grid_array[(Y)][(X)].feat = (F))
 #define add_cave_info(FL,Y,X,I)    ((FL)->grid_array[(Y)][(X)].info |= (I))
-
-/* This should not be used */
-/*#define set_cave_info(Y,X,I)    (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].info = (I)) */
 
 /*!
  * @brief 指定座標に瓦礫を配置する
@@ -366,9 +374,8 @@ extern void add_door(POSITION x, POSITION y);
 
 #define MAX_DOOR_TYPES   3
 extern void place_closed_door(POSITION y, POSITION x, int type);
-extern void place_secret_door(POSITION y, POSITION x, int type);
 
-extern void place_locked_door(POSITION y, POSITION x);
+
 extern void try_door(POSITION y, POSITION x);
 extern void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light);
 extern void place_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light);
