@@ -5086,7 +5086,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_MON_LITE))
 	{
 		creature_ptr->update &= ~(PU_MON_LITE);
-		update_mon_lite(p_ptr->current_floor_ptr);
+		update_mon_lite(p_ptr, p_ptr->current_floor_ptr);
 	}
 
 	/*
