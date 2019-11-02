@@ -201,18 +201,18 @@ const magic_type technic_info[NUM_TECHNIC][32] =
  * @param cury 現在の鏡のy座標
  * @param curx 現在の鏡のx座標
  */
-static void next_mirror(POSITION* next_y, POSITION* next_x, POSITION cury, POSITION curx)
+static void next_mirror(player_type *creature_ptr, POSITION* next_y, POSITION* next_x, POSITION cury, POSITION curx)
 {
 	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
 	int mirror_num = 0;			  /* 鏡の数 */
 	POSITION x, y;
 	int num;
 
-	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+	for (x = 0; x < creature_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < creature_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x])) {
+			if (is_mirror_grid(&creature_ptr->current_floor_ptr->grid_array[y][x])) {
 				mirror_y[mirror_num] = y;
 				mirror_x[mirror_num] = x;
 				mirror_num++;
@@ -5801,7 +5801,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				monster_target_x = x;
 
 				remove_mirror(y, x);
-				next_mirror(&oy, &ox, y, x);
+				next_mirror(p_ptr, &oy, &ox, y, x);
 
 				path_n = i + project_path(&(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
 				for (j = last_i; j <= i; j++)
