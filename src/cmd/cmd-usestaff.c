@@ -94,7 +94,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_REMOVE_CURSE:
 		{
-			bool result = powerful ? remove_all_curse() : remove_curse();
+			bool result = powerful ? remove_all_curse(creature_ptr) : remove_curse(creature_ptr);
 			if (result)
 			{
 				ident = TRUE;

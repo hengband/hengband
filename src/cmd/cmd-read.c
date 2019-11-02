@@ -209,7 +209,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_REMOVE_CURSE:
 		{
-			if (remove_curse())
+			if (remove_curse(creature_ptr))
 			{
 				ident = TRUE;
 			}
@@ -218,7 +218,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_STAR_REMOVE_CURSE:
 		{
-			if (remove_all_curse())
+			if (remove_all_curse(creature_ptr))
 			{
 				ident = TRUE;
 			}

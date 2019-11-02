@@ -299,8 +299,8 @@ extern void call_the_(void);
 extern void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
 extern void alter_reality(void);
 extern void identify_pack(void);
-extern int remove_curse(void);
-extern int remove_all_curse(void);
+extern int remove_curse(player_type *caster_ptr);
+extern int remove_all_curse(player_type *caster_ptr);
 extern bool alchemy(void);
 
 extern bool artifact_scroll(void);

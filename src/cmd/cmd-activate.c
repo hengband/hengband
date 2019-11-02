@@ -1626,7 +1626,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_DISP_CURSE_XTRA:
 	{
 		msg_format(_("%sが真実を照らし出す...", "The %s exhibits the truth..."), name);
-		(void)remove_all_curse();
+		(void)remove_all_curse(user_ptr);
 		(void)probing();
 		break;
 	}

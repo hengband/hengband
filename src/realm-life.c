@@ -141,7 +141,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("解呪", "Remove Curse");
 		if (desc) return _("アイテムにかかった弱い呪いを解除する。", "Removes normal curses from equipped items.");
 		{
-			if (cast) (void)remove_curse();
+			if (cast) (void)remove_curse(caster_ptr);
 		}
 		break;
 
@@ -248,7 +248,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (name) return _("*解呪*", "Dispel Curse");
 		if (desc) return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
 		{
-			if (cast) (void)remove_all_curse();
+			if (cast) (void)remove_all_curse(caster_ptr);
 		}
 		break;
 

@@ -1406,14 +1406,14 @@ void identify_pack(void)
  * will not be uncursed.
  * </pre>
  */
-static int remove_curse_aux(int all)
+static int remove_curse_aux(player_type *creature_ptr, int all)
 {
 	int i, cnt = 0;
 
 	/* Attempt to uncurse items being worn */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Uncursed already */
@@ -1433,8 +1433,8 @@ static int remove_curse_aux(int all)
 		o_ptr->ident |= (IDENT_SENSE);
 		o_ptr->feeling = FEEL_NONE;
 
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->window |= (PW_EQUIP);
+		creature_ptr->update |= (PU_BONUS);
+		creature_ptr->window |= (PW_EQUIP);
 
 		/* Count the uncursings */
 		cnt++;
@@ -1454,9 +1454,9 @@ static int remove_curse_aux(int all)
  * Remove most curses
  * @return 解呪に成功した装備数
  */
-int remove_curse(void)
+int remove_curse(player_type *caster_ptr)
 {
-	return (remove_curse_aux(FALSE));
+	return (remove_curse_aux(caster_ptr, FALSE));
 }
 
 /*!
@@ -1464,9 +1464,9 @@ int remove_curse(void)
  * Remove all curses
  * @return 解呪に成功した装備数
  */
-int remove_all_curse(void)
+int remove_all_curse(player_type *caster_ptr)
 {
-	return (remove_curse_aux(TRUE));
+	return (remove_curse_aux(caster_ptr, TRUE));
 }
 
 
