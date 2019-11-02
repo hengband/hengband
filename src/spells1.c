@@ -268,14 +268,13 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  * Perhaps we should affect doors?
  * </pre>
  */
-static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	bool obvious = FALSE;
 	bool known = player_has_los_bold(y, x);
-
 
 	who = who ? who : 0;
 
@@ -603,16 +602,16 @@ static bool project_f(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			/* Turn off the light. */
 			if (do_dark)
 			{
-				if (p_ptr->current_floor_ptr->dun_level || !is_daytime())
+				if (floor_ptr->dun_level || !is_daytime())
 				{
 					for (j = 0; j < 9; j++)
 					{
 						int by = y + ddy_ddd[j];
 						int bx = x + ddx_ddd[j];
 
-						if (in_bounds2(p_ptr->current_floor_ptr, by, bx))
+						if (in_bounds2(floor_ptr, by, bx))
 						{
-							grid_type *cc_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
+							grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
 
 							if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 							{
@@ -5820,7 +5819,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 							}
 						}
 					}
-					(void)project_f(0, 0, y, x, dam, GF_SEEKER);
+					(void)project_f(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER);
 				}
 				last_i = i;
 			}
@@ -5844,7 +5843,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					}
 				}
 			}
-			(void)project_f(0, 0, py, px, dam, GF_SEEKER);
+			(void)project_f(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER);
 		}
 		return notice;
 	}
@@ -5942,7 +5941,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					(void)project_f(0,0,y,x,dam,GF_SUPER_RAY);
+					(void)project_f(p_ptr->current_floor_ptr, 0,0,y,x,dam,GF_SUPER_RAY);
 				}
 				path_n = i;
 				second_step =i+1;
@@ -5973,7 +5972,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					}
 				}
 			}
-			(void)project_f(0, 0, py, px, dam, GF_SUPER_RAY);
+			(void)project_f(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY);
 		}
 		return notice;
 	}
@@ -6269,12 +6268,12 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				int d = dist_to_line(y, x, y1, x1, by, bx);
 
 				/* Affect the grid */
-				if (project_f(who, d, y, x, dam, typ)) notice = TRUE;
+				if (project_f(p_ptr->current_floor_ptr, who, d, y, x, dam, typ)) notice = TRUE;
 			}
 			else
 			{
 				/* Affect the grid */
-				if (project_f(who, dist, y, x, dam, typ)) notice = TRUE;
+				if (project_f(p_ptr->current_floor_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
 			}
 		}
 	}
@@ -6703,7 +6702,7 @@ bool binding_field(HIT_POINT dam)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
 				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
-					(void)project_f(0, 0, y, x, dam, GF_MANA);
+					(void)project_f(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
 			}
 		}
