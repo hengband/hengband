@@ -423,18 +423,18 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 
 				/* Secret doors */
 			case '+':
-				place_secret_door(y, x, DOOR_DEFAULT);
+				place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
 				break;
 
 				/* Secret glass doors */
 			case '-':
-				place_secret_door(y, x, DOOR_GLASS_DOOR);
+				place_secret_door(floor_ptr, y, x, DOOR_GLASS_DOOR);
 				if (is_closed_door(g_ptr->feat)) g_ptr->mimic = feat_glass_wall;
 				break;
 
 				/* Curtains */
 			case '\'':
-				place_secret_door(y, x, DOOR_CURTAIN);
+				place_secret_door(floor_ptr, y, x, DOOR_CURTAIN);
 				break;
 
 				/* Trap */

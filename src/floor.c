@@ -23,7 +23,7 @@ saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 * @param x 配置したいフロアのX座標
 * @return なし
 */
-void place_locked_door(POSITION y, POSITION x)
+void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
@@ -45,7 +45,7 @@ void place_locked_door(POSITION y, POSITION x)
 * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
 * @return なし
 */
-void place_secret_door(POSITION y, POSITION x, int type)
+void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 {
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{

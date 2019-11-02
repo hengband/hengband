@@ -408,10 +408,10 @@ bool build_type5(floor_type *floor_ptr)
 	/* Place a secret door */
 	switch (randint1(4))
 	{
-	case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-	case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-	case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-	case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+	case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+	case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+	case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+	case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
 	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
@@ -614,10 +614,10 @@ bool build_type6(floor_type *floor_ptr)
 	/* Place a secret door */
 	switch (randint1(4))
 	{
-	case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-	case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-	case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-	case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+	case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+	case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+	case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+	case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
 	/* Sort the entries */

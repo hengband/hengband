@@ -372,5 +372,5 @@ extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 #define GRID_X(G) \
 	((int)((G) % 256U))
 
-extern void place_secret_door(POSITION y, POSITION x, int type);
-extern void place_locked_door(POSITION y, POSITION x);
+extern void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type);
+extern void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x);

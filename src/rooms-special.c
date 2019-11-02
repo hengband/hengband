@@ -113,7 +113,7 @@ bool build_type15(floor_type *floor_ptr)
 		dir1 = randint0(4);
 		y = yval + 2 * ddy_ddd[dir1];
 		x = xval + 2 * ddx_ddd[dir1];
-		place_secret_door(y, x, DOOR_GLASS_DOOR);
+		place_secret_door(floor_ptr, y, x, DOOR_GLASS_DOOR);
 		g_ptr = &floor_ptr->grid_array[y][x];
 		if (is_closed_door(g_ptr->feat)) g_ptr->mimic = feat_glass_wall;
 

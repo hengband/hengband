@@ -487,10 +487,10 @@ bool build_type3(floor_type *floor_ptr)
 		/* Place a secret door on the inner room */
 		switch (randint0(4))
 		{
-		case 0: place_secret_door(y1b, xval, DOOR_DEFAULT); break;
-		case 1: place_secret_door(y2b, xval, DOOR_DEFAULT); break;
-		case 2: place_secret_door(yval, x1a, DOOR_DEFAULT); break;
-		case 3: place_secret_door(yval, x2a, DOOR_DEFAULT); break;
+		case 0: place_secret_door(floor_ptr, y1b, xval, DOOR_DEFAULT); break;
+		case 1: place_secret_door(floor_ptr, y2b, xval, DOOR_DEFAULT); break;
+		case 2: place_secret_door(floor_ptr, yval, x1a, DOOR_DEFAULT); break;
+		case 3: place_secret_door(floor_ptr, yval, x2a, DOOR_DEFAULT); break;
 		}
 
 		/* Place a treasure in the vault */
@@ -538,10 +538,10 @@ bool build_type3(floor_type *floor_ptr)
 					one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
 					((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
-				place_secret_door(yval, x1a - 1, door_type);
-				place_secret_door(yval, x2a + 1, door_type);
-				place_secret_door(y1b - 1, xval, door_type);
-				place_secret_door(y2b + 1, xval, door_type);
+				place_secret_door(floor_ptr, yval, x1a - 1, door_type);
+				place_secret_door(floor_ptr, yval, x2a + 1, door_type);
+				place_secret_door(floor_ptr, y1b - 1, xval, door_type);
+				place_secret_door(floor_ptr, y2b + 1, xval, door_type);
 			}
 		}
 
@@ -666,10 +666,10 @@ bool build_type4(floor_type *floor_ptr)
 			/* Place a secret door */
 			switch (randint1(4))
 			{
-			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+			case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 			}
 
 			/* Place a monster in the room */
@@ -684,10 +684,10 @@ bool build_type4(floor_type *floor_ptr)
 			/* Place a secret door */
 			switch (randint1(4))
 			{
-			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+			case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 			}
 
 			/* Place another inner room */
@@ -704,10 +704,10 @@ bool build_type4(floor_type *floor_ptr)
 			/* Place a locked door on the inner room */
 			switch (randint1(4))
 			{
-			case 1: place_locked_door(yval - 1, xval); break;
-			case 2: place_locked_door(yval + 1, xval); break;
-			case 3: place_locked_door(yval, xval - 1); break;
-			case 4: place_locked_door(yval, xval + 1); break;
+			case 1: place_locked_door(floor_ptr, yval - 1, xval); break;
+			case 2: place_locked_door(floor_ptr, yval + 1, xval); break;
+			case 3: place_locked_door(floor_ptr, yval, xval - 1); break;
+			case 4: place_locked_door(floor_ptr, yval, xval + 1); break;
 			}
 
 			/* Monsters to guard the "treasure" */
@@ -737,10 +737,10 @@ bool build_type4(floor_type *floor_ptr)
 			/* Place a secret door */
 			switch (randint1(4))
 			{
-			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+			case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 			}
 
 			/* Large Inner Pillar */
@@ -795,8 +795,8 @@ bool build_type4(floor_type *floor_ptr)
 				place_inner_grid(g_ptr);
 
 				/* Secret doors (random top/bottom) */
-				place_secret_door(yval - 3 + (randint1(2) * 2), xval - 3, door_type);
-				place_secret_door(yval - 3 + (randint1(2) * 2), xval + 3, door_type);
+				place_secret_door(floor_ptr, yval - 3 + (randint1(2) * 2), xval - 3, door_type);
+				place_secret_door(floor_ptr, yval - 3 + (randint1(2) * 2), xval + 3, door_type);
 
 				/* Monsters */
 				vault_monsters(yval, xval - 2, randint1(2));
@@ -816,10 +816,10 @@ bool build_type4(floor_type *floor_ptr)
 			/* Place a secret door */
 			switch (randint1(4))
 			{
-			case 1: place_secret_door(y1 - 1, xval, DOOR_DEFAULT); break;
-			case 2: place_secret_door(y2 + 1, xval, DOOR_DEFAULT); break;
-			case 3: place_secret_door(yval, x1 - 1, DOOR_DEFAULT); break;
-			case 4: place_secret_door(yval, x2 + 1, DOOR_DEFAULT); break;
+			case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+			case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+			case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+			case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 			}
 
 			/* Maze (really a checkerboard) */
@@ -872,18 +872,18 @@ bool build_type4(floor_type *floor_ptr)
 			if (randint0(100) < 50)
 			{
 				int i = randint1(10);
-				place_secret_door(y1 - 1, xval - i, door_type);
-				place_secret_door(y1 - 1, xval + i, door_type);
-				place_secret_door(y2 + 1, xval - i, door_type);
-				place_secret_door(y2 + 1, xval + i, door_type);
+				place_secret_door(floor_ptr, y1 - 1, xval - i, door_type);
+				place_secret_door(floor_ptr, y1 - 1, xval + i, door_type);
+				place_secret_door(floor_ptr, y2 + 1, xval - i, door_type);
+				place_secret_door(floor_ptr, y2 + 1, xval + i, door_type);
 			}
 			else
 			{
 				int i = randint1(3);
-				place_secret_door(yval + i, x1 - 1, door_type);
-				place_secret_door(yval - i, x1 - 1, door_type);
-				place_secret_door(yval + i, x2 + 1, door_type);
-				place_secret_door(yval - i, x2 + 1, door_type);
+				place_secret_door(floor_ptr, yval + i, x1 - 1, door_type);
+				place_secret_door(floor_ptr, yval - i, x1 - 1, door_type);
+				place_secret_door(floor_ptr, yval + i, x2 + 1, door_type);
+				place_secret_door(floor_ptr, yval - i, x2 + 1, door_type);
 			}
 
 			/* Treasure, centered at the center of the cross */

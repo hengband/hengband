@@ -181,10 +181,10 @@ void build_small_room(POSITION x0, POSITION y0)
 	/* Place a secret door on one side */
 	switch (randint0(4))
 	{
-		case 0: place_secret_door(y0, x0 - 1, DOOR_DEFAULT); break;
-		case 1: place_secret_door(y0, x0 + 1, DOOR_DEFAULT); break;
-		case 2: place_secret_door(y0 - 1, x0, DOOR_DEFAULT); break;
-		case 3: place_secret_door(y0 + 1, x0, DOOR_DEFAULT); break;
+		case 0: place_secret_door(p_ptr->current_floor_ptr, y0, x0 - 1, DOOR_DEFAULT); break;
+		case 1: place_secret_door(p_ptr->current_floor_ptr, y0, x0 + 1, DOOR_DEFAULT); break;
+		case 2: place_secret_door(p_ptr->current_floor_ptr, y0 - 1, x0, DOOR_DEFAULT); break;
+		case 3: place_secret_door(p_ptr->current_floor_ptr, y0 + 1, x0, DOOR_DEFAULT); break;
 	}
 
 	/* Clear mimic type */
