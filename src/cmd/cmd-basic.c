@@ -845,7 +845,7 @@ void do_cmd_open(player_type *creature_ptr)
 		{
 			bool too_many = (num_doors && num_chests) || (num_doors > 1) ||
 			    (num_chests > 1);
-			if (!too_many) command_dir = coords_to_dir(y, x);
+			if (!too_many) command_dir = coords_to_dir(creature_ptr, y, x);
 		}
 	}
 
@@ -984,7 +984,7 @@ void do_cmd_close(player_type *creature_ptr)
 		/* Count open doors */
 		if (count_dt(creature_ptr, &y, &x, is_open, FALSE) == 1)
 		{
-			command_dir = coords_to_dir(y, x);
+			command_dir = coords_to_dir(creature_ptr, y, x);
 		}
 	}
 
@@ -1570,7 +1570,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		if (num_traps || num_chests)
 		{
 			bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
-			if (!too_many) command_dir = coords_to_dir(y, x);
+			if (!too_many) command_dir = coords_to_dir(creature_ptr, y, x);
 		}
 	}
 

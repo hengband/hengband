@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+typedef struct player_type player_type;
+
 extern const POSITION ddd[9];
 extern const POSITION ddx[10];
 extern const POSITION ddy[10];
@@ -9,7 +11,7 @@ extern const POSITION cdd[8];
 extern const POSITION ddx_cdd[8];
 extern const POSITION ddy_cdd[8];
 
-extern DIRECTION coords_to_dir(POSITION y, POSITION x);
+extern DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x);
 
 /*
  * project()関数に用いられる、遠隔攻撃特性ビットフラグ / Bit flags for the "project()" function

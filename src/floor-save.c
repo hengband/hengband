@@ -9,6 +9,7 @@
  * included in all such copies. \n
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
+#pragma once
 
 #include "angband.h"
 #include "bldg.h"
@@ -19,9 +20,11 @@
 #include "artifact.h"
 #include "dungeon.h"
 #include "floor.h"
+#include "floor-save.h"
 #include "floor-events.h"
 #include "floor-generate.h"
 #include "feature.h"
+#include "geometry.h"
 #include "grid.h"
 #include "monster.h"
 #include "quest.h"

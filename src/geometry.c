@@ -99,13 +99,13 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
  * @param x 方角を確認したX座標
  * @return 方向ID
  */
-DIRECTION coords_to_dir(POSITION y, POSITION x)
+DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	DIRECTION d[3][3] = { {7, 4, 1}, {8, 5, 2}, {9, 6, 3} };
 	POSITION dy, dx;
 
-	dy = y - p_ptr->y;
-	dx = x - p_ptr->x;
+	dy = y - creature_ptr->y;
+	dx = x - creature_ptr->x;
 	if (ABS(dx) > 1 || ABS(dy) > 1) return (0);
 
 	return d[dx + 1][dy + 1];

@@ -1,4 +1,6 @@
-﻿extern bool build_type16(floor_type *floor_ptr);
+﻿#pragma once
+
+extern bool build_type16(floor_type *floor_ptr);
 
 /* Minimum & maximum town size */
 #define MIN_TOWN_WID ((MAX_WID / 3) / 2)
