@@ -5149,7 +5149,7 @@ void free_turn(player_type *creature_ptr)
 bool player_place(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	/* Paranoia XXX XXX */
-	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0) return FALSE;
+	if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx != 0) return FALSE;
 
 	/* Save player location */
 	creature_ptr->y = y;
