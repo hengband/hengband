@@ -710,7 +710,7 @@ static s16b conv_terrain2feat[MAX_WILDERNESS];
  * Build the wilderness area. -DG-
  * @return なし
  */
-void wilderness_gen_small(floor_type *floor_ptr)
+void wilderness_gen_small(player_type *creature_ptr, floor_type *floor_ptr)
 {
 	int i, j;
 
@@ -733,7 +733,7 @@ void wilderness_gen_small(floor_type *floor_ptr)
 			floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
 		}
 		else if (wilderness[j][i].road) floor_ptr->grid_array[j][i].feat = feat_floor;
-		else if (wilderness[j][i].entrance && (p_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
+		else if (wilderness[j][i].entrance && (creature_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
 		{
 			floor_ptr->grid_array[j][i].feat = feat_entrance;
 			floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
@@ -753,9 +753,9 @@ void wilderness_gen_small(floor_type *floor_ptr)
 	panel_row_min = floor_ptr->height;
 	panel_col_min = floor_ptr->width;
 
-	p_ptr->x = p_ptr->wilderness_x;
-	p_ptr->y = p_ptr->wilderness_y;
-	p_ptr->town_num = 0;
+	creature_ptr->x = creature_ptr->wilderness_x;
+	creature_ptr->y = creature_ptr->wilderness_y;
+	creature_ptr->town_num = 0;
 }
 
 
