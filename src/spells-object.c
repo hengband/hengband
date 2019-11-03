@@ -586,8 +586,8 @@ void acquire_chaos_weapon(player_type *creature_ptr)
 	}
 
 	object_prep(q_ptr, lookup_kind(dummy, dummy2));
-	q_ptr->to_h = 3 + randint1(p_ptr->current_floor_ptr->dun_level) % 10;
-	q_ptr->to_d = 3 + randint1(p_ptr->current_floor_ptr->dun_level) % 10;
+	q_ptr->to_h = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
+	q_ptr->to_d = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
 	one_resistance(q_ptr);
 	q_ptr->name2 = EGO_CHAOTIC;
 	(void)drop_near(q_ptr, -1, creature_ptr->y, creature_ptr->x);
