@@ -32,7 +32,7 @@ bool build_type15(floor_type *floor_ptr)
 	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
-	light = ((floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((floor_ptr->dun_level <= randint1(25)) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Get corner values */
 	y1 = yval - ysize / 2;

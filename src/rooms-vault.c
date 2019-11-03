@@ -1203,13 +1203,13 @@ bool build_type10(floor_type *floor_ptr)
 	do
 	{
 		vtype = randint1(15);
-	} while ((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) &&
+	} while ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) &&
 		((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
 #else /* ALLOW_CAVERNS_AND_LAKES */
 	do
 	{
 		vtype = randint1(7);
-	} while ((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) &&
+	} while ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) &&
 		((vtype == 1) || (vtype == 3)));
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 

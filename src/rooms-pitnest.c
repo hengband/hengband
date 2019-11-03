@@ -293,7 +293,7 @@ bool build_type5(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
-	int cur_nest_type = pick_vault_type(nest_types, d_info[p_ptr->dungeon_idx].nest);
+	int cur_nest_type = pick_vault_type(nest_types, d_info[floor_ptr->dungeon_idx].nest);
 	vault_aux_type *n_ptr;
 
 	/* No type available */
@@ -502,7 +502,7 @@ bool build_type6(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
-	int cur_pit_type = pick_vault_type(pit_types, d_info[p_ptr->dungeon_idx].pit);
+	int cur_pit_type = pick_vault_type(pit_types, d_info[floor_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
 
 	/* No type available */
@@ -807,11 +807,11 @@ bool build_type13(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
-	int cur_pit_type = pick_vault_type(pit_types, d_info[p_ptr->dungeon_idx].pit);
+	int cur_pit_type = pick_vault_type(pit_types, d_info[floor_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
 
 	/* Only in Angband */
-	if (p_ptr->dungeon_idx != DUNGEON_ANGBAND) return FALSE;
+	if (floor_ptr->dungeon_idx != DUNGEON_ANGBAND) return FALSE;
 
 	/* No type available */
 	if (cur_pit_type < 0) return FALSE;
