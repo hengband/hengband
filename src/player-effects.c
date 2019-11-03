@@ -3094,7 +3094,7 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 
 		if (creature_ptr->wild_mode && (new_aux < 2))
 		{
-			change_wild_mode(FALSE);
+			change_wild_mode(creature_ptr, FALSE);
 		}
 
 		/* Change */

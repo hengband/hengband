@@ -32,7 +32,7 @@ extern errr init_wilderness(void);
 extern void init_wilderness_terrains(void);
 extern void seed_wilderness(void);
 extern errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x);
-extern bool change_wild_mode(bool encount);
+extern bool change_wild_mode(player_type *creature_ptr, bool encount);
 
 /* Border */
 typedef struct border_type border_type;

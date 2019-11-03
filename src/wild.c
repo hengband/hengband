@@ -1111,14 +1111,14 @@ void init_wilderness_terrains(void)
  * @param encount 襲撃時TRUE
  * @return 切り替えが行われた場合はTRUEを返す。
  */
-bool change_wild_mode(bool encount)
+bool change_wild_mode(player_type *creature_ptr, bool encount)
 {
 	int i;
 	bool have_pet = FALSE;
 	generate_encounter = encount;
 
 	/* It is in the middle of changing map */
-	if (p_ptr->leaving) return FALSE;
+	if (creature_ptr->leaving) return FALSE;
 
 
 	if (lite_town || vanilla_town)
@@ -1127,35 +1127,35 @@ bool change_wild_mode(bool encount)
 		return FALSE;
 	}
 
-	if (p_ptr->wild_mode)
+	if (creature_ptr->wild_mode)
 	{
 		/* Save the location in the global map */
-		p_ptr->wilderness_x = p_ptr->x;
-		p_ptr->wilderness_y = p_ptr->y;
+		creature_ptr->wilderness_x = creature_ptr->x;
+		creature_ptr->wilderness_y = creature_ptr->y;
 
 		/* Give first move to the player */
-		p_ptr->energy_need = 0;
+		creature_ptr->energy_need = 0;
 
 		/* Go back to the ordinary map */
-		p_ptr->wild_mode = FALSE;
-		p_ptr->leaving = TRUE;
+		creature_ptr->wild_mode = FALSE;
+		creature_ptr->leaving = TRUE;
 
 		/* Succeed */
 		return TRUE;
 	}
 
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < creature_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
 
 		if (!monster_is_valid(m_ptr)) continue;
-		if (is_pet(m_ptr) && i != p_ptr->riding) have_pet = TRUE;
+		if (is_pet(m_ptr) && i != creature_ptr->riding) have_pet = TRUE;
 		if (MON_CSLEEP(m_ptr)) continue;
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 		if (!is_hostile(m_ptr)) continue;
 		msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！",
 			"You cannot enter global map, since there is some monsters nearby!"));
-		free_turn(p_ptr);
+		free_turn(creature_ptr);
 		return FALSE;
 	}
 
@@ -1166,26 +1166,26 @@ bool change_wild_mode(bool encount)
 
 		if (!get_check_strict(msg, CHECK_OKAY_CANCEL))
 		{
-			free_turn(p_ptr);
+			free_turn(creature_ptr);
 			return FALSE;
 		}
 	}
 
-	take_turn(p_ptr, 1000);
+	take_turn(creature_ptr, 1000);
 
 	/* Remember the position */
-	p_ptr->oldpx = p_ptr->x;
-	p_ptr->oldpy = p_ptr->y;
+	creature_ptr->oldpx = creature_ptr->x;
+	creature_ptr->oldpy = creature_ptr->y;
 
 	/* Cancel hex spelling */
-	if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
+	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
 
 	/* Cancel any special action */
-	set_action(p_ptr, ACTION_NONE);
+	set_action(creature_ptr, ACTION_NONE);
 
 	/* Go into the global map */
-	p_ptr->wild_mode = TRUE;
-	p_ptr->leaving = TRUE;
+	creature_ptr->wild_mode = TRUE;
+	creature_ptr->leaving = TRUE;
 
 	/* Succeed */
 	return TRUE;

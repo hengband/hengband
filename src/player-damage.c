@@ -715,7 +715,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 	}
 	if (creature_ptr->wild_mode && !creature_ptr->leaving && (creature_ptr->chp < MAX(warning, creature_ptr->mhp / 5)))
 	{
-		change_wild_mode(FALSE);
+		change_wild_mode(creature_ptr, FALSE);
 	}
 	return damage;
 }

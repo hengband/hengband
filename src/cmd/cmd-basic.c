@@ -2083,7 +2083,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
 			/* Go into large wilderness view */
 			creature_ptr->oldpy = randint1(MAX_HGT-2);
 			creature_ptr->oldpx = randint1(MAX_WID-2);
-			change_wild_mode(TRUE);
+			change_wild_mode(creature_ptr, TRUE);
 
 			/* Give first move to monsters */
 			take_turn(creature_ptr, 100);

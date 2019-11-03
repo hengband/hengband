@@ -3344,7 +3344,7 @@ static void process_world(void)
 				/* Go into large wilderness view */
 				p_ptr->oldpy = randint1(MAX_HGT - 2);
 				p_ptr->oldpx = randint1(MAX_WID - 2);
-				change_wild_mode(TRUE);
+				change_wild_mode(p_ptr, TRUE);
 
 				/* Give first move to monsters */
 				take_turn(p_ptr, 100);
@@ -3760,7 +3760,7 @@ static void process_command(player_type *creature_ptr)
 					break;
 				}
 
-				change_wild_mode(FALSE);
+				change_wild_mode(creature_ptr, FALSE);
 			}
 			else
 				do_cmd_go_up(creature_ptr);
@@ -3771,7 +3771,7 @@ static void process_command(player_type *creature_ptr)
 		case '>':
 		{
 			if (creature_ptr->wild_mode)
-				change_wild_mode(FALSE);
+				change_wild_mode(creature_ptr, FALSE);
 			else
 				do_cmd_go_down(creature_ptr);
 			break;
