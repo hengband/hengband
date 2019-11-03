@@ -181,7 +181,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_TELEPORT_LEVEL:
 		{
-			(void)teleport_level(0);
+			(void)teleport_level(creature_ptr, 0);
 			ident = TRUE;
 			break;
 		}

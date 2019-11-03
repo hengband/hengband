@@ -1710,7 +1710,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_TELEPORT_LEVEL:
 	{
 		if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) return FALSE;
-		teleport_level(0);
+		teleport_level(user_ptr, 0);
 		break;
 	}
 

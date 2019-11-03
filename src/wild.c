@@ -702,7 +702,6 @@ void wilderness_gen(floor_type *floor_ptr)
 	}
 }
 
-
 static s16b conv_terrain2feat[MAX_WILDERNESS];
 
 /*!

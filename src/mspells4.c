@@ -2324,7 +2324,7 @@ void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			teleport_level(0);
+			teleport_level(p_ptr, 0);
 		}
 		learn_spell(MS_TELE_LEVEL);
 		update_smart_learn(m_idx, DRS_NEXUS);
@@ -2344,7 +2344,7 @@ void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			teleport_level((t_idx == p_ptr->riding) ? 0 : t_idx);
+			teleport_level(p_ptr, (t_idx == p_ptr->riding) ? 0 : t_idx);
 		}
 	}
 }

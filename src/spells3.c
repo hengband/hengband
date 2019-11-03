@@ -607,7 +607,7 @@ bool teleport_level_other(player_type *creature_ptr)
 	{
 		msg_format(_("しかし効果がなかった！", "%^s is unaffected!"), m_name);
 	}
-	else teleport_level(target_m_idx);
+	else teleport_level(creature_ptr, target_m_idx);
 	return TRUE;
 }
 
@@ -617,11 +617,11 @@ bool teleport_level_other(player_type *creature_ptr)
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @return なし
  */
-void teleport_level(MONSTER_IDX m_idx)
+void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
-	bool         go_up;
+	bool go_up;
 	GAME_TEXT m_name[160];
-	bool         see_m = TRUE;
+	bool see_m = TRUE;
 
 	if (m_idx <= 0) /* To player */
 	{
@@ -629,7 +629,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 	else /* To monster */
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 
 		/* Get the monster name (or "it") */
 		monster_desc(m_name, m_ptr, 0);
@@ -644,7 +644,7 @@ void teleport_level(MONSTER_IDX m_idx)
 		return;
 	}
 
-	if ((m_idx <= 0) && p_ptr->anti_tele) /* To player */
+	if ((m_idx <= 0) && creature_ptr->anti_tele) /* To player */
 	{
 		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return;
@@ -661,7 +661,7 @@ void teleport_level(MONSTER_IDX m_idx)
 	}
 
 	/* Down only */ 
-	if ((ironman_downward && (m_idx <= 0)) || (p_ptr->current_floor_ptr->dun_level <= d_info[p_ptr->dungeon_idx].mindepth))
+	if ((ironman_downward && (m_idx <= 0)) || (creature_ptr->current_floor_ptr->dun_level <= d_info[creature_ptr->dungeon_idx].mindepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは床を突き破って沈んでいく。", m_name);
@@ -670,32 +670,32 @@ void teleport_level(MONSTER_IDX m_idx)
 #endif
 		if (m_idx <= 0) /* To player */
 		{
-			if (!p_ptr->current_floor_ptr->dun_level)
+			if (!creature_ptr->current_floor_ptr->dun_level)
 			{
-				p_ptr->dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : p_ptr->recall_dungeon;
-				p_ptr->oldpy = p_ptr->y;
-				p_ptr->oldpx = p_ptr->x;
+				creature_ptr->dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : creature_ptr->recall_dungeon;
+				creature_ptr->oldpy = creature_ptr->y;
+				creature_ptr->oldpx = creature_ptr->x;
 			}
 
-			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, 1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, 1, NULL);
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
-			if (!p_ptr->current_floor_ptr->dun_level)
+			if (!creature_ptr->current_floor_ptr->dun_level)
 			{
-				p_ptr->current_floor_ptr->dun_level = d_info[p_ptr->dungeon_idx].mindepth;
+				creature_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].mindepth;
 				prepare_change_floor_mode(CFM_RAND_PLACE);
 			}
 			else
 			{
 				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			}
-			p_ptr->leaving = TRUE;
+			creature_ptr->leaving = TRUE;
 		}
 	}
 
 	/* Up only */
-	else if (quest_number(p_ptr->current_floor_ptr->dun_level) || (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth))
+	else if (quest_number(creature_ptr->current_floor_ptr->dun_level) || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -706,15 +706,15 @@ void teleport_level(MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 			leave_quest_check();
-			p_ptr->inside_quest = 0;
-			p_ptr->leaving = TRUE;
+			creature_ptr->inside_quest = 0;
+			creature_ptr->leaving = TRUE;
 		}
 	}
 	else if (go_up)
@@ -728,12 +728,12 @@ void teleport_level(MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(TRUE);
 
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-			p_ptr->leaving = TRUE;
+			creature_ptr->leaving = TRUE;
 		}
 	}
 	else
@@ -747,19 +747,19 @@ void teleport_level(MONSTER_IDX m_idx)
 		if (m_idx <= 0) /* To player */
 		{
 			/* Never reach this code on the surface */
-			/* if (!p_ptr->current_floor_ptr->dun_level) p_ptr->dungeon_idx = p_ptr->recall_dungeon; */
-			if (record_stair) exe_write_diary(p_ptr, NIKKI_TELE_LEV, 1, NULL);
+			/* if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = creature_ptr->recall_dungeon; */
+			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, 1, NULL);
 			if (autosave_l) do_cmd_save_game(TRUE);
 
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-			p_ptr->leaving = TRUE;
+			creature_ptr->leaving = TRUE;
 		}
 	}
 
 	/* Monster level teleportation is simple deleting now */
 	if (m_idx > 0)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 
 		check_quest_completion(m_ptr);
 
@@ -768,7 +768,7 @@ void teleport_level(MONSTER_IDX m_idx)
 			char m2_name[MAX_NLEN];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
+			exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
 		}
 
 		delete_monster_idx(m_idx);

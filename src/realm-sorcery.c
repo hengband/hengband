@@ -377,7 +377,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (cast)
 			{
 				if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) return NULL;
-				teleport_level(0);
+				teleport_level(caster_ptr, 0);
 			}
 		}
 		break;

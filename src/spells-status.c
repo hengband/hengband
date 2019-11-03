@@ -505,7 +505,7 @@ void apply_nexus(monster_type *m_ptr)
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 			break;
 		}
-		teleport_level(0);
+		teleport_level(p_ptr, 0);
 		break;
 	}
 
