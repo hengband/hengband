@@ -179,7 +179,7 @@ static void perturb_point_end(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xm
  * need to be converted to features.
  * </pre>
  */
-static void plasma_recursive(POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX depth_max, FEAT_IDX rough)
+static void plasma_recursive(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX depth_max, FEAT_IDX rough)
 {
 	/* Find middle */
 	POSITION xmid = (x2 - x1) / 2 + x1;
@@ -188,27 +188,27 @@ static void plasma_recursive(POSITION x1, POSITION y1, POSITION x2, POSITION y2,
 	/* Are we done? */
 	if (x1 + 1 == x2) return;
 
-	perturb_point_mid(p_ptr->current_floor_ptr->grid_array[y1][x1].feat, p_ptr->current_floor_ptr->grid_array[y2][x1].feat, p_ptr->current_floor_ptr->grid_array[y1][x2].feat,
-		p_ptr->current_floor_ptr->grid_array[y2][x2].feat, xmid, ymid, rough, depth_max);
+	perturb_point_mid(floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[y1][x2].feat,
+		floor_ptr->grid_array[y2][x2].feat, xmid, ymid, rough, depth_max);
 
-	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y1][x1].feat, p_ptr->current_floor_ptr->grid_array[y1][x2].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[y1][x2].feat, floor_ptr->grid_array[ymid][xmid].feat,
 		xmid, y1, rough, depth_max);
 
-	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y1][x2].feat, p_ptr->current_floor_ptr->grid_array[y2][x2].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(floor_ptr->grid_array[y1][x2].feat, floor_ptr->grid_array[y2][x2].feat, floor_ptr->grid_array[ymid][xmid].feat,
 		x2, ymid, rough, depth_max);
 
-	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y2][x2].feat, p_ptr->current_floor_ptr->grid_array[y2][x1].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(floor_ptr->grid_array[y2][x2].feat, floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[ymid][xmid].feat,
 		xmid, y2, rough, depth_max);
 
-	perturb_point_end(p_ptr->current_floor_ptr->grid_array[y2][x1].feat, p_ptr->current_floor_ptr->grid_array[y1][x1].feat, p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat,
+	perturb_point_end(floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[ymid][xmid].feat,
 		x1, ymid, rough, depth_max);
 
 
 	/* Recurse the four quadrants */
-	plasma_recursive(x1, y1, xmid, ymid, depth_max, rough);
-	plasma_recursive(xmid, y1, x2, ymid, depth_max, rough);
-	plasma_recursive(x1, ymid, xmid, y2, depth_max, rough);
-	plasma_recursive(xmid, ymid, x2, y2, depth_max, rough);
+	plasma_recursive(floor_ptr, x1, y1, xmid, ymid, depth_max, rough);
+	plasma_recursive(floor_ptr, xmid, y1, x2, ymid, depth_max, rough);
+	plasma_recursive(floor_ptr, x1, ymid, xmid, y2, depth_max, rough);
+	plasma_recursive(floor_ptr, xmid, ymid, x2, y2, depth_max, rough);
 }
 
 
@@ -291,7 +291,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
 		s16b south_east = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
 		/* x1, y1, x2, y2, num_depths, roughness */
-		plasma_recursive(1, 1, MAX_WID-2, MAX_HGT-2, table_size-1, roughness);
+		plasma_recursive(floor_ptr, 1, 1, MAX_WID-2, MAX_HGT-2, table_size-1, roughness);
 
 		/* Hack -- copyback four corners */
 		floor_ptr->grid_array[1][1].feat = north_west;
