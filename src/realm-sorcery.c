@@ -444,7 +444,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				explosive_rune();
+				explosive_rune(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x);
 			}
 		}
 		break;

@@ -214,20 +214,20 @@ bool warding_glyph(player_type *caster_ptr)
  * Leave an "explosive rune" which prevents monster movement
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool explosive_rune(void)
+bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	if (!cave_clean_bold(p_ptr->y, p_ptr->x))
+	if (!cave_clean_bold(y, x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
 	}
 
 	/* Create a glyph */
-	p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info |= CAVE_OBJECT;
-	p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].mimic = feat_explosive_rune;
+	floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
+	floor_ptr->grid_array[y][x].mimic = feat_explosive_rune;
 
-	note_spot(p_ptr->y, p_ptr->x);
-	lite_spot(p_ptr->y, p_ptr->x);
+	note_spot(y, x);
+	lite_spot(y, x);
 
 	return TRUE;
 }

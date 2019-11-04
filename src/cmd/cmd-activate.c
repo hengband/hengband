@@ -1479,7 +1479,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_RUNE_EXPLO:
 	{
 		msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
-		explosive_rune();
+		explosive_rune(user_ptr->current_floor_ptr, user_ptr->y, user_ptr->x);
 		break;
 	}
 
