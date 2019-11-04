@@ -1535,11 +1535,11 @@ static bool cast_berserk_spell(player_type *caster_ptr, int spell)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_ninja_spell(int spell)
+static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 {
 	POSITION x = 0, y = 0;
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	/* spell code */
 	switch (spell)
@@ -1550,7 +1550,7 @@ static bool cast_ninja_spell(int spell)
 	case 1:
 		if (plev > 44)
 		{
-			wiz_lite(p_ptr, TRUE);
+			wiz_lite(caster_ptr, TRUE);
 		}
 		detect_monsters_normal(DETECT_RAD_DEFAULT);
 		if (plev > 4)
@@ -1571,17 +1571,17 @@ static bool cast_ninja_spell(int spell)
 	}
 	case 3:
 	{
-		if (!(p_ptr->special_defense & NINJA_KAWARIMI))
+		if (!(caster_ptr->special_defense & NINJA_KAWARIMI))
 		{
 			msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepare to evade any attacks."));
-			p_ptr->special_defense |= NINJA_KAWARIMI;
-			p_ptr->redraw |= (PR_STATUS);
+			caster_ptr->special_defense |= NINJA_KAWARIMI;
+			caster_ptr->redraw |= (PR_STATUS);
 		}
 		break;
 	}
 	case 4:
 	{
-		teleport_player(p_ptr->lev * 5, 0L);
+		teleport_player(caster_ptr->lev * 5, 0L);
 		break;
 	}
 	case 5:
@@ -1598,12 +1598,12 @@ static bool cast_ninja_spell(int spell)
 	case 7:
 		return ident_spell(FALSE);
 	case 8:
-		set_tim_levitation(p_ptr, randint1(20) + 20, FALSE);
+		set_tim_levitation(caster_ptr, randint1(20) + 20, FALSE);
 		break;
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
 		teleport_player(30, 0L);
-		set_oppose_fire(p_ptr, (TIME_EFFECT)plev, FALSE);
+		set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 10:
 		return rush_attack(NULL);
@@ -1616,7 +1616,7 @@ static bool cast_ninja_spell(int spell)
 
 			for (slot = 0; slot < INVEN_PACK; slot++)
 			{
-				if (p_ptr->inventory_list[slot].tval == TV_SPIKE) break;
+				if (caster_ptr->inventory_list[slot].tval == TV_SPIKE) break;
 			}
 			if (slot == INVEN_PACK)
 			{
@@ -1626,9 +1626,9 @@ static bool cast_ninja_spell(int spell)
 			}
 
 			/* Gives a multiplier of 2 at first, up to 3 at 40th */
-			do_cmd_throw(p_ptr, 1, FALSE, slot);
+			do_cmd_throw(caster_ptr, 1, FALSE, slot);
 
-			take_turn(p_ptr, 100);
+			take_turn(caster_ptr, 100);
 		}
 		break;
 	}
@@ -1643,23 +1643,23 @@ static bool cast_ninja_spell(int spell)
 		POSITION ty, tx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
-		if (m_idx == p_ptr->riding) break;
+		if (m_idx == caster_ptr->riding) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
-		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		if (!projectable(caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-		path_n = project_path(path_g, MAX_RANGE, target_row, target_col, p_ptr->y, p_ptr->x, 0);
+		path_n = project_path(path_g, MAX_RANGE, target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
 		ty = target_row, tx = target_col;
 		for (i = 1; i < path_n; i++)
 		{
 			POSITION ny = GRID_Y(path_g[i]);
 			POSITION nx = GRID_X(path_g[i]);
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[ny][nx];
+			grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[ny][nx];
 
-			if (in_bounds(p_ptr->current_floor_ptr, ny, nx) && cave_empty_bold(ny, nx) &&
+			if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && cave_empty_bold(ny, nx) &&
 			    !(g_ptr->info & CAVE_OBJECT) &&
 				!pattern_tile(ny, nx))
 			{
@@ -1668,10 +1668,10 @@ static bool cast_ninja_spell(int spell)
 			}
 		}
 		/* Update the old location */
-		p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx = 0;
+		caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx = 0;
 
 		/* Update the new location */
-		p_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
+		caster_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
 
 		/* Move the monster */
 		m_ptr->fy = ty;
@@ -1685,12 +1685,12 @@ static bool cast_ninja_spell(int spell)
 		lite_spot(ty, tx);
 
 		if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-			p_ptr->update |= (PU_MON_LITE);
+			caster_ptr->update |= (PU_MON_LITE);
 
 		if (m_ptr->ml)
 		{
 			/* Auto-Recall if possible and visible */
-			if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+			if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 			health_track(m_idx);
 		}
 
@@ -1715,8 +1715,8 @@ static bool cast_ninja_spell(int spell)
 		explosive_rune();
 		break;
 	case 16:
-		(void)set_kabenuke(p_ptr, randint1(plev/2) + plev/2, FALSE);
-		set_oppose_acid(p_ptr, (TIME_EFFECT)plev, FALSE);
+		(void)set_kabenuke(caster_ptr, randint1(plev/2) + plev/2, FALSE);
+		set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 17:
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
@@ -1736,7 +1736,7 @@ static bool cast_ninja_spell(int spell)
 
 			while (attempts--)
 			{
-				scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
+				scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
 				if (!player_bold(y, x)) break;
 			}
@@ -1746,7 +1746,7 @@ static bool cast_ninja_spell(int spell)
 		break;
 	}
 	case 19:
-		set_multishadow(p_ptr, 6+randint1(6), FALSE);
+		set_multishadow(caster_ptr, 6+randint1(6), FALSE);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
@@ -1976,12 +1976,12 @@ void do_cmd_mind(void)
 			break;
 		case MIND_MIRROR_MASTER:
 			
-			if( is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
+			if(is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
 			cast = cast_mirror_spell(n);
 			break;
 		case MIND_NINJUTSU:
 			
-			cast = cast_ninja_spell(n);
+			cast = cast_ninja_spell(p_ptr, n);
 			break;
 		default:
 			msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"),use_mind, n);
