@@ -990,7 +990,7 @@ static void build_elemental_vault(floor_type *floor_ptr, POSITION x0, POSITION y
 		generate_hmap(floor_ptr, y0, x0, xsize, ysize, grd, roug, c3);
 
 		/* Convert to normal format+ clean up */
-		done = generate_lake(y0, x0, xsize, ysize, c1, c2, c3, type);
+		done = generate_lake(floor_ptr, y0, x0, xsize, ysize, c1, c2, c3, type);
 	}
 
 	/* Set icky flag because is a vault */

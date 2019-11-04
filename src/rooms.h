@@ -65,7 +65,7 @@ struct room_info_type
 
 /* Externs */
 #ifdef ALLOW_CAVERNS_AND_LAKES
-extern void build_lake(int type);
+extern void build_lake(floor_type *floor_ptr, int type);
 extern void build_cavern(floor_type *floor_ptr);
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
@@ -99,7 +99,7 @@ extern void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSIT
 extern void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff);
 extern bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int cutoff, bool light, bool room);
 extern void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty);
-extern bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type);
+extern bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type);
 extern void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power);
 extern void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2);
 extern void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited);

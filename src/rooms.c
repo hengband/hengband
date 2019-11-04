@@ -1178,7 +1178,7 @@ void build_cavern(floor_type *floor_ptr)
 	}
 }
 
-bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
+bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
 {
 	POSITION x, y, xhsize, yhsize;
 	int i;
@@ -1201,7 +1201,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		feat2 = feat_shallow_water;
 		feat3 = feat_ground_type[randint0(100)];
 		break;
-	case LAKE_T_CAVE: /* Collapsed p_ptr->current_floor_ptr->grid_array */
+	case LAKE_T_CAVE: /* Collapsed floor_ptr->grid_array */
 		feat1 = feat_ground_type[randint0(100)];
 		feat2 = feat_ground_type[randint0(100)];
 		feat3 = feat_rubble;
@@ -1230,7 +1230,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 	}
 
 	/*
-	 * select region connected to center of p_ptr->current_floor_ptr->grid_array system
+	 * select region connected to center of floor_ptr->grid_array system
 	 * this gets rid of alot of isolated one-sqaures that
 	 * can make teleport traps instadeaths...
 	 */
@@ -1252,7 +1252,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 	/* number of filled squares */
 	fill_data.amount = 0;
 
-	/* select region connected to center of p_ptr->current_floor_ptr->grid_array system
+	/* select region connected to center of floor_ptr->grid_array system
 	* this gets rid of alot of isolated one-sqaures that
 	* can make teleport traps instadeaths... */
 	cave_fill((byte)y0, (byte)x0);
@@ -1266,7 +1266,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 			for (y = 0; y <= ysize; ++y)
 			{
 				place_floor_bold(y0 + y - yhsize, x0 + x - xhsize);
-				p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
+				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
 			}
 		}
 		return FALSE;
@@ -1279,8 +1279,8 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		place_extra_bold(y0 + ysize - yhsize, x0 + i - xhsize);
 
 		/* clear the icky flag-don't need it any more */
-		p_ptr->current_floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
-		p_ptr->current_floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
+		floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
+		floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
 	}
 
 	/* Do the left and right boundaries minus the corners (done above) */
@@ -1291,8 +1291,8 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		place_extra_bold(y0 + i - yhsize, x0 + xsize - xhsize);
 
 		/* clear icky flag -done with it */
-		p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
-		p_ptr->current_floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info &= ~(CAVE_ICKY);
+		floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
+		floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info &= ~(CAVE_ICKY);
 	}
 
 
@@ -1302,17 +1302,17 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 		for (y = 1; y < ysize; ++y)
 		{
 			/* Fill unconnected regions with granite */
-			if ((!(p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY)) ||
-				is_outer_bold(p_ptr->current_floor_ptr, y0 + y - yhsize, x0 + x - xhsize))
+			if ((!(floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY)) ||
+				is_outer_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize))
 				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
 
 			/* current_world_ptr->game_turn off icky flag (no longer needed.) */
-			p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
+			floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 
 			/* Light lava */
 			if (cave_have_flag_bold(y0 + y - yhsize, x0 + x - xhsize, FF_LAVA))
 			{
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) p_ptr->current_floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
+				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
 			}
 		}
 	}
@@ -1324,7 +1324,7 @@ bool generate_lake(POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int
 /*
  * makes a lake/collapsed p_ptr->current_floor_ptr->grid_array system in the center of the dungeon
  */
-void build_lake(int type)
+void build_lake(floor_type *floor_ptr, int type)
 {
 	int grd, roug, xsize, ysize, x0, y0;
 	bool done = FALSE;
@@ -1338,8 +1338,8 @@ void build_lake(int type)
 	}
 
 	/* Make the size of the dungeon */
-	xsize = p_ptr->current_floor_ptr->width - 1;
-	ysize = p_ptr->current_floor_ptr->height - 1;
+	xsize = floor_ptr->width - 1;
+	ysize = floor_ptr->height - 1;
 	x0 = xsize / 2;
 	y0 = ysize / 2;
 
@@ -1366,10 +1366,10 @@ void build_lake(int type)
 		c2 = (c1 + c3) / 2;
 
 		/* make it */
-		generate_hmap(p_ptr->current_floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, c3);
+		generate_hmap(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, c3);
 
 		/* Convert to normal format+ clean up */
-		done = generate_lake(y0 + 1, x0 + 1, xsize, ysize, c1, c2, c3, type);
+		done = generate_lake(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, c1, c2, c3, type);
 	}
 }
 #endif /* ALLOW_CAVERNS_AND_LAKES */

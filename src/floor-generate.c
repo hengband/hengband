@@ -493,7 +493,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_p
 		dun->destroyed = TRUE;
 
 		/* extra rubble around the place looks cool */
-		build_lake(one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
+		build_lake(floor_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
 	}
 
 	/* Make a lake some of the time */
@@ -545,7 +545,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_p
 		if (dun->laketype)
 		{
 			msg_print_wizard(CHEAT_DUNGEON, _("湖を生成します。", "Lake on the level."));
-			build_lake(dun->laketype);
+			build_lake(floor_ptr, dun->laketype);
 		}
 	}
 
