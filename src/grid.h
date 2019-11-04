@@ -415,7 +415,6 @@ extern void lite_spot(POSITION y, POSITION x);
 extern void delayed_visual_update(void);
 extern void forget_flow(void);
 extern void update_flow(void);
-extern void update_smell(void);
 extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
 extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
