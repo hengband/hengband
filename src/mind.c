@@ -1462,7 +1462,7 @@ static bool cast_mirror_spell(int spell)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_berserk_spell(int spell)
+static bool cast_berserk_spell(player_type *caster_ptr, int spell)
 {
 	POSITION y, x;
 	DIRECTION dir;
@@ -1475,7 +1475,7 @@ static bool cast_berserk_spell(int spell)
 		break;
 	case 1:
 	{
-		if (p_ptr->riding)
+		if (caster_ptr->riding)
 		{
 			msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
 			return FALSE;
@@ -1484,40 +1484,40 @@ static bool cast_berserk_spell(int spell)
 		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 
 		if (dir == 5) return FALSE;
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
+		y = caster_ptr->y + ddy[dir];
+		x = caster_ptr->x + ddx[dir];
 
-		if (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+		if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 		{
 			msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
 			return FALSE;
 		}
 
-		py_attack(p_ptr, y, x, 0);
+		py_attack(caster_ptr, y, x, 0);
 
-		if (!player_can_enter(p_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(p_ptr->current_floor_ptr->grid_array[y][x].feat))
+		if (!player_can_enter(caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat))
 			break;
 
 		y += ddy[dir];
 		x += ddx[dir];
 
-		if (player_can_enter(p_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(p_ptr->current_floor_ptr->grid_array[y][x].feat) && !p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+		if (player_can_enter(caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 		{
 			msg_print(NULL);
-			(void)move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+			(void)move_player_effect(caster_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 		}
 		break;
 	}
 	case 2:
 	{
 		if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
-		y = p_ptr->y + ddy[dir];
-		x = p_ptr->x + ddx[dir];
-		move_player(p_ptr, dir, easy_disarm, TRUE);
+		y = caster_ptr->y + ddy[dir];
+		x = caster_ptr->x + ddx[dir];
+		move_player(caster_ptr, dir, easy_disarm, TRUE);
 		break;
 	}
 	case 3:
-		earthquake(p_ptr, p_ptr->y, p_ptr->x, 8+randint0(5), 0);
+		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 8+randint0(5), 0);
 		break;
 	case 4:
 		massacre();
@@ -1972,7 +1972,7 @@ void do_cmd_mind(void)
 			break;
 		case MIND_BERSERKER:
 			
-			cast = cast_berserk_spell(n);
+			cast = cast_berserk_spell(p_ptr, n);
 			break;
 		case MIND_MIRROR_MASTER:
 			
