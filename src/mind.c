@@ -1024,12 +1024,12 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_mindcrafter_spell(int spell)
+static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 {
-	int             b = 0;
+	int b = 0;
 	DIRECTION dir;
 	TIME_EFFECT t;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	/* spell code */
 	switch (spell)
@@ -1037,9 +1037,9 @@ static bool cast_mindcrafter_spell(int spell)
 	case 0:   /* Precog */
 		if (plev > 44)
 		{
-			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
-			chg_virtue(p_ptr, V_ENLIGHTEN, 1);
-			wiz_lite(p_ptr, FALSE);
+			chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
+			chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
+			wiz_lite(caster_ptr, FALSE);
 		}
 		else if (plev > 19)
 			map_area(DETECT_RAD_MAP);
@@ -1059,7 +1059,7 @@ static bool cast_mindcrafter_spell(int spell)
 		}
 
 		if ((plev > 24) && (plev < 40))
-			set_tim_esp(p_ptr, (TIME_EFFECT)plev, FALSE);
+			set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
 
 		if (!b) msg_print(_("安全な気がする。", "You feel safe."));
 
@@ -1103,12 +1103,12 @@ static bool cast_mindcrafter_spell(int spell)
 		break;
 	case 6:
 		/* Character Armour */
-		set_shield(p_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev > 14) set_oppose_acid(p_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev > 19) set_oppose_fire(p_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev > 24) set_oppose_cold(p_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev > 29) set_oppose_elec(p_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev > 34) set_oppose_pois(p_ptr, (TIME_EFFECT)plev, FALSE);
+		set_shield(caster_ptr, (TIME_EFFECT)plev, FALSE);
+		if (plev > 14) set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
+		if (plev > 19) set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
+		if (plev > 24) set_oppose_cold(caster_ptr, (TIME_EFFECT)plev, FALSE);
+		if (plev > 29) set_oppose_elec(caster_ptr, (TIME_EFFECT)plev, FALSE);
+		if (plev > 34) set_oppose_pois(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 7:
 		/* Psychometry */
@@ -1121,15 +1121,15 @@ static bool cast_mindcrafter_spell(int spell)
 		msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
 
 		if (plev < 25)
-			project(0, 2 + plev / 10, p_ptr->y, p_ptr->x,
+			project(0, 2 + plev / 10, caster_ptr->y, caster_ptr->x,
 			(plev * 3), GF_PSI, PROJECT_KILL, -1);
 		else
 			(void)mindblast_monsters(randint1(plev * ((plev - 5) / 10 + 1)));
 		break;
 	case 9:
 		/* Adrenaline */
-		set_afraid(p_ptr, 0);
-		set_stun(p_ptr, 0);
+		set_afraid(caster_ptr, 0);
+		set_stun(caster_ptr, 0);
 
 		/*
 		 * Only heal when Adrenalin Channeling is not active. We check
@@ -1137,19 +1137,19 @@ static bool cast_mindcrafter_spell(int spell)
 		 */
 		if (!IS_FAST() || !IS_HERO())
 		{
-			hp_player(p_ptr, plev);
+			hp_player(caster_ptr, plev);
 		}
 
 		t = 10 + randint1((plev * 3) / 2);
-		set_hero(p_ptr, t, FALSE);
+		set_hero(caster_ptr, t, FALSE);
 		/* Haste */
-		(void)set_fast(p_ptr, t, FALSE);
+		(void)set_fast(caster_ptr, t, FALSE);
 		break;
 	case 10:
 		/* Telekinesis */
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		fetch(p_ptr, dir, plev * 15, FALSE);
+		fetch(caster_ptr, dir, plev * 15, FALSE);
 
 		break;
 	case 11:
@@ -1160,7 +1160,7 @@ static bool cast_mindcrafter_spell(int spell)
 
 		/* This is always a radius-0 ball now */
 		if (fire_ball(GF_PSI_DRAIN, dir, b, 0))
-			p_ptr->energy_need += randint1(150);
+			caster_ptr->energy_need += randint1(150);
 		break;
 	case 12:
 		/* psycho-spear */
@@ -1170,7 +1170,7 @@ static bool cast_mindcrafter_spell(int spell)
 		break;
 	case 13:
 	{
-		time_walk(p_ptr);
+		time_walk(caster_ptr);
 		break;
 	}
 	default:
@@ -1964,7 +1964,7 @@ void do_cmd_mind(void)
 		{
 		case MIND_MINDCRAFTER:
 			
-			cast = cast_mindcrafter_spell(n);
+			cast = cast_mindcrafter_spell(p_ptr, n);
 			break;
 		case MIND_KI:
 			
