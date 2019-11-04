@@ -1311,10 +1311,10 @@ static int number_of_mirrors(void)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_mirror_spell(int spell)
+static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 {
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	int tmp;
 	TIME_EFFECT t;
 	POSITION x, y;
@@ -1324,10 +1324,10 @@ static bool cast_mirror_spell(int spell)
 	{
 		/* mirror of seeing */
 	case 0:
-		tmp = is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) ? 4 : 0;
+		tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 0;
 		if (plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 		if (plev + tmp > 18)detect_monsters_invis(DETECT_RAD_DEFAULT);
-		if (plev + tmp > 28)set_tim_esp(p_ptr, (TIME_EFFECT)plev, FALSE);
+		if (plev + tmp > 28)set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev + tmp > 38)map_area(DETECT_RAD_MAP);
 		if (tmp == 0 && plev < 5) {
 			msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
@@ -1336,7 +1336,7 @@ static bool cast_mirror_spell(int spell)
 		/* drip of light */
 	case 1:
 		if (number_of_mirrors() < 4 + plev / 10) {
-			place_mirror(p_ptr);
+			place_mirror(caster_ptr);
 		}
 		else {
 			msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
@@ -1344,7 +1344,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 	case 2:
 		if (!get_aim_dir(&dir)) return FALSE;
-		if (plev > 9 && is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])) {
+		if (plev > 9 && is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x])) {
 			fire_beam(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 		}
 		else {
@@ -1365,7 +1365,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* robe of dust */
 	case 6:
-		set_dustrobe(p_ptr, 20 + randint1(20), FALSE);
+		set_dustrobe(caster_ptr, 20 + randint1(20), FALSE);
 		break;
 		/* banishing mirror */
 	case 7:
@@ -1380,9 +1380,9 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* mirror sleeping */
 	case 9:
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++) {
-			for (y = 0; y < p_ptr->current_floor_ptr->height; y++) {
-				if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x])) {
+		for (x = 0; x < caster_ptr->current_floor_ptr->width; x++) {
+			for (y = 0; y < caster_ptr->current_floor_ptr->height; y++) {
+				if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) {
 					project(0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 				}
 			}
@@ -1400,9 +1400,9 @@ static bool cast_mirror_spell(int spell)
 		/* shield of water */
 	case 12:
 		t = 20 + randint1(20);
-		set_shield(p_ptr, t, FALSE);
-		if (plev > 31)set_tim_reflect(p_ptr, t, FALSE);
-		if (plev > 39)set_resist_magic(p_ptr, t, FALSE);
+		set_shield(caster_ptr, t, FALSE);
+		if (plev > 31)set_tim_reflect(caster_ptr, t, FALSE);
+		if (plev > 39)set_resist_magic(caster_ptr, t, FALSE);
 		break;
 		/* super ray */
 	case 13:
@@ -1411,7 +1411,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* illusion light */
 	case 14:
-		tmp = is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) ? 4 : 3;
+		tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 3;
 		slow_monsters(plev);
 		stun_monsters(plev*tmp);
 		confuse_monsters(plev*tmp);
@@ -1421,7 +1421,7 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* mirror shift */
 	case 15:
-		if (!is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])) {
+		if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x])) {
 			msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
 			break;
 		}
@@ -1434,10 +1434,10 @@ static bool cast_mirror_spell(int spell)
 
 		/* mirror of recall */
 	case 17:
-		return recall_player(p_ptr, randint0(21) + 15);
+		return recall_player(caster_ptr, randint0(21) + 15);
 		/* multi-shadow */
 	case 18:
-		set_multishadow(p_ptr, 6 + randint1(6), FALSE);
+		set_multishadow(caster_ptr, 6 + randint1(6), FALSE);
 		break;
 		/* binding field */
 	case 19:
@@ -1445,13 +1445,13 @@ static bool cast_mirror_spell(int spell)
 		break;
 		/* mirror of Ruffnor */
 	case 20:
-		(void)set_invuln(p_ptr, randint1(4) + 4, FALSE);
+		(void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
 
 	}
-	p_ptr->magic_num1[0] = 0;
+	caster_ptr->magic_num1[0] = 0;
 
 	return TRUE;
 }
@@ -1977,7 +1977,7 @@ void do_cmd_mind(void)
 		case MIND_MIRROR_MASTER:
 			
 			if(is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
-			cast = cast_mirror_spell(n);
+			cast = cast_mirror_spell(p_ptr, n);
 			break;
 		case MIND_NINJUTSU:
 			
