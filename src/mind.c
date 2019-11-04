@@ -1186,13 +1186,13 @@ static bool cast_mindcrafter_spell(int spell)
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_force_spell(int spell)
+static bool cast_force_spell(player_type *caster_ptr, int spell)
 {
 	DIRECTION dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	int boost = P_PTR_KI;
 
-	if (heavy_armor(p_ptr)) boost /= 2;
+	if (heavy_armor(caster_ptr)) boost /= 2;
 
 	/* spell code */
 	switch (spell)
@@ -1205,7 +1205,7 @@ static bool cast_force_spell(int spell)
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
 	case 2:
-		set_tim_levitation(p_ptr, randint1(30) + 30 + boost / 5, FALSE);
+		set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, FALSE);
 		break;
 	case 3:
 		project_length = plev / 8 + 3;
@@ -1214,22 +1214,22 @@ static bool cast_force_spell(int spell)
 		fire_beam(GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
 		break;
 	case 4:
-		set_resist_magic(p_ptr, randint1(20) + 20 + boost / 5, FALSE);
+		set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, FALSE);
 		break;
 	case 5:
 		msg_print(_("気を練った。", "You improved the Force."));
 		P_PTR_KI += (70 + plev);
-		p_ptr->update |= (PU_BONUS);
+		caster_ptr->update |= (PU_BONUS);
 		if (randint1(P_PTR_KI) > (plev * 4 + 120))
 		{
 			msg_print(_("気が暴走した！", "The Force exploded!"));
 			fire_ball(GF_MANA, 0, P_PTR_KI / 2, 10);
-			take_hit(p_ptr, DAMAGE_LOSELIFE, p_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
+			take_hit(caster_ptr, DAMAGE_LOSELIFE, caster_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
 		}
 		else return TRUE;
 		break;
 	case 6:
-		set_tim_sh_touki(p_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
+		set_tim_sh_touki(caster_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
 		break;
 	case 7:
 		return shock_power();
@@ -1243,10 +1243,10 @@ static bool cast_force_spell(int spell)
 		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(target_row, target_col)) break;
-		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -1256,7 +1256,7 @@ static bool cast_force_spell(int spell)
 		bool success = FALSE;
 
 		for (i = 0; i < 1 + boost/100; i++)
-			if (summon_specific(-1, p_ptr->y, p_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
+			if (summon_specific(-1, caster_ptr->y, caster_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
 				success = TRUE;
 		if (success)
 		{
@@ -1277,13 +1277,13 @@ static bool cast_force_spell(int spell)
 		fire_beam(GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
 		break;
 	case 13:
-		set_lightspeed(p_ptr, randint1(16) + 16 + boost / 20, FALSE);
+		set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, FALSE);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));
 	}
 	P_PTR_KI = 0;
-	p_ptr->update |= (PU_BONUS);
+	caster_ptr->update |= (PU_BONUS);
 
 	return TRUE;
 }
@@ -1968,7 +1968,7 @@ void do_cmd_mind(void)
 			break;
 		case MIND_KI:
 			
-			cast = cast_force_spell(n);
+			cast = cast_force_spell(p_ptr, n);
 			break;
 		case MIND_BERSERKER:
 			
