@@ -4447,7 +4447,7 @@ static bool project_p(MONSTER_IDX who, concptr who_name, int r, POSITION y, POSI
 			}
 			else if (!CHECK_MULTISHADOW(p_ptr))
 			{
-				apply_nexus(m_ptr);
+				apply_nexus(m_ptr, p_ptr);
 			}
 			get_damage = take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 			break;

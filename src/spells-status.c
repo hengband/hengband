@@ -482,7 +482,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
  * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
  * @return なし
  */
-void apply_nexus(monster_type *m_ptr)
+void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 {
 	switch (randint1(7))
 	{
@@ -500,25 +500,25 @@ void apply_nexus(monster_type *m_ptr)
 
 	case 6:
 	{
-		if (randint0(100) < p_ptr->skill_sav)
+		if (randint0(100) < target_ptr->skill_sav)
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 			break;
 		}
-		teleport_level(p_ptr, 0);
+		teleport_level(target_ptr, 0);
 		break;
 	}
 
 	case 7:
 	{
-		if (randint0(100) < p_ptr->skill_sav)
+		if (randint0(100) < target_ptr->skill_sav)
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 			break;
 		}
 
 		msg_print(_("体がねじれ始めた...", "Your body starts to scramble..."));
-		status_shuffle(p_ptr);
+		status_shuffle(target_ptr);
 		break;
 	}
 	}

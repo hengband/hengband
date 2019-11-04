@@ -25,5 +25,5 @@ extern bool restore_all_status(player_type *creature_ptr);
 
 extern bool fishing(player_type *creature_ptr);
 extern bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr);
-extern void apply_nexus(monster_type *m_ptr);
+extern void apply_nexus(monster_type *m_ptr, player_type *target_ptr);
 extern void status_shuffle(player_type *creature_ptr);
