@@ -687,7 +687,7 @@ static bool cave_gen(floor_type *floor_ptr)
 		/*
 		 * Build each type of room in current_world_ptr->game_turn until we cannot build any more.
 		 */
-		if (!generate_rooms()) return FALSE;
+		if (!generate_rooms(floor_ptr)) return FALSE;
 
 
 		/* Make a hole in the dungeon roof sometimes at level 1 */

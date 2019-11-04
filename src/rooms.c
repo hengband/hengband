@@ -2118,7 +2118,7 @@ static bool room_build(floor_type *floor_ptr, EFFECT_ID typ)
  * @brief 部屋生成処理のメインルーチン(Sangbandを経由してOangbandからの実装を引用) / Generate rooms in dungeon.  Build bigger rooms at first.　[from SAngband (originally from OAngband)]
  * @return 部屋生成に成功した場合 TRUE を返す。
  */
-bool generate_rooms(void)
+bool generate_rooms(floor_type *floor_ptr)
 {
 	int i;
 	bool remain;
@@ -2126,8 +2126,8 @@ bool generate_rooms(void)
 	int total_prob;
 	int prob_list[ROOM_T_MAX];
 	int rooms_built = 0;
-	int area_size = 100 * (p_ptr->current_floor_ptr->height*p_ptr->current_floor_ptr->width) / (MAX_HGT*MAX_WID);
-	int level_index = MIN(10, div_round(p_ptr->current_floor_ptr->dun_level, 10));
+	int area_size = 100 * (floor_ptr->height*floor_ptr->width) / (MAX_HGT*MAX_WID);
+	int level_index = MIN(10, div_round(floor_ptr->dun_level, 10));
 
 	/* Number of each type of room on this level */
 	s16b room_num[ROOM_T_MAX];
@@ -2135,7 +2135,7 @@ bool generate_rooms(void)
 	/* Limit number of rooms */
 	int dun_rooms = DUN_ROOMS_MAX * area_size / 100;
 
-	/* Assume normal p_ptr->current_floor_ptr->grid_array */
+	/* Assume normal floor_ptr->grid_array */
 	room_info_type *room_info_ptr = room_info_normal;
 
 	/*
@@ -2144,7 +2144,7 @@ bool generate_rooms(void)
 	for (i = 0; i < ROOM_T_MAX; i++)
 	{
 		/* No rooms allowed above their minimum depth. */
-		if (p_ptr->current_floor_ptr->dun_level < room_info_ptr[i].min_level)
+		if (floor_ptr->dun_level < room_info_ptr[i].min_level)
 		{
 			prob_list[i] = 0;
 		}
@@ -2192,7 +2192,7 @@ bool generate_rooms(void)
 		MOVE_PLIST(ROOM_T_INNER_FEAT, ROOM_T_OVAL);
 	}
 
-	/*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc p_ptr->current_floor_ptr->grid_array etc.) */
+	/*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor_ptr->grid_array etc.) */
 	else if (d_info[p_ptr->dungeon_idx].flags1 & DF1_CAVE)
 	{
 		MOVE_PLIST(ROOM_T_FRACAVE, ROOM_T_NORMAL);
@@ -2289,7 +2289,7 @@ bool generate_rooms(void)
 			room_num[room_type]--;
 
 			/* Build the room. */
-			if (room_build(p_ptr->current_floor_ptr, room_type))
+			if (room_build(floor_ptr, room_type))
 			{
 				/* Increase the room built count. */
 				rooms_built++;

@@ -88,7 +88,7 @@ typedef struct
 
 door_type feat_door[MAX_DOOR_TYPES];
 
-extern bool generate_rooms(void);
+extern bool generate_rooms(floor_type *floor_ptr);
 extern void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault);
 extern bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width);
 extern void build_small_room(POSITION x0, POSITION y0);
