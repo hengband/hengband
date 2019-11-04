@@ -5435,7 +5435,7 @@ void play_game(bool new_game)
 			p_ptr->riding = 0;
 			for (i = p_ptr->current_floor_ptr->m_max; i > 0; i--)
 			{
-				if (player_bold(p_ptr->current_floor_ptr->m_list[i].fy, p_ptr->current_floor_ptr->m_list[i].fx))
+				if (player_bold(p_ptr, p_ptr->current_floor_ptr->m_list[i].fy, p_ptr->current_floor_ptr->m_list[i].fx))
 				{
 					p_ptr->riding = i;
 					break;

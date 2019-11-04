@@ -495,7 +495,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_MAKE_DOOR:
 		{
 			if (!cave_naked_bold(y, x)) break;
-			if (player_bold(y, x)) break;
+			if (player_bold(p_ptr, y, x)) break;
 			cave_set_feat(y, x, feat_door[DOOR_DOOR].closed);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
@@ -510,7 +510,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_MAKE_TREE:
 		{
 			if (!cave_naked_bold(y, x)) break;
-			if (player_bold(y, x)) break;
+			if (player_bold(p_ptr, y, x)) break;
 			cave_set_feat(y, x, feat_tree);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
@@ -529,7 +529,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_STONE_WALL:
 		{
 			if (!cave_naked_bold(y, x)) break;
-			if (player_bold(y, x)) break;
+			if (player_bold(p_ptr, y, x)) break;
 			cave_set_feat(y, x, feat_granite);
 			break;
 		}
@@ -585,7 +585,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				if (p_ptr->special_defense & NINJA_S_STEALTH)
 				{
-					if (player_bold(y, x)) set_superstealth(p_ptr, FALSE);
+					if (player_bold(p_ptr, y, x)) set_superstealth(p_ptr, FALSE);
 				}
 			}
 
@@ -3928,7 +3928,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				set_target(m_ptr, monster_target_y, monster_target_x);
 			}
 		}
-		else if ((who > 0) && is_pet(caster_ptr) && !player_bold(m_ptr->target_y, m_ptr->target_x))
+		else if ((who > 0) && is_pet(caster_ptr) && !player_bold(p_ptr, m_ptr->target_y, m_ptr->target_x))
 		{
 			set_target(m_ptr, caster_ptr->fy, caster_ptr->fx);
 		}
@@ -4020,7 +4020,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 
 	/* Player is not here */
-	if (!player_bold(y, x)) return (FALSE);
+	if (!player_bold(p_ptr, y, x)) return (FALSE);
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && who && (who != target_ptr->riding))
 	{
@@ -6376,7 +6376,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					if (is_original_ap_and_seen(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
 					/* Reflected bolts randomly target either one */
-					if (player_bold(y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
+					if (player_bold(p_ptr, y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
 					else flg |= PROJECT_PLAYER;
 
 					/* The bolt is reflected */
@@ -6400,7 +6400,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 
 
 			/* There is the riding player on this monster */
-			if (p_ptr->riding && player_bold(y, x))
+			if (p_ptr->riding && player_bold(p_ptr, y, x))
 			{
 				/* Aimed on the player */
 				if (flg & PROJECT_PLAYER)
@@ -6515,7 +6515,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			x = gx[i];
 
 			/* Affect the player? */
-			if (!player_bold(y, x)) continue;
+			if (!player_bold(p_ptr, y, x)) continue;
 
 			/* Find the closest point in the blast */
 			if (breath)

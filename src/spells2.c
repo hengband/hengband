@@ -1843,7 +1843,7 @@ bool starlight(bool magic)
 		{
 			scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
 			if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
-			if (!player_bold(y, x)) break;
+			if (!player_bold(p_ptr, y, x)) break;
 		}
 
 		project(0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
@@ -2757,7 +2757,7 @@ void wall_breaker(void)
 
 			if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
-			if (!player_bold(y, x)) break;
+			if (!player_bold(p_ptr, y, x)) break;
 		}
 
 		project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
@@ -2777,7 +2777,7 @@ void wall_breaker(void)
 			{
 				scatter(&y, &x, p_ptr->y, p_ptr->x, 10, 0);
 
-				if (!player_bold(y, x)) break;
+				if (!player_bold(p_ptr, y, x)) break;
 			}
 
 			project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
@@ -3064,7 +3064,7 @@ bool rush_attack(bool *mdeath)
 		}
 
 		/* Move player before updating the monster */
-		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
+		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
 		update_monster(p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
 
 		/* Found a monster */
@@ -3078,7 +3078,7 @@ bool rush_attack(bool *mdeath)
 			msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
 #endif
 		}
-		else if (!player_bold(ty, tx))
+		else if (!player_bold(p_ptr, ty, tx))
 		{
 			/* Hold the monster name */
 			GAME_TEXT m_name[MAX_NLEN];
@@ -3088,14 +3088,14 @@ bool rush_attack(bool *mdeath)
 			msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
 		}
 
-		if (!player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
+		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
 		moved = TRUE;
 		tmp_mdeath = py_attack(p_ptr, ny, nx, HISSATSU_NYUSIN);
 
 		break;
 	}
 
-	if (!moved && !player_bold(ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
+	if (!moved && !player_bold(p_ptr, ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
 
 	if (mdeath) *mdeath = tmp_mdeath;
 	return TRUE;

@@ -1606,7 +1606,7 @@ void update_flow(void)
 			x = tx + ddx_ddd[d];
 
 			/* Ignore player's grid */
-			if (player_bold(y, x)) continue;
+			if (player_bold(p_ptr, y, x)) continue;
 
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -1934,7 +1934,7 @@ bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, B
 	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
 
 	if (g_ptr->m_idx && (g_ptr->m_idx != m_idx)) return FALSE;
-	if (player_bold(y, x)) return FALSE;
+	if (player_bold(p_ptr, y, x)) return FALSE;
 
 	/* Hack -- no teleport onto glyph of warding */
 	if (is_glyph_grid(g_ptr)) return FALSE;

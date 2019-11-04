@@ -381,7 +381,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 		if (!pick) break;
 	}
 
-	if (player_bold(y, x)) return FALSE;
+	if (player_bold(creature_ptr, y, x)) return FALSE;
 
 	sound(SOUND_TELEPORT);
 

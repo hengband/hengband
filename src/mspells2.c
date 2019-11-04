@@ -70,7 +70,7 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 			return FALSE;
 		}
 
-		if (is_friend && player_bold(y, x))
+		if (is_friend && player_bold(p_ptr, y, x))
 			return FALSE;
 	}
 	if (!hit2)
@@ -186,7 +186,7 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 			y = gy[i];
 			x = gx[i];
 			if ((y == y2) && (x == x2)) hit2 = TRUE;
-			if (player_bold(y, x)) hityou = TRUE;
+			if (player_bold(p_ptr, y, x)) hityou = TRUE;
 		}
 	}
 

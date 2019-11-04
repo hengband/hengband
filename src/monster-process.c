@@ -60,7 +60,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_type *t_ptr;
 
-	if (p_ptr->riding_t_m_idx && player_bold(m_ptr->fy, m_ptr->fx))
+	if (p_ptr->riding_t_m_idx && player_bold(p_ptr, m_ptr->fy, m_ptr->fx))
 	{
 		y = p_ptr->current_floor_ptr->m_list[p_ptr->riding_t_m_idx].fy;
 		x = p_ptr->current_floor_ptr->m_list[p_ptr->riding_t_m_idx].fx;
@@ -334,7 +334,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Simply move to player */
-		if (player_bold(y, x)) return (FALSE);
+		if (player_bold(p_ptr, y, x)) return (FALSE);
 
 		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -1788,7 +1788,7 @@ void process_monster(MONSTER_IDX m_idx)
 		y_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Hack -- player 'in' wall */
-		if (player_bold(ny, nx))
+		if (player_bold(p_ptr, ny, nx))
 		{
 			do_move = TRUE;
 		}
@@ -1927,7 +1927,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 		/* Hack -- check for Glyph of Warding */
 		if (do_move && is_glyph_grid(g_ptr) &&
-		    !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(ny, nx)))
+		    !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(p_ptr, ny, nx)))
 		{
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -1955,7 +1955,7 @@ void process_monster(MONSTER_IDX m_idx)
 			}
 		}
 		else if (do_move && is_explosive_rune_grid(g_ptr) &&
-			 !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(ny, nx)))
+			 !((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(p_ptr, ny, nx)))
 		{
 			/* Assume no move allowed */
 			do_move = FALSE;
@@ -1995,7 +1995,7 @@ void process_monster(MONSTER_IDX m_idx)
 		}
 
 		/* The player is in the way */
-		if (do_move && player_bold(ny, nx))
+		if (do_move && player_bold(p_ptr, ny, nx))
 		{
 			/* Some monsters never attack */
 			if (r_ptr->flags1 & RF1_NEVER_BLOW)

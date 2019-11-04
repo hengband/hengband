@@ -193,8 +193,8 @@ extern floor_type floor_info;
 /*
  * Determine if player is on this grid
  */
-#define player_bold(Y,X) \
-	(((Y) == p_ptr->y) && ((X) == p_ptr->x))
+#define player_bold(C,Y,X) \
+	(((Y) == (C)->y) && ((X) == (C)->x))
 
 /*
  * Grid based version of "creature_bold()"
@@ -264,7 +264,7 @@ extern floor_type floor_info;
 #define cave_empty_bold(Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_PLACE) && \
 	 !(p_ptr->current_floor_ptr->grid_array[Y][X].m_idx) && \
-	 !player_bold(Y,X))
+	 !player_bold(p_ptr, Y,X))
 
 
 /*
@@ -289,7 +289,7 @@ extern floor_type floor_info;
 #define cave_naked_bold(Y,X) \
 	(cave_clean_bold(Y,X) && \
 	 !(p_ptr->current_floor_ptr->grid_array[Y][X].m_idx) && \
-	 !player_bold(Y,X))
+	 !player_bold(p_ptr, Y,X))
 
 
 /*

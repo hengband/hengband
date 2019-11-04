@@ -4869,7 +4869,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 
 	/* Mega-Hack -- no message if "dropped" by player */
 	/* Message when an object falls under the player */
-	if (chance && player_bold(by, bx))
+	if (chance && player_bold(p_ptr, by, bx))
 	{
 		msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
 	}

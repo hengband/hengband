@@ -4909,7 +4909,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 
 	if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (who != m_idx))
 	{
-		if (is_pet(&p_ptr->current_floor_ptr->m_list[who]) && !player_bold(m_ptr->target_y, m_ptr->target_x))
+		if (is_pet(&p_ptr->current_floor_ptr->m_list[who]) && !player_bold(p_ptr, m_ptr->target_y, m_ptr->target_x))
 		{
 			set_target(m_ptr, p_ptr->current_floor_ptr->m_list[who].fy, p_ptr->current_floor_ptr->m_list[who].fx);
 		}

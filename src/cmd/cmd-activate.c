@@ -1010,7 +1010,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 			{
 				scatter(&y, &x, user_ptr->y, user_ptr->x, 4, 0);
 				if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
-				if (!player_bold(y, x)) break;
+				if (!player_bold(user_ptr, y, x)) break;
 			}
 
 			project(0, 3, y, x, 150, GF_ELEC,

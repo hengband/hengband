@@ -696,7 +696,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 			(void)project(0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE,
 				PROJECT_KILL | PROJECT_ITEM, -1);
 
-			if (!player_bold(ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
+			if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
 		}
 
 		/* Spontaneous Searching */
@@ -782,7 +782,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		/* Hit the trap */
 		hit_trap(creature_ptr, (mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
 
-		if (!player_bold(ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
+		if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving) return FALSE;
 	}
 
 	/* Warn when leaving trap detected region */
@@ -804,7 +804,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		}
 	}
 
-	return player_bold(ny, nx) && !creature_ptr->is_dead && !creature_ptr->leaving;
+	return player_bold(creature_ptr, ny, nx) && !creature_ptr->is_dead && !creature_ptr->leaving;
 }
 
 /*!
@@ -1881,7 +1881,7 @@ void run_step(DIRECTION dir)
 	/* Move the player, using the "pickup" flag */
 	move_player(p_ptr, find_current, FALSE, FALSE);
 
-	if (player_bold(p_ptr->run_py, p_ptr->run_px))
+	if (player_bold(p_ptr, p_ptr->run_py, p_ptr->run_px))
 	{
 		p_ptr->run_py = 0;
 		p_ptr->run_px = 0;

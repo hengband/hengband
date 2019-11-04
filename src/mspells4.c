@@ -2042,7 +2042,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	bool monster_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
-	bool direct = player_bold(y, x);
+	bool direct = player_bold(p_ptr, y, x);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 

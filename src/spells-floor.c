@@ -506,7 +506,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 				g_ptr->info &= ~(CAVE_UNSAFE);
 
 				/* Hack -- Notice player affect */
-				if (player_bold(y, x))
+				if (player_bold(p_ptr, y, x))
 				{
 					/* Hurt the player later */
 					flag = TRUE;
@@ -801,7 +801,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			map[16 + yy - cy][16 + xx - cx] = TRUE;
 
 			/* Hack -- Take note of player damage */
-			if (player_bold(yy, xx)) hurt = TRUE;
+			if (player_bold(caster_ptr, yy, xx)) hurt = TRUE;
 		}
 	}
 
@@ -976,7 +976,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 							if (map[16 + y - cy][16 + x - cx]) continue;
 
 							if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) continue;
-							if (player_bold(y, x)) continue;
+							if (player_bold(caster_ptr, y, x)) continue;
 
 							/* Count "safe" grids */
 							sn++;
@@ -1065,9 +1065,6 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			if (!map[16 + yy - cy][16 + xx - cx]) continue;
 
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
-
-			/* Paranoia -- never affect player */
-/*			if (player_bold(yy, xx)) continue; */
 
 			/* Destroy location (if valid) */
 			if (cave_valid_bold(yy, xx))

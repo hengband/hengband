@@ -504,7 +504,7 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 			}
 		}
 		/* Pets may not shoot through the character - TNB */
-		if (player_bold(y, x))
+		if (player_bold(p_ptr, y, x))
 		{
 			if (is_friend) return (FALSE);
 		}
@@ -1728,7 +1728,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	}
 
 	/* Projectable? */
-	direct = player_bold(y, x);
+	direct = player_bold(p_ptr, y, x);
 
 	can_remember = is_original_ap_and_seen(m_ptr);
 

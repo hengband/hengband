@@ -333,7 +333,7 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
 			if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 			/* Avoid player location */
-			if (player_bold(y, x)) continue;
+			if (player_bold(p_ptr, y, x)) continue;
 
 			/* Check for "room" */
 			room = (floor_ptr->grid_array[y][x].info & CAVE_ROOM) ? TRUE : FALSE;

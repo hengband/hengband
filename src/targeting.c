@@ -327,7 +327,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return (FALSE);
 
 	/* Player grid is always interesting */
-	if (player_bold(y, x)) return (TRUE);
+	if (player_bold(p_ptr, y, x)) return (TRUE);
 
 	if (p_ptr->image) return (FALSE);
 
@@ -552,7 +552,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	}
 
 	/* Hack -- under the player */
-	if (player_bold(y, x))
+	if (player_bold(p_ptr, y, x))
 	{
 #ifdef JP
 		s1 = "あなたは";
@@ -2034,7 +2034,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 		case '5':
 		case '0':
 			/* illegal place */
-			if (player_bold(y, x)) ch = 0;
+			if (player_bold(p_ptr, y, x)) ch = 0;
 
 			/* okay place */
 			else success = TRUE;

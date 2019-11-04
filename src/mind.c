@@ -1738,7 +1738,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 			{
 				scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
-				if (!player_bold(y, x)) break;
+				if (!player_bold(caster_ptr, y, x)) break;
 			}
 			project(0, 0, y, x, damroll(6 + plev / 8, 10), typ,
 				(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);

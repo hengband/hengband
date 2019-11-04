@@ -3281,7 +3281,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	}
 
 	/* Handle "player" */
-	if (player_bold(y, x))
+	if (player_bold(p_ptr, y, x))
 	{
 		monster_race *r_ptr = &r_info[0];
 		*ap = r_ptr->x_attr;
