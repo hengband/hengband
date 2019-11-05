@@ -1428,9 +1428,9 @@ static void do_cmd_wiz_summon(int num)
  * @details
  * This function is rather dangerous
  */
-static void do_cmd_wiz_named(MONRACE_IDX r_idx)
+static void do_cmd_wiz_named(player_type *summoner_ptr, MONRACE_IDX r_idx)
 {
-	(void)summon_named_creature(0, p_ptr->y, p_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+	(void)summon_named_creature(0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 }
 
 
@@ -1442,11 +1442,10 @@ static void do_cmd_wiz_named(MONRACE_IDX r_idx)
  * @details
  * This function is rather dangerous
  */
-static void do_cmd_wiz_named_friendly(MONRACE_IDX r_idx)
+static void do_cmd_wiz_named_friendly(player_type *summoner_ptr, MONRACE_IDX r_idx)
 {
-	(void)summon_named_creature(0, p_ptr->y, p_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
+	(void)summon_named_creature(0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
 }
-
 
 
 /*!
@@ -1811,12 +1810,12 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Summon _friendly_ named monster */
 	case 'N':
-		do_cmd_wiz_named_friendly(command_arg);
+		do_cmd_wiz_named_friendly(creature_ptr, command_arg);
 		break;
 
 	/* Summon Named Monster */
 	case 'n':
-		do_cmd_wiz_named(command_arg);
+		do_cmd_wiz_named(creature_ptr, command_arg);
 		break;
 
 	/* Dump option bits usage */
