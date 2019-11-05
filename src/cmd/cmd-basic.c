@@ -604,7 +604,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 	if (flag)
 	{
 		/* Apply chest traps, if any */
-		chest_trap(y, x, o_idx);
+		chest_trap(creature_ptr, y, x, o_idx);
 
 		/* Let the Chest drop items */
 		chest_death(FALSE, y, x, o_idx);
@@ -1446,7 +1446,7 @@ static bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, 
 	{
 		msg_print(_("トラップを作動させてしまった！", "You set off a trap!"));
 		sound(SOUND_FAIL);
-		chest_trap(y, x, o_idx);
+		chest_trap(creature_ptr, y, x, o_idx);
 	}
 	return (more);
 }

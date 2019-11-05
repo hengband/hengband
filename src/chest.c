@@ -136,11 +136,11 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 * Note that the chest itself is never destroyed.
 * </pre>
 */
-void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
+void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int i, trap;
 
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	object_type *o_ptr = &target_ptr->current_floor_ptr->o_list[o_idx];
 
 	int mon_level = o_ptr->xtra3;
 
@@ -154,25 +154,25 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	if (trap & (CHEST_LOSE_STR))
 	{
 		msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
-		take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
-		(void)do_dec_stat(p_ptr, A_STR);
+		take_hit(target_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
+		(void)do_dec_stat(target_ptr, A_STR);
 	}
 
 	/* Lose constitution */
 	if (trap & (CHEST_LOSE_CON))
 	{
 		msg_print(_("仕掛けられていた小さな針に刺されてしまった！", "A small needle has pricked you!"));
-		take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
-		(void)do_dec_stat(p_ptr, A_CON);
+		take_hit(target_ptr, DAMAGE_NOESCAPE, damroll(1, 4), _("毒針", "a poison needle"), -1);
+		(void)do_dec_stat(target_ptr, A_CON);
 	}
 
 	/* Poison */
 	if (trap & (CHEST_POISON))
 	{
 		msg_print(_("突如吹き出した緑色のガスに包み込まれた！", "A puff of green gas surrounds you!"));
-		if (!(p_ptr->resist_pois || IS_OPPOSE_POIS()))
+		if (!(target_ptr->resist_pois || IS_OPPOSE_POIS()))
 		{
-			(void)set_poisoned(p_ptr, p_ptr->poisoned + 10 + randint1(20));
+			(void)set_poisoned(target_ptr, target_ptr->poisoned + 10 + randint1(20));
 		}
 	}
 
@@ -180,9 +180,9 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 	if (trap & (CHEST_PARALYZE))
 	{
 		msg_print(_("突如吹き出した黄色いガスに包み込まれた！", "A puff of yellow gas surrounds you!"));
-		if (!p_ptr->free_act)
+		if (!target_ptr->free_act)
 		{
-			(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 10 + randint1(20));
+			(void)set_paralyzed(target_ptr, target_ptr->paralyzed + 10 + randint1(20));
 		}
 	}
 
@@ -193,8 +193,8 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		msg_print(_("突如吹き出した煙に包み込まれた！", "You are enveloped in a cloud of smoke!"));
 		for (i = 0; i < num; i++)
 		{
-			if (randint1(100)<p_ptr->current_floor_ptr->dun_level)
-				activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
+			if (randint1(100)<target_ptr->current_floor_ptr->dun_level)
+				activate_hi_summon(target_ptr->y, target_ptr->x, FALSE);
 			else
 				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
@@ -280,28 +280,28 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		for (; nasty_tricks_count > 0; nasty_tricks_count--)
 		{
 			/* ...but a high saving throw does help a little. */
-			if (randint1(100 + o_ptr->pval * 2) > p_ptr->skill_sav)
+			if (randint1(100 + o_ptr->pval * 2) > target_ptr->skill_sav)
 			{
-				if (one_in_(6)) take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"), -1);
-				else if (one_in_(5)) (void)set_cut(p_ptr,p_ptr->cut + 200);
+				if (one_in_(6)) take_hit(target_ptr, DAMAGE_NOESCAPE, damroll(5, 20), _("破滅のトラップの宝箱", "a chest dispel-player trap"), -1);
+				else if (one_in_(5)) (void)set_cut(target_ptr,target_ptr->cut + 200);
 				else if (one_in_(4))
 				{
-					if (!p_ptr->free_act)
-						(void)set_paralyzed(p_ptr, p_ptr->paralyzed + 2 +
+					if (!target_ptr->free_act)
+						(void)set_paralyzed(target_ptr, target_ptr->paralyzed + 2 +
 							randint0(6));
 					else
-						(void)set_stun(p_ptr, p_ptr->stun + 10 +
+						(void)set_stun(target_ptr, target_ptr->stun + 10 +
 							randint0(100));
 				}
-				else if (one_in_(3)) apply_disenchant(p_ptr, 0);
+				else if (one_in_(3)) apply_disenchant(target_ptr, 0);
 				else if (one_in_(2))
 				{
-					(void)do_dec_stat(p_ptr, A_STR);
-					(void)do_dec_stat(p_ptr, A_DEX);
-					(void)do_dec_stat(p_ptr, A_CON);
-					(void)do_dec_stat(p_ptr, A_INT);
-					(void)do_dec_stat(p_ptr, A_WIS);
-					(void)do_dec_stat(p_ptr, A_CHR);
+					(void)do_dec_stat(target_ptr, A_STR);
+					(void)do_dec_stat(target_ptr, A_DEX);
+					(void)do_dec_stat(target_ptr, A_CON);
+					(void)do_dec_stat(target_ptr, A_INT);
+					(void)do_dec_stat(target_ptr, A_WIS);
+					(void)do_dec_stat(target_ptr, A_CHR);
 				}
 				else (void)fire_meteor(-1, GF_NETHER, y, x, 150, 1);
 			}
@@ -322,7 +322,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 		msg_print(_("箱の中の物はすべて粉々に砕け散った！", "Everything inside the chest is destroyed!"));
 		o_ptr->pval = 0;
 		sound(SOUND_EXPLODE);
-		take_hit(p_ptr, DAMAGE_ATTACK, damroll(5, 8), _("爆発する箱", "an exploding chest"), -1);
+		take_hit(target_ptr, DAMAGE_ATTACK, damroll(5, 8), _("爆発する箱", "an exploding chest"), -1);
 	}
 	/* Scatter contents. */
 	if ((trap & (CHEST_SCATTER)) && o_ptr->k_idx)
