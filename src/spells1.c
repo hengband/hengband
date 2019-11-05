@@ -4430,7 +4430,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr))
 		{
-			(void)apply_disenchant(0);
+			(void)apply_disenchant(target_ptr, 0);
 		}
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;

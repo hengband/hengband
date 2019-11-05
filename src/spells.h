@@ -294,7 +294,7 @@ extern void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool recall_player(player_type *creature_ptr, TIME_EFFECT turns);
 extern bool free_level_recall(player_type *creature_ptr);
 extern bool reset_recall(void);
-extern bool apply_disenchant(BIT_FLAGS mode);
+extern bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode);
 extern void call_the_(void);
 extern void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
 extern void alter_reality(void);

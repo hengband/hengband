@@ -930,9 +930,9 @@ bool reset_recall(void)
  * @return 劣化処理に関するメッセージが発せられた場合はTRUEを返す /
  * Return "TRUE" if the player notices anything
  */
-bool apply_disenchant(BIT_FLAGS mode)
+bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 {
-	int             t = 0;
+	int t = 0;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 	int to_h, to_d, to_a, pval;
@@ -950,7 +950,7 @@ bool apply_disenchant(BIT_FLAGS mode)
 		case 8: t = INVEN_FEET; break;
 	}
 
-	o_ptr = &p_ptr->inventory_list[t];
+	o_ptr = &target_ptr->inventory_list[t];
 
 	/* No item, nothing happens */
 	if (!o_ptr->k_idx) return (FALSE);
@@ -1013,12 +1013,12 @@ bool apply_disenchant(BIT_FLAGS mode)
 			((o_ptr->number != 1) ? "were" : "was"));
 #endif
 
-		chg_virtue(p_ptr, V_HARMONY, 1);
-		chg_virtue(p_ptr, V_ENCHANT, -2);
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->window |= (PW_EQUIP | PW_PLAYER);
+		chg_virtue(target_ptr, V_HARMONY, 1);
+		chg_virtue(target_ptr, V_ENCHANT, -2);
+		target_ptr->update |= (PU_BONUS);
+		target_ptr->window |= (PW_EQUIP | PW_PLAYER);
 
-		calc_android_exp(p_ptr);
+		calc_android_exp(target_ptr);
 	}
 
 	return (TRUE);

@@ -293,7 +293,7 @@ void chest_trap(POSITION y, POSITION x, OBJECT_IDX o_idx)
 						(void)set_stun(p_ptr, p_ptr->stun + 10 +
 							randint0(100));
 				}
-				else if (one_in_(3)) apply_disenchant(0);
+				else if (one_in_(3)) apply_disenchant(p_ptr, 0);
 				else if (one_in_(2))
 				{
 					(void)do_dec_stat(p_ptr, A_STR);

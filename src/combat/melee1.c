@@ -2840,7 +2840,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (!target_ptr->resist_disen && !CHECK_MULTISHADOW(target_ptr))
 					{
 						/* Apply disenchantment */
-						if (apply_disenchant(0))
+						if (apply_disenchant(target_ptr, 0))
 						{
 							/* Hack -- Update AC */
 							update_creature(target_ptr);
