@@ -1530,7 +1530,6 @@ void update_gambling_monsters(void)
 				power[i] = power[i] * 9 / 10;
 			if (r_ptr->flagsr & RFR_RES_ALL) power[i] *= 100000;
 			if (r_ptr->arena_ratio) power[i] = power[i] * r_ptr->arena_ratio / 100;
-
 			total += power[i];
 		}
 		for (i = 0; i < 4; i++)
