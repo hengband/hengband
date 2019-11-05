@@ -445,7 +445,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				brand_weapon(2);
+				brand_weapon(caster_ptr, 2);
 			}
 		}
 		break;

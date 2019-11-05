@@ -542,7 +542,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				brand_weapon(randint0(2));
+				brand_weapon(caster_ptr, randint0(2));
 			}
 		}
 		break;

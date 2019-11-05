@@ -475,7 +475,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				brand_weapon(randint0(18));
+				brand_weapon(caster_ptr, randint0(18));
 			}
 		}
 		break;

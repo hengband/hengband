@@ -1342,7 +1342,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
  * @return なし
  */
-void brand_weapon(int brand_type)
+void brand_weapon(player_type *caster_ptr, int brand_type)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -1354,7 +1354,7 @@ void brand_weapon(int brand_type)
 	q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
 	s = _("強化できる武器がない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* you can never modify artifacts / ego-items */
@@ -1380,7 +1380,7 @@ void brand_weapon(int brand_type)
 				act = _("は鋭さを増した！", "becomes very sharp!");
 
 				o_ptr->name2 = EGO_SHARPNESS;
-				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, p_ptr->current_floor_ptr->dun_level) + 1;
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, caster_ptr->current_floor_ptr->dun_level) + 1;
 
 				if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
 					o_ptr->pval = 2;
@@ -1389,7 +1389,7 @@ void brand_weapon(int brand_type)
 			{
 				act = _("は破壊力を増した！", "seems very powerful.");
 				o_ptr->name2 = EGO_EARTHQUAKES;
-				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, p_ptr->current_floor_ptr->dun_level);
+				o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, caster_ptr->current_floor_ptr->dun_level);
 			}
 			break;
 		case 16:
@@ -1467,14 +1467,14 @@ void brand_weapon(int brand_type)
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 
 		o_ptr->discount = 99;
-		chg_virtue(p_ptr, V_ENCHANT, 2);
+		chg_virtue(caster_ptr, V_ENCHANT, 2);
 	}
 	else
 	{
 		if (flush_failure) flush();
 
 		msg_print(_("属性付加に失敗した。", "The Branding failed."));
-		chg_virtue(p_ptr, V_ENCHANT, -2);
+		chg_virtue(caster_ptr, V_ENCHANT, -2);
 	}
-	calc_android_exp(p_ptr);
+	calc_android_exp(caster_ptr);
 }

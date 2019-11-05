@@ -285,7 +285,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				brand_weapon(3);
+				brand_weapon(caster_ptr, 3);
 			}
 		}
 		break;
@@ -443,7 +443,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				brand_weapon(4);
+				brand_weapon(caster_ptr, 4);
 			}
 		}
 		break;

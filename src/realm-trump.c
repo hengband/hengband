@@ -442,7 +442,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				brand_weapon(5);
+				brand_weapon(caster_ptr, 5);
 			}
 		}
 		break;

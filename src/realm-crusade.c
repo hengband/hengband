@@ -363,7 +363,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 		{
 			if (cast)
 			{
-				brand_weapon(13);
+				brand_weapon(caster_ptr, 13);
 			}
 		}
 		break;

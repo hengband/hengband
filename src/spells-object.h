@@ -25,4 +25,4 @@ extern bool pulish_shield(void);
 #define ENCH_FORCE      0x08 /*!< 装備強化処理: 無条件に成功させる / Force enchantment */
 extern bool enchant(object_type *o_ptr, int n, int eflag);
 extern bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac);
-extern void brand_weapon(int brand_type);
+extern void brand_weapon(player_type *caster_ptr, int brand_type);
