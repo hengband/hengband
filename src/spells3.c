@@ -3019,7 +3019,7 @@ bool mirror_tunnel(void)
  * @param power 基本効力
  * @return ターンを消費した場合TRUEを返す
  */
-bool eat_magic(int power)
+bool eat_magic(player_type *caster_ptr, int power)
 {
 	object_type *o_ptr;
 	object_kind *k_ptr;
@@ -3038,7 +3038,7 @@ bool eat_magic(int power)
 	q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
 	s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return FALSE;
 
 	k_ptr = &k_info[o_ptr->k_idx];
@@ -3062,7 +3062,7 @@ bool eat_magic(int power)
 			}
 			else
 			{
-				p_ptr->csp += lev;
+				caster_ptr->csp += lev;
 				o_ptr->timeout += k_ptr->pval;
 			}
 		}
@@ -3083,7 +3083,7 @@ bool eat_magic(int power)
 		{
 			if (o_ptr->pval > 0)
 			{
-				p_ptr->csp += lev / 2;
+				caster_ptr->csp += lev / 2;
 				o_ptr->pval --;
 
 				/* XXX Hack -- unstack if necessary */
@@ -3102,7 +3102,7 @@ bool eat_magic(int power)
 
 					/* Unstack the used item */
 					o_ptr->number--;
-					p_ptr->total_weight -= q_ptr->weight;
+					caster_ptr->total_weight -= q_ptr->weight;
 					item = inven_carry(q_ptr);
 
 					msg_print(_("杖をまとめなおした。", "You unstack your staff."));
@@ -3141,7 +3141,7 @@ bool eat_magic(int power)
 			/*** Determine Seriousness of Failure ***/
 
 			/* Mages recharge objects more safely. */
-			if (IS_WIZARD_CLASS(p_ptr))
+			if (IS_WIZARD_CLASS(caster_ptr))
 			{
 				/* 10% chance to blow up one rod, otherwise draining. */
 				if (o_ptr->tval == TV_ROD)
@@ -3219,7 +3219,7 @@ bool eat_magic(int power)
 					msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
 				}
 				
-				/* Reduce and describe p_ptr->inventory_list */
+				/* Reduce and describe caster_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -1);
@@ -3244,7 +3244,7 @@ bool eat_magic(int power)
 				else
 					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-				/* Reduce and describe p_ptr->inventory_list */
+				/* Reduce and describe caster_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -999);
@@ -3263,14 +3263,14 @@ bool eat_magic(int power)
 		}
 	}
 
-	if (p_ptr->csp > p_ptr->msp)
+	if (caster_ptr->csp > caster_ptr->msp)
 	{
-		p_ptr->csp = p_ptr->msp;
+		caster_ptr->csp = caster_ptr->msp;
 	}
 
-	p_ptr->redraw |= (PR_MANA);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN);
+	caster_ptr->redraw |= (PR_MANA);
+	caster_ptr->update |= (PU_COMBINE | PU_REORDER);
+	caster_ptr->window |= (PW_INVEN);
 
 	return TRUE;
 }

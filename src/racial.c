@@ -408,7 +408,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		/* case CLASS_HIGH_MAGE: */
 		case CLASS_SORCERER:
 		{
-			if (!eat_magic(creature_ptr->lev * 2)) return FALSE;
+			if (!eat_magic(creature_ptr, creature_ptr->lev * 2)) return FALSE;
 			break;
 		}
 		case CLASS_PRIEST:

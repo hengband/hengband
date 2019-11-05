@@ -243,7 +243,7 @@ extern bool mindblast_monsters(HIT_POINT dam);
 extern bool teleport_swap(DIRECTION dir);
 extern bool project_hook(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg);
 extern bool project_all_los(EFFECT_ID typ, HIT_POINT dam);
-extern bool eat_magic(int power);
+extern bool eat_magic(player_type *caster_ptr, int power);
 extern void discharge_minion(void);
 extern bool kawarimi(bool success);
 extern bool rush_attack(bool *mdeath);

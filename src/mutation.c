@@ -2256,7 +2256,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_EAT_MAGIC:
-			if (!eat_magic(creature_ptr->lev * 2)) return FALSE;
+			if (!eat_magic(creature_ptr, creature_ptr->lev * 2)) return FALSE;
 			break;
 
 		case MUT1_WEIGH_MAG:
