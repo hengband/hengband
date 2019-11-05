@@ -269,7 +269,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("静かな音楽が感覚を研ぎ澄まさせた．．．", "Your quiet music sharpens your sense of hearing..."));
-			/* Hack -- Initialize the current_world_ptr->game_turn count */
+			/* Hack -- Initialize the turn count */
 			SINGING_COUNT(caster_ptr) = 0;
 			start_singing(spell, MUSIC_DETECT);
 		}

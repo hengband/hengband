@@ -1262,7 +1262,7 @@ void do_cmd_cast(player_type *caster_ptr)
 	/* Process spell */
 	else
 	{
-		/* Canceled spells cost neither a current_world_ptr->game_turn nor mana */
+		/* Canceled spells cost neither a turn nor mana */
 		if (!exe_spell(caster_ptr, realm, spell, SPELL_CAST)) return;
 
 		if (randint1(100) < chance)

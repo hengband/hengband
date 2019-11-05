@@ -1066,7 +1066,7 @@ void leave_floor(player_type *creature_ptr)
 		/* Get out of the my way! */
 		get_out_monster(p_ptr->current_floor_ptr, creature_ptr);
 
-		/* Record the last visit current_world_ptr->game_turn of current floor */
+		/* Record the last visit turn of current floor */
 		sf_ptr->last_visit = current_world_ptr->game_turn;
 
 		forget_lite(p_ptr->current_floor_ptr);
@@ -1312,10 +1312,10 @@ void change_floor(player_type *creature_ptr)
 				generate_floor(creature_ptr->current_floor_ptr);
 			}
 
-			/* Record last visit current_world_ptr->game_turn */
+			/* Record last visit turn */
 			sf_ptr->last_visit = current_world_ptr->game_turn;
 
-			/* Set correct creature_ptr->current_floor_ptr->dun_level value */
+			/* Set correct dun_level value */
 			sf_ptr->dun_level = creature_ptr->current_floor_ptr->dun_level;
 
 			/* Create connected stairs */
@@ -1368,9 +1368,9 @@ void change_floor(player_type *creature_ptr)
 		/*
 		 * Update visit mark
 		 *
-		 * The "current_world_ptr->game_turn" is not always different number because
-		 * the level teleport doesn't take any current_world_ptr->game_turn.  Use
-		 * visit mark instead of last visit current_world_ptr->game_turn to find the
+		 * The "turn" is not always different number because
+		 * the level teleport doesn't take any turn.  Use
+		 * visit mark instead of last visit turn to find the
 		 * oldest saved floor.
 		 */
 		sf_ptr->visit_mark = latest_visit_mark++;

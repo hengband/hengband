@@ -436,7 +436,7 @@ static void do_cmd_wiz_change(player_type *creature_ptr)
  *     thus accepting the default-values for the remaining values.
  *     pval comes first now, since it is most important.
  * - wiz_reroll_item()
- *     apply some magic to the item or current_world_ptr->game_turn it into an artifact.
+ *     apply some magic to the item or turn it into an artifact.
  * - wiz_roll_item()
  *     Get some statistics about the rarity of an item:
  *     We create a lot of fake items and see if they are of the
@@ -765,7 +765,7 @@ static void wiz_tweak_item(object_type *o_ptr)
 
 /*!
  * @brief アイテムの質を選択して再生成する /
- * Apply magic to an item or current_world_ptr->game_turn it into an artifact. -Bernd-
+ * Apply magic to an item or turn it into an artifact. -Bernd-
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
  * @return なし
  */

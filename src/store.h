@@ -35,9 +35,9 @@ struct store_type
 	s16b good_buy;			/* Number of "good" buys */
 	s16b bad_buy;			/* Number of "bad" buys */
 
-	s32b store_open;		/* Closed until this current_world_ptr->game_turn */
+	s32b store_open;		/* Closed until this turn */
 
-	s32b last_visit;		/* Last visited on this current_world_ptr->game_turn */
+	s32b last_visit;		/* Last visited on this turn */
 
 	s16b table_num;			/* Table -- Number of entries */
 	s16b table_size;		/* Table -- Total Size of Array */

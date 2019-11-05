@@ -1925,7 +1925,7 @@ static void init_dungeon_quests(player_type *creature_ptr)
 }
 
 /*!
- * @brief ゲームターンを初期化する / Reset current_world_ptr->game_turn
+ * @brief ゲームターンを初期化する / Reset turn
  * @details アンデッド系種族は開始時刻を夜からにする。
  * @return なし
  */
@@ -4157,7 +4157,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 #endif /* ALLOW_AUTOROLLER */
 	clear_from(10);
 
-	/* Reset current_world_ptr->game_turn; before auto-roll and after choosing race */
+	/* Reset turn; before auto-roll and after choosing race */
 	init_turn(creature_ptr);
 
 	/*** Generate ***/

@@ -108,7 +108,7 @@
  * entirely open.
  *
  * Corners: If you are not in the open (i.e. you are in a corridor)
- * and there is only one way to go in the new squares, then current_world_ptr->game_turn in
+ * and there is only one way to go in the new squares, then turn in
  * that direction. If there are more than two new ways to go, STOP.
  * If there are two ways to go, and those ways are separated by a
  * square which does not seem to be open, then STOP.
@@ -873,7 +873,7 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
  * @note
  * This routine should (probably) always induce energy expenditure.\n
  * @details
- * Note that moving will *always* take a current_world_ptr->game_turn, and will *always* hit\n
+ * Note that moving will *always* take a turn, and will *always* hit\n
  * any monster which might be in the destination grid.  Previously,\n
  * moving into walls was "free" and did NOT hit invisible monsters.\n
  */
@@ -1209,7 +1209,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 				/*
 				 * Well, it makes sense that you lose time bumping into
 				 * a wall _if_ you are confused, stunned or blind; but
-				 * typing mistakes should not cost you a current_world_ptr->game_turn...
+				 * typing mistakes should not cost you a turn...
 				 */
 				if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
 					free_turn(creature_ptr);
@@ -1397,7 +1397,7 @@ static bool find_breakleft;
  * Diagonal Corridor -- allow diaginal entry into corridors.\n
  *\n
  * Blunt Corridor -- If there is a wall two spaces ahead and\n
- * we seem to be in a corridor, then force a current_world_ptr->game_turn into the side\n
+ * we seem to be in a corridor, then force a turn into the side\n
  * corridor, must be moving straight into a corridor here. ???\n
  *\n
  * Diagonal Corridor    Blunt Corridor (?)\n

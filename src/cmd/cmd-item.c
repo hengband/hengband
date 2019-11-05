@@ -417,7 +417,7 @@ void do_cmd_wield(player_type *creature_ptr)
 		o_ptr->ident |= (IDENT_SENSE);
 	}
 
-	/* The Stone Mask make the player current_world_ptr->game_turn into a vampire! */
+	/* The Stone Mask make the player turn into a vampire! */
 	if ((o_ptr->name1 == ART_STONEMASK) && (creature_ptr->prace != RACE_VAMPIRE) && (creature_ptr->prace != RACE_ANDROID))
 	{
 		/* Turn into a vampire */

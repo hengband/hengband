@@ -442,7 +442,7 @@ static concptr item_activation_aux(object_type *o_ptr)
 	constant = act_ptr->timeout.constant;
 	dice = act_ptr->timeout.dice;
 	if (constant == 0 && dice == 0) {
-		/* We can activate it every current_world_ptr->game_turn */
+		/* We can activate it every turn */
 		strcpy(timeout, _("いつでも", "every current_world_ptr->game_turn"));
 	} else if (constant < 0) {
 		/* Activations that have special timeout */

@@ -97,7 +97,7 @@ static int scent_when = 0;
  * current position, and monsters can use it to home in the character,
  * but not to run away from him.
  *
- * Smell is valued according to age.  When a character takes his current_world_ptr->game_turn,
+ * Smell is valued according to age.  When a character takes his turn,
  * scent is aged by one, and new scent of the current age is laid down.
  * Speedy characters leave more scent, true, but it also ages faster,
  * which makes it harder to hunt them down.

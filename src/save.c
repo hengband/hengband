@@ -840,7 +840,7 @@ static void wr_extra(void)
 	/* Turn of last "feeling" */
 	wr_s32b(p_ptr->feeling_turn);
 
-	/* Current current_world_ptr->game_turn */
+	/* Current turn */
 	wr_s32b(current_world_ptr->game_turn);
 
 	wr_s32b(current_world_ptr->dungeon_turn);
@@ -1847,7 +1847,7 @@ bool load_player(void)
 	}
 	if (!err)
 	{
-		/* Invalid current_world_ptr->game_turn */
+		/* Invalid turn */
 		if (!current_world_ptr->game_turn) err = -1;
 
 		/* Message (below) */

@@ -2007,7 +2007,7 @@ void process_monster(MONSTER_IDX m_idx)
 				do_move = FALSE;
 			}
 
-			/* In anti-melee dungeon, stupid or confused monster takes useless current_world_ptr->game_turn */
+			/* In anti-melee dungeon, stupid or confused monster takes useless turn */
 			if (do_move && (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
 			{
 				if (!MON_CONFUSED(m_ptr))
@@ -2031,7 +2031,7 @@ void process_monster(MONSTER_IDX m_idx)
 					/* Do not move */
 					do_move = FALSE;
 
-					/* Took a current_world_ptr->game_turn */
+					/* Took a turn */
 					do_turn = TRUE;
 				}
 			}
@@ -2063,7 +2063,7 @@ void process_monster(MONSTER_IDX m_idx)
 					{
 						if (monst_attack_monst(p_ptr, m_idx, g_ptr->m_idx)) return;
 
-						/* In anti-melee dungeon, stupid or confused monster takes useless current_world_ptr->game_turn */
+						/* In anti-melee dungeon, stupid or confused monster takes useless turn */
 						else if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 						{
 							if (MON_CONFUSED(m_ptr)) return;

@@ -2298,7 +2298,7 @@ static void rd_extra(void)
 		rd_s32b(&p_ptr->feeling_turn);
 	}
 
-	/* Current current_world_ptr->game_turn */
+	/* Current turn */
 	rd_s32b(&current_world_ptr->game_turn);
 
 	if (z_older_than(10, 3, 12))

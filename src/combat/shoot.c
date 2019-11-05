@@ -476,11 +476,11 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 	}
 
 
-	/* Take a (partial) current_world_ptr->game_turn */
+	/* Take a (partial) turn */
 	shooter_ptr->energy_use = (shooter_ptr->energy_use / thits);
 	shooter_ptr->is_fired = TRUE;
 
-	/* Sniper - Difficult to shot twice at 1 current_world_ptr->game_turn */
+	/* Sniper - Difficult to shot twice at 1 turn */
 	if (snipe_type == SP_DOUBLE)  shooter_ptr->concent = (shooter_ptr->concent + 1) / 2;
 
 	/* Sniper - Repeat shooting when double shots */

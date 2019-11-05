@@ -28,7 +28,7 @@
 * Small chests often contain "gold", while Large chests always contain
 * items.  Wooden chests contain 2 items, Iron chests contain 4 items,
 * and Steel chests contain 6 items.  The "value" of the items in a
-* chest is based on the "power" of the chest, which is in current_world_ptr->game_turn based
+* chest is based on the "power" of the chest, which is in turn based
 * on the level on which the chest is generated.
 * </pre>
 */

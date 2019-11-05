@@ -427,7 +427,7 @@ const byte adj_dex_blow[] =
  * @brief
  * 腕力、器用さに応じた攻撃回数テーブル /
  * This table is used to help calculate the number of blows the player can
- * make in a single round of attacks (one player current_world_ptr->game_turn) with a normal weapon.
+ * make in a single round of attacks (one player turn) with a normal weapon.
  * @details
  * <pre>
  * This number ranges from a single blow/round for weak players to up to six

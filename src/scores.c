@@ -501,7 +501,7 @@ errr top_twenty(void)
 	sprintf(the_score.gold, "%9lu", (long)p_ptr->au);
 	the_score.gold[9] = '\0';
 
-	/* Save the current current_world_ptr->game_turn */
+	/* Save the current turn */
 	sprintf(the_score.turns, "%9lu", (long)turn_real(current_world_ptr->game_turn));
 	the_score.turns[9] = '\0';
 
@@ -619,7 +619,7 @@ errr predict_score(player_type *creature_ptr)
 	/* Save the current gold */
 	sprintf(the_score.gold, "%9lu", (long)creature_ptr->au);
 
-	/* Save the current current_world_ptr->game_turn */
+	/* Save the current turn */
 	sprintf(the_score.turns, "%9lu", (long)turn_real(current_world_ptr->game_turn));
 
 	/* Hack -- no time needed */

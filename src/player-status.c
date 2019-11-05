@@ -1441,11 +1441,11 @@ void calc_bonuses(player_type *creature_ptr)
 	/* Start with "normal" speed */
 	new_speed = 110;
 
-	/* Start with a single blow per current_world_ptr->game_turn */
+	/* Start with a single blow per turn */
 	creature_ptr->num_blow[0] = 1;
 	creature_ptr->num_blow[1] = 1;
 
-	/* Start with a single shot per current_world_ptr->game_turn */
+	/* Start with a single shot per turn */
 	creature_ptr->num_fire = 100;
 
 	/* Reset the "xtra" tval */

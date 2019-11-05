@@ -717,7 +717,7 @@ struct player_type
 
 	byte pspeed;		/* Current speed */
 
-	ENERGY energy_use;	/* Energy use this current_world_ptr->game_turn */
+	ENERGY energy_use;	/* Energy use this turn */
 
 	POSITION y;	/* Player location in dungeon */
 	POSITION x;	/* Player location in dungeon */
