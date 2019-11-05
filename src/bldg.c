@@ -1531,11 +1531,11 @@ void update_gambling_monsters(void)
 			if (r_ptr->flagsr & RFR_RES_ALL) power[i] *= 100000;
 			if (r_ptr->arena_ratio) power[i] = power[i] * r_ptr->arena_ratio / 100;
 
-
 			total += power[i];
 		}
 		for (i = 0; i < 4; i++)
 		{
+			if (power[i] <= 0) break;
 			power[i] = total * 60 / power[i];
 			if (tekitou && ((power[i] < 160) || power[i] > 1500)) break;
 			if ((power[i] < 160) && randint0(20)) break;
