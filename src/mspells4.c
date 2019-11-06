@@ -2070,7 +2070,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 		dam = damroll(4, 8);
 
 		if (monster_to_player || t_idx == p_ptr->riding)
-			teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+			teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 		else 
 			teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 
@@ -2184,7 +2184,7 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+		teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 		learn_spell(MS_TELE_TO);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -2218,7 +2218,7 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 		if (!resists_tele)
 		{
 			if (t_idx == p_ptr->riding) 
-				teleport_player_to(m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+				teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 			else 
 				teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
 		}

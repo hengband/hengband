@@ -3064,7 +3064,7 @@ bool rush_attack(bool *mdeath)
 		}
 
 		/* Move player before updating the monster */
-		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
+		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(p_ptr, ty, tx, TELEPORT_NONMAGICAL);
 		update_monster(p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
 
 		/* Found a monster */
@@ -3088,14 +3088,14 @@ bool rush_attack(bool *mdeath)
 			msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
 		}
 
-		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
+		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(p_ptr, ty, tx, TELEPORT_NONMAGICAL);
 		moved = TRUE;
 		tmp_mdeath = py_attack(p_ptr, ny, nx, HISSATSU_NYUSIN);
 
 		break;
 	}
 
-	if (!moved && !player_bold(p_ptr, ty, tx)) teleport_player_to(ty, tx, TELEPORT_NONMAGICAL);
+	if (!moved && !player_bold(p_ptr, ty, tx)) teleport_player_to(p_ptr, ty, tx, TELEPORT_NONMAGICAL);
 
 	if (mdeath) *mdeath = tmp_mdeath;
 	return TRUE;

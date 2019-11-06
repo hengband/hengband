@@ -1037,7 +1037,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (flag && randint0(plev * plev / 2))
 			{
-				teleport_player_to(y, x, 0L);
+				teleport_player_to(caster_ptr, y, x, 0L);
 			}
 			else
 			{

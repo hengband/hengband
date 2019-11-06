@@ -62,7 +62,7 @@ static bool wiz_dimension_door(void)
 {
 	POSITION x = 0, y = 0;
 	if (!tgt_pt(&x, &y)) return FALSE;
-	teleport_player_to(y, x, TELEPORT_NONMAGICAL);
+	teleport_player_to(p_ptr, y, x, TELEPORT_NONMAGICAL);
 	return (TRUE);
 }
 
@@ -279,7 +279,7 @@ static void do_cmd_wiz_bamf(void)
 	if (!target_who) return;
 
 	/* Teleport to the target */
-	teleport_player_to(target_row, target_col, TELEPORT_NONMAGICAL);
+	teleport_player_to(p_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
 }
 
 

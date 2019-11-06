@@ -491,12 +491,12 @@ void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
  * This function allows teleporting into vaults (!)
  * </pre>
  */
-void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
+void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mode)
 {
 	POSITION y, x;
 	POSITION dis = 0, ctr = 0;
 
-	if (p_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
+	if (creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
 		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return;
@@ -510,11 +510,11 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 		{
 			y = (POSITION)rand_spread(ny, dis);
 			x = (POSITION)rand_spread(nx, dis);
-			if (in_bounds(p_ptr->current_floor_ptr, y, x)) break;
+			if (in_bounds(creature_ptr->current_floor_ptr, y, x)) break;
 		}
 
 		/* Accept any grid when wizard mode */
-		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx || (p_ptr->current_floor_ptr->grid_array[y][x].m_idx == p_ptr->riding))) break;
+		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx || (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx == creature_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
 		if (cave_player_teleportable_bold(y, x, mode)) break;
@@ -528,7 +528,7 @@ void teleport_player_to(POSITION ny, POSITION nx, BIT_FLAGS mode)
 	}
 
 	sound(SOUND_TELEPORT);
-	(void)move_player_effect(p_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(creature_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
 
@@ -577,7 +577,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 					teleport_player(200, TELEPORT_PASSIVE);
 					msg_print(_("失敗！", "Failed!"));
 				}
-				else teleport_player_to(m_ptr->fy, m_ptr->fx, 0L);
+				else teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, 0L);
 				p_ptr->energy_need += ENERGY_NEED();
 			}
 		}
@@ -2967,7 +2967,7 @@ static bool dimension_door_aux(DEPTH x, DEPTH y)
 	}
 	else
 	{
-		teleport_player_to(y, x, 0L);
+		teleport_player_to(p_ptr, y, x, 0L);
 
 		/* Success */
 		return TRUE;

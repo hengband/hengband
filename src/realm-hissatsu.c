@@ -811,7 +811,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				break;
 			}
 			project(0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
-			teleport_player_to(y, x, 0L);
+			teleport_player_to(caster_ptr, y, x, 0L);
 		}
 		break;
 
