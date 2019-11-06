@@ -4995,7 +4995,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_COMBINE))
 	{
 		creature_ptr->update &= ~(PU_COMBINE);
-		combine_pack();
+		combine_pack(creature_ptr);
 	}
 
 	/* Reorder the pack */

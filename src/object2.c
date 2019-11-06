@@ -5561,7 +5561,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
  * @details
  * Note special handling of the "overflow" slot
  */
-void combine_pack(void)
+void combine_pack(player_type *owner_ptr)
 {
 	int             i, j, k;
 	object_type *o_ptr;
@@ -5575,7 +5575,7 @@ void combine_pack(void)
 		/* Combine the pack (backwards) */
 		for (i = INVEN_PACK; i > 0; i--)
 		{
-			o_ptr = &p_ptr->inventory_list[i];
+			o_ptr = &owner_ptr->inventory_list[i];
 
 			/* Skip empty items */
 			if (!o_ptr->k_idx) continue;
@@ -5585,7 +5585,7 @@ void combine_pack(void)
 			{
 				int max_num;
 
-				j_ptr = &p_ptr->inventory_list[j];
+				j_ptr = &owner_ptr->inventory_list[j];
 
 				/* Skip empty items */
 				if (!j_ptr->k_idx) continue;
@@ -5608,17 +5608,17 @@ void combine_pack(void)
 						object_absorb(j_ptr, o_ptr);
 
 						/* One object is gone */
-						p_ptr->inven_cnt--;
+						owner_ptr->inven_cnt--;
 
 						/* Slide everything down */
 						for (k = i; k < INVEN_PACK; k++)
 						{
 							/* Structure copy */
-							p_ptr->inventory_list[k] = p_ptr->inventory_list[k+1];
+							owner_ptr->inventory_list[k] = owner_ptr->inventory_list[k+1];
 						}
 
 						/* Erase the "final" slot */
-						object_wipe(&p_ptr->inventory_list[k]);
+						object_wipe(&owner_ptr->inventory_list[k]);
 					}
 					else
 					{
@@ -5646,7 +5646,7 @@ void combine_pack(void)
 						}
 					}
 
-					p_ptr->window |= (PW_INVEN);
+					owner_ptr->window |= (PW_INVEN);
 
 					/* Take note */
 					combined = TRUE;
