@@ -1290,11 +1290,11 @@ static void wiz_create_item(void)
  * Cure everything instantly
  * @return なし
  */
-static void do_cmd_wiz_cure_all(void)
+static void do_cmd_wiz_cure_all(player_type *creature_ptr)
 {
-	(void)life_stream(p_ptr, FALSE, FALSE);
-	(void)restore_mana(p_ptr, TRUE);
-	(void)set_food(p_ptr, PY_FOOD_MAX - 1);
+	(void)life_stream(creature_ptr, FALSE, FALSE);
+	(void)restore_mana(creature_ptr, TRUE);
+	(void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 }
 
 
@@ -1693,7 +1693,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Cure all maladies */
 	case 'a':
-		do_cmd_wiz_cure_all();
+		do_cmd_wiz_cure_all(creature_ptr);
 		break;
 
 	/* Know alignment */
