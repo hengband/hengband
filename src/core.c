@@ -5331,7 +5331,7 @@ void play_game(bool new_game)
 		else
 		{
 			p_ptr->wait_report_score = FALSE;
-			top_twenty();
+			top_twenty(p_ptr);
 			if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
 		}
 		/* Shut the high score file */
@@ -5825,7 +5825,7 @@ void close_game(void)
 				}
 			}
 			if (!p_ptr->wait_report_score)
-				(void)top_twenty();
+				(void)top_twenty(p_ptr);
 		}
 		else if (highscore_fd >= 0)
 		{

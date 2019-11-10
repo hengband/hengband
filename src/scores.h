@@ -44,7 +44,7 @@ extern void display_scores_aux(int from, int to, int note, high_score *score);
 extern void display_scores(int from, int to);
 extern void kingly(player_type *winner_ptr);
 extern bool send_world_score(bool do_send);
-extern errr top_twenty(void);
+extern errr top_twenty(player_type *current_player_ptr);
 extern errr predict_score(player_type *creature_ptr);
 extern void race_legends(void);
 extern void race_score(int race_num);
