@@ -1132,30 +1132,31 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
 
 /*!
  * @brief 射撃時クリティカルによるダメージ期待値修正計算（スナイパーの集中処理と武器経験値） / critical happens at i / 10000
+ * @param shooter_ptr 射撃を行うクリーチャー参照ポインタ
  * @param plus_ammo 矢弾のダメージ修正
  * @param plus_bow 弓のダメージ修正
  * @return ダメージ期待値
  * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
  */
-HIT_POINT calc_crit_ratio_shot(HIT_POINT plus_ammo, HIT_POINT plus_bow)
+HIT_POINT calc_crit_ratio_shot(player_type* shooter_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
 	HIT_POINT i;
-	object_type *j_ptr = &p_ptr->inventory_list[INVEN_BOW];
+	object_type *j_ptr = &shooter_ptr->inventory_list[INVEN_BOW];
 
 	/* Extract "shot" power */
-	i = p_ptr->to_h_b + plus_ammo;
+	i = shooter_ptr->to_h_b + plus_ammo;
 
-	if (p_ptr->tval_ammo == TV_BOLT)
-		i = (p_ptr->skill_thb + (p_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
+	if (shooter_ptr->tval_ammo == TV_BOLT)
+		i = (shooter_ptr->skill_thb + (shooter_ptr->weapon_exp[0][j_ptr->sval] / 400 + i) * BTH_PLUS_ADJ);
 	else
-		i = (p_ptr->skill_thb + ((p_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
+		i = (shooter_ptr->skill_thb + ((shooter_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + i) * BTH_PLUS_ADJ);
 
 	/* Snipers can shot more critically with crossbows */
-	if (p_ptr->concent) i += ((i * p_ptr->concent) / 5);
-	if ((p_ptr->pclass == CLASS_SNIPER) && (p_ptr->tval_ammo == TV_BOLT)) i *= 2;
+	if (shooter_ptr->concent) i += ((i * shooter_ptr->concent) / 5);
+	if ((shooter_ptr->pclass == CLASS_SNIPER) && (shooter_ptr->tval_ammo == TV_BOLT)) i *= 2;
 
 	/* Good bow makes more critical */
-	i += plus_bow * 8 * (p_ptr->concent ? p_ptr->concent + 5 : 5);
+	i += plus_bow * 8 * (shooter_ptr->concent ? shooter_ptr->concent + 5 : 5);
 
 	if (i < 0) i = 0;
 
@@ -1174,7 +1175,7 @@ HIT_POINT calc_expect_crit_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_
 {
 	u32b num;
 	int i, k, crit;
-	i = calc_crit_ratio_shot(plus_ammo, plus_bow);
+	i = calc_crit_ratio_shot(p_ptr, plus_ammo, plus_bow);
 
 	k = 0;
 	num = 0;

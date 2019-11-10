@@ -2513,7 +2513,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 			
 			if(show_ammo_crit_ratio)
 			{
-				int percent = calc_crit_ratio_shot(known ? o_ptr->to_h : 0, known ? bow_ptr->to_h : 0);
+				int percent = calc_crit_ratio_shot(p_ptr, known ? o_ptr->to_h : 0, known ? bow_ptr->to_h : 0);
 				
 				t = object_desc_chr(t, '/');
 				t = object_desc_num(t, percent / 100);
