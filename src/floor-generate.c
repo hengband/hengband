@@ -392,9 +392,11 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
 
 /*!
  * @brief クエストに関わるモンスターの配置を行う / Place quest monsters
+ * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param subject_ptr 近隣への即出現を避けるためのプレイヤークリーチャー参照ポインタ
  * @return 成功したならばTRUEを返す
  */
-bool place_quest_monsters(floor_type *floor_ptr)
+bool place_quest_monsters(floor_type *floor_ptr, player_type *creature_ptr)
 {
 	int i;
 
@@ -409,7 +411,7 @@ bool place_quest_monsters(floor_type *floor_ptr)
 		    (quest[i].type != QUEST_TYPE_KILL_LEVEL &&
 		     quest[i].type != QUEST_TYPE_RANDOM) ||
 		    quest[i].level != floor_ptr->dun_level ||
-		    p_ptr->dungeon_idx != quest[i].dungeon ||
+		    creature_ptr->dungeon_idx != quest[i].dungeon ||
 		    (quest[i].flags & QUEST_FLAG_PRESET))
 		{
 			/* Ignore it */
@@ -450,7 +452,7 @@ bool place_quest_monsters(floor_type *floor_ptr)
 
 					if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) continue;
 					if (!monster_can_enter(y, x, r_ptr, 0)) continue;
-					if (distance(y, x, p_ptr->y, p_ptr->x) < 10) continue;
+					if (distance(y, x, creature_ptr->y, creature_ptr->x) < 10) continue;
 					if (g_ptr->info & CAVE_ICKY) continue;
 					else break;
 				}
@@ -915,7 +917,7 @@ static bool cave_gen(floor_type *floor_ptr)
 	/* Determine the character location */
 	if (!new_player_spot()) return FALSE;
 
-	if (!place_quest_monsters(floor_ptr)) return FALSE;
+	if (!place_quest_monsters(floor_ptr, p_ptr)) return FALSE;
 
 	/* Basic "amount" */
 	k = (floor_ptr->dun_level / 3);
