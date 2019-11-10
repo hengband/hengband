@@ -169,11 +169,11 @@ void stop_singing(player_type *creature_ptr)
 	/* The player is singing? */
 	if (!SINGING_SONG_EFFECT(creature_ptr)) return;
 
-	/* Hack -- if called from set_action(p_ptr), avoid recursive loop */
-	if (creature_ptr->action == ACTION_SING) set_action(p_ptr, ACTION_NONE);
+	/* Hack -- if called from set_action(), avoid recursive loop */
+	if (creature_ptr->action == ACTION_SING) set_action(creature_ptr, ACTION_NONE);
 
 	/* Message text of each song or etc. */
-	exe_spell(p_ptr, REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
+	exe_spell(creature_ptr, REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
 
 	SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
 	SINGING_SONG_ID(creature_ptr) = 0;
@@ -193,7 +193,7 @@ bool time_walk(player_type *creature_ptr)
 //	msg_print(_("「『ザ・ワールド』！時は止まった！」", "You yell 'The World! Time has stopped!'"));
 	msg_print(NULL);
 
-	creature_ptr->energy_need -= 1000 + (100 + p_ptr->csp - 50)*TURNS_PER_TICK / 10;
+	creature_ptr->energy_need -= 1000 + (100 + creature_ptr->csp - 50)*TURNS_PER_TICK / 10;
 	creature_ptr->redraw |= (PR_MAP);
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -418,15 +418,15 @@ bool fishing(player_type *creature_ptr)
 		msg_print(_("そこは水辺ではない。", "There is no fishing place."));
 		return FALSE;
 	}
-	else if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+	else if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(m_name, &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+		monster_desc(m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
 		msg_format(_("%sが邪魔だ！", "%^s is stand in your way."), m_name);
 		free_turn(creature_ptr);
 		return FALSE;
 	}
-	set_action(p_ptr, ACTION_FISH);
+	set_action(creature_ptr, ACTION_FISH);
 	creature_ptr->redraw |= (PR_STATE);
 	return TRUE;
 }
@@ -443,7 +443,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	/* Cast off activated item */
 	for (inv = INVEN_RARM; inv <= INVEN_FEET; inv++)
 	{
-		if (o_ptr == &p_ptr->inventory_list[inv]) break;
+		if (o_ptr == &creature_ptr->inventory_list[inv]) break;
 	}
 	if (inv > INVEN_FEET) return FALSE;
 
@@ -451,7 +451,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	inven_item_increase(inv, (0 - o_ptr->number));
 	inven_item_optimize(inv);
 	o_idx = drop_near(&forge, 0, creature_ptr->y, creature_ptr->x);
-	o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
@@ -459,14 +459,14 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	/* Get effects */
 	msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
 	t = 20 + randint1(20);
-	(void)set_blind(p_ptr, creature_ptr->blind + t);
-	(void)set_afraid(p_ptr, 0);
-	(void)set_tim_esp(p_ptr, creature_ptr->tim_esp + t, FALSE);
-	(void)set_tim_regen(p_ptr, creature_ptr->tim_regen + t, FALSE);
-	(void)set_hero(p_ptr, creature_ptr->hero + t, FALSE);
-	(void)set_blessed(p_ptr, creature_ptr->blessed + t, FALSE);
-	(void)set_fast(p_ptr, creature_ptr->fast + t, FALSE);
-	(void)set_shero(p_ptr, creature_ptr->shero + t, FALSE);
+	(void)set_blind(creature_ptr, creature_ptr->blind + t);
+	(void)set_afraid(creature_ptr, 0);
+	(void)set_tim_esp(creature_ptr, creature_ptr->tim_esp + t, FALSE);
+	(void)set_tim_regen(creature_ptr, creature_ptr->tim_regen + t, FALSE);
+	(void)set_hero(creature_ptr, creature_ptr->hero + t, FALSE);
+	(void)set_blessed(creature_ptr, creature_ptr->blessed + t, FALSE);
+	(void)set_fast(creature_ptr, creature_ptr->fast + t, FALSE);
+	(void)set_shero(creature_ptr, creature_ptr->shero + t, FALSE);
 	if (creature_ptr->pclass == CLASS_FORCETRAINER)
 	{
 		P_PTR_KI = creature_ptr->lev * 5 + 190;
@@ -494,7 +494,7 @@ void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 
 	case 4: case 5:
 	{
-		teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+		teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 		break;
 	}
 
