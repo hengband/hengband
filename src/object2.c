@@ -5796,7 +5796,7 @@ void display_koff(KIND_OBJECT_IDX k_idx)
 		}
 
 		/* Print spells */
-		print_spells(0, spells, num, 2, 0, use_realm);
+		print_spells(p_ptr, 0, spells, num, 2, 0, use_realm);
 	}
 }
 

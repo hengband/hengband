@@ -2631,6 +2631,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
  * @brief 呪文情報の表示処理 /
  * Print a list of spells (for browsing or casting or viewing)
  * @param target_spell 呪文ID		    
+ * @param caster_ptr 術者の参照ポインタ
  * @param spells 表示するスペルID配列の参照ポインタ
  * @param num 表示するスペルの数(spellsの要素数)
  * @param y 表示メッセージ左上Y座標
@@ -2638,7 +2639,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
  * @param use_realm 魔法領域ID
  * @return なし
  */
-void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX use_realm)
+void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX use_realm)
 {
 	int i;
 	SPELL_IDX spell;
@@ -2666,9 +2667,9 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 	put_str(_("名前", "Name"), y, x + 5);
 	put_str(buf, y, x + 29);
 
-	if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE)) increment = 0;
-	else if (use_realm == p_ptr->realm1) increment = 0;
-	else if (use_realm == p_ptr->realm2) increment = 32;
+	if ((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE)) increment = 0;
+	else if (use_realm == caster_ptr->realm1) increment = 0;
+	else if (use_realm == caster_ptr->realm2) increment = 32;
 
 	/* Dump the spells */
 	for (i = 0; i < num; i++)
@@ -2700,7 +2701,7 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 			if (!increment && (exp_level == EXP_LEVEL_MASTER)) max = TRUE;
 			else if ((increment == 32) && (exp_level >= EXP_LEVEL_EXPERT)) max = TRUE;
 			else if (s_ptr->slevel >= 99) max = TRUE;
-			else if ((p_ptr->pclass == CLASS_RED_MAGE) && (exp_level >= EXP_LEVEL_SKILLED)) max = TRUE;
+			else if ((caster_ptr->pclass == CLASS_RED_MAGE) && (exp_level >= EXP_LEVEL_SKILLED)) max = TRUE;
 
 			strncpy(ryakuji, exp_level_str[exp_level], 4);
 			ryakuji[3] = ']';
@@ -2726,7 +2727,7 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 		/* XXX XXX Could label spells above the players level */
 
 		/* Get extra info */
-		strcpy(info, exe_spell(p_ptr, use_realm, spell, SPELL_INFO));
+		strcpy(info, exe_spell(caster_ptr, use_realm, spell, SPELL_INFO));
 
 		/* Use that info */
 		comment = info;
@@ -2735,41 +2736,41 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 		line_attr = TERM_WHITE;
 
 		/* Analyze the spell */
-		if ((p_ptr->pclass == CLASS_SORCERER) || (p_ptr->pclass == CLASS_RED_MAGE))
+		if ((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE))
 		{
-			if (s_ptr->slevel > p_ptr->max_plv)
+			if (s_ptr->slevel > caster_ptr->max_plv)
 			{
 				comment = _("未知", "unknown");
 				line_attr = TERM_L_BLUE;
 			}
-			else if (s_ptr->slevel > p_ptr->lev)
+			else if (s_ptr->slevel > caster_ptr->lev)
 			{
 				comment = _("忘却", "forgotten");
 				line_attr = TERM_YELLOW;
 			}
 		}
-		else if ((use_realm != p_ptr->realm1) && (use_realm != p_ptr->realm2))
+		else if ((use_realm != caster_ptr->realm1) && (use_realm != caster_ptr->realm2))
 		{
 			comment = _("未知", "unknown");
 			line_attr = TERM_L_BLUE;
 		}
-		else if ((use_realm == p_ptr->realm1) ?
-		    ((p_ptr->spell_forgotten1 & (1L << spell))) :
-		    ((p_ptr->spell_forgotten2 & (1L << spell))))
+		else if ((use_realm == caster_ptr->realm1) ?
+		    ((caster_ptr->spell_forgotten1 & (1L << spell))) :
+		    ((caster_ptr->spell_forgotten2 & (1L << spell))))
 		{
 			comment = _("忘却", "forgotten");
 			line_attr = TERM_YELLOW;
 		}
-		else if (!((use_realm == p_ptr->realm1) ?
-		    (p_ptr->spell_learned1 & (1L << spell)) :
-		    (p_ptr->spell_learned2 & (1L << spell))))
+		else if (!((use_realm == caster_ptr->realm1) ?
+		    (caster_ptr->spell_learned1 & (1L << spell)) :
+		    (caster_ptr->spell_learned2 & (1L << spell))))
 		{
 			comment = _("未知", "unknown");
 			line_attr = TERM_L_BLUE;
 		}
-		else if (!((use_realm == p_ptr->realm1) ?
-		    (p_ptr->spell_worked1 & (1L << spell)) :
-		    (p_ptr->spell_worked2 & (1L << spell))))
+		else if (!((use_realm == caster_ptr->realm1) ?
+		    (caster_ptr->spell_worked1 & (1L << spell)) :
+		    (caster_ptr->spell_worked2 & (1L << spell))))
 		{
 			comment = _("未経験", "untried");
 			line_attr = TERM_L_GREEN;
@@ -2779,15 +2780,15 @@ void print_spells(SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y
 		if (use_realm == REALM_HISSATSU)
 		{
 			strcat(out_val, format("%-25s %2d %4d",
-			    exe_spell(p_ptr, use_realm, spell, SPELL_NAME), /* realm, spell */
+			    exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), /* realm, spell */
 			    s_ptr->slevel, need_mana));
 		}
 		else
 		{
 			strcat(out_val, format("%-25s%c%-4s %2d %4d %3d%% %s",
-			    exe_spell(p_ptr, use_realm, spell, SPELL_NAME), /* realm, spell */
+			    exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), /* realm, spell */
 			    (max ? '!' : ' '), ryakuji,
-			    s_ptr->slevel, need_mana, spell_chance(p_ptr, spell, use_realm), comment));
+			    s_ptr->slevel, need_mana, spell_chance(caster_ptr, spell, use_realm), comment));
 		}
 		c_prt(line_attr, out_val, y + i + 1, x);
 	}

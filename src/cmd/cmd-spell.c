@@ -439,7 +439,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 			}
 			if (menu_line > num) menu_line -= num;
 			/* Display a list of spells */
-			print_spells(menu_line, spells, num, 1, 15, use_realm);
+			print_spells(caster_ptr, menu_line, spells, num, 1, 15, use_realm);
 			if (ask) continue;
 		}
 		else
@@ -454,7 +454,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 					screen_save();
 
 					/* Display a list of spells */
-					print_spells(menu_line, spells, num, 1, 15, use_realm);
+					print_spells(caster_ptr, menu_line, spells, num, 1, 15, use_realm);
 				}
 
 				/* Hide the list */
@@ -712,7 +712,7 @@ void do_cmd_browse(player_type *caster_ptr)
 			if (spell == -1) break;
 
 			/* Display a list of spells */
-			print_spells(0, spells, num, 1, 15, use_realm);
+			print_spells(caster_ptr, 0, spells, num, 1, 15, use_realm);
 
 			/* Notify that there's nothing to see, and wait. */
 			if (use_realm == REALM_HISSATSU)
