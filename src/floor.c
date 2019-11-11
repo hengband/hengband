@@ -25,14 +25,14 @@ saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 */
 void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
+	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
 	}
 	else
 	{
-		set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
-		p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
+		set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+		floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(y, x);
 	}
 }
