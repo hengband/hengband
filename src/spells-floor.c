@@ -50,9 +50,9 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 	feature_type *f_ptr;
 
 	/* Memorize objects */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
@@ -62,12 +62,12 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 	}
 
 	/* Scan all normal grids */
-	for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
+	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
 		/* Scan all normal grids */
-		for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
+		for (x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Memorize terrain of the grid */
 			g_ptr->info |= (CAVE_KNOWN);
@@ -84,7 +84,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 				{
 					POSITION yy = y + ddy_ddd[i];
 					POSITION xx = x + ddx_ddd[i];
-					g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
+					g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
 
 					/* Feature code (applying "mimic" field) */
 					f_ptr = &f_info[get_feat_mimic(g_ptr)];
@@ -123,7 +123,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 
 	if (caster_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (p_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
+		if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
 	}
 }
 
