@@ -869,9 +869,9 @@ static bool hack_isnt_wall(floor_type *floor_ptr, POSITION y, POSITION x, int c1
 
 /*
  * Quick and nasty fill routine used to find the connected region
- * of floor in the middle of the p_ptr->current_floor_ptr->grid_array
+ * of floor in the middle of the grids
  */
-static void cave_fill(POSITION y, POSITION x)
+static void cave_fill(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	int i, j, d;
 	POSITION ty, tx;
@@ -905,11 +905,11 @@ static void cave_fill(POSITION y, POSITION x)
 			j = ty + ddy_ddd[d];
 			i = tx + ddx_ddd[d];
 
-			/* Paranoia Don't leave the p_ptr->current_floor_ptr->grid_array */
-			if (!in_bounds(p_ptr->current_floor_ptr, j, i))
+			/* Paranoia Don't leave the floor_ptr->grid_array */
+			if (!in_bounds(floor_ptr, j, i))
 			{
 				/* affect boundary */
-				p_ptr->current_floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
+				floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
 /*				return; */
 			}
 
@@ -918,7 +918,7 @@ static void cave_fill(POSITION y, POSITION x)
 				&& (j > fill_data.ymin) && (j < fill_data.ymax))
 			{
 				/* If not a wall or floor done before */
-				if (hack_isnt_wall(p_ptr->current_floor_ptr, j, i,
+				if (hack_isnt_wall(floor_ptr, j, i,
 					fill_data.c1, fill_data.c2, fill_data.c3,
 					fill_data.feat1, fill_data.feat2, fill_data.feat3,
 					fill_data.info1, fill_data.info2, fill_data.info3))
@@ -937,7 +937,7 @@ static void cave_fill(POSITION y, POSITION x)
 					}
 					else
 					{
-						/* keep tally of size of p_ptr->current_floor_ptr->grid_array system */
+						/* keep tally of size of floor_ptr->grid_array system */
 						(fill_data.amount)++;
 					}
 				}
@@ -945,7 +945,7 @@ static void cave_fill(POSITION y, POSITION x)
 			else
 			{
 				/* affect boundary */
-				p_ptr->current_floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
+				floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
 			}
 		}
 	}
@@ -985,7 +985,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 	/* number of filled squares */
 	fill_data.amount = 0;
 
-	cave_fill((byte)y0, (byte)x0);
+	cave_fill(floor_ptr, (byte)y0, (byte)x0);
 
 	/* if tally too small, try again */
 	if (fill_data.amount < 10)
@@ -1256,7 +1256,7 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 	/* select region connected to center of floor_ptr->grid_array system
 	* this gets rid of alot of isolated one-sqaures that
 	* can make teleport traps instadeaths... */
-	cave_fill((byte)y0, (byte)x0);
+	cave_fill(floor_ptr, (byte)y0, (byte)x0);
 
 	/* if tally too small, try again */
 	if (fill_data.amount < 10)
