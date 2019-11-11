@@ -153,6 +153,7 @@ static byte room_build_order[ROOM_T_MAX] = {
 
 /*!
  * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。
+ * @param floor_ptr 配置するフロアの参照ポインタ
  * @param y0 配置したい中心のY座標
  * @param x0 配置したい中心のX座標
  * @details
@@ -162,7 +163,7 @@ static byte room_build_order[ROOM_T_MAX] = {
  * Note - this should be used only on allocated regions
  * within another room.
  */
-void build_small_room(POSITION x0, POSITION y0)
+void build_small_room(floor_type *floor_ptr, POSITION x0, POSITION y0)
 {
 	POSITION x, y;
 
@@ -181,14 +182,14 @@ void build_small_room(POSITION x0, POSITION y0)
 	/* Place a secret door on one side */
 	switch (randint0(4))
 	{
-		case 0: place_secret_door(p_ptr->current_floor_ptr, y0, x0 - 1, DOOR_DEFAULT); break;
-		case 1: place_secret_door(p_ptr->current_floor_ptr, y0, x0 + 1, DOOR_DEFAULT); break;
-		case 2: place_secret_door(p_ptr->current_floor_ptr, y0 - 1, x0, DOOR_DEFAULT); break;
-		case 3: place_secret_door(p_ptr->current_floor_ptr, y0 + 1, x0, DOOR_DEFAULT); break;
+		case 0: place_secret_door(floor_ptr, y0, x0 - 1, DOOR_DEFAULT); break;
+		case 1: place_secret_door(floor_ptr, y0, x0 + 1, DOOR_DEFAULT); break;
+		case 2: place_secret_door(floor_ptr, y0 - 1, x0, DOOR_DEFAULT); break;
+		case 3: place_secret_door(floor_ptr, y0 + 1, x0, DOOR_DEFAULT); break;
 	}
 
 	/* Clear mimic type */
-	p_ptr->current_floor_ptr->grid_array[y0][x0].mimic = 0;
+	floor_ptr->grid_array[y0][x0].mimic = 0;
 
 	/* Add inner open space */
 	place_floor_bold(y0, x0);

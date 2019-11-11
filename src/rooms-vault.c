@@ -1005,7 +1005,7 @@ static void build_elemental_vault(floor_type *floor_ptr, POSITION x0, POSITION y
 	/* make a few rooms in the vault */
 	for (i = 1; i <= (xsize * ysize) / 50; i++)
 	{
-		build_small_room(x0 + randint0(xsize - 4) - xsize / 2 + 2,
+		build_small_room(floor_ptr, x0 + randint0(xsize - 4) - xsize / 2 + 2,
 			y0 + randint0(ysize - 4) - ysize / 2 + 2);
 	}
 

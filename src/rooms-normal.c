@@ -1032,7 +1032,7 @@ bool build_type12(floor_type *floor_ptr)
 	if (emptyflag && one_in_(2))
 	{
 		/* Build the vault */
-		build_small_room(x0, y0);
+		build_small_room(floor_ptr, x0, y0);
 
 		/* Place a treasure in the vault */
 		place_object(y0, x0, 0L);
