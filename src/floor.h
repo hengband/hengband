@@ -286,10 +286,10 @@ extern floor_type floor_info;
  * Line 2 -- forbid monsters
  * Line 3 -- forbid the player
  */
-#define cave_naked_bold(Y,X) \
-	(cave_clean_bold(p_ptr->current_floor_ptr, Y,X) && \
-	 !(p_ptr->current_floor_ptr->grid_array[Y][X].m_idx) && \
-	 !player_bold(p_ptr, Y,X))
+#define cave_naked_bold(C,F,Y,X) \
+	(cave_clean_bold(F,Y,X) && \
+	 !((F)->grid_array[Y][X].m_idx) && \
+	 !player_bold(C,Y,X))
 
 
 /*
