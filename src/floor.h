@@ -302,7 +302,7 @@ extern floor_type floor_info;
 
 
 /*
- * Grid based version of "cave_empty_bold(p_ptr->current_floor_ptr, )"
+ * Grid based version of "cave_empty_bold()"
  */
 #define cave_empty_grid(C) \
 	(cave_have_flag_grid((C), FF_PLACE) && \

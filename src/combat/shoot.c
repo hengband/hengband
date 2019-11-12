@@ -1171,11 +1171,11 @@ HIT_POINT calc_crit_ratio_shot(player_type* shooter_ptr, HIT_POINT plus_ammo, HI
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit_shot(WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
 	u32b num;
 	int i, k, crit;
-	i = calc_crit_ratio_shot(p_ptr, plus_ammo, plus_bow);
+	i = calc_crit_ratio_shot(shooter_ptr, plus_ammo, plus_bow);
 
 	k = 0;
 	num = 0;
