@@ -64,7 +64,7 @@ bool spell_learnable(MONSTER_IDX m_idx)
 	/* Extract the "see-able-ness" */
 	bool seen = (!p_ptr->blind && m_ptr->ml);
 
-	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
+	bool maneable = player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx);
 	return (seen && maneable && !current_world_ptr->timewalk_m_idx);
 }
 

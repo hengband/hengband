@@ -274,7 +274,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	bool obvious = FALSE;
-	bool known = player_has_los_bold(y, x);
+	bool known = player_has_los_bold(p_ptr, y, x);
 
 	who = who ? who : 0;
 
@@ -412,7 +412,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 
 			/* Remove "unsafe" flag if player is not blind */
-			if (!p_ptr->blind && player_has_los_bold(y, x))
+			if (!p_ptr->blind && player_has_los_bold(p_ptr, y, x))
 			{
 				g_ptr->info &= ~(CAVE_UNSAFE);
 				lite_spot(y, x);
@@ -440,7 +440,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 
 			/* Remove "unsafe" flag if player is not blind */
-			if (!p_ptr->blind && player_has_los_bold(y, x))
+			if (!p_ptr->blind && player_has_los_bold(p_ptr, y, x))
 			{
 				g_ptr->info &= ~(CAVE_UNSAFE);
 				lite_spot(y, x);
@@ -761,7 +761,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	bool obvious = FALSE;
-	bool known = player_has_los_bold(y, x);
+	bool known = player_has_los_bold(p_ptr, y, x);
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -5744,7 +5744,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
 				/* Only do visuals if the player can "see" the bolt */
-				if (panel_contains(y, x) && player_has_los_bold(y, x))
+				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
 				{
 					u16b p;
 
@@ -5876,7 +5876,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
 				/* Only do visuals if the player can "see" the bolt */
-				if (panel_contains(y, x) && player_has_los_bold(y, x))
+				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
 				{
 					u16b p;
 
@@ -6017,7 +6017,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		if (!blind && !(flg & (PROJECT_HIDE | PROJECT_FAST)))
 		{
 			/* Only do visuals if the player can "see" the bolt */
-			if (panel_contains(y, x) && player_has_los_bold(y, x))
+			if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
 			{
 				u16b p;
 
@@ -6178,7 +6178,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				x = gx[i];
 
 				/* Only do visuals if the player can "see" the blast */
-				if (panel_contains(y, x) && player_has_los_bold(y, x))
+				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
 				{
 					u16b p;
 
@@ -6222,7 +6222,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				x = gx[i];
 
 				/* Hack -- Erase if needed */
-				if (panel_contains(y, x) && player_has_los_bold(y, x))
+				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
 				{
 					lite_spot(y, x);
 				}
@@ -6627,7 +6627,7 @@ bool binding_field(HIT_POINT dam)
 			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]) &&
 				distance(p_ptr->y, p_ptr->x, y, x) <= MAX_RANGE &&
 				distance(p_ptr->y, p_ptr->x, y, x) != 0 &&
-				player_has_los_bold(y, x) &&
+				player_has_los_bold(p_ptr, y, x) &&
 				projectable(p_ptr->y, p_ptr->x, y, x)
 				) {
 				mirror_y[mirror_num] = y;
@@ -6677,7 +6677,7 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
+				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					/* Visual effects */
 					if (!(p_ptr->blind)
 						&& panel_contains(y, x)) {
@@ -6700,7 +6700,7 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
+				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					(void)project_f(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
 			}
@@ -6715,7 +6715,7 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
+				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					(void)project_o(0, 0, y, x, dam, GF_MANA);
 				}
 			}
@@ -6730,7 +6730,7 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
+				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
 					(void)project_m(0, 0, y, x, dam, GF_MANA,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}

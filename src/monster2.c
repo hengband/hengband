@@ -2035,7 +2035,7 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 		}
 
 		/* Normal line of sight, and not blind */
-		if (player_has_los_bold(fy, fx) && !p_ptr->blind)
+		if (player_has_los_bold(p_ptr, fy, fx) && !p_ptr->blind)
 		{
 			bool do_invisible = FALSE;
 			bool do_cold_blood = FALSE;

@@ -430,7 +430,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	x1 = m_ptr->fx;
 
 	/* Hack -- Player can see us, run towards him */
-	if (player_has_los_bold(y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)) return (FALSE);
+	if (player_has_los_bold(p_ptr, y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)) return (FALSE);
 
 	/* Monster grid */
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y1][x1];
@@ -1400,7 +1400,7 @@ void process_monster(MONSTER_IDX m_idx)
 				if (see_m)
 				{
 					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG) &&
-					    player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))
+					    player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))
 					{
 						msg_format(_("%^s「ピンチだ！退却させてもらう！」", "%^s says 'It is the pinch! I will retreat'."), m_name);
 					}
@@ -1567,7 +1567,7 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Some monsters can speak */
 		if ((ap_r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
 		    one_in_(SPEAK_CHANCE) &&
-		    player_has_los_bold(oy, ox) &&
+		    player_has_los_bold(p_ptr, oy, ox) &&
 		    projectable(oy, ox, p_ptr->y, p_ptr->x))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
@@ -2330,7 +2330,7 @@ void process_monster(MONSTER_IDX m_idx)
 						did_kill_item = TRUE;
 
 						/* Describe observable situations */
-						if (player_has_los_bold(ny, nx))
+						if (player_has_los_bold(p_ptr, ny, nx))
 						{
 							msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
 						}
@@ -2567,7 +2567,7 @@ void process_monsters(void)
 
 		/* Handle "sight" and "aggravation" */
         else if ((m_ptr->cdis <= MAX_SIGHT || p_ptr->phase_out) &&
-			(player_has_los_bold(fy, fx) || (p_ptr->cursed & TRC_AGGRAVATE)))
+			(player_has_los_bold(p_ptr, fy, fx) || (p_ptr->cursed & TRC_AGGRAVATE)))
 		{
 			/* We can "see" or "feel" the player */
 			test = TRUE;

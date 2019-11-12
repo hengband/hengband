@@ -796,7 +796,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 		x = m_ptr->fx;
 
 		/* Require line of sight */
-		if (!player_has_los_bold(y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)) continue;
+		if (!player_has_los_bold(p_ptr, y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)) continue;
 
 		/* Mark the monster */
 		m_ptr->mflag |= (MFLAG_LOS);
@@ -996,7 +996,7 @@ void aggravate_monsters(MONSTER_IDX who)
 		}
 
 		/* Speed up monsters in line of sight */
-		if (player_has_los_bold(m_ptr->fy, m_ptr->fx))
+		if (player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx))
 		{
 			if (!is_pet(m_ptr))
 			{
@@ -1254,7 +1254,7 @@ bool probing(void)
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Require line of sight */
-		if (!player_has_los_bold(m_ptr->fy, m_ptr->fx)) continue;
+		if (!player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx)) continue;
 
 		/* Probe visible monsters */
 		if (m_ptr->ml)

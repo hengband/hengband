@@ -586,7 +586,7 @@ static void process_monsters_mtimed_aux(MONSTER_IDX m_idx, int mtimed_idx)
 			}
 
 			/* Handle "sight" and "aggravation" */
-			else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(m_ptr->fy, m_ptr->fx)))
+			else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx)))
 			{
 				/* We may wake up */
 				test = TRUE;
@@ -839,7 +839,7 @@ bool set_monster_timewalk(int num, MONSTER_IDX who, bool vs_player)
 	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	current_world_ptr->timewalk_m_idx = 0;
-	if (vs_player || (player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
+	if (vs_player || (player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
 	{
 		msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
 		msg_print(NULL);

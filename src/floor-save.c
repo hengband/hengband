@@ -451,7 +451,7 @@ static void preserve_pet(void)
 				 * when you or the pet can see the other.
 				 */
 				if (m_ptr->nickname && 
-				    ((player_has_los_bold(m_ptr->fy, m_ptr->fx) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
+				    ((player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
 				     (los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))))
 				{
 					if (dis > 3) continue;

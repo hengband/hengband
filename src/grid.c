@@ -922,7 +922,7 @@ bool check_local_illumination(POSITION y, POSITION x)
 /*! 対象座標のマスの照明状態を更新する際の補助処理マクロ */
 #define update_local_illumination_aux(Y, X) \
 { \
-	if (player_has_los_bold((Y), (X))) \
+	if (player_has_los_bold(p_ptr, (Y), (X))) \
 	{ \
 		/* Update the monster */ \
 		if (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster(p_ptr->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
@@ -1330,7 +1330,7 @@ void lite_spot(POSITION y, POSITION x)
  * grid and maintains an array of all "CAVE_VIEW" grids.
  *
  * This set of grids is the complete set of all grids within line of sight
- * of the player, allowing the "player_has_los_bold()" macro to work very
+ * of the player, allowing the "player_has_los_bold(p_ptr, )" macro to work very
  * quickly.
  *
  *

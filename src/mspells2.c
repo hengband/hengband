@@ -293,7 +293,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	u32b f4, f5, f6;
 
 	bool see_m = is_seen(m_ptr);
-	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
+	bool maneable = player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx);
 	bool pet = is_pet(m_ptr);
 
 	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && p_ptr->current_floor_ptr->dun_level

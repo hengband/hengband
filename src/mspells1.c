@@ -1377,7 +1377,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 	/* Extract the "see-able-ness" */
     bool seen = (!p_ptr->blind && m_ptr->ml);
-	bool maneable = player_has_los_bold(m_ptr->fy, m_ptr->fx);
+	bool maneable = player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx);
 
 	/* Check "projectable" */
 	bool direct;

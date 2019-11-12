@@ -158,7 +158,7 @@ void update_smell(floor_type *floor_ptr)
 			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
 
 			/* Grid must not be blocked by walls from the character */
-			if (!player_has_los_bold(y, x)) continue;
+			if (!player_has_los_bold(p_ptr, y, x)) continue;
 
 			/* Note grids that are too far away */
 			if (scent_adjust[i][j] == -1) continue;

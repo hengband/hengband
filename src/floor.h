@@ -341,8 +341,8 @@ extern floor_type floor_info;
  *
  * Note the use of comparison to zero to force a "boolean" result
  */
-#define player_has_los_bold(Y,X) \
-    (((p_ptr->current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || p_ptr->phase_out)
+#define player_has_los_bold(C,Y,X) \
+    ((((C)->current_floor_ptr->grid_array[Y][X].info & (CAVE_VIEW)) != 0) || (C)->phase_out)
 
 
 /*

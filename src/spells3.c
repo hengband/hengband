@@ -595,7 +595,7 @@ bool teleport_level_other(player_type *creature_ptr)
 	if (!target_set(TARGET_KILL)) return FALSE;
 	target_m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 	if (!target_m_idx) return TRUE;
-	if (!player_has_los_bold(target_row, target_col)) return TRUE;
+	if (!player_has_los_bold(p_ptr, target_row, target_col)) return TRUE;
 	if (!projectable(creature_ptr->y, creature_ptr->x, target_row, target_col)) return TRUE;
 	m_ptr = &p_ptr->current_floor_ptr->m_list[target_m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
@@ -1285,7 +1285,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 		/* We need to see the item */
 		if (require_los)
 		{
-			if (!player_has_los_bold(ty, tx))
+			if (!player_has_los_bold(p_ptr, ty, tx))
 			{
 				msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
 				return;

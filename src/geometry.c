@@ -844,7 +844,7 @@ bool player_can_see_bold(POSITION y, POSITION x)
 	if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;
 
 	/* Require line of sight to the grid */
-	if (!player_has_los_bold(y, x)) return FALSE;
+	if (!player_has_los_bold(p_ptr, y, x)) return FALSE;
 
 	/* Noctovision of Ninja */
 	if (p_ptr->see_nocto) return TRUE;
