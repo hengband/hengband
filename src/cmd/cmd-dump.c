@@ -2913,14 +2913,14 @@ void do_cmd_feeling(player_type *creature_ptr)
 	if (creature_ptr->wild_mode) return;
 
 	/* No useful feeling in quests */
-	if (creature_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level))
+	if (creature_ptr->inside_quest && !random_quest_number(creature_ptr->current_floor_ptr->dun_level))
 	{
 		msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
 		return;
 	}
 
 	/* No useful feeling in town */
-	else if (creature_ptr->town_num && !p_ptr->current_floor_ptr->dun_level)
+	else if (creature_ptr->town_num && !creature_ptr->current_floor_ptr->dun_level)
 	{
 		if (!strcmp(town_info[creature_ptr->town_num].name, _("荒野", "wilderness")))
 		{
@@ -2935,7 +2935,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	}
 
 	/* No useful feeling in the wilderness */
-	else if (!p_ptr->current_floor_ptr->dun_level)
+	else if (!creature_ptr->current_floor_ptr->dun_level)
 	{
 		msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
 		return;
