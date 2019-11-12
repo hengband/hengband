@@ -213,7 +213,7 @@ void place_trap(POSITION y, POSITION x)
 	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Require empty, clean, floor grid */
-	if (!cave_clean_bold(y, x)) return;
+	if (!cave_clean_bold(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Place an invisible trap */
 	g_ptr->mimic = g_ptr->feat;
