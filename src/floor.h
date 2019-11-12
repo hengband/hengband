@@ -248,9 +248,9 @@ extern floor_type floor_info;
  * Line 1 -- forbid non-drops
  * Line 2 -- forbid object terrains
  */
-#define cave_drop_bold(Y,X) \
+#define cave_drop_bold(F,Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_DROP) && \
-	 !(p_ptr->current_floor_ptr->grid_array[Y][X].info & CAVE_OBJECT))
+	 !((F)->grid_array[Y][X].info & CAVE_OBJECT))
 
 
 /*

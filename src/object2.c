@@ -4402,7 +4402,7 @@ void place_object(POSITION y, POSITION x, BIT_FLAGS mode)
 	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Require floor space */
-	if (!cave_drop_bold(y, x)) return;
+	if (!cave_drop_bold(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Avoid stacking on other objects */
 	if (g_ptr->o_idx) return;
@@ -4513,7 +4513,7 @@ void place_gold(POSITION y, POSITION x)
 	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Require floor space */
-	if (!cave_drop_bold(y, x)) return;
+	if (!cave_drop_bold(p_ptr->current_floor_ptr, y, x)) return;
 
 	/* Avoid stacking on other objects */
 	if (g_ptr->o_idx) return;
@@ -4648,7 +4648,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
 
 			/* Require floor space */
-			if (!cave_drop_bold(ty, tx)) continue;
+			if (!cave_drop_bold(p_ptr->current_floor_ptr, ty, tx)) continue;
 
 			/* No objects */
 			k = 0;
@@ -4725,7 +4725,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		bx = tx;
 
 		/* Require floor space */
-		if (!cave_drop_bold(by, bx)) continue;
+		if (!cave_drop_bold(p_ptr->current_floor_ptr, by, bx)) continue;
 
 		flag = TRUE;
 	}
@@ -4740,7 +4740,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			for (tx = 1; tx < p_ptr->current_floor_ptr->width - 1; tx++)
 			{
 				/* A valid space found */
-				if (cave_drop_bold(ty, tx)) candidates++;
+				if (cave_drop_bold(p_ptr->current_floor_ptr, ty, tx)) candidates++;
 			}
 		}
 
@@ -4777,7 +4777,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		{
 			for (tx = 1; tx < p_ptr->current_floor_ptr->width - 1; tx++)
 			{
-				if (cave_drop_bold(ty, tx))
+				if (cave_drop_bold(p_ptr->current_floor_ptr, ty, tx))
 				{
 					pick--;
 
