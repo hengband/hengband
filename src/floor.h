@@ -274,8 +274,8 @@ extern floor_type floor_info;
  * Line 1 -- forbid non-empty grids
  * Line 2 -- forbid trees while dungeon generation
  */
-#define cave_empty_bold2(Y,X) \
-	(cave_empty_bold(p_ptr->current_floor_ptr, Y,X) && \
+#define cave_empty_bold2(F,Y,X) \
+	(cave_empty_bold(F,Y,X) && \
 	 (current_world_ptr->character_dungeon || !cave_have_flag_bold((Y), (X), FF_TREE)))
 
 

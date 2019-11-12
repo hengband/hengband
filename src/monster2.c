@@ -2926,7 +2926,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 			else
 			{
 				/* Walls and Monsters block flow */
-				if (!cave_empty_bold2(ny, nx)) continue;
+				if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
 
 				/* ... nor on the Pattern */
 				if (pattern_tile(ny, nx)) continue;
@@ -3032,7 +3032,7 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 			scatter(&my, &mx, hy, hx, 4, 0);
 
 			/* Walls and Monsters block flow */
-			if (!cave_empty_bold2(my, mx)) continue;
+			if (!cave_empty_bold2(p_ptr->current_floor_ptr, my, mx)) continue;
 
 			/* Attempt to place another monster */
 			if (place_monster_one(who, my, mx, r_idx, mode))
@@ -3182,7 +3182,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 			scatter(&ny, &nx, y, x, d, 0);
 
 			/* Require empty grids */
-			if (!cave_empty_bold2(ny, nx)) continue;
+			if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
 			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(ny, nx));
 
 			/* Pick a random race */
@@ -3316,7 +3316,7 @@ bool alloc_guardian(bool def_val)
 			ox = randint1(p_ptr->current_floor_ptr->width - 4) + 2;
 
 			/* Is it a good spot ? */
-			if (cave_empty_bold2(oy, ox) && monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
+			if (cave_empty_bold2(p_ptr->current_floor_ptr, oy, ox) && monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
 			{
 				/* Place the guardian */
 				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
@@ -3361,7 +3361,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 		/* Require empty floor grid (was "naked") */
 		if (p_ptr->current_floor_ptr->dun_level)
 		{
-			if (!cave_empty_bold2(y, x)) continue;
+			if (!cave_empty_bold2(p_ptr->current_floor_ptr, y, x)) continue;
 		}
 		else
 		{
