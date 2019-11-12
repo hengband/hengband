@@ -360,7 +360,7 @@ typedef struct
 
 /* Externs */
 
-extern bool new_player_spot(void);
+extern bool new_player_spot(player_type *creature_ptr);
 
 extern void place_random_stairs(POSITION y, POSITION x);
 extern void place_random_door(POSITION y, POSITION x, bool room);

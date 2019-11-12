@@ -176,9 +176,10 @@ static const byte feature_action_flags[FF_FLAG_MAX] =
 
 /*!
  * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
+ * @param creature_ptr 配置したいクリーチャーの参照ポインタ
  * @return 配置に成功したらTRUEを返す
  */
-bool new_player_spot(void)
+bool new_player_spot(player_type *creature_ptr)
 {
 	POSITION y = 0, x = 0;
 	int max_attempts = 10000;
@@ -189,14 +190,14 @@ bool new_player_spot(void)
 	while (max_attempts--)
 	{
 		/* Pick a legal spot */
-		y = (POSITION)rand_range(1, p_ptr->current_floor_ptr->height - 2);
-		x = (POSITION)rand_range(1, p_ptr->current_floor_ptr->width - 2);
+		y = (POSITION)rand_range(1, creature_ptr->current_floor_ptr->height - 2);
+		x = (POSITION)rand_range(1, creature_ptr->current_floor_ptr->width - 2);
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Must be a "naked" floor grid */
 		if (g_ptr->m_idx) continue;
-		if (p_ptr->current_floor_ptr->dun_level)
+		if (creature_ptr->current_floor_ptr->dun_level)
 		{
 			f_ptr = &f_info[g_ptr->feat];
 
@@ -214,7 +215,7 @@ bool new_player_spot(void)
 			if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) continue;
 		}
 		if (!player_can_enter(g_ptr->feat, 0)) continue;
-		if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
+		if (!in_bounds(creature_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Refuse to start on anti-teleport grids */
 		if (g_ptr->info & (CAVE_ICKY)) continue;
@@ -226,8 +227,8 @@ bool new_player_spot(void)
 		return FALSE;
 
 	/* Save the new player grid */
-	p_ptr->y = y;
-	p_ptr->x = x;
+	creature_ptr->y = y;
+	creature_ptr->x = x;
 
 	return TRUE;
 }

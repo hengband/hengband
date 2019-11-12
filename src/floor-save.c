@@ -1349,7 +1349,7 @@ void change_floor(player_type *creature_ptr)
 		/* Arrive at random grid */
 		if (creature_ptr->change_floor_mode & (CFM_RAND_PLACE))
 		{
-			(void)new_player_spot();
+			(void)new_player_spot(creature_ptr);
 		}
 
 		/* You see stairs blocked */

@@ -915,7 +915,7 @@ static bool cave_gen(floor_type *floor_ptr)
 	}
 
 	/* Determine the character location */
-	if (!new_player_spot()) return FALSE;
+	if (!new_player_spot(p_ptr)) return FALSE;
 
 	if (!place_quest_monsters(floor_ptr, p_ptr)) return FALSE;
 
