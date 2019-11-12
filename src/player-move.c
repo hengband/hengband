@@ -650,7 +650,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
 		if (mpe_mode & MPE_FORGET_FLOW)
 		{
-			forget_flow();
+			forget_flow(creature_ptr->current_floor_ptr);
 
 			creature_ptr->update |= (PU_UN_VIEW);
 			creature_ptr->redraw |= (PR_MAP);

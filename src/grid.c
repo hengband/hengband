@@ -1503,27 +1503,6 @@ void delayed_visual_update(void)
 
 
 /*
- * Hack -- forget the "flow" information
- */
-void forget_flow(void)
-{
-	POSITION x, y;
-
-	/* Check the entire dungeon */
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
-	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
-		{
-			/* Forget the old data */
-			p_ptr->current_floor_ptr->grid_array[y][x].dist = 0;
-			p_ptr->current_floor_ptr->grid_array[y][x].cost = 0;
-			p_ptr->current_floor_ptr->grid_array[y][x].when = 0;
-		}
-	}
-}
-
-
-/*
  * Hack - speed up the update_flow algorithm by only doing
  * it everytime the player moves out of LOS of the last
  * "way-point".

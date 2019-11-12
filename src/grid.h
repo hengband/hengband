@@ -413,7 +413,6 @@ extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
 extern void lite_spot(POSITION y, POSITION x);
 extern void delayed_visual_update(void);
-extern void forget_flow(void);
 extern void update_flow(void);
 extern void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat);
 extern FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat);

@@ -698,7 +698,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 			}
 		}
 
-		forget_flow();
+		forget_flow(floor_ptr);
 
 		/* Mega-Hack -- Forget the view and lite */
 		p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);

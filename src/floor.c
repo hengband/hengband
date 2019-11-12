@@ -169,3 +169,24 @@ void update_smell(floor_type *floor_ptr)
 	}
 }
 
+
+/*
+ * Hack -- forget the "flow" information
+ */
+void forget_flow(floor_type *floor_ptr)
+{
+	POSITION x, y;
+
+	/* Check the entire dungeon */
+	for (y = 0; y < floor_ptr->height; y++)
+	{
+		for (x = 0; x < floor_ptr->width; x++)
+		{
+			/* Forget the old data */
+			floor_ptr->grid_array[y][x].dist = 0;
+			floor_ptr->grid_array[y][x].cost = 0;
+			floor_ptr->grid_array[y][x].when = 0;
+		}
+	}
+}
+
