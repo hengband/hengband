@@ -221,8 +221,8 @@ extern floor_type floor_info;
 /*
  * Determine if a "legal" grid supports "los"
  */
-#define cave_los_bold(Y,X) \
-	(feat_supports_los(p_ptr->current_floor_ptr->grid_array[(Y)][(X)].feat))
+#define cave_los_bold(F,Y,X) \
+	(feat_supports_los((F)->grid_array[(Y)][(X)].feat))
 
 #define cave_los_grid(C) \
 	(feat_supports_los((C)->feat))

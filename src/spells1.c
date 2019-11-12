@@ -5993,7 +5993,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 		else if (flg & PROJECT_LOS)
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!cave_los_bold(ny, nx) && (rad > 0)) break;
+			if (!cave_los_bold(p_ptr->current_floor_ptr, ny, nx) && (rad > 0)) break;
 		}
 		else
 		{

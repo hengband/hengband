@@ -1436,7 +1436,7 @@ void lite_spot(POSITION y, POSITION x)
  * I am thinking in terms of an algorithm that "walks" from the central point
  * out to the maximal "distance", at each point, determining the "view" code
  * (above).  For each grid not on a major axis or diagonal, the "view" code
- * depends on the "cave_los_bold()" and "view" of exactly two other grids
+ * depends on the "cave_los_bold(p_ptr->current_floor_ptr, )" and "view" of exactly two other grids
  * (the one along the nearest diagonal, and the one next to that one, see
  * "update_view_aux()"...).
  *

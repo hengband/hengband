@@ -487,7 +487,7 @@ void update_lite(player_type *subject_ptr)
 	if (p >= 2)
 	{
 		/* South of the player */
-		if (cave_los_bold(subject_ptr->y + 1, subject_ptr->x))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x);
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x + 1);
@@ -495,7 +495,7 @@ void update_lite(player_type *subject_ptr)
 		}
 
 		/* North of the player */
-		if (cave_los_bold(subject_ptr->y - 1, subject_ptr->x))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x);
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x + 1);
@@ -503,7 +503,7 @@ void update_lite(player_type *subject_ptr)
 		}
 
 		/* East of the player */
-		if (cave_los_bold(subject_ptr->y, subject_ptr->x + 1))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x + 1))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x + 2);
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x + 2);
@@ -511,7 +511,7 @@ void update_lite(player_type *subject_ptr)
 		}
 
 		/* West of the player */
-		if (cave_los_bold(subject_ptr->y, subject_ptr->x - 1))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x - 1))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x - 2);
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x - 2);
@@ -528,25 +528,25 @@ void update_lite(player_type *subject_ptr)
 		if (p > 14) p = 14;
 
 		/* South-East of the player */
-		if (cave_los_bold(subject_ptr->y + 1, subject_ptr->x + 1))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x + 2);
 		}
 
 		/* South-West of the player */
-		if (cave_los_bold(subject_ptr->y + 1, subject_ptr->x - 1))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y + 2, subject_ptr->x - 2);
 		}
 
 		/* North-East of the player */
-		if (cave_los_bold(subject_ptr->y - 1, subject_ptr->x + 1))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x + 2);
 		}
 
 		/* North-West of the player */
-		if (cave_los_bold(subject_ptr->y - 1, subject_ptr->x - 1))
+		if (cave_los_bold(p_ptr->current_floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1))
 		{
 			cave_lite_hack(subject_ptr->current_floor_ptr, subject_ptr->y - 2, subject_ptr->x - 2);
 		}
@@ -837,7 +837,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
  * Note also the care taken to prevent "running off the map".  The use of
  * explicit checks on the "validity" of the "diagonal", and the fact that
  * the loops are never allowed to "leave" the map, lets "update_view_aux()"
- * use the optimized "cave_los_bold()" macro, and to avoid the overhead
+ * use the optimized "cave_los_bold(p_ptr->current_floor_ptr, )" macro, and to avoid the overhead
  * of multiple checks on the validity of grids.
  *
  * Note the "optimizations" involving the "se","sw","ne","nw","es","en",
@@ -854,7 +854,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
  * unless open space is still available.  This uses the "k" variable.
  *
  * Note the use of "inline" macros for efficiency.  The "cave_los_grid()"
- * macro is a replacement for "cave_los_bold()" which takes a pointer to
+ * macro is a replacement for "cave_los_bold(p_ptr->current_floor_ptr, )" which takes a pointer to
  * a grid instead of its location.  The "cave_view_hack()" macro is a
  * chunk of code which adds the given location to the "view" array if it
  * is not already there, using both the actual location and a pointer to
@@ -1353,11 +1353,11 @@ static void mon_lite_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
-				if (!cave_los_bold(y, x + 1)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x + 1)) return;
 			}
 			else if (x > midpoint)
 			{
-				if (!cave_los_bold(y, x - 1)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x - 1)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
@@ -1374,11 +1374,11 @@ static void mon_lite_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
-				if (!cave_los_bold(y + 1, x)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y + 1, x)) return;
 			}
 			else if (y > midpoint)
 			{
-				if (!cave_los_bold(y - 1, x)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y - 1, x)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
@@ -1439,11 +1439,11 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
-				if (!cave_los_bold(y, x + 1) && !cave_have_flag_bold(y, x + 1, FF_PROJECT)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x + 1) && !cave_have_flag_bold(y, x + 1, FF_PROJECT)) return;
 			}
 			else if (x > midpoint)
 			{
-				if (!cave_los_bold(y, x - 1) && !cave_have_flag_bold(y, x - 1, FF_PROJECT)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x - 1) && !cave_have_flag_bold(y, x - 1, FF_PROJECT)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
@@ -1460,11 +1460,11 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
-				if (!cave_los_bold(y + 1, x) && !cave_have_flag_bold(y + 1, x, FF_PROJECT)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y + 1, x) && !cave_have_flag_bold(y + 1, x, FF_PROJECT)) return;
 			}
 			else if (y > midpoint)
 			{
-				if (!cave_los_bold(y - 1, x) && !cave_have_flag_bold(y - 1, x, FF_PROJECT)) return;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y - 1, x) && !cave_have_flag_bold(y - 1, x, FF_PROJECT)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */

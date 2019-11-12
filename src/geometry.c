@@ -264,7 +264,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			}
 			else if (flg & (PROJECT_LOS))
 			{
-				if ((n > 0) && !cave_los_bold(y, x)) break;
+				if ((n > 0) && !cave_los_bold(p_ptr->current_floor_ptr, y, x)) break;
 			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
@@ -353,7 +353,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			}
 			else if (flg & (PROJECT_LOS))
 			{
-				if ((n > 0) && !cave_los_bold(y, x)) break;
+				if ((n > 0) && !cave_los_bold(p_ptr->current_floor_ptr, y, x)) break;
 			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
@@ -424,7 +424,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			}
 			else if (flg & (PROJECT_LOS))
 			{
-				if ((n > 0) && !cave_los_bold(y, x)) break;
+				if ((n > 0) && !cave_los_bold(p_ptr->current_floor_ptr, y, x)) break;
 			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
@@ -546,7 +546,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (ty = y1 + 1; ty < y2; ty++)
 			{
-				if (!cave_los_bold(ty, x1)) return FALSE;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, ty, x1)) return FALSE;
 			}
 		}
 
@@ -555,7 +555,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (ty = y1 - 1; ty > y2; ty--)
 			{
-				if (!cave_los_bold(ty, x1)) return FALSE;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, ty, x1)) return FALSE;
 			}
 		}
 
@@ -571,7 +571,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (tx = x1 + 1; tx < x2; tx++)
 			{
-				if (!cave_los_bold(y1, tx)) return FALSE;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y1, tx)) return FALSE;
 			}
 		}
 
@@ -580,7 +580,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (tx = x1 - 1; tx > x2; tx--)
 			{
-				if (!cave_los_bold(y1, tx)) return FALSE;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, y1, tx)) return FALSE;
 			}
 		}
 
@@ -599,7 +599,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	{
 		if (ay == 2)
 		{
-			if (cave_los_bold(y1 + sy, x1)) return TRUE;
+			if (cave_los_bold(p_ptr->current_floor_ptr, y1 + sy, x1)) return TRUE;
 		}
 	}
 
@@ -608,7 +608,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	{
 		if (ax == 2)
 		{
-			if (cave_los_bold(y1, x1 + sx)) return TRUE;
+			if (cave_los_bold(p_ptr->current_floor_ptr, y1, x1 + sx)) return TRUE;
 		}
 	}
 
@@ -644,7 +644,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		/* the LOS exactly meets the corner of a tile. */
 		while (x2 - tx)
 		{
-			if (!cave_los_bold(ty, tx)) return FALSE;
+			if (!cave_los_bold(p_ptr->current_floor_ptr, ty, tx)) return FALSE;
 
 			qy += m;
 
@@ -655,7 +655,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 			else if (qy > f2)
 			{
 				ty += sy;
-				if (!cave_los_bold(ty, tx)) return FALSE;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, ty, tx)) return FALSE;
 				qy -= f1;
 				tx += sx;
 			}
@@ -691,7 +691,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		/* the LOS exactly meets the corner of a tile. */
 		while (y2 - ty)
 		{
-			if (!cave_los_bold(ty, tx)) return FALSE;
+			if (!cave_los_bold(p_ptr->current_floor_ptr, ty, tx)) return FALSE;
 
 			qx += m;
 
@@ -702,7 +702,7 @@ bool los(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 			else if (qx > f2)
 			{
 				tx += sx;
-				if (!cave_los_bold(ty, tx)) return FALSE;
+				if (!cave_los_bold(p_ptr->current_floor_ptr, ty, tx)) return FALSE;
 				qx -= f1;
 				ty += sy;
 			}

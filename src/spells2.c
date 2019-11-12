@@ -1702,7 +1702,7 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
  */
 static bool cave_pass_lite_bold(POSITION y, POSITION x)
 {
-	return cave_los_bold(y, x);
+	return cave_los_bold(p_ptr->current_floor_ptr, y, x);
 }
 
 /*!

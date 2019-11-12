@@ -144,7 +144,7 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 		else if (flg & PROJECT_LOS)
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!cave_los_bold(ny, nx)) break;
+			if (!cave_los_bold(p_ptr->current_floor_ptr, ny, nx)) break;
 		}
 		else
 		{
