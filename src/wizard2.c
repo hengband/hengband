@@ -101,7 +101,7 @@ static void do_cmd_summon_horde(void)
 	while (--attempts)
 	{
 		scatter(&wy, &wx, p_ptr->y, p_ptr->x, 3, 0);
-		if (cave_empty_bold(wy, wx)) break;
+		if (cave_empty_bold(p_ptr->current_floor_ptr, wy, wx)) break;
 	}
 
 	(void)alloc_horde(wy, wx);

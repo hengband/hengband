@@ -3402,7 +3402,7 @@ bool shock_power(void)
 			{
 				y += ddy[dir];
 				x += ddx[dir];
-				if (cave_empty_bold(y, x))
+				if (cave_empty_bold(p_ptr->current_floor_ptr, y, x))
 				{
 					ty = y;
 					tx = x;

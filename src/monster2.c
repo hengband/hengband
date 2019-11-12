@@ -3365,7 +3365,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 		}
 		else
 		{
-			if (!cave_empty_bold(y, x)) continue;
+			if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x)) continue;
 		}
 
 		/* Accept far away grids */

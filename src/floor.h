@@ -261,9 +261,9 @@ extern floor_type floor_info;
  * Line 2 -- forbid normal monsters
  * Line 3 -- forbid the player
  */
-#define cave_empty_bold(Y,X) \
+#define cave_empty_bold(F,Y,X) \
 	(cave_have_flag_bold((Y), (X), FF_PLACE) && \
-	 !(p_ptr->current_floor_ptr->grid_array[Y][X].m_idx) && \
+	 !((F)->grid_array[Y][X].m_idx) && \
 	 !player_bold(p_ptr, Y,X))
 
 
@@ -275,7 +275,7 @@ extern floor_type floor_info;
  * Line 2 -- forbid trees while dungeon generation
  */
 #define cave_empty_bold2(Y,X) \
-	(cave_empty_bold(Y,X) && \
+	(cave_empty_bold(p_ptr->current_floor_ptr, Y,X) && \
 	 (current_world_ptr->character_dungeon || !cave_have_flag_bold((Y), (X), FF_TREE)))
 
 
@@ -302,7 +302,7 @@ extern floor_type floor_info;
 
 
 /*
- * Grid based version of "cave_empty_bold()"
+ * Grid based version of "cave_empty_bold(p_ptr->current_floor_ptr, )"
  */
 #define cave_empty_grid(C) \
 	(cave_have_flag_grid((C), FF_PLACE) && \

@@ -398,7 +398,7 @@ bool summon_possible(POSITION y1, POSITION x1)
 			if (pattern_tile(y, x)) continue;
 
 			/* Require empty floor grid in line of projection */
-			if (cave_empty_bold(y, x) && projectable(y1, x1, y, x) && projectable(y, x, y1, x1)) return (TRUE);
+			if (cave_empty_bold(p_ptr->current_floor_ptr, y, x) && projectable(y1, x1, y, x) && projectable(y, x, y1, x1)) return (TRUE);
 		}
 	}
 

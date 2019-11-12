@@ -311,7 +311,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				{
 					y += ddy[dir];
 					x += ddx[dir];
-					if (cave_empty_bold(y, x))
+					if (cave_empty_bold(p_ptr->current_floor_ptr, y, x))
 					{
 						ty = y;
 						tx = x;

@@ -3177,17 +3177,17 @@ MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 
 	for (k = 0; k < 30; k++)
 	{
-		if (!summon_possible(cy, cx) || !cave_empty_bold(cy, cx))
+		if (!summon_possible(cy, cx) || !cave_empty_bold(p_ptr->current_floor_ptr, cy, cx))
 		{
 			int j;
 			for (j = 100; j > 0; j--)
 			{
 				scatter(&cy, &cx, y, x, 2, 0);
-				if (cave_empty_bold(cy, cx)) break;
+				if (cave_empty_bold(p_ptr->current_floor_ptr, cy, cx)) break;
 			}
 			if (!j) break;
 		}
-		if (!cave_empty_bold(cy, cx)) continue;
+		if (!cave_empty_bold(p_ptr->current_floor_ptr, cy, cx)) continue;
 
 		if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, mode))
 		{

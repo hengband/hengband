@@ -1659,7 +1659,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 			POSITION nx = GRID_X(path_g[i]);
 			grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[ny][nx];
 
-			if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && cave_empty_bold(ny, nx) &&
+			if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && cave_empty_bold(p_ptr->current_floor_ptr, ny, nx) &&
 			    !(g_ptr->info & CAVE_OBJECT) &&
 				!pattern_tile(ny, nx))
 			{

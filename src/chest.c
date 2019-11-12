@@ -99,7 +99,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 				x = randint0(MAX_WID);
 
 				/* Must be an empty floor. */
-				if (!cave_empty_bold(y, x)) continue;
+				if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x)) continue;
 
 				/* Place the object there. */
 				(void)drop_near(q_ptr, -1, y, x);
