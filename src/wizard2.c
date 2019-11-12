@@ -93,15 +93,15 @@ static void wiz_create_named_art(void)
  * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
  * @return なし
  */
-static void do_cmd_summon_horde(void)
+static void do_cmd_summon_horde(player_type *caster_ptr)
 {
-	POSITION wy = p_ptr->y, wx = p_ptr->x;
+	POSITION wy = caster_ptr->y, wx = caster_ptr->x;
 	int attempts = 1000;
 
 	while (--attempts)
 	{
-		scatter(&wy, &wx, p_ptr->y, p_ptr->x, 3, 0);
-		if (cave_empty_bold(p_ptr->current_floor_ptr, wy, wx)) break;
+		scatter(&wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
+		if (cave_empty_bold(caster_ptr->current_floor_ptr, wy, wx)) break;
 	}
 
 	(void)alloc_horde(wy, wx);
@@ -1766,7 +1766,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		break;
 
 	case 'H':
-		do_cmd_summon_horde();
+		do_cmd_summon_horde(creature_ptr);
 		break;
 
 	/* Identify */
