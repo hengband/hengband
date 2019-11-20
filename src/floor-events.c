@@ -641,21 +641,21 @@ void update_lite(player_type *subject_ptr, floor_type *floor_ptr)
 /*
  * Clear the viewable space
  */
-void forget_view(void)
+void forget_view(floor_type *floor_ptr)
 {
 	int i;
 
 	grid_type *g_ptr;
 
 	/* None to forget */
-	if (!p_ptr->current_floor_ptr->view_n) return;
+	if (!floor_ptr->view_n) return;
 
 	/* Clear them all */
-	for (i = 0; i < p_ptr->current_floor_ptr->view_n; i++)
+	for (i = 0; i < floor_ptr->view_n; i++)
 	{
-		POSITION y = p_ptr->current_floor_ptr->view_y[i];
-		POSITION x = p_ptr->current_floor_ptr->view_x[i];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		POSITION y = floor_ptr->view_y[i];
+		POSITION x = floor_ptr->view_x[i];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Forget that the grid is viewable */
 		g_ptr->info &= ~(CAVE_VIEW);
@@ -667,7 +667,7 @@ void forget_view(void)
 	}
 
 	/* None left */
-	p_ptr->current_floor_ptr->view_n = 0;
+	floor_ptr->view_n = 0;
 }
 
 

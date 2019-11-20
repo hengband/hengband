@@ -5051,7 +5051,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_UN_VIEW))
 	{
 		creature_ptr->update &= ~(PU_UN_VIEW);
-		forget_view();
+		forget_view(creature_ptr->current_floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_VIEW))

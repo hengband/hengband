@@ -3941,7 +3941,7 @@ static void process_menus(WORD wCmd)
 				msg_flag = FALSE;
 
 				forget_lite(p_ptr->current_floor_ptr);
-				forget_view();
+				forget_view(p_ptr->current_floor_ptr);
 				clear_mon_lite(p_ptr->current_floor_ptr);
 
 				/* Save the game */
@@ -4838,7 +4838,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				msg_flag = FALSE;
 
 				forget_lite(p_ptr->current_floor_ptr);
-				forget_view();
+				forget_view(p_ptr->current_floor_ptr);
 				clear_mon_lite(p_ptr->current_floor_ptr);
 
 				/* Save the game */

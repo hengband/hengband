@@ -6934,7 +6934,7 @@ static void handle_signal_simple(int sig)
 		(void)strcpy(p_ptr->died_from, _("強制終了", "Abortion"));
 
 		forget_lite(p_ptr->current_floor_ptr);
-		forget_view();
+		forget_view(p_ptr->current_floor_ptr);
 		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Close stuff */
@@ -6951,7 +6951,7 @@ static void handle_signal_simple(int sig)
 		(void)strcpy(p_ptr->died_from, _("強制終了中", "Interrupting"));
 
 		forget_lite(p_ptr->current_floor_ptr);
-		forget_view();
+		forget_view(p_ptr->current_floor_ptr);
 		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Stop playing */
@@ -7027,7 +7027,7 @@ static void handle_signal_abort(int sig)
 
 
 	forget_lite(p_ptr->current_floor_ptr);
-	forget_view();
+	forget_view(p_ptr->current_floor_ptr);
 	clear_mon_lite(p_ptr->current_floor_ptr);
 
 	/* Clear the bottom line */

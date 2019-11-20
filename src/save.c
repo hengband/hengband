@@ -1117,7 +1117,7 @@ static bool wr_dungeon(void)
 	int i;
 
 	forget_lite(p_ptr->current_floor_ptr);
-	forget_view();
+	forget_view(p_ptr->current_floor_ptr);
 	clear_mon_lite(p_ptr->current_floor_ptr);
 
 	/* Update lite/view */

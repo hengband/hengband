@@ -8,7 +8,7 @@ extern void update_dungeon_feeling(player_type *subject_ptr, floor_type *floor_p
 extern void glow_deep_lava_and_bldg(floor_type *floor_ptr);
 extern void forget_lite(floor_type *floor_ptr);
 extern void update_lite(player_type *subject_ptr, floor_type *floor_ptr);
-extern void forget_view(void);
+extern void forget_view(floor_type *floor_ptr);
 extern void update_view(player_type *subject_ptr, floor_type *floor_ptr);
 extern void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr);
 extern void clear_mon_lite(floor_type *floor_ptr);

@@ -4148,7 +4148,7 @@ void do_cmd_bldg(void)
 	}
 
 	forget_lite(p_ptr->current_floor_ptr);
-	forget_view();
+	forget_view(p_ptr->current_floor_ptr);
 
 	/* Hack -- Increase "icky" depth */
 	current_world_ptr->character_icky++;

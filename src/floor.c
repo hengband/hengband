@@ -105,7 +105,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(floor_type *floor_ptr)
+void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 {
 	POSITION i, j;
 	POSITION y, x;
@@ -146,8 +146,8 @@ void update_smell(floor_type *floor_ptr)
 			grid_type *g_ptr;
 
 			/* Translate table to map grids */
-			y = i + p_ptr->y - 2;
-			x = j + p_ptr->x - 2;
+			y = i + subject_ptr->y - 2;
+			x = j + subject_ptr->x - 2;
 
 			/* Check Bounds */
 			if (!in_bounds(floor_ptr, y, x)) continue;
@@ -158,7 +158,7 @@ void update_smell(floor_type *floor_ptr)
 			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
 
 			/* Grid must not be blocked by walls from the character */
-			if (!player_has_los_bold(p_ptr, y, x)) continue;
+			if (!player_has_los_bold(subject_ptr, y, x)) continue;
 
 			/* Note grids that are too far away */
 			if (scent_adjust[i][j] == -1) continue;

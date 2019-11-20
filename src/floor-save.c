@@ -1070,7 +1070,7 @@ void leave_floor(player_type *creature_ptr)
 		sf_ptr->last_visit = current_world_ptr->game_turn;
 
 		forget_lite(p_ptr->current_floor_ptr);
-		forget_view();
+		forget_view(p_ptr->current_floor_ptr);
 		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Save current floor */

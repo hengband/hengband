@@ -5622,7 +5622,7 @@ void play_game(bool new_game)
 		health_track(0);
 
 		forget_lite(p_ptr->current_floor_ptr);
-		forget_view();
+		forget_view(p_ptr->current_floor_ptr);
 		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Handle "quit and save" */
