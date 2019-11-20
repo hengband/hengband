@@ -4882,7 +4882,7 @@ static void process_player(player_type *creature_ptr)
 	}
 
 	/* Update scent trail */
-	update_smell(creature_ptr->current_floor_ptr);
+	update_smell(creature_ptr->current_floor_ptr, creature_ptr);
 }
 
 /*!
