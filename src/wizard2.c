@@ -1409,12 +1409,12 @@ static void do_cmd_wiz_learn(void)
  * @param num 生成処理回数
  * @return なし
  */
-static void do_cmd_wiz_summon(int num)
+static void do_cmd_wiz_summon(player_type *caster_ptr, int num)
 {
 	int i;
 	for (i = 0; i < num; i++)
 	{
-		(void)summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		(void)summon_specific(0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 }
 
@@ -1888,7 +1888,7 @@ void do_cmd_debug(player_type *creature_ptr)
 	/* Summon Random Monster(s) */
 	case 's':
 		if (command_arg <= 0) command_arg = 1;
-		do_cmd_wiz_summon(command_arg);
+		do_cmd_wiz_summon(creature_ptr, command_arg);
 		break;
 
 	/* Special(Random Artifact) Objects */
