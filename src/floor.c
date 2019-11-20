@@ -47,19 +47,19 @@ void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x)
 */
 void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 {
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
+	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(y, x);
 	}
 	else
 	{
-		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 		if (type == DOOR_DEFAULT)
 		{
-			type = ((d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
-				one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-				((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+			type = ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+				one_in_((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+				((d_info[floor_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 		}
 
 		/* Create secret door */
