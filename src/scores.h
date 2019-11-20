@@ -48,5 +48,5 @@ extern errr top_twenty(player_type *current_player_ptr);
 extern errr predict_score(player_type *creature_ptr);
 extern void race_legends(void);
 extern void race_score(int race_num);
-extern void show_highclass(void);
+extern void show_highclass(player_type *current_player_ptr);
 extern bool check_score(void);

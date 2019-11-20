@@ -674,7 +674,7 @@ errr predict_score(player_type *creature_ptr)
  * show_highclass - selectively list highscores based on class -KMW-
  * @return なし
  */
-void show_highclass(void)
+void show_highclass(player_type *current_player_ptr)
 {
 
 	register int i = 0, j, m = 0;
@@ -726,10 +726,10 @@ void show_highclass(void)
 
 #ifdef JP
 	sprintf(out_val, "あなた) %sの%s (レベル %2d)",
-	    race_info[p_ptr->prace].title,p_ptr->name, p_ptr->lev);
+	    race_info[current_player_ptr->prace].title,current_player_ptr->name, current_player_ptr->lev);
 #else
 	sprintf(out_val, "You) %s the %s (Level %2d)",
-	    p_ptr->name, race_info[p_ptr->prace].title, p_ptr->lev);
+	    current_player_ptr->name, race_info[current_player_ptr->prace].title, current_player_ptr->lev);
 #endif
 
 	prt(out_val, (m + 8), 0);

@@ -3914,7 +3914,7 @@ static void bldg_process_command(building_type *bldg, int i)
 	case BACT_KING_LEGENDS:
 	case BACT_ARENA_LEGENDS:
 	case BACT_LEGENDS:
-		show_highclass();
+		show_highclass(p_ptr);
 		break;
 	case BACT_POSTER:
 	case BACT_ARENA_RULES:
