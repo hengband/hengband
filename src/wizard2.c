@@ -1234,7 +1234,7 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
  * Hack -- this routine always makes a "dungeon object", and applies
  * magic to it, and attempts to decline cursed items.
  */
-static void wiz_create_item(void)
+static void wiz_create_item(player_type *caster_ptr)
 {
 	object_type	forge;
 	object_type *q_ptr;
@@ -1264,7 +1264,7 @@ static void wiz_create_item(void)
 			if (a_info[i].sval != k_info[k_idx].sval) continue;
 
 			/* Create this artifact */
-			(void)create_named_art(i, p_ptr->y, p_ptr->x);
+			(void)create_named_art(i, caster_ptr->y, caster_ptr->x);
 
 			/* All done */
 			msg_print("Allocated(INSTA_ART).");
@@ -1275,10 +1275,10 @@ static void wiz_create_item(void)
 	q_ptr = &forge;
 	object_prep(q_ptr, k_idx);
 
-	apply_magic(q_ptr, p_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+	apply_magic(q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
 
 	/* Drop the object from heaven */
-	(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
+	(void)drop_near(q_ptr, -1, caster_ptr->y, caster_ptr->x);
 
 	/* All done */
 	msg_print("Allocated.");
@@ -1713,7 +1713,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Create any object */
 	case 'c':
-		wiz_create_item();
+		wiz_create_item(creature_ptr);
 		break;
 
 	/* Create a named artifact */
