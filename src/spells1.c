@@ -6602,7 +6602,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-bool binding_field(HIT_POINT dam)
+bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 {
 	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
 	int mirror_num = 0;			  /* 鏡の数 */
@@ -6617,18 +6617,18 @@ bool binding_field(HIT_POINT dam)
 	POSITION point_y[3];
 
 	/* Default target of monsterspell is player */
-	monster_target_y = p_ptr->y;
-	monster_target_x = p_ptr->x;
+	monster_target_y = caster_ptr->y;
+	monster_target_x = caster_ptr->x;
 
-	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]) &&
-				distance(p_ptr->y, p_ptr->x, y, x) <= MAX_RANGE &&
-				distance(p_ptr->y, p_ptr->x, y, x) != 0 &&
-				player_has_los_bold(p_ptr, y, x) &&
-				projectable(p_ptr->y, p_ptr->x, y, x)
+			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) &&
+				distance(caster_ptr->y, caster_ptr->x, y, x) <= MAX_RANGE &&
+				distance(caster_ptr->y, caster_ptr->x, y, x) != 0 &&
+				player_has_los_bold(caster_ptr, y, x) &&
+				projectable(caster_ptr->y, caster_ptr->x, y, x)
 				) {
 				mirror_y[mirror_num] = y;
 				mirror_x[mirror_num] = x;
@@ -6648,8 +6648,8 @@ bool binding_field(HIT_POINT dam)
 	point_x[0] = mirror_x[point_x[0]];
 	point_y[1] = mirror_y[point_x[1]];
 	point_x[1] = mirror_x[point_x[1]];
-	point_y[2] = p_ptr->y;
-	point_x[2] = p_ptr->x;
+	point_y[2] = caster_ptr->y;
+	point_x[2] = caster_ptr->x;
 
 	x = point_x[0] + point_x[1] + point_x[2];
 	y = point_y[0] + point_y[1] + point_y[2];
@@ -6677,9 +6677,9 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
 					/* Visual effects */
-					if (!(p_ptr->blind)
+					if (!(caster_ptr->blind)
 						&& panel_contains(y, x)) {
 						p = bolt_pict(y, x, y, x, GF_MANA);
 						print_rel(PICT_C(p), PICT_A(p), y, x);
@@ -6700,8 +6700,8 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
-					(void)project_f(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA);
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
+					(void)project_f(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
 			}
 		}
@@ -6715,7 +6715,7 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
 					(void)project_o(0, 0, y, x, dam, GF_MANA);
 				}
 			}
@@ -6730,7 +6730,7 @@ bool binding_field(HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(p_ptr, y, x) && projectable(p_ptr->y, p_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
 					(void)project_m(0, 0, y, x, dam, GF_MANA,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}

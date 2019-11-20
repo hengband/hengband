@@ -1441,7 +1441,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* binding field */
 	case 19:
-		if (!binding_field(plev * 11 + 5))msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
+		if (!binding_field(caster_ptr, plev * 11 + 5))msg_print(_("適当な鏡を選べなかった！", "You were not able to choose suitable mirrors!"));
 		break;
 		/* mirror of Ruffnor */
 	case 20:

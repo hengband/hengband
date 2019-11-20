@@ -151,7 +151,7 @@ extern POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, P
 extern bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell);
 
 extern int project_length;
-extern bool binding_field(HIT_POINT dam);
+extern bool binding_field(player_type *caster_ptr, HIT_POINT dam);
 extern void seal_of_mirror(HIT_POINT dam);
 extern concptr spell_category_name(OBJECT_TYPE_VALUE tval);
 
