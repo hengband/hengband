@@ -1246,9 +1246,10 @@ static void generate_fixed_floor(floor_type *floor_ptr)
  * @brief ダンジョン時のランダムフロア生成 / Make a real level
  * @return フロアの生成に成功したらTRUE
  */
-static bool level_gen(floor_type *floor_ptr, DUNGEON_IDX d_idx, concptr *why)
+static bool level_gen(floor_type *floor_ptr, concptr *why)
 {
 	int level_height, level_width;
+	DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
 
 	if ((always_small_levels || ironman_small_levels ||
 	    (one_in_(SMALL_LEVEL) && small_levels) ||
@@ -1406,7 +1407,7 @@ void generate_floor(floor_type *floor_ptr)
 	int num;
 
 	/* Fill the arrays of floors and walls in the good proportions */
-	set_floor_and_wall(p_ptr->dungeon_idx);
+	set_floor_and_wall(floor_ptr->dungeon_idx);
 
 	/* Generate */
 	for (num = 0; TRUE; num++)
@@ -1442,7 +1443,7 @@ void generate_floor(floor_type *floor_ptr)
 		/* Build a real level */
 		else
 		{
-			okay = level_gen(floor_ptr, p_ptr->dungeon_idx, &why);
+			okay = level_gen(floor_ptr, &why);
 		}
 
 
