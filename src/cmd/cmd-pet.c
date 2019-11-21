@@ -499,10 +499,10 @@ void do_cmd_pet(player_type *creature_ptr)
 
 #ifdef JP
 	sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
-		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "何か奇妙な物" : (r_name + r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
+		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "何か奇妙な物" : (r_name + r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "指定なし"));
 #else
 	sprintf(target_buf, "specify a target of pet (now:%s)",
-		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "something strange" : (r_name + r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "nothing"));
+		(creature_ptr->pet_t_m_idx ? (creature_ptr->image ? "something strange" : (r_name + r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name)) : "nothing"));
 #endif
 	power_desc[num] = target_buf;
 	powers[num++] = PET_TARGET;
@@ -815,10 +815,10 @@ void do_cmd_pet(player_type *creature_ptr)
 	case PET_DISMISS: /* Dismiss pets */
 	{
 		/* Check pets (backwards) */
-		for (pet_ctr = p_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+		for (pet_ctr = creature_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 		{
 			/* Player has pet */
-			if (is_pet(&p_ptr->current_floor_ptr->m_list[pet_ctr])) break;
+			if (is_pet(&creature_ptr->current_floor_ptr->m_list[pet_ctr])) break;
 		}
 
 		if (!pet_ctr)
@@ -836,10 +836,10 @@ void do_cmd_pet(player_type *creature_ptr)
 		if (!target_set(TARGET_KILL)) creature_ptr->pet_t_m_idx = 0;
 		else
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[target_row][target_col];
-			if (g_ptr->m_idx && (p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml))
+			grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[target_row][target_col];
+			if (g_ptr->m_idx && (creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml))
 			{
-				creature_ptr->pet_t_m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+				creature_ptr->pet_t_m_idx = creature_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 				creature_ptr->pet_follow_distance = PET_DESTROY_DIST;
 			}
 			else creature_ptr->pet_t_m_idx = 0;
@@ -893,9 +893,9 @@ void do_cmd_pet(player_type *creature_ptr)
 		if (creature_ptr->pet_extra_flags & PF_PICKUP_ITEMS)
 		{
 			creature_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
-			for (pet_ctr = p_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+			for (pet_ctr = creature_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
-				m_ptr = &p_ptr->current_floor_ptr->m_list[pet_ctr];
+				m_ptr = &creature_ptr->current_floor_ptr->m_list[pet_ctr];
 
 				if (is_pet(m_ptr))
 				{
