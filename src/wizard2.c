@@ -1453,18 +1453,18 @@ static void do_cmd_wiz_named_friendly(player_type *summoner_ptr, MONRACE_IDX r_i
  * Hack -- Delete all nearby monsters
  * @return なし
  */
-static void do_cmd_wiz_zap(void)
+static void do_cmd_wiz_zap(player_type *caster_ptr)
 {
 	MONSTER_IDX i;
 
 	/* Genocide everyone nearby */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip the mount */
-		if (i == p_ptr->riding) continue;
+		if (i == caster_ptr->riding) continue;
 
 		/* Delete nearby monsters */
 		if (m_ptr->cdis <= MAX_SIGHT)
@@ -1474,7 +1474,7 @@ static void do_cmd_wiz_zap(void)
 				GAME_TEXT m_name[MAX_NLEN];
 
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+				exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 			}
 
 			delete_monster_idx(i);
@@ -1926,7 +1926,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Zap Monsters (Genocide) */
 	case 'z':
-		do_cmd_wiz_zap();
+		do_cmd_wiz_zap(creature_ptr);
 		break;
 
 	/* Zap Monsters (Omnicide) */
