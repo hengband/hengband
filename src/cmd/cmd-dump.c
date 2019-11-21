@@ -454,13 +454,13 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		return (-1);
 	}
 
-	q_idx = quest_number(p_ptr->current_floor_ptr->dun_level);
+	q_idx = quest_number(creature_ptr->current_floor_ptr->dun_level);
 
 	if (write_level)
 	{
 		if (creature_ptr->inside_arena)
 			note_level = _("アリーナ:", "Arane:");
-		else if (!p_ptr->current_floor_ptr->dun_level)
+		else if (!creature_ptr->current_floor_ptr->dun_level)
 			note_level = _("地上:", "Surface:");
 		else if (q_idx && (is_fixed_quest_idx(q_idx)
 			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
@@ -468,9 +468,9 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		else
 		{
 #ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", (int)p_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
+			sprintf(note_level_buf, "%d階(%s):", (int)creature_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 #else
-			sprintf(note_level_buf, "%s L%d:", d_name+d_info[creature_ptr->dungeon_idx].name, (int)p_ptr->current_floor_ptr->dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name+d_info[creature_ptr->dungeon_idx].name, (int)creature_ptr->current_floor_ptr->dun_level);
 #endif
 			note_level = note_level_buf;
 		}
@@ -567,8 +567,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			}
 			else
 			{
-				if (!(p_ptr->current_floor_ptr->dun_level+num)) to = _("地上", "the surface");
-				else to = format(_("%d階", "level %d"), p_ptr->current_floor_ptr->dun_level+num);
+				if (!(creature_ptr->current_floor_ptr->dun_level+num)) to = _("地上", "the surface");
+				else to = format(_("%d階", "level %d"), creature_ptr->current_floor_ptr->dun_level+num);
 			}
 			fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
 			break;
@@ -634,10 +634,10 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		case NIKKI_WIZ_TELE:
 		{
 			concptr to;
-			if (!p_ptr->current_floor_ptr->dun_level)
+			if (!creature_ptr->current_floor_ptr->dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), p_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
+				to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
 						   " %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
@@ -646,10 +646,10 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		case NIKKI_PAT_TELE:
 		{
 			concptr to;
-			if (!p_ptr->current_floor_ptr->dun_level)
+			if (!creature_ptr->current_floor_ptr->dun_level)
 				to = _("地上", "the surface");
 			else
-				to = format(_("%d階(%s)", "level %d of %s"), p_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
+				to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
 
 			fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
 						   " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
