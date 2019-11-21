@@ -1192,7 +1192,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_SUMMON_PHANTOM:
 	{
 		msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-		(void)summon_specific(-1, user_ptr->y, user_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 
@@ -1217,7 +1217,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_SUMMON_DAWN:
 	{
 		msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
-		(void)summon_specific(-1, user_ptr->y, user_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(-1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 
@@ -1312,7 +1312,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_BERSERK:
 	{
-		(void)berserk(p_ptr, randint1(25) + 25);
+		(void)berserk(user_ptr, randint1(25) + 25);
 		break;
 	}
 
@@ -1363,14 +1363,14 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_HERO:
 	{
-		(void)heroism(p_ptr, 25);
+		(void)heroism(user_ptr, 25);
 		break;
 	}
 
 	case ACT_HERO_SPEED:
 	{
 		(void)set_fast(user_ptr, randint1(50) + 50, FALSE);
-		(void)heroism(p_ptr, 50);
+		(void)heroism(user_ptr, 50);
 		break;
 	}
 
@@ -1583,9 +1583,9 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		monster_race *r_ptr;
 		msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
 		/* Process the monsters (backwards) */
-		for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
+		for (i = user_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
 		{
-			m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			m_ptr = &user_ptr->current_floor_ptr->m_list[i];
 
 			/* Ignore "dead" monsters */
 			if (!monster_is_valid(m_ptr)) continue;
