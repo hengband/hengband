@@ -12,7 +12,7 @@ extern bool rustproof(void);
 extern bool brand_bolts(void);
 extern bool perilous_secrets(player_type *user_ptr);
 extern void get_bloody_moon_flags(object_type *o_ptr);
-extern void phlogiston(void);
+extern void phlogiston(player_type *caster_ptr);
 extern bool bless_weapon(void);
 extern bool pulish_shield(void);
 
