@@ -636,7 +636,7 @@ static bool cave_gen(floor_type *floor_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
-				place_floor_bold(y, x);
+				place_floor_bold(floor_ptr, y, x);
 			}
 		}
 
@@ -1810,7 +1810,7 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 		/* Clear mimic type */
 		floor_ptr->grid_array[*y][*x].mimic = 0;
 
-		place_floor_bold(*y, *x);
+		place_floor_bold(floor_ptr, *y, *x);
 
 		return TRUE;
 	}

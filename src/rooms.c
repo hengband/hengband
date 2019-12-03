@@ -192,7 +192,7 @@ void build_small_room(floor_type *floor_ptr, POSITION x0, POSITION y0)
 	floor_ptr->grid_array[y0][x0].mimic = 0;
 
 	/* Add inner open space */
-	place_floor_bold(y0, x0);
+	place_floor_bold(floor_ptr, y0, x0);
 }
 
 /*!
@@ -1266,7 +1266,7 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 		{
 			for (y = 0; y <= ysize; ++y)
 			{
-				place_floor_bold(y0 + y - yhsize, x0 + x - xhsize);
+				place_floor_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize);
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
 			}
 		}
@@ -1573,7 +1573,7 @@ void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, PO
 			if (is_extra_bold(floor_ptr, y1+y, x1+x))
 			{
 				/* clear the untouched region */
-				place_floor_bold(y1 + y, x1 + x);
+				place_floor_bold(floor_ptr, y1 + y, x1 + x);
 				floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
 			}
 			else
@@ -1617,7 +1617,7 @@ void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIREC
 	visited[node] = 1;
 	x = 2 * (node % m) + x1;
 	y = 2 * (node / m) + y1;
-	place_floor_bold(y, x);
+	place_floor_bold(p_ptr->current_floor_ptr, y, x);
 
 	/* setup order of adjacent node visits */
 	if (one_in_(3))
@@ -1657,7 +1657,7 @@ void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIREC
 				/* (0,+) - check for bottom boundary */
 				if ((node / m < n - 1) && (visited[node + m] == 0))
 				{
-					place_floor_bold(y + 1, x);
+					place_floor_bold(p_ptr->current_floor_ptr, y + 1, x);
 					r_visit(y1, x1, y2, x2, node + m, dir, visited);
 				}
 				break;
@@ -1665,7 +1665,7 @@ void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIREC
 				/* (0,-) - check for top boundary */
 				if ((node / m > 0) && (visited[node - m] == 0))
 				{
-					place_floor_bold(y - 1, x);
+					place_floor_bold(p_ptr->current_floor_ptr, y - 1, x);
 					r_visit(y1, x1, y2, x2, node - m, dir, visited);
 				}
 				break;
@@ -1673,7 +1673,7 @@ void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIREC
 				/* (+,0) - check for right boundary */
 				if ((node % m < m - 1) && (visited[node + 1] == 0))
 				{
-					place_floor_bold(y, x + 1);
+					place_floor_bold(p_ptr->current_floor_ptr, y, x + 1);
 					r_visit(y1, x1, y2, x2, node + 1, dir, visited);
 				}
 				break;
@@ -1681,7 +1681,7 @@ void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIREC
 				/* (-,0) - check for left boundary */
 				if ((node % m > 0) && (visited[node - 1] == 0))
 				{
-					place_floor_bold(y, x - 1);
+					place_floor_bold(p_ptr->current_floor_ptr, y, x - 1);
 					r_visit(y1, x1, y2, x2, node - 1, dir, visited);
 				}
 		} /* end switch */
@@ -1825,15 +1825,15 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 			{
 				/* left and right */
 				y = randint1(ysize) + y1;
-				place_floor_bold(y, x1);
-				place_floor_bold(y, x2);
+				place_floor_bold(floor_ptr, y, x1);
+				place_floor_bold(floor_ptr, y, x2);
 			}
 			else
 			{
 				/* top and bottom */
 				x = randint1(xsize) + x1;
-				place_floor_bold(y1, x);
-				place_floor_bold(y2, x);
+				place_floor_bold(floor_ptr, y1, x);
+				place_floor_bold(floor_ptr, y2, x);
 			}
 
 			/* Select size of keep */
@@ -1901,12 +1901,12 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 			if (one_in_(2))
 			{
 				/* left */
-				place_floor_bold(y, x1 + 1);
+				place_floor_bold(floor_ptr, y, x1 + 1);
 			}
 			else
 			{
 				/* right */
-				place_floor_bold(y, x2 - 1);
+				place_floor_bold(floor_ptr, y, x2 - 1);
 			}
 
 			/* Build the room */

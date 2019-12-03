@@ -373,7 +373,7 @@ static void build_dead_end(floor_type *floor_ptr)
 	p_ptr->x = floor_ptr->width / 2;
 
 	/* Give one square */
-	place_floor_bold(p_ptr->y, p_ptr->x);
+	place_floor_bold(floor_ptr, p_ptr->y, p_ptr->x);
 
 	wipe_generate_random_floor_flags(floor_ptr);
 }

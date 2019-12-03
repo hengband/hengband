@@ -253,7 +253,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(y, x);
+		place_floor_bold(p_ptr->current_floor_ptr, y, x);
 		return;
 	}
 
@@ -312,7 +312,7 @@ void place_random_door(POSITION y, POSITION x, bool room)
 		}
 		else
 		{
-			place_floor_bold(y, x);
+			place_floor_bold(p_ptr->current_floor_ptr, y, x);
 		}
 	}
 
@@ -333,7 +333,7 @@ void place_closed_door(POSITION y, POSITION x, int type)
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(y, x);
+		place_floor_bold(p_ptr->current_floor_ptr, y, x);
 		return;
 	}
 
@@ -370,7 +370,7 @@ void place_closed_door(POSITION y, POSITION x, int type)
 	}
 	else
 	{
-		place_floor_bold(y, x);
+		place_floor_bold(p_ptr->current_floor_ptr, y, x);
 	}
 }
 
@@ -493,7 +493,7 @@ void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			place_floor_bold(y, x);
+			place_floor_bold(p_ptr->current_floor_ptr, y, x);
 			add_cave_info(p_ptr->current_floor_ptr, y, x, CAVE_ROOM);
 			if (light) add_cave_info(p_ptr->current_floor_ptr, y, x, CAVE_GLOW);
 		}
@@ -734,7 +734,7 @@ void set_floor(POSITION x, POSITION y)
 
 	/* Set to be floor if is a wall (don't touch lakes). */
 	if (is_extra_bold(p_ptr->current_floor_ptr, y, x))
-		place_floor_bold(y, x);
+		place_floor_bold(p_ptr->current_floor_ptr, y, x);
 }
 
 /*!

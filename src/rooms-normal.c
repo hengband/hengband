@@ -933,7 +933,7 @@ bool build_type11(floor_type *floor_ptr)
 			if (distance(y0, x0, y, x) <= rad - 1)
 			{
 				/* inside- so is floor */
-				place_floor_bold(y, x);
+				place_floor_bold(floor_ptr, y, x);
 			}
 			else if (distance(y0, x0, y, x) <= rad + 1)
 			{
@@ -991,11 +991,11 @@ bool build_type12(floor_type *floor_ptr)
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1)
 			{
 				/* inside - so is floor */
-				place_floor_bold(y, x);
+				place_floor_bold(floor_ptr, y, x);
 			}
 			else if (distance(y0, x0, y, x) < 3)
 			{
-				place_floor_bold(y, x);
+				place_floor_bold(floor_ptr, y, x);
 			}
 			else
 			{

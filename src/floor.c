@@ -28,7 +28,7 @@ void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(y, x);
+		place_floor_bold(floor_ptr, y, x);
 	}
 	else
 	{
@@ -50,7 +50,7 @@ void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 {
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(y, x);
+		place_floor_bold(floor_ptr, y, x);
 	}
 	else
 	{

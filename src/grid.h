@@ -120,11 +120,11 @@ typedef struct
 #define is_outer_grid(C) ((C)->info & CAVE_OUTER)
 #define is_solid_grid(C) ((C)->info & CAVE_SOLID)
 
-#define place_floor_bold(Y, X) \
+#define place_floor_bold(F, Y, X) \
 { \
-	set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_ground_type[randint0(100)]); \
-	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_FLOOR); \
+	set_cave_feat((F), Y,X,feat_ground_type[randint0(100)]); \
+	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info((F), Y,X,CAVE_FLOOR); \
 	delete_monster(Y, X); \
 }
 
