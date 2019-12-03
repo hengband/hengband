@@ -920,12 +920,12 @@ bool check_local_illumination(POSITION y, POSITION x)
 
 
 /*! 対象座標のマスの照明状態を更新する際の補助処理マクロ */
-#define update_local_illumination_aux(Y, X) \
+#define update_local_illumination_aux(C, Y, X) \
 { \
-	if (player_has_los_bold(p_ptr, (Y), (X))) \
+	if (player_has_los_bold((C), (Y), (X))) \
 	{ \
 		/* Update the monster */ \
-		if (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster(p_ptr->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
+		if ((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
 \
 		/* Notice and redraw */ \
 		note_spot((Y), (X)); \
@@ -953,9 +953,9 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 	{
 		yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
 		xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
-		update_local_illumination_aux(yy, xx);
-		update_local_illumination_aux(y, xx);
-		update_local_illumination_aux(yy, x);
+		update_local_illumination_aux(creature_ptr, yy, xx);
+		update_local_illumination_aux(creature_ptr, y, xx);
+		update_local_illumination_aux(creature_ptr, yy, x);
 	}
 	else if (x != creature_ptr->x) /* y == creature_ptr->y */
 	{
@@ -963,12 +963,12 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 		for (i = -1; i <= 1; i++)
 		{
 			yy = y + i;
-			update_local_illumination_aux(yy, xx);
+			update_local_illumination_aux(creature_ptr, yy, xx);
 		}
 		yy = y - 1;
-		update_local_illumination_aux(yy, x);
+		update_local_illumination_aux(creature_ptr, yy, x);
 		yy = y + 1;
-		update_local_illumination_aux(yy, x);
+		update_local_illumination_aux(creature_ptr, yy, x);
 	}
 	else if (y != creature_ptr->y) /* x == creature_ptr->x */
 	{
@@ -976,12 +976,12 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 		for (i = -1; i <= 1; i++)
 		{
 			xx = x + i;
-			update_local_illumination_aux(yy, xx);
+			update_local_illumination_aux(creature_ptr, yy, xx);
 		}
 		xx = x - 1;
-		update_local_illumination_aux(y, xx);
+		update_local_illumination_aux(creature_ptr, y, xx);
 		xx = x + 1;
-		update_local_illumination_aux(y, xx);
+		update_local_illumination_aux(creature_ptr, y, xx);
 	}
 	else /* Player's grid */
 	{
@@ -989,7 +989,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 		{
 			yy = y + ddy_cdd[i];
 			xx = x + ddx_cdd[i];
-			update_local_illumination_aux(yy, xx);
+			update_local_illumination_aux(creature_ptr, yy, xx);
 		}
 	}
 
@@ -999,7 +999,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 	{
 		yy = (y < creature_ptr->y) ? (y - 1) : (y + 1);
 		xx = (x < creature_ptr->x) ? (x - 1) : (x + 1);
-		update_local_illumination_aux(yy, xx);
+		update_local_illumination_aux(creature_ptr, yy, xx);
 	}
 	else if (x != creature_ptr->x) /* y == creature_ptr->y */
 	{
@@ -1007,7 +1007,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 		for (i = -1; i <= 1; i++)
 		{
 			yy = y + i;
-			update_local_illumination_aux(yy, xx);
+			update_local_illumination_aux(creature_ptr, yy, xx);
 		}
 	}
 	else if (y != creature_ptr->y) /* x == creature_ptr->x */
@@ -1016,7 +1016,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 		for (i = -1; i <= 1; i++)
 		{
 			xx = x + i;
-			update_local_illumination_aux(yy, xx);
+			update_local_illumination_aux(creature_ptr, yy, xx);
 		}
 	}
 	else /* Player's grid */
@@ -1025,7 +1025,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 		{
 			yy = y + ddy_cdd[i];
 			xx = x + ddx_cdd[i];
-			update_local_illumination_aux(yy, xx);
+			update_local_illumination_aux(creature_ptr, yy, xx);
 		}
 	}
 
