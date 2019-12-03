@@ -319,7 +319,7 @@ extern void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_
 extern bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool dimension_door(void);
 extern bool mirror_tunnel(void);
-extern void massacre(void);
+extern void massacre(player_type *caster_ptr);
 extern bool eat_lock(void);
 extern bool shock_power(void);
 extern bool booze(player_type *creature_ptr);

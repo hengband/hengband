@@ -3285,7 +3285,7 @@ bool eat_magic(player_type *caster_ptr, int power)
  * @param px プレイヤーX座標
  * @return なし
  */
-void massacre(void)
+void massacre(player_type *caster_ptr)
 {
 	POSITION x, y;
 	grid_type *g_ptr;
@@ -3294,14 +3294,14 @@ void massacre(void)
 
 	for (dir = 0; dir < 8; dir++)
 	{
-		y = p_ptr->y + ddy_ddd[dir];
-		x = p_ptr->x + ddx_ddd[dir];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-		m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+		y = caster_ptr->y + ddy_ddd[dir];
+		x = caster_ptr->x + ddx_ddd[dir];
+		g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
+		m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Hack -- attack monsters */
 		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
-			py_attack(p_ptr, y, x, 0);
+			py_attack(caster_ptr, y, x, 0);
 	}
 }
 

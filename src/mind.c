@@ -1520,7 +1520,7 @@ static bool cast_berserk_spell(player_type *caster_ptr, int spell)
 		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 8+randint0(5), 0);
 		break;
 	case 4:
-		massacre();
+		massacre(caster_ptr);
 		break;
 	default:
 		msg_print(_("なに？", "Zap?"));

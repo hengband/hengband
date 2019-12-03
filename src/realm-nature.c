@@ -449,7 +449,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 25:
 		if (name) return _("カマイタチ", "Whirlwind");
 		if (desc) return _("全方向に向かって攻撃する。", "Attacks all adjacent monsters.");
-		if (cast) massacre();
+		if (cast) massacre(caster_ptr);
 		break;
 
 	case 26:
