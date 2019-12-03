@@ -3305,7 +3305,7 @@ void massacre(player_type *caster_ptr)
 	}
 }
 
-bool eat_lock(void)
+bool eat_lock(player_type *caster_ptr)
 {
 	POSITION x, y;
 	grid_type *g_ptr;
@@ -3313,9 +3313,9 @@ bool eat_lock(void)
 	DIRECTION dir;
 
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
-	y = p_ptr->y + ddy[dir];
-	x = p_ptr->x + ddx[dir];
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	y = caster_ptr->y + ddy[dir];
+	x = caster_ptr->x + ddx[dir];
+	g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 	f_ptr = &f_info[g_ptr->feat];
 	mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
@@ -3331,10 +3331,10 @@ bool eat_lock(void)
 	}
 	else if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 		msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
-		if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(p_ptr, y, x, 0);
+		if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(caster_ptr, y, x, 0);
 	}
 	else if (have_flag(f_ptr->flags, FF_TREE))
 	{
@@ -3346,22 +3346,22 @@ bool eat_lock(void)
 	}
 	else if (have_flag(f_ptr->flags, FF_DOOR) || have_flag(f_ptr->flags, FF_CAN_DIG))
 	{
-		(void)set_food(p_ptr, p_ptr->food + 3000);
+		(void)set_food(caster_ptr, caster_ptr->food + 3000);
 	}
 	else if (have_flag(f_ptr->flags, FF_MAY_HAVE_GOLD) || have_flag(f_ptr->flags, FF_HAS_GOLD))
 	{
-		(void)set_food(p_ptr, p_ptr->food + 5000);
+		(void)set_food(caster_ptr, caster_ptr->food + 5000);
 	}
 	else
 	{
 		msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), f_name + mimic_f_ptr->name);
-		(void)set_food(p_ptr, p_ptr->food + 10000);
+		(void)set_food(caster_ptr, caster_ptr->food + 10000);
 	}
 
 	/* Destroy the wall */
 	cave_alter_feat(y, x, FF_HURT_ROCK);
 
-	(void)move_player_effect(p_ptr, y, x, MPE_DONT_PICKUP);
+	(void)move_player_effect(caster_ptr, y, x, MPE_DONT_PICKUP);
 	return TRUE;
 }
 

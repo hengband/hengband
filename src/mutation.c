@@ -2154,7 +2154,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_EAT_ROCK:
-			return eat_lock();
+			return eat_lock(creature_ptr);
 			break;
 
 		case MUT1_SWAP_POS:
