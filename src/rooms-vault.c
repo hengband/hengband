@@ -161,7 +161,7 @@ static void build_bubble_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	{
 		x = randint1(xsize - 3) - xhsize + x0 + 1;
 		y = randint1(ysize - 3) - yhsize + y0 + 1;
-		add_door(x, y);
+		add_door(floor_ptr, x, y);
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
@@ -209,7 +209,7 @@ static void build_room_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, PO
 	{
 		x1 = randint1(xsize - 3) - xhsize + x0 + 1;
 		y1 = randint1(ysize - 3) - yhsize + y0 + 1;
-		add_door(x1, y1);
+		add_door(floor_ptr, x1, y1);
 	}
 
 	/* Fill with monsters and treasure, high difficulty */
@@ -908,14 +908,14 @@ static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	x = (rad - 2) / 4 + 1;
 	y = rad / 2 + x;
 
-	add_door(x0 + x, y0);
-	add_door(x0 + y, y0);
-	add_door(x0 - x, y0);
-	add_door(x0 - y, y0);
-	add_door(x0, y0 + x);
-	add_door(x0, y0 + y);
-	add_door(x0, y0 - x);
-	add_door(x0, y0 - y);
+	add_door(floor_ptr, x0 + x, y0);
+	add_door(floor_ptr, x0 + y, y0);
+	add_door(floor_ptr, x0 - x, y0);
+	add_door(floor_ptr, x0 - y, y0);
+	add_door(floor_ptr, x0, y0 + x);
+	add_door(floor_ptr, x0, y0 + y);
+	add_door(floor_ptr, x0, y0 - x);
+	add_door(floor_ptr, x0, y0 - y);
 
 	/* Fill with stuff - medium difficulty */
 	fill_treasure(floor_ptr, x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);

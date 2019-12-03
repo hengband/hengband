@@ -406,58 +406,6 @@ void place_closed_door(POSITION y, POSITION x, int type)
 	}
 }
 
-/*
- * Routine used by the random vault creators to add a door to a location
- * Note that range checking has to be done in the calling routine.
- *
- * The doors must be INSIDE the allocated region.
- */
-void add_door(POSITION x, POSITION y)
-{
-	/* Need to have a wall in the center square */
-	if (!is_outer_bold(p_ptr->current_floor_ptr, y, x)) return;
-
-	/* look at:
-	*  x#x
-	*  .#.
-	*  x#x
-	*
-	*  where x=don't care
-	*  .=floor, #=wall
-	*/
-
-	if (is_floor_bold(p_ptr->current_floor_ptr, y - 1, x) && is_floor_bold(p_ptr->current_floor_ptr, y + 1, x) &&
-		(is_outer_bold(p_ptr->current_floor_ptr, y, x - 1) && is_outer_bold(p_ptr->current_floor_ptr, y, x + 1)))
-	{
-		/* secret door */
-		place_secret_door(p_ptr->current_floor_ptr, y, x, DOOR_DEFAULT);
-
-		/* set boundarys so don't get wide doors */
-		place_solid_bold(y, x - 1);
-		place_solid_bold(y, x + 1);
-	}
-
-
-	/* look at:
-	*  x#x
-	*  .#.
-	*  x#x
-	*
-	*  where x = don't care
-	*  .=floor, #=wall
-	*/
-	if (is_outer_bold(p_ptr->current_floor_ptr, y - 1, x) && is_outer_bold(p_ptr->current_floor_ptr, y + 1, x) &&
-		is_floor_bold(p_ptr->current_floor_ptr, y, x - 1) && is_floor_bold(p_ptr->current_floor_ptr, y, x + 1))
-	{
-		/* secret door */
-		place_secret_door(p_ptr->current_floor_ptr, y, x, DOOR_DEFAULT);
-
-		/* set boundarys so don't get wide doors */
-		place_solid_bold(y - 1, x);
-		place_solid_bold(y + 1, x);
-	}
-}
-
 /*!
 * @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
 * @param y1 基準となるマスのY座標
