@@ -1156,8 +1156,10 @@ static bool vanish_dungeon(floor_type *floor_ptr)
 /*!
  * @brief 虚無招来処理 /
  * @return なし
+ * @details
+ * Sorry, it becomes not (void)...
  */
-void call_the_(void)
+void call_the_void(player_type *caster_ptr)
 {
 	int i;
 	grid_type *g_ptr;
@@ -1165,7 +1167,7 @@ void call_the_(void)
 
 	for (i = 0; i < 9; i++)
 	{
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y + ddy_ddd[i]][p_ptr->x + ddx_ddd[i]];
+		g_ptr = &caster_ptr->current_floor_ptr->grid_array[caster_ptr->y + ddy_ddd[i]][caster_ptr->x + ddx_ddd[i]];
 
 		if (!cave_have_flag_grid(g_ptr, FF_PROJECT))
 		{
@@ -1197,7 +1199,7 @@ void call_the_(void)
 	}
 
 	/* Prevent destruction of quest levels and town */
-	else if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !p_ptr->current_floor_ptr->dun_level)
+	else if ((caster_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
 	{
 		msg_print(_("地面が揺れた。", "The ground trembles."));
 	}
@@ -1216,17 +1218,17 @@ void call_the_(void)
 
 		if (one_in_(666))
 		{
-			if (!vanish_dungeon(p_ptr->current_floor_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
+			if (!vanish_dungeon(caster_ptr->current_floor_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
 		}
 		else
 		{
-			if (destroy_area(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, 15 + p_ptr->lev + randint0(11), FALSE))
+			if (destroy_area(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, 15 + caster_ptr->lev + randint0(11), FALSE))
 				msg_print(_("ダンジョンが崩壊した...", "The dungeon collapses..."));
 			else
 				msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));
 		}
 
-		take_hit(p_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
+		take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
 	}
 }
 
