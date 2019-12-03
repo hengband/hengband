@@ -1322,6 +1322,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 
 /*!
  * @brief モンスターによる光量状態更新 / Add a square to the changes array
+ * @param subject_ptr 主観となるクリーチャーの参照ポインタ
  * @param y Y座標
  * @param x X座標
  */
@@ -1334,7 +1335,7 @@ static void mon_lite_hack(player_type *subject_ptr, POSITION y, POSITION x)
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Want a unlit square in view of the player */
 	if ((g_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW) return;
@@ -1353,11 +1354,11 @@ static void mon_lite_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x + 1)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x + 1)) return;
 			}
 			else if (x > midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x - 1)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x - 1)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
@@ -1374,11 +1375,11 @@ static void mon_lite_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y + 1, x)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y + 1, x)) return;
 			}
 			else if (y > midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y - 1, x)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y - 1, x)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
