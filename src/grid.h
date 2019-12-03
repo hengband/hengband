@@ -168,14 +168,14 @@ typedef struct
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
-#define place_extra_noperm_bold(Y, X) \
+#define place_extra_noperm_bold(F, Y, X) \
 { \
 	feature_type *_f_ptr; \
-	set_cave_feat(floor_ptr, Y,X,feat_wall_type[randint0(100)]); \
-	_f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[Y][X].feat]; \
-	if (permanent_wall(_f_ptr)) p_ptr->current_floor_ptr->grid_array[Y][X].feat = feat_state(p_ptr->current_floor_ptr->grid_array[Y][X].feat, FF_UNPERM); \
-	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_EXTRA); \
+	set_cave_feat((F), Y,X,feat_wall_type[randint0(100)]); \
+	_f_ptr = &f_info[(F)->grid_array[Y][X].feat]; \
+	if (permanent_wall(_f_ptr)) (F)->grid_array[Y][X].feat = feat_state((F)->grid_array[Y][X].feat, FF_UNPERM); \
+	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info((F), Y, X, CAVE_EXTRA); \
 	delete_monster(Y, X); \
 }
 
