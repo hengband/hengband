@@ -168,13 +168,13 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 		}
 		else if (flg & PROJECT_LOS)
 		{
-			if (los(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (los(y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
+			if (los(p_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (los(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
 		}
 		else
 		{
-			if (projectable(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (projectable(y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
+			if (projectable(p_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (projectable(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
 		}
 	}
 	else
@@ -317,7 +317,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		t_ptr = &p_ptr->current_floor_ptr->m_list[target_idx];
 
 		/* Cancel if not projectable (for now) */
-		if ((m_idx == target_idx) || !projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if ((m_idx == target_idx) || !projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 		{
 			target_idx = 0;
 		}
@@ -340,7 +340,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			}
 
 			/* Allow only summoning etc.. if not projectable */
-			else if (!projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+			else if (!projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 			{
 				f4 &= (RF4_INDIRECT_MASK);
 				f5 &= (RF5_INDIRECT_MASK);
@@ -376,7 +376,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			if ((m_idx == target_idx) || !are_enemies(m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable */
-			if (!projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
+			if (!projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 
 			/* Get it */
 			success = TRUE;
@@ -400,7 +400,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	if (f4 & RF4_BR_LITE)
 	{
-		if (!los(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if (!los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 			f4 &= ~(RF4_BR_LITE);
 	}
 
@@ -491,7 +491,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 
-				if (projectable(real_y, real_x, p_ptr->y, p_ptr->x))
+				if (projectable(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x))
 				{
 					int dist = distance(real_y, real_x, p_ptr->y, p_ptr->x);
 
@@ -510,7 +510,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				}
 				else if (f5 & RF5_BA_LITE)
 				{
-					if ((distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 4) && los(real_y, real_x, p_ptr->y, p_ptr->x))
+					if ((distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 4) && los(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x))
 						f5 &= ~(RF5_BA_LITE);
 				}
 			}
@@ -521,7 +521,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				POSITION real_x = x;
 
 				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
-				if (projectable(real_y, real_x, p_ptr->y, p_ptr->x) && (distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 2))
+				if (projectable(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x) && (distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 2))
 					f4 &= ~(RF4_ROCKET);
 			}
 

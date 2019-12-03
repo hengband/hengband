@@ -1694,7 +1694,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (seen) obvious = TRUE;
 
 				/* PSI only works if the monster can see you! -- RG */
-				if (!(los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)))
+				if (!(los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)))
 				{
 					if (seen_msg) 
 						msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
@@ -4053,7 +4053,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 				t_y = target_ptr->current_floor_ptr->m_list[who].fy - 1 + randint1(3);
 				t_x = target_ptr->current_floor_ptr->m_list[who].fx - 1 + randint1(3);
 				max_attempts--;
-			} while (max_attempts && in_bounds2u(target_ptr->current_floor_ptr, t_y, t_x) && !projectable(target_ptr->y, target_ptr->x, t_y, t_x));
+			} while (max_attempts && in_bounds2u(target_ptr->current_floor_ptr, t_y, t_x) && !projectable(target_ptr->current_floor_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
@@ -5373,7 +5373,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 					case GF_LITE:
 					case GF_LITE_WEAK:
 						/* Lights are stopped by opaque terrains */
-						if (!los(by, bx, y, x)) continue;
+						if (!los(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
 						break;
 					case GF_DISINTEGRATE:
 						/* Disintegration are stopped only by perma-walls */
@@ -5381,7 +5381,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 						break;
 					default:
 						/* Ball explosions are stopped by walls */
-						if (!projectable(by, bx, y, x)) continue;
+						if (!projectable(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
 						break;
 					}
 
@@ -6136,7 +6136,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 						case GF_LITE:
 						case GF_LITE_WEAK:
 							/* Lights are stopped by opaque terrains */
-							if (!los(by, bx, y, x)) continue;
+							if (!los(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
 							break;
 						case GF_DISINTEGRATE:
 							/* Disintegration are stopped only by perma-walls */
@@ -6144,7 +6144,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 							break;
 						default:
 							/* Ball explosions are stopped by walls */
-							if (!projectable(by, bx, y, x)) continue;
+							if (!projectable(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
 							break;
 						}
 
@@ -6241,7 +6241,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 	if (flg & PROJECT_KILL)
 	{
 		see_s_msg = (who > 0) ? is_seen(&p_ptr->current_floor_ptr->m_list[who]) :
-			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)));
+			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y1, x1)));
 	}
 
 
@@ -6355,7 +6355,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 						t_x = x_saver - 1 + randint1(3);
 						max_attempts--;
 					}
-					while (max_attempts && in_bounds2u(p_ptr->current_floor_ptr, t_y, t_x) && !projectable(y, x, t_y, t_x));
+					while (max_attempts && in_bounds2u(p_ptr->current_floor_ptr, t_y, t_x) && !projectable(p_ptr->current_floor_ptr, y, x, t_y, t_x));
 
 					if (max_attempts < 1)
 					{
@@ -6628,7 +6628,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				distance(caster_ptr->y, caster_ptr->x, y, x) <= MAX_RANGE &&
 				distance(caster_ptr->y, caster_ptr->x, y, x) != 0 &&
 				player_has_los_bold(caster_ptr, y, x) &&
-				projectable(caster_ptr->y, caster_ptr->x, y, x)
+				projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)
 				) {
 				mirror_y[mirror_num] = y;
 				mirror_x[mirror_num] = x;
@@ -6677,7 +6677,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
 					/* Visual effects */
 					if (!(caster_ptr->blind)
 						&& panel_contains(y, x)) {
@@ -6700,7 +6700,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
 					(void)project_f(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
 			}
@@ -6715,7 +6715,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
 					(void)project_o(0, 0, y, x, dam, GF_MANA);
 				}
 			}
@@ -6730,7 +6730,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->y, caster_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
 					(void)project_m(0, 0, y, x, dam, GF_MANA,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}

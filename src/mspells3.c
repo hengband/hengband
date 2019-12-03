@@ -864,7 +864,7 @@ static bool cast_learned_spell(int spell, bool success)
 		m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
-		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
+		if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -1305,7 +1305,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!target_set(TARGET_KILL)) return FALSE;
 		if (!p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
-		if (!projectable(p_ptr->y, p_ptr->x, target_row, target_col)) break;
+		if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, target_row, target_col)) break;
 		m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);

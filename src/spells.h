@@ -327,6 +327,7 @@ extern bool detonation(player_type *creature_ptr);
 extern void blood_curse_to_enemy(MONSTER_IDX m_idx);
 extern bool fire_crimson(player_type *shooter_ptr);
 extern bool tele_town(void);
+extern int project_length;
 
 /* Is "teleport level" ineffective to this target? */
 #define TELE_LEVEL_IS_INEFF(TARGET) \
@@ -334,3 +335,4 @@ extern bool tele_town(void);
 	 (p_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || \
 	 (((TARGET) <= 0) && (quest_number(p_ptr->current_floor_ptr->dun_level) || (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) && \
 	  (p_ptr->current_floor_ptr->dun_level >= 1) && ironman_downward))
+

@@ -768,7 +768,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 
 
 	/* Hack -- check line of sight */
-	if (los(p_ptr->y, p_ptr->x, y, x))
+	if (los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x))
 	{
 		cave_view_hack(g_ptr, y, x);
 

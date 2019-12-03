@@ -224,7 +224,7 @@ bool target_able(MONSTER_IDX m_idx)
 	if (p_ptr->riding && (p_ptr->riding == m_idx)) return (TRUE);
 
 	/* Monster must be projectable */
-	if (!projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) return (FALSE);
+	if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) return (FALSE);
 
 	/* Hack -- Never target trappers */
 	/* if (CLEAR_ATTR && (CLEAR_CHAR)) return (FALSE); */
@@ -1117,7 +1117,7 @@ bool target_set(BIT_FLAGS mode)
 			{
 				char cheatinfo[30];
 				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d",
-					los(p_ptr->y, p_ptr->x, y, x), projectable(p_ptr->y, p_ptr->x, y, x));
+					los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x), projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x));
 				strcat(info, cheatinfo);
 			}
 			
@@ -1345,8 +1345,8 @@ bool target_set(BIT_FLAGS mode)
 			{
 				char cheatinfo[100];
 				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d",
-					los(p_ptr->y, p_ptr->x, y, x),
-					projectable(p_ptr->y, p_ptr->x, y, x), g_ptr->special);
+					los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x),
+					projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x), g_ptr->special);
 				strcat(info, cheatinfo);
 			}
 

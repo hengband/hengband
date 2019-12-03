@@ -542,7 +542,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 
 	teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
 
-	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !p_ptr->phase_out && los(p_ptr->y, p_ptr->x, oldfy, oldfx))
+	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !p_ptr->phase_out && los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, oldfy, oldfx))
 	{
 		bool follow = FALSE;
 
@@ -596,7 +596,7 @@ bool teleport_level_other(player_type *creature_ptr)
 	target_m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 	if (!target_m_idx) return TRUE;
 	if (!player_has_los_bold(p_ptr, target_row, target_col)) return TRUE;
-	if (!projectable(creature_ptr->y, creature_ptr->x, target_row, target_col)) return TRUE;
+	if (!projectable(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, target_row, target_col)) return TRUE;
 	m_ptr = &p_ptr->current_floor_ptr->m_list[target_m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 	monster_desc(m_name, m_ptr, 0);
@@ -1292,7 +1292,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 				msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
 				return;
 			}
-			else if (!projectable(caster_ptr->y, caster_ptr->x, ty, tx))
+			else if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, ty, tx))
 			{
 				msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
 				return;

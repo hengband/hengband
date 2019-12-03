@@ -4642,7 +4642,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			if (!in_bounds(p_ptr->current_floor_ptr, ty, tx)) continue;
 
 			/* Require line of projection */
-			if (!projectable(y, x, ty, tx)) continue;
+			if (!projectable(p_ptr->current_floor_ptr, y, x, ty, tx)) continue;
 
 			/* Obtain grid */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];

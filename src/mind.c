@@ -1246,7 +1246,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -1647,7 +1647,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		if (!m_idx) break;
 		if (m_idx == caster_ptr->riding) break;
 		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);

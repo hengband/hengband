@@ -380,4 +380,6 @@ extern void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void forget_flow(floor_type *floor_ptr);
 extern void place_random_stairs(floor_type *floor_ptr, POSITION y, POSITION x);
 
-
+extern bool los(floor_type* floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern int project_length;

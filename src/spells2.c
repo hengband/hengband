@@ -796,7 +796,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 		x = m_ptr->fx;
 
 		/* Require line of sight */
-		if (!player_has_los_bold(p_ptr, y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)) continue;
+		if (!player_has_los_bold(p_ptr, y, x) || !projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x)) continue;
 
 		/* Mark the monster */
 		m_ptr->mflag |= (MFLAG_LOS);
@@ -3322,7 +3322,7 @@ void cast_meteor(HIT_POINT dam, POSITION rad)
 
 			if (d >= 9) continue;
 
-			if (!in_bounds(p_ptr->current_floor_ptr, y, x) || !projectable(p_ptr->y, p_ptr->x, y, x)
+			if (!in_bounds(p_ptr->current_floor_ptr, y, x) || !projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x)
 				|| !cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 			/* Valid position */

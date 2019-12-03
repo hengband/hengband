@@ -125,7 +125,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 			}
 			else
 			{
-				if (!projectable(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
+				if (!projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 			}
 
 			/* OK -- we've got a target */
@@ -310,7 +310,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	x1 = m_ptr->fx;
 
 	/* Monster can already cast spell to player */
-	if (projectable(y1, x1, p_ptr->y, p_ptr->x)) return (FALSE);
+	if (projectable(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x)) return (FALSE);
 
 	/* Set current grid cost */
 	now_cost = p_ptr->current_floor_ptr->grid_array[y1][x1].cost;
@@ -352,7 +352,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 
 		if (now_cost < cost) continue;
 
-		if (!projectable(y, x, p_ptr->y, p_ptr->x)) continue;
+		if (!projectable(p_ptr->current_floor_ptr, y, x, p_ptr->y, p_ptr->x)) continue;
 
 		/* Accept louder sounds */
 		if (best < cost) continue;
@@ -430,7 +430,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	x1 = m_ptr->fx;
 
 	/* Hack -- Player can see us, run towards him */
-	if (player_has_los_bold(p_ptr, y1, x1) && projectable(p_ptr->y, p_ptr->x, y1, x1)) return (FALSE);
+	if (player_has_los_bold(p_ptr, y1, x1) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y1, x1)) return (FALSE);
 
 	/* Monster grid */
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y1][x1];
@@ -757,7 +757,7 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			}
 
 			/* Check for absence of shot (more or less) */
-			if (!projectable(p_ptr->y, p_ptr->x, y, x))
+			if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x))
 			{
 				/* Calculate distance from player */
 				dis = distance(y, x, p_ptr->y, p_ptr->x);
@@ -837,7 +837,7 @@ static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 
 			/* Check for hidden, available grid */
-			if (!projectable(p_ptr->y, p_ptr->x, y, x) && clean_shot(fy, fx, y, x, FALSE))
+			if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x) && clean_shot(fy, fx, y, x, FALSE))
 			{
 				/* Calculate distance from player */
 				dis = distance(y, x, p_ptr->y, p_ptr->x);
@@ -898,8 +898,8 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 		/* The monster must be an enemy, and in LOS */
 		if (t_m_idx &&
 		    are_enemies(m_ptr, &p_ptr->current_floor_ptr->m_list[t_m_idx]) &&
-		    los(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) &&
-		    projectable(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
+		    los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) &&
+		    projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 		{
 			/* Extract the "pseudo-direction" */
 			y = m_ptr->fy - m_ptr->target_y;
@@ -910,7 +910,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 
 	if (!done && !will_run && is_hostile(m_ptr) &&
 	    (r_ptr->flags1 & RF1_FRIENDS) &&
-	    ((los(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) ||
+	    ((los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)) ||
 	    (p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2)))
 	{
 	/*
@@ -1400,7 +1400,7 @@ void process_monster(MONSTER_IDX m_idx)
 				if (see_m)
 				{
 					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG) &&
-					    player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx) && projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))
+					    player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx) && projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))
 					{
 						msg_format(_("%^s「ピンチだ！退却させてもらう！」", "%^s says 'It is the pinch! I will retreat'."), m_name);
 					}
@@ -1568,7 +1568,7 @@ void process_monster(MONSTER_IDX m_idx)
 		if ((ap_r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
 		    one_in_(SPEAK_CHANCE) &&
 		    player_has_los_bold(p_ptr, oy, ox) &&
-		    projectable(oy, ox, p_ptr->y, p_ptr->x))
+		    projectable(p_ptr->current_floor_ptr, oy, ox, p_ptr->y, p_ptr->x))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			char monmessage[1024];
@@ -1610,7 +1610,7 @@ void process_monster(MONSTER_IDX m_idx)
 
 			/* The monster must be an enemy, and projectable */
 			if (t_m_idx && are_enemies(m_ptr, &p_ptr->current_floor_ptr->m_list[t_m_idx]) &&
-			    projectable(m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
+			    projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 			{
 				counterattack = TRUE;
 			}
@@ -2209,7 +2209,7 @@ void process_monster(MONSTER_IDX m_idx)
 			/* Possible disturb */
 			if (m_ptr->ml &&
 			    (disturb_move ||
-			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
+			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
 			     (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= p_ptr->lev)))
 			{
 				if (is_hostile(m_ptr))

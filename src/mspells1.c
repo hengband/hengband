@@ -398,7 +398,7 @@ bool summon_possible(POSITION y1, POSITION x1)
 			if (pattern_tile(y, x)) continue;
 
 			/* Require empty floor grid in line of projection */
-			if (cave_empty_bold(p_ptr->current_floor_ptr, y, x) && projectable(y1, x1, y, x) && projectable(y, x, y1, x1)) return (TRUE);
+			if (cave_empty_bold(p_ptr->current_floor_ptr, y, x) && projectable(p_ptr->current_floor_ptr, y1, x1, y, x) && projectable(p_ptr->current_floor_ptr, y, x, y1, x1)) return (TRUE);
 		}
 	}
 
@@ -425,8 +425,8 @@ bool raise_possible(monster_type *m_ptr)
 		for (yy = y - 5; yy <= y + 5; yy++)
 		{
 			if (distance(y, x, yy, xx) > 5) continue;
-			if (!los(y, x, yy, xx)) continue;
-			if (!projectable(y, x, yy, xx)) continue;
+			if (!los(p_ptr->current_floor_ptr, y, x, yy, xx)) continue;
+			if (!projectable(p_ptr->current_floor_ptr, y, x, yy, xx)) continue;
 
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
 			/* Scan the pile of objects */
@@ -1246,7 +1246,7 @@ bool spell_is_inate(SPELL_IDX spell)
  * @return 有効な座標があった場合TRUEを返す
  */
 static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
-	int f_flag, bool (*path_check)(POSITION, POSITION, POSITION, POSITION))
+	int f_flag, bool (*path_check)(floor_type *, POSITION, POSITION, POSITION, POSITION))
 {
 	int i;
 	int tonari;
@@ -1276,7 +1276,7 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 		/* Skip this feature */
 		if (!cave_have_flag_grid(g_ptr, f_flag)) continue;
 
-		if (path_check(m_ptr->fy, m_ptr->fx, next_y, next_x))
+		if (path_check(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x))
 		{
 			*yp = next_y;
 			*xp = next_x;
@@ -1423,7 +1423,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 		y_br_lite = y;
 		x_br_lite = x;
 
-		if (los(m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
+		if (los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
 		{
 			feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
 
@@ -1445,7 +1445,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	}
 
 	/* Check path */
-	if (projectable(m_ptr->fy, m_ptr->fx, y, x))
+	if (projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y, x))
 	{
 		feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
 
@@ -1466,13 +1466,13 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE/2) &&
 		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
-		    (one_in_(10) || (projectable(y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+		    (one_in_(10) || (projectable(p_ptr->current_floor_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
 			do_spell = DO_SPELL_BR_DISI;
 			success = TRUE;
 		}
 		else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE/2) &&
-		    los(m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
+		    los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
 		{
 			do_spell = DO_SPELL_BR_LITE;
 			success = TRUE;
@@ -1481,7 +1481,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 		{
 			POSITION by = y, bx = x;
 			get_project_point(m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
-			if ((distance(by, bx, y, x) <= 3) && los(by, bx, y, x) && one_in_(5))
+			if ((distance(by, bx, y, x) <= 3) && los(p_ptr->current_floor_ptr, by, bx, y, x) && one_in_(5))
 			{
 				do_spell = DO_SPELL_BA_LITE;
 				success = TRUE;

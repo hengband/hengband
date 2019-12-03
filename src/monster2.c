@@ -2133,7 +2133,7 @@ void update_monster(MONSTER_IDX m_idx, bool full)
 			}
 
 			/* Disturb on appearance */
-			if (disturb_near && (projectable(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
+			if (disturb_near && (projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
 			{
 				if (disturb_pets || is_hostile(m_ptr))
 					disturb(p_ptr, TRUE, TRUE);
@@ -2913,7 +2913,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
 
 			/* Require "line of projection" */
-			if (!projectable(y, x, ny, nx)) continue;
+			if (!projectable(p_ptr->current_floor_ptr, y, x, ny, nx)) continue;
 
 			if (r_idx > 0)
 			{
