@@ -205,15 +205,15 @@ void disclose_grid(POSITION y, POSITION x)
 * when they are "discovered" (by detecting them or setting them off),\n
 * the trap is "instantiated" as a visible, "typed", trap.\n
 */
-void place_trap(POSITION y, POSITION x)
+void place_trap(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Paranoia -- verify location */
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
+	if (!in_bounds(floor_ptr, y, x)) return;
 
 	/* Require empty, clean, floor grid */
-	if (!cave_clean_bold(p_ptr->current_floor_ptr, y, x)) return;
+	if (!cave_clean_bold(floor_ptr, y, x)) return;
 
 	/* Place an invisible trap */
 	g_ptr->mimic = g_ptr->feat;

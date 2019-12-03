@@ -4026,7 +4026,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				}
 				else
 				{
-					place_trap(*y, *x);
+					place_trap(p_ptr->current_floor_ptr, *y, *x);
 				}
 
 				p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
@@ -4048,7 +4048,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			/* Random trap */
 			else if (random & RANDOM_TRAP)
 			{
-				place_trap(*y, *x);
+				place_trap(p_ptr->current_floor_ptr, *y, *x);
 			}
 			/* Hidden trap (or door) */
 			else if (letter[idx].trap)

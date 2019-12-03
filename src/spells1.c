@@ -503,7 +503,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_MAKE_TRAP:
 		{
-			place_trap(y, x);
+			place_trap(p_ptr->current_floor_ptr, y, x);
 			break;
 		}
 

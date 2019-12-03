@@ -659,7 +659,7 @@ void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd)
 		if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 		/* Place the trap */
-		place_trap(y1, x1);
+		place_trap(p_ptr->current_floor_ptr, y1, x1);
 
 		break;
 	}

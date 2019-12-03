@@ -367,7 +367,7 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
 
 			case ALLOC_TYP_TRAP:
 			{
-				place_trap(y, x);
+				place_trap(floor_ptr, y, x);
 				floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
 				break;
 			}
