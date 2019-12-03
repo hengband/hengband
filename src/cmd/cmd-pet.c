@@ -153,9 +153,9 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 	C_MAKE(who, current_world_ptr->max_m_idx, MONSTER_IDX);
 
 	/* Process the monsters (backwards) */
-	for (pet_ctr = p_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
+	for (pet_ctr = creature_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 	{
-		if (is_pet(&p_ptr->current_floor_ptr->m_list[pet_ctr]))
+		if (is_pet(&creature_ptr->current_floor_ptr->m_list[pet_ctr]))
 			who[max_pet++] = pet_ctr;
 	}
 
@@ -169,7 +169,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 		bool kakunin;
 
 		pet_ctr = who[i];
-		m_ptr = &p_ptr->current_floor_ptr->m_list[pet_ctr];
+		m_ptr = &creature_ptr->current_floor_ptr->m_list[pet_ctr];
 
 		delete_this = FALSE;
 		kakunin = ((pet_ctr == creature_ptr->riding) || (m_ptr->nickname));
