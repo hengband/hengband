@@ -4,6 +4,7 @@
 #include "grid.h"
 #include "dungeon.h"
 #include "rooms.h"
+#include "quest.h"
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].
@@ -240,3 +241,36 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 		place_solid_bold(y + 1, x);
 	}
 }
+
+/*!
+ * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
+ * @param y 配置を試みたいマスのY座標
+ * @param x 配置を試みたいマスのX座標
+ * @return なし
+ */
+void place_random_stairs(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+	bool up_stairs = TRUE;
+	bool down_stairs = TRUE;
+	grid_type *g_ptr;
+	g_ptr = &floor_ptr->grid_array[y][x];
+	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
+
+	if (!floor_ptr->dun_level) up_stairs = FALSE;
+	if (ironman_downward) up_stairs = FALSE;
+	if (floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
+	if (quest_number(floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
+
+	/* We can't place both */
+	if (down_stairs && up_stairs)
+	{
+		/* Choose a staircase randomly */
+		if (randint0(100) < 50) up_stairs = FALSE;
+		else down_stairs = FALSE;
+	}
+
+	/* Place the stairs */
+	if (up_stairs) set_cave_feat(floor_ptr, y, x, feat_up_stair);
+	else if (down_stairs) set_cave_feat(floor_ptr, y, x, feat_down_stair);
+}
+

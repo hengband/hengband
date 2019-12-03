@@ -236,38 +236,6 @@ bool new_player_spot(player_type *creature_ptr)
 
 
 /*!
- * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
- * @param y 配置を試みたいマスのY座標
- * @param x 配置を試みたいマスのX座標
- * @return なし
- */
-void place_random_stairs(POSITION y, POSITION x)
-{
-	bool up_stairs = TRUE;
-	bool down_stairs = TRUE;
-	grid_type *g_ptr;
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
-
-	if (!p_ptr->current_floor_ptr->dun_level) up_stairs = FALSE;
-	if (ironman_downward) up_stairs = FALSE;
-	if (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
-	if (quest_number(p_ptr->current_floor_ptr->dun_level) && (p_ptr->current_floor_ptr->dun_level > 1)) down_stairs = FALSE;
-
-	/* We can't place both */
-	if (down_stairs && up_stairs)
-	{
-		/* Choose a staircase randomly */
-		if (randint0(100) < 50) up_stairs = FALSE;
-		else down_stairs = FALSE;
-	}
-
-	/* Place the stairs */
-	if (up_stairs) set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_up_stair);
-	else if (down_stairs) set_cave_feat(p_ptr->current_floor_ptr, y, x, feat_down_stair);
-}
-
-/*!
  * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標

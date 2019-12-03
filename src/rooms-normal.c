@@ -722,7 +722,7 @@ bool build_type4(floor_type *floor_ptr)
 			/* Stairs (20%) */
 			else
 			{
-				place_random_stairs(yval, xval);
+				place_random_stairs(floor_ptr, yval, xval);
 			}
 
 			/* Traps to protect the treasure */

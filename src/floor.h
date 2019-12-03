@@ -378,4 +378,6 @@ extern void add_door(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type);
 extern void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void forget_flow(floor_type *floor_ptr);
+extern void place_random_stairs(floor_type *floor_ptr, POSITION y, POSITION x);
+
 
