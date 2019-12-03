@@ -169,14 +169,14 @@ void build_small_room(floor_type *floor_ptr, POSITION x0, POSITION y0)
 
 	for (y = y0 - 1; y <= y0 + 1; y++)
 	{
-		place_inner_bold(y, x0 - 1);
-		place_inner_bold(y, x0 + 1);
+		place_inner_bold(floor_ptr, y, x0 - 1);
+		place_inner_bold(floor_ptr, y, x0 + 1);
 	}
 
 	for (x = x0 - 1; x <= x0 + 1; x++)
 	{
-		place_inner_bold(y0 - 1, x);
-		place_inner_bold(y0 + 1, x);
+		place_inner_bold(floor_ptr, y0 - 1, x);
+		place_inner_bold(floor_ptr, y0 + 1, x);
 	}
 
 	/* Place a secret door on one side */
@@ -1872,7 +1872,7 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 				{
 					for (x = x1; x < x2; x++)
 					{
-						place_inner_bold(y, x);
+						place_inner_bold(floor_ptr, y, x);
 					}
 				}
 
@@ -1884,15 +1884,15 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 			/* top and bottom */
 			for (x = x1 + 1; x <= x2 - 1; x++)
 			{
-				place_inner_bold(y1 + 1, x);
-				place_inner_bold(y2 - 1, x);
+				place_inner_bold(floor_ptr, y1 + 1, x);
+				place_inner_bold(floor_ptr, y2 - 1, x);
 			}
 
 			/* left and right */
 			for (y = y1 + 1; y <= y2 - 1; y++)
 			{
-				place_inner_bold(y, x1 + 1);
-				place_inner_bold(y, x2 - 1);
+				place_inner_bold(floor_ptr, y, x1 + 1);
+				place_inner_bold(floor_ptr, y, x2 - 1);
 			}
 
 			/* Make a door */
@@ -1923,7 +1923,7 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 				{
 					for (x = x1; x < x2; x++)
 					{
-						place_inner_bold(y, x);
+						place_inner_bold(floor_ptr, y, x);
 					}
 				}
 				return;
@@ -1944,7 +1944,7 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 				{
 					for (x = x1; x < x2; x++)
 					{
-						place_inner_bold(y, x);
+						place_inner_bold(floor_ptr, y, x);
 					}
 				}
 				return;

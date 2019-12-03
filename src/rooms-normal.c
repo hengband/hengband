@@ -173,7 +173,7 @@ bool build_type1(floor_type *floor_ptr)
 			/* Horizontal wall */
 			for (x = x1; x <= x2; x++)
 			{
-				place_inner_bold(yval, x);
+				place_inner_bold(floor_ptr, yval, x);
 				if (curtain2) floor_ptr->grid_array[yval][x].feat = feat_door[DOOR_CURTAIN].closed;
 			}
 
@@ -186,7 +186,7 @@ bool build_type1(floor_type *floor_ptr)
 			/* Vertical wall */
 			for (y = y1; y <= y2; y++)
 			{
-				place_inner_bold(y, xval);
+				place_inner_bold(floor_ptr, y, xval);
 				if (curtain2) floor_ptr->grid_array[y][xval].feat = feat_door[DOOR_CURTAIN].closed;
 			}
 

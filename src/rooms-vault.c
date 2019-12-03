@@ -872,7 +872,7 @@ static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) == rad / 2)
 			{
 				/* Make an internal wall */
-				place_inner_bold(y, x);
+				place_inner_bold(floor_ptr, y, x);
 			}
 		}
 	}
@@ -880,24 +880,24 @@ static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	/* Add perpendicular walls */
 	for (x = x0 - rad; x <= x0 + rad; x++)
 	{
-		place_inner_bold(y0, x);
+		place_inner_bold(floor_ptr, y0, x);
 	}
 
 	for (y = y0 - rad; y <= y0 + rad; y++)
 	{
-		place_inner_bold(y, x0);
+		place_inner_bold(floor_ptr, y, x0);
 	}
 
 	/* Make inner vault */
 	for (y = y0 - 1; y <= y0 + 1; y++)
 	{
-		place_inner_bold(y, x0 - 1);
-		place_inner_bold(y, x0 + 1);
+		place_inner_bold(floor_ptr, y, x0 - 1);
+		place_inner_bold(floor_ptr, y, x0 + 1);
 	}
 	for (x = x0 - 1; x <= x0 + 1; x++)
 	{
-		place_inner_bold(y0 - 1, x);
-		place_inner_bold(y0 + 1, x);
+		place_inner_bold(floor_ptr, y0 - 1, x);
+		place_inner_bold(floor_ptr, y0 + 1, x);
 	}
 
 	place_floor_bold(y0, x0);
@@ -1113,7 +1113,7 @@ static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 			/* If total is odd- and is a floor then make a wall */
 			if ((total % 2 == 1) && is_floor_bold(floor_ptr, y, x))
 			{
-				place_inner_bold(y, x);
+				place_inner_bold(floor_ptr, y, x);
 			}
 		}
 	}
@@ -1123,15 +1123,15 @@ static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	{
 		/* left and right */
 		y = randint1(dy) + dy / 2;
-		place_inner_bold(y1 + y, x1 - 1);
-		place_inner_bold(y1 + y, x2 + 1);
+		place_inner_bold(floor_ptr, y1 + y, x1 - 1);
+		place_inner_bold(floor_ptr, y1 + y, x2 + 1);
 	}
 	else
 	{
 		/* top and bottom */
 		x = randint1(dx) + dx / 2;
-		place_inner_bold(y1 - 1, x1 + x);
-		place_inner_bold(y2 + 1, x1 + x);
+		place_inner_bold(floor_ptr, y1 - 1, x1 + x);
+		place_inner_bold(floor_ptr, y2 + 1, x1 + x);
 	}
 
 	/* Fill with monsters and treasure, highest difficulty */
