@@ -144,7 +144,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
 						/* Lava terrain glows */
 						if (have_flag(f_info[feat1].flags, FF_LAVA))
 						{
-							if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) g_ptr->info |= CAVE_GLOW;
+							if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) g_ptr->info |= CAVE_GLOW;
 						}
 
 						/* Hack -- don't teleport here */
@@ -237,7 +237,7 @@ void add_river(floor_type *floor_ptr, FEAT_IDX feat1, FEAT_IDX feat2)
  * hidden gold types are currently unused.
  * </pre>
  */
-void build_streamer(FEAT_IDX feat, int chance)
+void build_streamer(floor_type *floor_ptr, FEAT_IDX feat, int chance)
 {
 	int i;
 	POSITION y, x, tx, ty;
@@ -252,8 +252,8 @@ void build_streamer(FEAT_IDX feat, int chance)
 	bool streamer_may_have_gold = have_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
 
 	/* Hack -- Choose starting point */
-	y = rand_spread(p_ptr->current_floor_ptr->height / 2, p_ptr->current_floor_ptr->height / 6);
-	x = rand_spread(p_ptr->current_floor_ptr->width / 2, p_ptr->current_floor_ptr->width / 6);
+	y = rand_spread(floor_ptr->height / 2, floor_ptr->height / 6);
+	x = rand_spread(floor_ptr->width / 2, floor_ptr->width / 6);
 
 	/* Choose a random compass direction */
 	dir = randint0(8);
@@ -273,10 +273,10 @@ void build_streamer(FEAT_IDX feat, int chance)
 			{
 				ty = rand_spread(y, d);
 				tx = rand_spread(x, d);
-				if (!in_bounds2(p_ptr->current_floor_ptr, ty, tx)) continue;
+				if (!in_bounds2(floor_ptr, ty, tx)) continue;
 				break;
 			}
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
+			g_ptr = &floor_ptr->grid_array[ty][tx];
 			f_ptr = &f_info[g_ptr->feat];
 
 			if (have_flag(f_ptr->flags, FF_MOVE) && (have_flag(f_ptr->flags, FF_WATER) || have_flag(f_ptr->flags, FF_LAVA)))
@@ -292,7 +292,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 				if (is_closed_door(g_ptr->feat)) continue;
 			}
 
-			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].r_idx], 0)))
+			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0)))
 			{
 				/* Delete the monster (if any) */
 				delete_monster(ty, tx);
@@ -305,7 +305,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 				/* Scan all objects in the grid */
 				for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 				{
-					object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+					object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
 					next_o_idx = o_ptr->next_o_idx;
 
 					/* Hack -- Preserve unknown artifacts */
@@ -372,7 +372,7 @@ void build_streamer(FEAT_IDX feat, int chance)
 		}
 
 		/* Quit before leaving the dungeon */
-		if (!in_bounds(p_ptr->current_floor_ptr, y, x)) break;
+		if (!in_bounds(floor_ptr, y, x)) break;
 	}
 }
 

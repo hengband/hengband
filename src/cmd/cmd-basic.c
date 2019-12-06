@@ -2865,7 +2865,6 @@ void do_cmd_suicide(player_type *creature_ptr)
 		if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) return;
 	}
 
-
 	if (!creature_ptr->noscore)
 	{
 		/* Special Verification for suicide */
