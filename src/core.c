@@ -4360,7 +4360,7 @@ static void process_upkeep_with_speed(void)
 
 		/* Hex - Handle the hex spells */
 		if (!load) check_hex(p_ptr);
-		if (!load) revenge_spell();
+		if (!load) revenge_spell(p_ptr);
 		
 		/* There is some randomness of needed energy */
 		p_ptr->enchant_energy_need += ENERGY_NEED();

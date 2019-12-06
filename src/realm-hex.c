@@ -260,15 +260,15 @@ bool hex_spell_fully(void)
  * @brief 一定ゲームターン毎に復讐処理の残り期間の判定を行う
  * @return なし
  */
-void revenge_spell(void)
+void revenge_spell(player_type *caster_ptr)
 {
-	if (p_ptr->realm1 != REALM_HEX) return;
-	if (HEX_REVENGE_TURN(p_ptr) <= 0) return;
+	if (caster_ptr->realm1 != REALM_HEX) return;
+	if (HEX_REVENGE_TURN(caster_ptr) <= 0) return;
 
-	switch(HEX_REVENGE_TYPE(p_ptr))
+	switch(HEX_REVENGE_TYPE(caster_ptr))
 	{
-		case 1: exe_spell(p_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT); break;
-		case 2: exe_spell(p_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT); break;
+		case 1: exe_spell(caster_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT); break;
+		case 2: exe_spell(caster_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT); break;
 	}
 }
 

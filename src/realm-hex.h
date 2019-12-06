@@ -53,7 +53,7 @@ extern bool stop_hex_spell_all(void);
 extern bool stop_hex_spell(void);
 extern void check_hex(player_type *caster_ptr);
 extern bool hex_spell_fully(void);
-extern void revenge_spell(void);
+extern void revenge_spell(player_type *caster_ptr);
 extern void revenge_store(HIT_POINT dam);
 extern bool teleport_barrier(MONSTER_IDX m_idx);
 extern bool magic_barrier(MONSTER_IDX m_idx);
