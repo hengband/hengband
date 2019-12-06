@@ -321,7 +321,7 @@ extern bool dimension_door(void);
 extern bool mirror_tunnel(void);
 extern void massacre(player_type *caster_ptr);
 extern bool eat_lock(player_type *caster_ptr);
-extern bool shock_power(void);
+extern bool shock_power(player_type *caster_ptr);
 extern bool booze(player_type *creature_ptr);
 extern bool detonation(player_type *creature_ptr);
 extern void blood_curse_to_enemy(MONSTER_IDX m_idx);

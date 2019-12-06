@@ -3366,29 +3366,29 @@ bool eat_lock(player_type *caster_ptr)
 }
 
 
-bool shock_power(void)
+bool shock_power(player_type *caster_ptr)
 {
 	DIRECTION dir;
 	POSITION y, x;
 	HIT_POINT dam;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	int boost = P_PTR_KI;
-	if (heavy_armor(p_ptr)) boost /= 2;
+	if (heavy_armor(caster_ptr)) boost /= 2;
 
 	project_length = 1;
 	if (!get_aim_dir(&dir)) return FALSE;
 
-	y = p_ptr->y + ddy[dir];
-	x = p_ptr->x + ddx[dir];
+	y = caster_ptr->y + ddy[dir];
+	x = caster_ptr->x + ddx[dir];
 	dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
 	fire_beam(GF_MISSILE, dir, dam);
-	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+	if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		int i;
 		POSITION ty = y, tx = x;
 		POSITION oy = y, ox = x;
-		MONSTER_IDX m_idx = p_ptr->current_floor_ptr->grid_array[y][x].m_idx;
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		MONSTER_IDX m_idx = caster_ptr->current_floor_ptr->grid_array[y][x].m_idx;
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		GAME_TEXT m_name[MAX_NLEN];
 
@@ -3404,7 +3404,7 @@ bool shock_power(void)
 			{
 				y += ddy[dir];
 				x += ddx[dir];
-				if (cave_empty_bold(p_ptr->current_floor_ptr, y, x))
+				if (cave_empty_bold(caster_ptr->current_floor_ptr, y, x))
 				{
 					ty = y;
 					tx = x;
@@ -3414,8 +3414,8 @@ bool shock_power(void)
 			if ((ty != oy) || (tx != ox))
 			{
 				msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
-				p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-				p_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
+				caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+				caster_ptr->current_floor_ptr->grid_array[ty][tx].m_idx = m_idx;
 				m_ptr->fy = ty;
 				m_ptr->fx = tx;
 
@@ -3424,7 +3424,7 @@ bool shock_power(void)
 				lite_spot(ty, tx);
 
 				if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-					p_ptr->update |= (PU_MON_LITE);
+					caster_ptr->update |= (PU_MON_LITE);
 			}
 		}
 	}

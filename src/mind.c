@@ -1232,7 +1232,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		set_tim_sh_touki(caster_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
 		break;
 	case 7:
-		return shock_power();
+		return shock_power(caster_ptr);
 		break;
 	case 8:
 		if (!get_aim_dir(&dir)) return FALSE;
