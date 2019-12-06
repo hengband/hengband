@@ -527,9 +527,9 @@ bool show_gold_on_floor = FALSE;
  *
  * This function must handle blindness/hallucination.
  */
-static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
+static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	concptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
@@ -552,7 +552,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	}
 
 	/* Hack -- under the player */
-	if (player_bold(p_ptr, y, x))
+	if (player_bold(subject_ptr, y, x))
 	{
 #ifdef JP
 		s1 = "あなたは";
@@ -569,7 +569,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	}
 
 	/* Hack -- hallucination */
-	if (p_ptr->image)
+	if (subject_ptr->image)
 	{
 		concptr name = _("何か奇妙な物", "something strange");
 
@@ -593,9 +593,9 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 
 
 	/* Actual monsters */
-	if (g_ptr->m_idx && p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)
+	if (g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 		GAME_TEXT m_name[MAX_NLEN];
 		bool recall = FALSE;
@@ -688,7 +688,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 			GAME_TEXT o_name[MAX_NLEN];
 
 			object_type *o_ptr;
-			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			object_desc(o_name, o_ptr, 0);
@@ -733,7 +733,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_type *o_ptr;
-				o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[0]];
+				o_ptr = &subject_ptr->current_floor_ptr->o_list[floor_list[0]];
 
 				object_desc(o_name, o_ptr, 0);
 
@@ -807,18 +807,18 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 				o_idx = g_ptr->o_idx;
  
 				/* Only rotate a pile of two or more objects. */
-				if (!(o_idx && p_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) continue;
+				if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) continue;
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
-				while (p_ptr->current_floor_ptr->o_list[i].next_o_idx)
-					i = p_ptr->current_floor_ptr->o_list[i].next_o_idx;
+				while (subject_ptr->current_floor_ptr->o_list[i].next_o_idx)
+					i = subject_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
 				/* Add after the last object. */
-				p_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
+				subject_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 				/* Loop and re-display the list */
 			}
@@ -831,7 +831,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		if (o_ptr->marked & OM_FOUND)
@@ -898,14 +898,14 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 		if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 		{
 			/* Set the quest number temporary */
-			IDX old_quest = p_ptr->inside_quest;
+			IDX old_quest = subject_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */
 			for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
 			quest_text_line = 0;
 
-			p_ptr->inside_quest = g_ptr->special;
+			subject_ptr->inside_quest = g_ptr->special;
 
 			/* Get the quest text */
 			init_flags = INIT_NAME_ONLY;
@@ -916,11 +916,11 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 						quest[g_ptr->special].name, quest[g_ptr->special].level);
 
 			/* Reset the old quest number */
-			p_ptr->inside_quest = old_quest;
+			subject_ptr->inside_quest = old_quest;
 		}
 
 		/* Hack -- special handling for building doors */
-		else if (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena)
+		else if (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->inside_arena)
 		{
 			name = building[f_ptr->subtype].name;
 		}
@@ -932,7 +932,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 		{
 			name = town_info[g_ptr->special].name;
 		}
-		else if (p_ptr->wild_mode && (feat == feat_floor))
+		else if (subject_ptr->wild_mode && (feat == feat_floor))
 		{
 			name = _("道", "road");
 		}
@@ -954,7 +954,7 @@ static char target_set_aux(POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 		/* Hack -- special introduction for store & building doors -KMW- */
 		if (have_flag(f_ptr->flags, FF_STORE) ||
 		    have_flag(f_ptr->flags, FF_QUEST_ENTER) ||
-		    (have_flag(f_ptr->flags, FF_BLDG) && !p_ptr->inside_arena) ||
+		    (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->inside_arena) ||
 		    have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
 			s2 = _("の入口", "");
@@ -1123,7 +1123,7 @@ bool target_set(BIT_FLAGS mode)
 			
 			/* Describe and Prompt */
 			while (TRUE){
-				query = target_set_aux(y, x, mode, info);
+				query = target_set_aux(p_ptr, y, x, mode, info);
 				if(query)break;
 			}
 
@@ -1351,7 +1351,7 @@ bool target_set(BIT_FLAGS mode)
 			}
 
 			/* Describe and Prompt (enable "TARGET_LOOK") */
-			while ((query = target_set_aux(y, x, mode | TARGET_LOOK, info)) == 0);
+			while ((query = target_set_aux(p_ptr, y, x, mode | TARGET_LOOK, info)) == 0);
 
 			/* Assume no direction */
 			d = 0;
