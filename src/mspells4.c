@@ -1876,7 +1876,7 @@ void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 		if(see_monster(m_idx))
 			msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
 
-		teleport_away(m_idx, 10, 0L);
+		teleport_away(p_ptr, m_idx, 10, 0L);
 
 		if (TARGET_TYPE==MONSTER_TO_PLAYER)
 			p_ptr->update |= (PU_MONSTERS);
@@ -2054,7 +2054,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 			_("%^sは突然急上昇して視界から消えた!", "%^s suddenly go out of your sight!"),
 			TARGET_TYPE);
 				
-		teleport_away(m_idx, 10, TELEPORT_NONMAGICAL);
+		teleport_away(p_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
 		p_ptr->update |= (PU_MONSTERS);
 	}
 	else
@@ -2290,7 +2290,7 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 			if (t_idx == p_ptr->riding) 
 				teleport_player_away(m_idx, MAX_SIGHT * 2 + 5);
 			else 
-				teleport_away(t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
+				teleport_away(p_ptr, t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
 		}
 
 		set_monster_csleep(t_idx, 0);

@@ -535,7 +535,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 					m_ptr->hp = m_ptr->maxhp;
 
 					/* Try to teleport away quest monsters */
-					if (!teleport_away(g_ptr->m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) continue;
+					if (!teleport_away(p_ptr, g_ptr->m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) continue;
 				}
 				else
 				{

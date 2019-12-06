@@ -282,7 +282,7 @@ extern bool concentration(player_type *creature_ptr);
 #define TELEPORT_DEC_VALOUR 0x00000004
 
 /* spells3.c */
-extern bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
+extern bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
 extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
 extern bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode);
 extern void teleport_player(POSITION dis, BIT_FLAGS mode);

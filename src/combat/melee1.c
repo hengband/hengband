@@ -1977,7 +1977,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				if (!resists_tele)
 				{
 					msg_format(_("%^sは消えた！", "%^s disappears!"), m_name);
-					teleport_away(g_ptr->m_idx, 50, TELEPORT_PASSIVE);
+					teleport_away(attacker_ptr, g_ptr->m_idx, 50, TELEPORT_PASSIVE);
 					num = num_blow + 1; /* Can't hit it anymore! */
 					*mdeath = TRUE;
 				}
@@ -4088,7 +4088,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		else
 		{
 			msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-			teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
+			teleport_away(target_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
 		}
 	}
 
@@ -4735,7 +4735,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 				subject_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 
-			teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
+			teleport_away(subject_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
 		}
 	}
 

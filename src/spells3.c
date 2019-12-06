@@ -74,7 +74,7 @@
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
+bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 {
 	POSITION oy, ox, d, i, min;
 	int tries = 0;
@@ -82,7 +82,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 
 	bool look = TRUE;
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	if (!monster_is_valid(m_ptr)) return (FALSE);
 
 	oy = m_ptr->fy;
@@ -92,10 +92,10 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	min = dis / 2;
 
 	if ((mode & TELEPORT_DEC_VALOUR) &&
-	    (((p_ptr->chp * 10) / p_ptr->mhp) > 5) &&
-		(4+randint1(5) < ((p_ptr->chp * 10) / p_ptr->mhp)))
+	    (((caster_ptr->chp * 10) / caster_ptr->mhp) > 5) &&
+		(4+randint1(5) < ((caster_ptr->chp * 10) / caster_ptr->mhp)))
 	{
-		chg_virtue(p_ptr, V_VALOUR, -1);
+		chg_virtue(caster_ptr, V_VALOUR, -1);
 	}
 
 	/* Look until done */
@@ -119,13 +119,13 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 			}
 
 			/* Ignore illegal locations */
-			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
+			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
 
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
-			if (!(p_ptr->inside_quest || p_ptr->inside_arena))
-				if (p_ptr->current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY) continue;
+			if (!(caster_ptr->inside_quest || caster_ptr->inside_arena))
+				if (caster_ptr->current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY) continue;
 
 			/* This grid looks good */
 			look = FALSE;
@@ -147,10 +147,10 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	sound(SOUND_TPOTHER);
 
 	/* Update the old location */
-	p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+	caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
 
 	/* Update the new location */
-	p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+	caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
 	/* Move the monster */
 	m_ptr->fy = ny;
@@ -164,7 +164,7 @@ bool teleport_away(MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
 	lite_spot(ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-		p_ptr->update |= (PU_MON_LITE);
+		caster_ptr->update |= (PU_MON_LITE);
 
 	return (TRUE);
 }
@@ -540,7 +540,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 	bool old_ml = m_ptr->ml;
 	POSITION old_cdis = m_ptr->cdis;
 
-	teleport_away(m_idx, MAX_SIGHT * 2 + 5, 0L);
+	teleport_away(p_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
 
 	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !p_ptr->phase_out && los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, oldfy, oldfx))
 	{
@@ -3507,7 +3507,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			{
 				msg_print(_("空間が歪んだ！", "Space warps about you!"));
 
-				if (m_ptr->r_idx) teleport_away(g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
+				if (m_ptr->r_idx) teleport_away(p_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
 				if (one_in_(13)) count += activate_hi_summon(m_ptr->fy, m_ptr->fx, TRUE);
 				if (!one_in_(6)) break;
 			}

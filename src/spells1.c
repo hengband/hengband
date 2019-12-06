@@ -3741,7 +3741,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			if (!who) chg_virtue(p_ptr, V_VALOUR, -1);
 
 			/* Teleport */
-			teleport_away(g_ptr->m_idx, do_dist,
+			teleport_away(p_ptr, g_ptr->m_idx, do_dist,
 						(!who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
 
 			/* Hack -- get new location */
