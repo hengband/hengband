@@ -4240,7 +4240,7 @@ bool double_attack(player_type *creature_ptr)
 	if (!get_rep_dir(&dir, FALSE)) return FALSE;
 	y = creature_ptr->y + ddy[dir];
 	x = creature_ptr->x + ddx[dir];
-	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+	if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		if (one_in_(3))
 			msg_print(_("あーたたたたたたたたたたたたたたたたたたたたたた！！！",
@@ -4252,11 +4252,11 @@ bool double_attack(player_type *creature_ptr)
 			msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！",
 				"Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
 
-		py_attack(p_ptr, y, x, 0);
-		if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+		py_attack(creature_ptr, y, x, 0);
+		if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 		{
 			handle_stuff();
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		}
 		creature_ptr->energy_need += ENERGY_NEED();
 	}
