@@ -2186,7 +2186,7 @@ void process_monster(MONSTER_IDX m_idx)
 					y_ptr->fx = ox;
 
 					/* Update the old monster */
-					update_monster(g_ptr->m_idx, TRUE);
+					update_monster(p_ptr, g_ptr->m_idx, TRUE);
 				}
 
 				/* Hack -- Update the new location */
@@ -2195,7 +2195,7 @@ void process_monster(MONSTER_IDX m_idx)
 				/* Move the monster */
 				m_ptr->fy = ny;
 				m_ptr->fx = nx;
-				update_monster(m_idx, TRUE);
+				update_monster(p_ptr, m_idx, TRUE);
 
 				lite_spot(oy, ox);
 				lite_spot(ny, nx);

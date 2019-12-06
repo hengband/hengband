@@ -807,7 +807,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 								m_ptr->fx = nx;
 								m_ptr->fy = ny;
 
-								update_monster(c_mon_ptr->m_idx, TRUE);
+								update_monster(shooter_ptr, c_mon_ptr->m_idx, TRUE);
 
 								lite_spot(ny, nx);
 								lite_spot(oy, ox);

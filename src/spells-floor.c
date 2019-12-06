@@ -1041,7 +1041,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 						m_ptr->fy = sy;
 						m_ptr->fx = sx;
 
-						update_monster(m_idx, TRUE);
+						update_monster(caster_ptr, m_idx, TRUE);
 						lite_spot(yy, xx);
 						lite_spot(sy, sx);
 					}

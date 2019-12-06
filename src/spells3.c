@@ -159,7 +159,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 	/* Forget the counter target */
 	reset_target(m_ptr);
 
-	update_monster(m_idx, TRUE);
+	update_monster(caster_ptr, m_idx, TRUE);
 	lite_spot(oy, ox);
 	lite_spot(ny, nx);
 
@@ -255,7 +255,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	m_ptr->fy = ny;
 	m_ptr->fx = nx;
 
-	update_monster(m_idx, TRUE);
+	update_monster(p_ptr, m_idx, TRUE);
 	lite_spot(oy, ox);
 	lite_spot(ny, nx);
 
@@ -3419,7 +3419,7 @@ bool shock_power(player_type *caster_ptr)
 				m_ptr->fy = ty;
 				m_ptr->fx = tx;
 
-				update_monster(m_idx, TRUE);
+				update_monster(caster_ptr, m_idx, TRUE);
 				lite_spot(oy, ox);
 				lite_spot(ty, tx);
 

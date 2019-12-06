@@ -4436,7 +4436,7 @@ static void process_player(player_type *creature_ptr)
 			if (!monster_is_valid(m_ptr)) continue;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(m_idx, FALSE);
+			update_monster(creature_ptr, m_idx, FALSE);
 		}
 		prt_time();
 	}
@@ -4819,7 +4819,7 @@ static void process_player(player_type *creature_ptr)
 
 							/* Assume invisible */
 							m_ptr->ml = FALSE;
-							update_monster(m_idx, FALSE);
+							update_monster(creature_ptr, m_idx, FALSE);
 
 							if (creature_ptr->health_who == m_idx) creature_ptr->redraw |= (PR_HEALTH);
 							if (creature_ptr->riding == m_idx) creature_ptr->redraw |= (PR_UHEALTH);

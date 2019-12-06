@@ -401,7 +401,7 @@ bool detect_monsters_normal(POSITION range)
 			repair_monsters = TRUE;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(p_ptr, i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -454,7 +454,7 @@ bool detect_monsters_invis(POSITION range)
 			repair_monsters = TRUE;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(p_ptr, i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -511,7 +511,7 @@ bool detect_monsters_evil(POSITION range)
 			repair_monsters = TRUE;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(p_ptr, i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -559,7 +559,7 @@ bool detect_monsters_nonliving(POSITION range)
 			repair_monsters = TRUE;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(p_ptr, i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -608,7 +608,7 @@ bool detect_monsters_mind(POSITION range)
 			repair_monsters = TRUE;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(p_ptr, i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -659,7 +659,7 @@ bool detect_monsters_string(POSITION range, concptr Match)
 			repair_monsters = TRUE;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(p_ptr, i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -718,7 +718,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 			repair_monsters = TRUE;
 
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-			update_monster(i, FALSE);
+			update_monster(p_ptr, i, FALSE);
 			flag = TRUE;
 		}
 	}
@@ -1463,7 +1463,7 @@ static void cave_temp_room_lite(void)
 			PERCENTAGE chance = 25;
 			monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-			update_monster(g_ptr->m_idx, FALSE);
+			update_monster(p_ptr, g_ptr->m_idx, FALSE);
 
 			/* Stupid monsters rarely wake up */
 			if (r_ptr->flags2 & (RF2_STUPID)) chance = 10;
@@ -1565,7 +1565,7 @@ static void cave_temp_room_unlite(void)
 			/* Process affected monsters */
 			if (g_ptr->m_idx)
 			{
-				update_monster(g_ptr->m_idx, FALSE);
+				update_monster(p_ptr, g_ptr->m_idx, FALSE);
 			}
 
 			lite_spot(y, x);
@@ -3065,7 +3065,7 @@ bool rush_attack(bool *mdeath)
 
 		/* Move player before updating the monster */
 		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(p_ptr, ty, tx, TELEPORT_NONMAGICAL);
-		update_monster(p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
+		update_monster(p_ptr, p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
 
 		/* Found a monster */
 		m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx];

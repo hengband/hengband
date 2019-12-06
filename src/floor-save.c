@@ -607,7 +607,7 @@ static void place_pet(player_type *master_ptr)
 				/* Must repair monsters */
 				repair_monsters = TRUE;
 			}
-			update_monster(m_idx, TRUE);
+			update_monster(master_ptr, m_idx, TRUE);
 			lite_spot(cy, cx);
 
 			/* Pre-calculated in precalc_cur_num_of_pet() */

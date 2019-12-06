@@ -803,7 +803,7 @@ bool check_local_illumination(POSITION y, POSITION x)
 	if (player_has_los_bold((C), (Y), (X))) \
 	{ \
 		/* Update the monster */ \
-		if ((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
+		if ((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster((C), (C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
 \
 		/* Notice and redraw */ \
 		note_spot((Y), (X)); \
@@ -1336,7 +1336,7 @@ void delayed_visual_update(void)
 		lite_spot(y, x);
 
 		/* Hack -- Visual update of monster on this grid */
-		if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
+		if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
 
 		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
@@ -1519,7 +1519,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 
 	/* Check for change to boring grid */
 	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
-	if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
+	if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
 
 	note_spot(y, x);
 	lite_spot(y, x);
@@ -1555,7 +1555,7 @@ void cave_set_feat(POSITION y, POSITION x, FEAT_IDX feat)
 
 			if (player_has_los_grid(cc_ptr))
 			{
-				if (cc_ptr->m_idx) update_monster(cc_ptr->m_idx, FALSE);
+				if (cc_ptr->m_idx) update_monster(p_ptr, cc_ptr->m_idx, FALSE);
 
 				note_spot(yy, xx);
 
@@ -1694,7 +1694,7 @@ void remove_mirror(POSITION y, POSITION x)
 	{
 		g_ptr->info &= ~(CAVE_GLOW);
 		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
-		if (g_ptr->m_idx) update_monster(g_ptr->m_idx, FALSE);
+		if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
 
 		update_local_illumination(p_ptr, y, x);
 	}

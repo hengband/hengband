@@ -1680,7 +1680,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		/* Wake the monster up */
 		(void)set_monster_csleep(m_idx, 0);
 
-		update_monster(m_idx, TRUE);
+		update_monster(caster_ptr, m_idx, TRUE);
 		lite_spot(target_row, target_col);
 		lite_spot(ty, tx);
 
