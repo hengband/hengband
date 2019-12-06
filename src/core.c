@@ -4359,7 +4359,7 @@ static void process_upkeep_with_speed(void)
 		if (!load) check_music(p_ptr);
 
 		/* Hex - Handle the hex spells */
-		if (!load) check_hex();
+		if (!load) check_hex(p_ptr);
 		if (!load) revenge_spell();
 		
 		/* There is some randomness of needed energy */

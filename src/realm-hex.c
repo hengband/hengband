@@ -147,7 +147,7 @@ bool stop_hex_spell(void)
  * Upkeeping hex spells Called from dungeon.c
  * @return なし
  */
-void check_hex(void)
+void check_hex(player_type *caster_ptr)
 {
 	int spell;
 	MANA_POINT need_mana;
@@ -155,18 +155,18 @@ void check_hex(void)
 	bool res = FALSE;
 
 	/* Spells spelled by player */
-	if (p_ptr->realm1 != REALM_HEX) return;
-	if (!CASTING_HEX_FLAGS(p_ptr) && !p_ptr->magic_num1[1]) return;
+	if (caster_ptr->realm1 != REALM_HEX) return;
+	if (!CASTING_HEX_FLAGS(caster_ptr) && !caster_ptr->magic_num1[1]) return;
 
-	if (p_ptr->magic_num1[1])
+	if (caster_ptr->magic_num1[1])
 	{
-		p_ptr->magic_num1[0] = p_ptr->magic_num1[1];
-		p_ptr->magic_num1[1] = 0;
+		caster_ptr->magic_num1[0] = caster_ptr->magic_num1[1];
+		caster_ptr->magic_num1[1] = 0;
 		res = TRUE;
 	}
 
 	/* Stop all spells when anti-magic ability is given */
-	if (p_ptr->anti_magic)
+	if (caster_ptr->anti_magic)
 	{
 		stop_hex_spell_all();
 		return;
@@ -186,10 +186,10 @@ void check_hex(void)
 	/* Culcurates final mana cost */
 	need_mana_frac = 0;
 	s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-	need_mana += (CASTING_HEX_NUM(p_ptr) - 1);
+	need_mana += (CASTING_HEX_NUM(caster_ptr) - 1);
 
 	/* Not enough mana */
-	if (s64b_cmp(p_ptr->csp, p_ptr->csp_frac, need_mana, need_mana_frac) < 0)
+	if (s64b_cmp(caster_ptr->csp, caster_ptr->csp_frac, need_mana, need_mana_frac) < 0)
 	{
 		stop_hex_spell_all();
 		return;
@@ -198,19 +198,19 @@ void check_hex(void)
 	/* Enough mana */
 	else
 	{
-		s64b_sub(&(p_ptr->csp), &(p_ptr->csp_frac), need_mana, need_mana_frac);
+		s64b_sub(&(caster_ptr->csp), &(caster_ptr->csp_frac), need_mana, need_mana_frac);
 
-		p_ptr->redraw |= PR_MANA;
+		caster_ptr->redraw |= PR_MANA;
 		if (res)
 		{
 			msg_print(_("詠唱を再開した。", "You restart spelling."));
 
-			p_ptr->action = ACTION_SPELL;
+			caster_ptr->action = ACTION_SPELL;
 
-			p_ptr->update |= (PU_BONUS | PU_HP);
-			p_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-			p_ptr->update |= (PU_MONSTERS);
-			p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+			caster_ptr->update |= (PU_BONUS | PU_HP);
+			caster_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+			caster_ptr->update |= (PU_MONSTERS);
+			caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
 
@@ -223,14 +223,14 @@ void check_hex(void)
 
 		s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
 
-		if (p_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
-			p_ptr->spell_exp[spell] += 5;
-		else if(p_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
-		{ if (one_in_(2) && (p_ptr->current_floor_ptr->dun_level > 4) && ((p_ptr->current_floor_ptr->dun_level + 10) > p_ptr->lev)) p_ptr->spell_exp[spell] += 1; }
-		else if(p_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
-		{ if (one_in_(5) && ((p_ptr->current_floor_ptr->dun_level + 5) > p_ptr->lev) && ((p_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
-		else if(p_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
-		{ if (one_in_(5) && ((p_ptr->current_floor_ptr->dun_level + 5) > p_ptr->lev) && (p_ptr->current_floor_ptr->dun_level > s_ptr->slevel)) p_ptr->spell_exp[spell] += 1; }
+		if (caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
+			caster_ptr->spell_exp[spell] += 5;
+		else if(caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
+		{ if (one_in_(2) && (caster_ptr->current_floor_ptr->dun_level > 4) && ((caster_ptr->current_floor_ptr->dun_level + 10) > caster_ptr->lev)) caster_ptr->spell_exp[spell] += 1; }
+		else if(caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
+		{ if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && ((caster_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel)) caster_ptr->spell_exp[spell] += 1; }
+		else if(caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
+		{ if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && (caster_ptr->current_floor_ptr->dun_level > s_ptr->slevel)) caster_ptr->spell_exp[spell] += 1; }
 	}
 
 	/* Do any effects of continual spells */
@@ -238,7 +238,7 @@ void check_hex(void)
 	{
 		if (hex_spelling(spell))
 		{
-			exe_spell(p_ptr, REALM_HEX, spell, SPELL_CONT);
+			exe_spell(caster_ptr, REALM_HEX, spell, SPELL_CONT);
 		}
 	}
 }
