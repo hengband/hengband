@@ -921,40 +921,6 @@ bool no_lite(void)
 	return (!player_can_see_bold(p_ptr->y, p_ptr->x));
 }
 
-
-/*!
- * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
- * @param y y座標
- * @param x x座標
- * @return 各種の変更が可能ならTRUEを返す。
- * @details
- * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。
- */
-bool cave_valid_bold(POSITION y, POSITION x)
-{
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-	OBJECT_IDX this_o_idx, next_o_idx = 0;
-
-	/* Forbid perma-grids */
-	if (cave_perma_grid(g_ptr)) return (FALSE);
-
-	/* Check objects */
-	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-	{
-		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
-		next_o_idx = o_ptr->next_o_idx;
-
-		/* Forbid artifact grids */
-		if (object_is_artifact(o_ptr)) return (FALSE);
-	}
-
-	/* Accept */
-	return (TRUE);
-}
-
-
-
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */

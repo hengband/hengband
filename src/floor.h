@@ -385,3 +385,4 @@ extern bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITIO
 extern int project_length;
 
 extern void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num);
+extern bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);

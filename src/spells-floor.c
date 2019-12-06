@@ -291,7 +291,7 @@ void stair_creation(player_type *caster_ptr)
 	}
 
 	/* Artifacts resists */
-	if (!cave_valid_bold(caster_ptr->y, caster_ptr->x))
+	if (!cave_valid_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return;
@@ -1067,7 +1067,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
 
 			/* Destroy location (if valid) */
-			if (cave_valid_bold(yy, xx))
+			if (cave_valid_bold(caster_ptr->current_floor_ptr, yy, xx))
 			{
 				delete_object(yy, xx);
 
