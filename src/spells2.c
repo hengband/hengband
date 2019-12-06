@@ -3666,18 +3666,18 @@ void cast_invoke_spirits(DIRECTION dir)
 * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
 * @return なし
 */
-void cast_shuffle(void)
+void cast_shuffle(player_type *caster_ptr)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	DIRECTION dir;
 	int die;
-	int vir = virtue_number(p_ptr, V_CHANCE);
+	int vir = virtue_number(caster_ptr, V_CHANCE);
 	int i;
 
 	/* Card sharks and high mages get a level bonus */
-	if ((p_ptr->pclass == CLASS_ROGUE) ||
-		(p_ptr->pclass == CLASS_HIGH_MAGE) ||
-		(p_ptr->pclass == CLASS_SORCERER))
+	if ((caster_ptr->pclass == CLASS_ROGUE) ||
+		(caster_ptr->pclass == CLASS_HIGH_MAGE) ||
+		(caster_ptr->pclass == CLASS_SORCERER))
 		die = (randint1(110)) + plev / 5;
 	else
 		die = randint1(120);
@@ -3685,32 +3685,32 @@ void cast_shuffle(void)
 
 	if (vir)
 	{
-		if (p_ptr->virtues[vir - 1] > 0)
+		if (caster_ptr->virtues[vir - 1] > 0)
 		{
-			while (randint1(400) < p_ptr->virtues[vir - 1]) die++;
+			while (randint1(400) < caster_ptr->virtues[vir - 1]) die++;
 		}
 		else
 		{
-			while (randint1(400) < (0 - p_ptr->virtues[vir - 1])) die--;
+			while (randint1(400) < (0 - caster_ptr->virtues[vir - 1])) die--;
 		}
 	}
 
 	msg_print(_("あなたはカードを切って一枚引いた...", "You shuffle the deck and draw a card..."));
 
 	if (die < 30)
-		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(caster_ptr, V_CHANCE, 1);
 
 	if (die < 7)
 	{
 		msg_print(_("なんてこった！《死》だ！", "Oh no! It's Death!"));
 
 		for (i = 0; i < randint1(3); i++)
-			activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
+			activate_hi_summon(caster_ptr->y, caster_ptr->x, FALSE);
 	}
 	else if (die < 14)
 	{
 		msg_print(_("なんてこった！《悪魔》だ！", "Oh no! It's the Devil!"));
-		summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+		summon_specific(0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 	}
 	else if (die < 18)
 	{
@@ -3726,13 +3726,13 @@ void cast_shuffle(void)
 	else if (die < 26)
 	{
 		msg_print(_("《愚者》だ。", "It's the Fool."));
-		do_dec_stat(p_ptr, A_INT);
-		do_dec_stat(p_ptr, A_WIS);
+		do_dec_stat(caster_ptr, A_INT);
+		do_dec_stat(caster_ptr, A_WIS);
 	}
 	else if (die < 30)
 	{
 		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
-		trump_summoning(1, FALSE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+		trump_summoning(1, FALSE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
 	}
 	else if (die < 33)
 	{
@@ -3752,7 +3752,7 @@ void cast_shuffle(void)
 	else if (die < 42)
 	{
 		msg_print(_("《正義》だ。", "It's Justice."));
-		set_blessed(p_ptr, p_ptr->lev, FALSE);
+		set_blessed(caster_ptr, caster_ptr->lev, FALSE);
 	}
 	else if (die < 47)
 	{
@@ -3778,34 +3778,34 @@ void cast_shuffle(void)
 	{
 		msg_print(_("《塔》だ。", "It's the Tower."));
 
-		earthquake(p_ptr, p_ptr->y, p_ptr->x, 5, 0);
+		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 5, 0);
 	}
 	else if (die < 82)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
+		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
 	}
 	else if (die < 84)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
+		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
 	}
 	else if (die < 86)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
+		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
 	}
 	else if (die < 88)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
+		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
 	}
 	else if (die < 96)
 	{
 		msg_print(_("《恋人》だ。", "It's the Lovers."));
 
 		if (get_aim_dir(&dir))
-			charm_monster(dir, MIN(p_ptr->lev, 20));
+			charm_monster(dir, MIN(caster_ptr->lev, 20));
 	}
 	else if (die < 101)
 	{
@@ -3815,25 +3815,25 @@ void cast_shuffle(void)
 	else if (die < 111)
 	{
 		msg_print(_("《審判》だ。", "It's the Judgement."));
-		roll_hitdice(p_ptr, 0L);
-		lose_all_mutations(p_ptr);
+		roll_hitdice(caster_ptr, 0L);
+		lose_all_mutations(caster_ptr);
 	}
 	else if (die < 120)
 	{
 		msg_print(_("《太陽》だ。", "It's the Sun."));
-		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
-		chg_virtue(p_ptr, V_ENLIGHTEN, 1);
-		wiz_lite(p_ptr, FALSE);
+		chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
+		chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
+		wiz_lite(caster_ptr, FALSE);
 	}
 	else
 	{
 		msg_print(_("《世界》だ。", "It's the World."));
-		if (p_ptr->exp < PY_MAX_EXP)
+		if (caster_ptr->exp < PY_MAX_EXP)
 		{
-			s32b ee = (p_ptr->exp / 25) + 1;
+			s32b ee = (caster_ptr->exp / 25) + 1;
 			if (ee > 5000) ee = 5000;
 			msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
-			gain_exp(p_ptr, ee);
+			gain_exp(caster_ptr, ee);
 		}
 	}
 }

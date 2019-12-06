@@ -75,7 +75,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				cast_shuffle();
+				cast_shuffle(caster_ptr);
 			}
 		}
 		break;

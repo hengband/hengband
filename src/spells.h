@@ -254,7 +254,7 @@ extern void cast_meteor(HIT_POINT dam, POSITION rad);
 extern bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad);
 extern void cast_wonder(DIRECTION dir);
 extern void cast_invoke_spirits(DIRECTION dir);
-extern void cast_shuffle(void);
+extern void cast_shuffle(player_type *caster_ptr);
 extern void stop_mouth(void);
 extern bool_hack vampirism(void);
 extern bool panic_hit(void);
