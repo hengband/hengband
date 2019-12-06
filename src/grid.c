@@ -655,44 +655,6 @@ void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 }
 
 /*!
- * @brief 特殊な部屋地形向けにモンスターを配置する / Hack -- Place some sleeping monsters near the given location
- * @param y1 モンスターを配置したいマスの中心Y座標
- * @param x1 モンスターを配置したいマスの中心X座標
- * @param num 配置したいモンスターの数
- * @return なし
- * @details
- * Only really called by some of the "vault" routines.
- */
-void vault_monsters(POSITION y1, POSITION x1, int num)
-{
-	int k, i;
-	POSITION y, x;
-	grid_type *g_ptr;
-
-	/* Try to summon "num" monsters "near" the given location */
-	for (k = 0; k < num; k++)
-	{
-		/* Try nine locations */
-		for (i = 0; i < 9; i++)
-		{
-			int d = 1;
-
-			/* Pick a nearby location */
-			scatter(&y, &x, y1, x1, d, 0);
-
-			/* Require "empty" floor grids */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-			if (!cave_empty_grid(g_ptr)) continue;
-
-			/* Place the monster (allow groups) */
-			p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level + 2;
-			(void)place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-			p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
-		}
-	}
-}
-
-/*!
  * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
  * @param x チェックするマスのX座標
  * @param y チェックするマスのY座標

@@ -570,3 +570,41 @@ bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, P
 	return (TRUE);
 }
 
+
+/*!
+ * @brief 特殊な部屋地形向けにモンスターを配置する / Hack -- Place some sleeping monsters near the given location
+ * @param y1 モンスターを配置したいマスの中心Y座標
+ * @param x1 モンスターを配置したいマスの中心X座標
+ * @param num 配置したいモンスターの数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
+ */
+void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
+{
+	int k, i;
+	POSITION y, x;
+	grid_type *g_ptr;
+
+	/* Try to summon "num" monsters "near" the given location */
+	for (k = 0; k < num; k++)
+	{
+		/* Try nine locations */
+		for (i = 0; i < 9; i++)
+		{
+			int d = 1;
+
+			/* Pick a nearby location */
+			scatter(&y, &x, y1, x1, d, 0);
+
+			/* Require "empty" floor grids */
+			g_ptr = &floor_ptr->grid_array[y][x];
+			if (!cave_empty_grid(g_ptr)) continue;
+
+			/* Place the monster (allow groups) */
+			floor_ptr->monster_level = floor_ptr->base_level + 2;
+			(void)place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+			floor_ptr->monster_level = floor_ptr->base_level;
+		}
+	}
+}

@@ -497,7 +497,7 @@ bool build_type3(floor_type *floor_ptr)
 		place_object(yval, xval, 0L);
 
 		/* Let's guard the treasure well */
-		vault_monsters(yval, xval, randint0(2) + 3);
+		vault_monsters(floor_ptr, yval, xval, randint0(2) + 3);
 
 		/* Traps naturally */
 		vault_traps(yval, xval, 4, 4, randint0(3) + 2);
@@ -673,7 +673,7 @@ bool build_type4(floor_type *floor_ptr)
 			}
 
 			/* Place a monster in the room */
-			vault_monsters(yval, xval, 1);
+			vault_monsters(floor_ptr, yval, xval, 1);
 
 			break;
 		}
@@ -711,7 +711,7 @@ bool build_type4(floor_type *floor_ptr)
 			}
 
 			/* Monsters to guard the "treasure" */
-			vault_monsters(yval, xval, randint1(3) + 2);
+			vault_monsters(floor_ptr, yval, xval, randint1(3) + 2);
 
 			/* Object (80%) */
 			if (randint0(100) < 80)
@@ -799,8 +799,8 @@ bool build_type4(floor_type *floor_ptr)
 				place_secret_door(floor_ptr, yval - 3 + (randint1(2) * 2), xval + 3, door_type);
 
 				/* Monsters */
-				vault_monsters(yval, xval - 2, randint1(2));
-				vault_monsters(yval, xval + 2, randint1(2));
+				vault_monsters(floor_ptr, yval, xval - 2, randint1(2));
+				vault_monsters(floor_ptr, yval, xval + 2, randint1(2));
 
 				/* Objects */
 				if (one_in_(3)) place_object(yval, xval - 2, 0L);
@@ -836,8 +836,8 @@ bool build_type4(floor_type *floor_ptr)
 			}
 
 			/* Monsters just love mazes. */
-			vault_monsters(yval, xval - 5, randint1(3));
-			vault_monsters(yval, xval + 5, randint1(3));
+			vault_monsters(floor_ptr, yval, xval - 5, randint1(3));
+			vault_monsters(floor_ptr, yval, xval + 5, randint1(3));
 
 			/* Traps make them entertaining. */
 			vault_traps(yval, xval - 3, 2, 8, randint1(3));
@@ -890,10 +890,10 @@ bool build_type4(floor_type *floor_ptr)
 			vault_objects(yval, xval, 2 + randint1(2));
 
 			/* Gotta have some monsters. */
-			vault_monsters(yval + 1, xval - 4, randint1(4));
-			vault_monsters(yval + 1, xval + 4, randint1(4));
-			vault_monsters(yval - 1, xval - 4, randint1(4));
-			vault_monsters(yval - 1, xval + 4, randint1(4));
+			vault_monsters(floor_ptr, yval + 1, xval - 4, randint1(4));
+			vault_monsters(floor_ptr, yval + 1, xval + 4, randint1(4));
+			vault_monsters(floor_ptr, yval - 1, xval - 4, randint1(4));
+			vault_monsters(floor_ptr, yval - 1, xval + 4, randint1(4));
 
 			break;
 		}
@@ -1038,7 +1038,7 @@ bool build_type12(floor_type *floor_ptr)
 		place_object(y0, x0, 0L);
 
 		/* Let's guard the treasure well */
-		vault_monsters(y0, x0, randint0(2) + 3);
+		vault_monsters(floor_ptr, y0, x0, randint0(2) + 3);
 
 		/* Traps naturally */
 		vault_traps(y0, x0, 4, 4, randint0(3) + 2);

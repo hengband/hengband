@@ -383,3 +383,5 @@ extern void place_random_stairs(floor_type *floor_ptr, POSITION y, POSITION x);
 extern bool los(floor_type* floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern int project_length;
+
+extern void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num);
