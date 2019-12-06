@@ -2069,7 +2069,7 @@ static concptr likert(int x, int y)
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */
-static void display_player_various(void)
+static void display_player_various(player_type *creature_ptr)
 {
 	int         tmp, damage[2], to_h[2], blows1, blows2, i, basedam;
 	int			xthn, xthb, xfos, xsrh;
@@ -2083,18 +2083,18 @@ static void display_player_various(void)
 
 	object_type *o_ptr;
 
-	if (p_ptr->muta2 & MUT2_HORNS)     muta_att++;
-	if (p_ptr->muta2 & MUT2_SCOR_TAIL) muta_att++;
-	if (p_ptr->muta2 & MUT2_BEAK)      muta_att++;
-	if (p_ptr->muta2 & MUT2_TRUNK)     muta_att++;
-	if (p_ptr->muta2 & MUT2_TENTACLES) muta_att++;
+	if (creature_ptr->muta2 & MUT2_HORNS)     muta_att++;
+	if (creature_ptr->muta2 & MUT2_SCOR_TAIL) muta_att++;
+	if (creature_ptr->muta2 & MUT2_BEAK)      muta_att++;
+	if (creature_ptr->muta2 & MUT2_TRUNK)     muta_att++;
+	if (creature_ptr->muta2 & MUT2_TENTACLES) muta_att++;
 
-	xthn = p_ptr->skill_thn + (p_ptr->to_h_m * BTH_PLUS_ADJ);
+	xthn = creature_ptr->skill_thn + (creature_ptr->to_h_m * BTH_PLUS_ADJ);
 
 	/* Shooting Skill (with current bow and normal missile) */
-	o_ptr = &p_ptr->inventory_list[INVEN_BOW];
-	tmp = p_ptr->to_h_b + o_ptr->to_h;
-	xthb = p_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
+	o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+	tmp = creature_ptr->to_h_b + o_ptr->to_h;
+	xthb = creature_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
 
 	/* If the player is wielding one? */
 	if (o_ptr->k_idx)
@@ -2102,23 +2102,23 @@ static void display_player_various(void)
 		ENERGY energy_fire = bow_energy(o_ptr->sval);
 
 		/* Calculate shots per round */
-		shots = p_ptr->num_fire * 100;
+		shots = creature_ptr->num_fire * 100;
 		shot_frac = (shots * 100 / energy_fire) % 100;
 		shots = shots / energy_fire;
 		if (o_ptr->name1 == ART_CRIMSON)
 		{
 			shots = 1;
 			shot_frac = 0;
-			if (p_ptr->pclass == CLASS_ARCHER)
+			if (creature_ptr->pclass == CLASS_ARCHER)
 			{
 				/* Extra shot at level 10 */
-				if (p_ptr->lev >= 10) shots++;
+				if (creature_ptr->lev >= 10) shots++;
 
 				/* Extra shot at level 30 */
-				if (p_ptr->lev >= 30) shots++;
+				if (creature_ptr->lev >= 30) shots++;
 
 				/* Extra shot at level 45 */
-				if (p_ptr->lev >= 45) shots++;
+				if (creature_ptr->lev >= 45) shots++;
 			}
 		}
 	}
@@ -2130,26 +2130,26 @@ static void display_player_various(void)
 
 	for(i = 0; i < 2; i++)
 	{
-		damage[i] = p_ptr->dis_to_d[i] * 100;
-		if (((p_ptr->pclass == CLASS_MONK) || (p_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(p_ptr, TRUE) & EMPTY_HAND_RARM))
+		damage[i] = creature_ptr->dis_to_d[i] * 100;
+		if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
 		{
-			PLAYER_LEVEL level = p_ptr->lev;
+			PLAYER_LEVEL level = creature_ptr->lev;
 			if (i)
 			{
 				damage[i] = 0;
 				break;
 			}
-			if (p_ptr->pclass == CLASS_FORCETRAINER) level = MAX(1, level - 3);
-			if (p_ptr->special_defense & KAMAE_BYAKKO)
+			if (creature_ptr->pclass == CLASS_FORCETRAINER) level = MAX(1, level - 3);
+			if (creature_ptr->special_defense & KAMAE_BYAKKO)
 				basedam = monk_ave_damage[level][1];
-			else if (p_ptr->special_defense & (KAMAE_GENBU | KAMAE_SUZAKU))
+			else if (creature_ptr->special_defense & (KAMAE_GENBU | KAMAE_SUZAKU))
 				basedam = monk_ave_damage[level][2];
 			else
 				basedam = monk_ave_damage[level][0];
 		}
 		else
 		{
-			o_ptr = &p_ptr->inventory_list[INVEN_RARM + i];
+			o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
 
 			/* Average damage per round */
 			if (o_ptr->k_idx)
@@ -2163,10 +2163,10 @@ static void display_player_various(void)
 					damage[i] += o_ptr->to_d * 100;
 					to_h[i] += o_ptr->to_h;
 				}
-				basedam = ((o_ptr->dd + p_ptr->to_dd[i]) * (o_ptr->ds + p_ptr->to_ds[i] + 1)) * 50;
+				basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
 				object_flags_known(o_ptr, flgs);
 								
-				basedam = calc_expect_crit(o_ptr->weight, to_h[i], basedam, p_ptr->dis_to_h[i], dokubari);
+				basedam = calc_expect_crit(o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], dokubari);
 				if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 				{
 					/* vorpal blade */
@@ -2179,7 +2179,7 @@ static void display_player_various(void)
 					basedam *= 11;
 					basedam /= 9;
 				}
-				if ((p_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (p_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
+				if ((creature_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 					basedam = basedam * 7 / 2;
 			}
 			else basedam = 0;
@@ -2188,18 +2188,18 @@ static void display_player_various(void)
 		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) damage[i] = 1;
 		if (damage[i] < 0) damage[i] = 0;
 	}
-	blows1 = p_ptr->migite ? p_ptr->num_blow[0]: 0;
-	blows2 = p_ptr->hidarite ? p_ptr->num_blow[1] : 0;
+	blows1 = creature_ptr->migite ? creature_ptr->num_blow[0]: 0;
+	blows2 = creature_ptr->hidarite ? creature_ptr->num_blow[1] : 0;
 
 	/* Basic abilities */
 
-	xdis = p_ptr->skill_dis;
-	xdev = p_ptr->skill_dev;
-	xsav = p_ptr->skill_sav;
-	xstl = p_ptr->skill_stl;
-	xsrh = p_ptr->skill_srh;
-	xfos = p_ptr->skill_fos;
-	xdig = p_ptr->skill_dig;
+	xdis = creature_ptr->skill_dis;
+	xdev = creature_ptr->skill_dev;
+	xsav = creature_ptr->skill_sav;
+	xstl = creature_ptr->skill_stl;
+	xsrh = creature_ptr->skill_srh;
+	xfos = creature_ptr->skill_fos;
+	xdig = creature_ptr->skill_dig;
 
 
 	desc = likert(xthn, 12);
@@ -2248,7 +2248,7 @@ static void display_player_various(void)
 
 	display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
 
-	display_player_one_line(ENTRY_INFRA, format("%d feet", p_ptr->see_infra * 10), TERM_WHITE);
+	display_player_one_line(ENTRY_INFRA, format("%d feet", creature_ptr->see_infra * 10), TERM_WHITE);
 }
 
 
@@ -4047,7 +4047,7 @@ void display_player(player_type *creature_ptr, int mode)
 		else
 		{
 			display_player_middle(creature_ptr);
-			display_player_various();
+			display_player_various(creature_ptr);
 		}
 	}
 
