@@ -1102,7 +1102,7 @@ static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	C_MAKE(visited, num_vertices, int);
 
 	/* traverse the graph to create a spannng tree, pick a random root */
-	r_visit(y1, x1, y2, x2, randint0(num_vertices), 0, visited);
+	r_visit(floor_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited);
 
 	/* Make it look like a checker board vault */
 	for (x = x1; x <= x2; x++)

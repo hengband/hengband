@@ -102,4 +102,4 @@ extern void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSIT
 extern bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type);
 extern void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int power);
 extern void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2);
-extern void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited);
+extern void r_visit(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited);

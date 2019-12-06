@@ -1605,7 +1605,7 @@ void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, PO
  * is the randint0(3) below; it governs the relative density of
  * twists and turns in the labyrinth: smaller number, more twists.
  */
-void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
+void r_visit(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIRECTION dir, int *visited)
 {
 	int i, j, m, n, temp, x, y, adj[4];
 
@@ -1617,7 +1617,7 @@ void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIREC
 	visited[node] = 1;
 	x = 2 * (node % m) + x1;
 	y = 2 * (node / m) + y1;
-	place_floor_bold(p_ptr->current_floor_ptr, y, x);
+	place_floor_bold(floor_ptr, y, x);
 
 	/* setup order of adjacent node visits */
 	if (one_in_(3))
@@ -1657,32 +1657,32 @@ void r_visit(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int node, DIREC
 				/* (0,+) - check for bottom boundary */
 				if ((node / m < n - 1) && (visited[node + m] == 0))
 				{
-					place_floor_bold(p_ptr->current_floor_ptr, y + 1, x);
-					r_visit(y1, x1, y2, x2, node + m, dir, visited);
+					place_floor_bold(floor_ptr, y + 1, x);
+					r_visit(floor_ptr, y1, x1, y2, x2, node + m, dir, visited);
 				}
 				break;
 			case 1:
 				/* (0,-) - check for top boundary */
 				if ((node / m > 0) && (visited[node - m] == 0))
 				{
-					place_floor_bold(p_ptr->current_floor_ptr, y - 1, x);
-					r_visit(y1, x1, y2, x2, node - m, dir, visited);
+					place_floor_bold(floor_ptr, y - 1, x);
+					r_visit(floor_ptr, y1, x1, y2, x2, node - m, dir, visited);
 				}
 				break;
 			case 2:
 				/* (+,0) - check for right boundary */
 				if ((node % m < m - 1) && (visited[node + 1] == 0))
 				{
-					place_floor_bold(p_ptr->current_floor_ptr, y, x + 1);
-					r_visit(y1, x1, y2, x2, node + 1, dir, visited);
+					place_floor_bold(floor_ptr, y, x + 1);
+					r_visit(floor_ptr, y1, x1, y2, x2, node + 1, dir, visited);
 				}
 				break;
 			case 3:
 				/* (-,0) - check for left boundary */
 				if ((node % m > 0) && (visited[node - 1] == 0))
 				{
-					place_floor_bold(p_ptr->current_floor_ptr, y, x - 1);
-					r_visit(y1, x1, y2, x2, node - 1, dir, visited);
+					place_floor_bold(floor_ptr, y, x - 1);
+					r_visit(floor_ptr, y1, x1, y2, x2, node - 1, dir, visited);
 				}
 		} /* end switch */
 	}
@@ -1744,7 +1744,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	C_MAKE(visited, num_vertices, int);
 
 	/* traverse the graph to create a spaning tree, pick a random root */
-	r_visit(y1, x1, y2, x2, randint0(num_vertices), 0, visited);
+	r_visit(p_ptr->current_floor_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited);
 
 	/* Fill with monsters and treasure, low difficulty */
 	if (is_vault) fill_treasure(p_ptr->current_floor_ptr, x1, x2, y1, y2, randint1(5));
