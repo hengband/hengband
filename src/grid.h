@@ -243,13 +243,13 @@ typedef struct
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
-#define place_outer_noperm_bold(Y, X) \
+#define place_outer_noperm_bold(F, Y, X) \
 { \
 	feature_type *_f_ptr = &f_info[feat_wall_outer]; \
-	if (permanent_wall(_f_ptr)) set_cave_feat(p_ptr->current_floor_ptr, Y, X, (s16b)feat_state(feat_wall_outer, FF_UNPERM)); \
-	else set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_outer); \
-	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(p_ptr->current_floor_ptr, Y,X,(CAVE_OUTER | CAVE_VAULT)); \
+	if (permanent_wall(_f_ptr)) set_cave_feat((F), Y, X, (s16b)feat_state(feat_wall_outer, FF_UNPERM)); \
+	else set_cave_feat((F), Y,X,feat_wall_outer); \
+	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info((F), Y,X,(CAVE_OUTER | CAVE_VAULT)); \
 	delete_monster(Y, X); \
 }
 

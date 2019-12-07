@@ -1550,18 +1550,18 @@ void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, PO
 	/* Top and bottom boundaries */
 	for (i = 0; i <= xsize; i++)
 	{
-		place_outer_noperm_bold(y1, x1 + i);
+		place_outer_noperm_bold(floor_ptr, y1, x1 + i);
 		floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(y2, x1 + i);
+		place_outer_noperm_bold(floor_ptr, y2, x1 + i);
 		floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
 	for (i = 1; i < ysize; i++)
 	{
-		place_outer_noperm_bold(y1 + i, x1);
+		place_outer_noperm_bold(floor_ptr, y1 + i, x1);
 		floor_ptr->grid_array[y1 + i][x1].info|=(CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(y1 + i, x2);
+		place_outer_noperm_bold(floor_ptr, y1 + i, x2);
 		floor_ptr->grid_array[y1 + i][x2].info|=(CAVE_ROOM | CAVE_ICKY);
 	}
 
