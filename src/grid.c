@@ -519,13 +519,13 @@ void place_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
 	/* Walls around the room */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
-		place_outer_bold(y, x1 - 1);
-		place_outer_bold(y, x2 + 1);
+		place_outer_bold(p_ptr->current_floor_ptr, y, x1 - 1);
+		place_outer_bold(p_ptr->current_floor_ptr, y, x2 + 1);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
-		place_outer_bold(y1 - 1, x);
-		place_outer_bold(y2 + 1, x);
+		place_outer_bold(p_ptr->current_floor_ptr, y1 - 1, x);
+		place_outer_bold(p_ptr->current_floor_ptr, y2 + 1, x);
 	}
 }
 
@@ -941,9 +941,6 @@ void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
 		Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, 0, 0);
 	}
 }
-
-
-
 
 
 /*

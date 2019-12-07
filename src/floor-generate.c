@@ -2098,7 +2098,7 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 			if (i == 0)
 			{
 				/* Failed for some reason: hack - ignore the solidness */
-				place_outer_bold(y3, x3);
+				place_outer_bold(floor_ptr, y3, x3);
 				dx = 0;
 				dy = 0;
 			}

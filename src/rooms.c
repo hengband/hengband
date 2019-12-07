@@ -858,7 +858,7 @@ static bool hack_isnt_wall(floor_type *floor_ptr, POSITION y, POSITION x, int c1
 		/* if greater than cutoff then is a wall */
 		else
 		{
-			place_outer_bold(y, x);
+			place_outer_bold(floor_ptr, y, x);
 			return FALSE;
 		}
 	}
@@ -1013,10 +1013,10 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		if ((floor_ptr->grid_array[0 + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
-			place_outer_bold(y0 + 0 - yhsize, x0 + i - xhsize);
+			place_outer_bold(floor_ptr, y0 + 0 - yhsize, x0 + i - xhsize);
 			if (light) floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
-			place_outer_bold(y0 + 0 - yhsize, x0 + i - xhsize);
+			place_outer_bold(floor_ptr, y0 + 0 - yhsize, x0 + i - xhsize);
 		}
 		else
 		{
@@ -1028,10 +1028,10 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		if ((floor_ptr->grid_array[ysize + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
-			place_outer_bold(y0 + ysize - yhsize, x0 + i - xhsize);
+			place_outer_bold(floor_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
 			if (light) floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_GLOW);
 			floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_ROOM);
-			place_outer_bold(y0 + ysize - yhsize, x0 + i - xhsize);
+			place_outer_bold(floor_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
 		}
 		else
 		{
@@ -1051,10 +1051,10 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		if ((floor_ptr->grid_array[i + y0 - yhsize][0 + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
-			place_outer_bold(y0 + i - yhsize, x0 + 0 - xhsize);
+			place_outer_bold(floor_ptr, y0 + i - yhsize, x0 + 0 - xhsize);
 			if (light) floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_ROOM);
-			place_outer_bold(y0 + i - yhsize, x0 + 0 - xhsize);
+			place_outer_bold(floor_ptr, y0 + i - yhsize, x0 + 0 - xhsize);
 		}
 		else
 		{
@@ -1065,10 +1065,10 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		if ((floor_ptr->grid_array[i + y0 - yhsize][xsize + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
-			place_outer_bold(y0 + i - yhsize, x0 + xsize - xhsize);
+			place_outer_bold(floor_ptr, y0 + i - yhsize, x0 + xsize - xhsize);
 			if (light) floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_ROOM);
-			place_outer_bold(y0 + i - yhsize, x0 + xsize - xhsize);
+			place_outer_bold(floor_ptr, y0 + i - yhsize, x0 + xsize - xhsize);
 		}
 		else
 		{
@@ -1809,15 +1809,15 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 			/* top and bottom */
 			for (x = x1; x <= x2; x++)
 			{
-				place_outer_bold(y1, x);
-				place_outer_bold(y2, x);
+				place_outer_bold(floor_ptr, y1, x);
+				place_outer_bold(floor_ptr, y2, x);
 			}
 
 			/* left and right */
 			for (y = y1 + 1; y < y2; y++)
 			{
-				place_outer_bold(y, x1);
-				place_outer_bold(y, x2);
+				place_outer_bold(floor_ptr, y, x1);
+				place_outer_bold(floor_ptr, y, x2);
 			}
 
 			/* Make a couple of entrances */
@@ -2001,7 +2001,7 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 	else if (is_extra_bold(p_ptr->current_floor_ptr, y, x))
 	{
 		/* Set bounding walls */
-		place_outer_bold(y, x);
+		place_outer_bold(p_ptr->current_floor_ptr, y, x);
 		if (light) g_ptr->info |= CAVE_GLOW;
 	}
 	else if (permanent_wall(f_ptr))
