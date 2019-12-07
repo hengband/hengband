@@ -1219,7 +1219,7 @@ bool build_type10(floor_type *floor_ptr)
 	case 1: case  9: build_bubble_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 2: case 10: build_room_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 3: case 11: build_cave_vault(x0, y0, xsize, ysize); break;
-	case 4: case 12: build_maze_vault(x0, y0, xsize, ysize, TRUE); break;
+	case 4: case 12: build_maze_vault(floor_ptr, x0, y0, xsize, ysize, TRUE); break;
 	case 5: case 13: build_mini_c_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 6: case 14: build_castle_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 7: case 15: build_target_vault(floor_ptr, x0, y0, xsize, ysize); break;

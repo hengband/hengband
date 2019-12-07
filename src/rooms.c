@@ -1689,7 +1689,7 @@ void r_visit(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSIT
 }
 
 
-void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
+void build_maze_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
 {
 	POSITION y, x, dy, dx;
 	POSITION y1, x1, y2, x2;
@@ -1700,7 +1700,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
-	light = ((p_ptr->current_floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Pick a random room size - randomized by calling routine */
 	dy = ysize / 2 - 1;
@@ -1716,7 +1716,7 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 			g_ptr->info |= CAVE_ROOM;
 			if (is_vault) g_ptr->info |= CAVE_ICKY;
 			if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1))
@@ -1744,10 +1744,10 @@ void build_maze_vault(POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, 
 	C_MAKE(visited, num_vertices, int);
 
 	/* traverse the graph to create a spaning tree, pick a random root */
-	r_visit(p_ptr->current_floor_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited);
+	r_visit(floor_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited);
 
 	/* Fill with monsters and treasure, low difficulty */
-	if (is_vault) fill_treasure(p_ptr->current_floor_ptr, x1, x2, y1, y2, randint1(5));
+	if (is_vault) fill_treasure(floor_ptr, x1, x2, y1, y2, randint1(5));
 
 	C_KILL(visited, num_vertices, int);
 }

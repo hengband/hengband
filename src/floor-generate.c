@@ -672,7 +672,7 @@ static bool cave_gen(floor_type *floor_ptr)
 	/* Build maze */
 	if (dungeon_ptr->flags1 & DF1_MAZE)
 	{
-		build_maze_vault(floor_ptr->width/2-1, floor_ptr->height/2-1, floor_ptr->width-4, floor_ptr->height-4, FALSE);
+		build_maze_vault(floor_ptr, floor_ptr->width/2-1, floor_ptr->height/2-1, floor_ptr->width-4, floor_ptr->height-4, FALSE);
 
 		/* Place 3 or 4 down stairs near some walls */
 		if (!alloc_stairs(floor_ptr, feat_down_stair, rand_range(2, 3), 3)) return FALSE;
