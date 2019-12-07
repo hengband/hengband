@@ -643,15 +643,15 @@ static bool cave_gen(floor_type *floor_ptr)
 		/* Special boundary walls -- Top and bottom */
 		for (x = 0; x < floor_ptr->width; x++)
 		{
-			place_extra_bold(0, x);
-			place_extra_bold(floor_ptr->height - 1, x);
+			place_extra_bold(floor_ptr, 0, x);
+			place_extra_bold(floor_ptr, floor_ptr->height - 1, x);
 		}
 
 		/* Special boundary walls -- Left and right */
 		for (y = 1; y < (floor_ptr->height - 1); y++)
 		{
-			place_extra_bold(y, 0);
-			place_extra_bold(y, floor_ptr->width - 1);
+			place_extra_bold(floor_ptr, y, 0);
+			place_extra_bold(floor_ptr, y, floor_ptr->width - 1);
 		}
 	}
 	else
@@ -661,7 +661,7 @@ static bool cave_gen(floor_type *floor_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
-				place_extra_bold(y, x);
+				place_extra_bold(floor_ptr, y, x);
 			}
 		}
 	}

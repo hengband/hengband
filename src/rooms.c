@@ -995,7 +995,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		{
 			for (y = 0; y <= ysize; ++y)
 			{
-				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
+				place_extra_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize);
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 			}
 		}
@@ -1021,7 +1021,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		else
 		{
 			/* set to be normal granite */
-			place_extra_bold(y0 + 0 - yhsize, x0 + i - xhsize);
+			place_extra_bold(floor_ptr, y0 + 0 - yhsize, x0 + i - xhsize);
 		}
 
 		/* bottom boundary */
@@ -1036,7 +1036,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		else
 		{
 			/* set to be normal granite */
-			place_extra_bold(y0 + ysize - yhsize, x0 + i - xhsize);
+			place_extra_bold(floor_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
 		}
 
 		/* clear the icky flag-don't need it any more */
@@ -1059,7 +1059,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		else
 		{
 			/* outside room */
-			place_extra_bold(y0 + i - yhsize, x0 + 0 - xhsize);
+			place_extra_bold(floor_ptr, y0 + i - yhsize, x0 + 0 - xhsize);
 		}
 		/* right boundary */
 		if ((floor_ptr->grid_array[i + y0 - yhsize][xsize + x0 - xhsize].info & CAVE_ICKY) && room)
@@ -1073,7 +1073,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		else
 		{
 			/* outside room */
-			place_extra_bold(y0 + i - yhsize, x0 + xsize - xhsize);
+			place_extra_bold(floor_ptr, y0 + i - yhsize, x0 + xsize - xhsize);
 		}
 
 		/* clear icky flag -done with it */
@@ -1110,14 +1110,14 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 				else
 				{
 
-					place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
+					place_extra_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize);
 					floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ROOM);
 				}
 			}
 			else
 			{
 				/* Clear the unconnected regions */
-				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
+				place_extra_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize);
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 			}
 		}
@@ -1276,8 +1276,8 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 	/* Do boundarys- set to normal granite */
 	for (i = 0; i <= xsize; ++i)
 	{
-		place_extra_bold(y0 + 0 - yhsize, x0 + i - xhsize);
-		place_extra_bold(y0 + ysize - yhsize, x0 + i - xhsize);
+		place_extra_bold(floor_ptr, y0 + 0 - yhsize, x0 + i - xhsize);
+		place_extra_bold(floor_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
 
 		/* clear the icky flag-don't need it any more */
 		floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
@@ -1288,8 +1288,8 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 
 	for (i = 1; i < ysize; ++i)
 	{
-		place_extra_bold(y0 + i - yhsize, x0 + 0 - xhsize);
-		place_extra_bold(y0 + i - yhsize, x0 + xsize - xhsize);
+		place_extra_bold(floor_ptr, y0 + i - yhsize, x0 + 0 - xhsize);
+		place_extra_bold(floor_ptr, y0 + i - yhsize, x0 + xsize - xhsize);
 
 		/* clear icky flag -done with it */
 		floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
@@ -1305,7 +1305,7 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 			/* Fill unconnected regions with granite */
 			if ((!(floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY)) ||
 				is_outer_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize))
-				place_extra_bold(y0 + y - yhsize, x0 + x - xhsize);
+				place_extra_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize);
 
 			/* turn off icky flag (no longer needed.) */
 			floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
