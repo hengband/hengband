@@ -218,7 +218,7 @@ static void build_room_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, PO
 
 
 /* Create a random vault out of a fractal p_ptr->current_floor_ptr->grid_array */
-static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
+static void build_cave_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
 	int grd, roug, cutoff;
 	bool done, light, room;
@@ -248,10 +248,10 @@ static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION y
 			randint1(xsize / 4) + randint1(ysize / 4);
 
 		/* make it */
-		generate_hmap(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
+		generate_hmap(floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
 
 		/* Convert to normal format+ clean up */
-		done = generate_fracave(p_ptr->current_floor_ptr, y0, x0, xsize, ysize, cutoff, light, room);
+		done = generate_fracave(floor_ptr, y0, x0, xsize, ysize, cutoff, light, room);
 	}
 
 	/* Set icky flag because is a vault */
@@ -259,12 +259,12 @@ static void build_cave_vault(POSITION x0, POSITION y0, POSITION xsiz, POSITION y
 	{
 		for (y = 0; y <= ysize; y++)
 		{
-			p_ptr->current_floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
+			floor_ptr->grid_array[y0 - yhsize + y][x0 - xhsize + x].info |= CAVE_ICKY;
 		}
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(p_ptr->current_floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1, y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
+	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1, y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
 }
 
 
@@ -1218,7 +1218,7 @@ bool build_type10(floor_type *floor_ptr)
 		/* Build an appropriate room */
 	case 1: case  9: build_bubble_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 2: case 10: build_room_vault(floor_ptr, x0, y0, xsize, ysize); break;
-	case 3: case 11: build_cave_vault(x0, y0, xsize, ysize); break;
+	case 3: case 11: build_cave_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 4: case 12: build_maze_vault(floor_ptr, x0, y0, xsize, ysize, TRUE); break;
 	case 5: case 13: build_mini_c_vault(floor_ptr, x0, y0, xsize, ysize); break;
 	case 6: case 14: build_castle_vault(floor_ptr, x0, y0, xsize, ysize); break;
