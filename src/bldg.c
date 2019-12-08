@@ -4050,7 +4050,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		break;
 
 	case BACT_TELE_TOWN:
-		paid = tele_town();
+		paid = tele_town(p_ptr);
 		break;
 
 	case BACT_EVAL_AC:

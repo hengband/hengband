@@ -3616,19 +3616,19 @@ bool fire_crimson(player_type *shooter_ptr)
  * @brief 町間のテレポートを行うメインルーチン。
  * @return テレポート処理を決定したか否か
  */
-bool tele_town(void)
+bool tele_town(player_type *caster_ptr)
 {
 	int i;
 	POSITION x, y;
 	int num = 0;
 
-	if (p_ptr->current_floor_ptr->dun_level)
+	if (caster_ptr->current_floor_ptr->dun_level)
 	{
 		msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
 		return FALSE;
 	}
 
-	if (p_ptr->inside_arena || p_ptr->phase_out)
+	if (caster_ptr->inside_arena || caster_ptr->phase_out)
 	{
 		msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
 		return FALSE;
@@ -3641,7 +3641,7 @@ bool tele_town(void)
 	{
 		char buf[80];
 
-		if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == p_ptr->town_num) || !(p_ptr->visit & (1L << (i - 1)))) continue;
+		if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == caster_ptr->town_num) || !(caster_ptr->visit & (1L << (i - 1)))) continue;
 
 		sprintf(buf, "%c) %-20s", I2A(i - 1), town_info[i].name);
 		prt(buf, 5 + i, 5);
@@ -3667,7 +3667,7 @@ bool tele_town(void)
 			return FALSE;
 		}
 		else if ((i < 'a') || (i > ('a' + max_towns - 2))) continue;
-		else if (((i - 'a' + 1) == p_ptr->town_num) || ((i - 'a' + 1) == NO_TOWN) || ((i - 'a' + 1) == SECRET_TOWN) || !(p_ptr->visit & (1L << (i - 'a')))) continue;
+		else if (((i - 'a' + 1) == caster_ptr->town_num) || ((i - 'a' + 1) == NO_TOWN) || ((i - 'a' + 1) == SECRET_TOWN) || !(caster_ptr->visit & (1L << (i - 'a')))) continue;
 		break;
 	}
 
@@ -3677,15 +3677,15 @@ bool tele_town(void)
 		{
 			if (wilderness[y][x].town == (i - 'a' + 1))
 			{
-				p_ptr->wilderness_y = y;
-				p_ptr->wilderness_x = x;
+				caster_ptr->wilderness_y = y;
+				caster_ptr->wilderness_x = x;
 			}
 		}
 	}
 
-	p_ptr->leaving = TRUE;
-	p_ptr->leave_bldg = TRUE;
-	p_ptr->teleport_town = TRUE;
+	caster_ptr->leaving = TRUE;
+	caster_ptr->leave_bldg = TRUE;
+	caster_ptr->teleport_town = TRUE;
 	screen_load();
 	return TRUE;
 }
