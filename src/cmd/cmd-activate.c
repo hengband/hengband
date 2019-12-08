@@ -1202,7 +1202,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_SUMMON_DEMON:
 	{
-		cast_summon_demon((plev * 3) / 2);
+		cast_summon_demon(user_ptr, (plev * 3) / 2);
 		break;
 	}
 

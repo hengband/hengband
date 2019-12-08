@@ -57,7 +57,7 @@ extern bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev
 extern bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
 
 extern bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
-extern bool cast_summon_demon(int power);
+extern bool cast_summon_demon(player_type *creature_ptr, int power);
 extern bool cast_summon_undead(player_type *creature_ptr, int power);
 extern bool cast_summon_hound(player_type *creature_ptr, int power);
 extern bool cast_summon_elemental(player_type *creature_ptr, int power);

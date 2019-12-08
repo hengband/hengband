@@ -307,7 +307,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				cast_summon_demon(plev * 2 / 3 + randint1(plev / 2));
+				cast_summon_demon(caster_ptr, plev * 2 / 3 + randint1(plev / 2));
 			}
 		}
 		break;

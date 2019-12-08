@@ -69,16 +69,16 @@ bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int t
 }
 
 
-bool cast_summon_demon(int power)
+bool cast_summon_demon(player_type *caster_ptr, int power)
 {
 	u32b flg = 0L;
 	bool pet = !one_in_(3);
 
 	if (pet) flg |= PM_FORCE_PET;
 	else flg |= PM_NO_PET;
-	if (!(pet && (p_ptr->lev < 50))) flg |= PM_ALLOW_GROUP;
+	if (!(pet && (caster_ptr->lev < 50))) flg |= PM_ALLOW_GROUP;
 
-	if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, power, SUMMON_DEMON, flg))
+	if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, power, SUMMON_DEMON, flg))
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		if (pet)
