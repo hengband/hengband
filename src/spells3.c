@@ -3476,10 +3476,10 @@ bool detonation(player_type *creature_ptr)
 	return TRUE;
 }
 
-void blood_curse_to_enemy(MONSTER_IDX m_idx)
+void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
+	grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
 	BIT_FLAGS curse_flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 	int count = 0;
 	do
@@ -3490,7 +3490,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			if (!count)
 			{
 				msg_print(_("地面が揺れた...", "The ground trembles..."));
-				earthquake(p_ptr, m_ptr->fy, m_ptr->fx, 4 + randint0(4), 0);
+				earthquake(caster_ptr, m_ptr->fy, m_ptr->fx, 4 + randint0(4), 0);
 				if (!one_in_(6)) break;
 			}
 		case 3: case 4: case 5: case 6:
@@ -3507,7 +3507,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			{
 				msg_print(_("空間が歪んだ！", "Space warps about you!"));
 
-				if (m_ptr->r_idx) teleport_away(p_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
+				if (m_ptr->r_idx) teleport_away(caster_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
 				if (one_in_(13)) count += activate_hi_summon(m_ptr->fy, m_ptr->fx, TRUE);
 				if (!one_in_(6)) break;
 			}
@@ -3529,15 +3529,15 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
-			count += summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : p_ptr->current_floor_ptr->dun_level), 0, mode);
+			count += summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : caster_ptr->current_floor_ptr->dun_level), 0, mode);
 			if (!one_in_(6)) break;
 		}
 		case 23: case 24: case 25:
-			if (p_ptr->hold_exp && (randint0(100) < 75)) break;
+			if (caster_ptr->hold_exp && (randint0(100) < 75)) break;
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
 
-			if (p_ptr->hold_exp) lose_exp(p_ptr, p_ptr->exp / 160);
-			else lose_exp(p_ptr, p_ptr->exp / 16);
+			if (caster_ptr->hold_exp) lose_exp(caster_ptr, caster_ptr->exp / 160);
+			else lose_exp(caster_ptr, caster_ptr->exp / 16);
 			if (!one_in_(6)) break;
 		case 26: case 27: case 28:
 		{
@@ -3548,7 +3548,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 				{
 					do
 					{
-						(void)do_dec_stat(p_ptr, i);
+						(void)do_dec_stat(caster_ptr, i);
 					} while (one_in_(2));
 
 					i++;
@@ -3556,7 +3556,7 @@ void blood_curse_to_enemy(MONSTER_IDX m_idx)
 			}
 			else
 			{
-				(void)do_dec_stat(p_ptr, randint0(6));
+				(void)do_dec_stat(caster_ptr, randint0(6));
 			}
 			break;
 		}

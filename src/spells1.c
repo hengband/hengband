@@ -3897,7 +3897,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	if ((typ == GF_BLOOD_CURSE) && one_in_(4))
 	{
-		blood_curse_to_enemy(who);
+		blood_curse_to_enemy(p_ptr, who);
 	}
 
 	if (p_ptr->phase_out)
