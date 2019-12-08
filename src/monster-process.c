@@ -1619,7 +1619,7 @@ void process_monster(MONSTER_IDX m_idx)
 		if (!counterattack)
 		{
 			/* Attempt to cast a spell */
-			if (aware && make_attack_spell(m_idx)) return;
+			if (aware && make_attack_spell(m_idx, p_ptr)) return;
 
 			/*
 			 * Attempt to cast a spell at an enemy other than the player
@@ -1632,7 +1632,7 @@ void process_monster(MONSTER_IDX m_idx)
 			/* Attempt to do counter attack at first */
 			if (monst_spell_monst(m_idx)) return;
 
-			if (aware && make_attack_spell(m_idx)) return;
+			if (aware && make_attack_spell(m_idx, p_ptr)) return;
 		}
 	}
 
@@ -2358,7 +2358,7 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Try to cast spell again */
 		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
 		{
-			if (make_attack_spell(m_idx)) return;
+			if (make_attack_spell(m_idx, p_ptr)) return;
 		}
 	}
 

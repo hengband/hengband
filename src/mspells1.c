@@ -1350,7 +1350,7 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
  * Note the special "MFLAG_NICE" flag, which prevents a monster from using\n
  * any spell attacks until the player has had a single chance to move.\n
  */
-bool make_attack_spell(MONSTER_IDX m_idx)
+bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 {
 	int k;
 	SPELL_IDX thrown_spell = 0;
@@ -1358,7 +1358,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	PERCENTAGE failrate;
 	byte spell[96], num = 0;
 	BIT_FLAGS f4, f5, f6;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 #ifndef JP
@@ -1368,22 +1368,22 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	bool            do_spell = DO_SPELL_NONE;
 	int             dam = 0;
 
-	POSITION x = p_ptr->x;
-	POSITION y = p_ptr->y;
+	POSITION x = target_ptr->x;
+	POSITION y = target_ptr->y;
 
 	/* Target location for lite breath */
 	POSITION x_br_lite = 0;
 	POSITION y_br_lite = 0;
 
 	/* Extract the "see-able-ness" */
-    bool seen = (!p_ptr->blind && m_ptr->ml);
-	bool maneable = player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx);
+    bool seen = (!target_ptr->blind && m_ptr->ml);
+	bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
 
 	/* Check "projectable" */
 	bool direct;
 
-	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && p_ptr->current_floor_ptr->dun_level
-		&& (!p_ptr->current_floor_ptr->inside_quest || is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest));
+	bool in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && target_ptr->current_floor_ptr->dun_level
+		&& (!target_ptr->current_floor_ptr->inside_quest || is_fixed_quest_idx(target_ptr->current_floor_ptr->inside_quest));
 
 	bool can_use_lite_area = FALSE;
 
@@ -1423,9 +1423,9 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 		y_br_lite = y;
 		x_br_lite = x;
 
-		if (los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
+		if (los(target_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
 		{
-			feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
+			feature_type *f_ptr = &f_info[target_ptr->current_floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
 
 			if (!have_flag(f_ptr->flags, FF_LOS))
 			{
@@ -1445,9 +1445,9 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	}
 
 	/* Check path */
-	if (projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y, x))
+	if (projectable(target_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y, x))
 	{
-		feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
+		feature_type *f_ptr = &f_info[target_ptr->current_floor_ptr->grid_array[y][x].feat];
 
 		if (!have_flag(f_ptr->flags, FF_PROJECT))
 		{
@@ -1466,13 +1466,13 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE/2) &&
 		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
-		    (one_in_(10) || (projectable(p_ptr->current_floor_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+		    (one_in_(10) || (projectable(target_ptr->current_floor_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
 			do_spell = DO_SPELL_BR_DISI;
 			success = TRUE;
 		}
 		else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE/2) &&
-		    los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
+		    los(target_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
 		{
 			do_spell = DO_SPELL_BR_LITE;
 			success = TRUE;
@@ -1481,7 +1481,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 		{
 			POSITION by = y, bx = x;
 			get_project_point(m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
-			if ((distance(by, bx, y, x) <= 3) && los(p_ptr->current_floor_ptr, by, bx, y, x) && one_in_(5))
+			if ((distance(by, bx, y, x) <= 3) && los(target_ptr->current_floor_ptr, by, bx, y, x) && one_in_(5))
 			{
 				do_spell = DO_SPELL_BA_LITE;
 				success = TRUE;
@@ -1533,15 +1533,15 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 	if (f6 & RF6_DARKNESS)
 	{
-		if ((p_ptr->pclass == CLASS_NINJA) &&
+		if ((target_ptr->pclass == CLASS_NINJA) &&
 		    !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
 		    !(r_ptr->flags7 & RF7_DARK_MASK))
 			can_use_lite_area = TRUE;
 
 		if (!(r_ptr->flags2 & RF2_STUPID))
 		{
-			if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
-			else if ((p_ptr->pclass == CLASS_NINJA) && !can_use_lite_area) f6 &= ~(RF6_DARKNESS);
+			if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
+			else if ((target_ptr->pclass == CLASS_NINJA) && !can_use_lite_area) f6 &= ~(RF6_DARKNESS);
 		}
 	}
 
@@ -1577,7 +1577,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	/* Remove the "ineffective" spells */
 	remove_bad_spells(m_idx, &f4, &f5, &f6);
 
-	if (p_ptr->inside_arena || p_ptr->phase_out)
+	if (target_ptr->inside_arena || target_ptr->phase_out)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
@@ -1591,13 +1591,13 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 	if (!(r_ptr->flags2 & RF2_STUPID))
 	{
-		if (!p_ptr->csp) f5 &= ~(RF5_DRAIN_MANA);
+		if (!target_ptr->csp) f5 &= ~(RF5_DRAIN_MANA);
 
 		/* Check for a clean bolt shot */
 		if (((f4 & RF4_BOLT_MASK) ||
 		     (f5 & RF5_BOLT_MASK) ||
 		     (f6 & RF6_BOLT_MASK)) &&
-		    !clean_shot(m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x, FALSE))
+		    !clean_shot(m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x, FALSE))
 		{
 			/* Remove spells that will only hurt friends */
 			f4 &= ~(RF4_BOLT_MASK);
@@ -1659,10 +1659,10 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	if (!num) return (FALSE);
 
 	/* Stop if player is dead or gone */
-	if (!p_ptr->playing || p_ptr->is_dead) return (FALSE);
+	if (!target_ptr->playing || target_ptr->is_dead) return (FALSE);
 
 	/* Stop if player is leaving */
-	if (p_ptr->leaving) return (FALSE);
+	if (target_ptr->leaving) return (FALSE);
 
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0x00);
@@ -1714,7 +1714,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	if (!spell_is_inate(thrown_spell)
 	    && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
 	{
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(target_ptr, TRUE, TRUE);
 		msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
 
 		return (TRUE);
@@ -1728,7 +1728,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 	}
 
 	/* Projectable? */
-	direct = player_bold(p_ptr, y, x);
+	direct = player_bold(target_ptr, y, x);
 
 	can_remember = is_original_ap_and_seen(m_ptr);
 
@@ -1775,31 +1775,31 @@ bool make_attack_spell(MONSTER_IDX m_idx)
     dam = monspell_to_player(thrown_spell, y, x, m_idx);
     if (dam < 0) return FALSE;
 
-	if ((p_ptr->action == ACTION_LEARN) && thrown_spell > 175)
+	if ((target_ptr->action == ACTION_LEARN) && thrown_spell > 175)
 	{
 		learn_spell(thrown_spell - 96);
 	}
 
-	if (seen && maneable && !current_world_ptr->timewalk_m_idx && (p_ptr->pclass == CLASS_IMITATOR))
+	if (seen && maneable && !current_world_ptr->timewalk_m_idx && (target_ptr->pclass == CLASS_IMITATOR))
 	{
 		if (thrown_spell != 167) /* Not RF6_SPECIAL */
 		{
-			if (p_ptr->mane_num == MAX_MANE)
+			if (target_ptr->mane_num == MAX_MANE)
 			{
 				int i;
-				p_ptr->mane_num--;
-				for (i = 0;i < p_ptr->mane_num;i++)
+				target_ptr->mane_num--;
+				for (i = 0;i < target_ptr->mane_num;i++)
 				{
-					p_ptr->mane_spell[i] = p_ptr->mane_spell[i+1];
-					p_ptr->mane_dam[i] = p_ptr->mane_dam[i+1];
+					target_ptr->mane_spell[i] = target_ptr->mane_spell[i+1];
+					target_ptr->mane_dam[i] = target_ptr->mane_dam[i+1];
 				}
 			}
-			p_ptr->mane_spell[p_ptr->mane_num] = thrown_spell - 96;
-			p_ptr->mane_dam[p_ptr->mane_num] = dam;
-			p_ptr->mane_num++;
-			p_ptr->new_mane = TRUE;
+			target_ptr->mane_spell[target_ptr->mane_num] = thrown_spell - 96;
+			target_ptr->mane_dam[target_ptr->mane_num] = dam;
+			target_ptr->mane_num++;
+			target_ptr->new_mane = TRUE;
 
-			p_ptr->redraw |= (PR_IMITATION);
+			target_ptr->redraw |= (PR_IMITATION);
 		}
 	}
 
@@ -1830,7 +1830,7 @@ bool make_attack_spell(MONSTER_IDX m_idx)
 
 
 	/* Always take note of monsters that kill you */
-	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
+	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++; /* Ignore appearance difference */
 	}
