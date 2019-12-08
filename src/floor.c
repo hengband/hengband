@@ -6,6 +6,8 @@
 #include "rooms.h"
 #include "quest.h"
 #include "object-hook.h"
+#include "world.h"
+#include "player-effects.h"
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].
@@ -642,4 +644,111 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 	return (TRUE);
 }
 
+/*
+ * Change the "feat" flag for a grid, and notice/redraw the grid
+ */
+void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
+{
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+	feature_type *f_ptr = &f_info[feat];
+	bool old_los, old_mirror;
+
+	if (!current_world_ptr->character_dungeon)
+	{
+		/* Clear mimic type */
+		g_ptr->mimic = 0;
+
+		/* Change the feature */
+		g_ptr->feat = feat;
+
+		/* Hack -- glow the GLOW terrain */
+		if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+		{
+			DIRECTION i;
+			POSITION yy, xx;
+
+			for (i = 0; i < 9; i++)
+			{
+				yy = y + ddy_ddd[i];
+				xx = x + ddx_ddd[i];
+				if (!in_bounds2(floor_ptr, yy, xx)) continue;
+				floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
+			}
+		}
+
+		return;
+	}
+
+	old_los = cave_have_flag_bold(y, x, FF_LOS);
+	old_mirror = is_mirror_grid(g_ptr);
+
+	/* Clear mimic type */
+	g_ptr->mimic = 0;
+
+	/* Change the feature */
+	g_ptr->feat = feat;
+
+	/* Remove flag for mirror/glyph */
+	g_ptr->info &= ~(CAVE_OBJECT);
+
+	if (old_mirror && (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+	{
+		g_ptr->info &= ~(CAVE_GLOW);
+		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
+
+		update_local_illumination(p_ptr, y, x);
+	}
+
+	/* Check for change to boring grid */
+	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
+	if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
+
+	note_spot(y, x);
+	lite_spot(y, x);
+
+	/* Check if los has changed */
+	if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
+	{
+
+#ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
+
+		update_local_illumination(p_ptr, y, x);
+
+#endif /* COMPLEX_WALL_ILLUMINATION */
+
+		/* Update the visuals */
+		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
+	}
+
+	/* Hack -- glow the GLOW terrain */
+	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+	{
+		DIRECTION i;
+		POSITION yy, xx;
+		grid_type *cc_ptr;
+
+		for (i = 0; i < 9; i++)
+		{
+			yy = y + ddy_ddd[i];
+			xx = x + ddx_ddd[i];
+			if (!in_bounds2(floor_ptr, yy, xx)) continue;
+			cc_ptr = &floor_ptr->grid_array[yy][xx];
+			cc_ptr->info |= CAVE_GLOW;
+
+			if (player_has_los_grid(cc_ptr))
+			{
+				if (cc_ptr->m_idx) update_monster(p_ptr, cc_ptr->m_idx, FALSE);
+				note_spot(yy, xx);
+				lite_spot(yy, xx);
+			}
+
+			update_local_illumination(p_ptr, yy, xx);
+		}
+
+		if (p_ptr->special_defense & NINJA_S_STEALTH)
+		{
+			if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		}
+	}
+}
 

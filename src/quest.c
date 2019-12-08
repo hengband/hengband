@@ -296,7 +296,7 @@ void check_quest_completion(monster_type *m_ptr)
 		msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
 
 		/* Create stairs down */
-		cave_set_feat(y, x, feat_down_stair);
+		cave_set_feat(p_ptr->current_floor_ptr, y, x, feat_down_stair);
 
 		/* Remember to update everything */
 		p_ptr->update |= (PU_FLOW);

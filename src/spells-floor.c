@@ -344,7 +344,7 @@ void stair_creation(player_type *caster_ptr)
 
 				/* Remove old stairs */
 				g_ptr->special = 0;
-				cave_set_feat(y, x, feat_ground_type[randint0(100)]);
+				cave_set_feat(floor_ptr, y, x, feat_ground_type[randint0(100)]);
 			}
 		}
 	}
@@ -368,13 +368,13 @@ void stair_creation(player_type *caster_ptr)
 	/* Create a staircase */
 	if (up)
 	{
-		cave_set_feat(caster_ptr->y, caster_ptr->x,
+		cave_set_feat(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ?
 			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
-		cave_set_feat(caster_ptr->y, caster_ptr->x,
+		cave_set_feat(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ?
 			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
@@ -598,22 +598,22 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 					if (t < 20)
 					{
 						/* Create granite wall */
-						cave_set_feat(y, x, feat_granite);
+						cave_set_feat(floor_ptr, y, x, feat_granite);
 					}
 					else if (t < 70)
 					{
 						/* Create quartz vein */
-						cave_set_feat(y, x, feat_quartz_vein);
+						cave_set_feat(floor_ptr, y, x, feat_quartz_vein);
 					}
 					else if (t < 100)
 					{
 						/* Create magma vein */
-						cave_set_feat(y, x, feat_magma_vein);
+						cave_set_feat(floor_ptr, y, x, feat_magma_vein);
 					}
 					else
 					{
 						/* Create floor */
-						cave_set_feat(y, x, feat_ground_type[randint0(100)]);
+						cave_set_feat(floor_ptr, y, x, feat_ground_type[randint0(100)]);
 					}
 				}
 				else /* In generation */
@@ -1078,28 +1078,28 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 				if (t < 20)
 				{
 					/* Create granite wall */
-					cave_set_feat(yy, xx, feat_granite);
+					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_granite);
 				}
 
 				/* Quartz */
 				else if (t < 70)
 				{
 					/* Create quartz vein */
-					cave_set_feat(yy, xx, feat_quartz_vein);
+					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_quartz_vein);
 				}
 
 				/* Magma */
 				else if (t < 100)
 				{
 					/* Create magma vein */
-					cave_set_feat(yy, xx, feat_magma_vein);
+					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_magma_vein);
 				}
 
 				/* Floor */
 				else
 				{
 					/* Create floor */
-					cave_set_feat(yy, xx, feat_ground_type[randint0(100)]);
+					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_ground_type[randint0(100)]);
 				}
 			}
 		}

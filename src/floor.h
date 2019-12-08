@@ -387,3 +387,4 @@ extern int project_length;
 
 extern void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num);
 extern bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
+extern void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat);

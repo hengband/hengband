@@ -5188,11 +5188,11 @@ void wreck_the_pattern(player_type *creature_ptr)
 		if (pattern_tile(r_y, r_x) &&
 			(f_info[p_ptr->current_floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
 		{
-			cave_set_feat(r_y, r_x, feat_pattern_corrupted);
+			cave_set_feat(p_ptr->current_floor_ptr, r_y, r_x, feat_pattern_corrupted);
 		}
 	}
 
-	cave_set_feat(creature_ptr->y, creature_ptr->x, feat_pattern_corrupted);
+	cave_set_feat(p_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_corrupted);
 }
 
 

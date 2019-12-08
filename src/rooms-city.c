@@ -168,7 +168,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 		/* Clear previous contents, add a store door */
 		if (j < max_f_idx)
 		{
-			cave_set_feat(ltcy + y, ltcx + x, j);
+			cave_set_feat(p_ptr->current_floor_ptr, ltcy + y, ltcx + x, j);
 
 			/* Init store */
 			store_init(NO_TOWN, stores[i]);

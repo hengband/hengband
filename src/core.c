@@ -711,7 +711,7 @@ static bool pattern_effect(player_type *creature_ptr)
 		(void)restore_level(creature_ptr);
 		(void)cure_critical_wounds(creature_ptr, 1000);
 
-		cave_set_feat(creature_ptr->y, creature_ptr->x, feat_pattern_old);
+		cave_set_feat(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_old);
 		msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
 		/*

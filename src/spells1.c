@@ -320,7 +320,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		if (message)
 		{
 			msg_format(_("木は%s。", "A tree %s"), message);
-			cave_set_feat(y, x, one_in_(3) ? feat_brake : feat_grass);
+			cave_set_feat(floor_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
 
 			/* Observe */
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -496,7 +496,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		{
 			if (!cave_naked_bold(p_ptr, p_ptr->current_floor_ptr, y, x)) break;
 			if (player_bold(p_ptr, y, x)) break;
-			cave_set_feat(y, x, feat_door[DOOR_DOOR].closed);
+			cave_set_feat(floor_ptr, y, x, feat_door[DOOR_DOOR].closed);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
 		}
@@ -511,7 +511,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		{
 			if (!cave_naked_bold(p_ptr, p_ptr->current_floor_ptr, y, x)) break;
 			if (player_bold(p_ptr, y, x)) break;
-			cave_set_feat(y, x, feat_tree);
+			cave_set_feat(floor_ptr, y, x, feat_tree);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
 		}
@@ -530,7 +530,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		{
 			if (!cave_naked_bold(p_ptr, p_ptr->current_floor_ptr, y, x)) break;
 			if (player_bold(p_ptr, y, x)) break;
-			cave_set_feat(y, x, feat_granite);
+			cave_set_feat(floor_ptr, y, x, feat_granite);
 			break;
 		}
 
@@ -540,11 +540,11 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (dam == 1)
 			{
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(y, x, feat_shallow_lava);
+				cave_set_feat(floor_ptr, y, x, feat_shallow_lava);
 			}
 			else if (dam)
 			{
-				cave_set_feat(y, x, feat_deep_lava);
+				cave_set_feat(floor_ptr, y, x, feat_deep_lava);
 			}
 			break;
 		}
@@ -555,11 +555,11 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (dam == 1)
 			{
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(y, x, feat_shallow_water);
+				cave_set_feat(floor_ptr, y, x, feat_shallow_water);
 			}
 			else if (dam)
 			{
-				cave_set_feat(y, x, feat_deep_water);
+				cave_set_feat(floor_ptr, y, x, feat_deep_water);
 			}
 			break;
 		}

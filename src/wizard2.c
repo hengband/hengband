@@ -1644,7 +1644,7 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 	if (tmp_mimic < 0) tmp_mimic = 0;
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 
-	cave_set_feat(y, x, tmp_feat);
+	cave_set_feat(creature_ptr->current_floor_ptr, y, x, tmp_feat);
 	g_ptr->mimic = (s16b)tmp_mimic;
 
 	f_ptr = &f_info[get_feat_mimic(g_ptr)];
