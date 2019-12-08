@@ -4304,21 +4304,21 @@ static void process_command(player_type *creature_ptr)
  * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理 / Hack -- Pack Overflow
  * @return なし
  */
-static void pack_overflow(void)
+static void pack_overflow(player_type *owner_ptr)
 {
-	if (p_ptr->inventory_list[INVEN_PACK].k_idx)
+	if (owner_ptr->inventory_list[INVEN_PACK].k_idx)
 	{
 		GAME_TEXT o_name[MAX_NLEN];
 		object_type *o_ptr;
 
 		/* Is auto-destroy done? */
-		update_creature(p_ptr);
-		if (!p_ptr->inventory_list[INVEN_PACK].k_idx) return;
+		update_creature(owner_ptr);
+		if (!owner_ptr->inventory_list[INVEN_PACK].k_idx) return;
 
 		/* Access the slot to be dropped */
-		o_ptr = &p_ptr->inventory_list[INVEN_PACK];
+		o_ptr = &owner_ptr->inventory_list[INVEN_PACK];
 
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(owner_ptr, FALSE, TRUE);
 
 		/* Warning */
 		msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
@@ -4327,7 +4327,7 @@ static void pack_overflow(void)
 		msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
 
 		/* Drop it (carefully) near the player */
-		(void)drop_near(o_ptr, 0, p_ptr->y, p_ptr->x);
+		(void)drop_near(o_ptr, 0, owner_ptr->y, owner_ptr->x);
 
 		/* Modify, Describe, Optimize */
 		inven_item_increase(INVEN_PACK, -255);
@@ -4634,7 +4634,7 @@ static void process_player(player_type *creature_ptr)
 		if (fresh_before) Term_fresh();
 
 		/* Hack -- Pack Overflow */
-		pack_overflow();
+		pack_overflow(creature_ptr);
 
 		/* Hack -- cancel "lurking browse mode" */
 		if (!command_new) command_see = FALSE;
@@ -4732,7 +4732,7 @@ static void process_player(player_type *creature_ptr)
 		}
 
 		/* Hack -- Pack Overflow */
-		pack_overflow();
+		pack_overflow(creature_ptr);
 
 		/*** Clean up ***/
 
