@@ -248,7 +248,7 @@ extern void discharge_minion(void);
 extern bool kawarimi(bool success);
 extern bool rush_attack(bool *mdeath);
 extern void remove_all_mirrors(bool explode);
-extern void ring_of_power(DIRECTION dir);
+extern void ring_of_power(player_type *caster_ptr, DIRECTION dir);
 extern void wild_magic(int spell);
 extern void cast_meteor(HIT_POINT dam, POSITION rad);
 extern bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad);

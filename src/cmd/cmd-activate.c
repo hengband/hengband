@@ -992,7 +992,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
 		if (!get_aim_dir(&dir)) return FALSE;
-		ring_of_power(dir);
+		ring_of_power(user_ptr, dir);
 		break;
 	}
 

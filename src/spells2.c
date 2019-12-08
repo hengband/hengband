@@ -3132,7 +3132,7 @@ void remove_all_mirrors(bool explode)
  * @param dir 発動の方向ID
  * @return なし
  */
-void ring_of_power(DIRECTION dir)
+void ring_of_power(player_type *caster_ptr, DIRECTION dir)
 {
 	/* Pick a random effect */
 	switch (randint1(10))
@@ -3144,17 +3144,17 @@ void ring_of_power(DIRECTION dir)
 		sound(SOUND_EVIL);
 
 		/* Decrease all stats (permanently) */
-		(void)dec_stat(p_ptr, A_STR, 50, TRUE);
-		(void)dec_stat(p_ptr, A_INT, 50, TRUE);
-		(void)dec_stat(p_ptr, A_WIS, 50, TRUE);
-		(void)dec_stat(p_ptr, A_DEX, 50, TRUE);
-		(void)dec_stat(p_ptr, A_CON, 50, TRUE);
-		(void)dec_stat(p_ptr, A_CHR, 50, TRUE);
+		(void)dec_stat(caster_ptr, A_STR, 50, TRUE);
+		(void)dec_stat(caster_ptr, A_INT, 50, TRUE);
+		(void)dec_stat(caster_ptr, A_WIS, 50, TRUE);
+		(void)dec_stat(caster_ptr, A_DEX, 50, TRUE);
+		(void)dec_stat(caster_ptr, A_CON, 50, TRUE);
+		(void)dec_stat(caster_ptr, A_CHR, 50, TRUE);
 
 		/* Lose some experience (permanently) */
-		p_ptr->exp -= (p_ptr->exp / 4);
-		p_ptr->max_exp -= (p_ptr->exp / 4);
-		check_experience(p_ptr);
+		caster_ptr->exp -= (caster_ptr->exp / 4);
+		caster_ptr->max_exp -= (caster_ptr->exp / 4);
+		check_experience(caster_ptr);
 
 		break;
 	}
