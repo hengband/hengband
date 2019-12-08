@@ -3518,27 +3518,27 @@ void cast_wonder(DIRECTION dir)
 * @param dir 方向ID
 * @return なし
 */
-void cast_invoke_spirits(DIRECTION dir)
+void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	int die = randint1(100) + plev / 5;
-	int vir = virtue_number(p_ptr, V_CHANCE);
+	int vir = virtue_number(caster_ptr, V_CHANCE);
 
 	if (vir)
 	{
-		if (p_ptr->virtues[vir - 1] > 0)
+		if (caster_ptr->virtues[vir - 1] > 0)
 		{
-			while (randint1(400) < p_ptr->virtues[vir - 1]) die++;
+			while (randint1(400) < caster_ptr->virtues[vir - 1]) die++;
 		}
 		else
 		{
-			while (randint1(400) < (0 - p_ptr->virtues[vir - 1])) die--;
+			while (randint1(400) < (0 - caster_ptr->virtues[vir - 1])) die--;
 		}
 	}
 
 	msg_print(_("あなたは死者たちの力を招集した...", "You call on the power of the dead..."));
 	if (die < 26)
-		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(caster_ptr, V_CHANCE, 1);
 
 	if (die > 100)
 	{
@@ -3550,21 +3550,21 @@ void cast_invoke_spirits(DIRECTION dir)
 		msg_print(_("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！",
 			"Oh no! Mouldering forms rise from the earth around you!"));
 
-		(void)summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
-		chg_virtue(p_ptr, V_UNLIFE, 1);
+		(void)summon_specific(0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+		chg_virtue(caster_ptr, V_UNLIFE, 1);
 	}
 	else if (die < 14)
 	{
 		msg_print(_("名状し難い邪悪な存在があなたの心を通り過ぎて行った...", "An unnamable evil brushes against your mind..."));
 
-		set_afraid(p_ptr, p_ptr->afraid + randint1(4) + 4);
+		set_afraid(caster_ptr, caster_ptr->afraid + randint1(4) + 4);
 	}
 	else if (die < 26)
 	{
 		msg_print(_("あなたの頭に大量の幽霊たちの騒々しい声が押し寄せてきた...",
 			"Your head is invaded by a horde of gibbering spectral voices..."));
 
-		set_confused(p_ptr, p_ptr->confused + randint1(4) + 4);
+		set_confused(caster_ptr, caster_ptr->confused + randint1(4) + 4);
 	}
 	else if (die < 31)
 	{
@@ -3633,11 +3633,11 @@ void cast_invoke_spirits(DIRECTION dir)
 	}
 	else if (die < 104)
 	{
-		earthquake(p_ptr, p_ptr->y, p_ptr->x, 12, 0);
+		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 12, 0);
 	}
 	else if (die < 106)
 	{
-		(void)destroy_area(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
+		(void)destroy_area(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
 	}
 	else if (die < 108)
 	{
@@ -3652,7 +3652,7 @@ void cast_invoke_spirits(DIRECTION dir)
 		dispel_monsters(150);
 		slow_monsters(plev);
 		sleep_monsters(plev);
-		hp_player(p_ptr, 300);
+		hp_player(caster_ptr, 300);
 	}
 
 	if (die < 31)

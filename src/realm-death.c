@@ -392,7 +392,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				cast_invoke_spirits(dir);
+				cast_invoke_spirits(caster_ptr, dir);
 			}
 		}
 		break;

@@ -253,7 +253,7 @@ extern void wild_magic(int spell);
 extern void cast_meteor(HIT_POINT dam, POSITION rad);
 extern bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad);
 extern void cast_wonder(DIRECTION dir);
-extern void cast_invoke_spirits(DIRECTION dir);
+extern void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir);
 extern void cast_shuffle(player_type *caster_ptr);
 extern void stop_mouth(void);
 extern bool_hack vampirism(player_type *caster_ptr);
