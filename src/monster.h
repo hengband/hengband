@@ -36,10 +36,12 @@ extern MONSTER_IDX hack_m_idx_ii;
 
 typedef struct monster_type monster_type;
 
+
 struct monster_type
 {
 	MONRACE_IDX r_idx;		/* Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */
+	struct floor_type *current_floor_ptr;
 
 	/* Sub-alignment flags for neutral monsters */
 	#define SUB_ALIGN_NEUTRAL 0x0000

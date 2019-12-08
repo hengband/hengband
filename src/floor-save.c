@@ -594,6 +594,7 @@ static void place_pet(player_type *master_ptr)
 
 			m_ptr->fy = cy;
 			m_ptr->fx = cx;
+			m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
 			m_ptr->ml = TRUE;
 			m_ptr->mtimed[MTIMED_CSLEEP] = 0;
 			m_ptr->hold_o_idx = 0;

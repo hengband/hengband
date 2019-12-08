@@ -880,6 +880,7 @@ static void rd_monster_old(monster_type *m_ptr)
 	m_ptr->fy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fx = (POSITION)tmp8u;
+	m_ptr->current_floor_ptr = p_ptr->current_floor_ptr;
 
 	rd_s16b(&tmp16s);
 	m_ptr->hp = tmp16s;

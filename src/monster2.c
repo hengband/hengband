@@ -2656,6 +2656,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Place the monster at the location */
 	m_ptr->fy = y;
 	m_ptr->fx = x;
+	m_ptr->current_floor_ptr = p_ptr->current_floor_ptr;
 
 
 	/* No "timed status" yet */
