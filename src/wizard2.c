@@ -53,6 +53,93 @@
 #include "world.h"
 
 #ifdef ALLOW_WIZARD
+/*
+typedef struct debug_spell_commands1
+{
+	int type;
+	char *command;
+	bool(*spell_function_type1)(player_type *);
+} debug_spell_commands1;
+
+typedef struct debug_spell_commands2
+{
+	int type;
+	char *command;
+	bool(*spell_function_type2)(player_type *, floor_type *);
+} debug_spell_commands2;
+
+typedef struct debug_spell_commands3
+{
+	int type;
+	char *command;
+	bool(*spell_function_type3)(player_type *, HIT_POINT);
+} debug_spell_commands3;
+
+typedef union debug_spell_commands {
+	debug_spell_commands1 command1;
+	debug_spell_commands2 command2;
+	debug_spell_commands3 command3;
+} debug_spell_commands;
+
+debug_spell_commands debug_spell_commands_list[] =
+{
+	.command3 = {3, "true healing", true_healing}
+};
+*/
+
+typedef union spell_functions {
+	struct debug_spell_type1 { bool(*spell_function)(player_type *, floor_type *); } spell1;
+	struct debug_spell_type2 { bool(*spell_function)(player_type *); } spell2;
+	struct debug_spell_type3 { bool(*spell_function)(player_type *, HIT_POINT); } spell3;
+} spell_functions;
+
+typedef struct debug_spell_command
+{
+	int type;
+	char *command_name;
+	spell_functions command_function;
+} debug_spell_command;
+
+
+#define SPELL_MAX 1
+debug_spell_command debug_spell_commands_list[SPELL_MAX] =
+{
+	{ 3, "true healing", {.spell3 = true_healing} }
+};
+
+/*!
+ * @brief コマンド入力により任意にスペル効果を起こす / Wizard spells
+ * @return 実際にテレポートを行ったらTRUEを返す
+ */
+static bool do_cmd_debug_spell(player_type *creature_ptr)
+{
+	char tmp_val[50] = "\0";
+	int tmp_int;
+	int i;
+
+	if (!get_string("SPELL:", tmp_val, 32)) return FALSE;
+
+	for (i = 0; i < SPELL_MAX; i++)
+	{
+		if (strcmp(tmp_val, debug_spell_commands_list[i].command_name) == 0)
+		{
+			switch (debug_spell_commands_list[i].type)
+			{
+			case 3:
+				tmp_val[0] = '\0';
+				if (!get_string("POWER:", tmp_val, 32)) return FALSE;
+				tmp_int = atoi(tmp_val);
+				(*(debug_spell_commands_list[i].command_function.spell3.spell_function))(creature_ptr, tmp_int);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+	return FALSE;
+}
+
 
 /*!
  * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
@@ -1954,6 +2041,11 @@ void do_cmd_debug(player_type *creature_ptr)
 	case 'V':
 		do_cmd_wiz_reset_class(creature_ptr);
 		break;
+
+	case '@':
+		do_cmd_debug_spell(creature_ptr);
+		break;
+
 
 	/* Not a Wizard Command */
 	default:
