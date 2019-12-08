@@ -387,7 +387,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
 			for (dummy = 0; dummy < randint1(5) + 1; dummy++)
 			{
-				(void)summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+				(void)summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 			reward = _("モンスターを召喚された。", "summoning hostile monsters");
 			break;
@@ -476,7 +476,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_print(_("「苦しむがよい、無能な愚か者よ！」", "'Suffer, pathetic fool!'"));
 
 			fire_ball(GF_DISINTEGRATE, 0, creature_ptr->lev * 4, 4);
-			take_hit(p_ptr, DAMAGE_NOESCAPE, creature_ptr->lev * 4, wrath_reason, -1);
+			take_hit(creature_ptr, DAMAGE_NOESCAPE, creature_ptr->lev * 4, wrath_reason, -1);
 			reward = _("分解の球が発生した。", "generating disintegration ball");
 			break;
 
@@ -491,15 +491,15 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
 		case REW_CURSE_WP:
 
-			if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM)) break;
+			if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM)) break;
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「汝、武器に頼ることなかれ。」", "'Thou reliest too much on thy weapon.'"));
 
 			dummy = INVEN_RARM;
-			if (has_melee_weapon(p_ptr, INVEN_LARM))
+			if (has_melee_weapon(creature_ptr, INVEN_LARM))
 			{
 				dummy = INVEN_LARM;
-				if (has_melee_weapon(p_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+				if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 			}
 			object_desc(o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
 			(void)curse_weapon(FALSE, dummy);
@@ -535,12 +535,12 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			case 3:
 				if (one_in_(2))
 				{
-					if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM)) break;
+					if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM)) break;
 					dummy = INVEN_RARM;
-					if (has_melee_weapon(p_ptr, INVEN_LARM))
+					if (has_melee_weapon(creature_ptr, INVEN_LARM))
 					{
 						dummy = INVEN_LARM;
-						if (has_melee_weapon(p_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
+						if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 					}
 					object_desc(o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
 					(void)curse_weapon(FALSE, dummy);
@@ -569,7 +569,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
-			take_hit(p_ptr, DAMAGE_LOSELIFE, creature_ptr->lev * 4, wrath_reason, -1);
+			take_hit(creature_ptr, DAMAGE_LOSELIFE, creature_ptr->lev * 4, wrath_reason, -1);
 			for (dummy = 0; dummy < A_MAX; dummy++)
 			{
 				(void)dec_stat(creature_ptr, dummy, 10 + randint1(15), FALSE);
@@ -580,12 +580,12 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			{
 				dummy = 0;
 
-				if (has_melee_weapon(p_ptr, INVEN_RARM))
+				if (has_melee_weapon(creature_ptr, INVEN_RARM))
 				{
 					dummy = INVEN_RARM;
-					if (has_melee_weapon(p_ptr, INVEN_LARM) && one_in_(2)) dummy = INVEN_LARM;
+					if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2)) dummy = INVEN_LARM;
 				}
-				else if (has_melee_weapon(p_ptr, INVEN_LARM)) dummy = INVEN_LARM;
+				else if (has_melee_weapon(creature_ptr, INVEN_LARM)) dummy = INVEN_LARM;
 
 				if (dummy) (void)curse_weapon(FALSE, dummy);
 			}
@@ -633,7 +633,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
 			msg_format(_("%sは褒美として悪魔の使いをよこした！", "%s rewards you with a demonic servant!"), chaos_patrons[creature_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET))
+			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("悪魔がペットになった。", "a demonic servant");
@@ -643,7 +643,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 		case REW_SER_MONS:
 			msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"), chaos_patrons[creature_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, PM_FORCE_PET))
+			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("モンスターがペットになった。", "a servant");
@@ -653,7 +653,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 		case REW_SER_UNDE:
 			msg_format(_("%sは褒美としてアンデッドの使いをよこした。", "%s rewards you with an undead servant!"), chaos_patrons[creature_ptr->chaos_patron]);
 
-			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
+			if (!summon_specific(-1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, PM_FORCE_PET))
 				msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
 			else
 				reward = _("アンデッドがペットになった。", "an undead servant");
@@ -668,7 +668,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 	}
 	if (reward)
 	{
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, format(_("パトロンの報酬で%s", "The patron rewards you with %s."), reward));
+		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, format(_("パトロンの報酬で%s", "The patron rewards you with %s."), reward));
 	}
 }
 
