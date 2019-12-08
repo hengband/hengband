@@ -704,7 +704,7 @@ static bool get_learned_power(SPELL_IDX *sn)
 					/* Reduce failure rate by INT/WIS adjustment */
 					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
 
-					chance = mod_spell_chance_1(chance);
+					chance = mod_spell_chance_1(p_ptr, chance);
 
 					need_mana = mod_need_mana(monster_powers[spellnum[i]].smana, 0, REALM_NONE);
 
@@ -727,7 +727,7 @@ static bool get_learned_power(SPELL_IDX *sn)
 					/* Always a 5 percent chance of working */
 					if (chance > 95) chance = 95;
 
-					chance = mod_spell_chance_2(chance);
+					chance = mod_spell_chance_2(p_ptr, chance);
 
 					/* Get info */
 					learned_info(comment, spellnum[i]);
@@ -1686,7 +1686,7 @@ bool do_cmd_cast_learned(void)
 	/* Reduce failure rate by INT/WIS adjustment */
 	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
 
-	chance = mod_spell_chance_1(chance);
+	chance = mod_spell_chance_1(p_ptr, chance);
 
 	/* Not enough mana to cast */
 	if (need_mana > p_ptr->csp)
@@ -1707,7 +1707,7 @@ bool do_cmd_cast_learned(void)
 	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
-	chance = mod_spell_chance_2(chance);
+	chance = mod_spell_chance_2(p_ptr, chance);
 
 	/* Failed spell */
 	if (randint0(100) < chance)

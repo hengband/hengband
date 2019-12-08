@@ -2487,15 +2487,15 @@ MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
  * @return 失敗率(%)
  * @todo 統合を検討
  */
-PERCENTAGE mod_spell_chance_1(PERCENTAGE chance)
+PERCENTAGE mod_spell_chance_1(player_type *caster_ptr, PERCENTAGE chance)
 {
-	chance += p_ptr->to_m_chance;
+	chance += caster_ptr->to_m_chance;
 
-	if (p_ptr->heavy_spell) chance += 20;
+	if (caster_ptr->heavy_spell) chance += 20;
 
-	if (p_ptr->dec_mana && p_ptr->easy_spell) chance -= 4;
-	else if (p_ptr->easy_spell) chance -= 3;
-	else if (p_ptr->dec_mana) chance -= 2;
+	if (caster_ptr->dec_mana && caster_ptr->easy_spell) chance -= 4;
+	else if (caster_ptr->easy_spell) chance -= 3;
+	else if (caster_ptr->dec_mana) chance -= 2;
 
 	return chance;
 }
@@ -2512,12 +2512,10 @@ PERCENTAGE mod_spell_chance_1(PERCENTAGE chance)
  * Note: variable "chance" cannot be negative.
  * @todo 統合を検討
  */
-PERCENTAGE mod_spell_chance_2(PERCENTAGE chance)
+PERCENTAGE mod_spell_chance_2(player_type *caster_ptr, PERCENTAGE chance)
 {
-	if (p_ptr->dec_mana) chance--;
-
-	if (p_ptr->heavy_spell) chance += 5;
-
+	if (caster_ptr->dec_mana) chance--;
+	if (caster_ptr->heavy_spell) chance += 5;
 	return MAX(chance, 0);
 }
 
@@ -2591,7 +2589,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 	if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[0]) chance += 25;
 	if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[1]) chance += 25;
 
-	chance = mod_spell_chance_1(chance);
+	chance = mod_spell_chance_1(caster_ptr, chance);
 
 	/* Goodness or evilness gives a penalty to failure rate */
 	switch (use_realm)
@@ -2626,7 +2624,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 	}
 
 	/* Return the chance */
-	return mod_spell_chance_2(chance);
+	return mod_spell_chance_2(caster_ptr, chance);
 }
 
 

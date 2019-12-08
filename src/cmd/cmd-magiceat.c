@@ -270,7 +270,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 				{
 					chance -= 3 * (creature_ptr->lev - level);
 				}
-				chance = mod_spell_chance_1(chance);
+				chance = mod_spell_chance_1(creature_ptr, chance);
 				chance = MAX(chance, adj_mag_fail[creature_ptr->stat_ind[mp_ptr->spell_stat]]);
 				/* Stunning makes spells harder */
 				if (creature_ptr->stun > 50) chance += 25;
@@ -278,7 +278,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 
 				if (chance > 95) chance = 95;
 
-				chance = mod_spell_chance_2(chance);
+				chance = mod_spell_chance_2(creature_ptr, chance);
 
 				col = TERM_WHITE;
 
@@ -540,7 +540,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
 	{
 		chance -= 3 * (creature_ptr->lev - level);
 	}
-	chance = mod_spell_chance_1(chance);
+	chance = mod_spell_chance_1(creature_ptr, chance);
 	chance = MAX(chance, adj_mag_fail[creature_ptr->stat_ind[mp_ptr->spell_stat]]);
 	/* Stunning makes spells harder */
 	if (creature_ptr->stun > 50) chance += 25;
@@ -548,7 +548,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
 
 	if (chance > 95) chance = 95;
 
-	chance = mod_spell_chance_2(chance);
+	chance = mod_spell_chance_2(creature_ptr, chance);
 
 	if (randint0(100) < chance)
 	{
