@@ -1822,9 +1822,9 @@ void select_floor_music(player_type *player_ptr)
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BATTLE)) return;
 	}
 
-	if(player_ptr->inside_quest)
+	if(player_ptr->current_floor_ptr->inside_quest)
 	{
-		if (!play_music(TERM_XTRA_MUSIC_QUEST, player_ptr->inside_quest)) return;
+		if (!play_music(TERM_XTRA_MUSIC_QUEST, player_ptr->current_floor_ptr->inside_quest)) return;
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST)) return;
 	}
 
@@ -4340,7 +4340,7 @@ static char inkey_from_menu(void)
 					if (p_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					break;
 				case MENU_WILD:
-					if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena && !p_ptr->inside_quest)
+					if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena && !p_ptr->current_floor_ptr->inside_quest)
 					{
 						if ((byte)p_ptr->wild_mode == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					}

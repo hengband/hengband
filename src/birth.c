@@ -1834,7 +1834,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	/* Initialize arena and rewards information -KMW- */
 	creature_ptr->arena_number = 0;
 	creature_ptr->inside_arena = FALSE;
-	creature_ptr->inside_quest = 0;
+	creature_ptr->current_floor_ptr->inside_quest = 0;
 	for (i = 0; i < MAX_MANE; i++)
 	{
 		creature_ptr->mane_spell[i] = -1;
@@ -1886,11 +1886,11 @@ static void init_dungeon_quests(player_type *creature_ptr)
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
-	creature_ptr->inside_quest = MIN_RANDOM_QUEST;
+	creature_ptr->current_floor_ptr->inside_quest = MIN_RANDOM_QUEST;
 
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
-	creature_ptr->inside_quest = 0;
+	creature_ptr->current_floor_ptr->inside_quest = 0;
 
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
@@ -1910,18 +1910,18 @@ static void init_dungeon_quests(player_type *creature_ptr)
 
 	/* Init the two main quests (Oberon + Serpent) */
 	init_flags = INIT_ASSIGN;
-	creature_ptr->inside_quest = QUEST_OBERON;
+	creature_ptr->current_floor_ptr->inside_quest = QUEST_OBERON;
 
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
 
-	creature_ptr->inside_quest = QUEST_SERPENT;
+	creature_ptr->current_floor_ptr->inside_quest = QUEST_SERPENT;
 
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
-	creature_ptr->inside_quest = 0;
+	creature_ptr->current_floor_ptr->inside_quest = 0;
 }
 
 /*!

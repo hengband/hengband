@@ -124,7 +124,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
-			if (!(caster_ptr->inside_quest || caster_ptr->inside_arena))
+			if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->inside_arena))
 				if (caster_ptr->current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY) continue;
 
 			/* This grid looks good */
@@ -713,7 +713,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
 			leave_quest_check();
-			creature_ptr->inside_quest = 0;
+			creature_ptr->current_floor_ptr->inside_quest = 0;
 			creature_ptr->leaving = TRUE;
 		}
 	}
@@ -797,7 +797,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		return TRUE;
 	}
 
-	if (p_ptr->current_floor_ptr->dun_level && (max_dlv[p_ptr->dungeon_idx] > p_ptr->current_floor_ptr->dun_level) && !creature_ptr->inside_quest && !creature_ptr->word_recall)
+	if (p_ptr->current_floor_ptr->dun_level && (max_dlv[p_ptr->dungeon_idx] > p_ptr->current_floor_ptr->dun_level) && !creature_ptr->current_floor_ptr->inside_quest && !creature_ptr->word_recall)
 	{
 		if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? ")))
 		{
@@ -1041,7 +1041,7 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Prevent vasishing of quest levels and town */
-	if ((subject_ptr->inside_quest && is_fixed_quest_idx(subject_ptr->inside_quest)) || !floor_ptr->dun_level)
+	if ((subject_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(subject_ptr->current_floor_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
 		return FALSE;
 	}
@@ -1201,7 +1201,7 @@ void call_the_void(player_type *caster_ptr)
 	}
 
 	/* Prevent destruction of quest levels and town */
-	else if ((caster_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
+	else if ((caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
 	{
 		msg_print(_("地面が揺れた。", "The ground trembles."));
 	}

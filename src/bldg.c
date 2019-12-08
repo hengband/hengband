@@ -2129,8 +2129,8 @@ static void get_questinfo(IDX questnum, bool do_init)
 	quest_text_line = 0;
 
 	/* Set the quest number temporary */
-	old_quest = p_ptr->inside_quest;
-	p_ptr->inside_quest = questnum;
+	old_quest = p_ptr->current_floor_ptr->inside_quest;
+	p_ptr->current_floor_ptr->inside_quest = questnum;
 
 	/* Get the quest text */
 	init_flags = INIT_SHOW_TEXT;
@@ -2139,7 +2139,7 @@ static void get_questinfo(IDX questnum, bool do_init)
 	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 	/* Reset the old quest number */
-	p_ptr->inside_quest = old_quest;
+	p_ptr->current_floor_ptr->inside_quest = old_quest;
 
 	/* Print the quest info */
 	sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)quest[questnum].level);

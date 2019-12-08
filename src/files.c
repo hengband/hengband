@@ -3968,7 +3968,7 @@ void display_player(player_type *creature_ptr, int mode)
 					sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name());
 #endif
 				}
-				else if (creature_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->inside_quest))
+				else if (creature_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->current_floor_ptr->inside_quest))
 				{
 					/* Get the quest text */
 					/* Bewere that INIT_ASSIGN resets the cur_num. */
@@ -3977,9 +3977,9 @@ void display_player(player_type *creature_ptr, int mode)
 					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 #ifdef JP
-					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[creature_ptr->inside_quest].name, creature_ptr->died_from);
+					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[creature_ptr->current_floor_ptr->inside_quest].name, creature_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s in the quest '%s'.", creature_ptr->died_from, quest[creature_ptr->inside_quest].name);
+					sprintf(statmsg, "...You were killed by %s in the quest '%s'.", creature_ptr->died_from, quest[creature_ptr->current_floor_ptr->inside_quest].name);
 #endif
 				}
 				else
@@ -3997,7 +3997,7 @@ void display_player(player_type *creature_ptr, int mode)
 				{
 					sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name());
 				}
-				else if (creature_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->inside_quest))
+				else if (creature_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->current_floor_ptr->inside_quest))
 				{
 					/* Clear the text */
 					/* Must be done before doing INIT_SHOW_TEXT */
@@ -4012,7 +4012,7 @@ void display_player(player_type *creature_ptr, int mode)
 
 					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
-					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[creature_ptr->inside_quest].name);
+					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[creature_ptr->current_floor_ptr->inside_quest].name);
 				}
 				else
 				{

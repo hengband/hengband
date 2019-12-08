@@ -190,8 +190,8 @@ void prt_time(void)
  */
 concptr map_name(void)
 {
-	if (p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)
-	    && (quest[p_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
+	if (p_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest)
+	    && (quest[p_ptr->current_floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
 		return _("クエスト", "Quest");
 	else if (p_ptr->wild_mode)
 		return _("地上", "Surface");
@@ -974,7 +974,7 @@ static void prt_depth(void)
 	{
 		strcpy(depths, _("地上", "Surf."));
 	}
-	else if (p_ptr->inside_quest && !p_ptr->dungeon_idx)
+	else if (p_ptr->current_floor_ptr->inside_quest && !p_ptr->dungeon_idx)
 	{
 		strcpy(depths, _("地上", "Quest"));
 	}

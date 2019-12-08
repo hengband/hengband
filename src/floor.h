@@ -123,6 +123,7 @@ typedef struct {
 	POSITION redraw_x[REDRAW_MAX];
 
 	bool monster_noise;
+	QUEST_IDX inside_quest;		/* Inside quest level */
 
 } floor_type;
 

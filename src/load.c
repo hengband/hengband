@@ -1960,7 +1960,7 @@ static void rd_extra(void)
 	}
 	rd_s16b(&tmp16s);
 	p_ptr->inside_arena = (bool)tmp16s;
-	rd_s16b(&p_ptr->inside_quest);
+	rd_s16b(&p_ptr->current_floor_ptr->inside_quest);
 	if (z_older_than(10, 3, 5)) p_ptr->phase_out = FALSE;
 	else
 	{
@@ -2845,7 +2845,7 @@ static errr rd_dungeon_old(void)
 				}
 			}
 			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
-			         (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+			         (p_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
 			{
 				g_ptr->feat = feat_up_stair;
 				g_ptr->special = 0;
@@ -3158,7 +3158,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 				}
 			}
 			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
-				(p_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+				(p_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
 			{
 				g_ptr->feat = feat_up_stair;
 				g_ptr->special = 0;
@@ -3556,7 +3556,7 @@ static errr rd_savefile_new_aux(void)
 		u16b max_towns_load;
 		u16b max_quests_load;
 		byte max_rquests_load;
-		s16b old_inside_quest = p_ptr->inside_quest;
+		s16b old_inside_quest = p_ptr->current_floor_ptr->inside_quest;
 
 		/* Number of towns */
 		rd_u16b(&max_towns_load);
@@ -3652,10 +3652,10 @@ static errr rd_savefile_new_aux(void)
 						else
 						{
 							init_flags = INIT_ASSIGN;
-							p_ptr->inside_quest = (QUEST_IDX)i;
+							p_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
 
 							process_dungeon_file("q_info.txt", 0, 0, 0, 0);
-							p_ptr->inside_quest = old_inside_quest;
+							p_ptr->current_floor_ptr->inside_quest = old_inside_quest;
 						}
 					}
 					else
@@ -3961,11 +3961,11 @@ static errr rd_savefile_new_aux(void)
 	/* Quest 18 was removed */
 	if (h_older_than(1, 7, 0, 6))
 	{
-		if (p_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
+		if (p_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
 		{
 			p_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
 			p_ptr->current_floor_ptr->dun_level = 1;
-			p_ptr->inside_quest = 0;
+			p_ptr->current_floor_ptr->inside_quest = 0;
 		}
 	}
 

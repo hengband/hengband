@@ -674,7 +674,7 @@ static void pattern_teleport(player_type *creature_ptr)
 
 	if (record_stair) exe_write_diary(creature_ptr, NIKKI_PAT_TELE, 0, NULL);
 
-	creature_ptr->inside_quest = 0;
+	creature_ptr->current_floor_ptr->inside_quest = 0;
 	free_turn(creature_ptr);
 
 	/*
@@ -2955,7 +2955,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (floor_ptr->dun_level || creature_ptr->inside_quest || creature_ptr->enter_dungeon)
+			if (floor_ptr->dun_level || creature_ptr->current_floor_ptr->inside_quest || creature_ptr->enter_dungeon)
 			{
 				msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
 
@@ -2969,7 +2969,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				leave_quest_check();
 				leave_tower_check();
 
-				creature_ptr->inside_quest = 0;
+				creature_ptr->current_floor_ptr->inside_quest = 0;
 
 				creature_ptr->leaving = TRUE;
 			}
@@ -3199,7 +3199,7 @@ static void process_world(void)
 	/*** Handle the wilderness/town (sunshine) ***/
 
 	/* While in town/wilderness */
-	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)
+	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
 		if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
@@ -3216,7 +3216,7 @@ static void process_world(void)
 	}
 
 	/* While in the dungeon (vanilla_town or lite_town mode only) */
-	else if ((vanilla_town || (lite_town && !p_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)) && p_ptr->current_floor_ptr->dun_level)
+	else if ((vanilla_town || (lite_town && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)) && p_ptr->current_floor_ptr->dun_level)
 	{
 		/*** Shuffle the Storekeepers ***/
 
@@ -3267,7 +3267,7 @@ static void process_world(void)
 
 	/* Check for creature generation. */
 	if (one_in_(d_info[p_ptr->dungeon_idx].max_m_alloc_chance) &&
-	    !p_ptr->inside_arena && !p_ptr->inside_quest && !p_ptr->phase_out)
+	    !p_ptr->inside_arena && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out)
 	{
 		/* Make a new monster */
 		(void)alloc_monster(MAX_SIGHT + 5, 0);
@@ -3744,7 +3744,7 @@ static void process_command(player_type *creature_ptr)
 		/* Go up staircase */
 		case '<':
 		{
-			if (!creature_ptr->wild_mode && !p_ptr->current_floor_ptr->dun_level && !creature_ptr->inside_arena && !creature_ptr->inside_quest)
+			if (!creature_ptr->wild_mode && !p_ptr->current_floor_ptr->dun_level && !creature_ptr->inside_arena && !creature_ptr->current_floor_ptr->inside_quest)
 			{
 				if (vanilla_town) break;
 
@@ -4957,7 +4957,7 @@ static void dungeon(bool load_game)
 
 
 	/* Track maximum dungeon level (if not in quest -KMW-) */
-	if ((max_dlv[p_ptr->dungeon_idx] < p_ptr->current_floor_ptr->dun_level) && !p_ptr->inside_quest)
+	if ((max_dlv[p_ptr->dungeon_idx] < p_ptr->current_floor_ptr->dun_level) && !p_ptr->current_floor_ptr->inside_quest)
 	{
 		max_dlv[p_ptr->dungeon_idx] = p_ptr->current_floor_ptr->dun_level;
 		if (record_maxdepth) exe_write_diary(p_ptr, NIKKI_MAXDEAPTH, p_ptr->current_floor_ptr->dun_level, NULL);
@@ -5016,10 +5016,10 @@ static void dungeon(bool load_game)
 	if (!p_ptr->playing || p_ptr->is_dead) return;
 
 	/* Print quest message if appropriate */
-	if (!p_ptr->inside_quest && (p_ptr->dungeon_idx == DUNGEON_ANGBAND))
+	if (!p_ptr->current_floor_ptr->inside_quest && (p_ptr->dungeon_idx == DUNGEON_ANGBAND))
 	{
 		quest_discovery(random_quest_number(p_ptr->current_floor_ptr->dun_level));
-		p_ptr->inside_quest = random_quest_number(p_ptr->current_floor_ptr->dun_level);
+		p_ptr->current_floor_ptr->inside_quest = random_quest_number(p_ptr->current_floor_ptr->dun_level);
 	}
 	if ((p_ptr->current_floor_ptr->dun_level == d_info[p_ptr->dungeon_idx].maxdepth) && d_info[p_ptr->dungeon_idx].final_guardian)
 	{
@@ -5392,7 +5392,7 @@ void play_game(bool new_game)
 
 		/* Start in town */
 		p_ptr->current_floor_ptr->dun_level = 0;
-		p_ptr->inside_quest = 0;
+		p_ptr->current_floor_ptr->inside_quest = 0;
 		p_ptr->inside_arena = FALSE;
 		p_ptr->phase_out = FALSE;
 
@@ -5488,7 +5488,7 @@ void play_game(bool new_game)
 				init_saved_floors(TRUE);
 
 				/* Avoid crash */
-				p_ptr->inside_quest = 0;
+				p_ptr->current_floor_ptr->inside_quest = 0;
 
 				/* Avoid crash in update_view() */
 				p_ptr->y = p_ptr->x = 10;
@@ -5501,7 +5501,7 @@ void play_game(bool new_game)
 	}
 
 	/* Initialize the town-buildings if necessary */
-	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_quest)
+	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest)
 	{
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 		init_flags = INIT_ONLY_BUILDINGS;

@@ -1082,7 +1082,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 		/* Accept this monster */
 		entry->prob2 = entry->prob1;
 
-		if (p_ptr->current_floor_ptr->dun_level && (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest)) &&
+		if (p_ptr->current_floor_ptr->dun_level && (!p_ptr->current_floor_ptr->inside_quest || is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest)) &&
 			!restrict_monster_to_dungeon(p_ptr->dungeon_idx, entry->index) && !p_ptr->phase_out)
 		{
 			int hoge = entry->prob2 * d_info[p_ptr->dungeon_idx].special_div;

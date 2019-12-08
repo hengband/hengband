@@ -1447,7 +1447,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 
 	if (record_stair) exe_write_diary(creature_ptr, NIKKI_WIZ_TELE,0,NULL);
 
-	creature_ptr->inside_quest = 0;
+	creature_ptr->current_floor_ptr->inside_quest = 0;
 	free_turn(creature_ptr);
 
 	/* Prevent energy_need from being too lower than 0 */
@@ -1936,20 +1936,20 @@ void do_cmd_debug(player_type *creature_ptr)
 			if(tmp_int < 0) break;
 			if(tmp_int >= max_q_idx) break;
 
-			creature_ptr->inside_quest = (QUEST_IDX)tmp_int;
+			creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
 			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 			quest[tmp_int].status = QUEST_STATUS_TAKEN;
-			creature_ptr->inside_quest = 0;
+			creature_ptr->current_floor_ptr->inside_quest = 0;
 		}
 		break;
 
 	/* Complete a Quest -KMW- */
 	case 'q':
-		if(creature_ptr->inside_quest)
+		if(creature_ptr->current_floor_ptr->inside_quest)
 		{
-			if (quest[creature_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
+			if (quest[creature_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
 			{
-				complete_quest(creature_ptr->inside_quest);
+				complete_quest(creature_ptr->current_floor_ptr->inside_quest);
 				break;
 			}
 		}

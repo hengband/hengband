@@ -297,7 +297,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	bool pet = is_pet(m_ptr);
 
 	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && p_ptr->current_floor_ptr->dun_level
-		&& (!p_ptr->inside_quest || is_fixed_quest_idx(p_ptr->inside_quest));
+		&& (!p_ptr->current_floor_ptr->inside_quest || is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest));
 
 	bool can_use_lite_area = FALSE;
 	bool can_remember;

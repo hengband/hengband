@@ -3614,9 +3614,9 @@ static errr parse_line_feature(char *buf)
 			}
 			else if (zz[6][0] == '!')
 			{
-				if (p_ptr->inside_quest)
+				if (p_ptr->current_floor_ptr->inside_quest)
 				{
-					letter[index].artifact = quest[p_ptr->inside_quest].k_idx;
+					letter[index].artifact = quest[p_ptr->current_floor_ptr->inside_quest].k_idx;
 				}
 			}
 			else
@@ -3645,9 +3645,9 @@ static errr parse_line_feature(char *buf)
 			}
 			else if (zz[4][0] == '!')
 			{
-				if (p_ptr->inside_quest)
+				if (p_ptr->current_floor_ptr->inside_quest)
 				{
-					ARTIFACT_IDX a_idx = quest[p_ptr->inside_quest].k_idx;
+					ARTIFACT_IDX a_idx = quest[p_ptr->current_floor_ptr->inside_quest].k_idx;
 					if (a_idx)
 					{
 						artifact_type *a_ptr = &a_info[a_idx];
@@ -4239,7 +4239,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 				panel_col_min = p_ptr->current_floor_ptr->width;
 
 				/* Place player in a quest level */
-				if (p_ptr->inside_quest)
+				if (p_ptr->current_floor_ptr->inside_quest)
 				{
 					POSITION py, px;
 
@@ -4613,7 +4613,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			/* Current quest number */
 			else if (streq(b + 1, "QUEST_NUMBER"))
 			{
-				sprintf(tmp, "%d", p_ptr->inside_quest);
+				sprintf(tmp, "%d", p_ptr->current_floor_ptr->inside_quest);
 				v = tmp;
 			}
 

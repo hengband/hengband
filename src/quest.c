@@ -130,7 +130,7 @@ void check_quest_completion(monster_type *m_ptr)
 	x = m_ptr->fx;
 
 	/* Inside a quest */
-	quest_num = p_ptr->inside_quest;
+	quest_num = p_ptr->current_floor_ptr->inside_quest;
 
 	/* Search for an active quest on this dungeon level */
 	if (!quest_num)
@@ -229,7 +229,7 @@ void check_quest_completion(monster_type *m_ptr)
 				if (!(q_ptr->flags & QUEST_FLAG_PRESET))
 				{
 					create_stairs = TRUE;
-					p_ptr->inside_quest = 0;
+					p_ptr->current_floor_ptr->inside_quest = 0;
 				}
 
 				/* Finish the two main quests without rewarding */
@@ -399,8 +399,8 @@ QUEST_IDX quest_number(DEPTH level)
 	QUEST_IDX i;
 
 	/* Check quests */
-	if (p_ptr->inside_quest)
-		return (p_ptr->inside_quest);
+	if (p_ptr->current_floor_ptr->inside_quest)
+		return (p_ptr->current_floor_ptr->inside_quest);
 
 	for (i = 0; i < max_q_idx; i++)
 	{
@@ -449,7 +449,7 @@ QUEST_IDX random_quest_number(DEPTH level)
 void leave_quest_check(void)
 {
 	/* Save quest number for dungeon pref file ($LEAVING_QUEST) */
-	leaving_quest = p_ptr->inside_quest;
+	leaving_quest = p_ptr->current_floor_ptr->inside_quest;
 
 	/* Leaving an 'only once' quest marks it as failed */
 	if (leaving_quest)
@@ -501,7 +501,7 @@ void leave_quest_check(void)
  */
 void leave_tower_check(void)
 {
-	leaving_quest = p_ptr->inside_quest;
+	leaving_quest = p_ptr->current_floor_ptr->inside_quest;
 	/* Check for Tower Quest */
 	if (leaving_quest &&
 		(quest[leaving_quest].type == QUEST_TYPE_TOWER) &&
@@ -547,8 +547,8 @@ void do_cmd_quest(void)
 
 		leave_quest_check();
 
-		if (quest[p_ptr->inside_quest].type != QUEST_TYPE_RANDOM) p_ptr->current_floor_ptr->dun_level = 1;
-		p_ptr->inside_quest = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
+		if (quest[p_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) p_ptr->current_floor_ptr->dun_level = 1;
+		p_ptr->current_floor_ptr->inside_quest = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
 
 		p_ptr->leaving = TRUE;
 	}

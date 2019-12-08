@@ -898,14 +898,14 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 		{
 			/* Set the quest number temporary */
-			IDX old_quest = subject_ptr->inside_quest;
+			IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */
 			for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
 			quest_text_line = 0;
 
-			subject_ptr->inside_quest = g_ptr->special;
+			subject_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 
 			/* Get the quest text */
 			init_flags = INIT_NAME_ONLY;
@@ -916,7 +916,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 						quest[g_ptr->special].name, quest[g_ptr->special].level);
 
 			/* Reset the old quest number */
-			subject_ptr->inside_quest = old_quest;
+			subject_ptr->current_floor_ptr->inside_quest = old_quest;
 		}
 
 		/* Hack -- special handling for building doors */

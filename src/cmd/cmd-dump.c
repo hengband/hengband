@@ -424,8 +424,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	{
 		QUEST_IDX old_quest;
 
-		old_quest = creature_ptr->inside_quest;
-		creature_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
+		old_quest = creature_ptr->current_floor_ptr->inside_quest;
+		creature_ptr->current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
 
 		/* Get the quest text */
 		init_flags = INIT_NAME_ONLY;
@@ -433,7 +433,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
-		creature_ptr->inside_quest = old_quest;
+		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 
 	/* different filne name to avoid mixing */
@@ -2913,7 +2913,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	if (creature_ptr->wild_mode) return;
 
 	/* No useful feeling in quests */
-	if (creature_ptr->inside_quest && !random_quest_number(creature_ptr->current_floor_ptr->dun_level))
+	if (creature_ptr->current_floor_ptr->inside_quest && !random_quest_number(creature_ptr->current_floor_ptr->dun_level))
 	{
 		msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
 		return;
@@ -6454,14 +6454,14 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 			(quest[i].status == QUEST_STATUS_COMPLETED))
 		{
 			/* Set the quest number temporary */
-			QUEST_IDX old_quest = p_ptr->inside_quest;
+			QUEST_IDX old_quest = p_ptr->current_floor_ptr->inside_quest;
 			int j;
 
 			/* Clear the text */
 			for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
 			quest_text_line = 0;
 
-			p_ptr->inside_quest = i;
+			p_ptr->current_floor_ptr->inside_quest = i;
 
 			/* Get the quest text */
 			init_flags = INIT_SHOW_TEXT;
@@ -6469,7 +6469,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 			/* Reset the old quest number */
-			p_ptr->inside_quest = old_quest;
+			p_ptr->current_floor_ptr->inside_quest = old_quest;
 
 			/* No info from "silent" quests */
 			if (quest[i].flags & QUEST_FLAG_SILENT) continue;
@@ -6611,9 +6611,9 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 	if (is_fixed_quest_idx(q_idx))
 	{
 		/* Set the quest number temporary */
-		IDX old_quest = p_ptr->inside_quest;
+		IDX old_quest = p_ptr->current_floor_ptr->inside_quest;
 
-		p_ptr->inside_quest = q_idx;
+		p_ptr->current_floor_ptr->inside_quest = q_idx;
 
 		/* Get the quest */
 		init_flags = INIT_NAME_ONLY;
@@ -6621,7 +6621,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
-		p_ptr->inside_quest = old_quest;
+		p_ptr->current_floor_ptr->inside_quest = old_quest;
 
 		/* No info from "silent" quests */
 		if (q_ptr->flags & QUEST_FLAG_SILENT) return FALSE;

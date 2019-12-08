@@ -5850,7 +5850,7 @@ void cheat_death(player_type *creature_ptr)
 	creature_ptr->inside_arena = FALSE;
 	creature_ptr->phase_out = FALSE;
 	leaving_quest = 0;
-	creature_ptr->inside_quest = 0;
+	creature_ptr->current_floor_ptr->inside_quest = 0;
 	if (creature_ptr->dungeon_idx) creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
 	creature_ptr->dungeon_idx = 0;
 	if (lite_town || vanilla_town)

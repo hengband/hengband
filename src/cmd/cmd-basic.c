@@ -65,10 +65,10 @@
  */
 static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
 {
-	quest_type *q_ptr = &quest[creature_ptr->inside_quest];
+	quest_type *q_ptr = &quest[creature_ptr->current_floor_ptr->inside_quest];
 
 	/* Confirm leaving from once only quest */
-	if (confirm_quest && creature_ptr->inside_quest &&
+	if (confirm_quest && creature_ptr->current_floor_ptr->inside_quest &&
 	    (q_ptr->type == QUEST_TYPE_RANDOM ||
 	     (q_ptr->flags & QUEST_FLAG_ONCE &&
 						q_ptr->status != QUEST_STATUS_COMPLETED) ||
@@ -219,21 +219,21 @@ void do_cmd_go_up(player_type *creature_ptr)
 
 		leave_quest_check();
 
-		creature_ptr->inside_quest = g_ptr->special;
+		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 
 		/* Activate the quest */
-		if (!quest[creature_ptr->inside_quest].status)
+		if (!quest[creature_ptr->current_floor_ptr->inside_quest].status)
 		{
-			if (quest[creature_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
 				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 			}
-			quest[creature_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
 
 		/* Leaving a quest */
-		if (!creature_ptr->inside_quest)
+		if (!creature_ptr->current_floor_ptr->inside_quest)
 		{
 			creature_ptr->current_floor_ptr->dun_level = 0;
 		}
@@ -264,21 +264,21 @@ void do_cmd_go_up(player_type *creature_ptr)
 	if (autosave_l) do_cmd_save_game(TRUE);
 
 	/* For a random quest */
-	if (creature_ptr->inside_quest &&
-	    quest[creature_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
+	if (creature_ptr->current_floor_ptr->inside_quest &&
+	    quest[creature_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
 	{
 		leave_quest_check();
 
-		creature_ptr->inside_quest = 0;
+		creature_ptr->current_floor_ptr->inside_quest = 0;
 	}
 
 	/* For a fixed quest */
-	if (creature_ptr->inside_quest &&
-	    quest[creature_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+	if (creature_ptr->current_floor_ptr->inside_quest &&
+	    quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 	{
 		leave_quest_check();
 
-		creature_ptr->inside_quest = g_ptr->special;
+		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 		creature_ptr->current_floor_ptr->dun_level = 0;
 		up_num = 0;
 	}
@@ -366,21 +366,21 @@ void do_cmd_go_down(player_type *creature_ptr)
 		leave_quest_check();
 		leave_tower_check();
 
-		creature_ptr->inside_quest = g_ptr->special;
+		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 
 		/* Activate the quest */
-		if (!quest[creature_ptr->inside_quest].status)
+		if (!quest[creature_ptr->current_floor_ptr->inside_quest].status)
 		{
-			if (quest[creature_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
+			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
 				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 			}
-			quest[creature_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
+			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
 
 		/* Leaving a quest */
-		if (!creature_ptr->inside_quest)
+		if (!creature_ptr->current_floor_ptr->inside_quest)
 		{
 			creature_ptr->current_floor_ptr->dun_level = 0;
 		}

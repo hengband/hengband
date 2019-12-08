@@ -2132,7 +2132,7 @@ void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr
  */
 monsterrace_hook_type get_monster_hook(void)
 {
-	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_quest)
+	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest)
 	{
 		switch (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain)
 		{

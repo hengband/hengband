@@ -1229,12 +1229,12 @@ static void generate_fixed_floor(floor_type *floor_ptr)
 	}
 
 	/* Set the quest level */
-	floor_ptr->base_level = quest[p_ptr->inside_quest].level;
+	floor_ptr->base_level = quest[p_ptr->current_floor_ptr->inside_quest].level;
 	floor_ptr->dun_level = floor_ptr->base_level;
 	floor_ptr->object_level = floor_ptr->base_level;
 	floor_ptr->monster_level = floor_ptr->base_level;
 
-	if (record_stair) exe_write_diary(p_ptr, NIKKI_TO_QUEST, p_ptr->inside_quest, NULL);
+	if (record_stair) exe_write_diary(p_ptr, NIKKI_TO_QUEST, p_ptr->current_floor_ptr->inside_quest, NULL);
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	init_flags = INIT_CREATE_DUNGEON;
@@ -1427,7 +1427,7 @@ void generate_floor(floor_type *floor_ptr)
 			generate_gambling_arena(floor_ptr, p_ptr);
 		}
 
-		else if (p_ptr->inside_quest)
+		else if (p_ptr->current_floor_ptr->inside_quest)
 		{
 			generate_fixed_floor(floor_ptr);
 		}

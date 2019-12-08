@@ -750,14 +750,14 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
 	else if (have_flag(f_ptr->flags, FF_QUEST_EXIT))
 	{
-		if (quest[creature_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
+		if (quest[creature_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
 		{
-			complete_quest(creature_ptr->inside_quest);
+			complete_quest(creature_ptr->current_floor_ptr->inside_quest);
 		}
 
 		leave_quest_check();
 
-		creature_ptr->inside_quest = g_ptr->special;
+		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 		p_ptr->current_floor_ptr->dun_level = 0;
 		creature_ptr->oldpx = 0;
 		creature_ptr->oldpy = 0;

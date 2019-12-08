@@ -282,7 +282,7 @@ void stair_creation(player_type *caster_ptr)
 
 	/* No effect out of standard dungeon floor */
 	if (!floor_ptr->dun_level || (!up && !down) ||
-		(caster_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->inside_quest)) ||
+		(caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) ||
 		caster_ptr->inside_arena || caster_ptr->phase_out)
 	{
 		/* arena or quest */
@@ -472,7 +472,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 	bool flag = FALSE;
 
 	/* Prevent destruction of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !floor_ptr->dun_level)
+	if ((p_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
 		return (FALSE);
 	}
@@ -756,7 +756,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 	bool map[32][32];
 
 	/* Prevent destruction of quest levels and town */
-	if ((caster_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
+	if ((caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
 	{
 		return (FALSE);
 	}
