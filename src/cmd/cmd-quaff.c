@@ -62,7 +62,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 		if (!hex_spelling(HEX_INHAIL)) stop_hex_spell_all();
 	}
 
-	o_ptr = REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
 	q_ptr = &forge;
 	object_copy(q_ptr, o_ptr);
 
@@ -296,15 +296,15 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_HEROISM:
-			ident = heroism(p_ptr, 25);
+			ident = heroism(creature_ptr, 25);
 			break;
 
 		case SV_POTION_BESERK_STRENGTH:
-			ident = berserk(p_ptr, randint1(25) + 25);
+			ident = berserk(creature_ptr, randint1(25) + 25);
 			break;
 
 		case SV_POTION_CURE_LIGHT:
-			ident = cure_light_wounds(p_ptr, 2, 8);
+			ident = cure_light_wounds(creature_ptr, 2, 8);
 			break;
 
 		case SV_POTION_CURE_SERIOUS:
