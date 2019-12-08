@@ -1421,7 +1421,7 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
 	/* We trust this grid is in bounds */
 	/* if (!in_bounds2(y, x)) return; */
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Want a unlit and undarkened square in view of the player */
 	if ((g_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW) return;
@@ -1440,11 +1440,11 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x + 1) && !cave_have_flag_bold(y, x + 1, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x + 1) && !cave_have_flag_bold(y, x + 1, FF_PROJECT)) return;
 			}
 			else if (x > midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y, x - 1) && !cave_have_flag_bold(y, x - 1, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x - 1) && !cave_have_flag_bold(y, x - 1, FF_PROJECT)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
@@ -1461,11 +1461,11 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y + 1, x) && !cave_have_flag_bold(y + 1, x, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y + 1, x) && !cave_have_flag_bold(y + 1, x, FF_PROJECT)) return;
 			}
 			else if (y > midpoint)
 			{
-				if (!cave_los_bold(p_ptr->current_floor_ptr, y - 1, x) && !cave_have_flag_bold(y - 1, x, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y - 1, x) && !cave_have_flag_bold(y - 1, x, FF_PROJECT)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
