@@ -2428,12 +2428,12 @@ void display_spell_list(player_type *caster_ptr)
  * @param use_realm 魔法領域
  * @return 経験値
  */
-EXP experience_of_spell(SPELL_IDX spell, REALM_IDX use_realm)
+EXP experience_of_spell(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_realm)
 {
-	if (p_ptr->pclass == CLASS_SORCERER) return SPELL_EXP_MASTER;
-	else if (p_ptr->pclass == CLASS_RED_MAGE) return SPELL_EXP_SKILLED;
-	else if (use_realm == p_ptr->realm1) return p_ptr->spell_exp[spell];
-	else if (use_realm == p_ptr->realm2) return p_ptr->spell_exp[spell + 32];
+	if (caster_ptr->pclass == CLASS_SORCERER) return SPELL_EXP_MASTER;
+	else if (caster_ptr->pclass == CLASS_RED_MAGE) return SPELL_EXP_SKILLED;
+	else if (use_realm == caster_ptr->realm1) return caster_ptr->spell_exp[spell];
+	else if (use_realm == caster_ptr->realm2) return caster_ptr->spell_exp[spell + 32];
 	else return 0;
 }
 
@@ -2459,7 +2459,7 @@ MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
 		 * need_mana defaults if spell exp equals SPELL_EXP_EXPERT and !p_ptr->dec_mana.
 		 * MANA_CONST is used to calculate need_mana effected from spell proficiency.
 		 */
-		need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(spell, realm)) + (MANA_CONST - 1);
+		need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(p_ptr, spell, realm)) + (MANA_CONST - 1);
 		need_mana *= p_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
 		need_mana /= MANA_CONST * MANA_DIV;
 		if (need_mana < 1) need_mana = 1;
@@ -2618,7 +2618,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 	if ((use_realm == caster_ptr->realm1) || (use_realm == caster_ptr->realm2)
 	    || (caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE))
 	{
-		EXP exp = experience_of_spell(spell, use_realm);
+		EXP exp = experience_of_spell(caster_ptr, spell, use_realm);
 		if (exp >= SPELL_EXP_EXPERT) chance--;
 		if (exp >= SPELL_EXP_MASTER) chance--;
 	}
@@ -2691,7 +2691,7 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 			need_mana = s_ptr->smana;
 		else
 		{
-			EXP exp = experience_of_spell(spell, use_realm);
+			EXP exp = experience_of_spell(caster_ptr, spell, use_realm);
 
 			/* Extract mana consumption rate */
 			need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);

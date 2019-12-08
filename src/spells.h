@@ -310,7 +310,7 @@ extern bool identify_item(object_type *o_ptr);
 extern bool identify_fully(bool only_equip);
 extern bool recharge(int power);
 extern void display_spell_list(player_type *caster_ptr);
-extern EXP experience_of_spell(SPELL_IDX spell, REALM_IDX use_realm);
+extern EXP experience_of_spell(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_realm);
 extern MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm);
 extern PERCENTAGE mod_spell_chance_1(player_type *caster_ptr, PERCENTAGE chance);
 extern PERCENTAGE mod_spell_chance_2(player_type *caster_ptr, PERCENTAGE chance);
