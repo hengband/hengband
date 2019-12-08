@@ -637,7 +637,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			return demonic_breath(creature_ptr);
 		}
 		case MIMIC_VAMPIRE:
-			vampirism();
+			vampirism(creature_ptr);
 			break;
 		}
 	}
@@ -784,7 +784,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_VAMPIRE:
-			vampirism();
+			vampirism(creature_ptr);
 			break;
 
 		case RACE_SPECTRE:

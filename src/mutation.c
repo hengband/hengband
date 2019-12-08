@@ -2136,7 +2136,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_VAMPIRISM:
-			vampirism();
+			vampirism(creature_ptr);
 			break;
 
 		case MUT1_SMELL_MET:

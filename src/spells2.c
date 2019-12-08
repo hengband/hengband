@@ -3849,14 +3849,14 @@ void stop_mouth(void)
 }
 
 
-bool_hack vampirism(void)
+bool_hack vampirism(player_type *caster_ptr)
 {
 	DIRECTION dir;
 	POSITION x, y;
 	int dummy;
 	grid_type *g_ptr;
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 	{
 		msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
 		return FALSE;
@@ -3864,9 +3864,9 @@ bool_hack vampirism(void)
 
 	/* Only works on adjacent monsters */
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
-	y = p_ptr->y + ddy[dir];
-	x = p_ptr->x + ddx[dir];
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	y = caster_ptr->y + ddy[dir];
+	x = caster_ptr->x + ddx[dir];
+	g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 	stop_mouth();
 
@@ -3878,13 +3878,13 @@ bool_hack vampirism(void)
 
 	msg_print(_("あなたはニヤリとして牙をむいた...", "You grin and bare your fangs..."));
 
-	dummy = p_ptr->lev * 2;
+	dummy = caster_ptr->lev * 2;
 
 	if (hypodynamic_bolt(dir, dummy))
 	{
-		if (p_ptr->food < PY_FOOD_FULL)
+		if (caster_ptr->food < PY_FOOD_FULL)
 			/* No heal if we are "full" */
-			(void)hp_player(p_ptr, dummy);
+			(void)hp_player(caster_ptr, dummy);
 		else
 			msg_print(_("あなたは空腹ではありません。", "You were not hungry."));
 
@@ -3892,9 +3892,9 @@ bool_hack vampirism(void)
 		/* A Food ration gives 5000 food points (by contrast) */
 		/* Don't ever get more than "Full" this way */
 		/* But if we ARE Gorged,  it won't cure us */
-		dummy = p_ptr->food + MIN(5000, 100 * dummy);
-		if (p_ptr->food < PY_FOOD_MAX)   /* Not gorged already */
-			(void)set_food(p_ptr, dummy >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dummy);
+		dummy = caster_ptr->food + MIN(5000, 100 * dummy);
+		if (caster_ptr->food < PY_FOOD_MAX)   /* Not gorged already */
+			(void)set_food(caster_ptr, dummy >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dummy);
 	}
 	else
 		msg_print(_("げぇ！ひどい味だ。", "Yechh. That tastes foul."));
