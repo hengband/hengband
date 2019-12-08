@@ -1028,9 +1028,11 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 /*!
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
+ * @params floor_ptr 対象となるフロアの対象ポインタ
+ * @params subject_ptr 現象を主観するクリーチャーの参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
-static bool vanish_dungeon(floor_type *floor_ptr)
+static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 {
 	POSITION y, x;
 	grid_type *g_ptr;
@@ -1039,7 +1041,7 @@ static bool vanish_dungeon(floor_type *floor_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Prevent vasishing of quest levels and town */
-	if ((p_ptr->inside_quest && is_fixed_quest_idx(p_ptr->inside_quest)) || !floor_ptr->dun_level)
+	if ((subject_ptr->inside_quest && is_fixed_quest_idx(subject_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
 		return FALSE;
 	}
@@ -1146,9 +1148,9 @@ static bool vanish_dungeon(floor_type *floor_ptr)
 	}
 
 	/* Mega-Hack -- Forget the view and lite */
-	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	subject_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+	subject_ptr->redraw |= (PR_MAP);
+	subject_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	return TRUE;
 }
@@ -1218,7 +1220,7 @@ void call_the_void(player_type *caster_ptr)
 
 		if (one_in_(666))
 		{
-			if (!vanish_dungeon(caster_ptr->current_floor_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
+			if (!vanish_dungeon(caster_ptr->current_floor_ptr, caster_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
 		}
 		else
 		{
