@@ -144,7 +144,7 @@ bool cmd_limit_stun(player_type *creature_ptr)
 
 bool cmd_limit_arena(player_type *creature_ptr)
 {
-	if (creature_ptr->inside_arena)
+	if (creature_ptr->current_floor_ptr->inside_arena)
 	{
 		msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
 		msg_print(NULL);
@@ -2415,7 +2415,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		return FALSE;
 	}
 
-	if (creature_ptr->inside_arena && !boomerang)
+	if (creature_ptr->current_floor_ptr->inside_arena && !boomerang)
 	{
 		if (o_ptr->tval != TV_SPIKE)
 		{
@@ -2697,7 +2697,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	j = (hit_body ? breakage_chance(q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
 
 	/* Figurines transform */
-	if ((q_ptr->tval == TV_FIGURINE) && !(creature_ptr->inside_arena))
+	if ((q_ptr->tval == TV_FIGURINE) && !(creature_ptr->current_floor_ptr->inside_arena))
 	{
 		j = 100;
 

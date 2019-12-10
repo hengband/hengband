@@ -1145,7 +1145,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 
 		if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 		{
-			if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->ambush_flag && !p_ptr->inside_arena)
+			if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->ambush_flag && !p_ptr->current_floor_ptr->inside_arena)
 			{
 				chg_virtue(p_ptr, V_VALOUR, -1);
 			}
@@ -1335,7 +1335,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		monster_death(m_idx, TRUE);
 
 		/* Mega hack : replace IKETA to BIKETAL */
-		if ((m_ptr->r_idx == MON_IKETA) && !(p_ptr->inside_arena || p_ptr->phase_out))
+		if ((m_ptr->r_idx == MON_IKETA) && !(p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out))
 		{
 			POSITION dummy_y = m_ptr->fy;
 			POSITION dummy_x = m_ptr->fx;

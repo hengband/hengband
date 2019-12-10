@@ -1034,7 +1034,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
 	else if (m_idx == p_ptr->riding) resist = TRUE;
-	else if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out) resist = TRUE;
+	else if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out) resist = TRUE;
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 
@@ -1113,7 +1113,7 @@ bool symbol_genocide(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent genocide in quest levels */
-	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
+	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out)
 	{
 		msg_print(_("何も起きないようだ……", "It seems nothing happen here..."));
 		return (FALSE);
@@ -1157,7 +1157,7 @@ bool mass_genocide(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
-	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
+	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out)
 	{
 		return (FALSE);
 	}
@@ -1197,7 +1197,7 @@ bool mass_genocide_undead(int power, bool player_cast)
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
-	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->inside_arena || p_ptr->phase_out)
+	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out)
 	{
 		return (FALSE);
 	}
@@ -4402,7 +4402,7 @@ bool rodeo(player_type *creature_ptr)
 	if (r_ptr->flags1 & RF1_UNIQUE) rlev = rlev * 3 / 2;
 	if (rlev > 60) rlev = 60 + (rlev - 60) / 2;
 	if ((randint1(creature_ptr->skill_exp[GINOU_RIDING] / 120 + creature_ptr->lev * 2 / 3) > rlev)
-		&& one_in_(2) && !creature_ptr->inside_arena && !creature_ptr->phase_out
+		&& one_in_(2) && !creature_ptr->current_floor_ptr->inside_arena && !creature_ptr->phase_out
 		&& !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR))
 		&& (rlev < creature_ptr->lev * 3 / 2 + randint0(creature_ptr->lev / 5)))
 	{

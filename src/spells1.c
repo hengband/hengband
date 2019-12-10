@@ -2088,7 +2088,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			{
 				if (seen) obvious = TRUE;
 
-				if ((p_ptr->inside_arena) || is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)))
+				if ((p_ptr->current_floor_ptr->inside_arena) || is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)))
 				{
 					note = _("には効果がなかった。", " is unaffected.");
 				}
@@ -3525,7 +3525,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				bool success = FALSE;
 				if (seen) obvious = TRUE;
 
-				if ((r_ptr->flags3 & (RF3_GOOD)) && !p_ptr->inside_arena)
+				if ((r_ptr->flags3 & (RF3_GOOD)) && !p_ptr->current_floor_ptr->inside_arena)
 				{
 					if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 50;
 					if (dam < 1) dam = 1;

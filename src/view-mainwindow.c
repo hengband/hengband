@@ -195,7 +195,7 @@ concptr map_name(void)
 		return _("クエスト", "Quest");
 	else if (p_ptr->wild_mode)
 		return _("地上", "Surface");
-	else if (p_ptr->inside_arena)
+	else if (p_ptr->current_floor_ptr->inside_arena)
 		return _("アリーナ", "Arena");
 	else if (p_ptr->phase_out)
 		return _("闘技場", "Monster Arena");
@@ -1011,7 +1011,7 @@ static void prt_depth(void)
  */
 static void prt_hunger(void)
 {
-	if(current_world_ptr->wizard && p_ptr->inside_arena) return;
+	if(current_world_ptr->wizard && p_ptr->current_floor_ptr->inside_arena) return;
 
 	/* Fainting / Starving */
 	if (p_ptr->food < PY_FOOD_FAINT)

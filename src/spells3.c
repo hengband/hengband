@@ -124,7 +124,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
-			if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->inside_arena))
+			if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->current_floor_ptr->inside_arena))
 				if (caster_ptr->current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY) continue;
 
 			/* This grid looks good */
@@ -791,7 +791,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 	 */
 
 	/* Ironman option */
-	if (creature_ptr->inside_arena || ironman_downward)
+	if (creature_ptr->current_floor_ptr->inside_arena || ironman_downward)
 	{
 		msg_print(_("何も起こらなかった。", "Nothing happens."));
 		return TRUE;
@@ -1348,7 +1348,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 void alter_reality(void)
 {
 	/* Ironman option */
-	if (p_ptr->inside_arena || ironman_downward)
+	if (p_ptr->current_floor_ptr->inside_arena || ironman_downward)
 	{
 		msg_print(_("何も起こらなかった。", "Nothing happens."));
 		return;
@@ -2866,7 +2866,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	bool health_tracked = (caster_ptr->health_who == g_ptr->m_idx) ? TRUE : FALSE;
 	monster_type back_m;
 
-	if (caster_ptr->inside_arena || caster_ptr->phase_out) return (FALSE);
+	if (caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) return (FALSE);
 
 	if ((caster_ptr->riding == g_ptr->m_idx) || (m_ptr->mflag2 & MFLAG2_KAGE)) return (FALSE);
 
@@ -3628,7 +3628,7 @@ bool tele_town(player_type *caster_ptr)
 		return FALSE;
 	}
 
-	if (caster_ptr->inside_arena || caster_ptr->phase_out)
+	if (caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out)
 	{
 		msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
 		return FALSE;

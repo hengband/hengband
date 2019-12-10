@@ -1833,7 +1833,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 
 	/* Initialize arena and rewards information -KMW- */
 	creature_ptr->arena_number = 0;
-	creature_ptr->inside_arena = FALSE;
+	creature_ptr->current_floor_ptr->inside_arena = FALSE;
 	creature_ptr->current_floor_ptr->inside_quest = 0;
 	for (i = 0; i < MAX_MANE; i++)
 	{

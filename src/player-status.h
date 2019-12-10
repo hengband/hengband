@@ -123,7 +123,6 @@ struct player_type
 
 	TOWN_IDX town_num;			/* Current town number */
 	s16b arena_number;		/* monster number in arena -KMW- */
-	bool inside_arena;		/* Is character inside arena? */
 	bool phase_out;		/*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 
 	DUNGEON_IDX dungeon_idx; /* current dungeon index */

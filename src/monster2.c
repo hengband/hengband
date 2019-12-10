@@ -2472,7 +2472,7 @@ SPEED get_mspeed(monster_race *r_ptr)
 	SPEED mspeed = r_ptr->speed;
 
 	/* Hack -- small racial variety */
-	if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->inside_arena)
+	if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->current_floor_ptr->inside_arena)
 	{
 		/* Allow some small variation per monster */
 		int i = SPEED_TO_ENERGY(r_ptr->speed) / (one_in_(4) ? 3 : 10);
@@ -3485,7 +3485,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	POSITION x, y;
 	MONRACE_IDX r_idx;
 
-	if (p_ptr->inside_arena) return (FALSE);
+	if (p_ptr->current_floor_ptr->inside_arena) return (FALSE);
 
 	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
 
@@ -3541,7 +3541,7 @@ bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_ID
 	/* Prevent illegal monsters */
 	if (r_idx >= max_r_idx) return FALSE;
 
-	if (p_ptr->inside_arena) return FALSE;
+	if (p_ptr->current_floor_ptr->inside_arena) return FALSE;
 
 	if (!mon_scatter(r_idx, &y, &x, oy, ox, 2)) return FALSE;
 

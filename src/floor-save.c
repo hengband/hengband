@@ -422,7 +422,7 @@ static void preserve_pet(void)
 	 * If player is in wild mode, no pets are preserved
 	 * except a monster whom player riding
 	 */
-	if (!p_ptr->wild_mode && !p_ptr->inside_arena && !p_ptr->phase_out)
+	if (!p_ptr->wild_mode && !p_ptr->current_floor_ptr->inside_arena && !p_ptr->phase_out)
 	{
 		for (i = p_ptr->current_floor_ptr->m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--)
 		{

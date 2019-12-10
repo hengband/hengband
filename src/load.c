@@ -1960,7 +1960,7 @@ static void rd_extra(void)
 		if (p_ptr->arena_number >= 99) p_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
 	}
 	rd_s16b(&tmp16s);
-	p_ptr->inside_arena = (bool)tmp16s;
+	p_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
 	rd_s16b(&p_ptr->current_floor_ptr->inside_quest);
 	if (z_older_than(10, 3, 5)) p_ptr->phase_out = FALSE;
 	else
@@ -1976,7 +1976,7 @@ static void rd_extra(void)
 	rd_s16b(&tmp16s);
 	p_ptr->oldpy = (POSITION)tmp16s;
 
-	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
+	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
 
 	/* Was p_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
@@ -2602,7 +2602,7 @@ static errr rd_dungeon_old(void)
 	p_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
 	p_ptr->x = (POSITION)tmp16s;
-	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
+	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
 	rd_s16b(&tmp16s);
 	p_ptr->current_floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
@@ -2962,7 +2962,7 @@ static errr rd_dungeon_old(void)
 	/*** Success ***/
 
 	/* The dungeon is ready */
-	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->inside_arena)
+	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_arena)
 		current_world_ptr->character_dungeon = FALSE;
 	else
 		current_world_ptr->character_dungeon = TRUE;

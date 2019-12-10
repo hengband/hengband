@@ -1531,7 +1531,7 @@ void process_monster(MONSTER_IDX m_idx)
 		/* Hack -- Ohmu scatters molds! */
 		if (m_ptr->r_idx == MON_OHMU)
 		{
-			if (!p_ptr->inside_arena && !p_ptr->phase_out)
+			if (!p_ptr->current_floor_ptr->inside_arena && !p_ptr->phase_out)
 			{
 				if (r_ptr->freq_spell && (randint1(100) <= r_ptr->freq_spell))
 				{

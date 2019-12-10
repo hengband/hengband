@@ -49,7 +49,7 @@ int inven_damage(inven_func typ, int perc)
 
 	if (CHECK_MULTISHADOW(p_ptr)) return 0;
 
-	if (p_ptr->inside_arena) return 0;
+	if (p_ptr->current_floor_ptr->inside_arena) return 0;
 
 	/* Count the casualties */
 	k = 0;
@@ -500,7 +500,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 		/* Note death */
 		creature_ptr->is_dead = TRUE;
 
-		if (creature_ptr->inside_arena)
+		if (creature_ptr->current_floor_ptr->inside_arena)
 		{
 			concptr m_name = r_name + r_info[arena_info[creature_ptr->arena_number].r_idx].name;
 			msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
@@ -550,7 +550,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			{
 				char buf[20];
 
-				if (creature_ptr->inside_arena)
+				if (creature_ptr->current_floor_ptr->inside_arena)
 					strcpy(buf, _("アリーナ", "in the Arena"));
 				else if (!p_ptr->current_floor_ptr->dun_level)
 					strcpy(buf, _("地上", "on the surface"));

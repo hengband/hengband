@@ -920,7 +920,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		}
 
 		/* Hack -- special handling for building doors */
-		else if (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->inside_arena)
+		else if (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena)
 		{
 			name = building[f_ptr->subtype].name;
 		}
@@ -954,7 +954,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		/* Hack -- special introduction for store & building doors -KMW- */
 		if (have_flag(f_ptr->flags, FF_STORE) ||
 		    have_flag(f_ptr->flags, FF_QUEST_ENTER) ||
-		    (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->inside_arena) ||
+		    (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) ||
 		    have_flag(f_ptr->flags, FF_ENTRANCE))
 		{
 			s2 = _("の入口", "");

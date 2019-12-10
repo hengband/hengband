@@ -1417,7 +1417,7 @@ void generate_floor(floor_type *floor_ptr)
 
 		clear_cave(floor_ptr);
 
-		if (p_ptr->inside_arena)
+		if (p_ptr->current_floor_ptr->inside_arena)
 		{
 			generate_challenge_arena(floor_ptr);
 		}

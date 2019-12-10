@@ -2478,7 +2478,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
 	}
 
-	if ((creature_ptr->muta2 & MUT2_WALK_SHAD) && !creature_ptr->anti_magic && one_in_(12000) && !creature_ptr->inside_arena)
+	if ((creature_ptr->muta2 & MUT2_WALK_SHAD) && !creature_ptr->anti_magic && one_in_(12000) && !creature_ptr->current_floor_ptr->inside_arena)
 	{
 		alter_reality();
 	}
@@ -3114,7 +3114,7 @@ static void process_world(void)
 		p_ptr->current_floor_ptr->dun_level = 0;
 		p_ptr->dungeon_idx = 0;
 		prepare_change_floor_mode(CFM_FIRST_FLOOR | CFM_RAND_PLACE);
-		p_ptr->inside_arena = FALSE;
+		p_ptr->current_floor_ptr->inside_arena = FALSE;
 		p_ptr->wild_mode = FALSE;
 		p_ptr->leaving = TRUE;
 	}
@@ -3199,7 +3199,7 @@ static void process_world(void)
 	/*** Handle the wilderness/town (sunshine) ***/
 
 	/* While in town/wilderness */
-	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)
+	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->current_floor_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
 		if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
@@ -3216,7 +3216,7 @@ static void process_world(void)
 	}
 
 	/* While in the dungeon (vanilla_town or lite_town mode only) */
-	else if ((vanilla_town || (lite_town && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->inside_arena)) && p_ptr->current_floor_ptr->dun_level)
+	else if ((vanilla_town || (lite_town && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->current_floor_ptr->inside_arena)) && p_ptr->current_floor_ptr->dun_level)
 	{
 		/*** Shuffle the Storekeepers ***/
 
@@ -3267,7 +3267,7 @@ static void process_world(void)
 
 	/* Check for creature generation. */
 	if (one_in_(d_info[p_ptr->dungeon_idx].max_m_alloc_chance) &&
-	    !p_ptr->inside_arena && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out)
+	    !p_ptr->current_floor_ptr->inside_arena && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out)
 	{
 		/* Make a new monster */
 		(void)alloc_monster(MAX_SIGHT + 5, 0);
@@ -3744,7 +3744,7 @@ static void process_command(player_type *creature_ptr)
 		/* Go up staircase */
 		case '<':
 		{
-			if (!creature_ptr->wild_mode && !p_ptr->current_floor_ptr->dun_level && !creature_ptr->inside_arena && !creature_ptr->current_floor_ptr->inside_quest)
+			if (!creature_ptr->wild_mode && !p_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena && !creature_ptr->current_floor_ptr->inside_quest)
 			{
 				if (vanilla_town) break;
 
@@ -5048,7 +5048,7 @@ static void dungeon(bool load_game)
 	current_world_ptr->is_loading_now = TRUE;
 
 	if (p_ptr->energy_need > 0 && !p_ptr->phase_out &&
-	    (p_ptr->current_floor_ptr->dun_level || p_ptr->leaving_dungeon || p_ptr->inside_arena))
+	    (p_ptr->current_floor_ptr->dun_level || p_ptr->leaving_dungeon || p_ptr->current_floor_ptr->inside_arena))
 		p_ptr->energy_need = 0;
 
 	/* Not leaving dungeon */
@@ -5393,7 +5393,7 @@ void play_game(bool new_game)
 		/* Start in town */
 		p_ptr->current_floor_ptr->dun_level = 0;
 		p_ptr->current_floor_ptr->inside_quest = 0;
-		p_ptr->inside_arena = FALSE;
+		p_ptr->current_floor_ptr->inside_arena = FALSE;
 		p_ptr->phase_out = FALSE;
 
 		write_level = TRUE;
@@ -5640,9 +5640,9 @@ void play_game(bool new_game)
 		/* Accidental Death */
 		if (p_ptr->playing && p_ptr->is_dead)
 		{
-			if (p_ptr->inside_arena)
+			if (p_ptr->current_floor_ptr->inside_arena)
 			{
-				p_ptr->inside_arena = FALSE;
+				p_ptr->current_floor_ptr->inside_arena = FALSE;
 				if (p_ptr->arena_number > MAX_ARENA_MONS)
 					p_ptr->arena_number++;
 				else

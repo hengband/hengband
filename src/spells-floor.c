@@ -283,7 +283,7 @@ void stair_creation(player_type *caster_ptr)
 	/* No effect out of standard dungeon floor */
 	if (!floor_ptr->dun_level || (!up && !down) ||
 		(caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) ||
-		caster_ptr->inside_arena || caster_ptr->phase_out)
+		caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out)
 	{
 		/* arena or quest */
 		msg_print(_("効果がありません！", "There is no effect!"));

@@ -355,7 +355,7 @@ static void arena_comm(int cmd)
 						/* Save the surface floor as saved floor */
 						prepare_change_floor_mode(CFM_SAVE_FLOORS);
 
-						p_ptr->inside_arena = TRUE;
+						p_ptr->current_floor_ptr->inside_arena = TRUE;
 						p_ptr->leaving = TRUE;
 						p_ptr->leave_bldg = TRUE;
 					}
@@ -385,7 +385,7 @@ static void arena_comm(int cmd)
 				/* Save the surface floor as saved floor */
 				prepare_change_floor_mode(CFM_SAVE_FLOORS);
 
-				p_ptr->inside_arena = TRUE;
+				p_ptr->current_floor_ptr->inside_arena = TRUE;
 				p_ptr->leaving = TRUE;
 				p_ptr->leave_bldg = TRUE;
 			}
@@ -4102,7 +4102,7 @@ void do_cmd_bldg(void)
 		msg_print(_("「敗者に用はない。」", "'There's no place here for a LOSER like you!'"));
 		return;
 	}
-	else if ((which == 2) && p_ptr->inside_arena)
+	else if ((which == 2) && p_ptr->current_floor_ptr->inside_arena)
 	{
 		if (!p_ptr->exit_bldg && p_ptr->current_floor_ptr->m_cnt > 0)
 		{
@@ -4113,7 +4113,7 @@ void do_cmd_bldg(void)
 			/* Don't save the arena as saved floor */
 			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
 
-			p_ptr->inside_arena = FALSE;
+			p_ptr->current_floor_ptr->inside_arena = FALSE;
 			p_ptr->leaving = TRUE;
 
 			/* Re-enter the arena */
@@ -4174,7 +4174,7 @@ void do_cmd_bldg(void)
 		if (command == ESCAPE)
 		{
 			p_ptr->leave_bldg = TRUE;
-			p_ptr->inside_arena = FALSE;
+			p_ptr->current_floor_ptr->inside_arena = FALSE;
 			p_ptr->phase_out = FALSE;
 			break;
 		}

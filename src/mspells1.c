@@ -1577,7 +1577,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	/* Remove the "ineffective" spells */
 	remove_bad_spells(m_idx, &f4, &f5, &f6);
 
-	if (target_ptr->inside_arena || target_ptr->phase_out)
+	if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
@@ -1830,7 +1830,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 
 	/* Always take note of monsters that kill you */
-	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->inside_arena)
+	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++; /* Ignore appearance difference */
 	}

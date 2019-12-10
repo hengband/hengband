@@ -2538,7 +2538,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	object_type forge;
 	object_type *q_ptr;
 
-	bool drop_chosen_item = drop_item && !cloned && !p_ptr->inside_arena
+	bool drop_chosen_item = drop_item && !cloned && !p_ptr->current_floor_ptr->inside_arena
 		&& !p_ptr->phase_out && !is_pet(m_ptr);
 
 	/* The caster is dead? */
@@ -2586,7 +2586,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	check_quest_completion(m_ptr);
 
 	/* Handle the possibility of player vanquishing arena combatant -KMW- */
-	if (p_ptr->inside_arena && !is_pet(m_ptr))
+	if (p_ptr->current_floor_ptr->inside_arena && !is_pet(m_ptr))
 	{
 		p_ptr->exit_bldg = TRUE;
 
@@ -2632,7 +2632,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	/* Drop a dead corpse? */
 	if (one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) &&
 		(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) &&
-		!(p_ptr->inside_arena || p_ptr->phase_out || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+		!(p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
 	{
 		/* Assume skeleton */
 		bool corpse = FALSE;
@@ -2680,7 +2680,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	{
 	case MON_PINK_HORROR:
 		/* Pink horrors are replaced with 2 Blue horrors */
-		if (!(p_ptr->inside_arena || p_ptr->phase_out))
+		if (!(p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out))
 		{
 			bool notice = FALSE;
 
@@ -2739,7 +2739,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		 * Mega^3-hack: killing a 'Warrior of the Dawn' is likely to
 		 * spawn another in the fallen one's place!
 		 */
-		if (!p_ptr->inside_arena && !p_ptr->phase_out)
+		if (!p_ptr->current_floor_ptr->inside_arena && !p_ptr->phase_out)
 		{
 			if (!one_in_(7))
 			{
@@ -3038,7 +3038,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	if (cloned && !(r_ptr->flags1 & RF1_UNIQUE))
 		number = 0; /* Clones drop no stuff unless Cloning Pits */
 
-	if (is_pet(m_ptr) || p_ptr->phase_out || p_ptr->inside_arena)
+	if (is_pet(m_ptr) || p_ptr->phase_out || p_ptr->current_floor_ptr->inside_arena)
 		number = 0; /* Pets drop no stuff */
 	if (!drop_item && (r_ptr->d_char != '$')) number = 0;
 

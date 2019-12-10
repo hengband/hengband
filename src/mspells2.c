@@ -434,7 +434,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		f6 &= (RF6_NOMAGIC_MASK);
 	}
 
-	if (p_ptr->inside_arena || p_ptr->phase_out)
+	if (p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
@@ -761,7 +761,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	}
 
 	/* Always take note of monsters that kill you */
-	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->inside_arena)
+	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->current_floor_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++; /* Ignore appearance difference */
 	}

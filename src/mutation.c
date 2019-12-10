@@ -2312,7 +2312,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 				if ((r_ptr->flags3 & RF3_EVIL) &&
 				    !(r_ptr->flags1 & RF1_QUESTOR) &&
 				    !(r_ptr->flags1 & RF1_UNIQUE) &&
-				    !creature_ptr->inside_arena && !creature_ptr->current_floor_ptr->inside_quest &&
+				    !creature_ptr->current_floor_ptr->inside_arena && !creature_ptr->current_floor_ptr->inside_quest &&
 					(r_ptr->level < randint1(creature_ptr->lev+50)) &&
 					!(m_ptr->mflag2 & MFLAG2_NOGENO))
 				{

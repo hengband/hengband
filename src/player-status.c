@@ -5847,7 +5847,7 @@ void cheat_death(player_type *creature_ptr)
 	(void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 
 	p_ptr->current_floor_ptr->dun_level = 0;
-	creature_ptr->inside_arena = FALSE;
+	creature_ptr->current_floor_ptr->inside_arena = FALSE;
 	creature_ptr->phase_out = FALSE;
 	leaving_quest = 0;
 	creature_ptr->current_floor_ptr->inside_quest = 0;

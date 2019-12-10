@@ -1440,7 +1440,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 	prepare_change_floor_mode(CFM_RAND_PLACE);
 
 	if (!p_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
-	creature_ptr->inside_arena = FALSE;
+	creature_ptr->current_floor_ptr->inside_arena = FALSE;
 	creature_ptr->wild_mode = FALSE;
 
 	leave_quest_check();

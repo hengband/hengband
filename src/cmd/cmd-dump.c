@@ -458,7 +458,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 
 	if (write_level)
 	{
-		if (creature_ptr->inside_arena)
+		if (creature_ptr->current_floor_ptr->inside_arena)
 			note_level = _("アリーナ:", "Arane:");
 		else if (!creature_ptr->current_floor_ptr->dun_level)
 			note_level = _("地上:", "Surface:");

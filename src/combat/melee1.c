@@ -4094,7 +4094,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 
 	/* Always notice cause of death */
-	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->inside_arena)
+	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++;
 	}

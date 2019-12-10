@@ -1947,7 +1947,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 			dummy_hp = (m_ptr->hp + 1) / 2;
 			dummy_maxhp = m_ptr->maxhp / 2;
 			
-			if (p_ptr->inside_arena || p_ptr->phase_out || !summon_possible(m_ptr->fy, m_ptr->fx)) 
+			if (p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out || !summon_possible(m_ptr->fy, m_ptr->fx)) 
 				return -1;
 
 			delete_monster_idx(p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);

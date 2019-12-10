@@ -19,7 +19,7 @@ bool_hack common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, mons
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (p_ptr->inside_arena) return TRUE;
+	if (p_ptr->current_floor_ptr->inside_arena) return TRUE;
 
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
@@ -51,7 +51,7 @@ bool_hack common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, mo
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (p_ptr->inside_arena) return TRUE;
+	if (p_ptr->current_floor_ptr->inside_arena) return TRUE;
 
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
