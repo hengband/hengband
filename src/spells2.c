@@ -2993,7 +2993,7 @@ bool kawarimi(bool success)
  * @param mdeath 目標モンスターが死亡したかを返す
  * @return 作用が実際にあった場合TRUEを返す /  Return value is for checking "done"
  */
-bool rush_attack(bool *mdeath)
+bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 {
 	DIRECTION dir;
 	int tx, ty;
@@ -3009,8 +3009,8 @@ bool rush_attack(bool *mdeath)
 	if (!get_aim_dir(&dir)) return FALSE;
 
 	/* Use the given direction */
-	tx = p_ptr->x + project_length * ddx[dir];
-	ty = p_ptr->y + project_length * ddy[dir];
+	tx = attacker_ptr->x + project_length * ddx[dir];
+	ty = attacker_ptr->y + project_length * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay())
@@ -3019,17 +3019,17 @@ bool rush_attack(bool *mdeath)
 		ty = target_row;
 	}
 
-	if (in_bounds(p_ptr->current_floor_ptr, ty, tx)) tm_idx = p_ptr->current_floor_ptr->grid_array[ty][tx].m_idx;
+	if (in_bounds(attacker_ptr->current_floor_ptr, ty, tx)) tm_idx = attacker_ptr->current_floor_ptr->grid_array[ty][tx].m_idx;
 
-	path_n = project_path(path_g, project_length, p_ptr->y, p_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+	path_n = project_path(path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
 	project_length = 0;
 
 	/* No need to move */
 	if (!path_n) return TRUE;
 
 	/* Use ty and tx as to-move point */
-	ty = p_ptr->y;
-	tx = p_ptr->x;
+	ty = attacker_ptr->y;
+	tx = attacker_ptr->x;
 
 	/* Project along the path */
 	for (i = 0; i < path_n; i++)
@@ -3039,7 +3039,7 @@ bool rush_attack(bool *mdeath)
 		int ny = GRID_Y(path_g[i]);
 		int nx = GRID_X(path_g[i]);
 
-		if (cave_empty_bold(p_ptr->current_floor_ptr, ny, nx) && player_can_enter(p_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0))
+		if (cave_empty_bold(attacker_ptr->current_floor_ptr, ny, nx) && player_can_enter(attacker_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0))
 		{
 			ty = ny;
 			tx = nx;
@@ -3048,7 +3048,7 @@ bool rush_attack(bool *mdeath)
 			continue;
 		}
 
-		if (!p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
+		if (!attacker_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
 		{
 			if (tm_idx)
 			{
@@ -3064,13 +3064,13 @@ bool rush_attack(bool *mdeath)
 		}
 
 		/* Move player before updating the monster */
-		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(p_ptr, ty, tx, TELEPORT_NONMAGICAL);
-		update_monster(p_ptr, p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
+		if (!player_bold(attacker_ptr, ty, tx)) teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
+		update_monster(attacker_ptr, attacker_ptr->current_floor_ptr->grid_array[ny][nx].m_idx, TRUE);
 
 		/* Found a monster */
-		m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx];
+		m_ptr = &attacker_ptr->current_floor_ptr->m_list[attacker_ptr->current_floor_ptr->grid_array[ny][nx].m_idx];
 
-		if (tm_idx != p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
+		if (tm_idx != attacker_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
 		{
 #ifdef JP
 			msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "", m_ptr->ml ? "モンスター" : "何か");
@@ -3078,7 +3078,7 @@ bool rush_attack(bool *mdeath)
 			msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
 #endif
 		}
-		else if (!player_bold(p_ptr, ty, tx))
+		else if (!player_bold(attacker_ptr, ty, tx))
 		{
 			/* Hold the monster name */
 			GAME_TEXT m_name[MAX_NLEN];
@@ -3088,14 +3088,14 @@ bool rush_attack(bool *mdeath)
 			msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
 		}
 
-		if (!player_bold(p_ptr, ty, tx)) teleport_player_to(p_ptr, ty, tx, TELEPORT_NONMAGICAL);
+		if (!player_bold(attacker_ptr, ty, tx)) teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
 		moved = TRUE;
-		tmp_mdeath = py_attack(p_ptr, ny, nx, HISSATSU_NYUSIN);
+		tmp_mdeath = py_attack(attacker_ptr, ny, nx, HISSATSU_NYUSIN);
 
 		break;
 	}
 
-	if (!moved && !player_bold(p_ptr, ty, tx)) teleport_player_to(p_ptr, ty, tx, TELEPORT_NONMAGICAL);
+	if (!moved && !player_bold(attacker_ptr, ty, tx)) teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
 
 	if (mdeath) *mdeath = tmp_mdeath;
 	return TRUE;

@@ -512,7 +512,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 		if (cast)
 		{
-			if (!rush_attack(NULL)) return NULL;
+			if (!rush_attack(caster_ptr, NULL)) return NULL;
 		}
 		break;
 
@@ -763,7 +763,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 			do
 			{
-				if (!rush_attack(&mdeath)) break;
+				if (!rush_attack(caster_ptr, &mdeath)) break;
 				if (is_new)
 				{
 					/* Reserve needed mana point */

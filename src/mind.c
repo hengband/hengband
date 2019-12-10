@@ -1606,7 +1606,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 10:
-		return rush_attack(NULL);
+		return rush_attack(caster_ptr, NULL);
 	case 11:
 	{
 		int i;

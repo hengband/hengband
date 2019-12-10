@@ -246,7 +246,7 @@ extern bool project_all_los(EFFECT_ID typ, HIT_POINT dam);
 extern bool eat_magic(player_type *caster_ptr, int power);
 extern void discharge_minion(void);
 extern bool kawarimi(bool success);
-extern bool rush_attack(bool *mdeath);
+extern bool rush_attack(player_type *attacker_ptr, bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 extern void ring_of_power(player_type *caster_ptr, DIRECTION dir);
 extern void wild_magic(int spell);
