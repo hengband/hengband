@@ -494,7 +494,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_MAKE_DOOR:
 		{
-			if (!cave_naked_bold(p_ptr, p_ptr->current_floor_ptr, y, x)) break;
+			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
 			if (player_bold(p_ptr, y, x)) break;
 			cave_set_feat(floor_ptr, y, x, feat_door[DOOR_DOOR].closed);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -503,13 +503,13 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_MAKE_TRAP:
 		{
-			place_trap(p_ptr->current_floor_ptr, y, x);
+			place_trap(floor_ptr, y, x);
 			break;
 		}
 
 		case GF_MAKE_TREE:
 		{
-			if (!cave_naked_bold(p_ptr, p_ptr->current_floor_ptr, y, x)) break;
+			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
 			if (player_bold(p_ptr, y, x)) break;
 			cave_set_feat(floor_ptr, y, x, feat_tree);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -518,7 +518,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_MAKE_GLYPH:
 		{
-			if (!cave_naked_bold(p_ptr, p_ptr->current_floor_ptr, y, x)) break;
+			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
 			g_ptr->info |= CAVE_OBJECT;
 			g_ptr->mimic = feat_glyph;
 			note_spot(y, x);
@@ -528,7 +528,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_STONE_WALL:
 		{
-			if (!cave_naked_bold(p_ptr, p_ptr->current_floor_ptr, y, x)) break;
+			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
 			if (player_bold(p_ptr, y, x)) break;
 			cave_set_feat(floor_ptr, y, x, feat_granite);
 			break;
