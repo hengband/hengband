@@ -152,7 +152,7 @@ extern bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_P
 
 extern int project_length;
 extern bool binding_field(player_type *caster_ptr, HIT_POINT dam);
-extern void seal_of_mirror(HIT_POINT dam);
+extern void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam);
 extern concptr spell_category_name(OBJECT_TYPE_VALUE tval);
 
 /* spells2.c */

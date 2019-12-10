@@ -6750,20 +6750,20 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
  * @param dam ダメージ量
  * @return 効果があったらTRUEを返す
  */
-void seal_of_mirror(HIT_POINT dam)
+void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 {
 	POSITION x, y;
 
-	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]))
+			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 			{
-				if (project_m(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
+				if (project_m(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
 					(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
 				{
-					if (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+					if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 					{
 						remove_mirror(y, x);
 					}

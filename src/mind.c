@@ -1395,7 +1395,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* seal of mirror */
 	case 11:
-		seal_of_mirror(plev * 4 + 100);
+		seal_of_mirror(caster_ptr, plev * 4 + 100);
 		break;
 		/* shield of water */
 	case 12:
