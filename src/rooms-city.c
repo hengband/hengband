@@ -114,7 +114,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 		cur_ugbldg = &ugbldg[i];
 
 		/* Generate new room */
-		generate_room_floor(
+		generate_room_floor(p_ptr->current_floor_ptr, 
 			ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2,
 			ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2,
 			FALSE);
@@ -246,7 +246,7 @@ bool build_type16(floor_type *floor_ptr)
 	x1 = xval - (town_wid / 2);
 
 	/* Generate new room */
-	generate_room_floor(
+	generate_room_floor(floor_ptr,
 		y1 + town_hgt / 3, x1 + town_wid / 3,
 		y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, FALSE);
 

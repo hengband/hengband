@@ -2040,7 +2040,7 @@ POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, 
 
 
 /* Create a new floor room with optional light */
-void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
+void generate_room_floor(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
 {
 	POSITION y, x;
 	
@@ -2051,7 +2051,7 @@ void generate_room_floor(POSITION y1, POSITION x1, POSITION y2, POSITION x2, int
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 			place_floor_grid(g_ptr);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
