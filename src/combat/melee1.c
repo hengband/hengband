@@ -3837,7 +3837,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
 					{
-						teleport_player(10, 0L);
+						teleport_player(target_ptr, 10, 0L);
 					}
 				}
 

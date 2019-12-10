@@ -2121,7 +2121,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 		case MUT1_VTELEPORT:
 			msg_print(_("集中している...", "You concentrate..."));
-			teleport_player(10 + 4 * lvl, 0L);
+			teleport_player(creature_ptr, 10 + 4 * lvl, 0L);
 			break;
 
 		case MUT1_MIND_BLST:
@@ -2150,7 +2150,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_BLINK:
-			teleport_player(10, 0L);
+			teleport_player(creature_ptr, 10, 0L);
 			break;
 
 		case MUT1_EAT_ROCK:

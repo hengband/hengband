@@ -182,7 +182,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				teleport_player(range, 0L);
+				teleport_player(caster_ptr, range, 0L);
 			}
 		}
 		break;

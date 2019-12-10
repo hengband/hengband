@@ -1075,11 +1075,11 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		break;
 	case 2:
 		/* Minor displace */
-		teleport_player(10, 0L);
+		teleport_player(caster_ptr, 10, 0L);
 		break;
 	case 3:
 		/* Major displace */
-		teleport_player(plev * 5, 0L);
+		teleport_player(caster_ptr, plev * 5, 0L);
 		break;
 	case 4:
 		/* Domination */
@@ -1353,7 +1353,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* warped mirror */
 	case 3:
-		teleport_player(10, 0L);
+		teleport_player(caster_ptr, 10, 0L);
 		break;
 		/* mirror of light */
 	case 4:
@@ -1361,7 +1361,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* mirror of wandering */
 	case 5:
-		teleport_player(plev * 5, 0L);
+		teleport_player(caster_ptr, plev * 5, 0L);
 		break;
 		/* robe of dust */
 	case 6:
@@ -1566,7 +1566,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		break;
 	case 2:
 	{
-		teleport_player(10, 0L);
+		teleport_player(caster_ptr, 10, 0L);
 		break;
 	}
 	case 3:
@@ -1581,7 +1581,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	}
 	case 4:
 	{
-		teleport_player(caster_ptr->lev * 5, 0L);
+		teleport_player(caster_ptr, caster_ptr->lev * 5, 0L);
 		break;
 	}
 	case 5:
@@ -1602,7 +1602,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		break;
 	case 9:
 		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
-		teleport_player(30, 0L);
+		teleport_player(caster_ptr, 30, 0L);
 		set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 10:
@@ -1722,7 +1722,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_HYPODYNAMIA, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
-		teleport_player(30, 0L);
+		teleport_player(caster_ptr, 30, 0L);
 		break;
 	case 18:
 	{
@@ -1936,7 +1936,7 @@ void do_cmd_mind(void)
 				else if (b < 81)
 				{
 					msg_print(_("鏡の世界の干渉を受けた！", "Weird visions seem to dance before your eyes..."));
-					teleport_player(10, TELEPORT_PASSIVE);
+					teleport_player(p_ptr, 10, TELEPORT_PASSIVE);
 				}
 				else if (b < 96)
 				{

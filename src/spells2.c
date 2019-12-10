@@ -2574,7 +2574,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			if (!(*count))
 			{
 				msg_print(_("周囲の空間が歪んだ！", "Space warps about you!"));
-				teleport_player(damroll(10, 10), TELEPORT_PASSIVE);
+				teleport_player(p_ptr, damroll(10, 10), TELEPORT_PASSIVE);
 				if (randint0(13)) (*count) += activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
 				if (!one_in_(6)) break;
 			}
@@ -2970,7 +2970,7 @@ bool kawarimi(bool success)
 	y = p_ptr->y;
 	x = p_ptr->x;
 
-	teleport_player(10 + randint1(90), 0L);
+	teleport_player(p_ptr, 10 + randint1(90), 0L);
 	object_wipe(q_ptr);
 	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
@@ -3203,16 +3203,16 @@ void wild_magic(int spell)
 	case 1:
 	case 2:
 	case 3:
-		teleport_player(10, TELEPORT_PASSIVE);
+		teleport_player(p_ptr, 10, TELEPORT_PASSIVE);
 		break;
 	case 4:
 	case 5:
 	case 6:
-		teleport_player(100, TELEPORT_PASSIVE);
+		teleport_player(p_ptr, 100, TELEPORT_PASSIVE);
 		break;
 	case 7:
 	case 8:
-		teleport_player(200, TELEPORT_PASSIVE);
+		teleport_player(p_ptr, 200, TELEPORT_PASSIVE);
 		break;
 	case 9:
 	case 10:
@@ -3747,7 +3747,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 40)
 	{
 		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
-		teleport_player(10, TELEPORT_PASSIVE);
+		teleport_player(p_ptr, 10, TELEPORT_PASSIVE);
 	}
 	else if (die < 42)
 	{
@@ -3757,12 +3757,12 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 47)
 	{
 		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
-		teleport_player(100, TELEPORT_PASSIVE);
+		teleport_player(p_ptr, 100, TELEPORT_PASSIVE);
 	}
 	else if (die < 52)
 	{
 		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
-		teleport_player(200, TELEPORT_PASSIVE);
+		teleport_player(p_ptr, 200, TELEPORT_PASSIVE);
 	}
 	else if (die < 60)
 	{
@@ -3915,7 +3915,7 @@ bool panic_hit(void)
 		if (randint0(p_ptr->skill_dis) < 7)
 			msg_print(_("うまく逃げられなかった。", "You failed to run away."));
 		else
-			teleport_player(30, 0L);
+			teleport_player(p_ptr, 30, 0L);
 		return TRUE;
 	}
 	else

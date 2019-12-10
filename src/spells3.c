@@ -400,25 +400,25 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
  * @param mode オプション
  * @return なし
  */
-void teleport_player(POSITION dis, BIT_FLAGS mode)
+void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 {
 	POSITION yy, xx;
-	POSITION oy = p_ptr->y;
-	POSITION ox = p_ptr->x;
+	POSITION oy = creature_ptr->y;
+	POSITION ox = creature_ptr->x;
 
-	if (!teleport_player_aux(p_ptr, dis, mode)) return;
+	if (!teleport_player_aux(creature_ptr, dis, mode)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			MONSTER_IDX tmp_m_idx = p_ptr->current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
+			MONSTER_IDX tmp_m_idx = creature_ptr->current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount may follow */
-			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx))
+			if (tmp_m_idx && (creature_ptr->riding != tmp_m_idx))
 			{
-				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[tmp_m_idx];
+				monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[tmp_m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/*
@@ -428,7 +428,7 @@ void teleport_player(POSITION dis, BIT_FLAGS mode)
 				if ((r_ptr->a_ability_flags2 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, p_ptr->y, p_ptr->x, r_ptr->level, 0L);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, 0L);
 				}
 			}
 		}
@@ -574,7 +574,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 			{
 				if (one_in_(3))
 				{
-					teleport_player(200, TELEPORT_PASSIVE);
+					teleport_player(p_ptr, 200, TELEPORT_PASSIVE);
 					msg_print(_("失敗！", "Failed!"));
 				}
 				else teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, 0L);
@@ -2963,7 +2963,7 @@ static bool dimension_door_aux(DEPTH x, DEPTH y)
 	    (!randint0(plev / 10 + 10)))
 	{
 		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
-		teleport_player((plev + 2) * 2, TELEPORT_PASSIVE);
+		teleport_player(p_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
 
 		/* Failed */
 		return FALSE;

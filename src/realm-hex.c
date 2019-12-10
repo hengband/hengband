@@ -1042,7 +1042,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			else
 			{
 				msg_print(_("おっと！", "Oops!"));
-				teleport_player(30, 0L);
+				teleport_player(caster_ptr, 30, 0L);
 			}
 
 			add = FALSE;

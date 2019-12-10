@@ -4630,7 +4630,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		if (!CHECK_MULTISHADOW(target_ptr))
 		{
-			teleport_player(5, TELEPORT_PASSIVE);
+			teleport_player(target_ptr, 5, TELEPORT_PASSIVE);
 			if (!target_ptr->levitation)
 				(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 			if (!(target_ptr->resist_sound || target_ptr->levitation))

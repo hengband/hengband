@@ -483,7 +483,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	case TRAP_TELEPORT:
 	{
 		msg_print(_("テレポート・トラップにひっかかった！", "You hit a teleport trap!"));
-		teleport_player(100, TELEPORT_PASSIVE);
+		teleport_player(trapped_ptr, 100, TELEPORT_PASSIVE);
 		break;
 	}
 

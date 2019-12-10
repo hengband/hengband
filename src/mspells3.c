@@ -1286,10 +1286,10 @@ static bool cast_learned_spell(int spell, bool success)
 		(void)set_invuln(p_ptr, randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
-		teleport_player(10, 0L);
+		teleport_player(p_ptr, 10, 0L);
 		break;
 	case MS_TELEPORT:
-		teleport_player(plev * 5, 0L);
+		teleport_player(p_ptr, plev * 5, 0L);
 		break;
 	case MS_WORLD:
 		(void)time_walk(p_ptr);

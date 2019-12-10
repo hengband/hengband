@@ -488,7 +488,7 @@ void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 	{
 	case 1: case 2: case 3:
 	{
-		teleport_player(200, TELEPORT_PASSIVE);
+		teleport_player(target_ptr, 200, TELEPORT_PASSIVE);
 		break;
 	}
 
