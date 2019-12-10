@@ -231,7 +231,7 @@ void place_trap(floor_type *floor_ptr, POSITION y, POSITION x)
 * Always miss 5% of the time, Always hit 5% of the time.
 * Otherwise, match trap power against player armor.
 */
-static int check_hit(int power)
+static int check_hit(player_type *target_ptr, int power)
 {
 	int k;
 	ARMOUR_CLASS ac;
@@ -242,14 +242,14 @@ static int check_hit(int power)
 	/* Hack -- 5% hit, 5% miss */
 	if (k < 10) return (k < 5);
 
-	if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+	if (target_ptr->pseikaku == SEIKAKU_NAMAKE)
 		if (one_in_(20)) return (TRUE);
 
 	/* Paranoia -- No power */
 	if (power <= 0) return (FALSE);
 
 	/* Total armor */
-	ac = p_ptr->ac + p_ptr->to_a;
+	ac = target_ptr->ac + target_ptr->to_a;
 
 	/* Power competes against Armor */
 	if (randint1(power) > ((ac * 3) / 4)) return (TRUE);
@@ -331,7 +331,7 @@ static bool hit_trap_dart(void)
 {
 	bool hit = FALSE;
 
-	if (check_hit(125))
+	if (check_hit(p_ptr, 125))
 	{
 		msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
 		take_hit(p_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
