@@ -944,7 +944,7 @@ bool build_type11(floor_type *floor_ptr)
 	}
 
 	/* Find visible outer walls and set to be FEAT_OUTER */
-	add_outer_wall(x0, y0, light, x0 - rad, y0 - rad, x0 + rad, y0 + rad);
+	add_outer_wall(floor_ptr, x0, y0, light, x0 - rad, y0 - rad, x0 + rad, y0 + rad);
 
 	return TRUE;
 }
@@ -1013,8 +1013,7 @@ bool build_type12(floor_type *floor_ptr)
 	}
 
 	/* Find visible outer walls and set to be FEAT_OUTER */
-	add_outer_wall(x0, y0, light, x0 - rad - 1, y0 - rad - 1,
-		x0 + rad + 1, y0 + rad + 1);
+	add_outer_wall(floor_ptr, x0, y0, light, x0 - rad - 1, y0 - rad - 1, x0 + rad + 1, y0 + rad + 1);
 
 	/* Check to see if there is room for an inner vault */
 	for (x = x0 - 2; x <= x0 + 2; x++)

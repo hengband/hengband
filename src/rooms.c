@@ -1964,15 +1964,15 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
  * Note: no range checking is done so must be inside dungeon
  * This routine also stomps on doors
  */
-void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
+void add_outer_wall(floor_type *floor_ptr, POSITION x, POSITION y, int light, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
 	grid_type *g_ptr;
 	feature_type *f_ptr;
 	int i, j;
 
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
+	if (!in_bounds(floor_ptr, y, x)) return;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* hack- check to see if square has been visited before
 	* if so, then exit (use room flag to do this) */
@@ -1983,25 +1983,24 @@ void add_outer_wall(POSITION x, POSITION y, int light, POSITION x1, POSITION y1,
 
 	f_ptr = &f_info[g_ptr->feat];
 
-	if (is_floor_bold(p_ptr->current_floor_ptr, y, x))
+	if (is_floor_bold(floor_ptr, y, x))
 	{
 		for (i = -1; i <= 1; i++)
 		{
 			for (j = -1; j <= 1; j++)
 			{
-				if ((x + i >= x1) && (x + i <= x2) &&
-					 (y + j >= y1) && (y + j <= y2))
+				if ((x + i >= x1) && (x + i <= x2) && (y + j >= y1) && (y + j <= y2))
 				{
-					add_outer_wall(x + i, y + j, light, x1, y1, x2, y2);
+					add_outer_wall(floor_ptr, x + i, y + j, light, x1, y1, x2, y2);
 					if (light) g_ptr->info |= CAVE_GLOW;
 				}
 			}
 		}
 	}
-	else if (is_extra_bold(p_ptr->current_floor_ptr, y, x))
+	else if (is_extra_bold(floor_ptr, y, x))
 	{
 		/* Set bounding walls */
-		place_outer_bold(p_ptr->current_floor_ptr, y, x);
+		place_outer_bold(floor_ptr, y, x);
 		if (light) g_ptr->info |= CAVE_GLOW;
 	}
 	else if (permanent_wall(f_ptr))

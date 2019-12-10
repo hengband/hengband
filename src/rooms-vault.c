@@ -861,8 +861,7 @@ static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	}
 
 	/* Find visible outer walls and set to be FEAT_OUTER */
-	add_outer_wall(x0, y0, FALSE, x0 - rad - 1, y0 - rad - 1,
-		x0 + rad + 1, y0 + rad + 1);
+	add_outer_wall(floor_ptr, x0, y0, FALSE, x0 - rad - 1, y0 - rad - 1, x0 + rad + 1, y0 + rad + 1);
 
 	/* Add inner wall */
 	for (x = x0 - rad / 2; x <= x0 + rad / 2; x++)
