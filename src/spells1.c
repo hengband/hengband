@@ -1130,14 +1130,14 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * "flg" was added.
  * </pre>
  */
-static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
+static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
 {
 	int tmp;
 
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-	monster_type *caster_ptr = (who > 0) ? &p_ptr->current_floor_ptr->m_list[who] : NULL;
+	monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+	monster_type *caster_ptr = (who > 0) ? &floor_ptr->m_list[who] : NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1228,8 +1228,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	{
 		note = _("には完全な耐性がある！", " is immune.");
 		dam = 0;
-		if(is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-		if(typ == GF_LITE_WEAK || typ == GF_KILL_WALL) skipped = TRUE;
+		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
+		if (typ == GF_LITE_WEAK || typ == GF_KILL_WALL) skipped = TRUE;
 	}
 	else
 	{
@@ -1237,1009 +1237,408 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 		switch (typ)
 		{
 			/* Magic Missile -- pure damage */
-			case GF_MISSILE:
+		case GF_MISSILE:
+		{
+			if (seen) obvious = TRUE;
+			break;
+		}
+
+		/* Acid */
+		case GF_ACID:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_IM_ACID)
 			{
-				if (seen) obvious = TRUE;
-				break;
+				note = _("にはかなり耐性がある！", " resists a lot.");
+				dam /= 9;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ACID);
 			}
+			break;
+		}
 
-			/* Acid */
-			case GF_ACID:
+		/* Electricity */
+		case GF_ELEC:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_IM_ELEC)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_IM_ACID)
-				{
-					note = _("にはかなり耐性がある！", " resists a lot.");
-					dam /= 9;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ACID);
-				}
-				break;
+				note = _("にはかなり耐性がある！", " resists a lot.");
+				dam /= 9;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ELEC);
 			}
+			break;
+		}
 
-			/* Electricity */
-			case GF_ELEC:
+		/* Fire damage */
+		case GF_FIRE:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_IM_FIRE)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_IM_ELEC)
-				{
-					note = _("にはかなり耐性がある！", " resists a lot.");
-					dam /= 9;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ELEC);
-				}
-				break;
+				note = _("にはかなり耐性がある！", " resists a lot.");
+				dam /= 9;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_FIRE);
 			}
-
-			/* Fire damage */
-			case GF_FIRE:
+			else if (r_ptr->flags3 & (RF3_HURT_FIRE))
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_IM_FIRE)
-				{
-					note = _("にはかなり耐性がある！", " resists a lot.");
-					dam /= 9;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_FIRE);
-				}
-				else if (r_ptr->flags3 & (RF3_HURT_FIRE))
-				{
-					note = _("はひどい痛手をうけた。", " is hit hard.");
-					dam *= 2;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_FIRE);
-				}
-				break;
+				note = _("はひどい痛手をうけた。", " is hit hard.");
+				dam *= 2;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_FIRE);
 			}
+			break;
+		}
 
-			/* Cold */
-			case GF_COLD:
+		/* Cold */
+		case GF_COLD:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_IM_COLD)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_IM_COLD)
-				{
-					note = _("にはかなり耐性がある！", " resists a lot.");
-					dam /= 9;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
-				}
-				else if (r_ptr->flags3 & (RF3_HURT_COLD))
-				{
-					note = _("はひどい痛手をうけた。", " is hit hard.");
-					dam *= 2;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
-				}
-				break;
+				note = _("にはかなり耐性がある！", " resists a lot.");
+				dam /= 9;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
-
-			/* Poison */
-			case GF_POIS:
+			else if (r_ptr->flags3 & (RF3_HURT_COLD))
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_IM_POIS)
-				{
-					note = _("にはかなり耐性がある！", " resists a lot.");
-					dam /= 9;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
-				}
-				break;
+				note = _("はひどい痛手をうけた。", " is hit hard.");
+				dam *= 2;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
+			break;
+		}
 
-			/* Nuclear waste */
-			case GF_NUKE:
+		/* Poison */
+		case GF_POIS:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_IM_POIS)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_IM_POIS)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
-				}
-				else if (one_in_(3)) do_poly = TRUE;
-				break;
+				note = _("にはかなり耐性がある！", " resists a lot.");
+				dam /= 9;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
+			break;
+		}
 
-			/* Hellfire -- hurts Evil */
-			case GF_HELL_FIRE:
+		/* Nuclear waste */
+		case GF_NUKE:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_IM_POIS)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flags3 & RF3_GOOD)
-				{
-					note = _("はひどい痛手をうけた。", " is hit hard.");
-					dam *= 2;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
-				}
-				break;
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
+			else if (one_in_(3)) do_poly = TRUE;
+			break;
+		}
 
-			/* Holy Fire -- hurts Evil, Good are immune, others _resist_ */
-			case GF_HOLY_FIRE:
+		/* Hellfire -- hurts Evil */
+		case GF_HELL_FIRE:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flags3 & RF3_GOOD)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flags3 & RF3_EVIL)
-				{
-					dam *= 2;
-					note = _("はひどい痛手をうけた。", " is hit hard.");
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
-				}
-				else
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-				}
-				break;
+				note = _("はひどい痛手をうけた。", " is hit hard.");
+				dam *= 2;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 			}
+			break;
+		}
 
-			/* Arrow -- XXX no defense */
-			case GF_ARROW:
+		/* Holy Fire -- hurts Evil, Good are immune, others _resist_ */
+		case GF_HOLY_FIRE:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flags3 & RF3_EVIL)
 			{
-				if (seen) obvious = TRUE;
-				break;
+				dam *= 2;
+				note = _("はひどい痛手をうけた。", " is hit hard.");
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
 			}
-
-			/* Plasma -- XXX perhaps check ELEC or FIRE */
-			case GF_PLASMA:
+			else
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_PLAS)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_PLAS);
-				}
-				break;
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
 			}
+			break;
+		}
 
-			/* Nether -- see above */
-			case GF_NETHER:
+		/* Arrow -- XXX no defense */
+		case GF_ARROW:
+		{
+			if (seen) obvious = TRUE;
+			break;
+		}
+
+		/* Plasma -- XXX perhaps check ELEC or FIRE */
+		case GF_PLASMA:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_PLAS)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_NETH)
-				{
-					if (r_ptr->flags3 & RF3_UNDEAD)
-					{
-						note = _("には完全な耐性がある！", " is immune.");
-						dam = 0;
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
-					}
-					else
-					{
-						note = _("には耐性がある。", " resists.");
-						dam *= 3; dam /= randint1(6) + 6;
-					}
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NETH);
-				}
-				else if (r_ptr->flags3 & RF3_EVIL)
-				{
-					note = _("はいくらか耐性を示した。", " resists somewhat.");
-					dam /= 2;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
-				}
-				break;
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_PLAS);
 			}
+			break;
+		}
 
-			/* Water (acid) damage -- Water spirits/elementals are immune */
-			case GF_WATER:
+		/* Nether -- see above */
+		case GF_NETHER:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_NETH)
 			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_WATE)
+				if (r_ptr->flags3 & RF3_UNDEAD)
 				{
-					if ((m_ptr->r_idx == MON_WATER_ELEM) || (m_ptr->r_idx == MON_UNMAKER))
-					{
-						note = _("には完全な耐性がある！", " is immune.");
-						dam = 0;
-					}
-					else
-					{
-						note = _("には耐性がある。", " resists.");
-						dam *= 3; dam /= randint1(6) + 6;
-					}
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WATE);
-				}
-				break;
-			}
-
-			/* Chaos -- Chaos breathers resist */
-			case GF_CHAOS:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_CHAO)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_CHAO);
-				}
-				else if ((r_ptr->flags3 & RF3_DEMON) && one_in_(3))
-				{
-					note = _("はいくらか耐性を示した。", " resists somewhat.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
-				}
-				else
-				{
-					do_poly = TRUE;
-					do_conf = (5 + randint1(11) + r) / (r + 1);
-				}
-				break;
-			}
-
-			/* Shards -- Shard breathers resist */
-			case GF_SHARDS:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_SHAR)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
-				}
-				break;
-			}
-
-			/* Rocket: Shard resistance helps */
-			case GF_ROCKET:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_SHAR)
-				{
-					note = _("はいくらか耐性を示した。", " resists somewhat.");
-					dam /= 2;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
-				}
-				break;
-			}
-
-
-			/* Sound -- Sound breathers resist */
-			case GF_SOUND:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_SOUN)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 2; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SOUN);
-				}
-				else do_stun = (10 + randint1(15) + r) / (r + 1);
-				break;
-			}
-
-			/* Confusion */
-			case GF_CONFUSION:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flags3 & RF3_NO_CONF)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-				}
-				else do_conf = (10 + randint1(15) + r) / (r + 1);
-				break;
-			}
-
-			/* Disenchantment -- Breathers and Disenchanters resist */
-			case GF_DISENCHANT:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_DISE)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DISE);
-				}
-				break;
-			}
-
-			/* Nexus -- Breathers and Existers resist */
-			case GF_NEXUS:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_NEXU)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NEXU);
-				}
-				break;
-			}
-
-			/* Force */
-			case GF_FORCE:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_WALL)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WALL);
-				}
-				else do_stun = (randint1(15) + r) / (r + 1);
-				break;
-			}
-
-			/* Inertia -- breathers resist */
-			case GF_INERTIAL:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_INER)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_INER);
-				}
-				else
-				{
-					/* Powerful monsters can resist */
-					if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-						(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-					{
-						obvious = FALSE;
-					}
-					/* Normal monsters slow down */
-					else
-					{
-						if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
-						{
-							note = _("の動きが遅くなった。", " starts moving slower.");
-						}
-					}
-				}
-				break;
-			}
-
-			/* Time -- breathers resist */
-			case GF_TIME:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_TIME)
-				{
-					note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_TIME);
-				}
-				else do_time = (dam + 1) / 2;
-				break;
-			}
-
-			/* Gravity -- breathers resist */
-			case GF_GRAVITY:
-			{
-				bool resist_tele = FALSE;
-
-				if (seen) obvious = TRUE;
-				if (r_ptr->flagsr & RFR_RES_TELE)
-				{
-					if (r_ptr->flags1 & (RF1_UNIQUE))
-					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-						note = _("には効果がなかった。", " is unaffected!");
-						resist_tele = TRUE;
-					}
-					else if (r_ptr->level > randint1(100))
-					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-						note = _("には耐性がある！", " resists!");
-						resist_tele = TRUE;
-					}
-				}
-
-				if (!resist_tele) do_dist = 10;
-				else do_dist = 0;
-				if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_dist = 0;
-
-				if (r_ptr->flagsr & RFR_RES_GRAV)
-				{
-					note = _("には耐性がある！", " resists!");
-					dam *= 3; dam /= randint1(6) + 6;
-					do_dist = 0;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_GRAV);
-				}
-				else
-				{
-					/* 1. slowness */
-					/* Powerful monsters can resist */
-					if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-						(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-					{
-						obvious = FALSE;
-					}
-					/* Normal monsters slow down */
-					else
-					{
-						if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
-						{
-							note = _("の動きが遅くなった。", " starts moving slower.");
-						}
-					}
-
-					/* 2. stun */
-					do_stun = damroll((caster_lev / 20) + 3 , (dam)) + 1;
-
-					/* Attempt a saving throw */
-					if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-						(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-					{
-						/* Resist */
-						do_stun = 0;
-						/* No obvious effect */
-						note = _("には効果がなかった。", " is unaffected!");
-						obvious = FALSE;
-					}
-				}
-				break;
-			}
-
-			/* Pure damage */
-			case GF_MANA:
-			case GF_SEEKER:
-			case GF_SUPER_RAY:
-			{
-				if (seen) obvious = TRUE;
-				break;
-			}
-
-
-			/* Pure damage */
-			case GF_DISINTEGRATE:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flags3 & RF3_HURT_ROCK)
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
-					note = _("の皮膚がただれた！", " loses some skin!");
-					note_dies = _("は蒸発した！", " evaporates!");
-					dam *= 2;
-				}
-				break;
-			}
-
-			case GF_PSI:
-			{
-				if (seen) obvious = TRUE;
-
-				/* PSI only works if the monster can see you! -- RG */
-				if (!(los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)))
-				{
-					if (seen_msg) 
-						msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
-					skipped = TRUE;
-					break;
-				}
-				if (r_ptr->flags2 & RF2_EMPTY_MIND)
-				{
-					dam = 0;
 					note = _("には完全な耐性がある！", " is immune.");
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-
-				}
-				else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
-						 (r_ptr->flags3 & RF3_ANIMAL) ||
-						 (r_ptr->level > randint1(3 * dam)))
-				{
-					note = _("には耐性がある！", " resists!");
-					dam /= 3;
-
-					/*
-					 * Powerful demons & undead can turn a mindcrafter's
-					 * attacks back on them
-					 */
-					if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-						(r_ptr->level > p_ptr->lev / 2) &&
-						one_in_(2))
-					{
-						note = NULL;
-						msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！", 
-							(seen ? "%^s's corrupted mind backlashes your attack!" : 
-									"%^ss corrupted mind backlashes your attack!")), m_name);
-
-						/* Saving throw */
-						if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW(p_ptr))
-						{
-							msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-						}
-						else
-						{
-							/* Injure +/- confusion */
-							monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
-							take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
-							if (one_in_(4) && !CHECK_MULTISHADOW(p_ptr))
-							{
-								switch (randint1(4))
-								{
-									case 1:
-										set_confused(p_ptr, p_ptr->confused + 3 + randint1(dam));
-										break;
-									case 2:
-										set_stun(p_ptr, p_ptr->stun + randint1(dam));
-										break;
-									case 3:
-									{
-										if (r_ptr->flags3 & RF3_NO_FEAR)
-											note = _("には効果がなかった。", " is unaffected.");
-										else
-											set_afraid(p_ptr, p_ptr->afraid + 3 + randint1(dam));
-										break;
-									}
-									default:
-										if (!p_ptr->free_act)
-											(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(dam));
-										break;
-								}
-							}
-						}
-						dam = 0;
-					}
-				}
-
-				if ((dam > 0) && one_in_(4))
-				{
-					switch (randint1(4))
-					{
-						case 1:
-							do_conf = 3 + randint1(dam);
-							break;
-						case 2:
-							do_stun = 3 + randint1(dam);
-							break;
-						case 3:
-							do_fear = 3 + randint1(dam);
-							break;
-						default:
-							note = _("は眠り込んでしまった！", " falls asleep!");
-							do_sleep = 3 + randint1(dam);
-							break;
-					}
-				}
-
-				note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-				break;
-			}
-
-			case GF_PSI_DRAIN:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flags2 & RF2_EMPTY_MIND)
-				{
 					dam = 0;
-					note = _("には完全な耐性がある！", " is immune.");
-				}
-				else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
-						 (r_ptr->flags3 & RF3_ANIMAL) ||
-						 (r_ptr->level > randint1(3 * dam)))
-				{
-					note = _("には耐性がある！", " resists!");
-					dam /= 3;
-
-					/*
-					 * Powerful demons & undead can turn a mindcrafter's
-					 * attacks back on them
-					 */
-					if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-						 (r_ptr->level > p_ptr->lev / 2) &&
-						 (one_in_(2)))
-					{
-						note = NULL;
-						msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！", 
-							(seen ? "%^s's corrupted mind backlashes your attack!" : 
-									"%^ss corrupted mind backlashes your attack!")), m_name);
-						/* Saving throw */
-						if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW(p_ptr))
-						{
-							msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
-						}
-						else
-						{
-							/* Injure + mana drain */
-							monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
-							if (!CHECK_MULTISHADOW(p_ptr))
-							{
-								msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
-								p_ptr->csp -= damroll(5, dam) / 2;
-								if (p_ptr->csp < 0) p_ptr->csp = 0;
-								p_ptr->redraw |= PR_MANA;
-								p_ptr->window |= (PW_SPELL);
-							}
-							take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
-						}
-						dam = 0;
-					}
-				}
-				else if (dam > 0)
-				{
-					int b = damroll(5, dam) / 4;
-					concptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
-					concptr msg = _("あなたは%sの苦痛を%sに変換した！", 
-						 (seen ? "You convert %s's pain into %s!" : 
-								 "You convert %ss pain into %s!"));
-					msg_format(msg, m_name, str);
-
-					b = MIN(p_ptr->msp, p_ptr->csp + b);
-					p_ptr->csp = b;
-					p_ptr->redraw |= PR_MANA;
-					p_ptr->window |= (PW_SPELL);
-				}
-				note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-				break;
-			}
-
-			case GF_TELEKINESIS:
-			{
-				if (seen) obvious = TRUE;
-				if (one_in_(4))
-				{
-					if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_dist = 0;
-					else do_dist = 7;
-				}
-
-				/* 1. stun */
-				do_stun = damroll((caster_lev / 20) + 3 , dam) + 1;
-
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-					(r_ptr->level > 5 + randint1(dam)))
-				{
-					/* Resist */
-					do_stun = 0;
-					/* No obvious effect */
-					obvious = FALSE;
-				}
-				break;
-			}
-
-			/* Psycho-spear -- powerful magic missile */
-			case GF_PSY_SPEAR:
-			{
-				if (seen) obvious = TRUE;
-				break;
-			}
-
-			/* Meteor -- powerful magic missile */
-			case GF_METEOR:
-			{
-				if (seen) obvious = TRUE;
-				break;
-			}
-
-			case GF_DOMINATION:
-			{
-				if (!is_hostile(m_ptr)) break;
-				if (seen) obvious = TRUE;
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
-					(r_ptr->flags3 & RF3_NO_CONF) ||
-					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-				{
-					/* Memorize a flag */
-					if (r_ptr->flags3 & RF3_NO_CONF)
-					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-					}
-
-					/* Resist */
-					do_conf = 0;
-
-					/*
-					 * Powerful demons & undead can turn a mindcrafter's
-					 * attacks back on them
-					 */
-					if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-						(r_ptr->level > p_ptr->lev / 2) &&
-						(one_in_(2)))
-					{
-						note = NULL;
-						msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
-							(seen ? "%^s's corrupted mind backlashes your attack!" :
-							"%^ss corrupted mind backlashes your attack!")), m_name);
-
-						/* Saving throw */
-						if (randint0(100 + r_ptr->level/2) < p_ptr->skill_sav)
-						{
-							msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-						}
-						else
-						{
-							/* Confuse, stun, terrify */
-							switch (randint1(4))
-							{
-								case 1:
-									set_stun(p_ptr, p_ptr->stun + dam / 2);
-									break;
-								case 2:
-									set_confused(p_ptr, p_ptr->confused + dam / 2);
-									break;
-								default:
-								{
-									if (r_ptr->flags3 & RF3_NO_FEAR)
-										note = _("には効果がなかった。", " is unaffected.");
-									else
-										set_afraid(p_ptr, p_ptr->afraid + dam);
-								}
-							}
-						}
-					}
-					else
-					{
-						/* No obvious effect */
-						note = _("には効果がなかった。", " is unaffected.");
-						obvious = FALSE;
-					}
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 				}
 				else
 				{
-					if (!common_saving_throw_charm(p_ptr, dam, m_ptr))
-					{
-						note = _("があなたに隷属した。", " is in your thrall!");
-						set_pet(m_ptr);
-					}
-					else
-					{
-						switch (randint1(4))
-						{
-							case 1:
-								do_stun = dam / 2;
-								break;
-							case 2:
-								do_conf = dam / 2;
-								break;
-							default:
-								do_fear = dam;
-						}
-					}
+					note = _("には耐性がある。", " resists.");
+					dam *= 3; dam /= randint1(6) + 6;
 				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NETH);
 			}
-
-			/* Ice -- Cold + Cuts + Stun */
-			case GF_ICE:
+			else if (r_ptr->flags3 & RF3_EVIL)
 			{
-				if (seen) obvious = TRUE;
-				do_stun = (randint1(15) + 1) / (r + 1);
-				if (r_ptr->flagsr & RFR_IM_COLD)
-				{
-					note = _("にはかなり耐性がある！", " resists a lot.");
-					dam /= 9;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
-				}
-				else if (r_ptr->flags3 & (RF3_HURT_COLD))
-				{
-					note = _("はひどい痛手をうけた。", " is hit hard.");
-					dam *= 2;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
-				}
-				break;
+				note = _("はいくらか耐性を示した。", " resists somewhat.");
+				dam /= 2;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 			}
+			break;
+		}
 
-
-			/* Drain Life */
-			case GF_HYPODYNAMIA:
+		/* Water (acid) damage -- Water spirits/elementals are immune */
+		case GF_WATER:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_WATE)
 			{
-				if (seen) obvious = TRUE;
-				if (!monster_living(m_ptr->r_idx))
+				if ((m_ptr->r_idx == MON_WATER_ELEM) || (m_ptr->r_idx == MON_UNMAKER))
 				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
-						if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
-						if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
-					}
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-					dam = 0;
-				}
-				else do_time = (dam+7)/8;
-
-				break;
-			}
-
-			/* Death Ray */
-			case GF_DEATH_RAY:
-			{
-				if (seen) obvious = TRUE;
-				if (!monster_living(m_ptr->r_idx))
-				{
-					if (is_original_ap_and_seen(m_ptr))
-					{
-						if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
-						if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
-						if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
-					}
 					note = _("には完全な耐性がある！", " is immune.");
-					obvious = FALSE;
 					dam = 0;
 				}
-				else if (((r_ptr->flags1 & RF1_UNIQUE) &&
-					 (randint1(888) != 666)) ||
-					 (((r_ptr->level + randint1(20)) > randint1((caster_lev / 2) + randint1(10))) &&
-					 randint1(100) != 66))
+				else
 				{
-					note = _("には耐性がある！", " resists!");
-					obvious = FALSE;
-					dam = 0;
+					note = _("には耐性がある。", " resists.");
+					dam *= 3; dam /= randint1(6) + 6;
 				}
-
-				break;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WATE);
 			}
+			break;
+		}
 
-			/* Polymorph monster (Use "dam" as "power") */
-			case GF_OLD_POLY:
+		/* Chaos -- Chaos breathers resist */
+		case GF_CHAOS:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_CHAO)
 			{
-				if (seen) obvious = TRUE;
-				/* Attempt to polymorph (see below) */
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_CHAO);
+			}
+			else if ((r_ptr->flags3 & RF3_DEMON) && one_in_(3))
+			{
+				note = _("はいくらか耐性を示した。", " resists somewhat.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
+			}
+			else
+			{
 				do_poly = TRUE;
+				do_conf = (5 + randint1(11) + r) / (r + 1);
+			}
+			break;
+		}
 
+		/* Shards -- Shard breathers resist */
+		case GF_SHARDS:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_SHAR)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
+			}
+			break;
+		}
+
+		/* Rocket: Shard resistance helps */
+		case GF_ROCKET:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_SHAR)
+			{
+				note = _("はいくらか耐性を示した。", " resists somewhat.");
+				dam /= 2;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
+			}
+			break;
+		}
+
+
+		/* Sound -- Sound breathers resist */
+		case GF_SOUND:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_SOUN)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 2; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SOUN);
+			}
+			else do_stun = (10 + randint1(15) + r) / (r + 1);
+			break;
+		}
+
+		/* Confusion */
+		case GF_CONFUSION:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flags3 & RF3_NO_CONF)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+			}
+			else do_conf = (10 + randint1(15) + r) / (r + 1);
+			break;
+		}
+
+		/* Disenchantment -- Breathers and Disenchanters resist */
+		case GF_DISENCHANT:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_DISE)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DISE);
+			}
+			break;
+		}
+
+		/* Nexus -- Breathers and Existers resist */
+		case GF_NEXUS:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_NEXU)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NEXU);
+			}
+			break;
+		}
+
+		/* Force */
+		case GF_FORCE:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_WALL)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WALL);
+			}
+			else do_stun = (randint1(15) + r) / (r + 1);
+			break;
+		}
+
+		/* Inertia -- breathers resist */
+		case GF_INERTIAL:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_INER)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_INER);
+			}
+			else
+			{
 				/* Powerful monsters can resist */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-					(r_ptr->flags1 & RF1_QUESTOR) ||
+				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
-					note = _("には効果がなかった。", " is unaffected.");
-					do_poly = FALSE;
 					obvious = FALSE;
 				}
-
-				/* No "real" damage */
-				dam = 0;
-
-				break;
-			}
-
-
-			/* Clone monsters (Ignore "dam") */
-			case GF_OLD_CLONE:
-			{
-				if (seen) obvious = TRUE;
-
-				if ((p_ptr->current_floor_ptr->inside_arena) || is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-				}
+				/* Normal monsters slow down */
 				else
 				{
-					/* Heal fully */
-					m_ptr->hp = m_ptr->maxhp;
-
-					/* Attempt to clone. */
-					if (multiply_monster(g_ptr->m_idx, TRUE, 0L))
+					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
-						note = _("が分裂した！", " spawns!");
+						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
 				}
+			}
+			break;
+		}
 
-				/* No "real" damage */
-				dam = 0;
+		/* Time -- breathers resist */
+		case GF_TIME:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_TIME)
+			{
+				note = _("には耐性がある。", " resists.");
+				dam *= 3; dam /= randint1(6) + 6;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_TIME);
+			}
+			else do_time = (dam + 1) / 2;
+			break;
+		}
 
-				break;
+		/* Gravity -- breathers resist */
+		case GF_GRAVITY:
+		{
+			bool resist_tele = FALSE;
+
+			if (seen) obvious = TRUE;
+			if (r_ptr->flagsr & RFR_RES_TELE)
+			{
+				if (r_ptr->flags1 & (RF1_UNIQUE))
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					note = _("には効果がなかった。", " is unaffected!");
+					resist_tele = TRUE;
+				}
+				else if (r_ptr->level > randint1(100))
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					note = _("には耐性がある！", " resists!");
+					resist_tele = TRUE;
+				}
 			}
 
+			if (!resist_tele) do_dist = 10;
+			else do_dist = 0;
+			if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_dist = 0;
 
-			/* Heal Monster (use "dam" as amount of healing) */
-			case GF_STAR_HEAL:
+			if (r_ptr->flagsr & RFR_RES_GRAV)
 			{
-				if (seen) obvious = TRUE;
-
-				/* Wake up */
-				(void)set_monster_csleep(g_ptr->m_idx, 0);
-
-				if (m_ptr->maxhp < m_ptr->max_maxhp)
-				{
-					if (seen_msg) msg_format(_("%^sの強さが戻った。", "%^s recovers %s vitality."), m_name, m_poss);
-					m_ptr->maxhp = m_ptr->max_maxhp;
-				}
-
-				if (!dam)
-				{
-					/* Redraw (later) if needed */
-					if (p_ptr->health_who == g_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-					if (p_ptr->riding == g_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
-					break;
-				}
-
-				/* Fall through */
+				note = _("には耐性がある！", " resists!");
+				dam *= 3; dam /= randint1(6) + 6;
+				do_dist = 0;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_GRAV);
 			}
-			case GF_OLD_HEAL:
+			else
 			{
-				if (seen) obvious = TRUE;
-
-				/* Wake up */
-				(void)set_monster_csleep(g_ptr->m_idx, 0);
-				if (MON_STUNNED(m_ptr))
-				{
-					if (seen_msg) msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
-					(void)set_monster_stunned(g_ptr->m_idx, 0);
-				}
-				if (MON_CONFUSED(m_ptr))
-				{
-					if (seen_msg) msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
-					(void)set_monster_confused(g_ptr->m_idx, 0);
-				}
-				if (MON_MONFEAR(m_ptr))
-				{
-					if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
-					(void)set_monster_monfear(g_ptr->m_idx, 0);
-				}
-
-				/* Heal */
-				if (m_ptr->hp < 30000) m_ptr->hp += dam;
-
-				/* No overflow */
-				if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
-
-				if (!who)
-				{
-					chg_virtue(p_ptr, V_VITALITY, 1);
-
-					if (r_ptr->flags1 & RF1_UNIQUE)
-						chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
-
-					if (is_friendly(m_ptr))
-						chg_virtue(p_ptr, V_HONOUR, 1);
-					else if (!(r_ptr->flags3 & RF3_EVIL))
-					{
-						if (r_ptr->flags3 & RF3_GOOD)
-							chg_virtue(p_ptr, V_COMPASSION, 2);
-						else
-							chg_virtue(p_ptr, V_COMPASSION, 1);
-					}
-
-					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(p_ptr, V_NATURE, 1);
-				}
-
-				if (m_ptr->r_idx == MON_LEPER)
-				{
-					heal_leper = TRUE;
-					if (!who) chg_virtue(p_ptr, V_COMPASSION, 5);
-				}
-
-				/* Redraw (later) if needed */
-				if (p_ptr->health_who == g_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == g_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
-
-				note = _("は体力を回復したようだ。", " looks healthier.");
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-
-			/* Speed Monster (Ignore "dam") */
-			case GF_OLD_SPEED:
-			{
-				if (seen) obvious = TRUE;
-
-				/* Speed up */
-				if (set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100))
-				{
-					note = _("の動きが速くなった。", " starts moving faster.");
-				}
-
-				if (!who)
-				{
-					if (r_ptr->flags1 & RF1_UNIQUE)
-						chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
-					if (is_friendly(m_ptr))
-						chg_virtue(p_ptr, V_HONOUR, 1);
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-
-			/* Slow Monster (Use "dam" as "power") */
-			case GF_OLD_SLOW:
-			{
-				if (seen) obvious = TRUE;
-
+				/* 1. slowness */
 				/* Powerful monsters can resist */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
-					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
-
 				/* Normal monsters slow down */
 				else
 				{
@@ -2249,361 +1648,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					}
 				}
 
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-
-			/* Sleep (Use "dam" as "power") */
-			case GF_OLD_SLEEP:
-			{
-				if (seen) obvious = TRUE;
-
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-					(r_ptr->flags3 & RF3_NO_SLEEP) ||
-					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-				{
-					/* Memorize a flag */
-					if (r_ptr->flags3 & RF3_NO_SLEEP)
-					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
-					}
-					/* No obvious effect */
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-				}
-				else
-				{
-					/* Go to sleep (much) later */
-					note = _("は眠り込んでしまった！", " falls asleep!");
-					do_sleep = 500;
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-
-			/* Sleep (Use "dam" as "power") */
-			case GF_STASIS_EVIL:
-			{
-				if (seen) obvious = TRUE;
-
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-					!(r_ptr->flags3 & RF3_EVIL) ||
-					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-				}
-				else
-				{
-					/* Go to sleep (much) later */
-					note = _("は動けなくなった！", " is suspended!");
-					do_sleep = 500;
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* Sleep (Use "dam" as "power") */
-			case GF_STASIS:
-			{
-				if (seen) obvious = TRUE;
-
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-				}
-				else
-				{
-					/* Go to sleep (much) later */
-					note = _("は動けなくなった！", " is suspended!");
-					do_sleep = 500;
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* Charm monster */
-			case GF_CHARM:
-			{
-				int vir;
-				vir = virtue_number(p_ptr, V_HARMONY);
-				if (vir)
-				{
-					dam += p_ptr->virtues[vir-1]/10;
-				}
-
-				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
-				if (vir)
-				{
-					dam -= p_ptr->virtues[vir-1]/20;
-				}
-
-				if (seen) obvious = TRUE;
-
-				/* Attempt a saving throw */
-				if (common_saving_throw_charm(p_ptr, dam, m_ptr))
-				{
-
-					/* Resist */
-					/* No obvious effect */
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else if (p_ptr->cursed & TRC_AGGRAVATE)
-				{
-					note = _("はあなたに敵意を抱いている！", " hates you too much!");
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else
-				{
-					note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
-					set_pet(m_ptr);
-
-					chg_virtue(p_ptr, V_INDIVIDUALISM, -1);
-					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(p_ptr, V_NATURE, 1);
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* Control undead */
-			case GF_CONTROL_UNDEAD:
-			{
-				int vir;
-				if (seen) obvious = TRUE;
-
-				vir = virtue_number(p_ptr, V_UNLIFE);
-				if (vir)
-				{
-					dam += p_ptr->virtues[vir-1]/10;
-				}
-
-				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
-				if (vir)
-				{
-					dam -= p_ptr->virtues[vir-1]/20;
-				}
-
-				/* Attempt a saving throw */
-				if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
-					!(r_ptr->flags3 & RF3_UNDEAD))
-				{
-					/* No obvious effect */
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else if (p_ptr->cursed & TRC_AGGRAVATE)
-				{
-					note = _("はあなたに敵意を抱いている！", " hates you too much!");
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else
-				{
-					note = _("は既にあなたの奴隷だ！", " is in your thrall!");
-					set_pet(m_ptr);
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* Control demon */
-			case GF_CONTROL_DEMON:
-			{
-				int vir;
-				if (seen) obvious = TRUE;
-
-				vir = virtue_number(p_ptr, V_UNLIFE);
-				if (vir)
-				{
-					dam += p_ptr->virtues[vir-1]/10;
-				}
-
-				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
-				if (vir)
-				{
-					dam -= p_ptr->virtues[vir-1]/20;
-				}
-
-				/* Attempt a saving throw */
-				if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
-					!(r_ptr->flags3 & RF3_DEMON))
-				{
-					/* No obvious effect */
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else if (p_ptr->cursed & TRC_AGGRAVATE)
-				{
-					note = _("はあなたに敵意を抱いている！", " hates you too much!");
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else
-				{
-					note = _("は既にあなたの奴隷だ！", " is in your thrall!");
-					set_pet(m_ptr);
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* Tame animal */
-			case GF_CONTROL_ANIMAL:
-			{
-				int vir;
-				if (seen) obvious = TRUE;
-
-				vir = virtue_number(p_ptr, V_NATURE);
-				if (vir)
-				{
-					dam += p_ptr->virtues[vir-1]/10;
-				}
-
-				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
-				if (vir)
-				{
-					dam -= p_ptr->virtues[vir-1]/20;
-				}
-
-				/* Attempt a saving throw */
-				if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
-					!(r_ptr->flags3 & RF3_ANIMAL))
-				{
-					/* Resist */
-					/* No obvious effect */
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else if (p_ptr->cursed & TRC_AGGRAVATE)
-				{
-					note = _("はあなたに敵意を抱いている！", " hates you too much!");
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else
-				{
-					note = _("はなついた。", " is tamed!");
-					set_pet(m_ptr);
-					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(p_ptr, V_NATURE, 1);
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* Tame animal */
-			case GF_CHARM_LIVING:
-			{
-				int vir;
-
-				vir = virtue_number(p_ptr, V_UNLIFE);
-				if (seen) obvious = TRUE;
-
-				vir = virtue_number(p_ptr, V_UNLIFE);
-				if (vir)
-				{
-					dam -= p_ptr->virtues[vir-1]/10;
-				}
-
-				vir = virtue_number(p_ptr, V_INDIVIDUALISM);
-				if (vir)
-				{
-					dam -= p_ptr->virtues[vir-1]/20;
-				}
-
-				msg_format(_("%sを見つめた。", "You stare into %s."), m_name);
-
-				/* Attempt a saving throw */
-				if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
-					!monster_living(m_ptr->r_idx))
-				{
-					/* Resist */
-					/* No obvious effect */
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else if (p_ptr->cursed & TRC_AGGRAVATE)
-				{
-					note = _("はあなたに敵意を抱いている！", " hates you too much!");
-					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-				}
-				else
-				{
-					note = _("を支配した。", " is tamed!");
-					set_pet(m_ptr);
-					if (r_ptr->flags3 & RF3_ANIMAL)
-						chg_virtue(p_ptr, V_NATURE, 1);
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* Confusion (Use "dam" as "power") */
-			case GF_OLD_CONF:
-			{
-				if (seen) obvious = TRUE;
-
-				/* Get confused later */
-				do_conf = damroll(3, (dam / 2)) + 1;
-
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-					(r_ptr->flags3 & (RF3_NO_CONF)) ||
-					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-				{
-					/* Memorize a flag */
-					if (r_ptr->flags3 & (RF3_NO_CONF))
-					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-					}
-
-					/* Resist */
-					do_conf = 0;
-
-					/* No obvious effect */
-					note = _("には効果がなかった。", " is unaffected.");
-					obvious = FALSE;
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			case GF_STUN:
-			{
-				if (seen) obvious = TRUE;
-
-				do_stun = damroll((caster_lev / 20) + 3 , (dam)) + 1;
+				/* 2. stun */
+				do_stun = damroll((caster_lev / 20) + 3, (dam)) + 1;
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -2611,210 +1657,1078 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				{
 					/* Resist */
 					do_stun = 0;
+					/* No obvious effect */
+					note = _("には効果がなかった。", " is unaffected!");
+					obvious = FALSE;
+				}
+			}
+			break;
+		}
 
+		/* Pure damage */
+		case GF_MANA:
+		case GF_SEEKER:
+		case GF_SUPER_RAY:
+		{
+			if (seen) obvious = TRUE;
+			break;
+		}
+
+
+		/* Pure damage */
+		case GF_DISINTEGRATE:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flags3 & RF3_HURT_ROCK)
+			{
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
+				note = _("の皮膚がただれた！", " loses some skin!");
+				note_dies = _("は蒸発した！", " evaporates!");
+				dam *= 2;
+			}
+			break;
+		}
+
+		case GF_PSI:
+		{
+			if (seen) obvious = TRUE;
+
+			/* PSI only works if the monster can see you! -- RG */
+			if (!(los(floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)))
+			{
+				if (seen_msg)
+					msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
+				skipped = TRUE;
+				break;
+			}
+			if (r_ptr->flags2 & RF2_EMPTY_MIND)
+			{
+				dam = 0;
+				note = _("には完全な耐性がある！", " is immune.");
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+
+			}
+			else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
+				(r_ptr->flags3 & RF3_ANIMAL) ||
+				(r_ptr->level > randint1(3 * dam)))
+			{
+				note = _("には耐性がある！", " resists!");
+				dam /= 3;
+
+				/*
+				 * Powerful demons & undead can turn a mindcrafter's
+				 * attacks back on them
+				 */
+				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
+					(r_ptr->level > p_ptr->lev / 2) &&
+					one_in_(2))
+				{
+					note = NULL;
+					msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
+						(seen ? "%^s's corrupted mind backlashes your attack!" :
+							"%^ss corrupted mind backlashes your attack!")), m_name);
+
+					/* Saving throw */
+					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW(p_ptr))
+					{
+						msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+					}
+					else
+					{
+						/* Injure +/- confusion */
+						monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
+						take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
+						if (one_in_(4) && !CHECK_MULTISHADOW(p_ptr))
+						{
+							switch (randint1(4))
+							{
+							case 1:
+								set_confused(p_ptr, p_ptr->confused + 3 + randint1(dam));
+								break;
+							case 2:
+								set_stun(p_ptr, p_ptr->stun + randint1(dam));
+								break;
+							case 3:
+							{
+								if (r_ptr->flags3 & RF3_NO_FEAR)
+									note = _("には効果がなかった。", " is unaffected.");
+								else
+									set_afraid(p_ptr, p_ptr->afraid + 3 + randint1(dam));
+								break;
+							}
+							default:
+								if (!p_ptr->free_act)
+									(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(dam));
+								break;
+							}
+						}
+					}
+					dam = 0;
+				}
+			}
+
+			if ((dam > 0) && one_in_(4))
+			{
+				switch (randint1(4))
+				{
+				case 1:
+					do_conf = 3 + randint1(dam);
+					break;
+				case 2:
+					do_stun = 3 + randint1(dam);
+					break;
+				case 3:
+					do_fear = 3 + randint1(dam);
+					break;
+				default:
+					note = _("は眠り込んでしまった！", " falls asleep!");
+					do_sleep = 3 + randint1(dam);
+					break;
+				}
+			}
+
+			note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+			break;
+		}
+
+		case GF_PSI_DRAIN:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flags2 & RF2_EMPTY_MIND)
+			{
+				dam = 0;
+				note = _("には完全な耐性がある！", " is immune.");
+			}
+			else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
+				(r_ptr->flags3 & RF3_ANIMAL) ||
+				(r_ptr->level > randint1(3 * dam)))
+			{
+				note = _("には耐性がある！", " resists!");
+				dam /= 3;
+
+				/*
+				 * Powerful demons & undead can turn a mindcrafter's
+				 * attacks back on them
+				 */
+				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
+					(r_ptr->level > p_ptr->lev / 2) &&
+					(one_in_(2)))
+				{
+					note = NULL;
+					msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
+						(seen ? "%^s's corrupted mind backlashes your attack!" :
+							"%^ss corrupted mind backlashes your attack!")), m_name);
+					/* Saving throw */
+					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW(p_ptr))
+					{
+						msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
+					}
+					else
+					{
+						/* Injure + mana drain */
+						monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
+						if (!CHECK_MULTISHADOW(p_ptr))
+						{
+							msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
+							p_ptr->csp -= damroll(5, dam) / 2;
+							if (p_ptr->csp < 0) p_ptr->csp = 0;
+							p_ptr->redraw |= PR_MANA;
+							p_ptr->window |= (PW_SPELL);
+						}
+						take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
+					}
+					dam = 0;
+				}
+			}
+			else if (dam > 0)
+			{
+				int b = damroll(5, dam) / 4;
+				concptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
+				concptr msg = _("あなたは%sの苦痛を%sに変換した！",
+					(seen ? "You convert %s's pain into %s!" :
+						"You convert %ss pain into %s!"));
+				msg_format(msg, m_name, str);
+
+				b = MIN(p_ptr->msp, p_ptr->csp + b);
+				p_ptr->csp = b;
+				p_ptr->redraw |= PR_MANA;
+				p_ptr->window |= (PW_SPELL);
+			}
+			note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+			break;
+		}
+
+		case GF_TELEKINESIS:
+		{
+			if (seen) obvious = TRUE;
+			if (one_in_(4))
+			{
+				if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_dist = 0;
+				else do_dist = 7;
+			}
+
+			/* 1. stun */
+			do_stun = damroll((caster_lev / 20) + 3, dam) + 1;
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				(r_ptr->level > 5 + randint1(dam)))
+			{
+				/* Resist */
+				do_stun = 0;
+				/* No obvious effect */
+				obvious = FALSE;
+			}
+			break;
+		}
+
+		/* Psycho-spear -- powerful magic missile */
+		case GF_PSY_SPEAR:
+		{
+			if (seen) obvious = TRUE;
+			break;
+		}
+
+		/* Meteor -- powerful magic missile */
+		case GF_METEOR:
+		{
+			if (seen) obvious = TRUE;
+			break;
+		}
+
+		case GF_DOMINATION:
+		{
+			if (!is_hostile(m_ptr)) break;
+			if (seen) obvious = TRUE;
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
+				(r_ptr->flags3 & RF3_NO_CONF) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				/* Memorize a flag */
+				if (r_ptr->flags3 & RF3_NO_CONF)
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+				}
+
+				/* Resist */
+				do_conf = 0;
+
+				/*
+				 * Powerful demons & undead can turn a mindcrafter's
+				 * attacks back on them
+				 */
+				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
+					(r_ptr->level > p_ptr->lev / 2) &&
+					(one_in_(2)))
+				{
+					note = NULL;
+					msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
+						(seen ? "%^s's corrupted mind backlashes your attack!" :
+							"%^ss corrupted mind backlashes your attack!")), m_name);
+
+					/* Saving throw */
+					if (randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav)
+					{
+						msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+					}
+					else
+					{
+						/* Confuse, stun, terrify */
+						switch (randint1(4))
+						{
+						case 1:
+							set_stun(p_ptr, p_ptr->stun + dam / 2);
+							break;
+						case 2:
+							set_confused(p_ptr, p_ptr->confused + dam / 2);
+							break;
+						default:
+						{
+							if (r_ptr->flags3 & RF3_NO_FEAR)
+								note = _("には効果がなかった。", " is unaffected.");
+							else
+								set_afraid(p_ptr, p_ptr->afraid + dam);
+						}
+						}
+					}
+				}
+				else
+				{
 					/* No obvious effect */
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
 			}
-
-			/* Lite, but only hurts susceptible creatures */
-			case GF_LITE_WEAK:
+			else
 			{
-				if (!dam)
+				if (!common_saving_throw_charm(p_ptr, dam, m_ptr))
 				{
-					skipped = TRUE;
-					break;
+					note = _("があなたに隷属した。", " is in your thrall!");
+					set_pet(m_ptr);
 				}
-				/* Hurt by light */
-				if (r_ptr->flags3 & (RF3_HURT_LITE))
-				{
-					/* Obvious effect */
-					if (seen) obvious = TRUE;
-
-					/* Memorize the effects */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
-
-					/* Special effect */
-					note = _("は光に身をすくめた！", " cringes from the light!");
-					note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
-				}
-
-				/* Normally no damage */
 				else
 				{
-					/* No damage */
-					dam = 0;
+					switch (randint1(4))
+					{
+					case 1:
+						do_stun = dam / 2;
+						break;
+					case 2:
+						do_conf = dam / 2;
+						break;
+					default:
+						do_fear = dam;
+					}
 				}
+			}
 
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Ice -- Cold + Cuts + Stun */
+		case GF_ICE:
+		{
+			if (seen) obvious = TRUE;
+			do_stun = (randint1(15) + 1) / (r + 1);
+			if (r_ptr->flagsr & RFR_IM_COLD)
+			{
+				note = _("にはかなり耐性がある！", " resists a lot.");
+				dam /= 9;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
+			}
+			else if (r_ptr->flags3 & (RF3_HURT_COLD))
+			{
+				note = _("はひどい痛手をうけた。", " is hit hard.");
+				dam *= 2;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
+			}
+			break;
+		}
+
+
+		/* Drain Life */
+		case GF_HYPODYNAMIA:
+		{
+			if (seen) obvious = TRUE;
+			if (!monster_living(m_ptr->r_idx))
+			{
+				if (is_original_ap_and_seen(m_ptr))
+				{
+					if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
+					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
+					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
+				}
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+				dam = 0;
+			}
+			else do_time = (dam + 7) / 8;
+
+			break;
+		}
+
+		/* Death Ray */
+		case GF_DEATH_RAY:
+		{
+			if (seen) obvious = TRUE;
+			if (!monster_living(m_ptr->r_idx))
+			{
+				if (is_original_ap_and_seen(m_ptr))
+				{
+					if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
+					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
+					if (r_ptr->flags3 & RF3_NONLIVING) r_ptr->r_flags3 |= (RF3_NONLIVING);
+				}
+				note = _("には完全な耐性がある！", " is immune.");
+				obvious = FALSE;
+				dam = 0;
+			}
+			else if (((r_ptr->flags1 & RF1_UNIQUE) &&
+				(randint1(888) != 666)) ||
+				(((r_ptr->level + randint1(20)) > randint1((caster_lev / 2) + randint1(10))) &&
+					randint1(100) != 66))
+			{
+				note = _("には耐性がある！", " resists!");
+				obvious = FALSE;
+				dam = 0;
+			}
+
+			break;
+		}
+
+		/* Polymorph monster (Use "dam" as "power") */
+		case GF_OLD_POLY:
+		{
+			if (seen) obvious = TRUE;
+			/* Attempt to polymorph (see below) */
+			do_poly = TRUE;
+
+			/* Powerful monsters can resist */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				(r_ptr->flags1 & RF1_QUESTOR) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				do_poly = FALSE;
+				obvious = FALSE;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+
+			break;
+		}
+
+
+		/* Clone monsters (Ignore "dam") */
+		case GF_OLD_CLONE:
+		{
+			if (seen) obvious = TRUE;
+
+			if ((floor_ptr->inside_arena) || is_pet(m_ptr) || (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2)))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+			}
+			else
+			{
+				/* Heal fully */
+				m_ptr->hp = m_ptr->maxhp;
+
+				/* Attempt to clone. */
+				if (multiply_monster(g_ptr->m_idx, TRUE, 0L))
+				{
+					note = _("が分裂した！", " spawns!");
+				}
+			}
+
+			/* No "real" damage */
+			dam = 0;
+
+			break;
+		}
+
+
+		/* Heal Monster (use "dam" as amount of healing) */
+		case GF_STAR_HEAL:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Wake up */
+			(void)set_monster_csleep(g_ptr->m_idx, 0);
+
+			if (m_ptr->maxhp < m_ptr->max_maxhp)
+			{
+				if (seen_msg) msg_format(_("%^sの強さが戻った。", "%^s recovers %s vitality."), m_name, m_poss);
+				m_ptr->maxhp = m_ptr->max_maxhp;
+			}
+
+			if (!dam)
+			{
+				/* Redraw (later) if needed */
+				if (p_ptr->health_who == g_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+				if (p_ptr->riding == g_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
 				break;
 			}
 
+			/* Fall through */
+		}
+		case GF_OLD_HEAL:
+		{
+			if (seen) obvious = TRUE;
 
-
-			/* Lite -- opposite of Dark */
-			case GF_LITE:
+			/* Wake up */
+			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			if (MON_STUNNED(m_ptr))
 			{
+				if (seen_msg) msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
+				(void)set_monster_stunned(g_ptr->m_idx, 0);
+			}
+			if (MON_CONFUSED(m_ptr))
+			{
+				if (seen_msg) msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
+				(void)set_monster_confused(g_ptr->m_idx, 0);
+			}
+			if (MON_MONFEAR(m_ptr))
+			{
+				if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
+				(void)set_monster_monfear(g_ptr->m_idx, 0);
+			}
+
+			/* Heal */
+			if (m_ptr->hp < 30000) m_ptr->hp += dam;
+
+			/* No overflow */
+			if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
+
+			if (!who)
+			{
+				chg_virtue(p_ptr, V_VITALITY, 1);
+
+				if (r_ptr->flags1 & RF1_UNIQUE)
+					chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
+
+				if (is_friendly(m_ptr))
+					chg_virtue(p_ptr, V_HONOUR, 1);
+				else if (!(r_ptr->flags3 & RF3_EVIL))
+				{
+					if (r_ptr->flags3 & RF3_GOOD)
+						chg_virtue(p_ptr, V_COMPASSION, 2);
+					else
+						chg_virtue(p_ptr, V_COMPASSION, 1);
+				}
+
+				if (r_ptr->flags3 & RF3_ANIMAL)
+					chg_virtue(p_ptr, V_NATURE, 1);
+			}
+
+			if (m_ptr->r_idx == MON_LEPER)
+			{
+				heal_leper = TRUE;
+				if (!who) chg_virtue(p_ptr, V_COMPASSION, 5);
+			}
+
+			/* Redraw (later) if needed */
+			if (p_ptr->health_who == g_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
+			if (p_ptr->riding == g_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
+
+			note = _("は体力を回復したようだ。", " looks healthier.");
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Speed Monster (Ignore "dam") */
+		case GF_OLD_SPEED:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Speed up */
+			if (set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100))
+			{
+				note = _("の動きが速くなった。", " starts moving faster.");
+			}
+
+			if (!who)
+			{
+				if (r_ptr->flags1 & RF1_UNIQUE)
+					chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
+				if (is_friendly(m_ptr))
+					chg_virtue(p_ptr, V_HONOUR, 1);
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Slow Monster (Use "dam" as "power") */
+		case GF_OLD_SLOW:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Powerful monsters can resist */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+			}
+
+			/* Normal monsters slow down */
+			else
+			{
+				if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+				{
+					note = _("の動きが遅くなった。", " starts moving slower.");
+				}
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Sleep (Use "dam" as "power") */
+		case GF_OLD_SLEEP:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				(r_ptr->flags3 & RF3_NO_SLEEP) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				/* Memorize a flag */
+				if (r_ptr->flags3 & RF3_NO_SLEEP)
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
+				}
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+			}
+			else
+			{
+				/* Go to sleep (much) later */
+				note = _("は眠り込んでしまった！", " falls asleep!");
+				do_sleep = 500;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Sleep (Use "dam" as "power") */
+		case GF_STASIS_EVIL:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				!(r_ptr->flags3 & RF3_EVIL) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+			}
+			else
+			{
+				/* Go to sleep (much) later */
+				note = _("は動けなくなった！", " is suspended!");
+				do_sleep = 500;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Sleep (Use "dam" as "power") */
+		case GF_STASIS:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+			}
+			else
+			{
+				/* Go to sleep (much) later */
+				note = _("は動けなくなった！", " is suspended!");
+				do_sleep = 500;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Charm monster */
+		case GF_CHARM:
+		{
+			int vir;
+			vir = virtue_number(p_ptr, V_HARMONY);
+			if (vir)
+			{
+				dam += p_ptr->virtues[vir - 1] / 10;
+			}
+
+			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			if (vir)
+			{
+				dam -= p_ptr->virtues[vir - 1] / 20;
+			}
+
+			if (seen) obvious = TRUE;
+
+			/* Attempt a saving throw */
+			if (common_saving_throw_charm(p_ptr, dam, m_ptr))
+			{
+
+				/* Resist */
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			{
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else
+			{
+				note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
+				set_pet(m_ptr);
+
+				chg_virtue(p_ptr, V_INDIVIDUALISM, -1);
+				if (r_ptr->flags3 & RF3_ANIMAL)
+					chg_virtue(p_ptr, V_NATURE, 1);
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Control undead */
+		case GF_CONTROL_UNDEAD:
+		{
+			int vir;
+			if (seen) obvious = TRUE;
+
+			vir = virtue_number(p_ptr, V_UNLIFE);
+			if (vir)
+			{
+				dam += p_ptr->virtues[vir - 1] / 10;
+			}
+
+			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			if (vir)
+			{
+				dam -= p_ptr->virtues[vir - 1] / 20;
+			}
+
+			/* Attempt a saving throw */
+			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
+				!(r_ptr->flags3 & RF3_UNDEAD))
+			{
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			{
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else
+			{
+				note = _("は既にあなたの奴隷だ！", " is in your thrall!");
+				set_pet(m_ptr);
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Control demon */
+		case GF_CONTROL_DEMON:
+		{
+			int vir;
+			if (seen) obvious = TRUE;
+
+			vir = virtue_number(p_ptr, V_UNLIFE);
+			if (vir)
+			{
+				dam += p_ptr->virtues[vir - 1] / 10;
+			}
+
+			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			if (vir)
+			{
+				dam -= p_ptr->virtues[vir - 1] / 20;
+			}
+
+			/* Attempt a saving throw */
+			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
+				!(r_ptr->flags3 & RF3_DEMON))
+			{
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			{
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else
+			{
+				note = _("は既にあなたの奴隷だ！", " is in your thrall!");
+				set_pet(m_ptr);
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Tame animal */
+		case GF_CONTROL_ANIMAL:
+		{
+			int vir;
+			if (seen) obvious = TRUE;
+
+			vir = virtue_number(p_ptr, V_NATURE);
+			if (vir)
+			{
+				dam += p_ptr->virtues[vir - 1] / 10;
+			}
+
+			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			if (vir)
+			{
+				dam -= p_ptr->virtues[vir - 1] / 20;
+			}
+
+			/* Attempt a saving throw */
+			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
+				!(r_ptr->flags3 & RF3_ANIMAL))
+			{
+				/* Resist */
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			{
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else
+			{
+				note = _("はなついた。", " is tamed!");
+				set_pet(m_ptr);
+				if (r_ptr->flags3 & RF3_ANIMAL)
+					chg_virtue(p_ptr, V_NATURE, 1);
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Tame animal */
+		case GF_CHARM_LIVING:
+		{
+			int vir;
+
+			vir = virtue_number(p_ptr, V_UNLIFE);
+			if (seen) obvious = TRUE;
+
+			vir = virtue_number(p_ptr, V_UNLIFE);
+			if (vir)
+			{
+				dam -= p_ptr->virtues[vir - 1] / 10;
+			}
+
+			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			if (vir)
+			{
+				dam -= p_ptr->virtues[vir - 1] / 20;
+			}
+
+			msg_format(_("%sを見つめた。", "You stare into %s."), m_name);
+
+			/* Attempt a saving throw */
+			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+				!monster_living(m_ptr->r_idx))
+			{
+				/* Resist */
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			{
+				note = _("はあなたに敵意を抱いている！", " hates you too much!");
+				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+			}
+			else
+			{
+				note = _("を支配した。", " is tamed!");
+				set_pet(m_ptr);
+				if (r_ptr->flags3 & RF3_ANIMAL)
+					chg_virtue(p_ptr, V_NATURE, 1);
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Confusion (Use "dam" as "power") */
+		case GF_OLD_CONF:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Get confused later */
+			do_conf = damroll(3, (dam / 2)) + 1;
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
+				(r_ptr->flags3 & (RF3_NO_CONF)) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				/* Memorize a flag */
+				if (r_ptr->flags3 & (RF3_NO_CONF))
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+				}
+
+				/* Resist */
+				do_conf = 0;
+
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		case GF_STUN:
+		{
+			if (seen) obvious = TRUE;
+
+			do_stun = damroll((caster_lev / 20) + 3, (dam)) + 1;
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				/* Resist */
+				do_stun = 0;
+
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* Lite, but only hurts susceptible creatures */
+		case GF_LITE_WEAK:
+		{
+			if (!dam)
+			{
+				skipped = TRUE;
+				break;
+			}
+			/* Hurt by light */
+			if (r_ptr->flags3 & (RF3_HURT_LITE))
+			{
+				/* Obvious effect */
 				if (seen) obvious = TRUE;
 
-				if (r_ptr->flagsr & RFR_RES_LITE)
-				{
-					note = _("には耐性がある！", " resists!");
-					dam *= 2; dam /= (randint1(6)+6);
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_LITE);
-				}
-				else if (r_ptr->flags3 & (RF3_HURT_LITE))
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
-					note = _("は光に身をすくめた！", " cringes from the light!");
-					note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
-					dam *= 2;
-				}
-				break;
+				/* Memorize the effects */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
+
+				/* Special effect */
+				note = _("は光に身をすくめた！", " cringes from the light!");
+				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
 			}
 
-
-			/* Dark -- opposite of Lite */
-			case GF_DARK:
+			/* Normally no damage */
+			else
 			{
+				/* No damage */
+				dam = 0;
+			}
+
+			break;
+		}
+
+
+
+		/* Lite -- opposite of Dark */
+		case GF_LITE:
+		{
+			if (seen) obvious = TRUE;
+
+			if (r_ptr->flagsr & RFR_RES_LITE)
+			{
+				note = _("には耐性がある！", " resists!");
+				dam *= 2; dam /= (randint1(6) + 6);
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_LITE);
+			}
+			else if (r_ptr->flags3 & (RF3_HURT_LITE))
+			{
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
+				note = _("は光に身をすくめた！", " cringes from the light!");
+				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
+				dam *= 2;
+			}
+			break;
+		}
+
+
+		/* Dark -- opposite of Lite */
+		case GF_DARK:
+		{
+			if (seen) obvious = TRUE;
+
+			if (r_ptr->flagsr & RFR_RES_DARK)
+			{
+				note = _("には耐性がある！", " resists!");
+				dam *= 2; dam /= (randint1(6) + 6);
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DARK);
+			}
+			break;
+		}
+
+
+		/* Stone to Mud */
+		case GF_KILL_WALL:
+		{
+			/* Hurt by rock remover */
+			if (r_ptr->flags3 & (RF3_HURT_ROCK))
+			{
+				/* Notice effect */
 				if (seen) obvious = TRUE;
 
-				if (r_ptr->flagsr & RFR_RES_DARK)
-				{
-					note = _("には耐性がある！", " resists!");
-					dam *= 2; dam /= (randint1(6)+6);
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DARK);
-				}
-				break;
+				/* Memorize the effects */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
+
+				/* Cute little message */
+				note = _("の皮膚がただれた！", " loses some skin!");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
 
-
-			/* Stone to Mud */
-			case GF_KILL_WALL:
+			/* Usually, ignore the effects */
+			else
 			{
-				/* Hurt by rock remover */
-				if (r_ptr->flags3 & (RF3_HURT_ROCK))
-				{
-					/* Notice effect */
-					if (seen) obvious = TRUE;
-
-					/* Memorize the effects */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
-
-					/* Cute little message */
-					note = _("の皮膚がただれた！", " loses some skin!");
-					note_dies = _("はドロドロに溶けた！", " dissolves!");
-				}
-
-				/* Usually, ignore the effects */
-				else
-				{
-					/* No damage */
-					dam = 0;
-				}
-
-				break;
-			}
-
-
-			/* Teleport undead (Use "dam" as "power") */
-			case GF_AWAY_UNDEAD:
-			{
-				/* Only affect undead */
-				if (r_ptr->flags3 & (RF3_UNDEAD))
-				{
-					bool resists_tele = FALSE;
-
-					if (r_ptr->flagsr & RFR_RES_TELE)
-					{
-						if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
-						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-							note = _("には効果がなかった。", " is unaffected.");
-							resists_tele = TRUE;
-						}
-						else if (r_ptr->level > randint1(100))
-						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-							note = _("には耐性がある！", " resists!");
-							resists_tele = TRUE;
-						}
-					}
-
-					if (!resists_tele)
-					{
-						if (seen) obvious = TRUE;
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
-						do_dist = dam;
-					}
-				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-				}
-
-				/* No "real" damage */
+				/* No damage */
 				dam = 0;
-				break;
 			}
 
-
-			/* Teleport evil (Use "dam" as "power") */
-			case GF_AWAY_EVIL:
-			{
-				/* Only affect evil */
-				if (r_ptr->flags3 & (RF3_EVIL))
-				{
-					bool resists_tele = FALSE;
-
-					if (r_ptr->flagsr & RFR_RES_TELE)
-					{
-						if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
-						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-							note = _("には効果がなかった。", " is unaffected.");
-							resists_tele = TRUE;
-						}
-						else if (r_ptr->level > randint1(100))
-						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-							note = _("には耐性がある！", " resists!");
-							resists_tele = TRUE;
-						}
-					}
-
-					if (!resists_tele)
-					{
-						if (seen) obvious = TRUE;
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
-						do_dist = dam;
-					}
-				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
+			break;
+		}
 
 
-			/* Teleport monster (Use "dam" as "power") */
-			case GF_AWAY_ALL:
+		/* Teleport undead (Use "dam" as "power") */
+		case GF_AWAY_UNDEAD:
+		{
+			/* Only affect undead */
+			if (r_ptr->flags3 & (RF3_UNDEAD))
 			{
 				bool resists_tele = FALSE;
+
 				if (r_ptr->flagsr & RFR_RES_TELE)
 				{
 					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
@@ -2834,769 +2748,855 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				if (!resists_tele)
 				{
 					if (seen) obvious = TRUE;
-
-					/* Prepare to teleport */
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 					do_dist = dam;
 				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
 			}
 
-
-			/* Turn undead (Use "dam" as "power") */
-			case GF_TURN_UNDEAD:
+			/* Others ignore */
+			else
 			{
-				/* Only affect undead */
-				if (r_ptr->flags3 & (RF3_UNDEAD))
+				/* Irrelevant */
+				skipped = TRUE;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Teleport evil (Use "dam" as "power") */
+		case GF_AWAY_EVIL:
+		{
+			/* Only affect evil */
+			if (r_ptr->flags3 & (RF3_EVIL))
+			{
+				bool resists_tele = FALSE;
+
+				if (r_ptr->flagsr & RFR_RES_TELE)
 				{
-					if (seen) obvious = TRUE;
-
-					/* Learn about type */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
-
-					/* Apply some fear */
-					do_fear = damroll(3, (dam / 2)) + 1;
-
-					/* Attempt a saving throw */
-					if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
+					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 					{
-						/* No obvious effect */
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 						note = _("には効果がなかった。", " is unaffected.");
-						obvious = FALSE;
-						do_fear = 0;
+						resists_tele = TRUE;
+					}
+					else if (r_ptr->level > randint1(100))
+					{
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						note = _("には耐性がある！", " resists!");
+						resists_tele = TRUE;
 					}
 				}
 
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-
-			/* Turn evil (Use "dam" as "power") */
-			case GF_TURN_EVIL:
-			{
-				/* Only affect evil */
-				if (r_ptr->flags3 & (RF3_EVIL))
+				if (!resists_tele)
 				{
 					if (seen) obvious = TRUE;
-
-					/* Learn about type */
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
-
-					/* Apply some fear */
-					do_fear = damroll(3, (dam / 2)) + 1;
-
-					/* Attempt a saving throw */
-					if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
-					{
-						/* No obvious effect */
-						note = _("には効果がなかった。", " is unaffected.");
-						obvious = FALSE;
-						do_fear = 0;
-					}
+					do_dist = dam;
 				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
 			}
 
+			/* Others ignore */
+			else
+			{
+				/* Irrelevant */
+				skipped = TRUE;
+			}
 
-			/* Turn monster (Use "dam" as "power") */
-			case GF_TURN_ALL:
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Teleport monster (Use "dam" as "power") */
+		case GF_AWAY_ALL:
+		{
+			bool resists_tele = FALSE;
+			if (r_ptr->flagsr & RFR_RES_TELE)
+			{
+				if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					note = _("には効果がなかった。", " is unaffected.");
+					resists_tele = TRUE;
+				}
+				else if (r_ptr->level > randint1(100))
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					note = _("には耐性がある！", " resists!");
+					resists_tele = TRUE;
+				}
+			}
+
+			if (!resists_tele)
 			{
 				if (seen) obvious = TRUE;
+
+				/* Prepare to teleport */
+				do_dist = dam;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Turn undead (Use "dam" as "power") */
+		case GF_TURN_UNDEAD:
+		{
+			/* Only affect undead */
+			if (r_ptr->flags3 & (RF3_UNDEAD))
+			{
+				if (seen) obvious = TRUE;
+
+				/* Learn about type */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 				/* Apply some fear */
 				do_fear = damroll(3, (dam / 2)) + 1;
 
 				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-					(r_ptr->flags3 & (RF3_NO_FEAR)) ||
-					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
 					/* No obvious effect */
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 					do_fear = 0;
 				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
 			}
 
-
-			/* Dispel undead */
-			case GF_DISP_UNDEAD:
+			/* Others ignore */
+			else
 			{
-				/* Only affect undead */
-				if (r_ptr->flags3 & (RF3_UNDEAD))
-				{
-					if (seen) obvious = TRUE;
-
-					/* Learn about type */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
-
-					note = _("は身震いした。", " shudders.");
-					note_dies = _("はドロドロに溶けた！", " dissolves!");
-				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-
-					/* No damage */
-					dam = 0;
-				}
-
-				break;
+				/* Irrelevant */
+				skipped = TRUE;
 			}
 
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
 
-			/* Dispel evil */
-			case GF_DISP_EVIL:
-			{
-				/* Only affect evil */
-				if (r_ptr->flags3 & (RF3_EVIL))
-				{
-					if (seen) obvious = TRUE;
 
-					/* Learn about type */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
-
-					note = _("は身震いした。", " shudders.");
-					note_dies = _("はドロドロに溶けた！", " dissolves!");
-				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-
-					/* No damage */
-					dam = 0;
-				}
-
-				break;
-			}
-
-			/* Dispel good */
-			case GF_DISP_GOOD:
-			{
-				/* Only affect good */
-				if (r_ptr->flags3 & (RF3_GOOD))
-				{
-					if (seen) obvious = TRUE;
-
-					/* Learn about type */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
-
-					note = _("は身震いした。", " shudders.");
-					note_dies = _("はドロドロに溶けた！", " dissolves!");
-				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-
-					/* No damage */
-					dam = 0;
-				}
-
-				break;
-			}
-
-			/* Dispel living */
-			case GF_DISP_LIVING:
-			{
-				/* Only affect non-undead */
-				if (monster_living(m_ptr->r_idx))
-				{
-					if (seen) obvious = TRUE;
-
-					note = _("は身震いした。", " shudders.");
-					note_dies = _("はドロドロに溶けた！", " dissolves!");
-				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-
-					/* No damage */
-					dam = 0;
-				}
-
-				break;
-			}
-
-			/* Dispel demons */
-			case GF_DISP_DEMON:
-			{
-				/* Only affect demons */
-				if (r_ptr->flags3 & (RF3_DEMON))
-				{
-					if (seen) obvious = TRUE;
-
-					/* Learn about type */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
-
-					note = _("は身震いした。", " shudders.");
-					note_dies = _("はドロドロに溶けた！", " dissolves!");
-				}
-
-				/* Others ignore */
-				else
-				{
-					/* Irrelevant */
-					skipped = TRUE;
-
-					/* No damage */
-					dam = 0;
-				}
-
-				break;
-			}
-
-			/* Dispel monster */
-			case GF_DISP_ALL:
+		/* Turn evil (Use "dam" as "power") */
+		case GF_TURN_EVIL:
+		{
+			/* Only affect evil */
+			if (r_ptr->flags3 & (RF3_EVIL))
 			{
 				if (seen) obvious = TRUE;
+
+				/* Learn about type */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
+
+				/* Apply some fear */
+				do_fear = damroll(3, (dam / 2)) + 1;
+
+				/* Attempt a saving throw */
+				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
+				{
+					/* No obvious effect */
+					note = _("には効果がなかった。", " is unaffected.");
+					obvious = FALSE;
+					do_fear = 0;
+				}
+			}
+
+			/* Others ignore */
+			else
+			{
+				/* Irrelevant */
+				skipped = TRUE;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Turn monster (Use "dam" as "power") */
+		case GF_TURN_ALL:
+		{
+			if (seen) obvious = TRUE;
+
+			/* Apply some fear */
+			do_fear = damroll(3, (dam / 2)) + 1;
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
+				(r_ptr->flags3 & (RF3_NO_FEAR)) ||
+				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+			{
+				/* No obvious effect */
+				note = _("には効果がなかった。", " is unaffected.");
+				obvious = FALSE;
+				do_fear = 0;
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+
+		/* Dispel undead */
+		case GF_DISP_UNDEAD:
+		{
+			/* Only affect undead */
+			if (r_ptr->flags3 & (RF3_UNDEAD))
+			{
+				if (seen) obvious = TRUE;
+
+				/* Learn about type */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
+
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
-				break;
 			}
 
-			/* Drain mana */
-			case GF_DRAIN_MANA:
-			{
-				if (seen) obvious = TRUE;
-				if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
-				{
-					if (who > 0)
-					{
-						/* Heal the monster */
-						if (caster_ptr->hp < caster_ptr->maxhp)
-						{
-							/* Heal */
-							caster_ptr->hp += dam;
-							if (caster_ptr->hp > caster_ptr->maxhp) caster_ptr->hp = caster_ptr->maxhp;
-
-							/* Redraw (later) if needed */
-							if (p_ptr->health_who == who) p_ptr->redraw |= (PR_HEALTH);
-							if (p_ptr->riding == who) p_ptr->redraw |= (PR_UHEALTH);
-
-							/* Special message */
-							if (see_s_msg)
-							{
-								monster_desc(killer, caster_ptr, 0);
-								msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), killer);
-							}
-						}
-					}
-					else
-					{
-						msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), m_name);
-						(void)hp_player(p_ptr, dam);
-					}
-				}
-				else
-				{
-					if (see_s_msg) msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
-				}
-				dam = 0;
-				break;
-			}
-
-			/* Mind blast */
-			case GF_MIND_BLAST:
-			{
-				if (seen) obvious = TRUE;
-				if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-					 (r_ptr->flags3 & RF3_NO_CONF) ||
-					 (r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
-				{
-					/* Memorize a flag */
-					if (r_ptr->flags3 & (RF3_NO_CONF))
-					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-					}
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				else if (r_ptr->flags2 & RF2_EMPTY_MIND)
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-					note = _("には完全な耐性がある！", " is immune.");
-					dam = 0;
-				}
-				else if (r_ptr->flags2 & RF2_WEIRD_MIND)
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
-					note = _("には耐性がある。", " resists.");
-					dam /= 3;
-				}
-				else
-				{
-					note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
-					note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-
-					if (who > 0) do_conf = randint0(4) + 4;
-					else do_conf = randint0(8) + 8;
-				}
-				break;
-			}
-
-			/* Brain smash */
-			case GF_BRAIN_SMASH:
-			{
-				if (seen) obvious = TRUE;
-				if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
-
-				/* Attempt a saving throw */
-				if ((r_ptr->flags1 & RF1_UNIQUE) ||
-					 (r_ptr->flags3 & RF3_NO_CONF) ||
-					 (r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
-				{
-					/* Memorize a flag */
-					if (r_ptr->flags3 & (RF3_NO_CONF))
-					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-					}
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				else if (r_ptr->flags2 & RF2_EMPTY_MIND)
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-					note = _("には完全な耐性がある！", " is immune.");
-					dam = 0;
-				}
-				else if (r_ptr->flags2 & RF2_WEIRD_MIND)
-				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
-					note = _("には耐性がある！", " resists!");
-					dam /= 3;
-				}
-				else
-				{
-					note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
-					note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-
-					if (who > 0)
-					{
-						do_conf = randint0(4) + 4;
-						do_stun = randint0(4) + 4;
-					}
-					else
-					{
-						do_conf = randint0(8) + 8;
-						do_stun = randint0(8) + 8;
-					}
-					(void)set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 10);
-				}
-				break;
-			}
-
-			/* CAUSE_1 */
-			case GF_CAUSE_1:
-			{
-				if (seen) obvious = TRUE;
-				if (!who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), m_name);
-				/* Attempt a saving throw */
-				if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				break;
-			}
-
-			/* CAUSE_2 */
-			case GF_CAUSE_2:
-			{
-				if (seen) obvious = TRUE;
-				if (!who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), m_name);
-				/* Attempt a saving throw */
-				if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				break;
-			}
-
-			/* CAUSE_3 */
-			case GF_CAUSE_3:
-			{
-				if (seen) obvious = TRUE;
-				if (!who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), m_name);
-				/* Attempt a saving throw */
-				if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				break;
-			}
-
-			/* CAUSE_4 */
-			case GF_CAUSE_4:
-			{
-				if (seen) obvious = TRUE;
-				if (!who) 
-					msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", 
-								 "You point at %s, screaming the word, 'DIE!'."), m_name);
-				/* Attempt a saving throw */
-				if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (caster_ptr->r_idx != MON_KENSHIROU)))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				break;
-			}
-
-			/* HAND_DOOM */
-			case GF_HAND_DOOM:
-			{
-				if (seen) obvious = TRUE;
-				if (r_ptr->flags1 & RF1_UNIQUE)
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				else
-				{
-					if ((who > 0) ? ((caster_lev + randint1(dam)) > (r_ptr->level + 10 + randint1(20))) :
-					   (((caster_lev / 2) + randint1(dam)) > (r_ptr->level + randint1(200))))
-					{
-						dam = ((40 + randint1(20)) * m_ptr->hp) / 100;
-
-						if (m_ptr->hp < dam) dam = m_ptr->hp - 1;
-					}
-					else
-					{
-						note = _("は耐性を持っている！", "resists!");
-						dam = 0;
-					}
-				}
-				break;
-			}
-
-			/* Capture monster */
-			case GF_CAPTURE:
-			{
-				int nokori_hp;
-				if ((p_ptr->current_floor_ptr->inside_quest && (quest[p_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(m_ptr)) ||
-					(r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL)) || (r_ptr->flags7 & (RF7_UNIQUE2)) || (r_ptr->flags1 & RF1_QUESTOR) || m_ptr->parent_m_idx)
-				{
-					msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
-					skipped = TRUE;
-					break;
-				}
-
-				if (is_pet(m_ptr)) nokori_hp = m_ptr->maxhp * 4L;
-				else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
-					nokori_hp = m_ptr->maxhp * 3 / 10;
-				else
-					nokori_hp = m_ptr->maxhp * 3 / 20;
-
-				if (m_ptr->hp >= nokori_hp)
-				{
-					msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), m_name);
-					skipped = TRUE;
-				}
-				else if (m_ptr->hp < randint0(nokori_hp))
-				{
-					if (m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(g_ptr->m_idx, FALSE, MON_CHAMELEON);
-					msg_format(_("%sを捕えた！", "You capture %^s!"), m_name);
-					cap_mon = m_ptr->r_idx;
-					cap_mspeed = m_ptr->mspeed;
-					cap_hp = m_ptr->hp;
-					cap_maxhp = m_ptr->max_maxhp;
-					cap_nickname = m_ptr->nickname; /* Quark transfer */
-					if (g_ptr->m_idx == p_ptr->riding)
-					{
-						if (rakuba(p_ptr, -1, FALSE))
-						{
-							msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
-						}
-					}
-
-					delete_monster_idx(g_ptr->m_idx);
-
-					return (TRUE);
-				}
-				else
-				{
-					msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), m_name);
-					skipped = TRUE;
-				}
-				break;
-			}
-
-			/* Attack (Use "dam" as attack type) */
-			case GF_ATTACK:
-			{
-				/* Return this monster's death */
-				return py_attack(p_ptr, y, x, dam);
-			}
-
-			/* Sleep (Use "dam" as "power") */
-			case GF_ENGETSU:
-			{
-				int effect = 0;
-				bool done = TRUE;
-
-				if (seen) obvious = TRUE;
-				if (r_ptr->flags2 & RF2_EMPTY_MIND)
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-					skipped = TRUE;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-					break;
-				}
-				if (MON_CSLEEP(m_ptr))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-					skipped = TRUE;
-					break;
-				}
-
-				if (one_in_(5)) effect = 1;
-				else if (one_in_(4)) effect = 2;
-				else if (one_in_(3)) effect = 3;
-				else done = FALSE;
-
-				if (effect == 1)
-				{
-					/* Powerful monsters can resist */
-					if ((r_ptr->flags1 & RF1_UNIQUE) ||
-						(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-					{
-						note = _("には効果がなかった。", " is unaffected.");
-						obvious = FALSE;
-					}
-
-					/* Normal monsters slow down */
-					else
-					{
-						if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
-						{
-							note = _("の動きが遅くなった。", " starts moving slower.");
-						}
-					}
-				}
-
-				else if (effect == 2)
-				{
-					do_stun = damroll((p_ptr->lev / 10) + 3 , (dam)) + 1;
-
-					/* Attempt a saving throw */
-					if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
-						(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-					{
-						/* Resist */
-						do_stun = 0;
-
-						/* No obvious effect */
-						note = _("には効果がなかった。", " is unaffected.");
-						obvious = FALSE;
-					}
-				}
-
-				else if (effect == 3)
-				{
-					/* Attempt a saving throw */
-					if ((r_ptr->flags1 & RF1_UNIQUE) ||
-						(r_ptr->flags3 & RF3_NO_SLEEP) ||
-						(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
-					{
-						/* Memorize a flag */
-						if (r_ptr->flags3 & RF3_NO_SLEEP)
-						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
-						}
-
-						/* No obvious effect */
-						note = _("には効果がなかった。", " is unaffected.");
-						obvious = FALSE;
-					}
-					else
-					{
-						/* Go to sleep (much) later */
-						note = _("は眠り込んでしまった！", " falls asleep!");
-						do_sleep = 500;
-					}
-				}
-
-				if (!done)
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			/* GENOCIDE */
-			case GF_GENOCIDE:
-			{
-				if (seen) obvious = TRUE;
-				if (genocide_aux(g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
-				{
-					if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
-					chg_virtue(p_ptr, V_VITALITY, -1);
-					return TRUE;
-				}
-
-				skipped = TRUE;
-				break;
-			}
-
-			case GF_PHOTO:
-			{
-				if (!who) msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), m_name);
-				/* Hurt by light */
-				if (r_ptr->flags3 & (RF3_HURT_LITE))
-				{
-					/* Obvious effect */
-					if (seen) obvious = TRUE;
-
-					/* Memorize the effects */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
-
-					/* Special effect */
-					note = _("は光に身をすくめた！", " cringes from the light!");
-					note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
-				}
-
-				/* Normally no damage */
-				else
-				{
-					/* No damage */
-					dam = 0;
-				}
-
-				photo = m_ptr->r_idx;
-
-				break;
-			}
-
-
-			/* blood curse */
-			case GF_BLOOD_CURSE:
-			{
-				if (seen) obvious = TRUE;
-				break;
-			}
-
-			case GF_CRUSADE:
-			{
-				bool success = FALSE;
-				if (seen) obvious = TRUE;
-
-				if ((r_ptr->flags3 & (RF3_GOOD)) && !p_ptr->current_floor_ptr->inside_arena)
-				{
-					if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 50;
-					if (dam < 1) dam = 1;
-
-					/* No need to tame your pet */
-					if (is_pet(m_ptr))
-					{
-						note = _("の動きが速くなった。", " starts moving faster.");
-						(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
-						success = TRUE;
-					}
-
-					/* Attempt a saving throw */
-					else if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
-						(r_ptr->flags1 & (RF1_UNIQUE)) ||
-						(m_ptr->mflag2 & MFLAG2_NOPET) ||
-						(p_ptr->cursed & TRC_AGGRAVATE) ||
-						 ((r_ptr->level+10) > randint1(dam)))
-					{
-						/* Resist */
-						if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
-					}
-					else
-					{
-						note = _("を支配した。", " is tamed!");
-						set_pet(m_ptr);
-						(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
-
-						/* Learn about type */
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
-						success = TRUE;
-					}
-				}
-
-				if (!success)
-				{
-					if (!(r_ptr->flags3 & RF3_NO_FEAR))
-					{
-						do_fear = randint1(90)+10;
-					}
-					else if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_FEAR);
-				}
-
-				/* No "real" damage */
-				dam = 0;
-				break;
-			}
-
-			case GF_WOUNDS:
-			{
-				if (seen) obvious = TRUE;
-				/* Attempt a saving throw */
-				if (randint0(100 + dam) < (r_ptr->level + 50))
-				{
-					note = _("には効果がなかった。", " is unaffected.");
-					dam = 0;
-				}
-				break;
-			}
-
-			/* Default */
-			default:
+			/* Others ignore */
+			else
 			{
 				/* Irrelevant */
 				skipped = TRUE;
 
 				/* No damage */
 				dam = 0;
+			}
 
+			break;
+		}
+
+
+		/* Dispel evil */
+		case GF_DISP_EVIL:
+		{
+			/* Only affect evil */
+			if (r_ptr->flags3 & (RF3_EVIL))
+			{
+				if (seen) obvious = TRUE;
+
+				/* Learn about type */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
+
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
+			}
+
+			/* Others ignore */
+			else
+			{
+				/* Irrelevant */
+				skipped = TRUE;
+
+				/* No damage */
+				dam = 0;
+			}
+
+			break;
+		}
+
+		/* Dispel good */
+		case GF_DISP_GOOD:
+		{
+			/* Only affect good */
+			if (r_ptr->flags3 & (RF3_GOOD))
+			{
+				if (seen) obvious = TRUE;
+
+				/* Learn about type */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
+
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
+			}
+
+			/* Others ignore */
+			else
+			{
+				/* Irrelevant */
+				skipped = TRUE;
+
+				/* No damage */
+				dam = 0;
+			}
+
+			break;
+		}
+
+		/* Dispel living */
+		case GF_DISP_LIVING:
+		{
+			/* Only affect non-undead */
+			if (monster_living(m_ptr->r_idx))
+			{
+				if (seen) obvious = TRUE;
+
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
+			}
+
+			/* Others ignore */
+			else
+			{
+				/* Irrelevant */
+				skipped = TRUE;
+
+				/* No damage */
+				dam = 0;
+			}
+
+			break;
+		}
+
+		/* Dispel demons */
+		case GF_DISP_DEMON:
+		{
+			/* Only affect demons */
+			if (r_ptr->flags3 & (RF3_DEMON))
+			{
+				if (seen) obvious = TRUE;
+
+				/* Learn about type */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
+
+				note = _("は身震いした。", " shudders.");
+				note_dies = _("はドロドロに溶けた！", " dissolves!");
+			}
+
+			/* Others ignore */
+			else
+			{
+				/* Irrelevant */
+				skipped = TRUE;
+
+				/* No damage */
+				dam = 0;
+			}
+
+			break;
+		}
+
+		/* Dispel monster */
+		case GF_DISP_ALL:
+		{
+			if (seen) obvious = TRUE;
+			note = _("は身震いした。", " shudders.");
+			note_dies = _("はドロドロに溶けた！", " dissolves!");
+			break;
+		}
+
+		/* Drain mana */
+		case GF_DRAIN_MANA:
+		{
+			if (seen) obvious = TRUE;
+			if ((r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) || (r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
+			{
+				if (who > 0)
+				{
+					/* Heal the monster */
+					if (caster_ptr->hp < caster_ptr->maxhp)
+					{
+						/* Heal */
+						caster_ptr->hp += dam;
+						if (caster_ptr->hp > caster_ptr->maxhp) caster_ptr->hp = caster_ptr->maxhp;
+
+						/* Redraw (later) if needed */
+						if (p_ptr->health_who == who) p_ptr->redraw |= (PR_HEALTH);
+						if (p_ptr->riding == who) p_ptr->redraw |= (PR_UHEALTH);
+
+						/* Special message */
+						if (see_s_msg)
+						{
+							monster_desc(killer, caster_ptr, 0);
+							msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), killer);
+						}
+					}
+				}
+				else
+				{
+					msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), m_name);
+					(void)hp_player(p_ptr, dam);
+				}
+			}
+			else
+			{
+				if (see_s_msg) msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
+			}
+			dam = 0;
+			break;
+		}
+
+		/* Mind blast */
+		case GF_MIND_BLAST:
+		{
+			if (seen) obvious = TRUE;
+			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				(r_ptr->flags3 & RF3_NO_CONF) ||
+				(r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
+			{
+				/* Memorize a flag */
+				if (r_ptr->flags3 & (RF3_NO_CONF))
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+				}
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
+			{
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				note = _("には完全な耐性がある！", " is immune.");
+				dam = 0;
+			}
+			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
+			{
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+				note = _("には耐性がある。", " resists.");
+				dam /= 3;
+			}
+			else
+			{
+				note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
+				note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+
+				if (who > 0) do_conf = randint0(4) + 4;
+				else do_conf = randint0(8) + 8;
+			}
+			break;
+		}
+
+		/* Brain smash */
+		case GF_BRAIN_SMASH:
+		{
+			if (seen) obvious = TRUE;
+			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
+
+			/* Attempt a saving throw */
+			if ((r_ptr->flags1 & RF1_UNIQUE) ||
+				(r_ptr->flags3 & RF3_NO_CONF) ||
+				(r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
+			{
+				/* Memorize a flag */
+				if (r_ptr->flags3 & (RF3_NO_CONF))
+				{
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+				}
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
+			{
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				note = _("には完全な耐性がある！", " is immune.");
+				dam = 0;
+			}
+			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
+			{
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+				note = _("には耐性がある！", " resists!");
+				dam /= 3;
+			}
+			else
+			{
+				note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
+				note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+
+				if (who > 0)
+				{
+					do_conf = randint0(4) + 4;
+					do_stun = randint0(4) + 4;
+				}
+				else
+				{
+					do_conf = randint0(8) + 8;
+					do_stun = randint0(8) + 8;
+				}
+				(void)set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 10);
+			}
+			break;
+		}
+
+		/* CAUSE_1 */
+		case GF_CAUSE_1:
+		{
+			if (seen) obvious = TRUE;
+			if (!who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), m_name);
+			/* Attempt a saving throw */
+			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			break;
+		}
+
+		/* CAUSE_2 */
+		case GF_CAUSE_2:
+		{
+			if (seen) obvious = TRUE;
+			if (!who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), m_name);
+			/* Attempt a saving throw */
+			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			break;
+		}
+
+		/* CAUSE_3 */
+		case GF_CAUSE_3:
+		{
+			if (seen) obvious = TRUE;
+			if (!who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), m_name);
+			/* Attempt a saving throw */
+			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			break;
+		}
+
+		/* CAUSE_4 */
+		case GF_CAUSE_4:
+		{
+			if (seen) obvious = TRUE;
+			if (!who)
+				msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",
+					"You point at %s, screaming the word, 'DIE!'."), m_name);
+			/* Attempt a saving throw */
+			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (caster_ptr->r_idx != MON_KENSHIROU)))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			break;
+		}
+
+		/* HAND_DOOM */
+		case GF_HAND_DOOM:
+		{
+			if (seen) obvious = TRUE;
+			if (r_ptr->flags1 & RF1_UNIQUE)
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			else
+			{
+				if ((who > 0) ? ((caster_lev + randint1(dam)) > (r_ptr->level + 10 + randint1(20))) :
+					(((caster_lev / 2) + randint1(dam)) > (r_ptr->level + randint1(200))))
+				{
+					dam = ((40 + randint1(20)) * m_ptr->hp) / 100;
+
+					if (m_ptr->hp < dam) dam = m_ptr->hp - 1;
+				}
+				else
+				{
+					note = _("は耐性を持っている！", "resists!");
+					dam = 0;
+				}
+			}
+			break;
+		}
+
+		/* Capture monster */
+		case GF_CAPTURE:
+		{
+			int nokori_hp;
+			if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(m_ptr)) ||
+				(r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL)) || (r_ptr->flags7 & (RF7_UNIQUE2)) || (r_ptr->flags1 & RF1_QUESTOR) || m_ptr->parent_m_idx)
+			{
+				msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
+				skipped = TRUE;
 				break;
 			}
+
+			if (is_pet(m_ptr)) nokori_hp = m_ptr->maxhp * 4L;
+			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
+				nokori_hp = m_ptr->maxhp * 3 / 10;
+			else
+				nokori_hp = m_ptr->maxhp * 3 / 20;
+
+			if (m_ptr->hp >= nokori_hp)
+			{
+				msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), m_name);
+				skipped = TRUE;
+			}
+			else if (m_ptr->hp < randint0(nokori_hp))
+			{
+				if (m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(g_ptr->m_idx, FALSE, MON_CHAMELEON);
+				msg_format(_("%sを捕えた！", "You capture %^s!"), m_name);
+				cap_mon = m_ptr->r_idx;
+				cap_mspeed = m_ptr->mspeed;
+				cap_hp = m_ptr->hp;
+				cap_maxhp = m_ptr->max_maxhp;
+				cap_nickname = m_ptr->nickname; /* Quark transfer */
+				if (g_ptr->m_idx == p_ptr->riding)
+				{
+					if (rakuba(p_ptr, -1, FALSE))
+					{
+						msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
+					}
+				}
+
+				delete_monster_idx(g_ptr->m_idx);
+
+				return (TRUE);
+			}
+			else
+			{
+				msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), m_name);
+				skipped = TRUE;
+			}
+			break;
+		}
+
+		/* Attack (Use "dam" as attack type) */
+		case GF_ATTACK:
+		{
+			/* Return this monster's death */
+			return py_attack(p_ptr, y, x, dam);
+		}
+
+		/* Sleep (Use "dam" as "power") */
+		case GF_ENGETSU:
+		{
+			int effect = 0;
+			bool done = TRUE;
+
+			if (seen) obvious = TRUE;
+			if (r_ptr->flags2 & RF2_EMPTY_MIND)
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+				skipped = TRUE;
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				break;
+			}
+			if (MON_CSLEEP(m_ptr))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+				skipped = TRUE;
+				break;
+			}
+
+			if (one_in_(5)) effect = 1;
+			else if (one_in_(4)) effect = 2;
+			else if (one_in_(3)) effect = 3;
+			else done = FALSE;
+
+			if (effect == 1)
+			{
+				/* Powerful monsters can resist */
+				if ((r_ptr->flags1 & RF1_UNIQUE) ||
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				{
+					note = _("には効果がなかった。", " is unaffected.");
+					obvious = FALSE;
+				}
+
+				/* Normal monsters slow down */
+				else
+				{
+					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+					{
+						note = _("の動きが遅くなった。", " starts moving slower.");
+					}
+				}
+			}
+
+			else if (effect == 2)
+			{
+				do_stun = damroll((p_ptr->lev / 10) + 3, (dam)) + 1;
+
+				/* Attempt a saving throw */
+				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				{
+					/* Resist */
+					do_stun = 0;
+
+					/* No obvious effect */
+					note = _("には効果がなかった。", " is unaffected.");
+					obvious = FALSE;
+				}
+			}
+
+			else if (effect == 3)
+			{
+				/* Attempt a saving throw */
+				if ((r_ptr->flags1 & RF1_UNIQUE) ||
+					(r_ptr->flags3 & RF3_NO_SLEEP) ||
+					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				{
+					/* Memorize a flag */
+					if (r_ptr->flags3 & RF3_NO_SLEEP)
+					{
+						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
+					}
+
+					/* No obvious effect */
+					note = _("には効果がなかった。", " is unaffected.");
+					obvious = FALSE;
+				}
+				else
+				{
+					/* Go to sleep (much) later */
+					note = _("は眠り込んでしまった！", " falls asleep!");
+					do_sleep = 500;
+				}
+			}
+
+			if (!done)
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		/* GENOCIDE */
+		case GF_GENOCIDE:
+		{
+			if (seen) obvious = TRUE;
+			if (genocide_aux(g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
+			{
+				if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
+				chg_virtue(p_ptr, V_VITALITY, -1);
+				return TRUE;
+			}
+
+			skipped = TRUE;
+			break;
+		}
+
+		case GF_PHOTO:
+		{
+			if (!who) msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), m_name);
+			/* Hurt by light */
+			if (r_ptr->flags3 & (RF3_HURT_LITE))
+			{
+				/* Obvious effect */
+				if (seen) obvious = TRUE;
+
+				/* Memorize the effects */
+				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
+
+				/* Special effect */
+				note = _("は光に身をすくめた！", " cringes from the light!");
+				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
+			}
+
+			/* Normally no damage */
+			else
+			{
+				/* No damage */
+				dam = 0;
+			}
+
+			photo = m_ptr->r_idx;
+
+			break;
+		}
+
+
+		/* blood curse */
+		case GF_BLOOD_CURSE:
+		{
+			if (seen) obvious = TRUE;
+			break;
+		}
+
+		case GF_CRUSADE:
+		{
+			bool success = FALSE;
+			if (seen) obvious = TRUE;
+
+			if ((r_ptr->flags3 & (RF3_GOOD)) && !floor_ptr->inside_arena)
+			{
+				if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 50;
+				if (dam < 1) dam = 1;
+
+				/* No need to tame your pet */
+				if (is_pet(m_ptr))
+				{
+					note = _("の動きが速くなった。", " starts moving faster.");
+					(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
+					success = TRUE;
+				}
+
+				/* Attempt a saving throw */
+				else if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
+					(r_ptr->flags1 & (RF1_UNIQUE)) ||
+					(m_ptr->mflag2 & MFLAG2_NOPET) ||
+					(p_ptr->cursed & TRC_AGGRAVATE) ||
+					((r_ptr->level + 10) > randint1(dam)))
+				{
+					/* Resist */
+					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
+				}
+				else
+				{
+					note = _("を支配した。", " is tamed!");
+					set_pet(m_ptr);
+					(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
+
+					/* Learn about type */
+					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
+					success = TRUE;
+				}
+			}
+
+			if (!success)
+			{
+				if (!(r_ptr->flags3 & RF3_NO_FEAR))
+				{
+					do_fear = randint1(90) + 10;
+				}
+				else if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_FEAR);
+			}
+
+			/* No "real" damage */
+			dam = 0;
+			break;
+		}
+
+		case GF_WOUNDS:
+		{
+			if (seen) obvious = TRUE;
+			/* Attempt a saving throw */
+			if (randint0(100 + dam) < (r_ptr->level + 50))
+			{
+				note = _("には効果がなかった。", " is unaffected.");
+				dam = 0;
+			}
+			break;
+		}
+
+		/* Default */
+		default:
+		{
+			/* Irrelevant */
+			skipped = TRUE;
+
+			/* No damage */
+			dam = 0;
+
+			break;
+		}
 		}
 	}
 
@@ -3664,8 +3664,8 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 		/* Confusion and Chaos resisters (and sleepers) never confuse */
 		if (do_conf &&
-			 !(r_ptr->flags3 & RF3_NO_CONF) &&
-			 !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
+			!(r_ptr->flags3 & RF3_NO_CONF) &&
+			!(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
 		{
 			if (seen) obvious = TRUE;
 
@@ -3725,7 +3725,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 
 			/* Hack -- Get new monster */
-			m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Hack -- Get new race */
 			r_ptr = &r_info[m_ptr->r_idx];
@@ -3742,14 +3742,14 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			/* Teleport */
 			teleport_away(p_ptr, g_ptr->m_idx, do_dist,
-						(!who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
+				(!who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
 
 			/* Hack -- get new location */
 			y = m_ptr->fy;
 			x = m_ptr->fx;
 
 			/* Hack -- get new grid */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 		}
 
 		/* Fear */
@@ -3799,7 +3799,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 				}
 				else
 				{
-					p_ptr->current_floor_ptr->monster_noise = TRUE;
+					floor_ptr->monster_noise = TRUE;
 				}
 			}
 
@@ -3830,7 +3830,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 			}
 			else
 			{
-				p_ptr->current_floor_ptr->monster_noise = TRUE;
+				floor_ptr->monster_noise = TRUE;
 			}
 
 			/* Hack -- handle sleep */
@@ -3936,7 +3936,7 @@ static bool project_m(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 	if (p_ptr->riding && (p_ptr->riding == g_ptr->m_idx) && (dam > 0))
 	{
-		if (m_ptr->hp > m_ptr->maxhp/3) dam = (dam + 1) / 2;
+		if (m_ptr->hp > m_ptr->maxhp / 3) dam = (dam + 1) / 2;
 		rakubadam_m = (dam > 200) ? 200 : dam;
 	}
 
@@ -5806,7 +5806,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					if (project_m(0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
+					if (project_m(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
 					if (!who && (project_m_n == 1) && !jump) {
 						if (p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
 							monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -5828,7 +5828,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			if (project_m(0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
+			if (project_m(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
 				notice = TRUE;
 			if (!who && (project_m_n == 1) && !jump) {
 				if (p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
@@ -5959,7 +5959,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			(void)project_m(0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
+			(void)project_m(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
 			if(!who && (project_m_n == 1) && !jump){
 				if(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx >0 ){
 					monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -6471,7 +6471,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 			}
 
 			/* Affect the monster in the grid */
-			if (project_m(who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
+			if (project_m(p_ptr->current_floor_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
 		}
 
 
@@ -6731,7 +6731,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
 				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
-					(void)project_m(0, 0, y, x, dam, GF_MANA,
+					(void)project_m(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}
 			}
@@ -6760,7 +6760,7 @@ void seal_of_mirror(HIT_POINT dam)
 		{
 			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]))
 			{
-				if (project_m(0, 0, y, x, dam, GF_GENOCIDE,
+				if (project_m(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
 					(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
 				{
 					if (!p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
