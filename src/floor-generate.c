@@ -849,7 +849,7 @@ static bool cave_gen(floor_type *floor_ptr)
 				if ((randint0(100) < dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))
 				{
 					/* Place a random door */
-					place_random_door(y, x, TRUE);
+					place_random_door(floor_ptr, y, x, TRUE);
 				}
 			}
 

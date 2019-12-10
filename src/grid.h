@@ -362,8 +362,6 @@ typedef struct
 
 extern bool new_player_spot(player_type *creature_ptr);
 
-extern void place_random_door(POSITION y, POSITION x, bool room);
-
 /* Types of doors */
 #define DOOR_DEFAULT    -1
 #define DOOR_DOOR        0

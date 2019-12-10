@@ -195,7 +195,7 @@ bool build_type1(floor_type *floor_ptr)
 			place_solid_bold(y2 + 1, xval);
 		}
 
-		place_random_door(yval, xval, TRUE);
+		place_random_door(floor_ptr, yval, xval, TRUE);
 		if (curtain2) floor_ptr->grid_array[yval][xval].feat = feat_door[DOOR_CURTAIN].closed;
 	}
 

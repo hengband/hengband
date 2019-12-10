@@ -233,92 +233,6 @@ bool new_player_spot(player_type *creature_ptr)
 	return TRUE;
 }
 
-
-
-/*!
- * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
- * @param y ドアの配置を試みたいマスのY座標
- * @param x ドアの配置を試みたいマスのX座標
- * @param room 部屋に接している場合向けのドア生成か否か
- * @return なし
- */
-void place_random_door(POSITION y, POSITION x, bool room)
-{
-	int tmp, type;
-	FEAT_IDX feat = feat_none;
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-
-	/* Initialize mimic info */
-	g_ptr->mimic = 0;
-
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
-	{
-		place_floor_bold(p_ptr->current_floor_ptr, y, x);
-		return;
-	}
-
-	type = ((d_info[p_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
-		one_in_((d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-		((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
-
-	/* Choose an object */
-	tmp = randint0(1000);
-
-	/* Open doors (300/1000) */
-	if (tmp < 300)
-	{
-		/* Create open door */
-		feat = feat_door[type].open;
-	}
-
-	/* Broken doors (100/1000) */
-	else if (tmp < 400)
-	{
-		/* Create broken door */
-		feat = feat_door[type].broken;
-	}
-
-	/* Secret doors (200/1000) */
-	else if (tmp < 600)
-	{
-		/* Create secret door */
-		place_closed_door(y, x, type);
-
-		if (type != DOOR_CURTAIN)
-		{
-			/* Hide. If on the edge of room, use outer wall. */
-			g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
-
-			/* Floor type terrain cannot hide a door */
-			if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat))
-			{
-				if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY))
-				{
-					g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
-				}
-				g_ptr->mimic = 0;
-			}
-		}
-	}
-
-	/* Closed, locked, or stuck doors (400/1000) */
-	else place_closed_door(y, x, type);
-
-	if (tmp < 400)
-	{
-		if (feat != feat_none)
-		{
-			set_cave_feat(p_ptr->current_floor_ptr, y, x, feat);
-		}
-		else
-		{
-			place_floor_bold(p_ptr->current_floor_ptr, y, x);
-		}
-	}
-
-	delete_monster(y, x);
-}
-
 /*!
  * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
  * @param y ドアの配置を試みたいマスのY座標
@@ -470,7 +384,7 @@ void try_door(POSITION y, POSITION x)
 	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
 	{
 		/* Place a door */
-		place_random_door(y, x, FALSE);
+		place_random_door(p_ptr->current_floor_ptr, y, x, FALSE);
 	}
 }
 
