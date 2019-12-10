@@ -114,7 +114,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 		cur_ugbldg = &ugbldg[i];
 
 		/* Generate new room */
-		generate_room_floor(p_ptr->current_floor_ptr, 
+		generate_room_floor(p_ptr->current_floor_ptr,
 			ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2,
 			ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2,
 			FALSE);
@@ -125,7 +125,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 		cur_ugbldg = &ugbldg[i];
 
 		/* Build an invulnerable rectangular building */
-		generate_fill_perm_bold(
+		generate_fill_perm_bold(p_ptr->current_floor_ptr, 
 			ltcy + cur_ugbldg->y0, ltcx + cur_ugbldg->x0,
 			ltcy + cur_ugbldg->y1, ltcx + cur_ugbldg->x1);
 

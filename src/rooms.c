@@ -2059,7 +2059,7 @@ void generate_room_floor(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITI
 	}
 }
 
-void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+void generate_fill_perm_bold(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	POSITION y, x;
 
@@ -2068,7 +2068,7 @@ void generate_fill_perm_bold(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			place_inner_perm_bold(p_ptr->current_floor_ptr ,y, x);
+			place_inner_perm_bold(floor_ptr ,y, x);
 		}
 	}
 }
