@@ -152,11 +152,11 @@ typedef struct
 	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
-#define place_extra_perm_bold(Y, X) \
+#define place_extra_perm_bold(F, Y, X) \
 { \
-	set_cave_feat(floor_ptr, Y,X,feat_permanent); \
-	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_EXTRA); \
+	set_cave_feat(F, Y, X,feat_permanent); \
+	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
+	add_cave_info(F, Y, X, CAVE_EXTRA); \
 	delete_monster(Y, X); \
 }
 
