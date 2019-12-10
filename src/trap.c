@@ -327,15 +327,15 @@ static void hit_trap_pit(int trap_feat_type)
 * @brief ダーツ系トラップ（通常ダメージ）の判定とプレイヤーの被害処理
 * @return ダーツが命中した場合TRUEを返す
 */
-static bool hit_trap_dart(void)
+static bool hit_trap_dart(player_type *target_ptr)
 {
 	bool hit = FALSE;
 
-	if (check_hit(p_ptr, 125))
+	if (check_hit(target_ptr, 125))
 	{
 		msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
-		take_hit(p_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
-		if (!CHECK_MULTISHADOW(p_ptr)) hit = TRUE;
+		take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
+		if (!CHECK_MULTISHADOW(target_ptr)) hit = TRUE;
 	}
 	else
 	{
@@ -352,7 +352,7 @@ static bool hit_trap_dart(void)
 */
 static void hit_trap_lose_stat(int stat)
 {
-	if (hit_trap_dart())
+	if (hit_trap_dart(p_ptr))
 	{
 		do_dec_stat(p_ptr, stat);
 	}
@@ -364,7 +364,7 @@ static void hit_trap_lose_stat(int stat)
 */
 static void hit_trap_slow(void)
 {
-	if (hit_trap_dart())
+	if (hit_trap_dart(p_ptr))
 	{
 		set_slow(p_ptr, p_ptr->slow + randint0(20) + 20, FALSE);
 	}
