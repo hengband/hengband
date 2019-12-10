@@ -1404,7 +1404,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 			if ((randint1(100) - difficulty * 3) > 50) value = 20;
 
 			 /* if floor, shallow water and lava */
-			if (is_floor_bold(p_ptr->current_floor_ptr, y, x) ||
+			if (is_floor_bold(floor_ptr, y, x) ||
 			    (cave_have_flag_bold(y, x, FF_PLACE) && cave_have_flag_bold(y, x, FF_DROP)))
 			{
 				/* The smaller 'value' is, the better the stuff */
