@@ -427,7 +427,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				(void)heroism(p_ptr, base);
+				(void)heroism(caster_ptr, base);
 			}
 		}
 		break;
@@ -560,7 +560,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 						scatter(&my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
 
 						/* Require empty grids */
-						if (cave_empty_bold2(p_ptr->current_floor_ptr, my, mx)) break;
+						if (cave_empty_bold2(caster_ptr->current_floor_ptr, my, mx)) break;
 					}
 					if (attempt < 0) continue;
 					summon_specific(-1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));

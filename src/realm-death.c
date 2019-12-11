@@ -376,7 +376,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				(void)berserk(p_ptr, base + randint1(base));
+				(void)berserk(caster_ptr, base + randint1(base));
 			}
 		}
 		break;
@@ -430,7 +430,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				(void)berserk(p_ptr, b_base + randint1(b_base));
+				(void)berserk(caster_ptr, b_base + randint1(b_base));
 				set_fast(caster_ptr, randint1(sp_sides) + sp_base, FALSE);
 			}
 		}

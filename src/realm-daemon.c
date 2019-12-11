@@ -468,7 +468,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			int base = 25;
 			if (info) return info_duration(base, base);
-			if (cast)heroism(p_ptr, base);
+			if (cast)heroism(caster_ptr, base);
 		}
 		break;
 

@@ -119,7 +119,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				(void)heroism(p_ptr, base);
+				(void)heroism(caster_ptr, base);
 			}
 		}
 		break;
@@ -211,7 +211,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				(void)berserk(p_ptr, base + randint1(base));
+				(void)berserk(caster_ptr, base + randint1(base));
 			}
 		}
 		break;
