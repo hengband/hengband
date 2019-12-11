@@ -3845,7 +3845,7 @@ void cast_shuffle(player_type *caster_ptr)
 void stop_mouth(void)
 {
 	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
-	if (hex_spelling_any(p_ptr)) stop_hex_spell_all();
+	if (hex_spelling_any(p_ptr)) stop_hex_spell_all(p_ptr);
 }
 
 

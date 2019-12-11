@@ -49,7 +49,7 @@
 #define HEX_ANTI_MAGIC       30
 #define HEX_REVENGE          31
 
-extern bool stop_hex_spell_all(void);
+extern bool stop_hex_spell_all(player_type *caster_ptr);
 extern bool stop_hex_spell(void);
 extern void check_hex(player_type *caster_ptr);
 extern bool hex_spell_fully(void);

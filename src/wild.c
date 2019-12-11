@@ -1177,7 +1177,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 	creature_ptr->oldpy = creature_ptr->y;
 
 	/* Cancel hex spelling */
-	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
+	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all(creature_ptr);
 
 	/* Cancel any special action */
 	set_action(creature_ptr, ACTION_NONE);

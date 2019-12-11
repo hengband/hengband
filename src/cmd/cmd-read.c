@@ -64,7 +64,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 	}
 
 	if (music_singing_any(creature_ptr)) stop_singing(creature_ptr);
-	if (hex_spelling_any(creature_ptr) && ((creature_ptr->lev < 35) || hex_spell_fully())) stop_hex_spell_all();
+	if (hex_spelling_any(creature_ptr) && ((creature_ptr->lev < 35) || hex_spell_fully())) stop_hex_spell_all(creature_ptr);
 
 	/* Not identified yet */
 	ident = FALSE;

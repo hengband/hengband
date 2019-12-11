@@ -526,7 +526,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 			/* Sniper */
 			if (creature_ptr->concent) reset_concentration(creature_ptr, TRUE);
 
-			if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
+			if (hex_spelling_any(creature_ptr)) stop_hex_spell_all(creature_ptr);
 
 			notice = TRUE;
 			creature_ptr->counter = FALSE;
@@ -674,7 +674,7 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 		{
 			msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
 			if (creature_ptr->concent) reset_concentration(creature_ptr, TRUE);
-			if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
+			if (hex_spelling_any(creature_ptr)) stop_hex_spell_all(creature_ptr);
 
 			creature_ptr->counter = FALSE;
 			notice = TRUE;
@@ -2696,7 +2696,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 
 		/* Sniper */
 		if (creature_ptr->concent) reset_concentration(creature_ptr, TRUE);
-		if (hex_spelling_any(creature_ptr)) stop_hex_spell_all();
+		if (hex_spelling_any(creature_ptr)) stop_hex_spell_all(creature_ptr);
 
 		notice = TRUE;
 	}

@@ -44,22 +44,22 @@
  * @brief プレイヤーが詠唱中の全呪術を停止する
  * @return なし
  */
-bool stop_hex_spell_all(void)
+bool stop_hex_spell_all(player_type *caster_ptr)
 {
 	SPELL_IDX i;
 
 	for (i = 0; i < 32; i++)
 	{
-		if (hex_spelling(i)) exe_spell(p_ptr, REALM_HEX, i, SPELL_STOP);
+		if (hex_spelling(i)) exe_spell(caster_ptr, REALM_HEX, i, SPELL_STOP);
 	}
 
-	CASTING_HEX_FLAGS(p_ptr) = 0;
-	CASTING_HEX_NUM(p_ptr) = 0;
+	CASTING_HEX_FLAGS(caster_ptr) = 0;
+	CASTING_HEX_NUM(caster_ptr) = 0;
 
-	if (p_ptr->action == ACTION_SPELL) set_action(p_ptr, ACTION_NONE);
+	if (caster_ptr->action == ACTION_SPELL) set_action(caster_ptr, ACTION_NONE);
 
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-	p_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+	caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+	caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
 
 	return TRUE;
 }
@@ -87,7 +87,7 @@ bool stop_hex_spell(void)
 	/* Stop all spells */
 	else if ((CASTING_HEX_NUM(p_ptr) == 1) || (p_ptr->lev < 35))
 	{
-		return stop_hex_spell_all();
+		return stop_hex_spell_all(p_ptr);
 	}
 	else
 	{
@@ -117,7 +117,7 @@ bool stop_hex_spell(void)
 			if (choice == 'l')	/* All */
 			{
 				screen_load();
-				return stop_hex_spell_all();
+				return stop_hex_spell_all(p_ptr);
 			}
 			if ((choice < I2A(0)) || (choice > I2A(CASTING_HEX_NUM(p_ptr) - 1))) continue;
 			flag = TRUE;
@@ -168,7 +168,7 @@ void check_hex(player_type *caster_ptr)
 	/* Stop all spells when anti-magic ability is given */
 	if (caster_ptr->anti_magic)
 	{
-		stop_hex_spell_all();
+		stop_hex_spell_all(caster_ptr);
 		return;
 	}
 
@@ -191,7 +191,7 @@ void check_hex(player_type *caster_ptr)
 	/* Not enough mana */
 	if (s64b_cmp(caster_ptr->csp, caster_ptr->csp_frac, need_mana, need_mana_frac) < 0)
 	{
-		stop_hex_spell_all();
+		stop_hex_spell_all(caster_ptr);
 		return;
 	}
 
