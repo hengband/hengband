@@ -4559,7 +4559,7 @@ static void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
  * Display skill-exp
  * @return なし
  */
-static void do_cmd_knowledge_skill_exp(void)
+static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 {
 	int i = 0, skill_exp;
 
@@ -4584,9 +4584,9 @@ static void do_cmd_knowledge_skill_exp(void)
 
 	for (i = 0; i < GINOU_TEMPMAX; i++)
 	{
-		skill_exp = p_ptr->skill_exp[i];
+		skill_exp = creature_ptr->skill_exp[i];
 		fprintf(fff, "%-20s ", skill_name[i]);
-		if (skill_exp >= s_info[p_ptr->pclass].s_max[i]) fprintf(fff, "!");
+		if (skill_exp >= s_info[creature_ptr->pclass].s_max[i]) fprintf(fff, "!");
 		else fprintf(fff, " ");
 		fprintf(fff, "%s", exp_level_str[(i == GINOU_RIDING) ? riding_exp_level(skill_exp) : weapon_exp_level(skill_exp)]);
 		if (cheat_xtra) fprintf(fff, " %d", skill_exp);
@@ -7071,7 +7071,7 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_spell_exp(p_ptr);
 			break;
 		case 'e': /* skill-exp */
-			do_cmd_knowledge_skill_exp();
+			do_cmd_knowledge_skill_exp(p_ptr);
 			break;
 		case 'f': /* Virtues */
 			do_cmd_knowledge_virtues();
