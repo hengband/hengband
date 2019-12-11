@@ -1465,7 +1465,7 @@ void generate_floor(floor_type *floor_ptr)
 
 		if (why) msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why);
 
-		wipe_o_list();
+		wipe_o_list(floor_ptr);
 		wipe_m_list();
 	}
 

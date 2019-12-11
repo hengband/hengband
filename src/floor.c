@@ -8,6 +8,10 @@
 #include "object-hook.h"
 #include "world.h"
 #include "player-effects.h"
+#include "object.h"
+#include "object-hook.h"
+#include "artifact.h"
+#include "objectkind.h"
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].
@@ -836,3 +840,74 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 
 	delete_monster(y, x);
 }
+
+
+
+/*!
+ * @brief グローバルオブジェクト配列を初期化する /
+ * Delete all the items when player leaves the level
+ * @note we do NOT visually reflect these (irrelevant) changes
+ * @details
+ * Hack -- we clear the "g_ptr->o_idx" field for every grid,
+ * and the "m_ptr->next_o_idx" field for every monster, since
+ * we know we are clearing every object.  Technically, we only
+ * clear those fields for grids/monsters containing objects,
+ * and we clear it once for every such object.
+ * @return なし
+ */
+void wipe_o_list(floor_type *floor_ptr)
+{
+	int i;
+
+	/* Delete the existing objects */
+	for (i = 1; i < floor_ptr->o_max; i++)
+	{
+		object_type *o_ptr = &floor_ptr->o_list[i];
+
+		if (!OBJECT_IS_VALID(o_ptr)) continue;
+
+		/* Mega-Hack -- preserve artifacts */
+		if (!current_world_ptr->character_dungeon || preserve_mode)
+		{
+			/* Hack -- Preserve unknown artifacts */
+			if (object_is_fixed_artifact(o_ptr) && !object_is_known(o_ptr))
+			{
+				/* Mega-Hack -- Preserve the artifact */
+				a_info[o_ptr->name1].cur_num = 0;
+			}
+		}
+
+		if (OBJECT_IS_HELD_MONSTER(o_ptr))
+		{
+			monster_type *m_ptr;
+			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
+
+			/* Hack -- see above */
+			m_ptr->hold_o_idx = 0;
+		}
+
+		/* Dungeon */
+		else
+		{
+			grid_type *g_ptr;
+
+			/* Access location */
+			POSITION y = o_ptr->iy;
+			POSITION x = o_ptr->ix;
+
+			/* Access grid */
+			g_ptr = &floor_ptr->grid_array[y][x];
+
+			/* Hack -- see above */
+			g_ptr->o_idx = 0;
+		}
+		object_wipe(o_ptr);
+	}
+
+	/* Reset "floor_ptr->o_max" */
+	floor_ptr->o_max = 1;
+
+	/* Reset "floor_ptr->o_cnt" */
+	floor_ptr->o_cnt = 0;
+}
+

@@ -390,3 +390,5 @@ extern void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int 
 extern bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat);
 extern void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room);
+
+extern void wipe_o_list(floor_type *floor_ptr);

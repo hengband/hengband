@@ -433,7 +433,7 @@ extern void excise_object_idx(OBJECT_IDX o_idx);
 extern void delete_object_idx(OBJECT_IDX o_idx);
 extern void delete_object(POSITION y, POSITION x);
 extern void compact_objects(int size);
-extern void wipe_o_list(void);
+
 extern OBJECT_IDX o_pop(void);
 extern OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode);
 extern void object_known(object_type *o_ptr);

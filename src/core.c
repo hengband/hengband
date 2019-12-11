@@ -5416,7 +5416,7 @@ void play_game(bool new_game)
 		determine_today_mon(FALSE);
 
 		/* Initialize object array */
-		wipe_o_list();
+		wipe_o_list(p_ptr->current_floor_ptr);
 	}
 	else
 	{
@@ -5629,7 +5629,7 @@ void play_game(bool new_game)
 		if (!p_ptr->playing && !p_ptr->is_dead) break;
 
 		/* Erase the old p_ptr->current_floor_ptr->grid_array */
-		wipe_o_list();
+		wipe_o_list(p_ptr->current_floor_ptr);
 		if (!p_ptr->is_dead) wipe_m_list();
 
 
