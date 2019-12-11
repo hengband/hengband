@@ -350,11 +350,11 @@ static bool hit_trap_dart(player_type *target_ptr)
 * @param stat 低下する能力値ID
 * @return なし
 */
-static void hit_trap_lose_stat(int stat)
+static void hit_trap_lose_stat(player_type *target_ptr, int stat)
 {
-	if (hit_trap_dart(p_ptr))
+	if (hit_trap_dart(target_ptr))
 	{
-		do_dec_stat(p_ptr, stat);
+		do_dec_stat(target_ptr, stat);
 	}
 }
 
@@ -362,11 +362,11 @@ static void hit_trap_lose_stat(int stat)
 * @brief ダーツ系トラップ（通常ダメージ＋減速）の判定とプレイヤーの被害処理
 * @return なし
 */
-static void hit_trap_slow(void)
+static void hit_trap_slow(player_type *target_ptr)
 {
-	if (hit_trap_dart(p_ptr))
+	if (hit_trap_dart(target_ptr))
 	{
-		set_slow(p_ptr, p_ptr->slow + randint0(20) + 20, FALSE);
+		set_slow(target_ptr, target_ptr->slow + randint0(20) + 20, FALSE);
 	}
 }
 
@@ -505,25 +505,25 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
 	case TRAP_SLOW:
 	{
-		hit_trap_slow();
+		hit_trap_slow(trapped_ptr);
 		break;
 	}
 
 	case TRAP_LOSE_STR:
 	{
-		hit_trap_lose_stat(A_STR);
+		hit_trap_lose_stat(trapped_ptr, A_STR);
 		break;
 	}
 
 	case TRAP_LOSE_DEX:
 	{
-		hit_trap_lose_stat(A_DEX);
+		hit_trap_lose_stat(trapped_ptr, A_DEX);
 		break;
 	}
 
 	case TRAP_LOSE_CON:
 	{
-		hit_trap_lose_stat(A_CON);
+		hit_trap_lose_stat(trapped_ptr, A_CON);
 		break;
 	}
 
