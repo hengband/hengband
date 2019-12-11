@@ -1441,7 +1441,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_MAP_LIGHT:
 	{
 		msg_print(_("眩しく輝いた...", "It shines brightly..."));
-		map_area(DETECT_RAD_MAP);
+		map_area(user_ptr, DETECT_RAD_MAP);
 		lite_area(damroll(2, 15), 3);
 		break;
 	}

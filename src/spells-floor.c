@@ -387,7 +387,7 @@ void stair_creation(player_type *caster_ptr)
 /*
  * Hack -- map the current panel (plus some) ala "magic mapping"
  */
-void map_area(POSITION range)
+void map_area(player_type *caster_ptr, POSITION range)
 {
 	int i;
 	POSITION x, y;
@@ -395,16 +395,16 @@ void map_area(POSITION range)
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan that area */
-	for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
+	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < p_ptr->current_floor_ptr->width - 1; x++)
+		for (x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
 		{
-			if (distance(p_ptr->y, p_ptr->x, y, x) > range) continue;
+			if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Memorize terrain of the grid */
 			g_ptr->info |= (CAVE_KNOWN);
@@ -426,7 +426,7 @@ void map_area(POSITION range)
 				/* Memorize known walls */
 				for (i = 0; i < 8; i++)
 				{
-					g_ptr = &p_ptr->current_floor_ptr->grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
+					g_ptr = &caster_ptr->current_floor_ptr->grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
 
 					/* Feature code (applying "mimic" field) */
 					feat = get_feat_mimic(g_ptr);
@@ -443,8 +443,8 @@ void map_area(POSITION range)
 		}
 	}
 
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	caster_ptr->redraw |= (PR_MAP);
+	caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
 

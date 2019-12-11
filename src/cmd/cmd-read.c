@@ -282,7 +282,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_MAPPING:
 		{
-			map_area(DETECT_RAD_MAP);
+			map_area(creature_ptr, DETECT_RAD_MAP);
 			ident = TRUE;
 			break;
 		}

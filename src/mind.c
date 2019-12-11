@@ -1042,7 +1042,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 			wiz_lite(caster_ptr, FALSE);
 		}
 		else if (plev > 19)
-			map_area(DETECT_RAD_MAP);
+			map_area(caster_ptr, DETECT_RAD_MAP);
 
 		if (plev < 30)
 		{
@@ -1328,7 +1328,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		if (plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
 		if (plev + tmp > 18)detect_monsters_invis(DETECT_RAD_DEFAULT);
 		if (plev + tmp > 28)set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
-		if (plev + tmp > 38)map_area(DETECT_RAD_MAP);
+		if (plev + tmp > 38)map_area(caster_ptr, DETECT_RAD_MAP);
 		if (tmp == 0 && plev < 5) {
 			msg_print(_("鏡がなくて集中できなかった！", "You need a mirror to concentrate!"));
 		}

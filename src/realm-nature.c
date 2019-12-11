@@ -238,7 +238,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				map_area(rad1);
+				map_area(caster_ptr, rad1);
 				detect_traps(rad2, TRUE);
 				detect_doors(rad2);
 				detect_stairs(rad2);

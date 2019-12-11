@@ -1878,7 +1878,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Magic Mapping */
 	case 'm':
-		map_area(DETECT_RAD_ALL * 3);
+		map_area(creature_ptr, DETECT_RAD_ALL * 3);
 		break;
 
 	/* Mutation */

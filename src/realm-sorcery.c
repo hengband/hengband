@@ -176,7 +176,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				map_area(rad);
+				map_area(caster_ptr, rad);
 			}
 		}
 		break;
