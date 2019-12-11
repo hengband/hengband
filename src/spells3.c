@@ -1028,11 +1028,10 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 /*!
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
- * @params floor_ptr 対象となるフロアの対象ポインタ
- * @params subject_ptr 現象を主観するクリーチャーの参照ポインタ
+ * @params caster_ptr 術者の参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
-static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
+static bool vanish_dungeon(player_type *caster_ptr)
 {
 	POSITION y, x;
 	grid_type *g_ptr;
@@ -1041,17 +1040,17 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	/* Prevent vasishing of quest levels and town */
-	if ((subject_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(subject_ptr->current_floor_ptr->inside_quest)) || !floor_ptr->dun_level)
+	if ((caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
 	{
 		return FALSE;
 	}
 
 	/* Scan all normal grids */
-	for (y = 1; y < floor_ptr->height - 1; y++)
+	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < floor_ptr->width - 1; x++)
+		for (x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
 		{
-			g_ptr = &floor_ptr->grid_array[y][x];
+			g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Seeing true feature code (ignore mimic) */
 			f_ptr = &f_info[g_ptr->feat];
@@ -1059,7 +1058,7 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 			/* Lose room and vault */
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-			m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+			m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Awake monster */
 			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
@@ -1080,9 +1079,9 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 	}
 
 	/* Special boundary walls -- Top and bottom */
-	for (x = 0; x < floor_ptr->width; x++)
+	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
-		g_ptr = &floor_ptr->grid_array[0][x];
+		g_ptr = &caster_ptr->current_floor_ptr->grid_array[0][x];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1097,7 +1096,7 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &floor_ptr->grid_array[floor_ptr->height - 1][x];
+		g_ptr = &caster_ptr->current_floor_ptr->grid_array[caster_ptr->current_floor_ptr->height - 1][x];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1114,9 +1113,9 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 	}
 
 	/* Special boundary walls -- Left and right */
-	for (y = 1; y < (floor_ptr->height - 1); y++)
+	for (y = 1; y < (caster_ptr->current_floor_ptr->height - 1); y++)
 	{
-		g_ptr = &floor_ptr->grid_array[y][0];
+		g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][0];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1131,7 +1130,7 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
-		g_ptr = &floor_ptr->grid_array[y][floor_ptr->width - 1];
+		g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][caster_ptr->current_floor_ptr->width - 1];
 		f_ptr = &f_info[g_ptr->mimic];
 
 		/* Lose room and vault */
@@ -1148,9 +1147,9 @@ static bool vanish_dungeon(floor_type *floor_ptr, player_type *subject_ptr)
 	}
 
 	/* Mega-Hack -- Forget the view and lite */
-	subject_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-	subject_ptr->redraw |= (PR_MAP);
-	subject_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+	caster_ptr->redraw |= (PR_MAP);
+	caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	return TRUE;
 }
@@ -1220,7 +1219,7 @@ void call_the_void(player_type *caster_ptr)
 
 		if (one_in_(666))
 		{
-			if (!vanish_dungeon(caster_ptr->current_floor_ptr, caster_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
+			if (!vanish_dungeon(caster_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon silences a moment."));
 		}
 		else
 		{
