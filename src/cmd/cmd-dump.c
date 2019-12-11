@@ -6319,7 +6319,7 @@ static void do_cmd_knowledge_kubi(void)
 /*
  * List virtues & status
  */
-static void do_cmd_knowledge_virtues(void)
+static void do_cmd_knowledge_virtues(player_type *creature_ptr)
 {
 	FILE *fff;	
 	GAME_TEXT file_name[1024];
@@ -6334,8 +6334,8 @@ static void do_cmd_knowledge_virtues(void)
 	
 	if (fff)
 	{
-		fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment(p_ptr));
-		dump_virtues(p_ptr, fff);
+		fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment(creature_ptr));
+		dump_virtues(creature_ptr, fff);
 	}
 		my_fclose(fff);
 	
@@ -7074,7 +7074,7 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_skill_exp(p_ptr);
 			break;
 		case 'f': /* Virtues */
-			do_cmd_knowledge_virtues();
+			do_cmd_knowledge_virtues(p_ptr);
 			break;
 		case 'g': /* Dungeon */
 			do_cmd_knowledge_dungeon();
