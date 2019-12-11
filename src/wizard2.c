@@ -101,9 +101,10 @@ typedef struct debug_spell_command
 } debug_spell_command;
 
 
-#define SPELL_MAX 1
+#define SPELL_MAX 2
 debug_spell_command debug_spell_commands_list[SPELL_MAX] =
 {
+	{ 2, "vanish dungeon", {.spell2 = vanish_dungeon} },
 	{ 3, "true healing", {.spell3 = true_healing} }
 };
 
@@ -125,6 +126,10 @@ static bool do_cmd_debug_spell(player_type *creature_ptr)
 		{
 			switch (debug_spell_commands_list[i].type)
 			{
+			case 2:
+				(*(debug_spell_commands_list[i].command_function.spell2.spell_function))(creature_ptr);
+				break;
+
 			case 3:
 				tmp_val[0] = '\0';
 				if (!get_string("POWER:", tmp_val, 32)) return FALSE;

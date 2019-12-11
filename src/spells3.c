@@ -1031,7 +1031,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
  * @params caster_ptr 術者の参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
-static bool vanish_dungeon(player_type *caster_ptr)
+bool vanish_dungeon(player_type *caster_ptr)
 {
 	POSITION y, x;
 	grid_type *g_ptr;

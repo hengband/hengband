@@ -273,6 +273,7 @@ extern bool confusing_light(player_type *creature_ptr);
 extern bool rodeo(player_type *creature_ptr);
 extern bool clear_mind(player_type *creature_ptr);
 extern bool concentration(player_type *creature_ptr);
+extern bool vanish_dungeon(player_type *caster_ptr);
 
 /*
  * Bit flags for teleportation
