@@ -15,11 +15,11 @@
  * @param m_ptr 対象モンスター
  * @return 魅了に抵抗したらTRUE
  */
-bool_hack common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool_hack common_saving_throw_charm(player_type *operator_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (p_ptr->current_floor_ptr->inside_arena) return TRUE;
+	if (operator_ptr->current_floor_ptr->inside_arena) return TRUE;
 
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
@@ -36,7 +36,7 @@ bool_hack common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, mons
 
 	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2 & MFLAG2_NOPET) return TRUE;
 
-	pow += (adj_chr_chm[player_ptr->stat_ind[A_CHR]] - 1);
+	pow += (adj_chr_chm[operator_ptr->stat_ind[A_CHR]] - 1);
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
 	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
@@ -47,11 +47,11 @@ bool_hack common_saving_throw_charm(player_type *player_ptr, HIT_POINT pow, mons
  * @param m_ptr 対象モンスター
  * @return 服従に抵抗したらTRUE
  */
-bool_hack common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, monster_type *m_ptr)
+bool_hack common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, monster_type *m_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (p_ptr->current_floor_ptr->inside_arena) return TRUE;
+	if (operator_ptr->current_floor_ptr->inside_arena) return TRUE;
 
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
@@ -62,7 +62,7 @@ bool_hack common_saving_throw_control(player_type *player_ptr, HIT_POINT pow, mo
 
 	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2 & MFLAG2_NOPET) return TRUE;
 
-	pow += adj_chr_chm[player_ptr->stat_ind[A_CHR]] - 1;
+	pow += adj_chr_chm[operator_ptr->stat_ind[A_CHR]] - 1;
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
 	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
