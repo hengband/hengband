@@ -121,7 +121,7 @@ static concptr mention_use(player_type *creature_ptr, int i)
  * Choice window "shadow" of the "show_equip()" function
  * @return なし
  */
-void display_equip(OBJECT_TYPE_VALUE tval)
+void display_equip(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
 {
 	register int i, n;
 	object_type *o_ptr;
@@ -130,11 +130,13 @@ void display_equip(OBJECT_TYPE_VALUE tval)
 	GAME_TEXT o_name[MAX_NLEN];
 	TERM_LEN wid, hgt;
 
+	if (!creature_ptr || !creature_ptr->inventory_list) return;
+
 	Term_get_size(&wid, &hgt);
 
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, tval))
 		{
@@ -143,7 +145,7 @@ void display_equip(OBJECT_TYPE_VALUE tval)
 		}
 
 		Term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
+		if ((((i == INVEN_RARM) && creature_ptr->hidarite) || ((i == INVEN_LARM) && creature_ptr->migite)) && creature_ptr->ryoute)
 		{
 			strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 			attr = TERM_WHITE;
@@ -178,7 +180,7 @@ void display_equip(OBJECT_TYPE_VALUE tval)
 		if (show_labels)
 		{
 			Term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
-			prt(mention_use(p_ptr, i), i - INVEN_RARM, wid - 15);
+			prt(mention_use(creature_ptr, i), i - INVEN_RARM, wid - 15);
 		}
 	}
 
@@ -3208,7 +3210,7 @@ void py_pickup_floor(bool pickup)
  * Choice window "shadow" of the "show_inven()" function
  * @return なし
  */
-void display_inven(OBJECT_TYPE_VALUE tval)
+void display_inven(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
 {
 	register int i, n, z = 0;
 	object_type *o_ptr;
@@ -3217,18 +3219,20 @@ void display_inven(OBJECT_TYPE_VALUE tval)
 	GAME_TEXT o_name[MAX_NLEN];
 	TERM_LEN wid, hgt;
 
+	if (!creature_ptr || !creature_ptr->inventory_list) return;
+
 	Term_get_size(&wid, &hgt);
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 		z = i + 1;
 	}
 
 	for (i = 0; i < z; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 		if (item_tester_okay(o_ptr, tval))
 		{
