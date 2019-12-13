@@ -53,9 +53,9 @@ by the racial/class power command ("U"/"O").
     good saving throws.  They also are very good at searching,
     disarming, perception, and stealth; so they make excellent rogues,
     but prefer to be called burglars.  They are much weaker than
-    humans, and no good at melee fighting.  Halflings have fair
+    humans and no good at melee fighting.  Halflings have fair
     infravision, so they can detect warm creatures at a distance.
-    They have a strong hold on their life force, and are thus
+    They have a strong hold on their life force and are thus
     intrinsically resistant to life draining.
 
 
@@ -88,7 +88,7 @@ by the racial/class power command ("U"/"O").
 
     Half-orcs make excellent warriors, but are terrible at magic.
     They are as bad as dwarves at stealth, and horrible at searching,
-    disarming, and perception.  Half-orcs are quite ugly, and tend to
+    disarming, and perception.  Half-orcs are quite ugly and tend to
     pay more for goods in town.  Because of their preference to living
     underground to on the surface, half-orcs resist darkness attacks.
 
@@ -260,7 +260,7 @@ by the racial/class power command ("U"/"O").
 
     A demon-creature from the nether-world, naturally resistant to
     fire attacks, and capable of learning fire bolt and fire ball
-    attacks.  They are little loved by other races, but can perform
+    attacks.  They are little loved by other races but can perform
     fairly well in most professions.  As they advance levels, they
     gain the powers of See Invisible.
 
