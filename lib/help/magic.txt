@@ -21,13 +21,14 @@ intelligence, wisdom, or charisma.  For spellcasting, you must always
 carry spellbooks which include spells which you want to cast.  You can
 choose either one or two realms, depending on class.  
 
-In Hengband, you cannot be as proficient in secondary realm as in
-first realm.  But you can change secondary realm to another realm of
-magic even in the middle of the game.  For that, you must choose a
-spellbook of new realm in the study command ('G').  But beware! After
-changing realm, you will forget all spells of old realm, moreover the
-forgotten spells still count towards the total number of spells you
-can learn, limiting the number of new spells you'll be able to study.
+In Hengband, you cannot be as proficient in the second realm as in
+the first realm.  But you can change the second realm to another realm
+of magic even in the middle of the game.  For that, you must choose a
+spellbook of the new realm in the study command ('G').  But beware!
+After changing realms, you will forget all spells of the old realm,
+moreover the forgotten spells still count towards the total number of
+spells you can learn, limiting the number of new spells you'll be
+able to study.
 
 Note that certain realms may be prohibited for some classes.  In the
 table below, '1' indicates that the realm may only be the first
