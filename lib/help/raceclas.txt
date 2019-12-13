@@ -559,10 +559,9 @@ command("U"/"O").
 --- Ranger ---
 
     A Ranger is a combination of a warrior and a mage who has
-
-    developed a special affinity for the natural world around him.
-    He or she is a good fighter and also good with missile weapons
-    such as bows.  A ranger has good stealth, good perception, good
+    developed a special affinity for the natural world.  He or she
+    is a good fighter and also good with missile weapons such as
+    bows.  A ranger has good stealth, good perception, good
     searching, good saving throws and is good with magical devices.
     Intelligence determines a Ranger's spell casting ability.
 
@@ -584,7 +583,7 @@ command("U"/"O").
     paladin lacks much in the way of abilities.  He or she is poor at
     stealth, perception, searching, and magical devices but has a
     decent saving throw due to his divine alliance.  Wisdom determines
-    a Paladin's success at praying to his deity.
+    a Paladin's success at praying to his or her deity.
 
     Paladins can select a realm from Crusade and Death.  Like priests,
     they cannot select which prayers to learn, but are rewarded with
@@ -623,11 +622,11 @@ command("U"/"O").
     of Chaos.  Every Chaos Warrior has a Patron Demon and, when
     gaining a level, may receive a reward from his or her Patron.  He
     or she might be healed or polymorphed, given an awesome weapon,
-    or have his or stats increased.  On the other hand, the Patron
+    or have his or her stats increased.  On the other hand, the Patron
     might surround the Chaos Warrior with monsters, drain his or her
-    stats, wreck or her equipment, or simply ignore the Chaos Warrior.
-    The Demon Lords of Chaos are chaotic and unpredictable indeed.
-    The exact type of reward depends on both the Patron Demon
+    stats, wreck his or her equipment, or simply ignore the Chaos
+    Warrior.  The Demon Lords of Chaos are chaotic and unpredictable
+    indeed.  The exact type of reward depends on both the Patron Demon
     (different Demons give different rewards) and chance.
 
     Chaos Warriors can select a realm from Chaos and Daemon.  They are
@@ -682,7 +681,7 @@ command("U"/"O").
     High-mages are mages who specialize in one particular field of
     magic and learn it very well - much better than the ordinary mage.
     A high mage's prime statistic is intelligence as this determines
-    his spell casting ability.
+    his or her spell casting ability.
 
     For the price of giving up a second realm of magic, High-mages
     gain substantial benefits in the mana costs, minimum levels, and
@@ -838,7 +837,7 @@ command("U"/"O").
     techniques.  Samurai are not good at most other skills, and many
     magical devices may be too difficult for them to use.  Wisdom
     determines a Samurai's ability to use the special combat
-    techniques available to him.
+    techniques available to him or her.
 
     Samurai use the art of the blade called Kendo (or Bugei).  Books
     of Kendo are similar to spellbooks, but Samurai don't need to
