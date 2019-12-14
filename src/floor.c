@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "floor.h"
 #include "floor-save.h"
+#include "floor-generate.h"
 #include "grid.h"
 #include "dungeon.h"
 #include "rooms.h"
@@ -12,6 +13,7 @@
 #include "object-hook.h"
 #include "artifact.h"
 #include "objectkind.h"
+#include "trap.h"
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].
@@ -964,5 +966,51 @@ void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 	else
 	{
 		place_floor_bold(floor_ptr, y, x);
+	}
+}
+
+/*!
+ * @brief 特殊な部屋向けに各種アイテムを配置する(vault_trapのサブセット) / Place a trap with a given displacement of point
+ * @param y トラップを配置したいマスの中心Y座標
+ * @param x トラップを配置したいマスの中心X座標
+ * @param yd Y方向の配置分散マス数
+ * @param xd X方向の配置分散マス数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
+ */
+void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+{
+	int count = 0, y1 = y, x1 = x;
+	int dummy = 0;
+
+	grid_type *g_ptr;
+
+	/* Place traps */
+	for (count = 0; count <= 5; count++)
+	{
+		/* Get a location */
+		while (dummy < SAFE_MAX_ATTEMPTS)
+		{
+			y1 = rand_spread(y, yd);
+			x1 = rand_spread(x, xd);
+			dummy++;
+			if (!in_bounds(floor_ptr, y1, x1)) continue;
+			break;
+		}
+
+		if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room)
+		{
+			msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
+		}
+
+		/* Require "naked" floor grids */
+		g_ptr = &floor_ptr->grid_array[y1][x1];
+		if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
+
+		/* Place the trap */
+		place_trap(floor_ptr, y1, x1);
+
+		break;
 	}
 }
