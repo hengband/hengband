@@ -199,7 +199,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (!get_aim_dir(&dir)) return NULL;
 
-				cast_wonder(dir);
+				cast_wonder(caster_ptr, dir);
 			}
 		}
 		break;

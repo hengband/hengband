@@ -3436,26 +3436,26 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 * while keeping the results quite random.  It also allows some potent\n
 * effects only at high level.
 */
-void cast_wonder(DIRECTION dir)
+void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	int die = randint1(100) + plev / 5;
-	int vir = virtue_number(p_ptr, V_CHANCE);
+	int vir = virtue_number(caster_ptr, V_CHANCE);
 
 	if (vir)
 	{
-		if (p_ptr->virtues[vir - 1] > 0)
+		if (caster_ptr->virtues[vir - 1] > 0)
 		{
-			while (randint1(400) < p_ptr->virtues[vir - 1]) die++;
+			while (randint1(400) < caster_ptr->virtues[vir - 1]) die++;
 		}
 		else
 		{
-			while (randint1(400) < (0 - p_ptr->virtues[vir - 1])) die--;
+			while (randint1(400) < (0 - caster_ptr->virtues[vir - 1])) die--;
 		}
 	}
 
 	if (die < 26)
-		chg_virtue(p_ptr, V_CHANCE, 1);
+		chg_virtue(caster_ptr, V_CHANCE, 1);
 
 	if (die > 100)
 	{
@@ -3492,15 +3492,15 @@ void cast_wonder(DIRECTION dir)
 	else if (die < 101) hypodynamic_bolt(dir, 100 + plev);
 	else if (die < 104)
 	{
-		earthquake(p_ptr, p_ptr->y, p_ptr->x, 12, 0);
+		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 12, 0);
 	}
 	else if (die < 106)
 	{
-		(void)destroy_area(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, 13 + randint0(5), FALSE);
+		(void)destroy_area(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
 	}
 	else if (die < 108)
 	{
-		symbol_genocide(p_ptr, plev + 50, TRUE);
+		symbol_genocide(caster_ptr, plev + 50, TRUE);
 	}
 	else if (die < 110) dispel_monsters(120);
 	else /* RARE */
@@ -3508,7 +3508,7 @@ void cast_wonder(DIRECTION dir)
 		dispel_monsters(150);
 		slow_monsters(plev);
 		sleep_monsters(plev);
-		hp_player(p_ptr, 300);
+		hp_player(caster_ptr, 300);
 	}
 }
 
