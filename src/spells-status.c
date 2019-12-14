@@ -27,7 +27,7 @@
 bool heal_monster(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_HEAL, dir, dam, flg));
+	return (project_hook(p_ptr, GF_OLD_HEAL, dir, dam, flg));
 }
 
 /*!
@@ -39,7 +39,7 @@ bool heal_monster(DIRECTION dir, HIT_POINT dam)
 bool speed_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_SPEED, dir, power, flg));
+	return (project_hook(p_ptr, GF_OLD_SPEED, dir, power, flg));
 }
 
 /*!
@@ -51,7 +51,7 @@ bool speed_monster(DIRECTION dir, int power)
 bool slow_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_SLOW, dir, power, flg));
+	return (project_hook(p_ptr, GF_OLD_SLOW, dir, power, flg));
 }
 
 /*!
@@ -63,7 +63,7 @@ bool slow_monster(DIRECTION dir, int power)
 bool sleep_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_SLEEP, dir, power, flg));
+	return (project_hook(p_ptr, GF_OLD_SLEEP, dir, power, flg));
 }
 
 /*!
@@ -97,7 +97,7 @@ bool stasis_evil(DIRECTION dir)
 bool confuse_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_CONF, dir, plev, flg));
+	return (project_hook(p_ptr, GF_OLD_CONF, dir, plev, flg));
 }
 
 /*!
@@ -109,7 +109,7 @@ bool confuse_monster(DIRECTION dir, PLAYER_LEVEL plev)
 bool stun_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_STUN, dir, plev, flg));
+	return (project_hook(p_ptr, GF_STUN, dir, plev, flg));
 }
 
 /*!
@@ -121,7 +121,7 @@ bool stun_monster(DIRECTION dir, PLAYER_LEVEL plev)
 bool poly_monster(DIRECTION dir, int power)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	bool tester = (project_hook(GF_OLD_POLY, dir, power, flg));
+	bool tester = (project_hook(p_ptr, GF_OLD_POLY, dir, power, flg));
 	if (tester)
 		chg_virtue(p_ptr, V_CHANCE, 1);
 	return(tester);
@@ -135,7 +135,7 @@ bool poly_monster(DIRECTION dir, int power)
 bool clone_monster(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_OLD_CLONE, dir, 0, flg));
+	return (project_hook(p_ptr, GF_OLD_CLONE, dir, 0, flg));
 }
 
 /*!
@@ -147,7 +147,7 @@ bool clone_monster(DIRECTION dir)
 bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_TURN_ALL, dir, plev, flg));
+	return (project_hook(p_ptr, GF_TURN_ALL, dir, plev, flg));
 }
 
 /*!

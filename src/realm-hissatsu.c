@@ -47,7 +47,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			project_length = 2;
 			if (!get_aim_dir(&dir)) return NULL;
 
-			project_hook(GF_ATTACK, dir, HISSATSU_2, PROJECT_STOP | PROJECT_KILL);
+			project_hook(caster_ptr, GF_ATTACK, dir, HISSATSU_2, PROJECT_STOP | PROJECT_KILL);
 		}
 		break;
 

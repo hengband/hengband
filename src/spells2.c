@@ -2202,7 +2202,7 @@ bool teleport_swap(DIRECTION dir)
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
+bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 {
 	POSITION tx, ty;
 
@@ -2210,8 +2210,8 @@ bool project_hook(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 	flg |= (PROJECT_THRU);
 
 	/* Use the given direction */
-	tx = p_ptr->x + ddx[dir];
-	ty = p_ptr->y + ddy[dir];
+	tx = caster_ptr->x + ddx[dir];
+	ty = caster_ptr->y + ddy[dir];
 
 	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay())
@@ -2241,7 +2241,7 @@ bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
-	return (project_hook(typ, dir, dam, flg));
+	return (project_hook(caster_ptr, typ, dir, dam, flg));
 }
 
 
@@ -2260,7 +2260,7 @@ bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
-	return (project_hook(typ, dir, dam, flg));
+	return (project_hook(p_ptr, typ, dir, dam, flg));
 }
 
 
@@ -2298,7 +2298,7 @@ bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 bool lite_line(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
-	return (project_hook(GF_LITE_WEAK, dir, dam, flg));
+	return (project_hook(p_ptr, GF_LITE_WEAK, dir, dam, flg));
 }
 
 /*!
@@ -2310,7 +2310,7 @@ bool lite_line(DIRECTION dir, HIT_POINT dam)
 bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_HYPODYNAMIA, dir, dam, flg));
+	return (project_hook(p_ptr, GF_HYPODYNAMIA, dir, dam, flg));
 }
 
 /*!
@@ -2322,7 +2322,7 @@ bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam)
 bool wall_to_mud(DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-	return (project_hook(GF_KILL_WALL, dir, dam, flg));
+	return (project_hook(p_ptr, GF_KILL_WALL, dir, dam, flg));
 }
 
 /*!
@@ -2333,7 +2333,7 @@ bool wall_to_mud(DIRECTION dir, HIT_POINT dam)
 bool wizard_lock(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-	return (project_hook(GF_JAM_DOOR, dir, 20 + randint1(30), flg));
+	return (project_hook(p_ptr, GF_JAM_DOOR, dir, 20 + randint1(30), flg));
 }
 
 /*!
@@ -2344,7 +2344,7 @@ bool wizard_lock(DIRECTION dir)
 bool destroy_door(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
-	return (project_hook(GF_KILL_DOOR, dir, 0, flg));
+	return (project_hook(p_ptr, GF_KILL_DOOR, dir, 0, flg));
 }
 
 /*!
@@ -2355,7 +2355,7 @@ bool destroy_door(DIRECTION dir)
 bool disarm_trap(DIRECTION dir)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_ITEM;
-	return (project_hook(GF_KILL_TRAP, dir, 0, flg));
+	return (project_hook(p_ptr, GF_KILL_TRAP, dir, 0, flg));
 }
 
 
@@ -2368,7 +2368,7 @@ bool disarm_trap(DIRECTION dir)
 bool death_ray(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(GF_DEATH_RAY, dir, plev * 200, flg));
+	return (project_hook(p_ptr, GF_DEATH_RAY, dir, plev * 200, flg));
 }
 
 /*!
@@ -2380,7 +2380,7 @@ bool death_ray(DIRECTION dir, PLAYER_LEVEL plev)
 bool teleport_monster(DIRECTION dir, int distance)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
-	return (project_hook(GF_AWAY_ALL, dir, distance, flg));
+	return (project_hook(p_ptr, GF_AWAY_ALL, dir, distance, flg));
 }
 
 /*!
@@ -2904,7 +2904,7 @@ bool deathray_monsters(void)
 bool charm_monster(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(GF_CHARM, dir, plev, flg));
+	return (project_hook(p_ptr, GF_CHARM, dir, plev, flg));
 }
 
 /*!
@@ -2916,7 +2916,7 @@ bool charm_monster(DIRECTION dir, PLAYER_LEVEL plev)
 bool control_one_undead(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(GF_CONTROL_UNDEAD, dir, plev, flg));
+	return (project_hook(p_ptr, GF_CONTROL_UNDEAD, dir, plev, flg));
 }
 
 /*!
@@ -2928,7 +2928,7 @@ bool control_one_undead(DIRECTION dir, PLAYER_LEVEL plev)
 bool control_one_demon(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(GF_CONTROL_DEMON, dir, plev, flg));
+	return (project_hook(p_ptr, GF_CONTROL_DEMON, dir, plev, flg));
 }
 
 /*!
@@ -2940,7 +2940,7 @@ bool control_one_demon(DIRECTION dir, PLAYER_LEVEL plev)
 bool charm_animal(DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(GF_CONTROL_ANIMAL, dir, plev, flg));
+	return (project_hook(p_ptr, GF_CONTROL_ANIMAL, dir, plev, flg));
 }
 
 
