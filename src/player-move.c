@@ -1242,7 +1242,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 
 		if (creature_ptr->warning)
 		{
-			if (!process_warning(x, y))
+			if (!process_warning(creature_ptr, x, y))
 			{
 				creature_ptr->energy_use = 25;
 				return;

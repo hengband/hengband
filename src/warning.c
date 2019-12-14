@@ -397,7 +397,7 @@ static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_bl
  * @param yy 危険性を調査するマスのY座標
  * @return 警告を無視して進むことを選択するかか問題が無ければTRUE、警告に従ったならFALSEを返す。
  */
-bool process_warning(POSITION xx, POSITION yy)
+bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 {
 	POSITION mx, my;
 	grid_type *g_ptr;
@@ -415,13 +415,13 @@ bool process_warning(POSITION xx, POSITION yy)
 			monster_type *m_ptr;
 			monster_race *r_ptr;
 
-			if (!in_bounds(p_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
+			if (!in_bounds(creature_ptr->current_floor_ptr, my, mx) || (distance(my, mx, yy, xx) > WARNING_AWARE_RANGE)) continue;
 
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[my][mx];
+			g_ptr = &creature_ptr->current_floor_ptr->grid_array[my][mx];
 
 			if (!g_ptr->m_idx) continue;
 
-			m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			if (MON_CSLEEP(m_ptr)) continue;
 			if (!is_hostile(m_ptr)) continue;
@@ -429,13 +429,13 @@ bool process_warning(POSITION xx, POSITION yy)
 			r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Monster spells (only powerful ones)*/
-			if (projectable(p_ptr->current_floor_ptr, my, mx, yy, xx))
+			if (projectable(creature_ptr->current_floor_ptr, my, mx, yy, xx))
 			{
 				BIT_FLAGS f4 = r_ptr->flags4;
 				BIT_FLAGS f5 = r_ptr->a_ability_flags1;
 				BIT_FLAGS f6 = r_ptr->a_ability_flags2;
 
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
+				if (!(d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
 				{
 					if (f4 & RF4_BA_CHAO) spell_damcalc_by_spellnum(MS_BALL_CHAOS, GF_CHAOS, g_ptr->m_idx, &dam_max0);
 					if (f5 & RF5_BA_MANA) spell_damcalc_by_spellnum(MS_BALL_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
@@ -470,7 +470,7 @@ bool process_warning(POSITION xx, POSITION yy)
 			}
 
 			/* Monster melee attacks */
-			if (!(r_ptr->flags1 & RF1_NEVER_BLOW) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
+			if (!(r_ptr->flags1 & RF1_NEVER_BLOW) && !(d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
 			{
 				if (mx <= xx + 1 && mx >= xx - 1 && my <= yy + 1 && my >= yy - 1)
 				{
@@ -482,7 +482,7 @@ bool process_warning(POSITION xx, POSITION yy)
 						if (!r_ptr->blow[m].method || (r_ptr->blow[m].method == RBM_SHOOT)) continue;
 
 						/* Extract the attack info */
-						dam_melee += blow_damcalc(m_ptr, p_ptr, &r_ptr->blow[m]);
+						dam_melee += blow_damcalc(m_ptr, creature_ptr, &r_ptr->blow[m]);
 						if (r_ptr->blow[m].method == RBM_EXPLODE) break;
 					}
 					if (dam_melee > dam_max0) dam_max0 = dam_melee;
@@ -499,7 +499,7 @@ bool process_warning(POSITION xx, POSITION yy)
 	{
 		old_damage = dam_max * 3 / 2;
 
-		if (dam_max > p_ptr->chp / 2)
+		if (dam_max > creature_ptr->chp / 2)
 		{
 			object_type *o_ptr = choose_warning_item();
 
@@ -509,13 +509,13 @@ bool process_warning(POSITION xx, POSITION yy)
 				strcpy(o_name, _("体", "body")); /* Warning ability without item */
 			msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
 
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(creature_ptr, FALSE, TRUE);
 			return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 		}
 	}
 	else old_damage = old_damage / 2;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
+	g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
 	if (((!easy_disarm && is_trap(g_ptr->feat))
 		|| (g_ptr->mimic && is_trap(g_ptr->feat))) && !one_in_(13))
 	{
@@ -526,7 +526,7 @@ bool process_warning(POSITION xx, POSITION yy)
 		else
 			strcpy(o_name, _("体", "body")); /* Warning ability without item */
 		msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(creature_ptr, FALSE, TRUE);
 		return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 	}
 
