@@ -388,62 +388,6 @@ void try_door(POSITION y, POSITION x)
 	}
 }
 
-
-/*!
- * @brief 長方形の空洞を生成する / Make an empty square floor, for the middle of rooms
- * @param x1 長方形の左端X座標(-1)
- * @param x2 長方形の右端X座標(+1)
- * @param y1 長方形の上端Y座標(-1)
- * @param y2 長方形の下端Y座標(+1)
- * @param light 照明の有無
- * @return なし
- */
-void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
-{
-	POSITION x, y;
-
-	/* Place a full floor under the room */
-	for (y = y1 - 1; y <= y2 + 1; y++)
-	{
-		for (x = x1 - 1; x <= x2 + 1; x++)
-		{
-			place_floor_bold(p_ptr->current_floor_ptr, y, x);
-			add_cave_info(p_ptr->current_floor_ptr, y, x, CAVE_ROOM);
-			if (light) add_cave_info(p_ptr->current_floor_ptr, y, x, CAVE_GLOW);
-		}
-	}
-}
-
-
-/*!
- * @brief 長方形の部屋を生成する / Make an empty square room, only floor and wall grids
- * @param x1 長方形の左端X座標(-1)
- * @param x2 長方形の右端X座標(+1)
- * @param y1 長方形の上端Y座標(-1)
- * @param y2 長方形の下端Y座標(+1)
- * @param light 照明の有無
- * @return なし
- */
-void place_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light)
-{
-	POSITION y, x;
-
-	place_floor(x1, x2, y1, y2, light);
-
-	/* Walls around the room */
-	for (y = y1 - 1; y <= y2 + 1; y++)
-	{
-		place_outer_bold(p_ptr->current_floor_ptr, y, x1 - 1);
-		place_outer_bold(p_ptr->current_floor_ptr, y, x2 + 1);
-	}
-	for (x = x1 - 1; x <= x2 + 1; x++)
-	{
-		place_outer_bold(p_ptr->current_floor_ptr, y1 - 1, x);
-		place_outer_bold(p_ptr->current_floor_ptr, y2 + 1, x);
-	}
-}
-
-
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
  * @param y 配置したい中心マスのY座標

@@ -373,8 +373,6 @@ extern void place_closed_door(POSITION y, POSITION x, int type);
 
 
 extern void try_door(POSITION y, POSITION x);
-extern void place_floor(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light);
-extern void place_room(POSITION x1, POSITION x2, POSITION y1, POSITION y2, bool light);
 extern void vault_objects(POSITION y, POSITION x, int num);
 extern void vault_trap_aux(POSITION y, POSITION x, POSITION yd, POSITION xd);
 extern void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
