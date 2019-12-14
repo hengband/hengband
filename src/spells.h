@@ -307,7 +307,7 @@ extern bool alchemy(void);
 extern bool artifact_scroll(void);
 extern bool ident_spell(player_type *caster_ptr, bool only_equip);
 extern bool mundane_spell(bool only_equip);
-extern bool identify_item(object_type *o_ptr);
+extern bool identify_item(player_type *owner_ptr, object_type *o_ptr);
 extern bool identify_fully(bool only_equip);
 extern bool recharge(int power);
 extern void display_spell_list(player_type *caster_ptr);

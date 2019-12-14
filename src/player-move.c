@@ -299,7 +299,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 
 	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
-		bool old_known = identify_item(o_ptr);
+		bool old_known = identify_item(p_ptr, o_ptr);
 
 		/* Auto-inscription/destroy */
 		autopick_alter_item(slot, (bool)(destroy_identify && !old_known));

@@ -5043,7 +5043,7 @@ static void store_sell(void)
 			/* Get the "apparent" value */
 			dummy = object_value(q_ptr) * q_ptr->number;
 
-			identify_item(o_ptr);
+			identify_item(p_ptr, o_ptr);
 			q_ptr = &forge;
 
 			/* Get a copy of the object */
@@ -5130,7 +5130,7 @@ static void store_sell(void)
 
 		if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) return;
 
-		identify_item(q_ptr);
+		identify_item(p_ptr, q_ptr);
 		q_ptr->ident |= IDENT_MENTAL;
 
 		/* Distribute charges of wands/rods */

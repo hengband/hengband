@@ -941,7 +941,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			case GF_IDENTIFY:
 			{
-				identify_item(o_ptr);
+				identify_item(p_ptr, o_ptr);
 
 				/* Auto-inscription */
 				autopick_alter_item((-this_o_idx), FALSE);

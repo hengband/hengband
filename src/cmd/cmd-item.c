@@ -321,7 +321,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
 	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
-		identify_item(o_ptr);
+		identify_item(creature_ptr, o_ptr);
 
 		/* Auto-inscription */
 		autopick_alter_item(item, FALSE);

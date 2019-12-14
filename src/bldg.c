@@ -3318,7 +3318,7 @@ static void building_recharge(void)
 
 		{
 			p_ptr->au -= 50;
-			identify_item(o_ptr);
+			identify_item(p_ptr, o_ptr);
 			object_desc(tmp_str, o_ptr, 0);
 			msg_format(_("%s です。", "You have: %s."), tmp_str);
 
@@ -3572,7 +3572,7 @@ static void building_recharge_all(void)
 
 		if (!object_is_known(o_ptr))
 		{
-			identify_item(o_ptr);
+			identify_item(p_ptr, o_ptr);
 
 			/* Auto-inscription */
 			autopick_alter_item(i, FALSE);

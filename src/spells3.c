@@ -1387,7 +1387,7 @@ void identify_pack(void)
 		object_type *o_ptr = &p_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
-		identify_item(o_ptr);
+		identify_item(p_ptr, o_ptr);
 
 		/* Auto-inscription */
 		autopick_alter_item(i, FALSE);
@@ -1688,7 +1688,7 @@ bool artifact_scroll(void)
  * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
  * @return 実際に鑑定できたらTRUEを返す
  */
-bool identify_item(object_type *o_ptr)
+bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 {
 	bool old_known = FALSE;
 	GAME_TEXT o_name[MAX_NLEN];
@@ -1701,15 +1701,15 @@ bool identify_item(object_type *o_ptr)
 	if (!(o_ptr->ident & (IDENT_MENTAL)))
 	{
 		if (object_is_artifact(o_ptr) || one_in_(5))
-			chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+			chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
 	}
 
 	object_aware(o_ptr);
 	object_known(o_ptr);
 	o_ptr->marked |= OM_TOUCHED;
 
-	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
+	owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	strcpy(record_o_name, o_name);
 	record_turn = current_world_ptr->game_turn;
@@ -1717,9 +1717,9 @@ bool identify_item(object_type *o_ptr)
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 	if(record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
-		exe_write_diary(p_ptr, NIKKI_ART, 0, o_name);
+		exe_write_diary(owner_ptr, NIKKI_ART, 0, o_name);
 	if(record_rand_art && !old_known && o_ptr->art_name)
-		exe_write_diary(p_ptr, NIKKI_ART, 0, o_name);
+		exe_write_diary(owner_ptr, NIKKI_ART, 0, o_name);
 
 	return old_known;
 }
@@ -1765,7 +1765,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
-	old_known = identify_item(o_ptr);
+	old_known = identify_item(p_ptr, o_ptr);
 
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
@@ -1881,7 +1881,7 @@ bool identify_fully(bool only_equip)
 	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
-	old_known = identify_item(o_ptr);
+	old_known = identify_item(p_ptr, o_ptr);
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
