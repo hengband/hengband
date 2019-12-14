@@ -3190,7 +3190,7 @@ void ring_of_power(player_type *caster_ptr, DIRECTION dir)
 * @param spell ランダムな効果を選択するための基準ID
 * @return なし
 */
-void wild_magic(int spell)
+void wild_magic(player_type *caster_ptr, int spell)
 {
 	int counter = 0;
 	int type = SUMMON_MOLD + randint0(6);
@@ -3203,16 +3203,16 @@ void wild_magic(int spell)
 	case 1:
 	case 2:
 	case 3:
-		teleport_player(p_ptr, 10, TELEPORT_PASSIVE);
+		teleport_player(caster_ptr, 10, TELEPORT_PASSIVE);
 		break;
 	case 4:
 	case 5:
 	case 6:
-		teleport_player(p_ptr, 100, TELEPORT_PASSIVE);
+		teleport_player(caster_ptr, 100, TELEPORT_PASSIVE);
 		break;
 	case 7:
 	case 8:
-		teleport_player(p_ptr, 200, TELEPORT_PASSIVE);
+		teleport_player(caster_ptr, 200, TELEPORT_PASSIVE);
 		break;
 	case 9:
 	case 10:
@@ -3234,7 +3234,7 @@ void wild_magic(int spell)
 		break;
 	case 19:
 	case 20:
-		trap_creation(p_ptr->y, p_ptr->x);
+		trap_creation(caster_ptr->y, caster_ptr->x);
 		break;
 	case 21:
 	case 22:
@@ -3246,18 +3246,18 @@ void wild_magic(int spell)
 		aggravate_monsters(0);
 		break;
 	case 26:
-		earthquake(p_ptr, p_ptr->y, p_ptr->x, 5, 0);
+		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 5, 0);
 		break;
 	case 27:
 	case 28:
-		(void)gain_mutation(p_ptr, 0);
+		(void)gain_mutation(caster_ptr, 0);
 		break;
 	case 29:
 	case 30:
-		apply_disenchant(p_ptr, 1);
+		apply_disenchant(caster_ptr, 1);
 		break;
 	case 31:
-		lose_all_info(p_ptr);
+		lose_all_info(caster_ptr);
 		break;
 	case 32:
 		fire_ball(GF_CHAOS, 0, spell + 5, 1 + (spell / 10));
@@ -3269,15 +3269,15 @@ void wild_magic(int spell)
 	case 35:
 		while (counter++ < 8)
 		{
-			(void)summon_specific(0, p_ptr->y, p_ptr->x, (p_ptr->current_floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
+			(void)summon_specific(0, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 		break;
 	case 36:
 	case 37:
-		activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
+		activate_hi_summon(caster_ptr->y, caster_ptr->x, FALSE);
 		break;
 	case 38:
-		(void)summon_cyber(-1, p_ptr->y, p_ptr->x);
+		(void)summon_cyber(-1, caster_ptr->y, caster_ptr->x);
 		break;
 	default:
 	{
@@ -3742,7 +3742,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 38)
 	{
 		msg_print(_("《運命の輪》だ。", "It's the Wheel of Fortune."));
-		wild_magic(randint0(32));
+		wild_magic(caster_ptr, randint0(32));
 	}
 	else if (die < 40)
 	{

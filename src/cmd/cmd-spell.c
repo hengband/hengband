@@ -1233,7 +1233,7 @@ void do_cmd_cast(player_type *caster_ptr)
 		if ((o_ptr->tval == TV_CHAOS_BOOK) && (randint1(100) < spell))
 		{
 			msg_print(_("カオス的な効果を発生した！", "You produce a chaotic effect!"));
-			wild_magic(spell);
+			wild_magic(caster_ptr, spell);
 		}
 		else if ((o_ptr->tval == TV_DEATH_BOOK) && (randint1(100) < spell))
 		{

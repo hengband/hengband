@@ -249,7 +249,7 @@ extern bool kawarimi(bool success);
 extern bool rush_attack(player_type *attacker_ptr, bool *mdeath);
 extern void remove_all_mirrors(bool explode);
 extern void ring_of_power(player_type *caster_ptr, DIRECTION dir);
-extern void wild_magic(int spell);
+extern void wild_magic(player_type *caster_ptr, int spell);
 extern void cast_meteor(HIT_POINT dam, POSITION rad);
 extern bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad);
 extern void cast_wonder(DIRECTION dir);
