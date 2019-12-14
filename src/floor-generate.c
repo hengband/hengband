@@ -1052,7 +1052,7 @@ static void build_arena(floor_type *floor_ptr)
  * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void generate_challenge_arena(floor_type *floor_ptr)
+static void generate_challenge_arena(floor_type *floor_ptr, player_type *challanger_ptr)
 {
 	POSITION y, x;
 	POSITION qy = 0;
@@ -1087,10 +1087,10 @@ static void generate_challenge_arena(floor_type *floor_ptr)
 
 	build_arena(floor_ptr);
 
-	if(!place_monster_aux(0, p_ptr->y + 5, p_ptr->x, arena_info[p_ptr->arena_number].r_idx, (PM_NO_KAGE | PM_NO_PET)))
+	if(!place_monster_aux(0, challanger_ptr->y + 5, challanger_ptr->x, arena_info[challanger_ptr->arena_number].r_idx, (PM_NO_KAGE | PM_NO_PET)))
 	{
-		p_ptr->exit_bldg = TRUE;
-		p_ptr->arena_number++;
+		challanger_ptr->exit_bldg = TRUE;
+		challanger_ptr->arena_number++;
 		msg_print(_("相手は欠場した。あなたの不戦勝だ。", "The enemy is unable appear. You won by default."));
 	}
 
@@ -1419,7 +1419,7 @@ void generate_floor(floor_type *floor_ptr)
 
 		if (p_ptr->current_floor_ptr->inside_arena)
 		{
-			generate_challenge_arena(floor_ptr);
+			generate_challenge_arena(floor_ptr, p_ptr);
 		}
 
 		else if (p_ptr->phase_out)
