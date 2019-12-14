@@ -68,7 +68,7 @@ bool stop_hex_spell_all(player_type *caster_ptr)
  * @brief プレイヤーが詠唱中の呪術から一つを選んで停止する
  * @return なし
  */
-bool stop_hex_spell(void)
+bool stop_hex_spell(player_type *caster_ptr)
 {
 	int spell;
 	char choice = 0;
@@ -78,21 +78,21 @@ bool stop_hex_spell(void)
 	TERM_LEN x = 20;
 	int sp[MAX_KEEP];
 
-	if (!hex_spelling_any(p_ptr))
+	if (!hex_spelling_any(caster_ptr))
 	{
 		msg_print(_("呪文を詠唱していません。", "You are casting no spell."));
 		return FALSE;
 	}
 
 	/* Stop all spells */
-	else if ((CASTING_HEX_NUM(p_ptr) == 1) || (p_ptr->lev < 35))
+	else if ((CASTING_HEX_NUM(caster_ptr) == 1) || (caster_ptr->lev < 35))
 	{
-		return stop_hex_spell_all(p_ptr);
+		return stop_hex_spell_all(caster_ptr);
 	}
 	else
 	{
 		strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
-			I2A(0), I2A(CASTING_HEX_NUM(p_ptr) - 1));
+			I2A(0), I2A(CASTING_HEX_NUM(caster_ptr) - 1));
 
 		screen_save();
 
@@ -106,7 +106,7 @@ bool stop_hex_spell(void)
 				if (hex_spelling(spell))
 				{
 					Term_erase(x, y + n + 1, 255);
-					put_str(format("%c)  %s", I2A(n), exe_spell(p_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
+					put_str(format("%c)  %s", I2A(n), exe_spell(caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
 					sp[n++] = spell;
 				}
 			}
@@ -117,9 +117,9 @@ bool stop_hex_spell(void)
 			if (choice == 'l')	/* All */
 			{
 				screen_load();
-				return stop_hex_spell_all(p_ptr);
+				return stop_hex_spell_all(caster_ptr);
 			}
-			if ((choice < I2A(0)) || (choice > I2A(CASTING_HEX_NUM(p_ptr) - 1))) continue;
+			if ((choice < I2A(0)) || (choice > I2A(CASTING_HEX_NUM(caster_ptr) - 1))) continue;
 			flag = TRUE;
 		}
 	}
@@ -130,13 +130,13 @@ bool stop_hex_spell(void)
 	{
 		int n = sp[A2I(choice)];
 
-		exe_spell(p_ptr, REALM_HEX, n, SPELL_STOP);
-		CASTING_HEX_FLAGS(p_ptr) &= ~(1L << n);
-		CASTING_HEX_NUM(p_ptr)--;
+		exe_spell(caster_ptr, REALM_HEX, n, SPELL_STOP);
+		CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << n);
+		CASTING_HEX_NUM(caster_ptr)--;
 	}
 
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-	p_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+	caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+	caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
 
 	return flag;
 }

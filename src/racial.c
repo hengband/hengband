@@ -400,7 +400,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case CLASS_HIGH_MAGE:
 		if (creature_ptr->realm1 == REALM_HEX)
 		{
-			bool retval = stop_hex_spell();
+			bool retval = stop_hex_spell(creature_ptr);
 			if (retval) creature_ptr->energy_use = 10;
 			return (retval);
 		}

@@ -1075,7 +1075,7 @@ void do_cmd_cast(player_type *caster_ptr)
 			bool flag = FALSE;
 			msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not spell new spells more."));
 			flush();
-			if (caster_ptr->lev >= 35) flag = stop_hex_spell();
+			if (caster_ptr->lev >= 35) flag = stop_hex_spell(caster_ptr);
 			if (!flag) return;
 		}
 	}

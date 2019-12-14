@@ -165,7 +165,7 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
 
 	/* If we are requested other action, stop singing */
 	if (prev_typ == ACTION_SING) stop_singing(creature_ptr);
-	if (prev_typ == ACTION_SPELL) stop_hex_spell();
+	if (prev_typ == ACTION_SPELL) stop_hex_spell(creature_ptr);
 
 	switch (creature_ptr->action)
 	{
