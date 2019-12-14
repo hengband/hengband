@@ -247,12 +247,12 @@ void check_hex(player_type *caster_ptr)
  * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
  * @return すでに全枠を利用しているならTRUEを返す
  */
-bool hex_spell_fully(void)
+bool hex_spell_fully(player_type *caster_ptr)
 {
 	int k_max = 0;
-	k_max = (p_ptr->lev / 15) + 1;
+	k_max = (caster_ptr->lev / 15) + 1;
 	k_max = MIN(k_max, MAX_KEEP);
-	if (CASTING_HEX_NUM(p_ptr) < k_max) return FALSE;
+	if (CASTING_HEX_NUM(caster_ptr) < k_max) return FALSE;
 	return TRUE;
 }
 

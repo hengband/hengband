@@ -1070,7 +1070,7 @@ void do_cmd_cast(player_type *caster_ptr)
 	if (cmd_limit_confused(caster_ptr)) return;
 	if (caster_ptr->realm1 == REALM_HEX)
 	{
-		if (hex_spell_fully())
+		if (hex_spell_fully(caster_ptr))
 		{
 			bool flag = FALSE;
 			msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not spell new spells more."));
