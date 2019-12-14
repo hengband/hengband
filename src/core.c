@@ -2262,7 +2262,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, mode))
+		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, mode))
 		{
 			msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2306,7 +2306,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
 		banish_monsters(100);
-		if (!p_ptr->current_floor_ptr->dun_level && creature_ptr->town_num)
+		if (!creature_ptr->current_floor_ptr->dun_level && creature_ptr->town_num)
 		{
 			int n;
 
@@ -2331,7 +2331,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		msg_print(NULL);
 
 		/* Absorb light from the current possition */
-		if ((p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
+		if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 		{
 			hp_player(creature_ptr, 10);
 		}
@@ -2371,7 +2371,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
+		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
 		{
 			msg_print(_("動物を引き寄せた！", "You have attracted an animal!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2449,7 +2449,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
+		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
 		{
 			msg_print(_("ドラゴンを引き寄せた！", "You have attracted a dragon!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2488,9 +2488,9 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		int danger_amount = 0;
 		MONSTER_IDX monster;
 
-		for (monster = 0; monster < p_ptr->current_floor_ptr->m_max; monster++)
+		for (monster = 0; monster < creature_ptr->current_floor_ptr->m_max; monster++)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[monster];
+			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[monster];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 			if (!monster_is_valid(m_ptr)) continue;
 
