@@ -1120,7 +1120,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_MASS_GENO:
 	{
 		msg_print(_("ひどく鋭い音が流れ出た...", "It lets out a long, shrill note..."));
-		(void)mass_genocide(200, TRUE);
+		(void)mass_genocide(user_ptr, 200, TRUE);
 		break;
 	}
 

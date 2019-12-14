@@ -423,7 +423,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_MASS_GENOCIDE:
 		{
-			(void)mass_genocide(300, TRUE);
+			(void)mass_genocide(creature_ptr, 300, TRUE);
 			ident = TRUE;
 			break;
 		}

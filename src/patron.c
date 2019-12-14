@@ -614,7 +614,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「我、汝の敵を抹殺せん！」", "'Let me relieve thee of thine oppressors!'"));
 
-			(void)mass_genocide(0, FALSE);
+			(void)mass_genocide(creature_ptr, 0, FALSE);
 			reward = _("モンスターが抹殺された。", "genociding nearby monsters");
 			break;
 

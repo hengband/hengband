@@ -1151,21 +1151,21 @@ bool symbol_genocide(int power, bool player_cast)
  * @param player_cast プレイヤーの魔法によるものならば TRUE
  * @return 効力があった場合TRUEを返す
  */
-bool mass_genocide(int power, bool player_cast)
+bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
 {
 	MONSTER_IDX i;
 	bool result = FALSE;
 
 	/* Prevent mass genocide in quest levels */
-	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out)
+	if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr->current_floor_ptr->dun_level)) || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out)
 	{
 		return (FALSE);
 	}
 
 	/* Delete the (nearby) monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip distant monsters */
@@ -1177,8 +1177,8 @@ bool mass_genocide(int power, bool player_cast)
 
 	if (result)
 	{
-		chg_virtue(p_ptr, V_VITALITY, -2);
-		chg_virtue(p_ptr, V_CHANCE, -1);
+		chg_virtue(caster_ptr, V_VITALITY, -2);
+		chg_virtue(caster_ptr, V_CHANCE, -1);
 	}
 
 	return result;
