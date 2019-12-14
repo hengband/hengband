@@ -1425,7 +1425,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 			msg_print(_("鏡の国の場所がわからない！", "You cannot find out where is the world of mirror!"));
 			break;
 		}
-		alter_reality();
+		reserve_alter_reality(caster_ptr);
 		break;
 		/* mirror tunnel */
 	case 16:

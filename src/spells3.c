@@ -1344,29 +1344,29 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
  * @brief 現実変容処理
  * @return なし
  */
-void alter_reality(void)
+void reserve_alter_reality(player_type *caster_ptr)
 {
 	/* Ironman option */
-	if (p_ptr->current_floor_ptr->inside_arena || ironman_downward)
+	if (caster_ptr->current_floor_ptr->inside_arena || ironman_downward)
 	{
 		msg_print(_("何も起こらなかった。", "Nothing happens."));
 		return;
 	}
 
-	if (!p_ptr->alter_reality)
+	if (!caster_ptr->alter_reality)
 	{
 		TIME_EFFECT turns = randint0(21) + 15;
 
-		p_ptr->alter_reality = turns;
+		caster_ptr->alter_reality = turns;
 		msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
 
-		p_ptr->redraw |= (PR_STATUS);
+		caster_ptr->redraw |= (PR_STATUS);
 	}
 	else
 	{
-		p_ptr->alter_reality = 0;
+		caster_ptr->alter_reality = 0;
 		msg_print(_("景色が元に戻った...", "The view around you got back..."));
-		p_ptr->redraw |= (PR_STATUS);
+		caster_ptr->redraw |= (PR_STATUS);
 	}
 	return;
 }

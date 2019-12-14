@@ -702,7 +702,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				msg_print(_("周囲が変化し始めた．．．", "You sing of the primeval shaping of Middle-earth..."));
-				alter_reality();
+				reserve_alter_reality(caster_ptr);
 			}
 		}
 		break;

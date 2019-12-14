@@ -677,7 +677,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (command == -1)
 			{
 				msg_print(_("あなたは歩き周り始めた。", "You start walking around. "));
-				alter_reality();
+				reserve_alter_reality(creature_ptr);
 			}
 			else if (command == -2)
 			{
