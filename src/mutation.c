@@ -2127,7 +2127,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 		case MUT1_MIND_BLST:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
-			fire_bolt(GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
+			fire_bolt(creature_ptr, GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
 			break;
 
 		case MUT1_RADIATION:
@@ -2349,7 +2349,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 					break;
 				}
-				fire_bolt(GF_COLD, dir, 2 * lvl);
+				fire_bolt(creature_ptr, GF_COLD, dir, 2 * lvl);
 			}
 			break;
 

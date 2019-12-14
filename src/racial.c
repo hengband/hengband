@@ -712,7 +712,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case RACE_CYCLOPS:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("巨大な岩を投げた。", "You throw a huge boulder."));
-			fire_bolt(GF_MISSILE, dir, (3 * plev) / 2);
+			fire_bolt(creature_ptr, GF_MISSILE, dir, (3 * plev) / 2);
 			break;
 
 		case RACE_YEEK:
@@ -726,14 +726,14 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth();
 			msg_print(_("酸を吐いた。", "You spit acid."));
-			if (plev < 25) fire_bolt(GF_ACID, dir, plev);
+			if (plev < 25) fire_bolt(creature_ptr, GF_ACID, dir, plev);
 			else fire_ball(creature_ptr, GF_ACID, dir, plev, 2);
 			break;
 
 		case RACE_KOBOLD:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("毒のダーツを投げた。", "You throw a dart of poison."));
-			fire_bolt(GF_POIS, dir, plev);
+			fire_bolt(creature_ptr, GF_POIS, dir, plev);
 			break;
 
 		case RACE_NIBELUNG:
@@ -756,7 +756,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case RACE_MIND_FLAYER:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("あなたは集中し、目が赤く輝いた...", "You concentrate and your eyes glow red..."));
-			fire_bolt(GF_PSI, dir, plev);
+			fire_bolt(creature_ptr, GF_PSI, dir, plev);
 			break;
 
 		case RACE_IMP:
@@ -769,7 +769,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			else
 			{
 				msg_print(_("ファイア・ボルトを放った。", "You cast a bolt of fire."));
-				fire_bolt(GF_FIRE, dir, plev);
+				fire_bolt(creature_ptr, GF_FIRE, dir, plev);
 			}
 			break;
 

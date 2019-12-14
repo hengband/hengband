@@ -308,7 +308,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 	case MS_SHOOT:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("矢を放った。", "You fire an arrow."));
-			fire_bolt(GF_ARROW, dir, damage);
+			fire_bolt(caster_ptr, GF_ARROW, dir, damage);
 		break;
 
 	case MS_XXX2:
@@ -555,25 +555,25 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
 		
-			fire_bolt(GF_ACID, dir, damage);
+			fire_bolt(caster_ptr, GF_ACID, dir, damage);
 		break;
 	case MS_BOLT_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
 		
-			fire_bolt(GF_ELEC, dir, damage);
+			fire_bolt(caster_ptr, GF_ELEC, dir, damage);
 		break;
 	case MS_BOLT_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
 		
-			fire_bolt(GF_FIRE, dir, damage);
+			fire_bolt(caster_ptr, GF_FIRE, dir, damage);
 		break;
 	case MS_BOLT_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
 		
-			fire_bolt(GF_COLD, dir, damage);
+			fire_bolt(caster_ptr, GF_COLD, dir, damage);
 		break;
 	case MS_STARBURST:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -585,37 +585,37 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
 		
-			fire_bolt(GF_NETHER, dir, damage);
+			fire_bolt(caster_ptr, GF_NETHER, dir, damage);
 		break;
 	case MS_BOLT_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
 		
-			fire_bolt(GF_WATER, dir, damage);
+			fire_bolt(caster_ptr, GF_WATER, dir, damage);
 		break;
 	case MS_BOLT_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
 		
-			fire_bolt(GF_MANA, dir, damage);
+			fire_bolt(caster_ptr, GF_MANA, dir, damage);
 		break;
 	case MS_BOLT_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
 		
-			fire_bolt(GF_PLASMA, dir, damage);
+			fire_bolt(caster_ptr, GF_PLASMA, dir, damage);
 		break;
 	case MS_BOLT_ICE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
 		
-			fire_bolt(GF_ICE, dir, damage);
+			fire_bolt(caster_ptr, GF_ICE, dir, damage);
 		break;
 	case MS_MAGIC_MISSILE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
 		
-			fire_bolt(GF_MISSILE, dir, damage);
+			fire_bolt(caster_ptr, GF_MISSILE, dir, damage);
 		break;
 	case MS_SCARE:
 		if (!get_aim_dir(&dir)) return FALSE;

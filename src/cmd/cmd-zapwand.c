@@ -291,7 +291,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_STRIKING:
 		{
-			fire_bolt(GF_METEOR, dir, damroll(15 + lev / 3, 13));
+			fire_bolt(creature_ptr, GF_METEOR, dir, damroll(15 + lev / 3, 13));
 			ident = TRUE;
 			break;
 		}

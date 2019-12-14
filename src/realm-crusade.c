@@ -248,7 +248,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_bolt(GF_ELEC, dir, dam);
+				fire_bolt(caster_ptr, GF_ELEC, dir, dam);
 			}
 		}
 		break;

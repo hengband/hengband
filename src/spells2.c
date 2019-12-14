@@ -2237,7 +2237,7 @@ bool project_hook(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
@@ -2285,7 +2285,7 @@ bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 	}
 	else
 	{
-		return (fire_bolt(typ, dir, dam));
+		return (fire_bolt(p_ptr, typ, dir, dam));
 	}
 }
 
@@ -3179,7 +3179,7 @@ void ring_of_power(player_type *caster_ptr, DIRECTION dir)
 	case 9:
 	case 10:
 	{
-		fire_bolt(GF_MANA, dir, 500);
+		fire_bolt(caster_ptr, GF_MANA, dir, 500);
 		break;
 	}
 	}
@@ -4168,12 +4168,12 @@ bool android_inside_weapon(player_type *creature_ptr)
 	if (creature_ptr->lev < 10)
 	{
 		msg_print(_("レイガンを発射した。", "You fire your ray gun."));
-		fire_bolt(GF_MISSILE, dir, (creature_ptr->lev + 1) / 2);
+		fire_bolt(creature_ptr, GF_MISSILE, dir, (creature_ptr->lev + 1) / 2);
 	}
 	else if (creature_ptr->lev < 25)
 	{
 		msg_print(_("ブラスターを発射した。", "You fire your blaster."));
-		fire_bolt(GF_MISSILE, dir, creature_ptr->lev);
+		fire_bolt(creature_ptr, GF_MISSILE, dir, creature_ptr->lev);
 	}
 	else if (creature_ptr->lev < 35)
 	{

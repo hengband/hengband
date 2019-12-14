@@ -119,7 +119,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_bolt(GF_SOUND, dir, damroll(dice, sides));
+				fire_bolt(caster_ptr, GF_SOUND, dir, damroll(dice, sides));
 			}
 		}
 		break;

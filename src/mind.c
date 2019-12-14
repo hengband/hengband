@@ -1348,7 +1348,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 			fire_beam(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 		}
 		else {
-			fire_bolt(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+			fire_bolt(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 		}
 		break;
 		/* warped mirror */

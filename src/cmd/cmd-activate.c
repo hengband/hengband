@@ -719,7 +719,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは眩しいくらいに明るく輝いている...", "It glows extremely brightly..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_bolt(GF_MISSILE, dir, damroll(2, 6));
+		fire_bolt(user_ptr, GF_MISSILE, dir, damroll(2, 6));
 		break;
 	}
 
@@ -735,7 +735,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは火花に覆われた...", "It is covered in sparks..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_bolt(GF_ELEC, dir, damroll(4, 8));
+		fire_bolt(user_ptr, GF_ELEC, dir, damroll(4, 8));
 		break;
 	}
 
@@ -743,7 +743,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは酸に覆われた...", "It is covered in acid..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_bolt(GF_ACID, dir, damroll(5, 8));
+		fire_bolt(user_ptr, GF_ACID, dir, damroll(5, 8));
 		break;
 	}
 
@@ -751,7 +751,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_bolt(GF_COLD, dir, damroll(6, 8));
+		fire_bolt(user_ptr, GF_COLD, dir, damroll(6, 8));
 		break;
 	}
 
@@ -759,7 +759,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは炎に覆われた...", "It is covered in fire..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_bolt(GF_FIRE, dir, damroll(9, 8));
+		fire_bolt(user_ptr, GF_FIRE, dir, damroll(9, 8));
 		break;
 	}
 
@@ -882,7 +882,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("魔法のトゲが現れた...", "It grows magical spikes..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_bolt(GF_ARROW, dir, 150);
+		fire_bolt(user_ptr, GF_ARROW, dir, 150);
 		break;
 	}
 
@@ -945,7 +945,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name);
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_bolt(GF_ARROW, dir, 150);
+		fire_bolt(user_ptr, GF_ARROW, dir, 150);
 		break;
 	}
 

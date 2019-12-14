@@ -202,7 +202,7 @@ extern bool fire_breath(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION ra
 extern bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);
 extern bool fire_ball_hide(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);
 extern bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION x, POSITION y, HIT_POINT dam, POSITION rad);
-extern bool fire_bolt(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
+extern bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev);
 extern void call_chaos(void);
 extern bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
