@@ -259,7 +259,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!ident_spell(FALSE)) return NULL;
+				if (!ident_spell(caster_ptr, FALSE)) return NULL;
 			}
 		}
 		break;

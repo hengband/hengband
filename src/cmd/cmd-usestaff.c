@@ -86,7 +86,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 				if (!identify_fully(FALSE)) *use_charge = FALSE;
 			}
 			else {
-				if (!ident_spell(FALSE)) *use_charge = FALSE;
+				if (!ident_spell(creature_ptr, FALSE)) *use_charge = FALSE;
 			}
 			ident = TRUE;
 			break;

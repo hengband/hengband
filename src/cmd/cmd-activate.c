@@ -1472,7 +1472,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_ID_PLAIN:
 	{
-		if (!ident_spell(FALSE)) return FALSE;
+		if (!ident_spell(user_ptr, FALSE)) return FALSE;
 		break;
 	}
 

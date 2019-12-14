@@ -1863,7 +1863,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Identify */
 	case 'i':
-		(void)ident_spell(FALSE);
+		(void)ident_spell(creature_ptr, FALSE);
 		break;
 
 	/* Go up or down in the dungeon */

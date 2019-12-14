@@ -305,7 +305,7 @@ extern int remove_all_curse(player_type *caster_ptr);
 extern bool alchemy(void);
 
 extern bool artifact_scroll(void);
-extern bool ident_spell(bool only_equip);
+extern bool ident_spell(player_type *caster_ptr, bool only_equip);
 extern bool mundane_spell(bool only_equip);
 extern bool identify_item(object_type *o_ptr);
 extern bool identify_fully(bool only_equip);

@@ -1733,12 +1733,12 @@ bool identify_item(object_type *o_ptr)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was identified, else FALSE.
  */
-bool ident_spell(bool only_equip)
+bool ident_spell(player_type *caster_ptr, bool only_equip)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	concptr            q, s;
+	concptr q, s;
 	bool old_known;
 
 	if (only_equip)
@@ -1762,7 +1762,7 @@ bool ident_spell(bool only_equip)
 
 	s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	old_known = identify_item(o_ptr);

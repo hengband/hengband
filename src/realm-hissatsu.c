@@ -350,7 +350,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			}
 			else
 			{
-				if (!ident_spell(TRUE)) return NULL;
+				if (!ident_spell(caster_ptr, TRUE)) return NULL;
 			}
 		}
 		break;

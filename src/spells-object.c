@@ -824,7 +824,7 @@ bool brand_bolts(void)
 
 bool perilous_secrets(player_type *user_ptr)
 {
-	if (!ident_spell(FALSE)) return FALSE;
+	if (!ident_spell(user_ptr, FALSE)) return FALSE;
 
 	if (mp_ptr->spell_book)
 	{

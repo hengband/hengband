@@ -605,7 +605,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			}
 			else
 			{
-				if (!ident_spell(TRUE)) return FALSE;
+				if (!ident_spell(creature_ptr, TRUE)) return FALSE;
 			}
 			break;
 		}

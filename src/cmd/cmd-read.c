@@ -195,7 +195,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_IDENTIFY:
 		{
-			if (!ident_spell(FALSE)) used_up = FALSE;
+			if (!ident_spell(creature_ptr, FALSE)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}
