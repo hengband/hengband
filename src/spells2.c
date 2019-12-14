@@ -3342,7 +3342,7 @@ void cast_meteor(HIT_POINT dam, POSITION rad)
 * @param rad 効力の半径
 * @return ターゲットを指定し、実行したならばTRUEを返す。
 */
-bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
+bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
 	POSITION x, y, tx, ty;
 	POSITION nx, ny;
@@ -3353,8 +3353,8 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 	if (!get_aim_dir(&dir)) return FALSE;
 
 	/* Use the given direction */
-	tx = p_ptr->x + 99 * ddx[dir];
-	ty = p_ptr->y + 99 * ddy[dir];
+	tx = caster_ptr->x + 99 * ddx[dir];
+	ty = caster_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay())
@@ -3363,8 +3363,8 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 		ty = target_row;
 	}
 
-	x = p_ptr->x;
-	y = p_ptr->y;
+	x = caster_ptr->x;
+	y = caster_ptr->y;
 
 	while (1)
 	{
@@ -3373,16 +3373,16 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 
 		ny = y;
 		nx = x;
-		mmove2(&ny, &nx, p_ptr->y, p_ptr->x, ty, tx);
+		mmove2(&ny, &nx, caster_ptr->y, caster_ptr->x, ty, tx);
 
 		/* Stop at maximum range */
-		if (MAX_RANGE <= distance(p_ptr->y, p_ptr->x, ny, nx)) break;
+		if (MAX_RANGE <= distance(caster_ptr->y, caster_ptr->x, ny, nx)) break;
 
 		/* Stopped by walls/doors */
 		if (!cave_have_flag_bold(ny, nx, FF_PROJECT)) break;
 
 		/* Stopped by monsters */
-		if ((dir != 5) && p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) break;
+		if ((dir != 5) && caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) break;
 
 		/* Save the new location */
 		x = nx;
@@ -3414,7 +3414,7 @@ bool cast_wrath_of_the_god(HIT_POINT dam, POSITION rad)
 		if (count < 0) continue;
 
 		/* Cannot penetrate perm walls */
-		if (!in_bounds(p_ptr->current_floor_ptr, y, x) ||
+		if (!in_bounds(caster_ptr->current_floor_ptr, y, x) ||
 			cave_stop_disintegration(y, x) ||
 			!in_disintegration_range(ty, tx, y, x))
 			continue;

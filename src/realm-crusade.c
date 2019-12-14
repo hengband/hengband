@@ -505,7 +505,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!cast_wrath_of_the_god(dam, rad)) return NULL;
+				if (!cast_wrath_of_the_god(caster_ptr, dam, rad)) return NULL;
 			}
 		}
 		break;
