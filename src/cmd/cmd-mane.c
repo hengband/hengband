@@ -447,7 +447,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
 		
-			fire_ball(GF_NUKE, dir, damage, 2);
+			fire_ball(caster_ptr, GF_NUKE, dir, damage, 2);
 		break;
 
 	case MS_BR_NUKE:
@@ -461,7 +461,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
 		
-			fire_ball(GF_CHAOS, dir, damage, 4);
+			fire_ball(caster_ptr, GF_CHAOS, dir, damage, 4);
 		break;
 	case MS_BR_DISI:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -473,55 +473,55 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
 		
-			fire_ball(GF_ACID, dir, damage, 2);
+			fire_ball(caster_ptr, GF_ACID, dir, damage, 2);
 		break;
 	case MS_BALL_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
 		
-			fire_ball(GF_ELEC, dir, damage, 2);
+			fire_ball(caster_ptr, GF_ELEC, dir, damage, 2);
 		break;
 	case MS_BALL_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
 		
-			fire_ball(GF_FIRE, dir, damage, 2);
+			fire_ball(caster_ptr, GF_FIRE, dir, damage, 2);
 		break;
 	case MS_BALL_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
 		
-			fire_ball(GF_COLD, dir, damage, 2);
+			fire_ball(caster_ptr, GF_COLD, dir, damage, 2);
 		break;
 	case MS_BALL_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
 		
-			fire_ball(GF_POIS, dir, damage, 2);
+			fire_ball(caster_ptr, GF_POIS, dir, damage, 2);
 		break;
 	case MS_BALL_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
 		
-			fire_ball(GF_NETHER, dir, damage, 2);
+			fire_ball(caster_ptr, GF_NETHER, dir, damage, 2);
 		break;
 	case MS_BALL_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
 		
-			fire_ball(GF_WATER, dir, damage, 4);
+			fire_ball(caster_ptr, GF_WATER, dir, damage, 4);
 		break;
 	case MS_BALL_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
 		
-			fire_ball(GF_MANA, dir, damage, 4);
+			fire_ball(caster_ptr, GF_MANA, dir, damage, 4);
 		break;
 	case MS_BALL_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
 		
-			fire_ball(GF_DARK, dir, damage, 4);
+			fire_ball(caster_ptr, GF_DARK, dir, damage, 4);
 		break;
 	case MS_DRAIN_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -579,7 +579,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
 		
-			fire_ball(GF_LITE, dir, damage, 4);
+			fire_ball(caster_ptr, GF_LITE, dir, damage, 4);
 		break;
 	case MS_BOLT_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;

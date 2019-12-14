@@ -488,7 +488,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			}
 			target_pet = old_target_pet;
 
-			if(fire_ball(GF_CAPTURE, dir, 0, 0))
+			if(fire_ball(user_ptr, GF_CAPTURE, dir, 0, 0))
 			{
 				o_ptr->pval = (PARAMETER_VALUE)cap_mon;
 				o_ptr->xtra3 = (XTRA8)cap_mspeed;
@@ -727,7 +727,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは濃緑色に脈動している...", "It throbs deep green..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_POIS, dir, 12, 3);
+		fire_ball(user_ptr, GF_POIS, dir, 12, 3);
 		break;
 	}
 
@@ -767,7 +767,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_COLD, dir, 48, 2);
+		fire_ball(user_ptr, GF_COLD, dir, 48, 2);
 		break;
 	}
 
@@ -775,7 +775,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは青く激しく輝いた...", "It glows an intense blue..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_COLD, dir, 100, 2);
+		fire_ball(user_ptr, GF_COLD, dir, 100, 2);
 		break;
 	}
 
@@ -783,7 +783,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("明るく白色に輝いている...", "It glows bright white..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_COLD, dir, 400, 3);
+		fire_ball(user_ptr, GF_COLD, dir, 400, 3);
 		break;
 	}
 
@@ -791,7 +791,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_FIRE, dir, 72, 2);
+		fire_ball(user_ptr, GF_FIRE, dir, 72, 2);
 		break;
 	}
 
@@ -799,7 +799,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name);
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_FIRE, dir, 120, 3);
+		fire_ball(user_ptr, GF_FIRE, dir, 120, 3);
 		break;
 	}
 
@@ -807,7 +807,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("深赤色に輝いている...", "It glows deep red..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_FIRE, dir, 300, 3);
+		fire_ball(user_ptr, GF_FIRE, dir, 300, 3);
 		break;
 	}
 
@@ -815,7 +815,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_FIRE, dir, 100, 2);
+		fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
 		break;
 	}
 
@@ -823,7 +823,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("電気がパチパチ音を立てた...", "It crackles with electricity..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_ELEC, dir, 100, 3);
+		fire_ball(user_ptr, GF_ELEC, dir, 100, 3);
 		break;
 	}
 
@@ -831,7 +831,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("深青色に輝いている...", "It glows deep blue..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_ELEC, dir, 500, 3);
+		fire_ball(user_ptr, GF_ELEC, dir, 500, 3);
 		break;
 	}
 
@@ -839,7 +839,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは黒く激しく輝いた...", "It glows an intense black..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_ACID, dir, 100, 2);
+		fire_ball(user_ptr, GF_ACID, dir, 100, 2);
 		break;
 	}
 
@@ -847,7 +847,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("それは緑に激しく輝いた...", "It glows an intense green..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_NUKE, dir, 100, 2);
+		fire_ball(user_ptr, GF_NUKE, dir, 100, 2);
 		break;
 	}
 
@@ -915,7 +915,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 		msg_print(_("ロケットを発射した！", "You launch a rocket!"));
-		fire_ball(GF_ROCKET, dir, 250 + plev * 3, 2);
+		fire_ball(user_ptr, GF_ROCKET, dir, 250 + plev * 3, 2);
 		break;
 	}
 
@@ -953,7 +953,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name);
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_WATER, dir, 200, 3);
+		fire_ball(user_ptr, GF_WATER, dir, 200, 3);
 		break;
 	}
 
@@ -961,7 +961,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sが深い闇に覆われた...", "The %s is coverd in pitch-darkness..."), name);
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_DARK, dir, 250, 4);
+		fire_ball(user_ptr, GF_DARK, dir, 250, 4);
 		break;
 	}
 
@@ -969,7 +969,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_MANA, dir, 250, 4);
+		fire_ball(user_ptr, GF_MANA, dir, 250, 4);
 		break;
 	}
 
@@ -983,7 +983,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_BLINDING_LIGHT:
 	{
 		msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
-		fire_ball(GF_LITE, 0, 300, 6);
+		fire_ball(user_ptr, GF_LITE, 0, 300, 6);
 		confuse_monsters(3 * user_ptr->lev / 2);
 		break;
 	}
@@ -1380,7 +1380,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ACID))
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_ACID, dir, 100, 2);
+			fire_ball(user_ptr, GF_ACID, dir, 100, 2);
 		}
 		(void)set_oppose_acid(user_ptr, randint1(20) + 20, FALSE);
 		break;
@@ -1392,7 +1392,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_FIRE, dir, 100, 2);
+			fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
 		}
 		(void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
 		break;
@@ -1404,7 +1404,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_COLD, dir, 100, 2);
+			fire_ball(user_ptr, GF_COLD, dir, 100, 2);
 		}
 		(void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
 		break;
@@ -1416,7 +1416,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ELEC))
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_ball(GF_ELEC, dir, 100, 2);
+			fire_ball(user_ptr, GF_ELEC, dir, 100, 2);
 		}
 		(void)set_oppose_elec(user_ptr, randint1(20) + 20, FALSE);
 		break;

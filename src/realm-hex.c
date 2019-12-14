@@ -1100,7 +1100,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 						msg_print(_("復讐の時だ！", "Time to revenge!"));
 					} while (!get_aim_dir(&dir));
 
-					fire_ball(GF_HELL_FIRE, dir, power, 1);
+					fire_ball(caster_ptr, GF_HELL_FIRE, dir, power, 1);
 
 					if (current_world_ptr->wizard)
 					{

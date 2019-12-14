@@ -1925,7 +1925,7 @@ bool unlite_area(HIT_POINT dam, POSITION rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	POSITION tx, ty;
 
@@ -1933,8 +1933,8 @@ bool fire_ball(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 
 	if (typ == GF_CHARM_LIVING) flg|= PROJECT_HIDE;
 	/* Use the given direction */
-	tx = p_ptr->x + 99 * ddx[dir];
-	ty = p_ptr->y + 99 * ddy[dir];
+	tx = caster_ptr->x + 99 * ddx[dir];
+	ty = caster_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay())
@@ -1964,7 +1964,7 @@ bool fire_ball(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 */
 bool fire_breath(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
-	return fire_ball(typ, dir, dam, -rad);
+	return fire_ball(p_ptr, typ, dir, dam, -rad);
 }
 
 
@@ -2516,13 +2516,13 @@ void call_chaos(void)
 				if (line_chaos)
 					fire_beam(Chaos_type, dummy, 150);
 				else
-					fire_ball(Chaos_type, dummy, 150, 2);
+					fire_ball(p_ptr, Chaos_type, dummy, 150, 2);
 			}
 		}
 	}
 	else if (one_in_(3))
 	{
-		fire_ball(Chaos_type, 0, 500, 8);
+		fire_ball(p_ptr, Chaos_type, 0, 500, 8);
 	}
 	else
 	{
@@ -2530,7 +2530,7 @@ void call_chaos(void)
 		if (line_chaos)
 			fire_beam(Chaos_type, dir, 250);
 		else
-			fire_ball(Chaos_type, dir, 250, 3 + (plev / 35));
+			fire_ball(p_ptr, Chaos_type, dir, 250, 3 + (plev / 35));
 	}
 }
 
@@ -3170,7 +3170,7 @@ void ring_of_power(player_type *caster_ptr, DIRECTION dir)
 	case 5:
 	case 6:
 	{
-		fire_ball(GF_MANA, dir, 600, 3);
+		fire_ball(caster_ptr, GF_MANA, dir, 600, 3);
 		break;
 	}
 
@@ -3260,7 +3260,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		lose_all_info(caster_ptr);
 		break;
 	case 32:
-		fire_ball(GF_CHAOS, 0, spell + 5, 1 + (spell / 10));
+		fire_ball(caster_ptr, GF_CHAOS, 0, spell + 5, 1 + (spell / 10));
 		break;
 	case 33:
 		wall_stone();
@@ -3470,7 +3470,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		fire_bolt_or_beam(beam_chance() - 10, GF_MISSILE, dir,
 			damroll(3 + ((plev - 1) / 5), 4));
 	else if (die < 41) confuse_monster(dir, plev);
-	else if (die < 46) fire_ball(GF_POIS, dir, 20 + (plev / 2), 3);
+	else if (die < 46) fire_ball(caster_ptr, GF_POIS, dir, 20 + (plev / 2), 3);
 	else if (die < 51) (void)lite_line(dir, damroll(6, 8));
 	else if (die < 56)
 		fire_bolt_or_beam(beam_chance() - 10, GF_ELEC, dir,
@@ -3485,10 +3485,10 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		fire_bolt_or_beam(beam_chance(), GF_FIRE, dir,
 			damroll(8 + ((plev - 5) / 4), 8));
 	else if (die < 76) hypodynamic_bolt(dir, 75);
-	else if (die < 81) fire_ball(GF_ELEC, dir, 30 + plev / 2, 2);
-	else if (die < 86) fire_ball(GF_ACID, dir, 40 + plev, 2);
-	else if (die < 91) fire_ball(GF_ICE, dir, 70 + plev, 3);
-	else if (die < 96) fire_ball(GF_FIRE, dir, 80 + plev, 3);
+	else if (die < 81) fire_ball(caster_ptr, GF_ELEC, dir, 30 + plev / 2, 2);
+	else if (die < 86) fire_ball(caster_ptr, GF_ACID, dir, 40 + plev, 2);
+	else if (die < 91) fire_ball(caster_ptr, GF_ICE, dir, 70 + plev, 3);
+	else if (die < 96) fire_ball(caster_ptr, GF_FIRE, dir, 80 + plev, 3);
 	else if (die < 101) hypodynamic_bolt(dir, 100 + plev);
 	else if (die < 104)
 	{
@@ -3581,7 +3581,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 46)
 	{
-		fire_ball(GF_POIS, dir, 20 + (plev / 2), 3);
+		fire_ball(caster_ptr, GF_POIS, dir, 20 + (plev / 2), 3);
 	}
 	else if (die < 51)
 	{
@@ -3613,19 +3613,19 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 81)
 	{
-		fire_ball(GF_ELEC, dir, 30 + plev / 2, 2);
+		fire_ball(caster_ptr, GF_ELEC, dir, 30 + plev / 2, 2);
 	}
 	else if (die < 86)
 	{
-		fire_ball(GF_ACID, dir, 40 + plev, 2);
+		fire_ball(caster_ptr, GF_ACID, dir, 40 + plev, 2);
 	}
 	else if (die < 91)
 	{
-		fire_ball(GF_ICE, dir, 70 + plev, 3);
+		fire_ball(caster_ptr, GF_ICE, dir, 70 + plev, 3);
 	}
 	else if (die < 96)
 	{
-		fire_ball(GF_FIRE, dir, 80 + plev, 3);
+		fire_ball(caster_ptr, GF_FIRE, dir, 80 + plev, 3);
 	}
 	else if (die < 101)
 	{
@@ -4178,7 +4178,7 @@ bool android_inside_weapon(player_type *creature_ptr)
 	else if (creature_ptr->lev < 35)
 	{
 		msg_print(_("バズーカを発射した。", "You fire your bazooka."));
-		fire_ball(GF_MISSILE, dir, creature_ptr->lev * 2, 2);
+		fire_ball(creature_ptr, GF_MISSILE, dir, creature_ptr->lev * 2, 2);
 	}
 	else if (creature_ptr->lev < 45)
 	{

@@ -70,7 +70,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				* travel to the monster.
 				*/
 
-				fire_ball(GF_HELL_FIRE, dir, damroll(dice, sides), rad);
+				fire_ball(caster_ptr, GF_HELL_FIRE, dir, damroll(dice, sides), rad);
 
 				if (one_in_(5))
 				{
@@ -120,7 +120,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_POIS, dir, dam, rad);
+				fire_ball(caster_ptr, GF_POIS, dir, dam, rad);
 			}
 		}
 		break;
@@ -219,7 +219,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
+				fire_ball(caster_ptr, GF_HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
 			}
 		}
 		break;
@@ -505,7 +505,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_DARK, dir, dam, rad);
+				fire_ball(caster_ptr, GF_DARK, dir, dam, rad);
 			}
 		}
 		break;
@@ -611,7 +611,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_HELL_FIRE, dir, dam, rad);
+				fire_ball(caster_ptr, GF_HELL_FIRE, dir, dam, rad);
 				take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"), -1);
 			}
 		}

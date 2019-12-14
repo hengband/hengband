@@ -445,7 +445,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		/* New Hengband scrolls */
 		case SV_SCROLL_FIRE:
 		{
-			fire_ball(GF_FIRE, 0, 666, 4);
+			fire_ball(creature_ptr, GF_FIRE, 0, 666, 4);
 			/* Note: "Double" damage since it is centered on the player ... */
 			if (!(IS_OPPOSE_FIRE() || creature_ptr->resist_fire || creature_ptr->immune_fire))
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, 50+randint1(50), _("炎の巻物", "a Scroll of Fire"), -1);
@@ -457,7 +457,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_ICE:
 		{
-			fire_ball(GF_ICE, 0, 777, 4);
+			fire_ball(creature_ptr, GF_ICE, 0, 777, 4);
 			if (!(IS_OPPOSE_COLD() || creature_ptr->resist_cold || creature_ptr->immune_cold))
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, 100+randint1(100), _("氷の巻物", "a Scroll of Ice"), -1);
 
@@ -467,7 +467,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_CHAOS:
 		{
-			fire_ball(GF_CHAOS, 0, 1000, 4);
+			fire_ball(creature_ptr, GF_CHAOS, 0, 1000, 4);
 			if (!creature_ptr->resist_chaos)
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, 111+randint1(111), _("ログルスの巻物", "a Scroll of Logrus"), -1);
 

@@ -144,7 +144,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_ball(GF_AWAY_EVIL, dir, power, 0);
+				fire_ball(caster_ptr, GF_AWAY_EVIL, dir, power, 0);
 			}
 		}
 		break;
@@ -173,7 +173,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
+				fire_ball(caster_ptr, GF_HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
 			}
 		}
 		break;
@@ -382,7 +382,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_LITE, dir, dam, rad);
+				fire_ball(caster_ptr, GF_LITE, dir, dam, rad);
 			}
 		}
 		break;

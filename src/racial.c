@@ -306,7 +306,7 @@ static int racial_cost;
  * 発動成功ならば1、発動失敗ならば-1、キャンセルならば0を返す。
  * return value indicates that we have succesfully used the power 1: Succeeded, 0: Cancelled, -1: Failed
  */
-static int racial_aux(player_type *caster_ptr, power_desc_type *pd_ptr)
+static int racial_aux(player_type *creature_ptr, power_desc_type *pd_ptr)
 {
 	PLAYER_LEVEL min_level  = pd_ptr->level;
 	int use_stat   = pd_ptr->stat;
@@ -316,30 +316,30 @@ static int racial_aux(player_type *caster_ptr, power_desc_type *pd_ptr)
 	racial_cost = pd_ptr->cost;
 
 	/* Not enough mana - use hp */
-	if (caster_ptr->csp < racial_cost) use_hp = racial_cost - caster_ptr->csp;
+	if (creature_ptr->csp < racial_cost) use_hp = racial_cost - creature_ptr->csp;
 
 	/* Power is not available yet */
-	if (caster_ptr->lev < min_level)
+	if (creature_ptr->lev < min_level)
 	{
 		msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", 
 					 "You need to attain level %d to use this power."), min_level);
 
-		free_turn(caster_ptr);
+		free_turn(creature_ptr);
 		return FALSE;
 	}
 
-	if (cmd_limit_confused(caster_ptr))
+	if (cmd_limit_confused(creature_ptr))
 	{
-		free_turn(caster_ptr);
+		free_turn(creature_ptr);
 		return FALSE;
 	}
 
 	/* Risk death? */
-	else if (caster_ptr->chp < use_hp)
+	else if (creature_ptr->chp < use_hp)
 	{
 		if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? ")))
 		{
-			free_turn(caster_ptr);
+			free_turn(creature_ptr);
 			return FALSE;
 		}
 	}
@@ -348,13 +348,13 @@ static int racial_aux(player_type *caster_ptr, power_desc_type *pd_ptr)
 
 	if (difficulty)
 	{
-		if (caster_ptr->stun)
+		if (creature_ptr->stun)
 		{
-			difficulty += caster_ptr->stun;
+			difficulty += creature_ptr->stun;
 		}
-		else if (caster_ptr->lev > min_level)
+		else if (creature_ptr->lev > min_level)
 		{
-			int lev_adj = ((caster_ptr->lev - min_level) / 3);
+			int lev_adj = ((creature_ptr->lev - min_level) / 3);
 			if (lev_adj > 10) lev_adj = 10;
 			difficulty -= lev_adj;
 		}
@@ -363,10 +363,10 @@ static int racial_aux(player_type *caster_ptr, power_desc_type *pd_ptr)
 	}
 
 	/* take time and pay the price */
-	take_turn(caster_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Success? */
-	if (randint1(caster_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
+	if (randint1(creature_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
 	{
 		return 1;
 	}
@@ -727,7 +727,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			stop_mouth();
 			msg_print(_("酸を吐いた。", "You spit acid."));
 			if (plev < 25) fire_bolt(GF_ACID, dir, plev);
-			else fire_ball(GF_ACID, dir, plev, 2);
+			else fire_ball(creature_ptr, GF_ACID, dir, plev, 2);
 			break;
 
 		case RACE_KOBOLD:
@@ -764,7 +764,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (plev >= 30)
 			{
 				msg_print(_("ファイア・ボールを放った。", "You cast a ball of fire."));
-				fire_ball(GF_FIRE, dir, plev, 2);
+				fire_ball(creature_ptr, GF_FIRE, dir, plev, 2);
 			}
 			else
 			{

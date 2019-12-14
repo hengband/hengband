@@ -466,7 +466,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_COLD, dir, dam, rad);
+				fire_ball(caster_ptr, GF_COLD, dir, dam, rad);
 			}
 		}
 		break;
@@ -484,7 +484,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_ball(GF_ELEC, dir, dam, rad);
+				fire_ball(caster_ptr, GF_ELEC, dir, dam, rad);
 				break;
 			}
 		}
@@ -503,7 +503,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_ball(GF_WATER, dir, dam, rad);
+				fire_ball(caster_ptr, GF_WATER, dir, dam, rad);
 			}
 		}
 		break;
@@ -521,7 +521,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				fire_ball(GF_LITE, 0, dam, rad);
+				fire_ball(caster_ptr, GF_LITE, 0, dam, rad);
 				chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
 				chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
 				wiz_lite(p_ptr, FALSE);

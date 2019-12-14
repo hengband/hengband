@@ -176,7 +176,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_HELL_FIRE, dir, damroll(dice, sides) + base, rad);
+				fire_ball(caster_ptr, GF_HELL_FIRE, dir, damroll(dice, sides) + base, rad);
 			}
 		}
 		break;
@@ -264,7 +264,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_FIRE, dir, dam, rad);
+				fire_ball(caster_ptr, GF_FIRE, dir, dam, rad);
 			}
 		}
 		break;
@@ -295,7 +295,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_NETHER, dir, dam, rad);
+				fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
 			}
 		}
 		break;
@@ -365,7 +365,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				fire_ball(GF_FIRE, 0, dam, rad);
+				fire_ball(caster_ptr, GF_FIRE, 0, dam, rad);
 				fire_ball_hide(GF_LAVA_FLOW, 0, 2 + randint1(2), rad);
 			}
 		}
@@ -385,7 +385,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_PLASMA, dir, dam, rad);
+				fire_ball(caster_ptr, GF_PLASMA, dir, dam, rad);
 			}
 		}
 		break;
@@ -439,7 +439,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_ball(GF_NEXUS, dir, dam, rad);
+				fire_ball(caster_ptr, GF_NEXUS, dir, dam, rad);
 			}
 		}
 		break;
@@ -502,9 +502,9 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				fire_ball(GF_CHAOS, 0, dam, rad);
-				fire_ball(GF_CONFUSION, 0, dam, rad);
-				fire_ball(GF_CHARM, 0, power, rad);
+				fire_ball(caster_ptr, GF_CHAOS, 0, dam, rad);
+				fire_ball(caster_ptr, GF_CONFUSION, 0, dam, rad);
+				fire_ball(caster_ptr, GF_CHARM, 0, power, rad);
 			}
 		}
 		break;
@@ -548,7 +548,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_NETHER, dir, dam, rad);
+				fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
 			}
 		}
 		break;

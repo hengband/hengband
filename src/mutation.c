@@ -2097,7 +2097,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth();
 			msg_print(_("酸を吐きかけた...", "You spit acid..."));
-			fire_ball(GF_ACID, dir, lvl, 1 + (lvl / 30));
+			fire_ball(creature_ptr, GF_ACID, dir, lvl, 1 + (lvl / 30));
 			break;
 
 		case MUT1_BR_FIRE:
@@ -2132,7 +2132,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 		case MUT1_RADIATION:
 			msg_print(_("体から放射能が発生した！", "Radiation flows from your body!"));
-			fire_ball(GF_NUKE, 0, (lvl * 2), 3 + (lvl / 20));
+			fire_ball(creature_ptr, GF_NUKE, 0, (lvl * 2), 3 + (lvl / 20));
 			break;
 
 		case MUT1_VAMPIRISM:
@@ -2170,7 +2170,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 		case MUT1_SHRIEK:
 			stop_mouth();
-			(void)fire_ball(GF_SOUND, 0, 2 * lvl, 8);
+			(void)fire_ball(creature_ptr, GF_SOUND, 0, 2 * lvl, 8);
 			(void)aggravate_monsters(0);
 			break;
 

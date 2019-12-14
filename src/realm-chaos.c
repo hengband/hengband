@@ -122,7 +122,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_MISSILE, dir, damroll(dice, sides) + base, rad);
+				fire_ball(caster_ptr, GF_MISSILE, dir, damroll(dice, sides) + base, rad);
 
 				/*
 				* Shouldn't actually use GF_MANA, as
@@ -166,7 +166,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_DISINTEGRATE, dir, damroll(dice, sides), 0);
+				fire_ball(caster_ptr, GF_DISINTEGRATE, dir, damroll(dice, sides), 0);
 			}
 		}
 		break;
@@ -274,7 +274,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_FIRE, dir, dam, rad);
+				fire_ball(caster_ptr, GF_FIRE, dir, dam, rad);
 			}
 		}
 		break;
@@ -326,7 +326,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_CHAOS, dir, dam, rad);
+				fire_ball(caster_ptr, GF_CHAOS, dir, dam, rad);
 			}
 		}
 		break;
@@ -396,7 +396,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_DISINTEGRATE, dir, dam, rad);
+				fire_ball(caster_ptr, GF_DISINTEGRATE, dir, dam, rad);
 			}
 		}
 		break;
@@ -509,7 +509,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				fire_ball(GF_FIRE, 0, dam, rad);
+				fire_ball(caster_ptr, GF_FIRE, 0, dam, rad);
 			}
 		}
 		break;
@@ -554,7 +554,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_ball(GF_MANA, dir, dam, rad);
+				fire_ball(caster_ptr, GF_MANA, dir, dam, rad);
 			}
 		}
 		break;
@@ -573,7 +573,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball(GF_CHAOS, dir, dam, rad);
+				fire_ball(caster_ptr, GF_CHAOS, dir, dam, rad);
 			}
 		}
 		break;

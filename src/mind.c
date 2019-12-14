@@ -1071,7 +1071,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		if (randint1(100) < plev * 2)
 			fire_beam(GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
 		else
-			fire_ball(GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
+			fire_ball(caster_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
 		break;
 	case 2:
 		/* Minor displace */
@@ -1087,7 +1087,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
 
-			fire_ball(GF_DOMINATION, dir, plev, 0);
+			fire_ball(caster_ptr, GF_DOMINATION, dir, plev, 0);
 		}
 		else
 		{
@@ -1098,7 +1098,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		/* Fist of Force  ---  not 'true' TK  */
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		fire_ball(GF_TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8),
+		fire_ball(caster_ptr, GF_TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8),
 			(plev > 20 ? (plev - 20) / 8 + 1 : 0));
 		break;
 	case 6:
@@ -1159,7 +1159,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		b = damroll(plev / 2, 6);
 
 		/* This is always a radius-0 ball now */
-		if (fire_ball(GF_PSI_DRAIN, dir, b, 0))
+		if (fire_ball(caster_ptr, GF_PSI_DRAIN, dir, b, 0))
 			caster_ptr->energy_need += randint1(150);
 		break;
 	case 12:
@@ -1199,7 +1199,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 	{
 	case 0:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
+		fire_ball(caster_ptr, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
 		break;
 	case 1:
 		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
@@ -1223,7 +1223,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		if (randint1(P_PTR_KI) > (plev * 4 + 120))
 		{
 			msg_print(_("気が暴走した！", "The Force exploded!"));
-			fire_ball(GF_MANA, 0, P_PTR_KI / 2, 10);
+			fire_ball(caster_ptr, GF_MANA, 0, P_PTR_KI / 2, 10);
 			take_hit(caster_ptr, DAMAGE_LOSELIFE, caster_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"), -1);
 		}
 		else return TRUE;
@@ -1236,7 +1236,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		break;
 	case 8:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
+		fire_ball(caster_ptr, GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
 		break;
 	case 9:
 	{
@@ -1269,7 +1269,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		break;
 	}
 	case 11:
-		fire_ball(GF_FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
+		fire_ball(caster_ptr, GF_FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
 		break;
 	case 12:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -1375,7 +1375,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* mirror clashing */
 	case 8:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8),
+		fire_ball(caster_ptr, GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8),
 			(plev > 20 ? (plev - 20) / 8 + 1 : 0));
 		break;
 		/* mirror sleeping */
@@ -1601,7 +1601,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		set_tim_levitation(caster_ptr, randint1(20) + 20, FALSE);
 		break;
 	case 9:
-		fire_ball(GF_FIRE, 0, 50+plev, plev/10+2);
+		fire_ball(caster_ptr, GF_FIRE, 0, 50+plev, plev/10+2);
 		teleport_player(caster_ptr, 30, 0L);
 		set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
@@ -1698,7 +1698,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	}
 	case 13:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball(GF_OLD_CONF, dir, plev*3, 3);
+		fire_ball(caster_ptr, GF_OLD_CONF, dir, plev*3, 3);
 		break;
 	case 14:
 		project_length = -1;
@@ -1719,9 +1719,9 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 17:
-		fire_ball(GF_POIS, 0, 75+plev*2/3, plev/5+2);
-		fire_ball(GF_HYPODYNAMIA, 0, 75+plev*2/3, plev/5+2);
-		fire_ball(GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
+		fire_ball(caster_ptr, GF_POIS, 0, 75+plev*2/3, plev/5+2);
+		fire_ball(caster_ptr, GF_HYPODYNAMIA, 0, 75+plev*2/3, plev/5+2);
+		fire_ball(caster_ptr, GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
 		teleport_player(caster_ptr, 30, 0L);
 		break;
 	case 18:

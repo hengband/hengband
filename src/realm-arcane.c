@@ -493,7 +493,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 				default: type = GF_ACID; break;
 				}
 
-				fire_ball(type, dir, dam, rad);
+				fire_ball(caster_ptr, type, dir, dam, rad);
 			}
 		}
 		break;

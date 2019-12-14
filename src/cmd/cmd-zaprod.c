@@ -206,28 +206,28 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_ACID_BALL:
 	{
-		fire_ball(GF_ACID, dir, 60 + lev, rad);
+		fire_ball(creature_ptr, GF_ACID, dir, 60 + lev, rad);
 		ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_ELEC_BALL:
 	{
-		fire_ball(GF_ELEC, dir, 40 + lev, rad);
+		fire_ball(creature_ptr, GF_ELEC, dir, 40 + lev, rad);
 		ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_FIRE_BALL:
 	{
-		fire_ball(GF_FIRE, dir, 70 + lev, rad);
+		fire_ball(creature_ptr, GF_FIRE, dir, 70 + lev, rad);
 		ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_COLD_BALL:
 	{
-		fire_ball(GF_COLD, dir, 50 + lev, rad);
+		fire_ball(creature_ptr, GF_COLD, dir, 50 + lev, rad);
 		ident = TRUE;
 		break;
 	}
