@@ -5577,7 +5577,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	bool breath = FALSE;
 
 	/* Is the player blind? */
-	bool blind = (p_ptr->blind ? TRUE : FALSE);
+	bool blind = (caster_ptr->blind ? TRUE : FALSE);
 
 	bool old_hide = FALSE;
 
@@ -5614,8 +5614,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	rakubadam_m = 0;
 
 	/* Default target of monsterspell is player */
-	monster_target_y = p_ptr->y;
-	monster_target_x = p_ptr->x;
+	monster_target_y = caster_ptr->y;
+	monster_target_x = caster_ptr->x;
 
 	/* Hack -- Jump to target */
 	if (flg & (PROJECT_JUMP))
@@ -5632,16 +5632,16 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	/* Start at player */
 	else if (who <= 0)
 	{
-		x1 = p_ptr->x;
-		y1 = p_ptr->y;
+		x1 = caster_ptr->x;
+		y1 = caster_ptr->y;
 	}
 
 	/* Start at monster */
 	else if (who > 0)
 	{
-		x1 = p_ptr->current_floor_ptr->m_list[who].fx;
-		y1 = p_ptr->current_floor_ptr->m_list[who].fy;
-		monster_desc(who_name, &p_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
+		x1 = caster_ptr->current_floor_ptr->m_list[who].fx;
+		y1 = caster_ptr->current_floor_ptr->m_list[who].fy;
+		monster_desc(who_name, &caster_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
 	}
 
 	else
@@ -5713,10 +5713,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 	/* Giga-Hack SEEKER & SUPER_RAY */
 
-	if( typ == GF_SEEKER )
+	if (typ == GF_SEEKER)
 	{
 		int j;
-		int last_i=0;
+		int last_i = 0;
 
 		/* Mega-Hack */
 		project_m_n = 0;
@@ -5744,7 +5744,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
 				/* Only do visuals if the player can "see" the bolt */
-				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
+				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					u16b p;
 
@@ -5792,61 +5792,61 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 			if (project_o(0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
-			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]))
+			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 			{
 				/* The target of monsterspell becomes tha mirror(broken) */
 				monster_target_y = y;
 				monster_target_x = x;
 
 				remove_mirror(y, x);
-				next_mirror(p_ptr, &oy, &ox, y, x);
+				next_mirror(caster_ptr, &oy, &ox, y, x);
 
 				path_n = i + project_path(&(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
 				for (j = last_i; j <= i; j++)
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					if (project_m(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
+					if (project_m(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
 					if (!who && (project_m_n == 1) && !jump) {
-						if (p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
-							monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+						if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
+							monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 							if (m_ptr->ml)
 							{
-								if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-								health_track(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+								if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+								health_track(caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 							}
 						}
 					}
-					(void)project_f(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER);
+					(void)project_f(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER);
 				}
 				last_i = i;
 			}
 		}
-		for(i = last_i ; i < path_n ; i++)
+		for (i = last_i; i < path_n; i++)
 		{
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			if (project_m(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
+			if (project_m(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
 				notice = TRUE;
 			if (!who && (project_m_n == 1) && !jump) {
-				if (p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
+				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
 				{
-					monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+					monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 					if (m_ptr->ml)
 					{
-						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-						health_track(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+						if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+						health_track(caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
 			}
-			(void)project_f(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER);
+			(void)project_f(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER);
 		}
 		return notice;
 	}
-	else if(typ == GF_SUPER_RAY){
+	else if (typ == GF_SUPER_RAY) {
 		int j;
 		int second_step = 0;
 
@@ -5876,7 +5876,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
 				/* Only do visuals if the player can "see" the bolt */
-				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
+				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					u16b p;
 
@@ -5923,55 +5923,55 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					Term_xtra(TERM_XTRA_DELAY, msec);
 				}
 			}
-			if(project_o(0,0,y,x,dam,GF_SUPER_RAY) )notice=TRUE;
+			if (project_o(0, 0, y, x, dam, GF_SUPER_RAY))notice = TRUE;
 			if (!cave_have_flag_bold(y, x, FF_PROJECT))
 			{
-				if( second_step )continue;
+				if (second_step)continue;
 				break;
 			}
-			if( is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]) && !second_step )
+			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) && !second_step)
 			{
-			  /* The target of monsterspell becomes tha mirror(broken) */
+				/* The target of monsterspell becomes tha mirror(broken) */
 				monster_target_y = y;
 				monster_target_x = x;
 
-				remove_mirror(y,x);
-				for( j = 0; j <=i ; j++ )
+				remove_mirror(y, x);
+				for (j = 0; j <= i; j++)
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					(void)project_f(p_ptr->current_floor_ptr, 0,0,y,x,dam,GF_SUPER_RAY);
+					(void)project_f(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SUPER_RAY);
 				}
 				path_n = i;
-				second_step =i+1;
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y-1, x-1, flg);
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y-1, x  , flg);
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y-1, x+1, flg);
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y  , x-1, flg);
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y  , x+1, flg);
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y+1, x-1, flg);
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y+1, x  , flg);
-				path_n += project_path(&(path_g[path_n+1]), (project_length ? project_length : MAX_RANGE), y, x, y+1, x+1, flg);
+				second_step = i + 1;
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flg);
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flg);
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flg);
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flg);
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flg);
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flg);
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flg);
+				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flg);
 			}
 		}
-		for( i = 0; i < path_n ; i++ )
+		for (i = 0; i < path_n; i++)
 		{
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			(void)project_m(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
-			if(!who && (project_m_n == 1) && !jump){
-				if(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx >0 ){
-					monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
+			(void)project_m(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
+			if (!who && (project_m_n == 1) && !jump) {
+				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
+					monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 					if (m_ptr->ml)
 					{
-						if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-						health_track(p_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+						if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+						health_track(caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
 			}
-			(void)project_f(p_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY);
+			(void)project_f(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY);
 		}
 		return notice;
 	}
@@ -5993,7 +5993,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		else if (flg & PROJECT_LOS)
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!cave_los_bold(p_ptr->current_floor_ptr, ny, nx) && (rad > 0)) break;
+			if (!cave_los_bold(caster_ptr->current_floor_ptr, ny, nx) && (rad > 0)) break;
 		}
 		else
 		{
@@ -6017,7 +6017,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		if (!blind && !(flg & (PROJECT_HIDE | PROJECT_FAST)))
 		{
 			/* Only do visuals if the player can "see" the bolt */
-			if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
+			if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 			{
 				u16b p;
 
@@ -6126,7 +6126,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					for (x = bx - dist; x <= bx + dist; x++)
 					{
 						/* Ignore "illegal" locations */
-						if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
+						if (!in_bounds2(caster_ptr->current_floor_ptr, y, x)) continue;
 
 						/* Enforce a "circular" explosion */
 						if (distance(by, bx, y, x) != dist) continue;
@@ -6136,7 +6136,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						case GF_LITE:
 						case GF_LITE_WEAK:
 							/* Lights are stopped by opaque terrains */
-							if (!los(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
+							if (!los(caster_ptr->current_floor_ptr, by, bx, y, x)) continue;
 							break;
 						case GF_DISINTEGRATE:
 							/* Disintegration are stopped only by perma-walls */
@@ -6144,7 +6144,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 							break;
 						default:
 							/* Ball explosions are stopped by walls */
-							if (!projectable(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
+							if (!projectable(caster_ptr->current_floor_ptr, by, bx, y, x)) continue;
 							break;
 						}
 
@@ -6156,7 +6156,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 
 				/* Encode some more "radius" info */
-				gm[dist+1] = grids;
+				gm[dist + 1] = grids;
 			}
 		}
 	}
@@ -6172,13 +6172,13 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		for (t = 0; t <= gm_rad; t++)
 		{
 			/* Dump everything with this radius */
-			for (i = gm[t]; i < gm[t+1]; i++)
+			for (i = gm[t]; i < gm[t + 1]; i++)
 			{
 				y = gy[i];
 				x = gx[i];
 
 				/* Only do visuals if the player can "see" the blast */
-				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
+				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					u16b p;
 
@@ -6222,7 +6222,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				x = gx[i];
 
 				/* Hack -- Erase if needed */
-				if (panel_contains(y, x) && player_has_los_bold(p_ptr, y, x))
+				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					lite_spot(y, x);
 				}
@@ -6236,12 +6236,12 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		}
 	}
 
-	update_creature(p_ptr);
+	update_creature(caster_ptr);
 
 	if (flg & PROJECT_KILL)
 	{
-		see_s_msg = (who > 0) ? is_seen(&p_ptr->current_floor_ptr->m_list[who]) :
-			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y1, x1)));
+		see_s_msg = (who > 0) ? is_seen(&caster_ptr->current_floor_ptr->m_list[who]) :
+			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
 	}
 
 
@@ -6255,7 +6255,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		for (i = 0; i < grids; i++)
 		{
 			/* Hack -- Notice new "dist" values */
-			if (gm[dist+1] == i) dist++;
+			if (gm[dist + 1] == i) dist++;
 
 			/* Get the grid location */
 			y = gy[i];
@@ -6267,17 +6267,17 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				int d = dist_to_line(y, x, y1, x1, by, bx);
 
 				/* Affect the grid */
-				if (project_f(p_ptr->current_floor_ptr, who, d, y, x, dam, typ)) notice = TRUE;
+				if (project_f(caster_ptr->current_floor_ptr, who, d, y, x, dam, typ)) notice = TRUE;
 			}
 			else
 			{
 				/* Affect the grid */
-				if (project_f(p_ptr->current_floor_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
+				if (project_f(caster_ptr->current_floor_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
 			}
 		}
 	}
 
-	update_creature(p_ptr);
+	update_creature(caster_ptr);
 
 	/* Check objects */
 	if (flg & (PROJECT_ITEM))
@@ -6289,7 +6289,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		for (i = 0; i < grids; i++)
 		{
 			/* Hack -- Notice new "dist" values */
-			if (gm[dist+1] == i) dist++;
+			if (gm[dist + 1] == i) dist++;
 
 			/* Get the grid location */
 			y = gy[i];
@@ -6338,11 +6338,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			/* A single bolt may be reflected */
 			if (grids <= 1)
 			{
-				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
 
-				if ((flg & PROJECT_REFLECTABLE) && p_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
-					((p_ptr->current_floor_ptr->grid_array[y][x].m_idx != p_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
+				if ((flg & PROJECT_REFLECTABLE) && caster_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
+					((caster_ptr->current_floor_ptr->grid_array[y][x].m_idx != caster_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
 					(!who || dist_hack > 1) && !one_in_(10))
 				{
 					POSITION t_y, t_x;
@@ -6354,8 +6354,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						t_y = y_saver - 1 + randint1(3);
 						t_x = x_saver - 1 + randint1(3);
 						max_attempts--;
-					}
-					while (max_attempts && in_bounds2u(p_ptr->current_floor_ptr, t_y, t_x) && !projectable(p_ptr->current_floor_ptr, y, x, t_y, t_x));
+					} while (max_attempts && in_bounds2u(caster_ptr->current_floor_ptr, t_y, t_x) && !projectable(caster_ptr->current_floor_ptr, y, x, t_y, t_x));
 
 					if (max_attempts < 1)
 					{
@@ -6368,19 +6367,19 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					{
 						if ((m_ptr->r_idx == MON_KENSHIROU) || (m_ptr->r_idx == MON_RAOU))
 							msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
-						else if (m_ptr->r_idx == MON_DIO) 
+						else if (m_ptr->r_idx == MON_DIO)
 							msg_print(_("ディオ・ブランドーは指一本で攻撃を弾き返した！", "The attack bounces!"));
-						else 
+						else
 							msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
 					}
 					if (is_original_ap_and_seen(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
 					/* Reflected bolts randomly target either one */
-					if (player_bold(p_ptr, y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
+					if (player_bold(caster_ptr, y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
 					else flg |= PROJECT_PLAYER;
 
 					/* The bolt is reflected */
-					project(caster_ptr, p_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
+					project(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
 
 					/* Don't affect the monster any longer */
 					continue;
@@ -6400,7 +6399,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 
 			/* There is the riding player on this monster */
-			if (p_ptr->riding && player_bold(p_ptr, y, x))
+			if (caster_ptr->riding && player_bold(caster_ptr, y, x))
 			{
 				/* Aimed on the player */
 				if (flg & PROJECT_PLAYER)
@@ -6417,7 +6416,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					else
 					{
 						/*
-						 * The spell is not well aimed, 
+						 * The spell is not well aimed,
 						 * So partly affect the mount too.
 						 */
 						effective_dist++;
@@ -6439,10 +6438,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				 * of fire is obstructed by this
 				 * monster.
 				 */
-				/*
-				 * A beam or bolt will hit either
-				 * player or mount.  Choose randomly.
-				 */
+				 /*
+				  * A beam or bolt will hit either
+				  * player or mount.  Choose randomly.
+				  */
 				else if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE))
 				{
 					if (one_in_(2))
@@ -6471,7 +6470,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			}
 
 			/* Affect the monster in the grid */
-			if (project_m(p_ptr->current_floor_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
+			if (project_m(caster_ptr->current_floor_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
 		}
 
 
@@ -6482,14 +6481,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			y = project_m_y;
 
 			/* Track if possible */
-			if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0)
+			if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0)
 			{
-				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 
 				if (m_ptr->ml)
 				{
-					if (!p_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-					health_track(p_ptr->current_floor_ptr->grid_array[y][x].m_idx);
+					if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+					health_track(caster_ptr->current_floor_ptr->grid_array[y][x].m_idx);
 				}
 			}
 		}
@@ -6508,14 +6507,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			int effective_dist;
 
 			/* Hack -- Notice new "dist" values */
-			if (gm[dist+1] == i) dist++;
+			if (gm[dist + 1] == i) dist++;
 
 			/* Get the grid location */
 			y = gy[i];
 			x = gx[i];
 
 			/* Affect the player? */
-			if (!player_bold(p_ptr, y, x)) continue;
+			if (!player_bold(caster_ptr, y, x)) continue;
 
 			/* Find the closest point in the blast */
 			if (breath)
@@ -6528,7 +6527,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			}
 
 			/* Target may be your horse */
-			if (p_ptr->riding)
+			if (caster_ptr->riding)
 			{
 				/* Aimed on the player */
 				if (flg & PROJECT_PLAYER)
@@ -6559,7 +6558,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				else
 				{
 					/*
-					 * The spell is not well aimed, 
+					 * The spell is not well aimed,
 					 * So partly affect the player too.
 					 */
 					effective_dist++;
@@ -6567,26 +6566,26 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			}
 
 			/* Affect the player */
-			if (project_p(who, p_ptr, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
+			if (project_p(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
 		}
 	}
 
-	if (p_ptr->riding)
+	if (caster_ptr->riding)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, &p_ptr->current_floor_ptr->m_list[p_ptr->riding], 0);
+		monster_desc(m_name, &caster_ptr->current_floor_ptr->m_list[caster_ptr->riding], 0);
 
 		if (rakubadam_m > 0)
 		{
-			if (rakuba(p_ptr, rakubadam_m, FALSE))
+			if (rakuba(caster_ptr, rakubadam_m, FALSE))
 			{
 				msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
 			}
 		}
-		if (p_ptr->riding && rakubadam_p > 0)
+		if (caster_ptr->riding && rakubadam_p > 0)
 		{
-			if(rakuba(p_ptr, rakubadam_p, FALSE))
+			if (rakuba(caster_ptr, rakubadam_p, FALSE))
 			{
 				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name);
 			}
