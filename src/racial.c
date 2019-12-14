@@ -507,7 +507,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case CLASS_IMITATOR:
 		{
 			handle_stuff();
-			if (!do_cmd_mane(p_ptr, TRUE)) return FALSE;
+			if (!do_cmd_mane(creature_ptr, TRUE)) return FALSE;
 			break;
 		}
 		case CLASS_BEASTMASTER:
@@ -670,7 +670,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_HALF_TROLL:
 			msg_print(_("うがぁぁ！", "RAAAGH!"));
-			(void)berserk(p_ptr, 10 + randint1(plev));
+			(void)berserk(creature_ptr, 10 + randint1(plev));
 			break;
 
 		case RACE_AMBERITE:
@@ -691,7 +691,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_BARBARIAN:
 			msg_print(_("うぉぉおお！", "Raaagh!"));
-			(void)berserk(p_ptr, 10 + randint1(plev));
+			(void)berserk(creature_ptr, 10 + randint1(plev));
 			break;
 
 		case RACE_HALF_OGRE:
