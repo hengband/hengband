@@ -1021,10 +1021,10 @@ void aggravate_monsters(MONSTER_IDX who)
  * @param spell_name 抹殺効果を起こした魔法の名前
  * @return 効力があった場合TRUEを返す
  */
-bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
+bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
 {
 	int          msec = delay_factor * delay_factor * delay_factor;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool         resist = FALSE;
 
@@ -1033,8 +1033,8 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 	/* Hack -- Skip Unique Monsters or Quest Monsters */
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
-	else if (m_idx == p_ptr->riding) resist = TRUE;
-	else if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out) resist = TRUE;
+	else if (m_idx == caster_ptr->riding) resist = TRUE;
+	else if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr->current_floor_ptr->dun_level)) || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) resist = TRUE;
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 
@@ -1045,7 +1045,7 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+			exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 		}
 
 		delete_monster_idx(m_idx);
@@ -1082,14 +1082,14 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
 
 	if (player_cast)
 	{
-		take_hit(p_ptr, DAMAGE_GENO, randint1(dam_side), format(_("%^sの呪文を唱えた疲労", "the strain of casting %^s"), spell_name), -1);
+		take_hit(caster_ptr, DAMAGE_GENO, randint1(dam_side), format(_("%^sの呪文を唱えた疲労", "the strain of casting %^s"), spell_name), -1);
 	}
 
 	/* Visual feedback */
-	move_cursor_relative(p_ptr->y, p_ptr->x);
+	move_cursor_relative(caster_ptr->y, caster_ptr->x);
 
-	p_ptr->redraw |= (PR_HP);
-	p_ptr->window |= (PW_PLAYER);
+	caster_ptr->redraw |= (PR_HP);
+	caster_ptr->window |= (PW_PLAYER);
 
 	handle_stuff();
 	Term_fresh();
@@ -1106,14 +1106,14 @@ bool genocide_aux(MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, 
  * @param player_cast プレイヤーの魔法によるものならば TRUE
  * @return 効力があった場合TRUEを返す
  */
-bool symbol_genocide(int power, bool player_cast)
+bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 {
 	MONSTER_IDX i;
 	char typ;
 	bool result = FALSE;
 
 	/* Prevent genocide in quest levels */
-	if ((p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out)
+	if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr->current_floor_ptr->dun_level)) || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out)
 	{
 		msg_print(_("何も起きないようだ……", "It seems nothing happen here..."));
 		return (FALSE);
@@ -1123,22 +1123,22 @@ bool symbol_genocide(int power, bool player_cast)
 	while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE)) ;
 
 	/* Delete the monsters of that "type" */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip "wrong" monsters */
 		if (r_ptr->d_char != typ) continue;
 
-		result |= genocide_aux(i, power, player_cast, 4, _("抹殺", "Genocide"));
+		result |= genocide_aux(caster_ptr, i, power, player_cast, 4, _("抹殺", "Genocide"));
 	}
 
 	if (result)
 	{
-		chg_virtue(p_ptr, V_VITALITY, -2);
-		chg_virtue(p_ptr, V_CHANCE, -1);
+		chg_virtue(caster_ptr, V_VITALITY, -2);
+		chg_virtue(caster_ptr, V_CHANCE, -1);
 	}
 
 	return result;
@@ -1172,7 +1172,7 @@ bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 
 		/* Note effect */
-		result |= genocide_aux(i, power, player_cast, 3, _("周辺抹殺", "Mass Genocide"));
+		result |= genocide_aux(caster_ptr, i, power, player_cast, 3, _("周辺抹殺", "Mass Genocide"));
 	}
 
 	if (result)
@@ -1215,7 +1215,7 @@ bool mass_genocide_undead(int power, bool player_cast)
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 
 		/* Note effect */
-		result |= genocide_aux(i, power, player_cast, 3, _("アンデッド消滅", "Annihilate Undead"));
+		result |= genocide_aux(p_ptr, i, power, player_cast, 3, _("アンデッド消滅", "Annihilate Undead"));
 	}
 
 	if (result)
@@ -3500,7 +3500,7 @@ void cast_wonder(DIRECTION dir)
 	}
 	else if (die < 108)
 	{
-		symbol_genocide(plev + 50, TRUE);
+		symbol_genocide(p_ptr, plev + 50, TRUE);
 	}
 	else if (die < 110) dispel_monsters(120);
 	else /* RARE */
@@ -3641,7 +3641,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 108)
 	{
-		symbol_genocide(plev + 50, TRUE);
+		symbol_genocide(p_ptr, plev + 50, TRUE);
 	}
 	else if (die < 110)
 	{

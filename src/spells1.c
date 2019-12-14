@@ -3472,7 +3472,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_GENOCIDE:
 		{
 			if (seen) obvious = TRUE;
-			if (genocide_aux(g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
+			if (genocide_aux(p_ptr, g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 			{
 				if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
 				chg_virtue(p_ptr, V_VITALITY, -1);

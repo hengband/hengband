@@ -1113,7 +1113,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_GENOCIDE:
 	{
 		msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-		(void)symbol_genocide(200, TRUE);
+		(void)symbol_genocide(user_ptr, 200, TRUE);
 		break;
 	}
 

@@ -360,7 +360,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				symbol_genocide(power, TRUE);
+				symbol_genocide(caster_ptr, power, TRUE);
 			}
 		}
 		break;

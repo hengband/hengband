@@ -416,7 +416,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_GENOCIDE:
 		{
-			(void)symbol_genocide(300, TRUE);
+			(void)symbol_genocide(creature_ptr, 300, TRUE);
 			ident = TRUE;
 			break;
 		}
