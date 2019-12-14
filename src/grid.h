@@ -369,8 +369,6 @@ extern bool new_player_spot(player_type *creature_ptr);
 #define DOOR_CURTAIN     2
 
 #define MAX_DOOR_TYPES   3
-extern void place_closed_door(POSITION y, POSITION x, int type);
-
 
 extern void try_door(POSITION y, POSITION x);
 extern void vault_objects(POSITION y, POSITION x, int num);

@@ -71,7 +71,7 @@ void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 		}
 
 		/* Create secret door */
-		place_closed_door(y, x, type);
+		place_closed_door(floor_ptr, y, x, type);
 
 		if (type != DOOR_CURTAIN)
 		{
@@ -804,7 +804,7 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 	else if (tmp < 600)
 	{
 		/* Create secret door */
-		place_closed_door(y, x, type);
+		place_closed_door(floor_ptr, y, x, type);
 
 		if (type != DOOR_CURTAIN)
 		{
@@ -824,7 +824,7 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 	}
 
 	/* Closed, locked, or stuck doors (400/1000) */
-	else place_closed_door(y, x, type);
+	else place_closed_door(floor_ptr, y, x, type);
 
 	if (tmp < 400)
 	{
@@ -911,3 +911,58 @@ void wipe_o_list(floor_type *floor_ptr)
 	floor_ptr->o_cnt = 0;
 }
 
+
+/*!
+ * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
+ * @param y ドアの配置を試みたいマスのY座標
+ * @param x ドアの配置を試みたいマスのX座標
+ * @param type ドアの地形ID
+ * @return なし
+ */
+void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
+{
+	int tmp;
+	FEAT_IDX feat = feat_none;
+
+	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
+	{
+		place_floor_bold(floor_ptr, y, x);
+		return;
+	}
+
+	/* Choose an object */
+	tmp = randint0(400);
+
+	/* Closed doors (300/400) */
+	if (tmp < 300)
+	{
+		/* Create closed door */
+		feat = feat_door[type].closed;
+	}
+
+	/* Locked doors (99/400) */
+	else if (tmp < 399)
+	{
+		/* Create locked door */
+		feat = feat_locked_door_random(type);
+	}
+
+	/* Stuck doors (1/400) */
+	else
+	{
+		/* Create jammed door */
+		feat = feat_jammed_door_random(type);
+	}
+
+	if (feat != feat_none)
+	{
+		cave_set_feat(floor_ptr, y, x, feat);
+
+		/* Now it is not floor */
+		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	}
+	else
+	{
+		place_floor_bold(floor_ptr, y, x);
+	}
+}

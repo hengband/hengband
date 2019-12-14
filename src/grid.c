@@ -234,61 +234,6 @@ bool new_player_spot(player_type *creature_ptr)
 }
 
 /*!
- * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
- * @param y ドアの配置を試みたいマスのY座標
- * @param x ドアの配置を試みたいマスのX座標
- * @param type ドアの地形ID
- * @return なし
- */
-void place_closed_door(POSITION y, POSITION x, int type)
-{
-	int tmp;
-	FEAT_IDX feat = feat_none;
-
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
-	{
-		place_floor_bold(p_ptr->current_floor_ptr, y, x);
-		return;
-	}
-
-	/* Choose an object */
-	tmp = randint0(400);
-
-	/* Closed doors (300/400) */
-	if (tmp < 300)
-	{
-		/* Create closed door */
-		feat = feat_door[type].closed;
-	}
-
-	/* Locked doors (99/400) */
-	else if (tmp < 399)
-	{
-		/* Create locked door */
-		feat = feat_locked_door_random(type);
-	}
-
-	/* Stuck doors (1/400) */
-	else
-	{
-		/* Create jammed door */
-		feat = feat_jammed_door_random(type);
-	}
-
-	if (feat != feat_none)
-	{
-		cave_set_feat(p_ptr->current_floor_ptr, y, x, feat);
-
-		/* Now it is not floor */
-		p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-	}
-	else
-	{
-		place_floor_bold(p_ptr->current_floor_ptr, y, x);
-	}
-}
-
-/*!
 * @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
 * @param y1 基準となるマスのY座標
 * @param x1 基準となるマスのX座標
