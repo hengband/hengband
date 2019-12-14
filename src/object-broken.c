@@ -398,7 +398,7 @@ bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_ID
 		/* Do nothing */;
 	}
 
-	(void)project(who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
+	(void)project(p_ptr, who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
 
 	/* XXX  those potions that explode need to become "known" */
 	return angry;

@@ -1238,7 +1238,7 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 		switch (attack)
 		{
 		case MUT2_SCOR_TAIL:
-			project(0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL, -1);
+			project(p_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL, -1);
 			*mdeath = (m_ptr->r_idx == 0);
 			break;
 		case MUT2_HORNS:
@@ -3934,7 +3934,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 							{
 								o_armed_ptr = &target_ptr->inventory_list[typ[j][0]];
 								if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(o_armed_ptr))
-									project(0, 0, m_ptr->fy, m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg, -1);
+									project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg, -1);
 							}
 						}
 					}
@@ -4062,7 +4062,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 		msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif
-		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+		project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		if (target_ptr->tim_eyeeye) set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye-5, TRUE);
 	}
 
@@ -4540,19 +4540,19 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 				/* Do damage if not exploding */
 				if (!explode)
 				{
-					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+					project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx,
 						damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 				}
 
 				switch (effect_type)
 				{
 				case BLOW_EFFECT_TYPE_FEAR:
-					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+					project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx,
 						damage, GF_TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 					break;
 
 				case BLOW_EFFECT_TYPE_SLEEP:
-					project(m_idx, 0, t_ptr->fy, t_ptr->fx,
+					project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx,
 						r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 					break;
 
@@ -4592,7 +4592,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 								msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
 							}
 							if (m_ptr->ml && is_original_ap_and_seen(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
-							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+							project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll(1 + ((tr_ptr->level) / 26),
 									1 + ((tr_ptr->level) / 17)),
 								GF_FIRE, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
@@ -4613,7 +4613,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 								msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), m_name);
 							}
 							if (m_ptr->ml && is_original_ap_and_seen(t_ptr)) tr_ptr->r_flags3 |= RF3_AURA_COLD;
-							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+							project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll(1 + ((tr_ptr->level) / 26),
 									1 + ((tr_ptr->level) / 17)),
 								GF_COLD, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
@@ -4634,7 +4634,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 								msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), m_name);
 							}
 							if (m_ptr->ml && is_original_ap_and_seen(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
-							project(t_idx, 0, m_ptr->fy, m_ptr->fx,
+							project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll(1 + ((tr_ptr->level) / 26),
 									1 + ((tr_ptr->level) / 17)),
 								GF_ELEC, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);

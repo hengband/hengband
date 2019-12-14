@@ -255,7 +255,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				project(0, rad, caster_ptr->y, caster_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM, -1);
+				project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}
 		break;

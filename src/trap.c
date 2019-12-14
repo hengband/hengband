@@ -578,7 +578,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	{
 		msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 		/* Make some new traps */
-		project(0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID, -1);
+		project(trapped_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID, -1);
 
 		break;
 	}
@@ -595,9 +595,9 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	case TRAP_OPEN:
 	{
 		msg_print(_("大音響と共にまわりの壁が崩れた！", "Suddenly, surrounding walls are opened!"));
-		(void)project(0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
-		(void)project(0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
-		(void)project(0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+		(void)project(trapped_ptr, 0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+		(void)project(trapped_ptr, 0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+		(void)project(trapped_ptr, 0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
 		aggravate_monsters(0);
 
 		break;

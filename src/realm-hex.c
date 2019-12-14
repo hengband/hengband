@@ -541,7 +541,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				msg_print(_("我慢が解かれた！", "Time for end of patioence!"));
 				if (power)
 				{
-					project(0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE,
+					project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE,
 						(PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 				}
 				if (current_world_ptr->wizard)

@@ -370,7 +370,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			*/
 			if (cont || cast)
 			{
-				project(0, rad, caster_ptr->y, caster_ptr->x, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
+				project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
 			}
 		}
 
@@ -515,7 +515,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			*/
 			if (cont || cast)
 			{
-				project(0, 0, caster_ptr->y, caster_ptr->x,
+				project(caster_ptr, 0, 0, caster_ptr->y, caster_ptr->x,
 					0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
 			}
 		}
@@ -604,7 +604,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				msg_print(_("歌が空間を歪めた．．．", "Reality whirls wildly as you sing a dizzying melody..."));
-				project(0, rad, caster_ptr->y, caster_ptr->x, power, GF_AWAY_ALL, PROJECT_KILL, -1);
+				project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_AWAY_ALL, PROJECT_KILL, -1);
 			}
 		}
 		break;

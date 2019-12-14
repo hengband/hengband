@@ -524,7 +524,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return format(_("回%d/損%d+%d", "h%d/dm%d+%d"), heal, d_dam, b_dam / 2);
 			if (cast)
 			{
-				project(0, 1, caster_ptr->y, caster_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
+				project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
 				dispel_monsters(d_dam);
 				slow_monsters(plev);
 				stun_monsters(power);

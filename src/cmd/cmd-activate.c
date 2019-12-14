@@ -1013,7 +1013,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 				if (!player_bold(user_ptr, y, x)) break;
 			}
 
-			project(0, 3, y, x, 150, GF_ELEC,
+			project(user_ptr, 0, 3, y, x, 150, GF_ELEC,
 				(PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 		}
 
@@ -1703,7 +1703,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_GRAND_CROSS:
 	{
 		msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
-		project(0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+		project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 		break;
 	}
 

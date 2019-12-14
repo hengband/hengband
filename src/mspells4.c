@@ -2108,7 +2108,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 
 				msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
 
-				project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+				project(p_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 				set_tim_eyeeye(p_ptr, p_ptr->tim_eyeeye - 5, TRUE);
 			}
 		}
@@ -2444,12 +2444,12 @@ void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	{
 		if (can_use_lite_area)
 		{
-			(void)project(m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, -1);
+			(void)project(p_ptr, m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, -1);
 			lite_room(y, x);
 		}
 		else
 		{
-			(void)project(m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
+			(void)project(p_ptr, m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
 			unlite_room(y, x);
 		}
 	}
@@ -2591,7 +2591,7 @@ MONSTER_NUMBER summon_Guardian(POSITION y, POSITION x, int rlev, MONSTER_IDX m_i
 		if(mon_to_player)
 			fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
 		else if(mon_to_mon)
-			project(t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE, -1);
+			project(p_ptr, t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE, -1);
 	}
 
 	for (k = 0; k < num; k++)

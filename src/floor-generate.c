@@ -1417,7 +1417,7 @@ void generate_floor(floor_type *floor_ptr)
 
 		clear_cave(floor_ptr);
 
-		if (p_ptr->current_floor_ptr->inside_arena)
+		if (floor_ptr->inside_arena)
 		{
 			generate_challenge_arena(floor_ptr, p_ptr);
 		}
@@ -1427,7 +1427,7 @@ void generate_floor(floor_type *floor_ptr)
 			generate_gambling_arena(floor_ptr, p_ptr);
 		}
 
-		else if (p_ptr->current_floor_ptr->inside_quest)
+		else if (floor_ptr->inside_quest)
 		{
 			generate_fixed_floor(floor_ptr);
 		}

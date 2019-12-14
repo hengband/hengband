@@ -542,7 +542,7 @@ void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
 	if (typ != GF_ARROW) flg  |= PROJECT_REFLECTABLE;
 
 	/* Target the player with a bolt attack */
-	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+	(void)project(p_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 /*!
@@ -572,7 +572,7 @@ void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
     }
 
 	/* Target the player with a bolt attack */
-	(void)project(m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+	(void)project(p_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 
@@ -631,7 +631,7 @@ void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp
 	}
 
 	/* Target the player with a ball attack */
-	(void)project(m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+	(void)project(p_ptr, m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 

@@ -1420,7 +1420,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 
 		if (have_flag(old_f_ptr->flags, FF_GLASS) && current_world_ptr->character_dungeon)
 		{
-			project(PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(p_ptr->current_floor_ptr->dun_level, 100) / 4, GF_SHARDS,
+			project(p_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(p_ptr->current_floor_ptr->dun_level, 100) / 4, GF_SHARDS,
 				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 		}
 	}

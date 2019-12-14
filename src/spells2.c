@@ -817,7 +817,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 		x = m_ptr->fx;
 
 		/* Jump directly to the target monster */
-		if (project(0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
+		if (project(p_ptr, 0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
 	}
 	return (obvious);
 }
@@ -927,7 +927,7 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 {
 	msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
-	project(0, (powerful ? 7 : 5), creature_ptr->y, creature_ptr->x,
+	project(creature_ptr, 0, (powerful ? 7 : 5), creature_ptr->y, creature_ptr->x,
 	(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 	if ((creature_ptr->pclass != CLASS_MAGE) && (creature_ptr->pclass != CLASS_HIGH_MAGE) && (creature_ptr->pclass != CLASS_SORCERER) && (creature_ptr->pclass != CLASS_MAGIC_EATER) && (creature_ptr->pclass != CLASS_BLUE_MAGE))
 	{
@@ -1404,7 +1404,7 @@ void discharge_minion(void)
 		if (dam > 100) dam = (dam - 100) / 2 + 100;
 		if (dam > 400) dam = (dam - 400) / 2 + 400;
 		if (dam > 800) dam = 800;
-		project(i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, 
+		project(p_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, 
 			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 
 		if (record_named_pet && m_ptr->nickname)
@@ -1846,7 +1846,7 @@ bool starlight(bool magic)
 			if (!player_bold(p_ptr, y, x)) break;
 		}
 
-		project(0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
+		project(p_ptr, 0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
 			(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
 	}
 	return TRUE;
@@ -1876,7 +1876,7 @@ bool lite_area(HIT_POINT dam, POSITION rad)
 	}
 
 	/* Hook into the "project()" function */
-	(void)project(0, rad, p_ptr->y, p_ptr->x, dam, GF_LITE_WEAK, flg, -1);
+	(void)project(p_ptr, 0, rad, p_ptr->y, p_ptr->x, dam, GF_LITE_WEAK, flg, -1);
 
 	lite_room(p_ptr->y, p_ptr->x);
 
@@ -1901,7 +1901,7 @@ bool unlite_area(HIT_POINT dam, POSITION rad)
 	}
 
 	/* Hook into the "project()" function */
-	(void)project(0, rad, p_ptr->y, p_ptr->x, dam, GF_DARK_WEAK, flg, -1);
+	(void)project(p_ptr, 0, rad, p_ptr->y, p_ptr->x, dam, GF_DARK_WEAK, flg, -1);
 
 	unlite_room(p_ptr->y, p_ptr->x);
 
@@ -1945,7 +1945,7 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 	}
 
 	/* Analyze the "dir" and the "target".  Hurt items on floor. */
-	return (project(0, rad, ty, tx, dam, typ, flg, -1));
+	return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
 
 /*!
@@ -1999,7 +1999,7 @@ bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 	}
 
 	/* Analyze the "dir" and the "target".  Hurt items on floor. */
-	return (project(0, rad, ty, tx, dam, typ, flg, -1));
+	return (project(p_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
 
 
@@ -2035,7 +2035,7 @@ bool fire_ball_hide(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 	}
 
 	/* Analyze the "dir" and the "target".  Hurt items on floor. */
-	return (project(0, rad, ty, tx, dam, typ, flg, -1));
+	return (project(p_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
 
 
@@ -2062,7 +2062,7 @@ bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POI
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Analyze the "target" and the caster. */
-	return (project(who, rad, y, x, dam, typ, flg, -1));
+	return (project(p_ptr, who, rad, y, x, dam, typ, flg, -1));
 }
 
 
@@ -2120,7 +2120,7 @@ bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int n
 		}
 
 		/* Analyze the "dir" and the "target". */
-		if (!project(0, 0, y, x, damroll(dd, ds), typ, flg, -1))
+		if (!project(p_ptr, 0, 0, y, x, damroll(dd, ds), typ, flg, -1))
 		{
 			result = FALSE;
 		}
@@ -2221,7 +2221,7 @@ bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POI
 	}
 
 	/* Analyze the "dir" and the "target", do NOT explode */
-	return (project(0, 0, ty, tx, dam, typ, flg, -1));
+	return (project(caster_ptr, 0, 0, ty, tx, dam, typ, flg, -1));
 }
 
 
@@ -2390,7 +2390,7 @@ bool teleport_monster(DIRECTION dir, int distance)
 bool door_creation(void)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_DOOR, flg, -1));
+	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_DOOR, flg, -1));
 }
 
 /*!
@@ -2402,7 +2402,7 @@ bool door_creation(void)
 bool trap_creation(POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
+	return (project(p_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
 }
 
 /*!
@@ -2412,7 +2412,7 @@ bool trap_creation(POSITION y, POSITION x)
 bool tree_creation(void)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_TREE, flg, -1));
+	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_TREE, flg, -1));
 }
 
 /*!
@@ -2422,7 +2422,7 @@ bool tree_creation(void)
 bool glyph_creation(void)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
-	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_GLYPH, flg, -1));
+	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_GLYPH, flg, -1));
 }
 
 /*!
@@ -2432,7 +2432,7 @@ bool glyph_creation(void)
 bool wall_stone(void)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	bool dummy = (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_STONE_WALL, flg, -1));
+	bool dummy = (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_STONE_WALL, flg, -1));
 	p_ptr->update |= (PU_FLOW);
 	p_ptr->redraw |= (PR_MAP);
 	return dummy;
@@ -2445,7 +2445,7 @@ bool wall_stone(void)
 bool destroy_doors_touch(void)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_DOOR, flg, -1));
+	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_DOOR, flg, -1));
 }
 
 /*!
@@ -2455,7 +2455,7 @@ bool destroy_doors_touch(void)
 bool disarm_traps_touch(void)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_TRAP, flg, -1));
+	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_TRAP, flg, -1));
 }
 
 /*!
@@ -2465,7 +2465,7 @@ bool disarm_traps_touch(void)
 bool sleep_monsters_touch(void)
 {
 	BIT_FLAGS flg = PROJECT_KILL | PROJECT_HIDE;
-	return (project(0, 1, p_ptr->y, p_ptr->x, p_ptr->lev, GF_OLD_SLEEP, flg, -1));
+	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, p_ptr->lev, GF_OLD_SLEEP, flg, -1));
 }
 
 
@@ -2479,7 +2479,7 @@ bool sleep_monsters_touch(void)
 bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
-	return (project(who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
+	return (project(p_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
 }
 
 /*!
@@ -2566,7 +2566,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			{
 				HIT_POINT dam = damroll(10, 10);
 				msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
-				project(0, 8, p_ptr->y, p_ptr->x, dam, GF_MANA, flg, -1);
+				project(p_ptr, 0, 8, p_ptr->y, p_ptr->x, dam, GF_MANA, flg, -1);
 				take_hit(p_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
 				if (!one_in_(6)) break;
 			}
@@ -2583,7 +2583,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			wall_breaker();
 			if (!randint0(7))
 			{
-				project(0, 7, p_ptr->y, p_ptr->x, 50, GF_KILL_WALL, flg, -1);
+				project(p_ptr, 0, 7, p_ptr->y, p_ptr->x, 50, GF_KILL_WALL, flg, -1);
 				take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"), -1);
 			}
 			if (!one_in_(6)) break;
@@ -2760,7 +2760,7 @@ void wall_breaker(void)
 			if (!player_bold(p_ptr, y, x)) break;
 		}
 
-		project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
+		project(p_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
 				  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 	}
 	else if (randint1(100) > 30)
@@ -2780,7 +2780,7 @@ void wall_breaker(void)
 				if (!player_bold(p_ptr, y, x)) break;
 			}
 
-			project(0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
+			project(p_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
 					  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 		}
 	}
@@ -3119,7 +3119,7 @@ void remove_all_mirrors(bool explode)
 			{
 				remove_mirror(y, x);
 				if (explode)
-					project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS,
+					project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 		}
@@ -3331,7 +3331,7 @@ void cast_meteor(HIT_POINT dam, POSITION rad)
 
 		if (count > 20) continue;
 
-		project(0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+		project(p_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
 	}
 }
 
@@ -3419,7 +3419,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 			!in_disintegration_range(ty, tx, y, x))
 			continue;
 
-		project(0, rad, y, x, dam, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+		project(caster_ptr, 0, rad, y, x, dam, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 	}
 
 	return TRUE;

@@ -564,7 +564,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				dispel_monsters(d_dam);
 				earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, q_rad, 0);
-				project(0, b_rad, caster_ptr->y, caster_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
+				project(caster_ptr, 0, b_rad, caster_ptr->y, caster_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
 		}
 		break;

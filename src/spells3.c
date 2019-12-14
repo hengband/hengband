@@ -3498,7 +3498,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 				int extra_dam = damroll(10, 10);
 				msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
 
-				project(0, 8, m_ptr->fy, m_ptr->fx, extra_dam, GF_MANA, curse_flg, -1);
+				project(caster_ptr, 0, 8, m_ptr->fy, m_ptr->fx, extra_dam, GF_MANA, curse_flg, -1);
 				if (!one_in_(6)) break;
 			}
 		case 7: case 8:
@@ -3512,7 +3512,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 			}
 		case 9: case 10: case 11:
 			msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
-			project(0, 7, m_ptr->fy, m_ptr->fx, 50, GF_DISINTEGRATE, curse_flg, -1);
+			project(caster_ptr, 0, 7, m_ptr->fy, m_ptr->fx, 50, GF_DISINTEGRATE, curse_flg, -1);
 			if (!one_in_(6)) break;
 		case 12: case 13: case 14: case 15: case 16:
 			aggravate_monsters(0);
@@ -3605,7 +3605,7 @@ bool fire_crimson(player_type *shooter_ptr)
 	}
 
 	for (i = 0; i < num; i++)
-		project(0, shooter_ptr->lev / 20 + 1, ty, tx, shooter_ptr->lev*shooter_ptr->lev * 6 / 50, GF_ROCKET, flg, -1);
+		project(shooter_ptr, 0, shooter_ptr->lev / 20 + 1, ty, tx, shooter_ptr->lev*shooter_ptr->lev * 6 / 50, GF_ROCKET, flg, -1);
 
 	return TRUE;
 }

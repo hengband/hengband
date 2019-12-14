@@ -658,7 +658,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
 				remove_mirror(y, x);
-				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+				project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
 			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
@@ -683,7 +683,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
 				remove_mirror(y, x);
-				project(0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+				project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
 			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
@@ -4067,7 +4067,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 			t_x = target_ptr->x - 1 + randint1(3);
 		}
 
-		project(0, 0, t_y, t_x, dam, typ, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), monspell);
+		project(p_ptr, 0, 0, t_y, t_x, dam, typ, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), monspell);
 
 		disturb(target_ptr, TRUE, TRUE);
 		return TRUE;
@@ -5059,7 +5059,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 		msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
-		project(0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+		project(p_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		if (target_ptr->tim_eyeeye) set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
 	}
 
@@ -5550,7 +5550,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
  * and "update_view()" and "update_monsters()" need to be called.
  * </pre>
  */
-bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
+bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
 {
 	int i, t, dist;
 
@@ -6380,7 +6380,7 @@ bool project(MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT da
 					else flg |= PROJECT_PLAYER;
 
 					/* The bolt is reflected */
-					project(p_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
+					project(caster_ptr, p_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
 
 					/* Don't affect the monster any longer */
 					continue;

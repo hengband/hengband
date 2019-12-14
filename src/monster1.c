@@ -2572,7 +2572,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			DICE_SID d_side = r_ptr->blow[i].d_side;
 			HIT_POINT damage = damroll(d_dice, d_side);
 
-			project(m_idx, 3, y, x, damage, typ, flg, -1);
+			project(p_ptr, m_idx, 3, y, x, damage, typ, flg, -1);
 			break;
 		}
 	}
@@ -2771,7 +2771,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		/* One more ultra-hack: An Unmaker goes out with a big bang! */
 	{
 		BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-		(void)project(m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
+		(void)project(p_ptr, m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
 	}
 	break;
 
@@ -2870,7 +2870,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	case MON_ROLENTO:
 	{
 		BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-		(void)project(m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
+		(void)project(p_ptr, m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
 	}
 	break;
 

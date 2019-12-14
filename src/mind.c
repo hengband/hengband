@@ -1121,7 +1121,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
 
 		if (plev < 25)
-			project(0, 2 + plev / 10, caster_ptr->y, caster_ptr->x,
+			project(caster_ptr, 0, 2 + plev / 10, caster_ptr->y, caster_ptr->x,
 			(plev * 3), GF_PSI, PROJECT_KILL, -1);
 		else
 			(void)mindblast_monsters(randint1(plev * ((plev - 5) / 10 + 1)));
@@ -1383,7 +1383,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		for (x = 0; x < caster_ptr->current_floor_ptr->width; x++) {
 			for (y = 0; y < caster_ptr->current_floor_ptr->height; y++) {
 				if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) {
-					project(0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+					project(caster_ptr, 0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 				}
 			}
 		}
@@ -1740,7 +1740,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 
 				if (!player_bold(caster_ptr, y, x)) break;
 			}
-			project(0, 0, y, x, damroll(6 + plev / 8, 10), typ,
+			project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ,
 				(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
 		}
 		break;
@@ -1923,7 +1923,7 @@ void do_cmd_mind(void)
 					/* Mana storm */
 					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
-					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
+					project(p_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}
@@ -1948,7 +1948,7 @@ void do_cmd_mind(void)
 					/* Mana storm */
 					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
-					project(PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
+					project(p_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
 					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
 				}
