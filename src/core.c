@@ -752,17 +752,17 @@ static bool pattern_effect(player_type *creature_ptr)
  * @param percent 回復比率
  * @return なし
  */
-static void regenhp(int percent)
+static void regenhp(player_type *creature_ptr, int percent)
 {
 	HIT_POINT new_chp;
 	u32b new_chp_frac;
 	HIT_POINT old_chp;
 
-	if (p_ptr->special_defense & KATA_KOUKIJIN) return;
-	if (p_ptr->action == ACTION_HAYAGAKE) return;
+	if (creature_ptr->special_defense & KATA_KOUKIJIN) return;
+	if (creature_ptr->action == ACTION_HAYAGAKE) return;
 
 	/* Save the old hitpoints */
-	old_chp = p_ptr->chp;
+	old_chp = creature_ptr->chp;
 
 	/*
 	 * Extract the new hitpoints
@@ -770,27 +770,27 @@ static void regenhp(int percent)
 	 * 'percent' is the Regen factor in unit (1/2^16)
 	 */
 	new_chp = 0;
-	new_chp_frac = (p_ptr->mhp * percent + PY_REGEN_HPBASE);
+	new_chp_frac = (creature_ptr->mhp * percent + PY_REGEN_HPBASE);
 
 	/* Convert the unit (1/2^16) to (1/2^32) */
 	s64b_LSHIFT(new_chp, new_chp_frac, 16);
 
 	/* Regenerating */
-	s64b_add(&(p_ptr->chp), &(p_ptr->chp_frac), new_chp, new_chp_frac);
+	s64b_add(&(creature_ptr->chp), &(creature_ptr->chp_frac), new_chp, new_chp_frac);
 
 
 	/* Fully healed */
-	if (0 < s64b_cmp(p_ptr->chp, p_ptr->chp_frac, p_ptr->mhp, 0))
+	if (0 < s64b_cmp(creature_ptr->chp, creature_ptr->chp_frac, creature_ptr->mhp, 0))
 	{
-		p_ptr->chp = p_ptr->mhp;
-		p_ptr->chp_frac = 0;
+		creature_ptr->chp = creature_ptr->mhp;
+		creature_ptr->chp_frac = 0;
 	}
 
 	/* Notice changes */
-	if (old_chp != p_ptr->chp)
+	if (old_chp != creature_ptr->chp)
 	{
-		p_ptr->redraw |= (PR_HP);
-		p_ptr->window |= (PW_PLAYER);
+		creature_ptr->redraw |= (PR_HP);
+		creature_ptr->window |= (PW_PLAYER);
 		wild_regen = 20;
 	}
 }
@@ -1792,7 +1792,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	/* Regenerate Hit Points if needed */
 	if ((creature_ptr->chp < creature_ptr->mhp) && !cave_no_regen)
 	{
-		regenhp(regen_amount);
+		regenhp(creature_ptr, regen_amount);
 	}
 }
 
