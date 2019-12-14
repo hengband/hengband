@@ -179,7 +179,7 @@ extern void aggravate_monsters(MONSTER_IDX who);
 extern bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name);
 extern bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast);
 extern bool mass_genocide(player_type *caster_ptr, int power, bool player_cast);
-extern bool mass_genocide_undead(int power, bool player_cast);
+extern bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast);
 extern bool probing(void);
 extern bool banish_evil(int dist);
 extern bool dispel_evil(HIT_POINT dam);

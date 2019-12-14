@@ -406,7 +406,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				mass_genocide_undead(power, TRUE);
+				mass_genocide_undead(caster_ptr, power, TRUE);
 			}
 		}
 		break;
