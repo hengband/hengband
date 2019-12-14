@@ -585,7 +585,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 }
 
 
-bool teleport_level_other(player_type *creature_ptr)
+bool teleport_level_other(player_type *caster_ptr)
 {
 	MONSTER_IDX target_m_idx;
 	monster_type *m_ptr;
@@ -593,21 +593,21 @@ bool teleport_level_other(player_type *creature_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 
 	if (!target_set(TARGET_KILL)) return FALSE;
-	target_m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+	target_m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 	if (!target_m_idx) return TRUE;
-	if (!player_has_los_bold(p_ptr, target_row, target_col)) return TRUE;
-	if (!projectable(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, target_row, target_col)) return TRUE;
-	m_ptr = &p_ptr->current_floor_ptr->m_list[target_m_idx];
+	if (!player_has_los_bold(caster_ptr, target_row, target_col)) return TRUE;
+	if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) return TRUE;
+	m_ptr = &caster_ptr->current_floor_ptr->m_list[target_m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 	monster_desc(m_name, m_ptr, 0);
 	msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
 
 	if ((r_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE)) ||
-		(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > creature_ptr->lev + randint1(60)))
+		(r_ptr->flags1 & RF1_QUESTOR) || (r_ptr->level + randint1(50) > caster_ptr->lev + randint1(60)))
 	{
 		msg_format(_("しかし効果がなかった！", "%^s is unaffected!"), m_name);
 	}
-	else teleport_level(creature_ptr, target_m_idx);
+	else teleport_level(caster_ptr, target_m_idx);
 	return TRUE;
 }
 
