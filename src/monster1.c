@@ -664,8 +664,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 #else
 
 			/* Mention the experience */
-			hooked_roff(format(" is worth about %ld.%02ld point%s for level %d player",
-				(long)i, (long)j, ((i == 1) && (j == 0)) ? "" : "s" , p_ptr->lev));
+			hooked_roff(format(" is worth about %ld.%02ld point%s",
+				(long)i, (long)j, ((i == 1) && (j == 0)) ? "" : "s"));
 
 			/* Take account of annoying English */
 			p = "th";
