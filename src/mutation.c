@@ -2104,7 +2104,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth();
 			msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
-			fire_breath(GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
+			fire_breath(creature_ptr, GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
 			break;
 
 		case MUT1_HYPN_GAZE:

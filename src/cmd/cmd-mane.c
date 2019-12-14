@@ -323,124 +323,124 @@ static bool use_mane(player_type *caster_ptr, int spell)
 	case MS_BR_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
-		fire_breath(GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
-		fire_breath(GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
-		fire_breath(GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
-		fire_breath(GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
-		fire_breath(GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
-		fire_breath(GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_LITE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
-		fire_breath(GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
-		fire_breath(GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
-		fire_breath(GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_SOUND:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
-		fire_breath(GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
-		fire_breath(GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_DISEN:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
-		fire_breath(GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
-			fire_breath(GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
+			fire_breath(caster_ptr, GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_TIME:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
-		fire_breath(GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_INERTIA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
-			fire_breath(GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
+			fire_breath(caster_ptr, GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));		
-		fire_breath(GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_SHARDS:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
-		fire_breath(GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
 		
-		fire_breath(GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_FORCE:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
 		
-		fire_breath(GF_FORCE, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_FORCE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
 		
-		fire_breath(GF_MANA, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_MANA, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BALL_NUKE:
@@ -454,7 +454,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
 		
-		fire_breath(GF_NUKE, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_NUKE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BALL_CHAOS:
@@ -467,7 +467,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
 		
-		fire_breath(GF_DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
+		fire_breath(caster_ptr, GF_DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 	case MS_BALL_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;

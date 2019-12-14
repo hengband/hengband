@@ -680,7 +680,7 @@ static bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 
 	t = randint0(n);
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), name[t]);
-	fire_breath(type[t], dir, 250, 4);
+	fire_breath(user_ptr, type[t], dir, 250, 4);
 
 	return TRUE;
 }
@@ -930,7 +930,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 		msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
-		fire_breath(GF_MISSILE, dir, 300, 4);
+		fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
 		break;
 	}
 
@@ -1024,7 +1024,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 		msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
-		fire_breath(GF_MISSILE, dir, 300, 4);
+		fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
 		msg_print(_("鎧が様々な色に輝いた...", "Your armor glows many colours..."));
 		(void)set_afraid(user_ptr, 0);
 		(void)set_hero(user_ptr, randint1(50) + 50, FALSE);
@@ -1041,7 +1041,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_BR_FIRE:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_breath(GF_FIRE, dir, 200, 2);
+		fire_breath(user_ptr, GF_FIRE, dir, 200, 2);
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
 		{
 			(void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
@@ -1052,7 +1052,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_BR_COLD:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_breath(GF_COLD, dir, 200, 2);
+		fire_breath(user_ptr, GF_COLD, dir, 200, 2);
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
 		{
 			(void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);

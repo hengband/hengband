@@ -895,140 +895,140 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
         damage = monspell_bluemage_damage((MS_BR_ACID), plev, DAM_ROLL);
-		fire_breath(GF_ACID, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_ACID, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
         damage = monspell_bluemage_damage((MS_BR_ELEC), plev, DAM_ROLL);
-		fire_breath(GF_ELEC, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_ELEC, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
         damage = monspell_bluemage_damage((MS_BR_FIRE), plev, DAM_ROLL);
-		fire_breath(GF_FIRE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_FIRE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_COLD:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
         damage = monspell_bluemage_damage((MS_BR_COLD), plev, DAM_ROLL);
-		fire_breath(GF_COLD, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_COLD, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_POIS:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
         damage = monspell_bluemage_damage((MS_BR_POIS), plev, DAM_ROLL);
-		fire_breath(GF_POIS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_POIS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_NETHER:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
         damage = monspell_bluemage_damage((MS_BR_NETHER), plev, DAM_ROLL);
-		fire_breath(GF_NETHER, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_NETHER, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_LITE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
         damage = monspell_bluemage_damage((MS_BR_LITE), plev, DAM_ROLL);
-		fire_breath(GF_LITE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_LITE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
         damage = monspell_bluemage_damage((MS_BR_DARK), plev, DAM_ROLL);
-		fire_breath(GF_DARK, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_DARK, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
         damage = monspell_bluemage_damage((MS_BR_CONF), plev, DAM_ROLL);
-		fire_breath(GF_CONFUSION, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_CONFUSION, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_SOUND:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
         damage = monspell_bluemage_damage((MS_BR_SOUND), plev, DAM_ROLL);
-		fire_breath(GF_SOUND, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_SOUND, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
         damage = monspell_bluemage_damage((MS_BR_CHAOS), plev, DAM_ROLL);
-		fire_breath(GF_CHAOS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_CHAOS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_DISEN:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
         damage = monspell_bluemage_damage((MS_BR_DISEN), plev, DAM_ROLL);
-		fire_breath(GF_DISENCHANT, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_DISENCHANT, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
         damage = monspell_bluemage_damage((MS_BR_NEXUS), plev, DAM_ROLL);
-		fire_breath(GF_NEXUS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_NEXUS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_TIME:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
         damage = monspell_bluemage_damage((MS_BR_TIME), plev, DAM_ROLL);
-		fire_breath(GF_TIME, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_TIME, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_INERTIA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
         damage = monspell_bluemage_damage((MS_BR_INERTIA), plev, DAM_ROLL);
-		fire_breath(GF_INERTIAL, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_INERTIAL, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
         damage = monspell_bluemage_damage((MS_BR_GRAVITY), plev, DAM_ROLL);
-		fire_breath(GF_GRAVITY, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_GRAVITY, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_SHARDS:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
         damage = monspell_bluemage_damage((MS_BR_SHARDS), plev, DAM_ROLL);
-		fire_breath(GF_SHARDS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_SHARDS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_PLASMA:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
         damage = monspell_bluemage_damage((MS_BR_PLASMA), plev, DAM_ROLL);
-		fire_breath(GF_PLASMA, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_PLASMA, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_FORCE:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
         damage = monspell_bluemage_damage((MS_BR_FORCE), plev, DAM_ROLL);
-		fire_breath(GF_FORCE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_FORCE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
         damage = monspell_bluemage_damage((MS_BR_MANA), plev, DAM_ROLL);
-		fire_breath(GF_MANA, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_MANA, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BALL_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -1042,7 +1042,7 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
         damage = monspell_bluemage_damage((MS_BR_NUKE), plev, DAM_ROLL);
-		fire_breath(GF_NUKE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_NUKE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BALL_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -1056,7 +1056,7 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
         damage = monspell_bluemage_damage((MS_BR_DISI), plev, DAM_ROLL);
-		fire_breath(GF_DISINTEGRATE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(p_ptr, GF_DISINTEGRATE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BALL_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;

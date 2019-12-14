@@ -225,14 +225,14 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_DRAGON_FIRE:
 		{
-			fire_breath(GF_FIRE, dir, (powerful ? 300 : 200), 3);
+			fire_breath(creature_ptr, GF_FIRE, dir, (powerful ? 300 : 200), 3);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_DRAGON_COLD:
 		{
-			fire_breath(GF_COLD, dir, (powerful ? 270 : 180), 3);
+			fire_breath(creature_ptr, GF_COLD, dir, (powerful ? 270 : 180), 3);
 			ident = TRUE;
 			break;
 		}
@@ -268,7 +268,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 			if (powerful) dam = (dam * 3) / 2;
 
-			fire_breath(typ, dir, dam, 3);
+			fire_breath(creature_ptr, typ, dir, dam, 3);
 
 			ident = TRUE;
 			break;

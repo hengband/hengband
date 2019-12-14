@@ -1962,9 +1962,9 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 * Affect grids, objects, and monsters
 * </pre>
 */
-bool fire_breath(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
-	return fire_ball(p_ptr, typ, dir, dam, -rad);
+	return fire_ball(caster_ptr, typ, dir, dam, -rad);
 }
 
 
@@ -4157,7 +4157,7 @@ bool draconian_breath(player_type *creature_ptr)
 	stop_mouth();
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), Type_desc);
 
-	fire_breath(Type, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
+	fire_breath(creature_ptr, Type, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
 	return TRUE;
 }
 
@@ -4310,7 +4310,7 @@ bool demonic_breath(player_type *creature_ptr)
 	if (!get_aim_dir(&dir)) return FALSE;
 	stop_mouth();
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), ((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
-	fire_breath(type, dir, creature_ptr->lev * 3, (creature_ptr->lev / 15) + 1);
+	fire_breath(creature_ptr, type, dir, creature_ptr->lev * 3, (creature_ptr->lev / 15) + 1);
 	return TRUE;
 }
 
