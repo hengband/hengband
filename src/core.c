@@ -2712,7 +2712,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call animal */
 		if ((creature_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2724,7 +2724,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call demon */
 		if ((creature_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2736,7 +2736,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call dragon */
 		if ((creature_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON,
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
@@ -2749,7 +2749,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call undead */
 		if ((creature_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, p_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
+			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
 			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
