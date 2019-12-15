@@ -3842,10 +3842,10 @@ void cast_shuffle(player_type *caster_ptr)
  * @brief 口を使う継続的な処理を中断する
  * @return なし
  */
-void stop_mouth(void)
+void stop_mouth(player_type *caster_ptr)
 {
-	if (music_singing_any(p_ptr)) stop_singing(p_ptr);
-	if (hex_spelling_any(p_ptr)) stop_hex_spell_all(p_ptr);
+	if (music_singing_any(caster_ptr)) stop_singing(caster_ptr);
+	if (hex_spelling_any(caster_ptr)) stop_hex_spell_all(caster_ptr);
 }
 
 
@@ -3868,7 +3868,7 @@ bool_hack vampirism(player_type *caster_ptr)
 	x = caster_ptr->x + ddx[dir];
 	g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
-	stop_mouth();
+	stop_mouth(caster_ptr);
 
 	if (!(g_ptr->m_idx))
 	{
@@ -4154,7 +4154,7 @@ bool draconian_breath(player_type *creature_ptr)
 		}
 	}
 
-	stop_mouth();
+	stop_mouth(creature_ptr);
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), Type_desc);
 
 	fire_breath(creature_ptr, Type, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
@@ -4308,7 +4308,7 @@ bool demonic_breath(player_type *creature_ptr)
 	DIRECTION dir;
 	int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
 	if (!get_aim_dir(&dir)) return FALSE;
-	stop_mouth();
+	stop_mouth(creature_ptr);
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), ((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
 	fire_breath(creature_ptr, type, dir, creature_ptr->lev * 3, (creature_ptr->lev / 15) + 1);
 	return TRUE;

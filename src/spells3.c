@@ -3247,7 +3247,7 @@ bool eat_lock(player_type *caster_ptr)
 	f_ptr = &f_info[g_ptr->feat];
 	mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
-	stop_mouth();
+	stop_mouth(caster_ptr);
 
 	if (!have_flag(mimic_f_ptr->flags, FF_HURT_ROCK))
 	{

@@ -2095,14 +2095,14 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 	{
 		case MUT1_SPIT_ACID:
 			if (!get_aim_dir(&dir)) return FALSE;
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			msg_print(_("酸を吐きかけた...", "You spit acid..."));
 			fire_ball(creature_ptr, GF_ACID, dir, lvl, 1 + (lvl / 30));
 			break;
 
 		case MUT1_BR_FIRE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
 			fire_breath(creature_ptr, GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
 			break;
@@ -2140,12 +2140,12 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_SMELL_MET:
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			(void)detect_treasure(DETECT_RAD_DEFAULT);
 			break;
 
 		case MUT1_SMELL_MON:
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			(void)detect_monsters_normal(DETECT_RAD_DEFAULT);
 			break;
 
@@ -2169,7 +2169,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_SHRIEK:
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			(void)fire_ball(creature_ptr, GF_SOUND, 0, 2 * lvl, 8);
 			(void)aggravate_monsters(0);
 			break;

@@ -717,14 +717,14 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_YEEK:
 			if (!get_aim_dir(&dir)) return FALSE;
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
 			(void)fear_monster(dir, plev);
 			break;
 
 		case RACE_KLACKON:
 			if (!get_aim_dir(&dir)) return FALSE;
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			msg_print(_("酸を吐いた。", "You spit acid."));
 			if (plev < 25) fire_bolt(creature_ptr, GF_ACID, dir, plev);
 			else fire_ball(creature_ptr, GF_ACID, dir, plev, 2);
@@ -789,7 +789,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_SPECTRE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			stop_mouth();
+			stop_mouth(creature_ptr);
 			msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
 			(void)fear_monster(dir, plev);
 			break;

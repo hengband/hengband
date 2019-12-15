@@ -255,7 +255,7 @@ extern bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITI
 extern void cast_wonder(player_type *caster_ptr, DIRECTION dir);
 extern void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir);
 extern void cast_shuffle(player_type *caster_ptr);
-extern void stop_mouth(void);
+extern void stop_mouth(player_type *caster_ptr);
 extern bool_hack vampirism(player_type *caster_ptr);
 extern bool panic_hit(void);
 extern bool psychometry(player_type *caster_ptr);
