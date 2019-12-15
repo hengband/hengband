@@ -2014,10 +2014,7 @@ void do_cmd_spike(player_type *creature_ptr)
 			msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
 			cave_alter_feat(y, x, FF_SPIKE);
 
-			/* Use up, and describe, a single spike, from the bottom */
-			inven_item_increase(item, -1);
-			inven_item_describe(item);
-			inven_item_optimize(item);
+			vary_item(item, -1);
 		}
 	}
 }

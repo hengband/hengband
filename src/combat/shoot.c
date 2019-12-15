@@ -496,17 +496,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 		/* Single object */
 		q_ptr->number = 1;
 
-		if (item >= 0)
-		{
-			inven_item_increase(item, -1);
-			inven_item_describe(item);
-			inven_item_optimize(item);
-		}
-		else
-		{
-			floor_item_increase(0 - item, -1);
-			floor_item_optimize(0 - item);
-		}
+		vary_item(item, -1);
 
 		sound(SOUND_SHOOT);
 		handle_stuff();

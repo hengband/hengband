@@ -462,18 +462,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		(void)set_food(creature_ptr, creature_ptr->food + o_ptr->pval);
 	}
 
-	if (item >= 0)
-	{
-		inven_item_increase(item, -1);
-		inven_item_describe(item);
-		inven_item_optimize(item);
-	}
-	else
-	{
-		floor_item_increase(0 - item, -1);
-		floor_item_describe(0 - item);
-		floor_item_optimize(0 - item);
-	}
+	vary_item(item, -1);
 }
 
 

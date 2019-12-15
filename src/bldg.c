@@ -1816,9 +1816,7 @@ static bool kankin(void)
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * o_ptr->number));
 				p_ptr->au += 1000000L * o_ptr->number;
 				p_ptr->redraw |= (PR_GOLD);
-				inven_item_increase(i, -o_ptr->number);
-				inven_item_describe(i);
-				inven_item_optimize(i);
+				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
 		}
@@ -1839,9 +1837,7 @@ static bool kankin(void)
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * o_ptr->number));
 				p_ptr->au += 200000L * o_ptr->number;
 				p_ptr->redraw |= (PR_GOLD);
-				inven_item_increase(i, -o_ptr->number);
-				inven_item_describe(i);
-				inven_item_optimize(i);
+				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
 		}
@@ -1862,9 +1858,7 @@ static bool kankin(void)
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * o_ptr->number));
 				p_ptr->au += 100000L * o_ptr->number;
 				p_ptr->redraw |= (PR_GOLD);
-				inven_item_increase(i, -o_ptr->number);
-				inven_item_describe(i);
-				inven_item_optimize(i);
+				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
 		}
@@ -1883,9 +1877,7 @@ static bool kankin(void)
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 50 + 100) * o_ptr->number));
 				p_ptr->au += (r_info[today_mon].level * 50 + 100) * o_ptr->number;
 				p_ptr->redraw |= (PR_GOLD);
-				inven_item_increase(i, -o_ptr->number);
-				inven_item_describe(i);
-				inven_item_optimize(i);
+				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
 		}
@@ -1905,9 +1897,7 @@ static bool kankin(void)
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 30 + 60) * o_ptr->number));
 				p_ptr->au += (r_info[today_mon].level * 30 + 60) * o_ptr->number;
 				p_ptr->redraw |= (PR_GOLD);
-				inven_item_increase(i, -o_ptr->number);
-				inven_item_describe(i);
-				inven_item_optimize(i);
+				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
 		}
@@ -1934,9 +1924,7 @@ static bool kankin(void)
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number);
 				p_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level+1) * 300 * o_ptr->number;
 				p_ptr->redraw |= (PR_GOLD);
-				inven_item_increase(i, -o_ptr->number);
-				inven_item_describe(i);
-				inven_item_optimize(i);
+				vary_item(i, -o_ptr->number);
 				chg_virtue(p_ptr, V_JUSTICE, 5);
 				current_world_ptr->bounty_r_idx[j] += 10000;
 
@@ -1944,9 +1932,7 @@ static bool kankin(void)
 #endif /* Obsoleted */
 
 				/* Hand it first */
-				inven_item_increase(i, -o_ptr->number);
-				inven_item_describe(i);
-				inven_item_optimize(i);
+				vary_item(i, -o_ptr->number);
 
 				chg_virtue(p_ptr, V_JUSTICE, 5);
 				current_world_ptr->bounty_r_idx[j] += 10000;

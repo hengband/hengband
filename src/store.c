@@ -5138,10 +5138,7 @@ static void store_sell(void)
 		msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 		choice = 0;
 
-		/* Take it from the players p_ptr->inventory_list */
-		inven_item_increase(item, -amt);
-		inven_item_describe(item);
-		inven_item_optimize(item);
+		vary_item(item, -amt);
 		handle_stuff();
 
 		/* Let the home carry it */
@@ -5163,10 +5160,7 @@ static void store_sell(void)
 
 		choice = 0;
 
-		/* Take it from the players p_ptr->inventory_list */
-		inven_item_increase(item, -amt);
-		inven_item_describe(item);
-		inven_item_optimize(item);
+		vary_item(item, -amt);
 		handle_stuff();
 
 		/* Let the home carry it */
@@ -5915,10 +5909,7 @@ void do_cmd_store(void)
 
 				msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 
-				/* Remove it from the players p_ptr->inventory_list */
-				inven_item_increase(item, -255);
-				inven_item_describe(item);
-				inven_item_optimize(item);
+				vary_item(item, -255);
 				handle_stuff();
 
 				/* Let the home carry it */

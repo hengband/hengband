@@ -204,19 +204,7 @@ bool create_ammo(player_type *creature_ptr)
 		object_desc(o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
-		if (item >= 0)
-		{
-			inven_item_increase(item, -1);
-			inven_item_describe(item);
-			inven_item_optimize(item);
-		}
-		else
-		{
-			floor_item_increase(0 - item, -1);
-			floor_item_describe(0 - item);
-			floor_item_optimize(0 - item);
-		}
-
+		vary_item(item, -1);
 		slot = inven_carry(q_ptr);
 
 		/* Auto-inscription */
@@ -251,18 +239,7 @@ bool create_ammo(player_type *creature_ptr)
 		object_desc(o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
-		if (item >= 0)
-		{
-			inven_item_increase(item, -1);
-			inven_item_describe(item);
-			inven_item_optimize(item);
-		}
-		else
-		{
-			floor_item_increase(0 - item, -1);
-			floor_item_describe(0 - item);
-			floor_item_optimize(0 - item);
-		}
+		vary_item(item, -1);
 
 		slot = inven_carry(q_ptr);
 
@@ -349,21 +326,7 @@ bool import_magic_device(player_type *user_ptr)
 	object_desc(o_name, o_ptr, 0);
 	msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
 
-	/* Eliminate the item (from the pack) */
-	if (item >= 0)
-	{
-		inven_item_increase(item, -999);
-		inven_item_describe(item);
-		inven_item_optimize(item);
-	}
-
-	/* Eliminate the item (from the floor) */
-	else
-	{
-		floor_item_increase(0 - item, -999);
-		floor_item_describe(0 - item);
-		floor_item_optimize(0 - item);
-	}
+	vary_item(item, -999);
 	take_turn(user_ptr, 100);
 	return TRUE;
 }

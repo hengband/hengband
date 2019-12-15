@@ -218,22 +218,7 @@ bool cast_summon_greater_demon(void)
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
-
-		/* Decrease the item (from the pack) */
-		if (item >= 0)
-		{
-			inven_item_increase(item, -1);
-			inven_item_describe(item);
-			inven_item_optimize(item);
-		}
-
-		/* Decrease the item (from the floor) */
-		else
-		{
-			floor_item_increase(0 - item, -1);
-			floor_item_describe(0 - item);
-			floor_item_optimize(0 - item);
-		}
+		vary_item(item, -1);
 	}
 	else
 	{

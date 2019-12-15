@@ -582,22 +582,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 	}
 
 	sound(SOUND_SCROLL);
-
-	/* Destroy a scroll in the pack */
-	if (item >= 0)
-	{
-		inven_item_increase(item, -1);
-		inven_item_describe(item);
-		inven_item_optimize(item);
-	}
-
-	/* Destroy a scroll on the floor */
-	else
-	{
-		floor_item_increase(0 - item, -1);
-		floor_item_describe(0 - item);
-		floor_item_optimize(0 - item);
-	}
+	vary_item(item, -1);
 }
 
 /*!

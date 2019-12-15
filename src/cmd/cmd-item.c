@@ -342,7 +342,6 @@ void do_cmd_wield(player_type *creature_ptr)
 		inven_item_increase(item, -1);
 		inven_item_optimize(item);
 	}
-
 	/* Decrease the item (from the floor) */
 	else
 	{
@@ -723,21 +722,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 	/* Reduce the charges of rods/wands */
 	reduce_charges(o_ptr, amt);
 
-	/* Eliminate the item (from the pack) */
-	if (item >= 0)
-	{
-		inven_item_increase(item, -amt);
-		inven_item_describe(item);
-		inven_item_optimize(item);
-	}
-
-	/* Eliminate the item (from the floor) */
-	else
-	{
-		floor_item_increase(0 - item, -amt);
-		floor_item_describe(0 - item);
-		floor_item_optimize(0 - item);
-	}
+	vary_item(item, -amt);
 
 	if (item_tester_high_level_book(q_ptr))
 	{
@@ -963,21 +948,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
 		msg_print(_("ランプの油は一杯だ。", "Your lamp is full."));
 	}
 
-	/* Decrease the item (from the pack) */
-	if (item >= 0)
-	{
-		inven_item_increase(item, -1);
-		inven_item_describe(item);
-		inven_item_optimize(item);
-	}
-
-	/* Decrease the item (from the floor) */
-	else
-	{
-		floor_item_increase(0 - item, -1);
-		floor_item_describe(0 - item);
-		floor_item_optimize(0 - item);
-	}
+	vary_item(item, -1);
 
 	user_ptr->update |= (PU_TORCH);
 }
@@ -1038,21 +1009,7 @@ static void do_cmd_refill_torch(player_type *creature_ptr)
 		msg_print(_("松明はいっそう明るく輝いた。", "Your torch glows more brightly."));
 	}
 
-	/* Decrease the item (from the pack) */
-	if (item >= 0)
-	{
-		inven_item_increase(item, -1);
-		inven_item_describe(item);
-		inven_item_optimize(item);
-	}
-
-	/* Decrease the item (from the floor) */
-	else
-	{
-		floor_item_increase(0 - item, -1);
-		floor_item_describe(0 - item);
-		floor_item_optimize(0 - item);
-	}
+	vary_item(item, -1);
 
 	creature_ptr->update |= (PU_TORCH);
 }

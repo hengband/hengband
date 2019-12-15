@@ -488,6 +488,7 @@ extern void place_object(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool make_gold(object_type *j_ptr);
 extern void place_gold(POSITION y, POSITION x);
 extern OBJECT_IDX drop_near(object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
+extern void vary_item(INVENTORY_IDX item, ITEM_NUMBER num);
 extern void inven_item_charges(INVENTORY_IDX item);
 extern void inven_item_describe(INVENTORY_IDX item);
 extern void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);

@@ -1553,22 +1553,7 @@ bool alchemy(player_type *caster_ptr)
 		caster_ptr->window |= (PW_PLAYER);
 	}
 
-	/* Eliminate the item (from the pack) */
-	if (item >= 0)
-	{
-		inven_item_increase(item, -amt);
-		inven_item_describe(item);
-		inven_item_optimize(item);
-	}
-
-	/* Eliminate the item (from the floor) */
-	else
-	{
-		floor_item_increase(0 - item, -amt);
-		floor_item_describe(0 - item);
-		floor_item_optimize(0 - item);
-	}
-
+	vary_item(item, -amt);
 	return TRUE;
 }
 
@@ -2152,18 +2137,7 @@ bool recharge(int power)
 				if (o_ptr->tval == TV_ROD) o_ptr->timeout = (o_ptr->number - 1) * k_ptr->pval;
 				if (o_ptr->tval == TV_WAND) o_ptr->pval = 0;
 
-				if (item >= 0)
-				{
-					inven_item_increase(item, -1);
-					inven_item_describe(item);
-					inven_item_optimize(item);
-				}
-				else
-				{
-					floor_item_increase(0 - item, -1);
-					floor_item_describe(0 - item);
-					floor_item_optimize(0 - item);
-				}
+				vary_item(item, -1);
 			}
 
 			/* Destroy all members of a stack of objects. */
@@ -2174,18 +2148,7 @@ bool recharge(int power)
 				else
 					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-				if (item >= 0)
-				{
-					inven_item_increase(item, -999);
-					inven_item_describe(item);
-					inven_item_optimize(item);
-				}
-				else
-				{
-					floor_item_increase(0 - item, -999);
-					floor_item_describe(0 - item);
-					floor_item_optimize(0 - item);
-				}
+				vary_item(item, -999);
 			}
 		}
 	}
@@ -3215,18 +3178,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 					msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
 				}
 				
-				if (item >= 0)
-				{
-					inven_item_increase(item, -1);
-					inven_item_describe(item);
-					inven_item_optimize(item);
-				}
-				else
-				{
-					floor_item_increase(0 - item, -1);
-					floor_item_describe(0 - item);
-					floor_item_optimize(0 - item);
-				}
+				vary_item(item, -1);
 			}
 
 			/* Destroy all members of a stack of objects. */
@@ -3237,18 +3189,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 				else
 					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-				if (item >= 0)
-				{
-					inven_item_increase(item, -999);
-					inven_item_describe(item);
-					inven_item_optimize(item);
-				}
-				else
-				{
-					floor_item_increase(0 - item, -999);
-					floor_item_describe(0 - item);
-					floor_item_optimize(0 - item);
-				}
+				vary_item(item, -999);
 			}
 		}
 	}

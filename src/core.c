@@ -4329,11 +4329,7 @@ static void pack_overflow(player_type *owner_ptr)
 		/* Drop it (carefully) near the player */
 		(void)drop_near(o_ptr, 0, owner_ptr->y, owner_ptr->x);
 
-		/* Modify, Describe, Optimize */
-		inven_item_increase(INVEN_PACK, -255);
-		inven_item_describe(INVEN_PACK);
-		inven_item_optimize(INVEN_PACK);
-
+		vary_item(INVEN_PACK, -255);
 		handle_stuff();
 	}
 }

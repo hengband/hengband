@@ -4879,6 +4879,22 @@ void inven_item_describe(INVENTORY_IDX item)
 
 }
 
+void vary_item(INVENTORY_IDX item, ITEM_NUMBER num)
+{
+	if (item >= 0)
+	{
+		inven_item_increase(item, num);
+		inven_item_describe(item);
+		inven_item_optimize(item);
+	}
+	else
+	{
+		floor_item_increase(0 - item, num);
+		floor_item_describe(0 - item);
+		floor_item_optimize(0 - item);
+	}
+}
+
 /*!
  * @brief アイテムを増減させ残り所持数メッセージを表示する /
  * Increase the "number" of an item in the p_ptr->inventory_list
@@ -5477,10 +5493,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	/* Drop it near the player */
 	(void)drop_near(q_ptr, 0, p_ptr->y, p_ptr->x);
 
-	/* Modify, Describe, Optimize */
-	inven_item_increase(item, -amt);
-	inven_item_describe(item);
-	inven_item_optimize(item);
+	vary_item(item, -amt);
 }
 
 
