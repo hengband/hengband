@@ -3274,7 +3274,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 
 	/* Prompt for the minimum stats */
 	put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
-	put_str(_("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum is extremery rare."), 23, 2);
+	put_str(_("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum are extremely rare."), 23, 2);
 
 	if (creature_ptr->psex == SEX_MALE)
 	{
