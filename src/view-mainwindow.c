@@ -777,7 +777,7 @@ static void print_title(player_type *creature_ptr)
 static void print_level(player_type *creature_ptr)
 {
 	char tmp[32];
-	sprintf(tmp, "%5d", creature_ptr->lev);
+	sprintf(tmp, _("%5d", "%6d"), creature_ptr->lev);
 	if (creature_ptr->lev >= creature_ptr->max_plv)
 	{
 		put_str(_("レベル ", "LEVEL "), ROW_LEVEL, 0);
