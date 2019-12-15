@@ -258,7 +258,7 @@ extern void cast_shuffle(player_type *caster_ptr);
 extern void stop_mouth(void);
 extern bool_hack vampirism(player_type *caster_ptr);
 extern bool panic_hit(void);
-extern bool psychometry(void);
+extern bool psychometry(player_type *caster_ptr);
 extern bool draconian_breath(player_type *creature_ptr);
 extern bool android_inside_weapon(player_type *creature_ptr);
 extern bool create_ration(player_type *crature_ptr);

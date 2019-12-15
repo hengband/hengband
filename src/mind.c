@@ -1113,7 +1113,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 	case 7:
 		/* Psychometry */
 		if (plev < 25)
-			return psychometry();
+			return psychometry(caster_ptr);
 		else
 			return ident_spell(caster_ptr, FALSE);
 	case 8:

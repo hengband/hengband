@@ -3928,7 +3928,7 @@ bool panic_hit(void)
 }
 
 /*!
-* @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the p_ptr->inventory_list (or on the floor)
+* @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
 * @return なし
 * @note
 * currently this function allows pseudo-id of any object,
@@ -3939,7 +3939,7 @@ bool panic_hit(void)
 * good (Cure Light Wounds, Restore Strength, etc) or
 * bad (Poison, Weakness etc) or 'useless' (Slime Mold Juice, etc).
 */
-bool psychometry(void)
+bool psychometry(player_type *caster_ptr)
 {
 	OBJECT_IDX      item;
 	object_type *o_ptr;
@@ -3951,7 +3951,7 @@ bool psychometry(void)
 	q = _("どのアイテムを調べますか？", "Meditate on which item? ");
 	s = _("調べるアイテムがありません。", "You have nothing appropriate.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	/* It is fully known, no information needed */
@@ -3986,8 +3986,8 @@ bool psychometry(void)
 	o_ptr->feeling = feel;
 	o_ptr->marked |= OM_TOUCHED;
 
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	caster_ptr->update |= (PU_COMBINE | PU_REORDER);
+	caster_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	/* Valid "tval" codes */
 	switch (o_ptr->tval)
