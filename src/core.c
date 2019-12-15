@@ -4043,14 +4043,14 @@ static void process_command(player_type *creature_ptr)
 		/* Look around */
 		case 'l':
 		{
-			do_cmd_look();
+			do_cmd_look(creature_ptr);
 			break;
 		}
 
 		/* Target monster or location */
 		case '*':
 		{
-			do_cmd_target();
+			do_cmd_target(creature_ptr);
 			break;
 		}
 

@@ -1130,9 +1130,9 @@ void do_cmd_target(void)
  * Look command
  * @return なし
  */
-void do_cmd_look(void)
+void do_cmd_look(player_type *creature_ptr)
 {
-	p_ptr->window |= PW_MONSTER_LIST;
+	creature_ptr->window |= PW_MONSTER_LIST;
 	handle_stuff();
 
 	/* Look around */
