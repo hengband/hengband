@@ -913,7 +913,7 @@ void phlogiston(player_type *caster_ptr)
  * Bless a weapon
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
-bool bless_weapon(void)
+bool bless_weapon(player_type *caster_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -927,7 +927,7 @@ bool bless_weapon(void)
 	q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
 	s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -962,8 +962,8 @@ bool bless_weapon(void)
 		o_ptr->feeling = FEEL_NONE;
 
 		/* Recalculate the bonuses */
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->window |= (PW_EQUIP);
+		caster_ptr->update |= (PU_BONUS);
+		caster_ptr->window |= (PW_EQUIP);
 	}
 
 	/*
@@ -1046,9 +1046,9 @@ bool bless_weapon(void)
 		}
 	}
 
-	p_ptr->update |= (PU_BONUS);
-	p_ptr->window |= (PW_EQUIP | PW_PLAYER);
-	calc_android_exp(p_ptr);
+	caster_ptr->update |= (PU_BONUS);
+	caster_ptr->window |= (PW_EQUIP | PW_PLAYER);
+	calc_android_exp(caster_ptr);
 
 	return TRUE;
 }

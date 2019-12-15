@@ -415,7 +415,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		{
 			if (is_good_realm(creature_ptr->realm1))
 			{
-				if (!bless_weapon()) return FALSE;
+				if (!bless_weapon(creature_ptr)) return FALSE;
 			}
 			else
 			{
