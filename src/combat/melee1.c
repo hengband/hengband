@@ -2400,7 +2400,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (target_ptr->special_defense & KATA_IAI)
 	{
-		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, draw and cut in one motion before %s moved."), m_name);
+		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), m_name);
 		if (py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
 	}
 
