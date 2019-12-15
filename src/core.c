@@ -3095,7 +3095,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
  * / Handle certain things once every 10 game turns
  * @return なし
  */
-static void process_world(void)
+static void process_world(player_type *player_ptr)
 {
 	int day, hour, min;
 
@@ -3106,33 +3106,33 @@ static void process_world(void)
 	extract_day_hour_min(&day, &hour, &min);
 
 	/* Update dungeon feeling, and announce it if changed */
-	update_dungeon_feeling(p_ptr, p_ptr->current_floor_ptr);
+	update_dungeon_feeling(player_ptr, player_ptr->current_floor_ptr);
 
 	/* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
-	if (ironman_downward && (p_ptr->dungeon_idx != DUNGEON_ANGBAND && p_ptr->dungeon_idx != 0))
+	if (ironman_downward && (player_ptr->dungeon_idx != DUNGEON_ANGBAND && player_ptr->dungeon_idx != 0))
 	{
-		p_ptr->current_floor_ptr->dun_level = 0;
-		p_ptr->dungeon_idx = 0;
+		player_ptr->current_floor_ptr->dun_level = 0;
+		player_ptr->dungeon_idx = 0;
 		prepare_change_floor_mode(CFM_FIRST_FLOOR | CFM_RAND_PLACE);
-		p_ptr->current_floor_ptr->inside_arena = FALSE;
-		p_ptr->wild_mode = FALSE;
-		p_ptr->leaving = TRUE;
+		player_ptr->current_floor_ptr->inside_arena = FALSE;
+		player_ptr->wild_mode = FALSE;
+		player_ptr->leaving = TRUE;
 	}
 
 	/*** Check monster arena ***/
-	if (p_ptr->phase_out && !p_ptr->leaving)
+	if (player_ptr->phase_out && !player_ptr->leaving)
 	{
 		int i2, j2;
 		int win_m_idx = 0;
 		int number_mon = 0;
 
 		/* Count all hostile monsters */
-		for (i2 = 0; i2 < p_ptr->current_floor_ptr->width; ++i2)
-			for (j2 = 0; j2 < p_ptr->current_floor_ptr->height; j2++)
+		for (i2 = 0; i2 < player_ptr->current_floor_ptr->width; ++i2)
+			for (j2 = 0; j2 < player_ptr->current_floor_ptr->height; j2++)
 			{
-				grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[j2][i2];
+				grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[j2][i2];
 
-				if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != p_ptr->riding))
+				if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != player_ptr->riding))
 				{
 					number_mon++;
 					win_m_idx = g_ptr->m_idx;
@@ -3143,7 +3143,7 @@ static void process_world(void)
 		{
 			msg_print(_("相打ちに終わりました。", "They have kill each other at the same time."));
 			msg_print(NULL);
-			p_ptr->energy_need = 0;
+			player_ptr->energy_need = 0;
 			update_gambling_monsters();
 		}
 		else if ((number_mon-1) == 0)
@@ -3151,7 +3151,7 @@ static void process_world(void)
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *wm_ptr;
 
-			wm_ptr = &p_ptr->current_floor_ptr->m_list[win_m_idx];
+			wm_ptr = &player_ptr->current_floor_ptr->m_list[win_m_idx];
 
 			monster_desc(m_name, wm_ptr, 0);
 			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
@@ -3161,22 +3161,22 @@ static void process_world(void)
 			{
 				msg_print(_("おめでとうございます。", "Congratulations."));
 				msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
-				p_ptr->au += battle_odds;
+				player_ptr->au += battle_odds;
 			}
 			else
 			{
 				msg_print(_("残念でした。", "You lost gold."));
 			}
 			msg_print(NULL);
-			p_ptr->energy_need = 0;
+			player_ptr->energy_need = 0;
 			update_gambling_monsters();
 		}
-		else if (current_world_ptr->game_turn - p_ptr->current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
+		else if (current_world_ptr->game_turn - player_ptr->current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
 		{
 			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
-			p_ptr->au += kakekin;
+			player_ptr->au += kakekin;
 			msg_print(NULL);
-			p_ptr->energy_need = 0;
+			player_ptr->energy_need = 0;
 			update_gambling_monsters();
 		}
 	}
@@ -3185,13 +3185,13 @@ static void process_world(void)
 	if (current_world_ptr->game_turn % TURNS_PER_TICK) return;
 
 	/*** Attempt timed autosave ***/
-	if (autosave_t && autosave_freq && !p_ptr->phase_out)
+	if (autosave_t && autosave_freq && !player_ptr->phase_out)
 	{
 		if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
 			do_cmd_save_game(TRUE);
 	}
 
-	if (p_ptr->current_floor_ptr->monster_noise && !ignore_unview)
+	if (player_ptr->current_floor_ptr->monster_noise && !ignore_unview)
 	{
 		msg_print(_("何かが聞こえた。", "You hear noise."));
 	}
@@ -3199,7 +3199,7 @@ static void process_world(void)
 	/*** Handle the wilderness/town (sunshine) ***/
 
 	/* While in town/wilderness */
-	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->current_floor_ptr->inside_arena)
+	if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest && !player_ptr->phase_out && !player_ptr->current_floor_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
 		if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
@@ -3209,14 +3209,14 @@ static void process_world(void)
 			/* Check for dawn */
 			dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
 
-			if (dawn) day_break(p_ptr->current_floor_ptr);
-			else night_falls(p_ptr->current_floor_ptr);
+			if (dawn) day_break(player_ptr->current_floor_ptr);
+			else night_falls(player_ptr->current_floor_ptr);
 
 		}
 	}
 
 	/* While in the dungeon (vanilla_town or lite_town mode only) */
-	else if ((vanilla_town || (lite_town && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out && !p_ptr->current_floor_ptr->inside_arena)) && p_ptr->current_floor_ptr->dun_level)
+	else if ((vanilla_town || (lite_town && !player_ptr->current_floor_ptr->inside_quest && !player_ptr->phase_out && !player_ptr->current_floor_ptr->inside_arena)) && player_ptr->current_floor_ptr->dun_level)
 	{
 		/*** Shuffle the Storekeepers ***/
 
@@ -3266,25 +3266,25 @@ static void process_world(void)
 	/*** Process the monsters ***/
 
 	/* Check for creature generation. */
-	if (one_in_(d_info[p_ptr->dungeon_idx].max_m_alloc_chance) &&
-	    !p_ptr->current_floor_ptr->inside_arena && !p_ptr->current_floor_ptr->inside_quest && !p_ptr->phase_out)
+	if (one_in_(d_info[player_ptr->dungeon_idx].max_m_alloc_chance) &&
+	    !player_ptr->current_floor_ptr->inside_arena && !player_ptr->current_floor_ptr->inside_quest && !player_ptr->phase_out)
 	{
 		/* Make a new monster */
 		(void)alloc_monster(MAX_SIGHT + 5, 0);
 	}
 
 	/* Hack -- Check for creature regeneration */
-	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !p_ptr->phase_out) regen_monsters();
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out) regen_monsters();
 	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
 
-	if (!p_ptr->leaving)
+	if (!player_ptr->leaving)
 	{
 		int i;
 
 		/* Hack -- Process the counters of monsters if needed */
 		for (i = 0; i < MAX_MTIMED; i++)
 		{
-			if (p_ptr->current_floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(i);
+			if (player_ptr->current_floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(i);
 		}
 	}
 
@@ -3294,7 +3294,7 @@ static void process_world(void)
 	{
 		if (min != prev_min)
 		{
-			exe_write_diary(p_ptr, NIKKI_HIGAWARI, 0, NULL);
+			exe_write_diary(player_ptr, NIKKI_HIGAWARI, 0, NULL);
 			determine_today_mon(FALSE);
 		}
 	}
@@ -3310,7 +3310,7 @@ static void process_world(void)
 		/* Every 15 minutes after 11:00 pm */
 		if ((hour == 23) && !(min % 15))
 		{
-			disturb(p_ptr, FALSE, TRUE);
+			disturb(player_ptr, FALSE, TRUE);
 
 			switch (min / 15)
 			{
@@ -3336,35 +3336,35 @@ static void process_world(void)
 		if (!hour && !min)
 		{
 
-			disturb(p_ptr, TRUE, TRUE);
+			disturb(player_ptr, TRUE, TRUE);
 			msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
 
-			if (p_ptr->wild_mode)
+			if (player_ptr->wild_mode)
 			{
 				/* Go into large wilderness view */
-				p_ptr->oldpy = randint1(MAX_HGT - 2);
-				p_ptr->oldpx = randint1(MAX_WID - 2);
-				change_wild_mode(p_ptr, TRUE);
+				player_ptr->oldpy = randint1(MAX_HGT - 2);
+				player_ptr->oldpx = randint1(MAX_WID - 2);
+				change_wild_mode(player_ptr, TRUE);
 
 				/* Give first move to monsters */
-				take_turn(p_ptr, 100);
+				take_turn(player_ptr, 100);
 
 			}
 
-			p_ptr->invoking_midnight_curse = TRUE;
+			player_ptr->invoking_midnight_curse = TRUE;
 		}
 	}
 
-	process_world_aux_digestion(p_ptr);
-	process_world_aux_hp_and_sp(p_ptr);
-	process_world_aux_timeout(p_ptr);
-	process_world_aux_light(p_ptr);
-	process_world_aux_mutation(p_ptr);
-	process_world_aux_curse(p_ptr);
-	process_world_aux_recharge(p_ptr);
-	sense_inventory1(p_ptr);
-	sense_inventory2(p_ptr);
-	process_world_aux_movement(p_ptr);
+	process_world_aux_digestion(player_ptr);
+	process_world_aux_hp_and_sp(player_ptr);
+	process_world_aux_timeout(player_ptr);
+	process_world_aux_light(player_ptr);
+	process_world_aux_mutation(player_ptr);
+	process_world_aux_curse(player_ptr);
+	process_world_aux_recharge(player_ptr);
+	sense_inventory1(player_ptr);
+	sense_inventory2(player_ptr);
+	process_world_aux_movement(player_ptr);
 }
 
 /*!
@@ -5099,7 +5099,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		if (!player_ptr->playing || player_ptr->is_dead) break;
 
 		/* Process the world */
-		process_world();
+		process_world(player_ptr);
 
 		handle_stuff();
 
