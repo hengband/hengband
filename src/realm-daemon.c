@@ -516,7 +516,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				discharge_minion();
+				discharge_minion(caster_ptr);
 			}
 		}
 		break;

@@ -1366,26 +1366,26 @@ bool probing(void)
  * @brief ペット爆破処理 /
  * @return なし
  */
-void discharge_minion(void)
+void discharge_minion(player_type *caster_ptr)
 {
 	MONSTER_IDX i;
 	bool okay = TRUE;
 
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!m_ptr->r_idx || !is_pet(m_ptr)) continue;
 		if (m_ptr->nickname) okay = FALSE;
 	}
-	if (!okay || p_ptr->riding)
+	if (!okay || caster_ptr->riding)
 	{
 		if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? ")))
 			return;
 	}
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		HIT_POINT dam;
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr;
 
 		if (!m_ptr->r_idx || !is_pet(m_ptr)) continue;
@@ -1404,7 +1404,7 @@ void discharge_minion(void)
 		if (dam > 100) dam = (dam - 100) / 2 + 100;
 		if (dam > 400) dam = (dam - 400) / 2 + 400;
 		if (dam > 800) dam = 800;
-		project(p_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, 
+		project(caster_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, 
 			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 
 		if (record_named_pet && m_ptr->nickname)
@@ -1412,7 +1412,7 @@ void discharge_minion(void)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
+			exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
 		}
 
 		delete_monster_idx(i);
