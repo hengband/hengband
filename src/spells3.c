@@ -532,21 +532,21 @@ void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 }
 
 
-void teleport_away_followable(MONSTER_IDX m_idx)
+void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &tracer_ptr->current_floor_ptr->m_list[m_idx];
 	POSITION oldfy = m_ptr->fy;
 	POSITION oldfx = m_ptr->fx;
 	bool old_ml = m_ptr->ml;
 	POSITION old_cdis = m_ptr->cdis;
 
-	teleport_away(p_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
+	teleport_away(tracer_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
 
-	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !p_ptr->phase_out && los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, oldfy, oldfx))
+	if (old_ml && (old_cdis <= MAX_SIGHT) && !current_world_ptr->timewalk_m_idx && !tracer_ptr->phase_out && los(tracer_ptr->current_floor_ptr, tracer_ptr->y, tracer_ptr->x, oldfy, oldfx))
 	{
 		bool follow = FALSE;
 
-		if ((p_ptr->muta1 & MUT1_VTELEPORT) || (p_ptr->pclass == CLASS_IMITATOR)) follow = TRUE;
+		if ((tracer_ptr->muta1 & MUT1_VTELEPORT) || (tracer_ptr->pclass == CLASS_IMITATOR)) follow = TRUE;
 		else
 		{
 			BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -555,7 +555,7 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 
 			for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 			{
-				o_ptr = &p_ptr->inventory_list[i];
+				o_ptr = &tracer_ptr->inventory_list[i];
 				if (o_ptr->k_idx && !object_is_cursed(o_ptr))
 				{
 					object_flags(o_ptr, flgs);
@@ -574,11 +574,11 @@ void teleport_away_followable(MONSTER_IDX m_idx)
 			{
 				if (one_in_(3))
 				{
-					teleport_player(p_ptr, 200, TELEPORT_PASSIVE);
+					teleport_player(tracer_ptr, 200, TELEPORT_PASSIVE);
 					msg_print(_("失敗！", "Failed!"));
 				}
-				else teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, 0L);
-				p_ptr->energy_need += ENERGY_NEED();
+				else teleport_player_to(tracer_ptr, m_ptr->fy, m_ptr->fx, 0L);
+				tracer_ptr->energy_need += ENERGY_NEED();
 			}
 		}
 	}

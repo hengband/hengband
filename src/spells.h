@@ -289,7 +289,7 @@ extern bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLA
 extern void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode);
 extern void teleport_player_away(MONSTER_IDX m_idx, POSITION dis);
 extern void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mode);
-extern void teleport_away_followable(MONSTER_IDX m_idx);
+extern void teleport_away_followable(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool teleport_level_other(player_type *caster_ptr);
 extern void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool recall_player(player_type *creature_ptr, TIME_EFFECT turns);

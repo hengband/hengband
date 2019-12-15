@@ -1906,7 +1906,7 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 		if(see_monster(m_idx))
 			msg_format(_("%^sがテレポートした。", "%^s teleports away."), m_name);
 
-		teleport_away_followable(m_idx);
+		teleport_away_followable(p_ptr, m_idx);
 	}
 }
 
