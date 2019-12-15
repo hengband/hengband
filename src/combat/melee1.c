@@ -2213,7 +2213,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 
 	if (d_info[attacker_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 	{
-		msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
+		msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
 		return FALSE;
 	}
 
