@@ -338,7 +338,7 @@ void dispel_player(player_type *creature_ptr)
 
 	if (music_singing_any(creature_ptr) || hex_spelling_any(creature_ptr))
 	{
-		concptr str = (music_singing_any(creature_ptr)) ? _("歌", "singing") : _("呪文", "spelling");
+		concptr str = (music_singing_any(creature_ptr)) ? _("歌", "singing") : _("呪文", "casting");
 		INTERUPTING_SONG_EFFECT(creature_ptr) = SINGING_SONG_EFFECT(creature_ptr);
 		SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
