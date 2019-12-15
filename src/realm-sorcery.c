@@ -516,7 +516,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 		{
 			if (cast)
 			{
-				if (!alchemy()) return NULL;
+				if (!alchemy(caster_ptr)) return NULL;
 			}
 		}
 		break;

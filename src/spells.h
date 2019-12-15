@@ -302,7 +302,7 @@ extern void reserve_alter_reality(player_type *caster_ptr);
 extern void identify_pack(void);
 extern int remove_curse(player_type *caster_ptr);
 extern int remove_all_curse(player_type *caster_ptr);
-extern bool alchemy(void);
+extern bool alchemy(player_type *caster_ptr);
 
 extern bool artifact_scroll(void);
 extern bool ident_spell(player_type *caster_ptr, bool only_equip);

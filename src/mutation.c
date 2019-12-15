@@ -2204,7 +2204,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_MIDAS_TCH:
-			if (!alchemy()) return FALSE;
+			if (!alchemy(creature_ptr)) return FALSE;
 			break;
 
 		/* Summon pet molds around the player */

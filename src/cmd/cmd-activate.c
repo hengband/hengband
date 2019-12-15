@@ -1520,7 +1520,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_ALCHEMY:
 	{
 		msg_print(_("明るい黄色に輝いている...", "It glows bright yellow..."));
-		(void)alchemy();
+		(void)alchemy(user_ptr);
 		break;
 	}
 

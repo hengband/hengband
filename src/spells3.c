@@ -1478,7 +1478,7 @@ int remove_all_curse(player_type *caster_ptr)
  * Turns an object into gold, gain some of its value in a shop
  * @return 処理が実際に行われたらTRUEを返す
  */
-bool alchemy(void)
+bool alchemy(player_type *caster_ptr)
 {
 	OBJECT_IDX item;
 	int amt = 1;
@@ -1497,7 +1497,7 @@ bool alchemy(void)
 	q = _("どのアイテムを金に変えますか？", "Turn which item to gold? ");
 	s = _("金に変えられる物がありません。", "You have nothing to current_world_ptr->game_turn to gold.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return (FALSE);
 
 	/* See how many items */
@@ -1548,9 +1548,9 @@ bool alchemy(void)
 		if (price > 30000) price = 30000;
 		msg_format(_("%sを＄%d の金に変えた。", "You current_world_ptr->game_turn %s to %ld coins worth of gold."), o_name, price);
 
-		p_ptr->au += price;
-		p_ptr->redraw |= (PR_GOLD);
-		p_ptr->window |= (PW_PLAYER);
+		caster_ptr->au += price;
+		caster_ptr->redraw |= (PR_GOLD);
+		caster_ptr->window |= (PW_PLAYER);
 	}
 
 	/* Eliminate the item (from the pack) */
