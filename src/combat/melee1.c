@@ -4069,7 +4069,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		monster_desc(target_ptr, m_target_name, m_ptr, 0);
 
 		target_ptr->csp -= 7;
-		msg_format(_("%^sに反撃した！", "Your counterattacked to %s!"), m_target_name);
+		msg_format(_("%^sに反撃した！", "You counterattacked to %s!"), m_target_name);
 		py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
 		target_ptr->redraw |= (PR_MANA);
