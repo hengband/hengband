@@ -4894,18 +4894,18 @@ static void process_player(player_type *creature_ptr)
  * the user dies, or the game is terminated.\n
  * </p>
  */
-static void dungeon(bool load_game)
+static void dungeon(player_type *player_ptr, bool load_game)
 {
 	int quest_num = 0;
 
 	/* Set the base level */
-	p_ptr->current_floor_ptr->base_level = p_ptr->current_floor_ptr->dun_level;
+	player_ptr->current_floor_ptr->base_level = player_ptr->current_floor_ptr->dun_level;
 
 	/* Reset various flags */
 	current_world_ptr->is_loading_now = FALSE;
 
 	/* Not leaving */
-	p_ptr->leaving = FALSE;
+	player_ptr->leaving = FALSE;
 
 	/* Reset the "command" vars */
 	command_cmd = 0;
@@ -4921,9 +4921,9 @@ static void dungeon(bool load_game)
 
 	/* Cancel the target */
 	target_who = 0;
-	p_ptr->pet_t_m_idx = 0;
-	p_ptr->riding_t_m_idx = 0;
-	p_ptr->ambush_flag = FALSE;
+	player_ptr->pet_t_m_idx = 0;
+	player_ptr->riding_t_m_idx = 0;
+	player_ptr->ambush_flag = FALSE;
 
 	/* Cancel the health bar */
 	health_track(0);
@@ -4933,10 +4933,10 @@ static void dungeon(bool load_game)
 	repair_objects = TRUE;
 
 
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(player_ptr, TRUE, TRUE);
 
 	/* Get index of current quest (if any) */
-	quest_num = quest_number(p_ptr->current_floor_ptr->dun_level);
+	quest_num = quest_number(player_ptr->current_floor_ptr->dun_level);
 
 	/* Inside a quest? */
 	if (quest_num)
@@ -4946,20 +4946,20 @@ static void dungeon(bool load_game)
 	}
 
 	/* Track maximum player level */
-	if (p_ptr->max_plv < p_ptr->lev)
+	if (player_ptr->max_plv < player_ptr->lev)
 	{
-		p_ptr->max_plv = p_ptr->lev;
+		player_ptr->max_plv = player_ptr->lev;
 	}
 
 
 	/* Track maximum dungeon level (if not in quest -KMW-) */
-	if ((max_dlv[p_ptr->dungeon_idx] < p_ptr->current_floor_ptr->dun_level) && !p_ptr->current_floor_ptr->inside_quest)
+	if ((max_dlv[player_ptr->dungeon_idx] < player_ptr->current_floor_ptr->dun_level) && !player_ptr->current_floor_ptr->inside_quest)
 	{
-		max_dlv[p_ptr->dungeon_idx] = p_ptr->current_floor_ptr->dun_level;
-		if (record_maxdepth) exe_write_diary(p_ptr, NIKKI_MAXDEAPTH, p_ptr->current_floor_ptr->dun_level, NULL);
+		max_dlv[player_ptr->dungeon_idx] = player_ptr->current_floor_ptr->dun_level;
+		if (record_maxdepth) exe_write_diary(player_ptr, NIKKI_MAXDEAPTH, player_ptr->current_floor_ptr->dun_level, NULL);
 	}
 
-	(void)calculate_upkeep(p_ptr);
+	(void)calculate_upkeep(player_ptr);
 
 	/* Validate the panel */
 	panel_bounds_center();
@@ -4973,29 +4973,29 @@ static void dungeon(bool load_game)
 	/* Enter "xtra" mode */
 	current_world_ptr->character_xtra = TRUE;
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
-	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
+	player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
+	player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
+	player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 	handle_stuff();
 
 	/* Leave "xtra" mode */
 	current_world_ptr->character_xtra = FALSE;
 
-	p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
+	player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+	player_ptr->update |= (PU_COMBINE | PU_REORDER);
 	handle_stuff();
 	Term_fresh();
 
 	if (quest_num && (is_fixed_quest_idx(quest_num) &&
 	    !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
-	    !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling(p_ptr);
+	    !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling(player_ptr);
 
-	if (p_ptr->phase_out)
+	if (player_ptr->phase_out)
 	{
 		if (load_game)
 		{
-			p_ptr->energy_need = 0;
+			player_ptr->energy_need = 0;
 			update_gambling_monsters();
 		}
 		else
@@ -5005,50 +5005,50 @@ static void dungeon(bool load_game)
 		}
 	}
 
-	if ((p_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(p_ptr) > MUSIC_DETECT))
-		SINGING_SONG_EFFECT(p_ptr) = MUSIC_DETECT;
+	if ((player_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(player_ptr) > MUSIC_DETECT))
+		SINGING_SONG_EFFECT(player_ptr) = MUSIC_DETECT;
 
 	/* Hack -- notice death or departure */
-	if (!p_ptr->playing || p_ptr->is_dead) return;
+	if (!player_ptr->playing || player_ptr->is_dead) return;
 
 	/* Print quest message if appropriate */
-	if (!p_ptr->current_floor_ptr->inside_quest && (p_ptr->dungeon_idx == DUNGEON_ANGBAND))
+	if (!player_ptr->current_floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND))
 	{
-		quest_discovery(random_quest_number(p_ptr->current_floor_ptr->dun_level));
-		p_ptr->current_floor_ptr->inside_quest = random_quest_number(p_ptr->current_floor_ptr->dun_level);
+		quest_discovery(random_quest_number(player_ptr->current_floor_ptr->dun_level));
+		player_ptr->current_floor_ptr->inside_quest = random_quest_number(player_ptr->current_floor_ptr->dun_level);
 	}
-	if ((p_ptr->current_floor_ptr->dun_level == d_info[p_ptr->dungeon_idx].maxdepth) && d_info[p_ptr->dungeon_idx].final_guardian)
+	if ((player_ptr->current_floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian)
 	{
-		if (r_info[d_info[p_ptr->dungeon_idx].final_guardian].max_num)
+		if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
 #ifdef JP
 			msg_format("この階には%sの主である%sが棲んでいる。",
-				   d_name+d_info[p_ptr->dungeon_idx].name, 
-				   r_name+r_info[d_info[p_ptr->dungeon_idx].final_guardian].name);
+				   d_name+d_info[player_ptr->dungeon_idx].name, 
+				   r_name+r_info[d_info[player_ptr->dungeon_idx].final_guardian].name);
 #else
 			msg_format("%^s lives in this level as the keeper of %s.",
-					   r_name+r_info[d_info[p_ptr->dungeon_idx].final_guardian].name, 
-					   d_name+d_info[p_ptr->dungeon_idx].name);
+					   r_name+r_info[d_info[player_ptr->dungeon_idx].final_guardian].name, 
+					   d_name+d_info[player_ptr->dungeon_idx].name);
 #endif
 	}
 
-	if (!load_game && (p_ptr->special_defense & NINJA_S_STEALTH)) set_superstealth(p_ptr, FALSE);
+	if (!load_game && (player_ptr->special_defense & NINJA_S_STEALTH)) set_superstealth(player_ptr, FALSE);
 
 	/*** Process this dungeon level ***/
 
 	/* Reset the monster generation level */
-	p_ptr->current_floor_ptr->monster_level = p_ptr->current_floor_ptr->base_level;
+	player_ptr->current_floor_ptr->monster_level = player_ptr->current_floor_ptr->base_level;
 
 	/* Reset the object generation level */
-	p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
+	player_ptr->current_floor_ptr->object_level = player_ptr->current_floor_ptr->base_level;
 
 	current_world_ptr->is_loading_now = TRUE;
 
-	if (p_ptr->energy_need > 0 && !p_ptr->phase_out &&
-	    (p_ptr->current_floor_ptr->dun_level || p_ptr->leaving_dungeon || p_ptr->current_floor_ptr->inside_arena))
-		p_ptr->energy_need = 0;
+	if (player_ptr->energy_need > 0 && !player_ptr->phase_out &&
+	    (player_ptr->current_floor_ptr->dun_level || player_ptr->leaving_dungeon || player_ptr->current_floor_ptr->inside_arena))
+		player_ptr->energy_need = 0;
 
 	/* Not leaving dungeon */
-	p_ptr->leaving_dungeon = FALSE;
+	player_ptr->leaving_dungeon = FALSE;
 
 	/* Initialize monster process */
 	mproc_init();
@@ -5057,32 +5057,32 @@ static void dungeon(bool load_game)
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((p_ptr->current_floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !p_ptr->phase_out) compact_monsters(64);
+		if ((player_ptr->current_floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out) compact_monsters(64);
 
 		/* Hack -- Compress the monster list occasionally */
-		if ((p_ptr->current_floor_ptr->m_cnt + 32 < p_ptr->current_floor_ptr->m_max) && !p_ptr->phase_out) compact_monsters(0);
+		if ((player_ptr->current_floor_ptr->m_cnt + 32 < player_ptr->current_floor_ptr->m_max) && !player_ptr->phase_out) compact_monsters(0);
 
 
 		/* Hack -- Compact the object list occasionally */
-		if (p_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(64);
+		if (player_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(64);
 
 		/* Hack -- Compress the object list occasionally */
-		if (p_ptr->current_floor_ptr->o_cnt + 32 < p_ptr->current_floor_ptr->o_max) compact_objects(0);
+		if (player_ptr->current_floor_ptr->o_cnt + 32 < player_ptr->current_floor_ptr->o_max) compact_objects(0);
 
 		/* Process the player */
-		process_player(p_ptr);
+		process_player(player_ptr);
 		process_upkeep_with_speed();
 
 		handle_stuff();
 
 		/* Hack -- Hilite the player */
-		move_cursor_relative(p_ptr->y, p_ptr->x);
+		move_cursor_relative(player_ptr->y, player_ptr->x);
 
 		/* Optional fresh */
 		if (fresh_after) Term_fresh();
 
 		/* Hack -- Notice death or departure */
-		if (!p_ptr->playing || p_ptr->is_dead) break;
+		if (!player_ptr->playing || player_ptr->is_dead) break;
 
 		/* Process all of the monsters */
 		process_monsters();
@@ -5090,13 +5090,13 @@ static void dungeon(bool load_game)
 		handle_stuff();
 
 		/* Hack -- Hilite the player */
-		move_cursor_relative(p_ptr->y, p_ptr->x);
+		move_cursor_relative(player_ptr->y, player_ptr->x);
 
 		/* Optional fresh */
 		if (fresh_after) Term_fresh();
 
 		/* Hack -- Notice death or departure */
-		if (!p_ptr->playing || p_ptr->is_dead) break;
+		if (!player_ptr->playing || player_ptr->is_dead) break;
 
 		/* Process the world */
 		process_world();
@@ -5104,27 +5104,27 @@ static void dungeon(bool load_game)
 		handle_stuff();
 
 		/* Hack -- Hilite the player */
-		move_cursor_relative(p_ptr->y, p_ptr->x);
+		move_cursor_relative(player_ptr->y, player_ptr->x);
 
 		/* Optional fresh */
 		if (fresh_after) Term_fresh();
 
 		/* Hack -- Notice death or departure */
-		if (!p_ptr->playing || p_ptr->is_dead) break;
+		if (!player_ptr->playing || player_ptr->is_dead) break;
 
 		/* Count game turns */
 		current_world_ptr->game_turn++;
 
 		if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
 		{
-			if (!p_ptr->wild_mode || wild_regen) current_world_ptr->dungeon_turn++;
-			else if (p_ptr->wild_mode && !(current_world_ptr->game_turn % ((MAX_HGT + MAX_WID) / 2))) current_world_ptr->dungeon_turn++;
+			if (!player_ptr->wild_mode || wild_regen) current_world_ptr->dungeon_turn++;
+			else if (player_ptr->wild_mode && !(current_world_ptr->game_turn % ((MAX_HGT + MAX_WID) / 2))) current_world_ptr->dungeon_turn++;
 		}
 
 		prevent_turn_overflow();
 
 		/* Handle "leaving" */
-		if (p_ptr->leaving) break;
+		if (player_ptr->leaving) break;
 
 		if (wild_regen) wild_regen--;
 	}
@@ -5137,13 +5137,13 @@ static void dungeon(bool load_game)
 	}
 
 	/* Not save-and-quit and not dead? */
-	if (p_ptr->playing && !p_ptr->is_dead)
+	if (player_ptr->playing && !player_ptr->is_dead)
 	{
 		/*
 		 * Maintain Unique monsters and artifact, save current
 		 * floor, then prepare next floor
 		 */
-		leave_floor(p_ptr);
+		leave_floor(player_ptr);
 
 		/* Forget the flag */
 		reinit_wilderness = FALSE;
@@ -5602,7 +5602,7 @@ void play_game(bool new_game)
 	while (TRUE)
 	{
 		/* Process the level */
-		dungeon(load_game);
+		dungeon(p_ptr, load_game);
 
 		/* Hack -- prevent "icky" message */
 		current_world_ptr->character_xtra = TRUE;
