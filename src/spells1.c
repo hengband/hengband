@@ -1130,14 +1130,17 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * "flg" was added.
  * </pre>
  */
-static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
+
+
+
+static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
 {
 	int tmp;
 
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-	monster_type *caster_ptr = (who > 0) ? &floor_ptr->m_list[who] : NULL;
+	monster_type *m_caster_ptr = (who > 0) ? &floor_ptr->m_list[who] : NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1153,7 +1156,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 	bool obvious = FALSE;
 
 	/* Can the player know about this effect? */
-	bool known = ((m_ptr->cdis <= MAX_SIGHT) || p_ptr->phase_out);
+	bool known = ((m_ptr->cdis <= MAX_SIGHT) || caster_ptr->phase_out);
 
 	/* Were the effects "irrelevant"? */
 	bool skipped = FALSE;
@@ -1196,14 +1199,14 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 	/* Assume a default death */
 	concptr note_dies = extract_note_dies(real_r_idx(m_ptr));
 
-	DEPTH caster_lev = (who > 0) ? r_info[caster_ptr->r_idx].level : (p_ptr->lev * 2);
+	DEPTH caster_lev = (who > 0) ? r_info[m_caster_ptr->r_idx].level : (caster_ptr->lev * 2);
 
 	/* Nobody here */
 	if (!g_ptr->m_idx) return (FALSE);
 
 	/* Never affect projector */
 	if (who && (g_ptr->m_idx == who)) return (FALSE);
-	if ((g_ptr->m_idx == p_ptr->riding) && !who && !(typ == GF_OLD_HEAL) && !(typ == GF_OLD_SPEED) && !(typ == GF_STAR_HEAL)) return (FALSE);
+	if ((g_ptr->m_idx == caster_ptr->riding) && !who && !(typ == GF_OLD_HEAL) && !(typ == GF_OLD_SPEED) && !(typ == GF_STAR_HEAL)) return (FALSE);
 	if (sukekaku && ((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) return FALSE;
 
 	/* Don't affect already death monsters */
@@ -1220,7 +1223,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 	/* Get the monster possessive ("his"/"her"/"its") */
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-	if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
+	if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding)) disturb(caster_ptr, TRUE, TRUE);
 
 	if (r_ptr->flagsr & RFR_RES_ALL &&
 		typ != GF_OLD_CLONE && typ != GF_STAR_HEAL && typ != GF_OLD_HEAL
@@ -1621,7 +1624,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			if (!resist_tele) do_dist = 10;
 			else do_dist = 0;
-			if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_dist = 0;
+			if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding)) do_dist = 0;
 
 			if (r_ptr->flagsr & RFR_RES_GRAV)
 			{
@@ -1694,7 +1697,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (seen) obvious = TRUE;
 
 			/* PSI only works if the monster can see you! -- RG */
-			if (!(los(floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x)))
+			if (!(los(floor_ptr, m_ptr->fy, m_ptr->fx, caster_ptr->y, caster_ptr->x)))
 			{
 				if (seen_msg)
 					msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
@@ -1720,7 +1723,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				 * attacks back on them
 				 */
 				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-					(r_ptr->level > p_ptr->lev / 2) &&
+					(r_ptr->level > caster_ptr->lev / 2) &&
 					one_in_(2))
 				{
 					note = NULL;
@@ -1729,7 +1732,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 							"%^ss corrupted mind backlashes your attack!")), m_name);
 
 					/* Saving throw */
-					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW(p_ptr))
+					if ((randint0(100 + r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
 					{
 						msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 					}
@@ -1737,28 +1740,28 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 					{
 						/* Injure +/- confusion */
 						monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
-						take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
-						if (one_in_(4) && !CHECK_MULTISHADOW(p_ptr))
+						take_hit(caster_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
+						if (one_in_(4) && !CHECK_MULTISHADOW(caster_ptr))
 						{
 							switch (randint1(4))
 							{
 							case 1:
-								set_confused(p_ptr, p_ptr->confused + 3 + randint1(dam));
+								set_confused(caster_ptr, caster_ptr->confused + 3 + randint1(dam));
 								break;
 							case 2:
-								set_stun(p_ptr, p_ptr->stun + randint1(dam));
+								set_stun(caster_ptr, caster_ptr->stun + randint1(dam));
 								break;
 							case 3:
 							{
 								if (r_ptr->flags3 & RF3_NO_FEAR)
 									note = _("には効果がなかった。", " is unaffected.");
 								else
-									set_afraid(p_ptr, p_ptr->afraid + 3 + randint1(dam));
+									set_afraid(caster_ptr, caster_ptr->afraid + 3 + randint1(dam));
 								break;
 							}
 							default:
-								if (!p_ptr->free_act)
-									(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(dam));
+								if (!caster_ptr->free_act)
+									(void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(dam));
 								break;
 							}
 						}
@@ -1811,7 +1814,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				 * attacks back on them
 				 */
 				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-					(r_ptr->level > p_ptr->lev / 2) &&
+					(r_ptr->level > caster_ptr->lev / 2) &&
 					(one_in_(2)))
 				{
 					note = NULL;
@@ -1819,7 +1822,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 						(seen ? "%^s's corrupted mind backlashes your attack!" :
 							"%^ss corrupted mind backlashes your attack!")), m_name);
 					/* Saving throw */
-					if ((randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav) && !CHECK_MULTISHADOW(p_ptr))
+					if ((randint0(100 + r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
 					{
 						msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
 					}
@@ -1827,15 +1830,15 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 					{
 						/* Injure + mana drain */
 						monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
-						if (!CHECK_MULTISHADOW(p_ptr))
+						if (!CHECK_MULTISHADOW(caster_ptr))
 						{
 							msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
-							p_ptr->csp -= damroll(5, dam) / 2;
-							if (p_ptr->csp < 0) p_ptr->csp = 0;
-							p_ptr->redraw |= PR_MANA;
-							p_ptr->window |= (PW_SPELL);
+							caster_ptr->csp -= damroll(5, dam) / 2;
+							if (caster_ptr->csp < 0) caster_ptr->csp = 0;
+							caster_ptr->redraw |= PR_MANA;
+							caster_ptr->window |= (PW_SPELL);
 						}
-						take_hit(p_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
+						take_hit(caster_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 					}
 					dam = 0;
 				}
@@ -1843,16 +1846,16 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			else if (dam > 0)
 			{
 				int b = damroll(5, dam) / 4;
-				concptr str = (p_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
+				concptr str = (caster_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
 				concptr msg = _("あなたは%sの苦痛を%sに変換した！",
 					(seen ? "You convert %s's pain into %s!" :
 						"You convert %ss pain into %s!"));
 				msg_format(msg, m_name, str);
 
-				b = MIN(p_ptr->msp, p_ptr->csp + b);
-				p_ptr->csp = b;
-				p_ptr->redraw |= PR_MANA;
-				p_ptr->window |= (PW_SPELL);
+				b = MIN(caster_ptr->msp, caster_ptr->csp + b);
+				caster_ptr->csp = b;
+				caster_ptr->redraw |= PR_MANA;
+				caster_ptr->window |= (PW_SPELL);
 			}
 			note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 			break;
@@ -1863,7 +1866,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (seen) obvious = TRUE;
 			if (one_in_(4))
 			{
-				if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_dist = 0;
+				if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding)) do_dist = 0;
 				else do_dist = 7;
 			}
 
@@ -1919,7 +1922,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				 * attacks back on them
 				 */
 				if ((r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) &&
-					(r_ptr->level > p_ptr->lev / 2) &&
+					(r_ptr->level > caster_ptr->lev / 2) &&
 					(one_in_(2)))
 				{
 					note = NULL;
@@ -1928,7 +1931,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 							"%^ss corrupted mind backlashes your attack!")), m_name);
 
 					/* Saving throw */
-					if (randint0(100 + r_ptr->level / 2) < p_ptr->skill_sav)
+					if (randint0(100 + r_ptr->level / 2) < caster_ptr->skill_sav)
 					{
 						msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 					}
@@ -1938,17 +1941,17 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 						switch (randint1(4))
 						{
 						case 1:
-							set_stun(p_ptr, p_ptr->stun + dam / 2);
+							set_stun(caster_ptr, caster_ptr->stun + dam / 2);
 							break;
 						case 2:
-							set_confused(p_ptr, p_ptr->confused + dam / 2);
+							set_confused(caster_ptr, caster_ptr->confused + dam / 2);
 							break;
 						default:
 						{
 							if (r_ptr->flags3 & RF3_NO_FEAR)
 								note = _("には効果がなかった。", " is unaffected.");
 							else
-								set_afraid(p_ptr, p_ptr->afraid + dam);
+								set_afraid(caster_ptr, caster_ptr->afraid + dam);
 						}
 						}
 					}
@@ -1962,7 +1965,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 			else
 			{
-				if (!common_saving_throw_charm(p_ptr, dam, m_ptr))
+				if (!common_saving_throw_charm(caster_ptr, dam, m_ptr))
 				{
 					note = _("があなたに隷属した。", " is in your thrall!");
 					set_pet(m_ptr);
@@ -2128,8 +2131,8 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (!dam)
 			{
 				/* Redraw (later) if needed */
-				if (p_ptr->health_who == g_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-				if (p_ptr->riding == g_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
+				if (caster_ptr->health_who == g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
+				if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 				break;
 			}
 
@@ -2165,34 +2168,34 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			if (!who)
 			{
-				chg_virtue(p_ptr, V_VITALITY, 1);
+				chg_virtue(caster_ptr, V_VITALITY, 1);
 
 				if (r_ptr->flags1 & RF1_UNIQUE)
-					chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
+					chg_virtue(caster_ptr, V_INDIVIDUALISM, 1);
 
 				if (is_friendly(m_ptr))
-					chg_virtue(p_ptr, V_HONOUR, 1);
+					chg_virtue(caster_ptr, V_HONOUR, 1);
 				else if (!(r_ptr->flags3 & RF3_EVIL))
 				{
 					if (r_ptr->flags3 & RF3_GOOD)
-						chg_virtue(p_ptr, V_COMPASSION, 2);
+						chg_virtue(caster_ptr, V_COMPASSION, 2);
 					else
-						chg_virtue(p_ptr, V_COMPASSION, 1);
+						chg_virtue(caster_ptr, V_COMPASSION, 1);
 				}
 
 				if (r_ptr->flags3 & RF3_ANIMAL)
-					chg_virtue(p_ptr, V_NATURE, 1);
+					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
 			if (m_ptr->r_idx == MON_LEPER)
 			{
 				heal_leper = TRUE;
-				if (!who) chg_virtue(p_ptr, V_COMPASSION, 5);
+				if (!who) chg_virtue(caster_ptr, V_COMPASSION, 5);
 			}
 
 			/* Redraw (later) if needed */
-			if (p_ptr->health_who == g_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == g_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
+			if (caster_ptr->health_who == g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
+			if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 
 			note = _("は体力を回復したようだ。", " looks healthier.");
 
@@ -2216,9 +2219,9 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (!who)
 			{
 				if (r_ptr->flags1 & RF1_UNIQUE)
-					chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
+					chg_virtue(caster_ptr, V_INDIVIDUALISM, 1);
 				if (is_friendly(m_ptr))
-					chg_virtue(p_ptr, V_HONOUR, 1);
+					chg_virtue(caster_ptr, V_HONOUR, 1);
 			}
 
 			/* No "real" damage */
@@ -2340,22 +2343,22 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_CHARM:
 		{
 			int vir;
-			vir = virtue_number(p_ptr, V_HARMONY);
+			vir = virtue_number(caster_ptr, V_HARMONY);
 			if (vir)
 			{
-				dam += p_ptr->virtues[vir - 1] / 10;
+				dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
-			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= p_ptr->virtues[vir - 1] / 20;
+				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
 			if (seen) obvious = TRUE;
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_charm(p_ptr, dam, m_ptr))
+			if (common_saving_throw_charm(caster_ptr, dam, m_ptr))
 			{
 
 				/* Resist */
@@ -2365,7 +2368,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
-			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			else if (caster_ptr->cursed & TRC_AGGRAVATE)
 			{
 				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2375,9 +2378,9 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
 				set_pet(m_ptr);
 
-				chg_virtue(p_ptr, V_INDIVIDUALISM, -1);
+				chg_virtue(caster_ptr, V_INDIVIDUALISM, -1);
 				if (r_ptr->flags3 & RF3_ANIMAL)
-					chg_virtue(p_ptr, V_NATURE, 1);
+					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
 			/* No "real" damage */
@@ -2391,20 +2394,20 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			int vir;
 			if (seen) obvious = TRUE;
 
-			vir = virtue_number(p_ptr, V_UNLIFE);
+			vir = virtue_number(caster_ptr, V_UNLIFE);
 			if (vir)
 			{
-				dam += p_ptr->virtues[vir - 1] / 10;
+				dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
-			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= p_ptr->virtues[vir - 1] / 20;
+				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
+			if (common_saving_throw_control(caster_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_UNDEAD))
 			{
 				/* No obvious effect */
@@ -2412,7 +2415,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
-			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			else if (caster_ptr->cursed & TRC_AGGRAVATE)
 			{
 				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2434,20 +2437,20 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			int vir;
 			if (seen) obvious = TRUE;
 
-			vir = virtue_number(p_ptr, V_UNLIFE);
+			vir = virtue_number(caster_ptr, V_UNLIFE);
 			if (vir)
 			{
-				dam += p_ptr->virtues[vir - 1] / 10;
+				dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
-			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= p_ptr->virtues[vir - 1] / 20;
+				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
+			if (common_saving_throw_control(caster_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_DEMON))
 			{
 				/* No obvious effect */
@@ -2455,7 +2458,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
-			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			else if (caster_ptr->cursed & TRC_AGGRAVATE)
 			{
 				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2477,20 +2480,20 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			int vir;
 			if (seen) obvious = TRUE;
 
-			vir = virtue_number(p_ptr, V_NATURE);
+			vir = virtue_number(caster_ptr, V_NATURE);
 			if (vir)
 			{
-				dam += p_ptr->virtues[vir - 1] / 10;
+				dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
-			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= p_ptr->virtues[vir - 1] / 20;
+				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_control(p_ptr, dam, m_ptr) ||
+			if (common_saving_throw_control(caster_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_ANIMAL))
 			{
 				/* Resist */
@@ -2499,7 +2502,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
-			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			else if (caster_ptr->cursed & TRC_AGGRAVATE)
 			{
 				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2509,7 +2512,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				note = _("はなついた。", " is tamed!");
 				set_pet(m_ptr);
 				if (r_ptr->flags3 & RF3_ANIMAL)
-					chg_virtue(p_ptr, V_NATURE, 1);
+					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
 			/* No "real" damage */
@@ -2522,25 +2525,25 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		{
 			int vir;
 
-			vir = virtue_number(p_ptr, V_UNLIFE);
+			vir = virtue_number(caster_ptr, V_UNLIFE);
 			if (seen) obvious = TRUE;
 
-			vir = virtue_number(p_ptr, V_UNLIFE);
+			vir = virtue_number(caster_ptr, V_UNLIFE);
 			if (vir)
 			{
-				dam -= p_ptr->virtues[vir - 1] / 10;
+				dam -= caster_ptr->virtues[vir - 1] / 10;
 			}
 
-			vir = virtue_number(p_ptr, V_INDIVIDUALISM);
+			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= p_ptr->virtues[vir - 1] / 20;
+				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
 			msg_format(_("%sを見つめた。", "You stare into %s."), m_name);
 
 			/* Attempt a saving throw */
-			if (common_saving_throw_charm(p_ptr, dam, m_ptr) ||
+			if (common_saving_throw_charm(caster_ptr, dam, m_ptr) ||
 				!monster_living(m_ptr->r_idx))
 			{
 				/* Resist */
@@ -2549,7 +2552,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 			}
-			else if (p_ptr->cursed & TRC_AGGRAVATE)
+			else if (caster_ptr->cursed & TRC_AGGRAVATE)
 			{
 				note = _("はあなたに敵意を抱いている！", " hates you too much!");
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2559,7 +2562,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				note = _("を支配した。", " is tamed!");
 				set_pet(m_ptr);
 				if (r_ptr->flags3 & RF3_ANIMAL)
-					chg_virtue(p_ptr, V_NATURE, 1);
+					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
 			/* No "real" damage */
@@ -3100,20 +3103,20 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if (who > 0)
 				{
 					/* Heal the monster */
-					if (caster_ptr->hp < caster_ptr->maxhp)
+					if (m_caster_ptr->hp < m_caster_ptr->maxhp)
 					{
 						/* Heal */
-						caster_ptr->hp += dam;
-						if (caster_ptr->hp > caster_ptr->maxhp) caster_ptr->hp = caster_ptr->maxhp;
+						m_caster_ptr->hp += dam;
+						if (m_caster_ptr->hp > m_caster_ptr->maxhp) m_caster_ptr->hp = m_caster_ptr->maxhp;
 
 						/* Redraw (later) if needed */
-						if (p_ptr->health_who == who) p_ptr->redraw |= (PR_HEALTH);
-						if (p_ptr->riding == who) p_ptr->redraw |= (PR_UHEALTH);
+						if (caster_ptr->health_who == who) caster_ptr->redraw |= (PR_HEALTH);
+						if (caster_ptr->riding == who) caster_ptr->redraw |= (PR_UHEALTH);
 
 						/* Special message */
 						if (see_s_msg)
 						{
-							monster_desc(killer, caster_ptr, 0);
+							monster_desc(killer, m_caster_ptr, 0);
 							msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), killer);
 						}
 					}
@@ -3121,7 +3124,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				else
 				{
 					msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), m_name);
-					(void)hp_player(p_ptr, dam);
+					(void)hp_player(caster_ptr, dam);
 				}
 			}
 			else
@@ -3274,7 +3277,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",
 					"You point at %s, screaming the word, 'DIE!'."), m_name);
 			/* Attempt a saving throw */
-			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (caster_ptr->r_idx != MON_KENSHIROU)))
+			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (m_caster_ptr->r_idx != MON_KENSHIROU)))
 			{
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
@@ -3322,7 +3325,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 
 			if (is_pet(m_ptr)) nokori_hp = m_ptr->maxhp * 4L;
-			else if ((p_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
+			else if ((caster_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
 				nokori_hp = m_ptr->maxhp * 3 / 10;
 			else
 				nokori_hp = m_ptr->maxhp * 3 / 20;
@@ -3341,9 +3344,9 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				cap_hp = m_ptr->hp;
 				cap_maxhp = m_ptr->max_maxhp;
 				cap_nickname = m_ptr->nickname; /* Quark transfer */
-				if (g_ptr->m_idx == p_ptr->riding)
+				if (g_ptr->m_idx == caster_ptr->riding)
 				{
-					if (rakuba(p_ptr, -1, FALSE))
+					if (rakuba(caster_ptr, -1, FALSE))
 					{
 						msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
 					}
@@ -3365,7 +3368,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_ATTACK:
 		{
 			/* Return this monster's death */
-			return py_attack(p_ptr, y, x, dam);
+			return py_attack(caster_ptr, y, x, dam);
 		}
 
 		/* Sleep (Use "dam" as "power") */
@@ -3418,7 +3421,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			else if (effect == 2)
 			{
-				do_stun = damroll((p_ptr->lev / 10) + 3, (dam)) + 1;
+				do_stun = damroll((caster_ptr->lev / 10) + 3, (dam)) + 1;
 
 				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -3472,10 +3475,10 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_GENOCIDE:
 		{
 			if (seen) obvious = TRUE;
-			if (genocide_aux(p_ptr, g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
+			if (genocide_aux(caster_ptr, g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 			{
 				if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
-				chg_virtue(p_ptr, V_VITALITY, -1);
+				chg_virtue(caster_ptr, V_VITALITY, -1);
 				return TRUE;
 			}
 
@@ -3542,7 +3545,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				else if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 					(r_ptr->flags1 & (RF1_UNIQUE)) ||
 					(m_ptr->mflag2 & MFLAG2_NOPET) ||
-					(p_ptr->cursed & TRC_AGGRAVATE) ||
+					(caster_ptr->cursed & TRC_AGGRAVATE) ||
 					((r_ptr->level + 10) > randint1(dam)))
 				{
 					/* Resist */
@@ -3609,18 +3612,18 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 	/* Quest monsters cannot be polymorphed */
 	if (r_ptr->flags1 & RF1_QUESTOR) do_poly = FALSE;
 
-	if (p_ptr->riding && (g_ptr->m_idx == p_ptr->riding)) do_poly = FALSE;
+	if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding)) do_poly = FALSE;
 
 	/* "Unique" and "quest" monsters can only be "killed" by the player. */
-	if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !p_ptr->phase_out)
+	if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out)
 	{
 		if (who && (dam > m_ptr->hp)) dam = m_ptr->hp;
 	}
 
 	if (!who && slept)
 	{
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_COMPASSION, -1);
-		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(p_ptr, V_HONOUR, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_COMPASSION, -1);
+		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_HONOUR, -1);
 	}
 
 	/* Modify the damage */
@@ -3708,7 +3711,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		/* Mega-Hack -- Handle "polymorph" -- monsters get a saving throw */
 		if (do_poly && (randint1(90) > r_ptr->level))
 		{
-			if (polymorph_monster(p_ptr, y, x))
+			if (polymorph_monster(caster_ptr, y, x))
 			{
 				if (seen) obvious = TRUE;
 
@@ -3738,10 +3741,10 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			note = _("が消え去った！", " disappears!");
 
-			if (!who) chg_virtue(p_ptr, V_VALOUR, -1);
+			if (!who) chg_virtue(caster_ptr, V_VALOUR, -1);
 
 			/* Teleport */
-			teleport_away(p_ptr, g_ptr->m_idx, do_dist,
+			teleport_away(caster_ptr, g_ptr->m_idx, do_dist,
 				(!who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
 
 			/* Hack -- get new location */
@@ -3772,8 +3775,8 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 	else if (who)
 	{
 		/* Redraw (later) if needed */
-		if (p_ptr->health_who == g_ptr->m_idx) p_ptr->redraw |= (PR_HEALTH);
-		if (p_ptr->riding == g_ptr->m_idx) p_ptr->redraw |= (PR_UHEALTH);
+		if (caster_ptr->health_who == g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
+		if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 
 		/* Wake the monster up */
 		(void)set_monster_csleep(g_ptr->m_idx, 0);
@@ -3847,7 +3850,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			char m2_name[MAX_NLEN];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+			exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
 		}
 
 		delete_monster_idx(g_ptr->m_idx);
@@ -3897,26 +3900,26 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if ((typ == GF_BLOOD_CURSE) && one_in_(4))
 	{
-		blood_curse_to_enemy(p_ptr, who);
+		blood_curse_to_enemy(caster_ptr, who);
 	}
 
-	if (p_ptr->phase_out)
+	if (caster_ptr->phase_out)
 	{
-		p_ptr->health_who = g_ptr->m_idx;
-		p_ptr->redraw |= (PR_HEALTH);
+		caster_ptr->health_who = g_ptr->m_idx;
+		caster_ptr->redraw |= (PR_HEALTH);
 		handle_stuff();
 	}
 
 	/* Verify this code */
-	if (m_ptr->r_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
+	if (m_ptr->r_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 
 	/* Redraw the monster grid */
 	lite_spot(y, x);
 
 	/* Update monster recall window */
-	if ((p_ptr->monster_race_idx == m_ptr->r_idx) && (seen || !m_ptr->r_idx))
+	if ((caster_ptr->monster_race_idx == m_ptr->r_idx) && (seen || !m_ptr->r_idx))
 	{
-		p_ptr->window |= (PW_MONSTER);
+		caster_ptr->window |= (PW_MONSTER);
 	}
 
 	if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr))
@@ -3928,13 +3931,13 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				set_target(m_ptr, monster_target_y, monster_target_x);
 			}
 		}
-		else if ((who > 0) && is_pet(caster_ptr) && !player_bold(p_ptr, m_ptr->target_y, m_ptr->target_x))
+		else if ((who > 0) && is_pet(m_caster_ptr) && !player_bold(caster_ptr, m_ptr->target_y, m_ptr->target_x))
 		{
-			set_target(m_ptr, caster_ptr->fy, caster_ptr->fx);
+			set_target(m_ptr, m_caster_ptr->fy, m_caster_ptr->fx);
 		}
 	}
 
-	if (p_ptr->riding && (p_ptr->riding == g_ptr->m_idx) && (dam > 0))
+	if (caster_ptr->riding && (caster_ptr->riding == g_ptr->m_idx) && (dam > 0))
 	{
 		if (m_ptr->hp > m_ptr->maxhp / 3) dam = (dam + 1) / 2;
 		rakubadam_m = (dam > 200) ? 200 : dam;
@@ -3954,7 +3957,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		/* Mark the item as fully known */
 		q_ptr->ident |= (IDENT_MENTAL);
-		(void)drop_near(q_ptr, -1, p_ptr->y, p_ptr->x);
+		(void)drop_near(q_ptr, -1, caster_ptr->y, caster_ptr->x);
 	}
 
 	/* Track it */
@@ -3965,6 +3968,7 @@ static bool project_m(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 	/* Return "Anything seen?" */
 	return (obvious);
 }
+
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.
@@ -5806,7 +5810,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					if (project_m(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
+					if (project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
 					if (!who && (project_m_n == 1) && !jump) {
 						if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
 							monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -5828,7 +5832,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			if (project_m(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
+			if (project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
 				notice = TRUE;
 			if (!who && (project_m_n == 1) && !jump) {
 				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
@@ -5959,7 +5963,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			(void)project_m(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
+			(void)project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
 			if (!who && (project_m_n == 1) && !jump) {
 				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
 					monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -6470,7 +6474,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			}
 
 			/* Affect the monster in the grid */
-			if (project_m(caster_ptr->current_floor_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
+			if (project_m(caster_ptr, caster_ptr->current_floor_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
 		}
 
 
@@ -6730,7 +6734,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
 				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
-					(void)project_m(p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA,
+					(void)project_m(caster_ptr, p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}
 			}
@@ -6759,7 +6763,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 		{
 			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 			{
-				if (project_m(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
+				if (project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
 					(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
 				{
 					if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
