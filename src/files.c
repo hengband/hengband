@@ -3460,7 +3460,7 @@ void display_player(player_type *creature_ptr, int mode)
 #ifdef JP
 			sprintf(statmsg, "…あなたは勝利の後%sした。", streq(creature_ptr->died_from, "Seppuku") ? "切腹" : "引退");
 #else
-			sprintf(statmsg, "...You %s after winning.", streq(creature_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
+			sprintf(statmsg, "...You %s after winning.", streq(creature_ptr->died_from, "Seppuku") ? "committed seppuku" : "retired from the adventure");
 #endif
 		}
 		else if (!floor_ptr->dun_level)
