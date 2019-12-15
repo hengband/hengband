@@ -862,7 +862,7 @@ void leave_floor(player_type *creature_ptr)
 	/* New floor is not yet prepared */
 	new_floor_id = 0;
 
-	/* Temporary get a floor_id (for Arena) */
+	/* Temporarily get a floor_id (for Arena) */
 	if (!creature_ptr->floor_id &&
 	    (creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) &&
 	    !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
