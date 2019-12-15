@@ -2269,7 +2269,11 @@ static void castle_quest(player_type *player_ptr)
 
 	q_ptr->cur_num = 0;
 	concptr name = (r_name + r_ptr->name);
-	msg_format(_("クエスト: %sを %d体倒す", "Your quest: kill %d %s"), name, q_ptr->max_num);
+#ifdef JP
+	msg_format("クエスト: %sを %d体倒す", name, q_ptr->max_num);
+#else
+	msg_format("Your quest: kill %d %s", q_ptr->max_num, name);
+#endif
 	get_questinfo(player_ptr, q_index, TRUE);
 }
 
