@@ -574,7 +574,7 @@ void do_cmd_drop(player_type *creature_ptr)
 	q = _("どのアイテムを落としますか? ", "Drop which item? ");
 	s = _("落とせるアイテムを持っていない。", "You have nothing to drop.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Hack -- Cannot remove cursed items */
