@@ -130,13 +130,13 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
 			}
 			case ACTION_KAMAE:
 			{
-				msg_print(_("構えをといた。", "You stop assuming the posture."));
+				msg_print(_("構えをといた。", "You stop assuming the special stance."));
 				creature_ptr->special_defense &= ~(KAMAE_MASK);
 				break;
 			}
 			case ACTION_KATA:
 			{
-				msg_print(_("型を崩した。", "You stop assuming the posture."));
+				msg_print(_("型を崩した。", "You stop assuming the special stance."));
 				creature_ptr->special_defense &= ~(KATA_MASK);
 				creature_ptr->update |= (PU_MONSTERS);
 				creature_ptr->redraw |= (PR_STATUS);
