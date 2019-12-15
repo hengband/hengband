@@ -3297,7 +3297,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 * @param rad 効力の半径
 * @return なし
 */
-void cast_meteor(HIT_POINT dam, POSITION rad)
+void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
 	int i;
 	int b = 10 + randint1(10);
@@ -3311,18 +3311,18 @@ void cast_meteor(HIT_POINT dam, POSITION rad)
 		{
 			int dy, dx, d;
 
-			x = p_ptr->x - 8 + randint0(17);
-			y = p_ptr->y - 8 + randint0(17);
+			x = caster_ptr->x - 8 + randint0(17);
+			y = caster_ptr->y - 8 + randint0(17);
 
-			dx = (p_ptr->x > x) ? (p_ptr->x - x) : (x - p_ptr->x);
-			dy = (p_ptr->y > y) ? (p_ptr->y - y) : (y - p_ptr->y);
+			dx = (caster_ptr->x > x) ? (caster_ptr->x - x) : (x - caster_ptr->x);
+			dy = (caster_ptr->y > y) ? (caster_ptr->y - y) : (y - caster_ptr->y);
 
 			/* Approximate distance */
 			d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
 
 			if (d >= 9) continue;
 
-			if (!in_bounds(p_ptr->current_floor_ptr, y, x) || !projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x)
+			if (!in_bounds(caster_ptr->current_floor_ptr, y, x) || !projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)
 				|| !cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
 			/* Valid position */
@@ -3331,7 +3331,7 @@ void cast_meteor(HIT_POINT dam, POSITION rad)
 
 		if (count > 20) continue;
 
-		project(p_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+		project(caster_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
 	}
 }
 

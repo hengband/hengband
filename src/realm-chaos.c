@@ -492,7 +492,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				cast_meteor(dam, rad);
+				cast_meteor(caster_ptr, dam, rad);
 			}
 		}
 		break;
