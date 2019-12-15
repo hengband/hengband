@@ -2152,15 +2152,12 @@ bool recharge(int power)
 				if (o_ptr->tval == TV_ROD) o_ptr->timeout = (o_ptr->number - 1) * k_ptr->pval;
 				if (o_ptr->tval == TV_WAND) o_ptr->pval = 0;
 
-				/* Reduce and describe p_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -1);
 					inven_item_describe(item);
 					inven_item_optimize(item);
 				}
-
-				/* Reduce and describe floor item */
 				else
 				{
 					floor_item_increase(0 - item, -1);
@@ -2177,15 +2174,12 @@ bool recharge(int power)
 				else
 					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-				/* Reduce and describe p_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -999);
 					inven_item_describe(item);
 					inven_item_optimize(item);
 				}
-
-				/* Reduce and describe floor item */
 				else
 				{
 					floor_item_increase(0 - item, -999);
@@ -3221,15 +3215,12 @@ bool eat_magic(player_type *caster_ptr, int power)
 					msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
 				}
 				
-				/* Reduce and describe caster_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -1);
 					inven_item_describe(item);
 					inven_item_optimize(item);
 				}
-
-				/* Reduce and describe floor item */
 				else
 				{
 					floor_item_increase(0 - item, -1);
@@ -3246,15 +3237,12 @@ bool eat_magic(player_type *caster_ptr, int power)
 				else
 					msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-				/* Reduce and describe caster_ptr->inventory_list */
 				if (item >= 0)
 				{
 					inven_item_increase(item, -999);
 					inven_item_describe(item);
 					inven_item_optimize(item);
 				}
-
-				/* Reduce and describe floor item */
 				else
 				{
 					floor_item_increase(0 - item, -999);

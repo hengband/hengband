@@ -2487,7 +2487,6 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	    (q_ptr->name1 == ART_AEGISFANG) || boomerang)
 		return_when_thrown = TRUE;
 
-	/* Reduce and describe creature_ptr->inventory_list */
 	if (item >= 0)
 	{
 		inven_item_increase(item, -1);
@@ -2495,8 +2494,6 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			inven_item_describe(item);
 		inven_item_optimize(item);
 	}
-
-	/* Reduce and describe floor item */
 	else
 	{
 		floor_item_increase(0 - item, -1);

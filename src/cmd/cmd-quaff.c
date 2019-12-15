@@ -69,15 +69,12 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 	/* Single object */
 	q_ptr->number = 1;
 
-	/* Reduce and describe creature_ptr->inventory_list */
 	if (item >= 0)
 	{
 		inven_item_increase(item, -1);
 		inven_item_describe(item);
 		inven_item_optimize(item);
 	}
-
-	/* Reduce and describe floor item */
 	else
 	{
 		floor_item_increase(0 - item, -1);
