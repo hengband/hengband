@@ -494,7 +494,7 @@ static GAME_TEXT MN_SEARCH[] = "Search";
 static GAME_TEXT MN_SEARCH_STR[] = "Search by string";
 static GAME_TEXT MN_SEARCH_FORW[] = "Search forward";
 static GAME_TEXT MN_SEARCH_BACK[] = "Search backward";
-static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory list object";
+static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory object";
 static GAME_TEXT MN_SEARCH_DESTROYED[] = "Search by destroyed object";
 
 static GAME_TEXT MN_INSERT[] = "Insert...";

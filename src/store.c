@@ -4576,7 +4576,7 @@ static void store_process_command(player_type *client_ptr)
 		/* 日本語版追加 */
 		/* 1 ページ戻るコマンド: 我が家のページ数が多いので重宝するはず By BUG */
 		if (st_ptr->stock_num <= store_bottom) {
-			msg_print(_("これで全部です。", "Entire client_ptr->inventory_list is shown."));
+			msg_print(_("これで全部です。", "Entire inventory is shown."));
 		}
 		else {
 			store_top -= store_bottom;
@@ -4593,7 +4593,7 @@ static void store_process_command(player_type *client_ptr)
 	{
 		if (st_ptr->stock_num <= store_bottom)
 		{
-			msg_print(_("これで全部です。", "Entire client_ptr->inventory_list is shown."));
+			msg_print(_("これで全部です。", "Entire inventory is shown."));
 		}
 		else
 		{
