@@ -4259,7 +4259,7 @@ static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
 		else fprintf(fff, "%s ???\n", stat_names[v_nr]);
 	}
 
-	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment(creature_ptr));
+	fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), your_alignment(creature_ptr));
 	fprintf(fff, "\n");
 	dump_virtues(creature_ptr, fff);
 }

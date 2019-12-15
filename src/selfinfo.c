@@ -111,7 +111,7 @@ void self_knowledge(player_type *creature_ptr)
 	}
 	info[i++] = "";
 
-	sprintf(Dummy, _("現在の属性 : %s(%ld)", "Your alighnment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
+	sprintf(Dummy, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
 	strcpy(buf[1], Dummy);
 	info[i++] = buf[1];
 	for (v_nr = 0; v_nr < 8; v_nr++)

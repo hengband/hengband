@@ -6159,7 +6159,7 @@ static void do_cmd_knowledge_virtues(player_type *creature_ptr)
 		return;
 	}
 
-	fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment(creature_ptr));
+	fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), your_alignment(creature_ptr));
 	dump_virtues(creature_ptr, fff);
 	my_fclose(fff);
 
