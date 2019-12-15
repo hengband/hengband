@@ -4446,7 +4446,7 @@ bool clear_mind(player_type *creature_ptr)
 {
 	if (total_friends)
 	{
-		msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
+		msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
 		return FALSE;
 	}
 
