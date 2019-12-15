@@ -1943,7 +1943,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			if (MON_MONFEAR(m_ptr))
 			{
-				if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
+				if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name, m_poss);
 				(void)set_monster_monfear(caster_ptr, g_ptr->m_idx, 0);
 			}
 
