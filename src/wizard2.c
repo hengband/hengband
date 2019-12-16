@@ -162,7 +162,7 @@ static bool wiz_dimension_door(void)
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
  * @return なし
  */
-static void wiz_create_named_art(void)
+static void wiz_create_named_art(player_type *caster_ptr)
 {
 	char tmp_val[10] = "";
 	ARTIFACT_IDX a_idx;
@@ -175,7 +175,7 @@ static void wiz_create_named_art(void)
 	if(a_idx < 0) a_idx = 0;
 	if(a_idx >= max_a_idx) a_idx = 0; 
 
-	(void)create_named_art(a_idx, p_ptr->y, p_ptr->x);
+	(void)create_named_art(a_idx, caster_ptr->y, caster_ptr->x);
 
 	/* All done */
 	msg_print("Allocated.");
@@ -1810,7 +1810,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Create a named artifact */
 	case 'C':
-		wiz_create_named_art();
+		wiz_create_named_art(creature_ptr);
 		break;
 
 	/* Detect everything */
