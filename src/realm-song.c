@@ -220,7 +220,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				project_all_los(GF_TURN_ALL, power);
+				project_all_los(caster_ptr, GF_TURN_ALL, power);
 			}
 		}
 
@@ -340,7 +340,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				project_all_los(GF_PSI, damroll(dice, sides));
+				project_all_los(caster_ptr, GF_PSI, damroll(dice, sides));
 			}
 		}
 
@@ -446,7 +446,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				project_all_los(GF_SOUND, damroll(dice, sides));
+				project_all_los(caster_ptr, GF_SOUND, damroll(dice, sides));
 			}
 		}
 

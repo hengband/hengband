@@ -779,7 +779,7 @@ bool detect_all(POSITION range)
  * this is done in two passes. -- JDL
  * </pre>
  */
-bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
+bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
 {
 	MONSTER_IDX i;
 	POSITION x, y;
@@ -787,25 +787,25 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 	bool obvious = FALSE;
 
 	/* Mark all (nearby) monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		y = m_ptr->fy;
 		x = m_ptr->fx;
 
 		/* Require line of sight */
-		if (!player_has_los_bold(p_ptr, y, x) || !projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x)) continue;
+		if (!player_has_los_bold(caster_ptr, y, x) || !projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) continue;
 
 		/* Mark the monster */
 		m_ptr->mflag |= (MFLAG_LOS);
 	}
 
 	/* Affect all marked monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 
 		/* Skip unmarked monsters */
 		if (!(m_ptr->mflag & (MFLAG_LOS))) continue;
@@ -817,7 +817,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
 		x = m_ptr->fx;
 
 		/* Jump directly to the target monster */
-		if (project(p_ptr, 0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
+		if (project(caster_ptr, 0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
 	}
 	return (obvious);
 }
@@ -829,7 +829,7 @@ bool project_all_los(EFFECT_ID typ, HIT_POINT dam)
  */
 bool speed_monsters(void)
 {
-	return (project_all_los(GF_OLD_SPEED, p_ptr->lev));
+	return (project_all_los(p_ptr, GF_OLD_SPEED, p_ptr->lev));
 }
 
 /*!
@@ -838,7 +838,7 @@ bool speed_monsters(void)
  */
 bool slow_monsters(int power)
 {
-	return (project_all_los(GF_OLD_SLOW, power));
+	return (project_all_los(p_ptr, GF_OLD_SLOW, power));
 }
 
 /*!
@@ -847,7 +847,7 @@ bool slow_monsters(int power)
  */
 bool sleep_monsters(int power)
 {
-	return (project_all_los(GF_OLD_SLEEP, power));
+	return (project_all_los(p_ptr, GF_OLD_SLEEP, power));
 }
 
 /*!
@@ -856,7 +856,7 @@ bool sleep_monsters(int power)
  */
 bool banish_evil(int dist)
 {
-	return (project_all_los(GF_AWAY_EVIL, dist));
+	return (project_all_los(p_ptr, GF_AWAY_EVIL, dist));
 }
 
 /*!
@@ -865,7 +865,7 @@ bool banish_evil(int dist)
  */
 bool turn_undead(void)
 {
-	bool tester = (project_all_los(GF_TURN_UNDEAD, p_ptr->lev));
+	bool tester = (project_all_los(p_ptr, GF_TURN_UNDEAD, p_ptr->lev));
 	if (tester)
 		chg_virtue(p_ptr, V_UNLIFE, -1);
 	return tester;
@@ -877,7 +877,7 @@ bool turn_undead(void)
  */
 bool dispel_undead(HIT_POINT dam)
 {
-	bool tester = (project_all_los(GF_DISP_UNDEAD, dam));
+	bool tester = (project_all_los(p_ptr, GF_DISP_UNDEAD, dam));
 	if (tester)
 		chg_virtue(p_ptr, V_UNLIFE, -2);
 	return tester;
@@ -889,7 +889,7 @@ bool dispel_undead(HIT_POINT dam)
  */
 bool dispel_evil(HIT_POINT dam)
 {
-	return (project_all_los(GF_DISP_EVIL, dam));
+	return (project_all_los(p_ptr, GF_DISP_EVIL, dam));
 }
 
 /*!
@@ -898,7 +898,7 @@ bool dispel_evil(HIT_POINT dam)
  */
 bool dispel_good(HIT_POINT dam)
 {
-	return (project_all_los(GF_DISP_GOOD, dam));
+	return (project_all_los(p_ptr, GF_DISP_GOOD, dam));
 }
 
 /*!
@@ -907,7 +907,7 @@ bool dispel_good(HIT_POINT dam)
  */
 bool dispel_monsters(HIT_POINT dam)
 {
-	return (project_all_los(GF_DISP_ALL, dam));
+	return (project_all_los(p_ptr, GF_DISP_ALL, dam));
 }
 
 bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
@@ -942,7 +942,7 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
  */
 bool dispel_living(HIT_POINT dam)
 {
-	return (project_all_los(GF_DISP_LIVING, dam));
+	return (project_all_los(p_ptr, GF_DISP_LIVING, dam));
 }
 
 /*!
@@ -951,7 +951,7 @@ bool dispel_living(HIT_POINT dam)
  */
 bool dispel_demons(HIT_POINT dam)
 {
-	return (project_all_los(GF_DISP_DEMON, dam));
+	return (project_all_los(p_ptr, GF_DISP_DEMON, dam));
 }
 
 /*!
@@ -960,7 +960,7 @@ bool dispel_demons(HIT_POINT dam)
  */
 bool crusade(void)
 {
-	return (project_all_los(GF_CRUSADE, p_ptr->lev*4));
+	return (project_all_los(p_ptr, GF_CRUSADE, p_ptr->lev*4));
 }
 
 /*!
@@ -2794,7 +2794,7 @@ void wall_breaker(player_type *caster_ptr)
  */
 bool confuse_monsters(HIT_POINT dam)
 {
-	return (project_all_los(GF_OLD_CONF, dam));
+	return (project_all_los(p_ptr, GF_OLD_CONF, dam));
 }
 
 
@@ -2805,7 +2805,7 @@ bool confuse_monsters(HIT_POINT dam)
  */
 bool charm_monsters(HIT_POINT dam)
 {
-	return (project_all_los(GF_CHARM, dam));
+	return (project_all_los(p_ptr, GF_CHARM, dam));
 }
 
 
@@ -2816,7 +2816,7 @@ bool charm_monsters(HIT_POINT dam)
  */
 bool charm_animals(HIT_POINT dam)
 {
-	return (project_all_los(GF_CONTROL_ANIMAL, dam));
+	return (project_all_los(p_ptr, GF_CONTROL_ANIMAL, dam));
 }
 
 
@@ -2827,7 +2827,7 @@ bool charm_animals(HIT_POINT dam)
  */
 bool stun_monsters(HIT_POINT dam)
 {
-	return (project_all_los(GF_STUN, dam));
+	return (project_all_los(p_ptr, GF_STUN, dam));
 }
 
 
@@ -2838,7 +2838,7 @@ bool stun_monsters(HIT_POINT dam)
  */
 bool stasis_monsters(HIT_POINT dam)
 {
-	return (project_all_los(GF_STASIS, dam));
+	return (project_all_los(p_ptr, GF_STASIS, dam));
 }
 
 
@@ -2849,7 +2849,7 @@ bool stasis_monsters(HIT_POINT dam)
  */
 bool mindblast_monsters(HIT_POINT dam)
 {
-	return (project_all_los(GF_PSI, dam));
+	return (project_all_los(p_ptr, GF_PSI, dam));
 }
 
 
@@ -2860,7 +2860,7 @@ bool mindblast_monsters(HIT_POINT dam)
  */
 bool banish_monsters(int dist)
 {
-	return (project_all_los(GF_AWAY_ALL, dist));
+	return (project_all_los(p_ptr, GF_AWAY_ALL, dist));
 }
 
 
@@ -2871,7 +2871,7 @@ bool banish_monsters(int dist)
  */
 bool turn_evil(HIT_POINT dam)
 {
-	return (project_all_los(GF_TURN_EVIL, dam));
+	return (project_all_los(p_ptr, GF_TURN_EVIL, dam));
 }
 
 
@@ -2882,7 +2882,7 @@ bool turn_evil(HIT_POINT dam)
  */
 bool turn_monsters(HIT_POINT dam)
 {
-	return (project_all_los(GF_TURN_ALL, dam));
+	return (project_all_los(p_ptr, GF_TURN_ALL, dam));
 }
 
 
@@ -2892,7 +2892,7 @@ bool turn_monsters(HIT_POINT dam)
  */
 bool deathray_monsters(void)
 {
-	return (project_all_los(GF_DEATH_RAY, p_ptr->lev * 200));
+	return (project_all_los(p_ptr, GF_DEATH_RAY, p_ptr->lev * 200));
 }
 
 /*!

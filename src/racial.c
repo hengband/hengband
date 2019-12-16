@@ -519,7 +519,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			}
 			else if (command == -4)
 			{
-				project_all_los(GF_CHARM_LIVING, creature_ptr->lev);
+				project_all_los(creature_ptr, GF_CHARM_LIVING, creature_ptr->lev);
 			}
 			break;
 		}

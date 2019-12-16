@@ -626,7 +626,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 		if (cast)
 		{
 			msg_print(_("雄叫びをあげた！", "You roar out!"));
-			project_all_los(GF_SOUND, randint1(plev * 3));
+			project_all_los(caster_ptr, GF_SOUND, randint1(plev * 3));
 			aggravate_monsters(0);
 		}
 		break;
@@ -744,9 +744,9 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 		if (cast)
 		{
 			msg_print(_("武器を不規則に揺らした．．．", "You irregularly wave your weapon..."));
-			project_all_los(GF_ENGETSU, plev * 4);
-			project_all_los(GF_ENGETSU, plev * 4);
-			project_all_los(GF_ENGETSU, plev * 4);
+			project_all_los(caster_ptr, GF_ENGETSU, plev * 4);
+			project_all_los(caster_ptr, GF_ENGETSU, plev * 4);
+			project_all_los(caster_ptr, GF_ENGETSU, plev * 4);
 		}
 		break;
 
