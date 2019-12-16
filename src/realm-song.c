@@ -17,20 +17,20 @@
 * @param song 魔法効果のID
 * @return なし
 */
-static void start_singing(SPELL_IDX spell, MAGIC_NUM1 song)
+static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 song)
 {
 	/* Remember the song index */
-	SINGING_SONG_EFFECT(p_ptr) = (MAGIC_NUM1)song;
+	SINGING_SONG_EFFECT(caster_ptr) = (MAGIC_NUM1)song;
 
 	/* Remember the index of the spell which activated the song */
-	SINGING_SONG_ID(p_ptr) = (MAGIC_NUM2)spell;
+	SINGING_SONG_ID(caster_ptr) = (MAGIC_NUM2)spell;
 
 
 	/* Now the player is singing */
-	set_action(p_ptr, ACTION_SING);
+	set_action(caster_ptr, ACTION_SING);
 
-	p_ptr->update |= (PU_BONUS);
-	p_ptr->redraw |= (PR_STATUS);
+	caster_ptr->update |= (PU_BONUS);
+	caster_ptr->redraw |= (PR_STATUS);
 }
 
 /*!
@@ -64,7 +64,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("ゆっくりとしたメロディを口ずさみ始めた．．．", "You start humming a slow, steady melody..."));
-			start_singing(spell, MUSIC_SLOW);
+			start_singing(caster_ptr, spell, MUSIC_SLOW);
 		}
 
 		{
@@ -89,7 +89,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("厳かなメロディを奏で始めた．．．", "The holy power of the Music of the Ainur enters you..."));
-			start_singing(spell, MUSIC_BLESS);
+			start_singing(caster_ptr, spell, MUSIC_BLESS);
 		}
 
 		if (stop)
@@ -134,7 +134,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("眩惑させるメロディを奏で始めた．．．", "You weave a pattern of sounds to bewilder and daze..."));
-			start_singing(spell, MUSIC_STUN);
+			start_singing(caster_ptr, spell, MUSIC_STUN);
 		}
 
 		{
@@ -161,7 +161,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("歌を通して体に活気が戻ってきた．．．", "Life flows through you as you sing a song of healing..."));
-			start_singing(spell, MUSIC_L_LIFE);
+			start_singing(caster_ptr, spell, MUSIC_L_LIFE);
 		}
 
 		{
@@ -210,7 +210,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("おどろおどろしいメロディを奏で始めた．．．", "You start weaving a fearful pattern..."));
-			start_singing(spell, MUSIC_FEAR);
+			start_singing(caster_ptr, spell, MUSIC_FEAR);
 		}
 
 		{
@@ -243,7 +243,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			/* Recalculate hitpoints */
 			caster_ptr->update |= (PU_HP);
 
-			start_singing(spell, MUSIC_HERO);
+			start_singing(caster_ptr, spell, MUSIC_HERO);
 		}
 
 		if (stop)
@@ -271,7 +271,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			msg_print(_("静かな音楽が感覚を研ぎ澄まさせた．．．", "Your quiet music sharpens your sense of hearing..."));
 			/* Hack -- Initialize the turn count */
 			SINGING_COUNT(caster_ptr) = 0;
-			start_singing(spell, MUSIC_DETECT);
+			start_singing(caster_ptr, spell, MUSIC_DETECT);
 		}
 
 		{
@@ -329,7 +329,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("精神を捻じ曲げる歌を歌った．．．", "You start singing a song of soul in pain..."));
-			start_singing(spell, MUSIC_PSI);
+			start_singing(caster_ptr, spell, MUSIC_PSI);
 		}
 
 		{
@@ -356,7 +356,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("この世界の知識が流れ込んできた．．．", "You recall the rich lore of the world..."));
-			start_singing(spell, MUSIC_ID);
+			start_singing(caster_ptr, spell, MUSIC_ID);
 		}
 
 		{
@@ -386,7 +386,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("あなたの姿が景色にとけこんでいった．．．", "Your song carries you beyond the sight of mortal eyes..."));
-			start_singing(spell, MUSIC_STEALTH);
+			start_singing(caster_ptr, spell, MUSIC_STEALTH);
 		}
 
 		if (stop)
@@ -409,7 +409,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("辺り一面に幻影が現れた．．．", "You weave a pattern of sounds to beguile and confuse..."));
-			start_singing(spell, MUSIC_CONF);
+			start_singing(caster_ptr, spell, MUSIC_CONF);
 		}
 
 		{
@@ -435,7 +435,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("轟音が響いた．．．", "The fury of the Downfall of Numenor lashes out..."));
-			start_singing(spell, MUSIC_SOUND);
+			start_singing(caster_ptr, spell, MUSIC_SOUND);
 		}
 
 		{
@@ -478,7 +478,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("安らかなメロディを奏で始めた．．．", "You weave a slow, soothing melody of imploration..."));
-			start_singing(spell, MUSIC_CHARM);
+			start_singing(caster_ptr, spell, MUSIC_CHARM);
 		}
 
 		{
@@ -505,7 +505,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("粉砕するメロディを奏で始めた．．．", "You weave a violent pattern of sounds to break wall."));
-			start_singing(spell, MUSIC_WALL);
+			start_singing(caster_ptr, spell, MUSIC_WALL);
 		}
 
 		{
@@ -532,7 +532,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("元素の力に対する忍耐の歌を歌った。", "You sing a song of perseverance against powers..."));
-			start_singing(spell, MUSIC_RESIST);
+			start_singing(caster_ptr, spell, MUSIC_RESIST);
 		}
 
 		if (stop)
@@ -575,7 +575,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("軽快な歌を口ずさみ始めた．．．", "You start singing joyful pop song..."));
-			start_singing(spell, MUSIC_SPEED);
+			start_singing(caster_ptr, spell, MUSIC_SPEED);
 		}
 
 		if (stop)
@@ -620,7 +620,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("耐えられない不協和音が敵を責め立てた．．．", "You cry out in an ear-wracking voice..."));
-			start_singing(spell, MUSIC_DISPEL);
+			start_singing(caster_ptr, spell, MUSIC_DISPEL);
 		}
 
 		{
@@ -647,7 +647,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("優しく、魅力的な歌を口ずさみ始めた．．．", "You start humming a gentle and attractive song..."));
-			start_singing(spell, MUSIC_SARUMAN);
+			start_singing(caster_ptr, spell, MUSIC_SARUMAN);
 		}
 
 		{
@@ -718,7 +718,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("破壊的な歌が響きわたった．．．", "You weave a pattern of sounds to contort and shatter..."));
-			start_singing(spell, MUSIC_QUAKE);
+			start_singing(caster_ptr, spell, MUSIC_QUAKE);
 		}
 
 		{
@@ -745,7 +745,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("ゆっくりとしたメロディを奏で始めた．．．", "You weave a very slow pattern which is almost likely to stop..."));
-			start_singing(spell, MUSIC_STASIS);
+			start_singing(caster_ptr, spell, MUSIC_STASIS);
 		}
 
 		{
@@ -795,7 +795,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			/* Recalculate hitpoints */
 			caster_ptr->update |= (PU_HP);
 
-			start_singing(spell, MUSIC_SHERO);
+			start_singing(caster_ptr, spell, MUSIC_SHERO);
 		}
 
 		if (stop)
@@ -836,7 +836,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			msg_print(_("歌を通して体に活気が戻ってきた．．．", "Life flows through you as you sing the song..."));
-			start_singing(spell, MUSIC_H_LIFE);
+			start_singing(caster_ptr, spell, MUSIC_H_LIFE);
 		}
 
 		{
@@ -913,7 +913,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			caster_ptr->update |= (PU_MONSTERS);
 			caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-			start_singing(spell, MUSIC_INVULN);
+			start_singing(caster_ptr, spell, MUSIC_INVULN);
 		}
 
 		if (stop)
