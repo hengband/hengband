@@ -3922,11 +3922,11 @@ static void calc_alignment(player_type *creature_ptr)
 	creature_ptr->align = 0;
 	int i, j, neutral[2];
 
-	for (m_idx = p_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
+	for (m_idx = creature_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;
-		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
