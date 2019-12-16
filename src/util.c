@@ -3091,7 +3091,7 @@ menu_naiyou menu_info[10][10] =
 		{"Items(other)", 4, FALSE},
 		{"Equip", 5, FALSE},
 		{"Door/Box", 6, FALSE},
-		{"Informations", 7, FALSE},
+		{"Information", 7, FALSE},
 		{"Options", 8, FALSE},
 		{"Other commands", 9, FALSE},
 		{"", 0, FALSE},
