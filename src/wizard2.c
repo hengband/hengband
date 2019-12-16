@@ -1421,7 +1421,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 			(int)d_info[tmp_dungeon_type].mindepth, (int)d_info[tmp_dungeon_type].maxdepth);
 
 		/* Default */
-		sprintf(tmp_val, "%d", (int)p_ptr->current_floor_ptr->dun_level);
+		sprintf(tmp_val, "%d", (int)creature_ptr->current_floor_ptr->dun_level);
 
 		/* Ask for a level */
 		if (!get_string(ppp, tmp_val, 10)) return;
@@ -1440,11 +1440,11 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 	if (autosave_l) do_cmd_save_game(TRUE);
 
 	/* Change level */
-	p_ptr->current_floor_ptr->dun_level = command_arg;
+	creature_ptr->current_floor_ptr->dun_level = command_arg;
 
 	prepare_change_floor_mode(CFM_RAND_PLACE);
 
-	if (!p_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
+	if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
 	creature_ptr->current_floor_ptr->inside_arena = FALSE;
 	creature_ptr->wild_mode = FALSE;
 
