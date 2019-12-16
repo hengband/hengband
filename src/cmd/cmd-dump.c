@@ -4146,7 +4146,7 @@ void do_cmd_save_screen(void)
 /*
  * Check the status of "artifacts"
  */
-static void do_cmd_knowledge_artifacts(void)
+static void do_cmd_knowledge_artifacts(player_type *player_ptr)
 {
 	ARTIFACT_IDX i;
 	ARTIFACT_IDX k;
@@ -4195,11 +4195,11 @@ static void do_cmd_knowledge_artifacts(void)
 	}
 
 	/* Check the dungeon */
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+	for (y = 0; y < player_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < player_ptr->current_floor_ptr->width; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
 			OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -4207,7 +4207,7 @@ static void do_cmd_knowledge_artifacts(void)
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
-				o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+				o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Ignore non-artifacts */
@@ -4222,10 +4222,10 @@ static void do_cmd_knowledge_artifacts(void)
 		}
 	}
 
-	/* Check the p_ptr->inventory_list and equipment */
+	/* Check the player_ptr->inventory_list and equipment */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &player_ptr->inventory_list[i];
 
 		/* Ignore non-objects */
 		if (!o_ptr->k_idx) continue;
@@ -7025,7 +7025,7 @@ void do_cmd_knowledge(void)
 			p = 1 - p;
 			break;
 		case '1': /* Artifacts */
-			do_cmd_knowledge_artifacts();
+			do_cmd_knowledge_artifacts(p_ptr);
 			break;
 		case '2': /* Objects */
 			do_cmd_knowledge_objects(&need_redraw, FALSE, -1);
