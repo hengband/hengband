@@ -1123,7 +1123,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 
 			do
 			{
-				stop_ty = activate_ty_curse(stop_ty, &count);
+				stop_ty = activate_ty_curse(p_ptr, stop_ty, &count);
 			} while (--curses);
 		}
 

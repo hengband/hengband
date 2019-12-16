@@ -376,7 +376,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「下僕よ、汝傲慢なり。」", "'Thou art growing arrogant, mortal.'"));
 
-			(void)activate_ty_curse(FALSE, &count);
+			(void)activate_ty_curse(creature_ptr, FALSE, &count);
 			reward = _("禍々しい呪いをかけられた。", "cursing");
 			break;
 
@@ -525,7 +525,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			switch (randint1(4))
 			{
 			case 1:
-				(void)activate_ty_curse(FALSE, &count);
+				(void)activate_ty_curse(creature_ptr, FALSE, &count);
 				reward = _("禍々しい呪いをかけられた。", "cursing");
 				break;
 			case 2:
@@ -575,7 +575,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 				(void)dec_stat(creature_ptr, dummy, 10 + randint1(15), FALSE);
 			}
 			activate_hi_summon(creature_ptr->y, creature_ptr->x, FALSE);
-			(void)activate_ty_curse(FALSE, &count);
+			(void)activate_ty_curse(creature_ptr, FALSE, &count);
 			if (one_in_(2))
 			{
 				dummy = 0;

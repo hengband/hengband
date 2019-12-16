@@ -2653,7 +2653,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		if ((creature_ptr->cursed & TRC_TY_CURSE) && one_in_(TY_CURSE_CHANCE))
 		{
 			int count = 0;
-			(void)activate_ty_curse(FALSE, &count);
+			(void)activate_ty_curse(creature_ptr, FALSE, &count);
 		}
 		/* Handle experience draining */
 		if (creature_ptr->prace != RACE_ANDROID && ((creature_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)))
@@ -4419,7 +4419,7 @@ static void process_player(player_type *creature_ptr)
 	if (creature_ptr->invoking_midnight_curse)
 	{
 		int count = 0;
-		activate_ty_curse(FALSE, &count);
+		activate_ty_curse(creature_ptr, FALSE, &count);
 		creature_ptr->invoking_midnight_curse = FALSE;
 	}
 

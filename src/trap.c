@@ -474,7 +474,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
 			do
 			{
-				stop_ty = activate_ty_curse(stop_ty, &count);
+				stop_ty = activate_ty_curse(trapped_ptr, stop_ty, &count);
 			} while (one_in_(6));
 		}
 		break;

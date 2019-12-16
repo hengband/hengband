@@ -2545,7 +2545,7 @@ void call_chaos(void)
  * or the player gets paralyzed.
  * </pre>
  */
-bool activate_ty_curse(bool stop_ty, int *count)
+bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 {
 	int i = 0;
 	BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
@@ -2558,7 +2558,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			if (!(*count))
 			{
 				msg_print(_("地面が揺れた...", "The ground trembles..."));
-				earthquake(p_ptr, p_ptr->y, p_ptr->x, 5 + randint0(10), 0);
+				earthquake(target_ptr, target_ptr->y, target_ptr->x, 5 + randint0(10), 0);
 				if (!one_in_(6)) break;
 			}
 		case 30: case 31:
@@ -2566,69 +2566,69 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			{
 				HIT_POINT dam = damroll(10, 10);
 				msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
-				project(p_ptr, 0, 8, p_ptr->y, p_ptr->x, dam, GF_MANA, flg, -1);
-				take_hit(p_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
+				project(target_ptr, 0, 8, target_ptr->y, target_ptr->x, dam, GF_MANA, flg, -1);
+				take_hit(target_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
 				if (!one_in_(6)) break;
 			}
 		case 32: case 33:
 			if (!(*count))
 			{
 				msg_print(_("周囲の空間が歪んだ！", "Space warps about you!"));
-				teleport_player(p_ptr, damroll(10, 10), TELEPORT_PASSIVE);
-				if (randint0(13)) (*count) += activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
+				teleport_player(target_ptr, damroll(10, 10), TELEPORT_PASSIVE);
+				if (randint0(13)) (*count) += activate_hi_summon(target_ptr->y, target_ptr->x, FALSE);
 				if (!one_in_(6)) break;
 			}
 		case 34:
 			msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
-			wall_breaker(p_ptr);
+			wall_breaker(target_ptr);
 			if (!randint0(7))
 			{
-				project(p_ptr, 0, 7, p_ptr->y, p_ptr->x, 50, GF_KILL_WALL, flg, -1);
-				take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"), -1);
+				project(target_ptr, 0, 7, target_ptr->y, target_ptr->x, 50, GF_KILL_WALL, flg, -1);
+				take_hit(target_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"), -1);
 			}
 			if (!one_in_(6)) break;
 		case 1: case 2: case 3: case 16: case 17:
 			aggravate_monsters(0);
 			if (!one_in_(6)) break;
 		case 4: case 5: case 6:
-			(*count) += activate_hi_summon(p_ptr->y, p_ptr->x, FALSE);
+			(*count) += activate_hi_summon(target_ptr->y, target_ptr->x, FALSE);
 			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
-			(*count) += summon_specific(0, p_ptr->y, p_ptr->x, p_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+			(*count) += summon_specific(0, target_ptr->y, target_ptr->x, target_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
-			lose_exp(p_ptr, p_ptr->exp / 16);
+			lose_exp(target_ptr, target_ptr->exp / 16);
 			if (!one_in_(6)) break;
 		case 13: case 14: case 15: case 19: case 20:
-			if (stop_ty || (p_ptr->free_act && (randint1(125) < p_ptr->skill_sav)) || (p_ptr->pclass == CLASS_BERSERKER))
+			if (stop_ty || (target_ptr->free_act && (randint1(125) < target_ptr->skill_sav)) || (target_ptr->pclass == CLASS_BERSERKER))
 			{
 				/* Do nothing */ ;
 			}
 			else
 			{
 				msg_print(_("彫像になった気分だ！", "You feel like a statue!"));
-				if (p_ptr->free_act)
-					set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(3));
+				if (target_ptr->free_act)
+					set_paralyzed(target_ptr, target_ptr->paralyzed + randint1(3));
 				else
-					set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(13));
+					set_paralyzed(target_ptr, target_ptr->paralyzed + randint1(13));
 				stop_ty = TRUE;
 			}
 			if (!one_in_(6)) break;
 		case 21: case 22: case 23:
-			(void)do_dec_stat(p_ptr, randint0(6));
+			(void)do_dec_stat(target_ptr, randint0(6));
 			if (!one_in_(6)) break;
 		case 24:
 			msg_print(_("ほえ？私は誰？ここで何してる？", "Huh? Who am I? What am I doing here?"));
-			lose_all_info(p_ptr);
+			lose_all_info(target_ptr);
 			if (!one_in_(6)) break;
 		case 25:
 			/*
 			 * Only summon Cyberdemons deep in the dungeon.
 			 */
-			if ((p_ptr->current_floor_ptr->dun_level > 65) && !stop_ty)
+			if ((target_ptr->current_floor_ptr->dun_level > 65) && !stop_ty)
 			{
-				(*count) += summon_cyber(-1, p_ptr->y, p_ptr->x);
+				(*count) += summon_cyber(-1, target_ptr->y, target_ptr->x);
 				stop_ty = TRUE;
 				break;
 			}
@@ -2638,7 +2638,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			{
 				do
 				{
-					(void)do_dec_stat(p_ptr, i);
+					(void)do_dec_stat(target_ptr, i);
 				}
 				while (one_in_(2));
 
@@ -3282,7 +3282,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 	default:
 	{
 		int count = 0;
-		(void)activate_ty_curse(FALSE, &count);
+		(void)activate_ty_curse(caster_ptr, FALSE, &count);
 		break;
 	}
 	}
@@ -3716,7 +3716,7 @@ void cast_shuffle(player_type *caster_ptr)
 	{
 		int count = 0;
 		msg_print(_("なんてこった！《吊られた男》だ！", "Oh no! It's the Hanged Man."));
-		activate_ty_curse(FALSE, &count);
+		activate_ty_curse(caster_ptr, FALSE, &count);
 	}
 	else if (die < 22)
 	{
