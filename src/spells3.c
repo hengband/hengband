@@ -2908,25 +2908,25 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
  * @param y テレポート先のY座標
  * @return 目標に指定通りテレポートできたならばTRUEを返す
  */
-static bool dimension_door_aux(DEPTH x, DEPTH y)
+static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
-	p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
+	caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
 	if (!cave_player_teleportable_bold(y, x, 0L) ||
-	    (distance(y, x, p_ptr->y, p_ptr->x) > plev / 2 + 10) ||
+	    (distance(y, x, caster_ptr->y, caster_ptr->x) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
-		p_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
-		teleport_player(p_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
+		caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
+		teleport_player(caster_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
 
 		/* Failed */
 		return FALSE;
 	}
 	else
 	{
-		teleport_player_to(p_ptr, y, x, 0L);
+		teleport_player_to(caster_ptr, y, x, 0L);
 
 		/* Success */
 		return TRUE;
@@ -2946,7 +2946,7 @@ bool dimension_door(void)
 	/* Rerutn FALSE if cancelled */
 	if (!tgt_pt(&x, &y)) return FALSE;
 
-	if (dimension_door_aux(x, y)) return TRUE;
+	if (dimension_door_aux(p_ptr, x, y)) return TRUE;
 
 	msg_print(_("精霊界から物質界に戻る時うまくいかなかった！", "You fail to exit the astral plane correctly!"));
 
@@ -2966,7 +2966,7 @@ bool mirror_tunnel(void)
 	/* Rerutn FALSE if cancelled */
 	if (!tgt_pt(&x, &y)) return FALSE;
 
-	if (dimension_door_aux(x, y)) return TRUE;
+	if (dimension_door_aux(p_ptr, x, y)) return TRUE;
 
 	msg_print(_("鏡の世界をうまく通れなかった！", "You fail to pass the mirror plane correctly!"));
 
