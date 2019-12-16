@@ -225,7 +225,7 @@ extern bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x);
 extern bool sleep_monsters_touch(void);
 extern bool activate_ty_curse(bool stop_ty, int *count);
 extern int activate_hi_summon(POSITION y, POSITION x, bool can_pet);
-extern void wall_breaker(void);
+extern void wall_breaker(player_type *caster_ptr);
 extern bool confuse_monsters(HIT_POINT dam);
 extern bool charm_monsters(HIT_POINT dam);
 extern bool charm_animals(HIT_POINT dam);

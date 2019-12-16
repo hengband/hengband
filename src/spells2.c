@@ -2580,7 +2580,7 @@ bool activate_ty_curse(bool stop_ty, int *count)
 			}
 		case 34:
 			msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
-			wall_breaker();
+			wall_breaker(p_ptr);
 			if (!randint0(7))
 			{
 				project(p_ptr, 0, 7, p_ptr->y, p_ptr->x, 50, GF_KILL_WALL, flg, -1);
@@ -2743,29 +2743,29 @@ int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
  * @brief 周辺破壊効果(プレイヤー中心)
  * @return 作用が実際にあった場合TRUEを返す
  */
-void wall_breaker(void)
+void wall_breaker(player_type *caster_ptr)
 {
 	int i;
 	POSITION y = 0, x = 0;
 	int attempts = 1000;
 
-	if (randint1(80 + p_ptr->lev) < 70)
+	if (randint1(80 + caster_ptr->lev) < 70)
 	{
 		while (attempts--)
 		{
-			scatter(&y, &x, p_ptr->y, p_ptr->x, 4, 0);
+			scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
 			if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
 
-			if (!player_bold(p_ptr, y, x)) break;
+			if (!player_bold(caster_ptr, y, x)) break;
 		}
 
-		project(p_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
+		project(caster_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
 				  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 	}
 	else if (randint1(100) > 30)
 	{
-		earthquake(p_ptr, p_ptr->y, p_ptr->x, 1, 0);
+		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 1, 0);
 	}
 	else
 	{
@@ -2775,12 +2775,12 @@ void wall_breaker(void)
 		{
 			while (1)
 			{
-				scatter(&y, &x, p_ptr->y, p_ptr->x, 10, 0);
+				scatter(&y, &x, caster_ptr->y, caster_ptr->x, 10, 0);
 
-				if (!player_bold(p_ptr, y, x)) break;
+				if (!player_bold(caster_ptr, y, x)) break;
 			}
 
-			project(p_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
+			project(caster_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
 					  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 		}
 	}
@@ -3228,7 +3228,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		destroy_doors_touch();
 		break;
 	case 16: case 17:
-		wall_breaker();
+		wall_breaker(caster_ptr);
 	case 18:
 		sleep_monsters_touch();
 		break;
@@ -3767,7 +3767,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 60)
 	{
 		msg_print(_("《塔》だ。", "It's the Tower."));
-		wall_breaker();
+		wall_breaker(caster_ptr);
 	}
 	else if (die < 72)
 	{
