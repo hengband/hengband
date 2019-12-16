@@ -3107,19 +3107,19 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
  * @param explode 爆発処理を伴うならばTRUE
  * @return なし
  */
-void remove_all_mirrors(bool explode)
+void remove_all_mirrors(player_type *caster_ptr, bool explode)
 {
 	POSITION x, y;
 
-	for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x]))
+			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 			{
 				remove_mirror(y, x);
 				if (explode)
-					project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS,
+					project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 		}

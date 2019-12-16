@@ -247,7 +247,7 @@ extern bool eat_magic(player_type *caster_ptr, int power);
 extern void discharge_minion(player_type *caster_ptr);
 extern bool kawarimi(bool success);
 extern bool rush_attack(player_type *attacker_ptr, bool *mdeath);
-extern void remove_all_mirrors(bool explode);
+extern void remove_all_mirrors(player_type *caster_ptr, bool explode);
 extern void ring_of_power(player_type *caster_ptr, DIRECTION dir);
 extern void wild_magic(player_type *caster_ptr, int spell);
 extern void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad);

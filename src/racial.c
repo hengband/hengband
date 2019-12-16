@@ -614,7 +614,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (command == -3)
 			{
 				/* Explode all mirrors */
-				remove_all_mirrors(TRUE);
+				remove_all_mirrors(creature_ptr, TRUE);
 			}
 			else if (command == -4)
 			{
