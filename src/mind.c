@@ -432,7 +432,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 },
 #else
 {
-	"Detects visible monsters in your vicinity and more and more. Detects traps and doors at level 5, invisible monsters at level 15, items at level 30. And magic mapping at level 20. Lights and know the whole level at level 45. Gives telepathy at level 25.",
+	"Detects visible monsters in your vicinity. Detects traps and doors at level 5, invisible monsters at level 15, and items at level 30. Gives telepathy at level 25. Magically maps the surroundings at level 20. Lights and reveals the whole level at level 45.",
 	"Fires a beam or ball which inflicts PSI damage.",
 	"Teleports you a short distance.",
 	"Teleports you a long distance.",
