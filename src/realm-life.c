@@ -398,7 +398,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 26:
 		if (name) return _("アンデッド消滅", "Annihilate Undead");
 		if (desc) return _("自分の周囲にいるアンデッドを現在の階から消し去る。抵抗されると無効。",
-			"Eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.");
+			"Eliminates all nearby undead monsters, exhausting you. Powerful or unique monsters may be able to resist.");
 
 		{
 			int power = plev + 50;
