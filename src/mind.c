@@ -464,7 +464,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Envelops you with a temporary aura that damages any monster which hits you in melee.",
 	"Damages an adjacent monster and blows it away.",
 	"Fires a large energy ball.",
-	"Dispels all magics which are effecting a monster.",
+	"Dispels all magics which are affecting a monster.",
 	"Summons ghosts.",
 	"Generates a huge ball of flame centered on you.",
 	"Fires a long, powerful energy beam.",
