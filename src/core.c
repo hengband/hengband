@@ -4363,7 +4363,7 @@ static void process_upkeep_with_speed(void)
 	}
 }
 
-static void process_fishing(void)
+static void process_fishing(player_type *creature_ptr)
 {
 	Term_xtra(TERM_XTRA_DELAY, 10);
 	if (one_in_(1000))
@@ -4371,17 +4371,17 @@ static void process_fishing(void)
 		MONRACE_IDX r_idx;
 		bool success = FALSE;
 		get_mon_num_prep(monster_is_fishing_target, NULL);
-		r_idx = get_mon_num(p_ptr->current_floor_ptr->dun_level ? p_ptr->current_floor_ptr->dun_level : wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level);
+		r_idx = get_mon_num(creature_ptr->current_floor_ptr->dun_level ? creature_ptr->current_floor_ptr->dun_level : wilderness[creature_ptr->wilderness_y][creature_ptr->wilderness_x].level);
 		msg_print(NULL);
 		if (r_idx && one_in_(2))
 		{
 			POSITION y, x;
-			y = p_ptr->y + ddy[p_ptr->fishing_dir];
-			x = p_ptr->x + ddx[p_ptr->fishing_dir];
+			y = creature_ptr->y + ddy[creature_ptr->fishing_dir];
+			x = creature_ptr->x + ddx[creature_ptr->fishing_dir];
 			if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+				monster_desc(m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
 				msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 				success = TRUE;
 			}
@@ -4390,7 +4390,7 @@ static void process_fishing(void)
 		{
 			msg_print(_("餌だけ食われてしまった！くっそ～！", "Damn!  The fish stole your bait!"));
 		}
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(creature_ptr, FALSE, TRUE);
 	}
 }
 
@@ -4481,7 +4481,7 @@ static void process_player(player_type *creature_ptr)
 		}
 	}
 
-	if (creature_ptr->action == ACTION_FISH) process_fishing();
+	if (creature_ptr->action == ACTION_FISH) process_fishing(creature_ptr);
 
 	/* Handle "abort" */
 	if (check_abort)
