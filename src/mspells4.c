@@ -1598,17 +1598,17 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
+	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		resist = p_ptr->resist_conf;
-		saving_throw = (randint0(100 + rlev / 2) < p_ptr->skill_sav);
+		resist = target_ptr->resist_conf;
+		saving_throw = (randint0(100 + rlev / 2) < target_ptr->skill_sav);
 		spell_badstatus_message(m_idx, t_idx,
 			_("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
 			_("%^sがあなたの筋力を吸い取ろうとした！", "%^s drains power from your muscles!"),
@@ -1618,7 +1618,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 		if (!resist && !saving_throw)
 		{
-			(void)set_slow(p_ptr, p_ptr->slow + randint0(4) + 4, FALSE);
+			(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 		}
 		learn_spell(MS_SLOW);
 		update_smart_learn(m_idx, DRS_FREE);
@@ -3467,7 +3467,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX 
 	case RF5_SPELL_START + 27: spell_RF5_SCARE(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;   /* RF5_SCARE */
 	case RF5_SPELL_START + 28: spell_RF5_BLIND(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;   /* RF5_BLIND */
 	case RF5_SPELL_START + 29: spell_RF5_CONF(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_CONF */
-	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
+	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
 	case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF5_HOLD */
 	case RF6_SPELL_START + 0:  spell_RF6_HASTE(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_HASTE */
 	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
@@ -3580,7 +3580,7 @@ HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX
 	case RF5_SPELL_START + 27: spell_RF5_SCARE(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_SCARE */
 	case RF5_SPELL_START + 28: spell_RF5_BLIND(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_BLIND */
 	case RF5_SPELL_START + 29: spell_RF5_CONF(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_CONF */
-	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_SLOW */
+	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_SLOW */
 	case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_HOLD */
 	case RF6_SPELL_START + 0:  spell_RF6_HASTE(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_HASTE */
 	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF6_HAND_DOOM */
