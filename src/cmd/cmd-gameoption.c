@@ -27,7 +27,7 @@ bool always_repeat;	/* Repeat obvious commands */
 bool confirm_destroy;	/* Prompt for destruction of known worthless items */
 bool confirm_wear;	/* Confirm to wear/wield known cursed items */
 bool confirm_quest;	/* Prompt before exiting a quest level */
-bool target_pet;	/* Allow targetting pets */
+bool target_pet;	/* Allow targeting pets */
 bool easy_open;	/* Automatically open doors */
 bool easy_disarm;	/* Automatically disarm traps */
 bool easy_floor;	/* Display floor stacks in a list */
@@ -263,7 +263,7 @@ const option_type option_info[] =
 	"confirm_quest",                _("クエストを諦めて階段で逃げる前に確認する", "Prompt before exiting a quest level") },
 
 	{ &target_pet,                  FALSE, OPT_PAGE_INPUT, 2, 5,
-	"target_pet",                   _("ペットをターゲットにする", "Allow targetting pets") },
+	"target_pet",                   _("ペットをターゲットにする", "Allow targeting pets") },
 
 	{ &easy_open,                   TRUE,  OPT_PAGE_INPUT, 5, 7,
 	"easy_open",                    _("自動的にドアを開ける", "Automatically open doors") },
