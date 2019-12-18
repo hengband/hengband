@@ -32,7 +32,7 @@
 * on the level on which the chest is generated.
 * </pre>
 */
-void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
+void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
 	int number;
 
@@ -42,7 +42,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	object_type forge;
 	object_type *q_ptr;
 
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
 
 
 	/* Small chests often hold "gold" */
@@ -56,12 +56,12 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 		number = 5;
 		small = FALSE;
 		mode |= AM_GREAT;
-		p_ptr->current_floor_ptr->object_level = o_ptr->xtra3;
+		owner_ptr->current_floor_ptr->object_level = o_ptr->xtra3;
 	}
 	else
 	{
 		/* Determine the "value" of the items */
-		p_ptr->current_floor_ptr->object_level = ABS(o_ptr->pval) + 10;
+		owner_ptr->current_floor_ptr->object_level = ABS(o_ptr->pval) + 10;
 	}
 
 	/* Zero pval means empty chest */
@@ -99,7 +99,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 				x = randint0(MAX_WID);
 
 				/* Must be an empty floor. */
-				if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x)) continue;
+				if (!cave_empty_bold(owner_ptr->current_floor_ptr, y, x)) continue;
 
 				/* Place the object there. */
 				(void)drop_near(q_ptr, -1, y, x);
@@ -113,7 +113,7 @@ void chest_death(bool scatter, POSITION y, POSITION x, OBJECT_IDX o_idx)
 	}
 
 	/* Reset the object level */
-	p_ptr->current_floor_ptr->object_level = p_ptr->current_floor_ptr->base_level;
+	owner_ptr->current_floor_ptr->object_level = owner_ptr->current_floor_ptr->base_level;
 
 	/* Empty */
 	o_ptr->pval = 0;
@@ -328,7 +328,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 	if ((trap & (CHEST_SCATTER)) && o_ptr->k_idx)
 	{
 		msg_print(_("宝箱の中身はダンジョンじゅうに散乱した！", "The contents of the chest scatter all over the dungeon!"));
-		chest_death(TRUE, y, x, o_idx);
+		chest_death(target_ptr, TRUE, y, x, o_idx);
 		o_ptr->pval = 0;
 	}
 }

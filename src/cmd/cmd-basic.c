@@ -607,7 +607,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 		chest_trap(creature_ptr, y, x, o_idx);
 
 		/* Let the Chest drop items */
-		chest_death(FALSE, y, x, o_idx);
+		chest_death(creature_ptr, FALSE, y, x, o_idx);
 	}
 	return (more);
 }
