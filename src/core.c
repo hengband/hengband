@@ -4338,28 +4338,28 @@ static void pack_overflow(player_type *owner_ptr)
  * @brief プレイヤーの行動エネルギーが充填される（＝プレイヤーのターンが回る）毎に行われる処理  / process the effects per 100 energy at player speed.
  * @return なし
  */
-static void process_upkeep_with_speed(void)
+static void process_upkeep_with_speed(player_type *creature_ptr)
 {
 	/* Give the player some energy */
-	if (!load && p_ptr->enchant_energy_need > 0 && !p_ptr->leaving)
+	if (!load && creature_ptr->enchant_energy_need > 0 && !creature_ptr->leaving)
 	{
-		p_ptr->enchant_energy_need -= SPEED_TO_ENERGY(p_ptr->pspeed);
+		creature_ptr->enchant_energy_need -= SPEED_TO_ENERGY(creature_ptr->pspeed);
 	}
 	
 	/* No turn yet */
-	if (p_ptr->enchant_energy_need > 0) return;
+	if (creature_ptr->enchant_energy_need > 0) return;
 	
-	while (p_ptr->enchant_energy_need <= 0)
+	while (creature_ptr->enchant_energy_need <= 0)
 	{
 		/* Handle the player song */
-		if (!load) check_music(p_ptr);
+		if (!load) check_music(creature_ptr);
 
 		/* Hex - Handle the hex spells */
-		if (!load) check_hex(p_ptr);
-		if (!load) revenge_spell(p_ptr);
+		if (!load) check_hex(creature_ptr);
+		if (!load) revenge_spell(creature_ptr);
 		
 		/* There is some randomness of needed energy */
-		p_ptr->enchant_energy_need += ENERGY_NEED();
+		creature_ptr->enchant_energy_need += ENERGY_NEED();
 	}
 }
 
@@ -5071,7 +5071,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 
 		/* Process the player */
 		process_player(player_ptr);
-		process_upkeep_with_speed();
+		process_upkeep_with_speed(player_ptr);
 
 		handle_stuff();
 
