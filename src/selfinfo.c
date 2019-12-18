@@ -820,7 +820,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (creature_ptr->muta3 & MUT3_ALBINO)
 		{
-			info[i++] = _("あなたはアルビノだ。(耐久-4)", "You are albino (-4 CON).");
+			info[i++] = _("あなたはアルビノだ。(耐久-4)", "You are an albino (-4 CON).");
 		}
 		if (creature_ptr->muta3 & MUT3_FLESH_ROT)
 		{
