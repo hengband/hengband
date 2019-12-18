@@ -418,14 +418,14 @@ void self_knowledge(player_type *creature_ptr)
 		{
 			if (plev > 29)
 			{
-				info[i++] = _("あなたは聖なる槍を放つことができる。(30 MP)", "You can fires a holy spear (cost 30).");
+				info[i++] = _("あなたは聖なる槍を放つことができる。(30 MP)", "You can fire a holy spear (cost 30).");
 			}
 		}
 		else
 		{
 			if (plev > 29)
 			{
-				info[i++] = _("あなたは生命力を減少させる槍を放つことができる。(30 MP)", "You can fires a spear which drains vitality (cost 30).");
+				info[i++] = _("あなたは生命力を減少させる槍を放つことができる。(30 MP)", "You can fire a spear which drains vitality (cost 30).");
 			}
 		}
 		break;
