@@ -2920,7 +2920,7 @@ static concptr monster_group_text[] =
 	"ユニーク",	/* "Uniques" */
 	"乗馬可能なモンスター",	/* "Riding" */
 	"賞金首", /* "Wanted */
-	"アンバーの王族", /* "Ambertite" */
+	"アンバーの王族", /* "Amberite" */
 	"アリ",
 	"コウモリ",
 	"ムカデ",
@@ -2981,7 +2981,7 @@ static concptr monster_group_text[] =
 	"Uniques",
 	"Ridable monsters",
 	"Wanted monsters",
-	"Ambertite",
+	"Amberite",
 	"Ant",
 	"Bat",
 	"Centipede",
