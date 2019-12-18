@@ -221,7 +221,7 @@ void self_knowledge(player_type *creature_ptr)
 			break;
 		case RACE_HALF_TROLL:
 			if (plev > 9)
-				info[i++] = _("あなたは狂暴化することができる。(12 MP) ", "You enter berserk fury (cost 12).");
+				info[i++] = _("あなたは狂暴化することができる。(12 MP) ", "You can enter a berserk fury (cost 12).");
 			break;
 		case RACE_AMBERITE:
 			if (plev > 29)
@@ -233,7 +233,7 @@ void self_knowledge(player_type *creature_ptr)
 			break;
 		case RACE_BARBARIAN:
 			if (plev > 7)
-				info[i++] = _("あなたは狂暴化することができる。(10 MP) ", "You can enter berserk fury (cost 10).");
+				info[i++] = _("あなたは狂暴化することができる。(10 MP) ", "You can enter a berserk fury (cost 10).");
 
 			break;
 		case RACE_HALF_OGRE:
