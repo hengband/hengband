@@ -372,7 +372,7 @@ const option_type option_info[] =
 	"exp_need",                     _("次のレベルに必要な経験値を表示する", "Show the experience needed for next level") },
 
 	{ &ignore_unview,               FALSE, OPT_PAGE_TEXT, 2, 13,
-	"ignore_unview",                _("視界外のモンスターの行動を表示しない", "Ignore whenever any monster does") },
+	"ignore_unview",                _("視界外のモンスターの行動を表示しない", "Ignore out-of-sight monster behavior") },
 
 	{ &show_ammo_detail,            TRUE, OPT_PAGE_TEXT, 2, 14,
 	"show_ammo_detail",             _("矢弾のダメージの説明を表示する", "Show description of ammo damage") },
