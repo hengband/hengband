@@ -162,8 +162,11 @@ void simple_monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1,
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF4_SHRIEK(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+	// temporary unused
+	(target_ptr);
+
 	simple_monspell_message(m_idx, t_idx,
 		_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
 		_("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."),
@@ -3405,7 +3408,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX 
 {
 	switch (SPELL_NUM)
 	{
-	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF4_SHRIEK */
+	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   break;   /* RF4_XXX1 */
 	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_DISPEL */
 	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_ROCKET */
@@ -3518,7 +3521,7 @@ HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX
 {
 	switch (SPELL_NUM)
 	{
-	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_SHRIEK */
+	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   return -1;   /* RF4_XXX1 */
 	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_DISPEL */
 	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_ROCKET */
