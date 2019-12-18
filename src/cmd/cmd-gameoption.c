@@ -640,7 +640,7 @@ const option_type cheat_info[CHEAT_MAX] =
 	},
 
 	{ &cheat_turn,	FALSE,	255,	0x81, 0x00,
-	"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put current_world_ptr->game_turn to game message.")
+	"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put turn in game messages.")
 	},
 
 	{ &cheat_sight,	FALSE,	255,	0x82, 0x00,
