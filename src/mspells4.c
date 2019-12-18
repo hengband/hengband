@@ -185,7 +185,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
-void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -199,12 +199,12 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		dispel_player(p_ptr);
-		if (p_ptr->riding) dispel_monster_status(p_ptr->riding);
+		dispel_player(target_ptr);
+		if (target_ptr->riding) dispel_monster_status(target_ptr->riding);
 
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("やりやがったな！", ""));
-		else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+		else if ((target_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 		{
 			if (randint0(2) == 0) msg_print(_("ジュラル星人め！", ""));
 			else msg_print(_("弱い者いじめは止めるんだ！", ""));
@@ -214,7 +214,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		if (t_idx == p_ptr->riding) dispel_player(p_ptr);
+		if (t_idx == target_ptr->riding) dispel_player(target_ptr);
 		dispel_monster_status(t_idx);
 	}
 }
@@ -3407,7 +3407,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX 
 	{
 	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   break;   /* RF4_XXX1 */
-	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF4_DISPEL */
+	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_DISPEL */
 	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_ROCKET */
 	case RF4_SPELL_START + 4:   return spell_RF4_SHOOT(y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_SHOOT */
 	case RF4_SPELL_START + 5:   break;   /* RF4_XXX2 */
@@ -3520,7 +3520,7 @@ HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX
 	{
 	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   return -1;   /* RF4_XXX1 */
-	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_DISPEL */
+	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_DISPEL */
 	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_ROCKET */
 	case RF4_SPELL_START + 4:   return spell_RF4_SHOOT(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_SHOOT */
 	case RF4_SPELL_START + 5:   return -1;   /* RF4_XXX2 */
