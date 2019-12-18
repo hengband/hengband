@@ -235,7 +235,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 15:
 		if (name) return _("結界の紋章", "Glyph of Warding");
 		if (desc) return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
-			"Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.");
+			"Sets a glyph on the floor beneath you. If you are on a glyph, monsters cannot attack you but can try to break the glyph.");
 
 		{
 			if (cast)
