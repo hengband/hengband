@@ -90,7 +90,7 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
  * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
  * @return ブレスを直接当てられるならばTRUEを返す
  */
-static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
+static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
 {
 	/* Must be the same as projectable() */
 
@@ -144,7 +144,7 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 		else if (flg & PROJECT_LOS)
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!cave_los_bold(p_ptr->current_floor_ptr, ny, nx)) break;
+			if (!cave_los_bold(master_ptr->current_floor_ptr, ny, nx)) break;
 		}
 		else
 		{
@@ -164,17 +164,17 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 		if (flg & PROJECT_DISI)
 		{
 			if (in_disintegration_range(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (in_disintegration_range(y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
+			if (in_disintegration_range(y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
 		}
 		else if (flg & PROJECT_LOS)
 		{
-			if (los(p_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (los(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
+			if (los(master_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (los(master_ptr->current_floor_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
 		}
 		else
 		{
-			if (projectable(p_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (projectable(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x) && (distance(y1, x1, p_ptr->y, p_ptr->x) <= rad)) hityou = TRUE;
+			if (projectable(master_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (projectable(master_ptr->current_floor_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
 		}
 	}
 	else
@@ -186,7 +186,7 @@ static bool breath_direct(POSITION y1, POSITION x1, POSITION y2, POSITION x2, PO
 			y = gy[i];
 			x = gx[i];
 			if ((y == y2) && (x == x2)) hit2 = TRUE;
-			if (player_bold(p_ptr, y, x)) hityou = TRUE;
+			if (player_bold(master_ptr, y, x)) hityou = TRUE;
 		}
 	}
 
@@ -538,19 +538,19 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				/* Expected breath radius */
 				POSITION rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
-				if (!breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, 0, TRUE))
+				if (!breath_direct(p_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, 0, TRUE))
 				{
 					f4 &= ~(RF4_BREATH_MASK);
 					f5 &= ~(RF5_BREATH_MASK);
 					f6 &= ~(RF6_BREATH_MASK);
 				}
 				else if ((f4 & RF4_BR_LITE) &&
-					 !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_LITE, TRUE))
+					 !breath_direct(p_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_LITE, TRUE))
 				{
 					f4 &= ~(RF4_BR_LITE);
 				}
 				else if ((f4 & RF4_BR_DISI) &&
-					 !breath_direct(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_DISINTEGRATE, TRUE))
+					 !breath_direct(p_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_DISINTEGRATE, TRUE))
 				{
 					f4 &= ~(RF4_BR_DISI);
 				}
