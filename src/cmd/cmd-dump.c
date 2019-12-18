@@ -6337,7 +6337,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 					sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find out %s."), name);
 					break;
 				case QUEST_TYPE_FIND_EXIT:
-					sprintf(note, _(" - 出口に到達する。", " - Reach to Exit."));
+					sprintf(note, _(" - 出口に到達する。", " - Reach exit."));
 					break;
 
 				case QUEST_TYPE_KILL_NUMBER:
