@@ -797,19 +797,19 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		return TRUE;
 	}
 
-	if (p_ptr->current_floor_ptr->dun_level && (max_dlv[p_ptr->dungeon_idx] > p_ptr->current_floor_ptr->dun_level) && !creature_ptr->current_floor_ptr->inside_quest && !creature_ptr->word_recall)
+	if (creature_ptr->current_floor_ptr->dun_level && (max_dlv[creature_ptr->dungeon_idx] > creature_ptr->current_floor_ptr->dun_level) && !creature_ptr->current_floor_ptr->inside_quest && !creature_ptr->word_recall)
 	{
 		if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? ")))
 		{
-			max_dlv[p_ptr->dungeon_idx] = p_ptr->current_floor_ptr->dun_level;
+			max_dlv[creature_ptr->dungeon_idx] = creature_ptr->current_floor_ptr->dun_level;
 			if (record_maxdepth)
-				exe_write_diary(p_ptr, NIKKI_TRUMP, p_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
+				exe_write_diary(creature_ptr, NIKKI_TRUMP, creature_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
 		}
 
 	}
 	if (!creature_ptr->word_recall)
 	{
-		if (!p_ptr->current_floor_ptr->dun_level)
+		if (!creature_ptr->current_floor_ptr->dun_level)
 		{
 			DUNGEON_IDX select_dungeon;
 			select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
