@@ -6115,7 +6115,7 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 		return;
 	}
 
-	fprintf(fff, _("今日のターゲット : %s\n", "Today target : %s\n"),
+	fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
 		(creature_ptr->today_mon ? r_name + r_info[creature_ptr->today_mon].name : _("不明", "unknown")));
 	fprintf(fff, "\n");
 	fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
