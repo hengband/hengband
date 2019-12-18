@@ -407,7 +407,7 @@ extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
 extern bool is_open(FEAT_IDX feat);
-extern bool check_local_illumination(POSITION y, POSITION x);
+extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
 
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);

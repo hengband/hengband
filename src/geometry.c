@@ -561,7 +561,7 @@ bool player_can_see_bold(POSITION y, POSITION x)
 	if (feat_supports_los(get_feat_mimic(g_ptr))) return TRUE;
 
 	/* Check for "local" illumination */
-	return check_local_illumination(y, x);
+	return check_local_illumination(p_ptr, y, x);
 }
 
 /*

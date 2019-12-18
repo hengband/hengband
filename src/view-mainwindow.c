@@ -3074,7 +3074,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 					}
 
 					/* Not glowing correctly */
-					else if (!have_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(y, x))
+					else if (!have_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(p_ptr, y, x))
 					{
 						/* Use a darkened colour/tile */
 						a = f_ptr->x_attr[F_LIT_DARK];

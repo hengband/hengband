@@ -524,23 +524,23 @@ bool is_hidden_door(grid_type *g_ptr)
  * @param x x座標
  * @return 指定された座標に照明がかかっているならTRUEを返す。。
  */
-bool check_local_illumination(POSITION y, POSITION x)
+bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	/* Hack -- move towards player */
-	POSITION yy = (y < p_ptr->y) ? (y + 1) : (y > p_ptr->y) ? (y - 1) : y;
-	POSITION xx = (x < p_ptr->x) ? (x + 1) : (x > p_ptr->x) ? (x - 1) : x;
+	POSITION yy = (y < creature_ptr->y) ? (y + 1) : (y > creature_ptr->y) ? (y - 1) : y;
+	POSITION xx = (x < creature_ptr->x) ? (x + 1) : (x > creature_ptr->x) ? (x - 1) : x;
 
 	/* Check for "local" illumination */
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
 	/* Check for "complex" illumination */
-	if ((feat_supports_los(get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[yy][xx])) &&
-		(p_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW)) ||
-		(feat_supports_los(get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[y][xx])) &&
-		(p_ptr->current_floor_ptr->grid_array[y][xx].info & CAVE_GLOW)) ||
-			(feat_supports_los(get_feat_mimic(&p_ptr->current_floor_ptr->grid_array[yy][x])) &&
-		(p_ptr->current_floor_ptr->grid_array[yy][x].info & CAVE_GLOW)))
+	if ((feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[yy][xx])) &&
+		(creature_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW)) ||
+		(feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[y][xx])) &&
+		(creature_ptr->current_floor_ptr->grid_array[y][xx].info & CAVE_GLOW)) ||
+			(feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[yy][x])) &&
+		(creature_ptr->current_floor_ptr->grid_array[yy][x].info & CAVE_GLOW)))
 	{
 		return TRUE;
 	}
@@ -549,7 +549,7 @@ bool check_local_illumination(POSITION y, POSITION x)
 #else /* COMPLEX_WALL_ILLUMINATION */
 
 	/* Check for "simple" illumination */
-	return (p_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
+	return (creature_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW) ? TRUE : FALSE;
 
 #endif /* COMPLEX_WALL_ILLUMINATION */
 }
@@ -816,7 +816,7 @@ void note_spot(POSITION y, POSITION x)
 		}
 
 		/* Memorize certain non-torch-lit wall grids */
-		else if (check_local_illumination(y, x))
+		else if (check_local_illumination(p_ptr, y, x))
 		{
 			g_ptr->info |= (CAVE_MARK);
 		}
