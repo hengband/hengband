@@ -849,7 +849,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 29:
 		if (name) return _("虎伏絶刀勢", "Kofuku-Zettousei");
-		if (desc) return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even effects nearby monsters.");
+		if (desc) return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even affects nearby monsters.");
 
 		if (cast)
 		{

@@ -154,7 +154,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 9:
 		if (name) return _("聖なる光球", "Holy Orb");
 		if (desc) return _("聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。",
-			"Fires a ball with holy power. Hurts evil monsters greatly, but doesn't effect good monsters.");
+			"Fires a ball with holy power. Hurts evil monsters greatly, but doesn't affect good monsters.");
 
 		{
 			DICE_NUMBER dice = 3;
