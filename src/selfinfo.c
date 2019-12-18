@@ -372,7 +372,7 @@ void self_knowledge(player_type *creature_ptr)
 		if (plev > 39)
 		{
 			info[i++] = _("あなたはランダムな方向に対して数回攻撃することができる。(75 MP)",
-				"You can attack some random directions at a time (cost 75).");
+				"You can attack some random directions simultaneously (cost 75).");
 		}
 		break;
 	case CLASS_HIGH_MAGE:
@@ -404,7 +404,7 @@ void self_knowledge(player_type *creature_ptr)
 	case CLASS_ROGUE:
 		if (plev > 7)
 		{
-			info[i++] = _("あなたは攻撃して即座に逃げることができる。(12 MP)", "You can hit a monster and teleport at a time (cost 12).");
+			info[i++] = _("あなたは攻撃して即座に逃げることができる。(12 MP)", "You can hit a monster and teleport away simultaneously (cost 12).");
 		}
 		break;
 	case CLASS_RANGER:
@@ -450,7 +450,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (plev > 29)
 		{
-			info[i++] = _("あなたは通常の2倍の攻撃を行うことができる。(30 MP)", "You can perform double attacks in a time (cost 30).");
+			info[i++] = _("あなたは通常の2倍の攻撃を行うことができる。(30 MP)", "You can perform two attacks at the same time (cost 30).");
 		}
 		break;
 	case CLASS_MINDCRAFTER:
@@ -488,7 +488,7 @@ void self_knowledge(player_type *creature_ptr)
 	case CLASS_RED_MAGE:
 		if (plev > 47)
 		{
-			info[i++] = _("あなたは1ターンに2回魔法を唱えることができる。(20 MP)", "You can cast two spells in one time (cost 20).");
+			info[i++] = _("あなたは1ターンに2回魔法を唱えることができる。(20 MP)", "You can cast two spells simultaneously (cost 20).");
 		}
 		break;
 	case CLASS_SAMURAI:
