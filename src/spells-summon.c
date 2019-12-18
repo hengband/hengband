@@ -198,9 +198,9 @@ bool item_tester_offer(object_type *o_ptr)
 * @brief 悪魔領域のグレーターデーモン召喚を処理する / Daemon spell Summon Greater Demon
 * @return 処理を実行したならばTRUEを返す。
 */
-bool cast_summon_greater_demon(void)
+bool cast_summon_greater_demon(player_type *caster_ptr)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	OBJECT_IDX item;
 	concptr q, s;
 	int summon_lev;
@@ -209,12 +209,12 @@ bool cast_summon_greater_demon(void)
 	item_tester_hook = item_tester_offer;
 	q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
 	s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return FALSE;
 
 	summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
 
-	if (summon_specific(-1, p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
+	if (summon_specific(-1, caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));

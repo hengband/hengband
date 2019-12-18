@@ -63,7 +63,7 @@ extern bool cast_summon_hound(player_type *creature_ptr, int power);
 extern bool cast_summon_elemental(player_type *creature_ptr, int power);
 extern bool cast_summon_octopus(player_type *creature_ptr);
 extern bool item_tester_offer(object_type *o_ptr);
-extern bool cast_summon_greater_demon(void);
+extern bool cast_summon_greater_demon(player_type *caster_ptr);
 extern bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
 extern int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x);
 
