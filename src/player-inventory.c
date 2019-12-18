@@ -2998,7 +2998,7 @@ static bool py_pickup_floor_aux(void)
  * @details
  * This is called by py_pickup() when easy_floor is TRUE.
  */
-void py_pickup_floor(bool pickup)
+void py_pickup_floor(player_type *creature_ptr, bool pickup)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -3011,17 +3011,17 @@ void py_pickup_floor(bool pickup)
 	int can_pickup = 0;
 
 	/* Scan the pile of objects */
-	for (this_o_idx = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		/* Access the object */
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
 
 		object_desc(o_name, o_ptr, 0);
 
 		/* Access the next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		disturb(p_ptr, FALSE, FALSE);
+		disturb(creature_ptr, FALSE, FALSE);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
@@ -3035,12 +3035,12 @@ void py_pickup_floor(bool pickup)
 #endif
 
 			/* Collect the gold */
-			p_ptr->au += o_ptr->pval;
+			creature_ptr->au += o_ptr->pval;
 
 			/* Redraw gold */
-			p_ptr->redraw |= (PR_GOLD);
+			creature_ptr->redraw |= (PR_GOLD);
 
-			p_ptr->window |= (PW_PLAYER);
+			creature_ptr->window |= (PW_PLAYER);
 
 			/* Delete the gold */
 			delete_object_idx(this_o_idx);
@@ -3080,7 +3080,7 @@ void py_pickup_floor(bool pickup)
 		if (floor_num == 1)
 		{
 			/* Access the object */
-			o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3114,7 +3114,7 @@ void py_pickup_floor(bool pickup)
 		if (floor_num == 1)
 		{
 			/* Access the object */
-			o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3151,7 +3151,7 @@ void py_pickup_floor(bool pickup)
 			char out_val[MAX_NLEN + 20];
 
 			/* Access the object */
-			o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3176,7 +3176,7 @@ void py_pickup_floor(bool pickup)
 		}
 
 		/* Access the object */
-		o_ptr = &p_ptr->current_floor_ptr->o_list[floor_o_idx];
+		o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
