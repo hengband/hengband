@@ -397,7 +397,7 @@ void self_knowledge(player_type *creature_ptr)
 		{
 			if (plev > 41)
 			{
-				info[i++] = _("あなたは周りのすべてのモンスターを攻撃することができる。(40 MP)", "You can damages all monsters in sight (cost 40).");
+				info[i++] = _("あなたは周りのすべてのモンスターを攻撃することができる。(40 MP)", "You can damage all monsters in sight (cost 40).");
 			}
 		}
 		break;
