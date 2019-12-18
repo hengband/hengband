@@ -6133,7 +6133,7 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 
 	if (!listed)
 	{
-		fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There is no more wanted monster."));
+		fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There are no more wanted monster."));
 	}
 
 	my_fclose(fff);
