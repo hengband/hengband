@@ -47,7 +47,7 @@ bool view_perma_grids;	/* Map remembers all perma-lit grids */
 bool view_torch_grids;	/* Map remembers all torch-lit grids */
 bool view_unsafe_grids;	/* Map marked by detect traps */
 bool view_reduce_view;	/* Reduce view-radius in town */
-bool fresh_before;	/* Flush output while continuous command */
+bool fresh_before;	/* Flush output while in repeated command */
 bool fresh_after;	/* Flush output after monster's move */
 bool fresh_message;	/* Flush output after every message */
 bool hilite_player;	/* Hilite the player with the cursor */
@@ -95,7 +95,7 @@ bool allow_debug_opts;	/* Allow use of debug/cheat options */
 bool find_ignore_stairs;	/* Run past stairs */
 bool find_ignore_doors;	/* Run through open doors */
 bool find_cut;	/* Run past known corners */
-bool check_abort;	/* Check for user abort while continuous command */
+bool check_abort;	/* Check for user abort while in repeated command */
 bool flush_failure;	/* Flush input on various failures */
 bool flush_disturb;	/* Flush input whenever disturbed */
 bool disturb_move;	/* Disturb whenever any monster moves */
@@ -316,7 +316,7 @@ const option_type option_info[] =
 	"view_reduce_view",             _("街では視野を狭くする", "Reduce view-radius in town") },
 
 	{ &fresh_before,                TRUE,  OPT_PAGE_MAPSCREEN, 1, 23,
-	"fresh_before",                 _("連続コマンド中に画面を再描画し続ける", "Flush output while continuous command") },
+	"fresh_before",                 _("連続コマンド中に画面を再描画し続ける", "Flush output while in repeated command") },
 
 	{ &fresh_after,                 FALSE, OPT_PAGE_MAPSCREEN, 1, 24,
 	"fresh_after",                  _("コマンド後に画面を常に再描画し続ける", "Flush output after monster's move") },
@@ -433,7 +433,7 @@ const option_type option_info[] =
 	"find_cut",                     _("曲り角を斜めに最短距離で通過する", "Run past known corners") },
 
 	{ &check_abort,                 TRUE,  OPT_PAGE_DISTURBANCE, 1, 18,
-	"check_abort",                  _("連続コマンドはキー入力で中断する", "Check for user abort while continuous command") },
+	"check_abort",                  _("連続コマンドはキー入力で中断する", "Check for user abort while in repeated command") },
 
 	{ &flush_failure,               TRUE,  OPT_PAGE_DISTURBANCE, 1, 20,
 	"flush_failure",                _("様々なミス発生時に入力をクリアする", "Flush input on various failures") },
