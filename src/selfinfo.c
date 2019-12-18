@@ -506,7 +506,7 @@ void self_knowledge(player_type *creature_ptr)
 	case CLASS_CAVALRY:
 		if (plev > 9)
 		{
-			info[i++] = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster forcibly to turn it into pet.");
+			info[i++] = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster to forcibly turn it into a pet.");
 		}
 		break;
 	case CLASS_BERSERKER:
