@@ -24,7 +24,7 @@ extern void py_pickup_aux(OBJECT_IDX o_idx);
 extern bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION n_y, POSITION n_x);
 extern bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat);
 extern void search(player_type *creature_ptr);
-extern void carry(bool pickup);
+extern void carry(player_type *creature_ptr, bool pickup);
 #ifdef TRAVEL
 extern void do_cmd_travel(player_type *creature_ptr);
 extern void travel_step(void);

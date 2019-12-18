@@ -354,9 +354,9 @@ void py_pickup_aux(OBJECT_IDX o_idx)
  * Note that we ONLY handle things that can be picked up.
  * See "move_player(p_ptr, )" for handling of other things.
  */
-void carry(bool pickup)
+void carry(player_type *creature_ptr, bool pickup)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -365,9 +365,9 @@ void carry(bool pickup)
 	/* Recenter the map around the player */
 	verify_panel();
 
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD);
+	creature_ptr->update |= (PU_MONSTERS);
+	creature_ptr->redraw |= (PR_MAP);
+	creature_ptr->window |= (PW_OVERHEAD);
 	handle_stuff();
 
 	/* Automatically pickup/destroy/inscribe items */
@@ -375,7 +375,7 @@ void carry(bool pickup)
 
 	if (easy_floor)
 	{
-		py_pickup_floor(p_ptr, pickup);
+		py_pickup_floor(creature_ptr, pickup);
 		return;
 	}
 
@@ -383,7 +383,7 @@ void carry(bool pickup)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
 
 #ifdef ALLOW_EASY_SENSE /* TNB */
 
@@ -399,7 +399,7 @@ void carry(bool pickup)
 		object_desc(o_name, o_ptr, 0);
 		next_o_idx = o_ptr->next_o_idx;
 
-		disturb(p_ptr, FALSE, FALSE);
+		disturb(creature_ptr, FALSE, FALSE);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
@@ -415,11 +415,11 @@ void carry(bool pickup)
 			sound(SOUND_SELL);
 
 			/* Collect the gold */
-			p_ptr->au += value;
+			creature_ptr->au += value;
 
 			/* Redraw gold */
-			p_ptr->redraw |= (PR_GOLD);
-			p_ptr->window |= (PW_PLAYER);
+			creature_ptr->redraw |= (PR_GOLD);
+			creature_ptr->window |= (PW_PLAYER);
 		}
 
 		/* Pick up objects */
@@ -715,7 +715,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 	/* Handle "objects" */
 	if (!(mpe_mode & MPE_DONT_PICKUP))
 	{
-		carry((mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
+		carry(creature_ptr, (mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
 	}
 
 	/* Handle "store doors" */
