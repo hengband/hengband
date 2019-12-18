@@ -622,7 +622,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		if (num == MAX_ARENA_MONS)
 		{
 			fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
-				"                 won all fight to become a Chanpion.\n"));
+				"                 won all fights to become a Champion.\n"));
 			do_level = FALSE;
 		}
 		break;
