@@ -3732,7 +3732,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 30)
 	{
 		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
-		trump_summoning(1, FALSE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+		trump_summoning(caster_ptr, 1, FALSE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
 	}
 	else if (die < 33)
 	{
@@ -3783,22 +3783,22 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 82)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
+		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
 	}
 	else if (die < 84)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
+		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
 	}
 	else if (die < 86)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
+		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
 	}
 	else if (die < 88)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-		trump_summoning(1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
+		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
 	}
 	else if (die < 96)
 	{

@@ -55,7 +55,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast || fail)
 			{
 				msg_print(_("あなたは蜘蛛のカードに集中する...", "You concentrate on the trump of an spider..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_SPIDER, PM_ALLOW_GROUP))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_SPIDER, PM_ALLOW_GROUP))
 				{
 					if (fail)
 					{
@@ -152,7 +152,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				int type = (!fail ? SUMMON_ANIMAL_RANGER : SUMMON_ANIMAL);
 				msg_print(_("あなたは動物のカードに集中する...", "You concentrate on the trump of an animal..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, type, 0L))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, type, 0L))
 				{
 					if (fail)
 					{
@@ -210,7 +210,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					type = SUMMON_KAMIKAZE;
 
 				msg_print(_("あなたはカミカゼのカードに集中する...", "You concentrate on several trumps at once..."));
-				if (trump_summoning(2 + randint0(plev / 7), !fail, y, x, 0, type, 0L))
+				if (trump_summoning(caster_ptr, 2 + randint0(plev / 7), !fail, y, x, 0, type, 0L))
 				{
 					if (fail)
 					{
@@ -231,7 +231,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				int summon_lev = plev * 2 / 3 + randint1(plev / 2);
 
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, (summon_lev * 3 / 2), SUMMON_PHANTOM, 0L))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, (summon_lev * 3 / 2), SUMMON_PHANTOM, 0L))
 				{
 					msg_print(_("御用でございますか、御主人様？", "'Your wish, master?'"));
 				}
@@ -360,7 +360,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast || fail)
 			{
 				msg_print(_("あなたはアンデッドのカードに集中する...", "You concentrate on the trump of an undead creature..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_UNDEAD, 0L))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_UNDEAD, 0L))
 				{
 					if (fail)
 					{
@@ -379,7 +379,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast || fail)
 			{
 				msg_print(_("あなたは爬虫類のカードに集中する...", "You concentrate on the trump of a reptile..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_HYDRA, 0L))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_HYDRA, 0L))
 				{
 					if (fail)
 					{
@@ -404,7 +404,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				else
 					type = 0;
 
-				if (trump_summoning((1 + (plev - 15) / 10), !fail, caster_ptr->y, caster_ptr->x, 0, type, 0L))
+				if (trump_summoning(caster_ptr, (1 + (plev - 15) / 10), !fail, caster_ptr->y, caster_ptr->x, 0, type, 0L))
 				{
 					if (fail)
 					{
@@ -424,7 +424,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast || fail)
 			{
 				msg_print(_("あなたはハウンドのカードに集中する...", "You concentrate on the trump of a hound..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_HOUND, PM_ALLOW_GROUP))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_HOUND, PM_ALLOW_GROUP))
 				{
 					if (fail)
 					{
@@ -462,7 +462,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast || fail)
 			{
 				msg_print(_("あなたはサイバーデーモンのカードに集中する...", "You concentrate on the trump of a Cyberdemon..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_CYBER, 0L))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_CYBER, 0L))
 				{
 					if (fail)
 					{
@@ -539,7 +539,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast || fail)
 			{
 				msg_print(_("あなたはドラゴンのカードに集中する...", "You concentrate on the trump of a dragon..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_DRAGON, 0L))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_DRAGON, 0L))
 				{
 					if (fail)
 					{
@@ -575,7 +575,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast || fail)
 			{
 				msg_print(_("あなたはデーモンのカードに集中する...", "You concentrate on the trump of a demon..."));
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_DEMON, 0L))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_DEMON, 0L))
 				{
 					if (fail)
 					{
@@ -595,7 +595,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				msg_print(_("あなたは強力なアンデッドのカードに集中する...", "You concentrate on the trump of a greater undead being..."));
 				/* May allow unique depend on level and dice roll */
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_HI_UNDEAD, PM_ALLOW_UNIQUE))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, SUMMON_HI_UNDEAD, PM_ALLOW_UNIQUE))
 				{
 					if (fail)
 					{
@@ -622,7 +622,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				msg_print(_("あなたは古代ドラゴンのカードに集中する...", "You concentrate on the trump of an ancient dragon..."));
 				/* May allow unique depend on level and dice roll */
-				if (trump_summoning(1, !fail, caster_ptr->y, caster_ptr->x, 0, type, PM_ALLOW_UNIQUE))
+				if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, type, PM_ALLOW_UNIQUE))
 				{
 					if (fail)
 					{

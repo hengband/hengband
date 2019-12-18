@@ -18,9 +18,9 @@
 * @param mode モンスター生成条件フラグ
 * @return モンスターが（敵対も含めて）召還されたならばTRUEを返す。
 */
-bool trump_summoning(int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode)
+bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	MONSTER_IDX who;
 	int i;
