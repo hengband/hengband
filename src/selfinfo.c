@@ -672,7 +672,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (creature_ptr->muta2 & MUT2_RTELEPORT)
 		{
-			info[i++] = _("あなたはランダムにテレポートする。", "You are teleporting randomly.");
+			info[i++] = _("あなたはランダムにテレポートする。", "You may randomly teleport.");
 		}
 		if (creature_ptr->muta2 & MUT2_ALCOHOL)
 		{
@@ -688,7 +688,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (creature_ptr->muta2 & MUT2_PROD_MANA)
 		{
-			info[i++] = _("あなたは制御不能な魔法のエネルギーを発している。", "You are producing magical energy uncontrollably.");
+			info[i++] = _("あなたは制御不能な魔法のエネルギーを発している。", "You produce magical energy uncontrollably.");
 		}
 		if (creature_ptr->muta2 & MUT2_ATT_DEMON)
 		{
