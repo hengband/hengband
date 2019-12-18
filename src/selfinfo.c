@@ -410,7 +410,7 @@ void self_knowledge(player_type *creature_ptr)
 	case CLASS_RANGER:
 		if (plev > 14)
 		{
-			info[i++] = _("あなたは怪物を調査することができる。(20 MP)", "You can prove monsters (cost 20).");
+			info[i++] = _("あなたは怪物を調査することができる。(20 MP)", "You can probe monsters (cost 20).");
 		}
 		break;
 	case CLASS_PALADIN:
