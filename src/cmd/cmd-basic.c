@@ -137,7 +137,7 @@ bool cmd_limit_stun(player_type *creature_ptr)
 {
 	if (creature_ptr->stun)
 	{
-		msg_print(_("頭が朦朧としていて集中できない！", "You are too stuned!"));
+		msg_print(_("頭が朦朧としていて集中できない！", "You are too stunned!"));
 		return TRUE;
 	}
 	return FALSE;
