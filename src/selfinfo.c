@@ -1192,7 +1192,7 @@ void self_knowledge(player_type *creature_ptr)
 	}
 	if (creature_ptr->tim_sh_touki)
 	{
-		info[i++] = _("あなたは闘気のオーラに包まれている。", "You are surrounded with a energy aura.");
+		info[i++] = _("あなたは闘気のオーラに包まれている。", "You are surrounded with an energy aura.");
 	}
 	if (creature_ptr->anti_magic)
 	{
