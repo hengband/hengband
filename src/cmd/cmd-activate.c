@@ -1142,7 +1142,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		if (o_ptr->name1 == ART_HYOUSIGI)
 		{
-			msg_print(_("拍子木を打った。", "You beat Your wooden clappers."));
+			msg_print(_("拍子木を打った。", "You beat your wooden clappers."));
 		}
 		else
 		{
