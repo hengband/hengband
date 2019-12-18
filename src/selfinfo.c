@@ -560,7 +560,7 @@ void self_knowledge(player_type *creature_ptr)
 		if (creature_ptr->muta1 & MUT1_VAMPIRISM)
 		{
 			info[i++] = _("あなたは吸血鬼のように敵から生命力を吸収することができる。(ダメージ レベルX2)",
-				"You can drain life from a foe like a vampire (dam lvl * 2).");
+				"Like a vampire, you can drain life from a foe (dam lvl * 2).");
 		}
 		if (creature_ptr->muta1 & MUT1_SMELL_MET)
 		{
