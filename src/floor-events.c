@@ -1506,7 +1506,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 	s16b end_temp;
 
 	/* Non-Ninja player in the darkness */
-	int dis_lim = ((d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !p_ptr->see_nocto) ?
+	int dis_lim = ((d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !subject_ptr->see_nocto) ?
 		(MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
 
 	/* Clear all monster lit squares */
@@ -1554,8 +1554,8 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			if (!rad) continue;
 			else if (rad > 0)
 			{
-				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || p_ptr->phase_out)) continue;
-				if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) rad = 1;
+				if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2)) && (MON_CSLEEP(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || subject_ptr->phase_out)) continue;
+				if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) rad = 1;
 				add_mon_lite = mon_lite_hack;
 				f_flag = FF_LOS;
 			}
@@ -1788,15 +1788,15 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 	tmp_pos.n = 0;
 
 	/* Mega-Hack -- Visual update later */
-	p_ptr->update |= (PU_DELAY_VIS);
+	subject_ptr->update |= (PU_DELAY_VIS);
 
-	p_ptr->monlite = (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_MNLT) ? TRUE : FALSE;
+	subject_ptr->monlite = (floor_ptr->grid_array[subject_ptr->y][subject_ptr->x].info & CAVE_MNLT) ? TRUE : FALSE;
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	if (subject_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (p_ptr->old_monlite != p_ptr->monlite)
+		if (subject_ptr->old_monlite != subject_ptr->monlite)
 		{
-			if (p_ptr->monlite)
+			if (subject_ptr->monlite)
 			{
 				msg_print(_("影の覆いが薄れた気がする。", "Your mantle of shadow become thin."));
 			}
@@ -1806,7 +1806,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			}
 		}
 	}
-	p_ptr->old_monlite = p_ptr->monlite;
+	subject_ptr->old_monlite = subject_ptr->monlite;
 }
 
 void clear_mon_lite(floor_type *floor_ptr)
