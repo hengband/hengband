@@ -374,7 +374,6 @@ extern void try_door(POSITION y, POSITION x);
 extern void vault_objects(POSITION y, POSITION x, int num);
 extern void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 
-extern bool get_is_floor(POSITION x, POSITION y);
 extern void set_floor(POSITION x, POSITION y);
 extern void place_bound_perm_wall(grid_type *g_ptr);
 

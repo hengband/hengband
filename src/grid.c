@@ -413,26 +413,6 @@ void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 }
 
 /*!
- * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
- * @param x チェックするマスのX座標
- * @param y チェックするマスのY座標
- * @return 床系地形ならばTRUE
- */
-bool get_is_floor(POSITION x, POSITION y)
-{
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x))
-	{
-		/* Out of bounds */
-		return (FALSE);
-	}
-
-	/* Do the real check */
-	if (is_floor_bold(p_ptr->current_floor_ptr, y, x)) return (TRUE);
-
-	return (FALSE);
-}
-
-/*!
  * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
  * @param x 地形を変えたいマスのX座標
  * @param y 地形を変えたいマスのY座標

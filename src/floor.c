@@ -1014,3 +1014,23 @@ void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, 
 		break;
 	}
 }
+
+/*!
+ * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
+ * @param x チェックするマスのX座標
+ * @param y チェックするマスのY座標
+ * @return 床系地形ならばTRUE
+ */
+bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
+{
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x))
+	{
+		/* Out of bounds */
+		return (FALSE);
+	}
+
+	/* Do the real check */
+	if (is_floor_bold(p_ptr->current_floor_ptr, y, x)) return (TRUE);
+
+	return (FALSE);
+}
