@@ -596,7 +596,7 @@ static bool cave_gen(floor_type *floor_ptr)
 	dun->laketype = 0;
 
 	/* Fill the arrays of floors and walls in the good proportions */
-	set_floor_and_wall(p_ptr->dungeon_idx);
+	set_floor_and_wall(floor_ptr->dungeon_idx);
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	/* Randomize the dungeon creation values */
