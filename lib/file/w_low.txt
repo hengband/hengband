@@ -30,7 +30,7 @@ N: 3:BIAS_FIRE
 'Fire Ant'
 'Hot Blood'
 'Fervent Soul'
-of the Damn
+of the Damned
 
 N: 4:BIAS_COLD
 'Freezing'
