@@ -3510,7 +3510,7 @@ W:70:0:50:4500
 A:70/2
 P:0:1d2:0:0:0
 D:$It does 150 damage to all evil monsters in sight, gives temporary 
-D:$protection from lesser evil creature, cures poison, stuuned, cuts, removes 
+D:$protection from lesser evil creatures, cures poison, stuuned, cuts, removes 
 D:$fear and heals you 50 when you use it.
 D:それは使うと視界内の邪悪なモンスターに150のダメージを与え、
 D:一時的に弱い邪悪な者の攻撃を回避しやすくなる結界を張り、
