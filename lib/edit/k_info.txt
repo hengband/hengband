@@ -6381,7 +6381,7 @@ G:?:w
 I:70:55:0
 W:20:0:5:100
 A:20/6
-D:$It creates one amuzing item when you read it.
+D:$It creates one amusing item when you read it.
 D:それは読むと誰の得なのかわからないものを1個作り出す。
 
 N:668:*誰得*:挽怒 那 務故
@@ -6390,7 +6390,7 @@ G:?:w
 I:70:56:0
 W:20:0:5:500
 A:60/8
-D:$It creates some amuzing item when you read it.
+D:$It creates some amusing item when you read it.
 D:それは読むと誰の得なのかわからないものを複数作り出す。
 
 N:669:オーブ
