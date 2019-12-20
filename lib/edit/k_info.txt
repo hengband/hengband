@@ -6242,7 +6242,7 @@ G:?:w
 I:70:54:0
 W:30:0:5:1000
 A:30/2
-D:$It summons a monster corresponds to your race as your pet when you read it.
+D:$It summons a monster that corresponds to your race as your pet when you read it.
 D:それは読むと自分の種族に対応したモンスター1体をペットとして召喚する。
 
 N:651:魔法の笛
