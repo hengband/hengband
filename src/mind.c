@@ -1293,13 +1293,13 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
  * @brief 現在フロアに存在している鏡の数を数える / calculate mirrors
  * @return 鏡の枚数
  */
-static int number_of_mirrors(void)
+static int number_of_mirrors(floor_type *floor_ptr)
 {
 	POSITION x, y;
 	int val = 0;
-	for (x = 0; x < p_ptr->current_floor_ptr->width; x++) {
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++) {
-			if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[y][x])) val++;
+	for (x = 0; x < floor_ptr->width; x++) {
+		for (y = 0; y < floor_ptr->height; y++) {
+			if (is_mirror_grid(&floor_ptr->grid_array[y][x])) val++;
 		}
 	}
 	return val;
@@ -1335,7 +1335,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* drip of light */
 	case 1:
-		if (number_of_mirrors() < 4 + plev / 10) {
+		if (number_of_mirrors(caster_ptr) < 4 + plev / 10) {
 			place_mirror(caster_ptr);
 		}
 		else {
