@@ -396,4 +396,5 @@ extern void wipe_o_list(floor_type *floor_ptr);
 extern void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd);
 
 extern bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
+extern void try_door(floor_type *floor_ptr, POSITION y, POSITION x);
 

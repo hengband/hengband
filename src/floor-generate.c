@@ -866,10 +866,10 @@ static bool cave_gen(floor_type *floor_ptr)
 			x = dun->door[i].x;
 
 			/* Try placing doors */
-			try_door(y, x - 1);
-			try_door(y, x + 1);
-			try_door(y - 1, x);
-			try_door(y + 1, x);
+			try_door(floor_ptr, y, x - 1);
+			try_door(floor_ptr, y, x + 1);
+			try_door(floor_ptr, y - 1, x);
+			try_door(floor_ptr, y + 1, x);
 		}
 
 		/* Place 3 or 4 down stairs near some walls */

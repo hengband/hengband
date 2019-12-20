@@ -1034,3 +1034,104 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 
 	return (FALSE);
 }
+
+/*!
+* @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
+* @param y1 基準となるマスのY座標
+* @param x1 基準となるマスのX座標
+* @return 通路の数
+* @note Assumes "in_bounds(p_ptr->current_floor_ptr, y1, x1)"
+* @details
+* XXX XXX This routine currently only counts actual "empty floor"\n
+* grids which are not in rooms.  We might want to also count stairs,\n
+* open doors, closed doors, etc.
+*/
+static int next_to_corr(POSITION y1, POSITION x1)
+{
+	int i, k = 0;
+	POSITION y, x;
+
+	grid_type *g_ptr;
+
+	/* Scan adjacent grids */
+	for (i = 0; i < 4; i++)
+	{
+		y = y1 + ddy_ddd[i];
+		x = x1 + ddx_ddd[i];
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+
+		/* Skip non floors */
+		if (cave_have_flag_grid(g_ptr, FF_WALL)) continue;
+
+		/* Skip non "empty floor" grids */
+		if (!is_floor_grid(g_ptr))
+			continue;
+
+		/* Skip grids inside rooms */
+		if (g_ptr->info & (CAVE_ROOM)) continue;
+
+		/* Count these grids */
+		k++;
+	}
+
+	/* Return the number of corridors */
+	return (k);
+}
+
+/*!
+* @brief ドアを設置可能な地形かを返す / Determine if the given location is "between" two walls, and "next to" two corridor spaces.
+* @param y 判定を行いたいマスのY座標
+* @param x 判定を行いたいマスのX座標
+* @return ドアを設置可能ならばTRUEを返す
+* @note Assumes "in_bounds(p_ptr->current_floor_ptr, y1, x1)"
+* @details
+* \n
+* Assumes "in_bounds(p_ptr->current_floor_ptr, y, x)"\n
+*/
+static bool possible_doorway(POSITION y, POSITION x)
+{
+	/* Count the adjacent corridors */
+	if (next_to_corr(y, x) >= 2)
+	{
+		/* Check Vertical */
+		if (cave_have_flag_bold(y - 1, x, FF_WALL) &&
+			cave_have_flag_bold(y + 1, x, FF_WALL))
+		{
+			return (TRUE);
+		}
+
+		/* Check Horizontal */
+		if (cave_have_flag_bold(y, x - 1, FF_WALL) &&
+			cave_have_flag_bold(y, x + 1, FF_WALL))
+		{
+			return (TRUE);
+		}
+	}
+
+	/* No doorway */
+	return (FALSE);
+}
+
+/*!
+* @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
+* @param y 設置を行いたいマスのY座標
+* @param x 設置を行いたいマスのX座標
+* @return なし
+*/
+void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+	if (!in_bounds(floor_ptr, y, x)) return;
+
+	/* Ignore walls */
+	if (cave_have_flag_bold(y, x, FF_WALL)) return;
+
+	/* Ignore room grids */
+	if (floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;
+
+	/* Occasional door (if allowed) */
+	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
+	{
+		/* Place a door */
+		place_random_door(floor_ptr, y, x, FALSE);
+	}
+}
