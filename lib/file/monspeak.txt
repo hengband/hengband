@@ -324,7 +324,7 @@ says, 'You aren't a caitiff that throws a cloak?!'
 #N:596:Mother Hydra
 
 N:598:Mandor, Master of the Logrus
-enjoys espresso coffee between battle.
+enjoys espresso coffee between battles.
 says, 'My slaves fight with you.'
 says, 'Excuse me, I have no time to continue a small fight.'
 says, 'It is a great pleasure to fight with such a worthy opponent as you.'
