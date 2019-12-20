@@ -5803,8 +5803,8 @@ G:?:w
 I:70:43:0
 W:10:0:5:1000
 A:10/8
-D:$It increases the number you can study spells when you read. If you are the 
-D:$class can't study or don't need to study, it effects none.
+D:$It increases the number of spells you can study when read. If you are a
+D:$ class that can't study or don't need to study, it has no effect.
 D:それは読むと呪文を1つ学習できるようになる。
 D:学習できない、または学習する必要のない職業では何も起きない。
 
