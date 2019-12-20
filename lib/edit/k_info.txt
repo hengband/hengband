@@ -3313,7 +3313,7 @@ I:55:7:12
 W:20:0:50:800
 A:20/1
 P:0:1d2:0:0:0
-D:$It fires a line of light directed randomly for 5d3 times when you use it.
+D:$It fires 5d3 random lines of light when you use it.
 D:それは使うとランダムな方向への光線を5d3回放つ。
 
 N:309:スピード・モンスター:ユーカリの
