@@ -1023,14 +1023,14 @@ void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, 
  */
 bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 {
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x))
+	if (!in_bounds(floor_ptr, y, x))
 	{
 		/* Out of bounds */
 		return (FALSE);
 	}
 
 	/* Do the real check */
-	if (is_floor_bold(p_ptr->current_floor_ptr, y, x)) return (TRUE);
+	if (is_floor_bold(floor_ptr, y, x)) return (TRUE);
 
 	return (FALSE);
 }
