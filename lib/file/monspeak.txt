@@ -601,7 +601,7 @@ says, 'Maybe I won't kill you... NOT!'
 yawns at your pathetic efforts to kill it.
 says, 'Another day, another bastard to slaughter...'
 says, 'I can't be bothered... minions, slaughter this fool!'
-says, 'Such a doomed, pathetic gesture as yours  verges on the heroic!'
+says, 'Such a doomed, pathetic gesture as yours verges on the heroic!'
 says, 'Mere mortals such as you should not meddle the affair of the Powers!'
 
 N:873:Combat-Echizen
