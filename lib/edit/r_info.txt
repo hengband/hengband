@@ -2051,7 +2051,7 @@ B:CLAW:POISON:1d4
 F:OPEN_DOOR | BASH_DOOR | FRIENDS |
 F:NO_CONF | NO_SLEEP | UNDEAD | EVIL | NO_FEAR | IM_POIS
 F:IM_COLD | RES_NETH | COLD_BLOOD | EMPTY_MIND
-D:$Corpses awakened from their sleep by dark sorceries. 
+D:$It is a corpse awakened from its sleep by dark sorceries. 
 D:暗黒魔術により眠りを覚まされた死体だ。
 
 #J0#
