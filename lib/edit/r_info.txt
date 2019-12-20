@@ -4115,7 +4115,7 @@ W:14:1:0:60:0:0
 B:HIT:HURT:6d3
 B:HIT:HURT:6d3
 F:AQUATIC | WILD_ALL | RES_WATE
-D:$A race of fair yet belligrent sea elves.
+D:$A race of fair yet belligerent sea elves.
 D:洗練された、しかも好戦的な海のエルフの種族だ。
 
 #JZ#
