@@ -912,7 +912,7 @@ F:PERMANENT | GLOW
 
 N:76:WEAPON_SMITHS
 J:武器専門店
-E:Weapon Smiths
+E:Weaponsmith's Shop
 G:3:w
 W:10
 F:SUBTYPE_2 | LOS | PROJECT | MOVE | NOTICE | REMEMBER | STORE | DOOR |

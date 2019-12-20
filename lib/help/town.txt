@@ -260,8 +260,8 @@ The General Store ("1")
      lamps, oil, shovels, picks, and spikes. All of these items and
      some others can be sold back to the General store for money.
 
-The Armory ("2")
-     The Armory is where the town's armor is fashioned. All sorts of
+The Armoury ("2")
+     The Armoury is where the town's armor is fashioned. All sorts of
      protective gear may be bought and sold here.
 
 The Weaponsmith's Shop ("3")
@@ -274,11 +274,11 @@ The Temple ("4")
      bless scrolls, word of recall scrolls, some approved priestly
      weapons, as well as books of Life magic for priests and paladins.
 
-The Alchemy shop ("5")
+The Alchemy Shop ("5")
      The Alchemy Shop deals in all types of potions and scrolls.
 
-The Magic User's Shop ("6")
-     The Magic User's Shop deals in all sorts of rings, wands, amulets,
+The Magic Shop ("6")
+     The Magic Shop deals in all sorts of rings, wands, amulets,
      and staves, as well as some magic books.
 
 The Black Market ("7")
