@@ -2036,7 +2036,7 @@ F:EVIL | UNDEAD | IM_POIS | RES_NETH |
 F:NO_CONF | NO_SLEEP | HURT_LITE
 S:1_IN_10
 S:CAUSE_1 | S_UNDEAD
-D:$Frightening skeletal figures in black robes. 
+D:$Is a frightening skeletal figure in a black robe. 
 D:黒装束に身を包んだ恐ろしげな骸骨の姿だ。
 D:（ロバート・ブロック「窖に潜むもの」）
 
