@@ -5580,7 +5580,7 @@ F:ONLY_GOLD | DROP_60 | DROP_90 | IM_POIS | CAN_FLY |
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | DRAGON |
 F:WILD_WOOD | WILD_MOUNTAIN | DROP_SKELETON | DROP_CORPSE |
 F:ANIMAL | EVIL | RIDING | EAT_POISONOUS
-D:$A fast-moving and deadly dragonian animal. Beware its poisonous sting!
+D:$A fast-moving and deadly dragon-like animal. Beware its poisonous sting!
 D:それは素早く動く危険なドラゴンのような生き物だ。
 D:その毒爪には気をつけろ！
 
