@@ -479,7 +479,7 @@ says, 'You'll become a good mounting'
 #N:805:Omarax the Eye Tyrant
 
 N:807:Gerard, Strongman of Amber
-rush toward you wordlessly.
+rushes toward you wordlessly.
 
 #N:809:Atlach-Nacha, the Spider God
 
