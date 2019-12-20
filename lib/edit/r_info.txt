@@ -4380,7 +4380,7 @@ F:MALE | WILD_ALL |
 F:FRIENDS | DROP_60 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | ORC | RES_DARK
-D:$He is a hideous deformed cross-breed with man and orc, combining man's 
+D:$He is a hideous deformed cross-breed of man and orc, combining man's 
 D:$strength and cunning with orcish evil.
 D:彼は人間とオークの混血でひどく醜い容貌をしている。人間の力強さとオークの邪悪
 D:なずる賢さを受け継いでいる。
