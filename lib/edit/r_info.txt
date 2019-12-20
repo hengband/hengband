@@ -5675,7 +5675,7 @@ B:BITE:HURT:1d10
 B:BITE:HURT:1d10
 F:BASH_DOOR | WILD_WOOD | WILD_GRASS |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | EAT_SPEED
-D:$A fierce and dangerous cat, its huge tusks and sharp claws would lacerate 
+D:$A fierce and dangerous cat, its huge tusks and sharp claws would pierce 
 D:$even the strongest armour.
 D:獰猛で危険なネコであり、その巨大な牙と鋭い爪は最強の鎧でさえも切り
 D:裂いてしまう。
