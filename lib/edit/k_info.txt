@@ -5876,8 +5876,8 @@ I:55:30:8
 W:35:0:50:800
 A:35/1
 P:0:1d2:0:0:0
-D:$It raises corpses and skeletons nearby you from dead and makes them your 
-D:$pet when you use it.
+D:$It raises nearby corpses and skeletons from the dead and makes them your
+D:$ pets when you use it.
 D:それは使うと自分の周囲の死体や骨を生き返らせてペットにする。
 
 N:609:石
