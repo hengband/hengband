@@ -2881,7 +2881,7 @@ A:20/1:45/1:80/1:100/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$You get temporary resistances to elements and poison when you quaff it. 
-D:$These resistances is cumulative with equipment.
+D:$These resistances are cumulative with equipment.
 D:それは飲むと一時的に酸・電撃・火炎・冷気・毒の耐性を得る。
 D:装備による耐性に累積する。
 
