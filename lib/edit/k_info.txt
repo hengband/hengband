@@ -3061,7 +3061,7 @@ I:65:3:12
 W:20:0:10:350
 A:20/1
 P:0:1d1:0:0:0
-D:$It fires a beam teleports all monsters on the line when you use it.
+D:$It fires a beam that teleports all monsters along a line when you use it.
 D:それは使うとモンスターをテレポートさせるビームを放つ。
 
 N:286:トラップ解除:銅メッキの
