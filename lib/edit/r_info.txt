@@ -9193,9 +9193,8 @@ B:HIT:EXP_20:13d1
 F:FORCE_MAXHP | OPEN_DOOR | FRIENDS | DROP_60 | REGENERATE |
 F:ONLY_ITEM | NO_FEAR | NONLIVING |
 F:EVIL | IM_POIS | IM_COLD | IM_FIRE | RES_CHAO | DEMON
-D:$Slender, red-skinned demons twisting in nightmarish shapes. 
-D:$They are armed with hellblades, which will suck the life from 
-D:$your body.
+D:$It is a slender, red-skinned demon twisted into a nightmarish shape.
+D:$ It is armed with a hellblade, which will suck the life from your body.
 D:流血の神<コーン>の配下の下級悪魔。
 D:悪夢のような姿に捻じ曲がった、細身で赤い肌をした悪魔だ。
 D:ヘルブレードを装備していて、その刃はあなたの生命力を
