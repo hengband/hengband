@@ -320,7 +320,7 @@ E:& Strip~ of Venison
 G:,:u
 I:80:33:1500
 W:0:0:2:2
-D:$A strip of jerked beef that seems never to spoil.
+D:$A strip of jerked beef that never seems to spoil.
 D:良く乾燥させた肉。決して腐る事が無さそうだ。
 
 N:24:スライムモルド
