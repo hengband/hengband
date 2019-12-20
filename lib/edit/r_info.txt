@@ -4450,7 +4450,7 @@ S:SCARE | S_ANT | CAUSE_2 | SLOW
 D:$An unfortunate individual, who was killed by the incurable 
 D:$disease known as Nurgle's Rot, and was transformed into a 
 D:$rotting demon zombie. It has but one eye, and a single 
-D:$pale horn in its forehead.
+D:$pale horn on its forehead.
 D:<ナーグル>の腐れ病という名で知られる不治の病によって死んだ不運な人間で、
 D:腐乱した悪魔のゾンビになってしまっている。目は一つだけで、一本の
 D:青白い角が額に生えている。
