@@ -4541,7 +4541,7 @@ B:BITE:POISON:1d3
 B:BITE:LOSE_STR:1d4
 F:UNDEAD | EVIL | IM_POIS | IM_COLD | WEIRD_MIND | NO_FEAR | CAN_FLY |
 F:RES_NETH | NO_CONF | NO_SLEEP | DROP_60 | BASH_DOOR | FRIENDS | COLD_BLOOD
-D:$A skullpack animated by necromantic spells.
+D:$A skull animated by necromantic spells.
 D:死霊術の呪文により動いている髑髏だ。
 
 #JZ#
