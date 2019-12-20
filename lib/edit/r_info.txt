@@ -4291,7 +4291,7 @@ B:BITE:HURT:1d2
 F:RAND_50 | CAN_FLY |
 F:WEIRD_MIND | MULTIPLY | 
 F:ANIMAL
-D:$It makes you itch just to look at it. 
+D:$It makes you itch just looking at it. 
 D:それを見るだけで体がむずがゆくなってくる。
 
 #J0#
@@ -9574,7 +9574,7 @@ F:ANIMAL | RES_INER | NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BR_INER
 D:$Bizarrely, this hound seems to be hardly moving at all, yet it approaches 
-D:$you with deadly menace.  It makes you tired just to look at it.
+D:$you with deadly menace.  It makes you tired just looking at it.
 D:奇怪なことだが、この犬は全然動いていないように見えるにも関わらず、何故か
 D:恐ろしい勢いで近づいてくるのだ。それを見ているだけで疲労してくる。
 
