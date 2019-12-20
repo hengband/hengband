@@ -3875,7 +3875,7 @@ I:66:13:25
 W:45:0:15:1400
 A:23/8:45/2
 P:0:1d1:0:0:0
-D:$It fires a beam teleports all monsters on the line when you zap it.
+D:$It fires a beam that teleports all monsters along a line when you zap it.
 D:それは振るとモンスターをテレポートさせるビームを放つ。
 
 N:365:トラップ解除:ジルコンの
