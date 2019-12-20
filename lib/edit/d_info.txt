@@ -155,7 +155,7 @@ M:IM_FIRE | CAN_FLY | WILD_VOLCANO
 
 N:9:地獄
 E:Hell
-D:$the stairway to the Hell
+D:$the stairway to Hell
 D:地獄への階段
 P:62:94
 W:666:696:50:1:14:160:90:77:0x0188:0x0280
@@ -167,7 +167,7 @@ M:IM_FIRE | EVIL
 
 N:10:天界
 E:Heaven
-D:$the way to the heaven
+D:$the way to Heaven
 D:天界へと通じる道
 P:2:94
 W:555:585:50:1:18:160:85:35:0x0040:0x0104
