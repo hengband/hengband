@@ -6044,7 +6044,7 @@ W:65:0:10:4000
 A:65/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:$It fires a bolt of meteor (damage: (15+level/3)d13) when you use it.
+D:$It fires a bolt of meteors (damage: (15+level/3)d13) when you use it.
 D:それは使うとダメージ(15+レベル/3)d13の隕石の矢を放つ。
 
 N:629:魔力の嵐:トネリコの
