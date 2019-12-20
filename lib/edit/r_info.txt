@@ -3500,7 +3500,7 @@ F:FRIENDS |
 F:BASH_DOOR | WILD_WASTE |
 F:ANIMAL | IM_COLD | DROP_SKELETON | DROP_CORPSE
 D:$A large and muscled wolf from the northern wastes.  Its breath is cold and 
-D:$icy and its fur coated in frost.
+D:$icy, and its fur is coated in frost.
 D:北の荒れ地からやって来た、大きくて屈強な狼だ。その息は氷のようで、毛皮は
 D:冷気に覆われている。
 
