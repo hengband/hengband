@@ -797,29 +797,29 @@ static void prt_level(player_type *creature_ptr)
  * @brief プレイヤーの経験値を表示する / Display the experience
  * @return なし
  */
-static void prt_exp(void)
+static void prt_exp(player_type *creature_ptr)
 {
 	char out_val[32];
 
-	if ((!exp_need)||(p_ptr->prace == RACE_ANDROID))
+	if ((!exp_need)||(creature_ptr->prace == RACE_ANDROID))
 	{
-		(void)sprintf(out_val, "%8ld", (long)p_ptr->exp);
+		(void)sprintf(out_val, "%8ld", (long)creature_ptr->exp);
 	}
 	else
 	{
-		if (p_ptr->lev >= PY_MAX_LEVEL)
+		if (creature_ptr->lev >= PY_MAX_LEVEL)
 		{
 			(void)sprintf(out_val, "********");
 		}
 		else
 		{
-			(void)sprintf(out_val, "%8ld", (long)(player_exp [p_ptr->lev - 1] * p_ptr->expfact / 100L) - p_ptr->exp);
+			(void)sprintf(out_val, "%8ld", (long)(player_exp [creature_ptr->lev - 1] * creature_ptr->expfact / 100L) - creature_ptr->exp);
 		}
 	}
 
-	if (p_ptr->exp >= p_ptr->max_exp)
+	if (creature_ptr->exp >= creature_ptr->max_exp)
 	{
-		if (p_ptr->prace == RACE_ANDROID) put_str(_("強化 ", "Cst "), ROW_EXP, 0);
+		if (creature_ptr->prace == RACE_ANDROID) put_str(_("強化 ", "Cst "), ROW_EXP, 0);
 		else put_str(_("経験 ", "EXP "), ROW_EXP, 0);
 		c_put_str(TERM_L_GREEN, out_val, ROW_EXP, COL_EXP + 4);
 	}
@@ -1522,7 +1522,7 @@ static void prt_frame_basic(void)
 
 	prt_title(p_ptr);
 	prt_level(p_ptr);
-	prt_exp();
+	prt_exp(p_ptr);
 	for (i = 0; i < A_MAX; i++) prt_stat(i);
 	prt_ac();
 	prt_hp();
@@ -2139,7 +2139,7 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_EXP))
 	{
 		p_ptr->redraw &= ~(PR_EXP);
-		prt_exp();
+		prt_exp(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_STATS))
