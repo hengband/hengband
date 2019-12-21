@@ -1335,7 +1335,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* drip of light */
 	case 1:
-		if (number_of_mirrors(caster_ptr) < 4 + plev / 10) {
+		if (number_of_mirrors(caster_ptr->current_floor_ptr) < 4 + plev / 10) {
 			place_mirror(caster_ptr);
 		}
 		else {
