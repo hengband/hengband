@@ -18449,8 +18449,8 @@ F:SMART | OPEN_DOOR | BASH_DOOR | HAS_LITE_2 |
 F:IM_ACID | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP |
 S:1_IN_2 | 
 S:CAUSE_3 | BO_WATE | BO_MANA
-D:$This body of once-mighty warrior was so dominated by Sauron's power that he 
-D:$became little more than a mindless undead of evil.
+D:$This body of a once-mighty warrior was so dominated by Sauron's power that
+D:$  he became little more than a mindless undead of evil.
 D:かつて屈強さを誇ったこの戦士の肉体はサウロンの力に完全に支配され、
 D:今ではほとんど意思を持たない邪悪なアンデッドに成り下がってしまった。
 
