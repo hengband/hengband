@@ -923,9 +923,8 @@ I:19:24:0
 W:30:0:200:500
 A:30/2:40/2
 F:SHOW_MODS
-# Not all heavy crossbow is the arbalest with a crank!
-#D:$The arbalest is so powerful it has to be reinforced with metal and 
-#D:$requires a crank to be cocked.
+D:$A heavy mechanical bow.  It is slower to fire than its lighter
+D:$ cousin but each bolt fired is deadlier.
 D:鋼鉄製の弦をあらかじめ引いておき、機械式の引き金を引くだけで矢を発射
 D:する事ができる。ショート・ボウやロング・ボウに比べて扱いが簡単な武器だ。
 D:ヘヴィ・クロスボウはライト・クロスボウに比べて威力は強いが、
