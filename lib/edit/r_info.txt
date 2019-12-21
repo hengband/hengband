@@ -18302,6 +18302,8 @@ S:1_IN_3 |
 S:S_MONSTERS | BR_CHAO | BA_CHAO | ROCKET | S_CYBER | S_KIN |
 S:BR_NETH | BR_MANA | S_HI_UNDEAD | S_HI_DRAGON | S_UNIQUE |
 S:BR_NUKE | BR_DISI | HAND_DOOM | DISPEL
+D:$Has returned from the bottom of Hell to take revenge on those who
+D:$ destroyed it.
 D:自分を滅ぼした者に復讐するため、地獄の底から復活した！
 
 N:884:有毒ガス
