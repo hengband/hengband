@@ -16348,7 +16348,7 @@ F:IM_POIS | IM_FIRE | FORCE_SLEEP | FORCE_MAXHP | NONLIVING
 S:1_IN_4 |
 S:ROCKET
 V:166
-D:$Reverbrant metal steps announce the arrival of this huge creature, 
+D:$Reverberant metal steps announce the arrival of this huge creature, 
 D:$half demon half machine. It has an unsurpassable firepower.
 D:響き渡る金属的な足音がこの巨大な、半悪魔半機械の怪物の
 D:到来を告げる。その火力には何者もかなわない。
