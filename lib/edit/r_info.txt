@@ -16165,7 +16165,7 @@ V:60
 D:$"He saw why the shadow on the frosted pane yesterday had been 
 D:$headless and he screamed... but before he could scream out his 
 D:$protest his breath was cut off, as the hands descended on his 
-D:$face and the wed ret mouths opened in their palms."
+D:$face and the wed red mouths opened in their palms."
 D:煉瓦の壁の向こう側にある広大な廃虚の地下に住む、邪悪な神。
 D:頭の無い太った人間のような姿をしている。
 D:両手に濡れた赤い口が付いており、全身が白熱して光り輝いている。
