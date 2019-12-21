@@ -13744,8 +13744,7 @@ F:BASH_DOOR | STUPID | DROP_CORPSE
 F:EVIL | IM_FIRE | FORCE_SLEEP | FORCE_MAXHP
 S:1_IN_5 |
 S:BO_PLAS | BA_FIRE
-D:$It is a belligrent minotaur with some destructive magical arsenal, armed 
-D:$with a hammer.
+D:$It is a belligerent minotaur with some magic powers and armed with a hammer.
 D:破壊的な魔法の火器を持ち、ハンマーを装備した好戦的なミノタウロスだ。
 
 #J0#
