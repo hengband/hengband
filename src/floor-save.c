@@ -364,7 +364,7 @@ static void build_dead_end(floor_type *floor_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(y, x);
+			place_solid_perm_bold(floor_ptr, y, x);
 		}
 	}
 

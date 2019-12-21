@@ -1068,7 +1068,7 @@ static void generate_challenge_arena(floor_type *floor_ptr, player_type *challan
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(y, x);
+			place_solid_perm_bold(floor_ptr, y, x);
 
 			/* Illuminate and memorize the walls */
 			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1176,7 +1176,7 @@ static void generate_gambling_arena(floor_type *floor_ptr, player_type *creature
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(y, x);
+			place_solid_perm_bold(floor_ptr, y, x);
 
 			/* Illuminate and memorize the walls */
 			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1224,7 +1224,7 @@ static void generate_fixed_floor(floor_type *floor_ptr)
 	{
 		for (x = 0; x < floor_ptr->width; x++)
 		{
-			place_solid_perm_bold(y, x);
+			place_solid_perm_bold(floor_ptr, y, x);
 		}
 	}
 
