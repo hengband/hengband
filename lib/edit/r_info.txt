@@ -18078,12 +18078,11 @@ S:1_IN_2 |
 S:ROCKET | HEAL | BLINK | INVULNER
 A:16:1:50
 V:900
-D:$His favorite food is roasting rice noodle. 
-D:$He is the lone wolf filled with the adventurous spirit. 
+D:$His favorite food is grilled rice noodle. 
+D:$He is a lone wolf filled with the adventurous spirit. 
 D:$His righteousness and courage are more than the average. 
 D:$He sometimes become emotional. 
-D:$He would like to choose a haphazard life rather than an intentional life. 
-D:$He is poor at treating women.
+D:$He prefers a haphazard life to an intentional one and is a known misogynist.
 D:好きな食べ物は焼きビーフン。抑えてはいるが、冒険心旺盛な
 D:一匹狼。正義感、勇気とも平均以上だがカッとしやすい所もある。
 D:計画的人生より行き当たりばったりの人生を選んでしまうタイプで、
