@@ -18246,6 +18246,9 @@ F:NO_SLEEP | RES_TELE | RES_NETH | RES_TIME | POWERFUL | CAN_FLY |
 S:1_IN_3 | 
 S:TPORT | BLIND | HOLD | BLINK | HEAL | HASTE |
 S:TELE_TO | CONF | BO_MANA | BRAIN_SMASH | PSY_SPEAR
+D:$Seeing the look in your eyes, he asks, "Do you know me?"  You're very
+D:$ tempted to answer, "Of course!  You're Superman Locke!  Immortal,
+D:$ the strongest ESPer ever!"
 D:「そうだ！超人ロック！」「僕を知っているのか？」
 D:「もちろん！不老不死にして、史上最強のエスパー！」
 D:（聖悠紀、超人ロック「赤いサーペント」）
