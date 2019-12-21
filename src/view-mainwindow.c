@@ -1284,9 +1284,9 @@ static void prt_imitation(void)
  * @brief プレイヤーの負傷状態を表示する
  * @return なし
  */
-static void prt_cut(void)
+static void prt_cut(player_type *creature_ptr)
 {
-	int c = p_ptr->cut;
+	int c = creature_ptr->cut;
 
 	if (c > 1000)
 	{
@@ -1327,9 +1327,9 @@ static void prt_cut(void)
  * @brief プレイヤーの朦朧状態を表示する
  * @return なし
  */
-static void prt_stun(void)
+static void prt_stun(player_type *creature_ptr)
 {
-	int s = p_ptr->stun;
+	int s = creature_ptr->stun;
 
 	if (s > 100)
 	{
@@ -1542,8 +1542,8 @@ static void prt_frame_basic(void)
  */
 static void prt_frame_extra(void)
 {
-	prt_cut();
-	prt_stun();
+	prt_cut(p_ptr);
+	prt_stun(p_ptr);
 	prt_hunger();
 	prt_state();
 	prt_speed();
@@ -2215,13 +2215,13 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_CUT))
 	{
 		p_ptr->redraw &= ~(PR_CUT);
-		prt_cut();
+		prt_cut(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_STUN))
 	{
 		p_ptr->redraw &= ~(PR_STUN);
-		prt_stun();
+		prt_stun(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_HUNGER))
