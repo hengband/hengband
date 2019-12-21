@@ -18500,7 +18500,7 @@ F:EVIL | TROLL | IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | REGENERATE
 S:1_IN_8 |
 S:BLINK
 D:$This troll is a king, which means it's still stupid, but has even more power.
-D:$It never comes alone, and can call out to other trolls.
+D:$It never comes alone and can call out to other trolls.
 D:このトロルはトロルの中の王だ。彼は依然としてトロルであり、頭は良くないが、
 D:その力はさらに強力だ。彼は一人でいる事はなく常に手下を連れている。
 
