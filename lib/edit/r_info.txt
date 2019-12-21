@@ -14323,7 +14323,7 @@ S:MIND_BLAST | BA_CHAO | SCARE | BRAIN_SMASH | DRAIN_MANA |
 S:S_HOUND | S_DEMON | S_DRAGON | TPORT | HASTE | CONF |
 S:TELE_AWAY | FORGET 
 D:$The most powerful of Tzeentch's servitors. This demon looks like 
-D:$a huge bird-creature, with the head of a predatory bird and 
+D:$a huge bird-like creature, with the head of a predatory bird and 
 D:$fantastically multi-coloured wings. 
 D:混沌の魔神<ティーンチ>の最も強力な手下だ。この悪魔は巨大な鳥のようで、
 D:頭部は肉食の猛禽類、羽根は幻想的な虹色に彩られている。
