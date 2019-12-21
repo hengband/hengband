@@ -740,7 +740,7 @@ static void prt_status(void)
  * @brief プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
  * @return なし
  */
-static void prt_title(void)
+static void prt_title(player_type *creature_ptr)
 {
 	concptr p = "";
 	GAME_TEXT str[14];
@@ -749,9 +749,9 @@ static void prt_title(void)
 	{
 		p = _("[ウィザード]", "[=-WIZARD-=]");
 	}
-	else if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
+	else if (creature_ptr->total_winner || (creature_ptr->lev > PY_MAX_LEVEL))
 	{
-		if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
+		if (creature_ptr->arena_number > MAX_ARENA_MONS + 2)
 		{
 			p = _("*真・勝利者*", "*TRUEWINNER*");
 		}
@@ -764,7 +764,7 @@ static void prt_title(void)
 	/* Normal */
 	else
 	{
-		my_strcpy(str, player_title[p_ptr->pclass][(p_ptr->lev - 1) / 5], sizeof(str));
+		my_strcpy(str, player_title[creature_ptr->pclass][(creature_ptr->lev - 1) / 5], sizeof(str));
 		p = str;
 	}
 
@@ -1522,7 +1522,7 @@ static void prt_frame_basic(void)
 		prt_field(str, ROW_RACE, COL_RACE);
 	}
 
-	prt_title();
+	prt_title(p_ptr);
 	prt_level();
 	prt_exp();
 	for (i = 0; i < A_MAX; i++) prt_stat(i);
@@ -2129,7 +2129,7 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_TITLE))
 	{
 		p_ptr->redraw &= ~(PR_TITLE);
-		prt_title();
+		prt_title(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_LEV))
