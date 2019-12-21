@@ -18030,6 +18030,7 @@ F:RES_ALL | POWERFUL |
 F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE |
 S:1_IN_1 |
 S:BLINK | BO_MANA | BA_CHAO | BA_FIRE | TPORT  | PSY_SPEAR
+D:$Is a bit of magical slime wrapped in hard metal.
 D:硬い金属に包まれたスライムだ。
 
 N:872:『八岐大蛇』
