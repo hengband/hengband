@@ -2626,7 +2626,8 @@ I:75:59:0
 W:65:0:4:25000
 A:65/1
 P:0:1d1:0:0:0
-D:$You gain experience half of your experience (max: 100000) when you quaff it.
+D:$You gain experience equal to the lesser of 100000 or half of your current
+D:$ experience when you quaff it.
 D:それは飲むと現在の経験値の半分(100000を超えない)の経験を得る。
 
 N:245:眠り:ぼやけた色の
