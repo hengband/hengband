@@ -9838,7 +9838,7 @@ S:1_IN_4|
 S:BO_FIRE
 V:150
 D:$Back from the grave, to wreak vengeance upon the living. A gaunt, tall, 
-D:$skeletal figure wearing a ruined plate mail.
+D:$skeletal figure wearing ruined plate mail.
 D:生ける者たちへ復讐するために墓から甦った亡霊だ。
 D:気味の悪い、背の高い骸骨の姿で
 D:壊れたプレートメイルを身につけている。
