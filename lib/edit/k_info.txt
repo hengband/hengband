@@ -805,6 +805,8 @@ W:10:0:300:230
 A:10/1
 P:0:2d8:0:0:0
 F:SHOW_MODS | RIDING
+D:$A spear with a long conical tip.  It is well-suited for the rider of
+D:$ a charging horse.
 D:大きく長い円錐形の穂先を持った槍だ。
 D:馬上で構えて突撃する為に作られている。
 
