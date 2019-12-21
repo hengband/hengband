@@ -9340,6 +9340,10 @@ B:EXPLODE:SHATTER:100d2
 F:FORCE_SLEEP | FORCE_MAXHP | UNIQUE | REFLECTING |
 F:EMPTY_MIND | COLD_BLOOD | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING | RES_TELE
+D:$It is the left hand of Killer Queen, the visual manifestation of the life
+D:$ energy of Yoshikage Kira.  It will follow the heat of the adventurer's
+D:$ body forever.  "Sheer Heart Attack in Killer Queen will definitely kill
+D:$ the prey at which he's aimed ...."
 D:吉良吉影のスタンド『キラークイーン』の左手だ。冒険者の体温を頼りに
 D:どこまでも追いかける。「『キラークイーン』の『シアーハートアタック』
 D:は狙った獲物は絶対に仕留める……」
