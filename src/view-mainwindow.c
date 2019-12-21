@@ -1371,7 +1371,7 @@ static void prt_stun(void)
  * health-bar stops tracking any monster that "disappears".
  * </pre>
  */
-static void health_redraw(bool riding)
+static void health_redraw(player_type *creature_ptr, bool riding)
 {
 	s16b health_who;
 	int row, col;
@@ -1379,20 +1379,20 @@ static void health_redraw(bool riding)
 
 	if (riding)
 	{
-		health_who = p_ptr->riding;
+		health_who = creature_ptr->riding;
 		row = ROW_RIDING_INFO;
 		col = COL_RIDING_INFO;
 	}
 	else
 	{
-		health_who = p_ptr->health_who;
+		health_who = creature_ptr->health_who;
 		row = ROW_INFO;
 		col = COL_INFO;
 	}
 
-	m_ptr = &p_ptr->current_floor_ptr->m_list[health_who];
+	m_ptr = &creature_ptr->current_floor_ptr->m_list[health_who];
 
-	if (current_world_ptr->wizard && p_ptr->phase_out)
+	if (current_world_ptr->wizard && creature_ptr->phase_out)
 	{
 		row = ROW_INFO - 2;
 		col = COL_INFO + 2;
@@ -1402,32 +1402,32 @@ static void health_redraw(bool riding)
 		Term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
 		Term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
 
-		if(p_ptr->current_floor_ptr->m_list[1].r_idx)
+		if(creature_ptr->current_floor_ptr->m_list[1].r_idx)
 		{
-			Term_putstr(col - 2, row, 2, r_info[p_ptr->current_floor_ptr->m_list[1].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[1].r_idx].x_char));
-			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[1].hp));
-			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[1].max_maxhp));
+			Term_putstr(col - 2, row, 2, r_info[creature_ptr->current_floor_ptr->m_list[1].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[1].r_idx].x_char));
+			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].hp));
+			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].max_maxhp));
 		}
 
-		if(p_ptr->current_floor_ptr->m_list[2].r_idx)
+		if(creature_ptr->current_floor_ptr->m_list[2].r_idx)
 		{
-			Term_putstr(col - 2, row + 1, 2, r_info[p_ptr->current_floor_ptr->m_list[2].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[2].r_idx].x_char));
-			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[2].hp));
-			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[2].max_maxhp));
+			Term_putstr(col - 2, row + 1, 2, r_info[creature_ptr->current_floor_ptr->m_list[2].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[2].r_idx].x_char));
+			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].hp));
+			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].max_maxhp));
 		}
 
-		if(p_ptr->current_floor_ptr->m_list[3].r_idx)
+		if(creature_ptr->current_floor_ptr->m_list[3].r_idx)
 		{
-			Term_putstr(col - 2, row + 2, 2, r_info[p_ptr->current_floor_ptr->m_list[3].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[3].r_idx].x_char));
-			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[3].hp));
-			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[3].max_maxhp));
+			Term_putstr(col - 2, row + 2, 2, r_info[creature_ptr->current_floor_ptr->m_list[3].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[3].r_idx].x_char));
+			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].hp));
+			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].max_maxhp));
 		}
 
-		if(p_ptr->current_floor_ptr->m_list[4].r_idx)
+		if(creature_ptr->current_floor_ptr->m_list[4].r_idx)
 		{
-			Term_putstr(col - 2, row + 3, 2, r_info[p_ptr->current_floor_ptr->m_list[4].r_idx].x_attr, format("%c", r_info[p_ptr->current_floor_ptr->m_list[4].r_idx].x_char));
-			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[4].hp));
-			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", p_ptr->current_floor_ptr->m_list[4].max_maxhp));
+			Term_putstr(col - 2, row + 3, 2, r_info[creature_ptr->current_floor_ptr->m_list[4].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[4].r_idx].x_char));
+			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].hp));
+			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].max_maxhp));
 		}
 	}
 	else
@@ -1448,7 +1448,7 @@ static void health_redraw(bool riding)
 		}
 
 		/* Tracking a hallucinatory monster */
-		else if (p_ptr->image)
+		else if (creature_ptr->image)
 		{
 			/* Indicate that the monster health is "unknown" */
 			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
@@ -1531,8 +1531,8 @@ static void prt_frame_basic(void)
 	prt_sp();
 	prt_gold();
 	prt_depth();
-	health_redraw(FALSE);
-	health_redraw(TRUE);
+	health_redraw(p_ptr, FALSE);
+	health_redraw(p_ptr, TRUE);
 }
 
 
@@ -2194,13 +2194,13 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_HEALTH))
 	{
 		p_ptr->redraw &= ~(PR_HEALTH);
-		health_redraw(FALSE);
+		health_redraw(p_ptr, FALSE);
 	}
 
 	if (p_ptr->redraw & (PR_UHEALTH))
 	{
 		p_ptr->redraw &= ~(PR_UHEALTH);
-		health_redraw(TRUE);
+		health_redraw(p_ptr, TRUE);
 	}
 
 	if (p_ptr->redraw & (PR_EXTRA))
