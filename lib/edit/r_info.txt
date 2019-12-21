@@ -18273,6 +18273,8 @@ S:TPORT | BLIND | BLINK | HEAL | HASTE |
 S:CONF | BO_MANA | BRAIN_SMASH | PSY_SPEAR |
 S:BA_NETH | BA_DARK | BA_CHAO |
 S:S_MONSTERS | S_DEMON | S_KIN
+D:$She tried to destroy Earth solely just she wanted to fight Locke, the
+D:$ Superman, as a superhuman.
 D:彼女はただ超人として超人との戦いを望むが故に、皇帝に扮し地球を
 D:滅ぼそうとした。「とにかくある朝起きてみるとディナールは皇帝
 D:レイザークの神聖なる領地となっていたのだ」
