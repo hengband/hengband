@@ -18052,6 +18052,8 @@ S:1_IN_2 |
 S:BR_FIRE | BR_NEXU | BR_CHAO | BR_POIS | BR_DISE | BR_PLAS | BR_NUKE | BR_DARK
 A:128:1:25
 V:150
+D:$Is a legendary snake, with eight necks and eight tails, living in Izumo.
+D:$  If denied sacrificial victims, it causes floods and annihilates people.
 D:出雲の国に棲む伝説の蛇で、八つの首と八つの尾を持つ。
 D:いけにえを拒むと洪水を起こして人々を全滅させる。
 
