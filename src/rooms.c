@@ -205,14 +205,14 @@ void build_small_room(floor_type *floor_ptr, POSITION x0, POSITION y0)
  * @param y2 範囲の下端
  * @return なし
  */
-static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION y2)
+static void check_room_boundary(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
 	int count;
 	POSITION x, y;
 	bool old_is_floor, new_is_floor;
 	count = 0;
 
-	old_is_floor = get_is_floor(p_ptr->current_floor_ptr, x1 - 1, y1);
+	old_is_floor = get_is_floor(floor_ptr, x1 - 1, y1);
 
 	/*
 	 * Count the number of floor-wall boundaries around the room
@@ -223,7 +223,7 @@ static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION 
 	/* Above the top boundary */
 	for (x = x1; x <= x2; x++)
 	{
-		new_is_floor = get_is_floor(p_ptr->current_floor_ptr, x, y1 - 1);
+		new_is_floor = get_is_floor(floor_ptr, x, y1 - 1);
 
 		/* Increment counter if they are different */
 		if (new_is_floor != old_is_floor) count++;
@@ -234,7 +234,7 @@ static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION 
 	/* Right boundary */
 	for (y = y1; y <= y2; y++)
 	{
-		new_is_floor = get_is_floor(p_ptr->current_floor_ptr, x2 + 1, y);
+		new_is_floor = get_is_floor(floor_ptr, x2 + 1, y);
 
 		/* increment counter if they are different */
 		if (new_is_floor != old_is_floor) count++;
@@ -245,7 +245,7 @@ static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION 
 	/* Bottom boundary */
 	for (x = x2; x >= x1; x--)
 	{
-		new_is_floor = get_is_floor(p_ptr->current_floor_ptr, x, y2 + 1);
+		new_is_floor = get_is_floor(floor_ptr, x, y2 + 1);
 
 		/* increment counter if they are different */
 		if (new_is_floor != old_is_floor) count++;
@@ -256,7 +256,7 @@ static void check_room_boundary(POSITION x1, POSITION y1, POSITION x2, POSITION 
 	/* Left boundary */
 	for (y = y2; y >= y1; y--)
 	{
-		new_is_floor = get_is_floor(p_ptr->current_floor_ptr, x1 - 1, y);
+		new_is_floor = get_is_floor(floor_ptr, x1 - 1, y);
 
 		/* increment counter if they are different */
 		if (new_is_floor != old_is_floor) count++;
@@ -485,7 +485,7 @@ bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 	 * If so, fix by tunneling outside the room in such a
 	 * way as to connect the caves.
 	 */
-	check_room_boundary(*x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
+	check_room_boundary(p_ptr->current_floor_ptr, *x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
 
 	/* Success. */
 	return TRUE;
