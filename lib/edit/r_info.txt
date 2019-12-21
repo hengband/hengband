@@ -18179,6 +18179,10 @@ F:NO_CONF | NO_SLEEP | RES_TIME | RES_TELE | REFLECTING |
 S:1_IN_4 | 
 S:SCARE | S_KIN | WORLD | TELE_TO
 A:146:1:20
+D:$Dio, who became an immortal vampire with the help of a stone mask,
+D:$ looks only at the adventurer.  Watch out for The World, Dio's stand
+D:$ or visual manifestation of his life energy:  "I don't know what his
+D:$ stand is, but it is certain that it can only be used at close range."
 D:石仮面の力で不死の吸血鬼となったディオは冒険者を餌としか見ていない。
 D:『ザ・ワールド』に気をつけろ！「奴のスタンドの正体は分からないが、
 D:至近距離でしか使えないことは確かだッ」
