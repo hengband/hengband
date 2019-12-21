@@ -18221,6 +18221,9 @@ S:TPORT | SCARE | S_KIN | BLINK | HEAL |
 S:TELE_TO | CONF | BO_MANA | BRAIN_SMASH |
 S:BA_WATE | TELE_AWAY |
 S:DISPEL | WORLD | PSY_SPEAR
+D:$He has psychic powers that allow him to freely manipulate time and space.
+D:$  He keeps calm and is always smiling, but beneath that mask is a
+D:$ cold-blooded soul.
 D:時間と空間を自在に操る超能力者。
 D:冷静沈着で、常に余裕の笑みを浮かべている。
 D:だが、その仮面の下には冷血な魂が宿り、自分自身の欲望の為なら手段を選ばない。
