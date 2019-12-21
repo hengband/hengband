@@ -776,13 +776,13 @@ static void prt_title(player_type *creature_ptr)
  * @brief プレイヤーのレベルを表示する / Prints level
  * @return なし
  */
-static void prt_level(void)
+static void prt_level(player_type *creature_ptr)
 {
 	char tmp[32];
 
-	sprintf(tmp, _("%5d", "%6d"), p_ptr->lev);
+	sprintf(tmp, _("%5d", "%6d"), creature_ptr->lev);
 
-	if (p_ptr->lev >= p_ptr->max_plv)
+	if (creature_ptr->lev >= creature_ptr->max_plv)
 	{
 		put_str(_("レベル ", "LEVEL "), ROW_LEVEL, 0);
 		c_put_str(TERM_L_GREEN, tmp, ROW_LEVEL, COL_LEVEL + 7);
@@ -1523,7 +1523,7 @@ static void prt_frame_basic(void)
 	}
 
 	prt_title(p_ptr);
-	prt_level();
+	prt_level(p_ptr);
 	prt_exp();
 	for (i = 0; i < A_MAX; i++) prt_stat(i);
 	prt_ac();
@@ -2135,7 +2135,7 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_LEV))
 	{
 		p_ptr->redraw &= ~(PR_LEV);
-		prt_level();
+		prt_level(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_EXP))
