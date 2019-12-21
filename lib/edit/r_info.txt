@@ -18198,6 +18198,8 @@ F:KILL_WALL | CAN_SWIM | DROP_CORPSE | MOVE_BODY |
 F:FORCE_MAXHP | ONLY_GOLD | DROP_2D2 | DROP_3D2 |
 S:1_IN_3
 S:SPECIAL
+D:$A mass of worms, mad with rage, rushes towards you strewing miasma in
+D:$ its wake.
 D:怒りに狂った王蟲の群は瘴気をまき散らしながら突進してくる。
 
 N:880:時を統べる者『リチャード・ウォン』
