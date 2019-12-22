@@ -847,18 +847,18 @@ static void prt_gold(void)
  * @brief プレイヤーのACを表示する / Prints current AC
  * @return なし
  */
-static void prt_ac(void)
+static void prt_ac(player_type *creature_ptr)
 {
 	char tmp[32];
 
 #ifdef JP
 /* AC の表示方式を変更している */
 	put_str(" ＡＣ(     )", ROW_AC, COL_AC);
-	sprintf(tmp, "%5d", p_ptr->dis_ac + p_ptr->dis_to_a);
+	sprintf(tmp, "%5d", creature_ptr->dis_ac + creature_ptr->dis_to_a);
 	c_put_str(TERM_L_GREEN, tmp, ROW_AC, COL_AC + 6);
 #else
 	put_str("Cur AC ", ROW_AC, COL_AC);
-	sprintf(tmp, "%5d", p_ptr->dis_ac + p_ptr->dis_to_a);
+	sprintf(tmp, "%5d", creature_ptr->dis_ac + creature_ptr->dis_to_a);
 	c_put_str(TERM_L_GREEN, tmp, ROW_AC, COL_AC + 7);
 #endif
 
@@ -869,7 +869,7 @@ static void prt_ac(void)
  * @brief プレイヤーのHPを表示する / Prints Cur/Max hit points
  * @return なし
  */
-static void prt_hp(void)
+static void prt_hp(player_type *creature_ptr)
 {
 	/* ヒットポイントの表示方法を変更 */
 	char tmp[32];
@@ -880,13 +880,13 @@ static void prt_hp(void)
 	put_str("HP", ROW_CURHP, COL_CURHP);
 
 	/* 現在のヒットポイント */
-	sprintf(tmp, "%4ld", (long int)p_ptr->chp);
+	sprintf(tmp, "%4ld", (long int)creature_ptr->chp);
 
-	if (p_ptr->chp >= p_ptr->mhp)
+	if (creature_ptr->chp >= creature_ptr->mhp)
 	{
 		color = TERM_L_GREEN;
 	}
-	else if (p_ptr->chp > (p_ptr->mhp * hitpoint_warn) / 10)
+	else if (creature_ptr->chp > (creature_ptr->mhp * hitpoint_warn) / 10)
 	{
 		color = TERM_YELLOW;
 	}
@@ -901,7 +901,7 @@ static void prt_hp(void)
 	put_str( "/", ROW_CURHP, COL_CURHP + 7 );
 
 	/* 最大ヒットポイント */
-	sprintf(tmp, "%4ld", (long int)p_ptr->mhp);
+	sprintf(tmp, "%4ld", (long int)creature_ptr->mhp);
 	color = TERM_L_GREEN;
 
 	c_put_str(color, tmp, ROW_CURHP, COL_CURHP + 8 );
@@ -912,7 +912,7 @@ static void prt_hp(void)
  * @brief プレイヤーのMPを表示する / Prints players max/cur spell points
  * @return なし
  */
-static void prt_sp(void)
+static void prt_sp(player_type *creature_ptr)
 {
 /* マジックポイントの表示方法を変更している */
 	char tmp[32];
@@ -926,13 +926,13 @@ static void prt_sp(void)
 	put_str(_("MP", "SP"), ROW_CURSP, COL_CURSP);
 
 	/* 現在のマジックポイント */
-	sprintf(tmp, "%4ld", (long int)p_ptr->csp);
+	sprintf(tmp, "%4ld", (long int)creature_ptr->csp);
 
-	if (p_ptr->csp >= p_ptr->msp)
+	if (creature_ptr->csp >= creature_ptr->msp)
 	{
 		color = TERM_L_GREEN;
 	}
-	else if (p_ptr->csp > (p_ptr->msp * mana_warn) / 10)
+	else if (creature_ptr->csp > (creature_ptr->msp * mana_warn) / 10)
 	{
 		color = TERM_YELLOW;
 	}
@@ -947,7 +947,7 @@ static void prt_sp(void)
 	put_str( "/", ROW_CURSP, COL_CURSP + 7 );
 
 	/* 最大マジックポイント */
-	sprintf(tmp, "%4ld", (long int)p_ptr->msp);
+	sprintf(tmp, "%4ld", (long int)creature_ptr->msp);
 	color = TERM_L_GREEN;
 
 	c_put_str(color, tmp, ROW_CURSP, COL_CURSP + 8);
@@ -1524,9 +1524,9 @@ static void prt_frame_basic(void)
 	prt_level(p_ptr);
 	prt_exp(p_ptr);
 	for (i = 0; i < A_MAX; i++) prt_stat(p_ptr, i);
-	prt_ac();
-	prt_hp();
-	prt_sp();
+	prt_ac(p_ptr);
+	prt_hp(p_ptr);
+	prt_sp(p_ptr);
 	prt_gold();
 	prt_depth();
 	health_redraw(p_ptr, FALSE);
@@ -2162,19 +2162,19 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_ARMOR))
 	{
 		p_ptr->redraw &= ~(PR_ARMOR);
-		prt_ac();
+		prt_ac(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_HP))
 	{
 		p_ptr->redraw &= ~(PR_HP);
-		prt_hp();
+		prt_hp(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_MANA))
 	{
 		p_ptr->redraw &= ~(PR_MANA);
-		prt_sp();
+		prt_sp(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_GOLD))
