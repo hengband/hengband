@@ -18962,6 +18962,8 @@ F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE |
 F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY |
 S:1_IN_3 |
 S:HOLD | BLIND | CONF | SCARE | SLOW
+D:$This is Bull Gates's most devastating weapon, propagating fear and ruin
+D:$ throughout the world.
 D:ブル・ゲイツの究極兵器であり、全世界に破滅をもたらす恐怖の存在だ。
 
 N:922:ピカチャウ
