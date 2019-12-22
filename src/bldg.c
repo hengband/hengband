@@ -3943,7 +3943,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		break;
 	case BACT_IDENTS: /* needs work */
 		if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay for identify all your possession? "))) break;
-		identify_pack();
+		identify_pack(p_ptr);
 		msg_print(_(" 持ち物全てが鑑定されました。", "Your possessions have been identified."));
 		paid = TRUE;
 		break;

@@ -299,7 +299,7 @@ extern bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode);
 extern void call_the_void(player_type *caster_ptr);
 extern void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
 extern void reserve_alter_reality(player_type *caster_ptr);
-extern void identify_pack(void);
+extern void identify_pack(player_type *target_ptr);
 extern int remove_curse(player_type *caster_ptr);
 extern int remove_all_curse(player_type *caster_ptr);
 extern bool alchemy(player_type *caster_ptr);

@@ -399,7 +399,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			(void)detect_treasure(DETECT_RAD_DEFAULT);
 			(void)detect_objects_gold(DETECT_RAD_DEFAULT);
 			(void)detect_objects_normal(DETECT_RAD_DEFAULT);
-			identify_pack();
+			identify_pack(creature_ptr);
 			self_knowledge(creature_ptr);
 			ident = TRUE;
 			break;

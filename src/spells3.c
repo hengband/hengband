@@ -1377,17 +1377,17 @@ void reserve_alter_reality(player_type *caster_ptr)
  * Done by a potion of "self knowledge".
  * @return なし
  */
-void identify_pack(void)
+void identify_pack(player_type *target_ptr)
 {
 	INVENTORY_IDX i;
 
 	/* Simply identify and know every item */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &target_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
-		identify_item(p_ptr, o_ptr);
+		identify_item(target_ptr, o_ptr);
 
 		/* Auto-inscription */
 		autopick_alter_item(i, FALSE);
