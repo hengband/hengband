@@ -18943,6 +18943,8 @@ S:1_IN_3 |
 S:BLIND | CONF | SCARE | 
 S:BA_DARK | BO_NETH | BR_NETH | BR_DARK | BR_NUKE | BR_POIS | HAND_DOOM |
 S:S_DEMON | S_KIN | DISPEL
+D:$Said to be the commander of a hellish army, this terrifying demon can cause
+D:$ ruin merely by saying his own name.
 D:その名を口にするだけで破滅をもたらすほどの恐るべきデーモンであり、
 D:地獄の軍勢の指揮官であると言われている。
 
