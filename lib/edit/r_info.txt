@@ -19032,6 +19032,8 @@ B:CLAW:HURT:2d5
 B:BITE:HURT:3d4
 B:CRUSH:SUPERHURT:5d8
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE
+D:$It is snake-like but much wider in the middle than the ends.  You've heard
+D:$ rumors of someone paying 1,000,000 gold for one captured alive.
 D:それを捕えた者には $1,000,000 の賞金が出るといわれている。
 
 # Description in English by Nick Keulmann
