@@ -3404,13 +3404,13 @@ void spell_RF6_S_UNIQUE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 * @param m_idx 呪文を唱えるモンスターID
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx)
+HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	switch (SPELL_NUM)
 	{
-	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_SHRIEK */
+	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   break;   /* RF4_XXX1 */
-	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_DISPEL */
+	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_DISPEL */
 	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_ROCKET */
 	case RF4_SPELL_START + 4:   return spell_RF4_SHOOT(y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_SHOOT */
 	case RF4_SPELL_START + 5:   break;   /* RF4_XXX2 */
@@ -3467,11 +3467,11 @@ HIT_POINT monspell_to_player(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX 
 	case RF5_SPELL_START + 24: return spell_RF5_BO_PLAS(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_PLAS */
 	case RF5_SPELL_START + 25: return spell_RF5_BO_ICEE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ICEE */
 	case RF5_SPELL_START + 26: return spell_RF5_MISSILE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MISSILE */
-	case RF5_SPELL_START + 27: spell_RF5_SCARE(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;   /* RF5_SCARE */
-	case RF5_SPELL_START + 28: spell_RF5_BLIND(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;   /* RF5_BLIND */
-	case RF5_SPELL_START + 29: spell_RF5_CONF(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_CONF */
-	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
-	case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, p_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_HOLD */
+	case RF5_SPELL_START + 27: spell_RF5_SCARE(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;   /* RF5_SCARE */
+	case RF5_SPELL_START + 28: spell_RF5_BLIND(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;   /* RF5_BLIND */
+	case RF5_SPELL_START + 29: spell_RF5_CONF(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_CONF */
+	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
+	case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_HOLD */
 	case RF6_SPELL_START + 0:  spell_RF6_HASTE(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_HASTE */
 	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
 	case RF6_SPELL_START + 2:  spell_RF6_HEAL(m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_HEAL */

@@ -1772,7 +1772,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
     }
 
     /* Cast the spell. */
-    dam = monspell_to_player(thrown_spell, y, x, m_idx);
+    dam = monspell_to_player(thrown_spell, target_ptr, y, x, m_idx);
     if (dam < 0) return FALSE;
 
 	if ((target_ptr->action == ACTION_LEARN) && thrown_spell > 175)
