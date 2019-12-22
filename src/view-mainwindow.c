@@ -233,15 +233,15 @@ static void prt_dungeon(void)
  * @param stat 描画するステータスのID
  * @return なし
  */
-static void prt_stat(int stat)
+static void prt_stat(player_type *creature_ptr, int stat)
 {
 	GAME_TEXT tmp[32];
 
 	/* Display "injured" stat */
-	if (p_ptr->stat_cur[stat] < p_ptr->stat_max[stat])
+	if (creature_ptr->stat_cur[stat] < creature_ptr->stat_max[stat])
 	{
 		put_str(stat_names_reduced[stat], ROW_STAT + stat, 0);
-		cnv_stat(p_ptr->stat_use[stat], tmp);
+		cnv_stat(creature_ptr->stat_use[stat], tmp);
 		c_put_str(TERM_YELLOW, tmp, ROW_STAT + stat, COL_STAT + 6);
 	}
 
@@ -249,12 +249,12 @@ static void prt_stat(int stat)
 	else
 	{
 		put_str(stat_names[stat], ROW_STAT + stat, 0);
-		cnv_stat(p_ptr->stat_use[stat], tmp);
+		cnv_stat(creature_ptr->stat_use[stat], tmp);
 		c_put_str(TERM_L_GREEN, tmp, ROW_STAT + stat, COL_STAT + 6);
 	}
 
 	/* Indicate natural maximum */
-	if (p_ptr->stat_max[stat] == p_ptr->stat_max_max[stat])
+	if (creature_ptr->stat_max[stat] == creature_ptr->stat_max_max[stat])
 	{
 #ifdef JP
 		/* 日本語にかぶらないように表示位置を変更 */
@@ -1523,7 +1523,7 @@ static void prt_frame_basic(void)
 	prt_title(p_ptr);
 	prt_level(p_ptr);
 	prt_exp(p_ptr);
-	for (i = 0; i < A_MAX; i++) prt_stat(i);
+	for (i = 0; i < A_MAX; i++) prt_stat(p_ptr, i);
 	prt_ac();
 	prt_hp();
 	prt_sp();
@@ -2145,12 +2145,12 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_STATS))
 	{
 		p_ptr->redraw &= ~(PR_STATS);
-		prt_stat(A_STR);
-		prt_stat(A_INT);
-		prt_stat(A_WIS);
-		prt_stat(A_DEX);
-		prt_stat(A_CON);
-		prt_stat(A_CHR);
+		prt_stat(p_ptr, A_STR);
+		prt_stat(p_ptr, A_INT);
+		prt_stat(p_ptr, A_WIS);
+		prt_stat(p_ptr, A_DEX);
+		prt_stat(p_ptr, A_CON);
+		prt_stat(p_ptr, A_CHR);
 	}
 
 	if (p_ptr->redraw & (PR_STATUS))
