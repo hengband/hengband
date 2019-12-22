@@ -689,7 +689,7 @@ void forget_view(floor_type *floor_ptr)
  *
  * This function now returns "TRUE" if vision is "blocked" by grid (y,x).
  */
-static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	bool f1, f2, v1, v2, z1, z2, wall;
 
@@ -699,8 +699,8 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	grid_type *g2_c_ptr;
 
 	/* Access the grids */
-	g1_c_ptr = &p_ptr->current_floor_ptr->grid_array[y1][x1];
-	g2_c_ptr = &p_ptr->current_floor_ptr->grid_array[y2][x2];
+	g1_c_ptr = &floor_ptr->grid_array[y1][x1];
+	g2_c_ptr = &floor_ptr->grid_array[y2][x2];
 
 
 	/* Check for walls */
@@ -718,7 +718,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 	/* Totally blocked by "unviewable neighbors" */
 	if (!v1 && !v2) return (TRUE);
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 
 	/* Check for walls */
@@ -768,7 +768,7 @@ static bool update_view_aux(POSITION y, POSITION x, POSITION y1, POSITION x1, PO
 
 
 	/* Hack -- check line of sight */
-	if (los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x))
+	if (los(floor_ptr, p_ptr->y, p_ptr->x, y, x))
 	{
 		cave_view_hack(g_ptr, y, x);
 
@@ -1072,7 +1072,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ypn + d, xpn, ypn + d - 1, xpn - 1, ypn + d - 1, xpn))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ypn + d, xpn, ypn + d - 1, xpn - 1, ypn + d - 1, xpn))
 					{
 						if (n + d >= se) break;
 					}
@@ -1095,7 +1095,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ypn + d, xmn, ypn + d - 1, xmn + 1, ypn + d - 1, xmn))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ypn + d, xmn, ypn + d - 1, xmn + 1, ypn + d - 1, xmn))
 					{
 						if (n + d >= sw) break;
 					}
@@ -1126,7 +1126,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ymn - d, xpn, ymn - d + 1, xpn - 1, ymn - d + 1, xpn))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ymn - d, xpn, ymn - d + 1, xpn - 1, ymn - d + 1, xpn))
 					{
 						if (n + d >= ne) break;
 					}
@@ -1149,7 +1149,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ymn - d, xmn, ymn - d + 1, xmn + 1, ymn - d + 1, xmn))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ymn - d, xmn, ymn - d + 1, xmn + 1, ymn - d + 1, xmn))
 					{
 						if (n + d >= nw) break;
 					}
@@ -1180,7 +1180,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ypn, xpn + d, ypn - 1, xpn + d - 1, ypn, xpn + d - 1))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ypn, xpn + d, ypn - 1, xpn + d - 1, ypn, xpn + d - 1))
 					{
 						if (n + d >= es) break;
 					}
@@ -1203,7 +1203,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ymn, xpn + d, ymn + 1, xpn + d - 1, ymn, xpn + d - 1))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ymn, xpn + d, ymn + 1, xpn + d - 1, ymn, xpn + d - 1))
 					{
 						if (n + d >= en) break;
 					}
@@ -1234,7 +1234,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ypn, xmn - d, ypn - 1, xmn - d + 1, ypn, xmn - d + 1))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ypn, xmn - d, ypn - 1, xmn - d + 1, ypn, xmn - d + 1))
 					{
 						if (n + d >= ws) break;
 					}
@@ -1257,7 +1257,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(ymn, xmn - d, ymn + 1, xmn - d + 1, ymn, xmn - d + 1))
+					if (update_view_aux(subject_ptr->current_floor_ptr, ymn, xmn - d, ymn + 1, xmn - d + 1, ymn, xmn - d + 1))
 					{
 						if (n + d >= wn) break;
 					}
