@@ -1961,7 +1961,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	(void)set_monster_monfear(target_ptr, m_idx, 0);
 
 	if (see_monster(floor_ptr, m_idx))
-		msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
+		msg_format(_("%^sは勇気を取り戻した。", format("%%^s recovers %s courage.", m_poss)), m_name);
 }
 
 
