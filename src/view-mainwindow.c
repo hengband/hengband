@@ -506,7 +506,7 @@ static struct {
  * @brief 下部に状態表示を行う / Show status bar
  * @return なし
  */
-static void prt_status(void)
+static void prt_status(player_type *creature_ptr)
 {
 	BIT_FLAGS bar_flags[3];
 	TERM_LEN wid, hgt, row_statbar, max_col_statbar;
@@ -523,138 +523,138 @@ static void prt_status(void)
 	bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;
 
 	/* Tsuyoshi  */
-	if (p_ptr->tsuyoshi) ADD_FLG(BAR_TSUYOSHI);
+	if (creature_ptr->tsuyoshi) ADD_FLG(BAR_TSUYOSHI);
 
 	/* Hallucinating */
-	if (p_ptr->image) ADD_FLG(BAR_HALLUCINATION);
+	if (creature_ptr->image) ADD_FLG(BAR_HALLUCINATION);
 
 	/* Blindness */
-	if (p_ptr->blind) ADD_FLG(BAR_BLINDNESS);
+	if (creature_ptr->blind) ADD_FLG(BAR_BLINDNESS);
 
 	/* Paralysis */
-	if (p_ptr->paralyzed) ADD_FLG(BAR_PARALYZE);
+	if (creature_ptr->paralyzed) ADD_FLG(BAR_PARALYZE);
 
 	/* Confusion */
-	if (p_ptr->confused) ADD_FLG(BAR_CONFUSE);
+	if (creature_ptr->confused) ADD_FLG(BAR_CONFUSE);
 
 	/* Posioned */
-	if (p_ptr->poisoned) ADD_FLG(BAR_POISONED);
+	if (creature_ptr->poisoned) ADD_FLG(BAR_POISONED);
 
 	/* Times see-invisible */
-	if (p_ptr->tim_invis) ADD_FLG(BAR_SENSEUNSEEN);
+	if (creature_ptr->tim_invis) ADD_FLG(BAR_SENSEUNSEEN);
 
 	/* Timed esp */
 	if (IS_TIM_ESP()) ADD_FLG(BAR_TELEPATHY);
 
 	/* Timed regenerate */
-	if (p_ptr->tim_regen) ADD_FLG(BAR_REGENERATION);
+	if (creature_ptr->tim_regen) ADD_FLG(BAR_REGENERATION);
 
 	/* Timed infra-vision */
-	if (p_ptr->tim_infra) ADD_FLG(BAR_INFRAVISION);
+	if (creature_ptr->tim_infra) ADD_FLG(BAR_INFRAVISION);
 
 	/* Protection from evil */
-	if (p_ptr->protevil) ADD_FLG(BAR_PROTEVIL);
+	if (creature_ptr->protevil) ADD_FLG(BAR_PROTEVIL);
 
 	/* Invulnerability */
 	if (IS_INVULN()) ADD_FLG(BAR_INVULN);
 
 	/* Wraith form */
-	if (p_ptr->wraith_form) ADD_FLG(BAR_WRAITH);
+	if (creature_ptr->wraith_form) ADD_FLG(BAR_WRAITH);
 
 	/* Kabenuke */
-	if (p_ptr->kabenuke) ADD_FLG(BAR_PASSWALL);
+	if (creature_ptr->kabenuke) ADD_FLG(BAR_PASSWALL);
 
-	if (p_ptr->tim_reflect) ADD_FLG(BAR_REFLECTION);
+	if (creature_ptr->tim_reflect) ADD_FLG(BAR_REFLECTION);
 
 	/* Heroism */
 	if (IS_HERO()) ADD_FLG(BAR_HEROISM);
 
 	/* Super Heroism / berserk */
-	if (p_ptr->shero) ADD_FLG(BAR_BERSERK);
+	if (creature_ptr->shero) ADD_FLG(BAR_BERSERK);
 
 	/* Blessed */
 	if (IS_BLESSED()) ADD_FLG(BAR_BLESSED);
 
 	/* Shield */
-	if (p_ptr->magicdef) ADD_FLG(BAR_MAGICDEFENSE);
+	if (creature_ptr->magicdef) ADD_FLG(BAR_MAGICDEFENSE);
 
-	if (p_ptr->tsubureru) ADD_FLG(BAR_EXPAND);
+	if (creature_ptr->tsubureru) ADD_FLG(BAR_EXPAND);
 
-	if (p_ptr->shield) ADD_FLG(BAR_STONESKIN);
+	if (creature_ptr->shield) ADD_FLG(BAR_STONESKIN);
 	
-	if (p_ptr->special_defense & NINJA_KAWARIMI) ADD_FLG(BAR_KAWARIMI);
+	if (creature_ptr->special_defense & NINJA_KAWARIMI) ADD_FLG(BAR_KAWARIMI);
 
 	/* Oppose Acid */
-	if (p_ptr->special_defense & DEFENSE_ACID) ADD_FLG(BAR_IMMACID);
+	if (creature_ptr->special_defense & DEFENSE_ACID) ADD_FLG(BAR_IMMACID);
 	if (IS_OPPOSE_ACID()) ADD_FLG(BAR_RESACID);
 
 	/* Oppose Lightning */
-	if (p_ptr->special_defense & DEFENSE_ELEC) ADD_FLG(BAR_IMMELEC);
+	if (creature_ptr->special_defense & DEFENSE_ELEC) ADD_FLG(BAR_IMMELEC);
 	if (IS_OPPOSE_ELEC()) ADD_FLG(BAR_RESELEC);
 
 	/* Oppose Fire */
-	if (p_ptr->special_defense & DEFENSE_FIRE) ADD_FLG(BAR_IMMFIRE);
+	if (creature_ptr->special_defense & DEFENSE_FIRE) ADD_FLG(BAR_IMMFIRE);
 	if (IS_OPPOSE_FIRE()) ADD_FLG(BAR_RESFIRE);
 
 	/* Oppose Cold */
-	if (p_ptr->special_defense & DEFENSE_COLD) ADD_FLG(BAR_IMMCOLD);
+	if (creature_ptr->special_defense & DEFENSE_COLD) ADD_FLG(BAR_IMMCOLD);
 	if (IS_OPPOSE_COLD()) ADD_FLG(BAR_RESCOLD);
 
 	/* Oppose Poison */
 	if (IS_OPPOSE_POIS()) ADD_FLG(BAR_RESPOIS);
 
 	/* Word of Recall */
-	if (p_ptr->word_recall) ADD_FLG(BAR_RECALL);
+	if (creature_ptr->word_recall) ADD_FLG(BAR_RECALL);
 
 	/* Alter realiry */
-	if (p_ptr->alter_reality) ADD_FLG(BAR_ALTER);
+	if (creature_ptr->alter_reality) ADD_FLG(BAR_ALTER);
 
 	/* Afraid */
-	if (p_ptr->afraid) ADD_FLG(BAR_AFRAID);
+	if (creature_ptr->afraid) ADD_FLG(BAR_AFRAID);
 
 	/* Resist time */
-	if (p_ptr->tim_res_time) ADD_FLG(BAR_RESTIME);
+	if (creature_ptr->tim_res_time) ADD_FLG(BAR_RESTIME);
 
-	if (p_ptr->multishadow) ADD_FLG(BAR_MULTISHADOW);
+	if (creature_ptr->multishadow) ADD_FLG(BAR_MULTISHADOW);
 
 	/* Confusing Hands */
-	if (p_ptr->special_attack & ATTACK_CONFUSE) ADD_FLG(BAR_ATTKCONF);
+	if (creature_ptr->special_attack & ATTACK_CONFUSE) ADD_FLG(BAR_ATTKCONF);
 
-	if (p_ptr->resist_magic) ADD_FLG(BAR_REGMAGIC);
+	if (creature_ptr->resist_magic) ADD_FLG(BAR_REGMAGIC);
 
 	/* Ultimate-resistance */
-	if (p_ptr->ult_res) ADD_FLG(BAR_ULTIMATE);
+	if (creature_ptr->ult_res) ADD_FLG(BAR_ULTIMATE);
 
 	/* tim levitation */
-	if (p_ptr->tim_levitation) ADD_FLG(BAR_LEVITATE);
+	if (creature_ptr->tim_levitation) ADD_FLG(BAR_LEVITATE);
 
-	if (p_ptr->tim_res_nether) ADD_FLG(BAR_RESNETH);
+	if (creature_ptr->tim_res_nether) ADD_FLG(BAR_RESNETH);
 
-	if (p_ptr->dustrobe) ADD_FLG(BAR_DUSTROBE);
+	if (creature_ptr->dustrobe) ADD_FLG(BAR_DUSTROBE);
 
 	/* Mahouken */
-	if (p_ptr->special_attack & ATTACK_FIRE) ADD_FLG(BAR_ATTKFIRE);
-	if (p_ptr->special_attack & ATTACK_COLD) ADD_FLG(BAR_ATTKCOLD);
-	if (p_ptr->special_attack & ATTACK_ELEC) ADD_FLG(BAR_ATTKELEC);
-	if (p_ptr->special_attack & ATTACK_ACID) ADD_FLG(BAR_ATTKACID);
-	if (p_ptr->special_attack & ATTACK_POIS) ADD_FLG(BAR_ATTKPOIS);
-	if (p_ptr->special_defense & NINJA_S_STEALTH) ADD_FLG(BAR_SUPERSTEALTH);
+	if (creature_ptr->special_attack & ATTACK_FIRE) ADD_FLG(BAR_ATTKFIRE);
+	if (creature_ptr->special_attack & ATTACK_COLD) ADD_FLG(BAR_ATTKCOLD);
+	if (creature_ptr->special_attack & ATTACK_ELEC) ADD_FLG(BAR_ATTKELEC);
+	if (creature_ptr->special_attack & ATTACK_ACID) ADD_FLG(BAR_ATTKACID);
+	if (creature_ptr->special_attack & ATTACK_POIS) ADD_FLG(BAR_ATTKPOIS);
+	if (creature_ptr->special_defense & NINJA_S_STEALTH) ADD_FLG(BAR_SUPERSTEALTH);
 
-	if (p_ptr->tim_sh_fire) ADD_FLG(BAR_SHFIRE);
+	if (creature_ptr->tim_sh_fire) ADD_FLG(BAR_SHFIRE);
 
 	/* tim stealth */
 	if (IS_TIM_STEALTH()) ADD_FLG(BAR_STEALTH);
 
-	if (p_ptr->tim_sh_touki) ADD_FLG(BAR_TOUKI);
+	if (creature_ptr->tim_sh_touki) ADD_FLG(BAR_TOUKI);
 
 	/* Holy aura */
-	if (p_ptr->tim_sh_holy) ADD_FLG(BAR_SHHOLY);
+	if (creature_ptr->tim_sh_holy) ADD_FLG(BAR_SHHOLY);
 
 	/* An Eye for an Eye */
-	if (p_ptr->tim_eyeeye) ADD_FLG(BAR_EYEEYE);
+	if (creature_ptr->tim_eyeeye) ADD_FLG(BAR_EYEEYE);
 
 	/* Hex spells */
-	if (p_ptr->realm1 == REALM_HEX)
+	if (creature_ptr->realm1 == REALM_HEX)
 	{
 		if (hex_spelling(HEX_BLESS)) ADD_FLG(BAR_BLESSED);
 		if (hex_spelling(HEX_DEMON_AURA)) { ADD_FLG(BAR_SHFIRE); ADD_FLG(BAR_REGENERATION); }
@@ -675,10 +675,10 @@ static void prt_status(void)
 			hex_spelling(HEX_CURE_SERIOUS) ||
 			hex_spelling(HEX_CURE_CRITICAL)) ADD_FLG(BAR_CURE);
 
-		if (HEX_REVENGE_TURN(p_ptr))
+		if (HEX_REVENGE_TURN(creature_ptr))
 		{
-			if (HEX_REVENGE_TYPE(p_ptr) == 1) ADD_FLG(BAR_PATIENCE);
-			if (HEX_REVENGE_TYPE(p_ptr) == 2) ADD_FLG(BAR_REVENGE);
+			if (HEX_REVENGE_TYPE(creature_ptr) == 1) ADD_FLG(BAR_PATIENCE);
+			if (HEX_REVENGE_TYPE(creature_ptr) == 2) ADD_FLG(BAR_REVENGE);
 		}
 	}
 
@@ -1547,7 +1547,7 @@ static void prt_frame_extra(void)
 	prt_speed();
 	prt_study();
 	prt_imitation();
-	prt_status();
+	prt_status(p_ptr);
 }
 
 
@@ -2156,7 +2156,7 @@ void redraw_stuff(void)
 	if (p_ptr->redraw & (PR_STATUS))
 	{
 		p_ptr->redraw &= ~(PR_STATUS);
-		prt_status();
+		prt_status(p_ptr);
 	}
 
 	if (p_ptr->redraw & (PR_ARMOR))
