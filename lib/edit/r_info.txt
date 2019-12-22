@@ -18978,6 +18978,7 @@ F:DROP_CORPSE | ONLY_GOLD | DROP_1D2 | IM_ELEC | ANIMAL | AURA_ELEC |
 F:SELF_LITE_1 |
 S:1_IN_5 | 
 S:BR_ELEC | BO_ELEC
+D:$It's shockingly pretty, for a rat.
 D:かわいらしい外見をしているが、油断すると思わぬ衝撃を受けるだろう。
 
 N:923:雪女
