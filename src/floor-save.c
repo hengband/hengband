@@ -351,6 +351,10 @@ static void build_dead_end(floor_type *floor_ptr)
 
 	clear_cave(floor_ptr);
 
+	/* Mega-Hack -- no player yet */
+	p_ptr->x = p_ptr->y = 0;
+
+
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(0);
 

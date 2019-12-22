@@ -3002,6 +3002,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 	clear_cave(p_ptr->current_floor_ptr);
 
+	/* Mega-Hack -- no player yet */
+	p_ptr->x = p_ptr->y = 0;
+
 	/*** Basic info ***/
 
 	/* Dungeon floor specific info follows */

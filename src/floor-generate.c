@@ -1383,9 +1383,6 @@ void clear_cave(floor_type *floor_ptr)
 		}
 	}
 
-	/* Mega-Hack -- no player yet */
-	p_ptr->x = p_ptr->y = 0;
-
 	/* Set the base level */
 	floor_ptr->base_level = floor_ptr->dun_level;
 
@@ -1416,6 +1413,9 @@ void generate_floor(floor_type *floor_ptr)
 		concptr why = NULL;
 
 		clear_cave(floor_ptr);
+
+		/* Mega-Hack -- no player yet */
+		p_ptr->x = p_ptr->y = 0;
 
 		if (floor_ptr->inside_arena)
 		{
