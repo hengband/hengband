@@ -1737,7 +1737,7 @@ static void load_quick_start(void)
  * @brief その他の情報を読み込む / Read the "extra" information
  * @return なし
  */
-static void rd_extra(void)
+static void rd_extra(player_type *creature_ptr)
 {
 	int i,j;
 
@@ -1746,9 +1746,9 @@ static void rd_extra(void)
 	s32b tmp32s;
 	u16b tmp16u;
 
-	rd_string(p_ptr->name, sizeof(p_ptr->name));
+	rd_string(creature_ptr->name, sizeof(creature_ptr->name));
 
-	rd_string(p_ptr->died_from, sizeof(p_ptr->died_from));
+	rd_string(creature_ptr->died_from, sizeof(creature_ptr->died_from));
 
 	if (!h_older_than(1, 7, 0, 1))
 	{
@@ -1756,136 +1756,136 @@ static void rd_extra(void)
 
 		/* Read the message */
 		rd_string(buf, sizeof buf);
-		if (buf[0]) p_ptr->last_message = string_make(buf);
+		if (buf[0]) creature_ptr->last_message = string_make(buf);
 	}
 
 	load_quick_start();
 
 	for (i = 0; i < 4; i++)
 	{
-		rd_string(p_ptr->history[i], sizeof(p_ptr->history[i]));
+		rd_string(creature_ptr->history[i], sizeof(creature_ptr->history[i]));
 	}
 
 	/* Class/Race/Seikaku/Gender/Spells */
 	rd_byte(&tmp8u);
-	p_ptr->prace = (RACE_IDX)tmp8u;
+	creature_ptr->prace = (RACE_IDX)tmp8u;
 	rd_byte(&tmp8u);
-	p_ptr->pclass = (CLASS_IDX)tmp8u;
+	creature_ptr->pclass = (CLASS_IDX)tmp8u;
 	rd_byte(&tmp8u);
-	p_ptr->pseikaku = (CHARACTER_IDX)tmp8u;
-	rd_byte(&p_ptr->psex);
+	creature_ptr->pseikaku = (CHARACTER_IDX)tmp8u;
+	rd_byte(&creature_ptr->psex);
 	rd_byte(&tmp8u);
-	p_ptr->realm1 = (REALM_IDX)tmp8u;
+	creature_ptr->realm1 = (REALM_IDX)tmp8u;
 	rd_byte(&tmp8u);
-	p_ptr->realm2 = (REALM_IDX)tmp8u;
+	creature_ptr->realm2 = (REALM_IDX)tmp8u;
 	rd_byte(&tmp8u);
 
 	if (z_older_than(10, 4, 4))
 	{
-		if (p_ptr->realm1 == 9) p_ptr->realm1 = REALM_MUSIC;
-		if (p_ptr->realm2 == 9) p_ptr->realm2 = REALM_MUSIC;
-		if (p_ptr->realm1 == 10) p_ptr->realm1 = REALM_HISSATSU;
-		if (p_ptr->realm2 == 10) p_ptr->realm2 = REALM_HISSATSU;
+		if (creature_ptr->realm1 == 9) creature_ptr->realm1 = REALM_MUSIC;
+		if (creature_ptr->realm2 == 9) creature_ptr->realm2 = REALM_MUSIC;
+		if (creature_ptr->realm1 == 10) creature_ptr->realm1 = REALM_HISSATSU;
+		if (creature_ptr->realm2 == 10) creature_ptr->realm2 = REALM_HISSATSU;
 	}
 
 	/* Special Race/Class info */
 	rd_byte(&tmp8u);
-	p_ptr->hitdie = tmp8u;
-	rd_u16b(&p_ptr->expfact);
+	creature_ptr->hitdie = tmp8u;
+	rd_u16b(&creature_ptr->expfact);
 
 	/* Age/Height/Weight */
-	rd_s16b(&p_ptr->age);
-	rd_s16b(&p_ptr->ht);
-	rd_s16b(&p_ptr->wt);
+	rd_s16b(&creature_ptr->age);
+	rd_s16b(&creature_ptr->ht);
+	rd_s16b(&creature_ptr->wt);
 
 	/* Read the stat info */
-	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_max[i]);
-	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_max_max[i]);
-	for (i = 0; i < A_MAX; i++) rd_s16b(&p_ptr->stat_cur[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max_max[i]);
+	for (i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_cur[i]);
 
 	strip_bytes(24);
-	rd_s32b(&p_ptr->au);
+	rd_s32b(&creature_ptr->au);
 
-	rd_s32b(&p_ptr->max_exp);
-	if (h_older_than(1, 5, 4, 1)) p_ptr->max_max_exp = p_ptr->max_exp;
-	else rd_s32b(&p_ptr->max_max_exp);
-	rd_s32b(&p_ptr->exp);
+	rd_s32b(&creature_ptr->max_exp);
+	if (h_older_than(1, 5, 4, 1)) creature_ptr->max_max_exp = creature_ptr->max_exp;
+	else rd_s32b(&creature_ptr->max_max_exp);
+	rd_s32b(&creature_ptr->exp);
 
 	if (h_older_than(1, 7, 0, 3))
 	{
 		rd_u16b(&tmp16u);
-		p_ptr->exp_frac = (u32b)tmp16u;
+		creature_ptr->exp_frac = (u32b)tmp16u;
 	}
 	else
 	{
-		rd_u32b(&p_ptr->exp_frac);
+		rd_u32b(&creature_ptr->exp_frac);
 	}
 
-	rd_s16b(&p_ptr->lev);
+	rd_s16b(&creature_ptr->lev);
 
-	for (i = 0; i < 64; i++) rd_s16b(&p_ptr->spell_exp[i]);
-	if ((p_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
+	for (i = 0; i < 64; i++) rd_s16b(&creature_ptr->spell_exp[i]);
+	if ((creature_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
 	{
-		for (i = 0; i < 64; i++) p_ptr->spell_exp[i] = SPELL_EXP_MASTER;
+		for (i = 0; i < 64; i++) creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
 	}
 	if (z_older_than(10, 3, 6))
-		for (i = 0; i < 5; i++) for (j = 0; j < 60; j++) rd_s16b(&p_ptr->weapon_exp[i][j]);
+		for (i = 0; i < 5; i++) for (j = 0; j < 60; j++) rd_s16b(&creature_ptr->weapon_exp[i][j]);
 	else
-		for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) rd_s16b(&p_ptr->weapon_exp[i][j]);
-	for (i = 0; i < GINOU_MAX; i++) rd_s16b(&p_ptr->skill_exp[i]);
+		for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) rd_s16b(&creature_ptr->weapon_exp[i][j]);
+	for (i = 0; i < GINOU_MAX; i++) rd_s16b(&creature_ptr->skill_exp[i]);
 	if (z_older_than(10, 4, 1))
 	{
-		if (p_ptr->pclass != CLASS_BEASTMASTER) p_ptr->skill_exp[GINOU_RIDING] /= 2;
-		p_ptr->skill_exp[GINOU_RIDING] = MIN(p_ptr->skill_exp[GINOU_RIDING], s_info[p_ptr->pclass].s_max[GINOU_RIDING]);
+		if (creature_ptr->pclass != CLASS_BEASTMASTER) creature_ptr->skill_exp[GINOU_RIDING] /= 2;
+		creature_ptr->skill_exp[GINOU_RIDING] = MIN(creature_ptr->skill_exp[GINOU_RIDING], s_info[creature_ptr->pclass].s_max[GINOU_RIDING]);
 	}
 	if (z_older_than(10, 3, 14))
 	{
-		for (i = 0; i < 108; i++) p_ptr->magic_num1[i] = 0;
-		for (i = 0; i < 108; i++) p_ptr->magic_num2[i] = 0;
+		for (i = 0; i < 108; i++) creature_ptr->magic_num1[i] = 0;
+		for (i = 0; i < 108; i++) creature_ptr->magic_num2[i] = 0;
 	}
 	else
 	{
-		for (i = 0; i < 108; i++) rd_s32b(&p_ptr->magic_num1[i]);
-		for (i = 0; i < 108; i++) rd_byte(&p_ptr->magic_num2[i]);
+		for (i = 0; i < 108; i++) rd_s32b(&creature_ptr->magic_num1[i]);
+		for (i = 0; i < 108; i++) rd_byte(&creature_ptr->magic_num2[i]);
 		if (h_older_than(1, 3, 0, 1))
 		{
-			if (p_ptr->pclass == CLASS_SMITH)
+			if (creature_ptr->pclass == CLASS_SMITH)
 			{
-				p_ptr->magic_num1[TR_ES_ATTACK] = p_ptr->magic_num1[96];
-				p_ptr->magic_num1[96] = 0;
-				p_ptr->magic_num1[TR_ES_AC] = p_ptr->magic_num1[97];
-				p_ptr->magic_num1[97] = 0;
+				creature_ptr->magic_num1[TR_ES_ATTACK] = creature_ptr->magic_num1[96];
+				creature_ptr->magic_num1[96] = 0;
+				creature_ptr->magic_num1[TR_ES_AC] = creature_ptr->magic_num1[97];
+				creature_ptr->magic_num1[97] = 0;
 			}
 		}
 	}
-	if (music_singing_any(p_ptr)) p_ptr->action = ACTION_SING;
+	if (music_singing_any(creature_ptr)) creature_ptr->action = ACTION_SING;
 
 	if (z_older_than(11, 0, 7))
 	{
-		p_ptr->start_race = p_ptr->prace;
-		p_ptr->old_race1 = 0L;
-		p_ptr->old_race2 = 0L;
-		p_ptr->old_realm = 0;
+		creature_ptr->start_race = creature_ptr->prace;
+		creature_ptr->old_race1 = 0L;
+		creature_ptr->old_race2 = 0L;
+		creature_ptr->old_realm = 0;
 	}
 	else
 	{
 		rd_byte(&tmp8u);
-		p_ptr->start_race = (RACE_IDX)tmp8u;
+		creature_ptr->start_race = (RACE_IDX)tmp8u;
 		rd_s32b(&tmp32s);
-		p_ptr->old_race1 = (BIT_FLAGS)tmp32s;
+		creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
 		rd_s32b(&tmp32s);
-		p_ptr->old_race2 = (BIT_FLAGS)tmp32s;
-		rd_s16b(&p_ptr->old_realm);
+		creature_ptr->old_race2 = (BIT_FLAGS)tmp32s;
+		rd_s16b(&creature_ptr->old_realm);
 	}
 
 	if (z_older_than(10, 0, 1))
 	{
 		for (i = 0; i < MAX_MANE; i++)
 		{
-			p_ptr->mane_spell[i] = -1;
-			p_ptr->mane_dam[i] = 0;
+			creature_ptr->mane_spell[i] = -1;
+			creature_ptr->mane_dam[i] = 0;
 		}
-		p_ptr->mane_num = 0;
+		creature_ptr->mane_num = 0;
 	}
 	else if (z_older_than(10, 2, 3))
 	{
@@ -1896,22 +1896,22 @@ static void rd_extra(void)
 		}
 		for (i = 0; i < MAX_MANE; i++)
 		{
-			p_ptr->mane_spell[i] = -1;
-			p_ptr->mane_dam[i] = 0;
+			creature_ptr->mane_spell[i] = -1;
+			creature_ptr->mane_dam[i] = 0;
 		}
 		rd_s16b(&tmp16s);
-		p_ptr->mane_num = 0;
+		creature_ptr->mane_num = 0;
 	}
 	else
 	{
 		for (i = 0; i < MAX_MANE; i++)
 		{
 			rd_s16b(&tmp16s);
-			p_ptr->mane_spell[i] = (SPELL_IDX)tmp16s;
+			creature_ptr->mane_spell[i] = (SPELL_IDX)tmp16s;
 			rd_s16b(&tmp16s);
-			p_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
+			creature_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
 		}
-		rd_s16b(&p_ptr->mane_num);
+		rd_s16b(&creature_ptr->mane_num);
 	}
 
 	if (z_older_than(10, 0, 3))
@@ -1950,35 +1950,35 @@ static void rd_extra(void)
 		}
 	}
 
-	rd_s16b(&p_ptr->town_num);
+	rd_s16b(&creature_ptr->town_num);
 
 	/* Read arena and rewards information */
-	rd_s16b(&p_ptr->arena_number);
+	rd_s16b(&creature_ptr->arena_number);
 	if (h_older_than(1, 5, 0, 1))
 	{
 		/* Arena loser of previous version was marked number 99 */
-		if (p_ptr->arena_number >= 99) p_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
+		if (creature_ptr->arena_number >= 99) creature_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
 	}
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
-	rd_s16b(&p_ptr->current_floor_ptr->inside_quest);
-	if (z_older_than(10, 3, 5)) p_ptr->phase_out = FALSE;
+	creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
+	rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
+	if (z_older_than(10, 3, 5)) creature_ptr->phase_out = FALSE;
 	else
 	{
 		rd_s16b(&tmp16s);
-		p_ptr->phase_out = (bool)tmp16s;
+		creature_ptr->phase_out = (bool)tmp16s;
 	}
-	rd_byte(&p_ptr->exit_bldg);
+	rd_byte(&creature_ptr->exit_bldg);
 	rd_byte(&tmp8u);
 
 	rd_s16b(&tmp16s);
-	p_ptr->oldpx = (POSITION)tmp16s;
+	creature_ptr->oldpx = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	p_ptr->oldpy = (POSITION)tmp16s;
+	creature_ptr->oldpy = (POSITION)tmp16s;
 
-	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_arena) {p_ptr->oldpy = 33;p_ptr->oldpx = 131;}
+	if (z_older_than(10, 3, 13) && !creature_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena) {creature_ptr->oldpy = 33;creature_ptr->oldpx = 131;}
 
-	/* Was p_ptr->rewards[MAX_BACT] */
+	/* Was creature_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
 	for (i = 0; i < tmp16s; i++)
 	{
@@ -1989,40 +1989,40 @@ static void rd_extra(void)
 	if (h_older_than(1, 7, 0, 3))
 	{
 		rd_s16b(&tmp16s);
-		p_ptr->mhp = tmp16s;
+		creature_ptr->mhp = tmp16s;
 
 		rd_s16b(&tmp16s);
-		p_ptr->chp = tmp16s;
+		creature_ptr->chp = tmp16s;
 
 		rd_u16b(&tmp16u);
-		p_ptr->chp_frac = (u32b)tmp16u;
+		creature_ptr->chp_frac = (u32b)tmp16u;
 	}
 	else
 	{
-		rd_s32b(&p_ptr->mhp);
-		rd_s32b(&p_ptr->chp);
-		rd_u32b(&p_ptr->chp_frac);
+		rd_s32b(&creature_ptr->mhp);
+		rd_s32b(&creature_ptr->chp);
+		rd_u32b(&creature_ptr->chp_frac);
 	}
 
 	if (h_older_than(1, 7, 0, 3))
 	{
 		rd_s16b(&tmp16s);
-		p_ptr->msp = tmp16s;
+		creature_ptr->msp = tmp16s;
 
 		rd_s16b(&tmp16s);
-		p_ptr->csp = tmp16s;
+		creature_ptr->csp = tmp16s;
 
 		rd_u16b(&tmp16u);
-		p_ptr->csp_frac = (u32b)tmp16u;
+		creature_ptr->csp_frac = (u32b)tmp16u;
 	}
 	else
 	{
-		rd_s32b(&p_ptr->msp);
-		rd_s32b(&p_ptr->csp);
-		rd_u32b(&p_ptr->csp_frac);
+		rd_s32b(&creature_ptr->msp);
+		rd_s32b(&creature_ptr->csp);
+		rd_u32b(&creature_ptr->csp_frac);
 	}
 
-	rd_s16b(&p_ptr->max_plv);
+	rd_s16b(&creature_ptr->max_plv);
 	if (z_older_than(10, 3, 8))
 	{
 		rd_s16b(&tmp16s);
@@ -2043,209 +2043,209 @@ static void rd_extra(void)
 	}
 
 	/* Repair maximum player level */
-	if (p_ptr->max_plv < p_ptr->lev) p_ptr->max_plv = p_ptr->lev;
+	if (creature_ptr->max_plv < creature_ptr->lev) creature_ptr->max_plv = creature_ptr->lev;
 
 	/* More info */
 	strip_bytes(8);
-	rd_s16b(&p_ptr->sc);
-	rd_s16b(&p_ptr->concent);
+	rd_s16b(&creature_ptr->sc);
+	rd_s16b(&creature_ptr->concent);
 
 	/* Read the flags */
 	strip_bytes(2); /* Old "rest" */
-	rd_s16b(&p_ptr->blind);
-	rd_s16b(&p_ptr->paralyzed);
-	rd_s16b(&p_ptr->confused);
-	rd_s16b(&p_ptr->food);
+	rd_s16b(&creature_ptr->blind);
+	rd_s16b(&creature_ptr->paralyzed);
+	rd_s16b(&creature_ptr->confused);
+	rd_s16b(&creature_ptr->food);
 	strip_bytes(4); /* Old "food_digested" / "protection" */
 
-	rd_s16b(&p_ptr->energy_need);
+	rd_s16b(&creature_ptr->energy_need);
 	if (z_older_than(11, 0, 13))
-		p_ptr->energy_need = 100 - p_ptr->energy_need;
+		creature_ptr->energy_need = 100 - creature_ptr->energy_need;
 	if (h_older_than(2, 1, 2, 0))
-		p_ptr->enchant_energy_need = 0;
+		creature_ptr->enchant_energy_need = 0;
 	else
-		rd_s16b(&p_ptr->enchant_energy_need);
+		rd_s16b(&creature_ptr->enchant_energy_need);
 
-	rd_s16b(&p_ptr->fast);
-	rd_s16b(&p_ptr->slow);
-	rd_s16b(&p_ptr->afraid);
-	rd_s16b(&p_ptr->cut);
-	rd_s16b(&p_ptr->stun);
-	rd_s16b(&p_ptr->poisoned);
-	rd_s16b(&p_ptr->image);
-	rd_s16b(&p_ptr->protevil);
-	rd_s16b(&p_ptr->invuln);
+	rd_s16b(&creature_ptr->fast);
+	rd_s16b(&creature_ptr->slow);
+	rd_s16b(&creature_ptr->afraid);
+	rd_s16b(&creature_ptr->cut);
+	rd_s16b(&creature_ptr->stun);
+	rd_s16b(&creature_ptr->poisoned);
+	rd_s16b(&creature_ptr->image);
+	rd_s16b(&creature_ptr->protevil);
+	rd_s16b(&creature_ptr->invuln);
 	if(z_older_than(10, 0, 0))
-		p_ptr->ult_res = 0;
+		creature_ptr->ult_res = 0;
 	else
-		rd_s16b(&p_ptr->ult_res);
-	rd_s16b(&p_ptr->hero);
-	rd_s16b(&p_ptr->shero);
-	rd_s16b(&p_ptr->shield);
-	rd_s16b(&p_ptr->blessed);
-	rd_s16b(&p_ptr->tim_invis);
-	rd_s16b(&p_ptr->word_recall);
+		rd_s16b(&creature_ptr->ult_res);
+	rd_s16b(&creature_ptr->hero);
+	rd_s16b(&creature_ptr->shero);
+	rd_s16b(&creature_ptr->shield);
+	rd_s16b(&creature_ptr->blessed);
+	rd_s16b(&creature_ptr->tim_invis);
+	rd_s16b(&creature_ptr->word_recall);
 	if (z_older_than(10, 3, 8))
-		p_ptr->recall_dungeon = DUNGEON_ANGBAND;
+		creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
 	else
 	{
 		rd_s16b(&tmp16s);
-		p_ptr->recall_dungeon = (byte)tmp16s;
+		creature_ptr->recall_dungeon = (byte)tmp16s;
 	}
 
 	if (h_older_than(1, 5, 0, 0))
-		p_ptr->alter_reality = 0;
+		creature_ptr->alter_reality = 0;
 	else
-		rd_s16b(&p_ptr->alter_reality);
+		rd_s16b(&creature_ptr->alter_reality);
 
-	rd_s16b(&p_ptr->see_infra);
-	rd_s16b(&p_ptr->tim_infra);
-	rd_s16b(&p_ptr->oppose_fire);
-	rd_s16b(&p_ptr->oppose_cold);
-	rd_s16b(&p_ptr->oppose_acid);
-	rd_s16b(&p_ptr->oppose_elec);
-	rd_s16b(&p_ptr->oppose_pois);
-	if (z_older_than(10,0,2)) p_ptr->tsuyoshi = 0;
-	else rd_s16b(&p_ptr->tsuyoshi);
+	rd_s16b(&creature_ptr->see_infra);
+	rd_s16b(&creature_ptr->tim_infra);
+	rd_s16b(&creature_ptr->oppose_fire);
+	rd_s16b(&creature_ptr->oppose_cold);
+	rd_s16b(&creature_ptr->oppose_acid);
+	rd_s16b(&creature_ptr->oppose_elec);
+	rd_s16b(&creature_ptr->oppose_pois);
+	if (z_older_than(10,0,2)) creature_ptr->tsuyoshi = 0;
+	else rd_s16b(&creature_ptr->tsuyoshi);
 
 	/* Old savefiles do not have the following fields... */
 	if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6))
 	{
-		p_ptr->tim_esp = 0;
-		p_ptr->wraith_form = 0;
-		p_ptr->resist_magic = 0;
-		p_ptr->tim_regen = 0;
-		p_ptr->kabenuke = 0;
-		p_ptr->tim_stealth = 0;
-		p_ptr->tim_levitation = 0;
-		p_ptr->tim_sh_touki = 0;
-		p_ptr->lightspeed = 0;
-		p_ptr->tsubureru = 0;
-		p_ptr->tim_res_nether = 0;
-		p_ptr->tim_res_time = 0;
-		p_ptr->mimic_form = 0;
-		p_ptr->tim_mimic = 0;
-		p_ptr->tim_sh_fire = 0;
+		creature_ptr->tim_esp = 0;
+		creature_ptr->wraith_form = 0;
+		creature_ptr->resist_magic = 0;
+		creature_ptr->tim_regen = 0;
+		creature_ptr->kabenuke = 0;
+		creature_ptr->tim_stealth = 0;
+		creature_ptr->tim_levitation = 0;
+		creature_ptr->tim_sh_touki = 0;
+		creature_ptr->lightspeed = 0;
+		creature_ptr->tsubureru = 0;
+		creature_ptr->tim_res_nether = 0;
+		creature_ptr->tim_res_time = 0;
+		creature_ptr->mimic_form = 0;
+		creature_ptr->tim_mimic = 0;
+		creature_ptr->tim_sh_fire = 0;
 
 		/* by henkma */
-		p_ptr->tim_reflect = 0;
-		p_ptr->multishadow = 0;
-		p_ptr->dustrobe = 0;
+		creature_ptr->tim_reflect = 0;
+		creature_ptr->multishadow = 0;
+		creature_ptr->dustrobe = 0;
 
-		p_ptr->chaos_patron = ((p_ptr->age + p_ptr->sc) % MAX_PATRON);
-		p_ptr->muta1 = 0;
-		p_ptr->muta2 = 0;
-		p_ptr->muta3 = 0;
-		get_virtues(p_ptr);
+		creature_ptr->chaos_patron = ((creature_ptr->age + creature_ptr->sc) % MAX_PATRON);
+		creature_ptr->muta1 = 0;
+		creature_ptr->muta2 = 0;
+		creature_ptr->muta3 = 0;
+		get_virtues(creature_ptr);
 	}
 	else
 	{
-		rd_s16b(&p_ptr->tim_esp);
-		rd_s16b(&p_ptr->wraith_form);
-		rd_s16b(&p_ptr->resist_magic);
-		rd_s16b(&p_ptr->tim_regen);
-		rd_s16b(&p_ptr->kabenuke);
-		rd_s16b(&p_ptr->tim_stealth);
-		rd_s16b(&p_ptr->tim_levitation);
-		rd_s16b(&p_ptr->tim_sh_touki);
-		rd_s16b(&p_ptr->lightspeed);
-		rd_s16b(&p_ptr->tsubureru);
+		rd_s16b(&creature_ptr->tim_esp);
+		rd_s16b(&creature_ptr->wraith_form);
+		rd_s16b(&creature_ptr->resist_magic);
+		rd_s16b(&creature_ptr->tim_regen);
+		rd_s16b(&creature_ptr->kabenuke);
+		rd_s16b(&creature_ptr->tim_stealth);
+		rd_s16b(&creature_ptr->tim_levitation);
+		rd_s16b(&creature_ptr->tim_sh_touki);
+		rd_s16b(&creature_ptr->lightspeed);
+		rd_s16b(&creature_ptr->tsubureru);
 		if (z_older_than(10, 4, 7))
-			p_ptr->magicdef = 0;
+			creature_ptr->magicdef = 0;
 		else
-			rd_s16b(&p_ptr->magicdef);
-		rd_s16b(&p_ptr->tim_res_nether);
+			rd_s16b(&creature_ptr->magicdef);
+		rd_s16b(&creature_ptr->tim_res_nether);
 		if (z_older_than(10, 4, 11))
 		{
-			p_ptr->tim_res_time = 0;
-			p_ptr->mimic_form = 0;
-			p_ptr->tim_mimic = 0;
-			p_ptr->tim_sh_fire = 0;
+			creature_ptr->tim_res_time = 0;
+			creature_ptr->mimic_form = 0;
+			creature_ptr->tim_mimic = 0;
+			creature_ptr->tim_sh_fire = 0;
 		}
 		else
 		{
-			rd_s16b(&p_ptr->tim_res_time);
+			rd_s16b(&creature_ptr->tim_res_time);
 			rd_byte(&tmp8u);
-			p_ptr->mimic_form = (IDX)tmp8u;
-			rd_s16b(&p_ptr->tim_mimic);
-			rd_s16b(&p_ptr->tim_sh_fire);
+			creature_ptr->mimic_form = (IDX)tmp8u;
+			rd_s16b(&creature_ptr->tim_mimic);
+			rd_s16b(&creature_ptr->tim_sh_fire);
 		}
 
 		if (z_older_than(11, 0, 99))
 		{
-			p_ptr->tim_sh_holy = 0;
-			p_ptr->tim_eyeeye = 0;
+			creature_ptr->tim_sh_holy = 0;
+			creature_ptr->tim_eyeeye = 0;
 		}
 		else
 		{
-			rd_s16b(&p_ptr->tim_sh_holy);
-			rd_s16b(&p_ptr->tim_eyeeye);
+			rd_s16b(&creature_ptr->tim_sh_holy);
+			rd_s16b(&creature_ptr->tim_eyeeye);
 		}
 
 		/* by henkma */
 		if ( z_older_than(11,0,3) ){
-		  p_ptr->tim_reflect=0;
-		  p_ptr->multishadow=0;
-		  p_ptr->dustrobe=0;
+		  creature_ptr->tim_reflect=0;
+		  creature_ptr->multishadow=0;
+		  creature_ptr->dustrobe=0;
 		}
 		else {
-		  rd_s16b(&p_ptr->tim_reflect);
-		  rd_s16b(&p_ptr->multishadow);
-		  rd_s16b(&p_ptr->dustrobe);
+		  rd_s16b(&creature_ptr->tim_reflect);
+		  rd_s16b(&creature_ptr->multishadow);
+		  rd_s16b(&creature_ptr->dustrobe);
 		}
 
-		rd_s16b(&p_ptr->chaos_patron);
-		rd_u32b(&p_ptr->muta1);
-		rd_u32b(&p_ptr->muta2);
-		rd_u32b(&p_ptr->muta3);
+		rd_s16b(&creature_ptr->chaos_patron);
+		rd_u32b(&creature_ptr->muta1);
+		rd_u32b(&creature_ptr->muta2);
+		rd_u32b(&creature_ptr->muta3);
 
 		for (i = 0; i < 8; i++)
-			rd_s16b(&p_ptr->virtues[i]);
+			rd_s16b(&creature_ptr->virtues[i]);
 		for (i = 0; i < 8; i++)
-			rd_s16b(&p_ptr->vir_types[i]);
+			rd_s16b(&creature_ptr->vir_types[i]);
 	}
 
 	/* Calc the regeneration modifier for mutations */
-	p_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(p_ptr);
+	creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
 
 	if (z_older_than(10,0,9))
 	{
 		rd_byte(&tmp8u);
-		if (tmp8u) p_ptr->special_attack = ATTACK_CONFUSE;
-		p_ptr->ele_attack = 0;
+		if (tmp8u) creature_ptr->special_attack = ATTACK_CONFUSE;
+		creature_ptr->ele_attack = 0;
 	}
 	else
 	{
-		rd_s16b(&p_ptr->ele_attack);
-		rd_u32b(&p_ptr->special_attack);
+		rd_s16b(&creature_ptr->ele_attack);
+		rd_u32b(&creature_ptr->special_attack);
 	}
-	if (p_ptr->special_attack & KAMAE_MASK) p_ptr->action = ACTION_KAMAE;
-	else if (p_ptr->special_attack & KATA_MASK) p_ptr->action = ACTION_KATA;
+	if (creature_ptr->special_attack & KAMAE_MASK) creature_ptr->action = ACTION_KAMAE;
+	else if (creature_ptr->special_attack & KATA_MASK) creature_ptr->action = ACTION_KATA;
 	if (z_older_than(10,0,12))
 	{
-		p_ptr->ele_immune = 0;
-		p_ptr->special_defense = 0;
+		creature_ptr->ele_immune = 0;
+		creature_ptr->special_defense = 0;
 	}
 	else
 	{
-		rd_s16b(&p_ptr->ele_immune);
-		rd_u32b(&p_ptr->special_defense);
+		rd_s16b(&creature_ptr->ele_immune);
+		rd_u32b(&creature_ptr->special_defense);
 	}
-	rd_byte(&p_ptr->knowledge);
+	rd_byte(&creature_ptr->knowledge);
 
 	rd_byte(&tmp8u);
-	p_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
+	creature_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
 
 	rd_byte(&tmp8u);
 	rd_byte(&tmp8u);
-	p_ptr->action = (ACTION_IDX)tmp8u;
+	creature_ptr->action = (ACTION_IDX)tmp8u;
 	if (!z_older_than(10, 4, 3))
 	{
 		rd_byte(&tmp8u);
-		if (tmp8u) p_ptr->action = ACTION_LEARN;
+		if (tmp8u) creature_ptr->action = ACTION_LEARN;
 	}
 	rd_byte((byte *)&preserve_mode);
-	rd_byte((byte *)&p_ptr->wait_report_score);
+	rd_byte((byte *)&creature_ptr->wait_report_score);
 
 	/* Future use */
 	for (i = 0; i < 48; i++) rd_byte(&tmp8u);
@@ -2260,19 +2260,19 @@ static void rd_extra(void)
 
 
 	/* Special stuff */
-	rd_u16b(&p_ptr->panic_save);
-	rd_u16b(&p_ptr->total_winner);
-	rd_u16b(&p_ptr->noscore);
+	rd_u16b(&creature_ptr->panic_save);
+	rd_u16b(&creature_ptr->total_winner);
+	rd_u16b(&creature_ptr->noscore);
 
 
 	/* Read "death" */
 	rd_byte(&tmp8u);
-	p_ptr->is_dead = tmp8u;
+	creature_ptr->is_dead = tmp8u;
 
 	/* Read "feeling" */
-	rd_byte(&p_ptr->feeling);
+	rd_byte(&creature_ptr->feeling);
 
-	switch (p_ptr->start_race)
+	switch (creature_ptr->start_race)
 	{
 	case RACE_VAMPIRE:
 	case RACE_SKELETON:
@@ -2287,16 +2287,16 @@ static void rd_extra(void)
 	current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 
 	/* Turn when level began */
-	rd_s32b(&p_ptr->current_floor_ptr->generated_turn);
+	rd_s32b(&creature_ptr->current_floor_ptr->generated_turn);
 
 	if (h_older_than(1, 7, 0, 4))
 	{
-		p_ptr->feeling_turn = p_ptr->current_floor_ptr->generated_turn;
+		creature_ptr->feeling_turn = creature_ptr->current_floor_ptr->generated_turn;
 	}
 	else
 	{
 		/* Turn of last "feeling" */
-		rd_s32b(&p_ptr->feeling_turn);
+		rd_s32b(&creature_ptr->feeling_turn);
 	}
 
 	/* Current turn */
@@ -2310,8 +2310,8 @@ static void rd_extra(void)
 
 	if (z_older_than(11, 0, 13))
 	{
-		p_ptr->current_floor_ptr->generated_turn /= 2;
-		p_ptr->feeling_turn /= 2;
+		creature_ptr->current_floor_ptr->generated_turn /= 2;
+		creature_ptr->feeling_turn /= 2;
 		current_world_ptr->game_turn /= 2;
 		current_world_ptr->dungeon_turn /= 2;
 	}
@@ -2329,26 +2329,26 @@ static void rd_extra(void)
 	else
 	{
 		rd_s16b(&today_mon);
-		rd_s16b(&p_ptr->today_mon);
+		rd_s16b(&creature_ptr->today_mon);
 	}
 
 	if (z_older_than(10,0,7))
 	{
-		p_ptr->riding = 0;
+		creature_ptr->riding = 0;
 	}
 	else
 	{
-		rd_s16b(&p_ptr->riding);
+		rd_s16b(&creature_ptr->riding);
 	}
 
 	/* Current floor_id */
 	if (h_older_than(1, 5, 0, 0))
 	{
-		p_ptr->floor_id = 0;
+		creature_ptr->floor_id = 0;
 	}
 	else
 	{
-		rd_s16b(&p_ptr->floor_id);
+		rd_s16b(&creature_ptr->floor_id);
 	}
 
 	if (h_older_than(1, 5, 0, 2))
@@ -2380,21 +2380,21 @@ static void rd_extra(void)
 
 	if (z_older_than(10,3,9))
 	{
-		p_ptr->visit = 1L;
+		creature_ptr->visit = 1L;
 	}
 	else if (z_older_than(10, 3, 10))
 	{
 		rd_s32b(&tmp32s);
-		p_ptr->visit = 1L;
+		creature_ptr->visit = 1L;
 	}
 	else
 	{
 		rd_s32b(&tmp32s);
-		p_ptr->visit = (BIT_FLAGS)tmp32s;
+		creature_ptr->visit = (BIT_FLAGS)tmp32s;
 	}
 	if (!z_older_than(11, 0, 5))
 	{
-		rd_u32b(&p_ptr->count);
+		rd_u32b(&creature_ptr->count);
 	}
 }
 
@@ -3764,7 +3764,7 @@ static errr rd_savefile_new_aux(void)
 	if (arg_fiddle) note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
 	/* Read the extra stuff */
-	rd_extra();
+	rd_extra(p_ptr);
 	if (p_ptr->energy_need < -999) p_ptr->timewalk = TRUE;
 
 	if (arg_fiddle) note(_("特別情報をロードしました", "Loaded extra information"));
