@@ -1135,3 +1135,34 @@ void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
 		place_random_door(floor_ptr, y, x, FALSE);
 	}
 }
+
+
+FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
+{
+	feature_type *f_ptr = &f_info[newfeat];
+
+	if (have_flag(f_ptr->flags, FF_CONVERT))
+	{
+		switch (f_ptr->subtype)
+		{
+		case CONVERT_TYPE_FLOOR:
+			return feat_ground_type[randint0(100)];
+		case CONVERT_TYPE_WALL:
+			return feat_wall_type[randint0(100)];
+		case CONVERT_TYPE_INNER:
+			return feat_wall_inner;
+		case CONVERT_TYPE_OUTER:
+			return feat_wall_outer;
+		case CONVERT_TYPE_SOLID:
+			return feat_wall_solid;
+		case CONVERT_TYPE_STREAM1:
+			return d_info[floor_ptr->dungeon_idx].stream1;
+		case CONVERT_TYPE_STREAM2:
+			return d_info[floor_ptr->dungeon_idx].stream2;
+		default:
+			return newfeat;
+		}
+	}
+	else return newfeat;
+}
+

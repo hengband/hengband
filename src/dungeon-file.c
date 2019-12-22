@@ -3951,7 +3951,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			ARTIFACT_IDX artifact_index = letter[idx].artifact;
 
 			/* Lay down a floor */
-			g_ptr->feat = conv_dungeon_feat(letter[idx].feature);
+			g_ptr->feat = conv_dungeon_feat(p_ptr->current_floor_ptr, letter[idx].feature);
 
 			/* Only the features */
 			if (init_flags & INIT_ONLY_FEATURES) continue;
@@ -4054,7 +4054,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 			else if (letter[idx].trap)
 			{
 				g_ptr->mimic = g_ptr->feat;
-				g_ptr->feat = conv_dungeon_feat(letter[idx].trap);
+				g_ptr->feat = conv_dungeon_feat(p_ptr->current_floor_ptr, letter[idx].trap);
 			}
 			else if (object_index)
 			{

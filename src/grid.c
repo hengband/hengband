@@ -1097,37 +1097,6 @@ void update_flow(void)
 	}
 }
 
-
-FEAT_IDX conv_dungeon_feat(FEAT_IDX newfeat)
-{
-	feature_type *f_ptr = &f_info[newfeat];
-
-	if (have_flag(f_ptr->flags, FF_CONVERT))
-	{
-		switch (f_ptr->subtype)
-		{
-		case CONVERT_TYPE_FLOOR:
-			return feat_ground_type[randint0(100)];
-		case CONVERT_TYPE_WALL:
-			return feat_wall_type[randint0(100)];
-		case CONVERT_TYPE_INNER:
-			return feat_wall_inner;
-		case CONVERT_TYPE_OUTER:
-			return feat_wall_outer;
-		case CONVERT_TYPE_SOLID:
-			return feat_wall_solid;
-		case CONVERT_TYPE_STREAM1:
-			return d_info[p_ptr->dungeon_idx].stream1;
-		case CONVERT_TYPE_STREAM2:
-			return d_info[p_ptr->dungeon_idx].stream2;
-		default:
-			return newfeat;
-		}
-	}
-	else return newfeat;
-}
-
-
 /*
  * Take a feature, determine what that feature becomes
  * through applying the given action.
@@ -1140,12 +1109,12 @@ FEAT_IDX feat_state(FEAT_IDX feat, int action)
 	/* Get the new feature */
 	for (i = 0; i < MAX_FEAT_STATES; i++)
 	{
-		if (f_ptr->state[i].action == action) return conv_dungeon_feat(f_ptr->state[i].result);
+		if (f_ptr->state[i].action == action) return conv_dungeon_feat(p_ptr->current_floor_ptr, f_ptr->state[i].result);
 	}
 
 	if (have_flag(f_ptr->flags, FF_PERMANENT)) return feat;
 
-	return (feature_action_flags[action] & FAF_DESTROY) ? conv_dungeon_feat(f_ptr->destroyed) : feat;
+	return (feature_action_flags[action] & FAF_DESTROY) ? conv_dungeon_feat(p_ptr->current_floor_ptr, f_ptr->destroyed) : feat;
 }
 
 /*
