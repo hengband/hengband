@@ -19018,6 +19018,8 @@ W:18:3:0:50:0:0
 B:HIT:HURT:2d7
 B:HIT:HURT:2d7
 F:DROP_60 | ANIMAL | DROP_SKELETON | DROP_CORPSE | FRIENDS | ONLY_GOLD
+D:$It is one of the wise monkeys of the Nikko Tosho-gu shrine and very likely
+D:$ has friends nearby.
 D:常に集団で現れる。つまり、日光猿の軍団なわけで……
 
 N:926:ツチノコ
