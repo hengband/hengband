@@ -20856,7 +20856,7 @@ B:CLAW:HURT:2d5
 B:BITE:HURT:3d6
 F:WEIRD_MIND | BASH_DOOR | FRIENDS | DROP_SKELETON | DROP_CORPSE
 F:ANIMAL | EVIL | WILD_WOOD | WILD_MOUNTAIN
-D:$These bears are followers of Red Helm.
+D:$This bear is a follower of Red Helm.
 D:『赤カブト』の配下の熊だ。
 
 N:1029:ベビーサタン
