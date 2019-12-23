@@ -20637,8 +20637,7 @@ B:EXPLODE:HURT:30d2
 F:EMPTY_MIND | COLD_BLOOD |
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
 F:NO_FEAR | NO_CONF | NO_SLEEP | NONLIVING | RES_TELE
-D:$It is a small bomb of a form like a spider. 
-D:$It walks toward you!
+D:$It is a small bomb in a spider-like package.  It walks toward you!
 D:蜘蛛のような形の小さな爆弾で、あなたに向って歩き、爆発する。
 
 #
