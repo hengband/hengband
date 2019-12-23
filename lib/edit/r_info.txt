@@ -21464,7 +21464,7 @@ D:グルーの頭を笑う者は、そのうち笑えないことに気づくだ
 D:ていうかグルーを笑って生きのびた者はいない。
 
 N:1063:巨大白シラミの王『lousy』
-E:Lousy, the King of Louses
+E:Lousy, the King of Lice
 G:I:W
 I:130:11d11:8:10:10
 W:9:3:0:100:0:0
@@ -21480,7 +21480,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD |
 S:1_IN_6
 S:S_KIN
 D:$This huge louse is the ruin of the sad man 
-D:$who had become a louse just because he loves louses.
+D:$who had become a louse just because he loves lice.
 D:この巨大なシラミはシラミを愛するあまりシラミになってしまった
 D:哀れな人間のなれの果てだ。
 
