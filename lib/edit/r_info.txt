@@ -22219,8 +22219,8 @@ B:HIT:SUPERHURT:5d4
 B:BITE:POISON:9d3
 F:EVIL | DROP_1D2 | DROP_SKELETON | DROP_CORPSE | FORCE_SLEEP
 F:OPEN_DOOR | MALE | WILD_WASTE | WILD_SWAMP | NO_FEAR
-D:$It's a biped walking monster, seems subspecies of Skaven,
-D:$but it's larger and more terrible than them.
+D:$Walking on two legs, this creature looks like a Skaven, of sorts, but it's
+D:$ larger and more terrible than a Skaven.
 D:それはスケイヴンの亜種と思われるが、より大きくおぞましい二足歩行の怪物だ。
 
 N:1103:拡散の尖兵
