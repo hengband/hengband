@@ -20842,8 +20842,8 @@ B:BITE:HURT:3d10
 F:MALE | ESCORT
 F:BASH_DOOR | FORCE_MAXHP | UNIQUE | DROP_CORPSE
 F:ANIMAL | EVIL | WILD_WOOD | WILD_MOUNTAIN | NO_SLEEP | NO_FEAR
-D:$A king of mad bear. He had built his stronghold at Hutago mountain, 
-D:$and is reigning over there.
+D:$He is king of the mad bears.  He has built his stronghold at Hutago
+D:$ mountain and reigns from there.
 D:二子峠に己の牙城を築き上げ君臨する凶熊どもの王だ。
 
 N:1028:凶熊
