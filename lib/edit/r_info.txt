@@ -21054,7 +21054,7 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR
 S:1_IN_4 | 
 S:SHOOT | MISSILE | S_MONSTER | BO_ELEC | BLINK
 D:$A warrior who is at one with nature. A master of both bow and sword, with 
-D:$minor spellcasting skills, and animals come to do his bidding.
+D:$minor spellcasting skills and animals that come to do his bidding.
 D:自然と共に戦う戦士だ。弓にも剣にも達者で、多少の魔法も使うことができ、
 D:動物達を飼い、従えている。
 
