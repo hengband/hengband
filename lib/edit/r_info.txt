@@ -21285,7 +21285,7 @@ F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL |
 F:IM_FIRE | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP | RES_TELE | 
 S:1_IN_3 | 
 S:HEAL | HASTE | BLIND | CONF | SCARE | TPORT | BLINK
-D:$A shabby humanoid with a wrinkled skin. It seems to shift 
+D:$A shabby humanoid with wrinkled skin. It seems to shift 
 D:$in and out of existance as you watch. 
 D:しわくちゃの肌を持つみすぼらしい姿の人間型モンスターだ。
 D:実存と非実存の間を行ったり来たりしている。
