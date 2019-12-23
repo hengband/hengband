@@ -20775,8 +20775,9 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL |
 S:1_IN_2 |
 S:BLINK | TPORT | TELE_TO | CONF | TRAPS
-D:$A class of its own: you are already too late to protect your possessions 
-D:$and he seems to have studied magic too, and is a master of setting traps.
+D:$He is a thief almost without equal; you are already too late to protect
+D:$ your possessions.  He seems to have studied magic too and is a master
+D:$ of setting traps.
 D:その技、だれにも真似はできない。今さら財産を守っても手遅れだ。
 D:彼は魔法を学び、罠を仕掛けることを覚えているのだ。
 
