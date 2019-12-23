@@ -20368,8 +20368,8 @@ B:HIT:SUPERHURT:4d8
 B:HIT:SUPERHURT:4d8
 F:MALE | DROP_CORPSE | DROP_SKELETON | FORCE_MAXHP | HAS_LITE_2 | HUMAN |
 F:OPEN_DOOR | BASH_DOOR | NO_FEAR | UNIQUE2
-D:$He is always traveling togather with 
-D:$Mitsukuni of the Yellow Gate, Grand Duke of Mito
+D:$He is always traveling together with
+D:$ Mitsukuni of the Yellow Gate, Grand Duke of Mito.
 D:ご老公を助けて旅から旅へ。とんだ爺に仕えたもんだ。
 
 N:1002:『格さん』
@@ -20381,8 +20381,8 @@ B:HIT:SUPERHURT:4d8
 B:HIT:SUPERHURT:4d8
 F:MALE | DROP_CORPSE | DROP_SKELETON | FORCE_MAXHP | HAS_LITE_2 | HUMAN |
 F:OPEN_DOOR | BASH_DOOR | NO_FEAR | UNIQUE2
-D:$He is always traveling togather with 
-D:$Mitsukuni of the Yellow Gate, Grand Duke of Mito
+D:$He is always traveling together with
+D:$ Mitsukuni of the Yellow Gate, Grand Duke of Mito.
 D:ご老公を助けて旅から旅へ。とんだ爺に仕えたもんだ。
 
 N:1003:ゴースト『Ｑ』
