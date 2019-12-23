@@ -21174,7 +21174,7 @@ F:FORCE_MAXHP | HAS_LITE_1 | DROP_SKELETON | DROP_CORPSE |
 F:ONLY_ITEM | DROP_2D2 | DROP_GOOD | 
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | 
 F:EVIL
-D:$A short and swarthy Easterling dressed in Black.
+D:$A short and swarthy Easterling dressed in black.
 D:背が低くて浅黒い肌をした東夷で、黒い服に身を包んでいる。
 
 N:1047:黄衣の修行僧
