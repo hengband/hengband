@@ -19840,7 +19840,7 @@ F:NO_FEAR | NO_STUN | RIDING | SELF_DARK_2 |
 S:1_IN_3 | 
 S:BRAIN_SMASH | BR_DARK | BR_NETH | BA_NETH
 D:$One of the ancient dragons of Lodoss, it causes destruction with 
-D:$an dark and nether breath.
+D:$a dark and nether breath.
 D:ロードスの古代竜の一匹で、暗黒と地獄のブレスで破壊を引き起こす。
 
 N:971:金鱗の竜王『マイセン』
