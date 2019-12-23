@@ -21422,7 +21422,7 @@ F:FORCE_MAXHP | DROP_CORPSE | WILD_TOWN | WILD_ONLY
 #F:ONLY_ITEM | DROP_90 | DROP_GOOD | FRIENDLY |
 F:OPEN_DOOR | BASH_DOOR | HAS_LITE_1 |
 F:NO_CONF | NO_SLEEP
-D:$Brazen faced this creature is more impudent than normal troll.
+D:$Brazen faced, this creature is more impudent than a normal troll.
 D:面の皮は普通のトロルよりも厚い。
 
 N:1061:『恐竜バーニーちゃん』
