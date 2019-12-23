@@ -20800,8 +20800,8 @@ S:1_IN_3 |
 S:BLIND | HOLD | SCARE | CAUSE_3 | DARKNESS |
 S:BO_ICEE | BO_NETH | BA_COLD | BA_NETH | BA_WATE |
 S:S_UNDEAD
-D:$The ferryman across the river Styx to the land of the dead. 
-D:$He wishes to receive payment for your entry.
+D:$He is the ferryman for the boat to cross the river Styx to the land of
+D:$ the dead.  He wishes to receive payment for your entry.
 D:三途の川の死者の国への渡し守だ。
 D:あなたを乗せて渡し賃をもらおうと考えている。
 
