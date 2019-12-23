@@ -1239,10 +1239,8 @@ static errr init_other(void)
 	/* Allocate and Wipe the max dungeon level */
 	C_MAKE(max_dlv, current_world_ptr->max_d_idx, DEPTH);
 
-	/* Allocate and wipe each line of the p_ptr->current_floor_ptr->grid_array */
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		/* Allocate one row of the p_ptr->current_floor_ptr->grid_array */
 		C_MAKE(p_ptr->current_floor_ptr->grid_array[i], MAX_WID, grid_type);
 	}
 

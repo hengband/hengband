@@ -7,7 +7,7 @@
 #include "dungeon.h"
 
 /*!
-* @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal p_ptr->current_floor_ptr->grid_array system
+* @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid
 * @return なし
 */
 bool build_type9(floor_type *floor_ptr)

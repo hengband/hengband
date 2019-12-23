@@ -544,9 +544,6 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		/* Ignore locations off of edge */
 		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 
-		/* Don't move toward player */
-		/* if (p_ptr->current_floor_ptr->grid_array[y][x].dist < 3) continue; */ /* Hmm.. Need it? */
-
 		/* Calculate distance of this grid from our destination */
 		dis = distance(y, x, y1, x1);
 

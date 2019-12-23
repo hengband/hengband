@@ -1644,7 +1644,7 @@ object_type *choose_object(player_type *creature_ptr, OBJECT_IDX *idx, concptr q
  * @param mode オプションフラグ
  * @return 対象のマスに落ちているアイテム数
  * @details
- * Return a list of o_list[] indexes of items at the given p_ptr->current_floor_ptr->grid_array
+ * Return a list of o_list[] indexes of items at the given floor
  * location. Valid flags are:
  *
  *		mode & 0x01 -- Item tester

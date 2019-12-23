@@ -3926,7 +3926,7 @@ static errr process_dungeon_file_aux(char *buf, int ymin, int xmin, int ymax, in
 		return parse_line_feature(buf);
 	}
 
-	/* Process "D:<dungeon>" -- info for the p_ptr->current_floor_ptr->grid_array grids */
+	/* Process "D:<dungeon>" -- info for the floor grids */
 	else if (buf[0] == 'D')
 	{
 		object_type object_type_body;

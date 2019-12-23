@@ -224,9 +224,6 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
-			/* No teleporting into vaults and such */
-			/* if (p_ptr->current_floor_ptr->grid_array[ny][nx].info & (CAVE_ICKY)) continue; */
-
 			/* This grid looks good */
 			look = FALSE;
 

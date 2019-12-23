@@ -2781,7 +2781,7 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
  * not any.  If there were, they would have to set "shimmer_objects"\n
  * when they were created, and then new "shimmer" code in "dungeon.c"\n
  * would have to be created handle the "shimmer" effect, and the code\n
- * in "p_ptr->current_floor_ptr->grid_array.c" would have to be updated to create the shimmer effect.\n
+ * in floor would have to be updated to create the shimmer effect.\n
  *\n
  * Note the effects of hallucination.  Objects always appear as random\n
  * "objects", monsters as random "monsters", and normal grids occasionally\n
@@ -2870,7 +2870,6 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
  */
 void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
-	/* Get the p_ptr->current_floor_ptr->grid_array */
 	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;

@@ -217,7 +217,7 @@ static void build_room_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, PO
 }
 
 
-/* Create a random vault out of a fractal p_ptr->current_floor_ptr->grid_array */
+/* Create a random vault out of a fractal grid */
 static void build_cave_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
 	int grd, roug, cutoff;

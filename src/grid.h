@@ -18,7 +18,7 @@
  /*
   * A single "grid" in a Cave
   *
-  * Note that several aspects of the code restrict the actual p_ptr->current_floor_ptr->grid_array
+  * Note that several aspects of the code restrict the actual grid
   * to a max size of 256 by 256.  In partcular, locations are often
   * saved as bytes, limiting each coordinate to the 0-255 range.
   *
@@ -47,13 +47,13 @@ typedef struct grid_type grid_type;
 
 struct grid_type
 {
-	BIT_FLAGS info;		/* Hack -- p_ptr->current_floor_ptr->grid_array flags */
+	BIT_FLAGS info;		/* Hack -- grid flags */
 
 	FEAT_IDX feat;		/* Hack -- feature type */
 	OBJECT_IDX o_idx;		/* Object in this grid */
 	MONSTER_IDX m_idx;		/* Monster in this grid */
 
-	/*! 地形の特別な情報を保存する / Special p_ptr->current_floor_ptr->grid_array info
+	/*! 地形の特別な情報を保存する / Special grid info
 	 * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
 	 * 各ダンジョン入口の移行先ダンジョンID、
 	 *
@@ -78,9 +78,6 @@ typedef struct
 	s16b special;
 	u16b occurrence;
 } grid_template_type;
-
-/* This should not be used */
-/*#define set_cave_info(Y,X,I)    (p_ptr->current_floor_ptr->grid_array[(Y)][(X)].info = (I)) */
 
 #define feat_locked_door_random(DOOR_TYPE) \
 	(feat_door[(DOOR_TYPE)].num_locked ? \
@@ -332,7 +329,7 @@ typedef struct
 #define CAVE_MNLT       0x0100    /*!< モンスターの光源によって照らされている / Illuminated by monster */
 #define CAVE_MNDK       0x8000    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
 
- /* Used only while p_ptr->current_floor_ptr->grid_array generation */
+ /* Used only while floor generation */
 #define CAVE_FLOOR      0x0200	/*!< フロア属性のあるマス */
 #define CAVE_EXTRA      0x0400
 #define CAVE_INNER      0x0800
@@ -341,7 +338,7 @@ typedef struct
 #define CAVE_VAULT      0x4000
 #define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
 
-/* Used only after p_ptr->current_floor_ptr->grid_array generation */
+/* Used only after floor generation */
 #define CAVE_KNOWN      0x0200    /* Directly viewed or map detected flag */
 #define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
 #define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */

@@ -2644,7 +2644,6 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "info" */
@@ -2675,7 +2674,6 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
@@ -2705,7 +2703,6 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "mimic" */
@@ -2735,7 +2732,6 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
@@ -2753,7 +2749,6 @@ static errr rd_dungeon_old(void)
 		}
 	}
 
-	/* Convert p_ptr->current_floor_ptr->grid_array data */
 	if (z_older_than(11, 0, 99))
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
@@ -2767,7 +2762,6 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Very old */
@@ -2790,7 +2784,6 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Old CAVE_IN_MIRROR flag */
@@ -2830,7 +2823,6 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !p_ptr->current_floor_ptr->dun_level)
@@ -3120,10 +3112,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-
-			/* Extract p_ptr->current_floor_ptr->grid_array data */
 			g_ptr->info = templates[id].info;
 			g_ptr->feat = templates[id].feat;
 			g_ptr->mimic = templates[id].mimic;
@@ -3146,7 +3135,6 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			/* Access the p_ptr->current_floor_ptr->grid_array */
 			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
 			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !p_ptr->current_floor_ptr->dun_level)

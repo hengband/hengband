@@ -1096,7 +1096,7 @@ void leave_floor(player_type *creature_ptr)
  * @return なし
  * @details
  * If the floor is an old saved floor, it will be\n
- * restored from the temporal file.  If the floor is new one, new p_ptr->current_floor_ptr->grid_array\n
+ * restored from the temporal file.  If the floor is new one, new floor\n
  * will be generated.\n
  */
 void change_floor(player_type *creature_ptr)

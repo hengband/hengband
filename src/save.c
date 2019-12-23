@@ -1006,13 +1006,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 
 
 
-	/*** "Run-Length-Encoding" of p_ptr->current_floor_ptr->grid_array ***/
+	/*** "Run-Length-Encoding" of floor ***/
 
 	/* Note that this will induce two wasted bytes */
 	count = 0;
 	prev_u16b = 0;
 
-	/* Dump the p_ptr->current_floor_ptr->grid_array */
 	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
 	{
 		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)

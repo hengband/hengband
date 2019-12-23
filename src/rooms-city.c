@@ -184,7 +184,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 * Town logic flow for generation of new town\n
 * Originally from Vanilla 3.0.3\n
 *\n
-* We start with a fully wiped p_ptr->current_floor_ptr->grid_array of normal floors.\n
+* We start with a fully wiped grids of normal floors.\n
 *\n
 * Note that town_gen_hack() plays games with the R.N.G.\n
 *\n

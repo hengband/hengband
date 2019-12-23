@@ -521,8 +521,8 @@ bool ang_sort_comp_pet_dismiss(vptr u, vptr v, int a, int b)
 
 
 /*!
- * @brief フロア保存時のp_ptr->current_floor_ptr->grid_array情報テンプレートをソートするための比較処理
- * @param u p_ptr->current_floor_ptr->grid_arrayテンプレートの参照ポインタ
+ * @brief フロア保存時のgrid情報テンプレートをソートするための比較処理
+ * @param u gridテンプレートの参照ポインタ
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2
@@ -543,8 +543,8 @@ bool ang_sort_comp_cave_temp(vptr u, vptr v, int a, int b)
 
 
 /*!
- * @brief フロア保存時のp_ptr->current_floor_ptr->grid_array情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
- * @param u p_ptr->current_floor_ptr->grid_arrayテンプレートの参照ポインタ
+ * @brief フロア保存時のgrid情報テンプレートをソートするためのスワップ処理 / Sorting hook -- Swap function
+ * @param u gridテンプレートの参照ポインタ
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2

@@ -570,7 +570,7 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
 *
 * How fractal caves are made:
 *
-* When the map is complete, a cut-off value is used to create a p_ptr->current_floor_ptr->grid_array.
+* When the map is complete, a cut-off value is used to create a floor.
 * Heights below this value are "floor", and heights above are "wall".
 * This also can be used to create lakes, by adding more height levels
 * representing shallow and deep water/ lava etc.
@@ -578,7 +578,7 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
 * The grd variable affects the width of passages.
 * The roug variable affects the roughness of those passages
 *
-* The tricky part is making sure the created p_ptr->current_floor_ptr->grid_array is connected.  This
+* The tricky part is making sure the created floor is connected.  This
 * is done by 'filling' from the inside and only keeping the 'filled'
 * floor.  Walls bounding the 'filled' floor are also kept.  Everything
 * else is converted to the normal _extra_.
@@ -586,7 +586,7 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
 
 
 /*
- *  Note that this uses the p_ptr->current_floor_ptr->grid_array.feat array in a very hackish way
+ *  Note that this uses the floor array in a very hackish way
  *  the values are first set to zero, and then each array location
  *  is used as a "heightmap"
  *  The heightmap then needs to be converted back into the "feat" format.
@@ -594,7 +594,7 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
  *  grd=level at which fractal turns on.  smaller gives more mazelike caves
  *  roug=roughness level.  16=normal.  higher values make things more convoluted
  *    small values are good for smooth walls.
- *  size=length of the side of the square p_ptr->current_floor_ptr->grid_array system.
+ *  size=length of the side of the square grid system.
  */
 void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
@@ -1323,7 +1323,7 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 
 
 /*
- * makes a lake/collapsed p_ptr->current_floor_ptr->grid_array system in the center of the dungeon
+ * makes a lake/collapsed floor in the center of the dungeon
  */
 void build_lake(floor_type *floor_ptr, int type)
 {

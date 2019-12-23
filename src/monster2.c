@@ -220,7 +220,6 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	/* Cave grid */
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
-	/* Update the p_ptr->current_floor_ptr->grid_array */
 	g_ptr->m_idx = i2;
 
 	/* Repair objects being carried by monster */

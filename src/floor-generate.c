@@ -1310,7 +1310,7 @@ static bool level_gen(floor_type *floor_ptr, concptr *why)
 }
 
 /*!
- * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after p_ptr->current_floor_ptr->grid_array generation
+ * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after grid_array generation
  * @return なし
  */
 void wipe_generate_random_floor_flags(floor_type *floor_ptr)
@@ -1340,7 +1340,7 @@ void wipe_generate_random_floor_flags(floor_type *floor_ptr)
 }
 
 /*!
- * @brief フロアの全情報を初期化する / Clear and empty the p_ptr->current_floor_ptr->grid_array
+ * @brief フロアの全情報を初期化する / Clear and empty floor.
  * @return なし
  */
 void clear_cave(floor_type *floor_ptr)
