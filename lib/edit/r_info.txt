@@ -21582,7 +21582,7 @@ F:INVISIBLE | PASS_WALL |
 F:UNDEAD | EVIL
 S:1_IN_2 |
 S:SHOOT | TELE_AWAY | TPORT | HASTE | BLINK | HEAL
-D:$He is one of the greatest trickster. Even greatest warrior cannot
+D:$He is one of the greatest tricksters. Even the greatest warrior cannot
 D:$ defeat him, and his storm of holy might arrows from the dark have
 D:$ defeated numerous victims.
 D:彼はこの世界で最も偉大ないかさま師だ。いかなる剣の達人も彼に深い傷を
