@@ -22098,7 +22098,7 @@ F:EVIL | ORC | RES_DARK
 S:1_IN_3 |
 S:SHOOT
 D:$A captain of a regiment of weaker orcs, 
-D:$Muzgash schemes promotion by flattety to his superiors.
+D:$Muzgash schemes promotion by flattering his superiors.
 D:$"I've told you twice that Gorbag's swine got to the gate first, and none 
 D:$of ours got out.  Lagduf and Muzgash ran through, but they were shot." 
 D:ムズガッシュは弱いオークの部隊を指揮する隊長で、上役にへつらい出世を企んでいる。
