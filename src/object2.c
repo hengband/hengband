@@ -4809,7 +4809,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 
 /*!
  * @brief 魔道具の使用回数の残量を示すメッセージを表示する /
- * Describe the charges on an item in the p_ptr->inventory_list.
+ * Describe the charges on an item in the inventory.
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
@@ -4850,7 +4850,7 @@ void inven_item_charges(INVENTORY_IDX item)
 
 /*!
  * @brief アイテムの残り所持数メッセージを表示する /
- * Describe an item in the p_ptr->inventory_list.
+ * Describe an item in the inventory.
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
@@ -4897,7 +4897,7 @@ void vary_item(INVENTORY_IDX item, ITEM_NUMBER num)
 
 /*!
  * @brief アイテムを増減させ残り所持数メッセージを表示する /
- * Increase the "number" of an item in the p_ptr->inventory_list
+ * Increase the "number" of an item in the inventory
  * @param item 所持数を増やしたいプレイヤーのアイテム所持スロット
  * @param num 増やしたい量
  * @return なし
@@ -4946,7 +4946,7 @@ void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 
 /*!
  * @brief 所持アイテムスロットから所持数のなくなったアイテムを消去する /
- * Erase an p_ptr->inventory_list slot if it has no more items
+ * Erase an inventory slot if it has no more items
  * @param item 消去したいプレイヤーのアイテム所持スロット
  * @return なし
  */
@@ -5233,13 +5233,13 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
 
 /*!
  * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン /
- * Add an item to the players p_ptr->inventory_list, and return the slot used.
+ * Add an item to the players inventory, and return the slot used.
  * @param o_ptr 拾うオブジェクトの構造体参照ポインタ
  * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
  * @details
- * If the new item can combine with an existing item in the p_ptr->inventory_list,\n
+ * If the new item can combine with an existing item in the inventory,\n
  * it will do so, using "object_similar()" and "object_absorb()", else,\n
- * the item will be placed into the "proper" location in the p_ptr->inventory_list.\n
+ * the item will be placed into the "proper" location in the inventory.\n
  *\n
  * This function can be used to "over-fill" the player's pack, but only\n
  * once, and such an action must trigger the "overflow" code immediately.\n
@@ -5249,7 +5249,7 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
  * combined.  This may be tricky.  See "dungeon.c" for info.\n
  *\n
  * Note that this code must remove any location/stack information\n
- * from the object once it is placed into the p_ptr->inventory_list.\n
+ * from the object once it is placed into the inventory.\n
  */
 s16b inven_carry(object_type *o_ptr)
 {
@@ -5364,7 +5364,7 @@ s16b inven_carry(object_type *o_ptr)
  * Note that only one item at a time can be wielded per slot.\n
  * Note that taking off an item when "full" may cause that item\n
  * to fall to the ground.\n
- * Return the p_ptr->inventory_list slot into which the item is placed.\n
+ * Return the inventory slot into which the item is placed.\n
  */
 INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 {
@@ -5440,7 +5440,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 /*!
  * @brief 所持スロットから床下にオブジェクトを落とすメインルーチン /
- * Drop (some of) a non-cursed p_ptr->inventory_list/equipment item
+ * Drop (some of) a non-cursed inventory/equipment item
  * @param item 所持テーブルのID
  * @param amt 落としたい個数
  * @return なし

@@ -1393,7 +1393,7 @@ void identify_pack(player_type *target_ptr)
 
 /*!
  * @brief 装備の解呪処理 /
- * Removes curses from items in p_ptr->inventory_list
+ * Removes curses from items in inventory
  * @param all 軽い呪いまでの解除ならば0
  * @return 解呪されたアイテムの数
  * @details
@@ -1708,7 +1708,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 
 /*!
  * @brief アイテム鑑定のメインルーチン処理 /
- * Identify an object in the p_ptr->inventory_list (or on the floor)
+ * Identify an object in the inventory (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
@@ -1773,12 +1773,12 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 
 /*!
  * @brief アイテム凡庸化のメインルーチン処理 /
- * Identify an object in the p_ptr->inventory_list (or on the floor)
+ * Identify an object in the inventory (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に凡庸化をを行ったならばTRUEを返す
  * @details
  * <pre>
- * Mundanify an object in the p_ptr->inventory_list (or on the floor)
+ * Mundanify an object in the inventory (or on the floor)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was mundanified, else FALSE.
  * </pre>
@@ -1824,11 +1824,11 @@ bool mundane_spell(bool only_equip)
 
 /*!
  * @brief アイテム*鑑定*のメインルーチン処理 /
- * Identify an object in the p_ptr->inventory_list (or on the floor)
+ * Identify an object in the inventory (or on the floor)
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
- * Fully "identify" an object in the p_ptr->inventory_list  -BEN-
+ * Fully "identify" an object in the inventory -BEN-
  * This routine returns TRUE if an item was identified.
  */
 bool identify_fully(bool only_equip)

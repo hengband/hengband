@@ -1446,7 +1446,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_
 	{
 		/*
 		 * 'Collecting' means the item must be absorbed 
-		 * into an p_ptr->inventory_list slot.
+		 * into an inventory slot.
 		 * But an item can not be absorbed into itself!
 		 */
 		if ((&p_ptr->inventory_list[j] != o_ptr) &&
@@ -1695,7 +1695,7 @@ void autopick_delayed_alter(void)
 /*
  * Auto-inscription and/or destroy
  *
- * Auto-destroyer works only on p_ptr->inventory_list or on floor stack only when
+ * Auto-destroyer works only on inventory or on floor stack only when
  * requested.
  */
 void autopick_alter_item(INVENTORY_IDX item, bool destroy)

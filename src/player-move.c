@@ -264,7 +264,7 @@ void search(player_type *creature_ptr)
  * だが、違和感が\n
  * あるという指摘をうけたので、「～を拾った、～を持っている」という表示\n
  * にかえてある。そのための配列。\n
- * Add the given dungeon object to the character's p_ptr->inventory_list.\n
+ * Add the given dungeon object to the character's inventory.\n
  * Delete the object afterwards.\n
  */
 void py_pickup_aux(OBJECT_IDX o_idx)

@@ -274,7 +274,7 @@ bool can_get_item(OBJECT_TYPE_VALUE tval)
 
 /*!
  * @brief 床オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
- * Find the "first" p_ptr->inventory_list object with the given "tag".
+ * Find the "first" inventory object with the given "tag".
  * @param cp 対応するタグIDを与える参照ポインタ
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
  * @param floor_list 床上アイテムの配列
@@ -370,7 +370,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
 
 /*!
  * @brief 所持/装備オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
- * Find the "first" p_ptr->inventory_list object with the given "tag".
+ * Find the "first" inventory object with the given "tag".
  * @param cp 対応するタグIDを与える参照ポインタ
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
  * @param mode 所持、装備の切り替え
@@ -408,7 +408,6 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
 
-	/* Check every p_ptr->inventory_list object */
 	for (i = start; i <= end; i++)
 	{
 		object_type *o_ptr = &p_ptr->inventory_list[i];
@@ -429,7 +428,6 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 			/* Check the special tags */
 			if ((s[1] == command_cmd) && (s[2] == tag))
 			{
-				/* Save the actual p_ptr->inventory_list ID */
 				*cp = i;
 
 				/* Success */
@@ -472,7 +470,6 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 			/* Check the normal tags */
 			if (s[1] == tag)
 			{
-				/* Save the actual p_ptr->inventory_list ID */
 				*cp = i;
 
 				/* Success */
@@ -561,7 +558,7 @@ static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM
 
 /*!
  * @brief 所持アイテムの表示を行う /
- * Display the p_ptr->inventory_list.
+ * Display the inventory.
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  * @details
@@ -603,7 +600,6 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 
 	prepare_label_string(inven_label, USE_INVEN, tval);
 
-	/* Display the p_ptr->inventory_list */
 	for (k = 0, i = 0; i < z; i++)
 	{
 		o_ptr = &p_ptr->inventory_list[i];
@@ -823,10 +819,10 @@ static bool get_item_allow(INVENTORY_IDX item)
  * All "item_tester" restrictions are cleared before this function returns.\n
  *\n
  * The user is allowed to choose acceptable items from the equipment,\n
- * p_ptr->inventory_list, or floor, respectively, if the proper flag was given,\n
+ * inventory, or floor, respectively, if the proper flag was given,\n
  * and there are any acceptable items in that location.\n
  *\n
- * The equipment or p_ptr->inventory_list are displayed (even if no acceptable\n
+ * The equipment or inventory are displayed (even if no acceptable\n
  * items are in that location) if the proper flag was given.\n
  *\n
  * If there are no acceptable items available anywhere, and "str" is\n
@@ -835,10 +831,10 @@ static bool get_item_allow(INVENTORY_IDX item)
  *\n
  * Note that the user must press "-" to specify the item on the floor,\n
  * and there is no way to "examine" the item on the floor, while the\n
- * use of "capital" letters will "examine" an p_ptr->inventory_list/equipment item,\n
+ * use of "capital" letters will "examine" an inventory/equipment item,\n
  * and prompt for its use.\n
  *\n
- * If a legal item is selected from the p_ptr->inventory_list, we save it in "cp"\n
+ * If a legal item is selected from the inventory, we save it in "cp"\n
  * directly (0 to 35), and return TRUE.\n
  *\n
  * If a legal item is selected from the floor, we save it in "cp" as\n
@@ -849,15 +845,15 @@ static bool get_item_allow(INVENTORY_IDX item)
  *\n
  * If no item is selected, we do nothing to "cp", and return FALSE.\n
  *\n
- * Global "p_ptr->command_new" is used when viewing the p_ptr->inventory_list or equipment\n
+ * Global "command_new" is used when viewing the inventory or equipment\n
  * to allow the user to enter a command while viewing those screens, and\n
  * also to induce "auto-enter" of stores, and other such stuff.\n
  *\n
- * Global "p_ptr->command_see" may be set before calling this function to start\n
+ * Global "command_see" may be set before calling this function to start\n
  * out in "browse" mode.  It is cleared before this function returns.\n
  *\n
- * Global "p_ptr->command_wrk" is used to choose between equip/inven listings.\n
- * If it is TRUE then we are viewing p_ptr->inventory_list, else equipment.\n
+ * Global "command_wrk" is used to choose between equip/inven listings.\n
+ * If it is TRUE then we are viewing inventory, else equipment.\n
  *\n
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
@@ -983,12 +979,9 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 	/* No item selected */
 	item = FALSE;
 
-
-	/* Full p_ptr->inventory_list */
 	i1 = 0;
 	i2 = INVEN_PACK - 1;
 
-	/* Forbid p_ptr->inventory_list */
 	if (!inven) i2 = -1;
 	else if (use_menu)
 	{
@@ -996,7 +989,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 			if (item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
-	/* Restrict p_ptr->inventory_list indexes */
 	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
 	while ((i1 <= i2) && (!get_item_okay(i2))) i2--;
 
@@ -1060,25 +1052,21 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 	/* Analyze choices */
 	else
 	{
-		/* Hack -- Start on equipment if requested */
 		if (command_see && command_wrk && equip)
 		{
 			command_wrk = TRUE;
 		}
 
-		/* Use p_ptr->inventory_list if allowed */
 		else if (inven)
 		{
 			command_wrk = FALSE;
 		}
 
-		/* Use equipment if allowed */
 		else if (equip)
 		{
 			command_wrk = TRUE;
 		}
 
-		/* Use p_ptr->inventory_list for floor */
 		else
 		{
 			command_wrk = FALSE;
@@ -1143,7 +1131,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 			if (command_see) get_item_label = show_equip(menu_line, mode, tval);
 		}
 
-		/* Viewing p_ptr->inventory_list */
 		if (!command_wrk)
 		{
 			/* Begin the prompt */
@@ -1454,7 +1441,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 			case '\n':
 			case '\r':
 			{
-				/* Choose "default" p_ptr->inventory_list item */
 				if (!command_wrk)
 				{
 					k = ((i1 == i2) ? i1 : -1);
@@ -1537,7 +1523,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 				ver = isupper(which);
 				which = (char)tolower(which);
 
-				/* Convert letter to p_ptr->inventory_list index */
 				if (!command_wrk)
 				{
 					if (which == '(') k = i1;
@@ -1737,7 +1722,6 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 		/* Save the index */
 		out_index[k] = i;
 
-		/* Acquire p_ptr->inventory_list color */
 		out_color[k] = tval_to_attr[o_ptr->tval & 0x7F];
 
 		/* Save the object description */
@@ -1967,12 +1951,9 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 	/* No item selected */
 	item = FALSE;
 
-
-	/* Full p_ptr->inventory_list */
 	i1 = 0;
 	i2 = INVEN_PACK - 1;
 
-	/* Forbid p_ptr->inventory_list */
 	if (!inven) i2 = -1;
 	else if (use_menu)
 	{
@@ -1980,7 +1961,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			if (item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
-	/* Restrict p_ptr->inventory_list indexes */
 	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
 	while ((i1 <= i2) && (!get_item_okay(i2))) i2--;
 
@@ -2022,7 +2002,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 		floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
 	}
 
-	/* Accept p_ptr->inventory_list */
 	if (i1 <= i2) allow_inven = TRUE;
 
 	/* Accept equipment */
@@ -2055,7 +2034,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			command_wrk = (USE_EQUIP);
 		}
 
-		/* Use p_ptr->inventory_list if allowed */
 		else if (allow_inven)
 		{
 			command_wrk = (USE_INVEN);
@@ -2154,7 +2132,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			if (command_see) get_item_label = show_floor(menu_line, p_ptr->y, p_ptr->x, &min_width);
 		}
 
-		/* Viewing p_ptr->inventory_list */
 		if (command_wrk == (USE_INVEN))
 		{
 			/* Begin the prompt */
@@ -2732,7 +2709,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			case '\n':
 			case '\r':
 			{
-				/* Choose "default" p_ptr->inventory_list item */
 				if (command_wrk == (USE_INVEN))
 				{
 					k = ((i1 == i2) ? i1 : -1);
@@ -2858,7 +2834,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 				ver = isupper(which);
 				which = (char)tolower(which);
 
-				/* Convert letter to p_ptr->inventory_list index */
 				if (command_wrk == (USE_INVEN))
 				{
 					if (which == '(') k = i1;
@@ -3462,7 +3437,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
  * @param i 状態表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 状態表現内容の文字列ポインタ
  * @details
- * Currently, only used for items in the equipment, not p_ptr->inventory_list.
+ * Currently, only used for items in the equipment, inventory.
  */
 concptr describe_use(int i)
 {

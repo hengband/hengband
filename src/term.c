@@ -365,7 +365,7 @@ TERM_COLOR misc_to_attr[256];
 SYMBOL_CODE misc_to_char[256];
 
 /*
- * Specify attr/char pairs for p_ptr->inventory_list items (by tval)
+ * Specify attr/char pairs for inventory items (by tval)
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
 TERM_COLOR tval_to_attr[128];

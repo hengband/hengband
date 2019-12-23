@@ -317,7 +317,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 * Handle "unstacking" in a logical manner.
 * For simplicity, you cannot use a stack of items from the
 * ground.  This would require too much nasty code.
-* There are no wands which can "destroy" themselves, in the p_ptr->inventory_list
+* There are no wands which can "destroy" themselves, in the inventory
 * or on the ground, so we can ignore this possibility.  Note that this
 * required giving "wand of wonder" the ability to ignore destruction
 * by electric balls.

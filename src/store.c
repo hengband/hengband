@@ -3016,7 +3016,7 @@ bool combine_and_reorder_home(int store_num)
 
 /*!
  * @brief 我が家にオブジェクトを加える /
- * Add the item "o_ptr" to the p_ptr->inventory_list of the "Home"
+ * Add the item "o_ptr" to the inventory of the "Home"
  * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
  * @return 収めた先のID
  * @details
@@ -3121,7 +3121,7 @@ static int home_carry(object_type *o_ptr)
 
 /*!
  * @brief 店舗にオブジェクトを加える /
- * Add the item "o_ptr" to a real stores p_ptr->inventory_list.
+ * Add the item "o_ptr" to a real stores inventory.
  * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
  * @return 収めた先のID
  * @details
@@ -3226,7 +3226,7 @@ static int store_carry(object_type *o_ptr)
 
 /*!
  * @brief 店舗のオブジェクト数を増やす /
- * Add the item "o_ptr" to a real stores p_ptr->inventory_list.
+ * Add the item "o_ptr" to a real stores inventory.
  * @param item 増やしたいアイテムのID
  * @param num 増やしたい数
  * @return なし
@@ -3685,7 +3685,7 @@ static void display_entry(int pos)
 
 /*!
  * @brief 店の商品リストを表示する /
- * Displays a store's p_ptr->inventory_list 		-RAK-
+ * Displays a store's inventory -RAK-
  * @return なし
  * @details
  * All prices are listed as "per individual object".  -BEN-
@@ -3830,8 +3830,6 @@ static void display_store(void)
 
 	/* Display the current gold */
 	store_prt_gold();
-
-	/* Draw in the p_ptr->inventory_list */
 	display_inventory();
 }
 
@@ -4801,7 +4799,6 @@ static void store_purchase(void)
 						msg_print(_("店主は新たな在庫を取り出した。", "The shopkeeper brings out some new stock."));
 					}
 
-					/* New p_ptr->inventory_list */
 					for (i = 0; i < 10; i++)
 					{
 						/* Maintain the store */
@@ -6036,7 +6033,7 @@ void store_shuffle(int which)
 
 /*!
  * @brief 店の品揃えを変化させる /
- * Maintain the p_ptr->inventory_list at the stores.
+ * Maintain the inventory at the stores.
  * @param town_num 町のID
  * @param store_num 店舗種類のID
  * @return なし

@@ -406,7 +406,7 @@ static named_num gf_desc[] =
  *   F:\<num\>:\<a\>:\<c\>
  * Specify the attr/char values for unaware "objects" by kind tval
  *   U:\<tv\>:\<a\>:\<c\>
- * Specify the attr/char values for p_ptr->inventory_list "objects" by kind tval
+ * Specify the attr/char values for inventory "objects" by kind tval
  *   E:\<tv\>:\<a\>:\<c\>
  * Define a macro action, given an encoded macro action
  *   A:\<str\>
@@ -570,7 +570,7 @@ errr process_pref_file_command(char *buf)
 			}
 			break;
 
-		/* Process "E:<tv>:<a>" -- attribute for p_ptr->inventory_list objects */
+		/* Process "E:<tv>:<a>" -- attribute for inventory objects */
 		case 'E':
 			if (tokenize(buf+2, 2, zz, TOKENIZE_CHECKQUOTE) == 2)
 			{
@@ -4887,7 +4887,6 @@ static void dump_aux_equipment_inventory(FILE *fff)
 		fprintf(fff, "\n\n");
 	}
 
-	/* Dump the p_ptr->inventory_list */
 	fprintf(fff, _("  [キャラクタの持ち物]\n\n", "  [Character Inventory]\n\n"));
 
 	for (i = 0; i < INVEN_PACK; i++)
@@ -4895,7 +4894,6 @@ static void dump_aux_equipment_inventory(FILE *fff)
 		/* Don't dump the empty slots */
 		if (!p_ptr->inventory_list[i].k_idx) break;
 
-		/* Dump the p_ptr->inventory_list slots */
 		object_desc(o_name, &p_ptr->inventory_list[i], 0);
 		fprintf(fff, "%c) %s\n", index_to_label(i), o_name);
 	}
@@ -6423,14 +6421,10 @@ void show_info(void)
 	update_playtime();
 	display_player(p_ptr, 0);
 
-	/* Prompt for p_ptr->inventory_list */
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 
 	/* Allow abort at this point */
 	if (inkey() == ESCAPE) return;
-
-
-	/* Show equipment and p_ptr->inventory_list */
 
 	/* Equipment -- if any */
 	if (p_ptr->equip_cnt)

@@ -1427,8 +1427,6 @@ static bool wr_savefile_new(void)
 		wr_byte((byte_hack)p_ptr->spell_order[i]);
 	}
 
-
-	/* Write the p_ptr->inventory_list */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &p_ptr->inventory_list[i];

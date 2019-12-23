@@ -1304,7 +1304,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 
 /*!
  * @brief オブジェクト選択時の選択アルファベットラベルを返す /
- * Convert an p_ptr->inventory_list index into a one character label
+ * Convert an inventory index into a one character label
  * @param i プレイヤーの所持/装備オブジェクトID
  * @return 対応するアルファベット
  * @details Note that the label does NOT distinguish inven/equip.

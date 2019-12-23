@@ -2400,16 +2400,16 @@ static void rd_extra(player_type *creature_ptr)
 
 
 /*!
- * @brief プレイヤーの所持品情報を読み込む / Read the player p_ptr->inventory_list
+ * @brief プレイヤーの所持品情報を読み込む / Read the player inventory
  * @return なし
  * @details
- * Note that the p_ptr->inventory_list changed in Angband 2.7.4.  Two extra
+ * Note that the inventory changed in Angband 2.7.4.  Two extra
  * pack slots were added and the equipment was rearranged.  Note
  * that these two features combine when parsing old save-files, in
  * which items from the old "aux" slot are "carried", perhaps into
- * one of the two new "p_ptr->inventory_list" slots.
+ * one of the two new "inventory" slots.
  *
- * Note that the p_ptr->inventory_list is "re-sorted" later by "dungeon()".
+ * Note that the inventory is "re-sorted" later by "dungeon()".
  */
 static errr rd_inventory(void)
 {
@@ -2463,13 +2463,11 @@ static errr rd_inventory(void)
 		/* Warning -- backpack is full */
 		else if (p_ptr->inven_cnt == INVEN_PACK)
 		{
-			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the p_ptr->inventory_list!"));
+			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory"));
 
 			/* Fail */
 			return (54);
 		}
-
-		/* Carry p_ptr->inventory_list */
 		else
 		{
 			/* Get a slot */
@@ -3848,11 +3846,9 @@ static errr rd_savefile_new_aux(void)
 		p_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
 	}
 
-
-	/* Read the p_ptr->inventory_list */
 	if (rd_inventory())
 	{
-		note(_("持ち物情報を読み込むことができません", "Unable to read p_ptr->inventory_list"));
+		note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
 		return (21);
 	}
 

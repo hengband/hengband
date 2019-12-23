@@ -8,7 +8,7 @@
 * @param o_ptr アイテムの情報参照ポインタ
 * @return 破損するならばTRUEを返す
 * Note that amulets, rods, and high-level spell books are immune
-* to "p_ptr->inventory_list damage" of any kind.  Also sling ammo and shovels.
+* to "inventory damage" of any kind.  Also sling ammo and shovels.
 * Does a given class of objects (usually) hate acid?
 * Note that acid can either melt or corrode something.
 */
@@ -258,10 +258,10 @@ int set_cold_destroy(object_type *o_ptr)
  *    who   ---  who caused the potion to shatter (0=player)
  *          potions that smash on the floor are assumed to
  *          be caused by no-one (who = 1), as are those that
- *          shatter inside the player p_ptr->inventory_list.
+ *          shatter inside the player inventory.
  *          (Not anymore -- I changed this; TY)
  *    y, x  --- coordinates of the potion (or player if
- *          the potion was in her p_ptr->inventory_list);
+ *          the potion was in her inventory);
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */

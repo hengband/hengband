@@ -1240,7 +1240,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 
 /*!
  * @brief 装備修正強化処理のメインルーチン /
- * Enchant an item (in the p_ptr->inventory_list or on the floor)
+ * Enchant an item (in the inventory or on the floor)
  * @param num_hit 命中修正量
  * @param num_dam ダメージ修正量
  * @param num_ac AC修正量

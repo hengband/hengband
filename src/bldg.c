@@ -1800,7 +1800,7 @@ static bool kankin(void)
 	GAME_TEXT o_name[MAX_NLEN];
 	object_type *o_ptr;
 
-	/* Loop for p_ptr->inventory_list and right/left arm */
+	/* Loop for inventory and right/left arm */
 	for (i = 0; i <= INVEN_LARM; i++)
 	{
 		o_ptr = &p_ptr->inventory_list[i];

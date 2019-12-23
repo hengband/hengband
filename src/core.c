@@ -220,8 +220,6 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 #endif
 
 	}
-
-	/* Message (p_ptr->inventory_list) */
 	else
 	{
 #ifdef JP
@@ -254,7 +252,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
  * @brief 1プレイヤーターン毎に武器、防具の擬似鑑定が行われるかを判定する。
  * @return なし
  * @details
- * Sense the p_ptr->inventory_list\n
+ * Sense the inventory\n
  *\n
  *   Class 0 = Warrior --> fast and heavy\n
  *   Class 1 = Mage    --> slow and light\n
