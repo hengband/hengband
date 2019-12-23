@@ -20983,7 +20983,7 @@ B:CRUSH:HURT:4d8
 F:NEVER_MOVE | NONLIVING | NO_FEAR |
 F:STUPID | COLD_BLOOD | CHAR_MULTI | NO_CONF | NO_SLEEP |
 F:EVIL | IM_COLD | IM_FIRE | FORCE_MAXHP | IM_ELEC | IM_POIS
-D:$It resembles a normal armor until some poor fool ventures too close! 
+D:$It resembles normal armor until some poor fool ventures too close! 
 D:哀れで愚かな冒険者が近づいて来るまでは普通の鎧に似ている。
 
 N:1036:トラップマスター
