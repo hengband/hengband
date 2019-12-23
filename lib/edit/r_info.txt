@@ -21890,8 +21890,8 @@ F:DROP_CORPSE | ONLY_GOLD | DROP_2D2 | DROP_4D2 |
 F:NO_SLEEP | RES_INER | IM_POIS |
 S:1_IN_5 |
 S:SHRIEK
-D:$It will make animals into stone-like objects. Be aware,
-D:$you become to stone if you touch it with your empty hand!
+D:$It can turn an animal into a stone statue.  Beware, you will turn to
+D:$ stone if you touch it with your bare hand!
 D:こいつは獲物を石像のようにしちまうんだ。
 D:気をつけろ！素手で触ると石になっちまうぞ。
 
