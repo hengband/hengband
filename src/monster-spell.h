@@ -309,7 +309,7 @@ extern const concptr monster_powers_short[MAX_MONSPELLS];
 extern bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
 extern bool summon_possible(POSITION y1, POSITION x1);
 extern bool raise_possible(monster_type *m_ptr);
-extern bool dispel_check(MONSTER_IDX m_idx);
+extern bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool spell_is_inate(SPELL_IDX spell);
 extern bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr);
 extern void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type);

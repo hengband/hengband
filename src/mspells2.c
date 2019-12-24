@@ -251,7 +251,7 @@ static bool dispel_check_monster(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	/* Riding monster */
 	if (t_idx == p_ptr->riding)
 	{
-		if (dispel_check(m_idx)) return TRUE;
+		if (dispel_check(p_ptr, m_idx)) return TRUE;
 	}
 
 	/* No need to cast dispel spell */
