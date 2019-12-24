@@ -19793,6 +19793,7 @@ F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM | MOVE_BODY | RES_SOUN
 S:1_IN_5 |
 S:BR_SOUN |
 V:150
+D:$What's yours is mine, and what's mine is mine.
 D:お前のものは俺のもの。俺のものは俺のもの。
 
 N:968:氷竜『ブラムド』
