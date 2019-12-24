@@ -19543,6 +19543,7 @@ F:ONLY_GOLD | DROP_90 |
 F:EMPTY_MIND | BASH_DOOR | REFLECTING |
 F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | IM_ACID |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
+D:$It walks on four legs and has a shiny shell like that of a beetle.
 D:このモンスターに対してはあまりの魔法の無力さに呆然とするであろう。
 D:噂では中にクリボーが入っているとか……
 
