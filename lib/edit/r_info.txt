@@ -19721,6 +19721,10 @@ F:REGENERATE | EAT_GIVE_STR | EAT_GIVE_CON | EAT_LOSE_INT | EAT_LOSE_CHR |
 S:1_IN_6 |
 S:BR_SHAR | TELE_TO
 V:150
+D:$This muscle-bound man with a horned helmet has won the Great Galaxy
+D:$ Bodybuiling championship ten times in a row.  He is eager to prevent
+D:$ anyone from challenging his title.  He's also know for his signature
+D:$ move, the Bo Emperor Building Cutter.
 D:銀河ボディビルコンテスト十連続グランドチャンピオン。
 D:必殺技はボ帝ビルカッター。
 
