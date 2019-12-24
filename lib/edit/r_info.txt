@@ -19557,6 +19557,7 @@ F:FORCE_SLEEP |
 F:FRIENDS |
 F:OPEN_DOOR | BASH_DOOR |
 F:ANIMAL | NO_CONF | NO_SLEEP
+D:$This dog is about to explode.
 D:今にも爆発しそうな犬だ。
 
 N:953:折れたデスソード
