@@ -20161,6 +20161,7 @@ F:NO_CONF | NO_SLEEP | RES_TELE | RIDING |
 S:1_IN_2
 S:S_MONSTERS | CAUSE_3 | CAUSE_4 | CONF | BRAIN_SMASH | DRAIN_MANA | SCARE |
 S:HASTE | HOLD |
+D:It is a fox with nine tails, and you can sense its strong magical power.
 D:尾が九つに分かれた狐で、強い妖力を秘めている。
 
 N:988:鳳凰
