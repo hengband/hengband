@@ -702,7 +702,7 @@ static bool cave_gen(floor_type *floor_ptr)
 		}
 
 		/* Destroy the level if necessary */
-		if (dun->destroyed) destroy_level();
+		if (dun->destroyed) destroy_level(floor_ptr);
 
 		/* Hack -- Add some rivers */
 		if (one_in_(3) && (randint1(floor_ptr->dun_level) > 5))

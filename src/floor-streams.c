@@ -445,7 +445,7 @@ void place_trees(floor_type *floor_ptr, POSITION x, POSITION y)
  * Build a destroyed level
  * @return なし
  */
-void destroy_level(void)
+void destroy_level(floor_type *floor_ptr)
 {
 	POSITION y1, x1;
 	int n;
