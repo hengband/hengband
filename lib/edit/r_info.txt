@@ -20032,6 +20032,8 @@ F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | DROP_CORPSE |
 F:OPEN_DOOR | BASH_DOOR | CAN_SWIM | AURA_ELEC |
 F:EVIL | GIANT | IM_POIS | IM_FIRE | IM_ELEC
 A:194:1:33
+D:$Living on Mt. Oe, in the province of Tanba, this large ogre seized young
+D:$ women and treasure from nearby Kyoto.
 D:丹波の国の大江山をねぐらとし、京の都を襲っては財宝と娘を
 D:奪う凶悪な鬼どもの首領だ。
 
