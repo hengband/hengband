@@ -20128,6 +20128,7 @@ B:BITE:LOSE_ALL:3d8
 F:REFLECTING | DROP_1D2 | DROP_2D2 | RES_DISE | ANIMAL |
 F:REGENERATE | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP | RES_TELE | CAN_SWIM | RIDING
+D:It is a white horse with a horn on its forehead.
 D:額に一本の角を持った白馬で、乙女にのみ心を許すと言われる。
 
 N:986:猫又
