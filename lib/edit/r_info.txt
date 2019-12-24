@@ -20142,6 +20142,8 @@ F:MALE | EVIL | FORCE_SLEEP | DROP_1D2 | ANIMAL |
 F:SMART | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 S:1_IN_3 |
 S:SCARE | CAUSE_2 | S_MONSTER
+D:$This cat has a second tail.  There are fables about old cats becoming
+D:$ such creatures and bedeviling people.
 D:猫が年老いると次第に高い知能と分かれた尻尾を持ち、猫又になるという。
 
 N:987:九尾の狐
