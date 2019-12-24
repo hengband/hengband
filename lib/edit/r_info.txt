@@ -20108,6 +20108,10 @@ B:CLAW:HURT:1d10
 B:BITE:POISON:1d10
 F:FORCE_SLEEP | DROP_CORPSE | ANIMAL |
 F:BASH_DOOR | WILD_MOUNTAIN |
+D:$This strange hybrid has the head of a monkey, the body of a racoon dog,
+D:$ the legs of a tiger and a tail that is the front half of a snake.  It
+D:$ makes an eerie, sorrowful cry, like that of a scaly thrush, and is
+D:$ wreathed with clouds of black smoke.
 D:頭がサル、胴はタヌキ、尾はヘビ、手足はトラで、鳴き声はトラツグミに
 D:似ていたという奇妙な生物だ。非常に変わった
 D:外見をしていて、近寄りがたい雰囲気がある。
