@@ -19246,6 +19246,9 @@ F:OPEN_DOOR | RES_NETH | RES_PLAS |
 F:EVIL | IM_FIRE | NO_CONF | NO_SLEEP
 S:1_IN_3 |
 S:S_DEMON | BA_CHAO | BO_PLAS | BR_FIRE | BR_PLAS
+D:$This horrible creature has four legs, nine arms, and bluish skin.  It wears
+D:$ a high golden crown with horns on either side.  Large fangs protude from
+D:$ its mouth.  According to legend, it guards an artifact that Ishtar wants.
 D:脚が４本。腕は９本。
 D:両脇から角が出ている丈高めの黄金の冠をかぶる。体色は青。牙を持つ。
 D:女神イシターを封印したと伝えられる。
