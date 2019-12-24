@@ -19753,6 +19753,9 @@ F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_5 | 
 S:BLIND | CONF | SCARE | CAUSE_2 | BA_POIS |
 S:S_MONSTER
+D:$This strange creature, transformed into an image of a strange creature
+D:$ that is transformed into an abandoned box, waits for a stupid adventurer
+D:$ to get close to its poisonous claws.
 D:放置された箱に化けている奇妙な生物の像に化けている奇妙な生物で、
 D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
 
