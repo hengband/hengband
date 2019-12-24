@@ -20093,6 +20093,9 @@ B:CLAW:HURT:1d7
 B:BITE:HURT:2d7
 F:OPEN_DOOR | BASH_DOOR | WILD_MOUNTAIN | DROP_CORPSE |
 F:ANIMAL
+D:$Resembling a monkey but, at five feet tall, much larger than monkey, this
+D:$ animal must be one of the mysterious beasts that live around Mt. Hiba in
+D:$ Hiroshima Prefecture.
 D:広島県の比婆山一帯に現れる「サルに似ているが、サルよりも大きな」謎の動物。
 
 N:984:鵺
