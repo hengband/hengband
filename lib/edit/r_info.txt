@@ -19895,7 +19895,7 @@ F:NO_FEAR | NO_STUN | RIDING |
 S:1_IN_3 | 
 S:BRAIN_SMASH | BR_FIRE | BA_FIRE
 D:$One of the ancient dragons of Lodoss, it causes destruction 
-D:$with it's breath of fire.
+D:$with its breath of fire.
 D:ロードスの古代竜の一匹で、その火炎のブレスで全てを焼き尽くす。
 
 N:973:暗黒の島マーモの皇帝『ベルド』
