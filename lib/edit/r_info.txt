@@ -19774,6 +19774,7 @@ F:OPEN_DOOR | GOOD | CAN_SWIM | CAN_FLY |
 F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
 S:1_IN_4 |
 S:BA_FIRE | HASTE | HOLD | CONF | BLIND
+D:$Absolutely not a Mario analog!
 D:断じてマリオの類似品ではない！(本人主張)
 
 N:967:ガキ大将『ジャイアン』
