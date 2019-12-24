@@ -19330,8 +19330,8 @@ S:1_IN_3 |
 S:BLIND | HOLD | SCARE | CAUSE_3 | CAUSE_4 | MIND_BLAST | 
 S:BO_COLD | BA_COLD | BA_NETH | 
 S:S_UNDEAD | S_HI_UNDEAD
-D:$A Ringwraith powerful in fell sorcery, he yearns for the life he has lost 
-D:$for a life of everlasting torment.
+D:$Is a Ringwraith powerful in fell sorcery.  He suffers eternally yearning
+D:$ for his lost soul.
 D:堕落した魔法使いである強力な指輪の幽鬼だ。彼は魂を失って永劫の苦しみの中に
 D:いるため、新たな魂を心から渇望している。
 
