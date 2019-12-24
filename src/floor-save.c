@@ -391,7 +391,7 @@ static monster_type party_mon[MAX_PARTY_MON]; /*!< フロア移動に保存す�
  * @brief フロア移動時のペット保存処理 / Preserve_pets
  * @return なし
  */
-static void preserve_pet(void)
+static void preserve_pet(player_type *master_ptr)
 {
 	int num;
 	MONSTER_IDX i;
@@ -401,16 +401,16 @@ static void preserve_pet(void)
 		party_mon[num].r_idx = 0;
 	}
 
-	if (p_ptr->riding)
+	if (master_ptr->riding)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
+		monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[master_ptr->riding];
 
 		/* Pet of other pet don't follow. */
 		if (m_ptr->parent_m_idx)
 		{
-			p_ptr->riding = 0;
-			p_ptr->pet_extra_flags &= ~(PF_RYOUTE);
-			p_ptr->riding_ryoute = p_ptr->old_riding_ryoute = FALSE;
+			master_ptr->riding = 0;
+			master_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+			master_ptr->riding_ryoute = master_ptr->old_riding_ryoute = FALSE;
 		}
 		else
 		{
@@ -418,7 +418,7 @@ static void preserve_pet(void)
 			(void)COPY(&party_mon[0], m_ptr, monster_type);
 
 			/* Delete from this floor */
-			delete_monster_idx(p_ptr->riding);
+			delete_monster_idx(master_ptr->riding);
 		}
 	}
 
@@ -426,15 +426,15 @@ static void preserve_pet(void)
 	 * If player is in wild mode, no pets are preserved
 	 * except a monster whom player riding
 	 */
-	if (!p_ptr->wild_mode && !p_ptr->current_floor_ptr->inside_arena && !p_ptr->phase_out)
+	if (!master_ptr->wild_mode && !master_ptr->current_floor_ptr->inside_arena && !master_ptr->phase_out)
 	{
-		for (i = p_ptr->current_floor_ptr->m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--)
+		for (i = master_ptr->current_floor_ptr->m_max - 1, num = 1; (i >= 1 && num < MAX_PARTY_MON); i--)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
 
 			if (!monster_is_valid(m_ptr)) continue;
 			if (!is_pet(m_ptr)) continue;
-			if (i == p_ptr->riding) continue;
+			if (i == master_ptr->riding) continue;
 
 			if (reinit_wilderness)
 			{
@@ -442,7 +442,7 @@ static void preserve_pet(void)
 			}
 			else
 			{
-				POSITION dis = distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx);
+				POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
 
 				/* Confused (etc.) monsters don't follow. */
 				if (MON_CONFUSED(m_ptr) || MON_STUNNED(m_ptr) || MON_CSLEEP(m_ptr)) continue;
@@ -455,8 +455,8 @@ static void preserve_pet(void)
 				 * when you or the pet can see the other.
 				 */
 				if (m_ptr->nickname && 
-				    ((player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) ||
-				     (los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x) && projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, p_ptr->y, p_ptr->x))))
+				    ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr->current_floor_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx)) ||
+				     (los(master_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x) && projectable(master_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x))))
 				{
 					if (dis > 3) continue;
 				}
@@ -466,7 +466,7 @@ static void preserve_pet(void)
 				}
 			}
 
-			(void)COPY(&party_mon[num], &p_ptr->current_floor_ptr->m_list[i], monster_type);
+			(void)COPY(&party_mon[num], &master_ptr->current_floor_ptr->m_list[i], monster_type);
 
 			num++;
 
@@ -477,29 +477,29 @@ static void preserve_pet(void)
 
 	if (record_named_pet)
 	{
-		for (i = p_ptr->current_floor_ptr->m_max - 1; i >=1; i--)
+		for (i = master_ptr->current_floor_ptr->m_max - 1; i >=1; i--)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
 			GAME_TEXT m_name[MAX_NLEN];
 
 			if (!monster_is_valid(m_ptr)) continue;
 			if (!is_pet(m_ptr)) continue;
 			if (!m_ptr->nickname) continue;
-			if (p_ptr->riding == i) continue;
+			if (master_ptr->riding == i) continue;
 
 			monster_desc(m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-			exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
+			exe_write_diary(master_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
 		}
 	}
 
 
 	/* Pet of other pet may disappear. */
-	for (i = p_ptr->current_floor_ptr->m_max - 1; i >=1; i--)
+	for (i = master_ptr->current_floor_ptr->m_max - 1; i >=1; i--)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
 
 		/* Are there its parent? */
-		if (m_ptr->parent_m_idx && !p_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx)
+		if (m_ptr->parent_m_idx && !master_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx)
 		{
 			/* Its parent have gone, it also goes away. */
 
@@ -876,7 +876,7 @@ void leave_floor(player_type *creature_ptr)
 	FLOOR_IDX tmp_floor_idx = 0;
 	
 	/* Preserve pets and prepare to take these to next floor */
-	preserve_pet();
+	preserve_pet(creature_ptr);
 
 	/* Remove all mirrors without explosion */
 	remove_all_mirrors(creature_ptr, FALSE);
