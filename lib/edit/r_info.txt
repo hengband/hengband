@@ -19572,6 +19572,7 @@ B:HIT:POISON:1d1
 F:NONLIVING | NO_FEAR |
 F:STUPID | COLD_BLOOD | NO_CONF | NO_SLEEP |
 F:EVIL | IM_COLD | IM_FIRE | IM_ELEC | IM_POIS
+D:$This broken sword moves about, searching for prey.
 D:獲物の血を求めて動き回る折れた剣だ。
 
 N:954:オークの弩弓隊
