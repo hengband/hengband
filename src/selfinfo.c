@@ -1040,7 +1040,7 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは神秘のシールドで守られている。", "You are protected by a mystic shield.");
 	}
-	if (IS_INVULN())
+	if (IS_INVULN(creature_ptr))
 	{
 		info[i++] = _("あなたは現在傷つかない。", "You are temporarily invulnerable.");
 	}

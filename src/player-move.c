@@ -1608,7 +1608,7 @@ static bool run_test(void)
 				}
 
 				/* Lava */
-				else if (have_flag(f_ptr->flags, FF_LAVA) && (p_ptr->immune_fire || IS_INVULN()))
+				else if (have_flag(f_ptr->flags, FF_LAVA) && (p_ptr->immune_fire || IS_INVULN(p_ptr)))
 				{
 					/* Ignore */
 					notice = FALSE;

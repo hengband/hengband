@@ -1332,7 +1332,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->invuln > v) return FALSE;
 		}
-		else if (!IS_INVULN())
+		else if (!IS_INVULN(creature_ptr))
 		{
 			msg_print(_("無敵だ！", "Invulnerability!"));
 			notice = TRUE;

@@ -877,7 +877,7 @@ bool dispel_check(MONSTER_IDX m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Invulnabilty (including the song) */
-	if (IS_INVULN()) return (TRUE);
+	if (IS_INVULN(p_ptr)) return (TRUE);
 
 	/* Wraith form */
 	if (p_ptr->wraith_form) return (TRUE);
@@ -1151,7 +1151,7 @@ static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 	}
 
 	/* Attack spell (most of the time) */
-	if (IS_INVULN())
+	if (IS_INVULN(p_ptr))
 	{
 		if (psy_spe_num && (randint0(100) < 50))
 		{

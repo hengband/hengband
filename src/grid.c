@@ -571,7 +571,7 @@ void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
+			else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
@@ -727,7 +727,7 @@ void lite_spot(POSITION y, POSITION x)
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
+			else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
 			else if (p_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
@@ -1299,7 +1299,7 @@ bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
 			if (!p_ptr->levitation && !p_ptr->can_swim) return FALSE;
 		}
 
-		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN())
+		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN(p_ptr))
 		{
 			/* Always forbid deep lava */
 			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;

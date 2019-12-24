@@ -412,7 +412,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 	/* Mega-Hack -- Apply "invulnerability" */
 	if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE))
 	{
-		if (IS_INVULN() && (damage < 9000))
+		if (IS_INVULN(creature_ptr) && (damage < 9000))
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{

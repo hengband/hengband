@@ -729,14 +729,14 @@ static bool pattern_effect(player_type *creature_ptr)
 		break;
 
 	case PATTERN_TILE_WRECKED:
-		if (!IS_INVULN())
+		if (!IS_INVULN(creature_ptr))
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, 200, _("壊れた「パターン」を歩いたダメージ", "walking the corrupted Pattern"), -1);
 		break;
 
 	default:
 		if (PRACE_IS_(creature_ptr, RACE_AMBERITE) && !one_in_(2))
 			return TRUE;
-		else if (!IS_INVULN())
+		else if (!IS_INVULN(creature_ptr))
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"), -1);
 		break;
 	}
@@ -1320,7 +1320,7 @@ static void process_world_aux_digestion(player_type *creature_ptr)
 				/* Calculate damage */
 				HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
 
-				if (!IS_INVULN()) take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
+				if (!IS_INVULN(creature_ptr)) take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
 			}
 		}
 	}
@@ -1344,13 +1344,13 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	/*** Damage over Time ***/
 
 	/* Take damage from poison */
-	if (creature_ptr->poisoned && !IS_INVULN())
+	if (creature_ptr->poisoned && !IS_INVULN(creature_ptr))
 	{
 		take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison"), -1);
 	}
 
 	/* Take damage from cuts */
-	if (creature_ptr->cut && !IS_INVULN())
+	if (creature_ptr->cut && !IS_INVULN(creature_ptr))
 	{
 		HIT_POINT dam;
 
@@ -1398,7 +1398,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	/* (Vampires) Take damage from sunlight */
 	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 	{
-		if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN() && is_daytime())
+		if (!creature_ptr->current_floor_ptr->dun_level && !creature_ptr->resist_lite && !IS_INVULN(creature_ptr) && is_daytime())
 		{
 			if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW)
 			{
@@ -1425,11 +1425,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
-			if (!IS_INVULN()) take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
+			if (!IS_INVULN(creature_ptr)) take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_LAVA) && !IS_INVULN() && !creature_ptr->immune_fire)
+	if (have_flag(f_ptr->flags, FF_LAVA) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_fire)
 	{
 		int damage = 0;
 
@@ -1468,7 +1468,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !IS_INVULN() && !creature_ptr->immune_cold)
+	if (have_flag(f_ptr->flags, FF_COLD_PUDDLE) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_cold)
 	{
 		int damage = 0;
 
@@ -1506,7 +1506,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !IS_INVULN() && !creature_ptr->immune_elec)
+	if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_elec)
 	{
 		int damage = 0;
 
@@ -1544,7 +1544,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !IS_INVULN() && !creature_ptr->immune_acid)
+	if (have_flag(f_ptr->flags, FF_ACID_PUDDLE) && !IS_INVULN(creature_ptr) && !creature_ptr->immune_acid)
 	{
 		int damage = 0;
 
@@ -1582,7 +1582,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		}
 	}
 
-	if (have_flag(f_ptr->flags, FF_POISON_PUDDLE) && !IS_INVULN())
+	if (have_flag(f_ptr->flags, FF_POISON_PUDDLE) && !IS_INVULN(creature_ptr))
 	{
 		int damage = 0;
 
@@ -1673,7 +1673,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	 */
 	if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY))
 	{
-		if (!IS_INVULN() && !creature_ptr->wraith_form && !creature_ptr->kabenuke && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall))
+		if (!IS_INVULN(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->kabenuke && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall))
 		{
 			concptr dam_desc;
 			cave_no_regen = TRUE;

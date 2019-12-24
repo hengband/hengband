@@ -556,7 +556,7 @@ static void prt_status(player_type *creature_ptr)
 	if (creature_ptr->protevil) ADD_FLG(BAR_PROTEVIL);
 
 	/* Invulnerability */
-	if (IS_INVULN()) ADD_FLG(BAR_INVULN);
+	if (IS_INVULN(creature_ptr)) ADD_FLG(BAR_INVULN);
 
 	/* Wraith form */
 	if (creature_ptr->wraith_form) ADD_FLG(BAR_WRAITH);
@@ -1935,7 +1935,7 @@ static void display_dungeon(void)
 				if (!use_graphics)
 				{
 					if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-					else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
+					else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
 					else if (p_ptr->wraith_form) a = TERM_L_DARK;
 				}
 
@@ -2557,7 +2557,7 @@ void prt_map(void)
 			if (!use_graphics)
 			{
 				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-				else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
+				else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
@@ -3580,7 +3580,7 @@ void display_map(floor_type *floor_ptr, int *cy, int *cx)
 			if (!use_graphics)
 			{
 				if (current_world_ptr->timewalk_m_idx) ta = TERM_DARK;
-				else if (IS_INVULN() || p_ptr->timewalk) ta = TERM_WHITE;
+				else if (IS_INVULN(p_ptr) || p_ptr->timewalk) ta = TERM_WHITE;
 				else if (p_ptr->wraith_form) ta = TERM_L_DARK;
 			}
 
@@ -3823,7 +3823,7 @@ void prt_path(POSITION y, POSITION x)
 			if (!use_graphics)
 			{
 				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-				else if (IS_INVULN() || p_ptr->timewalk) a = TERM_WHITE;
+				else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
 				else if (p_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
