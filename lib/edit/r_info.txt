@@ -20080,6 +20080,7 @@ F:COLD_BLOOD | OPEN_DOOR | CAN_FLY |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP |
 S:1_IN_5
 S:BLIND | HOLD | SCARE | CAUSE_4 | BO_NETH | S_UNDEAD
+D:$Carrying its head in its hand, this ominous monster comes to announce death.
 D:この不吉なモンスターは自分の首を脇に抱え、死を告げにやってくる。
 
 N:983:ヒバゴン
