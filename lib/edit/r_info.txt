@@ -19607,7 +19607,6 @@ F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
 D:$This pitiful horse has not been well fed, it walks unsteadily.
 D:満足に飼葉も与えられていないがりがりでふらふらの哀れな馬だ。
 
-# Description in English by Nick Keulmann
 N:956:馬
 E:Horse
 G:q:o
@@ -19617,8 +19616,8 @@ B:BITE:HURT:1d8
 B:KICK:HURT:2d4
 F:WILD_WASTE | BASH_DOOR |
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
-D:$As for the horse with the animal of four feet which can run fast, 
-D:$it was utilized for a long time as the vehicle of the human.
+D:$This four-legged beast is capable of running quickly.  Others like it
+D:$ have been used by humans as vehicles since ancient times.
 D:馬は速く駆けることのできる四本足の獣で、
 D:古くから人間の乗り物として利用されてきた。
 
