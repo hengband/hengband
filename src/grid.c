@@ -1005,7 +1005,7 @@ static POSITION flow_y = 0;
  * We do not need a priority queue because the cost from grid
  * to grid is always "one" and we process them in order.
  */
-void update_flow(void)
+void update_flow(player_type *subject_ptr)
 {
 	POSITION x, y;
 	DIRECTION d;
@@ -1016,29 +1016,29 @@ void update_flow(void)
 	if (tmp_pos.n) return;
 
 	/* The last way-point is on the map */
-	if (p_ptr->running && in_bounds(p_ptr->current_floor_ptr, flow_y, flow_x))
+	if (subject_ptr->running && in_bounds(subject_ptr->current_floor_ptr, flow_y, flow_x))
 	{
 		/* The way point is in sight - do not update.  (Speedup) */
-		if (p_ptr->current_floor_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW) return;
+		if (subject_ptr->current_floor_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW) return;
 	}
 
 	/* Erase all of the current flow information */
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+	for (y = 0; y < subject_ptr->current_floor_ptr->height; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < subject_ptr->current_floor_ptr->width; x++)
 		{
-			p_ptr->current_floor_ptr->grid_array[y][x].cost = 0;
-			p_ptr->current_floor_ptr->grid_array[y][x].dist = 0;
+			subject_ptr->current_floor_ptr->grid_array[y][x].cost = 0;
+			subject_ptr->current_floor_ptr->grid_array[y][x].dist = 0;
 		}
 	}
 
 	/* Save player position */
-	flow_y = p_ptr->y;
-	flow_x = p_ptr->x;
+	flow_y = subject_ptr->y;
+	flow_x = subject_ptr->x;
 
 	/* Add the player's grid to the queue */
-	tmp_pos.y[0] = p_ptr->y;
-	tmp_pos.x[0] = p_ptr->x;
+	tmp_pos.y[0] = subject_ptr->y;
+	tmp_pos.x[0] = subject_ptr->x;
 
 	/* Now process the queue */
 	while (flow_head != flow_tail)
@@ -1056,8 +1056,8 @@ void update_flow(void)
 		for (d = 0; d < 8; d++)
 		{
 			int old_head = flow_head;
-			byte_hack m = p_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
-			byte_hack n = p_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
+			byte_hack m = subject_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
+			byte_hack n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
 			grid_type *g_ptr;
 
 			/* Child location */
@@ -1065,9 +1065,9 @@ void update_flow(void)
 			x = tx + ddx_ddd[d];
 
 			/* Ignore player's grid */
-			if (player_bold(p_ptr, y, x)) continue;
+			if (player_bold(subject_ptr, y, x)) continue;
 
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
 
 			if (is_closed_door(g_ptr->feat)) m += 3;
 

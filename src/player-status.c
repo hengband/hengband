@@ -5070,7 +5070,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_FLOW))
 	{
 		creature_ptr->update &= ~(PU_FLOW);
-		update_flow();
+		update_flow(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_DISTANCE))

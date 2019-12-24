@@ -396,7 +396,7 @@ extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(POSITION y, POSITION x);
 extern void lite_spot(POSITION y, POSITION x);
 extern void delayed_visual_update(void);
-extern void update_flow(void);
+extern void update_flow(player_type *subject_ptr);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(POSITION y, POSITION x, int action);
 extern void remove_mirror(POSITION y, POSITION x);
