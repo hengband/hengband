@@ -952,7 +952,7 @@ bool dispel_check(MONSTER_IDX m_idx)
 
 	if (p_ptr->pspeed < 145)
 	{
-		if (IS_FAST()) return (TRUE);
+		if (IS_FAST(p_ptr)) return (TRUE);
 	}
 
 	/* Light speed */

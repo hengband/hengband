@@ -1866,7 +1866,7 @@ static void display_player_middle(player_type *creature_ptr)
 
 		if (!creature_ptr->riding)
 		{
-			if (IS_FAST()) tmp_speed += 10;
+			if (IS_FAST(creature_ptr)) tmp_speed += 10;
 			if (creature_ptr->slow) tmp_speed -= 10;
 			if (creature_ptr->lightspeed) tmp_speed = 99;
 		}
@@ -2725,7 +2725,7 @@ static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_S
 		add_flag(flgs, TR_REGEN);
 	if (IS_TIM_ESP())
 		add_flag(flgs, TR_TELEPATHY);
-	if (IS_FAST() || creature_ptr->slow)
+	if (IS_FAST(creature_ptr) || creature_ptr->slow)
 		add_flag(flgs, TR_SPEED);
 
 	if (IS_OPPOSE_ACID() && !(creature_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(creature_ptr, RACE_YEEK) && (creature_ptr->lev > 19)))

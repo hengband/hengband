@@ -2909,7 +2909,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 
 	/* Temporary "fast" */
-	if (IS_FAST())
+	if (IS_FAST(creature_ptr))
 	{
 		new_speed += 10;
 	}

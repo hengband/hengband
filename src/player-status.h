@@ -800,7 +800,7 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 
 
 /* Temporary flags macro */
-#define IS_FAST() (p_ptr->fast || music_singing(p_ptr, MUSIC_SPEED) || music_singing(p_ptr, MUSIC_SHERO))
+#define IS_FAST(C) (C->fast || music_singing(C, MUSIC_SPEED) || music_singing(C, MUSIC_SHERO))
 #define IS_INVULN() (p_ptr->invuln || music_singing(p_ptr, MUSIC_INVULN))
 #define IS_HERO() (p_ptr->hero || music_singing(p_ptr, MUSIC_HERO) || music_singing(p_ptr, MUSIC_SHERO))
 #define IS_BLESSED() (p_ptr->blessed || music_singing(p_ptr, MUSIC_BLESS) || hex_spelling(HEX_BLESS))

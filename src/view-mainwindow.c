@@ -1172,7 +1172,7 @@ static void prt_state(void)
 static void prt_speed(void)
 {
 	int i = p_ptr->pspeed;
-	bool is_fast = IS_FAST();
+	bool is_fast = IS_FAST(p_ptr);
 
 	TERM_COLOR attr = TERM_WHITE;
 	char buf[32] = "";

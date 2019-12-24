@@ -776,7 +776,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->fast > v) return FALSE;
 		}
-		else if (!IS_FAST() && !creature_ptr->lightspeed)
+		else if (!IS_FAST(creature_ptr) && !creature_ptr->lightspeed)
 		{
 			msg_print(_("素早く動けるようになった！", "You feel yourself moving much faster!"));
 			notice = TRUE;
