@@ -21182,8 +21182,8 @@ F:OPEN_DOOR | BASH_DOOR | SMART |
 F:ANIMAL | IM_ACID | IM_FIRE | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 |
 S:BO_COLD | BA_COLD | BO_ICEE | BR_COLD
-D:$This bird is the porter of the mansion in which Dio Brando hides and lives. 
-D:$For it, a dog may be a favorite food.
+D:$This bird guards the mansion in which Dio Brando hides and lives.  Dogs
+D:$ may be its favorite food.
 D:ディオが隠れ棲む館の門番であるこの鳥は犬が
 D:大好物なのかもしれない。
 
