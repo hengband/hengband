@@ -20933,7 +20933,7 @@ D:$A demon small in stature whose face you can't help but love.
 D:憎めない顔をした小柄な悪魔だ。
 
 N:1030:南蛮王『孟獲』
-E:Meng Huo, the King of Southerings
+E:Meng Huo, the King of the Southerners
 G:p:o
 I:110:38d10:20:50:20
 W:18:2:0:250:0:0
@@ -21732,7 +21732,7 @@ F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
 F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | 
 F:OPEN_DOOR | BASH_DOOR
-D:$He is a junior brother of king of southerings Meng Huo.
+D:$He is a junior brother of the king of the southerners, Meng Huo.
 D:南蛮王孟獲の弟だ。武勇には多少の自信がある。
 
 N:1074:火の神『祝融』
@@ -21754,7 +21754,7 @@ D:南蛮王孟獲の妻だ。彼女は火の神の化身と言われている。
 D:その武勇を侮るな。
 
 N:1075:南蛮人『帯来洞主』
-E:Dailai Dongzhu, the Captain of Southerings
+E:Dailai Dongzhu, the Captain of the Southerners
 G:p:u
 I:110:22d10:20:35:20
 W:10:2:0:100:0:0
@@ -21772,7 +21772,7 @@ D:$He comes to help his sister and her husband Meng Huo.
 D:南蛮王孟獲の援軍として現れた南蛮の将だ。孟獲の義理の弟にあたる。
 
 N:1076:禿竜洞主『朶思大王』
-E:King Duosi, the Chief of Southerings
+E:King Duosi, the Chief of the Southerners
 G:p:v
 I:110:25d10:20:45:20
 W:11:2:0:150:0:0
@@ -21789,7 +21789,7 @@ D:$the enemy.
 D:南蛮随一の知恵者と言われる有力領主だ。彼の知略は蜀軍を苦しめた。
 
 N:1077:南蛮の酋長『木鹿大王』
-E:King Mulu, the Chief of Southerings
+E:King Mulu, the Chief of the Southerners
 G:p:g
 I:110:35d10:20:45:20
 W:16:2:0:250:0:0
@@ -21807,7 +21807,7 @@ D:南蛮を支配する酋長の一人だ。彼の動物軍団には孟獲も絶
 D:ただしカラクリは嫌いだ。
 
 N:1078:烏戈国王『兀突骨』
-E:Wutugu, the Chief of Southerings
+E:Wutugu, the Chief of the Southerners
 G:P:u
 I:110:35d10:20:60:20
 W:17:2:0:250:0:0
