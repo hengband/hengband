@@ -19276,6 +19276,8 @@ F:DROP_2D2 | DROP_1D2 | DROP_GOOD | ONLY_ITEM | CAN_SWIM |
 F:GOOD | IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | REGENERATE |
 S:1_IN_3 |
 S:CAUSE_4 | TELE_TO
+D:$He is the rightful master of the martial art, Hokuto Shinken.  At a time
+D:$ when power seems to be everything, he lives in love and fights for love.
 D:一子相伝とされる北斗神拳の伝承者だ。力が全てを支配すると思われた
 D:時代にあって愛に生き、愛のために戦っている。
 
