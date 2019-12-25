@@ -21157,9 +21157,8 @@ F:ONLY_ITEM | DROP_2D2 | DROP_GOOD |
 F:IM_COLD | RES_WATE |
 F:IM_POIS | NO_CONF | NO_SLEEP | NO_STUN |
 F:RIDING
-D:$This is the whale of the tradition which gets across to the Inuit 
-D:$who lives in the world of winter. It is said that the mystical horn 
-D:$of this whale cures all illnesses.
+D:$This is the legendary whale of the Inuit living in the winter world.  It
+D:$ is said that the horn of this whale can cure any disease.
 D:冬の世界に住むイヌイット族に伝わる伝説の鯨で，
 D:その神秘の角はあらゆる病に効くとされる。
 
