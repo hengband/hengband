@@ -20215,6 +20215,8 @@ F:NO_STUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 |
 S:BLIND | SHRIEK | DISPEL | INVULNER | S_ANGEL
 V:133
+D:$It is deer-like but with the scales of a dragon and the tail of an ox.  All
+D:$ accounts attest to its holiness and power.
 D:龍の鱗に牛の尾、馬の蹄を持ち、角の生えた四本足の聖なる獣で、
 D:王者が仁のある政治を行った時に姿を現わすと言われている。
 
