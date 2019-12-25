@@ -21056,6 +21056,7 @@ F:MALE | HUMAN | DROP_SKELETON | DROP_CORPSE |
 F:DROP_1D2 | EAT_GIVE_DEX | EAT_LOSE_WIS | OPEN_DOOR | BASH_DOOR | EVIL |
 S:1_IN_2 |
 S:TRAPS | BLINK
+D:$Be careful!  When you see him, you're likely already surrounded with traps.
 D:気をつけろ！姿を見たときはすでに罠に囲まれているぞ。
 
 N:1037:聖堂騎士
