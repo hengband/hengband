@@ -20494,6 +20494,8 @@ F:IM_ACID | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP | EVIL
 S:1_IN_2 | CAUSE_3 | BA_FIRE | HOLD | BLIND | CONF | SCARE
 S:TRAPS | BO_PLAS | BO_NETH
 S:BA_DARK | S_HOUND
+D:$This black-haired sorceror does all he can to wither crops, steal pigs,
+D:$ dry up waterways, and kidnap a queen.
 D:「そこには、魔法の杖を持った黒髪、黒髭、黒い目をして、
 D:黒いローブをまとったいかにも極悪非道といった感じの男が描かれた絵が、
 D:無造作に貼り付けてある」
