@@ -20967,8 +20967,9 @@ F:NO_CONF | NO_SLEEP | CAN_FLY |
 F:COLD_BLOOD | BASH_DOOR | POWERFUL | RAND_25 |
 F:GOOD | DROP_CORPSE | SELF_LITE_2
 V:150
-D:$He was the braver of Atlantis. His body was converted by a Shinto priest, 
-D:$in order to fight against "Papa". His body is now made by Orihalcon.
+D:$He is a robotic soldier from the lost city of Atlantis.  Rediscovered in
+D:$ Tokyo, a Shinto priest converted his body into orihalcon to fight against
+D:$ "Papa".
 D:もとはアトランティスの勇者。
 D:『パパ』に立ち向かうために神官の手によってオリハルコンの体に改造された。
 
