@@ -21802,7 +21802,7 @@ F:FORCE_MAXHP | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR
 S:1_IN_6 |
 S:S_ANT | S_SPIDER
-D:$He is one of chiefs of Nanman. He is also good beast master.
+D:$He is one of chiefs of Nanman. He is also a good beast master.
 D:南蛮を支配する酋長の一人だ。彼の動物軍団には孟獲も絶大な信頼を寄せる。
 D:ただしカラクリは嫌いだ。
 
