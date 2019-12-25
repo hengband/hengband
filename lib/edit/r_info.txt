@@ -20245,6 +20245,8 @@ B:BITE:HURT:10d10
 F:FORCE_MAXHP | UNIQUE | ANIMAL | CAN_FLY |
 F:REGENERATE | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC |
 F:IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
+D:$This great eight-legged horse is Odin's mount.  It is said to be the child
+D:$ of Loki, the giant.
 D:オーディンの乗馬たるスレイプニルは、8本の足を持つ名馬である。
 D:巨人ロキの子供であると言われている。
 
