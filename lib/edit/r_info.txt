@@ -20724,6 +20724,10 @@ F:DROP_2D2 | DROP_1D2 | DROP_GOOD | ONLY_ITEM | CAN_SWIM |
 F:GOOD | IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | REGENERATE |
 S:1_IN_3 |
 S:CAUSE_3 | TELE_TO
+D:$Raou is the eldest of four honorary brothers, another being Kenshirou,
+D:$ who were trained by the master of Hokuto Shinken, a martial art.
+D:$ Headstrong, Raou tries to forge a new order through conquest in a
+D:$ turbulent dark era.
 D:ラオウは北斗神拳伝承者ケンシロウの義兄であり北斗神拳の使い手である。
 D:激動の闇の時代に、己の信念で新たな時代を築こうとした。
 
