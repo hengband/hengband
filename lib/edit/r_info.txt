@@ -20190,6 +20190,10 @@ S:1_IN_3 |
 S:SCARE | BRAIN_SMASH | DRAIN_MANA |
 S:BR_FIRE | BR_LITE | BR_SOUN | HEAL | S_ANGEL
 V:133
+D:$It is a ruler among the birds and a symbol of virtue and grace.  It has
+D:$ the beak of a rooster, the face of a swallow, the forehead of a fowl,
+D:$ the neck of a snake, the back of a tortoise, the hindquarters of a stag,
+D:$ and tail of a fish.
 D:伝説の聖なる鳥だ。前は鴻、後は麟、顎は燕、嘴は鶏、頸は蛇、尾は魚、額は鸛、
 D:顋は鴛、背は亀甲、羽は五采を備え、龍の紋様を持つと言う。
 
