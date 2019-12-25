@@ -20234,7 +20234,7 @@ D:$It is a large white horse with wings.
 D:翼の生えた天駆ける白馬だ。
 
 N:991:オーディンの乗馬『スレイプニル』
-E:Sleipnir, the Odin's Steed
+E:Sleipnir, Odin's Steed
 G:q:o
 I:130:40d100:20:140:50
 W:51:3:0:17000:0:0
