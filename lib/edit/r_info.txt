@@ -20802,10 +20802,9 @@ F:EVIL | REGENERATE |
 F:OPEN_DOOR | BASH_DOOR | RES_WALL
 S:1_IN_8 |
 S:TELE_TO | BO_MANA
-D:$He looks like brawny human being apparently. 
-D:$However, unlike man, it has the tail of a monkey. 
-D:$This tail proves he is a Saiyan. 
-D:$A Saiyan's fighting power is far superior to human's and will bring many destruction.
+D:$He looks like a brawny human.  However, unlike a man, he has the tail of a
+D:$ monkey.  This tail proves he is a Saiyan.  A Saiyan's fighting power is
+D:$ far superior to a human's and will cause much destruction.
 D:逞しい人間のようだが、猿の尻尾が付いている。これこそがサイヤ人の証だ。
 D:その戦闘力は人間を凌駕し、多くの破壊を呼び起こすだろう。
 
