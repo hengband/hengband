@@ -20230,6 +20230,7 @@ B:BITE:HURT:3d8
 B:KICK:HURT:4d10
 B:KICK:HURT:4d10
 F:DROP_2D2 | ANIMAL | NO_SLEEP | CAN_FLY | RIDING
+D:$It is a large white horse with wings.
 D:翼の生えた天駆ける白馬だ。
 
 N:991:オーディンの乗馬『スレイプニル』
