@@ -20263,6 +20263,10 @@ F:UNIQUE | MALE | CAN_SPEAK | DROP_CORPSE | WILD_WOOD |
 F:FORCE_SLEEP | FORCE_MAXHP | RAND_25 | GOOD | FRIENDLY | 
 F:SMART | OPEN_DOOR | BASH_DOOR | MOVE_BODY | RIDING |
 F:ANIMAL | IM_FIRE | IM_POIS | NO_CONF | NO_SLEEP
+D:$As large as a small horse, Huan, the hound of Valinor, has the ability to
+D:$ understand and speak the languages of elves and men.  However, he never
+D:$ speaks in front of Feanor's sons as he's only allowed to speak three times
+D:$ before he dies.
 D:ヴァリノールの猟犬たるフアンは特別な力を持ち、人語を理解し、そして
 D:話すことができる。しかし、フェアノールの子息達の前で話すことは無い。
 D:なぜならば彼は死ぬまでに3度しか話をすることを許されておらず、
