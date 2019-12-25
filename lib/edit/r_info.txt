@@ -21208,7 +21208,7 @@ D:彼にとっては冒険者など獲物にすぎない。
 
 #J0#
 N:1045:分解ボルテックス
-E:Disintegrate vortex
+E:Disintegration vortex
 G:v:s
 I:140:32d20:100:80:0
 W:65:6:0:5000:0:0
