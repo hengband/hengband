@@ -20449,7 +20449,7 @@ F:ONLY_ITEM | DROP_90 | DROP_GOOD |
 F:INVISIBLE | COLD_BLOOD | PASS_WALL | RES_NETH
 F:UNDEAD | NO_SLEEP
 V:25
-D:$He has only three hair. He is careless, but kind, and always a bit hungry.
+D:$He has only three hairs. He is careless, but kind, and always a bit hungry.
 D:毛が三本しかないんだよ。ずっこけなんだ優しい奴さ。
 D:いつもおなかを空かせているんだよ。
 
