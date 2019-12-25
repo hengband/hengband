@@ -21748,8 +21748,8 @@ F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE |
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR |
 S:1_IN_9
 S:SHRIEK
-D:$She is the wife of king Meng Huo. She is called as the avater of 
-D:$flame spirit.
+D:$She is the wife of king Meng Huo.  She is said to be an avatar of a
+D:$ flame spirit.
 D:南蛮王孟獲の妻だ。彼女は火の神の化身と言われている。
 D:その武勇を侮るな。
 
