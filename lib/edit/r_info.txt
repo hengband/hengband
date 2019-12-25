@@ -18992,6 +18992,13 @@ B:TOUCH:COLD:3d5
 F:FEMALE | IM_COLD | DROP_1D2 | NONLIVING | AURA_COLD |
 S:1_IN_5
 S:BR_COLD | BO_COLD | BA_COLD
+D:$This female figure stirs the memory of a tale of two woodcutters sheltering
+D:$ from a winter storm in a small hut:  "He was awakened by a showering of
+D:$ snow in his face.  The door of the hut had been forced open; and, by the
+D:$ snow-light he saw a woman in the room, - a woman all in white.  She was
+D:$ bending above Mosaku, and blowing her breath upon him; - and her breath
+D:$ was like a bright white smoke." (from Lafcadio Hearn's "Yuki-onna" in his
+D:$ collection of stories, "Kwaidan:  Stories and Studies of Strange Things")
 D:顔に雪がさかんに降りかかるので、巳之吉は目をさました。
 D:小屋の戸はむりにこじ開けられて、小屋の中に一人の女―すっかり白い装いをした
 D:女がいるのが、雪明かりで見えた。女は茂作のうえに身をかがめて、
