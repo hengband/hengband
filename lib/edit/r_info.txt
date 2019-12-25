@@ -20454,7 +20454,7 @@ D:毛が三本しかないんだよ。ずっこけなんだ優しい奴さ。
 D:いつもおなかを空かせているんだよ。
 
 N:1004:異世界からの勇者『ピップ』
-E:Pip, the Braver from Another World
+E:Pip, the Adventurer from Another World
 G:p:u
 I:110:20d48:20:80:15
 W:35:3:0:1800:0:0
@@ -20469,6 +20469,9 @@ F:NO_CONF | NO_SLEEP | FRIENDLY | TAKE_ITEM |
 S:1_IN_5 |
 S:BA_FIRE | HOLD | BO_FIRE | HEAL
 A:179:1:50
+D:$Merlin the magician summoned this young warrior to complete a variety of
+D:$ tasks.  Pip carries a dubious sword, created by Merlin and modeled on King
+D:$ Arthur's Excalibur.
 D:かの大魔術師マーリンが異世界から召喚した(と言い張っている)戦士だ。
 D:「若者はエクスカリバーを短くしたような怪しげな剣を持ち、
 D:稲妻だとか火の玉だとか、わけのわからぬことを呟いている。」
