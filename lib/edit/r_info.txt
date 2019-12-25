@@ -21218,6 +21218,8 @@ F:EMPTY_MIND | BASH_DOOR | POWERFUL | KILL_WALL | KILL_ITEM |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING
 S:1_IN_6 | 
 S:BR_DISI
+D:$You see streams of dust spiraling inward from rapidly crumbling stone on
+D:$ the walls or floor.
 D:周囲のものが渦巻き状に分解されていくのが見える。
 
 N:1046:黒色王『ウルファング』
