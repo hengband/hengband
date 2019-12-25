@@ -20747,6 +20747,7 @@ B:BITE:HURT:6d6
 F:FORCE_MAXHP | UNIQUE | ANIMAL |
 F:REGENERATE | BASH_DOOR | IM_FIRE | IM_COLD | IM_ELEC |
 F:IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | DROP_CORPSE | RIDING
+D:$This rough horse, with its large black body, is just right for Raou.
 D:黒く大きな体をしたこの荒ぶる馬は、まさにラオウの乗馬にふさわしい。
 
 #
