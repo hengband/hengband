@@ -844,7 +844,7 @@ bool build_type4(floor_type *floor_ptr)
 			vault_traps(yval, xval + 3, 2, 8, randint1(3));
 
 			/* Mazes should have some treasure too. */
-			vault_objects(yval, xval, 3);
+			vault_objects(floor_ptr, yval, xval, 3);
 
 			break;
 		}
@@ -887,7 +887,7 @@ bool build_type4(floor_type *floor_ptr)
 			}
 
 			/* Treasure, centered at the center of the cross */
-			vault_objects(yval, xval, 2 + randint1(2));
+			vault_objects(floor_ptr, yval, xval, 2 + randint1(2));
 
 			/* Gotta have some monsters. */
 			vault_monsters(floor_ptr, yval + 1, xval - 4, randint1(4));

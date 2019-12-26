@@ -1166,3 +1166,61 @@ FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
 	else return newfeat;
 }
 
+
+/*!
+ * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
+ * @param y 配置したい中心マスのY座標
+ * @param x 配置したい中心マスのX座標
+ * @param num 配置したい数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
+ */
+void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num)
+{
+	int dummy = 0;
+	int i = 0, j = y, k = x;
+
+	grid_type *g_ptr;
+
+
+	/* Attempt to place 'num' objects */
+	for (; num > 0; --num)
+	{
+		/* Try up to 11 spots looking for empty space */
+		for (i = 0; i < 11; ++i)
+		{
+			/* Pick a random location */
+			while (dummy < SAFE_MAX_ATTEMPTS)
+			{
+				j = rand_spread(y, 2);
+				k = rand_spread(x, 3);
+				dummy++;
+				if (!in_bounds(floor_ptr, j, k)) continue;
+				break;
+			}
+
+			if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room)
+			{
+				msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
+			}
+
+			/* Require "clean" floor space */
+			g_ptr = &floor_ptr->grid_array[j][k];
+			if (!is_floor_grid(g_ptr) || g_ptr->o_idx) continue;
+
+			if (randint0(100) < 75)
+			{
+				place_object(j, k, 0L);
+			}
+			else
+			{
+				place_gold(j, k);
+			}
+
+			/* Placement accomplished */
+			break;
+		}
+	}
+}
+

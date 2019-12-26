@@ -399,3 +399,5 @@ extern bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void try_door(floor_type *floor_ptr, POSITION y, POSITION x);
 
 extern FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
+extern void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num);
+

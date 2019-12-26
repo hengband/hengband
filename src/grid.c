@@ -234,64 +234,6 @@ bool new_player_spot(player_type *creature_ptr)
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
- * @param y 配置したい中心マスのY座標
- * @param x 配置したい中心マスのX座標
- * @param num 配置したい数
- * @return なし
- * @details
- * Only really called by some of the "vault" routines.
- */
-void vault_objects(POSITION y, POSITION x, int num)
-{
-	int dummy = 0;
-	int i = 0, j = y, k = x;
-
-	grid_type *g_ptr;
-
-
-	/* Attempt to place 'num' objects */
-	for (; num > 0; --num)
-	{
-		/* Try up to 11 spots looking for empty space */
-		for (i = 0; i < 11; ++i)
-		{
-			/* Pick a random location */
-			while (dummy < SAFE_MAX_ATTEMPTS)
-			{
-				j = rand_spread(y, 2);
-				k = rand_spread(x, 3);
-				dummy++;
-				if (!in_bounds(p_ptr->current_floor_ptr, j, k)) continue;
-				break;
-			}
-
-			if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room)
-			{
-				msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
-			}
-
-			/* Require "clean" floor space */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[j][k];
-			if (!is_floor_grid(g_ptr) || g_ptr->o_idx) continue;
-
-			if (randint0(100) < 75)
-			{
-				place_object(j, k, 0L);
-			}
-			else
-			{
-				place_gold(j, k);
-			}
-
-			/* Placement accomplished */
-			break;
-		}
-	}
-}
-
-
-/*!
  * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
  * @param y トラップを配置したいマスの中心Y座標
  * @param x トラップを配置したいマスの中心X座標
