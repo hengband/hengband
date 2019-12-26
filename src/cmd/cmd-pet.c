@@ -282,7 +282,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
 	y = creature_ptr->y + ddy[dir];
 	x = creature_ptr->x + ddx[dir];
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 	if (creature_ptr->special_defense & KATA_MUSOU) set_action(creature_ptr, ACTION_NONE);
 
@@ -303,7 +303,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
 			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 			return FALSE;
 		}
 
@@ -315,7 +315,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 	{
 		if (cmd_limit_confused(creature_ptr)) return FALSE;
 
-		m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+		m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		if (!g_ptr->m_idx || !m_ptr->ml)
 		{
