@@ -21622,8 +21622,9 @@ B:HIT:HURT:1d5
 B:CRUSH:HURT:1d6
 F:TAKE_ITEM | OPEN_DOOR | DROP_CORPSE | RAND_25
 F:ANIMAL | TANUKI
-D:$Tanuki (raccoon dog) is thought to bewitch people in Japanese. 
-D:$Tanuki can disguise as human beings by putting a magic leaf on his/her head.
+D:$It is a dog-like carnivorous mammal with markings like a raccoon.  In
+D:$ Japanese tales, a tanuki (raccoon dog) can bewitch people or disguise
+D:$ itself as a human being by placing a magic leaf on its head.
 D:日本の伝説では、たぬきは人を化かすと伝えられている。
 D:魔法の木の葉を頭に載せて人に化けるのだ。
 
