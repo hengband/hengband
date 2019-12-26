@@ -5325,7 +5325,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 /*
  * breath shape
  */
-void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ)
+void breath_shape(floor_type *floor_ptr, u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ)
 {
 	POSITION by = y1;
 	POSITION bx = x1;
@@ -5364,7 +5364,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 				for (x = bx - cdis; x <= bx + cdis; x++)
 				{
 					/* Ignore "illegal" locations */
-					if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
+					if (!in_bounds(floor_ptr, y, x)) continue;
 
 					/* Enforce a circular "ripple" */
 					if (distance(y1, x1, y, x) != bdis) continue;
@@ -5377,7 +5377,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 					case GF_LITE:
 					case GF_LITE_WEAK:
 						/* Lights are stopped by opaque terrains */
-						if (!los(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
+						if (!los(floor_ptr, by, bx, y, x)) continue;
 						break;
 					case GF_DISINTEGRATE:
 						/* Disintegration are stopped only by perma-walls */
@@ -5385,7 +5385,7 @@ void breath_shape(u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *g
 						break;
 					default:
 						/* Ball explosions are stopped by walls */
-						if (!projectable(p_ptr->current_floor_ptr, by, bx, y, x)) continue;
+						if (!projectable(floor_ptr, by, bx, y, x)) continue;
 						break;
 					}
 
@@ -6117,7 +6117,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		{
 			flg &= ~(PROJECT_HIDE);
 
-			breath_shape(path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
+			breath_shape(caster_ptr->current_floor_ptr, path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
 		}
 		else
 		{

@@ -179,7 +179,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 	}
 	else
 	{
-		breath_shape(grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
+		breath_shape(master_ptr->current_floor_ptr, grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
 
 		for (i = 0; i < grids; i++)
 		{
