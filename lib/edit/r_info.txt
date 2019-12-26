@@ -22589,7 +22589,7 @@ F:EVIL | IM_POIS | EAT_POISONOUS
 F:ESCORT | ESCORTS | RES_SOUN | CAN_FLY
 F:NO_CONF
 D:$"Hey Nobita, I regret to say, but the capacity of this dungeon is 3."
-D:$However, obviously there are many money mongers around him!
+D:$However, there are clearly more than three money mongers around him!
 D:「悪いなのび太、このダンジョンは3人用なんだ」
 D:しかし、彼に群がる金の亡者は明らかに3人よりも多い！
 
