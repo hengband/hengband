@@ -21564,6 +21564,9 @@ S:TPORT | BLINK | TELE_AWAY | TELE_LEVEL | HASTE |
 S:SLOW | HOLD |
 S:BR_TIME | BR_NEXU | BR_GRAV | BR_INER | 
 S:S_DRAGON
+D:$The figure is distorted, like but not like the way swirling water or air
+D:$ above a hot surface can twist a shape, but it appears to be a huge dragon,
+D:$ somehow.
 D:このような存在にはかつて出会ったことがない。
 D:その周囲の空間も時も歪んで見えるためよく分からないが、
 D:なんとなく巨大なドラゴンがいるように見える。
