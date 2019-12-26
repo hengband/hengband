@@ -22607,8 +22607,8 @@ F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
 F:EVIL | ORC | IM_POIS | RES_DARK | IM_FIRE | RES_CHAO | DEMON | WILD_VOLCANO | AURA_FIRE
 S:1_IN_8
 S:SHOOT |  BO_FIRE |
-D:$This orc is succeeding demon blood. He wears brack flame.
-D:$This unclean combination is bred in unclean tribe
+D:$Cloaked in black flame, this orc must be the descendant of a demon.  Such
+D:$ creatures are often seen among the foulest orcs.
 D:このオークの体にはデーモンの血が流れており、そこから来る暗黒の炎をまとっている。
 D:この不浄な結合は、暗き風習を持つ生き物の中でしばしば育まれる。
 
