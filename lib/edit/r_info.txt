@@ -22326,8 +22326,8 @@ B:KICK:HURT:8d4
 F:WILD_ALL | BASH_DOOR | RAND_25 | CAN_SWIM
 F:NO_FEAR | POWERFUL | FRIENDS
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
-D:$This horse is produced in ancient Fergana.
-D:$It was able to run 1000 Li a day and shed bloogy sweat.
+D:$It is one of the famed horses from Central Asia.  They are said to sweat
+D:$ blood and to be able to run 300 miles in a day.
 D:大宛で産出する名馬だ。血の汗を流し、千里を走ることができた。
 
 N:1106:光の堕天使『エミリオ・ミハイロフ』
