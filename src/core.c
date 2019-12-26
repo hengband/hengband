@@ -5224,7 +5224,7 @@ static void load_all_pref_files(void)
  * savefile, we will commit suicide, if necessary, to allow the
  * player to start a new game.
  */
-void play_game(bool new_game)
+void play_game(player_type *player_ptr, bool new_game)
 {
 	MONSTER_IDX i;
 	bool load_game = TRUE;
@@ -5251,7 +5251,7 @@ void play_game(bool new_game)
 		return;
 	}
 
-	p_ptr->hack_mutation = FALSE;
+	player_ptr->hack_mutation = FALSE;
 
 	/* Hack -- Character is "icky" */
 	current_world_ptr->character_icky = TRUE;
@@ -5286,7 +5286,7 @@ void play_game(bool new_game)
 	extract_option_vars();
 
 	/* Report waited score */
-	if (p_ptr->wait_report_score)
+	if (player_ptr->wait_report_score)
 	{
 		char buf[1024];
 		bool success;
@@ -5294,10 +5294,10 @@ void play_game(bool new_game)
 		if (!get_check_strict(_("待機していたスコア登録を今行ないますか？", "Do you register score now? "), CHECK_NO_HISTORY))
 			quit(0);
 
-		p_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-		update_creature(p_ptr);
+		player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+		update_creature(player_ptr);
 
-		p_ptr->is_dead = TRUE;
+		player_ptr->is_dead = TRUE;
 
 		current_world_ptr->start_time = (u32b)time(NULL);
 
@@ -5324,8 +5324,8 @@ void play_game(bool new_game)
 		}
 		else
 		{
-			p_ptr->wait_report_score = FALSE;
-			top_twenty(p_ptr);
+			player_ptr->wait_report_score = FALSE;
+			top_twenty(player_ptr);
 			if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
 		}
 		/* Shut the high score file */
@@ -5385,10 +5385,10 @@ void play_game(bool new_game)
 		current_world_ptr->character_dungeon = FALSE;
 
 		/* Start in town */
-		p_ptr->current_floor_ptr->dun_level = 0;
-		p_ptr->current_floor_ptr->inside_quest = 0;
-		p_ptr->current_floor_ptr->inside_arena = FALSE;
-		p_ptr->phase_out = FALSE;
+		player_ptr->current_floor_ptr->dun_level = 0;
+		player_ptr->current_floor_ptr->inside_quest = 0;
+		player_ptr->current_floor_ptr->inside_arena = FALSE;
+		player_ptr->phase_out = FALSE;
 
 		write_level = TRUE;
 
@@ -5399,10 +5399,10 @@ void play_game(bool new_game)
 		current_world_ptr->seed_town = randint0(0x10000000);
 
 		/* Roll up a new character */
-		player_birth(p_ptr);
+		player_birth(player_ptr);
 
 		counts_write(2,0);
-		p_ptr->count = 0;
+		player_ptr->count = 0;
 
 		load = FALSE;
 
@@ -5410,28 +5410,28 @@ void play_game(bool new_game)
 		determine_today_mon(FALSE);
 
 		/* Initialize object array */
-		wipe_o_list(p_ptr->current_floor_ptr);
+		wipe_o_list(player_ptr->current_floor_ptr);
 	}
 	else
 	{
 		write_level = FALSE;
 
-		exe_write_diary(p_ptr, NIKKI_GAMESTART, 1, 
+		exe_write_diary(player_ptr, NIKKI_GAMESTART, 1, 
 					  _("                            ----ゲーム再開----",
 						"                            ---- Restart Game ----"));
 
 /*
- * 1.0.9 以前はセーブ前に p_ptr->riding = -1 としていたので、再設定が必要だった。
+ * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
  * もう不要だが、以前のセーブファイルとの互換のために残しておく。
  */
-		if (p_ptr->riding == -1)
+		if (player_ptr->riding == -1)
 		{
-			p_ptr->riding = 0;
-			for (i = p_ptr->current_floor_ptr->m_max; i > 0; i--)
+			player_ptr->riding = 0;
+			for (i = player_ptr->current_floor_ptr->m_max; i > 0; i--)
 			{
-				if (player_bold(p_ptr, p_ptr->current_floor_ptr->m_list[i].fy, p_ptr->current_floor_ptr->m_list[i].fx))
+				if (player_bold(player_ptr, player_ptr->current_floor_ptr->m_list[i].fy, player_ptr->current_floor_ptr->m_list[i].fx))
 				{
-					p_ptr->riding = i;
+					player_ptr->riding = i;
 					break;
 				}
 			}
@@ -5440,24 +5440,24 @@ void play_game(bool new_game)
 
 	current_world_ptr->creating_savefile = FALSE;
 
-	p_ptr->teleport_town = FALSE;
-	p_ptr->sutemi = FALSE;
+	player_ptr->teleport_town = FALSE;
+	player_ptr->sutemi = FALSE;
 	current_world_ptr->timewalk_m_idx = 0;
-	p_ptr->now_damaged = FALSE;
+	player_ptr->now_damaged = FALSE;
 	now_message = 0;
 	current_world_ptr->start_time = time(NULL) - 1;
 	record_o_name[0] = '\0';
 
 	/* Reset map panel */
-	panel_row_min = p_ptr->current_floor_ptr->height;
-	panel_col_min = p_ptr->current_floor_ptr->width;
+	panel_row_min = player_ptr->current_floor_ptr->height;
+	panel_col_min = player_ptr->current_floor_ptr->width;
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
-	if (p_ptr->pseikaku == SEIKAKU_SEXY)
-		s_info[p_ptr->pclass].w_max[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
+	if (player_ptr->pseikaku == SEIKAKU_SEXY)
+		s_info[player_ptr->pclass].w_max[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
 
 	/* Fill the arrays of floors and walls in the good proportions */
-	set_floor_and_wall(p_ptr->dungeon_idx);
+	set_floor_and_wall(player_ptr->dungeon_idx);
 
 	/* Flavor the objects */
 	flavor_init();
@@ -5476,55 +5476,55 @@ void play_game(bool new_game)
 		{
 			current_world_ptr->wizard = TRUE;
 
-			if (p_ptr->is_dead || !p_ptr->y || !p_ptr->x)
+			if (player_ptr->is_dead || !player_ptr->y || !player_ptr->x)
 			{
 				/* Initialize the saved floors data */
 				init_saved_floors(TRUE);
 
 				/* Avoid crash */
-				p_ptr->current_floor_ptr->inside_quest = 0;
+				player_ptr->current_floor_ptr->inside_quest = 0;
 
 				/* Avoid crash in update_view() */
-				p_ptr->y = p_ptr->x = 10;
+				player_ptr->y = player_ptr->x = 10;
 			}
 		}
-		else if (p_ptr->is_dead)
+		else if (player_ptr->is_dead)
 		{
 			quit("Already dead.");
 		}
 	}
 
 	/* Initialize the town-buildings if necessary */
-	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest)
+	if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest)
 	{
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 		init_flags = INIT_ONLY_BUILDINGS;
 		process_dungeon_file("t_info.txt", 0, 0, MAX_HGT, MAX_WID);
-		select_floor_music(p_ptr);
+		select_floor_music(player_ptr);
 	}
 
 	/* Generate a dungeon level if needed */
 	if (!current_world_ptr->character_dungeon)
 	{
-		change_floor(p_ptr);
+		change_floor(player_ptr);
 	}
 	else
 	{
 		/* HACK -- Restore from panic-save */
-		if (p_ptr->panic_save)
+		if (player_ptr->panic_save)
 		{
 			/* No player?  -- Try to regenerate floor */
-			if (!p_ptr->y || !p_ptr->x)
+			if (!player_ptr->y || !player_ptr->x)
 			{
 				msg_print(_("プレイヤーの位置がおかしい。フロアを再生成します。", "What a strange player location.  Regenerate the dungeon floor."));
-				change_floor(p_ptr);
+				change_floor(player_ptr);
 			}
 
 			/* Still no player?  -- Try to locate random place */
-			if (!p_ptr->y || !p_ptr->x) p_ptr->y = p_ptr->x = 10;
+			if (!player_ptr->y || !player_ptr->x) player_ptr->y = player_ptr->x = 10;
 
 			/* No longer in panic */
-			p_ptr->panic_save = 0;
+			player_ptr->panic_save = 0;
 		}
 	}
 
@@ -5540,12 +5540,12 @@ void play_game(bool new_game)
 	{
 		char buf[80];
 		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name());
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, buf);
+		exe_write_diary(player_ptr, NIKKI_BUNSHOU, 0, buf);
 	}
 
 
 	/* Start game */
-	p_ptr->playing = TRUE;
+	player_ptr->playing = TRUE;
 
 	/* Reset the visual mappings */
 	reset_visuals();
@@ -5556,14 +5556,14 @@ void play_game(bool new_game)
 	/* Give startup outfit (after loading pref files) */
 	if (new_game)
 	{
-		player_outfit(p_ptr);
+		player_outfit(player_ptr);
 	}
 
 	/* React to changes */
 	Term_xtra(TERM_XTRA_REACT, 0);
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+	player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
+	player_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 	handle_stuff();
 
 	/* Set or clear "rogue_like_commands" if requested */
@@ -5571,18 +5571,18 @@ void play_game(bool new_game)
 	if (arg_force_roguelike) rogue_like_commands = TRUE;
 
 	/* Hack -- Enforce "delayed death" */
-	if (p_ptr->chp < 0) p_ptr->is_dead = TRUE;
+	if (player_ptr->chp < 0) player_ptr->is_dead = TRUE;
 
-	if (p_ptr->prace == RACE_ANDROID) calc_android_exp(p_ptr);
+	if (player_ptr->prace == RACE_ANDROID) calc_android_exp(player_ptr);
 
-	if (new_game && ((p_ptr->pclass == CLASS_CAVALRY) || (p_ptr->pclass == CLASS_BEASTMASTER)))
+	if (new_game && ((player_ptr->pclass == CLASS_CAVALRY) || (player_ptr->pclass == CLASS_BEASTMASTER)))
 	{
 		monster_type *m_ptr;
-		MONRACE_IDX pet_r_idx = ((p_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
+		MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
 		monster_race *r_ptr = &r_info[pet_r_idx];
-		place_monster_aux(0, p_ptr->y, p_ptr->x - 1, pet_r_idx,
+		place_monster_aux(0, player_ptr->y, player_ptr->x - 1, pet_r_idx,
 				  (PM_FORCE_PET | PM_NO_KAGE));
-		m_ptr = &p_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
+		m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;
 		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;
 		m_ptr->max_maxhp = m_ptr->maxhp;
@@ -5594,13 +5594,13 @@ void play_game(bool new_game)
 	(void)combine_and_reorder_home(STORE_HOME);
 	(void)combine_and_reorder_home(STORE_MUSEUM);
 
-	select_floor_music(p_ptr);
+	select_floor_music(player_ptr);
 
 	/* Process */
 	while (TRUE)
 	{
 		/* Process the level */
-		dungeon(p_ptr, load_game);
+		dungeon(player_ptr, load_game);
 
 		/* Hack -- prevent "icky" message */
 		current_world_ptr->character_xtra = TRUE;
@@ -5615,15 +5615,15 @@ void play_game(bool new_game)
 		/* Cancel the health bar */
 		health_track(0);
 
-		forget_lite(p_ptr->current_floor_ptr);
-		forget_view(p_ptr->current_floor_ptr);
-		clear_mon_lite(p_ptr->current_floor_ptr);
+		forget_lite(player_ptr->current_floor_ptr);
+		forget_view(player_ptr->current_floor_ptr);
+		clear_mon_lite(player_ptr->current_floor_ptr);
 
 		/* Handle "quit and save" */
-		if (!p_ptr->playing && !p_ptr->is_dead) break;
+		if (!player_ptr->playing && !player_ptr->is_dead) break;
 
-		wipe_o_list(p_ptr->current_floor_ptr);
-		if (!p_ptr->is_dead) wipe_m_list();
+		wipe_o_list(player_ptr->current_floor_ptr);
+		if (!player_ptr->is_dead) wipe_m_list();
 
 
 		msg_print(NULL);
@@ -5631,42 +5631,42 @@ void play_game(bool new_game)
 		load_game = FALSE;
 
 		/* Accidental Death */
-		if (p_ptr->playing && p_ptr->is_dead)
+		if (player_ptr->playing && player_ptr->is_dead)
 		{
-			if (p_ptr->current_floor_ptr->inside_arena)
+			if (player_ptr->current_floor_ptr->inside_arena)
 			{
-				p_ptr->current_floor_ptr->inside_arena = FALSE;
-				if (p_ptr->arena_number > MAX_ARENA_MONS)
-					p_ptr->arena_number++;
+				player_ptr->current_floor_ptr->inside_arena = FALSE;
+				if (player_ptr->arena_number > MAX_ARENA_MONS)
+					player_ptr->arena_number++;
 				else
-					p_ptr->arena_number = -1 - p_ptr->arena_number;
-				p_ptr->is_dead = FALSE;
-				p_ptr->chp = 0;
-				p_ptr->chp_frac = 0;
-				p_ptr->exit_bldg = TRUE;
-				reset_tim_flags(p_ptr);
+					player_ptr->arena_number = -1 - player_ptr->arena_number;
+				player_ptr->is_dead = FALSE;
+				player_ptr->chp = 0;
+				player_ptr->chp_frac = 0;
+				player_ptr->exit_bldg = TRUE;
+				reset_tim_flags(player_ptr);
 
 				/* Leave through the exit */
 				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
 
 				/* prepare next floor */
-				leave_floor(p_ptr);
+				leave_floor(player_ptr);
 			}
 			else
 			{
 				/* Mega-Hack -- Allow player to cheat death */
 				if ((current_world_ptr->wizard || cheat_live) && !get_check(_("死にますか? ", "Die? ")))
 				{
-					cheat_death(p_ptr);
+					cheat_death(player_ptr);
 				}
 			}
 		}
 
 		/* Handle "death" */
-		if (p_ptr->is_dead) break;
+		if (player_ptr->is_dead) break;
 
 		/* Make a new level */
-		change_floor(p_ptr);
+		change_floor(player_ptr);
 	}
 
 	/* Close stuff */

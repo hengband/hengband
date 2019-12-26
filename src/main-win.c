@@ -3824,7 +3824,7 @@ static void check_for_save_file(LPSTR cmd_line)
 	game_in_progress = TRUE;
 
 	/* Play game */
-	play_game(FALSE);
+	play_game(p_ptr, FALSE);
 }
 
 
@@ -3857,7 +3857,7 @@ static void process_menus(WORD wCmd)
 			{
 				game_in_progress = TRUE;
 				Term_flush();
-				play_game(TRUE);
+				play_game(p_ptr, TRUE);
 				quit(NULL);
 			}
 			break;
@@ -3892,7 +3892,7 @@ static void process_menus(WORD wCmd)
 					validate_file(savefile);
 					game_in_progress = TRUE;
 					Term_flush();
-					play_game(FALSE);
+					play_game(p_ptr, FALSE);
 					quit(NULL);
 				}
 			}
@@ -4020,7 +4020,7 @@ static void process_menus(WORD wCmd)
 				{
 					/* Load 'savefile' */
 					prepare_browse_movie_aux(savefile);
-					play_game(FALSE);
+					play_game(p_ptr, FALSE);
 					quit(NULL);
 					return;
 				}
@@ -5783,7 +5783,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	      if (!lpCmdLine[2]) break;
 	      chuukei_client = TRUE;
 	      connect_chuukei_server(&lpCmdLine[2]);
-	      play_game(FALSE);
+	      play_game(p_ptr, FALSE);
 	      quit(NULL);
 	      return 0;
 	    }
@@ -5792,7 +5792,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	    {
 	      if (!lpCmdLine[2]) break;
 	      prepare_browse_movie(&lpCmdLine[2]);
-	      play_game(FALSE);
+	      play_game(p_ptr, FALSE);
 	      quit(NULL);
 	      return 0;
 	    }

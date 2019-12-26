@@ -78,7 +78,7 @@ extern COMMAND_CODE now_message;
 extern bool repair_monsters;
 extern bool repair_objects;
 
-extern void play_game(bool new_game);
+extern void play_game(player_type *player_ptr, bool new_game);
 extern void update_playtime(void);
 extern s32b turn_real(s32b hoge);
 extern void prevent_turn_overflow(void);
