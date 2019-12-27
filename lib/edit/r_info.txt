@@ -22072,6 +22072,7 @@ F:ONLY_ITEM | DROP_2D2 | DROP_GOOD |
 F:OPEN_DOOR | BASH_DOOR
 S:1_IN_2
 S:SHOOT | SHRIEK
+D:$He leads the force of Juralians invading this world.
 D:環境の悪化したジュラル星に変わる新天地を求め、
 D:地球侵略を企てるジュラル星人の統率者だ。
 D:「諸君、今から命令をすりゅ！地球の子供達をかたっぱしからとらえて君! 」
