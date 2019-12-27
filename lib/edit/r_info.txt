@@ -21128,6 +21128,7 @@ F:CHAMELEON | WILD_WOOD | DROP_1D2 | DROP_CORPSE | DROP_SKELETON | ANIMAL |
 F:CAN_FLY | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS |
 S:1_IN_1
 S:SPECIAL
+D:$This lizard can change its appearance to blend in with its surroundings.
 D:周囲の環境に合わせてその姿を変えると言われる生物だ。
 
 N:1041:カメレオンの王
@@ -21140,8 +21141,8 @@ F:CHAMELEON | DROP_3D2 | DROP_CORPSE | DROP_SKELETON | ANIMAL |
 F:CAN_FLY | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
 S:1_IN_1
 S:SPECIAL
-D:カメレオンは周囲の環境に合わせてその姿を変えると言われるが、
-D:それは王とて例外ではない。
+D:$This king of the chameleons, like its lesser kin, can change its appearance
+D:$ to blend in with its surroundings.
 
 N:1042:幻の鯨『イッカク』
 E:Narwhal
