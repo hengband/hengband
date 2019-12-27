@@ -22087,6 +22087,10 @@ B:EXPLODE:SHATTER:15d8
 F:GOOD | DROP_GOOD | DROP_GREAT | ONLY_ITEM | DROP_90 | FORCE_MAXHP |
 F:UNIQUE | EMPTY_MIND | WILD_TOWN | CAN_SPEAK |
 F:OPEN_DOOR | BASH_DOOR | NONLIVING | RES_TELE
+D:$He was a West German scientist, but the Jurians turned him into a bomb
+D:$ delivery system:  "Dr. Volga, you have been killed.  With a bomb in your
+D:$ head, you are now a human robot!" ("Chargeman Ken!" episode 35,
+D:$ "Dynamite in the Brain!")
 D:ジュラル星人の魔の手により爆弾を頭に仕込まれた西ドイツの科学者だ。
 D:「ボルガ博士、あなたは殺されたんです。
 D:その頭の中に爆弾を仕掛けられて、今のあなたは人間ロボットなんだ！」
