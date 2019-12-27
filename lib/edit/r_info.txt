@@ -22127,6 +22127,10 @@ F:IM_POIS | OPEN_DOOR | BASH_DOOR | MALE | FORCE_MAXHP
 F:NO_CONF | NO_SLEEP | EVIL | DEMON | HUMAN
 S:1_IN_2 |
 S:BO_FIRE | BA_FIRE
+D:$After the land of Boletaria, King Allant's kingdom, is engulfed in a
+D:$ colorless fog, this creature is one of King Allant's officials who take
+D:$ charge.  Shaking his fat and ugly body, he rolls out a fireball with an
+D:$ eerie laugh and attacks with a crescent ax.
 D:ボーレタリアが色のない霧に包まれた後、
 D:オーラント王の手先として彼の地を統率する異形の者だ。
 D:その醜く太った体を揺らしながら、不気味な笑いと共に火の玉を繰り出し、
