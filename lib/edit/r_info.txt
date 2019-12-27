@@ -22322,6 +22322,9 @@ F:FORCE_SLEEP | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_4D2 |
 F:OPEN_DOOR | BASH_DOOR | POWERFUL | NONLIVING |
 F:EVIL | DEMON | NO_CONF | NO_SLEEP
+D:$This giant demon carrying an axe has three yellow eyes and grey skin
+D:$ covered with spikes.  It is one of the first demons to emerge from the
+D:$ colorless fog engulfing Boletaria.
 D:ボーレタリアの色のない霧から最初に現れたデーモンの尖兵だ。
 D:刺々しい灰色の巨体が斧を握りしめている。
 
