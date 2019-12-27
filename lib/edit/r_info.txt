@@ -22455,7 +22455,7 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS
 F:IM_FIRE | WILD_VOLCANO
-D:$It seems only a red kobold, but it learned the use of fire.
+D:$It's a red kobold.  Wait, are its hands on fire?
 D:それは単なる赤いコボルドに見えるが、火の使い方を覚えている。
 
 N:1112:アイス・コボルド
@@ -22468,7 +22468,7 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS
 F:IM_COLD | WILD_SWAMP
-D:$It seems only a white kobold, but it learned the use of ice.
+D:$It's a white kobold.  Wait, is that frost on its hands?
 D:それは単なる白いコボルドに見えるが、冷気の浴びせ方を覚えている。
 
 N:1113:サンダー・コボルド
@@ -22481,7 +22481,7 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS
 F:IM_ELEC | WILD_MOUNTAIN
-D:$It seems only a blue kobold, but it learned the use of electricity.
+D:$Its a blue kobold, but why do its hands glow with St. Elmo's fire?
 D:それは単なる青いコボルドに見えるが、電撃の浴びせ方を覚えている。
 
 N:1114:アシッド・コボルド
@@ -22494,7 +22494,7 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS
 F:IM_ACID | WILD_WOOD
-D:$It seems only a black kobold, but it learned the use of acid.
+D:$It's a black kobold, but its hands drip with some sort of caustic substance.
 D:それは単なる黒いコボルドに見えるが、酸の浴びせ方を覚えている。
 
 N:1115:ポイズン・コボルド
@@ -22506,7 +22506,8 @@ B:HIT:POISON:4d6
 F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS
-D:$It seems only a green kobold, but it learned the use of poison.
+D:$It's a green kobold, but there's something strange about the oily
+D:$ secretions on its hands.
 D:それは単なる緑色のコボルドに見えるが、毒のくらわし方を覚えている。
 
 N:1116:フレイム・コボルド
