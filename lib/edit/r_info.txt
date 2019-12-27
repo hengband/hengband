@@ -21916,7 +21916,7 @@ D:「チャージマン！殺してやる！」「それは僕が言う言葉だ
 D:（『チャージマン研！』アニメ第３６話・『戦慄!悪魔の病院』）
 
 N:1082:ジュラル星人
-E:Alien Jural
+E:Juralian
 G:h:v
 I:105:3d6:10:10:10
 W:5:8:0:20:0:0
@@ -21927,6 +21927,10 @@ F:DROP_90 | OPEN_DOOR | BASH_DOOR | FRIENDS | DROP_CORPSE |
 F:WILD_WOOD | HAS_LITE_1 |
 S:1_IN_6
 S:SHOOT
+D:$This maroon-colored, vaguely humanoid, creature with one eye, tentacle-like
+D:$ limbs, slim waist and broad chest is a member of an advanced
+D:$ civilization from another world.  They have invaded this world to steal its
+D:$ resources.
 D:彼等の文明は地球より５００年進んでいるそうだ。
 D:「これから毎日家を焼こうぜ」
 D:（『チャージマン研！』アニメ第２５話・『雄一少年を救え！』）
