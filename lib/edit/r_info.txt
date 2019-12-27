@@ -22523,9 +22523,8 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_FIRE | FRIENDS
-D:$It is a kobold which emits the fire breath enough to burns down a big tree.
-D:$They are sometimes shunned by other kobolds on the ground that
-D:$he is a somothering guy.
+D:$This red kobold has flames on its hands and wisps of smoke issuing
+D:$ from its mouth.
 D:大木を焼き尽くすほどの強力な炎を吐き出すことができるようになったコボルドだ。
 D:コボルド仲間の間でも暑苦しいと煙たがれることがある。
 
@@ -22542,8 +22541,8 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_COLD | FRIENDS
-D:$It can freeze a room eternally by its strong breath.
-D:$Around him, you may be able to see the diamond dust.
+D:$This white kobold has frost covering its hands, and small ice crystals swirl
+D:$ in the air around it.
 D:部屋の全てを永遠に凍りつかせるほどの強力な冷気を吐き出すことができる。
 D:それの周りではダイアモンドダストを見ることができるという。
 
@@ -22561,8 +22560,7 @@ F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_ELEC | FRIENDS
 F:SELF_LITE_1
-D:$Have you seen the very experiment by Edison?
-D:$This kobold can kill an elephant easily by its breath!
+D:$Electric sparks fly from the hands and mouth of this blue kobold.
 D:君は見たことがあるだろうか、あのエジソンの忌まわしい実験を！
 D:このコボルドはあれと同じことができる！
 
@@ -22579,8 +22577,7 @@ F:DROP_90
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_ACID | FRIENDS
-D:$O my god!
-D:$This kobold can resolve a candle via its breath!
+D:$This black kobold has caustic liquid dripping from its hands and mouth.
 D:ああ、何ということだ！
 D:このコボルドが吐き出す酸はロウソクをも溶かしてしまう！
 
