@@ -212,7 +212,7 @@ I:40:12:3
 W:70:70:3:75000
 F:STR | CON | INFRA | HIDE_TYPE |
 F:SEE_INVIS | FREE_ACT | REGEN | LITE | INSTA_ART
-D:$The Nauglamir; a carencet of gold set with a multitude of shining gems of 
+D:$The Nauglamir; a carcanet of gold set with a multitude of shining gems of 
 D:$Valinor, accenting a radiant Silmaril.  The sturdy spirits of Dwarvish 
 D:$craftsmen who labored long in mountain smithies lie within it still, and 
 D:$as gossamer it rests upon the bearer.
