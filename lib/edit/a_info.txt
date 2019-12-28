@@ -547,8 +547,8 @@ F:HOLD_EXP | RES_NETHER | RES_DARK | RES_FEAR |
 F:ACTIVATE
 U:CHOIR_SINGS
 D:$The shining armor of Lohengrin the son of Parsifal.
-D:$ If you wears it, the holy grail gives to you the devine protection
-D:$  from all evils. (W.R.Wagner, 'Parsifal')
+D:$ The Holy Grail gives divine protection from all evils to the wearer.
+D:$  (W.R.Wagner, 'Parsifal')
 D:聖杯守護の騎士パルジファルの息子、ローエングリンの輝く鎧だ。
 D:身に付ける者はあらゆる邪悪なものを退け聖杯の加護を得る。
 D:(ワーグナー、「パルジファル」)
