@@ -1708,7 +1708,7 @@ F:DEX | CHR | STEALTH | HIDE_TYPE | SPEED | AGGRAVATE | VORPAL |
 F:SLAY_HUMAN | SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS |
 F:ESP_ORC | ESP_TROLL | ESP_HUMAN
 D:$Take care! This sword will make you a murderer if you wield it.
-D:$ Do you hear cries of this sword that want more blood thirstily?
+D:$ Do you hear the bloodthirsty screams of this sword?
 D:持った者を殺戮マシーンに変える呪われた剣だ。あなたにはこの剣の
 D:血に飢えた叫びが聞こえるだろう。
 
