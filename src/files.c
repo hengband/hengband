@@ -2940,21 +2940,21 @@ static void player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void tim_player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
+static void tim_player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
-	if (p_ptr->special_defense & DEFENSE_ACID)
+	if (creature_ptr->special_defense & DEFENSE_ACID)
 		add_flag(flgs, TR_RES_ACID);
-	if (p_ptr->special_defense & DEFENSE_ELEC)
+	if (creature_ptr->special_defense & DEFENSE_ELEC)
 		add_flag(flgs, TR_RES_ELEC);
-	if (p_ptr->special_defense & DEFENSE_FIRE)
+	if (creature_ptr->special_defense & DEFENSE_FIRE)
 		add_flag(flgs, TR_RES_FIRE);
-	if (p_ptr->special_defense & DEFENSE_COLD)
+	if (creature_ptr->special_defense & DEFENSE_COLD)
 		add_flag(flgs, TR_RES_COLD);
-	if (p_ptr->wraith_form)
+	if (creature_ptr->wraith_form)
 		add_flag(flgs, TR_RES_DARK);
 }
 
@@ -3160,7 +3160,7 @@ static void display_player_flag_info(void)
 	player_flags(p_ptr, f.player_flags);
 	tim_player_flags(p_ptr, f.tim_player_flags);
 	player_immunity(f.player_imm);
-	tim_player_immunity(f.tim_player_imm);
+	tim_player_immunity(p_ptr, f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
 	player_vuln_flags(f.player_vuln);
 
@@ -3291,7 +3291,7 @@ static void display_player_other_flag_info(void)
 	player_flags(p_ptr, f.player_flags);
 	tim_player_flags(p_ptr, f.tim_player_flags);
 	player_immunity(f.player_imm);
-	tim_player_immunity(f.tim_player_imm);
+	tim_player_immunity(p_ptr, f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
 	player_vuln_flags(f.player_vuln);
 
