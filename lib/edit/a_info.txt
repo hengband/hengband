@@ -1569,8 +1569,7 @@ P:0:4d6:-40:-60:-50
 F:SPEED | IM_FIRE | RES_FIRE | BRAND_FIRE | RES_DISEN | RES_FEAR |
 F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS | TY_CURSE | LITE
 F:RANDOM_CURSE2
-D:$The flame sword with which Surtr set fire all over the world
-D:$ at Ragnarok.
+D:$The flame sword with which Surtr set the world on fire at Ragnarok.
 D:北欧神話において炎の巨人スルトが世界に火を放った燃える剣だ。
 
 # The Cutlass 'Gondricam'
@@ -1641,7 +1640,7 @@ F:ESP_ORC | ESP_TROLL | ESP_GIANT
 U:BA_COLD_2
 D:$The weapon of Fingolfin, High King of the Noldor; it shines like a column 
 D:$of ice lit by light unquenchable.  Morgoth came but unwillingly to meet it 
-D:$of old; his lame foot will remind him of its might should be meet it again.
+D:$of old; his lame foot will remind him of its might should he meet it again.
 D:ノルドールの上級王フィンゴルフィンの武器。氷の柱の如く輝いている。
 D:かつてモルゴスは期せずしてこの剣に対峙し深い傷を
 D:刻み込まれた。彼はこの剣の力を再び思い知ることになるだろう。
