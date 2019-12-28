@@ -734,7 +734,7 @@ I:32:2:5
 W:30:50:15:100000
 P:2:0d0:0:0:18
 F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | RES_BLIND | IM_ELEC
-D:$This is the helm of Indra the god of thunderstorms.
+D:$This is the helm of Indra, the god of thunderstorms.
 D:雷神インドラの兜だ。
 
 # The Massive Iron Crown of Morgoth
