@@ -1217,6 +1217,9 @@ P:2:1d1:0:0:15
 U:CURE_POISON
 F:DEX | HIDE_TYPE | CHR | SUST_CHR | ACTIVATE | FREE_ACT |
 F:RES_NETHER | RES_CHAOS | SUST_CON
+D:$Flora is away from Amber's palace most of the time and enjoys finding
+D:$ new boyfriends in the parallel worlds that are shadows of Amber.  Her
+D:$ boots are enchanted with magic to make the wearer more attractive.
 D:フローラはほとんどの時間アンバーの宮殿を離れていて、
 D:影の世界で新しいボーイフレンドを見つけては楽しんでいる。
 D:彼女のブーツには身に付けた者を魅力的に見せる魔法がかかっている。
