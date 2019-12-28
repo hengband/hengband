@@ -627,7 +627,7 @@ P:12:1d2:3:4:20
 F:BLOWS | RES_SHARDS | HOLD_EXP | SLOW_DIGEST |
 F:SUST_STR | SUST_DEX | SUST_CON | SUST_INT | SUST_WIS | SUST_CHR |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
-D:$The leather armor which has a power of Shiva the god of destruction.
+D:$The leather armor of Shiva, the god of destruction.
 D:ヒンズー教の最高神は創造の神ブラフマン、維持の神ヴィシュヌ、
 D:そして破壊神シヴァだ。これはその中でも最も強力なシヴァの力が宿った
 D:鎧だ。
