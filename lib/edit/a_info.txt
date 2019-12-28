@@ -881,8 +881,8 @@ F:SEE_INVIS | NO_MAGIC | ACTIVATE |
 F:RES_DISEN | RES_FEAR | FREE_ACT | RES_ACID | RES_COLD | RES_POIS |
 F:TELEPORT
 U:TERROR
-D:$This is terrible, scary, fearful, dreadful, bloodcurding, hair-rising
-D:$ frightening mask.
+D:$You run out of adjectives to describe the dread this mask inspires:
+D:$  terrifying, scary, creepy, bloodcurdling, hair-rising, frightening, ....
 D:なんとも恐ろしい、不気味で、おどろおどろしく、髪が逆立ち、血も凍り、
 D:ぞっとして鳥肌が立つような仮面だ。
 D:仮面の奥の瞳に睨まれれば、怖くて逃げ出さずにはいられない。
