@@ -2421,9 +2421,9 @@ F:WIS | INFRA | HIDE_TYPE | BLESSED |
 F:BRAND_COLD | SLAY_ORC | RES_COLD | RES_LITE | LITE | REGEN |
 F:ACTIVATE | SHOW_MODS | XTRA_H_RES
 U:DRAIN_2
-D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
-D:$though moonlit, and it can strike as mighty a blow spiritually as 
-D:$physically.
+D:$Wielded by the High Priest of Meneltarma, this great hammer gleams coldly
+D:$ as though moonlit, and it can strike as mighty a blow spiritually as
+D:$ physically.
 D:メネルタルマの高僧が使っていた大鎚で、月の光のように冷たく輝いている。
 D:その打撃は敵の肉体だけでなく精神をも打ち砕くことができる。
 
