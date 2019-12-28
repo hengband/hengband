@@ -1920,8 +1920,8 @@ F:SLAY_TROLL | SLAY_ORC | SLAY_GIANT |
 F:FREE_ACT | RES_FIRE | RES_ELEC | RES_LITE |
 F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS | LITE | RIDING
 U:BA_ELEC_2
-D:$The spear which Odin created from a branch of the world tree.
-D:$It is craved magical runes.
+D:$The spear which Odin created from a branch of the world tree.  Magical
+D:$ runes have been carved into the shaft.
 D:主神オーディンが世界樹の枝から作り上げた槍で、魔力を込めた
 D:ルーン文字が刻まれている。（北欧神話）
 
