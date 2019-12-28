@@ -1257,7 +1257,7 @@ I:30:2:4
 W:30:20:20:100000
 P:4:1d1:5:5:16
 F:SPEED | DEX | SUST_DEX | RES_NEXUS | FREE_ACT | LEVITATION
-D:$The boots has an agility of Shiva the god of destruction.
+D:$The boots have the agility of Shiva, the god of destruction.
 D:破壊神シヴァの力を持った革の靴だ。
 
 
