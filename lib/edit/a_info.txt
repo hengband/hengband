@@ -692,9 +692,9 @@ I:34:4:0
 W:30:3:60:30000
 P:6:1d2:0:0:20
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_DARK | XTRA_H_RES
-D:$This shield emblazoned with a multitude of creatures not seen for ages 
-D:$once protected Celegorm, lord of Himlad; around it lies a mystic balance  
-D:$that contains the conflicts of the elements.
+D:$This shield, emblazoned with a multitude of creatures not seen for ages,
+D:$ once protected Celegorm, lord of Himlad; around it, a mystic balance lies
+D:$ containing the conflicts of the elements.
 D:いまでは見られなくなった数々の伝説の生き物の
 D:装飾が施されたこの盾は、かつてヒムラドの王ケレゴルムを
 D:守っていた。地水火風のエレメントのせめぎ合いを内包し、
