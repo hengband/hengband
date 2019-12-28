@@ -1112,6 +1112,8 @@ I:31:2:4
 W:10:40:25:43000
 P:2:1d1:0:0:15
 F:SUST_CON | CON | REGEN | RES_COLD | FREE_ACT
+D:$These gauntlets belonged to Prince Corwin of Amber and are imbued with
+D:$ his extraordinary toughness.
 D:並外れた強靭さを持つアンバーの王子コーウィンのガントレットだ。
 
 # The Set of Gauntlets 'Pauraegen'
