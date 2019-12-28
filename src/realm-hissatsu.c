@@ -372,7 +372,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 				py_attack(caster_ptr, y, x, HISSATSU_HAGAN);
 
-			if (!cave_have_flag_bold(y, x, FF_HURT_ROCK)) break;
+			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_HURT_ROCK)) break;
 
 			/* Destroy the feature */
 			cave_alter_feat(y, x, FF_HURT_ROCK);
@@ -541,7 +541,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 				/* Hack -- attack monsters */
-				if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
+				if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
 				{
 					if (!monster_living(m_ptr->r_idx))
 					{
@@ -893,7 +893,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				damage *= caster_ptr->num_blow[i];
 				total_damage += (damage / 100);
 			}
-			project(caster_ptr, 0, (cave_have_flag_bold(y, x, FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+			project(caster_ptr, 0, (cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
 		}
 		break;
 

@@ -2067,7 +2067,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
 	}
 
 	/* Hack again -- Is there a special encounter ??? */
-	if (creature_ptr->wild_mode && !cave_have_flag_bold(creature_ptr->y, creature_ptr->x, FF_TOWN))
+	if (creature_ptr->wild_mode && !cave_have_flag_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, FF_TOWN))
 	{
 		int tmp = 120 + creature_ptr->lev*10 - wilderness[creature_ptr->y][creature_ptr->x].level + 5;
 		if (tmp < 1) 
@@ -2539,7 +2539,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		mmove2(&ny[cur_dis], &nx[cur_dis], creature_ptr->y, creature_ptr->x, ty, tx);
 
 		/* Stopped by walls/doors */
-		if (!cave_have_flag_bold(ny[cur_dis], nx[cur_dis], FF_PROJECT))
+		if (!cave_have_flag_bold(creature_ptr->current_floor_ptr, ny[cur_dis], nx[cur_dis], FF_PROJECT))
 		{
 			hit_wall = TRUE;
 			if ((q_ptr->tval == TV_FIGURINE) || object_is_potion(q_ptr) || !creature_ptr->current_floor_ptr->grid_array[ny[cur_dis]][nx[cur_dis]].m_idx) break;
@@ -2819,7 +2819,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
 	if (do_drop)
 	{
-		if (cave_have_flag_bold(y, x, FF_PROJECT))
+		if (cave_have_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_PROJECT))
 		{
 			(void)drop_near(q_ptr, j, y, x);
 		}

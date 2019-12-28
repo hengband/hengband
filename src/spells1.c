@@ -5928,7 +5928,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 			if (project_o(0, 0, y, x, dam, GF_SUPER_RAY))notice = TRUE;
-			if (!cave_have_flag_bold(y, x, FF_PROJECT))
+			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
 			{
 				if (second_step)continue;
 				break;
@@ -6002,7 +6002,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		else
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && (rad > 0)) break;
+			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && (rad > 0)) break;
 		}
 
 		/* Advance */

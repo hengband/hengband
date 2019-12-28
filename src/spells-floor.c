@@ -1072,7 +1072,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 				delete_object(yy, xx);
 
 				/* Wall (or floor) type */
-				t = cave_have_flag_bold(yy, xx, FF_PROJECT) ? randint0(100) : 200;
+				t = cave_have_flag_bold(caster_ptr->current_floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
 
 				/* Granite */
 				if (t < 20)

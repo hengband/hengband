@@ -1308,7 +1308,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
 
 			if ((distance(caster_ptr->y, caster_ptr->x, ty, tx) > MAX_RANGE) ||
-				!cave_have_flag_bold(ty, tx, FF_PROJECT)) return;
+				!cave_have_flag_bold(caster_ptr->current_floor_ptr, ty, tx, FF_PROJECT)) return;
 		}
 		while (!g_ptr->o_idx);
 	}
@@ -3225,7 +3225,7 @@ void massacre(player_type *caster_ptr)
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Hack -- attack monsters */
-		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(y, x, FF_PROJECT)))
+		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
 			py_attack(caster_ptr, y, x, 0);
 	}
 }

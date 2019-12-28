@@ -1433,7 +1433,7 @@ static void run_init(DIRECTION dir)
 	row = p_ptr->y + ddy[dir];
 	col = p_ptr->x + ddx[dir];
 
-	ignore_avoid_run = cave_have_flag_bold(row, col, FF_AVOID_RUN);
+	ignore_avoid_run = cave_have_flag_bold(p_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
 
 	/* Extract cycle index */
 	i = chome[dir];

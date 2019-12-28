@@ -205,8 +205,8 @@ extern floor_type floor_info;
 	((G) == &(C)->current_floor_ptr->grid_array[(C)->y][(C)->x])
 
 
-#define cave_have_flag_bold(Y,X,INDEX) \
-	(have_flag(f_info[p_ptr->current_floor_ptr->grid_array[(Y)][(X)].feat].flags, (INDEX)))
+#define cave_have_flag_bold(F,Y,X,INDEX) \
+	(have_flag(f_info[(F)->grid_array[(Y)][(X)].feat].flags, (INDEX)))
 
 
 #define cave_have_flag_grid(C,INDEX) \
@@ -239,7 +239,7 @@ extern floor_type floor_info;
  * Line 3 -- forbid normal objects
  */
 #define cave_clean_bold(F,Y,X) \
-	(cave_have_flag_bold((Y), (X), FF_FLOOR) && \
+	(cave_have_flag_bold((F), (Y), (X), FF_FLOOR) && \
 	 !((F)->grid_array[Y][X].info & CAVE_OBJECT) && \
 	  ((F)->grid_array[Y][X].o_idx == 0))
 
@@ -251,7 +251,7 @@ extern floor_type floor_info;
  * Line 2 -- forbid object terrains
  */
 #define cave_drop_bold(F,Y,X) \
-	(cave_have_flag_bold((Y), (X), FF_DROP) && \
+	(cave_have_flag_bold((F), (Y), (X), FF_DROP) && \
 	 !((F)->grid_array[Y][X].info & CAVE_OBJECT))
 
 
@@ -264,7 +264,7 @@ extern floor_type floor_info;
  * Line 3 -- forbid the player
  */
 #define cave_empty_bold(F,Y,X) \
-	(cave_have_flag_bold((Y), (X), FF_PLACE) && \
+	(cave_have_flag_bold((F), (Y), (X), FF_PLACE) && \
 	 !((F)->grid_array[Y][X].m_idx) && \
 	 !player_bold(p_ptr, Y,X))
 
@@ -278,7 +278,7 @@ extern floor_type floor_info;
  */
 #define cave_empty_bold2(F,Y,X) \
 	(cave_empty_bold(F,Y,X) && \
-	 (current_world_ptr->character_dungeon || !cave_have_flag_bold((Y), (X), FF_TREE)))
+	 (current_world_ptr->character_dungeon || !cave_have_flag_bold((F), (Y), (X), FF_TREE)))
 
 
 /*
@@ -300,7 +300,7 @@ extern floor_type floor_info;
  * Line 1 -- permanent flag
  */
 #define cave_perma_bold(Y,X) \
-	(cave_have_flag_bold((Y), (X), FF_PERMANENT))
+	(cave_have_flag_bold(p_ptr->current_floor_ptr, (Y), (X), FF_PERMANENT))
 
 
 /*
@@ -319,15 +319,15 @@ extern floor_type floor_info;
 
 
 #define pattern_tile(Y,X) \
-	(cave_have_flag_bold((Y), (X), FF_PATTERN))
+	(cave_have_flag_bold(p_ptr->current_floor_ptr, (Y), (X), FF_PATTERN))
 
 /*
  * Does the grid stop disintegration?
  */
 #define cave_stop_disintegration(Y,X) \
-	(!cave_have_flag_bold((Y), (X), FF_PROJECT) && \
-	 (!cave_have_flag_bold((Y), (X), FF_HURT_DISI) || \
-	  cave_have_flag_bold((Y), (X), FF_PERMANENT)))
+	(!cave_have_flag_bold(p_ptr->current_floor_ptr, (Y), (X), FF_PROJECT) && \
+	 (!cave_have_flag_bold(p_ptr->current_floor_ptr, (Y), (X), FF_HURT_DISI) || \
+	  cave_have_flag_bold(p_ptr->current_floor_ptr, (Y), (X), FF_PERMANENT)))
 
 
 /*

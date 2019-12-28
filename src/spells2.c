@@ -1724,7 +1724,7 @@ static void cave_temp_lite_room_aux(POSITION y, POSITION x)
  */
 static bool cave_pass_dark_bold(POSITION y, POSITION x)
 {
-	return cave_have_flag_bold(y, x, FF_PROJECT);
+	return cave_have_flag_bold(p_ptr->current_floor_ptr, y, x, FF_PROJECT);
 }
 
 
@@ -1842,7 +1842,7 @@ bool starlight(bool magic)
 		while (attempts--)
 		{
 			scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
-			if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+			if (!cave_have_flag_bold(p_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
 			if (!player_bold(p_ptr, y, x)) break;
 		}
 
@@ -2755,7 +2755,7 @@ void wall_breaker(player_type *caster_ptr)
 		{
 			scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
-			if (!cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
 
 			if (!player_bold(caster_ptr, y, x)) break;
 		}
@@ -3323,7 +3323,7 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 			if (d >= 9) continue;
 
 			if (!in_bounds(caster_ptr->current_floor_ptr, y, x) || !projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)
-				|| !cave_have_flag_bold(y, x, FF_PROJECT)) continue;
+				|| !cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
 
 			/* Valid position */
 			break;
@@ -3379,7 +3379,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 		if (MAX_RANGE <= distance(caster_ptr->y, caster_ptr->x, ny, nx)) break;
 
 		/* Stopped by walls/doors */
-		if (!cave_have_flag_bold(ny, nx, FF_PROJECT)) break;
+		if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT)) break;
 
 		/* Stopped by monsters */
 		if ((dir != 5) && caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) break;

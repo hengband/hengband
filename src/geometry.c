@@ -269,7 +269,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !cave_have_flag_bold(y, x, FF_PROJECT)) break;
+				if ((n > 0) && !cave_have_flag_bold(p_ptr->current_floor_ptr, y, x, FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -358,7 +358,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !cave_have_flag_bold(y, x, FF_PROJECT)) break;
+				if ((n > 0) && !cave_have_flag_bold(p_ptr->current_floor_ptr, y, x, FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */
@@ -429,7 +429,7 @@ sint project_path(u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y
 			else if (!(flg & (PROJECT_PATH)))
 			{
 				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !cave_have_flag_bold(y, x, FF_PROJECT)) break;
+				if ((n > 0) && !cave_have_flag_bold(p_ptr->current_floor_ptr, y, x, FF_PROJECT)) break;
 			}
 
 			/* Sometimes stop at non-initial monsters/players */

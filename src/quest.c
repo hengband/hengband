@@ -528,7 +528,7 @@ void do_cmd_quest(void)
 
 	take_turn(p_ptr, 100);
 
-	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
+	if (!cave_have_flag_bold(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
 	{
 		msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
 		return;

@@ -1440,11 +1440,11 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-x is lit */
 			if (x < midpoint)
 			{
-				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x + 1) && !cave_have_flag_bold(y, x + 1, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x + 1) && !cave_have_flag_bold(subject_ptr->current_floor_ptr, y, x + 1, FF_PROJECT)) return;
 			}
 			else if (x > midpoint)
 			{
-				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x - 1) && !cave_have_flag_bold(y, x - 1, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x - 1) && !cave_have_flag_bold(subject_ptr->current_floor_ptr, y, x - 1, FF_PROJECT)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
@@ -1461,11 +1461,11 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
 			/* Only first wall viewed from mid-y is lit */
 			if (y < midpoint)
 			{
-				if (!cave_los_bold(subject_ptr->current_floor_ptr, y + 1, x) && !cave_have_flag_bold(y + 1, x, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y + 1, x) && !cave_have_flag_bold(subject_ptr->current_floor_ptr, y + 1, x, FF_PROJECT)) return;
 			}
 			else if (y > midpoint)
 			{
-				if (!cave_los_bold(subject_ptr->current_floor_ptr, y - 1, x) && !cave_have_flag_bold(y - 1, x, FF_PROJECT)) return;
+				if (!cave_los_bold(subject_ptr->current_floor_ptr, y - 1, x) && !cave_have_flag_bold(subject_ptr->current_floor_ptr, y - 1, x, FF_PROJECT)) return;
 			}
 
 			/* Hack XXX XXX - Is it a wall and monster not in LOS? */
@@ -1590,7 +1590,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			if (rad >= 2)
 			{
 				/* South of the monster */
-				if (cave_have_flag_bold(mon_fy + 1, mon_fx, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy + 1, mon_fx, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy + 2, mon_fx + 1);
 					add_mon_lite(subject_ptr, mon_fy + 2, mon_fx);
@@ -1608,7 +1608,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 				}
 
 				/* North of the monster */
-				if (cave_have_flag_bold(mon_fy - 1, mon_fx, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy - 1, mon_fx, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy - 2, mon_fx + 1);
 					add_mon_lite(subject_ptr, mon_fy - 2, mon_fx);
@@ -1626,7 +1626,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 				}
 
 				/* East of the monster */
-				if (cave_have_flag_bold(mon_fy, mon_fx + 1, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy, mon_fx + 1, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy + 1, mon_fx + 2);
 					add_mon_lite(subject_ptr, mon_fy, mon_fx + 2);
@@ -1644,7 +1644,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 				}
 
 				/* West of the monster */
-				if (cave_have_flag_bold(mon_fy, mon_fx - 1, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy, mon_fx - 1, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy + 1, mon_fx - 2);
 					add_mon_lite(subject_ptr, mon_fy, mon_fx - 2);
@@ -1666,25 +1666,25 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			if (rad == 3)
 			{
 				/* South-East of the monster */
-				if (cave_have_flag_bold(mon_fy + 1, mon_fx + 1, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy + 1, mon_fx + 1, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy + 2, mon_fx + 2);
 				}
 
 				/* South-West of the monster */
-				if (cave_have_flag_bold(mon_fy + 1, mon_fx - 1, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy + 1, mon_fx - 1, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy + 2, mon_fx - 2);
 				}
 
 				/* North-East of the monster */
-				if (cave_have_flag_bold(mon_fy - 1, mon_fx + 1, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy - 1, mon_fx + 1, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy - 2, mon_fx + 2);
 				}
 
 				/* North-West of the monster */
-				if (cave_have_flag_bold(mon_fy - 1, mon_fx - 1, f_flag))
+				if (cave_have_flag_bold(subject_ptr->current_floor_ptr, mon_fy - 1, mon_fx - 1, f_flag))
 				{
 					add_mon_lite(subject_ptr, mon_fy - 2, mon_fx - 2);
 				}

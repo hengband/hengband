@@ -541,7 +541,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			}
 
 			/* Stopped by walls/doors */
-			if (!cave_have_flag_bold(ny, nx, FF_PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) break;
+			if (!cave_have_flag_bold(shooter_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx) break;
 
 			/* Advance the distance */
 			cur_dis++;
@@ -861,7 +861,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			/* Carry object */
 			m_ptr->hold_o_idx = o_idx;
 		}
-		else if (cave_have_flag_bold(y, x, FF_PROJECT))
+		else if (cave_have_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT))
 		{
 			/* Drop (or break) near that location */
 			(void)drop_near(q_ptr, j, y, x);

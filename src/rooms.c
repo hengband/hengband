@@ -1311,7 +1311,7 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 			floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 
 			/* Light lava */
-			if (cave_have_flag_bold(y0 + y - yhsize, x0 + x - xhsize, FF_LAVA))
+			if (cave_have_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FF_LAVA))
 			{
 				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
 			}
@@ -1405,7 +1405,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 
 			 /* if floor, shallow water and lava */
 			if (is_floor_bold(floor_ptr, y, x) ||
-			    (cave_have_flag_bold(y, x, FF_PLACE) && cave_have_flag_bold(y, x, FF_DROP)))
+			    (cave_have_flag_bold(floor_ptr, y, x, FF_PLACE) && cave_have_flag_bold(floor_ptr, y, x, FF_DROP)))
 			{
 				/* The smaller 'value' is, the better the stuff */
 				if (value < 0)

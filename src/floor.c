@@ -685,7 +685,7 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 		return;
 	}
 
-	old_los = cave_have_flag_bold(y, x, FF_LOS);
+	old_los = cave_have_flag_bold(floor_ptr, y, x, FF_LOS);
 	old_mirror = is_mirror_grid(g_ptr);
 
 	/* Clear mimic type */
@@ -1094,15 +1094,15 @@ static bool possible_doorway(POSITION y, POSITION x)
 	if (next_to_corr(y, x) >= 2)
 	{
 		/* Check Vertical */
-		if (cave_have_flag_bold(y - 1, x, FF_WALL) &&
-			cave_have_flag_bold(y + 1, x, FF_WALL))
+		if (cave_have_flag_bold(p_ptr->current_floor_ptr, y - 1, x, FF_WALL) &&
+			cave_have_flag_bold(p_ptr->current_floor_ptr, y + 1, x, FF_WALL))
 		{
 			return (TRUE);
 		}
 
 		/* Check Horizontal */
-		if (cave_have_flag_bold(y, x - 1, FF_WALL) &&
-			cave_have_flag_bold(y, x + 1, FF_WALL))
+		if (cave_have_flag_bold(p_ptr->current_floor_ptr, y, x - 1, FF_WALL) &&
+			cave_have_flag_bold(p_ptr->current_floor_ptr, y, x + 1, FF_WALL))
 		{
 			return (TRUE);
 		}
@@ -1123,7 +1123,7 @@ void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
 	if (!in_bounds(floor_ptr, y, x)) return;
 
 	/* Ignore walls */
-	if (cave_have_flag_bold(y, x, FF_WALL)) return;
+	if (cave_have_flag_bold(floor_ptr, y, x, FF_WALL)) return;
 
 	/* Ignore room grids */
 	if (floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;

@@ -4070,7 +4070,7 @@ void do_cmd_bldg(void)
 
 	take_turn(p_ptr, 100);
 
-	if (!cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_BLDG))
+	if (!cave_have_flag_bold(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, FF_BLDG))
 	{
 		msg_print(_("ここには建物はない。", "You see no building here."));
 		return;
