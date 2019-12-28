@@ -1901,8 +1901,8 @@ P:0:2d5:10:12:10
 F:INT | HIDE_TYPE |
 F:BRAND_COLD | BRAND_FIRE | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT |
 F:RES_FIRE | RES_COLD | SUST_INT | SLOW_DIGEST | SHOW_MODS | LITE
-D:$Within this long thrusting spear lie the spirits of frost giants and fire 
-D:$demons, who war forever, trapped by magely spells.  
+D:$Within this long thrusting spear, the spirits of frost giants and fire
+D:$ demons war forever, trapped by magely spells.
 D:この両手持ちの長槍の中には
 D:氷の巨人と炎の悪魔の二つの魂が魔法により
 D:封印されていて永遠に争っている。
