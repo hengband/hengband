@@ -202,7 +202,7 @@ extern floor_type floor_info;
  * Grid based version of "creature_bold()"
  */
 #define player_grid(C, G) \
-	((G) == &(C)->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x])
+	((G) == &(C)->current_floor_ptr->grid_array[(C)->y][(C)->x])
 
 
 #define cave_have_flag_bold(Y,X,INDEX) \
