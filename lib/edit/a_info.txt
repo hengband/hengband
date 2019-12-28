@@ -1295,7 +1295,7 @@ P:0:2d4:10:15:5
 F:DEX | HIDE_TYPE | STEALTH | SEARCH | SLAY_HUMAN |
 F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | BRAND_POIS |
 F:FREE_ACT | RES_DARK | SUST_DEX | SEE_INVIS | SHOW_MODS | THROW
-D:$The dagger of Caine the leader of Amber fleets.
+D:$The dagger of Caine, the leader of Amber's fleets.
 D:アンバーの艦隊を指揮するケインのダガーだ。
 
 # The Dagger 'Narthanc'
