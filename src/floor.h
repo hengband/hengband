@@ -299,8 +299,8 @@ extern floor_type floor_info;
  *
  * Line 1 -- permanent flag
  */
-#define cave_perma_bold(Y,X) \
-	(cave_have_flag_bold(p_ptr->current_floor_ptr, (Y), (X), FF_PERMANENT))
+#define cave_perma_bold(F,Y,X) \
+	(cave_have_flag_bold((F), (Y), (X), FF_PERMANENT))
 
 
 /*
