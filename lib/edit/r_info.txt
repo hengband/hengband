@@ -22162,6 +22162,13 @@ F:IM_FIRE | IM_POIS | NO_SLEEP | NO_CONF
 F:MALE | DROP_CORPSE | DROP_SKELETON
 S:1_IN_3 |
 S:SHOOT
+D:$Firearms were not used in Amber since gunpowder does not work there:
+D:$  chemistry is not always the same in Amber and the parallel worlds that
+D:$ are shadows of it.  Prince Corwin, by accident, had found a substance in
+D:$ Avalon that could work as powder and primer in Amber and its closest
+D:$ shadows.  With that in mind, he devised a plan to take Amber using a small
+D:$ force armed with automatic rifles.  This gunner, from a parallel world
+D:$ where Corwin is worshipped as a god, is one of that force.
 D:アンバーの王子コーウィンは、並行世界の化学的作用が必ずしも
 D:共通でない事を知っている。そこで彼はあらゆる影から数多くの鉱物を取り寄せ、
 D:各世界で作用する火薬を生産し、現代地球の銃器で利用できる手法を確立した。
