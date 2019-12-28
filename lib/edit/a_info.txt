@@ -1460,9 +1460,9 @@ P:0:2d5:12:16:0
 F:SEARCH | BRAND_ELEC | SLAY_ORC | KILL_DRAGON | RES_FEAR |
 F:RES_ELEC | LITE | RES_FIRE | RES_POIS |
 F:SLOW_DIGEST | SHOW_MODS | RIDING
-D:$The sword of Sigurd which is alos called Balmung or Gram.
-D:$ He slashed the anvil of Mime's blacksmith and used to
-D:$ kill the dragon Fafnir.
+D:$The sword of Sigurd which is also called Balmung or Gram.
+D:$ With it, Sigurd cut the anvil at Mime's forge in half and slew Fafner,
+D:$ the dragon.
 D:「ノートゥングさ、その名は。ヴォータンがとねりこの幹
 D:に突き立てた剣だ。それを引き抜くことのでき
 D:た者だけが、わがものとしうるわけだ。」
