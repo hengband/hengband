@@ -1097,7 +1097,7 @@ W:10:20:25:15000
 P:2:1d1:0:0:15
 F:STR | RES_FIRE | MAGIC_MASTERY | ACTIVATE
 U:BO_FIRE_1
-D:$A firey set of gauntlets that can even shoot fire from the user's 
+D:$A fiery set of gauntlets that can even shoot fire from the user's 
 D:$hands. 
 D:シンダール語で「跳ねる炎の拳」の名を持つこの篭手は炎に
 D:包まれており、身に付ける者は火の球を撃ち出すことも出来る。
