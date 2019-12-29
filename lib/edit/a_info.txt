@@ -2700,8 +2700,8 @@ P:0:8d6:0:30:0
 F:STEALTH | INT | WIS | AGGRAVATE | CURSED | HEAVY_CURSE |
 F:SHOW_MODS | CHAOTIC | IMPACT | SPEED
 F:RANDOM_CURSE0
-D:$This is disruptive heave thing made by Micro$oft.
-D:$It will bring many troubles to its user.
+D:$This is a destructive heavy thing made by Micro$oft.
+D:$  It will bring many troubles to its user.
 D:マイクロンフトによって作られたもので、重くて破壊力がある。
 D:使用する者に災いをもたらす。
 
