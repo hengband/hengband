@@ -2812,6 +2812,7 @@ W:60:60:10:60000
 P:0:1d1:0:0:0
 F:INT | CHR | SPEED | ACTIVATE | LEVITATION | HOLD_EXP | INSTA_ART | LITE_3 | 
 U:BA_MANA
+D:$This glowing blue gem allows the wielder to levitate.
 D:浮遊の力を与えてくれる青く仄光る宝石だ。
 
 N:148:『与一の弓』
