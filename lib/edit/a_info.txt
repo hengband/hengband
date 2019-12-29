@@ -3182,6 +3182,9 @@ F:BLOWS
 F:SLAY_UNDEAD | SLAY_DRAGON | SLAY_ANIMAL |
 F:RES_FIRE | RES_FEAR | BLESSED | 
 F:SLOW_DIGEST | SHOW_MODS
+D:$It is similar to the fabled Excalibur but is slightly smaller.  It also
+D:$ also happens to talk, calling itself "E.J." and admitting to a severe case
+D:$ of arachnophobia.
 D:かの宝剣エクスカリバーに似た作りの、少し小型の剣だ。
 D:自分のことを「E.J.」と呼び、ごくたまに話もする。
 D:蜘蛛と対峙すると、恐れのあまりプリンのようにぷるぷると震える。
