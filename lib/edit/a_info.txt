@@ -2802,6 +2802,7 @@ F:RES_CONF | RES_NETHER | RES_COLD | RES_POIS | RES_DARK | RES_FEAR |
 F:SEE_INVIS | ACTIVATE | DRAIN_EXP |
 F:SH_COLD | HOLD_EXP | LEVITATION | REGEN
 U:TERROR
+D:$It is the stone mask of Dio Brando that turns the wearer into a vampire.
 D:装備した者を吸血鬼に変えてしまうというディオの石仮面だ。
 
 N:147:飛行
