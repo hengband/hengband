@@ -418,7 +418,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!mundane_spell(TRUE)) return NULL;
+				if (!mundane_spell(caster_ptr, TRUE)) return NULL;
 			}
 		}
 		break;

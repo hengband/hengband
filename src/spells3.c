@@ -1783,7 +1783,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
  * Returns TRUE if something was mundanified, else FALSE.
  * </pre>
  */
-bool mundane_spell(bool only_equip)
+bool mundane_spell(player_type *owner_ptr, bool only_equip)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -1794,7 +1794,7 @@ bool mundane_spell(bool only_equip)
 	q = _("どれを使いますか？", "Use which item? ");
 	s = _("使えるものがありません。", "You have nothing you can use.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
@@ -1814,9 +1814,9 @@ bool mundane_spell(bool only_equip)
 		o_ptr->next_o_idx = next_o_idx;
 		o_ptr->marked = marked;
 		o_ptr->inscription = inscription;
-		if (item >= 0) p_ptr->total_weight += (o_ptr->weight - weight);
+		if (item >= 0) owner_ptr->total_weight += (o_ptr->weight - weight);
 	}
-	calc_android_exp(p_ptr);
+	calc_android_exp(owner_ptr);
 
 	/* Something happened */
 	return TRUE;

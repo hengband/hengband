@@ -270,7 +270,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_MUNDANITY:
 		{
 			ident = TRUE;
-			if (!mundane_spell(FALSE)) used_up = FALSE;
+			if (!mundane_spell(creature_ptr, FALSE)) used_up = FALSE;
 			break;
 		}
 
