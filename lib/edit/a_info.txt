@@ -2937,6 +2937,8 @@ W:10:150:30:10000
 P:0:1d1:0:0:0
 F:ACTIVATE | INSTA_ART
 U:FISHING
+D:$Taikobo's daily routine was to fish with this fishing rod.  Eventually,
+D:$ Taikobo was himself caught by Zhou Wen Wang.
 D:太公望はこの釣り竿を用いて釣りを楽しむのが日課であったが、
 D:結局は彼自身が周の文王に釣られてしまったのであった。
 
