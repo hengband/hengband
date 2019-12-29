@@ -2484,7 +2484,7 @@ W:50:25:110:100000
 P:0:0d0:10:14:0
 F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS | XTRA_RES_OR_POWER
 U:BRAND_FIRE_BOLTS
-D:$Magic power of this crossbow of Brand the prince of Amber will enable
+D:$The magic power of this crossbow of Brand, the prince of Amber, will enable
 D:$ you to move faster.
 D:トランプの魔力を自分の物にし、新たな宇宙を創造しようとした
 D:アンバーの王子ブランドが使っていたクロスボウだ。
@@ -2513,10 +2513,10 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | ACTIVATE |
 F:SLAY_EVIL | SLAY_ANIMAL | SLAY_DEMON | SLAY_DRAGON |
 F:SEE_INVIS | REGEN | BLESSED | LITE | SHOW_MODS
 U:ESCAPE
-D:$One of the three imperial spiritual artifacts of Japan.
-D:$Susanoo found this tsurugi at Izumo, then Yamato Takeru
-D:$got and used for conquesting Japan.
-D:$It guards its owner from many dangers by its spiritual power.
+D:$It is one of the three imperial spiritual artifacts of Japan.
+D:$  Susanoo found this tsurugi, a straight double-edged sword, at Izumo.
+D:$  Many years later, Yamato Takeru received it as a gift.
+D:$  The tsurugi's spiritual power guards its owner from many dangers.
 D:三種の神器の一つ。出雲の国で素戔嗚尊(すさのおのみこと)により
 D:見出され、後に日本武尊(やまとたけるのみこと)の剣となる。
 D:使う者を様々な危機から守る霊力が備わっている。
