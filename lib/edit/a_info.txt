@@ -2989,6 +2989,9 @@ F:BRAND_ELEC | SLAY_EVIL | SLAY_GIANT |
 F:RES_ELEC | RES_LITE | RES_DARK |
 F:LITE | SEE_INVIS | RES_BLIND | SHOW_MODS | RIDING
 U:BA_STAR
+D:$This is spear of the Celtic hero, Cuchulainn.  Carved from the bone of
+D:$ a sea dragon, it protects the sight of the wielder and can flash to dazzle
+D:$ an opponent.
 D:ケルトの英雄クーフーリンの、海竜の骨から削られた長槍だ。
 D:つねに目映く発せられるその閃光は敵の目をくらまし、
 D:逆に所有者の視力を守る。
