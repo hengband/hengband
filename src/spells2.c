@@ -3021,7 +3021,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
 	if (in_bounds(attacker_ptr->current_floor_ptr, ty, tx)) tm_idx = attacker_ptr->current_floor_ptr->grid_array[ty][tx].m_idx;
 
-	path_n = project_path(path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+	path_n = project_path(attacker_ptr->current_floor_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
 	project_length = 0;
 
 	/* No need to move */

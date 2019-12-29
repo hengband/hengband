@@ -5712,7 +5712,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 	/* Calculate the projection path */
 
-	path_n = project_path(path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
+	path_n = project_path(caster_ptr->current_floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
 	handle_stuff();
 
 	/* Giga-Hack SEEKER & SUPER_RAY */
@@ -5805,7 +5805,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				remove_mirror(y, x);
 				next_mirror(caster_ptr, &oy, &ox, y, x);
 
-				path_n = i + project_path(&(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
+				path_n = i + project_path(caster_ptr->current_floor_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
 				for (j = last_i; j <= i; j++)
 				{
 					y = GRID_Y(path_g[j]);
@@ -5948,14 +5948,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 				path_n = i;
 				second_step = i + 1;
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flg);
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flg);
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flg);
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flg);
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flg);
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flg);
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flg);
-				path_n += project_path(&(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flg);
+				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flg);
 			}
 		}
 		for (i = 0; i < path_n; i++)

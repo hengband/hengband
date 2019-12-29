@@ -461,7 +461,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 	}
 
 	/* Get projection path length */
-	tdis = project_path(path_g, project_length, shooter_ptr->y, shooter_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
+	tdis = project_path(shooter_ptr->current_floor_ptr, path_g, project_length, shooter_ptr->y, shooter_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
 
 	project_length = 0; /* reset to default */
 

@@ -51,7 +51,7 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 	bool is_friend = is_pet(m_ptr);
 
 	/* Check the projection path */
-	grid_n = project_path(grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
+	grid_n = project_path(p_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
 
 	/* No grid is ever projectable from itself */
 	if (!grid_n) return (FALSE);
@@ -128,7 +128,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 	}
 
 	/* Check the projection path */
-	grid_n = project_path(grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
+	grid_n = project_path(p_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
 
 	/* Project along the path */
 	for (i = 0; i < grid_n; ++i)
@@ -211,7 +211,7 @@ void get_project_point(POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT
 	u16b path_g[128];
 	int  path_n, i;
 
-	path_n = project_path(path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
+	path_n = project_path(p_ptr->current_floor_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
 
 	*ty = sy;
 	*tx = sx;

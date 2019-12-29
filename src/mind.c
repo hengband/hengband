@@ -1651,7 +1651,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-		path_n = project_path(path_g, MAX_RANGE, target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
+		path_n = project_path(caster_ptr->current_floor_ptr, path_g, MAX_RANGE, target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
 		ty = target_row, tx = target_col;
 		for (i = 1; i < path_n; i++)
 		{
