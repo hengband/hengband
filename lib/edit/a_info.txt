@@ -2821,6 +2821,7 @@ I:19:13:4
 W:35:30:40:30000
 P:0:0d0:40:13:0
 F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
+D:$It is the bow of Nasu no Yoichi, known for making impossible shots.
 D:「与一鏑を取つて番ひ、能つ引いてひやうと放つ。小兵といふ条、
 D:十二束三伏、弓はつよし、鏑は浦響くほどに長鳴して、過たず扇の
 D:要ぎは一寸ばかり置いて、ひいふつとぞ射切つたる。」(平家物語)。
