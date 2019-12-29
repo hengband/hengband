@@ -2961,9 +2961,9 @@ P:0:4d9:6:23:10
 F:STR | DEX | HIDE_TYPE | SEARCH | FREE_ACT | SLAY_HUMAN |
 F:SLAY_TROLL | SLAY_GIANT | SLAY_ANIMAL | SLAY_ORC | RES_FIRE | RES_COLD |
 F:RES_ELEC | RES_ACID | RES_FEAR | SHOW_MODS | RIDING
-D:$Because of very superb sharpness such as dragon flies are 
-D:$cut which perches on the tip of this spear, it is called
-D:$'Tonbo giri' which means 'dragon fry cutter'. 
+D:$Said to belong to Honda Tadakatsu, a leading general for Tokugawa Ieyasu,
+D:$ this spear got its name, 'Tonbo giri' or dragonfly cutter, because a
+D:$ dragonfly that tried to perch on the tip was cut in two.
 D:徳川四天王の１人本多忠勝の愛用の槍だ。
 D:その切れ味は穂先に止まった蜻蛉が切れて落ちるほどである。
 
