@@ -2437,6 +2437,8 @@ W:30:60:260:200000
 P:0:4d5:15:15:0
 F:BLOWS | VAMPIRIC | HOLD_EXP | SLAY_UNDEAD | SLAY_EVIL | SLAY_HUMAN |
 F:REGEN | RES_FEAR | RES_BLIND | SLOW_DIGEST | SHOW_MODS
+D:$This bloodthirsty blade, which has lopped countless heads, heals the body
+D:$ and safeguards the soul of the wielder.
 D:数え切れないほどの首を落としてきたこの血に飢えた刃は
 D:敵の血と魂を吸って手にする者の体を癒す。
 
