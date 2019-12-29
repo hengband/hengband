@@ -198,7 +198,7 @@ void build_small_room(floor_type *floor_ptr, POSITION x0, POSITION y0)
 /*!
  * @brief
  * 指定範囲に通路が通っていることを確認した上で床で埋める
- * This function tunnels around a room if it will cut off part of a p_ptr->current_floor_ptr->grid_array system.
+ * This function tunnels around a room if it will cut off part of a grid system.
  * @param x1 範囲の左端
  * @param y1 範囲の上端
  * @param x2 範囲の右端

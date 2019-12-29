@@ -672,7 +672,6 @@ void wilderness_gen(floor_type *floor_ptr)
 	}
 
 	player_place(p_ptr, p_ptr->oldpy, p_ptr->oldpx);
-	/* p_ptr->leaving_dungeon = FALSE;*/
 
 	lim = (generate_encounter == TRUE) ? 40 : MIN_M_ALLOC_TN;
 

@@ -5913,7 +5913,7 @@ void process_player_name(bool sf)
  * @return なし
  * @details
  * <pre>
- * Assumes that "display_player(p_ptr, 0)" has just been called
+ * Assumes that "display_player()" has just been called
  * Perhaps we should NOT ask for a name (at "birth()") on
  * Unix machines?  XXX XXX
  * What a horrible name for a global function.  

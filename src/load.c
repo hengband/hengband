@@ -1314,7 +1314,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 }
 
 /*!
- * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the p_ptr->inventory_list of the "Home"
+ * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the inventory of the "Home"
  * @param st_ptr 店舗の参照ポインタ
  * @param o_ptr アイテムオブジェクト参照ポインタ
  * @return なし
