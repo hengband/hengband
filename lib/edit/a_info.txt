@@ -2729,8 +2729,8 @@ F:LEVITATION | SLOW_DIGEST | REGEN | SEARCH | LITE | WARNING |
 F:INSTA_ART | QUESTITEM | FULL_NAME
 U:RECHARGE_XTRA
 D:$Yaaaaaaaaay! Platinum card of Yendorian Express!!!
-D:$Wait a minute, you can not pay any more with this card.
-D:$You must think other way of using it.
+D:$  Wait a minute, you can not pay any more with this card.
+D:$  You must think of another way of using it.
 D:金色に光り輝くイェンダー印のプラチナカードだ。
 D:まるで億万長者になった気分がする。限度額まで使い込もう。
 
