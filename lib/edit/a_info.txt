@@ -2668,6 +2668,10 @@ W:20:25:150:40000
 P:0:2d5:10:10:0
 F:STR | DEX | HIDE_TYPE | FORCE_WEAPON | KILL_EVIL
 F:SHOW_MODS | RIDING
+D:$This legendary weapon is said to have killed Zanaffer, the beast that
+D:$ destroyed the magic city of Sairaag.  As the wielder's will augments the
+D:$ powers of this blade of light, all evil creatures have reason to fear its
+D:$ power.
 D:かつて魔導都市サイラーグを破壊つくした魔獣、ザナッファー。
 D:それを滅ぼしたといわれるのが、この伝説の武器である。
 D:持つ者の、意思の力を刃と成して、魔族すらも両断する。
