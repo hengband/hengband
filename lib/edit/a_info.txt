@@ -887,12 +887,12 @@ D:なんとも恐ろしい、不気味で、おどろおどろしく、髪が逆
 D:ぞっとして鳥肌が立つような仮面だ。
 D:仮面の奥の瞳に睨まれれば、怖くて逃げ出さずにはいられない。
 
-# The Golden Crown of Gondor -> Amber
+# The Golden Crown of Gondor -> Jewel Encrusted Crown of Amber
 
 #JZ#
 N:42:真世界アンバーの
 E:of Amber
-I:33:11:3
+I:33:12:3
 W:40:40:30:125000
 P:0:1d1:0:0:15
 F:STR | WIS | CON | HIDE_TYPE | SPEED |
@@ -900,8 +900,9 @@ F:RES_COLD | RES_FIRE | RES_LITE | RES_BLIND | RES_ELEC | RES_CONF |
 F:RES_CHAOS | LITE | SEE_INVIS | REGEN | ACTIVATE
 F:XTRA_POWER | XTRA_H_RES
 U:CURE_700
-D:$The gold grown which is decorated with much jewerly is the symbol
-D:$ of the throne of Amber. Princes of Amber scrambled for it violently.
+D:$Wrought of silver with seven high points each topped by a gem, this crown
+D:$ is the symbol of the throne of Amber.  The Princes of Amber scrambled for
+D:$ it violently.
 D:アンバーの王位の象徴である、多数の宝石で飾られた金の王冠だ。
 D:これをめぐって骨肉の争いが王子たちの間で繰り広げられた。
 
