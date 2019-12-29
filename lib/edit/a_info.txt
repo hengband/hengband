@@ -1409,7 +1409,7 @@ F:RES_CHAOS | RES_NETHER | HOLD_EXP | RES_FEAR |
 F:RES_COLD | BRAND_COLD |
 F:SLAY_DEMON | SLAY_EVIL | SLAY_DRAGON | SLAY_UNDEAD |
 F:SLOW_DIGEST | SHOW_MODS | HIDE_TYPE | BLESSED | RIDING
-D:$The silver sable forged by moonlights, which Corwin the prince of
+D:$The is the silver saber, forged by moonlight, which Corwin the prince of
 D:$ Amber wielded. It shows contrasts between silver and black like
 D:$ its owner does.
 D:アンバーの王子コーウィンが使っていた、月の光により
