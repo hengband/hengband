@@ -135,8 +135,8 @@ P:0:1d1:0:0:0
 F:ACTIVATE | SEE_INVIS | HOLD_EXP | RES_CONF | RES_CHAOS | LITE_3 | 
 F:INSTA_ART | SPEED | WIS | INT
 U:JUDGE
-D:$This crimson jewelry which is chained with a gold chain is
-D:$ deeply related to creation of this universe.
+D:$This ruby pendant in a simple setting with a heavy gold chain is deeply
+D:$ related to the creation of this universe.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.3-10)
 D:金の鎖に取り付けられた、この宇宙の創世に深い関わりを持つ真紅の宝石。
 D:（R.ゼラズニイ、真世界アンバーシリーズ 3～10巻）
