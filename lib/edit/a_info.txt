@@ -3159,6 +3159,7 @@ W:50:30:130:0
 P:0:5d5:-50:-50:-5
 F:WIS | CHR | 
 F:TY_CURSE | AGGRAVATE | DRAIN_EXP | SHOW_MODS | THROW
+D:$"What's this!  Isn't it the strongest sword!?"  (Final Fantasy V)
 D:「なんだこれは！最強の剣じゃないのか！？」
 D:（FINAL FANTASY V）
 
