@@ -2784,6 +2784,9 @@ F:STEALTH | SUST_STR | SUST_DEX | SUST_CON |
 F:SPEED | RES_FIRE | BRAND_FIRE |
 F:SLAY_ANIMAL | SLAY_DRAGON | RES_FEAR | FREE_ACT |
 F:REGEN | SHOW_MODS | HIDE_TYPE
+D:$This a powerful nunchaku with the spiritual power of a legendary fighter.
+D:$  In skilled hands, it can deliver blows as fast as someone fighting
+D:$ barehanded.
 D:伝説の格闘家の霊力が宿った強力なヌンチャクだ。
 D:拳法を操る者が手にすれば自らの体の一部のように
 D:操ることができ、素手の時と同じくらい素早い攻撃が
