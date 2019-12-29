@@ -2862,6 +2862,11 @@ W:40:20:400:98765
 P:0:3d6:5:23:5
 F:STR | CON | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_TROLL | RES_FEAR |
 F:FREE_ACT | REGEN | SHOW_MODS
+D:$Musashibo Benkei, sometimes said to be a demon, used his power to obtain
+D:$ this naginata.  With it, he won 999 swords from samurai in duels
+D:$ around Kyoto.  Trying to win an additional sword, Benkei fought Minamoto
+D:$ no Yoshitsune on Gojo Bridge and lost.  Benkei later became Yoshitsune's
+D:$ retainer.
 D:後に義経に仕えた怪僧・武蔵坊弁慶は、この大薙刀を得物に武力を振るい、
 D:五条大橋の上で999本の刀を狩った。
 
