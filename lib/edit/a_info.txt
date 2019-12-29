@@ -2712,8 +2712,8 @@ W:30:15:75:100000
 P:0:2d6:17:12:0
 F:DEX | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_DEMON |
 F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_DARK | RES_DISEN | SPEED
-D:$The silver light sabre of Polnareff's stand Silver Chariot.
-D:$It can pierce enemies rapidly.
+D:$The silver light sabre of Polnareff's stand, Silver Chariot.
+D:$  It can pierce enemies rapidly.
 D:ポルナレフのスタンド「シルバーチャリオッツ」が手にしていた
 D:軽量のサーベルだ。一瞬にして敵に無数の風穴をあけることがで
 D:きるはずだッ！
