@@ -3760,7 +3760,8 @@ P:0:2d1:15:17:0
 F:STR | INFRA | RES_FIRE | SH_FIRE |
 F:ACTIVATE | HIDE_TYPE | SHOW_MODS
 U:BRAND_FIRE_BOLTS
-D:$This crossbow gives flame energy to bolts which it fires.
+D:$This fiery-colored crossbow can cause the bolts it fires to burst into
+D:$ flame upon impact.
 D:この燃えるような色のクロスボウは、発射するボルトに炎の力を
 D:与えることができる。
 
