@@ -4070,6 +4070,11 @@ W:70:70:15:45000
 P:0:1d1:0:0:20
 F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 | INSTA_ART
 U:TELEPORT_LEVEL
+D:"You may take the Orb of Fate with you.  I have removed from it the power
+D: to foretell the future, for that power no mortal should have.  Its other
+D: abilities, however, you have at your disposal.  You must now begin in Tyr's
+D: name to search for the Amulet of Yendor.  May your steps be guided by Tyr,
+D: my child." (Norn, Nethack)
 D:「運命のオーブを持っていきなさい。わたしは運命のオーブから
 D:人間の手に触れてはならぬ未来を告げる力を取り除きました。
 D:しかしながら運命のオーブの他の力は，あなたの思い通りに
