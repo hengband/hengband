@@ -3514,6 +3514,8 @@ P:4:0d0:0:0:0
 F:STR | CON | SUST_STR | SUST_CON |
 F:RES_FEAR | FREE_ACT | ACTIVATE
 U:SHIKOFUMI
+D:$It is the traditional garb for a Sumo wrestler.  Just touching it makes you
+D:$ feel stronger.
 D:遥か東の国のスモー戦士が身につける正装だ。
 D:その豪華な宝飾は力強さを感じさせる。
 
