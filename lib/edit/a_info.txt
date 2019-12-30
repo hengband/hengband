@@ -3864,11 +3864,11 @@ D:大きな太刀を手にして多くの敵兵の命を奪いさった。その
 D:えに敵陣に突っ込みすぎたという。
 
 N:230:手品師の
-E:of Magician
+E:of a Magician
 I:23:1:0
 W:1:1:5:3000
 P:0:1d1:0:0:0
-D:$This dagger can not injure someone almostly.
+D:$This dull dagger has a very faint magic aura about it.
 D:このダガーは人を傷つけることはないだろう。
 
 N:231:暗殺者荊軻の
