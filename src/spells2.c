@@ -3467,22 +3467,22 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 	else if (die < 26) heal_monster(dir, damroll(4, 6));
 	else if (die < 31) poly_monster(dir, plev);
 	else if (die < 36)
-		fire_bolt_or_beam(beam_chance() - 10, GF_MISSILE, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_MISSILE, dir,
 			damroll(3 + ((plev - 1) / 5), 4));
 	else if (die < 41) confuse_monster(dir, plev);
 	else if (die < 46) fire_ball(caster_ptr, GF_POIS, dir, 20 + (plev / 2), 3);
 	else if (die < 51) (void)lite_line(dir, damroll(6, 8));
 	else if (die < 56)
-		fire_bolt_or_beam(beam_chance() - 10, GF_ELEC, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_ELEC, dir,
 			damroll(3 + ((plev - 5) / 4), 8));
 	else if (die < 61)
-		fire_bolt_or_beam(beam_chance() - 10, GF_COLD, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_COLD, dir,
 			damroll(5 + ((plev - 5) / 4), 8));
 	else if (die < 66)
-		fire_bolt_or_beam(beam_chance(), GF_ACID, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr), GF_ACID, dir,
 			damroll(6 + ((plev - 5) / 4), 8));
 	else if (die < 71)
-		fire_bolt_or_beam(beam_chance(), GF_FIRE, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr), GF_FIRE, dir,
 			damroll(8 + ((plev - 5) / 4), 8));
 	else if (die < 76) hypodynamic_bolt(dir, 75);
 	else if (die < 81) fire_ball(caster_ptr, GF_ELEC, dir, 30 + plev / 2, 2);
@@ -3572,7 +3572,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 36)
 	{
-		fire_bolt_or_beam(beam_chance() - 10, GF_MISSILE, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_MISSILE, dir,
 			damroll(3 + ((plev - 1) / 5), 4));
 	}
 	else if (die < 41)
@@ -3589,22 +3589,22 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 56)
 	{
-		fire_bolt_or_beam(beam_chance() - 10, GF_ELEC, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_ELEC, dir,
 			damroll(3 + ((plev - 5) / 4), 8));
 	}
 	else if (die < 61)
 	{
-		fire_bolt_or_beam(beam_chance() - 10, GF_COLD, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_COLD, dir,
 			damroll(5 + ((plev - 5) / 4), 8));
 	}
 	else if (die < 66)
 	{
-		fire_bolt_or_beam(beam_chance(), GF_ACID, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr), GF_ACID, dir,
 			damroll(6 + ((plev - 5) / 4), 8));
 	}
 	else if (die < 71)
 	{
-		fire_bolt_or_beam(beam_chance(), GF_FIRE, dir,
+		fire_bolt_or_beam(beam_chance(caster_ptr), GF_FIRE, dir,
 			damroll(8 + ((plev - 5) / 4), 8));
 	}
 	else if (die < 76)

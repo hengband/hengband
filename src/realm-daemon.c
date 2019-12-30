@@ -46,7 +46,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_bolt_or_beam(beam_chance() - 10, GF_MISSILE, dir, damroll(dice, sides));
+				fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
 			}
 		}
 		break;
@@ -133,7 +133,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_bolt_or_beam(beam_chance(), GF_NETHER, dir, damroll(dice, sides));
+				fire_bolt_or_beam(beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
 			}
 		}
 		break;
@@ -245,7 +245,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_bolt_or_beam(beam_chance(), GF_PLASMA, dir, damroll(dice, sides));
+				fire_bolt_or_beam(beam_chance(caster_ptr), GF_PLASMA, dir, damroll(dice, sides));
 			}
 		}
 		break;

@@ -220,7 +220,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_bolt_or_beam(beam_chance() - 10, GF_COLD, dir, damroll(dice, sides));
+				fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_COLD, dir, damroll(dice, sides));
 			}
 		}
 		break;
@@ -260,7 +260,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_bolt_or_beam(beam_chance() - 10, GF_FIRE, dir, damroll(dice, sides));
+				fire_bolt_or_beam(beam_chance(caster_ptr) - 10, GF_FIRE, dir, damroll(dice, sides));
 			}
 		}
 		break;
