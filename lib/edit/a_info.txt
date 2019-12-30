@@ -3490,7 +3490,7 @@ D:是れ淤能碁呂島なり。」(古事記)。
 
 # モーロックの高僧の錆びた鎖かたびら
 N:203:モーロックの高僧の
-E:of The High Preist of Morlok
+E:of The High Priest of Morlok
 I:37:1:-2
 W:90:8:200:100000
 P:14:1d4:-5:0:-40
