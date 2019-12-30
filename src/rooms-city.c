@@ -234,7 +234,7 @@ bool build_type16(floor_type *floor_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, town_hgt + 4, town_wid + 4))
+	if (!find_space(floor_ptr, &yval, &xval, town_hgt + 4, town_wid + 4))
 	{
 		/* Free buildings array */
 		C_KILL(ugbldg, n, ugbldg_type);

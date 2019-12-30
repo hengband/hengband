@@ -339,7 +339,7 @@ bool build_type5(floor_type *floor_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -547,7 +547,7 @@ bool build_type6(floor_type *floor_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -855,7 +855,7 @@ bool build_type13(floor_type *floor_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, 13, 25)) return FALSE;
+	if (!find_space(floor_ptr, &yval, &xval, 13, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 5;

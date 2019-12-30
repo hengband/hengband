@@ -699,7 +699,7 @@ bool build_type7(floor_type *floor_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, abs(y), abs(x))) return FALSE;
+	if (!find_space(floor_ptr, &yval, &xval, abs(y), abs(x))) return FALSE;
 
 #ifdef FORCE_V_IDX
 	v_ptr = &v_info[2];
@@ -785,7 +785,7 @@ bool build_type8(floor_type *floor_ptr)
 	* prevent generation of vaults with no-entrance.
 	*/
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2))) return FALSE;
+	if (!find_space(floor_ptr, &yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2))) return FALSE;
 
 #ifdef FORCE_V_IDX
 	v_ptr = &v_info[76 + randint1(3)];
@@ -1195,7 +1195,7 @@ bool build_type10(floor_type *floor_ptr)
 	ysize = randint1(11) + 11;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&y0, &x0, ysize + 1, xsize + 1)) return FALSE;
+	if (!find_space(floor_ptr, &y0, &x0, ysize + 1, xsize + 1)) return FALSE;
 
 	/* Select type of vault */
 #ifdef ALLOW_CAVERNS_AND_LAKES
@@ -1298,7 +1298,7 @@ bool build_type17(floor_type *floor_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, abs(y), abs(x))) return FALSE;
+	if (!find_space(floor_ptr, &yval, &xval, abs(y), abs(x))) return FALSE;
 
 #ifdef FORCE_V_IDX
 	v_ptr = &v_info[2];

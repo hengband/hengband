@@ -380,7 +380,7 @@ static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION 
  * Return TRUE and values for the center of the room if all went well.\n
  * Otherwise, return FALSE.\n
  */
-bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
+bool find_space(floor_type *floor_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
 {
 	int candidates, pick;
 	POSITION by, bx, by1, bx1, by2, bx2;
@@ -485,7 +485,7 @@ bool find_space(POSITION *y, POSITION *x, POSITION height, POSITION width)
 	 * If so, fix by tunneling outside the room in such a
 	 * way as to connect the caves.
 	 */
-	check_room_boundary(p_ptr->current_floor_ptr, *x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
+	check_room_boundary(floor_ptr, *x - width / 2 - 1, *y - height / 2 - 1, *x + (width - 1) / 2 + 1, *y + (height - 1) / 2 + 1);
 
 	/* Success. */
 	return TRUE;

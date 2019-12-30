@@ -22,14 +22,14 @@ bool build_type9(floor_type *floor_ptr)
 	ysize = randint1(15) * 2 + 6;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&y0, &x0, ysize + 1, xsize + 1))
+	if (!find_space(floor_ptr, &y0, &x0, ysize + 1, xsize + 1))
 	{
 		/* Limit to the minimum room size, and retry */
 		xsize = 8;
 		ysize = 8;
 
 		/* Find and reserve some space in the dungeon.  Get center of room. */
-		if (!find_space(&y0, &x0, ysize + 1, xsize + 1))
+		if (!find_space(floor_ptr, &y0, &x0, ysize + 1, xsize + 1))
 		{
 			/*
 			* Still no space?!

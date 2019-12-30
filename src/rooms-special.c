@@ -29,7 +29,7 @@ bool build_type15(floor_type *floor_ptr)
 	ysize = rand_range(9, 13);
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(&yval, &xval, ysize + 2, xsize + 2)) return FALSE;
+	if (!find_space(floor_ptr, &yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
 	light = ((floor_ptr->dun_level <= randint1(25)) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
