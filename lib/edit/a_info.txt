@@ -4001,15 +4001,16 @@ D:この不気味に黒光るクロスボウはずっしりと重い。その一
 
 # The Heavy Crossbow of Guanzi (x4)
 N:241:管子の
+E:of Guan Zhong
 I:19:24:3
 W:40:20:200:99999
 P:0:4d1:10:15:0
 F:INT | WIS | SUST_INT | SUST_WIS | MAGIC_MASTERY | XTRA_SHOTS |
 F:RES_CONF | RES_NEXUS | FREE_ACT |
 F:HIDE_TYPE | SHOW_MODS
-D:$This is Guan Zhong's heavy crossbow for assassinating.
-D:$He took prime minister's post of Qi, although he failed to
-D:$take the life of the prince of Qi.
+D:$This is Guan Zhong's heavy crossbow.  Tutor to a prince of Qi, he
+D:$ attempted to use it to kill another prince of Qi but failed.  Spared by
+D:$ his target, he became the chancellor of Qi.
 D:斉の管仲が暗殺用に用いた重い弩だ。公子小白を射抜くことはできなかった
 D:が、後に斉の宰相の座を見事に射止めた。
 
