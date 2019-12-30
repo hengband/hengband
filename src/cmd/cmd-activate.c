@@ -536,7 +536,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 		else
 		{
 			success = FALSE;
-			if (!get_direction(&dir, FALSE, FALSE)) return;
+			if (!get_direction(user_ptr, &dir, FALSE, FALSE)) return;
 			if (monster_can_enter(user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
 			{
 				if (place_monster_aux(0, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))

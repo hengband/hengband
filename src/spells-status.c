@@ -409,7 +409,7 @@ bool fishing(player_type *creature_ptr)
 	DIRECTION dir;
 	POSITION x, y;
 
-	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
+	if (!get_direction(creature_ptr, &dir, FALSE, FALSE)) return FALSE;
 	y = creature_ptr->y + ddy[dir];
 	x = creature_ptr->x + ddx[dir];
 	creature_ptr->fishing_dir = dir;

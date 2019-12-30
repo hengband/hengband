@@ -3863,7 +3863,7 @@ bool_hack vampirism(player_type *caster_ptr)
 	}
 
 	/* Only works on adjacent monsters */
-	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
+	if (!get_direction(caster_ptr, &dir, FALSE, FALSE)) return FALSE;
 	y = caster_ptr->y + ddy[dir];
 	x = caster_ptr->x + ddx[dir];
 	g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
@@ -3906,7 +3906,7 @@ bool panic_hit(void)
 	DIRECTION dir;
 	POSITION x, y;
 
-	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
+	if (!get_direction(p_ptr, &dir, FALSE, FALSE)) return FALSE;
 	y = p_ptr->y + ddy[dir];
 	x = p_ptr->x + ddx[dir];
 	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)

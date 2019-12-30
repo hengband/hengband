@@ -3237,7 +3237,7 @@ bool eat_lock(player_type *caster_ptr)
 	feature_type *f_ptr, *mimic_f_ptr;
 	DIRECTION dir;
 
-	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
+	if (!get_direction(caster_ptr, &dir, FALSE, FALSE)) return FALSE;
 	y = caster_ptr->y + ddy[dir];
 	x = caster_ptr->x + ddx[dir];
 	g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];

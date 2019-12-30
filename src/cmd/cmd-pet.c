@@ -279,7 +279,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 	grid_type *g_ptr;
 	monster_type *m_ptr;
 
-	if (!get_direction(&dir, FALSE, FALSE)) return FALSE;
+	if (!get_direction(creature_ptr, &dir, FALSE, FALSE)) return FALSE;
 	y = creature_ptr->y + ddy[dir];
 	x = creature_ptr->x + ddx[dir];
 	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
