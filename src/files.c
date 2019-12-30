@@ -4762,23 +4762,23 @@ static void dump_aux_monsters(FILE *fff)
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_race_history(FILE *fff)
+static void dump_aux_race_history(player_type *creature_ptr, FILE *fff)
 {
-	if (p_ptr->old_race1 || p_ptr->old_race2)
+	if (creature_ptr->old_race1 || creature_ptr->old_race2)
 	{
 		int i;
 
-		fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[p_ptr->start_race].title);
+		fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[creature_ptr->start_race].title);
 		for (i = 0; i < MAX_RACES; i++)
 		{
-			if (p_ptr->start_race == i) continue;
+			if (creature_ptr->start_race == i) continue;
 			if (i < 32)
 			{
-				if (!(p_ptr->old_race1 & 1L << i)) continue;
+				if (!(creature_ptr->old_race1 & 1L << i)) continue;
 			}
 			else
 			{
-				if (!(p_ptr->old_race2 & 1L << (i-32))) continue;
+				if (!(creature_ptr->old_race2 & 1L << (i-32))) continue;
 			}
 			fprintf(fff, _("\n あなたはかつて%sだった。", "\n You were a %s before."), race_info[i].title);
 		}
@@ -4999,7 +4999,7 @@ errr make_character_dump(FILE *fff)
 	dump_aux_arena(fff);
 	dump_aux_monsters(fff);
 	dump_aux_virtues(fff);
-	dump_aux_race_history(fff);
+	dump_aux_race_history(p_ptr, fff);
 	dump_aux_realm_history(fff);
 	dump_aux_class_special(fff);
 	dump_aux_mutations(fff);
