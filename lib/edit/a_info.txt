@@ -3490,7 +3490,7 @@ D:是れ淤能碁呂島なり。」(古事記)。
 
 # モーロックの高僧の錆びた鎖かたびら
 N:203:モーロックの高僧の
-E:of The High Priest of Morlok
+E:of The High Priest of Moloch
 I:37:1:-2
 W:90:8:200:100000
 P:14:1d4:-5:0:-40
@@ -3498,6 +3498,9 @@ F:INT | WIS | CHR | HIDE_TYPE | RES_LITE | RES_DARK |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
 F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER |
 F:RES_NEXUS | AGGRAVATE | CURSED | HEAVY_CURSE | TY_CURSE
+D:$This badly rusted chain mail was once worn by a high priest who guarded a
+D:$ powerful magic amulet.  That priest's despair and the amulet's magic have
+D:$ left their mark in the mail.
 D:この赤々と錆びた今にも崩れ去りそうな鎖かたびらには、
 D:かつて愚かにも守護する魔除けを奪われ朽ち果てた、
 D:太古の高僧の怨念がこもっている。
