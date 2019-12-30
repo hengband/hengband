@@ -3526,6 +3526,7 @@ W:20:20:30:50000
 P:3:0d0:0:0:20
 F:RES_COLD | RES_ACID | RES_CHAOS | LEVITATION | ACTIVATE
 U:RESIST_COLD
+D:$This is the fur cloak of Mook, a red Yeti and Gachapin's friend.
 D:ガチャピンと対をなす赤い獣の毛皮のクロークだ。
 
 # 金属製ラメラー・アーマー『バテレン鎧』
