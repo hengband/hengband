@@ -3790,7 +3790,7 @@ D:悪代官ゲスラーの命を正確に奪ったという。
 
 #JX#
 N:225:アスクレピオスの
-E:of Aesculapius
+E:of Asclepius
 I:21:14:3
 W:40:45:160:300000
 P:0:2d11:15:15:5
@@ -3800,8 +3800,8 @@ F:VAMPIRIC | SLAY_ANIMAL | SLAY_DRAGON | SLAY_HUMAN |
 F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
 F:RES_POIS | RES_CONF | RES_CHAOS |
 U:REST_ALL
-D:$This is the staff of Aesculapius, who is a greek god of 
-D:$the medicine.
+D:$This is the staff of Asclepius, a hero and god of medicine in Greek
+D:$ mythology.
 D:これは、医学の神アスクレピオスの奇跡の六尺棒だ。
 D:どんな怪我もたちまち癒してしまう。
 
