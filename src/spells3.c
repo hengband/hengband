@@ -2393,7 +2393,7 @@ EXP experience_of_spell(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 
 /*!
  * @brief 呪文の消費MPを返す /
- * Modify mana consumption rate using spell exp and p_ptr->dec_mana
+ * Modify mana consumption rate using spell exp and dec_mana
  * @param need_mana 基本消費MP
  * @param spell 呪文ID
  * @param realm 魔法領域
@@ -2435,7 +2435,7 @@ MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
 /*!
  * @brief 呪文の失敗率修正処理1(呪い、消費魔力減少、呪文簡易化) /
  * Modify spell fail rate
- * Using p_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
+ * Using to_m_chance, dec_mana, easy_spell and heavy_spell
  * @param chance 修正前失敗率
  * @return 失敗率(%)
  * @todo 統合を検討
@@ -2457,11 +2457,11 @@ PERCENTAGE mod_spell_chance_1(player_type *caster_ptr, PERCENTAGE chance)
 /*!
  * @brief 呪文の失敗率修正処理2(消費魔力減少、呪い、負値修正) /
  * Modify spell fail rate
- * Using p_ptr->to_m_chance, p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
+ * Using to_m_chance, dec_mana, easy_spell and heavy_spell
  * @param chance 修正前失敗率
  * @return 失敗率(%)
  * Modify spell fail rate (as "suffix" process)
- * Using p_ptr->dec_mana, p_ptr->easy_spell and p_ptr->heavy_spell
+ * Using dec_mana, easy_spell and heavy_spell
  * Note: variable "chance" cannot be negative.
  * @todo 統合を検討
  */

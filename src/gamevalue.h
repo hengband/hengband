@@ -2,7 +2,7 @@
 /*!
 * @brief ベースアイテム生成階層が加算される確率
 * @details
-* There is a 1/10 (10%) chance of inflating the requested p_ptr->current_floor_ptr->object_level
+* There is a 1/10 (10%) chance of inflating the requested object_level
 * during the creation of an object (see "get_obj_num()" in "object.c").
 * Lower values yield better objects more often.
 */
@@ -11,7 +11,7 @@
 /*!
 * @brief 深層モンスターが生成される(NASTY生成)の基本確率(1/x)
 * @details
-* There is a 1/25 (4%) chance of inflating the requested p_ptr->current_floor_ptr->monster_level
+* There is a 1/25 (4%) chance of inflating the requested monster_level
 * during the creation of a monsters (see "get_mon_num()" in "monster.c").
 * Lower values yield harder monsters more often.
 */
@@ -44,7 +44,7 @@
 * @details
 * A monster can only "multiply" (reproduce) if there are fewer than 100
 * monsters on the level capable of such spontaneous reproduction.  This
-* is a hack which prevents the "p_ptr->current_floor_ptr->m_list[]" array from exploding due to
+* is a hack which prevents the "m_list[]" array from exploding due to
 * reproducing monsters.  Messy, but necessary.
 */
 #define MAX_REPRO       100
