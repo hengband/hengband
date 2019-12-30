@@ -3675,6 +3675,8 @@ F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
 F:RES_DARK | ACTIVATE | LITE_M1 |
 F:INSTA_ART
 U:BA_DARK
+D:$It is a necklace decorated with jet-black jewels.  Wear it and feel yourself
+D:$ in the dark.
 D:漆黒の宝玉がつけられた頸飾りだ。
 D:身に付けると自分が暗闇の中にいるのを感じる。
 
