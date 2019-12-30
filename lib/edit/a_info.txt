@@ -3980,9 +3980,8 @@ P:0:1d1:13:13:0
 F:INFRA | DEX | XTRA_SHOTS | LITE |
 F:SEE_INVIS | WARNING |
 F:HIDE_TYPE | SHOW_MODS
-D:$The white light crossbow that the fighter Link, wearing green clothes,
-D:$bought for training of shooting.'Enjoy shootings at the living room.'
-D:$(Nintendo)
+D:$Link, a warrior dressed in green, allegedly bought this white light crossbow
+D:$ for training.  "Enjoy shooting in the living room"  (Nintendo)
 D:緑の服の戦士リンクがボウガンのトレーニングのために購入した
 D:と言われる軽くて白いクロスボウだ。「リビングで射撃を楽しむ」
 D:(Nintendo)
