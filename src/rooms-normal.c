@@ -178,8 +178,8 @@ bool build_type1(floor_type *floor_ptr)
 			}
 
 			/* Prevent edge of wall from being tunneled */
-			place_solid_bold(yval, x1 - 1);
-			place_solid_bold(yval, x2 + 1);
+			place_solid_bold(floor_ptr, yval, x1 - 1);
+			place_solid_bold(floor_ptr, yval, x2 + 1);
 		}
 		else
 		{
@@ -191,8 +191,8 @@ bool build_type1(floor_type *floor_ptr)
 			}
 
 			/* Prevent edge of wall from being tunneled */
-			place_solid_bold(y1 - 1, xval);
-			place_solid_bold(y2 + 1, xval);
+			place_solid_bold(floor_ptr, y1 - 1, xval);
+			place_solid_bold(floor_ptr, y2 + 1, xval);
 		}
 
 		place_random_door(floor_ptr, yval, xval, TRUE);

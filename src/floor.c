@@ -226,8 +226,8 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 		place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(y, x - 1);
-		place_solid_bold(y, x + 1);
+		place_solid_bold(floor_ptr, y, x - 1);
+		place_solid_bold(floor_ptr, y, x + 1);
 	}
 
 
@@ -246,8 +246,8 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 		place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(y - 1, x);
-		place_solid_bold(y + 1, x);
+		place_solid_bold(floor_ptr, y - 1, x);
+		place_solid_bold(floor_ptr, y + 1, x);
 	}
 }
 

@@ -931,12 +931,12 @@ bool build_type13(floor_type *floor_ptr)
 		for (y = y1; y <= yval; y++)
 		{
 			place_floor_bold(floor_ptr, y, x2);
-			place_solid_bold(y, x1 - 1);
+			place_solid_bold(floor_ptr, y, x1 - 1);
 		}
 		for (y = yval; y <= y2 + 1; y++)
 		{
 			place_floor_bold(floor_ptr, y, x1);
-			place_solid_bold(y, x2 + 1);
+			place_solid_bold(floor_ptr, y, x2 + 1);
 		}
 	}
 	else
@@ -944,12 +944,12 @@ bool build_type13(floor_type *floor_ptr)
 		for (y = yval; y <= y2 + 1; y++)
 		{
 			place_floor_bold(floor_ptr, y, x1);
-			place_solid_bold(y, x2 + 1);
+			place_solid_bold(floor_ptr, y, x2 + 1);
 		}
 		for (y = y1; y <= yval; y++)
 		{
 			place_floor_bold(floor_ptr, y, x2);
-			place_solid_bold(y, x1 - 1);
+			place_solid_bold(floor_ptr, y, x1 - 1);
 		}
 	}
 
