@@ -3771,9 +3771,8 @@ I:19:23:4
 W:35:30:110:50000
 P:0:0d0:40:13:0
 F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
-D:$With this crossbow, Swiss hero Tell shot an apple exactly 
-D:$though it was on his son's head, and then he defeated evil 
-D:$magistrate Gessler.
+D:$With this crossbow, the Swiss hero, Tell, shot an apple from his son's
+D:$ head and then defeated the Gessler, the tyrannical magistrate.
 D:スイスの英雄ウィリアム・テルの使ったクロスボウだ。
 D:彼は我が子の頭の上のリンゴを正確に撃ち抜き、民衆を苦しめる
 D:悪代官ゲスラーを打ち破った。
