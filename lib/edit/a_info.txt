@@ -3968,6 +3968,7 @@ I:21:5:0
 W:45:18:250:2500
 P:0:4d6:15:15:0
 F:RIDING | WARNING | SLAY_EVIL | KILL_DEMON | ESP_DEMON
+D:$What, this useless sword again?  Oh!  Wait a minute ....
 D:なんだ、またこの役立たずの剣か。おや？ちょっと待てよ……
 
 # The Light Crossbow 'Wiizapper' (x3)
