@@ -3373,7 +3373,7 @@ W:20:4:130:20000
 P:0:2d2:6:10:0
 F:STR | BLOWS | HIDE_TYPE | 
 F:SLAY_ORC | SLAY_TROLL | RES_FIRE
-D:$A blade of Elendil that was broken by his fall as the battled Sauron upon
+D:$A blade of Elendil that was broken by his fall as he battled Sauron upon
 D:$ the steps of Barad-Dur.
 D:「金はすべて光るとは限らぬ、
 D:放浪する者すべてが、まよう者ではない。
