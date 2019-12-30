@@ -3169,6 +3169,9 @@ I:21:1:3
 W:10:20:50:40000
 P:0:2d4:8:10:0
 F:STR | CON | RES_FEAR | SEE_INVIS | SLAY_EVIL | SLAY_UNDEAD
+D:$This is the donkey's jawbone that Samson used to defeat a Philistine Army.
+D:$  Lightweight but effective, this club's sacred power is especially deadly
+D:$ against evil foes.
 D:怪力サムソンがペルシア人兵士の包囲を撃ち破ったときに使っていた
 D:棍棒。骨でできているために軽く、その聖なる力は邪悪なモンスター
 D:を打ち払う。
