@@ -252,10 +252,10 @@ W:50:40:2:75000
 F:STR | INT | WIS | DEX | CON | CHR | STEALTH | HIDE_TYPE |
 F:RES_POIS | ACTIVATE | SEE_INVIS | SEARCH | WARNING | INSTA_ART
 U:HYPODYNAMIA_1
-D:$This bracelet has its own will, which was created by Marlin
-D:$ the prince of chaos. It is  invisible but it sometimes
-D:$ ripples to warn owner's dangers. It can morph to strangle
-D:$ enemy's neck, if owner commands to it.
+D:$This bracelet has its own will.  It was created by Merlin, a prince of Chaos
+D:$ and son of Corwin.  The bracelet is invisible, but it sometimes ripples or
+D:$ constricts to warn its owner of danger.  When commanded by its owner, it
+D:$ can morph to strangle an enemy's neck.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
 D:混沌の王子マーリンがログルスから生み出した意思を持った腕輪だ。
 D:普段は目に見えないが脈動して危険を知らせてくれる。装備するものが
