@@ -5867,13 +5867,13 @@ void close_game(void)
 void handle_stuff(void)
 {
 	if (p_ptr->update) update_creature(p_ptr);
-	if (p_ptr->redraw) redraw_stuff();
+	if (p_ptr->redraw) redraw_stuff(p_ptr);
 	if (p_ptr->window) window_stuff();
 }
 
 void update_output(void)
 {
-	if (p_ptr->redraw) redraw_stuff();
+	if (p_ptr->redraw) redraw_stuff(p_ptr);
 	if (p_ptr->window) window_stuff();
 }
 

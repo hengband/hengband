@@ -30,7 +30,7 @@ extern void window_stuff(void);
 /*
  * Bit flags for the "redraw" variable
  */
-extern void redraw_stuff(void);
+extern void redraw_stuff(player_type *creature_ptr);
 
 extern POSITION panel_row_min, panel_row_max;
 extern POSITION panel_col_min, panel_col_max;

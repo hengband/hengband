@@ -2070,13 +2070,13 @@ bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
 
 
 /*! 
- * @brief p_ptr->redraw のフラグに応じた更新をまとめて行う / Handle "p_ptr->redraw"
+ * @brief redraw のフラグに応じた更新をまとめて行う / Handle "redraw"
  * @return なし
  * @details 更新処理の対象はゲーム中の全描画処理
  */
-void redraw_stuff(void)
+void redraw_stuff(player_type *creature_ptr)
 {
-	if (!p_ptr->redraw) return;
+	if (!creature_ptr->redraw) return;
 
 	/* Character is not ready yet, no screen updates */
 	if (!current_world_ptr->character_generated) return;
@@ -2085,171 +2085,171 @@ void redraw_stuff(void)
 	if (current_world_ptr->character_icky) return;
 
 	/* Hack -- clear the screen */
-	if (p_ptr->redraw & (PR_WIPE))
+	if (creature_ptr->redraw & (PR_WIPE))
 	{
-		p_ptr->redraw &= ~(PR_WIPE);
+		creature_ptr->redraw &= ~(PR_WIPE);
 		msg_print(NULL);
 		Term_clear();
 	}
 
-	if (p_ptr->redraw & (PR_MAP))
+	if (creature_ptr->redraw & (PR_MAP))
 	{
-		p_ptr->redraw &= ~(PR_MAP);
+		creature_ptr->redraw &= ~(PR_MAP);
 		prt_map();
 	}
 
-	if (p_ptr->redraw & (PR_BASIC))
+	if (creature_ptr->redraw & (PR_BASIC))
 	{
-		p_ptr->redraw &= ~(PR_BASIC);
-		p_ptr->redraw &= ~(PR_MISC | PR_TITLE | PR_STATS);
-		p_ptr->redraw &= ~(PR_LEV | PR_EXP | PR_GOLD);
-		p_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_MANA);
-		p_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
+		creature_ptr->redraw &= ~(PR_BASIC);
+		creature_ptr->redraw &= ~(PR_MISC | PR_TITLE | PR_STATS);
+		creature_ptr->redraw &= ~(PR_LEV | PR_EXP | PR_GOLD);
+		creature_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_MANA);
+		creature_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
 		prt_frame_basic();
 		prt_time();
 		prt_dungeon();
 	}
 
-	if (p_ptr->redraw & (PR_EQUIPPY))
+	if (creature_ptr->redraw & (PR_EQUIPPY))
 	{
-		p_ptr->redraw &= ~(PR_EQUIPPY);
+		creature_ptr->redraw &= ~(PR_EQUIPPY);
 		print_equippy(); /* To draw / delete equippy chars */
 	}
 
-	if (p_ptr->redraw & (PR_MISC))
+	if (creature_ptr->redraw & (PR_MISC))
 	{
-		p_ptr->redraw &= ~(PR_MISC);
+		creature_ptr->redraw &= ~(PR_MISC);
 		prt_field(rp_ptr->title, ROW_RACE, COL_RACE);
 /*		prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS); */
 	}
 
-	if (p_ptr->redraw & (PR_TITLE))
+	if (creature_ptr->redraw & (PR_TITLE))
 	{
-		p_ptr->redraw &= ~(PR_TITLE);
-		prt_title(p_ptr);
+		creature_ptr->redraw &= ~(PR_TITLE);
+		prt_title(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_LEV))
+	if (creature_ptr->redraw & (PR_LEV))
 	{
-		p_ptr->redraw &= ~(PR_LEV);
-		prt_level(p_ptr);
+		creature_ptr->redraw &= ~(PR_LEV);
+		prt_level(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_EXP))
+	if (creature_ptr->redraw & (PR_EXP))
 	{
-		p_ptr->redraw &= ~(PR_EXP);
-		prt_exp(p_ptr);
+		creature_ptr->redraw &= ~(PR_EXP);
+		prt_exp(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_STATS))
+	if (creature_ptr->redraw & (PR_STATS))
 	{
-		p_ptr->redraw &= ~(PR_STATS);
-		prt_stat(p_ptr, A_STR);
-		prt_stat(p_ptr, A_INT);
-		prt_stat(p_ptr, A_WIS);
-		prt_stat(p_ptr, A_DEX);
-		prt_stat(p_ptr, A_CON);
-		prt_stat(p_ptr, A_CHR);
+		creature_ptr->redraw &= ~(PR_STATS);
+		prt_stat(creature_ptr, A_STR);
+		prt_stat(creature_ptr, A_INT);
+		prt_stat(creature_ptr, A_WIS);
+		prt_stat(creature_ptr, A_DEX);
+		prt_stat(creature_ptr, A_CON);
+		prt_stat(creature_ptr, A_CHR);
 	}
 
-	if (p_ptr->redraw & (PR_STATUS))
+	if (creature_ptr->redraw & (PR_STATUS))
 	{
-		p_ptr->redraw &= ~(PR_STATUS);
-		prt_status(p_ptr);
+		creature_ptr->redraw &= ~(PR_STATUS);
+		prt_status(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_ARMOR))
+	if (creature_ptr->redraw & (PR_ARMOR))
 	{
-		p_ptr->redraw &= ~(PR_ARMOR);
-		prt_ac(p_ptr);
+		creature_ptr->redraw &= ~(PR_ARMOR);
+		prt_ac(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_HP))
+	if (creature_ptr->redraw & (PR_HP))
 	{
-		p_ptr->redraw &= ~(PR_HP);
-		prt_hp(p_ptr);
+		creature_ptr->redraw &= ~(PR_HP);
+		prt_hp(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_MANA))
+	if (creature_ptr->redraw & (PR_MANA))
 	{
-		p_ptr->redraw &= ~(PR_MANA);
-		prt_sp(p_ptr);
+		creature_ptr->redraw &= ~(PR_MANA);
+		prt_sp(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_GOLD))
+	if (creature_ptr->redraw & (PR_GOLD))
 	{
-		p_ptr->redraw &= ~(PR_GOLD);
+		creature_ptr->redraw &= ~(PR_GOLD);
 		prt_gold();
 	}
 
-	if (p_ptr->redraw & (PR_DEPTH))
+	if (creature_ptr->redraw & (PR_DEPTH))
 	{
-		p_ptr->redraw &= ~(PR_DEPTH);
+		creature_ptr->redraw &= ~(PR_DEPTH);
 		prt_depth();
 	}
 
-	if (p_ptr->redraw & (PR_HEALTH))
+	if (creature_ptr->redraw & (PR_HEALTH))
 	{
-		p_ptr->redraw &= ~(PR_HEALTH);
-		health_redraw(p_ptr, FALSE);
+		creature_ptr->redraw &= ~(PR_HEALTH);
+		health_redraw(creature_ptr, FALSE);
 	}
 
-	if (p_ptr->redraw & (PR_UHEALTH))
+	if (creature_ptr->redraw & (PR_UHEALTH))
 	{
-		p_ptr->redraw &= ~(PR_UHEALTH);
-		health_redraw(p_ptr, TRUE);
+		creature_ptr->redraw &= ~(PR_UHEALTH);
+		health_redraw(creature_ptr, TRUE);
 	}
 
-	if (p_ptr->redraw & (PR_EXTRA))
+	if (creature_ptr->redraw & (PR_EXTRA))
 	{
-		p_ptr->redraw &= ~(PR_EXTRA);
-		p_ptr->redraw &= ~(PR_CUT | PR_STUN);
-		p_ptr->redraw &= ~(PR_HUNGER);
-		p_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_IMITATION | PR_STATUS);
+		creature_ptr->redraw &= ~(PR_EXTRA);
+		creature_ptr->redraw &= ~(PR_CUT | PR_STUN);
+		creature_ptr->redraw &= ~(PR_HUNGER);
+		creature_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_IMITATION | PR_STATUS);
 		prt_frame_extra();
 	}
 
-	if (p_ptr->redraw & (PR_CUT))
+	if (creature_ptr->redraw & (PR_CUT))
 	{
-		p_ptr->redraw &= ~(PR_CUT);
-		prt_cut(p_ptr);
+		creature_ptr->redraw &= ~(PR_CUT);
+		prt_cut(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_STUN))
+	if (creature_ptr->redraw & (PR_STUN))
 	{
-		p_ptr->redraw &= ~(PR_STUN);
-		prt_stun(p_ptr);
+		creature_ptr->redraw &= ~(PR_STUN);
+		prt_stun(creature_ptr);
 	}
 
-	if (p_ptr->redraw & (PR_HUNGER))
+	if (creature_ptr->redraw & (PR_HUNGER))
 	{
-		p_ptr->redraw &= ~(PR_HUNGER);
+		creature_ptr->redraw &= ~(PR_HUNGER);
 		prt_hunger();
 	}
 
-	if (p_ptr->redraw & (PR_STATE))
+	if (creature_ptr->redraw & (PR_STATE))
 	{
-		p_ptr->redraw &= ~(PR_STATE);
+		creature_ptr->redraw &= ~(PR_STATE);
 		prt_state();
 	}
 
-	if (p_ptr->redraw & (PR_SPEED))
+	if (creature_ptr->redraw & (PR_SPEED))
 	{
-		p_ptr->redraw &= ~(PR_SPEED);
+		creature_ptr->redraw &= ~(PR_SPEED);
 		prt_speed();
 	}
 
-	if (p_ptr->pclass == CLASS_IMITATOR)
+	if (creature_ptr->pclass == CLASS_IMITATOR)
 	{
-		if (p_ptr->redraw & (PR_IMITATION))
+		if (creature_ptr->redraw & (PR_IMITATION))
 		{
-			p_ptr->redraw &= ~(PR_IMITATION);
+			creature_ptr->redraw &= ~(PR_IMITATION);
 			prt_imitation();
 		}
 	}
-	else if (p_ptr->redraw & (PR_STUDY))
+	else if (creature_ptr->redraw & (PR_STUDY))
 	{
-		p_ptr->redraw &= ~(PR_STUDY);
+		creature_ptr->redraw &= ~(PR_STUDY);
 		prt_study();
 	}
 }
