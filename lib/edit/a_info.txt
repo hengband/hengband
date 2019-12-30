@@ -1790,9 +1790,9 @@ W:20:8:80:35000
 P:0:1d7:3:7:0
 F:BLOWS |
 F:SLAY_ANIMAL | SLOW_DIGEST | REGEN | SHOW_MODS | SEE_INVIS | RES_DISEN
-D:$Merlin the prince of chaos hates carrying a heavy sword, so he invokes
-D:$ a power of chaos to take his sword from another dimension when he
-D:$ needs. This sword is also one of such things.
+D:$Merlin, a prince of chaos and Corwin's son, hates carrying a heavy sword.
+D:$  When he needs one, he invokes a power of chaos to summon a blade from some
+D:$ nearby parallel world.  This sword is one of those he summoned.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
 D:地球暮らしの長いマーリンは現代っ子らしく重く長い剣を持ち歩くのが嫌いで、
 D:必要な時カオスの力で剣を異世界から取り寄せる。この剣もそうした物の
