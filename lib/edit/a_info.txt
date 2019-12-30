@@ -3783,8 +3783,8 @@ I:18:1:0
 W:35:35:2:5000
 P:0:6d5:20:16:0
 F:KILL_HUMAN
-D:$It is said that this bolt sticked onto the heart of Gessler 
-D:$when Wilhelm Tell shot it.
+D:$It is said that Wilhelm Tell slew Gessler, the Austrian magistrate, with
+D:$ this bolt.
 D:かつてウィリアム・テルが撃ち放った1本のクロスボウの矢だ。
 D:悪代官ゲスラーの命を正確に奪ったという。
 
