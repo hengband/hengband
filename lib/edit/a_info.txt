@@ -3748,7 +3748,7 @@ W:20:15:30:50000
 P:0:2d1:15:17:0
 F:DEX | CHR | STEALTH |
 F:XTRA_MIGHT | HIDE_TYPE | SHOW_MODS | XTRA_H_RES
-D:$This is of Robin Hood who live in the deep forest.
+D:$It is the bow of Robin Hood, the bandit in Sherwood Forest.
 D:シャーウッドの森に住む義賊ロビン・フッドの弓だ。
 
 # from Slash'EM
