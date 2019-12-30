@@ -2965,25 +2965,25 @@ static void tim_player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLA
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void player_vuln_flags(BIT_FLAGS flgs[TR_FLAG_SIZE])
+static void player_vuln_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
-	if ((p_ptr->muta3 & MUT3_VULN_ELEM) || (p_ptr->special_defense & KATA_KOUKIJIN))
+	if ((creature_ptr->muta3 & MUT3_VULN_ELEM) || (creature_ptr->special_defense & KATA_KOUKIJIN))
 	{
 		add_flag(flgs, TR_RES_ACID);
 		add_flag(flgs, TR_RES_ELEC);
 		add_flag(flgs, TR_RES_FIRE);
 		add_flag(flgs, TR_RES_COLD);
 	}
-	if (PRACE_IS_(p_ptr, RACE_ANDROID))
+	if (PRACE_IS_(creature_ptr, RACE_ANDROID))
 		add_flag(flgs, TR_RES_ELEC);
-	if (PRACE_IS_(p_ptr, RACE_ENT))
+	if (PRACE_IS_(creature_ptr, RACE_ENT))
 		add_flag(flgs, TR_RES_FIRE);
-	if (PRACE_IS_(p_ptr, RACE_VAMPIRE) || PRACE_IS_(p_ptr, RACE_S_FAIRY) ||
-	    (p_ptr->mimic_form == MIMIC_VAMPIRE))
+	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || PRACE_IS_(creature_ptr, RACE_S_FAIRY) ||
+	    (creature_ptr->mimic_form == MIMIC_VAMPIRE))
 		add_flag(flgs, TR_RES_LITE);
 }
 
@@ -3162,7 +3162,7 @@ static void display_player_flag_info(void)
 	player_immunity(f.player_imm);
 	tim_player_immunity(p_ptr, f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
-	player_vuln_flags(f.player_vuln);
+	player_vuln_flags(p_ptr, f.player_vuln);
 
 	/*** Set 1 ***/
 
@@ -3293,7 +3293,7 @@ static void display_player_other_flag_info(void)
 	player_immunity(f.player_imm);
 	tim_player_immunity(p_ptr, f.tim_player_imm);
 	known_obj_immunity(f.known_obj_imm);
-	player_vuln_flags(f.player_vuln);
+	player_vuln_flags(p_ptr, f.player_vuln);
 
 	/*** Set 1 ***/
 
