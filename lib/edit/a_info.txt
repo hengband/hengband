@@ -3333,6 +3333,8 @@ P:0:2d6:6:9:0
 F:DEX | CHR | HIDE_TYPE | RIDING |
 F:KILL_ANIMAL | ESP_ANIMAL | BRAND_FIRE | ACTIVATE
 U:CHARM_ANIMAL
+D:$This is the whip of a venerable beastmaster from a country circus.  The
+D:$ crack of this whip can shake any beast.
 D:某国サーカス団で使用された由緒正しい猛獣使いの証だ。
 D:このムチの音はどんな猛獣でも震え上がらせることができる。
 
