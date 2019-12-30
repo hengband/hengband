@@ -3039,7 +3039,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 		int ny = GRID_Y(path_g[i]);
 		int nx = GRID_X(path_g[i]);
 
-		if (cave_empty_bold(attacker_ptr->current_floor_ptr, ny, nx) && player_can_enter(attacker_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0))
+		if (cave_empty_bold(attacker_ptr->current_floor_ptr, ny, nx) && player_can_enter(attacker_ptr, attacker_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0))
 		{
 			ty = ny;
 			tx = nx;

@@ -208,13 +208,13 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 			py_attack(caster_ptr, y, x, 0);
 
-			if (!player_can_enter(caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat))
+			if (!player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat))
 				break;
 
 			y += ddy[dir];
 			x += ddx[dir];
 
-			if (player_can_enter(caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+			if (player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 			{
 				msg_print(NULL);
 				(void)move_player_effect(caster_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
@@ -697,7 +697,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				lite_spot(ny, nx);
 
 				/* Player can move forward? */
-				if (player_can_enter(g_ptr->feat, 0))
+				if (player_can_enter(caster_ptr, g_ptr->feat, 0))
 				{
 					if (!move_player_effect(caster_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP)) break;
 				}

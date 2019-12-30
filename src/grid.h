@@ -378,7 +378,7 @@ extern bool is_mirror_grid(grid_type *g_ptr);
 extern bool is_glyph_grid(grid_type *g_ptr);
 extern bool is_explosive_rune_grid(grid_type *g_ptr);
 
-extern bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode);
+extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 
 /*!
  * マス構造体のspecial要素を利用する地形かどうかを判定するマクロ / Is this feature has special meaning (except floor_id) with g_ptr->special?

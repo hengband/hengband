@@ -53,7 +53,7 @@ bool player_can_ride_aux(player_type *creature_ptr, grid_type *g_ptr, bool now_r
 	creature_ptr->update |= PU_BONUS;
 	handle_stuff();
 
-	p_can_enter = player_can_enter(g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+	p_can_enter = player_can_enter(creature_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 
 	creature_ptr->riding = old_riding;
 	if (old_pf_ryoute) creature_ptr->pet_extra_flags |= (PF_RYOUTE);

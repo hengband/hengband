@@ -214,7 +214,7 @@ bool new_player_spot(player_type *creature_ptr)
 			/* Refuse to start on anti-teleport grids in dungeon */
 			if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) continue;
 		}
-		if (!player_can_enter(g_ptr->feat, 0)) continue;
+		if (!player_can_enter(creature_ptr, g_ptr->feat, 0)) continue;
 		if (!in_bounds(creature_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Refuse to start on anti-teleport grids */
@@ -1234,7 +1234,7 @@ bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
 
 	if (!(mode & TELEPORT_PASSIVE))
 	{
-		if (!player_can_enter(g_ptr->feat, 0)) return FALSE;
+		if (!player_can_enter(p_ptr, g_ptr->feat, 0)) return FALSE;
 
 		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
 		{
@@ -1272,20 +1272,20 @@ bool is_open(FEAT_IDX feat)
  * @param mode 移動に関するオプションフラグ
  * @return 移動可能ならばTRUEを返す
  */
-bool player_can_enter(FEAT_IDX feature, BIT_FLAGS16 mode)
+bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 mode)
 {
 	feature_type *f_ptr = &f_info[feature];
 
-	if (p_ptr->riding) return monster_can_cross_terrain(feature, &r_info[p_ptr->current_floor_ptr->m_list[p_ptr->riding].r_idx], mode | CEM_RIDING);
+	if (creature_ptr->riding) return monster_can_cross_terrain(feature, &r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx], mode | CEM_RIDING);
 
 	if (have_flag(f_ptr->flags, FF_PATTERN))
 	{
 		if (!(mode & CEM_P_CAN_ENTER_PATTERN)) return FALSE;
 	}
 
-	if (have_flag(f_ptr->flags, FF_CAN_FLY) && p_ptr->levitation) return TRUE;
-	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && p_ptr->can_swim) return TRUE;
-	if (have_flag(f_ptr->flags, FF_CAN_PASS) && p_ptr->pass_wall) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_FLY) && creature_ptr->levitation) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && creature_ptr->can_swim) return TRUE;
+	if (have_flag(f_ptr->flags, FF_CAN_PASS) && creature_ptr->pass_wall) return TRUE;
 
 	if (!have_flag(f_ptr->flags, FF_MOVE)) return FALSE;
 
