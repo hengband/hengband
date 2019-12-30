@@ -3717,6 +3717,8 @@ F:RES_DARK | RES_NETHER |
 F:SEE_INVIS | AGGRAVATE | ESP_UNDEAD | ACTIVATE |
 F:INSTA_ART
 U:BA_DARK
+D:$It is one of the restraining collars used for the prisoners in Hell.  The
+D:$ spite of many prisoners is palpable when near the collar.
 D:地獄の囚人を拘束する首輪だ。多くの囚人の怨念が込められている。
 
 N:219:帯魔力ペンダント
