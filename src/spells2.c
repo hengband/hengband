@@ -2076,7 +2076,7 @@ bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POI
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
+bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev)
 {
 	POSITION ly, lx;
 	int ld;
@@ -2091,8 +2091,8 @@ bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int n
 	/* Use the given direction */
 	if (dir != 5)
 	{
-		ly = ty = p_ptr->y + 20 * ddy[dir];
-		lx = tx = p_ptr->x + 20 * ddx[dir];
+		ly = ty = caster_ptr->y + 20 * ddy[dir];
+		lx = tx = caster_ptr->x + 20 * ddx[dir];
 	}
 
 	/* Use an actual "target" */
@@ -2101,11 +2101,11 @@ bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int n
 		tx = target_col;
 		ty = target_row;
 
-		lx = 20 * (tx - p_ptr->x) + p_ptr->x;
-		ly = 20 * (ty - p_ptr->y) + p_ptr->y;
+		lx = 20 * (tx - caster_ptr->x) + caster_ptr->x;
+		ly = 20 * (ty - caster_ptr->y) + caster_ptr->y;
 	}
 
-	ld = distance(p_ptr->y, p_ptr->x, ly, lx);
+	ld = distance(caster_ptr->y, caster_ptr->x, ly, lx);
 
 	/* Blast */
 	for (i = 0; i < num; i++)
@@ -2120,7 +2120,7 @@ bool fire_blast(EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int n
 		}
 
 		/* Analyze the "dir" and the "target". */
-		if (!project(p_ptr, 0, 0, y, x, damroll(dd, ds), typ, flg, -1))
+		if (!project(caster_ptr, 0, 0, y, x, damroll(dd, ds), typ, flg, -1))
 		{
 			result = FALSE;
 		}

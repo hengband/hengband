@@ -116,7 +116,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_blast(GF_LITE, dir, dice, sides, 10, 3);
+				fire_blast(caster_ptr, GF_LITE, dir, dice, sides, 10, 3);
 			}
 		}
 		break;
