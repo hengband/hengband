@@ -264,7 +264,7 @@ static int check_hit(player_type *target_ptr, int power)
 * @param trap_feat_type トラップの種別ID
 * @return なし
 */
-static void hit_trap_pit(int trap_feat_type)
+static void hit_trap_pit(player_type *trapped_ptr, int trap_feat_type)
 {
 	HIT_POINT dam;
 	concptr trap_name = "";
@@ -287,7 +287,7 @@ static void hit_trap_pit(int trap_feat_type)
 		return;
 	}
 
-	if (p_ptr->levitation)
+	if (trapped_ptr->levitation)
 	{
 		msg_format(_("%sを飛び越えた。", "You fly over %s."), trap_name);
 		return;
@@ -305,22 +305,22 @@ static void hit_trap_pit(int trap_feat_type)
 		msg_format(_("%sが刺さった！", "You are impaled on %s!"), spike_name);
 
 		dam = dam * 2;
-		(void)set_cut(p_ptr,p_ptr->cut + randint1(dam));
+		(void)set_cut(trapped_ptr,trapped_ptr->cut + randint1(dam));
 
 		if (trap_feat_type == TRAP_POISON_PIT) {
-			if (p_ptr->resist_pois || IS_OPPOSE_POIS())
+			if (trapped_ptr->resist_pois || IS_OPPOSE_POIS())
 			{
 				msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
 			}
 			else
 			{
 				dam = dam * 2;
-				(void)set_poisoned(p_ptr, p_ptr->poisoned + randint1(dam));
+				(void)set_poisoned(trapped_ptr, trapped_ptr->poisoned + randint1(dam));
 			}
 		}
 	}
 
-	take_hit(p_ptr, DAMAGE_NOESCAPE, dam, trap_name, -1);
+	take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, trap_name, -1);
 }
 
 /*!
@@ -454,7 +454,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	case TRAP_SPIKED_PIT:
 	case TRAP_POISON_PIT:
 	{
-		hit_trap_pit(trap_feat_type);
+		hit_trap_pit(trapped_ptr, trap_feat_type);
 		break;
 	}
 
