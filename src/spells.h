@@ -204,7 +204,7 @@ extern bool fire_ball_hide(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION
 extern bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION x, POSITION y, HIT_POINT dam, POSITION rad);
 extern bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev);
-extern void call_chaos(void);
+extern void call_chaos(player_type *caster_ptr);
 extern bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool lite_line(DIRECTION dir, HIT_POINT dam);

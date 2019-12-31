@@ -907,7 +907,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_CALL_CHAOS:
 	{
 		msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
-		call_chaos();
+		call_chaos(user_ptr);
 		break;
 	}
 

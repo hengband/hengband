@@ -523,7 +523,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				call_chaos();
+				call_chaos(caster_ptr);
 			}
 		}
 		break;

@@ -407,7 +407,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
-			call_chaos();
+			call_chaos(creature_ptr);
 			reward = _("カオスの力が渦巻いた。", "calling chaos");
 			break;
 

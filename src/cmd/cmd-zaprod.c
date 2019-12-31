@@ -234,7 +234,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_HAVOC:
 	{
-		call_chaos();
+		call_chaos(creature_ptr);
 		ident = TRUE;
 		break;
 	}

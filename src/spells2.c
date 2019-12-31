@@ -2486,10 +2486,10 @@ bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
  * @brief 混沌招来処理
  * @return 作用が実際にあった場合TRUEを返す
  */
-void call_chaos(void)
+void call_chaos(player_type *caster_ptr)
 {
 	int Chaos_type, dummy, dir;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	bool line_chaos = FALSE;
 
 	int hurt_types[31] =
@@ -2516,13 +2516,13 @@ void call_chaos(void)
 				if (line_chaos)
 					fire_beam(Chaos_type, dummy, 150);
 				else
-					fire_ball(p_ptr, Chaos_type, dummy, 150, 2);
+					fire_ball(caster_ptr, Chaos_type, dummy, 150, 2);
 			}
 		}
 	}
 	else if (one_in_(3))
 	{
-		fire_ball(p_ptr, Chaos_type, 0, 500, 8);
+		fire_ball(caster_ptr, Chaos_type, 0, 500, 8);
 	}
 	else
 	{
@@ -2530,7 +2530,7 @@ void call_chaos(void)
 		if (line_chaos)
 			fire_beam(Chaos_type, dir, 250);
 		else
-			fire_ball(p_ptr, Chaos_type, dir, 250, 3 + (plev / 35));
+			fire_ball(caster_ptr, Chaos_type, dir, 250, 3 + (plev / 35));
 	}
 }
 
