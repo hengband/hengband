@@ -255,31 +255,6 @@ void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 }
 
 /*!
- * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
- * @param x 地形を変えたいマスのX座標
- * @param y 地形を変えたいマスのY座標
- * @return なし
- */
-void set_floor(POSITION x, POSITION y)
-{
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x))
-	{
-		/* Out of bounds */
-		return;
-	}
-
-	if (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ROOM)
-	{
-		/* A room border don't touch. */
-		return;
-	}
-
-	/* Set to be floor if is a wall (don't touch lakes). */
-	if (is_extra_bold(p_ptr->current_floor_ptr, y, x))
-		place_floor_bold(p_ptr->current_floor_ptr, y, x);
-}
-
-/*!
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
  * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
  * @return なし

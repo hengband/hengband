@@ -421,3 +421,5 @@ extern void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num
 #define PROJECT_FAST        0x4000 /*!< 遠隔攻撃特性: / Hide "visual" of flying bolts until blast */
 #define PROJECT_LOS         0x8000 /*!< 遠隔攻撃特性: /  */
 extern sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
+
+extern void set_floor(floor_type *floor_ptr, POSITION x, POSITION y);

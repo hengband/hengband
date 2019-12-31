@@ -1566,3 +1566,30 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 	/* Length */
 	return (n);
 }
+
+
+/*!
+ * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
+ * @param x 地形を変えたいマスのX座標
+ * @param y 地形を変えたいマスのY座標
+ * @return なし
+ */
+void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
+{
+	if (!in_bounds(floor_ptr, y, x))
+	{
+		/* Out of bounds */
+		return;
+	}
+
+	if (floor_ptr->grid_array[y][x].info & CAVE_ROOM)
+	{
+		/* A room border don't touch. */
+		return;
+	}
+
+	/* Set to be floor if is a wall (don't touch lakes). */
+	if (is_extra_bold(floor_ptr, y, x))
+		place_floor_bold(floor_ptr, y, x);
+}
+

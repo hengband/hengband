@@ -273,7 +273,7 @@ static void check_room_boundary(floor_type *floor_ptr, POSITION x1, POSITION y1,
 	{
 		for (x = x1; x <= x2; x++)
 		{
-			set_floor(x, y);
+			set_floor(floor_ptr, x, y);
 		}
 	}
 }
