@@ -467,9 +467,10 @@ static border_type border;
 /*!
  * @brief 広域マップの生成 /
  * Build the wilderness area outside of the town.
+ * @todo 広域マップは恒常生成にする予定、player_typeによる処理分岐は最終的に排除する。
  * @return なし
  */
-void wilderness_gen(floor_type *floor_ptr)
+void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
 {
 	int i, lim;
 	POSITION y, x;
@@ -485,8 +486,8 @@ void wilderness_gen(floor_type *floor_ptr)
 	panel_col_min = floor_ptr->width;
 
 	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-	x = p_ptr->wilderness_x;
-	y = p_ptr->wilderness_y;
+	x = creature_ptr->wilderness_x;
+	y = creature_ptr->wilderness_y;
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	/* North border */
@@ -627,7 +628,7 @@ void wilderness_gen(floor_type *floor_ptr)
 		}
 	}
 
-	if (p_ptr->teleport_town)
+	if (creature_ptr->teleport_town)
 	{
 		for (y = 0; y < floor_ptr->height; y++)
 		{
@@ -640,19 +641,19 @@ void wilderness_gen(floor_type *floor_ptr)
 
 				if (have_flag(f_ptr->flags, FF_BLDG))
 				{
-					if ((f_ptr->subtype == 4) || ((p_ptr->town_num == 1) && (f_ptr->subtype == 0)))
+					if ((f_ptr->subtype == 4) || ((creature_ptr->town_num == 1) && (f_ptr->subtype == 0)))
 					{
 						if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
-						p_ptr->oldpy = y;
-						p_ptr->oldpx = x;
+						creature_ptr->oldpy = y;
+						creature_ptr->oldpx = x;
 					}
 				}
 			}
 		}
-		p_ptr->teleport_town = FALSE;
+		creature_ptr->teleport_town = FALSE;
 	}
 
-	else if (p_ptr->leaving_dungeon)
+	else if (creature_ptr->leaving_dungeon)
 	{
 		for (y = 0; y < floor_ptr->height; y++)
 		{
@@ -663,15 +664,15 @@ void wilderness_gen(floor_type *floor_ptr)
 				if (cave_have_flag_grid(g_ptr, FF_ENTRANCE))
 				{
 					if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
-					p_ptr->oldpy = y;
-					p_ptr->oldpx = x;
+					creature_ptr->oldpy = y;
+					creature_ptr->oldpx = x;
 				}
 			}
 		}
-		p_ptr->teleport_town = FALSE;
+		creature_ptr->teleport_town = FALSE;
 	}
 
-	player_place(p_ptr, p_ptr->oldpy, p_ptr->oldpx);
+	player_place(creature_ptr, creature_ptr->oldpy, creature_ptr->oldpx);
 
 	lim = (generate_encounter == TRUE) ? 40 : MIN_M_ALLOC_TN;
 
@@ -680,14 +681,14 @@ void wilderness_gen(floor_type *floor_ptr)
 	{
 		BIT_FLAGS mode = 0;
 
-		if (!(generate_encounter || (one_in_(2) && (!p_ptr->town_num))))
+		if (!(generate_encounter || (one_in_(2) && (!creature_ptr->town_num))))
 			mode |= PM_ALLOW_SLEEP;
 
 		/* Make a resident */
 		(void)alloc_monster(generate_encounter ? 0 : 3, mode);
 	}
 
-	if(generate_encounter) p_ptr->ambush_flag = TRUE;
+	if(generate_encounter) creature_ptr->ambush_flag = TRUE;
 	generate_encounter = FALSE;
 
 	/* Fill the arrays of floors and walls in the good proportions */
