@@ -473,7 +473,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
  */
 bool no_lite(void)
 {
-	return (!player_can_see_bold(p_ptr->y, p_ptr->x));
+	return (!player_can_see_bold(p_ptr, p_ptr->y, p_ptr->x));
 }
 
 /*
@@ -1074,7 +1074,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 			found = TRUE;
 		}
 
-		if (found && current_world_ptr->character_dungeon && player_can_see_bold(y, x))
+		if (found && current_world_ptr->character_dungeon && player_can_see_bold(p_ptr, y, x))
 		{
 			msg_print(_("何かを発見した！", "You have found something!"));
 		}

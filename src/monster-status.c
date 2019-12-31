@@ -936,7 +936,7 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 
 		if (is_pet(m_ptr) || m_ptr->ml)
 		{
-			if (!ignore_unview || player_can_see_bold(m_ptr->fy, m_ptr->fx))
+			if (!ignore_unview || player_can_see_bold(p_ptr, m_ptr->fy, m_ptr->fx))
 			{
 				if (p_ptr->image)
 				{

@@ -2546,7 +2546,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		}
 
 		/* The player can see the (on screen) missile */
-		if (panel_contains(ny[cur_dis], nx[cur_dis]) && player_can_see_bold(ny[cur_dis], nx[cur_dis]))
+		if (panel_contains(ny[cur_dis], nx[cur_dis]) && player_can_see_bold(creature_ptr, ny[cur_dis], nx[cur_dis]))
 		{
 			SYMBOL_CODE c = object_char(q_ptr);
 			TERM_COLOR a = object_attr(q_ptr);
@@ -2743,7 +2743,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		{
 			for (i = cur_dis - 1; i > 0; i--)
 			{
-				if (panel_contains(ny[i], nx[i]) && player_can_see_bold(ny[i], nx[i]))
+				if (panel_contains(ny[i], nx[i]) && player_can_see_bold(creature_ptr, ny[i], nx[i]))
 				{
 					char c = object_char(q_ptr);
 					byte a = object_attr(q_ptr);

@@ -1159,7 +1159,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		oktomove = FALSE;
 
 		/* Notice things in the dark */
-		if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
+		if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(creature_ptr, y, x))
 		{
 			/* Boundary floor mimic */
 			if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
@@ -1351,7 +1351,7 @@ static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
 	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return (FALSE);
 
 	/* Viewable door/wall grids are known */
-	if (player_can_see_bold(y, x)) return (FALSE);
+	if (player_can_see_bold(p_ptr, y, x)) return (FALSE);
 
 	/* Default */
 	return (TRUE);

@@ -387,7 +387,6 @@ extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FL
 /* grids.c */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
-extern bool player_can_see_bold(POSITION y, POSITION x);
 extern bool no_lite(void);
 extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp);
 extern void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);

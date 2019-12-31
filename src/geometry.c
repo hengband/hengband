@@ -192,23 +192,23 @@ void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT
  * "glowing" grid.  This prevents the player from being able to "see" the\n
  * walls of illuminated rooms from a corridor outside the room.\n
  */
-bool player_can_see_bold(POSITION y, POSITION x)
+bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 
 	/* Blind players see nothing */
-	if (p_ptr->blind) return FALSE;
+	if (creature_ptr->blind) return FALSE;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Note that "torch-lite" yields "illumination" */
 	if (g_ptr->info & (CAVE_LITE | CAVE_MNLT)) return TRUE;
 
 	/* Require line of sight to the grid */
-	if (!player_has_los_bold(p_ptr, y, x)) return FALSE;
+	if (!player_has_los_bold(creature_ptr, y, x)) return FALSE;
 
 	/* Noctovision of Ninja */
-	if (p_ptr->see_nocto) return TRUE;
+	if (creature_ptr->see_nocto) return TRUE;
 
 	/* Require "perma-lite" of the grid */
 	if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) return FALSE;
@@ -218,7 +218,7 @@ bool player_can_see_bold(POSITION y, POSITION x)
 	if (feat_supports_los(get_feat_mimic(g_ptr))) return TRUE;
 
 	/* Check for "local" illumination */
-	return check_local_illumination(p_ptr, y, x);
+	return check_local_illumination(creature_ptr, y, x);
 }
 
 /*

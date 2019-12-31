@@ -881,7 +881,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	feat = get_feat_mimic(g_ptr);
 
 	/* Require knowledge about grid, or ability to see grid */
-	if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(y, x))
+	if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(subject_ptr, y, x))
 	{
 		/* Forget feature */
 		feat = feat_none;

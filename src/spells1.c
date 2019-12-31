@@ -577,7 +577,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				update_local_illumination(p_ptr, y, x);
 
 				/* Observe */
-				if (player_can_see_bold(y, x)) obvious = TRUE;
+				if (player_can_see_bold(p_ptr, y, x)) obvious = TRUE;
 
 				/* Mega-Hack -- Update the monster in the affected grid */
 				/* This allows "spear of light" (etc) to work "correctly" */
@@ -639,7 +639,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				update_local_illumination(p_ptr, y, x);
 
-				if (player_can_see_bold(y, x)) obvious = TRUE;
+				if (player_can_see_bold(p_ptr, y, x)) obvious = TRUE;
 
 				/* Mega-Hack -- Update the monster in the affected grid */
 				/* This allows "spear of light" (etc) to work "correctly" */
@@ -6245,7 +6245,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	if (flg & PROJECT_KILL)
 	{
 		see_s_msg = (who > 0) ? is_seen(&caster_ptr->current_floor_ptr->m_list[who]) :
-			(!who ? TRUE : (player_can_see_bold(y1, x1) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
+			(!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
 	}
 
 

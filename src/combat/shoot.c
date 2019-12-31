@@ -555,7 +555,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			}
 
 			/* The player can see the (on screen) missile */
-			if (panel_contains(ny, nx) && player_can_see_bold(ny, nx))
+			if (panel_contains(ny, nx) && player_can_see_bold(shooter_ptr, ny, nx))
 			{
 				char c = object_char(q_ptr);
 				byte a = object_attr(q_ptr);

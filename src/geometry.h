@@ -18,7 +18,7 @@ extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
-extern bool player_can_see_bold(POSITION y, POSITION x);
+extern bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x);
 extern bool no_lite(void);
 
 /*!
@@ -63,5 +63,5 @@ struct coord
  */
 #define is_seen(A) \
 	((bool)((A)->ml && (!ignore_unview || p_ptr->phase_out || \
-	 (player_can_see_bold((A)->fy, (A)->fx) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
+	 (player_can_see_bold(p_ptr, (A)->fy, (A)->fx) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
 

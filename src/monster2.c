@@ -2064,7 +2064,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 			}
 
 			/* Use "illumination" */
-			if (player_can_see_bold(fy, fx))
+			if (player_can_see_bold(subject_ptr, fy, fx))
 			{
 				/* Handle "invisible" monsters */
 				if (r_ptr->flags2 & (RF2_INVISIBLE))

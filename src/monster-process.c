@@ -2284,7 +2284,7 @@ void process_monster(MONSTER_IDX m_idx)
 							did_take_item = TRUE;
 
 							/* Describe observable situations */
-							if (m_ptr->ml && player_can_see_bold(ny, nx))
+							if (m_ptr->ml && player_can_see_bold(p_ptr, ny, nx))
 							{
 								msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
 							}
@@ -2297,7 +2297,7 @@ void process_monster(MONSTER_IDX m_idx)
 						did_take_item = TRUE;
 
 						/* Describe observable situations */
-						if (player_can_see_bold(ny, nx))
+						if (player_can_see_bold(p_ptr, ny, nx))
 						{
 							msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
 						}

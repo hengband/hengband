@@ -2694,7 +2694,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
 				{
-					if (player_can_see_bold(wy, wx)) notice = TRUE;
+					if (player_can_see_bold(p_ptr, wy, wx)) notice = TRUE;
 				}
 			}
 
@@ -2759,7 +2759,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 					if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
 					{
-						if (player_can_see_bold(wy, wx))
+						if (player_can_see_bold(p_ptr, wy, wx))
 							msg_print(_("新たな戦士が現れた！", "A new warrior steps forth!"));
 					}
 				}
