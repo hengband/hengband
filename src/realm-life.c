@@ -215,7 +215,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				turn_undead();
+				turn_undead(caster_ptr);
 			}
 		}
 		break;

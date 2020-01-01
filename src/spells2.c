@@ -863,11 +863,11 @@ bool banish_evil(int dist)
  * @brief 視界内のアンデッド・モンスターを恐怖させる処理 / Turn undead
  * @return 効力があった場合TRUEを返す
  */
-bool turn_undead(void)
+bool turn_undead(player_type *caster_ptr)
 {
-	bool tester = (project_all_los(p_ptr, GF_TURN_UNDEAD, p_ptr->lev));
+	bool tester = (project_all_los(caster_ptr, GF_TURN_UNDEAD, caster_ptr->lev));
 	if (tester)
-		chg_virtue(p_ptr, V_UNLIFE, -1);
+		chg_virtue(caster_ptr, V_UNLIFE, -1);
 	return tester;
 }
 

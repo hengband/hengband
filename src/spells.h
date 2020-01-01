@@ -191,7 +191,7 @@ extern bool dispel_demons(HIT_POINT dam);
 extern bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful);
 extern bool unleash_mana_storm(player_type *creature_ptr, bool powerful);
 extern bool crusade(player_type *caster_ptr);
-extern bool turn_undead(void);
+extern bool turn_undead(player_type *caster_ptr);
 extern void lite_room(POSITION y1, POSITION x1);
 extern bool starlight(bool magic);
 extern void unlite_room(POSITION y1, POSITION x1);
