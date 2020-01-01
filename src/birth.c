@@ -476,7 +476,7 @@ static concptr realm_jouhou[VALID_REALM] =
 
 "Music magic works through the caster singing songs.  There are two types of songs; one which shows effects instantly and another which shows effects continuously until SP runs out.  The latter type has a limit:  only one song can be sung at a time.",
 
-"The books of Kendo describe various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorizes them, you don't have to carry them.  When using a technique, wielding a weapon is required.",
+"The books of Kendo describe various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorize them, you don't have to carry them.  When using a technique, wielding a weapon is required.",
 
 "Hex is an unsavory realm, like the death and demon realms.  Many spells can act continuously by stringing together curses like a song.  Spells may obstruct monsters' actions, deal damage to monsters in sight, or return damage to monsters who have damaged the caster."
 #endif
