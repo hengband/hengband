@@ -101,7 +101,7 @@ void set_floor_and_wall(DUNGEON_IDX type)
  * @param depth_max 深みの最大値
  * @return なし
  */
-static void perturb_point_mid(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
+static void perturb_point_mid(floor_type *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
 	/*
 	 * Average the four corners & perturb it a bit.
@@ -121,7 +121,7 @@ static void perturb_point_mid(FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4
 	if (avg > depth_max) avg = depth_max;
 
 	/* Set the new value. */
-	p_ptr->current_floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
+	floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
 }
 
 
@@ -188,7 +188,7 @@ static void plasma_recursive(floor_type *floor_ptr, POSITION x1, POSITION y1, PO
 	/* Are we done? */
 	if (x1 + 1 == x2) return;
 
-	perturb_point_mid(floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[y1][x2].feat,
+	perturb_point_mid(floor_ptr, floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[y1][x2].feat,
 		floor_ptr->grid_array[y2][x2].feat, xmid, ymid, rough, depth_max);
 
 	perturb_point_end(floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[y1][x2].feat, floor_ptr->grid_array[ymid][xmid].feat,
