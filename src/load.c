@@ -2975,7 +2975,7 @@ static errr rd_dungeon_old(void)
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-static errr rd_saved_floor(saved_floor_type *sf_ptr)
+static errr rd_saved_floor(saved_floor_type *sf_ptr, floor_type *floor_ptr)
 {
 	POSITION ymax, xmax;
 	POSITION y, x;
@@ -2990,7 +2990,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 	grid_template_type *templates;
 
-	clear_cave(p_ptr->current_floor_ptr);
+	clear_cave(floor_ptr);
 
 	/* Mega-Hack -- no player yet */
 	p_ptr->x = p_ptr->y = 0;
@@ -3004,8 +3004,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/*** Not a saved floor ***/
 
 		rd_s16b(&tmp16s);
-		p_ptr->current_floor_ptr->dun_level = (DEPTH)tmp16s;
-		p_ptr->current_floor_ptr->base_level = p_ptr->current_floor_ptr->dun_level;
+		floor_ptr->dun_level = (DEPTH)tmp16s;
+		floor_ptr->base_level = floor_ptr->dun_level;
 	}
 	else
 	{
@@ -3019,7 +3019,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		rd_s16b(&tmp16s);
 		if (tmp16s != sf_ptr->dun_level) return 171;
-		p_ptr->current_floor_ptr->dun_level = sf_ptr->dun_level;
+		floor_ptr->dun_level = sf_ptr->dun_level;
 
 		rd_s32b(&tmp32s);
 		if (tmp32s != sf_ptr->last_visit) return 171;
@@ -3035,9 +3035,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->base_level = (DEPTH)tmp16s;
+	floor_ptr->base_level = (DEPTH)tmp16s;
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
+	floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 
 	rd_u16b(&tmp16u);
 	p_ptr->y = (POSITION)tmp16u;
@@ -3046,9 +3046,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	p_ptr->x = (POSITION)tmp16u;
 
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->height = (POSITION)tmp16s;
+	floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->width = (POSITION)tmp16s;
+	floor_ptr->width = (POSITION)tmp16s;
 
 	rd_byte(&p_ptr->feeling);
 
@@ -3086,8 +3086,8 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	}
 
 	/* Maximal size */
-	ymax = p_ptr->current_floor_ptr->height;
-	xmax = p_ptr->current_floor_ptr->width;
+	ymax = floor_ptr->height;
+	xmax = floor_ptr->width;
 
 
 	/*** Run length decoding ***/
@@ -3110,7 +3110,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 			g_ptr->info = templates[id].info;
 			g_ptr->feat = templates[id].feat;
 			g_ptr->mimic = templates[id].mimic;
@@ -3133,9 +3133,9 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !p_ptr->current_floor_ptr->dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level)
 			{
 				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
@@ -3148,7 +3148,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 				}
 			}
 			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
-				(p_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+				(floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
 			{
 				g_ptr->feat = feat_up_stair;
 				g_ptr->special = 0;
@@ -3182,7 +3182,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		if (i != o_idx) return 152;
 
 		/* Acquire place */
-		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+		o_ptr = &floor_ptr->o_list[o_idx];
 
 		/* Read the item */
 		rd_item(o_ptr);
@@ -3190,7 +3190,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
-			m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
+			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -3202,7 +3202,7 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 		else
 		{
 			/* Access the item location */
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
+			grid_type *g_ptr = &floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
@@ -3232,14 +3232,14 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr)
 
 		if (i != m_idx) return 162;
 
-		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		m_ptr = &floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
 		rd_monster(m_ptr);
 
 
 		/* Access grid */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		g_ptr->m_idx = m_idx;
@@ -3303,7 +3303,7 @@ static errr rd_dungeon(void)
 	if (!num)
 	{
 		/* Read the current floor data */
-		err = rd_saved_floor(NULL);
+		err = rd_saved_floor(NULL, p_ptr->current_floor_ptr);
 	}
 
 	/*** In the dungeon ***/
@@ -3342,7 +3342,7 @@ static errr rd_dungeon(void)
 			if (tmp8u) continue;
 
 			/* Read from the save file */
-			err = rd_saved_floor(sf_ptr);
+			err = rd_saved_floor(sf_ptr, p_ptr->current_floor_ptr);
 
 			/* Error? */
 			if (err) break;
@@ -4057,7 +4057,7 @@ static bool load_floor_aux(saved_floor_type *sf_ptr)
 	if (saved_floor_file_sign != tmp32u) return FALSE;
 
 	/* Read -- have error? */
-	if (rd_saved_floor(sf_ptr)) return FALSE;
+	if (rd_saved_floor(sf_ptr, p_ptr->current_floor_ptr)) return FALSE;
 
 
 #ifdef VERIFY_CHECKSUMS
