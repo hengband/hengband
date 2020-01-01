@@ -940,7 +940,7 @@ bool check_score(void)
 
 #ifndef SCORE_WIZARDS
 	/* Wizard-mode pre-empts scoring */
-	if (p_ptr->noscore & 0x000F)
+	if (current_world_ptr->noscore & 0x000F)
 	{
 		msg_print(_("ウィザード・モードではスコアが記録されません。", "Score not registered for wizards."));
 		msg_print(NULL);
@@ -950,7 +950,7 @@ bool check_score(void)
 
 #ifndef SCORE_BORGS
 	/* Borg-mode pre-empts scoring */
-	if (p_ptr->noscore & 0x00F0)
+	if (current_world_ptr->noscore & 0x00F0)
 	{
 		msg_print(_("ボーグ・モードではスコアが記録されません。", "Score not registered for borgs."));
 		msg_print(NULL);
@@ -960,7 +960,7 @@ bool check_score(void)
 
 #ifndef SCORE_CHEATERS
 	/* Cheaters are not scored */
-	if (p_ptr->noscore & 0xFF00)
+	if (current_world_ptr->noscore & 0xFF00)
 	{
 		msg_print(_("詐欺をやった人はスコアが記録されません。", "Score not registered for cheaters."));
 		msg_print(NULL);

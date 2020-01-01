@@ -422,8 +422,6 @@ struct player_type
 	u16b total_winner;	  /* Total winner */
 	u16b panic_save;	  /* Panic save */
 
-	u16b noscore;		  /* Cheating flags */
-
 	bool wait_report_score;   /* Waiting to report score */
 	bool is_dead;		  /* Player is dead */
 	bool now_damaged;

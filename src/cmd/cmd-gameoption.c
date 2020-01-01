@@ -1103,10 +1103,10 @@ static void do_cmd_options_cheat(concptr info)
 		case 'Y':
 		case '6':
 		{
-			if (!p_ptr->noscore)
+			if (!current_world_ptr->noscore)
 				exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0,
 					_("詐欺オプションをONにして、スコアを残せなくなった。", "give up sending score to use cheating options."));
-			p_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
+			current_world_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
 			(*cheat_info[k].o_var) = TRUE;
 			k = (k + 1) % n;
 			break;
@@ -1195,7 +1195,7 @@ void do_cmd_options(void)
 		int n = OPT_NUM;
 
 		/* Does not list cheat option when cheat option is off */
-		if (!p_ptr->noscore && !allow_debug_opts) n--;
+		if (!current_world_ptr->noscore && !allow_debug_opts) n--;
 		Term_clear();
 
 		/* Why are we here */
@@ -1316,7 +1316,7 @@ void do_cmd_options(void)
 		/* Cheating Options */
 		case 'C':
 		{
-			if (!p_ptr->noscore && !allow_debug_opts)
+			if (!current_world_ptr->noscore && !allow_debug_opts)
 			{
 				/* Cheat options are not permitted */
 				bell();

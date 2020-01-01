@@ -4608,7 +4608,7 @@ static void dump_aux_options(FILE *fff)
 
 	fputc('\n', fff);
 
-	if (p_ptr->noscore)
+	if (current_world_ptr->noscore)
 		fprintf(fff, _("\n 何か不正なことをしてしまっています。\n", "\n You have done something illegal.\n"));
 
 	fputc('\n', fff);
@@ -6080,7 +6080,7 @@ static void make_bones(void)
 
 
 	/* Ignore wizards and borgs */
-	if (!(p_ptr->noscore & 0x00FF))
+	if (!(current_world_ptr->noscore & 0x00FF))
 	{
 		/* Ignore people who die in town */
 		if (p_ptr->current_floor_ptr->dun_level)

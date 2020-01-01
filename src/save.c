@@ -601,7 +601,7 @@ static void save_quick_start(void)
 	wr_byte(0);
 
 	/* No quick start after using debug mode or cheat options */
-	if (p_ptr->noscore) previous_char.quick_ok = FALSE;
+	if (current_world_ptr->noscore) previous_char.quick_ok = FALSE;
 
 	wr_byte((byte)previous_char.quick_ok);
 }
@@ -825,7 +825,7 @@ static void wr_extra(player_type *creature_ptr)
 	/* Special stuff */
 	wr_u16b(creature_ptr->panic_save);
 	wr_u16b(creature_ptr->total_winner);
-	wr_u16b(creature_ptr->noscore);
+	wr_u16b(current_world_ptr->noscore);
 
 
 	/* Write death */

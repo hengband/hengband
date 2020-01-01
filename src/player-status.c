@@ -5794,7 +5794,7 @@ void cheat_death(player_type *creature_ptr)
 	creature_ptr->age++;
 
 	/* Mark savefile */
-	creature_ptr->noscore |= 0x0001;
+	current_world_ptr->noscore |= 0x0001;
 
 	msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
 	msg_print(NULL);

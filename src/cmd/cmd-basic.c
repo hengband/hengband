@@ -57,6 +57,7 @@
 
 #include "view-mainwindow.h"
 #include "targeting.h"
+#include "world.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
@@ -2859,7 +2860,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 		if (!get_check(_("本当に自殺しますか？", "Do you really want to commit suicide? "))) return;
 	}
 
-	if (!creature_ptr->noscore)
+	if (!current_world_ptr->noscore)
 	{
 		/* Special Verification for suicide */
 		prt(_("確認のため '@' を押して下さい。", "Please verify SUICIDE by typing the '@' sign: "), 0, 0);

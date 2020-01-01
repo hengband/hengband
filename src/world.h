@@ -11,6 +11,7 @@ typedef struct {
 	GAME_TURN dungeon_turn_limit;	/*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
 	GAME_TURN arena_start_turn;		/*!< 闘技場賭博の開始ターン値 */
 	u32b start_time;
+	u16b noscore;		  /* Cheating flags */
 
 	MONSTER_IDX timewalk_m_idx;     /*!< 現在時間停止を行っているモンスターのID */
 

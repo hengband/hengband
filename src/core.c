@@ -3373,7 +3373,7 @@ static void process_world(player_type *player_ptr)
 static bool enter_wizard_mode(void)
 {
 	/* Ask first time */
-	if (!p_ptr->noscore)
+	if (!current_world_ptr->noscore)
 	{
 		/* Wizard mode is not permitted */
 		if (!allow_debug_opts || arg_wizard)
@@ -3395,7 +3395,7 @@ static bool enter_wizard_mode(void)
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
 		/* Mark savefile */
-		p_ptr->noscore |= 0x0002;
+		current_world_ptr->noscore |= 0x0002;
 	}
 
 	/* Success */
@@ -3413,7 +3413,7 @@ static bool enter_wizard_mode(void)
 static bool enter_debug_mode(void)
 {
 	/* Ask first time */
-	if (!p_ptr->noscore)
+	if (!current_world_ptr->noscore)
 	{
 		/* Debug mode is not permitted */
 		if (!allow_debug_opts)
@@ -3436,7 +3436,7 @@ static bool enter_debug_mode(void)
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
 		/* Mark savefile */
-		p_ptr->noscore |= 0x0008;
+		current_world_ptr->noscore |= 0x0008;
 	}
 
 	/* Success */
@@ -3461,7 +3461,7 @@ extern void do_cmd_debug(player_type *creature_ptr);
 static bool enter_borg_mode(void)
 {
 	/* Ask first time */
-	if (!(p_ptr->noscore & 0x0010))
+	if (!(current_world_ptr->noscore & 0x0010))
 	{
 		/* Mention effects */
 		msg_print(_("ボーグ・コマンドはデバッグと実験のためのコマンドです。 ", "The borg commands are for debugging and experimenting."));
@@ -3477,7 +3477,7 @@ static bool enter_borg_mode(void)
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ボーグ・コマンドを使用してスコアを残せなくなった。", "give up recording score to use borg commands."));
 		/* Mark savefile */
-		p_ptr->noscore |= 0x0010;
+		current_world_ptr->noscore |= 0x0010;
 	}
 
 	/* Success */

@@ -1801,7 +1801,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	creature_ptr->panic_save = 0;
 
 	/* Assume no cheating */
-	creature_ptr->noscore = 0;
+	current_world_ptr->noscore = 0;
 	current_world_ptr->wizard = FALSE;
 
 	/* Not waiting to report score */
