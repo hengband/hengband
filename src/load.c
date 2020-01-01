@@ -3406,7 +3406,7 @@ static errr rd_dungeon(void)
  * @brief ロード処理全体のサブ関数 / Actually read the savefile
  * @return エラーコード
  */
-static errr rd_savefile_new_aux(void)
+static errr rd_savefile_new_aux(player_type *creature_ptr)
 {
 	int i, j;
 	int town_count;
@@ -3546,7 +3546,7 @@ static errr rd_savefile_new_aux(void)
 		u16b max_towns_load;
 		u16b max_quests_load;
 		byte max_rquests_load;
-		s16b old_inside_quest = p_ptr->current_floor_ptr->inside_quest;
+		s16b old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
 
 		/* Number of towns */
 		rd_u16b(&max_towns_load);
@@ -3642,10 +3642,10 @@ static errr rd_savefile_new_aux(void)
 						else
 						{
 							init_flags = INIT_ASSIGN;
-							p_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
+							creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
 
 							process_dungeon_file("q_info.txt", 0, 0, 0, 0);
-							p_ptr->current_floor_ptr->inside_quest = old_inside_quest;
+							creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
 						}
 					}
 					else
@@ -3683,18 +3683,18 @@ static errr rd_savefile_new_aux(void)
 		}
 
 		/* Position in the wilderness */
-		rd_s32b(&p_ptr->wilderness_x);
-		rd_s32b(&p_ptr->wilderness_y);
+		rd_s32b(&creature_ptr->wilderness_x);
+		rd_s32b(&creature_ptr->wilderness_y);
 		if (z_older_than(10, 3, 13))
 		{
-			p_ptr->wilderness_x = 5;
-			p_ptr->wilderness_y = 48;
+			creature_ptr->wilderness_x = 5;
+			creature_ptr->wilderness_y = 48;
 		}
 
-		if (z_older_than(10, 3, 7)) p_ptr->wild_mode = FALSE;
-		else rd_byte((byte *)&p_ptr->wild_mode);
-		if (z_older_than(10, 3, 7)) p_ptr->ambush_flag = FALSE;
-		else rd_byte((byte *)&p_ptr->ambush_flag);
+		if (z_older_than(10, 3, 7)) creature_ptr->wild_mode = FALSE;
+		else rd_byte((byte *)&creature_ptr->wild_mode);
+		if (z_older_than(10, 3, 7)) creature_ptr->ambush_flag = FALSE;
+		else rd_byte((byte *)&creature_ptr->ambush_flag);
 
 		/* Size of the wilderness */
 		rd_s32b(&wild_x_size);
@@ -3753,8 +3753,8 @@ static errr rd_savefile_new_aux(void)
 	if (arg_fiddle) note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
 	/* Read the extra stuff */
-	rd_extra(p_ptr);
-	if (p_ptr->energy_need < -999) p_ptr->timewalk = TRUE;
+	rd_extra(creature_ptr);
+	if (creature_ptr->energy_need < -999) creature_ptr->timewalk = TRUE;
 
 	if (arg_fiddle) note(_("特別情報をロードしました", "Loaded extra information"));
 
@@ -3773,77 +3773,77 @@ static errr rd_savefile_new_aux(void)
 	for (i = 0; i < tmp16u; i++)
 	{
 		rd_s16b(&tmp16s);
-		p_ptr->player_hp[i] = (HIT_POINT)tmp16s;
+		creature_ptr->player_hp[i] = (HIT_POINT)tmp16s;
 	}
 
 	/* Important -- Initialize the sex */
-	sp_ptr = &sex_info[p_ptr->psex];
+	sp_ptr = &sex_info[creature_ptr->psex];
 
 	/* Important -- Initialize the race/class */
-	rp_ptr = &race_info[p_ptr->prace];
-	cp_ptr = &class_info[p_ptr->pclass];
-	ap_ptr = &seikaku_info[p_ptr->pseikaku];
+	rp_ptr = &race_info[creature_ptr->prace];
+	cp_ptr = &class_info[creature_ptr->pclass];
+	ap_ptr = &seikaku_info[creature_ptr->pseikaku];
 
-	if(z_older_than(10, 2, 2) && (p_ptr->pclass == CLASS_BEASTMASTER) && !p_ptr->is_dead)
+	if(z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead)
 	{
-		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		roll_hitdice(p_ptr, 0L);
+		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		roll_hitdice(creature_ptr, 0L);
 	}
-	if(z_older_than(10, 3, 2) && (p_ptr->pclass == CLASS_ARCHER) && !p_ptr->is_dead)
+	if(z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead)
 	{
-		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		roll_hitdice(p_ptr, 0L);
+		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		roll_hitdice(creature_ptr, 0L);
 	}
-	if(z_older_than(10, 2, 6) && (p_ptr->pclass == CLASS_SORCERER) && !p_ptr->is_dead)
+	if(z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead)
 	{
-		p_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		roll_hitdice(p_ptr, 0L);
+		creature_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		roll_hitdice(creature_ptr, 0L);
 	}
-	if(z_older_than(10, 4, 7) && (p_ptr->pclass == CLASS_BLUE_MAGE) && !p_ptr->is_dead)
+	if(z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead)
 	{
-		p_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-		roll_hitdice(p_ptr, 0L);
+		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		roll_hitdice(creature_ptr, 0L);
 	}
 
 	/* Important -- Initialize the magic */
-	mp_ptr = &m_info[p_ptr->pclass];
+	mp_ptr = &m_info[creature_ptr->pclass];
 
 
 	/* Read spell info */
-	rd_u32b(&p_ptr->spell_learned1);
-	rd_u32b(&p_ptr->spell_learned2);
-	rd_u32b(&p_ptr->spell_worked1);
-	rd_u32b(&p_ptr->spell_worked2);
-	rd_u32b(&p_ptr->spell_forgotten1);
-	rd_u32b(&p_ptr->spell_forgotten2);
+	rd_u32b(&creature_ptr->spell_learned1);
+	rd_u32b(&creature_ptr->spell_learned2);
+	rd_u32b(&creature_ptr->spell_worked1);
+	rd_u32b(&creature_ptr->spell_worked2);
+	rd_u32b(&creature_ptr->spell_forgotten1);
+	rd_u32b(&creature_ptr->spell_forgotten2);
 
 	if (z_older_than(10,0,5))
 	{
-		p_ptr->learned_spells = 0;
+		creature_ptr->learned_spells = 0;
 		for (i = 0; i < 64; i++)
 		{
 			/* Count known spells */
 			if ((i < 32) ?
-			    (p_ptr->spell_learned1 & (1L << i)) :
-			    (p_ptr->spell_learned2 & (1L << (i - 32))))
+			    (creature_ptr->spell_learned1 & (1L << i)) :
+			    (creature_ptr->spell_learned2 & (1L << (i - 32))))
 			{
-				p_ptr->learned_spells++;
+				creature_ptr->learned_spells++;
 			}
 		}
 	}
-	else rd_s16b(&p_ptr->learned_spells);
+	else rd_s16b(&creature_ptr->learned_spells);
 
 	if (z_older_than(10,0,6))
 	{
-		p_ptr->add_spells = 0;
+		creature_ptr->add_spells = 0;
 	}
-	else rd_s16b(&p_ptr->add_spells);
-	if (p_ptr->pclass == CLASS_MINDCRAFTER) p_ptr->add_spells = 0;
+	else rd_s16b(&creature_ptr->add_spells);
+	if (creature_ptr->pclass == CLASS_MINDCRAFTER) creature_ptr->add_spells = 0;
 
 	for (i = 0; i < 64; i++)
 	{
 		rd_byte(&tmp8u);
-		p_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
+		creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
 	}
 
 	if (rd_inventory())
@@ -3866,45 +3866,45 @@ static errr rd_savefile_new_aux(void)
 		}
 	}
 
-	rd_s16b(&p_ptr->pet_follow_distance);
+	rd_s16b(&creature_ptr->pet_follow_distance);
 	if (z_older_than(10, 4, 10))
 	{
-		p_ptr->pet_extra_flags = 0;
+		creature_ptr->pet_extra_flags = 0;
 		rd_byte(&tmp8u);
-		if (tmp8u) p_ptr->pet_extra_flags |= PF_OPEN_DOORS;
+		if (tmp8u) creature_ptr->pet_extra_flags |= PF_OPEN_DOORS;
 		rd_byte(&tmp8u);
-		if (tmp8u) p_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
+		if (tmp8u) creature_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
 
-		if (z_older_than(10,0,4)) p_ptr->pet_extra_flags |= PF_TELEPORT;
+		if (z_older_than(10,0,4)) creature_ptr->pet_extra_flags |= PF_TELEPORT;
 		else
 		{
 			rd_byte(&tmp8u);
-			if (tmp8u) p_ptr->pet_extra_flags |= PF_TELEPORT;
+			if (tmp8u) creature_ptr->pet_extra_flags |= PF_TELEPORT;
 		}
 
-		if (z_older_than(10,0,7)) p_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
+		if (z_older_than(10,0,7)) creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
 		else
 		{
 			rd_byte(&tmp8u);
-			if (tmp8u) p_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
+			if (tmp8u) creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
 		}
 
-		if (z_older_than(10,0,8)) p_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
+		if (z_older_than(10,0,8)) creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
 		else
 		{
 			rd_byte(&tmp8u);
-			if (tmp8u) p_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
+			if (tmp8u) creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
 		}
 
 		if (!z_older_than(10,0,8))
 		{
 			rd_byte(&tmp8u);
-			if (tmp8u) p_ptr->pet_extra_flags |= PF_BALL_SPELL;
+			if (tmp8u) creature_ptr->pet_extra_flags |= PF_BALL_SPELL;
 		}
 	}
 	else
 	{
-		rd_s16b(&p_ptr->pet_extra_flags);
+		rd_s16b(&creature_ptr->pet_extra_flags);
 	}
 
 	if (!z_older_than(11, 0, 9))
@@ -3914,7 +3914,7 @@ static errr rd_savefile_new_aux(void)
 		if (buf[0]) screen_dump = string_make(buf);
 	}
 
-	if (p_ptr->is_dead)
+	if (creature_ptr->is_dead)
 	{
 		for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 		{
@@ -3924,7 +3924,7 @@ static errr rd_savefile_new_aux(void)
 
 
 	/* I'm not dead yet... */
-	if (!p_ptr->is_dead)
+	if (!creature_ptr->is_dead)
 	{
 		/* Dead players have no dungeon */
 		note(_("ダンジョン復元中...", "Restoring Dungeon..."));
@@ -3949,11 +3949,11 @@ static errr rd_savefile_new_aux(void)
 	/* Quest 18 was removed */
 	if (h_older_than(1, 7, 0, 6))
 	{
-		if (p_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
+		if (creature_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE)
 		{
-			p_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
-			p_ptr->current_floor_ptr->dun_level = 1;
-			p_ptr->current_floor_ptr->inside_quest = 0;
+			creature_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
+			creature_ptr->current_floor_ptr->dun_level = 1;
+			creature_ptr->current_floor_ptr->inside_quest = 0;
 		}
 	}
 
@@ -4013,7 +4013,7 @@ errr rd_savefile_new(void)
 	if (!fff) return (-1);
 
 	/* Call the sub-function */
-	err = rd_savefile_new_aux();
+	err = rd_savefile_new_aux(p_ptr);
 
 	/* Check for errors */
 	if (ferror(fff)) err = -1;
