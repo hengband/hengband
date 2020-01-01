@@ -6602,7 +6602,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 }
 
 
-static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
+static bool do_cmd_knowledge_quests_aux(FILE *fff, floor_type *floor_ptr, IDX q_idx)
 {
 	char tmp_str[120];
 	char playtime_str[16];
@@ -6611,9 +6611,9 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 	if (is_fixed_quest_idx(q_idx))
 	{
 		/* Set the quest number temporary */
-		IDX old_quest = p_ptr->current_floor_ptr->inside_quest;
+		IDX old_quest = floor_ptr->inside_quest;
 
-		p_ptr->current_floor_ptr->inside_quest = q_idx;
+		floor_ptr->inside_quest = q_idx;
 
 		/* Get the quest */
 		init_flags = INIT_NAME_ONLY;
@@ -6621,7 +6621,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, IDX q_idx)
 		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
-		p_ptr->current_floor_ptr->inside_quest = old_quest;
+		floor_ptr->inside_quest = old_quest;
 
 		/* No info from "silent" quests */
 		if (q_ptr->flags & QUEST_FLAG_SILENT) return FALSE;
@@ -6680,7 +6680,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, QUEST_IDX quest_num[])
 		QUEST_IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
-		if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(fff, q_idx))
+		if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(fff, p_ptr->current_floor_ptr, q_idx))
 		{
 			++total;
 		}
@@ -6704,7 +6704,7 @@ void do_cmd_knowledge_quests_failed(FILE *fff, QUEST_IDX quest_num[])
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) &&
-		    do_cmd_knowledge_quests_aux(fff, q_idx))
+		    do_cmd_knowledge_quests_aux(fff, p_ptr->current_floor_ptr, q_idx))
 		{
 			++total;
 		}
