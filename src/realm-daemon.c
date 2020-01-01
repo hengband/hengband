@@ -366,7 +366,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				fire_ball(caster_ptr, GF_FIRE, 0, dam, rad);
-				fire_ball_hide(GF_LAVA_FLOW, 0, 2 + randint1(2), rad);
+				fire_ball_hide(caster_ptr, GF_LAVA_FLOW, 0, 2 + randint1(2), rad);
 			}
 		}
 		break;
@@ -456,7 +456,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 				else
 					msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
-				fire_ball_hide(GF_HAND_DOOM, dir, plev * 2, 0);
+				fire_ball_hide(caster_ptr, GF_HAND_DOOM, dir, plev * 2, 0);
 			}
 		}
 		break;
@@ -568,7 +568,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball_hide(GF_BLOOD_CURSE, dir, dam, rad);
+				fire_ball_hide(caster_ptr, GF_BLOOD_CURSE, dir, dam, rad);
 				take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);
 			}
 		}

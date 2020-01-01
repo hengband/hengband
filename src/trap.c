@@ -653,7 +653,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 		msg_print(_("突然壁から水が溢れ出した！ピラニアがいる！", "Suddenly, the room is filled with water with piranhas!"));
 
 		/* Water fills room */
-		fire_ball_hide(GF_WATER_FLOW, 0, 1, 10);
+		fire_ball_hide(p_ptr, GF_WATER_FLOW, 0, 1, 10);
 
 		/* Summon Piranhas */
 		num = 1 + trapped_ptr->current_floor_ptr->dun_level / 20;

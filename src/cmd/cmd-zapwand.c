@@ -298,7 +298,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_GENOCIDE:
 		{
-			fire_ball_hide(GF_GENOCIDE, dir, magic ? lev + 50 : 250, 0);
+			fire_ball_hide(creature_ptr, GF_GENOCIDE, dir, magic ? lev + 50 : 250, 0);
 			ident = TRUE;
 			break;
 		}

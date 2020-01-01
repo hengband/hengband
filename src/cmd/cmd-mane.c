@@ -525,31 +525,31 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		break;
 	case MS_DRAIN_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_DRAIN_MANA, dir, randint1(plev*3)+plev, 0);
+		fire_ball_hide(caster_ptr, GF_DRAIN_MANA, dir, randint1(plev*3)+plev, 0);
 		break;
 	case MS_MIND_BLAST:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_MIND_BLAST, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_MIND_BLAST, dir, damage, 0);
 		break;
 	case MS_BRAIN_SMASH:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_BRAIN_SMASH, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, dir, damage, 0);
 		break;
 	case MS_CAUSE_1:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_CAUSE_1, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_1, dir, damage, 0);
 		break;
 	case MS_CAUSE_2:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_CAUSE_2, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_2, dir, damage, 0);
 		break;
 	case MS_CAUSE_3:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_CAUSE_3, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_3, dir, damage, 0);
 		break;
 	case MS_CAUSE_4:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_ball_hide(GF_CAUSE_4, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_4, dir, damage, 0);
 		break;
 	case MS_BOLT_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -649,7 +649,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
-		fire_ball_hide(GF_HAND_DOOM, dir, 200, 0);
+		fire_ball_hide(caster_ptr, GF_HAND_DOOM, dir, 200, 0);
 		break;
 	}
 	case MS_HEAL:

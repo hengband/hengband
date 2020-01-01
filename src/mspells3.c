@@ -1125,43 +1125,43 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_DRAIN_MANA), plev, DAM_ROLL);
-        fire_ball_hide(GF_DRAIN_MANA, dir, damage, 0);
+        fire_ball_hide(p_ptr, GF_DRAIN_MANA, dir, damage, 0);
 		break;
 	case MS_MIND_BLAST:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_MIND_BLAST), plev, DAM_ROLL);
-		fire_ball_hide(GF_MIND_BLAST, dir, damage, 0);
+		fire_ball_hide(p_ptr, GF_MIND_BLAST, dir, damage, 0);
 		break;
 	case MS_BRAIN_SMASH:
         if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_BRAIN_SMASH), plev, DAM_ROLL);
-		fire_ball_hide(GF_BRAIN_SMASH, dir, damage, 0);
+		fire_ball_hide(p_ptr, GF_BRAIN_SMASH, dir, damage, 0);
 		break;
 	case MS_CAUSE_1:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_1), plev, DAM_ROLL);
-		fire_ball_hide(GF_CAUSE_1, dir, damage, 0);
+		fire_ball_hide(p_ptr, GF_CAUSE_1, dir, damage, 0);
 		break;
 	case MS_CAUSE_2:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_2), plev, DAM_ROLL);
-		fire_ball_hide(GF_CAUSE_2, dir, damage, 0);
+		fire_ball_hide(p_ptr, GF_CAUSE_2, dir, damage, 0);
 		break;
 	case MS_CAUSE_3:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_3), plev, DAM_ROLL);
-		fire_ball_hide(GF_CAUSE_3, dir, damage, 0);
+		fire_ball_hide(p_ptr, GF_CAUSE_3, dir, damage, 0);
 		break;
 	case MS_CAUSE_4:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_4), plev, DAM_ROLL);
-		fire_ball_hide(GF_CAUSE_4, dir, damage, 0);
+		fire_ball_hide(p_ptr, GF_CAUSE_4, dir, damage, 0);
 		break;
 	case MS_BOLT_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -1272,7 +1272,7 @@ static bool cast_learned_spell(int spell, bool success)
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
-		fire_ball_hide(GF_HAND_DOOM, dir, plev * 3, 0);
+		fire_ball_hide(p_ptr, GF_HAND_DOOM, dir, plev * 3, 0);
 		break;
 	}
 	case MS_HEAL:

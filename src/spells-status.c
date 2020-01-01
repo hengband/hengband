@@ -74,7 +74,7 @@ bool sleep_monster(DIRECTION dir, int power)
  */
 bool stasis_monster(DIRECTION dir)
 {
-	return (fire_ball_hide(GF_STASIS, dir, p_ptr->lev * 2, 0));
+	return (fire_ball_hide(p_ptr, GF_STASIS, dir, p_ptr->lev * 2, 0));
 }
 
 /*!
@@ -85,7 +85,7 @@ bool stasis_monster(DIRECTION dir)
  */
 bool stasis_evil(DIRECTION dir)
 {
-	return (fire_ball_hide(GF_STASIS_EVIL, dir, p_ptr->lev * 2, 0));
+	return (fire_ball_hide(p_ptr, GF_STASIS_EVIL, dir, p_ptr->lev * 2, 0));
 }
 
 /*!

@@ -515,7 +515,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (command == -3)
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
-				(void)fire_ball_hide(GF_CHARM_LIVING, dir, creature_ptr->lev, 0);
+				(void)fire_ball_hide(creature_ptr, GF_CHARM_LIVING, dir, creature_ptr->lev, 0);
 			}
 			else if (command == -4)
 			{

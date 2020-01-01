@@ -78,13 +78,13 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					int effect = randint1(1000);
 
 					if (effect == 666)
-						fire_ball_hide(GF_DEATH_RAY, dir, plev * 200, 0);
+						fire_ball_hide(caster_ptr, GF_DEATH_RAY, dir, plev * 200, 0);
 					else if (effect < 500)
-						fire_ball_hide(GF_TURN_ALL, dir, plev, 0);
+						fire_ball_hide(caster_ptr, GF_TURN_ALL, dir, plev, 0);
 					else if (effect < 800)
-						fire_ball_hide(GF_OLD_CONF, dir, plev, 0);
+						fire_ball_hide(caster_ptr, GF_OLD_CONF, dir, plev, 0);
 					else
-						fire_ball_hide(GF_STUN, dir, plev, 0);
+						fire_ball_hide(caster_ptr, GF_STUN, dir, plev, 0);
 				}
 			}
 		}
@@ -273,7 +273,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_ball_hide(GF_GENOCIDE, dir, power, 0);
+				fire_ball_hide(caster_ptr, GF_GENOCIDE, dir, power, 0);
 			}
 		}
 		break;

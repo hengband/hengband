@@ -2592,7 +2592,7 @@ MONSTER_NUMBER summon_Guardian(POSITION y, POSITION x, int rlev, MONSTER_IDX m_i
 			TARGET_TYPE);
 
 		if(mon_to_player)
-			fire_ball_hide(GF_WATER_FLOW, 0, 3, 8);
+			fire_ball_hide(p_ptr, GF_WATER_FLOW, 0, 3, 8);
 		else if(mon_to_mon)
 			project(p_ptr, t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE, -1);
 	}

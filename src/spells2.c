@@ -2017,14 +2017,14 @@ bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	POSITION tx, ty;
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
 
 	/* Use the given direction */
-	tx = p_ptr->x + 99 * ddx[dir];
-	ty = p_ptr->y + 99 * ddy[dir];
+	tx = caster_ptr->x + 99 * ddx[dir];
+	ty = caster_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay())
@@ -2035,7 +2035,7 @@ bool fire_ball_hide(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 	}
 
 	/* Analyze the "dir" and the "target".  Hurt items on floor. */
-	return (project(p_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
+	return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
 
 
