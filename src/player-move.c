@@ -2067,9 +2067,9 @@ void forget_travel_flow(void)
  * @param x 該当地点のX座標
  * @return コスト値
  */
-static int travel_flow_cost(POSITION y, POSITION x)
+static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
+	feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[y][x].feat];
 	int cost = 1;
 
 	/* Avoid obstacles (ex. trees) */
@@ -2078,22 +2078,22 @@ static int travel_flow_cost(POSITION y, POSITION x)
 	/* Water */
 	if (have_flag(f_ptr->flags, FF_WATER))
 	{
-		if (have_flag(f_ptr->flags, FF_DEEP) && !p_ptr->levitation) cost += 5;
+		if (have_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation) cost += 5;
 	}
 
 	/* Lava */
 	if (have_flag(f_ptr->flags, FF_LAVA))
 	{
 		int lava = 2;
-		if (!p_ptr->resist_fire) lava *= 2;
-		if (!p_ptr->levitation) lava *= 2;
+		if (!creature_ptr->resist_fire) lava *= 2;
+		if (!creature_ptr->levitation) lava *= 2;
 		if (have_flag(f_ptr->flags, FF_DEEP)) lava *= 2;
 
 		cost += lava;
 	}
 
 	/* Detected traps and doors */
-	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK))
+	if (creature_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK))
 	{
 		if (have_flag(f_ptr->flags, FF_DOOR)) cost += 1;
 		if (have_flag(f_ptr->flags, FF_TRAP)) cost += 10;
@@ -2137,7 +2137,7 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 	}
 	else
 	{
-		add_cost = travel_flow_cost(y, x);
+		add_cost = travel_flow_cost(p_ptr, y, x);
 	}
 
 	cost = base_cost + add_cost;
