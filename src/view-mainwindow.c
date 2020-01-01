@@ -1643,7 +1643,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type* m_ptr, int 
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
+void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
 	TERM_LEN line = y;
 	monster_type* last_mons = NULL;
 	monster_type* m_ptr = NULL;
@@ -1651,9 +1651,9 @@ void print_monster_list(TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
 	int i;
 
 	for(i=0;i<tmp_pos.n;i++){
-		grid_type* g_ptr = &p_ptr->current_floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]];
-		if(!g_ptr->m_idx || !p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
-		m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+		grid_type* g_ptr = &floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]];
+		if(!g_ptr->m_idx || !floor_ptr->m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
+		m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 		if(is_pet(m_ptr))continue;//pet
 		if(!m_ptr->r_idx)continue;//dead?
 		{
@@ -1728,7 +1728,7 @@ static void fix_monster_list(void)
 		Term_clear();
 
 		target_set_prepare_look();//モンスター一覧を生成，ソート
-		print_monster_list(0, 0, h);
+		print_monster_list(p_ptr->current_floor_ptr, 0, 0, h);
 		Term_fresh();
 		Term_activate(old);
 	}
