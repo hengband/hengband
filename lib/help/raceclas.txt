@@ -258,7 +258,7 @@ by the racial/class power command ("U"/"O").
 ***** <Imp>
 --- Imp ---
 
-    A demon-creature from the nether-world, imps are naturally resistant
+    Demon-creatures from the nether-world, imps are naturally resistant
     to fire attacks and capable of learning fire bolt and fire ball
     attacks.  They are little loved by other races but can perform
     fairly well in most professions.  As they advance levels, they

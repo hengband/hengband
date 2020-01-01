@@ -202,7 +202,7 @@ static concptr race_jouhou[MAX_RACES] =
 
 "A secretive and mysterious ancient race.  Their civilization may well be older than any other on our planet, and their intelligence and wisdom are naturally sustained, and are so great that they enable Mind Flayers to become more powerful spellcasters than any other race, even if their physical attributes are a good deal less admirable.  As they advance levels, they gain the powers of See Invisible and Telepathy.",
 
-"A demon-creature from the nether-world, imps are naturally resistant to fire attacks and capable of learning fire bolt and fire ball attacks.  They are little loved by other races but can perform fairly well in most professions.  As they advance levels, they gain the powers of See Invisible.",
+"Demon-creatures from the nether-world, imps are naturally resistant to fire attacks and capable of learning fire bolt and fire ball attacks.  They are little loved by other races but can perform fairly well in most professions.  As they advance levels, they gain the powers of See Invisible.",
 
 "A Golem is an artificial creature, built from a lifeless raw material like clay, and awakened to life.  They are nearly mindless, making them useless for professions which rely on magic, but as warriors they are very tough.  They are resistant to poison, they can see invisible things, and move freely.  At higher levels, they also become resistant to attacks which threaten to drain away their experience.  Golems gain very little nutrition from ordinary food, but can absorb mana from staves and wands as their power source.  Golems also gain a natural armor class bonus from their tough body.",
 
