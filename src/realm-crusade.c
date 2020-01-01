@@ -549,7 +549,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 				int sp_base = plev;
 
 				int i;
-				crusade();
+				crusade(caster_ptr);
 				for (i = 0; i < 12; i++)
 				{
 					int attempt = 10;

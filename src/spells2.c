@@ -958,9 +958,9 @@ bool dispel_demons(HIT_POINT dam)
  * @brief 視界内のモンスターに「聖戦」効果を与える処理
  * @return 効力があった場合TRUEを返す
  */
-bool crusade(void)
+bool crusade(player_type *caster_ptr)
 {
-	return (project_all_los(p_ptr, GF_CRUSADE, p_ptr->lev*4));
+	return (project_all_los(caster_ptr, GF_CRUSADE, caster_ptr->lev*4));
 }
 
 /*!
