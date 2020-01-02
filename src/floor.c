@@ -668,7 +668,7 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 		g_ptr->feat = feat;
 
 		/* Hack -- glow the GLOW terrain */
-		if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+		if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 		{
 			DIRECTION i;
 			POSITION yy, xx;
@@ -697,7 +697,7 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 	/* Remove flag for mirror/glyph */
 	g_ptr->info &= ~(CAVE_OBJECT);
 
-	if (old_mirror && (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+	if (old_mirror && (d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 	{
 		g_ptr->info &= ~(CAVE_GLOW);
 		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
