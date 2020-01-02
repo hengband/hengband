@@ -3891,7 +3891,7 @@ static void process_command(player_type *creature_ptr)
 					    (creature_ptr->pclass == CLASS_NINJA) ||
 					    (creature_ptr->pclass == CLASS_MIRROR_MASTER)
 					    )
-						do_cmd_mind();
+						do_cmd_mind(creature_ptr);
 					else if (creature_ptr->pclass == CLASS_IMITATOR)
 						do_cmd_mane(creature_ptr, FALSE);
 					else if (creature_ptr->pclass == CLASS_MAGIC_EATER)

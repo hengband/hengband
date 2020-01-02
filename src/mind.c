@@ -1759,25 +1759,25 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
  * @brief 特殊技能コマンドのメインルーチン /
  * @return なし
  */
-void do_cmd_mind(void)
+void do_cmd_mind(player_type *caster_ptr)
 {
 	SPELL_IDX n = 0;
 	int b = 0;
 	PERCENTAGE chance;
 	PERCENTAGE minfail = 0;
-	PLAYER_LEVEL plev = p_ptr->lev;
-	int             old_csp = p_ptr->csp;
+	PLAYER_LEVEL plev = caster_ptr->lev;
+	int             old_csp = caster_ptr->csp;
 	mind_type       spell;
 	bool            cast;
 	int             use_mind, mana_cost;
 	concptr            p;
 	bool		on_mirror = FALSE;
 
-	if (cmd_limit_confused(p_ptr)) return;
+	if (cmd_limit_confused(caster_ptr)) return;
 	if (!get_mind_power(&n, FALSE)) return;
 
 #ifdef JP
-	switch(p_ptr->pclass)
+	switch(caster_ptr->pclass)
 	{
 		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER; p = "精神";break;
 		case CLASS_FORCETRAINER:          use_mind = MIND_KI; p = "気";break;
@@ -1787,7 +1787,7 @@ void do_cmd_mind(void)
 		default:                use_mind = 0 ;p = "超能力"; break;
 	}
 #else
-	switch(p_ptr->pclass)
+	switch(caster_ptr->pclass)
 	{
 		case CLASS_MINDCRAFTER: use_mind = MIND_MINDCRAFTER; break;
 		case CLASS_FORCETRAINER: use_mind = MIND_KI; break;
@@ -1806,11 +1806,11 @@ void do_cmd_mind(void)
 	mana_cost = spell.mana_cost;
 	if (use_mind == MIND_KI)
 	{
-		if (heavy_armor(p_ptr)) chance += 20;
-		if (p_ptr->icky_wield[0]) chance += 20;
-		else if (has_melee_weapon(p_ptr, INVEN_RARM)) chance += 10;
-		if (p_ptr->icky_wield[1]) chance += 20;
-		else if (has_melee_weapon(p_ptr, INVEN_LARM)) chance += 10;
+		if (heavy_armor(caster_ptr)) chance += 20;
+		if (caster_ptr->icky_wield[0]) chance += 20;
+		else if (has_melee_weapon(caster_ptr, INVEN_RARM)) chance += 10;
+		if (caster_ptr->icky_wield[1]) chance += 20;
+		else if (has_melee_weapon(caster_ptr, INVEN_LARM)) chance += 10;
 		if (n == 5)
 		{
 			int j;
@@ -1822,13 +1822,13 @@ void do_cmd_mind(void)
 	/* Verify "dangerous" spells */
 	if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU))
 	{
-		if (mana_cost > p_ptr->chp)
+		if (mana_cost > caster_ptr->chp)
 		{
 			msg_print(_("ＨＰが足りません。", "You do not have enough hp to use this power."));
 			return;
 		}
 	}
-	else if (mana_cost > p_ptr->csp)
+	else if (mana_cost > caster_ptr->csp)
 	{
 		/* Warning */
 		msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
@@ -1845,32 +1845,32 @@ void do_cmd_mind(void)
 		/* Reduce failure rate by "effective" level adjustment */
 		chance -= 3 * (plev - spell.min_lev);
 
-		chance += p_ptr->to_m_chance;
+		chance += caster_ptr->to_m_chance;
 
 		/* Reduce failure rate by INT/WIS adjustment */
-		chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+		chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
 		/* Not enough mana to cast */
-		if ((mana_cost > p_ptr->csp) && (use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU))
+		if ((mana_cost > caster_ptr->csp) && (use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU))
 		{
-			chance += 5 * (mana_cost - p_ptr->csp);
+			chance += 5 * (mana_cost - caster_ptr->csp);
 		}
 
 		/* Extract the minimum failure rate */
-		minfail = adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]];
+		minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
 
 		/* Minimum failure rate */
 		if (chance < minfail) chance = minfail;
 
 		/* Stunning makes spells harder */
-		if (p_ptr->stun > 50) chance += 25;
-		else if (p_ptr->stun) chance += 15;
+		if (caster_ptr->stun > 50) chance += 25;
+		else if (caster_ptr->stun) chance += 15;
 
 		if (use_mind == MIND_KI)
 		{
-			if (heavy_armor(p_ptr)) chance += 5;
-			if (p_ptr->icky_wield[0]) chance += 5;
-			if (p_ptr->icky_wield[1]) chance += 5;
+			if (heavy_armor(caster_ptr)) chance += 5;
+			if (caster_ptr->icky_wield[0]) chance += 5;
+			if (caster_ptr->icky_wield[1]) chance += 5;
 		}
 	}
 
@@ -1902,30 +1902,30 @@ void do_cmd_mind(void)
 				if (b < 5)
 				{
 					msg_print(_("なんてこった！頭の中が真っ白になった！", "Oh, no! Your mind has gone blank!"));
-					lose_all_info(p_ptr);
+					lose_all_info(caster_ptr);
 				}
 				else if (b < 15)
 				{
 					msg_print(_("奇妙な光景が目の前で踊っている...", "Weird visions seem to dance before your eyes..."));
-					set_image(p_ptr, p_ptr->image + 5 + randint1(10));
+					set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
 				}
 				else if (b < 45)
 				{
 					msg_print(_("あなたの頭は混乱した！", "Your brain is addled!"));
-					set_confused(p_ptr, p_ptr->confused + randint1(8));
+					set_confused(caster_ptr, caster_ptr->confused + randint1(8));
 				}
 				else if (b < 90)
 				{
-					set_stun(p_ptr, p_ptr->stun + randint1(8));
+					set_stun(caster_ptr, caster_ptr->stun + randint1(8));
 				}
 				else
 				{
 					/* Mana storm */
 					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
-					project(p_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
+					project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, caster_ptr->y, caster_ptr->x, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
-					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
+					caster_ptr->csp = MAX(0, caster_ptr->csp - plev * MAX(1, plev / 10));
 				}
 			  }
 			  if( use_mind == MIND_MIRROR_MASTER ){
@@ -1936,21 +1936,21 @@ void do_cmd_mind(void)
 				else if (b < 81)
 				{
 					msg_print(_("鏡の世界の干渉を受けた！", "Weird visions seem to dance before your eyes..."));
-					teleport_player(p_ptr, 10, TELEPORT_PASSIVE);
+					teleport_player(caster_ptr, 10, TELEPORT_PASSIVE);
 				}
 				else if (b < 96)
 				{
 					msg_print(_("まわりのものがキラキラ輝いている！", "Your brain is addled!"));
-					set_image(p_ptr, p_ptr->image + 5 + randint1(10));
+					set_image(caster_ptr, caster_ptr->image + 5 + randint1(10));
 				}
 				else
 				{
 					/* Mana storm */
 					msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), p);
 
-					project(p_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, p_ptr->y, p_ptr->x, plev * 2,
+					project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, caster_ptr->y, caster_ptr->x, plev * 2,
 						GF_MANA, PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
-					p_ptr->csp = MAX(0, p_ptr->csp - plev * MAX(1, plev / 10));
+					caster_ptr->csp = MAX(0, caster_ptr->csp - plev * MAX(1, plev / 10));
 				}
 			  }
 			}
@@ -1964,24 +1964,24 @@ void do_cmd_mind(void)
 		{
 		case MIND_MINDCRAFTER:
 			
-			cast = cast_mindcrafter_spell(p_ptr, n);
+			cast = cast_mindcrafter_spell(caster_ptr, n);
 			break;
 		case MIND_KI:
 			
-			cast = cast_force_spell(p_ptr, n);
+			cast = cast_force_spell(caster_ptr, n);
 			break;
 		case MIND_BERSERKER:
 			
-			cast = cast_berserk_spell(p_ptr, n);
+			cast = cast_berserk_spell(caster_ptr, n);
 			break;
 		case MIND_MIRROR_MASTER:
 			
-			if(is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x]) )on_mirror = TRUE;
-			cast = cast_mirror_spell(p_ptr, n);
+			if(is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) )on_mirror = TRUE;
+			cast = cast_mirror_spell(caster_ptr, n);
 			break;
 		case MIND_NINJUTSU:
 			
-			cast = cast_ninja_spell(p_ptr, n);
+			cast = cast_ninja_spell(caster_ptr, n);
 			break;
 		default:
 			msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"),use_mind, n);
@@ -1993,36 +1993,36 @@ void do_cmd_mind(void)
 
 
 	/* teleport from mirror costs small energy */
-	if(on_mirror && p_ptr->pclass == CLASS_MIRROR_MASTER)
+	if(on_mirror && caster_ptr->pclass == CLASS_MIRROR_MASTER)
 	{
-	  if( n==3 || n==5 || n==7 || n==16 ) take_turn(p_ptr, 50);
+	  if( n==3 || n==5 || n==7 || n==16 ) take_turn(caster_ptr, 50);
 	}
 	else
 	{
-		take_turn(p_ptr, 100);
+		take_turn(caster_ptr, 100);
 	}
 
 	if ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU))
 	{
-		take_hit(p_ptr, DAMAGE_USELIFE, mana_cost, _("過度の集中", "concentrating too hard"), -1);
+		take_hit(caster_ptr, DAMAGE_USELIFE, mana_cost, _("過度の集中", "concentrating too hard"), -1);
 		/* Redraw hp */
-		p_ptr->redraw |= (PR_HP);
+		caster_ptr->redraw |= (PR_HP);
 	}
 
 	/* Sufficient mana */
 	else if (mana_cost <= old_csp)
 	{
 		/* Use some mana */
-		p_ptr->csp -= mana_cost;
+		caster_ptr->csp -= mana_cost;
 
 		/* Limit */
-		if (p_ptr->csp < 0) p_ptr->csp = 0;
+		if (caster_ptr->csp < 0) caster_ptr->csp = 0;
 
 		if ((use_mind == MIND_MINDCRAFTER) && (n == 13))
 		{
 			/* No mana left */
-			p_ptr->csp = 0;
-			p_ptr->csp_frac = 0;
+			caster_ptr->csp = 0;
+			caster_ptr->csp_frac = 0;
 		}
 	}
 
@@ -2032,13 +2032,13 @@ void do_cmd_mind(void)
 		int oops = mana_cost - old_csp;
 
 		/* No mana left */
-		if ((p_ptr->csp - mana_cost) < 0) p_ptr->csp_frac = 0;
-		p_ptr->csp = MAX(0, p_ptr->csp - mana_cost);
+		if ((caster_ptr->csp - mana_cost) < 0) caster_ptr->csp_frac = 0;
+		caster_ptr->csp = MAX(0, caster_ptr->csp - mana_cost);
 
 		msg_format(_("%sを集中しすぎて気を失ってしまった！", "You faint from the effort!"),p);
 
 		/* Hack -- Bypass free action */
-		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(5 * oops + 1));
+		(void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(5 * oops + 1));
 
 		/* Damage WIS (possibly permanently) */
 		if (randint0(100) < 50)
@@ -2048,12 +2048,12 @@ void do_cmd_mind(void)
 			msg_print(_("自分の精神を攻撃してしまった！", "You have damaged your mind!"));
 
 			/* Reduce constitution */
-			(void)dec_stat(p_ptr, A_WIS, 15 + randint1(10), perm);
+			(void)dec_stat(caster_ptr, A_WIS, 15 + randint1(10), perm);
 		}
 	}
-	p_ptr->redraw |= (PR_MANA);
-	p_ptr->window |= (PW_PLAYER);
-	p_ptr->window |= (PW_SPELL);
+	caster_ptr->redraw |= (PR_MANA);
+	caster_ptr->window |= (PW_PLAYER);
+	caster_ptr->window |= (PW_SPELL);
 }
 
 
