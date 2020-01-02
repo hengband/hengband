@@ -245,7 +245,7 @@ extern bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, 
 extern bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam);
 extern bool eat_magic(player_type *caster_ptr, int power);
 extern void discharge_minion(player_type *caster_ptr);
-extern bool kawarimi(bool success);
+extern bool kawarimi(player_type *caster_ptr, bool success);
 extern bool rush_attack(player_type *attacker_ptr, bool *mdeath);
 extern void remove_all_mirrors(player_type *caster_ptr, bool explode);
 extern void ring_of_power(player_type *caster_ptr, DIRECTION dir);

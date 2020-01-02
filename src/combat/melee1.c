@@ -2405,7 +2405,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && (randint0(55) < (target_ptr->lev*3/5+20)))
 	{
-		if (kawarimi(TRUE)) return TRUE;
+		if (kawarimi(target_ptr, TRUE)) return TRUE;
 	}
 
 	/* Assume no blink */
@@ -4042,7 +4042,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 		if (target_ptr->special_defense & NINJA_KAWARIMI)
 		{
-			if (kawarimi(FALSE)) return TRUE;
+			if (kawarimi(target_ptr, FALSE)) return TRUE;
 		}
 	}
 

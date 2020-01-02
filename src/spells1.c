@@ -4028,7 +4028,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && who && (who != target_ptr->riding))
 	{
-		if (kawarimi(TRUE)) return FALSE;
+		if (kawarimi(target_ptr, TRUE)) return FALSE;
 	}
 
 	/* Player cannot hurt himself */
@@ -5078,7 +5078,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && who && (who != target_ptr->riding))
 	{
-		(void)kawarimi(FALSE);
+		(void)kawarimi(target_ptr, FALSE);
 	}
 
 	/* Return "Anything seen?" */

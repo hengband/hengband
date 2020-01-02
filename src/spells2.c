@@ -2949,28 +2949,28 @@ bool charm_animal(DIRECTION dir, PLAYER_LEVEL plev)
  * @param success 判定成功上の処理ならばTRUE
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool kawarimi(bool success)
+bool kawarimi(player_type *caster_ptr, bool success)
 {
 	object_type forge;
 	object_type *q_ptr = &forge;
 	POSITION y, x;
 
-	if (p_ptr->is_dead) return FALSE;
-	if (p_ptr->confused || p_ptr->blind || p_ptr->paralyzed || p_ptr->image) return FALSE;
-	if (randint0(200) < p_ptr->stun) return FALSE;
+	if (caster_ptr->is_dead) return FALSE;
+	if (caster_ptr->confused || caster_ptr->blind || caster_ptr->paralyzed || caster_ptr->image) return FALSE;
+	if (randint0(200) < caster_ptr->stun) return FALSE;
 
 	if (!success && one_in_(3))
 	{
 		msg_print(_("失敗！逃げられなかった。", "Failed! You couldn't run away."));
-		p_ptr->special_defense &= ~(NINJA_KAWARIMI);
-		p_ptr->redraw |= (PR_STATUS);
+		caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
+		caster_ptr->redraw |= (PR_STATUS);
 		return FALSE;
 	}
 
-	y = p_ptr->y;
-	x = p_ptr->x;
+	y = caster_ptr->y;
+	x = caster_ptr->x;
 
-	teleport_player(p_ptr, 10 + randint1(90), 0L);
+	teleport_player(caster_ptr, 10 + randint1(90), 0L);
 	object_wipe(q_ptr);
 	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
@@ -2980,8 +2980,8 @@ bool kawarimi(bool success)
 	if (success) msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));
 	else msg_print(_("失敗！攻撃を受けてしまった。", "Failed! You are hit by the attack."));
 
-	p_ptr->special_defense &= ~(NINJA_KAWARIMI);
-	p_ptr->redraw |= (PR_STATUS);
+	caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
+	caster_ptr->redraw |= (PR_STATUS);
 
 	/* Teleported */
 	return TRUE;
