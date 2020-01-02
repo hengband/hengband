@@ -4620,42 +4620,42 @@ static void dump_aux_options(FILE *fff)
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_arena(FILE *fff)
+static void dump_aux_arena(player_type *creature_ptr, FILE *fff)
 {
 	if (lite_town || vanilla_town) return;
 
-	if (p_ptr->arena_number < 0)
+	if (creature_ptr->arena_number < 0)
 	{
-		if (p_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
+		if (creature_ptr->arena_number <= ARENA_DEFEATED_OLD_VER)
 		{
 			fprintf(fff, _("\n 闘技場: 敗北\n", "\n Arena: Defeated\n"));
 		}
 		else
 		{
 #ifdef JP
-			fprintf(fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -p_ptr->arena_number,
-				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name);
+			fprintf(fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -creature_ptr->arena_number,
+				r_name + r_info[arena_info[-1 - creature_ptr->arena_number].r_idx].name);
 #else
 			fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n",
-				r_name + r_info[arena_info[-1 - p_ptr->arena_number].r_idx].name,
-				-p_ptr->arena_number, get_ordinal_number_suffix(-p_ptr->arena_number));
+				r_name + r_info[arena_info[-1 - creature_ptr->arena_number].r_idx].name,
+				-creature_ptr->arena_number, get_ordinal_number_suffix(-creature_ptr->arena_number));
 #endif
 		}
 	}
-	else if (p_ptr->arena_number > MAX_ARENA_MONS + 2)
+	else if (creature_ptr->arena_number > MAX_ARENA_MONS + 2)
 	{
 		fprintf(fff, _("\n 闘技場: 真のチャンピオン\n", "\n Arena: True Champion\n"));
 	}
-	else if (p_ptr->arena_number > MAX_ARENA_MONS - 1)
+	else if (creature_ptr->arena_number > MAX_ARENA_MONS - 1)
 	{
 		fprintf(fff, _("\n 闘技場: チャンピオン\n", "\n Arena: Champion\n"));
 	}
 	else
 	{
 #ifdef JP
-		fprintf(fff, "\n 闘技場: %2d勝\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number));
+		fprintf(fff, "\n 闘技場: %2d勝\n", (creature_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : creature_ptr->arena_number));
 #else
-		fprintf(fff, "\n Arena: %2d Victor%s\n", (p_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : p_ptr->arena_number), (p_ptr->arena_number > 1) ? "ies" : "y");
+		fprintf(fff, "\n Arena: %2d Victor%s\n", (creature_ptr->arena_number > MAX_ARENA_MONS ? MAX_ARENA_MONS : creature_ptr->arena_number), (creature_ptr->arena_number > 1) ? "ies" : "y");
 #endif
 	}
 
@@ -4996,7 +4996,7 @@ errr make_character_dump(FILE *fff)
 	dump_aux_options(fff);
 	dump_aux_recall(fff);
 	dump_aux_quest(fff);
-	dump_aux_arena(fff);
+	dump_aux_arena(p_ptr, fff);
 	dump_aux_monsters(fff);
 	dump_aux_virtues(fff);
 	dump_aux_race_history(p_ptr, fff);
