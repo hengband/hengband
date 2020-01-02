@@ -824,11 +824,11 @@ static bool get_learned_power(SPELL_IDX *sn)
  * @param success TRUEは成功時、FALSEは失敗時の処理を行う
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool cast_learned_spell(int spell, bool success)
+static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 {
 	DIRECTION dir;
 	PLAYER_LEVEL plev = pseudo_plev();
-	PLAYER_LEVEL summon_lev = p_ptr->lev * 2 / 3 + randint1(p_ptr->lev/2);
+	PLAYER_LEVEL summon_lev = caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev/2);
 	HIT_POINT damage = 0;
 	bool pet = success;
 	bool no_trump = FALSE;
@@ -861,10 +861,10 @@ static bool cast_learned_spell(int spell, bool success)
 		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		m_idx = p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
-		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
-		if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, target_row, target_col)) break;
+		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
+		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -881,7 +881,7 @@ static bool cast_learned_spell(int spell, bool success)
 		
         msg_print(_("矢を放った。", "You fire an arrow."));
         damage = monspell_bluemage_damage((MS_SHOOT), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_ARROW, dir, damage);
+		fire_bolt(caster_ptr, GF_ARROW, dir, damage);
 		break;
 	}
 	case MS_XXX2:
@@ -895,350 +895,350 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
         damage = monspell_bluemage_damage((MS_BR_ACID), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_ACID, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_ACID, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
         damage = monspell_bluemage_damage((MS_BR_ELEC), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_ELEC, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_ELEC, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
         damage = monspell_bluemage_damage((MS_BR_FIRE), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_FIRE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_FIRE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_COLD:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
         damage = monspell_bluemage_damage((MS_BR_COLD), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_COLD, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_COLD, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_POIS:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
         damage = monspell_bluemage_damage((MS_BR_POIS), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_POIS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_POIS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_NETHER:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
         damage = monspell_bluemage_damage((MS_BR_NETHER), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_NETHER, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_NETHER, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_LITE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
         damage = monspell_bluemage_damage((MS_BR_LITE), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_LITE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_LITE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
         damage = monspell_bluemage_damage((MS_BR_DARK), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_DARK, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_DARK, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
         damage = monspell_bluemage_damage((MS_BR_CONF), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_CONFUSION, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_CONFUSION, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_SOUND:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
         damage = monspell_bluemage_damage((MS_BR_SOUND), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_SOUND, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_SOUND, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
         damage = monspell_bluemage_damage((MS_BR_CHAOS), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_CHAOS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_CHAOS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_DISEN:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
         damage = monspell_bluemage_damage((MS_BR_DISEN), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_DISENCHANT, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_DISENCHANT, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_NEXUS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
         damage = monspell_bluemage_damage((MS_BR_NEXUS), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_NEXUS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_NEXUS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_TIME:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
         damage = monspell_bluemage_damage((MS_BR_TIME), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_TIME, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_TIME, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_INERTIA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
         damage = monspell_bluemage_damage((MS_BR_INERTIA), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_INERTIAL, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_INERTIAL, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_GRAVITY:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
         damage = monspell_bluemage_damage((MS_BR_GRAVITY), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_GRAVITY, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_GRAVITY, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_SHARDS:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
         damage = monspell_bluemage_damage((MS_BR_SHARDS), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_SHARDS, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_SHARDS, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_PLASMA:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
         damage = monspell_bluemage_damage((MS_BR_PLASMA), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_PLASMA, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_PLASMA, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_FORCE:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
         damage = monspell_bluemage_damage((MS_BR_FORCE), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_FORCE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_FORCE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BR_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
         damage = monspell_bluemage_damage((MS_BR_MANA), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_MANA, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_MANA, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BALL_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
         damage = monspell_bluemage_damage((MS_BALL_NUKE), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_NUKE, dir, damage, 2);
+		fire_ball(caster_ptr, GF_NUKE, dir, damage, 2);
 		break;
 	case MS_BR_NUKE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
         damage = monspell_bluemage_damage((MS_BR_NUKE), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_NUKE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_NUKE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BALL_CHAOS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
         damage = monspell_bluemage_damage((MS_BALL_CHAOS), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_CHAOS, dir, damage, 4);
+		fire_ball(caster_ptr, GF_CHAOS, dir, damage, 4);
 		break;
 	case MS_BR_DISI:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
         damage = monspell_bluemage_damage((MS_BR_DISI), plev, DAM_ROLL);
-		fire_breath(p_ptr, GF_DISINTEGRATE, dir, damage, (plev > 40 ? 3 : 2));
+		fire_breath(caster_ptr, GF_DISINTEGRATE, dir, damage, (plev > 40 ? 3 : 2));
 		break;
 	case MS_BALL_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
         damage = monspell_bluemage_damage((MS_BALL_ACID), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_ACID, dir, damage, 2);
+		fire_ball(caster_ptr, GF_ACID, dir, damage, 2);
 		break;
 	case MS_BALL_ELEC:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
         damage = monspell_bluemage_damage((MS_BALL_ELEC), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_ELEC, dir, damage, 2);
+		fire_ball(caster_ptr, GF_ELEC, dir, damage, 2);
 		break;
 	case MS_BALL_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
         damage = monspell_bluemage_damage((MS_BALL_FIRE), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_FIRE, dir, damage, 2);
+		fire_ball(caster_ptr, GF_FIRE, dir, damage, 2);
 		break;
 	case MS_BALL_COLD:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
         damage = monspell_bluemage_damage((MS_BALL_COLD), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_COLD, dir, damage, 2);
+		fire_ball(caster_ptr, GF_COLD, dir, damage, 2);
 		break;
 	case MS_BALL_POIS:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
         damage = monspell_bluemage_damage((MS_BALL_POIS), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_POIS, dir, damage, 2);
+		fire_ball(caster_ptr, GF_POIS, dir, damage, 2);
 		break;
 	case MS_BALL_NETHER:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
         damage = monspell_bluemage_damage((MS_BALL_NETHER), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_NETHER, dir, damage, 2);
+		fire_ball(caster_ptr, GF_NETHER, dir, damage, 2);
 		break;
 	case MS_BALL_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
         damage = monspell_bluemage_damage((MS_BALL_WATER), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_WATER, dir, damage, 4);
+		fire_ball(caster_ptr, GF_WATER, dir, damage, 4);
 		break;
 	case MS_BALL_MANA:
         if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
         damage = monspell_bluemage_damage((MS_BALL_MANA), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_MANA, dir, damage, 4);
+		fire_ball(caster_ptr, GF_MANA, dir, damage, 4);
 		break;
 	case MS_BALL_DARK:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
         damage = monspell_bluemage_damage((MS_BALL_DARK), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_DARK, dir, damage, 4);
+		fire_ball(caster_ptr, GF_DARK, dir, damage, 4);
 		break;
 	case MS_DRAIN_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_DRAIN_MANA), plev, DAM_ROLL);
-        fire_ball_hide(p_ptr, GF_DRAIN_MANA, dir, damage, 0);
+        fire_ball_hide(caster_ptr, GF_DRAIN_MANA, dir, damage, 0);
 		break;
 	case MS_MIND_BLAST:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_MIND_BLAST), plev, DAM_ROLL);
-		fire_ball_hide(p_ptr, GF_MIND_BLAST, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_MIND_BLAST, dir, damage, 0);
 		break;
 	case MS_BRAIN_SMASH:
         if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_BRAIN_SMASH), plev, DAM_ROLL);
-		fire_ball_hide(p_ptr, GF_BRAIN_SMASH, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, dir, damage, 0);
 		break;
 	case MS_CAUSE_1:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_1), plev, DAM_ROLL);
-		fire_ball_hide(p_ptr, GF_CAUSE_1, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_1, dir, damage, 0);
 		break;
 	case MS_CAUSE_2:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_2), plev, DAM_ROLL);
-		fire_ball_hide(p_ptr, GF_CAUSE_2, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_2, dir, damage, 0);
 		break;
 	case MS_CAUSE_3:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_3), plev, DAM_ROLL);
-		fire_ball_hide(p_ptr, GF_CAUSE_3, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_3, dir, damage, 0);
 		break;
 	case MS_CAUSE_4:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         damage = monspell_bluemage_damage((MS_CAUSE_4), plev, DAM_ROLL);
-		fire_ball_hide(p_ptr, GF_CAUSE_4, dir, damage, 0);
+		fire_ball_hide(caster_ptr, GF_CAUSE_4, dir, damage, 0);
 		break;
 	case MS_BOLT_ACID:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_ACID), plev, DAM_ROLL);
-        fire_bolt(p_ptr, GF_ACID, dir, damage);
+        fire_bolt(caster_ptr, GF_ACID, dir, damage);
 		break;
 	case MS_BOLT_ELEC:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_ELEC), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_ELEC, dir, damage);
+		fire_bolt(caster_ptr, GF_ELEC, dir, damage);
 		break;
 	case MS_BOLT_FIRE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_FIRE), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_FIRE, dir, damage);
+		fire_bolt(caster_ptr, GF_FIRE, dir, damage);
 		break;
 	case MS_BOLT_COLD:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_COLD), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_COLD, dir, damage);
+		fire_bolt(caster_ptr, GF_COLD, dir, damage);
 		break;
 	case MS_STARBURST:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
         damage = monspell_bluemage_damage((MS_STARBURST), plev, DAM_ROLL);
-		fire_ball(p_ptr, GF_LITE, dir, damage, 4);
+		fire_ball(caster_ptr, GF_LITE, dir, damage, 4);
 		break;
 	case MS_BOLT_NETHER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_NETHER), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_NETHER, dir, damage);
+		fire_bolt(caster_ptr, GF_NETHER, dir, damage);
 		break;
 	case MS_BOLT_WATER:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_WATER), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_WATER, dir, damage);
+		fire_bolt(caster_ptr, GF_WATER, dir, damage);
 		break;
 	case MS_BOLT_MANA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_MANA), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_MANA, dir, damage);
+		fire_bolt(caster_ptr, GF_MANA, dir, damage);
 		break;
 	case MS_BOLT_PLASMA:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_PLASMA), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_PLASMA, dir, damage);
+		fire_bolt(caster_ptr, GF_PLASMA, dir, damage);
 		break;
 	case MS_BOLT_ICE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
         damage = monspell_bluemage_damage((MS_BOLT_ICE), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_ICE, dir, damage);
+		fire_bolt(caster_ptr, GF_ICE, dir, damage);
 		break;
 	case MS_MAGIC_MISSILE:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
         damage = monspell_bluemage_damage((MS_MAGIC_MISSILE), plev, DAM_ROLL);
-		fire_bolt(p_ptr, GF_MISSILE, dir, damage);
+		fire_bolt(caster_ptr, GF_MISSILE, dir, damage);
 		break;
 	case MS_SCARE:
 		if (!get_aim_dir(&dir)) return FALSE;
@@ -1265,34 +1265,34 @@ static bool cast_learned_spell(int spell, bool success)
 		sleep_monster(dir, plev);
 		break;
 	case MS_SPEED:
-		(void)set_fast(p_ptr, randint1(20 + plev) + plev, FALSE);
+		(void)set_fast(caster_ptr, randint1(20 + plev) + plev, FALSE);
 		break;
 	case MS_HAND_DOOM:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
-		fire_ball_hide(p_ptr, GF_HAND_DOOM, dir, plev * 3, 0);
+		fire_ball_hide(caster_ptr, GF_HAND_DOOM, dir, plev * 3, 0);
 		break;
 	}
 	case MS_HEAL:
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
-		(void)hp_player(p_ptr, plev*4);
-		(void)set_stun(p_ptr, 0);
-		(void)set_cut(p_ptr,0);
+		(void)hp_player(caster_ptr, plev*4);
+		(void)set_stun(caster_ptr, 0);
+		(void)set_cut(caster_ptr,0);
 		break;
 	case MS_INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-		(void)set_invuln(p_ptr, randint1(4) + 4, FALSE);
+		(void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
-		teleport_player(p_ptr, 10, 0L);
+		teleport_player(caster_ptr, 10, 0L);
 		break;
 	case MS_TELEPORT:
-		teleport_player(p_ptr, plev * 5, 0L);
+		teleport_player(caster_ptr, plev * 5, 0L);
 		break;
 	case MS_WORLD:
-		(void)time_walk(p_ptr);
+		(void)time_walk(caster_ptr);
 		break;
 	case MS_SPECIAL:
 		break;
@@ -1303,10 +1303,10 @@ static bool cast_learned_spell(int spell, bool success)
 		GAME_TEXT m_name[MAX_NLEN];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		if (!p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) break;
-		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
-		if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, target_row, target_col)) break;
-		m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
+		if (!caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) break;
+		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
+		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
 		if (r_ptr->flagsr & RFR_RES_TELE)
@@ -1325,7 +1325,7 @@ static bool cast_learned_spell(int spell, bool success)
 			}
 		}
         msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
-		teleport_monster_to(p_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, p_ptr->y, p_ptr->x, 100, TELEPORT_PASSIVE);
+		teleport_monster_to(caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
 		break;
 	}
 	case MS_TELE_AWAY:
@@ -1335,7 +1335,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
 
 	case MS_TELE_LEVEL:
-		return teleport_level_other(p_ptr);
+		return teleport_level_other(caster_ptr);
 		break;
 
 	case MS_PSY_SPEAR:
@@ -1361,7 +1361,7 @@ static bool cast_learned_spell(int spell, bool success)
 		break;
     case MS_RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You cast a animate dead."));
-		(void)animate_dead(0, p_ptr->y, p_ptr->x);
+		(void)animate_dead(0, caster_ptr->y, caster_ptr->x);
 		break;
 	case MS_S_KIN:
 	{
@@ -1370,7 +1370,7 @@ static bool cast_learned_spell(int spell, bool success)
         msg_print(_("援軍を召喚した。", "You summon minions."));
 		for (k = 0;k < 1; k++)
 		{
-			if (summon_kin_player(summon_lev, p_ptr->y, p_ptr->x, (pet ? PM_FORCE_PET : 0L)))
+			if (summon_kin_player(summon_lev, caster_ptr->y, caster_ptr->x, (pet ? PM_FORCE_PET : 0L)))
 			{
 				if (!pet) msg_print(_("召喚された仲間は怒っている！", "Summoned fellows are angry!"));
 			}
@@ -1387,7 +1387,7 @@ static bool cast_learned_spell(int spell, bool success)
 
         msg_print(_("サイバーデーモンを召喚した！", "You summon a Cyberdemon!"));
 		for (k = 0 ;k < 1 ; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_CYBER, p_mode))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_CYBER, p_mode))
 			{
                 if (!pet)
                     msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
@@ -1403,7 +1403,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("仲間を召喚した。", "You summon help."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, 0, p_mode))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, 0, p_mode))
 			{
                 if (!pet)
                     msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
@@ -1419,7 +1419,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("モンスターを召喚した！", "You summon monsters!"));
 		for (k = 0;k < plev / 15 + 2; k++)
-			if(summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, 0, (p_mode | u_mode)))
+			if(summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, 0, (p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
@@ -1435,7 +1435,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("アリを召喚した。", "You summon ants."));
 		for (k = 0; k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたアリは怒っている！", "The summoned ants are angry!"));
@@ -1451,7 +1451,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された蜘蛛は怒っている！", "Summoned spiders are angry!"));
@@ -1467,7 +1467,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("ハウンドを召喚した。", "You summon hounds."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたハウンドは怒っている！", "Summoned hounds are angry!"));
@@ -1483,7 +1483,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("ヒドラを召喚した。", "You summon a hydras."));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたヒドラは怒っている！", "Summoned hydras are angry!"));
@@ -1499,7 +1499,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("天使を召喚した！", "You summon an angel!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された天使は怒っている！", "Summoned angels are angry!"));
@@ -1515,7 +1515,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("混沌の宮廷から悪魔を召喚した！", "You summon a demon from the Courts of Chaos!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたデーモンは怒っている！", "Summoned demons are angry!"));
@@ -1531,7 +1531,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("アンデッドの強敵を召喚した！", "You summon an undead adversary!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたアンデッドは怒っている！", "Summoned undeads are angry!"));
@@ -1547,7 +1547,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("ドラゴンを召喚した！", "You summon a dragon!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたドラゴンは怒っている！", "Summoned dragons are angry!"));
@@ -1563,7 +1563,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("強力なアンデッドを召喚した！", "You summon a greater undead!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された上級アンデッドは怒っている！", "Summoned greater undeads are angry!"));
@@ -1579,7 +1579,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("古代ドラゴンを召喚した！", "You summon an ancient dragon!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚された古代ドラゴンは怒っている！", "Summoned ancient dragons are angry!"));
@@ -1595,7 +1595,7 @@ static bool cast_learned_spell(int spell, bool success)
 		int k;
         msg_print(_("アンバーの王族を召喚した！", "You summon a Lord of Amber!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
 			{
                 if (!pet)
                     msg_print(_("召喚されたアンバーの王族は怒っている！", "Summoned Lords of Amber are angry!"));
@@ -1611,14 +1611,14 @@ static bool cast_learned_spell(int spell, bool success)
 		int k, count = 0;
 		msg_print(_("特別な強敵を召喚した！", "You summon a special opponent!"));
 		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
 				if (!pet)
 					msg_print(_("召喚されたユニーク・モンスターは怒っている！", "Summoned special opponents are angry!"));
 			}
 		for (k = count;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), p_ptr->y, p_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
 				if (!pet)
@@ -1718,12 +1718,12 @@ bool do_cmd_cast_learned(void)
 		sound(SOUND_FAIL);
 
 		if (n >= MS_S_KIN)
-			cast = cast_learned_spell(n, FALSE);
+			cast = cast_learned_spell(p_ptr, n, FALSE);
 	}
 	else
 	{
 		sound(SOUND_ZAP);
-		cast = cast_learned_spell(n, TRUE);
+		cast = cast_learned_spell(p_ptr, n, TRUE);
 		if (!cast) return FALSE;
 	}
 
