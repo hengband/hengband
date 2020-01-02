@@ -655,15 +655,15 @@ static void place_pet(player_type *master_ptr)
  * while new floor creation since dungeons may be re-created by\n
  * auto-scum option.\n
  */
-static void update_unique_artifact(s16b cur_floor_id)
+static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
 {
 	int i;
 
 	/* Maintain unique monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < floor_ptr->m_max; i++)
 	{
 		monster_race *r_ptr;
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -679,9 +679,9 @@ static void update_unique_artifact(s16b cur_floor_id)
 	}
 
 	/* Maintain artifatcs */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		object_type *o_ptr = &floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
@@ -1388,7 +1388,7 @@ void change_floor(player_type *creature_ptr)
 	forget_travel_flow();
 
 	/* Hack -- maintain unique and artifacts */
-	update_unique_artifact(new_floor_id);
+	update_unique_artifact(creature_ptr->current_floor_ptr, new_floor_id);
 
 	/* Now the player is in new floor */
 	creature_ptr->floor_id = new_floor_id;
