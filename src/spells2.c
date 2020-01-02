@@ -64,22 +64,22 @@
  * @param known 地形から危険フラグを外すならTRUE
  * @return 効力があった場合TRUEを返す
  */
-static bool detect_feat_flag(POSITION range, int flag, bool known)
+static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, bool known)
 {
 	POSITION x, y;
 	bool detect = FALSE;
 	grid_type *g_ptr;
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
+	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan the current panel */
-	for (y = 1; y < p_ptr->current_floor_ptr->height - 1; y++)
+	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x <= p_ptr->current_floor_ptr->width - 1; x++)
+		for (x = 1; x <= caster_ptr->current_floor_ptr->width - 1; x++)
 		{
-			int dist = distance(p_ptr->y, p_ptr->x, y, x);
+			int dist = distance(caster_ptr->y, caster_ptr->x, y, x);
 			if (dist > range) continue;
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Hack -- Safe */
 			if (flag == FF_TRAP)
@@ -116,7 +116,7 @@ static bool detect_feat_flag(POSITION range, int flag, bool known)
  */
 bool detect_traps(POSITION range, bool known)
 {
-	bool detect = detect_feat_flag(range, FF_TRAP, known);
+	bool detect = detect_feat_flag(p_ptr, range, FF_TRAP, known);
 
 	if (known) p_ptr->dtrap = TRUE;
 
@@ -136,7 +136,7 @@ bool detect_traps(POSITION range, bool known)
  */
 bool detect_doors(POSITION range)
 {
-	bool detect = detect_feat_flag(range, FF_DOOR, TRUE);
+	bool detect = detect_feat_flag(p_ptr, range, FF_DOOR, TRUE);
 
 	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 	if (detect)
@@ -154,7 +154,7 @@ bool detect_doors(POSITION range)
  */
 bool detect_stairs(POSITION range)
 {
-	bool detect = detect_feat_flag(range, FF_STAIRS, TRUE);
+	bool detect = detect_feat_flag(p_ptr, range, FF_STAIRS, TRUE);
 
 	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 0) detect = FALSE;
 	if (detect)
@@ -172,7 +172,7 @@ bool detect_stairs(POSITION range)
  */
 bool detect_treasure(POSITION range)
 {
-	bool detect = detect_feat_flag(range, FF_HAS_GOLD, TRUE);
+	bool detect = detect_feat_flag(p_ptr, range, FF_HAS_GOLD, TRUE);
 
 	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
 	if (detect)
