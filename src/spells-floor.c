@@ -192,7 +192,7 @@ void wiz_dark(player_type *caster_ptr)
  */
 bool warding_glyph(player_type *caster_ptr)
 {
-	if (!cave_clean_bold(p_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x))
+	if (!cave_clean_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
