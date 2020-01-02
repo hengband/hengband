@@ -858,7 +858,7 @@ static bool get_item_allow(INVENTORY_IDX item)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -917,7 +917,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 
 			/* Special index */
 			k = 0 - (*cp);
-			o_ptr = &p_ptr->current_floor_ptr->o_list[k];
+			o_ptr = &owner_ptr->current_floor_ptr->o_list[k];
 
 			/* Validate the item */
 			if (item_tester_okay(o_ptr, tval) || (mode & USE_FULL))
@@ -986,7 +986,7 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
 	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
@@ -1002,21 +1002,21 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
-		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
+		if (owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
 
-	if (equip && p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
+	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
-		if (p_ptr->migite)
+		if (owner_ptr->migite)
 		{
 			if (e2 < INVEN_LARM) e2 = INVEN_LARM;
 		}
-		else if (p_ptr->hidarite) e1 = INVEN_RARM;
+		else if (owner_ptr->hidarite) e1 = INVEN_RARM;
 	}
 
 
@@ -1024,10 +1024,10 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		for (this_o_idx = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+		for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Accept the item on the floor if legal */
@@ -1038,7 +1038,6 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 	/* Require at least one legal choice */
 	if (!allow_floor && (i1 > i2) && (e1 > e2))
 	{
-		/* Cancel p_ptr->command_see */
 		command_see = FALSE;
 		oops = TRUE;
 		done = TRUE;
@@ -1110,11 +1109,11 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 
 		if ((command_wrk && ni && !ne) || (!command_wrk && !ni && ne))
 		{
-			toggle_inven_equip(p_ptr);
+			toggle_inven_equip(owner_ptr);
 			toggle = !toggle;
 		}
 
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+		owner_ptr->window |= (PW_INVEN | PW_EQUIP);
 		handle_stuff();
 
 		/* Inventory screen */
@@ -1363,10 +1362,10 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 				if (allow_floor)
 				{
 					/* Scan all objects in the grid */
-					for (this_o_idx = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+					for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 					{
 						object_type *o_ptr;
-						o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+						o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
 						next_o_idx = o_ptr->next_o_idx;
 
 						/* Validate the item */
@@ -1588,9 +1587,9 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 
 
 	/* Clean up  'show choices' */
-	if (toggle) toggle_inven_equip(p_ptr);
+	if (toggle) toggle_inven_equip(owner_ptr);
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	owner_ptr->window |= (PW_INVEN | PW_EQUIP);
 	handle_stuff();
 
 	/* Clear the prompt line */
@@ -1614,10 +1613,10 @@ bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_T
 object_type *choose_object(player_type *creature_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval)
 {
 	OBJECT_IDX item;
-	if (!get_item(&item, q, s, option, tval)) return NULL;
+	if (!get_item(creature_ptr, &item, q, s, option, tval)) return NULL;
 	if (idx) *idx = item;
 	if (item == INVEN_FORCE) return NULL;
-	return REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
+	return REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
 }
 
 
@@ -2013,7 +2012,6 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 	/* Require at least one legal choice */
 	if (!allow_inven && !allow_equip && !allow_floor)
 	{
-		/* Cancel p_ptr->command_see */
 		command_see = FALSE;
 		oops = TRUE;
 		done = TRUE;

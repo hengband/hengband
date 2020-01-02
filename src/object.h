@@ -422,7 +422,7 @@ extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUB
 #define IGNORE_BOTHHAND_SLOT 0x10 /*!< アイテム表示/選択範囲: 両手持ちスロットを選択に含めない */
 #define USE_FULL  0x20 /*!< アイテム表示/選択範囲: 空欄まですべて表示する*/
 extern bool can_get_item(OBJECT_TYPE_VALUE tval);
-extern bool get_item(OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
+extern bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 
 #define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID >= 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
 
