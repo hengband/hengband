@@ -2804,7 +2804,7 @@ static errr rd_dungeon_old(floor_type *floor_ptr)
 			{
 				g_ptr->info &= ~CAVE_TRAP;
 				g_ptr->mimic = g_ptr->feat;
-				g_ptr->feat = choose_random_trap();
+				g_ptr->feat = choose_random_trap(floor_ptr);
 			}
 
 			/* Another hidden trap */
