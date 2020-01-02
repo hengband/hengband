@@ -2923,13 +2923,13 @@ static void player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SI
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
-	if (PRACE_IS_(p_ptr, RACE_SPECTRE))
+	if (PRACE_IS_(creature_ptr, RACE_SPECTRE))
 		add_flag(flgs, TR_RES_NETHER);
-	if (p_ptr->mimic_form == MIMIC_VAMPIRE || PRACE_IS_(p_ptr, RACE_VAMPIRE))
+	if (creature_ptr->mimic_form == MIMIC_VAMPIRE || PRACE_IS_(creature_ptr, RACE_VAMPIRE))
 		add_flag(flgs, TR_RES_DARK);
-	if (p_ptr->mimic_form == MIMIC_DEMON_LORD)
+	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
 		add_flag(flgs, TR_RES_FIRE);
-	else if (PRACE_IS_(p_ptr, RACE_YEEK) && p_ptr->lev > 19)
+	else if (PRACE_IS_(creature_ptr, RACE_YEEK) && creature_ptr->lev > 19)
 		add_flag(flgs, TR_RES_ACID);
 }
 
