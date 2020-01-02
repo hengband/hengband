@@ -304,7 +304,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				detect_objects_normal(rad);
 				detect_treasure(rad);
-				detect_objects_gold(rad);
+				detect_objects_gold(caster_ptr, rad);
 			}
 		}
 		break;

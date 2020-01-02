@@ -122,7 +122,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 		case SV_STAFF_DETECT_GOLD:
 		{
 			if (detect_treasure(detect_rad)) ident = TRUE;
-			if (detect_objects_gold(detect_rad)) ident = TRUE;
+			if (detect_objects_gold(creature_ptr, detect_rad)) ident = TRUE;
 			break;
 		}
 

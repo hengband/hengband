@@ -188,7 +188,7 @@ bool detect_treasure(POSITION range)
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
-bool detect_objects_gold(POSITION range)
+bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 {
 	OBJECT_IDX i;
 	POSITION y, x;
@@ -196,12 +196,12 @@ bool detect_objects_gold(POSITION range)
 
 	bool detect = FALSE;
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
+	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
 	/* Scan objects */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
@@ -210,7 +210,7 @@ bool detect_objects_gold(POSITION range)
 		x = o_ptr->ix;
 
 		/* Only detect nearby objects */
-		if (distance(p_ptr->y, p_ptr->x, y, x) > range2) continue;
+		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range2) continue;
 
 		/* Detect "gold" objects */
 		if (o_ptr->tval == TV_GOLD)
@@ -221,7 +221,7 @@ bool detect_objects_gold(POSITION range)
 		}
 	}
 
-	if (music_singing(p_ptr, MUSIC_DETECT) && SINGING_COUNT(p_ptr) > 6) detect = FALSE;
+	if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 6) detect = FALSE;
 	if (detect)
 	{
 		msg_print(_("財宝の存在を感じとった！", "You sense the presence of treasure!"));
@@ -758,7 +758,7 @@ bool detect_all(POSITION range)
 	/* There are too many hidden treasure.  So... */
 	/* if (detect_treasure(range)) detect = TRUE; */
 
-	if (detect_objects_gold(range)) detect = TRUE;
+	if (detect_objects_gold(p_ptr, range)) detect = TRUE;
 	if (detect_objects_normal(range)) detect = TRUE;
 	if (detect_monsters_invis(range)) detect = TRUE;
 	if (detect_monsters_normal(range)) detect = TRUE;

@@ -199,7 +199,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				detect_treasure(rad);
-				detect_objects_gold(rad);
+				detect_objects_gold(caster_ptr, rad);
 			}
 		}
 		break;

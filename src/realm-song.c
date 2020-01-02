@@ -294,7 +294,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				{
 					/* There are too many hidden treasure.  So... */
 					/* detect_treasure(rad); */
-					detect_objects_gold(rad);
+					detect_objects_gold(caster_ptr, rad);
 					detect_objects_normal(rad);
 
 					if (plev > 24 && count < 11)

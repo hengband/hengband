@@ -160,7 +160,7 @@ extern bool detect_traps(POSITION range, bool known);
 extern bool detect_doors(POSITION range);
 extern bool detect_stairs(POSITION range);
 extern bool detect_treasure(POSITION range);
-extern bool detect_objects_gold(POSITION range);
+extern bool detect_objects_gold(player_type *caster_ptr, POSITION range);
 extern bool detect_objects_normal(POSITION range);
 extern bool detect_objects_magic(POSITION range);
 extern bool detect_monsters_normal(POSITION range);

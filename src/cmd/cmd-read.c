@@ -290,7 +290,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_DETECT_GOLD:
 		{
 			if (detect_treasure(DETECT_RAD_DEFAULT)) ident = TRUE;
-			if (detect_objects_gold(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_objects_gold(creature_ptr, DETECT_RAD_DEFAULT)) ident = TRUE;
 			break;
 		}
 
