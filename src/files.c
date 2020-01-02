@@ -2882,7 +2882,7 @@ void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void known_obj_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
+static void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 	for (i = 0; i < TR_FLAG_SIZE; i++)
@@ -2896,7 +2896,7 @@ static void known_obj_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
 		object_type *o_ptr;
 
 		/* Object */
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 
 		if (!o_ptr->k_idx) continue;
 
@@ -2917,7 +2917,7 @@ static void known_obj_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-static void player_immunity(BIT_FLAGS flgs[TR_FLAG_SIZE])
+static void player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	int i;
 	for (i = 0; i < TR_FLAG_SIZE; i++)
@@ -3159,9 +3159,9 @@ static void display_player_flag_info(void)
 	/* Extract flags and store */
 	player_flags(p_ptr, f.player_flags);
 	tim_player_flags(p_ptr, f.tim_player_flags);
-	player_immunity(f.player_imm);
+	player_immunity(p_ptr, f.player_imm);
 	tim_player_immunity(p_ptr, f.tim_player_imm);
-	known_obj_immunity(f.known_obj_imm);
+	known_obj_immunity(p_ptr, f.known_obj_imm);
 	player_vuln_flags(p_ptr, f.player_vuln);
 
 	/*** Set 1 ***/
@@ -3290,9 +3290,9 @@ static void display_player_other_flag_info(void)
 	/* Extract flags and store */
 	player_flags(p_ptr, f.player_flags);
 	tim_player_flags(p_ptr, f.tim_player_flags);
-	player_immunity(f.player_imm);
+	player_immunity(p_ptr, f.player_imm);
 	tim_player_immunity(p_ptr, f.tim_player_imm);
-	known_obj_immunity(f.known_obj_imm);
+	known_obj_immunity(p_ptr, f.known_obj_imm);
 	player_vuln_flags(p_ptr, f.player_vuln);
 
 	/*** Set 1 ***/
