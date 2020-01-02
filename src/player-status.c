@@ -5777,7 +5777,7 @@ long calc_score(player_type *creature_ptr)
 	if ((creature_ptr->pseikaku == SEIKAKU_MUNCHKIN) && point)
 	{
 		point = 1;
-		if (creature_ptr->total_winner) point = 2;
+		if (current_world_ptr->total_winner) point = 2;
 	}
 	if (easy_band) point = (0 - point);
 

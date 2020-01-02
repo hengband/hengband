@@ -435,7 +435,7 @@ static void generate_area(floor_type *floor_ptr, POSITION y, POSITION x, bool bo
 		}
 	}
 
-	if (wilderness[y][x].entrance && !wilderness[y][x].town && (p_ptr->total_winner || !(d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER)))
+	if (wilderness[y][x].entrance && !wilderness[y][x].town && (current_world_ptr->total_winner || !(d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER)))
 	{
 		int dy, dx;
 		u32b state_backup[4];
@@ -732,7 +732,7 @@ void wilderness_gen_small(player_type *creature_ptr, floor_type *floor_ptr)
 			floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
 		}
 		else if (wilderness[j][i].road) floor_ptr->grid_array[j][i].feat = feat_floor;
-		else if (wilderness[j][i].entrance && (creature_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
+		else if (wilderness[j][i].entrance && (current_world_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
 		{
 			floor_ptr->grid_array[j][i].feat = feat_entrance;
 			floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;

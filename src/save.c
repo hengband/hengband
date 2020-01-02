@@ -824,7 +824,7 @@ static void wr_extra(player_type *creature_ptr)
 
 	/* Special stuff */
 	wr_u16b(creature_ptr->panic_save);
-	wr_u16b(creature_ptr->total_winner);
+	wr_u16b(current_world_ptr->total_winner);
 	wr_u16b(current_world_ptr->noscore);
 
 

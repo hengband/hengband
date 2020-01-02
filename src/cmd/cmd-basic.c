@@ -2847,7 +2847,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 	flush();
 
 	/* Verify Retirement */
-	if (creature_ptr->total_winner)
+	if (current_world_ptr->total_winner)
 	{
 		/* Verify */
 		if (!get_check_strict(_("引退しますか? ", "Do you want to retire? "), CHECK_NO_HISTORY)) return;
@@ -2878,7 +2878,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 	creature_ptr->last_message = NULL;
 
 	/* Hack -- Note *winning* message */
-	if (creature_ptr->total_winner && last_words)
+	if (current_world_ptr->total_winner && last_words)
 	{
 		char buf[1024] = "";
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WINNER);
@@ -2901,7 +2901,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 	creature_ptr->is_dead = TRUE;
 	creature_ptr->leaving = TRUE;
 
-	if (!creature_ptr->total_winner)
+	if (!current_world_ptr->total_winner)
 	{
 		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, _("ダンジョンの探索に絶望して自殺した。", "give up all hope to commit suicide."));
 		exe_write_diary(creature_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));

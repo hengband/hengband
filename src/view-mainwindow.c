@@ -749,7 +749,7 @@ static void prt_title(player_type *creature_ptr)
 	{
 		p = _("[ウィザード]", "[=-WIZARD-=]");
 	}
-	else if (creature_ptr->total_winner || (creature_ptr->lev > PY_MAX_LEVEL))
+	else if (current_world_ptr->total_winner || (creature_ptr->lev > PY_MAX_LEVEL))
 	{
 		if (creature_ptr->arena_number > MAX_ARENA_MONS + 2)
 		{

@@ -969,7 +969,7 @@ bool check_score(void)
 #endif
 
 	/* Interupted */
-	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("強制終了", "Interrupting")))
+	if (!current_world_ptr->total_winner && streq(p_ptr->died_from, _("強制終了", "Interrupting")))
 	{
 		msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
 		msg_print(NULL);
@@ -977,7 +977,7 @@ bool check_score(void)
 	}
 
 	/* Quitter */
-	if (!p_ptr->total_winner && streq(p_ptr->died_from, _("途中終了", "Quitting")))
+	if (!current_world_ptr->total_winner && streq(p_ptr->died_from, _("途中終了", "Quitting")))
 	{
 		msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
 		msg_print(NULL);

@@ -1793,7 +1793,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	cheat_turn = FALSE;
 
 	/* Assume no winning game */
-	creature_ptr->total_winner = FALSE;
+	current_world_ptr->total_winner = FALSE;
 
 	creature_ptr->timewalk = FALSE;
 

@@ -12,6 +12,7 @@ typedef struct {
 	GAME_TURN arena_start_turn;		/*!< 闘技場賭博の開始ターン値 */
 	u32b start_time;
 	u16b noscore;		  /* Cheating flags */
+	u16b total_winner;	  /* Total winner */
 
 	MONSTER_IDX timewalk_m_idx;     /*!< 現在時間停止を行っているモンスターのID */
 

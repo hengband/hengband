@@ -20,6 +20,7 @@
 #include "targeting.h"
 #include "view-mainwindow.h"
 #include "spells-floor.h"
+#include "world.h"
 
 /*!
 * @brief 剣術の各処理を行う
@@ -938,10 +939,10 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			i = inkey();
 			prt("", 0, 0);
 			if (i != '@') return NULL;
-			if (caster_ptr->total_winner)
+			if (current_world_ptr->total_winner)
 			{
 				take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku", -1);
-				caster_ptr->total_winner = TRUE;
+				current_world_ptr->total_winner = TRUE;
 			}
 			else
 			{

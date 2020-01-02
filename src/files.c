@@ -3952,7 +3952,7 @@ void display_player(player_type *creature_ptr, int mode)
 
 			if (creature_ptr->is_dead)
 			{
-				if (creature_ptr->total_winner)
+				if (current_world_ptr->total_winner)
 				{
 #ifdef JP
 					sprintf(statmsg, "…あなたは勝利の後%sした。", streq(creature_ptr->died_from, "Seppuku") ? "切腹" : "引退");
@@ -4505,7 +4505,7 @@ static void dump_aux_last_message(FILE *fff)
 {
 	if (p_ptr->is_dead)
 	{
-		if (!p_ptr->total_winner)
+		if (!current_world_ptr->total_winner)
 		{
 			int i;
 
@@ -6187,7 +6187,7 @@ void print_tomb(void)
 		}
 
 		/* King or Queen */
-		if (p_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
+		if (current_world_ptr->total_winner || (p_ptr->lev > PY_MAX_LEVEL))
 		{
 #ifdef JP
 			/* 英日切り替え */

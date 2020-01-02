@@ -511,7 +511,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 		{
 			QUEST_IDX q_idx = quest_number(p_ptr->current_floor_ptr->dun_level);
 			bool seppuku = streq(hit_from, "Seppuku");
-			bool winning_seppuku = creature_ptr->total_winner && seppuku;
+			bool winning_seppuku = current_world_ptr->total_winner && seppuku;
 
 			play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
@@ -540,7 +540,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			}
 
 			/* No longer a winner */
-			creature_ptr->total_winner = FALSE;
+			current_world_ptr->total_winner = FALSE;
 
 			if (winning_seppuku)
 			{

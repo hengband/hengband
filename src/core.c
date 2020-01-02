@@ -5787,7 +5787,7 @@ void close_game(void)
 	if (p_ptr->is_dead)
 	{
 		/* Handle retirement */
-		if (p_ptr->total_winner) kingly(p_ptr);
+		if (current_world_ptr->total_winner) kingly(p_ptr);
 
 		/* Save memories */
 		if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? ")))

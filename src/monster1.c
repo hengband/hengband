@@ -3092,7 +3092,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	if ((m_ptr->r_idx == MON_SERPENT) && !cloned)
 	{
 		/* Total winner */
-		p_ptr->total_winner = TRUE;
+		current_world_ptr->total_winner = TRUE;
 
 		/* Redraw the "title" */
 		p_ptr->redraw |= (PR_TITLE);
