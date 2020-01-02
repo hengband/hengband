@@ -85,9 +85,9 @@ static bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
  * @param f6p モンスター魔法のフラグリスト3
  * @return なし
  */
-static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p)
+static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u32b *f5p, u32b *f6p)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	u32b f4 = (*f4p);
@@ -121,40 +121,40 @@ static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p
 	if (smart_cheat)
 	{
 		/* Know basic info */
-		if (p_ptr->resist_acid) smart |= (SM_RES_ACID);
+		if (target_ptr->resist_acid) smart |= (SM_RES_ACID);
 		if (IS_OPPOSE_ACID()) smart |= (SM_OPP_ACID);
-		if (p_ptr->immune_acid) smart |= (SM_IMM_ACID);
-		if (p_ptr->resist_elec) smart |= (SM_RES_ELEC);
+		if (target_ptr->immune_acid) smart |= (SM_IMM_ACID);
+		if (target_ptr->resist_elec) smart |= (SM_RES_ELEC);
 		if (IS_OPPOSE_ELEC()) smart |= (SM_OPP_ELEC);
-		if (p_ptr->immune_elec) smart |= (SM_IMM_ELEC);
-		if (p_ptr->resist_fire) smart |= (SM_RES_FIRE);
+		if (target_ptr->immune_elec) smart |= (SM_IMM_ELEC);
+		if (target_ptr->resist_fire) smart |= (SM_RES_FIRE);
 		if (IS_OPPOSE_FIRE()) smart |= (SM_OPP_FIRE);
-		if (p_ptr->immune_fire) smart |= (SM_IMM_FIRE);
-		if (p_ptr->resist_cold) smart |= (SM_RES_COLD);
+		if (target_ptr->immune_fire) smart |= (SM_IMM_FIRE);
+		if (target_ptr->resist_cold) smart |= (SM_RES_COLD);
 		if (IS_OPPOSE_COLD()) smart |= (SM_OPP_COLD);
-		if (p_ptr->immune_cold) smart |= (SM_IMM_COLD);
+		if (target_ptr->immune_cold) smart |= (SM_IMM_COLD);
 
 		/* Know poison info */
-		if (p_ptr->resist_pois) smart |= (SM_RES_POIS);
+		if (target_ptr->resist_pois) smart |= (SM_RES_POIS);
 		if (IS_OPPOSE_POIS()) smart |= (SM_OPP_POIS);
 
 		/* Know special resistances */
-		if (p_ptr->resist_neth) smart |= (SM_RES_NETH);
-		if (p_ptr->resist_lite) smart |= (SM_RES_LITE);
-		if (p_ptr->resist_dark) smart |= (SM_RES_DARK);
-		if (p_ptr->resist_fear) smart |= (SM_RES_FEAR);
-		if (p_ptr->resist_conf) smart |= (SM_RES_CONF);
-		if (p_ptr->resist_chaos) smart |= (SM_RES_CHAOS);
-		if (p_ptr->resist_disen) smart |= (SM_RES_DISEN);
-		if (p_ptr->resist_blind) smart |= (SM_RES_BLIND);
-		if (p_ptr->resist_nexus) smart |= (SM_RES_NEXUS);
-		if (p_ptr->resist_sound) smart |= (SM_RES_SOUND);
-		if (p_ptr->resist_shard) smart |= (SM_RES_SHARD);
-		if (p_ptr->reflect) smart |= (SM_IMM_REFLECT);
+		if (target_ptr->resist_neth) smart |= (SM_RES_NETH);
+		if (target_ptr->resist_lite) smart |= (SM_RES_LITE);
+		if (target_ptr->resist_dark) smart |= (SM_RES_DARK);
+		if (target_ptr->resist_fear) smart |= (SM_RES_FEAR);
+		if (target_ptr->resist_conf) smart |= (SM_RES_CONF);
+		if (target_ptr->resist_chaos) smart |= (SM_RES_CHAOS);
+		if (target_ptr->resist_disen) smart |= (SM_RES_DISEN);
+		if (target_ptr->resist_blind) smart |= (SM_RES_BLIND);
+		if (target_ptr->resist_nexus) smart |= (SM_RES_NEXUS);
+		if (target_ptr->resist_sound) smart |= (SM_RES_SOUND);
+		if (target_ptr->resist_shard) smart |= (SM_RES_SHARD);
+		if (target_ptr->reflect) smart |= (SM_IMM_REFLECT);
 
 		/* Know bizarre "resistances" */
-		if (p_ptr->free_act) smart |= (SM_IMM_FREE);
-		if (!p_ptr->msp) smart |= (SM_IMM_MANA);
+		if (target_ptr->free_act) smart |= (SM_IMM_FREE);
+		if (!target_ptr->msp) smart |= (SM_IMM_MANA);
 	}
 
 
@@ -261,7 +261,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p
 
 	if (smart & (SM_RES_NETH))
 	{
-		if (PRACE_IS_(p_ptr, RACE_SPECTRE))
+		if (PRACE_IS_(target_ptr, RACE_SPECTRE))
 		{
 			f4 &= ~(RF4_BR_NETH);
 			f5 &= ~(RF5_BA_NETH);
@@ -283,7 +283,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, u32b *f4p, u32b *f5p, u32b *f6p
 
 	if (smart & (SM_RES_DARK))
 	{
-		if (PRACE_IS_(p_ptr, RACE_VAMPIRE))
+		if (PRACE_IS_(target_ptr, RACE_VAMPIRE))
 		{
 			f4 &= ~(RF4_BR_DARK);
 			f5 &= ~(RF5_BA_DARK);
@@ -1575,7 +1575,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	if (!f4 && !f5 && !f6) return (FALSE);
 
 	/* Remove the "ineffective" spells */
-	remove_bad_spells(m_idx, &f4, &f5, &f6);
+	remove_bad_spells(m_idx, target_ptr, &f4, &f5, &f6);
 
 	if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out)
 	{
