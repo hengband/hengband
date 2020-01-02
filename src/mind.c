@@ -689,14 +689,14 @@ void mindcraft_info(char *p, int use_mind, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
+static bool_hack get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
 {
 	SPELL_IDX i;
 	int             num = 0;
 	TERM_LEN y = 1;
 	TERM_LEN x = 10;
 	PERCENTAGE minfail = 0;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	PERCENTAGE chance = 0;
 	int             ask = TRUE;
 	char            choice;
@@ -710,7 +710,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	int             use_mind;
 	int menu_line = (use_menu ? 1 : 0);
 
-	switch (p_ptr->pclass)
+	switch (caster_ptr->pclass)
 	{
 	case CLASS_MINDCRAFTER:
 	{
@@ -861,8 +861,8 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 				put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
 					((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y, x + 35);
 
-				has_weapon[0] = has_melee_weapon(p_ptr, INVEN_RARM);
-				has_weapon[1] = has_melee_weapon(p_ptr, INVEN_LARM);
+				has_weapon[0] = has_melee_weapon(caster_ptr, INVEN_RARM);
+				has_weapon[1] = has_melee_weapon(caster_ptr, INVEN_LARM);
 
 				/* Dump the spells */
 				for (i = 0; i < MAX_MIND_POWERS; i++)
@@ -884,14 +884,14 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 						chance -= 3 * (plev - spell.min_lev);
 
 						/* Reduce failure rate by INT/WIS adjustment */
-						chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+						chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
 
 						if (use_mind == MIND_KI)
 						{
-							if (heavy_armor(p_ptr)) chance += 20;
-							if (p_ptr->icky_wield[0]) chance += 20;
+							if (heavy_armor(caster_ptr)) chance += 20;
+							if (caster_ptr->icky_wield[0]) chance += 20;
 							else if (has_weapon[0]) chance += 10;
-							if (p_ptr->icky_wield[1]) chance += 20;
+							if (caster_ptr->icky_wield[1]) chance += 20;
 							else if (has_weapon[1]) chance += 10;
 							if (i == 5)
 							{
@@ -902,28 +902,28 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 						}
 
 						/* Not enough mana to cast */
-						if ((use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU) && (mana_cost > p_ptr->csp))
+						if ((use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU) && (mana_cost > caster_ptr->csp))
 						{
-							chance += 5 * (mana_cost - p_ptr->csp);
+							chance += 5 * (mana_cost - caster_ptr->csp);
 						}
 
-						chance += p_ptr->to_m_chance;
+						chance += caster_ptr->to_m_chance;
 
 						/* Extract the minimum failure rate */
-						minfail = adj_mag_fail[p_ptr->stat_ind[mp_ptr->spell_stat]];
+						minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
 
 						/* Minimum failure rate */
 						if (chance < minfail) chance = minfail;
 
 						/* Stunning makes spells harder */
-						if (p_ptr->stun > 50) chance += 25;
-						else if (p_ptr->stun) chance += 15;
+						if (caster_ptr->stun > 50) chance += 25;
+						else if (caster_ptr->stun) chance += 15;
 
 						if (use_mind == MIND_KI)
 						{
-							if (heavy_armor(p_ptr)) chance += 5;
-							if (p_ptr->icky_wield[0]) chance += 5;
-							if (p_ptr->icky_wield[1]) chance += 5;
+							if (heavy_armor(caster_ptr)) chance += 5;
+							if (caster_ptr->icky_wield[0]) chance += 5;
+							if (caster_ptr->icky_wield[1]) chance += 5;
 						}
 						/* Always a 5 percent chance of working */
 						if (chance > 95) chance = 95;
@@ -1003,7 +1003,7 @@ static bool_hack get_mind_power(SPELL_IDX *sn, bool only_browse)
 	}
 	if (redraw && !only_browse) screen_load();
 
-	p_ptr->window |= (PW_SPELL);
+	caster_ptr->window |= (PW_SPELL);
 	handle_stuff();
 
 	/* Abort if needed */
@@ -1774,7 +1774,7 @@ void do_cmd_mind(player_type *caster_ptr)
 	bool		on_mirror = FALSE;
 
 	if (cmd_limit_confused(caster_ptr)) return;
-	if (!get_mind_power(&n, FALSE)) return;
+	if (!get_mind_power(caster_ptr, &n, FALSE)) return;
 
 #ifdef JP
 	switch(caster_ptr->pclass)
@@ -2079,7 +2079,7 @@ void do_cmd_mind_browse(void)
 
 	while(1)
 	{
-		if (!get_mind_power(&n, TRUE))
+		if (!get_mind_power(p_ptr, &n, TRUE))
 		{
 			screen_load();
 			return;
