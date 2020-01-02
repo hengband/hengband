@@ -5052,7 +5052,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	}
 
 	/* Hex - revenge damage stored */
-	revenge_store(get_damage);
+	revenge_store(target_ptr, get_damage);
 
 	if ((target_ptr->tim_eyeeye || hex_spelling(HEX_EYE_FOR_EYE))
 		&& (get_damage > 0) && !target_ptr->is_dead && (who > 0))

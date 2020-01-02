@@ -277,12 +277,12 @@ void revenge_spell(player_type *caster_ptr)
  * @param dam 蓄積されるダメージ量
  * @return なし
  */
-void revenge_store(HIT_POINT dam)
+void revenge_store(player_type *caster_ptr, HIT_POINT dam)
 {
-	if (p_ptr->realm1 != REALM_HEX) return;
-	if (HEX_REVENGE_TURN(p_ptr) <= 0) return;
+	if (caster_ptr->realm1 != REALM_HEX) return;
+	if (HEX_REVENGE_TURN(caster_ptr) <= 0) return;
 
-	HEX_REVENGE_POWER(p_ptr) += dam;
+	HEX_REVENGE_POWER(caster_ptr) += dam;
 }
 
 /*!

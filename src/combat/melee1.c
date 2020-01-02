@@ -4047,7 +4047,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* Hex - revenge damage stored */
-	revenge_store(get_damage);
+	revenge_store(target_ptr, get_damage);
 
 	if ((target_ptr->tim_eyeeye || hex_spelling(HEX_EYE_FOR_EYE))
 		&& get_damage > 0 && !target_ptr->is_dead)
