@@ -423,13 +423,13 @@ extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode
  * have already been placed into the "lite" array, and we are never
  * called when the "lite" array is full.
  */
-#define cave_lite_hack(F, Y,X) \
+#define cave_lite_hack(F,Y,X) \
 {\
 	if (!((F)->grid_array[Y][X].info & (CAVE_LITE))) \
 	{ \
 		(F)->grid_array[Y][X].info |= (CAVE_LITE); \
-		(F)->lite_y[p_ptr->current_floor_ptr->lite_n] = (Y); \
-		(F)->lite_x[p_ptr->current_floor_ptr->lite_n++] = (X); \
+		(F)->lite_y[(F)->lite_n] = (Y); \
+		(F)->lite_x[(F)->lite_n++] = (X); \
 	} \
 }
 
