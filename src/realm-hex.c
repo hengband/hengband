@@ -434,7 +434,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どれを呪いますか？", "Which weapon do you curse?");
 			s = _("武器を装備していない。", "You wield no weapons.");
 
-			o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP), 0);
+			o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
@@ -588,7 +588,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (cast)
 		{
 			CASTING_HEX_FLAGS(caster_ptr) |= (1L << HEX_INHAIL);
-			do_cmd_quaff_potion(p_ptr);
+			do_cmd_quaff_potion(caster_ptr);
 			CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << HEX_INHAIL);
 			add = FALSE;
 		}
@@ -730,7 +730,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どれを呪いますか？", "Which piece of armour do you curse?");
 			s = _("防具を装備していない。", "You wield no piece of armours.");
 
-			o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP), 0);
+			o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
 			o_ptr = &caster_ptr->inventory_list[item];
@@ -823,7 +823,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
 			{
-				exe_spell(p_ptr, REALM_HEX, spell, SPELL_STOP);
+				exe_spell(caster_ptr, REALM_HEX, spell, SPELL_STOP);
 				CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << spell);
 				CASTING_HEX_NUM(caster_ptr)--;
 				if (!SINGING_SONG_ID(caster_ptr)) set_action(caster_ptr, ACTION_NONE);
@@ -910,7 +910,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (!flag)
 			{
-				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(p_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
+				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(caster_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
 				CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << HEX_RESTORE);
 				if (cont) CASTING_HEX_NUM(caster_ptr)--;
 				if (CASTING_HEX_NUM(caster_ptr)) caster_ptr->action = ACTION_NONE;
@@ -937,7 +937,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
 			s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
-			o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP), 0);
+			o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
 			object_flags(o_ptr, f);
@@ -1023,10 +1023,10 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					int dy = y + ddy_ddd[dir];
 					int dx = x + ddx_ddd[dir];
 					if (dir == 5) continue;
-					if (p_ptr->current_floor_ptr->grid_array[dy][dx].m_idx) flag = TRUE;
+					if (caster_ptr->current_floor_ptr->grid_array[dy][dx].m_idx) flag = TRUE;
 				}
 
-				if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x) || (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ICKY) ||
+				if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x) || (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ICKY) ||
 					(distance(y, x, caster_ptr->y, caster_ptr->x) > plev + 2))
 				{
 					msg_print(_("そこには移動できない。", "Can not teleport to there."));
