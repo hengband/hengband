@@ -1083,26 +1083,26 @@ static int next_to_corr(POSITION y1, POSITION x1)
 * @param y 判定を行いたいマスのY座標
 * @param x 判定を行いたいマスのX座標
 * @return ドアを設置可能ならばTRUEを返す
-* @note Assumes "in_bounds(p_ptr->current_floor_ptr, y1, x1)"
+* @note Assumes "in_bounds()"
 * @details
 * \n
-* Assumes "in_bounds(p_ptr->current_floor_ptr, y, x)"\n
+* Assumes "in_bounds()"\n
 */
-static bool possible_doorway(POSITION y, POSITION x)
+static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	/* Count the adjacent corridors */
 	if (next_to_corr(y, x) >= 2)
 	{
 		/* Check Vertical */
-		if (cave_have_flag_bold(p_ptr->current_floor_ptr, y - 1, x, FF_WALL) &&
-			cave_have_flag_bold(p_ptr->current_floor_ptr, y + 1, x, FF_WALL))
+		if (cave_have_flag_bold(floor_ptr, y - 1, x, FF_WALL) &&
+			cave_have_flag_bold(floor_ptr, y + 1, x, FF_WALL))
 		{
 			return (TRUE);
 		}
 
 		/* Check Horizontal */
-		if (cave_have_flag_bold(p_ptr->current_floor_ptr, y, x - 1, FF_WALL) &&
-			cave_have_flag_bold(p_ptr->current_floor_ptr, y, x + 1, FF_WALL))
+		if (cave_have_flag_bold(floor_ptr, y, x - 1, FF_WALL) &&
+			cave_have_flag_bold(floor_ptr, y, x + 1, FF_WALL))
 		{
 			return (TRUE);
 		}
@@ -1129,7 +1129,7 @@ void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
 	if (floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;
 
 	/* Occasional door (if allowed) */
-	if ((randint0(100) < dun_tun_jct) && possible_doorway(y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
+	if ((randint0(100) < dun_tun_jct) && possible_doorway(floor_ptr, y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
 	{
 		/* Place a door */
 		place_random_door(floor_ptr, y, x, FALSE);
