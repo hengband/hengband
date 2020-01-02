@@ -290,13 +290,13 @@ void revenge_store(HIT_POINT dam)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反テレポートの効果が適用されるならTRUEを返す
  */
-bool teleport_barrier(MONSTER_IDX m_idx)
+bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!hex_spelling(HEX_ANTI_TELE)) return FALSE;
-	if ((p_ptr->lev * 3 / 2) < randint1(r_ptr->level)) return FALSE;
+	if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level)) return FALSE;
 
 	return TRUE;
 }

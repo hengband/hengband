@@ -4081,7 +4081,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	/* Blink away */
 	if (blinked && alive && !target_ptr->is_dead)
 	{
-		if (teleport_barrier(m_idx))
+		if (teleport_barrier(target_ptr, m_idx))
 		{
 			msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But magic barrier obstructs it."));
 		}
@@ -4713,7 +4713,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	/* Blink away */
 	if (blinked && m_ptr->r_idx)
 	{
-		if (teleport_barrier(m_idx))
+		if (teleport_barrier(subject_ptr, m_idx))
 		{
 			if (see_m)
 			{

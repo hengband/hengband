@@ -1868,7 +1868,7 @@ void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
 		disturb(p_ptr, TRUE, TRUE);
 
-	if (teleport_barrier(m_idx))
+	if (teleport_barrier(p_ptr, m_idx))
 	{
 		if(see_monster(m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
@@ -1898,7 +1898,7 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 	
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
 		disturb(p_ptr, TRUE, TRUE);
-	if (teleport_barrier(m_idx))
+	if (teleport_barrier(p_ptr, m_idx))
 	{
 		if(see_monster(m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
