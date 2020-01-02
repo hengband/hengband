@@ -4079,14 +4079,14 @@ void display_player(player_type *creature_ptr, int mode)
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_display_player(FILE *fff)
+static void dump_aux_display_player(player_type *creature_ptr, FILE *fff)
 {
 	TERM_LEN x, y;
 	TERM_COLOR a;
 	char c;
 	char buf[1024];
 
-	display_player(p_ptr, 0);
+	display_player(creature_ptr, 0);
 
 	/* Dump part of the screen */
 	for (y = 1; y < 22; y++)
@@ -4112,7 +4112,7 @@ static void dump_aux_display_player(FILE *fff)
 	}
 
 	/* Display history */
-	display_player(p_ptr, 1);
+	display_player(creature_ptr, 1);
 
 	/* Dump part of the screen */
 	for (y = 10; y < 19; y++)
@@ -4140,7 +4140,7 @@ static void dump_aux_display_player(FILE *fff)
 	fprintf(fff, "\n");
 
 	/* Display flags (part 1) */
-	display_player(p_ptr, 2);
+	display_player(creature_ptr, 2);
 
 	/* Dump part of the screen */
 	for (y = 2; y < 22; y++)
@@ -4171,7 +4171,7 @@ static void dump_aux_display_player(FILE *fff)
 	fprintf(fff, "\n");
 
 	/* Display flags (part 2) */
-	display_player(p_ptr, 3);
+	display_player(creature_ptr, 3);
 
 	/* Dump part of the screen */
 	for (y = 1; y < 22; y++)
@@ -4991,7 +4991,7 @@ errr make_character_dump(FILE *fff)
 
 	update_playtime();
 
-	dump_aux_display_player(fff);
+	dump_aux_display_player(p_ptr, fff);
 	dump_aux_last_message(fff);
 	dump_aux_options(fff);
 	dump_aux_recall(fff);
