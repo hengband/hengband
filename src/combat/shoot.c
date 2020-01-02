@@ -561,7 +561,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 				byte a = object_attr(q_ptr);
 
 				/* Draw, Hilite, Fresh, Pause, Erase */
-				print_rel(c, a, ny, nx);
+				print_rel(shooter_ptr, c, a, ny, nx);
 				move_cursor_relative(ny, nx);
 				Term_fresh();
 				Term_xtra(TERM_XTRA_DELAY, msec);

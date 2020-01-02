@@ -479,7 +479,7 @@ bool no_lite(void)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
+void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
 {
 	/* Only do "legal" locations */
 	if (panel_contains(y, x))
@@ -488,8 +488,8 @@ void print_rel(SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x)
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
-			else if (p_ptr->wraith_form) a = TERM_L_DARK;
+			else if (IS_INVULN(subject_ptr) || subject_ptr->timewalk) a = TERM_WHITE;
+			else if (subject_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
 		/* Draw the char using the attr */

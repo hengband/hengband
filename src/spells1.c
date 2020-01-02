@@ -5763,7 +5763,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					c = PICT_C(p);
 
 					/* Visual effects */
-					print_rel(c, a, y, x);
+					print_rel(caster_ptr, c, a, y, x);
 					move_cursor_relative(y, x);
 					/*if (fresh_before)*/ Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
@@ -5781,7 +5781,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						c = PICT_C(p);
 
 						/* Visual effects */
-						print_rel(c, a, y, x);
+						print_rel(caster_ptr, c, a, y, x);
 					}
 
 					/* Hack -- Activate delay */
@@ -5895,7 +5895,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					c = PICT_C(p);
 
 					/* Visual effects */
-					print_rel(c, a, y, x);
+					print_rel(caster_ptr, c, a, y, x);
 					move_cursor_relative(y, x);
 					/*if (fresh_before)*/ Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
@@ -5913,7 +5913,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						c = PICT_C(p);
 
 						/* Visual effects */
-						print_rel(c, a, y, x);
+						print_rel(caster_ptr, c, a, y, x);
 					}
 
 					/* Hack -- Activate delay */
@@ -6036,7 +6036,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				c = PICT_C(p);
 
 				/* Visual effects */
-				print_rel(c, a, y, x);
+				print_rel(caster_ptr, c, a, y, x);
 				move_cursor_relative(y, x);
 				/*if (fresh_before)*/ Term_fresh();
 				Term_xtra(TERM_XTRA_DELAY, msec);
@@ -6054,7 +6054,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					c = PICT_C(p);
 
 					/* Visual effects */
-					print_rel(c, a, y, x);
+					print_rel(caster_ptr, c, a, y, x);
 				}
 
 				/* Hack -- Activate delay */
@@ -6199,7 +6199,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					c = PICT_C(p);
 
 					/* Visual effects -- Display */
-					print_rel(c, a, y, x);
+					print_rel(caster_ptr, c, a, y, x);
 				}
 			}
 
@@ -6685,7 +6685,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 					if (!(caster_ptr->blind)
 						&& panel_contains(y, x)) {
 						p = bolt_pict(y, x, y, x, GF_MANA);
-						print_rel(PICT_C(p), PICT_A(p), y, x);
+						print_rel(caster_ptr, PICT_C(p), PICT_A(p), y, x);
 						move_cursor_relative(y, x);
 						/*if (fresh_before)*/ Term_fresh();
 						Term_xtra(TERM_XTRA_DELAY, msec);

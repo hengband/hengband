@@ -2553,7 +2553,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			TERM_COLOR a = object_attr(q_ptr);
 
 			/* Draw, Hilite, Fresh, Pause, Erase */
-			print_rel(c, a, ny[cur_dis], nx[cur_dis]);
+			print_rel(creature_ptr, c, a, ny[cur_dis], nx[cur_dis]);
 			move_cursor_relative(ny[cur_dis], nx[cur_dis]);
 			Term_fresh();
 			Term_xtra(TERM_XTRA_DELAY, msec);
@@ -2750,7 +2750,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 					byte a = object_attr(q_ptr);
 
 					/* Draw, Hilite, Fresh, Pause, Erase */
-					print_rel(c, a, ny[i], nx[i]);
+					print_rel(creature_ptr, c, a, ny[i], nx[i]);
 					move_cursor_relative(ny[i], nx[i]);
 					Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
