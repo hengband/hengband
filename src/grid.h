@@ -439,19 +439,19 @@ extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode
 #define cave_note_and_redraw_later(C,Y,X) \
 {\
 	(C)->info |= CAVE_NOTE; \
-	cave_redraw_later((C), (Y), (X)); \
+	cave_redraw_later(p_ptr->current_floor_ptr, (C), (Y), (X)); \
 }
 
 /*
  * For delayed visual update
  */
-#define cave_redraw_later(C,Y,X) \
+#define cave_redraw_later(F,G,Y,X) \
 {\
-	if (!((C)->info & CAVE_REDRAW)) \
+	if (!((G)->info & CAVE_REDRAW)) \
 	{ \
-		(C)->info |= CAVE_REDRAW; \
-		p_ptr->current_floor_ptr->redraw_y[p_ptr->current_floor_ptr->redraw_n] = (Y); \
-		p_ptr->current_floor_ptr->redraw_x[p_ptr->current_floor_ptr->redraw_n++] = (X); \
+		(G)->info |= CAVE_REDRAW; \
+		(F)->redraw_y[(F)->redraw_n] = (Y); \
+		(F)->redraw_x[(F)->redraw_n++] = (X); \
 	} \
 }
 

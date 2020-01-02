@@ -434,7 +434,7 @@ void update_lite(player_type *subject_ptr, floor_type *floor_ptr)
 		/* forget_lite(); Perhaps don't need? */
 
 		/* Add it to later visual update */
-		cave_redraw_later(&floor_ptr->grid_array[subject_ptr->y][subject_ptr->x], subject_ptr->y, subject_ptr->x);
+		cave_redraw_later(floor_ptr, &floor_ptr->grid_array[subject_ptr->y][subject_ptr->x], subject_ptr->y, subject_ptr->x);
 	}
 #endif
 
@@ -627,7 +627,7 @@ void update_lite(player_type *subject_ptr, floor_type *floor_ptr)
 		if (g_ptr->info & (CAVE_LITE)) continue;
 
 		/* Add it to later visual update */
-		cave_redraw_later(g_ptr, y, x);
+		cave_redraw_later(floor_ptr, g_ptr, y, x);
 	}
 
 	/* None left */
@@ -1309,7 +1309,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 		if (g_ptr->info & (CAVE_VIEW)) continue;
 
 		/* Add it to later visual update */
-		cave_redraw_later(g_ptr, y, x);
+		cave_redraw_later(floor_ptr, g_ptr, y, x);
 	}
 
 	/* None left */
