@@ -2565,7 +2565,7 @@ static void rd_messages(void)
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-static errr rd_dungeon_old(void)
+static errr rd_dungeon_old(floor_type *floor_ptr)
 {
 	int i, y, x;
 	int ymax, xmax;
@@ -2580,7 +2580,7 @@ static errr rd_dungeon_old(void)
 
 	/* Header info */
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->dun_level = (DEPTH)tmp16s;
+	floor_ptr->dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) p_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
 	{ 
@@ -2589,22 +2589,22 @@ static errr rd_dungeon_old(void)
 	}
 
 	/* Set the base level for old versions */
-	p_ptr->current_floor_ptr->base_level = p_ptr->current_floor_ptr->dun_level;
+	floor_ptr->base_level = floor_ptr->dun_level;
 
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->base_level = (DEPTH)tmp16s;
+	floor_ptr->base_level = (DEPTH)tmp16s;
 
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
+	floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 	rd_s16b(&tmp16s);
 	p_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
 	p_ptr->x = (POSITION)tmp16s;
-	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
+	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->height = (POSITION)tmp16s;
+	floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	p_ptr->current_floor_ptr->width = (POSITION)tmp16s;
+	floor_ptr->width = (POSITION)tmp16s;
 	rd_s16b(&tmp16s); /* max_panel_rows */
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
@@ -2613,8 +2613,8 @@ static errr rd_dungeon_old(void)
 #endif
 
 	/* Maximal size */
-	ymax = p_ptr->current_floor_ptr->height;
-	xmax = p_ptr->current_floor_ptr->width;
+	ymax = floor_ptr->height;
+	xmax = floor_ptr->width;
 
 
 	/*** Run length decoding ***/
@@ -2642,7 +2642,7 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "info" */
 			g_ptr->info = info;
@@ -2672,7 +2672,7 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
 			g_ptr->feat = (s16b)tmp8u;
@@ -2701,7 +2701,7 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "mimic" */
 			g_ptr->mimic = (s16b)tmp8u;
@@ -2730,7 +2730,7 @@ static errr rd_dungeon_old(void)
 		/* Apply the RLE info */
 		for (i = count; i > 0; i--)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
 			g_ptr->special = tmp16s;
@@ -2752,7 +2752,7 @@ static errr rd_dungeon_old(void)
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
 			/* Wipe old unused flags */
-			p_ptr->current_floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+			floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		}
 	}
 
@@ -2760,7 +2760,7 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Very old */
 			if (g_ptr->feat == OLD_FEAT_INVIS)
@@ -2782,7 +2782,7 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Old CAVE_IN_MIRROR flag */
 			if (g_ptr->info & CAVE_OBJECT)
@@ -2821,9 +2821,9 @@ static errr rd_dungeon_old(void)
 	{
 		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
 		{
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !p_ptr->current_floor_ptr->dun_level)
+			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level)
 			{
 				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
 				{
@@ -2836,7 +2836,7 @@ static errr rd_dungeon_old(void)
 				}
 			}
 			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
-			         (p_ptr->current_floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+			         (floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
 			{
 				g_ptr->feat = feat_up_stair;
 				g_ptr->special = 0;
@@ -2875,7 +2875,7 @@ static errr rd_dungeon_old(void)
 
 
 		/* Acquire place */
-		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+		o_ptr = &floor_ptr->o_list[o_idx];
 
 		/* Read the item */
 		rd_item(o_ptr);
@@ -2884,7 +2884,7 @@ static errr rd_dungeon_old(void)
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
-			m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
+			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
@@ -2896,7 +2896,7 @@ static errr rd_dungeon_old(void)
 		else
 		{
 			/* Access the item location */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
+			g_ptr = &floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
 
 			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
@@ -2933,14 +2933,14 @@ static errr rd_dungeon_old(void)
 			return (162);
 		}
 
-		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		m_ptr = &floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
 		rd_monster(m_ptr);
 
 
 		/* Access grid */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+		g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
 
 		/* Mark the location */
 		g_ptr->m_idx = m_idx;
@@ -2952,7 +2952,7 @@ static errr rd_dungeon_old(void)
 	/*** Success ***/
 
 	/* The dungeon is ready */
-	if (z_older_than(10, 3, 13) && !p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_arena)
+	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
 		current_world_ptr->character_dungeon = FALSE;
 	else
 		current_world_ptr->character_dungeon = TRUE;
@@ -3274,7 +3274,7 @@ static errr rd_dungeon(void)
 	/* Older method */
 	if (h_older_than(1, 5, 0, 0))
 	{
-		err = rd_dungeon_old();
+		err = rd_dungeon_old(p_ptr->current_floor_ptr);
 
 		/* Prepare floor_id of current floor */
 		if (p_ptr->dungeon_idx)
