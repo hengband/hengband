@@ -1135,7 +1135,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		 * Only heal when Adrenalin Channeling is not active. We check
 		 * that by checking if the player isn't fast and 'heroed' atm.
 		 */
-		if (!IS_FAST(caster_ptr) || !IS_HERO())
+		if (!IS_FAST(caster_ptr) || !IS_HERO(caster_ptr))
 		{
 			hp_player(caster_ptr, plev);
 		}

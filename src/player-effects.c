@@ -1119,7 +1119,7 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->hero > v) return FALSE;
 		}
-		else if (!IS_HERO())
+		else if (!IS_HERO(creature_ptr))
 		{
 			msg_print(_("ヒーローになった気がする！", "You feel like a hero!"));
 			notice = TRUE;

@@ -2717,7 +2717,7 @@ static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_S
 	for (i = 0; i < TR_FLAG_SIZE; i++)
 		flgs[i] = 0L;
 
-	if (IS_HERO() || creature_ptr->shero)
+	if (IS_HERO(creature_ptr) || creature_ptr->shero)
 		add_flag(flgs, TR_RES_FEAR);
 	if (creature_ptr->tim_invis)
 		add_flag(flgs, TR_SEE_INVIS);

@@ -567,7 +567,7 @@ static void prt_status(player_type *creature_ptr)
 	if (creature_ptr->tim_reflect) ADD_FLG(BAR_REFLECTION);
 
 	/* Heroism */
-	if (IS_HERO()) ADD_FLG(BAR_HEROISM);
+	if (IS_HERO(creature_ptr)) ADD_FLG(BAR_HEROISM);
 
 	/* Super Heroism / berserk */
 	if (creature_ptr->shero) ADD_FLG(BAR_BERSERK);

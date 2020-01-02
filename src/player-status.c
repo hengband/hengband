@@ -2871,7 +2871,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 
 	/* Temporary "Hero" */
-	if (IS_HERO())
+	if (IS_HERO(creature_ptr))
 	{
 		creature_ptr->to_h[0] += 12;
 		creature_ptr->to_h[1] += 12;
@@ -2969,7 +2969,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 
 	/* Hack -- Hero/Shero -> Res fear */
-	if (IS_HERO() || creature_ptr->shero)
+	if (IS_HERO(creature_ptr) || creature_ptr->shero)
 	{
 		creature_ptr->resist_fear = TRUE;
 	}
@@ -4056,7 +4056,7 @@ static void calc_hitpoints(player_type *creature_ptr)
 	if (mhp < creature_ptr->lev + 1) mhp = creature_ptr->lev + 1;
 
 	/* Factor in the hero / superhero settings */
-	if (IS_HERO()) mhp += 10;
+	if (IS_HERO(creature_ptr)) mhp += 10;
 	if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER)) mhp += 30;
 	if (creature_ptr->tsuyoshi) mhp += 50;
 

@@ -1024,7 +1024,7 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは高潔さを感じている。", "You feel rightous.");
 	}
-	if (IS_HERO())
+	if (IS_HERO(creature_ptr))
 	{
 		info[i++] = _("あなたはヒーロー気分だ。", "You feel heroic.");
 	}
