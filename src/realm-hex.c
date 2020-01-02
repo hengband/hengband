@@ -5,11 +5,11 @@
  * @author
  * 2014 Deskull rearranged comment for Doxygen.\n
  * @details
- * p_ptr-magic_num1\n
+ * magic_num1\n
  * 0: Flag bits of spelling spells\n
  * 1: Flag bits of despelled spells\n
  * 2: Revange damage\n
- * p_ptr->magic_num2\n
+ * magic_num2\n
  * 0: Number of spelling spells\n
  * 1: Type of revenge\n
  * 2: Turn count for revenge\n
