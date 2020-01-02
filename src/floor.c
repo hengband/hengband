@@ -1211,7 +1211,7 @@ void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num)
 
 			if (randint0(100) < 75)
 			{
-				place_object(j, k, 0L);
+				place_object(floor_ptr, j, k, 0L);
 			}
 			else
 			{
@@ -1591,5 +1591,75 @@ void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 	/* Set to be floor if is a wall (don't touch lakes). */
 	if (is_extra_bold(floor_ptr, y, x))
 		place_floor_bold(floor_ptr, y, x);
+}
+
+
+/*!
+ * @brief フロアの指定位置に生成階に応じたベースアイテムの生成を行う。
+ * Attempt to place an object (normal or good/great) at the given location.
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @param mode オプションフラグ
+ * @return 生成に成功したらTRUEを返す。
+ * @details
+ * This routine plays nasty games to generate the "special artifacts".\n
+ * This routine uses "object_level" for the "generation level".\n
+ * This routine requires a clean floor grid destination.\n
+ */
+void place_object(floor_type *floor_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+{
+	OBJECT_IDX o_idx;
+
+	/* Acquire grid */
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+
+	object_type forge;
+	object_type *q_ptr;
+
+
+	/* Paranoia -- check bounds */
+	if (!in_bounds(floor_ptr, y, x)) return;
+
+	/* Require floor space */
+	if (!cave_drop_bold(floor_ptr, y, x)) return;
+
+	/* Avoid stacking on other objects */
+	if (g_ptr->o_idx) return;
+
+	q_ptr = &forge;
+	object_wipe(q_ptr);
+
+	/* Make an object (if possible) */
+	if (!make_object(q_ptr, mode)) return;
+
+	o_idx = o_pop();
+
+	/* Success */
+	if (o_idx)
+	{
+		object_type *o_ptr;
+		o_ptr = &floor_ptr->o_list[o_idx];
+
+		/* Structure Copy */
+		object_copy(o_ptr, q_ptr);
+
+		o_ptr->iy = y;
+		o_ptr->ix = x;
+
+		/* Build a stack */
+		o_ptr->next_o_idx = g_ptr->o_idx;
+
+		g_ptr->o_idx = o_idx;
+		note_spot(y, x);
+		lite_spot(y, x);
+	}
+	else
+	{
+		/* Hack -- Preserve artifacts */
+		if (object_is_fixed_artifact(q_ptr))
+		{
+			a_info[q_ptr->name1].cur_num = 0;
+		}
+	}
 }
 

@@ -484,7 +484,6 @@ extern void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 extern OBJECT_SUBTYPE_VALUE coin_type;
 
 extern bool make_object(object_type *j_ptr, BIT_FLAGS mode);
-extern void place_object(POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool make_gold(object_type *j_ptr);
 extern void place_gold(POSITION y, POSITION x);
 extern OBJECT_IDX drop_near(object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);

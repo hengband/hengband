@@ -4022,7 +4022,7 @@ static errr process_dungeon_file_aux(floor_type *floor_ptr, char *buf, int ymin,
 				 */
 				if (randint0(100) < 75)
 				{
-					place_object(*y, *x, 0L);
+					place_object(floor_ptr, *y, *x, 0L);
 				}
 				else
 				{
@@ -4037,11 +4037,11 @@ static errr process_dungeon_file_aux(floor_type *floor_ptr, char *buf, int ymin,
 
 				/* Create an out of deep object */
 				if (randint0(100) < 75)
-					place_object(*y, *x, 0L);
+					place_object(floor_ptr, *y, *x, 0L);
 				else if (randint0(100) < 80)
-					place_object(*y, *x, AM_GOOD);
+					place_object(floor_ptr, *y, *x, AM_GOOD);
 				else
-					place_object(*y, *x, AM_GOOD | AM_GREAT);
+					place_object(floor_ptr, *y, *x, AM_GOOD | AM_GREAT);
 
 				floor_ptr->object_level = floor_ptr->base_level;
 			}

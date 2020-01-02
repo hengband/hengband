@@ -119,7 +119,7 @@ bool build_type15(floor_type *floor_ptr)
 
 		/* Place a potion */
 		get_obj_num_hook = kind_is_potion;
-		place_object(yval, xval, AM_NO_FIXED_ART);
+		place_object(floor_ptr, yval, xval, AM_NO_FIXED_ART);
 		floor_ptr->grid_array[yval][xval].info |= (CAVE_ICKY);
 	}
 	break;
@@ -171,7 +171,7 @@ bool build_type15(floor_type *floor_ptr)
 		}
 
 		/* Place an object */
-		place_object(yval, xval, AM_NO_FIXED_ART);
+		place_object(floor_ptr, yval, xval, AM_NO_FIXED_ART);
 		floor_ptr->grid_array[yval][xval].info |= (CAVE_ICKY);
 	}
 	break;
@@ -221,16 +221,16 @@ bool build_type15(floor_type *floor_ptr)
 		if (one_in_(2))
 		{
 			get_obj_num_hook = kind_is_potion;
-			place_object(yval, xval - 1, AM_NO_FIXED_ART);
+			place_object(floor_ptr, yval, xval - 1, AM_NO_FIXED_ART);
 			get_obj_num_hook = kind_is_potion;
-			place_object(yval, xval + 1, AM_NO_FIXED_ART);
+			place_object(floor_ptr, yval, xval + 1, AM_NO_FIXED_ART);
 		}
 		else
 		{
 			get_obj_num_hook = kind_is_potion;
-			place_object(yval - 1, xval, AM_NO_FIXED_ART);
+			place_object(floor_ptr, yval - 1, xval, AM_NO_FIXED_ART);
 			get_obj_num_hook = kind_is_potion;
-			place_object(yval + 1, xval, AM_NO_FIXED_ART);
+			place_object(floor_ptr, yval + 1, xval, AM_NO_FIXED_ART);
 		}
 
 		for (y = yval - 2; y <= yval + 2; y++)

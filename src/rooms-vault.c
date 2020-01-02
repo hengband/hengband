@@ -403,7 +403,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 			case '*':
 				if (randint0(100) < 75)
 				{
-					place_object(y, x, 0L);
+					place_object(floor_ptr, y, x, 0L);
 				}
 				else
 				{
@@ -413,7 +413,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 
 				/* Treasure */
 			case '[':
-				place_object(y, x, 0L);
+				place_object(floor_ptr, y, x, 0L);
 				break;
 
 				/* Tree */
@@ -480,7 +480,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 			case 'A':
 				/* Reward for Pattern walk */
 				floor_ptr->object_level = floor_ptr->base_level + 12;
-				place_object(y, x, AM_GOOD | AM_GREAT);
+				place_object(floor_ptr, y, x, AM_GOOD | AM_GREAT);
 				floor_ptr->object_level = floor_ptr->base_level;
 				break;
 
@@ -592,7 +592,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 					place_monster(y, x, PM_ALLOW_SLEEP);
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 7;
-					place_object(y, x, AM_GOOD);
+					place_object(floor_ptr, y, x, AM_GOOD);
 					floor_ptr->object_level = floor_ptr->base_level;
 					break;
 				}
@@ -604,7 +604,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 					place_monster(y, x, PM_ALLOW_SLEEP);
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 20;
-					place_object(y, x, AM_GOOD | AM_GREAT);
+					place_object(floor_ptr, y, x, AM_GOOD | AM_GREAT);
 					floor_ptr->object_level = floor_ptr->base_level;
 					break;
 				}
@@ -621,7 +621,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 					if (randint0(100) < 50)
 					{
 						floor_ptr->object_level = floor_ptr->base_level + 7;
-						place_object(y, x, 0L);
+						place_object(floor_ptr, y, x, 0L);
 						floor_ptr->object_level = floor_ptr->base_level;
 					}
 					break;

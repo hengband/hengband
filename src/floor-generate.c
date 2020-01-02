@@ -380,7 +380,7 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
 
 			case ALLOC_TYP_OBJECT:
 			{
-				place_object(y, x, 0L);
+				place_object(floor_ptr, y, x, 0L);
 				break;
 			}
 		}

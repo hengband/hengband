@@ -494,7 +494,7 @@ bool build_type3(floor_type *floor_ptr)
 		}
 
 		/* Place a treasure in the vault */
-		place_object(yval, xval, 0L);
+		place_object(floor_ptr, yval, xval, 0L);
 
 		/* Let's guard the treasure well */
 		vault_monsters(floor_ptr, yval, xval, randint0(2) + 3);
@@ -716,7 +716,7 @@ bool build_type4(floor_type *floor_ptr)
 			/* Object (80%) */
 			if (randint0(100) < 80)
 			{
-				place_object(yval, xval, 0L);
+				place_object(floor_ptr, yval, xval, 0L);
 			}
 
 			/* Stairs (20%) */
@@ -803,8 +803,8 @@ bool build_type4(floor_type *floor_ptr)
 				vault_monsters(floor_ptr, yval, xval + 2, randint1(2));
 
 				/* Objects */
-				if (one_in_(3)) place_object(yval, xval - 2, 0L);
-				if (one_in_(3)) place_object(yval, xval + 2, 0L);
+				if (one_in_(3)) place_object(floor_ptr, yval, xval - 2, 0L);
+				if (one_in_(3)) place_object(floor_ptr, yval, xval + 2, 0L);
 			}
 
 			break;
@@ -1034,7 +1034,7 @@ bool build_type12(floor_type *floor_ptr)
 		build_small_room(floor_ptr, x0, y0);
 
 		/* Place a treasure in the vault */
-		place_object(y0, x0, 0L);
+		place_object(floor_ptr, y0, x0, 0L);
 
 		/* Let's guard the treasure well */
 		vault_monsters(floor_ptr, y0, x0, randint0(2) + 3);
