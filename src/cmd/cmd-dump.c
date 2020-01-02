@@ -1065,7 +1065,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 		/* Change name */
 		if (c == 'c')
 		{
-			get_name();
+			get_name(creature_ptr);
 
 			/* Process the player name */
 			process_player_name(FALSE);

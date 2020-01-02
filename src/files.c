@@ -5919,24 +5919,24 @@ void process_player_name(bool sf)
  * What a horrible name for a global function.  
  * </pre>
  */
-void get_name(void)
+void get_name(player_type *creature_ptr)
 {
 	char tmp[64];
 
 	/* Save the player name */
-	strcpy(tmp, p_ptr->name);
+	strcpy(tmp, creature_ptr->name);
 
 	/* Prompt for a new name */
 	if (get_string(_("キャラクターの名前を入力して下さい: ", "Enter a name for your character: "), tmp, 15))
 	{
 		/* Use the name */
-		strcpy(p_ptr->name, tmp);
+		strcpy(creature_ptr->name, tmp);
 	}
 
-	if (0 == strlen(p_ptr->name))
+	if (0 == strlen(creature_ptr->name))
 	{
 		/* Use default name */
-		strcpy(p_ptr->name, "PLAYER");
+		strcpy(creature_ptr->name, "PLAYER");
 	}
 
 	strcpy(tmp,ap_ptr->title);
@@ -5946,7 +5946,7 @@ void get_name(void)
 #else
 	strcat(tmp, " ");
 #endif
-	strcat(tmp,p_ptr->name);
+	strcat(tmp,creature_ptr->name);
 
 	/* Re-Draw the name (in light blue) */
 	Term_erase(34, 1, 255);
