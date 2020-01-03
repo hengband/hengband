@@ -302,7 +302,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_DETECT_TRAP:
 		{
-			if (detect_traps(DETECT_RAD_DEFAULT, known)) ident = TRUE;
+			if (detect_traps(creature_ptr, DETECT_RAD_DEFAULT, known)) ident = TRUE;
 			break;
 		}
 

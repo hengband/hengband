@@ -156,7 +156,7 @@ extern void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam);
 extern concptr spell_category_name(OBJECT_TYPE_VALUE tval);
 
 /* spells2.c */
-extern bool detect_traps(POSITION range, bool known);
+extern bool detect_traps(player_type *caster_ptr, POSITION range, bool known);
 extern bool detect_doors(POSITION range);
 extern bool detect_stairs(POSITION range);
 extern bool detect_treasure(POSITION range);

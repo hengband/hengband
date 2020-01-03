@@ -1556,7 +1556,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
 		take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
 
-		(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
+		(void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, TRUE);
 		(void)detect_doors(DETECT_RAD_DEFAULT);
 		(void)detect_stairs(DETECT_RAD_DEFAULT);
 

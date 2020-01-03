@@ -81,7 +81,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				detect_traps(rad, TRUE);
+				detect_traps(caster_ptr, rad, TRUE);
 				detect_doors(rad);
 				detect_stairs(rad);
 			}
@@ -239,7 +239,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				map_area(caster_ptr, rad1);
-				detect_traps(rad2, TRUE);
+				detect_traps(caster_ptr, rad2, TRUE);
 				detect_doors(rad2);
 				detect_stairs(rad2);
 				detect_monsters_normal(rad2);

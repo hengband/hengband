@@ -96,7 +96,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				detect_traps(rad, TRUE);
+				detect_traps(caster_ptr, rad, TRUE);
 				detect_doors(rad);
 				detect_stairs(rad);
 			}

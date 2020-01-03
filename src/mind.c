@@ -1049,7 +1049,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 			b = detect_monsters_normal(DETECT_RAD_DEFAULT);
 			if (plev > 14) b |= detect_monsters_invis(DETECT_RAD_DEFAULT);
 			if (plev > 4)  {
-				b |= detect_traps(DETECT_RAD_DEFAULT, TRUE);
+				b |= detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
 				b |= detect_doors(DETECT_RAD_DEFAULT);
 			}
 		}
@@ -1555,7 +1555,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		detect_monsters_normal(DETECT_RAD_DEFAULT);
 		if (plev > 4)
 		{
-			detect_traps(DETECT_RAD_DEFAULT, TRUE);
+			detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
 			detect_doors(DETECT_RAD_DEFAULT);
 			detect_stairs(DETECT_RAD_DEFAULT);
 		}

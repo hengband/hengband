@@ -393,7 +393,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			wiz_lite(creature_ptr, FALSE);
 			(void)do_inc_stat(creature_ptr, A_INT);
 			(void)do_inc_stat(creature_ptr, A_WIS);
-			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
+			(void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
 			(void)detect_doors(DETECT_RAD_DEFAULT);
 			(void)detect_stairs(DETECT_RAD_DEFAULT);
 			(void)detect_treasure(DETECT_RAD_DEFAULT);

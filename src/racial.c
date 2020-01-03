@@ -649,7 +649,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 	{
 		case RACE_DWARF:
 			msg_print(_("周囲を調べた。", "You examine your surroundings."));
-			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
+			(void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
 			(void)detect_doors(DETECT_RAD_DEFAULT);
 			(void)detect_stairs(DETECT_RAD_DEFAULT);
 			break;
@@ -738,7 +738,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_NIBELUNG:
 			msg_print(_("周囲を調査した。", "You examine your surroundings."));
-			(void)detect_traps(DETECT_RAD_DEFAULT, TRUE);
+			(void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
 			(void)detect_doors(DETECT_RAD_DEFAULT);
 			(void)detect_stairs(DETECT_RAD_DEFAULT);
 			break;
