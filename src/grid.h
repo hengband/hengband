@@ -122,7 +122,7 @@ typedef struct
 	set_cave_feat((F), Y,X,feat_ground_type[randint0(100)]); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,CAVE_FLOOR); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_floor_grid(C) \
@@ -138,7 +138,7 @@ typedef struct
 	set_cave_feat((F), Y,X,feat_wall_type[randint0(100)]); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,CAVE_EXTRA); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_extra_grid(C) \
@@ -154,7 +154,7 @@ typedef struct
 	set_cave_feat(F, Y, X,feat_permanent); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(F, Y, X, CAVE_EXTRA); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_extra_perm_grid(C) \
@@ -181,7 +181,7 @@ typedef struct
 	set_cave_feat((F), Y, X, feat_wall_inner); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y, X, CAVE_INNER); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_inner_grid(C) \
@@ -197,7 +197,7 @@ typedef struct
 	set_cave_feat(F, Y,X,feat_permanent); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,CAVE_INNER); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_inner_perm_grid(C) \
@@ -213,7 +213,7 @@ typedef struct
 	set_cave_feat((F), Y, X, feat_wall_outer); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,CAVE_OUTER); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_outer_grid(C) \
@@ -229,7 +229,7 @@ typedef struct
 	set_cave_feat(F, Y, X, feat_permanent); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,CAVE_OUTER); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_outer_perm_grid(C) \
@@ -247,7 +247,7 @@ typedef struct
 	else set_cave_feat((F), Y,X,feat_wall_outer); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,(CAVE_OUTER | CAVE_VAULT)); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_outer_noperm_grid(C) \
@@ -265,7 +265,7 @@ typedef struct
 	set_cave_feat(F,Y,X,feat_wall_solid); \
 	F->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(F,Y,X,CAVE_SOLID); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_solid_grid(C) \
@@ -281,7 +281,7 @@ typedef struct
 	set_cave_feat(F, Y, X, feat_permanent); \
 	F->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(F, Y, X, CAVE_SOLID); \
-	delete_monster(Y, X); \
+	delete_monster(F, Y, X); \
 }
 
 #define place_solid_perm_grid(C) \
@@ -300,7 +300,7 @@ typedef struct
 	else set_cave_feat(p_ptr->current_floor_ptr, Y,X,feat_wall_solid); \
 	p_ptr->current_floor_ptr->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(p_ptr->current_floor_ptr, Y,X,CAVE_SOLID); \
-	delete_monster(Y, X); \
+	delete_monster(p_ptr->current_floor_ptr, Y, X); \
 }
 
 #define place_solid_noperm_grid(C) \

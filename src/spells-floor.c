@@ -527,7 +527,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 				if (in_generate) /* In generation */
 				{
 					/* Delete the monster (if any) */
-					delete_monster(y, x);
+					delete_monster(floor_ptr, y, x);
 				}
 				else if (r_ptr->flags1 & RF1_QUESTOR)
 				{
@@ -548,7 +548,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 					}
 
 					/* Delete the monster (if any) */
-					delete_monster(y, x);
+					delete_monster(floor_ptr, y, x);
 				}
 			}
 
@@ -1020,7 +1020,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 							}
 						}
 
-						delete_monster(yy, xx);
+						delete_monster(caster_ptr->current_floor_ptr, yy, xx);
 
 						/* No longer safe */
 						sn = 0;

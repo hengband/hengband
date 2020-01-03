@@ -43,7 +43,7 @@ void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x)
 	{
 		set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
-		delete_monster(y, x);
+		delete_monster(floor_ptr, y, x);
 	}
 }
 
@@ -92,7 +92,7 @@ void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 		}
 
 		g_ptr->info &= ~(CAVE_FLOOR);
-		delete_monster(y, x);
+		delete_monster(floor_ptr, y, x);
 	}
 }
 
@@ -840,7 +840,7 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 		}
 	}
 
-	delete_monster(y, x);
+	delete_monster(floor_ptr, y, x);
 }
 
 
@@ -1720,4 +1720,23 @@ void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 		note_spot(y, x);
 		lite_spot(y, x);
 	}
+}
+
+
+/*!
+ * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
+ * @param x 削除位置x座標
+ * @param y 削除位置y座標
+ * @return なし
+ */
+void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+	grid_type *g_ptr;
+	if (!in_bounds(floor_ptr, y, x)) return;
+
+	/* Check the grid */
+	g_ptr = &floor_ptr->grid_array[y][x];
+
+	/* Delete the monster (if any) */
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
 }

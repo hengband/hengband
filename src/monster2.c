@@ -176,25 +176,6 @@ void delete_monster_idx(MONSTER_IDX i)
 
 
 /*!
- * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
- * @param x 削除位置x座標
- * @param y 削除位置y座標
- * @return なし
- */
-void delete_monster(POSITION y, POSITION x)
-{
-	grid_type *g_ptr;
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
-
-	/* Check the grid */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-
-	/* Delete the monster (if any) */
-	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
-}
-
-
-/*!
  * @brief モンスター情報を配列内移動する / Move an object from index i1 to index i2 in the object list
  * @param i1 配列移動元添字
  * @param i2 配列移動先添字
