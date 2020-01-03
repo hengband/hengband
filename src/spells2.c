@@ -2257,10 +2257,10 @@ bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
+bool fire_beam(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
-	return (project_hook(p_ptr, typ, dir, dam, flg));
+	return (project_hook(caster_ptr, typ, dir, dam, flg));
 }
 
 
@@ -2281,7 +2281,7 @@ bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 {
 	if (randint0(100) < prob)
 	{
-		return (fire_beam(typ, dir, dam));
+		return (fire_beam(p_ptr, typ, dir, dam));
 	}
 	else
 	{
@@ -2514,7 +2514,7 @@ void call_chaos(player_type *caster_ptr)
 			if (dummy - 5)
 			{
 				if (line_chaos)
-					fire_beam(Chaos_type, dummy, 150);
+					fire_beam(caster_ptr, Chaos_type, dummy, 150);
 				else
 					fire_ball(caster_ptr, Chaos_type, dummy, 150, 2);
 			}
@@ -2528,7 +2528,7 @@ void call_chaos(player_type *caster_ptr)
 	{
 		if (!get_aim_dir(&dir)) return;
 		if (line_chaos)
-			fire_beam(Chaos_type, dir, 250);
+			fire_beam(caster_ptr, Chaos_type, dir, 250);
 		else
 			fire_ball(caster_ptr, Chaos_type, dir, 250, 3 + (plev / 35));
 	}
@@ -4183,7 +4183,7 @@ bool android_inside_weapon(player_type *creature_ptr)
 	else if (creature_ptr->lev < 45)
 	{
 		msg_print(_("ビームキャノンを発射した。", "You fire a beam cannon."));
-		fire_beam(GF_MISSILE, dir, creature_ptr->lev * 2);
+		fire_beam(creature_ptr, GF_MISSILE, dir, creature_ptr->lev * 2);
 	}
 	else
 	{

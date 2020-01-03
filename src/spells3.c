@@ -3306,7 +3306,7 @@ bool shock_power(player_type *caster_ptr)
 	y = caster_ptr->y + ddy[dir];
 	x = caster_ptr->x + ddx[dir];
 	dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
-	fire_beam(GF_MISSILE, dir, dam);
+	fire_beam(caster_ptr, GF_MISSILE, dir, dam);
 	if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		int i;

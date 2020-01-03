@@ -1331,7 +1331,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 	case MS_TELE_AWAY:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		(void)fire_beam(GF_AWAY_ALL, dir, 100);
+		(void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, 100);
 		break;
 
 	case MS_TELE_LEVEL:
@@ -1343,7 +1343,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 
         msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
         damage = monspell_bluemage_damage((MS_PSY_SPEAR), plev, DAM_ROLL);
-		(void)fire_beam(GF_PSY_SPEAR, dir, damage);
+		(void)fire_beam(caster_ptr, GF_PSY_SPEAR, dir, damage);
 		break;
 	case MS_DARKNESS:
 

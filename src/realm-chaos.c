@@ -255,7 +255,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_beam(GF_MANA, dir, damroll(dice, sides));
+				fire_beam(caster_ptr, GF_MANA, dir, damroll(dice, sides));
 			}
 		}
 		break;
@@ -292,7 +292,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_beam(GF_AWAY_ALL, dir, power);
+				fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
 			}
 		}
 		break;
@@ -362,7 +362,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				for (dir = 0; dir <= 9; dir++)
-					fire_beam(GF_ELEC, dir, damroll(dice, sides));
+					fire_beam(caster_ptr, GF_ELEC, dir, damroll(dice, sides));
 			}
 		}
 		break;
@@ -475,7 +475,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
-				fire_beam(GF_GRAVITY, dir, damroll(dice, sides));
+				fire_beam(caster_ptr, GF_GRAVITY, dir, damroll(dice, sides));
 			}
 		}
 		break;

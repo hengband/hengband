@@ -711,7 +711,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 	case MS_TELE_AWAY:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		(void)fire_beam(GF_AWAY_ALL, dir, plev);
+		(void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
 		break;
 
 	case MS_TELE_LEVEL:
@@ -721,7 +721,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 	case MS_PSY_SPEAR:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
-		(void)fire_beam(GF_PSY_SPEAR, dir, damage);
+		(void)fire_beam(caster_ptr, GF_PSY_SPEAR, dir, damage);
 		break;
 
 	case MS_DARKNESS:

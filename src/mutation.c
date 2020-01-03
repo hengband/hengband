@@ -2281,7 +2281,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 		case MUT1_LASER_EYE:
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_beam(GF_LITE, dir, 2 * lvl);
+			fire_beam(creature_ptr, GF_LITE, dir, 2 * lvl);
 			break;
 
 		case MUT1_RECALL:

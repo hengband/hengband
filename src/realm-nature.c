@@ -65,7 +65,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_beam(GF_ELEC, dir, damroll(dice, sides));
+				fire_beam(caster_ptr, GF_ELEC, dir, damroll(dice, sides));
 			}
 		}
 		break;

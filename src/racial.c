@@ -440,7 +440,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case CLASS_PALADIN:
 		{
 			if (!get_aim_dir(&dir)) return FALSE;
-			fire_beam(is_good_realm(creature_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE,
+			fire_beam(creature_ptr, is_good_realm(creature_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE,
 			          dir, plev * 3);
 			break;
 		}
@@ -496,7 +496,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			{
 				if (!get_aim_dir(&dir)) return FALSE;
 				project_length = 1;
-				fire_beam(GF_PHOTO, dir, 1);
+				fire_beam(creature_ptr, GF_PHOTO, dir, 1);
 			}
 			else if (command == -4)
 			{

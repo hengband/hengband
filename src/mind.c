@@ -1069,7 +1069,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		if (!get_aim_dir(&dir)) return FALSE;
 
 		if (randint1(100) < plev * 2)
-			fire_beam(GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
+			fire_beam(caster_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
 		else
 			fire_ball(caster_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
 		break;
@@ -1166,7 +1166,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		/* psycho-spear */
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		fire_beam(GF_PSY_SPEAR, dir, randint1(plev*3)+plev*3);
+		fire_beam(caster_ptr, GF_PSY_SPEAR, dir, randint1(plev*3)+plev*3);
 		break;
 	case 13:
 	{
@@ -1211,7 +1211,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		project_length = plev / 8 + 3;
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		fire_beam(GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
+		fire_beam(caster_ptr, GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
 		break;
 	case 4:
 		set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, FALSE);
@@ -1274,7 +1274,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 	case 12:
 		if (!get_aim_dir(&dir)) return FALSE;
 
-		fire_beam(GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
+		fire_beam(caster_ptr, GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
 		break;
 	case 13:
 		set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, FALSE);
@@ -1345,7 +1345,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 	case 2:
 		if (!get_aim_dir(&dir)) return FALSE;
 		if (plev > 9 && is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x])) {
-			fire_beam(GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
+			fire_beam(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 		}
 		else {
 			fire_bolt(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
@@ -1370,7 +1370,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* banishing mirror */
 	case 7:
 		if (!get_aim_dir(&dir)) return FALSE;
-		(void)fire_beam(GF_AWAY_ALL, dir, plev);
+		(void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
 		break;
 		/* mirror clashing */
 	case 8:
@@ -1391,7 +1391,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* seeker ray */
 	case 10:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_beam(GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
+		fire_beam(caster_ptr, GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
 		break;
 		/* seal of mirror */
 	case 11:
@@ -1407,7 +1407,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* super ray */
 	case 13:
 		if (!get_aim_dir(&dir)) return FALSE;
-		fire_beam(GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
+		fire_beam(caster_ptr, GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
 		break;
 		/* illusion light */
 	case 14:

@@ -1097,7 +1097,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_TELE_AWAY:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
-		(void)fire_beam(GF_AWAY_ALL, dir, plev);
+		(void)fire_beam(user_ptr, GF_AWAY_ALL, dir, plev);
 		break;
 	}
 

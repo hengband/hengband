@@ -615,7 +615,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				total_damage += damage / 200;
 				if (i) total_damage = total_damage * 7 / 10;
 			}
-			fire_beam(GF_FORCE, dir, total_damage);
+			fire_beam(caster_ptr, GF_FORCE, dir, total_damage);
 		}
 		break;
 
