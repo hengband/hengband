@@ -4231,7 +4231,7 @@ static void process_command(player_type *creature_ptr)
 		/* Check artifacts, uniques, objects */
 		case '~':
 		{
-			do_cmd_knowledge();
+			do_cmd_knowledge(creature_ptr);
 			break;
 		}
 

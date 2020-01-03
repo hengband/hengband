@@ -6937,7 +6937,7 @@ static void do_cmd_knowledge_autopick(void)
 /*
  * Interact with "knowledge"
  */
-void do_cmd_knowledge(void)
+void do_cmd_knowledge(player_type *creature_ptr)
 {
 	int i, p = 0;
 	bool need_redraw = FALSE;
@@ -7025,7 +7025,7 @@ void do_cmd_knowledge(void)
 			p = 1 - p;
 			break;
 		case '1': /* Artifacts */
-			do_cmd_knowledge_artifacts(p_ptr);
+			do_cmd_knowledge_artifacts(creature_ptr);
 			break;
 		case '2': /* Objects */
 			do_cmd_knowledge_objects(&need_redraw, FALSE, -1);
@@ -7049,7 +7049,7 @@ void do_cmd_knowledge(void)
 			do_cmd_knowledge_home();
 			break;
 		case '9': /* Resist list */
-			do_cmd_knowledge_inven(p_ptr);
+			do_cmd_knowledge_inven(creature_ptr);
 			break;
 		case '0': /* Feature list */
 			{
@@ -7059,22 +7059,22 @@ void do_cmd_knowledge(void)
 			break;
 		/* Next page */
 		case 'a': /* Max stat */
-			do_cmd_knowledge_stat(p_ptr);
+			do_cmd_knowledge_stat(creature_ptr);
 			break;
 		case 'b': /* Mutations */
-			do_cmd_knowledge_mutations(p_ptr);
+			do_cmd_knowledge_mutations(creature_ptr);
 			break;
 		case 'c': /* weapon-exp */
-			do_cmd_knowledge_weapon_exp(p_ptr);
+			do_cmd_knowledge_weapon_exp(creature_ptr);
 			break;
 		case 'd': /* spell-exp */
-			do_cmd_knowledge_spell_exp(p_ptr);
+			do_cmd_knowledge_spell_exp(creature_ptr);
 			break;
 		case 'e': /* skill-exp */
-			do_cmd_knowledge_skill_exp(p_ptr);
+			do_cmd_knowledge_skill_exp(creature_ptr);
 			break;
 		case 'f': /* Virtues */
-			do_cmd_knowledge_virtues(p_ptr);
+			do_cmd_knowledge_virtues(creature_ptr);
 			break;
 		case 'g': /* Dungeon */
 			do_cmd_knowledge_dungeon();
@@ -7093,7 +7093,7 @@ void do_cmd_knowledge(void)
 	}
 	screen_load();
 
-	if (need_redraw) do_cmd_redraw(p_ptr);
+	if (need_redraw) do_cmd_redraw(creature_ptr);
 }
 
 

@@ -5645,7 +5645,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Check artifacts, uniques etc. */
 		case '~':
 		{
-			do_cmd_knowledge();
+			do_cmd_knowledge(client_ptr);
 			break;
 		}
 
