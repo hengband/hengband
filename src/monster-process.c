@@ -1503,7 +1503,7 @@ void process_monster(MONSTER_IDX m_idx)
 			}
 		}
 
-		if (multiply_barrier(m_idx)) k = 8;
+		if (multiply_barrier(p_ptr, m_idx)) k = 8;
 
 		/* Hack -- multiply slower in crowded areas */
 		if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ)))
