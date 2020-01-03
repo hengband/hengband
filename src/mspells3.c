@@ -873,7 +873,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		
         msg_print(_("ロケットを発射した。", "You fire a rocket."));
         damage = monspell_bluemage_damage((MS_ROCKET), plev, DAM_ROLL);
-		fire_rocket(GF_ROCKET, dir, damage, 2);
+		fire_rocket(caster_ptr, GF_ROCKET, dir, damage, 2);
 		break;
 	case MS_SHOOT:
 	{

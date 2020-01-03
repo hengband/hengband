@@ -1982,14 +1982,14 @@ bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	POSITION tx, ty;
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Use the given direction */
-	tx = p_ptr->x + 99 * ddx[dir];
-	ty = p_ptr->y + 99 * ddy[dir];
+	tx = caster_ptr->x + 99 * ddx[dir];
+	ty = caster_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay())
@@ -1999,7 +1999,7 @@ bool fire_rocket(EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 	}
 
 	/* Analyze the "dir" and the "target".  Hurt items on floor. */
-	return (project(p_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
+	return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
 
 
@@ -4188,7 +4188,7 @@ bool android_inside_weapon(player_type *creature_ptr)
 	else
 	{
 		msg_print(_("ロケットを発射した。", "You fire a rocket."));
-		fire_rocket(GF_ROCKET, dir, creature_ptr->lev * 5, 2);
+		fire_rocket(creature_ptr, GF_ROCKET, dir, creature_ptr->lev * 5, 2);
 	}
 	return TRUE;
 }

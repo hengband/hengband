@@ -433,7 +433,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				if (!get_aim_dir(&dir)) return NULL;
 
 				msg_print(_("ロケット発射！", "You launch a rocket!"));
-				fire_rocket(GF_ROCKET, dir, dam, rad);
+				fire_rocket(caster_ptr, GF_ROCKET, dir, dam, rad);
 			}
 		}
 		break;

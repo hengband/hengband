@@ -302,7 +302,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 	case MS_ROCKET:
 		if (!get_aim_dir(&dir)) return FALSE;
 		else msg_print(_("ロケットを発射した。", "You fire a rocket."));
-			fire_rocket(GF_ROCKET, dir, damage, 2);
+			fire_rocket(caster_ptr, GF_ROCKET, dir, damage, 2);
 		break;
 
 	case MS_SHOOT:
