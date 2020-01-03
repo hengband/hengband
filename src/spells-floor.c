@@ -216,7 +216,7 @@ bool warding_glyph(player_type *caster_ptr)
  */
 bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	if (!cave_clean_bold(p_ptr->current_floor_ptr, y, x))
+	if (!cave_clean_bold(floor_ptr, y, x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
@@ -238,7 +238,7 @@ bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 bool place_mirror(player_type *caster_ptr)
 {
-	if (!cave_clean_bold(p_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x))
+	if (!cave_clean_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return FALSE;
@@ -663,7 +663,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 				g_ptr = &floor_ptr->grid_array[y][x];
 
 				if (is_mirror_grid(g_ptr)) g_ptr->info |= CAVE_GLOW;
-				else if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+				else if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 				{
 					DIRECTION i;
 					POSITION yy, xx;
@@ -815,7 +815,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			x = caster_ptr->x + ddx_ddd[i];
 
 			/* Skip non-empty grids */
-			if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x)) continue;
 
 			/* Important -- Skip "quake" grids */
 			if (map[16 + y - cy][16 + x - cx]) continue;
@@ -963,7 +963,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 							x = xx + ddx_ddd[i];
 
 							/* Skip non-empty grids */
-							if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x)) continue;
+							if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x)) continue;
 
 							/* Hack -- no safety on glyph of warding */
 							if (is_glyph_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) continue;
