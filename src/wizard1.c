@@ -2501,7 +2501,7 @@ static void spoil_random_artifact_aux(object_type *o_ptr, int i)
  * @param fname 出力ファイル名
  * @return なし
  */
-void spoil_random_artifact(concptr fname)
+void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 {
 	int i,j;
 
@@ -2531,13 +2531,13 @@ void spoil_random_artifact(concptr fname)
 		/* random artifacts wielding */
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			q_ptr = &p_ptr->inventory_list[i];
+			q_ptr = &creature_ptr->inventory_list[i];
 			spoil_random_artifact_aux(q_ptr, j);
 		}
 
 		for (i = 0; i < INVEN_PACK; i++)
 		{
-			q_ptr = &p_ptr->inventory_list[i];
+			q_ptr = &creature_ptr->inventory_list[i];
 			spoil_random_artifact_aux(q_ptr, j);
 		}
 

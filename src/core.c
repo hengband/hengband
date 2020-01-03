@@ -4259,7 +4259,7 @@ static void process_command(player_type *creature_ptr)
 		/* Make random artifact list */
 		case KTRL('V'):
 		{
-			spoil_random_artifact("randifact.txt");
+			spoil_random_artifact(creature_ptr, "randifact.txt");
 			break;
 		}
 

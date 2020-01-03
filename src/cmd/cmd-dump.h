@@ -77,6 +77,6 @@ extern void do_cmd_time(void);
 extern void do_cmd_spoilers(void);
 
 /* wizard1.c */
-extern void spoil_random_artifact(concptr fname);
+extern void spoil_random_artifact(player_type *creature_ptr, concptr fname);
 
 extern bool write_level;
