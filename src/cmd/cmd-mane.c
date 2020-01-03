@@ -38,9 +38,9 @@ static int damage;
  * @param dam ものまねの威力
  * @return なし
  */
-static void mane_info(char *p, int power, HIT_POINT dam)
+static void mane_info(player_type *caster_ptr, char *p, int power, HIT_POINT dam)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	strcpy(p, "");
 
@@ -181,7 +181,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
 					if (chance > 95) chance = 95;
 
 					/* Get info */
-					mane_info(comment, caster_ptr->mane_spell[i], (baigaesi ? caster_ptr->mane_dam[i]*2 : caster_ptr->mane_dam[i]));
+					mane_info(caster_ptr, comment, caster_ptr->mane_spell[i], (baigaesi ? caster_ptr->mane_dam[i]*2 : caster_ptr->mane_dam[i]));
 
 					/* Dump the spell --(-- */
 					sprintf(psi_desc, "  %c) %-30s %3d%%%s",
