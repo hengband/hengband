@@ -160,7 +160,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!recharge(power)) return NULL;
+				if (!recharge(caster_ptr, power)) return NULL;
 			}
 		}
 		break;

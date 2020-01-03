@@ -697,7 +697,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (info) return info_power(power);
 		if (cast)
 		{
-			if (!recharge(power)) return NULL;
+			if (!recharge(caster_ptr, power)) return NULL;
 			add = FALSE;
 		}
 		break;

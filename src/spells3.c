@@ -1915,7 +1915,7 @@ bool identify_fully(bool only_equip)
  *
  * Beware of "sliding index errors".
  */
-bool recharge(int power)
+bool recharge(player_type *caster_ptr, int power)
 {
 	OBJECT_IDX item;
 	DEPTH lev;
@@ -1937,7 +1937,7 @@ bool recharge(int power)
 	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
 	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return (FALSE);
 
 	/* Get the object kind. */
@@ -2058,7 +2058,7 @@ bool recharge(int power)
 			/*** Determine Seriousness of Failure ***/
 
 			/* Mages recharge objects more safely. */
-			if (IS_WIZARD_CLASS(p_ptr) || p_ptr->pclass == CLASS_MAGIC_EATER || p_ptr->pclass == CLASS_BLUE_MAGE)
+			if (IS_WIZARD_CLASS(caster_ptr) || caster_ptr->pclass == CLASS_MAGIC_EATER || caster_ptr->pclass == CLASS_BLUE_MAGE)
 			{
 				/* 10% chance to blow up one rod, otherwise draining. */
 				if (o_ptr->tval == TV_ROD)
@@ -2149,8 +2149,8 @@ bool recharge(int power)
 			}
 		}
 	}
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN);
+	caster_ptr->update |= (PU_COMBINE | PU_REORDER);
+	caster_ptr->window |= (PW_INVEN);
 
 	/* Something was done */
 	return (TRUE);

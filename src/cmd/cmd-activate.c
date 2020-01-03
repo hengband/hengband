@@ -1513,7 +1513,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_RECHARGE:
 	{
-		recharge(130);
+		recharge(user_ptr, 130);
 		break;
 	}
 
@@ -1641,7 +1641,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_RECHARGE_XTRA:
 	{
 		msg_format(_("%sが白く輝いた．．．", "The %s gleams with blinding light..."), name);
-		if (!recharge(1000)) return FALSE;
+		if (!recharge(user_ptr, 1000)) return FALSE;
 		break;
 	}
 

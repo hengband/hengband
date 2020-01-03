@@ -262,7 +262,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_RECHARGING:
 		{
-			if (!recharge(130)) used_up = FALSE;
+			if (!recharge(creature_ptr, 130)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}
