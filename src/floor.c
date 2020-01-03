@@ -1040,13 +1040,13 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 * @param y1 基準となるマスのY座標
 * @param x1 基準となるマスのX座標
 * @return 通路の数
-* @note Assumes "in_bounds(p_ptr->current_floor_ptr, y1, x1)"
+* @note Assumes "in_bounds(y1, x1)"
 * @details
 * XXX XXX This routine currently only counts actual "empty floor"\n
 * grids which are not in rooms.  We might want to also count stairs,\n
 * open doors, closed doors, etc.
 */
-static int next_to_corr(POSITION y1, POSITION x1)
+static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 {
 	int i, k = 0;
 	POSITION y, x;
@@ -1058,7 +1058,7 @@ static int next_to_corr(POSITION y1, POSITION x1)
 	{
 		y = y1 + ddy_ddd[i];
 		x = x1 + ddx_ddd[i];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Skip non floors */
 		if (cave_have_flag_grid(g_ptr, FF_WALL)) continue;
@@ -1091,7 +1091,7 @@ static int next_to_corr(POSITION y1, POSITION x1)
 static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	/* Count the adjacent corridors */
-	if (next_to_corr(y, x) >= 2)
+	if (next_to_corr(floor_ptr, y, x) >= 2)
 	{
 		/* Check Vertical */
 		if (cave_have_flag_bold(floor_ptr, y - 1, x, FF_WALL) &&
