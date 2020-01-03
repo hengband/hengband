@@ -4350,64 +4350,6 @@ bool make_gold(object_type *j_ptr)
 
 
 /*!
- * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
- * Places a treasure (Gold or Gems) at given location
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
- * @return 生成に成功したらTRUEを返す。
- * @details
- * The location must be a legal, clean, floor grid.
- */
-void place_gold(POSITION y, POSITION x)
-{
-	OBJECT_IDX o_idx;
-
-	/* Acquire grid */
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-
-	object_type forge;
-	object_type *q_ptr;
-
-
-	/* Paranoia -- check bounds */
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
-
-	/* Require floor space */
-	if (!cave_drop_bold(p_ptr->current_floor_ptr, y, x)) return;
-
-	/* Avoid stacking on other objects */
-	if (g_ptr->o_idx) return;
-
-	q_ptr = &forge;
-	object_wipe(q_ptr);
-
-	/* Make some gold */
-	if (!make_gold(q_ptr)) return;
-
-	o_idx = o_pop();
-
-	/* Success */
-	if (o_idx)
-	{
-		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
-		object_copy(o_ptr, q_ptr);
-
-		/* Save location */
-		o_ptr->iy = y;
-		o_ptr->ix = x;
-
-		/* Build a stack */
-		o_ptr->next_o_idx = g_ptr->o_idx;
-
-		g_ptr->o_idx = o_idx;
-		note_spot(y, x);
-		lite_spot(y, x);
-	}
-}
-
-
-/*!
  * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
  * Let an object fall to the ground at or near a location.
  * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ

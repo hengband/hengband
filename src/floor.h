@@ -424,4 +424,4 @@ extern sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITI
 
 extern void set_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void place_object(floor_type *floor_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
-
+extern void place_gold(floor_type *floor_ptr, POSITION y, POSITION x);
