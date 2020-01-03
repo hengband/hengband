@@ -1063,9 +1063,9 @@ void do_cmd_refill(player_type *creature_ptr)
  * Target command
  * @return なし
  */
-void do_cmd_target(void)
+void do_cmd_target(player_type *creature_ptr)
 {
-	if (p_ptr->wild_mode) return;
+	if (creature_ptr->wild_mode) return;
 
 	/* Target set */
 	if (target_set(TARGET_KILL))
