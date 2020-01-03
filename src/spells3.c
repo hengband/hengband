@@ -439,25 +439,25 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
  * @param dis テレポート距離
  * @return なし
  */
-void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
+void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis)
 {
 	POSITION yy, xx;
-	POSITION oy = p_ptr->y;
-	POSITION ox = p_ptr->x;
+	POSITION oy = target_ptr->y;
+	POSITION ox = target_ptr->x;
 
-	if (!teleport_player_aux(p_ptr, dis, TELEPORT_PASSIVE)) return;
+	if (!teleport_player_aux(target_ptr, dis, TELEPORT_PASSIVE)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	for (xx = -1; xx < 2; xx++)
 	{
 		for (yy = -1; yy < 2; yy++)
 		{
-			MONSTER_IDX tmp_m_idx = p_ptr->current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
+			MONSTER_IDX tmp_m_idx = target_ptr->current_floor_ptr->grid_array[oy+yy][ox+xx].m_idx;
 
 			/* A monster except your mount or caster may follow */
-			if (tmp_m_idx && (p_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))
+			if (tmp_m_idx && (target_ptr->riding != tmp_m_idx) && (m_idx != tmp_m_idx))
 			{
-				monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[tmp_m_idx];
+				monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[tmp_m_idx];
 				monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 				/*
@@ -467,7 +467,7 @@ void teleport_player_away(MONSTER_IDX m_idx, POSITION dis)
 				if ((r_ptr->a_ability_flags2 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, p_ptr->y, p_ptr->x, r_ptr->level, 0L);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, 0L);
 				}
 			}
 		}
