@@ -1059,13 +1059,13 @@ bool bless_weapon(player_type *caster_ptr)
  * pulish shield
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
-bool pulish_shield(void)
+bool pulish_shield(player_type *caster_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	GAME_TEXT o_name[MAX_NLEN];
-	concptr            q, s;
+	concptr q, s;
 
 	/* Assume enchant weapon */
 	item_tester_tval = TV_SHIELD;
@@ -1073,7 +1073,7 @@ bool pulish_shield(void)
 	q = _("どの盾を磨きますか？", "Pulish which weapon? ");
 	s = _("磨く盾がありません。", "You have weapon to pulish.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1091,7 +1091,7 @@ bool pulish_shield(void)
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOAC);
 
 		o_ptr->discount = 99;
-		chg_virtue(p_ptr, V_ENCHANT, 2);
+		chg_virtue(caster_ptr, V_ENCHANT, 2);
 
 		return TRUE;
 	}
@@ -1100,9 +1100,9 @@ bool pulish_shield(void)
 		if (flush_failure) flush();
 
 		msg_print(_("失敗した。", "Failed."));
-		chg_virtue(p_ptr, V_ENCHANT, -2);
+		chg_virtue(caster_ptr, V_ENCHANT, -2);
 	}
-	calc_android_exp(p_ptr);
+	calc_android_exp(caster_ptr);
 
 	return FALSE;
 }

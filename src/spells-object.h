@@ -14,7 +14,7 @@ extern bool perilous_secrets(player_type *user_ptr);
 extern void get_bloody_moon_flags(object_type *o_ptr);
 extern void phlogiston(player_type *caster_ptr);
 extern bool bless_weapon(player_type *caster_ptr);
-extern bool pulish_shield(void);
+extern bool pulish_shield(player_type *caster_ptr);
 
 /*
  * Bit flags for the "enchant()" function
