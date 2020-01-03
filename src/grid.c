@@ -726,7 +726,7 @@ void lite_spot(POSITION y, POSITION x)
  * grid and maintains an array of all "CAVE_VIEW" grids.
  *
  * This set of grids is the complete set of all grids within line of sight
- * of the player, allowing the "player_has_los_bold(p_ptr, )" macro to work very
+ * of the player, allowing the "player_has_los_bold()" macro to work very
  * quickly.
  *
  *
@@ -757,7 +757,7 @@ void lite_spot(POSITION y, POSITION x)
  * To simplify various things, a grid may be marked as "CAVE_MARK", meaning
  * that even if the player cannot "see" the grid, he "knows" the terrain in
  * that grid.  This is used to "remember" walls/doors/stairs/floors when they
- * are "seen" or "detected", and also to "memorize" floors, after "wiz_lite(p_ptr, )",
+ * are "seen" or "detected", and also to "memorize" floors, after "wiz_lite()",
  * or when one of the "memorize floor grids" options induces memorization.
  *
  * Objects are "memorized" in a different way, using a special "marked" flag
@@ -832,7 +832,7 @@ void lite_spot(POSITION y, POSITION x)
  * I am thinking in terms of an algorithm that "walks" from the central point
  * out to the maximal "distance", at each point, determining the "view" code
  * (above).  For each grid not on a major axis or diagonal, the "view" code
- * depends on the "cave_los_bold(p_ptr->current_floor_ptr, )" and "view" of exactly two other grids
+ * depends on the "cave_los_bold()" and "view" of exactly two other grids
  * (the one along the nearest diagonal, and the one next to that one, see
  * "update_view_aux()"...).
  *
