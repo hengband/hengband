@@ -39,7 +39,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
 	if (music_singing_any(creature_ptr)) stop_singing(creature_ptr);
 	if (hex_spelling_any(creature_ptr)) stop_hex_spell_all(creature_ptr);
-	o_ptr = REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
 
 	sound(SOUND_EAT);
 
@@ -486,7 +486,7 @@ void do_cmd_eat_food(player_type *creature_ptr)
 	q = _("どれを食べますか? ", "Eat which item? ");
 	s = _("食べ物がない。", "You have nothing to eat.");
 
-	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
+	if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0)) return;
 
 	exe_eat_food(creature_ptr, item);
 }
