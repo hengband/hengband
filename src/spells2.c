@@ -2135,7 +2135,7 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool teleport_swap(DIRECTION dir)
+bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 {
 	POSITION tx, ty;
 	grid_type* g_ptr;
@@ -2149,30 +2149,30 @@ bool teleport_swap(DIRECTION dir)
 	}
 	else
 	{
-		tx = p_ptr->x + ddx[dir];
-		ty = p_ptr->y + ddy[dir];
+		tx = caster_ptr->x + ddx[dir];
+		ty = caster_ptr->y + ddy[dir];
 	}
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
+	g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
 
-	if (p_ptr->anti_tele)
+	if (caster_ptr->anti_tele)
 	{
 		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return FALSE;
 	}
 
-	if (!g_ptr->m_idx || (g_ptr->m_idx == p_ptr->riding))
+	if (!g_ptr->m_idx || (g_ptr->m_idx == caster_ptr->riding))
 	{
 		msg_print(_("それとは場所を交換できません。", "You can't trade places with that!"));
 		return FALSE;
 	}
 
-	if ((g_ptr->info & CAVE_ICKY) || (distance(ty, tx, p_ptr->y, p_ptr->x) > p_ptr->lev * 3 / 2 + 10))
+	if ((g_ptr->info & CAVE_ICKY) || (distance(ty, tx, caster_ptr->y, caster_ptr->x) > caster_ptr->lev * 3 / 2 + 10))
 	{
 		msg_print(_("失敗した。", "Failed to swap."));
 		return FALSE;
 	}
 
-	m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 
 	(void)set_monster_csleep(g_ptr->m_idx, 0);
@@ -2187,7 +2187,7 @@ bool teleport_swap(DIRECTION dir)
 	sound(SOUND_TELEPORT);
 
 	/* Swap the player and monster */
-	(void)move_player_effect(p_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+	(void)move_player_effect(caster_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 
 	/* Success */
 	return TRUE;

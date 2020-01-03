@@ -2164,7 +2164,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 				project_length = 0;
 				return FALSE;
 			}
-			(void)teleport_swap(dir);
+			(void)teleport_swap(creature_ptr, dir);
 			project_length = 0;
 			break;
 

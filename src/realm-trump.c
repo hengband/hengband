@@ -347,7 +347,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (!result) return NULL;
 
-				teleport_swap(dir);
+				teleport_swap(caster_ptr, dir);
 			}
 		}
 		break;

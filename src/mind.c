@@ -1709,7 +1709,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		}
 		project_length = 0;
 
-		(void)teleport_swap(dir);
+		(void)teleport_swap(caster_ptr, dir);
 		break;
 	case 15:
 		explosive_rune(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x);
