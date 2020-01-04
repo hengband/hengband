@@ -432,7 +432,6 @@ extern int bow_tval_ammo(object_type *o_ptr);
 extern void excise_object_idx(OBJECT_IDX o_idx);
 extern void delete_object_idx(OBJECT_IDX o_idx);
 extern void delete_object(POSITION y, POSITION x);
-extern void compact_objects(int size);
 
 extern OBJECT_IDX o_pop(void);
 extern OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode);

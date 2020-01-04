@@ -1740,3 +1740,186 @@ void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x)
 	/* Delete the monster (if any) */
 	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
 }
+
+
+
+/*!
+ * @brief グローバルオブジェクト配列に対し指定範囲のオブジェクトを整理してIDの若い順に寄せる /
+ * Move an object from index i1 to index i2 in the object list
+ * @param i1 整理したい配列の始点
+ * @param i2 整理したい配列の終点
+ * @return なし
+ */
+static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
+{
+	OBJECT_IDX i;
+	grid_type *g_ptr;
+	object_type *o_ptr;
+
+	/* Do nothing */
+	if (i1 == i2) return;
+
+	/* Repair objects */
+	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	{
+		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+
+		/* Skip "dead" objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Repair "next" pointers */
+		if (o_ptr->next_o_idx == i1)
+		{
+			/* Repair */
+			o_ptr->next_o_idx = i2;
+		}
+	}
+	o_ptr = &p_ptr->current_floor_ptr->o_list[i1];
+
+	if (OBJECT_IS_HELD_MONSTER(o_ptr))
+	{
+		monster_type *m_ptr;
+		m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
+
+		/* Repair monster */
+		if (m_ptr->hold_o_idx == i1)
+		{
+			/* Repair */
+			m_ptr->hold_o_idx = i2;
+		}
+	}
+
+	/* Dungeon */
+	else
+	{
+		POSITION y, x;
+
+		/* Acquire location */
+		y = o_ptr->iy;
+		x = o_ptr->ix;
+
+		/* Acquire grid */
+		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+
+		/* Repair grid */
+		if (g_ptr->o_idx == i1)
+		{
+			/* Repair */
+			g_ptr->o_idx = i2;
+		}
+	}
+
+	/* Structure copy */
+	p_ptr->current_floor_ptr->o_list[i2] = p_ptr->current_floor_ptr->o_list[i1];
+
+	/* Wipe the hole */
+	object_wipe(o_ptr);
+}
+
+/*!
+ * @brief グローバルオブジェクト配列から優先度の低いものを削除し、データを圧縮する。 /
+ * Compact and Reorder the object list.
+ * @param size 最低でも減らしたいオブジェクト数の水準
+ * @return なし
+ * @details
+ * （危険なので使用には注意すること）
+ * This function can be very dangerous, use with caution!\n
+ *\n
+ * When actually "compacting" objects, we base the saving throw on a\n
+ * combination of object level, distance from player, and current\n
+ * "desperation".\n
+ *\n
+ * After "compacting" (if needed), we "reorder" the objects into a more\n
+ * compact order, and we reset the allocation info, and the "live" array.\n
+ */
+void compact_objects(floor_type *floor_ptr, int size)
+{
+	OBJECT_IDX i;
+	POSITION y, x;
+	int num, cnt;
+	int cur_lev, cur_dis, chance;
+	object_type *o_ptr;
+
+	/* Compact */
+	if (size)
+	{
+		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
+		p_ptr->redraw |= (PR_MAP);
+		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	}
+
+
+	/* Compact at least 'size' objects */
+	for (num = 0, cnt = 1; num < size; cnt++)
+	{
+		/* Get more vicious each iteration */
+		cur_lev = 5 * cnt;
+
+		/* Get closer each iteration */
+		cur_dis = 5 * (20 - cnt);
+
+		/* Examine the objects */
+		for (i = 1; i < floor_ptr->o_max; i++)
+		{
+			o_ptr = &floor_ptr->o_list[i];
+
+			if (!OBJECT_IS_VALID(o_ptr)) continue;
+
+			/* Hack -- High level objects start out "immune" */
+			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
+
+			if (OBJECT_IS_HELD_MONSTER(o_ptr))
+			{
+				monster_type *m_ptr;
+				m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
+
+				y = m_ptr->fy;
+				x = m_ptr->fx;
+
+				/* Monsters protect their objects */
+				if (randint0(100) < 90) continue;
+			}
+
+			/* Dungeon */
+			else
+			{
+				y = o_ptr->iy;
+				x = o_ptr->ix;
+			}
+
+			/* Nearby objects start out "immune" */
+			if ((cur_dis > 0) && (distance(p_ptr->y, p_ptr->x, y, x) < cur_dis)) continue;
+
+			/* Saving throw */
+			chance = 90;
+
+			/* Hack -- only compact artifacts in emergencies */
+			if ((object_is_fixed_artifact(o_ptr) || o_ptr->art_name) &&
+				(cnt < 1000)) chance = 100;
+
+			/* Apply the saving throw */
+			if (randint0(100) < chance) continue;
+
+			delete_object_idx(i);
+
+			/* Count it */
+			num++;
+		}
+	}
+
+
+	/* Excise dead objects (backwards!) */
+	for (i = floor_ptr->o_max - 1; i >= 1; i--)
+	{
+		o_ptr = &floor_ptr->o_list[i];
+
+		/* Skip real objects */
+		if (o_ptr->k_idx) continue;
+
+		/* Move last object into open hole */
+		compact_objects_aux(floor_ptr->o_max - 1, i);
+
+		/* Compress "floor_ptr->o_max" */
+		floor_ptr->o_max--;
+	}
+}

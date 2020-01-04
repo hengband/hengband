@@ -1222,7 +1222,7 @@ static bool wr_savefile_new(void)
 	KIND_OBJECT_IDX k_idx;
 
 	/* Compact the objects */
-	compact_objects(0);
+	compact_objects(p_ptr->current_floor_ptr, 0);
 	/* Compact the monsters */
 	compact_monsters(0);
 
@@ -2000,7 +2000,7 @@ static bool save_floor_aux(saved_floor_type *sf_ptr)
 	byte tmp8u;
 
 	/* Compact the objects */
-	compact_objects(0);
+	compact_objects(p_ptr->current_floor_ptr, 0);
 	/* Compact the monsters */
 	compact_monsters(0);
 
