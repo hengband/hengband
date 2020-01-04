@@ -26,7 +26,8 @@ struct mind_power
 
 /* mind.c */
 extern mind_power const mind_powers[5];
-extern void mindcraft_info(char *p, int use_mind, int power);
+extern void mindcraft_info(player_type *caster_ptr, char *p, int use_mind, int power);
 extern void do_cmd_mind(player_type *caster_ptr);
-extern void do_cmd_mind_browse(void);
+extern void do_cmd_mind_browse(player_type *caster_ptr);
+extern void do_cmd_mind_browse(player_type *caster_ptr);
 

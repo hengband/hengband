@@ -3834,7 +3834,7 @@ static void process_command(player_type *creature_ptr)
 			     (creature_ptr->pclass == CLASS_BERSERKER) ||
 			     (creature_ptr->pclass == CLASS_NINJA) ||
 			     (creature_ptr->pclass == CLASS_MIRROR_MASTER) 
-			     ) do_cmd_mind_browse();
+			     ) do_cmd_mind_browse(creature_ptr);
 			else if (creature_ptr->pclass == CLASS_SMITH)
 				do_cmd_kaji(creature_ptr, TRUE);
 			else if (creature_ptr->pclass == CLASS_MAGIC_EATER)

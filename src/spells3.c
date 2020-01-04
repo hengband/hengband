@@ -2272,7 +2272,7 @@ void display_spell_list(player_type *caster_ptr)
 			if (chance > 95) chance = 95;
 
 			/* Get info */
-			mindcraft_info(comment, use_mind, i);
+			mindcraft_info(caster_ptr, comment, use_mind, i);
 
 			/* Dump the spell */
 			sprintf(psi_desc, "  %c) %-30s%2d %4d %3d%%%s",

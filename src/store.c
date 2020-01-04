@@ -5490,7 +5490,7 @@ static void store_process_command(player_type *client_ptr)
 			     (client_ptr->pclass == CLASS_BERSERKER) ||
 			     (client_ptr->pclass == CLASS_NINJA) ||
 			     (client_ptr->pclass == CLASS_MIRROR_MASTER) 
-			     ) do_cmd_mind_browse();
+			     ) do_cmd_mind_browse(client_ptr);
 			else if (client_ptr->pclass == CLASS_SMITH)
 				do_cmd_kaji(client_ptr, TRUE);
 			else if (client_ptr->pclass == CLASS_MAGIC_EATER)

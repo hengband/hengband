@@ -557,9 +557,9 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
  * @param power モンスター魔法のID
  * @return なし
  */
-void mindcraft_info(char *p, int use_mind, int power)
+void mindcraft_info(player_type *caster_ptr, char *p, int use_mind, int power)
 {
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 
 	strcpy(p, "");
 
@@ -585,14 +585,14 @@ void mindcraft_info(char *p, int use_mind, int power)
 #endif
 		case 11: sprintf(p, " %s%dd6", KWD_DAM, plev / 2);  break;
 		case 12: sprintf(p, " %sd%d+%d", KWD_DAM, plev * 3, plev * 3); break;
-		case 13: sprintf(p, _(" 行動:%ld回", " %ld acts."), (long int)(p_ptr->csp + 100-p_ptr->energy_need - 50)/100); break;
+		case 13: sprintf(p, _(" 行動:%ld回", " %ld acts."), (long int)(caster_ptr->csp + 100-caster_ptr->energy_need - 50)/100); break;
 		}
 		break;
 	case MIND_KI:
 	{
 		int boost = P_PTR_KI;
 
-		if (heavy_armor(p_ptr)) boost /= 2;
+		if (heavy_armor(caster_ptr)) boost /= 2;
 
 		switch (power)
 		{
@@ -930,7 +930,7 @@ static bool_hack get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool onl
 					}
 
 					/* Get info */
-					mindcraft_info(comment, use_mind, i);
+					mindcraft_info(caster_ptr, comment, use_mind, i);
 
 					if (use_menu)
 					{
@@ -1245,7 +1245,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		if (!target_set(TARGET_KILL)) return FALSE;
 		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
-		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
+		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
 		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
@@ -1646,7 +1646,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (m_idx == caster_ptr->riding) break;
-		if (!player_has_los_bold(p_ptr, target_row, target_col)) break;
+		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
 		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -1659,7 +1659,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 			POSITION nx = GRID_X(path_g[i]);
 			grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[ny][nx];
 
-			if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && cave_empty_bold(p_ptr->current_floor_ptr, ny, nx) &&
+			if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && cave_empty_bold(caster_ptr->current_floor_ptr, ny, nx) &&
 			    !(g_ptr->info & CAVE_OBJECT) &&
 				!pattern_tile(ny, nx))
 			{
@@ -2061,25 +2061,25 @@ void do_cmd_mind(player_type *caster_ptr)
  * @brief 現在プレイヤーが使用可能な特殊技能の一覧表示 /
  * @return なし
  */
-void do_cmd_mind_browse(void)
+void do_cmd_mind_browse(player_type *caster_ptr)
 {
 	SPELL_IDX n = 0;
 	int j, line;
 	char temp[62*5];
 	int use_mind = 0;
 
-	if (p_ptr->pclass == CLASS_MINDCRAFTER) use_mind = MIND_MINDCRAFTER;
-	else if (p_ptr->pclass == CLASS_FORCETRAINER) use_mind = MIND_KI;
-	else if (p_ptr->pclass == CLASS_BERSERKER) use_mind = MIND_BERSERKER;
-	else if (p_ptr->pclass == CLASS_NINJA) use_mind = MIND_NINJUTSU;
-	else if (p_ptr->pclass == CLASS_MIRROR_MASTER)
+	if (caster_ptr->pclass == CLASS_MINDCRAFTER) use_mind = MIND_MINDCRAFTER;
+	else if (caster_ptr->pclass == CLASS_FORCETRAINER) use_mind = MIND_KI;
+	else if (caster_ptr->pclass == CLASS_BERSERKER) use_mind = MIND_BERSERKER;
+	else if (caster_ptr->pclass == CLASS_NINJA) use_mind = MIND_NINJUTSU;
+	else if (caster_ptr->pclass == CLASS_MIRROR_MASTER)
 	  use_mind = MIND_MIRROR_MASTER;
 
 	screen_save();
 
 	while(1)
 	{
-		if (!get_mind_power(p_ptr, &n, TRUE))
+		if (!get_mind_power(caster_ptr, &n, TRUE))
 		{
 			screen_load();
 			return;
