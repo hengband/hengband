@@ -249,6 +249,7 @@ bool create_ammo(player_type *creature_ptr)
 	return TRUE;
 }
 
+
 /*!
  * @brief 魔道具術師の魔力取り込み処理
  * @param user_ptr アイテムを取り込むクリーチャー
@@ -330,6 +331,7 @@ bool import_magic_device(player_type *user_ptr)
 	take_turn(user_ptr, 100);
 	return TRUE;
 }
+
 
 /*!
  * @brief 誰得ドロップを行う。
@@ -418,7 +420,6 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
 }
 
 
-
 /*!
  * @brief 獲得ドロップを行う。
  * Scatter some "great" objects near the player
@@ -454,6 +455,7 @@ void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bo
 		(void)drop_near(i_ptr, -1, y1, x1);
 	}
 }
+
 
 void acquire_chaos_weapon(player_type *creature_ptr)
 {
@@ -622,6 +624,7 @@ bool curse_armor(player_type *owner_ptr)
 	return (TRUE);
 }
 
+
 /*!
  * @brief 武器呪縛処理 /
  * Curse the players weapon
@@ -683,6 +686,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 	return (TRUE);
 }
 
+
 /*!
  * @brief 武器呪縛処理のメインルーチン /
  * Curse the players weapon
@@ -742,19 +746,19 @@ bool rustproof(player_type *caster_ptr)
 	return TRUE;
 }
 
+
 /*!
  * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
- * @return 常にTRUEを返す
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
-bool brand_bolts(void)
+void brand_bolts(player_type *caster_ptr)
 {
-	int i;
-
 	/* Use the first acceptable bolts */
-	for (i = 0; i < INVEN_PACK; i++)
+	for (int i = 0; i < INVEN_PACK; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &caster_ptr->inventory_list[i];
 
 		/* Skip non-bolts */
 		if (o_ptr->tval != TV_BOLT) continue;
@@ -774,15 +778,11 @@ bool brand_bolts(void)
 		/* Ego-item */
 		o_ptr->name2 = EGO_FLAME;
 		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
-		return (TRUE);
+		return;
 	}
 
 	if (flush_failure) flush();
-
-	/* Fail */
 	msg_print(_("炎で強化するのに失敗した。", "The fiery enchantment failed."));
-
-	return (TRUE);
 }
 
 
@@ -827,6 +827,7 @@ bool perilous_secrets(player_type *user_ptr)
 
 }
 
+
 /*!
  * @brief 固定アーティファクト『ブラッディムーン』の特性を変更する。
  * @details スレイ2d2種、及びone_resistance()による耐性1d2種、pval2種を得る。
@@ -860,6 +861,7 @@ void get_bloody_moon_flags(object_type *o_ptr)
 		else add_flag(o_ptr->art_flags, TR_STEALTH + tmp - 6);
 	}
 }
+
 
 /*!
  * @brief 寿命つき光源の燃素追加処理 /
@@ -908,6 +910,7 @@ void phlogiston(player_type *caster_ptr)
 
 	caster_ptr->update |= (PU_TORCH);
 }
+
 
 /*!
  * @brief 武器の祝福処理 /
@@ -1108,6 +1111,7 @@ bool pulish_shield(player_type *caster_ptr)
 	return FALSE;
 }
 
+
 /*!
  * @brief 呪いの打ち破り処理 /
  * Break the curse of an item
@@ -1125,6 +1129,7 @@ static void break_curse(object_type *o_ptr)
 		o_ptr->feeling = FEEL_NONE;
 	}
 }
+
 
 /*!
  * @brief 装備修正強化処理 /
@@ -1299,7 +1304,6 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 }
 
 
-
 /*!
  * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
@@ -1440,5 +1444,6 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 		msg_print(_("属性付加に失敗した。", "The Branding failed."));
 		chg_virtue(caster_ptr, V_ENCHANT, -2);
 	}
+
 	calc_android_exp(caster_ptr);
 }

@@ -9,7 +9,7 @@ extern bool curse_armor(player_type *owner_ptr);
 extern bool curse_weapon_object(player_type *creature_ptr, bool force, object_type *o_ptr);
 extern bool curse_weapon(bool force, int slot);
 extern bool rustproof(player_type *caster_ptr);
-extern bool brand_bolts(void);
+extern void brand_bolts(player_type *caster_ptr);
 extern bool perilous_secrets(player_type *user_ptr);
 extern void get_bloody_moon_flags(object_type *o_ptr);
 extern void phlogiston(player_type *caster_ptr);

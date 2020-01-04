@@ -688,6 +688,7 @@ static bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 
 /*!
  * @brief アイテムの発動効果を処理する。
+ * @param user_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動実行の是非を返す。
  */
@@ -1634,7 +1635,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_BRAND_FIRE_BOLTS:
 	{
 		msg_format(_("%sが深紅に輝いた...", "Your %s glows deep red..."), name);
-		(void)brand_bolts();
+		brand_bolts(user_ptr);
 		break;
 	}
 
