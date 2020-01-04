@@ -4352,11 +4352,11 @@ bool sword_dancing(player_type *creature_ptr)
 		dir = randint0(8);
 		y = creature_ptr->y + ddy_ddd[dir];
 		x = creature_ptr->x + ddx_ddd[dir];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* Hack -- attack monsters */
 		if (g_ptr->m_idx)
-			py_attack(p_ptr, y, x, 0);
+			py_attack(creature_ptr, y, x, 0);
 		else
 		{
 			msg_print(_("攻撃が空をきった。", "You attack the empty air."));
