@@ -38,6 +38,7 @@
 * ***
 * @brief アイテムを指定確率で破損させる /
 * Destroys a type of item on a given percent chance
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param typ 破損判定関数ポインタ
 * @param perc 基本確率
 * @return なし
@@ -116,6 +117,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 /*!
 * @brief 酸攻撃による装備のAC劣化処理 /
 * Acid has hit the player, attempt to affect some armor.
+* @param 酸を浴びたキャラクタへの参照ポインタ
 * @return 装備による軽減があったならTRUEを返す
 * @details
 * Note that the "base armor" of an object never changes.
@@ -177,6 +179,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
 /*!
 * @brief 酸属性によるプレイヤー損害処理 /
 * Hurt the player with Acid
+* @param creature_ptr 酸を浴びたキャラクタへの参照ポインタ
 * @param dam 基本ダメージ量
 * @param kb_str ダメージ原因記述
 * @param monspell 原因となったモンスター特殊攻撃ID
@@ -226,6 +229,7 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 /*!
 * @brief 電撃属性によるプレイヤー損害処理 /
 * Hurt the player with electricity
+* @param creature_ptr 電撃を浴びたキャラクタへの参照ポインタ
 * @param dam 基本ダメージ量
 * @param kb_str ダメージ原因記述
 * @param monspell 原因となったモンスター特殊攻撃ID
@@ -274,6 +278,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 /*!
 * @brief 火炎属性によるプレイヤー損害処理 /
 * Hurt the player with Fire
+* @param creature_ptr 火炎を浴びたキャラクタへの参照ポインタ
 * @param dam 基本ダメージ量
 * @param kb_str ダメージ原因記述
 * @param monspell 原因となったモンスター特殊攻撃ID
@@ -322,6 +327,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 /*!
 * @brief 冷気属性によるプレイヤー損害処理 /
 * Hurt the player with Cold
+* @param creature_ptr 冷気を浴びたキャラクタへの参照ポインタ
 * @param dam 基本ダメージ量
 * @param kb_str ダメージ原因記述
 * @param monspell 原因となったモンスター特殊攻撃ID

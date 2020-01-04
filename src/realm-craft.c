@@ -451,7 +451,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!enchant_spell(randint0(4) + 1, randint0(4) + 1, 0)) return NULL;
+				if (!enchant_spell(caster_ptr, randint0(4) + 1, randint0(4) + 1, 0)) return NULL;
 			}
 		}
 		break;
@@ -463,7 +463,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!enchant_spell(0, 0, randint0(3) + 2)) return NULL;
+				if (!enchant_spell(caster_ptr, 0, 0, randint0(3) + 2)) return NULL;
 			}
 		}
 		break;

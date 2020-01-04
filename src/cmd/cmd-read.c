@@ -113,7 +113,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 				if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2)) k = INVEN_LARM;
 			}
 			else if (has_melee_weapon(creature_ptr, INVEN_LARM)) k = INVEN_LARM;
-			if (k && curse_weapon(FALSE, k)) ident = TRUE;
+			if (k && curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[k])) ident = TRUE;
 			break;
 		}
 
@@ -228,34 +228,34 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_ENCHANT_ARMOR:
 		{
 			ident = TRUE;
-			if (!enchant_spell(0, 0, 1)) used_up = FALSE;
+			if (!enchant_spell(creature_ptr, 0, 0, 1)) used_up = FALSE;
 			break;
 		}
 
 		case SV_SCROLL_ENCHANT_WEAPON_TO_HIT:
 		{
-			if (!enchant_spell(1, 0, 0)) used_up = FALSE;
+			if (!enchant_spell(creature_ptr, 1, 0, 0)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_ENCHANT_WEAPON_TO_DAM:
 		{
-			if (!enchant_spell(0, 1, 0)) used_up = FALSE;
+			if (!enchant_spell(creature_ptr, 0, 1, 0)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_STAR_ENCHANT_ARMOR:
 		{
-			if (!enchant_spell(0, 0, randint1(3) + 2)) used_up = FALSE;
+			if (!enchant_spell(creature_ptr, 0, 0, randint1(3) + 2)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_STAR_ENCHANT_WEAPON:
 		{
-			if (!enchant_spell(randint1(3), randint1(3), 0)) used_up = FALSE;
+			if (!enchant_spell(creature_ptr, randint1(3), randint1(3), 0)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}
