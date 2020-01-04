@@ -3892,7 +3892,7 @@ static void bldg_process_command(building_type *bldg, int i)
 		town_history();
 		break;
 	case BACT_RACE_LEGENDS:
-		race_legends();
+		race_legends(p_ptr);
 		break;
 	case BACT_QUEST:
 		castle_quest();

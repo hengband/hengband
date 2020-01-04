@@ -597,7 +597,7 @@ errr top_twenty(player_type *current_player_ptr)
  * Predict the players location, and display it.
  * @return エラーコード
  */
-errr predict_score(player_type *creature_ptr)
+errr predict_score(player_type *current_player_ptr)
 {
 	int j;
 	high_score the_score;
@@ -615,10 +615,10 @@ errr predict_score(player_type *creature_ptr)
 		FAKE_VER_MAJOR, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	/* Calculate and save the points */
-	sprintf(the_score.pts, "%9ld", (long)calc_score(creature_ptr));
+	sprintf(the_score.pts, "%9ld", (long)calc_score(current_player_ptr));
 
 	/* Save the current gold */
-	sprintf(the_score.gold, "%9lu", (long)creature_ptr->au);
+	sprintf(the_score.gold, "%9lu", (long)current_player_ptr->au);
 
 	/* Save the current turn */
 	sprintf(the_score.turns, "%9lu", (long)turn_real(current_world_ptr->game_turn));
@@ -627,20 +627,20 @@ errr predict_score(player_type *creature_ptr)
 	strcpy(the_score.day, _("今日", "TODAY"));
 
 	/* Save the player name (15 chars) */
-	sprintf(the_score.who, "%-.15s", creature_ptr->name);
+	sprintf(the_score.who, "%-.15s", current_player_ptr->name);
 
 	/* Save the player info */
-	sprintf(the_score.uid, "%7u", creature_ptr->player_uid);
-	sprintf(the_score.sex, "%c", (creature_ptr->psex ? 'm' : 'f'));
-	sprintf(the_score.p_r, "%2d", MIN(creature_ptr->prace, MAX_RACES));
-	sprintf(the_score.p_c, "%2d", MIN(creature_ptr->pclass, MAX_CLASS));
-	sprintf(the_score.p_a, "%2d", MIN(creature_ptr->pseikaku, MAX_SEIKAKU));
+	sprintf(the_score.uid, "%7u", current_player_ptr->player_uid);
+	sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
+	sprintf(the_score.p_r, "%2d", MIN(current_player_ptr->prace, MAX_RACES));
+	sprintf(the_score.p_c, "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
+	sprintf(the_score.p_a, "%2d", MIN(current_player_ptr->pseikaku, MAX_SEIKAKU));
 
 	/* Save the level and such */
-	sprintf(the_score.cur_lev, "%3d", MIN((u16b)creature_ptr->lev, 999));
-	sprintf(the_score.cur_dun, "%3d", (int)creature_ptr->current_floor_ptr->dun_level);
-	sprintf(the_score.max_lev, "%3d", MIN((u16b)creature_ptr->max_plv, 999));
-	sprintf(the_score.max_dun, "%3d", (int)max_dlv[creature_ptr->dungeon_idx]);
+	sprintf(the_score.cur_lev, "%3d", MIN((u16b)current_player_ptr->lev, 999));
+	sprintf(the_score.cur_dun, "%3d", (int)current_player_ptr->current_floor_ptr->dun_level);
+	sprintf(the_score.max_lev, "%3d", MIN((u16b)current_player_ptr->max_plv, 999));
+	sprintf(the_score.max_dun, "%3d", (int)max_dlv[current_player_ptr->dungeon_idx]);
 
 	/* Hack -- no cause of death */
 	/* まだ死んでいないときの識別文字 */
@@ -750,7 +750,7 @@ void show_highclass(player_type *current_player_ptr)
  * @param race_num 種族ID
  * @return なし
  */
-void race_score(int race_num)
+void race_score(player_type *current_player_ptr, int race_num)
 {
 	register int i = 0, j, m = 0;
 	int pr, clev, lastlev;
@@ -811,14 +811,14 @@ void race_score(int race_num)
 	}
 
 	/* add player if qualified */
-	if ((p_ptr->prace == race_num) && (p_ptr->lev >= lastlev))
+	if ((current_player_ptr->prace == race_num) && (current_player_ptr->lev >= lastlev))
 	{
 #ifdef JP
 	sprintf(out_val, "あなた) %sの%s (レベル %2d)",
-		     race_info[p_ptr->prace].title,p_ptr->name, p_ptr->lev);
+		     race_info[current_player_ptr->prace].title,current_player_ptr->name, current_player_ptr->lev);
 #else
 		sprintf(out_val, "You) %s the %s (Level %3d)",
-		    p_ptr->name, race_info[p_ptr->prace].title, p_ptr->lev);
+		    current_player_ptr->name, race_info[current_player_ptr->prace].title, current_player_ptr->lev);
 #endif
 
 		prt(out_val, (m + 8), 0);
@@ -834,13 +834,13 @@ void race_score(int race_num)
  * Race Legends -KMW-
  * @return なし
  */
-void race_legends(void)
+void race_legends(player_type *current_player_ptr)
 {
 	int i, j;
 
 	for (i = 0; i < MAX_RACES; i++)
 	{
-		race_score(i);
+		race_score(current_player_ptr, i);
 		msg_print(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"));
 		msg_print(NULL);
 		for (j = 5; j < 19; j++)
