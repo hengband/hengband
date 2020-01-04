@@ -3728,7 +3728,7 @@ static void process_command(player_type *creature_ptr)
 		/* Enter building -KMW- */
 		case SPECIAL_KEY_BUILDING:
 		{
-			do_cmd_bldg();
+			do_cmd_bldg(creature_ptr);
 			break;
 		}
 

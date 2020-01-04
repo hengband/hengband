@@ -777,7 +777,7 @@ void brand_bolts(player_type *caster_ptr)
 
 		/* Ego-item */
 		o_ptr->name2 = EGO_FLAME;
-		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+		enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 		return;
 	}
 
@@ -1092,7 +1092,7 @@ bool pulish_shield(player_type *caster_ptr)
 		msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
 		o_ptr->name2 = EGO_REFLECTION;
-		enchant(o_ptr, randint0(3) + 4, ENCH_TOAC);
+		enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);
 
 		o_ptr->discount = 99;
 		chg_virtue(caster_ptr, V_ENCHANT, 2);
@@ -1134,6 +1134,7 @@ static void break_curse(object_type *o_ptr)
 /*!
  * @brief 装備修正強化処理 /
  * Enchants a plus onto an item. -RAK-
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化するアイテムの参照ポインタ
  * @param n 強化基本量
  * @param eflag 強化オプション(命中/ダメージ/AC)
@@ -1153,7 +1154,7 @@ static void break_curse(object_type *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant(object_type *o_ptr, int n, int eflag)
+bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
 {
 	int     i, chance, prob;
 	bool    res = FALSE;
@@ -1234,8 +1235,8 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 
 	/* Failure */
 	if (!res) return (FALSE);
-	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	caster_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
+	caster_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp(p_ptr);
 
@@ -1247,6 +1248,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
 /*!
  * @brief 装備修正強化処理のメインルーチン /
  * Enchant an item (in the inventory or on the floor)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param num_hit 命中修正量
  * @param num_dam ダメージ修正量
  * @param num_ac AC修正量
@@ -1255,7 +1257,7 @@ bool enchant(object_type *o_ptr, int n, int eflag)
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
-bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
+bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
 	OBJECT_IDX item;
 	bool        okay = FALSE;
@@ -1283,9 +1285,9 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 #endif
 
 	/* Enchant */
-	if (enchant(o_ptr, num_hit, ENCH_TOHIT)) okay = TRUE;
-	if (enchant(o_ptr, num_dam, ENCH_TODAM)) okay = TRUE;
-	if (enchant(o_ptr, num_ac, ENCH_TOAC)) okay = TRUE;
+	if (enchant(caster_ptr, o_ptr, num_hit, ENCH_TOHIT)) okay = TRUE;
+	if (enchant(caster_ptr, o_ptr, num_dam, ENCH_TODAM)) okay = TRUE;
+	if (enchant(caster_ptr, o_ptr, num_ac, ENCH_TOAC)) okay = TRUE;
 
 	/* Failure */
 	if (!okay)
@@ -1307,6 +1309,7 @@ bool enchant_spell(HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 /*!
  * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
  * @return なし
  */
@@ -1432,7 +1435,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 		}
 
 		msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
-		enchant(o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+		enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
 
 		o_ptr->discount = 99;
 		chg_virtue(caster_ptr, V_ENCHANT, 2);

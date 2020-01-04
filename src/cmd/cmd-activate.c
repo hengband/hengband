@@ -619,6 +619,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 
 /*!
  * @brief 装備を発動するコマンドのメインルーチン /
+ * @param user_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_activate(player_type *user_ptr)
@@ -648,6 +649,7 @@ void do_cmd_activate(player_type *user_ptr)
 /*!
 * @brief 発動によるブレスの属性をアイテムの耐性から選択し、実行を処理する。/ Dragon breath activation
 * @details 対象となる耐性は dragonbreath_info テーブルを参照のこと。
+* @param user_ptr プレーヤーへの参照ポインタ
 * @param o_ptr 対象のオブジェクト構造体ポインタ
 * @return 発動実行の是非を返す。
 */
