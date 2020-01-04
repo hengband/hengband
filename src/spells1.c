@@ -657,7 +657,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
-				remove_mirror(y, x);
+				remove_mirror(p_ptr, y, x);
 				project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
@@ -682,7 +682,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
-				remove_mirror(y, x);
+				remove_mirror(p_ptr, y, x);
 				project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
@@ -705,7 +705,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		{
 			/* Destroy mirror/glyph */
 			if (is_mirror_grid(g_ptr) || is_glyph_grid(g_ptr) || is_explosive_rune_grid(g_ptr))
-				remove_mirror(y, x);
+				remove_mirror(p_ptr, y, x);
 
 			/* Permanent features don't get effect */
 			/* But not protect monsters and other objects */
@@ -5802,7 +5802,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				monster_target_y = y;
 				monster_target_x = x;
 
-				remove_mirror(y, x);
+				remove_mirror(caster_ptr, y, x);
 				next_mirror(caster_ptr, &oy, &ox, y, x);
 
 				path_n = i + project_path(caster_ptr->current_floor_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
@@ -5939,7 +5939,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				monster_target_y = y;
 				monster_target_x = x;
 
-				remove_mirror(y, x);
+				remove_mirror(caster_ptr, y, x);
 				for (j = 0; j <= i; j++)
 				{
 					y = GRID_Y(path_g[j]);
@@ -6742,7 +6742,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 	}
 	if (one_in_(7)) {
 		msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
-		remove_mirror(point_y[0], point_x[0]);
+		remove_mirror(caster_ptr, point_y[0], point_x[0]);
 	}
 
 	return TRUE;
@@ -6768,7 +6768,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 				{
 					if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 					{
-						remove_mirror(y, x);
+						remove_mirror(caster_ptr, y, x);
 					}
 				}
 			}

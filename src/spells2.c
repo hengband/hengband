@@ -3117,7 +3117,7 @@ void remove_all_mirrors(player_type *caster_ptr, bool explode)
 		{
 			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 			{
-				remove_mirror(y, x);
+				remove_mirror(caster_ptr, y, x);
 				if (explode)
 					project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
