@@ -1026,7 +1026,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					if (caster_ptr->current_floor_ptr->grid_array[dy][dx].m_idx) flag = TRUE;
 				}
 
-				if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x) || (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ICKY) ||
+				if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x) || (caster_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ICKY) ||
 					(distance(y, x, caster_ptr->y, caster_ptr->x) > plev + 2))
 				{
 					msg_print(_("そこには移動できない。", "Can not teleport to there."));

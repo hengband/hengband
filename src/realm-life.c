@@ -373,7 +373,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				p_ptr->current_floor_ptr->num_repro += MAX_REPRO;
+				caster_ptr->current_floor_ptr->num_repro += MAX_REPRO;
 			}
 		}
 		break;
@@ -418,7 +418,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				wiz_lite(p_ptr, FALSE);
+				wiz_lite(caster_ptr, FALSE);
 			}
 		}
 		break;

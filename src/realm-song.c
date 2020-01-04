@@ -283,7 +283,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				int count = SINGING_COUNT(caster_ptr);
 
-				if (count >= 19) wiz_lite(p_ptr, FALSE);
+				if (count >= 19) wiz_lite(caster_ptr, FALSE);
 				if (count >= 11)
 				{
 					map_area(caster_ptr, rad);
