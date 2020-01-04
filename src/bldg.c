@@ -1991,22 +1991,22 @@ static bool kankin(void)
  * @param cmd 宿屋の利用施設ID
  * @return 施設の利用が実際に行われたか否か。
  */
-static bool inn_comm(int cmd)
+static bool inn_comm(player_type *customer_ptr, int cmd)
 {
 	switch (cmd)
 	{
 		case BACT_FOOD: /* Buy food & drink */
-			if (p_ptr->food >= PY_FOOD_FULL)
+			if (customer_ptr->food >= PY_FOOD_FULL)
 			{
 				msg_print(_("今は満腹だ。", "You are full now."));
 				return FALSE;
 			}
 			msg_print(_("バーテンはいくらかの食べ物とビールをくれた。", "The barkeep gives you some gruel and a beer."));
-			(void)set_food(p_ptr, PY_FOOD_MAX - 1);
+			(void)set_food(customer_ptr, PY_FOOD_MAX - 1);
 			break;
 
 		case BACT_REST: /* Rest for the night */
-			if ((p_ptr->poisoned) || (p_ptr->cut))
+			if ((customer_ptr->poisoned) || (customer_ptr->cut))
 			{
 				msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
 				msg_print(NULL);
@@ -2019,9 +2019,9 @@ static bool inn_comm(int cmd)
 
 				extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
 				if ((prev_hour >= 6) && (prev_hour <= 17)) 
-					exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
+					exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
 				else
-					exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
+					exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
 				
 				current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
 				if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
@@ -2032,8 +2032,8 @@ static bool inn_comm(int cmd)
 
 				prevent_turn_overflow();
 
-				if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(p_ptr, NIKKI_HIGAWARI, 0, NULL);
-				p_ptr->chp = p_ptr->mhp;
+				if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(customer_ptr, NIKKI_HIGAWARI, 0, NULL);
+				customer_ptr->chp = customer_ptr->mhp;
 
 				if (ironman_nightmare)
 				{
@@ -2042,42 +2042,42 @@ static bool inn_comm(int cmd)
 					/* Have some nightmares */
 					while(1)
 					{
-						sanity_blast(p_ptr, NULL, FALSE);
+						sanity_blast(customer_ptr, NULL, FALSE);
 						if (!one_in_(3)) break;
 					}
 
 					msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
-					exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
+					exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
 				}
 				else
 				{
-					set_blind(p_ptr, 0);
-					set_confused(p_ptr, 0);
-					p_ptr->stun = 0;
-					p_ptr->chp = p_ptr->mhp;
-					p_ptr->csp = p_ptr->msp;
-					if (p_ptr->pclass == CLASS_MAGIC_EATER)
+					set_blind(customer_ptr, 0);
+					set_confused(customer_ptr, 0);
+					customer_ptr->stun = 0;
+					customer_ptr->chp = customer_ptr->mhp;
+					customer_ptr->csp = customer_ptr->msp;
+					if (customer_ptr->pclass == CLASS_MAGIC_EATER)
 					{
 						int i;
 						for (i = 0; i < 72; i++)
 						{
-							p_ptr->magic_num1[i] = p_ptr->magic_num2[i] * EATER_CHARGE;
+							customer_ptr->magic_num1[i] = customer_ptr->magic_num2[i] * EATER_CHARGE;
 						}
 						for (; i < 108; i++)
 						{
-							p_ptr->magic_num1[i] = 0;
+							customer_ptr->magic_num1[i] = 0;
 						}
 					}
 
 					if ((prev_hour >= 6) && (prev_hour <= 17))
 					{
 						msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
-						exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
+						exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
 					}
 					else
 					{
 						msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
-						exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
+						exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
 					}
 				}
 			}
@@ -3920,7 +3920,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 	case BACT_REST:
 	case BACT_RUMORS:
 	case BACT_FOOD:
-		paid = inn_comm(bact);
+		paid = inn_comm(player_ptr, bact);
 		break;
 	case BACT_RESEARCH_MONSTER:
 		paid = research_mon();
