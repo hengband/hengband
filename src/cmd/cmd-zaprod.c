@@ -281,7 +281,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 
 	object_kind *k_ptr;
 
-	o_ptr = REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
 
 	/* Mega-Hack -- refuse to zap a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
@@ -408,7 +408,7 @@ void do_cmd_zap_rod(player_type *creature_ptr)
 	q = _("どのロッドを振りますか? ", "Zap which rod? ");
 	s = _("使えるロッドがない。", "You have no rod to zap.");
 
-	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD)) return;
+	if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD)) return;
 
 	/* Zap the rod */
 	exe_zap_rod(creature_ptr, item);

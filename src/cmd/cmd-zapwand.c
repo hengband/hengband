@@ -335,7 +335,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool old_target_pet = target_pet;
 
-	o_ptr = REF_ITEM(creature_ptr, p_ptr->current_floor_ptr, item);
+	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
 
 	/* Mega-Hack -- refuse to aim a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))
@@ -459,7 +459,7 @@ void do_cmd_aim_wand(player_type *creature_ptr)
 
 	q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
 	s = _("使える魔法棒がない。", "You have no wand to aim.");
-	if (!choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
+	if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND)) return;
 
 	exe_aim_wand(creature_ptr, item);
 }
