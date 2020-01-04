@@ -206,12 +206,12 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
  * @param flg 判定のフラグ配列
  * @return なし
  */
-void get_project_point(POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
+void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
 	u16b path_g[128];
 	int  path_n, i;
 
-	path_n = project_path(p_ptr->current_floor_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
+	path_n = project_path(floor_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
 
 	*ty = sy;
 	*tx = sx;
@@ -223,7 +223,7 @@ void get_project_point(POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT
 		sx = GRID_X(path_g[i]);
 
 		/* Hack -- Balls explode before reaching walls */
-		if (!cave_have_flag_bold(p_ptr->current_floor_ptr, sy, sx, FF_PROJECT)) break;
+		if (!cave_have_flag_bold(floor_ptr, sy, sx, FF_PROJECT)) break;
 
 		*ty = sy;
 		*tx = sx;
@@ -489,7 +489,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				POSITION real_y = y;
 				POSITION real_x = x;
 
-				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
+				get_project_point(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 
 				if (projectable(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x))
 				{
@@ -520,7 +520,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				POSITION real_y = y;
 				POSITION real_x = x;
 
-				get_project_point(m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
+				get_project_point(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
 				if (projectable(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x) && (distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 2))
 					f4 &= ~(RF4_ROCKET);
 			}

@@ -1480,7 +1480,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= MAX_RANGE))
 		{
 			POSITION by = y, bx = x;
-			get_project_point(m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
+			get_project_point(target_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
 			if ((distance(by, bx, y, x) <= 3) && los(target_ptr->current_floor_ptr, by, bx, y, x) && one_in_(5))
 			{
 				do_spell = DO_SPELL_BA_LITE;

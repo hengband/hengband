@@ -317,7 +317,7 @@ extern void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int d
 extern void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type);
 
 /* mspells2.c */
-extern void get_project_point(POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg);
+extern void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg);
 extern bool monst_spell_monst(MONSTER_IDX m_idx);
 
 /* mspells3.c */
