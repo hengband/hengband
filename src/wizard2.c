@@ -1967,11 +1967,11 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Make every dungeon square "known" to test streamers -KMW- */
 	case 'u':
-		for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+		for (y = 0; y < creature_ptr->current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+			for (x = 0; x < creature_ptr->current_floor_ptr->width; x++)
 			{
-				p_ptr->current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+				creature_ptr->current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
 		}
 		wiz_lite(creature_ptr, FALSE);
