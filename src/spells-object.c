@@ -1238,7 +1238,7 @@ bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
 	caster_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	caster_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-	calc_android_exp(p_ptr);
+	calc_android_exp(caster_ptr);
 
 	/* Success */
 	return (TRUE);
@@ -1274,7 +1274,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1294,12 +1294,12 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 	{
 		if (flush_failure) flush();
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
-		if (one_in_(3)) chg_virtue(p_ptr, V_ENCHANT, -1);
+		if (one_in_(3)) chg_virtue(caster_ptr, V_ENCHANT, -1);
 	}
 	else
-		chg_virtue(p_ptr, V_ENCHANT, 1);
+		chg_virtue(caster_ptr, V_ENCHANT, 1);
 
-	calc_android_exp(p_ptr);
+	calc_android_exp(caster_ptr);
 
 	/* Something happened */
 	return (TRUE);
