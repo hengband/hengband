@@ -60,7 +60,7 @@ struct vault_aux_type
 * @param allow_flag_mask 生成が許されるpit/nestのビット配列
 * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
 */
-static int pick_vault_type(vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
+static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
 	int tmp, total, count;
 
@@ -73,13 +73,13 @@ static int pick_vault_type(vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 		if (!n_ptr->name) break;
 
 		/* Ignore excessive depth */
-		if (n_ptr->level > p_ptr->current_floor_ptr->dun_level) continue;
+		if (n_ptr->level > floor_ptr->dun_level) continue;
 
 		/* Not matched with pit/nest flag */
 		if (!(allow_flag_mask & (1L << count))) continue;
 
 		/* Count this possibility */
-		total += n_ptr->chance * MAX_DEPTH / (MIN(p_ptr->current_floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
+		total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
 	}
 
 	/* Pick a random type */
@@ -92,13 +92,13 @@ static int pick_vault_type(vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 		if (!n_ptr->name) break;
 
 		/* Ignore excessive depth */
-		if (n_ptr->level > p_ptr->current_floor_ptr->dun_level) continue;
+		if (n_ptr->level > floor_ptr->dun_level) continue;
 
 		/* Not matched with pit/nest flag */
 		if (!(allow_flag_mask & (1L << count))) continue;
 
 		/* Count this possibility */
-		total += n_ptr->chance * MAX_DEPTH / (MIN(p_ptr->current_floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
+		total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
 
 		/* Found the type */
 		if (tmp < total) break;
@@ -293,7 +293,7 @@ bool build_type5(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
-	int cur_nest_type = pick_vault_type(nest_types, d_info[floor_ptr->dungeon_idx].nest);
+	int cur_nest_type = pick_vault_type(floor_ptr, nest_types, d_info[floor_ptr->dungeon_idx].nest);
 	vault_aux_type *n_ptr;
 
 	/* No type available */
@@ -502,7 +502,7 @@ bool build_type6(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
-	int cur_pit_type = pick_vault_type(pit_types, d_info[floor_ptr->dungeon_idx].pit);
+	int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
 
 	/* No type available */
@@ -807,7 +807,7 @@ bool build_type13(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
-	int cur_pit_type = pick_vault_type(pit_types, d_info[floor_ptr->dungeon_idx].pit);
+	int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
 
 	/* Only in Angband */
