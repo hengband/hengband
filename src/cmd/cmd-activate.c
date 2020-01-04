@@ -1458,7 +1458,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("明るく輝いている...", "It glows brightly..."));
 		detect_all(DETECT_RAD_DEFAULT);
-		probing();
+		probing(user_ptr);
 		identify_fully(FALSE);
 		break;
 	}
@@ -1627,7 +1627,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sが真実を照らし出す...", "The %s exhibits the truth..."), name);
 		(void)remove_all_curse(user_ptr);
-		(void)probing();
+		(void)probing(user_ptr);
 		break;
 	}
 

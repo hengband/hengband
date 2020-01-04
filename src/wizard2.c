@@ -2028,7 +2028,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Hack -- whatever I desire */
 	case '_':
-		probing();
+		probing(creature_ptr);
 		break;
 
 	/* For temporary test. */

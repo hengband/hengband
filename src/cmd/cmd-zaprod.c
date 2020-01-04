@@ -92,7 +92,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_PROBING:
 	{
-		probing();
+		probing(creature_ptr);
 		ident = TRUE;
 		break;
 	}

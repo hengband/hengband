@@ -1232,7 +1232,7 @@ bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast)
  * @brief 周辺モンスターを調査する / Probe nearby monsters
  * @return 効力があった場合TRUEを返す
  */
-bool probing(void)
+bool probing(player_type *caster_ptr)
 {
 	int i;
 	int speed; /* TODO */
@@ -1247,14 +1247,14 @@ bool probing(void)
 	Term->scr->cv = 1;
 
 	/* Probe all (nearby) monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Require line of sight */
-		if (!player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx)) continue;
+		if (!player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx)) continue;
 
 		/* Probe visible monsters */
 		if (m_ptr->ml)
@@ -1317,7 +1317,7 @@ bool probing(void)
 			/* HACK : Add the line to message buffer */
 			message_add(buf);
 
-			p_ptr->window |= (PW_MESSAGE);
+			caster_ptr->window |= (PW_MESSAGE);
 			handle_stuff();
 
 			if (m_ptr->ml) move_cursor_relative(m_ptr->fy, m_ptr->fx);
@@ -1356,7 +1356,7 @@ bool probing(void)
 
 	if (probe)
 	{
-		chg_virtue(p_ptr, V_KNOWLEDGE, 1);
+		chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
 		msg_print(_("これで全部です。", "That's all."));
 	}
 	return (probe);

@@ -434,7 +434,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case CLASS_SNIPER:
 		{
 			msg_print(_("敵を調査した...", "You examine your foes..."));
-			probing();
+			probing(creature_ptr);
 			break;
 		}
 		case CLASS_PALADIN:
@@ -706,7 +706,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_HALF_TITAN:
 			msg_print(_("敵を調査した...", "You examine your foes..."));
-			probing();
+			probing(creature_ptr);
 			break;
 
 		case RACE_CYCLOPS:

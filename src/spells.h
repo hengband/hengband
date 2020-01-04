@@ -180,7 +180,7 @@ extern bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, 
 extern bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast);
 extern bool mass_genocide(player_type *caster_ptr, int power, bool player_cast);
 extern bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast);
-extern bool probing(void);
+extern bool probing(player_type *caster_ptr);
 extern bool banish_evil(int dist);
 extern bool dispel_evil(HIT_POINT dam);
 extern bool dispel_good(HIT_POINT dam);

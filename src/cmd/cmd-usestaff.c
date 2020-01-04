@@ -204,7 +204,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_PROBING:
 		{
-			ident = probing();
+			ident = probing(creature_ptr);
 			break;
 		}
 
