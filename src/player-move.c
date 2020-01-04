@@ -1997,7 +1997,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
  * Travel command
  * @return なし
  */
-void travel_step(void)
+void travel_step(player_type *creature_ptr)
 {
 	/* Get travel direction */
 	travel.dir = travel_test(travel.dir);
@@ -2009,15 +2009,15 @@ void travel_step(void)
 			msg_print(_("道筋が見つかりません！", "No route is found!"));
 			travel.y = travel.x = 0;
 		}
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(creature_ptr, FALSE, TRUE);
 		return;
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
-	move_player(p_ptr, travel.dir, always_pickup, FALSE);
+	move_player(creature_ptr, travel.dir, always_pickup, FALSE);
 
-	if ((p_ptr->y == travel.y) && (p_ptr->x == travel.x))
+	if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x))
 	{
 		travel.run = 0;
 		travel.y = travel.x = 0;

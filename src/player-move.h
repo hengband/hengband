@@ -27,7 +27,7 @@ extern void search(player_type *creature_ptr);
 extern void carry(player_type *creature_ptr, bool pickup);
 #ifdef TRAVEL
 extern void do_cmd_travel(player_type *creature_ptr);
-extern void travel_step(void);
+extern void travel_step(player_type *creature_ptr);
 #endif
 
 /* Types of pattern tiles */
