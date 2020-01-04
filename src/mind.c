@@ -479,7 +479,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 },
 {
 	"Detects all monsters except the mindless in your vicinity.",
-	"Attacks a monster with your weapons normally, then dodges to one side.",
+	"In one action, attacks a monster with your weapons normally and then moves to the space beyond the monster if that space is not blocked.",
 	"Sets off a trap, then destroys that trap.",
 	"Shakes dungeon structure, and results in random swapping of floors and walls.",
 	"Attacks all adjacent monsters.",
