@@ -4569,7 +4569,7 @@ void player_birth(player_type *creature_ptr)
 
 	/* 
 	 * Wipe monsters in old dungeon
-	 * This wipe destroys value of p_ptr->current_floor_ptr->m_list[].cur_num .
+	 * This wipe destroys value of m_list[].cur_num .
 	 */
 	wipe_m_list();
 
@@ -4601,26 +4601,26 @@ void player_birth(player_type *creature_ptr)
 	message_add(" ");
 	message_add("  ");
 
-	exe_write_diary(p_ptr, NIKKI_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "-------- Start New Game --------"));
-	exe_write_diary(p_ptr, NIKKI_HIGAWARI, 0, NULL);
+	exe_write_diary(creature_ptr, NIKKI_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "-------- Start New Game --------"));
+	exe_write_diary(creature_ptr, NIKKI_HIGAWARI, 0, NULL);
 
 	sprintf(buf,_("                            性別に%sを選択した。", "                            choose %s personality."), sex_info[creature_ptr->psex].title);
-	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, buf);
+	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	sprintf(buf,_("                            種族に%sを選択した。", "                            choose %s race."), race_info[creature_ptr->prace].title);
-	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, buf);
+	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	sprintf(buf,_("                            職業に%sを選択した。", "                            choose %s class."), class_info[creature_ptr->pclass].title);
-	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, buf);
+	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	if (creature_ptr->realm1)
 	{
 		sprintf(buf,_("                            魔法の領域に%s%sを選択した。", "                            choose %s%s realm."),realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format("と%s",realm_names[creature_ptr->realm2]) : "");
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, buf);
+		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 	}
 
 	sprintf(buf,_("                            性格に%sを選択した。", "                            choose %s."), seikaku_info[creature_ptr->pseikaku].title);
-	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, buf);
+	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	/* Init the shops */
 	for (i = 1; i < max_towns; i++)
