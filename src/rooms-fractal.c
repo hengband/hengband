@@ -42,7 +42,7 @@ bool build_type9(floor_type *floor_ptr)
 	light = done = FALSE;
 	room = TRUE;
 
-	if ((floor_ptr->dun_level <= randint1(25)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((floor_ptr->dun_level <= randint1(25)) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	while (!done)
 	{
