@@ -1014,7 +1014,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			for (i = 0; i < 3; i++)
 			{
-				if (!tgt_pt(&x, &y)) return FALSE;
+				if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
 
 				flag = FALSE;
 

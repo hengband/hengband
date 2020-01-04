@@ -23,4 +23,4 @@ extern bool get_aim_dir(DIRECTION *dp);
 extern bool get_hack_dir(DIRECTION *dp);
 extern bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, bool with_steed);
 extern bool get_rep_dir(DIRECTION *dp, bool under);
-extern bool tgt_pt(POSITION *x, POSITION *y);
+extern bool tgt_pt(player_type *creature_ptr, POSITION *x, POSITION *y);

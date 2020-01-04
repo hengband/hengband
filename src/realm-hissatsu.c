@@ -797,7 +797,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 		{
 			POSITION y, x;
 
-			if (!tgt_pt(&x, &y)) return NULL;
+			if (!tgt_pt(caster_ptr, &x, &y)) return NULL;
 
 			if (!cave_player_teleportable_bold(y, x, 0L) ||
 				(distance(y, x, caster_ptr->y, caster_ptr->x) > MAX_SIGHT / 2) ||

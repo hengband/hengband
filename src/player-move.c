@@ -2225,7 +2225,7 @@ void do_cmd_travel(player_type *creature_ptr)
 		y = travel.y;
 		x = travel.x;
 	}
-	else if (!tgt_pt(&x, &y)) return;
+	else if (!tgt_pt(creature_ptr, &x, &y)) return;
 
 	if ((x == creature_ptr->x) && (y == creature_ptr->y))
 	{

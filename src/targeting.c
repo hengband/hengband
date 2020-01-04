@@ -1996,7 +1996,7 @@ static void tgt_pt_prepare(void)
 /*
  * old -- from PsiAngband.
  */
-bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
+bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 {
 	char ch = 0;
 	int d, n = 0;
@@ -2007,8 +2007,8 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 
 	get_screen_size(&wid, &hgt);
 
-	x = p_ptr->x;
-	y = p_ptr->y;
+	x = creature_ptr->x;
+	y = creature_ptr->y;
 
 	if (expand_list) 
 	{
@@ -2034,7 +2034,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 		case '5':
 		case '0':
 			/* illegal place */
-			if (player_bold(p_ptr, y, x)) ch = 0;
+			if (player_bold(creature_ptr, y, x)) ch = 0;
 
 			/* okay place */
 			else success = TRUE;
@@ -2055,7 +2055,7 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				/* Skip stairs which have defferent distance */
 				for (; n < tmp_pos.n; ++ n)
 				{
-					grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
+					grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
 
 					if (cave_have_flag_grid(g_ptr, FF_STAIRS) &&
 					    cave_have_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
@@ -2068,15 +2068,15 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				if (n == tmp_pos.n)	/* Loop out taget list */
 				{
 					n = 0;
-					y = p_ptr->y;
-					x = p_ptr->x;
+					y = creature_ptr->y;
+					x = creature_ptr->x;
 					verify_panel();	/* Move cursor to player */
 
-					p_ptr->update |= (PU_MONSTERS);
+					creature_ptr->update |= (PU_MONSTERS);
 
-					p_ptr->redraw |= (PR_MAP);
+					creature_ptr->redraw |= (PR_MAP);
 
-					p_ptr->window |= (PW_OVERHEAD);
+					creature_ptr->window |= (PW_OVERHEAD);
 					handle_stuff();
 				}
 				else	/* move cursor to next stair and change panel */
@@ -2140,11 +2140,11 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 				}
 
 				/* Slide into legality */
-				if (x >= p_ptr->current_floor_ptr->width-1) x = p_ptr->current_floor_ptr->width - 2;
+				if (x >= creature_ptr->current_floor_ptr->width-1) x = creature_ptr->current_floor_ptr->width - 2;
 				else if (x <= 0) x = 1;
 
 				/* Slide into legality */
-				if (y >= p_ptr->current_floor_ptr->height-1) y = p_ptr->current_floor_ptr->height- 2;
+				if (y >= creature_ptr->current_floor_ptr->height-1) y = creature_ptr->current_floor_ptr->height- 2;
 				else if (y <= 0) y = 1;
 
 			}
@@ -2158,11 +2158,11 @@ bool tgt_pt(POSITION *x_ptr, POSITION *y_ptr)
 	/* Recenter the map around the player */
 	verify_panel();
 
-	p_ptr->update |= (PU_MONSTERS);
+	creature_ptr->update |= (PU_MONSTERS);
 
-	p_ptr->redraw |= (PR_MAP);
+	creature_ptr->redraw |= (PR_MAP);
 
-	p_ptr->window |= (PW_OVERHEAD);
+	creature_ptr->window |= (PW_OVERHEAD);
 	handle_stuff();
 
 	*x_ptr = x;

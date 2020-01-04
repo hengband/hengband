@@ -153,7 +153,7 @@ static bool do_cmd_debug_spell(player_type *creature_ptr)
 static bool wiz_dimension_door(void)
 {
 	POSITION x = 0, y = 0;
-	if (!tgt_pt(&x, &y)) return FALSE;
+	if (!tgt_pt(p_ptr, &x, &y)) return FALSE;
 	teleport_player_to(p_ptr, y, x, TELEPORT_NONMAGICAL);
 	return (TRUE);
 }
@@ -1623,7 +1623,7 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 	FEAT_IDX          tmp_feat, tmp_mimic;
 	POSITION y, x;
 
-	if (!tgt_pt(&x, &y)) return;
+	if (!tgt_pt(creature_ptr, &x, &y)) return;
 
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 

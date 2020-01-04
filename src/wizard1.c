@@ -1018,7 +1018,7 @@ static void analyze_general(object_type *o_ptr, char *desc_ptr)
  * List "player traits" altered by an artifact's pval. These include stats,
  * speed, infravision, tunneling, stealth, searching, and extra attacks.
  * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param p_ptr pval修正構造体の参照ポインタ
+ * @param pi_ptr pval修正構造体の参照ポインタ
  * @return なし
  */
 static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
