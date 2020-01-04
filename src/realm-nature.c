@@ -424,7 +424,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				if (!rustproof()) return NULL;
+				if (!rustproof(caster_ptr)) return NULL;
 			}
 		}
 		break;

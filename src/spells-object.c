@@ -138,7 +138,7 @@ bool create_ammo(player_type *creature_ptr)
 		if (!get_rep_dir(&dir, FALSE)) return FALSE;
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 		if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG))
 		{
@@ -700,7 +700,7 @@ bool curse_weapon(bool force, int slot)
  * @brief 防具の錆止め防止処理
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
-bool rustproof(void)
+bool rustproof(player_type *caster_ptr)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -713,7 +713,7 @@ bool rustproof(void)
 	q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
 	s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -737,7 +737,7 @@ bool rustproof(void)
 	msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "are" : "is"));
 #endif
 
-	calc_android_exp(p_ptr);
+	calc_android_exp(caster_ptr);
 	return TRUE;
 }
 
