@@ -166,7 +166,7 @@ void do_cmd_wield(player_type *creature_ptr)
 	if (!o_ptr) return;
 
 	/* Check the slot */
-	slot = wield_slot(o_ptr);
+	slot = wield_slot(creature_ptr, o_ptr);
 
 	switch (o_ptr->tval)
 	{

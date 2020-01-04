@@ -1324,7 +1324,7 @@ char index_to_label(int i)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-s16b wield_slot(object_type *o_ptr)
+s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
 {
 	/* Slot for equipment */
 	switch (o_ptr->tval)
@@ -1334,8 +1334,8 @@ s16b wield_slot(object_type *o_ptr)
 		case TV_POLEARM:
 		case TV_SWORD:
 		{
-			if (!p_ptr->inventory_list[INVEN_RARM].k_idx) return (INVEN_RARM);
-			if (p_ptr->inventory_list[INVEN_LARM].k_idx) return (INVEN_RARM);
+			if (!owner_ptr->inventory_list[INVEN_RARM].k_idx) return (INVEN_RARM);
+			if (owner_ptr->inventory_list[INVEN_LARM].k_idx) return (INVEN_RARM);
 			return (INVEN_LARM);
 		}
 
@@ -1343,8 +1343,8 @@ s16b wield_slot(object_type *o_ptr)
 		case TV_CARD:
 		case TV_SHIELD:
 		{
-			if (!p_ptr->inventory_list[INVEN_LARM].k_idx) return (INVEN_LARM);
-			if (p_ptr->inventory_list[INVEN_RARM].k_idx) return (INVEN_LARM);
+			if (!owner_ptr->inventory_list[INVEN_LARM].k_idx) return (INVEN_LARM);
+			if (owner_ptr->inventory_list[INVEN_RARM].k_idx) return (INVEN_LARM);
 			return (INVEN_RARM);
 		}
 
@@ -1356,7 +1356,7 @@ s16b wield_slot(object_type *o_ptr)
 		case TV_RING:
 		{
 			/* Use the right hand first */
-			if (!p_ptr->inventory_list[INVEN_RIGHT].k_idx) return (INVEN_RIGHT);
+			if (!owner_ptr->inventory_list[INVEN_RIGHT].k_idx) return (INVEN_RIGHT);
 
 			/* Use the left hand for swapping (by default) */
 			return (INVEN_LEFT);

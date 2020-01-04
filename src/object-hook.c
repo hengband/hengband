@@ -197,7 +197,7 @@ bool item_tester_hook_wear(object_type *o_ptr)
 		if (p_ptr->psex == SEX_MALE) return FALSE;
 
 	/* Check for a usable slot */
-	if (wield_slot(o_ptr) >= INVEN_RARM) return (TRUE);
+	if (wield_slot(p_ptr, o_ptr) >= INVEN_RARM) return (TRUE);
 
 	return (FALSE);
 }
