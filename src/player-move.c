@@ -2046,13 +2046,13 @@ static POSITION temp2_y[MAX_SHORT];
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
  * @return なし
  */
-void forget_travel_flow(void)
+void forget_travel_flow(floor_type *floor_ptr)
 {
 	POSITION x, y;
 	/* Check the entire dungeon / Forget the old data */
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
 
 			travel.cost[y][x] = MAX_SHORT;
@@ -2244,7 +2244,7 @@ void do_cmd_travel(player_type *creature_ptr)
 		return;
 	}
 
-	forget_travel_flow();
+	forget_travel_flow(creature_ptr->current_floor_ptr);
 	travel_flow(y, x);
 
 	travel.x = x;

@@ -1385,7 +1385,7 @@ void change_floor(player_type *creature_ptr)
 	place_pet(creature_ptr);
 
 	/* Reset travel target place */
-	forget_travel_flow();
+	forget_travel_flow(creature_ptr->current_floor_ptr);
 
 	/* Hack -- maintain unique and artifacts */
 	update_unique_artifact(creature_ptr->current_floor_ptr, new_floor_id);

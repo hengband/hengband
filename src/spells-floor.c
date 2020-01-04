@@ -176,7 +176,7 @@ void wiz_dark(player_type *caster_ptr)
 	}
 
 	/* Forget travel route when we have forgotten map */
-	forget_travel_flow();
+	forget_travel_flow(caster_ptr->current_floor_ptr);
 
 	caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
 	caster_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
