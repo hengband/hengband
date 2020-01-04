@@ -915,12 +915,12 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	bool ident = FALSE;
 	if (dispel_evil(powerful ? 225 : 150)) ident = TRUE;
 	int k = 3 * creature_ptr->lev;
-	if (set_protevil(p_ptr, (magic ? 0 : creature_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
-	if (set_poisoned(p_ptr, 0)) ident = TRUE;
-	if (set_afraid(p_ptr, 0)) ident = TRUE;
-	if (hp_player(p_ptr, 50)) ident = TRUE;
-	if (set_stun(p_ptr, 0)) ident = TRUE;
-	if (set_cut(p_ptr,0)) ident = TRUE;
+	if (set_protevil(creature_ptr, (magic ? 0 : creature_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
+	if (set_poisoned(creature_ptr, 0)) ident = TRUE;
+	if (set_afraid(creature_ptr, 0)) ident = TRUE;
+	if (hp_player(creature_ptr, 50)) ident = TRUE;
+	if (set_stun(creature_ptr, 0)) ident = TRUE;
+	if (set_cut(creature_ptr,0)) ident = TRUE;
 	return ident;
 }
 
