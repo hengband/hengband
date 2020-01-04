@@ -144,7 +144,7 @@ dun_data *dun;
  * @param y 基準のy座標
  * @param x 基準のx座標
  * @return 隣接する外壁の数
- * @note Assumes "in_bounds(p_ptr->current_floor_ptr, y, x)"
+ * @note Assumes "in_bounds()"
  * @details We count only granite walls and permanent walls.
  */
 static int next_to_walls(floor_type* floor_ptr, POSITION y, POSITION x)

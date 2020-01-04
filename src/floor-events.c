@@ -837,7 +837,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
  * Note also the care taken to prevent "running off the map".  The use of
  * explicit checks on the "validity" of the "diagonal", and the fact that
  * the loops are never allowed to "leave" the map, lets "update_view_aux()"
- * use the optimized "cave_los_bold(p_ptr->current_floor_ptr, )" macro, and to avoid the overhead
+ * use the optimized "cave_los_bold()" macro, and to avoid the overhead
  * of multiple checks on the validity of grids.
  *
  * Note the "optimizations" involving the "se","sw","ne","nw","es","en",
@@ -854,7 +854,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
  * unless open space is still available.  This uses the "k" variable.
  *
  * Note the use of "inline" macros for efficiency.  The "cave_los_grid()"
- * macro is a replacement for "cave_los_bold(p_ptr->current_floor_ptr, )" which takes a pointer to
+ * macro is a replacement for "cave_los_bold()" which takes a pointer to
  * a grid instead of its location.  The "cave_view_hack()" macro is a
  * chunk of code which adds the given location to the "view" array if it
  * is not already there, using both the actual location and a pointer to
