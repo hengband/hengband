@@ -617,7 +617,7 @@ void do_cmd_read_scroll(player_type *creature_ptr)
 	q = _("どの巻物を読みますか? ", "Read which scroll? ");
 	s = _("読める巻物がない。", "You have no scrolls to read.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
 	/* Read the scroll */

@@ -82,12 +82,12 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
 
 	total_friends = 0;
 
-	for (m_idx = p_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
+	for (m_idx = creature_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;
 
-		m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+		m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
@@ -972,7 +972,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 	POSITION y, x, oy, ox, sy = 0, sx = 0;
 	int sn = 0;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+	monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool fall_dam = FALSE;
 
@@ -1022,7 +1022,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 			y = creature_ptr->y + ddy_ddd[i];
 			x = creature_ptr->x + ddx_ddd[i];
 
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 			if (g_ptr->m_idx) continue;
 
