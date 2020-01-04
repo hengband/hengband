@@ -16,8 +16,8 @@ extern int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage
  */
 typedef int(*inven_func)(object_type *);
 
-extern int inven_damage(inven_func typ, int perc);
-extern HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura);
-extern HIT_POINT elec_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura);
-extern HIT_POINT fire_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura);
-extern HIT_POINT cold_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura);
+extern void inventory_damage(player_type *creature_ptr, inven_func typ, int perc);
+extern HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura);
+extern HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura);
+extern HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura);
+extern HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura);
