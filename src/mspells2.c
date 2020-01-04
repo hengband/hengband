@@ -163,8 +163,8 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 	{
 		if (flg & PROJECT_DISI)
 		{
-			if (in_disintegration_range(y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (in_disintegration_range(y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
+			if (in_disintegration_range(master_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (in_disintegration_range(master_ptr->current_floor_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
 		}
 		else if (flg & PROJECT_LOS)
 		{

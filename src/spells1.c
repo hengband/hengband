@@ -5119,7 +5119,7 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
  * Modified version of los() for calculation of disintegration balls.
  * Disintegration effects are stopped by permanent walls.
  */
-bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	POSITION dx, dy; /* Delta */
 	POSITION ax, ay; /* Absolute */
@@ -5141,7 +5141,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	if ((ax < 2) && (ay < 2)) return (TRUE);
 
 	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(p_ptr->current_floor_ptr, y1, x1)) return (FALSE); */
+	/* if (!in_bounds(floor_ptr, y1, x1)) return (FALSE); */
 
 	/* Directly South/North */
 	if (!dx)
@@ -5151,7 +5151,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (ty = y1 + 1; ty < y2; ty++)
 			{
-				if (cave_stop_disintegration(p_ptr->current_floor_ptr, ty, x1)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, ty, x1)) return (FALSE);
 			}
 		}
 
@@ -5160,7 +5160,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (ty = y1 - 1; ty > y2; ty--)
 			{
-				if (cave_stop_disintegration(p_ptr->current_floor_ptr, ty, x1)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, ty, x1)) return (FALSE);
 			}
 		}
 
@@ -5176,7 +5176,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (tx = x1 + 1; tx < x2; tx++)
 			{
-				if (cave_stop_disintegration(p_ptr->current_floor_ptr, y1, tx)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, y1, tx)) return (FALSE);
 			}
 		}
 
@@ -5185,7 +5185,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		{
 			for (tx = x1 - 1; tx > x2; tx--)
 			{
-				if (cave_stop_disintegration(p_ptr->current_floor_ptr, y1, tx)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, y1, tx)) return (FALSE);
 			}
 		}
 
@@ -5202,7 +5202,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	{
 		if (ay == 2)
 		{
-			if (!cave_stop_disintegration(p_ptr->current_floor_ptr, y1 + sy, x1)) return (TRUE);
+			if (!cave_stop_disintegration(floor_ptr, y1 + sy, x1)) return (TRUE);
 		}
 	}
 
@@ -5211,7 +5211,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	{
 		if (ax == 2)
 		{
-			if (!cave_stop_disintegration(p_ptr->current_floor_ptr, y1, x1 + sx)) return (TRUE);
+			if (!cave_stop_disintegration(floor_ptr, y1, x1 + sx)) return (TRUE);
 		}
 	}
 
@@ -5246,7 +5246,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		/* the LOS exactly meets the corner of a tile. */
 		while (x2 - tx)
 		{
-			if (cave_stop_disintegration(p_ptr->current_floor_ptr, ty, tx)) return (FALSE);
+			if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
 
 			qy += m;
 
@@ -5257,7 +5257,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 			else if (qy > f2)
 			{
 				ty += sy;
-				if (cave_stop_disintegration(p_ptr->current_floor_ptr, ty, tx)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
 				qy -= f1;
 				tx += sx;
 			}
@@ -5293,7 +5293,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 		/* the LOS exactly meets the corner of a tile. */
 		while (y2 - ty)
 		{
-			if (cave_stop_disintegration(p_ptr->current_floor_ptr, ty, tx)) return (FALSE);
+			if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
 
 			qx += m;
 
@@ -5304,7 +5304,7 @@ bool in_disintegration_range(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 			else if (qx > f2)
 			{
 				tx += sx;
-				if (cave_stop_disintegration(p_ptr->current_floor_ptr, ty, tx)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
 				qx -= f1;
 				ty += sy;
 			}
@@ -5381,7 +5381,7 @@ void breath_shape(floor_type *floor_ptr, u16b *path_g, int dist, int *pgrids, PO
 						break;
 					case GF_DISINTEGRATE:
 						/* Disintegration are stopped only by perma-walls */
-						if (!in_disintegration_range(by, bx, y, x)) continue;
+						if (!in_disintegration_range(floor_ptr, by, bx, y, x)) continue;
 						break;
 					default:
 						/* Ball explosions are stopped by walls */
@@ -6144,7 +6144,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 							break;
 						case GF_DISINTEGRATE:
 							/* Disintegration are stopped only by perma-walls */
-							if (!in_disintegration_range(by, bx, y, x)) continue;
+							if (!in_disintegration_range(caster_ptr->current_floor_ptr, by, bx, y, x)) continue;
 							break;
 						default:
 							/* Ball explosions are stopped by walls */

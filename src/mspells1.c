@@ -1465,7 +1465,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		bool success = FALSE;
 
 		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE/2) &&
-		    in_disintegration_range(m_ptr->fy, m_ptr->fx, y, x) &&
+		    in_disintegration_range(target_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, y, x) &&
 		    (one_in_(10) || (projectable(target_ptr->current_floor_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
 			do_spell = DO_SPELL_BR_DISI;

@@ -121,7 +121,7 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 			if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) ||
 			    ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)))
 			{
-				if (!in_disintegration_range(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
+				if (!in_disintegration_range(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 			}
 			else
 			{
