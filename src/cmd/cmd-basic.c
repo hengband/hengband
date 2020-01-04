@@ -161,7 +161,7 @@ bool cmd_limit_blind(player_type *creature_ptr)
 		msg_print(_("目が見えない。", "You can't see anything."));
 		return TRUE;
 	}
-	if (no_lite())
+	if (no_lite(creature_ptr))
 	{
 		msg_print(_("明かりがないので見えない。", "You have no light."));
 		return TRUE;
@@ -573,7 +573,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 		i = creature_ptr->skill_dis;
 
 		/* Penalize some conditions */
-		if (creature_ptr->blind || no_lite()) i = i / 10;
+		if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
 		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 		/* Extract the difficulty */
@@ -763,7 +763,7 @@ static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 		i = creature_ptr->skill_dis;
 
 		/* Penalize some conditions */
-		if (creature_ptr->blind || no_lite()) i = i / 10;
+		if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
 		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 		/* Extract the lock power */
@@ -1323,7 +1323,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 		i = creature_ptr->skill_dis;
 
 		/* Penalize some conditions */
-		if (creature_ptr->blind || no_lite()) i = i / 10;
+		if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
 		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 		/* Extract the lock power */
@@ -1397,7 +1397,7 @@ static bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, 
 	i = creature_ptr->skill_dis;
 
 	/* Penalize some conditions */
-	if (creature_ptr->blind || no_lite()) i = i / 10;
+	if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
 	if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 	/* Extract the difficulty */
@@ -1489,7 +1489,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
 	take_turn(creature_ptr, 100);
 
 	/* Penalize some conditions */
-	if (creature_ptr->blind || no_lite()) i = i / 10;
+	if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
 	if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 	/* Extract the difficulty */

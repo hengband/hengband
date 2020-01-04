@@ -471,9 +471,9 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
  * @return 視覚に収められていないならTRUEを返す
  * @details player_can_see_bold()関数の返り値の否定を返している。
  */
-bool no_lite(void)
+bool no_lite(player_type *creature_ptr)
 {
-	return (!player_can_see_bold(p_ptr, p_ptr->y, p_ptr->x));
+	return (!player_can_see_bold(creature_ptr, creature_ptr->y, creature_ptr->x));
 }
 
 /*

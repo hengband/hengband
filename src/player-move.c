@@ -238,7 +238,7 @@ void search(player_type *creature_ptr)
 	chance = creature_ptr->skill_srh;
 
 	/* Penalize various conditions */
-	if (creature_ptr->blind || no_lite()) chance = chance / 10;
+	if (creature_ptr->blind || no_lite(creature_ptr)) chance = chance / 10;
 	if (creature_ptr->confused || creature_ptr->image) chance = chance / 10;
 
 	/* Search the nearby grids, which are always in bounds */
@@ -660,7 +660,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */
-		if ((!creature_ptr->blind && !no_lite()) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
+		if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
 
 		/* For get everything when requested hehe I'm *NASTY* */
 		if (p_ptr->current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark(creature_ptr);
@@ -1906,7 +1906,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	int cost;
 
 	/* Cannot travel when blind */
-	if (p_ptr->blind || no_lite())
+	if (p_ptr->blind || no_lite(p_ptr))
 	{
 		msg_print(_("目が見えない！", "You cannot see!"));
 		return (0);

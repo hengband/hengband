@@ -19,7 +19,6 @@ extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION
 extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
 extern bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x);
-extern bool no_lite(void);
 
 /*!
  * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array

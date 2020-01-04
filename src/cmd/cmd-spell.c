@@ -1056,7 +1056,7 @@ void do_cmd_cast(player_type *caster_ptr)
 		return;
 	}
 
-	if (caster_ptr->blind || no_lite())
+	if (caster_ptr->blind || no_lite(caster_ptr))
 	{
 		if (caster_ptr->pclass == CLASS_FORCETRAINER) confirm_use_force(FALSE);
 		else
