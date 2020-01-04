@@ -3415,7 +3415,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
 		/* Cannot penetrate perm walls */
 		if (!in_bounds(caster_ptr->current_floor_ptr, y, x) ||
-			cave_stop_disintegration(y, x) ||
+			cave_stop_disintegration(caster_ptr->current_floor_ptr, y, x) ||
 			!in_disintegration_range(ty, tx, y, x))
 			continue;
 

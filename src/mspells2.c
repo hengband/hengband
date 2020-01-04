@@ -139,7 +139,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 		if (flg & PROJECT_DISI)
 		{
 			/* Hack -- Balls explode before reaching walls */
-			if (cave_stop_disintegration(ny, nx)) break;
+			if (cave_stop_disintegration(master_ptr->current_floor_ptr, ny, nx)) break;
 		}
 		else if (flg & PROJECT_LOS)
 		{

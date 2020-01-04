@@ -1373,7 +1373,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 
 			if (flg & (PROJECT_DISI))
 			{
-				if ((n > 0) && cave_stop_disintegration(y, x)) break;
+				if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x)) break;
 			}
 			else if (flg & (PROJECT_LOS))
 			{
@@ -1462,7 +1462,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 
 			if (flg & (PROJECT_DISI))
 			{
-				if ((n > 0) && cave_stop_disintegration(y, x)) break;
+				if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x)) break;
 			}
 			else if (flg & (PROJECT_LOS))
 			{
@@ -1533,7 +1533,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 
 			if (flg & (PROJECT_DISI))
 			{
-				if ((n > 0) && cave_stop_disintegration(y, x)) break;
+				if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x)) break;
 			}
 			else if (flg & (PROJECT_LOS))
 			{
