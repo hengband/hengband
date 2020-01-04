@@ -1099,27 +1099,26 @@ static concptr desc_moan[] =
 * @param message オーラダメージを受けた際のメッセージ
 * @return なし
 */
-static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
-	HIT_POINT(*dam_func)(HIT_POINT dam, concptr kb_str, int monspell, bool aura), concptr message)
+static void touch_zap_player_aux(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
+	HIT_POINT(*dam_func)(player_type *creature_type, HIT_POINT dam, concptr kb_str, int monspell, bool aura), concptr message)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if ((atoffset(BIT_FLAGS, r_ptr, flags_offset) & aura_flag) && !immune)
+	if (!(atoffset(BIT_FLAGS, r_ptr, flags_offset) & aura_flag) || immune) return;
+	
+	GAME_TEXT mon_name[MAX_NLEN];
+	int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
+
+	monster_desc(mon_name, m_ptr, MD_WRONGDOER_NAME);
+	msg_print(message);
+	dam_func(touched_ptr, aura_damage, mon_name, -1, TRUE);
+
+	if (is_original_ap_and_seen(m_ptr))
 	{
-		GAME_TEXT mon_name[MAX_NLEN];
-		int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
-
-		monster_desc(mon_name, m_ptr, MD_WRONGDOER_NAME);
-		msg_print(message);
-		dam_func(aura_damage, mon_name, -1, TRUE);
-
-		if (is_original_ap_and_seen(m_ptr))
-		{
-			atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
-		}
-
-		handle_stuff();
+		atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
 	}
+
+	handle_stuff();
 }
 
 /*!
@@ -1130,11 +1129,11 @@ static void touch_zap_player_aux(monster_type *m_ptr, bool immune, int flags_off
 */
 static void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 {
-	touch_zap_player_aux(m_ptr, touched_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
+	touch_zap_player_aux(m_ptr, touched_ptr, touched_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
 		fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
-	touch_zap_player_aux(m_ptr, touched_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
+	touch_zap_player_aux(m_ptr, touched_ptr, touched_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
 		cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
-	touch_zap_player_aux(m_ptr, touched_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
+	touch_zap_player_aux(m_ptr, touched_ptr, touched_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
 		elec_dam, _("電撃をくらった！", "You get zapped!"));
 }
 
@@ -3134,7 +3133,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (explode) break;
 					obvious = TRUE;
 					msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
-					get_damage += acid_dam(damage, ddesc, -1, FALSE);
+					get_damage += acid_dam(target_ptr, damage, ddesc, -1, FALSE);
 					update_creature(target_ptr);
 					update_smart_learn(m_idx, DRS_ACID);
 					break;
@@ -3145,7 +3144,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (explode) break;
 					obvious = TRUE;
 					msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
-					get_damage += elec_dam(damage, ddesc, -1, FALSE);
+					get_damage += elec_dam(target_ptr, damage, ddesc, -1, FALSE);
 					update_smart_learn(m_idx, DRS_ELEC);
 					break;
 				}
@@ -3155,7 +3154,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (explode) break;
 					obvious = TRUE;
 					msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
-					get_damage += fire_dam(damage, ddesc, -1, FALSE);
+					get_damage += fire_dam(target_ptr, damage, ddesc, -1, FALSE);
 					update_smart_learn(m_idx, DRS_FIRE);
 					break;
 				}
@@ -3165,7 +3164,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (explode) break;
 					obvious = TRUE;
 					msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
-					get_damage += cold_dam(damage, ddesc, -1, FALSE);
+					get_damage += cold_dam(target_ptr, damage, ddesc, -1, FALSE);
 					update_smart_learn(m_idx, DRS_COLD);
 					break;
 				}

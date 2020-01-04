@@ -4123,7 +4123,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	case GF_ACID:
 	{
 		if (fuzzy) msg_print(_("酸で攻撃された！", "You are hit by acid!"));
-		get_damage = acid_dam(dam, killer, monspell, FALSE);
+		get_damage = acid_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
 
@@ -4131,7 +4131,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	case GF_FIRE:
 	{
 		if (fuzzy) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
-		get_damage = fire_dam(dam, killer, monspell, FALSE);
+		get_damage = fire_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
 
@@ -4139,7 +4139,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	case GF_COLD:
 	{
 		if (fuzzy) msg_print(_("冷気で攻撃された！", "You are hit by cold!"));
-		get_damage = cold_dam(dam, killer, monspell, FALSE);
+		get_damage = cold_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
 
@@ -4147,7 +4147,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	case GF_ELEC:
 	{
 		if (fuzzy) msg_print(_("電撃で攻撃された！", "You are hit by lightning!"));
-		get_damage = elec_dam(dam, killer, monspell, FALSE);
+		get_damage = elec_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
 
@@ -4198,7 +4198,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 			if (one_in_(6))
 			{
-				inven_damage(set_acid_destroy, 2);
+				inventory_damage(target_ptr, set_acid_destroy, 2);
 			}
 		}
 		break;
@@ -4263,7 +4263,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		if (!(target_ptr->resist_fire || IS_OPPOSE_FIRE() || target_ptr->immune_fire))
 		{
-			inven_damage(set_acid_destroy, 3);
+			inventory_damage(target_ptr, set_acid_destroy, 3);
 		}
 
 		break;
@@ -4313,7 +4313,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 			if (one_in_(5) && !target_ptr->resist_water)
 			{
-				inven_damage(set_cold_destroy, 3);
+				inventory_damage(target_ptr, set_cold_destroy, 3);
 			}
 
 			if (target_ptr->resist_water) get_damage /= 4;
@@ -4354,8 +4354,8 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 			if (!target_ptr->resist_chaos || one_in_(9))
 			{
-				inven_damage(set_elec_destroy, 2);
-				inven_damage(set_fire_destroy, 2);
+				inventory_damage(target_ptr, set_elec_destroy, 2);
+				inventory_damage(target_ptr, set_fire_destroy, 2);
 			}
 		}
 
@@ -4378,7 +4378,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		if (!target_ptr->resist_shard || one_in_(13))
 		{
-			inven_damage(set_cold_destroy, 2);
+			inventory_damage(target_ptr, set_cold_destroy, 2);
 		}
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -4401,7 +4401,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		if (!target_ptr->resist_sound || one_in_(13))
 		{
-			inven_damage(set_cold_destroy, 2);
+			inventory_damage(target_ptr, set_cold_destroy, 2);
 		}
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -4489,7 +4489,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		if (!target_ptr->resist_shard || one_in_(12))
 		{
-			inven_damage(set_cold_destroy, 3);
+			inventory_damage(target_ptr, set_cold_destroy, 3);
 		}
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -4650,7 +4650,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		if (!target_ptr->levitation || one_in_(13))
 		{
-			inven_damage(set_cold_destroy, 2);
+			inventory_damage(target_ptr, set_cold_destroy, 2);
 		}
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -4733,8 +4733,8 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		if (!target_ptr->resist_shard || one_in_(13))
 		{
-			if (!target_ptr->immune_fire) inven_damage(set_fire_destroy, 2);
-			inven_damage(set_cold_destroy, 2);
+			if (!target_ptr->immune_fire) inventory_damage(target_ptr, set_fire_destroy, 2);
+			inventory_damage(target_ptr, set_cold_destroy, 2);
 		}
 
 		break;
@@ -4744,7 +4744,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	case GF_ICE:
 	{
 		if (fuzzy) msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
-		get_damage = cold_dam(dam, killer, monspell, FALSE);
+		get_damage = cold_dam(target_ptr, dam, killer, monspell, FALSE);
 		if (!CHECK_MULTISHADOW(target_ptr))
 		{
 			if (!target_ptr->resist_shard)
@@ -4758,7 +4758,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 			if ((!(target_ptr->resist_cold || IS_OPPOSE_COLD())) || one_in_(12))
 			{
-				if (!target_ptr->immune_cold) inven_damage(set_cold_destroy, 3);
+				if (!target_ptr->immune_cold) inventory_damage(target_ptr, set_cold_destroy, 3);
 			}
 		}
 

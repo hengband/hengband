@@ -27,96 +27,87 @@
 #include "files.h"
 
 
-
 /*!
-* @brief アイテムが指定確率で破損するかどうかを判定する /
+* todo 元々「破損したアイテムの数」をreturnしていました
+* しかし調査の結果、どの関数も戻り値を使用していませんでした
+* よって戻りをvoidとし、破損したアイテム数を計上しているローカル変数を削除しました
+* 確認後、問題がなければ本コメントを削除の上コミット願います by Hourier
+* そして英語のコメントにある「stealing」とは一体…
+* ***
+* @brief アイテムを指定確率で破損させる /
 * Destroys a type of item on a given percent chance
 * @param typ 破損判定関数ポインタ
 * @param perc 基本確率
-* @return 破損したアイテムの数
+* @return なし
 * @details
 * Note that missiles are no longer necessarily all destroyed
 * Destruction taken from "melee.c" code for "stealing".
 * New-style wands and rods handled correctly. -LM-
-* Returns number of items destroyed.
 */
-int inven_damage(inven_func typ, int perc)
+void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 {
 	INVENTORY_IDX i;
-	int j, k, amt;
+	int j, amt;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
-	if (CHECK_MULTISHADOW(p_ptr)) return 0;
-
-	if (p_ptr->current_floor_ptr->inside_arena) return 0;
-
-	/* Count the casualties */
-	k = 0;
+	if (CHECK_MULTISHADOW(player_ptr) || player_ptr->current_floor_ptr->inside_arena) return;
 
 	/* Scan through the slots backwards */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &player_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Hack -- for now, skip artifacts */
 		if (object_is_artifact(o_ptr)) continue;
 
 		/* Give this item slot a shot at death */
-		if ((*typ)(o_ptr))
+		if (!(*typ)(o_ptr)) continue;
+		
+		/* Count the casualties */
+		for (amt = j = 0; j < o_ptr->number; ++j)
 		{
-			/* Count the casualties */
-			for (amt = j = 0; j < o_ptr->number; ++j)
-			{
-				if (randint0(100) < perc) amt++;
-			}
-
-			/* Some casualities */
-			if (amt)
-			{
-				object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
-
-				msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
-#ifdef JP
-					o_name, index_to_label(i), ((o_ptr->number > 1) ?
-						((amt == o_ptr->number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
-#else
-					((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "All of y" :
-						(amt > 1 ? "Some of y" : "One of y")) : "Y"), o_name, index_to_label(i), ((amt > 1) ? "were" : "was"));
-#endif
-
-#ifdef JP
-				if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
-					msg_print("やりやがったな！");
-				else if ((p_ptr->pseikaku == SEIKAKU_CHARGEMAN))
-				{
-					if (randint0(2) == 0) msg_print(_("ジュラル星人め！", ""));
-					else msg_print(_("弱い者いじめは止めるんだ！", ""));
-				}
-#endif
-
-				/* Potions smash open */
-				if (object_is_potion(o_ptr))
-				{
-					(void)potion_smash_effect(0, p_ptr->y, p_ptr->x, o_ptr->k_idx);
-				}
-
-				/* Reduce the charges of rods/wands */
-				reduce_charges(o_ptr, amt);
-
-				/* Destroy "amt" items */
-				inven_item_increase(i, -amt);
-				inven_item_optimize(i);
-
-				/* Count the casualties */
-				k += amt;
-			}
+			if (randint0(100) < perc) amt++;
 		}
-	}
 
-	/* Return the casualty count */
-	return (k);
+		/* Some casualities */
+		if (!amt) continue;
+		
+		object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+
+		msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
+#ifdef JP
+			o_name, index_to_label(i), ((o_ptr->number > 1) ?
+			((amt == o_ptr->number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
+#else
+			((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "All of y" :
+			(amt > 1 ? "Some of y" : "One of y")) : "Y"), o_name, index_to_label(i), ((amt > 1) ? "were" : "was"));
+#endif
+
+#ifdef JP
+		if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+			msg_print("やりやがったな！");
+		else if ((player_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+		{
+			if (randint0(2) == 0) msg_print(_("ジュラル星人め！", ""));
+			else msg_print(_("弱い者いじめは止めるんだ！", ""));
+		}
+#endif
+
+		/* Potions smash open */
+		if (object_is_potion(o_ptr))
+		{
+			(void)potion_smash_effect(0, player_ptr->y, player_ptr->x, o_ptr->k_idx);
+		}
+
+		/* Reduce the charges of rods/wands */
+		reduce_charges(o_ptr, amt);
+
+		/* Destroy "amt" items */
+		inven_item_increase(i, -amt);
+		inven_item_optimize(i);
+	}
 }
 
 
@@ -190,42 +181,42 @@ static bool acid_minus_ac(player_type *creature_ptr)
 * @param aura オーラよるダメージが原因ならばTRUE
 * @return 修正HPダメージ量
 */
-HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
+HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_ACID();
 
 	/* Total Immunity */
-	if (p_ptr->immune_acid || (dam <= 0))
+	if (creature_ptr->immune_acid || (dam <= 0))
 	{
 		learn_spell(monspell);
 		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
-	if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-	if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+	if (creature_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+	if (creature_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 
 	/* Resist the damage */
-	if (p_ptr->resist_acid) dam = (dam + 2) / 3;
+	if (creature_ptr->resist_acid) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(p_ptr))
+	if (aura || !CHECK_MULTISHADOW(creature_ptr))
 	{
-		if ((!(double_resist || p_ptr->resist_acid)) &&
+		if ((!(double_resist || creature_ptr->resist_acid)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(p_ptr, A_CHR);
+			(void)do_dec_stat(creature_ptr, A_CHR);
 
 		/* If any armor gets hit, defend the player */
-		if (acid_minus_ac(p_ptr)) dam = (dam + 1) / 2;
+		if (acid_minus_ac(creature_ptr)) dam = (dam + 1) / 2;
 	}
 
-	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!aura && !(double_resist && p_ptr->resist_acid))
-		inven_damage(set_acid_destroy, inv);
+	if (!aura && !(double_resist && creature_ptr->resist_acid))
+		inventory_damage(creature_ptr, set_acid_destroy, inv);
 	return get_damage;
 }
 
@@ -239,40 +230,40 @@ HIT_POINT acid_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 * @param aura オーラよるダメージが原因ならばTRUE
 * @return 修正HPダメージ量
 */
-HIT_POINT elec_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
+HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_ELEC();
 
 	/* Total immunity */
-	if (p_ptr->immune_elec || (dam <= 0))
+	if (creature_ptr->immune_elec || (dam <= 0))
 	{
 		learn_spell(monspell);
 		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
-	if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-	if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
-	if (PRACE_IS_(p_ptr, RACE_ANDROID)) dam += dam / 3;
+	if (creature_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+	if (creature_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+	if (PRACE_IS_(creature_ptr, RACE_ANDROID)) dam += dam / 3;
 
 	/* Resist the damage */
-	if (p_ptr->resist_elec) dam = (dam + 2) / 3;
+	if (creature_ptr->resist_elec) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(p_ptr))
+	if (aura || !CHECK_MULTISHADOW(creature_ptr))
 	{
-		if ((!(double_resist || p_ptr->resist_elec)) &&
+		if ((!(double_resist || creature_ptr->resist_elec)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(p_ptr, A_DEX);
+			(void)do_dec_stat(creature_ptr, A_DEX);
 	}
 
-	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!aura && !(double_resist && p_ptr->resist_elec))
-		inven_damage(set_elec_destroy, inv);
+	if (!aura && !(double_resist && creature_ptr->resist_elec))
+		inventory_damage(creature_ptr, set_elec_destroy, inv);
 
 	return get_damage;
 }
@@ -287,40 +278,40 @@ HIT_POINT elec_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 * @param aura オーラよるダメージが原因ならばTRUE
 * @return 修正HPダメージ量
 */
-HIT_POINT fire_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
+HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_FIRE();
 
 	/* Totally immune */
-	if (p_ptr->immune_fire || (dam <= 0))
+	if (creature_ptr->immune_fire || (dam <= 0))
 	{
 		learn_spell(monspell);
 		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
-	if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-	if (PRACE_IS_(p_ptr, RACE_ENT)) dam += dam / 3;
-	if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+	if (creature_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+	if (PRACE_IS_(creature_ptr, RACE_ENT)) dam += dam / 3;
+	if (creature_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 
 	/* Resist the damage */
-	if (p_ptr->resist_fire) dam = (dam + 2) / 3;
+	if (creature_ptr->resist_fire) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(p_ptr))
+	if (aura || !CHECK_MULTISHADOW(creature_ptr))
 	{
-		if ((!(double_resist || p_ptr->resist_fire)) &&
+		if ((!(double_resist || creature_ptr->resist_fire)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(p_ptr, A_STR);
+			(void)do_dec_stat(creature_ptr, A_STR);
 	}
 
-	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!aura && !(double_resist && p_ptr->resist_fire))
-		inven_damage(set_fire_destroy, inv);
+	if (!aura && !(double_resist && creature_ptr->resist_fire))
+		inventory_damage(creature_ptr, set_fire_destroy, inv);
 
 	return get_damage;
 }
@@ -335,39 +326,39 @@ HIT_POINT fire_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 * @param aura オーラよるダメージが原因ならばTRUE
 * @return 修正HPダメージ量
 */
-HIT_POINT cold_dam(HIT_POINT dam, concptr kb_str, int monspell, bool aura)
+HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int monspell, bool aura)
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
 	bool double_resist = IS_OPPOSE_COLD();
 
 	/* Total immunity */
-	if (p_ptr->immune_cold || (dam <= 0))
+	if (creature_ptr->immune_cold || (dam <= 0))
 	{
 		learn_spell(monspell);
 		return 0;
 	}
 
 	/* Vulnerability (Ouch!) */
-	if (p_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
-	if (p_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
+	if (creature_ptr->muta3 & MUT3_VULN_ELEM) dam *= 2;
+	if (creature_ptr->special_defense & KATA_KOUKIJIN) dam += dam / 3;
 
 	/* Resist the damage */
-	if (p_ptr->resist_cold) dam = (dam + 2) / 3;
+	if (creature_ptr->resist_cold) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(p_ptr))
+	if (aura || !CHECK_MULTISHADOW(creature_ptr))
 	{
-		if ((!(double_resist || p_ptr->resist_cold)) &&
+		if ((!(double_resist || creature_ptr->resist_cold)) &&
 			one_in_(HURT_CHANCE))
-			(void)do_dec_stat(p_ptr, A_STR);
+			(void)do_dec_stat(creature_ptr, A_STR);
 	}
 
-	get_damage = take_hit(p_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
+	get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str, monspell);
 
 	/* Inventory damage */
-	if (!aura && !(double_resist && p_ptr->resist_cold))
-		inven_damage(set_cold_destroy, inv);
+	if (!aura && !(double_resist && creature_ptr->resist_cold))
+		inventory_damage(creature_ptr, set_cold_destroy, inv);
 
 	return get_damage;
 }
@@ -400,7 +391,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 	if (damage_type != DAMAGE_USELIFE)
 	{
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(creature_ptr, TRUE, TRUE);
 		if (auto_more)
 		{
 			creature_ptr->now_damaged = TRUE;
@@ -428,7 +419,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			}
 		}
 
-		if (CHECK_MULTISHADOW(p_ptr))
+		if (CHECK_MULTISHADOW(creature_ptr))
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{
@@ -505,11 +496,11 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			concptr m_name = r_name + r_info[arena_info[creature_ptr->arena_number].r_idx].name;
 			msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
 			msg_print(NULL);
-			if (record_arena) exe_write_diary(p_ptr, NIKKI_ARENA, -1 - creature_ptr->arena_number, m_name);
+			if (record_arena) exe_write_diary(creature_ptr, NIKKI_ARENA, -1 - creature_ptr->arena_number, m_name);
 		}
 		else
 		{
-			QUEST_IDX q_idx = quest_number(p_ptr->current_floor_ptr->dun_level);
+			QUEST_IDX q_idx = quest_number(creature_ptr->current_floor_ptr->dun_level);
 			bool seppuku = streq(hit_from, "Seppuku");
 			bool winning_seppuku = current_world_ptr->total_winner && seppuku;
 
@@ -544,7 +535,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			if (winning_seppuku)
 			{
-				exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("勝利の後切腹した。", "did Seppuku after the winning."));
+				exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, _("勝利の後切腹した。", "did Seppuku after the winning."));
 			}
 			else
 			{
@@ -552,20 +543,20 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 				if (creature_ptr->current_floor_ptr->inside_arena)
 					strcpy(buf, _("アリーナ", "in the Arena"));
-				else if (!p_ptr->current_floor_ptr->dun_level)
+				else if (!creature_ptr->current_floor_ptr->dun_level)
 					strcpy(buf, _("地上", "on the surface"));
 				else if (q_idx && (is_fixed_quest_idx(q_idx) &&
 					!((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
 					strcpy(buf, _("クエスト", "in a quest"));
 				else
-					sprintf(buf, _("%d階", "level %d"), (int)p_ptr->current_floor_ptr->dun_level);
+					sprintf(buf, _("%d階", "level %d"), (int)creature_ptr->current_floor_ptr->dun_level);
 
 				sprintf(tmp, _("%sで%sに殺された。", "killed by %s %s."), buf, creature_ptr->died_from);
-				exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, tmp);
+				exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, tmp);
 			}
 
-			exe_write_diary(p_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-			exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
+			exe_write_diary(creature_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+			exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
 
 			flush();
 
@@ -700,7 +691,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 				hit_from = _("何か", "something");
 
 			sprintf(tmp, _("%sによってピンチに陥った。", "A critical situation because of %s."), hit_from);
-			exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, tmp);
+			exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, tmp);
 		}
 
 		if (auto_more)

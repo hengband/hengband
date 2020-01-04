@@ -491,7 +491,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	{
 		msg_print(_("炎に包まれた！", "You are enveloped in flames!"));
 		dam = damroll(4, 6);
-		(void)fire_dam(dam, _("炎のトラップ", "a fire trap"), -1, FALSE);
+		(void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), -1, FALSE);
 		break;
 	}
 
@@ -499,7 +499,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	{
 		msg_print(_("酸が吹きかけられた！", "You are splashed with acid!"));
 		dam = damroll(4, 6);
-		(void)acid_dam(dam, _("酸のトラップ", "an acid trap"), -1, FALSE);
+		(void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), -1, FALSE);
 		break;
 	}
 
