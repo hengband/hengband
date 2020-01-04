@@ -698,6 +698,7 @@ bool curse_weapon(bool force, int slot)
 
 /*!
  * @brief 防具の錆止め防止処理
+ * @param caster_ptr 錆止め実行者の参照ポインタ
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
 bool rustproof(player_type *caster_ptr)
