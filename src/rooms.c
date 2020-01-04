@@ -417,7 +417,7 @@ bool find_space(floor_type *floor_ptr, POSITION *y, POSITION *x, POSITION height
 	}
 
 	/* Normal dungeon */
-	if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_CAVE))
+	if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE))
 	{
 		/* Choose a random one */
 		pick = randint1(candidates);
@@ -1148,7 +1148,7 @@ void build_cavern(floor_type *floor_ptr)
 	bool done, light;
 
 	light = done = FALSE;
-	if ((floor_ptr->dun_level <= randint1(50)) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
+	if ((floor_ptr->dun_level <= randint1(50)) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	/* Make a cave the size of the dungeon */
 	xsize = floor_ptr->width - 1;
@@ -1313,7 +1313,7 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 			/* Light lava */
 			if (cave_have_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FF_LAVA))
 			{
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
+				if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
 			}
 		}
 	}
@@ -1700,7 +1700,7 @@ void build_maze_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
-	light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+	light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Pick a random room size - randomized by calling routine */
 	dy = ysize / 2 - 1;
