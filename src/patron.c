@@ -502,7 +502,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 				if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 			}
 			object_desc(o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
-			(void)curse_weapon(FALSE, dummy);
+			(void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[dummy]);
 			reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 			break;
 
@@ -543,7 +543,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 						if (has_melee_weapon(creature_ptr, INVEN_RARM) && one_in_(2)) dummy = INVEN_RARM;
 					}
 					object_desc(o_name, &creature_ptr->inventory_list[dummy], OD_NAME_ONLY);
-					(void)curse_weapon(FALSE, dummy);
+					(void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[dummy]);
 					reward = format(_("%sが破壊された。", "destroying %s"), o_name);
 				}
 				else
@@ -587,7 +587,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 				}
 				else if (has_melee_weapon(creature_ptr, INVEN_LARM)) dummy = INVEN_LARM;
 
-				if (dummy) (void)curse_weapon(FALSE, dummy);
+				if (dummy) (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[dummy]);
 			}
 			if (one_in_(2)) (void)curse_armor(creature_ptr);
 			break;

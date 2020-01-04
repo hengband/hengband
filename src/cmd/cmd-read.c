@@ -113,7 +113,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 				if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2)) k = INVEN_LARM;
 			}
 			else if (has_melee_weapon(creature_ptr, INVEN_LARM)) k = INVEN_LARM;
-			if (k && curse_weapon(FALSE, k)) ident = TRUE;
+			if (k && curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[k])) ident = TRUE;
 			break;
 		}
 

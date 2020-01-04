@@ -688,19 +688,6 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 
 
 /*!
- * @brief 武器呪縛処理のメインルーチン /
- * Curse the players weapon
- * @param force 無条件に呪縛を行うならばTRUE
- * @param slot 呪縛する武器の装備スロット
- * @return 実際に呪縛されたらTRUEを返す
- */
-bool curse_weapon(bool force, int slot)
-{
-	return curse_weapon_object(p_ptr, force, &p_ptr->inventory_list[slot]);
-}
-
-
-/*!
  * @brief 防具の錆止め防止処理
  * @param caster_ptr 錆止め実行者の参照ポインタ
  * @return ターン消費を要する処理を行ったならばTRUEを返す

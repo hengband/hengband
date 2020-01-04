@@ -7,7 +7,6 @@ extern void acquirement(POSITION y1, POSITION x1, int num, bool great, bool spec
 extern void acquire_chaos_weapon(player_type *creature_ptr);
 extern bool curse_armor(player_type *owner_ptr);
 extern bool curse_weapon_object(player_type *creature_ptr, bool force, object_type *o_ptr);
-extern bool curse_weapon(bool force, int slot);
 extern bool rustproof(player_type *caster_ptr);
 extern void brand_bolts(player_type *caster_ptr);
 extern bool perilous_secrets(player_type *user_ptr);
