@@ -102,7 +102,7 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 * @note
 * Note: ltcy and ltcx indicate "left top corner".
 */
-static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
+static void build_stores(floor_type *floor_ptr, POSITION ltcy, POSITION ltcx, int stores[], int n)
 {
 	int i;
 	POSITION y, x;
@@ -114,7 +114,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 		cur_ugbldg = &ugbldg[i];
 
 		/* Generate new room */
-		generate_room_floor(p_ptr->current_floor_ptr,
+		generate_room_floor(floor_ptr,
 			ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2,
 			ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2,
 			FALSE);
@@ -125,7 +125,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 		cur_ugbldg = &ugbldg[i];
 
 		/* Build an invulnerable rectangular building */
-		generate_fill_perm_bold(p_ptr->current_floor_ptr, 
+		generate_fill_perm_bold(floor_ptr, 
 			ltcy + cur_ugbldg->y0, ltcx + cur_ugbldg->x0,
 			ltcy + cur_ugbldg->y1, ltcx + cur_ugbldg->x1);
 
@@ -168,7 +168,7 @@ static void build_stores(POSITION ltcy, POSITION ltcx, int stores[], int n)
 		/* Clear previous contents, add a store door */
 		if (j < max_f_idx)
 		{
-			cave_set_feat(p_ptr->current_floor_ptr, ltcy + y, ltcx + x, j);
+			cave_set_feat(floor_ptr, ltcy + y, ltcx + x, j);
 
 			/* Init store */
 			store_init(NO_TOWN, stores[i]);
@@ -251,7 +251,7 @@ bool build_type16(floor_type *floor_ptr)
 		y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, FALSE);
 
 	/* Build stores */
-	build_stores(y1, x1, stores, n);
+	build_stores(floor_ptr, y1, x1, stores, n);
 
 	msg_print_wizard(CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
 
