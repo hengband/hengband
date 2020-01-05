@@ -366,17 +366,17 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			/* But we've also killed it */
 			if (dead)
 			{
-				hooked_roff(format(
-					_("が、すでに仇討ちは果たしている！", 
-					 (", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them")))));
+				hooked_roff(
+					_(format("が、すでに仇討ちは果たしている！"),
+						format(", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them"))));
 			}
 
 			/* Unavenged (ever) */
 			else
 			{
-				hooked_roff(format(
-					_("のに、まだ仇討ちを果たしていない。", 
-					 (", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain")))));
+				hooked_roff(
+					_(format("のに、まだ仇討ちを果たしていない。"),
+						format(", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain"))));
 			}
 
 			/* Start a new line */
@@ -1543,9 +1543,10 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[msex]));
 			hook_c_roff(TERM_YELLOW, format("%s", r_name+r_info[r_ptr->next_r_idx].name));
-			hooked_roff(format(
-				_(("に進化する。"), 
-				  (" when %s gets enugh experience.  ", wd_he[msex]))));
+
+			hooked_roff(
+				_(format("に進化する。"),
+					format(" when %s gets enough experience.  ", wd_he[msex])));
 		}
 		else if (!(r_ptr->flags1 & RF1_UNIQUE))
 		{
