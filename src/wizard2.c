@@ -148,18 +148,20 @@ static bool do_cmd_debug_spell(player_type *creature_ptr)
 
 /*!
  * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 実際にテレポートを行ったらTRUEを返す
  */
-static bool wiz_dimension_door(void)
+static bool wiz_dimension_door(player_type *caster_ptr)
 {
 	POSITION x = 0, y = 0;
-	if (!tgt_pt(p_ptr, &x, &y)) return FALSE;
-	teleport_player_to(p_ptr, y, x, TELEPORT_NONMAGICAL);
+	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
+	teleport_player_to(caster_ptr, y, x, TELEPORT_NONMAGICAL);
 	return (TRUE);
 }
 
 /*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void wiz_create_named_art(player_type *caster_ptr)
@@ -365,13 +367,13 @@ static void do_cmd_wiz_reset_class(player_type *creature_ptr)
  * @brief ウィザードモード用処理としてターゲット中の相手をテレポートバックする / Hack -- Teleport to the target
  * @return なし
  */
-static void do_cmd_wiz_bamf(void)
+static void do_cmd_wiz_bamf(player_type *caster_ptr)
 {
 	/* Must have a target */
 	if (!target_who) return;
 
 	/* Teleport to the target */
-	teleport_player_to(p_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
+	teleport_player_to(caster_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
 }
 
 
@@ -972,10 +974,10 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 }
 
 
-
 /*!
  * @brief 検査対象のアイテムを基準とした生成テストを行う /
  * Try to create an item again. Output some statistics.    -Bernd-
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 生成テストの基準となるアイテム情報の参照ポインタ
  * @return なし
  * The statistics are correct now.  We acquire a clean grid, and then
@@ -984,7 +986,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
  * counter flags to prevent weirdness.  We use the items to collect
  * statistics on item creation relative to the initial item.
  */
-static void wiz_statistics(object_type *o_ptr)
+static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 {
 	u32b i, matches, better, worse, other, correct;
 
@@ -1045,7 +1047,7 @@ static void wiz_statistics(object_type *o_ptr)
 
 		/* Let us know what we are doing */
 		msg_format("Creating a lot of %s items. Base level = %d.",
-					  quality, p_ptr->current_floor_ptr->dun_level);
+					  quality, caster_ptr->current_floor_ptr->dun_level);
 		msg_print(NULL);
 
 		/* Set counters to zero */
@@ -1263,7 +1265,7 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
 
 		if (ch == 's' || ch == 'S')
 		{
-			wiz_statistics(q_ptr);
+			wiz_statistics(creature_ptr, q_ptr);
 		}
 
 		if (ch == 'r' || ch == 'r')
@@ -1611,6 +1613,7 @@ static void do_cmd_wiz_zap_all(player_type *caster_ptr)
 /*!
  * @brief 指定された地点の地形IDを変更する /
  * Create desired feature
+ * @param creaturer_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void do_cmd_wiz_create_feature(player_type *creature_ptr)
@@ -1625,7 +1628,7 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 
 	if (!tgt_pt(creature_ptr, &x, &y)) return;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Default */
 	sprintf(tmp_val, "%d", prev_feat);
@@ -1796,7 +1799,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Teleport to target */
 	case 'b':
-		do_cmd_wiz_bamf();
+		do_cmd_wiz_bamf(creature_ptr);
 		break;
 
 	case 'B':
@@ -1820,7 +1823,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 	/* Dimension_door */
 	case 'D':
-		wiz_dimension_door();
+		wiz_dimension_door(creature_ptr);
 		break;
 
 	/* Edit character */
