@@ -367,8 +367,6 @@ extern bool new_player_spot(player_type *creature_ptr);
 
 #define MAX_DOOR_TYPES   3
 
-extern void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
-
 extern void place_bound_perm_wall(grid_type *g_ptr);
 
 extern bool is_known_trap(grid_type *g_ptr);

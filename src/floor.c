@@ -1923,3 +1923,24 @@ void compact_objects(floor_type *floor_ptr, int size)
 		floor_ptr->o_max--;
 	}
 }
+
+/*!
+ * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
+ * @param y トラップを配置したいマスの中心Y座標
+ * @param x トラップを配置したいマスの中心X座標
+ * @param yd Y方向の配置分散マス数
+ * @param xd X方向の配置分散マス数
+ * @param num 配置したいトラップの数
+ * @return なし
+ * @details
+ * Only really called by some of the "vault" routines.
+ */
+void vault_traps(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+{
+	int i;
+
+	for (i = 0; i < num; i++)
+	{
+		vault_trap_aux(floor_ptr, y, x, yd, xd);
+	}
+}

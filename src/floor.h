@@ -427,3 +427,4 @@ extern void place_object(floor_type *floor_ptr, POSITION y, POSITION x, BIT_FLAG
 extern void place_gold(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void compact_objects(floor_type *floor_ptr, int size);
+extern void vault_traps(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);

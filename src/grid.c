@@ -234,27 +234,6 @@ bool new_player_spot(player_type *creature_ptr)
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
- * @param y トラップを配置したいマスの中心Y座標
- * @param x トラップを配置したいマスの中心X座標
- * @param yd Y方向の配置分散マス数
- * @param xd X方向の配置分散マス数
- * @param num 配置したいトラップの数
- * @return なし
- * @details
- * Only really called by some of the "vault" routines.
- */
-void vault_traps(POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
-{
-	int i;
-
-	for (i = 0; i < num; i++)
-	{
-		vault_trap_aux(p_ptr->current_floor_ptr, y, x, yd, xd);
-	}
-}
-
-/*!
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
  * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
  * @return なし
