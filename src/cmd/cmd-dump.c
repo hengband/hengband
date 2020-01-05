@@ -4731,7 +4731,7 @@ if (!fff)
 		else
 			fprintf(fff, "     %3d 体の %s\n", (int)this_monster, r_name + r_ptr->name);
 #else
-		if (This < 2)
+		if (this_monster < 2)
 		{
 			if (my_strstr(r_name + r_ptr->name, "coins"))
 			{
@@ -4747,7 +4747,7 @@ if (!fff)
 			char ToPlural[80];
 			strcpy(ToPlural, (r_name + r_ptr->name));
 			plural_aux(ToPlural);
-			fprintf(fff, "     %d %s\n", This, ToPlural);
+			fprintf(fff, "     %d %s\n", this_monster, ToPlural);
 		}
 #endif
 		total += this_monster;
