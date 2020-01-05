@@ -6204,7 +6204,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 /*
  * List wanted monsters
  */
-static void do_cmd_knowledge_kubi(void)
+static void do_cmd_knowledge_kubi(player_type *creature_ptr)
 {
 	/* Open a new file */
 	FILE *fff;
@@ -6222,7 +6222,7 @@ static void do_cmd_knowledge_kubi(void)
 		bool listed = FALSE;
 
 		fprintf(fff, _("今日のターゲット : %s\n", "Today target : %s\n"),
-			(p_ptr->today_mon ? r_name + r_info[p_ptr->today_mon].name : _("不明", "unknown")));
+			(creature_ptr->today_mon ? r_name + r_info[creature_ptr->today_mon].name : _("不明", "unknown")));
 		fprintf(fff, "\n");
 		fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
 		fprintf(fff, "----------------------------------------------\n");
@@ -6957,7 +6957,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			do_cmd_knowledge_kill_count();
 			break;
 		case '6': /* wanted */
-			if (!vanilla_town) do_cmd_knowledge_kubi();
+			if (!vanilla_town) do_cmd_knowledge_kubi(creature_ptr);
 			break;
 		case '7': /* Pets */
 			do_cmd_knowledge_pets(creature_ptr);
