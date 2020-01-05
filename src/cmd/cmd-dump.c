@@ -6361,9 +6361,10 @@ static void do_cmd_knowledge_stat(player_type *creature_ptr)
 
 
 /*
+ * todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
  * Print all active quests
  */
-static void do_cmd_knowledge_quests_current(FILE *fff)
+static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff)
 {
 	char tmp_str[120];
 	char rand_tmp_str[120] = "\0";
@@ -6383,13 +6384,13 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 			continue;
 
 		/* Set the quest number temporary */
-		QUEST_IDX old_quest = p_ptr->current_floor_ptr->inside_quest;
+		QUEST_IDX old_quest = creature_ptr->current_floor_ptr->inside_quest;
 
 		/* Clear the text */
 		for (int j = 0; j < 10; j++) quest_text[j][0] = '\0';
 		quest_text_line = 0;
 
-		p_ptr->current_floor_ptr->inside_quest = i;
+		creature_ptr->current_floor_ptr->inside_quest = i;
 
 		/* Get the quest text */
 		init_flags = INIT_SHOW_TEXT;
@@ -6397,7 +6398,7 @@ static void do_cmd_knowledge_quests_current(FILE *fff)
 		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
-		p_ptr->current_floor_ptr->inside_quest = old_quest;
+		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 
 		/* No info from "silent" quests */
 		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
@@ -6668,7 +6669,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 /*
  * Print quest status of all active quests
  */
-static void do_cmd_knowledge_quests(void)
+static void do_cmd_knowledge_quests(player_type *creature_ptr)
 {
 	/* Open a new file */
 	FILE *fff;
@@ -6691,7 +6692,7 @@ static void do_cmd_knowledge_quests(void)
 	ang_sort(quest_num, &dummy, max_q_idx, ang_sort_comp_quest_num, ang_sort_swap_quest_num);
 
 	/* Dump Quest Information */
-	do_cmd_knowledge_quests_current(fff);
+	do_cmd_knowledge_quests_current(creature_ptr, fff);
 	fputc('\n', fff);
 	do_cmd_knowledge_quests_completed(fff, quest_num);
 	fputc('\n', fff);
@@ -6997,7 +6998,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			do_cmd_knowledge_dungeon();
 			break;
 		case 'h': /* Quests */
-			do_cmd_knowledge_quests();
+			do_cmd_knowledge_quests(creature_ptr);
 			break;
 		case 'i': /* Autopick */
 			do_cmd_knowledge_autopick();
@@ -7017,14 +7018,14 @@ void do_cmd_knowledge(player_type *creature_ptr)
 /*
  * Check on the status of an active quest
  */
-void do_cmd_checkquest(void)
+void do_cmd_checkquest(player_type *creature_ptr)
 {
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 
 	/* Quest info */
-	do_cmd_knowledge_quests();
+	do_cmd_knowledge_quests(creature_ptr);
 	screen_load();
 }
 

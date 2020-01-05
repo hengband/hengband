@@ -4178,7 +4178,7 @@ static void process_command(player_type *creature_ptr)
 		/* Show quest status -KMW- */
 		case KTRL('Q'):
 		{
-			do_cmd_checkquest();
+			do_cmd_checkquest(creature_ptr);
 			break;
 		}
 
