@@ -305,7 +305,7 @@ void stair_creation(player_type *caster_ptr)
 	if (!sf_ptr)
 	{
 		/* No floor id? -- Create now! */
-		caster_ptr->floor_id = get_new_floor_id();
+		caster_ptr->floor_id = get_new_floor_id(caster_ptr);
 		sf_ptr = get_sf_ptr(caster_ptr->floor_id);
 	}
 
@@ -352,7 +352,7 @@ void stair_creation(player_type *caster_ptr)
 	/* No old destination -- Get new one now */
 	else
 	{
-		dest_floor_id = get_new_floor_id();
+		dest_floor_id = get_new_floor_id(caster_ptr);
 
 		/* Fix it */
 		if (up)

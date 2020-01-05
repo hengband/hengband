@@ -444,12 +444,13 @@ QUEST_IDX random_quest_number(DEPTH level)
 
 /*!
  * @brief クエスト階層から離脱する際の処理
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void leave_quest_check(void)
+void leave_quest_check(player_type *player_ptr)
 {
 	/* Save quest number for dungeon pref file ($LEAVING_QUEST) */
-	leaving_quest = p_ptr->current_floor_ptr->inside_quest;
+	leaving_quest = player_ptr->current_floor_ptr->inside_quest;
 
 	/* Leaving an 'only once' quest marks it as failed */
 	if (leaving_quest)
@@ -460,7 +461,7 @@ void leave_quest_check(void)
 			(q_ptr->status == QUEST_STATUS_TAKEN))
 		{
 			q_ptr->status = QUEST_STATUS_FAILED;
-			q_ptr->complev = p_ptr->lev;
+			q_ptr->complev = player_ptr->lev;
 			update_playtime();
 			q_ptr->comptime = current_world_ptr->play_time;
 
@@ -469,7 +470,7 @@ void leave_quest_check(void)
 			{
 			case QUEST_TYPE_TOWER:
 				quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
-				quest[QUEST_TOWER1].complev = p_ptr->lev;
+				quest[QUEST_TOWER1].complev = player_ptr->lev;
 				break;
 			case QUEST_TYPE_FIND_ARTIFACT:
 				a_info[q_ptr->k_idx].gen_flags &= ~(TRG_QUESTITEM);
@@ -478,18 +479,18 @@ void leave_quest_check(void)
 				r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
 
 				/* Floor of random quest will be blocked */
-				prepare_change_floor_mode(CFM_NO_RETURN);
+				prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
 				break;
 			}
 
 			/* Record finishing a quest */
 			if (q_ptr->type == QUEST_TYPE_RANDOM)
 			{
-				if (record_rand_quest) exe_write_diary(p_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+				if (record_rand_quest) exe_write_diary(player_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
 			}
 			else
 			{
-				if (record_fix_quest) exe_write_diary(p_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
+				if (record_fix_quest) exe_write_diary(player_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
 			}
 		}
 	}
@@ -520,15 +521,16 @@ void leave_tower_check(void)
 
 /*!
  * @brief クエスト入り口にプレイヤーが乗った際の処理 / Do building commands
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void do_cmd_quest(void)
+void do_cmd_quest(player_type *player_ptr)
 {
-	if (p_ptr->wild_mode) return;
+	if (player_ptr->wild_mode) return;
 
-	take_turn(p_ptr, 100);
+	take_turn(player_ptr, 100);
 
-	if (!cave_have_flag_bold(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, FF_QUEST_ENTER))
+	if (!cave_have_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_QUEST_ENTER))
 	{
 		msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
 		return;
@@ -537,20 +539,20 @@ void do_cmd_quest(void)
 	{
 		msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
 		if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
-		if ((p_ptr->pseikaku == SEIKAKU_COMBAT) || (p_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("『とにかく入ってみようぜぇ。』", ""));
-		else if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
+		else if (player_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
 
 		/* Player enters a new quest */
-		p_ptr->oldpy = 0;
-		p_ptr->oldpx = 0;
+		player_ptr->oldpy = 0;
+		player_ptr->oldpx = 0;
 
-		leave_quest_check();
+		leave_quest_check(player_ptr);
 
-		if (quest[p_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) p_ptr->current_floor_ptr->dun_level = 1;
-		p_ptr->current_floor_ptr->inside_quest = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
+		if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) player_ptr->current_floor_ptr->dun_level = 1;
+		player_ptr->current_floor_ptr->inside_quest = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
 
-		p_ptr->leaving = TRUE;
+		player_ptr->leaving = TRUE;
 	}
 }
 

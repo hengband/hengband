@@ -486,7 +486,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 #ifdef JP       /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
 		if (!cheat_save)
-			if (!save_player()) msg_print("セーブ失敗！");
+			if (!save_player(creature_ptr)) msg_print("セーブ失敗！");
 #endif
 
 		sound(SOUND_DEATH);

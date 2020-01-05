@@ -43,9 +43,9 @@ extern bool show_file(bool show_version, concptr name, concptr what, int line, B
 extern void do_cmd_help(void);
 extern void process_player_name(bool sf);
 extern void get_name(player_type *creature_ptr);
-extern void do_cmd_save_game(int is_autosave);
+extern void do_cmd_save_game(player_type *creature_ptr, int is_autosave);
 extern void do_cmd_save_and_exit(void);
-extern void exit_game_panic(void);
+extern void exit_game_panic(player_type *creature_ptr);
 extern void signals_ignore_tstp(void);
 extern void signals_handle_tstp(void);
 extern void signals_init(void);

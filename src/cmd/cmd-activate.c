@@ -1619,7 +1619,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		default:
 			if (get_check(_("この階を去りますか？", "Leave this level? ")))
 			{
-				if (autosave_l) do_cmd_save_game(TRUE);
+				if (autosave_l) do_cmd_save_game(user_ptr, TRUE);
 				user_ptr->leaving = TRUE;
 			}
 		}

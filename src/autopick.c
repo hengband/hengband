@@ -5971,8 +5971,9 @@ static int analyze_move_key(text_body_type *tb, int skey)
 
 /*
  * In-game editor of Object Auto-picker/Destoryer
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_edit_autopick(void)
+void do_cmd_edit_autopick(player_type *player_ptr)
 {
 	static int cx_save = 0;
 	static int cy_save = 0;
@@ -6014,7 +6015,7 @@ void do_cmd_edit_autopick(void)
 	/* Autosave */
 	if (current_world_ptr->game_turn > old_autosave_turn + 100L)
 	{
-		do_cmd_save_game(TRUE);
+		do_cmd_save_game(player_ptr, TRUE);
 		old_autosave_turn = current_world_ptr->game_turn;
 	}
 

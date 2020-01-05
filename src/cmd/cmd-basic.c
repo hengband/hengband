@@ -218,7 +218,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		else
 			msg_print(_("上の階に登った。", "You enter the up staircase."));
 
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 
@@ -262,13 +262,13 @@ void do_cmd_go_up(player_type *creature_ptr)
 
 	take_turn(creature_ptr, 100);
 
-	if (autosave_l) do_cmd_save_game(TRUE);
+	if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 	/* For a random quest */
 	if (creature_ptr->current_floor_ptr->inside_quest &&
 	    quest[creature_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
 	{
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = 0;
 	}
@@ -277,7 +277,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 	if (creature_ptr->current_floor_ptr->inside_quest &&
 	    quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 	{
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 		creature_ptr->current_floor_ptr->dun_level = 0;
@@ -291,14 +291,14 @@ void do_cmd_go_up(player_type *creature_ptr)
 		if (have_flag(f_ptr->flags, FF_SHAFT))
 		{
 			/* Create a way back */
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
 
 			up_num = 2;
 		}
 		else
 		{
 			/* Create a way back */
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP);
 
 			up_num = 1;
 		}
@@ -350,7 +350,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 	/* Quest entrance */
 	if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 	{
-		do_cmd_quest();
+		do_cmd_quest(creature_ptr);
 	}
 
 	/* Quest down stairs */
@@ -364,7 +364,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		else
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
 
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 		leave_tower_check();
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
@@ -421,12 +421,12 @@ void do_cmd_go_down(player_type *creature_ptr)
 			 * Clear all saved floors
 			 * and create a first saved floor
 			 */
-			prepare_change_floor_mode(CFM_FIRST_FLOOR);
+			prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
 		}
 
 		take_turn(creature_ptr, 100);
 
-		if (autosave_l) do_cmd_save_game(TRUE);
+		if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 		/* Go down */
 		if (have_flag(f_ptr->flags, FF_SHAFT)) down_num += 2;
@@ -469,19 +469,19 @@ void do_cmd_go_down(player_type *creature_ptr)
 
 		if (fall_trap)
 		{
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 		}
 		else
 		{
 			if (have_flag(f_ptr->flags, FF_SHAFT))
 			{
 				/* Create a way back */
-				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
+				prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
 			}
 			else
 			{
 				/* Create a way back */
-				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN);
+				prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN);
 			}
 		}
 	}

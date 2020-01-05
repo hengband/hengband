@@ -1108,9 +1108,10 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 /*!
  * @brief 現在フロアの書き込み /
  * Write the current dungeon (new method)
- * @return なし
+ * @player_ptr プレーヤーへの参照ポインタ
+ * @return 保存に成功したらTRUE
  */
-static bool wr_dungeon(void)
+static bool wr_dungeon(player_type *player_ptr)
 {
 	saved_floor_type *cur_sf_ptr;
 	int i;
@@ -1180,7 +1181,7 @@ static bool wr_dungeon(void)
 		if (!sf_ptr->floor_id) continue;
 
 		/* Load temporal saved floor file */
-		if (load_floor(sf_ptr, (SLF_SECOND | SLF_NO_KILL)))
+		if (load_floor(player_ptr, sf_ptr, (SLF_SECOND | SLF_NO_KILL)))
 		{
 			/* Mark success */
 			wr_byte(0);
@@ -1196,7 +1197,7 @@ static bool wr_dungeon(void)
 	}
 
 	/* Restore current floor */
-	if (!load_floor(cur_sf_ptr, (SLF_SECOND))) return FALSE;
+	if (!load_floor(player_ptr, cur_sf_ptr, (SLF_SECOND))) return FALSE;
 
 	/* Success */
 	return TRUE;
@@ -1206,9 +1207,10 @@ static bool wr_dungeon(void)
 /*!
  * @brief セーブデータの書き込み /
  * Actually write a save-file
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-static bool wr_savefile_new(void)
+static bool wr_savefile_new(player_type *player_ptr)
 {
 	int        i, j;
 
@@ -1477,7 +1479,7 @@ static bool wr_savefile_new(void)
 	if (!p_ptr->is_dead)
 	{
 		/* Dump the dungeon */
-		if (!wr_dungeon()) return FALSE;
+		if (!wr_dungeon(player_ptr)) return FALSE;
 
 		/* Dump the ghost */
 		wr_ghost();
@@ -1505,11 +1507,12 @@ static bool wr_savefile_new(void)
 /*!
  * @brief セーブデータ書き込みのサブルーチン /
  * Medium level player saver
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  * @details
  * Angband 2.8.0 will use "fd" instead of "fff" if possible
  */
-static bool save_player_aux(char *name)
+static bool save_player_aux(player_type *player_ptr, char *name)
 {
 	bool ok = FALSE;
 	int fd = -1;
@@ -1549,7 +1552,7 @@ static bool save_player_aux(char *name)
 		if (fff)
 		{
 			/* Write the savefile */
-			if (wr_savefile_new()) ok = TRUE;
+			if (wr_savefile_new(player_ptr)) ok = TRUE;
 
 			/* Attempt to close it */
 			if (my_fclose(fff)) ok = FALSE;
@@ -1583,9 +1586,10 @@ static bool save_player_aux(char *name)
 /*!
  * @brief セーブデータ書き込みのメインルーチン /
  * Attempt to save the player in a savefile
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  */
-bool save_player(void)
+bool save_player(player_type *player_ptr)
 {
 	bool result = FALSE;
 
@@ -1620,7 +1624,7 @@ bool save_player(void)
 	update_playtime();
 
 	/* Attempt to save the player */
-	if (save_player_aux(safe))
+	if (save_player_aux(player_ptr, safe))
 	{
 		char temp[1024];
 

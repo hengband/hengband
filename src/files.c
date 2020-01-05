@@ -5964,11 +5964,12 @@ void get_name(player_type *creature_ptr)
 /*!
  * @brief セーブするコマンドのメインルーチン
  * Save the game
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param is_autosave オートセーブ中の処理ならばTRUE
  * @return なし
  * @details
  */
-void do_cmd_save_game(int is_autosave)
+void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 {
 	/* Autosaves do not disturb */
 	if (is_autosave)
@@ -5995,7 +5996,7 @@ void do_cmd_save_game(int is_autosave)
 	signals_ignore_tstp();
 
 	/* Save the player */
-	if (save_player())
+	if (save_player(creature_ptr))
 	{
 		prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
 	}
@@ -6494,6 +6495,7 @@ void show_info(player_type *creature_ptr)
 /*!
  * @brief 異常発生時のゲーム緊急終了処理 /
  * Handle abrupt death of the visual system
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -6503,7 +6505,7 @@ void show_info(player_type *creature_ptr)
  * save file so that player can see tombstone when restart.
  * </pre>
  */
-void exit_game_panic(void)
+void exit_game_panic(player_type *creature_ptr)
 {
 	/* If nothing important has happened, just quit */
 	if (!current_world_ptr->character_generated || current_world_ptr->character_saved) quit(_("緊急事態", "panic"));
@@ -6530,7 +6532,7 @@ void exit_game_panic(void)
 	(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
 	/* Panic save, or get worried */
-	if (!save_player()) quit(_("緊急セーブ失敗！", "panic save failed!"));
+	if (!save_player(creature_ptr)) quit(_("緊急セーブ失敗！", "panic save failed!"));
 
 	/* Successful panic save */
 	quit(_("緊急セーブ成功！", "panic save succeeded!"));
@@ -7053,7 +7055,7 @@ static void handle_signal_abort(int sig)
 	signals_ignore_tstp();
 
 	/* Attempt to save */
-	if (save_player())
+	if (save_player(p_ptr))
 	{
 		Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ成功！", "Panic save succeeded!"));
 	}

@@ -1413,18 +1413,18 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 	/* Accept request */
 	msg_format("You jump to dungeon level %d.", command_arg);
 
-	if (autosave_l) do_cmd_save_game(TRUE);
+	if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 	/* Change level */
 	creature_ptr->current_floor_ptr->dun_level = command_arg;
 
-	prepare_change_floor_mode(CFM_RAND_PLACE);
+	prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
 
 	if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
 	creature_ptr->current_floor_ptr->inside_arena = FALSE;
 	creature_ptr->wild_mode = FALSE;
 
-	leave_quest_check();
+	leave_quest_check(creature_ptr);
 
 	if (record_stair) exe_write_diary(creature_ptr, NIKKI_WIZ_TELE, 0, NULL);
 
@@ -1438,7 +1438,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 	 * Clear all saved floors
 	 * and create a first saved floor
 	 */
-	prepare_change_floor_mode(CFM_FIRST_FLOOR);
+	prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
 	creature_ptr->leaving = TRUE;
 }
 
