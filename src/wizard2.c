@@ -981,10 +981,8 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 	object_type	*q_ptr;
 
 	concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
-
 	concptr p = "Enter number of items to roll: ";
 	char tmp_val[80];
-
 
 	/* Mega-Hack -- allow multiple artifacts */
 	if (object_is_fixed_artifact(o_ptr)) a_info[o_ptr->name1].cur_num = 0;
