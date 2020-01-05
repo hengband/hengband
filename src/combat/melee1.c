@@ -1005,7 +1005,7 @@ static int monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
  */
-static int check_hit(int power, DEPTH level, int stun)
+static int check_hit(player_type *target_ptr, int power, DEPTH level, int stun)
 {
 	int i, k, ac;
 
@@ -1014,8 +1014,8 @@ static int check_hit(int power, DEPTH level, int stun)
 	if (k < 10) return (k < 5);
 	i = (power + (level * 3));
 
-	ac = p_ptr->ac + p_ptr->to_a;
-	if (p_ptr->special_attack & ATTACK_SUIKEN) ac += (p_ptr->lev * 2);
+	ac = target_ptr->ac + target_ptr->to_a;
+	if (target_ptr->special_attack & ATTACK_SUIKEN) ac += (target_ptr->lev * 2);
 
 	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
 	return (FALSE);
@@ -2453,7 +2453,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		ac = target_ptr->ac + target_ptr->to_a;
 
 		/* Monster hits player */
-		if (!effect || check_hit(power, rlev, MON_STUNNED(m_ptr)))
+		if (!effect || check_hit(target_ptr, power, rlev, MON_STUNNED(m_ptr)))
 		{
 			/* Always disturbing */
 			disturb(target_ptr, TRUE, TRUE);
