@@ -913,6 +913,7 @@ static void do_cmd_erase_nikki(void)
 
 /*!
  * @brief 日記コマンド
+ * @param crerature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_nikki(player_type *creature_ptr)
@@ -3135,11 +3136,17 @@ static concptr monster_group_char[] =
 
 
 /*
- * Build a list of monster indexes in the given group. Return the number
- * of monsters in the group.
+ * todo 引数と戻り値について追記求む
+ * Build a list of monster indexes in the given group.
  *
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
+
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param grp_cur ？？？
+ * @param mon_idx[] ？？？
+ * @param mode ？？？
+ * @return The number of monsters in the group
  */
 static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 {
@@ -4004,7 +4011,9 @@ void (*screendump_aux)(void) = NULL;
 
 
 /*
- * Hack -- save a screen dump to a file
+ * Save a screen dump to a file
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
 void do_cmd_save_screen(player_type *creature_ptr)
 {
@@ -4600,6 +4609,7 @@ static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 /*!
  * @brief 現在のペットを表示するコマンドのメインルーチン /
  * Display current pets
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void do_cmd_knowledge_pets(player_type *creature_ptr)
@@ -5215,7 +5225,13 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 
 
 /*
+ * todo 引数の詳細について加筆求む
  * Display known monsters.
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param need_redraw 画面の再描画が必要な時TRUE
+ * @param visual_only ？？？
+ * @param direct_r_idx モンスターID
+ * @return なし
  */
 static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
@@ -6203,6 +6219,8 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 
 /*
  * List wanted monsters
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
 static void do_cmd_knowledge_kubi(player_type *creature_ptr)
 {
@@ -6363,6 +6381,8 @@ static void do_cmd_knowledge_stat(player_type *creature_ptr)
 /*
  * todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
  * Print all active quests
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
 static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff)
 {
@@ -6596,6 +6616,10 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, floor_type *floor_ptr, IDX q_
 
 /*
  * Print all finished quests
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param fff セーブファイル (展開済？)
+ * @param quest_num[] 受注したことのあるクエスト群
+ * @return なし
  */
 void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
@@ -6618,7 +6642,11 @@ void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUE
 
 /*
  * Print all failed quests
- */
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param fff セーブファイル (展開済？)
+ * @param quest_num[] 受注したことのあるクエスト群
+ * @return なし
+*/
 void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
 	fprintf(fff, _("《失敗したクエスト》\n", "< Failed Quest >\n"));
@@ -6668,6 +6696,8 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
 /*
  * Print quest status of all active quests
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
 static void do_cmd_knowledge_quests(player_type *creature_ptr)
 {
@@ -7017,6 +7047,8 @@ void do_cmd_knowledge(player_type *creature_ptr)
 
 /*
  * Check on the status of an active quest
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
 void do_cmd_checkquest(player_type *creature_ptr)
 {
@@ -7032,6 +7064,8 @@ void do_cmd_checkquest(player_type *creature_ptr)
 
 /*
  * Display the time and date
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
 void do_cmd_time(player_type *creature_ptr)
 {

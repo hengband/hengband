@@ -5744,6 +5744,7 @@ void prevent_turn_overflow(void)
 /*!
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>

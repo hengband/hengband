@@ -280,6 +280,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
 
 /*!
  * @brief キャラクタダンプを作って BUFに保存
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
@@ -447,6 +448,7 @@ concptr make_screen_dump(void)
 
 /*!
  * @brief スコア転送処理のメインルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
 errr report_score(player_type *creature_ptr)

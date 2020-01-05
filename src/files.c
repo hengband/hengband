@@ -4466,6 +4466,7 @@ static void dump_aux_class_special(FILE *fff)
 
 /*!
  * @brief クエスト情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
@@ -4976,6 +4977,7 @@ static void dump_aux_home_museum(FILE *fff)
 /*!
  * @brief ダンプ出力のメインルーチン
  * Output the character dump to a file
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return エラーコード
  */
@@ -5015,6 +5017,7 @@ errr make_character_dump(player_type *creature_ptr, FILE *fff)
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する
  * Hack -- Dump a character description file
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name 出力ファイル名
  * @return エラーコード
  * @details
@@ -6346,6 +6349,7 @@ void print_tomb(void)
 /*!
  * @brief 死亡、引退時の簡易ステータス表示 /
  * Display some character info
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void show_info(player_type *creature_ptr)
