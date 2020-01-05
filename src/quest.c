@@ -449,50 +449,45 @@ QUEST_IDX random_quest_number(DEPTH level)
  */
 void leave_quest_check(player_type *player_ptr)
 {
-	/* Save quest number for dungeon pref file ($LEAVING_QUEST) */
 	leaving_quest = player_ptr->current_floor_ptr->inside_quest;
+	if (!leaving_quest) return;
 
-	/* Leaving an 'only once' quest marks it as failed */
-	if (leaving_quest)
+	quest_type* const q_ptr = &quest[leaving_quest];
+	bool is_one_time_quest = ((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QUEST_TYPE_RANDOM)) &&
+		(q_ptr->status == QUEST_STATUS_TAKEN);
+	if (is_one_time_quest) return;
+
+	q_ptr->status = QUEST_STATUS_FAILED;
+	q_ptr->complev = player_ptr->lev;
+	update_playtime();
+	q_ptr->comptime = current_world_ptr->play_time;
+
+	/* Additional settings */
+	switch (q_ptr->type)
 	{
-		quest_type* const q_ptr = &quest[leaving_quest];
+	case QUEST_TYPE_TOWER:
+		quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
+		quest[QUEST_TOWER1].complev = player_ptr->lev;
+		break;
+	case QUEST_TYPE_FIND_ARTIFACT:
+		a_info[q_ptr->k_idx].gen_flags &= ~(TRG_QUESTITEM);
+		break;
+	case QUEST_TYPE_RANDOM:
+		r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
 
-		if (((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QUEST_TYPE_RANDOM)) &&
-			(q_ptr->status == QUEST_STATUS_TAKEN))
-		{
-			q_ptr->status = QUEST_STATUS_FAILED;
-			q_ptr->complev = player_ptr->lev;
-			update_playtime();
-			q_ptr->comptime = current_world_ptr->play_time;
+		/* Floor of random quest will be blocked */
+		prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
+		break;
+	}
 
-			/* Additional settings */
-			switch (q_ptr->type)
-			{
-			case QUEST_TYPE_TOWER:
-				quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
-				quest[QUEST_TOWER1].complev = player_ptr->lev;
-				break;
-			case QUEST_TYPE_FIND_ARTIFACT:
-				a_info[q_ptr->k_idx].gen_flags &= ~(TRG_QUESTITEM);
-				break;
-			case QUEST_TYPE_RANDOM:
-				r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
-
-				/* Floor of random quest will be blocked */
-				prepare_change_floor_mode(player_ptr, CFM_NO_RETURN);
-				break;
-			}
-
-			/* Record finishing a quest */
-			if (q_ptr->type == QUEST_TYPE_RANDOM)
-			{
-				if (record_rand_quest) exe_write_diary(player_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
-			}
-			else
-			{
-				if (record_fix_quest) exe_write_diary(player_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
-			}
-		}
+	/* Record finishing a quest */
+	if (q_ptr->type == QUEST_TYPE_RANDOM)
+	{
+		if (record_rand_quest) exe_write_diary(player_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+	}
+	else
+	{
+		if (record_fix_quest) exe_write_diary(player_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
 	}
 }
 
