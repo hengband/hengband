@@ -995,10 +995,10 @@ static bool cave_gen(floor_type *floor_ptr)
  * @brief 闘技場用のアリーナ地形を作成する / Builds the arena after it is entered -KMW-
  * @return なし
  */
-static void build_arena(floor_type *floor_ptr)
+static void build_arena(floor_type *floor_ptr, POSITION *start_y, POSITION *start_x)
 {
 	POSITION yval, y_height, y_depth, xval, x_left, x_right;
-	register int i, j;
+	POSITION i, j;
 
 	yval = SCREEN_HGT / 2;
 	xval = SCREEN_WID / 2;
@@ -1032,20 +1032,19 @@ static void build_arena(floor_type *floor_ptr)
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	place_extra_perm_bold(floor_ptr, y_height+6, x_left+18);
-	floor_ptr->grid_array[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_depth-6, x_left+18);
-	floor_ptr->grid_array[y_depth-6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_height+6, x_right-18);
-	floor_ptr->grid_array[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_depth-6, x_right-18);
-	floor_ptr->grid_array[y_depth-6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
+	place_extra_perm_bold(floor_ptr, y_height + 6, x_left + 18);
+	floor_ptr->grid_array[y_height + 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
+	place_extra_perm_bold(floor_ptr, y_depth - 6, x_left + 18);
+	floor_ptr->grid_array[y_depth - 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
+	place_extra_perm_bold(floor_ptr, y_height + 6, x_right - 18);
+	floor_ptr->grid_array[y_height + 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
+	place_extra_perm_bold(floor_ptr, y_depth - 6, x_right - 18);
+	floor_ptr->grid_array[y_depth - 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
 
-	i = y_height + 5;
-	j = xval;
-	floor_ptr->grid_array[i][j].feat = f_tag_to_index("ARENA_GATE");
-	floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
-	player_place(p_ptr, i, j);
+	*start_y = y_height + 5;
+	*start_x = xval;
+	floor_ptr->grid_array[*start_y][*start_x].feat = f_tag_to_index("ARENA_GATE");
+	floor_ptr->grid_array[*start_y][*start_x].info |= (CAVE_GLOW | CAVE_MARK);
 }
 
 /*!
@@ -1085,7 +1084,8 @@ static void generate_challenge_arena(floor_type *floor_ptr, player_type *challan
 		}
 	}
 
-	build_arena(floor_ptr);
+	build_arena(floor_ptr, &y, &x);
+	player_place(challanger_ptr, y, x);
 
 	if(!place_monster_aux(0, challanger_ptr->y + 5, challanger_ptr->x, arena_info[challanger_ptr->arena_number].r_idx, (PM_NO_KAGE | PM_NO_PET)))
 	{
