@@ -4006,7 +4006,7 @@ void (*screendump_aux)(void) = NULL;
 /*
  * Hack -- save a screen dump to a file
  */
-void do_cmd_save_screen(void)
+void do_cmd_save_screen(player_type *creature_ptr)
 {
 	bool old_use_graphics = use_graphics;
 	bool html_dump = FALSE;
@@ -4036,14 +4036,14 @@ void do_cmd_save_screen(void)
 	{
 		use_graphics = FALSE;
 		reset_visuals();
-		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff();
 	}
 
 	if (html_dump)
 	{
 		do_cmd_save_screen_html();
-		do_cmd_redraw(p_ptr);
+		do_cmd_redraw(creature_ptr);
 	}
 
 	/* Do we use a special screendump function ? */
@@ -4133,7 +4133,7 @@ void do_cmd_save_screen(void)
 	{
 		use_graphics = TRUE;
 		reset_visuals();
-		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff();
 	}
 }
