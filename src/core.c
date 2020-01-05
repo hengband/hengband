@@ -5083,7 +5083,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		if (!player_ptr->playing || player_ptr->is_dead) break;
 
 		/* Process all of the monsters */
-		process_monsters();
+		process_monsters(player_ptr->current_floor_ptr);
 
 		handle_stuff();
 

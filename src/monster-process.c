@@ -2454,7 +2454,7 @@ void process_monster(MONSTER_IDX m_idx)
  * changes (flags, attacks, spells), we induce a redraw of the monster\n
  * recall window.\n
  */
-void process_monsters(void)
+void process_monsters(floor_type *floor_ptr)
 {
 	MONSTER_IDX i;
 	POSITION fx, fy;
@@ -2484,7 +2484,7 @@ void process_monsters(void)
 	SPEED speed;
 
 	/* Clear monster fighting indicator */
-	p_ptr->current_floor_ptr->monster_noise = FALSE;
+	floor_ptr->monster_noise = FALSE;
 
 	/* Memorize old race */
 	old_monster_race_idx = p_ptr->monster_race_idx;
@@ -2516,9 +2516,9 @@ void process_monsters(void)
 
 
 	/* Process the monsters (backwards) */
-	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
+	for (i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		m_ptr = &floor_ptr->m_list[i];
 		r_ptr = &r_info[m_ptr->r_idx];
 
 		/* Handle "leaving" */
@@ -2570,14 +2570,14 @@ void process_monsters(void)
 			test = TRUE;
 		}
 
-#if 0 /* (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].when == p_ptr->current_floor_ptr->grid_array[fy][fx].when) is always FALSE... */
+#if 0 /* (floor_ptr->grid_array[p_ptr->y][p_ptr->x].when == floor_ptr->grid_array[fy][fx].when) is always FALSE... */
 		/* Hack -- Monsters can "smell" the player from far away */
 		/* Note that most monsters have "aaf" of "20" or so */
 		else if (!(m_ptr->mflag2 & MFLAG2_NOFLOW) &&
 			cave_have_flag_bold(p_ptr->y, p_ptr->x, FF_MOVE) &&
-			(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].when == p_ptr->current_floor_ptr->grid_array[fy][fx].when) &&
-			(p_ptr->current_floor_ptr->grid_array[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
-			(p_ptr->current_floor_ptr->grid_array[fy][fx].dist < r_ptr->aaf))
+			(floor_ptr->grid_array[p_ptr->y][p_ptr->x].when == floor_ptr->grid_array[fy][fx].when) &&
+			(floor_ptr->grid_array[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
+			(floor_ptr->grid_array[fy][fx].dist < r_ptr->aaf))
 		{
 			/* We can "smell" the player */
 			test = TRUE;
