@@ -409,11 +409,11 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	char note_level_buf[40];
 	QUEST_IDX q_idx;
 
-	static bool disable_nikki = FALSE;
+	static bool disable_diary = FALSE;
 
 	extract_day_hour_min(&day, &hour, &min);
 
-	if (disable_nikki) return(-1);
+	if (disable_diary) return(-1);
 
 	if (type == NIKKI_FIX_QUEST_C ||
 	    type == NIKKI_FIX_QUEST_F ||
@@ -449,7 +449,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	{
 		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporally."), buf);
 		msg_format(NULL);
-		disable_nikki=TRUE;
+		disable_diary=TRUE;
 		return (-1);
 	}
 
@@ -756,7 +756,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
  */
 static void display_diary(player_type *creature_ptr)
 {
-	char nikki_title[256];
+	char diary_title[256];
 	GAME_TEXT file_name[MAX_NLEN];
 	char buf[1024];
 	char tmp[80];
@@ -837,13 +837,13 @@ static void display_diary(player_type *creature_ptr)
 	else strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-2)+1]);
 
 #ifdef JP
-	sprintf(nikki_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", creature_ptr->name, tmp);
+	sprintf(diary_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", creature_ptr->name, tmp);
 #else
-	sprintf(nikki_title, "Legend of %s %s '%s'", ap_ptr->title, creature_ptr->name, tmp);
+	sprintf(diary_title, "Legend of %s %s '%s'", ap_ptr->title, creature_ptr->name, tmp);
 #endif
 
 	/* Display the file contents */
-	show_file(FALSE, buf, nikki_title, -1, 0);
+	show_file(FALSE, buf, diary_title, -1, 0);
 }
 
 /*!
@@ -887,7 +887,7 @@ static void do_cmd_last_get(player_type *creaute_ptr)
  * @brief ファイル中の全日記記録を消去する /
  * @return なし
  */
-static void do_cmd_erase_nikki(void)
+static void do_cmd_erase_diary(void)
 {
 	GAME_TEXT file_name[MAX_NLEN];
 	char buf[256];
@@ -916,7 +916,7 @@ static void do_cmd_erase_nikki(void)
  * @param crerature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void do_cmd_nikki(player_type *creature_ptr)
+void do_cmd_diary(player_type *creature_ptr)
 {
 	int i;
 
@@ -960,7 +960,7 @@ void do_cmd_nikki(player_type *creature_ptr)
 			do_cmd_last_get(creature_ptr);
 			break;
 		case '4':
-			do_cmd_erase_nikki();
+			do_cmd_erase_diary();
 			break;
 		case 'r': case 'R':
 			screen_load();
