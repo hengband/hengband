@@ -96,6 +96,10 @@ static FILE *auto_dump_stream;
 static concptr auto_dump_mark;
 static int auto_dump_line_num;
 
+static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx);
+static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx);
+static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level);
+
 // todo *抹殺* したい…
 bool write_level;
 
@@ -2039,10 +2043,6 @@ static void print_visuals_menu(concptr choice_msg)
 	prt(format("コマンド: %s", choice_msg ? choice_msg : _("", "")), 15, 0);
 }
 
-// todo これはなんぞや？
-static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX direct_r_idx);
-static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx);
-static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level);
 
 /*
  * Interact with "visuals"
@@ -2345,7 +2345,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 					need_redraw = TRUE;
 					break;
 				case 'v':
-					do_cmd_knowledge_monsters(&need_redraw, TRUE, r);
+					do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, r);
 					Term_clear();
 					print_visuals_menu(choice_msg);
 					break;
@@ -2556,7 +2556,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 
 		/* Modify monster attr/chars (visual mode) */
 		case '7':
-			do_cmd_knowledge_monsters(&need_redraw, TRUE, -1);
+			do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, -1);
 			break;
 
 		/* Modify object attr/chars (visual mode) */
@@ -3141,7 +3141,7 @@ static concptr monster_group_char[] =
  * mode & 0x01 : check for non-empty group
  * mode & 0x02 : visual operation only
  */
-static IDX collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
+static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 {
 	IDX mon_cnt = 0;
 	int dummy_why;
@@ -3191,7 +3191,7 @@ static IDX collect_monsters(IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
 			for (j = 0; j < MAX_KUBI; j++)
 			{
 				if (current_world_ptr->bounty_r_idx[j] == i || current_world_ptr->bounty_r_idx[j] - 10000 == i ||
-					(p_ptr->today_mon && p_ptr->today_mon == i))
+					(creature_ptr->today_mon && creature_ptr->today_mon == i))
 				{
 					wanted = TRUE;
 					break;
@@ -5217,7 +5217,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 /*
  * Display known monsters.
  */
-static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX direct_r_idx)
+static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
 	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
@@ -5250,7 +5250,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 			if (len > max) max = len;
 
 			/* See if any monsters are known */
-			if ((monster_group_char[i] == ((char *) -1L)) || collect_monsters(i, mon_idx, mode))
+			if ((monster_group_char[i] == ((char *) -1L)) || collect_monsters(creature_ptr, i, mon_idx, mode))
 			{
 				/* Build a list of groups with known monsters */
 				grp_idx[grp_cnt++] = i;
@@ -5328,7 +5328,7 @@ static void do_cmd_knowledge_monsters(bool *need_redraw, bool visual_only, IDX d
 				old_grp_cur = grp_cur;
 
 				/* Get a list of monsters in the current group */
-				mon_cnt = collect_monsters(grp_idx[grp_cur], mon_idx, mode);
+				mon_cnt = collect_monsters(creature_ptr, grp_idx[grp_cur], mon_idx, mode);
 			}
 
 			/* Scroll monster list */
@@ -6951,7 +6951,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			do_cmd_knowledge_uniques();
 			break;
 		case '4': /* Monsters */
-			do_cmd_knowledge_monsters(&need_redraw, FALSE, -1);
+			do_cmd_knowledge_monsters(creature_ptr, &need_redraw, FALSE, -1);
 			break;
 		case '5': /* Kill count  */
 			do_cmd_knowledge_kill_count();
