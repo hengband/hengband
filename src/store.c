@@ -5638,7 +5638,7 @@ static void store_process_command(player_type *client_ptr)
 
 		case '|':
 		{
-			do_cmd_nikki();
+			do_cmd_nikki(client_ptr);
 			break;
 		}
 

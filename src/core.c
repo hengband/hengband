@@ -4224,7 +4224,7 @@ static void process_command(player_type *creature_ptr)
 
 		case '|':
 		{
-			do_cmd_nikki();
+			do_cmd_nikki(creature_ptr);
 			break;
 		}
 

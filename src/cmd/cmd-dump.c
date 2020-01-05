@@ -911,7 +911,7 @@ static void do_cmd_erase_nikki(void)
  * @brief 日記コマンド
  * @return なし
  */
-void do_cmd_nikki(void)
+void do_cmd_nikki(player_type *creature_ptr)
 {
 	int i;
 
@@ -946,13 +946,13 @@ void do_cmd_nikki(void)
 		switch (i)
 		{
 		case '1':
-			display_diary(p_ptr);
+			display_diary(creature_ptr);
 			break;
 		case '2':
-			add_diary_note(p_ptr);
+			add_diary_note(creature_ptr);
 			break;
 		case '3':
-			do_cmd_last_get(p_ptr);
+			do_cmd_last_get(creature_ptr);
 			break;
 		case '4':
 			do_cmd_erase_nikki();
