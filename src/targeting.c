@@ -1096,7 +1096,7 @@ bool target_set(BIT_FLAGS mode)
 			/* Set forcus */
 			change_panel_xy(y, x);
 
-			if (!(mode & TARGET_LOOK)) prt_path(y, x);
+			if (!(mode & TARGET_LOOK)) prt_path(p_ptr->current_floor_ptr, y, x);
 
 			/* Access */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
@@ -1333,7 +1333,7 @@ bool target_set(BIT_FLAGS mode)
 		{
 			bool move_fast = FALSE;
 
-			if (!(mode & TARGET_LOOK)) prt_path(y, x);
+			if (!(mode & TARGET_LOOK)) prt_path(p_ptr->current_floor_ptr, y, x);
 
 			/* Access */
 			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];

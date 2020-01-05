@@ -3775,7 +3775,7 @@ void move_cursor_relative(int row, int col)
 /*
  * print project path
  */
-void prt_path(POSITION y, POSITION x)
+void prt_path(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	int i;
 	int path_n;
@@ -3787,7 +3787,7 @@ void prt_path(POSITION y, POSITION x)
 		return;
 
 	/* Get projection path */
-	path_n = project_path(p_ptr->current_floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), p_ptr->y, p_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
+	path_n = project_path(floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), p_ptr->y, p_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
 
 	p_ptr->redraw |= (PR_MAP);
 	handle_stuff();
@@ -3797,7 +3797,7 @@ void prt_path(POSITION y, POSITION x)
 	{
 		POSITION ny = GRID_Y(path_g[i]);
 		POSITION nx = GRID_X(path_g[i]);
-		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[ny][nx];
+		grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
 
 		if (panel_contains(ny, nx))
 		{
@@ -3807,7 +3807,7 @@ void prt_path(POSITION y, POSITION x)
 			TERM_COLOR ta = default_color;
 			char tc = '*';
 
-			if (g_ptr->m_idx && p_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)
+			if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml)
 			{
 				/* Determine what is there */
 				map_info(ny, nx, &a, &c, &ta, &tc);
