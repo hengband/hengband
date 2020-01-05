@@ -69,7 +69,7 @@ extern void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *f
 extern void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[]);
 extern void do_cmd_knowledge(player_type *creature_ptr);
 extern void do_cmd_checkquest(player_type *creature_ptr);
-extern void do_cmd_time(void);
+extern void do_cmd_time(player_type *creature_ptr);
 
 /*
  * Forward declare

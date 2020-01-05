@@ -7033,7 +7033,7 @@ void do_cmd_checkquest(player_type *creature_ptr)
 /*
  * Display the time and date
  */
-void do_cmd_time(void)
+void do_cmd_time(player_type *creature_ptr)
 {
 	int day, hour, min;
 	extract_day_hour_min(&day, &hour, &min);
@@ -7055,7 +7055,7 @@ void do_cmd_time(void)
 
 	/* Find the path */
 	char buf[1024];
-	if (!randint0(10) || p_ptr->image)
+	if (!randint0(10) || creature_ptr->image)
 	{
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
 	}

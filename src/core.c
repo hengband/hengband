@@ -4203,7 +4203,7 @@ static void process_command(player_type *creature_ptr)
 
 		case KTRL('T'):
 		{
-			do_cmd_time();
+			do_cmd_time(creature_ptr);
 			break;
 		}
 
