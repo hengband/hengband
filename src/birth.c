@@ -315,7 +315,7 @@ static concptr class_jouhou[MAX_CLASS] =
 
 "A Rogue is a character that prefers to live by his cunning, but is capable of fighting his way out of a tight spot.  Rogues are good at locating hidden traps and doors and are the masters of disarming traps and picking locks.  A rogue has a high stealth allowing him to sneak around many creatures without having to fight, or to get in a telling first blow.  A rogue may also backstab a fleeing monster.  Intelligence determines a Rogue's spell casting ability.",
 
-"A Ranger is a combination of a warrior and a mage who has developed a special affinity for the natural world around him.  He is a good fighter and also good about a missile weapon such as a bow.  A ranger has a good stealth, good perception, good searching, a good saving throw and is good with magical devices.  Intelligence determines a Ranger's spell casting ability.",
+"A Ranger is a combination of a warrior and a mage who has developed a special affinity for the natural world.  He or she is a good fighter and also good with missile weapons such as bows.  A ranger has good stealth, good perception, good searching, good saving throws and is good with magical devices.  Intelligence determines a Ranger's spell casting ability.",
 
 "A Paladin is a combination of a warrior and a priest.  Paladins are very good fighters, but not very good at missile weapons.  A paladin lacks much in the way of abilities.  He is poor at stealth, perception, searching, and magical devices but has a decent saving throw due to his divine alliance.  Wisdom determines a Paladin's success at praying to his deity.",
 

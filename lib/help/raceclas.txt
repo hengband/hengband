@@ -561,7 +561,7 @@ command("U"/"O").
     developed a special affinity for the natural world around him.  He
     is a good fighter and also good about a missile weapon such as a
     bow.  A ranger has a good stealth, good perception, good
-    searching, a good saving throw and is good with magical devices.
+    searching, good saving throw and is good with magical devices.
     Intelligence determines a Ranger's spell casting ability.
 
     All rangers are trained in Nature magic, and all Nature spells are
