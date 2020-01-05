@@ -105,6 +105,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 			}
 		}
 	}
+
 	return detect;
 }
 
@@ -127,6 +128,7 @@ bool detect_traps(player_type *caster_ptr, POSITION range, bool known)
 	{
 		msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
 	}
+
 	return detect;
 }
 
@@ -146,6 +148,7 @@ bool detect_doors(POSITION range)
 	{
 		msg_print(_("ドアの存在を感じとった！", "You sense the presence of doors!"));
 	}
+
 	return detect;
 }
 
@@ -165,6 +168,7 @@ bool detect_stairs(POSITION range)
 	{
 		msg_print(_("階段の存在を感じとった！", "You sense the presence of stairs!"));
 	}
+
 	return detect;
 }
 
@@ -184,6 +188,7 @@ bool detect_treasure(POSITION range)
 	{
 		msg_print(_("埋蔵された財宝の存在を感じとった！", "You sense the presence of buried treasure!"));
 	}
+
 	return detect;
 }
 
@@ -236,6 +241,7 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 	{
 		detect = TRUE;
 	}
+
 	return (detect);
 }
 
@@ -289,6 +295,7 @@ bool detect_objects_normal(POSITION range)
 	{
 		detect = TRUE;
 	}
+
 	return (detect);
 }
 
@@ -366,12 +373,12 @@ bool detect_objects_magic(POSITION range)
 			detect = TRUE;
 		}
 	}
+
 	if (detect)
 	{
 		msg_print(_("魔法のアイテムの存在を感じとった！", "You sense the presence of magic objects!"));
 	}
 
-	/* Return result */
 	return (detect);
 }
 
@@ -419,6 +426,7 @@ bool detect_monsters_normal(POSITION range)
 	{
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
 	}
+
 	return (flag);
 }
 
@@ -473,6 +481,7 @@ bool detect_monsters_invis(POSITION range)
 	{
 		msg_print(_("透明な生物の存在を感じとった！", "You sense the presence of invisible creatures!"));
 	}
+
 	return (flag);
 }
 
@@ -525,10 +534,12 @@ bool detect_monsters_evil(POSITION range)
 			flag = TRUE;
 		}
 	}
+
 	if (flag)
 	{
 		msg_print(_("邪悪なる生物の存在を感じとった！", "You sense the presence of evil creatures!"));
 	}
+
 	return (flag);
 }
 
@@ -574,10 +585,12 @@ bool detect_monsters_nonliving(POSITION range)
 			flag = TRUE;
 		}
 	}
+
 	if (flag)
 	{
 		msg_print(_("自然でないモンスターの存在を感じた！", "You sense the presence of unnatural beings!"));
 	}
+
 	return (flag);
 }
 
@@ -624,10 +637,12 @@ bool detect_monsters_mind(POSITION range)
 			flag = TRUE;
 		}
 	}
+
 	if (flag)
 	{
 		msg_print(_("殺気を感じとった！", "You sense the presence of someone's mind!"));
 	}
+
 	return (flag);
 }
 
@@ -682,6 +697,7 @@ bool detect_monsters_string(POSITION range, concptr Match)
 	{
 		msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
 	}
+
 	return (flag);
 }
 
@@ -752,6 +768,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 		msg_format(_("%sの存在を感じとった！", "You sense the presence of %s!"), desc_monsters);
 		msg_print(NULL);
 	}
+
 	return (flag);
 }
 
@@ -835,6 +852,7 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
 		/* Jump directly to the target monster */
 		if (project(caster_ptr, 0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
 	}
+
 	return (obvious);
 }
 
@@ -1104,6 +1122,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 		{
 			msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
 		}
+
 		if (MON_CSLEEP(m_ptr))
 		{
 			(void)set_monster_csleep(m_idx, 0);
@@ -1112,6 +1131,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 				msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 			}
 		}
+
 		if (is_friendly(m_ptr) && !is_pet(m_ptr))
 		{
 			if (see_m)
@@ -1120,6 +1140,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 			}
 			set_hostile(m_ptr);
 		}
+
 		if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
 	}
 
@@ -1402,6 +1423,7 @@ bool probing(player_type *caster_ptr)
 		chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
 		msg_print(_("これで全部です。", "That's all."));
 	}
+
 	return (probe);
 }
 
@@ -1421,11 +1443,13 @@ void discharge_minion(player_type *caster_ptr)
 		if (!m_ptr->r_idx || !is_pet(m_ptr)) continue;
 		if (m_ptr->nickname) okay = FALSE;
 	}
+
 	if (!okay || caster_ptr->riding)
 	{
 		if (!get_check(_("本当に全ペットを爆破しますか？", "You will blast all pets. Are you sure? ")))
 			return;
 	}
+
 	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		HIT_POINT dam;
@@ -2657,11 +2681,12 @@ void call_chaos(player_type *caster_ptr)
  */
 bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 {
-	int i = 0;
 	BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 
-	do
+	bool is_first_curse = TRUE;
+	while (is_first_curse || one_in_(3) && !stop_ty)
 	{
+		is_first_curse = FALSE;
 		switch (randint1(34))
 		{
 		case 28: case 29:
@@ -2747,17 +2772,17 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 
 			if (!one_in_(6)) break;
 		default:
-			while (i < A_MAX)
+			for (int i = 0; i < A_MAX; i++)
 			{
-				do
+				bool is_first_dec_stat = TRUE;
+				while (is_first_dec_stat || one_in_(2))
 				{
+					is_first_dec_stat = FALSE;
 					(void)do_dec_stat(target_ptr, i);
-				} while (one_in_(2));
-
-				i++;
+				}
 			}
 		}
-	} while (one_in_(3) && !stop_ty);
+	}
 
 	return stop_ty;
 }
@@ -3426,8 +3451,6 @@ void wild_magic(player_type *caster_ptr, int spell)
 		break;
 	}
 	}
-
-	return;
 }
 
 
@@ -3831,8 +3854,7 @@ void cast_shuffle(player_type *caster_ptr)
 		die = (randint1(110)) + plev / 5;
 	else
 		die = randint1(120);
-
-
+	
 	if (vir)
 	{
 		if (caster_ptr->virtues[vir - 1] > 0)
