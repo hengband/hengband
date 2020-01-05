@@ -3827,16 +3827,6 @@ static void do_cmd_knowledge_inven(player_type *creature_ptr)
 
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
-	TERM_LEN y, x;
-	int i;
-
-	TERM_COLOR a = 0, old_a = 0;
-	char c = ' ';
-
-	FILE *fff, *tmpfff;
-	char buf[2048];
-
-	int yomikomu = 0;
 	concptr tags[4] = {
 		"HEADER_START:",
 		"HEADER_END:",
@@ -3855,13 +3845,13 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	};
 
 	TERM_LEN wid, hgt;
-
 	Term_get_size(&wid, &hgt);
 
 	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Append to the file */
+	FILE *fff;
 	fff = my_fopen(filename, "w");
 
 	if (!fff)
@@ -3876,22 +3866,24 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	}
 
 	if (message) screen_save();
+	char buf[2048];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
+	FILE *tmpfff;
 	tmpfff = my_fopen(buf, "r");
 	if (!tmpfff)
 	{
-		for (i = 0; html_head[i]; i++)
+		for (int i = 0; html_head[i]; i++)
 			fputs(html_head[i], fff);
 	}
 	else
 	{
-		yomikomu = 0;
+		bool is_first_line = TRUE;
 		while (!my_fgets(tmpfff, buf, sizeof(buf)))
 		{
-			if (!yomikomu)
+			if (is_first_line)
 			{
 				if (strncmp(buf, tags[0], strlen(tags[0])) == 0)
-					yomikomu = 1;
+					is_first_line = FALSE;
 			}
 			else
 			{
@@ -3903,13 +3895,15 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	}
 
 	/* Dump the screen */
-	for (y = 0; y < hgt; y++)
+	for (TERM_LEN y = 0; y < hgt; y++)
 	{
 		/* Start the row */
 		if (y != 0) fprintf(fff, "\n");
 
 		/* Dump each row */
-		for (x = 0; x < wid - 1; x++)
+		TERM_COLOR a = 0, old_a = 0;
+		char c = ' ';
+		for (TERM_LEN x = 0; x < wid - 1; x++)
 		{
 			concptr cc = NULL;
 			/* Get the attr/char */
@@ -3948,19 +3942,19 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 
 	if (!tmpfff)
 	{
-		for (i = 0; html_foot[i]; i++)
+		for (int i = 0; html_foot[i]; i++)
 			fputs(html_foot[i], fff);
 	}
 	else
 	{
 		rewind(tmpfff);
-		yomikomu = 0;
+		bool is_first_line = TRUE;
 		while (!my_fgets(tmpfff, buf, sizeof(buf)))
 		{
-			if (!yomikomu)
+			if (is_first_line)
 			{
 				if (strncmp(buf, tags[2], strlen(tags[2])) == 0)
-					yomikomu = 1;
+					is_first_line = FALSE;
 			}
 			else
 			{
@@ -7072,11 +7066,6 @@ void do_cmd_time(player_type *creature_ptr)
 	int day, hour, min;
 	extract_day_hour_min(&day, &hour, &min);
 
-	int full = hour * 100 + min;
-	int start = 9999;
-	int end = -9999;
-	int num = 0;
-
 	char desc[1024];
 	strcpy(desc, _("変な時刻だ。", "It is a strange time."));
 
@@ -7105,6 +7094,10 @@ void do_cmd_time(player_type *creature_ptr)
 	if (!fff) return;
 
 	/* Find this time */
+	int full = hour * 100 + min;
+	int start = 9999;
+	int end = -9999;
+	int num = 0;
 	while (!my_fgets(fff, buf, sizeof(buf)))
 	{
 		/* Ignore comments */
