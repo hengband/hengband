@@ -59,6 +59,7 @@
 
 /*!
  * @brief プレイヤー周辺の地形を感知する
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @param flag 特定地形ID
  * @param known 地形から危険フラグを外すならTRUE
@@ -110,6 +111,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 
 /*!
  * @brief プレイヤー周辺のトラップを感知する / Detect all traps on current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @return 効力があった場合TRUEを返す
@@ -131,6 +133,7 @@ bool detect_traps(player_type *caster_ptr, POSITION range, bool known)
 
 /*!
  * @brief プレイヤー周辺のドアを感知する / Detect all doors on current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -149,6 +152,7 @@ bool detect_doors(POSITION range)
 
 /*!
  * @brief プレイヤー周辺の階段を感知する / Detect all stairs on current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -167,6 +171,7 @@ bool detect_stairs(POSITION range)
 
 /*!
  * @brief プレイヤー周辺の地形財宝を感知する / Detect any treasure on the current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -237,6 +242,7 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 
 /*!
  * @brief 通常のアイテムオブジェクトを感知する / Detect all "normal" objects on the current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -289,6 +295,7 @@ bool detect_objects_normal(POSITION range)
 
 /*!
  * @brief 魔法効果のあるのアイテムオブジェクトを感知する / Detect all "magic" objects on the current panel.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  * @details
@@ -371,6 +378,7 @@ bool detect_objects_magic(POSITION range)
 
 /*!
  * @brief 一般のモンスターを感知する / Detect all "normal" monsters on the current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -417,6 +425,7 @@ bool detect_monsters_normal(POSITION range)
 
 /*!
  * @brief 不可視のモンスターを感知する / Detect all "invisible" monsters around the player
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -469,6 +478,7 @@ bool detect_monsters_invis(POSITION range)
 
 /*!
  * @brief 邪悪なモンスターを感知する / Detect all "evil" monsters on current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -524,6 +534,7 @@ bool detect_monsters_evil(POSITION range)
 
 /*!
  * @brief 無生命のモンスターを感知する(アンデッド、悪魔系を含む) / Detect all "nonliving", "undead" or "demonic" monsters on current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -572,6 +583,7 @@ bool detect_monsters_nonliving(POSITION range)
 
 /*!
  * @brief 精神のあるモンスターを感知する / Detect all monsters it has mind on current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -622,6 +634,7 @@ bool detect_monsters_mind(POSITION range)
 
 /*!
  * @brief 該当シンボルのモンスターを感知する / Detect all (string) monsters on current panel
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @param Match 対応シンボルの混じったモンスター文字列(複数指定化)
  * @return 効力があった場合TRUEを返す
@@ -674,6 +687,7 @@ bool detect_monsters_string(POSITION range, concptr Match)
 
 /*!
  * @brief flags3に対応するモンスターを感知する / A "generic" detect monsters routine, tagged to flags3
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @param match_flag 感知フラグ
  * @return 効力があった場合TRUEを返す
@@ -722,6 +736,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 			flag = TRUE;
 		}
 	}
+
 	if (flag)
 	{
 		switch (match_flag)
@@ -743,6 +758,7 @@ bool detect_monsters_xxx(POSITION range, u32b match_flag)
 
 /*!
  * @brief 全感知処理 / Detect everything
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param range 効果範囲
  * @return 効力があった場合TRUEを返す
  */
@@ -825,6 +841,7 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
 
 /*!
  * @brief 視界内モンスターを加速する処理 / Speed monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool speed_monsters(void)
@@ -832,8 +849,10 @@ bool speed_monsters(void)
 	return (project_all_los(p_ptr, GF_OLD_SPEED, p_ptr->lev));
 }
 
+
 /*!
  * @brief 視界内モンスターを加速する処理 / Slow monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool slow_monsters(int power)
@@ -841,8 +860,10 @@ bool slow_monsters(int power)
 	return (project_all_los(p_ptr, GF_OLD_SLOW, power));
 }
 
+
 /*!
  * @brief 視界内モンスターを眠らせる処理 / Sleep monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool sleep_monsters(int power)
@@ -850,14 +871,17 @@ bool sleep_monsters(int power)
 	return (project_all_los(p_ptr, GF_OLD_SLEEP, power));
 }
 
+
 /*!
  * @brief 視界内の邪悪なモンスターをテレポート・アウェイさせる処理 / Banish evil monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool banish_evil(int dist)
 {
 	return (project_all_los(p_ptr, GF_AWAY_EVIL, dist));
 }
+
 
 /*!
  * @brief 視界内のアンデッド・モンスターを恐怖させる処理 / Turn undead
@@ -871,8 +895,10 @@ bool turn_undead(player_type *caster_ptr)
 	return tester;
 }
 
+
 /*!
  * @brief 視界内のアンデッド・モンスターにダメージを与える処理 / Dispel undead monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_undead(HIT_POINT dam)
@@ -883,8 +909,10 @@ bool dispel_undead(HIT_POINT dam)
 	return tester;
 }
 
+
 /*!
  * @brief 視界内の邪悪なモンスターにダメージを与える処理 / Dispel evil monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_evil(HIT_POINT dam)
@@ -892,8 +920,10 @@ bool dispel_evil(HIT_POINT dam)
 	return (project_all_los(p_ptr, GF_DISP_EVIL, dam));
 }
 
+
 /*!
  * @brief 視界内の善良なモンスターにダメージを与える処理 / Dispel good monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_good(HIT_POINT dam)
@@ -901,14 +931,17 @@ bool dispel_good(HIT_POINT dam)
 	return (project_all_los(p_ptr, GF_DISP_GOOD, dam));
 }
 
+
 /*!
  * @brief 視界内のあらゆるモンスターにダメージを与える処理 / Dispel all monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_monsters(HIT_POINT dam)
 {
 	return (project_all_los(p_ptr, GF_DISP_ALL, dam));
 }
+
 
 bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 {
@@ -924,6 +957,7 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	return ident;
 }
 
+
 bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 {
 	msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
@@ -933,11 +967,14 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 	{
 		(void)take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
 	}
+
 	return TRUE;
 }
 
+
 /*!
  * @brief 視界内の生命のあるモンスターにダメージを与える処理 / Dispel 'living' monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_living(HIT_POINT dam)
@@ -945,8 +982,10 @@ bool dispel_living(HIT_POINT dam)
 	return (project_all_los(p_ptr, GF_DISP_LIVING, dam));
 }
 
+
 /*!
  * @brief 視界内の悪魔系モンスターにダメージを与える処理 / Dispel 'living' monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool dispel_demons(HIT_POINT dam)
@@ -954,8 +993,10 @@ bool dispel_demons(HIT_POINT dam)
 	return (project_all_los(p_ptr, GF_DISP_DEMON, dam));
 }
 
+
 /*!
  * @brief 視界内のモンスターに「聖戦」効果を与える処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
 bool crusade(player_type *caster_ptr)
@@ -963,8 +1004,10 @@ bool crusade(player_type *caster_ptr)
 	return (project_all_los(caster_ptr, GF_CRUSADE, caster_ptr->lev*4));
 }
 
+
 /*!
  * @brief 視界内モンスターを怒らせる処理 / Wake up all monsters, and speed up "los" monsters.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
  * @return なし
  */
@@ -1362,6 +1405,7 @@ bool probing(player_type *caster_ptr)
 	return (probe);
 }
 
+
 /*!
  * @brief ペット爆破処理 /
  * @return なし
@@ -1422,6 +1466,7 @@ void discharge_minion(player_type *caster_ptr)
 
 /*!
  * @brief 部屋全体を照らすサブルーチン
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -1497,9 +1542,9 @@ static void cave_temp_room_lite(void)
 }
 
 
-
 /*!
  * @brief 部屋全体を暗くするサブルーチン
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -1617,6 +1662,7 @@ static int next_to_open(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, PO
 	return (MAX(len, blen));
 }
 
+
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
  * @param cy Y座標
@@ -1644,6 +1690,7 @@ static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITIO
 
 /*!
  * @brief 部屋内にある一点の周囲に該当する地形数かいくつあるかをグローバル変数tmp_pos.nに返す / Aux function -- see below
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 部屋内のy座標1点
  * @param x 部屋内のx座標1点
  * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
@@ -1694,7 +1741,9 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 	tmp_pos.n++;
 }
 
+
 /*!
+ * todo このシンタックスシュガーは不要
  * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
  * @param y 指定Y座標
  * @param x 指定X座標
@@ -1704,6 +1753,7 @@ static bool cave_pass_lite_bold(POSITION y, POSITION x)
 {
 	return cave_los_bold(p_ptr->current_floor_ptr, y, x);
 }
+
 
 /*!
  * @brief 部屋内にある一点の周囲がいくつ光を通すかをグローバル変数tmp_pos.nに返す / Aux function -- see below
@@ -1716,8 +1766,10 @@ static void cave_temp_lite_room_aux(POSITION y, POSITION x)
 	cave_temp_room_aux(y, x, FALSE, cave_pass_lite_bold);
 }
 
+
 /*!
  * @brief 指定のマスが光を通さず射線のみを通すかを返す。 / Aux function -- see below
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
@@ -1742,6 +1794,7 @@ static void cave_temp_unlite_room_aux(POSITION y, POSITION x)
 
 /*!
  * @brief 指定された部屋内を照らす / Illuminate any room containing the given location.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y1 指定Y座標
  * @param x1 指定X座標
  * @return なし
@@ -1787,6 +1840,7 @@ void lite_room(POSITION y1, POSITION x1)
 
 /*!
  * @brief 指定された部屋内を暗くする / Darken all rooms containing the given location
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y1 指定Y座標
  * @param x1 指定X座標
  * @return なし
@@ -1824,6 +1878,13 @@ void unlite_room(POSITION y1, POSITION x1)
 	cave_temp_room_unlite();
 }
 
+
+/*!
+ * @brief スターライトの効果を発生させる
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param magic 魔法による効果であればTRUE、スターライトの杖による効果であればFALSE
+ * @return 常にTRUE
+ */
 bool starlight(bool magic)
 {
 	HIT_POINT num = damroll(5, 3);
@@ -1835,6 +1896,7 @@ bool starlight(bool magic)
 	{
 		msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
 	}
+
 	for (k = 0; k < num; k++)
 	{
 		attempts = 1000;
@@ -1849,13 +1911,14 @@ bool starlight(bool magic)
 		project(p_ptr, 0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
 			(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
 	}
+
 	return TRUE;
 }
 
 
-
 /*!
  * @brief プレイヤー位置を中心にLITE_WEAK属性を通じた照明処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 威力
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
@@ -1887,6 +1950,7 @@ bool lite_area(HIT_POINT dam, POSITION rad)
 
 /*!
  * @brief プレイヤー位置を中心にLITE_DARK属性を通じた消灯処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 威力
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
@@ -1910,9 +1974,9 @@ bool unlite_area(HIT_POINT dam, POSITION rad)
 }
 
 
-
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -1948,8 +2012,10 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 	return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
 
+
 /*!
 * @brief ブレス系スペルの発動 / Cast a breath spell
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param typ 効果属性
 * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
 * @param dam 威力
@@ -1970,6 +2036,7 @@ bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
 
 /*!
  * @brief ロケット系スペルの発動(詳細な差は確認中) / Cast a ball spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -2005,6 +2072,7 @@ bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
 
 /*!
  * @brief ボール(ハイド)系スペルの発動 / Cast a ball spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -2041,6 +2109,7 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
 
 /*!
  * @brief メテオ系スペルの発動 / Cast a meteor spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who スぺル詠唱者のモンスターID(0=プレイヤー)
  * @param typ 効果属性
  * @param dam 威力
@@ -2068,6 +2137,7 @@ bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POI
 
 /*!
  * @brief ブラスト系スペルの発動 / Cast a blast spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dd 威力ダイス数
@@ -2132,6 +2202,7 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
 
 /*!
  * @brief モンスターとの位置交換処理 / Switch position with a monster.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2196,6 +2267,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 
 /*!
  * @brief 指定方向に飛び道具を飛ばす（フラグ任意指定） / Hack -- apply a "project()" in a direction (or at the target)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -2227,6 +2299,7 @@ bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POI
 
 /*!
  * @brief ボルト系スペルの発動 / Cast a bolt spell.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -2247,6 +2320,7 @@ bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 
 /*!
  * @brief ビーム系スペルの発動 / Cast a beam spell.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
@@ -2266,6 +2340,7 @@ bool fire_beam(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 
 /*!
  * @brief 確率に応じたボルト系/ビーム系スペルの発動 / Cast a bolt spell, or rarely, a beam spell.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param prob ビーム化する確率(%)
  * @param typ 効果属性
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
@@ -2289,8 +2364,10 @@ bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 	}
 }
 
+
 /*!
  * @brief LITE_WEAK属性による光源ビーム処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
@@ -2301,8 +2378,10 @@ bool lite_line(DIRECTION dir, HIT_POINT dam)
 	return (project_hook(p_ptr, GF_LITE_WEAK, dir, dam, flg));
 }
 
+
 /*!
  * @brief 衰弱ボルト処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
@@ -2313,8 +2392,10 @@ bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam)
 	return (project_hook(p_ptr, GF_HYPODYNAMIA, dir, dam, flg));
 }
 
+
 /*!
  * @brief 岩石溶解処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
@@ -2325,8 +2406,10 @@ bool wall_to_mud(DIRECTION dir, HIT_POINT dam)
 	return (project_hook(p_ptr, GF_KILL_WALL, dir, dam, flg));
 }
 
+
 /*!
  * @brief 魔法の施錠処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2336,8 +2419,10 @@ bool wizard_lock(DIRECTION dir)
 	return (project_hook(p_ptr, GF_JAM_DOOR, dir, 20 + randint1(30), flg));
 }
 
+
 /*!
  * @brief ドア破壊処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2347,8 +2432,10 @@ bool destroy_door(DIRECTION dir)
 	return (project_hook(p_ptr, GF_KILL_DOOR, dir, 0, flg));
 }
 
+
 /*!
  * @brief トラップ解除処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2361,6 +2448,7 @@ bool disarm_trap(DIRECTION dir)
 
 /*!
  * @brief 死の光線処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(効力はplev*200)
  * @return 作用が実際にあった場合TRUEを返す
@@ -2371,8 +2459,10 @@ bool death_ray(DIRECTION dir, PLAYER_LEVEL plev)
 	return (project_hook(p_ptr, GF_DEATH_RAY, dir, plev * 200, flg));
 }
 
+
 /*!
  * @brief モンスター用テレポート処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param distance 移動距離
  * @return 作用が実際にあった場合TRUEを返す
@@ -2383,8 +2473,10 @@ bool teleport_monster(DIRECTION dir, int distance)
 	return (project_hook(p_ptr, GF_AWAY_ALL, dir, distance, flg));
 }
 
+
 /*!
  * @brief ドア生成処理(プレイヤー中心に周囲1マス) / Hooks -- affect adjacent grids (radius 1 ball attack)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool door_creation(player_type *caster_ptr, POSITION y, POSITION x)
@@ -2393,8 +2485,10 @@ bool door_creation(player_type *caster_ptr, POSITION y, POSITION x)
 	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_DOOR, flg, -1));
 }
 
+
 /*!
  * @brief トラップ生成処理(起点から周囲1マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 起点Y座標
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
@@ -2405,8 +2499,10 @@ bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x)
 	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
 }
 
+
 /*!
  * @brief 森林生成処理(プレイヤー中心に周囲1マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
@@ -2415,8 +2511,10 @@ bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
 	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TREE, flg, -1));
 }
 
+
 /*!
  * @brief 魔法のルーン生成処理(プレイヤー中心に周囲1マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool glyph_creation(player_type *caster_ptr, POSITION y, POSITION x)
@@ -2425,8 +2523,10 @@ bool glyph_creation(player_type *caster_ptr, POSITION y, POSITION x)
 	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_GLYPH, flg, -1));
 }
 
+
 /*!
  * @brief 壁生成処理(プレイヤー中心に周囲1マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool wall_stone(void)
@@ -2438,8 +2538,10 @@ bool wall_stone(void)
 	return dummy;
 }
 
+
 /*!
  * @brief ドア破壊処理(プレイヤー中心に周囲1マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool destroy_doors_touch(void)
@@ -2448,8 +2550,10 @@ bool destroy_doors_touch(void)
 	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_DOOR, flg, -1));
 }
 
+
 /*!
  * @brief トラップ解除処理(プレイヤー中心に周囲1マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool disarm_traps_touch(void)
@@ -2458,8 +2562,10 @@ bool disarm_traps_touch(void)
 	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_TRAP, flg, -1));
 }
 
+
 /*!
  * @brief スリープモンスター処理(プレイヤー中心に周囲1マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool sleep_monsters_touch(void)
@@ -2471,6 +2577,7 @@ bool sleep_monsters_touch(void)
 
 /*!
  * @brief 死者復活処理(起点より周囲5マス)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 術者モンスターID(0ならばプレイヤー)
  * @param y 起点Y座標
  * @param x 起点X座標
@@ -2481,6 +2588,7 @@ bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
 	BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
 	return (project(p_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
 }
+
 
 /*!
  * @brief 混沌招来処理
@@ -2534,8 +2642,10 @@ void call_chaos(player_type *caster_ptr)
 	}
 }
 
+
 /*!
  * @brief TY_CURSE処理発動 / Activate the evil Topi Ylinen curse
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param stop_ty 再帰処理停止フラグ
  * @param count 発動回数
  * @return 作用が実際にあった場合TRUEを返す
@@ -2586,6 +2696,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 				project(target_ptr, 0, 7, target_ptr->y, target_ptr->x, 50, GF_KILL_WALL, flg, -1);
 				take_hit(target_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"), -1);
 			}
+
 			if (!one_in_(6)) break;
 		case 1: case 2: case 3: case 16: case 17:
 			aggravate_monsters(0);
@@ -2614,6 +2725,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 					set_paralyzed(target_ptr, target_ptr->paralyzed + randint1(13));
 				stop_ty = TRUE;
 			}
+
 			if (!one_in_(6)) break;
 		case 21: case 22: case 23:
 			(void)do_dec_stat(target_ptr, randint0(6));
@@ -2632,6 +2744,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 				stop_ty = TRUE;
 				break;
 			}
+
 			if (!one_in_(6)) break;
 		default:
 			while (i < A_MAX)
@@ -2639,20 +2752,20 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 				do
 				{
 					(void)do_dec_stat(target_ptr, i);
-				}
-				while (one_in_(2));
+				} while (one_in_(2));
 
 				i++;
 			}
 		}
-	}
-	while (one_in_(3) && !stop_ty);
+	} while (one_in_(3) && !stop_ty);
 
 	return stop_ty;
 }
 
+
 /*!
  * @brief HI_SUMMON(上級召喚)処理発動
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 召喚位置Y座標
  * @param x 召喚位置X座標
  * @param can_pet プレイヤーのペットとなる可能性があるならばTRUEにする
@@ -2739,8 +2852,10 @@ int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 	return count;
 }
 
+
 /*!
  * @brief 周辺破壊効果(プレイヤー中心)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 void wall_breaker(player_type *caster_ptr)
@@ -2789,6 +2904,7 @@ void wall_breaker(player_type *caster_ptr)
 
 /*!
  * @brief パニック・モンスター効果(プレイヤー視界範囲内) / Confuse monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2800,6 +2916,7 @@ bool confuse_monsters(HIT_POINT dam)
 
 /*!
  * @brief チャーム・モンスター効果(プレイヤー視界範囲内) / Charm monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2811,6 +2928,7 @@ bool charm_monsters(HIT_POINT dam)
 
 /*!
  * @brief 動物魅了効果(プレイヤー視界範囲内) / Charm Animals
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2822,6 +2940,7 @@ bool charm_animals(HIT_POINT dam)
 
 /*!
  * @brief モンスター朦朧効果(プレイヤー視界範囲内) / Stun monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2833,6 +2952,7 @@ bool stun_monsters(HIT_POINT dam)
 
 /*!
  * @brief モンスター停止効果(プレイヤー視界範囲内) / Stasis monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2844,6 +2964,7 @@ bool stasis_monsters(HIT_POINT dam)
 
 /*!
  * @brief モンスター精神攻撃効果(プレイヤー視界範囲内) / Mindblast monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2855,6 +2976,7 @@ bool mindblast_monsters(HIT_POINT dam)
 
 /*!
  * @brief モンスター追放効果(プレイヤー視界範囲内) / Banish all monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dist 効力（距離）
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2866,6 +2988,7 @@ bool banish_monsters(int dist)
 
 /*!
  * @brief 邪悪退散効果(プレイヤー視界範囲内) / Turn evil
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2877,6 +3000,7 @@ bool turn_evil(HIT_POINT dam)
 
 /*!
  * @brief 全モンスター退散効果(プレイヤー視界範囲内) / Turn everyone
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2888,6 +3012,7 @@ bool turn_monsters(HIT_POINT dam)
 
 /*!
  * @brief 死の光線(プレイヤー視界範囲内) / Death-ray all monsters (note: OBSCENELY powerful)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool deathray_monsters(void)
@@ -2895,8 +3020,10 @@ bool deathray_monsters(void)
 	return (project_all_los(p_ptr, GF_DEATH_RAY, p_ptr->lev * 200));
 }
 
+
 /*!
  * @brief チャーム・モンスター(1体)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
@@ -2907,8 +3034,10 @@ bool charm_monster(DIRECTION dir, PLAYER_LEVEL plev)
 	return (project_hook(p_ptr, GF_CHARM, dir, plev, flg));
 }
 
+
 /*!
  * @brief アンデッド支配(1体)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
@@ -2919,8 +3048,10 @@ bool control_one_undead(DIRECTION dir, PLAYER_LEVEL plev)
 	return (project_hook(p_ptr, GF_CONTROL_UNDEAD, dir, plev, flg));
 }
 
+
 /*!
  * @brief 悪魔支配(1体)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
@@ -2931,8 +3062,10 @@ bool control_one_demon(DIRECTION dir, PLAYER_LEVEL plev)
 	return (project_hook(p_ptr, GF_CONTROL_DEMON, dir, plev, flg));
 }
 
+
 /*!
  * @brief 動物支配(1体)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
@@ -2946,6 +3079,7 @@ bool charm_animal(DIRECTION dir, PLAYER_LEVEL plev)
 
 /*!
  * @brief 変わり身処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param success 判定成功上の処理ならばTRUE
  * @return 作用が実際にあった場合TRUEを返す
  */
@@ -2990,6 +3124,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
 
 /*!
  * @brief 入身処理 / "Rush Attack" routine for Samurai or Ninja
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param mdeath 目標モンスターが死亡したかを返す
  * @return 作用が実際にあった場合TRUEを返す /  Return value is for checking "done"
  */
@@ -3104,6 +3239,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
 /*!
  * @brief 全鏡の消去 / Remove all mirrors in this floor
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param explode 爆発処理を伴うならばTRUE
  * @return なし
  */
@@ -3126,9 +3262,11 @@ void remove_all_mirrors(player_type *caster_ptr, bool explode)
 	}
 }
 
+
 /*!
  * @brief 『一つの指輪』の効果処理 /
  * Hack -- activate the ring of power
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 発動の方向ID
  * @return なし
  */
@@ -3185,8 +3323,10 @@ void ring_of_power(player_type *caster_ptr, DIRECTION dir)
 	}
 }
 
+
 /*!
 * @brief 運命の輪、並びにカオス的な効果の発動
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param spell ランダムな効果を選択するための基準ID
 * @return なし
 */
@@ -3290,9 +3430,11 @@ void wild_magic(player_type *caster_ptr, int spell)
 	return;
 }
 
+
 /*!
 * @brief カオス魔法「流星群」の処理としてプレイヤーを中心に隕石落下処理を10+1d10回繰り返す。
 * / Drop 10+1d10 meteor ball at random places near the player
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param dam ダメージ
 * @param rad 効力の半径
 * @return なし
@@ -3338,6 +3480,7 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
 /*!
 * @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param dam ダメージ
 * @param rad 効力の半径
 * @return ターゲットを指定し、実行したならばTRUEを返す。
@@ -3388,6 +3531,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 		x = nx;
 		y = ny;
 	}
+
 	tx = x;
 	ty = y;
 
@@ -3427,6 +3571,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
 /*!
 * @brief 「ワンダー」のランダムな効果を決定して処理する。
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param dir 方向ID
 * @return なし
 * @details
@@ -3502,7 +3647,10 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 	{
 		symbol_genocide(caster_ptr, plev + 50, TRUE);
 	}
-	else if (die < 110) dispel_monsters(120);
+	else if (die < 110)
+	{
+		dispel_monsters(120);
+	}
 	else /* RARE */
 	{
 		dispel_monsters(150);
@@ -3515,6 +3663,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 
 /*!
 * @brief 「悪霊召喚」のランダムな効果を決定して処理する。
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param dir 方向ID
 * @return なし
 */
@@ -3641,7 +3790,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 108)
 	{
-		symbol_genocide(p_ptr, plev + 50, TRUE);
+		symbol_genocide(caster_ptr, plev + 50, TRUE);
 	}
 	else if (die < 110)
 	{
@@ -3664,6 +3813,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 
 /*!
 * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @return なし
 */
 void cast_shuffle(player_type *caster_ptr)
@@ -3840,6 +3990,7 @@ void cast_shuffle(player_type *caster_ptr)
 
 /*!
  * @brief 口を使う継続的な処理を中断する
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void stop_mouth(player_type *caster_ptr)
@@ -3901,6 +4052,7 @@ bool_hack vampirism(player_type *caster_ptr)
 	return TRUE;
 }
 
+
 bool panic_hit(void)
 {
 	DIRECTION dir;
@@ -3924,11 +4076,12 @@ bool panic_hit(void)
 		msg_print(NULL);
 		return FALSE;
 	}
-
 }
+
 
 /*!
 * @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @note
 * currently this function allows pseudo-id of any object,
@@ -4055,6 +4208,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_SHARDS;
 				Type_desc = _("破片", "shards");
 			}
+
 			break;
 		case CLASS_MAGE:
 		case CLASS_WARRIOR_MAGE:
@@ -4074,6 +4228,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_DISENCHANT;
 				Type_desc = _("劣化", "disenchantment");
 			}
+
 			break;
 		case CLASS_CHAOS_WARRIOR:
 			if (!one_in_(3))
@@ -4086,6 +4241,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_CHAOS;
 				Type_desc = _("カオス", "chaos");
 			}
+
 			break;
 		case CLASS_MONK:
 		case CLASS_SAMURAI:
@@ -4100,6 +4256,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_SOUND;
 				Type_desc = _("轟音", "sound");
 			}
+
 			break;
 		case CLASS_MINDCRAFTER:
 			if (!one_in_(3))
@@ -4112,6 +4269,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_PSI;
 				Type_desc = _("精神エネルギー", "mental energy");
 			}
+
 			break;
 		case CLASS_PRIEST:
 		case CLASS_PALADIN:
@@ -4125,6 +4283,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_HOLY_FIRE;
 				Type_desc = _("聖なる炎", "holy fire");
 			}
+
 			break;
 		case CLASS_ROGUE:
 		case CLASS_NINJA:
@@ -4138,6 +4297,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_POIS;
 				Type_desc = _("毒", "poison");
 			}
+
 			break;
 		case CLASS_BARD:
 			if (!one_in_(3))
@@ -4150,6 +4310,7 @@ bool draconian_breath(player_type *creature_ptr)
 				Type = GF_CONFUSION;
 				Type_desc = _("混乱", "confusion");
 			}
+
 			break;
 		}
 	}
@@ -4160,6 +4321,7 @@ bool draconian_breath(player_type *creature_ptr)
 	fire_breath(creature_ptr, Type, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
 	return TRUE;
 }
+
 
 bool android_inside_weapon(player_type *creature_ptr)
 {
@@ -4190,8 +4352,10 @@ bool android_inside_weapon(player_type *creature_ptr)
 		msg_print(_("ロケットを発射した。", "You fire a rocket."));
 		fire_rocket(creature_ptr, GF_ROCKET, dir, creature_ptr->lev * 5, 2);
 	}
+
 	return TRUE;
 }
+
 
 bool create_ration(player_type *crature_ptr)
 {
@@ -4207,6 +4371,7 @@ bool create_ration(player_type *crature_ptr)
 	msg_print(_("食事を料理して作った。", "You cook some food."));
 	return TRUE;
 }
+
 
 void hayagake(player_type *creature_ptr)
 {
@@ -4229,8 +4394,10 @@ void hayagake(player_type *creature_ptr)
 			set_action(creature_ptr, ACTION_HAYAGAKE);
 		}
 	}
+
 	creature_ptr->energy_use = 0;
 }
+
 
 bool double_attack(player_type *creature_ptr)
 {
@@ -4265,8 +4432,10 @@ bool double_attack(player_type *creature_ptr)
 		msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
 		msg_print(NULL);
 	}
+
 	return TRUE;
 }
+
 
 bool comvert_hp_to_mp(player_type *creature_ptr)
 {
@@ -4284,9 +4453,11 @@ bool comvert_hp_to_mp(player_type *creature_ptr)
 	{
 		msg_print(_("変換に失敗した。", "You failed to convert."));
 	}
+
 	creature_ptr->redraw |= (PR_HP | PR_MANA);
 	return TRUE;
 }
+
 
 bool comvert_mp_to_hp(player_type *creature_ptr)
 {
@@ -4299,9 +4470,11 @@ bool comvert_mp_to_hp(player_type *creature_ptr)
 	{
 		msg_print(_("変換に失敗した。", "You failed to convert."));
 	}
+
 	creature_ptr->redraw |= (PR_HP | PR_MANA);
 	return TRUE;
 }
+
 
 bool demonic_breath(player_type *creature_ptr)
 {
@@ -4314,6 +4487,7 @@ bool demonic_breath(player_type *creature_ptr)
 	return TRUE;
 }
 
+
 bool mirror_concentration(player_type *creature_ptr)
 {
 	if (total_friends)
@@ -4321,6 +4495,7 @@ bool mirror_concentration(player_type *creature_ptr)
 		msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
 		return FALSE;
 	}
+
 	if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x]))
 	{
 		msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
@@ -4337,8 +4512,10 @@ bool mirror_concentration(player_type *creature_ptr)
 	{
 		msg_print(_("鏡の上でないと集中できない！", "Here are not any mirrors!"));
 	}
+
 	return TRUE;
 }
+
 
 bool sword_dancing(player_type *creature_ptr)
 {
@@ -4362,8 +4539,10 @@ bool sword_dancing(player_type *creature_ptr)
 			msg_print(_("攻撃が空をきった。", "You attack the empty air."));
 		}
 	}
+
 	return TRUE;
 }
+
 
 bool confusing_light(player_type *creature_ptr)
 {
@@ -4375,6 +4554,7 @@ bool confusing_light(player_type *creature_ptr)
 	stasis_monsters(creature_ptr->lev * 4);
 	return TRUE;
 }
+
 
 bool rodeo(player_type *creature_ptr)
 {
@@ -4388,6 +4568,7 @@ bool rodeo(player_type *creature_ptr)
 		msg_print(_("今は乗馬中だ。", "You ARE riding."));
 		return FALSE;
 	}
+
 	if (!do_cmd_riding(creature_ptr, TRUE)) return TRUE;
 
 	m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
@@ -4416,8 +4597,10 @@ bool rodeo(player_type *creature_ptr)
 		/* 落馬処理に失敗してもとにかく乗馬解除 */
 		creature_ptr->riding = 0;
 	}
+
 	return TRUE;
 }
+
 
 bool clear_mind(player_type *creature_ptr)
 {
@@ -4434,9 +4617,11 @@ bool clear_mind(player_type *creature_ptr)
 		creature_ptr->csp = creature_ptr->msp;
 		creature_ptr->csp_frac = 0;
 	}
+
 	creature_ptr->redraw |= (PR_MANA);
 	return TRUE;
 }
+
 
 bool concentration(player_type *creature_ptr)
 {
@@ -4447,11 +4632,13 @@ bool concentration(player_type *creature_ptr)
 		msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
 		return FALSE;
 	}
+
 	if (creature_ptr->special_defense & KATA_MASK)
 	{
 		msg_print(_("今は構えに集中している。", "You need concentration on your form."));
 		return FALSE;
 	}
+
 	msg_print(_("精神を集中して気合いを溜めた。", "You concentrate to charge your power."));
 
 	creature_ptr->csp += creature_ptr->msp / 2;
@@ -4460,6 +4647,7 @@ bool concentration(player_type *creature_ptr)
 		creature_ptr->csp = max_csp;
 		creature_ptr->csp_frac = 0;
 	}
+
 	creature_ptr->redraw |= (PR_MANA);
 	return TRUE;
 }
