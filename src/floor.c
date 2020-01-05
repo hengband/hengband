@@ -1750,7 +1750,7 @@ void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x)
  * @param i2 整理したい配列の終点
  * @return なし
  */
-static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
+static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
 	OBJECT_IDX i;
 	grid_type *g_ptr;
@@ -1760,9 +1760,9 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	if (i1 == i2) return;
 
 	/* Repair objects */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < floor_ptr->o_max; i++)
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		o_ptr = &floor_ptr->o_list[i];
 
 		/* Skip "dead" objects */
 		if (!o_ptr->k_idx) continue;
@@ -1774,12 +1774,12 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 			o_ptr->next_o_idx = i2;
 		}
 	}
-	o_ptr = &p_ptr->current_floor_ptr->o_list[i1];
+	o_ptr = &floor_ptr->o_list[i1];
 
 	if (OBJECT_IS_HELD_MONSTER(o_ptr))
 	{
 		monster_type *m_ptr;
-		m_ptr = &p_ptr->current_floor_ptr->m_list[o_ptr->held_m_idx];
+		m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
 
 		/* Repair monster */
 		if (m_ptr->hold_o_idx == i1)
@@ -1799,7 +1799,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 		x = o_ptr->ix;
 
 		/* Acquire grid */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Repair grid */
 		if (g_ptr->o_idx == i1)
@@ -1810,7 +1810,7 @@ static void compact_objects_aux(OBJECT_IDX i1, OBJECT_IDX i2)
 	}
 
 	/* Structure copy */
-	p_ptr->current_floor_ptr->o_list[i2] = p_ptr->current_floor_ptr->o_list[i1];
+	floor_ptr->o_list[i2] = floor_ptr->o_list[i1];
 
 	/* Wipe the hole */
 	object_wipe(o_ptr);
@@ -1917,7 +1917,7 @@ void compact_objects(floor_type *floor_ptr, int size)
 		if (o_ptr->k_idx) continue;
 
 		/* Move last object into open hole */
-		compact_objects_aux(floor_ptr->o_max - 1, i);
+		compact_objects_aux(floor_ptr, floor_ptr->o_max - 1, i);
 
 		/* Compress "floor_ptr->o_max" */
 		floor_ptr->o_max--;
