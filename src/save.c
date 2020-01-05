@@ -677,7 +677,7 @@ static void wr_extra(player_type *creature_ptr)
 	}
 	wr_s16b(creature_ptr->mane_num);
 
-	for (i = 0; i < MAX_KUBI; i++)
+	for (i = 0; i < MAX_BOUNTY; i++)
 	{
 		wr_s16b(current_world_ptr->bounty_r_idx[i]);
 	}

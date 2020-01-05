@@ -1714,7 +1714,7 @@ static void tsuchinoko(void)
  * @brief 通常の賞金首情報を表示する。
  * @return なし
  */
-static void shoukinkubi(void)
+static void show_bounty(void)
 {
 	int i;
 	TERM_LEN y = 0;
@@ -1723,7 +1723,7 @@ static void shoukinkubi(void)
 	prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"),4 ,10);
 	c_put_str(TERM_YELLOW, _("現在の賞金首", "Wanted monsters"), 6, 10);
 
-	for (i = 0; i < MAX_KUBI; i++)
+	for (i = 0; i < MAX_BOUNTY; i++)
 	{
 		byte color;
 		concptr done_mark;
@@ -1743,7 +1743,7 @@ static void shoukinkubi(void)
 		c_prt(color, format("%s %s", r_name + r_ptr->name, done_mark), y+7, 10);
 
 		y = (y+1) % 10;
-		if (!y && (i < MAX_KUBI -1))
+		if (!y && (i < MAX_BOUNTY -1))
 		{
 			prt(_("何かキーを押してください", "Hit any key."), 0, 0);
 			(void)inkey();
@@ -1761,7 +1761,7 @@ static void shoukinkubi(void)
 static struct {
 	OBJECT_TYPE_VALUE tval; /*!< ベースアイテムのメイン種別ID */
 	OBJECT_SUBTYPE_VALUE sval; /*!< ベースアイテムのサブ種別ID */
-} prize_list[MAX_KUBI] = 
+} prize_list[MAX_BOUNTY] = 
 {
 	{TV_POTION, SV_POTION_CURING},
 	{TV_POTION, SV_POTION_SPEED},
@@ -1903,7 +1903,7 @@ static bool kankin(void)
 		}
 	}
 
-	for (j = 0; j < MAX_KUBI; j++)
+	for (j = 0; j < MAX_BOUNTY; j++)
 	{
 		/* Need reverse order --- Positions will be changed in the loop */
 		for (i = INVEN_PACK-1; i >= 0; i--)
@@ -1938,7 +1938,7 @@ static bool kankin(void)
 				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				/* Count number of unique corpses already handed */
-				for (num = 0, k = 0; k < MAX_KUBI; k++)
+				for (num = 0, k = 0; k < MAX_BOUNTY; k++)
 				{
 					if (current_world_ptr->bounty_r_idx[k] >= 10000) num++;
 				}
@@ -4001,8 +4001,8 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		tsuchinoko();
 		break;
 
-	case BACT_KUBI:
-		shoukinkubi();
+	case BACT_BOUNTY:
+		show_bounty();
 		break;
 
 	case BACT_TARGET:
@@ -4256,7 +4256,7 @@ void determine_bounty_uniques(void)
 	monster_race *r_ptr;
 
 	get_mon_num_prep(NULL, NULL);
-	for (i = 0; i < MAX_KUBI; i++)
+	for (i = 0; i < MAX_BOUNTY; i++)
 	{
 		while (1)
 		{
@@ -4279,9 +4279,9 @@ void determine_bounty_uniques(void)
 	}
 
 	/* Sort them */
-	for (i = 0; i < MAX_KUBI - 1; i++)
+	for (i = 0; i < MAX_BOUNTY - 1; i++)
 	{
-		for (j = i; j < MAX_KUBI; j++)
+		for (j = i; j < MAX_BOUNTY; j++)
 		{
 			if (r_info[current_world_ptr->bounty_r_idx[i]].level > r_info[current_world_ptr->bounty_r_idx[j]].level)
 			{

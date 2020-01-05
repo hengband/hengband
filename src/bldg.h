@@ -16,7 +16,7 @@
  */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
 
-#define MAX_KUBI 20
+#define MAX_BOUNTY 20
 
 /*
  * A structure to describe a building.
@@ -88,7 +88,7 @@ extern MONRACE_IDX today_mon;
 #define BACT_BATTLE                 36
 #define BACT_TSUCHINOKO             37
 #define BACT_TARGET                 38
-#define BACT_KUBI                   39
+#define BACT_BOUNTY                 39
 #define BACT_KANKIN                 40
 #define BACT_HEIKOUKA               41
 #define BACT_TELE_TOWN              42

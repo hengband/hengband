@@ -3195,7 +3195,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 		{
 			bool wanted = FALSE;
 			int j;
-			for (j = 0; j < MAX_KUBI; j++)
+			for (j = 0; j < MAX_BOUNTY; j++)
 			{
 				if (current_world_ptr->bounty_r_idx[j] == i || current_world_ptr->bounty_r_idx[j] - 10000 == i ||
 					(creature_ptr->today_mon && creature_ptr->today_mon == i))
@@ -6222,7 +6222,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void do_cmd_knowledge_kubi(player_type *creature_ptr)
+static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 {
 	/* Open a new file */
 	FILE *fff;
@@ -6245,7 +6245,7 @@ static void do_cmd_knowledge_kubi(player_type *creature_ptr)
 		fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
 		fprintf(fff, "----------------------------------------------\n");
 
-		for (int i = 0; i < MAX_KUBI; i++)
+		for (int i = 0; i < MAX_BOUNTY; i++)
 		{
 			if (current_world_ptr->bounty_r_idx[i] <= 10000)
 			{
@@ -6988,7 +6988,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			do_cmd_knowledge_kill_count();
 			break;
 		case '6': /* wanted */
-			if (!vanilla_town) do_cmd_knowledge_kubi(creature_ptr);
+			if (!vanilla_town) do_cmd_knowledge_bounty(creature_ptr);
 			break;
 		case '7': /* Pets */
 			do_cmd_knowledge_pets(creature_ptr);

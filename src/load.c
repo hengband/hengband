@@ -1918,7 +1918,7 @@ static void rd_extra(player_type *creature_ptr)
 	{
 		determine_bounty_uniques();
 
-		for (i = 0; i < MAX_KUBI; i++)
+		for (i = 0; i < MAX_BOUNTY; i++)
 		{
 			/* Is this bounty unique already dead? */
 			if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num) current_world_ptr->bounty_r_idx[i] += 10000;
@@ -1926,7 +1926,7 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else
 	{
-		for (i = 0; i < MAX_KUBI; i++)
+		for (i = 0; i < MAX_BOUNTY; i++)
 		{
 			rd_s16b(&current_world_ptr->bounty_r_idx[i]);
 		}
