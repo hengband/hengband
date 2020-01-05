@@ -564,7 +564,7 @@ static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+COMMAND_CODE show_inven(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	int j, k, l, z = 0;
@@ -591,7 +591,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 	/* Find the "final" slot */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Track */
@@ -602,7 +602,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 
 	for (k = 0, i = 0; i < z; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
 		if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
@@ -648,7 +648,7 @@ COMMAND_CODE show_inven(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 	for (j = 0; j < k; j++)
 	{
 		i = out_index[j];
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -1120,7 +1120,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 		if (!command_wrk)
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line, mode, tval);
+			if (command_see) get_item_label = show_inven(owner_ptr, menu_line, mode, tval);
 		}
 
 		/* Equipment screen */
@@ -2102,7 +2102,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(i2);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(menu_line, mode, tval);
+			if (command_see) get_item_label = show_inven(p_ptr, menu_line, mode, tval);
 		}
 
 		/* Equipment screen */

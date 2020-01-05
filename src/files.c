@@ -6445,7 +6445,7 @@ void show_info(player_type *creature_ptr)
 	if (creature_ptr->inven_cnt)
 	{
 		Term_clear();
-		(void)show_inven(0, USE_FULL, 0);
+		(void)show_inven(creature_ptr, 0, USE_FULL, 0);
 		prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;

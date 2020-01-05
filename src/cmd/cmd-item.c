@@ -60,7 +60,7 @@ void do_cmd_inven(player_type *creature_ptr)
 	command_wrk = FALSE;
 	if (easy_floor) command_wrk = (USE_INVEN);
 	screen_save();
-	(void)show_inven(0, USE_FULL, 0);
+	(void)show_inven(creature_ptr, 0, USE_FULL, 0);
 
 #ifdef JP
 	sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
