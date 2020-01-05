@@ -1127,7 +1127,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 		else
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line, mode, tval);
+			if (command_see) get_item_label = show_equip(owner_ptr, menu_line, mode, tval);
 		}
 
 		if (!command_wrk)
@@ -2113,7 +2113,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(menu_line, mode, tval);
+			if (command_see) get_item_label = show_equip(p_ptr, menu_line, mode, tval);
 		}
 
 		/* Floor screen */
@@ -3250,7 +3250,7 @@ void display_inven(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+COMMAND_CODE show_equip(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	int j, k, l;
@@ -3277,16 +3277,16 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 	/* Scan the equipment list */
 	for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 
 		/* Is this item acceptable? */
 		if (!(select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, tval) || (mode & USE_FULL)) &&
-			(!((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute) ||
+			(!((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute) ||
 			(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
 		object_desc(o_name, o_ptr, 0);
 
-		if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
+		if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute)
 		{
 			(void)strcpy(out_desc[k], _("(武器を両手持ち)", "(wielding with two-hands)"));
 			out_color[k] = TERM_WHITE;
@@ -3345,7 +3345,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 	for (j = 0; j < k; j++)
 	{
 		i = out_index[j];
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -3390,7 +3390,7 @@ COMMAND_CODE show_equip(int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 		if (show_labels)
 		{
 			/* Mention the use */
-			(void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(p_ptr, i));
+			(void)sprintf(tmp_val, _("%-7s: ", "%-14s: "), mention_use(owner_ptr, i));
 
 			put_str(tmp_val, j + 1, cur_col);
 

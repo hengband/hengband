@@ -100,7 +100,7 @@ void do_cmd_equip(player_type *creature_ptr)
 	if (easy_floor) command_wrk = (USE_EQUIP);
 	screen_save();
 
-	(void)show_equip(0, USE_FULL, 0);
+	(void)show_equip(creature_ptr, 0, USE_FULL, 0);
 
 #ifdef JP
 	sprintf(out_val, "装備： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ",
