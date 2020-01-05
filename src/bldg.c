@@ -1567,7 +1567,7 @@ static bool kakutoujou(player_type *player_ptr)
 	screen_save();
 
 	/* No money */
-	if (player_ptr->au < 1)
+	if (player_ptr->au <= 1)
 	{
 		msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", "Hey! You don't have gold - get out of here!"));
 		msg_print(NULL);
