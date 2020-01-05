@@ -524,7 +524,7 @@ bool object_is_potion(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが報酬対象になるならTRUEを返す
  */
-bool object_is_shoukinkubi(object_type *o_ptr)
+bool object_is_bounty(object_type *o_ptr)
 {
 	int i;
 
@@ -541,9 +541,9 @@ bool object_is_shoukinkubi(object_type *o_ptr)
 	if (o_ptr->pval == MON_TSUCHINOKO) return TRUE;
 
 	/* Unique monster */
-	for (i = 0; i < MAX_KUBI; i++)
+	for (i = 0; i < MAX_BOUNTY; i++)
 		if (o_ptr->pval == current_world_ptr->bounty_r_idx[i]) break;
-	if (i < MAX_KUBI) return TRUE;
+	if (i < MAX_BOUNTY) return TRUE;
 
 	/* Not wanted */
 	return FALSE;

@@ -86,19 +86,21 @@ typedef struct {
 static BUF* buf_new(void)
 {
 	BUF *p;
-
-	if ((p = malloc(sizeof(BUF))) == NULL)
-		return NULL;
+	p = malloc(sizeof(BUF));
+	if (!p) return NULL;
 
 	p->size = 0;
 	p->max_size = BUFSIZE;
-	if ((p->data = malloc(BUFSIZE)) == NULL)
+	p->data = malloc(BUFSIZE);
+	if (!p->data)
 	{
 		free(p);
 		return NULL;
 	}
+
 	return p;
 }
+
 
 /*!
  * @brief 転送用バッファの解放
@@ -109,6 +111,7 @@ static void buf_delete(BUF *b)
 	free(b->data);
 	free(b);
 }
+
 
 /*!
  * @brief 転送用バッファにデータを追加する
@@ -136,6 +139,7 @@ static int buf_append(BUF *buf, concptr data, size_t size)
 
 	return buf->size;
 }
+
 
 /*!
  * @brief 転送用バッファにフォーマット指定した文字列データを追加する
@@ -238,6 +242,7 @@ static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
 }
 #endif
 
+
 /*!
  * @brief HTTPによるダンプ内容伝送
  * @param sd ソケットID
@@ -278,12 +283,14 @@ static bool http_post(int sd, concptr url, BUF *buf)
 	return strncmp(response_buf, HTTP_RESPONSE_CODE_OK, strlen(HTTP_RESPONSE_CODE_OK)) == 0;
 }
 
+
 /*!
  * @brief キャラクタダンプを作って BUFに保存
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(BUF* dumpbuf)
+static errr make_dump(player_type *creature_ptr, BUF* dumpbuf)
 {
 	char		buf[1024];
 	FILE *fff;
@@ -303,7 +310,7 @@ static errr make_dump(BUF* dumpbuf)
 	}
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
-	(void)make_character_dump(fff);
+	(void)make_character_dump(creature_ptr, fff);
 	my_fclose(fff);
 
 	/* Open for read */
@@ -320,19 +327,13 @@ static errr make_dump(BUF* dumpbuf)
 	return (0);
 }
 
+
 /*!
  * @brief スクリーンダンプを作成する/ Make screen dump to buffer
  * @return 作成したスクリーンダンプの参照ポインタ
  */
-concptr make_screen_dump(void)
+concptr make_screen_dump(player_type *creature_ptr)
 {
-	BUF *screen_buf;
-	int y, x, i;
-	concptr ret;
-
-	TERM_COLOR a = 0, old_a = 0;
-	SYMBOL_CODE c = ' ';
-
 	static concptr html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
 		"<pre>",
@@ -344,16 +345,15 @@ concptr make_screen_dump(void)
 		0,
 	};
 
-	bool old_use_graphics = use_graphics;
-
 	int wid, hgt;
-
 	Term_get_size(&wid, &hgt);
 
 	/* Alloc buffer */
+	BUF *screen_buf;
 	screen_buf = buf_new();
 	if (screen_buf == NULL) return (NULL);
 
+	bool old_use_graphics = use_graphics;
 	if (old_use_graphics)
 	{
 		/* Clear -more- prompt first */
@@ -362,22 +362,24 @@ concptr make_screen_dump(void)
 		use_graphics = FALSE;
 		reset_visuals();
 
-		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff();
 	}
 
-	for (i = 0; html_head[i]; i++)
+	for (int i = 0; html_head[i]; i++)
 		buf_sprintf(screen_buf, html_head[i]);
 
 	/* Dump the screen */
-	for (y = 0; y < hgt; y++)
+	for (int y = 0; y < hgt; y++)
 	{
 		/* Start the row */
 		if (y != 0)
 			buf_sprintf(screen_buf, "\n");
 
 		/* Dump each row */
-		for (x = 0; x < wid - 1; x++)
+		TERM_COLOR a = 0, old_a = 0;
+		SYMBOL_CODE c = ' ';
+		for (int x = 0; x < wid - 1; x++)
 		{
 			int rv, gv, bv;
 			concptr cc = NULL;
@@ -406,18 +408,21 @@ concptr make_screen_dump(void)
 					    ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
 				old_a = a;
 			}
+
 			if (cc)
 				buf_sprintf(screen_buf, "%s", cc);
 			else
 				buf_sprintf(screen_buf, "%c", c);
 		}
 	}
+
 	buf_sprintf(screen_buf, "</font>");
 
-	for (i = 0; html_foot[i]; i++)
+	for (int i = 0; html_foot[i]; i++)
 		buf_sprintf(screen_buf, html_foot[i]);
 
 	/* Screen dump size is too big ? */
+	concptr ret;
 	if (screen_buf->size + 1> SCREEN_BUF_MAX_SIZE)
 	{
 		ret = NULL;
@@ -438,18 +443,21 @@ concptr make_screen_dump(void)
 		use_graphics = TRUE;
 		reset_visuals();
 
-		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff();
 	}
 
 	return ret;
 }
 
+
 /*!
+ * todo メッセージは言語選択の関数マクロで何とかならんか？
  * @brief スコア転送処理のメインルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
-errr report_score(void)
+errr report_score(player_type *creature_ptr)
 {
 #ifdef MACINTOSH
 	OSStatus err;
@@ -463,18 +471,16 @@ errr report_score(void)
 #endif
 
 	BUF *score;
-	int sd;
-	char seikakutmp[128];
-
 	score = buf_new();
 
+	char seikakutmp[128];
 #ifdef JP
 	sprintf(seikakutmp, "%s%s", ap_ptr->title, (ap_ptr->no ? "の" : ""));
 #else
 	sprintf(seikakutmp, "%s ", ap_ptr->title);
 #endif
 
-	buf_sprintf(score, "name: %s\n", p_ptr->name);
+	buf_sprintf(score, "name: %s\n", creature_ptr->name);
 #ifdef JP
 	buf_sprintf(score, "version: 変愚蛮怒 %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
@@ -482,23 +488,23 @@ errr report_score(void)
 	buf_sprintf(score, "version: Hengband %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
-	buf_sprintf(score, "score: %d\n", calc_score(p_ptr));
-	buf_sprintf(score, "level: %d\n", p_ptr->lev);
-	buf_sprintf(score, "depth: %d\n", p_ptr->current_floor_ptr->dun_level);
-	buf_sprintf(score, "maxlv: %d\n", p_ptr->max_plv);
+	buf_sprintf(score, "score: %d\n", calc_score(creature_ptr));
+	buf_sprintf(score, "level: %d\n", creature_ptr->lev);
+	buf_sprintf(score, "depth: %d\n", creature_ptr->current_floor_ptr->dun_level);
+	buf_sprintf(score, "maxlv: %d\n", creature_ptr->max_plv);
 	buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
-	buf_sprintf(score, "au: %d\n", p_ptr->au);
+	buf_sprintf(score, "au: %d\n", creature_ptr->au);
 	buf_sprintf(score, "turns: %d\n", turn_real(current_world_ptr->game_turn));
-	buf_sprintf(score, "sex: %d\n", p_ptr->psex);
+	buf_sprintf(score, "sex: %d\n", creature_ptr->psex);
 	buf_sprintf(score, "race: %s\n", rp_ptr->title);
 	buf_sprintf(score, "class: %s\n", cp_ptr->title);
 	buf_sprintf(score, "seikaku: %s\n", seikakutmp);
-	buf_sprintf(score, "realm1: %s\n", realm_names[p_ptr->realm1]);
-	buf_sprintf(score, "realm2: %s\n", realm_names[p_ptr->realm2]);
-	buf_sprintf(score, "killer: %s\n", p_ptr->died_from);
+	buf_sprintf(score, "realm1: %s\n", realm_names[creature_ptr->realm1]);
+	buf_sprintf(score, "realm2: %s\n", realm_names[creature_ptr->realm2]);
+	buf_sprintf(score, "killer: %s\n", creature_ptr->died_from);
 	buf_sprintf(score, "-----charcter dump-----\n");
 
-	make_dump(score);
+	make_dump(creature_ptr, score);
 
 	if (screen_dump)
 	{
@@ -529,7 +535,8 @@ errr report_score(void)
 
 	Term_clear();
 
-	while (1)
+	int sd;
+	while (TRUE)
 	{
 		char buff[160];
 #ifdef JP

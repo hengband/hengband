@@ -45,9 +45,10 @@
 
 #include "view-mainwindow.h"
 
-
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
+#define MAX_PARTY_MON 21 /*!< フロア移動時に先のフロアに連れて行けるペットの最大数 Maximum number of preservable pets */
+static monster_type party_mon[MAX_PARTY_MON]; /*!< フロア移動に保存するペットモンスターの配列 */
 
 /*
  * Number of floor_id used from birth
@@ -62,11 +63,12 @@ u32b saved_floor_file_sign;
 
 /*!
  * @brief 保存フロア配列を初期化する / Initialize saved_floors array. 
- * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除する。
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除するフラグ
  * @details Make sure that old temporal files are not remaining as gurbages.
  * @return なし
  */
-void init_saved_floors(bool force)
+void init_saved_floors(player_type *creature_ptr, bool force)
 {
 	char floor_savefile[1024];
 	int i;
@@ -141,7 +143,7 @@ void init_saved_floors(bool force)
 	new_floor_id = 0;
 
 	/* No change floor mode yet */
-	p_ptr->change_floor_mode = 0;
+	creature_ptr->change_floor_mode = 0;
 
 #ifdef SET_UID
 # ifdef SECURE
@@ -154,9 +156,10 @@ void init_saved_floors(bool force)
 /*!
  * @brief 保存フロア用テンポラリファイルを削除する / Kill temporal files
  * @details Should be called just before the game quit.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void clear_saved_floor_files(void)
+void clear_saved_floor_files(player_type *creature_ptr)
 {
 	char floor_savefile[1024];
 	int i;
@@ -174,7 +177,7 @@ void clear_saved_floor_files(void)
 
 		/* No temporal file */
 		if (!sf_ptr->floor_id) continue;
-		if (sf_ptr->floor_id == p_ptr->floor_id) continue;
+		if (sf_ptr->floor_id == creature_ptr->floor_id) continue;
 
 		/* File name */
 		sprintf(floor_savefile, "%s.F%02d", savefile, i);
@@ -223,10 +226,11 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
 
 /*!
  * @brief 参照ポインタ先の保存フロアを抹消する / kill a saved floor and get an empty space
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロアの参照ポインタ
  * @return なし
  */
-static void kill_saved_floor(saved_floor_type *sf_ptr)
+static void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
 	char floor_savefile[1024];
 	if (!sf_ptr) return;
@@ -234,10 +238,10 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
 	/* Already empty */
 	if (!sf_ptr->floor_id) return;
 
-	if (sf_ptr->floor_id == p_ptr->floor_id)
+	if (sf_ptr->floor_id == creature_ptr->floor_id)
 	{
 		/* Kill current floor */
-		p_ptr->floor_id = 0;
+		creature_ptr->floor_id = 0;
 
 		/* Current floor doesn't have temporal file */
 	}
@@ -263,11 +267,12 @@ static void kill_saved_floor(saved_floor_type *sf_ptr)
 
 /*!
  * @brief 新規に利用可能な保存フロアを返す / Initialize new saved floor and get its floor id.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 利用可能な保存フロアID
  * @details
  * If number of saved floors are already MAX_SAVED_FLOORS, kill the oldest one.
  */
-FLOOR_IDX get_new_floor_id(void)
+FLOOR_IDX get_new_floor_id(player_type *creature_ptr)
 {
 	saved_floor_type *sf_ptr = NULL;
 	FLOOR_IDX i;
@@ -292,7 +297,7 @@ FLOOR_IDX get_new_floor_id(void)
 			sf_ptr = &saved_floors[i];
 
 			/* Don't kill current floor */
-			if (sf_ptr->floor_id == p_ptr->floor_id) continue;
+			if (sf_ptr->floor_id == creature_ptr->floor_id) continue;
 
 			/* Don't kill newer */
 			if (sf_ptr->visit_mark > oldest_visit) continue;
@@ -303,7 +308,7 @@ FLOOR_IDX get_new_floor_id(void)
 
 		/* Kill oldest saved floor */
 		sf_ptr = &saved_floors[oldest];
-		kill_saved_floor(sf_ptr);
+		kill_saved_floor(creature_ptr, sf_ptr);
 
 		/* Use it */
 		i = oldest;
@@ -318,7 +323,7 @@ FLOOR_IDX get_new_floor_id(void)
 	sf_ptr->visit_mark = latest_visit_mark++;
 
 	/* sf_ptr->dun_level may be changed later */
-	sf_ptr->dun_level = p_ptr->current_floor_ptr->dun_level;
+	sf_ptr->dun_level = creature_ptr->current_floor_ptr->dun_level;
 
 
 	/* Increment number of floor_id */
@@ -333,34 +338,34 @@ FLOOR_IDX get_new_floor_id(void)
 
 /*!
  * @brief フロア切り替え時の処理フラグを追加する / Prepare mode flags of changing floor
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param mode 追加したい所持フラグ
  * @return なし
  */
-void prepare_change_floor_mode(BIT_FLAGS mode)
+void prepare_change_floor_mode(player_type *creature_ptr, BIT_FLAGS mode)
 {
-	p_ptr->change_floor_mode |= mode;
+	creature_ptr->change_floor_mode |= mode;
 }
 
 /*!
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
  * @return なし
  */
-static void build_dead_end(floor_type *floor_ptr)
+static void build_dead_end(player_type *creature_ptr)
 {
 	POSITION x, y;
 
-	clear_cave(floor_ptr);
+	clear_cave(creature_ptr);
 
 	/* Mega-Hack -- no player yet */
-	p_ptr->x = p_ptr->y = 0;
-
+	creature_ptr->x = creature_ptr->y = 0;
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(0);
 
 	/* Smallest area */
-	floor_ptr->height = SCREEN_HGT;
-	floor_ptr->width = SCREEN_WID;
+	creature_ptr->current_floor_ptr->height = SCREEN_HGT;
+	creature_ptr->current_floor_ptr->width = SCREEN_WID;
 
 	/* Filled with permanent walls */
 	for (y = 0; y < MAX_HGT; y++)
@@ -368,27 +373,24 @@ static void build_dead_end(floor_type *floor_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(floor_ptr, y, x);
+			place_solid_perm_bold(creature_ptr->current_floor_ptr, y, x);
 		}
 	}
 
 	/* Place at center of the floor */
-	p_ptr->y = floor_ptr->height / 2;
-	p_ptr->x = floor_ptr->width / 2;
+	creature_ptr->y = creature_ptr->current_floor_ptr->height / 2;
+	creature_ptr->x = creature_ptr->current_floor_ptr->width / 2;
 
 	/* Give one square */
-	place_floor_bold(floor_ptr, p_ptr->y, p_ptr->x);
+	place_floor_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x);
 
-	wipe_generate_random_floor_flags(floor_ptr);
+	wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
 }
 
 
-
-#define MAX_PARTY_MON 21 /*!< フロア移動時に先のフロアに連れて行けるペットの最大数 Maximum number of preservable pets */
-static monster_type party_mon[MAX_PARTY_MON]; /*!< フロア移動に保存するペットモンスターの配列 */
-
 /*!
  * @brief フロア移動時のペット保存処理 / Preserve_pets
+ * @param master_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void preserve_pet(player_type *master_ptr)
@@ -518,15 +520,16 @@ static void preserve_pet(player_type *master_ptr)
 
 /*!
  * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
+ * @param master_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * To prevent multiple generation of unique monster who is the minion of player
  */
-void precalc_cur_num_of_pet(void)
+void precalc_cur_num_of_pet(player_type *player_ptr)
 {
 	monster_type *m_ptr;
 	int i;
-	int max_num = p_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+	int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
 
 	for (i = 0; i < max_num; i++)
 	{
@@ -542,6 +545,7 @@ void precalc_cur_num_of_pet(void)
 
 /*!
  * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
+ * @param master_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void place_pet(player_type *master_ptr)
@@ -585,10 +589,10 @@ static void place_pet(player_type *master_ptr)
 
 		if (m_idx)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+			monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[m_idx];
 			monster_race *r_ptr;
 
-			p_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
+			master_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
 
 			m_ptr->r_idx = party_mon[i].r_idx;
 
@@ -619,7 +623,7 @@ static void place_pet(player_type *master_ptr)
 			/* r_ptr->cur_num++; */
 
 			/* Hack -- Count the number of "reproducers" */
-			if (r_ptr->flags2 & RF2_MULTIPLY) p_ptr->current_floor_ptr->num_repro++;
+			if (r_ptr->flags2 & RF2_MULTIPLY) master_ptr->current_floor_ptr->num_repro++;
 
 		}
 		else
@@ -733,7 +737,7 @@ static void get_out_monster(floor_type *floor_ptr, player_type *protected_ptr)
 		if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 		/* Require "empty" floor space */
-		if (!cave_empty_bold(p_ptr->current_floor_ptr, ny, nx)) continue;
+		if (!cave_empty_bold(protected_ptr->current_floor_ptr, ny, nx)) continue;
 
 		/* Hack -- no teleport onto glyph of warding */
 		if (is_glyph_grid(&floor_ptr->grid_array[ny][nx])) continue;
@@ -845,7 +849,7 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
 	else if (!num)
 	{
 		/* No stairs found! -- No return */
-		prepare_change_floor_mode(CFM_RAND_PLACE | CFM_NO_RETURN);
+		prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE | CFM_NO_RETURN);
 
 		/* Mega Hack -- It's not the stairs you enter.  Disable it.  */
 		if (!feat_uses_special(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat)) floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].special = 0;
@@ -864,6 +868,7 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
 /*!
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void leave_floor(player_type *creature_ptr)
@@ -892,7 +897,7 @@ void leave_floor(player_type *creature_ptr)
 	    !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
 	{
 	    /* Get temporal floor_id */
-		tmp_floor_idx = get_new_floor_id();
+		tmp_floor_idx = get_new_floor_id(creature_ptr);
 	}
 
 	/* Search the quest monster index */
@@ -901,7 +906,7 @@ void leave_floor(player_type *creature_ptr)
 		if ((quest[i].status == QUEST_STATUS_TAKEN) &&
 		    ((quest[i].type == QUEST_TYPE_KILL_LEVEL) ||
 		    (quest[i].type == QUEST_TYPE_RANDOM)) &&
-		    (quest[i].level == p_ptr->current_floor_ptr->dun_level) &&
+		    (quest[i].level == creature_ptr->current_floor_ptr->dun_level) &&
 		    (creature_ptr->dungeon_idx == quest[i].dungeon) &&
 		    !(quest[i].flags & QUEST_FLAG_PRESET))
 		{
@@ -910,10 +915,10 @@ void leave_floor(player_type *creature_ptr)
 	}
 
 	/* Maintain quest monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < creature_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_race *r_ptr;
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
 
 		if (!monster_is_valid(m_ptr)) continue;
 
@@ -958,7 +963,7 @@ void leave_floor(player_type *creature_ptr)
 	if (creature_ptr->change_floor_mode & CFM_SAVE_FLOORS)
 	{
 		/* Extract stair position */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+		g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 		f_ptr = &f_info[g_ptr->feat];
 
 		/* Get back to old saved floor? */
@@ -971,7 +976,7 @@ void leave_floor(player_type *creature_ptr)
 		/* Mark shaft up/down */
 		if (have_flag(f_ptr->flags, FF_STAIRS) && have_flag(f_ptr->flags, FF_SHAFT))
 		{
-			prepare_change_floor_mode(CFM_SHAFT);
+			prepare_change_floor_mode(creature_ptr, CFM_SHAFT);
 		}
 	}
 
@@ -991,20 +996,20 @@ void leave_floor(player_type *creature_ptr)
 		/* Get out from or Enter the dungeon */
 		if (creature_ptr->change_floor_mode & CFM_DOWN)
 		{
-			if (!p_ptr->current_floor_ptr->dun_level)
+			if (!creature_ptr->current_floor_ptr->dun_level)
 				move_num = d_info[creature_ptr->dungeon_idx].mindepth;
 		}
 		else if (creature_ptr->change_floor_mode & CFM_UP)
 		{
-			if (p_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth)
-				move_num = -p_ptr->current_floor_ptr->dun_level;
+			if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth)
+				move_num = -creature_ptr->current_floor_ptr->dun_level;
 		}
 
-		p_ptr->current_floor_ptr->dun_level += move_num;
+		creature_ptr->current_floor_ptr->dun_level += move_num;
 	}
 
 	/* Leaving the dungeon to town */
-	if (!p_ptr->current_floor_ptr->dun_level && creature_ptr->dungeon_idx)
+	if (!creature_ptr->current_floor_ptr->dun_level && creature_ptr->dungeon_idx)
 	{
 		creature_ptr->leaving_dungeon = TRUE;
 		if (!vanilla_town && !lite_town)
@@ -1024,7 +1029,7 @@ void leave_floor(player_type *creature_ptr)
 	{
 		/* Kill all saved floors */
 		for (i = 0; i < MAX_SAVED_FLOORS; i++)
-			kill_saved_floor(&saved_floors[i]);
+			kill_saved_floor(creature_ptr, &saved_floors[i]);
 
 		/* Reset visit_mark count */
 		latest_visit_mark = 1;
@@ -1032,7 +1037,7 @@ void leave_floor(player_type *creature_ptr)
 	else if (creature_ptr->change_floor_mode & CFM_NO_RETURN)
 	{
 		/* Kill current floor */
-		kill_saved_floor(sf_ptr);
+		kill_saved_floor(creature_ptr, sf_ptr);
 	}
 
 	/* No current floor -- Left/Enter dungeon etc... */
@@ -1046,7 +1051,7 @@ void leave_floor(player_type *creature_ptr)
 	if (!new_floor_id)
 	{
 		/* Get new id */
-		new_floor_id = get_new_floor_id();
+		new_floor_id = get_new_floor_id(creature_ptr);
 
 		/* Connect from here */
 		if (g_ptr && !feat_uses_special(g_ptr->feat))
@@ -1069,23 +1074,23 @@ void leave_floor(player_type *creature_ptr)
 	    !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
 	{
 		/* Get out of the my way! */
-		get_out_monster(p_ptr->current_floor_ptr, creature_ptr);
+		get_out_monster(creature_ptr->current_floor_ptr, creature_ptr);
 
 		/* Record the last visit turn of current floor */
 		sf_ptr->last_visit = current_world_ptr->game_turn;
 
-		forget_lite(p_ptr->current_floor_ptr);
-		forget_view(p_ptr->current_floor_ptr);
-		clear_mon_lite(p_ptr->current_floor_ptr);
+		forget_lite(creature_ptr->current_floor_ptr);
+		forget_view(creature_ptr->current_floor_ptr);
+		clear_mon_lite(creature_ptr->current_floor_ptr);
 
 		/* Save current floor */
 		if (!save_floor(sf_ptr, 0))
 		{
 			/* Save failed -- No return */
-			prepare_change_floor_mode(CFM_NO_RETURN);
+			prepare_change_floor_mode(creature_ptr, CFM_NO_RETURN);
 
 			/* Kill current floor */
-			kill_saved_floor(get_sf_ptr(creature_ptr->floor_id));
+			kill_saved_floor(creature_ptr, get_sf_ptr(creature_ptr->floor_id));
 		}
 	}
 }
@@ -1093,6 +1098,7 @@ void leave_floor(player_type *creature_ptr)
 
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * If the floor is an old saved floor, it will be\n
@@ -1123,7 +1129,7 @@ void change_floor(player_type *creature_ptr)
 	if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) &&
 	    !(creature_ptr->change_floor_mode & CFM_FIRST_FLOOR))
 	{
-		generate_floor(creature_ptr->current_floor_ptr);
+		generate_floor(creature_ptr);
 
 		/* Paranoia -- No new saved floor */
 		new_floor_id = 0;
@@ -1136,7 +1142,7 @@ void change_floor(player_type *creature_ptr)
 		if (!new_floor_id)
 		{
 			/* Get new id */
-			new_floor_id = get_new_floor_id();
+			new_floor_id = get_new_floor_id(creature_ptr);
 		}
 
 		/* Pointer for infomations of new floor */
@@ -1146,7 +1152,7 @@ void change_floor(player_type *creature_ptr)
 		if (sf_ptr->last_visit)
 		{
 			/* Old saved floor is exist */
-			if (load_floor(sf_ptr, 0))
+			if (load_floor(creature_ptr, sf_ptr, 0))
 			{
 				loaded = TRUE;
 
@@ -1300,7 +1306,7 @@ void change_floor(player_type *creature_ptr)
 				msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
 
 				/* Create simple dead end */
-				build_dead_end(creature_ptr->current_floor_ptr);
+				build_dead_end(creature_ptr);
 
 				/* Break connection */
 				if (creature_ptr->change_floor_mode & CFM_UP)
@@ -1314,7 +1320,7 @@ void change_floor(player_type *creature_ptr)
 			}
 			else
 			{
-				generate_floor(creature_ptr->current_floor_ptr);
+				generate_floor(creature_ptr);
 			}
 
 			/* Record last visit turn */

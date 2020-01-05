@@ -18,12 +18,12 @@ typedef struct
 
 extern u32b saved_floor_file_sign;
 
-extern void init_saved_floors(bool force);
+extern void init_saved_floors(player_type *creature_ptr, bool force);
 extern void change_floor(player_type *creature_ptr);
 extern void leave_floor(player_type *creature_ptr);
-extern void clear_saved_floor_files(void);
+extern void clear_saved_floor_files(player_type *creature_ptr);
 extern saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id);
-extern FLOOR_IDX get_new_floor_id(void);
+extern FLOOR_IDX get_new_floor_id(player_type *creature_ptr);
 
 /*
  * Flags for change floor mode
@@ -38,7 +38,7 @@ extern FLOOR_IDX get_new_floor_id(void);
 #define CFM_SAVE_FLOORS  0x0080  /* Save floors */
 #define CFM_NO_RETURN    0x0100  /* Flee from random quest etc... */
 #define CFM_FIRST_FLOOR  0x0200  /* Create exit from the dungeon */
-extern void prepare_change_floor_mode(BIT_FLAGS mode);
+extern void prepare_change_floor_mode(player_type *creature_ptr, BIT_FLAGS mode);
 
-extern void precalc_cur_num_of_pet(void);
+extern void precalc_cur_num_of_pet(player_type *creature_ptr);
 extern FLOOR_IDX max_floor_id;

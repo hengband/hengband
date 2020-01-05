@@ -36,4 +36,4 @@ extern void autopick_alter_item(INVENTORY_IDX item, bool destroy);
 extern void autopick_delayed_alter(void);
 extern void autopick_pickup_items(grid_type *g_ptr);
 extern bool autopick_autoregister(object_type *o_ptr);
-extern void do_cmd_edit_autopick(void);
+extern void do_cmd_edit_autopick(player_type *player_ptr);

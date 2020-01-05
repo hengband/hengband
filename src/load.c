@@ -1918,7 +1918,7 @@ static void rd_extra(player_type *creature_ptr)
 	{
 		determine_bounty_uniques();
 
-		for (i = 0; i < MAX_KUBI; i++)
+		for (i = 0; i < MAX_BOUNTY; i++)
 		{
 			/* Is this bounty unique already dead? */
 			if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num) current_world_ptr->bounty_r_idx[i] += 10000;
@@ -1926,7 +1926,7 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else
 	{
-		for (i = 0; i < MAX_KUBI; i++)
+		for (i = 0; i < MAX_BOUNTY; i++)
 		{
 			rd_s16b(&current_world_ptr->bounty_r_idx[i]);
 		}
@@ -2964,6 +2964,8 @@ static errr rd_dungeon_old(floor_type *floor_ptr)
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param sf_ptr 最後に保存されたフロアへの参照ポインタ
  * @return info読み込みエラーコード
  * @details
  * この関数は、セーブデータの互換性を保つために多くのデータ改変処理を備えている。
@@ -2975,7 +2977,7 @@ static errr rd_dungeon_old(floor_type *floor_ptr)
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-static errr rd_saved_floor(saved_floor_type *sf_ptr, floor_type *floor_ptr)
+static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
 	POSITION ymax, xmax;
 	POSITION y, x;
@@ -2989,11 +2991,11 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr, floor_type *floor_ptr)
 	u16b limit;
 
 	grid_template_type *templates;
-
-	clear_cave(floor_ptr);
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	clear_cave(player_ptr);
 
 	/* Mega-Hack -- no player yet */
-	p_ptr->x = p_ptr->y = 0;
+	player_ptr->x = player_ptr->y = 0;
 
 	/*** Basic info ***/
 
@@ -3040,17 +3042,17 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr, floor_type *floor_ptr)
 	floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 
 	rd_u16b(&tmp16u);
-	p_ptr->y = (POSITION)tmp16u;
+	player_ptr->y = (POSITION)tmp16u;
 
 	rd_u16b(&tmp16u);
-	p_ptr->x = (POSITION)tmp16u;
+	player_ptr->x = (POSITION)tmp16u;
 
 	rd_s16b(&tmp16s);
 	floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
 	floor_ptr->width = (POSITION)tmp16s;
 
-	rd_byte(&p_ptr->feeling);
+	rd_byte(&player_ptr->feeling);
 
 
 
@@ -3255,12 +3257,13 @@ static errr rd_saved_floor(saved_floor_type *sf_ptr, floor_type *floor_ptr)
 
 /*!
  * @brief 保存されたフロアを読み込む(現版) / Read the dungeon (new method)
- * @return なし
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return エラーコード
  * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-static errr rd_dungeon(void)
+static errr rd_dungeon(player_type *player_ptr)
 {
 	errr err = 0;
 	s16b tmp16s;
@@ -3269,18 +3272,18 @@ static errr rd_dungeon(void)
 	int i;
 
 	/* Initialize saved_floors array and temporal files */
-	init_saved_floors(FALSE);
+	init_saved_floors(player_ptr, FALSE);
 
 	/* Older method */
 	if (h_older_than(1, 5, 0, 0))
 	{
-		err = rd_dungeon_old(p_ptr->current_floor_ptr);
+		err = rd_dungeon_old(player_ptr->current_floor_ptr);
 
 		/* Prepare floor_id of current floor */
-		if (p_ptr->dungeon_idx)
+		if (player_ptr->dungeon_idx)
 		{
-			p_ptr->floor_id = get_new_floor_id();
-			get_sf_ptr(p_ptr->floor_id)->dun_level = p_ptr->current_floor_ptr->dun_level;
+			player_ptr->floor_id = get_new_floor_id(player_ptr);
+			get_sf_ptr(player_ptr->floor_id)->dun_level = player_ptr->current_floor_ptr->dun_level;
 		}
 
 		return err;
@@ -3294,7 +3297,7 @@ static errr rd_dungeon(void)
 
 	/* Current dungeon type */
 	rd_byte(&tmp8u);
-	p_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
+	player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
 
 	/* Number of the saved_floors array elements */
 	rd_byte(&num);
@@ -3303,7 +3306,7 @@ static errr rd_dungeon(void)
 	if (!num)
 	{
 		/* Read the current floor data */
-		err = rd_saved_floor(NULL, p_ptr->current_floor_ptr);
+		err = rd_saved_floor(player_ptr, NULL);
 	}
 
 	/*** In the dungeon ***/
@@ -3342,7 +3345,7 @@ static errr rd_dungeon(void)
 			if (tmp8u) continue;
 
 			/* Read from the save file */
-			err = rd_saved_floor(sf_ptr, p_ptr->current_floor_ptr);
+			err = rd_saved_floor(player_ptr, sf_ptr);
 
 			/* Error? */
 			if (err) break;
@@ -3357,7 +3360,7 @@ static errr rd_dungeon(void)
 		/* Finally load current floor data from temporal file */
 		if (!err)
 		{
-			if (!load_floor(get_sf_ptr(p_ptr->floor_id), SLF_SECOND)) err = 183;
+			if (!load_floor(player_ptr, get_sf_ptr(player_ptr->floor_id), SLF_SECOND)) err = 183;
 		}
 	}
 
@@ -3929,7 +3932,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		/* Dead players have no dungeon */
 		note(_("ダンジョン復元中...", "Restoring Dungeon..."));
 
-		if (rd_dungeon())
+		if (rd_dungeon(creature_ptr))
 		{
 			note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
 			return (34);
@@ -4024,10 +4027,11 @@ errr rd_savefile_new(void)
 
 /*!
  * @brief 保存フロア読み込みのサブ関数 / Actually load and verify a floor save data
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア読み込み先
  * @return 成功したらtrue
  */
-static bool load_floor_aux(saved_floor_type *sf_ptr)
+static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
 	byte tmp8u;
 	u32b tmp32u;
@@ -4057,7 +4061,7 @@ static bool load_floor_aux(saved_floor_type *sf_ptr)
 	if (saved_floor_file_sign != tmp32u) return FALSE;
 
 	/* Read -- have error? */
-	if (rd_saved_floor(sf_ptr, p_ptr->current_floor_ptr)) return FALSE;
+	if (rd_saved_floor(player_ptr, sf_ptr)) return FALSE;
 
 
 #ifdef VERIFY_CHECKSUMS
@@ -4087,11 +4091,12 @@ static bool load_floor_aux(saved_floor_type *sf_ptr)
 
 /*!
  * @brief 一時保存フロア情報を読み込む / Attempt to load the temporally saved-floor data
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア読み込み先
  * @param mode オプション
  * @return 成功したらtrue
  */
-bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
+bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
 	FILE *old_fff = NULL;
 	byte old_xor_byte = 0;
@@ -4159,7 +4164,7 @@ bool load_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 	if (ok)
 	{
 		/* Load saved floor data from file */
-		ok = load_floor_aux(sf_ptr);
+		ok = load_floor_aux(player_ptr, sf_ptr);
 
 		/* Check for errors */
 		if (ferror(fff)) ok = FALSE;

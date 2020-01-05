@@ -676,16 +676,16 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 
 			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, 1, NULL);
 
-			if (autosave_l) do_cmd_save_game(TRUE);
+			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 			if (!creature_ptr->current_floor_ptr->dun_level)
 			{
 				creature_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].mindepth;
-				prepare_change_floor_mode(CFM_RAND_PLACE);
+				prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
 			}
 			else
 			{
-				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+				prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			}
 			creature_ptr->leaving = TRUE;
 		}
@@ -705,11 +705,11 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		{
 			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, -1, NULL);
 
-			if (autosave_l) do_cmd_save_game(TRUE);
+			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
-			leave_quest_check();
+			leave_quest_check(creature_ptr);
 			creature_ptr->current_floor_ptr->inside_quest = 0;
 			creature_ptr->leaving = TRUE;
 		}
@@ -727,9 +727,9 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		{
 			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, -1, NULL);
 
-			if (autosave_l) do_cmd_save_game(TRUE);
+			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			creature_ptr->leaving = TRUE;
 		}
 	}
@@ -746,9 +746,9 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 			/* Never reach this code on the surface */
 			/* if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = creature_ptr->recall_dungeon; */
 			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, 1, NULL);
-			if (autosave_l) do_cmd_save_game(TRUE);
+			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			creature_ptr->leaving = TRUE;
 		}
 	}

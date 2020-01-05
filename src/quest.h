@@ -92,7 +92,7 @@ extern void check_find_art_quest_completion(object_type *o_ptr);
 extern void quest_discovery(QUEST_IDX q_idx);
 extern QUEST_IDX quest_number(DEPTH level);
 extern QUEST_IDX random_quest_number(DEPTH level);
-extern void leave_quest_check(void);
+extern void leave_quest_check(player_type *player_ptr);
 extern void leave_tower_check(void);
-extern void do_cmd_quest(void);
+extern void do_cmd_quest(player_type *player_ptr);
 

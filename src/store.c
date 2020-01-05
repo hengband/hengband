@@ -5638,7 +5638,7 @@ static void store_process_command(player_type *client_ptr)
 
 		case '|':
 		{
-			do_cmd_nikki();
+			do_cmd_diary(client_ptr);
 			break;
 		}
 
@@ -5659,7 +5659,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Save "screen dump" */
 		case ')':
 		{
-			do_cmd_save_screen();
+			do_cmd_save_screen(client_ptr);
 			break;
 		}
 

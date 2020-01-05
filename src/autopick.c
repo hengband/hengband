@@ -605,7 +605,7 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	}
 
 	/* Wanted monster's corpse */
-	if (object_is_shoukinkubi(o_ptr))
+	if (object_is_bounty(o_ptr))
 	{
 		REM_FLG(FLG_WORTHLESS);
 		ADD_FLG(FLG_WANTED);
@@ -1265,7 +1265,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_
 		return FALSE;
 
 	/*** Wanted monster's corpse/skeletons ***/
-	if (IS_FLG(FLG_WANTED) && !object_is_shoukinkubi(o_ptr))
+	if (IS_FLG(FLG_WANTED) && !object_is_bounty(o_ptr))
 		return FALSE;
 
 	/*** Unique monster's corpse/skeletons/statues ***/
@@ -1527,7 +1527,7 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 
 	if (leave_wanted)
 	{
-		if (object_is_shoukinkubi(o_ptr)) return FALSE;
+		if (object_is_bounty(o_ptr)) return FALSE;
 	}
 
 	if (leave_corpse)
@@ -5971,8 +5971,9 @@ static int analyze_move_key(text_body_type *tb, int skey)
 
 /*
  * In-game editor of Object Auto-picker/Destoryer
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_edit_autopick(void)
+void do_cmd_edit_autopick(player_type *player_ptr)
 {
 	static int cx_save = 0;
 	static int cy_save = 0;
@@ -6014,7 +6015,7 @@ void do_cmd_edit_autopick(void)
 	/* Autosave */
 	if (current_world_ptr->game_turn > old_autosave_turn + 100L)
 	{
-		do_cmd_save_game(TRUE);
+		do_cmd_save_game(player_ptr, TRUE);
 		old_autosave_turn = current_world_ptr->game_turn;
 	}
 

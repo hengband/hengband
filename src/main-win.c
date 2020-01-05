@@ -3915,7 +3915,7 @@ static void process_menus(WORD wCmd)
 
 				/* Save the game */
 #ifdef ZANGBAND
-				do_cmd_save_game(FALSE);
+				do_cmd_save_game(p_ptr, FALSE);
 #else /* ZANGBAND */
 				do_cmd_save_game();
 #endif /* ZANGBAND */
@@ -4875,7 +4875,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
 				/* Panic save */
-				(void)save_player();
+				(void)save_player(p_ptr);
 			}
 			quit(NULL);
 			return 0;

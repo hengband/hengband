@@ -663,12 +663,12 @@ static void pattern_teleport(player_type *creature_ptr)
 	/* Accept request */
 	msg_format(_("%d 階にテレポートしました。", "You teleport to dungeon level %d."), command_arg);
 
-	if (autosave_l) do_cmd_save_game(TRUE);
+	if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 	/* Change level */
 	creature_ptr->current_floor_ptr->dun_level = command_arg;
 
-	leave_quest_check();
+	leave_quest_check(creature_ptr);
 
 	if (record_stair) exe_write_diary(creature_ptr, NIKKI_PAT_TELE, 0, NULL);
 
@@ -679,7 +679,7 @@ static void pattern_teleport(player_type *creature_ptr)
 	 * Clear all saved floors
 	 * and create a first saved floor
 	 */
-	prepare_change_floor_mode(CFM_FIRST_FLOOR);
+	prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
 	creature_ptr->leaving = TRUE;
 }
 
@@ -2939,7 +2939,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 		 * he loads the autosaved game.
 		 */
 		if (autosave_l && (creature_ptr->word_recall == 1) && !creature_ptr->phase_out)
-			do_cmd_save_game(TRUE);
+			do_cmd_save_game(creature_ptr, TRUE);
 
 		/* Count down towards recall */
 		creature_ptr->word_recall--;
@@ -2964,7 +2964,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				floor_ptr->dun_level = 0;
 				creature_ptr->dungeon_idx = 0;
 
-				leave_quest_check();
+				leave_quest_check(creature_ptr);
 				leave_tower_check();
 
 				creature_ptr->current_floor_ptr->inside_quest = 0;
@@ -3018,7 +3018,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				 * Clear all saved floors
 				 * and create a first saved floor
 				 */
-				prepare_change_floor_mode(CFM_FIRST_FLOOR);
+				prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
 				creature_ptr->leaving = TRUE;
 
 				if (creature_ptr->dungeon_idx == DUNGEON_ANGBAND)
@@ -3053,7 +3053,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 	if (creature_ptr->alter_reality)
 	{
 		if (autosave_l && (creature_ptr->alter_reality == 1) && !creature_ptr->phase_out)
-			do_cmd_save_game(TRUE);
+			do_cmd_save_game(creature_ptr, TRUE);
 
 		/* Count down towards alter */
 		creature_ptr->alter_reality--;
@@ -3075,7 +3075,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				 * Clear all saved floors
 				 * and create a first saved floor
 				 */
-				prepare_change_floor_mode(CFM_FIRST_FLOOR);
+				prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
 				creature_ptr->leaving = TRUE;
 			}
 			else
@@ -3111,7 +3111,7 @@ static void process_world(player_type *player_ptr)
 	{
 		player_ptr->current_floor_ptr->dun_level = 0;
 		player_ptr->dungeon_idx = 0;
-		prepare_change_floor_mode(CFM_FIRST_FLOOR | CFM_RAND_PLACE);
+		prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
 		player_ptr->current_floor_ptr->inside_arena = FALSE;
 		player_ptr->wild_mode = FALSE;
 		player_ptr->leaving = TRUE;
@@ -3186,7 +3186,7 @@ static void process_world(player_type *player_ptr)
 	if (autosave_t && autosave_freq && !player_ptr->phase_out)
 	{
 		if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
-			do_cmd_save_game(TRUE);
+			do_cmd_save_game(player_ptr, TRUE);
 	}
 
 	if (player_ptr->current_floor_ptr->monster_noise && !ignore_unview)
@@ -3735,7 +3735,7 @@ static void process_command(player_type *creature_ptr)
 		/* Enter quest level -KMW- */
 		case SPECIAL_KEY_QUEST:
 		{
-			do_cmd_quest();
+			do_cmd_quest(creature_ptr);
 			break;
 		}
 
@@ -4102,7 +4102,7 @@ static void process_command(player_type *creature_ptr)
 
 		case '_':
 		{
-			do_cmd_edit_autopick();
+			do_cmd_edit_autopick(creature_ptr);
 			break;
 		}
 
@@ -4178,7 +4178,7 @@ static void process_command(player_type *creature_ptr)
 		/* Show quest status -KMW- */
 		case KTRL('Q'):
 		{
-			do_cmd_checkquest();
+			do_cmd_checkquest(creature_ptr);
 			break;
 		}
 
@@ -4195,7 +4195,7 @@ static void process_command(player_type *creature_ptr)
 		/* Hack -- Save and don't quit */
 		case KTRL('S'):
 		{
-			do_cmd_save_game(FALSE);
+			do_cmd_save_game(creature_ptr, FALSE);
 			break;
 		}
 
@@ -4203,7 +4203,7 @@ static void process_command(player_type *creature_ptr)
 
 		case KTRL('T'):
 		{
-			do_cmd_time();
+			do_cmd_time(creature_ptr);
 			break;
 		}
 
@@ -4224,7 +4224,7 @@ static void process_command(player_type *creature_ptr)
 
 		case '|':
 		{
-			do_cmd_nikki();
+			do_cmd_diary(creature_ptr);
 			break;
 		}
 
@@ -4245,7 +4245,7 @@ static void process_command(player_type *creature_ptr)
 		/* Save "screen dump" */
 		case ')':
 		{
-			do_cmd_save_screen();
+			do_cmd_save_screen(creature_ptr);
 			break;
 		}
 
@@ -5315,7 +5315,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 		/* Handle score, show Top scores */
-		success = send_world_score(TRUE);
+		success = send_world_score(player_ptr, TRUE);
 
 		if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY))
 		{
@@ -5326,7 +5326,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		{
 			player_ptr->wait_report_score = FALSE;
 			top_twenty(player_ptr);
-			if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
+			if (!save_player(player_ptr)) msg_print(_("セーブ失敗！", "death save failed!"));
 		}
 		/* Shut the high score file */
 		(void)fd_close(highscore_fd);
@@ -5355,14 +5355,14 @@ void play_game(player_type *player_ptr, bool new_game)
 		init_random_seed = TRUE;
 
 		/* Initialize the saved floors data */
-		init_saved_floors(FALSE);
+		init_saved_floors(player_ptr, FALSE);
 	}
 
 	/* Old game is loaded.  But new game is requested. */
 	else if (new_game)
 	{
 		/* Initialize the saved floors data */
-		init_saved_floors(TRUE);
+		init_saved_floors(player_ptr, TRUE);
 	}
 
 	/* Process old character */
@@ -5479,7 +5479,7 @@ void play_game(player_type *player_ptr, bool new_game)
 			if (player_ptr->is_dead || !player_ptr->y || !player_ptr->x)
 			{
 				/* Initialize the saved floors data */
-				init_saved_floors(TRUE);
+				init_saved_floors(player_ptr, TRUE);
 
 				/* Avoid crash */
 				player_ptr->current_floor_ptr->inside_quest = 0;
@@ -5647,7 +5647,7 @@ void play_game(player_type *player_ptr, bool new_game)
 				reset_tim_flags(player_ptr);
 
 				/* Leave through the exit */
-				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
+				prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
 
 				/* prepare next floor */
 				leave_floor(player_ptr);
@@ -5670,7 +5670,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	}
 
 	/* Close stuff */
-	close_game();
+	close_game(player_ptr);
 
 	/* Quit */
 	quit(NULL);
@@ -5744,13 +5744,14 @@ void prevent_turn_overflow(void)
 /*!
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
  * This function is called only from "main.c" and "signals.c".
  * </pre>
  */
-void close_game(void)
+void close_game(player_type *player_ptr)
 {
 	char buf[1024];
 	bool do_send = TRUE;
@@ -5784,15 +5785,15 @@ void close_game(void)
 	safe_setuid_drop();
 
 	/* Handle death */
-	if (p_ptr->is_dead)
+	if (player_ptr->is_dead)
 	{
 		/* Handle retirement */
-		if (current_world_ptr->total_winner) kingly(p_ptr);
+		if (current_world_ptr->total_winner) kingly(player_ptr);
 
 		/* Save memories */
 		if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? ")))
 		{
-			if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
+			if (!save_player(player_ptr)) msg_print(_("セーブ失敗！", "death save failed!"));
 		}
 		else do_send = FALSE;
 
@@ -5802,23 +5803,23 @@ void close_game(void)
 		flush();
 
 		/* Show more info */
-		show_info();
+		show_info(player_ptr);
 		Term_clear();
 
 		if (check_score())
 		{
-			if ((!send_world_score(do_send)))
+			if ((!send_world_score(player_ptr, do_send)))
 			{
 				if (get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
 					(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 				{
-					p_ptr->wait_report_score = TRUE;
-					p_ptr->is_dead = FALSE;
-					if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
+					player_ptr->wait_report_score = TRUE;
+					player_ptr->is_dead = FALSE;
+					if (!save_player(player_ptr)) msg_print(_("セーブ失敗！", "death save failed!"));
 				}
 			}
-			if (!p_ptr->wait_report_score)
-				(void)top_twenty(p_ptr);
+			if (!player_ptr->wait_report_score)
+				(void)top_twenty(player_ptr);
 		}
 		else if (highscore_fd >= 0)
 		{
@@ -5834,14 +5835,14 @@ void close_game(void)
 	else
 	{
 		/* Save the game */
-		do_cmd_save_game(FALSE);
+		do_cmd_save_game(player_ptr, FALSE);
 
 		/* Prompt for scores */
 		prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
 
 		/* Predict score (or ESCAPE) */
-		if (inkey() != ESCAPE) predict_score(p_ptr);
+		if (inkey() != ESCAPE) predict_score(player_ptr);
 	}
 
 
@@ -5852,7 +5853,7 @@ void close_game(void)
 	highscore_fd = -1;
 
 	/* Kill all temporal files */
-	clear_saved_floor_files();
+	clear_saved_floor_files(player_ptr);
 
 	/* Allow suspending now */
 	signals_handle_tstp();

@@ -312,19 +312,19 @@ static void show_building(building_type* bldg)
 
 /*!
  * @brief 闘技場に入るコマンドの処理 / arena commands
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
  * @return なし
  */
-static void arena_comm(int cmd)
+static void arena_comm(player_type *player_ptr, int cmd)
 {
 	monster_race    *r_ptr;
 	concptr            name;
-
-
+	
 	switch (cmd)
 	{
 		case BACT_ARENA:
-			if (p_ptr->arena_number == MAX_ARENA_MONS)
+			if (player_ptr->arena_number == MAX_ARENA_MONS)
 			{
 				clear_bldg(5, 19);
 				prt(_("アリーナの優勝者！", "               Arena Victor!"), 5, 0);
@@ -333,14 +333,14 @@ static void arena_comm(int cmd)
 
 				prt("", 10, 0);
 				prt("", 11, 0);
-				p_ptr->au += 1000000L;
+				player_ptr->au += 1000000L;
 				msg_print(_("スペースキーで続行", "Press the space bar to continue"));
 				msg_print(NULL);
-				p_ptr->arena_number++;
+				player_ptr->arena_number++;
 			}
-			else if (p_ptr->arena_number > MAX_ARENA_MONS)
+			else if (player_ptr->arena_number > MAX_ARENA_MONS)
 			{
-				if (p_ptr->arena_number < MAX_ARENA_MONS+2)
+				if (player_ptr->arena_number < MAX_ARENA_MONS+2)
 				{
 					msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
 					msg_print(NULL);
@@ -349,15 +349,15 @@ static void arena_comm(int cmd)
 						msg_print(_("死ぬがよい。", "Die, maggots."));
 						msg_print(NULL);
 					
-						p_ptr->exit_bldg = FALSE;
-						reset_tim_flags(p_ptr);
+						player_ptr->exit_bldg = FALSE;
+						reset_tim_flags(player_ptr);
 
 						/* Save the surface floor as saved floor */
-						prepare_change_floor_mode(CFM_SAVE_FLOORS);
+						prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
-						p_ptr->current_floor_ptr->inside_arena = TRUE;
-						p_ptr->leaving = TRUE;
-						p_ptr->leave_bldg = TRUE;
+						player_ptr->current_floor_ptr->inside_arena = TRUE;
+						player_ptr->leaving = TRUE;
+						player_ptr->leave_bldg = TRUE;
 					}
 					else
 					{
@@ -371,7 +371,7 @@ static void arena_comm(int cmd)
 					msg_print(NULL);
 				}
 			}
-			else if (p_ptr->riding && (p_ptr->pclass != CLASS_BEASTMASTER) && (p_ptr->pclass != CLASS_CAVALRY))
+			else if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY))
 			{
 				msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
 							"You don't have permission to enter with pet."));
@@ -379,34 +379,34 @@ static void arena_comm(int cmd)
 			}
 			else
 			{
-				p_ptr->exit_bldg = FALSE;
-				reset_tim_flags(p_ptr);
+				player_ptr->exit_bldg = FALSE;
+				reset_tim_flags(player_ptr);
 
 				/* Save the surface floor as saved floor */
-				prepare_change_floor_mode(CFM_SAVE_FLOORS);
+				prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
-				p_ptr->current_floor_ptr->inside_arena = TRUE;
-				p_ptr->leaving = TRUE;
-				p_ptr->leave_bldg = TRUE;
+				player_ptr->current_floor_ptr->inside_arena = TRUE;
+				player_ptr->leaving = TRUE;
+				player_ptr->leave_bldg = TRUE;
 			}
 			break;
 		case BACT_POSTER:
-			if (p_ptr->arena_number == MAX_ARENA_MONS)
+			if (player_ptr->arena_number == MAX_ARENA_MONS)
 				msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
 							"You are victorious. Enter the arena for the ceremony."));
 
-			else if (p_ptr->arena_number > MAX_ARENA_MONS)
+			else if (player_ptr->arena_number > MAX_ARENA_MONS)
 			{
 				msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
 			}
 			else
 			{
-				r_ptr = &r_info[arena_info[p_ptr->arena_number].r_idx];
+				r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
 				name = (r_name + r_ptr->name);
 				msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
 
-				p_ptr->monster_race_idx = arena_info[p_ptr->arena_number].r_idx;
-				p_ptr->window |= (PW_MONSTER);
+				player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
+				player_ptr->window |= (PW_MONSTER);
 				handle_stuff();
 
 			}
@@ -421,6 +421,7 @@ static void arena_comm(int cmd)
 			break;
 	}
 }
+
 
 /*!
  * @brief カジノのスロットシンボルを表示する / display fruit for dice slots
@@ -1547,9 +1548,10 @@ void update_gambling_monsters(void)
 
 /*!
  * @brief モンスター闘技場のメインルーチン
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 賭けを開始したか否か
  */
-static bool kakutoujou(void)
+static bool kakutoujou(player_type *player_ptr)
 {
 	PRICE maxbet;
 	PRICE wager;
@@ -1565,7 +1567,7 @@ static bool kakutoujou(void)
 	screen_save();
 
 	/* No money */
-	if (p_ptr->au < 1)
+	if (player_ptr->au <= 1)
 	{
 		msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", "Hey! You don't have gold - get out of here!"));
 		msg_print(NULL);
@@ -1614,10 +1616,10 @@ static bool kakutoujou(void)
 		for (i = 0; i < 4; i++)
 			if (i != sel_monster) clear_bldg(i + 5, i + 5);
 
-		maxbet = p_ptr->lev * 200;
+		maxbet = player_ptr->lev * 200;
 
 		/* We can't bet more than we have */
-		maxbet = MIN(maxbet, p_ptr->au);
+		maxbet = MIN(maxbet, player_ptr->au);
 
 		/* Get the wager */
 		strcpy(out_val, "");
@@ -1634,7 +1636,7 @@ static bool kakutoujou(void)
 			/* Get the wager */
 			wager = atol(p);
 
-			if (wager > p_ptr->au)
+			if (wager > player_ptr->au)
 			{
 				msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
 
@@ -1656,15 +1658,15 @@ static bool kakutoujou(void)
 			msg_print(NULL);
 			battle_odds = MAX(wager+1, wager * battle_odds / 100);
 			kakekin = wager;
-			p_ptr->au -= wager;
-			reset_tim_flags(p_ptr);
+			player_ptr->au -= wager;
+			reset_tim_flags(player_ptr);
 
 			/* Save the surface floor as saved floor */
-			prepare_change_floor_mode(CFM_SAVE_FLOORS);
+			prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
-			p_ptr->phase_out = TRUE;
-			p_ptr->leaving = TRUE;
-			p_ptr->leave_bldg = TRUE;
+			player_ptr->phase_out = TRUE;
+			player_ptr->leaving = TRUE;
+			player_ptr->leave_bldg = TRUE;
 
 			screen_load();
 
@@ -1714,7 +1716,7 @@ static void tsuchinoko(void)
  * @brief 通常の賞金首情報を表示する。
  * @return なし
  */
-static void shoukinkubi(void)
+static void show_bounty(void)
 {
 	int i;
 	TERM_LEN y = 0;
@@ -1723,7 +1725,7 @@ static void shoukinkubi(void)
 	prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"),4 ,10);
 	c_put_str(TERM_YELLOW, _("現在の賞金首", "Wanted monsters"), 6, 10);
 
-	for (i = 0; i < MAX_KUBI; i++)
+	for (i = 0; i < MAX_BOUNTY; i++)
 	{
 		byte color;
 		concptr done_mark;
@@ -1743,7 +1745,7 @@ static void shoukinkubi(void)
 		c_prt(color, format("%s %s", r_name + r_ptr->name, done_mark), y+7, 10);
 
 		y = (y+1) % 10;
-		if (!y && (i < MAX_KUBI -1))
+		if (!y && (i < MAX_BOUNTY -1))
 		{
 			prt(_("何かキーを押してください", "Hit any key."), 0, 0);
 			(void)inkey();
@@ -1761,7 +1763,7 @@ static void shoukinkubi(void)
 static struct {
 	OBJECT_TYPE_VALUE tval; /*!< ベースアイテムのメイン種別ID */
 	OBJECT_SUBTYPE_VALUE sval; /*!< ベースアイテムのサブ種別ID */
-} prize_list[MAX_KUBI] = 
+} prize_list[MAX_BOUNTY] = 
 {
 	{TV_POTION, SV_POTION_CURING},
 	{TV_POTION, SV_POTION_SPEED},
@@ -1903,7 +1905,7 @@ static bool kankin(void)
 		}
 	}
 
-	for (j = 0; j < MAX_KUBI; j++)
+	for (j = 0; j < MAX_BOUNTY; j++)
 	{
 		/* Need reverse order --- Positions will be changed in the loop */
 		for (i = INVEN_PACK-1; i >= 0; i--)
@@ -1938,7 +1940,7 @@ static bool kankin(void)
 				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				/* Count number of unique corpses already handed */
-				for (num = 0, k = 0; k < MAX_KUBI; k++)
+				for (num = 0, k = 0; k < MAX_BOUNTY; k++)
 				{
 					if (current_world_ptr->bounty_r_idx[k] >= 10000) num++;
 				}
@@ -3907,7 +3909,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 	case BACT_POSTER:
 	case BACT_ARENA_RULES:
 	case BACT_ARENA:
-		arena_comm(bact);
+		arena_comm(player_ptr, bact);
 		break;
 	case BACT_IN_BETWEEN:
 	case BACT_CRAPS:
@@ -3994,15 +3996,15 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		break;
 
 	case BACT_BATTLE:
-		kakutoujou();
+		kakutoujou(player_ptr);
 		break;
 
 	case BACT_TSUCHINOKO:
 		tsuchinoko();
 		break;
 
-	case BACT_KUBI:
-		shoukinkubi();
+	case BACT_BOUNTY:
+		show_bounty();
 		break;
 
 	case BACT_TARGET:
@@ -4097,7 +4099,7 @@ void do_cmd_bldg(player_type *player_ptr)
 		else
 		{
 			/* Don't save the arena as saved floor */
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
+			prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);
 
 			player_ptr->current_floor_ptr->inside_arena = FALSE;
 			player_ptr->leaving = TRUE;
@@ -4114,7 +4116,7 @@ void do_cmd_bldg(player_type *player_ptr)
 	else if (player_ptr->phase_out)
 	{
 		/* Don't save the arena as saved floor */
-		prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_NO_RETURN);
+		prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);
 
 		player_ptr->leaving = TRUE;
 		player_ptr->phase_out = FALSE;
@@ -4256,7 +4258,7 @@ void determine_bounty_uniques(void)
 	monster_race *r_ptr;
 
 	get_mon_num_prep(NULL, NULL);
-	for (i = 0; i < MAX_KUBI; i++)
+	for (i = 0; i < MAX_BOUNTY; i++)
 	{
 		while (1)
 		{
@@ -4279,9 +4281,9 @@ void determine_bounty_uniques(void)
 	}
 
 	/* Sort them */
-	for (i = 0; i < MAX_KUBI - 1; i++)
+	for (i = 0; i < MAX_BOUNTY - 1; i++)
 	{
-		for (j = i; j < MAX_KUBI; j++)
+		for (j = i; j < MAX_BOUNTY; j++)
 		{
 			if (r_info[current_world_ptr->bounty_r_idx[i]].level > r_info[current_world_ptr->bounty_r_idx[j]].level)
 			{

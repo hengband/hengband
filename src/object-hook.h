@@ -28,7 +28,7 @@ extern bool item_tester_high_level_book(object_type *o_ptr);
 extern bool item_tester_refill_lantern(object_type *o_ptr);
 
 extern bool object_is_potion(object_type *o_ptr);
-extern bool object_is_shoukinkubi(object_type *o_ptr);
+extern bool object_is_bounty(object_type *o_ptr);
 extern bool object_is_favorite(object_type *o_ptr);
 extern bool object_is_rare(object_type *o_ptr);
 extern bool object_is_weapon(object_type *o_ptr);

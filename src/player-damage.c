@@ -486,7 +486,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 #ifdef JP       /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
 		if (!cheat_save)
-			if (!save_player()) msg_print("セーブ失敗！");
+			if (!save_player(creature_ptr)) msg_print("セーブ失敗！");
 #endif
 
 		sound(SOUND_DEATH);
@@ -516,7 +516,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 #ifdef WORLD_SCORE
 			/* Make screen dump */
-			screen_dump = make_screen_dump();
+			screen_dump = make_screen_dump(creature_ptr);
 #endif
 
 			/* Note cause of death */
@@ -570,7 +570,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			if (get_check_strict(_("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
 			{
-				do_cmd_save_screen();
+				do_cmd_save_screen(creature_ptr);
 			}
 
 			flush();
@@ -667,7 +667,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 					flush();
 #ifdef WORLD_SCORE
 					/* Make screen dump */
-					screen_dump = make_screen_dump();
+					screen_dump = make_screen_dump(creature_ptr);
 #endif
 
 					/* Wait a key press */

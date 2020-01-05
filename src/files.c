@@ -4466,10 +4466,11 @@ static void dump_aux_class_special(FILE *fff)
 
 /*!
  * @brief クエスト情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_quest(FILE *fff)
+static void dump_aux_quest(player_type *creature_ptr, FILE *fff)
 {
 	QUEST_IDX i;
 	QUEST_IDX *quest_num;
@@ -4486,9 +4487,9 @@ static void dump_aux_quest(FILE *fff)
 
 	/* Dump Quest Information */
 	fputc('\n', fff);
-	do_cmd_knowledge_quests_completed(fff, quest_num);
+	do_cmd_knowledge_quests_completed(creature_ptr, fff, quest_num);
 	fputc('\n', fff);
-	do_cmd_knowledge_quests_failed(fff, quest_num);
+	do_cmd_knowledge_quests_failed(creature_ptr, fff, quest_num);
 	fputc('\n', fff);
 
 	/* Free Memory */
@@ -4976,10 +4977,11 @@ static void dump_aux_home_museum(FILE *fff)
 /*!
  * @brief ダンプ出力のメインルーチン
  * Output the character dump to a file
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-errr make_character_dump(FILE *fff)
+errr make_character_dump(player_type *creature_ptr, FILE *fff)
 {
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
@@ -4995,7 +4997,7 @@ errr make_character_dump(FILE *fff)
 	dump_aux_last_message(fff);
 	dump_aux_options(fff);
 	dump_aux_recall(fff);
-	dump_aux_quest(fff);
+	dump_aux_quest(creature_ptr, fff);
 	dump_aux_arena(p_ptr, fff);
 	dump_aux_monsters(fff);
 	dump_aux_virtues(fff);
@@ -5015,13 +5017,14 @@ errr make_character_dump(FILE *fff)
 /*!
  * @brief プレイヤーステータスをファイルダンプ出力する
  * Hack -- Dump a character description file
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name 出力ファイル名
  * @return エラーコード
  * @details
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(concptr name)
+errr file_character(player_type *creature_ptr, concptr name)
 {
 	int		fd = -1;
 	FILE		*fff = NULL;
@@ -5061,7 +5064,7 @@ errr file_character(concptr name)
 		return (-1);
 	}
 
-	(void)make_character_dump(fff);
+	(void)make_character_dump(creature_ptr, fff);
 	my_fclose(fff);
 
 
@@ -5961,11 +5964,12 @@ void get_name(player_type *creature_ptr)
 /*!
  * @brief セーブするコマンドのメインルーチン
  * Save the game
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param is_autosave オートセーブ中の処理ならばTRUE
  * @return なし
  * @details
  */
-void do_cmd_save_game(int is_autosave)
+void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 {
 	/* Autosaves do not disturb */
 	if (is_autosave)
@@ -5992,7 +5996,7 @@ void do_cmd_save_game(int is_autosave)
 	signals_ignore_tstp();
 
 	/* Save the player */
-	if (save_player())
+	if (save_player(creature_ptr))
 	{
 		prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
 	}
@@ -6346,9 +6350,10 @@ void print_tomb(void)
 /*!
  * @brief 死亡、引退時の簡易ステータス表示 /
  * Display some character info
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void show_info(void)
+void show_info(player_type *creature_ptr)
 {
 	int             i, j, k, l;
 	object_type *o_ptr;
@@ -6357,7 +6362,7 @@ void show_info(void)
 	/* Hack -- Know everything in the inven/equip */
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Aware and Known */
@@ -6382,7 +6387,7 @@ void show_info(void)
 	}
 
 	/* Hack -- Recalculate bonuses */
-	p_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= (PU_BONUS);
 	handle_stuff();
 
 	/* Flush all input keys */
@@ -6414,12 +6419,12 @@ void show_info(void)
 		screen_save();
 
 		/* Dump a character file */
-		(void)file_character(out_val);
+		(void)file_character(creature_ptr, out_val);
 		screen_load();
 	}
 
 	update_playtime();
-	display_player(p_ptr, 0);
+	display_player(creature_ptr, 0);
 
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 
@@ -6427,7 +6432,7 @@ void show_info(void)
 	if (inkey() == ESCAPE) return;
 
 	/* Equipment -- if any */
-	if (p_ptr->equip_cnt)
+	if (creature_ptr->equip_cnt)
 	{
 		Term_clear();
 		(void)show_equip(0, USE_FULL, 0);
@@ -6437,7 +6442,7 @@ void show_info(void)
 	}
 
 	/* Inventory -- if any */
-	if (p_ptr->inven_cnt)
+	if (creature_ptr->inven_cnt)
 	{
 		Term_clear();
 		(void)show_inven(0, USE_FULL, 0);
@@ -6490,6 +6495,7 @@ void show_info(void)
 /*!
  * @brief 異常発生時のゲーム緊急終了処理 /
  * Handle abrupt death of the visual system
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -6499,7 +6505,7 @@ void show_info(void)
  * save file so that player can see tombstone when restart.
  * </pre>
  */
-void exit_game_panic(void)
+void exit_game_panic(player_type *creature_ptr)
 {
 	/* If nothing important has happened, just quit */
 	if (!current_world_ptr->character_generated || current_world_ptr->character_saved) quit(_("緊急事態", "panic"));
@@ -6526,7 +6532,7 @@ void exit_game_panic(void)
 	(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
 	/* Panic save, or get worried */
-	if (!save_player()) quit(_("緊急セーブ失敗！", "panic save failed!"));
+	if (!save_player(creature_ptr)) quit(_("緊急セーブ失敗！", "panic save failed!"));
 
 	/* Successful panic save */
 	quit(_("緊急セーブ成功！", "panic save succeeded!"));
@@ -6932,7 +6938,7 @@ static void handle_signal_simple(int sig)
 		clear_mon_lite(p_ptr->current_floor_ptr);
 
 		/* Close stuff */
-		close_game();
+		close_game(p_ptr);
 
 		/* Quit */
 		quit(_("強制終了", "interrupt"));
@@ -6956,7 +6962,7 @@ static void handle_signal_simple(int sig)
 		p_ptr->leaving = TRUE;
 
 		/* Close stuff */
-		close_game();
+		close_game(p_ptr);
 
 		/* Quit */
 		quit(_("強制終了", "interrupt"));
@@ -7049,7 +7055,7 @@ static void handle_signal_abort(int sig)
 	signals_ignore_tstp();
 
 	/* Attempt to save */
-	if (save_player())
+	if (save_player(p_ptr))
 	{
 		Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ成功！", "Panic save succeeded!"));
 	}

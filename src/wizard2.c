@@ -52,6 +52,11 @@
 #include "view-mainwindow.h"
 #include "world.h"
 
+#define NUM_O_SET 8
+#define NUM_O_BIT 32
+
+extern void do_cmd_debug(player_type *creature_ptr);
+
 #ifdef ALLOW_WIZARD
 /*
 typedef struct debug_spell_commands1
@@ -100,7 +105,6 @@ typedef struct debug_spell_command
 	spell_functions command_function;
 } debug_spell_command;
 
-
 #define SPELL_MAX 2
 debug_spell_command debug_spell_commands_list[SPELL_MAX] =
 {
@@ -116,50 +120,49 @@ static bool do_cmd_debug_spell(player_type *creature_ptr)
 {
 	char tmp_val[50] = "\0";
 	int tmp_int;
-	int i;
 
 	if (!get_string("SPELL:", tmp_val, 32)) return FALSE;
 
-	for (i = 0; i < SPELL_MAX; i++)
+	for (int i = 0; i < SPELL_MAX; i++)
 	{
-		if (strcmp(tmp_val, debug_spell_commands_list[i].command_name) == 0)
+		if (strcmp(tmp_val, debug_spell_commands_list[i].command_name) != 0)
+			continue;
+		switch (debug_spell_commands_list[i].type)
 		{
-			switch (debug_spell_commands_list[i].type)
-			{
-			case 2:
-				(*(debug_spell_commands_list[i].command_function.spell2.spell_function))(creature_ptr);
-				break;
-
-			case 3:
-				tmp_val[0] = '\0';
-				if (!get_string("POWER:", tmp_val, 32)) return FALSE;
-				tmp_int = atoi(tmp_val);
-				(*(debug_spell_commands_list[i].command_function.spell3.spell_function))(creature_ptr, tmp_int);
-				break;
-
-			default:
-				break;
-			}
+		case 2:
+			(*(debug_spell_commands_list[i].command_function.spell2.spell_function))(creature_ptr);
+			break;
+		case 3:
+			tmp_val[0] = '\0';
+			if (!get_string("POWER:", tmp_val, 32)) return FALSE;
+			tmp_int = atoi(tmp_val);
+			(*(debug_spell_commands_list[i].command_function.spell3.spell_function))(creature_ptr, tmp_int);
+			break;
+		default:
+			break;
 		}
 	}
+
 	return FALSE;
 }
 
 
 /*!
  * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 実際にテレポートを行ったらTRUEを返す
  */
-static bool wiz_dimension_door(void)
+static bool wiz_dimension_door(player_type *caster_ptr)
 {
 	POSITION x = 0, y = 0;
-	if (!tgt_pt(p_ptr, &x, &y)) return FALSE;
-	teleport_player_to(p_ptr, y, x, TELEPORT_NONMAGICAL);
+	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
+	teleport_player_to(caster_ptr, y, x, TELEPORT_NONMAGICAL);
 	return (TRUE);
 }
 
 /*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void wiz_create_named_art(player_type *caster_ptr)
@@ -172,8 +175,8 @@ static void wiz_create_named_art(player_type *caster_ptr)
 
 	/* Extract */
 	a_idx = (ARTIFACT_IDX)atoi(tmp_val);
-	if(a_idx < 0) a_idx = 0;
-	if(a_idx >= max_a_idx) a_idx = 0; 
+	if (a_idx < 0) a_idx = 0;
+	if (a_idx >= max_a_idx) a_idx = 0;
 
 	(void)create_named_art(a_idx, caster_ptr->y, caster_ptr->x);
 
@@ -183,6 +186,7 @@ static void wiz_create_named_art(player_type *caster_ptr)
 
 /*!
  * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void do_cmd_summon_horde(player_type *caster_ptr)
@@ -238,28 +242,21 @@ static void prt_binary(BIT_FLAGS flags, int row, int col)
  */
 static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
-	int i, j;
-	int home = 0;
 	u32b rarity[K_MAX_DEPTH];
-	u32b total[K_MAX_DEPTH];
-	s32b display[22];
-	concptr r = "+---Rate---+";
-	object_kind *k_ptr;
-
-
-	/* Get the entry */
-	alloc_entry *table = alloc_kind_table;
-
-	/* Wipe the tables */
 	(void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
+	u32b total[K_MAX_DEPTH];
 	(void)C_WIPE(total, K_MAX_DEPTH, u32b);
+	s32b display[22];
 	(void)C_WIPE(display, 22, s32b);
 
 	/* Scan all entries */
-	for (i = 0; i < K_MAX_DEPTH; i++)
+	int home = 0;
+	for (int i = 0; i < K_MAX_DEPTH; i++)
 	{
 		int total_frac = 0;
-		for (j = 0; j < alloc_kind_size; j++)
+		object_kind *k_ptr;
+		alloc_entry *table = alloc_kind_table;
+		for (int j = 0; j < alloc_kind_size; j++)
 		{
 			PERCENTAGE prob = 0;
 
@@ -290,19 +287,19 @@ static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_LE
 	}
 
 	/* Calculate probabilities for each range */
-	for (i = 0; i < 22; i++)
+	for (int i = 0; i < 22; i++)
 	{
 		/* Shift the values into view */
 		int possibility = 0;
-		for (j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
+		for (int j = i * K_MAX_DEPTH / 22; j < (i + 1) * K_MAX_DEPTH / 22; j++)
 			possibility += rarity[j] * 100000 / total[j];
 		display[i] = possibility / 5;
 	}
 
 	/* Graph the rarities */
-	for (i = 0; i < 22; i++)
+	for (int i = 0; i < 22; i++)
 	{
-		Term_putch(col, row + i + 1, TERM_WHITE,  '|');
+		Term_putch(col, row + i + 1, TERM_WHITE, '|');
 
 		prt(format("%2dF", (i * 5)), row + i + 1, col);
 
@@ -319,6 +316,7 @@ static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_LE
 	}
 
 	/* Make it look nice */
+	concptr r = "+---Rate---+";
 	prt(r, row, col);
 }
 
@@ -329,21 +327,19 @@ static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_LE
  */
 static void do_cmd_wiz_reset_class(player_type *creature_ptr)
 {
-	int tmp_int;
-	char tmp_val[160];
-	char ppp[80];
-
 	/* Prompt */
+	char ppp[80];
 	sprintf(ppp, "Class (0-%d): ", MAX_CLASS - 1);
 
 	/* Default */
+	char tmp_val[160];
 	sprintf(tmp_val, "%d", creature_ptr->pclass);
 
 	/* Query */
 	if (!get_string(ppp, tmp_val, 2)) return;
 
 	/* Extract */
-	tmp_int = atoi(tmp_val);
+	int tmp_int = atoi(tmp_val);
 
 	/* Verify */
 	if (tmp_int < 0 || tmp_int >= MAX_CLASS) return;
@@ -365,13 +361,13 @@ static void do_cmd_wiz_reset_class(player_type *creature_ptr)
  * @brief ウィザードモード用処理としてターゲット中の相手をテレポートバックする / Hack -- Teleport to the target
  * @return なし
  */
-static void do_cmd_wiz_bamf(void)
+static void do_cmd_wiz_bamf(player_type *caster_ptr)
 {
 	/* Must have a target */
 	if (!target_who) return;
 
 	/* Teleport to the target */
-	teleport_player_to(p_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
+	teleport_player_to(caster_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
 }
 
 
@@ -382,7 +378,6 @@ static void do_cmd_wiz_bamf(void)
  */
 static void do_cmd_wiz_change_aux(player_type *creature_ptr)
 {
-	int i, j;
 	int tmp_int;
 	long tmp_long;
 	s16b tmp_s16b;
@@ -390,7 +385,7 @@ static void do_cmd_wiz_change_aux(player_type *creature_ptr)
 	char ppp[80];
 
 	/* Query the stats */
-	for (i = 0; i < A_MAX; i++)
+	for (int i = 0; i < A_MAX; i++)
 	{
 		/* Prompt */
 		sprintf(ppp, "%s (3-%d): ", stat_names[i], creature_ptr->stat_max_max[i]);
@@ -426,25 +421,26 @@ static void do_cmd_wiz_change_aux(player_type *creature_ptr)
 	if (tmp_s16b < WEAPON_EXP_UNSKILLED) tmp_s16b = WEAPON_EXP_UNSKILLED;
 	if (tmp_s16b > WEAPON_EXP_MASTER) tmp_s16b = WEAPON_EXP_MASTER;
 
-	for (j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++)
+	for (int j = 0; j <= TV_WEAPON_END - TV_WEAPON_BEGIN; j++)
 	{
-		for (i = 0;i < 64;i++)
+		for (int i = 0; i < 64; i++)
 		{
 			creature_ptr->weapon_exp[j][i] = tmp_s16b;
 			if (creature_ptr->weapon_exp[j][i] > s_info[creature_ptr->pclass].w_max[j][i]) creature_ptr->weapon_exp[j][i] = s_info[creature_ptr->pclass].w_max[j][i];
 		}
 	}
 
-	for (j = 0; j < 10; j++)
+	for (int j = 0; j < 10; j++)
 	{
 		creature_ptr->skill_exp[j] = tmp_s16b;
 		if (creature_ptr->skill_exp[j] > s_info[creature_ptr->pclass].s_max[j]) creature_ptr->skill_exp[j] = s_info[creature_ptr->pclass].s_max[j];
 	}
 
-	for (j = 0; j < 32; j++)
-		creature_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
-	for (; j < 64; j++)
-		creature_ptr->spell_exp[j] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
+	int k;
+	for (k = 0; k < 32; k++)
+		creature_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_MASTER ? SPELL_EXP_MASTER : tmp_s16b);
+	for (; k < 64; k++)
+		creature_ptr->spell_exp[k] = (tmp_s16b > SPELL_EXP_EXPERT ? SPELL_EXP_EXPERT : tmp_s16b);
 
 	/* Default */
 	sprintf(tmp_val, "%ld", (long)(creature_ptr->au));
@@ -473,15 +469,14 @@ static void do_cmd_wiz_change_aux(player_type *creature_ptr)
 	/* Verify */
 	if (tmp_long < 0) tmp_long = 0L;
 
-	if (creature_ptr->prace != RACE_ANDROID)
-	{
-		/* Save */
-		creature_ptr->max_exp = tmp_long;
-		creature_ptr->exp = tmp_long;
+	if (creature_ptr->prace == RACE_ANDROID) return;
 
-		/* Update */
-		check_experience(creature_ptr);
-	}
+	/* Save */
+	creature_ptr->max_exp = tmp_long;
+	creature_ptr->exp = tmp_long;
+
+	/* Update */
+	check_experience(creature_ptr);
 }
 
 
@@ -499,7 +494,7 @@ static void do_cmd_wiz_change(player_type *creature_ptr)
 
 
 /*!
- * @brief アイテムの詳細ステータスを表示する / 
+ * @brief アイテムの詳細ステータスを表示する /
  * Change various "permanent" player variables.
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
  * @return なし
@@ -563,40 +558,40 @@ static void do_cmd_wiz_change(player_type *creature_ptr)
  */
 static void wiz_display_item(object_type *o_ptr)
 {
-	int i, j = 13;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	char buf[256];
 	object_flags(o_ptr, flgs);
 
 	/* Clear the screen */
-	for (i = 1; i <= 23; i++) prt("", i, j - 2);
+	int j = 13;
+	for (int i = 1; i <= 23; i++) prt("", i, j - 2);
 
 	prt_alloc(o_ptr->tval, o_ptr->sval, 1, 0);
 
 	/* Describe fully */
+	char buf[256];
 	object_desc(buf, o_ptr, OD_STORE);
 
 	prt(buf, 2, j);
 
 	prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d",
-		   o_ptr->k_idx, k_info[o_ptr->k_idx].level,
-		   o_ptr->tval, o_ptr->sval), 4, j);
+		o_ptr->k_idx, k_info[o_ptr->k_idx].level,
+		o_ptr->tval, o_ptr->sval), 4, j);
 
 	prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %dd%d",
-		   o_ptr->number, o_ptr->weight,
-		   o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
+		o_ptr->number, o_ptr->weight,
+		o_ptr->ac, o_ptr->dd, o_ptr->ds), 5, j);
 
 	prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d",
-		   o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
+		o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), 6, j);
 
 	prt(format("name1 = %-4d  name2 = %-4d  cost = %ld",
-		   o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
+		o_ptr->name1, o_ptr->name2, (long)object_value_real(o_ptr)), 7, j);
 
 	prt(format("ident = %04x  xtra1 = %-4d  xtra2 = %-4d  timeout = %-d",
-		   o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
+		o_ptr->ident, o_ptr->xtra1, o_ptr->xtra2, o_ptr->timeout), 8, j);
 
 	prt(format("xtra3 = %-4d  xtra4 = %-4d  xtra5 = %-4d  cursed  = %-d",
-		   o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
+		o_ptr->xtra3, o_ptr->xtra4, o_ptr->xtra5, o_ptr->curse_flags), 9, j);
 
 	prt("+------------FLAGS1------------+", 10, j);
 	prt("AFFECT........SLAY........BRAND.", 11, j);
@@ -614,21 +609,21 @@ static void wiz_display_item(object_type *o_ptr)
 	prt("rtsxnaeydcedwlatdcedsrekdfddrxss", 22, j);
 	prt_binary(flgs[1], 23, j);
 
-	prt("+------------FLAGS3------------+", 10, j+32);
-	prt("fe cnn t      stdrmsiiii d ab   ", 11, j+32);
-	prt("aa aoomywhs lleeieihgggg rtgl   ", 12, j+32);
-	prt("uu utmacaih eielgggonnnnaaere   ", 13, j+32);
-	prt("rr reanurdo vtieeehtrrrrcilas   ", 14, j+32);
-	prt("aa algarnew ienpsntsaefctnevs   ", 15, j+32);
-	prt_binary(flgs[2], 16, j+32);
+	prt("+------------FLAGS3------------+", 10, j + 32);
+	prt("fe cnn t      stdrmsiiii d ab   ", 11, j + 32);
+	prt("aa aoomywhs lleeieihgggg rtgl   ", 12, j + 32);
+	prt("uu utmacaih eielgggonnnnaaere   ", 13, j + 32);
+	prt("rr reanurdo vtieeehtrrrrcilas   ", 14, j + 32);
+	prt("aa algarnew ienpsntsaefctnevs   ", 15, j + 32);
+	prt_binary(flgs[2], 16, j + 32);
 
-	prt("+------------FLAGS4------------+", 17, j+32);
-	prt("KILL....ESP.........            ", 18, j+32);
-	prt("aeud tghaud tgdhegnu            ", 19, j+32);
-	prt("nvneoriunneoriruvoon            ", 20, j+32);
-	prt("iidmroamidmroagmionq            ", 21, j+32);
-	prt("mlenclnmmenclnnnldlu            ", 22, j+32);
-	prt_binary(flgs[3], 23, j+32);
+	prt("+------------FLAGS4------------+", 17, j + 32);
+	prt("KILL....ESP.........            ", 18, j + 32);
+	prt("aeud tghaud tgdhegnu            ", 19, j + 32);
+	prt("nvneoriunneoriruvoon            ", 20, j + 32);
+	prt("iidmroamidmroagmionq            ", 21, j + 32);
+	prt("mlenclnmmenclnnnldlu            ", 22, j + 32);
+	prt_binary(flgs[3], 23, j + 32);
 }
 
 
@@ -768,7 +763,6 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 	tval = tvals[num].tval;
 	tval_desc = tvals[num].desc;
 
-
 	/*** And now we go for k_idx ***/
 	Term_clear();
 
@@ -778,23 +772,22 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 		object_kind *k_ptr = &k_info[i];
 
 		/* Analyze matching items */
-		if (k_ptr->tval == tval)
-		{
-			/* Prepare it */
-			row = 2 + (num % 20);
-			col = 20 * (num / 20);
-			ch = listsym[num];
-			strcpy(buf,"                    ");
+		if (k_ptr->tval != tval) continue;
 
-			/* Acquire the "name" of object "i" */
-			strip_name(buf, i);
+		/* Prepare it */
+		row = 2 + (num % 20);
+		col = 20 * (num / 20);
+		ch = listsym[num];
+		strcpy(buf, "                    ");
 
-			/* Print it */
-			prt(format("[%c] %s", ch, buf), row, col);
+		/* Acquire the "name" of object "i" */
+		strip_name(buf, i);
 
-			/* Remember the object index */
-			choice[num++] = i;
-		}
+		/* Print it */
+		prt(format("[%c] %s", ch, buf), row, col);
+
+		/* Remember the object index */
+		choice[num++] = i;
 	}
 
 	/* Me need to know the maximal possible remembered object_index */
@@ -824,12 +817,10 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
  */
 static void wiz_tweak_item(object_type *o_ptr)
 {
-	concptr p;
-	char tmp_val[80];
-
 	if (object_is_artifact(o_ptr)) return;
 
-	p = "Enter new 'pval' setting: ";
+	concptr p = "Enter new 'pval' setting: ";
+	char tmp_val[80];
 	sprintf(tmp_val, "%d", o_ptr->pval);
 	if (!get_string(p, tmp_val, 5)) return;
 	o_ptr->pval = (s16b)atoi(tmp_val);
@@ -863,17 +854,16 @@ static void wiz_tweak_item(object_type *o_ptr)
  */
 static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 {
-	object_type forge;
-	object_type *q_ptr;
-	char ch;
-	bool changed = FALSE;
-
 	if (object_is_artifact(o_ptr)) return;
 
+	object_type forge;
+	object_type *q_ptr;
 	q_ptr = &forge;
 	object_copy(q_ptr, o_ptr);
 
 	/* Main loop. Ask for magification and artifactification */
+	char ch;
+	bool changed = FALSE;
 	while (TRUE)
 	{
 		/* Display full item debug information */
@@ -907,54 +897,55 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 			q_ptr->name1 = 0;
 		}
 
-		switch(ch)
+		switch (ch)
 		{
 			/* Apply bad magic, but first clear object */
-			case 'w': case 'W':
-			{
-				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
-				break;
-			}
-			/* Apply bad magic, but first clear object */
-			case 'c': case 'C':
-			{
-				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
-				break;
-			}
-			/* Apply normal magic, but first clear object */
-			case 'n': case 'N':
-			{
-				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
-				break;
-			}
-			/* Apply good magic, but first clear object */
-			case 'g': case 'G':
-			{
-				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
-				break;
-			}
-			/* Apply great magic, but first clear object */
-			case 'e': case 'E':
-			{
-				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
-				break;
-			}
-			/* Apply special magic, but first clear object */
-			case 's': case 'S':
-			{
-				object_prep(q_ptr, o_ptr->k_idx);
-				apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
-
-				/* Failed to create artifact; make a random one */
-				if (!object_is_artifact(q_ptr)) become_random_artifact(q_ptr, FALSE);
-				break;
-			}
+		case 'w': case 'W':
+		{
+			object_prep(q_ptr, o_ptr->k_idx);
+			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+			break;
 		}
+		/* Apply bad magic, but first clear object */
+		case 'c': case 'C':
+		{
+			object_prep(q_ptr, o_ptr->k_idx);
+			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+			break;
+		}
+		/* Apply normal magic, but first clear object */
+		case 'n': case 'N':
+		{
+			object_prep(q_ptr, o_ptr->k_idx);
+			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+			break;
+		}
+		/* Apply good magic, but first clear object */
+		case 'g': case 'G':
+		{
+			object_prep(q_ptr, o_ptr->k_idx);
+			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+			break;
+		}
+		/* Apply great magic, but first clear object */
+		case 'e': case 'E':
+		{
+			object_prep(q_ptr, o_ptr->k_idx);
+			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+			break;
+		}
+		/* Apply special magic, but first clear object */
+		case 's': case 'S':
+		{
+			object_prep(q_ptr, o_ptr->k_idx);
+			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+
+			/* Failed to create artifact; make a random one */
+			if (!object_is_artifact(q_ptr)) become_random_artifact(q_ptr, FALSE);
+			break;
+		}
+		}
+
 		q_ptr->iy = o_ptr->iy;
 		q_ptr->ix = o_ptr->ix;
 		q_ptr->next_o_idx = o_ptr->next_o_idx;
@@ -972,10 +963,10 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 }
 
 
-
 /*!
  * @brief 検査対象のアイテムを基準とした生成テストを行う /
  * Try to create an item again. Output some statistics.    -Bernd-
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 生成テストの基準となるアイテム情報の参照ポインタ
  * @return なし
  * The statistics are correct now.  We acquire a clean grid, and then
@@ -984,31 +975,24 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
  * counter flags to prevent weirdness.  We use the items to collect
  * statistics on item creation relative to the initial item.
  */
-static void wiz_statistics(object_type *o_ptr)
+static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 {
-	u32b i, matches, better, worse, other, correct;
-
-	u32b test_roll = 1000000;
-
-	char ch;
-	concptr quality;
-
-	BIT_FLAGS mode;
-
 	object_type forge;
 	object_type	*q_ptr;
 
 	concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
-
 	concptr p = "Enter number of items to roll: ";
 	char tmp_val[80];
-
 
 	/* Mega-Hack -- allow multiple artifacts */
 	if (object_is_fixed_artifact(o_ptr)) a_info[o_ptr->name1].cur_num = 0;
 
-
 	/* Interact */
+	u32b i, matches, better, worse, other, correct;
+	u32b test_roll = 1000000;
+	char ch;
+	concptr quality;
+	BIT_FLAGS mode;
 	while (TRUE)
 	{
 		concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
@@ -1045,7 +1029,7 @@ static void wiz_statistics(object_type *o_ptr)
 
 		/* Let us know what we are doing */
 		msg_format("Creating a lot of %s items. Base level = %d.",
-					  quality, p_ptr->current_floor_ptr->dun_level);
+			quality, caster_ptr->current_floor_ptr->dun_level);
 		msg_print(NULL);
 
 		/* Set counters to zero */
@@ -1091,28 +1075,28 @@ static void wiz_statistics(object_type *o_ptr)
 
 			/* Check for match */
 			if ((q_ptr->pval == o_ptr->pval) &&
-				 (q_ptr->to_a == o_ptr->to_a) &&
-				 (q_ptr->to_h == o_ptr->to_h) &&
-				 (q_ptr->to_d == o_ptr->to_d) &&
-				 (q_ptr->name1 == o_ptr->name1))
+				(q_ptr->to_a == o_ptr->to_a) &&
+				(q_ptr->to_h == o_ptr->to_h) &&
+				(q_ptr->to_d == o_ptr->to_d) &&
+				(q_ptr->name1 == o_ptr->name1))
 			{
 				matches++;
 			}
 
 			/* Check for better */
 			else if ((q_ptr->pval >= o_ptr->pval) &&
-						(q_ptr->to_a >= o_ptr->to_a) &&
-						(q_ptr->to_h >= o_ptr->to_h) &&
-						(q_ptr->to_d >= o_ptr->to_d))
+				(q_ptr->to_a >= o_ptr->to_a) &&
+				(q_ptr->to_h >= o_ptr->to_h) &&
+				(q_ptr->to_d >= o_ptr->to_d))
 			{
 				better++;
 			}
 
 			/* Check for worse */
 			else if ((q_ptr->pval <= o_ptr->pval) &&
-						(q_ptr->to_a <= o_ptr->to_a) &&
-						(q_ptr->to_h <= o_ptr->to_h) &&
-						(q_ptr->to_d <= o_ptr->to_d))
+				(q_ptr->to_a <= o_ptr->to_a) &&
+				(q_ptr->to_h <= o_ptr->to_h) &&
+				(q_ptr->to_d <= o_ptr->to_d))
 			{
 				worse++;
 			}
@@ -1129,7 +1113,6 @@ static void wiz_statistics(object_type *o_ptr)
 		msg_print(NULL);
 	}
 
-
 	/* Hack -- Normally only make a single artifact */
 	if (object_is_fixed_artifact(o_ptr)) a_info[o_ptr->name1].cur_num = 1;
 }
@@ -1143,25 +1126,21 @@ static void wiz_statistics(object_type *o_ptr)
  */
 static void wiz_quantity_item(object_type *o_ptr)
 {
-	int         tmp_int, tmp_qnt;
-
-	char        tmp_val[100];
-
-
 	/* Never duplicate artifacts */
 	if (object_is_artifact(o_ptr)) return;
 
 	/* Store old quantity. -LM- */
-	tmp_qnt = o_ptr->number;
+	int tmp_qnt = o_ptr->number;
 
 	/* Default */
+	char tmp_val[100];
 	sprintf(tmp_val, "%d", (int)o_ptr->number);
 
 	/* Query */
 	if (get_string("Quantity: ", tmp_val, 2))
 	{
 		/* Extract */
-		tmp_int = atoi(tmp_val);
+		int tmp_int = atoi(tmp_val);
 		if (tmp_int < 1) tmp_int = 1;
 		if (tmp_int > 99) tmp_int = 99;
 
@@ -1175,6 +1154,7 @@ static void wiz_quantity_item(object_type *o_ptr)
 	}
 }
 
+
 /*!
  * @brief 青魔導師の魔法を全て習得済みにする /
  * debug command for blue mage
@@ -1182,22 +1162,22 @@ static void wiz_quantity_item(object_type *o_ptr)
  */
 static void do_cmd_wiz_blue_mage(player_type *caster_ptr)
 {
-	int i = 0;
-	int j = 0;
 	BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
-
-	for (j = 1; j < A_MAX; j++)
+	for (int j = 1; j < A_MAX; j++)
 	{
 		set_rf_masks(&f4, &f5, &f6, j);
 
+		int i;
 		for (i = 0; i < 32; i++)
 		{
 			if ((0x00000001 << i) & f4) caster_ptr->magic_num2[i] = 1;
 		}
+
 		for (; i < 64; i++)
 		{
 			if ((0x00000001 << (i - 32)) & f5) caster_ptr->magic_num2[i] = 1;
 		}
+
 		for (; i < 96; i++)
 		{
 			if ((0x00000001 << (i - 64)) & f6) caster_ptr->magic_num2[i] = 1;
@@ -1210,7 +1190,7 @@ static void do_cmd_wiz_blue_mage(player_type *caster_ptr)
  * @brief アイテム検査のメインルーチン /
  * Play with an item. Options include:
  * @return なし
- * @details 
+ * @details
  *   - Output statistics (via wiz_roll_item)<br>
  *   - Reroll item (via wiz_reroll_item)<br>
  *   - Change properties (via wiz_tweak_item)<br>
@@ -1218,31 +1198,25 @@ static void do_cmd_wiz_blue_mage(player_type *caster_ptr)
  */
 static void do_cmd_wiz_play(player_type *creature_ptr)
 {
+	concptr q = "Play with which object? ";
+	concptr s = "You have nothing to play with.";
+
 	OBJECT_IDX item;
-	object_type	forge;
-	object_type *q_ptr;
 	object_type *o_ptr;
-	char ch;
-	bool changed;
-	concptr q, s;
-
-	q = "Play with which object? ";
-	s = "You have nothing to play with.";
-
 	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 
 	if (!o_ptr) return;
-	
-	/* The item was not changed */
-	changed = FALSE;
 
 	screen_save();
 
+	object_type	forge;
+	object_type *q_ptr;
 	q_ptr = &forge;
 	object_copy(q_ptr, o_ptr);
 
-
 	/* The main loop */
+	char ch;
+	bool changed = FALSE;
 	while (TRUE)
 	{
 		/* Display the item */
@@ -1263,7 +1237,7 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
 
 		if (ch == 's' || ch == 'S')
 		{
-			wiz_statistics(q_ptr);
+			wiz_statistics(creature_ptr, q_ptr);
 		}
 
 		if (ch == 'r' || ch == 'r')
@@ -1328,14 +1302,10 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
  */
 static void wiz_create_item(player_type *caster_ptr)
 {
-	object_type	forge;
-	object_type *q_ptr;
-
-	OBJECT_IDX k_idx;
 	screen_save();
 
 	/* Get object base type */
-	k_idx = wiz_create_itemtype();
+	OBJECT_IDX k_idx = wiz_create_itemtype();
 
 	screen_load();
 
@@ -1364,6 +1334,9 @@ static void wiz_create_item(player_type *caster_ptr)
 			return;
 		}
 	}
+
+	object_type	forge;
+	object_type *q_ptr;
 	q_ptr = &forge;
 	object_prep(q_ptr, k_idx);
 
@@ -1431,26 +1404,27 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 
 		creature_ptr->dungeon_idx = tmp_dungeon_type;
 	}
+
 	if (command_arg < d_info[creature_ptr->dungeon_idx].mindepth) command_arg = 0;
 	if (command_arg > d_info[creature_ptr->dungeon_idx].maxdepth) command_arg = (COMMAND_ARG)d_info[creature_ptr->dungeon_idx].maxdepth;
 
 	/* Accept request */
 	msg_format("You jump to dungeon level %d.", command_arg);
 
-	if (autosave_l) do_cmd_save_game(TRUE);
+	if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 	/* Change level */
 	creature_ptr->current_floor_ptr->dun_level = command_arg;
 
-	prepare_change_floor_mode(CFM_RAND_PLACE);
+	prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
 
 	if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = 0;
 	creature_ptr->current_floor_ptr->inside_arena = FALSE;
 	creature_ptr->wild_mode = FALSE;
 
-	leave_quest_check();
+	leave_quest_check(creature_ptr);
 
-	if (record_stair) exe_write_diary(creature_ptr, NIKKI_WIZ_TELE,0,NULL);
+	if (record_stair) exe_write_diary(creature_ptr, NIKKI_WIZ_TELE, 0, NULL);
 
 	creature_ptr->current_floor_ptr->inside_quest = 0;
 	free_turn(creature_ptr);
@@ -1462,7 +1436,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 	 * Clear all saved floors
 	 * and create a first saved floor
 	 */
-	prepare_change_floor_mode(CFM_FIRST_FLOOR);
+	prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
 	creature_ptr->leaving = TRUE;
 }
 
@@ -1474,13 +1448,10 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
  */
 static void do_cmd_wiz_learn(void)
 {
-	KIND_OBJECT_IDX i;
-
+	/* Scan every object */
 	object_type forge;
 	object_type *q_ptr;
-
-	/* Scan every object */
-	for (i = 1; i < max_k_idx; i++)
+	for (KIND_OBJECT_IDX i = 1; i < max_k_idx; i++)
 	{
 		object_kind *k_ptr = &k_info[i];
 
@@ -1503,13 +1474,11 @@ static void do_cmd_wiz_learn(void)
  */
 static void do_cmd_wiz_summon(player_type *caster_ptr, int num)
 {
-	int i;
-	for (i = 0; i < num; i++)
+	for (int i = 0; i < num; i++)
 	{
 		(void)summon_specific(0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 }
-
 
 
 /*!
@@ -1547,10 +1516,8 @@ static void do_cmd_wiz_named_friendly(player_type *summoner_ptr, MONRACE_IDX r_i
  */
 static void do_cmd_wiz_zap(player_type *caster_ptr)
 {
-	MONSTER_IDX i;
-
 	/* Genocide everyone nearby */
-	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
+	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -1559,18 +1526,17 @@ static void do_cmd_wiz_zap(player_type *caster_ptr)
 		if (i == caster_ptr->riding) continue;
 
 		/* Delete nearby monsters */
-		if (m_ptr->cdis <= MAX_SIGHT)
+		if (m_ptr->cdis > MAX_SIGHT) continue;
+
+		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
-			if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
-			{
-				GAME_TEXT m_name[MAX_NLEN];
+			GAME_TEXT m_name[MAX_NLEN];
 
-				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
-			}
-
-			delete_monster_idx(i);
+			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 		}
+
+		delete_monster_idx(i);
 	}
 }
 
@@ -1583,10 +1549,8 @@ static void do_cmd_wiz_zap(player_type *caster_ptr)
  */
 static void do_cmd_wiz_zap_all(player_type *caster_ptr)
 {
-	MONSTER_IDX i;
-
 	/* Genocide everyone */
-	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
+	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
@@ -1611,51 +1575,50 @@ static void do_cmd_wiz_zap_all(player_type *caster_ptr)
 /*!
  * @brief 指定された地点の地形IDを変更する /
  * Create desired feature
+ * @param creaturer_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 {
-	static int   prev_feat = 0;
-	static int   prev_mimic = 0;
-	grid_type    *g_ptr;
-	feature_type *f_ptr;
-	char         tmp_val[160];
-	FEAT_IDX          tmp_feat, tmp_mimic;
 	POSITION y, x;
-
 	if (!tgt_pt(creature_ptr, &x, &y)) return;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr;
+	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 	/* Default */
+	static int prev_feat = 0;
+	char tmp_val[160];
 	sprintf(tmp_val, "%d", prev_feat);
 
 	/* Query */
 	if (!get_string(_("地形: ", "Feature: "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_feat = (FEAT_IDX)atoi(tmp_val);
+	FEAT_IDX tmp_feat = (FEAT_IDX)atoi(tmp_val);
 	if (tmp_feat < 0) tmp_feat = 0;
 	else if (tmp_feat >= max_f_idx) tmp_feat = max_f_idx - 1;
 
 	/* Default */
+	static int prev_mimic = 0;
 	sprintf(tmp_val, "%d", prev_mimic);
 
 	/* Query */
 	if (!get_string(_("地形 (mimic): ", "Feature (mimic): "), tmp_val, 3)) return;
 
 	/* Extract */
-	tmp_mimic = (FEAT_IDX)atoi(tmp_val);
+	FEAT_IDX tmp_mimic = (FEAT_IDX)atoi(tmp_val);
 	if (tmp_mimic < 0) tmp_mimic = 0;
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 
 	cave_set_feat(creature_ptr->current_floor_ptr, y, x, tmp_feat);
 	g_ptr->mimic = (s16b)tmp_mimic;
 
+	feature_type *f_ptr;
 	f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 	if (have_flag(f_ptr->flags, FF_GLYPH) ||
-	    have_flag(f_ptr->flags, FF_MINOR_GLYPH))
+		have_flag(f_ptr->flags, FF_MINOR_GLYPH))
 		g_ptr->info |= (CAVE_OBJECT);
 	else if (have_flag(f_ptr->flags, FF_MIRROR))
 		g_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
@@ -1669,9 +1632,6 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 }
 
 
-#define NUM_O_SET 8
-#define NUM_O_BIT 32
-
 /*!
  * @brief 現在のオプション設定をダンプ出力する /
  * Hack -- Dump option bits usage
@@ -1679,13 +1639,11 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
  */
 static void do_cmd_dump_options(void)
 {
-	int  i, j;
-	FILE *fff;
 	char buf[1024];
-	int  **exist;
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");
 
 	/* File type is "TEXT" */
+	FILE *fff;
 	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "a");
 
@@ -1697,38 +1655,41 @@ static void do_cmd_dump_options(void)
 	}
 
 	/* Allocate the "exist" array (2-dimension) */
+	int  **exist;
 	C_MAKE(exist, NUM_O_SET, int *);
 	C_MAKE(*exist, NUM_O_BIT * NUM_O_SET, int);
-	for (i = 1; i < NUM_O_SET; i++) exist[i] = *exist + i * NUM_O_BIT;
+	for (int i = 1; i < NUM_O_SET; i++) exist[i] = *exist + i * NUM_O_BIT;
 
 	/* Check for exist option bits */
-	for (i = 0; option_info[i].o_desc; i++)
+	for (int i = 0; option_info[i].o_desc; i++)
 	{
 		const option_type *ot_ptr = &option_info[i];
 		if (ot_ptr->o_var) exist[ot_ptr->o_set][ot_ptr->o_bit] = i + 1;
 	}
 
 	fprintf(fff, "[Option bits usage on Hengband %d.%d.%d]\n\n",
-	        FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	fputs("Set - Bit (Page) Option Name\n", fff);
 	fputs("------------------------------------------------\n", fff);
+
 	/* Dump option bits usage */
-	for (i = 0; i < NUM_O_SET; i++)
+	for (int i = 0; i < NUM_O_SET; i++)
 	{
-		for (j = 0; j < NUM_O_BIT; j++)
+		for (int j = 0; j < NUM_O_BIT; j++)
 		{
 			if (exist[i][j])
 			{
 				const option_type *ot_ptr = &option_info[exist[i][j] - 1];
 				fprintf(fff, "  %d -  %02d (%4d) %s\n",
-				        i, j, ot_ptr->o_page, ot_ptr->o_text);
+					i, j, ot_ptr->o_page, ot_ptr->o_text);
 			}
 			else
 			{
 				fprintf(fff, "  %d -  %02d\n", i, j);
 			}
 		}
+
 		fputc('\n', fff);
 	}
 
@@ -1740,11 +1701,6 @@ static void do_cmd_dump_options(void)
 	msg_format(_("オプションbit使用状況をファイル %s に書き出しました。", "Option bits usage dump saved to file %s."), buf);
 }
 
-/*
- * Hack -- declare external function
- */
-extern void do_cmd_debug(player_type *creature_ptr);
-
 
 /*!
  * @brief デバッグコマンドを選択する処理のメインルーチン /
@@ -1754,16 +1710,11 @@ extern void do_cmd_debug(player_type *creature_ptr);
  */
 void do_cmd_debug(player_type *creature_ptr)
 {
-	int     x, y;
-	char    cmd;
-
-	/* Get a "debug command" */
+	char cmd;
 	get_com("Debug Command: ", &cmd, FALSE);
 
-	/* Analyze the command */
 	switch (cmd)
 	{
-	/* Nothing */
 	case ESCAPE:
 	case ' ':
 	case '\n':
@@ -1771,64 +1722,62 @@ void do_cmd_debug(player_type *creature_ptr)
 		break;
 
 #ifdef ALLOW_SPOILERS
-
-	/* Hack -- Generate Spoilers */
+		/* Hack -- Generate Spoilers */
 	case '"':
 		do_cmd_spoilers();
 		break;
-
 #endif /* ALLOW_SPOILERS */
 
-	/* Hack -- Help */
+		/* Hack -- Help */
 	case '?':
 		do_cmd_help();
 		break;
 
-	/* Cure all maladies */
+		/* Cure all maladies */
 	case 'a':
 		do_cmd_wiz_cure_all(creature_ptr);
 		break;
 
-	/* Know alignment */
+		/* Know alignment */
 	case 'A':
 		msg_format("Your alignment is %d.", creature_ptr->align);
 		break;
 
-	/* Teleport to target */
+		/* Teleport to target */
 	case 'b':
-		do_cmd_wiz_bamf();
+		do_cmd_wiz_bamf(creature_ptr);
 		break;
 
 	case 'B':
 		update_gambling_monsters();
 		break;
 
-	/* Create any object */
+		/* Create any object */
 	case 'c':
 		wiz_create_item(creature_ptr);
 		break;
 
-	/* Create a named artifact */
+		/* Create a named artifact */
 	case 'C':
 		wiz_create_named_art(creature_ptr);
 		break;
 
-	/* Detect everything */
+		/* Detect everything */
 	case 'd':
 		detect_all(DETECT_RAD_ALL * 3);
 		break;
 
-	/* Dimension_door */
+		/* Dimension_door */
 	case 'D':
-		wiz_dimension_door();
+		wiz_dimension_door(creature_ptr);
 		break;
 
-	/* Edit character */
+		/* Edit character */
 	case 'e':
 		do_cmd_wiz_change(creature_ptr);
 		break;
 
-	/* Blue Mage Only */
+		/* Blue Mage Only */
 	case 'E':
 		if (creature_ptr->pclass == CLASS_BLUE_MAGE)
 		{
@@ -1836,23 +1785,23 @@ void do_cmd_debug(player_type *creature_ptr)
 		}
 		break;
 
-	/* View item info */
+		/* View item info */
 	case 'f':
 		identify_fully(FALSE);
 		break;
 
-	/* Create desired feature */
+		/* Create desired feature */
 	case 'F':
 		do_cmd_wiz_create_feature(creature_ptr);
 		break;
 
-	/* Good Objects */
+		/* Good Objects */
 	case 'g':
 		if (command_arg <= 0) command_arg = 1;
 		acquirement(creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
 		break;
 
-	/* Hitpoint rerating */
+		/* Hitpoint rerating */
 	case 'h':
 		roll_hitdice(creature_ptr, SPOP_DISPLAY_MES | SPOP_DEBUG);
 		break;
@@ -1861,96 +1810,97 @@ void do_cmd_debug(player_type *creature_ptr)
 		do_cmd_summon_horde(creature_ptr);
 		break;
 
-	/* Identify */
+		/* Identify */
 	case 'i':
 		(void)ident_spell(creature_ptr, FALSE);
 		break;
 
-	/* Go up or down in the dungeon */
+		/* Go up or down in the dungeon */
 	case 'j':
 		do_cmd_wiz_jump(creature_ptr);
 		break;
 
-	/* Self-Knowledge */
+		/* Self-Knowledge */
 	case 'k':
 		self_knowledge(creature_ptr);
 		break;
 
-	/* Learn about objects */
+		/* Learn about objects */
 	case 'l':
 		do_cmd_wiz_learn();
 		break;
 
-	/* Magic Mapping */
+		/* Magic Mapping */
 	case 'm':
 		map_area(creature_ptr, DETECT_RAD_ALL * 3);
 		break;
 
-	/* Mutation */
+		/* Mutation */
 	case 'M':
 		(void)gain_mutation(creature_ptr, command_arg);
 		break;
 
-	/* Reset Class */
+		/* Reset Class */
 	case 'R':
 		(void)do_cmd_wiz_reset_class(creature_ptr);
 		break;
 
-	/* Specific reward */
+		/* Specific reward */
 	case 'r':
 		(void)gain_level_reward(creature_ptr, command_arg);
 		break;
 
-	/* Summon _friendly_ named monster */
+		/* Summon _friendly_ named monster */
 	case 'N':
 		do_cmd_wiz_named_friendly(creature_ptr, command_arg);
 		break;
 
-	/* Summon Named Monster */
+		/* Summon Named Monster */
 	case 'n':
 		do_cmd_wiz_named(creature_ptr, command_arg);
 		break;
 
-	/* Dump option bits usage */
+		/* Dump option bits usage */
 	case 'O':
 		do_cmd_dump_options();
 		break;
 
-	/* Object playing routines */
+		/* Object playing routines */
 	case 'o':
 		do_cmd_wiz_play(creature_ptr);
 		break;
 
-	/* Phase Door */
+		/* Phase Door */
 	case 'p':
 		teleport_player(creature_ptr, 10, 0L);
 		break;
 
-	/* Take a Quests */
+		/* Take a Quests */
 	case 'Q':
-		{
-			char ppp[30];
-			char tmp_val[5];
-			int tmp_int;
-			sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
-			sprintf(tmp_val, "%d", 0);
+	{
+		char ppp[30];
+		char tmp_val[5];
+		int tmp_int;
+		sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
+		sprintf(tmp_val, "%d", 0);
 
-			if (!get_string(ppp, tmp_val, 3)) return;
-			tmp_int = atoi(tmp_val);
+		if (!get_string(ppp, tmp_val, 3)) return;
+		tmp_int = atoi(tmp_val);
 
-			if(tmp_int < 0) break;
-			if(tmp_int >= max_q_idx) break;
+		if (tmp_int < 0) break;
+		if (tmp_int >= max_q_idx) break;
 
-			creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
-			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
-			quest[tmp_int].status = QUEST_STATUS_TAKEN;
-			creature_ptr->current_floor_ptr->inside_quest = 0;
-		}
-		break;
+		creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
+		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+		quest[tmp_int].status = QUEST_STATUS_TAKEN;
+		creature_ptr->current_floor_ptr->inside_quest = 0;
+	}
+
+	break;
 
 	/* Complete a Quest -KMW- */
 	case 'q':
-		if(creature_ptr->current_floor_ptr->inside_quest)
+		if (creature_ptr->current_floor_ptr->inside_quest)
 		{
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
 			{
@@ -1963,81 +1913,82 @@ void do_cmd_debug(player_type *creature_ptr)
 			msg_print("No current quest");
 			msg_print(NULL);
 		}
+
 		break;
 
-	/* Make every dungeon square "known" to test streamers -KMW- */
+		/* Make every dungeon square "known" to test streamers -KMW- */
 	case 'u':
-		for (y = 0; y < creature_ptr->current_floor_ptr->height; y++)
+		for (int y = 0; y < creature_ptr->current_floor_ptr->height; y++)
 		{
-			for (x = 0; x < creature_ptr->current_floor_ptr->width; x++)
+			for (int x = 0; x < creature_ptr->current_floor_ptr->width; x++)
 			{
 				creature_ptr->current_floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
 			}
 		}
+
 		wiz_lite(creature_ptr, FALSE);
 		break;
 
-	/* Summon Random Monster(s) */
+		/* Summon Random Monster(s) */
 	case 's':
 		if (command_arg <= 0) command_arg = 1;
 		do_cmd_wiz_summon(creature_ptr, command_arg);
 		break;
 
-	/* Special(Random Artifact) Objects */
+		/* Special(Random Artifact) Objects */
 	case 'S':
 		if (command_arg <= 0) command_arg = 1;
 		acquirement(creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
 		break;
 
-	/* Teleport */
+		/* Teleport */
 	case 't':
 		teleport_player(creature_ptr, 100, 0L);
 		break;
 
-	/* Game Time Setting */
+		/* Game Time Setting */
 	case 'T':
 		set_gametime();
 		break;
 
-
-	/* Very Good Objects */
+		/* Very Good Objects */
 	case 'v':
 		if (command_arg <= 0) command_arg = 1;
 		acquirement(creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
 		break;
 
-	/* Wizard Light the Level */
+		/* Wizard Light the Level */
 	case 'w':
 		wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
 		break;
 
-	/* Increase Experience */
+		/* Increase Experience */
 	case 'x':
 		gain_exp(creature_ptr, command_arg ? command_arg : (creature_ptr->exp + 1));
 		break;
 
-	/* Zap Monsters (Genocide) */
+		/* Zap Monsters (Genocide) */
 	case 'z':
 		do_cmd_wiz_zap(creature_ptr);
 		break;
 
-	/* Zap Monsters (Omnicide) */
+		/* Zap Monsters (Omnicide) */
 	case 'Z':
 		do_cmd_wiz_zap_all(creature_ptr);
 		break;
 
-	/* Hack -- whatever I desire */
+		/* Hack -- whatever I desire */
 	case '_':
 		probing(creature_ptr);
 		break;
 
-	/* For temporary test. */
+		/* For temporary test. */
 	case 'X':
 	{
 		INVENTORY_IDX i;
-		for(i = INVEN_TOTAL - 1; i >= 0; i--)
+		for (i = INVEN_TOTAL - 1; i >= 0; i--)
 		{
-			if(creature_ptr->inventory_list[i].k_idx) inven_drop(i, 999);
+			if (creature_ptr->inventory_list[i].k_idx) inven_drop(i, 999);
 		}
 		player_outfit(creature_ptr);
 		break;
@@ -2051,14 +2002,11 @@ void do_cmd_debug(player_type *creature_ptr)
 		do_cmd_debug_spell(creature_ptr);
 		break;
 
-
-	/* Not a Wizard Command */
 	default:
 		msg_print("That is not a valid debug command.");
 		break;
 	}
 }
-
 
 #else
 
@@ -2067,4 +2015,3 @@ static int i = 0;
 #endif
 
 #endif
-

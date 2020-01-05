@@ -218,7 +218,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		else
 			msg_print(_("上の階に登った。", "You enter the up staircase."));
 
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 
@@ -262,13 +262,13 @@ void do_cmd_go_up(player_type *creature_ptr)
 
 	take_turn(creature_ptr, 100);
 
-	if (autosave_l) do_cmd_save_game(TRUE);
+	if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 	/* For a random quest */
 	if (creature_ptr->current_floor_ptr->inside_quest &&
 	    quest[creature_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_RANDOM)
 	{
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = 0;
 	}
@@ -277,7 +277,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 	if (creature_ptr->current_floor_ptr->inside_quest &&
 	    quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 	{
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 		creature_ptr->current_floor_ptr->dun_level = 0;
@@ -291,14 +291,14 @@ void do_cmd_go_up(player_type *creature_ptr)
 		if (have_flag(f_ptr->flags, FF_SHAFT))
 		{
 			/* Create a way back */
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_SHAFT);
 
 			up_num = 2;
 		}
 		else
 		{
 			/* Create a way back */
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_UP);
+			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP);
 
 			up_num = 1;
 		}
@@ -322,14 +322,11 @@ void do_cmd_go_up(player_type *creature_ptr)
 
 /*!
  * @brief 階段を使って階層を降りる処理 / Go down one level
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_go_down(player_type *creature_ptr)
 {
-	/* Player grid */
-	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
-	feature_type *f_ptr = &f_info[g_ptr->feat];
-
 	bool fall_trap = FALSE;
 	int down_num = 0;
 
@@ -339,6 +336,8 @@ void do_cmd_go_down(player_type *creature_ptr)
 	}
 
 	/* Verify stairs */
+	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+	feature_type *f_ptr = &f_info[g_ptr->feat];
 	if (!have_flag(f_ptr->flags, FF_MORE))
 	{
 		msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
@@ -350,11 +349,12 @@ void do_cmd_go_down(player_type *creature_ptr)
 	/* Quest entrance */
 	if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
 	{
-		do_cmd_quest();
+		do_cmd_quest(creature_ptr);
+		return;
 	}
 
 	/* Quest down stairs */
-	else if (have_flag(f_ptr->flags, FF_QUEST))
+	if (have_flag(f_ptr->flags, FF_QUEST))
 	{
 		/* Confirm Leaving */
 		if(!confirm_leave_level(creature_ptr, TRUE)) return;
@@ -364,7 +364,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		else
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
 
-		leave_quest_check();
+		leave_quest_check(creature_ptr);
 		leave_tower_check();
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
@@ -390,100 +390,96 @@ void do_cmd_go_down(player_type *creature_ptr)
 		creature_ptr->oldpy = 0;
 		
 		take_turn(creature_ptr, 100);
+		return;
 	}
 
+	DUNGEON_IDX target_dungeon = 0;
+
+	if (!creature_ptr->current_floor_ptr->dun_level)
+	{
+		target_dungeon = have_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
+
+		if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND))
+		{
+			msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
+			return;
+		}
+		if (!max_dlv[target_dungeon])
+		{
+			msg_format(_("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)"),
+				d_name + d_info[target_dungeon].name, d_info[target_dungeon].mindepth);
+			if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) return;
+		}
+
+		/* Save old player position */
+		creature_ptr->oldpx = creature_ptr->x;
+		creature_ptr->oldpy = creature_ptr->y;
+		creature_ptr->dungeon_idx = target_dungeon;
+
+		/*
+		 * Clear all saved floors
+		 * and create a first saved floor
+		 */
+		prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
+	}
+
+	take_turn(creature_ptr, 100);
+
+	if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
+
+	/* Go down */
+	if (have_flag(f_ptr->flags, FF_SHAFT)) down_num += 2;
+	else down_num += 1;
+
+	if (!creature_ptr->current_floor_ptr->dun_level)
+	{
+		/* Enter the dungeon just now */
+		creature_ptr->enter_dungeon = TRUE;
+		down_num = d_info[creature_ptr->dungeon_idx].mindepth;
+	}
+
+	if (record_stair)
+	{
+		if (fall_trap) exe_write_diary(creature_ptr, NIKKI_STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
+		else exe_write_diary(creature_ptr, NIKKI_STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
+	}
+
+	if (fall_trap)
+	{
+		msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
+	}
 	else
 	{
-		DUNGEON_IDX target_dungeon = 0;
-
-		if (!creature_ptr->current_floor_ptr->dun_level)
+		/* Success */
+		if (target_dungeon)
 		{
-			target_dungeon = have_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
-
-			if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND))
-			{
-				msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
-				return;
-			}
-			if (!max_dlv[target_dungeon])
-			{
-				msg_format(_("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)"),
-							d_name+d_info[target_dungeon].name, d_info[target_dungeon].mindepth);
-				if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) return;
-			}
-
-			/* Save old player position */
-			creature_ptr->oldpx = creature_ptr->x;
-			creature_ptr->oldpy = creature_ptr->y;
-			creature_ptr->dungeon_idx = target_dungeon;
-
-			/*
-			 * Clear all saved floors
-			 * and create a first saved floor
-			 */
-			prepare_change_floor_mode(CFM_FIRST_FLOOR);
-		}
-
-		take_turn(creature_ptr, 100);
-
-		if (autosave_l) do_cmd_save_game(TRUE);
-
-		/* Go down */
-		if (have_flag(f_ptr->flags, FF_SHAFT)) down_num += 2;
-		else down_num += 1;
-
-		if (!creature_ptr->current_floor_ptr->dun_level)
-		{
-			/* Enter the dungeon just now */
-			creature_ptr->enter_dungeon = TRUE;
-			down_num = d_info[creature_ptr->dungeon_idx].mindepth;
-		}
-
-		if (record_stair)
-		{
-			if (fall_trap) exe_write_diary(creature_ptr, NIKKI_STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
-			else exe_write_diary(creature_ptr, NIKKI_STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
-		}
-
-		if (fall_trap)
-		{
-			msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
+			msg_format(_("%sへ入った。", "You entered %s."), d_text + d_info[creature_ptr->dungeon_idx].text);
 		}
 		else
 		{
-			/* Success */
-			if (target_dungeon)
-			{
-				msg_format(_("%sへ入った。", "You entered %s."), d_text + d_info[creature_ptr->dungeon_idx].text);
-			}
+			if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+				msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 			else
-			{
-				if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
-					msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
-				else
-					msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));
-			}
+				msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));
 		}
+	}
 
-		creature_ptr->leaving = TRUE;
+	creature_ptr->leaving = TRUE;
 
-		if (fall_trap)
-		{
-			prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-		}
-		else
-		{
-			if (have_flag(f_ptr->flags, FF_SHAFT))
-			{
-				/* Create a way back */
-				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
-			}
-			else
-			{
-				/* Create a way back */
-				prepare_change_floor_mode(CFM_SAVE_FLOORS | CFM_DOWN);
-			}
-		}
+	if (fall_trap)
+	{
+		prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
+		return;
+	}
+	
+	/* Create a way back */
+	if (have_flag(f_ptr->flags, FF_SHAFT))
+	{
+		prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_SHAFT);
+	}
+	else
+	{
+		prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN);
 	}
 }
 
@@ -504,8 +500,8 @@ void do_cmd_search(player_type * creature_ptr)
 		/* Cancel the arg */
 		command_arg = 0;
 	}
-	take_turn(creature_ptr, 100);
 
+	take_turn(creature_ptr, 100);
 	search(creature_ptr);
 }
 
@@ -541,7 +537,8 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 			return (this_o_idx);
 		}
 	}
-	return (0);
+
+	return 0;
 }
 
 /*!
@@ -556,7 +553,6 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
  */
 static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
-	int i, j;
 	bool flag = TRUE;
 	bool more = FALSE;
 	object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
@@ -570,14 +566,14 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 		flag = FALSE;
 
 		/* Get the "disarm" factor */
-		i = creature_ptr->skill_dis;
+		int i = creature_ptr->skill_dis;
 
 		/* Penalize some conditions */
 		if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
 		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 		/* Extract the difficulty */
-		j = i - o_ptr->pval;
+		int j = i - o_ptr->pval;
 
 		/* Always have a small chance of success */
 		if (j < 2) j = 2;
@@ -610,7 +606,8 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 		/* Let the Chest drop items */
 		chest_death(creature_ptr, FALSE, y, x, o_idx);
 	}
-	return (more);
+
+	return more;
 }
 
 /*!
@@ -626,15 +623,9 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
  */
 static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool under)
 {
-	DIRECTION d;
-	int count;
-	POSITION xx, yy;
-
-	/* Count how many matches */
-	count = 0;
-
 	/* Check around (and under) the character */
-	for (d = 0; d < 9; d++)
+	int count = 0;
+	for (DIRECTION d = 0; d < 9; d++)
 	{
 		grid_type *g_ptr;
 		FEAT_IDX feat;
@@ -643,8 +634,8 @@ static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*
 		if ((d == 8) && !under) continue;
 
 		/* Extract adjacent (legal) location */
-		yy = creature_ptr->y + ddy_ddd[d];
-		xx = creature_ptr->x + ddx_ddd[d];
+		POSITION yy = creature_ptr->y + ddy_ddd[d];
+		POSITION xx = creature_ptr->x + ddx_ddd[d];
 
 		/* Get the creature_ptr->current_floor_ptr->grid_array */
 		g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
@@ -683,25 +674,20 @@ static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*
  */
 static int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, bool trapped)
 {
-	DIRECTION d;
-	int count;
-	OBJECT_IDX o_idx;
-	object_type *o_ptr;
-
-	/* Count how many matches */
-	count = 0;
-
 	/* Check around (and under) the character */
-	for (d = 0; d < 9; d++)
+	int count = 0;
+	for (DIRECTION d = 0; d < 9; d++)
 	{
 		/* Extract adjacent (legal) location */
 		POSITION yy = creature_ptr->y + ddy_ddd[d];
 		POSITION xx = creature_ptr->x + ddx_ddd[d];
 
 		/* No (visible) chest is there */
-		if ((o_idx = chest_check(yy, xx, FALSE)) == 0) continue;
+		OBJECT_IDX o_idx = chest_check(yy, xx, FALSE);
+		if (!o_idx) continue;
 
 		/* Grab the object */
+		object_type *o_ptr;
 		o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 		/* Already open */
@@ -738,8 +724,6 @@ static int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, boo
  */
 static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	int i, j;
-
 	/* Get requested grid */
 	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
@@ -754,63 +738,47 @@ static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 	{
 		/* Stuck */
 		msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+		return more;
 	}
 
-	/* Locked door */
-	else if (f_ptr->power)
+	if (!f_ptr->power)
 	{
-		/* Disarm factor */
-		i = creature_ptr->skill_dis;
-
-		/* Penalize some conditions */
-		if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
-		if (creature_ptr->confused || creature_ptr->image) i = i / 10;
-
-		/* Extract the lock power */
-		j = f_ptr->power;
-
-		/* Extract the difficulty */
-		j = i - (j * 4);
-
-		/* Always have a small chance of success */
-		if (j < 2) j = 2;
-
-		/* Success */
-		if (randint0(100) < j)
-		{
-			msg_print(_("鍵をはずした。", "You have picked the lock."));
-
-			/* Open the door */
-			cave_alter_feat(y, x, FF_OPEN);
-
-			sound(SOUND_OPENDOOR);
-
-			/* Experience */
-			gain_exp(creature_ptr, 1);
-		}
-
-		/* Failure */
-		else
-		{
-			/* Failure */
-			if (flush_failure) flush();
-
-			msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
-
-			/* We may keep trying */
-			more = TRUE;
-		}
-	}
-
-	/* Closed door */
-	else
-	{
-		/* Open the door */
 		cave_alter_feat(y, x, FF_OPEN);
-
 		sound(SOUND_OPENDOOR);
+		return more;
 	}
-	return (more);
+	
+	/* Disarm factor */
+	int i = creature_ptr->skill_dis;
+
+	/* Penalize some conditions */
+	if (creature_ptr->blind || no_lite(creature_ptr)) i = i / 10;
+	if (creature_ptr->confused || creature_ptr->image) i = i / 10;
+
+	/* Extract the difficulty */
+	int j = f_ptr->power;
+	j = i - (j * 4);
+
+	/* Always have a small chance of success */
+	if (j < 2) j = 2;
+
+	if (randint0(100) >= j)
+	{
+		if (flush_failure) flush();
+		msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
+		more = TRUE;
+	}
+
+	msg_print(_("鍵をはずした。", "You have picked the lock."));
+
+	/* Open the door */
+	cave_alter_feat(y, x, FF_OPEN);
+
+	sound(SOUND_OPENDOOR);
+
+	/* Experience */
+	gain_exp(creature_ptr, 1);
+	return more;
 }
 
 /*!
@@ -906,7 +874,8 @@ void do_cmd_open(player_type *creature_ptr)
 
 
 
-/*!
+/*
+ * todo 常にFALSEを返している
  * @brief 「閉じる」動作コマンドのサブルーチン /
  * Perform the basic "close" command
  * @param y 対象を行うマスのY座標
@@ -928,33 +897,36 @@ static bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 	/* Seeing true feature code (ignore mimic) */
 
 	/* Open door */
-	if (have_flag(f_info[old_feat].flags, FF_CLOSE))
+	if (!have_flag(f_info[old_feat].flags, FF_CLOSE))
 	{
-		s16b closed_feat = feat_state(old_feat, FF_CLOSE);
+		return more;
+	}
+	
+	s16b closed_feat = feat_state(old_feat, FF_CLOSE);
 
-		/* Hack -- object in the way */
-		if ((g_ptr->o_idx || (g_ptr->info & CAVE_OBJECT)) &&
-		    (closed_feat != old_feat) && !have_flag(f_info[closed_feat].flags, FF_DROP))
+	/* Hack -- object in the way */
+	if ((g_ptr->o_idx || (g_ptr->info & CAVE_OBJECT)) &&
+		(closed_feat != old_feat) && !have_flag(f_info[closed_feat].flags, FF_DROP))
+	{
+		msg_print(_("何かがつっかえて閉まらない。", "There seems stuck."));
+	}
+	else
+	{
+		/* Close the door */
+		cave_alter_feat(y, x, FF_CLOSE);
+
+		/* Broken door */
+		if (old_feat == g_ptr->feat)
 		{
-			msg_print(_("何かがつっかえて閉まらない。", "There seems stuck."));
+			msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
 		}
 		else
 		{
-			/* Close the door */
-			cave_alter_feat(y, x, FF_CLOSE);
-
-			/* Broken door */
-			if (old_feat == g_ptr->feat)
-			{
-				msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
-			}
-			else
-			{
-				sound(SOUND_SHUTDOOR);
-			}
+			sound(SOUND_SHUTDOOR);
 		}
 	}
-	return (more);
+
+	return more;
 }
 
 
@@ -1193,6 +1165,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 		/* Occasional Search XXX XXX */
 		if (randint0(100) < 25) search(creature_ptr);
 	}
+
 	return more;
 }
 
@@ -1368,6 +1341,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 
 		sound(SOUND_OPENDOOR);
 	}
+
 	return (TRUE);
 }
 
@@ -1449,6 +1423,7 @@ static bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, 
 		sound(SOUND_FAIL);
 		chest_trap(creature_ptr, y, x, o_idx);
 	}
+
 	return (more);
 }
 
@@ -1532,6 +1507,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
 		/* Move the player onto the trap */
 		move_player(creature_ptr, dir, easy_disarm, FALSE);
 	}
+
 	return (more);
 }
 
@@ -1574,8 +1550,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 			if (!too_many) command_dir = coords_to_dir(creature_ptr, y, x);
 		}
 	}
-
-
+	
 	/* Allow repeated command */
 	if (command_arg)
 	{
@@ -1721,6 +1696,7 @@ static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, D
 		/* Hack -- Lose balance ala paralysis */
 		(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 2 + randint0(2));
 	}
+
 	return (more);
 }
 
@@ -1952,6 +1928,7 @@ static bool get_spike(player_type *creature_ptr, INVENTORY_IDX *ip)
 /*!
  * @brief 「くさびを打つ」動作コマンドのメインルーチン /
  * Jam a closed door with a spike
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -1969,54 +1946,50 @@ void do_cmd_spike(player_type *creature_ptr)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir, FALSE))
+	if (!get_rep_dir(&dir, FALSE)) return;
+
+	POSITION y = creature_ptr->y + ddy[dir];
+	POSITION x = creature_ptr->x + ddx[dir];
+	grid_type *g_ptr;
+	g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+
+	/* Feature code (applying "mimic" field) */
+	FEAT_IDX feat = get_feat_mimic(g_ptr);
+
+	/* Require closed door */
+	INVENTORY_IDX item;
+	if (!have_flag(f_info[feat].flags, FF_SPIKE))
 	{
-		POSITION y, x;
-		INVENTORY_IDX item;
-		grid_type *g_ptr;
-		FEAT_IDX feat;
+		msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
+	}
 
-		y = creature_ptr->y + ddy[dir];
-		x = creature_ptr->x + ddx[dir];
-		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+	/* Get a spike */
+	else if (!get_spike(creature_ptr, &item))
+	{
+		msg_print(_("くさびを持っていない！", "You have no spikes!"));
+	}
 
-		/* Feature code (applying "mimic" field) */
-		feat = get_feat_mimic(g_ptr);
+	/* Is a monster in the way? */
+	else if (g_ptr->m_idx)
+	{
+		take_turn(creature_ptr, 100);
 
-		/* Require closed door */
-		if (!have_flag(f_info[feat].flags, FF_SPIKE))
-		{
-			msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));
-		}
+		msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
-		/* Get a spike */
-		else if (!get_spike(creature_ptr, &item))
-		{
-			msg_print(_("くさびを持っていない！", "You have no spikes!"));
-		}
+		/* Attack */
+		py_attack(creature_ptr, y, x, 0);
+	}
 
-		/* Is a monster in the way? */
-		else if (g_ptr->m_idx)
-		{
-			take_turn(creature_ptr, 100);
+	/* Go for it */
+	else
+	{
+		take_turn(creature_ptr, 100);
 
-			msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
+		/* Successful jamming */
+		msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
+		cave_alter_feat(y, x, FF_SPIKE);
 
-			/* Attack */
-			py_attack(creature_ptr, y, x, 0);
-		}
-
-		/* Go for it */
-		else
-		{
-			take_turn(creature_ptr, 100);
-
-			/* Successful jamming */
-			msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
-			cave_alter_feat(y, x, FF_SPIKE);
-
-			vary_item(item, -1);
-		}
+		vary_item(item, -1);
 	}
 }
 
@@ -2025,16 +1998,12 @@ void do_cmd_spike(player_type *creature_ptr)
 /*!
  * @brief 「歩く」動作コマンドのメインルーチン /
  * Support code for the "Walk" and "Jump" commands
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  * @return なし
  */
 void do_cmd_walk(player_type *creature_ptr, bool pickup)
 {
-	DIRECTION dir;
-
-	bool more = FALSE;
-
-
 	/* Allow repeated command */
 	if (command_arg)
 	{
@@ -2047,6 +2016,8 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
 	}
 
 	/* Get a "repeated" direction */
+	bool more = FALSE;
+	DIRECTION dir;
 	if (get_rep_dir(&dir, FALSE))
 	{
 		take_turn(creature_ptr, 100);
@@ -2097,6 +2068,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
 /*!
  * @brief 「走る」動作コマンドのメインルーチン /
  * Start running.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_run(player_type *creature_ptr)
@@ -2125,6 +2097,7 @@ void do_cmd_run(player_type *creature_ptr)
  * @brief 「留まる」動作コマンドのメインルーチン /
  * Stay still.  Search.  Enter stores.
  * Pick up treasure if "pickup" is true.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
  * @return なし
  */
@@ -2153,11 +2126,11 @@ void do_cmd_stay(player_type *creature_ptr, bool pickup)
 /*!
  * @brief 「休む」動作コマンドのメインルーチン /
  * Resting allows a player to safely restore his hp	-RAK-
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_rest(player_type *creature_ptr)
 {
-
 	set_action(creature_ptr, ACTION_NONE);
 
 	if ((creature_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(creature_ptr) || INTERUPTING_SONG_EFFECT(creature_ptr)))
@@ -2173,8 +2146,7 @@ void do_cmd_rest(player_type *creature_ptr)
 		concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", 
 				   "Rest (0-9999, '*' for HP/SP, '&' as needed): ");
 
-
-		char out_val[80];
+char out_val[80];
 
 		/* Default */
 		strcpy(out_val, "&");
@@ -2237,8 +2209,11 @@ void do_cmd_rest(player_type *creature_ptr)
 
 
 
-/*!
+/*
+ * todo Doxygenの加筆求む
  * @brief 射撃処理のメインルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param snipe_type ？？？
  * @return なし
  */
 void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
@@ -2302,6 +2277,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 	{
 		teleport_player(creature_ptr, 10 + (creature_ptr->concent * 2), 0L);
 	}
+
 	if (snipe_type == SP_FINAL)
 	{
 		msg_print(_("射撃の反動が体を襲った。", "A reactionary of shooting attacked you. "));
@@ -2315,6 +2291,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
  * @param mult 威力の倍率
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param boomerang ブーメラン処理ならばTRUE
  * @param shuriken 忍者の手裏剣処理ならばTRUE
  * @return ターンを消費した場合TRUEを返す
@@ -2422,8 +2399,8 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
 			return FALSE;
 		}
-
 	}
+
 	q_ptr = &forge;
 	object_copy(q_ptr, o_ptr);
 

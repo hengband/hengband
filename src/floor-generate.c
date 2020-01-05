@@ -1341,14 +1341,16 @@ void wipe_generate_random_floor_flags(floor_type *floor_ptr)
 
 /*!
  * @brief フロアの全情報を初期化する / Clear and empty floor.
+ * @parama player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void clear_cave(floor_type *floor_ptr)
+void clear_cave(player_type *player_ptr)
 {
 	POSITION x, y;
 	int i;
 
 	/* Very simplified version of wipe_o_list() */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	(void)C_WIPE(floor_ptr->o_list, floor_ptr->o_max, object_type);
 	floor_ptr->o_max = 1;
 	floor_ptr->o_cnt = 0;
@@ -1362,7 +1364,7 @@ void clear_cave(floor_type *floor_ptr)
 	for (i = 0; i < MAX_MTIMED; i++) floor_ptr->mproc_max[i] = 0;
 
 	/* Pre-calc cur_num of pets in party_mon[] */
-	precalc_cur_num_of_pet();
+	precalc_cur_num_of_pet(player_ptr);
 
 
 	/* Start with a blank floor_ptr->grid_array */
@@ -1396,14 +1398,16 @@ void clear_cave(floor_type *floor_ptr)
 
 /*!
  * ダンジョンのランダムフロアを生成する / Generates a random dungeon level -RAK-
+ * @parama player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @note Hack -- regenerate any "overflow" levels
  */
-void generate_floor(floor_type *floor_ptr)
+void generate_floor(player_type *player_ptr)
 {
 	int num;
 
 	/* Fill the arrays of floors and walls in the good proportions */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	set_floor_and_wall(floor_ptr->dungeon_idx);
 
 	/* Generate */
@@ -1412,7 +1416,7 @@ void generate_floor(floor_type *floor_ptr)
 		bool okay = TRUE;
 		concptr why = NULL;
 
-		clear_cave(floor_ptr);
+		clear_cave(player_ptr);
 
 		/* Mega-Hack -- no player yet */
 		p_ptr->x = p_ptr->y = 0;

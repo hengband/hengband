@@ -245,6 +245,7 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
@@ -268,21 +269,21 @@ static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
  * Perhaps we should affect doors?
  * </pre>
  */
-static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	bool obvious = FALSE;
-	bool known = player_has_los_bold(p_ptr, y, x);
+	bool known = player_has_los_bold(caster_ptr, y, x);
 
 	who = who ? who : 0;
 
 	/* Reduce damage by distance */
 	dam = (dam + r) / (r + 1);
 
-
-	if (have_flag(f_ptr->flags, FF_TREE))
+if (have_flag(f_ptr->flags, FF_TREE))
 	{
 		concptr message;
 		switch (typ)
@@ -412,7 +413,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 
 			/* Remove "unsafe" flag if player is not blind */
-			if (!p_ptr->blind && player_has_los_bold(p_ptr, y, x))
+			if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
 			{
 				g_ptr->info &= ~(CAVE_UNSAFE);
 				lite_spot(y, x);
@@ -440,7 +441,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 
 			/* Remove "unsafe" flag if player is not blind */
-			if (!p_ptr->blind && player_has_los_bold(p_ptr, y, x))
+			if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
 			{
 				g_ptr->info &= ~(CAVE_UNSAFE);
 				lite_spot(y, x);
@@ -470,6 +471,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 					obvious = TRUE;
 				}
 			}
+
 			break;
 		}
 
@@ -486,7 +488,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				/* Destroy the wall */
 				cave_alter_feat(y, x, FF_HURT_ROCK);
-				p_ptr->update |= (PU_FLOW);
+				caster_ptr->update |= (PU_FLOW);
 			}
 
 			break;
@@ -494,8 +496,8 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_MAKE_DOOR:
 		{
-			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
-			if (player_bold(p_ptr, y, x)) break;
+			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+			if (player_bold(caster_ptr, y, x)) break;
 			cave_set_feat(floor_ptr, y, x, feat_door[DOOR_DOOR].closed);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
@@ -509,8 +511,8 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_MAKE_TREE:
 		{
-			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
-			if (player_bold(p_ptr, y, x)) break;
+			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+			if (player_bold(caster_ptr, y, x)) break;
 			cave_set_feat(floor_ptr, y, x, feat_tree);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
@@ -518,7 +520,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_MAKE_GLYPH:
 		{
-			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
+			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 			g_ptr->info |= CAVE_OBJECT;
 			g_ptr->mimic = feat_glyph;
 			note_spot(y, x);
@@ -528,8 +530,8 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		case GF_STONE_WALL:
 		{
-			if (!cave_naked_bold(p_ptr, floor_ptr, y, x)) break;
-			if (player_bold(p_ptr, y, x)) break;
+			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+			if (player_bold(caster_ptr, y, x)) break;
 			cave_set_feat(floor_ptr, y, x, feat_granite);
 			break;
 		}
@@ -546,6 +548,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				cave_set_feat(floor_ptr, y, x, feat_deep_lava);
 			}
+
 			break;
 		}
 
@@ -561,6 +564,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				cave_set_feat(floor_ptr, y, x, feat_deep_water);
 			}
+
 			break;
 		}
 
@@ -569,23 +573,23 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_LITE:
 		{
 			/* Turn on the light */
-			if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+			if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 			{
 				g_ptr->info |= (CAVE_GLOW);
 				note_spot(y, x);
 				lite_spot(y, x);
-				update_local_illumination(p_ptr, y, x);
+				update_local_illumination(caster_ptr, y, x);
 
 				/* Observe */
-				if (player_can_see_bold(p_ptr, y, x)) obvious = TRUE;
+				if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
 
 				/* Mega-Hack -- Update the monster in the affected grid */
 				/* This allows "spear of light" (etc) to work "correctly" */
-				if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
+				if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 
-				if (p_ptr->special_defense & NINJA_S_STEALTH)
+				if (caster_ptr->special_defense & NINJA_S_STEALTH)
 				{
-					if (player_bold(p_ptr, y, x)) set_superstealth(p_ptr, FALSE);
+					if (player_bold(caster_ptr, y, x)) set_superstealth(caster_ptr, FALSE);
 				}
 			}
 
@@ -596,7 +600,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_DARK_WEAK:
 		case GF_DARK:
 		{
-			bool do_dark = !p_ptr->phase_out && !is_mirror_grid(g_ptr);
+			bool do_dark = !caster_ptr->phase_out && !is_mirror_grid(g_ptr);
 			int j;
 
 			/* Turn off the light. */
@@ -637,13 +641,13 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				lite_spot(y, x);
 
-				update_local_illumination(p_ptr, y, x);
+				update_local_illumination(caster_ptr, y, x);
 
-				if (player_can_see_bold(p_ptr, y, x)) obvious = TRUE;
+				if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
 
 				/* Mega-Hack -- Update the monster in the affected grid */
 				/* This allows "spear of light" (etc) to work "correctly" */
-				if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
+				if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 			}
 
 			/* All done */
@@ -657,8 +661,8 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
-				remove_mirror(p_ptr, y, x);
-				project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+				remove_mirror(caster_ptr, y, x);
+				project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
 			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
@@ -671,19 +675,20 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				/* Destroy the wall */
 				cave_alter_feat(y, x, FF_HURT_ROCK);
-				p_ptr->update |= (PU_FLOW);
+				caster_ptr->update |= (PU_FLOW);
 			}
+
 			break;
 		}
 
 		case GF_SOUND:
 		{
-			if (is_mirror_grid(g_ptr) && p_ptr->lev < 40)
+			if (is_mirror_grid(g_ptr) && caster_ptr->lev < 40)
 			{
 				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
 				sound(SOUND_GLASS);
-				remove_mirror(p_ptr, y, x);
-				project(p_ptr, 0, 2, y, x, p_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+				remove_mirror(caster_ptr, y, x);
+				project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
 			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
@@ -696,8 +701,9 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				/* Destroy the wall */
 				cave_alter_feat(y, x, FF_HURT_ROCK);
-				p_ptr->update |= (PU_FLOW);
+				caster_ptr->update |= (PU_FLOW);
 			}
+
 			break;
 		}
 
@@ -705,7 +711,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 		{
 			/* Destroy mirror/glyph */
 			if (is_mirror_grid(g_ptr) || is_glyph_grid(g_ptr) || is_explosive_rune_grid(g_ptr))
-				remove_mirror(p_ptr, y, x);
+				remove_mirror(caster_ptr, y, x);
 
 			/* Permanent features don't get effect */
 			/* But not protect monsters and other objects */
@@ -714,8 +720,9 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 				cave_alter_feat(y, x, FF_HURT_DISI);
 
 				/* Update some things -- similar to GF_KILL_WALL */
-				p_ptr->update |= (PU_FLOW);
+				caster_ptr->update |= (PU_FLOW);
 			}
+
 			break;
 		}
 	}
@@ -729,6 +736,7 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
@@ -754,14 +762,14 @@ static bool project_f(floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITI
  * We return "TRUE" if the effect of the projection is "obvious".
  * </pre>
  */
-static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	bool obvious = FALSE;
-	bool known = player_has_los_bold(p_ptr, y, x);
+	bool known = player_has_los_bold(caster_ptr, y, x);
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
@@ -780,7 +788,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 	/* Scan all objects in the grid */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
 
 		bool is_art = FALSE;
 		bool ignore = FALSE;
@@ -941,7 +949,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 
 			case GF_IDENTIFY:
 			{
-				identify_item(p_ptr, o_ptr);
+				identify_item(caster_ptr, o_ptr);
 
 				/* Auto-inscription */
 				autopick_alter_item((-this_o_idx), FALSE);
@@ -981,7 +989,7 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
 					int i;
 					BIT_FLAGS mode = 0L;
 
-					if (!who || is_pet(&p_ptr->current_floor_ptr->m_list[who]))
+					if (!who || is_pet(&caster_ptr->current_floor_ptr->m_list[who]))
 						mode |= PM_FORCE_PET;
 
 					for (i = 0; i < o_ptr->number ; i++)
@@ -1130,7 +1138,6 @@ static bool project_o(MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_P
  * "flg" was added.
  * </pre>
  */
-
 
 
 static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
@@ -4024,7 +4031,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 
 	/* Player is not here */
-	if (!player_bold(p_ptr, y, x)) return (FALSE);
+	if (!player_bold(target_ptr, y, x)) return (FALSE);
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && who && (who != target_ptr->riding))
 	{
@@ -4048,7 +4055,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		else
 			msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
 
-
 		/* Choose 'new' target */
 		if (who > 0)
 		{
@@ -4071,7 +4077,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 			t_x = target_ptr->x - 1 + randint1(3);
 		}
 
-		project(p_ptr, 0, 0, t_y, t_x, dam, typ, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), monspell);
+		project(target_ptr, 0, 0, t_y, t_x, dam, typ, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), monspell);
 
 		disturb(target_ptr, TRUE, TRUE);
 		return TRUE;
@@ -5063,7 +5069,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 		msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
-		project(p_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+		project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		if (target_ptr->tim_eyeeye) set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
 	}
 
@@ -5111,7 +5117,6 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
 	/* Absolute value */
 	return((nd >= 0) ? nd : 0 - nd);
 }
-
 
 
 /*
@@ -5268,57 +5273,54 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 				tx += sx;
 			}
 		}
+
+		return TRUE;
 	}
 
-	/* Travel vertically */
+	/* Let m = dx / dy * 2 * (dx * dy) = 2 * dx * dx */
+	qx = ax * ax;
+	m = qx << 1;
+
+	ty = y1 + sy;
+
+	if (qx == f2)
+	{
+		tx = x1 + sx;
+		qx -= f1;
+	}
 	else
 	{
-		/* Let m = dx / dy * 2 * (dx * dy) = 2 * dx * dx */
-		qx = ax * ax;
-		m = qx << 1;
+		tx = x1;
+	}
 
-		ty = y1 + sy;
+	/* Note (below) the case (qx == f2), where */
+	/* the LOS exactly meets the corner of a tile. */
+	while (y2 - ty)
+	{
+		if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
 
-		if (qx == f2)
+		qx += m;
+
+		if (qx < f2)
 		{
-			tx = x1 + sx;
+			ty += sy;
+		}
+		else if (qx > f2)
+		{
+			tx += sx;
+			if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
 			qx -= f1;
+			ty += sy;
 		}
 		else
 		{
-			tx = x1;
-		}
-
-		/* Note (below) the case (qx == f2), where */
-		/* the LOS exactly meets the corner of a tile. */
-		while (y2 - ty)
-		{
-			if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
-
-			qx += m;
-
-			if (qx < f2)
-			{
-				ty += sy;
-			}
-			else if (qx > f2)
-			{
-				tx += sx;
-				if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
-				qx -= f1;
-				ty += sy;
-			}
-			else
-			{
-				tx += sx;
-				qx -= f1;
-				ty += sy;
-			}
+			tx += sx;
+			qx -= f1;
+			ty += sy;
 		}
 	}
 
-	/* Assume los */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -5680,7 +5682,6 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		flg |= PROJECT_HIDE;
 	}
 
-
 	/* Hack -- Assume there will be no blast (max radius 32) */
 	for (dist = 0; dist < 32; dist++) gm[dist] = 0;
 
@@ -5743,20 +5744,17 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			gx[grids] = x;
 			grids++;
 
-
 			/* Only do visuals if requested */
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
 				/* Only do visuals if the player can "see" the bolt */
 				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
-					u16b p;
-
 					TERM_COLOR a;
 					SYMBOL_CODE c;
 
 					/* Obtain the bolt pict */
-					p = bolt_pict(oy, ox, y, x, typ);
+					u16b p = bolt_pict(oy, ox, y, x, typ);
 
 					/* Extract attr/char */
 					a = PICT_A(p);
@@ -5765,10 +5763,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					/* Visual effects */
 					print_rel(caster_ptr, c, a, y, x);
 					move_cursor_relative(y, x);
-					/*if (fresh_before)*/ Term_fresh();
+					Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
 					lite_spot(y, x);
-					/*if (fresh_before)*/ Term_fresh();
+					Term_fresh();
 
 					/* Display "beam" grids */
 					if (flg & (PROJECT_BEAM))
@@ -5795,7 +5793,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					Term_xtra(TERM_XTRA_DELAY, msec);
 				}
 			}
-			if (project_o(0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
+
+			if (project_o(caster_ptr, 0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
 			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 			{
 				/* The target of monsterspell becomes tha mirror(broken) */
@@ -5812,7 +5811,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					x = GRID_X(path_g[j]);
 					if (project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
 					if (!who && (project_m_n == 1) && !jump) {
-						if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
+						if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
+						{
 							monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
 
 							if (m_ptr->ml)
@@ -5822,11 +5822,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 							}
 						}
 					}
-					(void)project_f(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER);
+
+					(void)project_f(caster_ptr, 0, 0, y, x, dam, GF_SEEKER);
 				}
+
 				last_i = i;
 			}
 		}
+
 		for (i = last_i; i < path_n; i++)
 		{
 			POSITION py, px;
@@ -5846,11 +5849,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					}
 				}
 			}
-			(void)project_f(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER);
+
+			(void)project_f(caster_ptr, 0, 0, py, px, dam, GF_SEEKER);
 		}
+
 		return notice;
 	}
-	else if (typ == GF_SUPER_RAY) {
+	else if (typ == GF_SUPER_RAY)
+	{
 		int j;
 		int second_step = 0;
 
@@ -5874,8 +5880,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			gy[grids] = y;
 			gx[grids] = x;
 			grids++;
-
-
+			
 			/* Only do visuals if requested */
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
@@ -5927,12 +5932,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					Term_xtra(TERM_XTRA_DELAY, msec);
 				}
 			}
-			if (project_o(0, 0, y, x, dam, GF_SUPER_RAY))notice = TRUE;
+
+			if (project_o(caster_ptr, 0, 0, y, x, dam, GF_SUPER_RAY))notice = TRUE;
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
 			{
 				if (second_step)continue;
 				break;
 			}
+
 			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) && !second_step)
 			{
 				/* The target of monsterspell becomes tha mirror(broken) */
@@ -5944,8 +5951,9 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					(void)project_f(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SUPER_RAY);
+					(void)project_f(caster_ptr, 0, 0, y, x, dam, GF_SUPER_RAY);
 				}
+
 				path_n = i;
 				second_step = i + 1;
 				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flg);
@@ -5958,11 +5966,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flg);
 			}
 		}
+
 		for (i = 0; i < path_n; i++)
 		{
-			POSITION py, px;
-			py = GRID_Y(path_g[i]);
-			px = GRID_X(path_g[i]);
+			POSITION py = GRID_Y(path_g[i]);
+			POSITION px = GRID_X(path_g[i]);
 			(void)project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
 			if (!who && (project_m_n == 1) && !jump) {
 				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
@@ -5975,8 +5983,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					}
 				}
 			}
-			(void)project_f(caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY);
+
+			(void)project_f(caster_ptr, 0, 0, py, px, dam, GF_SUPER_RAY);
 		}
+
 		return notice;
 	}
 
@@ -6248,7 +6258,6 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			(!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
 	}
 
-
 	/* Check features */
 	if (flg & (PROJECT_GRID))
 	{
@@ -6271,12 +6280,13 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				int d = dist_to_line(y, x, y1, x1, by, bx);
 
 				/* Affect the grid */
-				if (project_f(caster_ptr->current_floor_ptr, who, d, y, x, dam, typ)) notice = TRUE;
+				if (project_f(caster_ptr, who, d, y, x, dam, typ)) notice = TRUE;
 			}
+
 			else
 			{
 				/* Affect the grid */
-				if (project_f(caster_ptr->current_floor_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
+				if (project_f(caster_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
 			}
 		}
 	}
@@ -6305,16 +6315,15 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				int d = dist_to_line(y, x, y1, x1, by, bx);
 
 				/* Affect the object in the grid */
-				if (project_o(who, d, y, x, dam, typ)) notice = TRUE;
+				if (project_o(caster_ptr, who, d, y, x, dam, typ)) notice = TRUE;
 			}
 			else
 			{
 				/* Affect the object in the grid */
-				if (project_o(who, dist, y, x, dam, typ)) notice = TRUE;
+				if (project_o(caster_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
 			}
 		}
 	}
-
 
 	/* Check monsters */
 	if (flg & (PROJECT_KILL))
@@ -6631,8 +6640,8 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				distance(caster_ptr->y, caster_ptr->x, y, x) <= MAX_RANGE &&
 				distance(caster_ptr->y, caster_ptr->x, y, x) != 0 &&
 				player_has_los_bold(caster_ptr, y, x) &&
-				projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)
-				) {
+				projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+			{
 				mirror_y[mirror_num] = y;
 				mirror_x[mirror_num] = x;
 				mirror_num++;
@@ -6671,8 +6680,10 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 	y2 = point_y[0] > point_y[1] ? point_y[0] : point_y[1];
 	y2 = y2 > point_y[2] ? y2 : point_y[2];
 
-	for (y = y1; y <= y2; y++) {
-		for (x = x1; x <= x2; x++) {
+	for (y = y1; y <= y2; y++)
+	{
+		for (x = x1; x <= x2; x++)
+		{
 			if (centersign*((point_x[0] - x)*(point_y[1] - y)
 				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
 				centersign*((point_x[1] - x)*(point_y[2] - y)
@@ -6680,10 +6691,12 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				{
 					/* Visual effects */
 					if (!(caster_ptr->blind)
-						&& panel_contains(y, x)) {
+						&& panel_contains(y, x))
+					{
 						p = bolt_pict(y, x, y, x, GF_MANA);
 						print_rel(caster_ptr, PICT_C(p), PICT_A(p), y, x);
 						move_cursor_relative(y, x);
@@ -6694,8 +6707,11 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 			}
 		}
 	}
-	for (y = y1; y <= y2; y++) {
-		for (x = x1; x <= x2; x++) {
+
+	for (y = y1; y <= y2; y++)
+	{
+		for (x = x1; x <= x2; x++)
+		{
 			if (centersign*((point_x[0] - x)*(point_y[1] - y)
 				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
 				centersign*((point_x[1] - x)*(point_y[2] - y)
@@ -6703,14 +6719,18 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
-					(void)project_f(caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA);
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				{
+					(void)project_f(caster_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
 			}
 		}
 	}
-	for (y = y1; y <= y2; y++) {
-		for (x = x1; x <= x2; x++) {
+
+	for (y = y1; y <= y2; y++)
+	{
+		for (x = x1; x <= x2; x++)
+		{
 			if (centersign*((point_x[0] - x)*(point_y[1] - y)
 				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
 				centersign*((point_x[1] - x)*(point_y[2] - y)
@@ -6718,14 +6738,18 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
-					(void)project_o(0, 0, y, x, dam, GF_MANA);
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				{
+					(void)project_o(caster_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
 			}
 		}
 	}
-	for (y = y1; y <= y2; y++) {
-		for (x = x1; x <= x2; x++) {
+
+	for (y = y1; y <= y2; y++)
+	{
+		for (x = x1; x <= x2; x++)
+		{
 			if (centersign*((point_x[0] - x)*(point_y[1] - y)
 				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
 				centersign*((point_x[1] - x)*(point_y[2] - y)
@@ -6733,14 +6757,17 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
-					(void)project_m(caster_ptr, p_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA,
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				{
+					(void)project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}
 			}
 		}
 	}
-	if (one_in_(7)) {
+
+	if (one_in_(7))
+	{
 		msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
 		remove_mirror(caster_ptr, point_y[0], point_x[0]);
 	}
@@ -6755,28 +6782,24 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
  */
 void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 {
-	POSITION x, y;
-
-	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
+	for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
+		for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++)
 		{
-			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
+			if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
+				continue;
+			
+			if (!project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
+				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
+				continue;
+			
+			if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 			{
-				if (project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
-					(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
-				{
-					if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-					{
-						remove_mirror(caster_ptr, y, x);
-					}
-				}
+				remove_mirror(caster_ptr, y, x);
 			}
 		}
 	}
-	return;
 }
-
 
 
 /*!
@@ -6798,4 +6821,3 @@ concptr spell_category_name(OBJECT_TYPE_VALUE tval)
 		return _("呪文", "spell");
 	}
 }
-
