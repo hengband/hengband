@@ -325,7 +325,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf)
  * @brief スクリーンダンプを作成する/ Make screen dump to buffer
  * @return 作成したスクリーンダンプの参照ポインタ
  */
-concptr make_screen_dump(void)
+concptr make_screen_dump(player_type *creature_ptr)
 {
 	BUF *screen_buf;
 	int y, x, i;
@@ -363,7 +363,7 @@ concptr make_screen_dump(void)
 		use_graphics = FALSE;
 		reset_visuals();
 
-		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff();
 	}
 
@@ -439,7 +439,7 @@ concptr make_screen_dump(void)
 		use_graphics = TRUE;
 		reset_visuals();
 
-		p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff();
 	}
 
@@ -476,7 +476,7 @@ errr report_score(player_type *creature_ptr)
 	sprintf(seikakutmp, "%s ", ap_ptr->title);
 #endif
 
-	buf_sprintf(score, "name: %s\n", p_ptr->name);
+	buf_sprintf(score, "name: %s\n", creature_ptr->name);
 #ifdef JP
 	buf_sprintf(score, "version: 変愚蛮怒 %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
@@ -484,20 +484,20 @@ errr report_score(player_type *creature_ptr)
 	buf_sprintf(score, "version: Hengband %d.%d.%d\n",
 		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
-	buf_sprintf(score, "score: %d\n", calc_score(p_ptr));
-	buf_sprintf(score, "level: %d\n", p_ptr->lev);
-	buf_sprintf(score, "depth: %d\n", p_ptr->current_floor_ptr->dun_level);
-	buf_sprintf(score, "maxlv: %d\n", p_ptr->max_plv);
+	buf_sprintf(score, "score: %d\n", calc_score(creature_ptr));
+	buf_sprintf(score, "level: %d\n", creature_ptr->lev);
+	buf_sprintf(score, "depth: %d\n", creature_ptr->current_floor_ptr->dun_level);
+	buf_sprintf(score, "maxlv: %d\n", creature_ptr->max_plv);
 	buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
-	buf_sprintf(score, "au: %d\n", p_ptr->au);
+	buf_sprintf(score, "au: %d\n", creature_ptr->au);
 	buf_sprintf(score, "turns: %d\n", turn_real(current_world_ptr->game_turn));
-	buf_sprintf(score, "sex: %d\n", p_ptr->psex);
+	buf_sprintf(score, "sex: %d\n", creature_ptr->psex);
 	buf_sprintf(score, "race: %s\n", rp_ptr->title);
 	buf_sprintf(score, "class: %s\n", cp_ptr->title);
 	buf_sprintf(score, "seikaku: %s\n", seikakutmp);
-	buf_sprintf(score, "realm1: %s\n", realm_names[p_ptr->realm1]);
-	buf_sprintf(score, "realm2: %s\n", realm_names[p_ptr->realm2]);
-	buf_sprintf(score, "killer: %s\n", p_ptr->died_from);
+	buf_sprintf(score, "realm1: %s\n", realm_names[creature_ptr->realm1]);
+	buf_sprintf(score, "realm2: %s\n", realm_names[creature_ptr->realm2]);
+	buf_sprintf(score, "killer: %s\n", creature_ptr->died_from);
 	buf_sprintf(score, "-----charcter dump-----\n");
 
 	make_dump(creature_ptr, score);
