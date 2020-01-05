@@ -756,7 +756,8 @@ static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 	if (creature_ptr->confused || creature_ptr->image) i = i / 10;
 
 	/* Extract the difficulty */
-	int j = i - (j * 4);
+	int j = f_ptr->power;
+	j = i - (j * 4);
 
 	/* Always have a small chance of success */
 	if (j < 2) j = 2;
