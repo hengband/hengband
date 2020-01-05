@@ -66,7 +66,7 @@ extern void do_cmd_load_screen(void);
 extern void do_cmd_save_screen_html_aux(char *filename, int message);
 extern void do_cmd_save_screen(player_type *creature_ptr);
 extern void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[]);
-extern void do_cmd_knowledge_quests_failed(FILE *fff, QUEST_IDX quest_num[]);
+extern void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[]);
 extern void do_cmd_knowledge(player_type *creature_ptr);
 extern void do_cmd_checkquest(player_type *creature_ptr);
 extern void do_cmd_time(void);

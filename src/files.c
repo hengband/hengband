@@ -4488,7 +4488,7 @@ static void dump_aux_quest(player_type *creature_ptr, FILE *fff)
 	fputc('\n', fff);
 	do_cmd_knowledge_quests_completed(creature_ptr, fff, quest_num);
 	fputc('\n', fff);
-	do_cmd_knowledge_quests_failed(fff, quest_num);
+	do_cmd_knowledge_quests_failed(creature_ptr, fff, quest_num);
 	fputc('\n', fff);
 
 	/* Free Memory */
