@@ -26,8 +26,8 @@ extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);
 extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
 extern void display_player(player_type *creature_ptr, int mode);
-extern errr make_character_dump(FILE *fff);
-extern errr file_character(concptr name);
+extern errr make_character_dump(player_type *creature_ptr, FILE *fff);
+extern errr file_character(player_type *creature_ptr, concptr name);
 extern errr process_pref_file_command(char *buf);
 extern concptr process_pref_file_expr(char **sp, char *fp);
 extern errr process_pref_file(concptr name);
@@ -51,7 +51,7 @@ extern void signals_handle_tstp(void);
 extern void signals_init(void);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
 extern void print_tomb(void);
-extern void show_info(void);
+extern void show_info(player_type *creature_ptr);
 
 #ifdef JP
 extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count);

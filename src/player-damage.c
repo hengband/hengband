@@ -516,7 +516,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 #ifdef WORLD_SCORE
 			/* Make screen dump */
-			screen_dump = make_screen_dump();
+			screen_dump = make_screen_dump(creature_ptr);
 #endif
 
 			/* Note cause of death */
@@ -667,7 +667,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 					flush();
 #ifdef WORLD_SCORE
 					/* Make screen dump */
-					screen_dump = make_screen_dump();
+					screen_dump = make_screen_dump(creature_ptr);
 #endif
 
 					/* Wait a key press */

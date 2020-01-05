@@ -1138,7 +1138,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 #ifdef WORLD_SCORE
 			if (m_ptr->r_idx == MON_SERPENT)
 			{
-				screen_dump = make_screen_dump();
+				screen_dump = make_screen_dump(p_ptr);
 			}
 #endif
 		}

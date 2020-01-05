@@ -1080,7 +1080,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			{
 				if (tmp[0] && (tmp[0] != ' '))
 				{
-					file_character(tmp);
+					file_character(creature_ptr, tmp);
 				}
 			}
 		}
@@ -6597,7 +6597,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, floor_type *floor_ptr, IDX q_
 /*
  * Print all finished quests
  */
-void do_cmd_knowledge_quests_completed(FILE *fff, QUEST_IDX quest_num[])
+void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
 	fprintf(fff, _("《達成したクエスト》\n", "< Completed Quest >\n"));
 	QUEST_IDX total = 0;
@@ -6606,7 +6606,7 @@ void do_cmd_knowledge_quests_completed(FILE *fff, QUEST_IDX quest_num[])
 		QUEST_IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
-		if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(fff, p_ptr->current_floor_ptr, q_idx))
+		if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(fff, creature_ptr->current_floor_ptr, q_idx))
 		{
 			++total;
 		}
@@ -6694,7 +6694,7 @@ static void do_cmd_knowledge_quests(player_type *creature_ptr)
 	/* Dump Quest Information */
 	do_cmd_knowledge_quests_current(creature_ptr, fff);
 	fputc('\n', fff);
-	do_cmd_knowledge_quests_completed(fff, quest_num);
+	do_cmd_knowledge_quests_completed(creature_ptr, fff, quest_num);
 	fputc('\n', fff);
 	do_cmd_knowledge_quests_failed(fff, quest_num);
 	if (current_world_ptr->wizard)

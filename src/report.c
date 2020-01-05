@@ -283,7 +283,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(BUF* dumpbuf)
+static errr make_dump(player_type *creature_ptr, BUF* dumpbuf)
 {
 	char		buf[1024];
 	FILE *fff;
@@ -303,7 +303,7 @@ static errr make_dump(BUF* dumpbuf)
 	}
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
-	(void)make_character_dump(fff);
+	(void)make_character_dump(creature_ptr, fff);
 	my_fclose(fff);
 
 	/* Open for read */
@@ -449,7 +449,7 @@ concptr make_screen_dump(void)
  * @brief スコア転送処理のメインルーチン
  * @return エラーコード
  */
-errr report_score(void)
+errr report_score(player_type *creature_ptr)
 {
 #ifdef MACINTOSH
 	OSStatus err;
@@ -498,7 +498,7 @@ errr report_score(void)
 	buf_sprintf(score, "killer: %s\n", p_ptr->died_from);
 	buf_sprintf(score, "-----charcter dump-----\n");
 
-	make_dump(score);
+	make_dump(creature_ptr, score);
 
 	if (screen_dump)
 	{

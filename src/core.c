@@ -5315,7 +5315,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 		/* Handle score, show Top scores */
-		success = send_world_score(TRUE);
+		success = send_world_score(player_ptr, TRUE);
 
 		if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY))
 		{
@@ -5670,7 +5670,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	}
 
 	/* Close stuff */
-	close_game();
+	close_game(player_ptr);
 
 	/* Quit */
 	quit(NULL);
@@ -5750,7 +5750,7 @@ void prevent_turn_overflow(void)
  * This function is called only from "main.c" and "signals.c".
  * </pre>
  */
-void close_game(void)
+void close_game(player_type *player_ptr)
 {
 	char buf[1024];
 	bool do_send = TRUE;
@@ -5784,10 +5784,10 @@ void close_game(void)
 	safe_setuid_drop();
 
 	/* Handle death */
-	if (p_ptr->is_dead)
+	if (player_ptr->is_dead)
 	{
 		/* Handle retirement */
-		if (current_world_ptr->total_winner) kingly(p_ptr);
+		if (current_world_ptr->total_winner) kingly(player_ptr);
 
 		/* Save memories */
 		if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? ")))
@@ -5802,23 +5802,23 @@ void close_game(void)
 		flush();
 
 		/* Show more info */
-		show_info();
+		show_info(player_ptr);
 		Term_clear();
 
 		if (check_score())
 		{
-			if ((!send_world_score(do_send)))
+			if ((!send_world_score(player_ptr, do_send)))
 			{
 				if (get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
 					(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
 				{
-					p_ptr->wait_report_score = TRUE;
-					p_ptr->is_dead = FALSE;
+					player_ptr->wait_report_score = TRUE;
+					player_ptr->is_dead = FALSE;
 					if (!save_player()) msg_print(_("セーブ失敗！", "death save failed!"));
 				}
 			}
-			if (!p_ptr->wait_report_score)
-				(void)top_twenty(p_ptr);
+			if (!player_ptr->wait_report_score)
+				(void)top_twenty(player_ptr);
 		}
 		else if (highscore_fd >= 0)
 		{
@@ -5841,7 +5841,7 @@ void close_game(void)
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
 
 		/* Predict score (or ESCAPE) */
-		if (inkey() != ESCAPE) predict_score(p_ptr);
+		if (inkey() != ESCAPE) predict_score(player_ptr);
 	}
 
 
