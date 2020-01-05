@@ -4602,7 +4602,7 @@ static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
  * Display current pets
  * @return なし
  */
-static void do_cmd_knowledge_pets(void)
+static void do_cmd_knowledge_pets(player_type *creature_ptr)
 {
 	/* Open a new file */
 	GAME_TEXT file_name[1024];
@@ -4619,9 +4619,9 @@ static void do_cmd_knowledge_pets(void)
 	monster_type *m_ptr;
 	GAME_TEXT pet_name[MAX_NLEN];
 	int t_friends = 0;
-	for (int i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
+	for (int i = creature_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
 
 		/* Ignore "dead" monsters */
 		if (!monster_is_valid(m_ptr)) continue;
@@ -4634,7 +4634,7 @@ static void do_cmd_knowledge_pets(void)
 		fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
 	}
 
-	int show_upkeep = calculate_upkeep(p_ptr);
+	int show_upkeep = calculate_upkeep(creature_ptr);
 
 	fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
@@ -6960,7 +6960,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			if (!vanilla_town) do_cmd_knowledge_kubi();
 			break;
 		case '7': /* Pets */
-			do_cmd_knowledge_pets();
+			do_cmd_knowledge_pets(creature_ptr);
 			break;
 		case '8': /* Home */
 			do_cmd_knowledge_home();
