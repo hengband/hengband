@@ -361,7 +361,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				warding_glyph(caster_ptr);
-				glyph_creation();
+				glyph_creation(caster_ptr, caster_ptr->y, caster_ptr->x);
 			}
 		}
 		break;

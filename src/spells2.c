@@ -2387,10 +2387,10 @@ bool teleport_monster(DIRECTION dir, int distance)
  * @brief ドア生成処理(プレイヤー中心に周囲1マス) / Hooks -- affect adjacent grids (radius 1 ball attack)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool door_creation(void)
+bool door_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_DOOR, flg, -1));
+	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_DOOR, flg, -1));
 }
 
 /*!
@@ -2399,30 +2399,30 @@ bool door_creation(void)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool trap_creation(POSITION y, POSITION x)
+bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(p_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
+	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
 }
 
 /*!
  * @brief 森林生成処理(プレイヤー中心に周囲1マス)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool tree_creation(void)
+bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_TREE, flg, -1));
+	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TREE, flg, -1));
 }
 
 /*!
  * @brief 魔法のルーン生成処理(プレイヤー中心に周囲1マス)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool glyph_creation(void)
+bool glyph_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
-	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_MAKE_GLYPH, flg, -1));
+	return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_GLYPH, flg, -1));
 }
 
 /*!
@@ -3234,11 +3234,11 @@ void wild_magic(player_type *caster_ptr, int spell)
 		break;
 	case 19:
 	case 20:
-		trap_creation(caster_ptr->y, caster_ptr->x);
+		trap_creation(caster_ptr, caster_ptr->y, caster_ptr->x);
 		break;
 	case 21:
 	case 22:
-		door_creation();
+		door_creation(caster_ptr, caster_ptr->y, caster_ptr->x);
 		break;
 	case 23:
 	case 24:

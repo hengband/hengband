@@ -377,7 +377,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				tree_creation();
+				tree_creation(caster_ptr, caster_ptr->y, caster_ptr->x);
 			}
 		}
 		break;

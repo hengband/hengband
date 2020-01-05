@@ -2478,7 +2478,7 @@ void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
 		"%^s casts a spell and cackles evilly."), m_name);
 
 	learn_spell(MS_MAKE_TRAP);
-	(void)trap_creation(y, x);
+	(void)trap_creation(p_ptr, y, x);
 }
 
 /*!

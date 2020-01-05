@@ -161,7 +161,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_TRAP_CREATION:
 		{
-			if (trap_creation(creature_ptr->y, creature_ptr->x)) ident = TRUE;
+			if (trap_creation(creature_ptr, creature_ptr->y, creature_ptr->x)) ident = TRUE;
 			break;
 		}
 
