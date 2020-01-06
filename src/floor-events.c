@@ -609,7 +609,7 @@ void update_lite(player_type *subject_ptr, floor_type *floor_ptr)
 		if (g_ptr->info & (CAVE_TEMP)) continue;
 
 		/* Add it to later visual update */
-		cave_note_and_redraw_later(g_ptr, y, x);
+		cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
 	}
 
 	/* Clear them all */
@@ -1292,7 +1292,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 		if (g_ptr->info & (CAVE_TEMP)) continue;
 
 		/* Add it to later visual update */
-		cave_note_and_redraw_later(g_ptr, y, x);
+		cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
 	}
 
 	/* Wipe the old grids, update as needed */
@@ -1715,7 +1715,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			{
 				/* It is now unlit */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(g_ptr, fy, fx);
+				cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
 			}
 		}
 		else /* Pervious darkened */
@@ -1725,7 +1725,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			{
 				/* It is now undarken */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(g_ptr, fy, fx);
+				cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
 			}
 		}
 
@@ -1756,7 +1756,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			{
 				/* It is now lit */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(g_ptr, fy, fx);
+				cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
 			}
 		}
 		else /* Darkened */
@@ -1766,7 +1766,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 			{
 				/* It is now darkened */
 				/* Add it to later visual update */
-				cave_note_and_redraw_later(g_ptr, fy, fx);
+				cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
 			}
 		}
 
