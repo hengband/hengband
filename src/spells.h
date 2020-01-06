@@ -141,7 +141,6 @@ extern bool sukekaku;
 extern const magic_type technic_info[NUM_TECHNIC][32];
 
 /* spells1.c */
-extern PERCENTAGE beam_chance(player_type *caster_ptr);
 extern bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void breath_shape(floor_type *floor_ptr, u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ);
 extern POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);

@@ -6,6 +6,7 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-object.h"
+#include "spells-diceroll.h"
 #include "avatar.h"
 #include "spells-floor.h"
 #include "player-race.h"

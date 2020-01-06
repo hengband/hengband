@@ -34,6 +34,7 @@
 #include "monsterrace.h"
 #include "birth.h"
 #include "bldg.h"
+#include "view-mainwindow.h"
 
 
 /*

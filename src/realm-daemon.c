@@ -9,6 +9,7 @@
 #include "spells-floor.h"
 #include "spells-status.h"
 #include "spells-object.h"
+#include "spells-diceroll.h"
 #include "player-effects.h"
 #include "player-race.h"
 #include "player-damage.h"
