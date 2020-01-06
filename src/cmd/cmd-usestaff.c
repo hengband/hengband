@@ -103,7 +103,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 		}
 
 		case SV_STAFF_STARLITE:
-			ident = starlight(magic);
+			ident = starlight(creature_ptr, magic);
 			break;
 
 		case SV_STAFF_LITE:

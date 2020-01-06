@@ -193,7 +193,7 @@ extern bool unleash_mana_storm(player_type *creature_ptr, bool powerful);
 extern bool crusade(player_type *caster_ptr);
 extern bool turn_undead(player_type *caster_ptr);
 extern void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1);
-extern bool starlight(bool magic);
+extern bool starlight(player_type *caster_ptr, bool magic);
 extern void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1);
 extern bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad);
 extern bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad);

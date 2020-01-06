@@ -1910,14 +1910,14 @@ void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
  * @param magic 魔法による効果であればTRUE、スターライトの杖による効果であればFALSE
  * @return 常にTRUE
  */
-bool starlight(bool magic)
+bool starlight(player_type *caster_ptr, bool magic)
 {
 	HIT_POINT num = damroll(5, 3);
 	POSITION y = 0, x = 0;
 	int k;
 	int attempts;
 
-	if (!p_ptr->blind && !magic)
+	if (!caster_ptr->blind && !magic)
 	{
 		msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
 	}
@@ -1928,12 +1928,12 @@ bool starlight(bool magic)
 
 		while (attempts--)
 		{
-			scatter(&y, &x, p_ptr->y, p_ptr->x, 4, PROJECT_LOS);
-			if (!cave_have_flag_bold(p_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
-			if (!player_bold(p_ptr, y, x)) break;
+			scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_LOS);
+			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
+			if (!player_bold(caster_ptr, y, x)) break;
 		}
 
-		project(p_ptr, 0, 0, y, x, damroll(6 + p_ptr->lev / 8, 10), GF_LITE_WEAK,
+		project(caster_ptr, 0, 0, y, x, damroll(6 + caster_ptr->lev / 8, 10), GF_LITE_WEAK,
 			(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
 	}
 
