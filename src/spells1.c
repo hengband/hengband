@@ -3728,11 +3728,6 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 				/* Turn off the damage */
 				dam = 0;
 			}
-			else
-			{
-				/* No polymorph */
-				note = _("には効果がなかった。", " is unaffected.");
-			}
 
 			/* Hack -- Get new monster */
 			m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
