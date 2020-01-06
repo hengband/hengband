@@ -176,9 +176,9 @@ FEAT_IDX choose_random_trap(floor_type *floor_ptr)
 * @param x 秘匿したいマスのX座標
 * @return なし
 */
-void disclose_grid(POSITION y, POSITION x)
+void disclose_grid(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	if (cave_have_flag_grid(g_ptr, FF_SECRET))
 	{

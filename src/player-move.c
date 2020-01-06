@@ -195,7 +195,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	/* Invisible trap */
 	if (g_ptr->mimic && is_trap(g_ptr->feat))
 	{
-		disclose_grid(y, x);
+		disclose_grid(p_ptr->current_floor_ptr, y, x);
 		msg_print(_("トラップを発見した。", "You have found a trap."));
 		disturb(p_ptr, FALSE, TRUE);
 	}
@@ -204,7 +204,7 @@ static void discover_hidden_things(POSITION y, POSITION x)
 	if (is_hidden_door(g_ptr))
 	{
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
-		disclose_grid(y, x);
+		disclose_grid(p_ptr->current_floor_ptr, y, x);
 		disturb(p_ptr, FALSE, FALSE);
 	}
 
@@ -776,7 +776,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 			msg_print(_("トラップだ！", "You found a trap!"));
 
 			/* Pick a trap */
-			disclose_grid(creature_ptr->y, creature_ptr->x);
+			disclose_grid(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x);
 		}
 
 		/* Hit the trap */

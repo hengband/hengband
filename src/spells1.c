@@ -373,7 +373,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			if (is_hidden_door(g_ptr))
 			{
 				/* Pick a door */
-				disclose_grid(y, x);
+				disclose_grid(caster_ptr->current_floor_ptr, y, x);
 
 				/* Check line of sight */
 				if (known)
