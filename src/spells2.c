@@ -1650,12 +1650,13 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
 
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
+ * @param floor_ptr 配置するフロアの参照ポインタ
  * @param cy Y座標
  * @param cx X座標
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, POSITION))
+static int next_to_open(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	int i;
 	POSITION y, x;
@@ -1668,7 +1669,7 @@ static int next_to_open(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, PO
 		x = cx + ddx_cdd[i % 8];
 
 		/* Found a wall, break the length */
-		if (!pass_bold(y, x))
+		if (!pass_bold(floor_ptr, y, x))
 		{
 			/* Track best length */
 			if (len > blen)
@@ -1690,12 +1691,13 @@ static int next_to_open(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, PO
 
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
+ * @param floor_ptr 配置するフロアの参照ポインタ
  * @param cy Y座標
  * @param cx X座標
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITION, POSITION))
+static int next_to_walls_adj(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	DIRECTION i;
 	POSITION y, x;
@@ -1706,7 +1708,7 @@ static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITIO
 		y = cy + ddy_ddd[i];
 		x = cx + ddx_ddd[i];
 
-		if (!pass_bold(y, x)) c++;
+		if (!pass_bold(floor_ptr, y, x)) c++;
 	}
 
 	return c;
@@ -1722,10 +1724,11 @@ static int next_to_walls_adj(POSITION cy, POSITION cx, bool (*pass_bold)(POSITIO
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pass_bold)(POSITION, POSITION))
+static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, bool only_room, bool (*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	grid_type *g_ptr;
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Avoid infinite recursion */
 	if (g_ptr->info & (CAVE_TEMP)) return;
@@ -1736,10 +1739,10 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 		if (only_room) return;
 
 		/* Verify */
-		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return;
+		if (!in_bounds2(floor_ptr, y, x)) return;
 
 		/* Do not exceed the maximum spell range */
-		if (distance(p_ptr->y, p_ptr->x, y, x) > MAX_RANGE) return;
+		if (distance(caster_ptr->y, caster_ptr->x, y, x) > MAX_RANGE) return;
 
 		/* Verify this grid */
 		/*
@@ -1750,8 +1753,8 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 		 * properly.
 		 * This leaves only a check for 6 bounding walls!
 		 */
-		if (in_bounds(p_ptr->current_floor_ptr, y, x) && pass_bold(y, x) &&
-		    (next_to_walls_adj(y, x, pass_bold) == 6) && (next_to_open(y, x, pass_bold) <= 1)) return;
+		if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) &&
+		    (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1)) return;
 	}
 
 	/* Paranoia -- verify space */
@@ -1768,52 +1771,55 @@ static void cave_temp_room_aux(POSITION y, POSITION x, bool only_room, bool (*pa
 
 
 /*!
- * todo このシンタックスシュガーは不要
+ * todo このシンタックスシュガーは不要だが、関数ポインタなので安易には消せず……
  * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
+ * @param floor_ptr 配置するフロアの参照ポインタ
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return 光を通すならばtrueを返す。
  */
-static bool cave_pass_lite_bold(POSITION y, POSITION x)
+static bool cave_pass_lite_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	return cave_los_bold(p_ptr->current_floor_ptr, y, x);
+	return cave_los_bold(floor_ptr, y, x);
 }
 
 
 /*!
  * @brief 部屋内にある一点の周囲がいくつ光を通すかをグローバル変数tmp_pos.nに返す / Aux function -- see below
- * @param y 指定Y座標
+* @param caster_ptr プレーヤーへの参照ポインタ
+  * @param y 指定Y座標
  * @param x 指定X座標
  * @return なし
  */
-static void cave_temp_lite_room_aux(POSITION y, POSITION x)
+static void cave_temp_lite_room_aux(player_type *caster_ptr, POSITION y, POSITION x)
 {
-	cave_temp_room_aux(y, x, FALSE, cave_pass_lite_bold);
+	cave_temp_room_aux(caster_ptr, y, x, FALSE, cave_pass_lite_bold);
 }
 
 
 /*!
  * @brief 指定のマスが光を通さず射線のみを通すかを返す。 / Aux function -- see below
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param floor_ptr 配置するフロアの参照ポインタ
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(POSITION y, POSITION x)
+static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	return cave_have_flag_bold(p_ptr->current_floor_ptr, y, x, FF_PROJECT);
+	return cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT);
 }
 
 
 /*!
  * @brief 部屋内にある一点の周囲がいくつ射線を通すかをグローバル変数tmp_pos.nに返す / Aux function -- see below
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return なし
  */
-static void cave_temp_unlite_room_aux(POSITION y, POSITION x)
+static void cave_temp_unlite_room_aux(player_type *caster_ptr, POSITION y, POSITION x)
 {
-	cave_temp_room_aux(y, x, TRUE, cave_pass_dark_bold);
+	cave_temp_room_aux(caster_ptr, y, x, TRUE, cave_pass_dark_bold);
 }
 
 
@@ -1830,27 +1836,28 @@ void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 	POSITION x, y;
 
 	/* Add the initial grid */
-	cave_temp_lite_room_aux(y1, x1);
+	cave_temp_lite_room_aux(caster_ptr, y1, x1);
 
 	/* While grids are in the queue, add their neighbors */
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	for (i = 0; i < tmp_pos.n; i++)
 	{
 		x = tmp_pos.x[i], y = tmp_pos.y[i];
 
 		/* Walls get lit, but stop light */
-		if (!cave_pass_lite_bold(y, x)) continue;
+		if (!cave_pass_lite_bold(floor_ptr, y, x)) continue;
 
 		/* Spread adjacent */
-		cave_temp_lite_room_aux(y + 1, x);
-		cave_temp_lite_room_aux(y - 1, x);
-		cave_temp_lite_room_aux(y, x + 1);
-		cave_temp_lite_room_aux(y, x - 1);
+		cave_temp_lite_room_aux(caster_ptr, y + 1, x);
+		cave_temp_lite_room_aux(caster_ptr, y - 1, x);
+		cave_temp_lite_room_aux(caster_ptr, y, x + 1);
+		cave_temp_lite_room_aux(caster_ptr, y, x - 1);
 
 		/* Spread diagonal */
-		cave_temp_lite_room_aux(y + 1, x + 1);
-		cave_temp_lite_room_aux(y - 1, x - 1);
-		cave_temp_lite_room_aux(y - 1, x + 1);
-		cave_temp_lite_room_aux(y + 1, x - 1);
+		cave_temp_lite_room_aux(caster_ptr, y + 1, x + 1);
+		cave_temp_lite_room_aux(caster_ptr, y - 1, x - 1);
+		cave_temp_lite_room_aux(caster_ptr, y - 1, x + 1);
+		cave_temp_lite_room_aux(caster_ptr, y + 1, x - 1);
 	}
 
 	/* Now, lite them all up at once */
@@ -1858,7 +1865,7 @@ void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 
 	if (caster_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
+		if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
 	}
 }
 
@@ -1876,7 +1883,7 @@ void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 	POSITION x, y;
 
 	/* Add the initial grid */
-	cave_temp_unlite_room_aux(y1, x1);
+	cave_temp_unlite_room_aux(caster_ptr, y1, x1);
 
 	/* Spread, breadth first */
 	for (i = 0; i < tmp_pos.n; i++)
@@ -1884,19 +1891,19 @@ void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 		x = tmp_pos.x[i], y = tmp_pos.y[i];
 
 		/* Walls get dark, but stop darkness */
-		if (!cave_pass_dark_bold(y, x)) continue;
+		if (!cave_pass_dark_bold(caster_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Spread adjacent */
-		cave_temp_unlite_room_aux(y + 1, x);
-		cave_temp_unlite_room_aux(y - 1, x);
-		cave_temp_unlite_room_aux(y, x + 1);
-		cave_temp_unlite_room_aux(y, x - 1);
+		cave_temp_unlite_room_aux(caster_ptr, y + 1, x);
+		cave_temp_unlite_room_aux(caster_ptr, y - 1, x);
+		cave_temp_unlite_room_aux(caster_ptr, y, x + 1);
+		cave_temp_unlite_room_aux(caster_ptr, y, x - 1);
 
 		/* Spread diagonal */
-		cave_temp_unlite_room_aux(y + 1, x + 1);
-		cave_temp_unlite_room_aux(y - 1, x - 1);
-		cave_temp_unlite_room_aux(y - 1, x + 1);
-		cave_temp_unlite_room_aux(y + 1, x - 1);
+		cave_temp_unlite_room_aux(caster_ptr, y + 1, x + 1);
+		cave_temp_unlite_room_aux(caster_ptr, y - 1, x - 1);
+		cave_temp_unlite_room_aux(caster_ptr, y - 1, x + 1);
+		cave_temp_unlite_room_aux(caster_ptr, y + 1, x - 1);
 	}
 
 	/* Now, darken them all at once */
