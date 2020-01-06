@@ -459,12 +459,12 @@ extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode
   * have already been placed into the "view" array, and we are never
   * called when the "view" array is full.
   */
-#define cave_view_hack(C,Y,X) \
+#define cave_view_hack(F,C,Y,X) \
 {\
     if (!((C)->info & (CAVE_VIEW))){\
     (C)->info |= (CAVE_VIEW); \
-    p_ptr->current_floor_ptr->view_y[p_ptr->current_floor_ptr->view_n] = (Y); \
-    p_ptr->current_floor_ptr->view_x[p_ptr->current_floor_ptr->view_n] = (X); \
-    p_ptr->current_floor_ptr->view_n++;}\
+    (F)->view_y[(F)->view_n] = (Y); \
+    (F)->view_x[(F)->view_n] = (X); \
+    (F)->view_n++;}\
 }
 

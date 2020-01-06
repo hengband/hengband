@@ -734,7 +734,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	{
 		g_ptr->info |= (CAVE_XTRA);
 
-		cave_view_hack(g_ptr, y, x);
+		cave_view_hack(floor_ptr, g_ptr, y, x);
 
 		return (wall);
 	}
@@ -742,7 +742,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	/* Hack -- primary "easy" yields "viewed" */
 	if (z1)
 	{
-		cave_view_hack(g_ptr, y, x);
+		cave_view_hack(floor_ptr, g_ptr, y, x);
 
 		return (wall);
 	}
@@ -752,7 +752,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	{
 		/* g_ptr->info |= (CAVE_XTRA); */
 
-		cave_view_hack(g_ptr, y, x);
+		cave_view_hack(floor_ptr, g_ptr, y, x);
 
 		return (wall);
 	}
@@ -761,7 +761,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	/* Mega-Hack -- the "los()" function works poorly on walls */
 	if (wall)
 	{
-		cave_view_hack(g_ptr, y, x);
+		cave_view_hack(floor_ptr, g_ptr, y, x);
 
 		return (wall);
 	}
@@ -770,7 +770,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	/* Hack -- check line of sight */
 	if (los(floor_ptr, p_ptr->y, p_ptr->x, y, x))
 	{
-		cave_view_hack(g_ptr, y, x);
+		cave_view_hack(floor_ptr, g_ptr, y, x);
 
 		return (wall);
 	}
@@ -944,7 +944,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	g_ptr->info |= (CAVE_XTRA);
 
 	/* Assume the player grid is viewable */
-	cave_view_hack(g_ptr, y, x);
+	cave_view_hack(floor_ptr, g_ptr, y, x);
 
 
 	/*** Step 2 -- Major Diagonals ***/
@@ -957,7 +957,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y + d][x + d];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y + d, x + d);
+		cave_view_hack(floor_ptr, g_ptr, y + d, x + d);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
@@ -966,7 +966,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y + d][x - d];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y + d, x - d);
+		cave_view_hack(floor_ptr, g_ptr, y + d, x - d);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
@@ -975,7 +975,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y - d][x + d];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y - d, x + d);
+		cave_view_hack(floor_ptr, g_ptr, y - d, x + d);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
@@ -984,7 +984,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y - d][x - d];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y - d, x - d);
+		cave_view_hack(floor_ptr, g_ptr, y - d, x - d);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
@@ -995,7 +995,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y + d][x];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y + d, x);
+		cave_view_hack(floor_ptr, g_ptr, y + d, x);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
@@ -1007,7 +1007,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y - d][x];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y - d, x);
+		cave_view_hack(floor_ptr, g_ptr, y - d, x);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
@@ -1019,7 +1019,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x + d];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y, x + d);
+		cave_view_hack(floor_ptr, g_ptr, y, x + d);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
@@ -1031,7 +1031,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x - d];
 		g_ptr->info |= (CAVE_XTRA);
-		cave_view_hack(g_ptr, y, x - d);
+		cave_view_hack(floor_ptr, g_ptr, y, x - d);
 		if (!cave_los_grid(g_ptr)) break;
 	}
 
