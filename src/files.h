@@ -50,7 +50,7 @@ extern void signals_ignore_tstp(void);
 extern void signals_handle_tstp(void);
 extern void signals_init(void);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
-extern void print_tomb(void);
+extern void print_tomb(player_type *dead_ptr);
 extern void show_info(player_type *creature_ptr);
 
 #ifdef JP

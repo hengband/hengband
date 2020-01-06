@@ -5798,7 +5798,7 @@ void close_game(player_type *player_ptr)
 		else do_send = FALSE;
 
 		/* You are dead */
-		print_tomb();
+		print_tomb(player_ptr);
 
 		flush();
 
