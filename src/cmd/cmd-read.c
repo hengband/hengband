@@ -87,7 +87,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 			{
 				(void)set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5));
 			}
-			if (unlite_area(10, 3)) ident = TRUE;
+			if (unlite_area(creature_ptr, 10, 3)) ident = TRUE;
 			break;
 		}
 
@@ -277,7 +277,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_LIGHT:
 		{
-			if (lite_area(damroll(2, 8), 2)) ident = TRUE;
+			if (lite_area(creature_ptr, damroll(2, 8), 2)) ident = TRUE;
 			break;
 		}
 

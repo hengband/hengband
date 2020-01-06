@@ -121,7 +121,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				lite_area(damroll(dice, sides), rad);
+				lite_area(caster_ptr, damroll(dice, sides), rad);
 
 				if ((PRACE_IS_(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !caster_ptr->resist_lite)
 				{

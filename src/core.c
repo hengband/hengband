@@ -2358,7 +2358,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		 * Unlite the area (radius 10) around player and
 		 * do 50 points damage to every affected monster
 		 */
-		unlite_area(50, 10);
+		unlite_area(creature_ptr, 50, 10);
 	}
 
 	if ((creature_ptr->muta2 & MUT2_ATT_ANIMAL) && !creature_ptr->anti_magic && one_in_(7000))
@@ -5083,7 +5083,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		if (!player_ptr->playing || player_ptr->is_dead) break;
 
 		/* Process all of the monsters */
-		process_monsters(player_ptr->current_floor_ptr);
+		process_monsters(player_ptr);
 
 		handle_stuff();
 

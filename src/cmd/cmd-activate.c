@@ -1437,7 +1437,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_LIGHT:
 	{
 		msg_format(_("%sから澄んだ光があふれ出た...", "The %s wells with clear light..."), name);
-		lite_area(damroll(2, 15), 3);
+		lite_area(user_ptr, damroll(2, 15), 3);
 		break;
 	}
 
@@ -1445,7 +1445,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("眩しく輝いた...", "It shines brightly..."));
 		map_area(user_ptr, DETECT_RAD_MAP);
-		lite_area(damroll(2, 15), 3);
+		lite_area(user_ptr, damroll(2, 15), 3);
 		break;
 	}
 

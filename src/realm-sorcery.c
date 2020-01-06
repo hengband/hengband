@@ -93,7 +93,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				lite_area(damroll(dice, sides), rad);
+				lite_area(caster_ptr, damroll(dice, sides), rad);
 			}
 		}
 		break;
@@ -484,7 +484,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 				chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
 				chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
 
-				wiz_lite(p_ptr, FALSE);
+				wiz_lite(caster_ptr, FALSE);
 
 				if (!caster_ptr->telepathy)
 				{

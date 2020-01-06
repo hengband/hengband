@@ -727,7 +727,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
 	case MS_DARKNESS:
 		msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
-		(void)unlite_area(10, 3);
+		(void)unlite_area(caster_ptr, 10, 3);
 		break;
 
 	case MS_MAKE_TRAP:

@@ -1490,6 +1490,7 @@ void discharge_minion(player_type *caster_ptr)
 
 
 /*!
+ * todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  * @brief 部屋全体を照らすサブルーチン
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -1506,7 +1507,7 @@ void discharge_minion(player_type *caster_ptr)
  * STUPID monsters wake up 1/10 the time when illuminated
  * </pre>
  */
-static void cave_temp_room_lite(void)
+static void cave_temp_room_lite(player_type *caster_ptr)
 {
 	int i;
 
@@ -1516,7 +1517,7 @@ static void cave_temp_room_lite(void)
 		POSITION y = tmp_pos.y[i];
 		POSITION x = tmp_pos.x[i];
 
-		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_TEMP);
@@ -1531,9 +1532,9 @@ static void cave_temp_room_lite(void)
 		if (g_ptr->m_idx)
 		{
 			PERCENTAGE chance = 25;
-			monster_type    *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_type    *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-			update_monster(p_ptr, g_ptr->m_idx, FALSE);
+			update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 
 			/* Stupid monsters rarely wake up */
 			if (r_ptr->flags2 & (RF2_STUPID)) chance = 10;
@@ -1559,15 +1560,15 @@ static void cave_temp_room_lite(void)
 
 		note_spot(y, x);
 		lite_spot(y, x);
-		update_local_illumination(p_ptr, y, x);
+		update_local_illumination(caster_ptr, y, x);
 	}
 
-	/* None left */
 	tmp_pos.n = 0;
 }
 
 
 /*!
+ * todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  * @brief 部屋全体を暗くするサブルーチン
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -1580,7 +1581,7 @@ static void cave_temp_room_lite(void)
  * Also, process all affected monsters
  * </pre>
  */
-static void cave_temp_room_unlite(void)
+static void cave_temp_room_unlite(player_type *caster_ptr)
 {
 	int i;
 
@@ -1591,7 +1592,7 @@ static void cave_temp_room_unlite(void)
 		POSITION x = tmp_pos.x[i];
 		int j;
 
-		grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 		bool do_dark = !is_mirror_grid(g_ptr);
 
 		/* No longer in the array */
@@ -1600,16 +1601,16 @@ static void cave_temp_room_unlite(void)
 		/* Darken the grid */
 		if (do_dark)
 		{
-			if (p_ptr->current_floor_ptr->dun_level || !is_daytime())
+			if (caster_ptr->current_floor_ptr->dun_level || !is_daytime())
 			{
 				for (j = 0; j < 9; j++)
 				{
 					POSITION by = y + ddy_ddd[j];
 					POSITION bx = x + ddx_ddd[j];
 
-					if (in_bounds2(p_ptr->current_floor_ptr, by, bx))
+					if (in_bounds2(caster_ptr->current_floor_ptr, by, bx))
 					{
-						grid_type *cc_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
+						grid_type *cc_ptr = &caster_ptr->current_floor_ptr->grid_array[by][bx];
 
 						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 						{
@@ -1635,15 +1636,14 @@ static void cave_temp_room_unlite(void)
 			/* Process affected monsters */
 			if (g_ptr->m_idx)
 			{
-				update_monster(p_ptr, g_ptr->m_idx, FALSE);
+				update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 			}
 
 			lite_spot(y, x);
-			update_local_illumination(p_ptr, y, x);
+			update_local_illumination(caster_ptr, y, x);
 		}
 	}
 
-	/* None left */
 	tmp_pos.n = 0;
 }
 
@@ -1824,7 +1824,7 @@ static void cave_temp_unlite_room_aux(POSITION y, POSITION x)
  * @param x1 指定X座標
  * @return なし
  */
-void lite_room(POSITION y1, POSITION x1)
+void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 {
 	int i;
 	POSITION x, y;
@@ -1854,11 +1854,11 @@ void lite_room(POSITION y1, POSITION x1)
 	}
 
 	/* Now, lite them all up at once */
-	cave_temp_room_lite();
+	cave_temp_room_lite(caster_ptr);
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	if (caster_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
 	}
 }
 
@@ -1870,7 +1870,7 @@ void lite_room(POSITION y1, POSITION x1)
  * @param x1 指定X座標
  * @return なし
  */
-void unlite_room(POSITION y1, POSITION x1)
+void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 {
 	int i;
 	POSITION x, y;
@@ -1900,7 +1900,7 @@ void unlite_room(POSITION y1, POSITION x1)
 	}
 
 	/* Now, darken them all at once */
-	cave_temp_room_unlite();
+	cave_temp_room_unlite(caster_ptr);
 }
 
 
@@ -1948,25 +1948,25 @@ bool starlight(bool magic)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_area(HIT_POINT dam, POSITION rad)
+bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
+	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
 	{
 		msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorb your light."));
 		return FALSE;
 	}
 
-	if (!p_ptr->blind)
+	if (!caster_ptr->blind)
 	{
 		msg_print(_("白い光が辺りを覆った。", "You are surrounded by a white light."));
 	}
 
 	/* Hook into the "project()" function */
-	(void)project(p_ptr, 0, rad, p_ptr->y, p_ptr->x, dam, GF_LITE_WEAK, flg, -1);
+	(void)project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_LITE_WEAK, flg, -1);
 
-	lite_room(p_ptr->y, p_ptr->x);
+	lite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	/* Assume seen */
 	return (TRUE);
@@ -1980,19 +1980,19 @@ bool lite_area(HIT_POINT dam, POSITION rad)
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool unlite_area(HIT_POINT dam, POSITION rad)
+bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
 
-	if (!p_ptr->blind)
+	if (!caster_ptr->blind)
 	{
 		msg_print(_("暗闇が辺りを覆った。", "Darkness surrounds you."));
 	}
 
 	/* Hook into the "project()" function */
-	(void)project(p_ptr, 0, rad, p_ptr->y, p_ptr->x, dam, GF_DARK_WEAK, flg, -1);
+	(void)project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_DARK_WEAK, flg, -1);
 
-	unlite_room(p_ptr->y, p_ptr->x);
+	unlite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	/* Assume seen */
 	return (TRUE);
@@ -3383,12 +3383,12 @@ void wild_magic(player_type *caster_ptr, int spell)
 	case 9:
 	case 10:
 	case 11:
-		unlite_area(10, 3);
+		unlite_area(caster_ptr, 10, 3);
 		break;
 	case 12:
 	case 13:
 	case 14:
-		lite_area(damroll(2, 3), 2);
+		lite_area(caster_ptr, damroll(2, 3), 2);
 		break;
 	case 15:
 		destroy_doors_touch();
@@ -3910,7 +3910,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 33)
 	{
 		msg_print(_("《月》だ。", "It's the Moon."));
-		unlite_area(10, 3);
+		unlite_area(caster_ptr, 10, 3);
 	}
 	else if (die < 38)
 	{

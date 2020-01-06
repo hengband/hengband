@@ -192,11 +192,11 @@ extern bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 extern bool unleash_mana_storm(player_type *creature_ptr, bool powerful);
 extern bool crusade(player_type *caster_ptr);
 extern bool turn_undead(player_type *caster_ptr);
-extern void lite_room(POSITION y1, POSITION x1);
+extern void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1);
 extern bool starlight(bool magic);
-extern void unlite_room(POSITION y1, POSITION x1);
-extern bool lite_area(HIT_POINT dam, POSITION rad);
-extern bool unlite_area(HIT_POINT dam, POSITION rad);
+extern void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1);
+extern bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad);
+extern bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad);
 extern bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);
 extern bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);
 extern bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad);

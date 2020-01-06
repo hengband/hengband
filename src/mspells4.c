@@ -1915,19 +1915,20 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 
 /*!
 * @brief RF6_WORLDの処理。時を止める。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 */
-HIT_POINT spell_RF6_WORLD(MONSTER_IDX m_idx)
+HIT_POINT spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	MONSTER_IDX who = 0;
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(target_ptr, TRUE, TRUE);
 	if (m_ptr->r_idx == MON_DIO) who = 1;
 	else if (m_ptr->r_idx == MON_WONG) who = 3;
-	if (!set_monster_timewalk(randint1(2) + 2, who, TRUE)) return (FALSE);
+	if (!set_monster_timewalk(target_ptr, randint1(2) + 2, who, TRUE)) return (FALSE);
 	return who;
 }
 
@@ -2378,16 +2379,17 @@ HIT_POINT spell_RF6_PSY_SPEAR(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 
 /*!
 * @brief RF6_DARKNESSの処理。暗闇or閃光。 /
+* @param target_type プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
+	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	bool can_use_lite_area = FALSE;
 	bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
@@ -2395,7 +2397,7 @@ void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	GAME_TEXT t_name[MAX_NLEN];
 	monster_name(t_idx, t_name);
 
-	if ((p_ptr->pclass == CLASS_NINJA) &&
+	if ((target_ptr->pclass == CLASS_NINJA) &&
 		!(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
 		!(r_ptr->flags7 & RF7_DARK_MASK))
 		can_use_lite_area = TRUE;
@@ -2435,26 +2437,28 @@ void spell_RF6_DARKNESS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	{
 		if (can_use_lite_area)
 		{
-			(void)lite_area(0, 3);
+			(void)lite_area(target_ptr, 0, 3);
 		}
 		else
 		{
 			learn_spell(MS_DARKNESS);
-			(void)unlite_area(0, 3);
+			(void)unlite_area(target_ptr, 0, 3);
 		}
+
+		return;
 	}
-	else if(monster_to_monster)
+
+	if (!monster_to_monster) return;
+	
+	if (can_use_lite_area)
 	{
-		if (can_use_lite_area)
-		{
-			(void)project(p_ptr, m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, -1);
-			lite_room(y, x);
-		}
-		else
-		{
-			(void)project(p_ptr, m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
-			unlite_room(y, x);
-		}
+		(void)project(target_ptr, m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, -1);
+		lite_room(target_ptr, y, x);
+	}
+	else
+	{
+		(void)project(target_ptr, m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
+		unlite_room(target_ptr, y, x);
 	}
 }
 
@@ -3478,13 +3482,13 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 3:  spell_RF6_INVULNER(m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_INVULNER */
 	case RF6_SPELL_START + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
 	case RF6_SPELL_START + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_TPORT */
-	case RF6_SPELL_START + 6:  return spell_RF6_WORLD(m_idx); break;	/* RF6_WORLD */
+	case RF6_SPELL_START + 6:  return spell_RF6_WORLD(target_ptr, m_idx); break;	/* RF6_WORLD */
 	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF6_SPECIAL */
 	case RF6_SPELL_START + 8:  spell_RF6_TELE_TO(m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_TELE_TO */
 	case RF6_SPELL_START + 9:  spell_RF6_TELE_AWAY(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_TELE_AWAY */
 	case RF6_SPELL_START + 10: spell_RF6_TELE_LEVEL(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_TELE_LEVEL */
 	case RF6_SPELL_START + 11: spell_RF6_PSY_SPEAR(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_PSY_SPEAR */
-	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_DARKNESS */
+	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_DARKNESS */
 	case RF6_SPELL_START + 13: spell_RF6_TRAPS(y, x, m_idx); break; /* RF6_TRAPS */
 	case RF6_SPELL_START + 14: spell_RF6_FORGET(m_idx); break;  /* RF6_FORGET */
 	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_RAISE_DEAD */
@@ -3509,7 +3513,9 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 }
 
 /*!
+* todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
 * @brief モンスターからモンスターへの呪文の振り分け関数。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param SPELL_NUM モンスター魔法ID
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
@@ -3517,7 +3523,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	switch (SPELL_NUM)
 	{
@@ -3597,7 +3603,7 @@ HIT_POINT monspell_to_monster(int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX
 	case RF6_SPELL_START + 9:  spell_RF6_TELE_AWAY(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_TELE_AWAY */
 	case RF6_SPELL_START + 10: spell_RF6_TELE_LEVEL(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_TELE_LEVEL */
 	case RF6_SPELL_START + 11: return spell_RF6_PSY_SPEAR(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_PSY_SPEAR */
-	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_DARKNESS */
+	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_DARKNESS */
 	case RF6_SPELL_START + 13: return -1; /* RF6_TRAPS */
 	case RF6_SPELL_START + 14: return -1;  /* RF6_FORGET */
 	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_RAISE_DEAD */

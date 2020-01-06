@@ -15,7 +15,7 @@ extern bool set_monster_stunned(MONSTER_IDX m_idx, int v);
 extern bool set_monster_confused(MONSTER_IDX m_idx, int v);
 extern bool set_monster_monfear(MONSTER_IDX m_idx, int v);
 extern bool set_monster_invulner(MONSTER_IDX m_idx, int v, bool energy_need);
-extern bool set_monster_timewalk(int num, MONSTER_IDX who, bool vs_player);
+extern bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, bool vs_player);
 
 extern void dispel_monster_status(MONSTER_IDX m_idx);
 extern void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx);

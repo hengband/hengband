@@ -1202,7 +1202,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		fire_ball(caster_ptr, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
 		break;
 	case 1:
-		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
+		(void)lite_area(caster_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
 	case 2:
 		set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, FALSE);
@@ -1282,6 +1282,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 	default:
 		msg_print(_("なに？", "Zap?"));
 	}
+
 	P_PTR_KI = 0;
 	caster_ptr->update |= (PU_BONUS);
 
@@ -1295,15 +1296,16 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
  */
 static int number_of_mirrors(floor_type *floor_ptr)
 {
-	POSITION x, y;
 	int val = 0;
-	for (x = 0; x < floor_ptr->width; x++) {
-		for (y = 0; y < floor_ptr->height; y++) {
+	for (POSITION x = 0; x < floor_ptr->width; x++) {
+		for (POSITION y = 0; y < floor_ptr->height; y++) {
 			if (is_mirror_grid(&floor_ptr->grid_array[y][x])) val++;
 		}
 	}
+
 	return val;
 }
+
 
 /*!
  * @brief 鏡魔法の発動 /
@@ -1357,7 +1359,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* mirror of light */
 	case 4:
-		(void)lite_area(damroll(2, (plev / 2)), (plev / 10) + 1);
+		(void)lite_area(caster_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
 		break;
 		/* mirror of wandering */
 	case 5:
@@ -1546,7 +1548,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	switch (spell)
 	{
 	case 0:
-		(void)unlite_area(0, 3);
+		(void)unlite_area(caster_ptr, 0, 3);
 		break;
 	case 1:
 		if (plev > 44)

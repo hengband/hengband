@@ -848,6 +848,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 	if (!success || (randint1(50+plev) < plev/10)) u_mode = PM_ALLOW_UNIQUE;
 
 	/* spell code */
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	switch (spell)
 	{
 	case MS_SHRIEK:
@@ -861,10 +862,10 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		MONSTER_IDX m_idx;
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+		m_idx = floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		if (!projectable(floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -1303,10 +1304,10 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		GAME_TEXT m_name[MAX_NLEN];
 
 		if (!target_set(TARGET_KILL)) return FALSE;
-		if (!caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) break;
+		if (!floor_ptr->grid_array[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
-		m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
+		if (!projectable(floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
 		if (r_ptr->flagsr & RFR_RES_TELE)
@@ -1324,8 +1325,9 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 				break;
 			}
 		}
+
         msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
-		teleport_monster_to(caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
+		teleport_monster_to(floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
 		break;
 	}
 	case MS_TELE_AWAY:
@@ -1348,7 +1350,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 	case MS_DARKNESS:
 
         msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
-		(void)unlite_area(10, 3);
+		(void)unlite_area(caster_ptr, 10, 3);
 		break;
 	case MS_MAKE_TRAP:
 		if (!target_set(TARGET_KILL)) return FALSE;
@@ -1365,10 +1367,8 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		break;
 	case MS_S_KIN:
 	{
-		int k;
-
         msg_print(_("援軍を召喚した。", "You summon minions."));
-		for (k = 0;k < 1; k++)
+		for (int k = 0;k < 1; k++)
 		{
 			if (summon_kin_player(summon_lev, caster_ptr->y, caster_ptr->x, (pet ? PM_FORCE_PET : 0L)))
 			{
@@ -1379,260 +1379,260 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 				no_trump = TRUE;
 			}
 		}
+
 		break;
 	}
 	case MS_S_CYBER:
 	{
-		int k;
-
         msg_print(_("サイバーデーモンを召喚した！", "You summon a Cyberdemon!"));
-		for (k = 0 ;k < 1 ; k++)
+		for (int k = 0; k < 1; k++)
+		{
 			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_CYBER, p_mode))
 			{
-                if (!pet)
-                    msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
+				if (!pet)
+					msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon are angry!"));
 			}
 			else
 			{
 				no_trump = TRUE;
 			}
+		}
 		break;
 	}
 	case MS_S_MONSTER:
 	{
-		int k;
         msg_print(_("仲間を召喚した。", "You summon help."));
-		for (k = 0;k < 1; k++)
+		for (int k = 0; k < 1; k++)
+		{
 			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, 0, p_mode))
 			{
-                if (!pet)
-                    msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
+				if (!pet)
+					msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
 			}
 			else
 			{
 				no_trump = TRUE;
 			}
+		}
+		
 		break;
 	}
 	case MS_S_MONSTERS:
 	{
-		int k;
         msg_print(_("モンスターを召喚した！", "You summon monsters!"));
-		for (k = 0;k < plev / 15 + 2; k++)
-			if(summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, 0, (p_mode | u_mode)))
+		for (int k = 0; k < plev / 15 + 2; k++)
+		{
+			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, 0, (p_mode | u_mode)))
 			{
-                if (!pet)
-                    msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
+				if (!pet)
+					msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
 			}
 			else
 			{
 				no_trump = TRUE;
 			}
+		}
+		
 		break;
 	}
 	case MS_S_ANT:
 	{
-		int k;
         msg_print(_("アリを召喚した。", "You summon ants."));
-		for (k = 0; k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚されたアリは怒っている！", "The summoned ants are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_ANT, (PM_ALLOW_GROUP | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚されたアリは怒っている！", "The summoned ants are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
 		break;
 	}
 	case MS_S_SPIDER:
 	{
-		int k;
         msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚された蜘蛛は怒っている！", "Summoned spiders are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_SPIDER, (PM_ALLOW_GROUP | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚された蜘蛛は怒っている！", "Summoned spiders are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+
 		break;
 	}
 	case MS_S_HOUND:
 	{
-		int k;
         msg_print(_("ハウンドを召喚した。", "You summon hounds."));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚されたハウンドは怒っている！", "Summoned hounds are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HOUND, (PM_ALLOW_GROUP | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚されたハウンドは怒っている！", "Summoned hounds are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+
 		break;
 	}
 	case MS_S_HYDRA:
 	{
-		int k;
         msg_print(_("ヒドラを召喚した。", "You summon a hydras."));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚されたヒドラは怒っている！", "Summoned hydras are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HYDRA, (g_mode | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚されたヒドラは怒っている！", "Summoned hydras are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+
 		break;
 	}
 	case MS_S_ANGEL:
 	{
-		int k;
         msg_print(_("天使を召喚した！", "You summon an angel!"));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚された天使は怒っている！", "Summoned angels are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_ANGEL, (g_mode | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚された天使は怒っている！", "Summoned angels are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+
 		break;
 	}
 	case MS_S_DEMON:
 	{
-		int k;
         msg_print(_("混沌の宮廷から悪魔を召喚した！", "You summon a demon from the Courts of Chaos!"));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚されたデーモンは怒っている！", "Summoned demons are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_DEMON, (g_mode | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚されたデーモンは怒っている！", "Summoned demons are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+
 		break;
 	}
 	case MS_S_UNDEAD:
 	{
-		int k;
         msg_print(_("アンデッドの強敵を召喚した！", "You summon an undead adversary!"));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚されたアンデッドは怒っている！", "Summoned undeads are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_UNDEAD, (g_mode | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚されたアンデッドは怒っている！", "Summoned undeads are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+
 		break;
 	}
 	case MS_S_DRAGON:
 	{
-		int k;
         msg_print(_("ドラゴンを召喚した！", "You summon a dragon!"));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚されたドラゴンは怒っている！", "Summoned dragons are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_DRAGON, (g_mode | p_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚されたドラゴンは怒っている！", "Summoned dragons are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+		
 		break;
 	}
 	case MS_S_HI_UNDEAD:
 	{
-		int k;
         msg_print(_("強力なアンデッドを召喚した！", "You summon a greater undead!"));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚された上級アンデッドは怒っている！", "Summoned greater undeads are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | u_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚された上級アンデッドは怒っている！", "Summoned greater undeads are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+		
 		break;
 	}
 	case MS_S_HI_DRAGON:
 	{
-		int k;
-        msg_print(_("古代ドラゴンを召喚した！", "You summon an ancient dragon!"));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚された古代ドラゴンは怒っている！", "Summoned ancient dragons are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		msg_print(_("古代ドラゴンを召喚した！", "You summon an ancient dragon!"));
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_DRAGON, (g_mode | p_mode | u_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚された古代ドラゴンは怒っている！", "Summoned ancient dragons are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
+		
 		break;
 	}
 	case MS_S_AMBERITE:
 	{
-		int k;
         msg_print(_("アンバーの王族を召喚した！", "You summon a Lord of Amber!"));
-		for (k = 0;k < 1; k++)
-			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
-			{
-                if (!pet)
-                    msg_print(_("召喚されたアンバーの王族は怒っている！", "Summoned Lords of Amber are angry!"));
-			}
-			else
-			{
-				no_trump = TRUE;
-			}
+		if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_AMBERITES, (g_mode | p_mode | u_mode)))
+		{
+			if (!pet)
+				msg_print(_("召喚されたアンバーの王族は怒っている！", "Summoned Lords of Amber are angry!"));
+		}
+		else
+		{
+			no_trump = TRUE;
+		}
 		break;
 	}
 	case MS_S_UNIQUE:
 	{
 		int k, count = 0;
 		msg_print(_("特別な強敵を召喚した！", "You summon a special opponent!"));
-		for (k = 0;k < 1; k++)
+		for (k = 0; k < 1; k++)
+		{
 			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_UNIQUE, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
 				if (!pet)
 					msg_print(_("召喚されたユニーク・モンスターは怒っている！", "Summoned special opponents are angry!"));
 			}
-		for (k = count;k < 1; k++)
+		}
+
+		for (k = count; k < 1; k++)
+		{
 			if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_UNDEAD, (g_mode | p_mode | PM_ALLOW_UNIQUE)))
 			{
 				count++;
 				if (!pet)
 					msg_print(_("召喚された上級アンデッドは怒っている！", "Summoned greater undeads are angry!"));
 			}
+		}
+
 		if (!count)
 		{
 			no_trump = TRUE;
 		}
+
 		break;
 	}
 	default:
 		msg_print("hoge?");
 	}
+
 	if (no_trump)
     {
         msg_print(_("何も現れなかった。", "No one have appeared."));

@@ -78,6 +78,7 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 	return TRUE;
 }
 
+
 /*!
  * @brief モンスターが敵対モンスターに直接ブレスを当てることが可能かを判定する /
  * Determine if a breath will hit the target.
@@ -128,7 +129,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 	}
 
 	/* Check the projection path */
-	grid_n = project_path(p_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
+	grid_n = project_path(master_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
 
 	/* Project along the path */
 	for (i = 0; i < grid_n; ++i)
@@ -196,6 +197,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 	return TRUE;
 }
 
+
 /*!
  * @brief モンスターが特殊能力の目標地点を決める処理 /
  * Get the actual center point of ball spells (rad > 1) (originally from TOband)
@@ -230,6 +232,7 @@ void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION
 	}
 }
 
+
 /*!
  * @brief モンスターが敵モンスターに魔力消去を使うかどうかを返す /
  * Check should monster cast dispel spell at other monster.
@@ -258,15 +261,18 @@ static bool dispel_check_monster(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	return FALSE;
 }
 
+
 /*!
+ * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
  * @brief モンスターが敵モンスターに特殊能力を使う処理のメインルーチン /
  * Monster tries to 'cast a spell' (or breath, etc) at another monster.
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx 術者のモンスターID
  * @return 実際に特殊能力を使った場合TRUEを返す
  * @details
  * The player is only disturbed if able to be affected by the spell.
  */
-bool monst_spell_monst(MONSTER_IDX m_idx)
+bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	POSITION y = 0, x = 0;
 	int i, k;
@@ -285,7 +291,8 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	char m_poss[160];
 #endif
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_type *t_ptr = NULL;
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -293,11 +300,11 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	u32b f4, f5, f6;
 
 	bool see_m = is_seen(m_ptr);
-	bool maneable = player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx);
+	bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
 	bool pet = is_pet(m_ptr);
 
-	bool in_no_magic_dungeon = (d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && p_ptr->current_floor_ptr->dun_level
-		&& (!p_ptr->current_floor_ptr->inside_quest || is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest));
+	bool in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
+		&& (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
 
 	bool can_use_lite_area = FALSE;
 	bool can_remember;
@@ -311,13 +318,13 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	f6 = r_ptr->a_ability_flags2;
 
 	/* Target is given for pet? */
-	if (p_ptr->pet_t_m_idx && pet)
+	if (target_ptr->pet_t_m_idx && pet)
 	{
-		target_idx = p_ptr->pet_t_m_idx;
-		t_ptr = &p_ptr->current_floor_ptr->m_list[target_idx];
+		target_idx = target_ptr->pet_t_m_idx;
+		t_ptr = &floor_ptr->m_list[target_idx];
 
 		/* Cancel if not projectable (for now) */
-		if ((m_idx == target_idx) || !projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if ((m_idx == target_idx) || !projectable(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 		{
 			target_idx = 0;
 		}
@@ -326,21 +333,21 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* Is there counter attack target? */
 	if (!target_idx && m_ptr->target_y)
 	{
-		target_idx = p_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
+		target_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
 
 		if (target_idx)
 		{
-			t_ptr = &p_ptr->current_floor_ptr->m_list[target_idx];
+			t_ptr = &floor_ptr->m_list[target_idx];
 
 			/* Cancel if neither enemy nor a given target */
 			if ((m_idx == target_idx) ||
-			    ((target_idx != p_ptr->pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
+			    ((target_idx != target_ptr->pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
 			{
 				target_idx = 0;
 			}
 
 			/* Allow only summoning etc.. if not projectable */
-			else if (!projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+			else if (!projectable(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 			{
 				f4 &= (RF4_INDIRECT_MASK);
 				f5 &= (RF5_INDIRECT_MASK);
@@ -354,21 +361,21 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	{
 		bool success = FALSE;
 
-		if (p_ptr->phase_out)
+		if (target_ptr->phase_out)
 		{
-			start = randint1(p_ptr->current_floor_ptr->m_max-1) + p_ptr->current_floor_ptr->m_max;
+			start = randint1(floor_ptr->m_max-1) + floor_ptr->m_max;
 			if (randint0(2)) plus = -1;
 		}
-		else start = p_ptr->current_floor_ptr->m_max + 1;
+		else start = floor_ptr->m_max + 1;
 
 		/* Scan thru all monsters */
-		for (i = start; ((i < start + p_ptr->current_floor_ptr->m_max) && (i > start - p_ptr->current_floor_ptr->m_max)); i += plus)
+		for (i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus)
 		{
-			MONSTER_IDX dummy = (i % p_ptr->current_floor_ptr->m_max);
+			MONSTER_IDX dummy = (i % floor_ptr->m_max);
 			if (!dummy) continue;
 
 			target_idx = dummy;
-			t_ptr = &p_ptr->current_floor_ptr->m_list[target_idx];
+			t_ptr = &floor_ptr->m_list[target_idx];
 
 			if (!monster_is_valid(t_ptr)) continue;
 
@@ -376,7 +383,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 			if ((m_idx == target_idx) || !are_enemies(m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable */
-			if (!projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
+			if (!projectable(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 
 			/* Get it */
 			success = TRUE;
@@ -386,8 +393,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		/* No enemy found */
 		if (!success) return FALSE;
 	}
-
-
+	
 	/* OK -- we've got a target */
 	y = t_ptr->fy;
 	x = t_ptr->fx;
@@ -400,7 +406,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	if (f4 & RF4_BR_LITE)
 	{
-		if (!los(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if (!los(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 			f4 &= ~(RF4_BR_LITE);
 	}
 
@@ -413,7 +419,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	if (f6 & RF6_DARKNESS)
 	{
-		bool vs_ninja = (p_ptr->pclass == CLASS_NINJA) && !is_hostile(t_ptr);
+		bool vs_ninja = (target_ptr->pclass == CLASS_NINJA) && !is_hostile(t_ptr);
 
 		if (vs_ninja &&
 		    !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
@@ -422,7 +428,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 		if (!(r_ptr->flags2 & RF2_STUPID))
 		{
-			if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
+			if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS) f6 &= ~(RF6_DARKNESS);
 			else if (vs_ninja && !can_use_lite_area) f6 &= ~(RF6_DARKNESS);
 		}
 	}
@@ -434,7 +440,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		f6 &= (RF6_NOMAGIC_MASK);
 	}
 
-	if (p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out)
+	if (floor_ptr->inside_arena || target_ptr->phase_out)
 	{
 		f4 &= ~(RF4_SUMMON_MASK);
 		f5 &= ~(RF5_SUMMON_MASK);
@@ -443,12 +449,12 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		if (m_ptr->r_idx == MON_ROLENTO) f6 &= ~(RF6_SPECIAL);
 	}
 
-	if (p_ptr->phase_out && !one_in_(3))
+	if (target_ptr->phase_out && !one_in_(3))
 	{
 		f6 &= ~(RF6_HEAL);
 	}
 
-	if (m_idx == p_ptr->riding)
+	if (m_idx == target_ptr->riding)
 	{
 		f4 &= ~(RF4_RIDING_MASK);
 		f5 &= ~(RF5_RIDING_MASK);
@@ -460,19 +466,19 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		f4 &= ~(RF4_SHRIEK);
 		f6 &= ~(RF6_DARKNESS | RF6_TRAPS);
 
-		if (!(p_ptr->pet_extra_flags & PF_TELEPORT))
+		if (!(target_ptr->pet_extra_flags & PF_TELEPORT))
 		{
 			f6 &= ~(RF6_BLINK | RF6_TPORT | RF6_TELE_TO | RF6_TELE_AWAY | RF6_TELE_LEVEL);
 		}
 
-		if (!(p_ptr->pet_extra_flags & PF_ATTACK_SPELL))
+		if (!(target_ptr->pet_extra_flags & PF_ATTACK_SPELL))
 		{
 			f4 &= ~(RF4_ATTACK_MASK);
 			f5 &= ~(RF5_ATTACK_MASK);
 			f6 &= ~(RF6_ATTACK_MASK);
 		}
 
-		if (!(p_ptr->pet_extra_flags & PF_SUMMON_SPELL))
+		if (!(target_ptr->pet_extra_flags & PF_SUMMON_SPELL))
 		{
 			f4 &= ~(RF4_SUMMON_MASK);
 			f5 &= ~(RF5_SUMMON_MASK);
@@ -480,7 +486,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		}
 
 		/* Prevent collateral damage */
-		if (!(p_ptr->pet_extra_flags & PF_BALL_SPELL) && (m_idx != p_ptr->riding))
+		if (!(target_ptr->pet_extra_flags & PF_BALL_SPELL) && (m_idx != target_ptr->riding))
 		{
 			if ((f4 & (RF4_BALL_MASK & ~(RF4_ROCKET))) ||
 			    (f5 & RF5_BALL_MASK) ||
@@ -489,11 +495,11 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				POSITION real_y = y;
 				POSITION real_x = x;
 
-				get_project_point(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
+				get_project_point(floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 
-				if (projectable(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x))
+				if (projectable(floor_ptr, real_y, real_x, target_ptr->y, target_ptr->x))
 				{
-					int dist = distance(real_y, real_x, p_ptr->y, p_ptr->x);
+					int dist = distance(real_y, real_x, target_ptr->y, target_ptr->x);
 
 					if (dist <= 2)
 					{
@@ -510,7 +516,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				}
 				else if (f5 & RF5_BA_LITE)
 				{
-					if ((distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 4) && los(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x))
+					if ((distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 4) && los(floor_ptr, real_y, real_x, target_ptr->y, target_ptr->x))
 						f5 &= ~(RF5_BA_LITE);
 				}
 			}
@@ -520,8 +526,8 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				POSITION real_y = y;
 				POSITION real_x = x;
 
-				get_project_point(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
-				if (projectable(p_ptr->current_floor_ptr, real_y, real_x, p_ptr->y, p_ptr->x) && (distance(real_y, real_x, p_ptr->y, p_ptr->x) <= 2))
+				get_project_point(floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
+				if (projectable(floor_ptr, real_y, real_x, target_ptr->y, target_ptr->x) && (distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 2))
 					f4 &= ~(RF4_ROCKET);
 			}
 
@@ -538,19 +544,19 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 				/* Expected breath radius */
 				POSITION rad = (r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
 
-				if (!breath_direct(p_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, 0, TRUE))
+				if (!breath_direct(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, 0, TRUE))
 				{
 					f4 &= ~(RF4_BREATH_MASK);
 					f5 &= ~(RF5_BREATH_MASK);
 					f6 &= ~(RF6_BREATH_MASK);
 				}
 				else if ((f4 & RF4_BR_LITE) &&
-					 !breath_direct(p_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_LITE, TRUE))
+					 !breath_direct(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_LITE, TRUE))
 				{
 					f4 &= ~(RF4_BR_LITE);
 				}
 				else if ((f4 & RF4_BR_DISI) &&
-					 !breath_direct(p_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_DISINTEGRATE, TRUE))
+					 !breath_direct(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, rad, GF_DISINTEGRATE, TRUE))
 				{
 					f4 &= ~(RF4_BR_DISI);
 				}
@@ -562,12 +568,12 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		{
 			if (m_ptr->r_idx == MON_ROLENTO)
 			{
-				if ((p_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_SUMMON_SPELL)) != (PF_ATTACK_SPELL | PF_SUMMON_SPELL))
+				if ((target_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_SUMMON_SPELL)) != (PF_ATTACK_SPELL | PF_SUMMON_SPELL))
 					f6 &= ~(RF6_SPECIAL);
 			}
 			else if (r_ptr->d_char == 'B')
 			{
-				if ((p_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT))
+				if ((target_ptr->pet_extra_flags & (PF_ATTACK_SPELL | PF_TELEPORT)) != (PF_ATTACK_SPELL | PF_TELEPORT))
 					f6 &= ~(RF6_SPECIAL);
 			}
 			else f6 &= ~(RF6_SPECIAL);
@@ -638,7 +644,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 		}
 
 		/* Hack -- decline "teleport level" in some case */
-		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF((target_idx == p_ptr->riding) ? 0 : target_idx))
+		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF((target_idx == target_ptr->riding) ? 0 : target_idx))
 		{
 			f6 &= ~(RF6_TELE_LEVEL);
 		}
@@ -669,10 +675,10 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	if (!num) return (FALSE);
 
 	/* Stop if player is dead or gone */
-	if (!p_ptr->playing || p_ptr->is_dead) return (FALSE);
+	if (!target_ptr->playing || target_ptr->is_dead) return (FALSE);
 
 	/* Handle "leaving" */
-	if (p_ptr->leaving) return (FALSE);
+	if (target_ptr->leaving) return (FALSE);
 
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0x00);
@@ -688,12 +694,12 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	/* Choose a spell to cast */
 	thrown_spell = spell[randint0(num)];
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
+	if (target_ptr->riding && (m_idx == target_ptr->riding)) disturb(target_ptr, TRUE, TRUE);
 
 	/* Check for spell failure (inate attacks never fail) */
 	if (!spell_is_inate(thrown_spell) && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2))))
 	{
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(target_ptr, TRUE, TRUE);
 		if (see_m) msg_format(_("%^sは呪文を唱えようとしたが失敗した。", 
 			                    "%^s tries to cast a spell, but fails."), m_name);
 
@@ -701,7 +707,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	}
 
 	/* Hex: Anti Magic Barrier */
-	if (!spell_is_inate(thrown_spell) && magic_barrier(p_ptr, m_idx))
+	if (!spell_is_inate(thrown_spell) && magic_barrier(target_ptr, m_idx))
 	{
 		if (see_m) msg_format(_("反魔法バリアが%^sの呪文をかき消した。", 
 			                    "Anti magic barrier cancels the spell which %^s casts."), m_name);
@@ -710,28 +716,29 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 
 	can_remember = is_original_ap_and_seen(m_ptr);
 
-	dam = monspell_to_monster(thrown_spell, y, x, m_idx, target_idx);
+	dam = monspell_to_monster(target_ptr, thrown_spell, y, x, m_idx, target_idx);
 	if (dam < 0) return FALSE;
 
-	if (m_ptr->ml && maneable && !current_world_ptr->timewalk_m_idx && !p_ptr->blind && (p_ptr->pclass == CLASS_IMITATOR))
+	if (m_ptr->ml && maneable && !current_world_ptr->timewalk_m_idx && !target_ptr->blind && (target_ptr->pclass == CLASS_IMITATOR))
 	{
 		if (thrown_spell != 167) /* Not RF6_SPECIAL */
 		{
-			if (p_ptr->mane_num == MAX_MANE)
+			if (target_ptr->mane_num == MAX_MANE)
 			{
-				p_ptr->mane_num--;
-				for (i = 0; i < p_ptr->mane_num - 1; i++)
+				target_ptr->mane_num--;
+				for (i = 0; i < target_ptr->mane_num - 1; i++)
 				{
-					p_ptr->mane_spell[i] = p_ptr->mane_spell[i+1];
-					p_ptr->mane_dam[i] = p_ptr->mane_dam[i+1];
+					target_ptr->mane_spell[i] = target_ptr->mane_spell[i+1];
+					target_ptr->mane_dam[i] = target_ptr->mane_dam[i+1];
 				}
 			}
-			p_ptr->mane_spell[p_ptr->mane_num] = thrown_spell - RF4_SPELL_START;
-			p_ptr->mane_dam[p_ptr->mane_num] = dam;
-			p_ptr->mane_num++;
-			p_ptr->new_mane = TRUE;
 
-			p_ptr->redraw |= (PR_IMITATION);
+			target_ptr->mane_spell[target_ptr->mane_num] = thrown_spell - RF4_SPELL_START;
+			target_ptr->mane_dam[target_ptr->mane_num] = dam;
+			target_ptr->mane_num++;
+			target_ptr->new_mane = TRUE;
+
+			target_ptr->redraw |= (PR_IMITATION);
 		}
 	}
 
@@ -761,7 +768,7 @@ bool monst_spell_monst(MONSTER_IDX m_idx)
 	}
 
 	/* Always take note of monsters that kill you */
-	if (p_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !p_ptr->current_floor_ptr->inside_arena)
+	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++; /* Ignore appearance difference */
 	}

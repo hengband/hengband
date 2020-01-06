@@ -794,14 +794,15 @@ void dispel_monster_status(MONSTER_IDX m_idx)
 
 /*!
 * @brief モンスターの時間停止処理
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param num 時間停止を行った敵が行動できる回数
 * @param who 時間停止処理の主体ID
 * @param vs_player TRUEならば時間停止開始処理を行う
 * @return 時間停止が行われている状態ならばTRUEを返す
 */
-bool set_monster_timewalk(int num, MONSTER_IDX who, bool vs_player)
+bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, bool vs_player)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
 
 	if (current_world_ptr->timewalk_m_idx) return (FALSE);
 
@@ -822,24 +823,24 @@ bool set_monster_timewalk(int num, MONSTER_IDX who, bool vs_player)
 	/* This monster cast spells */
 	current_world_ptr->timewalk_m_idx = hack_m_idx;
 
-	if (vs_player) do_cmd_redraw(p_ptr);
+	if (vs_player) do_cmd_redraw(target_ptr);
 
 	while (num--)
 	{
 		if (!monster_is_valid(m_ptr)) break;
-		process_monster(current_world_ptr->timewalk_m_idx);
+		process_monster(target_ptr, current_world_ptr->timewalk_m_idx);
 		reset_target(m_ptr);
 		handle_stuff();
 
 		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
 	}
 
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	target_ptr->redraw |= (PR_MAP);
+	target_ptr->update |= (PU_MONSTERS);
+	target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	current_world_ptr->timewalk_m_idx = 0;
-	if (vs_player || (player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)))
+	if (vs_player || (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr->current_floor_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx)))
 	{
 		msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
 		msg_print(NULL);

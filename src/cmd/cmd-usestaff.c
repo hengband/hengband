@@ -18,7 +18,6 @@
 #include "view-mainwindow.h"
 
 
-
 /*!
 * @brief 杖の効果を発動する
 * @param creature_ptr プレーヤーへの参照ポインタ
@@ -45,7 +44,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 			{
 				if (set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5))) ident = TRUE;
 			}
-			if (unlite_area(10, (powerful ? 6 : 3))) ident = TRUE;
+			if (unlite_area(creature_ptr, 10, (powerful ? 6 : 3))) ident = TRUE;
 			break;
 		}
 
@@ -109,7 +108,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_LITE:
 		{
-			if (lite_area(damroll(2, 8), (powerful ? 4 : 2))) ident = TRUE;
+			if (lite_area(creature_ptr, damroll(2, 8), (powerful ? 4 : 2))) ident = TRUE;
 			break;
 		}
 
@@ -273,6 +272,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 	return ident;
 }
 
+
 /*!
  * @brief 杖を使うコマンドのサブルーチン /
  * Use a staff.			-RAK-
@@ -287,8 +287,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 	int         ident, chance, lev;
 	object_type *o_ptr;
 
-
-	/* Hack -- let staffs of identify get aborted */
+		/* Hack -- let staffs of identify get aborted */
 	bool use_charge = TRUE;
 
 	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
@@ -300,8 +299,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 		return;
 	}
 
-
-	take_turn(creature_ptr, 100);
+		take_turn(creature_ptr, 100);
 
 	lev = k_info[o_ptr->k_idx].level;
 	if (lev > 50) lev = 50 + (lev - 50) / 2;
@@ -343,7 +341,6 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
 		return;
 	}
-
 
 	sound(SOUND_ZAP);
 
@@ -411,6 +408,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 		floor_item_charges(0 - item);
 	}
 }
+
 
 /*!
 * @brief 杖を使うコマンドのメインルーチン /

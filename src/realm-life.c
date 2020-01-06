@@ -82,7 +82,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				lite_area(damroll(dice, sides), rad);
+				lite_area(caster_ptr, damroll(dice, sides), rad);
 			}
 		}
 		break;

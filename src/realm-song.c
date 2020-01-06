@@ -33,6 +33,7 @@ static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 s
 	caster_ptr->redraw |= (PR_STATUS);
 }
 
+
 /*!
 * @brief 歌の各処理を行う
 * @param caster_ptr プレーヤーへの参照ポインタ
@@ -196,7 +197,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				msg_print(_("光り輝く歌が辺りを照らした。", "Your uplifting song brings brightness to dark places..."));
-				lite_area(damroll(dice, sides), rad);
+				lite_area(caster_ptr, damroll(dice, sides), rad);
 			}
 		}
 		break;
