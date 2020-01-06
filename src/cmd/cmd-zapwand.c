@@ -17,6 +17,7 @@
 
 /*!
 * @brief 魔法棒の効果を発動する
+* @param creature_ptr プレーヤーへの参照ポインタ
 * @param sval オブジェクトのsval
 * @param dir 発動の方向ID
 * @param powerful 強力発動上の処理ならばTRUE
@@ -156,14 +157,14 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_MAGIC_MISSILE:
 		{
-			fire_bolt_or_beam(20, GF_MISSILE, dir, damroll(2 + lev / 10, 6));
+			fire_bolt_or_beam(creature_ptr, 20, GF_MISSILE, dir, damroll(2 + lev / 10, 6));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_ACID_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_ACID, dir, damroll(6 + lev / 7, 8));
+			fire_bolt_or_beam(creature_ptr, 20, GF_ACID, dir, damroll(6 + lev / 7, 8));
 			ident = TRUE;
 			break;
 		}
@@ -177,14 +178,14 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_FIRE_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_FIRE, dir, damroll(7 + lev / 6, 8));
+			fire_bolt_or_beam(creature_ptr, 20, GF_FIRE, dir, damroll(7 + lev / 6, 8));
 			ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_COLD_BOLT:
 		{
-			fire_bolt_or_beam(20, GF_COLD, dir, damroll(5 + lev / 8, 8));
+			fire_bolt_or_beam(creature_ptr, 20, GF_COLD, dir, damroll(5 + lev / 8, 8));
 			ident = TRUE;
 			break;
 		}

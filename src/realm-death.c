@@ -239,7 +239,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_bolt_or_beam(beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
+				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
 			}
 		}
 		break;
@@ -412,7 +412,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fire_bolt_or_beam(beam_chance(caster_ptr), GF_DARK, dir, damroll(dice, sides));
+				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_DARK, dir, damroll(dice, sides));
 			}
 		}
 		break;

@@ -206,7 +206,7 @@ extern bool fire_bolt(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT
 extern bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMBER dd, DICE_SID ds, int num, int dev);
 extern void call_chaos(player_type *caster_ptr);
 extern bool fire_beam(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
-extern bool fire_bolt_or_beam(PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
+extern bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool lite_line(DIRECTION dir, HIT_POINT dam);
 extern bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam);
 extern bool death_ray(DIRECTION dir, PLAYER_LEVEL plev);

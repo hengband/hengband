@@ -747,7 +747,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case RACE_DARK_ELF:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
-			fire_bolt_or_beam(10, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
+			fire_bolt_or_beam(creature_ptr, 10, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
 			break;
 
 		case RACE_DRACONIAN:

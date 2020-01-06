@@ -179,28 +179,28 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_ACID_BOLT:
 	{
-		fire_bolt_or_beam(10, GF_ACID, dir, damroll(6 + lev / 7, 8));
+		fire_bolt_or_beam(creature_ptr, 10, GF_ACID, dir, damroll(6 + lev / 7, 8));
 		ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_ELEC_BOLT:
 	{
-		fire_bolt_or_beam(10, GF_ELEC, dir, damroll(4 + lev / 9, 8));
+		fire_bolt_or_beam(creature_ptr, 10, GF_ELEC, dir, damroll(4 + lev / 9, 8));
 		ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_FIRE_BOLT:
 	{
-		fire_bolt_or_beam(10, GF_FIRE, dir, damroll(7 + lev / 6, 8));
+		fire_bolt_or_beam(creature_ptr, 10, GF_FIRE, dir, damroll(7 + lev / 6, 8));
 		ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_COLD_BOLT:
 	{
-		fire_bolt_or_beam(10, GF_COLD, dir, damroll(5 + lev / 8, 8));
+		fire_bolt_or_beam(creature_ptr, 10, GF_COLD, dir, damroll(5 + lev / 8, 8));
 		ident = TRUE;
 		break;
 	}
