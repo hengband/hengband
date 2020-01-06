@@ -891,7 +891,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 	static char prev_tag = '\0';
 	char cur_tag = '\0';
 
-	if (easy_floor || use_menu) return get_item_floor(cp, pmt, str, mode, tval);
+	if (easy_floor || use_menu) return get_item_floor(owner_ptr, cp, pmt, str, mode, tval);
 
 	/* Extract args */
 	if (mode & USE_EQUIP) equip = TRUE;
@@ -1810,7 +1810,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
@@ -1868,7 +1868,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			if (prev_tag && command_cmd)
 			{
 				/* Scan all objects in the grid */
-				floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
+				floor_num = scan_floor(floor_list, creature_ptr->y, creature_ptr->x, 0x03);
 
 				/* Look up the tag */
 				if (get_tag_floor(&k, prev_tag, floor_list, floor_num))
@@ -1889,7 +1889,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			}
 
 			/* Validate the item */
-			else if (item_tester_okay(&p_ptr->current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL))
+			else if (item_tester_okay(&creature_ptr->current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
 				tval = 0;
@@ -1957,7 +1957,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&creature_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
 	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
@@ -1973,21 +1973,21 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&p_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
-		if (p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&creature_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
+		if (creature_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
 
-	if (equip && p_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
+	if (equip && creature_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
-		if (p_ptr->migite)
+		if (creature_ptr->migite)
 		{
 			if (e2 < INVEN_LARM) e2 = INVEN_LARM;
 		}
-		else if (p_ptr->hidarite) e1 = INVEN_RARM;
+		else if (creature_ptr->hidarite) e1 = INVEN_RARM;
 	}
 
 
@@ -1998,7 +1998,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
+		floor_num = scan_floor(floor_list, creature_ptr->y, creature_ptr->x, 0x03);
 	}
 
 	if (i1 <= i2) allow_inven = TRUE;
@@ -2087,11 +2087,11 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 		if ((command_wrk == (USE_EQUIP) && ni && !ne) ||
 			(command_wrk == (USE_INVEN) && !ni && ne))
 		{
-			toggle_inven_equip(p_ptr);
+			toggle_inven_equip(creature_ptr);
 			toggle = !toggle;
 		}
 
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+		creature_ptr->window |= (PW_INVEN | PW_EQUIP);
 		handle_stuff();
 
 		/* Inventory screen */
@@ -2102,7 +2102,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(i2);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(p_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_inven(creature_ptr, menu_line, mode, tval);
 		}
 
 		/* Equipment screen */
@@ -2113,7 +2113,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(p_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_equip(creature_ptr, menu_line, mode, tval);
 		}
 
 		/* Floor screen */
@@ -2127,7 +2127,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			n2 = I2A(k - floor_top);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_floor(menu_line, p_ptr->y, p_ptr->x, &min_width);
+			if (command_see) get_item_label = show_floor(menu_line, creature_ptr->y, creature_ptr->x, &min_width);
 		}
 
 		if (command_wrk == (USE_INVEN))
@@ -2513,7 +2513,7 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 			{
 				int i;
 				OBJECT_IDX o_idx;
-				grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+				grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;
 
@@ -2521,21 +2521,21 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 				o_idx = g_ptr->o_idx;
 
 				/* Only rotate a pile of two or more objects. */
-				if (!(o_idx && p_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
+				if (!(o_idx && creature_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
 
 				/* Remove the first object from the list. */
 				excise_object_idx(o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
-				while (p_ptr->current_floor_ptr->o_list[i].next_o_idx)
-					i = p_ptr->current_floor_ptr->o_list[i].next_o_idx;
+				while (creature_ptr->current_floor_ptr->o_list[i].next_o_idx)
+					i = creature_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
 				/* Add after the last object. */
-				p_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
+				creature_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 				/* Re-scan floor list */
-				floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
+				floor_num = scan_floor(floor_list, creature_ptr->y, creature_ptr->x, 0x03);
 
 				/* Hack -- Fix screen */
 				if (command_see)
@@ -2912,9 +2912,9 @@ bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, 
 
 
 	/* Clean up  'show choices' */
-	if (toggle) toggle_inven_equip(p_ptr);
+	if (toggle) toggle_inven_equip(creature_ptr);
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP);
 	handle_stuff();
 
 	/* Clear the prompt line */

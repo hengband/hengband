@@ -509,7 +509,7 @@ extern concptr essence_name[];
 
 extern s32b flag_cost(object_type *o_ptr, int plusses);
 
-extern bool get_item_floor(COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
+extern bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 extern void py_pickup_floor(player_type *creature_ptr, bool pickup);
 extern void prepare_label_string(char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 
