@@ -3899,7 +3899,7 @@ static void process_command(player_type *creature_ptr)
 					else if (creature_ptr->pclass == CLASS_SAMURAI)
 						do_cmd_hissatsu(creature_ptr);
 					else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
-						do_cmd_cast_learned();
+						do_cmd_cast_learned(creature_ptr);
 					else if (creature_ptr->pclass == CLASS_SMITH)
 						do_cmd_kaji(creature_ptr, FALSE);
 					else if (creature_ptr->pclass == CLASS_SNIPER)

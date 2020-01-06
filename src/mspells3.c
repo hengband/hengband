@@ -1646,17 +1646,17 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
  * do_cmd_cast calls this function if the player's class is 'Blue-Mage'.
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool do_cmd_cast_learned(void)
+bool do_cmd_cast_learned(player_type *caster_ptr)
 {
 	SPELL_IDX n = 0;
 	PERCENTAGE chance;
 	PERCENTAGE minfail = 0;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	monster_power spell;
 	bool cast;
 	MANA_POINT need_mana;
 
-	if (cmd_limit_confused(p_ptr)) return FALSE;
+	if (cmd_limit_confused(caster_ptr)) return FALSE;
 
 	if (!get_learned_power(&n)) return FALSE;
 
@@ -1665,7 +1665,7 @@ bool do_cmd_cast_learned(void)
 	need_mana = mod_need_mana(spell.smana, 0, REALM_NONE);
 
 	/* Verify "dangerous" spells */
-	if (need_mana > p_ptr->csp)
+	if (need_mana > caster_ptr->csp)
 	{
 		/* Warning */
 		msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
@@ -1684,30 +1684,30 @@ bool do_cmd_cast_learned(void)
 	else chance += (spell.level - plev);
 
 	/* Reduce failure rate by INT/WIS adjustment */
-	chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
+	chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
 
-	chance = mod_spell_chance_1(p_ptr, chance);
+	chance = mod_spell_chance_1(caster_ptr, chance);
 
 	/* Not enough mana to cast */
-	if (need_mana > p_ptr->csp)
+	if (need_mana > caster_ptr->csp)
 	{
-		chance += 5 * (need_mana - p_ptr->csp);
+		chance += 5 * (need_mana - caster_ptr->csp);
 	}
 
 	/* Extract the minimum failure rate */
-	minfail = adj_mag_fail[p_ptr->stat_ind[A_INT]];
+	minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
 
 	/* Minimum failure rate */
 	if (chance < minfail) chance = minfail;
 
 	/* Stunning makes spells harder */
-	if (p_ptr->stun > 50) chance += 25;
-	else if (p_ptr->stun) chance += 15;
+	if (caster_ptr->stun > 50) chance += 25;
+	else if (caster_ptr->stun) chance += 15;
 
 	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
-	chance = mod_spell_chance_2(p_ptr, chance);
+	chance = mod_spell_chance_2(caster_ptr, chance);
 
 	/* Failed spell */
 	if (randint0(100) < chance)
@@ -1718,35 +1718,35 @@ bool do_cmd_cast_learned(void)
 		sound(SOUND_FAIL);
 
 		if (n >= MS_S_KIN)
-			cast = cast_learned_spell(p_ptr, n, FALSE);
+			cast = cast_learned_spell(caster_ptr, n, FALSE);
 	}
 	else
 	{
 		sound(SOUND_ZAP);
-		cast = cast_learned_spell(p_ptr, n, TRUE);
+		cast = cast_learned_spell(caster_ptr, n, TRUE);
 		if (!cast) return FALSE;
 	}
 
 	/* Sufficient mana */
-	if (need_mana <= p_ptr->csp)
+	if (need_mana <= caster_ptr->csp)
 	{
 		/* Use some mana */
-		p_ptr->csp -= need_mana;
+		caster_ptr->csp -= need_mana;
 	}
 	else
 	{
 		int oops = need_mana;
 
 		/* No mana left */
-		p_ptr->csp = 0;
-		p_ptr->csp_frac = 0;
+		caster_ptr->csp = 0;
+		caster_ptr->csp_frac = 0;
 
 		msg_print(_("精神を集中しすぎて気を失ってしまった！", "You faint from the effort!"));
 
 		/* Hack -- Bypass free action */
-		(void)set_paralyzed(p_ptr, p_ptr->paralyzed + randint1(5 * oops + 1));
+		(void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(5 * oops + 1));
 
-		chg_virtue(p_ptr, V_KNOWLEDGE, -10);
+		chg_virtue(caster_ptr, V_KNOWLEDGE, -10);
 
 		/* Damage CON (possibly permanently) */
 		if (randint0(100) < 50)
@@ -1756,14 +1756,14 @@ bool do_cmd_cast_learned(void)
 			msg_print(_("体を悪くしてしまった！", "You have damaged your health!"));
 
 			/* Reduce constitution */
-			(void)dec_stat(p_ptr, A_CON, 15 + randint1(10), perm);
+			(void)dec_stat(caster_ptr, A_CON, 15 + randint1(10), perm);
 		}
 	}
 
-	take_turn(p_ptr, 100);
+	take_turn(caster_ptr, 100);
 
-	p_ptr->redraw |= (PR_MANA);
-	p_ptr->window |= (PW_PLAYER | PW_SPELL);
+	caster_ptr->redraw |= (PR_MANA);
+	caster_ptr->window |= (PW_PLAYER | PW_SPELL);
 
 	return TRUE;
 }
