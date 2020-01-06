@@ -189,8 +189,8 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return info_damage(1, sides, 0);
 			if (cast)
 			{
-				dispel_undead(randint1(sides));
-				dispel_demons(randint1(sides));
+				dispel_undead(caster_ptr, randint1(sides));
+				dispel_demons(caster_ptr, randint1(sides));
 				turn_evil(power);
 			}
 		}
@@ -266,7 +266,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return format(_("損:1d%d/回%d", "dam:d%d/h%d"), dam_sides, heal);
 			if (cast)
 			{
-				dispel_evil(randint1(dam_sides));
+				dispel_evil(caster_ptr, randint1(dam_sides));
 				hp_player(caster_ptr, heal);
 				set_afraid(caster_ptr, 0);
 				set_poisoned(caster_ptr, 0);
@@ -335,8 +335,8 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				dispel_undead(randint1(sides));
-				dispel_demons(randint1(sides));
+				dispel_undead(caster_ptr, randint1(sides));
+				dispel_demons(caster_ptr, randint1(sides));
 			}
 		}
 		break;
@@ -352,7 +352,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				dispel_evil(randint1(sides));
+				dispel_evil(caster_ptr, randint1(sides));
 			}
 		}
 		break;
@@ -454,7 +454,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (banish_evil(power))
+				if (banish_evil(caster_ptr, power))
 				{
 					msg_print(_("神聖な力が邪悪を打ち払った！", "The holy power banishes evil!"));
 				}
@@ -526,8 +526,8 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (cast)
 			{
 				project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
-				dispel_monsters(d_dam);
-				slow_monsters(plev);
+				dispel_monsters(caster_ptr, d_dam);
+				slow_monsters(caster_ptr, plev);
 				stun_monsters(power);
 				confuse_monsters(power);
 				turn_monsters(power);

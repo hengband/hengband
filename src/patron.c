@@ -621,7 +621,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 		case REW_DISPEL_C:
 
 			msg_format(_("%sの力が敵を攻撃するのを感じた！", "You can feel the power of %s assault your enemies!"), chaos_patrons[creature_ptr->chaos_patron]);
-			(void)dispel_monsters(creature_ptr->lev * 4);
+			(void)dispel_monsters(creature_ptr, creature_ptr->lev * 4);
 			break;
 
 		case REW_IGNORE:

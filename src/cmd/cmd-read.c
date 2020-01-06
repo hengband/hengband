@@ -388,7 +388,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_DISPEL_UNDEAD:
 		{
-			if (dispel_undead(80)) ident = TRUE;
+			if (dispel_undead(creature_ptr, 80)) ident = TRUE;
 			break;
 		}
 

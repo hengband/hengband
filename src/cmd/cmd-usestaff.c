@@ -57,7 +57,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_HASTE_MONSTERS:
 		{
-			if (speed_monsters()) ident = TRUE;
+			if (speed_monsters(creature_ptr)) ident = TRUE;
 			break;
 		}
 
@@ -187,13 +187,13 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_SLEEP_MONSTERS:
 		{
-			if (sleep_monsters(lev)) ident = TRUE;
+			if (sleep_monsters(creature_ptr, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_SLOW_MONSTERS:
 		{
-			if (slow_monsters(lev)) ident = TRUE;
+			if (slow_monsters(creature_ptr, lev)) ident = TRUE;
 			break;
 		}
 
@@ -211,13 +211,13 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_DISPEL_EVIL:
 		{
-			ident = dispel_evil(powerful ? 120 : 80);
+			ident = dispel_evil(creature_ptr, powerful ? 120 : 80);
 			break;
 		}
 
 		case SV_STAFF_POWER:
 		{
-			ident = dispel_monsters(powerful ? 225 : 150) ;
+			ident = dispel_monsters(creature_ptr, powerful ? 225 : 150) ;
 			break;
 		}
 

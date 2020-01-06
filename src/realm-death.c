@@ -487,7 +487,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				dispel_living(randint1(sides));
+				dispel_living(caster_ptr, randint1(sides));
 			}
 		}
 		break;

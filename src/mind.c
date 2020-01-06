@@ -1412,7 +1412,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* illusion light */
 	case 14:
 		tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 3;
-		slow_monsters(plev);
+		slow_monsters(caster_ptr, plev);
 		stun_monsters(plev*tmp);
 		confuse_monsters(plev*tmp);
 		turn_monsters(plev*tmp);

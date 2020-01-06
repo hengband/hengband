@@ -421,8 +421,8 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				dispel_monsters(randint1(sides1));
-				dispel_good(randint1(sides2));
+				dispel_monsters(caster_ptr, randint1(sides1));
+				dispel_good(caster_ptr, randint1(sides2));
 			}
 		}
 		break;

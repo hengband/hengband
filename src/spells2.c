@@ -863,9 +863,9 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool speed_monsters(void)
+bool speed_monsters(player_type *caster_ptr)
 {
-	return (project_all_los(p_ptr, GF_OLD_SPEED, p_ptr->lev));
+	return (project_all_los(caster_ptr, GF_OLD_SPEED, caster_ptr->lev));
 }
 
 
@@ -874,9 +874,9 @@ bool speed_monsters(void)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool slow_monsters(int power)
+bool slow_monsters(player_type *caster_ptr, int power)
 {
-	return (project_all_los(p_ptr, GF_OLD_SLOW, power));
+	return (project_all_los(caster_ptr, GF_OLD_SLOW, power));
 }
 
 
@@ -885,9 +885,9 @@ bool slow_monsters(int power)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool sleep_monsters(int power)
+bool sleep_monsters(player_type *caster_ptr, int power)
 {
-	return (project_all_los(p_ptr, GF_OLD_SLEEP, power));
+	return (project_all_los(caster_ptr, GF_OLD_SLEEP, power));
 }
 
 
@@ -896,9 +896,9 @@ bool sleep_monsters(int power)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool banish_evil(int dist)
+bool banish_evil(player_type *caster_ptr, int dist)
 {
-	return (project_all_los(p_ptr, GF_AWAY_EVIL, dist));
+	return (project_all_los(caster_ptr, GF_AWAY_EVIL, dist));
 }
 
 
@@ -920,11 +920,11 @@ bool turn_undead(player_type *caster_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_undead(HIT_POINT dam)
+bool dispel_undead(player_type *caster_ptr, HIT_POINT dam)
 {
-	bool tester = (project_all_los(p_ptr, GF_DISP_UNDEAD, dam));
+	bool tester = (project_all_los(caster_ptr, GF_DISP_UNDEAD, dam));
 	if (tester)
-		chg_virtue(p_ptr, V_UNLIFE, -2);
+		chg_virtue(caster_ptr, V_UNLIFE, -2);
 	return tester;
 }
 
@@ -934,9 +934,9 @@ bool dispel_undead(HIT_POINT dam)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_evil(HIT_POINT dam)
+bool dispel_evil(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_DISP_EVIL, dam));
+	return (project_all_los(caster_ptr, GF_DISP_EVIL, dam));
 }
 
 
@@ -945,9 +945,9 @@ bool dispel_evil(HIT_POINT dam)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_good(HIT_POINT dam)
+bool dispel_good(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_DISP_GOOD, dam));
+	return (project_all_los(caster_ptr, GF_DISP_GOOD, dam));
 }
 
 
@@ -956,16 +956,16 @@ bool dispel_good(HIT_POINT dam)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_monsters(HIT_POINT dam)
+bool dispel_monsters(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_DISP_ALL, dam));
+	return (project_all_los(caster_ptr, GF_DISP_ALL, dam));
 }
 
 
 bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 {
 	bool ident = FALSE;
-	if (dispel_evil(powerful ? 225 : 150)) ident = TRUE;
+	if (dispel_evil(creature_ptr, powerful ? 225 : 150)) ident = TRUE;
 	int k = 3 * creature_ptr->lev;
 	if (set_protevil(creature_ptr, (magic ? 0 : creature_ptr->protevil) + randint1(25) + k, FALSE)) ident = TRUE;
 	if (set_poisoned(creature_ptr, 0)) ident = TRUE;
@@ -984,7 +984,7 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 	(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 	if ((creature_ptr->pclass != CLASS_MAGE) && (creature_ptr->pclass != CLASS_HIGH_MAGE) && (creature_ptr->pclass != CLASS_SORCERER) && (creature_ptr->pclass != CLASS_MAGIC_EATER) && (creature_ptr->pclass != CLASS_BLUE_MAGE))
 	{
-		(void)take_hit(p_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
+		(void)take_hit(creature_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
 	}
 
 	return TRUE;
@@ -996,9 +996,9 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_living(HIT_POINT dam)
+bool dispel_living(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_DISP_LIVING, dam));
+	return (project_all_los(caster_ptr, GF_DISP_LIVING, dam));
 }
 
 
@@ -1007,9 +1007,9 @@ bool dispel_living(HIT_POINT dam)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 効力があった場合TRUEを返す
  */
-bool dispel_demons(HIT_POINT dam)
+bool dispel_demons(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_DISP_DEMON, dam));
+	return (project_all_los(caster_ptr, GF_DISP_DEMON, dam));
 }
 
 
@@ -3326,7 +3326,7 @@ void ring_of_power(player_type *caster_ptr, DIRECTION dir)
 	case 3:
 	{
 		msg_print(_("あなたは強力なオーラに包み込まれた。", "You are surrounded by a powerful aura."));
-		dispel_monsters(1000);
+		dispel_monsters(caster_ptr, 1000);
 		break;
 	}
 
@@ -3673,13 +3673,13 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 110)
 	{
-		dispel_monsters(120);
+		dispel_monsters(caster_ptr, 120);
 	}
 	else /* RARE */
 	{
-		dispel_monsters(150);
-		slow_monsters(plev);
-		sleep_monsters(plev);
+		dispel_monsters(caster_ptr, 150);
+		slow_monsters(caster_ptr, plev);
+		sleep_monsters(caster_ptr, plev);
 		hp_player(caster_ptr, 300);
 	}
 }
@@ -3818,13 +3818,13 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 110)
 	{
-		dispel_monsters(120);
+		dispel_monsters(caster_ptr, 120);
 	}
 	else
 	{ /* RARE */
-		dispel_monsters(150);
-		slow_monsters(plev);
-		sleep_monsters(plev);
+		dispel_monsters(caster_ptr, 150);
+		slow_monsters(caster_ptr, plev);
+		sleep_monsters(caster_ptr, plev);
 		hp_player(caster_ptr, 300);
 	}
 
@@ -4566,11 +4566,15 @@ bool sword_dancing(player_type *creature_ptr)
 	return TRUE;
 }
 
-
+/*!
+ * 幻惑の光
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 常にTRUE
+*/
 bool confusing_light(player_type *creature_ptr)
 {
 	msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
-	slow_monsters(creature_ptr->lev);
+	slow_monsters(creature_ptr, creature_ptr->lev);
 	stun_monsters(creature_ptr->lev * 4);
 	confuse_monsters(creature_ptr->lev * 4);
 	turn_monsters(creature_ptr->lev * 4);
@@ -4579,6 +4583,11 @@ bool confusing_light(player_type *creature_ptr)
 }
 
 
+/*!
+ * 荒馬慣らし
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 結果はどうあれ騎乗したらTRUE
+*/
 bool rodeo(player_type *creature_ptr)
 {
 	GAME_TEXT m_name[MAX_NLEN];

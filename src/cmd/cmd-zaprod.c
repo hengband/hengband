@@ -126,7 +126,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_PESTICIDE:
 	{
-		if (dispel_monsters(powerful ? 8 : 4)) ident = TRUE;
+		if (dispel_monsters(creature_ptr, powerful ? 8 : 4)) ident = TRUE;
 		break;
 	}
 

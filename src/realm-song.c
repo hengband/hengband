@@ -75,7 +75,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				slow_monsters(plev);
+				slow_monsters(caster_ptr, plev);
 			}
 		}
 		break;
@@ -632,8 +632,8 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				dispel_monsters(randint1(m_sides));
-				dispel_evil(randint1(e_sides));
+				dispel_monsters(caster_ptr, randint1(m_sides));
+				dispel_evil(caster_ptr, randint1(e_sides));
 			}
 		}
 		break;
@@ -658,8 +658,8 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				slow_monsters(plev);
-				sleep_monsters(plev);
+				slow_monsters(caster_ptr, plev);
+				sleep_monsters(caster_ptr, plev);
 			}
 		}
 
@@ -822,7 +822,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				dispel_monsters(damroll(dice, sides));
+				dispel_monsters(caster_ptr, damroll(dice, sides));
 			}
 		}
 		break;

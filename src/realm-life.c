@@ -277,7 +277,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				dispel_undead(damroll(dice, sides));
+				dispel_undead(caster_ptr, damroll(dice, sides));
 			}
 		}
 		break;

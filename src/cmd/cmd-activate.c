@@ -925,7 +925,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_DISP_EVIL:
 	{
 		msg_print(_("神聖な雰囲気が充満した...", "It floods the area with goodness..."));
-		dispel_evil(user_ptr->lev * 5);
+		dispel_evil(user_ptr, user_ptr->lev * 5);
 		break;
 	}
 
@@ -940,7 +940,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_DISP_GOOD:
 	{
 		msg_print(_("邪悪な雰囲気が充満した...", "It floods the area with evil..."));
-		dispel_good(user_ptr->lev * 5);
+		dispel_good(user_ptr, user_ptr->lev * 5);
 		break;
 	}
 
@@ -979,7 +979,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_PESTICIDE:
 	{
 		msg_print(_("あなたは害虫を一掃した。", "You exterminate small life."));
-		(void)dispel_monsters(4);
+		(void)dispel_monsters(user_ptr, 4);
 		break;
 	}
 
@@ -1106,7 +1106,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_BANISH_EVIL:
 	{
-		if (banish_evil(100))
+		if (banish_evil(user_ptr, 100))
 		{
 			msg_print(_("アーティファクトの力が邪悪を打ち払った！", "The power of the artifact banishes evil!"));
 		}
@@ -1658,7 +1658,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
 		(void)set_afraid(user_ptr, 0);
 		(void)set_hero(user_ptr, randint1(20) + 20, FALSE);
-		dispel_evil(user_ptr->lev * 3);
+		dispel_evil(user_ptr, user_ptr->lev * 3);
 		break;
 	}
 

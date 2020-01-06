@@ -291,7 +291,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			int power = plev;
 			if (info) return info_power(power);
-			if (cast) slow_monsters(plev);
+			if (cast) slow_monsters(caster_ptr, lev);
 		}
 		break;
 
@@ -563,7 +563,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				dispel_monsters(d_dam);
+				dispel_monsters(caster_ptr, d_dam);
 				earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, q_rad, 0);
 				project(caster_ptr, 0, b_rad, caster_ptr->y, caster_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
 			}
