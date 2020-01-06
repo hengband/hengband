@@ -285,7 +285,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				destroy_door(dir);
+				destroy_door(caster_ptr, dir);
 			}
 		}
 		break;

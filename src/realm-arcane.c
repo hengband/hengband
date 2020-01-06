@@ -60,7 +60,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				wizard_lock(dir);
+				wizard_lock(caster_ptr, dir);
 			}
 		}
 		break;
@@ -140,7 +140,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				destroy_door(dir);
+				destroy_door(caster_ptr, dir);
 			}
 		}
 		break;
@@ -372,7 +372,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				wall_to_mud(dir, 20 + randint1(30));
+				wall_to_mud(caster_ptr, dir, 20 + randint1(30));
 			}
 		}
 		break;

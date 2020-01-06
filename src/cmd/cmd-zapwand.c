@@ -78,20 +78,20 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 		case SV_WAND_TELEPORT_AWAY:
 		{
 			int distance = MAX_SIGHT * (powerful ? 8 : 5);
-			if (teleport_monster(dir, distance)) ident = TRUE;
+			if (teleport_monster(creature_ptr, dir, distance)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_DISARMING:
 		{
-			if (disarm_trap(dir)) ident = TRUE;
+			if (disarm_trap(creature_ptr, dir)) ident = TRUE;
 			if (powerful && disarm_traps_touch()) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_TRAP_DOOR_DEST:
 		{
-			if (destroy_door(dir)) ident = TRUE;
+			if (destroy_door(creature_ptr, dir)) ident = TRUE;
 			if (powerful && destroy_doors_touch()) ident = TRUE;
 			break;
 		}
@@ -99,7 +99,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 		case SV_WAND_STONE_TO_MUD:
 		{
 			HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
-			if (wall_to_mud(dir, dam)) ident = TRUE;
+			if (wall_to_mud(creature_ptr, dir, dam)) ident = TRUE;
 			break;
 		}
 

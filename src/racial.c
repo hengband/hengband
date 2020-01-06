@@ -702,7 +702,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_HALF_GIANT:
 			if (!get_aim_dir(&dir)) return FALSE;
-			(void)wall_to_mud(dir, 20 + randint1(30));
+			(void)wall_to_mud(creature_ptr, dir, 20 + randint1(30));
 			break;
 
 		case RACE_HALF_TITAN:

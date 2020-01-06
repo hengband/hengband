@@ -203,7 +203,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				wall_to_mud(dir, 20 + randint1(30));
+				wall_to_mud(caster_ptr, dir, 20 + randint1(30));
 			}
 		}
 		break;

@@ -209,12 +209,12 @@ extern bool fire_beam(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT
 extern bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool lite_line(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
 extern bool hypodynamic_bolt(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
-extern bool death_ray(DIRECTION dir, PLAYER_LEVEL plev);
-extern bool wall_to_mud(DIRECTION dir, HIT_POINT dam);
-extern bool destroy_door(DIRECTION dir);
-extern bool disarm_trap(DIRECTION dir);
-extern bool wizard_lock(DIRECTION dir);
-extern bool teleport_monster(DIRECTION dir, int distance);
+extern bool death_ray(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+extern bool wall_to_mud(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
+extern bool destroy_door(player_type *caster_ptr, DIRECTION dir);
+extern bool disarm_trap(player_type *caster_ptr, DIRECTION dir);
+extern bool wizard_lock(player_type *caster_ptr, DIRECTION dir);
+extern bool teleport_monster(player_type *caster_ptr, DIRECTION dir, int distance);
 extern bool door_creation(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x);

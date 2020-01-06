@@ -1510,7 +1510,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("鼓動している...", "It pulsates..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		wall_to_mud(dir, 20 + randint1(30));
+		wall_to_mud(user_ptr, dir, 20 + randint1(30));
 		break;
 	}
 
