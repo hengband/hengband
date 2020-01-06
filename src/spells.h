@@ -207,7 +207,7 @@ extern bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DI
 extern void call_chaos(player_type *caster_ptr);
 extern bool fire_beam(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
 extern bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam);
-extern bool lite_line(DIRECTION dir, HIT_POINT dam);
+extern bool lite_line(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
 extern bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam);
 extern bool death_ray(DIRECTION dir, PLAYER_LEVEL plev);
 extern bool wall_to_mud(DIRECTION dir, HIT_POINT dam);

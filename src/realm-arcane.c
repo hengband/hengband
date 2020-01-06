@@ -392,7 +392,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 				if (!get_aim_dir(&dir)) return NULL;
 
 				msg_print(_("光線が放たれた。", "A line of light appears."));
-				lite_line(dir, damroll(6, 8));
+				lite_line(caster_ptr, dir, damroll(6, 8));
 			}
 		}
 		break;

@@ -714,7 +714,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
 		msg_print(_("太陽光線が放たれた。", "A line of sunlight appears."));
-		(void)lite_line(dir, damroll(6, 8));
+		(void)lite_line(user_ptr, dir, damroll(6, 8));
 		break;
 	}
 

@@ -2404,10 +2404,10 @@ bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, 
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_line(DIRECTION dir, HIT_POINT dam)
+bool lite_line(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
-	return (project_hook(p_ptr, GF_LITE_WEAK, dir, dam, flg));
+	return (project_hook(caster_ptr, GF_LITE_WEAK, dir, dam, flg));
 }
 
 
@@ -3647,7 +3647,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 			damroll(3 + ((plev - 1) / 5), 4));
 	else if (die < 41) confuse_monster(dir, plev);
 	else if (die < 46) fire_ball(caster_ptr, GF_POIS, dir, 20 + (plev / 2), 3);
-	else if (die < 51) (void)lite_line(dir, damroll(6, 8));
+	else if (die < 51) (void)lite_line(caster_ptr, dir, damroll(6, 8));
 	else if (die < 56)
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_ELEC, dir,
 			damroll(3 + ((plev - 5) / 4), 8));
@@ -3765,7 +3765,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 51)
 	{
-		(void)lite_line(dir, damroll(6, 8));
+		(void)lite_line(caster_ptr, dir, damroll(6, 8));
 	}
 	else if (die < 56)
 	{

@@ -148,7 +148,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 	{
 		HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
 		msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
-		(void)lite_line(dir, dam);
+		(void)lite_line(creature_ptr, dir, dam);
 		ident = TRUE;
 		break;
 	}
