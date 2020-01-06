@@ -291,7 +291,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			int power = plev;
 			if (info) return info_power(power);
-			if (cast) slow_monsters(caster_ptr, lev);
+			if (cast) slow_monsters(caster_ptr, plev);
 		}
 		break;
 

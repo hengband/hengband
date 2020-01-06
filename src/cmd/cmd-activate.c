@@ -1147,7 +1147,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		{
 			msg_format(_("%sは不快な物音を立てた。", "The %s sounds an unpleasant noise."), name);
 		}
-		aggravate_monsters(0);
+		aggravate_monsters(user_ptr, 0);
 		break;
 	}
 

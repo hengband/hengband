@@ -3441,7 +3441,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 			project(caster_ptr, 0, 7, m_ptr->fy, m_ptr->fx, 50, GF_DISINTEGRATE, curse_flg, -1);
 			if (!one_in_(6)) break;
 		case 12: case 13: case 14: case 15: case 16:
-			aggravate_monsters(0);
+			aggravate_monsters(caster_ptr, 0);
 			if (!one_in_(6)) break;
 		case 17: case 18:
 			count += activate_hi_summon(m_ptr->fy, m_ptr->fx, TRUE);

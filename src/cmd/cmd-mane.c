@@ -261,6 +261,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
 /*!
  * @brief ものまね処理の発動 /
  * do_cmd_cast calls this function if the player's class is 'imitator'.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 発動するモンスター攻撃のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
@@ -280,7 +281,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
 	case MS_SHRIEK:
 		msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
-		aggravate_monsters(0);
+		aggravate_monsters(caster_ptr, 0);
 		break;
 
 	case MS_XXX1:

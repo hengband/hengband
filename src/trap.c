@@ -587,7 +587,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	{
 		msg_print(_("けたたましい音が鳴り響いた！", "An alarm sounds!"));
 
-		aggravate_monsters(0);
+		aggravate_monsters(trapped_ptr, 0);
 
 		break;
 	}
@@ -598,7 +598,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 		(void)project(trapped_ptr, 0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
 		(void)project(trapped_ptr, 0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
 		(void)project(trapped_ptr, 0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
-		aggravate_monsters(0);
+		aggravate_monsters(trapped_ptr, 0);
 
 		break;
 	}

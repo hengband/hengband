@@ -629,7 +629,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 		{
 			msg_print(_("雄叫びをあげた！", "You roar out!"));
 			project_all_los(caster_ptr, GF_SOUND, randint1(plev * 3));
-			aggravate_monsters(0);
+			aggravate_monsters(caster_ptr, 0);
 		}
 		break;
 

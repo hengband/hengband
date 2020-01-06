@@ -94,7 +94,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_AGGRAVATE_MONSTER:
 		{
 			msg_print(_("カン高くうなる様な音が辺りを覆った。", "There is a high pitched humming noise."));
-			aggravate_monsters(0);
+			aggravate_monsters(creature_ptr, 0);
 			ident = TRUE;
 			break;
 		}

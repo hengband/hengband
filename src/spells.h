@@ -175,7 +175,7 @@ extern bool wall_stone(void);
 extern bool speed_monsters(player_type *caster_ptr);
 extern bool slow_monsters(player_type *caster_ptr, int power);
 extern bool sleep_monsters(player_type *caster_ptr, int power);
-extern void aggravate_monsters(MONSTER_IDX who);
+extern void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who);
 extern bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name);
 extern bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast);
 extern bool mass_genocide(player_type *caster_ptr, int power, bool player_cast);

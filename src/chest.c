@@ -312,7 +312,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 	if (trap & (CHEST_ALARM))
 	{
 		msg_print(_("けたたましい音が鳴り響いた！", "An alarm sounds!"));
-		aggravate_monsters(0);
+		aggravate_monsters(target_ptr, 0);
 	}
 
 	/* Explode */

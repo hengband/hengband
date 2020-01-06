@@ -852,7 +852,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 	{
 	case MS_SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
-		aggravate_monsters(0);
+		aggravate_monsters(caster_ptr, 0);
 		break;
 	case MS_XXX1:
 		break;

@@ -174,7 +174,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		aggravate_monsters(m_idx);
+		aggravate_monsters(target_ptr, m_idx);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{

@@ -1029,6 +1029,7 @@ void do_cmd_study(player_type *caster_ptr)
 /*!
  * @brief 魔法を詠唱するコマンドのメインルーチン /
  * Cast a spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_cast(player_type *caster_ptr)
@@ -1253,7 +1254,7 @@ void do_cmd_cast(player_type *caster_ptr)
 		else if ((o_ptr->tval == TV_MUSIC_BOOK) && (randint1(200) < spell))
 		{
 			msg_print(_("いやな音が響いた", "An infernal sound echoed."));
-			aggravate_monsters(0);
+			aggravate_monsters(caster_ptr, 0);
 		}
 		if (randint1(100) >= chance)
 			chg_virtue(caster_ptr, V_CHANCE, -1);

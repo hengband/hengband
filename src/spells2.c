@@ -1030,16 +1030,16 @@ bool crusade(player_type *caster_ptr)
  * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
  * @return なし
  */
-void aggravate_monsters(MONSTER_IDX who)
+void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 {
 	MONSTER_IDX i;
 	bool sleep = FALSE;
 	bool speed = FALSE;
 
 	/* Aggravate everyone nearby */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Skip aggravating monster (or player) */
@@ -1058,7 +1058,7 @@ void aggravate_monsters(MONSTER_IDX who)
 		}
 
 		/* Speed up monsters in line of sight */
-		if (player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx))
+		if (player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx))
 		{
 			if (!is_pet(m_ptr))
 			{
@@ -1070,7 +1070,7 @@ void aggravate_monsters(MONSTER_IDX who)
 
 	if (speed) msg_print(_("付近で何かが突如興奮したような感じを受けた！", "You feel a sudden stirring nearby!"));
 	else if (sleep) msg_print(_("何かが突如興奮したような騒々しい音が遠くに聞こえた！", "You hear a sudden stirring in the distance!"));
-	if (p_ptr->riding) p_ptr->update |= PU_BONUS;
+	if (caster_ptr->riding) caster_ptr->update |= PU_BONUS;
 }
 
 
@@ -2725,7 +2725,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 
 			if (!one_in_(6)) break;
 		case 1: case 2: case 3: case 16: case 17:
-			aggravate_monsters(0);
+			aggravate_monsters(target_ptr, 0);
 			if (!one_in_(6)) break;
 		case 4: case 5: case 6:
 			(*count) += activate_hi_summon(target_ptr->y, target_ptr->x, FALSE);
@@ -3409,7 +3409,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 	case 23:
 	case 24:
 	case 25:
-		aggravate_monsters(0);
+		aggravate_monsters(caster_ptr, 0);
 		break;
 	case 26:
 		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 5, 0);
@@ -3894,7 +3894,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 22)
 	{
 		msg_print(_("《不調和の剣》だ。", "It's the swords of discord."));
-		aggravate_monsters(0);
+		aggravate_monsters(caster_ptr, 0);
 	}
 	else if (die < 26)
 	{

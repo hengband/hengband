@@ -2172,7 +2172,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 		case MUT1_SHRIEK:
 			stop_mouth(creature_ptr);
 			(void)fire_ball(creature_ptr, GF_SOUND, 0, 2 * lvl, 8);
-			(void)aggravate_monsters(0);
+			(void)aggravate_monsters(creature_ptr, 0);
 			break;
 
 		case MUT1_ILLUMINE:
