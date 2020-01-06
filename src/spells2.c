@@ -2151,12 +2151,12 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
+bool fire_meteor(player_type *caster_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 
 	/* Analyze the "target" and the caster. */
-	return (project(p_ptr, who, rad, y, x, dam, typ, flg, -1));
+	return (project(caster_ptr, who, rad, y, x, dam, typ, flg, -1));
 }
 
 

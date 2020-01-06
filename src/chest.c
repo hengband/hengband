@@ -216,7 +216,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 		msg_print(_("鳥の群れがあなたを取り巻いた！", "A storm of birds swirls around you!"));
 
 		for (i = 0; i < randint1(3) + 3; i++)
-			(void)fire_meteor(-1, GF_FORCE, y, x, o_ptr->pval / 5, 7);
+			(void)fire_meteor(target_ptr, -1, GF_FORCE, y, x, o_ptr->pval / 5, 7);
 
 		for (i = 0; i < randint1(5) + o_ptr->pval / 5; i++)
 		{
@@ -233,7 +233,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 			msg_print(_("炎と硫黄の雲の中に悪魔が姿を現した！", "Demons materialize in clouds of fire and brimstone!"));
 			for (i = 0; i < randint1(3) + 2; i++)
 			{
-				(void)fire_meteor(-1, GF_FIRE, y, x, 10, 5);
+				(void)fire_meteor(target_ptr, -1, GF_FIRE, y, x, 10, 5);
 				(void)summon_specific(0, y, x, mon_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			}
 		}
@@ -303,7 +303,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 					(void)do_dec_stat(target_ptr, A_WIS);
 					(void)do_dec_stat(target_ptr, A_CHR);
 				}
-				else (void)fire_meteor(-1, GF_NETHER, y, x, 150, 1);
+				else (void)fire_meteor(target_ptr, -1, GF_NETHER, y, x, 150, 1);
 			}
 		}
 	}
