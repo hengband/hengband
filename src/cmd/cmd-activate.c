@@ -858,7 +858,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
 		if (!get_aim_dir(&dir)) return FALSE;
-		if (hypodynamic_bolt(dir, 100))
+		if (hypodynamic_bolt(user_ptr, dir, 100))
 			break;
 	}
 
@@ -866,7 +866,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("黒く輝いている...", "It glows black..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		hypodynamic_bolt(dir, 120);
+		hypodynamic_bolt(user_ptr, dir, 120);
 		break;
 	}
 
@@ -875,7 +875,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		if (!get_aim_dir(&dir)) return FALSE;
 		for (dummy = 0; dummy < 3; dummy++)
 		{
-			if (hypodynamic_bolt(dir, 50))
+			if (hypodynamic_bolt(user_ptr, dir, 50))
 				hp_player(user_ptr, 50);
 		}
 		break;
@@ -900,7 +900,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		if (!get_aim_dir(&dir)) return FALSE;
 		for (dummy = 0; dummy < 3; dummy++)
 		{
-			if (hypodynamic_bolt(dir, 100))
+			if (hypodynamic_bolt(user_ptr, dir, 100))
 				hp_player(user_ptr, 100);
 		}
 		break;

@@ -309,7 +309,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (!get_aim_dir(&dir)) return NULL;
 
-				if (hypodynamic_bolt(dir, dam))
+				if (hypodynamic_bolt(caster_ptr, dir, dam))
 				{
 					chg_virtue(caster_ptr, V_SACRIFICE, -1);
 					chg_virtue(caster_ptr, V_VITALITY, -1);
@@ -469,7 +469,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				for (i = 0; i < 3; i++)
 				{
-					if (hypodynamic_bolt(dir, dam))
+					if (hypodynamic_bolt(caster_ptr, dir, dam))
 						hp_player(caster_ptr, dam);
 				}
 			}

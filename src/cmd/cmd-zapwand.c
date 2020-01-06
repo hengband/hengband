@@ -138,7 +138,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_HYPODYNAMIA:
 		{
-			if (hypodynamic_bolt(dir, 80 + lev)) ident = TRUE;
+			if (hypodynamic_bolt(creature_ptr, dir, 80 + lev)) ident = TRUE;
 			break;
 		}
 

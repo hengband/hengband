@@ -2418,10 +2418,10 @@ bool lite_line(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool hypodynamic_bolt(DIRECTION dir, HIT_POINT dam)
+bool hypodynamic_bolt(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-	return (project_hook(p_ptr, GF_HYPODYNAMIA, dir, dam, flg));
+	return (project_hook(caster_ptr, GF_HYPODYNAMIA, dir, dam, flg));
 }
 
 
@@ -3660,12 +3660,12 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 	else if (die < 71)
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_FIRE, dir,
 			damroll(8 + ((plev - 5) / 4), 8));
-	else if (die < 76) hypodynamic_bolt(dir, 75);
+	else if (die < 76) hypodynamic_bolt(caster_ptr, dir, 75);
 	else if (die < 81) fire_ball(caster_ptr, GF_ELEC, dir, 30 + plev / 2, 2);
 	else if (die < 86) fire_ball(caster_ptr, GF_ACID, dir, 40 + plev, 2);
 	else if (die < 91) fire_ball(caster_ptr, GF_ICE, dir, 70 + plev, 3);
 	else if (die < 96) fire_ball(caster_ptr, GF_FIRE, dir, 80 + plev, 3);
-	else if (die < 101) hypodynamic_bolt(dir, 100 + plev);
+	else if (die < 101) hypodynamic_bolt(caster_ptr, dir, 100 + plev);
 	else if (die < 104)
 	{
 		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 12, 0);
@@ -3789,7 +3789,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 76)
 	{
-		hypodynamic_bolt(dir, 75);
+		hypodynamic_bolt(caster_ptr, dir, 75);
 	}
 	else if (die < 81)
 	{
@@ -3809,7 +3809,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 101)
 	{
-		hypodynamic_bolt(dir, 100 + plev);
+		hypodynamic_bolt(caster_ptr, dir, 100 + plev);
 	}
 	else if (die < 104)
 	{
@@ -4061,7 +4061,7 @@ bool_hack vampirism(player_type *caster_ptr)
 
 	dummy = caster_ptr->lev * 2;
 
-	if (hypodynamic_bolt(dir, dummy))
+	if (hypodynamic_bolt(caster_ptr, dir, dummy))
 	{
 		if (caster_ptr->food < PY_FOOD_FULL)
 			/* No heal if we are "full" */
