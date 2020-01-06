@@ -1224,7 +1224,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 	KIND_OBJECT_IDX k_idx;
 
 	/* Compact the objects */
-	compact_objects(p_ptr->current_floor_ptr, 0);
+	compact_objects(player_ptr->current_floor_ptr, 0);
 	/* Compact the monsters */
 	compact_monsters(0);
 
@@ -1370,11 +1370,11 @@ static bool wr_savefile_new(player_type *player_ptr)
 	}
 
 	/* Dump the position in the wilderness */
-	wr_s32b(p_ptr->wilderness_x);
-	wr_s32b(p_ptr->wilderness_y);
+	wr_s32b(player_ptr->wilderness_x);
+	wr_s32b(player_ptr->wilderness_y);
 
-	wr_byte(p_ptr->wild_mode);
-	wr_byte(p_ptr->ambush_flag);
+	wr_byte(player_ptr->wild_mode);
+	wr_byte(player_ptr->ambush_flag);
 
 	wr_s32b(current_world_ptr->max_wild_x);
 	wr_s32b(current_world_ptr->max_wild_y);
@@ -1401,37 +1401,37 @@ static bool wr_savefile_new(player_type *player_ptr)
 
 
 	/* Write the "extra" information */
-	wr_extra(p_ptr);
+	wr_extra(player_ptr);
 
 	/* Dump the "player hp" entries */
 	tmp16u = PY_MAX_LEVEL;
 	wr_u16b(tmp16u);
 	for (i = 0; i < tmp16u; i++)
 	{
-		wr_s16b((s16b)p_ptr->player_hp[i]);
+		wr_s16b((s16b)player_ptr->player_hp[i]);
 	}
 
 
 	/* Write spell data */
-	wr_u32b(p_ptr->spell_learned1);
-	wr_u32b(p_ptr->spell_learned2);
-	wr_u32b(p_ptr->spell_worked1);
-	wr_u32b(p_ptr->spell_worked2);
-	wr_u32b(p_ptr->spell_forgotten1);
-	wr_u32b(p_ptr->spell_forgotten2);
+	wr_u32b(player_ptr->spell_learned1);
+	wr_u32b(player_ptr->spell_learned2);
+	wr_u32b(player_ptr->spell_worked1);
+	wr_u32b(player_ptr->spell_worked2);
+	wr_u32b(player_ptr->spell_forgotten1);
+	wr_u32b(player_ptr->spell_forgotten2);
 
-	wr_s16b(p_ptr->learned_spells);
-	wr_s16b(p_ptr->add_spells);
+	wr_s16b(player_ptr->learned_spells);
+	wr_s16b(player_ptr->add_spells);
 
 	/* Dump the ordered spells */
 	for (i = 0; i < 64; i++)
 	{
-		wr_byte((byte_hack)p_ptr->spell_order[i]);
+		wr_byte((byte_hack)player_ptr->spell_order[i]);
 	}
 
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &player_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Dump index */
@@ -1462,11 +1462,11 @@ static bool wr_savefile_new(player_type *player_ptr)
 	}
 
 	/* Write the pet command settings */
-	wr_s16b(p_ptr->pet_follow_distance);
-	wr_s16b(p_ptr->pet_extra_flags);
+	wr_s16b(player_ptr->pet_follow_distance);
+	wr_s16b(player_ptr->pet_extra_flags);
 
 	/* Write screen dump for sending score */
-	if (screen_dump && (p_ptr->wait_report_score || !p_ptr->is_dead))
+	if (screen_dump && (player_ptr->wait_report_score || !player_ptr->is_dead))
 	{
 		wr_string(screen_dump);
 	}
@@ -1476,7 +1476,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 	}
 
 	/* Player is not dead, write the dungeon */
-	if (!p_ptr->is_dead)
+	if (!player_ptr->is_dead)
 	{
 		/* Dump the dungeon */
 		if (!wr_dungeon(player_ptr)) return FALSE;
