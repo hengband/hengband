@@ -574,7 +574,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
  * @param browse_only 魔法と技能の閲覧を行うならばTRUE
  * @return 魔道書を一冊も持っていないならTRUEを返す
  */
-static void confirm_use_force(bool browse_only)
+static void confirm_use_force(player_type *caster_ptr, bool browse_only)
 {
 	char which;
 	COMMAND_CODE code;
@@ -582,7 +582,7 @@ static void confirm_use_force(bool browse_only)
 	/* Get the item index */
 	if (repeat_pull(&code) && (code == INVEN_FORCE))
 	{
-		browse_only ? do_cmd_mind_browse(p_ptr) : do_cmd_mind(p_ptr);
+		browse_only ? do_cmd_mind_browse(caster_ptr) : do_cmd_mind(caster_ptr);
 		return;
 	}
 
@@ -607,7 +607,7 @@ static void confirm_use_force(bool browse_only)
 
 	if (which == 'w')
 	{
-		browse_only ? do_cmd_mind_browse(p_ptr) : do_cmd_mind(p_ptr);
+		browse_only ? do_cmd_mind_browse(caster_ptr) : do_cmd_mind(caster_ptr);
 	}
 }
 
@@ -656,7 +656,7 @@ void do_cmd_browse(player_type *caster_ptr)
 	{
 		if (player_has_no_spellbooks(caster_ptr))
 		{
-			confirm_use_force(TRUE);
+			confirm_use_force(caster_ptr, TRUE);
 			return;
 		}
 	}
@@ -1059,7 +1059,7 @@ void do_cmd_cast(player_type *caster_ptr)
 
 	if (caster_ptr->blind || no_lite(caster_ptr))
 	{
-		if (caster_ptr->pclass == CLASS_FORCETRAINER) confirm_use_force(FALSE);
+		if (caster_ptr->pclass == CLASS_FORCETRAINER) confirm_use_force(caster_ptr, FALSE);
 		else
 		{
 			msg_print(_("目が見えない！", "You cannot see!"));
@@ -1085,7 +1085,7 @@ void do_cmd_cast(player_type *caster_ptr)
 	{
 		if (player_has_no_spellbooks(caster_ptr))
 		{
-			confirm_use_force(FALSE);
+			confirm_use_force(caster_ptr, FALSE);
 			return;
 		}
 	}
