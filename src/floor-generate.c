@@ -1657,7 +1657,7 @@ bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION 
 					if (is_outer_bold(floor_ptr, y, x))
 					{
 						/* Change the wall to a "solid" wall */
-						place_solid_noperm_bold(y, x);
+						place_solid_noperm_bold(floor_ptr, y, x);
 					}
 				}
 			}
@@ -1806,7 +1806,7 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 				if (is_outer_bold(floor_ptr, j, i))
 				{
 					/* Change the wall to a "solid" wall */
-					place_solid_noperm_bold(j, i);
+					place_solid_noperm_bold(floor_ptr, j, i);
 				}
 			}
 		}
