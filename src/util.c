@@ -1842,11 +1842,11 @@ void select_floor_music(player_type *player_ptr)
 		{
 			if (!play_music(TERM_XTRA_MUSIC_DUNGEON, player_ptr->dungeon_idx)) return;
 
-			if (p_ptr->current_floor_ptr->dun_level < 40)
+			if (player_ptr->current_floor_ptr->dun_level < 40)
 			{
 				if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_LOW)) return;
 			}
-			else if (p_ptr->current_floor_ptr->dun_level < 80)
+			else if (player_ptr->current_floor_ptr->dun_level < 80)
 			{
 				if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DUN_MED)) return;
 			}
@@ -1864,7 +1864,7 @@ void select_floor_music(player_type *player_ptr)
 		return;
 	}
 
-	if(!p_ptr->current_floor_ptr->dun_level)
+	if(!player_ptr->current_floor_ptr->dun_level)
 	{
 		if (player_ptr->lev >= 45)
 		{
