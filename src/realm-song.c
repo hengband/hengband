@@ -35,6 +35,7 @@ static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 s
 
 /*!
 * @brief 歌の各処理を行う
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param spell 歌ID
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
@@ -295,22 +296,22 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					/* There are too many hidden treasure.  So... */
 					/* detect_treasure(rad); */
 					detect_objects_gold(caster_ptr, rad);
-					detect_objects_normal(rad);
+					detect_objects_normal(caster_ptr, rad);
 
 					if (plev > 24 && count < 11)
 						SINGING_COUNT(caster_ptr) = count + 1;
 				}
 				if (count >= 3)
 				{
-					detect_monsters_invis(rad);
-					detect_monsters_normal(rad);
+					detect_monsters_invis(caster_ptr, rad);
+					detect_monsters_normal(caster_ptr, rad);
 
 					if (plev > 19 && count < A_MAX)
 						SINGING_COUNT(caster_ptr) = count + 1;
 				}
 				detect_traps(caster_ptr, rad, TRUE);
-				detect_doors(rad);
-				detect_stairs(rad);
+				detect_doors(caster_ptr, rad);
+				detect_stairs(caster_ptr, rad);
 
 				if (plev > 14 && count < 3)
 					SINGING_COUNT(caster_ptr) = count + 1;

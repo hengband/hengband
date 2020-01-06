@@ -1046,16 +1046,16 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 
 		if (plev < 30)
 		{
-			b = detect_monsters_normal(DETECT_RAD_DEFAULT);
-			if (plev > 14) b |= detect_monsters_invis(DETECT_RAD_DEFAULT);
+			b = detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
+			if (plev > 14) b |= detect_monsters_invis(caster_ptr, DETECT_RAD_DEFAULT);
 			if (plev > 4)  {
 				b |= detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
-				b |= detect_doors(DETECT_RAD_DEFAULT);
+				b |= detect_doors(caster_ptr, DETECT_RAD_DEFAULT);
 			}
 		}
 		else
 		{
-			b = detect_all(DETECT_RAD_DEFAULT);
+			b = detect_all(caster_ptr, DETECT_RAD_DEFAULT);
 		}
 
 		if ((plev > 24) && (plev < 40))
@@ -1325,8 +1325,8 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* mirror of seeing */
 	case 0:
 		tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 0;
-		if (plev + tmp > 4)detect_monsters_normal(DETECT_RAD_DEFAULT);
-		if (plev + tmp > 18)detect_monsters_invis(DETECT_RAD_DEFAULT);
+		if (plev + tmp > 4)detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
+		if (plev + tmp > 18)detect_monsters_invis(caster_ptr, DETECT_RAD_DEFAULT);
 		if (plev + tmp > 28)set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		if (plev + tmp > 38)map_area(caster_ptr, DETECT_RAD_MAP);
 		if (tmp == 0 && plev < 5) {
@@ -1471,7 +1471,7 @@ static bool cast_berserk_spell(player_type *caster_ptr, int spell)
 	switch (spell)
 	{
 	case 0:
-		detect_monsters_mind(DETECT_RAD_DEFAULT);
+		detect_monsters_mind(caster_ptr, DETECT_RAD_DEFAULT);
 		break;
 	case 1:
 	{
@@ -1532,6 +1532,7 @@ static bool cast_berserk_spell(player_type *caster_ptr, int spell)
 /*!
  * @brief 忍術の発動 /
  * do_cmd_cast calls this function if the player's class is 'ninja'.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
@@ -1552,16 +1553,16 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		{
 			wiz_lite(caster_ptr, TRUE);
 		}
-		detect_monsters_normal(DETECT_RAD_DEFAULT);
+		detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
 		if (plev > 4)
 		{
 			detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
-			detect_doors(DETECT_RAD_DEFAULT);
-			detect_stairs(DETECT_RAD_DEFAULT);
+			detect_doors(caster_ptr, DETECT_RAD_DEFAULT);
+			detect_stairs(caster_ptr, DETECT_RAD_DEFAULT);
 		}
 		if (plev > 14)
 		{
-			detect_objects_normal(DETECT_RAD_DEFAULT);
+			detect_objects_normal(caster_ptr, DETECT_RAD_DEFAULT);
 		}
 		break;
 	case 2:

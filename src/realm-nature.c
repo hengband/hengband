@@ -16,6 +16,7 @@
 
 /*!
 * @brief 自然領域魔法の各処理を行う
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param spell 魔法ID
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
@@ -43,7 +44,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				detect_monsters_normal(rad);
+				detect_monsters_normal(caster_ptr, rad);
 			}
 		}
 		break;
@@ -82,8 +83,8 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			if (cast)
 			{
 				detect_traps(caster_ptr, rad, TRUE);
-				detect_doors(rad);
-				detect_stairs(rad);
+				detect_doors(caster_ptr, rad);
+				detect_stairs(caster_ptr, rad);
 			}
 		}
 		break;
@@ -240,9 +241,9 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				map_area(caster_ptr, rad1);
 				detect_traps(caster_ptr, rad2, TRUE);
-				detect_doors(rad2);
-				detect_stairs(rad2);
-				detect_monsters_normal(rad2);
+				detect_doors(caster_ptr, rad2);
+				detect_stairs(caster_ptr, rad2);
+				detect_monsters_normal(caster_ptr, rad2);
 			}
 		}
 		break;

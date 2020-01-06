@@ -17,6 +17,7 @@
 
 /*!
 * @brief 破邪領域魔法の各処理を行う
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param spell 魔法ID
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
@@ -56,7 +57,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return info_radius(rad);
 			if (cast)
 			{
-				detect_monsters_evil(rad);
+				detect_monsters_evil(caster_ptr, rad);
 			}
 		}
 		break;

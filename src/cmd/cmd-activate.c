@@ -1453,14 +1453,14 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("白く明るく輝いている...", "It glows bright white..."));
 		msg_print(_("心にイメージが浮かんできた...", "An image forms in your mind..."));
-		detect_all(DETECT_RAD_DEFAULT);
+		detect_all(user_ptr, DETECT_RAD_DEFAULT);
 		break;
 	}
 
 	case ACT_DETECT_XTRA:
 	{
 		msg_print(_("明るく輝いている...", "It glows brightly..."));
-		detect_all(DETECT_RAD_DEFAULT);
+		detect_all(user_ptr, DETECT_RAD_DEFAULT);
 		probing(user_ptr);
 		identify_fully(FALSE);
 		break;
@@ -1560,8 +1560,8 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
 
 		(void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, TRUE);
-		(void)detect_doors(DETECT_RAD_DEFAULT);
-		(void)detect_stairs(DETECT_RAD_DEFAULT);
+		(void)detect_doors(user_ptr, DETECT_RAD_DEFAULT);
+		(void)detect_stairs(user_ptr, DETECT_RAD_DEFAULT);
 
 		if (get_check(_("帰還の力を使いますか？", "Activate recall? ")))
 		{
@@ -1670,8 +1670,8 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_DETECT_ALL_MONS:
 	{
-		(void)detect_monsters_invis(255);
-		(void)detect_monsters_normal(255);
+		(void)detect_monsters_invis(user_ptr, 255);
+		(void)detect_monsters_normal(user_ptr, 255);
 		break;
 	}
 

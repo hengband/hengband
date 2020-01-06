@@ -21,6 +21,7 @@
 
 /*!
 * @brief 杖の効果を発動する
+* @param creature_ptr プレーヤーへの参照ポインタ
 * @param sval オブジェクトのsval
 * @param use_charge 使用回数を消費したかどうかを返す参照ポインタ
 * @param powerful 強力発動上の処理ならばTRUE
@@ -121,14 +122,14 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_DETECT_GOLD:
 		{
-			if (detect_treasure(detect_rad)) ident = TRUE;
+			if (detect_treasure(creature_ptr, detect_rad)) ident = TRUE;
 			if (detect_objects_gold(creature_ptr, detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_ITEM:
 		{
-			if (detect_objects_normal(detect_rad)) ident = TRUE;
+			if (detect_objects_normal(creature_ptr, detect_rad)) ident = TRUE;
 			break;
 		}
 
@@ -140,20 +141,20 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_DETECT_DOOR:
 		{
-			if (detect_doors(detect_rad)) ident = TRUE;
-			if (detect_stairs(detect_rad)) ident = TRUE;
+			if (detect_doors(creature_ptr, detect_rad)) ident = TRUE;
+			if (detect_stairs(creature_ptr, detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_INVIS:
 		{
-			if (detect_monsters_invis(detect_rad)) ident = TRUE;
+			if (detect_monsters_invis(creature_ptr, detect_rad)) ident = TRUE;
 			break;
 		}
 
 		case SV_STAFF_DETECT_EVIL:
 		{
-			if (detect_monsters_evil(detect_rad)) ident = TRUE;
+			if (detect_monsters_evil(creature_ptr, detect_rad)) ident = TRUE;
 			break;
 		}
 

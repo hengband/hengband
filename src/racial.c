@@ -380,6 +380,7 @@ static int racial_aux(player_type *creature_ptr, power_desc_type *pd_ptr)
 
 /*!
  * @brief レイシャル・パワー発動処理
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param command 発動するレイシャルのID
  * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
  */
@@ -650,8 +651,8 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case RACE_DWARF:
 			msg_print(_("周囲を調べた。", "You examine your surroundings."));
 			(void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
-			(void)detect_doors(DETECT_RAD_DEFAULT);
-			(void)detect_stairs(DETECT_RAD_DEFAULT);
+			(void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
+			(void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
 			break;
 
 		case RACE_HOBBIT:
@@ -739,8 +740,8 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case RACE_NIBELUNG:
 			msg_print(_("周囲を調査した。", "You examine your surroundings."));
 			(void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
-			(void)detect_doors(DETECT_RAD_DEFAULT);
-			(void)detect_stairs(DETECT_RAD_DEFAULT);
+			(void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
+			(void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
 			break;
 
 		case RACE_DARK_ELF:

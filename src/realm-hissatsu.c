@@ -24,6 +24,7 @@
 
 /*!
 * @brief 剣術の各処理を行う
+* @param caster_ptr プレーヤーへの参照ポインタ
 * @param spell 剣術ID
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_CAST)
 * @return SPELL_NAME / SPELL_DESC 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
@@ -135,7 +136,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 		if (cast)
 		{
-			detect_monsters_mind(DETECT_RAD_DEFAULT);
+			detect_monsters_mind(caster_ptr, DETECT_RAD_DEFAULT);
 		}
 		break;
 

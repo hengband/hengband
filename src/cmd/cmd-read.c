@@ -37,6 +37,7 @@
 /*!
  * @brief 巻物を読むコマンドのサブルーチン
  * Read a scroll (from the pack or floor).
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param item 読むオブジェクトの所持品ID
  * @param known 判明済ならばTRUE
  * @return なし
@@ -289,14 +290,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_DETECT_GOLD:
 		{
-			if (detect_treasure(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_treasure(creature_ptr, DETECT_RAD_DEFAULT)) ident = TRUE;
 			if (detect_objects_gold(creature_ptr, DETECT_RAD_DEFAULT)) ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_DETECT_ITEM:
 		{
-			if (detect_objects_normal(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_objects_normal(creature_ptr, DETECT_RAD_DEFAULT)) ident = TRUE;
 			break;
 		}
 
@@ -308,14 +309,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_DETECT_DOOR:
 		{
-			if (detect_doors(DETECT_RAD_DEFAULT)) ident = TRUE;
-			if (detect_stairs(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_doors(creature_ptr, DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_stairs(creature_ptr, DETECT_RAD_DEFAULT)) ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_DETECT_INVIS:
 		{
-			if (detect_monsters_invis(DETECT_RAD_DEFAULT)) ident = TRUE;
+			if (detect_monsters_invis(creature_ptr, DETECT_RAD_DEFAULT)) ident = TRUE;
 			break;
 		}
 

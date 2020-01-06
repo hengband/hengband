@@ -2083,6 +2083,7 @@ int calc_mutant_regenerate_mod(player_type *creature_ptr)
 
 /*!
  * @brief 突然変異のレイシャル効果実装
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param power 発動させる突然変異レイシャルのID
  * @return レイシャルを実行した場合TRUE、キャンセルした場合FALSEを返す
  */
@@ -2141,12 +2142,12 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 		case MUT1_SMELL_MET:
 			stop_mouth(creature_ptr);
-			(void)detect_treasure(DETECT_RAD_DEFAULT);
+			(void)detect_treasure(creature_ptr, DETECT_RAD_DEFAULT);
 			break;
 
 		case MUT1_SMELL_MON:
 			stop_mouth(creature_ptr);
-			(void)detect_monsters_normal(DETECT_RAD_DEFAULT);
+			(void)detect_monsters_normal(creature_ptr, DETECT_RAD_DEFAULT);
 			break;
 
 		case MUT1_BLINK:

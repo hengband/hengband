@@ -34,6 +34,7 @@
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /
  * Quaff a potion (from the pack or the floor)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param item 飲む薬オブジェクトの所持品ID
  * @return なし
  */
@@ -394,11 +395,11 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			(void)do_inc_stat(creature_ptr, A_INT);
 			(void)do_inc_stat(creature_ptr, A_WIS);
 			(void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
-			(void)detect_doors(DETECT_RAD_DEFAULT);
-			(void)detect_stairs(DETECT_RAD_DEFAULT);
-			(void)detect_treasure(DETECT_RAD_DEFAULT);
+			(void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
+			(void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
+			(void)detect_treasure(creature_ptr, DETECT_RAD_DEFAULT);
 			(void)detect_objects_gold(creature_ptr, DETECT_RAD_DEFAULT);
-			(void)detect_objects_normal(DETECT_RAD_DEFAULT);
+			(void)detect_objects_normal(creature_ptr, DETECT_RAD_DEFAULT);
 			identify_pack(creature_ptr);
 			self_knowledge(creature_ptr);
 			ident = TRUE;

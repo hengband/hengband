@@ -1706,6 +1706,7 @@ static void do_cmd_dump_options(void)
  * @brief デバッグコマンドを選択する処理のメインルーチン /
  * Ask for and parse a "debug command"
  * The "command_arg" may have been set.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_debug(player_type *creature_ptr)
@@ -1764,7 +1765,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* Detect everything */
 	case 'd':
-		detect_all(DETECT_RAD_ALL * 3);
+		detect_all(creature_ptr, DETECT_RAD_ALL * 3);
 		break;
 
 		/* Dimension_door */

@@ -18,6 +18,7 @@
 
 /*!
  * @brief ロッドの効果を発動する
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param sval オブジェクトのsval
  * @param dir 発動目標の方向ID
  * @param use_charge チャージを消費したかどうかを返す参照ポインタ
@@ -46,8 +47,8 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_DETECT_DOOR:
 	{
-		if (detect_doors(detect_rad)) ident = TRUE;
-		if (detect_stairs(detect_rad)) ident = TRUE;
+		if (detect_doors(creature_ptr, detect_rad)) ident = TRUE;
+		if (detect_stairs(creature_ptr, detect_rad)) ident = TRUE;
 		break;
 	}
 
@@ -85,7 +86,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_DETECTION:
 	{
-		detect_all(detect_rad);
+		detect_all(creature_ptr, detect_rad);
 		ident = TRUE;
 		break;
 	}
