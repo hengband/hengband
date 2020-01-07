@@ -195,7 +195,7 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	/* Total Immunity */
 	if (creature_ptr->immune_acid || (dam <= 0))
 	{
-		learn_spell(monspell);
+		learn_spell(creature_ptr, monspell);
 		return 0;
 	}
 
@@ -245,7 +245,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	/* Total immunity */
 	if (creature_ptr->immune_elec || (dam <= 0))
 	{
-		learn_spell(monspell);
+		learn_spell(creature_ptr, monspell);
 		return 0;
 	}
 
@@ -294,7 +294,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	/* Totally immune */
 	if (creature_ptr->immune_fire || (dam <= 0))
 	{
-		learn_spell(monspell);
+		learn_spell(creature_ptr, monspell);
 		return 0;
 	}
 
@@ -343,7 +343,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	/* Total immunity */
 	if (creature_ptr->immune_cold || (dam <= 0))
 	{
-		learn_spell(monspell);
+		learn_spell(creature_ptr, monspell);
 		return 0;
 	}
 
@@ -406,7 +406,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 		}
 	}
 
-	if (monspell >= 0) learn_spell(monspell);
+	if (monspell >= 0) learn_spell(creature_ptr, monspell);
 
 	/* Mega-Hack -- Apply "invulnerability" */
 	if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE))

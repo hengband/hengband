@@ -4287,7 +4287,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		{
 			msg_print(_("気分がよくなった。", "You feel invigorated!"));
 			hp_player(target_ptr, dam / 4);
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{
@@ -4833,7 +4833,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 				target_ptr->csp -= dam;
 			}
 
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 			target_ptr->redraw |= (PR_MANA);
 			target_ptr->window |= (PW_PLAYER | PW_SPELL);
 
@@ -4869,7 +4869,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if ((randint0(100 + rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{
@@ -4907,7 +4907,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if ((randint0(100 + rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{
@@ -4961,7 +4961,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{
@@ -4977,7 +4977,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{
@@ -4993,7 +4993,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{
@@ -5009,7 +5009,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{
@@ -5025,7 +5025,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(monspell);
+			learn_spell(target_ptr, monspell);
 		}
 		else
 		{

@@ -322,7 +322,7 @@ extern bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx);
 
 /* mspells3.c */
 extern bool do_cmd_cast_learned(player_type *caster_ptr);
-extern void learn_spell(int monspell);
+extern void learn_spell(player_type *learner_ptr, int monspell);
 extern void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode);
 
 /* mspells4.c */

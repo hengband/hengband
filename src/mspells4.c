@@ -213,7 +213,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 			else msg_print(_("弱い者いじめは止めるんだ！", ""));
 		}
 
-		learn_spell(MS_DISPEL);
+		learn_spell(target_ptr, MS_DISPEL);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
@@ -1460,7 +1460,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 		{
 			(void)set_afraid(target_ptr, target_ptr->afraid + randint0(4) + 4);
 		}
-		learn_spell(MS_SCARE);
+		learn_spell(target_ptr, MS_SCARE);
 		update_smart_learn(m_idx, DRS_FEAR);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -1510,7 +1510,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 		{
 			(void)set_blind(target_ptr, 12 + randint0(4));
 		}
-		learn_spell(MS_BLIND);
+		learn_spell(target_ptr, MS_BLIND);
 		update_smart_learn(m_idx, DRS_BLIND);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -1573,7 +1573,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		{
 			(void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
 		}
-		learn_spell(MS_CONF);
+		learn_spell(target_ptr, MS_CONF);
 		update_smart_learn(m_idx, DRS_CONF);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -1623,7 +1623,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		{
 			(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 		}
-		learn_spell(MS_SLOW);
+		learn_spell(target_ptr, MS_SLOW);
 		update_smart_learn(m_idx, DRS_FREE);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -1686,7 +1686,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		{
 			(void)set_paralyzed(target_ptr, target_ptr->paralyzed + randint0(4) + 4);
 		}
-		learn_spell(MS_SLEEP);
+		learn_spell(target_ptr, MS_SLEEP);
 		update_smart_learn(m_idx, DRS_FREE);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -2189,7 +2189,7 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
 		teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
-		learn_spell(MS_TELE_TO);
+		learn_spell(p_ptr, MS_TELE_TO);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
@@ -2258,7 +2258,7 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 			else msg_print(_("弱い者いじめは止めるんだ！", ""));
 		}
 
-		learn_spell(MS_TELE_AWAY);
+		learn_spell(p_ptr, MS_TELE_AWAY);
 		teleport_player_away(m_idx, p_ptr, 100);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -2330,7 +2330,7 @@ void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 		{
 			teleport_level(p_ptr, 0);
 		}
-		learn_spell(MS_TELE_LEVEL);
+		learn_spell(p_ptr, MS_TELE_LEVEL);
 		update_smart_learn(m_idx, DRS_NEXUS);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -2441,7 +2441,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 		}
 		else
 		{
-			learn_spell(MS_DARKNESS);
+			learn_spell(target_ptr, MS_DARKNESS);
 			(void)unlite_area(target_ptr, 0, 3);
 		}
 
@@ -2481,7 +2481,7 @@ void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
 		msg_format(_("%^sが呪文を唱えて邪悪に微笑んだ。",
 		"%^s casts a spell and cackles evilly."), m_name);
 
-	learn_spell(MS_MAKE_TRAP);
+	learn_spell(p_ptr, MS_MAKE_TRAP);
 	(void)trap_creation(p_ptr, y, x);
 }
 
@@ -2508,7 +2508,7 @@ void spell_RF6_FORGET(MONSTER_IDX m_idx)
 	{
 		msg_print(_("記憶が薄れてしまった。", "Your memories fade away."));
 	}
-	learn_spell(MS_FORGET);
+	learn_spell(p_ptr, MS_FORGET);
 }
 
 

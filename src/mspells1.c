@@ -1777,7 +1777,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	if ((target_ptr->action == ACTION_LEARN) && thrown_spell > 175)
 	{
-		learn_spell(thrown_spell - 96);
+		learn_spell(target_ptr, thrown_spell - 96);
 	}
 
 	if (seen && maneable && !current_world_ptr->timewalk_m_idx && (target_ptr->pclass == CLASS_IMITATOR))
