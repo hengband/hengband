@@ -15,7 +15,6 @@ extern DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x
 
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
-extern void scatter(POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
 extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
 extern bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x);

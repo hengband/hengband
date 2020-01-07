@@ -604,7 +604,7 @@ void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
 			int d = 1;
 
 			/* Pick a nearby location */
-			scatter(&y, &x, y1, x1, d, 0);
+			scatter(floor_ptr, &y, &x, y1, x1, d, 0);
 
 			/* Require "empty" floor grids */
 			g_ptr = &floor_ptr->grid_array[y][x];
@@ -1943,4 +1943,49 @@ void vault_traps(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POS
 	{
 		vault_trap_aux(floor_ptr, y, x, yd, xd);
 	}
+}
+
+
+/*
+ * Standard "find me a location" function
+ *
+ * Obtains a legal location within the given distance of the initial
+ * location, and with "los()" from the source to destination location.
+ *
+ * This function is often called from inside a loop which searches for
+ * locations while increasing the "d" distance.
+ *
+ * Currently the "m" parameter is unused.
+ */
+void scatter(floor_type *floor_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+{
+	POSITION nx, ny;
+
+	/* Pick a location */
+	while (TRUE)
+	{
+		/* Pick a new location */
+		ny = rand_spread(y, d);
+		nx = rand_spread(x, d);
+
+		/* Ignore annoying locations */
+		if (!in_bounds(floor_ptr, ny, nx)) continue;
+
+		/* Ignore "excessively distant" locations */
+		if ((d > 1) && (distance(y, x, ny, nx) > d)) continue;
+
+		if (mode & PROJECT_LOS)
+		{
+			if (los(floor_ptr, y, x, ny, nx)) break;
+		}
+		else
+		{
+			if (projectable(floor_ptr, y, x, ny, nx)) break;
+		}
+
+	}
+
+	/* Save the location */
+	(*yp) = ny;
+	(*xp) = nx;
 }

@@ -287,7 +287,7 @@ void check_quest_completion(monster_type *m_ptr)
 		while (cave_perma_bold(p_ptr->current_floor_ptr, y, x) || p_ptr->current_floor_ptr->grid_array[y][x].o_idx || (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_OBJECT))
 		{
 			/* Pick a location */
-			scatter(&ny, &nx, y, x, 1, 0);
+			scatter(p_ptr->current_floor_ptr, &ny, &nx, y, x, 1, 0);
 
 			/* Stagger */
 			y = ny; x = nx;

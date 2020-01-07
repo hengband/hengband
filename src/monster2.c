@@ -3010,7 +3010,7 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 		{
 			POSITION mx, my;
 
-			scatter(&my, &mx, hy, hx, 4, 0);
+			scatter(p_ptr->current_floor_ptr, &my, &mx, hy, hx, 4, 0);
 
 			/* Walls and Monsters block flow */
 			if (!cave_empty_bold2(p_ptr->current_floor_ptr, my, mx)) continue;
@@ -3135,7 +3135,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 		for(j = 0; j < n; j++)
 		{
 			POSITION nx, ny, d = 7;
-			scatter(&ny, &nx, y, x, d, 0);
+			scatter(p_ptr->current_floor_ptr, &ny, &nx, y, x, d, 0);
 			(void)place_monster_one(place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
 		}
 	}
@@ -3160,7 +3160,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 			MONRACE_IDX z; 
 
 			/* Pick a location */
-			scatter(&ny, &nx, y, x, d, 0);
+			scatter(p_ptr->current_floor_ptr, &ny, &nx, y, x, d, 0);
 
 			/* Require empty grids */
 			if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
@@ -3262,7 +3262,7 @@ bool alloc_horde(POSITION y, POSITION x)
 
 	for (attempts = randint1(10) + 5; attempts; attempts--)
 	{
-		scatter(&cy, &cx, y, x, 5, 0);
+		scatter(p_ptr->current_floor_ptr, &cy, &cx, y, x, 5, 0);
 
 		(void)summon_specific(m_idx, cy, cx, p_ptr->current_floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
 

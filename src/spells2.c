@@ -1877,7 +1877,7 @@ bool starlight(player_type *caster_ptr, bool magic)
 
 		while (attempts--)
 		{
-			scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_LOS);
+			scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_LOS);
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
 			if (!player_bold(caster_ptr, y, x)) break;
 		}
@@ -2801,7 +2801,7 @@ void wall_breaker(player_type *caster_ptr)
 	{
 		while (attempts--)
 		{
-			scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
+			scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
 
@@ -2824,7 +2824,7 @@ void wall_breaker(player_type *caster_ptr)
 	{
 		while (TRUE)
 		{
-			scatter(&y, &x, caster_ptr->y, caster_ptr->x, 10, 0);
+			scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 10, 0);
 
 			if (!player_bold(caster_ptr, y, x)) break;
 		}

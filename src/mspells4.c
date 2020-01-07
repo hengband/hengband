@@ -3190,7 +3190,7 @@ MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 			int j;
 			for (j = 100; j > 0; j--)
 			{
-				scatter(&cy, &cx, y, x, 2, 0);
+				scatter(p_ptr->current_floor_ptr, &cy, &cx, y, x, 2, 0);
 				if (cave_empty_bold(p_ptr->current_floor_ptr, cy, cx)) break;
 			}
 			if (!j) break;

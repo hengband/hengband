@@ -1739,7 +1739,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 
 			while (attempts--)
 			{
-				scatter(&y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
+				scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
 				if (!player_bold(caster_ptr, y, x)) break;
 			}

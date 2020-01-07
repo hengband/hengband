@@ -196,7 +196,7 @@ static void do_cmd_summon_horde(player_type *caster_ptr)
 
 	while (--attempts)
 	{
-		scatter(&wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
+		scatter(caster_ptr->current_floor_ptr, &wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
 		if (cave_empty_bold(caster_ptr->current_floor_ptr, wy, wx)) break;
 	}
 

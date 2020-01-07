@@ -559,7 +559,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 					while (attempt--)
 					{
-						scatter(&my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
+						scatter(caster_ptr->current_floor_ptr, &my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
 
 						/* Require empty grids */
 						if (cave_empty_bold2(caster_ptr->current_floor_ptr, my, mx)) break;
