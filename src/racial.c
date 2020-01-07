@@ -428,7 +428,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		}
 		case CLASS_ROGUE:
 		{
-			if(!panic_hit()) return FALSE;
+			if(!hit_and_away(creature_ptr)) return FALSE;
 			break;
 		}
 		case CLASS_RANGER:
@@ -1734,14 +1734,14 @@ void do_cmd_racial_power(player_type *creature_ptr)
 			power_desc[num++].number = MUT1_STERILITY;
 		}
 
-		if (creature_ptr->muta1 & MUT1_PANIC_HIT)
+		if (creature_ptr->muta1 & MUT1_HIT_AND_AWAY)
 		{
 			strcpy(power_desc[num].name, _("ヒット＆アウェイ", "Panic Hit"));
 			power_desc[num].level = 10;
 			power_desc[num].cost = 12;
 			power_desc[num].stat = A_DEX;
 			power_desc[num].fail = 14;
-			power_desc[num++].number = MUT1_PANIC_HIT;
+			power_desc[num++].number = MUT1_HIT_AND_AWAY;
 		}
 
 		if (creature_ptr->muta1 & MUT1_DAZZLE)

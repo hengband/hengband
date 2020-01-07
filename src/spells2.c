@@ -4084,29 +4084,30 @@ bool_hack vampirism(player_type *caster_ptr)
 }
 
 
-bool panic_hit(void)
+/*!
+* ヒット＆アウェイのレイシャルパワー/突然変異
+* @param caster_ptr プレーヤーへの参照ポインタ
+* @return コマンドの入力先にモンスターがいたらTRUE
+*/
+bool hit_and_away(player_type *caster_ptr)
 {
 	DIRECTION dir;
-	POSITION x, y;
-
-	if (!get_direction(p_ptr, &dir, FALSE, FALSE)) return FALSE;
-	y = p_ptr->y + ddy[dir];
-	x = p_ptr->x + ddx[dir];
-	if (p_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+	if (!get_direction(caster_ptr, &dir, FALSE, FALSE)) return FALSE;
+	POSITION y = caster_ptr->y + ddy[dir];
+	POSITION x = caster_ptr->x + ddx[dir];
+	if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
-		py_attack(p_ptr, y, x, 0);
-		if (randint0(p_ptr->skill_dis) < 7)
+		py_attack(caster_ptr, y, x, 0);
+		if (randint0(caster_ptr->skill_dis) < 7)
 			msg_print(_("うまく逃げられなかった。", "You failed to run away."));
 		else
-			teleport_player(p_ptr, 30, 0L);
+			teleport_player(caster_ptr, 30, 0L);
 		return TRUE;
 	}
-	else
-	{
-		msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-		msg_print(NULL);
-		return FALSE;
-	}
+	
+	msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
+	msg_print(NULL);
+	return FALSE;
 }
 
 
@@ -4611,7 +4612,7 @@ bool rodeo(player_type *creature_ptr)
 
 	if (!do_cmd_riding(creature_ptr, TRUE)) return TRUE;
 
-	m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+	m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	r_ptr = &r_info[m_ptr->r_idx];
 	monster_desc(m_name, m_ptr, 0);
 	msg_format(_("%sに乗った。", "You ride on %s."), m_name);
@@ -4633,7 +4634,7 @@ bool rodeo(player_type *creature_ptr)
 	else
 	{
 		msg_format(_("%sに振り落とされた！", "You have thrown off by %s."), m_name);
-		rakuba(p_ptr, 1, TRUE);
+		rakuba(creature_ptr, 1, TRUE);
 		/* 落馬処理に失敗してもとにかく乗馬解除 */
 		creature_ptr->riding = 0;
 	}

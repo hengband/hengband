@@ -246,7 +246,7 @@ struct player_type
 #define MUT1_EAT_MAGIC                  0x00400000L /*!< 突然変異: 魔力喰い */
 #define MUT1_WEIGH_MAG                  0x00800000L /*!< 突然変異: 魔力感知 */
 #define MUT1_STERILITY                  0x01000000L /*!< 突然変異: 増殖阻止 */
-#define MUT1_PANIC_HIT                  0x02000000L /*!< 突然変異: ヒットアンドアウェイ */
+#define MUT1_HIT_AND_AWAY               0x02000000L /*!< 突然変異: ヒットアンドアウェイ */
 #define MUT1_DAZZLE                     0x04000000L /*!< 突然変異: 眩惑 */
 #define MUT1_LASER_EYE                  0x08000000L /*!< 突然変異: レーザー・アイ */
 #define MUT1_RECALL                     0x10000000L /*!< 突然変異: 帰還 */

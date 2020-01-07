@@ -206,7 +206,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 			break;
 		case 60: case 61:
 			muta_class = &(creature_ptr->muta1);
-			muta_which = MUT1_PANIC_HIT;
+			muta_which = MUT1_HIT_AND_AWAY;
 			muta_desc = _("突然、泥棒の気分が分かるようになった。", "You suddenly understand how thieves feel.");
 			break;
 			
@@ -1045,7 +1045,7 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 			break;
 		case 60: case 61:
 			muta_class = &(creature_ptr->muta1);
-			muta_which = MUT1_PANIC_HIT;
+			muta_which = MUT1_HIT_AND_AWAY;
 			muta_desc = _( "あちこちへ跳べる気分がなくなった。",  "You no longer feel jumpy.");
 
 			break;
@@ -1650,7 +1650,7 @@ void dump_mutations(player_type *creature_ptr, FILE *OutFile)
 			fprintf(OutFile, _(" あなたは集団的生殖不能を起こすことができる。\n", " You can cause mass impotence.\n"));
 
 		}
-		if (creature_ptr->muta1 & MUT1_PANIC_HIT)
+		if (creature_ptr->muta1 & MUT1_HIT_AND_AWAY)
 		{
 			fprintf(OutFile, _(" あなたは攻撃した後身を守るため逃げることができる。\n", " You can run for your life after hitting something.\n"));
 
@@ -2270,8 +2270,8 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			creature_ptr->current_floor_ptr->num_repro += MAX_REPRO;
 			break;
 
-		case MUT1_PANIC_HIT:
-			if(!panic_hit()) return FALSE;
+		case MUT1_HIT_AND_AWAY:
+			if(!hit_and_away()) return FALSE;
 			break;
 
 		case MUT1_DAZZLE:

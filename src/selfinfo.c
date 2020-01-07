@@ -630,7 +630,7 @@ void self_knowledge(player_type *creature_ptr)
 		{
 			info[i++] = _("あなたは集団的生殖不能を起こすことができる。", "You can cause mass impotence.");
 		}
-		if (creature_ptr->muta1 & MUT1_PANIC_HIT)
+		if (creature_ptr->muta1 & MUT1_HIT_AND_AWAY)
 		{
 			info[i++] = _("あなたは攻撃した後身を守るため逃げることができる。", "You can run for your life after hitting something.");
 		}
