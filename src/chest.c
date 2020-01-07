@@ -194,7 +194,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 		for (i = 0; i < num; i++)
 		{
 			if (randint1(100)<target_ptr->current_floor_ptr->dun_level)
-				activate_hi_summon(target_ptr->y, target_ptr->x, FALSE);
+				activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
 			else
 				(void)summon_specific(0, y, x, mon_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}

@@ -3433,7 +3433,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 				msg_print(_("空間が歪んだ！", "Space warps about you!"));
 
 				if (m_ptr->r_idx) teleport_away(caster_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
-				if (one_in_(13)) count += activate_hi_summon(m_ptr->fy, m_ptr->fx, TRUE);
+				if (one_in_(13)) count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
 				if (!one_in_(6)) break;
 			}
 		case 9: case 10: case 11:
@@ -3444,7 +3444,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 			aggravate_monsters(caster_ptr, 0);
 			if (!one_in_(6)) break;
 		case 17: case 18:
-			count += activate_hi_summon(m_ptr->fy, m_ptr->fx, TRUE);
+			count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
 			if (!one_in_(6)) break;
 		case 19: case 20: case 21: case 22:
 		{

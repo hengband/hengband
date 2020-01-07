@@ -398,7 +398,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「汝、より強き敵を必要とせり！」", "'Thou needst worthier opponents!'"));
 
-			activate_hi_summon(creature_ptr->y, creature_ptr->x, FALSE);
+			activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
 			reward = _("モンスターを召喚された。", "summoning many hostile monsters");
 			break;
 
@@ -529,7 +529,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 				reward = _("禍々しい呪いをかけられた。", "cursing");
 				break;
 			case 2:
-				activate_hi_summon(creature_ptr->y, creature_ptr->x, FALSE);
+				activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
 				reward = _("モンスターを召喚された。", "summoning hostile monsters");
 				break;
 			case 3:
@@ -574,7 +574,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			{
 				(void)dec_stat(creature_ptr, dummy, 10 + randint1(15), FALSE);
 			}
-			activate_hi_summon(creature_ptr->y, creature_ptr->x, FALSE);
+			activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
 			(void)activate_ty_curse(creature_ptr, FALSE, &count);
 			if (one_in_(2))
 			{

@@ -2719,7 +2719,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			{
 				msg_print(_("周囲の空間が歪んだ！", "Space warps about you!"));
 				teleport_player(target_ptr, damroll(10, 10), TELEPORT_PASSIVE);
-				if (randint0(13)) (*count) += activate_hi_summon(target_ptr->y, target_ptr->x, FALSE);
+				if (randint0(13)) (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
 				if (!one_in_(6)) break;
 			}
 		case 34:
@@ -2736,7 +2736,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			aggravate_monsters(target_ptr, 0);
 			if (!one_in_(6)) break;
 		case 4: case 5: case 6:
-			(*count) += activate_hi_summon(target_ptr->y, target_ptr->x, FALSE);
+			(*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
 			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
 			(*count) += summon_specific(0, target_ptr->y, target_ptr->x, target_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
@@ -2798,6 +2798,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 
 
 /*!
+ * todo 引数にPOSITION x/yは必要か？ 要調査
  * @brief HI_SUMMON(上級召喚)処理発動
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 召喚位置Y座標
@@ -2805,9 +2806,8 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
  * @param can_pet プレイヤーのペットとなる可能性があるならばTRUEにする
  * @return 作用が実際にあった場合TRUEを返す
  */
-int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
+int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can_pet)
 {
-	int i;
 	int count = 0;
 	DEPTH summon_lev;
 	BIT_FLAGS mode = PM_ALLOW_GROUP;
@@ -2828,11 +2828,11 @@ int activate_hi_summon(POSITION y, POSITION x, bool can_pet)
 
 	if (!pet) mode |= PM_NO_PET;
 
-	summon_lev = (pet ? p_ptr->lev * 2 / 3 + randint1(p_ptr->lev / 2) : p_ptr->current_floor_ptr->dun_level);
+	summon_lev = (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : caster_ptr->current_floor_ptr->dun_level);
 
-	for (i = 0; i < (randint1(7) + (p_ptr->current_floor_ptr->dun_level / 40)); i++)
+	for (int i = 0; i < (randint1(7) + (caster_ptr->current_floor_ptr->dun_level / 40)); i++)
 	{
-		switch (randint1(25) + (p_ptr->current_floor_ptr->dun_level / 20))
+		switch (randint1(25) + (caster_ptr->current_floor_ptr->dun_level / 20))
 		{
 			case 1: case 2:
 				count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode);
@@ -3448,7 +3448,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		break;
 	case 36:
 	case 37:
-		activate_hi_summon(caster_ptr->y, caster_ptr->x, FALSE);
+		activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, FALSE);
 		break;
 	case 38:
 		(void)summon_cyber(-1, caster_ptr->y, caster_ptr->x);
@@ -3886,7 +3886,7 @@ void cast_shuffle(player_type *caster_ptr)
 		msg_print(_("なんてこった！《死》だ！", "Oh no! It's Death!"));
 
 		for (i = 0; i < randint1(3); i++)
-			activate_hi_summon(caster_ptr->y, caster_ptr->x, FALSE);
+			activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, FALSE);
 	}
 	else if (die < 14)
 	{

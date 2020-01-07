@@ -223,7 +223,7 @@ extern bool disarm_traps_touch(player_type *caster_ptr);
 extern bool animate_dead(player_type *caster_ptr, MONSTER_IDX who, POSITION y, POSITION x);
 extern bool sleep_monsters_touch(player_type *caster_ptr);
 extern bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count);
-extern int activate_hi_summon(POSITION y, POSITION x, bool can_pet);
+extern int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can_pet);
 extern void wall_breaker(player_type *caster_ptr);
 extern bool confuse_monsters(HIT_POINT dam);
 extern bool charm_monsters(HIT_POINT dam);
