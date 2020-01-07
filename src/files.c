@@ -3149,7 +3149,7 @@ static void display_flag_aux(TERM_LEN row, TERM_LEN col, concptr header,
  * Special display, part 1
  * @return なし
  */
-static void display_player_flag_info(void)
+static void display_player_flag_info(player_type *creature_ptr)
 {
 	TERM_LEN row;
 	TERM_LEN col;
@@ -3157,12 +3157,12 @@ static void display_player_flag_info(void)
 	all_player_flags f;
 
 	/* Extract flags and store */
-	player_flags(p_ptr, f.player_flags);
-	tim_player_flags(p_ptr, f.tim_player_flags);
-	player_immunity(p_ptr, f.player_imm);
-	tim_player_immunity(p_ptr, f.tim_player_imm);
-	known_obj_immunity(p_ptr, f.known_obj_imm);
-	player_vuln_flags(p_ptr, f.player_vuln);
+	player_flags(creature_ptr, f.player_flags);
+	tim_player_flags(creature_ptr, f.tim_player_flags);
+	player_immunity(creature_ptr, f.player_imm);
+	tim_player_immunity(creature_ptr, f.tim_player_imm);
+	known_obj_immunity(creature_ptr, f.known_obj_imm);
+	player_vuln_flags(creature_ptr, f.player_vuln);
 
 	/*** Set 1 ***/
 
@@ -4059,7 +4059,7 @@ void display_player(player_type *creature_ptr, int mode)
 		/* Dump the info */
 		display_player_misc_info(creature_ptr);
 		display_player_stat_info(creature_ptr);
-		display_player_flag_info();
+		display_player_flag_info(creature_ptr);
 	}
 
 	/* Special */
