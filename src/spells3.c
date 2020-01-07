@@ -853,7 +853,7 @@ bool free_level_recall(player_type *creature_ptr)
 		creature_ptr->recall_dungeon = select_dungeon;
 		max_dlv[creature_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
 		if (record_maxdepth)
-			exe_write_diary(p_ptr, NIKKI_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
+			exe_write_diary(creature_ptr, NIKKI_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
 
 		msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
 
@@ -1285,7 +1285,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 		/* We need to see the item */
 		if (require_los)
 		{
-			if (!player_has_los_bold(p_ptr, ty, tx))
+			if (!player_has_los_bold(caster_ptr, ty, tx))
 			{
 				msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
 				return;
@@ -1747,7 +1747,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
-	old_known = identify_item(p_ptr, o_ptr);
+	old_known = identify_item(caster_ptr, o_ptr);
 
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
@@ -3359,11 +3359,11 @@ bool shock_power(player_type *caster_ptr)
 bool booze(player_type *creature_ptr)
 {
 	bool ident = FALSE;
-	if (creature_ptr->pclass != CLASS_MONK) chg_virtue(p_ptr, V_HARMONY, -1);
+	if (creature_ptr->pclass != CLASS_MONK) chg_virtue(creature_ptr, V_HARMONY, -1);
 	else if (!creature_ptr->resist_conf) creature_ptr->special_attack |= ATTACK_SUIKEN;
 	if (!creature_ptr->resist_conf)
 	{
-		if (set_confused(p_ptr, randint0(20) + 15))
+		if (set_confused(creature_ptr, randint0(20) + 15))
 		{
 			ident = TRUE;
 		}
@@ -3373,7 +3373,7 @@ bool booze(player_type *creature_ptr)
 	{
 		if (one_in_(2))
 		{
-			if (set_image(p_ptr, creature_ptr->image + randint0(150) + 150))
+			if (set_image(creature_ptr, creature_ptr->image + randint0(150) + 150))
 			{
 				ident = TRUE;
 			}
@@ -3381,7 +3381,7 @@ bool booze(player_type *creature_ptr)
 		if (one_in_(13) && (creature_ptr->pclass != CLASS_MONK))
 		{
 			ident = TRUE;
-			if (one_in_(3)) lose_all_info(p_ptr);
+			if (one_in_(3)) lose_all_info(creature_ptr);
 			else wiz_dark(creature_ptr);
 			(void)teleport_player_aux(creature_ptr, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 			wiz_dark(creature_ptr);
@@ -3395,9 +3395,9 @@ bool booze(player_type *creature_ptr)
 bool detonation(player_type *creature_ptr)
 {
 	msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
-	take_hit(p_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
-	(void)set_stun(p_ptr, creature_ptr->stun + 75);
-	(void)set_cut(p_ptr,creature_ptr->cut + 5000);
+	take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
+	(void)set_stun(creature_ptr, creature_ptr->stun + 75);
+	(void)set_cut(creature_ptr,creature_ptr->cut + 5000);
 	return TRUE;
 }
 

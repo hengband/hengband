@@ -335,4 +335,3 @@ extern int project_length;
 	 (p_ptr->current_floor_ptr->inside_quest && !random_quest_number(p_ptr->current_floor_ptr->dun_level)) || \
 	 (((TARGET) <= 0) && (quest_number(p_ptr->current_floor_ptr->dun_level) || (p_ptr->current_floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth)) && \
 	  (p_ptr->current_floor_ptr->dun_level >= 1) && ironman_downward))
-
