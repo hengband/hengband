@@ -2271,7 +2271,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_HIT_AND_AWAY:
-			if(!hit_and_away()) return FALSE;
+			if(!hit_and_away(creature_ptr)) return FALSE;
 			break;
 
 		case MUT1_DAZZLE:

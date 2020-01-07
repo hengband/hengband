@@ -1589,7 +1589,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	}
 	case 5:
 	{
-		if(!panic_hit()) return FALSE;
+		if(!hit_and_away(caster_ptr)) return FALSE;
 		break;
 	}
 	case 6:

@@ -386,7 +386,7 @@ bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
 
 	POSITION y, x;
 	bool flag = FALSE;
-	for (int i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
+	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -432,7 +432,7 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
 
 	POSITION y, x;
 	bool flag = FALSE;
-	for (int i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
+	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -484,7 +484,7 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
 
 	POSITION y, x;
 	bool flag = FALSE;
-	for (int i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
+	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -540,7 +540,7 @@ bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
 
 	POSITION y, x;
 	bool flag = FALSE;
-	for (int i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
+	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
