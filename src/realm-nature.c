@@ -414,7 +414,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				wall_stone();
+				wall_stone(caster_ptr);
 			}
 		}
 		break;

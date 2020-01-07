@@ -85,14 +85,14 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 		case SV_WAND_DISARMING:
 		{
 			if (disarm_trap(creature_ptr, dir)) ident = TRUE;
-			if (powerful && disarm_traps_touch()) ident = TRUE;
+			if (powerful && disarm_traps_touch(creature_ptr)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_TRAP_DOOR_DEST:
 		{
 			if (destroy_door(creature_ptr, dir)) ident = TRUE;
-			if (powerful && destroy_doors_touch()) ident = TRUE;
+			if (powerful && destroy_doors_touch(creature_ptr)) ident = TRUE;
 			break;
 		}
 

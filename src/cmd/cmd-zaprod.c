@@ -140,7 +140,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 	case SV_ROD_DISARMING:
 	{
 		if (disarm_trap(creature_ptr, dir)) ident = TRUE;
-		if (powerful && disarm_traps_touch()) ident = TRUE;
+		if (powerful && disarm_traps_touch(creature_ptr)) ident = TRUE;
 		break;
 	}
 

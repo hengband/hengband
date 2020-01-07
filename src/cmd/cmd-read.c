@@ -372,7 +372,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_TRAP_DOOR_DESTRUCTION:
 		{
-			if (destroy_doors_touch()) ident = TRUE;
+			if (destroy_doors_touch(creature_ptr)) ident = TRUE;
 			break;
 		}
 

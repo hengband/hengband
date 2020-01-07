@@ -797,7 +797,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_SPRITE:
 			msg_print(_("あなたは魔法の粉を投げつけた...", "You throw some magic dust..."));
-			if (plev < 25) sleep_monsters_touch();
+			if (plev < 25) sleep_monsters_touch(creature_ptr);
 			else (void)sleep_monsters(creature_ptr, plev);
 			break;
 

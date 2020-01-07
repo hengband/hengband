@@ -2562,12 +2562,12 @@ bool glyph_creation(player_type *caster_ptr, POSITION y, POSITION x)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool wall_stone(void)
+bool wall_stone(player_type *caster_ptr)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	bool dummy = (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_STONE_WALL, flg, -1));
-	p_ptr->update |= (PU_FLOW);
-	p_ptr->redraw |= (PR_MAP);
+	bool dummy = (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_STONE_WALL, flg, -1));
+	caster_ptr->update |= (PU_FLOW);
+	caster_ptr->redraw |= (PR_MAP);
 	return dummy;
 }
 
@@ -2577,10 +2577,10 @@ bool wall_stone(void)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool destroy_doors_touch(void)
+bool destroy_doors_touch(player_type *caster_ptr)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_DOOR, flg, -1));
+	return (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_KILL_DOOR, flg, -1));
 }
 
 
@@ -2589,10 +2589,10 @@ bool destroy_doors_touch(void)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool disarm_traps_touch(void)
+bool disarm_traps_touch(player_type *caster_ptr)
 {
 	BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, 0, GF_KILL_TRAP, flg, -1));
+	return (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_KILL_TRAP, flg, -1));
 }
 
 
@@ -2601,10 +2601,10 @@ bool disarm_traps_touch(void)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool sleep_monsters_touch(void)
+bool sleep_monsters_touch(player_type *caster_ptr)
 {
 	BIT_FLAGS flg = PROJECT_KILL | PROJECT_HIDE;
-	return (project(p_ptr, 0, 1, p_ptr->y, p_ptr->x, p_ptr->lev, GF_OLD_SLEEP, flg, -1));
+	return (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, caster_ptr->lev, GF_OLD_SLEEP, flg, -1));
 }
 
 
@@ -2616,10 +2616,10 @@ bool sleep_monsters_touch(void)
  * @param x 起点X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool animate_dead(MONSTER_IDX who, POSITION y, POSITION x)
+bool animate_dead(player_type *caster_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
 	BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
-	return (project(p_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
+	return (project(caster_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
 }
 
 
@@ -3399,12 +3399,12 @@ void wild_magic(player_type *caster_ptr, int spell)
 		lite_area(caster_ptr, damroll(2, 3), 2);
 		break;
 	case 15:
-		destroy_doors_touch();
+		destroy_doors_touch(caster_ptr);
 		break;
 	case 16: case 17:
 		wall_breaker(caster_ptr);
 	case 18:
-		sleep_monsters_touch();
+		sleep_monsters_touch(caster_ptr);
 		break;
 	case 19:
 	case 20:
@@ -3437,7 +3437,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		fire_ball(caster_ptr, GF_CHAOS, 0, spell + 5, 1 + (spell / 10));
 		break;
 	case 33:
-		wall_stone();
+		wall_stone(caster_ptr);
 		break;
 	case 34:
 	case 35:
@@ -3953,7 +3953,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 72)
 	{
 		msg_print(_("《節制》だ。", "It's Temperance."));
-		sleep_monsters_touch();
+		sleep_monsters_touch(caster_ptr);
 	}
 	else if (die < 80)
 	{
@@ -3991,7 +3991,7 @@ void cast_shuffle(player_type *caster_ptr)
 	else if (die < 101)
 	{
 		msg_print(_("《隠者》だ。", "It's the Hermit."));
-		wall_stone();
+		wall_stone(caster_ptr);
 	}
 	else if (die < 111)
 	{

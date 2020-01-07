@@ -62,7 +62,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				destroy_doors_touch();
+				destroy_doors_touch(caster_ptr);
 			}
 		}
 		break;

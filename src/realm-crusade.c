@@ -92,7 +92,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 		{
 			PLAYER_LEVEL power = plev;
 			if (info) return info_power(power);
-			if (cast) sleep_monsters_touch();
+			if (cast) sleep_monsters_touch(caster_ptr);
 		}
 		break;
 

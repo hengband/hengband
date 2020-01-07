@@ -250,7 +250,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_ANIMATE_DEAD:
 		{
-			ident = animate_dead(0, creature_ptr->y, creature_ptr->x);
+			ident = animate_dead(creature_ptr, 0, creature_ptr->y, creature_ptr->x);
 			break;
 		}
 

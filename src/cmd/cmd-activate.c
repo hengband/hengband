@@ -1081,7 +1081,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_SLEEP:
 	{
 		msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-		sleep_monsters_touch();
+		sleep_monsters_touch(user_ptr);
 		break;
 	}
 
@@ -1502,7 +1502,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_DEST_DOOR:
 	{
 		msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
-		destroy_doors_touch();
+		destroy_doors_touch(user_ptr);
 		break;
 	}
 

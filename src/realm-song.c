@@ -465,7 +465,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				msg_print(_("生命と復活のテーマを奏で始めた．．．", "The themes of life and revival are woven into your song..."));
-				animate_dead(0, caster_ptr->y, caster_ptr->x);
+				animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
 			}
 		}
 		break;

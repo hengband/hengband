@@ -2514,11 +2514,12 @@ void spell_RF6_FORGET(MONSTER_IDX m_idx)
 
 /*!
 * @brief RF6_RAISE_DEADの処理。死者復活。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_RAISE_DEAD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_RAISE_DEAD(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
@@ -2528,7 +2529,7 @@ void spell_RF6_RAISE_DEAD(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 		_("%^sが死者復活の呪文を唱えた。", "%^s casts a spell to revive corpses."),
 		TARGET_TYPE);
 
-	animate_dead(m_idx, m_ptr->fy, m_ptr->fx);
+	animate_dead(target_ptr, m_idx, m_ptr->fy, m_ptr->fx);
 }
 
 
@@ -3491,7 +3492,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_DARKNESS */
 	case RF6_SPELL_START + 13: spell_RF6_TRAPS(y, x, m_idx); break; /* RF6_TRAPS */
 	case RF6_SPELL_START + 14: spell_RF6_FORGET(m_idx); break;  /* RF6_FORGET */
-	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_RAISE_DEAD */
+	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_RAISE_DEAD */
 	case RF6_SPELL_START + 16: spell_RF6_S_KIN(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_S_KIN */
 	case RF6_SPELL_START + 17: spell_RF6_S_CYBER(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_CYBER */
 	case RF6_SPELL_START + 18: spell_RF6_S_MONSTER(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_S_MONSTER */
@@ -3606,7 +3607,7 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_DARKNESS */
 	case RF6_SPELL_START + 13: return -1; /* RF6_TRAPS */
 	case RF6_SPELL_START + 14: return -1;  /* RF6_FORGET */
-	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_RAISE_DEAD */
+	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(target_ptr, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_RAISE_DEAD */
 	case RF6_SPELL_START + 16: spell_RF6_S_KIN(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_S_KIN */
 	case RF6_SPELL_START + 17: spell_RF6_S_CYBER(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_CYBER */
 	case RF6_SPELL_START + 18: spell_RF6_S_MONSTER(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_S_MONSTER */
@@ -3624,6 +3625,7 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF6_SPELL_START + 30: spell_RF6_S_AMBERITES(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_AMBERITES */
 	case RF6_SPELL_START + 31: spell_RF6_S_UNIQUE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_UNIQUE */
 	}
+
 	return 0;
 }
 

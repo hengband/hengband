@@ -740,7 +740,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		break;
 	case MS_RAISE_DEAD:
 		msg_print(_("死者復活の呪文を唱えた。", "You cast a animate dead."));
-		(void)animate_dead(0, caster_ptr->y, caster_ptr->x);
+		(void)animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
 		break;
 	case MS_S_KIN:
 	{
