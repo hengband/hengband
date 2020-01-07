@@ -4471,7 +4471,7 @@ bool double_attack(player_type *creature_ptr)
 
 bool comvert_hp_to_mp(player_type *creature_ptr)
 {
-	int gain_sp = take_hit(p_ptr, DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
+	int gain_sp = take_hit(creature_ptr, DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
 	if (gain_sp)
 	{
 		creature_ptr->csp += gain_sp;
@@ -4496,7 +4496,7 @@ bool comvert_mp_to_hp(player_type *creature_ptr)
 	if (creature_ptr->csp >= creature_ptr->lev / 5)
 	{
 		creature_ptr->csp -= creature_ptr->lev / 5;
-		hp_player(p_ptr, creature_ptr->lev);
+		hp_player(creature_ptr, creature_ptr->lev);
 	}
 	else
 	{
@@ -4528,7 +4528,7 @@ bool mirror_concentration(player_type *creature_ptr)
 		return FALSE;
 	}
 
-	if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x]))
+	if (is_mirror_grid(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x]))
 	{
 		msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
 
