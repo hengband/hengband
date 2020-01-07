@@ -1419,16 +1419,16 @@ void generate_floor(player_type *player_ptr)
 		clear_cave(player_ptr);
 
 		/* Mega-Hack -- no player yet */
-		p_ptr->x = p_ptr->y = 0;
+		player_ptr->x = player_ptr->y = 0;
 
 		if (floor_ptr->inside_arena)
 		{
-			generate_challenge_arena(floor_ptr, p_ptr);
+			generate_challenge_arena(floor_ptr, player_ptr);
 		}
 
-		else if (p_ptr->phase_out)
+		else if (player_ptr->phase_out)
 		{
-			generate_gambling_arena(floor_ptr, p_ptr);
+			generate_gambling_arena(floor_ptr, player_ptr);
 		}
 
 		else if (floor_ptr->inside_quest)
@@ -1440,8 +1440,8 @@ void generate_floor(player_type *player_ptr)
 		else if (!floor_ptr->dun_level)
 		{
 			/* Make the wilderness */
-			if (p_ptr->wild_mode) wilderness_gen_small(p_ptr, floor_ptr);
-			else wilderness_gen(p_ptr, floor_ptr);
+			if (player_ptr->wild_mode) wilderness_gen_small(player_ptr, floor_ptr);
+			else wilderness_gen(player_ptr, floor_ptr);
 		}
 
 		/* Build a real level */
@@ -1477,7 +1477,7 @@ void generate_floor(player_type *player_ptr)
 	glow_deep_lava_and_bldg(floor_ptr);
 
 	/* Reset flag */
-	p_ptr->enter_dungeon = FALSE;
+	player_ptr->enter_dungeon = FALSE;
 
 	wipe_generate_random_floor_flags(floor_ptr);
 }
