@@ -4941,7 +4941,7 @@ bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr)
  * Note that this code must remove any location/stack information\n
  * from the object once it is placed into the inventory.\n
  */
-s16b inven_carry(object_type *o_ptr)
+s16b inven_carry(player_type *owner_ptr, object_type *o_ptr)
 {
 	INVENTORY_IDX i, j, k;
 	INVENTORY_IDX n = -1;
@@ -4952,7 +4952,7 @@ s16b inven_carry(object_type *o_ptr)
 	/* Check for combining */
 	for (j = 0; j < INVEN_PACK; j++)
 	{
-		j_ptr = &p_ptr->inventory_list[j];
+		j_ptr = &owner_ptr->inventory_list[j];
 		if (!j_ptr->k_idx) continue;
 
 		/* Hack -- track last item */
@@ -4963,21 +4963,21 @@ s16b inven_carry(object_type *o_ptr)
 		{
 			object_absorb(j_ptr, o_ptr);
 
-			p_ptr->total_weight += (o_ptr->number * o_ptr->weight);
-			p_ptr->update |= (PU_BONUS);
-			p_ptr->window |= (PW_INVEN);
+			owner_ptr->total_weight += (o_ptr->number * o_ptr->weight);
+			owner_ptr->update |= (PU_BONUS);
+			owner_ptr->window |= (PW_INVEN);
 
 			/* Success */
 			return (j);
 		}
 	}
 
-	if (p_ptr->inven_cnt > INVEN_PACK) return (-1);
+	if (owner_ptr->inven_cnt > INVEN_PACK) return (-1);
 
 	/* Find an empty slot */
 	for (j = 0; j <= INVEN_PACK; j++)
 	{
-		j_ptr = &p_ptr->inventory_list[j];
+		j_ptr = &owner_ptr->inventory_list[j];
 
 		/* Use it if found */
 		if (!j_ptr->k_idx) break;
@@ -4996,7 +4996,7 @@ s16b inven_carry(object_type *o_ptr)
 		/* Scan every occupied slot */
 		for (j = 0; j < INVEN_PACK; j++)
 		{
-			if (object_sort_comp(o_ptr, o_value, &p_ptr->inventory_list[j])) break;
+			if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j])) break;
 		}
 
 		/* Use that slot */
@@ -5006,19 +5006,19 @@ s16b inven_carry(object_type *o_ptr)
 		for (k = n; k >= i; k--)
 		{
 			/* Hack -- Slide the item */
-			object_copy(&p_ptr->inventory_list[k+1], &p_ptr->inventory_list[k]);
+			object_copy(&owner_ptr->inventory_list[k+1], &owner_ptr->inventory_list[k]);
 		}
 
 		/* Wipe the empty slot */
-		object_wipe(&p_ptr->inventory_list[i]);
+		object_wipe(&owner_ptr->inventory_list[i]);
 	}
 
 
 	/* Copy the item */
-	object_copy(&p_ptr->inventory_list[i], o_ptr);
+	object_copy(&owner_ptr->inventory_list[i], o_ptr);
 
 	/* Access new object */
-	j_ptr = &p_ptr->inventory_list[i];
+	j_ptr = &owner_ptr->inventory_list[i];
 
 	/* Forget stack */
 	j_ptr->next_o_idx = 0;
@@ -5032,12 +5032,12 @@ s16b inven_carry(object_type *o_ptr)
 	/* Player touches it, and no longer marked */
 	j_ptr->marked = OM_TOUCHED;
 
-	p_ptr->total_weight += (j_ptr->number * j_ptr->weight);
+	owner_ptr->total_weight += (j_ptr->number * j_ptr->weight);
 
 	/* Count the items */
-	p_ptr->inven_cnt++;
-	p_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-	p_ptr->window |= (PW_INVEN);
+	owner_ptr->inven_cnt++;
+	owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
+	owner_ptr->window |= (PW_INVEN);
 
 	/* Return the slot */
 	return (i);
@@ -5114,7 +5114,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 	inven_item_optimize(item);
 
 	/* Carry the object */
-	slot = inven_carry(q_ptr);
+	slot = inven_carry(p_ptr, q_ptr);
 
 #ifdef JP
 	msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);

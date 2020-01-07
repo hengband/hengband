@@ -496,7 +496,7 @@ extern void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 extern void floor_item_optimize(INVENTORY_IDX item);
 extern bool inven_carry_okay(object_type *o_ptr);
 extern bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
-extern s16b inven_carry(object_type *o_ptr);
+extern s16b inven_carry(player_type *owner_ptr, object_type *o_ptr);
 extern INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt);
 extern void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt);
 extern void combine_pack(player_type *owner_ptr);

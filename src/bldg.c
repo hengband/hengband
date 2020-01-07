@@ -1958,7 +1958,7 @@ static bool kankin(void)
 				 * Since a corpse is handed at first,
 				 * there is at least one empty slot.
 				 */
-				item_new = inven_carry(&forge);
+				item_new = inven_carry(p_ptr, &forge);
 
 				object_desc(o_name, &forge, 0);
 				msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));

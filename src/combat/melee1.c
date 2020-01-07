@@ -2023,7 +2023,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 					target_ptr->hold_o_idx = q_ptr->next_o_idx;
 					q_ptr->next_o_idx = 0;
 					msg_format(_("%sを奪った。", "You snatched %s."), o_name);
-					inven_carry(q_ptr);
+					inven_carry(attacker_ptr, q_ptr);
 				}
 			}
 		}

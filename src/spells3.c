@@ -3059,7 +3059,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 					/* Unstack the used item */
 					o_ptr->number--;
 					caster_ptr->total_weight -= q_ptr->weight;
-					item = inven_carry(q_ptr);
+					item = inven_carry(caster_ptr, q_ptr);
 
 					msg_print(_("杖をまとめなおした。", "You unstack your staff."));
 				}

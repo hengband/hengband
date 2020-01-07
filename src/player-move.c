@@ -290,7 +290,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	hirottakazu = o_ptr->number;
 #endif
 	/* Carry the object */
-	slot = inven_carry(o_ptr);
+	slot = inven_carry(p_ptr, o_ptr);
 
 	/* Get the object again */
 	o_ptr = &p_ptr->inventory_list[slot];

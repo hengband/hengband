@@ -4749,7 +4749,7 @@ static void store_purchase(void)
 				j_ptr->feeling = FEEL_NONE;
 				j_ptr->ident &= ~(IDENT_STORE);
 				/* Give it to the player */
-				item_new = inven_carry(j_ptr);
+				item_new = inven_carry(p_ptr, j_ptr);
 
 				/* Describe the final result */
 				object_desc(o_name, &p_ptr->inventory_list[item_new], 0);
@@ -4844,7 +4844,7 @@ static void store_purchase(void)
 		distribute_charges(o_ptr, j_ptr, amt);
 
 		/* Give it to the player */
-		item_new = inven_carry(j_ptr);
+		item_new = inven_carry(p_ptr, j_ptr);
 
 		/* Describe just the result */
 		object_desc(o_name, &p_ptr->inventory_list[item_new], 0);

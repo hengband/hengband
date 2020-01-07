@@ -2221,7 +2221,7 @@ static void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 
 	object_aware(o_ptr);
 	object_known(o_ptr);
-	slot = inven_carry(o_ptr);
+	slot = inven_carry(creature_ptr, o_ptr);
 
 	/* Auto-inscription */
 	autopick_alter_item(slot, FALSE);
