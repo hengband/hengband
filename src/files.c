@@ -3473,7 +3473,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
  * Special display, part 2a
  * @return なし
  */
-static void display_player_misc_info(void)
+static void display_player_misc_info(player_type *creature_ptr)
 {
 	char	buf[80];
 	char	tmp[80];
@@ -3498,11 +3498,11 @@ put_str("職業  :", 5, 1);
 #else
 		strcat(tmp," ");
 #endif
-	strcat(tmp,p_ptr->name);
+	strcat(tmp,creature_ptr->name);
 
 	c_put_str(TERM_L_BLUE, tmp, 1, 34);
 	c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 9);
-	c_put_str(TERM_L_BLUE, (p_ptr->mimic_form ? mimic_info[p_ptr->mimic_form].title : rp_ptr->title), 4, 9);
+	c_put_str(TERM_L_BLUE, (creature_ptr->mimic_form ? mimic_info[creature_ptr->mimic_form].title : rp_ptr->title), 4, 9);
 	c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 9);
 
 	/* Display extras */
@@ -3517,11 +3517,11 @@ put_str("ＭＰ  :", 8, 1);
 #endif
 
 
-	(void)sprintf(buf, "%d", (int)p_ptr->lev);
+	(void)sprintf(buf, "%d", (int)creature_ptr->lev);
 	c_put_str(TERM_L_BLUE, buf, 6, 9);
-	(void)sprintf(buf, "%d/%d", (int)p_ptr->chp, (int)p_ptr->mhp);
+	(void)sprintf(buf, "%d/%d", (int)creature_ptr->chp, (int)creature_ptr->mhp);
 	c_put_str(TERM_L_BLUE, buf, 7, 9);
-	(void)sprintf(buf, "%d/%d", (int)p_ptr->csp, (int)p_ptr->msp);
+	(void)sprintf(buf, "%d/%d", (int)creature_ptr->csp, (int)creature_ptr->msp);
 	c_put_str(TERM_L_BLUE, buf, 8, 9);
 }
 
@@ -4057,7 +4057,7 @@ void display_player(player_type *creature_ptr, int mode)
 		/* See "http://www.cs.berkeley.edu/~davidb/angband.html" */
 
 		/* Dump the info */
-		display_player_misc_info();
+		display_player_misc_info(creature_ptr);
 		display_player_stat_info(creature_ptr);
 		display_player_flag_info();
 	}
