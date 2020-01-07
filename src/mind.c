@@ -1091,7 +1091,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		}
 		else
 		{
-			charm_monsters(plev * 2);
+			charm_monsters(caster_ptr, plev * 2);
 		}
 		break;
 	case 5:
@@ -1124,7 +1124,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 			project(caster_ptr, 0, 2 + plev / 10, caster_ptr->y, caster_ptr->x,
 			(plev * 3), GF_PSI, PROJECT_KILL, -1);
 		else
-			(void)mindblast_monsters(randint1(plev * ((plev - 5) / 10 + 1)));
+			(void)mindblast_monsters(caster_ptr, randint1(plev * ((plev - 5) / 10 + 1)));
 		break;
 	case 9:
 		/* Adrenaline */
@@ -1415,11 +1415,11 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 	case 14:
 		tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 3;
 		slow_monsters(caster_ptr, plev);
-		stun_monsters(plev*tmp);
-		confuse_monsters(plev*tmp);
-		turn_monsters(plev*tmp);
-		stun_monsters(plev*tmp);
-		stasis_monsters(plev*tmp);
+		stun_monsters(caster_ptr, plev*tmp);
+		confuse_monsters(caster_ptr, plev*tmp);
+		turn_monsters(caster_ptr, plev*tmp);
+		stun_monsters(caster_ptr, plev*tmp);
+		stasis_monsters(caster_ptr, plev*tmp);
 		break;
 		/* mirror shift */
 	case 15:

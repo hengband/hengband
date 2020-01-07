@@ -421,8 +421,8 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			else
 			{
 				(void)dispel_monsters(creature_ptr, plev * 4);
-				turn_monsters(plev * 4);
-				banish_monsters(plev * 4);
+				turn_monsters(creature_ptr, plev * 4);
+				banish_monsters(creature_ptr, plev * 4);
 			}
 			break;
 		}

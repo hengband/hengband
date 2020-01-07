@@ -194,7 +194,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				control_one_undead(dir, plev);
+				control_one_undead(caster_ptr, dir, plev);
 			}
 		}
 		break;

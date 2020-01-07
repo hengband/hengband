@@ -323,7 +323,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				charm_monster(dir, plev);
+				charm_monster(caster_ptr, dir, plev);
 			}
 		}
 		break;
@@ -505,7 +505,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				charm_monsters(power);
+				charm_monsters(caster_ptr, power);
 			}
 		}
 		break;
@@ -533,7 +533,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				banish_monsters(power);
+				banish_monsters(caster_ptr, power);
 			}
 		}
 		break;

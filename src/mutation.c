@@ -2111,7 +2111,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 		case MUT1_HYPN_GAZE:
 			if (!get_aim_dir(&dir)) return FALSE;
 			msg_print(_("あなたの目は幻惑的になった...", "Your eyes look mesmerizing..."));
-			(void)charm_monster(dir, lvl);
+			(void)charm_monster(creature_ptr, dir, lvl);
 			break;
 
 		case MUT1_TELEKINES:
@@ -2275,9 +2275,9 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_DAZZLE:
-			stun_monsters(lvl * 4);
-			confuse_monsters(lvl * 4);
-			turn_monsters(lvl * 4);
+			stun_monsters(creature_ptr, lvl * 4);
+			confuse_monsters(creature_ptr, lvl * 4);
+			turn_monsters(creature_ptr, lvl * 4);
 			break;
 
 		case MUT1_LASER_EYE:

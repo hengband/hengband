@@ -324,7 +324,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				banish_monsters(power);
+				banish_monsters(caster_ptr, power);
 			}
 		}
 		break;

@@ -2942,9 +2942,9 @@ void wall_breaker(player_type *caster_ptr)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monsters(HIT_POINT dam)
+bool confuse_monsters(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_OLD_CONF, dam));
+	return (project_all_los(caster_ptr, GF_OLD_CONF, dam));
 }
 
 
@@ -2954,9 +2954,9 @@ bool confuse_monsters(HIT_POINT dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_monsters(HIT_POINT dam)
+bool charm_monsters(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_CHARM, dam));
+	return (project_all_los(caster_ptr, GF_CHARM, dam));
 }
 
 
@@ -2966,9 +2966,9 @@ bool charm_monsters(HIT_POINT dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_animals(HIT_POINT dam)
+bool charm_animals(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_CONTROL_ANIMAL, dam));
+	return (project_all_los(caster_ptr, GF_CONTROL_ANIMAL, dam));
 }
 
 
@@ -2978,9 +2978,9 @@ bool charm_animals(HIT_POINT dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monsters(HIT_POINT dam)
+bool stun_monsters(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_STUN, dam));
+	return (project_all_los(caster_ptr, GF_STUN, dam));
 }
 
 
@@ -2990,9 +2990,9 @@ bool stun_monsters(HIT_POINT dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stasis_monsters(HIT_POINT dam)
+bool stasis_monsters(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_STASIS, dam));
+	return (project_all_los(caster_ptr, GF_STASIS, dam));
 }
 
 
@@ -3002,9 +3002,9 @@ bool stasis_monsters(HIT_POINT dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool mindblast_monsters(HIT_POINT dam)
+bool mindblast_monsters(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_PSI, dam));
+	return (project_all_los(caster_ptr, GF_PSI, dam));
 }
 
 
@@ -3014,9 +3014,9 @@ bool mindblast_monsters(HIT_POINT dam)
  * @param dist 効力（距離）
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool banish_monsters(int dist)
+bool banish_monsters(player_type *caster_ptr, int dist)
 {
-	return (project_all_los(p_ptr, GF_AWAY_ALL, dist));
+	return (project_all_los(caster_ptr, GF_AWAY_ALL, dist));
 }
 
 
@@ -3026,9 +3026,9 @@ bool banish_monsters(int dist)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool turn_evil(HIT_POINT dam)
+bool turn_evil(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_TURN_EVIL, dam));
+	return (project_all_los(caster_ptr, GF_TURN_EVIL, dam));
 }
 
 
@@ -3038,9 +3038,9 @@ bool turn_evil(HIT_POINT dam)
  * @param dam 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool turn_monsters(HIT_POINT dam)
+bool turn_monsters(player_type *caster_ptr, HIT_POINT dam)
 {
-	return (project_all_los(p_ptr, GF_TURN_ALL, dam));
+	return (project_all_los(caster_ptr, GF_TURN_ALL, dam));
 }
 
 
@@ -3049,9 +3049,9 @@ bool turn_monsters(HIT_POINT dam)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool deathray_monsters(void)
+bool deathray_monsters(player_type *caster_ptr)
 {
-	return (project_all_los(p_ptr, GF_DEATH_RAY, p_ptr->lev * 200));
+	return (project_all_los(caster_ptr, GF_DEATH_RAY, caster_ptr->lev * 200));
 }
 
 
@@ -3062,10 +3062,10 @@ bool deathray_monsters(void)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_monster(DIRECTION dir, PLAYER_LEVEL plev)
+bool charm_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(p_ptr, GF_CHARM, dir, plev, flg));
+	return (project_hook(caster_ptr, GF_CHARM, dir, plev, flg));
 }
 
 
@@ -3076,10 +3076,10 @@ bool charm_monster(DIRECTION dir, PLAYER_LEVEL plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool control_one_undead(DIRECTION dir, PLAYER_LEVEL plev)
+bool control_one_undead(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(p_ptr, GF_CONTROL_UNDEAD, dir, plev, flg));
+	return (project_hook(caster_ptr, GF_CONTROL_UNDEAD, dir, plev, flg));
 }
 
 
@@ -3090,10 +3090,10 @@ bool control_one_undead(DIRECTION dir, PLAYER_LEVEL plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool control_one_demon(DIRECTION dir, PLAYER_LEVEL plev)
+bool control_one_demon(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(p_ptr, GF_CONTROL_DEMON, dir, plev, flg));
+	return (project_hook(caster_ptr, GF_CONTROL_DEMON, dir, plev, flg));
 }
 
 
@@ -3104,10 +3104,10 @@ bool control_one_demon(DIRECTION dir, PLAYER_LEVEL plev)
  * @param plev パワー
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool charm_animal(DIRECTION dir, PLAYER_LEVEL plev)
+bool charm_animal(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL;
-	return (project_hook(p_ptr, GF_CONTROL_ANIMAL, dir, plev, flg));
+	return (project_hook(caster_ptr, GF_CONTROL_ANIMAL, dir, plev, flg));
 }
 
 
@@ -3986,7 +3986,7 @@ void cast_shuffle(player_type *caster_ptr)
 		msg_print(_("《恋人》だ。", "It's the Lovers."));
 
 		if (get_aim_dir(&dir))
-			charm_monster(dir, MIN(caster_ptr->lev, 20));
+			charm_monster(caster_ptr, dir, MIN(caster_ptr->lev, 20));
 	}
 	else if (die < 101)
 	{
@@ -4583,10 +4583,10 @@ bool confusing_light(player_type *creature_ptr)
 {
 	msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
 	slow_monsters(creature_ptr, creature_ptr->lev);
-	stun_monsters(creature_ptr->lev * 4);
-	confuse_monsters(creature_ptr->lev * 4);
-	turn_monsters(creature_ptr->lev * 4);
-	stasis_monsters(creature_ptr->lev * 4);
+	stun_monsters(creature_ptr, creature_ptr->lev * 4);
+	confuse_monsters(creature_ptr, creature_ptr->lev * 4);
+	turn_monsters(creature_ptr, creature_ptr->lev * 4);
+	stasis_monsters(creature_ptr, creature_ptr->lev * 4);
 	return TRUE;
 }
 

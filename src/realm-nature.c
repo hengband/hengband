@@ -146,7 +146,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				charm_animal(dir, plev);
+				charm_animal(caster_ptr, dir, plev);
 			}
 		}
 		break;
@@ -391,7 +391,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			int power = plev * 2;
 			if (info) return info_power(power);
-			if (cast) charm_animals(power);
+			if (cast) charm_animals(caster_ptr, power);
 		}
 		break;
 

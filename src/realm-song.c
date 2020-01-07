@@ -147,7 +147,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				stun_monsters(damroll(dice, sides));
+				stun_monsters(caster_ptr, damroll(dice, sides));
 			}
 		}
 
@@ -421,7 +421,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				confuse_monsters(power);
+				confuse_monsters(caster_ptr, power);
 			}
 		}
 
@@ -491,7 +491,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				charm_monsters(damroll(dice, sides));
+				charm_monsters(caster_ptr, damroll(dice, sides));
 			}
 		}
 
@@ -757,7 +757,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cont)
 			{
-				stasis_monsters(power);
+				stasis_monsters(caster_ptr, power);
 			}
 		}
 

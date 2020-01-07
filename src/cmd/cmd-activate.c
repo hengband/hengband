@@ -987,7 +987,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name);
 		fire_ball(user_ptr, GF_LITE, 0, 300, 6);
-		confuse_monsters(3 * user_ptr->lev / 2);
+		confuse_monsters(user_ptr, 3 * user_ptr->lev / 2);
 		break;
 	}
 
@@ -1093,7 +1093,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_TERROR:
 	{
-		turn_monsters(40 + user_ptr->lev);
+		turn_monsters(user_ptr, 40 + user_ptr->lev);
 		break;
 	}
 
@@ -1133,7 +1133,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		if (hex_spelling_any(user_ptr)) stop_hex_spell_all(user_ptr);
 		msg_print(_("あなたは力強い突風を吹き鳴らした。周囲の敵が震え上っている!",
 			"You wind a mighty blast; your enemies tremble!"));
-		(void)turn_monsters((3 * user_ptr->lev / 2) + 10);
+		(void)turn_monsters(user_ptr, (3 * user_ptr->lev / 2) + 10);
 		break;
 	}
 
@@ -1156,33 +1156,33 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_CHARM_ANIMAL:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
-		(void)charm_animal(dir, plev);
+		(void)charm_animal(user_ptr, dir, plev);
 		break;
 	}
 
 	case ACT_CHARM_UNDEAD:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
-		(void)control_one_undead(dir, plev);
+		(void)control_one_undead(user_ptr, dir, plev);
 		break;
 	}
 
 	case ACT_CHARM_OTHER:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
-		(void)charm_monster(dir, plev * 2);
+		(void)charm_monster(user_ptr, dir, plev * 2);
 		break;
 	}
 
 	case ACT_CHARM_ANIMALS:
 	{
-		(void)charm_animals(plev * 2);
+		(void)charm_animals(user_ptr, plev * 2);
 		break;
 	}
 
 	case ACT_CHARM_OTHERS:
 	{
-		charm_monsters(plev * 2);
+		charm_monsters(user_ptr, plev * 2);
 		break;
 	}
 

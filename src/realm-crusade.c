@@ -192,7 +192,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				dispel_undead(caster_ptr, randint1(sides));
 				dispel_demons(caster_ptr, randint1(sides));
-				turn_evil(power);
+				turn_evil(caster_ptr, power);
 			}
 		}
 		break;
@@ -529,10 +529,10 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 				project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, b_dam, GF_HOLY_FIRE, PROJECT_KILL, -1);
 				dispel_monsters(caster_ptr, d_dam);
 				slow_monsters(caster_ptr, plev);
-				stun_monsters(power);
-				confuse_monsters(power);
-				turn_monsters(power);
-				stasis_monsters(power);
+				stun_monsters(caster_ptr, power);
+				confuse_monsters(caster_ptr, power);
+				turn_monsters(caster_ptr, power);
+				stasis_monsters(caster_ptr, power);
 				hp_player(caster_ptr, heal);
 			}
 		}

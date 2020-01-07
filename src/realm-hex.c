@@ -999,7 +999,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (info) return info_power(power);
 		if (cast || cont)
 		{
-			stun_monsters(power);
+			stun_monsters(caster_ptr, power);
 		}
 		break;
 

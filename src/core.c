@@ -2303,7 +2303,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		disturb(creature_ptr, FALSE, TRUE);
 		msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
-		banish_monsters(100);
+		banish_monsters(creature_ptr, 100);
 		if (!creature_ptr->current_floor_ptr->dun_level && creature_ptr->town_num)
 		{
 			int n;
