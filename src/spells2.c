@@ -4604,6 +4604,7 @@ bool sword_dancing(player_type *creature_ptr)
 	return TRUE;
 }
 
+
 /*!
  * 幻惑の光
  * @param creature_ptr プレーヤーへの参照ポインタ
