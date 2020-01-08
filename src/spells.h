@@ -307,7 +307,7 @@ extern bool artifact_scroll(player_type *caster_ptr);
 extern bool ident_spell(player_type *caster_ptr, bool only_equip);
 extern bool mundane_spell(player_type *ownner_ptr, bool only_equip);
 extern bool identify_item(player_type *owner_ptr, object_type *o_ptr);
-extern bool identify_fully(bool only_equip);
+extern bool identify_fully(player_type *caster_ptr, bool only_equip);
 extern bool recharge(player_type *caster_ptr, int power);
 extern void display_spell_list(player_type *caster_ptr);
 extern EXP experience_of_spell(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_realm);

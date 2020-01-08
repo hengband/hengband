@@ -1862,7 +1862,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
  * Fully "identify" an object in the inventory -BEN-
  * This routine returns TRUE if an item was identified.
  */
-bool identify_fully(bool only_equip)
+bool identify_fully(player_type *caster_ptr, bool only_equip)
 {
 	OBJECT_IDX item;
 	object_type *o_ptr;
@@ -1891,10 +1891,10 @@ bool identify_fully(bool only_equip)
 
 	s = _("*鑑定*するべきアイテムがない。", "You have nothing to *identify*.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
-	old_known = identify_item(p_ptr, o_ptr);
+	old_known = identify_item(caster_ptr, o_ptr);
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);

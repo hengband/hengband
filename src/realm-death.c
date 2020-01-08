@@ -546,7 +546,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				}
 				else
 				{
-					if (!identify_fully(FALSE)) return NULL;
+					if (!identify_fully(caster_ptr, FALSE)) return NULL;
 				}
 			}
 		}

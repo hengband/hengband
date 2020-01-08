@@ -1788,7 +1788,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* View item info */
 	case 'f':
-		identify_fully(FALSE);
+		identify_fully(creature_ptr, FALSE);
 		break;
 
 		/* Create desired feature */

@@ -3890,7 +3890,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		/* Do nothing */
 		break;
 	case BACT_RESEARCH_ITEM:
-		paid = identify_fully(FALSE);
+		paid = identify_fully(player_ptr, FALSE);
 		break;
 	case BACT_TOWN_HISTORY:
 		town_history();

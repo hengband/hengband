@@ -203,7 +203,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_STAR_IDENTIFY:
 		{
-			if (!identify_fully(FALSE)) used_up = FALSE;
+			if (!identify_fully(creature_ptr, FALSE)) used_up = FALSE;
 			ident = TRUE;
 			break;
 		}

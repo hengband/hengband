@@ -501,7 +501,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			}
 			else if (command == -4)
 			{
-				if (!identify_fully(FALSE)) return FALSE;
+				if (!identify_fully(creature_ptr, FALSE)) return FALSE;
 			}
 			break;
 		}
@@ -602,7 +602,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		{
 			if (creature_ptr->lev > 29)
 			{
-				if (!identify_fully(TRUE)) return FALSE;
+				if (!identify_fully(creature_ptr, TRUE)) return FALSE;
 			}
 			else
 			{

@@ -287,7 +287,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 		{
 			if (cast)
 			{
-				if (!identify_fully(FALSE)) return NULL;
+				if (!identify_fully(caster_ptr, FALSE)) return NULL;
 			}
 		}
 		break;
