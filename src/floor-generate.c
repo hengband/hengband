@@ -1100,7 +1100,7 @@ static void generate_challenge_arena(floor_type *floor_ptr, player_type *challan
  * @brief モンスター闘技場のフロア生成 / Builds the arena after it is entered -KMW-
  * @return なし
  */
-static void build_battle(floor_type *floor_ptr)
+static void build_battle(floor_type *floor_ptr, POSITION *y, POSITION *x)
 {
 	POSITION yval, y_height, y_depth, xval, x_left, x_right;
 	register int i, j;
@@ -1156,7 +1156,9 @@ static void build_battle(floor_type *floor_ptr)
 	j = xval;
 	floor_ptr->grid_array[i][j].feat = f_tag_to_index("BUILDING_3");
 	floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
-	player_place(p_ptr, i, j);
+
+	*y = i;
+	*x = j;
 }
 
 /*!
@@ -1193,7 +1195,9 @@ static void generate_gambling_arena(floor_type *floor_ptr, player_type *creature
 		}
 	}
 
-	build_battle(floor_ptr);
+	build_battle(floor_ptr, &y, &x);
+
+	player_place(creature_ptr, y, x);
 
 	for(i = 0; i < 4; i++)
 	{
