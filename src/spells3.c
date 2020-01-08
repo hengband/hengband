@@ -2798,7 +2798,7 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
  * @details
  * Note that this function is one of the more "dangerous" ones...
  */
-static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
+static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -2818,7 +2818,7 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 	for (i = 0; i < 1000; i++)
 	{
 		/* Pick a new race, using a level calculation */
-		r = get_mon_num((p_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
+		r = get_mon_num((caster_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
 
 		/* Handle failure */
 		if (!r) break;
@@ -2837,7 +2837,7 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 		break;
 	}
 
-	return (r_idx);
+	return r_idx;
 }
 
 
@@ -2868,7 +2868,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	back_m = *m_ptr;
 
 	/* Pick a "new" monster race */
-	new_r_idx = poly_r_idx(old_r_idx);
+	new_r_idx = poly_r_idx(caster_ptr, old_r_idx);
 
 	/* Handle polymorph */
 	if (new_r_idx != old_r_idx)
