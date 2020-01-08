@@ -438,6 +438,7 @@ static void learned_info(char *p, int power)
 /*!
  * @brief 使用可能な青魔法を選択する /
  * Allow user to choose a imitation.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param sn 選択したモンスター攻撃ID、キャンセルの場合-1、不正な選択の場合-2を返す
  * @return 発動可能な魔法を選択した場合TRUE、キャンセル処理か不正な選択が行われた場合FALSEを返す。
  * @details
@@ -452,7 +453,7 @@ static void learned_info(char *p, int power)
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-static bool get_learned_power(SPELL_IDX *sn)
+static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 {
 	int             i = 0;
 	int             num = 0;
@@ -706,7 +707,7 @@ static bool get_learned_power(SPELL_IDX *sn)
 
 					chance = mod_spell_chance_1(p_ptr, chance);
 
-					need_mana = mod_need_mana(monster_powers[spellnum[i]].smana, 0, REALM_NONE);
+					need_mana = mod_need_mana(caster_ptr, monster_powers[spellnum[i]].smana, 0, REALM_NONE);
 
 					/* Not enough mana to cast */
 					if (need_mana > p_ptr->csp)
@@ -1658,11 +1659,11 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
 
 	if (cmd_limit_confused(caster_ptr)) return FALSE;
 
-	if (!get_learned_power(&n)) return FALSE;
+	if (!get_learned_power(caster_ptr, &n)) return FALSE;
 
 	spell = monster_powers[n];
 
-	need_mana = mod_need_mana(spell.smana, 0, REALM_NONE);
+	need_mana = mod_need_mana(caster_ptr, spell.smana, 0, REALM_NONE);
 
 	/* Verify "dangerous" spells */
 	if (need_mana > caster_ptr->csp)

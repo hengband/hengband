@@ -1149,7 +1149,7 @@ static void check_music(player_type *caster_ptr)
 	spell = SINGING_SONG_ID(caster_ptr);
 	s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
-	need_mana = mod_need_mana(s_ptr->smana, spell, REALM_MUSIC);
+	need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, REALM_MUSIC);
 	need_mana_frac = 0;
 
 	/* Divide by 2 */

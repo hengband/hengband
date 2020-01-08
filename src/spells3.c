@@ -2432,7 +2432,7 @@ EXP experience_of_spell(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
  * @param realm 魔法領域
  * @return 消費MP
  */
-MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
+MANA_POINT mod_need_mana(player_type *caster_ptr, MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
 {
 #define MANA_CONST   2400
 #define MANA_DIV        4
@@ -2442,11 +2442,11 @@ MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
 	if ((realm > REALM_NONE) && (realm <= MAX_REALM))
 	{
 		/*
-		 * need_mana defaults if spell exp equals SPELL_EXP_EXPERT and !p_ptr->dec_mana.
+		 * need_mana defaults if spell exp equals SPELL_EXP_EXPERT and !caster_ptr->dec_mana.
 		 * MANA_CONST is used to calculate need_mana effected from spell proficiency.
 		 */
-		need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(p_ptr, spell, realm)) + (MANA_CONST - 1);
-		need_mana *= p_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
+		need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(caster_ptr, spell, realm)) + (MANA_CONST - 1);
+		need_mana *= caster_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
 		need_mana /= MANA_CONST * MANA_DIV;
 		if (need_mana < 1) need_mana = 1;
 	}
@@ -2454,7 +2454,7 @@ MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
 	/* Non-realm magic */
 	else
 	{
-		if (p_ptr->dec_mana) need_mana = (need_mana + 1) * DEC_MANA_DIV / MANA_DIV;
+		if (caster_ptr->dec_mana) need_mana = (need_mana + 1) * DEC_MANA_DIV / MANA_DIV;
 	}
 
 #undef DEC_MANA_DIV
@@ -2552,7 +2552,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 		chance += (MAX(r_info[caster_ptr->current_floor_ptr->m_list[caster_ptr->riding].r_idx].level - caster_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
 
 	/* Extract mana consumption rate */
-	need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
+	need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, use_realm);
 
 	/* Not enough mana to cast */
 	if (need_mana > caster_ptr->csp)
@@ -2682,7 +2682,7 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 			EXP exp = experience_of_spell(caster_ptr, spell, use_realm);
 
 			/* Extract mana consumption rate */
-			need_mana = mod_need_mana(s_ptr->smana, spell, use_realm);
+			need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, use_realm);
 
 			if ((increment == 64) || (s_ptr->slevel >= 99)) exp_level = EXP_LEVEL_UNSKILLED;
 			else exp_level = spell_exp_level(exp);

@@ -179,7 +179,7 @@ void check_hex(player_type *caster_ptr)
 		{
 			const magic_type *s_ptr;
 			s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-			need_mana += mod_need_mana(s_ptr->smana, spell, REALM_HEX);
+			need_mana += mod_need_mana(caster_ptr, s_ptr->smana, spell, REALM_HEX);
 		}
 	}
 
