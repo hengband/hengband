@@ -513,9 +513,9 @@ void do_cmd_search(player_type * creature_ptr)
  * @param trapped TRUEならばトラップが存在する箱のみ、FALSEならば空でない箱全てを対象にする
  * @return 箱が存在する場合そのオブジェクトID、存在しない場合0を返す。
  */
-static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
+static OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapped)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Scan all objects in the grid */
@@ -523,7 +523,7 @@ static OBJECT_IDX chest_check(POSITION y, POSITION x, bool trapped)
 	{
 		object_type *o_ptr;
 
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Skip unknown chests XXX XXX */
@@ -683,7 +683,7 @@ static int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, boo
 		POSITION xx = creature_ptr->x + ddx_ddd[d];
 
 		/* No (visible) chest is there */
-		OBJECT_IDX o_idx = chest_check(yy, xx, FALSE);
+		OBJECT_IDX o_idx = chest_check(creature_ptr->current_floor_ptr, yy, xx, FALSE);
 		if (!o_idx) continue;
 
 		/* Grab the object */
@@ -846,7 +846,7 @@ void do_cmd_open(player_type *creature_ptr)
 		feat = get_feat_mimic(g_ptr);
 
 		/* Check for chest */
-		o_idx = chest_check(y, x, FALSE);
+		o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, FALSE);
 
 		if (!have_flag(f_info[feat].flags, FF_OPEN) && !o_idx)
 		{
@@ -1576,7 +1576,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		feat = get_feat_mimic(g_ptr);
 
 		/* Check for chests */
-		o_idx = chest_check(y, x, TRUE);
+		o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, TRUE);
 
 		/* Disarm a trap */
 		if (!is_trap(feat) && !o_idx)
