@@ -267,7 +267,7 @@ void search(player_type *creature_ptr)
  * Add the given dungeon object to the character's inventory.\n
  * Delete the object afterwards.\n
  */
-void py_pickup_aux(OBJECT_IDX o_idx)
+void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 {
 	INVENTORY_IDX slot;
 
@@ -282,7 +282,7 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 
 	object_type *o_ptr;
 
-	o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
 	object_desc(old_name, o_ptr, OD_NAME_ONLY);
@@ -290,16 +290,16 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	hirottakazu = o_ptr->number;
 #endif
 	/* Carry the object */
-	slot = inven_carry(p_ptr, o_ptr);
+	slot = inven_carry(owner_ptr, o_ptr);
 
 	/* Get the object again */
-	o_ptr = &p_ptr->inventory_list[slot];
+	o_ptr = &owner_ptr->inventory_list[slot];
 
 	delete_object_idx(o_idx);
 
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	if (owner_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
-		bool old_known = identify_item(p_ptr, o_ptr);
+		bool old_known = identify_item(owner_ptr, o_ptr);
 
 		/* Auto-inscription/destroy */
 		autopick_alter_item(slot, (bool)(destroy_identify && !old_known));
@@ -311,11 +311,11 @@ void py_pickup_aux(OBJECT_IDX o_idx)
 	object_desc(o_name, o_ptr, 0);
 
 #ifdef JP
-	if ((o_ptr->name1 == ART_CRIMSON) && (p_ptr->pseikaku == SEIKAKU_COMBAT))
+	if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == SEIKAKU_COMBAT))
 	{
-		msg_format("こうして、%sは『クリムゾン』を手に入れた。", p_ptr->name);
+		msg_format("こうして、%sは『クリムゾン』を手に入れた。", owner_ptr->name);
 		msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
-		msg_format("%sに襲いかかる．．．", p_ptr->name);
+		msg_format("%sに襲いかかる．．．", owner_ptr->name);
 	}
 	else
 	{
@@ -459,7 +459,7 @@ void carry(player_type *creature_ptr, bool pickup)
 				if (okay)
 				{
 					/* Pick up the object */
-					py_pickup_aux(this_o_idx);
+					py_pickup_aux(creature_ptr, this_o_idx);
 				}
 			}
 		}

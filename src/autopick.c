@@ -1776,7 +1776,7 @@ void autopick_pickup_items(grid_type *g_ptr)
 				}
 
 			}
-			py_pickup_aux(this_o_idx);
+			py_pickup_aux(p_ptr, this_o_idx);
 		}
 		
 		/*
