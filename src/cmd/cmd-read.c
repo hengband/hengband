@@ -498,7 +498,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_RESET_RECALL:
 		{
 			ident = TRUE;
-			if (!reset_recall()) used_up = FALSE;
+			if (!reset_recall(creature_ptr)) used_up = FALSE;
 			break;
 		}
 

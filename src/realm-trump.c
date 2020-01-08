@@ -88,7 +88,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		{
 			if (cast)
 			{
-				if (!reset_recall()) return NULL;
+				if (!reset_recall(caster_ptr)) return NULL;
 			}
 		}
 		break;

@@ -882,7 +882,7 @@ bool free_level_recall(player_type *creature_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return リセット処理が実際に行われたらTRUEを返す
  */
-bool reset_recall(void)
+bool reset_recall(player_type *caster_ptr)
 {
 	int select_dungeon, dummy = 0;
 	char ppp[80];
@@ -903,7 +903,7 @@ bool reset_recall(void)
 		(int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
 
 	/* Default */
-	sprintf(tmp_val, "%d", (int)MAX(p_ptr->current_floor_ptr->dun_level, 1));
+	sprintf(tmp_val, "%d", (int)MAX(caster_ptr->current_floor_ptr->dun_level, 1));
 
 	/* Ask for a level */
 	if (get_string(ppp, tmp_val, 10))
@@ -917,7 +917,7 @@ bool reset_recall(void)
 		max_dlv[select_dungeon] = dummy;
 
 		if (record_maxdepth)
-			exe_write_diary(p_ptr, NIKKI_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
+			exe_write_diary(caster_ptr, NIKKI_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 					/* Accept request */
 #ifdef JP
 		msg_format("%sの帰還レベルを %d 階にセット。", d_name+d_info[select_dungeon].name, dummy, dummy * 50);
