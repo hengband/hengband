@@ -66,6 +66,7 @@
 /*!
  * @brief モンスターのテレポートアウェイ処理 /
  * Teleport a monster, normally up to "dis" grids away.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param dis テレポート距離
  * @param mode オプション
@@ -173,6 +174,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 /*!
  * @brief モンスターを指定された座標付近にテレポートする /
  * Teleport monster next to a grid near the given location
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param ty 目安Y座標
  * @param tx 目安X座標
@@ -263,6 +265,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 /*!
  * @brief プレイヤーのテレポート先選定と移動処理 /
  * Teleport the player to a location up to "dis" grids away.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dis 基本移動距離
  * @param mode オプション
  * @return 実際にテレポート処理が行われたらtrue
@@ -393,6 +396,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 
 /*!
  * @brief プレイヤーのテレポート処理メインルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dis 基本移動距離
  * @param mode オプション
  * @return なし
@@ -436,6 +440,7 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 /*!
  * @brief プレイヤーのテレポートアウェイ処理 /
  * @param m_idx アウェイを試みたプレイヤーID
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param dis テレポート距離
  * @return なし
  */
@@ -478,6 +483,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
 /*!
  * @brief プレイヤーを指定位置近辺にテレポートさせる
  * Teleport player to a grid near the given location
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param ny 目標Y座標
  * @param nx 目標X座標
  * @param mode オプションフラグ
@@ -611,6 +617,7 @@ bool teleport_level_other(player_type *caster_ptr)
 /*!
  * @brief プレイヤー及びモンスターをレベルテレポートさせる /
  * Teleport the player one level up or down (random when legal)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @return なし
  */
@@ -777,6 +784,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief プレイヤーの帰還発動及び中止処理 /
  * Recall the player to town or dungeon
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param turns 発動までのターン数
  * @return 常にTRUEを返す
  */
@@ -804,6 +812,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		}
 
 	}
+
 	if (!creature_ptr->word_recall)
 	{
 		if (!creature_ptr->current_floor_ptr->dun_level)
@@ -823,8 +832,10 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
 		creature_ptr->redraw |= (PR_STATUS);
 	}
+
 	return TRUE;
 }
+
 
 bool free_level_recall(player_type *creature_ptr)
 {
@@ -860,12 +871,14 @@ bool free_level_recall(player_type *creature_ptr)
 		creature_ptr->redraw |= (PR_STATUS);
 		return TRUE;
 	}
+
 	return FALSE;
 }
 
 
 /*!
  * @brief フロア・リセット処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return リセット処理が実際に行われたらTRUEを返す
  */
 bool reset_recall(void)
@@ -916,6 +929,7 @@ bool reset_recall(void)
 	{
 		return FALSE;
 	}
+
 	return TRUE;
 }
 
@@ -923,6 +937,7 @@ bool reset_recall(void)
 /*!
  * @brief プレイヤーの装備劣化処理 /
  * Apply disenchantment to the player's stuff
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param mode 最下位ビットが1ならば劣化処理が若干低減される
  * @return 劣化処理に関するメッセージが発せられた場合はTRUEを返す /
  * Return "TRUE" if the player notices anything
@@ -976,8 +991,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 #endif
 		return (TRUE);
 	}
-
-
+	
 	/* Memorize old value */
 	to_h = o_ptr->to_h;
 	to_d = o_ptr->to_d;
@@ -1018,13 +1032,14 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 		calc_android_exp(target_ptr);
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 
 /*!
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @params caster_ptr 術者の参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
@@ -1153,6 +1168,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 
 /*!
  * @brief 虚無招来処理 /
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * Sorry, it becomes not (void)...
@@ -1234,6 +1250,7 @@ void call_the_void(player_type *caster_ptr)
 /*!
  * @brief アイテム引き寄せ処理 /
  * Fetch an item (teleport it right underneath the caster)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 魔法の発動方向
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE
@@ -1337,8 +1354,10 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 	caster_ptr->redraw |= PR_MAP;
 }
 
+
 /*!
  * @brief 現実変容処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void reserve_alter_reality(player_type *caster_ptr)
@@ -1365,13 +1384,14 @@ void reserve_alter_reality(player_type *caster_ptr)
 		msg_print(_("景色が元に戻った...", "The view around you got back..."));
 		caster_ptr->redraw |= (PR_STATUS);
 	}
-	return;
 }
+
 
 /*!
  * @brief 全所持アイテム鑑定処理 /
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void identify_pack(player_type *target_ptr)
@@ -1391,9 +1411,11 @@ void identify_pack(player_type *target_ptr)
 	}
 }
 
+
 /*!
  * @brief 装備の解呪処理 /
  * Removes curses from items in inventory
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param all 軽い呪いまでの解除ならば0
  * @return 解呪されたアイテムの数
  * @details
@@ -1444,20 +1466,22 @@ static int remove_curse_aux(player_type *creature_ptr, int all)
 	{
 		msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
 	}
-	/* Return "something uncursed" */
-	return (cnt);
+	
+	return cnt;
 }
 
 
 /*!
  * @brief 装備の軽い呪い解呪処理 /
  * Remove most curses
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 解呪に成功した装備数
  */
 int remove_curse(player_type *caster_ptr)
 {
-	return (remove_curse_aux(caster_ptr, FALSE));
+	return remove_curse_aux(caster_ptr, FALSE);
 }
+
 
 /*!
  * @brief 装備の重い呪い解呪処理 /
@@ -1466,13 +1490,14 @@ int remove_curse(player_type *caster_ptr)
  */
 int remove_all_curse(player_type *caster_ptr)
 {
-	return (remove_curse_aux(caster_ptr, TRUE));
+	return remove_curse_aux(caster_ptr, TRUE);
 }
 
 
 /*!
  * @brief アイテムの価値に応じた錬金術処理 /
  * Turns an object into gold, gain some of its value in a shop
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 処理が実際に行われたらTRUEを返す
  */
 bool alchemy(player_type *caster_ptr)
@@ -1557,6 +1582,7 @@ bool alchemy(player_type *caster_ptr)
 
 /*!
  * @brief アーティファクト生成の巻物処理 /
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 生成が実際に試みられたらTRUEを返す
  */
 bool artifact_scroll(void)
@@ -1654,19 +1680,21 @@ bool artifact_scroll(void)
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
 			exe_write_diary(p_ptr, NIKKI_ART_SCROLL, 0, o_name);
 		}
+
 		chg_virtue(p_ptr, V_ENCHANT, 1);
 	}
 
 	calc_android_exp(p_ptr);
 
 	/* Something happened */
-	return (TRUE);
+	return TRUE;
 }
 
 
 /*!
  * @brief アイテム鑑定処理 /
  * Identify an object
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 鑑定されるアイテムの情報参照ポインタ
  * @return 実際に鑑定できたらTRUEを返す
  */
@@ -1706,9 +1734,11 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 	return old_known;
 }
 
+
 /*!
  * @brief アイテム鑑定のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
@@ -1774,6 +1804,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 /*!
  * @brief アイテム凡庸化のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に凡庸化をを行ったならばTRUEを返す
  * @details
@@ -1816,6 +1847,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 		o_ptr->inscription = inscription;
 		if (item >= 0) owner_ptr->total_weight += (o_ptr->weight - weight);
 	}
+
 	calc_android_exp(owner_ptr);
 
 	/* Something happened */
@@ -1825,6 +1857,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 /*!
  * @brief アイテム*鑑定*のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
@@ -1890,7 +1923,7 @@ bool identify_fully(bool only_equip)
 	autopick_alter_item(item, (bool)(destroy_identify && !old_known));
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1899,6 +1932,7 @@ bool identify_fully(bool only_equip)
  * @brief 魔力充填処理 /
  * Recharge a wand/staff/rod from the pack or on the floor.
  * This function has been rewritten in Oangband and ZAngband.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param power 充填パワー
  * @return ターン消費を要する処理まで進んだらTRUEを返す
  *
@@ -1974,8 +2008,7 @@ bool recharge(player_type *caster_ptr, int power)
 				o_ptr->timeout = 0;
 		}
 	}
-
-
+	
 	/* Recharge wand/staff */
 	else
 	{
@@ -2031,8 +2064,7 @@ bool recharge(player_type *caster_ptr, int power)
 			o_ptr->ident &= ~(IDENT_EMPTY);
 		}
 	}
-
-
+	
 	/* Inflict the penalties for failing a recharge. */
 	if (fail)
 	{
@@ -2149,11 +2181,11 @@ bool recharge(player_type *caster_ptr, int power)
 			}
 		}
 	}
+
 	caster_ptr->update |= (PU_COMBINE | PU_REORDER);
 	caster_ptr->window |= (PW_INVEN);
 
-	/* Something was done */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -2281,6 +2313,7 @@ void display_spell_list(player_type *caster_ptr)
 
 			Term_putstr(x, y + i + 1, -1, a, psi_desc);
 		}
+
 		return;
 	}
 
@@ -2377,6 +2410,7 @@ void display_spell_list(player_type *caster_ptr)
 /*!
  * @brief 呪文の経験値を返す /
  * Returns experience of a spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 呪文ID
  * @param use_realm 魔法領域
  * @return 経験値
@@ -2394,6 +2428,7 @@ EXP experience_of_spell(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 /*!
  * @brief 呪文の消費MPを返す /
  * Modify mana consumption rate using spell exp and dec_mana
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param need_mana 基本消費MP
  * @param spell 呪文ID
  * @param realm 魔法領域
@@ -2436,6 +2471,7 @@ MANA_POINT mod_need_mana(MANA_POINT need_mana, SPELL_IDX spell, REALM_IDX realm)
  * @brief 呪文の失敗率修正処理1(呪い、消費魔力減少、呪文簡易化) /
  * Modify spell fail rate
  * Using to_m_chance, dec_mana, easy_spell and heavy_spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param chance 修正前失敗率
  * @return 失敗率(%)
  * @todo 統合を検討
@@ -2458,6 +2494,7 @@ PERCENTAGE mod_spell_chance_1(player_type *caster_ptr, PERCENTAGE chance)
  * @brief 呪文の失敗率修正処理2(消費魔力減少、呪い、負値修正) /
  * Modify spell fail rate
  * Using to_m_chance, dec_mana, easy_spell and heavy_spell
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param chance 修正前失敗率
  * @return 失敗率(%)
  * Modify spell fail rate (as "suffix" process)
@@ -2476,6 +2513,7 @@ PERCENTAGE mod_spell_chance_2(player_type *caster_ptr, PERCENTAGE chance)
 /*!
  * @brief 呪文の失敗率計算メインルーチン /
  * Returns spell chance of failure for spell -RAK-
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 呪文ID
  * @param use_realm 魔法領域ID
  * @return 失敗率(%)
@@ -2581,12 +2619,11 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 }
 
 
-
 /*!
  * @brief 呪文情報の表示処理 /
  * Print a list of spells (for browsing or casting or viewing)
- * @param target_spell 呪文ID		    
  * @param caster_ptr 術者の参照ポインタ
+ * @param target_spell 呪文ID
  * @param spells 表示するスペルID配列の参照ポインタ
  * @param num 表示するスペルの数(spellsの要素数)
  * @param y 表示メッセージ左上Y座標
@@ -2745,6 +2782,7 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 			    (max ? '!' : ' '), ryakuji,
 			    s_ptr->slevel, need_mana, spell_chance(caster_ptr, spell, use_realm), comment));
 		}
+
 		c_prt(line_attr, out_val, y + i + 1, x);
 	}
 
@@ -2752,9 +2790,11 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 	prt("", y + i + 1, x);
 }
 
+
 /*!
  * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す /
  * Helper function -- return a "nearby" race for polymorphing
+ * @param floor_ptr 配置するフロアの参照ポインタ
  * @param r_idx 基準となるモンスター種族ID
  * @return 変更先のモンスター種族ID
  * @details
@@ -2798,12 +2838,15 @@ static MONRACE_IDX poly_r_idx(MONRACE_IDX r_idx)
 
 		break;
 	}
+
 	return (r_idx);
 }
+
 
 /*!
  * @brief 指定座標にいるモンスターを変身させる /
  * Helper function -- return a "nearby" race for polymorphing
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 指定のY座標
  * @param x 指定のX座標
  * @return 実際に変身したらTRUEを返す
@@ -2901,6 +2944,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 /*!
  * @brief 次元の扉処理 /
  * Dimension Door
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param x テレポート先のX座標
  * @param y テレポート先のY座標
  * @return 目標に指定通りテレポートできたならばTRUEを返す
@@ -2933,6 +2977,7 @@ static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
 
 /*!
  * @brief 次元の扉処理のメインルーチン /
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * Dimension Door
  * @return ターンを消費した場合TRUEを返す
  */
@@ -2954,6 +2999,7 @@ bool dimension_door(void)
 /*!
  * @brief 鏡抜け処理のメインルーチン /
  * Mirror Master's Dimension Door
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return ターンを消費した場合TRUEを返す
  */
 bool mirror_tunnel(void)
@@ -2970,8 +3016,10 @@ bool mirror_tunnel(void)
 	return TRUE;
 }
 
+
 /*!
  * @brief 魔力食い処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param power 基本効力
  * @return ターンを消費した場合TRUEを返す
  */
@@ -3157,7 +3205,6 @@ bool eat_magic(player_type *caster_ptr, int power)
 					msg_format(_("%sは破損を免れたが、魔力が全て失われた。", "You save your %s from destruction, but all charges are lost."), o_name);
 					o_ptr->pval = 0;
 				}
-				/* Staffs aren't drained. */
 			}
 
 			/* Destroy an object or one in a stack of objects. */
@@ -3206,8 +3253,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 
 /*!
  * @brief 皆殺し(全方向攻撃)処理
- * @param py プレイヤーY座標
- * @param px プレイヤーX座標
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void massacre(player_type *caster_ptr)
@@ -3229,6 +3275,7 @@ void massacre(player_type *caster_ptr)
 			py_attack(caster_ptr, y, x, 0);
 	}
 }
+
 
 bool eat_lock(player_type *caster_ptr)
 {
@@ -3353,8 +3400,10 @@ bool shock_power(player_type *caster_ptr)
 			}
 		}
 	}
+
 	return TRUE;
 }
+
 
 bool booze(player_type *creature_ptr)
 {
@@ -3389,8 +3438,10 @@ bool booze(player_type *creature_ptr)
 			msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing, or how you got here!"));
 		}
 	}
+
 	return ident;
 }
+
 
 bool detonation(player_type *creature_ptr)
 {
@@ -3400,6 +3451,7 @@ bool detonation(player_type *creature_ptr)
 	(void)set_cut(creature_ptr,creature_ptr->cut + 5000);
 	return TRUE;
 }
+
 
 void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 {
@@ -3489,6 +3541,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 	} while (one_in_(5));
 }
 
+
 /*!
  * @brief クリムゾンを発射する / Fire Crimson, evoluting gun.
  @ @param shooter_ptr 射撃を行うクリーチャー参照
@@ -3538,7 +3591,8 @@ bool fire_crimson(player_type *shooter_ptr)
 
 
 /*!
- * @brief 町間のテレポートを行うメインルーチン。
+ * @brief 町間のテレポートを行うメインルーチン
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return テレポート処理を決定したか否か
  */
 bool tele_town(player_type *caster_ptr)
@@ -3591,6 +3645,7 @@ bool tele_town(player_type *caster_ptr)
 			screen_load();
 			return FALSE;
 		}
+
 		else if ((i < 'a') || (i > ('a' + max_towns - 2))) continue;
 		else if (((i - 'a' + 1) == caster_ptr->town_num) || ((i - 'a' + 1) == NO_TOWN) || ((i - 'a' + 1) == SECRET_TOWN) || !(caster_ptr->visit & (1L << (i - 'a')))) continue;
 		break;
