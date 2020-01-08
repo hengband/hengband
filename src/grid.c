@@ -842,51 +842,12 @@ void lite_spot(POSITION y, POSITION x)
  */
 
 /*
- * Mega-Hack -- Delayed visual update
- * Only used if update_view(), update_lite() or update_mon_lite() was called
- */
-void delayed_visual_update(void)
-{
-	int i;
-	POSITION y, x;
-	grid_type *g_ptr;
-
-	/* Update needed grids */
-	for (i = 0; i < p_ptr->current_floor_ptr->redraw_n; i++)
-	{
-		y = p_ptr->current_floor_ptr->redraw_y[i];
-		x = p_ptr->current_floor_ptr->redraw_x[i];
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-
-		/* Update only needed grids (prevent multiple updating) */
-		if (!(g_ptr->info & CAVE_REDRAW)) continue;
-
-		/* If required, note */
-		if (g_ptr->info & CAVE_NOTE) note_spot(y, x);
-
-		lite_spot(y, x);
-
-		/* Hack -- Visual update of monster on this grid */
-		if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
-
-		/* No longer in the array */
-		g_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
-	}
-
-	/* None left */
-	p_ptr->current_floor_ptr->redraw_n = 0;
-}
-
-
-/*
  * Hack - speed up the update_flow algorithm by only doing
  * it everytime the player moves out of LOS of the last
  * "way-point".
  */
 static POSITION flow_x = 0;
 static POSITION flow_y = 0;
-
-
 
 /*
  * Hack -- fill in the "cost" field of every grid that the player

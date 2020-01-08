@@ -5096,7 +5096,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_DELAY_VIS))
 	{
 		creature_ptr->update &= ~(PU_DELAY_VIS);
-		delayed_visual_update();
+		delayed_visual_update(creature_ptr->current_floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_MONSTERS))
