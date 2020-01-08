@@ -1432,7 +1432,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		/* mirror tunnel */
 	case 16:
 		msg_print(_("鏡の世界を通り抜け…  ", "Go through the world of mirror..."));
-		return mirror_tunnel();
+		return mirror_tunnel(caster_ptr);
 
 		/* mirror of recall */
 	case 17:

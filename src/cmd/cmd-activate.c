@@ -1530,7 +1530,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_DIM_DOOR:
 	{
 		msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
-		if (!dimension_door()) return FALSE;
+		if (!dimension_door(user_ptr)) return FALSE;
 		break;
 	}
 

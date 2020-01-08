@@ -290,7 +290,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 				msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
-				if (!dimension_door()) return NULL;
+				if (!dimension_door(caster_ptr)) return NULL;
 			}
 		}
 		break;

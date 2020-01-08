@@ -2841,12 +2841,12 @@ static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
  * Dimension Door
  * @return ターンを消費した場合TRUEを返す
  */
-bool dimension_door(void)
+bool dimension_door(player_type *caster_ptr)
 {
 	DEPTH x = 0, y = 0;
 
-	if (!tgt_pt(p_ptr, &x, &y)) return FALSE;
-	if (dimension_door_aux(p_ptr, x, y)) return TRUE;
+	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
+	if (dimension_door_aux(caster_ptr, x, y)) return TRUE;
 
 	msg_print(_("精霊界から物質界に戻る時うまくいかなかった！", "You fail to exit the astral plane correctly!"));
 	return TRUE;
@@ -2859,11 +2859,11 @@ bool dimension_door(void)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return ターンを消費した場合TRUEを返す
  */
-bool mirror_tunnel(void)
+bool mirror_tunnel(player_type *caster_ptr)
 {
 	POSITION x = 0, y = 0;
-	if (!tgt_pt(p_ptr, &x, &y)) return FALSE;
-	if (dimension_door_aux(p_ptr, x, y)) return TRUE;
+	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
+	if (dimension_door_aux(caster_ptr, x, y)) return TRUE;
 
 	msg_print(_("鏡の世界をうまく通れなかった！", "You fail to pass the mirror plane correctly!"));
 	return TRUE;

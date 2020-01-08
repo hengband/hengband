@@ -317,8 +317,8 @@ extern PERCENTAGE mod_spell_chance_2(player_type *caster_ptr, PERCENTAGE chance)
 extern PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX realm);
 extern void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX realm);
 extern bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x);
-extern bool dimension_door(void);
-extern bool mirror_tunnel(void);
+extern bool dimension_door(player_type *caster_ptr);
+extern bool mirror_tunnel(player_type *caster_ptr);
 extern void massacre(player_type *caster_ptr);
 extern bool eat_rock(player_type *caster_ptr);
 extern bool shock_power(player_type *caster_ptr);
