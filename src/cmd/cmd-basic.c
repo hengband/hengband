@@ -1022,9 +1022,9 @@ void do_cmd_close(player_type *creature_ptr)
  * @param x 対象を行うマスのX座標
  * @return 
  */
-static bool do_cmd_tunnel_test(POSITION y, POSITION x)
+static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Must have knowledge */
 	if (!(g_ptr->info & CAVE_MARK))
@@ -1066,7 +1066,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 	bool more = FALSE;
 
 	/* Verify legality */
-	if (!do_cmd_tunnel_test(y, x)) return (FALSE);
+	if (!do_cmd_tunnel_test(creature_ptr->current_floor_ptr, y, x)) return (FALSE);
 
 	take_turn(creature_ptr, 100);
 
