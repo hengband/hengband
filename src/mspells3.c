@@ -1327,7 +1327,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		}
 
         msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
-		teleport_monster_to(floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
+		teleport_monster_to(caster_ptr, floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
 		break;
 	}
 	case MS_TELE_AWAY:

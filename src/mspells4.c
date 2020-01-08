@@ -2031,6 +2031,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, M
 
 /*!
 * @brief BシンボルのRF6_SPECIALの処理。投げ落とす攻撃。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -2038,7 +2039,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, M
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam = -1;
 	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
@@ -2076,7 +2077,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 		if (monster_to_player || t_idx == p_ptr->riding)
 			teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 		else 
-			teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+			teleport_monster_to(target_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 
 		sound(SOUND_FALL);
 
@@ -2128,6 +2129,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 
 /*!
 * @brief RF6_SPECIALの処理。モンスターの種類によって実処理に振り分ける。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -2135,7 +2137,7 @@ HIT_POINT spell_RF6_SPECIAL_B(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
@@ -2159,7 +2161,7 @@ HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		default:
 		if (r_ptr->d_char == 'B')
 		{
-			return spell_RF6_SPECIAL_B(y, x, m_idx, t_idx, TARGET_TYPE);
+			return spell_RF6_SPECIAL_B(target_ptr, y, x, m_idx, t_idx, TARGET_TYPE);
 			break;
 		}
 
@@ -2170,12 +2172,13 @@ HIT_POINT spell_RF6_SPECIAL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF6_TELE_TOの処理。テレポート・バック。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_type	*t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
@@ -2224,7 +2227,7 @@ void spell_RF6_TELE_TO(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 			if (t_idx == p_ptr->riding) 
 				teleport_player_to(p_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 			else 
-				teleport_monster_to(t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
+				teleport_monster_to(target_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
 		}
 
 		set_monster_csleep(t_idx, 0);
@@ -3484,8 +3487,8 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
 	case RF6_SPELL_START + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_TPORT */
 	case RF6_SPELL_START + 6:  return spell_RF6_WORLD(target_ptr, m_idx); break;	/* RF6_WORLD */
-	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF6_SPECIAL */
-	case RF6_SPELL_START + 8:  spell_RF6_TELE_TO(m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_TELE_TO */
+	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF6_SPECIAL */
+	case RF6_SPELL_START + 8:  spell_RF6_TELE_TO(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_TELE_TO */
 	case RF6_SPELL_START + 9:  spell_RF6_TELE_AWAY(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_TELE_AWAY */
 	case RF6_SPELL_START + 10: spell_RF6_TELE_LEVEL(m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_TELE_LEVEL */
 	case RF6_SPELL_START + 11: spell_RF6_PSY_SPEAR(y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_PSY_SPEAR */
@@ -3599,8 +3602,8 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF6_SPELL_START + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_BLINK */
 	case RF6_SPELL_START + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_TPORT */
 	case RF6_SPELL_START + 6:  return -1; break;	/* RF6_WORLD */
-	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF6_SPECIAL */
-	case RF6_SPELL_START + 8:  spell_RF6_TELE_TO(m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_TELE_TO */
+	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF6_SPECIAL */
+	case RF6_SPELL_START + 8:  spell_RF6_TELE_TO(target_ptr, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_TELE_TO */
 	case RF6_SPELL_START + 9:  spell_RF6_TELE_AWAY(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_TELE_AWAY */
 	case RF6_SPELL_START + 10: spell_RF6_TELE_LEVEL(m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_TELE_LEVEL */
 	case RF6_SPELL_START + 11: return spell_RF6_PSY_SPEAR(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_PSY_SPEAR */

@@ -466,7 +466,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			for (i = 0; i < max_pet; i++)
 			{
 				pet_ctr = who[i];
-				teleport_monster_to(pet_ctr, user_ptr->y, user_ptr->x, 100, TELEPORT_PASSIVE);
+				teleport_monster_to(user_ptr, pet_ctr, user_ptr->y, user_ptr->x, 100, TELEPORT_PASSIVE);
 			}
 
 			/* Free the "who" array */

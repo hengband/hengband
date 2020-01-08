@@ -182,14 +182,14 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
  * @param mode オプション
  * @return なし
  */
-void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode)
+void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode)
 {
 	POSITION ny, nx, oy, ox;
 	int d, i, min;
 	int attempts = 500;
 	POSITION dis = 2;
 	bool look = TRUE;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	if(!m_ptr->r_idx) return;
 
 	/* "Skill" test */
@@ -222,7 +222,7 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 			}
 
 			/* Ignore illegal locations */
-			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
+			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
 
 			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
 
@@ -245,22 +245,23 @@ void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power,
 	sound(SOUND_TPOTHER);
 
 	/* Update the old location */
-	p_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+	caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
 
 	/* Update the new location */
-	p_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+	caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
 	/* Move the monster */
 	m_ptr->fy = ny;
 	m_ptr->fx = nx;
 
-	update_monster(p_ptr, m_idx, TRUE);
+	update_monster(caster_ptr, m_idx, TRUE);
 	lite_spot(oy, ox);
 	lite_spot(ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-		p_ptr->update |= (PU_MON_LITE);
+		caster_ptr->update |= (PU_MON_LITE);
 }
+
 
 /*!
  * @brief プレイヤーのテレポート先選定と移動処理 /
@@ -429,7 +430,7 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 				if ((r_ptr->a_ability_flags2 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, 0L);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, 0L);
 				}
 			}
 		}
@@ -472,7 +473,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
 				if ((r_ptr->a_ability_flags2 & RF6_TPORT) &&
 				    !(r_ptr->flagsr & RFR_RES_TELE))
 				{
-					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, 0L);
+					if (!MON_CSLEEP(m_ptr)) teleport_monster_to(target_ptr, tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, 0L);
 				}
 			}
 		}
@@ -3383,6 +3384,7 @@ bool shock_power(player_type *caster_ptr)
 				}
 				else break;
 			}
+
 			if ((ty != oy) || (tx != ox))
 			{
 				msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
@@ -3427,6 +3429,7 @@ bool booze(player_type *creature_ptr)
 				ident = TRUE;
 			}
 		}
+
 		if (one_in_(13) && (creature_ptr->pclass != CLASS_MONK))
 		{
 			ident = TRUE;

@@ -283,7 +283,7 @@ extern bool vanish_dungeon(player_type *caster_ptr);
 
 /* spells3.c */
 extern bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
-extern void teleport_monster_to(MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
+extern void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
 extern bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode);
 extern void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode);
 extern void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis);
