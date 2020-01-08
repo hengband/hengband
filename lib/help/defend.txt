@@ -528,9 +528,9 @@ need to take steps to recover from the damage as soon as possible.
 
 --- Healing Items ---
 
-Healing is available in multiple forms including: Potions and Staves
+Healing is available in multiple forms including: Potions and Staffs
 of Cure Light Wounds, Potions of Cure Serious Wounds, Potions of Cure
-Critical Wounds, Potions, Staves and Rods of Healing, Potions of
+Critical Wounds, Potions, Staffs and Rods of Healing, Potions of
 *Healing* and Potions of Life, from weakest to strongest. Both the Life
 and Nature realms contain spells to heal the player.
 

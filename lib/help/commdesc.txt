@@ -24,7 +24,7 @@ Inventory list (i)
      equipment. Often, many identical objects can be "stacked" into a
      "pile" which will count as a single item. This is always true of
      things like potions, scrolls, and food, but you may have to set
-     options to allow wands, staves, and other such objects to stack.
+     options to allow wands, staffs, and other such objects to stack.
      Each object has a weight, and if you carry more objects than your
      strength permits, you will begin to slow down.
  
@@ -390,13 +390,13 @@ Aim a wand (a) or Zap a wand (z)
 Use a staff (u) or Zap a staff (Z)
      This command will use a staff. A staff is normally very similar
      to a scroll, in that they normally either have an area effect or
-     affect a specific object. Staves are magical devices, and there
+     affect a specific object. Staffs are magical devices, and there
      is a chance you will not be able to figure out how to use them.
  
 Zap a rod (z) or Activate a rod (a)
      Rods are extremely powerful magical items, which cannot be burnt
      or shattered, and which can have either staff-like or wand-like
-     effects, but unlike staves and wands, they don't have charges.
+     effects, but unlike staffs and wands, they don't have charges.
      Instead, they draw on the ambient magical energy to recharge
      themselves, and therefore can only be activated once every few
      turns. The recharging time varies depending on the type of rod.

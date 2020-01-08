@@ -2612,7 +2612,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	else if (IS_FLG(FLG_MISSILES))
 		body_str = "shots, arrows or crossbow bolts";
 	else if (IS_FLG(FLG_DEVICES))
-		body_str = "scrolls, wands, staves or rods";
+		body_str = "scrolls, wands, staffs or rods";
 	else if (IS_FLG(FLG_LIGHTS))
 		body_str = "light sources";
 	else if (IS_FLG(FLG_JUNKS))

@@ -170,7 +170,7 @@ damage, and magical bonuses to stats. It also tells you if the item is
 cursed. It tells you what a wand/rod/staff/potion/scroll/mushroom/etc.
 does, and this is very important. There are nasty potions deep in the
 dungeon that you *do not* want to drink! Sometimes, the descriptions of
-the items are a little obscure; things like Staves of Holiness and
+the items are a little obscure; things like Staffs of Holiness and
 Power, Mushrooms of Unhealth, and others. You may have to experiment a
 bit to determine their powers. 
 
@@ -275,7 +275,7 @@ you watch, helpless.
 
 Confusion and Blindness resistance are vital. If you have these, you
 can rely on scrolls of Teleportation to get you out of any situation.
-Before this, you need Staves of Teleportation which can be activated
+Before this, you need Staffs of Teleportation which can be activated
 when blinded or confused, although with a decent failure rate. Scrolls
 are fail-safe.
 

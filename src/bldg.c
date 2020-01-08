@@ -3183,13 +3183,13 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 
 
 /*!
- * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staves
+ * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staffs
  * @details
  * The player can select the number of charges to add\n
  * (up to a limit), and the recharge never fails.\n
  *\n
  * The cost for rods depends on the level of the rod. The prices\n
- * for recharging wands and staves are dependent on the cost of\n
+ * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -3353,13 +3353,13 @@ static void building_recharge(player_type *player_ptr)
 
 
 /*!
- * @brief 魔道具の使用回数を回復させる施設の一括処理向けサブルーチン / Recharge rods, wands and staves
+ * @brief 魔道具の使用回数を回復させる施設の一括処理向けサブルーチン / Recharge rods, wands and staffs
  * @details
  * The player can select the number of charges to add\n
  * (up to a limit), and the recharge never fails.\n
  *\n
  * The cost for rods depends on the level of the rod. The prices\n
- * for recharging wands and staves are dependent on the cost of\n
+ * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし

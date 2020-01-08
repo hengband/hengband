@@ -26,7 +26,7 @@ devices.
 
 You can attack creatures from a distance by firing a missile from a bow
 or other missile launcher, by throwing an object or by using magical
-items such as wands, rods and staves. If you have chosen to play a
+items such as wands, rods and staffs. If you have chosen to play a
 spell casting class, you may be able to learn some spells which allow
 you to attack a creature from a distance. You can use distance attacks
 even when your target is next to you.

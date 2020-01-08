@@ -275,7 +275,7 @@ by the racial/class power command ("U"/"O").
     poison, they can see invisible things, and move freely.  At higher
     levels, they also become resistant to attacks which threaten to
     drain away their life force.  Golems gain very little nutrition
-    from ordinary food, but can absorb mana from staves and wands as
+    from ordinary food, but can absorb mana from staffs and wands as
     their power source.  Golems also gain a natural armor class bonus
     from their tough body.
 
@@ -293,7 +293,7 @@ by the racial/class power command ("U"/"O").
     effects of these will affect the skeleton even without entering
     the skeleton's (non-existent) belly, the potion or food itself
     will fall through the skeleton's jaws, giving no nutritional
-    benefit.  They can absorb mana from staves and wands as their
+    benefit.  They can absorb mana from staffs and wands as their
     energy source.
 
 
@@ -307,7 +307,7 @@ by the racial/class power command ("U"/"O").
     see invisible.  While still vulnerable to cuts (unlike skeletons),
     Zombies are resistant to Nether.  Like Golems, they gain very
     little nutrition from the food of mortals, but can absorb mana
-    from staves and wands as their energy source.
+    from staffs and wands as their energy source.
 
 
 ***** <Vampire>
@@ -337,7 +337,7 @@ by the racial/class power command ("U"/"O").
     cold.  They also resist nether.  At higher levels they develop
     telepathic abilities.  Spectres make superb spellcasters, but
     their physical form is very weak.  They gain very little nutrition
-    from the food of mortals, but can absorb mana from staves and
+    from the food of mortals, but can absorb mana from staffs and
     wands as their energy source.
 
 
@@ -505,7 +505,7 @@ command("U"/"O").
     second realm can be changed in the middle of the game.  You can
     change second realm by studying ("G") from a spellbook of new
     realm.  They have a class power - 'Eat Magic' - which absorbs mana
-    from wands, staves or rods.
+    from wands, staffs or rods.
 
 
 ***** <Priest>
@@ -687,7 +687,7 @@ command("U"/"O").
     gain substantial benefits in the mana costs, minimum levels, and
     failure rates of the spells in their speciality realm.  They have
     a class power - 'Eat Magic' - which absorbs mana from wands,
-    staves, or rods.
+    staffs, or rods.
 
     And then, only High-Mages are able to cast Hex spells.
 
@@ -758,7 +758,7 @@ command("U"/"O").
     Sorcerers can cast any spell from any spellbooks of all nine magic
     realms with 'Master' proficiency level without having to learn it.
     They have a class power - 'Eat Magic' - which absorbs mana from
-    wands, staves or rods.
+    wands, staffs or rods.
 
 
 ***** <Archer>

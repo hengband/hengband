@@ -279,7 +279,7 @@ The Alchemy Shop ("5")
 
 The Magic Shop ("6")
      The Magic Shop deals in all sorts of rings, wands, amulets,
-     and staves, as well as some magic books.
+     and staffs, as well as some magic books.
 
 The Black Market ("7")
      The Black Market will sell and buy anything at extortionate

@@ -292,7 +292,7 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
  * @details
  * <pre>
  * This will light up all spaces with "magic" items, including artifacts,
- * ego-items, potions, scrolls, books, rods, wands, staves, amulets, rings,
+ * ego-items, potions, scrolls, books, rods, wands, staffs, amulets, rings,
  * and "enchanted" items of the "good" variety.
  *
  * It can probably be argued that this function is now too powerful.
