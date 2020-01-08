@@ -1586,7 +1586,7 @@ bool alchemy(player_type *caster_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 生成が実際に試みられたらTRUEを返す
  */
-bool artifact_scroll(void)
+bool artifact_scroll(player_type *caster_ptr)
 {
 	OBJECT_IDX item;
 	bool okay = FALSE;
@@ -1600,7 +1600,7 @@ bool artifact_scroll(void)
 	q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return (FALSE);
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1667,27 +1667,24 @@ bool artifact_scroll(void)
 		okay = become_random_artifact(o_ptr, TRUE);
 	}
 
-	/* Failure */
 	if (!okay)
 	{
 		if (flush_failure) flush();
 		msg_print(_("強化に失敗した。", "The enchantment failed."));
-		if (one_in_(3)) chg_virtue(p_ptr, V_ENCHANT, -1);
+		if (one_in_(3)) chg_virtue(caster_ptr, V_ENCHANT, -1);
 	}
 	else
 	{
 		if (record_rand_art)
 		{
 			object_desc(o_name, o_ptr, OD_NAME_ONLY);
-			exe_write_diary(p_ptr, NIKKI_ART_SCROLL, 0, o_name);
+			exe_write_diary(caster_ptr, NIKKI_ART_SCROLL, 0, o_name);
 		}
 
-		chg_virtue(p_ptr, V_ENCHANT, 1);
+		chg_virtue(caster_ptr, V_ENCHANT, 1);
 	}
 
-	calc_android_exp(p_ptr);
-
-	/* Something happened */
+	calc_android_exp(caster_ptr);
 	return TRUE;
 }
 

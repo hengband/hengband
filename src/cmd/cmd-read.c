@@ -491,7 +491,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_ARTIFACT:
 		{
 			ident = TRUE;
-			if (!artifact_scroll()) used_up = FALSE;
+			if (!artifact_scroll(creature_ptr)) used_up = FALSE;
 			break;
 		}
 

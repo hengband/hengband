@@ -293,7 +293,7 @@ extern bool teleport_level_other(player_type *caster_ptr);
 extern void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool recall_player(player_type *creature_ptr, TIME_EFFECT turns);
 extern bool free_level_recall(player_type *creature_ptr);
-extern bool reset_recall(player_type *caster_type);
+extern bool reset_recall(player_type *caster_ptr);
 extern bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode);
 extern void call_the_void(player_type *caster_ptr);
 extern void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
@@ -303,7 +303,7 @@ extern int remove_curse(player_type *caster_ptr);
 extern int remove_all_curse(player_type *caster_ptr);
 extern bool alchemy(player_type *caster_ptr);
 
-extern bool artifact_scroll(void);
+extern bool artifact_scroll(player_type *caster_ptr);
 extern bool ident_spell(player_type *caster_ptr, bool only_equip);
 extern bool mundane_spell(player_type *ownner_ptr, bool only_equip);
 extern bool identify_item(player_type *owner_ptr, object_type *o_ptr);
