@@ -5369,31 +5369,29 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		msg_print(_("ネクロノミコンを読んで正気を失った！", "Your sanity is shaken by reading the Necronomicon!"));
 	}
 
-	if (saving_throw(creature_ptr->skill_sav - power))
+	/* 過去の効果無効率再現のため5回saving_throw 実行 */
+	if (saving_throw(creature_ptr->skill_sav - power)
+		&& saving_throw(creature_ptr->skill_sav - power)
+		&& saving_throw(creature_ptr->skill_sav - power)
+		&& saving_throw(creature_ptr->skill_sav - power)
+		&& saving_throw(creature_ptr->skill_sav - power)
+		)
 	{
 		return;
 	}
 
-	do {
-		(void)do_dec_stat(creature_ptr, A_INT);
-	} while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
-
-	do {
-		(void)do_dec_stat(creature_ptr, A_WIS);
-	} while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
-
-	switch (randint1(21))
+	switch (randint1(22))
 	{
 	case 1:
-		if (!(creature_ptr->muta3 & MUT3_MORONIC) && one_in_(5))
+		if (!(creature_ptr->muta3 & MUT3_MORONIC))
 		{
 			if ((creature_ptr->stat_use[A_INT] < 4) && (creature_ptr->stat_use[A_WIS] < 4))
 			{
-				msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You current_world_ptr->game_turn into an utter moron!"));
+				msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
 			}
 			else
 			{
-				msg_print(_("あなたは完璧な馬鹿になった！", "You current_world_ptr->game_turn into an utter moron!"));
+				msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
 			}
 
 			if (creature_ptr->muta3 & MUT3_HYPER_INT)
@@ -5405,8 +5403,6 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		}
 		break;
 	case 2:
-	case 3:
-	case 4:
 		if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !creature_ptr->resist_fear)
 		{
 			msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
@@ -5421,30 +5417,42 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 			creature_ptr->muta2 |= MUT2_COWARDICE;
 		}
 		break;
-	case 5:
-	case 6:
-	case 7:
+	case 3:
 		if (!(creature_ptr->muta2 & MUT2_HALLU) && !creature_ptr->resist_chaos)
 		{
 			msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
 			creature_ptr->muta2 |= MUT2_HALLU;
 		}
 		break;
-	case 8:
-	case 9:
-	case 10:
-		if (!(creature_ptr->muta2 & MUT2_BERS_RAGE))
+	case 4:
+		if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !creature_ptr->resist_conf)
 		{
 			msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
 			creature_ptr->muta2 |= MUT2_BERS_RAGE;
 		}
 		break;
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	case 10:
 	case 11:
 	case 12:
+		/* Mind blast */
+		if (!creature_ptr->resist_conf)
+		{
+			(void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
+		}
+		if (!creature_ptr->resist_chaos && one_in_(3))
+		{
+			(void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
+		}
+		return;
+		break;
 	case 13:
 	case 14:
 	case 15:
-	case 16:
 		/* Brain smash */
 		if (!creature_ptr->resist_conf)
 		{
@@ -5458,22 +5466,36 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		{
 			(void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
 		}
+		do {
+			(void)do_dec_stat(creature_ptr, A_INT);
+		} while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
+
+		do {
+			(void)do_dec_stat(creature_ptr, A_WIS);
+		} while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
 		break;
+	case 16:
 	case 17:
+		/* Amnesia */
+		if (lose_all_info(creature_ptr))
+			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
+		break;
 	case 18:
 	case 19:
 	case 20:
 	case 21:
-		/* Amnesia */
-		if (lose_all_info(creature_ptr))
-			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
+	case 22:
+		/* Lose int & wis */
+		do_dec_stat(creature_ptr, A_INT);
+		do_dec_stat(creature_ptr, A_WIS);
+		break;
+	default:
 		break;
 	}
 
 	creature_ptr->update |= PU_BONUS;
 	handle_stuff();
 }
-
 
 /*!
  * @brief プレイヤーの経験値について整合性のためのチェックと調整を行う /
