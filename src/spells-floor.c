@@ -44,28 +44,20 @@
  */
 void wiz_lite(player_type *caster_ptr, bool ninja)
 {
-	OBJECT_IDX i;
-	POSITION y, x;
-	FEAT_IDX feat;
-	feature_type *f_ptr;
-
 	/* Memorize objects */
-	for (i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
+	for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
-
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
-
-		/* Memorize */
 		o_ptr->marked |= OM_FOUND;
 	}
 
 	/* Scan all normal grids */
-	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
+	for (POSITION y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
 		/* Scan all normal grids */
-		for (x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
+		for (POSITION x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
 		{
 			grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -73,44 +65,44 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 			g_ptr->info |= (CAVE_KNOWN);
 
 			/* Feature code (applying "mimic" field) */
-			feat = get_feat_mimic(g_ptr);
+			FEAT_IDX feat = get_feat_mimic(g_ptr);
+			feature_type *f_ptr;
 			f_ptr = &f_info[feat];
 
 			/* Process all non-walls */
-			if (!have_flag(f_ptr->flags, FF_WALL))
+			if (have_flag(f_ptr->flags, FF_WALL)) continue;
+
+			/* Scan all neighbors */
+			for (OBJECT_IDX i = 0; i < 9; i++)
 			{
-				/* Scan all neighbors */
-				for (i = 0; i < 9; i++)
+				POSITION yy = y + ddy_ddd[i];
+				POSITION xx = x + ddx_ddd[i];
+				g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
+
+				/* Feature code (applying "mimic" field) */
+				f_ptr = &f_info[get_feat_mimic(g_ptr)];
+
+				/* Perma-lite the grid */
+				if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !ninja)
 				{
-					POSITION yy = y + ddy_ddd[i];
-					POSITION xx = x + ddx_ddd[i];
-					g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
+					g_ptr->info |= (CAVE_GLOW);
+				}
 
-					/* Feature code (applying "mimic" field) */
-					f_ptr = &f_info[get_feat_mimic(g_ptr)];
+				/* Memorize normal features */
+				if (have_flag(f_ptr->flags, FF_REMEMBER))
+				{
+					/* Memorize the grid */
+					g_ptr->info |= (CAVE_MARK);
+				}
 
-					/* Perma-lite the grid */
-					if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !ninja)
-					{
-						g_ptr->info |= (CAVE_GLOW);
-					}
-
-					/* Memorize normal features */
-					if (have_flag(f_ptr->flags, FF_REMEMBER))
+				/* Perma-lit grids (newly and previously) */
+				else if (g_ptr->info & CAVE_GLOW)
+				{
+					/* Normally, memorize floors (see above) */
+					if (view_perma_grids && !view_torch_grids)
 					{
 						/* Memorize the grid */
 						g_ptr->info |= (CAVE_MARK);
-					}
-
-					/* Perma-lit grids (newly and previously) */
-					else if (g_ptr->info & CAVE_GLOW)
-					{
-						/* Normally, memorize floors (see above) */
-						if (view_perma_grids && !view_torch_grids)
-						{
-							/* Memorize the grid */
-							g_ptr->info |= (CAVE_MARK);
-						}
 					}
 				}
 			}
@@ -133,13 +125,10 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
  */
 void wiz_dark(player_type *caster_ptr)
 {
-	OBJECT_IDX i;
-	POSITION y, x;
-
 	/* Forget every grid */
-	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
+	for (POSITION y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
+		for (POSITION x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
 		{
 			grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -150,21 +139,21 @@ void wiz_dark(player_type *caster_ptr)
 	}
 
 	/* Forget every grid on horizontal edge */
-	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
+	for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
 		caster_ptr->current_floor_ptr->grid_array[0][x].info &= ~(CAVE_MARK);
 		caster_ptr->current_floor_ptr->grid_array[caster_ptr->current_floor_ptr->height - 1][x].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget every grid on vertical edge */
-	for (y = 1; y < (caster_ptr->current_floor_ptr->height - 1); y++)
+	for (POSITION y = 1; y < (caster_ptr->current_floor_ptr->height - 1); y++)
 	{
 		caster_ptr->current_floor_ptr->grid_array[y][0].info &= ~(CAVE_MARK);
 		caster_ptr->current_floor_ptr->grid_array[y][caster_ptr->current_floor_ptr->width - 1].info &= ~(CAVE_MARK);
 	}
 
 	/* Forget all objects */
-	for (i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
+	for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
@@ -184,6 +173,7 @@ void wiz_dark(player_type *caster_ptr)
 	caster_ptr->redraw |= (PR_MAP);
 	caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
+
 
 /*!
  * @brief 守りのルーン設置処理 /
@@ -232,6 +222,7 @@ bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
 	return TRUE;
 }
 
+
 /*!
  * @brief 鏡設置処理
  * @return 実際に設置が行われた場合TRUEを返す
@@ -258,6 +249,7 @@ bool place_mirror(player_type *caster_ptr)
 	return TRUE;
 }
 
+
 /*!
  * @brief プレイヤーの手による能動的な階段生成処理 /
  * Create stairs at or move previously created stairs into the player location.
@@ -265,19 +257,13 @@ bool place_mirror(player_type *caster_ptr)
  */
 void stair_creation(player_type *caster_ptr)
 {
-	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	saved_floor_type *sf_ptr;
-	saved_floor_type *dest_sf_ptr;
-
-	bool up = TRUE;
-	bool down = TRUE;
-	FLOOR_IDX dest_floor_id = 0;
-
-
 	/* Forbid up staircases on Ironman mode */
+	bool up = TRUE;
 	if (ironman_downward) up = FALSE;
 
 	/* Forbid down staircases on quest level */
+	bool down = TRUE;
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	if (quest_number(floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth)) down = FALSE;
 
 	/* No effect out of standard dungeon floor */
@@ -301,6 +287,7 @@ void stair_creation(player_type *caster_ptr)
 	delete_object(caster_ptr->y, caster_ptr->x);
 
 	/* Extract current floor data */
+	saved_floor_type *sf_ptr;
 	sf_ptr = get_sf_ptr(caster_ptr->floor_id);
 	if (!sf_ptr)
 	{
@@ -317,6 +304,7 @@ void stair_creation(player_type *caster_ptr)
 	}
 
 	/* Destination is already fixed */
+	FLOOR_IDX dest_floor_id = 0;
 	if (up)
 	{
 		if (sf_ptr->upper_floor_id) dest_floor_id = sf_ptr->upper_floor_id;
@@ -325,8 +313,7 @@ void stair_creation(player_type *caster_ptr)
 	{
 		if (sf_ptr->lower_floor_id) dest_floor_id = sf_ptr->lower_floor_id;
 	}
-
-
+	
 	/* Search old stairs leading to the destination */
 	if (dest_floor_id)
 	{
@@ -362,9 +349,9 @@ void stair_creation(player_type *caster_ptr)
 	}
 
 	/* Extract destination floor data */
+	saved_floor_type *dest_sf_ptr;
 	dest_sf_ptr = get_sf_ptr(dest_floor_id);
-
-
+	
 	/* Create a staircase */
 	if (up)
 	{
@@ -379,7 +366,6 @@ void stair_creation(player_type *caster_ptr)
 			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
 
-
 	/* Connect this stairs to the destination */
 	floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].special = dest_floor_id;
 }
@@ -389,55 +375,50 @@ void stair_creation(player_type *caster_ptr)
  */
 void map_area(player_type *caster_ptr, POSITION range)
 {
-	int i;
-	POSITION x, y;
-	grid_type *g_ptr;
-	FEAT_IDX feat;
-	feature_type *f_ptr;
-
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
 	/* Scan that area */
-	for (y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
+	for (POSITION y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
 	{
-		for (x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
+		for (POSITION x = 1; x < caster_ptr->current_floor_ptr->width - 1; x++)
 		{
 			if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
+			grid_type *g_ptr;
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Memorize terrain of the grid */
 			g_ptr->info |= (CAVE_KNOWN);
 
 			/* Feature code (applying "mimic" field) */
-			feat = get_feat_mimic(g_ptr);
+			FEAT_IDX feat = get_feat_mimic(g_ptr);
+			feature_type *f_ptr;
 			f_ptr = &f_info[feat];
 
 			/* All non-walls are "checked" */
-			if (!have_flag(f_ptr->flags, FF_WALL))
+			if (have_flag(f_ptr->flags, FF_WALL)) continue;
+
+			/* Memorize normal features */
+			if (have_flag(f_ptr->flags, FF_REMEMBER))
 			{
-				/* Memorize normal features */
+				/* Memorize the object */
+				g_ptr->info |= (CAVE_MARK);
+			}
+
+			/* Memorize known walls */
+			for (int i = 0; i < 8; i++)
+			{
+				g_ptr = &caster_ptr->current_floor_ptr->grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
+
+				/* Feature code (applying "mimic" field) */
+				feat = get_feat_mimic(g_ptr);
+				f_ptr = &f_info[feat];
+
+				/* Memorize walls (etc) */
 				if (have_flag(f_ptr->flags, FF_REMEMBER))
 				{
-					/* Memorize the object */
+					/* Memorize the walls */
 					g_ptr->info |= (CAVE_MARK);
-				}
-
-				/* Memorize known walls */
-				for (i = 0; i < 8; i++)
-				{
-					g_ptr = &caster_ptr->current_floor_ptr->grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
-
-					/* Feature code (applying "mimic" field) */
-					feat = get_feat_mimic(g_ptr);
-					f_ptr = &f_info[feat];
-
-					/* Memorize walls (etc) */
-					if (have_flag(f_ptr->flags, FF_REMEMBER))
-					{
-						/* Memorize the walls */
-						g_ptr->info |= (CAVE_MARK);
-					}
 				}
 			}
 		}
@@ -466,33 +447,30 @@ void map_area(player_type *caster_ptr, POSITION range)
  */
 bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
-	POSITION y, x;
-	int k, t;
-	grid_type *g_ptr;
-	bool flag = FALSE;
-
 	/* Prevent destruction of quest levels and town */
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	if ((floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Lose monster light */
 	if (!in_generate) clear_mon_lite(floor_ptr);
 
 	/* Big area of affect */
-	for (y = (y1 - r); y <= (y1 + r); y++)
+	bool flag = FALSE;
+	for (POSITION y = (y1 - r); y <= (y1 + r); y++)
 	{
-		for (x = (x1 - r); x <= (x1 + r); x++)
+		for (POSITION x = (x1 - r); x <= (x1 + r); x++)
 		{
 			if (!in_bounds(floor_ptr, y, x)) continue;
 
 			/* Extract the distance */
-			k = distance(y1, x1, y, x);
+			int k = distance(y1, x1, y, x);
 
 			/* Stay in the circle of death */
 			if (k > r) continue;
+			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Lose room and vault */
@@ -589,127 +567,130 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			delete_object(y, x);
 
 			/* Destroy "non-permanent" grids */
-			if (!cave_perma_grid(g_ptr))
+			if (cave_perma_grid(g_ptr)) continue;
+
+			/* Wall (or floor) type */
+			int t = randint0(200);
+
+			if (!in_generate) /* Normal */
 			{
-				/* Wall (or floor) type */
-				t = randint0(200);
-
-				if (!in_generate) /* Normal */
+				if (t < 20)
 				{
-					if (t < 20)
-					{
-						/* Create granite wall */
-						cave_set_feat(floor_ptr, y, x, feat_granite);
-					}
-					else if (t < 70)
-					{
-						/* Create quartz vein */
-						cave_set_feat(floor_ptr, y, x, feat_quartz_vein);
-					}
-					else if (t < 100)
-					{
-						/* Create magma vein */
-						cave_set_feat(floor_ptr, y, x, feat_magma_vein);
-					}
-					else
-					{
-						/* Create floor */
-						cave_set_feat(floor_ptr, y, x, feat_ground_type[randint0(100)]);
-					}
+					/* Create granite wall */
+					cave_set_feat(floor_ptr, y, x, feat_granite);
 				}
-				else /* In generation */
+				else if (t < 70)
 				{
-					if (t < 20)
-					{
-						/* Create granite wall */
-						place_extra_grid(g_ptr);
-					}
-					else if (t < 70)
-					{
-						/* Create quartz vein */
-						g_ptr->feat = feat_quartz_vein;
-					}
-					else if (t < 100)
-					{
-						/* Create magma vein */
-						g_ptr->feat = feat_magma_vein;
-					}
-					else
-					{
-						/* Create floor */
-						place_floor_grid(g_ptr);
-					}
+					/* Create quartz vein */
+					cave_set_feat(floor_ptr, y, x, feat_quartz_vein);
+				}
+				else if (t < 100)
+				{
+					/* Create magma vein */
+					cave_set_feat(floor_ptr, y, x, feat_magma_vein);
+				}
+				else
+				{
+					/* Create floor */
+					cave_set_feat(floor_ptr, y, x, feat_ground_type[randint0(100)]);
+				}
 
-					/* Clear garbage of hidden trap or door */
-					g_ptr->mimic = 0;
+				continue;
+			}
+			
+			if (t < 20)
+			{
+				/* Create granite wall */
+				place_extra_grid(g_ptr);
+			}
+			else if (t < 70)
+			{
+				/* Create quartz vein */
+				g_ptr->feat = feat_quartz_vein;
+			}
+			else if (t < 100)
+			{
+				/* Create magma vein */
+				g_ptr->feat = feat_magma_vein;
+			}
+			else
+			{
+				/* Create floor */
+				place_floor_grid(g_ptr);
+			}
+
+			/* Clear garbage of hidden trap or door */
+			g_ptr->mimic = 0;
+		}
+	}
+
+	if (in_generate) return TRUE;
+
+	/* Process "re-glowing" */
+	for (POSITION y = (y1 - r); y <= (y1 + r); y++)
+	{
+		for (POSITION x = (x1 - r); x <= (x1 + r); x++)
+		{
+			if (!in_bounds(floor_ptr, y, x)) continue;
+
+			/* Extract the distance */
+			int k = distance(y1, x1, y, x);
+
+			/* Stay in the circle of death */
+			if (k > r) continue;
+			grid_type *g_ptr;
+			g_ptr = &floor_ptr->grid_array[y][x];
+
+			if (is_mirror_grid(g_ptr))
+			{
+				g_ptr->info |= CAVE_GLOW;
+				continue;
+			}
+			
+			if ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) continue;
+
+			DIRECTION i;
+			POSITION yy, xx;
+			grid_type *cc_ptr;
+
+			for (i = 0; i < 9; i++)
+			{
+				yy = y + ddy_ddd[i];
+				xx = x + ddx_ddd[i];
+				if (!in_bounds2(floor_ptr, yy, xx)) continue;
+				cc_ptr = &floor_ptr->grid_array[yy][xx];
+				if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
+				{
+					g_ptr->info |= CAVE_GLOW;
+					break;
 				}
 			}
 		}
 	}
 
-	if (!in_generate)
+	/* Hack -- Affect player */
+	if (flag)
 	{
-		/* Process "re-glowing" */
-		for (y = (y1 - r); y <= (y1 + r); y++)
+		msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
+
+		/* Blind the player */
+		if (!caster_ptr->resist_blind && !caster_ptr->resist_lite)
 		{
-			for (x = (x1 - r); x <= (x1 + r); x++)
-			{
-				if (!in_bounds(floor_ptr, y, x)) continue;
-
-				/* Extract the distance */
-				k = distance(y1, x1, y, x);
-
-				/* Stay in the circle of death */
-				if (k > r) continue;
-				g_ptr = &floor_ptr->grid_array[y][x];
-
-				if (is_mirror_grid(g_ptr)) g_ptr->info |= CAVE_GLOW;
-				else if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
-				{
-					DIRECTION i;
-					POSITION yy, xx;
-					grid_type *cc_ptr;
-
-					for (i = 0; i < 9; i++)
-					{
-						yy = y + ddy_ddd[i];
-						xx = x + ddx_ddd[i];
-						if (!in_bounds2(floor_ptr, yy, xx)) continue;
-						cc_ptr = &floor_ptr->grid_array[yy][xx];
-						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
-						{
-							g_ptr->info |= CAVE_GLOW;
-							break;
-						}
-					}
-				}
-			}
+			/* Become blind */
+			(void)set_blind(caster_ptr, caster_ptr->blind + 10 + randint1(10));
 		}
+	}
 
-		/* Hack -- Affect player */
-		if (flag)
-		{
-			msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
+	forget_flow(floor_ptr);
 
-			/* Blind the player */
-			if (!caster_ptr->resist_blind && !caster_ptr->resist_lite)
-			{
-				/* Become blind */
-				(void)set_blind(caster_ptr, caster_ptr->blind + 10 + randint1(10));
-			}
-		}
+	/* Mega-Hack -- Forget the view and lite */
+	caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+	caster_ptr->redraw |= (PR_MAP);
+	caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-		forget_flow(floor_ptr);
-
-		/* Mega-Hack -- Forget the view and lite */
-		caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-		caster_ptr->redraw |= (PR_MAP);
-		caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
-		if (caster_ptr->special_defense & NINJA_S_STEALTH)
-		{
-			if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
-		}
+	if (caster_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
 	}
 
 	return TRUE;
@@ -719,11 +700,12 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 /*!
  * @brief 地震処理(サブルーチン) /
  * Induce an "earthquake" of the given radius at the given location.
- * @return 効力があった場合TRUEを返す
+ * @param caster_ptrプレーヤーへの参照ポインタ
  * @param cy 中心Y座標
  * @param cx 中心X座標
  * @param r 効果半径
  * @param m_idx 地震を起こしたモンスターID(0ならばプレイヤー)
+ * @return 効力があった場合TRUEを返す
  * @details
  * <pre>
  *
@@ -745,26 +727,18 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
  */
 bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
-	DIRECTION i;
-	int t;
-	POSITION y, x, yy, xx, dy, dx;
-	int damage = 0;
-	int sn = 0;
-	POSITION sy = 0, sx = 0;
-	bool hurt = FALSE;
-	grid_type *g_ptr;
-	bool map[32][32];
-
 	/* Prevent destruction of quest levels and town */
 	if ((caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
 	{
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Paranoia -- Enforce maximum range */
 	if (r > 12) r = 12;
 
 	/* Clear the "maximal blast" area */
+	POSITION y, x;
+	bool map[32][32];
 	for (y = 0; y < 32; y++)
 	{
 		for (x = 0; x < 32; x++)
@@ -774,6 +748,9 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 	}
 
 	/* Check around the epicenter */
+	POSITION yy, xx, dy, dx;
+	int damage = 0;
+	bool hurt = FALSE;
 	for (dy = -r; dy <= r; dy++)
 	{
 		for (dx = -r; dx <= r; dx++)
@@ -785,6 +762,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;
+			grid_type *g_ptr;
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
 
 			/* Lose room and vault / Lose light and knowledge */
@@ -806,10 +784,12 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 	}
 
 	/* First, affect the player (if necessary) */
+	int sn = 0;
+	POSITION sy = 0, sx = 0;
 	if (hurt && !caster_ptr->pass_wall && !caster_ptr->kill_wall)
 	{
 		/* Check around the player */
-		for (i = 0; i < 8; i++)
+		for (DIRECTION i = 0; i < 8; i++)
 		{
 			y = caster_ptr->y + ddy_ddd[i];
 			x = caster_ptr->x + ddx_ddd[i];
@@ -925,128 +905,125 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
 			/* Skip unaffected grids */
 			if (!map[16 + yy - cy][16 + xx - cx]) continue;
+
+			grid_type *g_ptr;
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
 
 			if (g_ptr->m_idx == caster_ptr->riding) continue;
 
 			/* Process monsters */
-			if (g_ptr->m_idx)
+			if (!g_ptr->m_idx) continue;
+
+			monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+			/* Quest monsters */
+			if (r_ptr->flags1 & RF1_QUESTOR)
 			{
-				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-				monster_race *r_ptr = &r_info[m_ptr->r_idx];
+				/* No wall on quest monsters */
+				map[16 + yy - cy][16 + xx - cx] = FALSE;
 
-				/* Quest monsters */
-				if (r_ptr->flags1 & RF1_QUESTOR)
+				continue;
+			}
+
+			/* Most monsters cannot co-exist with rock */
+			if ((r_ptr->flags2 & RF2_KILL_WALL) || (r_ptr->flags2 & RF2_PASS_WALL)) continue;
+
+			GAME_TEXT m_name[MAX_NLEN];
+
+			/* Assume not safe */
+			sn = 0;
+
+			/* Monster can move to escape the wall */
+			if (!(r_ptr->flags1 & RF1_NEVER_MOVE))
+			{
+				/* Look for safety */
+				for (DIRECTION i = 0; i < 8; i++)
 				{
-					/* No wall on quest monsters */
-					map[16 + yy - cy][16 + xx - cx] = FALSE;
+					y = yy + ddy_ddd[i];
+					x = xx + ddx_ddd[i];
 
-					continue;
-				}
+					/* Skip non-empty grids */
+					if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x)) continue;
 
-				/* Most monsters cannot co-exist with rock */
-				if (!(r_ptr->flags2 & (RF2_KILL_WALL)) &&
-					!(r_ptr->flags2 & (RF2_PASS_WALL)))
-				{
-					GAME_TEXT m_name[MAX_NLEN];
+					/* Hack -- no safety on glyph of warding */
+					if (is_glyph_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) continue;
+					if (is_explosive_rune_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) continue;
 
-					/* Assume not safe */
-					sn = 0;
+					/* ... nor on the Pattern */
+					if (pattern_tile(y, x)) continue;
 
-					/* Monster can move to escape the wall */
-					if (!(r_ptr->flags1 & (RF1_NEVER_MOVE)))
-					{
-						/* Look for safety */
-						for (i = 0; i < 8; i++)
-						{
-							y = yy + ddy_ddd[i];
-							x = xx + ddx_ddd[i];
+					/* Important -- Skip "quake" grids */
+					if (map[16 + y - cy][16 + x - cx]) continue;
 
-							/* Skip non-empty grids */
-							if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x)) continue;
+					if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) continue;
+					if (player_bold(caster_ptr, y, x)) continue;
 
-							/* Hack -- no safety on glyph of warding */
-							if (is_glyph_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) continue;
-							if (is_explosive_rune_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) continue;
+					/* Count "safe" grids */
+					sn++;
 
-							/* ... nor on the Pattern */
-							if (pattern_tile(y, x)) continue;
+					/* Randomize choice */
+					if (randint0(sn) > 0) continue;
 
-							/* Important -- Skip "quake" grids */
-							if (map[16 + y - cy][16 + x - cx]) continue;
-
-							if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) continue;
-							if (player_bold(caster_ptr, y, x)) continue;
-
-							/* Count "safe" grids */
-							sn++;
-
-							/* Randomize choice */
-							if (randint0(sn) > 0) continue;
-
-							/* Save the safe grid */
-							sy = y; sx = x;
-						}
-					}
-
-					monster_desc(m_name, m_ptr, 0);
-
-					/* Scream in pain */
-					if (!ignore_unview || is_seen(m_ptr)) msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
-
-					/* Take damage from the quake */
-					damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
-
-					/* Monster is certainly awake */
-					(void)set_monster_csleep(g_ptr->m_idx, 0);
-
-					/* Apply damage directly */
-					m_ptr->hp -= damage;
-
-					/* Delete (not kill) "dead" monsters */
-					if (m_ptr->hp < 0)
-					{
-						if (!ignore_unview || is_seen(m_ptr))
-							msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
-
-						if (g_ptr->m_idx)
-						{
-							if (record_named_pet && is_pet(&caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx]) && caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx].nickname)
-							{
-								char m2_name[MAX_NLEN];
-
-								monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-								exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
-							}
-						}
-
-						delete_monster(caster_ptr->current_floor_ptr, yy, xx);
-
-						/* No longer safe */
-						sn = 0;
-					}
-
-					/* Hack -- Escape from the rock */
-					if (sn)
-					{
-						IDX m_idx_aux = caster_ptr->current_floor_ptr->grid_array[yy][xx].m_idx;
-
-						/* Update the old location */
-						caster_ptr->current_floor_ptr->grid_array[yy][xx].m_idx = 0;
-
-						/* Update the new location */
-						caster_ptr->current_floor_ptr->grid_array[sy][sx].m_idx = m_idx_aux;
-
-						/* Move the monster */
-						m_ptr->fy = sy;
-						m_ptr->fx = sx;
-
-						update_monster(caster_ptr, m_idx, TRUE);
-						lite_spot(yy, xx);
-						lite_spot(sy, sx);
-					}
+					/* Save the safe grid */
+					sy = y; sx = x;
 				}
 			}
+
+			monster_desc(m_name, m_ptr, 0);
+
+			/* Scream in pain */
+			if (!ignore_unview || is_seen(m_ptr)) msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
+
+			/* Take damage from the quake */
+			damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
+
+			/* Monster is certainly awake */
+			(void)set_monster_csleep(g_ptr->m_idx, 0);
+
+			/* Apply damage directly */
+			m_ptr->hp -= damage;
+
+			/* Delete (not kill) "dead" monsters */
+			if (m_ptr->hp < 0)
+			{
+				if (!ignore_unview || is_seen(m_ptr))
+					msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
+
+				if (g_ptr->m_idx)
+				{
+					if (record_named_pet && is_pet(&caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx]) && caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx].nickname)
+					{
+						char m2_name[MAX_NLEN];
+
+						monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
+						exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
+					}
+				}
+
+				delete_monster(caster_ptr->current_floor_ptr, yy, xx);
+
+				sn = 0;
+			}
+
+			/* Hack -- Escape from the rock */
+			if (sn == 0) continue;
+
+			IDX m_idx_aux = caster_ptr->current_floor_ptr->grid_array[yy][xx].m_idx;
+
+			/* Update the old location */
+			caster_ptr->current_floor_ptr->grid_array[yy][xx].m_idx = 0;
+
+			/* Update the new location */
+			caster_ptr->current_floor_ptr->grid_array[sy][sx].m_idx = m_idx_aux;
+
+			/* Move the monster */
+			m_ptr->fy = sy;
+			m_ptr->fx = sx;
+
+			update_monster(caster_ptr, m_idx, TRUE);
+			lite_spot(yy, xx);
+			lite_spot(sy, sx);
 		}
 	}
 
@@ -1064,44 +1041,40 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			/* Skip unaffected grids */
 			if (!map[16 + yy - cy][16 + xx - cx]) continue;
 
+			grid_type *g_ptr;
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
 
 			/* Destroy location (if valid) */
-			if (cave_valid_bold(caster_ptr->current_floor_ptr, yy, xx))
+			if (!cave_valid_bold(caster_ptr->current_floor_ptr, yy, xx)) continue;
+
+			delete_object(yy, xx);
+
+			/* Wall (or floor) type */
+			int t = cave_have_flag_bold(caster_ptr->current_floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
+
+			/* Create granite wall */
+			if (t < 20)
 			{
-				delete_object(yy, xx);
-
-				/* Wall (or floor) type */
-				t = cave_have_flag_bold(caster_ptr->current_floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
-
-				/* Granite */
-				if (t < 20)
-				{
-					/* Create granite wall */
-					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_granite);
-				}
-
-				/* Quartz */
-				else if (t < 70)
-				{
-					/* Create quartz vein */
-					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_quartz_vein);
-				}
-
-				/* Magma */
-				else if (t < 100)
-				{
-					/* Create magma vein */
-					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_magma_vein);
-				}
-
-				/* Floor */
-				else
-				{
-					/* Create floor */
-					cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_ground_type[randint0(100)]);
-				}
+				cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_granite);
+				continue;
 			}
+
+			/* Create quartz vein */
+			if (t < 70)
+			{
+				cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_quartz_vein);
+				continue;
+			}
+
+			/* Create magma vein */
+			if (t < 100)
+			{
+				cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_magma_vein);
+				continue;
+			}
+
+			/* Create floor */
+			cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_ground_type[randint0(100)]);
 		}
 	}
 
@@ -1117,26 +1090,31 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;
+			grid_type *g_ptr;
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
 
-			if (is_mirror_grid(g_ptr)) g_ptr->info |= CAVE_GLOW;
-			else if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+			if (is_mirror_grid(g_ptr))
 			{
-				DIRECTION ii;
-				POSITION yyy, xxx;
-				grid_type *cc_ptr;
+				g_ptr->info |= CAVE_GLOW;
+				continue;
+			}
+			
+			if ((d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) continue;
+			
+			DIRECTION ii;
+			POSITION yyy, xxx;
+			grid_type *cc_ptr;
 
-				for (ii = 0; ii < 9; ii++)
+			for (ii = 0; ii < 9; ii++)
+			{
+				yyy = yy + ddy_ddd[ii];
+				xxx = xx + ddx_ddd[ii];
+				if (!in_bounds2(caster_ptr->current_floor_ptr, yyy, xxx)) continue;
+				cc_ptr = &caster_ptr->current_floor_ptr->grid_array[yyy][xxx];
+				if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 				{
-					yyy = yy + ddy_ddd[ii];
-					xxx = xx + ddx_ddd[ii];
-					if (!in_bounds2(caster_ptr->current_floor_ptr, yyy, xxx)) continue;
-					cc_ptr = &caster_ptr->current_floor_ptr->grid_array[yyy][xxx];
-					if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
-					{
-						g_ptr->info |= CAVE_GLOW;
-						break;
-					}
+					g_ptr->info |= CAVE_GLOW;
+					break;
 				}
 			}
 		}
@@ -1153,5 +1131,5 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
