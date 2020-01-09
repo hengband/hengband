@@ -720,7 +720,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth(creature_ptr);
 			msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
-			(void)fear_monster(dir, plev);
+			(void)fear_monster(creature_ptr, dir, plev);
 			break;
 
 		case RACE_KLACKON:
@@ -792,7 +792,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (!get_aim_dir(&dir)) return FALSE;
 			stop_mouth(creature_ptr);
 			msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
-			(void)fear_monster(dir, plev);
+			(void)fear_monster(creature_ptr, dir, plev);
 			break;
 
 		case RACE_SPRITE:
@@ -818,8 +818,10 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			free_turn(creature_ptr);
 	}
 	}
+
 	return TRUE;
 }
+
 
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate

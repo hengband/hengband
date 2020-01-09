@@ -59,19 +59,19 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 		case SV_WAND_HEAL_MONSTER:
 		{
 			HIT_POINT dam = damroll((powerful ? 20 : 10), 10);
-			if (heal_monster(dir, dam)) ident = TRUE;
+			if (heal_monster(creature_ptr, dir, dam)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_HASTE_MONSTER:
 		{
-			if (speed_monster(dir, lev)) ident = TRUE;
+			if (speed_monster(creature_ptr, dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_CLONE_MONSTER:
 		{
-			if (clone_monster(dir)) ident = TRUE;
+			if (clone_monster(creature_ptr, dir)) ident = TRUE;
 			break;
 		}
 
@@ -114,25 +114,25 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_SLEEP_MONSTER:
 		{
-			if (sleep_monster(dir, lev)) ident = TRUE;
+			if (sleep_monster(creature_ptr, dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_SLOW_MONSTER:
 		{
-			if (slow_monster(dir, lev)) ident = TRUE;
+			if (slow_monster(creature_ptr, dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_CONFUSE_MONSTER:
 		{
-			if (confuse_monster(dir, lev)) ident = TRUE;
+			if (confuse_monster(creature_ptr, dir, lev)) ident = TRUE;
 			break;
 		}
 
 		case SV_WAND_FEAR_MONSTER:
 		{
-			if (fear_monster(dir, lev)) ident = TRUE;
+			if (fear_monster(creature_ptr, dir, lev)) ident = TRUE;
 			break;
 		}
 
@@ -144,7 +144,7 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
 		case SV_WAND_POLYMORPH:
 		{
-			if (poly_monster(dir, lev)) ident = TRUE;
+			if (poly_monster(creature_ptr, dir, lev)) ident = TRUE;
 			break;
 		}
 

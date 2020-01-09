@@ -1595,7 +1595,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	case 6:
 	{
 		if (!get_aim_dir(&dir)) return FALSE;
-		(void)stasis_monster(dir);
+		(void)stasis_monster(caster_ptr, dir);
 		break;
 	}
 	case 7:

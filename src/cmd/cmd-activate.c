@@ -1074,7 +1074,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
 		if (!get_aim_dir(&dir)) return FALSE;
-		confuse_monster(dir, 20);
+		confuse_monster(user_ptr, dir, 20);
 		break;
 	}
 

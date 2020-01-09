@@ -115,8 +115,8 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fear_monster(dir, power);
-				stun_monster(dir, power);
+				fear_monster(caster_ptr, dir, power);
+				stun_monster(caster_ptr, dir, power);
 			}
 		}
 		break;

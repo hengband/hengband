@@ -3528,25 +3528,25 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 
 	if (die < 8)
 	{
-		clone_monster(dir);
+		clone_monster(caster_ptr, dir);
 		return;
 	}
 	
 	if (die < 14)
 	{
-		speed_monster(dir, plev);
+		speed_monster(caster_ptr, dir, plev);
 		return;
 	}
 
 	if (die < 26)
 	{
-		heal_monster(dir, damroll(4, 6));
+		heal_monster(caster_ptr, dir, damroll(4, 6));
 		return;
 	}
 
 	if (die < 31)
 	{
-		poly_monster(dir, plev);
+		poly_monster(caster_ptr, dir, plev);
 		return;
 	}
 
@@ -3559,7 +3559,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 
 	if (die < 41)
 	{
-		confuse_monster(dir, plev);
+		confuse_monster(caster_ptr, dir, plev);
 		return;
 	}
 	
@@ -3726,7 +3726,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 31)
 	{
-		poly_monster(dir, plev);
+		poly_monster(caster_ptr, dir, plev);
 	}
 	else if (die < 36)
 	{
@@ -3735,7 +3735,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 	else if (die < 41)
 	{
-		confuse_monster(dir, plev);
+		confuse_monster(caster_ptr, dir, plev);
 	}
 	else if (die < 46)
 	{

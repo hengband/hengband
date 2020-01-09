@@ -140,7 +140,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				sleep_monster(dir, plev);
+				sleep_monster(caster_ptr, dir, plev);
 			}
 		}
 		break;
@@ -175,8 +175,8 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				fear_monster(dir, plev);
-				stun_monster(dir, plev);
+				fear_monster(caster_ptr, dir, plev);
+				stun_monster(caster_ptr, dir, plev);
 			}
 		}
 		break;

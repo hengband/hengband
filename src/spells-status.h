@@ -1,15 +1,15 @@
 ﻿
-extern bool heal_monster(DIRECTION dir, HIT_POINT dam);
-extern bool speed_monster(DIRECTION dir, int power);
-extern bool slow_monster(DIRECTION dir, int power);
-extern bool sleep_monster(DIRECTION dir, int power);
-extern bool stasis_monster(DIRECTION dir);    /* Like sleep, affects undead as well */
-extern bool stasis_evil(DIRECTION dir);    /* Like sleep, affects undead as well */
-extern bool confuse_monster(DIRECTION dir, PLAYER_LEVEL plev);
-extern bool stun_monster(DIRECTION dir, PLAYER_LEVEL plev);
-extern bool fear_monster(DIRECTION dir, PLAYER_LEVEL plev);
-extern bool poly_monster(DIRECTION dir, int power);
-extern bool clone_monster(DIRECTION dir);
+extern bool heal_monster(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
+extern bool speed_monster(player_type *caster_ptr, DIRECTION dir, int power);
+extern bool slow_monster(player_type *caster_ptr, DIRECTION dir, int power);
+extern bool sleep_monster(player_type *caster_ptr, DIRECTION dir, int power);
+extern bool stasis_monster(player_type *caster_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
+extern bool stasis_evil(player_type *caster_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
+extern bool confuse_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+extern bool stun_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+extern bool fear_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+extern bool poly_monster(player_type *caster_ptr, DIRECTION dir, int power);
+extern bool clone_monster(player_type *caster_ptr, DIRECTION dir);
 extern void stop_singing(player_type *creature_ptr);
 extern bool time_walk(player_type *creature_ptr);
 extern void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options);

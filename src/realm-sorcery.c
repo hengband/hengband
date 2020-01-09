@@ -111,7 +111,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				confuse_monster(dir, power);
+				confuse_monster(caster_ptr, dir, power);
 			}
 		}
 		break;
@@ -145,7 +145,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				sleep_monster(dir, plev);
+				sleep_monster(caster_ptr, dir, plev);
 			}
 		}
 		break;
@@ -207,7 +207,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			{
 				if (!get_aim_dir(&dir)) return NULL;
 
-				slow_monster(dir, plev);
+				slow_monster(caster_ptr, dir, plev);
 			}
 		}
 		break;

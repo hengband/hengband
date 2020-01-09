@@ -155,13 +155,13 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_SLEEP_MONSTER:
 	{
-		if (sleep_monster(dir, lev)) ident = TRUE;
+		if (sleep_monster(creature_ptr, dir, lev)) ident = TRUE;
 		break;
 	}
 
 	case SV_ROD_SLOW_MONSTER:
 	{
-		if (slow_monster(dir, lev)) ident = TRUE;
+		if (slow_monster(creature_ptr, dir, lev)) ident = TRUE;
 		break;
 	}
 
@@ -173,7 +173,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
 	case SV_ROD_POLYMORPH:
 	{
-		if (poly_monster(dir, lev)) ident = TRUE;
+		if (poly_monster(creature_ptr, dir, lev)) ident = TRUE;
 		break;
 	}
 

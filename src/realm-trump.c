@@ -260,7 +260,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (!result) return NULL;
 
-				speed_monster(dir, plev);
+				speed_monster(caster_ptr, dir, plev);
 			}
 		}
 		break;
@@ -527,7 +527,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (!result) return NULL;
 
-				heal_monster(dir, heal);
+				heal_monster(caster_ptr, dir, heal);
 			}
 		}
 		break;

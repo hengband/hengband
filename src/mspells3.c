@@ -1246,25 +1246,25 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("恐ろしげな幻覚を作り出した。", "You cast a fearful illusion."));
-		fear_monster(dir, plev+10);
+		fear_monster(caster_ptr, dir, plev+10);
 		break;
 	case MS_BLIND:
 		if (!get_aim_dir(&dir)) return FALSE;
-		confuse_monster(dir, plev * 2);
+		confuse_monster(caster_ptr, dir, plev * 2);
 		break;
 	case MS_CONF:
 		if (!get_aim_dir(&dir)) return FALSE;
 
         msg_print(_("誘惑的な幻覚をつくり出した。", "You cast a mesmerizing illusion."));
-		confuse_monster(dir, plev * 2);
+		confuse_monster(caster_ptr, dir, plev * 2);
 		break;
 	case MS_SLOW:
 		if (!get_aim_dir(&dir)) return FALSE;
-		slow_monster(dir, plev);
+		slow_monster(caster_ptr, dir, plev);
 		break;
 	case MS_SLEEP:
 		if (!get_aim_dir(&dir)) return FALSE;
-		sleep_monster(dir, plev);
+		sleep_monster(caster_ptr, dir, plev);
 		break;
 	case MS_SPEED:
 		(void)set_fast(caster_ptr, randint1(20 + plev) + plev, FALSE);
