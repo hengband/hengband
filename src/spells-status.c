@@ -209,8 +209,9 @@ bool time_walk(player_type *creature_ptr)
 	if (creature_ptr->timewalk)
 	{
 		msg_print(_("既に時は止まっている。", "Time is already stopped."));
-		return (FALSE);
+		return FALSE;
 	}
+
 	creature_ptr->timewalk = TRUE;
 	msg_print(_("「時よ！」", "You yell 'Time!'"));
 //	msg_print(_("「『ザ・ワールド』！時は止まった！」", "You yell 'The World! Time has stopped!'"));
@@ -227,34 +228,28 @@ bool time_walk(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのヒットダイスを振る / Role Hitpoints
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param options スペル共通オプション
  * @return なし
  */
 void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options)
 {
-	PERCENTAGE percent;
-
-	/* Minimum hitpoints at highest level */
 	HIT_POINT min_value = creature_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (creature_ptr->hitdie + 1)) * 3 / 8;
-
-	/* Maximum hitpoints at highest level */
 	HIT_POINT max_value = creature_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (creature_ptr->hitdie + 1)) * 5 / 8;
 
-	int i;
-
 	/* Rerate */
-	while (1)
+	while (TRUE)
 	{
 		/* Pre-calculate level 1 hitdice */
 		creature_ptr->player_hp[0] = (HIT_POINT)creature_ptr->hitdie;
 
-		for (i = 1; i < 4; i++)
+		for (int i = 1; i < 4; i++)
 		{
 			creature_ptr->player_hp[0] += randint1(creature_ptr->hitdie);
 		}
 
 		/* Roll the hitpoint values */
-		for (i = 1; i < PY_MAX_LEVEL; i++)
+		for (int i = 1; i < PY_MAX_LEVEL; i++)
 		{
 			creature_ptr->player_hp[i] = creature_ptr->player_hp[i - 1] + randint1(creature_ptr->hitdie);
 		}
@@ -264,7 +259,7 @@ void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options)
 			(creature_ptr->player_hp[PY_MAX_LEVEL - 1] <= max_value)) break;
 	}
 
-	percent = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
+	PERCENTAGE percent = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
 
 	/* Update and redraw hitpoints */
@@ -274,19 +269,17 @@ void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options)
 
 	if (!(options & SPOP_NO_UPDATE)) handle_stuff();
 
-	if (options & SPOP_DISPLAY_MES)
+	if (!(options & SPOP_DISPLAY_MES)) return;
+
+	if (options & SPOP_DEBUG)
 	{
-		if (options & SPOP_DEBUG)
-		{
-			msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
-			creature_ptr->knowledge |= KNOW_HPRATE;
-		}
-		else
-		{
-			msg_print(_("体力ランクが変わった。", "Life rate is changed."));
-			creature_ptr->knowledge &= ~(KNOW_HPRATE);
-		}
+		msg_format(_("現在の体力ランクは %d/100 です。", "Your life rate is %d/100 now."), percent);
+		creature_ptr->knowledge |= KNOW_HPRATE;
+		return;
 	}
+
+	msg_print(_("体力ランクが変わった。", "Life rate is changed."));
+	creature_ptr->knowledge &= ~(KNOW_HPRATE);
 }
 
 
@@ -297,10 +290,12 @@ bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack vi
 		chg_virtue(creature_ptr, V_VITALITY, 1);
 		chg_virtue(creature_ptr, V_UNLIFE, -5);
 	}
+
 	if (message)
 	{
 		msg_print(_("体中に生命力が満ちあふれてきた！", "You feel life flow through your body!"));
 	}
+
 	restore_level(creature_ptr);
 	(void)set_poisoned(creature_ptr, 0);
 	(void)set_blind(creature_ptr, 0);
@@ -390,8 +385,6 @@ bool_hack true_healing(player_type *creature_ptr, HIT_POINT pow)
 
 bool_hack restore_mana(player_type *creature_ptr, bool_hack magic_eater)
 {
-	bool_hack ident = FALSE;
-
 	if (creature_ptr->pclass == CLASS_MAGIC_EATER && magic_eater)
 	{
 		int i;
@@ -400,28 +393,28 @@ bool_hack restore_mana(player_type *creature_ptr, bool_hack magic_eater)
 			creature_ptr->magic_num1[i] += (creature_ptr->magic_num2[i] < 10) ? EATER_CHARGE * 3 : creature_ptr->magic_num2[i] * EATER_CHARGE / 3;
 			if (creature_ptr->magic_num1[i] > creature_ptr->magic_num2[i] * EATER_CHARGE) creature_ptr->magic_num1[i] = creature_ptr->magic_num2[i] * EATER_CHARGE;
 		}
+
 		for (; i < EATER_EXT * 3; i++)
 		{
 			KIND_OBJECT_IDX k_idx = lookup_kind(TV_ROD, i - EATER_EXT * 2);
 			creature_ptr->magic_num1[i] -= ((creature_ptr->magic_num2[i] < 10) ? EATER_ROD_CHARGE * 3 : creature_ptr->magic_num2[i] * EATER_ROD_CHARGE / 3)*k_info[k_idx].pval;
 			if (creature_ptr->magic_num1[i] < 0) creature_ptr->magic_num1[i] = 0;
 		}
-		msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-		creature_ptr->window |= (PW_PLAYER);
-		ident = TRUE;
-	}
-	else if (creature_ptr->csp < creature_ptr->msp)
-	{
-		creature_ptr->csp = creature_ptr->msp;
-		creature_ptr->csp_frac = 0;
-		msg_print(_("頭がハッキリとした。", "You feel your head clear."));
-		creature_ptr->redraw |= (PR_MANA);
-		creature_ptr->window |= (PW_PLAYER);
-		creature_ptr->window |= (PW_SPELL);
-		ident = TRUE;
-	}
 
-	return ident;
+		msg_print(_("頭がハッキリとした。", "You feel your head clear."));
+		creature_ptr->window |= (PW_PLAYER);
+		return TRUE;
+	}
+	
+	if (creature_ptr->csp >= creature_ptr->msp) return FALSE;
+
+	creature_ptr->csp = creature_ptr->msp;
+	creature_ptr->csp_frac = 0;
+	msg_print(_("頭がハッキリとした。", "You feel your head clear."));
+	creature_ptr->redraw |= (PR_MANA);
+	creature_ptr->window |= (PW_PLAYER);
+	creature_ptr->window |= (PW_SPELL);
+	return TRUE;
 }
 
 
@@ -441,18 +434,17 @@ bool restore_all_status(player_type *creature_ptr)
 bool fishing(player_type *creature_ptr)
 {
 	DIRECTION dir;
-	POSITION x, y;
-
 	if (!get_direction(creature_ptr, &dir, FALSE, FALSE)) return FALSE;
-	y = creature_ptr->y + ddy[dir];
-	x = creature_ptr->x + ddx[dir];
+	POSITION y = creature_ptr->y + ddy[dir];
+	POSITION x = creature_ptr->x + ddx[dir];
 	creature_ptr->fishing_dir = dir;
 	if (!cave_have_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_WATER))
 	{
 		msg_print(_("そこは水辺ではない。", "There is no fishing place."));
 		return FALSE;
 	}
-	else if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+	
+	if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 		monster_desc(m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
@@ -460,6 +452,7 @@ bool fishing(player_type *creature_ptr)
 		free_turn(creature_ptr);
 		return FALSE;
 	}
+
 	set_action(creature_ptr, ACTION_FISH);
 	creature_ptr->redraw |= (PR_STATE);
 	return TRUE;
@@ -468,31 +461,29 @@ bool fishing(player_type *creature_ptr)
 
 bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 {
-	INVENTORY_IDX inv;
-	int t;
-	OBJECT_IDX o_idx;
-	GAME_TEXT o_name[MAX_NLEN];
-	object_type forge;
-
 	/* Cast off activated item */
+	INVENTORY_IDX inv;
 	for (inv = INVEN_RARM; inv <= INVEN_FEET; inv++)
 	{
 		if (o_ptr == &creature_ptr->inventory_list[inv]) break;
 	}
+
 	if (inv > INVEN_FEET) return FALSE;
 
+	object_type forge;
 	object_copy(&forge, o_ptr);
 	inven_item_increase(inv, (0 - o_ptr->number));
 	inven_item_optimize(inv);
-	o_idx = drop_near(&forge, 0, creature_ptr->y, creature_ptr->x);
+	OBJECT_IDX o_idx = drop_near(&forge, 0, creature_ptr->y, creature_ptr->x);
 	o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
+	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
 
 	/* Get effects */
 	msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
-	t = 20 + randint1(20);
+	int t = 20 + randint1(20);
 	(void)set_blind(creature_ptr, creature_ptr->blind + t);
 	(void)set_afraid(creature_ptr, 0);
 	(void)set_tim_esp(creature_ptr, creature_ptr->tim_esp + t, FALSE);
@@ -539,6 +530,7 @@ void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 			break;
 		}
+
 		teleport_level(target_ptr, 0);
 		break;
 	}
@@ -558,34 +550,36 @@ void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 	}
 }
 
+
 /*!
  * @brief プレイヤーのステータスシャッフル処理
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void status_shuffle(player_type *creature_ptr)
 {
-	BASE_STATUS max1, cur1, max2, cur2;
-	int ii, jj, i;
-
 	/* Pick a pair of stats */
-	ii = randint0(A_MAX);
-	for (jj = ii; jj == ii; jj = randint0(A_MAX)) /* loop */;
+	int i = randint0(A_MAX);
+	int j;
 
-	max1 = creature_ptr->stat_max[ii];
-	cur1 = creature_ptr->stat_cur[ii];
-	max2 = creature_ptr->stat_max[jj];
-	cur2 = creature_ptr->stat_cur[jj];
+	// todo ここのループは一体何をしている？
+	for (j = i; j == i; j = randint0(A_MAX)) /* loop */;
 
-	creature_ptr->stat_max[ii] = max2;
-	creature_ptr->stat_cur[ii] = cur2;
-	creature_ptr->stat_max[jj] = max1;
-	creature_ptr->stat_cur[jj] = cur1;
+	BASE_STATUS max1 = creature_ptr->stat_max[i];
+	BASE_STATUS cur1 = creature_ptr->stat_cur[i];
+	BASE_STATUS max2 = creature_ptr->stat_max[j];
+	BASE_STATUS cur2 = creature_ptr->stat_cur[j];
 
-	for (i = 0; i < A_MAX; i++)
+	creature_ptr->stat_max[i] = max2;
+	creature_ptr->stat_cur[i] = cur2;
+	creature_ptr->stat_max[j] = max1;
+	creature_ptr->stat_cur[j] = cur1;
+
+	for (int k = 0; k < A_MAX; k++)
 	{
-		if (creature_ptr->stat_max[i] > creature_ptr->stat_max_max[i]) creature_ptr->stat_max[i] = creature_ptr->stat_max_max[i];
-		if (creature_ptr->stat_cur[i] > creature_ptr->stat_max_max[i]) creature_ptr->stat_cur[i] = creature_ptr->stat_max_max[i];
+		if (creature_ptr->stat_max[k] > creature_ptr->stat_max_max[k]) creature_ptr->stat_max[k] = creature_ptr->stat_max_max[k];
+		if (creature_ptr->stat_cur[k] > creature_ptr->stat_max_max[k]) creature_ptr->stat_cur[k] = creature_ptr->stat_max_max[k];
 	}
 
-	creature_ptr->update |= (PU_BONUS);
+	creature_ptr->update |= PU_BONUS;
 }
