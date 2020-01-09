@@ -2579,7 +2579,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (slot && !object_is_cursed(o_ptr))
 		{
 			msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
-			inven_drop(creature_ptr, slot, 1);
+			drop_from_inventory(creature_ptr, slot, 1);
 		}
 	}
 

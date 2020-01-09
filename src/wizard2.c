@@ -1989,7 +1989,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		INVENTORY_IDX i;
 		for (i = INVEN_TOTAL - 1; i >= 0; i--)
 		{
-			if (creature_ptr->inventory_list[i].k_idx) inven_drop(creature_ptr, i, 999);
+			if (creature_ptr->inventory_list[i].k_idx) drop_from_inventory(creature_ptr, i, 999);
 		}
 		player_outfit(creature_ptr);
 		break;

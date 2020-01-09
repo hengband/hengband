@@ -5163,7 +5163,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
  * @details
  * The object will be dropped "near" the current location
  */
-void inven_drop(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
+void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
 	object_type forge;
 	object_type *q_ptr;
