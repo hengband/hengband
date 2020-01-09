@@ -572,14 +572,16 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_p
 /*!
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return ダンジョン生成が全て無事に成功したらTRUEを返す。
  */
-static bool cave_gen(floor_type *floor_ptr)
+static bool cave_gen(player_type *player_ptr)
 {
 	int i, k;
 	POSITION y, x;
 	dun_data dun_body;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	dungeon_type* dungeon_ptr = &d_info[floor_ptr->dungeon_idx];
 
 	floor_ptr->lite_n = 0;
@@ -702,7 +704,7 @@ static bool cave_gen(floor_type *floor_ptr)
 		}
 
 		/* Destroy the level if necessary */
-		if (dun->destroyed) destroy_level(floor_ptr);
+		if (dun->destroyed) destroy_level(player_ptr);
 
 		/* Hack -- Add some rivers */
 		if (one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
@@ -976,15 +978,17 @@ static bool cave_gen(floor_type *floor_ptr)
 	/* Put the Guardian */
 	if (!alloc_guardian(TRUE)) return FALSE;
 
-	if (dun->empty_level && (!one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level)) && !(dungeon_ptr->flags1 & DF1_DARKNESS))
+	bool is_empty_or_dark = dun->empty_level;
+	is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
+	is_empty_or_dark &= !(dungeon_ptr->flags1 & DF1_DARKNESS);
+	if (!is_empty_or_dark) return TRUE;
+
+	/* Lite the floor_ptr->grid_array */
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		/* Lite the floor_ptr->grid_array */
-		for (y = 0; y < floor_ptr->height; y++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
-			for (x = 0; x < floor_ptr->width; x++)
-			{
-				floor_ptr->grid_array[y][x].info |= (CAVE_GLOW);
-			}
+			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW);
 		}
 	}
 
@@ -1248,11 +1252,13 @@ static void generate_fixed_floor(floor_type *floor_ptr)
 
 /*!
  * @brief ダンジョン時のランダムフロア生成 / Make a real level
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param concptr
  * @return フロアの生成に成功したらTRUE
  */
-static bool level_gen(floor_type *floor_ptr, concptr *why)
+static bool level_gen(player_type *player_ptr, concptr *why)
 {
-	int level_height, level_width;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
 
 	if ((always_small_levels || ironman_small_levels ||
@@ -1261,6 +1267,7 @@ static bool level_gen(floor_type *floor_ptr, concptr *why)
 	    (d_info[d_idx].flags1 & DF1_SMALLEST)) &&
 	    !(d_info[d_idx].flags1 & DF1_BIG))
 	{
+		int level_height, level_width;
 		if (d_info[d_idx].flags1 & DF1_SMALLEST)
 		{
 			level_height = 1;
@@ -1273,12 +1280,16 @@ static bool level_gen(floor_type *floor_ptr, concptr *why)
 		}
 		else
 		{
-			do
+			level_height = randint1(MAX_HGT / SCREEN_HGT);
+			level_width = randint1(MAX_WID / SCREEN_WID);
+			bool is_first_level_area = TRUE;
+			bool is_max_area = (level_height == MAX_HGT / SCREEN_HGT) && (level_width == MAX_WID / SCREEN_WID);
+			while (is_first_level_area || is_max_area)
 			{
-				level_height = randint1(MAX_HGT/SCREEN_HGT);
-				level_width = randint1(MAX_WID/SCREEN_WID);
+				level_height = randint1(MAX_HGT / SCREEN_HGT);
+				level_width = randint1(MAX_WID / SCREEN_WID);
+				is_max_area = (level_height == MAX_HGT / SCREEN_HGT) && (level_width == MAX_WID / SCREEN_WID);
 			}
-			while ((level_height == MAX_HGT/SCREEN_HGT) && (level_width == MAX_WID/SCREEN_WID));
 		}
 
 		floor_ptr->height = level_height * SCREEN_HGT;
@@ -1303,13 +1314,13 @@ static bool level_gen(floor_type *floor_ptr, concptr *why)
 		panel_col_min = floor_ptr->width;
 	}
 
-	/* Make a dungeon */
 	floor_ptr->dungeon_idx = d_idx;
-	if (!cave_gen(floor_ptr))
+	if (!cave_gen(player_ptr))
 	{
 		*why = _("ダンジョン生成に失敗", "could not place player");
 		return FALSE;
 	}
+
 	else return TRUE;
 }
 
@@ -1451,7 +1462,7 @@ void generate_floor(player_type *player_ptr)
 		/* Build a real level */
 		else
 		{
-			okay = level_gen(floor_ptr, &why);
+			okay = level_gen(player_ptr, &why);
 		}
 
 

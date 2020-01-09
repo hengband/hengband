@@ -445,21 +445,19 @@ void place_trees(floor_type *floor_ptr, POSITION x, POSITION y)
  * Build a destroyed level
  * @return なし
  */
-void destroy_level(floor_type *floor_ptr)
+void destroy_level(player_type *player_ptr)
 {
-	POSITION y1, x1;
-	int n;
-
-	/* Note destroyed levels */
 	msg_print_wizard(CHEAT_DUNGEON, _("階に*破壊*の痕跡を生成しました。", "Destroyed Level."));
 
 	/* Drop a few epi-centers (usually about two) */
-	for (n = 0; n < randint1(5); n++)
+	POSITION y1, x1;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	for (int n = 0; n < randint1(5); n++)
 	{
 		/* Pick an epi-center */
 		x1 = rand_range(5, floor_ptr->width - 1 - 5);
 		y1 = rand_range(5, floor_ptr->height - 1 - 5);
 
-		(void)destroy_area(floor_ptr, y1, x1, 15, TRUE);
+		(void)destroy_area(player_ptr, y1, x1, 15, TRUE);
 	}
 }

@@ -464,7 +464,7 @@ void map_area(player_type *caster_ptr, POSITION range)
  * "earthquake" by using the "full" to select "destruction".
  * </pre>
  */
-bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
+bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r, bool in_generate)
 {
 	POSITION y, x;
 	int k, t;
@@ -472,6 +472,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 	bool flag = FALSE;
 
 	/* Prevent destruction of quest levels and town */
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	if ((floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
 		return (FALSE);
@@ -506,7 +507,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 				g_ptr->info &= ~(CAVE_UNSAFE);
 
 				/* Hack -- Notice player affect */
-				if (player_bold(p_ptr, y, x))
+				if (player_bold(caster_ptr, y, x))
 				{
 					/* Hurt the player later */
 					flag = TRUE;
@@ -535,7 +536,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 					m_ptr->hp = m_ptr->maxhp;
 
 					/* Try to teleport away quest monsters */
-					if (!teleport_away(p_ptr, g_ptr->m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) continue;
+					if (!teleport_away(caster_ptr, g_ptr->m_idx, (r * 2) + 1, TELEPORT_DEC_VALOUR)) continue;
 				}
 				else
 				{
@@ -544,7 +545,7 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 						GAME_TEXT m_name[MAX_NLEN];
 
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-						exe_write_diary(p_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
+						exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
 					}
 
 					/* Delete the monster (if any) */
@@ -691,28 +692,27 @@ bool destroy_area(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION r, b
 			msg_print(_("燃えるような閃光が発生した！", "There is a searing blast of light!"));
 
 			/* Blind the player */
-			if (!p_ptr->resist_blind && !p_ptr->resist_lite)
+			if (!caster_ptr->resist_blind && !caster_ptr->resist_lite)
 			{
 				/* Become blind */
-				(void)set_blind(p_ptr, p_ptr->blind + 10 + randint1(10));
+				(void)set_blind(caster_ptr, caster_ptr->blind + 10 + randint1(10));
 			}
 		}
 
 		forget_flow(floor_ptr);
 
 		/* Mega-Hack -- Forget the view and lite */
-		p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-		p_ptr->redraw |= (PR_MAP);
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
+		caster_ptr->redraw |= (PR_MAP);
+		caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-		if (p_ptr->special_defense & NINJA_S_STEALTH)
+		if (caster_ptr->special_defense & NINJA_S_STEALTH)
 		{
-			if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+			if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
 		}
 	}
 
-	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 

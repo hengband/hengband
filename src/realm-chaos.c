@@ -309,7 +309,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				destroy_area(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), FALSE);
+				destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), FALSE);
 			}
 		}
 		break;

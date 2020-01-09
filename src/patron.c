@@ -597,7 +597,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 			msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
 			msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
-			(void)destroy_area(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, 25, FALSE);
+			(void)destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, 25, FALSE);
 			reward = _("ダンジョンが*破壊*された。", "*destruct*ing dungeon");
 			break;
 

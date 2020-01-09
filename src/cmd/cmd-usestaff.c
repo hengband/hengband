@@ -244,7 +244,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
 		case SV_STAFF_DESTRUCTION:
 		{
-			ident = destroy_area(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
+			ident = destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
 			break;
 		}
 
