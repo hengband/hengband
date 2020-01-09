@@ -28,6 +28,7 @@ bool is_ring_slot(int i)
 
 /*!
  * @brief 選択アルファベットラベルからプレイヤーの装備オブジェクトIDを返す /
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */

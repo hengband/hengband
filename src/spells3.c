@@ -616,7 +616,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* No effect in some case */
-	if (TELE_LEVEL_IS_INEFF(m_idx))
+	if (is_teleport_level_ineffective(creature_ptr, m_idx))
 	{
 		if (see_m) msg_print(_("効果がなかった。", "There is no effect."));
 		return;
@@ -3497,6 +3497,25 @@ bool tele_town(player_type *caster_ptr)
 	caster_ptr->teleport_town = TRUE;
 	screen_load();
 	return TRUE;
+}
+
+
+/*!
+* todo 変数名が実態と合っているかどうかは要確認
+* テレポート・レベルが効かないモンスターであるかどうかを判定する
+* @param caster_ptr プレーヤーへの参照ポインタ
+* @param idx テレポート・レベル対象のモンスター
+*/
+bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
+{
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	bool is_special_floor = floor_ptr->inside_arena || caster_ptr->phase_out ||
+		(floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level));
+	bool is_invalid_floor = idx <= 0;
+	is_invalid_floor &= quest_number(floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
+	is_invalid_floor &= caster_ptr->current_floor_ptr->dun_level >= 1;
+	is_invalid_floor &= ironman_downward;
+	return is_special_floor || is_invalid_floor;
 }
 
 
