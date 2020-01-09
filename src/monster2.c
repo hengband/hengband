@@ -159,7 +159,7 @@ void delete_monster_idx(MONSTER_IDX i)
 		 * to prevent calling lite_spot()
 		 */
 
-		delete_object_idx(this_o_idx);
+		delete_object_idx(p_ptr->current_floor_ptr, this_o_idx);
 	}
 
 	(void)WIPE(m_ptr, monster_type);
@@ -4032,10 +4032,10 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 		/* Forget monster */
 		q_ptr->held_m_idx = 0;
 
-		delete_object_idx(this_o_idx);
+		delete_object_idx(p_ptr->current_floor_ptr, this_o_idx);
 
 		/* Drop it */
-		(void)drop_near(q_ptr, -1, m_ptr->fy, m_ptr->fx);
+		(void)drop_near(p_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
 	}
 
 	/* Forget objects */

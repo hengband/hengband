@@ -331,13 +331,14 @@ bool import_magic_device(player_type *user_ptr)
 
 /*!
  * @brief 誰得ドロップを行う。
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param y1 配置したいフロアのY座標
  * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  * @return なし
  */
-void amusement(POSITION y1, POSITION x1, int num, bool known)
+void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
 	int t = 0;
 	for (int n = 0; amuse_info[n].tval != 0; n++)
@@ -408,7 +409,7 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
 		/* Paranoia - reroll if nothing */
 		if (!(i_ptr->k_idx)) continue;
 
-		(void)drop_near(i_ptr, -1, y1, x1);
+		(void)drop_near(creature_ptr, i_ptr, -1, y1, x1);
 
 		num--;
 	}
@@ -418,6 +419,7 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
 /*!
  * @brief 獲得ドロップを行う。
  * Scatter some "great" objects near the player
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y1 配置したいフロアのY座標
  * @param x1 配置したいフロアのX座標
  * @param num 獲得の処理回数
@@ -426,7 +428,7 @@ void amusement(POSITION y1, POSITION x1, int num, bool known)
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  * @return なし
  */
-void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
+void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
 	object_type *i_ptr;
 	object_type object_type_body;
@@ -447,7 +449,7 @@ void acquirement(POSITION y1, POSITION x1, int num, bool great, bool special, bo
 			object_known(i_ptr);
 		}
 
-		(void)drop_near(i_ptr, -1, y1, x1);
+		(void)drop_near(caster_ptr, i_ptr, -1, y1, x1);
 	}
 }
 
@@ -550,7 +552,7 @@ void acquire_chaos_weapon(player_type *creature_ptr)
 	q_ptr->to_d = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
 	one_resistance(q_ptr);
 	q_ptr->name2 = EGO_CHAOTIC;
-	(void)drop_near(q_ptr, -1, creature_ptr->y, creature_ptr->x);
+	(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
 }
 
 

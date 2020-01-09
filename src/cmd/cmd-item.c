@@ -592,7 +592,7 @@ void do_cmd_drop(player_type *creature_ptr)
 	take_turn(creature_ptr, 50);
 
 	/* Drop (some of) the item */
-	inven_drop(item, amt);
+	inven_drop(creature_ptr, item, amt);
 
 	if (item >= INVEN_RARM)
 	{

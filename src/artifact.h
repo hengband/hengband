@@ -78,7 +78,7 @@ extern bool become_random_artifact(object_type *o_ptr, bool a_scroll);
 extern int activation_index(object_type *o_ptr);
 extern const activation_type* find_activation_info(object_type *o_ptr);
 extern void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr);
-extern bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x);
+extern bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
 extern bool make_artifact(object_type *o_ptr);
 extern bool make_artifact_special(object_type *o_ptr);
 

@@ -178,7 +178,7 @@ static void wiz_create_named_art(player_type *caster_ptr)
 	if (a_idx < 0) a_idx = 0;
 	if (a_idx >= max_a_idx) a_idx = 0;
 
-	(void)create_named_art(a_idx, caster_ptr->y, caster_ptr->x);
+	(void)create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
 
 	/* All done */
 	msg_print("Allocated.");
@@ -1326,7 +1326,7 @@ static void wiz_create_item(player_type *caster_ptr)
 			if (a_info[i].sval != k_info[k_idx].sval) continue;
 
 			/* Create this artifact */
-			(void)create_named_art(i, caster_ptr->y, caster_ptr->x);
+			(void)create_named_art(caster_ptr, i, caster_ptr->y, caster_ptr->x);
 
 			/* All done */
 			msg_print("Allocated(INSTA_ART).");
@@ -1343,7 +1343,7 @@ static void wiz_create_item(player_type *caster_ptr)
 	apply_magic(q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
 
 	/* Drop the object from heaven */
-	(void)drop_near(q_ptr, -1, caster_ptr->y, caster_ptr->x);
+	(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
 
 	/* All done */
 	msg_print("Allocated.");
@@ -1799,7 +1799,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		/* Good Objects */
 	case 'g':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
+		acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
 		break;
 
 		/* Hitpoint rerating */
@@ -1892,7 +1892,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		if (tmp_int >= max_q_idx) break;
 
 		creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
-		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 		quest[tmp_int].status = QUEST_STATUS_TAKEN;
 		creature_ptr->current_floor_ptr->inside_quest = 0;
 	}
@@ -1939,7 +1939,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		/* Special(Random Artifact) Objects */
 	case 'S':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
+		acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
 		break;
 
 		/* Teleport */
@@ -1955,7 +1955,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		/* Very Good Objects */
 	case 'v':
 		if (command_arg <= 0) command_arg = 1;
-		acquirement(creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
+		acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
 		break;
 
 		/* Wizard Light the Level */
@@ -1989,7 +1989,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		INVENTORY_IDX i;
 		for (i = INVEN_TOTAL - 1; i >= 0; i--)
 		{
-			if (creature_ptr->inventory_list[i].k_idx) inven_drop(i, 999);
+			if (creature_ptr->inventory_list[i].k_idx) inven_drop(creature_ptr, i, 999);
 		}
 		player_outfit(creature_ptr);
 		break;

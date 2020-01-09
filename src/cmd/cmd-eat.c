@@ -433,7 +433,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 				object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
 
 				/* Drop the object from heaven */
-				(void)drop_near(q_ptr, -1, creature_ptr->y, creature_ptr->x);
+				(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
 			}
 			else
 			{

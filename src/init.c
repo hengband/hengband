@@ -867,14 +867,12 @@ static errr init_m_info(void)
 /*!
  * @brief 基本情報読み込みのメインルーチン /
  * Initialize misc. values
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
-static errr init_misc(void)
+static errr init_misc(player_type *player_ptr)
 {
-	/* Initialize the values */
-	process_dungeon_file("misc.txt", 0, 0, 0, 0);
-
-	return 0;
+	return process_dungeon_file(player_ptr, "misc.txt", 0, 0, 0, 0);
 }
 
 
@@ -1702,7 +1700,7 @@ static void init_angband_aux(concptr why)
  * if needed, in the first (?) pass through "TERM_XTRA_REACT".
  * </pre>
  */
-void init_angband(void)
+void init_angband(player_type *player_ptr)
 {
 	int fd = -1;
 
@@ -1799,7 +1797,7 @@ void init_angband(void)
 
 	/* Initialize misc. values */
 	note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
-	if (init_misc()) quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
+	if (init_misc(player_ptr)) quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
 
 	/* Initialize feature info */
 #ifdef JP

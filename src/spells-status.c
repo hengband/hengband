@@ -474,7 +474,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	object_copy(&forge, o_ptr);
 	inven_item_increase(inv, (0 - o_ptr->number));
 	inven_item_optimize(inv);
-	OBJECT_IDX o_idx = drop_near(&forge, 0, creature_ptr->y, creature_ptr->x);
+	OBJECT_IDX o_idx = drop_near(creature_ptr, &forge, 0, creature_ptr->y, creature_ptr->x);
 	o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 	GAME_TEXT o_name[MAX_NLEN];

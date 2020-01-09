@@ -431,7 +431,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		/* Get the quest text */
 		init_flags = INIT_NAME_ONLY;
 
-		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
@@ -6348,7 +6348,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 		/* Get the quest text */
 		init_flags = INIT_SHOW_TEXT;
 
-		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
@@ -6483,12 +6483,13 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 }
 
 
-static bool do_cmd_knowledge_quests_aux(FILE *fff, floor_type *floor_ptr, IDX q_idx)
+static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX q_idx)
 {
 	char tmp_str[120];
 	char playtime_str[16];
 	quest_type* const q_ptr = &quest[q_idx];
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (is_fixed_quest_idx(q_idx))
 	{
 		/* Set the quest number temporary */
@@ -6499,7 +6500,7 @@ static bool do_cmd_knowledge_quests_aux(FILE *fff, floor_type *floor_ptr, IDX q_
 		/* Get the quest */
 		init_flags = INIT_NAME_ONLY;
 
-		process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+		process_dungeon_file(player_ptr, "q_info.txt", 0, 0, 0, 0);
 
 		/* Reset the old quest number */
 		floor_ptr->inside_quest = old_quest;
@@ -6562,7 +6563,7 @@ void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUE
 		QUEST_IDX q_idx = quest_num[i];
 		quest_type* const q_ptr = &quest[q_idx];
 
-		if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(fff, creature_ptr->current_floor_ptr, q_idx))
+		if (q_ptr->status == QUEST_STATUS_FINISHED && do_cmd_knowledge_quests_aux(creature_ptr, fff, q_idx))
 		{
 			++total;
 		}
@@ -6589,7 +6590,7 @@ void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) &&
-		    do_cmd_knowledge_quests_aux(fff, creature_ptr->current_floor_ptr, q_idx))
+		    do_cmd_knowledge_quests_aux(creature_ptr, fff, q_idx))
 		{
 			++total;
 		}
@@ -6678,10 +6679,12 @@ static void do_cmd_knowledge_quests(player_type *creature_ptr)
 
 /*
  * List my home
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return なし
  */
-static void do_cmd_knowledge_home(void)
+static void do_cmd_knowledge_home(player_type *player_ptr)
 {
-	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+	process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	/* Open a new file */
 	FILE *fff;
@@ -6926,7 +6929,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			do_cmd_knowledge_pets(creature_ptr);
 			break;
 		case '8': /* Home */
-			do_cmd_knowledge_home();
+			do_cmd_knowledge_home(creature_ptr);
 			break;
 		case '9': /* Resist list */
 			do_cmd_knowledge_inven(creature_ptr);

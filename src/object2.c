@@ -88,7 +88,7 @@ OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  * @return なし
  */
-void excise_object_idx(OBJECT_IDX o_idx)
+void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
 	object_type *j_ptr;
 
@@ -96,18 +96,18 @@ void excise_object_idx(OBJECT_IDX o_idx)
 	OBJECT_IDX prev_o_idx = 0;
 
 	/* Object */
-	j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	j_ptr = &floor_ptr->o_list[o_idx];
 
 	if (OBJECT_IS_HELD_MONSTER(j_ptr))
 	{
 		monster_type *m_ptr;
-		m_ptr = &p_ptr->current_floor_ptr->m_list[j_ptr->held_m_idx];
+		m_ptr = &floor_ptr->m_list[j_ptr->held_m_idx];
 
 		/* Scan all objects in the grid */
 		for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			if (this_o_idx == o_idx)
@@ -125,7 +125,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 					object_type *k_ptr;
 
 					/* Previous object */
-					k_ptr = &p_ptr->current_floor_ptr->o_list[prev_o_idx];
+					k_ptr = &floor_ptr->o_list[prev_o_idx];
 
 					/* Remove from list */
 					k_ptr->next_o_idx = next_o_idx;
@@ -150,13 +150,13 @@ void excise_object_idx(OBJECT_IDX o_idx)
 		POSITION y = j_ptr->iy;
 		POSITION x = j_ptr->ix;
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Scan all objects in the grid */
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			if (this_o_idx == o_idx)
@@ -174,7 +174,7 @@ void excise_object_idx(OBJECT_IDX o_idx)
 					object_type *k_ptr;
 
 					/* Previous object */
-					k_ptr = &p_ptr->current_floor_ptr->o_list[prev_o_idx];
+					k_ptr = &floor_ptr->o_list[prev_o_idx];
 
 					/* Remove from list */
 					k_ptr->next_o_idx = next_o_idx;
@@ -202,15 +202,15 @@ void excise_object_idx(OBJECT_IDX o_idx)
  * @details
  * Handle "stacks" of objects correctly.
  */
-void delete_object_idx(OBJECT_IDX o_idx)
+void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
 	object_type *j_ptr;
 
 	/* Excise */
-	excise_object_idx(o_idx);
+	excise_object_idx(floor_ptr, o_idx);
 
 	/* Object */
-	j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	j_ptr = &floor_ptr->o_list[o_idx];
 
 	/* Dungeon floor */
 	if (!OBJECT_IS_HELD_MONSTER(j_ptr))
@@ -222,8 +222,7 @@ void delete_object_idx(OBJECT_IDX o_idx)
 	}
 	object_wipe(j_ptr);
 
-	/* Count objects */
-	p_ptr->current_floor_ptr->o_cnt--;
+	floor_ptr->o_cnt--;
 }
 
 
@@ -235,31 +234,27 @@ void delete_object_idx(OBJECT_IDX o_idx)
  * @param x 削除したフロアマスのX座標
  * @return なし
  */
-void delete_object(POSITION y, POSITION x)
+void delete_object(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
+	if (!in_bounds(floor_ptr, y, x)) return;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 		object_wipe(o_ptr);
-
-		/* Count objects */
-		p_ptr->current_floor_ptr->o_cnt--;
+		floor_ptr->o_cnt--;
 	}
 
-	/* Objects are gone */
 	g_ptr->o_idx = 0;
-
 	lite_spot(y, x);
 }
 
@@ -273,48 +268,43 @@ void delete_object(POSITION y, POSITION x)
  * This routine should almost never fail, but in case it does,
  * we must be sure to handle "failure" of this routine.
  */
-OBJECT_IDX o_pop(void)
+OBJECT_IDX o_pop(floor_type *floor_ptr)
 {
 	OBJECT_IDX i;
 
 	/* Initial allocation */
-	if (p_ptr->current_floor_ptr->o_max < current_world_ptr->max_o_idx)
+	if (floor_ptr->o_max < current_world_ptr->max_o_idx)
 	{
 		/* Get next space */
-		i = p_ptr->current_floor_ptr->o_max;
+		i = floor_ptr->o_max;
 
 		/* Expand object array */
-		p_ptr->current_floor_ptr->o_max++;
-
-		/* Count objects */
-		p_ptr->current_floor_ptr->o_cnt++;
+		floor_ptr->o_max++;
+		floor_ptr->o_cnt++;
 
 		/* Use this object */
-		return (i);
+		return i;
 	}
 
 
 	/* Recycle dead objects */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		o_ptr = &floor_ptr->o_list[i];
 
 		/* Skip live objects */
 		if (o_ptr->k_idx) continue;
-
-		/* Count objects */
-		p_ptr->current_floor_ptr->o_cnt++;
+		floor_ptr->o_cnt++;
 
 		/* Use this object */
-		return (i);
+		return i;
 	}
-
 
 	/* Warn the player (except during dungeon creation) */
 	if (current_world_ptr->character_dungeon) msg_print(_("アイテムが多すぎる！", "Too many objects!"));
 
-	return (0);
+	return 0;
 }
 
 
@@ -349,8 +339,7 @@ static errr get_obj_num_prep(void)
 		}
 	}
 
-	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -4193,7 +4182,7 @@ bool make_gold(object_type *j_ptr)
 /*!
  * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
  * Let an object fall to the ground at or near a location.
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ
  * @param chance ドロップの消滅率(%)
  * @param y 配置したいフロアのY座標
@@ -4213,7 +4202,7 @@ bool make_gold(object_type *j_ptr)
  * the object can combine, stack, or be placed.  Artifacts will try very\n
  * hard to be placed, including "teleporting" to a useful grid if needed.\n
  */
-OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
+OBJECT_IDX drop_near(player_type *owner_type, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
 {
 	int i, k, d, s;
 
@@ -4265,7 +4254,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	/* Default */
 	by = y;
 	bx = x;
-
+	floor_type *floor_ptr = owner_type->current_floor_ptr;
 	/* Scan local grids */
 	for (dy = -3; dy <= 3; dy++)
 	{
@@ -4283,16 +4272,16 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			ty = y + dy;
 			tx = x + dx;
 
-			if (!in_bounds(p_ptr->current_floor_ptr, ty, tx)) continue;
+			if (!in_bounds(floor_ptr, ty, tx)) continue;
 
 			/* Require line of projection */
-			if (!projectable(p_ptr->current_floor_ptr, y, x, ty, tx)) continue;
+			if (!projectable(floor_ptr, y, x, ty, tx)) continue;
 
 			/* Obtain grid */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[ty][tx];
+			g_ptr = &floor_ptr->grid_array[ty][tx];
 
 			/* Require floor space */
-			if (!cave_drop_bold(p_ptr->current_floor_ptr, ty, tx)) continue;
+			if (!cave_drop_bold(floor_ptr, ty, tx)) continue;
 
 			/* No objects */
 			k = 0;
@@ -4301,7 +4290,7 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
 				object_type *o_ptr;
-				o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+				o_ptr = &floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Check for possible combination */
@@ -4338,7 +4327,6 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		}
 	}
 
-
 	/* Handle lack of space */
 	if (!flag && !object_is_artifact(j_ptr))
 	{
@@ -4362,14 +4350,14 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		ty = rand_spread(by, 1);
 		tx = rand_spread(bx, 1);
 
-		if (!in_bounds(p_ptr->current_floor_ptr, ty, tx)) continue;
+		if (!in_bounds(floor_ptr, ty, tx)) continue;
 
 		/* Bounce to that location */
 		by = ty;
 		bx = tx;
 
 		/* Require floor space */
-		if (!cave_drop_bold(p_ptr->current_floor_ptr, by, bx)) continue;
+		if (!cave_drop_bold(floor_ptr, by, bx)) continue;
 
 		flag = TRUE;
 	}
@@ -4379,12 +4367,12 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	{
 		int candidates = 0, pick;
 
-		for (ty = 1; ty < p_ptr->current_floor_ptr->height - 1; ty++)
+		for (ty = 1; ty < floor_ptr->height - 1; ty++)
 		{
-			for (tx = 1; tx < p_ptr->current_floor_ptr->width - 1; tx++)
+			for (tx = 1; tx < floor_ptr->width - 1; tx++)
 			{
 				/* A valid space found */
-				if (cave_drop_bold(p_ptr->current_floor_ptr, ty, tx)) candidates++;
+				if (cave_drop_bold(floor_ptr, ty, tx)) candidates++;
 			}
 		}
 
@@ -4417,11 +4405,11 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		/* Choose a random one */
 		pick = randint1(candidates);
 
-		for (ty = 1; ty < p_ptr->current_floor_ptr->height - 1; ty++)
+		for (ty = 1; ty < floor_ptr->height - 1; ty++)
 		{
-			for (tx = 1; tx < p_ptr->current_floor_ptr->width - 1; tx++)
+			for (tx = 1; tx < floor_ptr->width - 1; tx++)
 			{
-				if (cave_drop_bold(p_ptr->current_floor_ptr, ty, tx))
+				if (cave_drop_bold(floor_ptr, ty, tx))
 				{
 					pick--;
 
@@ -4438,13 +4426,13 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 	}
 
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[by][bx];
+	g_ptr = &floor_ptr->grid_array[by][bx];
 
 	/* Scan objects in that grid for combination */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Check for combination */
@@ -4459,9 +4447,8 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 		}
 	}
 
-	if (!done) o_idx = o_pop();
+	if (!done) o_idx = o_pop(floor_ptr);
 
-	/* Failure */
 	if (!done && !o_idx)
 	{
 #ifdef JP
@@ -4478,18 +4465,17 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 			a_info[j_ptr->name1].cur_num = 0;
 		}
 
-		/* Failure */
-		return (0);
+		return 0;
 	}
 
 	/* Stack */
 	if (!done)
 	{
 		/* Structure copy */
-		object_copy(&p_ptr->current_floor_ptr->o_list[o_idx], j_ptr);
+		object_copy(&floor_ptr->o_list[o_idx], j_ptr);
 
 		/* Access new object */
-		j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+		j_ptr = &floor_ptr->o_list[o_idx];
 
 		/* Locate */
 		j_ptr->iy = by;
@@ -4513,12 +4499,12 @@ OBJECT_IDX drop_near(object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION
 
 	/* Mega-Hack -- no message if "dropped" by player */
 	/* Message when an object falls under the player */
-	if (chance && player_bold(p_ptr, by, bx))
+	if (chance && player_bold(owner_type, by, bx))
 	{
 		msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
 	}
 
-	return (o_idx);
+	return o_idx;
 }
 
 
@@ -4839,7 +4825,7 @@ void floor_item_optimize(INVENTORY_IDX item)
 	/* Only optimize empty items */
 	if (o_ptr->number) return;
 
-	delete_object_idx(item);
+	delete_object_idx(p_ptr->current_floor_ptr, item);
 }
 
 
@@ -5177,7 +5163,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
  * @details
  * The object will be dropped "near" the current location
  */
-void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
+void inven_drop(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -5186,7 +5172,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Access original object */
-	o_ptr = &p_ptr->inventory_list[item];
+	o_ptr = &owner_ptr->inventory_list[item];
 
 	/* Error check */
 	if (amt <= 0) return;
@@ -5201,7 +5187,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 		item = inven_takeoff(item, amt);
 
 		/* Access original object */
-		o_ptr = &p_ptr->inventory_list[item];
+		o_ptr = &owner_ptr->inventory_list[item];
 	}
 
 	q_ptr = &forge;
@@ -5221,7 +5207,7 @@ void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt)
 	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
 
 	/* Drop it near the player */
-	(void)drop_near(q_ptr, 0, p_ptr->y, p_ptr->x);
+	(void)drop_near(owner_ptr, q_ptr, 0, owner_ptr->y, owner_ptr->x);
 
 	vary_item(item, -amt);
 }

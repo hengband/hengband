@@ -3013,7 +3013,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
 #endif
 						chg_virtue(target_ptr, V_SACRIFICE, 1);
-						o_idx = o_pop();
+						o_idx = o_pop(target_ptr->current_floor_ptr);
 
 						/* Success */
 						if (o_idx)

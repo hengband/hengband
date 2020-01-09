@@ -2098,11 +2098,12 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 
 /*!
  * @brief クエスト情報を表示しつつ処理する。/ Display quest information
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param questnum クエストのID
  * @param do_init クエストの開始処理(TRUE)、結果処理か(FALSE)
  * @return なし
  */
-static void get_questinfo(IDX questnum, bool do_init)
+static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 {
 	int i;
 	QUEST_IDX old_quest;
@@ -2124,7 +2125,7 @@ static void get_questinfo(IDX questnum, bool do_init)
 	init_flags = INIT_SHOW_TEXT;
 	if (do_init) init_flags |= INIT_ASSIGN;
 
-	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+	process_dungeon_file(player_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	/* Reset the old quest number */
 	p_ptr->current_floor_ptr->inside_quest = old_quest;
@@ -2144,9 +2145,10 @@ static void get_questinfo(IDX questnum, bool do_init)
 
 /*!
  * @brief クエスト処理のメインルーチン / Request a quest from the Lord.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void castle_quest(void)
+static void castle_quest(player_type *player_ptr)
 {
 	QUEST_IDX q_index = 0;
 	monster_race *r_ptr;
@@ -2157,7 +2159,7 @@ static void castle_quest(void)
 	clear_bldg(4, 18);
 
 	/* Current quest of the building */
-	q_index = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].special;
+	q_index = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
 
 	/* Is there a quest available at the building? */
 	if (!q_index)
@@ -2174,14 +2176,14 @@ static void castle_quest(void)
 		/* Rewarded quest */
 		q_ptr->status = QUEST_STATUS_REWARDED;
 
-		get_questinfo(q_index, FALSE);
+		get_questinfo(player_ptr, q_index, FALSE);
 
 		reinit_wilderness = TRUE;
 	}
 	/* Failed quest */
 	else if (q_ptr->status == QUEST_STATUS_FAILED)
 	{
-		get_questinfo(q_index, FALSE);
+		get_questinfo(player_ptr, q_index, FALSE);
 
 		/* Mark quest as done (but failed) */
 		q_ptr->status = QUEST_STATUS_FAILED_DONE;
@@ -2234,7 +2236,7 @@ static void castle_quest(void)
 		}
 		else
 		{
-			get_questinfo(q_index, TRUE);
+			get_questinfo(player_ptr, q_index, TRUE);
 		}
 	}
 }
@@ -3899,7 +3901,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		race_legends(p_ptr);
 		break;
 	case BACT_QUEST:
-		castle_quest();
+		castle_quest(player_ptr);
 		break;
 	case BACT_KING_LEGENDS:
 	case BACT_ARENA_LEGENDS:

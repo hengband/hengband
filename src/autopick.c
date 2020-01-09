@@ -1636,7 +1636,7 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 /*
  *  Auto-destroy marked item
  */
-static void autopick_delayed_alter_aux(INVENTORY_IDX item)
+static void autopick_delayed_alter_aux(floor_type *floor_ptr, INVENTORY_IDX item)
 {
 	object_type *o_ptr;
 
@@ -1659,7 +1659,7 @@ static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 		/* Eliminate the item (from the floor) */
 		else
 		{
-			delete_object_idx(0 - item);
+			delete_object_idx(floor_ptr, 0 - item);
 		}
 
 		msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), o_name);
@@ -1670,7 +1670,7 @@ static void autopick_delayed_alter_aux(INVENTORY_IDX item)
 /*
  *  Auto-destroy marked items in inventry and on floor
  */
-void autopick_delayed_alter(void)
+void autopick_delayed_alter(floor_type *floor_ptr)
 {
 	INVENTORY_IDX item;
 
@@ -1679,14 +1679,14 @@ void autopick_delayed_alter(void)
 	 * skipping after inven_item_optimize()
 	 */
 	for (item = INVEN_TOTAL - 1; item >= 0 ; item--)
-		autopick_delayed_alter_aux(item);
+		autopick_delayed_alter_aux(floor_ptr, item);
 
 	/* Scan the pile of objects */
 	item = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx;
 	while (item)
 	{
 		OBJECT_IDX next = p_ptr->current_floor_ptr->o_list[item].next_o_idx;
-		autopick_delayed_alter_aux(-item);
+		autopick_delayed_alter_aux(floor_ptr, -item);
 		item = next;
 	}
 }

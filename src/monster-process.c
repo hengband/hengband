@@ -1411,7 +1411,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					msg_print(_("地面に落とされた。", "You have fallen from riding pet."));
 				}
 
-				check_quest_completion(m_ptr);
+				check_quest_completion(target_ptr, m_ptr);
 				delete_monster_idx(m_idx);
 				return;
 			}
@@ -2304,7 +2304,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 						}
 
 						/* Excise the object */
-						excise_object_idx(this_o_idx);
+						excise_object_idx(target_ptr->current_floor_ptr, this_o_idx);
 
 						/* Forget mark */
 						o_ptr->marked &= OM_TOUCHED;
@@ -2333,7 +2333,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 							msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
 						}
 
-						delete_object_idx(this_o_idx);
+						delete_object_idx(target_ptr->current_floor_ptr, this_o_idx);
 					}
 				}
 			}

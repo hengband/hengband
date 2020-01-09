@@ -268,8 +268,8 @@ void stair_creation(player_type *caster_ptr)
 
 	/* No effect out of standard dungeon floor */
 	if (!floor_ptr->dun_level || (!up && !down) ||
-		(caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) ||
-		caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out)
+		(floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) ||
+		floor_ptr->inside_arena || caster_ptr->phase_out)
 	{
 		/* arena or quest */
 		msg_print(_("効果がありません！", "There is no effect!"));
@@ -277,14 +277,14 @@ void stair_creation(player_type *caster_ptr)
 	}
 
 	/* Artifacts resists */
-	if (!cave_valid_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x))
+	if (!cave_valid_bold(floor_ptr, caster_ptr->y, caster_ptr->x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
 		return;
 	}
 
 	/* Destroy all objects in the grid */
-	delete_object(caster_ptr->y, caster_ptr->x);
+	delete_object(floor_ptr, caster_ptr->y, caster_ptr->x);
 
 	/* Extract current floor data */
 	saved_floor_type *sf_ptr;
@@ -355,13 +355,13 @@ void stair_creation(player_type *caster_ptr)
 	/* Create a staircase */
 	if (up)
 	{
-		cave_set_feat(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x,
+		cave_set_feat(floor_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ?
 			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
-		cave_set_feat(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x,
+		cave_set_feat(floor_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ?
 			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
@@ -564,7 +564,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 				}
 			}
 
-			delete_object(y, x);
+			delete_object(floor_ptr, y, x);
 
 			/* Destroy "non-permanent" grids */
 			if (cave_perma_grid(g_ptr)) continue;
@@ -728,7 +728,8 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
 {
 	/* Prevent destruction of quest levels and town */
-	if ((caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest)) || !caster_ptr->current_floor_ptr->dun_level)
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	if ((floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || !floor_ptr->dun_level)
 	{
 		return FALSE;
 	}
@@ -758,12 +759,12 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			yy = cy + dy;
 			xx = cx + dx;
 
-			if (!in_bounds(caster_ptr->current_floor_ptr, yy, xx)) continue;
+			if (!in_bounds(floor_ptr, yy, xx)) continue;
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;
 			grid_type *g_ptr;
-			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
+			g_ptr = &floor_ptr->grid_array[yy][xx];
 
 			/* Lose room and vault / Lose light and knowledge */
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
@@ -795,12 +796,12 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			x = caster_ptr->x + ddx_ddd[i];
 
 			/* Skip non-empty grids */
-			if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x)) continue;
+			if (!cave_empty_bold(floor_ptr, y, x)) continue;
 
 			/* Important -- Skip "quake" grids */
 			if (map[16 + y - cy][16 + x - cx]) continue;
 
-			if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) continue;
+			if (floor_ptr->grid_array[y][x].m_idx) continue;
 
 			/* Count "safe" grids */
 			sn++;
@@ -817,17 +818,17 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 		{
 		case 1:
 		{
-			msg_print(_("ダンジョンの壁が崩れた！", "The caster_ptr->current_floor_ptr->grid_array ceiling collapses!"));
+			msg_print(_("ダンジョンの壁が崩れた！", "The dungeon's ceiling collapses!"));
 			break;
 		}
 		case 2:
 		{
-			msg_print(_("ダンジョンの床が不自然にねじ曲がった！", "The caster_ptr->current_floor_ptr->grid_array floor twists in an unnatural way!"));
+			msg_print(_("ダンジョンの床が不自然にねじ曲がった！", "The dungeon's floor twists in an unnatural way!"));
 			break;
 		}
 		default:
 		{
-			msg_print(_("ダンジョンが揺れた！崩れた岩が頭に降ってきた！", "The caster_ptr->current_floor_ptr->grid_array quakes!  You are pummeled with debris!"));
+			msg_print(_("ダンジョンが揺れた！崩れた岩が頭に降ってきた！", "The dungeon quakes!  You are pummeled with debris!"));
 			break;
 		}
 		}
@@ -882,7 +883,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			if (m_idx)
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
+				monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 				monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
 				killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name);
 			}
@@ -907,14 +908,14 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			if (!map[16 + yy - cy][16 + xx - cx]) continue;
 
 			grid_type *g_ptr;
-			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
+			g_ptr = &floor_ptr->grid_array[yy][xx];
 
 			if (g_ptr->m_idx == caster_ptr->riding) continue;
 
 			/* Process monsters */
 			if (!g_ptr->m_idx) continue;
 
-			monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Quest monsters */
@@ -944,11 +945,11 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					x = xx + ddx_ddd[i];
 
 					/* Skip non-empty grids */
-					if (!cave_empty_bold(caster_ptr->current_floor_ptr, y, x)) continue;
+					if (!cave_empty_bold(floor_ptr, y, x)) continue;
 
 					/* Hack -- no safety on glyph of warding */
-					if (is_glyph_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) continue;
-					if (is_explosive_rune_grid(&caster_ptr->current_floor_ptr->grid_array[y][x])) continue;
+					if (is_glyph_grid(&floor_ptr->grid_array[y][x])) continue;
+					if (is_explosive_rune_grid(&floor_ptr->grid_array[y][x])) continue;
 
 					/* ... nor on the Pattern */
 					if (pattern_tile(y, x)) continue;
@@ -956,7 +957,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					/* Important -- Skip "quake" grids */
 					if (map[16 + y - cy][16 + x - cx]) continue;
 
-					if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) continue;
+					if (floor_ptr->grid_array[y][x].m_idx) continue;
 					if (player_bold(caster_ptr, y, x)) continue;
 
 					/* Count "safe" grids */
@@ -992,7 +993,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
 				if (g_ptr->m_idx)
 				{
-					if (record_named_pet && is_pet(&caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx]) && caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx].nickname)
+					if (record_named_pet && is_pet(&floor_ptr->m_list[g_ptr->m_idx]) && floor_ptr->m_list[g_ptr->m_idx].nickname)
 					{
 						char m2_name[MAX_NLEN];
 
@@ -1001,7 +1002,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					}
 				}
 
-				delete_monster(caster_ptr->current_floor_ptr, yy, xx);
+				delete_monster(floor_ptr, yy, xx);
 
 				sn = 0;
 			}
@@ -1009,13 +1010,13 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			/* Hack -- Escape from the rock */
 			if (sn == 0) continue;
 
-			IDX m_idx_aux = caster_ptr->current_floor_ptr->grid_array[yy][xx].m_idx;
+			IDX m_idx_aux = floor_ptr->grid_array[yy][xx].m_idx;
 
 			/* Update the old location */
-			caster_ptr->current_floor_ptr->grid_array[yy][xx].m_idx = 0;
+			floor_ptr->grid_array[yy][xx].m_idx = 0;
 
 			/* Update the new location */
-			caster_ptr->current_floor_ptr->grid_array[sy][sx].m_idx = m_idx_aux;
+			floor_ptr->grid_array[sy][sx].m_idx = m_idx_aux;
 
 			/* Move the monster */
 			m_ptr->fy = sy;
@@ -1028,7 +1029,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 	}
 
 	/* Lose monster light */
-	clear_mon_lite(caster_ptr->current_floor_ptr);
+	clear_mon_lite(floor_ptr);
 
 	/* Examine the quaked region */
 	for (dy = -r; dy <= r; dy++)
@@ -1042,39 +1043,39 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			if (!map[16 + yy - cy][16 + xx - cx]) continue;
 
 			grid_type *g_ptr;
-			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
+			g_ptr = &floor_ptr->grid_array[yy][xx];
 
 			/* Destroy location (if valid) */
-			if (!cave_valid_bold(caster_ptr->current_floor_ptr, yy, xx)) continue;
+			if (!cave_valid_bold(floor_ptr, yy, xx)) continue;
 
-			delete_object(yy, xx);
+			delete_object(floor_ptr, yy, xx);
 
 			/* Wall (or floor) type */
-			int t = cave_have_flag_bold(caster_ptr->current_floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
+			int t = cave_have_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;
 
 			/* Create granite wall */
 			if (t < 20)
 			{
-				cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_granite);
+				cave_set_feat(floor_ptr, yy, xx, feat_granite);
 				continue;
 			}
 
 			/* Create quartz vein */
 			if (t < 70)
 			{
-				cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_quartz_vein);
+				cave_set_feat(floor_ptr, yy, xx, feat_quartz_vein);
 				continue;
 			}
 
 			/* Create magma vein */
 			if (t < 100)
 			{
-				cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_magma_vein);
+				cave_set_feat(floor_ptr, yy, xx, feat_magma_vein);
 				continue;
 			}
 
 			/* Create floor */
-			cave_set_feat(caster_ptr->current_floor_ptr, yy, xx, feat_ground_type[randint0(100)]);
+			cave_set_feat(floor_ptr, yy, xx, feat_ground_type[randint0(100)]);
 		}
 	}
 
@@ -1086,12 +1087,12 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			yy = cy + dy;
 			xx = cx + dx;
 
-			if (!in_bounds(caster_ptr->current_floor_ptr, yy, xx)) continue;
+			if (!in_bounds(floor_ptr, yy, xx)) continue;
 
 			/* Skip distant grids */
 			if (distance(cy, cx, yy, xx) > r) continue;
 			grid_type *g_ptr;
-			g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
+			g_ptr = &floor_ptr->grid_array[yy][xx];
 
 			if (is_mirror_grid(g_ptr))
 			{
@@ -1109,8 +1110,8 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			{
 				yyy = yy + ddy_ddd[ii];
 				xxx = xx + ddx_ddd[ii];
-				if (!in_bounds2(caster_ptr->current_floor_ptr, yyy, xxx)) continue;
-				cc_ptr = &caster_ptr->current_floor_ptr->grid_array[yyy][xxx];
+				if (!in_bounds2(floor_ptr, yyy, xxx)) continue;
+				cc_ptr = &floor_ptr->grid_array[yyy][xxx];
 				if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 				{
 					g_ptr->info |= CAVE_GLOW;
@@ -1127,7 +1128,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
 	if (caster_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
+		if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
 	}
 
 	/* Success */

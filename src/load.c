@@ -2865,7 +2865,7 @@ static errr rd_dungeon_old(floor_type *floor_ptr)
 
 
 		/* Get a new record */
-		o_idx = o_pop();
+		o_idx = o_pop(floor_ptr);
 
 		if (i != o_idx)
 		{
@@ -3179,7 +3179,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 
 		/* Get a new record */
-		o_idx = o_pop();
+		o_idx = o_pop(floor_ptr);
 
 		if (i != o_idx) return 152;
 
@@ -3647,7 +3647,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 							init_flags = INIT_ASSIGN;
 							creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
 
-							process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+							process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 							creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
 						}
 					}

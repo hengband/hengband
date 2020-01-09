@@ -1272,7 +1272,7 @@ void change_floor(player_type *creature_ptr)
 				if (a_info[o_ptr->name1].floor_id != new_floor_id)
 				{
 					/* Disappear from here */
-					delete_object_idx(i);
+					delete_object_idx(creature_ptr->current_floor_ptr, i);
 				}
 				else
 				{

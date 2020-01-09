@@ -329,7 +329,7 @@ void build_streamer(floor_type *floor_ptr, FEAT_IDX feat, int chance)
 					}
 				}
 
-				delete_object(ty, tx);
+				delete_object(floor_ptr, ty, tx);
 			}
 
 			/* Clear previous contents, add proper vein type */

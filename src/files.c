@@ -3974,7 +3974,7 @@ void display_player(player_type *creature_ptr, int mode)
 					/* Bewere that INIT_ASSIGN resets the cur_num. */
 					init_flags = INIT_NAME_ONLY;
 
-					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+					process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 #ifdef JP
 					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[creature_ptr->current_floor_ptr->inside_quest].name, creature_ptr->died_from);
@@ -4010,7 +4010,7 @@ void display_player(player_type *creature_ptr, int mode)
 					/* Get the quest text */
 					init_flags = INIT_NAME_ONLY;
 
-					process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+					process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[creature_ptr->current_floor_ptr->inside_quest].name);
 				}

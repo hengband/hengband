@@ -40,7 +40,7 @@ struct dungeon_grid
 #define PARSE_ERROR_MAX                     11
 
 extern concptr err_str[PARSE_ERROR_MAX];
-extern errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax);
+extern errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax);
 extern errr init_v_info(void);
 extern errr init_buildings(void);
 

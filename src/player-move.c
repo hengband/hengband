@@ -295,7 +295,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 	/* Get the object again */
 	o_ptr = &owner_ptr->inventory_list[slot];
 
-	delete_object_idx(o_idx);
+	delete_object_idx(owner_ptr->current_floor_ptr, o_idx);
 
 	if (owner_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
@@ -407,7 +407,7 @@ void carry(player_type *creature_ptr, bool pickup)
 			int value = (long)o_ptr->pval;
 
 			/* Delete the gold */
-			delete_object_idx(this_o_idx);
+			delete_object_idx(creature_ptr->current_floor_ptr, this_o_idx);
 
 			msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."),
 			   (long)value, o_name);

@@ -324,6 +324,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
 /*!
  * @brief 荒野フロア生成のメインルーチン /
  * Load a town or generate a terrain level using "plasma" fractals.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 広域Y座標
  * @param x 広域X座標
  * @param border 広域マップの辺部分としての生成ならばTRUE
@@ -339,14 +340,15 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
  * If corner is set then only the corners of the area are needed.
  * </pre>
  */
-static void generate_area(floor_type *floor_ptr, POSITION y, POSITION x, bool border, bool corner)
+static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool border, bool corner)
 {
 	POSITION x1, y1;
 
 	/* Number of the town (if any) */
-	p_ptr->town_num = wilderness[y][x].town;
+	player_ptr->town_num = wilderness[y][x].town;
 
 	/* Set the base level */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	floor_ptr->base_level = wilderness[y][x].level;
 
 	/* Set the dungeon level */
@@ -360,7 +362,7 @@ static void generate_area(floor_type *floor_ptr, POSITION y, POSITION x, bool bo
 
 
 	/* Create the town */
-	if (p_ptr->town_num)
+	if (player_ptr->town_num)
 	{
 		/* Reset the buildings */
 		init_buildings();
@@ -371,9 +373,9 @@ static void generate_area(floor_type *floor_ptr, POSITION y, POSITION x, bool bo
 		else
 			init_flags = INIT_CREATE_DUNGEON;
 
-		process_dungeon_file("t_info.txt", 0, 0, MAX_HGT, MAX_WID);
+		process_dungeon_file(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
 
-		if (!corner && !border) p_ptr->visit |= (1L << (p_ptr->town_num - 1));
+		if (!corner && !border) player_ptr->visit |= (1L << (player_ptr->town_num - 1));
 	}
 	else
 	{
@@ -468,9 +470,10 @@ static border_type border;
  * @brief 広域マップの生成 /
  * Build the wilderness area outside of the town.
  * @todo 広域マップは恒常生成にする予定、player_typeによる処理分岐は最終的に排除する。
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
+void wilderness_gen(player_type *creature_ptr)
 {
 	int i, lim;
 	POSITION y, x;
@@ -478,6 +481,7 @@ void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
 	feature_type *f_ptr;
 
 	/* Big town */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	floor_ptr->height = MAX_HGT;
 	floor_ptr->width = MAX_WID;
 
@@ -485,13 +489,13 @@ void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
 	panel_row_min = floor_ptr->height;
 	panel_col_min = floor_ptr->width;
 
-	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+	process_dungeon_file(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 	x = creature_ptr->wilderness_x;
 	y = creature_ptr->wilderness_y;
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	/* North border */
-	generate_area(floor_ptr, y - 1, x, TRUE, FALSE);
+	generate_area(creature_ptr, y - 1, x, TRUE, FALSE);
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
@@ -499,7 +503,7 @@ void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
 	}
 
 	/* South border */
-	generate_area(floor_ptr, y + 1, x, TRUE, FALSE);
+	generate_area(creature_ptr, y + 1, x, TRUE, FALSE);
 
 	for (i = 1; i < MAX_WID - 1; i++)
 	{
@@ -507,7 +511,7 @@ void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
 	}
 
 	/* West border */
-	generate_area(floor_ptr, y, x - 1, TRUE, FALSE);
+	generate_area(creature_ptr, y, x - 1, TRUE, FALSE);
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
@@ -515,7 +519,7 @@ void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
 	}
 
 	/* East border */
-	generate_area(floor_ptr, y, x + 1, TRUE, FALSE);
+	generate_area(creature_ptr, y, x + 1, TRUE, FALSE);
 
 	for (i = 1; i < MAX_HGT - 1; i++)
 	{
@@ -523,25 +527,24 @@ void wilderness_gen(player_type *creature_ptr, floor_type *floor_ptr)
 	}
 
 	/* North west corner */
-	generate_area(floor_ptr, y - 1, x - 1, FALSE, TRUE);
+	generate_area(creature_ptr, y - 1, x - 1, FALSE, TRUE);
 	border.north_west = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
 	/* North east corner */
-	generate_area(floor_ptr, y - 1, x + 1, FALSE, TRUE);
+	generate_area(creature_ptr, y - 1, x + 1, FALSE, TRUE);
 	border.north_east = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
 
 	/* South west corner */
-	generate_area(floor_ptr, y + 1, x - 1, FALSE, TRUE);
+	generate_area(creature_ptr, y + 1, x - 1, FALSE, TRUE);
 	border.south_west = floor_ptr->grid_array[1][MAX_WID - 2].feat;
 
 	/* South east corner */
-	generate_area(floor_ptr, y + 1, x + 1, FALSE, TRUE);
+	generate_area(creature_ptr, y + 1, x + 1, FALSE, TRUE);
 	border.south_east = floor_ptr->grid_array[1][1].feat;
 
 
 	/* Create terrain of the current area */
-	generate_area(floor_ptr, y, x, FALSE, FALSE);
-
+	generate_area(creature_ptr, y, x, FALSE, FALSE);
 
 	/* Special boundary walls -- North */
 	for (i = 0; i < MAX_WID; i++)
@@ -709,8 +712,9 @@ static s16b conv_terrain2feat[MAX_WILDERNESS];
  * Build the wilderness area. -DG-
  * @return なし
  */
-void wilderness_gen_small(player_type *creature_ptr, floor_type *floor_ptr)
+void wilderness_gen_small(player_type *creature_ptr)
 {
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	int i, j;
 
 	/* To prevent stupid things */
@@ -720,7 +724,7 @@ void wilderness_gen_small(player_type *creature_ptr, floor_type *floor_ptr)
 		floor_ptr->grid_array[j][i].feat = feat_permanent;
 	}
 
-	process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+	process_dungeon_file(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	/* Fill the map */
 	for (i = 0; i < current_world_ptr->max_wild_x; i++)
