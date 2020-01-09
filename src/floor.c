@@ -1632,7 +1632,7 @@ void place_object(floor_type *floor_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 	/* Make an object (if possible) */
 	if (!make_object(q_ptr, mode)) return;
 
-	o_idx = o_pop();
+	o_idx = o_pop(floor_ptr);
 
 	/* Success */
 	if (o_idx)
@@ -1700,7 +1700,7 @@ void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 	/* Make some gold */
 	if (!make_gold(q_ptr)) return;
 
-	o_idx = o_pop();
+	o_idx = o_pop(floor_ptr);
 
 	/* Success */
 	if (o_idx)
@@ -1900,7 +1900,7 @@ void compact_objects(floor_type *floor_ptr, int size)
 			/* Apply the saving throw */
 			if (randint0(100) < chance) continue;
 
-			delete_object_idx(i);
+			delete_object_idx(floor_ptr, i);
 
 			/* Count it */
 			num++;

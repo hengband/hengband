@@ -2579,7 +2579,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (slot && !object_is_cursed(o_ptr))
 		{
 			msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
-			inven_drop(slot, 1);
+			drop_from_inventory(creature_ptr, slot, 1);
 		}
 	}
 
@@ -4325,7 +4325,7 @@ static void pack_overflow(player_type *owner_ptr)
 		msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
 
 		/* Drop it (carefully) near the player */
-		(void)drop_near(o_ptr, 0, owner_ptr->y, owner_ptr->x);
+		(void)drop_near(owner_ptr, o_ptr, 0, owner_ptr->y, owner_ptr->x);
 
 		vary_item(INVEN_PACK, -255);
 		handle_stuff();
@@ -5312,7 +5312,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		highscore_fd = fd_open(buf, O_RDWR);
 
 		/* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
-		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+		process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 		/* Handle score, show Top scores */
 		success = send_world_score(player_ptr, TRUE);
@@ -5497,9 +5497,9 @@ void play_game(player_type *player_ptr, bool new_game)
 	/* Initialize the town-buildings if necessary */
 	if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest)
 	{
-		process_dungeon_file("w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+		process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 		init_flags = INIT_ONLY_BUILDINGS;
-		process_dungeon_file("t_info.txt", 0, 0, MAX_HGT, MAX_WID);
+		process_dungeon_file(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
 		select_floor_music(player_ptr);
 	}
 

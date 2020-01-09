@@ -104,7 +104,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 				object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
 				/* Drop the object from heaven */
-				(void)drop_near(q_ptr, -1, caster_ptr->y, caster_ptr->x);
+				(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
 			}
 		}
 		break;

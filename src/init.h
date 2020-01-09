@@ -117,7 +117,6 @@ extern errr init_info_txt(FILE *fp, char *buf, header *head,
 			  parse_info_txt_func parse_info_txt_line);
 
 #ifdef ALLOW_TEMPLATES
-extern errr parse_z_info(char *buf, header *head);
 extern errr parse_v_info(char *buf, header *head);
 extern errr parse_f_info(char *buf, header *head);
 extern void retouch_f_info(header *head);
@@ -157,6 +156,6 @@ extern header g_head;
 
 extern s16b f_tag_to_index(concptr str);
 extern s16b f_tag_to_index_in_init(concptr str);
-extern void init_angband(void);
+extern void init_angband(player_type *player_ptr);
 extern concptr get_check_sum(void);
 extern void init_file_paths(char *path);

@@ -102,14 +102,14 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 				if (!cave_empty_bold(owner_ptr->current_floor_ptr, y, x)) continue;
 
 				/* Place the object there. */
-				(void)drop_near(q_ptr, -1, y, x);
+				(void)drop_near(owner_ptr, q_ptr, -1, y, x);
 
 				/* Done. */
 				break;
 			}
 		}
 		/* Normally, drop object near the chest. */
-		else (void)drop_near(q_ptr, -1, y, x);
+		else (void)drop_near(owner_ptr, q_ptr, -1, y, x);
 	}
 
 	/* Reset the object level */

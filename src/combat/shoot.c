@@ -831,7 +831,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 		{
 			MONSTER_IDX m_idx = shooter_ptr->current_floor_ptr->grid_array[y][x].m_idx;
 			monster_type *m_ptr = &shooter_ptr->current_floor_ptr->m_list[m_idx];
-			OBJECT_IDX o_idx = o_pop();
+			OBJECT_IDX o_idx = o_pop(shooter_ptr->current_floor_ptr);
 
 			if (!o_idx)
 			{
@@ -864,12 +864,12 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 		else if (cave_have_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT))
 		{
 			/* Drop (or break) near that location */
-			(void)drop_near(q_ptr, j, y, x);
+			(void)drop_near(shooter_ptr, q_ptr, j, y, x);
 		}
 		else
 		{
 			/* Drop (or break) near that location */
-			(void)drop_near(q_ptr, j, prev_y, prev_x);
+			(void)drop_near(shooter_ptr, q_ptr, j, prev_y, prev_x);
 		}
 
 		/* Sniper - Repeat shooting when double shots */

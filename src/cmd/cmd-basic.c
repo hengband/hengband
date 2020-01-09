@@ -228,7 +228,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
-				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+				process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 			}
 			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
@@ -375,7 +375,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
-				process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+				process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 			}
 			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
@@ -2799,11 +2799,11 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	{
 		if (cave_have_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_PROJECT))
 		{
-			(void)drop_near(q_ptr, j, y, x);
+			(void)drop_near(creature_ptr, q_ptr, j, y, x);
 		}
 		else
 		{
-			(void)drop_near(q_ptr, j, prev_y, prev_x);
+			(void)drop_near(creature_ptr, q_ptr, j, prev_y, prev_x);
 		}
 	}
 

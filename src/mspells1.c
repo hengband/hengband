@@ -1565,7 +1565,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 
 		/* Hack -- decline "teleport level" in some case */
-		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF(0))
+		if ((f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, 0))
 		{
 			f6 &= ~(RF6_TELE_LEVEL);
 		}

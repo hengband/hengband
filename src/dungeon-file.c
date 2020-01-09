@@ -3857,12 +3857,12 @@ static errr parse_line_building(char *buf)
  * @param x 配置先X座標
  * @return エラーコード
  */
-static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
+static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 	object_type *o_ptr;
 
-	OBJECT_IDX o_idx = o_pop();
+	OBJECT_IDX o_idx = o_pop(floor_ptr);
 
 	/* Access new object */
 	o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
@@ -3886,6 +3886,7 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
 /*!
  * @brief クエスト用固定ダンジョンをフロアに生成する
  * Parse a sub-file of the "extra info"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 文字列
  * @param ymin 詳細不明
  * @param xmin 詳細不明
@@ -3895,7 +3896,7 @@ static void drop_here(object_type *j_ptr, POSITION y, POSITION x)
  * @param x 詳細不明
  * @return エラーコード
  */
-static errr process_dungeon_file_aux(floor_type *floor_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
+static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
 	int i;
 	char *zz[33];
@@ -3917,9 +3918,10 @@ static errr process_dungeon_file_aux(floor_type *floor_ptr, char *buf, int ymin,
 	if (buf[0] == '%')
 	{
 		/* Attempt to Process the given file */
-		return (process_dungeon_file(buf + 2, ymin, xmin, ymax, xmax));
+		return (process_dungeon_file(player_ptr, buf + 2, ymin, xmin, ymax, xmax));
 	}
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	/* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
 	if (buf[0] == 'F')
 	{
@@ -4071,7 +4073,7 @@ static errr process_dungeon_file_aux(floor_type *floor_ptr, char *buf, int ymin,
 				/* Apply magic (no messages, no artifacts) */
 				apply_magic(o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
 
-				drop_here(o_ptr, *y, *x);
+				drop_here(floor_ptr, o_ptr, *y, *x);
 			}
 
 			/* Artifact */
@@ -4084,11 +4086,11 @@ static errr process_dungeon_file_aux(floor_type *floor_ptr, char *buf, int ymin,
 					object_type *q_ptr = &forge;
 
 					object_prep(q_ptr, k_idx);
-					drop_here(q_ptr, *y, *x);
+					drop_here(floor_ptr, q_ptr, *y, *x);
 				}
 				else
 				{
-					if (create_named_art(artifact_index, *y, *x))
+					if (create_named_art(player_ptr, artifact_index, *y, *x))
 						a_info[artifact_index].cur_num = 1;
 				}
 			}
@@ -4901,6 +4903,7 @@ void write_r_info_txt(void)
 /*!
  * @brief クエスト用固定ダンジョン生成時のメインルーチン
  * Helper function for "process_dungeon_file()"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param name ファイル名
  * @param ymin 詳細不明
  * @param xmin 詳細不明
@@ -4908,7 +4911,7 @@ void write_r_info_txt(void)
  * @param xmax 詳細不明
  * @return エラーコード
  */
-errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax)
+errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax)
 {
 	FILE *fp;
 	char buf[1024];
@@ -4963,7 +4966,7 @@ errr process_dungeon_file(concptr name, int ymin, int xmin, int ymax, int xmax)
 		if (bypass) continue;
 
 		/* Process the line */
-		err = process_dungeon_file_aux(p_ptr->current_floor_ptr, buf, ymin, xmin, ymax, xmax, &y, &x);
+		err = process_dungeon_file_aux(player_ptr, buf, ymin, xmin, ymax, xmax, &y, &x);
 
 		if (err) break;
 	}

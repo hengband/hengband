@@ -2218,7 +2218,7 @@ void set_friendly(monster_type *m_ptr)
  */
 void set_pet(monster_type *m_ptr)
 {
-	check_quest_completion(m_ptr);
+	check_quest_completion(p_ptr, m_ptr);
 
 	m_ptr->smart |= SM_PET;
 	if (!(r_info[m_ptr->r_idx].flags3 & (RF3_EVIL | RF3_GOOD)))
@@ -2584,7 +2584,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 
-	check_quest_completion(m_ptr);
+	check_quest_completion(p_ptr, m_ptr);
 
 	/* Handle the possibility of player vanquishing arena combatant -KMW- */
 	if (p_ptr->current_floor_ptr->inside_arena && !is_pet(m_ptr))
@@ -2607,7 +2607,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Prepare to make a prize */
 			object_prep(q_ptr, lookup_kind(arena_info[p_ptr->arena_number].tval, arena_info[p_ptr->arena_number].sval));
 			apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
-			(void)drop_near(q_ptr, -1, y, x);
+			(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		}
 
 		if (p_ptr->arena_number > MAX_ARENA_MONS) p_ptr->arena_number++;
@@ -2668,7 +2668,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
 		q_ptr->pval = m_ptr->r_idx;
-		(void)drop_near(q_ptr, -1, y, x);
+		(void)drop_near(p_ptr, q_ptr, -1, y, x);
 	}
 
 	/* Drop objects being carried */
@@ -2713,7 +2713,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
 
 			apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
-			(void)drop_near(q_ptr, -1, y, x);
+			(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
@@ -2731,7 +2731,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			/* Make a book */
 			make_object(q_ptr, mo_mode);
-			(void)drop_near(q_ptr, -1, y, x);
+			(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
@@ -2805,7 +2805,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				a_ptr = &a_info[a_idx];
 			} while (a_ptr->cur_num);
 
-			if (create_named_art(a_idx, y, x))
+			if (create_named_art(p_ptr, a_idx, y, x))
 			{
 				a_ptr->cur_num = 1;
 
@@ -2828,7 +2828,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		/* Mega-Hack -- Actually create "Grond" */
 		apply_magic(q_ptr, -1, AM_GOOD | AM_GREAT);
-		(void)drop_near(q_ptr, -1, y, x);
+		(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		q_ptr = &forge;
 
 		/* Mega-Hack -- Prepare to make "Chaos" */
@@ -2839,7 +2839,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		/* Mega-Hack -- Actually create "Chaos" */
 		apply_magic(q_ptr, -1, AM_GOOD | AM_GREAT);
-		(void)drop_near(q_ptr, -1, y, x);
+		(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		break;
 
 	case MON_B_DEATH_SWORD:
@@ -2849,7 +2849,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			/* Prepare to make a broken sword */
 			object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
-			(void)drop_near(q_ptr, -1, y, x);
+			(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
@@ -2864,7 +2864,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
 
 			apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
-			(void)drop_near(q_ptr, -1, y, x);
+			(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
@@ -2891,7 +2891,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a cloak */
 				make_object(q_ptr, mo_mode);
-				(void)drop_near(q_ptr, -1, y, x);
+				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2906,7 +2906,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a poleweapon */
 				make_object(q_ptr, mo_mode);
-				(void)drop_near(q_ptr, -1, y, x);
+				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2921,7 +2921,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a hard armor */
 				make_object(q_ptr, mo_mode);
-				(void)drop_near(q_ptr, -1, y, x);
+				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2936,7 +2936,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a hafted weapon */
 				make_object(q_ptr, mo_mode);
-				(void)drop_near(q_ptr, -1, y, x);
+				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2951,7 +2951,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				/* Make a sword */
 				make_object(q_ptr, mo_mode);
-				(void)drop_near(q_ptr, -1, y, x);
+				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
 		}
@@ -2977,7 +2977,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			if (!a_ptr->cur_num)
 			{
-				if (create_named_art(a_idx, y, x))
+				if (create_named_art(p_ptr, a_idx, y, x))
 				{
 					a_ptr->cur_num = 1;
 
@@ -3000,7 +3000,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				if (!a_ptr->cur_num)
 				{
-					if (create_named_art(a_idx, y, x))
+					if (create_named_art(p_ptr, a_idx, y, x))
 					{
 						a_ptr->cur_num = 1;
 
@@ -3022,7 +3022,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				object_prep(q_ptr, k_idx);
 
 				apply_magic(q_ptr, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
-				(void)drop_near(q_ptr, -1, y, x);
+				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[p_ptr->dungeon_idx].name);
 		}
@@ -3068,7 +3068,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			if (!make_object(q_ptr, mo_mode)) continue;
 			dump_item++;
 		}
-		(void)drop_near(q_ptr, -1, y, x);
+		(void)drop_near(p_ptr, q_ptr, -1, y, x);
 	}
 
 	/* Reset the object level */
@@ -3120,22 +3120,17 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 concptr extract_note_dies(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-	/* Some monsters get "destroyed" */
-	if (!monster_living(r_idx))
-	{
-		int i;
+	if (monster_living(r_idx)) return _("は死んだ。", " dies.");
 
-		for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
+	{
+		if (r_ptr->blow[i].method == RBM_EXPLODE)
 		{
-			if (r_ptr->blow[i].method == RBM_EXPLODE)
-			{
-				return _("は爆発して粉々になった。", " explodes into tiny shreds.");
-			}
+			return _("は爆発して粉々になった。", " explodes into tiny shreds.");
 		}
-		return _("を倒した。", " is destroyed.");
 	}
 
-	return _("は死んだ。", " dies.");
+	return _("を倒した。", " is destroyed.");
 }
 
 /*

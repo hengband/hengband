@@ -1221,13 +1221,15 @@ static void generate_gambling_arena(floor_type *floor_ptr, player_type *creature
 
 /*!
  * @brief 固定マップクエストのフロア生成 / Generate a quest level
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void generate_fixed_floor(floor_type *floor_ptr)
+static void generate_fixed_floor(player_type *player_ptr)
 {
 	POSITION x, y;
 
 	/* Start with perm walls */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (y = 0; y < floor_ptr->height; y++)
 	{
 		for (x = 0; x < floor_ptr->width; x++)
@@ -1247,7 +1249,7 @@ static void generate_fixed_floor(floor_type *floor_ptr)
 
 	init_flags = INIT_CREATE_DUNGEON;
 
-	process_dungeon_file("q_info.txt", 0, 0, MAX_HGT, MAX_WID);
+	process_dungeon_file(player_ptr, "q_info.txt", 0, 0, MAX_HGT, MAX_WID);
 }
 
 /*!
@@ -1448,15 +1450,15 @@ void generate_floor(player_type *player_ptr)
 
 		else if (floor_ptr->inside_quest)
 		{
-			generate_fixed_floor(floor_ptr);
+			generate_fixed_floor(player_ptr);
 		}
 
 		/* Build the town */
 		else if (!floor_ptr->dun_level)
 		{
 			/* Make the wilderness */
-			if (player_ptr->wild_mode) wilderness_gen_small(player_ptr, floor_ptr);
-			else wilderness_gen(player_ptr, floor_ptr);
+			if (player_ptr->wild_mode) wilderness_gen_small(player_ptr);
+			else wilderness_gen(player_ptr);
 		}
 
 		/* Build a real level */

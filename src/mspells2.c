@@ -644,7 +644,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Hack -- decline "teleport level" in some case */
-		if ((f6 & RF6_TELE_LEVEL) && TELE_LEVEL_IS_INEFF((target_idx == target_ptr->riding) ? 0 : target_idx))
+		if ((f6 & RF6_TELE_LEVEL) && is_teleport_level_ineffective(target_ptr, (target_idx == target_ptr->riding) ? 0 : target_idx))
 		{
 			f6 &= ~(RF6_TELE_LEVEL);
 		}

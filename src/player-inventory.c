@@ -28,6 +28,7 @@ bool is_ring_slot(int i)
 
 /*!
  * @brief 選択アルファベットラベルからプレイヤーの装備オブジェクトIDを返す /
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
@@ -2524,7 +2525,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 				if (!(o_idx && creature_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
 
 				/* Remove the first object from the list. */
-				excise_object_idx(o_idx);
+				excise_object_idx(creature_ptr->current_floor_ptr, o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
@@ -3016,7 +3017,7 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 			creature_ptr->window |= (PW_PLAYER);
 
 			/* Delete the gold */
-			delete_object_idx(this_o_idx);
+			delete_object_idx(creature_ptr->current_floor_ptr, this_o_idx);
 
 			/* Check the next object */
 			continue;

@@ -113,13 +113,13 @@ void complete_quest(QUEST_IDX quest_num)
 /*!
  * @brief 特定の敵を倒した際にクエスト達成処理 /
  * Check for "Quest" completion when a quest monster is killed or charmed.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr 撃破したモンスターの構造体参照ポインタ
  * @return なし
  */
-void check_quest_completion(monster_type *m_ptr)
+void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 {
 	POSITION y, x;
-	QUEST_IDX quest_num;
 
 	bool create_stairs = FALSE;
 	bool reward = FALSE;
@@ -130,8 +130,8 @@ void check_quest_completion(monster_type *m_ptr)
 	y = m_ptr->fy;
 	x = m_ptr->fx;
 
-	/* Inside a quest */
-	quest_num = p_ptr->current_floor_ptr->inside_quest;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	QUEST_IDX quest_num = floor_ptr->inside_quest;
 
 	/* Search for an active quest on this dungeon level */
 	if (!quest_num)
@@ -151,7 +151,7 @@ void check_quest_completion(monster_type *m_ptr)
 				continue;
 
 			/* Quest is not on this level */
-			if ((q_ptr->level != p_ptr->current_floor_ptr->dun_level) &&
+			if ((q_ptr->level != floor_ptr->dun_level) &&
 				(q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL))
 				continue;
 
@@ -201,7 +201,7 @@ void check_quest_completion(monster_type *m_ptr)
 		{
 			if (!is_hostile(m_ptr)) break;
 
-			if (count_all_hostile_monsters(p_ptr->current_floor_ptr) == 1)
+			if (count_all_hostile_monsters(floor_ptr) == 1)
 			{
 				if (q_ptr->flags & QUEST_FLAG_SILENT)
 				{
@@ -230,7 +230,7 @@ void check_quest_completion(monster_type *m_ptr)
 				if (!(q_ptr->flags & QUEST_FLAG_PRESET))
 				{
 					create_stairs = TRUE;
-					p_ptr->current_floor_ptr->inside_quest = 0;
+					floor_ptr->inside_quest = 0;
 				}
 
 				/* Finish the two main quests without rewarding */
@@ -261,7 +261,7 @@ void check_quest_completion(monster_type *m_ptr)
 		{
 			if (!is_hostile(m_ptr)) break;
 
-			if (count_all_hostile_monsters(p_ptr->current_floor_ptr) == 1)
+			if (count_all_hostile_monsters(floor_ptr) == 1)
 			{
 				q_ptr->status = QUEST_STATUS_STAGE_COMPLETED;
 
@@ -284,10 +284,10 @@ void check_quest_completion(monster_type *m_ptr)
 		POSITION ny, nx;
 
 		/* Stagger around */
-		while (cave_perma_bold(p_ptr->current_floor_ptr, y, x) || p_ptr->current_floor_ptr->grid_array[y][x].o_idx || (p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_OBJECT))
+		while (cave_perma_bold(floor_ptr, y, x) || floor_ptr->grid_array[y][x].o_idx || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT))
 		{
 			/* Pick a location */
-			scatter(p_ptr->current_floor_ptr, &ny, &nx, y, x, 1, 0);
+			scatter(floor_ptr, &ny, &nx, y, x, 1, 0);
 
 			/* Stagger */
 			y = ny; x = nx;
@@ -297,10 +297,10 @@ void check_quest_completion(monster_type *m_ptr)
 		msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
 
 		/* Create stairs down */
-		cave_set_feat(p_ptr->current_floor_ptr, y, x, feat_down_stair);
+		cave_set_feat(floor_ptr, y, x, feat_down_stair);
 
 		/* Remember to update everything */
-		p_ptr->update |= (PU_FLOW);
+		player_ptr->update |= (PU_FLOW);
 	}
 
 	/*
@@ -310,14 +310,14 @@ void check_quest_completion(monster_type *m_ptr)
 	{
 		int i;
 
-		for (i = 0; i < (p_ptr->current_floor_ptr->dun_level / 15) + 1; i++)
+		for (i = 0; i < (floor_ptr->dun_level / 15) + 1; i++)
 		{
 			o_ptr = &forge;
 			object_wipe(o_ptr);
 
 			/* Make a great object */
 			make_object(o_ptr, AM_GOOD | AM_GREAT);
-			(void)drop_near(o_ptr, -1, y, x);
+			(void)drop_near(player_ptr, o_ptr, -1, y, x);
 		}
 	}
 }

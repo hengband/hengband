@@ -4986,11 +4986,11 @@ void update_creature(player_type *creature_ptr)
 {
 	if (!creature_ptr->update) return;
 
-	/* Actually do auto-destroy */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (creature_ptr->update & (PU_AUTODESTROY))
 	{
 		creature_ptr->update &= ~(PU_AUTODESTROY);
-		autopick_delayed_alter();
+		autopick_delayed_alter(floor_ptr);
 	}
 	if (creature_ptr->update & (PU_COMBINE))
 	{
@@ -5045,27 +5045,26 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_UN_LITE))
 	{
 		creature_ptr->update &= ~(PU_UN_LITE);
-		forget_lite(p_ptr->current_floor_ptr);
+		forget_lite(floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_UN_VIEW))
 	{
 		creature_ptr->update &= ~(PU_UN_VIEW);
-		forget_view(creature_ptr->current_floor_ptr);
+		forget_view(floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_VIEW))
 	{
 		creature_ptr->update &= ~(PU_VIEW);
-		update_view(creature_ptr, p_ptr->current_floor_ptr);
+		update_view(creature_ptr, floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_LITE))
 	{
 		creature_ptr->update &= ~(PU_LITE);
-		update_lite(creature_ptr, p_ptr->current_floor_ptr);
+		update_lite(creature_ptr, floor_ptr);
 	}
-
 
 	if (creature_ptr->update & (PU_FLOW))
 	{
@@ -5086,7 +5085,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_MON_LITE))
 	{
 		creature_ptr->update &= ~(PU_MON_LITE);
-		update_mon_lite(p_ptr, p_ptr->current_floor_ptr);
+		update_mon_lite(creature_ptr, floor_ptr);
 	}
 
 	/*
@@ -5096,7 +5095,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_DELAY_VIS))
 	{
 		creature_ptr->update &= ~(PU_DELAY_VIS);
-		delayed_visual_update(creature_ptr->current_floor_ptr);
+		delayed_visual_update(floor_ptr);
 	}
 
 	if (creature_ptr->update & (PU_MONSTERS))
@@ -5105,6 +5104,7 @@ void update_creature(player_type *creature_ptr)
 		update_monsters(FALSE);
 	}
 }
+
 
 /*!
  * @brief プレイヤーが魔道書を一冊も持っていないかを判定する

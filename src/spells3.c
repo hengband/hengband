@@ -616,7 +616,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* No effect in some case */
-	if (TELE_LEVEL_IS_INEFF(m_idx))
+	if (is_teleport_level_ineffective(creature_ptr, m_idx))
 	{
 		if (see_m) msg_print(_("効果がなかった。", "There is no effect."));
 		return;
@@ -744,7 +744,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 	}
 
 	monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
-	check_quest_completion(m_ptr);
+	check_quest_completion(creature_ptr, m_ptr);
 	if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 	{
 		char m2_name[MAX_NLEN];
@@ -2723,14 +2723,15 @@ static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
  */
 bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
-	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+	monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 	MONRACE_IDX new_r_idx;
 	MONRACE_IDX old_r_idx = m_ptr->r_idx;
 	bool targeted = (target_who == g_ptr->m_idx) ? TRUE : FALSE;
 	bool health_tracked = (caster_ptr->health_who == g_ptr->m_idx) ? TRUE : FALSE;
 
-	if (caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) return FALSE;
+	if (floor_ptr->inside_arena || caster_ptr->phase_out) return FALSE;
 	if ((caster_ptr->riding == g_ptr->m_idx) || (m_ptr->mflag2 & MFLAG2_KAGE)) return FALSE;
 
 	/* Memorize the monster before polymorphing */
@@ -2761,9 +2762,9 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	bool polymorphed = FALSE;
 	if (place_monster_aux(0, y, x, new_r_idx, mode))
 	{
-		caster_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
-		caster_ptr->current_floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
-		caster_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
+		floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
+		floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
+		floor_ptr->m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
 
 		/* Success */
 		polymorphed = TRUE;
@@ -2773,7 +2774,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 		/* Placing the new monster failed */
 		if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
 		{
-			caster_ptr->current_floor_ptr->m_list[hack_m_idx_ii] = back_m;
+			floor_ptr->m_list[hack_m_idx_ii] = back_m;
 
 			/* Re-initialize monster process */
 			mproc_init();
@@ -2786,7 +2787,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	{
 		for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
-			object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
+			object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Held by new monster */
@@ -2797,8 +2798,8 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	{
 		for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
-			next_o_idx = caster_ptr->current_floor_ptr->o_list[this_o_idx].next_o_idx;
-			delete_object_idx(this_o_idx);
+			next_o_idx = floor_ptr->o_list[this_o_idx].next_o_idx;
+			delete_object_idx(floor_ptr, this_o_idx);
 		}
 	}
 
@@ -3497,6 +3498,25 @@ bool tele_town(player_type *caster_ptr)
 	caster_ptr->teleport_town = TRUE;
 	screen_load();
 	return TRUE;
+}
+
+
+/*!
+* todo 変数名が実態と合っているかどうかは要確認
+* テレポート・レベルが効かないモンスターであるかどうかを判定する
+* @param caster_ptr プレーヤーへの参照ポインタ
+* @param idx テレポート・レベル対象のモンスター
+*/
+bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
+{
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	bool is_special_floor = floor_ptr->inside_arena || caster_ptr->phase_out ||
+		(floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level));
+	bool is_invalid_floor = idx <= 0;
+	is_invalid_floor &= quest_number(floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
+	is_invalid_floor &= caster_ptr->current_floor_ptr->dun_level >= 1;
+	is_invalid_floor &= ironman_downward;
+	return is_special_floor || is_invalid_floor;
 }
 
 

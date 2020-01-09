@@ -3041,7 +3041,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
 	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
 	q_ptr->pval = MON_NINJA;
-	(void)drop_near(q_ptr, -1, y, x);
+	(void)drop_near(caster_ptr, q_ptr, -1, y, x);
 
 	if (success) msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));
 	else msg_print(_("失敗！攻撃を受けてしまった。", "Failed! You are hit by the attack."));
@@ -4413,7 +4413,7 @@ bool android_inside_weapon(player_type *creature_ptr)
 }
 
 
-bool create_ration(player_type *crature_ptr)
+bool create_ration(player_type *creature_ptr)
 {
 	object_type *q_ptr;
 	object_type forge;
@@ -4423,7 +4423,7 @@ bool create_ration(player_type *crature_ptr)
 	object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
 	/* Drop the object from heaven */
-	(void)drop_near(q_ptr, -1, crature_ptr->y, crature_ptr->x);
+	(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
 	msg_print(_("食事を料理して作った。", "You cook some food."));
 	return TRUE;
 }

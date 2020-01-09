@@ -1052,7 +1052,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 				k_idx = o_ptr->k_idx;
 				is_potion = object_is_potion(o_ptr);
-				delete_object_idx(this_o_idx);
+				delete_object_idx(caster_ptr->current_floor_ptr, this_o_idx);
 
 				/* Potions produce effects when 'shattered' */
 				if (is_potion)
@@ -1066,7 +1066,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	}
 
 	/* Return "Anything seen?" */
-	return (obvious);
+	return obvious;
 }
 
 
@@ -3959,7 +3959,7 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 
 		/* Mark the item as fully known */
 		q_ptr->ident |= (IDENT_MENTAL);
-		(void)drop_near(q_ptr, -1, caster_ptr->y, caster_ptr->x);
+		(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
 	}
 
 	/* Track it */

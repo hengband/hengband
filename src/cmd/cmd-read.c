@@ -431,14 +431,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_ACQUIREMENT:
 		{
-			acquirement(creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, FALSE);
+			acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, FALSE);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_STAR_ACQUIREMENT:
 		{
-			acquirement(creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, FALSE);
+			acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, FALSE);
 			ident = TRUE;
 			break;
 		}
@@ -505,14 +505,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_AMUSEMENT:
 		{
 			ident = TRUE;
-			amusement(creature_ptr->y, creature_ptr->x, 1, FALSE);
+			amusement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, FALSE);
 			break;
 		}
 
 		case SV_SCROLL_STAR_AMUSEMENT:
 		{
 			ident = TRUE;
-			amusement(creature_ptr->y, creature_ptr->x,  randint1(2) + 1, FALSE);
+			amusement(creature_ptr, creature_ptr->y, creature_ptr->x,  randint1(2) + 1, FALSE);
 			break;
 		}
 	}

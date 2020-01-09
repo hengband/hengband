@@ -810,7 +810,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 				if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) continue;
 
 				/* Remove the first object from the list. */
-				excise_object_idx(o_idx);
+				excise_object_idx(subject_ptr->current_floor_ptr, o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
@@ -910,7 +910,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			/* Get the quest text */
 			init_flags = INIT_NAME_ONLY;
 
-			process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+			process_dungeon_file(subject_ptr, "q_info.txt", 0, 0, 0, 0);
 
 			name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), 
 						quest[g_ptr->special].name, quest[g_ptr->special].level);

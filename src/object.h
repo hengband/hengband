@@ -274,7 +274,6 @@ struct object_type
 	#define TV_ARMOR_END      TV_DRAG_ARMOR
 	OBJECT_TYPE_VALUE tval;			/* Item type (from kind) */
 
-
 	OBJECT_SUBTYPE_VALUE sval;			/* Item sub-type (from kind) */
 
 	PARAMETER_VALUE pval;			/* Item extra-parameter */
@@ -428,12 +427,17 @@ extern bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concpt
 
 extern int bow_tval_ammo(object_type *o_ptr);
 
-/* object2.c */
-extern void excise_object_idx(OBJECT_IDX o_idx);
-extern void delete_object_idx(OBJECT_IDX o_idx);
-extern void delete_object(POSITION y, POSITION x);
+/*!
+* todo ここに置くとコンパイルは通る (このファイルの冒頭やobject2.cでincludeするとコンパイルエラー)、しかし圧倒的にダメなので要調整
+*/
+#include "floor.h"
 
-extern OBJECT_IDX o_pop(void);
+/* object2.c */
+extern void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
+extern void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
+extern void delete_object(floor_type *floor_ptr, POSITION y, POSITION x);
+
+extern OBJECT_IDX o_pop(floor_type *floor_ptr);
 extern OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode);
 extern void object_known(object_type *o_ptr);
 extern void object_aware(object_type *o_ptr);
@@ -484,7 +488,7 @@ extern OBJECT_SUBTYPE_VALUE coin_type;
 
 extern bool make_object(object_type *j_ptr, BIT_FLAGS mode);
 extern bool make_gold(object_type *j_ptr);
-extern OBJECT_IDX drop_near(object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
+extern OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 extern void vary_item(INVENTORY_IDX item, ITEM_NUMBER num);
 extern void inven_item_charges(INVENTORY_IDX item);
 extern void inven_item_describe(INVENTORY_IDX item);
@@ -498,7 +502,7 @@ extern bool inven_carry_okay(object_type *o_ptr);
 extern bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
 extern s16b inven_carry(player_type *owner_ptr, object_type *o_ptr);
 extern INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt);
-extern void inven_drop(INVENTORY_IDX item, ITEM_NUMBER amt);
+extern void drop_from_inventory(player_type *owner_type, INVENTORY_IDX item, ITEM_NUMBER amt);
 extern void combine_pack(player_type *owner_ptr);
 extern void reorder_pack(void);
 extern void display_koff(KIND_OBJECT_IDX k_idx);

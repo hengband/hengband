@@ -1877,6 +1877,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 
 /*!
  * @brief ダンジョン内部のクエストを初期化する / Initialize random quests and final quests
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void init_dungeon_quests(player_type *creature_ptr)
@@ -1888,7 +1889,7 @@ static void init_dungeon_quests(player_type *creature_ptr)
 	init_flags = INIT_ASSIGN;
 	creature_ptr->current_floor_ptr->inside_quest = MIN_RANDOM_QUEST;
 
-	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	creature_ptr->current_floor_ptr->inside_quest = 0;
 
@@ -1912,13 +1913,13 @@ static void init_dungeon_quests(player_type *creature_ptr)
 	init_flags = INIT_ASSIGN;
 	creature_ptr->current_floor_ptr->inside_quest = QUEST_OBERON;
 
-	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
 
 	creature_ptr->current_floor_ptr->inside_quest = QUEST_SERPENT;
 
-	process_dungeon_file("q_info.txt", 0, 0, 0, 0);
+	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
 	creature_ptr->current_floor_ptr->inside_quest = 0;

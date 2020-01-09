@@ -2045,6 +2045,7 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
 /*!
  * @brief フロアの指定された位置に固定アーティファクトを生成する。 / Create the artifact of the specified number
  * @details 固定アーティファクト構造体から基本ステータスをコピーした後、所定の座標でdrop_item()で落とす。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param a_idx 生成する固定アーティファクト構造体のID
  * @param y アイテムを落とす地点のy座標
  * @param x アイテムを落とす地点のx座標
@@ -2053,7 +2054,7 @@ void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
  * 仮に2個以上存在可能かつ装備品以外の固定アーティファクトが作成されれば
  * drop_near()関数の返り値は信用できなくなる.
  */
-bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
+bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -2096,7 +2097,7 @@ bool create_named_art(ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 	random_artifact_resistance(q_ptr, a_ptr);
 
 	/* Drop the artifact from heaven */
-	return drop_near(q_ptr, -1, y, x) ? TRUE : FALSE;
+	return drop_near(player_ptr, q_ptr, -1, y, x) ? TRUE : FALSE;
 }
 
 /*対邪平均ダメージの計算処理*/
