@@ -1290,6 +1290,7 @@ static bool level_gen(player_type *player_ptr, concptr *why)
 			{
 				level_height = randint1(MAX_HGT / SCREEN_HGT);
 				level_width = randint1(MAX_WID / SCREEN_WID);
+				is_first_level_area = FALSE;
 				is_max_area = (level_height == MAX_HGT / SCREEN_HGT) && (level_width == MAX_WID / SCREEN_WID);
 			}
 		}
