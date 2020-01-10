@@ -5201,7 +5201,7 @@ void combine_pack(player_type *owner_ptr)
 {
 	bool flag = FALSE;
 	bool is_first_combination = TRUE;
-	bool combined;
+	bool combined = TRUE;
 	while (is_first_combination || combined)
 	{
 		is_first_combination = FALSE;
