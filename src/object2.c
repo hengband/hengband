@@ -91,12 +91,11 @@ void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item);
  */
 void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
-	object_type *j_ptr;
-
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	OBJECT_IDX prev_o_idx = 0;
 
 	/* Object */
+	object_type *j_ptr;
 	j_ptr = &floor_ptr->o_list[o_idx];
 
 	if (OBJECT_IS_HELD_MONSTER(j_ptr))
@@ -111,85 +110,84 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 			o_ptr = &floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
-			if (this_o_idx == o_idx)
+			if (this_o_idx != o_idx)
 			{
-				/* No previous */
-				if (prev_o_idx == 0)
-				{
-					/* Remove from list */
-					m_ptr->hold_o_idx = next_o_idx;
-				}
-
-				/* Real previous */
-				else
-				{
-					object_type *k_ptr;
-
-					/* Previous object */
-					k_ptr = &floor_ptr->o_list[prev_o_idx];
-
-					/* Remove from list */
-					k_ptr->next_o_idx = next_o_idx;
-				}
-
-				/* Forget next pointer */
-				o_ptr->next_o_idx = 0;
-
-				break;
+				prev_o_idx = this_o_idx;
+				continue;
+			}
+			
+			/* No previous */
+			if (prev_o_idx == 0)
+			{
+				/* Remove from list */
+				m_ptr->hold_o_idx = next_o_idx;
 			}
 
-			/* Save prev_o_idx */
-			prev_o_idx = this_o_idx;
+			/* Real previous */
+			else
+			{
+				object_type *k_ptr;
+
+				/* Previous object */
+				k_ptr = &floor_ptr->o_list[prev_o_idx];
+
+				/* Remove from list */
+				k_ptr->next_o_idx = next_o_idx;
+			}
+
+			/* Forget next pointer */
+			o_ptr->next_o_idx = 0;
+
+			break;
 		}
+
+		return;
 	}
 
 	/* Dungeon */
-	else
+	grid_type *g_ptr;
+
+	POSITION y = j_ptr->iy;
+	POSITION x = j_ptr->ix;
+
+	g_ptr = &floor_ptr->grid_array[y][x];
+
+	/* Scan all objects in the grid */
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		grid_type *g_ptr;
+		object_type *o_ptr;
+		o_ptr = &floor_ptr->o_list[this_o_idx];
+		next_o_idx = o_ptr->next_o_idx;
 
-		POSITION y = j_ptr->iy;
-		POSITION x = j_ptr->ix;
-
-		g_ptr = &floor_ptr->grid_array[y][x];
-
-		/* Scan all objects in the grid */
-		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+		if (this_o_idx != o_idx)
 		{
-			object_type *o_ptr;
-			o_ptr = &floor_ptr->o_list[this_o_idx];
-			next_o_idx = o_ptr->next_o_idx;
-
-			if (this_o_idx == o_idx)
-			{
-				/* No previous */
-				if (prev_o_idx == 0)
-				{
-					/* Remove from list */
-					g_ptr->o_idx = next_o_idx;
-				}
-
-				/* Real previous */
-				else
-				{
-					object_type *k_ptr;
-
-					/* Previous object */
-					k_ptr = &floor_ptr->o_list[prev_o_idx];
-
-					/* Remove from list */
-					k_ptr->next_o_idx = next_o_idx;
-				}
-
-				/* Forget next pointer */
-				o_ptr->next_o_idx = 0;
-
-				break;
-			}
-
-			/* Save prev_o_idx */
 			prev_o_idx = this_o_idx;
+			continue;
 		}
+
+		/* No previous */
+		if (prev_o_idx == 0)
+		{
+			/* Remove from list */
+			g_ptr->o_idx = next_o_idx;
+		}
+
+		/* Real previous */
+		else
+		{
+			object_type *k_ptr;
+
+			/* Previous object */
+			k_ptr = &floor_ptr->o_list[prev_o_idx];
+
+			/* Remove from list */
+			k_ptr->next_o_idx = next_o_idx;
+		}
+
+		/* Forget next pointer */
+		o_ptr->next_o_idx = 0;
+
+		break;
 	}
 }
 
@@ -221,8 +219,8 @@ void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 		x = j_ptr->ix;
 		lite_spot(y, x);
 	}
-	object_wipe(j_ptr);
 
+	object_wipe(j_ptr);
 	floor_ptr->o_cnt--;
 }
 
@@ -454,28 +452,26 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 	}
 
 	/* Try for a "better" object twice (10%) */
-	if (p < 10)
+	if (p >= 10) return (table[i].index);
+	
+	/* Save old */
+	j = i;
+
+	/* Pick a object */
+	value = randint0(total);
+
+	/* Find the object */
+	for (i = 0; i < alloc_kind_size; i++)
 	{
-		/* Save old */
-		j = i;
+		/* Found the entry */
+		if (value < table[i].prob3) break;
 
-		/* Pick a object */
-		value = randint0(total);
-
-		/* Find the object */
-		for (i = 0; i < alloc_kind_size; i++)
-		{
-			/* Found the entry */
-			if (value < table[i].prob3) break;
-
-			/* Decrement */
-			value = value - table[i].prob3;
-		}
-
-		/* Keep the "best" one */
-		if (table[i].level < table[j].level) i = j;
+		/* Decrement */
+		value = value - table[i].prob3;
 	}
 
+	/* Keep the "best" one */
+	if (table[i].level < table[j].level) i = j;
 	return (table[i].index);
 }
 
@@ -523,26 +519,25 @@ void object_known(object_type *o_ptr)
  */
 void object_aware(player_type *owner_ptr, object_type *o_ptr)
 {
-	bool mihanmei = !object_is_aware(o_ptr);
-
 	/* Fully aware of the effects */
 	k_info[o_ptr->k_idx].aware = TRUE;
 
-	if (mihanmei && !(k_info[o_ptr->k_idx].gen_flags & TRG_INSTA_ART) && record_ident &&
-		!owner_ptr->is_dead && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD)))
-	{
-		object_type forge;
-		object_type *q_ptr;
-		GAME_TEXT o_name[MAX_NLEN];
+	bool mihanmei = !object_is_aware(o_ptr);
+	bool is_undefined = mihanmei && !(k_info[o_ptr->k_idx].gen_flags & TRG_INSTA_ART) && record_ident &&
+		!owner_ptr->is_dead && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD));
+	if (!is_undefined) return;
 
-		q_ptr = &forge;
-		object_copy(q_ptr, o_ptr);
+	object_type forge;
+	object_type *q_ptr;
+	GAME_TEXT o_name[MAX_NLEN];
 
-		q_ptr->number = 1;
-		object_desc(o_name, q_ptr, OD_NAME_ONLY);
+	q_ptr = &forge;
+	object_copy(q_ptr, o_ptr);
 
-		exe_write_diary(owner_ptr, NIKKI_HANMEI, 0, o_name);
-	}
+	q_ptr->number = 1;
+	object_desc(o_name, q_ptr, OD_NAME_ONLY);
+
+	exe_write_diary(owner_ptr, NIKKI_HANMEI, 0, o_name);
 }
 
 
@@ -1242,25 +1237,23 @@ PRICE object_value(object_type *o_ptr)
  */
 void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
 {
-	if ((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_ROD))
-	{
-		q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
-		if (amt < o_ptr->number) o_ptr->pval -= q_ptr->pval;
+	if ((o_ptr->tval != TV_WAND) && (o_ptr->tval != TV_ROD)) return;
 
-		/* Hack -- Rods also need to have their timeouts distributed.  The
-		 * dropped stack will accept all time remaining to charge up to its
-		 * maximum.
-		 */
-		if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout))
-		{
-			if (q_ptr->pval > o_ptr->timeout)
-				q_ptr->timeout = o_ptr->timeout;
-			else
-				q_ptr->timeout = q_ptr->pval;
+	q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
+	if (amt < o_ptr->number) o_ptr->pval -= q_ptr->pval;
 
-			if (amt < o_ptr->number) o_ptr->timeout -= q_ptr->timeout;
-		}
-	}
+	/* Hack -- Rods also need to have their timeouts distributed.  The
+	 * dropped stack will accept all time remaining to charge up to its
+	 * maximum.
+	 */
+	if ((o_ptr->tval != TV_ROD) || !o_ptr->timeout) return;
+
+	if (q_ptr->pval > o_ptr->timeout)
+		q_ptr->timeout = o_ptr->timeout;
+	else
+		q_ptr->timeout = q_ptr->pval;
+
+	if (amt < o_ptr->number) o_ptr->timeout -= q_ptr->timeout;
 }
 
 
@@ -1735,12 +1728,11 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
  */
 static byte get_random_ego(byte slot, bool good)
 {
-	int i, value;
 	ego_item_type *e_ptr;
 
 	long total = 0L;
 
-	for (i = 1; i < max_e_idx; i++)
+	for (int i = 1; i < max_e_idx; i++)
 	{
 		e_ptr = &e_info[i];
 
@@ -1752,11 +1744,12 @@ static byte get_random_ego(byte slot, bool good)
 		}
 	}
 
-	value = randint1(total);
+	int value = randint1(total);
 
-	for (i = 1; i < max_e_idx; i++)
+	int j;
+	for (j = 1; j < max_e_idx; j++)
 	{
-		e_ptr = &e_info[i];
+		e_ptr = &e_info[j];
 
 		if (e_ptr->slot == slot
 			&& ((good && e_ptr->rating) || (!good && !e_ptr->rating)))
@@ -1766,7 +1759,8 @@ static byte get_random_ego(byte slot, bool good)
 			if (value <= 0L) break;
 		}
 	}
-	return (byte)i;
+
+	return (byte)j;
 }
 
 
@@ -4108,7 +4102,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 		}
 
 		/* Handle failure */
-		if (!k_idx) return (FALSE);
+		if (!k_idx) return FALSE;
 
 		/* Prepare the object */
 		object_prep(j_ptr, k_idx);
@@ -4175,7 +4169,7 @@ bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
 	j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -4662,43 +4656,33 @@ void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
 	/* Only optimize empty items */
 	if (o_ptr->number) return;
 
-	/* The item is in the pack */
-	if (item < INVEN_RARM)
+	if (item >= INVEN_RARM)
 	{
-		int i;
-
-		/* One less item */
-		owner_ptr->inven_cnt--;
-
-		/* Slide everything down */
-		for (i = item; i < INVEN_PACK; i++)
-		{
-			/* Structure copy */
-			owner_ptr->inventory_list[i] = owner_ptr->inventory_list[i + 1];
-		}
-
-		/* Erase the "final" slot */
-		object_wipe(&owner_ptr->inventory_list[i]);
-
-		owner_ptr->window |= (PW_INVEN);
-	}
-
-	/* The item is being wielded */
-	else
-	{
-		/* One less item */
 		owner_ptr->equip_cnt--;
-
-		/* Erase the empty slot */
 		object_wipe(&owner_ptr->inventory_list[item]);
-		owner_ptr->update |= (PU_BONUS);
-		owner_ptr->update |= (PU_TORCH);
-		owner_ptr->update |= (PU_MANA);
+		owner_ptr->update |= PU_BONUS;
+		owner_ptr->update |= PU_TORCH;
+		owner_ptr->update |= PU_MANA;
 
-		owner_ptr->window |= (PW_EQUIP);
+		owner_ptr->window |= PW_EQUIP;
+		owner_ptr->window |= PW_SPELL;
+		return;
 	}
 
-	owner_ptr->window |= (PW_SPELL);
+	owner_ptr->inven_cnt--;
+
+	/* Slide everything down */
+	int i;
+	for (i = item; i < INVEN_PACK; i++)
+	{
+		owner_ptr->inventory_list[i] = owner_ptr->inventory_list[i + 1];
+	}
+
+	/* Erase the "final" slot */
+	object_wipe(&owner_ptr->inventory_list[i]);
+
+	owner_ptr->window |= PW_INVEN;
+	owner_ptr->window |= PW_SPELL;
 }
 
 
@@ -4825,6 +4809,7 @@ void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item)
 
 
 /*!
+ * todo ここのp_ptrだけは抜けない……関数ポインタの嵐でにっちもさっちもいかない
  * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
  * @param owner_ptr プレーヤーへの参照ポインタ
@@ -4833,23 +4818,22 @@ void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item)
  */
 bool inven_carry_okay(object_type *o_ptr)
 {
-	int j;
-
 	/* Empty slot? */
-	if (p_ptr->inven_cnt < INVEN_PACK) return (TRUE);
+	if (p_ptr->inven_cnt < INVEN_PACK) return TRUE;
 
 	/* Similar slot? */
-	for (j = 0; j < INVEN_PACK; j++)
+	for (int j = 0; j < INVEN_PACK; j++)
 	{
 		object_type *j_ptr = &p_ptr->inventory_list[j];
 		if (!j_ptr->k_idx) continue;
 
 		/* Check if the two items can be combined */
-		if (object_similar(j_ptr, o_ptr)) return (TRUE);
+		if (object_similar(j_ptr, o_ptr)) return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
+
 
 /*!
  * @brief オブジェクトを定義された基準に従いソートするための関数 /
@@ -5059,7 +5043,7 @@ s16b inven_carry(player_type *owner_ptr, object_type *o_ptr)
 	owner_ptr->window |= (PW_INVEN);
 
 	/* Return the slot */
-	return (i);
+	return i;
 }
 
 
@@ -5142,9 +5126,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 	msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
 #endif
 
-
-	/* Return slot */
-	return (slot);
+	return slot;
 }
 
 
@@ -5217,28 +5199,27 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
  */
 void combine_pack(player_type *owner_ptr)
 {
-	int             i, j, k;
-	object_type *o_ptr;
-	object_type     *j_ptr;
-	bool            flag = FALSE, combined;
-
-	do
+	bool flag = FALSE;
+	bool is_first_combination = TRUE;
+	bool combined;
+	while (is_first_combination || combined)
 	{
+		is_first_combination = FALSE;
 		combined = FALSE;
 
 		/* Combine the pack (backwards) */
-		for (i = INVEN_PACK; i > 0; i--)
+		for (int i = INVEN_PACK; i > 0; i--)
 		{
+			object_type *o_ptr;
 			o_ptr = &owner_ptr->inventory_list[i];
 
 			/* Skip empty items */
 			if (!o_ptr->k_idx) continue;
 
 			/* Scan the items above that item */
-			for (j = 0; j < i; j++)
+			for (int j = 0; j < i; j++)
 			{
-				int max_num;
-
+				object_type *j_ptr;
 				j_ptr = &owner_ptr->inventory_list[j];
 
 				/* Skip empty items */
@@ -5248,68 +5229,69 @@ void combine_pack(player_type *owner_ptr)
 				 * Get maximum number of the stack if these
 				 * are similar, get zero otherwise.
 				 */
-				max_num = object_similar_part(j_ptr, o_ptr);
+				int max_num = object_similar_part(j_ptr, o_ptr);
 
 				/* Can we (partialy) drop "o_ptr" onto "j_ptr"? */
-				if (max_num && j_ptr->number < max_num)
+				bool is_max = (max_num != 0) && (j_ptr->number < max_num);
+				if (!is_max) continue;
+
+				if (o_ptr->number + j_ptr->number <= max_num)
 				{
-					if (o_ptr->number + j_ptr->number <= max_num)
-					{
-						/* Take note */
-						flag = TRUE;
-
-						/* Add together the item counts */
-						object_absorb(j_ptr, o_ptr);
-
-						/* One object is gone */
-						owner_ptr->inven_cnt--;
-
-						/* Slide everything down */
-						for (k = i; k < INVEN_PACK; k++)
-						{
-							/* Structure copy */
-							owner_ptr->inventory_list[k] = owner_ptr->inventory_list[k + 1];
-						}
-
-						/* Erase the "final" slot */
-						object_wipe(&owner_ptr->inventory_list[k]);
-					}
-					else
-					{
-						int old_num = o_ptr->number;
-						int remain = j_ptr->number + o_ptr->number - max_num;
-#if 0
-						o_ptr->number -= remain;
-#endif
-						/* Add together the item counts */
-						object_absorb(j_ptr, o_ptr);
-
-						o_ptr->number = remain;
-
-						/* Hack -- if rods are stacking, add the pvals (maximum timeouts) and current timeouts together. -LM- */
-						if (o_ptr->tval == TV_ROD)
-						{
-							o_ptr->pval = o_ptr->pval * remain / old_num;
-							o_ptr->timeout = o_ptr->timeout * remain / old_num;
-						}
-
-						/* Hack -- if wands are stacking, combine the charges. -LM- */
-						if (o_ptr->tval == TV_WAND)
-						{
-							o_ptr->pval = o_ptr->pval * remain / old_num;
-						}
-					}
-
-					owner_ptr->window |= (PW_INVEN);
-
 					/* Take note */
-					combined = TRUE;
+					flag = TRUE;
 
-					break;
+					/* Add together the item counts */
+					object_absorb(j_ptr, o_ptr);
+
+					/* One object is gone */
+					owner_ptr->inven_cnt--;
+
+					/* Slide everything down */
+					int k;
+					for (k = i; k < INVEN_PACK; k++)
+					{
+						/* Structure copy */
+						owner_ptr->inventory_list[k] = owner_ptr->inventory_list[k + 1];
+					}
+
+					/* Erase the "final" slot */
+					object_wipe(&owner_ptr->inventory_list[k]);
 				}
+				else
+				{
+					int old_num = o_ptr->number;
+					int remain = j_ptr->number + o_ptr->number - max_num;
+#if 0
+					o_ptr->number -= remain;
+#endif
+					/* Add together the item counts */
+					object_absorb(j_ptr, o_ptr);
+
+					o_ptr->number = remain;
+
+					/* Hack -- if rods are stacking, add the pvals (maximum timeouts) and current timeouts together. -LM- */
+					if (o_ptr->tval == TV_ROD)
+					{
+						o_ptr->pval = o_ptr->pval * remain / old_num;
+						o_ptr->timeout = o_ptr->timeout * remain / old_num;
+					}
+
+					/* Hack -- if wands are stacking, combine the charges. -LM- */
+					if (o_ptr->tval == TV_WAND)
+					{
+						o_ptr->pval = o_ptr->pval * remain / old_num;
+					}
+				}
+
+				owner_ptr->window |= (PW_INVEN);
+
+				/* Take note */
+				combined = TRUE;
+
+				break;
 			}
 		}
-	} while (combined);
+	}
 
 	if (flag) msg_print(_("ザックの中のアイテムをまとめ直した。", "You combine some items in your pack."));
 }
@@ -5399,7 +5381,6 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
 
 	GAME_TEXT o_name[MAX_NLEN];
 
-
 	/* Erase the window */
 	for (y = 0; y < Term->hgt; y++)
 	{
@@ -5464,15 +5445,11 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
  */
 void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs)
 {
-	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
-	{
-		if (o_ptr->xtra4 > 0)
-		{
-			add_flag(flgs, TR_BRAND_FIRE);
-			add_flag(flgs, TR_KILL_UNDEAD);
-			add_flag(flgs, TR_THROW);
-		}
-	}
+	if ((o_ptr->tval != TV_LITE) || (o_ptr->sval != SV_LITE_TORCH)) return;
+	if (o_ptr->xtra4 <= 0) return;
+	add_flag(flgs, TR_BRAND_FIRE);
+	add_flag(flgs, TR_KILL_UNDEAD);
+	add_flag(flgs, TR_THROW);
 }
 
 
@@ -5486,14 +5463,10 @@ void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs)
  */
 void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
 {
-	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
-	{
-		if (o_ptr->xtra4 > 0)
-		{
-			(*dd) = 1;
-			(*ds) = 6;
-		}
-	}
+	if ((o_ptr->tval != TV_LITE) || (o_ptr->sval != SV_LITE_TORCH)) return;
+	if (o_ptr->xtra4 <= 0) return;
+	(*dd) = 1;
+	(*ds) = 6;
 }
 
 
@@ -5505,11 +5478,9 @@ void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
  */
 void torch_lost_fuel(object_type *o_ptr)
 {
-	if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
-	{
-		o_ptr->xtra4 -= (FUEL_TORCH / 25);
-		if (o_ptr->xtra4 < 0) o_ptr->xtra4 = 0;
-	}
+	if ((o_ptr->tval != TV_LITE) || (o_ptr->sval != SV_LITE_TORCH)) return;
+	o_ptr->xtra4 -= (FUEL_TORCH / 25);
+	if (o_ptr->xtra4 < 0) o_ptr->xtra4 = 0;
 }
 
 
