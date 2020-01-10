@@ -373,7 +373,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			if (is_hidden_door(g_ptr))
 			{
 				/* Pick a door */
-				disclose_grid(caster_ptr->current_floor_ptr, y, x);
+				disclose_grid(caster_ptr, y, x);
 
 				/* Check line of sight */
 				if (known)
@@ -393,7 +393,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 				}
 
 				/* Destroy the trap */
-				cave_alter_feat(y, x, FF_DISARM);
+				cave_alter_feat(caster_ptr, y, x, FF_DISARM);
 			}
 
 			/* Locked doors are unlocked */
@@ -402,7 +402,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 				FEAT_IDX old_feat = g_ptr->feat;
 
 				/* Unlock the door */
-				cave_alter_feat(y, x, FF_DISARM);
+				cave_alter_feat(caster_ptr, y, x, FF_DISARM);
 
 				/* Check line of sound */
 				if (known && (old_feat != g_ptr->feat))
@@ -437,7 +437,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 				}
 
 				/* Destroy the feature */
-				cave_alter_feat(y, x, FF_TUNNEL);
+				cave_alter_feat(caster_ptr, y, x, FF_TUNNEL);
 			}
 
 			/* Remove "unsafe" flag if player is not blind */
@@ -458,7 +458,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 				s16b old_mimic = g_ptr->mimic;
 				feature_type *mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
-				cave_alter_feat(y, x, FF_SPIKE);
+				cave_alter_feat(caster_ptr, y, x, FF_SPIKE);
 				g_ptr->mimic = old_mimic;
 
 				note_spot(y, x);
@@ -487,7 +487,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 				}
 
 				/* Destroy the wall */
-				cave_alter_feat(y, x, FF_HURT_ROCK);
+				cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 				caster_ptr->update |= (PU_FLOW);
 			}
 
@@ -674,7 +674,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 				}
 
 				/* Destroy the wall */
-				cave_alter_feat(y, x, FF_HURT_ROCK);
+				cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 				caster_ptr->update |= (PU_FLOW);
 			}
 
@@ -700,7 +700,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 				}
 
 				/* Destroy the wall */
-				cave_alter_feat(y, x, FF_HURT_ROCK);
+				cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 				caster_ptr->update |= (PU_FLOW);
 			}
 
@@ -717,7 +717,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			/* But not protect monsters and other objects */
 			if (have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT))
 			{
-				cave_alter_feat(y, x, FF_HURT_DISI);
+				cave_alter_feat(caster_ptr, y, x, FF_HURT_DISI);
 
 				/* Update some things -- similar to GF_KILL_WALL */
 				caster_ptr->update |= (PU_FLOW);

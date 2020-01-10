@@ -743,7 +743,7 @@ static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 
 	if (!f_ptr->power)
 	{
-		cave_alter_feat(y, x, FF_OPEN);
+		cave_alter_feat(creature_ptr, y, x, FF_OPEN);
 		sound(SOUND_OPENDOOR);
 		return more;
 	}
@@ -772,7 +772,7 @@ static bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 	msg_print(_("鍵をはずした。", "You have picked the lock."));
 
 	/* Open the door */
-	cave_alter_feat(y, x, FF_OPEN);
+	cave_alter_feat(creature_ptr, y, x, FF_OPEN);
 
 	sound(SOUND_OPENDOOR);
 
@@ -913,7 +913,7 @@ static bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 	else
 	{
 		/* Close the door */
-		cave_alter_feat(y, x, FF_CLOSE);
+		cave_alter_feat(creature_ptr, y, x, FF_CLOSE);
 
 		/* Broken door */
 		if (old_feat == g_ptr->feat)
@@ -1105,7 +1105,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 			msg_format(_("%sをくずした。", "You have removed the %s."), name);
 
 			/* Remove the feature */
-			cave_alter_feat(y, x, FF_TUNNEL);
+			cave_alter_feat(creature_ptr, y, x, FF_TUNNEL);
 			creature_ptr->update |= (PU_FLOW);
 		}
 		else
@@ -1134,7 +1134,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 			if (have_flag(f_ptr->flags, FF_GLASS)) sound(SOUND_GLASS);
 
 			/* Remove the feature */
-			cave_alter_feat(y, x, FF_TUNNEL);
+			cave_alter_feat(creature_ptr, y, x, FF_TUNNEL);
 
 			chg_virtue(creature_ptr, V_DILIGENCE, 1);
 			chg_virtue(creature_ptr, V_NATURE, -1);
@@ -1314,7 +1314,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 			msg_print(_("鍵をはずした。", "You have picked the lock."));
 
 			/* Open the door */
-			cave_alter_feat(y, x, FF_OPEN);
+			cave_alter_feat(creature_ptr, y, x, FF_OPEN);
 
 			sound(SOUND_OPENDOOR);
 
@@ -1337,7 +1337,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 	else
 	{
 		/* Open the door */
-		cave_alter_feat(y, x, FF_OPEN);
+		cave_alter_feat(creature_ptr, y, x, FF_OPEN);
 
 		sound(SOUND_OPENDOOR);
 	}
@@ -1482,7 +1482,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
 		gain_exp(creature_ptr, power);
 
 		/* Remove the trap */
-		cave_alter_feat(y, x, FF_DISARM);
+		cave_alter_feat(creature_ptr, y, x, FF_DISARM);
 
 		/* Move the player onto the trap */
 		move_player(creature_ptr, dir, easy_disarm, FALSE);
@@ -1665,13 +1665,13 @@ static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, D
 		/* Break down the door */
 		if ((randint0(100) < 50) || (feat_state(g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
 		{
-			cave_alter_feat(y, x, FF_BASH);
+			cave_alter_feat(creature_ptr, y, x, FF_BASH);
 		}
 
 		/* Open the door */
 		else
 		{
-			cave_alter_feat(y, x, FF_OPEN);
+			cave_alter_feat(creature_ptr, y, x, FF_OPEN);
 		}
 
 		/* Hack -- Fall through the door */
@@ -1987,7 +1987,7 @@ void do_cmd_spike(player_type *creature_ptr)
 
 		/* Successful jamming */
 		msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
-		cave_alter_feat(y, x, FF_SPIKE);
+		cave_alter_feat(creature_ptr, y, x, FF_SPIKE);
 
 		vary_item(item, -1);
 	}

@@ -316,7 +316,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 			object_wipe(o_ptr);
 
 			/* Make a great object */
-			make_object(o_ptr, AM_GOOD | AM_GREAT);
+			make_object(player_ptr, o_ptr, AM_GOOD | AM_GREAT);
 			(void)drop_near(player_ptr, o_ptr, -1, y, x);
 		}
 	}

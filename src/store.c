@@ -3372,6 +3372,7 @@ static void store_delete(void)
 /*!
  * @brief 店舗の品揃え変化のためにアイテムを追加する /
  * Creates a random item and gives it to a store
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -3383,7 +3384,7 @@ static void store_delete(void)
  * Should we check for "permission" to have the given item?
  * </pre>
  */
-static void store_create(void)
+static void store_create(player_type *player_ptr)
 {
 	OBJECT_IDX i;
 	int tries;
@@ -3405,7 +3406,7 @@ static void store_create(void)
 			level = 25 + randint0(25);
 
 			/* Random item (usually of given level) */
-			i = get_obj_num(level, 0x00000000);
+			i = get_obj_num(player_ptr, level, 0x00000000);
 
 			/* Handle failure */
 			if (!i) continue;
@@ -4530,9 +4531,10 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 /*!
  * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void store_purchase(void)
+static void store_purchase(player_type *player_ptr)
 {
 	int i, choice;
 	COMMAND_CODE item, item_new;
@@ -4701,15 +4703,15 @@ static void store_purchase(void)
 			if (price == (best * j_ptr->number)) o_ptr->ident |= (IDENT_FIXED);
 
 			/* Player can afford it */
-			if (p_ptr->au >= price)
+			if (player_ptr->au >= price)
 			{
 				/* Say "okay" */
 				say_comment_1();
 
 				if (cur_store_num == STORE_BLACK) /* The black market is illegal! */
-					chg_virtue(p_ptr, V_JUSTICE, -1);
+					chg_virtue(player_ptr, V_JUSTICE, -1);
 				if((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))
-					chg_virtue(p_ptr, V_NATURE, -1);
+					chg_virtue(player_ptr, V_NATURE, -1);
 
 				/* Make a sound */
 				sound(SOUND_BUY);
@@ -4718,7 +4720,7 @@ static void store_purchase(void)
 				decrease_insults();
 
 				/* Spend the money */
-				p_ptr->au -= price;
+				player_ptr->au -= price;
 
 				/* Update the display */
 				store_prt_gold();
@@ -4737,10 +4739,10 @@ static void store_purchase(void)
 				strcpy(record_o_name, o_name);
 				record_turn = current_world_ptr->game_turn;
 
-				if (record_buy) exe_write_diary(p_ptr, NIKKI_BUY, 0, o_name);
+				if (record_buy) exe_write_diary(player_ptr, NIKKI_BUY, 0, o_name);
 				object_desc(o_name, o_ptr, OD_NAME_ONLY);
 				if(record_rand_art && o_ptr->art_name)
-					exe_write_diary(p_ptr, NIKKI_ART, 0, o_name);
+					exe_write_diary(player_ptr, NIKKI_ART, 0, o_name);
 
 				/* Erase the inscription */
 				j_ptr->inscription = 0;
@@ -4749,10 +4751,10 @@ static void store_purchase(void)
 				j_ptr->feeling = FEEL_NONE;
 				j_ptr->ident &= ~(IDENT_STORE);
 				/* Give it to the player */
-				item_new = inven_carry(p_ptr, j_ptr);
+				item_new = inven_carry(player_ptr, j_ptr);
 
 				/* Describe the final result */
-				object_desc(o_name, &p_ptr->inventory_list[item_new], 0);
+				object_desc(o_name, &player_ptr->inventory_list[item_new], 0);
 				msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
 				/* Auto-inscription */
@@ -4802,7 +4804,7 @@ static void store_purchase(void)
 					for (i = 0; i < 10; i++)
 					{
 						/* Maintain the store */
-						store_maint(p_ptr->town_num, cur_store_num);
+						store_maint(player_ptr, player_ptr->town_num, cur_store_num);
 					}
 
 					/* Start over */
@@ -4844,10 +4846,10 @@ static void store_purchase(void)
 		distribute_charges(o_ptr, j_ptr, amt);
 
 		/* Give it to the player */
-		item_new = inven_carry(p_ptr, j_ptr);
+		item_new = inven_carry(player_ptr, j_ptr);
 
 		/* Describe just the result */
-		object_desc(o_name, &p_ptr->inventory_list[item_new], 0);
+		object_desc(o_name, &player_ptr->inventory_list[item_new], 0);
 
 		msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(item_new));
 		handle_stuff();
@@ -4880,12 +4882,9 @@ static void store_purchase(void)
 			else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
 			display_inventory();
 
-			chg_virtue(p_ptr, V_SACRIFICE, 1);
+			chg_virtue(player_ptr, V_SACRIFICE, 1);
 		}
 	}
-
-	/* Not kicked out */
-	return;
 }
 
 
@@ -5404,7 +5403,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Get (purchase) */
 		case 'g':
 		{
-			store_purchase();
+			store_purchase(client_ptr);
 			break;
 		}
 
@@ -5683,6 +5682,7 @@ static void store_process_command(player_type *client_ptr)
 /*!
  * @brief 店舗処理全体のメインルーチン /
  * Enter a store, and interact with it. *
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @note
  * <pre>
@@ -5694,7 +5694,7 @@ static void store_process_command(player_type *client_ptr)
  * (cast magic) into "g" (get), and "s" (search) into "d" (drop).
  * </pre>
  */
-void do_cmd_store(void)
+void do_cmd_store(player_type *player_ptr)
 {
 	int which;
 	int maintain_num;
@@ -5703,7 +5703,7 @@ void do_cmd_store(void)
 	bool need_redraw_store_inv; /* To redraw missiles damage and prices in store */
 	TERM_LEN w, h;
 
-	if(p_ptr->wild_mode) return;
+	if(player_ptr->wild_mode) return;
 	Term_get_size(&w, &h);
 
 	/* Calculate stocks per 1 page */
@@ -5711,7 +5711,7 @@ void do_cmd_store(void)
 	store_bottom = MIN_STOCK + xtra_stock;
 
 	/* Access the player grid */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x];
+	g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
 
 	/* Verify a store */
 	if (!cave_have_flag_grid(g_ptr, FF_STORE))
@@ -5723,22 +5723,22 @@ void do_cmd_store(void)
 	/* Extract the store code */
 	which = f_info[g_ptr->feat].subtype;
 
-	old_town_num = p_ptr->town_num;
-	if ((which == STORE_HOME) || (which == STORE_MUSEUM)) p_ptr->town_num = 1;
-	if (p_ptr->current_floor_ptr->dun_level) p_ptr->town_num = NO_TOWN;
-	inner_town_num = p_ptr->town_num;
+	old_town_num = player_ptr->town_num;
+	if ((which == STORE_HOME) || (which == STORE_MUSEUM)) player_ptr->town_num = 1;
+	if (player_ptr->current_floor_ptr->dun_level) player_ptr->town_num = NO_TOWN;
+	inner_town_num = player_ptr->town_num;
 
 	/* Hack -- Check the "locked doors" */
-	if ((town_info[p_ptr->town_num].store[which].store_open >= current_world_ptr->game_turn) ||
+	if ((town_info[player_ptr->town_num].store[which].store_open >= current_world_ptr->game_turn) ||
 	    (ironman_shops))
 	{
 		msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
-		p_ptr->town_num = old_town_num;
+		player_ptr->town_num = old_town_num;
 		return;
 	}
 
 	/* Calculate the number of store maintainances since the last visit */
-	maintain_num = (current_world_ptr->game_turn - town_info[p_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
+	maintain_num = (current_world_ptr->game_turn - town_info[player_ptr->town_num].store[which].last_visit) / (TURNS_PER_TICK * STORE_TICKS);
 
 	/* Maintain the store max. 10 times */
 	if (maintain_num > 10) maintain_num = 10;
@@ -5747,14 +5747,14 @@ void do_cmd_store(void)
 	{
 		/* Maintain the store */
 		for (i = 0; i < maintain_num; i++)
-			store_maint(p_ptr->town_num, which);
+			store_maint(player_ptr, player_ptr->town_num, which);
 
 		/* Save the visit */
-		town_info[p_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
+		town_info[player_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
 	}
 
-	forget_lite(p_ptr->current_floor_ptr);
-	forget_view(p_ptr->current_floor_ptr);
+	forget_lite(player_ptr->current_floor_ptr);
+	forget_view(player_ptr->current_floor_ptr);
 
 	/* Hack -- Character is in "icky" mode */
 	current_world_ptr->character_icky = TRUE;
@@ -5774,7 +5774,7 @@ void do_cmd_store(void)
 	cur_store_feat = g_ptr->feat;
 
 	/* Save the store and owner pointers */
-	st_ptr = &town_info[p_ptr->town_num].store[cur_store_num];
+	st_ptr = &town_info[player_ptr->town_num].store[cur_store_num];
 	ot_ptr = &owners[cur_store_num][st_ptr->owner];
 
 	/* Start at the beginning */
@@ -5846,13 +5846,13 @@ void do_cmd_store(void)
 		request_command(TRUE);
 
 		/* Process the command */
-		store_process_command(p_ptr);
+		store_process_command(player_ptr);
 
 		/*
 		 * Hack -- To redraw missiles damage and prices in store
 		 * If player's charisma changes, or if player changes a bow, PU_BONUS is set
 		 */
-		need_redraw_store_inv = (p_ptr->update & PU_BONUS) ? TRUE : FALSE;
+		need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? TRUE : FALSE;
 
 		/* Hack -- Character is still in "icky" mode */
 		current_world_ptr->character_icky = TRUE;
@@ -5860,11 +5860,11 @@ void do_cmd_store(void)
 		handle_stuff();
 
 		/* Pack Overflow */
-		if (p_ptr->inventory_list[INVEN_PACK].k_idx)
+		if (player_ptr->inventory_list[INVEN_PACK].k_idx)
 		{
 			INVENTORY_IDX item = INVEN_PACK;
 
-			object_type *o_ptr = &p_ptr->inventory_list[item];
+			object_type *o_ptr = &player_ptr->inventory_list[item];
 
 			/* Hack -- Flee from the store */
 			if (cur_store_num != STORE_HOME)
@@ -5929,11 +5929,11 @@ void do_cmd_store(void)
 		if (st_ptr->store_open >= current_world_ptr->game_turn) leave_store = TRUE;
 	}
 
-	select_floor_music(p_ptr);
+	select_floor_music(player_ptr);
 
-	p_ptr->town_num = old_town_num;
+	player_ptr->town_num = old_town_num;
 
-	take_turn(p_ptr, 100);
+	take_turn(player_ptr, 100);
 
 	/* Hack -- Character is no longer in "icky" mode */
 	current_world_ptr->character_icky = FALSE;
@@ -5951,13 +5951,13 @@ void do_cmd_store(void)
 	Term_clear();
 
 	/* Update everything */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-	p_ptr->update |= (PU_MONSTERS);
+	player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+	player_ptr->update |= (PU_MONSTERS);
 
 	/* Redraw entire screen */
-	p_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	player_ptr->redraw |= (PR_BASIC | PR_EXTRA | PR_EQUIPPY);
+	player_ptr->redraw |= (PR_MAP);
+	player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
 
@@ -6034,11 +6034,12 @@ void store_shuffle(int which)
 /*!
  * @brief 店の品揃えを変化させる /
  * Maintain the inventory at the stores.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param town_num 町のID
  * @param store_num 店舗種類のID
  * @return なし
  */
-void store_maint(int town_num, int store_num)
+void store_maint(player_type *player_ptr, int town_num, int store_num)
 {
 	INVENTORY_IDX j;
 
@@ -6075,7 +6076,6 @@ void store_maint(int town_num, int store_num)
 		}
 	}
 
-
 	/* Choose the number of slots to keep */
 	j = st_ptr->stock_num;
 
@@ -6111,7 +6111,7 @@ void store_maint(int town_num, int store_num)
 	if (j >= st_ptr->stock_size) j = st_ptr->stock_size - 1;
 
 	/* Acquire some new items */
-	while (st_ptr->stock_num < j) store_create();
+	while (st_ptr->stock_num < j) store_create(player_ptr);
 }
 
 

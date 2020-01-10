@@ -226,6 +226,7 @@ void add_river(floor_type *floor_ptr, FEAT_IDX feat1, FEAT_IDX feat2)
 /*!
  * @brief ダンジョンの壁部にストリーマー（地質の変化）を与える /
  * Places "streamers" of rock through dungeon
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param feat ストリーマー地形ID
  * @param chance 生成密度
  * @return なし
@@ -237,7 +238,7 @@ void add_river(floor_type *floor_ptr, FEAT_IDX feat1, FEAT_IDX feat2)
  * hidden gold types are currently unused.
  * </pre>
  */
-void build_streamer(floor_type *floor_ptr, FEAT_IDX feat, int chance)
+void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 {
 	int i;
 	POSITION y, x, tx, ty;
@@ -252,6 +253,7 @@ void build_streamer(floor_type *floor_ptr, FEAT_IDX feat, int chance)
 	bool streamer_may_have_gold = have_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
 
 	/* Hack -- Choose starting point */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	y = rand_spread(floor_ptr->height / 2, floor_ptr->height / 6);
 	x = rand_spread(floor_ptr->width / 2, floor_ptr->width / 6);
 
@@ -343,14 +345,14 @@ void build_streamer(floor_type *floor_ptr, FEAT_IDX feat, int chance)
 				/* Hack -- Add some known treasure */
 				if (one_in_(chance))
 				{
-					cave_alter_feat(ty, tx, FF_MAY_HAVE_GOLD);
+					cave_alter_feat(player_ptr, ty, tx, FF_MAY_HAVE_GOLD);
 				}
 
 				/* Hack -- Add some hidden treasure */
 				else if (one_in_(chance / 4))
 				{
-					cave_alter_feat(ty, tx, FF_MAY_HAVE_GOLD);
-					cave_alter_feat(ty, tx, FF_ENSECRET);
+					cave_alter_feat(player_ptr, ty, tx, FF_MAY_HAVE_GOLD);
+					cave_alter_feat(player_ptr, ty, tx, FF_ENSECRET);
 				}
 			}
 		}

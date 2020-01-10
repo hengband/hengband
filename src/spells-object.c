@@ -170,7 +170,7 @@ bool create_ammo(player_type *creature_ptr)
 			if (slot >= 0) autopick_alter_item(slot, FALSE);
 
 			/* Destroy the wall */
-			cave_alter_feat(y, x, FF_HURT_ROCK);
+			cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
 
 			creature_ptr->update |= (PU_FLOW);
 		}
@@ -441,7 +441,7 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
 		object_wipe(i_ptr);
 
 		/* Make a good (or great) object (if possible) */
-		if (!make_object(i_ptr, mode)) continue;
+		if (!make_object(caster_ptr, i_ptr, mode)) continue;
 
 		if (known)
 		{

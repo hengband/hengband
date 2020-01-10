@@ -377,7 +377,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_HURT_ROCK)) break;
 
 			/* Destroy the feature */
-			cave_alter_feat(y, x, FF_HURT_ROCK);
+			cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 			caster_ptr->update |= (PU_FLOW);
 		}
 		break;

@@ -304,7 +304,7 @@ static bool alloc_stairs(floor_type *floor_ptr, FEAT_IDX feat, int num, int wall
  * @param num 配置したい数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
+static void alloc_object(player_type *owner_ptr, int set, EFFECT_ID typ, int num)
 {
 	POSITION y = 0, x = 0;
 	int k;
@@ -312,6 +312,7 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
 	grid_type *g_ptr;
 
 	/* A small level has few objects. */
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	num = num * floor_ptr->height * floor_ptr->width / (MAX_HGT*MAX_WID) +1;
 
 	/* Place some objects */
@@ -380,7 +381,7 @@ static void alloc_object(floor_type *floor_ptr, int set, EFFECT_ID typ, int num)
 
 			case ALLOC_TYP_OBJECT:
 			{
-				place_object(floor_ptr, y, x, 0L);
+				place_object(owner_ptr, y, x, 0L);
 				break;
 			}
 		}
@@ -674,7 +675,7 @@ static bool cave_gen(player_type *player_ptr)
 	/* Build maze */
 	if (dungeon_ptr->flags1 & DF1_MAZE)
 	{
-		build_maze_vault(floor_ptr, floor_ptr->width/2-1, floor_ptr->height/2-1, floor_ptr->width-4, floor_ptr->height-4, FALSE);
+		build_maze_vault(player_ptr, floor_ptr->width/2-1, floor_ptr->height/2-1, floor_ptr->width-4, floor_ptr->height-4, FALSE);
 
 		/* Place 3 or 4 down stairs near some walls */
 		if (!alloc_stairs(floor_ptr, feat_down_stair, rand_range(2, 3), 3)) return FALSE;
@@ -691,7 +692,7 @@ static bool cave_gen(player_type *player_ptr)
 		/*
 		 * Build each type of room in turn until we cannot build any more.
 		 */
-		if (!generate_rooms(floor_ptr)) return FALSE;
+		if (!generate_rooms(player_ptr)) return FALSE;
 
 
 		/* Make a hole in the dungeon roof sometimes at level 1 */
@@ -888,7 +889,7 @@ static bool cave_gen(player_type *player_ptr)
 			/* Hack -- Add some quartz streamers */
 			for (i = 0; i < DUN_STR_QUA; i++)
 			{
-				build_streamer(floor_ptr, dungeon_ptr->stream2, DUN_STR_QC);
+				build_streamer(player_ptr, dungeon_ptr->stream2, DUN_STR_QC);
 			}
 		}
 
@@ -897,7 +898,7 @@ static bool cave_gen(player_type *player_ptr)
 			/* Hack -- Add some magma streamers */
 			for (i = 0; i < DUN_STR_MAG; i++)
 			{
-				build_streamer(floor_ptr, dungeon_ptr->stream1, DUN_STR_MC);
+				build_streamer(player_ptr, dungeon_ptr->stream1, DUN_STR_MC);
 			}
 		}
 	}
@@ -953,10 +954,10 @@ static bool cave_gen(player_type *player_ptr)
 	}
 
 	/* Place some traps in the dungeon */
-	alloc_object(floor_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(k));
+	alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_TRAP, randint1(k));
 
 	/* Put some rubble in corridors (except NO_CAVE dungeon (Castle)) */
-	if (!(dungeon_ptr->flags1 & DF1_NO_CAVE)) alloc_object(floor_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(k));
+	if (!(dungeon_ptr->flags1 & DF1_NO_CAVE)) alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(k));
 
 	/* Mega Hack -- No object at first level of deeper dungeon */
 	if (p_ptr->enter_dungeon && floor_ptr->dun_level > 1)
@@ -966,11 +967,11 @@ static bool cave_gen(player_type *player_ptr)
 	}
 
 	/* Put some objects in rooms */
-	alloc_object(floor_ptr, ALLOC_SET_ROOM, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ROOM, 3));
+	alloc_object(player_ptr, ALLOC_SET_ROOM, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ROOM, 3));
 
 	/* Put some objects/gold in the dungeon */
-	alloc_object(floor_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
-	alloc_object(floor_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
+	alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
+	alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
 
 	/* Set back to default */
 	floor_ptr->object_level = floor_ptr->base_level;

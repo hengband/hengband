@@ -2730,7 +2730,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_book;
 
 			/* Make a book */
-			make_object(q_ptr, mo_mode);
+			make_object(p_ptr, q_ptr, mo_mode);
 			(void)drop_near(p_ptr, q_ptr, -1, y, x);
 		}
 		break;
@@ -2890,7 +2890,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_cloak;
 
 				/* Make a cloak */
-				make_object(q_ptr, mo_mode);
+				make_object(p_ptr, q_ptr, mo_mode);
 				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
@@ -2905,7 +2905,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_polearm;
 
 				/* Make a poleweapon */
-				make_object(q_ptr, mo_mode);
+				make_object(p_ptr, q_ptr, mo_mode);
 				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
@@ -2920,7 +2920,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_armor;
 
 				/* Make a hard armor */
-				make_object(q_ptr, mo_mode);
+				make_object(p_ptr, q_ptr, mo_mode);
 				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
@@ -2935,7 +2935,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_hafted;
 
 				/* Make a hafted weapon */
-				make_object(q_ptr, mo_mode);
+				make_object(p_ptr, q_ptr, mo_mode);
 				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
@@ -2950,7 +2950,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_sword;
 
 				/* Make a sword */
-				make_object(q_ptr, mo_mode);
+				make_object(p_ptr, q_ptr, mo_mode);
 				(void)drop_near(p_ptr, q_ptr, -1, y, x);
 			}
 			break;
@@ -3065,9 +3065,10 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		}
 		else
 		{
-			if (!make_object(q_ptr, mo_mode)) continue;
+			if (!make_object(p_ptr, q_ptr, mo_mode)) continue;
 			dump_item++;
 		}
+
 		(void)drop_near(p_ptr, q_ptr, -1, y, x);
 	}
 

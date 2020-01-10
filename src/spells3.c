@@ -1052,7 +1052,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 			}
 
 			/* Process all walls, doors and patterns */
-			if (have_flag(f_ptr->flags, FF_HURT_DISI)) cave_alter_feat(y, x, FF_HURT_DISI);
+			if (have_flag(f_ptr->flags, FF_HURT_DISI)) cave_alter_feat(caster_ptr, y, x, FF_HURT_DISI);
 		}
 	}
 
@@ -3174,7 +3174,7 @@ bool eat_rock(player_type *caster_ptr)
 		(void)set_food(caster_ptr, caster_ptr->food + 10000);
 	}
 
-	cave_alter_feat(y, x, FF_HURT_ROCK);
+	cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 	(void)move_player_effect(caster_ptr, y, x, MPE_DONT_PICKUP);
 	return TRUE;
 }

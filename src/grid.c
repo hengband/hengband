@@ -978,10 +978,11 @@ FEAT_IDX feat_state(FEAT_IDX feat, int action)
  * Takes a location and action and changes the feature at that
  * location through applying the given action.
  */
-void cave_alter_feat(POSITION y, POSITION x, int action)
+void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action)
 {
 	/* Set old feature */
-	FEAT_IDX oldfeat = p_ptr->current_floor_ptr->grid_array[y][x].feat;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
 
 	/* Get the new feat */
 	FEAT_IDX newfeat = feat_state(oldfeat, action);
@@ -990,7 +991,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 	if (newfeat == oldfeat) return;
 
 	/* Set the new feature */
-	cave_set_feat(p_ptr->current_floor_ptr, y, x, newfeat);
+	cave_set_feat(floor_ptr, y, x, newfeat);
 
 	if (!(feature_action_flags[action] & FAF_NO_DROP))
 	{
@@ -1002,19 +1003,19 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 		if (have_flag(old_f_ptr->flags, FF_HAS_GOLD) && !have_flag(f_ptr->flags, FF_HAS_GOLD))
 		{
 			/* Place some gold */
-			place_gold(p_ptr->current_floor_ptr, y, x);
+			place_gold(floor_ptr, y, x);
 			found = TRUE;
 		}
 
 		/* Handle item */
-		if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - p_ptr->current_floor_ptr->dun_level / 2)))
+		if (have_flag(old_f_ptr->flags, FF_HAS_ITEM) && !have_flag(f_ptr->flags, FF_HAS_ITEM) && (randint0(100) < (15 - floor_ptr->dun_level / 2)))
 		{
 			/* Place object */
-			place_object(p_ptr->current_floor_ptr, y, x, 0L);
+			place_object(player_ptr, y, x, 0L);
 			found = TRUE;
 		}
 
-		if (found && current_world_ptr->character_dungeon && player_can_see_bold(p_ptr, y, x))
+		if (found && current_world_ptr->character_dungeon && player_can_see_bold(player_ptr, y, x))
 		{
 			msg_print(_("何かを発見した！", "You have found something!"));
 		}
@@ -1026,7 +1027,7 @@ void cave_alter_feat(POSITION y, POSITION x, int action)
 
 		if (have_flag(old_f_ptr->flags, FF_GLASS) && current_world_ptr->character_dungeon)
 		{
-			project(p_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(p_ptr->current_floor_ptr->dun_level, 100) / 4, GF_SHARDS,
+			project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, MIN(floor_ptr->dun_level, 100) / 4, GF_SHARDS,
 				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 		}
 	}

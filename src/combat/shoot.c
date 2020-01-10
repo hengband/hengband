@@ -533,7 +533,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					shooter_ptr->update |= (PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
 					/* Destroy the wall */
-					cave_alter_feat(ny, nx, FF_HURT_ROCK);
+					cave_alter_feat(shooter_ptr, ny, nx, FF_HURT_ROCK);
 
 					hit_body = TRUE;
 					break;

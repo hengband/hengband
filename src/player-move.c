@@ -179,40 +179,43 @@
 travel_type travel;
 #endif
 
+
 /*!
  * @brief 地形やその上のアイテムの隠された要素を全て明かす /
  * Search for hidden things
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
  * @return なし
  */
-static void discover_hidden_things(POSITION y, POSITION x)
+static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	grid_type *g_ptr;
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Invisible trap */
 	if (g_ptr->mimic && is_trap(g_ptr->feat))
 	{
-		disclose_grid(p_ptr->current_floor_ptr, y, x);
+		disclose_grid(creature_ptr, y, x);
 		msg_print(_("トラップを発見した。", "You have found a trap."));
-		disturb(p_ptr, FALSE, TRUE);
+		disturb(creature_ptr, FALSE, TRUE);
 	}
 
 	/* Secret door */
 	if (is_hidden_door(g_ptr))
 	{
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
-		disclose_grid(p_ptr->current_floor_ptr, y, x);
-		disturb(p_ptr, FALSE, FALSE);
+		disclose_grid(creature_ptr, y, x);
+		disturb(creature_ptr, FALSE, FALSE);
 	}
 
 	/* Scan all objects in the grid */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 		if (o_ptr->tval != TV_CHEST) continue;
 		if (!chest_traps[o_ptr->pval]) continue;
@@ -220,10 +223,11 @@ static void discover_hidden_things(POSITION y, POSITION x)
 		{
 			msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
 			object_known(o_ptr);
-			disturb(p_ptr, FALSE, FALSE);
+			disturb(creature_ptr, FALSE, FALSE);
 		}
 	}
 }
+
 
 /*!
  * @brief プレイヤーの探索処理判定
@@ -247,7 +251,7 @@ void search(player_type *creature_ptr)
 		/* Sometimes, notice things */
 		if (randint0(100) < chance)
 		{
-			discover_hidden_things(creature_ptr->y + ddy_ddd[i], creature_ptr->x + ddx_ddd[i]);
+			discover_hidden_things(creature_ptr, creature_ptr->y + ddy_ddd[i], creature_ptr->x + ddx_ddd[i]);
 		}
 	}
 }
@@ -776,7 +780,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 			msg_print(_("トラップだ！", "You found a trap!"));
 
 			/* Pick a trap */
-			disclose_grid(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x);
+			disclose_grid(creature_ptr, creature_ptr->y, creature_ptr->x);
 		}
 
 		/* Hit the trap */
@@ -1267,7 +1271,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 
 		if (p_can_kill_walls)
 		{
-			cave_alter_feat(y, x, FF_HURT_DISI);
+			cave_alter_feat(creature_ptr, y, x, FF_HURT_DISI);
 
 			/* Update some things -- similar to GF_KILL_WALL */
 			creature_ptr->update |= (PU_FLOW);

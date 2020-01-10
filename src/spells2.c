@@ -97,7 +97,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 
 			if (cave_have_flag_grid(g_ptr, flag))
 			{
-				disclose_grid(caster_ptr->current_floor_ptr, y, x);
+				disclose_grid(caster_ptr, y, x);
 				g_ptr->info |= (CAVE_MARK);
 				lite_spot(y, x);
 				detect = TRUE;

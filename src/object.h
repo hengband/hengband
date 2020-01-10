@@ -438,7 +438,7 @@ extern void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
 extern void delete_object(floor_type *floor_ptr, POSITION y, POSITION x);
 
 extern OBJECT_IDX o_pop(floor_type *floor_ptr);
-extern OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode);
+extern OBJECT_IDX get_obj_num(player_type *o_ptr, DEPTH level, BIT_FLAGS mode);
 extern void object_known(object_type *o_ptr);
 extern void object_aware(object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
@@ -486,7 +486,7 @@ extern void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
 extern OBJECT_SUBTYPE_VALUE coin_type;
 
-extern bool make_object(object_type *j_ptr, BIT_FLAGS mode);
+extern bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode);
 extern bool make_gold(object_type *j_ptr);
 extern OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 extern void vary_item(INVENTORY_IDX item, ITEM_NUMBER num);

@@ -3721,7 +3721,7 @@ static void process_command(player_type *creature_ptr)
 		/* Enter store */
 		case SPECIAL_KEY_STORE:
 		{
-			do_cmd_store();
+			do_cmd_store(creature_ptr);
 			break;
 		}
 

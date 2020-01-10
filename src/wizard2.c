@@ -1059,7 +1059,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 			object_wipe(q_ptr);
 
 			/* Create an object */
-			make_object(q_ptr, mode);
+			make_object(caster_ptr, q_ptr, mode);
 
 
 			/* Mega-Hack -- allow multiple artifacts */

@@ -399,7 +399,7 @@ extern bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void try_door(floor_type *floor_ptr, POSITION y, POSITION x);
 
 extern FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
-extern void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num);
+extern void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
 
 /*
  * project()関数に用いられる、遠隔攻撃特性ビットフラグ / Bit flags for the "project()" function
@@ -423,7 +423,7 @@ extern void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num
 extern sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 
 extern void set_floor(floor_type *floor_ptr, POSITION x, POSITION y);
-extern void place_object(floor_type *floor_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
+extern void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
 extern void place_gold(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void compact_objects(floor_type *floor_ptr, int size);

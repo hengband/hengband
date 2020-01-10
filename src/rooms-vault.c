@@ -37,7 +37,7 @@ VAULT_IDX max_v_idx;
 * Note: If two centers are on the same point then this algorithm will create a
 *       blank bubble filled with walls. - This is prevented from happening.
 */
-static void build_bubble_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 #define BUBBLENUM 10		/* number of bubbles */
 
@@ -82,8 +82,8 @@ static void build_bubble_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 		center[i].y = y;
 	}
 
-
 	/* Top and bottom boundaries */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i < xsize; i++)
 	{
 		int side_x = x0 - xhsize + i;
@@ -165,11 +165,11 @@ static void build_bubble_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
+	fill_treasure(player_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5));
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
-static void build_room_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_room_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION x1, x2, y1, y2, xhsize, yhsize;
 	int i;
@@ -181,6 +181,7 @@ static void build_room_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, PO
 	msg_print_wizard(CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
 
 	/* fill area so don't get problems with arena levels */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (x1 = 0; x1 < xsize; x1++)
 	{
 		POSITION x = x0 - xhsize + x1;
@@ -213,12 +214,12 @@ static void build_room_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, PO
 	}
 
 	/* Fill with monsters and treasure, high difficulty */
-	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5) + 5);
+	fill_treasure(player_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 2, y0 - yhsize + 1, y0 - yhsize + ysize - 2, randint1(5) + 5);
 }
 
 
 /* Create a random vault out of a fractal grid */
-static void build_cave_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
+static void build_cave_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
 	int grd, roug, cutoff;
 	bool done, light, room;
@@ -235,6 +236,7 @@ static void build_cave_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, PO
 	light = done = FALSE;
 	room = TRUE;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	while (!done)
 	{
 		/* testing values for these parameters feel free to adjust */
@@ -264,9 +266,8 @@ static void build_cave_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, PO
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1, y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
+	fill_treasure(player_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1, y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
 }
-
 
 
 /*!
@@ -314,6 +315,7 @@ static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yof
 
 /*!
 * @brief Vaultをフロアに配置する / Hack -- fill in "vault" rooms
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param yval 生成基準Y座標
 * @param xval 生成基準X座標
 * @param ymax VaultのYサイズ
@@ -324,7 +326,7 @@ static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yof
 * @param transno 変換ID
 * @return なし
 */
-static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, concptr data,
+static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, concptr data,
 	POSITION xoffset, POSITION yoffset, int transno)
 {
 	POSITION dx, dy, x, y, i, j;
@@ -332,6 +334,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 	grid_type *g_ptr;
 
 	/* Place dungeon features and objects */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (t = data, dy = 0; dy < ymax; dy++)
 	{
 		for (dx = 0; dx < xmax; dx++, t++)
@@ -403,7 +406,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 			case '*':
 				if (randint0(100) < 75)
 				{
-					place_object(floor_ptr, y, x, 0L);
+					place_object(player_ptr, y, x, 0L);
 				}
 				else
 				{
@@ -413,7 +416,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 
 				/* Treasure */
 			case '[':
-				place_object(floor_ptr, y, x, 0L);
+				place_object(player_ptr, y, x, 0L);
 				break;
 
 				/* Tree */
@@ -480,7 +483,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 			case 'A':
 				/* Reward for Pattern walk */
 				floor_ptr->object_level = floor_ptr->base_level + 12;
-				place_object(floor_ptr, y, x, AM_GOOD | AM_GREAT);
+				place_object(player_ptr, y, x, AM_GOOD | AM_GREAT);
 				floor_ptr->object_level = floor_ptr->base_level;
 				break;
 
@@ -592,7 +595,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 					place_monster(y, x, PM_ALLOW_SLEEP);
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 7;
-					place_object(floor_ptr, y, x, AM_GOOD);
+					place_object(player_ptr, y, x, AM_GOOD);
 					floor_ptr->object_level = floor_ptr->base_level;
 					break;
 				}
@@ -604,7 +607,7 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 					place_monster(y, x, PM_ALLOW_SLEEP);
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 20;
-					place_object(floor_ptr, y, x, AM_GOOD | AM_GREAT);
+					place_object(player_ptr, y, x, AM_GOOD | AM_GREAT);
 					floor_ptr->object_level = floor_ptr->base_level;
 					break;
 				}
@@ -621,24 +624,22 @@ static void build_vault(floor_type *floor_ptr, POSITION yval, POSITION xval, POS
 					if (randint0(100) < 50)
 					{
 						floor_ptr->object_level = floor_ptr->base_level + 7;
-						place_object(floor_ptr, y, x, 0L);
+						place_object(player_ptr, y, x, 0L);
 						floor_ptr->object_level = floor_ptr->base_level;
 					}
 					break;
 				}
-
 			}
 		}
 	}
 }
 
 
-
 /*!
 * @brief タイプ7の部屋…v_info.txtより小型vaultを生成する / Type 7 -- simple vaults (see "v_info.txt")
 * @return なし
 */
-bool build_type7(floor_type *floor_ptr)
+bool build_type7(player_type *player_ptr)
 {
 	vault_type *v_ptr = NULL;
 	int dummy;
@@ -672,6 +673,7 @@ bool build_type7(floor_type *floor_ptr)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (x + 2 > floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
@@ -708,17 +710,18 @@ bool build_type7(floor_type *floor_ptr)
 	msg_format_wizard(CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
 }
 
+
 /*!
 * @brief タイプ8の部屋…v_info.txtより大型vaultを生成する / Type 8 -- greater vaults (see "v_info.txt")
 * @return なし
 */
-bool build_type8(floor_type *floor_ptr)
+bool build_type8(player_type *player_ptr)
 {
 	vault_type *v_ptr;
 	int dummy;
@@ -752,6 +755,7 @@ bool build_type8(floor_type *floor_ptr)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (x + 2 > floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
@@ -794,7 +798,7 @@ bool build_type8(floor_type *floor_ptr)
 	msg_format_wizard(CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
@@ -806,7 +810,7 @@ bool build_type8(floor_type *floor_ptr)
 * This is made by two concentric "crypts" with perpendicular
 * walls creating the cross-hairs.
 */
-static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION rad, x, y;
 
@@ -830,6 +834,7 @@ static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	}
 
 	/* Make floor */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (x = x0 - rad; x <= x0 + rad; x++)
 	{
 		for (y = y0 - rad; y <= y0 + rad; y++)
@@ -917,7 +922,7 @@ static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	add_door(floor_ptr, x0, y0 - y);
 
 	/* Fill with stuff - medium difficulty */
-	fill_treasure(floor_ptr, x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);
+	fill_treasure(player_ptr, x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);
 }
 
 
@@ -929,7 +934,7 @@ static void build_target_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 *
 * Miniture rooms are then scattered across the vault.
 */
-static void build_elemental_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
+static void build_elemental_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsiz, POSITION ysiz)
 {
 	int grd, roug;
 	int c1, c2, c3;
@@ -946,6 +951,7 @@ static void build_elemental_vault(floor_type *floor_ptr, POSITION x0, POSITION y
 	xsize = xhsize * 2;
 	ysize = yhsize * 2;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (floor_ptr->dun_level < 25)
 	{
 		/* Earth vault  (Rubble) */
@@ -1009,7 +1015,7 @@ static void build_elemental_vault(floor_type *floor_ptr, POSITION x0, POSITION y
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(floor_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1,
+	fill_treasure(player_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1,
 		y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
 }
 #endif /* ALLOW_CAVERNS_AND_LAKES */
@@ -1022,7 +1028,7 @@ static void build_elemental_vault(floor_type *floor_ptr, POSITION x0, POSITION y
 * The vault has two entrances on opposite sides to guarantee
 * a way to get in even if the vault abuts a side of the dungeon.
 */
-static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION dy, dx;
 	POSITION y1, x1, y2, x2, y, x, total;
@@ -1042,6 +1048,7 @@ static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 
 
 	/* generate the room */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (x = x1 - 2; x <= x2 + 2; x++)
 	{
 		if (!in_bounds(floor_ptr, y1 - 2, x)) break;
@@ -1134,7 +1141,7 @@ static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	}
 
 	/* Fill with monsters and treasure, highest difficulty */
-	fill_treasure(floor_ptr, x1, x2, y1, y2, 10);
+	fill_treasure(player_ptr, x1, x2, y1, y2, 10);
 
 	C_KILL(visited, num_vertices, int);
 }
@@ -1145,7 +1152,7 @@ static void build_mini_c_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 *
 *This makes a vault that looks like a castle/ city in the dungeon.
 */
-static void build_castle_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
+static void build_castle_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize)
 {
 	POSITION dy, dx;
 	POSITION y1, x1, y2, x2;
@@ -1163,6 +1170,7 @@ static void build_castle_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	msg_print_wizard(CHEAT_DUNGEON, _("城型ランダムVaultを生成しました。", "Castle Vault"));
 
 	/* generate the room */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		for (x = x1 - 1; x <= x2 + 1; x++)
@@ -1177,16 +1185,16 @@ static void build_castle_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, 
 	build_recursive_room(floor_ptr, x1, y1, x2, y2, randint1(5));
 
 	/* Fill with monsters and treasure, low difficulty */
-	fill_treasure(floor_ptr, x1, x2, y1, y2, randint1(3));
+	fill_treasure(player_ptr, x1, x2, y1, y2, randint1(3));
 }
-
 
 
 /*!
 * @brief タイプ10の部屋…ランダム生成vault / Type 10 -- Random vaults
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 */
-bool build_type10(floor_type *floor_ptr)
+bool build_type10(player_type *player_ptr)
 {
 	POSITION y0, x0, xsize, ysize, vtype;
 
@@ -1195,6 +1203,7 @@ bool build_type10(floor_type *floor_ptr)
 	ysize = randint1(11) + 11;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!find_space(floor_ptr, &y0, &x0, ysize + 1, xsize + 1)) return FALSE;
 
 	/* Select type of vault */
@@ -1215,15 +1224,15 @@ bool build_type10(floor_type *floor_ptr)
 	switch (vtype)
 	{
 		/* Build an appropriate room */
-	case 1: case  9: build_bubble_vault(floor_ptr, x0, y0, xsize, ysize); break;
-	case 2: case 10: build_room_vault(floor_ptr, x0, y0, xsize, ysize); break;
-	case 3: case 11: build_cave_vault(floor_ptr, x0, y0, xsize, ysize); break;
-	case 4: case 12: build_maze_vault(floor_ptr, x0, y0, xsize, ysize, TRUE); break;
-	case 5: case 13: build_mini_c_vault(floor_ptr, x0, y0, xsize, ysize); break;
-	case 6: case 14: build_castle_vault(floor_ptr, x0, y0, xsize, ysize); break;
-	case 7: case 15: build_target_vault(floor_ptr, x0, y0, xsize, ysize); break;
+	case 1: case  9: build_bubble_vault(player_ptr, x0, y0, xsize, ysize); break;
+	case 2: case 10: build_room_vault(player_ptr, x0, y0, xsize, ysize); break;
+	case 3: case 11: build_cave_vault(player_ptr, x0, y0, xsize, ysize); break;
+	case 4: case 12: build_maze_vault(player_ptr, x0, y0, xsize, ysize, TRUE); break;
+	case 5: case 13: build_mini_c_vault(player_ptr, x0, y0, xsize, ysize); break;
+	case 6: case 14: build_castle_vault(player_ptr, x0, y0, xsize, ysize); break;
+	case 7: case 15: build_target_vault(player_ptr, x0, y0, xsize, ysize); break;
 #ifdef ALLOW_CAVERNS_AND_LAKES
-	case 8: build_elemental_vault(floor_ptr, x0, y0, xsize, ysize); break;
+	case 8: build_elemental_vault(player_ptr, x0, y0, xsize, ysize); break;
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 		/* I know how to add a few more... give me some time. */
 	default: return FALSE;
@@ -1237,7 +1246,7 @@ bool build_type10(floor_type *floor_ptr)
 * @brief タイプ17の部屋…v_info.txtより固定特殊部屋を生成する / Type 17 -- fixed special room (see "v_info.txt")
 * @return なし
 */
-bool build_type17(floor_type *floor_ptr)
+bool build_type17(player_type *player_ptr)
 {
 	vault_type *v_ptr = NULL;
 	int dummy;
@@ -1271,6 +1280,7 @@ bool build_type17(floor_type *floor_ptr)
 	y = v_ptr->hgt;
 
 	/* Some huge vault cannot be ratated to fit in the dungeon */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (x + 2 > floor_ptr->height - 2)
 	{
 		/* Forbid 90 or 270 degree ratation */
@@ -1307,9 +1317,8 @@ bool build_type17(floor_type *floor_ptr)
 	msg_format_wizard(CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
-	build_vault(floor_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
+	build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid,
 		v_text + v_ptr->text, xoffset, yoffset, transno);
 
 	return TRUE;
 }
-

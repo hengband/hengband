@@ -317,6 +317,7 @@ bool build_type2(floor_type *floor_ptr)
 
 /*!
 * @brief タイプ3の部屋…十字型の部屋を生成する / Type 3 -- Cross shaped rooms
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @details
 * Builds a room at a row, column coordinate\n
@@ -328,7 +329,7 @@ bool build_type2(floor_type *floor_ptr)
 * the code below will work (with "bounds checking") for 5x5, or even\n
 * for unsymetric values like 4x3 or 5x3 or 3x4 or 3x5, or even larger.\n
 */
-bool build_type3(floor_type *floor_ptr)
+bool build_type3(player_type *player_ptr)
 {
 	POSITION y, x, dy, dx, wy, wx;
 	POSITION y1a, x1a, y2a, x2a;
@@ -337,8 +338,8 @@ bool build_type3(floor_type *floor_ptr)
 	bool light;
 	grid_type *g_ptr;
 
-
 	/* Find and reserve some space in the dungeon.  Get center of room. */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 
@@ -494,7 +495,7 @@ bool build_type3(floor_type *floor_ptr)
 		}
 
 		/* Place a treasure in the vault */
-		place_object(floor_ptr, yval, xval, 0L);
+		place_object(player_ptr, yval, xval, 0L);
 
 		/* Let's guard the treasure well */
 		vault_monsters(floor_ptr, yval, xval, randint0(2) + 3);
@@ -576,6 +577,7 @@ bool build_type3(floor_type *floor_ptr)
 
 /*!
 * @brief タイプ4の部屋…固定サイズの二重構造部屋を生成する / Type 4 -- Large room with inner features
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @details
 * Possible sub-types:\n
@@ -585,15 +587,15 @@ bool build_type3(floor_type *floor_ptr)
 *	4 - Inner room has a maze\n
 *	5 - A set of four inner rooms\n
 */
-bool build_type4(floor_type *floor_ptr)
+bool build_type4(player_type *player_ptr)
 {
 	POSITION y, x, y1, x1;
 	POSITION y2, x2, tmp, yval, xval;
 	bool light;
 	grid_type *g_ptr;
 
-
 	/* Find and reserve some space in the dungeon.  Get center of room. */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Choose lite or dark */
@@ -716,7 +718,7 @@ bool build_type4(floor_type *floor_ptr)
 			/* Object (80%) */
 			if (randint0(100) < 80)
 			{
-				place_object(floor_ptr, yval, xval, 0L);
+				place_object(player_ptr, yval, xval, 0L);
 			}
 
 			/* Stairs (20%) */
@@ -803,8 +805,8 @@ bool build_type4(floor_type *floor_ptr)
 				vault_monsters(floor_ptr, yval, xval + 2, randint1(2));
 
 				/* Objects */
-				if (one_in_(3)) place_object(floor_ptr, yval, xval - 2, 0L);
-				if (one_in_(3)) place_object(floor_ptr, yval, xval + 2, 0L);
+				if (one_in_(3)) place_object(player_ptr, yval, xval - 2, 0L);
+				if (one_in_(3)) place_object(player_ptr, yval, xval + 2, 0L);
 			}
 
 			break;
@@ -844,7 +846,7 @@ bool build_type4(floor_type *floor_ptr)
 			vault_traps(floor_ptr, yval, xval + 3, 2, 8, randint1(3));
 
 			/* Mazes should have some treasure too. */
-			vault_objects(floor_ptr, yval, xval, 3);
+			vault_objects(player_ptr, yval, xval, 3);
 
 			break;
 		}
@@ -887,7 +889,7 @@ bool build_type4(floor_type *floor_ptr)
 			}
 
 			/* Treasure, centered at the center of the cross */
-			vault_objects(floor_ptr, yval, xval, 2 + randint1(2));
+			vault_objects(player_ptr, yval, xval, 2 + randint1(2));
 
 			/* Gotta have some monsters. */
 			vault_monsters(floor_ptr, yval + 1, xval - 4, randint1(4));
@@ -952,6 +954,7 @@ bool build_type11(floor_type *floor_ptr)
 
 /*!
 * @brief タイプ12の部屋…ドーム型部屋の生成 / Type 12 -- Build crypt room.
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @details
 * For every grid in the possible square, check the (fake) distance.\n
@@ -959,7 +962,7 @@ bool build_type11(floor_type *floor_ptr)
 *\n
 * When done fill from the inside to find the walls,\n
 */
-bool build_type12(floor_type *floor_ptr)
+bool build_type12(player_type *player_ptr)
 {
 	POSITION rad, x, y, x0, y0;
 	int light = FALSE;
@@ -973,6 +976,7 @@ bool build_type12(floor_type *floor_ptr)
 	h4 = randint1(32) - 16;
 
 	/* Occasional light */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if ((randint1(floor_ptr->dun_level) <= 5) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) light = TRUE;
 
 	rad = randint1(9);
@@ -1034,7 +1038,7 @@ bool build_type12(floor_type *floor_ptr)
 		build_small_room(floor_ptr, x0, y0);
 
 		/* Place a treasure in the vault */
-		place_object(floor_ptr, y0, x0, 0L);
+		place_object(player_ptr, y0, x0, 0L);
 
 		/* Let's guard the treasure well */
 		vault_monsters(floor_ptr, y0, x0, randint0(2) + 3);

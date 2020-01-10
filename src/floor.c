@@ -1169,6 +1169,7 @@ FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
 
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置したい中心マスのY座標
  * @param x 配置したい中心マスのX座標
  * @param num 配置したい数
@@ -1176,13 +1177,13 @@ FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num)
+void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 {
 	int dummy = 0;
 	int i = 0, j = y, k = x;
 
 	grid_type *g_ptr;
-
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
 	/* Attempt to place 'num' objects */
 	for (; num > 0; --num)
@@ -1211,7 +1212,7 @@ void vault_objects(floor_type *floor_ptr, POSITION y, POSITION x, int num)
 
 			if (randint0(100) < 75)
 			{
-				place_object(floor_ptr, j, k, 0L);
+				place_object(player_ptr, j, k, 0L);
 			}
 			else
 			{
@@ -1597,6 +1598,7 @@ void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 /*!
  * @brief フロアの指定位置に生成階に応じたベースアイテムの生成を行う。
  * Attempt to place an object (normal or good/great) at the given location.
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @param mode オプションフラグ
@@ -1606,16 +1608,15 @@ void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
  * This routine uses "object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
-void place_object(floor_type *floor_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	OBJECT_IDX o_idx;
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 
 	/* Acquire grid */
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	object_type forge;
 	object_type *q_ptr;
-
 
 	/* Paranoia -- check bounds */
 	if (!in_bounds(floor_ptr, y, x)) return;
@@ -1630,9 +1631,9 @@ void place_object(floor_type *floor_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 	object_wipe(q_ptr);
 
 	/* Make an object (if possible) */
-	if (!make_object(q_ptr, mode)) return;
+	if (!make_object(owner_ptr, q_ptr, mode)) return;
 
-	o_idx = o_pop(floor_ptr);
+	OBJECT_IDX o_idx = o_pop(floor_ptr);
 
 	/* Success */
 	if (o_idx)

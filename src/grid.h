@@ -392,7 +392,7 @@ extern void note_spot(POSITION y, POSITION x);
 extern void lite_spot(POSITION y, POSITION x);
 extern void update_flow(player_type *subject_ptr);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
-extern void cave_alter_feat(POSITION y, POSITION x, int action);
+extern void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action);
 extern void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool is_open(FEAT_IDX feat);
 extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);

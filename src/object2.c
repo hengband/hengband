@@ -362,7 +362,7 @@ static errr get_obj_num_prep(void)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode)
+OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 {
 	int i, j, p;
 	KIND_OBJECT_IDX k_idx;
@@ -373,7 +373,7 @@ OBJECT_IDX get_obj_num(DEPTH level, BIT_FLAGS mode)
 	if (level > MAX_DEPTH - 1) level = MAX_DEPTH - 1;
 
 	/* Boost level */
-	if ((level > 0) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
+	if ((level > 0) && !(d_info[owner_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 	{
 		/* Occasional "boost" */
 		if (one_in_(GREAT_OBJ))
@@ -4056,7 +4056,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 /*!
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
- * @param floor_ptr 生成階への参照ポインタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
  * @return 生成に成功したらTRUEを返す。
@@ -4065,17 +4065,15 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
  * This routine uses "floor_ptr->object_level" for the "generation level".\n
  * We assume that the given object has been "wiped".\n
  */
-bool make_object(object_type *j_ptr, BIT_FLAGS mode)
+bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 {
-	PERCENTAGE prob;
-	DEPTH base;
-
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 
 	/* Chance of "special object" */
-	prob = ((mode & AM_GOOD) ? 10 : 1000);
+	PERCENTAGE prob = ((mode & AM_GOOD) ? 10 : 1000);
 
 	/* Base level for the object */
-	base = ((mode & AM_GOOD) ? (p_ptr->current_floor_ptr->object_level + 10) : p_ptr->current_floor_ptr->object_level);
+	DEPTH base = ((mode & AM_GOOD) ? (floor_ptr->object_level + 10) : floor_ptr->object_level);
 
 
 	/* Generate a special object, or a normal object */
@@ -4094,7 +4092,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 		if (get_obj_num_hook) get_obj_num_prep();
 
 		/* Pick a random object */
-		k_idx = get_obj_num(base, mode);
+		k_idx = get_obj_num(owner_ptr, base, mode);
 
 		/* Restricted objects */
 		if (get_obj_num_hook)
@@ -4114,7 +4112,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 	}
 
 	/* Apply magic (allow artifacts) */
-	apply_magic(j_ptr, p_ptr->current_floor_ptr->object_level, mode);
+	apply_magic(j_ptr, floor_ptr->object_level, mode);
 
 	/* Hack -- generate multiple spikes/missiles */
 	switch (j_ptr->tval)
@@ -4131,8 +4129,7 @@ bool make_object(object_type *j_ptr, BIT_FLAGS mode)
 
 	if (cheat_peek) object_mention(j_ptr);
 
-	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 

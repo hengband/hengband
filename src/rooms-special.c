@@ -14,9 +14,10 @@
 
 /*!
 * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 */
-bool build_type15(floor_type *floor_ptr)
+bool build_type15(player_type *player_ptr)
 {
 	POSITION y, x, y2, x2, yval, xval;
 	POSITION y1, x1, xsize, ysize;
@@ -29,6 +30,7 @@ bool build_type15(floor_type *floor_ptr)
 	ysize = rand_range(9, 13);
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!find_space(floor_ptr, &yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
@@ -119,7 +121,7 @@ bool build_type15(floor_type *floor_ptr)
 
 		/* Place a potion */
 		get_obj_num_hook = kind_is_potion;
-		place_object(floor_ptr, yval, xval, AM_NO_FIXED_ART);
+		place_object(player_ptr, yval, xval, AM_NO_FIXED_ART);
 		floor_ptr->grid_array[yval][xval].info |= (CAVE_ICKY);
 	}
 	break;
@@ -171,7 +173,7 @@ bool build_type15(floor_type *floor_ptr)
 		}
 
 		/* Place an object */
-		place_object(floor_ptr, yval, xval, AM_NO_FIXED_ART);
+		place_object(player_ptr, yval, xval, AM_NO_FIXED_ART);
 		floor_ptr->grid_array[yval][xval].info |= (CAVE_ICKY);
 	}
 	break;
@@ -221,16 +223,16 @@ bool build_type15(floor_type *floor_ptr)
 		if (one_in_(2))
 		{
 			get_obj_num_hook = kind_is_potion;
-			place_object(floor_ptr, yval, xval - 1, AM_NO_FIXED_ART);
+			place_object(player_ptr, yval, xval - 1, AM_NO_FIXED_ART);
 			get_obj_num_hook = kind_is_potion;
-			place_object(floor_ptr, yval, xval + 1, AM_NO_FIXED_ART);
+			place_object(player_ptr, yval, xval + 1, AM_NO_FIXED_ART);
 		}
 		else
 		{
 			get_obj_num_hook = kind_is_potion;
-			place_object(floor_ptr, yval - 1, xval, AM_NO_FIXED_ART);
+			place_object(player_ptr, yval - 1, xval, AM_NO_FIXED_ART);
 			get_obj_num_hook = kind_is_potion;
-			place_object(floor_ptr, yval + 1, xval, AM_NO_FIXED_ART);
+			place_object(player_ptr, yval + 1, xval, AM_NO_FIXED_ART);
 		}
 
 		for (y = yval - 2; y <= yval + 2; y++)

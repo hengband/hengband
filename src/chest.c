@@ -85,7 +85,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 		else
 		{
 			/* Make a good object */
-			if (!make_object(q_ptr, mode)) continue;
+			if (!make_object(owner_ptr, q_ptr, mode)) continue;
 		}
 
 		/* If chest scatters its contents, pick any floor square. */

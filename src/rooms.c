@@ -1380,7 +1380,7 @@ void build_lake(floor_type *floor_ptr, int type)
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.
  */
-void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
+void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, POSITION y2, int difficulty)
 {
 	POSITION x, y, cx, cy, size;
 	s32b value;
@@ -1392,6 +1392,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 	/* Rough measure of size of vault= sum of lengths of sides */
 	size = abs(x2 - x1) + abs(y2 - y1);
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (x = x1; x <= x2; x++)
 	{
 		for (y = y1; y <= y2; y++)
@@ -1415,7 +1416,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 20;
-					place_object(floor_ptr, y, x, AM_GOOD);
+					place_object(player_ptr, y, x, AM_GOOD);
 					floor_ptr->object_level = floor_ptr->base_level;
 				}
 				else if (value < 5)
@@ -1425,7 +1426,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 10;
-					place_object(floor_ptr, y, x, AM_GOOD);
+					place_object(player_ptr, y, x, AM_GOOD);
 					floor_ptr->object_level = floor_ptr->base_level;
 				}
 				else if (value < 10)
@@ -1450,7 +1451,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 					/* Object or trap */
 					if (randint0(100) < 25)
 					{
-						place_object(floor_ptr, y, x, 0L);
+						place_object(player_ptr, y, x, 0L);
 					}
 					else
 					{
@@ -1477,7 +1478,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 					if (randint0(100) < 50)
 					{
 						floor_ptr->object_level = floor_ptr->base_level + 7;
-						place_object(floor_ptr, y, x, 0L);
+						place_object(player_ptr, y, x, 0L);
 						floor_ptr->object_level = floor_ptr->base_level;
 					}
 				}
@@ -1501,7 +1502,7 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 					}
 					else if (randint0(100) < 50)
 					{
-						place_object(floor_ptr, y, x, 0L);
+						place_object(player_ptr, y, x, 0L);
 					}
 				}
 
@@ -1509,7 +1510,6 @@ void fill_treasure(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1,
 		}
 	}
 }
-
 
 
 /*
@@ -1689,7 +1689,7 @@ void r_visit(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSIT
 }
 
 
-void build_maze_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
+void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
 {
 	POSITION y, x, dy, dx;
 	POSITION y1, x1, y2, x2;
@@ -1700,6 +1700,7 @@ void build_maze_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION 
 	msg_print_wizard(CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
 
 	/* Choose lite or dark */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 	/* Pick a random room size - randomized by calling routine */
@@ -1747,7 +1748,7 @@ void build_maze_vault(floor_type *floor_ptr, POSITION x0, POSITION y0, POSITION 
 	r_visit(floor_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited);
 
 	/* Fill with monsters and treasure, low difficulty */
-	if (is_vault) fill_treasure(floor_ptr, x1, x2, y1, y2, randint1(5));
+	if (is_vault) fill_treasure(player_ptr, x1, x2, y1, y2, randint1(5));
 
 	C_KILL(visited, num_vertices, int);
 }
@@ -2076,33 +2077,34 @@ void generate_fill_perm_bold(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 
 /*!
  * @brief 与えられた部屋型IDに応じて部屋の生成処理分岐を行い結果を返す / Attempt to build a room of the given type at the given block
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param type 部屋型ID
  * @note that we restrict the number of "crowded" rooms to reduce the chance of overflowing the monster list during level creation.
- * @return 部屋の精製に成功した場合 TRUE を返す。
+ * @return 部屋の生成に成功した場合 TRUE を返す。
  */
-static bool room_build(floor_type *floor_ptr, EFFECT_ID typ)
+static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 {
-	/* Build a room */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	switch (typ)
 	{
 	/* Build an appropriate room */
 	case ROOM_T_NORMAL:        return build_type1(floor_ptr);
 	case ROOM_T_OVERLAP:       return build_type2(floor_ptr);
-	case ROOM_T_CROSS:         return build_type3(floor_ptr);
-	case ROOM_T_INNER_FEAT:    return build_type4(floor_ptr);
+	case ROOM_T_CROSS:         return build_type3(player_ptr);
+	case ROOM_T_INNER_FEAT:    return build_type4(player_ptr);
 	case ROOM_T_NEST:          return build_type5(floor_ptr);
 	case ROOM_T_PIT:           return build_type6(floor_ptr);
-	case ROOM_T_LESSER_VAULT:  return build_type7(floor_ptr);
-	case ROOM_T_GREATER_VAULT: return build_type8(floor_ptr);
+	case ROOM_T_LESSER_VAULT:  return build_type7(player_ptr);
+	case ROOM_T_GREATER_VAULT: return build_type8(player_ptr);
 	case ROOM_T_FRACAVE:       return build_type9(floor_ptr);
-	case ROOM_T_RANDOM_VAULT:  return build_type10(floor_ptr);
+	case ROOM_T_RANDOM_VAULT:  return build_type10(player_ptr);
 	case ROOM_T_OVAL:          return build_type11(floor_ptr);
-	case ROOM_T_CRYPT:         return build_type12(floor_ptr);
+	case ROOM_T_CRYPT:         return build_type12(player_ptr);
 	case ROOM_T_TRAP_PIT:      return build_type13(floor_ptr);
 	case ROOM_T_TRAP:          return build_type14(floor_ptr);
-	case ROOM_T_GLASS:         return build_type15(floor_ptr);
+	case ROOM_T_GLASS:         return build_type15(player_ptr);
 	case ROOM_T_ARCADE:        return build_type16(floor_ptr);
-	case ROOM_T_FIXED:         return build_type17(floor_ptr);
+	case ROOM_T_FIXED:         return build_type17(player_ptr);
 	}
 	return FALSE;
 }
@@ -2116,10 +2118,12 @@ static bool room_build(floor_type *floor_ptr, EFFECT_ID typ)
 
 /*!
  * @brief 部屋生成処理のメインルーチン(Sangbandを経由してOangbandからの実装を引用) / Generate rooms in dungeon.  Build bigger rooms at first.　[from SAngband (originally from OAngband)]
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 部屋生成に成功した場合 TRUE を返す。
  */
-bool generate_rooms(floor_type *floor_ptr)
+bool generate_rooms(player_type *player_ptr)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	int i;
 	bool remain;
 	int crowded = 0;
@@ -2289,7 +2293,7 @@ bool generate_rooms(floor_type *floor_ptr)
 			room_num[room_type]--;
 
 			/* Build the room. */
-			if (room_build(floor_ptr, room_type))
+			if (room_build(player_ptr, room_type))
 			{
 				/* Increase the room built count. */
 				rooms_built++;

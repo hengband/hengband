@@ -1857,7 +1857,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (randint0(m_ptr->hp / 10) > f_ptr->power)
 					{
 						/* Unlock the door */
-						cave_alter_feat(ny, nx, FF_DISARM);
+						cave_alter_feat(target_ptr, ny, nx, FF_DISARM);
 
 						/* Do not bash the door */
 						may_bash = FALSE;
@@ -1898,7 +1898,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				/* Break down the door */
 				if (did_bash_door && ((randint0(100) < 50) || (feat_state(g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 				{
-					cave_alter_feat(ny, nx, FF_BASH);
+					cave_alter_feat(target_ptr, ny, nx, FF_BASH);
 
 					if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
 					{
@@ -1913,7 +1913,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				/* Open the door */
 				else
 				{
-					cave_alter_feat(ny, nx, FF_OPEN);
+					cave_alter_feat(target_ptr, ny, nx, FF_OPEN);
 				}
 
 				f_ptr = &f_info[g_ptr->feat];
@@ -2109,7 +2109,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					msg_print(_("ギシギシいう音が聞こえる。", "There is a grinding sound."));
 			}
 
-			cave_alter_feat(ny, nx, FF_HURT_DISI);
+			cave_alter_feat(target_ptr, ny, nx, FF_HURT_DISI);
 
 			if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
 			{
