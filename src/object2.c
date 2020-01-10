@@ -4138,24 +4138,24 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 /*!
  * @brief 生成階に応じた財宝オブジェクトの生成を行う。
  * Make a treasure object
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param floor_ptr 現在フロアへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  * @details
  * The location must be a legal, clean, floor grid.
  */
-bool make_gold(object_type *j_ptr)
+bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
 {
 	int i;
 	s32b base;
 
 	/* Hack -- Pick a Treasure variety */
-	i = ((randint1(p_ptr->current_floor_ptr->object_level + 2) + 2) / 2) - 1;
+	i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;
 
 	/* Apply "extra" magic */
 	if (one_in_(GREAT_OBJ))
 	{
-		i += randint1(p_ptr->current_floor_ptr->object_level + 1);
+		i += randint1(floor_ptr->object_level + 1);
 	}
 
 	/* Hack -- Creeping Coins only generate "themselves" */

@@ -487,7 +487,7 @@ extern void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, 
 extern OBJECT_SUBTYPE_VALUE coin_type;
 
 extern bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode);
-extern bool make_gold(object_type *j_ptr);
+extern bool make_gold(floor_type *floor_ptr, object_type *j_ptr);
 extern OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 extern void vary_item(INVENTORY_IDX item, ITEM_NUMBER num);
 extern void inven_item_charges(INVENTORY_IDX item);

@@ -1669,6 +1669,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 /*!
  * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
  * Places a treasure (Gold or Gems) at given location
+ * @param floor_ptr 現在フロアへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらTRUEを返す。
@@ -1699,7 +1700,7 @@ void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 	object_wipe(q_ptr);
 
 	/* Make some gold */
-	if (!make_gold(q_ptr)) return;
+	if (!make_gold(floor_ptr, q_ptr)) return;
 
 	o_idx = o_pop(floor_ptr);
 

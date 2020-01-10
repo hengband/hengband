@@ -42,8 +42,8 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 	object_type forge;
 	object_type *q_ptr;
 
-	object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
-
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+	object_type *o_ptr = &floor_ptr->o_list[o_idx];
 
 	/* Small chests often hold "gold" */
 	small = (o_ptr->sval < SV_CHEST_MIN_LARGE);
@@ -56,12 +56,12 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 		number = 5;
 		small = FALSE;
 		mode |= AM_GREAT;
-		owner_ptr->current_floor_ptr->object_level = o_ptr->xtra3;
+		floor_ptr->object_level = o_ptr->xtra3;
 	}
 	else
 	{
 		/* Determine the "value" of the items */
-		owner_ptr->current_floor_ptr->object_level = ABS(o_ptr->pval) + 10;
+		floor_ptr->object_level = ABS(o_ptr->pval) + 10;
 	}
 
 	/* Zero pval means empty chest */
@@ -78,7 +78,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 		if (small && (randint0(100) < 25))
 		{
 			/* Make some gold */
-			if (!make_gold(q_ptr)) continue;
+			if (!make_gold(floor_ptr, q_ptr)) continue;
 		}
 
 		/* Otherwise drop an item */
@@ -99,7 +99,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 				x = randint0(MAX_WID);
 
 				/* Must be an empty floor. */
-				if (!cave_empty_bold(owner_ptr->current_floor_ptr, y, x)) continue;
+				if (!cave_empty_bold(floor_ptr, y, x)) continue;
 
 				/* Place the object there. */
 				(void)drop_near(owner_ptr, q_ptr, -1, y, x);
@@ -113,7 +113,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 	}
 
 	/* Reset the object level */
-	owner_ptr->current_floor_ptr->object_level = owner_ptr->current_floor_ptr->base_level;
+	floor_ptr->object_level = floor_ptr->base_level;
 
 	/* Empty */
 	o_ptr->pval = 0;

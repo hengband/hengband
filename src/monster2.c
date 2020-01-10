@@ -2638,7 +2638,6 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	m_ptr->fx = x;
 	m_ptr->current_floor_ptr = p_ptr->current_floor_ptr;
 
-
 	/* No "timed status" yet */
 	for (cmi = 0; cmi < MAX_MTIMED; cmi++) m_ptr->mtimed[cmi] = 0;
 

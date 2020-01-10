@@ -3062,7 +3062,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		if (do_gold && (!do_item || (randint0(100) < 50)))
 		{
-			if (!make_gold(q_ptr)) continue;
+			if (!make_gold(floor_ptr, q_ptr)) continue;
 			dump_gold++;
 		}
 		else
