@@ -1993,7 +1993,7 @@ static void wield_all(player_type *creature_ptr)
 		/* Decrease the item (from the floor) */ 
 		else 
 		{ 
-			floor_item_increase(0 - item, -1); 
+			floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1); 
 			floor_item_optimize(0 - item); 
 		} 
  

@@ -1605,7 +1605,7 @@ bool artifact_scroll(player_type *caster_ptr)
 			}
 			else
 			{
-				floor_item_increase(0 - item, 1 - (o_ptr->number));
+				floor_item_increase(caster_ptr->current_floor_ptr, 0 - item, 1 - (o_ptr->number));
 			}
 		}
 		

@@ -4592,7 +4592,7 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 	}
 	else
 	{
-		floor_item_increase(0 - item, num);
+		floor_item_increase(owner_ptr->current_floor_ptr, 0 - item, num);
 		floor_item_describe(owner_ptr->current_floor_ptr, 0 - item);
 		floor_item_optimize(0 - item);
 	}
@@ -4783,9 +4783,9 @@ void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item)
  * @param num 増やしたいアイテムの数
  * @return なし
  */
-void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
+void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
+	object_type *o_ptr = &floor_ptr->o_list[item];
 
 	/* Apply */
 	num += o_ptr->number;
