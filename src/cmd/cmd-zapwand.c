@@ -434,7 +434,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 		return;
 	}
 
-	floor_item_charges(0 - item);
+	floor_item_charges(creature_ptr->current_floor_ptr, 0 - item);
 }
 
 /*!

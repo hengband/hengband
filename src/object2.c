@@ -4707,9 +4707,9 @@ void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
  * @param item メッセージの対象にしたいアイテム所持スロット
  * @return なし
  */
-void floor_item_charges(INVENTORY_IDX item)
+void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
+	object_type *o_ptr = &floor_ptr->o_list[item];
 
 	/* Require staff/wand */
 	if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND)) return;
