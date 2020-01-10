@@ -1650,7 +1650,7 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
 	if (item >= 0)
 	{
 		inven_item_increase(player_ptr, item, -(o_ptr->number));
-		inven_item_optimize(item);
+		inven_item_optimize(player_ptr, item);
 	}
 
 	/* Eliminate the item (from the floor) */

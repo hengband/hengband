@@ -5095,7 +5095,7 @@ static void store_sell(player_type *owner_ptr)
 			if (o_ptr->number > 0)
 				autopick_alter_item(item, FALSE);
 
-			inven_item_optimize(item);
+			inven_item_optimize(owner_ptr, item);
 			handle_stuff(owner_ptr);
 
 			/* The store gets that (known) item */

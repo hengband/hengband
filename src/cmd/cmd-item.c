@@ -340,7 +340,7 @@ void do_cmd_wield(player_type *creature_ptr)
 	if (item >= 0)
 	{
 		inven_item_increase(creature_ptr, item, -1);
-		inven_item_optimize(item);
+		inven_item_optimize(creature_ptr, item);
 	}
 	/* Decrease the item (from the floor) */
 	else
@@ -458,7 +458,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 		object_copy(new_o_ptr, o_ptr);
 		owner_ptr->total_weight += o_ptr->weight;
 		inven_item_increase(owner_ptr, INVEN_LARM, -((int)o_ptr->number));
-		inven_item_optimize(INVEN_LARM);
+		inven_item_optimize(owner_ptr, INVEN_LARM);
 		if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 			msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 		else
@@ -485,7 +485,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 	object_copy(new_o_ptr, o_ptr);
 	owner_ptr->total_weight += o_ptr->weight;
 	inven_item_increase(owner_ptr, INVEN_RARM, -((int)o_ptr->number));
-	inven_item_optimize(INVEN_RARM);
+	inven_item_optimize(owner_ptr, INVEN_RARM);
 	msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);
 }
 

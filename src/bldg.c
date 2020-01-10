@@ -3122,7 +3122,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 	/* Decrease material object */
 	inven_item_increase(player_ptr, mater, -1);
-	inven_item_optimize(mater);
+	inven_item_optimize(player_ptr, mater);
 
 	/* Copyback */
 	p_ptr->update |= PU_BONUS;

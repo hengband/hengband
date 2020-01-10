@@ -1987,7 +1987,7 @@ static void wield_all(player_type *creature_ptr)
 		if (item >= 0) 
 		{ 
 			inven_item_increase(creature_ptr, item, -1); 
-			inven_item_optimize(item); 
+			inven_item_optimize(creature_ptr, item); 
 		} 
  
 		/* Decrease the item (from the floor) */ 

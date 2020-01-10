@@ -4587,7 +4587,7 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 	{
 		inven_item_increase(owner_ptr, item, num);
 		inven_item_describe(owner_ptr, item);
-		inven_item_optimize(item);
+		inven_item_optimize(owner_ptr, item);
 	}
 	else
 	{
@@ -4650,9 +4650,9 @@ void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
  * @param item 消去したいプレイヤーのアイテム所持スロット
  * @return なし
  */
-void inven_item_optimize(INVENTORY_IDX item)
+void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &p_ptr->inventory_list[item];
+	object_type *o_ptr = &owner_ptr->inventory_list[item];
 
 	/* Only optimize real items */
 	if (!o_ptr->k_idx) return;
@@ -4666,37 +4666,37 @@ void inven_item_optimize(INVENTORY_IDX item)
 		int i;
 
 		/* One less item */
-		p_ptr->inven_cnt--;
+		owner_ptr->inven_cnt--;
 
 		/* Slide everything down */
 		for (i = item; i < INVEN_PACK; i++)
 		{
 			/* Structure copy */
-			p_ptr->inventory_list[i] = p_ptr->inventory_list[i + 1];
+			owner_ptr->inventory_list[i] = owner_ptr->inventory_list[i + 1];
 		}
 
 		/* Erase the "final" slot */
-		object_wipe(&p_ptr->inventory_list[i]);
+		object_wipe(&owner_ptr->inventory_list[i]);
 
-		p_ptr->window |= (PW_INVEN);
+		owner_ptr->window |= (PW_INVEN);
 	}
 
 	/* The item is being wielded */
 	else
 	{
 		/* One less item */
-		p_ptr->equip_cnt--;
+		owner_ptr->equip_cnt--;
 
 		/* Erase the empty slot */
-		object_wipe(&p_ptr->inventory_list[item]);
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->update |= (PU_TORCH);
-		p_ptr->update |= (PU_MANA);
+		object_wipe(&owner_ptr->inventory_list[item]);
+		owner_ptr->update |= (PU_BONUS);
+		owner_ptr->update |= (PU_TORCH);
+		owner_ptr->update |= (PU_MANA);
 
-		p_ptr->window |= (PW_EQUIP);
+		owner_ptr->window |= (PW_EQUIP);
 	}
 
-	p_ptr->window |= (PW_SPELL);
+	owner_ptr->window |= (PW_SPELL);
 }
 
 
@@ -5129,7 +5129,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 
 	/* Modify, Optimize */
 	inven_item_increase(owner_ptr, item, -amt);
-	inven_item_optimize(item);
+	inven_item_optimize(owner_ptr, item);
 
 	/* Carry the object */
 	slot = inven_carry(owner_ptr, q_ptr);

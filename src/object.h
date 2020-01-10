@@ -493,7 +493,7 @@ extern void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER nu
 extern void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item);
 extern void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item);
 extern void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
-extern void inven_item_optimize(INVENTORY_IDX item);
+extern void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 extern void floor_item_charges(INVENTORY_IDX item);
 extern void floor_item_describe(INVENTORY_IDX item);
 extern void floor_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);

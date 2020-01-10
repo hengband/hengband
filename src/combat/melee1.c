@@ -3051,7 +3051,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 						/* Steal the items */
 						inven_item_increase(target_ptr, i, -1);
-						inven_item_optimize(i);
+						inven_item_optimize(target_ptr, i);
 
 						obvious = TRUE;
 
@@ -3092,7 +3092,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 						/* Steal the items */
 						inven_item_increase(target_ptr, i, -1);
-						inven_item_optimize(i);
+						inven_item_optimize(target_ptr, i);
 
 						obvious = TRUE;
 
