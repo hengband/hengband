@@ -1511,7 +1511,7 @@ bool alchemy(player_type *caster_ptr)
 	if (price <= 0)
 	{
 		msg_format(_("%sをニセの金に変えた。", "You current_world_ptr->game_turn %s to fool's gold."), o_name);
-		vary_item(item, -amt);
+		vary_item(caster_ptr, item, -amt);
 		return TRUE;
 	}
 	
@@ -1525,7 +1525,7 @@ bool alchemy(player_type *caster_ptr)
 	caster_ptr->au += price;
 	caster_ptr->redraw |= PR_GOLD;
 	caster_ptr->window |= PW_PLAYER;
-	vary_item(item, -amt);
+	vary_item(caster_ptr, item, -amt);
 	return TRUE;
 }
 
@@ -2063,7 +2063,7 @@ bool recharge(player_type *caster_ptr, int power)
 		if (o_ptr->tval == TV_ROD) o_ptr->timeout = (o_ptr->number - 1) * k_ptr->pval;
 		if (o_ptr->tval == TV_WAND) o_ptr->pval = 0;
 
-		vary_item(item, -1);
+		vary_item(caster_ptr, item, -1);
 	}
 
 	if (fail_type == 3)
@@ -2073,7 +2073,7 @@ bool recharge(player_type *caster_ptr, int power)
 		else
 			msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-		vary_item(item, -999);
+		vary_item(caster_ptr, item, -999);
 	}
 
 	return update_player(caster_ptr);
@@ -3077,7 +3077,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 			msg_format(_("乱暴な魔法のために%sが何本か壊れた！", "Wild magic consumes your %s!"), o_name);
 		}
 
-		vary_item(item, -1);
+		vary_item(caster_ptr, item, -1);
 	}
 
 	/* Destroy all members of a stack of objects. */
@@ -3088,7 +3088,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 		else
 			msg_format(_("乱暴な魔法のために%sが壊れた！", "Wild magic consumes your %s!"), o_name);
 
-		vary_item(item, -999);
+		vary_item(caster_ptr, item, -999);
 	}
 
 	return redraw_player(caster_ptr);

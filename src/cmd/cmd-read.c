@@ -583,8 +583,9 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 	}
 
 	sound(SOUND_SCROLL);
-	vary_item(item, -1);
+	vary_item(creature_ptr, item, -1);
 }
+
 
 /*!
  * @brief 読むコマンドのメインルーチン /

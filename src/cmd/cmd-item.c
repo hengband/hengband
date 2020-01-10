@@ -722,7 +722,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 	/* Reduce the charges of rods/wands */
 	reduce_charges(o_ptr, amt);
 
-	vary_item(item, -amt);
+	vary_item(creature_ptr, item, -amt);
 
 	if (item_tester_high_level_book(q_ptr))
 	{
@@ -948,7 +948,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
 		msg_print(_("ランプの油は一杯だ。", "Your lamp is full."));
 	}
 
-	vary_item(item, -1);
+	vary_item(user_ptr, item, -1);
 
 	user_ptr->update |= (PU_TORCH);
 }
@@ -1009,7 +1009,7 @@ static void do_cmd_refill_torch(player_type *creature_ptr)
 		msg_print(_("松明はいっそう明るく輝いた。", "Your torch glows more brightly."));
 	}
 
-	vary_item(item, -1);
+	vary_item(creature_ptr, item, -1);
 
 	creature_ptr->update |= (PU_TORCH);
 }

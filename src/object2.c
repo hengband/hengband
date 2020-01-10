@@ -4556,9 +4556,9 @@ void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item)
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
-void inven_item_describe(INVENTORY_IDX item)
+void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &p_ptr->inventory_list[item];
+	object_type *o_ptr = &owner_ptr->inventory_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
@@ -4581,12 +4581,12 @@ void inven_item_describe(INVENTORY_IDX item)
 
 }
 
-void vary_item(INVENTORY_IDX item, ITEM_NUMBER num)
+void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
 	if (item >= 0)
 	{
 		inven_item_increase(item, num);
-		inven_item_describe(item);
+		inven_item_describe(owner_ptr, item);
 		inven_item_optimize(item);
 	}
 	else
@@ -5208,7 +5208,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 	/* Drop it near the player */
 	(void)drop_near(owner_ptr, q_ptr, 0, owner_ptr->y, owner_ptr->x);
 
-	vary_item(item, -amt);
+	vary_item(owner_ptr, item, -amt);
 }
 
 

@@ -1989,10 +1989,9 @@ void do_cmd_spike(player_type *creature_ptr)
 		msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
 		cave_alter_feat(creature_ptr, y, x, FF_SPIKE);
 
-		vary_item(item, -1);
+		vary_item(creature_ptr, item, -1);
 	}
 }
-
 
 
 /*!
@@ -2466,7 +2465,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	{
 		inven_item_increase(item, -1);
 		if (!return_when_thrown)
-			inven_item_describe(item);
+			inven_item_describe(creature_ptr, item);
 		inven_item_optimize(item);
 	}
 	else
@@ -2474,6 +2473,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		floor_item_increase(0 - item, -1);
 		floor_item_optimize(0 - item);
 	}
+
 	if (item >= INVEN_RARM)
 	{
 		equiped_item = TRUE;

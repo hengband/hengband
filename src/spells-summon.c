@@ -218,7 +218,7 @@ bool cast_summon_greater_demon(player_type *caster_ptr)
 	{
 		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
 		msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
-		vary_item(item, -1);
+		vary_item(caster_ptr, item, -1);
 	}
 	else
 	{

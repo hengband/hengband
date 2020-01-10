@@ -127,6 +127,7 @@ bool create_ammo(player_type *creature_ptr)
 	object_type	forge;
 	object_type *q_ptr;
 	q_ptr = &forge;
+
 	/**********Create shots*********/
 	if (ext == 1)
 	{
@@ -144,39 +145,41 @@ bool create_ammo(player_type *creature_ptr)
 			msg_print(_("そこには岩石がない。", "You need pile of rubble."));
 			return FALSE;
 		}
-		else if (!cave_have_flag_grid(g_ptr, FF_CAN_DIG) || !cave_have_flag_grid(g_ptr, FF_HURT_ROCK))
+		
+		if (!cave_have_flag_grid(g_ptr, FF_CAN_DIG) || !cave_have_flag_grid(g_ptr, FF_HURT_ROCK))
 		{
 			msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
+			return TRUE;
 		}
-		else
-		{
-			s16b slot;
-			q_ptr = &forge;
+		
+		s16b slot;
+		q_ptr = &forge;
 
-			/* Hack -- Give the player some small firestones */
-			object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
-			q_ptr->number = (byte)rand_range(15, 30);
-			object_aware(creature_ptr, q_ptr);
-			object_known(q_ptr);
-			apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
-			q_ptr->discount = 99;
+		/* Hack -- Give the player some small firestones */
+		object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+		q_ptr->number = (byte)rand_range(15, 30);
+		object_aware(creature_ptr, q_ptr);
+		object_known(q_ptr);
+		apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+		q_ptr->discount = 99;
 
-			slot = inven_carry(creature_ptr, q_ptr);
+		slot = inven_carry(creature_ptr, q_ptr);
 
-			object_desc(o_name, q_ptr, 0);
-			msg_format(_("%sを作った。", "You make some ammo."), o_name);
+		object_desc(o_name, q_ptr, 0);
+		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
-			/* Auto-inscription */
-			if (slot >= 0) autopick_alter_item(slot, FALSE);
+		/* Auto-inscription */
+		if (slot >= 0) autopick_alter_item(slot, FALSE);
 
-			/* Destroy the wall */
-			cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
+		/* Destroy the wall */
+		cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
 
-			creature_ptr->update |= (PU_FLOW);
-		}
+		creature_ptr->update |= (PU_FLOW);
+		return TRUE;
 	}
+
 	/**********Create arrows*********/
-	else if (ext == 2)
+	if (ext == 2)
 	{
 		OBJECT_IDX item;
 		concptr q, s;
@@ -203,14 +206,16 @@ bool create_ammo(player_type *creature_ptr)
 		object_desc(o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
-		vary_item(item, -1);
+		vary_item(creature_ptr, item, -1);
 		slot = inven_carry(creature_ptr, q_ptr);
 
 		/* Auto-inscription */
 		if (slot >= 0) autopick_alter_item(slot, FALSE);
+		return TRUE;
 	}
+
 	/**********Create bolts*********/
-	else if (ext == 3)
+	if (ext == 3)
 	{
 		OBJECT_IDX item;
 		concptr q, s;
@@ -238,7 +243,7 @@ bool create_ammo(player_type *creature_ptr)
 		object_desc(o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
-		vary_item(item, -1);
+		vary_item(creature_ptr, item, -1);
 
 		slot = inven_carry(creature_ptr, q_ptr);
 
@@ -324,7 +329,7 @@ bool import_magic_device(player_type *user_ptr)
 	object_desc(o_name, o_ptr, 0);
 	msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
 
-	vary_item(item, -999);
+	vary_item(user_ptr, item, -999);
 	take_turn(user_ptr, 100);
 	return TRUE;
 }

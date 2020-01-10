@@ -496,7 +496,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 		/* Single object */
 		q_ptr->number = 1;
 
-		vary_item(item, -1);
+		vary_item(shooter_ptr, item, -1);
 
 		sound(SOUND_SHOOT);
 		handle_stuff();

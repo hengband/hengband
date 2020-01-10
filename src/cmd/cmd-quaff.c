@@ -70,7 +70,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 	/* Single object */
 	q_ptr->number = 1;
 
-	vary_item(item, -1);
+	vary_item(creature_ptr, item, -1);
 	sound(SOUND_QUAFF);
 
 

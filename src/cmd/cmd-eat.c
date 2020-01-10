@@ -462,7 +462,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		(void)set_food(creature_ptr, creature_ptr->food + o_ptr->pval);
 	}
 
-	vary_item(item, -1);
+	vary_item(creature_ptr, item, -1);
 }
 
 

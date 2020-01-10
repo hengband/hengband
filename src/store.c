@@ -4891,9 +4891,10 @@ static void store_purchase(player_type *player_ptr)
 /*!
  * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void store_sell(void)
+static void store_sell(player_type *owner_ptr)
 {
 	int choice;
 	OBJECT_IDX item;
@@ -4938,7 +4939,7 @@ static void store_sell(void)
 		s = _("欲しい物がないですねえ。", "You have nothing that I want.");
 	}
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr) return;
 
 	/* Hack -- Cannot remove cursed items */
@@ -4998,7 +4999,6 @@ static void store_sell(void)
 		return;
 	}
 
-
 	/* Real store */
 	if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM))
 	{
@@ -5024,14 +5024,14 @@ static void store_sell(void)
 
 			/* Be happy */
 			if (cur_store_num == STORE_BLACK) /* The black market is illegal! */
-				chg_virtue(p_ptr, V_JUSTICE, -1);
+				chg_virtue(owner_ptr, V_JUSTICE, -1);
 
 			if((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))
-				chg_virtue(p_ptr, V_NATURE, 1);
+				chg_virtue(owner_ptr, V_NATURE, 1);
 			decrease_insults();
 
 			/* Get some money */
-			p_ptr->au += price;
+			owner_ptr->au += price;
 
 			/* Update the display */
 			store_prt_gold();
@@ -5039,7 +5039,7 @@ static void store_sell(void)
 			/* Get the "apparent" value */
 			dummy = object_value(q_ptr) * q_ptr->number;
 
-			identify_item(p_ptr, o_ptr);
+			identify_item(owner_ptr, o_ptr);
 			q_ptr = &forge;
 
 			/* Get a copy of the object */
@@ -5069,7 +5069,7 @@ static void store_sell(void)
 			/* Describe the result (in message buffer) */
 			msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, (long)price);
 
-			if (record_sell) exe_write_diary(p_ptr, NIKKI_SELL, 0, o_name);
+			if (record_sell) exe_write_diary(owner_ptr, NIKKI_SELL, 0, o_name);
 
 			if (!((o_ptr->tval == TV_FIGURINE) && (value > 0)))
 			{
@@ -5088,7 +5088,7 @@ static void store_sell(void)
 
 			/* Take the item from the player, describe the result */
 			inven_item_increase(item, -amt);
-			inven_item_describe(item);
+			inven_item_describe(owner_ptr, item);
 
 			/* If items remain, auto-inscribe before optimizing */
 			if (o_ptr->number > 0)
@@ -5126,7 +5126,7 @@ static void store_sell(void)
 
 		if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) return;
 
-		identify_item(p_ptr, q_ptr);
+		identify_item(owner_ptr, q_ptr);
 		q_ptr->ident |= IDENT_MENTAL;
 
 		/* Distribute charges of wands/rods */
@@ -5134,7 +5134,7 @@ static void store_sell(void)
 		msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 		choice = 0;
 
-		vary_item(item, -amt);
+		vary_item(owner_ptr, item, -amt);
 		handle_stuff();
 
 		/* Let the home carry it */
@@ -5156,7 +5156,7 @@ static void store_sell(void)
 
 		choice = 0;
 
-		vary_item(item, -amt);
+		vary_item(owner_ptr, item, -amt);
 		handle_stuff();
 
 		/* Let the home carry it */
@@ -5172,8 +5172,8 @@ static void store_sell(void)
 
 	if ((choice == 0) && (item >= INVEN_RARM))
 	{
-		calc_android_exp(p_ptr);
-		verify_equip_slot(p_ptr, item);
+		calc_android_exp(owner_ptr);
+		verify_equip_slot(owner_ptr, item);
 	}
 }
 
@@ -5410,7 +5410,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Drop (Sell) */
 		case 'd':
 		{
-			store_sell();
+			store_sell(client_ptr);
 			break;
 		}
 
@@ -5906,7 +5906,7 @@ void do_cmd_store(player_type *player_ptr)
 
 				msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 
-				vary_item(item, -255);
+				vary_item(player_ptr, item, -255);
 				handle_stuff();
 
 				/* Let the home carry it */
