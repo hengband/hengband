@@ -425,21 +425,16 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-
 	/* Use a single charge */
 	o_ptr->pval--;
 
-	/* Describe the charges in the pack */
 	if (item >= 0)
 	{
-		inven_item_charges(item);
+		inven_item_charges(creature_ptr, item);
+		return;
 	}
 
-	/* Describe the charges on the floor */
-	else
-	{
-		floor_item_charges(0 - item);
-	}
+	floor_item_charges(0 - item);
 }
 
 /*!

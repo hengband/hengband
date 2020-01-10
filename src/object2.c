@@ -4514,9 +4514,9 @@ OBJECT_IDX drop_near(player_type *owner_type, object_type *j_ptr, PERCENTAGE cha
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
  * @return なし
  */
-void inven_item_charges(INVENTORY_IDX item)
+void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &p_ptr->inventory_list[item];
+	object_type *o_ptr = &owner_ptr->inventory_list[item];
 
 	/* Require staff/wand */
 	if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND)) return;
