@@ -5003,7 +5003,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_REORDER))
 	{
 		creature_ptr->update &= ~(PU_REORDER);
-		reorder_pack();
+		reorder_pack(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_BONUS))

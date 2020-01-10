@@ -5321,7 +5321,7 @@ void combine_pack(player_type *owner_ptr)
  * @details
  * Note special handling of the "overflow" slot
  */
-void reorder_pack(void)
+void reorder_pack(player_type *owner_ptr)
 {
 	int             i, j, k;
 	s32b            o_value;
@@ -5330,14 +5330,13 @@ void reorder_pack(void)
 	object_type *o_ptr;
 	bool            flag = FALSE;
 
-
 	/* Re-order the pack (forwards) */
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		/* Mega-Hack -- allow "proper" over-flow */
-		if ((i == INVEN_PACK) && (p_ptr->inven_cnt == INVEN_PACK)) break;
+		if ((i == INVEN_PACK) && (owner_ptr->inven_cnt == INVEN_PACK)) break;
 
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 
 		/* Skip empty slots */
 		if (!o_ptr->k_idx) continue;
@@ -5348,7 +5347,7 @@ void reorder_pack(void)
 		/* Scan every occupied slot */
 		for (j = 0; j < INVEN_PACK; j++)
 		{
-			if (object_sort_comp(o_ptr, o_value, &p_ptr->inventory_list[j])) break;
+			if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j])) break;
 		}
 
 		/* Never move down */
@@ -5359,19 +5358,19 @@ void reorder_pack(void)
 		q_ptr = &forge;
 
 		/* Save a copy of the moving item */
-		object_copy(q_ptr, &p_ptr->inventory_list[i]);
+		object_copy(q_ptr, &owner_ptr->inventory_list[i]);
 
 		/* Slide the objects */
 		for (k = i; k > j; k--)
 		{
 			/* Slide the item */
-			object_copy(&p_ptr->inventory_list[k], &p_ptr->inventory_list[k - 1]);
+			object_copy(&owner_ptr->inventory_list[k], &owner_ptr->inventory_list[k - 1]);
 		}
 
 		/* Insert the moving item */
-		object_copy(&p_ptr->inventory_list[j], q_ptr);
+		object_copy(&owner_ptr->inventory_list[j], q_ptr);
 
-		p_ptr->window |= (PW_INVEN);
+		owner_ptr->window |= (PW_INVEN);
 	}
 
 	if (flag) msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
