@@ -4582,6 +4582,7 @@ void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 
 }
 
+
 void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
 	if (item >= 0)
@@ -4589,13 +4590,13 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 		inven_item_increase(owner_ptr, item, num);
 		inven_item_describe(owner_ptr, item);
 		inven_item_optimize(owner_ptr, item);
+		return;
 	}
-	else
-	{
-		floor_item_increase(owner_ptr->current_floor_ptr, 0 - item, num);
-		floor_item_describe(owner_ptr->current_floor_ptr, 0 - item);
-		floor_item_optimize(0 - item);
-	}
+
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+	floor_item_increase(floor_ptr, 0 - item, num);
+	floor_item_describe(floor_ptr, 0 - item);
+	floor_item_optimize(floor_ptr, 0 - item);
 }
 
 
@@ -4809,9 +4810,9 @@ void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER 
  * @param item 消去したいアイテムの所持スロット
  * @return なし
  */
-void floor_item_optimize(INVENTORY_IDX item)
+void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
+	object_type *o_ptr = &floor_ptr->o_list[item];
 
 	/* Paranoia -- be sure it exists */
 	if (!o_ptr->k_idx) return;
@@ -4819,7 +4820,7 @@ void floor_item_optimize(INVENTORY_IDX item)
 	/* Only optimize empty items */
 	if (o_ptr->number) return;
 
-	delete_object_idx(p_ptr->current_floor_ptr, item);
+	delete_object_idx(floor_ptr, item);
 }
 
 

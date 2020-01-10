@@ -496,7 +496,7 @@ extern void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM
 extern void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 extern void floor_item_charges(floor_type *owner_ptr, INVENTORY_IDX item);
 extern void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
-extern void floor_item_optimize(INVENTORY_IDX item);
+extern void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item);
 extern bool inven_carry_okay(object_type *o_ptr);
 extern bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
 extern s16b inven_carry(player_type *owner_ptr, object_type *o_ptr);

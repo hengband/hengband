@@ -1994,7 +1994,7 @@ static void wield_all(player_type *creature_ptr)
 		else 
 		{ 
 			floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1); 
-			floor_item_optimize(0 - item); 
+			floor_item_optimize(creature_ptr->current_floor_ptr, 0 - item);
 		} 
  
 		o_ptr = &creature_ptr->inventory_list[slot]; 

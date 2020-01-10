@@ -2471,7 +2471,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	else
 	{
 		floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1);
-		floor_item_optimize(0 - item);
+		floor_item_optimize(creature_ptr->current_floor_ptr, 0 - item);
 	}
 
 	if (item >= INVEN_RARM)
