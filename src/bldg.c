@@ -2873,26 +2873,23 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 		}
 	}
 
-	if (n > 0)
-	{
-		int bmax;
-		int tr_idx = cand[randint0(n)];
-		add_flag(to_ptr->art_flags, tr_idx);
-		if (is_pval_flag(tr_idx)) to_ptr->pval = MAX(to_ptr->pval, 1);
-		bmax = MIN(3, MAX(1, 40 / (to_ptr->dd * to_ptr->ds)));
-		if (tr_idx == TR_BLOWS) to_ptr->pval = MIN(to_ptr->pval, bmax);
-		if (tr_idx == TR_SPEED) to_ptr->pval = MIN(to_ptr->pval, 4);
-	}
+	if (n <= 0) return;
 
-	return;
+	int tr_idx = cand[randint0(n)];
+	add_flag(to_ptr->art_flags, tr_idx);
+	if (is_pval_flag(tr_idx)) to_ptr->pval = MAX(to_ptr->pval, 1);
+	int bmax = MIN(3, MAX(1, 40 / (to_ptr->dd * to_ptr->ds)));
+	if (tr_idx == TR_BLOWS) to_ptr->pval = MIN(to_ptr->pval, bmax);
+	if (tr_idx == TR_SPEED) to_ptr->pval = MIN(to_ptr->pval, 4);
 }
 
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param bcost 基本修復費用
  * @return 実際にかかった費用
  */
-static PRICE repair_broken_weapon_aux(PRICE bcost)
+static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 {
 	PRICE cost;
 	OBJECT_IDX item, mater;
@@ -3126,7 +3123,7 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 	calc_android_exp(p_ptr);
 
 	/* Decrease material object */
-	inven_item_increase(mater, -1);
+	inven_item_increase(player_ptr, mater, -1);
 	inven_item_optimize(mater);
 
 	/* Copyback */
@@ -3139,14 +3136,15 @@ static PRICE repair_broken_weapon_aux(PRICE bcost)
 
 /*!
  * @brief アイテム修復処理の過渡ルーチン / Repair broken weapon
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param bcost 基本鑑定費用
  * @return 実際にかかった費用
  */
-static int repair_broken_weapon(PRICE bcost)
+static int repair_broken_weapon(player_type *player_ptr, PRICE bcost)
 {
 	PRICE cost;
 	screen_save();
-	cost = repair_broken_weapon_aux(bcost);
+	cost = repair_broken_weapon_aux(player_ptr, bcost);
 	screen_load();
 	return cost;
 }
@@ -4053,12 +4051,13 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 
 	case BACT_BROKEN_WEAPON:
 		paid = TRUE;
-		bcost = repair_broken_weapon(bcost);
+		bcost = repair_broken_weapon(player_ptr, bcost);
 		break;
 	}
 
 	if (paid) player_ptr->au -= bcost;
 }
+
 
 /*!
  * @brief 施設入り口にプレイヤーが乗った際の処理 / Do building commands

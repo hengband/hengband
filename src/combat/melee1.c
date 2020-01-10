@@ -3049,7 +3049,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						}
 
 						/* Steal the items */
-						inven_item_increase(i, -1);
+						inven_item_increase(target_ptr, i, -1);
 						inven_item_optimize(i);
 
 						obvious = TRUE;
@@ -3090,7 +3090,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 #endif
 
 						/* Steal the items */
-						inven_item_increase(i, -1);
+						inven_item_increase(target_ptr, i, -1);
 						inven_item_optimize(i);
 
 						obvious = TRUE;
@@ -4013,7 +4013,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				break;
 			}
 		}
-
 
 		/* Analyze "visible" monsters only */
 		if (is_original_ap_and_seen(m_ptr) && !do_silly_attack)

@@ -108,7 +108,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 		reduce_charges(o_ptr, amt);
 
 		/* Destroy "amt" items */
-		inven_item_increase(i, -amt);
+		inven_item_increase(player_ptr, i, -amt);
 		inven_item_optimize(i);
 	}
 }

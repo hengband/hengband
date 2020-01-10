@@ -1628,49 +1628,45 @@ static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
 	/* Destroy Later */
 	o_ptr->marked |= OM_AUTODESTROY;
 	p_ptr->update |= PU_AUTODESTROY;
-
-	return;
 }
 
 
 /*
  *  Auto-destroy marked item
  */
-static void autopick_delayed_alter_aux(floor_type *floor_ptr, INVENTORY_IDX item)
+static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX item)
 {
 	object_type *o_ptr;
-
 	o_ptr = REF_ITEM(p_ptr, p_ptr->current_floor_ptr, item);
 
-	if (o_ptr->k_idx && (o_ptr->marked & OM_AUTODESTROY))
+	if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY)) return;
+
+	GAME_TEXT o_name[MAX_NLEN];
+
+	/* Describe the object (with {terrible/special}) */
+	object_desc(o_name, o_ptr, 0);
+
+	/* Eliminate the item (from the pack) */
+	if (item >= 0)
 	{
-		GAME_TEXT o_name[MAX_NLEN];
-
-		/* Describe the object (with {terrible/special}) */
-		object_desc(o_name, o_ptr, 0);
-
-		/* Eliminate the item (from the pack) */
-		if (item >= 0)
-		{
-			inven_item_increase(item, -(o_ptr->number));
-			inven_item_optimize(item);
-		}
-
-		/* Eliminate the item (from the floor) */
-		else
-		{
-			delete_object_idx(floor_ptr, 0 - item);
-		}
-
-		msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), o_name);
+		inven_item_increase(player_ptr, item, -(o_ptr->number));
+		inven_item_optimize(item);
 	}
+
+	/* Eliminate the item (from the floor) */
+	else
+	{
+		delete_object_idx(player_ptr->current_floor_ptr, 0 - item);
+	}
+
+	msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), o_name);
 }
 
 
 /*
  *  Auto-destroy marked items in inventry and on floor
  */
-void autopick_delayed_alter(floor_type *floor_ptr)
+void autopick_delayed_alter(player_type *owner_ptr)
 {
 	INVENTORY_IDX item;
 
@@ -1679,14 +1675,14 @@ void autopick_delayed_alter(floor_type *floor_ptr)
 	 * skipping after inven_item_optimize()
 	 */
 	for (item = INVEN_TOTAL - 1; item >= 0 ; item--)
-		autopick_delayed_alter_aux(floor_ptr, item);
+		autopick_delayed_alter_aux(owner_ptr, item);
 
 	/* Scan the pile of objects */
 	item = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx;
 	while (item)
 	{
 		OBJECT_IDX next = p_ptr->current_floor_ptr->o_list[item].next_o_idx;
-		autopick_delayed_alter_aux(floor_ptr, -item);
+		autopick_delayed_alter_aux(owner_ptr, -item);
 		item = next;
 	}
 }

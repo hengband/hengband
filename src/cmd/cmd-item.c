@@ -339,7 +339,7 @@ void do_cmd_wield(player_type *creature_ptr)
 	/* Decrease the item (from the pack) */
 	if (item >= 0)
 	{
-		inven_item_increase(item, -1);
+		inven_item_increase(creature_ptr, item, -1);
 		inven_item_optimize(item);
 	}
 	/* Decrease the item (from the floor) */
@@ -356,7 +356,7 @@ void do_cmd_wield(player_type *creature_ptr)
 	if (o_ptr->k_idx)
 	{
 		/* Take off existing item */
-		(void)inven_takeoff(slot, 255);
+		(void)inven_takeoff(creature_ptr, slot, 255);
 	}
 
 	/* Wear the new stuff */
@@ -442,51 +442,51 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 
 	if (item == INVEN_RARM)
 	{
-		if (has_melee_weapon(owner_ptr, INVEN_LARM))
-		{
-			o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
-			object_desc(o_name, o_ptr, 0);
+		if (!has_melee_weapon(owner_ptr, INVEN_LARM)) return;
 
-			if (!object_is_cursed(o_ptr))
-			{
-				new_o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
-				object_copy(new_o_ptr, o_ptr);
-				owner_ptr->total_weight += o_ptr->weight;
-				inven_item_increase(INVEN_LARM, -((int)o_ptr->number));
-				inven_item_optimize(INVEN_LARM);
-				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
-					msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
-				else
-					msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name, 
-						(left_hander ? _("左手", "left") : _("右手", "right")));
-			}
-			else
-			{
-				if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
-					msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
-			}
-		}
-	}
-	else if (item == INVEN_LARM)
-	{
-		o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
-		if (o_ptr->k_idx) object_desc(o_name, o_ptr, 0);
+		o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
+		object_desc(o_name, o_ptr, 0);
 
-		if (has_melee_weapon(owner_ptr, INVEN_RARM))
+		if (object_is_cursed(o_ptr))
 		{
 			if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
 				msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+			return;
 		}
-		else if (!(empty_hands(owner_ptr, FALSE) & EMPTY_HAND_RARM) && !object_is_cursed(o_ptr))
-		{
-			new_o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
-			object_copy(new_o_ptr, o_ptr);
-			owner_ptr->total_weight += o_ptr->weight;
-			inven_item_increase(INVEN_RARM, -((int)o_ptr->number));
-			inven_item_optimize(INVEN_RARM);
-			msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);
-		}
+
+		new_o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
+		object_copy(new_o_ptr, o_ptr);
+		owner_ptr->total_weight += o_ptr->weight;
+		inven_item_increase(owner_ptr, INVEN_LARM, -((int)o_ptr->number));
+		inven_item_optimize(INVEN_LARM);
+		if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
+			msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+		else
+			msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name,
+			(left_hander ? _("左手", "left") : _("右手", "right")));
+		return;
 	}
+	
+	if (item != INVEN_LARM) return;
+
+	o_ptr = &owner_ptr->inventory_list[INVEN_RARM];
+	if (o_ptr->k_idx) object_desc(o_name, o_ptr, 0);
+
+	if (has_melee_weapon(owner_ptr, INVEN_RARM))
+	{
+		if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
+			msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
+		return;
+	}
+	
+	if ((empty_hands(owner_ptr, FALSE) & EMPTY_HAND_RARM) || object_is_cursed(o_ptr)) return;
+
+	new_o_ptr = &owner_ptr->inventory_list[INVEN_LARM];
+	object_copy(new_o_ptr, o_ptr);
+	owner_ptr->total_weight += o_ptr->weight;
+	inven_item_increase(owner_ptr, INVEN_RARM, -((int)o_ptr->number));
+	inven_item_optimize(INVEN_RARM);
+	msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);
 }
 
 
@@ -545,7 +545,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
 	take_turn(creature_ptr, 50);
 
 	/* Take off the item */
-	(void)inven_takeoff(item, 255);
+	(void)inven_takeoff(creature_ptr, item, 255);
 	verify_equip_slot(creature_ptr, item);
 	calc_android_exp(creature_ptr);
 	creature_ptr->redraw |= (PR_EQUIPPY);

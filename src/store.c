@@ -5087,7 +5087,7 @@ static void store_sell(player_type *owner_ptr)
 			q_ptr->timeout = 0;
 
 			/* Take the item from the player, describe the result */
-			inven_item_increase(item, -amt);
+			inven_item_increase(owner_ptr, item, -amt);
 			inven_item_describe(owner_ptr, item);
 
 			/* If items remain, auto-inscribe before optimizing */

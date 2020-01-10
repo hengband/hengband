@@ -33,7 +33,7 @@ extern errr process_autopick_file_command(char *buf);
 extern concptr autopick_line_from_entry(autopick_type *entry);
 extern int is_autopick(object_type *o_ptr);
 extern void autopick_alter_item(INVENTORY_IDX item, bool destroy);
-extern void autopick_delayed_alter(floor_type *floor_ptr);
+extern void autopick_delayed_alter(player_type *player_ptr);
 extern void autopick_pickup_items(grid_type *g_ptr);
 extern bool autopick_autoregister(object_type *o_ptr);
 extern void do_cmd_edit_autopick(player_type *player_ptr);

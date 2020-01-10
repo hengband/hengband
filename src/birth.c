@@ -1986,7 +1986,7 @@ static void wield_all(player_type *creature_ptr)
 		/* Decrease the item (from the pack) */ 
 		if (item >= 0) 
 		{ 
-			inven_item_increase(item, -1); 
+			inven_item_increase(creature_ptr, item, -1); 
 			inven_item_optimize(item); 
 		} 
  

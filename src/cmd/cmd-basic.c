@@ -2463,7 +2463,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
 	if (item >= 0)
 	{
-		inven_item_increase(item, -1);
+		inven_item_increase(creature_ptr, item, -1);
 		if (!return_when_thrown)
 			inven_item_describe(creature_ptr, item);
 		inven_item_optimize(item);

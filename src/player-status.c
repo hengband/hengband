@@ -4990,8 +4990,9 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_AUTODESTROY))
 	{
 		creature_ptr->update &= ~(PU_AUTODESTROY);
-		autopick_delayed_alter(floor_ptr);
+		autopick_delayed_alter(creature_ptr);
 	}
+
 	if (creature_ptr->update & (PU_COMBINE))
 	{
 		creature_ptr->update &= ~(PU_COMBINE);

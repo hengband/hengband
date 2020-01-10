@@ -4585,7 +4585,7 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
 	if (item >= 0)
 	{
-		inven_item_increase(item, num);
+		inven_item_increase(owner_ptr, item, num);
 		inven_item_describe(owner_ptr, item);
 		inven_item_optimize(item);
 	}
@@ -4606,9 +4606,9 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
  * @param num 増やしたい量
  * @return なし
  */
-void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
+void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
-	object_type *o_ptr = &p_ptr->inventory_list[item];
+	object_type *o_ptr = &owner_ptr->inventory_list[item];
 
 	/* Apply */
 	num += o_ptr->number;
@@ -4621,31 +4621,25 @@ void inven_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 	num -= o_ptr->number;
 
 	/* Change the number and weight */
-	if (num)
-	{
-		/* Add the number */
-		o_ptr->number += num;
+	if (num != 0) return;
 
-		/* Add the weight */
-		p_ptr->total_weight += (num * o_ptr->weight);
-		p_ptr->update |= (PU_BONUS);
-		p_ptr->update |= (PU_MANA);
-		p_ptr->update |= (PU_COMBINE);
-		p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	/* Add the number */
+	o_ptr->number += num;
 
-		/* Hack -- Clear temporary elemental brands if player takes off weapons */
-		if (!o_ptr->number && p_ptr->ele_attack)
-		{
-			if ((item == INVEN_RARM) || (item == INVEN_LARM))
-			{
-				if (!has_melee_weapon(p_ptr, INVEN_RARM + INVEN_LARM - item))
-				{
-					/* Clear all temporary elemental brands */
-					set_ele_attack(p_ptr, 0, 0);
-				}
-			}
-		}
-	}
+	/* Add the weight */
+	owner_ptr->total_weight += (num * o_ptr->weight);
+	owner_ptr->update |= (PU_BONUS);
+	owner_ptr->update |= (PU_MANA);
+	owner_ptr->update |= (PU_COMBINE);
+	owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+
+	/* Hack -- Clear temporary elemental brands if player takes off weapons */
+	if (o_ptr->number || !owner_ptr->ele_attack) return;
+	if (!(item == INVEN_RARM) && !(item == INVEN_LARM)) return;
+	if (has_melee_weapon(owner_ptr, INVEN_RARM + INVEN_LARM - item)) return;
+
+	/* Clear all temporary elemental brands */
+	set_ele_attack(owner_ptr, 0, 0);
 }
 
 
@@ -5080,7 +5074,7 @@ s16b inven_carry(player_type *owner_ptr, object_type *o_ptr)
  * to fall to the ground.\n
  * Return the inventory slot into which the item is placed.\n
  */
-INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
+INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
 {
 	INVENTORY_IDX slot;
 
@@ -5095,7 +5089,7 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 
 
 	/* Get the item to take off */
-	o_ptr = &p_ptr->inventory_list[item];
+	o_ptr = &owner_ptr->inventory_list[item];
 	if (amt <= 0) return (-1);
 
 	/* Verify */
@@ -5134,11 +5128,11 @@ INVENTORY_IDX inven_takeoff(INVENTORY_IDX item, ITEM_NUMBER amt)
 	}
 
 	/* Modify, Optimize */
-	inven_item_increase(item, -amt);
+	inven_item_increase(owner_ptr, item, -amt);
 	inven_item_optimize(item);
 
 	/* Carry the object */
-	slot = inven_carry(p_ptr, q_ptr);
+	slot = inven_carry(owner_ptr, q_ptr);
 
 #ifdef JP
 	msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
@@ -5183,7 +5177,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 	if (item >= INVEN_RARM)
 	{
 		/* Take off first */
-		item = inven_takeoff(item, amt);
+		item = inven_takeoff(owner_ptr, item, amt);
 
 		/* Access original object */
 		o_ptr = &owner_ptr->inventory_list[item];

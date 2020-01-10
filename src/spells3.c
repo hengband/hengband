@@ -1601,7 +1601,7 @@ bool artifact_scroll(player_type *caster_ptr)
 
 			if (item >= 0)
 			{
-				inven_item_increase(item, 1 - (o_ptr->number));
+				inven_item_increase(caster_ptr, item, 1 - (o_ptr->number));
 			}
 			else
 			{
